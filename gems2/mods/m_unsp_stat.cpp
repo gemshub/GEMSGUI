@@ -690,9 +690,9 @@ void TUnSpace::out_QT( int Ngr  )
    j   = kol_in_sol(0);
 
    usp->UnIC[l][0] = Ca1;
-   usp->UnIC[l][1] = st1*sCa1 / sqrt(ca);
+   usp->UnIC[l][1] = st1*sCa1 / sqrt(double(ca));
    usp->UnIC[l][2] = Ca;
-   usp->UnIC[l][3] = st*sCa / sqrt(usp->Q);
+   usp->UnIC[l][3] = st*sCa / sqrt(double(usp->Q));
    usp->UnIC[l][4] = usp->vMol[l];
    usp->UnIC[l][5] = usp->vMol[usp->Lapl*usp->N+l];
    usp->UnIC[l][6] = usp->vMol[usp->Homen*usp->N+l];
@@ -732,7 +732,7 @@ void TUnSpace::out_QT( int Ngr  )
 
    usp->UgDC[l][0] = gg1;
    if( usp->NgLg[l] > 0 )
-      usp->UgDC[l][1] = st1*sg1/sqrt(ca);
+      usp->UgDC[l][1] = st1*sg1/sqrt(double(ca));
    else
       usp->UgDC[l][1] = 0.;
    usp->UgDC[l][2] = usp->Gs[l]; //usp->vG[l];
@@ -769,7 +769,7 @@ void TUnSpace::out_QT( int Ngr  )
     sg1=sqrt(sg1);
 
    usp->UaDC[l][0] = gg1;
-   usp->UaDC[l][1] = st1*sg1/sqrt(ca);
+   usp->UaDC[l][1] = st1*sg1/sqrt(double(ca));
    usp->UaDC[l][2] = usp->vFug[l];
    usp->UaDC[l][3] = usp->vFug[usp->Lapl*usp->Ls+l];
    usp->UaDC[l][4] = usp->vFug[usp->Homen*usp->Ls+l];
@@ -934,14 +934,14 @@ void TUnSpace::AdapG()
       usp->UnDCA[i][2] = min;
       usp->UnDCA[i][3] = max;
       usp->UnDCA[i][4] = sr;
-      usp->UnDCA[i][5] = 3.*sto/sqrt(usp->ob);
+      usp->UnDCA[i][5] = 3.*sto/sqrt(double(usp->ob));
       usp->UnDCA[i][6] = 0.;
       usp->UnDCA[i][7] = 0.;
 
 //   ??????????????????
 //   adatpter new data to BD
     if( usp->NgLg[i] > 0 )
-    {  usp->IntLg[i]=3.*sto/sqrt(usp->ob);
+    {  usp->IntLg[i]=3.*sto/sqrt(double(usp->ob));
        TProfil::pm->syp->GEX[i] =
             usp->Gs[i]-TProfil::pm->tpp->G[i];
     }

@@ -403,7 +403,7 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
    LI = new int[QT2+1];
    LI1 = new int[QT2+1];
 
-   W=floor(NG/QT2);
+   W=floor(float(NG)/float(QT2));
    if(W)
    {  k=1;
       for(i=1;i<=QT2;i++)
@@ -454,7 +454,7 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
 
 int TUnSpace::WL(int i,int j,int QT)
 { int W;
-  W=i*j-floor(i*j/QT)*QT;
+  W=i*j-floor(float(i*j)/float(QT))*QT;  //  ?????????? 
   if( QT-W < W )
       W=QT-W;
   return(W);
@@ -466,7 +466,7 @@ float TUnSpace::PNTBEL(int J,int QT,int OV)
 // QT - numbers points
 // OV -  number of Belov for group
 { float TB;
-  TB=fabs(J*OV-floor(J*OV/QT)*QT);
+  TB=fabs(float(J*OV)-floor(float(J*OV)/float(QT))*float(QT));
   TB+=(QT-1)/2;
   while(1)
    if(TB>=QT) TB-=QT;
