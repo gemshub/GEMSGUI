@@ -22,7 +22,7 @@
 const char *GEMS_SETUP_HTML = "gemsetup";
 
 #include <qfontdialog.h>
-//#include <qfiledialog.h>
+#include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qlabel.h>
@@ -48,6 +48,7 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     pFontRawName->setText(cellFont.rawName());
     pNumDigits->setValue(pVisorImp->getDoubleDigits());
     pUpdateInterval->setValue(pVisorImp->updateInterval());
+    pConfigAutosave->setChecked(pVisorImp->getConfigAutosave());
 
 #ifndef __unix
     pFontRawName->setReadOnly(true);	// no meaning for Win32 (now)
@@ -80,6 +81,7 @@ SettingsDialog::CmApply()
 
     pVisorImp->setDoubleDigits(pNumDigits->value());
     pVisorImp->setUpdateInterval( pUpdateInterval->value() );
+    pVisorImp->setConfigAutosave( pConfigAutosave->isChecked() );
 
     //pVisorImp->Update(true);
 }

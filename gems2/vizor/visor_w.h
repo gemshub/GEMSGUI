@@ -61,6 +61,8 @@ class TVisorImp:
     QPixmap*    pixSys;
     QFont	CellFont;
     //  int	DoubleDigits;
+    // other settings
+    bool	configAutosave;
 
 protected slots:
     void closeEvent( QCloseEvent* );
@@ -143,6 +145,7 @@ public:
     {
         CellFont = newCellFont;
     }
+
     int getDoubleDigits() const
     {
         return TValBase::doublePrecision - 1;
@@ -151,6 +154,17 @@ public:
     {
         TValBase::doublePrecision = newDoubleDigits + 1;
     }
+
+    void setConfigAutosave(bool autosave)
+    {
+        configAutosave = autosave;
+    }
+
+    bool getConfigAutosave() const
+    {
+        return configAutosave;
+    }
+
 #ifdef Use_mt_mode
 
 QWaitCondition& getWaitProgress();

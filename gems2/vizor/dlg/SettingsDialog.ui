@@ -30,17 +30,17 @@
     </property>
     <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>Layout4</cstring>
+            <cstring>Layout28</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>10</x>
-                <y>10</y>
-                <width>550</width>
-                <height>60</height>
+                <y>260</y>
+                <width>560</width>
+                <height>37</height>
             </rect>
         </property>
-        <grid>
+        <hbox>
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
@@ -50,51 +50,129 @@
             <property name="spacing">
                 <number>6</number>
             </property>
-            <widget class="QLabel" row="0" column="1">
+            <widget class="QPushButton">
                 <property name="name">
-                    <cstring>pSysDBDir</cstring>
+                    <cstring>pButtonOK</cstring>
                 </property>
-                <property name="frameShape">
-                    <enum>Box</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Sunken</enum>
+                <property name="font">
+                    <font>
+                    </font>
                 </property>
                 <property name="text">
-                    <string>TextLabel1</string>
+                    <string>&amp;Ok</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
                 </property>
             </widget>
-            <widget class="QLabel" row="0" column="0">
+            <widget class="QPushButton">
                 <property name="name">
-                    <cstring>TextLabel2</cstring>
+                    <cstring>pButtonApply</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
                 </property>
                 <property name="text">
-                    <string> Core database directory</string>
+                    <string>&amp;Apply</string>
                 </property>
             </widget>
-            <widget class="QLabel" row="1" column="0">
+            <widget class="QPushButton">
                 <property name="name">
-                    <cstring>TextLabel2_2</cstring>
+                    <cstring>pButtonHelp</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
                 </property>
                 <property name="text">
-                    <string> User's profile directory</string>
+                    <string>&amp;Help</string>
                 </property>
             </widget>
-            <widget class="QLabel" row="1" column="1">
+            <spacer>
+                <property name="name" stdset="0">
+                    <cstring>Spacer1</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QPushButton">
                 <property name="name">
-                    <cstring>pUserDBDir</cstring>
+                    <cstring>pButtonCancel</cstring>
                 </property>
-                <property name="frameShape">
-                    <enum>Box</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Sunken</enum>
+                <property name="font">
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
                 </property>
                 <property name="text">
-                    <string>TextLabel1</string>
+                    <string>&amp;Cancel</string>
                 </property>
             </widget>
-        </grid>
+        </hbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>210</y>
+                <width>560</width>
+                <height>37</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_3</cstring>
+                </property>
+                <property name="text">
+                    <string>Font</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>pFontRawName</cstring>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Currently applied font for data screen forms</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonChFont</cstring>
+                </property>
+                <property name="text">
+                    <string>C&amp;hange font...</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Here you can change font for the data screen forms</string>
+                </property>
+            </widget>
+        </hbox>
     </widget>
     <widget class="QButtonGroup">
         <property name="name">
@@ -103,7 +181,7 @@
         <property name="geometry">
             <rect>
                 <x>10</x>
-                <y>90</y>
+                <y>100</y>
                 <width>310</width>
                 <height>101</height>
             </rect>
@@ -160,7 +238,7 @@
         <property name="geometry">
             <rect>
                 <x>330</x>
-                <y>90</y>
+                <y>100</y>
                 <width>240</width>
                 <height>101</height>
             </rect>
@@ -291,17 +369,17 @@
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>Layout5</cstring>
+            <cstring>Layout4</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>200</y>
-                <width>560</width>
-                <height>37</height>
+                <x>2</x>
+                <y>9</y>
+                <width>570</width>
+                <height>77</height>
             </rect>
         </property>
-        <hbox>
+        <grid>
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
@@ -311,129 +389,62 @@
             <property name="spacing">
                 <number>6</number>
             </property>
-            <widget class="QLabel">
+            <widget class="QCheckBox" row="2" column="0">
                 <property name="name">
-                    <cstring>TextLabel1_3</cstring>
+                    <cstring>pConfigAutosave</cstring>
                 </property>
                 <property name="text">
-                    <string>Font</string>
+                    <string>Save configuration at exit</string>
                 </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>pFontRawName</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Currently applied font for data screen forms</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pButtonChFont</cstring>
-                </property>
-                <property name="text">
-                    <string>C&amp;hange font...</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Here you can change font for the data screen forms</string>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>Layout28</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>250</y>
-                <width>560</width>
-                <height>37</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pButtonOK</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Ok</string>
-                </property>
-                <property name="default">
+                <property name="checked">
                     <bool>true</bool>
                 </property>
             </widget>
-            <widget class="QPushButton">
+            <widget class="QLabel" row="0" column="0">
                 <property name="name">
-                    <cstring>pButtonApply</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
+                    <cstring>TextLabel2</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;Apply</string>
+                    <string> Core database directory</string>
                 </property>
             </widget>
-            <widget class="QPushButton">
+            <widget class="QLabel" row="1" column="1">
                 <property name="name">
-                    <cstring>pButtonHelp</cstring>
+                    <cstring>pUserDBDir</cstring>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
                 </property>
                 <property name="text">
-                    <string>&amp;Help</string>
+                    <string>TextLabel1</string>
                 </property>
             </widget>
-            <spacer>
-                <property name="name" stdset="0">
-                    <cstring>Spacer1</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
-            <widget class="QPushButton">
+            <widget class="QLabel" row="0" column="1">
                 <property name="name">
-                    <cstring>pButtonCancel</cstring>
+                    <cstring>pSysDBDir</cstring>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
                 </property>
                 <property name="text">
-                    <string>&amp;Cancel</string>
+                    <string>TextLabel1</string>
                 </property>
             </widget>
-        </hbox>
+            <widget class="QLabel" row="1" column="0">
+                <property name="name">
+                    <cstring>TextLabel2_2</cstring>
+                </property>
+                <property name="text">
+                    <string> User's profile directory</string>
+                </property>
+            </widget>
+        </grid>
     </widget>
 </widget>
 <connections>

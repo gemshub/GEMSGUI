@@ -170,6 +170,7 @@ gems2/mods/unmerged1_93/m_rtparm.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/unmerged1_93/v_mod.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_mod.h svn_keywords=Author+Date+Id+Revision
 gems2/rungems.sh svn_keywords=Author+Date+Id+Revision
+gems2/vizor/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/vizor/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/vizor/Makefile.qt svn_keywords=Author+Date+Id+Revision
 gems2/vizor/Makefile.qt_w32 svn_keywords=Author+Date+Id+Revision

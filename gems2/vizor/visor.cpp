@@ -459,6 +459,7 @@ TVisor::toWinCFG()
 
     int win_num = aWinInfo.GetCount();
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;
+    f_win_ini << "config_autosave\t=\t" << pVisorImp->getConfigAutosave() << endl;
     f_win_ini.close();
 
     // Window-specific settings
@@ -509,20 +510,25 @@ TVisor::fromWinCFG()
                     name.strip();
                     general_font.setFamily( name.c_str() );
                 }
-                else
-                    if( name == "general_font_size" ) {
-                        general_font.setPointSize( visor_conf.getcInt() );
-                    }
-                    else
-                        if( name == "general_font_weight" ) {
-                            general_font.setWeight( visor_conf.getcInt() );
-                        }
+                else if( name == "general_font_size" ) {
+                    general_font.setPointSize( visor_conf.getcInt() );
+                }
+                else if( name == "general_font_weight" ) {
+                    general_font.setWeight( visor_conf.getcInt() );
+                }
 #endif
-                else
-                    if( name == "number_of_windows" ) {
-                        win_num = visor_conf.getcInt();
-                    }
-
+                else if( name == "number_of_windows" ) {
+                    win_num = visor_conf.getcInt();
+                }
+            	else if( name == "config_autosave" ) {
+                    visor_conf.getcStr(name);
+                    name.strip();
+		    if( name == "1" )
+			pVisorImp->setConfigAutosave(true);
+		    else
+			pVisorImp->setConfigAutosave(false);
+		}
+			
         name = visor_conf.getNext();
     }
 
@@ -540,12 +546,16 @@ TVisor::fromWinCFG()
 
     for (int ii = 0; ii < aWinInfo.GetCount(); ii++)
         aWinInfo[ii].fromWinCFG(f_win_ini);
-
 }
 
 //  Reorganized by KD on E.Curti' comment 04.04.01
 bool TVisor::CanClose()
 {
+    if( pVisorImp->getConfigAutosave() ) {
+        Exit();
+        return true;
+    }
+
     switch (vfQuestYesNoCancel(pVisorImp,
         "GEM-Selektor Exit", "Normal, without saving configuration?"))
     {
