@@ -92,7 +92,7 @@ visor.o: ../mods/m_probe.h ../mods/m_gtdemo.h ../mods/m_duterm.h
 main.o: visor.h ./libs/gstring.h ./libs/array.h ./kernel/v_module.h
 main.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 main.o: ./kernel/v_vals.h ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h
-main.o: graph.h dlg/MainDialog.h
+main.o: graph.h dlg/MainDialog.h dlg/MainDialogData.h
 visor_w.o: helpwindow.h service.h ./libs/array.h ./libs/gstring.h
 visor_w.o: ./kernel/v_user.h ./libs/verror.h visor_w.h ./kernel/v_vals.h
 visor_w.o: graph.h ./kernel/v_module.h ./kernel/v_object.h ./kernel/v_dbm.h
@@ -103,11 +103,17 @@ visor_w.o: ../mods/m_phase.h ../mods/submod/ms_multi.h ./libs/gdatastream.h
 visor_w.o: ../mods/submod/datach.h ../mods/submod/databr.h ../mods/v_ipnc.h
 visor_w.o: ../mods/submod/ms_calc.h ../mods/m_proces.h ../mods/m_syseq.h
 visor_w.o: page_win_w.h page_s.h ./libs/config.h dlg/MainDialog.h
-visor_w.o: dlg/SelectDialog.h dlg/KeyFilter.h dlg/ExcludeFillDialog.h
-visor_w.o: dlg/ProgressDialog.h dlg/ProcessDialog.h dlg/NewSystemDialog.h
-visor_w.o: dlg/ListFilesDialog.h dlg/ElementsDialog.h ../mods/filters_data.h
-visor_w.o: dlg/LoadMessage.h dlg/KeyDialog.h dlg/KeyProfile.h
-visor_w.o: dlg/ChangeKeyDialog.h dlg/AutoPhaseDialog.h
+visor_w.o: dlg/MainDialogData.h dlg/SelectDialog.h dlg/SelectDialogData.h
+visor_w.o: dlg/KeyFilter.h dlg/ExcludeFillDialog.h dlg/ProgressDialog.h
+visor_w.o: dlg/ProgressDialogData.h dlg/ProcessDialog.h
+visor_w.o: dlg/ProcessDialogData.h dlg/NewSystemDialog.h
+visor_w.o: dlg/NewSystemDialogData.h dlg/ListFilesDialog.h
+visor_w.o: dlg/ListFilesDialogData.h dlg/ElementsDialog.h
+visor_w.o: dlg/ElementsDialogData.h ../mods/filters_data.h dlg/LoadMessage.h
+visor_w.o: dlg/KeyDialog.h dlg/KeyDialogData.h dlg/KeyProfile.h
+visor_w.o: dlg/KeyProfileData.h dlg/ChangeKeyDialog.h
+visor_w.o: dlg/ChangeKeyDialogData.h dlg/AutoPhaseDialog.h
+visor_w.o: dlg/AutoPhaseDialogData.h
 module_w.o: visor.h ./libs/gstring.h ./libs/array.h ./kernel/v_module.h
 module_w.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 module_w.o: ./kernel/v_vals.h ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h
@@ -123,7 +129,8 @@ page_w.o: ../mods/m_phase.h ../mods/submod/ms_multi.h ./libs/gdatastream.h
 page_w.o: ../mods/submod/datach.h ../mods/submod/databr.h ../mods/v_ipnc.h
 page_w.o: ../mods/submod/ms_calc.h ../mods/m_sdata.h module_w.h page_w.h
 page_w.o: page_win_w.h service.h query_w.h help.h dlg/CalcDialog.h
-page_w.o: dlg/CalcCheckDialog.h
+page_w.o: dlg/CalcDialogData.h dlg/CalcCheckDialog.h
+page_w.o: dlg/CalcCheckDialogData.h
 page_win_w.o: units.h ./libs/array.h ./libs/gstring.h page_i.h page_s.h
 page_win_w.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 page_win_w.o: ./kernel/v_vals.h ./kernel/v_module.h ./kernel/v_dbm.h
@@ -135,11 +142,12 @@ page_win_w.o: ./libs/gdatastream.h ../mods/submod/datach.h
 page_win_w.o: ../mods/submod/databr.h ../mods/v_ipnc.h
 page_win_w.o: ../mods/submod/ms_calc.h ../mods/m_sdata.h module_w.h page_w.h
 page_win_w.o: page_win_w.h service.h query_w.h help.h dlg/CalcDialog.h
-page_win_w.o: dlg/CalcCheckDialog.h
+page_win_w.o: dlg/CalcDialogData.h dlg/CalcCheckDialog.h
+page_win_w.o: dlg/CalcCheckDialogData.h
 pshape.o: pshape.h ./kernel/v_user.h ./libs/gstring.h ./libs/array.h
-pshape.o: ./libs/verror.h dlg/GraphDialog.h ./kernel/v_module.h
-pshape.o: ./kernel/v_object.h ./kernel/v_vals.h ./kernel/v_dbm.h
-pshape.o: ./kernel/v_file.h graph.h
+pshape.o: ./libs/verror.h dlg/GraphDialog.h dlg/GraphDialogData.h
+pshape.o: ./kernel/v_module.h ./kernel/v_object.h ./kernel/v_vals.h
+pshape.o: ./kernel/v_dbm.h ./kernel/v_file.h graph.h
 help.o: help.h ./libs/gstring.h ./libs/array.h ./kernel/v_user.h
 help.o: ./libs/verror.h
 units.o: ./kernel/v_user.h ./libs/gstring.h ./libs/array.h ./libs/verror.h
@@ -151,4 +159,4 @@ helpwindow.o: ./kernel/v_file.h
 graph.o: graph.h ./libs/array.h ./kernel/v_module.h ./kernel/v_object.h
 graph.o: ./libs/gstring.h ./kernel/v_user.h ./libs/verror.h ./kernel/v_vals.h
 graph.o: ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h dlg/GraphDialog.h
-graph.o: pshape.h
+graph.o: dlg/GraphDialogData.h pshape.h

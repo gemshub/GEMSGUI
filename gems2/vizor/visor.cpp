@@ -463,10 +463,10 @@ TVisor::toWinCFG()
 
     QFont font = pVisorImp->getCellFont();
 
-#ifdef __unix
-    f_win_ini << "general_font_raw\t=\t" << font.rawName() << endl;
-#endif
-    // these are exported for both OS (for Unix->Win export :-)
+    // all font settings are exported (for possible Unix->Win export)
+    // but general_font_string is now is the only potrable way
+    f_win_ini << "general_font_string\t=\t\"" << font.toString() << "\"" << endl;
+
     f_win_ini << "general_font_family\t=\t" << font.family() << endl;
     f_win_ini << "general_font_points\t=\t" << font.pointSize() << endl;
     f_win_ini << "general_font_weight\t=\t" << font.weight() << endl;
@@ -505,7 +505,7 @@ TVisor::fromWinCFG()
 #endif
 
     int win_num = 0;
-    QFont general_font = QFont::defaultFont();
+    QFont cellFont = pVisorImp->getCellFont();
     gstring name = visor_conf.getFirst();
 
     while ( !name.empty() )
@@ -519,24 +519,22 @@ TVisor::fromWinCFG()
             }
             else
 #ifdef __unix
-                if( name == "general_font_raw" ) {
-                    QFont general_font;
+                if( name == "general_font_string" ) {
                     visor_conf.getcStr(name);
                     name.strip();
-                    general_font.setRawName( name.c_str() );
-                    pVisorImp->setCellFont( general_font );
+                    cellFont.fromString( name.c_str() );
                 }
 #else
                 if( name == "general_font_family" ) {
                     visor_conf.getcStr(name);
                     name.strip();
-                    general_font.setFamily( name.c_str() );
+                    cellFont.setFamily( name.c_str() );
                 }
                 else if( name == "general_font_size" ) {
-                    general_font.setPointSize( visor_conf.getcInt() );
+                    cellFont.setPointSize( visor_conf.getcInt() );
                 }
                 else if( name == "general_font_weight" ) {
-                    general_font.setWeight( visor_conf.getcInt() );
+                    cellFont.setWeight( visor_conf.getcInt() );
                 }
 #endif
                 else if( name == "number_of_windows" ) {
@@ -562,7 +560,7 @@ TVisor::fromWinCFG()
         name = visor_conf.getNext();
     }
 
-    pVisorImp->setCellFont( general_font );
+    pVisorImp->setCellFont( cellFont );
 
     // Window-specific settings
     gstring fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;

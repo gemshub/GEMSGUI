@@ -49,7 +49,11 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     pRemoteDoc->setChecked(!pVisor->localDoc());
     pSysDBDir->setText(pVisor->sysGEMDir().c_str());
     pUserDBDir->setText(pVisor->userGEMDir().c_str());
-    pFontRawName->setText(cellFont.rawName());
+//#ifdef __unix
+    pFontRawName->setText(cellFont.toString());
+//#else
+//    pFontRawName->setText(cellFont.rawName());
+//#endif
     pNumDigits->setValue(pVisorImp->getDoubleDigits());
     pUpdateInterval->setValue(pVisorImp->updateInterval());
     pConfigAutosave->setChecked(pVisorImp->getConfigAutosave());
@@ -64,9 +68,9 @@ SettingsDialog::SettingsDialog (QWidget* parent)
         rbOldPrMode->setChecked( true );
     }
 
-#ifndef __unix
+//#ifndef __unix
     pFontRawName->setReadOnly(true);	// no meaning for Win32 (now)
-#endif
+//#endif
 }
 
 
@@ -86,11 +90,11 @@ SettingsDialog::CmApply()
 {
 
     QFont font;
-#ifdef __unix
+//#ifdef __unix
     // this line is here because in Unix font raw name could be changed
     // in LineEdit element
-    cellFont.setRawName(pFontRawName->text());
-#endif
+//    cellFont.setRawName(pFontRawName->text());
+//#endif
     pVisorImp->setCellFont(cellFont);
 
     pVisorImp->setDoubleDigits(pNumDigits->value());
@@ -153,12 +157,12 @@ SettingsDialog::CmChangeFont()
     {
         cellFont = selected_font;
         // for Win32 this line does not have a lot of sence
-#ifdef __unix
-	QString fontName( selected_font.rawName() );
-#else
-	QString fontName( selected_font.rawName() );
-#endif
-        pFontRawName->setText( fontName );
+//#ifdef __unix
+//	QString fontName( selected_font.toString() );
+//#else
+//	QString fontName( selected_font.rawName() );
+//#endif
+        pFontRawName->setText( cellFont.toString() );
     }
 }
 

@@ -97,23 +97,23 @@ TVisorImp::TVisorImp(int c, char** v):
     updateTime = 1; // second
 #endif
 
-  try{
-    pVisor = new TVisor(argc, argv);
-    pVisor->Setup();
-  }
-  catch(TError err) {
-    //("Could not load Vizor parameters!");
-    vfMessage(0, err.title, err.mess, vfErr);
-    exit(1);	
-  }
-
     setCellFont( QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE) );
+
+    try{
+	pVisor = new TVisor(argc, argv);
+	pVisor->Setup();
+    }
+    catch(TError err) {
+	//("Could not load Vizor parameters!");
+	vfMessage(0, err.title, err.mess, vfErr);
+	exit(1);	
+    }
 
     gstring logoFile = pVisor->sysGEMDir() + GEMS_LOGO_ICON;
     pixLogo = new QPixmap( logoFile.c_str() );
     logoFile = pVisor->sysGEMDir() + GEMS_SYS_ICON;
     pixSys = new QPixmap( logoFile.c_str() );
-    pThread = QThread::currentThread ();
+    pThread = QThread::currentThread();
 
     setCaption( GEMS_VERSION_STAMP );
 }
