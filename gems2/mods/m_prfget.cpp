@@ -472,7 +472,8 @@ void TProfil::loadSystat( const char *key )
     {
         rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                                K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-        str = STat->GetKeyofRecord( pkey, "Existing systems and equilibria", KEY_OLD );
+        str = STat->GetKeyofRecord( pkey,
+           "Existing CSD and equilibria records in project database", KEY_OLD );
         ErrorIf( str.empty(), GetName(), "Operation cancelled!");
     }
     else str=gstring(key);

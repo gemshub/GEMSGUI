@@ -368,7 +368,7 @@ HelpWindow::~HelpWindow()
 void HelpWindow::about()
 {
     QMessageBox::about( this, "Help Window",
-			"Allows to browse rich text documentation."
+			"Allows to browse GEM-Selektor HTML documentation"
 			);
 }
 
