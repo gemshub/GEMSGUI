@@ -64,19 +64,16 @@ protected slots:
 public slots:
     bool SetProfileMode();
     bool SetGeneralMode();
-    void ShowPhaseWindow();
-    void ShowEqPhaseWindow();
+//    void ShowPhaseWindow();
+//    void ShowEqPhaseWindow();
     void CmExit();
     void CmHelp();
     void CmHelpAbout();
     void CmHelpMenuItem(); //  Added 05.01.01
 
-    void NewSystem();
-    void RemakeSystem();
-    void LoadSystem();
-    void SaveSystem();
     void CalcMulti();
-
+    void SaveSystem();
+    
 public:
     TVisorImp(int c, char** v);
     ~TVisorImp();

@@ -84,10 +84,7 @@ public:
 
 public:
     TCModuleImp* pImp;		// for visor implementation
-    QWidget* window()
-    {
-        return (QWidget*)pImp;
-    }
+    QWidget* window();
 
     TSubModule( int nrt );
     virtual ~TSubModule();
@@ -287,6 +284,11 @@ public:
 
     virtual bool SaveGraphData( GraphData *graph )
     { return false; }
+
+    const char *getFilter()
+    {
+        return Filter.c_str();
+    }
 
     void setFilter( const char *filt)
     {

@@ -22,10 +22,10 @@ const char *GEMS_EQ_HTML = "ge_howto";
 #include <qlabel.h>
 
 #include "EQDialog.h"
-#include "SystemDialog.h"
+#include "NewSystemDialog.h"
 #include "MainDialog.h"
-#include "HLresDialog.h"
-#include "HLinpDialog.h"
+//#include "HLresDialog.h"
+//#include "HLinpDialog.h"
 
 #include "service.h"
 #include "visor.h"
@@ -50,10 +50,10 @@ EQDialog::~EQDialog()
 void
 EQDialog::CmSystemDialog()
 {
-    if( !SystemDialog::pDia )
-        (new SystemDialog(0/*pVisorImp*/))->show();
+    if( !NewSystemDialog::pDia )
+        (new NewSystemDialog(0/*pVisorImp*/))->show();
     else
-        SystemDialog::pDia->raise();
+        NewSystemDialog::pDia->raise();
 }
 
 void
@@ -126,15 +126,15 @@ EQDialog::closeEvent(QCloseEvent* ev)
             aMod[ii].pImp->CloseWin();
 
     // close SystemDialog also
-    if( SystemDialog::pDia )
-        SystemDialog::pDia->close();
+    if( NewSystemDialog::pDia )
+        NewSystemDialog::pDia->close();
 
     // close ListDialogs also
-    if( HLresDialog::pDia )
-        HLresDialog::pDia->close();
+//    if( HLresDialog::pDia )
+//        HLresDialog::pDia->close();
 
-    if( HLinpDialog::pDia )
-        HLinpDialog::pDia->close();
+//    if( HLinpDialog::pDia )
+//        HLinpDialog::pDia->close();
 
     QWidget::closeEvent(ev);
 }

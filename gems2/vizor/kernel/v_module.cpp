@@ -63,6 +63,16 @@ TSubModule::EvClose()
 {
 }
 
+#include "dlg/NewSystemDialog.h"
+
+QWidget* TSubModule::window()
+{
+      if( nRT== RT_SYSEQ && pVisor->ProfileMode == true )
+       return (QWidget*)(NewSystemDialog::pDia);
+      else
+       return (QWidget*)pImp;
+}
+
 // Callback for 'close' command
 
 void
@@ -179,7 +189,7 @@ TCModule::MessageToSave()
     gstring str=key;
     if( fEdit==true && str.find_first_of("*?" ) == gstring::npos )
     {
-        if( vfQuestion(pImp, str.c_str(),
+        if( vfQuestion(window(), str.c_str(),
                        "Data record has been changed! Save changes?"))
             RecSave( str.c_str() );
     }
@@ -209,11 +219,11 @@ TCModule::GetKeyofRecord( const char *oldKey, const char *strTitle,
     switch( keyType )
     {
     case KEY_OLD:
-        return vfKeyEdit(pImp, str.c_str(), nRT, key.c_str() );
+        return vfKeyEdit(window(), str.c_str(), nRT, key.c_str() );
     case KEY_NEW:
-        return vfKeyTemplEdit(pImp, str.c_str(), nRT, key.c_str(), false );
+        return vfKeyTemplEdit(window(), str.c_str(), nRT, key.c_str(), false );
     case KEY_TEMP:
-        Filter = vfKeyTemplEdit(pImp, str.c_str(), nRT, key.c_str() );
+        Filter = vfKeyTemplEdit(window(), str.c_str(), nRT, key.c_str() );
         return Filter;
     }
     Error( str.c_str(), "Illegal record key editing mode");
@@ -232,7 +242,7 @@ TCModule::CheckEqText( const char *erscan, const char *msg )
         msger = gstring(msg);
     msger += erscan;
     msger += "\n  Would you like to make corrections? ";
-    if( !vfQuestion(pImp, GetName() , msger ) )
+    if( !vfQuestion(window(), GetName() , msger ) )
         return false;
     pVisorImp->OpenModule(window(), nRT);
     return true;
@@ -253,7 +263,7 @@ TCModule::RecSave( const char *key, bool onOld )
     if( Rnum<0 )
         AddRecord( key );
     else
-        if( onOld == true || vfQuestion(pImp, key,
+        if( onOld == true || vfQuestion(window(), key,
                  "This data record already exists! Replace?") )
             db->Rep( Rnum );
     fEdit = false;
@@ -282,7 +292,7 @@ TCModule::CmSave()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -308,7 +318,7 @@ TCModule::CmSaveAs()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -348,7 +358,7 @@ TCModule::CmDelete()
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos )
             Error( GetName(), "Current record key not defined!");
-        if( !vfQuestion(pImp, GetName(),
+        if( !vfQuestion(window(), GetName(),
                    "Confirm deletion of data record keyed "+str ))
             return;
         DeleteRecord( str.c_str() );
@@ -356,7 +366,7 @@ TCModule::CmDelete()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -401,7 +411,7 @@ TCModule::CmShow()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -433,7 +443,7 @@ TCModule::CmFilter()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -473,7 +483,7 @@ TCModule::CmNext()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -512,7 +522,7 @@ TCModule::CmPrevious()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -527,7 +537,7 @@ TCModule::RecBuild( const char *key, int mode  )
 
     int bldType = mode;
     if( bldType == VF_UNDEF )
-       bldType = vfQuestion3(pImp, "Reallocation of data arrays ",
+       bldType = vfQuestion3(window(), "Reallocation of data arrays ",
                               GetName()+ gstring(" : ") + key ,
                               "&Bypass", "&Remake", "&Clear all");
     int retType = bldType;
@@ -585,7 +595,7 @@ TCModule::CmDerive()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -629,7 +639,7 @@ TCModule::CmCalc()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -660,7 +670,7 @@ TCModule::CmNew()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -689,7 +699,7 @@ TCModule::CmCreate()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -752,7 +762,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
             if(pVisor->ProfileMode == true)
                 Error( GetName(), msg.c_str() );
             msg +=  "Create new record?";
-            if( !vfQuestion(pImp, GetName(), msg ))
+            if( !vfQuestion(window(), GetName(), msg ))
                 Error( GetName(), "Record creation rejected!");
             gstring str = key.p;
 
@@ -811,7 +821,7 @@ void TCModule::RecordLoadinProfile( const char *key )
             return ;
     RecInput( str.c_str() );
     if( check_input( str.c_str(), 0 ) ) // read and unpack base SyStat
-        vfMessage(pImp, GetName(),
+        vfMessage(window(), GetName(),
       "Warning: Startpoint SysEq record has been modified!" );
     //   pVisor->Update();
 }
@@ -833,7 +843,7 @@ void TCModule::CmLoadinProfile()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -866,7 +876,7 @@ TCModule::CmNewinProfile()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -896,7 +906,7 @@ TCModule::CmCreateinProfile()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -908,7 +918,7 @@ TCModule::CmCreateinProfile()
 void
 TCModule::RecordPlot( const char* /*key*/ )
 {
-    vfMessage(pImp, GetName(), "Plotting?\n\nNot here, yet... Sorry!");
+    vfMessage(window(), GetName(), "Plotting?\n\nNot here, yet... Sorry!");
 }
 
 
@@ -930,7 +940,7 @@ TCModule::CmPlot()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -944,12 +954,12 @@ TCModule::PrintSDref( const char* sd_key, char* text_fmt )
    Error( sd_key, "No format text in this record.");  */
  // open file to output
  gstring filename;
-    if( vfChooseFileSave(pImp, filename, "Please, provide name of TXT-file") )
+    if( vfChooseFileSave(window(), filename, "Please, provide name of TXT-file") )
     {
         ios::openmode mod = ios::out;
 
         if( !(::access(filename.c_str(), 0 )) ) //file exists
-            switch( vfQuestion3( pImp, filename.c_str(),
+            switch( vfQuestion3( window(), filename.c_str(),
                              "This file exists! What to do?",
                                  "&Append", "&Overwrite", "&Cancel") )
             {
@@ -989,11 +999,16 @@ TCModule::RecordPrint( const char* key )
     sd_key = "pscript*:*:";
     sd_key += db->GetKeywd();
     sd_key += ":";
-    sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+ }
+ if( sd_key.find_first_of("*?" ) != gstring::npos )
+ {
+     sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
           sd_key.c_str(), "Select key of pscript format", KEY_OLD);
-    if( sd_key.empty() )
+ }
+
+ if( sd_key.empty() )
      return;
-  }
+
   ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
   char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
   if( !text_fmt )
@@ -1019,7 +1034,7 @@ TCModule::CmPrint()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1043,7 +1058,7 @@ TCModule::CmScript()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1060,7 +1075,7 @@ TCModule::CmRebildFile()
     try
     {
         MessageToSave();
-        pVisor->Message( pImp, GetName(), "Compressing database file \n"
+        pVisor->Message( window(), GetName(), "Compressing database file \n"
          "Please, wait...", 0, 100 );
 
         db->RebildFile(SelectFileList(closef|openf));
@@ -1071,7 +1086,7 @@ TCModule::CmRebildFile()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1085,7 +1100,7 @@ TCModule::CmAddFileToList()
         MessageToSave();
 
         gstring filename;
-        if( vfChooseFileSave(pImp, filename,
+        if( vfChooseFileSave(window(), filename,
                              "Put new Data Base file name" ) == false )
             return;
         // test Path Added Sveta 5/03/02
@@ -1112,7 +1127,7 @@ TCModule::CmAddFileToList()
 
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1132,7 +1147,7 @@ TCModule::CmAddOpenFile()
 
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1147,7 +1162,7 @@ TCModule::CmReOpenFileList()
         TCIntArray arr = SelectFileList(closef|openf|oldself);
 
         if( arr.GetCount() < 1 )
-            if( !vfQuestion( pImp, GetName(),
+            if( !vfQuestion( window(), GetName(),
                   "No database files selected to open! Continue?" ))
                 return;
 
@@ -1160,7 +1175,7 @@ TCModule::CmReOpenFileList()
 
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1185,7 +1200,7 @@ TCModule::CmKeysToTXT()
 
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1202,7 +1217,7 @@ TCModule::CmDeleteList()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1222,7 +1237,7 @@ TCModule::CmCopyList( )
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1239,7 +1254,7 @@ TCModule::CmRenameList( )
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1258,7 +1273,7 @@ TCModule::CmTransferList()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1275,7 +1290,7 @@ TCModule::CmExport()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1291,7 +1306,7 @@ TCModule::CmBackup()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1308,7 +1323,7 @@ TCModule::CmImport()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1324,7 +1339,7 @@ TCModule::CmRestore()
     }
     catch( TError& xcpt )
     {
-        vfMessage(pImp, xcpt.title, xcpt.mess);
+        vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
 
@@ -1345,7 +1360,7 @@ TCModule::AddRecord(const char* key )
     {
         gstring s="Choose a database file to put a record: "+ gstring(key);
         file = db->fOpenNameBuf.GetCount() - 1;  // 04.04.01 KD
-        file = vfChoice(pImp, db->fOpenNameBuf, s.c_str(), file );
+        file = vfChoice(window(), db->fOpenNameBuf, s.c_str(), file );
     }
     else
         file = 0;
@@ -1376,7 +1391,7 @@ TCModule::AddRecord(const char* key, int& fnum )
            gstring s="Choose a database file to put a record: "
                       + gstring(key);
            file = db->fOpenNameBuf.GetCount() - 1;  // 04.04.01 KD
-           file = vfChoice2(pImp, db->fOpenNameBuf, s.c_str(), file, ok_to_all );
+           file = vfChoice2(window(), db->fOpenNameBuf, s.c_str(), file, ok_to_all );
            if( ok_to_all == true && file >= 0 )
               fnum = file;
        }
@@ -1394,7 +1409,7 @@ TCModule::AddRecord(const char* key, int& fnum )
 void
 TCModule::KeysToTXT( const char *pattern )
 {
-    TCStringArray aKey = vfMultiKeys( pImp,
+    TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark record keys to be listed in txt-file",
        nRT, pattern );
     if( aKey.GetCount() <1 )
@@ -1403,7 +1418,7 @@ TCModule::KeysToTXT( const char *pattern )
     gstring s = GetName();
     gstring filename;
     s += " : Please, select file to write record keys";
-    if( !vfChooseFileSave(pImp, filename, s.c_str()) )
+    if( !vfChooseFileSave(window(), filename, s.c_str()) )
         return;
     fstream f(filename.c_str(), ios::out);
     ErrorIf( !f.good() , GetName(), "Fileopen error");
@@ -1422,7 +1437,7 @@ TCModule::KeysToTXT( const char *pattern )
 void
 TCModule::RecToTXT( const char *pattern )
 {
-    TCStringArray aKey = vfMultiKeys( pImp,
+    TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
        nRT, pattern );
     if( aKey.GetCount() <1 )
@@ -1431,7 +1446,7 @@ TCModule::RecToTXT( const char *pattern )
     gstring s = GetName();
     gstring filename;
     s += " : Please, give a file name for unloading records";
-    if( vfChooseFileSave( pImp, filename, s.c_str() ) == false )
+    if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::out);
     ErrorIf( !f.good() , GetName(), "File write error");
@@ -1462,7 +1477,7 @@ TCModule::RecOfTXT()
 
     gstring s =gstring( GetName() )+" : Please, select file with unloaded records";
     gstring filename;
-    if( vfChooseFileOpen( pImp, filename, s.c_str() ) == false )
+    if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::in);
     ErrorIf( !f.good() , GetName(), "Fileread error...");
@@ -1524,7 +1539,7 @@ TCModule::RecExport( const char *pattern )
     if( !text_fmt )
        Error( sd_key.c_str(), "No format text in this record.");
 
-    TCStringArray aKey = vfMultiKeys( pImp,
+    TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
        nRT, pattern );
     if( aKey.GetCount() <1 )
@@ -1533,11 +1548,11 @@ TCModule::RecExport( const char *pattern )
     gstring s = GetName();
     gstring filename;
     s += " : Please, give a file name for unloading records";
-    if( vfChooseFileSave( pImp, filename, s.c_str() ) == false )
+    if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
         return;
    ios::openmode mod = ios::out;
    if( !(::access(filename.c_str(), 0 )) ) //file exists
-     switch( vfQuestion3( pImp, filename.c_str(),
+     switch( vfQuestion3( window(), filename.c_str(),
                    "This file exists! What to do?",
                   "&Append", "&Overwrite", "&Cancel") )
      {
@@ -1591,7 +1606,7 @@ TCModule::RecImport()
 
     gstring s =gstring( GetName() )+" : Please, select file with imported records";
     gstring filename;
-    if( vfChooseFileOpen( pImp, filename, s.c_str() ) == false )
+    if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::in);
     ErrorIf( !f.good() , GetName(), "Fileread error...");
@@ -1604,7 +1619,7 @@ TCModule::RecImport()
         Rnum = db->Find( keyp.c_str() );
         if( Rnum >= 0 )
         {
-           if( vfQuestion(pImp, keyp.c_str(),
+           if( vfQuestion(window(), keyp.c_str(),
                "Data record with this key already exists! Replace?"))
               db->Rep( Rnum );
         }
@@ -1639,7 +1654,7 @@ TCModule::RecImport()
 void
 TCModule::DelList( const char *pattern )
 {
-    TCStringArray aKey = vfMultiKeys( pImp,
+    TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark record keys to be deleted from database",
        nRT, pattern );
     int ichs = 1;
@@ -1650,7 +1665,7 @@ TCModule::DelList( const char *pattern )
         str += aKey[i];
         if( ichs )
         {
-            switch( vfQuestion3(pImp, GetName(), str.c_str(),
+            switch( vfQuestion3(window(), GetName(), str.c_str(),
                                 "&Yes", "&No", "&Delete All" ))
             {
             case VF3_3:
@@ -1674,7 +1689,7 @@ TCModule::Transfer( const char *pattern )
     int nrec = 0;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
-    TCStringArray aKey = vfMultiKeys( pImp,
+    TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark record keys to be moved",
        nRT, pattern );
 
@@ -1709,11 +1724,11 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
     else
      str = "Please, mark record keys to be copied";
 
-    TCStringArray aKey = vfMultiKeys( pImp,
+    TCStringArray aKey = vfMultiKeys( window(),
        str.c_str(), nRT, pattern );
 
     int rn_type = 0;
-    switch (vfQuestYesNoCancel(pImp,
+    switch (vfQuestYesNoCancel(window(),
         "How to rename records",
         "Each key separately (Yes) \n"
         "All records using template (No)" ))
@@ -1730,7 +1745,7 @@ TCModule::CopyRecordsList( const char *pattern, bool if_rename )
     gstring to_t;
     if( rn_type == 0 )
     {
-     if( !vfKeyCanged(pImp, "", from_t,  to_t ))
+     if( !vfKeyCanged(window(), "", from_t,  to_t ))
       return;
     }
 
@@ -1784,7 +1799,8 @@ TCModule::SelectFileList(int mode)
 
     db->GetFileList(mode, names, indx, sel);
 
-    TCIntArray aSel = vfMultiChoiceSet(pImp, names, "Selection of files", sel);
+    TCIntArray aSel = vfMultiChoiceSet(window(), names,
+         "Selection of files", sel);
 
     TCIntArray arr;
     for( uint i=0; i<aSel.GetCount(); i++ )
@@ -1817,7 +1833,7 @@ TCModule::RecToTXT( const char *pattern )
     int ichs;
     uint i;
 
-    TCStringArray aKey = vfMultiKeys( pImp,
+    TCStringArray aKey = vfMultiKeys( window(),
        "Please, mark records to be unloaded into txt-file",
        nRT, pattern );
     if( aKey.GetCount() <1 )
@@ -1826,11 +1842,11 @@ TCModule::RecToTXT( const char *pattern )
     gstring s = GetName();
     gstring filename;
     s += " : Please, give a file name for unloading records";
-    if( vfChooseFileSave( pImp, filename, s.c_str() ) == false )
+    if( vfChooseFileSave( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::out);
     ErrorIf( !f.good() , GetName(), "File write error");
-    switch( vfQuestion3(pImp, GetName(), "Unload all marked records (Y) "
+    switch( vfQuestion3(window(), GetName(), "Unload all marked records (Y) "
                         "or show/confirm each one (N)?","&All", "&Each one", "&Skip" ))
     {
     case VF3_2:
@@ -1851,7 +1867,7 @@ TCModule::RecToTXT( const char *pattern )
         if( ichs )
         {
             pVisor->Update(); // no objecs change, only title
-            switch( vfQuestion3(pImp, aKey[i], "Unload record?",
+            switch( vfQuestion3(window(), aKey[i], "Unload record?",
                                 "&Yes", "&No", "&Unload All" ))
             {
             case VF3_3:
@@ -1885,11 +1901,11 @@ TCModule::RecOfTXT()
 
     gstring s =gstring( GetName() )+" : Please, select file with unloaded records";
     gstring filename;
-    if( vfChooseFileOpen( pImp, filename, s.c_str() ) == false )
+    if( vfChooseFileOpen( window(), filename, s.c_str() ) == false )
         return;
     fstream f(filename.c_str(), ios::in);
     ErrorIf( !f.good() , GetName(), "Fileread error...");
-    switch( vfQuestion3(pImp, GetName(), "Load all records (Y) "
+    switch( vfQuestion3(window(), GetName(), "Load all records (Y) "
                         "or show/confirm each one (N)?","&All", "&Each one", "&Skip" ))
     {
     case VF3_2:
@@ -1912,7 +1928,7 @@ TCModule::RecOfTXT()
         {
             db->SetKey( buf );
             pVisor->Update(); // no objecs change, only title
-            switch( vfQuestion3(pImp, buf.p, "Load record?" ,
+            switch( vfQuestion3(window(), buf.p, "Load record?" ,
                                 "&Yes", "&No", "&Load All" ))
             {
             case VF3_3:

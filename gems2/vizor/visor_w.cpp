@@ -48,11 +48,11 @@ using namespace std;
 #include "dlg/ExcludeFillDialog.h"
 #include "dlg/ProgressDialog.h"
 #include "dlg/ProcessDialog.h"
-#include "dlg/SystemDialog.h"
+#include "dlg/NewSystemDialog.h"
 #include "dlg/ListFilesDialog.h"
 #include "dlg/ElementsDialog.h"
 #include "dlg/LoadMessage.h"
-#include "dlg/HLinpDialog.h"
+//#include "dlg/HLinpDialog.h"
 #include "dlg/KeyDialog.h"
 #include "dlg/KeyProfile.h"
 #include "dlg/ChangeKeyDialog.h"
@@ -166,11 +166,11 @@ TVisorImp::Update(bool force)
     if( ProgressDialog::pDia )
         ProgressDialog::pDia->Update(force);
 #endif
-    if( SystemDialog::pDia )
-        SystemDialog::pDia->Update();
+    if( NewSystemDialog::pDia )
+        NewSystemDialog::pDia->Update();
 
-    if( HLinpDialog::pDia )   // may be resized
-        HLinpDialog::pDia->Update();
+//    if( HLinpDialog::pDia )   // may be resized
+//        HLinpDialog::pDia->Update();
 
     for( uint ii=0; ii<aMod.GetCount(); ii++ )
         aMod[ii].Update(force);
@@ -228,68 +228,10 @@ TVisorImp::SetGeneralMode()
 }
 
 void
-TVisorImp::ShowPhaseWindow()
+TVisorImp::SaveSystem()
 {
-    try
-    {
-        TProfil::pm->ShowPhaseWindow();
-    }
-    catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-void
+    TSysEq::pm->CmSave();
 
-TVisorImp::ShowEqPhaseWindow()
-{
-    try
-    {
-        TProfil::pm->ShowEqPhaseWindow();
-    }
-    catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-
-void
-TVisorImp::NewSystem()
-{
-    try
-    {
-        TProfil::pm->newSystat();
-    }
-    catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-
-void
-TVisorImp::RemakeSystem()
-{
-    try
-    {
-        TProfil::pm->deriveSystat();
-    }
-    catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
-}
-
-void
-TVisorImp::LoadSystem()
-{
-    try
-    {
-        TProfil::pm->loadSystat();
-    }
-    catch( TError& xcpt )
-    {
-        vfMessage(this, xcpt.title, xcpt.mess);
-    }
 }
 
 void
@@ -319,12 +261,6 @@ TVisorImp::CalcMulti()
         vfMessage(this, xcpt.title, xcpt.mess);
     }
 #endif
-}
-
-void
-TVisorImp::SaveSystem()
-{
-    TSysEq::pm->CmSave();
 }
 
 
@@ -400,7 +336,7 @@ TVisorImp::OpenProgress( bool step )
     if( ProgressDialog::pDia )
         ProgressDialog::pDia->raise();
     else
-        (new ProgressDialog(SystemDialog::pDia, step))->show();
+        (new ProgressDialog(NewSystemDialog::pDia, step))->show();
 }
 
 void

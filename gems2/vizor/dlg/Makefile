@@ -18,7 +18,7 @@ INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 DATASRC =	MainDialogData.cpp \
 		DBDialogData.cpp \
 		EQDialogData.cpp \
-		SystemDialogData.cpp \
+		NewSystemDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessDialogData.cpp \
 		KeyDialogData.cpp \
@@ -33,8 +33,6 @@ DATASRC =	MainDialogData.cpp \
 		GraphDialogData.cpp \
 		LegendDialogData.cpp \
 		ListFilesDialogData.cpp \
-		HLresDialogData.cpp \
-		HLinpDialogData.cpp \
 		ElementsDialogData.cpp \
 		SetFiltersDialogData.cpp
 
@@ -43,7 +41,7 @@ DATAOBJ =	$(subst .cpp,.o,$(DATASRC))
 SOURCES =	MainDialog.cpp \
 		DBDialog.cpp \
 		EQDialog.cpp \
-		SystemDialog.cpp \
+		NewSystemDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessDialog.cpp \
 		KeyDialog.cpp \
@@ -60,8 +58,6 @@ SOURCES =	MainDialog.cpp \
 		GraphDialog.cpp \
 		LegendDialog.cpp \
 		ListFilesDialog.cpp \
-		HLresDialog.cpp \
-		HLinpDialog.cpp \
 		LoadMessage.cpp \
 		ElementsDialog.cpp \
 		SetFiltersDialog.cpp
@@ -74,8 +70,8 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_DBDialogData.o \
 		moc_EQDialog.o \
 		moc_EQDialogData.o \
-		moc_SystemDialog.o \
-		moc_SystemDialogData.o \
+		moc_NewSystemDialog.o \
+		moc_NewSystemDialogData.o \
 		moc_ProgressDialog.o \
 		moc_ProgressDialogData.o \
 		moc_ProcessDialog.o \
@@ -106,10 +102,6 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_LegendDialogData.o \
 		moc_ListFilesDialog.o \
 		moc_ListFilesDialogData.o \
-		moc_HLresDialog.o \
-		moc_HLresDialogData.o \
-		moc_HLinpDialog.o \
-		moc_HLinpDialogData.o \
 		moc_LoadMessage.o \
 		moc_ElementsDialog.o \
 		moc_ElementsDialogData.o \

@@ -111,8 +111,8 @@ link:
 +dlg\DBDialogData.obj \
 +dlg\EQDialog.obj \
 +dlg\EQDialogData.obj \
-+dlg\SystemDialog.obj \
-+dlg\SystemDialogData.obj \
++dlg\NewSystemDialog.obj \
++dlg\NewSystemDialogData.obj \
 +dlg\ProgressDialog.obj \
 +dlg\ProgressDialogData.obj \
 +dlg\ProcessDialog.obj \
@@ -143,10 +143,6 @@ link:
 +dlg\LegendDialogData.obj \
 +dlg\ListFilesDialog.obj \
 +dlg\ListFilesDialogData.obj \
-+dlg\HLresDialog.obj \
-+dlg\HLresDialogData.obj \
-+dlg\HLinpDialog.obj \
-+dlg\HLinpDialogData.obj \
 +dlg\ElementsDialog.obj \
 +dlg\ElementsDialogData.obj \
 +dlg\SetFiltersDialog.obj \
@@ -158,8 +154,8 @@ link:
 +tmp\moc_DBDialogData.obj \
 +tmp\moc_EQDialog.obj \
 +tmp\moc_EQDialogData.obj \
-+tmp\moc_SystemDialog.obj \
-+tmp\moc_SystemDialogData.obj \
++tmp\moc_NewSystemDialog.obj \
++tmp\moc_NewSystemDialogData.obj \
 +tmp\moc_ProgressDialog.obj \
 +tmp\moc_ProgressDialogData.obj \
 +tmp\moc_ProcessDialog.obj \
@@ -190,10 +186,6 @@ link:
 +tmp\moc_LegendDialogData.obj \
 +tmp\moc_ListFilesDialog.obj \
 +tmp\moc_ListFilesDialogData.obj \
-+tmp\moc_HLresDialog.obj \
-+tmp\moc_HLresDialogData.obj \
-+tmp\moc_HLinpDialog.obj \
-+tmp\moc_HLinpDialogData.obj \
 +tmp\moc_ElementsDialog.obj \
 +tmp\moc_ElementsDialogData.obj \
 +tmp\moc_SetFiltersDialog.obj \

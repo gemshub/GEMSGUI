@@ -541,7 +541,7 @@ void TProfil::deriveSystat()
 
 
 //  build new Systat record
-void TProfil::newSystat()
+void TProfil::newSystat( int mode )
 { //vstr pkey(81);
 
     //rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
@@ -563,7 +563,7 @@ void TProfil::newSystat()
     if( rt[RT_SYSEQ].Find( str.c_str() ) >= 0 )
         Error("SyStat", "This record already exists!");
 
-    int ret = TSysEq::pm->RecBuild( str.c_str(), VF_BYPASS );
+    int ret = TSysEq::pm->RecBuild( str.c_str(), mode );
     //  fEdit = false;
     //  TSysEq::pm->CloseWin();
     //  fEdit = true;

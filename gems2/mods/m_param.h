@@ -338,7 +338,7 @@ public:
     // work with Project
     bool initCalcMode();
     void loadSystat( const char *key=0 );
-    void newSystat();
+    void newSystat( int mode );
     void deriveSystat();
     void PackSystat();
     void CalcEqstat( bool show_progress=true );

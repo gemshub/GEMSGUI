@@ -19,7 +19,7 @@ FLAGS	=	$(CCFLAGS) $(DEBUG_FLAGS)
 DATASRC =	MainDialogData.cpp \
 		DBDialogData.cpp \
 		EQDialogData.cpp \
-		SystemDialogData.cpp \
+		NewSystemDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessDialogData.cpp \
 		KeyDialogData.cpp \
@@ -34,15 +34,13 @@ DATASRC =	MainDialogData.cpp \
 		LegendDialogData.cpp \
 		GraphDialogData.cpp \
 		ListFilesDialogData.cpp \
-		HLresDialogData.cpp \
-		HLinpDialogData.cpp \
 		ElementsDialogData.cpp \
 		SetFiltersDialogData.cpp
 
 DATAOBJ =       MainDialogData.obj \
 		DBDialogData.obj \
 		EQDialogData.obj \
-		SystemDialogData.obj \
+		NewSystemDialogData.obj \
 		ProgressDialogData.obj \
 		ProcessDialogData.obj \
 		KeyDialogData.obj \
@@ -57,8 +55,6 @@ DATAOBJ =       MainDialogData.obj \
 		GraphDialogData.obj \
 		LegendDialogData.obj \
 		ListFilesDialogData.obj \
-		HLresDialogData.obj \
-		HLinpDialogData.obj \
 		ElementsDialogData.obj \
 		SetFiltersDialogData.obj
 
@@ -66,7 +62,7 @@ DATAOBJ =       MainDialogData.obj \
 SOURCES =	MainDialog.cpp \
 		DBDialog.cpp \
 		EQDialog.cpp \
-		SystemDialog.cpp \
+		NewSystemDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessDialog.cpp \
 		KeyDialog.cpp \
@@ -83,8 +79,6 @@ SOURCES =	MainDialog.cpp \
 		GraphDialog.cpp \
 		LegendDialog.cpp \
 		ListFilesDialog.cpp \
-		HLresDialog.cpp \
-		HLinpDialog.cpp \
 		ElementsDialog.cpp \
 		SetFiltersDialog.cpp \
  		LoadMessage.cpp
@@ -92,7 +86,7 @@ SOURCES =	MainDialog.cpp \
 OBJECTS =	MainDialog.obj \
 		DBDialog.obj \
 		EQDialog.obj \
-		SystemDialog.obj \
+		NewSystemDialog.obj \
 		ProgressDialog.obj \
 		ProcessDialog.obj \
 		KeyDialog.obj \
@@ -109,8 +103,6 @@ OBJECTS =	MainDialog.obj \
 		GraphDialog.obj  \
 		LegendDialog.obj  \
 		ListFilesDialog.obj \
-		HLresDialog.obj \
-		HLinpDialog.obj \
  		LoadMessage.obj \
 		ElementsDialog.obj \
 		SetFiltersDialog.obj
@@ -121,8 +113,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_DBDialogData.obj \
 		..\tmp\moc_EQDialog.obj \
 		..\tmp\moc_EQDialogData.obj \
-		..\tmp\moc_SystemDialog.obj \
-		..\tmp\moc_SystemDialogData.obj \
+		..\tmp\moc_NewSystemDialog.obj \
+		..\tmp\moc_NewSystemDialogData.obj \
 		..\tmp\moc_ProgressDialog.obj \
 		..\tmp\moc_ProgressDialogData.obj \
 		..\tmp\moc_ProcessDialog.obj \
@@ -153,10 +145,6 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_LegendDialogData.obj \
             ..\tmp\moc_ListFilesDialog.obj \
 		..\tmp\moc_ListFilesDialogData.obj \
-		..\tmp\moc_HLresDialog.obj \
-		..\tmp\moc_HLresDialogData.obj \
-		..\tmp\moc_HLinpDialog.obj \
-		..\tmp\moc_HLinpDialogData.obj \
  		..\tmp\moc_LoadMessage.obj \
             ..\tmp\moc_ElementsDialog.obj \
 		..\tmp\moc_ElementsDialogData.obj \
@@ -223,18 +211,18 @@ clean:
 	-del moc_EQDialogData.cpp
 
 
-..\tmp\moc_SystemDialog.obj: SystemDialog.h
-      	$(MOC) SystemDialog.h -o moc_SystemDialog.cpp
+..\tmp\moc_NewSystemDialog.obj: NewSystemDialog.h
+      	$(MOC) NewSystemDialog.h -o moc_NewSystemDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SystemDialog.cpp
-	-del moc_SystemDialog.cpp
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_NewSystemDialog.cpp
+	-del moc_NewSystemDialog.cpp
 
 
-..\tmp\moc_SystemDialogData.obj: SystemDialogData.h
-      	$(MOC) SystemDialogData.h -o moc_SystemDialogData.cpp
+..\tmp\moc_NewSystemDialogData.obj: NewSystemDialogData.h
+      	$(MOC) NewSystemDialogData.h -o moc_NewSystemDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SystemDialogData.cpp
-	-del moc_SystemDialogData.cpp
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_NewSystemDialogData.cpp
+	-del moc_NewSystemDialogData.cpp
 
 
 ..\tmp\moc_ProgressDialog.obj: ProgressDialog.h
@@ -424,30 +412,6 @@ clean:
         $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ListFilesDialogData.cpp
 	-del moc_ListFilesDialogData.cpp
 
-..\tmp\moc_HLresDialog.obj: HLresDialog.h
-      	$(MOC) HLresDialog.h -o moc_HLresDialog.cpp
-
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_HLresDialog.cpp
-	-del moc_HLresDialog.cpp
-
-..\tmp\moc_HLresDialogData.obj: HLresDialogData.h
-      	$(MOC) HLresDialogData.h -o moc_HLresDialogData.cpp
-
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_HLresDialogData.cpp
-	-del moc_HLresDialogData.cpp
-
-..\tmp\moc_HLinpDialog.obj: HLinpDialog.h
-      	$(MOC) HLinpDialog.h -o moc_HLinpDialog.cpp
-
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_HLinpDialog.cpp
-	-del moc_HLinpDialog.cpp
-
-..\tmp\moc_HLinpDialogData.obj: HLinpDialogData.h
-      	$(MOC) HLinpDialogData.h -o moc_HLinpDialogData.cpp
-
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_HLinpDialogData.cpp
-	-del moc_HLinpDialogData.cpp
-
 ..\tmp\moc_ElementsDialog.obj: ElementsDialog.h
       	$(MOC) ElementsDialog.h -o moc_ElementsDialog.cpp
 
@@ -492,7 +456,7 @@ EQDialogData.cpp: EQDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
-SystemDialogData.cpp: SystemDialog.ui
+NewSystemDialogData.cpp: NewSystemDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
@@ -549,14 +513,6 @@ GraphDialogData.cpp: GraphDialog.ui
         $(UIC) $? -impl $(*).h -o $@
 
 ListFilesDialogData.cpp: ListFilesDialog.ui
-        $(UIC) $? -o $(*).h
-        $(UIC) $? -impl $(*).h -o $@
-
-HLresDialogData.cpp: HLresDialog.ui
-        $(UIC) $? -o $(*).h
-        $(UIC) $? -impl $(*).h -o $@
-
-HLinpDialogData.cpp: HLinpDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
