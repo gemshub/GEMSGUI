@@ -57,6 +57,9 @@
                 <property name="default">
                     <bool>true</bool>
                 </property>
+                <property name="toolTip" stdset="0">
+                    <string>Click to accept selections and proceed with creating/opening the modelling project</string>
+                </property>
             </widget>
             <spacer>
                 <property name="name">
@@ -90,6 +93,9 @@
                 </property>
                 <property name="default">
                     <bool>false</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Click to see updated Phase record keys and parameters related to chosen models </string>
                 </property>
             </widget>
             <spacer>
@@ -174,19 +180,6 @@
                     <string>Phase record key:</string>
                 </property>
             </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>apRkeyEdit</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>140</x>
-                        <y>278</y>
-                        <width>370</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-            </widget>
             <widget class="QGroupBox">
                 <property name="name">
                     <cstring>groupBox1_2</cstring>
@@ -202,24 +195,6 @@
                 <property name="title">
                     <string>Parameters</string>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1_2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>20</y>
-                            <width>120</width>
-                            <height>35</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>for generated &lt;br&gt;
-
-aq. phase model</string>
-                    </property>
-                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>textLabel2_5</cstring>
@@ -250,45 +225,6 @@ aq. phase model</string>
                     </property>
                     <property name="text">
                         <string>Policy_to_neutral</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>apEdit3</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>260</y>
-                            <width>80</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>apEdit0</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>80</y>
-                            <width>80</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>apEdit2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>200</y>
-                            <width>80</width>
-                            <height>22</height>
-                        </rect>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -325,6 +261,22 @@ aq. phase model</string>
                 </widget>
                 <widget class="QLineEdit">
                     <property name="name">
+                        <cstring>apEdit0</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>50</x>
+                            <y>80</y>
+                            <width>80</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This value of third EDH parameter will be used in H and 3 models and in 2 (aqueous species only)</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
                         <cstring>apEdit1</cstring>
                     </property>
                     <property name="geometry">
@@ -334,6 +286,59 @@ aq. phase model</string>
                             <width>80</width>
                             <height>22</height>
                         </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This value (to be used in the H model) can be changed here</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>apEdit2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>50</x>
+                            <y>200</y>
+                            <width>80</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This value can be 0 (default) or -1 (set gamma=1 for all neutral species)</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>apEdit3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>50</x>
+                            <y>260</y>
+                            <width>80</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This reminds you up to what ionic strength the chosen model can be used</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>120</width>
+                            <height>35</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>for aqueous &lt;br&gt;
+
+phase model</string>
                     </property>
                 </widget>
             </widget>
@@ -518,6 +523,22 @@ aq. phase model</string>
                     </property>
                 </widget>
             </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>apRkeyEdit</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>140</x>
+                        <y>278</y>
+                        <width>370</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>This field shows a record key of the aqueous Phase to be automatically generated</string>
+                </property>
+            </widget>
         </widget>
         <widget class="QWidget">
             <property name="name">
@@ -541,6 +562,85 @@ aq. phase model</string>
                 <property name="text">
                     <string>Phase record key:</string>
                 </property>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>ButtonGroup1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>496</width>
+                        <height>160</height>
+                    </rect>
+                </property>
+                <property name="title">
+                    <string></string>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>gselI</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Ideal mixture of gaseous components, &amp;I (default)</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>gselF</cstring>
+                        </property>
+                        <property name="text">
+                            <string>CG EoS for non-electrolyte fluid (Churakov &amp;&amp; Gottschalk, 2003), &amp;F</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer7_3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>16</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>gselU</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Do not generate; select a user-defined Phase record from database, &amp;U</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>gselNo</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Do not include gas/fluid mixture phase into the system definition, &amp;N</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                    </widget>
+                </vbox>
             </widget>
             <widget class="QGroupBox">
                 <property name="name">
@@ -639,6 +739,22 @@ aq. phase model</string>
                 </widget>
                 <widget class="QLineEdit">
                     <property name="name">
+                        <cstring>gpEdit0</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>50</x>
+                            <y>80</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Reserved for use in future versions</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
                         <cstring>gpEdit1</cstring>
                     </property>
                     <property name="geometry">
@@ -648,6 +764,9 @@ aq. phase model</string>
                             <width>90</width>
                             <height>22</height>
                         </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Reserved for use in future versions</string>
                     </property>
                 </widget>
                 <widget class="QLineEdit">
@@ -662,6 +781,9 @@ aq. phase model</string>
                             <height>22</height>
                         </rect>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Reserved for use in future versions</string>
+                    </property>
                 </widget>
                 <widget class="QLineEdit">
                     <property name="name">
@@ -675,99 +797,10 @@ aq. phase model</string>
                             <height>22</height>
                         </rect>
                     </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>gpEdit0</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>80</y>
-                            <width>90</width>
-                            <height>22</height>
-                        </rect>
+                    <property name="toolTip" stdset="0">
+                        <string>Reserved for use in future versions</string>
                     </property>
                 </widget>
-            </widget>
-            <widget class="QButtonGroup">
-                <property name="name">
-                    <cstring>ButtonGroup1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>496</width>
-                        <height>160</height>
-                    </rect>
-                </property>
-                <property name="title">
-                    <string></string>
-                </property>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>gselI</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Ideal mixture of gaseous components, &amp;I (default)</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>gselF</cstring>
-                        </property>
-                        <property name="text">
-                            <string>CG EoS for non-electrolyte fluid (Churakov &amp;&amp; Gottschalk, 2003), &amp;F</string>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>spacer7_3</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>16</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>gselU</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Do not generate; select a user-defined Phase record from database, &amp;U</string>
-                        </property>
-                        <property name="checked">
-                            <bool>false</bool>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>gselNo</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Do not include gas/fluid mixture phase into the system definition, &amp;N</string>
-                        </property>
-                        <property name="checked">
-                            <bool>false</bool>
-                        </property>
-                    </widget>
-                </vbox>
             </widget>
             <widget class="QLineEdit">
                 <property name="name">
@@ -780,6 +813,9 @@ aq. phase model</string>
                         <width>360</width>
                         <height>22</height>
                     </rect>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>This field shows a record key of the gas/fluid Phase to be automatically generated</string>
                 </property>
             </widget>
         </widget>
