@@ -22,6 +22,22 @@
         <attribute name="title">
             <string>Step 1 - Defining Phase Model</string>
         </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>15</x>
+                    <y>8</y>
+                    <width>610</width>
+                    <height>40</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;By setting the codes below you will configure the Phase record and tell the program what kind of mixed phase and non-ideal model should be used.&lt;/b&gt;</string>
+            </property>
+        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>MixingModelGroup</cstring>
@@ -29,9 +45,9 @@
             <property name="geometry">
                 <rect>
                     <x>0</x>
-                    <y>10</y>
+                    <y>60</y>
                     <width>630</width>
-                    <height>340</height>
+                    <height>320</height>
                 </rect>
             </property>
             <property name="title">
@@ -39,15 +55,37 @@
             </property>
             <widget class="QLabel">
                 <property name="name">
+                    <cstring>ModelCodeLabel</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>380</x>
+                        <y>20</y>
+                        <width>230</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&lt;b&gt;Select a mixing model for this phase&lt;/b&gt;</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>AC_modeLabel</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>380</x>
-                        <y>80</y>
+                        <y>70</y>
                         <width>230</width>
                         <height>31</height>
                     </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Plain</enum>
                 </property>
                 <property name="text">
                     <string>&lt;b&gt;Select a mode of calculation of activity coefficients of end members&lt;/b&gt;</string>
@@ -60,7 +98,7 @@
                 <property name="geometry">
                     <rect>
                         <x>380</x>
-                        <y>130</y>
+                        <y>120</y>
                         <width>230</width>
                         <height>31</height>
                     </rect>
@@ -76,7 +114,7 @@
                 <property name="geometry">
                     <rect>
                         <x>380</x>
-                        <y>180</y>
+                        <y>170</y>
                         <width>230</width>
                         <height>31</height>
                     </rect>
@@ -92,7 +130,7 @@
                 <property name="geometry">
                     <rect>
                         <x>380</x>
-                        <y>230</y>
+                        <y>220</y>
                         <width>230</width>
                         <height>31</height>
                     </rect>
@@ -103,34 +141,183 @@
             </widget>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>ModelCodeLabel</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>380</x>
-                        <y>30</y>
-                        <width>230</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&lt;b&gt;Select a mixing model for this phase&lt;/b&gt;</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
                     <cstring>SCM_codeLabel</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>380</x>
-                        <y>280</y>
+                        <y>270</y>
                         <width>230</width>
                         <height>31</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>&lt;b&gt;Select the most complex SCM to be used (sorption phases only) &lt;/b&gt;</string>
+                    <string>&lt;b&gt;Select the most complex SCM to be used in this phase (sorption only) &lt;/b&gt;</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>N   Surface complexation models are not specified (default)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>I    NEM (non-electrostatic), ignores any Coulomb's corrections</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>D   DLM  (diffuse double layer model), Gouy-Chapman only </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>C   CCM (constant capacitance model)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>S   BSM (basic Stern model) as TLM but only with C1 and CD </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>T   TLM (triple layer model) with C1, C2 </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>M   modified TLM for permanent-charge surfaces </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>E   extended BSM for permanent-charge surfaces</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>SCM_code</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>270</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>N   No DcEq script will be provided (built-in or ideal model) (default)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>U   A universal DcEq script will be applied to each end member in a loop</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>P   A private group of expressions will be executed for each end member separately</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>DcEqLinkMode</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>220</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>N   No PhEq script will be provided in this Phase definition (default)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>T   PhEq script will be executed once before GEM IPM iterations</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>X    PhEq script will be executed after each GEM IPM iteration</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>PhEqModeCode</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>170</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>N   No DcEq script will be provided in this Phase definition (default)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>T   DcEq script will be executed once before GEM IPM iterations</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>X    DcEq script will be executed after each GEM IPM iteration</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>DcEqModeCode</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>120</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>I   Activity coefficients will be set to 1 (ideal, default)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>S   Activity coefficients will be calculated using a built-in mixing model selected above</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>N   Activity coefficients will be calculated as given in user-defined script(s)</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>AC_modeCode</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>70</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
                 </property>
             </widget>
             <widget class="QComboBox">
@@ -209,158 +396,18 @@
                         <string>C   CORK fluid model (under construction)</string>
                     </property>
                 </item>
+                <item>
+                    <property name="text">
+                        <string>N   No mixing (pure or single-component phase) </string>
+                    </property>
+                </item>
                 <property name="name">
                     <cstring>ModelCode</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>10</x>
-                        <y>30</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>I   Activity coefficients will be set to 1 (ideal, default)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>S   Activity coefficients will be calculated using a built-in mixing model selected above</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>N   Activity coefficients will be calculated as given in user-defined script(s)</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>AC_modeCode</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>80</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>N   No DcEq script will be provided in this Phase definition (default)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>T   DcEq script will be executed once before GEM IPM iterations</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>X    DcEq script will be executed after each GEM IPM iteration</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>DcEqModeCode</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>130</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>N   No PhEq script will be provided in this Phase definition (default)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>T   PhEq script will be executed once before GEM IPM iterations</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>X    PhEq script will be executed after each GEM IPM iteration</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>PhEqModeCode</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>180</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>N   No DcEq script will be provided (built-in or ideal model) (default)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>U   A universal DcEq script will be applied to each end member in a loop</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>P   A private group of expressions will be executed for each end member separately</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>DcEqLinkMode</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>230</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>N   Surface complexation models are not specified (default)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>I    NEM (non-electrostatic), ignores any Coulomb's corrections</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>D   DLM  (diffuse double layer model), Gouy-Chapman only </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>New Item</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>SCM_code</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>280</y>
+                        <y>20</y>
                         <width>350</width>
                         <height>31</height>
                     </rect>
@@ -547,28 +594,12 @@
                     <x>10</x>
                     <y>240</y>
                     <width>611</width>
-                    <height>140</height>
+                    <height>130</height>
                 </rect>
             </property>
             <property name="title">
                 <string>Set items in this box only if this is a sorption phase  </string>
             </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel4</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>100</y>
-                        <width>461</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Enter here the specific surface area of the sorbent (in m2 per gram), 0 is not valid</string>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel3</cstring>
@@ -583,22 +614,6 @@
                 </property>
                 <property name="text">
                     <string>&lt;b&gt;Set the number of surface types&lt;/b&gt; (minimum 1, maximum 6) to allocate surface complexes</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>checkBoxSorption</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>30</y>
-                        <width>520</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Check this box on if you wish to consider surface species</string>
                 </property>
             </widget>
             <widget class="QSpinBox">
@@ -617,6 +632,22 @@
                     <number>6</number>
                 </property>
             </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>checkBoxSorption</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>520</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Checked if surface complexation will be considered in this (sorption) phase</string>
+                </property>
+            </widget>
             <widget class="QLineEdit">
                 <property name="name">
                     <cstring>lineEdit_surfArea</cstring>
@@ -624,10 +655,26 @@
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>100</y>
+                        <y>90</y>
                         <width>60</width>
                         <height>21</height>
                     </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel4</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>90</y>
+                        <width>461</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Enter here the specific surface area of the sorbent (in m2 per gram), 0 is not valid</string>
                 </property>
             </widget>
         </widget>

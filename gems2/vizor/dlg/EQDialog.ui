@@ -303,7 +303,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Coupling to Fluid &amp;Mass Transport (FMT-GEM)</string>
+                <string>Coupling to Fluid &amp;Mass Transport (GEM2FMT)</string>
             </property>
             <property name="accel">
                 <string>Alt+M</string>

@@ -1,16 +1,17 @@
 Instruction:
 
-Add new wizards for Remake/Create module procedure:
+How to add new wizards for Remake/Create module procedure:
 (see ComposWizard as example)
 
-1. Create ModuleWizard.ui file using QtDisigner,
-   and put it to gems2\vizor\dlg catalog
+1. Create ModuleWizard.ui file using QtDesigner. Set the 
+name of the top-level dialog to ModuleWizardData. 
+Save the ui file and put it into gems2\vizor\dlg catalog.
 
 2. Execute commands in gems2\vizor\dlg catalog:
    uic ModuleWizard.ui -o ModuleWizardData.h
    uic ModuleWizard.ui -impl ModuleWizardData.h -o ModuleWizardData.cpp
 
-3. Make ModuleWizard.h file, that must contained:
+3. Create ModuleWizard.h file as shown below for Compos module:
 
 #ifndef ComposWizard_included
 #define ComposWizard_included
@@ -44,11 +45,14 @@ protected slots:
 
 #endif // ComposWizard_included
 
-Where values: flgs, sizes, r2 - variables, that must be returned to
-work structure of module.
-Dimensions can be changed.
+Parameters such as flgs, sizes, r2 exchange data between the wizard 
+dialog and the rest of the program in both directions. The number
+of parameters, their sizes and dimensions depend on the particular
+module.  
 
-4. Make ModuleWizard.cpp file implamentation of ModuleWizard.h
+
+4. Create ModuleWizard.cpp file implementation of ModuleWizard.h
+(again for Compos module as an example).
 
 //-------------------------------------------------------------------
 
@@ -116,7 +120,8 @@ ComposWizard::help()
 }
 
 
-5. Added function vfModuleSet to visor_w.cpp and user.h files
+5. Add function vfModuleSet() to visor_w.cpp and user.h files
+(for Compos module as an example):
 
 #include "dlg/ComposWizard.h"
 
@@ -135,7 +140,8 @@ vfComposSet(QWidget* par, const char * p_key,
     return true;
 }
 
-6. Added function MakeQuery() to m_module.cpp/.h files
+6. Add a function MakeQuery() to m_module.cpp/.h files
+(virtual function for the selected module, e.g. Compos):
 
 /* opens window with 'Remake record' parameters
 */
@@ -164,6 +170,17 @@ TCompos::MakeQuery()
 }
 
 
-7. Add all new files for all Makefile.* files
-    ( as example do: Search/Find in Files: "ComposWizard" (No all words) in "Makefile.*" )
-  and recompile all.
+7. Add all new files as entries in Makefile.* files
+
+Example for Another module:
+
+Search/Find in Files: "ComposWizard" in "Makefile.*" 
+
+Get to each "ComposWizard" entry found in a Makefile, 
+copy it, paste after the entry found, and change 
+the substring "Compos" to "Another" in the pasted 
+entry.  
+
+Save makefiles and re-compile the whole GEMS 
+program. 
+
