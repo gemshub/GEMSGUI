@@ -1,2 +1,4 @@
 gems2/vizor/*.o
 gems2/vizor/*~
+gems2/vizor/dlg/*.o
+gems2/vizor/dlg/*~

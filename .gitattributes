@@ -175,6 +175,7 @@ gems2/vizor/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/vizor/Makefile.qt svn_keywords=Author+Date+Id+Revision
 gems2/vizor/Makefile.qt_w32 svn_keywords=Author+Date+Id+Revision
 gems2/vizor/Makefile.w32 svn_keywords=Author+Date+Id+Revision
+gems2/vizor/dlg/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/CalcCheckDialog.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/CalcCheckDialog.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/CalcCheckDialog.ui svn_keywords=Author+Date+Id+Revision
