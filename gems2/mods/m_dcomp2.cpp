@@ -38,11 +38,11 @@ ZPrTr = -0.1278034682e-1,
 void
 TDComp::calc_tpcv( int q, int p, int CE, int CV )
 {
-    double a=0., T=0., TC=0., Vst=0., Tst=0., T_Tst=0., Ts2=0., TT=0., dT=0., T2=0., T3=0., T4=0.,
-    T05=0., Tst2=0., Tst3=0., Tst4=0., Tst05=0., Tcr_=0.; // qQ=0., Tcr1=0., Tcr=0., Smax=0., Vmax=0.;
-    int k=0, i=0, j=0, jf=0;
+    double a=0., T=0., TC=0., Vst=0., Tst=0., T_Tst=0., Ts2=0., TT=0., dT=0.,
+    T2=0., T3=0., T4=0., T05=0., Tst2=0., Tst3=0., Tst4=0., Tst05=0.; 
+    int k=0, i, j, jf;
     double ac[16];
-    float a1=0.0;
+    float a1;
 
 // cout << endl << " q=" << q << " p=" << p << "  CE " << CE << "  CV " << CV << endl;
     // iRet = ZERO;
@@ -59,7 +59,7 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
     aW.twp->G = dc[q].Gs[0]; /* - aW.twp->S * (T-Tst); */
     aW.twp->H = dc[q].Hs[0];
     aW.twp->V = Vst;
-// cout << " TC="<< TC << " T=" << aW.twp->T << " Tst=" << aW.twp->Tst << " Sst=" << aW.twp->S << " Gst=" 
+// cout << " TC="<< TC << " T=" << aW.twp->T << " Tst=" << aW.twp->Tst << " Sst=" << aW.twp->S << " Gst="
 //     << aW.twp->G << " Hst=" << aW.twp->H << " Cpst=" << aW.twp->Cp << " Vst=" << aW.twp->V << endl; 
     if(( dc[q].pstate[0] == CP_GAS || dc[q].pstate[0] == CP_GASI )
             && aW.twp->P > 0.0 )
@@ -153,7 +153,7 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
 		  + ac[5] * ( T3 - Tst3 ) / 3. + ac[6] * ( T4 - Tst4 ) / 4.
 		  + ac[7] * ( 1./ Tst3 - 1./ T3 ) / 3. + ac[8] * (1. / Tst - 1. / T )
 		  + ac[9] * 2.* ( T05 - Tst05 ) );   
-	    
+
 	    aW.twp->G -= ( ac[0] * ( T * log( TT ) - T_Tst ) + ac[1] * Ts2 / 2. + ac[2] * Ts2 / T / Tst2 / 2.
 	          + ac[3] * 2. * (T05 - Tst05)*(T05 - Tst05) / Tst05 + ac[4] * ( T3 + 2.*Tst3 - 3.* T * Tst2 ) / 6.
 		  + ac[5] * ( T4 + 3.*Tst4 - 4.*T * Tst3 ) / 12. + ac[6] * ( T4*T + 4.*Tst4*Tst - 5.*T*Tst4 ) / 20.
@@ -166,48 +166,63 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
 		  + ac[7] * ( 1./ Tst2 - 1./ T2 ) / 2. + ac[8] * log( TT ) 
 		  + ac[9] * 2.* ( T * T05 - Tst * Tst05 ) / 3.  );
 
-// cout << " j=" << j << " T-Tst=" << T_Tst << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G 
-//     << " H(T)=" << aW.twp->H << endl; 
+// cout << " j=" << j << " T-Tst=" << T_Tst << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G
+//     << " H(T)=" << aW.twp->H << endl;
         }
-    T=aW.twp->T; 
-NEXT:  
-    if( CE == CTM_CHP )
-    {   
-        double aA=0., qQ=0., Tcr, Tcr1, Smax, Vmax;
-        // Parameters of lambda-transition 
-        Tcr1 =  (double)dc[q].TCr;
+    T=aW.twp->T;
+NEXT:
+    if( CE == CTM_CHP )  // Rewritten 11.11.04 using input by Th.Wagner & D.Dolejs
+    {
+        double Qq, Tcr, Tcr0, Smax, Vmax, k298, kT, a0, p, pp, ivdp, idvdtdp,
+               Q298, v_bis, smq;
+        // Parameters of lambda-transition
+        Tcr0 =  (double)dc[q].TCr;
         Smax = (double)dc[q].Smax;
+        k298 = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
+        p = aW.twp->P;
+        if( IsFloatEmpty( dc[q].Comp ))
+           k298 = 0.;
+        a0 = (double)dc[q].Expa; // This is the a parameter (at one bar) in 1/K !
+        if( IsFloatEmpty( dc[q].Expa ))
+           a0 = 0.;
+
         if( !IsFloatEmpty( dc[q].TCr ) && !IsFloatEmpty( dc[q].Smax ))
         {
-// Added 21.09.04 from input by Th.Wagner
             Vmax = (double)dc[q].Der;
             if( IsFloatEmpty( dc[q].Der ))
             {
-               Vmax = 0.0; Tcr = Tcr1;
+               Vmax = 0.0; Tcr = Tcr0;
             }
             else
-               Tcr = Tcr1 + Vmax/Smax * aW.twp->P;
-// end added
-            Tcr += dT;  Tcr_ = Tcr;
+               Tcr = Tcr0 + Vmax/Smax * p;
+            Tcr += dT;
+            Q298 = pow( 1.-Tst/Tcr0, 0.25 );
             if( T<Tcr )
-            {
-                qQ = 1. - T / Tcr; a=qQ;
-                aA = 2.* Tcr * Smax; 
-                aW.twp->Cp += T * Smax / 2. / sqrt( Tcr ) / sqrt( Tcr-T );
-                aW.twp->S  += Smax * ( 1.- sqrt( qQ ));                                // to check!
-                aW.twp->G -= Smax *( Tcr-T ) * sqrt( qQ ) - aA * qQ * sqrt( qQ ) / 6.; // to check!
-                aW.twp->H += aA * ( qQ * sqrt( qQ ) / 6. - sqrt( qQ ) / 2. + 1./3. );  // to check! 
-            }
+               Qq = pow( 1.-Tst/Tcr, 0.25 );
             else
-            {
-                aW.twp->S  += Smax;
-                aW.twp->G -= Smax * (T-Tcr);
-                aW.twp->H += 2.* Smax * Tcr / 3.;
-            }
+               Qq = 0.;
+            pp = p/1000.; // p is in bar, pp in kbar, kT and k298 in kbar
+            kT = k298 * (1 - 1.5e-4 * ( T-Tst ));
+            v_bis = Vmax * Q298*Q298 * ( 1.+a0*(T-Tst) -
+                     20.*a0*( sqrt(T) - sqrt(Tst) ));
+            ivdp = v_bis * kT / 3. * ( pow(1.+4.*pp/kT, 0.75) - 1. ) * 1000.;
+            idvdtdp = Vmax*p*(a0-10.*a0/sqrt(T));
+            smq = Smax * Tcr0 *( Q298*Q298 - pow(Q298,6.)/3. );
+
+        // incrementing molar properties
+            aW.twp->S += Smax * ( Q298*Q298 - Qq*Qq ) - idvdtdp;
+            aW.twp->G += smq - T * Smax * Q298*Q298 + ivdp
+                         + Smax * ((T-Tcr)*Qq*Qq + Tcr*pow(Qq,6.)/3.);
+            aW.twp->H += smq - Smax*Tcr*( Qq*Qq - pow(Qq,6.)/3. )
+                         + ivdp - T*idvdtdp;   // check this!
+            aW.twp->V += ivdp;
+
+            if( T<Tcr )  // Cp is corrected at subcritical T only
+                aW.twp->Cp += T * Smax / 2. / sqrt( Tcr ) / sqrt( Tcr-T );
         }
     }
-// cout << "   qQ=" << a << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G << " H(T)=" 
-//     << aW.twp->H << " Cp(T)=" << aW.twp->Cp << " Tcr=" << Tcr_ << endl; 
+// cout << "   qQ=" << a << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G << " H(T)="
+//     << aW.twp->H << " Cp(T)=" << aW.twp->Cp << " Tcr=" << Tcr_ << endl;
 
     calc_voldp( q, p, CE, CV );
 
@@ -265,7 +280,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
       {
 // Inserted 01.07.03 - calculations acc. to Holland&Powell, 1998
          double PP = P*0.001; // P seems to be in kbar in HP98 eqns!
-//       double PP = P_Pst*0.001;  // this is used by C.DeCapitani in Theriac  
+//       double PP = P_Pst*0.001;  // this is used by C.DeCapitani in Theriac
          // Coeff. of thermal expansion at T
          aW.twp->Alp = aE * (1. - 10./T05 );
          // Bulk modulus at T
