@@ -225,38 +225,38 @@ TCPage::AddFields()
         {
             switch( fi.place )
             {
-            case First:
+            case FieldInfo::First:
                 x=10;
                 y=10;
                 break;
 
-            case Tied:
+            case FieldInfo::Tied:
                 pTied = prevField;
     int jj;
     for( jj = ii+1; jj<getFieldCnt() && rInfo.aFieldInfo[jj].pObj->IsNull(); jj++ );	// searching for next 'not null' field
-    if( jj == getFieldCnt() || rInfo.aFieldInfo[jj].place != Tied )
+    if( jj == getFieldCnt() || rInfo.aFieldInfo[jj].place != FieldInfo::Tied )
 	prevField->indTied = -1;	// this is the last field in the chain
 	
-            case Right:
+            case FieldInfo::Right:
                 x += prevField->GetW();
                 break;
 
-            case Fixed:
-            case NextP:
+            case FieldInfo::Fixed:
+            case FieldInfo::NextP:
                 x += prevField->GetW() + wdFSPACE;
                 break;
 
-            case Sticked:
+            case FieldInfo::Sticked:
                 pSticked = prevField;
-            case Down:
+            case FieldInfo::Down:
                 y += LineH + htFSPACE;
                 break;
 
-            case Under:
+            case FieldInfo::Under:
                 y += prevField->GetH() + htFSPACE;
                 break;
 
-            case SkipLine:
+            case FieldInfo::SkipLine:
                 y += LineH + htCELL;
                 x = 10;
                 break;
@@ -281,22 +281,22 @@ TCPage::AddFields()
         // estimating the height of the line
         switch( fi.place )
         {
-        case First:
+        case FieldInfo::First:
             LineH = fi.pField->GetH();
             break;
-        case Tied:
-        case Right:
-        case Fixed:
-        case NextP:
+        case FieldInfo::Tied:
+        case FieldInfo::Right:
+        case FieldInfo::Fixed:
+        case FieldInfo::NextP:
             LineH = max(LineH,fi.pField->GetH());
             break;
-        case Under:
+        case FieldInfo::Under:
             LineH = max(LineH,fi.pField->GetH()+prevHeight);	// first variant
             //; leaving the height of previous element		// second one
             break;
-        case Sticked:
-        case Down:
-        case SkipLine:
+        case FieldInfo::Sticked:
+        case FieldInfo::Down:
+        case FieldInfo::SkipLine:
             LineH = fi.pField->GetH();
             break;
         }
@@ -1358,28 +1358,28 @@ TQueryWindow::AddFields()
         if( prevField )
             switch( fi.place )
             {
-            case First:
+            case FieldInfo::First:
                 x=X0;
                 y=Y0;
                 break;
-            case Tied:
+            case FieldInfo::Tied:
                 pTied = prevField;
-            case Right:
+            case FieldInfo::Right:
                 x += prevField->GetW();
                 break;
-            case Fixed:
-            case NextP:
+            case FieldInfo::Fixed:
+            case FieldInfo::NextP:
                 x += prevField->GetW() + wdFSPACE;
                 break;
-            case Sticked:
+            case FieldInfo::Sticked:
                 pSticked = prevField;
-            case Down:
+            case FieldInfo::Down:
                 y += LineH + htFSPACE;
                 break;
-            case Under:
+            case FieldInfo::Under:
                 y += prevField->GetH() + htFSPACE;
                 break;
-            case SkipLine:
+            case FieldInfo::SkipLine:
                 y += LineH + htCELL;
                 x = 10;
                 break;
@@ -1402,25 +1402,25 @@ TQueryWindow::AddFields()
 
         switch( fi.place )
         {
-        case First:
+        case FieldInfo::First:
             if( fi.pField == NULL )    // Bugfix  DAK 19.12.00
                 LineH = htCELL;
             else LineH = fi.pField->GetH();
             break;
-        case Tied:
-        case Right:
-        case Fixed:
-        case NextP:
+        case FieldInfo::Tied:
+        case FieldInfo::Right:
+        case FieldInfo::Fixed:
+        case FieldInfo::NextP:
             if( fi.pField == NULL )    // Bugfix  DAK 19.12.00
                 LineH = htCELL;
             else LineH = max(LineH,fi.pField->GetH());
             break;
-        case Under:
+        case FieldInfo::Under:
             //; leaving the height of previous element	// second one
             break;
-        case Sticked:
-        case Down:
-        case SkipLine:
+        case FieldInfo::Sticked:
+        case FieldInfo::Down:
+        case FieldInfo::SkipLine:
             if( fi.pField == NULL )    // Bugfix  DAK 19.12.00
                 LineH = htCELL;
             else LineH = fi.pField->GetH();

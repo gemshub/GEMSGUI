@@ -53,17 +53,18 @@ enum eEdit { eYes='+', eNo='-', eParam='?' };
 // TField class
 //===========================================
 
+const int DEF_M_BROWSE = 6;
+const int DEF_N_BROWSE = 6;
+
+struct FieldInfo
+{
+
 enum ePlaceMode { First='*', Fixed='+',
                   Right='r', Down='d',
                   NextP='n', SkipLine='b',
                   Tied = 't', Sticked = 's',
                   Under='u' };
 
-const int DEF_M_BROWSE = 6;
-const int DEF_N_BROWSE = 6;
-
-struct FieldInfo
-{
     const PageInfo& rPageInfo;
     TField* pField;
     TObject* pObj;

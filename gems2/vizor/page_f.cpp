@@ -224,7 +224,7 @@ PageInfo::load(TConfig & cnf)
             if (edit != '+' && edit != '-' && edit != '?')
                 throw TError(obj.c_str(), "Bad edit type");
 
-            ePlaceMode place = ePlaceMode(mode[1]);
+            FieldInfo::ePlaceMode place = FieldInfo::ePlaceMode(mode[1]);
             eShowType showT = eShowType(mode[3]);
             aFieldInfo.Add(new FieldInfo(*this, rO, type, npos,
                                          label, place, edit, showT, maxM,
