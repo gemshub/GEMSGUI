@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <time.h>
 
 #include "v_user.h"
