@@ -1,7 +1,7 @@
 //masstransport
 //-------------------------------------------------------------------
 
-#include <iostream>
+//#include <iostream>
 
 #include "verror.h"
 #include "m_param.h"
@@ -77,6 +77,7 @@ int
 main(int argc, char* argv[])
 {
     TProfil task_;
+      fstream f_log("ipmlog.txt", ios::out );
     try
     {
      bool binary_f = true;
@@ -174,7 +175,7 @@ main(int argc, char* argv[])
 //calc part
          task_.calcMulti();
 
-//output resalts
+//output results
 
          task_.multi->packDataBr();
 
@@ -189,8 +190,8 @@ main(int argc, char* argv[])
                     "DataBR out Fileopen error");
                 task_.multi->databr_to_text_file(out_br);
          }
-//     std::cout << datachbr_file.c_str() << " ";
-
+//       std::cout << datachbr_file.c_str() << " ";
+      f_log << datachbr_file.c_str() << " +\n";
      }
 //test resalts
 
@@ -223,7 +224,8 @@ main(int argc, char* argv[])
     }
     catch(TError& err)
     {
-        std::cout << err.title.c_str() << "  : " << err.mess.c_str();
+//    std::cout
+      f_log << err.title.c_str() << "  : " << err.mess.c_str();
     }
     catch(...)
     {

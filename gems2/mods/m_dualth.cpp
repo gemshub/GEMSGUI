@@ -134,7 +134,6 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtt ].SetPtr(  &dtp->cT );
     aObj[ o_dtp ].SetPtr(  &dtp->cP );
     aObj[ o_dtv ].SetPtr(  &dtp->cV );
-    aObj[ o_dtres ].SetPtr(  &dtp->Asur );
     aObj[ o_dtq ].SetPtr(  &dtp->q );
     aObj[ o_dti ].SetPtr(  &dtp->i );
     aObj[ o_dtjm ].SetPtr(  &dtp->jm );
@@ -323,9 +322,12 @@ void TDualTh::dyn_kill(int q)
     dtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_dtsdval ].Free();
     dtp->nam_b = (char (*)[MAXIDNAME])aObj[ o_dtnam_b ].Free();
     dtp->nam_n = (char (*)[MAXIDNAME])aObj[ o_dtnam_n ].Free();
-    //aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
+    aObj[ o_dtnam_nr].SetPtr(0);
     //aObj[ o_dtnam_nr].SetDim( 1, 0 );
     dtp->for_n = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_n ].Free();
+    aObj[ o_dtres].SetPtr(0);
+//    aObj[ o_dtres].SetDim(  dtp->nK, 1 );
+
     dtp->for_b = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_b ].Free();
     dtp->stld = (char (*)[EQ_RKLEN])aObj[ o_dtstl ].Free();
     dtp->typ_n = (char *)aObj[ o_dttyp_n ].Free();

@@ -430,9 +430,9 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    fout << "echo off\n";
    fout << "rem Normal runs\n";
    fout << "gemipm2k.exe " << name.c_str() <<
-        ".ipm ipmfiles-dat.lst > log-dat.txt \n";
+        ".ipm ipmfiles-dat.lst\n";
    fout << "rem gemipm2k.exe " << name.c_str() <<
-       ".ipm ipmfiles-bin.lst > log-bin.txt\n";
+       ".ipm ipmfiles-bin.lst\n";
    fout.close();
 
 }

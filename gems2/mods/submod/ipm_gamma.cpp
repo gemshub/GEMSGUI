@@ -2247,7 +2247,7 @@ TProfil::ChurakovFluid( int jb, int je, int /* jpb */, int jdb, int k )
         pmp->Pc, pmp->Tc );
     if (ro <= 0. )
     {
-       cout << "\nCGFluid() error: ro= " << ro << endl;  // error message!
+//       cout << "\nCGFluid() error: ro= " << ro << endl;  // error message!
        return;
     }
     // Phase volume of the fluid in cm3

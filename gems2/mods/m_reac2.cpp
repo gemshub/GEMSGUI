@@ -993,12 +993,12 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
     aW.WW(p).dCp = dCpr;
   /* Checking consistency of Gr, Hr and Sr,  Gr == Hr - T*Sr; */
     DH = dGr + T*dSr;
-    if( fabs( dGr - dGr_d ) > 1. || fabs( DH - dHr ) > 57.08 )  // J/mol
-    {
-       cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d;
-       cout << " rKey:" /* << aW.WW(p).DRkey */ << rc[q].name ;
+//    if( fabs( dGr - dGr_d ) > 1. || fabs( DH - dHr ) > 57.08 )  // J/mol
+//    {
+//       cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d;
+ //      cout << " rKey:" /* << aW.WW(p).DRkey */ << rc[q].name ;
 //      To add an error message ?
-    }
+//    }
   // Correction for pressure at constant dVr ?
     aW.WW(p).dV = dVr;
 

@@ -121,8 +121,8 @@ NewSystemDialog::LoadMenu()
         p2->insertItem( "&Commit ISD list view", this, SLOT(CmCommit()) );
         p2->insertItem( "&Reset ISD list view", this, SLOT(CmReset()) );
         p2->insertSeparator();
-        p2->insertItem( "Out Multi (test)", this, SLOT(CmOutMulti()) );
-        p2->insertItem( "Read Multi (test)", this, SLOT(CmReadMulti()) );
+        p2->insertItem( "&Write IPM files (test)", this, SLOT(CmOutMulti()) );
+        p2->insertItem( "Read &IPM file (test)", this, SLOT(CmReadMulti()) );
         menuBar()->insertItem( "&Data", p2 );
     }
 

@@ -1457,10 +1457,10 @@ void TMulti::Test_Eq( int size, double *p1, double *p2, const char *key )
     if( fabs(p1[i]-p2[i]) > fabs(p1[i])*1e-7 )
     {
        sprintf(buf, "%7s[%3d]:  %12.8g  %12.8g", key, i, p1[i], p2[i]);
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
 //       vfMessage( window(), "Double ", buf.p );
-#endif
-       std::cout << "Double " << buf.p << endl;
+//#endif
+//       std::cout << "Double " << buf.p << endl;
 //       break;
     }
 }
@@ -1472,10 +1472,10 @@ void TMulti::Test_Eq( int size, float *p1, float *p2, const char *key )
     if( p1[i] != p2[i] )
     {
        sprintf(buf, "%7s[%3d]:  %12.8g  %12.8g", key, i, p1[i], p2[i]);
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
 //       vfMessage(window(), "Float ", buf.p);
-#endif
-       cout << "Float  " << buf.p << endl;
+//#endif
+//       cout << "Float  " << buf.p << endl;
 //       break;
     }
 }
@@ -1487,10 +1487,10 @@ void TMulti::Test_Eq( int size, short *p1, short *p2, const char *key )
     if( p1[i] != p2[i] )
     {
        sprintf(buf, "%7s[%3d]:  %12d  %12d", key, i, p1[i], p2[i]);
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN
 //       vfMessage(window(), "Float ", buf.p);
-#endif
-       cout << "Short  " << buf.p << endl;
+//#endif
+//       cout << "Short  " << buf.p << endl;
 //       break;
     }
 }
@@ -1498,7 +1498,7 @@ void TMulti::Test_Eq( int size, short *p1, short *p2, const char *key )
 // Test by comparing old and new dynamic memory of the MULTI structure
 void TMulti::dyn__test(MULTI& tes)
 {
- cout << "Test  begin:     previous     current" << endl;
+// cout << "Test  begin:     previous     current" << endl;
  Test_Eq( 36, &tes.N, &pm.N, "IFlags" );
  Test_Eq( 54, &tes.TC, &pm.TC, "Scalars" );
  Test_Eq( pm.L, tes.DUL, pm.DUL, "DUL" );
@@ -1623,7 +1623,7 @@ void TMulti::dyn__test(MULTI& tes)
 // Test_Eq( pm.Ls, tes.Wabs, pm.Wabs, "Wabs" );
 // Test_Eq( pm.Ls, tes.Rion, pm.Rion, "Rion" );
 // }
-  cout << "Test sequence end: " << endl;
+//  cout << "Test sequence end: " << endl;
 }
 
 #endif

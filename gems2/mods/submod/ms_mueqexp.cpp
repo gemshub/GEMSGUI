@@ -93,7 +93,7 @@ if( pa.p.PRD >= 7 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
-    std::cout << " P. 7 with simplex: ";
+//    std::cout << " P. 7 with simplex: ";
     multi->dyn__test( multi->GetPMcopy1() );
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
@@ -169,7 +169,7 @@ if( pa.p.PRD >= 8 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
-    std::cout << " Point 8: ";
+//    std::cout << " Point 8: ";
     multi->dyn__test( multi->GetPMcopy1() );
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
@@ -254,7 +254,7 @@ if( pa.p.PRD >= 7 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
-    std::cout << " P.7  no simplex: ";
+//    std::cout << " P.7  no simplex: ";
     multi->dyn__test( multi->GetPMcopy1() );
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
@@ -1006,9 +1006,9 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
         {                 // error - will result in zerodivide!
            char pbuf[80];
            sprintf( pbuf, "%20s", pmp->SF[k] ); pbuf[20] = 0;
-cout << "Error in IPM PrimeChemicalPotentials(): IT = " << pmp->IT << endl;
-cout << "  Phase " << pbuf << " k= " << k << " Yf= " << Yf;
-cout << " YFa= " << pmp->YFk << " Yf fixed to " << pmp->YFk << endl;
+//cout << "Error in IPM PrimeChemicalPotentials(): IT = " << pmp->IT << endl;
+//cout << "  Phase " << pbuf << " k= " << k << " Yf= " << Yf;
+//cout << " YFa= " << pmp->YFk << " Yf fixed to " << pmp->YFk << endl;
 //           for( ; j<i; j++ )
 //           {
 //             if( Y[j] > pmp->YFk )

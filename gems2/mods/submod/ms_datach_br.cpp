@@ -178,6 +178,7 @@ void TMulti::packDataBr()
 void TMulti::unpackDataBr()
 {
  short ii;
+ double Gamm;
 // numbers
 
   if( data_BR.NodeStatusCH == NEED_GEM_PIA )
@@ -190,19 +191,22 @@ void TMulti::unpackDataBr()
   pm.Tc = data_BR.T;
   pm.Pc  = data_BR.P;
   pm.MBX = data_BR.Ms;
-
+  pm.IC = data_BR.IC;
 // arrays
    for( ii=0; ii<data_CH.nICb; ii++ )
     pm.B[ data_CH.xIC[ii] ] = data_BR.bIC[ii];
 
-// added  to compare SD 15/07/04  not need
-/*   for( ii=0; ii<data_CH.nDCb; ii++ )
-    pm.X[ data_CH.xDC[ii] ] = data_BR.xDC[ii];
+// added  to compare SD 15/07/04
    for( ii=0; ii<data_CH.nDCb; ii++ )
-    pm.Gamma[ data_CH.xDC[ii] ] = data_BR.gam[ii];
-
+    pm.X[ data_CH.xDC[ii] ] = pm.Y[ data_CH.xDC[ii] ] = data_BR.xDC[ii];
+   for( ii=0; ii<data_CH.nDCb; ii++ )
+   {
+      Gamm = data_BR.gam[ii];
+      pm.Gamma[ data_CH.xDC[ii] ] = Gamm;
+      pm.lnGmo[ data_CH.xDC[ii] ] = pm.lnGam[ data_CH.xDC[ii] ] = log(Gamm);
+   }
    for( ii=0; ii<data_CH.nPHb; ii++ )
-    pm.XF[ data_CH.xPH[ii] ] = data_BR.xPH[ii];
+    pm.XF[ data_CH.xPH[ii] ] = pm.YF[ data_CH.xPH[ii] ] = data_BR.xPH[ii];
    for( ii=0; ii<data_CH.nPSb; ii++ )
     pm.FVOL[ data_CH.xPH[ii] ] = data_BR.vPS[ii];
    for( ii=0; ii<data_CH.nPSb; ii++ )
@@ -221,7 +225,7 @@ void TMulti::unpackDataBr()
     pm.C[ data_CH.xIC[ii] ] = data_BR.rMB[ii];
    for( ii=0; ii<data_CH.nICb; ii++ )
     pm.U[ data_CH.xIC[ii] ] = data_BR.uIC[ii];
-*/
+
 }
 
 
