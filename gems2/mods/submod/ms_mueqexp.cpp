@@ -18,7 +18,8 @@
 //-------------------------------------------------------------------
 //
 #include <math.h>
-#include <stdio.h>
+//#include <stdio.h>
+#include <iostream>
 
 #include "m_param.h"
 
