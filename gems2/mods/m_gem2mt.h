@@ -214,6 +214,12 @@ protected:
     void CalcPoint( int nPoint );
     bool test_sizes();
     void init_arrays( bool mode );
+    void calc_eqstat();
+    void outMulti();
+    void mt_next();
+    void mt_reset();
+    void gen_task();
+
 
 
 

@@ -15,7 +15,7 @@ INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 #FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 
 
-SOURCES 	= m_const.cpp m_sdata.cpp m_gem2mt.cpp \
+SOURCES 	= m_const.cpp m_sdata.cpp m_gem2mt.cpp  m_gem2mtc.cpp \
     m_param.cpp m_icomp.cpp v_ipnc.cpp \
     s_formula.cpp m_dcomp.cpp m_dcomp2.cpp \
     s_tpwork.cpp s_supcrt.cpp s_supcrt2.cpp \

@@ -645,86 +645,6 @@ TGEM2MT::test_sizes( )
     return true;
 }
 
-// setup begin initalization
-void TGEM2MT::init_arrays( bool mode )
-{
-  vstr tbuf(100);
-
-// setup default graphiks lines
-   if( mtp->PvEF != S_OFF  )
-        for(int i=0; i<mtp->nYE; i++ )
-        {
-            sprintf( tbuf, "%s%d", TProfil::pm->pa.GDpsc, i+1 );
-            if( !*mtp->lNamE[i] || *mtp->lNamE[i] == ' ' )
-                strncpy( mtp->lNamE[i], tbuf,  MAXGRNAME );
-        }
-    if( mtp->PvMSg != S_OFF  )
-         for(int j=0; j< mtp->nYS; j++ )
-         {
-            sprintf( tbuf, "%s%d", TProfil::pm->pa.GDpsc, j+1 );
-            if( !*mtp->lNam[j]|| *mtp->lNam[j] == ' ' )
-               strncpy( mtp->lNam[j], tbuf, MAXGRNAME );
-          }
-
-// set data to SBM (IComp names)
-    if( mtp->SBM )
-      for(int ii=0; ii< mtp->Nb; ii++ )
-        memcpy( mtp->SBM[ii], TProfil::pm->pmp->SB[ii], MAXICNAME+MAXSYMB  );
-
-// setup flags and counters
-  mtp->gStat = '0';
-  mtp->iStat = '0';
-  mtp->cT = mtp->Tai[START_];
-  mtp->cP = mtp->Pai[START_];
-  mtp->cTau = mtp->Tau[START_];
-  mtp->ctm = mtp->tmi[START_];
-  mtp->cnv = mtp->NVi[START_];
-  mtp->qc = 0;
-  mtp->kv = 0;
-  mtp->jt = 0;
-
-  if( mode )
-  {
-    int ii;
-
-    mtp->Msysb = 0.;
-    mtp->Vsysb = 0.;
-    mtp->Mwatb = 1.;
-    mtp->Maqb = 1.;
-    mtp->Vaqb = 1.;
-
-    for( ii=0; ii<mtp->Nb; ii++)
-     mtp->CIclb[ii] = 'g';
-
-    for( ii=0; ii<mtp->nIV; ii++)
-    {
-     sprintf( tbuf, "Variant%d", ii );
-     strncpy( mtp->nam_i[ii], tbuf, MAXIDNAME );
-    }
-
-    for( ii=0; ii<mtp->Lbi; ii++)
-    {
-     mtp->AUcln[ii] = 'M';
-     strncpy( mtp->for_i[ii], "H2O", 4 );
-    }
-
-    for( ii=0; ii<mtp->nFD; ii++)
-    {
-     strcpy( mtp->FDLid[ii], "F1" );
-     strcpy( mtp->FDLop[ii], "ADD" );
-    }
-
-    for( ii=0; ii<mtp->nPG; ii++)
-    {
-     strcpy( mtp->FDLmp[ii], "P1" );
-     strcpy( mtp->MPGid[ii], "P1" );
-    }
-
-    if( mtp->UMPG)
-      for( ii=0; ii<TProfil::pm->pmp->FI; ii++)
-         mtp->UMPG[ii] = 'g';
-  }
-}
 
 //Rebild record structure before calc
 int
@@ -760,7 +680,16 @@ TGEM2MT::RecCalc( const char * key )
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
 
-    TCModule::RecCalc( key );
+   mt_reset();
+   if( mtp->PsMode == 'S' )
+     outMulti();
+
+
+
+
+   TCModule::RecCalc( key );
+   pVisor->Update();
+
 }
 
 

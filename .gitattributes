@@ -138,6 +138,7 @@ gems2/mods/m_dualth.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_dualthc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_gem2mt.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_gem2mt.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/m_gem2mtc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_gtdemo.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_gtdemo.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_icomp.cpp svn_keywords=Author+Date+Id+Revision

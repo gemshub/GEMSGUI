@@ -165,7 +165,7 @@ class TProfil : public TCModule
     TSyst* syst;
     //  SYSTEM *syp;
 
-    TMulti* multi;
+    //TMulti* multi;
     //  MULTI *pmp;
 
     bool newRecord;
@@ -321,6 +321,7 @@ void SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k );
 public:
 
     static TProfil* pm;
+    TMulti* multi;
 
    bool userCancel;
    bool stepWise;
