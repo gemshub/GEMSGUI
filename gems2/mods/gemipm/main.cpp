@@ -33,7 +33,7 @@ f_getline(istream& is, gstring& str, char delim)
 
 // first argv name of binary file with MULTI structure
 // second argv file that contained
-// -t/-b <dataCH file name> <dataBR file name1> ... <dataBR file nameN> 
+// -t/-b <dataCH file name> <dataBR file name1> ... <dataBR file nameN>
 
 int
 main(int argc, char* argv[])
@@ -41,6 +41,7 @@ main(int argc, char* argv[])
     TProfil task_;
     try
     {
+     bool binary_f = true;
      gstring multu_in = "input_multi.txt";
      gstring chbr_in   = "mtr_data.txt";
 
@@ -50,6 +51,7 @@ main(int argc, char* argv[])
       if (argc >= 3 )
         chbr_in = argv[2];
 
+/*
 // test working with txt files
       fstream f_ch(multu_in.c_str(), ios::in );
       ErrorIf( !f_ch.good() , multu_in.c_str(), "DataCH Fileopen error");
@@ -67,8 +69,8 @@ main(int argc, char* argv[])
       fstream f_br1(chbr_in.c_str(), ios::out );
       ErrorIf( !f_br1.good() , chbr_in.c_str(), "DataBr out Fileopen error");
       task_.multi->databr_to_text_file(f_br1);
+*/
 
-/*
 // read multi structure
       GemDataStream f_m(multu_in, ios::in|ios::binary);
       task_.readMulti(f_m);
@@ -82,17 +84,51 @@ main(int argc, char* argv[])
 
       gstring datachbr_file;
       f_getline( f_chbr, datachbr_file, ',');
-// Read dataCH file
-      GemDataStream f_ch(datachbr_file, ios::in|ios::binary);
-      task_.multi->datach_from_file(f_ch);
+//test flag -t or -b (by default -b)
+      size_t pos = datachbr_file.find( '-');
+      if( pos != gstring::npos )
+      {
+         if( datachbr_file[pos+1] == 't' )
+            binary_f = false;
 
+         if( datachbr_file[pos+1] != '\0' )
+            pos +=2;
+         while(  ( datachbr_file[pos] ==' ' ||
+                   datachbr_file[pos] == '\n' ||
+                   datachbr_file[pos]== '\t') )
+             pos++;
+         if( datachbr_file[pos] == '\"')
+             pos++;
+         datachbr_file = datachbr_file.substr(pos);
+      }
+
+// Read dataCH file
+      if( binary_f )
+      {  GemDataStream f_ch(datachbr_file, ios::in|ios::binary);
+         task_.multi->datach_from_file(f_ch);
+       }
+       else
+       { fstream f_ch(datachbr_file.c_str(), ios::in );
+         ErrorIf( !f_ch.good() , datachbr_file.c_str(), "DataCH Fileopen error");
+         task_.multi->datach_from_text_file(f_ch);
+       }
 // for all databr files
       while( !f_chbr.eof() )
       {
 // read and unpack dataBR structure
          f_getline( f_chbr, datachbr_file, ',');
-         GemDataStream in_br(datachbr_file, ios::in|ios::binary);
-         task_.multi->databr_from_file(in_br);
+
+         if( binary_f )
+         {
+             GemDataStream in_br(datachbr_file, ios::in|ios::binary);
+             task_.multi->databr_from_file(in_br);
+          }
+         else
+         {      fstream in_br(datachbr_file.c_str(), ios::in );
+                ErrorIf( !in_br.good() , datachbr_file.c_str(),
+                    "DataBR Fileopen error");
+                task_.multi->databr_from_text_file(in_br);
+         }
          task_.multi->unpackDataBr();
 
 //calc part
@@ -101,10 +137,20 @@ main(int argc, char* argv[])
 //output resalts
 
          task_.multi->packDataBr();
-         GemDataStream out_br(datachbr_file, ios::out|ios::binary);
-         task_.multi->databr_to_file(out_br);
 
-        }
+         if( binary_f )
+         {
+            GemDataStream out_br(datachbr_file, ios::out|ios::binary);
+            task_.multi->databr_to_file(out_br);
+         }
+         else
+         {      fstream out_br(datachbr_file.c_str(), ios::out );
+                ErrorIf( !out_br.good() , datachbr_file.c_str(),
+                    "DataBR out Fileopen error");
+                task_.multi->databr_to_text_file(out_br);
+         }
+
+     }
 //test resalts
       gstring out_s = "multi_out.txt";
       GemDataStream o_m( out_s, ios::out|ios::binary);
@@ -115,7 +161,7 @@ main(int argc, char* argv[])
       task_.multi->datach_free();
       task_.multi->databr_free();
 
-*/      return 1;
+      return 1;
     }
     catch(TError& err)
     {
