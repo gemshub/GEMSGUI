@@ -54,6 +54,7 @@ using namespace std;
 #include "dlg/ProcessWizard.h"
 #include "dlg/GtDemoWizard.h"
 #include "dlg/ComposWizard.h"
+#include "dlg/DCompWizard.h"
 #include "dlg/ReacDCWizard.h"
 #include "dlg/RTparmWizard.h"
 #include "dlg/PhaseWizard.h"
@@ -887,6 +888,19 @@ vfComposSet(QWidget* par, const char * p_key,
     cdlg.getFlags( flgs );
     cdlg.getSizes( size );
     r2 = cdlg.getR2();
+
+    return true;
+}
+
+bool
+vfDCompSet(QWidget* par, const char * p_key,
+            char flgs[15], int size[4]  )
+{
+     DCompWizard cdlg( p_key, flgs, size, par );
+     if( !cdlg.exec() )
+       return false;
+    cdlg.getFlags( flgs );
+    cdlg.getSizes( size );
 
     return true;
 }

@@ -90,6 +90,9 @@ bool
 vfComposSet(QWidget* par, const char * p_key,
             char flgs[6], int sizes[2], double& r2 );
 bool
+vfDCompSet(QWidget* par, const char * p_key,
+            char flgs[15], int sizes[4] );
+bool
 vfReacDCSet(QWidget* par, const char * p_key,
             char flgs[12], int sizes[4] );
 

@@ -357,6 +357,34 @@ void TDComp::RecInput( const char *key )
     TCModule::RecInput( key );
 }
 
+/* opens window with 'Remake record' parameters
+*/
+void
+TDComp::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[15];
+    int size[4];
+
+    p_key  = db->PackKey();
+    memcpy( flgs, dcp->pct, 15);
+    size[0] = dcp->NeCp;
+    size[1] = dcp->Nft;
+    size[2] = dcp->Nsd;
+    size[3] = dcp->Nemp;
+
+    if( !vfDCompSet( window(), p_key, flgs, size ))
+         Error( p_key, "DComp record configuration cancelled by the user!" );
+     //  return;   // cancel
+
+    memcpy( dcp->pct, flgs, 15);
+    dcp->NeCp = (short)size[0];
+    dcp->Nft = (short)size[1];
+    dcp->Nsd = (short)size[2];
+    dcp->Nemp = (short)size[3];
+
+}
 
 // Remake or create DCOMP record structure
 //

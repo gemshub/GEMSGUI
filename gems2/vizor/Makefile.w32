@@ -119,6 +119,8 @@ link:
 +dlg\ProcessWizardData.obj \
 +dlg\ComposWizard.obj \
 +dlg\ComposWizardData.obj \
++dlg\DCompWizard.obj \
++dlg\DCompWizardData.obj \
 +dlg\ReacDCWizard.obj \
 +dlg\ReacDCWizardData.obj \
 +dlg\RTparmWizard.obj \
@@ -174,6 +176,8 @@ link:
 +tmp\moc_ProcessWizardData.obj \
 +tmp\moc_ComposWizard.obj \
 +tmp\moc_ComposWizardData.obj \
++tmp\moc_DCompWizard.obj \
++tmp\moc_DCompWizardData.obj \
 +tmp\moc_ReacDCWizard.obj \
 +tmp\moc_ReacDCWizardData.obj \
 +tmp\moc_RTparmWizard.obj \

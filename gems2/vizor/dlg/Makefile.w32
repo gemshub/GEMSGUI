@@ -23,6 +23,7 @@ DATASRC =	MainDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessWizardData.cpp \
 		ComposWizardData.cpp \
+		DCompWizardData.cpp \
 		ReacDCWizardData.cpp \
 		RTparmWizardData.cpp \
 		GtDemoWizardData.cpp \
@@ -50,6 +51,7 @@ DATAOBJ =       MainDialogData.obj \
 		ProgressDialogData.obj \
 		ProcessWizardData.obj \
 		ComposWizardData.obj \
+		DCompWizardData.obj \
 		ReacDCWizardData.obj \
 		RTparmWizardData.obj \
 		GtDemoWizardData.obj \
@@ -78,6 +80,7 @@ SOURCES =	MainDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessWizard.cpp \
 		ComposWizard.cpp \
+		DCompWizard.cpp \
 		ReacDCWizard.cpp \
 		RTparmWizard.cpp \
 		GtDemoWizard.cpp \
@@ -108,6 +111,7 @@ OBJECTS =	MainDialog.obj \
 		ProgressDialog.obj \
 		ProcessWizard.obj \
 		ComposWizard.obj \
+		DCompWizard.obj \
 		ReacDCWizard.obj \
 		RTparmWizard.obj \
 		GtDemoWizard.obj \
@@ -145,6 +149,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_ProcessWizardData.obj \
 		..\tmp\moc_ComposWizard.obj \
 		..\tmp\moc_ComposWizardData.obj \
+		..\tmp\moc_DCompWizard.obj \
+		..\tmp\moc_DCompWizardData.obj \
 		..\tmp\moc_ReacDCWizard.obj \
 		..\tmp\moc_ReacDCWizardData.obj \
 		..\tmp\moc_RTparmWizard.obj \
@@ -299,6 +305,19 @@ clean:
 
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ComposWizardData.cpp
 	-del moc_ComposWizardData.cpp
+
+..\tmp\moc_DCompWizard.obj: DCompWizard.h
+      	$(MOC) DCompWizard.h -o moc_DCompWizard.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_DCompWizard.cpp
+	-del moc_DCompWizard.cpp
+
+
+..\tmp\moc_DCompWizardData.obj: DCompWizardData.h
+      	$(MOC) DCompWizardData.h -o moc_DCompWizardData.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_DCompWizardData.cpp
+	-del moc_DCompWizardData.cpp
 
 ..\tmp\moc_ReacDCWizard.obj: ReacDCWizard.h
       	$(MOC) ReacDCWizard.h -o moc_ReacDCWizard.cpp
@@ -583,6 +602,10 @@ ProcessWizardData.cpp: ProcessWizard.ui
         $(UIC) $? -impl $(*).h -o $@
 
 ComposWizardData.cpp: ComposWizard.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+DCompWizardData.cpp: DCompWizard.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
