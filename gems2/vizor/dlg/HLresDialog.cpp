@@ -1,9 +1,7 @@
 //-------------------------------------------------------------------
-// Id: gems/vizor/dlg/HLresDialog.cpp  version 2.0.0    2001
+// $Id$
 //
 // Implementation of HLresDialog class
-//
-// Created : 970207    Modified: 010908
 //
 // Copyright (C) 1996-2001  A.Rysin, S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
@@ -106,8 +104,7 @@ void HLresDialog::loadList()
     phase = new QListViewItem( item,
      aObj[o_wd_sf].GetStringEmpty(ii).c_str(), buf.p,
      aObj[o_wi_phc].GetStringEmpty(ii).c_str(),
-     aObj[o_w_xf].GetStringEmpty(ii).c_str(),
-     aObj[o_wo_falp].GetStringEmpty(ii).c_str() );
+     aObj[o_w_xf].GetStringEmpty(ii).c_str() );
     je = je - l1_[ii];
         for( ; jj>je ; jj--)
          switch( aObj[o_wi_dcc].GetStringEmpty(jj)[0])
@@ -130,7 +127,6 @@ void HLresDialog::loadList()
                 aObj[o_wd_sm].GetStringEmpty(jj).c_str()," ",
                 aObj[o_wi_dcc].GetStringEmpty(jj).c_str(),
                 aObj[o_w_x].GetStringEmpty(jj).c_str(),
-                aObj[o_w_emu].GetStringEmpty(jj).c_str(),
                 aObj[o_wd_yla].GetStringEmpty(jj).c_str(),
                 aObj[o_wo_wx].GetStringEmpty(jj).c_str(),
                 aObj[o_wo_lngam].GetStringEmpty(jj).c_str() );
@@ -140,7 +136,6 @@ void HLresDialog::loadList()
                 aObj[o_wd_sm].GetStringEmpty(jj).c_str()," ",
                 aObj[o_wi_dcc].GetStringEmpty(jj).c_str(),
                 aObj[o_w_x].GetStringEmpty(jj).c_str(),
-                aObj[o_w_emu].GetStringEmpty(jj).c_str(),
                 aObj[o_wd_yla].GetStringEmpty(jj).c_str(),
                 aObj[o_wd_ym].GetStringEmpty(jj).c_str(),
                 aObj[o_wo_lngam].GetStringEmpty(jj).c_str() );
@@ -162,7 +157,7 @@ void HLresDialog::printList( fstream& f )
     while( pPhase )
     {
       pComp = pPhase->firstChild();
-      for(int ii=0; ii<5; ii++)
+      for(int ii=0; ii<4; ii++)
       {
         col =pPhase->text( ii );
         switch(ii)
@@ -181,7 +176,7 @@ void HLresDialog::printList( fstream& f )
 
       while( pComp )
       {
-         for(int ii=0; ii<8; ii++)
+         for(int ii=0; ii<7; ii++)
         {
            col =pComp->text( ii );
            switch(ii)

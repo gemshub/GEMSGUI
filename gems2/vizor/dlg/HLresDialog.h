@@ -1,9 +1,7 @@
 //-------------------------------------------------------------------
-// Id: gems/vizor/dlg/HLresDialog.h  version 2.0.0    2001
+// $Id$
 //
 // Declaration of HLresDialog class
-//
-// Created : 970207    Modified: 010908
 //
 // Copyright (C) 1996-2001  A.Rysin, S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
