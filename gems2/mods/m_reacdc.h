@@ -142,7 +142,7 @@ protected:
     void calc_akinf_r( int q, int p, int CE, int CV );
     void calc_lgk_r( int q, int p, int CE, int CV );
     void calc_r_interp( int q, int p, int CE, int CV );
-    float lagr(float *a, float *x, float *y, float x1, float x2,  int p0,int p1);
+    float LagranInterp(float *a, float *x, float *y, float x1, float x2,  int p0,int p1);
     void calc_dissoc_r( int q, int p, int CE, int CV );
     void calc_iso_a( int q, int p );
     void calc_exion_r( int q, int p );

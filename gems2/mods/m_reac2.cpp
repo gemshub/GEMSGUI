@@ -1058,7 +1058,7 @@ void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
         break;
     }
     /* call interpolations */
-    lgK = lagr( rc[q].TCint, rc[q].Pint, rc[q].logK,
+    lgK = LagranInterp( rc[q].TCint, rc[q].Pint, rc[q].logK,
                 Pa, aW.WW(p).TC, nP, rc[q].nTp );
     //  if( lgK > 7777776. )
     //    return 1;
@@ -1083,9 +1083,9 @@ FINITA:
 }
 
 /*-----------------------------------------------------------------*/
-// Interpolyation on tabls values  (massiv y) by polinom Lagranga
-float TReacDC::lagr(float *a, float *x, float *y, float x1,
-                    float x2,  int p0,int p1)
+// Interpolation over tabulated values (array y) using Lagrange method
+float TReacDC::LagranInterp(float *a, float *x, float *y, float x1,
+                    float x2, int p0, int p1)
 {
     float s,z,s1[21];
     int pa, px, i=0, j, j1, k, ja, ja1;
@@ -1097,13 +1097,13 @@ float TReacDC::lagr(float *a, float *x, float *y, float x1,
     /*s=0.;*/
     pa = p1-1;
     px = p0-1;
-    for(j1=0;j1<p1;j1++)   /*p1 - dlina  T? */
+    for(j1=0;j1<p1;j1++)   /*p1 - dimension over T? rows? */
         if (x2 >= a[j1] && x2 <= a[j1+1])
             goto m1;
     //z=x2;
     goto m2;
 m1:
-    for(i=0;i<p0;i++)      /*p0 -dlina  x ? */
+    for(i=0;i<p0;i++)      /*p0 - dimension over P? columns? */
         if(x1 >= x[i] && x1 <= x[i+1])
             goto m;
     // z=x1;

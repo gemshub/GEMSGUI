@@ -778,16 +778,73 @@ TDualTh::Calc_muo_n( char eState )
   Calc_muo_n_stat( eState );
 }
 
+// Calculation of average and standard deviation
+#define d(i,j) (*(DataTable+(j)+(i)*M))
+double
+TDualTh::ColumnAverage( double *DataTable, short N, short M, short ColInd  )
+{
+   short ir, jc;
+   double Average = 0.0;
+
+   jc = ColInd;
+   if( jc < 0 || jc >= M || N <= 0 )
+     return 0.0;  // column index or number of rows is invalid
+
+   for(ir=0; ir<N; ir++)
+      Average += d(ir,jc)/(double)N;
+
+   return Average;
+}
+
+double
+TDualTh::ColumnStdev( double *DataTable, double ColAvg, short N, short M,
+   short ColInd )
+{
+   short ir, jc;
+   double StDev, Col2Avg=0.0;
+
+   jc = ColInd;
+   if( jc < 0 || jc >= M || N <= 0 )
+     return 0.0;  // column index or number of rows is invalid
+
+// calculate average of squares
+   for(ir=0; ir<N; ir++)
+      Col2Avg += d(ir,jc)*d(ir,jc)/(double)N;
+
+// calculate StDev
+   StDev = sqrt( Col2Avg - ColAvg*ColAvg );
+
+   return StDev;
+}
+
+#undef d
+
 // Calculation of statistics over muo_n columns
 void
 TDualTh::Calc_muo_n_stat( char /*eState*/ )
 {
+   short k;
+
+   for( k=0; k< dtp->nK; k++ )
+   {
+      dtp->avg_m[k] = ColumnAverage( dtp->muo_n, dtp->nQ, dtp->nK, k  );
+      dtp->sd_m[k] = ColumnStdev( dtp->muo_n, dtp->avg_m[k], dtp->nQ,
+                     dtp->nK, k  );
+   }
 }
 
 // Calculation of statistics over Wg (gamma interaction parameters)
 void
 TDualTh::Calc_gam_n_stat( char /*eState*/ )
 {
+   short k;
+
+   for( k=0; k< dtp->nK; k++ )
+   {
+      dtp->avg_g[k] = ColumnAverage( dtp->gam_n, dtp->nQ, dtp->nK, k  );
+      dtp->sd_g[k] = ColumnStdev( dtp->gam_n, dtp->avg_g[k], dtp->nQ,
+                     dtp->nK, k  );
+   }
 }
 
 void

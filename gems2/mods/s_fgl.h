@@ -133,7 +133,7 @@ protected:
     float densi1(float TR,float PR);
     float lfug(float TR,float PR);
     float ENTALPIA(float TR,float PR);
-    float lagran(float *a, float *x, float *y, float x1, float x2,
+    float LagranInterp(float *a, float *x, float *y, float x1, float x2,
                  int p,int p0,int p1);
 
 public:

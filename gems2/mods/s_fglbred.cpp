@@ -23,8 +23,8 @@
 #include "s_fgl.h"
 
 //--------------------------------------------------------------------//
-// interpolyt tabl values method Lagranga
-float TFGLcalc::lagran(float *a, float *x, float *y, float x1, float x2,
+// interpolation of tabulated values using Lagrange method
+float TFGLcalc::LagranInterp(float *a, float *x, float *y, float x1, float x2,
                        int p,int p0,int p1)
 {
     float s,z, s1[21];
@@ -52,7 +52,7 @@ m1:
 m2:
     if(x2 <= a[p1-1])
         goto m;
-m3: /* Error arg behand the tabl size */
+m3: /* Error arg beyond the table size */
     return(1);
 m:
     if(i < p0-p)
@@ -594,7 +594,7 @@ float TFGLcalc::densi1(float TR,float PR)
         return 0;
       iRet = DBfind( RT_CONST, "BRE_RO:Liquid_gas_density:" );
      }*/
-    Val = lagran(A+2745,A+2684,A,PR,TR,p,p0,p1);
+    Val = LagranInterp(A+2745,A+2684,A,PR,TR,p,p0,p1);
     return Val;
 }
 /********************************************************************/
@@ -938,7 +938,7 @@ float TFGLcalc::lfug(float TR,float PR)
         return 0;
       iRet = DBfind( RT_CONST, "BRE_LNF:Liquid_gas_LnF:" );
      }*/
-    Val = lagran(A+2772,A+2709,A,PR,TR,p,p0,p1);
+    Val = LagranInterp(A+2772,A+2709,A,PR,TR,p,p0,p1);
     return Val;
 }
 
@@ -1345,7 +1345,7 @@ float TFGLcalc::ENTALPIA(float TR,float PR)
         return 0;
       iRet = DBfind( RT_CONST,"BRE_ENT:Liquid_gas_E0:" );
      }*/
-    Val = lagran(A+2074,A+2013,A,PR,TR,p,p0,p1);
+    Val = LagranInterp(A+2074,A+2013,A,PR,TR,p,p0,p1);
     return Val;
 }
 

@@ -119,7 +119,7 @@ typedef struct
     *Nu,     // Array of Nu values [0:NNu-1]
 
     *Kin,    // Array of (reaction) kinetic parameters [0:Nrea-1][0:Nrp-1]
-    *Modc    // Array of empirical parameters  [0:Ntm-1][Nmc]
+    *Modc    // Array of process script parameters  [0:Ntm-1][Nmc]
     ;
     double
      *x0,   // Vector of abscissa dimXY[][1]

@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// Data Bridge Chemistry structure  (draft variant 2)
+// Data Chemistry structure  (draft variant 2)
 //-------------------------------------------------------------------
 //
 #ifndef _DataCh_H_
@@ -26,7 +26,7 @@ typedef struct
     nAalp,      // presence of surface areas in datach
     uRes2,
 
-  // These dimensionalities define sizes of dynamic data in DATABT structure!!!
+  // These dimensionalities define sizes of dynamic data in DATABR structure!!!
   // Needed to reduce on storage demand for data bridge instances (nodes)!
   // Connection occurs through xIC, xPH and xDC lists!
     nICb,       // number of stoichiometry units (<= nIC) used in the data bridge  
@@ -58,10 +58,12 @@ typedef struct
 
 // DC - related values  
     *DCmm,   // DC molar mass, g/mole [nDC]
+
 // Thermodynamic data
-// Require Lagrange extrapolation subroutine to extract data for given P,T    
+// Require Lagrange interpolation subroutine to extract data for given P,T
     *G0,    // standard molar Gibbs energy [nDC, nPp, nTp]
     *V0,    // standard molar volume [nDC, nPp, nTp]
+//  *S0,    // standard molar entropy [nDC, nPp, nTp]
     *H0,    // standard molar enthalpy, reserved [nDC, nPp, nTp]
     *Cp0,   // st. molar heat capacity, reserved [nDC, nPp, nTp]
 

@@ -25,7 +25,7 @@
 
 #ifndef IPMGEMPLUGIN
 
-// Writting dataCH structure to binary file
+// Writing dataCH structure to binary file
 void TMulti::makeStartDataChBR(
   TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH )
 {

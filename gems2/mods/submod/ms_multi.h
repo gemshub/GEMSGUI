@@ -285,6 +285,7 @@ class TMulti :
     // transport
     DATACH  *data_CH;
     DATABR  *data_BR;
+
 public:
 
     TIArray<IPNCalc> qEp;

@@ -42,11 +42,11 @@ typedef struct
    PvICi,    // Use IC quantities for initial system compositions? { + * - }
    PvAUi,    // Use formula units for initial sub-system compositions? { + * - }
    PvSd,     // Include references to data sources (+ -)?
-   PvMSi,    // Use math script for initial system compositions (+ -)?
-   PvMSc,    // Use math script for mass transport between nodes (+ -)?
+   PvMSt,    // Use math script for running the mass transport (+ -)?
+   PvMSg,    // Use math script for graphic presentation (+ -)?
+   PvEF      // Use empirical data for graphics  (+ -)?
    PvRes1,
    PvRes2,
-   PvRes3,
 
      // Controls on operation
    PsMode,  // GEM2MT mode of operation {  }
@@ -71,9 +71,9 @@ typedef struct
    nIV,  // number of initial variants of the chemical system, nIV <= nC
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
-   Nqpi, // Number of elements in the script work array qpi for input variants
-   Nqpc, // Number of elements in the script work array qpc for MT between nodes
-   Nb,    // N - number of independent components (set automatically from Multi)
+   Nqpt, // Number of elements in the script work array qpi for transport
+   Nqpg, // Number of elements in the script work array qpc for graphics
+   Nb,   // N - number of independent components (set automatically from Multi)
 
    nPai,  // Number of P points in MTP interpolation array in DataCH ( 1 to 10 )
    nTai,  // Number of T points in MTP interpolation array in DataCH ( 1 to 20 )
@@ -84,6 +84,10 @@ typedef struct
 // iterators for generating syseq record keys for initial system variants
    tmi[3],  // SYSTEM CSD definition #: start, end, step (initial)
    NVi[3]  // Restrictions variant #: start, end, step
+// graphics
+    dimEF[2],    // Dimensions of array of empirical data
+    dimXY[2],    // Dimensions of data sampler tables: col.1 - N of time points
+    axisType[6],         // axis graph type, background(3) reserved(2)
    ;
   float        // input
    Pi[],    // Pressure P, bar for initial systems (values within Pai range) [nIV]
@@ -104,6 +108,8 @@ typedef struct
 // Iterators for MTP interpolation array in DataCH
    Pai[3],  // Pressure P, bar: start, end, increment for MTP array in DataCH
    Tai[3]   // Temperature T, C: start, end, increment for MTP array in DataCH
+// graphics
+   size[2][4]; // Graph axis scale for the region and the fragment
     ;
  double
    *Bn,    //  [nIV][N] Table of bulk compositions of initial systems
@@ -119,8 +125,8 @@ typedef struct
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
     ;
  char
-   *iExpr,  // Math script text for calculation of initial system compositions
-   *tExpr,  // Math script text for calculation of mass transport
+   *tExpr,  // Math script text for calculation of initial system compositions
+   *gExpr,  // Math script text for calculation of mass transport
    (*sdref)[V_SD_RKLEN], // "List of bibl. refs to data sources" [0:Nsd-1]
    (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
    (*nam_i)[MAXIDNAME], // [nIV][16] id names of initial systems
@@ -130,7 +136,13 @@ typedef struct
    *CIclb, // [N] Units of IC quantity/concentration for initial systems compositions
    *AUcln, // [Lbi] Units of setting UDF quantities for initial system compositions
 //
-   (*SBM)[MAXICNAME+MAXSYMB] // Keys (names) of IC
+   (*SBM)[MAXICNAME+MAXSYMB],  // Keys (names) of IC
+//  graphics
+    xNames[MAXAXISNAME],        // Abscissa name
+    yNames[MAXAXISNAME],       // Ordinate name
+    (*lNam)[MAXGRNAME],        // List of ID of lines on Graph
+    (*lNamE)[MAXGRNAME];       // List of ID of lines of empirical data
+
    ;
 /* Work arrays */
    char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
@@ -141,8 +153,8 @@ typedef struct
    cnv,    //  current restriction variant #
    qc,     // current index of the compartment ( 1 to nC )
    kv,     // current index of the initial system variant (1 to nIV )
-   jqc,    // script c-style index (= qc-1)
-   jkv    // script c-style index (= kv-1)
+   jqc,    // script c-style index (= qc-1) for transport
+   jqs,    // script c-style index (= qc-1) for graphics 
    ;
 
  float

@@ -236,6 +236,9 @@ protected:
     void Calc_act_n( char eState ); // calculate activity DualTh
     void Calc_muo_n_stat( char eState ); // statistics for EM candidates
     void Calc_gam_n_stat( char eState ); // statistics for Wg/gamma calc.
+    double ColumnAverage( double *DataTable, short N, short M, short ColInd  );
+    double ColumnStdev( double *DataTable, double ColAvg,
+                  short N, short M, short ColInd  ); //
 
 public:
 
