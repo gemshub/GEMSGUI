@@ -52,7 +52,7 @@ class TVisor
     void addModule(TCModule* pm, bool selectFiles=false);
 
     void load();
-    void fromDAT( bool op_c );
+    void fromDAT( bool option_c, bool option_v );
     void toDAT();
     void defaultCFG();
     void toModCFG();

@@ -171,6 +171,7 @@ TVisor::Setup()
 {
     bool option_d = false;
     bool option_f = false;
+    bool option_v = false;
 #ifdef __APPLE__
     bool option_c = true;
 #else
@@ -197,13 +198,19 @@ TVisor::Setup()
                 option_c = true;
                 pVisorImp->setConfigAutosave( true );
             }
+            else if (strcmp(argv[ii], "-v") == 0
+                     || strcmp(argv[ii], "--with-default-settings") == 0 )
+            {
+                option_v = true;
+                pVisorImp->setConfigAutosave( true );
+            }
     }
 #ifndef GEMS_RELEASE
     if (option_d)
         load();
     else
 #endif // GEMS_RELEASE
-        fromDAT(option_c);
+        fromDAT(option_c, option_d);
 
     // Sveta permission to change data in special DB files
     if (option_f)
@@ -287,7 +294,7 @@ const char *vSigERROR_VISOBJ = "Error in visor data file visobj.dat - wrong mark
 const char *vSigTITLE = "Configurator";
 
 void
-TVisor::fromDAT(bool option_c)
+TVisor::fromDAT(bool option_c, bool option_v)
 {
     gstring fname = sysGEMDir();
     fname += VISOBJ_DAT;
@@ -402,7 +409,7 @@ TVisor::fromDAT(bool option_c)
     aUnits.fromDAT(visor_dat);
 
 
-    if( firstTimeStart || option_c )
+    if( firstTimeStart || option_v )
     {
         // save initial settings of windows to windows.cfg
         toWinCFG();
