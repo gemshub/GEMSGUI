@@ -361,7 +361,7 @@ void TPlotLine::read(GemDataStream& stream)
     stream >> size;
     stream >> line_size;
     stream >> red >> green >> blue;
-    stream.readArray(name, 15);
+    stream.readArray(name, sizeof(name));
 }
 
 void TPlotLine::write(GemDataStream& stream)
@@ -370,7 +370,7 @@ void TPlotLine::write(GemDataStream& stream)
     stream << size;
     stream << line_size;
     stream << red << green << blue;
-    stream.writeArray(name, 15);
+    stream.writeArray(name, sizeof(name));
 }
 
 

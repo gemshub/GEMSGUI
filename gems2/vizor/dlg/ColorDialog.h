@@ -22,8 +22,8 @@
 #define ColorDialog_included
 
 #include "ColorDialogData.h"
-#include "v_module.h"
 #include "../graph.h"
+
 
 class ColorDialog : public ColorDialogData
 {

@@ -525,7 +525,8 @@ size_t  TObject::toDB( GemDataStream& f )
         }
 	else	// all object with Keyword "**plt" considered PlotLine object !!!
 	if( strcmp(Keywd+2, "plt") == 0 )
-            ((TPlotLine*)GetPtr())->write(f);
+	    for(int ii=0; ii<GetN(); ii++)
+        	((TPlotLine*)GetPtr() + ii)->write(f);
         else
             pV->write( f, size );
 
@@ -720,8 +721,10 @@ size_t  TObject::ofDB( GemDataStream& f )
         //ssize = 768;
     }
     else	// all object with Keyword "**plt" considered PlotLine object !!!
-    if( strcmp(Keywd+2, "plt") == 0 )
-        ((TPlotLine*)GetPtr())->read(f);
+    if( strcmp(Keywd+2, "plt") == 0 ) {
+	for(int ii=0; ii<GetN(); ii++)
+    	    ((TPlotLine*)GetPtr() + ii)->read(f);
+    }
     else
         pV->read( f, ssize );
 

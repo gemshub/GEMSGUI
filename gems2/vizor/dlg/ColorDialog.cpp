@@ -21,6 +21,7 @@
 #include <qframe.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
+
 #include "ColorDialog.h"
 
 #define Inherited ColorDialogData

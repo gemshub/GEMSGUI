@@ -37,7 +37,7 @@ struct TPlotLine
     int green;
     int blue;
 
-    char name[15];
+    char name[16];
 
 
     TPlotLine( const char *aName = 0,
