@@ -793,11 +793,11 @@ int TProfil::Set_DC_limits( int Mode )
             XFL = Mode? pmp->XF[k]: pmp->PLL[k]*XFS;
             XFU = Mode? pmp->XF[k]: pmp->PUL[k]*XFS;
             break;
-        case CON_WTFR:
+        case CON_WTFR:   if(MWXW < 1e-15) break;  // Temp.fix
             XFL = Mode? pmp->XF[k]: pmp->PLL[k]*pmp->MBX/MWXW;
             XFU = Mode? pmp->XF[k]: pmp->PUL[k]*pmp->MBX/MWXW;
             break;
-        case CON_VOLFR:
+        case CON_VOLFR:   if(MXV < 1e-15) break; // Temp.fix
             XFL = Mode? pmp->XF[k]: pmp->PLL[k]*pmp->VXc/MXV;
             XFU = Mode? pmp->XF[k]: pmp->PUL[k]*pmp->VXc/MXV;
             break;
