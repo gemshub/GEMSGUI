@@ -132,7 +132,8 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void CmHelp();
-
+    // added by KD on 21.11.04 for SIT 
+    void MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut );
     // make new aq and/or gas phases (re-written by KD 30.07.03)
     void newAqGasPhase( const char *akey, const char *gkey, int file,
         const char amod, const char gmod, float apar[4], float gpar[4],

@@ -626,7 +626,7 @@ pm.DCC3   = (char *)aObj[ o_wi_dcc3 ].Free();
 void TMulti::sit_dyn_new()
 {
 //  Added 16.11.2004 by Sveta
-   if( pm.sitNcat*pm.sitNcat )
+   if( pm.sitNcat*pm.sitNan )
      pm.sitE = (float *)aObj[ o_wd_site].Alloc(pm.sitNcat, pm.sitNan, F_);
    else
      pm.sitE = (float *)aObj[ o_wd_site].Free();

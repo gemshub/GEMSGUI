@@ -654,37 +654,94 @@ AGAINRC:
 //---------------------------------------------------------------------
     if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
     {  // Filling out name and index lists for cations and anions
-       int iCat=0, iAn=0, pos;
-       gstring spName;
-
-       for( i=0; i<php->nDC; i++ )
-       { // Determining if cation or anion
-         spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-         spName.strip();
-         pos = spName.length()-1;
-         while( pos>0 && spName[pos] <= '9' && spName[pos] >= '0' )
-            pos--;
-         switch( spName[pos] )
-         {
-           case '-': memcpy( php->lsAn[iAn], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
-                     php->nxAn[iAn++] = i;
-                     break;
-           case '+': memcpy( php->lsCat[iCat], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
-                     php->nxCat[iCat++] = i;
-                     break;
-           case '@':
-           default:
-                     continue;
-         }
-       }
-       if( iCat != php->ncpN || iAn != php->ncpM )
-            Error( GetName(),
-              "E38PHrem: Mismatch in the number of cations or anions in the SIT model...");
+       MakeCatAnLists( false, false, true );
     }
 //--------------------------------------------------------------
     SetString("PH_make   Remake of Phase definition OK");
     pVisor->Update();
     return ret;
+}
+
+// Assembling indices and name lists for cations and anions
+void
+TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
+{
+   int i, iCat=0, iAn=0, pos;
+   gstring spName;
+
+   if( WorkCount )
+   {   // pre-proc. loop for SIT: determining number of cations and anions
+      int nAn=0, nCat=0;
+      for( i=0; i<php->nDC; i++ )
+      {
+         spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+         spName.strip();
+         pos = spName.length()-1;
+         while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
+             pos--;
+         switch( spName[pos] )
+         {
+           case '-': nAn++;
+                     break;
+           case '+': nCat++;
+                     break;
+           case '@':
+           default:
+                     break;
+         }
+      }
+      if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
+           Error( GetName(),
+              "E39PHrem: No cations or no anions - SIT model cannot be applied...");
+      php->ncpN = nCat;
+      php->ncpM = nAn;
+   }
+
+   if( WorkAlloc )
+   {
+      if( php->Ppnc == S_ON && php->sol_t[SPHAS_TYP] == SM_AQSIT )
+      {
+         php->lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Alloc(
+                          php->ncpN, 1, MAXDCNAME );
+         php->lsAn  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Alloc(
+                          1, php->ncpM, MAXDCNAME );
+         php->nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( php->ncpN, 1, I_);
+         php->nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( 1, php->ncpM, I_);
+      }
+      else {
+        php->lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
+        php->lsAn =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Free();
+        php->nxCat = (short *)aObj[ o_ph_w_nxc ].Free();
+        php->nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
+      }
+   }
+
+   if( FillOut )
+   {
+     for( i=0; i<php->nDC; i++ )
+     { // Determining if cation or anion
+       spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+       spName.strip();
+       pos = spName.length()-1;
+       while( pos>0 && spName[pos] <= '9' && spName[pos] >= '0' )
+          pos--;
+       switch( spName[pos] )
+       {
+          case '-': memcpy( php->lsAn[iAn], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                  php->nxAn[iAn++] = i;
+                  break;
+          case '+': memcpy( php->lsCat[iCat], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                   php->nxCat[iCat++] = i;
+                  break;
+          case '@':
+          default:
+                  continue;
+        }
+     }
+     if( iCat != php->ncpN || iAn != php->ncpM )
+       Error( GetName(),
+        "E38PHrem: Mismatch in the number of cations or anions in the SIT model...");
+   }
 }
 
 #define s(i,j) php->scoef[(j)+(i)*nsc]
@@ -695,6 +752,12 @@ void
 TPhase::RecCalc( const char *key )
 {
     bool getDCC;
+
+    if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
+    {  // refreshing lists for SIT coefficients 
+       MakeCatAnLists( true, true, true );
+    }
+
     getDCC = vfQuestion(window(), GetName(),
        "Extract parameters from DComp/ReacDC records and refresh DC class codes?");
 
