@@ -485,8 +485,8 @@ TVisor::toWinCFG()
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;
     f_win_ini << "config_autosave\t=\t" << pVisorImp->getConfigAutosave() << endl;
 
-    f_win_ini << "local_doc_dir\t=\t" << LocalDocDir.c_str() << endl;
-    f_win_ini << "remote_doc_url\t=\t" << RemoteDocURL.c_str() << endl;
+    f_win_ini << "local_doc_dir\t=\t\"" << LocalDocDir.c_str() << "\""  << endl;
+    f_win_ini << "remote_doc_url\t=\t\"" << RemoteDocURL.c_str() << "\"" << endl;
     f_win_ini << "local_doc\t=\t" << LocalDoc << endl;
     f_win_ini.close();
 

@@ -57,6 +57,7 @@ gems2/gems2.app/Contents/PkgInfo svn_keywords=Author+Date+Id+Revision
 gems2/gems2.app/Contents/Resources/gems.icns svneol=native#unset svn_keywords=Author+Date+Id+Revision
 gems2/gems2.spec svn_keywords=Author+Date+Id+Revision
 gems2/gems200-w32-install.nsi svn_keywords=Author+Date+Id+Revision
+gems2/gems201rc0-w32-install.exe -text
 gems2/img/RunBCC.png -text
 gems2/img/RunIPM.png -text
 gems2/img/SetCompos.png -text
