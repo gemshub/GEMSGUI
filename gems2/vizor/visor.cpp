@@ -138,7 +138,7 @@ TVisor::TVisor(int c, char *v[]):
 
 
     DefDBDir = "DB.default/";
-    DefProfDir = "project/";
+    DefProfDir = "projects/";
     UserProfDir = "projects/";
     ImgDir = "img/";
 
