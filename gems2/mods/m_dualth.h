@@ -25,9 +25,6 @@
 #include "v_module.h"
 
 const int DT_RKLEN = 80;
-const int  MAXIDNAME = 12;
-const   int MAXFORMUNITDT=     40;
-
 
 typedef struct
 { // Description of DualTh data structure (revised in July 2004)

@@ -98,8 +98,8 @@ DBAdvDialog::CmOpen_GTDEMO()
 void
 DBAdvDialog::CmOpen_INTEG()
 {
-    qWarning( "DBAdvDialog::CmOpen_INTEG(): Not implemented yet!" );
-//    pVisorImp->OpenModule(this, RT_INTEG);
+//    qWarning( "DBAdvDialog::CmOpen_INTEG(): Not implemented yet!" );
+    pVisorImp->OpenModule(this, RT_GEM2MT);
 }
 
 

@@ -42,10 +42,18 @@ const char S_OFF = '-',
                                   A_NUL ='?';
 
 enum { RT_SDATA=0, RT_CONST=1 };
-
-enum { RT_INTEG=2, RT_PARAM=3, RT_ICOMP=4, RT_DCOMP=5, RT_COMPOS=6,
+/*
+enum { RT_GEM2MT=2, RT_PARAM=3, RT_ICOMP=4, RT_DCOMP=5, RT_COMPOS=6,
        RT_REACDC=7, RT_RTPARM=8, RT_PHASE=9, RT_SYSEQ=10, RT_PROCES=11,
        RT_UNSPACE=12, RT_GTDEMO=13, RT_DUALTH=14,
+
+       MD_RMULTS=15, MD_MTPARM=16, MD_SYSTEM=17,
+       MD_MULTI=18, MD_EQCALC=19, MD_EQDEMO=20
+     };
+*/
+enum { RT_PARAM=2, RT_ICOMP=3, RT_DCOMP=4, RT_COMPOS=5,
+       RT_REACDC=6, RT_RTPARM=7, RT_PHASE=8, RT_SYSEQ=9, RT_PROCES=10,
+       RT_UNSPACE=11, RT_GTDEMO=12, RT_DUALTH=13, RT_GEM2MT=14,
 
        MD_RMULTS=15, MD_MTPARM=16, MD_SYSTEM=17,
        MD_MULTI=18, MD_EQCALC=19, MD_EQDEMO=20
@@ -64,9 +72,6 @@ inline bool IsDoubleEmpty( const double v )
     return ( v>0. && v <= DOUBLE_EMPTY);
 }
 
-//---------------------------------
-// Integ
-//---------------------------------
 
 enum std_object{
     o_hpage = 0, o_hrkey, o_hemsg, o_hedbuf, o_hrkeys,
@@ -75,14 +80,6 @@ enum std_object{
     o_sdpage, o_sdabstr, o_sdrefs, o_sdnote, o_sdbkwd,
     o_reckey, o_k_, o_ii_, o_prn_, o_rtkey, o_rttime
 };
-
-enum integ_objects {                  // work objects
-    o_i_allx = o_rttime+1, o_i_ally, o_iallst, o_iallpr,
-    o_ipstr, o_igexpr, o_ipdoub, o_iparam, o_ipy_bg, o_ig_txt,
-    o_igkey, o_igname, o_igbgen, o_igeps, o_igstep,
-    o_ival_x, o_imaxit, o_ignstp, o_ival_y, o_ivaldy
-};
-
 
 //---------------------------------
 // Param
@@ -96,7 +93,7 @@ MAXPARAMKEY =    24,
                             DFCN = 6; // number of columns in MASDJ table
 
 enum param_objects {                  // work objects
-    o_paver =  o_ivaldy+1,
+    o_paver = o_rttime+1,
     // BASE_PARAM
     o_papc, o_paprd,  /*i 3*/  o_padpwt, /*i 3*/
     o_papllg, o_pape, o_paiim, o_padg, o_padhb, o_pads, o_padk,
@@ -754,6 +751,36 @@ typedef enum {
 
 
 } GS_AS_CLASSES;
+
+const int  MAXIDNAME = 12;
+const   int MAXFORMUNITDT=     40;
+
+//---------------------------------
+// GEM2MT
+//---------------------------------
+
+
+enum gem2mt_objects {
+  o_mtpufl = o_dttprn+1, o_mtpvfl, o_mtpsfl, o_mtcipf, o_mtszt,
+  o_mtnsne, o_mtptai, o_mttmi,  o_mtnvi, o_mtaxis,
+  o_mtpai,  o_mttai,  o_mttau,  o_mtsize,
+// DBase 42
+  o_mtname, o_mtnotes, o_mtflag, o_mtshort, o_mtdoudl,
+  o_mtfloat, o_mtxnames, o_mtynames, o_mtlnam, o_mtlname,
+  o_mttexpr, o_mtgexpr, o_mtsdref, o_mtsdval, o_mtdicp,
+  o_mtfdli,  o_mtpi,   o_mtti,   o_mtvi, o_mtxet,
+  o_mtyet,  o_mtbn,    o_mtqpi,  o_mtqpc, o_mtxt,
+  o_mtyt,   o_mtcib,   o_mtcab, o_mtfdlf,
+  o_mtpgt,  o_mtnam_i, o_mtfor_i, o_mtstld, o_mtciclb,
+  o_mtaucln, o_mtfdlid, o_mtfdlop, o_mtfdlmp, o_mtmpgid,
+  o_mtumpg,  o_mtbm,  o_mtplline,
+//work
+  o_mtsykey, o_mwetext, o_mwtprn, o_mtctm,  o_mtcnv,
+  o_mtqc, o_mtkv, o_mtjqc, o_mtjqs,  o_mtjt,
+  o_mtrei1, o_mtrei2, o_mtrei3, o_mtrei4, o_mtrei5,
+  o_mtct, o_mtcp, o_mtcv,  o_mtctau, o_mtdtau,
+  o_mtotau, o_mtref1, o_mtref2, o_mtref3, o_mtref4
+};
 
 #endif // _v_mod_h
 

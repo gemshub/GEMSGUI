@@ -3,7 +3,6 @@
 // To be finalized in Version 3.0 (2006)
 // Declaration of GEM2MT class, config and calculation functions
 //
-
 // Copyright (C) 2005 D.Kulik, S. Dmytriyeva
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -22,11 +21,10 @@
 
 #include "m_param.h"
 #include "v_ipnc.h"
+#include "graph.h"
 #include "v_module.h"
 
 const int MT_RKLEN = 80;
-const int  MAXIDNAME = 12;
-const   int MAXFORMUNITMT= 40;
 
 
 typedef struct
@@ -76,6 +74,7 @@ typedef struct
    Nqpt, // Number of elements in the script work array qpi for transport
    Nqpg, // Number of elements in the script work array qpc for graphics
    Nb,   // N - number of independent components (set automatically from Multi)
+   FIb,   // N - number of independent components (set automatically from Multi)
    bTau, // Time point for the simulation break (Tau[0] at start)
    nS,   // Total number of points to sample the results in xt, yt
    nYS,  // number of plots (columns in the yt array)
@@ -86,16 +85,16 @@ typedef struct
 
 // iterators for generating syseq record keys for initial system variants
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
-   NVi[3]    // Restrictions variant #: start, end, step
+   NVi[3],    // Restrictions variant #: start, end, step
    axisType[6],  // axis graph type, background(3) reserved(2)
-   DiCp[],   // array of indexes of initial system variants for
+   *DiCp,   // array of indexes of initial system variants for
              // distributing to nodes [nC]
-   *FDLi[2], //[nFD][2] Box indices in the flux definition list
+   (*FDLi)[2] //[nFD][2] Box indices in the flux definition list
    ;
   float        // input
-   Pi[],    // Pressure P, bar for initial systems (values within Pai range) [nIV]
-   Ti[],    // Temperature T, C for initial systems (values within Pai range) [nIV]
-   Vi[];    // Volume of the system (L) [nIV] usually zeros
+   *Pi,    // Pressure P, bar for initial systems (values within Pai range) [nIV]
+   *Ti,    // Temperature T, C for initial systems (values within Pai range) [nIV]
+   *Vi;    // Volume of the system (L) [nIV] usually zeros
   double
   // Input for compositions of initial systems
    Msysb, // Masses (kg) and volumes (L) for initial systems: Ms (total mass, normalize)
@@ -119,7 +118,7 @@ typedef struct
  double
    *Bn,    //  [nIV][N] Table of bulk compositions of initial systems
    *qpi,   //  [Nqpi] Work array for initial systems math script
-   *qpc    //  [Nqpc] Work array for mass transport math script,
+   *qpc,    //  [Nqpc] Work array for mass transport math script,
    *xt,    //  Abscissa for sampled data [nS]
    *yt     //  Ordinates for sampled data [nS][nYS]
    //
@@ -128,14 +127,13 @@ typedef struct
     ;
  float
    *CIb, // [nIV][N] Table of quantity/concentration of IC in initial systems
-   *CIn, // [nIV][N] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
-   *FDLf[2], // [nFD][2] Part of the flux defnition list (MPG quantities)
+   (*FDLf)[2], // [nFD][2] Part of the flux defnition list (MPG quantities)
    *PGT  // Quantities of phases in MPG [Fi][nPG]
     ;
  char
-   *tExpr,  // Math script text for calculation of initial system compositions
-   *gExpr,  // Math script text for calculation of mass transport
+   *tExpr,  // Math script text for calculation of mass transport
+   *gExpr,  // Math script text for calculation of data sampling and plotting
    (*sdref)[V_SD_RKLEN], // "List of bibl. refs to data sources" [0:Nsd-1]
    (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
    (*nam_i)[MAXIDNAME], // [nIV][12] id names of initial systems
@@ -144,10 +142,10 @@ typedef struct
 //
    *CIclb, // [N] Units of IC quantity/concentration for initial systems compositions
    *AUcln, // [Lbi] Units of setting UDF quantities for initial system compositions
-   *(FDLid)[MAXSYMB], // [nFD] ID of fluxes
-   *(FDLop)[MAXSYMB], // [nFD] Operation codes (letters)
-   *(FDLmp)[MAXSYMB], // [nPG] ID of MPG to move in this flux
-   *(MPGid)[MAXSYMB], // [nPG] ID list of mobile phase groups
+   (*FDLid)[MAXSYMB], // [nFD] ID of fluxes
+   (*FDLop)[MAXSYMB], // [nFD] Operation codes (letters)
+   (*FDLmp)[MAXSYMB], // [nPG] ID of MPG to move in this flux
+   (*MPGid)[MAXSYMB], // [nPG] ID list of mobile phase groups
    *UMPG,  // [nFi] units for setting phase quantities in MPG (see PGT ),
 //
    (*SBM)[MAXICNAME+MAXSYMB],  // Keys (names) of IC
@@ -157,7 +155,7 @@ typedef struct
     (*lNam)[MAXGRNAME],        // List of ID of lines on Graph [nYS]
     (*lNamE)[MAXGRNAME];       // List of ID of lines of empirical data [nYE]
 
-   ;
+
 /* Work arrays */
    char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
    *etext,              // internal
@@ -170,7 +168,7 @@ typedef struct
    kv,     // current index of the initial system variant (1 to nIV )
    jqc,    // script c-style index (= qc-1) for transport
    jqs,    // script c-style index (= qc-1) for graphics
-   jt      // index of sampled point (for sampling scripts)
+   jt,      // index of sampled point (for sampling scripts)
    rei1,
    rei2,
    rei3,
@@ -215,6 +213,8 @@ protected:
     void Expr_analyze( int obj_num );
     void CalcPoint( int nPoint );
     bool test_sizes();
+    void init_arrays( bool mode );
+
 
 
 /*    // internal
@@ -269,7 +269,5 @@ public:
     void InsertChanges( TIArray<CompItem>& aIComp ); 
 };
 
-
-};
 
 #endif //_m_gem2mt_h_

@@ -24,6 +24,8 @@ const char *GEMS_MT_HTML = "gm_gem2mt";
 #include "m_gem2mt.h"
 #include "v_object.h"
 #include "visor.h"
+#include "m_syseq.h"
+#include "m_param.h"
 #include "service.h"
 
 #include "v_mod.h"
@@ -122,7 +124,7 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtpvfl].SetPtr( &mtp->PvICi );  /* a8 */
     aObj[o_mtpsfl].SetPtr( &mtp->PsMode ); /* a8 */
     aObj[o_mtcipf].SetPtr( &mtp->nC );     /* i4 */
-    aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i6 */
+    aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i7 */
     aObj[o_mtnsne].SetPtr( &mtp->nS );   /* i4 */
     aObj[o_mtptai].SetPtr( &mtp->nPai );  /* i2 */
     aObj[o_mttmi].SetPtr( mtp->tmi );     /* i3 */
@@ -161,7 +163,7 @@ void TGEM2MT::ods_link(int q)
     aObj[ o_mtname].SetPtr(  mtp->name );
     aObj[ o_mtnotes].SetPtr(   mtp->notes );
     aObj[o_mtflag].SetPtr( &mtp->PunE );    /* a20 */
-    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i28 */
+    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i29 */
     aObj[o_mtdoudl].SetPtr( &mtp->Msysb );    /* d9 */
     aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f17 */
     aObj[ o_mtxnames].SetPtr(  mtp->xNames );
@@ -206,14 +208,12 @@ void TGEM2MT::ods_link(int q)
     aObj[ o_mtyt].SetDim( mtp->nS, mtp->nYS );
     aObj[ o_mtcib].SetPtr( mtp->CIb);
     aObj[ o_mtcib].SetDim( mtp->nIV, mtp->Nb );
-    aObj[ o_mtcin].SetPtr( mtp->CIn);
-    aObj[ o_mtcin].SetDim( mtp->nIV, mtp->Nb );
     aObj[ o_mtcab].SetPtr( mtp->CAb);
     aObj[ o_mtcab].SetDim( mtp->nIV, mtp->Lbi );
     aObj[ o_mtfdlf].SetPtr( mtp->FDLf);
     aObj[ o_mtfdlf].SetDim( mtp->nFD, 2 );
     aObj[ o_mtpgt].SetPtr( mtp->PGT);
-    aObj[ o_mtpgt].SetDim( TProfil::pm->pmp->FI, mtp->nPG );
+    aObj[ o_mtpgt].SetDim( mtp->FIb, mtp->nPG );
     aObj[ o_mtnam_i].SetPtr( mtp->nam_i );
     aObj[ o_mtnam_i].SetDim(  mtp->nIV, 1 );
     aObj[ o_mtfor_i].SetPtr( mtp->for_i );
@@ -233,7 +233,7 @@ void TGEM2MT::ods_link(int q)
     aObj[ o_mtmpgid].SetPtr( mtp->MPGid );
     aObj[ o_mtmpgid].SetDim(  mtp->nPG, 1 );
     aObj[ o_mtumpg].SetPtr( mtp->UMPG );
-    aObj[ o_mtumpg].SetDim( TProfil::pm->pmp->FI, 1 );
+    aObj[ o_mtumpg].SetDim( mtp->FIb, 1 );
     aObj[ o_mtbm].SetPtr( mtp->SBM );
     aObj[ o_mtbm].SetDim(  1, mtp->Nb );
     aObj[ o_mtplline].SetPtr( plot );
@@ -271,7 +271,6 @@ void TGEM2MT::dyn_set(int q)
     mtp->xt = (double *)aObj[ o_mtxt].GetPtr();
     mtp->yt = (double *)aObj[ o_mtyt].GetPtr();
     mtp->CIb = (float *)aObj[ o_mtcib].GetPtr();
-    mtp->CIn = (float *)aObj[ o_mtcin].GetPtr();
     mtp->CAb = (float *)aObj[ o_mtcab].GetPtr();
     mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].GetPtr();
     mtp->PGT = (float *)aObj[ o_mtpgt].GetPtr();
@@ -317,7 +316,6 @@ void TGEM2MT::dyn_kill(int q)
     mtp->xt = (double *)aObj[ o_mtxt].Free();
     mtp->yt = (double *)aObj[ o_mtyt].Free();
     mtp->CIb = (float *)aObj[ o_mtcib].Free();
-    mtp->CIn = (float *)aObj[ o_mtcin].Free();
     mtp->CAb = (float *)aObj[ o_mtcab].Free();
     mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].Free();
     mtp->PGT = (float *)aObj[ o_mtpgt].Free();
@@ -355,7 +353,6 @@ void TGEM2MT::dyn_new(int q)
     {
       mtp->Bn = (double *)aObj[ o_mtbn].Free();
       mtp->CIb = (float *)aObj[ o_mtcib].Free();
-      mtp->CIn = (float *)aObj[ o_mtcin].Free();
       mtp->CIclb = (char *)aObj[ o_mtciclb].Free();
       mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Free();
       mtp->Nb = 0;
@@ -364,7 +361,6 @@ void TGEM2MT::dyn_new(int q)
     {
       mtp->Bn = (double *)aObj[ o_mtbn].Alloc( mtp->nIV, mtp->Nb, D_);
       mtp->CIb = (float *)aObj[ o_mtcib].Alloc( mtp->nIV, mtp->Nb, F_);
-      mtp->CIn = (float *)aObj[ o_mtcin].Alloc( mtp->nIV, mtp->Nb, F_);
       mtp->CIclb = (char *)aObj[ o_mtciclb].Alloc(1, mtp->Nb, A_);
       mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Alloc(
              1, mtp->Nb, MAXICNAME+MAXSYMB);
@@ -411,12 +407,12 @@ void TGEM2MT::dyn_new(int q)
    }
    else
    {
-      mtp->PGT  = (float *)aObj[ o_mtpgt ].Alloc( TProfil::pm->pmp->FI, mtp->nPG, F_);
+      mtp->PGT  = (float *)aObj[ o_mtpgt ].Alloc( mtp->FIb, mtp->nPG, F_);
       mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp ].Alloc(
                     1, mtp->nPG, MAXSYMB);
       mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid ].Alloc(
                     1, mtp->nPG, MAXSYMB);
-      mtp->UMPG = (char *)aObj[ o_mtumpg].Alloc( TProfil::pm->pmp->FI, 1, A_);
+      mtp->UMPG = (char *)aObj[ o_mtumpg].Alloc( mtp->FIb, 1, A_);
    }
 
    if( mtp->Nqpt > 0  )
@@ -448,7 +444,7 @@ void TGEM2MT::dyn_new(int q)
       mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam ].Alloc(
                     1, mtp->nYS, MAXGRNAME);
       mtp->gExpr = (char *)aObj[ o_mtgexpr ].Alloc(1, 2048, S_);
-      mtp->xt   = (double *)aObj[ o_mtxt ].Alloc(mtp->nD, 1, D_);
+      mtp->xt   = (double *)aObj[ o_mtxt ].Alloc(mtp->nS, 1, D_);
       mtp->yt   = (double *)aObj[ o_mtyt ].Alloc(mtp->nS, mtp->nYS, D_);
     }
 
@@ -480,7 +476,7 @@ void TGEM2MT::dyn_new(int q)
       mtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_mtsdval].Free();
     }
     mtp->etext = (char *)aObj[ o_mwetext ].Alloc(1, 4096, S_);
-    mtp->prtab = (char *)aObj[ o_mwtprn ].Alloc(1, 2048, S_);
+    mtp->tprn = (char *)aObj[ o_mwtprn ].Alloc(1, 2048, S_);
 }
 
 // return true if nesessary, recalc base SYSEQ
@@ -509,12 +505,14 @@ void TGEM2MT::set_def(int q)
     ErrorIf( mtp!=&mt[q], GetName(),
         "E03DTrem: Illegal access to mt in set_def");
 
-    TProfil *aPa= TProfil::pm;
-    memcpy( &mtp->PunE, aPa->pa.TPpdc, 4 );
+//    TProfil *aPa= TProfil::pm;
+    memcpy( &mtp->PunE, "jjbC", 4 );
     memcpy( &mtp->PvICi, "+-------S00+-+--", 16 );
     strcpy( mtp->name,  "`" );
     strcpy( mtp->notes, "`" );
-    memset( &mtp->nC, 0, sizeof(short)*16 );
+    strcpy( mtp->xNames, "X" );
+    strcpy( mtp->yNames, "Y" );
+    memset( &mtp->nC, 0, sizeof(short)*17 );
     memset( &mtp->Msysb, 0, sizeof(double)*9 );
     memset( mtp->size[0], 0, sizeof(float)*8 );
     memset( mtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
@@ -559,7 +557,6 @@ void TGEM2MT::set_def(int q)
     mtp->xt = 0;
     mtp->yt = 0;
     mtp->CIb = 0;
-    mtp->CIn = 0;
     mtp->CAb = 0;
     mtp->FDLf = 0;
     mtp->PGT = 0;
@@ -594,38 +591,40 @@ TGEM2MT::test_sizes( )
 
   if( mtp->PvICi != S_OFF )
     mtp->Nb = TProfil::pm->pmp->N;
+  mtp->FIb = TProfil::pm->pmp->FI;
+
 
   if( mtp->nC<=0 || mtp->nIV <= 0)
   {  err_str +=
-"W02PErem: You forgot to specify the number of inital variants! \n Please, do it!");
+"W02PErem: You forgot to specify the number of inital variants! \n Please, do it!";
     mtp->nC = mtp->nIV = 1;
   }
 
   if( mtp->PvAUi != S_OFF )
     if( mtp->Lbi <= 0 )
     {  err_str +=
-"W02PErem: You forgot to specify the number of formula units! \n Please, do it!");
+"W02PErem: You forgot to specify the number of formula units! \n Please, do it!";
        mtp->Lbi = 1;
      }
 
   if( mtp->PvFDL != S_OFF )
     if( mtp->nFD <= 0 )
     {  err_str +=
-"W02PErem: You forgot to specify the number of flux definitions! \n Please, do it!");
+"W02PErem: You forgot to specify the number of flux definitions! \n Please, do it!";
        mtp->nFD = 1;
      }
 
   if( mtp->PvPGD != S_OFF )
     if( mtp->nPG <= 0 )
     {  err_str +=
-"W02PErem: You forgot to specify the number of mobile phase groups! \n Please, do it!");
+"W02PErem: You forgot to specify the number of mobile phase groups! \n Please, do it!";
        mtp->nPG = 1;
      }
 
   if( mtp->PvMSg != S_OFF )
     if( mtp->nS <= 0 || mtp->nYS <= 0 )
     {  err_str +=
-"W02PErem: You forgot to specify the number of points or plots! \n Please, do it!");
+"W02PErem: You forgot to specify the number of points or plots! \n Please, do it!";
       if( mtp->nS <= 0 ) mtp->nS = 1;
       if( mtp->nYS <= 0 ) mtp->nYS = 1;
      }
@@ -633,7 +632,7 @@ TGEM2MT::test_sizes( )
   if( mtp->PvEF != S_OFF )
     if( mtp->nE <= 0 || mtp->nYE <= 0 )
     {  err_str +=
-"W02PErem: You forgot to specify the number of experimental points! \n Please, do it!");
+"W02PErem: You forgot to specify the number of experimental points! \n Please, do it!";
       if( mtp->nE <= 0 ) mtp->nE = 1;
       if( mtp->nYE <= 0 ) mtp->nYE = 1;
      }
@@ -646,13 +645,92 @@ TGEM2MT::test_sizes( )
     return true;
 }
 
+// setup begin initalization
+void TGEM2MT::init_arrays( bool mode )
+{
+  vstr tbuf(100);
+
+// setup default graphiks lines
+   if( mtp->PvEF != S_OFF  )
+        for(int i=0; i<mtp->nYE; i++ )
+        {
+            sprintf( tbuf, "%s%d", TProfil::pm->pa.GDpsc, i+1 );
+            if( !*mtp->lNamE[i] || *mtp->lNamE[i] == ' ' )
+                strncpy( mtp->lNamE[i], tbuf,  MAXGRNAME );
+        }
+    if( mtp->PvMSg != S_OFF  )
+         for(int j=0; j< mtp->nYS; j++ )
+         {
+            sprintf( tbuf, "%s%d", TProfil::pm->pa.GDpsc, j+1 );
+            if( !*mtp->lNam[j]|| *mtp->lNam[j] == ' ' )
+               strncpy( mtp->lNam[j], tbuf, MAXGRNAME );
+          }
+
+// set data to SBM (IComp names)
+    if( mtp->SBM )
+      for(int ii=0; ii< mtp->Nb; ii++ )
+        memcpy( mtp->SBM[ii], TProfil::pm->pmp->SB[ii], MAXICNAME+MAXSYMB  );
+
+// setup flags and counters
+  mtp->gStat = '0';
+  mtp->iStat = '0';
+  mtp->cT = mtp->Tai[START_];
+  mtp->cP = mtp->Pai[START_];
+  mtp->cTau = mtp->Tau[START_];
+  mtp->ctm = mtp->tmi[START_];
+  mtp->cnv = mtp->NVi[START_];
+  mtp->qc = 0;
+  mtp->kv = 0;
+  mtp->jt = 0;
+
+  if( mode )
+  {
+    int ii;
+
+    mtp->Msysb = 0.;
+    mtp->Vsysb = 0.;
+    mtp->Mwatb = 1.;
+    mtp->Maqb = 1.;
+    mtp->Vaqb = 1.;
+
+    for( ii=0; ii<mtp->Nb; ii++)
+     mtp->CIclb[ii] = 'g';
+
+    for( ii=0; ii<mtp->nIV; ii++)
+    {
+     sprintf( tbuf, "Variant%d", ii );
+     strncpy( mtp->nam_i[ii], tbuf, MAXIDNAME );
+    }
+
+    for( ii=0; ii<mtp->Lbi; ii++)
+    {
+     mtp->AUcln[ii] = 'M';
+     strncpy( mtp->for_i[ii], "H2O", 4 );
+    }
+
+    for( ii=0; ii<mtp->nFD; ii++)
+    {
+     strcpy( mtp->FDLid[ii], "F1" );
+     strcpy( mtp->FDLop[ii], "ADD" );
+    }
+
+    for( ii=0; ii<mtp->nPG; ii++)
+    {
+     strcpy( mtp->FDLmp[ii], "P1" );
+     strcpy( mtp->MPGid[ii], "P1" );
+    }
+
+    if( mtp->UMPG)
+      for( ii=0; ii<TProfil::pm->pmp->FI; ii++)
+         mtp->UMPG[ii] = 'g';
+  }
+}
 
 //Rebild record structure before calc
 int
 TGEM2MT::RecBuild( const char *key, int mode )
 {
 
-    vstr tbuf(100);
     if( pVisor->ProfileMode != true )
       Error( GetName(), "E09DTrem: Please, do it in the Project mode!" );
 
@@ -668,24 +746,7 @@ AGAIN:
 
     dyn_new();
 
-//   init_arrays( set_def );
-   if( mtp->PvEF != S_OFF  )
-        for(int i=0; i<mtp->nYE; i++ )
-        {
-            sprintf( tbuf, "%s%d", aPa->pa.GDpsc, i+1 );
-            if( !*mtp->lNamE[i] || *mtp->lNamE[i] == ' ' )
-                strncpy( mtp->lNamE[i], tbuf,  MAXGRNAME );
-        }
-    if( mtp->PvMSg != S_OFF  )
-         for(int j=0; j< mtp->nYS; j++ )
-         {
-            sprintf( tbuf, "%s%d", aPa->pa.GDpsc, j+1 );
-            if( !*mtp->lNam[j]|| *mtp->lNam[j] == ' ' )
-               strncpy( mtp->lNam[j], tbuf, MAXGRNAME );
-          }
-    if( mtp->SBM )      // set data to SBM
-      for(int ii=0; ii< mtp->Nb; ii++ )
-        memcpy( mtp->SBM[ii], TProfil::pm->pmp->SB[ii], MAXICNAME+MAXSYMB  );
+   init_arrays( ( ret==VF3_1 ) ); //clear all
 
     SetString("Record build OK");
     pVisor->Update();
@@ -706,7 +767,7 @@ TGEM2MT::RecCalc( const char * key )
 void
 TGEM2MT::CmHelp()
 {
-    pVisor->OpenHelp( GEMS_INT_HTML );
+    pVisor->OpenHelp( GEMS_MT_HTML );
 }
 
 // insert changes in Project to GEM2MT

@@ -13,7 +13,7 @@ INCLUDES     = $(INC_LOCAL) $(INC_GLOBAL)
 #FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 LIB	=   tlib /C /P256
 
-SOURCES = m_const.cpp m_sdata.cpp m_integ.cpp \
+SOURCES = m_const.cpp m_sdata.cpp m_gem2mt.cpp \
     m_param.cpp m_icomp.cpp v_ipnc.cpp \
     s_formula.cpp m_dcomp.cpp m_dcomp2.cpp \
     s_tpwork.cpp s_supcrt.cpp s_supcrt2.cpp \
@@ -25,7 +25,7 @@ SOURCES = m_const.cpp m_sdata.cpp m_integ.cpp \
     m_dualth.cpp m_dualthc.cpp  \
     m_gtdemo.cpp   m_rtparm.cpp
 
-OBJECTS = m_const.obj m_sdata.obj m_integ.obj \
+OBJECTS = m_const.obj m_sdata.obj m_gem2mt.obj \
      m_param.obj m_icomp.obj v_ipnc.obj\
      s_formula.obj s_tpwork.obj m_dcomp.obj m_dcomp2.obj \
      s_supcrt.obj s_supcrt2.obj m_compos.obj s_fgl.obj s_fgl2.obj s_fglbred.obj \
@@ -52,7 +52,7 @@ subdirs_mk:
 $(TARGET): subdirs_mk	$(OBJECTS)
         -del $(TARGET)
 	$(LIB) $(TARGET) @&&|
-        +m_const.obj +m_sdata.obj +m_integ.obj \
+        +m_const.obj +m_sdata.obj +m_gem2mt.obj \
 	+m_param.obj +m_icomp.obj +v_ipnc.obj\
 	+s_formula.obj +s_tpwork.obj +m_dcomp.obj +m_dcomp2.obj \
 	+s_supcrt.obj +s_supcrt2.obj +m_compos.obj \

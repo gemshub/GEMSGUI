@@ -36,7 +36,7 @@ using namespace std;
 
 #include "m_const.h"
 #include "m_sdata.h"
-#include "m_integ.h"
+#include "m_gem2mt.h"
 #include "m_param.h"
 #include "m_icomp.h"
 #include "m_dcomp.h"
@@ -634,7 +634,7 @@ TVisor::initModules()
     {
         addModule(TSData::pm = new TSData(RT_SDATA));
         addModule(TConst::pm = new TConst(RT_CONST));
-        addModule(TInteg::pm = new TInteg(RT_INTEG));
+//        addModule(TGEM2MT::pm = new TGEM2MT(RT_GEM2MT));
         addModule(TProfil::pm = new TProfil(RT_PARAM));
         addModule(TIComp::pm = new TIComp(RT_ICOMP));
         addModule(TDComp::pm = new TDComp(RT_DCOMP));
@@ -647,6 +647,7 @@ TVisor::initModules()
         addModule(TUnSpace::pm = new TUnSpace(RT_UNSPACE));
         addModule(TGtDemo::pm = new TGtDemo(RT_GTDEMO));
         addModule(TDualTh::pm = new TDualTh(RT_DUALTH));
+        addModule(TGEM2MT::pm = new TGEM2MT(RT_GEM2MT));
 
         TProfil::pm->InitSubModules();
     }
@@ -715,10 +716,6 @@ TVisor::defaultCFG()
 {
     rt.Init();
 
-    // RT_INTEG default
-    unsigned char integ_rkfrm[1] = { 24 };
-    rt.Add(new TDataBase(rt.GetCount(), "integ", true, true,
-                         o_ipstr, 6, 0, 1, integ_rkfrm));
 
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
@@ -790,6 +787,13 @@ TVisor::defaultCFG()
                                   };
     rt.Add(new TDataBase(rt.GetCount(), "dualth", true, true,
                          o_dtname, 51, 0, 10, dualth_rkfrm));
+
+    // RT_GEM2MT default
+    unsigned char gem2mt_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
+       MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
+                                  };
+    rt.Add(new TDataBase(rt.GetCount(), "gem2mt", true, true,
+                         o_mtname, 42, 0, 10, gem2mt_rkfrm));
 
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");

@@ -889,8 +889,8 @@ TDualTh::Calc_gam_n( char eState )
       //    Calculation of Gex for q-th experiment
       Gex = Gmix - Gid - Gmech;
 // putting values provisionally in 1st column of Coul cells!
-      dtp->gex_n[ii*dtp->nK] = Gex;   // molar excess Gibbs energy of mixing
-      dtp->gm_n[ii*dtp->nK] = Gmix;      // Temporarily!
+//      dtp->gex_n[ii*dtp->nK] = Gex;   // molar excess Gibbs energy of mixing
+//      dtp->gm_n[ii*dtp->nK] = Gmix;      // Temporarily!
       dtp->gmx_n[ii*dtp->nK] = Gmix-Gmech;     // Temporarily!
 // Interaction parameter (regular binary only)!
       Wg = Gex / chiPr;

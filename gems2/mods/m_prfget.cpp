@@ -925,7 +925,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
 // Reopen file configuration on data in Project structure
 void TProfil::SetFN()
 {
-    unsigned i;
+    unsigned i, nx=0;
     short j, k=0;
     TCStringArray aFls;
     gstring s;
@@ -933,10 +933,18 @@ void TProfil::SetFN()
     {
         if( aMod[i].IsSubModule() )
             continue;
-        ///
-
+///Added after GEM2MT implemented
+        if( i == RT_PARAM )
+        {
+            s = gstring( mup->FN[k], 0, MAX_FILENAME_LEN);
+            if( s[0] == 'i' && s[1] == 'n') // integ file , use old version DB
+            { k+=mup->Nfl[i];
+              nx = 1;
+            }
+        }
+///end Added after GEM2MT implemented
         aFls.Clear();
-        for(j=0; j<mup->Nfl[i]; j++)
+        for(j=0; j<mup->Nfl[i+nx]; j++)
         {
             s = gstring( mup->FN[k++], 0, MAX_FILENAME_LEN);
             aFls.Add(s);

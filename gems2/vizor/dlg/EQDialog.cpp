@@ -113,7 +113,7 @@ EQDialog::CmOpen_GTDEMO()
 void
 EQDialog::CmOpen_INTEG()
 {
-//    pVisorImp->OpenModule(this, RT_INTEG);
+    pVisorImp->OpenModule(this, RT_GEM2MT);
 }
 
 
