@@ -283,8 +283,8 @@ void TCModule::CmSaveM()
   try{
         gstring str=db->PackKey();
        if( str.find_first_of("*?" ) != gstring::npos
-            || ( db->GetStatus() == UNDF_ ) )   // 09/11/2004 Sveta
-        Error( GetName(), "Cannot save under record key template, or record contents are not yet loaded!");
+            || ( db->GetStatus() == UNDF_  && db->RecCount() ) )   // 09/11/2004 Sveta
+        Error( GetName(), "E1 Cannot save under record key template, or record contents are not yet loaded!");
         CmSave();
      }
    catch( TError& xcpt )
@@ -619,7 +619,7 @@ TCModule::CmDerive()
                     //db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
             || ( db->GetStatus() == UNDF_ ) )   // 09/11/2004 Sveta
-            Error( GetName(), "Cannot save under record key template, or record contents are not yet loaded!");
+            Error( GetName(), "E2 Cannot save under record key template, or record contents are not yet loaded!");
 
         //check_input( db->UnpackKey() );
         RecBuild( str.c_str(), VF_REMAKE );
@@ -661,8 +661,8 @@ TCModule::CmCalc()
 
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
-               || ( db->GetStatus()== UNDF_ ))      // 09/11/2004 Sveta
-            Error( GetName(), "Cannot save under record key template, or record contents are not yet loaded!");
+               || ( db->GetStatus()== UNDF_ && db->RecCount() ))  // 09/11/2004 Sveta
+            Error( GetName(), "E3 Cannot save under record key template, or record contents are not yet loaded!");
         //int  Rnum = db->Find( str.c_str() );
         //ErrorIf( Rnum<0, GetKeywd(),
         // "Record to calculate not found!");
@@ -985,8 +985,8 @@ TCModule::CmPlot()
 
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
-        || ( db->GetStatus()== UNDF_ ))      // 09/11/2004 Sveta
-            Error( GetName(), "Current record key is not provided or readed!");
+        || ( db->GetStatus()== UNDF_ && db->RecCount() ))  // 09/11/2004 Sveta
+            Error( GetName(), "E4 Cannot save under record key template, or record contents are not yet loaded!");
         //int  Rnum = db->Find( str.c_str() );
         //ErrorIf( Rnum<0, GetName(), "Record to demonstrate not found!");
         RecordPlot( str.c_str() );
