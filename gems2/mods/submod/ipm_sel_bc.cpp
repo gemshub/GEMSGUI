@@ -26,7 +26,7 @@
 #ifndef IPMGEMPLUGIN
 
 #include "visor.h"
-#include "visor_w.h"
+//#include "visor_w.h"
 #include "service.h"
 #include "stepwise.h"
 

@@ -27,7 +27,7 @@
 #include "s_formula.h"
 #include "service.h"
 #include "visor.h"
-#include "visor_w.h"
+//#include "visor_w.h"
 #include "stepwise.h"
 
 enum translat_codes { /* codes for translations of equations */

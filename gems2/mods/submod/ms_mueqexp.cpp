@@ -26,7 +26,7 @@
 
 #include "service.h"
 #include "visor.h"
-#include "visor_w.h"
+//#include "visor_w.h"
 #include "stepwise.h"
 
 #endif

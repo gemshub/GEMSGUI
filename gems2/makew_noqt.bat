@@ -1,1 +1,1 @@
-make -f Makefile.w32 noqt > compile.out
+make -f Makefile.w32 RELEASE=NO noqt > compile.out
