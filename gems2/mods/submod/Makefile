@@ -169,12 +169,12 @@ ms_multi_file.o: ../../vizor/kernel/v_file.h ../submod/ms_mtparm.h
 ms_multi_file.o: ../submod/ms_system.h ../m_phase.h ../submod/ms_multi.h
 ms_multi_file.o: ../../vizor/libs/gdatastream.h datach.h databr.h ../v_ipnc.h
 ms_multi_file.o: ../submod/ms_calc.h
-ms_multi_file.o: ../m_param.h ../v_mod.h ../../vizor/kernel/v_vals.h
-ms_multi_file.o: ../../vizor/libs/gstring.h ../../vizor/libs/array.h
-ms_multi_file.o: ../submod/ms_rmults.h ../../vizor/kernel/v_module.h
-ms_multi_file.o: ../../vizor/kernel/v_object.h ../../vizor/kernel/v_user.h
-ms_multi_file.o: ../../vizor/libs/verror.h ../../vizor/kernel/v_dbm.h
-ms_multi_file.o: ../../vizor/kernel/v_file.h ../submod/ms_mtparm.h
-ms_multi_file.o: ../submod/ms_system.h ../m_phase.h ../submod/ms_multi.h
-ms_multi_file.o: ../../vizor/libs/gdatastream.h datach.h databr.h ../v_ipnc.h
-ms_multi_file.o: ../submod/ms_calc.h
+ms_datach_br.o: ../m_param.h ../v_mod.h ../../vizor/kernel/v_vals.h
+ms_datach_br.o: ../../vizor/libs/gstring.h ../../vizor/libs/array.h
+ms_datach_br.o: ../submod/ms_rmults.h ../../vizor/kernel/v_module.h
+ms_datach_br.o: ../../vizor/kernel/v_object.h ../../vizor/kernel/v_user.h
+ms_datach_br.o: ../../vizor/libs/verror.h ../../vizor/kernel/v_dbm.h
+ms_datach_br.o: ../../vizor/kernel/v_file.h ../submod/ms_mtparm.h
+ms_datach_br.o: ../submod/ms_system.h ../m_phase.h ../submod/ms_multi.h
+ms_datach_br.o: ../../vizor/libs/gdatastream.h datach.h databr.h ../v_ipnc.h
+ms_datach_br.o: ../submod/ms_calc.h

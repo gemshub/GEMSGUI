@@ -25,24 +25,20 @@ struct vstr
     vstr(int ln): p(new char[ln+1])
     { }
 
-    vstr(int ln, const char* s): p(new char[ln+1])
-    {
+    vstr(int ln, const char* s): p(new char[ln+1])    {
         strncpy(p, s, ln);
         p[ln]='\0';
     }
 
-    vstr(const char* s): p(new char[strlen(s)+1])
-    {
+    vstr(const char* s): p(new char[strlen(s)+1])    {
        strcpy(p, s);
     }
 
-    ~vstr()
-    {
+    ~vstr()    {
         delete[] p;
     }
 
-    operator char* ()
-    {
+    operator char* ()    {
         return p;
     }
 
