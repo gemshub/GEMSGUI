@@ -26,6 +26,7 @@
 #include <qaccel.h>
 #include <qvalidator.h>
 #include <qclipboard.h>
+#include <qscrollbar.h>
 
 #include "units.h"
 #include "page_i.h"
@@ -56,7 +57,7 @@ gstring visualizeEmpty(const gstring& text)
     return (text==S_EMPTY) ? emptiness : text;
 }
 
-// for QTextEdit - has no QValidator
+/*
 static
 bool IsCharAllowed(TObject& obj, uint ch)
 {
@@ -83,6 +84,7 @@ bool IsCharAllowed(TObject& obj, uint ch)
         return	true;
     }
 }
+*/
 
 // for QLineEdit with QValidator
 static
@@ -225,7 +227,7 @@ TCPage::RedrawFields()
             if( getField(ii) )
             {
                 delete getField(ii);
-                rInfo.aFieldInfo[ii].pField=0;
+                rInfo.aFieldInfo[ii].pField = NULL;
             }
     }
     else
@@ -237,7 +239,7 @@ TCPage::RedrawFields()
 void
 TCPage::AddFields()
 {
-    TField* prevField = 0;
+    TField* prevField = NULL;
     int LineH = pVisorImp->getCharHeight();
 
     for( int ii=0; ii<getFieldCnt(); ii++ )
@@ -247,8 +249,8 @@ TCPage::AddFields()
         {   fi.pField = NULL;    //added Sveta 24/08/01
             continue; //return;
         }
-        TField* pTied = 0;
-        TField* pSticked = 0;
+        TField* pTied = NULL;
+        TField* pSticked = NULL;
 
         // calculating position of the element
 
@@ -371,11 +373,11 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
         Lab(rInfo.label),
         X(xx0), Y(yy0),
         selected(false),
-        pTied(0),
-        pSticked(0)
+        pTied(NULL),
+        pSticked(NULL)
 {
-    focused = 0;
-    pSV = pSH = 0;
+    focused = NULL;
+    pSV = pSH = NULL;
     indTied = 0;
 
     p->setFont( pVisorImp->getCellFont() );
@@ -554,7 +556,7 @@ TField::Update()
 
     uint minM = min(GetObj().GetM(), rInfo.maxM);
     for(uint ii=0; ii<aCtrl.GetCount(); ii++)
-        aCtrl[ii]->SetNM((ii/minM)+iN, (ii%minM)+iM);
+        aCtrl[ii]->changeCellNM((ii/minM)+iN, (ii%minM)+iM);
 
     if( focused )
         focused->SetDescription();
@@ -572,9 +574,10 @@ TField::setYPos(int pos)
 void
 TField::setXPos(int pos)
 {
-    //  if( !pSH ) return;		/// Possibly ERROR !
-    pSH->setValue(iM=pos);
+    iM = pos;
     Update();
+    if( pSH )
+	pSH->setValue(iM);
 }
 
 void
@@ -586,10 +589,7 @@ TField::EvVScroll(int n)
     iN = n;
     Update();
 
-    if( !pTied )
-        return;
-
-    for(TField* t = pTied; t!=this; t=t->pTied)
+    for(TField* t = pTied; t && t!=this; t=t->pTied)
         t->setYPos( n );
 }
 
@@ -602,10 +602,7 @@ TField::EvHScroll(int m)
     iM = m;
     Update();
 
-    if( !pSticked )
-        return;
-
-    for(TField* t = pSticked; t!=this; t=t->pSticked)
+    for(TField* t = pSticked; t && t!=this; t=t->pSticked)
         t->setXPos( m );
 }
 
@@ -641,6 +638,8 @@ TField::setFocused(TCell* cell)
     if( !selected )
 	getPage()->clearSelectedObjects();
     focused = cell;
+    if( focused )
+	focused->SetDescription();
 }
 
 void
@@ -758,10 +757,7 @@ TField::CmPasteFromClipboard()
     
 	setFromString(clipboard);
 	
-	QWidget* topw = topLevelWidget();
-	if( topw->inherits("QWidget") && !topw->inherits("QDialog") )
-    	    ((TCModuleImp*)(topw))->CellChanged();
-	    
+	objectChanged();
 	Update();
 	
 	groupUndoContents = undoString;	// for possible group undo
@@ -895,8 +891,7 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
                        TObject& rO, int n, int m, bool ed, int ht):
         QLineEdit(&rfield),
         TCell(rO, n, m, ed, showType_, this),
-        fieldType(ft),
-        changed(false)
+        fieldType(ft)
 {
     move(xx, yy);
     setFixedSize(wdF(fieldType, npos), htF(fieldType, ht));
@@ -904,7 +899,6 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
 
     if( edit )
     {
-        connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(EvChange()) );
         connect(this, SIGNAL(fieldUpdate()), &rfield, SLOT(Update()));
 	setMaxLength(AllowedPos(rO)+1);
 	setValidator(new QRegExpValidator( QRegExp(GetAllowedRegExp(rO)), this ) );
@@ -925,13 +919,14 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
     //    setFont( pVisorImp->getCellFont() );
     updateCellBackground();
     updateDisplay();
+    QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
 }
 
 
 void
 TCellInput::closeEvent(QCloseEvent* e)
 {
-    if( hasFocus() && changed )
+    if( isModified() )
         setValue();
 
     QLineEdit::closeEvent(e);
@@ -942,22 +937,15 @@ void
 TCellInput::updateDisplay()
 {
     setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+    setCursorPosition(100);
     setCursorPosition(0);
-//    QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
-}
-
-void
-TCellInput::EvChange()
-{
-    if( isModified() )	// it reacts now only on keyboard changes
-        changed = true;
 }
 
 
 void
 TCellInput::setIfChanged()
 {
-    if( changed )
+    if( isModified() )
         setValue();
 }
 
@@ -965,8 +953,13 @@ TCellInput::setIfChanged()
 void
 TCellInput::setValue()
 {
-    changed = false;
-    if( !rObj.SetString(text(), N, M) )
+    clearModified();
+    if( rObj.SetString(text(), N, M) )
+    {
+        field()->objectChanged();
+        setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+    }
+    else
     {
         if( text() == emptiness || text() == short_emptiness )
         {
@@ -975,15 +968,10 @@ TCellInput::setValue()
         }
         else
         {
-            vfMessage(topLevelWidget(), rObj.GetKeywd(), "Sorry! Wrong value typed!" );
+            vfMessage(topLevelWidget(), rObj.GetKeywd(), "Sorry! Wrong value typed!", vfErr );
             setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
             setCursorPosition(0);
         }
-    }
-    else
-    {
-        field()->objectChanged();
-        setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
     }
 }
 
@@ -993,20 +981,17 @@ TCellInput::focusInEvent(QFocusEvent* e)
 {
     QLineEdit::focusInEvent(e);
 
+    clearModified();
     field()->setFocused(this);
-    SetDescription();
-    changed = false;
-    //    if( rObj.IsEmpty(N, M) )
-    //	selectAll();
 }
 
 
 void
 TCellInput::focusOutEvent(QFocusEvent* e)
 {
-    field()->setFocused(0);
-    if( changed )
+    if( isModified() )
         setValue();
+    field()->setFocused(NULL);
 
     QLineEdit::focusOutEvent(e);
 }
@@ -1018,7 +1003,7 @@ TCellInput::keyPressEvent(QKeyEvent* e)
     {
     case Key_Enter:
     case Key_Return:
-        if( changed )
+        if( isModified() )
             setValue();
         return;
     case Key_F1:
@@ -1146,7 +1131,7 @@ TCellInput::CmSDRef()
             }
         }
 
-        if( rt[RT_SDATA].Find( str.c_str() )>= 0)
+        if( rt[RT_SDATA].Find( str.c_str() ) >= 0)
             TSData::pm->RecInput( str.c_str() );
 
         pVisorImp->OpenModule(topLevelWidget(), RT_SDATA);
@@ -1258,14 +1243,13 @@ TCellCheck::focusInEvent(QFocusEvent* e)
     QLineEdit::focusInEvent(e);
 
     field()->setFocused(this);
-    SetDescription();
 }
 
 
 void
 TCellCheck::focusOutEvent(QFocusEvent* e)
 {
-    field()->setFocused(0);
+    field()->setFocused(NULL);
 
     QLineEdit::focusOutEvent(e);
 }
@@ -1367,8 +1351,7 @@ TCellText::TCellText(TField& rfield, int xx, int yy,
                      int npos, eShowType showType_,
                      TObject& rO, int n, int m, bool ed, int ht):
         QTextEdit(&rfield),
-        TCell(rO, n, m, ed, showType_, this),
-        changed(false)
+        TCell(rO, n, m, ed, showType_, this)
 {
     move(xx, yy);
     setFixedSize(wdF(ftText, npos), htF(ftText, ht));
@@ -1393,7 +1376,7 @@ TCellText::TCellText(TField& rfield, int xx, int yy,
 void
 TCellText::closeEvent(QCloseEvent* e)
 {
-    if( hasFocus() && changed )
+    if( isModified() )
         setValue();
 
     QTextEdit::closeEvent(e);
@@ -1414,17 +1397,13 @@ TCellText::EvChange()
         vfMessage(topLevelWidget(), "Text object", "String is too long for this object", vfErr);
 	undo();
     }
-    else {
-	changed = changed || isModified();	// it reacts now only on keyboard changes
-    }
 }
 
 void
 TCellText::setIfChanged()
 {
-    if( changed )
+    if( isModified() )
         setValue();
-    SetDescription();
 }
 
 
@@ -1440,7 +1419,7 @@ TCellText::setValue()
         }
         s += textLine(ii);
     */
-    changed = false;
+    setModified(false);
     if( !rObj.SetString(text().remove('\r'), N, M) )
     {
         vfMessage(topLevelWidget(), rObj.GetKeywd(), "Sorry! Wrong value typed!" );
@@ -1456,17 +1435,16 @@ TCellText::focusInEvent(QFocusEvent* e)
 {
     QTextEdit::focusInEvent(e);
 
+    setModified(false);
     field()->setFocused(this);
-    SetDescription();
-    changed = false;
 }
 
 void
 TCellText::focusOutEvent(QFocusEvent* e)
 {
-    field()->setFocused(0);
-    if( changed )
+    if( isModified() )
         setValue();
+    field()->setFocused(NULL);
 
     QTextEdit::focusOutEvent(e);
 }
@@ -1550,7 +1528,7 @@ TQueryWindow::done(int result)
 void
 TQueryWindow::AddFields()
 {
-    TField* prevField = 0;	// previous cell
+    TField* prevField = NULL;	// previous cell
     int LineH = pVisorImp->getCharHeight();
     //  PageInfo& pginfo = rInfo.aPageInfo[0];
     int LastPage = rInfo.aPageInfo.GetCount()-1;
@@ -1570,8 +1548,8 @@ TQueryWindow::AddFields()
             continue; /// may be error?
         }
 
-        TField* pSticked = 0;
-        TField* pTied = 0;
+        TField* pSticked = NULL;
+        TField* pTied = NULL;
 
         if( prevField )
             switch( fi.place )

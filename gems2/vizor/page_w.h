@@ -22,17 +22,19 @@
 #define _page_w_h
 
 #include <qdialog.h>
-#include <qlined.h>
+#include <qlineedit.h>
 #include <qtextedit.h>
-#include <qscrbar.h>
 #include <qevent.h>
 #include <qcolor.h>
+#include <qtooltip.h>
 
 #include "v_object.h"
 #include "module_w.h"
 #include "page_s.h"
 #include "verror.h"
 
+
+class QScrollBar;
 
 //===========================================
 // TCell... classes
@@ -69,12 +71,11 @@ public:
     virtual void setIfChanged() {}
 
     void SetDescription();
-    void SetNM(int n, int m)
+    void changeCellNM(int n, int m)
     {
         N = n; M = m;
         updateDisplay();
-        //    if( pw->hasFocus() )  // transfered to TField::Update for speed up
-        //	SetDescription();
+        QToolTip::add(pw, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
     }
 
     TField* field() const
@@ -98,7 +99,6 @@ class TCellInput:
     Q_OBJECT
 
     const eFieldType fieldType;
-    bool changed;
 
     void setValue();
 
@@ -115,7 +115,6 @@ protected:
     void setIfChanged();
 
 protected slots:
-    void EvChange();
     void CmSDRef();
     void CmDComp();
     void CmCalc();
@@ -183,8 +182,6 @@ class TCellText:
             public TCell
 {
     Q_OBJECT
-
-    bool changed;
 
     void setValue();
 
