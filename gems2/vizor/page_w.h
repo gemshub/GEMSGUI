@@ -131,6 +131,7 @@ protected slots:
     void CmSelectAll();
     void copy();
     void paste();
+    void pasteTransposed();
 
 public:
     TCellInput(TField&, int x, int y, eFieldType ft, int npos, eShowType,
