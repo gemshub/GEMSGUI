@@ -60,7 +60,7 @@ void TProfil::PMtest( const char *key )
         else
             pmp->pNP = 1;
     }
-/*    if( Prob->usp->pbcalc == P_EXECUTE )    ??????? 
+/*    if( Prob->usp->pbcalc == P_EXECUTE )    ???????
     {
         if(Prob->usp->zond[11] == S_OFF )
             pmp->pNP = 0;
@@ -70,7 +70,8 @@ void TProfil::PMtest( const char *key )
 */    pmp->pBAL =  BAL_compare();
     if( !pmp->pBAL )
         pmp->pIPN = 0;
-    if( multi->qEp.GetCount()<1 || multi->qEd.GetCount()<1 )
+//    if( multi->qEp.GetCount()<1 || multi->qEd.GetCount()<1 )  Caution! 
+    if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE )
         pmp->pIPN = 0;
     // Get P and T from key
     gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
@@ -306,26 +307,6 @@ void TProfil::MultiRemake( const char *key )
 NEXT2:
     // load data for dependent components
     multi_sys_dc();
-
-    /* Учесть отметки экстраполяции в MTPARM ? *
-    if( tp->mark )
-      for( pmp->L=0,j=0; j<mu->L; j++ )
-      {
-        if(( pa.ptm == TPMARK_VALID &&
-          ( tp->mark[j] == CP_NOT_VALID || tp->mark[j] == PM_NOT_EXIST ))
-          || ( pa.ptm == TPMARK_PMODF && tp->mark[j] == PM_NOT_EXIST ))
-          { * G = 7777777; *
-            sy->Dcl[j] = DELETE_C; sy->L--;
-            if( sy->LO && j<mu->Laq-1 ) sy->LO--;
-            if( sy->PG && j >= mu->Laq && j< mu->Laq+mu->Pg ) sy->PG--;
-          }
-        if( sy->Dcl[j] == DEFAULT_C )
-          pmp->L++; * Подсчет количества включаемых з.к. *
-      }
-    if( pmp->L < pmp->N )
-      if( !YNonly( msg(em_ltNdc) ))
-        goto WRONG;
-    * Дать предупреждение ? */
 
     // load data by phases, sorption and solution models
     multi_sys_ph();
@@ -904,36 +885,6 @@ PARLOAD: if( k < syp->Fis )
             pmp->PLL[k] = 0.0;
         }
 
-        /* Кинетическая фиксация фазы - не сделано !!!*
-        * Надо знать состав фазы-раствора *;
-        * syp->XFk[kk] *
-        * Проверка на кинетическую фиксацию *
-             if( syp->PPHk != S_OFF )
-             {
-                 if( sy->Lk )
-                 { int jk;
-                   for( jk=ZERO; jk<sy->Lk; jk++ )
-                   if( sy->llk[jk] == jm )
-                   {  if( !bc->VG && bc->Xk )
-                       if( bc->Xk[jk] && !ISEMPTY( bc->Xk[jk] ))
-                         pmp->VG[jp] = bc->Xk[jk] + bc->Xk[jk]*sp->DKIN;
-                       else pmp->VG[jp] = 1e6;
-                      else if( bc->VG && bc->VG[jk] > 1e-18 )
-                             pmp->VG[jp] = bc->VG[jk];
-                          else pmp->VG[jp] = (float)tc_DCmaxm;
-                      if( !bc->NG && bc->Xk )
-                      { pmp->NG[jp] = bc->Xk[jk] - bc->Xk[jk]*sp->DKIN;
-                       * if( pmp->NG[jp] < sp->DKIN )
-                         pmp->NG[jp] = sp->DKIN; *
-                      }
-                      else if( bc->NG && bc->NG[jk] > F_EMPTY )
-                            pmp->NG[jp] = bc->NG[jk];
-                          else pmp->NG[jp] = DZERO;
-                   }
-                 }
-                 if( pmp->VG[jp] < 1e-15 ) pmp->VG[jp] = (float)tc_DCmaxm;
-             }
-        */
     }  /* k */
     pmp->pTPD = 2;
 }
