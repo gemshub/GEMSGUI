@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ProgressDialogData</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>ProgressDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,32 +12,26 @@
             <height>461</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>minimumSize</name>
+    <property name="minimumSize">
         <size>
             <width>310</width>
             <height>460</height>
         </size>
     </property>
-    <property stdset="1">
-        <name>font</name>
+    <property name="font">
         <font>
             <family>Lucida Sans Unicode</family>
             <pointsize>9</pointsize>
         </font>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>ProgressDialogData</string>
     </property>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel1</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>10</y>
@@ -48,25 +39,20 @@
                 <height>20</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
                 <pointsize>11</pointsize>
             </font>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>IPM Minimization Progress</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel3_3</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>70</y>
@@ -74,25 +60,20 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
                 <pointsize>12</pointsize>
             </font>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>System: </string>
         </property>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLayoutWidget">
+        <property name="name">
             <cstring>vbox</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>90</x>
                 <y>130</y>
@@ -100,420 +81,319 @@
                 <height>261</height>
             </rect>
         </property>
-        <property>
-            <name>layoutSpacing</name>
+        <property name="layoutSpacing" stdset="0">
         </property>
         <grid>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>0</number>
             </property>
-            <widget row="5"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="5" column="0">
+                <property name="name">
                     <cstring>TextLabel3_2_2_3</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>pe  </string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget row="1"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="1" column="0">
+                <property name="name">
                     <cstring>TextLabel3_2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Gas  </string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget row="3"  column="1" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="3" column="1">
+                <property name="name">
                     <cstring>pSolid</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>frameShape</name>
+                <property name="frameShape">
                     <enum>Box</enum>
                 </property>
-                <property stdset="1">
-                    <name>frameShadow</name>
+                <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Total mass of solid phases in the system (g)</string>
                 </property>
             </widget>
-            <widget row="5"  column="1" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="5" column="1">
+                <property name="name">
                     <cstring>pPE</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>frameShape</name>
+                <property name="frameShape">
                     <enum>Box</enum>
                 </property>
-                <property stdset="1">
-                    <name>frameShadow</name>
+                <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>pe value of aqueous electrolyte, molal</string>
                 </property>
             </widget>
-            <widget row="4"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="4" column="0">
+                <property name="name">
                     <cstring>TextLabel3_2_3</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>pH  </string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget row="1"  column="1" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="1" column="1">
+                <property name="name">
                     <cstring>pGas</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>frameShape</name>
+                <property name="frameShape">
                     <enum>Box</enum>
                 </property>
-                <property stdset="1">
-                    <name>frameShadow</name>
+                <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Mass of gas (in grams) in the system</string>
                 </property>
             </widget>
-            <widget row="2"  column="1" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="2" column="1">
+                <property name="name">
                     <cstring>pWater</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>frameShape</name>
+                <property name="frameShape">
                     <enum>Box</enum>
                 </property>
-                <property stdset="1">
-                    <name>frameShadow</name>
+                <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Total mass of liquid phases in the system (g)</string>
                 </property>
             </widget>
-            <widget row="6"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="6" column="0">
+                <property name="name">
                     <cstring>TextLabel3_2_2_2_2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>IS  </string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget row="0"  column="1" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="0" column="1">
+                <property name="name">
                     <cstring>pIT</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>frameShape</name>
+                <property name="frameShape">
                     <enum>Box</enum>
                 </property>
-                <property stdset="1">
-                    <name>frameShadow</name>
+                <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Number of IPM iterations performed until the last update of dialog fields</string>
                 </property>
             </widget>
-            <widget row="4"  column="1" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="4" column="1">
+                <property name="name">
                     <cstring>pPH</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>frameShape</name>
+                <property name="frameShape">
                     <enum>Box</enum>
                 </property>
-                <property stdset="1">
-                    <name>frameShadow</name>
+                <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>pH value of aqueous electrolyte, molal (activity scale)</string>
                 </property>
             </widget>
-            <widget row="6"  column="1" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="6" column="1">
+                <property name="name">
                     <cstring>pIC</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>frameShape</name>
+                <property name="frameShape">
                     <enum>Box</enum>
                 </property>
-                <property stdset="1">
-                    <name>frameShadow</name>
+                <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Effective ionic strength of aqueous electrolyte, molal</string>
                 </property>
             </widget>
-            <widget row="3"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="3" column="0">
+                <property name="name">
                     <cstring>TextLabel3_2_2_2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Solid  </string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget row="2"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="2" column="0">
+                <property name="name">
                     <cstring>TextLabel3_2_2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Liquid  </string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget row="0"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel" row="0" column="0">
+                <property name="name">
                     <cstring>TextLabel3</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Iter  </string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
         </grid>
     </widget>
-    <widget>
-        <class>Line</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="Line">
+        <property name="name">
             <cstring>Line1</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>390</y>
@@ -521,19 +401,21 @@
                 <height>20</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>orientation</name>
+        <property name="frameShape" stdset="0">
+            <enum>HLine</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="orientation">
             <enum>Horizontal</enum>
         </property>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLayoutWidget">
+        <property name="name">
             <cstring>Layout4</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>21</x>
                 <y>411</y>
@@ -542,101 +424,87 @@
             </rect>
         </property>
         <hbox>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>6</number>
             </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pStep</cstring>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pStepAccept</cstring>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Step</string>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Make next iteration in Stepwise mode</string>
                 </property>
             </widget>
             <spacer>
-                <property>
-                    <name>name</name>
+                <property name="name" stdset="0">
                     <cstring>Spacer1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
-                <property stdset="1">
-                    <name>sizeType</name>
+                <property name="sizeType">
                     <enum>Expanding</enum>
                 </property>
-                <property>
-                    <name>sizeHint</name>
+                <property name="sizeHint">
                     <size>
                         <width>20</width>
                         <height>20</height>
                     </size>
                 </property>
             </spacer>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pClose</cstring>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Cancel</string>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Do not save IPM results to database (or cancel IPM run in Stepwise mode)</string>
                 </property>
             </widget>
         </hbox>
     </widget>
-    <widget>
-        <class>QFrame</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QFrame">
+        <property name="name">
             <cstring>pBottle</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>130</y>
@@ -644,61 +512,21 @@
                 <height>260</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>frameShape</name>
+        <property name="frameShape">
             <enum>StyledPanel</enum>
         </property>
-        <property stdset="1">
-            <name>frameShadow</name>
+        <property name="frameShadow">
             <enum>Raised</enum>
         </property>
-        <property>
-            <name>toolTip</name>
+        <property name="toolTip" stdset="0">
             <string>Shows current mass ratio of gas (white), liquid (blue) and solid (black) phases </string>
         </property>
     </widget>
-    <widget>
-        <class>QProgressBar</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>pProgress</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>30</y>
-                <width>290</width>
-                <height>31</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <pointsize>12</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>totalSteps</name>
-            <number>7</number>
-        </property>
-        <property stdset="1">
-            <name>progress</name>
-            <number>1</number>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Shows how far the GEM IPM proceeded from FIA to G(x) minimum</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>pKey</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>90</y>
@@ -706,88 +534,64 @@
                 <height>30</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
                 <pointsize>10</pointsize>
             </font>
         </property>
-        <property stdset="1">
-            <name>frameShape</name>
+        <property name="frameShape">
             <enum>StyledPanel</enum>
         </property>
-        <property stdset="1">
-            <name>frameShadow</name>
+        <property name="frameShadow">
             <enum>Sunken</enum>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>:</string>
         </property>
-        <property>
-            <name>toolTip</name>
+        <property name="toolTip" stdset="0">
             <string>Key of the currently processed SysEq database record</string>
         </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>pAccept</cstring>
+    <widget class="QProgressBar">
+        <property name="name">
+            <cstring>pProgress</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
-                <x>20</x>
-                <y>410</y>
-                <width>80</width>
-                <height>37</height>
+                <x>10</x>
+                <y>30</y>
+                <width>290</width>
+                <height>31</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>sizePolicy</name>
-            <sizepolicy>
-                <hsizetype>1</hsizetype>
-                <vsizetype>1</vsizetype>
-            </sizepolicy>
-        </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
                 <pointsize>12</pointsize>
             </font>
         </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Accept</string>
+        <property name="totalSteps">
+            <number>7</number>
         </property>
-        <property>
-            <name>toolTip</name>
-            <string>Save IPM results to database</string>
+        <property name="progress">
+            <number>1</number>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Shows how far the GEM IPM proceeded from FIA to G(x) minimum</string>
         </property>
     </widget>
 </widget>
 <connections>
-    <connection>
-        <sender>pStep</sender>
-        <signal>clicked()</signal>
-        <receiver>ProgressDialogData</receiver>
-        <slot>CmStep()</slot>
-    </connection>
     <connection>
         <sender>pClose</sender>
         <signal>clicked()</signal>
         <receiver>ProgressDialogData</receiver>
         <slot>CmClose()</slot>
     </connection>
-    <connection>
-        <sender>pAccept</sender>
-        <signal>clicked()</signal>
-        <receiver>ProgressDialogData</receiver>
-        <slot>CmAccept()</slot>
-    </connection>
+</connections>
+<slots>
     <slot access="protected">CmAccept()</slot>
     <slot access="protected">CmClose()</slot>
     <slot access="protected">CmStep()</slot>
-</connections>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

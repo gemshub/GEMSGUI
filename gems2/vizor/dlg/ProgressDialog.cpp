@@ -57,7 +57,9 @@ ProgressDialog::ProgressDialog(QWidget* parent,	bool step):
 
     calcThread = new CalcThread();
 
-    pAccept->hide();
+    //pStepAccept->hide();
+	switchToAccept(false);
+
     Update(true);
 
     if( step ) {
@@ -65,7 +67,7 @@ ProgressDialog::ProgressDialog(QWidget* parent,	bool step):
     }
     else {
 	setCaption( "Running..." );
-        pStep->hide();
+      pStepAccept->hide();
 	pClose->setText("&Cancel");
 
 	timer = new QTimer( this );
@@ -85,6 +87,22 @@ ProgressDialog::~ProgressDialog()
 // timer deleted with the parent
 //    delete timer;  
 }
+
+void 
+ProgressDialog::switchToAccept(bool isAccept)
+{
+	if( isAccept ) {
+		pStepAccept->disconnect();
+		connect( pStepAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
+		pStepAccept->setText("Accept");
+	}
+	else {
+		pStepAccept->disconnect();
+		connect( pStepAccept, SIGNAL(clicked()), this, SLOT(CmStep()) );
+		pStepAccept->setText("&Step");
+	}
+}
+
 
 /*!
     Step
@@ -133,7 +151,7 @@ ProgressDialog::CmStep()
     catch( TError& err )
     {
         vfMessage(this, err.title, err.mess);
-	pStep->hide();
+	pStepAccept->hide();
     }
 }
 
@@ -180,10 +198,10 @@ ProgressDialog::Run()
 void
 ProgressDialog::CalcFinished()
 {
-    pStep->hide();
-    pAccept->show();
-
+    switchToAccept(true);
+	pStepAccept->show();
     pClose->setText("&Discard");
+
     QString str;
     str.sprintf("Converged at DK=%.2g", TProfil::pm->pa.p.DK);
     setCaption(str);

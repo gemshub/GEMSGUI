@@ -24,10 +24,9 @@
 
 #include <time.h>
 #include "setthread.h"
-
-#ifdef Use_mt_mode
-
-#include "ProgressDialogData_mt.h"
+ #ifdef Use_mt_mode 
+//#include "ProgressDialogData_mt.h"
+#include "ProgressDialogData.h"
 class CalcThread;
 class QTimer;
 
@@ -49,6 +48,8 @@ class ProgressDialog : public ProgressDialogData
     CalcThread* calcThread;
     QTimer* timer;
 #endif
+
+    void switchToAccept(bool isAccept);
 
 public slots:
     void CmClose();
