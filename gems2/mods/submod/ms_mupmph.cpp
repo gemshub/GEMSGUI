@@ -447,7 +447,7 @@ CH_FOUND:
             if( syp->DUL )
                 pmp->DUL[j] = syp->DUL[jj];
             else pmp->DUL[j] = 1e6;
-            if( jj < mup->Ls  )
+            if( jj < mup->Ls && pmp->lnSAT )
                pmp->lnSAT[j] = pmp->DUL[j]; // Copy of DUL for SAT refining
             if( syp->DLL )
                 pmp->DLL[j] = syp->DLL[jj];

@@ -924,7 +924,7 @@ void TProcess::pe_text_analyze()
     }
 }
 
-// calc function for Method of Gold dividion
+// calc function for Method of golden section
 double TProcess::f_proc( double x )
 {
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
@@ -945,8 +945,12 @@ TProcess::proc_titr()
 {
     double Fa, Fb, Fx1, Fx2, a, b, x1, x2;
 
-    if(  !pep->Nst ) x1 = pep->pXii[0];
-    else x1 = pep->c_Eh;
+//    if(  !pep->Nst )
+    x1 = pep->pXii[0];
+//    else {
+//         x1 = pep->pXii[0];      // KD:  debugging
+//    }
+//    else x1 = pep->c_Eh;
     x2 = pep->pXii[1];
     a = min( x1, x2 );
     b = max( x1, x2 );
