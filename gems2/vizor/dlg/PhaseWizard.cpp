@@ -35,7 +35,7 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[12], int size[6],
                             double r2, QWidget* parent):
         Inherited( parent, 0, true )
 {
-    gstring str1= "Setup to Create Phase:  ";
+    gstring str1= "GEM-Selektor Phase Setup:  ";
             str1 += pkey;
     setCaption( str1.c_str() );
 

@@ -33,7 +33,7 @@ RTparmWizard::RTparmWizard( const char* pkey, char flgs[10], int size[7],
         Inherited( parent, 0, true )
 {
     int ii;
-    gstring str1= "Setup to Create RTparm:  ";
+    gstring str1= "GEM-Selektor RTparm Setup:  ";
             str1 += pkey;
     setCaption( str1.c_str() );
 

@@ -34,7 +34,7 @@ ComposWizard::ComposWizard( const char* pkey, char flgs[6], int size[2],
                             double r2, QWidget* parent):
         Inherited( parent, 0, true )
 {
-    gstring str1= "Setup to Create Compos:  ";
+    gstring str1= "GEM-Selektor Compos Setup:  ";
             str1 += pkey;
     setCaption( str1.c_str() );
 

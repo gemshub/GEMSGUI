@@ -34,7 +34,7 @@ ProcessDialog::ProcessDialog (
         const char* pkey, char type, QWidget* parent):
         Inherited( parent, 0, true )
 {
-    gstring str= "Setup to Create Process:  ";
+    gstring str= "GEM-Selektor Process Setup:  ";
             str += pkey;
     setCaption( str.c_str() );
 

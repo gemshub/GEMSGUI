@@ -35,7 +35,7 @@ DCompWizard::DCompWizard( const char* pkey, char flgs[15], int size[4],
                             QWidget* parent):
         Inherited( parent, 0, true )
 {
-    gstring str1= "Setup to Create ReacDC:  ";
+    gstring str1= "GEM-Selektor DComp Setup:  ";
             str1 += pkey;
     setCaption( str1.c_str() );
 

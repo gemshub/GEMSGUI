@@ -36,7 +36,7 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[7],
                             const char *proc_key, QWidget* parent):
         Inherited( parent, 0, true )
 {
-    gstring str1= "Setup to Create GtDemo:  ";
+    gstring str1= "GEM-Selektor GtDemo Setup:  ";
             str1 += pkey;
     setCaption( str1.c_str() );
 

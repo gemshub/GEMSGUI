@@ -35,7 +35,7 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24],
                               int size[6], QWidget* parent):
         Inherited( parent, 0, true )
 {
-    gstring str1= "Setup to Create Process:  ";
+    gstring str1= "GEM-Selektor Process Setup:  ";
             str1 += pkey;
     setCaption( str1.c_str() );
 
