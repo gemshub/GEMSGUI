@@ -1,0 +1,50 @@
+HOW TO PRODUCE UPGRADED INSTALLATION PACKAGE OF GEMS_PSI FOR MAC
+
+Needs Tres Thoenen's G4 Mac running 
+
+1. Open a SSH terminal: 
+
+  ssh guest@129.129.204.77   (password: Gems Selektor)
+
+Check QTDIR (if Qt is istalled):
+
+  echo $QTDIR
+
+  cd work/gems2
+  setenv CVS_RSH ssh
+
+2. Make update of GEMS source code tree: 
+
+  cvs update <password> 
+
+3. Build the release executable file: 
+
+  make RELEASE=YES
+
+It makes sense to re-read configuration 
+files before producing zip package (see below)
+
+4. For further steps, see INSTALL-mac.txt
+
+
+To run GEMS from virtual desktop (on Linux): 
+
+start KDE virtual desktop client for 
+  129.129.204.77:0  <password for user guest>
+
+After getting Mac desktop window, open a 
+terminal there and 
+
+  cd work/gems2
+  make RELEASE=YES
+
+when done, re-read configuration files: 
+
+  ./gems2 ./rungems.sh -d 
+
+and then exit GEMS. 
+ 
+For further steps, see INSTALL-mac.txt
+
+
+
