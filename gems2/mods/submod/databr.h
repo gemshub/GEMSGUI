@@ -98,15 +98,15 @@ typedef struct
 DATABR;
 
 typedef enum {  // NodeStatus codes GEMS
- NEED_GEM_AIA = 1, 
- OK_GEM_AIA   = 2,
- BAD_GEM_AIA  = 3,
- ERR_GEM_AIA  = 4,
- NEED_GEM_PIA = 5, 
- OK_GEM_PIA   = 6,
- BAD_GEM_PIA  = 7, 
- ERR_GEM_PIA  = 8,
- TERROR_GEM   = 9 
+ NEED_GEM_AIA = 1,   //To calculate with simplex IA
+ OK_GEM_AIA   = 2,   // OK calculated from simplex IA
+ BAD_GEM_AIA  = 3,   // Bad result from simplex IA
+ ERR_GEM_AIA  = 4,   // Failed to calculated from simplex IA
+ NEED_GEM_PIA = 5,   //To calculate without simplex from previous solution
+ OK_GEM_PIA   = 6,   // OK calculated without simplex from previous solution
+ BAD_GEM_PIA  = 7,   // Bad result without simplex from previous solution
+ ERR_GEM_PIA  = 8,   // Failed to calculated without simplex
+ TERROR_GEM   = 9    // Terminal error GemIPM
 } NODECODECH;
 
 

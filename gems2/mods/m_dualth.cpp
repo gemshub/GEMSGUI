@@ -656,9 +656,129 @@ TDualTh::CmHelp()
 }
 
 // insert changes in Project to TDualTh
-void TDualTh::InsertChanges( TIArray<CompItem>& aIComp,
-    TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
+void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
 {
+    // insert changes to IComp
+    if(aIComp.GetCount()<1 || dtp->nQ < 1)
+        return;
+
+   // alloc memory & copy data from db
+
+    int Nold = dtp->Nb;
+    double *p_Bb = new double[dtp->nQ*dtp->Nb];
+        memcpy( p_Bb, dtp->Bb, dtp->nQ*dtp->Nb*sizeof(double));
+    double *p_Bn = new double[dtp->nQ*dtp->Nb];
+       memcpy( p_Bn, dtp->Bn, dtp->nQ*dtp->Nb*sizeof(double));
+    double *p_Ub = new double[dtp->nQ*dtp->Nb];
+       memcpy( p_Ub, dtp->Ub, dtp->nQ*dtp->Nb*sizeof(double));
+
+    char *p_CIclb;
+    float *p_CIb;
+    char *p_CIcln;
+    float *p_CIn;
+
+   if( dtp->PvICb == S_ON )
+   {
+    p_CIclb = new char[dtp->Nb];
+       memcpy( p_CIclb, dtp->CIclb, dtp->Nb*sizeof(char));
+    p_CIb = new float[dtp->nQ*dtp->Nb];
+       memcpy( p_CIb, dtp->CIb, dtp->nQ*dtp->Nb*sizeof(float));
+    }
+   if( dtp->PvICn == S_ON )
+   {
+    p_CIcln = new char[dtp->Nb];
+       memcpy( p_CIcln, dtp->CIcln, dtp->Nb*sizeof(char));
+    p_CIn = new float[dtp->nQ*dtp->Nb];
+       memcpy( p_CIn, dtp->CIn, dtp->nQ*dtp->Nb*sizeof(float));
+   }
+   float *p_An = new float[dtp->nK*dtp->Nb];
+    if( dtp->An )
+      memcpy( p_An, dtp->An, dtp->nK*dtp->Nb*sizeof(float));
+
+
+    // alloc new memory
+     dtp->Nb = TProfil::pm->mup->N;
+     dyn_new();
+
+    for(int ii=0; ii< dtp->Nb; ii++ )
+      memcpy( dtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME  );
+
+    int j, i=0, ii=0, jj =0;
+    while( jj < dtp->Nb )
+    {
+      if( i < aIComp.GetCount() &&  aIComp[i].line == ii )
+      {
+        if( aIComp[i].delta == 1 )
+        { // add line
+          for( j =0; j<dtp->nQ; j++ )
+          {
+            dtp->Bb[j*dtp->Nb+jj] = 0.;
+            dtp->Bn[j*dtp->Nb+jj] = 0.;
+            dtp->Ub[j*dtp->Nb+jj] = 0.;
+            if( dtp->PvICb == S_ON )
+            {
+              dtp->CIb[j*dtp->Nb+jj] = 0.;
+              dtp->CIclb[j*dtp->Nb+jj] = QUAN_GRAM;
+            }
+            if( dtp->PvICn == S_ON )
+            {
+              dtp->CIn[j*dtp->Nb+jj] = 0.;
+              dtp->CIcln[j*dtp->Nb+jj] = QUAN_GRAM;
+             }
+          }
+          for( j =0; j<dtp->nK; j++ )
+            dtp->An[j*dtp->Nb+jj] = 0.;
+
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < Nold )
+         {
+             for( j =0; j<dtp->nQ; j++ )
+             {
+               dtp->Bb[j*dtp->Nb+jj] = p_Bb[j*dtp->Nb+ii];
+               dtp->Bn[j*dtp->Nb+jj] = p_Bn[j*dtp->Nb+ii];
+               dtp->Ub[j*dtp->Nb+jj] = p_Ub[j*dtp->Nb+ii];
+               if( dtp->PvICb == S_ON )
+               {
+                 dtp->CIb[j*dtp->Nb+jj] = p_CIb[j*dtp->Nb+ii];
+                 dtp->CIclb[j*dtp->Nb+jj] = p_CIclb[j*dtp->Nb+ii];
+                }
+               if( dtp->PvICn == S_ON )
+               {
+                 dtp->CIn[j*dtp->Nb+jj] = p_CIn[j*dtp->Nb+ii];
+                 dtp->CIcln[j*dtp->Nb+jj] = p_CIcln[j*dtp->Nb+ii];
+               }
+             }
+             for( j =0; j<dtp->nK; j++ )
+                dtp->An[j*dtp->Nb+jj] = p_An[j*dtp->Nb+ii];
+          }
+        jj++;
+        ii++;
+       }
+    }
+
+// free memory
+   delete[] p_Bb;
+   delete[] p_Bn;
+   delete[] p_Ub;
+   if( dtp->PvICb == S_ON )
+   {
+     delete[] p_CIclb;
+     delete[] p_CIb;
+    }
+   if( dtp->PvICb == S_ON )
+   { delete[] p_CIcln;
+     delete[] p_CIn;
+   }
+   delete[] p_An;
 }
 
 

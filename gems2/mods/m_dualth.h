@@ -264,8 +264,7 @@ public:
     void RecCalc( const char *key );
     void CmHelp();
 
-    void InsertChanges( TIArray<CompItem>& aIComp,
-    TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
+    void InsertChanges( TIArray<CompItem>& aIComp );
 };
 
 enum dualth_inernal {

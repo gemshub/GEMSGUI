@@ -218,6 +218,42 @@ void TMulti::SaveCopyTo( int ii )
   databr_realloc();
 }
 
+
+void TMulti::fromMT(
+   short p_NodeHandle,    // Node identification handle
+   short p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
+   double p_T,     // Temperature T, K                        +      +      -     -
+   double p_P,     // Pressure P, bar                         +      +      -     -
+   double p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
+   double p_dt,    // actual time step
+   double p_dt1,   // priveous time step
+   double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
+   )
+{
+  int ii;
+  bool useSimplex = false;
+
+  data_BR->NodeHandle = p_NodeHandle;
+  data_BR->NodeStatusCH = p_NodeStatusCH;
+  data_BR->T = p_T;
+  data_BR->P = p_P;
+  data_BR->Ms = p_Ms;
+  data_BR->dt = p_dt;
+  data_BR->dt1 = p_dt1;
+
+   for( ii=0; ii<data_CH->nICb; ii++ )
+   { if( fabs(data_BR->bIC[ii] - p_bIC[ii] ) > data_BR->bIC[ii]*10-4 )
+          useSimplex = true;
+     data_BR->bIC[ii] = p_bIC[ii];
+   }
+  if( useSimplex )
+    data_BR->NodeStatusCH = NEED_GEM_AIA;
+  else
+    data_BR->NodeStatusCH = NEED_GEM_PIA;
+
+}
+
+
 #endif
 
 // set nessasary data from Multi structure to DataBr structure

@@ -19,6 +19,7 @@
 //
 #include "m_param.h"
 #include "m_unspace.h"
+#include "m_dualth.h"
 #include "m_syseq.h"
 #include "service.h"
 
@@ -338,8 +339,29 @@ void TProfil::TestChangeProfile()
         aSE->RecSave( aList[i].c_str(), true );
         //    rt[RT_SYSEQ].Rep( nRt );
     }
-    // Insert changes to PROBE
 
+    // Insert changes to DUALTH
+    if( aIComp.GetCount()>=1  )
+    {
+      aList.Clear();
+      anR.Clear();
+
+       rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+       rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
+
+       TDualTh* aDU= (TDualTh *)(&aMod[RT_DUALTH]);
+       aDU->ods_link(0);
+       for(uint i=0; i< aList.GetCount(); i++)
+       {
+         aDU->RecInput( aList[i].c_str() );
+         aDU->InsertChanges( aIComp  );
+         aDU->RecSave( aList[i].c_str(), true );
+       }
+
+    }
+
+    // Insert changes to PROBE
     if( aIComp.GetCount()<1 &&
             aPhase.GetCount()<1 && aDComp.GetCount()<1 )
         return;

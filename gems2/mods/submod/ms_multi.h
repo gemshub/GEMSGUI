@@ -384,14 +384,16 @@ class TMulti
 
     // transport
     int nNodes;
-    DATACH  *data_CH;
-    DATABR  *data_BR;
+//    DATACH  *data_CH;
+//    DATABR  *data_BR;
     DATABR  *(*arr_BR);
 
    char PAalp_;
    char PSigm_;
 public:
 
+   DATABR  *data_BR;
+   DATACH  *data_CH;
    float EpsW_;
    float RoW_;
 
@@ -414,6 +416,16 @@ public:
     void SaveCopyFrom( int ii );
     void SaveCopyTo( int ii );
     void CopyTo( DATABR *(*dBR) );
+    void fromMT(
+       short p_NodeHandle,    // Node identification handle
+       short p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
+       double p_T,     // Temperature T, K                        +      +      -     -
+       double p_P,     // Pressure P, bar                         +      +      -     -
+       double p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
+       double p_dt,    // actual time step
+       double p_dt1,   // priveous time step
+       double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
+   );
 
     //mass transport
     void to_file( GemDataStream& ff, gstring& path  );

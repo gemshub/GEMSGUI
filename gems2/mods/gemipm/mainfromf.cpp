@@ -145,6 +145,8 @@ extern "C" int __stdcall MAIF_START( int nNodes,
        {    TProfil::pm->multi->SaveCopyTo(ii);
             TProfil::pm->multi->SaveCopyFrom(ii);
        }
+
+
     return 1;
     }
     catch(TError& err)
@@ -231,7 +233,8 @@ extern "C" int __stdcall MAIF_CALC( int  iNode,
 //---------------------------------------------
 // need unpack data from transport into DATABR
    TProfil::pm->multi->SaveCopyFrom(iNode);
-//   TProfil::pm->multi->fromMT();   // test simplex
+   TProfil::pm->multi->fromMT(  p_NodeHandle,  p_NodeStatusCH,
+      p_T, p_P, p_Ms, p_dt, p_dt1,  p_bIC );   // test simplex
 
 // put data for internal gems structures
     TProfil::pm->multi->unpackDataBr();
@@ -243,8 +246,37 @@ extern "C" int __stdcall MAIF_CALC( int  iNode,
 //----------------------------------------------
 // need pack data to transport from DATABR
 //   TProfil::pm->multi->toMT();
+   DATABR  *dBR = TProfil::pm->multi->data_BR;
+   DATACH  *dCH = TProfil::pm->multi->data_CH;
 
+   p_NodeHandle = dBR->NodeHandle;
+   p_NodeStatusCH = dBR->NodeStatusCH;
+   p_IterDone = dBR->IterDone;
 
+   p_Vs = dBR->Vs;
+   p_Gs = dBR->Gs;
+   p_Hs = dBR->Hs;
+   p_IC = dBR->IC;
+   p_pH = dBR->pH;
+   p_pe = dBR->pe;
+   p_Eh = dBR->Eh;
+   p_denW = dBR->denW;
+   p_denWg = dBR->denWg;
+   p_epsW = dBR->epsW;
+   p_epsWg = dBR->epsWg;
+
+  memcpy( p_xDC, dBR->xDC, dCH->nDCb*sizeof(double) );
+  memcpy( p_gam, dBR->gam, dCH->nDCb*sizeof(double) );
+  memcpy( p_xPH, dBR->xPH, dCH->nPHb*sizeof(double) );
+  memcpy( p_vPS, dBR->vPS, dCH->nPSb*sizeof(double) );
+  memcpy( p_mPS, dBR->mPS, dCH->nPSb*sizeof(double) );
+  memcpy( p_bPS, dBR->bPS, dCH->nPSb*dCH->nICb*sizeof(double) );
+  memcpy( p_xPA, dBR->xPA, dCH->nPSb*sizeof(double) );
+  memcpy( p_bIC, dBR->bIC, dCH->nICb*sizeof(double) );
+  memcpy( p_rMB, dBR->rMB, dCH->nICb*sizeof(double) );
+  memcpy( p_uIC, dBR->uIC, dCH->nICb*sizeof(double) );
+
+//**************************************************************
 // only for test output resalts for files
     gstring strr= "databr.dat";
 // binary DATABR
@@ -259,6 +291,7 @@ extern "C" int __stdcall MAIF_CALC( int  iNode,
     strr = "multi.ipm";
     GemDataStream o_m( strr, ios::out|ios::binary);
     TProfil::pm->outMulti(o_m, strr );
+//********************************************************* */
 
     TProfil::pm->multi->SaveCopyTo(iNode);
     return 1;
