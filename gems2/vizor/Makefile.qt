@@ -29,7 +29,7 @@ LIBS		= -lqt -lX11 -lXext -lm -lstdc++
 #-lefence 
 
 # commands
-CC		= /usr/bin/g++
+CC		= c++
 LD		= ld
 MOC		= $(QTDIR)/bin/moc
 UIC		= $(QTDIR)/bin/uic

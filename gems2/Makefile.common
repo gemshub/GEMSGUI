@@ -30,7 +30,7 @@ LIBS		= -lqt-mt -lX11 -lXext -lXt -lm -lstdc++
 #-lcwd
 
 # commands
-CC		= /usr/bin/g++
+CC		= c++
 LD		= ld
 MOC		= $(QTDIR)/bin/moc
 UIC		= /usr/bin/uic

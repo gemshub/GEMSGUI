@@ -28,7 +28,7 @@ LDFLAGS		=
 #-lefence 
 
 # commands
-CC		= g++
+CC		= c++
 LD		= ld
 
 ifeq ($(RELEASE),YES)
