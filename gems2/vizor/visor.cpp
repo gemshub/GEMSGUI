@@ -92,9 +92,9 @@ TVisor::TVisor(int c, char *v[]):
     {
 #ifndef GEMS_RELEASE
         SysGEMDir = getenv("HOME");
-        SysGEMDir += "/GEMS.sys/";
+        SysGEMDir += "/GEMS2test/program/";
 #else
-SysGEMDir = "/usr/lib/gems/";
+	SysGEMDir = "/usr/share/gems2/";
 #endif //GEMS_RELEASE
     }
 
@@ -108,13 +108,13 @@ SysGEMDir = "/usr/lib/gems/";
     else
     {
         UserGEMDir = getenv("HOME");
-        UserGEMDir += "/GEMS/";
+        UserGEMDir += "/GEMS2test/";
     }
 
 
 #else // Win32 - to expand (comm.line etc.)
-    SysGEMDir = "c:/gems.sys/";
-    UserGEMDir = "c:/gems/";
+    SysGEMDir = "c:/GEMS2test/program/";
+    UserGEMDir = "c:/GEMS2test/";
 
     // If either of two directories is located on other disk(s)
     // or not in the root directory, then in Autoexec.bat,
