@@ -7,37 +7,58 @@
 
 //---------------------------------------------------------//
 // for test out data
-void TMulti::outArray( fstream& ff, char *name, short* arr, int size )
+void TMulti::outArray( fstream& ff, char *name, char* arr,
+                              int size, int arr_siz )
 {
- ff << endl << name << endl;
- for( int ii=0, jj=1; ii<size; ii++, jj++  )
+ ff << endl << "\'" << name << "\'" << endl;
+ for( int ii=0, jj=0; ii<size; ii++, jj++  )
  {
-    ff << arr[ii] << " ";
     if(jj == 10)
     { jj=0;  ff << endl;}
+    gstring str = gstring( arr +(ii*arr_siz), 0, arr_siz );
+    str.strip();
+    ff  << "\'" << str.c_str() << "\'" << " ";
  }
 }
 
-void TMulti::outArray( fstream& ff, char *name,  float* arr, int size )
+
+
+void TMulti::outArray( fstream& ff, char *name, short* arr, int size )
 {
- ff << endl << name << endl;
- for( int ii=0, jj=1; ii<size; ii++, jj++  )
+ ff << endl << "\'" << name << "\'" << endl;
+ for( int ii=0, jj=0; ii<size; ii++, jj++  )
  {
-    ff << arr[ii] << " ";
     if(jj == 10)
     { jj=0;  ff << endl;}
+    ff << arr[ii] << " ";
+ }
+}
+
+void TMulti::outArray( fstream& ff, char *name,  float* arr,
+            int size, int l_size )
+{
+ int sz = 10;
+ if( l_size > 0 )
+       sz = l_size;
+
+ ff << endl << "\'" << name << "\'" << endl;
+ for( int ii=0, jj=0; ii<size; ii++, jj++  )
+ {
+    if(jj == sz)
+    { jj=0;  ff << endl;}
+    ff << arr[ii] << " ";
  }
 }
 
 
 void TMulti::outArray( fstream& ff, char *name, double* arr, int size )
 {
- ff << endl << name << endl;
- for( int ii=0, jj=1; ii<size; ii++, jj++  )
+ ff << endl << "\'" << name << "\'" << endl;
+ for( int ii=0, jj=0; ii<size; ii++, jj++  )
  {
-    ff << arr[ii] << " ";
     if(jj == 10)
     { jj=0;  ff << endl;}
+    ff << arr[ii] << " ";
  }
 }
 

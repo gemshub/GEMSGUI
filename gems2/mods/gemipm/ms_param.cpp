@@ -4,6 +4,7 @@
 #endif
 
 #include "m_param.h"
+#include "gdatastream.h"
 
 const double R_CONSTANT = 8.31451,
               NA_CONSTANT = 6.0221367e23,

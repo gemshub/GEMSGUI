@@ -327,6 +327,7 @@ void
 TDualTh::CIb_Calc()
 {
     int i, j;
+    double Msysb_bk, Tmolb_bk;
     double MsysC = 0., R1C = 0.;
     double Xincr, ICmw, DCmw;
     vstr  pkey(MAXRKEYLEN+10);
@@ -358,11 +359,16 @@ TDualTh::CIb_Calc()
 // make An from dtp->for_b
        make_A( dtp->La_b, dtp->for_b );
 
+  Msysb_bk = dtp->Msysb;
+  Tmolb_bk = dtp->Tmolb;
 
   for( int ii=0; ii< dtp->nQ; ii++ )
   {
     // set line in Bb to zeros
     memset( dtp->Bb + ii*dtp->Nb, 0, dtp->Nb*sizeof(double) );
+    dtp->Msysb = Msysb_bk;
+    dtp->Tmolb = Tmolb_bk;
+
 
     if( dtp->PvICb != S_OFF )
     { //  Through IC
@@ -394,6 +400,9 @@ TDualTh::CIb_Calc()
             IsFloatEmpty( dtp->CAb[ii*dtp->La_b + j] ))
                     continue;
          DCmw = 0.;
+         for( i=0; i<dtp->Nb; i++ )
+         // calculation of molar mass
+             DCmw += A[i]* ICw[i];
          Xincr = TCompos::pm->Reduce_Conc( dtp->AUclb[j],
                 dtp->CAb[ii*dtp->La_b + j],
                  DCmw, 1.0, dtp->Tmolb, dtp->Msysb, dtp->Mwatb,
@@ -448,6 +457,8 @@ TDualTh::CIb_Calc()
       }
   } // ii
 
+  dtp->Msysb = Msysb_bk;
+  dtp->Tmolb = Tmolb_bk;
   delete[]  ICw;
 
 }

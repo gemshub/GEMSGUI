@@ -5,6 +5,7 @@
 
 #include "verror.h"
 #include "m_param.h"
+#include "gdatastream.h"
 
 // read string as: "<characters>",
 istream&

@@ -174,6 +174,33 @@ void TMulti::unpackDataBr()
    for( ii=0; ii<data_CH.nICb; ii++ )
     pm.B[ data_CH.xIC[ii] ] = data_BR.bIC[ii];
 
+// added  to compare SD 15/07/04  not need
+   for( ii=0; ii<data_CH.nDCb; ii++ )
+    pm.X[ data_CH.xDC[ii] ] = data_BR.xDC[ii];
+   for( ii=0; ii<data_CH.nDCb; ii++ )
+    pm.Gamma[ data_CH.xDC[ii] ] = data_BR.gam[ii];
+
+   for( ii=0; ii<data_CH.nPHb; ii++ )
+    pm.XF[ data_CH.xPH[ii] ] = data_BR.xPH[ii];
+   for( ii=0; ii<data_CH.nPSb; ii++ )
+    pm.FVOL[ data_CH.xPH[ii] ] = data_BR.vPS[ii];
+   for( ii=0; ii<data_CH.nPSb; ii++ )
+    pm.FWGT[ data_CH.xPH[ii] ] = data_BR.mPS[ii];
+
+   for( ii=0; ii<data_CH.nPSb; ii++ )
+   for(short jj=0; jj<data_CH.nICb; jj++ )
+   { short new_ndx= (ii*data_CH.nICb)+jj,
+           mul_ndx = ( data_CH.xPH[ii]*data_CH.nIC )+ data_CH.xIC[jj];
+     pm.BF[ mul_ndx ] = data_BR.bPS[new_ndx];
+   }
+   for( ii=0; ii<data_CH.nPSb; ii++ )
+    pm.XFA[ data_CH.xPH[ii] ] = data_BR.xPA[ii];
+
+   for( ii=0; ii<data_CH.nICb; ii++ )
+    pm.C[ data_CH.xIC[ii] ] = data_BR.rMB[ii];
+   for( ii=0; ii<data_CH.nICb; ii++ )
+    pm.U[ data_CH.xIC[ii] ] = data_BR.uIC[ii];
+
 }
 
 
@@ -264,8 +291,8 @@ void TMulti::datach_to_text_file( )
  fstream ff("DataCH.out", ios::out );
  ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
 
-  outArray( ff, "Short_Const",  &data_CH.nIC, 14 );
-  outArray( ff, "Double_Const",  &data_CH.Tmin, 10 );
+  outArray( ff, "sCon",  &data_CH.nIC, 14 );
+  outArray( ff, "dCon",  &data_CH.Tmin, 10 );
 
 //dynamic data
    outArray( ff, "nDCinPH", data_CH.nDCinPH, data_CH.nPH);
@@ -274,7 +301,7 @@ void TMulti::datach_to_text_file( )
    outArray( ff, "xDC", data_CH.xDC, data_CH.nDCb);
    outArray( ff, "xPH", data_CH.xPH, data_CH.nPHb);
 
-   outArray( ff, "A", data_CH.A, data_CH.nIC*data_CH.nDC);
+   outArray( ff, "A", data_CH.A, data_CH.nDC, data_CH.nIC );
    outArray( ff, "ICmm", data_CH.ICmm, data_CH.nIC);
    outArray( ff, "DCmm", data_CH.DCmm, data_CH.nDC);
 
@@ -285,6 +312,16 @@ void TMulti::datach_to_text_file( )
 
    if( data_CH.nAalp >0 )
       outArray( ff, "Aalp", data_CH.Aalp, data_CH.nPH);
+
+   outArray( ff, "ICNL", data_CH.ICNL[0], data_CH.nIC, MaxICN );
+   outArray( ff, "DCNL", data_CH.DCNL[0], data_CH.nDC, MaxDCN );
+   outArray( ff, "PHNL", data_CH.PHNL[0], data_CH.nPH, MaxPHN );
+
+   outArray( ff, "ccIC", data_CH.ccIC, data_CH.nIC, 1 );
+   outArray( ff, "ccDC", data_CH.ccDC, data_CH.nDC, 1 );
+   outArray( ff, "ccDCW", data_CH.ccDCW, data_CH.nDC, 1 );
+   outArray( ff, "ccPH", data_CH.ccPH, data_CH.nPH, 1 );
+
 }
 
 // allocate DataCH structure
@@ -467,8 +504,8 @@ void TMulti::databr_to_text_file( )
  fstream ff("DataBR.out", ios::out );
  ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
 
-  outArray( ff, "Short_Const",  &data_BR.NodeHandle, 6 );
-  outArray( ff, "Double_Const",  &data_BR.T, 36 );
+  outArray( ff, "sCon",  &data_BR.NodeHandle, 6 );
+  outArray( ff, "dCon",  &data_BR.T, 36 );
 
   outArray( ff, "xDC",  data_BR.xDC, data_CH.nDCb );
   outArray( ff, "gam",  data_BR.gam, data_CH.nDCb );

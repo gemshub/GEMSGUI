@@ -589,8 +589,8 @@ TDualTh::RecCalc( const char *key )
    }
 
 //analyse part
-  Init_Analyse();
-  Analyse();
+//  Init_Analyse();
+//  Analyse();
   dtp->aStat = UNSP_AS_DONE;
 
   pVisor->CloseMessage();

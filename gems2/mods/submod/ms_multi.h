@@ -317,8 +317,11 @@ public:
     void to_text_file();
     void from_file( GemDataStream& ff );
     void outArray( fstream& ff, char *name, short* arr, int size );
-    void outArray( fstream& ff, char *name,  float* arr, int size );
+    void outArray( fstream& ff, char *name,  float* arr,
+                             int size, int l_size=-1 );
     void outArray( fstream& ff, char *name, double* arr, int size );
+    void outArray( fstream& ff, char *name, char* arr,
+                              int size, int arr_siz );
 
     void datach_to_file( GemDataStream& ff );
     void datach_from_file( GemDataStream& ff );
@@ -396,9 +399,12 @@ public:
     void from_file( GemDataStream& ff );
     void multi_realloc( char PAalp, char PSigm );
     void multi_free();
-    void outArray( fstream& ff, char *name, short* arr, int size );
+    void outArray( fstream& ff, char *name, short* arr,
+                             int size, int l_size=-1  );
     void outArray( fstream& ff, char *name,  float* arr, int size );
     void outArray( fstream& ff, char *name, double* arr, int size );
+    void outArray( fstream& ff, char *name, char* arr,
+                              int size, int arr_siz );
 
     void datach_to_file( GemDataStream& ff );
     void datach_from_file( GemDataStream& ff );
