@@ -101,6 +101,11 @@ bool
 vfKeyCanged(QWidget* par, const char* caption,
             gstring& from_str, gstring& to_str );
 
+bool
+vfExcludeFillEdit(QWidget* par, const char* caption,
+   TCStringArray& aICkeys, TOArray<bool>& sel, double& fill_data );
+
+
 bool vfChooseFileOpen(QWidget* par, gstring& path, const char* title=0);
 bool vfChooseFileSave(QWidget* par, gstring& path, const char* title=0);
 

@@ -660,61 +660,49 @@ NEXT_DC:
     }
 
     else N = mup->N;
+// SD 14/03/02
     /* test for zero in composition */
-    for( wps=0,i=0; i<N; i++ )
+    TCStringArray aICkeys;
+    TCIntArray aICnums;
+    TOArray<bool> sel;
+    double fill_data = aPa->pa.p.DB*10.;
+
+    for( i=0; i<N; i++ )
     {
         if( sy.Icl[i] == S_OFF )
             continue;
         if( sy.B[i] < aPa->pa.p.DB || sy.B[i] > 1e6 )
         {
-            wps++;
+            aICkeys.Add(gstring(mup->SB[i],0, MAXICNAME));
+            aICnums.Add(i);
             sy.Icl[i] = S_REM;
         }
         else sy.Icl[i] = S_ON;
     }
-    if( wps )
-    { // Some IC disappeared from the bulk composition
-        switch( vfQuestion3(window(), rt[RT_SYSEQ].PackKey(),
-           "WARNING: Moles of some independent components (IC) are missing \n"
-           "   in the calculated bulk composition vector (B_[i] < Pa_DB)!\n\n"
-           "Possible actions:\n\n"
-           "EXCLUDE all these IC and all related dependent components\n"
-           "         from the chemical system formulation;\n"
-           "FILL OUT missing elements of the system bulk composition\n"
-           "         vector B_ by inserting trace moles (Pa_DB*10) into\n"
-           "         the respective elements of bi_ vector;\n"
-           "Cancel, check and correct the chemical system definition,\n"
-           "         then calculate bulk composition (BCC button) again.",
-           "&EXCLUDE", "&FILL OUT" ))
-//        "Warning: Some b[i] < DB in calculated bulk composition (b).\n"
-//        "Switch off all IC with b[i]<DB, DC and phases containing them?\n"
-//        "Fill such elements of b vector with trace values DB*10?",
-//        "&Switch off", "&Fill" ))
-        {
-        case VF3_2:  // insert default trace quantity 
-            for( i=0; i<N; i++ )
-                if( sy.Icl[i] != S_OFF )
-                {
-                    if( sy.B[i] < aPa->pa.p.DB )
-                    {
-                       sy.B[i] = aPa->pa.p.DB*10.;
-                       sy.BI[i] = aPa->pa.p.DB*10.;    // Added KD 04.01.01
-                       sy.BIun[i] = QUAN_MOL; // 'M';  // -- " --
-                    }
-                    else if( sy.B[i] > 1e6 )  // Why do we need it?
+
+    if( aICkeys.GetCount() > 0 )
+    {
+      if( vfExcludeFillEdit( window(), rt[RT_SYSEQ].PackKey(),
+            aICkeys, sel,  fill_data ))
+         for( uint ii=0; ii<aICnums.GetCount(); ii++ )
+         {
+           i = aICnums[ii];
+           if( sel[ii]== true ) //fill
+           {
+             if( sy.B[i] < aPa->pa.p.DB )
+             {
+                sy.B[i] = fill_data;
+                sy.BI[i] = fill_data;
+                sy.BIun[i] = QUAN_MOL; // 'M';  // -- " --
+             }
+             else if( sy.B[i] > 1e6 )  // Why do we need it?
                         sy.B[i] = 1e5;
-                }
-            break;
-        case VF3_1:   // switch 0ff this IC
-            for( i=0; i<N; i++ )
-                if( sy.Icl[i] != S_OFF )
-                    if( sy.B[i] < aPa->pa.p.DB || sy.B[i] > 1e6 )
-                    {
-                        sy.Icl[i] = S_OFF;
-                        sy.B[i] = 0.0;
-                    }
-        case VF3_3:
-            break;
+           }
+           else   //exclude
+           {
+              sy.Icl[i] = S_OFF;
+              sy.B[i] = 0.0;
+            }
         }
     }
     if( A )

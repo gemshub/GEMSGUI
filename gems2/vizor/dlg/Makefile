@@ -50,6 +50,7 @@ SOURCES =	MainDialog.cpp \
 		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
 		KeyFilter.cpp \
+		ExcludeFillDialog.cpp \
 		SettingsDialog.cpp \
 		SelectDialog.cpp \
 		CalcDialog.cpp \
@@ -86,6 +87,7 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_KeyProfile.o \
 		moc_KeyProfileData.o \
 		moc_KeyFilter.o \
+		moc_ExcludeFillDialog.o \
 		moc_SettingsDialog.o \
 		moc_SettingsDialogData.o \
 		moc_SelectDialog.o \

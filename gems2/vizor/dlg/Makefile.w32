@@ -73,6 +73,7 @@ SOURCES =	MainDialog.cpp \
 		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
 		KeyFilter.cpp \
+		ExcludeFillDialog.cpp \
 		SettingsDialog.cpp \
 		SelectDialog.cpp \
 		CalcDialog.cpp \
@@ -98,6 +99,7 @@ OBJECTS =	MainDialog.obj \
 		ChangeKeyDialog.obj \
 		KeyProfile.obj \
 		KeyFilter.obj \
+		ExcludeFillDialog.obj \
 		SettingsDialog.obj \
 		SelectDialog.obj \
 		CalcDialog.obj \
@@ -132,6 +134,7 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_KeyProfile.obj \
 		..\tmp\moc_KeyProfileData.obj \
 		..\tmp\moc_KeyFilter.obj \
+		..\tmp\moc_ExcludeFillDialog.obj \
 		..\tmp\moc_SettingsDialog.obj \
 		..\tmp\moc_SettingsDialogData.obj \
 		..\tmp\moc_SelectDialog.obj \
@@ -306,6 +309,12 @@ clean:
 
         $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_KeyFilter.cpp
 	-del moc_KeyFilter.cpp
+
+..\tmp\moc_ExcludeFillDialog.obj: ExcludeFillDialog.h
+      	$(MOC) ExcludeFillDialog.h -o moc_ExcludeFillDialog.cpp
+
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ExcludeFillDialog.cpp
+	-del moc_ExcludeFillDialog.cpp
 
 ..\tmp\moc_SettingsDialog.obj: SettingsDialog.h
       	$(MOC) SettingsDialog.h -o moc_SettingsDialog.cpp

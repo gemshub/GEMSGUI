@@ -124,6 +124,7 @@ link:
 +dlg\KeyProfile.obj \
 +dlg\KeyProfileData.obj \
 +dlg\KeyFilter.obj \
++dlg\ExcludeFillDialog.obj \
 +dlg\SettingsDialog.obj \
 +dlg\SettingsDialogData.obj \
 +dlg\SelectDialog.obj \
@@ -170,6 +171,7 @@ link:
 +tmp\moc_KeyProfile.obj \
 +tmp\moc_KeyProfileData.obj \
 +tmp\moc_KeyFilter.obj \
++tmp\moc_ExcludeFillDialog.obj \
 +tmp\moc_SettingsDialog.obj \
 +tmp\moc_SettingsDialogData.obj \
 +tmp\moc_SelectDialog.obj \

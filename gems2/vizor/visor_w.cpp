@@ -47,6 +47,7 @@ using namespace std;
 #include "dlg/MainDialog.h"
 #include "dlg/SelectDialog.h"
 #include "dlg/KeyFilter.h"
+#include "dlg/ExcludeFillDialog.h"
 #include "dlg/ProgressDialog.h"
 #include "dlg/ProcessDialog.h"
 #include "dlg/SystemDialog.h"
@@ -833,6 +834,21 @@ vfKeyTemplEdit(QWidget* par, const char* caption, int iRt, const char* key,
         return "";
 
     return dbk.getFilter();
+}
+
+
+bool
+vfExcludeFillEdit(QWidget* par, const char* caption,
+   TCStringArray& aICkeys, TOArray<bool>& sel, double& fill_data )
+{
+    ExcludeFillDialog dbk(par, caption, aICkeys, fill_data );
+    if( !dbk.exec() )
+        return false;
+
+    sel = dbk.getFillType();
+    fill_data = dbk.getFillValue();
+
+    return true;
 }
 
 bool

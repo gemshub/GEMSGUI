@@ -35,7 +35,6 @@
 #include "visor.h"
 #endif
 #include "v_module.h"
-#include "KeyFilter.h"
 
 
 
