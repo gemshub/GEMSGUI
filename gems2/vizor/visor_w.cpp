@@ -418,6 +418,7 @@ TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent)
     {
 //        pHelpWidget = new HelpWin(this, path.c_str());
 	pHelpWidget = new HelpWindow(path.c_str(), ".", parent); //0);
+	pHelpWidget->loadFile(path.c_str());
 	connect( pHelpWidget, SIGNAL( destroyed() ), SLOT( evHelpClosed() ) );
 	pHelpWidget->show();
     }

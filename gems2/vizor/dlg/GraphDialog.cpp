@@ -257,9 +257,6 @@ GraphDialog::CmFragment()
     if( maxX == minX ) maxX += 1.;
     if( maxY == minY ) maxY += 1.;
 
-    float dx = maxX-minX;
-    float dy = maxY-minY;
-
     plot->setPlotBounds( FPoint(minX, minY),
                    FPoint(maxX, maxY));
     plot->update();
