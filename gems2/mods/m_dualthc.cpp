@@ -113,6 +113,11 @@ void TDualTh::dt_initiate( bool mode )
   dtp->c_tm = dtp->tmd[START_];
   dtp->c_NV = dtp->NVd[START_];
 
+  if( (dtp->PvTPI == S_ON) && dtp->Tdq && dtp->Pdq )
+  {       // Take T and P from lists
+     dtp->cT = dtp->Tdq[0];
+     dtp->cP = dtp->Pdq[0];
+  }
   dtp->q = 0;
   dtp->i = 0;
   dtp->jm = 0;
@@ -167,11 +172,11 @@ void TDualTh::dt_initiate( bool mode )
 // recalc working parametres
 void TDualTh::dt_next()
 {
-  dtp->cT += dtp->Td[STEP_];
-  dtp->cP += dtp->Pd[STEP_];
-  dtp->cV += dtp->Vd[STEP_];
-  dtp->c_tm += dtp->tmd[STEP_];
-  dtp->c_NV += dtp->NVd[STEP_];
+     dtp->cT += dtp->Td[STEP_];
+     dtp->cP += dtp->Pd[STEP_];
+     dtp->cV += dtp->Vd[STEP_];
+     dtp->c_tm += dtp->tmd[STEP_];
+     dtp->c_NV += dtp->NVd[STEP_];
 }
 
 //make matrix An
@@ -234,13 +239,13 @@ void TDualTh::calc_eqstat()
 void TDualTh::build_Ub()
 {
  short i, ii;
+ double RT = 2479.;
 
  dt_initiate( false );
 
  for( ii=0; ii<dtp->nQ; ii++)
  {
    dtp->q = ii;
-
    pVisor->Message( window(), GetName(),
              "Generation of EqStat records\n"
                  "Please, wait...", dtp->q, dtp->nQ);
@@ -254,15 +259,24 @@ void TDualTh::build_Ub()
    //  TProfil::pm->pmp->pTPD = 0;
      calc_eqstat();
 
+     RT = TProfil::pm->pmp->RT;
+//   RT = R_CONSTANT * (Tdq[ii] + 273.15);
  // set zeros for result
     for( i=0; i<dtp->Nb; i++)
        dtp->Ub[dtp->q*dtp->Nb+i] = 0.;
  // copy calculated data from multy
     for( i=0; i<TProfil::pm->pmp->N; i++)
        dtp->Ub[ dtp->q*dtp->Nb + (TProfil::pm->pmp->mui[i])]
-           = TProfil::pm->pmp->U[i];
+           = TProfil::pm->pmp->U[i] * RT;
 
-    dt_next();
+    dt_next();      // Generate work values for the next EqStat rkey
+    if( (dtp->PvTPI == S_ON) && dtp->Tdq && dtp->Pdq )
+    {       // Take T and P from lists and store IS
+        dtp->cT = dtp->Tdq[ii];
+        dtp->cP = dtp->Pdq[ii];
+        if(dtp->ISq)
+           dtp->ISq[ii] = TProfil::pm->pmp->IC;
+    }
   }
 }
 
@@ -643,13 +657,29 @@ TDualTh::Bn_Calc()
 
 void
 TDualTh::Calc_muo_n( char eState )
-{ // calculate mu_o DualTh
+{ // calculate muo_n DualTh
  short ii, j;
- double muo, gam;
+ double muo, gam=1., Dsur=0., RT = 2479., P=1., lnFmol=4.016535;
+
+// dt_initiate( false );
+  Dsur = dtp->WmCb - 1.;
+  if( Dsur < 0. )
+    Dsur = 0.;
 
  for( ii=0; ii < dtp->nQ; ii++)
  {
     dtp->q = ii;
+    if( dtp->PvTPI == S_ON && dtp->Tdq )
+    {
+       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
+       P = dtp->Pdq[ii];
+    }
+    else
+    {
+       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
+       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
+    }
+
     for( j=0; j<dtp->nK; j++)
     {
        dtp->jm = j;
@@ -666,7 +696,8 @@ TDualTh::Calc_muo_n( char eState )
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR:
-              muo = dtp->mu_n[ii*dtp->nK+j] - gam - log(dtp->chi[ii*dtp->nK+j]);
+              muo = dtp->mu_n[ii*dtp->nK+j]
+                  - RT*(gam + log(dtp->chi[ii*dtp->nK+j]));
               break;
         }
        else  // Equilibrium
@@ -678,33 +709,31 @@ TDualTh::Calc_muo_n( char eState )
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR:
-              muo = dtp->mu_n[ii*dtp->nK+j] - gam - log(dtp->chi[ii*dtp->nK+j]);
+              muo = dtp->mu_n[ii*dtp->nK+j]
+                    - RT*(gam + log(dtp->chi[ii*dtp->nK+j]));
               break;
-/*          case DC_AQ_ELECTRON: /* pE  SPmol = X[j]*Factor; *
-              break;
+          case DC_AQ_ELECTRON:
           case DC_AQ_PROTON:
-//            pmp->pH = -ln_to_lg*(Muj-pmp->G0[j]+Dsur+lnFmol);
-              break;
           case DC_AQ_SPECIES:
-              muo = dtp->mu_n[ii*dtp->nK+j] - gam - log(dtp->chi_n[ii*dtp->nK+j]);
+              muo = dtp->mu_n[ii*dtp->nK+j] + RT * ( Dsur + lnFmol - gam
+                    - log(dtp->chi[ii*dtp->nK+j]));
               break;
           case DC_AQ_SOLVENT:
           case DC_AQ_SOLVCOM:
-            pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j]
-                                        + Dsur - 1. + 1. / ( 1.+Dsur ) );
-            break;
-        case DC_GAS_COMP:
-        case DC_GAS_H2O:
-        case DC_GAS_CO2:   /* gases *
-        case DC_GAS_H2:
-        case DC_GAS_N2:
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
-            if( pmp->Pc > 1e-9 )
-                pmp->Y_la[j] += log10( pmp->Pc );
-            break;
+              muo = dtp->mu_n[ii*dtp->nK+j] + RT * ( Dsur - 1. + 1. / ( 1.+Dsur ) - gam
+                    - log(dtp->chi[ii*dtp->nK+j]));
+              break;
+          case DC_GAS_COMP:
+          case DC_GAS_H2O:
+          case DC_GAS_CO2:   /* gases */
+          case DC_GAS_H2:
+          case DC_GAS_N2:
+              muo = dtp->mu_n[ii*dtp->nK+j]
+                    - RT*(gam + log(dtp->chi[ii*dtp->nK+j])
+                    - log(P) );
+              break;
 /*
 // adsorption:
-/*
         case DC_SUR_SITE:
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
@@ -748,29 +777,42 @@ void
 TDualTh::Calc_gam_n( char eState )
 {  // calculate gamma DualTh
  short ii, j;
- double muo, gam;
+ double muoi, gam=1., Dsur=0., RT = 2479., P=1., lnFmol=4.016535;
 
 // dt_initiate( false );
+   Dsur = dtp->WmCb - 1.;
+   if( Dsur < 0. )
+     Dsur = 0.;
 
  for( ii=0; ii<dtp->nQ; ii++)
  {
-   dtp->q = ii;
+    dtp->q = ii;
+    if( dtp->PvTPI == S_ON && dtp->Tdq )
+    {
+       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
+       P = dtp->Pdq[ii];
+    }
+    else
+    {
+       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
+       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
+    }
   // zero off a cell in mu_n
     for( j=0; j<dtp->nK; j++)
     {
        dtp->jm = j;
-       muo = dtp->muo_n[ii*dtp->nK+j];
+       muoi = dtp->muo_i[ii*dtp->nK+j];
        if( eState == DT_STATE_S )
-        switch(dtp->typ_n[j])  // Stoich. saturation
+        switch(dtp->typ_n[j])  // Stoich. saturation  - to be finished!
         {
           default:
           case DC_SCP_CONDEN:
-              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muo);
+              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muoi);
               break;
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR:
-              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muo
+              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muoi
                   - log(dtp->chi[ii*dtp->nK+j]));
               break;
         }
@@ -778,39 +820,35 @@ TDualTh::Calc_gam_n( char eState )
         switch(dtp->typ_n[j])
         {
           case DC_SCP_CONDEN:
-              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muo);
+              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT);
               break;
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR:
-              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muo
+              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
                    - log(dtp->chi[ii*dtp->nK+j]));
               break;
-/*          case DC_AQ_ELECTRON: /* pE  SPmol = X[j]*Factor; *
-              break;
+          case DC_AQ_ELECTRON:
           case DC_AQ_PROTON:
-//            pmp->pH = -ln_to_lg*(Muj-pmp->G0[j]+Dsur+lnFmol);
-              break;
           case DC_AQ_SPECIES:
-              muo = dtp->mu_n[ii*dtp->nK+j] - gam - log(dtp->chi_n[ii*dtp->nK+j]);
+              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT + Dsur + lnFmol
+                   - log(dtp->chi[ii*dtp->nK+j]));
               break;
           case DC_AQ_SOLVENT:
           case DC_AQ_SOLVCOM:
-            pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j]
-                                        + Dsur - 1. + 1. / ( 1.+Dsur ) );
-            break;
-        case DC_GAS_COMP:
-        case DC_GAS_H2O:
-        case DC_GAS_CO2:   /* gases *
-        case DC_GAS_H2:
-        case DC_GAS_N2:
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
-            if( pmp->Pc > 1e-9 )
-                pmp->Y_la[j] += log10( pmp->Pc );
-            break;
+              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT + Dsur - 1.
+                    + 1. / ( 1.+Dsur ) - log(dtp->chi[ii*dtp->nK+j]));
+              break;
+          case DC_GAS_COMP:
+          case DC_GAS_H2O:
+          case DC_GAS_CO2:   /* gases */
+          case DC_GAS_H2:
+          case DC_GAS_N2:
+              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                   - log(dtp->chi[ii*dtp->nK+j]) + log(P));
+              break;
 /*
 // adsorption:
-/*
         case DC_SUR_SITE:
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
@@ -849,32 +887,84 @@ TDualTh::Calc_gam_n( char eState )
   }
 }
 
-//  void TDualTh::Calc_act_n( char eState )
-// { // calculate activity DualTh
+void
+TDualTh::Calc_act_n( char eState )
+{ // calculate activity DualTh
 
+ short ii, j;
+ double muoi, activ = 1., Dsur=0., RT = 2479., P=1., lnFmol=4.016535;
 
-/*
-               case DC_SCP_CONDEN:
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+// dt_initiate( false );
+  Dsur = dtp->WmCb - 1.;
+  if( Dsur < 0. )
+    Dsur = 0.;
+
+ for( ii=0; ii<dtp->nQ; ii++)
+ {
+    dtp->q = ii;
+    if( dtp->PvTPI == S_ON && dtp->Tdq )
+    {
+       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
+       P = dtp->Pdq[ii];
+    }
+    else
+    {
+       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
+       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
+    }
+  // zero off a cell in mu_n
+    for( j=0; j<dtp->nK; j++)
+    {
+       dtp->jm = j;
+       muoi = dtp->muo_i[ii*dtp->nK+j];
+       if( eState == DT_STATE_S )
+        switch(dtp->typ_n[j])  // Stoich. saturation - to be written !
+        {          // for now, the same calculation as at equilibrium
+          default:
+          case DC_SCP_CONDEN:
+                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
                     break;
                case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
-                    pmp->Y_la[j] = ln_to_lg*(Muj - pmp->G0[j]
-                                        + Dsur + lnFmol);
+                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                            + Dsur + lnFmol);
                     break;
                case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
-                    pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j]
-                                        + Dsur - 1. + 1. / ( 1.+Dsur ) );
+                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                            + Dsur - 1. + 1. / ( 1.+Dsur ) );
                     break;
-               case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:   /* gases *
+               case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:
                case DC_GAS_H2: case DC_GAS_N2:
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
-                    if( pmp->Pc > 1e-9 )
-                        pmp->Y_la[j] += log10( pmp->Pc );
+                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT )
+                            * P; // This makes partial fugacity (in activity scale)
                     break;
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
                     break;
-               case DC_SUR_SITE:
+        } // case
+       else
+        switch(dtp->typ_n[j])  // Equilibrium
+        {
+          default:
+          case DC_SCP_CONDEN: // actually, this is the saturation index
+                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
+                    break;
+               case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
+                    activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                            + Dsur + lnFmol);
+                    break;
+               case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
+                    activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                            + Dsur - 1. + 1. / ( 1.+Dsur ) );
+                    break;
+               case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:
+               case DC_GAS_H2: case DC_GAS_N2:
+                    activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT )
+                            * P; // Converts to activity scale
+                    break;
+               case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
+                    activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
+                    break;
+/*               case DC_SUR_SITE:
                     DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
@@ -892,8 +982,11 @@ TDualTh::Calc_gam_n( char eState )
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                        + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
                     break;
-               default:
-                    break; /* error in DC class code */
-// }
+*/       } // case
+
+         dtp->act_n[ii*dtp->nK+j] = activ;
+      } // j
+   }  // ii
+}
 
 // ------------------- End of m_dualthc.cpp --------------------------

@@ -93,8 +93,8 @@ typedef struct
    Vaqb,  // Vaq (volume of aqueous solution for molarities)
    Pgb,   // Pg (pressure in gas, for partial pressures)
    Tmolb, // MOL total mole amount for basis sub-system composition calculations
-   WmCb,  // molar mass of carrier DC (e.g. sorbent or solvent), reserved
-   Asur,  // Specific surface area (for adsorbed species)
+   WmCb,  // mole fraction of the carrier DC (e.g. sorbent or solvent)
+   Asur,  // Specific surface area of the sorbent (for adsorbed species)
    cT,
    cP,
    cV  // State factors T,P,V
