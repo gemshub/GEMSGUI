@@ -64,34 +64,6 @@
             <property name="title">
                 <string>No need to change in this version of GEMS-PSI </string>
             </property>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>C   Celsius  </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>K   Kelvin</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>F   Fahrenheit</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>comboBox1_2_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>170</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel1_2_3_2_2</cstring>
@@ -112,72 +84,6 @@
                 </property>
                 <property name="text">
                     <string>Units of measurement of temperature in this RTparm record (default: C)</string>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>b    bar  = 10^5 Pa</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>B    kbar (kilobar)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>p    Pa  (Pascal)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>P    MPa  = 10^6 Pa  </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>A    atm (=1.013 bar)</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>comboBox1_2_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>140</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>j    J/bar  = 0.1 cm3/mol</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>a   cal/bar</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>m   cm3/mol</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>comboBox1_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>110</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
                 </property>
             </widget>
             <widget class="QLabel">
@@ -212,6 +118,64 @@
                     <string>Units of measurement of volume in this RTparm record (default:  j)</string>
                 </property>
             </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>80</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Units of measurement of energy in this RTparm record (default: j)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>30</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Source of input data for this RTparm task  (default: d )</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>d   DComp record </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>r   ReacDC record</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>pWhat</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
             <widget class="QComboBox">
                 <item>
                     <property name="text">
@@ -239,7 +203,10 @@
                     </property>
                 </item>
                 <property name="name">
-                    <cstring>comboBox1</cstring>
+                    <cstring>pPunE</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
                 </property>
                 <property name="geometry">
                     <rect>
@@ -248,61 +215,109 @@
                         <width>140</width>
                         <height>21</height>
                     </rect>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>180</x>
-                        <y>80</y>
-                        <width>370</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Units of measurement of energy in this RTparm record (default: j)</string>
                 </property>
             </widget>
             <widget class="QComboBox">
                 <item>
                     <property name="text">
-                        <string>d   DComp record </string>
+                        <string>j    J/bar  = 0.1 cm3/mol</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>r   ReacDC record</string>
+                        <string>a   cal/bar</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>m   cm3/mol</string>
                     </property>
                 </item>
                 <property name="name">
-                    <cstring>comboBox1_2</cstring>
+                    <cstring>pPunV</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>30</y>
+                        <y>110</y>
                         <width>140</width>
                         <height>21</height>
                     </rect>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>b    bar  = 10^5 Pa</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>B    kbar (kilobar)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>p    Pa  (Pascal)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>P    MPa  = 10^6 Pa  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>A    atm (=1.013 bar)</string>
+                    </property>
+                </item>
                 <property name="name">
-                    <cstring>textLabel1_2_2</cstring>
+                    <cstring>pPunP</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>180</x>
-                        <y>30</y>
-                        <width>370</width>
+                        <x>20</x>
+                        <y>140</y>
+                        <width>140</width>
                         <height>21</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>Source of input data for this RTparm task  (default: d )</string>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>C   Celsius  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>K   Kelvin</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>F   Fahrenheit</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>pPunT</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>170</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
                 </property>
             </widget>
         </widget>
@@ -368,91 +383,6 @@
                     <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pNwc</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>70</y>
-                        <width>60</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="maxValue">
-                    <number>999</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="value">
-                    <number>1</number>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pGraph</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>100</y>
-                        <width>60</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="maxValue">
-                    <number>20</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="value">
-                    <number>15</number>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pECol</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>230</y>
-                        <width>60</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="maxValue">
-                    <number>10</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="value">
-                    <number>1</number>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pELine</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>200</y>
-                        <width>60</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="maxValue">
-                    <number>100</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>TextLabel1_2_2</cstring>
@@ -472,28 +402,6 @@
                     <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pNqp</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>150</y>
-                        <width>60</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="maxValue">
-                    <number>20</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="value">
-                    <number>0</number>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>TextLabel1_2_2_2</cstring>
@@ -508,42 +416,6 @@
                 </property>
                 <property name="text">
                     <string>Optional: Number of columns (plots) in the ytE array for plotting experimental data. Default: 1.</string>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>0   Pairwise given T and P  </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>1   P, then T increments</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>2   T, then P increments</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>3    P and T increments</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>comboBox1_2_4</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>30</y>
-                        <width>170</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="currentItem">
-                    <number>2</number>
                 </property>
             </widget>
             <widget class="QLabel">
@@ -601,6 +473,149 @@
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pNP</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>70</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>999</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>1</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pNT</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>100</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>15</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pdimY</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>150</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pELine</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>200</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>100</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pECol</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>230</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>10</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>1</number>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>0   Pairwise given T and P  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>1   P, then T increments</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>2   T, then P increments</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>3    P and T increments</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>pMode</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>170</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="currentItem">
+                    <number>2</number>
                 </property>
             </widget>
         </widget>
@@ -719,68 +734,6 @@
             <property name="title">
                 <string>Optional</string>
             </property>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>C   Celsius  </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>K   Kelvin</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>comboBox1_2_3_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>100</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>T   Temperature  </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>P   Pressure</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>comboBox1_2_3_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>70</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>spinBox18</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>90</x>
-                        <y>30</y>
-                        <width>60</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="maxValue">
-                    <number>4</number>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel11</cstring>
@@ -827,6 +780,68 @@
                 </property>
                 <property name="text">
                     <string>Which temperature units to use for the abscissa? Default: C.</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>T   Temperature  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>P   Pressure</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>pPabs</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>70</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>C   Celsius  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>K   Kelvin</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>pPtun</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>100</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>spinBox18</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>30</y>
+                        <width>60</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>4</number>
                 </property>
             </widget>
         </widget>

@@ -777,6 +777,9 @@
                 <property name="text">
                     <string>Here the Process record key (template)  can be edited (will appear as GDproc line on Page 3 of GtDemo window).</string>
                 </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
             </widget>
             <widget class="QLineEdit">
                 <property name="name">
@@ -786,8 +789,8 @@
                     <rect>
                         <x>10</x>
                         <y>30</y>
-                        <width>320</width>
-                        <height>30</height>
+                        <width>310</width>
+                        <height>20</height>
                     </rect>
                 </property>
                 <property name="text">
