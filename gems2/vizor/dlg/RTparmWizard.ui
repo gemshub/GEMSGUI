@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>GEM-Selektor RTparm Wizard</string>
+        <string>GEM-Selektor RTParm Wizard</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>false</bool>
@@ -329,26 +329,6 @@
         <attribute name="title">
             <string>Step 2 - Important dimensions</string>
         </attribute>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>0</y>
-                    <width>570</width>
-                    <height>110</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&lt;p&gt;Select the mode of generating T and P argument arrays and specify the number of different temperatures and pressures. Set also  the number of plots or columns in the yF table of collected data. The number of rows in the xT, xP and yF arrays will be defined autmatically.&lt;/p&gt; 
-&lt;p&gt;As an option, you may set the number of experimental points (rows in xTE, xPE,  ytE) and the number of columns in the ytE table to plot experimental data over the calculated data.&lt;/p&gt;</string>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignVCenter</set>
-            </property>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup7</cstring>
@@ -621,6 +601,26 @@
         </widget>
         <widget class="QLabel">
             <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>0</y>
+                    <width>570</width>
+                    <height>110</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;p&gt;Select the mode of generating T and P argument arrays and specify the number of different temperatures and pressures. Set also  the number of plots or columns in the yF table of collected data. The number of rows in the xT, xP and yF arrays will be defined autmatically.&lt;/p&gt; 
+&lt;p&gt;As an option, you may set the number of experimental points (rows in xTE, xPE,  ytE) and the number of columns in the ytE table to plot experimental data over the calculated data.&lt;/p&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
                 <cstring>textLabel1</cstring>
             </property>
             <property name="geometry">
@@ -632,7 +632,7 @@
                 </rect>
             </property>
             <property name="text">
-                <string>Note: the generation modes 1, 2 and 3 will require to set the iterators for T and P after this wizard is finished. &lt;br&gt;The actual sampling of results into the yF table requires a math script which should use data objects from the TPwork page of RTparm window.</string>
+                <string>Note: the generation modes 1, 2 and 3 will require to set values in the iterators for T and P after this wizard is finished. &lt;br&gt;The actual sampling of results into the yF table requires a math script which should use data objects from the "TPwork" page of RTParm window.</string>
             </property>
             <property name="alignment">
                 <set>WordBreak|AlignVCenter</set>
@@ -655,7 +655,7 @@
                     <x>10</x>
                     <y>160</y>
                     <width>570</width>
-                    <height>280</height>
+                    <height>270</height>
                 </rect>
             </property>
             <property name="title">
@@ -669,31 +669,12 @@
                     <rect>
                         <x>20</x>
                         <y>200</y>
-                        <width>540</width>
-                        <height>40</height>
+                        <width>530</width>
+                        <height>50</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>(3) If you wish to plot some experimental values against sampled data, close the graph dialog, find on the "Graph" page arrays xE and yE, and type the empirical data in there. Open the plot again and customie it, if necessary.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel15</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>110</y>
-                        <width>540</width>
-                        <height>70</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(2) When ready, click on the "Calculate" toolbar button to start consecutive reading of records and data sampling (in the case of messages about errors in scripts, fix them and try calculation again). After the sampling has finished, you can see the sampled results on Page 2. Type in the axis and plot names, and click on the "Plot data" button to see customizable graphs.</string>
+                    <string>(3) If you wish to plot some experimental values against sampled data, close the graph dialog, find on the "Tables" page arrays xTE, xPE and ytE, and type the empirical data in there. Open the plot again and customise it, if necessary.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
@@ -707,12 +688,31 @@
                     <rect>
                         <x>20</x>
                         <y>30</y>
-                        <width>540</width>
-                        <height>60</height>
+                        <width>520</width>
+                        <height>80</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>(1) The RTparm arrays will be allocated, and Page 1 of the RTparm module window appears. Enter the full data sampler name into the RPname field and (optionally) a comment into the RPnote line. Then type the math script into the rExpr area. Use template scripts accessible through the "Help" "View Scripts" menu command.</string>
+                    <string>(1) The RTParm arrays will be allocated, and "Scripts" page of RTParm module window appears. Enter the full data sampler name into the "RTname" field and (optionally) a comment into the "RTcom" line. Then type the math script into the "tExpr" area. Typically, such a script collects data from objects visible on the "TPwork" page and assign to xT, xP and yF array elements. You can also look at template scripts accessible through the "Help" "View Scripts..." menu command.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel15</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>120</y>
+                        <width>530</width>
+                        <height>70</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(2) When ready, click on the "Calculate" toolbar button to start consecutive reading of records and data sampling (in the case of messages about errors in scripts, fix them and try calculation again). After the sampling has finished, check sampled results on the "Tables" page. Enter axis and plot names, and click on the "Plot data" button to see a customizable graph.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
@@ -726,7 +726,7 @@
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>0</y>
+                    <y>10</y>
                     <width>570</width>
                     <height>140</height>
                 </rect>
