@@ -775,7 +775,7 @@ enum gem2mt_objects {
   o_mtaucln, o_mtfdlid, o_mtfdlop, o_mtfdlmp, o_mtmpgid,
   o_mtumpg,  o_mtbm,  o_mtplline,
 //work
-  o_mtsykey, o_mwetext, o_mwtprn, o_mtctm,  o_mtcnv,
+  o_mtsykey, o_mtan, o_mwetext, o_mwtprn, o_mtctm,  o_mtcnv,
   o_mtqc, o_mtkv, o_mtjqc, o_mtjqs,  o_mtjt,
   o_mtrei1, o_mtrei2, o_mtrei3, o_mtrei4, o_mtrei5,
   o_mtct, o_mtcp, o_mtcv,  o_mtctau, o_mtdtau,

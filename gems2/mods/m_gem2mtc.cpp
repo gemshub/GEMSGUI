@@ -26,7 +26,10 @@
 #include "service.h"
 #include "visor.h"
 #include "gdatastream.h"
-//#include "ms_multi.h"
+#include "s_formula.h"
+#include "m_icomp.h"
+#include "m_compos.h"
+
 
 
 
@@ -71,7 +74,7 @@ void TGEM2MT::init_arrays( bool mode )
     mtp->Vaqb = 1.;
 
     for( ii=0; ii<mtp->Nb; ii++)
-     mtp->CIclb[ii] = 'g';
+     mtp->CIclb[ii] = QUAN_GRAM;
 
     for( ii=0; ii<mtp->nIV; ii++)
     {
@@ -99,7 +102,7 @@ void TGEM2MT::init_arrays( bool mode )
 
     if( mtp->UMPG)
       for( ii=0; ii<TProfil::pm->pmp->FI; ii++)
-         mtp->UMPG[ii] = 'g';
+         mtp->UMPG[ii] = QUAN_GRAM;
 
 // setup default graphiks lines
    if( mtp->PvEF != S_OFF  )
@@ -161,12 +164,173 @@ void TGEM2MT::calc_eqstat()
 //make matrix An  As Bb_Calc in Dualth
 void TGEM2MT::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 {
+  // Get full matrix A
+  TIArray<TFormula> aFo;
+  gstring form;
+  int ii;
+
+  if( !siz_ )
+  { mtp->An = (float *)aObj[ o_mtan ].Free();
+    return;
+  }
+  for( ii=0; ii<siz_; ii++ )
+  {
+     aFo.Add( new TFormula() );
+     form = gstring( for_[ii], 0, MAXFORMUNITDT );
+     form.strip();
+     aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
+  }
+
+  ErrorIf( mtp->Nb != TProfil::pm->mup->N, GetName(),
+               "Illegal data in mtp->Nb ");
+
+  mtp->An = (float *)aObj[ o_mtan ].Alloc( siz_, mtp->Nb, F_ );
+  memset(mtp->An, 0, sizeof(float)*(siz_*mtp->Nb) );
+  for( ii=0; ii<siz_; ii++ )
+     aFo[ii].Stm_line( TProfil::pm->mup->N, mtp->An+ii*TProfil::pm->mup->N,
+           (char *)TProfil::pm->mup->SB, TProfil::pm->mup->Val );
+  aFo.Clear();
 }
 
 // Calculate data for matrix Bn As Bb_Calc in Dualth
 void
 TGEM2MT::Bn_Calc()
-{}
+{
+    int i, j;
+    double Msysb_bk, Tmolb_bk;
+    double MsysC = 0., R1C = 0.;
+    double Xincr, ICmw, DCmw;
+    vstr  pkey(MAXRKEYLEN+10);
+    float  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
+    float *A;
+    time_t crt;
+
+    if( mtp->PvICi == S_OFF  &&   mtp->PvAUi == S_OFF )
+       return;
+
+// get data fron IComp
+    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    aIC->ods_link(0);
+    ICw = new float[mtp->Nb];
+    memset( pkey, 0, MAXRKEYLEN+9 );
+    for( i=0; i<mtp->Nb; i++ )
+    {
+        // load molar mass
+        memcpy( pkey, TProfil::pm->mup->SB[i], IC_RKLEN );
+        pkey[IC_RKLEN] = 0;
+        aIC->TryRecInp( pkey, crt, 0 );
+        // atomic mass and valence
+        if( IsFloatEmpty( aIC->icp->awt ))
+            ICw[i] = 0;
+        else ICw[i] = aIC->icp->awt;
+        // icp->val;
+    }
+
+// make An from dtp->for_b
+       make_A( mtp->Lbi, mtp->for_i );
+
+  Msysb_bk = mtp->Msysb;
+  Tmolb_bk = mtp->Tmolb;
+
+  for( int ii=0; ii< mtp->nIV; ii++ )
+  {
+    // set line in Bb to zeros
+    memset( mtp->Bn + ii*mtp->Nb, 0, mtp->Nb*sizeof(double) );
+    mtp->Msysb = Msysb_bk;
+    mtp->Tmolb = Tmolb_bk;
+
+
+    if( mtp->PvICi != S_OFF )
+    { //  Through IC
+        for( i=0; i<mtp->Nb; i++ )
+        {
+          if( !mtp->CIb[ii*mtp->Nb + i] ||
+                 IsFloatEmpty( mtp->CIb[ ii*mtp->Nb + i ] ))
+                continue;
+
+          ICmw = ICw[i];
+          Xincr = TCompos::pm->Reduce_Conc( mtp->CIclb[i],
+             mtp->CIb[ii*mtp->Nb+i],
+             ICmw, 1.0, mtp->Tmolb, mtp->Msysb, mtp->Mwatb,
+             mtp->Vaqb, mtp->Maqb, mtp->Vsysb );
+
+           mtp->Bn[ii*mtp->Nb+i] += Xincr;
+           MsysC += Xincr*ICmw;
+           R1C += Xincr;
+        } //  i
+    }
+
+    if( mtp->PvAUi != S_OFF )
+    { // formul list
+
+      for( j=0; j < mtp->Lbi; j++ )
+      {
+         A = mtp->An + j * mtp->Nb;
+         if( !mtp->CAb[ii*mtp->Lbi + j] ||
+            IsFloatEmpty( mtp->CAb[ii*mtp->Lbi + j] ))
+                    continue;
+         DCmw = 0.;
+         for( i=0; i<mtp->Nb; i++ )
+         // calculation of molar mass
+             DCmw += A[i]* ICw[i];
+         Xincr = TCompos::pm->Reduce_Conc( mtp->AUcln[j],
+                mtp->CAb[ii*mtp->Lbi + j],
+                 DCmw, 1.0, mtp->Tmolb, mtp->Msysb, mtp->Mwatb,
+                 mtp->Vaqb, mtp->Maqb, mtp->Vsysb );
+         // recalc stoichiometry
+         for( i=0; i<mtp->Nb; i++ )
+          if( A[i] )
+          {
+            mtp->Bn[ii*mtp->Nb+i] += Xincr*A[i]; // calc control sum
+            MsysC += Xincr * A[i] * ICw[i];
+            R1C += Xincr * A[i];
+          }
+        } //  j
+
+      }
+      MsysC /= 1e3;
+
+      // Analyze control sum
+      if( fabs( mtp->Tmolb ) < 1e-12 )
+        mtp->Tmolb = R1C;
+      if( fabs( mtp->Tmolb - R1C ) < 1e-12 || fabs( R1C ) < 1e-15 )
+        /*Xincr = 1.*/;
+       else
+       { // normalisation
+          Xincr = mtp->Tmolb / R1C;
+          MsysC = 0.0;
+          for( i=0; i<mtp->Nb; i++ )
+            if( fabs( mtp->Bn[ii*mtp->Nb+i] ) >= 1e-12 )
+            {
+                mtp->Bn[ii*mtp->Nb+i] *= Xincr;
+                MsysC += mtp->Bn[ii*mtp->Nb+i] * ICw[i];
+            }
+          mtp->Tmolb = R1C;
+          MsysC /= 1e3;
+       }
+
+       if( fabs( mtp->Msysb ) < 1e-12 )
+           mtp->Msysb = MsysC;
+       if( fabs( mtp->Msysb - MsysC ) < 1e-12 || fabs( MsysC ) < 1e-15 )
+        /*Xincr = 1.*/;
+      else
+      { // normalisation
+         Xincr = mtp->Msysb / MsysC;
+         R1C = 0.0;
+         for( i=0; i<mtp->Nb; i++ )
+             if( fabs( mtp->Bn[ii*mtp->Nb+i] ) >= 1e-12 )
+             {
+                mtp->Bn[ii*mtp->Nb+i] *= Xincr;
+                R1C += mtp->Bn[ii*mtp->Nb+i];
+             }
+         mtp->Tmolb = R1C;
+      }
+  } // ii
+
+  mtp->Msysb = Msysb_bk;
+  mtp->Tmolb = Tmolb_bk;
+  delete[]  ICw;
+}
 
 
 // Generating new SysEq
@@ -178,6 +342,7 @@ void TGEM2MT::gen_task()
     {
        TProfil::pm->syp->B[i] =  mtp->Bn[ mtp->kv*mtp->Nb+i ];
        TProfil::pm->syp->BI[i] =  mtp->Bn[ mtp->kv*mtp->Nb+i ];
+       TProfil::pm->syp->BIun[i] =  QUAN_MOL;
     }
 // set zeros to xd_ and xa_
     for( i=0; i < TProfil::pm->mup->L; i++)
@@ -213,9 +378,6 @@ void TGEM2MT::outMulti()
   gstring name;
   gstring newname;
   gstring path;
-
-  // calculate start data
-  Bn_Calc();
 
 
 if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )

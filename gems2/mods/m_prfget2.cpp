@@ -20,6 +20,7 @@
 #include "m_param.h"
 #include "m_unspace.h"
 #include "m_dualth.h"
+#include "m_gem2mt.h"
 #include "m_syseq.h"
 #include "service.h"
 
@@ -357,6 +358,27 @@ void TProfil::TestChangeProfile()
          aDU->RecInput( aList[i].c_str() );
          aDU->InsertChanges( aIComp  );
          aDU->RecSave( aList[i].c_str(), true );
+       }
+
+    }
+
+    // Insert changes to GEM2MT
+    if( aIComp.GetCount()>=1 || aPhase.GetCount()>=1 )
+    {
+      aList.Clear();
+      anR.Clear();
+
+       rt[RT_GEM2MT].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+       K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+       rt[RT_GEM2MT].GetKeyList( pkey, aList, anR );
+
+       TGEM2MT* aMT= (TGEM2MT *)(&aMod[RT_GEM2MT]);
+       aMT->ods_link(0);
+       for(uint i=0; i< aList.GetCount(); i++)
+       {
+         aMT->RecInput( aList[i].c_str() );
+         aMT->InsertChanges( aPhase, aIComp  );
+         aMT->RecSave( aList[i].c_str(), true );
        }
 
     }

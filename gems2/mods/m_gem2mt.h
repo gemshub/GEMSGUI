@@ -157,6 +157,8 @@ typedef struct
 
 
 /* Work arrays */
+ float
+   *An;  // [K][N] stoich matrix for DC (end-member) stoichiometry candidates
    char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
    *etext,              // internal
    *tprn;              // internal
@@ -272,7 +274,7 @@ public:
 
     void CmHelp();
 
-    void InsertChanges( TIArray<CompItem>& aIComp ); 
+   void InsertChanges( TIArray<CompItem>& aPhase,TIArray<CompItem>& aIComp );
 };
 
 
