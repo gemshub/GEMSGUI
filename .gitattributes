@@ -50,7 +50,7 @@ gems2/doc/vis_cn.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/vis_od.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/gems2.app/Contents/Info.plist svn_keywords=Author+Date+Id+Revision
 gems2/gems2.app/Contents/PkgInfo svn_keywords=Author+Date+Id+Revision
-gems2/gems2.app/Contents/Resources/gems.icns svn_keywords=Author+Date+Id+Revision
+gems2/gems2.app/Contents/Resources/gems.icns svneol=native#unset svn_keywords=Author+Date+Id+Revision
 gems2/gems2.spec svn_keywords=Author+Date+Id+Revision
 gems2/gems200-w32-install.nsi svn_keywords=Author+Date+Id+Revision
 gems2/img/RunBCC.png -text
