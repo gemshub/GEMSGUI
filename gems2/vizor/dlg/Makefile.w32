@@ -23,6 +23,7 @@ DATASRC =	MainDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessWizardData.cpp \
 		ComposWizardData.cpp \
+		RTparmWizardData.cpp \
 		GtDemoWizardData.cpp \
 		PhaseWizardData.cpp \
 		KeyDialogData.cpp \
@@ -48,6 +49,7 @@ DATAOBJ =       MainDialogData.obj \
 		ProgressDialogData.obj \
 		ProcessWizardData.obj \
 		ComposWizardData.obj \
+		RTparmWizardData.obj \
 		GtDemoWizardData.obj \
 		PhaseWizardData.obj \
 		KeyDialogData.obj \
@@ -74,6 +76,7 @@ SOURCES =	MainDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessWizard.cpp \
 		ComposWizard.cpp \
+		RTparmWizard.cpp \
 		GtDemoWizard.cpp \
 		PhaseWizard.cpp \
 		KeyDialog.cpp \
@@ -102,6 +105,7 @@ OBJECTS =	MainDialog.obj \
 		ProgressDialog.obj \
 		ProcessWizard.obj \
 		ComposWizard.obj \
+		RTparmWizard.obj \
 		GtDemoWizard.obj \
 		PhaseWizard.obj \
 		KeyDialog.obj \
@@ -137,6 +141,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_ProcessWizardData.obj \
 		..\tmp\moc_ComposWizard.obj \
 		..\tmp\moc_ComposWizardData.obj \
+		..\tmp\moc_RTparmWizard.obj \
+		..\tmp\moc_RTparmWizardData.obj \
 		..\tmp\moc_GtDemoWizard.obj \
 		..\tmp\moc_GtDemoWizardData.obj \
 		..\tmp\moc_PhaseWizard.obj \
@@ -287,6 +293,19 @@ clean:
 
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ComposWizardData.cpp
 	-del moc_ComposWizardData.cpp
+
+..\tmp\moc_RTparmWizard.obj: RTparmWizard.h
+      	$(MOC) RTparmWizard.h -o moc_RTparmWizard.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_RTparmWizard.cpp
+	-del moc_RTparmWizard.cpp
+
+
+..\tmp\moc_RTparmWizardData.obj: RTparmWizardData.h
+      	$(MOC) RTparmWizardData.h -o moc_RTparmWizardData.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_RTparmWizardData.cpp
+	-del moc_RTparmWizardData.cpp
 
 ..\tmp\moc_GtDemoWizard.obj: GtDemoWizard.h
       	$(MOC) GtDemoWizard.h -o moc_GtDemoWizard.cpp
@@ -545,6 +564,10 @@ ProcessWizardData.cpp: ProcessWizard.ui
         $(UIC) $? -impl $(*).h -o $@
 
 ComposWizardData.cpp: ComposWizard.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+RTparmWizardData.cpp: RTparmWizard.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 

@@ -54,6 +54,7 @@ using namespace std;
 #include "dlg/ProcessWizard.h"
 #include "dlg/GtDemoWizard.h"
 #include "dlg/ComposWizard.h"
+#include "dlg/RTparmWizard.h"
 #include "dlg/PhaseWizard.h"
 #include "dlg/NewSystemDialog.h"
 #include "dlg/ListFilesDialog.h"
@@ -875,7 +876,6 @@ vfGtDemoSet(QWidget* par, const char * p_key, int size[7], gstring& prkey )
     return true;
 }
 
-
 bool
 vfComposSet(QWidget* par, const char * p_key,
             char flgs[6], int size[2], double& r2  )
@@ -886,6 +886,19 @@ vfComposSet(QWidget* par, const char * p_key,
     cdlg.getFlags( flgs );
     cdlg.getSizes( size );
     r2 = cdlg.getR2();
+
+    return true;
+}
+
+bool
+vfRTparmSet(QWidget* par, const char * p_key,
+            char flgs[10], int size[7]  )
+{
+     RTparmWizard cdlg( p_key, flgs, size, par );
+     if( !cdlg.exec() )
+       return false;
+    cdlg.getFlags( flgs );
+    cdlg.getSizes( size );
 
     return true;
 }

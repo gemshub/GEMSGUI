@@ -89,6 +89,9 @@ vfGtDemoSet(QWidget* par, const char * p_key, int size[7], gstring& prkey );
 bool
 vfComposSet(QWidget* par, const char * p_key,
             char flgs[6], int sizes[2], double& r2 );
+bool
+vfRTparmSet(QWidget* par, const char * p_key,
+            char flgs[10], int sizes[7] );
 
 bool
 vfPhaseSet(QWidget* par, const char * p_key,

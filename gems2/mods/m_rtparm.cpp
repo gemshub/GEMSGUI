@@ -338,6 +338,40 @@ void TRTParm::RecInput( const char *key )
     TCModule::RecInput( key );
 }
 
+/* opens window with 'Remake record' parameters
+*/
+void
+TRTParm::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[10];
+    int size[7];
+
+    p_key  = db->PackKey();
+    memcpy( flgs, &rpp->What, 10);
+    size[0] = rpp->NP;
+    size[1] = rpp->NT;
+    size[2] = rpp->Mode;
+    size[3] = rpp->Nsd;
+    size[4] = rpp->dimEF[0];
+    size[5] = rpp->dimEF[1];
+    size[6] = rpp->dimXY[1];
+
+    if( !vfRTparmSet( window(), p_key, flgs, size ))
+         Error( p_key, "RTparm record configuration cancelled by the user!" );
+     //  return;   // cancel
+
+    memcpy( &rpp->What, flgs, 10);
+    rpp->NP = size[0];
+    rpp->NT = size[1];
+    rpp->Mode = size[2];
+    rpp->Nsd = size[3];
+    rpp->dimEF[0] = size[4];
+    rpp->dimEF[1] = size[5];
+    rpp->dimXY[1] = size[6];
+}
+
 //Rebuild record structure before calculation
 int
 TRTParm::RecBuild( const char *key, int mode  )
