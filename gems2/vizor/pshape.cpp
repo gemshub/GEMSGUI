@@ -362,13 +362,16 @@ TPlotWin::mousePressEvent( QMouseEvent *e ) {
 	if( txtLabel != 0 && txtLabel->contains(e->pos()) ) {
 
 	    QFontMetrics fm = QPainter(this).fontMetrics();
-	    QPixmap pixmap(fm.width(txtLabel->text()), fm.height());
-	    QPainter dc(&pixmap, this);
+	    QPixmap pixmap(fm.width(txtLabel->text())+2, fm.height()+2);
+	    pixmap.fill(backgroundColor());
+	    QPainter dc(&pixmap);
 //	    dc.setBackgroundMode(Qt::TransparentMode);
-	    dc.setBackgroundColor(Qt::gray);
-	    txtLabel->paint(dc);
-	    //dc.setPen( Qt::black );
-	    //dc.drawText(0, 0, txtLabel->text());
+	    //dc.setBackgroundColor(Qt::gray);
+//	    dc.setPen(Qt::yellow);
+//	    dc.setFont(QFont("Arial", 10));
+	    dc.drawText(0, fm.height(), txtLabel->text());
+	    //txtLabel->paint(dc);
+	    dc.flush();
 
 	    QTextDrag *drag = new QTextDrag( txtLabel->text(), this );
 	    drag->setPixmap(pixmap, QPoint(0, pixmap.height()));
