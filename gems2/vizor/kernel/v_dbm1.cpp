@@ -430,7 +430,7 @@ TDBFile::SetDh( long& fLen, int nRec )
     int handle = f.rdbuf()->fd();
     chsize( handle, fLen );
 #else
-#if __GCC__ != 3
+#if __GNUC__ != 3
     int handle = f.rdbuf()->fd();
 #else
 cerr << "trunc dummy" << endl;
