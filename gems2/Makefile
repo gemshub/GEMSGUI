@@ -144,7 +144,8 @@ copy_data:
 		cp -R ./data ./shared/ 
 endif	
 
-zip:	check_shared
+zip:
+# check_shared
 	-mv ~/Desktop/gems2-mac-`date +%Y%m%d`.zip ~/Desktop/gems2-mac-`date +%Y%m%d`.zip.bak
 	zip -r ~/Desktop/gems2-mac-`date +%Y%m%d`.zip gems2.app/Contents/MacOS gems2.app/Contents/Resources gems2.app/Contents/Info.plist gems2.app/Contents/PkgInfo -x gems2.app/Contents/Resources/CVS/*
 
