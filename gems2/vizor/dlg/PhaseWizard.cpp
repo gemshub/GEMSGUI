@@ -99,6 +99,12 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[12], int size[6],
     }
     else checkBoxSorption->setChecked( false );
 
+    if( flgs[11] == '+' )
+     checkBoxSorption->setChecked(true);
+    else
+     checkBoxSorption->setChecked(false);
+
+
     spinBox_SurTypes_N->setValue(size[5]);
     QString str;
     lineEdit_surfArea->setValidator( new QDoubleValidator( lineEdit_surfArea ));
@@ -163,11 +169,14 @@ void PhaseWizard::getFlags( char flgs[12] )
     flgs[8] = '+';
   else flgs[8] = '-';
 
-  if( checkBoxSorption->isChecked() )
+//  if( checkBoxSorption->isChecked() )
+//       flgs[11] = '+';
+//  else flgs[11] = '-';
+  //if( flgs[5] != 'N' )
+  //     flgs[11] = '+';
+  if( flgs[0] == 'A' )
        flgs[11] = '+';
   else flgs[11] = '-';
-  if( flgs[5] != 'N' )
-       flgs[11] = '+';
 
   // Flags for scripts
  flgs[9] = '-';

@@ -415,7 +415,7 @@ AGAIN_SETUP:
        php->sol_t[DCOMP_DEP] = SM_UNDEF;
        php->sol_t[SPHAS_DEP] = SM_UNDEF;
        php->sol_t[DCE_LINK] = SM_UNDEF;
-       php->sol_t[SCM_TYPE] = SM_UNDEF;
+//       php->sol_t[SCM_TYPE] = SM_UNDEF;
 
        switch(php->sol_t[SPHAS_TYP])
        {
