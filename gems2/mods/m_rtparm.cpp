@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/m_rtparm.cpp  version 2.0.0   2001
+// $Id$
 //
 // Implementation of TRTParm class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010903
+// Rewritten from C to C++ by S.Dmytriyeva  
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -243,8 +243,9 @@ void TRTParm::set_def( int q)
     memcpy( &rp[q].What, aPa->pa.RPpdc, 10 );
     strcpy( rp[q].name,  "`" );   // Fixed for debugging
     strcpy( rp[q].comment, "`" );
-    strcpy( rp[q].xNames,  "`" );   // Fixed for debugging
-    strcpy( rp[q].yNames, "`" );
+    strcpy( rp[q].xNames,  "xTP" );   // Fixed for debugging
+    strcpy( rp[q].yNames, "yF" );
+
     rp[q].NT = aPa->pa.NT;
     rp[q].NP = aPa->pa.NP;
     rp[q].Mode = aPa->pa.Mode;
@@ -383,6 +384,25 @@ AGAIN_SETUP:
     rpp->What = *(key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB);
     rpp->dimXY[0] = rpp->NV;
     dyn_new();
+
+    TProfil *aPa=TProfil::pm;
+    vstr tbuf(100);
+
+    if( rpp->Pplot != S_OFF  )
+    {
+        for(int i=0; i<rpp->dimEF[1]; i++ )
+        {
+            sprintf( tbuf, "%s%d", aPa->pa.GDpsc, i+1 );
+            if( !*rpp->lNamE[i] || *rpp->lNamE[i] == ' ' )
+                strncpy( rpp->lNamE[i], tbuf,MAXGRNAME );
+        }
+    }
+    for(int j=0; j< rpp->dimXY[1]; j++ )
+    {
+        sprintf( tbuf, "%s%d", aPa->pa.GDpsc, j+1 );
+        if( !*rpp->lNam[j]|| *rpp->lNam[j] == ' ' )
+            strncpy( rpp->lNam[j], tbuf, MAXGRNAME );
+    }
 
     pVisor->Update();
     return ret;
