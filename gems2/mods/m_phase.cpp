@@ -364,15 +364,16 @@ TPhase::MakeQuery()
     size[5] = php->NsiT;
 
     if( !vfPhaseSet( window(), p_key, flgs, size, r2 ))
-        return;   // cancel
+         Error( p_key, "Phase record configuration cancelled by the user!" );
+     //  return;   // cancel
 
     memcpy( php->sol_t, flgs, 12);
-    php->Nsd = size[0];
-    php->ncpN = size[1];
-    php->ncpM = size[2];
-    php->nscN = size[3];
-    php->nscM = size[4];
-    php->NsiT = size[5];
+    php->Nsd = (short)size[0];
+    php->ncpN = (short)size[1];
+    php->ncpM = (short)size[2];
+    php->nscN = (short)size[3];
+    php->nscM = (short)size[4];
+    php->NsiT = (short)size[5];
     php->Asur = r2;
 }
 

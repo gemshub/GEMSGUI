@@ -340,6 +340,7 @@ TCModule::CmSaveAs()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -435,6 +436,7 @@ TCModule::CmShow()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -469,6 +471,7 @@ TCModule::CmFilter()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -511,6 +514,7 @@ TCModule::CmNext()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -524,7 +528,7 @@ TCModule::CmPrevious()
        int i_next = 0;
        if( ! MessageToSave() )
     	return;
-	
+
        // get current record key
        gstring str=db->UnpackKey();
        // select scroll list
@@ -552,6 +556,7 @@ TCModule::CmPrevious()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -615,7 +620,7 @@ TCModule::CmDerive()
 
         if( ! MessageToSave() )
 	    return;
-	    
+
         gstring str = gstring( db->UnpackKey(), 0, db->KeyLen() );
                     //db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
@@ -630,6 +635,7 @@ TCModule::CmDerive()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -677,6 +683,7 @@ TCModule::CmCalc()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -710,6 +717,7 @@ TCModule::CmNew()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -741,6 +749,7 @@ TCModule::CmCreate()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -884,12 +893,13 @@ void TCModule::CmLoadinProfile()
 
         if( ! MessageToSave() )
 	    return;
-	    
+
         RecordLoadinProfile();
         pVisor->Update(true);
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -906,7 +916,7 @@ TCModule::CmNewinProfile()
             Error( GetName(),  "Please, do it in Database mode!");
         if( ! MessageToSave() )
 	    return;
-	    
+
         // Get record key
         gstring str = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
         str += ":"; //04/09/01 ????
@@ -925,6 +935,7 @@ TCModule::CmNewinProfile()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -958,6 +969,7 @@ TCModule::CmCreateinProfile()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update( true );
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1081,7 +1093,7 @@ TCModule::CmPrint()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         /*gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos )
             Error( GetName(), "Current record is not defined!");*/
@@ -1147,6 +1159,7 @@ TCModule::CmRebildFile()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1189,6 +1202,7 @@ TCModule::CmAddFileToList()
 
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1202,7 +1216,7 @@ TCModule::CmAddOpenFile()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         db->AddOpenFile(SelectFileList(closef));
         db->SetKey( ALLKEY );
         //        SetString("Command finished OK");
@@ -1224,7 +1238,7 @@ TCModule::CmReOpenFileList()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         TCIntArray arr = SelectFileList(closef|openf|oldself);
 
         if( arr.GetCount() < 1 )
@@ -1280,12 +1294,13 @@ TCModule::CmDeleteList()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         DelList( Filter.c_str() );
         db->SetKey( ALLKEY );
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1308,6 +1323,7 @@ TCModule::CmCopyList( )
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1319,7 +1335,7 @@ TCModule::CmRenameList( )
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         CopyRecordsList( Filter.c_str(), true );
 
         dyn_set();
@@ -1327,6 +1343,7 @@ TCModule::CmRenameList( )
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1340,7 +1357,7 @@ TCModule::CmTransferList()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         Transfer( Filter.c_str() );
         dyn_set();
         //       SetString("Command finished OK");
@@ -1348,6 +1365,7 @@ TCModule::CmTransferList()
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1361,12 +1379,13 @@ TCModule::CmExport()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         RecExport( Filter.c_str() );
         pVisor->Update();
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1378,13 +1397,14 @@ TCModule::CmBackup()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         RecToTXT( Filter.c_str() );
         //  SetString("Command finished OK");
         pVisor->Update();
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1398,12 +1418,13 @@ TCModule::CmImport()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         RecImport();
         pVisor->Update();
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }
@@ -1415,13 +1436,14 @@ TCModule::CmRestore()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         RecOfTXT( );
         //     SetString("Command finished OK");
         pVisor->Update();
     }
     catch( TError& xcpt )
     {
+        pVisor->Update();
         vfMessage(window(), xcpt.title, xcpt.mess);
     }
 }

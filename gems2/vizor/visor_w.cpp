@@ -869,8 +869,7 @@ vfComposSet(QWidget* par, const char * p_key,
 {
      ComposWizard cdlg( p_key, flgs, size, r2, par );
      if( !cdlg.exec() )
-      return false;
-
+       return false;
     cdlg.getFlags( flgs );
     cdlg.getSizes( size );
     r2 = cdlg.getR2();

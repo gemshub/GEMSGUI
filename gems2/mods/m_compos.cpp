@@ -378,7 +378,8 @@ TCompos::MakeQuery()
     size[1] = bcp->Nsd;
 
     if( !vfComposSet( window(), p_key, flgs, size, r2 ))
-        return;   // cancel
+         Error( p_key, "Compos record configuration cancelled by the user!" );
+     //  return;   // cancel
 
     memcpy( &bcp->PcIC, flgs, 6);
     bcp->La = (short)size[0];
