@@ -317,9 +317,6 @@ NewSystemDialog::CmPrevious()
 }
 
 
-
-
-
 // Database SysEq record actions
 
 void
@@ -443,14 +440,7 @@ NewSystemDialog::event(QEvent* ev)
     }
     return QWidget::event(ev);
 }
-/*
-void
-NewSystemDialog::leaveEvent(QEvent* ev)
-{
-    cerr << "leave event" << endl;
-    QWidget::leaveEvent(ev);
-}
-*/
+
 void                                 // Thermodynamic data
 NewSystemDialog::CmOpen_MTPARAM()
 {
@@ -845,13 +835,15 @@ void NewSystemDialog::CmEdit( QListViewItem *it,
 {
   if( it == 0 || col < 3  )
     return;
+    
   QString data = it->text( col );
   if( data.isEmpty() )
     return;
-  if( colEdit==0)
+    
+  if( colEdit==0 )
     colEdit = new MLineEdit(ListView1/*this*/);
-  QRect rec;
-  rec = ListView1->itemRect( it );
+    
+  QRect rec = ListView1->itemRect( it );
 /*
   rec.setLeft( rec.left()+ ListView1->header()->sectionPos(col )+
                ListView1->frameWidth() + ListView1->x() );
@@ -876,9 +868,9 @@ void NewSystemDialog::CmEdit( QListViewItem *it,
   colEdit->setText( data );
   colEdit->setFocus();
   colEdit->show();
-/*  connect( colEdit, SIGNAL( returnPressed () ),
-     this, SLOT( CmSaveEdit() ));
-*/
+  connect( colEdit, SIGNAL( returnPressed () ),
+     colEdit, SLOT( CmAccept() ));
+
   update();
 }
 
@@ -1099,6 +1091,11 @@ MLineEdit::MLineEdit( QWidget * parent, const char * name ):
 
 void MLineEdit::CmHide( int , int  )
 {
+    CmAccept();
+}
+
+void MLineEdit::CmAccept()
+{
     getData();
     hide();
 }
@@ -1186,7 +1183,7 @@ void MLineEdit::getData()
 }
 
 void
-MLineEdit::mousePressEvent(QMouseEvent* e)
+MLineEdit::mousePressEvent(QMouseEvent *e)
 {
     if( e->button() != RightButton || type < 0 )
     {

@@ -43,12 +43,14 @@ class MLineEdit :
     gstring Vals;
 
 protected:
-    void focusOutEvent(QFocusEvent*);
+    void focusOutEvent(QFocusEvent* ev);
     void mousePressEvent(QMouseEvent* e);
+//    void mouseDoubleClickEvent(QMouseEvent *ev);
 
 protected slots:
     void SetIndex(int ii);
     void CmHide( int x, int y );
+    void CmAccept();
 
 public:
 
