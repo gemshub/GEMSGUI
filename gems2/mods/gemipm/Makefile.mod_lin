@@ -20,7 +20,7 @@ PROF_FLAGS	=
 WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
 CCFLAGS		= -Wall -D__unix -pipe -DIPMGEMPLUGIN=1 -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
-		    -Wunreachable-code -Hu
+		    -Wunreachable-code
 
 INC_GLOBAL	= -I$(QTDIR)/include 
 LDFLAGS		=

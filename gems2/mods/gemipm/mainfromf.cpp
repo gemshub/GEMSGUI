@@ -17,13 +17,17 @@ istream& f_getline(istream& is, gstring& str, char delim);
 // -t/-b <dataCH file name> <dataBR file name1> ... <dataBR file nameN>
 //
 
+//extern "C"
+//int __stdcall MAIF_START( int nNodes,
+//   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
+
 extern "C"
-int __stdcall MAIF_START( int nNodes,
+int MAIF_START( int nNodes,
    int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
 {
 
 //-------------------------------------------------------------------
-    int i ;
+    int i;
     char c_to_ic[30];
     char string_cto_i1c[31];
     char string_cto_i2c[31];
@@ -47,7 +51,7 @@ int __stdcall MAIF_START( int nNodes,
          if( nodeTypes[ii] < 0  )
              nodeTypes[ii] = 0;
 
-
+// cout << endl << string_cto_i1c << " " << string_cto_i2c << endl;
 //-------------------------------------------------------------------------
     fstream f_log("ipmlog.txt", ios::out );
     try
@@ -111,7 +115,7 @@ int __stdcall MAIF_START( int nNodes,
       }
 
 // read and unpack dataBR structure
-     int i = 0;
+     i = 0;
 // for all databr files
      while( !f_chbr.eof() )
      {
@@ -165,8 +169,11 @@ int __stdcall MAIF_START( int nNodes,
 //-------------------------------------------------------------------------
 // calc one node data bridge instances
 
+
+//extern "C"
+//int __stdcall MAIF_CALC( int  iNode,
 extern "C"
-int __stdcall MAIF_CALC( int  iNode,
+int MAIF_CALC( int  iNode,
    short& p_NodeHandle,    // Node identification handle
    short& p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short& p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -231,7 +238,7 @@ int __stdcall MAIF_CALC( int  iNode,
   fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {
-
+// cout << " MAIF_CALC begin Mode= " << p_NodeStatusCH << " iNode= " << iNode << endl; 
 //---------------------------------------------
 // need unpack data from transport into DATABR
    TProfil::pm->multi->SaveCopyFrom(iNode);

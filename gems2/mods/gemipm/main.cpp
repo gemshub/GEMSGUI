@@ -7,10 +7,14 @@
 #include "m_param.h"
 #include "gdatastream.h"
 
-extern "C" int __stdcall MAIF_START( int nNodes,
+// extern "C" int __stdcall MAIF_START( int nNodes,
+//   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
+
+extern "C" int MAIF_START( int nNodes,
    int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
 
-extern "C" int __stdcall MAIF_CALC( int iNode,
+// extern "C" int __stdcall MAIF_CALC( int iNode,
+extern "C" int MAIF_CALC( int iNode,
    short& p_NodeHandle,    // Node identification handle
    short& p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short& p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -78,14 +82,14 @@ extern "C" int __stdcall MAIF_CALC( int iNode,
 int
 main(int argc, char* argv[])
 {
-     gstring multu_in = "input_multi.txt";
-     gstring chbr_in   = "mtr_data.txt";
+     gstring multu_in = "";
+     gstring chbr_in   = "";
 
       // from argv
       if (argc >= 2 )
         multu_in = argv[1];
       if (argc >= 3 )
-        chbr_in = argv[2]; \
+        chbr_in = argv[2]; 
       int  c_to_i1[30];
       int  c_to_i2[30];
       for( int i=0; i<30; i++ )
@@ -93,14 +97,17 @@ main(int argc, char* argv[])
         c_to_i1[i]=multu_in[i];
         c_to_i2[i]=chbr_in[i];
       }
+      dBR = 0;
 
+// cout <<  multu_in.c_str() << " " << chbr_in.c_str() << endl;
       MAIF_START( 3, c_to_i1, c_to_i2, 0 );
 //      DATABR
-      dBR = 0;
+//      dBR = 0;
 //      DATABR *(
       dBR1 = &dBR;
-
-      TProfil::pm->multi->CopyTo(dBR1);
+// cout << " After MAIF_START " << endl;
+      TProfil::pm->multi->CopyTo( dBR1 );
+// cout << " Before MAIF_CALC Mode=" << dBR->NodeStatusCH << " IT=" << dBR->IterDone << endl;
 
       MAIF_CALC( 0,
         dBR->NodeHandle, dBR->NodeTypeHY, dBR->NodeTypeMT,
