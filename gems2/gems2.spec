@@ -38,13 +38,17 @@ make RELEASE=YES
 %install
 
 #if exists 
-/usr/sbin/groupadd -f gems_admin
+/usr/sbin/groupadd gems_admin || /bin/true
 
 install -s -m 755 -o 0 -g 0 gems2 %{install_dir}/bin/gems2
 
 install -d -m 775 -o 0 -g gems_admin %{shared_dir}/gems2
 install -d -m 775 -o 0 -g gems_admin %{shared_dir}/gems2/DB.default
 install -m 664 -o 0 -g gems_admin %{shared_src_dir}/DB.default/* %{shared_dir}/gems2/DB.default 
+install -d -m 775 -o 0 -g gems_admin %{shared_dir}/gems2/projects
+install -m 664 -o 0 -g gems_admin %{shared_src_dir}/projects/*.* %{shared_dir}/gems2/projects 
+install -d -m 775 -o 0 -g gems_admin %{shared_dir}/gems2/projects/TryNPTDB
+install -m 664 -o 0 -g gems_admin %{shared_src_dir}/projects/TryNPTDB/* %{shared_dir}/gems2/projects/TryNPTDB
 install -d -m 775 -o 0 %{shared_dir}/gems2/visor.data
 install -m 664 -o 0 %{shared_src_dir}/visor.data/* %{shared_dir}/gems2/visor.data
 install -d -m 775 -o 0 %{shared_dir}/gems2/doc/html
@@ -53,12 +57,13 @@ install -d -m 775 -o 0 %{shared_dir}/gems2/img
 install -m 664 -o 0 %{shared_src_dir}/img/* %{shared_dir}/gems2/img
 
 install -m 664 -o 0 img/gems32.xpm %{shared_dir}/icons/gems2.xpm
-install -m 664 -o 0 img/gems16.xpm %{shared_dir}/icons/mini/gems2.xpm
+install -m 664 -o 0 img/gems32.xpm %{shared_dir}/pixmaps/gems2.xpm
+#install -m 664 -o 0 img/gems16.xpm %{shared_dir}/icons/mini/gems2.xpm
 install -m 664 -o 0 doc/gems2.desktop %{shared_dir}/applications/
 
 %files
 %{install_dir}/bin/gems2
 %{shared_dir}/gems2
 %{shared_dir}/icons/gems2.xpm
-%{shared_dir}/icons/mini/gems2.xpm
+%{shared_dir}/pixmaps/gems2.xpm
 %{shared_dir}/applications/gems2.desktop
