@@ -96,14 +96,14 @@ const char* GetAllowedRegExp(TObject& obj)
     case I_: 		//<short>
     case L_: 		//<long>
     case H_: 		//<signed char>
-        return	"([\\*`])|(-?\\d{0,9})";
+        return	"(---)|([*`])|(-?\\d{0,9})";
     case U_: 		//<unsigned short>
     case X_: 		//<unsigned long>
     case B_: 		//<unsigned char>
-        return	"([\\*`])|(\\d{0,9})";
+        return	"(---)|([*`])|(\\d{0,9})";
     case F_: 		//<float>
     case D_: 		//<double>
-        return	"([\\*`])|(-?\\d{0,9}(\\.\\d{1,9})?(e-?\\d{1,2})?)";
+        return	"(---)|([*`])|(-?\\d{0,9}(\\.\\d{1,9})?(e-?\\d{1,2})?)";
     case A_: 		//<char> - not used here
     case S_: 		//TValString
     default:		// 1..127
@@ -684,13 +684,20 @@ TField::CmCopyToClipboard()
 void
 TField::setFromString(const QString& str) throw(TError)
 {
+	if( str.isEmpty() )
+	    return;
+
 	const QStringList rows = QStringList::split('\n', str, true);
 
 	int rowNum = 0;
 	QStringList::const_iterator it;
 	for( it = rows.begin(); it != rows.end() && rowNum < GetObj().GetN(); ++it, rowNum++) {
+	    if( (*it).isEmpty() )
+		continue;
+	
 	    const QStringList cells = QStringList::split('\t', *it, true);
 	    int cellNum = 0;
+
 	    QStringList::const_iterator cellIt;
 	    for( cellIt = cells.begin(); 
 			cellIt != cells.end() && cellNum < GetObj().GetM(); ++cellIt, cellNum++) {
@@ -702,7 +709,7 @@ TField::setFromString(const QString& str) throw(TError)
 
 		if( ! GetObj().SetString( value, rowNum, cellNum ) ) {
 		    vstr err(200);
-		    sprintf(err, "Invalid value for cell [%d, %d]: '%s'!",
+		    sprintf(err, "Invalid value for cell [%d, %d]: '%.100s'!",
 				rowNum, cellNum, (const char*)value);
 		    throw TError("Object paste", err.p);
 		}
@@ -713,16 +720,21 @@ TField::setFromString(const QString& str) throw(TError)
 void
 TField::CmPasteFromClipboard()
 {
-    const QString clipboard = QApplication::clipboard()->text(QClipboard::Clipboard);
+    QString clipboard = QApplication::clipboard()->text(QClipboard::Clipboard);
+    
+    int lastCR = clipboard.findRev('\n');
+    if( lastCR == clipboard.length() - 1 )
+	clipboard.remove(lastCR, 1);
+    
     const int clipN = clipboard.contains('\n') + 1;
     QString undoString;
     bool largerN = false, largerM = false;
 
     try {
 	if( clipN > N ) {
-	    vstr err(200);
-	    sprintf(err, "Paste number of rows larger than object dimension N (%d > %d)!",
-			    clipN, N);
+//	    vstr err(200);
+//	    sprintf(err, "Paste number of rows larger than object dimension N (%d > %d)!",
+//			    clipN, N);
 //	    throw TError("Object paste error", err.p);
 	    largerN = true;
 	}
@@ -733,9 +745,9 @@ TField::CmPasteFromClipboard()
 	for(QStringList::const_iterator it = rows.begin(); it != rows.end(); ++it, rowNum++) {
 	    int clipM = (*it).contains('\t') + 1;
 	    if( clipM > M ) {
-		vstr err(200);
-		sprintf(err, "Paste number of cells bigger that object dimension M (%d > %d) for row %d!",
-			    clipM, M, rowNum);
+//		vstr err(200);
+//		sprintf(err, "Paste number of cells bigger that object dimension M (%d > %d) for row %d!",
+//			    clipM, M, rowNum);
 //		throw TError("Object paste error", err.p);
 		largerM = true;
 	    }
@@ -975,6 +987,9 @@ TCellInput::setValue()
         {
             vfMessage(topLevelWidget(), rObj.GetKeywd(), "Sorry! Wrong value typed!", vfErr );
             setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+	    // temporary fix for Qt bug on right-alighned QLineEdit with contents larger then display size
+	    if( (fieldType == ftNumeric || fieldType == ftFloat) )
+		repaint();
             setCursorPosition(0);
         }
     }
