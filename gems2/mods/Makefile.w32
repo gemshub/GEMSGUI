@@ -52,7 +52,7 @@ subdirs_mk:
 $(TARGET): subdirs_mk	$(OBJECTS)
         -del $(TARGET)
 	$(LIB) $(TARGET) @&&|
-      +m_const.obj +m_sdata.obj +m_integ.obj \
+        +m_const.obj +m_sdata.obj +m_integ.obj \
 	+m_param.obj +m_icomp.obj +v_ipnc.obj\
 	+s_formula.obj +s_tpwork.obj +m_dcomp.obj +m_dcomp2.obj \
 	+s_supcrt.obj +s_supcrt2.obj +m_compos.obj +s_fgl.obj +s_fglbred.obj \
