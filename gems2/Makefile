@@ -53,6 +53,14 @@ subdirs		= mods vizor
 backupfiles	= doc data vizor mods  Makefile* *.spec
 rpmfiles	= lib doc vizor mods shared Makefile* *.spec
 
+ifeq ("$(shell ls /usr/src/packages; echo $?)", "0")
+RPMDIR=/usr/src/packages
+else
+RPMDIR=/usr/src/RPM
+endif
+
+
+
 OBJS		= ./lib/gemsel.o ./lib/gemviz.o
 		    
 ifeq ("$(shell uname)", "Darwin")
@@ -74,7 +82,7 @@ $(TARGET):	$(OBJS)
 	@if [ "`uname`" == "Darwin" ]; then \
 	  install -d gems2.app/Contents/MacOS; \
 	fi
-	$(LINK_CMD) $(OBJS) $(LIBS) $(LIBDIRS) -o $(TARGET)
+	$(LINK_CMD) $(OBJS) $(LIBS) $(LIBDIRS) -o $(TARGET) -lefence
 
 link:	$(TARGET)
 
@@ -115,9 +123,9 @@ rpm:
 	cp gems2.spec /tmp
 #	rm -fr ./program
 #	rm -fr /tmp/gems-2.0
-	su -c "	mv /tmp/$(NAME)-$(VERSION).tar.bz2 /usr/src/packages/SOURCES; \
-		mv /tmp/gems2.spec /usr/src/packages/SPECS; \
-		cd /usr/src/packages/SPECS; \
+	su -c "	mv /tmp/$(NAME)-$(VERSION).tar.bz2 $(RPMDIR)/SOURCES; \
+		mv /tmp/gems2.spec $(RPMDIR)/SPECS; \
+		cd $(RPMDIR)/SPECS; \
 		rpmbuild -bb gems2.spec"
 	
 ifeq ("$(shell uname)", "Darwin")
