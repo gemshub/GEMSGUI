@@ -53,11 +53,15 @@ install -d -m 775 -o 0 %{shared_dir}/gems2/visor.data
 install -m 664 -o 0 %{shared_src_dir}/visor.data/* %{shared_dir}/gems2/visor.data
 install -d -m 775 -o 0 %{shared_dir}/gems2/doc/html
 install -m 664 -o 0 %{shared_src_dir}/doc/html/* %{shared_dir}/gems2/doc/html
+install -d -m 775 -o 0 %{shared_dir}/gems2/doc/pdf
+install -m 664 -o 0 %{shared_src_dir}/doc/pdf/* %{shared_dir}/gems2/doc/pdf
+install -d -m 775 -o 0 %{shared_dir}/gems2/doc/txt
+install -m 664 -o 0 %{shared_src_dir}/doc/txt/* %{shared_dir}/gems2/doc/txt
+
 install -d -m 775 -o 0 %{shared_dir}/gems2/img
 install -m 664 -o 0 %{shared_src_dir}/img/* %{shared_dir}/gems2/img
-
-install -m 664 -o 0 img/gems32.xpm %{shared_dir}/icons/gems2.xpm
-install -m 664 -o 0 img/gems32.xpm %{shared_dir}/pixmaps/gems2.xpm
+install -m 664 -o 0 %{shared_src_dir}/img/gems32.xpm %{shared_dir}/icons/gems2.xpm
+install -m 664 -o 0 %{shared_src_dir}/img/gems32.xpm %{shared_dir}/pixmaps/gems2.xpm
 #install -m 664 -o 0 img/gems16.xpm %{shared_dir}/icons/mini/gems2.xpm
 install -m 664 -o 0 doc/gems2.desktop %{shared_dir}/applications/
 

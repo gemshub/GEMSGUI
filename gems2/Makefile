@@ -53,7 +53,7 @@ subdirs		= mods vizor
 backupfiles	= doc data vizor mods  Makefile* *.spec
 rpmfiles	= lib doc vizor mods shared Makefile* *.spec
 
-ifeq ("$(shell ls /usr/src/packages; echo $?)", "0")
+ifeq ("$(shell ls /usr/src/packages -d)", "/usr/src/packages")
 RPMDIR=/usr/src/packages
 else
 RPMDIR=/usr/src/RPM
@@ -83,7 +83,7 @@ $(TARGET):	$(OBJS)
 	  install -d gems2.app/Contents/MacOS; \
 	fi
 	$(LINK_CMD) $(OBJS) $(LIBS) $(LIBDIRS) -o $(TARGET) 
-#-lefence
+
 
 link:	$(TARGET)
 
