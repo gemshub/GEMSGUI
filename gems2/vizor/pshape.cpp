@@ -232,7 +232,7 @@ TPlotWin::PaintToDC(QPainter& dc)
     paintGrid(dc);
 
     int txtWidth = dc.fontMetrics().width(title);
-    QPoint point((dc.window().width() - txtWidth)/2, 13);
+    QPoint point((/*dc.window().*/width() - txtWidth)/2, 13);
     dc.drawText(point, title);
 
     for( uint ii=0; ii<shapes.GetCount(); ii++ )

@@ -328,14 +328,19 @@ GraphDialog::CmFragment()
 void
 GraphDialog::CmSave()
 {
-    QStrList formatList = QImageIO::outputFormats();
-    
     QString filter;
+    QStrList formatList = QImageIO::outputFormats();
+
+    if( formatList.contains("PNG") )
+	filter.append("PNG Files (*.png)");
+    
     QStrListIterator it( formatList );
     for( ; it != 0; ++it ) {
+	QString str = *it;
+	if( str == "PNG" )
+	  continue;
 	if( !filter.isEmpty() )
 	    filter.append(";;");
-	QString str = *it;
 	filter.append(str);
 	filter.append(" Files (*.");
 	filter.append(str.lower());
@@ -389,7 +394,11 @@ GraphDialog::CmPrint()
 //        metrics.height()-margin*dpiy/72*2 );
 
         painter.setPen(Qt::black);
+#ifndef __unix
+	painter.setFont(QFont("Arial", 10));
+#else
 	painter.setFont(QFont("Arial", 12));
+#endif
 
 //	painter.scale(metrics.width()/double(plot->width()), metrics.height()/double(plot->height()));
 	painter.translate(40, 50);
