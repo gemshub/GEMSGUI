@@ -40,6 +40,8 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
         prf_name ( prfName )
 {
 
+    pLogoImg->setPixmap(pVisorImp->getLogo());
+
    // build IComp list from template database
     TCIntArray aIndMT;
     TCStringArray aIC;

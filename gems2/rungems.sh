@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec ./gems2 -c -s ~/GEMS2test/program -u ~/GEMS2test 
+exec ./gems2 -s ~/GEMS2test/program -u ~/GEMS2test 
