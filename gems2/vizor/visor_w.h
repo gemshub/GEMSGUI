@@ -25,7 +25,6 @@
 #include <qfont.h>
 
 #include "v_vals.h"
-//#include "graph.h"
 
 
 class TCModule;
@@ -115,8 +114,6 @@ class TVisorImp:
     char TCpoint[32];  // Step point ID for stepwise mode
 
     // thread data
-
-
 
 
 protected slots:

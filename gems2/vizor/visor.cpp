@@ -192,12 +192,12 @@ TVisor::Setup()
 {
     bool option_d = false;
     bool option_f = false;
-    bool option_v = false;
+    bool default_settings = false;
 #ifdef __APPLE__
-    bool option_c = true;
+    bool default_config = true;
     pVisorImp->setConfigAutosave( true );
 #else
-    bool option_c = false;
+    bool default_config = false;
 #endif
 
     for (int ii = 1; ii < argc; ii++)	//Sveta 16/06/1999
@@ -218,22 +218,65 @@ TVisor::Setup()
 	if (strcmp(argv[ii], "-c") == 0
                 || strcmp(argv[ii], "--with-default-config") == 0 ) 
 	{
-            option_c = true;
+            default_config = true;
             pVisorImp->setConfigAutosave( true );
         }
         else 
 	if (strcmp(argv[ii], "-v") == 0
                 || strcmp(argv[ii], "--with-default-settings") == 0 ) 
 	{
-            option_v = true;
+            default_settings = true;
             pVisorImp->setConfigAutosave( true );
         }
     }
 
+    // check home dir
+    gstring dir = userGEMDir();
+    QDir userGEM(dir.c_str());
+
+    bool firstTimeStart = !userGEM.exists();
+
+    if (firstTimeStart)
+    {
+        default_config = true;
+        default_settings = true;
+        pVisorImp->setConfigAutosave( true );
+
+        // make home GEM directories
+        if( !userGEM.mkdir(userGEMDir().c_str(), true)
+                || !userGEM.mkdir(userProfDir().c_str(), true) )
+            throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
+
+        // copy default project
+        gstring cmd;
+
+#ifdef __unix
+        cmd = "cp -r ";
+        cmd += sysProfDir();
+        cmd += "* ";
+        cmd += userProfDir();
+
+        cout << "Creating GEMS user directory " << userProfDir().c_str() << endl;
+#else
+        cmd = "xcopy -r ";
+        cmd += sysProfDir();
+        cmd += DefProfDir;
+        cmd += "*.* ";
+        cmd += userProfDir();
+
+        ofstream fdbg("out.log");
+        fdbg << "Creating GEMS user directory " << cmd.c_str() << endl;
+#endif
+
+        if (system(cmd.c_str()) != 0)
+            throw TFatalError("GEMS Init", "Cannot copy default project to user directory");
+    }
+
+
     if (option_d)
         load();
     else
-        fromDAT(option_c, option_d);
+        fromDAT(default_config, default_settings);
 
     // Sveta permission to change data in special DB files
     if (option_f)
@@ -248,13 +291,13 @@ const char SigEND[lnWINSIG + 1] = "sX";
 void
 TVisor::load()
 {
-  gstring fname = sysGEMDir();
-          fname += OBJECT_INI;
+    gstring fname = sysGEMDir() + OBJECT_INI;
 
-//    TConfig cnf1(OBJECT_INI, ' ');
     aObj.load(fname.c_str());
+
     defaultCFG();
     initModules();
+
     fname = sysGEMDir();
     fname += UNITS_INI;
     aUnits.load(fname.c_str());
@@ -316,10 +359,9 @@ const char *vSigERROR_VISOBJ = "Error in visor data file visobj.dat - wrong mark
 const char *vSigTITLE = "Configurator";
 
 void
-TVisor::fromDAT(bool option_c, bool option_v)
+TVisor::fromDAT(bool default_config /*option_c*/, bool default_settings/*option_v*/)
 {
-    gstring fname = sysGEMDir();
-    fname += VISOBJ_DAT;
+    gstring fname = sysGEMDir() + VISOBJ_DAT;
 
     // objects' DAT
     ifstream obj_dat(fname.c_str(), ios::binary | ios::in);
@@ -343,52 +385,10 @@ TVisor::fromDAT(bool option_c, bool option_v)
 
     obj_dat.close();
 
-    // add modules
-    gstring dir = userGEMDir();
-    QDir userGEM(dir.c_str());
 
-    bool firstTimeStart = !userGEM.exists();
-
-    if (firstTimeStart)
-    {
-        // make home GEM directories
-        if( !userGEM.mkdir(userGEMDir().c_str(), true)
-                || !userGEM.mkdir(userProfDir().c_str(), true) )
-            throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
-
-        // copy default project
-
-        gstring cmd;
-
-#ifdef __unix
-        cmd = "cp -r ";
-        cmd += sysProfDir();
-        cmd += "* ";
-        cmd += userProfDir();
-
-        cout << "Creating GEMS user directory..." << endl;
-        //      cout << cmd << endl;
-
-#else
-        cmd = "xcopy -r ";
-        cmd += sysProfDir();
-        cmd += DefProfDir;
-        cmd += "*.* ";
-        cmd += userProfDir();
-
-        ofstream fdbg("out.log");
-        fdbg << "Creating GEMS user directory..." << endl;
-        fdbg << cmd.c_str() << endl;
-#endif
-
-        if (system(cmd.c_str()) != 0)
-            throw TFatalError("GEMS Init", "Cannot copy default project to user directory");
-    }
-
-    if( firstTimeStart || option_c )
+    if( default_config )
     {
         defaultCFG();
-        // save initial state of databases to gems.cfg
         toModCFG();
     }
     else
@@ -399,8 +399,7 @@ TVisor::fromDAT(bool option_c, bool option_v)
     initModules();
 
     // loading static info for visor (DAT files)
-    fname = sysGEMDir();
-    fname += VISOR_DAT;
+    fname = sysGEMDir() + VISOR_DAT;
 
     ifstream visor_dat(fname.c_str(), ios::binary | ios::in);
 
@@ -430,16 +429,10 @@ TVisor::fromDAT(bool option_c, bool option_v)
     // Units' part to load
     aUnits.fromDAT(visor_dat);
 
-
-    if( firstTimeStart || option_v )
-    {
-        // save initial settings of windows to windows.cfg
+    if( default_settings )
         toWinCFG();
-    }
     else
-    {
         fromWinCFG();
-    }
 }
 
 void
@@ -594,15 +587,16 @@ bool TVisor::CanClose()
         return true;
     }
 
-    switch (vfQuestYesNoCancel(pVisorImp,
-        "GEM-Selektor Exit", "Normal, without saving configuration?"))
+    switch (vfQuestion3(pVisorImp,
+    		"Exit GEM-Selektor", "Save configuration?",
+		"Do not save", "Save"))
     {
-    case VF_YES:
+    case VF3_1:
         return true;
-    case VF_NO:
+    case VF3_2:
         Exit();
         return true;
-    case VF_CANCEL:
+    case VF3_3:
         ;
     }
     return false;

@@ -221,10 +221,10 @@ DBAdvDialog.o: ../../mods/v_mod.h ../kernel/v_vals.h ../libs/gstring.h
 DBAdvDialog.o: ../libs/array.h ../module_w.h ../kernel/v_module.h
 DBAdvDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
 DBAdvDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h ../visor_w.h
-ColorDialog.o: ColorDialog.h ColorDialogData.h ../kernel/v_module.h
-ColorDialog.o: ../kernel/v_object.h ../libs/gstring.h ../libs/array.h
+ColorDialog.o: ColorDialog.h ColorDialogData.h ../graph.h ../libs/array.h
+ColorDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../libs/gstring.h
 ColorDialog.o: ../kernel/v_user.h ../libs/verror.h ../kernel/v_vals.h
-ColorDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h ../graph.h
+ColorDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h
 GraphDialog.o: GraphDialog.h GraphDialogData.h ../libs/array.h
 GraphDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../libs/gstring.h
 GraphDialog.o: ../kernel/v_user.h ../libs/verror.h ../kernel/v_vals.h
@@ -236,7 +236,7 @@ LegendDialog.o: LegendDialogData.h GraphDialog.h GraphDialogData.h
 LegendDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../kernel/v_vals.h
 LegendDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h ../pshape.h ../graph.h
 LegendDialog.o: ../dlg/ColorDialog.h ColorDialogData.h ../graph.h
-LegendDialog.o: ../dlg/GraphDialog.h
+LegendDialog.o: ../dlg/GraphDialog.h ../visor_w.h
 ListFilesDialog.o: ListFilesDialog.h ListFilesDialogData.h ../libs/gstring.h
 ListFilesDialog.o: ../libs/array.h ../visor.h ../kernel/v_module.h
 ListFilesDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h

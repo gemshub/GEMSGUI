@@ -360,7 +360,7 @@
                 <cstring>pConfigAutosave</cstring>
             </property>
             <property name="text">
-                <string>Save configuration on exit</string>
+                <string>Automatically save configuration on exit</string>
             </property>
             <property name="checked">
                 <bool>true</bool>

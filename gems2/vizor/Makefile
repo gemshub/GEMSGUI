@@ -144,7 +144,7 @@ page_win_w.o: dlg/CalcCheckDialogData.h
 pshape.o: pshape.h ./kernel/v_user.h ./libs/gstring.h ./libs/array.h
 pshape.o: ./libs/verror.h dlg/GraphDialog.h dlg/GraphDialogData.h
 pshape.o: ./kernel/v_module.h ./kernel/v_object.h ./kernel/v_vals.h
-pshape.o: ./kernel/v_dbm.h ./kernel/v_file.h graph.h
+pshape.o: ./kernel/v_dbm.h ./kernel/v_file.h graph.h visor_w.h
 help.o: help.h ./libs/gstring.h ./libs/array.h ./kernel/v_user.h
 help.o: ./libs/verror.h
 units.o: ./kernel/v_user.h ./libs/gstring.h ./libs/array.h ./libs/verror.h
