@@ -25,9 +25,12 @@ CCFLAGS		= -Wall -DQTv3 -D__unix -pipe -DQT_THREAD_SUPPORT=1 \
 INCLUDES	= -I$(QTDIR)/include 
 LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
 LDFLAGS		=
+ifeq ("$(shell uname)", "Linux")
 LIBS		= -lqt-mt -lX11 -lXext -lXt -lm -lstdc++ 
-#-lefence
-#-lcwd
+else
+LIBS		= -lqt-mt
+endif
+
 
 # commands
 CC		= c++
