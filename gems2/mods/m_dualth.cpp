@@ -664,6 +664,7 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
 
    // alloc memory & copy data from db
 
+    int j, i=0, ii=0, jj =0;
     int Nold = dtp->Nb;
     double *p_Bb = new double[dtp->nQ*dtp->Nb];
         memcpy( p_Bb, dtp->Bb, dtp->nQ*dtp->Nb*sizeof(double));
@@ -695,7 +696,6 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
     if( dtp->An )
       memcpy( p_An, dtp->An, dtp->nK*dtp->Nb*sizeof(float));
 
-
     // alloc new memory
      dtp->Nb = TProfil::pm->mup->N;
      dyn_new();
@@ -703,7 +703,6 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
     for(int ii=0; ii< dtp->Nb; ii++ )
       memcpy( dtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME  );
 
-    int j, i=0, ii=0, jj =0;
     while( jj < dtp->Nb )
     {
       if( i < aIComp.GetCount() &&  aIComp[i].line == ii )
@@ -743,28 +742,27 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
          {
              for( j =0; j<dtp->nQ; j++ )
              {
-               dtp->Bb[j*dtp->Nb+jj] = p_Bb[j*dtp->Nb+ii];
-               dtp->Bn[j*dtp->Nb+jj] = p_Bn[j*dtp->Nb+ii];
-               dtp->Ub[j*dtp->Nb+jj] = p_Ub[j*dtp->Nb+ii];
+               dtp->Bb[j*dtp->Nb+jj] = p_Bb[j*Nold+ii];
+               dtp->Bn[j*dtp->Nb+jj] = p_Bn[j*Nold+ii];
+               dtp->Ub[j*dtp->Nb+jj] = p_Ub[j*Nold+ii];
                if( dtp->PvICb == S_ON )
                {
-                 dtp->CIb[j*dtp->Nb+jj] = p_CIb[j*dtp->Nb+ii];
-                 dtp->CIclb[j*dtp->Nb+jj] = p_CIclb[j*dtp->Nb+ii];
+                 dtp->CIb[j*dtp->Nb+jj] = p_CIb[j*Nold+ii];
+                 dtp->CIclb[j*dtp->Nb+jj] = p_CIclb[j*Nold+ii];
                 }
                if( dtp->PvICn == S_ON )
                {
-                 dtp->CIn[j*dtp->Nb+jj] = p_CIn[j*dtp->Nb+ii];
-                 dtp->CIcln[j*dtp->Nb+jj] = p_CIcln[j*dtp->Nb+ii];
+                 dtp->CIn[j*dtp->Nb+jj] = p_CIn[j*Nold+ii];
+                 dtp->CIcln[j*dtp->Nb+jj] = p_CIcln[j*Nold+ii];
                }
              }
              for( j =0; j<dtp->nK; j++ )
-                dtp->An[j*dtp->Nb+jj] = p_An[j*dtp->Nb+ii];
+                dtp->An[j*dtp->Nb+jj] = p_An[j*Nold+ii];
           }
         jj++;
         ii++;
        }
     }
-
 // free memory
    delete[] p_Bb;
    delete[] p_Bn;
@@ -774,7 +772,7 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
      delete[] p_CIclb;
      delete[] p_CIb;
     }
-   if( dtp->PvICb == S_ON )
+   if( dtp->PvICn == S_ON )
    { delete[] p_CIcln;
      delete[] p_CIn;
    }
