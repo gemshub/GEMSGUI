@@ -265,16 +265,16 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
        double *xtmp,*Fx;
        double P=Pbar/10.;
       //ncmp=unsigned((nn-2)/5);
-      try
-      {
+//      try
+//      {
         xtmp=new double [NN];
           Fx=new double [NN];
-      }
-      catch(xalloc)
-      {
-        printf("Can't allocate memory\n");
-        exit(1);
-      }
+//      }
+//      catch(xalloc)
+//      {
+//        printf("Can't allocate memory\n");
+//        exit(1);
+//      }
 
       EOSPARAM paar(X,param,NN);
       double F0,Z,F1,fideal;
@@ -352,16 +352,16 @@ if( ro < 0.0 ) //  Too low pressure - no corrections will be done
       //double  ro = data[nn - 1];
 
        double *Fx,*xtmp;
-      try
-      {
+//      try
+//      {
         xtmp=new double [NN];
         Fx=new double [NN];
-      }
-      catch(xalloc)
-      {
-        printf("Cannot allocate memory\n");
-        exit(1);
-      }
+//      }
+//      catch(xalloc)
+//      {
+//        printf("Cannot allocate memory\n");
+//        exit(1);
+//      }
       EOSPARAM paar(X,param,NN);
 
        double   F0,Z,F1,GMix,fideal;
@@ -435,15 +435,15 @@ if( ro < 0.0 ) //  Too low pressure - no corrections will be done
      // double  T = data[nn - 1];
 
        double *xtmp;
-      try
-      {
+//      try
+//      {
         xtmp=new double [NN];
-      }
-      catch(xalloc)
-      {
-        printf("Can't allocate memory\n");
-        exit(1);
-      }
+//      }
+//      catch(xalloc)
+//      {
+//        printf("Can't allocate memory\n");
+//        exit(1);
+//      }
       EOSPARAM paar(X,param,NN);
 
       double ro;
@@ -469,15 +469,15 @@ if( ro < 0.0 ) //  Too low pressure - no corrections will be done
 
 
       double *xtmp;
-      try
-      {
+//      try
+//      {
         xtmp=new double [NN];
-      }
-      catch(xalloc)
-      {
-        printf("Can't allocate memory\n");
-        exit(1);
-      }
+//      }
+//      catch(xalloc)
+//      {
+//        printf("Can't allocate memory\n");
+//        exit(1);
+//      }
       EOSPARAM paar(X,param,NN);
 
        norm(paar.XX0,paar.NCmp());
@@ -1156,7 +1156,7 @@ void EOSPARAM::allocate(unsigned inew)
   if ( (inew > isize) )
   {
 
-    try{
+//    try{
            mixpar=new   double* [inew];
          for ( i=0;i<inew;i++ )
          {
@@ -1174,14 +1174,12 @@ void EOSPARAM::allocate(unsigned inew)
    aredpar=new double [inew];
    m2par  =new double [inew];
    XX0    =new double [inew];
-  }
-
-
-  catch (xalloc)
-  {
-    printf("Can't allocate mamory\n");
-    exit(1);
-  }
+//  }
+//  catch (xalloc)
+//  {
+//    printf("Can't allocate mamory\n");
+//    exit(1);
+//  }
 
   isize=inew;
   }
