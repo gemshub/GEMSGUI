@@ -566,6 +566,11 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
         if( mu.nAq >= 0)
         {
             AqKey = gstring( mu.SF[mu.nAq], 0, PH_RKLEN );
+            if( amod == SM_AQDH3 && aparam[0] < 1e-9 )
+            {  // To use aq models from old versions
+               aparam[0] = 0.064;
+               aparam[3] = 0.7;
+            }
         }
         else {
              AqKey == "";

@@ -379,9 +379,9 @@ AGAIN_SETUP:
             php->NsiT < 0 || php->NsiT > 6 )
     {
         if(vfQuestion(window(), GetName(),
- "W06PHrem: Invalid number of coeffs in the non-ideal solution model! Proceed?"))
+ "W06PHrem: Invalid number of coeffs in the non-ideal solution model!\n Repeat (Y) or Cancel (N)?"))
             goto AGAIN_SETUP;
-        else   Error( GetName(), "E07PHrem: Invalid mode of calculation!");
+        else   Error( GetName(), "E07PHrem: The user cancelled remaking Phase definition !");
     }
     SetString("PH_make   Remaking Phase definition");
     pVisor->Update();

@@ -193,7 +193,7 @@ HelpWindow::HelpWindow( const QString& path_,
     connect( browser, SIGNAL( highlighted( const QString&) ),
 	     statusBar(), SLOT( message( const QString&)) );
 
-    resize( 520, 600 );
+    resize( 620, 660 );
 
     QPopupMenu* file = new QPopupMenu( this );
 //    file->insertItem( tr("&New Window"), this, SLOT( newWindow() ), CTRL+Key_N );
