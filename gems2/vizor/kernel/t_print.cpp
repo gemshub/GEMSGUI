@@ -399,6 +399,8 @@ TPrintData::getData( )
 
 }
 
+extern const gstring emptiness("---");
+
 void
 TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
 {
@@ -442,16 +444,25 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                     default: fmt.type = 's';
                    }
                }
+              int scalar = 0, Ndim, Mdim;
               int count = 1;
+              Mdim = aObj[dt.data].GetM();
+              Ndim = aObj[dt.data].GetN();
               if( dt.is_all )
-                  count = aObj[dt.data].GetM();
+                  count = Mdim;
+              if( Mdim * Ndim == 1 )
+                  scalar = 1;
               for(int ii=0; ii<count; ii++)
               {
                if( dt.is_all )
                   dt.index_j = ii;
                if( dt.is_label )
-                 sprintf( strbuf, fmt.FmtOut().c_str(),
+               { // workaround - skip printing DOD labels and data
+                 // if dynamic object is not allocated
+                 if( !aObj[dt.data].IsNull() )
+                    sprintf( strbuf, fmt.FmtOut().c_str(),
                         aObj[dt.data].GetKeywd() );
+               }
                else
                {
                  if( fmt.type == 's' )
@@ -468,16 +479,23 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                   }
                   else // float or double data
                   {
-                     if( aObj[dt.data].IsNull()  ||
-                       aObj[dt.data].IsEmpty( ind, dt.index_j) )
-                     {
-                       char oldtype = fmt.type;
-                       fmt.type = 's';
-                       sprintf( strbuf, fmt.FmtOut().c_str(), S_EMPTY );
-                       fmt.type = oldtype;
+                     if( !aObj[dt.data].IsNull() ) // workaround - print
+                     {  // only static or allocated objects !
+                        int indx;
+                        if( scalar )
+                           indx = 0;
+                        else indx = ind;
+                        if( aObj[dt.data].IsEmpty( indx, dt.index_j) )
+                        {
+                          char oldtype = fmt.type;
+                          fmt.type = 's';
+                          sprintf( strbuf, fmt.FmtOut().c_str(),
+                                 emptiness.c_str() ); // S_EMPTY );
+                          fmt.type = oldtype;
+                        }
+                         else sprintf( strbuf, fmt.FmtOut().c_str(),
+                            aObj[dt.data].Get( indx, dt.index_j) );
                      }
-                     else sprintf( strbuf, fmt.FmtOut().c_str(),
-                           aObj[dt.data].Get( ind, dt.index_j) );
                   }
                 }
                 fout << strbuf << " ";
