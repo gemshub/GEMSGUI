@@ -1,3 +1,3 @@
 echo off
 rem Normal runs
-gemipm2.exe DataCH.dat DataBR.dat
+gemipm2.exe GEMSystem.ipm datach_br_b.dat

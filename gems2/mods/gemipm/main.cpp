@@ -83,7 +83,7 @@ main(int argc, char* argv[])
       ErrorIf( !f_chbr.good() , chbr_in.c_str(), "Fileopen error");
 
       gstring datachbr_file;
-      f_getline( f_chbr, datachbr_file, ',');
+      f_getline( f_chbr, datachbr_file, ' ');
 //test flag -t or -b (by default -b)
       size_t pos = datachbr_file.find( '-');
       if( pos != gstring::npos )
@@ -91,7 +91,8 @@ main(int argc, char* argv[])
          if( datachbr_file[pos+1] == 't' )
             binary_f = false;
 
-         if( datachbr_file[pos+1] != '\0' )
+         f_getline( f_chbr, datachbr_file, ',');
+/*         if( datachbr_file[pos+1] != '\0' )
             pos +=2;
          while(  ( datachbr_file[pos] ==' ' ||
                    datachbr_file[pos] == '\n' ||
@@ -100,16 +101,17 @@ main(int argc, char* argv[])
          if( datachbr_file[pos] == '\"')
              pos++;
          datachbr_file = datachbr_file.substr(pos);
-      }
+*/      }
 
 // Read dataCH file
+      gstring dat_ch = datachbr_file;
       if( binary_f )
-      {  GemDataStream f_ch(datachbr_file, ios::in|ios::binary);
+      {  GemDataStream f_ch(dat_ch, ios::in|ios::binary);
          task_.multi->datach_from_file(f_ch);
        }
        else
-       { fstream f_ch(datachbr_file.c_str(), ios::in );
-         ErrorIf( !f_ch.good() , datachbr_file.c_str(), "DataCH Fileopen error");
+       { fstream f_ch(dat_ch.c_str(), ios::in );
+         ErrorIf( !f_ch.good() , dat_ch.c_str(), "DataCH Fileopen error");
          task_.multi->datach_from_text_file(f_ch);
        }
 // for all databr files
@@ -155,6 +157,17 @@ main(int argc, char* argv[])
       gstring out_s = "multi_out.txt";
       GemDataStream o_m( out_s, ios::out|ios::binary);
       task_.outMulti(o_m);
+
+      if( binary_f )
+      {  GemDataStream f_ch(dat_ch, ios::out|ios::binary);
+         task_.multi->datach_to_file(f_ch);
+       }
+       else
+       { fstream f_ch(dat_ch.c_str(), ios::out );
+         ErrorIf( !f_ch.good() , dat_ch.c_str(), "DataCH Fileopen error");
+         task_.multi->datach_to_text_file(f_ch);
+       }
+
 
 // free data
       task_.multi->multi_free();

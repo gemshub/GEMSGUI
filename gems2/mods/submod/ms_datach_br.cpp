@@ -36,6 +36,8 @@ void TMulti::makeStartDataChBR(
   data_CH.uRes3 = 0;
   data_CH.uRes4 = 0;
 
+  memset( &data_CH.Tmin, 0 , 10*sizeof(double));
+
 // realloc structures DataCh&DataBr
 
   datach_realloc();
@@ -53,20 +55,31 @@ void TMulti::makeStartDataChBR(
 
   memcpy( data_CH.A, pm.A , data_CH.nIC*data_CH.nDC*sizeof(float));
 
-  memcpy( data_CH.ICmm, pm.Awt , data_CH.nIC*sizeof(double));
+  for( ii=0; ii< data_CH.nIC; ii++ )
+     data_CH.ICmm[ii] = pm.Awt[ii];
+
   memcpy( data_CH.DCmm, pm.MM , data_CH.nDC*sizeof(double));
 
 // must be changed to matrix structure  ???????
 // setted data_CH.nPp*data_CH.nTp = 1
   memcpy( data_CH.G0, pm.G0 , data_CH.nDC*sizeof(double));
   memcpy( data_CH.V0, pm.Vol , data_CH.nDC*sizeof(double));
+
+  for( ii=0; ii< data_CH.nDC; ii++ )
   if ( pm.H0 )
-   memcpy( data_CH.H0, pm.H0 , data_CH.nDC*sizeof(double));
+      data_CH.H0[ii] = pm.H0[ii];
+  else
+      data_CH.H0[ii] = 0.;
+
+  for( ii=0; ii< data_CH.nDC; ii++ )
   if ( pm.Cp0 )
-   memcpy( data_CH.Cp0, pm.Cp0 , data_CH.nDC*sizeof(double));
+      data_CH.Cp0[ii] = pm.Cp0[ii];
+  else
+      data_CH.Cp0[ii] = 0.;
 
   if( data_CH.nAalp >0 )
-    memcpy( data_CH.Aalp, pm.Aalp , data_CH.nPH*sizeof(double));
+      for( ii=0; ii< data_CH.nPH; ii++ )
+         data_CH.Aalp[ii] = pm.Aalp[ii];
 
   memcpy( data_CH.ICNL, pm.SB , MaxICN*data_CH.nIC*sizeof(char));
   memcpy( data_CH.DCNL, pm.SM , MaxDCN*data_CH.nDC*sizeof(char));
@@ -175,7 +188,7 @@ void TMulti::unpackDataBr()
     pm.B[ data_CH.xIC[ii] ] = data_BR.bIC[ii];
 
 // added  to compare SD 15/07/04  not need
-   for( ii=0; ii<data_CH.nDCb; ii++ )
+/*   for( ii=0; ii<data_CH.nDCb; ii++ )
     pm.X[ data_CH.xDC[ii] ] = data_BR.xDC[ii];
    for( ii=0; ii<data_CH.nDCb; ii++ )
     pm.Gamma[ data_CH.xDC[ii] ] = data_BR.gam[ii];
@@ -200,7 +213,7 @@ void TMulti::unpackDataBr()
     pm.C[ data_CH.xIC[ii] ] = data_BR.rMB[ii];
    for( ii=0; ii<data_CH.nICb; ii++ )
     pm.U[ data_CH.xIC[ii] ] = data_BR.uIC[ii];
-
+*/
 }
 
 
