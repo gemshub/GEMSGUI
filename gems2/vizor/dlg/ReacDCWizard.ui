@@ -37,6 +37,25 @@
             <property name="title">
                 <string>Select here to which class the new reaction-defined component belongs</string>
             </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>ModelCodeLabel</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>410</x>
+                        <y>10</y>
+                        <width>210</width>
+                        <height>70</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>This class code will be copied into the Phase definition and can be changed there, if necessary</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
             <widget class="QComboBox">
                 <item>
                     <property name="text">
@@ -45,22 +64,27 @@
                 </item>
                 <item>
                     <property name="text">
-                        <string>T   Hydrogen ion H+</string>
+                        <string>T    Hydrogen ion H+</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>S   Other aqueous species (ions complexes and ion pairs)</string>
+                        <string>S    Other aqueous species (ions complexes and ion pairs)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>W  Water H2O (solvent in aqueous phase)</string>
+                        <string>W   Water H2O (solvent in aqueous phase)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>G   Gas (ideal component)</string>
+                        <string>L     Liquid solvent component of the aqueous phase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>G    Gas (ideal component)</string>
                     </property>
                 </item>
                 <item>
@@ -165,25 +189,6 @@
                     </rect>
                 </property>
             </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>ModelCodeLabel</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>410</x>
-                        <y>10</y>
-                        <width>210</width>
-                        <height>70</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>This class code will be copied into the Phase definition and can be changed there, if necessary</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
         </widget>
         <widget class="QLabel">
             <property name="name">
@@ -279,64 +284,6 @@
                     <rect>
                         <x>10</x>
                         <y>90</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>N   No pressure correction to be done</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>C   Molar volume from dVr  of reaction</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>B   Molar volume corrected using Birch-Murnaghan EoS coefficients</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>0   Account for pressure dependence is inherent</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>K   Molar volume is calculated from 5 empirical coefficients</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>E   Molar volume V (T,P )  increment to V0 (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>P   Application of built-in PRONSPREP97  (for aqueous dissociation reactions)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>F   Pressure corrections for the properties of H2O liquid (reserved)</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>p_pct_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>150</y>
                         <width>350</width>
                         <height>31</height>
                     </rect>
@@ -439,6 +386,64 @@
                     <rect>
                         <x>10</x>
                         <y>30</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>C   Molar volume of new DC from constant dVr  of reaction</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>N   No pressure correction to be done</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>B   Molar volume corrected using Birch-Murnaghan EoS coefficients</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>0   Account for pressure dependence is inherent</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>K   Molar volume is calculated from 5 empirical coefficients</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>E   Molar volume V (T,P )  increment to V0 (reserved)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>P   Application of built-in PRONSPREP97  (for aqueous dissociation reactions)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>F   Pressure corrections for the properties of H2O liquid (reserved)</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>p_pct_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>150</y>
                         <width>350</width>
                         <height>31</height>
                     </rect>

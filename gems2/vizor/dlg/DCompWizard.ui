@@ -59,47 +59,52 @@
             <widget class="QComboBox">
                 <item>
                     <property name="text">
-                        <string>O   Dependent Component of a single-component condensed phase</string>
+                        <string>O    Dependent Component of a single-component condensed phase</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>T   Hydrogen ion H+</string>
+                        <string>T    Hydrogen ion H+</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>S   Other aqueous species (ions complexes and ion pairs)</string>
+                        <string>S    Other aqueous species (ions complexes and ion pairs)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>W  Water H2O (solvent in aqueous phase)</string>
+                        <string>W   Water H2O (solvent in aqueous phase)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>G   Gas (ideal component)</string>
+                        <string>L     Liquid solvent component of the aqueous phase</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>I     Ideal end-member (ideal mixing, Raoult's law)</string>
+                        <string>G    Gas (ideal component)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>J    Junior end-member (solute, non-ideal mixing)</string>
+                        <string>I      Ideal end-member (ideal mixing, Raoult's law)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>M   Major end-member (solvent, non-ideal mixing)</string>
+                        <string>M    Major end-member (solvent, non-ideal mixing)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>X    Neutral surface OH functional group</string>
+                        <string>J     Junior end-member (solute, non-ideal mixing)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>X     Neutral surface OH functional group</string>
                     </property>
                 </item>
                 <item>
@@ -316,6 +321,11 @@
                 </item>
                 <item>
                     <property name="text">
+                        <string>H   Calculation using Landau contribution to Cp(T) (Holland&amp;Powell,1998)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
                         <string>W  Calculation of properties of H2O liquid and vapor using HGK EoS </string>
                     </property>
                 </item>
@@ -354,6 +364,11 @@
                 </item>
                 <item>
                     <property name="text">
+                        <string>S    Pressure corrections for fluids using CG (Churakov-Gottschalk, 2004) EoS</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
                         <string>N   No pressure corrections at all to be done</string>
                     </property>
                 </item>
@@ -375,6 +390,21 @@
                 <item>
                     <property name="text">
                         <string>0   Account for pressure dependence is inherent e.g. in EoS model</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>H   Pressure corrections using CORK EoS for H2O (reserved)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>I    Pressure corrections using CORK EoS for CO2 (reserved)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>J    Pressure corrections using CORK EoS corresponding-states routine (reserved)</string>
                     </property>
                 </item>
                 <property name="name">
@@ -559,6 +589,54 @@
             </widget>
             <widget class="QLabel">
                 <property name="name">
+                    <cstring>textLabel1_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>40</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Units of measurement of energy in this DComp record (default: j)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_3_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>80</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Units of measurement of volume in this DComp record (default:  j)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_3_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>120</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Units of measurement of pressure in this DComp record (default: b)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>textLabel1_2_3_2_2</cstring>
                 </property>
                 <property name="geometry">
@@ -576,55 +654,7 @@
                     <enum>Plain</enum>
                 </property>
                 <property name="text">
-                    <string>Units of measurement of temperature in this ReacDC record (default: C)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_3_2_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>180</x>
-                        <y>120</y>
-                        <width>370</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Units of measurement of pressure in this ReacDC record (default: b)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_3_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>180</x>
-                        <y>80</y>
-                        <width>370</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Units of measurement of volume in this ReacDC record (default:  j)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>180</x>
-                        <y>40</y>
-                        <width>370</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Units of measurement of energy in this ReacDC record (default: j)</string>
+                    <string>Units of measurement of temperature in this DComp record (default: C)</string>
                 </property>
             </widget>
         </widget>
@@ -688,6 +718,22 @@
                     </rect>
                 </property>
             </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>pPdcVT</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>50</x>
+                        <y>150</y>
+                        <width>550</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Check here to allocate the Vm=f(P, T) vector of coefficients (reserved)</string>
+                </property>
+            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel1_2_2</cstring>
@@ -739,26 +785,10 @@
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Number of EoS coefficients can be set here if certain EoS models for fluids will be used. The coefficients will be collected automatically into Phase record.</string>
+                    <string>Number of EoS coefficients can be set here if certain EoS models for fluids will be used (default: 0). The coefficients will be collected automatically into Phase record.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>pPdcVT</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>50</x>
-                        <y>150</y>
-                        <width>550</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Check here to allocate the Vm=f(P, T) vector of coefficients (reserved)</string>
                 </property>
             </widget>
         </widget>
