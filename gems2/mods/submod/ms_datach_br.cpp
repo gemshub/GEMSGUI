@@ -96,7 +96,12 @@ void TMulti::makeStartDataChBR(
    data_BR.NodeTypeHY = initital;
    data_BR.NodeTypeMT = normal;
    data_BR.NodeStatusFMT = Initial_RUN;
-   data_BR.NodeStatusCH = NEED_GEM_AIA;
+//   data_BR.NodeStatusCH = NEED_GEM_AIA;
+   if( pm.pNP == 0 )
+    data_BR.NodeStatusCH = NEED_GEM_AIA;
+  else
+     data_BR.NodeStatusCH = NEED_GEM_PIA;
+
    data_BR.IterDone = 0;
 
    memset( &data_BR.T, 0, 36*sizeof(double));
@@ -182,7 +187,7 @@ void TMulti::unpackDataBr()
  double Gamm;
 // numbers
 
-  if( data_BR.NodeStatusCH == NEED_GEM_PIA )
+  if( data_BR.NodeStatusCH >= NEED_GEM_PIA )
    pm.pNP = 1;
   else
    pm.pNP = 0; //  NEED_GEM_AIA;

@@ -41,6 +41,9 @@ bool TProfil::AutoInitialApprox( )
     int i, j, k, NN;
     double minB=0.0, molB=0.0, sfactor=1.0;
 
+//test 11
+//   multi->to_text_file( "Multi1.txt" );
+
 // Kostya correct DK & DHB as automatic
     NN = pmp->N - pmp->E;
     minB=pmp->B[0];
@@ -506,6 +509,9 @@ void TProfil::MultiCalcIterations()
     pll=0;
     FXold=0.0;
 
+// Test2
+//       multi->to_text_file( "Multi2.txt" );
+
  /*   do
     { // cycle of iterations Selekt
         // Stop calculations here Sveta
@@ -521,7 +527,11 @@ void TProfil::MultiCalcIterations()
     //calc demo data
     for( int ii=0; ii<pmp->N; ii++ )
         pmp->U_r[ii] = pmp->U[ii]*pmp->RT;
+//Test3
+//       multi->to_text_file( "Multi3.txt" );
     GasParcP();
+//Test4
+//       multi->to_text_file( "Multi4.txt" );
 
     /* calc finished */
     //   if( wn[W_EQCALC].status )

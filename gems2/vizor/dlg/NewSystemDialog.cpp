@@ -311,11 +311,6 @@ NewSystemDialog::CmOutMulti()
           "Please, enter IPM work structure file name", "*.ipm" ) == false )
                return;
       GemDataStream  f(filename, ios::out|ios::binary);
-//Ask Dima!!! 20/04/2002
-//Setting start data before calc in calc_gems
-//      gstring keyp = rt[RT_SYSEQ].UnpackKey();
-//      TProfil::pm->PMtest( keyp.c_str() );
-//      TProfil::pm->MultiCalcInit( keyp.c_str() );
 
       TProfil::pm->outMulti( f, filename );
     }

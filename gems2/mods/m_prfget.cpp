@@ -728,6 +728,8 @@ void TProfil::CalcEqstat( bool prg)
 	pVisorImp->OpenProgress();
 #endif
 //    vfMessage(window(),"Test1", "Point1");
+//   multi->to_text_file( "Multi0.txt" );
+
     MultiCalcInit( keyp.c_str() );
 //    vfMessage(window(),"Test1", "Point2");
     if( AutoInitialApprox() == false )
