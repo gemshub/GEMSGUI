@@ -144,7 +144,8 @@ o_musm3, o_mudcc3, // new !!!
     o_wi_ve, o_wi_mbx, o_wo_fx, o_wo_ic,  o_wd_ph,
     o_wd_pe, o_wd_eh, o_wi_mol,  o_wi_gwat,o_wi_ymet,
     o_wio_denw, o_wio_epsw, o_wo_psi, o_wo_lnp, o_wo_rt,
-    o_wo_frt,  o_wo_yw,  o_wio_cons,  o_wio_fitv,  o_wi_l1,
+    o_wo_frt,  o_wo_yw,  o_wio_cons,  o_wio_fitv, o_wd_sitn, 
+    o_wi_l1,
     o_wi_lsmod,  o_wi_lsmdc,  o_wi_mui, o_wi_muk, o_wi_muj,
     o_wi_satndx, o_wi_dul,  o_wi_dll,  o_wi_gex,  o_wi_pul,
     o_wi_pll, o_wi_yof,  o_wi_pmc, o_wi_dmc,  o_wio_vol,
@@ -173,7 +174,9 @@ o_wd_sm3,  //  new
     o_wi_dcc,
 o_wi_dcc3, // new
     o_wi_phc,  o_wi_scm,  o_wi_satt,  o_wi_dccw,
-    o_w_r, o_w_r1, o_w_sbh, o_w_tprn,
+    o_w_r, o_w_r1,
+o_wd_sitxcat, o_wd_sitxan, o_wd_site,
+    o_w_sbh, o_w_tprn,
     // GammaCalc() - adjustable DOD for calculation of activity coefficients
     o_neqtxt,  o_nsmod,  o_ntc,  o_ntk,  o_np ,
     o_nis, o_ni,  o_njs,  o_nnext, o_nncp ,

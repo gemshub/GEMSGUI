@@ -92,15 +92,17 @@ bool TProfil::AutoInitialApprox( )
         pmp->K2 = 0;
         pmp->PCI = 0;
 
+/*
 if( pa.p.PRD >= 7 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
 //    std::cout << " P. 7 with simplex: ";
-    multi->dyn__test( multi->GetPMcopy1() );
+//    multi->dyn__test( multi->GetPMcopy1() );
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
 }
+*/
   // simplex method is called here
         SimplexInitialApproximation( );
 //  STEPWISE (0) - stop point for examining results from simplex IA
@@ -168,7 +170,8 @@ STEP_POINT( "End Simplex" );
         int jb, je=0, jpb, jpe=0, jdb, jde=0;
         double LnGam, FitVar3;
         /*    pmp->IT *= pa.p.PLLG; */
-if( pa.p.PRD >= 8 )
+
+/*if( pa.p.PRD >= 8 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
@@ -177,7 +180,7 @@ if( pa.p.PRD >= 8 )
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
 }
-        FitVar3 = pmp->FitVar[3];
+*/        FitVar3 = pmp->FitVar[3];
         pmp->FitVar[3] = 1.0;
         TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
         for( j=0; j< pmp->L; j++ )
@@ -257,7 +260,7 @@ if( pa.p.PRD >= 8 )
               } // i
 //           }
         }
-if( pa.p.PRD >= 7 )
+/*if( pa.p.PRD >= 7 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
@@ -266,7 +269,7 @@ if( pa.p.PRD >= 7 )
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
 }
-    }
+*/    }
     pmp->MK = 1;
     // Sveta 18/01/1999 test init load
     /*   if( ((TMulti *)aSubMod[MD_MULTI])->flCopy == true )

@@ -28,9 +28,8 @@ TMulti::TMulti( int nrt, SYSTEM* sy_ ):
     set_def();
     data_CH = 0;
     data_BR = 0;
-
-    flCopy = false;
 }
+
 
 // link values to objects
 void TMulti::ods_link( int /*q*/)
@@ -76,6 +75,7 @@ void TMulti::ods_link( int /*q*/)
     aObj[ o_wo_yw ].SetPtr( &pm.Yw );
     aObj[ o_wio_cons ].SetPtr(&pm.ln5551 );/*d 6*/
     aObj[ o_wio_fitv ].SetPtr(pm.FitVar ); /*d 5*/
+    aObj[ o_wd_sitn ].SetPtr(&pm.sitNcat );
 
     // dynamic part 1
     aObj[ o_wi_l1 ].SetPtr( pm.L1 );
@@ -342,6 +342,14 @@ void TMulti::ods_link( int /*q*/)
 //    aObj[ o_wo_lnsat ].SetDim( pm.Ls, 1 );
 aObj[ o_wo_lnsat].SetPtr( pm.lnSAC );
 aObj[ o_wo_lnsat ].SetDim( pm.Lads, 4 );
+
+//  Added 16.11.2004 by Sveta
+    aObj[ o_wd_sitxcat ].SetPtr( pm.sitXcat );
+    aObj[ o_wd_sitxcat ].SetDim( pm.sitNcat, 1 );
+    aObj[ o_wd_sitxan ].SetPtr( pm.sitXan );
+    aObj[ o_wd_sitxan ].SetDim( 1, pm.sitNan );
+    aObj[ o_wd_site ].SetPtr( pm.sitE );
+    aObj[ o_wd_site ].SetDim( pm.sitNcat, pm.sitNan );
 }
 
 // set dynamic Objects ptr to values
@@ -473,6 +481,11 @@ pm.DCC3   = (char *)aObj[ o_wi_dcc3 ].GetPtr();
     pm.SCM   = (char (*)[MST])aObj[ o_wi_scm ].GetPtr();
     pm.SATT  = (char *)aObj[ o_wi_satt ].GetPtr();
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].GetPtr();
+//  Added 16.11.2004 by Sveta
+    pm.sitXcat = (short *)aObj[ o_wd_sitxcat ].GetPtr();
+    pm.sitXan = (short *)aObj[ o_wd_sitxan ].GetPtr();
+    pm.sitE = (float *)aObj[ o_wd_site ].GetPtr();
+
 }
 
 
@@ -604,8 +617,28 @@ pm.DCC3   = (char *)aObj[ o_wi_dcc3 ].Free();
     pm.SCM   = (char (*)[MST])aObj[ o_wi_scm ].Free();
     pm.SATT  = (char *)aObj[ o_wi_satt ].Free();
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].Free();
+//  Added 16.11.2004 by Sveta
+    pm.sitXcat = (short *)aObj[ o_wd_sitxcat ].Free();
+    pm.sitXan = (short *)aObj[ o_wd_sitxan ].Free();
+    pm.sitE = (float *)aObj[ o_wd_site ].Free();
 }
 
+void TMulti::sit_dyn_new()
+{
+//  Added 16.11.2004 by Sveta
+   if( pm.sitNcat*pm.sitNcat )
+     pm.sitE = (float *)aObj[ o_wd_site].Alloc(pm.sitNcat, pm.sitNan, F_);
+   else
+     pm.sitE = (float *)aObj[ o_wd_site].Free();
+   if( pm.sitNcat )
+     pm.sitXcat = (short *)aObj[ o_wd_sitxcat].Alloc( pm.sitNcat, 1, I_ );
+   else
+     pm.sitXcat = (short *)aObj[ o_wd_sitxcat].Free();
+   if( pm.sitNan )
+     pm.sitXan = (short *)aObj[ o_wd_sitxan].Alloc( 1, pm.sitNan, I_ );
+   else
+     pm.sitXan = (short *)aObj[ o_wd_sitxan].Free();
+}
 
 // realloc dynamic memory
 void TMulti::dyn_new(int /*q*/)
@@ -875,7 +908,7 @@ pm.DCC3 = (char *)aObj[ o_wi_dcc3 ].Free();
     }
 
     /* pm.R = (float *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
-
+    sit_dyn_new();
 }
 
 
@@ -885,6 +918,8 @@ void TMulti::set_def( int /*q*/)
     memcpy( &pm.PunE, "jjbC", 4 );
     memset( &pm.N, 0, 36*sizeof(short));
     memset( &pm.TC, 0, 54*sizeof(double));
+    pm.sitNcat = 0;
+    pm.sitNcat = 0;
     pm.L1    = 0;
     pm.LsMod = 0;
     pm.LsMdc = 0;
@@ -1010,6 +1045,10 @@ void TMulti::set_def( int /*q*/)
         pm.SM3    = 0;
         pm.SF2    = 0;
         pm.DCC3   = 0;
-    }
+//  Added 16.11.2004 by Sveta
+    pm.sitXcat = 0;
+    pm.sitXan = 0;
+    pm.sitE = 0;
+ }
 
 //--------------------- End of ms_multi.cpp ---------------------------

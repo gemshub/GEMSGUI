@@ -291,15 +291,7 @@ TProfil::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
    if( k )   // not an aqueous phase!
      return 0;
    // allocating dyn memory
-   if( pmp->sitE )
-     free( pmp->sitE );
-   pmp->sitE = (float*)malloc( pmp->sitNcat * pmp->sitNan * sizeof(float) );
-   if( pmp->sitXcat )
-     free( pmp->sitXcat );
-   pmp->sitXcat = (short*)malloc( pmp->sitNcat * sizeof(short) );
-   if( pmp->sitXan )
-     free( pmp->sitXan );
-   pmp->sitXan = (short*)malloc( pmp->sitNan * sizeof(short) );
+   multi->sit_dyn_new();
 
    nxCAT = (short *)malloc( (JE-JB)*sizeof(short) );
    nxAN = (short *)malloc( (JE-JB)*sizeof(short) );

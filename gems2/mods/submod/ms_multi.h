@@ -83,7 +83,10 @@ Lads,     	// Lads - number of DC in sorption phases
     W1,     // internal IPM-2 indicator
     is,     // is - index of IC for IPN equations ( GammaCalc() )
     js,     // js - index of DC for IPN equations ( GammaCalc() )
-    next;  // Next - continue variable for  IPN equations ( GammaCalc() )
+    next,
+sitNcat,  // SIT: number of cations
+sitNan   // SIT: number of anions
+    ;  // Next - continue variable for  IPN equations ( GammaCalc() )
     double TC,TCc, 	// Temperature T, min.-max. (0,2000 C)
     T,Tc,   	// T, min.-max. K
     P,Pc,   	// Pressure P, min.-max.(0,10000 bar)
@@ -122,6 +125,7 @@ Lads,     	// Lads - number of DC in sorption phases
     logYFk,    /*log(1e-9)*/
     YFk,       // Current number of moles in a multicomponent phase
     FitVar[5]; // internal
+
     short
     *L1,    // l_a vector - number of DC included into each phase [Fi]
     *LsMod, // Number of non-ideality coeffs per multicomponent phase [FIs]
@@ -256,9 +260,7 @@ Lads,     	// Lads - number of DC in sorption phases
     (*SCM)[MST], //classifier of adsorption models for sur types [FIs][FIat]
 *SATT,  /* classifier of methods of SAT calculation [0:Lads] */
     *DCCW;  // reserved 0:L-1 codes see in file S_CLASS.H
-short sitNcat,  // SIT: number of cations
-      sitNan,   // SIT: number of anions 
-      *sitXcat, // SIT: indices of cations
+short *sitXcat, // SIT: indices of cations
       *sitXan;  // SIT: indices of anions
 float *sitE;    // pointer to SIT coeff. table
 }
@@ -306,6 +308,7 @@ public:
     void dyn_kill( int i=0);
     void dyn_new( int i=0);
     void set_def( int i=0);
+    void sit_dyn_new();
 
     // EQUSTAT
     void packData();
@@ -353,19 +356,6 @@ public:
 //    void multi_free();
 
 
-    // test
-    void dyn_kill_test(MULTI& tes);
-    void dyn_new_test(MULTI& tes);
-    void Test_Eq( int size, double *p1, double *p2, const char *key );
-    void Test_Eq( int size, float *p1, float *p2, const char *key );
-    void Test_Eq( int size, short *p1, short *p2, const char *key );
-    void dyn__test(MULTI& tes);
-    MULTI copy1;
-    bool flCopy;
-    MULTI& GetPMcopy1()
-    {
-        return copy1;
-    }
  };
 
 #else
@@ -384,6 +374,7 @@ class TMulti
 
    char PAalp_;
    char PSigm_;
+
 public:
 
    DATABR  *data_BR;
@@ -456,19 +447,6 @@ public:
 
     void packDataBr();
     void unpackDataBr();
-    // test
-    void dyn_kill_test(MULTI& tes);
-    void dyn_new_test(MULTI& tes);
-    void Test_Eq( int size, double *p1, double *p2, const char *key );
-    void Test_Eq( int size, float *p1, float *p2, const char *key );
-    void Test_Eq( int size, short *p1, short *p2, const char *key );
-    void dyn__test(MULTI& tes);
-    MULTI copy1;
-    bool flCopy;
-    MULTI& GetPMcopy1()
-    {
-        return copy1;
-    }
 
 };
 
