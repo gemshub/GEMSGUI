@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Setup to Create Process:  </string>
+        <string>GEM-Selektor Create Process Wizard  </string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -37,7 +37,7 @@
                     <cstring>Widget8</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Process Types</string>
+                    <string>Process Simulation Types</string>
                 </attribute>
                 <vbox>
                     <property name="name">

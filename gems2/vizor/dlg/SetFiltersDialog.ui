@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Set filters to create an independent modelling project</string>
+        <string>Setup of files and filters to create/extend an independent modelling project</string>
     </property>
     <vbox>
         <property name="name">

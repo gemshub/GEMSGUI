@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>622</width>
-            <height>409</height>
+            <height>410</height>
         </rect>
     </property>
     <property name="caption">
-        <string>GraphDemo Plotting</string>
+        <string>GEM-Selektor v.2.0-PSI Plotting Dialog</string>
     </property>
     <vbox>
         <property name="name">
@@ -116,14 +116,14 @@
                                 </property>
                                 <property name="geometry">
                                     <rect>
-                                        <x>5</x>
-                                        <y>5</y>
+                                        <x>10</x>
+                                        <y>10</y>
                                         <width>125</width>
-                                        <height>65</height>
+                                        <height>60</height>
                                     </rect>
                                 </property>
                                 <property name="text">
-                                    <string>You can drag and drop the legend labels to the plotting area.</string>
+                                    <string>You may drag and drop legend labels to the plotting area.</string>
                                 </property>
                                 <property name="alignment">
                                     <set>WordBreak|AlignVCenter</set>

@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>440</width>
+            <width>447</width>
             <height>441</height>
         </rect>
     </property>
@@ -62,41 +62,26 @@
         <property name="hAlign" stdset="0">
         </property>
     </widget>
-    <widget class="QLabel">
+    <widget class="Line">
         <property name="name">
-            <cstring>pTitleTL</cstring>
+            <cstring>Line10</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>70</x>
-                <y>10</y>
-                <width>350</width>
-                <height>60</height>
+                <x>10</x>
+                <y>370</y>
+                <width>411</width>
+                <height>20</height>
             </rect>
         </property>
-        <property name="font">
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>13</pointsize>
-                <bold>1</bold>
-                <italic>1</italic>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>Panel</enum>
+        <property name="frameShape" stdset="0">
+            <enum>HLine</enum>
         </property>
         <property name="frameShadow">
-            <enum>Raised</enum>
+            <enum>Sunken</enum>
         </property>
-        <property name="text">
-            <string>Computation of Geochemical Equilibrium Models</string>
-        </property>
-        <property name="alignment">
-            <set>WordBreak|AlignCenter</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-        <property name="wordwrap" stdset="0">
+        <property name="orientation">
+            <enum>Horizontal</enum>
         </property>
     </widget>
     <widget class="QLayoutWidget">
@@ -107,7 +92,7 @@
             <rect>
                 <x>10</x>
                 <y>80</y>
-                <width>410</width>
+                <width>425</width>
                 <height>140</height>
             </rect>
         </property>
@@ -133,6 +118,12 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Ms Sans Serif</family>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
                 <property name="text">
                     <string>Single - &amp;System Equilibria (SysEq)</string>
                 </property>
@@ -151,6 +142,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Ms Sans Serif</family>
+                        <pointsize>14</pointsize>
+                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Process Simulation (Process)</string>
@@ -171,6 +168,12 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Ms Sans Serif</family>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
                 <property name="text">
                     <string>&amp;Data Sampling and Plotting (GtDemo) </string>
                 </property>
@@ -183,92 +186,64 @@
             </widget>
         </vbox>
     </widget>
-    <widget class="QLayoutWidget">
+    <widget class="QLabel">
         <property name="name">
-            <cstring>hbox</cstring>
+            <cstring>pTitleTL</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>390</y>
-                <width>410</width>
-                <height>37</height>
+                <x>70</x>
+                <y>10</y>
+                <width>360</width>
+                <height>60</height>
             </rect>
         </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pBackButton</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Back</string>
-                </property>
-                <property name="default">
-                    <bool>false</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Back to 'Thermodynamic database management' dialog</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pNumCtrlButton</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Numerical Controls...</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Press to check/adjust controls of the numerical modules (saved in Project record)</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pHelpButton</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Help</string>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Learn about GEM chemical thermodynamic modelling technique</string>
-                </property>
-            </widget>
-        </hbox>
+        <property name="font">
+            <font>
+                <family>Ms Sans Serif</family>
+                <pointsize>14</pointsize>
+                <bold>1</bold>
+                <italic>1</italic>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>Panel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="text">
+            <string>Computation of Geochemical Equilibrium Models</string>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+        <property name="wordwrap" stdset="0">
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>40</x>
+                <y>230</y>
+                <width>171</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>Ms Sans Serif</family>
+                <pointsize>10</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Under Construction:</string>
+        </property>
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -276,9 +251,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>40</x>
+                <x>20</x>
                 <y>250</y>
-                <width>380</width>
+                <width>400</width>
                 <height>120</height>
             </rect>
         </property>
@@ -365,43 +340,110 @@
             </widget>
         </vbox>
     </widget>
-    <widget class="Line">
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>Line10</cstring>
+            <cstring>hbox</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>10</x>
-                <y>370</y>
-                <width>411</width>
-                <height>20</height>
+                <y>390</y>
+                <width>420</width>
+                <height>37</height>
             </rect>
         </property>
-        <property name="frameShape" stdset="0">
-            <enum>HLine</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>40</x>
-                <y>230</y>
-                <width>171</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Under Construction:</string>
-        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBackButton</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Ms Sans Serif</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Back</string>
+                </property>
+                <property name="default">
+                    <bool>false</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Back to 'Thermodynamic database management' dialog</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pNumCtrlButton</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Ms Sans Serif</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Numerical Controls...</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Press to check/adjust controls of the numerical modules (saved in Project record)</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pHelpButton</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Ms Sans Serif</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Help</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Learn about GEM chemical thermodynamic modelling technique</string>
+                </property>
+            </widget>
+        </hbox>
     </widget>
 </widget>
 <connections>

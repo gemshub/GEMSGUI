@@ -20,7 +20,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>Modelling projects</string>
+        <string>GEM-Selektor v.2-PSI Modelling Projects</string>
     </property>
     <vbox>
         <property name="name">
@@ -37,7 +37,7 @@
                 <cstring>pLabel</cstring>
             </property>
             <property name="text">
-                <string>Please, select one modelling project to open:</string>
+                <string>Please, select one modelling project </string>
             </property>
             <property name="alignment">
                 <set>AlignCenter</set>

@@ -37,7 +37,7 @@
                 <cstring>pLabel</cstring>
             </property>
             <property name="text">
-                <string>  Please, check files linked to Project:</string>
+                <string>  Please, check files linked to the project:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignLeft</set>

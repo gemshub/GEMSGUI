@@ -262,13 +262,8 @@
             </inactive>
         </palette>
     </property>
-    <property name="font">
-        <font>
-            <family>Arial [Monotype]</family>
-        </font>
-    </property>
     <property name="caption">
-        <string>Selection of Independent Components to Modelling Project</string>
+        <string>Selection of Independent Components into Modelling Project</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -752,6 +747,12 @@
                 </inactive>
             </palette>
         </property>
+        <property name="font">
+            <font>
+                <family>Ms Sans Serif</family>
+                <bold>1</bold>
+            </font>
+        </property>
         <property name="title">
             <string>Chemical Elements</string>
         </property>
@@ -771,6 +772,7 @@
                 <font>
                     <family>MS Sans Serif</family>
                     <pointsize>10</pointsize>
+                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -798,6 +800,7 @@
                 <font>
                     <family>MS Sans Serif</family>
                     <pointsize>10</pointsize>
+                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -825,6 +828,7 @@
                 <font>
                     <family>MS Sans Serif</family>
                     <pointsize>10</pointsize>
+                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -852,6 +856,7 @@
                 <font>
                     <family>MS Sans Serif</family>
                     <pointsize>10</pointsize>
+                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -879,6 +884,7 @@
                 <font>
                     <family>MS Sans Serif</family>
                     <pointsize>10</pointsize>
+                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -1137,6 +1143,7 @@
                 <font>
                     <family>MS Sans Serif</family>
                     <pointsize>10</pointsize>
+                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -1164,6 +1171,7 @@
                 <font>
                     <family>MS Sans Serif</family>
                     <pointsize>10</pointsize>
+                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -4847,6 +4855,12 @@
                     </color>
                 </inactive>
             </palette>
+        </property>
+        <property name="font">
+            <font>
+                <family>Ms Sans Serif</family>
+                <bold>1</bold>
+            </font>
         </property>
         <property name="title">
             <string>Other</string>

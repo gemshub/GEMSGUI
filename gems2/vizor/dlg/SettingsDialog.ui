@@ -88,7 +88,7 @@
                 <cstring>GroupBox4</cstring>
             </property>
             <property name="title">
-                <string>DB Directories</string>
+                <string>Database Directories</string>
             </property>
             <grid>
                 <property name="name">
@@ -175,7 +175,7 @@
                         <cstring>ButtonGroup1</cstring>
                     </property>
                     <property name="title">
-                        <string>Creating/Upgrading Modelling Projects</string>
+                        <string>Creation/Upgrade of Modelling Projects</string>
                     </property>
                     <vbox>
                         <property name="name">
@@ -355,7 +355,7 @@
                 <cstring>pConfigAutosave</cstring>
             </property>
             <property name="text">
-                <string>Save configuration at exit</string>
+                <string>Save configuration on exit</string>
             </property>
             <property name="checked">
                 <bool>true</bool>
