@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "m_param.h"
+#include "gdatastream.h"
 
 
 //---------------------------------------------------------//
