@@ -334,7 +334,9 @@ TPlotWin::mousePressEvent( QMouseEvent *e ) {
 
 	    QFontMetrics fm = QPainter(this).fontMetrics();
 	    QPixmap pixmap(fm.width(txtLabel->text()), fm.height());
-	    QPainter dc(&pixmap);
+	    QPainter dc(&pixmap, this);
+//	    dc.setBackgroundMode(Qt::TransparentMode);
+	    dc.setBackgroundColor(Qt::gray);
 	    txtLabel->paint(dc);
 	    //dc.setPen( Qt::black );
 	    //dc.drawText(0, 0, txtLabel->text());

@@ -93,6 +93,7 @@ class SymbolLabel:
 	    color = QColor(ln.red, ln.green, ln.blue );
             type = ln.type;
 	    lineSize = ln.line_size;
+	    update();
 	}
 };
 
@@ -130,7 +131,7 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
     plot = new TPlotWin(plotFrame,
 		    FPoint(minX, minY),
                     FPoint(maxX, maxY),
-			gr_data.title);
+			gr_data.title.c_str());
 			
     plot->setGridCount(gr_data.axisType);
 
@@ -182,12 +183,13 @@ void GraphDialog::Show()
     else
       plot->setBackgroundColor( backgroundColor().dark(110) );
 
+    plot->setPlotBounds( FPoint(minX, minY),
+                   FPoint(maxX, maxY));
+
     ShowPlots();
 
     update();
 
-    plot->setPlotBounds( FPoint(minX, minY),
-                   FPoint(maxX, maxY));
 }
 
 // show plots
@@ -257,20 +259,19 @@ GraphDialog::Apply()
     if( maxX == minX ) maxX += 1.;
     if( maxY == minY ) maxY += 1.;
 
-    int y = 20;
-    for( uint ii=0, kk=0; ii<gr_data.plots.GetCount(); ii++, y+=10 )
+    for( uint ii=0, kk=0; ii<gr_data.plots.GetCount(); ii++ )
     {
-        for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++, y+=25 )
+        for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++ )
         {
 	    aSymbolLabels[kk].setData( gr_data.lines[kk] );
 	    aLegendLabels[kk].setText( gr_data.lines[kk].name );
         }
     }
+    pGrpLegend->update();
 
     plot->Clear();
     Show();
     plot->update();
-    pGrpLegend->update();
 }
 
 
