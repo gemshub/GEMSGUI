@@ -26,6 +26,7 @@
 #include "v_dbfile.h"
 #include "v_object.h"
 
+// Reading header of DB file
 void
 VDBhead::read(GemDataStream& is)
 {
@@ -44,7 +45,7 @@ VDBhead::read(GemDataStream& is)
     ;               // number of deleted blocks
 }
 
-
+// Writing header of DB file
 void
 VDBhead::write(GemDataStream& is)
 {
@@ -64,6 +65,7 @@ VDBhead::write(GemDataStream& is)
 }
 
 
+// read deleted block description
 void
 DBentry::read(GemDataStream& is)
 {
@@ -71,6 +73,7 @@ DBentry::read(GemDataStream& is)
     is >> len;
 }
 
+// write deleted block description
 void
 DBentry::write(GemDataStream& is)
 {
@@ -78,6 +81,7 @@ DBentry::write(GemDataStream& is)
     is << len;
 }
 
+// read DBrecord description
 void
 RecEntry::read(GemDataStream& is)
 {
@@ -86,6 +90,7 @@ RecEntry::read(GemDataStream& is)
     is >> nFile;
 }
 
+// write DBrecord description
 void
 RecEntry::write(GemDataStream& is)
 {
@@ -94,6 +99,7 @@ RecEntry::write(GemDataStream& is)
     is << nFile;
 }
 
+// read DB record head
 void
 RecHead::read(GemDataStream& is)
 {
@@ -105,6 +111,7 @@ RecHead::read(GemDataStream& is)
     is.readArray (endm, 2);
 }
 
+// write DB record head
 void
 RecHead::write(GemDataStream& is)
 {
@@ -120,7 +127,7 @@ RecHead::write(GemDataStream& is)
 
 
 //-------------------------------------------------------------
-// TDBFile
+// TDBFile, files that contain DB records
 //-------------------------------------------------------------
 
 // default configurations
@@ -274,7 +281,7 @@ TDBFile::PutHead( GemDataStream& fdb, int deltRec )
 }
 
 //Read and test VDBhead
-void 
+void
 TDBFile::v_PDBtry( GemDataStream& fdb )
 {
     if( dh==0 )
@@ -311,6 +318,7 @@ TDBFile::Close()
     TFile::Close();
 }
 
+// compare deleted blocs
 int
 rlencomp( const void *ie_1, const void *ie_2 )
 {
@@ -322,7 +330,7 @@ rlencomp( const void *ie_1, const void *ie_2 )
 }
 
 //Add new deleted record in sfe list and mark deleted record in file
-void 
+void
 TDBFile::AddSfe( RecEntry& re )
 {
     RecHead rh;
@@ -368,8 +376,8 @@ TDBFile::AddSfe( RecEntry& re )
     ErrorIf( !f.good(), GetPath(), "PDB file write error.");
 }
 
-//Add new deleted record in sfe list and mark deleted record in file
-void 
+//Find deleted block in sfe list for puttig record here
+void
 TDBFile::FindSfe( RecEntry& re )
 {
     int i,j;
@@ -473,7 +481,7 @@ cerr << "trunc dummy" << endl;
 }
 
 //-------------------------------------------------------------
-// TDBKey
+// TDBKey  - workin with DB record key
 //-------------------------------------------------------------
 
 // default configuration
@@ -563,7 +571,7 @@ TDBKey::~TDBKey()
     delete[] uKey;
 }
 
-void 
+void
 TDBKey::check()
 {
     ErrorIf( pKey==0 || uKey==0 || rkLen==0 || rkInd==0,
@@ -571,6 +579,8 @@ TDBKey::check()
 }
 
 
+// Putting DB record key key to internal structure
+// in pack and unpack forms
 void
 TDBKey::SetKey( const char *key )
 {
@@ -594,8 +604,8 @@ TDBKey::SetKey( const char *key )
         pack( sp );
 }
 
-
-void 
+// Change i-th field of DBkey to key
+void
 TDBKey::SetFldKey( int i, const char *key )
 {
     ErrorIf( i>= rkFlds, key, "Illegal key field number");
@@ -825,7 +835,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
 }
 
 //-------------------------------------------------------------
-// TDBKeyList
+// TDBKeyList - working with DB keys list
 //-------------------------------------------------------------
 
 // default configuration
@@ -856,7 +866,8 @@ TDBKeyList::check_i(int i)
         Error( "TDBMKeyList","Illegal record index in the chain.");
 }
 
-void 
+//initialization of DB keys list state
+void
 TDBKeyList::init()
 {
     nI = -1;
@@ -886,7 +897,7 @@ TDBKeyList::initnew()
 }
 
 // delete the keys of records file nF
-void 
+void
 TDBKeyList::delfile( int nF )
 {
     int i=0;
@@ -912,7 +923,7 @@ TDBKeyList::RecPosit(int i)
 }
 
 // compare key i record and work key
-int 
+int
 TDBKeyList::keycom( int i )
 {
     int l = 0;
@@ -974,8 +985,8 @@ TDBKeyList::addndx( int nF, long len, const char *key )
     return i;
 }
 
-// Delete record from list
-void 
+// Delete i-th record from list
+void
 TDBKeyList::delndx( int i )
 {
     int j;
@@ -991,7 +1002,7 @@ TDBKeyList::delndx( int i )
 }
 
 // find record in list
-int 
+int
 TDBKeyList::findx( const char *key )
 {
     int i,l;
@@ -1013,7 +1024,7 @@ TDBKeyList::findx( const char *key )
 }
 
 //Set key i - record to work key structure
-void 
+void
 TDBKeyList::PutKey( int i)
 {
     int j;
@@ -1025,7 +1036,7 @@ TDBKeyList::PutKey( int i)
 }
 
 //Put key i record to kbuf in unpack form.
-void 
+void
 TDBKeyList::RecKey(int i, gstring& kbuf )
 {
     int j;
@@ -1036,7 +1047,7 @@ TDBKeyList::RecKey(int i, gstring& kbuf )
 }
 
 // write the keys of records to ndx file
-void 
+void
 TDBKeyList::PutKeyList( int nF, GemDataStream& f)
 {
     unsigned char j;
@@ -1052,7 +1063,7 @@ TDBKeyList::PutKeyList( int nF, GemDataStream& f)
 }
 
 // read the keys of records from ndx file
-void 
+void
 TDBKeyList::GetKeyList_i(int nF, int nRec, GemDataStream& f)
 {
     RecEntry re_;
@@ -1109,7 +1120,7 @@ NEXTKF:
 }
 
 //add records key in key list for a wildcard search
-void 
+void
 TDBKeyList::arec_add( int ni )
 {
     gstring s;
@@ -1119,7 +1130,7 @@ TDBKeyList::arec_add( int ni )
 }
 
 //get key list for a wildcard search
-int 
+int
 TDBKeyList::xlist( const char *pattern )
 {
     bool OneRec, AllRecs;

@@ -339,7 +339,7 @@ long TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
 }
 
 /*!
-    Add new record with key pkey
+    Add new record with key pkey to file in DB files list
 */
 int TDataBase::AddRecordToFile( const char *pkey, int file )
 {
@@ -352,7 +352,7 @@ int TDataBase::AddRecordToFile( const char *pkey, int file )
 
     ErrorIf( !dbChangeAllowed( nF ),
 	aFile[nF].Name(), "Cannot add record: changes to system database are not allowed!" );
-	
+
 
     aFile[nF].Open( UPDATE_DBV );
 
@@ -431,10 +431,10 @@ void TDataBase::Del(int i)
     // test and open file
     nF = rh->nFile;
     check_file( nF );
-    ErrorIf( !dbChangeAllowed( nF ), 
+    ErrorIf( !dbChangeAllowed( nF ),
 	aFile[nF].Name(), "Cannot delete record: changes to system database are not allowed!");
-	
-	
+
+
     aFile[nF].Open( UPDATE_DBV );
     // delete record
     rh->len += RecHead::data_size();
@@ -446,7 +446,7 @@ void TDataBase::Del(int i)
     if( rclose )  aFile[nF].Close();
 }
 
-//Read record from PDB file to memory.
+//Read i-th record from PDB file to memory.
 void TDataBase::Get(int i)
 {
     unsigned char nF;
@@ -592,6 +592,8 @@ AGAIN:
     }
 }
 
+//Test state of record with key key_ as template.
+// in field field setted any(*) data
 bool TDataBase::FindPart( const char *key_, int field )
 {
 
@@ -947,7 +949,7 @@ int TDataBase::scanfile( int nF, long& fPos, long& fLen,
     while( fPos < fLen )
     {
 	char ch;
-	
+
         inStream.seekg( fPos, ios::beg );
         inStream.get(ch);
         if( ch != MARKRECHEAD[0] )
@@ -962,7 +964,7 @@ int TDataBase::scanfile( int nF, long& fPos, long& fLen,
             continue;
         }
         recordEntry.pos = fPos;
-	
+
         try
         {
             len = getrec(recordEntry, inStream, recordHead);
@@ -1051,7 +1053,7 @@ void TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
 {
     if(aFlKeywd.GetCount() < 1 )
         return;
-	
+
     Close();
     for(uint i=0; i<aFlKeywd.GetCount(); i++)
     {
@@ -1063,7 +1065,7 @@ void TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
                 break;
             }
 	}
-	
+
         if( nF >= 0 )
             fls.Add(nF);
         else
