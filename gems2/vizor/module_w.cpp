@@ -367,7 +367,7 @@ void TCModuleImp::CmSave()
 {
     if( qApp->focusWidget() )
         qApp->focusWidget()->clearFocus();
-    ((TCModule*)&rMod)->CmSave();
+    ((TCModule*)&rMod)->CmSaveM();
 }
 
 void TCModuleImp::CmShow()

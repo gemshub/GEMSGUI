@@ -238,7 +238,7 @@ protected:
     long putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
     long getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
     void opfils();
-    int scanfile( int nF, long& fPos, long& fLen, 
+    int scanfile( int nF, long& fPos, long& fLen,
 	    GemDataStream& inStream, GemDataStream& outStream);
     void fromCFG(fstream& f);
     bool dbChangeAllowed( int nf, bool ifRep=false );
@@ -262,6 +262,15 @@ public:
     void check_file( int nF );
 
     //--- Selectors
+    RecStatus GetStatus() const
+    {
+     return status;
+    }
+    void SetStatus( RecStatus stt )
+    {
+      status = stt;
+    }
+
     const char* GetKeywd() const
     {
         return Keywd;

@@ -514,7 +514,7 @@ NewSystemDialog::CmSave()
             return;
       }
     }
-    TSysEq::pm->CmSave();
+    TSysEq::pm->CmSaveM();
   }
     catch( TError& xcpt )
     {

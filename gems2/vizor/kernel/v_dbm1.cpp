@@ -1126,6 +1126,7 @@ TDBKeyList::xlist( const char *pattern )
     int i;
 
     SetKey( pattern );
+
     // analyze pattern
     if( strchr( UnpackKey(), '*' ) || strchr( UnpackKey(), '?' ))
         OneRec = false;

@@ -186,14 +186,15 @@ TCModule::MessageToSave()
     	return true;
 
     gstring key_str = db->PackKey();
-    if( contentsChanged && key_str.find_first_of("*?") == gstring::npos )
+    if( contentsChanged && key_str.find_first_of("*?") == gstring::npos
+        && ( db->GetStatus()!= UNDF_ ) )   // 09/11/2004 Sveta
     {
         int res = vfQuestion3(window(), key_str.c_str(),
                        "Data record has been changed!",
 		       "Save changes", "Discard changes", "Cancel");
 	if( res == VF3_3 )
 	    return false;
-	    
+
 	if( res == VF3_1 )
             RecSave( key_str.c_str() );
     }
@@ -277,6 +278,20 @@ TCModule::RecSave( const char *key, bool onOld )
 }
 
 // Save record to DB file
+void TCModule::CmSaveM()
+{
+  try{
+        gstring str=db->PackKey();
+       if( str.find_first_of("*?" ) != gstring::npos
+            || ( db->GetStatus() == UNDF_ ) )   // 09/11/2004 Sveta
+        Error( GetName(), "Current record key is not defined or readed!");
+        CmSave();
+     }
+   catch( TError& xcpt )
+    {
+        vfMessage(window(), xcpt.title, xcpt.mess);
+    }
+}
 
 void
 TCModule::CmSave()
@@ -288,7 +303,7 @@ TCModule::CmSave()
             Error( GetName(), "Please, do it in Database mode!");
 
         gstring str=db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos ) // udef key
+        if( str.find_first_of("*?" ) != gstring::npos )
         {
             str = GetKeyofRecord( str.c_str(),
                      "Insert new record keyed ", KEY_NEW );
@@ -433,7 +448,7 @@ TCModule::CmFilter()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         gstring str = Filter;
         str = GetKeyofRecord( str.c_str(),
                          "Please, give a key template", KEY_TEMP );
@@ -467,7 +482,7 @@ TCModule::CmNext()
        int i_next = 0;
        if( ! MessageToSave() )
 	    return;
-	    
+
        // get current record key
        gstring str=db->UnpackKey();
        // select scroll list
@@ -556,6 +571,7 @@ TCModule::RecBuild( const char *key, int mode  )
                               GetName()+ gstring(" : ") + key ,
                               "&Bypass", "&Remake", "&Clear all");
     int retType = bldType;
+    db->SetStatus(ONEF_);
 
     switch( bldType )
     {
@@ -601,8 +617,9 @@ TCModule::CmDerive()
 	    
         gstring str = gstring( db->UnpackKey(), 0, db->KeyLen() );
                     //db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos )
-            Error( GetName(), "Current record key is not defined!");
+        if( str.find_first_of("*?" ) != gstring::npos
+            || ( db->GetStatus() == UNDF_ ) )   // 09/11/2004 Sveta
+            Error( GetName(), "Current record key is not defined or readed!");
 
         //check_input( db->UnpackKey() );
         RecBuild( str.c_str(), VF_REMAKE );
@@ -641,10 +658,11 @@ TCModule::CmCalc()
 
         if( ! MessageToSave() )
 	    return;
-	    
+
         gstring str=db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos )
-            Error( GetName(), "Current record key is not defined!");
+        if( str.find_first_of("*?" ) != gstring::npos
+               || ( db->GetStatus()== UNDF_ ))      // 09/11/2004 Sveta
+            Error( GetName(), "Current record key is not defined or readed!");
         //int  Rnum = db->Find( str.c_str() );
         //ErrorIf( Rnum<0, GetKeywd(),
         // "Record to calculate not found!");
@@ -675,7 +693,7 @@ TCModule::CmNew()
 
         if( ! MessageToSave() )
 	    return;
-	    
+
         gstring str = GetKeyofRecord( db->PackKey(),
                              "Insert a new record key, please ", KEY_NEW);
         if(  str.empty() )
@@ -706,7 +724,7 @@ TCModule::CmCreate()
 
         if( ! MessageToSave() )
 	    return;
-	    
+
         gstring str = GetKeyofRecord( db->PackKey(),
                              "Insert a new record key, please ", KEY_NEW);
         if(  str.empty() )
@@ -920,7 +938,7 @@ TCModule::CmCreateinProfile()
 
         if( ! MessageToSave() )
 	    return;
-	    
+
         // Get record key
         gstring str = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
         str += ":"; //04/09/01 ????
@@ -964,10 +982,11 @@ TCModule::CmPlot()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         gstring str=db->PackKey();
-        if( str.find_first_of("*?" ) != gstring::npos )
-            Error( GetName(), "Current record key is not provided!");
+        if( str.find_first_of("*?" ) != gstring::npos
+        || ( db->GetStatus()== UNDF_ ))      // 09/11/2004 Sveta
+            Error( GetName(), "Current record key is not provided or readed!");
         //int  Rnum = db->Find( str.c_str() );
         //ErrorIf( Rnum<0, GetName(), "Record to demonstrate not found!");
         RecordPlot( str.c_str() );

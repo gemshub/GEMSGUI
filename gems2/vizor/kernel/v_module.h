@@ -205,6 +205,7 @@ public:
 
     //--- Manipulation current record
     void CmSave();
+    void CmSaveM();
     void CmSaveAs();
     void CmCalc();  //Calculate or create Data Record
 
