@@ -35,22 +35,30 @@ OBJ_SUB = ./submod/submods.o
 TARGET	= ../lib/gemsel.o
 
 
+.PHONY:	all subdirs_mk link
+
 # rules
 
 %.o:	%.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c $<
 
 
-all:
+all:	subdirs_mk $(TARGET)
+
+
+subdirs_mk:
 	for i in $(subdirs); do  \
 	echo Making all in $$i ; \
 	$(MAKE) -C $$i all RELEASE=$(RELEASE) || exit 1; \
 	done
-	make $(TARGET)
 
 
 $(TARGET):    $(OBJECTS) $(OBJ_SUB)
 	$(LD) -r $(OBJECTS) $(OBJ_SUB) -o $@
+
+
+link:	$(TARGET)
+
 
 clean:  
 	@for i in $(subdirs); do  \

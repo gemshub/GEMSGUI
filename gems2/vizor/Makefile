@@ -40,14 +40,14 @@ TARGET	= ../lib/gemviz.o
 
 .PHONY: subdirs_mk all
 
-all:      $(TARGET)
+
+all:	subdirs_mk $(TARGET)
 
 
-$(TARGET): subdir_mk $(OBJECTS) $(METAOBJ) $(OBJ_SUB)
+$(TARGET):	$(OBJECTS) $(METAOBJ) $(OBJ_SUB)
 	$(LD) -r $(OBJECTS) $(METAOBJ) $(OBJ_SUB) -o $@
 
-
-subdir_mk:	
+subdirs_mk:	
 	@for i in $(subdirs); do \
 	 echo Making all in $$i ;  \
 	 $(MAKE) -C $$i all RELEASE=$(RELEASE) || exit 1; \

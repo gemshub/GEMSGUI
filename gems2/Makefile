@@ -61,7 +61,7 @@ else
 TARGET		= gems2
 endif
 
-all:	subdirs_mk link
+all:	subdirs_mk $(TARGET)
 
 
 subdirs_mk:
@@ -70,11 +70,13 @@ subdirs_mk:
 	  $(MAKE) -C $$i all RELEASE=$(RELEASE) || exit 1; \
         done
 
-link:
+$(TARGET):	$(OBJS)
 	@if [ "`uname`" == "Darwin" ]; then \
 	  install -d gems2.app/Contents/MacOS; \
 	fi
 	$(LINK_CMD) $(OBJS) $(LIBS) $(LIBDIRS) -o $(TARGET)
+
+link:	$(TARGET)
 
 
 dep:
