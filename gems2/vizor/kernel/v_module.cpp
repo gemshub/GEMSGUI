@@ -1550,7 +1550,7 @@ TCModule::RecExport( const char *pattern )
       case VF3_3:
                 return;
      }
-    fstream f(filename.c_str(), ios::out);
+    fstream f(filename.c_str(), mod);
     ErrorIf( !f.good() , GetName(), "File write error");
 
     for(uint i=0; i<aKey.GetCount(); i++ )

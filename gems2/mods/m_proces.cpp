@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/m_proces.cpp  version 2.0.0   2001
+// $Id$
 //
 // Implementation of TProcess class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010904
+// Rewritten from C to C++ by S.Dmytriyeva   
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -29,6 +29,7 @@ const char *GEMS_PE_HTML = "gm_proces";
 #include "service.h"
 #include "visor.h"
 #include "visor_w.h"
+#include "t_print.h"
 
 TProcess* TProcess::pm;
 
@@ -984,8 +985,35 @@ TProcess::RecCalc( const char *key )
     if( pVisor->ProfileMode != true )
         Error( GetName(), "Please, do it in Project mode!" );
 
+    char *text_fmt = 0;
+    gstring sd_key = "";
+    gstring filename = "";
+
+
     if( pep->Istat != P_EXECUTE )
     {
+       // Setup data for exporting mass transport
+       if( pep->PsRT != S_OFF )
+       {
+           // read sdref record with format prn
+           sd_key = "pscript*:*:";
+           sd_key += db->GetKeywd();
+           sd_key += ":";
+           sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+             sd_key.c_str(), "Select key of pscript format", KEY_OLD);
+
+           if( !sd_key.empty() )
+           {
+             ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+              text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+              if( !text_fmt )
+                Error( sd_key.c_str(), "No format text in this record.");
+              if( !vfChooseFileSave(window(), filename,
+                     "Please, provide name of output file") )
+                text_fmt = 0;
+           }
+         }
+
         if(  pep->PsGR != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic window?") )
         {
@@ -1121,8 +1149,13 @@ TProcess::RecCalc( const char *key )
                   gd_gr->Show();
 
                 // export script
-
-
+                if( text_fmt )
+                { fstream f( filename.c_str(), ios::app );
+                  ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+                   // scan and print format
+                  TPrintData dat( sd_key.c_str(), nRT, f, text_fmt );
+                }
+                // change internal counts
                 pe_reset();
                 pep->i++;
                 pep->c_Tau += pep->Taui[STEP_];
