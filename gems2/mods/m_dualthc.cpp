@@ -19,7 +19,7 @@
 //
 
 
-//#include <math.h>
+#include <math.h>
 //#include <stdio.h>
 
 #include "m_dualth.h"

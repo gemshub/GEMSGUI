@@ -20,7 +20,7 @@
 
 const char *GEMS_DT_HTML = "gm_dualth";
 
-//#include <math.h>
+#include <math.h>
 //#include <stdio.h>
 
 #include "m_dualth.h"
