@@ -51,6 +51,8 @@ ProcessWizard::ProcessWizard( const char* pkey, char flgs[24],
                        pselS->setChecked( true );
                      else
                        pselP->setChecked( true );
+   if( !pselP->isChecked() )
+     flgs[10] = '+';
 
 //Page2
     pPoints->setValue(size[0]);

@@ -228,6 +228,15 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtpdq].SetDim( 1, dtp->nQ );
     aObj[ o_dtisq].SetPtr(dtp->ISq);
     aObj[ o_dtisq].SetDim( 1, dtp->nQ );
+//Added  new objects
+    aObj[ o_mia].SetPtr(dtp->mia);
+    aObj[ o_mia].SetDim( dtp->nK, 1 );
+    aObj[ o_gm_n ].SetPtr( dtp->gm_n );
+    aObj[ o_gm_n ].SetDim( dtp->nQ, dtp->nM );
+    aObj[ o_gmx_n ].SetPtr( dtp->gmx_n );
+    aObj[ o_gmx_n ].SetDim( dtp->nQ, dtp->nM );
+    aObj[ o_gex_n ].SetPtr( dtp->gex_n );
+    aObj[ o_gex_n ].SetDim( dtp->nQ, dtp->nM );
 
     aObj[ o_dtan].SetPtr(dtp->An);
 //    aObj[ o_dtan].SetDim( dtp->nK, dtp->Nb );
@@ -287,6 +296,11 @@ void TDualTh::dyn_set(int q)
     dtp->Tdq = (float *)aObj[ o_dttdq ].GetPtr();
     dtp->Pdq = (float *)aObj[ o_dtpdq ].GetPtr();
     dtp->ISq = (float *)aObj[ o_dtisq ].GetPtr();
+//Added  new objects
+    dtp->mia = (short *)aObj[ o_mia ].GetPtr();
+    dtp->gm_n = (double *)aObj[ o_gm_n ].GetPtr();
+    dtp->gmx_n = (double *)aObj[ o_gmx_n ].GetPtr();
+    dtp->gex_n = (double *)aObj[ o_gex_n ].GetPtr();
 
     dtp->An = (float *)aObj[ o_dtan ].GetPtr();
     dtp->tprn = (char *)aObj[ o_dttprn ].GetPtr();
@@ -343,6 +357,11 @@ void TDualTh::dyn_kill(int q)
     dtp->Tdq = (float *)aObj[ o_dttdq ].Free();
     dtp->Pdq = (float *)aObj[ o_dtpdq ].Free();
     dtp->ISq = (float *)aObj[ o_dtisq ].Free();
+//Added  new objects
+    dtp->mia = (short *)aObj[ o_mia ].Free();
+    dtp->gm_n = (double *)aObj[ o_gm_n ].Free();
+    dtp->gmx_n = (double *)aObj[ o_gmx_n ].Free();
+    dtp->gex_n = (double *)aObj[ o_gex_n ].Free();
 
     dtp->An = (float *)aObj[ o_dtan ].Free();
     dtp->tprn = (char *)aObj[ o_dttprn ].Free();
@@ -473,8 +492,23 @@ void TDualTh::dyn_new(int q)
     dtp->Pdq = (float *)aObj[ o_dtpdq ].Alloc( dtp->nQ, 1, F_ );
     dtp->ISq = (float *)aObj[ o_dtisq ].Alloc( dtp->nQ, 1, F_ );
 
+//Added  new objects
+    dtp->mia = (short *)aObj[ o_mia ].Alloc( dtp->nK, 1, I_ );
+    if( dtp->nM > 0 )
+    {
+      dtp->gm_n = (double *)aObj[ o_gm_n ].Alloc( dtp->nQ, dtp->nM, D_ );
+      dtp->gmx_n = (double *)aObj[ o_gmx_n ].Alloc( dtp->nQ, dtp->nM, D_ );
+      dtp->gex_n = (double *)aObj[ o_gex_n ].Alloc( dtp->nQ, dtp->nM, D_ );
+    }
+    else
+    {
+       dtp->gm_n = (double *)aObj[ o_gm_n ].Free();
+       dtp->gmx_n = (double *)aObj[ o_gmx_n ].Free();
+       dtp->gex_n = (double *)aObj[ o_gex_n ].Free();
+    }
+
    dtp->An = (float *)aObj[ o_dtan ].Alloc( dtp->nK, dtp->Nb, F_ );
-dtp->Asiz = dtp->nK;
+   dtp->Asiz = dtp->nK;
 }
 
 
@@ -553,6 +587,11 @@ void TDualTh::set_def( int q)
     dtp->Tdq = 0;
     dtp->Pdq = 0;
     dtp->ISq = 0;
+//Added  new objects
+    dtp->mia = 0;
+    dtp->gm_n = 0;
+    dtp->gmx_n = 0;
+    dtp->gex_n = 0;
 
     dtp->An = 0;
     dtp->tprn = 0;

@@ -452,7 +452,7 @@ void TProcess::set_def( int q)
 
     set_type_flags( rt[rtNum()].FldKey(9)[0] );
     memcpy( &pe[q].Pvtm, aPa->pa.PEpvc, 12 );
-pe[q].PvR1 = '-';    // simplex on   KD: temporary for process create 
+pe[q].PvR1 = '-';    // simplex on   KD: temporary for process create
     strcpy( pe[q].name,  "`" );   // Fixed for debugging
     strcpy( pe[q].notes, "`" );
 
@@ -464,6 +464,8 @@ pe[q].PvR1 = '-';    // simplex on   KD: temporary for process create
     memset( &pe[q].NeMax, 0, sizeof(short)*8 );
     memset( &pe[q].c_P, 0, sizeof(double)*11 );
     pe[q].NeMax =400; // fixed by DAK - was only 100
+    pe[q].Nxi = 21;
+    pe[q].Nmc = 1;
 
     pe[q].tm =  0;
     pe[q].nv =  0;
@@ -483,8 +485,10 @@ pe[q].PvR1 = '-';    // simplex on   KD: temporary for process create
     // graphics
     strcpy( pe[q].xNames, "xp" );
     strcpy( pe[q].yNames, "yp" );
-    pe[q].dimEF[1] = pe[q].dimEF[0] = 0;
-    pe[q].dimXY[1] = pe[q].dimXY[0] = 0;
+    pe[q].dimEF[1] = 1;
+    pe[q].dimEF[0] = 0;
+    pe[q].dimXY[1] = 1;
+    pe[q].dimXY[0] = 0;
     pe[q].lNam = 0;
     pe[q].lNamE = 0;
     pe[q].gr_expr = 0;

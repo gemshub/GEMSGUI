@@ -76,10 +76,10 @@ typedef struct
    Nb,    // N - number of independent components (in basis sub-system, taken
         // from project system dimensions automatically)
 nM,    //number of mixtures considered in non-basis sub-system (default 1)
-*mia,  // [K] allocation indexes of NB end-member candidates to mixtures
 // for generating syseq record keys
    tmd[3],  // SYSTEM CSD definition #: start, end, step (initial)
-   NVd[3]  // Restrictions variant #: start, end, step
+   NVd[3],  // Restrictions variant #: start, end, step
+*mia  // [K] allocation indexes of NB end-member candidates to mixtures
    ;
   float
    Pd[3],    // Pressure P, bar: start, end, increment
