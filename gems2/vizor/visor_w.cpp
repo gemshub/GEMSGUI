@@ -55,6 +55,7 @@ using namespace std;
 #include "dlg/HLinpDialog.h"
 #include "dlg/KeyDialog.h"
 #include "dlg/KeyProfile.h"
+#include "dlg/ChangeKeyDialog.h"
 
 #ifdef __unix
 const char* GEMS_LOGO_ICON = "img/gems1.png";
@@ -801,6 +802,20 @@ vfKeyTemplEdit(QWidget* par, const char* caption, int iRt, const char* key,
         return "";
 
     return dbk.getFilter();
+}
+
+bool
+vfKeyCanged(QWidget* par, const char* caption,
+            gstring& from_str, gstring& to_str )
+{
+    ChangeKeyDialog dbk(par, caption );
+    if( !dbk.exec() )
+        return false;
+
+    from_str = dbk.getTemplFrom();
+    to_str =  dbk.getTemplTo();
+
+    return true;
 }
 
 //=============================================

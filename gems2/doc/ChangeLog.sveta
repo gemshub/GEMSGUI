@@ -1,3 +1,35 @@
+05/03/2002
+ Changed Copy List command: making new keys using template
+ Added Rename List command
+
+
+05/03/2002
+ Delete list: Added button "Delete All"
+
+
+05/03/2002
+ Added defaults for "File/New..." commamd
+ ( <mod_name>.<newfile_name>.pdb )
+
+05/03/2002
+ Changed activiti if  "Two records with the same key" error
+ (new message and open all files selected before error )
+
+
+04/03/2002
+ Added Import command
+
+01/03/2002
+ Writed Import scrips translater
+
+28/02/2002
+ Changed menus, Added diferent types of making new records
+
+27/02/2002
+ Added dialogs for MultiKeysSelection, and
+ inserted it to text
+
+//==================================================
 25/01/2002
   Finalised ElementsDialog, SetFiltersDialog, implementation
   of two alternative modes of assembling system profiles.

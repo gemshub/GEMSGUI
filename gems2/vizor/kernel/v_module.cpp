@@ -1045,6 +1045,19 @@ TCModule::CmAddFileToList()
         if( vfChooseFileSave(pImp, filename,
                              "Put new Data Base file name" ) == false )
             return;
+        // test Path Added Sveta 5/03/02
+        // pdb extension, name must started db->GetKeywd()
+        gstring dir;
+        gstring name;
+        gstring ext;
+        u_splitpath( filename, dir, name, ext);
+        ext = PDB_EXT;
+        size_t pos = name.find( db->GetKeywd() );
+        if( pos != 0 )
+        {  name = "." + name;
+           name = db->GetKeywd()+ name;
+        }
+        u_makepath( filename, dir, name, ext );
 
         TDBFile* file = new TDBFile(filename);
         /////////
@@ -1159,7 +1172,7 @@ TCModule::CmCopyList( )
     try
     {
         MessageToSave();
-        CopyRecordsList( Filter.c_str() );
+        CopyRecordsList( Filter.c_str(), false );
 
          dyn_set();
          pVisor->Update();
@@ -1170,6 +1183,22 @@ TCModule::CmCopyList( )
     }
 }
 
+void
+TCModule::CmRenameList( )
+{
+    try
+    {
+        MessageToSave();
+        CopyRecordsList( Filter.c_str(), true );
+
+         dyn_set();
+         pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        vfMessage(pImp, xcpt.title, xcpt.mess);
+    }
+}
 
 // Transfer the list of records
 
@@ -1569,13 +1598,25 @@ TCModule::DelList( const char *pattern )
     TCStringArray aKey = vfMultiKeys( pImp,
        "Please, mark record keys to be deleted from database",
        nRT, pattern );
+    int ichs = 1;
 
     for(uint i=0; i<aKey.GetCount(); i++ )
     {
-        gstring str = "Please, confirm deleting record with key: ";
+        gstring str = "Please, confirm deleting record \nwith key: ";
         str += aKey[i];
-        if( ! vfQuestion(pImp, GetName(), str.c_str() ) )
-            continue;
+        if( ichs )
+        {
+            switch( vfQuestion3(pImp, GetName(), str.c_str(),
+                                "&Yes", "&No", "&Delete All" ))
+            {
+            case VF3_3:
+                ichs=0;
+            case VF3_1:
+                break;
+            case VF3_2:
+                continue;
+            }
+        }
         DeleteRecord( aKey[i].c_str(), false );
     }
 }
@@ -1613,28 +1654,80 @@ TCModule::Transfer( const char *pattern )
 // (Sveta 15/06/01)
 
 void
-TCModule::CopyRecordsList( const char *pattern )
+TCModule::CopyRecordsList( const char *pattern, bool if_rename )
 {
     int nrec = 0;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
+    gstring str;
+
+    if( if_rename )
+     str = "Please, mark record keys to be renamed";
+    else
+     str = "Please, mark record keys to be copied";
 
     TCStringArray aKey = vfMultiKeys( pImp,
-       "Please, mark record keys to be copied",
-       nRT, pattern );
+       str.c_str(), nRT, pattern );
+
+    int rn_type = 0;
+    switch (vfQuestYesNoCancel(pImp,
+        "How to rename records",
+        "Each key separately (Yes) \n"
+        "All records using template (No)" ))
+    {
+    case VF_YES:
+        rn_type = 1;
+    case VF_NO:
+         break;
+    case VF_CANCEL:
+        return;
+    }
+
+    gstring from_t;
+    gstring to_t;
+    if( rn_type == 0 )
+    {
+     if( !vfKeyCanged(pImp, "", from_t,  to_t ))
+      return;
+    }
 
     for(uint i=0; i<aKey.GetCount(); i++ )
     {
         nrec = db->Find( aKey[i].c_str() );
         db->Get( nrec );
         /// !!! changing record key
-        gstring str= aKey[i];
-        str = GetKeyofRecord( str.c_str(),
-                 "Insert new record keye ", KEY_NEW );
-        if(  str.empty() )
+        if( rn_type ==  1)
+        {
+          str= aKey[i];
+          str = GetKeyofRecord( str.c_str(),
+                 "Insert new record key", KEY_NEW );
+          if(  str.empty() )
             return ;
-        AddRecord( str.c_str(), fnum );
-        if( fnum == -2 )
-            break;
+        }
+        else
+        {
+          int fld = db->KeyNumFlds()-1;
+          str= gstring(db->FldKey( fld ), 0, db->FldLen( fld ));
+          ChangeforTempl( str, from_t, to_t, db->FldLen( fld ));
+          str += ":";
+          for(int ii=fld-1; ii>=0; ii--)
+          {  gstring str1 =
+               gstring(db->FldKey( ii ), 0, db->FldLen( ii ));
+             str1.strip();
+             str = str1 + ":" + str;
+           }
+        }
+       if( if_rename )
+       {
+         fnum = db->fNum;
+         db->Del( nrec );
+         db->AddRecordToFile( str.c_str(), fnum );
+       }
+       else
+       {
+         AddRecord( str.c_str(), fnum );
+         if( fnum == -2 )
+             break;
+       }
     }
 }
 

@@ -21,6 +21,7 @@ DATASRC =	MainDialogData.cpp \
 		SystemDialogData.cpp \
 		ProgressDialogData.cpp \
 		KeyDialogData.cpp \
+		ChangeKeyDialogData.cpp \
 		KeyProfileData.cpp \
 		SettingsDialogData.cpp \
 		SelectDialogData.cpp \
@@ -43,7 +44,7 @@ SOURCES =	MainDialog.cpp \
 		EQDialog.cpp \
 		SystemDialog.cpp \
 		ProgressDialog.cpp \
-		KeyDialog.cpp \
+		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
 		KeyFilter.cpp \
 		SettingsDialog.cpp \
@@ -75,6 +76,8 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_ProgressDialogData.o \
 		moc_KeyDialog.o \
 		moc_KeyDialogData.o \
+		moc_ChangeKeyDialog.o \
+		moc_ChangeKeyDialogData.o \
 		moc_KeyProfile.o \
 		moc_KeyProfileData.o \
 		moc_KeyFilter.o \
@@ -123,7 +126,7 @@ clean:
 	$(CLEAN_CMD)
 
 dep:
-	$(MAKEDEP_CMD) $(INC_LOCAL) $(SOURCES) 
+	$(MAKEDEP_CMD) $(INC_LOCAL) $(SOURCES)
 
 
 %.o:	%.cpp

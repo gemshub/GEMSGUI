@@ -226,7 +226,7 @@ void TDataBase::getndx( int nF )
       Error(  Path.c_str(),"Index file open error");
     //   f.read( (char *)&dh, sizeof(VDBhead) );
     dh.read (f);
-    ind.GetKeyList( nF, dh.nRec, f);
+    ind.GetKeyList_i( nF, dh.nRec, f);
 }
 
 // get record length in the PDB file
@@ -658,12 +658,37 @@ TDataBase::Open( bool type, FileStatus mode, const TCIntArray& nff )
     ind.initnew();
     for( j=0; j<fls.GetCount(); j++ )
         Create( fls[j] );
+try
+  {
     for( j=0; j<fls.GetCount(); j++ )
     {
         aFile[fls[j]].Open( mode );
         getndx( fls[j] );
         if( rclose )  aFile[fls[j]].Close();
     }
+    opfils();
+  }
+  catch( TError& xcpt )
+  {
+        if( xcpt.mess == "Two records with the same key.")
+        {
+          xcpt.mess += "\n 2nd record in file: ";
+          xcpt.mess +=  aFile[fls[j]].Name();
+
+          while( j < fls.GetCount() )
+            fls.Remove(j);
+         ind.initnew();
+
+          for( j=0; j<fls.GetCount(); j++ )
+          {
+             aFile[fls[j]].Open( mode );
+             getndx( fls[j] );
+             if( rclose )  aFile[fls[j]].Close();
+           }
+           opfils();
+         }
+         Error( xcpt.title, xcpt.mess);
+   }
     opfils();
 }
 
@@ -724,7 +749,7 @@ void TDataBase::OpenOnlyFromList( TCStringArray& names )
 int TDataBase::AddFileToList(TDBFile* file)
 {
     aFile.Add( file );
-
+try{
     Create(aFile.GetCount()-1);
     file->Open( UPDATE_DBV );
     getndx(aFile.GetCount()-1);
@@ -732,7 +757,28 @@ int TDataBase::AddFileToList(TDBFile* file)
     if( rclose )
         file->Close();
     opfils();
-    return fls.Find( aFile.GetCount()-1 );
+ }
+ catch( TError& xcpt )
+  {
+        if( xcpt.mess == "Two records with the same key.")
+        {
+          xcpt.mess += "\n 2nd record in file: ";
+          xcpt.mess +=  aFile[aFile.GetCount()-1].Name();
+
+          ind.initnew();
+
+          for(uint j=0; j<fls.GetCount(); j++ )
+          {
+             aFile[fls[j]].Open( UPDATE_DBV );
+             getndx( fls[j] );
+             if( rclose )
+                aFile[fls[j]].Close();
+           }
+           opfils();
+         }
+         Error( xcpt.title, xcpt.mess);
+   }
+   return fls.Find( aFile.GetCount()-1 );
 }
 
 
@@ -775,9 +821,11 @@ void TDataBase::DelFile(const gstring& path)
 // add open PDB files
 void TDataBase::AddOpenFile(const TCIntArray& nff)
 {
-    if( nff.GetCount()<1 )
+  uint j;
+  if( nff.GetCount()<1 )
         return;
-    for(uint j=0; j<nff.GetCount(); j++)
+try{
+    for( j=0; j<nff.GetCount(); j++)
     {  //fls.Add( nff[j] );
         Create( nff[j] );
         aFile[nff[j]].Open( UPDATE_DBV );
@@ -787,6 +835,28 @@ void TDataBase::AddOpenFile(const TCIntArray& nff)
             aFile[nff[j]].Close();
     }
     opfils();
+  }
+  catch( TError& xcpt )
+  {
+        if( xcpt.mess == "Two records with the same key.")
+        {
+          xcpt.mess += "\n 2nd record in file: ";
+          xcpt.mess +=  aFile[nff[j]].Name();
+
+          ind.initnew();
+
+          for( j=0; j<fls.GetCount(); j++ )
+          {
+             aFile[fls[j]].Open( UPDATE_DBV );
+             getndx( fls[j] );
+             if( rclose )
+                aFile[fls[j]].Close();
+           }
+           opfils();
+         }
+         Error( xcpt.title, xcpt.mess);
+   }
+
 }
 
 

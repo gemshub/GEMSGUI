@@ -92,6 +92,9 @@ vfKeyProfile(QWidget* par, const char* title, int iRt,
 gstring
 vfKeyTemplEdit(QWidget* par, const char* title, int iRt, const char* key=0,
                bool allowTemplate=true);
+bool
+vfKeyCanged(QWidget* par, const char* caption,
+            gstring& from_str, gstring& to_str );
 
 bool vfChooseFileOpen(QWidget* par, gstring& path, const char* title=0);
 bool vfChooseFileSave(QWidget* par, gstring& path, const char* title=0);

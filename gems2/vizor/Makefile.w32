@@ -118,6 +118,8 @@ link:
 +dlg\ProgressDialogData.obj \
 +dlg\KeyDialog.obj \
 +dlg\KeyDialogData.obj \
++dlg\ChangeKeyDialog.obj \
++dlg\ChangeKeyDialogData.obj \
 +dlg\KeyProfile.obj \
 +dlg\KeyProfileData.obj \
 +dlg\KeyFilter.obj \
@@ -160,6 +162,8 @@ link:
 +tmp\moc_ProgressDialogData.obj \
 +tmp\moc_KeyDialog.obj \
 +tmp\moc_KeyDialogData.obj \
++tmp\moc_ChangeKeyDialog.obj \
++tmp\moc_ChangeKeyDialogData.obj \
 +tmp\moc_KeyProfile.obj \
 +tmp\moc_KeyProfileData.obj \
 +tmp\moc_KeyFilter.obj \

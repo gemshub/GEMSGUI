@@ -74,6 +74,7 @@ public/* protected*/ slots:
     void CmKeysToTXT();
     void CmDeleteList();
     void CmCopyList();
+    void CmRenameList();
     void CmTransferList();
     void CmImport();
     void CmExport();

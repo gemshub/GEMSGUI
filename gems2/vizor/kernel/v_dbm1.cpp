@@ -143,7 +143,8 @@ TDBFile::TDBFile(const gstring& path):
         FPosFree(1),
         dh(0),
         sfe(0)
-{}
+{
+}
 
 //load configurations from cfg file
 
@@ -156,7 +157,7 @@ TDBFile::TDBFile(fstream& file):
 
 
 
-void 
+void
 TDBFile::check_sfe()
 {
     ErrorIf( sfe == 0 , GetKeywd(),
@@ -171,7 +172,7 @@ TDBFile::check_dh()
 }
 
 // Set date and time in header of file.
-void 
+void
 TDBFile::vdbh_setdt()
 {
     check_dh();
@@ -181,7 +182,7 @@ TDBFile::vdbh_setdt()
 }
 
 //Clear the header of PDB file.
-void 
+void
 TDBFile::clrh()
 {
     check_dh();
@@ -192,7 +193,7 @@ TDBFile::clrh()
 }
 
 //Set header of PDB file
-void 
+void
 TDBFile::vdbh_new( const char *VerP,
                         const char *passwd,	int nRT, bool ifDel )
 {
@@ -315,7 +316,7 @@ TDBFile::Close()
     TFile::Close();
 }
 
-int 
+int
 rlencomp( const void *ie_1, const void *ie_2 )
 {
     DBentry* ie1 = (DBentry *)ie_1;
@@ -411,7 +412,7 @@ TDBFile::GetDh( long& fPos, long& fLen )
 }
 
 //set information to dh
-void 
+void
 TDBFile::SetDh( long& fLen, int nRec )
 {
     check_dh();
@@ -541,7 +542,7 @@ TDBKey::check()
 }
 
 
-void 
+void
 TDBKey::SetKey( const char *key )
 {
     ErrorIf( key==0,"TDBKey", "No key buf.");
@@ -1017,7 +1018,7 @@ TDBKeyList::PutKeyList( int nF, fstream& f)
 
 // read the keys of records from ndx file
 void 
-TDBKeyList::GetKeyList(int nF, int nRec, fstream& f)
+TDBKeyList::GetKeyList_i(int nF, int nRec, fstream& f)
 {
     RecEntry re_;
 

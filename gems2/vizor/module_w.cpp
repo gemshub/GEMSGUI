@@ -182,6 +182,7 @@ TCModuleImp::LoadGeneralMenu()
     {
         QPopupMenu* p2 = new QPopupMenu;
         p2->insertItem( "&Copy...", this, SLOT(CmCopyList()) );
+        p2->insertItem( "&Rename...", this, SLOT(CmRenameList()) );
         p2->insertItem( "&Move...", this, SLOT(CmTransferList()) );
         p2->insertItem( "&Delete...", this, SLOT(CmDeleteList()) );
         p2->insertSeparator();
@@ -411,6 +412,7 @@ TCM_EV_COMMAND(CM_REOPENFILELIST, CmReOpenFileList);
 TCM_EV_COMMAND(CM_KEYSTOTXT, CmKeysToTXT);
 TCM_EV_COMMAND(CM_DELETELIST, CmDeleteList);
 TCM_EV_COMMAND(CM_CHOISELIST, CmCopyList);
+TCM_EV_COMMAND(CM_RENAMELIST, CmRenameList);
 TCM_EV_COMMAND(CM_TRANSFERLIST, CmTransferList);
 
 //  TCM_EV_COMMAND(CM_RECSAVE, CmSave);

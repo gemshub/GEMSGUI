@@ -189,6 +189,7 @@ public:	// moved to public to remove 'friend' for TCModuleImp
     void CmKeysToTXT();
     void CmDeleteList();
     void CmCopyList();
+    void CmRenameList();
     void CmTransferList();
 
     virtual void CmImport();
@@ -252,7 +253,7 @@ public:
     //-- Database manipulation
     void DelList( const char *pattern );
     void Transfer( const char *pattern );
-    void CopyRecordsList( const char *pattern );
+    void CopyRecordsList( const char *pattern, bool if_rename );
     void KeysToTXT( const char *pattern );
     void RecToTXT( const char *pattern );
     void RecOfTXT( );

@@ -285,7 +285,7 @@ public:
     int  findx( const char *key );
     int  xlist( const char *pattern );
     void PutKeyList( int nF, fstream& f);
-    void GetKeyList( int nF,int nRec, fstream& f );
+    void GetKeyList_i( int nF,int nRec, fstream& f );
     void delfile( int nF );
 
     //--- Manipulation key

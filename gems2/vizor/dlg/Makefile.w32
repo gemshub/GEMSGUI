@@ -22,6 +22,7 @@ DATASRC =	MainDialogData.cpp \
 		SystemDialogData.cpp \
 		ProgressDialogData.cpp \
 		KeyDialogData.cpp \
+		ChangeKeyDialogData.cpp \
 		KeyProfileData.cpp \
 		SettingsDialogData.cpp \
 		SelectDialogData.cpp \
@@ -43,6 +44,7 @@ DATAOBJ =       MainDialogData.obj \
 		SystemDialogData.obj \
 		ProgressDialogData.obj \
 		KeyDialogData.obj \
+		ChangeKeyDialogData.obj \
 		KeyProfileData.obj \
 		SettingsDialogData.obj \
 		SelectDialogData.obj \
@@ -65,6 +67,7 @@ SOURCES =	MainDialog.cpp \
 		SystemDialog.cpp \
 		ProgressDialog.cpp \
 		KeyDialog.cpp \
+		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
 		KeyFilter.cpp \
 		SettingsDialog.cpp \
@@ -88,6 +91,7 @@ OBJECTS =	MainDialog.obj \
 		SystemDialog.obj \
 		ProgressDialog.obj \
 		KeyDialog.obj \
+		ChangeKeyDialog.obj \
 		KeyProfile.obj \
 		KeyFilter.obj \
 		SettingsDialog.obj \
@@ -115,6 +119,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_SystemDialogData.obj \
 		..\tmp\moc_ProgressDialog.obj \
 		..\tmp\moc_ProgressDialogData.obj \
+		..\tmp\moc_ChangeKeyDialog.obj \
+		..\tmp\moc_ChangeKeyDialogData.obj \
 		..\tmp\moc_KeyDialog.obj \
 		..\tmp\moc_KeyDialogData.obj \
 		..\tmp\moc_KeyProfile.obj \
@@ -248,6 +254,20 @@ clean:
 
         $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_KeyDialogData.cpp
 	-del moc_KeyDialogData.cpp
+
+
+..\tmp\moc_ChangeKeyDialog.obj: ChangeKeyDialog.h
+      	$(MOC) ChangeKeyDialog.h -o moc_ChangeKeyDialog.cpp
+
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ChangeKeyDialog.cpp
+	-del moc_ChangeKeyDialog.cpp
+
+
+..\tmp\moc_ChangeKeyDialogData.obj: ChangeKeyDialogData.h
+      	$(MOC) ChangeKeyDialogData.h -o moc_ChangeKeyDialogData.cpp
+
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ChangeKeyDialogData.cpp
+	-del moc_ChangeKeyDialogData.cpp
 
 
 ..\tmp\moc_KeyProfile.obj: KeyProfile.h
@@ -453,6 +473,10 @@ ProgressDialogData.cpp: ProgressDialog.ui
         $(UIC) $? -impl $(*).h -o $@
 
 KeyDialogData.cpp: KeyDialog.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+ChangeKeyDialogData.cpp: ChangeKeyDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
