@@ -215,9 +215,6 @@ public:
 
 class TObjList : public TIArrayF<TObject>
 {
-    double Value;
-    gstring Filler;
-
 public:
     TObjList();
     TObjList(istream& f);

@@ -935,8 +935,6 @@ TObjList::TObjList():
 TObjList::TObjList(istream& f):
         TIArrayF<TObject>(N_OBJECTS, 30 )
 {
-    Value = 0.;
-    Filler = "";
     fromDAT(f);
 }
 
@@ -945,13 +943,13 @@ TObjList::TObjList(istream& f):
 void
 TObjList::toDAT(ostream& f)
 {
-    int ii, nObj = GetCount();
+    double Value = 0.0;
+    int nObj = GetCount();
 
-    f.write( Filler.c_str(), Filler.length());
-    f<<'@';
+    f << '@';
     f.write((char*) &Value, sizeof(double) );
     f.write((char*) &nObj, sizeof(int) );
-    for( ii=0; ii<nObj; ii++)
+    for(int ii=0; ii<nObj; ii++)
         elem(ii).ToCFG( f );
 }
 
@@ -959,12 +957,14 @@ TObjList::toDAT(ostream& f)
 void
 TObjList::fromDAT(istream& f)
 {
+    double Value;	// not used
+
     Clear();
     int nObj;
-    u_getline( f, Filler, '@' );
+    f.get(); // '@' marker
     f.read((char*) &Value, sizeof(double) );
     f.read((char*) &nObj, sizeof(int) );
-    for( int ii=0; ii<nObj; ii++)
+    for(int ii=0; ii<nObj; ii++)
         Add( new TObject(f) );
 }
 
@@ -989,12 +989,9 @@ TConfig cnf(f_obj,' ');
     gstring par;
     int N;
     unsigned M;
-    ObjType objectType;
+    ObjType objectType = 0;
     char indexationCode;
     gstring astr[6];
-
-    Value = 0.;
-    Filler = "";
 
     par = cnf.getFirst();
 
