@@ -910,10 +910,11 @@ TCellInput::CmSDRef()
         if( patt )
         {
             setText(str.c_str());
+            setValue();
             //save new SDrefs
             if( !strcmp(rObj.GetKeywd(), "SDrefs") )
             {
-                setValue();
+               // setValue();
                 if( sd_key.find_first_of("*?") == gstring::npos )  // pattern
                     TSData::pm->RecSave( sd_key.c_str() );
             }
