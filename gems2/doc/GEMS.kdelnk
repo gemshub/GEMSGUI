@@ -1,0 +1,12 @@
+# KDE Config File
+[KDE Desktop Entry]
+Comment=Geochemical equillibrium modelling program
+BinaryPattern=
+Name=GEM-Selektor
+MimeType=
+Exec=gems
+TerminalOptions=
+Icon=gems.xpm
+Path=
+Type=Application
+Terminal=0

@@ -1,0 +1,27 @@
+To pack backup archive of GEMS profiles created by the user, 
+
+1. Go into the user home directory ~/<username>, e.g. ~/geochemist
+
+2. Type 
+
+   tar cv ./GEMS | bzip2 > gems_<username>.1999<MM><DD>.tar.bz2 
+
+   and press Enter to execute this bash command. 
+   
+3. Copy the obtained .bz2 file to diskette or another directory. 
+
+
+To pack backup of only one profile directory, go into  
+
+~/<username>/GEMS/  directory and execute        
+
+   tar cv ./<profile> | bzip2 > gems_<username>_<profile>.1999<MM><DD>.tar.bz2 
+
+
+To restore backup archives, the simplest way is to use mc 
+(Midnight Commander).
+ 
+Dive into the bzipped tar backup file as into any usual directory,
+then copy necessary files where appropriate.
+  
+ 

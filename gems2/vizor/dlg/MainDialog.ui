@@ -1,0 +1,428 @@
+<!DOCTYPE UI><UI>
+<class>MainDialogData</class>
+<comment>Main program window (poor but important :)</comment>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>MainDialogData</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>500</width>
+            <height>321</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>sizePolicy</name>
+        <sizepolicy>
+            <hsizetype>3</hsizetype>
+            <vsizetype>3</vsizetype>
+        </sizepolicy>
+    </property>
+    <property stdset="1">
+        <name>minimumSize</name>
+        <size>
+            <width>500</width>
+            <height>320</height>
+        </size>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>GEM-Selektor</string>
+    </property>
+    <property stdset="1">
+        <name>font</name>
+        <font>
+            <family>Lucida Sans Unicode</family>
+            <pointsize>9</pointsize>
+        </font>
+    </property>
+    <widget>
+        <class>QLayoutWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Layout9</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>270</y>
+                <width>480</width>
+                <height>37</height>
+            </rect>
+        </property>
+        <hbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonExit</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Exit</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>default</name>
+                    <bool>false</bool>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonSettings</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Preferences...</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Press to adjust fonts on screen forms and set work directories</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonHelp</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Get &amp;Started</string>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Press, if you are new to GEM-Selektor </string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonAbout</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;About</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>default</name>
+                    <bool>false</bool>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>About GEM-Selektor and its development</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget>
+        <class>Line</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Line1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>240</y>
+                <width>480</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>orientation</name>
+            <enum>Horizontal</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum>Sunken</enum>
+        </property>
+        <property>
+            <name>frameShape</name>
+            <enum>HLine</enum>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>pButtonDB</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>30</x>
+                <y>170</y>
+                <width>428</width>
+                <height>66</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;Thermodynamic Database</string>
+        </property>
+        <property stdset="1">
+            <name>sizePolicy</name>
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>1</vsizetype>
+            </sizepolicy>
+        </property>
+        <property stdset="1">
+            <name>font</name>
+            <font>
+                <pointsize>16</pointsize>
+            </font>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Press this button to manage database records</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QPushButton</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>pButtonEQ</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>30</x>
+                <y>100</y>
+                <width>428</width>
+                <height>66</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;Computation of Equilibria</string>
+        </property>
+        <property stdset="1">
+            <name>sizePolicy</name>
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>1</vsizetype>
+            </sizepolicy>
+        </property>
+        <property stdset="1">
+            <name>font</name>
+            <font>
+                <pointsize>16</pointsize>
+            </font>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Press this button to calculate thermodynamic models</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>pLogoImg</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>60</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>scaledContents</name>
+            <bool>true</bool>
+        </property>
+        <property stdset="1">
+            <name>sizePolicy</name>
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+            </sizepolicy>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum>Raised</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>Panel</enum>
+        </property>
+        <property stdset="1">
+            <name>alignment</name>
+            <set>AlignCenter</set>
+        </property>
+        <property>
+            <name>hAlign</name>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>70</x>
+                <y>20</y>
+                <width>420</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Geochemical Equilibrium Modelling by Gibbs Energy Minimization</string>
+        </property>
+        <property stdset="1">
+            <name>alignment</name>
+            <set>WordBreak|AlignCenter</set>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>Panel</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum>Raised</enum>
+        </property>
+        <property stdset="1">
+            <name>font</name>
+            <font>
+                <pointsize>13</pointsize>
+                <bold>1</bold>
+                <italic>1</italic>
+            </font>
+        </property>
+        <property stdset="1">
+            <name>sizePolicy</name>
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>1</vsizetype>
+            </sizepolicy>
+        </property>
+        <property>
+            <name>hAlign</name>
+        </property>
+        <property>
+            <name>wordwrap</name>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>pButtonEQ</sender>
+        <signal>clicked()</signal>
+        <receiver>MainDialogData</receiver>
+        <slot>CmEQDialog()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonExit</sender>
+        <signal>clicked()</signal>
+        <receiver>MainDialogData</receiver>
+        <slot>CmExit()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonAbout</sender>
+        <signal>clicked()</signal>
+        <receiver>MainDialogData</receiver>
+        <slot>CmAbout()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonHelp</sender>
+        <signal>clicked()</signal>
+        <receiver>MainDialogData</receiver>
+        <slot>CmHelp()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonSettings</sender>
+        <signal>clicked()</signal>
+        <receiver>MainDialogData</receiver>
+        <slot>CmSettings()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonDB</sender>
+        <signal>clicked()</signal>
+        <receiver>MainDialogData</receiver>
+        <slot>CmDBDialog()</slot>
+    </connection>
+    <slot access="protected">CmDBDialog()</slot>
+    <slot access="protected">CmEQDialog()</slot>
+    <slot access="protected">CmExit()</slot>
+    <slot access="protected">CmHelp()</slot>
+    <slot access="protected">CmAbout()</slot>
+    <slot access="protected">CmSettings()</slot>
+</connections>
+</UI>

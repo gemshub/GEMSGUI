@@ -1,0 +1,54 @@
+# Makefile.common
+# include file for all Makefiles
+#
+
+# GNU standard requirements
+
+# SHELL=/bin/sh
+
+# compile variables
+
+#QTDIR		= /usr/local/qt2e
+QTDIR		= /usr/lib/qt2
+
+OPT_FLAGS	= -O2 -mcpu=pentium
+RELEASE_FLAGS	= -DGEMS_RELEASE
+DEBUG_FLAGS	= -ggdb
+PROF_FLAGS	= -pg
+WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
+		    -Wunreachable-code
+CCFLAGS		= -Wall -DQT_THREAD_SUPPORT -D__unix -pipe
+
+INC_GLOBAL	= -I$(QTDIR)/include 
+LDFLAGS		=
+#LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
+#LIBS		= -lqt-mt -lX11 -lXext -lm -lstdc++
+#-lefence 
+
+# commands
+CC		= g++
+LD		= ld
+
+ifeq ($(RELEASE),YES)
+
+# flags for making release version of GEMS
+FLAGS		= $(CCFLAGS) $(OPT_FLAGS) $(RELEASE_FLAGS)
+LINK_CMD	= $(CC)
+else
+ifeq ($(PROFILE),YES)
+
+#flag for making profile version of GEMS
+FLAGS		= $(CCFLAGS) $(DEBUG_FLAGS) $(PROF_FLAGS)
+LINK_CMD	= $(CC) $(PROF_FLAGS)
+else
+
+#flags for making usual debug version
+FLAGS		= $(CCFLAGS) $(DEBUG_FLAGS)
+# $(WARN_ALL)
+LINK_CMD	= $(CC)
+endif
+endif
+
+
+MAKEDEP_CMD	= makedepend -m -Y 
+CLEAN_CMD	= rm -f *.o *.bak *~ *.moc.cpp *.log *.out *.orig *.rej *.rpo

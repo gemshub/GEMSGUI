@@ -1,0 +1,46 @@
+# Makefile for Borland C++ Builder 5 (bcc32 5.5.1)
+
+!if !$d(BCB)
+BCB = $(MAKEDIR)\..
+!endif
+
+MAKE = make -f Makefile.w32
+
+subdirs	= vizor/libs vizor/kernel vizor mods mods/submod vizor/dlg
+cleandirs	= vizor/libs vizor/kernel vizor mods mods/submod vizor/dlg
+backupfiles	= doc data lib mods vizor Makefile*.* *.spec
+
+LIBS	= import32.lib cw32mti.lib 
+
+GEMS_L	= lib\gemviz.lib lib\gemsel.lib lib\qtmain.lib lib\qtmt300.lib
+# $(QTDIR)\lib\qtmain.lib $(QTDIR)\lib\qtmt300.lib
+
+TARGET		= gems.exe
+
+MAKE	= make
+
+.PHONY: subdirs_mk
+
+all:	subdirs_mk link
+
+subdirs_mk:
+	cd mods
+	$(MAKE) -f Makefile.w32 all
+	cd ..\vizor
+	$(MAKE) -f Makefile.w32 all
+	cd ..
+
+
+link:
+	ilink32 -v -c -x -Gn -aa -Tpe c0w32.obj -L$(BCB)\lib  \
+                 , $(TARGET), , $(GEMS_L) $(LIBS)
+
+
+
+clean:
+	cd mods
+        $(MAKE) -f Makefile.w32 clean
+	cd ..\vizor
+        $(MAKE) -f Makefile.w32 clean
+	cd ..
+

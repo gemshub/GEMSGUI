@@ -1,0 +1,85 @@
+Format dlya vyvoda tablic rezul'tatov:
+
+All words case sensitive   !!!!!
+
+
+<FORMAT> =:: <COMMAND> { <COMMAND> }
+<COMMAND> =:: line <COLUMNS>  ¦ list <obj_name> <COLUMNS>
+<COLUMNS> =:: <STATEMENT> {, <STATEMENT>}
+<STATEMENT> =:: <FORMAT> <DATA>
+<FORMAT>    =:: %[flags][width][.prec]type_char
+
+ flags: "+" or "-";
+ width = integer from 0 to 256;
+ [.prec]= integer from 0 to 14
+ type_char
+ - s	Prints characters until a null-terminator
+ - f	Floating point	signed value of the form [-]dddd.dddd.
+ - e	Floating point	signed value of the form [-]d.dddde[+/-]ddd
+ - g	Floating point	signed value in either e or f form,
+        based on the given value and precision.
+
+<DATA>  =::  [all] [label] <obj_name> ¦
+             [label] <obj_name[i]>    ¦
+             <obj_name[i,j]>          ¦   (substring from-to for string data)
+             "text string"            ¦
+             index                    ¦
+             space                    ¦
+             rkey                     ¦
+
+             date                     ¦
+
+             time                     ¦
+
+
+     line            -- komanda pechati odnoy stroki
+
+     list <obj_name> -- pechat' stol'ko strok, skol'ko
+                        strok (GetN()) v ob'ekte <obj_name>
+                        (the first dimension in DOD)
+
+      all            -- pechataem vse kolonki <obj_name>  (GetM)
+                        v zadannom pered etim formate
+
+      label           -- pechataem DOD label <obj_name>
+                        v zadannom pered etim formate
+
+      <obj_name>       -- pechataem znachenie ob'ekta <obj_name>
+                        i = index ( current line), j = 0
+                        v zadannom pered etim formate
+
+      <obj_name[col]>  -- pechataem znachenie ob'ekta <obj_name>
+                        i = index, j = col
+                        v zadannom pered etim formate
+      <obj_name[from, num]>  -- Tol'ko dlya spiskov strok
+                       pechataem dlya ob'ekta <obj_name>
+                        i = index, j = 0 podstroku s pozicii from,
+                        num - cumvolov
+                        v zadannom pered etim formate
+
+      space           -- pechat' probelov po formatu
+
+      index          -- index stroki tablicy
+
+      rkey           -- kluch tekushey zapisi v upakovanom vide
+      date           -- tekushaya data
+      time           -- tekushee vremya
+
+
+    Dlya vyvoda pustoy stroki: line %s ""
+
+
+
+Example:
+
+line  %s "Data Sampling Tabulation"
+line  %s "   Record key:",  %s rkey
+line  %s #GDname
+line  %s #GDcom
+line
+     %14.7s  #gX_Nam,  %14.7s all #gLnam,  %s  "Record key variant"
+list #x0  %14.7e  #x0, %14.7e all #y0 , %s   #GD_rkl[17,10]
+
+line  %14.7s  #gX_Nam, %14.7s all #gLnamE
+list #xE  %14.7e  #xE, %14.7e all #yE
+

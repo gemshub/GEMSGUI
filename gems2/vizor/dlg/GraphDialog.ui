@@ -1,0 +1,285 @@
+<!DOCTYPE UI><UI>
+<class>GraphDialogData</class>
+<widget>
+    <class>QDialog</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>GraphDialogData</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>610</width>
+            <height>451</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>minimumSize</name>
+        <size>
+            <width>610</width>
+            <height>450</height>
+        </size>
+    </property>
+    <property stdset="1">
+        <name>font</name>
+        <font>
+            <family>Lucida Sans Unicode</family>
+            <pointsize>9</pointsize>
+        </font>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>GraphDialogData</string>
+    </property>
+    <widget>
+        <class>QGroupBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>pGroupBox</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>480</x>
+                <y>10</y>
+                <width>110</width>
+                <height>140</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>title</name>
+            <string></string>
+        </property>
+        <property stdset="1">
+            <name>sizePolicy</name>
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>5</vsizetype>
+            </sizepolicy>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>NoFrame</enum>
+        </property>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>pFragmentBtn</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>0</x>
+                    <y>35</y>
+                    <width>110</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&amp;Fragment</string>
+            </property>
+            <property stdset="1">
+                <name>sizePolicy</name>
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                </sizepolicy>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <pointsize>10</pointsize>
+                </font>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Shows a fragment of the plot - set up size and position under Configure...</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>pBtn3</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>0</x>
+                    <y>70</y>
+                    <width>110</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&amp;Print...</string>
+            </property>
+            <property stdset="1">
+                <name>sizePolicy</name>
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                </sizepolicy>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <pointsize>10</pointsize>
+                </font>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Prints the plot and its legend (under construction)</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>pBtn4</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>0</x>
+                    <y>106</y>
+                    <width>110</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>&amp;Customize...</string>
+            </property>
+            <property stdset="1">
+                <name>sizePolicy</name>
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                </sizepolicy>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <pointsize>10</pointsize>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>toggleButton</name>
+                <bool>false</bool>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Press to set up axii, colors, and graph legend symbols</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>pBtn1</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>110</width>
+                    <height>33</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>C&amp;lose</string>
+            </property>
+            <property stdset="1">
+                <name>sizePolicy</name>
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                </sizepolicy>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <pointsize>10</pointsize>
+                </font>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Closes the plot and goes back to the parent window</string>
+            </property>
+        </widget>
+    </widget>
+    <widget>
+        <class>QGroupBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>pGrpLegend</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>480</x>
+                <y>160</y>
+                <width>110</width>
+                <height>270</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>title</name>
+            <string>Legend</string>
+        </property>
+        <property stdset="1">
+            <name>font</name>
+            <font>
+                <pointsize>11</pointsize>
+            </font>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>Box</enum>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>pBtn4</sender>
+        <signal>clicked()</signal>
+        <receiver>GraphDialogData</receiver>
+        <slot>CmLegend()</slot>
+    </connection>
+    <connection>
+        <sender>pFragmentBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>GraphDialogData</receiver>
+        <slot>CmFragment()</slot>
+    </connection>
+    <connection>
+        <sender>pBtn3</sender>
+        <signal>clicked()</signal>
+        <receiver>GraphDialogData</receiver>
+        <slot>CmPrint()</slot>
+    </connection>
+    <connection>
+        <sender>pBtn1</sender>
+        <signal>clicked()</signal>
+        <receiver>GraphDialogData</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <slot access="protected">CmFragment()</slot>
+    <slot access="protected">CmLegend()</slot>
+    <slot access="protected">CmPrint()</slot>
+</connections>
+<tabstops>
+    <tabstop>pBtn1</tabstop>
+    <tabstop>pFragmentBtn</tabstop>
+    <tabstop>pBtn3</tabstop>
+    <tabstop>pBtn4</tabstop>
+</tabstops>
+</UI>

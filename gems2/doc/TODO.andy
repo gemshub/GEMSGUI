@@ -1,0 +1,23 @@
+ANDY+SVETA:
+- what is Filler?
+- fix ROUND(), LROUND() defines (they seems to be wrong/duplicated/#defined?? )
+- stop calculation on 'Cancel in Progress', for now it just closes the window
+- remove 'operation cancelled' on 'escape' in some dialogs etc. (its rudiment
+    left from DOS version)
+
+ANDY:
+- complete visor.cpp 'first start' code in Win32/Linux
+- include reading $WINSYS\gems.ini file to get GEMS home/sys directories
+
+- make help search case insensitive (before opening Help window
+    requested chapter is searched in help file to know wether it's there)
+- reparenting in HTML-Help Dialog ?? (if you press F1 in some window
+    while help is opened for another, parent of the Help window should change)
+
+- make 'Remake' dialog scrollable
+
+- complete or remove SettingsDialog
+
+- set default buttons after QTARCHITECT (this works in QtArchitect 2.1)
+
+- export function in Graphics (Sveta's old request)

@@ -1,0 +1,34 @@
+# Makefile.common
+# include file for all Makefiles
+#
+# For Borland C++ Builder 5 (bcc32 5.5.1)
+
+!if !$d(BCB)
+BCB = $(MAKEDIR)\..
+!endif
+
+MAKE = make -f Makefile.w32
+
+#.autodepend
+
+# compile variables
+
+INCL_GLOBAL	=
+RELEASE_FLAGS	= -DGEMS_RELEASE
+DEBUG_FLAGS	= -v
+PROF_FLAGS	=
+CCFLAGS         = -w -D__bcc -tWM -tWR -DQT_THREAD_SUPPORT -DQT_DLL
+LDFLAGS		=
+
+
+# commands
+
+CC		= bcc32.exe
+LD		= tlib.exe
+LIB_PRG		= tlib.exe
+
+CLEAN_CMD	= del *.obj
+
+.SUFFIXES:
+.SUFFIXES:	.h .obj .cpp
+

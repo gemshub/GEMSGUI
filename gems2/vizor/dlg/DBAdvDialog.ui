@@ -1,0 +1,697 @@
+<!DOCTYPE UI><UI>
+<class>DBAdvDialogData</class>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>DBAdvDialogData</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>420</width>
+            <height>501</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>minimumSize</name>
+        <size>
+            <width>420</width>
+            <height>500</height>
+        </size>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>DBAdvDialogData</string>
+    </property>
+    <property stdset="1">
+        <name>font</name>
+        <font>
+            <family>Lucida Sans Unicode</family>
+            <pointsize>9</pointsize>
+        </font>
+    </property>
+    <property stdset="1">
+        <name>baseSize</name>
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property>
+        <name>toolTip</name>
+        <string>Get miscellaneous information about maintaining databases</string>
+    </property>
+    <widget>
+        <class>Line</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Line1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>430</y>
+                <width>390</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>orientation</name>
+            <enum>Horizontal</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum>Sunken</enum>
+        </property>
+        <property>
+            <name>frameShape</name>
+            <enum>HLine</enum>
+        </property>
+    </widget>
+    <widget>
+        <class>QLayoutWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>vbox2</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>40</x>
+                <y>330</y>
+                <width>360</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <vbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>0</number>
+            </property>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonDUTerm</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Du&amp;al Thermodynamics (DUtherm)</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>8</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string></string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonAdProbe</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Adaptive Models and &amp;Uncertainty Spaces </string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>8</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string></string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonInteg</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Coupled &amp;Mass Transport in a Megasystem</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>8</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string></string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>TextLabel1_2</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>40</x>
+                <y>310</y>
+                <width>160</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Under Construction:</string>
+        </property>
+        <property stdset="1">
+            <name>font</name>
+            <font>
+                <italic>1</italic>
+            </font>
+        </property>
+    </widget>
+    <widget>
+        <class>QLayoutWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>vbox1</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>80</y>
+                <width>390</width>
+                <height>220</height>
+            </rect>
+        </property>
+        <property>
+            <name>layoutSpacing</name>
+        </property>
+        <vbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>0</number>
+            </property>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonSDref</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>B&amp;ibliography (SDref)</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>11</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Full references (opt. abstracts) to sources of input data</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonConst</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Numerical &amp;Constants (Const)</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>11</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Some tables of constants used in thermodynamic calculations</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonProfile</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Chemical Model &amp;Profile (Profile)</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>11</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Modeling application profile of database files, phases and species</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonSysEq</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Single Chemical Sys&amp;tem (SysEq)</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>11</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Definitions of chemical systems and equilibrium states</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonProcess</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Process Simulators (Process)</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>11</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Definitions of process simulators (batch GEM calculations)</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonGTdemo</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Data &amp;Samplers and Plotters (GTdemo)</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>11</pointsize>
+                    </font>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Definitions of data samplers and graphics</string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+    <widget>
+        <class>QLayoutWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Layout20</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>450</y>
+                <width>390</width>
+                <height>37</height>
+            </rect>
+        </property>
+        <hbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonBack</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Back</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>default</name>
+                    <bool>false</bool>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Back to 'Thermodynamic database management' dialog</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonHelp</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Help</string>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>default</name>
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pButtonFormats</cstring>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Formats</string>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Get descriptions of database and other file formats</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>tlTitle</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>70</x>
+                <y>10</y>
+                <width>330</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>Database Management (2)</string>
+        </property>
+        <property stdset="1">
+            <name>alignment</name>
+            <set>AlignCenter</set>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>Panel</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum>Raised</enum>
+        </property>
+        <property stdset="1">
+            <name>font</name>
+            <font>
+                <pointsize>13</pointsize>
+                <bold>1</bold>
+                <italic>1</italic>
+            </font>
+        </property>
+        <property>
+            <name>hAlign</name>
+        </property>
+        <property>
+            <name>wordwrap</name>
+        </property>
+    </widget>
+    <widget>
+        <class>QLabel</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>pLogoImg</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>60</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>scaledContents</name>
+            <bool>true</bool>
+        </property>
+        <property stdset="1">
+            <name>sizePolicy</name>
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+            </sizepolicy>
+        </property>
+        <property stdset="1">
+            <name>frameShadow</name>
+            <enum>Raised</enum>
+        </property>
+        <property stdset="1">
+            <name>frameShape</name>
+            <enum>Panel</enum>
+        </property>
+        <property stdset="1">
+            <name>alignment</name>
+            <set>AlignCenter</set>
+        </property>
+        <property>
+            <name>hAlign</name>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>pButtonBack</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmBack()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonHelp</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmHelp()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonFormats</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmFormats()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonSDref</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_SData()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonConst</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_Const()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonProfile</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_PROFILE()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonSysEq</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmThermoSystem()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonProcess</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_PROCESS()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonGTdemo</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_GTDEMO()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonDUTerm</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_DUTERM()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonAdProbe</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_PROBE()</slot>
+    </connection>
+    <connection>
+        <sender>pButtonInteg</sender>
+        <signal>clicked()</signal>
+        <receiver>DBAdvDialogData</receiver>
+        <slot>CmOpen_INTEG()</slot>
+    </connection>
+    <slot access="protected">CmBack()</slot>
+    <slot access="protected">CmHelp()</slot>
+    <slot access="protected">CmFormats()</slot>
+    <slot access="protected">CmOpen_PROCESS()</slot>
+    <slot access="protected">CmOpen_Const()</slot>
+    <slot access="protected">CmOpen_DUTERM()</slot>
+    <slot access="protected">CmOpen_GTDEMO()</slot>
+    <slot access="protected">CmOpen_INTEG()</slot>
+    <slot access="protected">CmOpen_PROBE()</slot>
+    <slot access="protected">CmOpen_PROFILE()</slot>
+    <slot access="protected">CmOpen_SData()</slot>
+    <slot access="protected">CmThermoSystem()</slot>
+</connections>
+</UI>

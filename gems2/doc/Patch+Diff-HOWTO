@@ -1,0 +1,57 @@
+
+to make diff from one version to another:
+
+1) change to gems parent directory
+2) assume new gems dir is 'new_dir' and old is 'old_dir'
+3) diff -rcbN --exclude-from=diff.exclude old_dir new_dir > gems-1999mmdd-a.diff
+
+options:
+    -r recursive into directories
+    -c context diff - if some chnages were made to file being patched,
+         patch will try to find line being changed anyway!!!
+    -b skip changes in white space
+    -N if file in exist in one dir and dosen't in other
+	treat it like it was empty in other
+    --exclude-from=diff.exclude 
+	do not compare files listed in diff.exclude
+
+  gems-1999mmdd-a.diff - made 1999/mm/dd by Andy 
+	
+4) optionally bzip2 or gzip gems-1999xxxx-a.diff
+
+	
+To apply patch:
+
+1) change to gems dir
+2) move patch file here
+3) gzip or 'bzip2 -cd gems-1999xxxx-a.diff.bz2 | patch -p1'
+
+options:
+    -p1 skips one level of directory (because we diff'ed in gems parent and 
+	applying in gems directory)
+	
+	
+should work now :)
+
+I use next diff.exclude:
+
+out
+*.bak
+*.o
+*.html
+*.out
+*.xpm
+*.bmp
+*~
+*.moc.cpp
+*.orig
+*.rej
+Makefile
+Makefile.common
+gems
+
+
+
+
+1999-2000 (c) Andy Rysin <arysin@yahoo.com>
+

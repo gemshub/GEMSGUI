@@ -1,0 +1,228 @@
+# BCB5 (bcc32 5.5.1 ) version
+# Makefile	Makefile for GEM
+#
+# Version:	@(#)Makefile  28-Dec-1998
+#
+
+!include Makefile.qt_w32
+
+FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
+INC_LOCAL	= -I./kernel -I./libs -I../mods
+INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
+LIB	=   tlib /C /P512
+
+
+SOURCES = page_f.cpp \
+          visor.cpp \
+          main.cpp \
+          visor_w.cpp \
+          module_w.cpp \
+          page_w.cpp \
+          page_win_w.cpp \
+          pshape.cpp \
+          help.cpp \
+          units.cpp \
+          helpwindow.cpp \
+          graph.cpp
+
+OBJECTS = page_f.obj \
+          visor.obj \
+          main.obj \
+          visor_w.obj \
+          module_w.obj \
+          page_w.obj \
+          page_win_w.obj \
+          pshape.obj \
+          help.obj \
+          units.obj \
+          helpwindow.obj \
+          graph.obj
+
+METAOBJ = tmp\moc_visor_w.obj \
+          tmp\moc_module_w.obj  \
+          tmp\moc_page_w.obj \
+          tmp\moc_query_w.obj \
+          tmp\moc_page_win_w.obj  \
+          tmp\moc_helpwindow.obj
+
+
+TARGET	= ..\lib\gemviz.lib
+
+MAKE	= make
+
+# rules
+
+.PHONY: subdirs_mk
+
+.cpp.obj:
+        $(CC) $(FLAGS) $(INCLUDES) -c $<
+
+
+all:  $(TARGET)
+
+
+subdirs_mk:
+      cd libs
+	$(MAKE) -f Makefile.w32 all
+	cd ..\kernel
+	$(MAKE) -f Makefile.w32 all
+	cd ..\dlg
+	$(MAKE) -f Makefile.w32 all
+        cd ..
+
+$(TARGET):  subdirs_mk $(OBJECTS) $(METAOBJ) link
+
+
+link:
+      -del $(TARGET)
+	$(LIB) $(TARGET) @&&|
++libs\config.obj \
++libs\gstring.obj \
++kernel\v_user.obj \
++kernel\v_vals.obj \
++kernel\v_object.obj \
++kernel\v_ipnc.obj \
++kernel\v_file.obj \
++kernel\v_dbm1.obj \
++kernel\v_dbm2.obj \
++kernel\t_print.obj \
++kernel\v_module.obj \
++page_f.obj \
++visor.obj \
++main.obj \
++visor_w.obj \
++module_w.obj \
++page_w.obj\
++pshape.obj \
++help.obj \
++units.obj \
++helpwindow.obj \
++tmp\moc_visor_w.obj \
++tmp\moc_module_w.obj \
++tmp\moc_page_w.obj \
++page_win_w.obj \ 
++graph.obj \
++tmp\moc_query_w.obj \
++tmp\moc_page_win_w.obj \
++tmp\moc_helpwindow.obj \
++dlg\MainDialog.obj \
++dlg\MainDialogData.obj \
++dlg\DBDialog.obj \
++dlg\DBDialogData.obj \
++dlg\EQDialog.obj \
++dlg\EQDialogData.obj \
++dlg\SystemDialog.obj \
++dlg\SystemDialogData.obj \
++dlg\ProgressDialog.obj \
++dlg\ProgressDialogData.obj \
++dlg\KeyDialog.obj \
++dlg\KeyDialogData.obj \
++dlg\KeyProfile.obj \
++dlg\KeyProfileData.obj \
++dlg\KeyFilter.obj \
++dlg\SettingsDialog.obj \
++dlg\SettingsDialogData.obj \
++dlg\SelectDialog.obj \
++dlg\SelectDialogData.obj \
++dlg\CalcDialog.obj \
++dlg\CalcDialogData.obj \
++dlg\CalcCheckDialog.obj \
++dlg\CalcCheckDialogData.obj \
++dlg\DBAdvDialog.obj \
++dlg\DBAdvDialogData.obj \
++dlg\ColorDialog.obj  \
++dlg\ColorDialogData.obj \
++dlg\GraphDialog.obj  \
++dlg\GraphDialogData.obj \
++dlg\LegendDialog.obj  \
++dlg\LegendDialogData.obj \
++dlg\ListFilesDialog.obj \
++dlg\ListFilesDialogData.obj \
++dlg\HLresDialog.obj \
++dlg\HLresDialogData.obj \
++dlg\HLinpDialog.obj \
++dlg\HLinpDialogData.obj \
++dlg\LoadMessage.obj \
++tmp\moc_MainDialog.obj \
++tmp\moc_MainDialogData.obj \
++tmp\moc_DBDialog.obj \
++tmp\moc_DBDialogData.obj \
++tmp\moc_EQDialog.obj \
++tmp\moc_EQDialogData.obj \
++tmp\moc_SystemDialog.obj \
++tmp\moc_SystemDialogData.obj \
++tmp\moc_ProgressDialog.obj \
++tmp\moc_ProgressDialogData.obj \
++tmp\moc_KeyDialog.obj \
++tmp\moc_KeyDialogData.obj \
++tmp\moc_KeyProfile.obj \
++tmp\moc_KeyProfileData.obj \
++tmp\moc_KeyFilter.obj \
++tmp\moc_SettingsDialog.obj \
++tmp\moc_SettingsDialogData.obj \
++tmp\moc_SelectDialog.obj \
++tmp\moc_SelectDialogData.obj \
++tmp\moc_CalcDialog.obj \
++tmp\moc_CalcDialogData.obj \
++tmp\moc_CalcCheckDialog.obj \
++tmp\moc_CalcCheckDialogData.obj \
++tmp\moc_DBAdvDialog.obj \
++tmp\moc_DBAdvDialogData.obj \
++tmp\moc_ColorDialog.obj \
++tmp\moc_ColorDialogData.obj \
++tmp\moc_GraphDialog.obj \
++tmp\moc_GraphDialogData.obj \
++tmp\moc_LegendDialog.obj \
++tmp\moc_LegendDialogData.obj \
++tmp\moc_ListFilesDialog.obj \
++tmp\moc_ListFilesDialogData.obj \
++tmp\moc_HLresDialog.obj \
++tmp\moc_HLresDialogData.obj \
++tmp\moc_HLinpDialog.obj \
++tmp\moc_HLinpDialogData.obj \
++tmp\moc_LoadMessage.obj
+|
+
+clean:
+        cd libs
+	$(MAKE) -f Makefile.w32 clean
+	cd ..\kernel
+	$(MAKE) -f Makefile.w32 clean
+	cd ..\dlg
+	$(MAKE) -f Makefile.w32 clean
+        cd ..
+        -del *.obj
+        -del tmp\*.obj
+
+#
+
+tmp\moc_visor_w.obj: visor_w.h
+		$(MOC) visor_w.h -o moc_visor_w.cpp
+                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_visor_w.cpp
+		-del moc_visor_w.cpp
+
+
+tmp\moc_module_w.obj: module_w.h
+		$(MOC) module_w.h -o moc_module_w.cpp
+                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_module_w.cpp
+		-del moc_module_w.cpp
+
+tmp\moc_page_w.obj: page_w.h
+		$(MOC) page_w.h -o moc_page_w.cpp
+                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_page_w.cpp
+		-del moc_page_w.cpp
+
+tmp\moc_query_w.obj: query_w.h
+		$(MOC) query_w.h -o moc_query_w.cpp
+                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_query_w.cpp
+		-del moc_query_w.cpp
+
+tmp\moc_page_win_w.obj: page_win_w.h
+      	$(MOC) page_win_w.h -o moc_page_win_w.cpp
+                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_page_win_w.cpp
+		-del moc_page_win_w.cpp
+
+tmp\moc_helpwindow.obj: helpwindow.h
+		$(MOC) helpwindow.h -o moc_helpwindow.cpp
+                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_helpwindow.cpp
+		-del moc_helpwindow.cpp

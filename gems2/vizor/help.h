@@ -1,0 +1,48 @@
+//-------------------------------------------------------------------
+// Id: gems/vizor/help.h  version 2.0.0    2001
+//
+// Declaration of Helper class
+//
+// Created : 970207    Modified: 010908
+//
+// Copyright (C) 1996-2001  A.Rysin
+// Uses  gstring class (C) A.Rysin 1999
+//
+// This file is part of the GEM-Vizor library which uses the
+// Qt v.2.x GUI Toolkit (Troll Tech AS, http://www.trolltech.com)
+// according to the Qt Duo Commercial license #1435515
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
+// E-mail gems2.support@psi.ch
+//-------------------------------------------------------------------
+#ifndef __help_h
+#define __help_h
+
+#include "gstring.h"
+//using namespace std;
+
+/*! This class searches for some reference in html help file
+*/
+class Helper
+{
+    gstring path;
+
+public:
+    Helper(const gstring&);
+
+    bool checkForRef(const gstring& file, gstring& ref);
+    /*! sets the path where html-files are */
+    void setPath(const gstring& p)
+    {
+        path = p;
+    }
+
+    struct FileError
+        {}
+    ;
+};
+
+#endif  //__help_h

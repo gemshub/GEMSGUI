@@ -1,0 +1,744 @@
+//-------------------------------------------------------------------
+// Id: gems/mods/submod/ms_mueqexp.cpp
+//      version 2.0.0                           edited 2001-09-08
+//  Created: 1992-1997
+//
+// Copyright (C) 1992-2000  D.Kulik, S.Dmitrieva, K.Chudnenko, I.Karpov
+//
+// Implementation of chemistry-specific functions
+// for convex programming Gibbs energy minimization
+//
+// This file is part of a GEM-Selektor (GEMS) v.2.x.x program
+// environment for thermodynamic modeling in geochemistry
+// Uses: GEM-Vizor GUI DBMS library, gems/lib/gemvizor.lib
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// E-mail: gems2.support@psi.ch; chud@igc.irk.ru
+//-------------------------------------------------------------------
+//
+#include <math.h>
+#include <stdio.h>
+
+#include "m_param.h"
+#include "service.h"
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// Load Thermodynamic Data from MTPARM to MULTI
+void TProfil::CompG0Load()
+{
+    int j, jj, k, jb, je=0;
+
+    /* pTPD state of reload t/d data 0-all, 1 G0, 2 нdo not*/
+    if( pmp->pTPD < 1 )
+    {
+        pmp->T = pmp->Tc = tpp->T + C_to_K;
+        pmp->TC = pmp->TCc = tpp->T;
+        pmp->P = pmp->Pc = tpp->P;
+        pmp->denW = tpp->RoW;
+        pmp->denWg = tpp->RoV;
+        pmp->epsW = tpp->EpsW;
+        pmp->epsWg = tpp->EpsV;
+        pmp->RT = tpp->RT; // R_CONSTANT * pm->Tc
+        pmp->FRT = F_CONSTANT/pmp->RT;
+        pmp->lnP = 0.;
+        if( tpp->P != 1. ) /* ??????? */
+            pmp->lnP = log( tpp->P );
+    }
+    if( pmp->pTPD <= 1 )
+    {
+        for( k=0; k<pmp->FI; k++ )
+        {
+            jb = je;
+            je += pmp->L1[k];
+            /*load t/d data from DC */
+            for( j=jb; j<je; j++ )
+            {
+                jj = pmp->muj[j];
+                pmp->G0[j] = Cj_init_calc( tpp->G[jj], j, k );
+            }
+        }
+    }
+    if( !pmp->pTPD )
+    {
+        for( j=0; j<pmp->L; j++ )
+        {
+            jj = pmp->muj[j];
+
+            if( tpp->PtvVm == S_ON )
+                switch( pmp->PV )
+                { /* make mol volumes of components */
+                case VOL_CONSTR:
+                    pmp->A[j*pmp->N] = tpp->Vm[jj];
+                case VOL_CALC:
+                case VOL_UNDEF:
+                    pmp->Vol[j] = tpp->Vm[jj] * 10.;  /* ?хфшэшЎ√? */
+                    break;
+                }
+            else pmp->Vol[j] = 0.0;
+
+            /* load ather t/d parametres - do it! */
+        }
+    }
+    pmp->pTPD = 2;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// calc value of dual chemical potencial
+double TProfil::DualChemPot( double U[], float AL[], int N )
+{
+    double Nu = 0.0;
+    for(int i=0; i<N; i++ )
+        Nu += AL[i]? U[i]*AL[i]: 0.0;
+    return Nu;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Расчет валовой стехиометрии фазы - раствора              17.03.96
+*  N - к-во независимых, M - зависимых компонентов.
+*  X - вектор мольных кол-в зависимых компонентов.
+*  BF - валовой состав фазы.
+*/
+void TProfil::phase_bcs( int N, int M, float *A, double X[], double BF[] )
+{
+    int i, j;
+    double Xx;
+
+    if( !A || !X || !BF )
+        return;
+    memset( BF, 0, N*sizeof( double ));
+    for( j=0; j<M; j++ )
+    {
+        Xx = X[j];
+        if( fabs( Xx ) < 1e-12 )
+            continue;
+        for( i=0; i<N; i++ )
+            BF[i] += A[i+j*N] * Xx;
+    }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+//  This procedure sets kinetic limits according to a given
+//  concentration units
+//  Needs much more work and elaboration!
+//
+int TProfil::Set_DC_limits( int Mode )
+{
+    double XFL, XFU, XFS=0., XFM, MWXW, MXV, XL, XU;
+    int jb, je, j,k,JJ,KK, MpL, iRet=0;
+    vstr tbuf(80);
+
+    if( !pmp->PLIM )
+        return iRet;  /* no limits */
+// ???????????????????????????????????????
+    ConCalc( pmp->X, pmp->XF, pmp->XFA );
+
+    for(k=0; k<pmp->FI; k++)
+        XFS+=pmp->XF[k];  /* calc sum of mol all phases */
+
+    jb=0;
+    for( k=0; k<pmp->FI; k++ )
+    { /* cycle by phases */
+        je=jb+pmp->L1[k];
+        /*XFM=0.;*/
+        MWXW =0.;
+        MXV = 0.;
+        XFL = 0.;
+        XFU = 1e6;
+        if( Mode && pmp->XF[k] < pmp->DSM )
+            goto NEXT_PHASE;
+        XFM = pmp->FWGT[k]; /* Mass of a phase */
+        if( Mode )
+        {
+            MWXW = XFM/pmp->XF[k]; /* current mol weight of phase */
+            MXV = pmp->FVOL[k]/pmp->XF[k]; /*current mol volume of phase  */
+        }
+        /* Check codes for phase DC */
+        MpL=0;
+        for( j=jb; j<je; j++ )
+            if( pmp->RLC[j] != NO_LIM )
+                MpL = 1;
+        if( pmp->RFLC[k] == NO_LIM && !MpL )
+        { /* check type restrictions on phase */
+            goto NEXT_PHASE;
+        }
+        switch( pmp->RFSC[k] )
+        { /* check scale restrictions on phase in all system */
+        case QUAN_MOL:
+            XFL = Mode? pmp->XF[k]: pmp->PLL[k];
+            XFU = Mode? pmp->XF[k]: pmp->PUL[k];
+            break;
+        case CON_MOLAL:
+            XFL = Mode? pmp->XF[k] /* *pmp->X[pmp->LO]/55.508373 */:
+                  pmp->PLL[k]*pmp->GWAT/55.508373;
+            XFU = Mode? pmp->XF[k] /* *pmp->X[pmp->LO]/55.508373 */:
+                  pmp->PUL[k]*pmp->GWAT/55.508373;
+            break;
+        case CON_MOLFR:
+            XFL = Mode? pmp->XF[k]: pmp->PLL[k]*XFS;
+            XFU = Mode? pmp->XF[k]: pmp->PUL[k]*XFS;
+            break;
+        case CON_WTFR:
+            XFL = Mode? pmp->XF[k]: pmp->PLL[k]*pmp->MBX/MWXW;
+            XFU = Mode? pmp->XF[k]: pmp->PUL[k]*pmp->MBX/MWXW;
+            break;
+        case CON_VOLFR:
+            XFL = Mode? pmp->XF[k]: pmp->PLL[k]*pmp->VXc/MXV;
+            XFU = Mode? pmp->XF[k]: pmp->PUL[k]*pmp->VXc/MXV;
+            break;
+        default:
+            ; /* do more? */
+        }
+//        if( pmp->RFLC[k] == NO_LIM )
+//        {                            Temporary!
+            XFL = 0.0;
+            XFU = 1e6;
+//        }
+        for( j=jb; j<je; j++ )
+        { /* cycle by DC. */
+            if( pmp->RLC[j] == NO_LIM )
+                continue;
+
+            if( Mode )
+            {
+                XU = pmp->DUL[j];
+                XL = pmp->DLL[j];
+            }
+            else
+                switch( pmp->RSC[j] ) /* get initial limits */
+                {
+                case QUAN_MOL:
+                    XU = pmp->DUL[j];
+                    XL = pmp->DLL[j];
+                    break;
+                case CON_MOLAL:
+                    XU = pmp->DUL[j]*pmp->GWAT/55.508373;
+                    XL = pmp->DLL[j]*pmp->GWAT/55.508373;
+                    break;
+                case CON_MOLFR:
+                    XU = pmp->DUL[j]*XFU;
+                    XL = pmp->DLL[j]*XFL;
+                    break;
+                case CON_WTFR:
+                    XU = pmp->DUL[j]*XFU*MWXW /
+                         syst->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );
+                    XL = pmp->DLL[j]*XFL*MWXW /
+                         syst->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );
+                    break;
+                case CON_VOLFR:
+                    XU = pmp->DUL[j]*XFU*MXV/ pmp->Vol[j];
+                    XL = pmp->DLL[j]*XFL*MXV/ pmp->Vol[j];
+                    break;
+                default:
+                    ; /* do more */
+                }
+            /* check combine */
+            if( XU < 0.0 ) XU = 0.0;
+            if( XU > 1e6 ) XU = 1e6;
+            if( XL < 0.0 ) XL = 0.0;
+            if( XL > 1e6 ) XL = 1e6;
+            if( XU > XFU )
+            {
+                iRet = 1;
+                JJ = j;
+                KK = k;
+                sprintf( tbuf, "Inconsistent upper limits j=%d k=%d XU=%g XFU=%g",
+                         JJ, KK, XU, XFU );
+                vfMessage(window(), "Set_DC_limits",tbuf.p );
+                XU = XFU; // - pmp->lowPosNum;
+            }
+            if( XL < XFL )
+            {
+                iRet = 1;
+                JJ = j;
+                KK = k;
+                sprintf( tbuf, "Inconsistent lower limits j=%d k=%d XL=%g XFL=%g",
+                         JJ, KK, XL, XFL );
+                vfMessage(window(), "Set_DC_limits",tbuf.p );
+                XL = XFL; // - pmp->lowPosNum;
+            }
+            pmp->DUL[j]=XU;
+            pmp->DLL[j]=XL;
+        }   /* j */
+NEXT_PHASE:
+        jb = je;
+
+    }  /* k */
+    return iRet;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// Calc sum count of phases
+void TProfil::TotalPhases( double X[], double XF[], double XFA[] )
+{
+    int jj, j, i, k;
+    double XFw, XFs, x;
+
+    j=0;
+    for( k=0; k< pmp->FI; k++ )
+    { /* cycle by phases */
+        i=j+pmp->L1[k];
+        XFw = 0.0;
+        XFs=0.0; /* calc  count mol of carrier */
+        for(jj=j; jj<i; jj++)
+        {
+            x = X[jj];
+            if( pmp->DCCW[jj] == DC_ASYM_CARRIER && pmp->FIs )
+                XFw += x;
+            else XFs += x;
+        }
+        XF[k] = XFw + XFs;
+        if( k < pmp->FIs )
+            XFA[k] = XFw;
+        j=i;
+    }
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// Calculate mass-balance deviations (moles)
+// void TProfil::eDmb( int N, int L, float *A, double *Y, double *B, double *C )
+// {
+//  short I,J;
+//  for(J=0;J<N;J++)
+//  {
+//    C[J]=B[J];
+//    for(I=0;I<L;I++)
+//       if( Y[I] && *(A+I*N+J) )
+//           C[J]-= *(A+I*N+J) *Y[I];
+//  }
+// }
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Calculation of prime chemical potential F (returned)
+* from moles of DC Y[], total moles of phase YF[] and standard 
+* Gibbs energy gT (obtained from pmp->G[])
+* On error returns +7777777.
+*/
+double TProfil::PrimeChemPot(
+    double G,      /* gT0+gEx */
+    double logY,   /* ln x */
+    double logYF,  /* ln Xa */
+    double asTail, /* asymmetry non-log term or 0 for symmetric phases */
+    double logYw,  /* ln Xv */
+    char DCCW      /* generalized species class code */
+)
+{
+    double F;
+    switch( DCCW )
+    {
+    case DC_SINGLE:
+        F = G;
+        break;
+    case DC_ASYM_SPECIES:
+        F = G + logY - logYw + asTail;
+        break;
+    case DC_ASYM_CARRIER:
+        F = G + logY - logYF + asTail + 1.0 -
+            1.0/(1.0 - asTail);
+        break;
+    case DC_SYMMETRIC:
+        F = G + logY - logYF;
+        break;
+    default:
+        F = 7777777.;
+    }
+    return F;
+}
+
+
+// Kernel functions of IPM - rewritten by DAK for adsorption
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// VJ - Update of prime chemical potentials
+void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA[] )
+{
+    int i,j,k;
+    double v, Yf; // v is debug variable
+
+    j=0;
+    for( k=0; k<pmp->FI; k++ )
+    { /* cycle by phase */
+        i=j+pmp->L1[k];
+        if( YF[k] <= pmp->lowPosNum*100. ||
+                pmp->PHC[k] == PH_AQUEL && Y[pmp->LO] <= pa.p.XwMin )
+            goto NEXT_PHASE;
+
+        pmp->YFk = 0.0;
+        Yf= YF[k]; /* calculate number of moles of carrier */
+        if( pmp->FIs && k<pmp->FIs )
+            pmp->YFk = YFA[k];
+        if( pmp->YFk > pmp->lowPosNum*10. )
+        {
+            pmp->logXw = log(pmp->YFk);
+            pmp->aqsTail = 1.- pmp->YFk / Yf;
+        }
+        if( pmp->L1[k] > 1 )
+            pmp->logYFk = log( Yf );
+        if( pmp->PHC[k] == PH_AQUEL)
+            /* ln moles of solvent in aqueous phase */
+            pmp->Yw = pmp->YFk;
+        for( ; j<i; j++ )
+        { /*cycle by DC. */
+            if( Y[j] < pmp->lowPosNum )
+                continue;  /* exception by minimum DC quantity */
+            /* calculate chemical potential of j-th DC */
+            v = PrimeChemPot( pmp->G[j], log(Y[j]), pmp->logYFk,
+                              pmp->aqsTail, pmp->logXw, pmp->DCCW[j] );
+            F[j] = v;
+        }   /* j */
+NEXT_PHASE:
+        j = i;
+    }  /* k */
+    if( pmp->Yw > pa.p.XwMin )
+        pmp->logXw = log(pmp->Yw);
+}
+
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Calculation of Karpov stability criteria for a DC*/
+double TProfil::KarpovCriterionDC(
+    double *dNuG,  /* Nu[j]-c[j] difference - is modified here */
+    double logYF,  /* ln Xa */
+    double asTail, /* asymmetry correction (0 for symmetric phases) */
+    double logYw,  /* ln Xv */
+    double Wx,     /* mole fraction */
+    char DCCW      /* generalized DC class code */
+)
+{
+    double Fj;     /* output phase stability criterion */
+
+    if( logYF > -35. && Wx > 1e-18 )
+        switch( DCCW ) /* expressions for fj */
+        {
+        default: /* error code !!! */
+            *dNuG = 36.;
+        case DC_SINGLE:
+            Wx = 1.0;
+        case DC_SYMMETRIC:
+            break;
+        case DC_ASYM_SPECIES:
+            *dNuG += logYw - logYF - asTail;
+            break;
+        case DC_ASYM_CARRIER:
+            *dNuG += 1.0/(1.0 - asTail) - asTail - 1.0;
+        }
+    if( fabs( *dNuG ) > 35.)
+        Fj = ( *dNuG > 0 )? 1.5860135e15: 6.305117e-16;
+    else Fj = exp( *dNuG );
+    Fj -= Wx;
+    return Fj;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// calculation of Karpov stability criteria for all phases
+void TProfil::f_alpha()
+{
+    short k;
+    int j, ii;
+    double *EMU,*NMU, YF, Nu, dNuG, Wx, Yj, Fj;
+
+    EMU = pmp->EMU;
+    NMU = pmp->NMU;
+    memset( EMU, 0, pmp->L*sizeof(double));
+    memset( NMU, 0, pmp->L*sizeof(double));
+
+    j=0;
+    pmp->YMET = 0.0;
+    for( k=0; k<pmp->FI; k++ )
+    { /*phases */
+        ii=j+pmp->L1[k];
+        pmp->Falp[k] = pmp->YMET; /* metastability parameter */
+        pmp->logXw = -35.;
+        pmp->logYFk = -35.;
+
+        pmp->YFk = 0.0;
+        YF= pmp->YF[k]; /* moles of carrier */
+        if( pmp->FIs && k<pmp->FIs )
+            pmp->YFk = pmp->YFA[k];
+        if( pmp->YFk > 6.305117e-16 )
+        {
+            pmp->logXw = log(pmp->YFk);
+            pmp->aqsTail = 1.- pmp->YFk / YF;
+        }
+        else
+        {
+            pmp->logXw = -35.;
+            pmp->aqsTail = 0.0;
+        }
+
+        if( pmp->L1[k] > 1 && YF > 6.305117e-16 )
+            pmp->logYFk = log( YF );
+        else pmp->logYFk = -35.;
+        if( pmp->PHC[k] == PH_AQUEL) /* number of moles of solvent */
+            pmp->Yw = pmp->YFk;
+
+        for( ; j<ii; j++ )
+        { /* DC */
+            Nu = DualChemPot( pmp->U, pmp->A+j*pmp->N, pmp->NR );
+            dNuG = Nu - pmp->G[j]; /* this is -s_j (6pot paper 1) */
+            Wx = 0.0;
+            Yj = pmp->Y[j];
+            if( YF > 1e-12 && Yj > pmp->lowPosNum*10. )
+                Wx = Yj / YF; /*calc mol fraction of DC */
+            /* calc Karpov criteria of DC */
+            Fj = KarpovCriterionDC( &dNuG, pmp->logYFk, pmp->aqsTail,
+                                    pmp->logXw, Wx, pmp->DCCW[j] );
+            NMU[j] = dNuG;
+            EMU[j] = Fj;
+            if( YF > 1e-12 && Yj > pmp->lowPosNum*10. )
+                pmp->Falp[k] += EMU[j]; /* calc Karpov criteria of phase */
+        }   /* j */
+        j = ii;
+    }  /* k */
+}
+
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Calculation of a species increment to total Gibbs energy G(X)
+*  of the system (returned). On error returns +7777777.
+*/
+double TProfil::FreeEnergyIncr(
+    double G,      /* gT0+gEx */
+    double x,      /* x - moles of species */
+    double logXF,  /* ln Xa - moles of phase */
+    double logXw,  /* ln Xv - moles of the solvent/sorbent */
+    char DCCW      /* generalized species class code */
+)
+{
+    double Gi;
+
+    switch( DCCW )
+    {
+    case DC_ASYM_SPECIES:
+        Gi = x * ( G + log(x) - logXw );
+        break;
+    case DC_ASYM_CARRIER:
+    case DC_SYMMETRIC:
+        Gi = x * ( G + log(x) - logXF );
+        break;
+    case DC_SINGLE:
+        Gi = G * x;
+        break;
+    default:
+        Gi = 7777777.;
+    }
+    return Gi;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Calculation of the total Gibbs energy of the system G(X).
+*  Parameter LM is IPM step size for calculation of new 
+*  quantities of all species (vector X[]) using direction 
+*  of descent (MU[] vector). If LM==0, this function 
+*  just copies vector Y[] into X[].
+*  Returns value of G(X) in moles.
+*/
+double TProfil::GX( double LM  )
+{
+    int i, j, k;
+    double x, XF, XFw, FX, Gi /* debug variable */;
+
+    if( LM<pmp->lowPosNum)     /* copy vector Y into X */
+        for(i=0;i<pmp->L;i++)
+            pmp->X[i]=pmp->Y[i];
+    else  /*calculate new values of X */
+        for(i=0;i<pmp->L;i++)
+        {  /* vector pmp->MU - the direction of descent! */
+            pmp->X[i]=pmp->Y[i]+LM*pmp->MU[i];
+            if( pmp->X[i] <  pmp->lowPosNum )
+                pmp->X[i]=0.;
+        }
+    /*calculate new total quantities of phases */
+    TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+
+    /* calculate G(X) */
+    FX=0.;
+    j=0;
+    for( k=0; k<pmp->FI; k++ )
+    { /* loop for phases */
+        i=j+pmp->L1[k];
+        XFw = 0.0;  /* calc moles of solvent/sorbent */
+        if( pmp->FIs && k<pmp->FIs )
+            XFw = pmp->XFA[k];
+        if( XFw > pmp->lowPosNum*10. )
+            pmp->logXw = log( XFw );
+        /*   */
+        XF = pmp->XF[k];
+        if( XF <= pmp->lowPosNum*1000. ||
+                (pmp->PHC[k] == PH_AQUEL && XFw <= pa.p.XwMin )
+                || ( pmp->PHC[k] == PH_SORPTION && XFw <= pa.p.ScMin ))
+            goto NEXT_PHASE;
+        pmp->logYFk = log( XF );
+
+        for( ; j<i; j++ )
+        { /* Species */
+            x = pmp->X[j];
+            if( x < pmp->lowPosNum*10. )
+                continue;
+            /* calc increment of G(x) */
+            Gi = FreeEnergyIncr( pmp->G[j], x, pmp->logYFk, pmp->logXw,
+                                 pmp->DCCW[j] );
+            FX += Gi;
+        }   /* j */
+NEXT_PHASE:
+        j = i;
+    }  /* k */
+    return(FX);
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// GX for ProbeUncert in statistic
+double TProfil::pb_GX( double *Gxx  )
+{
+    int i, j;
+    short k;
+    double Gi, x, XF, XFw, FX;
+
+    /* calc G(X) */
+    FX=0.;
+    j=0;
+    for( k=0; k<pmp->FI; k++ )
+    { /*phases*/
+        i=j+pmp->L1[k];
+        XFw = 0.0;  /* calc number of moles of carrier*/
+        if( pmp->FIs && k<pmp->FIs )
+            XFw = pmp->XFA[k];
+        if( XFw > pmp->lowPosNum*10. )
+            pmp->logXw = log( XFw );
+        /* calc new quantitys of phase  */
+        XF = pmp->XF[k];
+        if( XF <= pmp->lowPosNum*1000. ||
+                (pmp->PHC[k] == PH_AQUEL && XFw <= pa.p.XwMin )
+                || ( pmp->PHC[k] == PH_SORPTION && XFw <= pa.p.ScMin ))
+            goto NEXT_PHASE;
+        pmp->logYFk = log( XF );
+
+        for( ; j<i; j++ )
+        { /*DC */
+            x = pmp->X[j];
+            if( x < pmp->lowPosNum*10. )
+                continue;
+            /* calc increment of G(x) */
+            Gi = FreeEnergyIncr( Gxx[j], x, pmp->logYFk, pmp->logXw,
+                                 pmp->DCCW[j] );
+            FX += Gi;
+        }   /* j */
+NEXT_PHASE:
+        j = i;
+    }  /* k */
+    return(FX);
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// Calculation of full structure MULTI by expanding
+// SysEq main vectors read from the database
+//
+void TProfil::EqstatExpand( const char *key )
+{
+    int i, j, k, jb, je;
+    double FitVar3;
+
+//    if( !pmp->NR )       Sveta 30/08/01
+        pmp->NR = pmp->N;
+
+    /* Load thermodynamic data for DC, if necessary */
+    if( pmp->pTPD < 2 )
+    {
+        CompG0Load();
+        memcpy( pmp->stkey, key, EQ_RKLEN );
+        pmp->stkey[EQ_RKLEN]='\0';
+    }
+    /* Load activity coeffs for phases-solutions */
+    if( pmp->FIs )
+    {
+        for( j=0; j< pmp->Ls; j++ )
+        {
+            pmp->lnGmo[j] = pmp->lnGam[j];
+            if( fabs( pmp->lnGam[j] ) <= 84. )
+                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+            else pmp->Gamma[j] = 1;
+        }
+    }
+    /* recalc kinetic restrictions for DC */
+    if( pmp->pULR && pmp->PLIM )
+        if( Set_DC_limits( DC_LIM_INIT ))
+            if( !vfQuestion(window(), "IPM:",
+                            "Inconsistent metastability restrictions to DC or phases.\n"
+                            "Continue calculation (take those restrictions as trivial)?") )
+                Error( "IPM","Inconsistent metastability restrictions." );
+    TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+    for( j=0; j<pmp->L; j++ )
+        pmp->Y[j] = pmp->X[j];
+    for( k=0; k<pmp->FI; k++ )
+    {
+        pmp->YF[k] = pmp->XF[k];
+        if( k<pmp->FIs )
+            pmp->YFA[k] = pmp->XFA[k];
+    }
+    /* set IPM weight multipliers for DC*/
+    for(j=0;j<pmp->L;j++)
+    {
+        switch( pmp->RLC[j] )
+        {
+        case NO_LIM:
+        case LOWER_LIM:
+            pmp->W[j] = pmp->Y[j]-pmp->DLL[j];
+            break;
+        case UPPER_LIM:
+            pmp->W[j] = pmp->DUL[j]-pmp->Y[j];
+            break;
+        case BOTH_LIM:
+            pmp->W[j]= ((pmp->Y[j]-pmp->DLL[j])<(pmp->DUL[j]-pmp->Y[j]))?
+                       (pmp->Y[j]-pmp->DLL[j]): (pmp->DUL[j]-pmp->Y[j]);
+            break;
+        default: /* greatest errorа */ ; //break;
+            Error( "Internal error", "Wrong IPM weight factor type!" );
+        }
+        if( pmp->W[j] < 0. ) pmp->W[j]=0.;    /* !!this is know how of Mr.Chudnenko !! */
+    }
+    /* Calculate elemental chemical potentials in J/mole */
+    for( i=0; i<pmp->N; i++ )
+        pmp->U_r[i] = pmp->U[i]*pmp->RT;
+
+    ConCalc( pmp->X, pmp->XF, pmp->XFA);
+    /* Calculate mass-balance deviations (moles) */
+    MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C );
+    /* Calc Eh, pe, pH,and other stuff */
+    if( pmp->E && pmp->LO )
+        IS_EtaCalc();
+
+    FitVar3 = pmp->FitVar[3];   /* Switch off smoothing factor */
+    pmp->FitVar[3] = 1.0;
+    /* Scan phases to retrieve concentrations and activities */
+    for( k=0, je=0; k<pmp->FIs; k++ )
+    {
+        jb = je;
+        je = jb+pmp->L1[k];
+        if( pmp->PHC[k] == PH_SORPTION )
+        {
+            GouyChapman(  jb, je, k );
+            /* calculation of surface activity terms */
+            SurfaceActivityTerm(  jb, je, k );
+        }
+        for( j=jb; j<je; j++ )
+        {
+            /* calc Excess Gibbs energies F0 and values c_j */
+            pmp->F0[j] = Ej_init_calc( 0, j, k );
+            pmp->G[j] = pmp->G0[j] + pmp->F0[j];
+            /* pmp->Gamma[j] = exp( pmp->lnGam[j] ); */
+        }
+    }
+    pmp->FitVar[3]=FitVar3;
+    pmp->GX_ = pmp->FX * pmp->RT;
+    /* calc Prime DC chemical potentials defined via g0_j, Wx_j and lnGam_j */
+    PrimeChemicalPotentials( pmp->F, pmp->X, pmp->XF, pmp->XFA );
+    /*calc Karpov phase criteria */
+    f_alpha();
+    /*calc gas partial pressures  -- obsolete? */
+    GasParcP();
+    pmp->pFAG = 2;
+}
+
+//--------------------- End of ms_muexp.cpp ---------------------------
+

@@ -1,0 +1,1 @@
+diff -crbN --exclude-from=diff.exclude gems21.orig gems21 | bzip2 > gems-`date +'%Y%m%d'`-a.diff.bz2

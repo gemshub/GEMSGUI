@@ -1,0 +1,133 @@
+ms_mtparm---------------------------------------------------------------
+
+"pscript:0000:mtparm:"
+
+line %s " Contents of MTparm "
+$line %s "SysEq key:  ", %s rkey
+line %s #tname
+line %s #note
+line %s " P = ", %15.4f #P, %s " T = ", %15.4f #T
+line
+  %33s  "Record Key",  %s label #gTP,   %s label #gEx_,  %s label #VTP
+list #DCvp
+  %28s  #DCvp[0,28],  %1s  #DCSvp,  %1s  #DCon,
+  %15.7g  #gTP,   %15.7g  #gEx_,  %15.7g  #VTP,   %1s  #TPmark
+
+
+//ms_multy--------------------------------------------------------
+
+"pscript:0000:multi:"
+
+line %s    " CALCULATION OF EQUILIBRIUM STATE IN GEOCHEMICAL SYSTEM"
+line %s   rkey
+line %s ""
+line %s "State variables: V(L)=", %-.7g  #Vx[1],
+        %s " P(bar)=",  %-.7g  #PG[1],
+        %s " T=", %-.6g #TC[1], %s " (K) =",  %-.6g #TK[1], %s "(C)"
+line %s  " Mass(kg)=", %.10g #Mbx,
+     %s  " Min.potential: G(x)=", %-.8g #GX, %s "(moles)"
+line %s ""
+line %s ""
+line %s "                                                         Table 1"
+line %s " PARAMETERS OF STOICHIOMETRIC UNITS (IC, independent components)"
+line %s "|=========|=============|============|===========================|"
+line %s "|  IC     |b (input bulk| Deviation  | u (IC chemical potential) |"
+line %s "| Name    | composition,| of mass    |-------------|-------------|"
+line %s "|         |   moles)    | balance    | Normalized  |   J/mole    |"
+line %s  "|=========|=============|============|=============|=============|"
+list #ICvp
+       %-8.8s  #ICvp, %12.6e  #b, %11.4e #Cb,  %12.7g #u, %12.3f  #ue
+line %s "|=========|=============|============|===========================|"
+line %s ""
+line %s ""
+line %s "Aqueous phase: I(molal)= ", %-.7g #IS,
+     %s "pH= ",  %-.4g #pH
+line %s "pe=",   %-.4g #pe,
+     %s "Eh(V)=", %-.5g" #Eh
+line %s ""
+line %-62s pkey, %s " Table 1a"
+line %s "       TOTAL DISSOLVED INDEPENDENT COMPONENTS"
+line %s "|=========|==============|=============|==============|"
+line %s "|   IC    |m_i,t Molality|    Log      | Mass Conc.   |"
+line %s "|  Name   | total (moles |  molality   | (mg per 1 kg |"
+line %s "|         |per 1 kg H2O) |(log(m_i,t)) | of solution) |"
+line %s "|=========|==============|=============|==============|"
+list #ICvp
+       %-8.8s  #ICvp, %13.6e  #m_t, %12.5e #lgm_t,  %13.7g #w_t
+line %s "|=========|==============|=============|==============|"
+line %s ""
+line %s ""
+line %-62s pkey, %s " Table 2a"
+line %s "|==============|==|============|========|========|==========|==========|==========|"
+line %s "| DC              |x_j (number |  log   |Activity|Wx_j (mole|Dual chem.|  Mola-   |"
+line %s "|  Name       Type|of moles in | acti-  | coeffi-|fraction  |potential |  lities  |"
+line %s "|                 |the system) | vity   | cient  |in phase) |(J/mole)  |          |"
+line %s "|==============|==|============|========|========|==========|==========|==========|"
+list #DCnam
+  %-14.13s #DCnam, %1s #DCC, %12.5e #x, %8.4f #lga,
+        %8.5g #gamma, %10.4e #Wxx,%8.1f #fx, %10.4g #my
+line %s "|==============|==|============|========|========|==========|===========|===========|"
+line %s ""
+line %s ""
+line %-62s pkey, %s " Table 3"
+line %s "      TOTAL PARAMETERS OF PHASES PRESENT AT EQUILIBRIUM STATE"
+line %s "|============|===|==========|==========|=========|==========|"
+line %s "| Phase          |XFa number|F(a) phase|w(a) mass| Volumes  |"
+line %s "| Name      Type |of moles  |stability |content  |of phases |"
+line %s "|                |in system |criterion |in syst. |  (cm3)   |"
+line %s "|============|===|==========|==========|=========|==========|"
+list #PHnam
+  %-13.11s #PHnam, %3s #PHC,  %10.6g #Xa, %10.4g #Fa,
+        %%9.5lg #phM, %10.6g #phVol
+line %s "|============|===|==========|==========|=========|==========|"
+
+
+
+ms_system---------------------------------------------------------------
+
+"pscript:0000:system:"
+
+line %s    "Comparison of System record"
+line %s   rkey
+line %s ""
+line %s "                                                         Table 1"
+line %s "          Parameters of Independent Components (IC) "
+line %s "|================================|==|==|=============|=============|"
+line %s "| Independent Component          |  |  | Bulk        | Quantity/   |"
+line %s "|                                |  |  | Composition | Concentrat. |"
+line %s "|================================|==|==|=============|=============|"
+list #ICvp
+   %-32.32s #ICvp, %1s #IC_on, %1s #BCun_,  %-13.7g #B_, %-12.6g #bi_
+line %s "|================================|==|==|=============|=============|"
+line %s ""
+line %s "                                                         Table 2"
+line %s "          Parameters of GCO (COMPOS)               "
+line %s "|===============================================|==|==|=============|"
+line %s "| Geochemical Composition Object (GCO) Rkey     |  |  | Quan./Conc. |"
+line %s "|===============================================|==|==|=============|"
+list #CCvp
+   %-47.47s #CCvp, %1s #AC_on, %1s #XAun_,  %-12.6g #xa_
+line %s "|===============================================|==|==|=============|"
+line %s ""
+line %s "                                                         Table 3"
+line %s "          PARAMETERS OF DEPENDENT COMPONENTS          "
+line %s "|=|================================|=|=|=|=============|=============|=|=============|=|=============|"
+line %s "    Dependent Component                   ", %13s label #xd_,
+     %13s label #gEx_, %s " ", %13s label #dul_, %1s " ", %13s label #dll_
+line %s "|=|================================|=|=|=|=============|=============|=|=============|=|=============|"
+list #DCvp
+    %1s #DC_on, %-32.32s #DCvp, %1s #DCSvp, %1s #mDCC, %1s #XDun_,
+    %13.13s  #gEx_, %1s #RLC_, %13.13s #dul_, %1s #RSC_, %13.13s #dll_
+line %s "|=|================================|=|=|=|=============|=============|=|=============|=|=============|"
+line %s ""
+line %s "                                                         Table 4"
+line %s "          PARAMETERS OF PHASES        "
+line %s "|=|================================|===|=|===|=|=============|=============|=============|"
+line %s "    Phase                                       ",
+         %13s label #xp_,%13s label #Yof_,%13s label #Aalp_
+line %s "|=|================================|===|=|===|=|=============|=============|=============|"
+list #PHvp
+    %1s #PC_on, %-32.32s #PHvp, %3s #L1_, %1s #mPHC, %3s #L1vp,
+    %13.13s  #xp_,  %13.13s #Yof_,  %13.13s #Aalp_
+line %s "|=|================================|===|=|===|=|=============|=============|=============|"
+

@@ -1,0 +1,20 @@
+* Units description file (units.ini) *
+
+
+Used for setting range of values for so called CHECKBOXes,
+(sorry this definition just got stuck with us) in reality they are DropDownLists
+
+Format of the line
+
+Name	<set1>[/<set2>]...
+
+Name:
+    name of the union
+    
+<set>:
+    set of the chars allowed
+    
+If there's several sets separated by '/' then for every new column(?) 
+    used next <set>, last <set> is propagated for the rest of the columns
+
+2000 (c) Andy Rysin

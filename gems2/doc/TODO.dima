@@ -1,0 +1,345 @@
+08/09/2001
+Check headers for files:
+    ms_mueqexp.cpp, s_fgl.cpp, s_fglbred, s_formula, s_subcrt,
+    s_subcrt2
+
+
+19 Mar 2001 PSI Enzo Curti' comments on GEMSTART.HTML
+
+   - Rearrange "Exit GEMS" dialog to make it less dangerous.
+Done by
+KD 04.04.01
+
+   - Supply GEMS with start configuration for Default (or
+     TutStart profile), in order to execute what is written
+     in Section 2.1. Remove irrelevant references from the
+     SDref files attached to the tutorial database.
+Done
+
+   - Implement BCC and IPM icon buttons on pages of System
+     window for user's convenience.
+
+   - Convert BCC warning message into "human" language.
+Done KD
+04.04.01
+
+   - Implement "Listview" access windows for setting up
+     system definitions and examining the IPM results
+     (important but requires programming)
+
+   - Reorganization of data fields dialog (System): set
+     buttons in the order "Bypass" (default), "Remake",
+     "Clear all"
+Done by
+KD 04.04.01
+
+   - Change Profile open function such that default over-
+     ride mechanism applies BOTH to DComp and ReacDC rkeys
+     (i.e. alphabetically first species is taken in the
+     profile aq phase regardless of d or r source)(important! )
+
+   - Process module: debug and re-implement connection to
+     GtDemo sampler/plotter (important!)
+
+   - Process: to implement clear and consize wizard for
+     setting up process definition, iterators and math
+     scripts (difficult but very important)
+
+   - GtDemo remake sequence: streamline and simplify, or
+     better, develop a clear wizard analogous to that required
+     for the Process definitions
+
+   - At saving records to DB files: don't show write-protected
+     files in the list, or show but don't let selecting them!
+Worked around by default selection
+of the last file in the list
+KD 04.04.01
+
+   - Fix database file selection dialogs (Save As and Create
+     menu commands): (i) fix the "Cancel" button bug (does not
+     work!);
+Done!
+
+     (2) implement "Ok to all" button for multiple
+     insertions ("Move" and "copy" commands in "Record List");
+     (3) add "Help" button.
+
+
+25 Jan 2001 PSI
+
+   - Implement help on pressing F1 in lineedits in KeyFilter
+     dialog, to get help pages separately on record key fields.
+
+
+09 Jan 2001 PSI
+
+   - Re-think the sequence of steps for creation of new
+     System profiles ("New Profile" from KeyProfile dialog).
+     Implement a new function of copying files from one
+     of existing user profile directories as a basis for
+     a newly-created profile.
+     Implement a File Selection Listview dialog (for the
+     kernel database) appearing on creation of new profiles,
+     to avoid a time-consuming step of opening Icomp, Dcomp,
+     .... modules for linking necessary database files.
+     Cross-referencing between different user-created
+     system profile directories must be avoided.
+
+05 Jan 2001 PSI
+
+   - Check and re-format printout/export methods ::CmPrint()
+     for modules and submodules - best using printout format
+     scripts. At first step - trim auto printfile formats.
+     Add print functions to IComp and other modules where
+     not provided.
+     Then need to think over the script syntax (similar to
+     PmatchC or like sprintf?)
+
+04 Jan 2001 PSI
+
+   - Re-organize HTML on-line help files in /GEMS.sys/doc/html/
+     and the access to them from GEMS dialogs and module windows...
+Done 10.01.01
+
+   See new file  Helpfiles-chart.txt for more information
+
+
+21 Dec 2000 PSI
+
+   - Another important point is to get rid of those stupid
+   \J \i switches in math scripts (e.g., Proces and GTdemo
+   records). I found how to do it but this requires an
+   extension of the DOD format (TObject class). My idea
+   is, in parallel to the tooltip strings, to keep a static
+   char vector aOx[] which would contain indexation codes
+   like J or j or i etc. On processing the math scripts, these
+   codes will be analyzed instead of the \J switches to
+   search for component names in the appropriate lists.
+   I will type the codes into vis_od.ini as an additional
+   field before the tooltip string, so I need that this
+   extra field for each DOD is read from *.ini file and stored
+   into *.dat file. To access the codes from the math script
+   analyzer, I need public member functions GetLabelOx(<DOD label>)
+   and GetIndexOx(int <DOD index>), both should return char -
+   the name indexation system code. I will add the allowed
+   char codes to units.ini. There is no need to write these
+   codes for DOD into database files, so all the existing
+   records and database access functions should remain untouched.
+Done by KD and RA
+02 Apr 01
+
+   After this is done, it should also be possible to convert
+   part of the MULTI vectors and arrays into the built-in
+   functions (like molality() or molfract()) which should also
+   be accessible from math scripts, and thus make the math and
+   print/export scripts more transparent to the users.
+
+   Third point is to re-write the RTparam module, provide
+   it also with math scripts and stepwise mode, improve on
+   plotting functionality. I think, in this case the record
+   format can be extended since we don't have many such recs
+   in the database and they can easily be re-created.
+
+
+20 Dec 2000 PSI
+
+ - Need to enhance the GEMS Help window. (a) To make a status bar
+   where URL hovered by the mouse cursor should be displayed.
+   Also, keeping track of history is desirable. In window caption,
+   the currently shown URL should be displayed. A possibility to
+   type in a new URL would be nice too. In general, functionality
+   provided by the Helpviewer Qt example is quite sufficient.
+   These enhancements would greatly facilitate development of the
+   GEMS HTML help files.
+Done by AR 11.01.01
+
+12 Dec 2000 PSI
+
+ - Process module: create a "Math script library" (put SDref rec key to
+   pSLkey object) from where one can copy an example script to Proces
+   definition. This should be one or more special entries in default
+   SDref database.
+
+ - to prepare files /home/dima/GEMS.sys/doc/html/GEMS-general-index.html
+                    /home/dima/GEMS.sys/doc/html/GEMS-module-IPM.html
+                    /home/dima/GEMS.sys/doc/html/GEMS-module-BCC.html
+   they are called from buttons on SystemDialog
+
+01 Dec 2000 PSI
+
+- GTdemo: change arrays x0 and y0 to double precision;
+  implement saving of the backgorund color for the graph into
+  GTdemo record (if there is an unused dynamic DOD).
+
+- Tied/scrolled lists in visor: the scrollers should be made ca.
+  two times thinner (they overload pages with many tied lists).
+Re-implemented by AR 18/12/00
+
+  Can we adjust the default height of the data fields on module
+  windows (some fonts do not fit)?
+
+- Appearance of module screen forms (contd.): a field which display
+  date/time should be put AFTER the field displaying record key:
+  the last field is much more important (again: it should be shown
+  with a larger font, maybe on different background color).
+Done by AR 12/11/00
+
+29 Nov 2000 PSI
+
+- To display in EqDemo page bulk composition of multi-component phases
+Done by KD 12/05/00
+
+- To set DOD "PHnam2" and "DCnam2" in EqDemo for the range in sorption phases
+  only
+
+27 Nov 2000 PSI
+
+- Important: To get rid of \J ... indexation switches in math scripts,
+  the format of vis_od.ini file should be extended to include a one-
+  character field with a code for indexation and allocation of names for
+  a given DOD. This code should be used by Math Script Interpreter
+  instead of \J... switches (which just have to be ignored for the
+  upward compatibility). The DOD array class, and *.dat config format
+  must be changed accordingly. Codes: I J K A i j k correspond to the
+  old \J... switch codes;
+DONE!
+   This stuff below still has to be done!
+   add codes S s (surface species only); W w
+  (set into a phase DC index range for the non-ideality models); R
+  for the ReacDC module (species in reaction); N n - not defined (e.g.
+  name preprocessing is not possible).
+
+
+- Several DOD - Ph_v2, SCMT_, Nfsp_, MaSdt_, XfIEC_, XcapA_, XcapB_,
+  XcapF_ - must be made allocated to index range of sorption phases only.
+  Similarly, some DOD related to specific properties of surface and
+  sorbent species - DC_v2, SATC_, MaSDj - must be made allocated to
+  index range of species of sorption phases.
+
+- Major rewriting is needed for the "Remake/Create" mode of all
+  modules. Existing switch lines and simple dialogs must be replaced
+  with well-commented wizards and/or tab dialogs. Without doing this,
+  there will be no chance to win users (except maybe a few enthusiasts)
+  because "Remake/Create" mode is at the moment the most cryptic
+  and the least user-friendly part of the whole GEMS code.
+
+- Major re-arrangement is needed for the RTparm module and record
+  structure: (a) convert "float" to "double" for calculated vectors,
+  add TK vector for temperature in Kelvins and vectors for the empi-
+  rical T,P data; (b) introduce MATH SCRIPT for supporting calculations,
+  similar to GTDemo module, make DCthermo() and RCthermo() applicable
+  to a given TP pair via the calls to the built-in thermdat(T,P,J),
+  and getLogK(), getGr(), getHr(), getG0, getH0(), ... functions;
+  (c) add into record the information for setup of graphs (four of them,
+  or for one graph similar to GTdemo record), don't forget saving the
+  background color; (d) write a "print" slot for printing-exporting
+  the tabulated data to text files (again similar to GTdemo);
+  This will make previous format of RTparm records unusable, but
+  I don't believe that this is a real harm because RTparm records
+  are not part of thermodynamic database as such, rather they should
+  be used for analysing or fitting calculated T/P dependences.
+
+24 Nov 2000 PSI
+
+- Brush up SDref module (remove bugs, fix "create/init" mode
+Partially done
+
+- How to make a second page visible in IComp and RTParm module
+  windows? (just adding it to vis_cn.ini does not work!)
+Done - it works :)
+
+- Users complain that representation of "EMPTY" value (`)
+  in module dialog cells is difficult to see and, more important,
+  difficult to type on some keyboards (e.g. German, French).
+  This representation in v_vals should be changed for displaying
+  to something like --- (as Sveta did in PmatchC code), but
+  the old one (`) should be retained for compatibility with the
+  old backup text format, used for down/uploading GEM-Selektor
+  database records!
+
+- Users complain that it's difficult to see record keys on
+  module screen form dialogs. The font for them must be made
+  larger, and/or the background - of different color.
+Done by AR 12/11/00
+
+- Module screen form dialogs (v_module): Add icons for
+  Remake, Create, Plot, Print in the toolbar; Change meaning
+  of the current icon "red cross" from "Close" to "Delete";
+
+- Module screen form dialogs: add icons for "Browse" mode:
+  "Next record" (arrow up), "Previous record" (arrow down),
+  "Select this record" (paper sheet like in "Load" button),
+  and "Set filter" for browsing through a subset of records.
+  Remove BrowseDialog and attach its functionality to the
+  module screen form dialogs.
+
+- Module screen form dialogs: in menu "Record List", change
+  "Browse" to "Copy". This menu item should work similar to
+  "Move", but (i) let the user modify record key, then select
+  the file where to put it for each copied record; (ii) do
+  not delete the original record.
+
+- In SelectDialog, add a "Ok to All" button and implement it
+  for "Record List" "Move" or new "Copy" modes, so that all
+  the selected records would go into the same file. Make sure
+  that "Cancel" always works properly in SelectDialog - this
+  bug is dangerous and causes trouble often.
+
+- To implement TPworkDialog, to be invoked from RTparm module
+  in a stepwise mode (use it also for specifying which data
+  to sample/plot?)
+Done as Page2 in RTparm module window (except stepwise mode)
+
+23 Nov 2000 PSI
+
+- To implement HLinpDialog and HLresDialog, to be called from
+  SystemDialog
+
+16 Nov 2000 PSI
+
+- Important!
+  Stepwise mode of IPM calculations (create and use a pmRefresh() signal
+  CmStepRefresh() and CmTimeRefresh() slots). Stepwise = 1 should connect
+  pmRefresh to CmStepRefresh. Stepwise=0 should connect pmRefresh to
+  CmTimeRefresh. pmStop() signal should break the IPM loop or raise
+  an exception to stop calculations.
+
+- CalcDialog.ui: Added "help" button and "n.d." (= insert "no data" value)
+  functional button. Need to implement these two commands in CalcDialog.cpp
+
+- All dialogs in *.ui files: changed fonts to Lucida Sans Unicode
+  (for compatibility between Win32 and Linux versions)
+
+- Important (beta-users request): The plot ordinate symbols and names
+  must be shown below the "Print" button, otherwise it is not clear
+  what is where (it's only possible if one opens the Legend dialog)
+Done by AR
+in March 01
+
+- Desirable: To use one of yet unused dynamic objects in the Profile
+  record format to keep text info about the author(s) of the model
+  application and its brief description
+
+---------------------------------------------------------------------
+The list below is more or less done :)
+
+- fix ROUND(), LROUND() defines to fit numbers in column width
+
+- stop calculation on 'Cancel in Progress', for now it just closes the window
+
+- implement "Stepwise" IPM calculations
+
+- fix stack corruption on construction of TConfig object (v_object(900))
+  in gems -g mode - unable to read configuration *.ini files!
+
+- revise visor.cpp 'first start' code in Win32/Linux
+ (work dirs)
+- include reading $WINSYS\gems.ini file to get GEMS home/sys directories
+
+- complete or remove SettingsDialog
+
+- set default buttons after QTARCHITECT (this works in QtArchitect 2.1)
+
+- export function in Graphics (Sveta's old request) ??? what does it mean?
+
+

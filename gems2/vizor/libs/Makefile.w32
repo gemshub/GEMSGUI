@@ -1,0 +1,25 @@
+#
+# Makefile	Makefile for the systemV init suite.
+#		Targets:   all      compiles everything
+#		           install  installs the binaries (not the scripts)
+#                          clean    cleans up
+#
+# Version:	@(#)Makefile  2.58  28-Dec-1995  MvS
+#
+
+!include ../Makefile.qt_w32
+
+INCLUDES	= -I../kernel -I../libs
+FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
+
+OBJECTS = config.obj gstring.obj
+SRC	= config.cpp gstring.cpp
+
+all:		$(OBJECTS)
+
+.cpp.obj:
+	 $(CC) $(INCLUDES) $(FLAGS) -c  $<
+
+clean:
+	$(CLEAN_CMD)
+

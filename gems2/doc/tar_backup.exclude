@@ -1,0 +1,9 @@
+out
+*.bak
+*.o
+*.obj
+*.out
+*~
+*.moc.cpp
+*.orig
+*.rej
