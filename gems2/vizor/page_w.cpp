@@ -755,7 +755,12 @@ TField::createString(int N1, int N2, int M1, int M2)
     for(int nn=N1; nn<N2; nn++) {
         for(int mm=M1; mm<M2; mm++) {
             //        if( aCtrl[ii]->isSelected() )
-            clipText += visualizeEmpty(object.GetString(nn, mm)).c_str();
+            //Sveta 16/02/2005
+            gstring str_sh = visualizeEmpty(object.GetString(nn, mm));
+            if( object.GetType() > 0 )
+                     str_sh.strip();
+            clipText += str_sh.c_str();
+//            clipText += visualizeEmpty(object.GetString(nn, mm)).c_str();
             if( mm < M2 - 1 )
                 clipText += "\t";
         }
@@ -1055,7 +1060,12 @@ TCellInput::closeEvent(QCloseEvent* e)
 void
 TCellInput::updateDisplay()
 {
-    setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+//Sveta 16/02/2005
+  gstring str_sh = visualizeEmpty(rObj.GetString(N, M));
+    if( rObj.GetType() > 0 )
+           str_sh.strip();
+  setText( str_sh.c_str() );
+//    setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
 
 // temporary fix for Qt bug on right-alighned QLineEdit with contents larger then display size
 //    if( (fieldType == ftNumeric || fieldType == ftFloat) )
@@ -1077,23 +1087,39 @@ TCellInput::setIfChanged()
 void
 TCellInput::setValue()
 {
+    gstring str_sh;
     clearModified();
     if( rObj.SetString(text(), N, M) )
     {
         field()->objectChanged();
-        setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+//Sveta 16/02/2005
+        str_sh = visualizeEmpty(rObj.GetString(N, M));
+        if( rObj.GetType() > 0 )
+             str_sh.strip();
+        setText( str_sh.c_str() );
+//      setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
     }
     else
     {
         if( text() == emptiness || text() == short_emptiness )
         {
             rObj.SetString(S_EMPTY, N, M);
-            setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+//Sveta 16/02/2005
+        str_sh = visualizeEmpty(rObj.GetString(N, M));
+        if( rObj.GetType() > 0 )
+             str_sh.strip();
+        setText( str_sh.c_str() );
+//            setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
         }
         else
         {
             vfMessage(topLevelWidget(), rObj.GetKeywd(), "Sorry! Wrong value typed!", vfErr );
-            setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+//Sveta 16/02/2005
+        str_sh = visualizeEmpty(rObj.GetString(N, M));
+        if( rObj.GetType() > 0 )
+             str_sh.strip();
+        setText( str_sh.c_str() );
+//            setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
 	    // temporary fix for Qt bug on right-alighned QLineEdit with contents larger then display size
 	    if( (fieldType == ftNumeric || fieldType == ftFloat) )
 		repaint();
