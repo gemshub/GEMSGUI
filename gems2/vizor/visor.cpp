@@ -300,8 +300,8 @@ TVisor::toDAT()
 }
 #endif // GEMS_RELEASE
 
-const char *vSigERROR = "Error in visor data file (visor.dat)";
-const char *vSigERROR1 = "Error in visor data file (visobj.dat)";
+const char *vSigERROR_VISOR = "Error in visor data file visor.dat - wrong markers";
+const char *vSigERROR_VISOBJ = "Error in visor data file visobj.dat - wrong markers";
 const char *vSigTITLE = "Configurator";
 
 void
@@ -312,16 +312,23 @@ TVisor::fromDAT(bool option_c)
 
     // objects' DAT
     ifstream obj_dat(fname.c_str(), ios::binary | ios::in);
+
+    if ( !obj_dat.good() ) {
+	gstring message = "Can't open ";
+	message += fname;
+        throw TError(vSigTITLE, message);
+    }
+
     char sg[2];
     obj_dat.read(sg, sizeof sg);
     if (sg[0] != SigBEG[0] || sg[1] != SigBEG[1])
-        throw TError(vSigERROR1, vSigTITLE);
+        throw TError(vSigTITLE, vSigERROR_VISOBJ);
 
     aObj.fromDAT(obj_dat);
 
     obj_dat.read(sg, sizeof sg);
     if (sg[0] != SigEND[0] || sg[1] != SigEND[1])
-        throw TError(vSigERROR1, vSigTITLE);
+        throw TError(vSigTITLE, vSigERROR_VISOBJ);
 
     obj_dat.close();
 
@@ -386,9 +393,15 @@ TVisor::fromDAT(bool option_c)
 
     ifstream visor_dat(fname.c_str(), ios::binary | ios::in);
 
+    if ( !obj_dat.good() ) {
+	gstring message = "Can't open ";
+	message += fname;
+        throw TError(vSigTITLE, message);
+    }
+
     visor_dat.read(sg, sizeof sg);
     if (sg[0] != SigBEG[0] || sg[1] != SigBEG[1])
-        throw TError(vSigERROR, vSigTITLE);
+        throw TError(vSigTITLE, vSigERROR_VISOR);
 
     int n;
     visor_dat.read((char *) &n, sizeof n);
@@ -401,7 +414,7 @@ TVisor::fromDAT(bool option_c)
 
     visor_dat.read(sg, sizeof sg);
     if (sg[0] != SigEND[0] || sg[1] != SigEND[1])
-        throw TError(vSigERROR, vSigTITLE);
+        throw TError(vSigTITLE, vSigERROR_VISOR);
 
     // Units' part to load
     aUnits.fromDAT(visor_dat);
