@@ -176,10 +176,10 @@ NEXT:
         double Qq, Tcr, Tcr0, Smax, Vmax, k298, kT, a0, p, pp, ivdp, idvdtdp,
                Q298, v_bis, smq;
         // Parameters of lambda-transition
-        Tcr0 =  (double)dc[q].TCr;
+        Tcr0 =  (double)dc[q].TCr;   // given in centigrade
         Smax = (double)dc[q].Smax;
         k298 = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
-        p = aW.twp->P;
+        p = aW.twp->P;             // in bars   
         if( IsFloatEmpty( dc[q].Comp ))
            k298 = 0.;
         a0 = (double)dc[q].Expa; // This is the a parameter (at one bar) in 1/K !
@@ -195,7 +195,8 @@ NEXT:
             }
             else
                Tcr = Tcr0 + Vmax/Smax * p;
-            Tcr += dT;
+            Tcr += dT; 
+            Tcr0 += dT;  //  dT is a constant equal 273.15 
             Q298 = pow( 1.- Tst/Tcr0, 0.25 );
             if( T<Tcr )
                Qq = pow( 1.- T/Tcr, 0.25 );
@@ -215,7 +216,7 @@ NEXT:
                          + Smax * ((T-Tcr)*Qq*Qq + Tcr*pow(Qq,6.)/3.);
             aW.twp->H += smq - Smax*Tcr*( Qq*Qq - pow(Qq,6.)/3. )
                          + ivdp - T*idvdtdp;   // check this!
-            aW.twp->V += ivdp;
+            aW.twp->V += v_bis;    // in J/bar 
 
             if( T<Tcr )  // Cp is corrected at subcritical T only
                 aW.twp->Cp += T * Smax / 2. / sqrt( Tcr ) / sqrt( Tcr-T );
