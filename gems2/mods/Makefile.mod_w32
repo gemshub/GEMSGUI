@@ -13,22 +13,22 @@ MAKE = make -f Makefile.w32
 
 # compile variables
 
-INCL_GLOBAL	=
-RELEASE_FLAGS	= -DGEMS_RELEASE
-DEBUG_FLAGS	= -v
-PROF_FLAGS	=
-CCFLAGS         = -w -D__bcc -tWM -tWR -DQT_THREAD_SUPPORT -DQT_DLL
-LDFLAGS		=
+INC_GLOBAL      = -I$(QTDIR)/include
+RELEASE_FLAGS   = -DGEMS_RELEASE
+DEBUG_FLAGS     = -v -y
+PROF_FLAGS      =
+CCFLAGS         = -w -D__bcc -tWM -tWR -DQT_THREAD_SUPPORT -DQT_DLL -DUse_mt_mode
+LDFLAGS         =
 
 
 # commands
 
-CC		= bcc32.exe
-LD		= tlib.exe
-LIB_PRG		= tlib.exe
+CC              = bcc32.exe
+LD              = tlib.exe
+LIB_PRG         = tlib.exe
 
-CLEAN_CMD	= del *.obj
+CLEAN_CMD       = del *.obj
 
 .SUFFIXES:
-.SUFFIXES:	.h .obj .cpp
+.SUFFIXES:      .h .obj .cpp
 

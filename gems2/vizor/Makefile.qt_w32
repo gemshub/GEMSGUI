@@ -13,24 +13,24 @@ MAKE = make -f Makefile.w32
 
 # compile variables
 
-INC_GLOBAL	= -I"$(QTDIR)/include"
-DEBUG_FLAGS	= -v
-PROF_FLAGS	=
-CCFLAGS         = -w -D__bcc -tWM -tWR -DQT_THREAD_SUPPORT -DQT_DLL
+INC_GLOBAL      = -I"$(QTDIR)/include"
+DEBUG_FLAGS     = -v -y
+PROF_FLAGS      =
+CCFLAGS         = -w -D__bcc -tWM -tWR -DQT_THREAD_SUPPORT -DQT_DLL -DUse_mt_mode
 LDFLAGS         =
-LIBS		= $(QTDIR)\lib\qt.lib
+LIBS            = $(QTDIR)\lib\qt.lib
 
 # commands
 
-CC		= bcc32.exe
-LD		= tlib.exe
-LIB_PRG		= tlib.exe
+CC              = bcc32.exe
+LD              = tlib.exe
+LIB_PRG         = tlib.exe
 
 # this is suitable for Win32
-MOC		= $(QTDIR)\bin\moc.exe
-UIC		= $(QTDIR)\bin\uic.exe
+MOC             = $(QTDIR)\bin\moc.exe
+UIC             = $(QTDIR)\bin\uic.exe
 
 
-CLEAN_CMD	= del *.obj
+CLEAN_CMD       = del *.obj
 
-.SUFFIXES:	 .obj .cpp
+.SUFFIXES:       .obj .cpp

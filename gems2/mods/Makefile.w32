@@ -13,7 +13,6 @@ INCLUDES     = $(INC_LOCAL) $(INC_GLOBAL)
 FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 LIB	=   tlib /C /P256
 
-
 SOURCES = m_const.cpp m_sdata.cpp m_integ.cpp \
     m_param.cpp m_icomp.cpp \
     s_formula.cpp m_dcomp.cpp m_dcomp2.cpp \
@@ -41,10 +40,7 @@ TARGET	= ..\lib\gemsel.lib
 
 MAKE	= make
 
-# rules
-
-.cpp.obj:
-	$(CC) $(FLAGS) $(INCLUDES) -c $<
+# rules.cpp.obj:	$(CC) $(FLAGS) $(INCLUDES) -c $<
 
 all:  $(TARGET)
 
@@ -56,21 +52,19 @@ subdirs_mk:
 $(TARGET): subdirs_mk   $(OBJECTS)
         -del $(TARGET)
 	$(LIB) $(TARGET) @&&|
-+m_const.obj +m_sdata.obj +m_integ.obj \
-+m_param.obj +m_icomp.obj \
-+s_formula.obj +s_tpwork.obj +m_dcomp.obj +m_dcomp2.obj \
-+s_supcrt.obj +s_supcrt2.obj +m_compos.obj +s_fgl.obj +s_fglbred.obj \
-+m_reacdc.obj +m_phase.obj \
-+m_proces.obj +m_reac2.obj \
-+m_prfget.obj +m_prfget2.obj +m_syseq.obj \
-+m_syst2.obj +m_probe.obj +m_probe2.obj \
-+m_duterm.obj +m_dutx.obj \
-+m_gtdemo.obj     +m_rtparm.obj\
-+submod\ms_rmults.obj +submod\ms_mtparm.obj \
-+submod\ms_multi.obj +submod\ms_system.obj \
-+submod\ms_sysbc.obj +submod\ms_mupmph.obj \
-+submod\ms_muload.obj +submod\ms_muleq.obj +submod\ms_mueqexp.obj \
-+submod\ipm_sel_bc.obj +submod\ipm_gamma.obj +submod\ipm_fia_bc.obj
+      +m_const.obj +m_sdata.obj +m_integ.obj \
+	+m_param.obj +m_icomp.obj \
+	+s_formula.obj +s_tpwork.obj +m_dcomp.obj +m_dcomp2.obj \
+	+s_supcrt.obj +s_supcrt2.obj +m_compos.obj +s_fgl.obj +s_fglbred.obj \
+	+m_reacdc.obj +m_phase.obj +m_proces.obj +m_reac2.obj \
+	+m_prfget.obj +m_prfget2.obj +m_syseq.obj \
+	+m_syst2.obj +m_probe.obj +m_probe2.obj \
+	+m_duterm.obj +m_dutx.obj +m_gtdemo.obj \
+      +m_rtparm.obj +submod\ms_rmults.obj +submod\ms_mtparm.obj \
+	+submod\ms_multi.obj +submod\ms_system.obj \
+	+submod\ms_sysbc.obj +submod\ms_mupmph.obj \
+	+submod\ms_muload.obj +submod\ms_muleq.obj +submod\ms_mueqexp.obj \
+	+submod\ipm_sel_bc.obj +submod\ipm_gamma.obj +submod\ipm_fia_bc.obj
 |
 
 clean:
