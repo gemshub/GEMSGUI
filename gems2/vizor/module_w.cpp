@@ -217,49 +217,49 @@ TCModuleImp::LoadGeneralMenu()
     gstring imgFile;
 
     imgFile = imgDir + "arrow_left1.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Previous", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Display previous record", 0,
                      this, SLOT(CmPrevious()), toolBar, "previous" );
 
     imgFile = imgDir + "arrow_right1.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Next", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Display next record", 0,
                      this, SLOT(CmNext()), toolBar, "next" );
 
     imgFile = imgDir + "p_star.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Filter", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Set filter for record keys", 0,
                      this, SLOT(CmFilter()), toolBar, "filter" );
 
     imgFile = imgDir + "fileopen.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Display", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Display selected record", 0,
                      this, SLOT(CmShow()), toolBar, "display" );
 
     toolBar->addSeparator();
 
     imgFile = imgDir + "iconclose.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Delete", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Delete current record", 0,
                      this, SLOT(CmDelete()), toolBar, "delete" );
 
     toolBar->addSeparator();
 
     imgFile = imgDir + "toolbutton.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Remake", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Remake record data structure", 0,
                      this, SLOT(CmDerive()), toolBar, "remake" );
 
     imgFile = imgDir + "kcalc.png"; //"reccalc.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Calculate", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Calculate record data", 0,
                      this, SLOT(CmCalc()), toolBar, "calc" );
 
     imgFile = imgDir + "filesave.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Save", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Save current record", 0,
                      this, SLOT(CmSave()), toolBar, "show" );
 
     toolBar->addSeparator();
 
     imgFile = imgDir + "xpaint.png"; //"pixlabel.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Plot", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Plot data on graph dialog", 0,
                      this, SLOT(CmPlot()), toolBar, "plot" );
 
     imgFile = imgDir + "fileprint.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Print", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Print data to ASCII file", 0,
                      this, SLOT(CmPrint()), toolBar, "print" );
 
     imgFile = imgDir + "help.png";
@@ -311,49 +311,49 @@ TCModuleImp::LoadProfileMenu()
 
 
    imgFile = imgDir + "arrow_left1.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Previous", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Display previous record", 0,
                      this, SLOT(CmPrevious()), toolBar, "previous" );
 
     imgFile = imgDir + "arrow_right1.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Next", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Display next record", 0,
                      this, SLOT(CmNext()), toolBar, "next" );
 
     imgFile = imgDir + "p_star.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Filter", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Set filter for record keys", 0,
                      this, SLOT(CmFilter()), toolBar, "filter" );
 
     imgFile = imgDir + "fileopen.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Display", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Display selected record", 0,
                      this, SLOT(CmLoadinProfile()), toolBar, "display" );
 
     toolBar->addSeparator();
 
     imgFile = imgDir + "iconclose.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Delete", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Delete current record", 0,
                      this, SLOT(CmDelete()), toolBar, "delete" );
 
     toolBar->addSeparator();
 
     imgFile = imgDir + "toolbutton.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Remake", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Remake record data structure", 0,
                      this, SLOT(CmDerive()), toolBar, "remake" );
 
     imgFile = imgDir + "kcalc.png"; //"reccalc.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Calculate", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Calculate record data", 0,
                      this, SLOT(CmCalc()), toolBar, "calc" );
 
     imgFile = imgDir + "filesave.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Save", 0,
-                     this, SLOT(CmSave()), toolBar, "show" );
+    new QToolButton( QPixmap(imgFile.c_str()), "Save current record", 0,
+                     this, SLOT(CmSave()), toolBar, "save" ); // "show" );
 
     toolBar->addSeparator();
 
     imgFile = imgDir + "xpaint.png"; //"pixlabel.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Plot", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Plot data on graph dialog", 0,
                      this, SLOT(CmPlot()), toolBar, "plot" );
 
     imgFile = imgDir + "fileprint.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Print", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Print data to ASCII file", 0,
                      this, SLOT(CmPrint()), toolBar, "print" );
 
     imgFile = imgDir + "help.png";

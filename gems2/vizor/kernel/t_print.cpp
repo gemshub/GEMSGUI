@@ -100,7 +100,11 @@ TPrintData::TPrintData(const char *sd_key,
           skipSpace();
           /*while( *input == ' ' || *input == '\n' || *input == '\t')
                   input++; */
-          getFormat( input );
+          if( !getFormat( input ) )
+          {  gstring str_err = "Wrong or missing format: \n";
+               str_err += input;
+            Error( key_format, str_err.c_str() );
+          }   // added by KD 17.06.2002 
           getData();
           skipSpace();
           /*while( *input == ' ' || *input == '\n' || *input == '\t')
@@ -224,7 +228,7 @@ TPrintData::getToken( int& ii, int& jj )
     data = text_d;
     return data;
  }
- if( *input != '#') // special world
+ if( *input != '#') // special word
  {
    i=0;
    while( isalpha( input[i] ))
@@ -281,7 +285,7 @@ TPrintData::getToken( int& ii, int& jj )
                       else  if( str.equals("date") ) data = date_d;
                           else  if( str.equals("time") ) data = time_d;
     else
-    {  gstring str_err = "Illegal token: \n";
+    {  gstring str_err = "Invalid token: \n";
            str_err += str;
        if( i==0 )
            str_err += input;
