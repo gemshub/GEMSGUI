@@ -11,7 +11,7 @@ void TMulti::inArray( fstream& ff, char *name, short* arr, int size )
  char buf[200];
  ff >> buf;
  if( memcmp( name, buf+1, strlen(name)))
-    Error( buf, "Illegal name of array");
+    Error( buf, "DataBR text read 01: Invalid name of (int*2) array");
  for( int ii=0; ii<size; ii++  )
  {
     ff >> arr[ii];
@@ -23,7 +23,7 @@ void TMulti::inArray( fstream& ff, char *name, float* arr, int size )
  char buf[200];
  ff >> buf;
  if( memcmp( name, buf+1, strlen(name)))
-    Error( buf, "Illegal name of array");
+    Error( buf, "DataBR text read 02: Invalid name of float (real*4) array");
  for( int ii=0; ii<size; ii++  )
  {
     ff >> arr[ii];
@@ -35,7 +35,7 @@ void TMulti::inArray( fstream& ff, char *name, double* arr, int size )
  char buf[200];
  ff >> buf;
  if( memcmp( name, buf+1, strlen(name)))
-    Error( buf, "Illegal name of array");
+    Error( buf, "DataBR text read 03: Invalid name of double (real*8) array");
  for( int ii=0; ii<size; ii++  )
  {
     ff >> arr[ii];
@@ -44,21 +44,21 @@ void TMulti::inArray( fstream& ff, char *name, double* arr, int size )
 
 
 void TMulti::inArray( fstream& ff, char *name, char* arr,
-                              int size, int arr_siz )
+                              int size, int el_size )
 {
  char ch;
  char buf[200];
  ff >> buf;
  if( memcmp( name, buf+1, strlen(name)))
-    Error( buf, "Illegal name of array");
+    Error( buf, "DataBR text read 04: Invalid name of char[el_size] array");
 
  for( int ii=0; ii<size; ii++  )
  {
     ff.get(ch);
     while( ff.good() && ch != '\'' )
        ff.get(ch);
-    ff.getline( buf, arr_siz+1, '\'');
-    strncpy( arr +(ii*arr_siz), buf, arr_siz );
+    ff.getline( buf, el_size+1, '\'');
+    strncpy( arr +(ii*el_size), buf, el_size );
  }
 
 }
@@ -105,7 +105,7 @@ void TMulti::outArray( fstream& ff, char *name,  float* arr,
  {
     if(jj == sz)
     { jj=0;  ff << endl;}
-    ff << setprecision(7)  << arr[ii] << " ";
+    ff << setprecision(10) << scientific << arr[ii] << " ";
  }
 }
 
@@ -117,7 +117,7 @@ void TMulti::outArray( fstream& ff, char *name, double* arr, int size )
  {
     if(jj == 10)
     { jj=0;  ff << endl;}
-    ff << setprecision(14)  << arr[ii] << " ";
+    ff << setprecision(18) << scientific << arr[ii] << " ";
  }
 }
 

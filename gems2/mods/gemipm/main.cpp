@@ -72,6 +72,9 @@ extern "C" int __stdcall MAIF_CALC( int iNode,
    double  *p_dRes2
 );
 
+      DATABR  *dBR;
+      DATABR  *(*dBR1);
+
 int
 main(int argc, char* argv[])
 {
@@ -92,8 +95,10 @@ main(int argc, char* argv[])
       }
 
       MAIF_START( 3, c_to_i1, c_to_i2, 0 );
-      DATABR  *dBR = 0;
-      DATABR  *(*dBR1) = &dBR;
+//      DATABR
+      dBR = 0;
+//      DATABR *(
+      dBR1 = &dBR;
 
       TProfil::pm->multi->CopyTo(dBR1);
 

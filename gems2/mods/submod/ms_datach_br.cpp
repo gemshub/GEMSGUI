@@ -240,19 +240,16 @@ void TMulti::fromMT(
   data_BR->Ms = p_Ms;
   data_BR->dt = p_dt;
   data_BR->dt1 = p_dt1;
-
+// Checking if no-simplex IA is Ok
    for( ii=0; ii<data_CH->nICb; ii++ )
-   { if( fabs(data_BR->bIC[ii] - p_bIC[ii] ) > data_BR->bIC[ii]*10-4 )
+   { if( fabs(data_BR->bIC[ii] - p_bIC[ii] ) > data_BR->bIC[ii]*1e-4 ) // bugfix KD 21.11.04
           useSimplex = true;
      data_BR->bIC[ii] = p_bIC[ii];
    }
-  if( useSimplex )
-    data_BR->NodeStatusCH = NEED_GEM_AIA;
-  else
-    data_BR->NodeStatusCH = NEED_GEM_PIA;
-
+   if( useSimplex && data_BR->NodeStatusCH == NEED_GEM_PIA )
+     data_BR->NodeStatusCH = NEED_GEM_AIA;
+   // Switch only if PIA is ordered, leave if simplex is ordered (KD) 
 }
-
 
 #endif
 
@@ -264,7 +261,7 @@ void TMulti::packDataBr()
   if( pm.pNP == 0 )
     data_BR->NodeStatusCH = OK_GEM_AIA;
   else
-     data_BR->NodeStatusCH = OK_GEM_PIA;
+    data_BR->NodeStatusCH = OK_GEM_PIA;
 
   data_BR->IterDone = pm.IT;
 
@@ -315,7 +312,7 @@ data_BR->Eh = pm.FitVar[3];
 
 }
 
-// set nessasary data from DataBr structure to Multi structure
+// Set necessary data from DataBr structure to Multi structure
 void TMulti::unpackDataBr()
 {
  short ii;
@@ -327,7 +324,7 @@ void TMulti::unpackDataBr()
   else
    pm.pNP = 0; //  NEED_GEM_AIA;
   data_BR->IterDone = 0;
-
+  pm.IT = 0;
 // values
   pm.Tc = data_BR->T;
   pm.Pc  = data_BR->P;

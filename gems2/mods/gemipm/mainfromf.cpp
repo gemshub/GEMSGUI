@@ -17,7 +17,8 @@ istream& f_getline(istream& is, gstring& str, char delim);
 // -t/-b <dataCH file name> <dataBR file name1> ... <dataBR file nameN>
 //
 
-extern "C" int __stdcall MAIF_START( int nNodes,
+extern "C"
+int __stdcall MAIF_START( int nNodes,
    int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
 {
 
@@ -164,7 +165,8 @@ extern "C" int __stdcall MAIF_START( int nNodes,
 //-------------------------------------------------------------------------
 // calc one node data bridge instances
 
-extern "C" int __stdcall MAIF_CALC( int  iNode,
+extern "C"
+int __stdcall MAIF_CALC( int  iNode,
    short& p_NodeHandle,    // Node identification handle
    short& p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short& p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -277,18 +279,18 @@ extern "C" int __stdcall MAIF_CALC( int  iNode,
   memcpy( p_uIC, dBR->uIC, dCH->nICb*sizeof(double) );
 
 //**************************************************************
-// only for test output resalts for files
-    gstring strr= "databr.dat";
+// only for test output results for files
+    gstring strr= "calculated.dbr";
 // binary DATABR
     GemDataStream out_br(strr, ios::out|ios::binary);
     TProfil::pm->multi->databr_to_file(out_br);
 // text DATABR
-    fstream out_br_t("databr.txt", ios::out );
-    ErrorIf( !out_br_t.good() , "databr.txt",
-                "DataBR out yyyy Fileopen error");
+    fstream out_br_t("calculated_dbr.dat", ios::out );
+    ErrorIf( !out_br_t.good() , "calculated_dbr.dat",
+                "DataBR text file open error");
     TProfil::pm->multi->databr_to_text_file(out_br_t);
 // output multy
-    strr = "multi.ipm";
+    strr = "calc_multi.ipm";
     GemDataStream o_m( strr, ios::out|ios::binary);
     TProfil::pm->outMulti(o_m, strr );
 //********************************************************* */

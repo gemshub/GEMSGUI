@@ -358,6 +358,7 @@ TPhase::RecBuild( const char *key, int mode  )
 
     gstring str;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    php->PphC = php->pst[0];
 
 AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
@@ -400,28 +401,34 @@ AGAIN_SETUP:
           case SM_AQDAV:  // Aqueous Davies
                           php->ncpN = php->ncpM = 0;
                           php->nscN = php->nscM = 0;
+                          php->PphC == PH_AQUEL;
                           break;
           case SM_AQDH1:  // Aqueous DH LL
                           php->ncpN = php->ncpM = 0;
                           php->nscN = php->nscM = 0;
+                          php->PphC == PH_AQUEL;
                           break;
           case SM_AQDH2:  // DH Kielland, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
                           php->nscN = php->nscM = 1;
+                          php->PphC == PH_AQUEL;
                           break;
           case SM_AQDH3:  // EDH Kielland, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
                           php->nscN = php->nscM = 1;
+                          php->PphC == PH_AQUEL;
                           break;
           case SM_AQDHH:  // EDH Helgeson, common a0, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
                           php->nscN = php->nscM = 0;
+                          php->PphC == PH_AQUEL;
                           break;
           case SM_AQSIT:  // SIT model in NEA variant
-                          break;
                           php->ncpN = max( (short)3, php->ncpN );
                           php->ncpM = max( (short)2, php->ncpM );
                           php->nscN = php->nscM = 1;
+                          php->PphC == PH_AQUEL;
+                          break;
           default:  // other models
              break;
        }
@@ -533,7 +540,7 @@ AGAINRC:
            default:
                      break;
          }
-         cbr = spName[pos];  // debugging 
+         cbr = spName[pos];  // debugging
        }
        if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
             Error( GetName(),
