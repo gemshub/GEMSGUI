@@ -23,6 +23,7 @@ const char *GEMS_IC_HTML = "gm_icomp";
 #include "v_object.h"
 #include "visor.h"
 #include "service.h"
+#include "filters_data.h"
 
 TIComp* TIComp::pm;
 
@@ -125,6 +126,35 @@ TIComp::CmHelp()
     pVisor->OpenHelp( GEMS_IC_HTML );
 }
 
+void
+TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
+{
+
+ TCIntArray anR;
+ TCStringArray aIC1;
+
+ //open selected files in kernel database
+ //db->OpenOnlyFromList(names);
+ //db->OpenAllFiles(true);
+ db->GetKeyList( "*:*:*:", aIC1, anR );
+
+ for( uint ii=0; ii<aIC1.GetCount(); ii++ )
+ {
+    RecInput( aIC1[ii].c_str() );
+    if( *db->FldKey( 1 ) == 'a' || *db->FldKey( 1 ) == 'v' ) // addition
+      aIndMT.Add( -1 );
+    else
+      if( isotopes || *db->FldKey( 1 ) == 'e' || *db->FldKey( 1 ) == 'z' ||
+          *db->FldKey( 1 ) == 'h' || *db->FldKey( 1 ) == 'o' )
+        aIndMT.Add( icp->num );
+      else
+        continue;
+   aIC.Add(aIC1[ii]);
+ }
+}
+
+
+
 #include "m_sdata.h"
 void
 TIComp::RecordPrint( const char *key )
@@ -142,6 +172,45 @@ TIComp::RecordPrint( const char *key )
    Error( sd_key.c_str(), "No format text in this record.");
  PrintSDref( sd_key.c_str(), text_fmt );
 }
+
+void
+TIComp::CopyElements( const char * prfName,
+         elmWindowData el_data, icSetupData st_data )
+{
+    // open selected kernel files
+   //db->OpenOnlyFromList(el_data.flNames);
+    int fnum_ = db->GetOpenFileNum( prfName );
+
+    //  copy to it selected records
+    // ( add to last key field first symbol from prfname )
+    int nrec;
+    for(uint i=0; i<el_data.ICrds.GetCount(); i++ )
+    {
+        nrec = db->Find( el_data.ICrds[i].c_str() );
+        db->Get( nrec );
+        /// !!! changing record key
+       gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+       ChangeforTempl( str, st_data.from_templ,
+                       st_data.to_templ, db->FldLen( 2 ));
+        str += ":";
+        gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        AddRecord( str.c_str(), fnum_ );
+    }
+
+    // close all no profile files
+    TCStringArray names1;
+    names1.Add(prfName);
+    db->OpenOnlyFromList(names1);
+
+}
+
+
+
 
 // ------------- End of file  m_icomp.cpp -------------------
 

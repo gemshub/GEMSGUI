@@ -186,11 +186,14 @@ protected:
 
     void InitFN( const char * prfName, const char* prfTemplate );
     void RenameFN( const char * prfName, const char* prfTemplate );
-    bool GetFN( const char * prfName );
+    bool GetFN( const char * prfName, bool show_dlg=true );
     void SetFN();
+    bool rCopyFilterProfile( const char * prfName );
+
     void OpenProfileMode(
         const char* key, bool changeAqGas, bool addFile );
     bool NewProfileMode();
+    bool NewProfileModeElements();
     void SaveOldList();
     void DeleteOldList();
     void TestChangeProfile();
@@ -249,6 +252,7 @@ protected:
     void pm_GC_ods_link( int k, int jb, int jpb, int jdb );
     double TinkleSupressFactor( double ag, int ir);
     void DebyeHueckel3HelKarp( int jb, int je, int jpb, int jdb, int k );
+    void Davies03temp( int jb, int je, int k ); // added by KD 25.01.02
     void GammaCalc( int LinkMode );
     // ipm_fia_bc
     void MassBalanceDeviations( int N, int L, float *A, double *Y, double *B, double *C );

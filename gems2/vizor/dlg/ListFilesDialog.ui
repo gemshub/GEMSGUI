@@ -12,7 +12,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>581</width>
+            <width>570</width>
             <height>454</height>
         </rect>
     </property>
@@ -34,37 +34,135 @@
         <string>Database File Configuration for Modelling Profile</string>
     </property>
     <widget>
-        <class>QLabel</class>
+        <class>QLayoutWidget</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>pLabel</cstring>
+            <cstring>Layout3</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
-                <x>0</x>
-                <y>10</y>
-                <width>440</width>
-                <height>20</height>
+                <x>10</x>
+                <y>410</y>
+                <width>560</width>
+                <height>37</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <pointsize>11</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Please, check files linkes to Profile:</string>
-        </property>
-        <property stdset="1">
-            <name>alignment</name>
-            <set>AlignCenter</set>
-        </property>
-        <property>
-            <name>hAlign</name>
-        </property>
+        <hbox>
+            <property stdset="1">
+                <name>margin</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>spacing</name>
+                <number>6</number>
+            </property>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pHelpButton</cstring>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Help</string>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Learn about System Profile concept and profile configuration</string>
+                </property>
+            </widget>
+            <spacer>
+                <property>
+                    <name>name</name>
+                    <cstring>Spacer1</cstring>
+                </property>
+                <property stdset="1">
+                    <name>orientation</name>
+                    <enum>Horizontal</enum>
+                </property>
+                <property stdset="1">
+                    <name>sizeType</name>
+                    <enum>Expanding</enum>
+                </property>
+                <property>
+                    <name>sizeHint</name>
+                    <size>
+                        <width>20</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pGO_OKButton</cstring>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Ok</string>
+                </property>
+                <property stdset="1">
+                    <name>default</name>
+                    <bool>true</bool>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Files selections is finisded OK</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>pCancelButton</cstring>
+                </property>
+                <property stdset="1">
+                    <name>sizePolicy</name>
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                    </sizepolicy>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Cancel</string>
+                </property>
+            </widget>
+        </hbox>
     </widget>
     <widget>
         <class>QListView</class>
@@ -104,9 +202,9 @@
             <name>geometry</name>
             <rect>
                 <x>10</x>
-                <y>40</y>
+                <y>30</y>
                 <width>560</width>
-                <height>320</height>
+                <height>370</height>
             </rect>
         </property>
         <property stdset="1">
@@ -119,114 +217,37 @@
         </property>
     </widget>
     <widget>
-        <class>QLayoutWidget</class>
+        <class>QLabel</class>
         <property stdset="1">
             <name>name</name>
-            <cstring>Layout3</cstring>
+            <cstring>pLabel</cstring>
         </property>
         <property stdset="1">
             <name>geometry</name>
             <rect>
-                <x>10</x>
-                <y>380</y>
-                <width>560</width>
-                <height>40</height>
+                <x>0</x>
+                <y>0</y>
+                <width>440</width>
+                <height>20</height>
             </rect>
         </property>
-        <hbox>
-            <property stdset="1">
-                <name>margin</name>
-                <number>0</number>
-            </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
-            </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pGO_OKButton</cstring>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Ok</string>
-                </property>
-                <property stdset="1">
-                    <name>default</name>
-                    <bool>true</bool>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Files selections is finisded OK</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pHelpButton</cstring>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Help</string>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Learn about System Profile concept and profile configuration</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pCancelButton</cstring>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Cancel</string>
-                </property>
-            </widget>
-        </hbox>
+        <property stdset="1">
+            <name>font</name>
+            <font>
+                <pointsize>10</pointsize>
+            </font>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>   Please, check files linked to Profile:</string>
+        </property>
+        <property stdset="1">
+            <name>alignment</name>
+            <set>AlignVCenter|AlignLeft</set>
+        </property>
+        <property>
+            <name>hAlign</name>
+        </property>
     </widget>
 </widget>
 <connections>

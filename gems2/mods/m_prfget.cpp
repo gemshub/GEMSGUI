@@ -23,6 +23,7 @@
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
+
 #ifdef Use_mt_mode
 #include "visor_w.h"
 #endif
@@ -50,9 +51,16 @@ TProfil::initCalcMode()
 
 
     if( str == ALLKEY )
+     {
+       if( pVisor->getElemPrMode() )
+       { if(  !NewProfileModeElements(  ) )
+            return false;
+       }
+       else
      {    if(  !NewProfileMode(  ) )
             return false;
       }
+     }
     else
        OpenProfileMode(  str.c_str(),changeAqGas, addfiles );
 
@@ -175,13 +183,33 @@ bool TProfil::NewProfileMode()
  {
     bool templ_key = false;
 
-    gstring  key_str = GetKeyofRecord( ALLKEY,
+    gstring  templ_str;
+AGAIN:
+    gstring  key_str = GetKeyofRecord( "MyWork:MyData"/*ALLKEY*/,
             "Please, enter a new profile key", KEY_NEW );
     if( key_str.empty() )
       return false; // cancel command
 
+    rt[RT_PARAM].SetKey( key_str.c_str() );
+    vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+    gstring fstKeyFld(_fstKeyFld);
+    StripLine(fstKeyFld);
+
+    //Test equal profile names
+    templ_str = fstKeyFld;
+    templ_str += ":*:";
+    TCStringArray aKey__;
+    TCIntArray anR__;
+
+    if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
+    {
+      vfMessage(window(), fstKeyFld.c_str(),
+        "Profile cannot be created - such directory already exists."
+        "\nPlease, enter another name.");
+      goto AGAIN;
+    }
    // select profile record key to template
-    gstring  templ_str = GetKeyofRecord( ALLKEY,
+    templ_str = GetKeyofRecord( ALLKEY,
             "Please, select a template profile", KEY_OLD );
     if( !templ_str.empty() )
     {
@@ -196,18 +224,20 @@ bool TProfil::NewProfileMode()
     }
     else
     {
+       rt[RT_PARAM].SetKey( key_str.c_str() );
        dyn_kill();
        set_def(); // set default data or zero if necessary
     }
-      pVisor->Message( 0, "Loading Profile",
-      "Opening data base files to Profile", 5  );
 
      RecBuild( key_str.c_str() );  // Edit flags
 
+   pVisor->Message( window(), "Loading Profile",
+      "Opening data base files to Profile", 5  );
+
      rt[RT_PARAM].SetKey( key_str.c_str() );
-     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-     gstring fstKeyFld(_fstKeyFld);
-     StripLine(fstKeyFld);
+//     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+//     gstring fstKeyFld(_fstKeyFld);
+//     StripLine(fstKeyFld);
 
      if( templ_key == false  )
         InitFN( fstKeyFld.c_str(), 0  ); // make Profile directory
@@ -257,6 +287,94 @@ bool TProfil::NewProfileMode()
             TestChangeProfile();  // test and insert changes to data base file
             DeleteOldList();
    }
+
+  // save results   RecSave(str.c_str());
+   AddRecord( key_str.c_str() );
+
+ }
+ catch( TError& xcpt )
+    {
+     pVisor->CloseMessage();
+      fEdit = false;
+      //delete profile directory, if Profile record create error
+      gstring fstKeyFld =
+                gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+      StripLine(fstKeyFld);
+
+      gstring Path = pVisor->userProfDir();
+      Path += fstKeyFld;
+      pVisor->deleteDBDir(Path.c_str());
+      throw;
+    }
+    return true;
+}
+
+//Making new Profile  (new elements mode)
+bool TProfil::NewProfileModeElements()
+{
+ try
+ {
+    bool templ_key = false;
+
+    gstring  templ_str;
+AGAIN:
+    gstring  key_str = GetKeyofRecord( "MyWork:MyData"/*ALLKEY*/,
+            "Please, enter a new profile key", KEY_NEW );
+    if( key_str.empty() )
+      return false; // cancel command
+
+    rt[RT_PARAM].SetKey( key_str.c_str() );
+    vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+    gstring fstKeyFld(_fstKeyFld);
+    StripLine(fstKeyFld);
+
+    //Test equal profile names
+    templ_str = fstKeyFld;
+    templ_str += ":*:";
+    TCStringArray aKey__;
+    TCIntArray anR__;
+
+    if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
+    {
+      vfMessage(window(), fstKeyFld.c_str(),
+        "Profile cannot be created - such directory already exists."
+        "\nPlease, enter another name.");
+      goto AGAIN;
+    }
+   rt[RT_PARAM].SetKey( key_str.c_str() );
+   dyn_kill();
+   set_def(); // set default data or zero if necessary
+
+   RecBuild( key_str.c_str() );  // Edit flags
+
+   pVisor->Message( window(), "Loading Profile",
+      "Opening data base files to Profile", 5  );
+
+   rt[RT_PARAM].SetKey( key_str.c_str() );
+//     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+//     gstring fstKeyFld(_fstKeyFld);
+//     StripLine(fstKeyFld);
+
+   InitFN( fstKeyFld.c_str(), 0  ); // make Profile directory
+
+   if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
+         ;//goto BACK;
+   // get opens files list
+      if( !GetFN( fstKeyFld.c_str(), false ) )
+        Error( key_str.c_str(),
+           "Profile configuration aborted by the user!" );
+   SetFN();
+
+   pVisor->Message( 0, "Loading Profile",
+      "Loading lists of IComp, Compos, Phase\n"
+                "  and DComp/ReacDC record keys", 10);
+
+        // load lists of ICOMP, COMPOS, PHASE and DCOMP&REACT recordc keys
+        rt[RT_PARAM].SetKey( key_str.c_str() );
+        rmults->LoadRmults( true, true );
+
+   pVisor->Message( 0, "Loading Profile",
+         "Detecting changes in thermodynamic database", 40 );
 
   // save results   RecSave(str.c_str());
    AddRecord( key_str.c_str() );
@@ -366,9 +484,17 @@ void TProfil::newSystat()
 
     //rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
     //            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+
     TSysEq::pm->setCalcFlag( false );
 
-    gstring str = TSysEq::pm->GetKeyofRecord( rt[RT_SYSEQ].PackKey(),
+    gstring key_str = rt[RT_SYSEQ].PackKey();
+    if( key_str.find("*") != gstring::npos )
+    {
+        key_str = gstring( db->FldKey(0), 0, db->FldLen(0) );
+        key_str.strip();
+        key_str += ":G:MySystem:0:0:1:25:0:";
+    }
+    gstring str = TSysEq::pm->GetKeyofRecord( key_str.c_str() ,
                   "Please, enter a new key: ", KEY_NEW );
     if( str.empty() )
         return;
@@ -650,12 +776,12 @@ void TProfil::RenameFN( const char * prfName, const char* prfTemplate )
       }
 }
 // Save file configuration to Profil structure
-bool TProfil::GetFN( const char * prfName )
+bool TProfil::GetFN( const char * prfName, bool show_dlg )
 {
 
     TCStringArray aFls;
     TCIntArray aCnt;
-    if( ! vfListFiles(window(), prfName, aFls, aCnt ))
+    if( ! vfListFiles(window(), show_dlg, prfName, aFls, aCnt ))
       return false;
 
     memset(mup->Nfl, 0, MAXNUMCHAINS*sizeof(short));

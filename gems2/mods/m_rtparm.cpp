@@ -356,11 +356,22 @@ AGAIN_SETUP:
             goto AGAIN_SETUP;
         else   Error( GetName(), "Invalid mode of calculation.");
     }
-    if(  rpp->dimXY[1] < 1 || rpp->dimXY[1] > 20 ||
-          rpp->dimEF[0]<0 || rpp->dimEF[1]<0  ||
-         ( (rpp->dimEF[0]==0 || rpp->dimEF[1]==0) && rpp->Pplot != S_OFF ) )
+
+    if( rpp->Pplot == S_OFF )
+         if( rpp->dimEF[0]>0 && rpp->dimEF[1]> 0)
+             rpp->Pplot = S_ON;
+
+    if( (rpp->dimEF[0]<=0 || rpp->dimEF[1]<=0) && rpp->Pplot != S_OFF )
     {
-        vfMessage(window(), GetName(), "Invalid sizes or flags!");
+        vfMessage(window(), GetName(),
+        "Wrong dimensions set for the empirical data array!");
+        goto AGAIN_SETUP;
+    }
+
+    if(  rpp->dimXY[1] < 1 || rpp->dimXY[1] > 20 )
+    {
+        vfMessage(window(), GetName(),
+        "Wrong dimensions set for the data array!");
         goto AGAIN_SETUP;
     }
     rpp->What = *(key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB);

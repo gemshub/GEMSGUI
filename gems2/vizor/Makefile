@@ -109,9 +109,10 @@ visor_w.o: ./libs/config.h dlg/MainDialog.h dlg/MainDialogData.h
 visor_w.o: dlg/SelectDialog.h dlg/SelectDialogData.h dlg/KeyFilter.h
 visor_w.o: dlg/KeyFilter.h dlg/ProgressDialog.h dlg/ProgressDialogData.h
 visor_w.o: dlg/SystemDialog.h dlg/SystemDialogData.h dlg/ListFilesDialog.h
-visor_w.o: dlg/ListFilesDialogData.h dlg/LoadMessage.h dlg/HLinpDialog.h
-visor_w.o: dlg/HLinpDialogData.h dlg/KeyDialog.h dlg/KeyDialogData.h
-visor_w.o: dlg/KeyProfile.h dlg/KeyProfileData.h
+visor_w.o: dlg/ListFilesDialogData.h dlg/ElementsDialog.h
+visor_w.o: dlg/ElementsDialogData.h ../mods/filters_data.h dlg/LoadMessage.h
+visor_w.o: dlg/HLinpDialog.h dlg/HLinpDialogData.h dlg/KeyDialog.h
+visor_w.o: dlg/KeyDialogData.h dlg/KeyProfile.h dlg/KeyProfileData.h
 module_w.o: visor.h ./libs/gstring.h ./libs/array.h ./kernel/v_module.h
 module_w.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 module_w.o: ./kernel/v_vals.h ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'ListFilesDialog.ui'
 **
-** Created: Пнд Гру 17 12:44:08 2001
+** Created: Втр Лют 5 12:33:53 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -27,11 +27,11 @@ public:
     ListFilesDialogData( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~ListFilesDialogData();
 
-    QLabel* pLabel;
-    QListView* pListFiles;
-    QPushButton* pGO_OKButton;
     QPushButton* pHelpButton;
+    QPushButton* pGO_OKButton;
     QPushButton* pCancelButton;
+    QListView* pListFiles;
+    QLabel* pLabel;
 
 
 public slots:

@@ -195,7 +195,7 @@ protected:
     void stbal( int N, int L, float *Smatr, float *DCstc, double *ICm );
     // mark data
     void mark_ic_to_bc();
-    void mark_ph_to_dc();
+    //void mark_ph_to_dc();
     void mark_dc_to_ph();
     void mark_dc_to_ic();
     void mark_ic_to_dc();
@@ -236,6 +236,7 @@ public:
     void loadData( bool newRec, int reBuildType = 2 );
     void setDefData();
 
+    void mark_ph_to_dc();
     void SyTest();
     void SyTestSizes();
     void setSizes();

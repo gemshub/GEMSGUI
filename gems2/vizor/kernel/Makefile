@@ -59,8 +59,8 @@ v_dbm2.o: v_object.h ../libs/gstring.h ../libs/array.h v_user.h
 v_dbm2.o: ../libs/verror.h v_vals.h v_dbm.h v_file.h ../../mods/v_mod.h
 v_dbm2.o: ../visor.h v_module.h
 t_print.o: t_print.h v_object.h ../libs/gstring.h ../libs/array.h v_user.h
-t_print.o: ../libs/verror.h v_vals.h v_dbm.h v_file.h ../service.h
+t_print.o: ../libs/verror.h v_vals.h v_ipnc.h v_dbm.h v_file.h ../service.h
 v_module.o: v_module.h v_object.h ../libs/gstring.h ../libs/array.h v_user.h
 v_module.o: ../libs/verror.h v_vals.h v_dbm.h v_file.h ../module_w.h
 v_module.o: ../../mods/setthread.h ../visor_w.h ../graph.h ../visor.h
-v_module.o: ../service.h ../../mods/v_mod.h t_print.h
+v_module.o: ../service.h ../../mods/v_mod.h t_print.h v_ipnc.h

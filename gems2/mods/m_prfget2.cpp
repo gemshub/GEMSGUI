@@ -393,9 +393,10 @@ void TProfil::Set_z_sp_config( const char *profil )
     gstring AqKey = gstring( mup->SF[nAq], 0, PH_RKLEN);
     gstring GasKey = gstring( mup->SF[nGas], 0, PH_RKLEN);
 
-    if( nAq >=0 && mup->PmvAq == S_ON )
+    if( nAq >=0 && mup->PmvAq != S_OFF )
     {
         TCStringArray lst;
+        char emod;
         for( ii=nAqf; ii<nAqf+mup->Ll[nAq]; ii++  )
             if( syp->Dcl[ii] != S_OFF )
             {
@@ -404,7 +405,8 @@ void TProfil::Set_z_sp_config( const char *profil )
                 lst.Add( gstring(ss.p) );
                 mup->SM[ii][DC_RKLEN-1] = ' ';
             }
-        TPhase::pm->newAqGasPhase( AqKey.c_str(), file, true, lst);
+        emod = mup->PmvAq;
+        TPhase::pm->newAqGasPhase( AqKey.c_str(), file, emod, true, lst);
     }
 
     if( nGas >=0 && mup->PmvGas == S_ON )
@@ -418,7 +420,7 @@ void TProfil::Set_z_sp_config( const char *profil )
                 lst.Add( gstring(ss.p) );
                 mup->SM[ii][DC_RKLEN-1] = ' ';
             }
-        TPhase::pm->newAqGasPhase( GasKey.c_str(), file, true, lst);
+        TPhase::pm->newAqGasPhase( GasKey.c_str(), file, SM_AQDH3, true, lst);
     }
 
     //save DClist old

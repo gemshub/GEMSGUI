@@ -85,6 +85,7 @@ TVisor::TVisor(int c, char *v[]):
 
     ProfileMode = false;
     DBChangedMode = false;
+    isElementsProfileMode = false;
 
     char* env_s;
 
@@ -905,7 +906,18 @@ void
 TVisor::makeDBDir(const char *dir)
 {
   // make directory dir (find system function)
-    QDir d;
+    QDir d(dir);
+    if ( d.exists() )
+    { if( d.count()>2)
+      {
+         QStringList lst = d.entryList( "*.ndx;*.pdb" );
+         if (lst.count()<=0)
+           vfMessage(0, dir, "This directory is not empty.");
+         else
+          Error( dir, "Error creating System Profile directory!");
+      }
+      return;
+    }
     if( !d.mkdir( dir ))
         Error( dir, "Error creating System Profile directory!");
 }

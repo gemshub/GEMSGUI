@@ -1,4 +1,4 @@
-//-------------------------------------------------------------------
+//------------------------------------------------------------------
 // Id: gems/mods/m_reacdc.cpp  version 2.0.0   2001
 //
 // Implementation of TReacDC class, config and calculation functions
@@ -26,8 +26,10 @@ const char *GEMS_RE_HTML = "gm_reacdc";
 #include "m_dcomp.h"
 #include "m_param.h"
 #include "s_supcrt.h"
+#include "s_formula.h"
 #include "service.h"
 #include "visor.h"
+#include "filters_data.h"
 
 TReacDC* TReacDC::pm;
 
@@ -1399,6 +1401,82 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
         msg += "'\n Try to unload or re-index this PDB chain.";
         Error( GetName(),  msg.c_str() );
     }
+}
+
+void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
+                      elmWindowData el_data, rdSetupData st_data)
+{
+    TCIntArray anR;
+    TCStringArray aDCkey;
+
+    // open selected kernel files
+    // db->OpenOnlyFromList(el_data.flNames);
+    int fnum_ = db->GetOpenFileNum( prfName );
+
+    // get list of records
+    db->GetKeyList( "*:*:*:*:", aDCkey, anR );
+
+    //  test&copy  selected records
+    // ( add to last key field first symbol from prfname )
+    int i;
+    uint j;
+    TFormula aFo;
+
+    for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
+    {
+     if( !el_data.flags[cbAqueous_] &&
+         ( *db->FldKey( 0 )== 'a' || *db->FldKey( 0 )== 'x' ))
+       continue;
+     if( !el_data.flags[cbGaseous_] && *db->FldKey( 0 )== 'g' )
+       continue;
+     if( !el_data.flags[cbSorption_] && *db->FldKey( 0 )== 'c' )
+       continue;
+
+     RecInput( aDCkey[ii].c_str() );
+     //test record
+       aFo.SetFormula( rcp->form ); // and ce_fscan
+     for( i=0; i<aFo.GetIn(); i++ )
+     {
+       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+        if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
+          break;
+       if( j == el_data.ICrds.GetCount() )
+        break;
+      }
+      if( i < aFo.GetIn() )
+        continue;
+     // add cnt
+     for( i=0; i<aFo.GetIn(); i++ )
+     {
+       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+        if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
+          cnt[j]++;
+     }
+    // test Vol
+       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+        if( !memcmp( el_data.ICrds[j].c_str(), "Vol", 3 ) )
+          cnt[j]++;
+    // !!! changing record key
+     gstring str= gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
+    ChangeforTempl( str, st_data.from_templ,
+                    st_data.to_templ, db->FldLen( 3 ));
+        str += ":";
+        gstring str1 = gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        str1.strip();
+        str = str1 + ":" + str;
+     AddRecord( str.c_str(), fnum_ );
+    }
+
+    // close all no profile files
+    TCStringArray names1;
+    names1.Add(prfName);
+    db->OpenOnlyFromList(names1);
 }
 
 // ------------------ End of m_reacdc.cpp --------------------------

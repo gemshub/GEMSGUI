@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'HLinpDialog.ui'
 **
-** Created: Пнд Гру 17 12:44:09 2001
+** Created: Втр Лют 5 12:33:54 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

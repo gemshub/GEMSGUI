@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'SettingsDialog.ui'
 **
-** Created: Di 18. Dez 12:46:37 2001
+** Created: Втр Лют 5 12:33:44 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

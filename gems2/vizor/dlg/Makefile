@@ -32,7 +32,9 @@ DATASRC =	MainDialogData.cpp \
 		LegendDialogData.cpp \
 		ListFilesDialogData.cpp \
 		HLresDialogData.cpp \
-		HLinpDialogData.cpp
+		HLinpDialogData.cpp \
+		ElementsDialogData.cpp \
+		SetFiltersDialogData.cpp
 
 DATAOBJ =	$(subst .cpp,.o,$(DATASRC))
 
@@ -55,7 +57,9 @@ SOURCES =	MainDialog.cpp \
 		ListFilesDialog.cpp \
 		HLresDialog.cpp \
 		HLinpDialog.cpp \
-		LoadMessage.cpp
+		LoadMessage.cpp \
+		ElementsDialog.cpp \
+		SetFiltersDialog.cpp
 
 OBJECTS =	$(subst .cpp,.o,$(SOURCES))
 
@@ -96,7 +100,11 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_HLresDialogData.o \
 		moc_HLinpDialog.o \
 		moc_HLinpDialogData.o \
- 		moc_LoadMessage.o
+		moc_LoadMessage.o \
+		moc_ElementsDialog.o \
+		moc_ElementsDialogData.o \
+		moc_SetFiltersDialog.o \
+		moc_SetFiltersDialogData.o
 
 
 TARGET =    dlg.o
@@ -168,7 +176,7 @@ ProgressDialog.o: ../kernel/v_file.h ../../mods/submod/ms_mtparm.h
 ProgressDialog.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
 ProgressDialog.o: ../../mods/submod/ms_multi.h ../kernel/v_ipnc.h
 ProgressDialog.o: ../../mods/submod/ms_calc.h ../service.h ../visor.h
-ProgressDialog.o: ../visor_w.h ../graph.h
+ProgressDialog.o: ../visor_w.h ../graph.h HLresDialog.h HLresDialogData.h
 KeyDialog.o: ../kernel/v_dbm.h ../libs/gstring.h ../libs/array.h
 KeyDialog.o: ../kernel/v_file.h ../kernel/v_user.h ../libs/verror.h
 KeyDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../kernel/v_vals.h
@@ -246,3 +254,17 @@ HLinpDialog.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
 HLinpDialog.o: ../../mods/submod/ms_multi.h ../kernel/v_ipnc.h
 HLinpDialog.o: ../../mods/submod/ms_calc.h
 LoadMessage.o: LoadMessage.h
+ElementsDialog.o: ElementsDialog.h ElementsDialogData.h
+ElementsDialog.o: ../../mods/filters_data.h ../libs/array.h
+ElementsDialog.o: ../kernel/v_user.h ../libs/gstring.h ../libs/verror.h
+ElementsDialog.o: SetFiltersDialog.h SetFiltersDialogData.h ../visor.h
+ElementsDialog.o: ../kernel/v_module.h ../kernel/v_object.h
+ElementsDialog.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../kernel/v_file.h
+ElementsDialog.o: ../visor_w.h ../../mods/setthread.h ../graph.h
+ElementsDialog.o: ../../mods/m_icomp.h ../../mods/v_mod.h
+SetFiltersDialog.o: SetFiltersDialog.h SetFiltersDialogData.h
+SetFiltersDialog.o: ../../mods/filters_data.h ../libs/array.h
+SetFiltersDialog.o: ../kernel/v_user.h ../libs/gstring.h ../libs/verror.h
+SetFiltersDialog.o: ../visor_w.h ../../mods/setthread.h ../kernel/v_vals.h
+SetFiltersDialog.o: ../graph.h ../kernel/v_module.h ../kernel/v_object.h
+SetFiltersDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h

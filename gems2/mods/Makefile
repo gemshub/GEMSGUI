@@ -49,7 +49,7 @@ all:
 	make $(TARGET)
 
 
-$(TARGET):    $(OBJECTS) $(OBJ_SUB) Makefile
+$(TARGET):    $(OBJECTS) $(OBJ_SUB)
 	$(LD) -r $(OBJECTS) $(OBJ_SUB) -o $@
 
 clean:  
@@ -92,13 +92,13 @@ m_param.o: submod/ms_mtparm.h submod/ms_system.h m_phase.h submod/ms_multi.h
 m_param.o: ../vizor/kernel/v_ipnc.h submod/ms_calc.h setthread.h m_gtdemo.h
 m_param.o: ../vizor/graph.h m_syseq.h m_dcomp.h s_tpwork.h m_icomp.h
 m_param.o: m_compos.h m_reacdc.h m_proces.h m_duterm.h ../vizor/visor.h
-m_param.o: m_sdata.h
+m_param.o: ../vizor/service.h m_sdata.h filters_data.h
 m_icomp.o: m_icomp.h v_mod.h ../vizor/kernel/v_vals.h ../vizor/libs/gstring.h
 m_icomp.o: ../vizor/libs/array.h ../vizor/kernel/v_module.h
 m_icomp.o: ../vizor/kernel/v_object.h ../vizor/kernel/v_user.h
 m_icomp.o: ../vizor/libs/verror.h ../vizor/kernel/v_dbm.h
 m_icomp.o: ../vizor/kernel/v_file.h ../vizor/visor.h ../vizor/service.h
-m_icomp.o: m_sdata.h
+m_icomp.o: filters_data.h m_sdata.h
 s_formula.o: s_formula.h ../vizor/libs/array.h ../vizor/kernel/v_user.h
 s_formula.o: ../vizor/libs/gstring.h ../vizor/libs/verror.h v_mod.h
 s_formula.o: ../vizor/kernel/v_vals.h m_icomp.h ../vizor/kernel/v_module.h
@@ -112,7 +112,7 @@ m_dcomp.o: ../vizor/kernel/v_file.h s_tpwork.h m_param.h submod/ms_rmults.h
 m_dcomp.o: submod/ms_mtparm.h submod/ms_system.h m_phase.h submod/ms_multi.h
 m_dcomp.o: ../vizor/kernel/v_ipnc.h submod/ms_calc.h setthread.h
 m_dcomp.o: ../vizor/visor.h ../vizor/service.h s_formula.h s_supcrt.h s_fgl.h
-m_dcomp.o: m_sdata.h
+m_dcomp.o: filters_data.h m_sdata.h
 m_dcomp2.o: m_dcomp.h v_mod.h ../vizor/kernel/v_vals.h
 m_dcomp2.o: ../vizor/libs/gstring.h ../vizor/libs/array.h
 m_dcomp2.o: ../vizor/kernel/v_module.h ../vizor/kernel/v_object.h
@@ -141,6 +141,7 @@ m_compos.o: v_mod.h m_param.h submod/ms_rmults.h submod/ms_mtparm.h
 m_compos.o: submod/ms_system.h m_phase.h submod/ms_multi.h
 m_compos.o: ../vizor/kernel/v_ipnc.h submod/ms_calc.h setthread.h m_icomp.h
 m_compos.o: m_dcomp.h s_tpwork.h m_sdata.h m_reacdc.h s_formula.h
+m_compos.o: filters_data.h
 s_fgl.o: s_fgl.h m_dcomp.h v_mod.h ../vizor/kernel/v_vals.h
 s_fgl.o: ../vizor/libs/gstring.h ../vizor/libs/array.h
 s_fgl.o: ../vizor/kernel/v_module.h ../vizor/kernel/v_object.h
@@ -159,8 +160,8 @@ m_reacdc.o: v_mod.h ../vizor/kernel/v_module.h ../vizor/kernel/v_dbm.h
 m_reacdc.o: ../vizor/kernel/v_file.h m_dcomp.h s_tpwork.h m_param.h
 m_reacdc.o: submod/ms_rmults.h submod/ms_mtparm.h submod/ms_system.h
 m_reacdc.o: m_phase.h submod/ms_multi.h ../vizor/kernel/v_ipnc.h
-m_reacdc.o: submod/ms_calc.h setthread.h s_supcrt.h ../vizor/service.h
-m_reacdc.o: ../vizor/visor.h m_sdata.h
+m_reacdc.o: submod/ms_calc.h setthread.h s_supcrt.h s_formula.h
+m_reacdc.o: ../vizor/service.h ../vizor/visor.h filters_data.h m_sdata.h
 m_phase.o: ../vizor/kernel/v_object.h ../vizor/libs/gstring.h
 m_phase.o: ../vizor/libs/array.h ../vizor/kernel/v_user.h
 m_phase.o: ../vizor/libs/verror.h ../vizor/kernel/v_vals.h ../vizor/visor.h
@@ -168,7 +169,8 @@ m_phase.o: ../vizor/kernel/v_module.h ../vizor/kernel/v_dbm.h
 m_phase.o: ../vizor/kernel/v_file.h ../vizor/service.h m_dcomp.h v_mod.h
 m_phase.o: s_tpwork.h m_reacdc.h m_phase.h m_param.h submod/ms_rmults.h
 m_phase.o: submod/ms_mtparm.h submod/ms_system.h submod/ms_multi.h
-m_phase.o: ../vizor/kernel/v_ipnc.h submod/ms_calc.h setthread.h m_sdata.h
+m_phase.o: ../vizor/kernel/v_ipnc.h submod/ms_calc.h setthread.h
+m_phase.o: filters_data.h m_sdata.h
 m_proces.o: m_proces.h ../vizor/kernel/v_ipnc.h ../vizor/libs/array.h
 m_proces.o: ../vizor/kernel/v_user.h ../vizor/libs/gstring.h
 m_proces.o: ../vizor/libs/verror.h v_mod.h ../vizor/kernel/v_vals.h

@@ -106,6 +106,7 @@ SystemDialog::CmRunIPM()
         if( !pStepwiseCheck->isChecked() )
         {
            pVisorImp->CalcMulti();
+//           CmOpen_res_PHASE_HL();    // Added Sveta 17/01/2002
 //         Update();   Provisional
         }
         else  // Stepwise mode - under construction !

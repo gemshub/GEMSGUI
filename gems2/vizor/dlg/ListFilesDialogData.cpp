@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'ListFilesDialog.ui'
 **
-** Created: Пнд Гру 17 12:44:08 2001
+** Created: Втр Лют 5 12:33:53 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -29,31 +29,27 @@ ListFilesDialogData::ListFilesDialogData( QWidget* parent,  const char* name, bo
 {
     if ( !name )
 	setName( "ListFilesDialogData" );
-    resize( 581, 454 ); 
+    resize( 570, 454 ); 
     setMinimumSize( QSize( 450, 400 ) );
     QFont f( font() );
     f.setFamily( "Lucida Sans Unicode" );
     setFont( f ); 
     setCaption( trUtf8( "Database File Configuration for Modelling Profile" ) );
 
-    pLabel = new QLabel( this, "pLabel" );
-    pLabel->setGeometry( QRect( 0, 10, 440, 20 ) ); 
-    QFont pLabel_font(  pLabel->font() );
-    pLabel_font.setPointSize( 11 );
-    pLabel->setFont( pLabel_font ); 
-    pLabel->setText( trUtf8( "Please, check files linkes to Profile:" ) );
-    pLabel->setAlignment( int( QLabel::AlignCenter ) );
-
-    pListFiles = new QListView( this, "pListFiles" );
-    pListFiles->addColumn( trUtf8( "File Keyword" ) );
-    pListFiles->addColumn( trUtf8( "File Path" ) );
-    pListFiles->setGeometry( QRect( 10, 40, 560, 320 ) ); 
-    pListFiles->setAllColumnsShowFocus( FALSE );
-    pListFiles->setItemMargin( 1 );
-
     QWidget* privateLayoutWidget = new QWidget( this, "Layout3" );
-    privateLayoutWidget->setGeometry( QRect( 10, 380, 560, 40 ) ); 
+    privateLayoutWidget->setGeometry( QRect( 10, 410, 560, 37 ) ); 
     Layout3 = new QHBoxLayout( privateLayoutWidget, 0, 6, "Layout3"); 
+
+    pHelpButton = new QPushButton( privateLayoutWidget, "pHelpButton" );
+    pHelpButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, pHelpButton->sizePolicy().hasHeightForWidth() ) );
+    QFont pHelpButton_font(  pHelpButton->font() );
+    pHelpButton_font.setPointSize( 10 );
+    pHelpButton->setFont( pHelpButton_font ); 
+    pHelpButton->setText( trUtf8( "&Help" ) );
+    QToolTip::add( pHelpButton, trUtf8( "Learn about System Profile concept and profile configuration" ) );
+    Layout3->addWidget( pHelpButton );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    Layout3->addItem( spacer );
 
     pGO_OKButton = new QPushButton( privateLayoutWidget, "pGO_OKButton" );
     pGO_OKButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, pGO_OKButton->sizePolicy().hasHeightForWidth() ) );
@@ -65,15 +61,6 @@ ListFilesDialogData::ListFilesDialogData( QWidget* parent,  const char* name, bo
     QToolTip::add( pGO_OKButton, trUtf8( "Files selections is finisded OK" ) );
     Layout3->addWidget( pGO_OKButton );
 
-    pHelpButton = new QPushButton( privateLayoutWidget, "pHelpButton" );
-    pHelpButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, pHelpButton->sizePolicy().hasHeightForWidth() ) );
-    QFont pHelpButton_font(  pHelpButton->font() );
-    pHelpButton_font.setPointSize( 10 );
-    pHelpButton->setFont( pHelpButton_font ); 
-    pHelpButton->setText( trUtf8( "&Help" ) );
-    QToolTip::add( pHelpButton, trUtf8( "Learn about System Profile concept and profile configuration" ) );
-    Layout3->addWidget( pHelpButton );
-
     pCancelButton = new QPushButton( privateLayoutWidget, "pCancelButton" );
     pCancelButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, pCancelButton->sizePolicy().hasHeightForWidth() ) );
     QFont pCancelButton_font(  pCancelButton->font() );
@@ -81,6 +68,21 @@ ListFilesDialogData::ListFilesDialogData( QWidget* parent,  const char* name, bo
     pCancelButton->setFont( pCancelButton_font ); 
     pCancelButton->setText( trUtf8( "&Cancel" ) );
     Layout3->addWidget( pCancelButton );
+
+    pListFiles = new QListView( this, "pListFiles" );
+    pListFiles->addColumn( trUtf8( "File Keyword" ) );
+    pListFiles->addColumn( trUtf8( "File Path" ) );
+    pListFiles->setGeometry( QRect( 10, 30, 560, 370 ) ); 
+    pListFiles->setAllColumnsShowFocus( FALSE );
+    pListFiles->setItemMargin( 1 );
+
+    pLabel = new QLabel( this, "pLabel" );
+    pLabel->setGeometry( QRect( 0, 0, 440, 20 ) ); 
+    QFont pLabel_font(  pLabel->font() );
+    pLabel_font.setPointSize( 10 );
+    pLabel->setFont( pLabel_font ); 
+    pLabel->setText( trUtf8( "   Please, check files linked to Profile:" ) );
+    pLabel->setAlignment( int( QLabel::AlignVCenter | QLabel::AlignLeft ) );
 
     // signals and slots connections
     connect( pGO_OKButton, SIGNAL( clicked() ), this, SLOT( accept() ) );

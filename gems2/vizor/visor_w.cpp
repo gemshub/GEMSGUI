@@ -50,6 +50,7 @@ using namespace std;
 #include "dlg/ProgressDialog.h"
 #include "dlg/SystemDialog.h"
 #include "dlg/ListFilesDialog.h"
+#include "dlg/ElementsDialog.h"
 #include "dlg/LoadMessage.h"
 #include "dlg/HLinpDialog.h"
 
@@ -545,6 +546,7 @@ TVisorImp::getWaitProgress()
 bool
 vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
 {
+//cerr << "vfQ" << endl;
     qApp->lock();
     bool result = (QMessageBox::information(par, title.c_str(), mess.c_str(),
                                      "&Yes", "&No") == 0);
@@ -556,6 +558,7 @@ vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
 int
 vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess)
 {
+//cerr << "vfYNC" << endl;
     qApp->lock();
     int result = QMessageBox::information(
                 par, title.c_str(), mess.c_str(), "&Yes", "&No", "&Cancel",
@@ -577,6 +580,7 @@ vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess)
 void
 vfMessage(QWidget* par, const gstring& title, const gstring& mess, WarnType type)
 {
+//cerr << "vfM" << endl;
     qApp->lock();
     switch( type )
     {
@@ -601,6 +605,7 @@ int
 vfQuestion3(QWidget* par, const gstring& title, const gstring& mess, const gstring& s1,
             const gstring& s2,  const gstring& s3, bool i_mov )
 {
+//cerr << "vfQ3" << endl;
     qApp->lock();
     QMessageBox qm( title.c_str(), mess.c_str(),
                     QMessageBox::Information,
@@ -813,10 +818,12 @@ vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArra
 #endif // Use_mt_mode
 
 bool
-vfListFiles(QWidget* par, const char * prfName,
+vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
                 TCStringArray& fls, TCIntArray& cnt )
 {
     ListFilesDialog cw( par, prfName );
+    if( show_dlg )
+    {
 BACK:
     if( !cw.exec() )
       return false;
@@ -832,7 +839,32 @@ BACK:
     case VF3_2:
         goto BACK;
     }
+    }
     cw.allSelected( fls, cnt );
+    return true;
+}
+
+//bool
+//vfElements(QWidget* par, const char * prfName,
+//            TCStringArray& rds, TCStringArray& names,
+//            bool& aAqueous, bool& aGaseous, bool& aSorption)
+bool
+vfElements(QWidget* par, const char * prfName,
+            elmWindowData& elm_data, setFiltersData& sf_data )
+{
+     ElementsDialog eldlg( par, prfName );
+     if( !eldlg.exec() )
+      return false;
+
+//    eldlg.allSelected( rds );
+//    eldlg.openFiles( names );
+//    aAqueous =   eldlg.isAqueous();
+//    aGaseous =   eldlg.isGaseous();
+//    aSorption =  eldlg.isSorption();
+
+    sf_data =  eldlg.getFilters();
+    elm_data = eldlg.getData();
+
     return true;
 }
 

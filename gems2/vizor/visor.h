@@ -44,6 +44,9 @@ class TVisor
     gstring DocDir;
     gstring ImgDir;
 
+    bool isElementsProfileMode;
+
+
     void initModules();
     void addModule(TCModule* pm, bool selectFiles=false);
 
@@ -114,6 +117,17 @@ public:
     void Message( QWidget* parent, const char* name,
              const char* msg, int prog =0, int total=-1);
     void CloseMessage();
+
+
+    bool getElemPrMode() const
+    {
+        return isElementsProfileMode;
+    }
+    void setElemPrMode(bool newData)
+    {
+        isElementsProfileMode = newData;
+    }
+
 };
 
 extern TVisor* pVisor;

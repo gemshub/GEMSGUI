@@ -54,7 +54,7 @@ ListFilesDialog::ListFilesDialog(QWidget* win, const char * prfName,
 //    Path += prfName;  // created before
 
     QListViewItem* pMod;
-//    QListViewItem* pFile;
+    QListViewItem* pFile;
     size_t pos1, pos2;
 
     for(int i=aMod.GetCount()-1; i>=0; i--)
@@ -136,8 +136,8 @@ ListFilesDialog::allSelected( TCStringArray& aFls,TCIntArray& aCnt)
     aFls.Clear();
     aCnt.Clear();
 
-    if( !result() )
-        return;
+//    if( !result() )
+//        return;
 
     uint cnt = 0;
     QListViewItem* pMod1 = pkern->firstChild();

@@ -22,6 +22,7 @@
 #ifndef ListFilesDialog_included
 #define ListFilesDialog_included
 
+#include <qradiobutton.h>
 #include "ListFilesDialogData.h"
 #include "gstring.h"
 
@@ -43,6 +44,7 @@ public:
     virtual ~ListFilesDialog();
 
     void allSelected( TCStringArray& aFls, TCIntArray& aCnt);
+
 };
 
 #endif // ListFilesDialog_included

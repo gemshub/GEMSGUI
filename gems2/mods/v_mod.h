@@ -74,7 +74,7 @@ enum std_object{
     o_constlab, o_constdim, o_const, o_sdnref, o_sdauth, o_sdyear,
     o_sdclass,  o_sdauthr, o_sdtitle, o_sdedit,   o_sdvoly,
     o_sdpage, o_sdabstr, o_sdrefs, o_sdnote, o_sdbkwd,
-    o_reckey, o_k_, o_rtkey, o_rttime
+    o_reckey, o_k_, o_ii_, o_prn_, o_rtkey, o_rttime
 };
 
 enum integ_objects {                  // work objects

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'SystemDialog.ui'
 **
-** Created: Пнд Гру 17 12:43:56 2001
+** Created: Втр Лют 5 12:33:40 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -118,6 +118,9 @@ typedef struct
 
 REACDC;
 
+struct elmWindowData;
+struct rdSetupData;
+
 // Current ReacDC
 class TReacDC : public TCModule
 {
@@ -179,6 +182,10 @@ public:
     void CmHelp(); 
 
     void RCthermo( int q, int p );
+
+    void CopyRecords( const char * prfName, TCIntArray& cnt,
+                      elmWindowData el_data, rdSetupData st_data );
+
 };
 
 enum pardc_ndx {  /* indexes of work arrays  */

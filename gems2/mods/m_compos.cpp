@@ -30,6 +30,7 @@ const char *GEMS_PCO_HTML = "gm_compos";
 #include "m_sdata.h"
 #include "m_reacdc.h"
 #include "s_formula.h"
+#include "filters_data.h"
 
 TCompos* TCompos::pm;
 
@@ -1012,6 +1013,62 @@ TCompos::RecordPrint( const char *key )
  PrintSDref( sd_key.c_str(), text_fmt );
 
 }
+
+
+void TCompos::CopyRecords( const char * prfName,
+            elmWindowData el_data, cmSetupData st_data )
+{
+    TCIntArray anR;
+    TCStringArray aComp;
+
+    // open selected kernel files
+    // db->OpenOnlyFromList(el_data.flNames);
+    int fnum_ = db->GetOpenFileNum( prfName );
+
+    // get list of records
+    db->GetKeyList( "*:*:*:", aComp, anR );
+
+    //  test&copy  selected records
+    // ( add to last key field first symbol from prfname )
+    int i, ij;
+    for(uint ii=0; ii<aComp.GetCount(); ii++ )
+    {
+     RecInput( aComp[ii].c_str() );
+     //test record
+     ij = 0;
+     for( i=0; i< bcp->N; i++ )
+     {
+      for(uint jj=0; jj<el_data.ICrds.GetCount(); jj++ )
+         if( !memcmp( el_data.ICrds[jj].c_str(), bcp->SB[i], MAXICNAME+MAXSYMB))
+            {  ij++;
+               break;
+            }
+     } // i
+     if( !(ij==bcp->N))
+      continue;                // no all icomp
+
+     // !!! changing record key
+     gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+     ChangeforTempl( str, st_data.from_templ,
+                    st_data.to_templ, db->FldLen( 2 ));
+        str += ":";
+        gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        AddRecord( str.c_str(), fnum_ );
+    }
+
+    // close all no profile files
+    TCStringArray names1;
+    names1.Add(prfName);
+    db->OpenOnlyFromList(names1);
+}
+
+
+
 
 // ----------------------- End of m_compos.cpp ---------------------
 

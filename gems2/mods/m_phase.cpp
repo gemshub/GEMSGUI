@@ -28,6 +28,7 @@ const char *GEMS_PH_HTML = "gm_phase";
 #include "m_reacdc.h"
 #include "m_phase.h"
 #include "m_param.h"
+#include "filters_data.h"
 
 TPhase* TPhase::pm;
 
@@ -673,22 +674,31 @@ NEXT:  /* define more precisely code of phase  */
 }
 
 // to Profile new
-void TPhase::newAqGasPhase( const char *key, int file,
+void TPhase::newAqGasPhase( const char *key, int file, const char emod,
                             bool useLst, TCStringArray lst )
 {
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     char *part;
 
-    if( key[0] == 'a' )
-        // set flags  and sizes
+    if( key[0] == 'a' ) // set flags  and sizes
     {
         part = "a:*:*:*:";
         memcpy( php->sol_t, "3NNSNN", 6 );
+        if( emod != SM_AQDH3 )
+           php->sol_t[0] = emod;  // added Davies eq by KD 25.01.02
+        if( emod == SM_AQDH3)
+        {
         memcpy( &php->PphC, "a++---", 6 );
         php->ncpN = 1;
-        php->ncpM =8;
+           php->ncpM = 8;
         php->nscN = php->nscM = 1;
-
+        }
+        else if(emod == SM_AQDAV)
+        {
+           memcpy( &php->PphC, "a-----", 6 );
+           php->ncpN = php->ncpM = 0;
+           php->nscN = php->nscM = 0;
+        }
     }
     else
     {
@@ -870,6 +880,82 @@ TPhase::RecordPrint( const char *key )
  if( !text_fmt )
    Error( sd_key.c_str(), "No format text in this record.");
  PrintSDref( sd_key.c_str(), text_fmt );
+}
+
+
+void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
+            elmWindowData el_data, phSetupData st_data )
+{
+    TCIntArray anR;
+    TCStringArray aPHkey;
+    aPHnoused.Clear();
+
+    // open selected kernel files
+    // db->OpenOnlyFromList(el_data.flNames);
+    int fnum_ = db->GetOpenFileNum( prfName );
+
+    // get list of records
+    db->GetKeyList( "*:*:*:*:*:", aPHkey, anR );
+
+    //  test&copy  selected records
+    // ( add to last key field first symbol from prfname )
+    int i, cnt;
+    bool nRec;
+    for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
+    {
+     if( !el_data.flags[cbAqueous_] &&
+         ( *db->FldKey( 0 )== 'a' || *db->FldKey( 0 )== 'x' ))
+       continue;
+//     if( !el_data.flags[cbGaseous_] && *db->FldKey( 0 )== 'g' )
+//       continue;
+     if( !el_data.flags[cbSorption_] && *db->FldKey( 0 )== 'x' )
+       continue;
+
+     RecInput( aPHkey[ii].c_str() );
+     //test record
+     for( i=0, cnt=0; i<php->nDC; i++ )
+     {
+        // test to exist of DCOMP or REACDC record later
+        // only 3 field
+        gstring key = gstring( php->SM[i], 0, DC_RKLEN);
+        if( php->DCS[i] == SRC_DCOMP )
+            nRec = rt[RT_DCOMP].FindPart( php->SM[i], 3 );
+        else
+            nRec = rt[RT_REACDC].FindPart( php->SM[i], 3 );
+        if( nRec )
+         cnt++;
+     } // i
+     if( cnt < php->nDC )
+     {
+       if( php->nDC > 1 && cnt > 0 )
+         aPHnoused.Add( aPHkey[ii] );
+       continue;
+     }
+
+     // !!! changing record key
+    gstring str= gstring(db->FldKey( 4 ), 0, db->FldLen( 4 ));
+    ChangeforTempl( str, st_data.from_templ,
+                    st_data.to_templ, db->FldLen( 4 ));
+        str += ":";
+        gstring str1 = gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        str1 = gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        str1.strip();
+        str = str1 + ":" + str;
+     AddRecord( str.c_str(), fnum_ );
+    }
+
+    // close all no profile files
+    TCStringArray names1;
+    names1.Add(prfName);
+    db->OpenOnlyFromList(names1);
 }
 
 // ----------------- End of m_phase.cpp -------------------------

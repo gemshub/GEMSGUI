@@ -1160,7 +1160,7 @@ void TProfil::DebyeHueckel3HelKarp( int jb, int je, int jpb, int jdb, int k )
     if( fabs(B) < 1e-9 )
         B = 50.2916 * sqrt( tpp->RoW ) / sqrt( T*tpp->EpsW );
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel3HelKarp",
-             "Error - No values of RoW and EpsW !" );
+        "Error: A,B were not calculated - no values of RoW and EpsW !" );
     /* Calculation of DH equation */
     bgi = bg;
     for( j=jb; j<je; j++ )
@@ -1199,9 +1199,47 @@ void TProfil::DebyeHueckel3HelKarp( int jb, int je, int jpb, int jdb, int k )
     } /* j */
 }
 
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Aqueous electrolyte                      KD 25.01.02 */
+/* Calculation of individual activity coefficients
+* using Davies equation with common 0.3 parameter and
+ temperature-dependent A parameter */
+void TProfil::Davies03temp( int jb, int je, int k )
+{
+    int j;
+    double T, A, I, sqI, Z2, lgGam;
+
+    I= pmp->IC;
+    if( I < pa.p.ICmin )
+        return;  // too low ionic strength
+
+    T=pmp->Tc;
+    sqI = sqrt( I );
+//    if( fabs(A) < 1e-9 )
+    A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
+//  at 25 C 1 bar: A = 0.5092
+    ErrorIf( fabs(A) < 1e-9, "Davies03temp",
+       "Error: A is not calculated - check values of RoW and EpsW !" );
+    /* Calculation of Davies equation: Langmuir 1997 p. 133 */
+    for( j=jb; j<je; j++ )
+    {
+        if( pmp->EZ[j] )
+        {   /* Charged species */
+            Z2 = pmp->EZ[j]*pmp->EZ[j];
+            lgGam = ( -A * Z2 ) * ( sqI/( 1 + sqI ) - 0.3 * I );
+        }
+        else
+        { /* Neutral species */
+          lgGam = 0;
+        }
+        pmp->lnGam[j] = lgGam * lg_to_ln;
+    } /* j */
+}
+
+
 static double ICold=0.;
 /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* Calculation of activity coefficient vector (lnGam[])
+/* Calculation of the activity coefficient vector (lnGam[])
 *  LinkMode - parameter indicating call status of GammaCalc():
 *   LINK_TP_MODE  - calculation of equations depending on TP only;
 *   LINK_UX_MODE  - calculation of equations depending on current
@@ -1298,8 +1336,12 @@ void TProfil::GammaCalc( int LinkMode  )
                 if( pmp->XF[k] > pa.p.XwMin &&
                         pmp->IC > pa.p.ICmin )
                 {
+                    if( sMod[SPHAS_TYP] == SM_AQDH3 )
                     DebyeHueckel3HelKarp(  jb, je, jpb, jdb, k );
+                    else if( sMod[SPHAS_TYP] == SM_AQDAV )
+                       Davies03temp( jb, je, k );
                     /* Pitzer( q, jb, je, k ); */
+                    /* Donnan volume model */
                 }
                 goto END_LOOP; /* break; */
             }

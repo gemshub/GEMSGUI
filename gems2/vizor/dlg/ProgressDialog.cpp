@@ -384,9 +384,16 @@ ProgressDialog::Run()
 {
 }
 
+#include "HLresDialog.h"
+
 void
 ProgressDialog::CmAccept()
 {
+    if( !HLresDialog::pDia )
+        (new HLresDialog(this->topLevelWidget()))->show();
+    else
+        HLresDialog::pDia->raise();
+
 }
 
 
