@@ -449,7 +449,7 @@ void TSyst::make_syst()
 // mode == 0 - set zero to B, mode != 0 add data to B
 void TSyst::systbc_calc( int mode )
 {
-    int i,j, N, wps;//, Incomplete=0;
+    int i,j, N; // wps, Incomplete=0;
     //  uint ii;
     double MsysC = 0., MaqC = 0., VaqC = 0., VsysC = 0., R1C = 0.;
     double Xincr, DCmw, ACmw;
@@ -495,7 +495,7 @@ void TSyst::systbc_calc( int mode )
             // analyse DC formule
             form = aFo.form_extr( j, mup->L, mup->DCF );
             aFo.SetFormula( form.c_str() );   // set formula to analyse
-            for(uint ii=0; ii<aFo.GetIn(); ii++ )
+            for(int ii=0; ii<aFo.GetIn(); ii++ )
             { // cycle on formula terms
                 ICs[IC_RKLEN-1]=0;
                 memset( ICs, ' ', IC_RKLEN-1 );
@@ -648,7 +648,7 @@ NEXT_DC:
     if( !memcmp( mup->SB[mup->N-1], "Zz", 2 ))
     {
         N = mup->N - 1;
-        if( sy.B[N] > aPa->pmp->DHBM/10.0 )  // Fixed by DAK 14.03.02
+        if( fabs( sy.B[N] ) > aPa->pmp->DHBM/10. )  // Fixed by DAK 30.12.02
         {
             if( /*( pe && (pe[0].Istat == P_EXECUTE))  ||*/
                 vfQuestion(window(), rt[RT_SYSEQ].PackKey(),
@@ -722,7 +722,7 @@ void TSyst::PHbcalc( double *MsysC, double *MaqC, double *R1C,
     int i, j, jf=0, jsf=0, k, Lf;
     float *A;
     double *B, Xf, Mass, Xincr;
-    float *X;
+    double *X;
 
     for( k = 0; k<mup->Fi; k++ ) /*phases */
     {
@@ -741,17 +741,17 @@ void TSyst::PHbcalc( double *MsysC, double *MaqC, double *R1C,
         jsf += Lf;
         continue;
 NEXT:
-        X = new float[Lf];
-        memset( X, 0, sizeof(float)*Lf );
+        X = new double[Lf];
+        memset( X, 0, sizeof(double)*Lf );
 
-        /* load formules */
+        /* load formulae */
         for( i=0; i<Lf; i++ )
         {
             aFo.Add( new TFormula() );
             j=aSE->stp->llf[jsf+i];
             form = aFo[i].form_extr( j, mup->L, mup->DCF );
             aFo[i].SetFormula( form.c_str() ); // and ce_fscan
-            X[i] = aSE->stp->Y[jsf+i];
+            X[i] = aSE->stp->Y[jsf+i];   // load mole quantities
         }
         A = new float[Lf*mup->N];
         memset( A, 0, sizeof(float)*(Lf*mup->N) );
@@ -764,7 +764,7 @@ NEXT:
         Mass = 0.0; /* calc mass of phase */
         for( i=0; i<Lf; i++ )
             Mass += X[i]*MolWeight( mup->N, mup->BC, A+i*mup->N );
-        /* calc stehiometric of phase */
+        /* calc stoichiometry of phase */
         stbal( mup->N, Lf, A, X, B );
         delete[] A;
         delete[] X;
@@ -788,7 +788,7 @@ NEXT:
     } /* k */
 }
 
-void TSyst::stbal( int N, int L, float *Smatr, float *DCstc,
+void TSyst::stbal( int N, int L, float *Smatr, double *DCstc,
                    double *ICm )
 {
     int i, j;

@@ -3,7 +3,7 @@
 //
 // Implementation of TProcess class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva   
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -493,7 +493,36 @@ pe[q].PvR1 = '-';    // simplex on   KD: temporary for process create
     pe[q].xE    = 0;
     pe[q].yE    = 0;
     plot  = 0;
-
+    pep[q].tmi[START_] = 1000;
+    pep[q].tmi[STOP_] = 1200;
+    pep[q].tmi[STEP_] = 10;
+    pep[q].Vi[START_] = 0.;
+    pep[q].Vi[STOP_] = 0.;
+    pep[q].Vi[STEP_] = 0.;
+    pep[q].Pi[START_] = 1.;
+    pep[q].Pi[STOP_] = 1.;
+    pep[q].Pi[STEP_] = 0;
+    pep[q].Ti[START_] = 25.;
+    pep[q].Ti[STOP_] = 25.;
+    pep[q].Ti[STEP_] = 0;
+    pep[q].NVi[START_] = 0;
+    pep[q].NVi[STOP_] = 0;
+    pep[q].NVi[STEP_] = 0;
+    pep[q].Taui[START_] = 0;
+    pep[q].Taui[STOP_] = 0;
+    pep[q].Taui[STEP_] = 0;
+    pep[q].pXii[START_] = 0;
+    pep[q].pXii[STOP_] = 0;
+    pep[q].pXii[STEP_] = 0;
+    pep[q].Nui[START_] = 0;
+    pep[q].Nui[STOP_] = 0;
+    pep[q].Nui[STEP_] = 0;
+    pep[q].pHi[START_] = 0;
+    pep[q].pHi[STOP_] = 0;
+    pep[q].pHi[STEP_] = 0;
+    pep[q].pei[START_] = 0;
+    pep[q].pei[STOP_] = 0;
+    pep[q].pei[STEP_] = 0;
 }
 
 
@@ -623,13 +652,13 @@ void TProcess::pe_initiate()
     pep->c_tm = pep->tmi[START_];
     pep->c_NV = pep->NVi[START_];
     pep->c_P = pep->Pi[START_];
-    pep->c_T = pep->Ti[START_];
+    pep->c_TC = pep->Ti[START_]; pep->c_T = pep->c_TC + 273.15;
     pep->c_V = pep->Vi[START_];
     pep->c_Tau = pep->Taui[START_];
-    pep->c_pXi = pep->pXii[START_];
+    pep->c_pXi = pep->pXii[START_]; pep->c_Xi = pow(10., pep->c_pXi);
     pep->c_Nu = pep->Nui[START_];
     pep->c_pH = pep->pHi[START_];
-    pep->c_pe = pep->pei[START_];
+    pep->c_pe = pep->pei[START_]; // pep->c_Eh =
     pep->NP = 0;
 }
 
@@ -643,9 +672,9 @@ void TProcess::pe_reset()
     pep->c_tm = pep->tmi[START_];
     pep->c_NV = pep->NVi[START_];
     pep->c_P = pep->Pi[START_];
-    pep->c_T = pep->Ti[START_];
+    pep->c_TC = pep->Ti[START_]; pep->c_T = pep->c_TC + 273.15;
     pep->c_V = pep->Vi[START_];
-    pep->c_pXi = pep->pXii[START_];
+    pep->c_pXi = pep->pXii[START_]; pep->c_Xi = pow(10., pep->c_pXi);
     pep->c_Nu = pep->Nui[START_];
     pep->c_pH = pep->pHi[START_];
     pep->c_pe = pep->pei[START_];
@@ -663,10 +692,10 @@ void TProcess::pe_next()
     pep->c_tm += pep->tmi[STEP_];
     pep->c_NV += pep->NVi[STEP_];
     pep->c_P += pep->Pi[STEP_];
-    pep->c_T += pep->Ti[STEP_];
+    pep->c_TC += pep->Ti[STEP_]; pep->c_T = pep->c_TC + 273.15;
     pep->c_V += pep->Vi[STEP_];
-//    pep->c_Tau += pep->Taui[STEP_];
-    pep->c_pXi += pep->pXii[STEP_];
+    pep->c_Tau += pep->Taui[STEP_];
+    pep->c_pXi += pep->pXii[STEP_]; pep->c_Xi = pow(10., pep->c_pXi);
     pep->c_Nu += pep->Nui[STEP_];
     pep->c_pH += pep->pHi[STEP_];
     pep->c_pe += pep->pei[STEP_];
@@ -767,7 +796,7 @@ TProcess::pe_qekey()
     sprintf(buf, "%.3d", pep->c_NV);
     memset( pep->NVp, 0, 4 );
     strncpy( pep->NVp, buf, 3 );
-    gcvt( pep->c_T, 6, pep->TCp );
+    gcvt( pep->c_TC, 6, pep->TCp );
     gcvt( pep->c_P, 6, pep->Pp );
     gcvt( pep->c_V, 6, pep->Bnamep );
 }
@@ -829,11 +858,11 @@ TProcess::pe_test()
          }
 
     if( pep->Ti[STEP_] > 0 )
-    {  if( pep->c_T > pep->Ti[STOP_] )
+    {  if( pep->c_TC > pep->Ti[STOP_] )
           pep->Loop = 0;
     }
     else if( pep->Ti[STEP_] < 0 )
-         {  if( pep->c_T < pep->Ti[STOP_] )
+         {  if( pep->c_TC < pep->Ti[STOP_] )
              pep->Loop = 0;
          }
 
