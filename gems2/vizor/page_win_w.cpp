@@ -200,6 +200,7 @@ TCWindow::EvTabSelChange(int newSel)
     iCurPage = newSel;
 
     //  getPage(iCurPage).move(0, szTab);
+    getPage(iCurPage).Update();
     getPage(iCurPage).show();
     posX = posY = 0;
     pSH->setValue(0);
