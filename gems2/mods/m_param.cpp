@@ -317,14 +317,21 @@ TProfil::CmHelp()
     pVisor->OpenHelp( GEMS_SP_HTML );  //  05.01.01
 }
 
-void TProfil::outMulti( GemDataStream& ff )
+void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 {
     TCStringArray aList;
-    gstring filename;
+//    gstring filename;
 
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff );
+    multi->to_file( ff, path );
+
+   gstring Path_;
+   gstring dir;
+   gstring name;
+   gstring newname;
+
+   u_splitpath( path, dir, name, newname );
 
 // added for dataCH and DataBr structures
 
@@ -351,38 +358,59 @@ void TProfil::outMulti( GemDataStream& ff )
    multi->makeStartDataChBR( aSelIC, aSelDC, aSelPH );
 
 // out dataCH&DataBR files
-   filename = "GEMSystem.dch";
-   if( vfChooseFileSave(window(), filename,
-          "Please, enter DataCH binary file name", "*.dch" )  )
-   {
-     GemDataStream  f_ch(filename, ios::out|ios::binary);
-      multi->datach_to_file(f_ch);
-   }
-   filename = "GEMSystem.dat";
-   if( vfChooseFileSave(window(), filename,
-          "Please, enter DataCH text file name", "*.dat" )  )
-   {
-      fstream  f_ch(filename.c_str(), ios::out);
-      multi->datach_to_text_file(f_ch);
-   }
+   Path_ = u_makepath( dir, name, "dch" );
+//   filename = "GEMSystem.dch";
+//   if( vfChooseFileSave(window(), filename,
+//          "Please, enter DataCH binary file name", "*.dch" )  )
+//   {
+     GemDataStream  f_ch1(Path_, ios::out|ios::binary);
+      multi->datach_to_file(f_ch1);
+      f_ch1.close();
+//   }
 
-   filename = "GEMNode.dbr";
-   if( vfChooseFileSave(window(), filename,
-          "Please, enter DataBR binary file name", "*.dbr" )  )
-   {
-     GemDataStream  f_br(filename, ios::out|ios::binary);
-     multi->databr_to_file(f_br);
-   }
-   filename = "GEMNode.dat";
-   if( vfChooseFileSave(window(), filename,
-          "Please, enter DataBR text file name", "*.dat" )  )
-   {
-     fstream  f_br(filename.c_str(), ios::out);
-     multi->databr_to_text_file(f_br);
-   }
+   newname = name+"-dch";
+   Path_ = u_makepath( dir, newname, "dat" );
+//   filename = "GEMSystem.dat";
+//   if( vfChooseFileSave(window(), filename,
+//          "Please, enter DataCH text file name", "*.dat" )  )
+//   {
+      fstream  f_ch2(Path_.c_str(), ios::out);
+      multi->datach_to_text_file(f_ch2);
+      f_ch2.close();
+//   }
+
+   newname = gstring( rt[RT_SYSEQ].FldKey(3), 0, rt[RT_SYSEQ].FldLen(3));
+   newname.strip();
+   newname = name+"-"+newname;
+   Path_ = u_makepath( dir, newname, "dbr" );
+//   filename = "GEMNode.dbr";
+//   if( vfChooseFileSave(window(), filename,
+//          "Please, enter DataBR binary file name", "*.dbr" )  )
+//   {
+     GemDataStream  f_br1(Path_, ios::out|ios::binary);
+     multi->databr_to_file(f_br1);
+     f_br1.close();
+//   }
+
+   newname = gstring( rt[RT_SYSEQ].FldKey(4), 0, rt[RT_SYSEQ].FldLen(4));
+   newname.strip();
+   newname = name+"-dbr-"+newname;
+   Path_ = u_makepath( dir, newname, "dat" );
+//   filename = "GEMNode.dat";
+//   if( vfChooseFileSave(window(), filename,
+//          "Please, enter DataBR text file name", "*.dat" )  )
+//   {
+     fstream  f_br2(Path_.c_str(), ios::out);
+     multi->databr_to_text_file(f_br2);
+     f_br2.close();
+//   }
 
    multi->datach_free();
    multi->databr_free();
+
+// put data to work files
+//   Path_ = u_makepath( dir, "ipmfiles-bin", "lst" );
+
 }
 
 

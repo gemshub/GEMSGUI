@@ -120,13 +120,14 @@ void TMulti::outArray( fstream& ff, char *name, double* arr, int size )
  }
 }
 
-void TMulti::to_text_file( )
+void TMulti::to_text_file( gstring& path )
 {
     //static values
    char PAalp;
    char PSigm;
    float EpsW;
    float RoW;
+
 
 #ifndef IPMGEMPLUGIN
    PAalp = syp->PAalp;
@@ -140,8 +141,16 @@ void TMulti::to_text_file( )
    RoW = RoW_;
 #endif
 
- fstream ff("Multi_Out", ios::out );
- ErrorIf( !ff.good() , "Multi_Out", "Fileopen error");
+   gstring Path_ = path;
+   gstring dir;
+   gstring name;
+   gstring ext;
+
+   u_splitpath( Path_, dir, name, ext );
+   Path_ = u_makepath( dir, name, "txt" );
+
+  fstream ff(Path_.c_str(), ios::out );
+  ErrorIf( !ff.good() , Path_.c_str(), "Fileopen error");
 
  ff << pm.stkey << endl;
 
@@ -309,7 +318,7 @@ void TMulti::to_text_file( )
 //---------------------------------------------------------//
 
 // writing MULTI to binary file
-void TMulti::to_file( GemDataStream& ff )
+void TMulti::to_file( GemDataStream& ff, gstring& path  )
 {
    if( pm.N < 2 || pm.L < 2 || pm.FI < 1 )
         Error( GetName(), "pm.N < 2 || pm.L < 2 || pm.FI < 1" );
@@ -514,7 +523,8 @@ void TMulti::to_file( GemDataStream& ff )
       ff.writeArray(pm.Qp,pm.FIs*20);
       ff.writeArray(pm.Qd, 20);
    }
-   to_text_file();
+
+  to_text_file( path );
 
 }
 

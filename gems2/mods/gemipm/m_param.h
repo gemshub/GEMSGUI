@@ -255,7 +255,7 @@ public:
     double pb_GX( double *Gxx  );
 
    //test
-   void outMulti( GemDataStream& ff );
+   void outMulti( GemDataStream& ff, gstring& path  );
    void readMulti( GemDataStream& ff );
    void calcMulti();
 

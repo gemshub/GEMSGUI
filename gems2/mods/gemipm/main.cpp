@@ -30,6 +30,44 @@ f_getline(istream& is, gstring& str, char delim)
    return is;
 }
 
+gstring
+u_makepath(const gstring& dir,
+           const gstring& name, const gstring& ext)
+{
+    gstring Path(dir);
+    Path += "/";
+    Path += name;
+    Path += ".";
+    Path += ext;
+
+    return Path;
+}
+
+
+void
+u_splitpath(const gstring& Path, gstring& dir,
+            gstring& name, gstring& ext)
+{
+    size_t pos = Path.rfind("/");
+    if( pos != gstring::npos )
+        dir = Path.substr(0, pos);
+    else
+        dir = "",
+    pos = 0;
+
+    size_t pose = Path.rfind(".");
+    if( pose != gstring::npos )
+    {
+        ext = Path.substr( pose+1, gstring::npos );
+        name = Path.substr(pos+1, pose-pos-1);
+    }
+    else
+    {
+        ext = "";
+        name = Path.substr(pos+1, gstring::npos);
+    }
+}
+
 
 // first argv name of binary file with MULTI structure
 // second argv file that contained
@@ -151,12 +189,19 @@ main(int argc, char* argv[])
                     "DataBR out Fileopen error");
                 task_.multi->databr_to_text_file(out_br);
          }
+     std::cout << datachbr_file.c_str() << "\n";
 
      }
 //test resalts
-      gstring out_s = "multi_out.txt";
-      GemDataStream o_m( out_s, ios::out|ios::binary);
-      task_.outMulti(o_m);
+
+    gstring dir;
+    gstring name;
+    gstring ext;
+    u_splitpath( multu_in, dir, name, ext );
+    multu_in = u_makepath( dir, name, "out" );
+
+    GemDataStream o_m( multu_in, ios::out|ios::binary);
+    task_.outMulti(o_m, multu_in);
 
       if( binary_f )
       {  GemDataStream f_ch(dat_ch, ios::out|ios::binary);

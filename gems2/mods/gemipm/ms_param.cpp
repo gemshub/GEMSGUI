@@ -76,11 +76,11 @@ TProfil::calcMulti()
         MultiCalcIterations();
 }
 
-void TProfil::outMulti( GemDataStream& ff )
+void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 {
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff );
+    multi->to_file( ff, path );
 }
 
 

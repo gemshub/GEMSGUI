@@ -63,16 +63,6 @@ int ROUND(double x)
     return int((x)+.5);
 }
 
-// Combines path, directory, name and extension to full pathname
-gstring
-u_makepath(const gstring& dir,
-           const gstring& name, const gstring& ext);
-
-// Splits full pathname to path, directory, name and extension
-void
-u_splitpath(const gstring& Path, gstring& dir,
-            gstring& name, gstring& ext);
-
 inline
 bool
 IsSpace(char ch)
@@ -172,6 +162,16 @@ private:
     const vstr& operator= (const vstr&);
 
 };
+
+// Combines path, directory, name and extension to full pathname
+gstring
+u_makepath(const gstring& dir,
+           const gstring& name, const gstring& ext);
+
+// Splits full pathname to path, directory, name and extension
+void
+u_splitpath(const gstring& Path, gstring& dir,
+            gstring& name, gstring& ext);
 
 
 

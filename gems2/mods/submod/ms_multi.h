@@ -313,8 +313,8 @@ public:
     void unpackData();
 
     //mass transport
-    void to_file( GemDataStream& ff );
-    void to_text_file();
+    void to_file( GemDataStream& ff, gstring& path  );
+    void to_text_file( gstring& path );
     void from_file( GemDataStream& ff );
 
     void inArray( fstream& ff, char *name, float* arr, int size );
@@ -403,8 +403,8 @@ public:
     }
 
     //mass transport
-    void to_file( GemDataStream& ff );
-    void to_text_file();
+    void to_file( GemDataStream& ff, gstring& path  );
+    void to_text_file( gstring& path );
     void from_file( GemDataStream& ff );
     void multi_realloc( char PAalp, char PSigm );
     void multi_free();

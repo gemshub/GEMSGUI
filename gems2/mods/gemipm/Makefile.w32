@@ -34,7 +34,7 @@ OBJECTS =  ..\..\vizor\libs\gstring.obj ..\..\vizor\libs\gdatastream.obj \
      ms_multi_file.obj s_fgl.obj ms_datach_br.obj
 
 
-TARGET		= gemipm2.exe
+TARGET		= gemipm2k.exe
 
 all:            $(OBJECTS) link
 

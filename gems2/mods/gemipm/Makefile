@@ -31,7 +31,7 @@ SOURCES         = ../../vizor/libs/gstring.o ../../vizor/libs/gdatastream.o \
 OBJECTS = $(subst .cpp,.o,$(SOURCES))
 
 
-TARGET = gemipm2
+TARGET = gemipm2k
 
 #
 

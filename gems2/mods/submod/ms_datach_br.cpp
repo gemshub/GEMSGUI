@@ -121,7 +121,11 @@ void TMulti::packDataBr()
 {
  short ii;
 // numbers
-  data_BR.NodeStatusCH = OK_GEM_AIA;
+  if( pm.pNP == 0 )
+    data_BR.NodeStatusCH = OK_GEM_AIA;
+  else
+     data_BR.NodeStatusCH = OK_GEM_PIA;
+
   data_BR.IterDone = pm.IT;
 
 // values
@@ -175,7 +179,11 @@ void TMulti::unpackDataBr()
 {
  short ii;
 // numbers
-  data_BR.NodeStatusCH = NEED_GEM_AIA;
+
+  if( data_BR.NodeStatusCH == NEED_GEM_PIA )
+   pm.pNP = 1;
+  else
+   pm.pNP = 0; //  NEED_GEM_AIA;
   data_BR.IterDone = 0;
 
 // values

@@ -302,8 +302,11 @@ NewSystemDialog::CmOutMulti()
 {
     try
     {
+      gstring filename =
+         gstring( rt[RT_SYSEQ].FldKey(2), 0, rt[RT_SYSEQ].FldLen(2));;
+      filename.strip();
+      filename += ".ipm";
       // open file to output
-      gstring filename = "GEMSystem.ipm";
       if( vfChooseFileSave(this, filename,
           "Please, enter IPM work structure file name", "*.ipm" ) == false )
                return;
@@ -314,7 +317,7 @@ NewSystemDialog::CmOutMulti()
 //      TProfil::pm->PMtest( keyp.c_str() );
 //      TProfil::pm->MultiCalcInit( keyp.c_str() );
 
-      TProfil::pm->outMulti( f );
+      TProfil::pm->outMulti( f, filename );
     }
     catch( TError& xcpt )
     {
