@@ -82,7 +82,8 @@ $(TARGET):	$(OBJS)
 	@if [ "`uname`" == "Darwin" ]; then \
 	  install -d gems2.app/Contents/MacOS; \
 	fi
-	$(LINK_CMD) $(OBJS) $(LIBS) $(LIBDIRS) -o $(TARGET) -lefence
+	$(LINK_CMD) $(OBJS) $(LIBS) $(LIBDIRS) -o $(TARGET) 
+#-lefence
 
 link:	$(TARGET)
 

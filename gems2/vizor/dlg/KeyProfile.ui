@@ -346,6 +346,12 @@
         <receiver>KeyProfileData</receiver>
         <slot>CmHelp()</slot>
     </connection>
+    <connection>
+        <sender>pList</sender>
+        <signal>returnPressed(QListBoxItem*)</signal>
+        <receiver>KeyProfileData</receiver>
+        <slot>accept()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>CmNew()</slot>

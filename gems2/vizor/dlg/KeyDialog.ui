@@ -325,6 +325,12 @@
         <receiver>KeyDialogData</receiver>
         <slot>CmClearAll()</slot>
     </connection>
+    <connection>
+        <sender>pList</sender>
+        <signal>returnPressed(QListBoxItem*)</signal>
+        <receiver>KeyDialogData</receiver>
+        <slot>accept()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>PushButton1</tabstop>
