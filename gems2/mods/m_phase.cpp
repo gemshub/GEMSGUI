@@ -347,7 +347,7 @@ static int rkeycmp(const void *e1, const void *e2)
 int
 TPhase::RecBuild( const char *key, int mode  )
 {
-    int iic, i;
+    int iic, i, nCat, nAn;
     vstr pkeydc(81);
     vstr pkeyrd(81);
 
@@ -417,7 +417,11 @@ AGAIN_SETUP:
                           php->ncpN = 2; php->ncpM = 4;
                           php->nscN = php->nscM = 0;
                           break;
-          //          case SM_AQSIT:
+          case SM_AQSIT:  // SIT model in NEA variant
+                          break;
+                          php->ncpN = max( 3, php->ncpN );
+                          php->ncpM = max( 2, php->ncpM );
+                          php->nscN = php->nscM = 1;
           default:  // other models
              break;
        }
@@ -500,6 +504,25 @@ AGAINRC:
 //    php->NR1 = aRclist.GetCount();   comm.out by KD on 25.10.2004
     iic = aDclist.GetCount();
 
+
+
+
+
+    if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
+    {  // pre-processing cycle for SIT: determining number of cations and anions
+       int nCat = 0, nAn = 0;
+       char spName[MAXDCNAME+1];
+       spName[MAXDCNAME] = 0;
+
+       for( i=0; i<php->nDC; i++ )
+       {
+          memcpy( spName, php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+
+       }
+    }
+
+
+
     /* insert coeff of model of solid and other data */
     if( php->nscN * php->nscM ) php->Psco = S_ON;
     else  php->Psco = S_OFF;
@@ -512,9 +535,9 @@ AGAINRC:
     if( php->sol_t[SPHAS_DEP] == SM_UNDEF ) php->PpEq = S_OFF;
     else php->PpEq = S_ON;
 
-    dyn_new(0);
+    dyn_new(0);  // reallocation of memory
 
-    /* Get list of component : add aMcv and aMrv */
+    /* Get list of components : add aMcv and aMrv */
     for( i=0; i<php->nDC; i++ )
     {
         if( i < iic )
@@ -528,10 +551,9 @@ AGAINRC:
             php->SM[i][DC_RKLEN-1] = SRC_REACDC;
         }
     }
-    /* Sort list of component */
-    if( php->nDC > 2 )
+    // Sorting the list of dependent components
+    if( php->nDC >= 2 )         // >= may change behavior !
         qsort( php->SM[0], (size_t)php->nDC, DC_RKLEN, rkeycmp );
-
     for( i=0; i<php->nDC; i++ )
     {
         php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* cod istochnic  */
@@ -601,12 +623,14 @@ AGAINRC:
     }
     if( php->NsiT > 0 && php->PFsiT == S_ON )
         php->NR1 = DFCN; // Added for CD-MUSIC by KD on 25.10.2004
+
     SetString("PH_make   Remake of Phase definition OK");
     pVisor->Update();
     return ret;
 }
 
 #define s(i,j) php->scoef[(j)+(i)*nsc]
+#define sit(i,j) php->pnc[(j)+(i)*nAn]
 // #define m(i,j) php->MaSdj[(j)+(i)*DFCN]
 //Recalc record structure
 void
@@ -624,7 +648,7 @@ TPhase::RecCalc( const char *key )
 void
 TPhase::CalcPhaseRecord(  bool getDCC  )
 {
-    int  i, /*iic,*/ pa0=0, Kielland, nsc, ndc=php->NR1;
+    int  i, /*iic,*/ pa0=0, Kielland, nsc, ndc=php->NR1, nCat, nAn;
     vstr dcn(MAXRKEYLEN);
     char Ctype;
     float a0, bp, Z, cN, Fi;
@@ -637,13 +661,14 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     aDC->ods_link(0);
     aRDC->ods_link(0);
 
-    /* get effective ion radii of aqueous */
+    /* get effective ion radii of aqueous species */
     if( (php->PphC == PH_AQUEL /* || php->PphC == PH_SORPTION ||
                   php->PphC == PH_POLYEL */ ) && php->scoef )
     {
         nsc = php->nscN * php->nscM;
+        nCat = 0; nAn = 0;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
-   "Kielland radii of aqueous species: Collect from DComp/ReacDC records?"))
+   "Parameters of aqueous species: Collect from DComp/ReacDC records?"))
         {
             pa0 = 1;
             Kielland = 0;

@@ -25,7 +25,7 @@
 
 const int MAXPHSYMB =      8,
                            MAXPHGROUP =     16,
-                                            MAXPNCOEF =      40;
+                                            MAXPNCOEF =      1024;
 
 typedef struct
 {// Description  PHASE
