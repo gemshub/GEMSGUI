@@ -129,7 +129,7 @@ inline char* gcvt(double num, int digit, char* buf)
 #include <algobase.h>
 #endif
 
-#endif
+#endif    // IPMGEMPLUGIN
 
 // dynamically allocated temporary 'char*'
 // for simple string manipulations

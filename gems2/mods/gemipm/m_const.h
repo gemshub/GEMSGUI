@@ -13,7 +13,9 @@ using namespace std;
 #include "verror.h"
 #include "v_user.h"
 
-const int MST =  6;
+const int MST =  6,
+          DFCN = 6; // number of columns in MASDJ table
+
 const unsigned int
     MAXICNAME =      6,
     MAXSYMB =        4,
@@ -156,6 +158,7 @@ typedef enum {  /* Limits on DC and phases */
     DC_LIM_INIT = 0, DC_LIM_CURRENT = 1
 } DC_LIMITS;
 
+
 enum sorption_control {
     /* EDL interface models - separate for site types in v. 3.1 */
     SC_DDLM = 'D',  SC_CCM = 'C',     SC_TLM = 'T',   SC_MTL = 'M',
@@ -165,12 +168,21 @@ enum sorption_control {
     SAT_COMP = 'C', SAT_NCOMP = 'N', SAT_SITE = 'S', SAT_INDEF = 'I',
 /* New methods for surface activity coefficient terms (2004) */
  SAT_L_COMP = 'L', SAT_QCA_NCOMP = 'Q', SAT_QCA1_NCOMP = '1',
- SAT_QCA2_NCOMP = '2', SAT_QCA3_NCOMP = '3',
+ SAT_QCA2_NCOMP = '2', SAT_QCA3_NCOMP = '3', SAT_FREU_NCOMP = 'f',
  SAT_QCA4_NCOMP = '4', SAT_BET_NCOMP = 'B', SAT_VIR_NCOMP = 'W',
  SAT_FRUM_NCOMP = 'F', SAT_FRUM_COMP = 'R', SAT_PIVO_NCOMP = 'P',
-     /* Assignment of surtype to carrier (end-member) */
+    /* Assignment of surtype to carrier (end-member) */
     CCA_VOL = 'V', CCA_0 = '0', CCA_1, CCA_2, CCA_3, CCA_4, CCA_5,
-    CCA_6, CCA_7, CCA_8, CCA_9
+    CCA_6, CCA_7, CCA_8, CCA_9, SPL_0='0', SPL_B, SPL_C, SPL_D,
+    SDU_N = 'n', SDU_m = 'm', SDU_M = 'M', SDU_g = 'g',
+    CST_0 = '0', CST_1, CST_2, CST_3, CST_4, CST_5, // surface type index
+    CSI_0 = '0', CSI_1, CSI_2, CSI_3, CSI_4, CSI_5, // surface site index
+// Number of parameters per surface species in the MaSdj array
+// MCAS = 6 = DFCN ; position index    added by KD 25.10.2004
+// Column indices of surface species allocation table MCAS
+   SA_MCA=0, SA_EMX, SA_STX, SA_PLAX, SA_SITX, SA_UNIT,
+// Column indices of MaSdj table of adsorption parameters
+   PI_DEN=0, PI_CD0, PI_CDB, PI_P1, PI_P2, PI_P3
 };
 
 typedef enum { // Units of measurement of quantities and concentrations

@@ -1,5 +1,5 @@
 #include <math.h>
-#include <iomanip.h>
+#include <iomanip>
 #include <iostream>
 
 #include "m_param.h"
@@ -954,7 +954,6 @@ pm.D = new double[MST][MST];
  }
 else
  { // ADSORPTION AND ION EXCHANGE
-pm.SATNdx = 0;
    pm.SCM  = 0;
     pm.Nfsp = 0;
     pm.MASDT = 0;
@@ -1279,8 +1278,8 @@ void TMulti::dyn_new_test(MULTI& tes)
    memcpy( tes.Gamma, pm.Gamma, pm.L*sizeof(double) );
    tes.lnGmf = new double[pm.L];
    memcpy( tes.lnGmf, pm.lnGmf, pm.L*sizeof(double) );
-   tes.D = new double[pm.L];
-   memcpy( tes.D, pm.D, pm.L*sizeof(double) );
+   tes.D = new double[MST][MST];
+   memcpy( tes.D, pm.D, MST*MST );
  }
 
    // Part 2  not requited arrays
@@ -1565,7 +1564,7 @@ void TMulti::dyn__test(MULTI& tes)
  Test_Eq( pm.L, tes.VL, pm.VL, "VL" );
  Test_Eq( pm.L, tes.Gamma, pm.Gamma, "Gamma" );
  Test_Eq( pm.L, tes.lnGmf, pm.lnGmf, "lnGmf" );
- Test_Eq( pm.L, tes.D, pm.D, "D" );
+ Test_Eq( pm.L, &tes.D[0][0], &pm.D[0][0], "D" );
  }
 
    // Part 2  not required arrays

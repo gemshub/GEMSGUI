@@ -73,26 +73,42 @@ u_splitpath(const gstring& Path, gstring& dir,
 // second argv file that contained
 // -t/-b <dataCH file name> <dataBR file name1> ... <dataBR file nameN>
 
-int
-main(int argc, char* argv[])
+
+// extern "C" int __stdcall
+int MAIF ( int  c_to_i1[30], int c_to_i2[30] )
 {
+
+#include <string.h>
+
+    int i ;
+    char c_to_ic[30];
+    char string_cto_i1c[31];
+    char string_cto_i2c[31];
+
+    for (i=0; i<=29;i++)
+    {
+      c_to_ic[i] = char (c_to_i1[i]);
+      string_cto_i1c[i]= c_to_ic[i];
+    }
+    string_cto_i1c[30]= '\0';          // end string in cpp
+
+    for (i=0; i<=29;i++)
+    {
+      	c_to_ic[i] = char (c_to_i2[i]);
+         string_cto_i2c[i]= c_to_ic[i];
+    }
+    string_cto_i2c[30]= '\0';          // end string in cpp
+
     TProfil task_;
-      fstream f_log("ipmlog.txt", ios::out );
+    fstream f_log("ipmlog.txt", ios::out );
     try
     {
      bool binary_f = true;
-     gstring multu_in = "input_multi.txt";
-     gstring chbr_in   = "mtr_data.txt";
+     gstring multu_in = string_cto_i1c;     //"xxxx1.ipm";
+     gstring chbr_in = string_cto_i2c;           //////"ipmfiles-dat.lst";
 
-      // from argv
-      if (argc >= 2 )
-        multu_in = argv[1];
-      if (argc >= 3 )
-        chbr_in = argv[2];
-
-/*
 // test working with txt files
-      fstream f_ch(multu_in.c_str(), ios::in );
+/*      fstream f_ch(multu_in.c_str(), ios::in );
       ErrorIf( !f_ch.good() , multu_in.c_str(), "DataCH Fileopen error");
       task_.multi->datach_from_text_file(f_ch);
 
@@ -131,7 +147,7 @@ main(int argc, char* argv[])
             binary_f = false;
 
          f_getline( f_chbr, datachbr_file, ',');
-/*         if( datachbr_file[pos+1] != '\0' )
+ /*        if( datachbr_file[pos+1] != '\0' )
             pos +=2;
          while(  ( datachbr_file[pos] ==' ' ||
                    datachbr_file[pos] == '\n' ||
@@ -143,16 +159,16 @@ main(int argc, char* argv[])
 */      }
 
 // Read dataCH file
-      gstring dat_ch = datachbr_file;
+     gstring dat_ch = datachbr_file;
       if( binary_f )
       {  GemDataStream f_ch(dat_ch, ios::in|ios::binary);
          task_.multi->datach_from_file(f_ch);
        }
-       else
-       { fstream f_ch(dat_ch.c_str(), ios::in );
-         ErrorIf( !f_ch.good() , dat_ch.c_str(), "DataCH Fileopen error");
+      else
+      { fstream f_ch(dat_ch.c_str(), ios::in );
+         ErrorIf( !f_ch.good() , dat_ch.c_str(), "DataCH ccc Fileopen error");
          task_.multi->datach_from_text_file(f_ch);
-       }
+		 }
 // for all databr files
       while( !f_chbr.eof() )
       {
@@ -165,10 +181,11 @@ main(int argc, char* argv[])
              task_.multi->databr_from_file(in_br);
           }
          else
-         {      fstream in_br(datachbr_file.c_str(), ios::in );
-                ErrorIf( !in_br.good() , datachbr_file.c_str(),
-                    "DataBR Fileopen error");
-                task_.multi->databr_from_text_file(in_br);
+          {   fstream in_br(datachbr_file.c_str(), ios::in );
+
+		 ErrorIf( !in_br.good() , datachbr_file.c_str(),
+                    "DataBR vvv Fileopen error");
+               task_.multi->databr_from_text_file(in_br);
          }
          task_.multi->unpackDataBr();
 
@@ -187,10 +204,9 @@ main(int argc, char* argv[])
          else
          {      fstream out_br(datachbr_file.c_str(), ios::out );
                 ErrorIf( !out_br.good() , datachbr_file.c_str(),
-                    "DataBR out Fileopen error");
+                    "DataBR out yyyy Fileopen error");
                 task_.multi->databr_to_text_file(out_br);
          }
-//       std::cout << datachbr_file.c_str() << " ";
       f_log << datachbr_file.c_str() << " +\n";
      }
 //test resalts
@@ -224,13 +240,37 @@ main(int argc, char* argv[])
     }
     catch(TError& err)
     {
-//    std::cout
       f_log << err.title.c_str() << "  : " << err.mess.c_str();
     }
     catch(...)
     {
         return -1;
     }
+    return 0;
+}
+
+
+int
+main(int argc, char* argv[])
+{
+     gstring multu_in = "input_multi.txt";
+     gstring chbr_in   = "mtr_data.txt";
+
+      // from argv
+      if (argc >= 2 )
+        multu_in = argv[1];
+      if (argc >= 3 )
+        chbr_in = argv[2]; \
+      int  c_to_i1[30];
+      int  c_to_i2[30];
+      for( int i=0; i<30; i++ )
+      {
+        c_to_i1[i]=multu_in[i];
+        c_to_i2[i]=chbr_in[i];
+      }
+
+      MAIF ( c_to_i1, c_to_i2 );
+
     return 0;
 }
 

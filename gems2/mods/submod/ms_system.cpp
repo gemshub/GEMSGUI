@@ -1083,7 +1083,7 @@ void TSyst::unpackData()
             }
             else { // For reading old SysEq records
                float *masdj_ = &STat->ssp->MaSdj[0][0];
-               sy.MaSdj[ind][PI_DEN]  = masdj[i*2];     // check if *2
+               sy.MaSdj[ind][PI_DEN]  = masdj_[i*2];     // check if *2
 //            sy.MaSdj[ind]  = STat->ssp->MaSdj[i];
             }
         }

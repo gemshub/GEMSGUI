@@ -1,6 +1,6 @@
 #include "m_param.h"
 #include "gdatastream.h"
-
+#include <math.h>
 
 //---------------------------------------------------------//
 
