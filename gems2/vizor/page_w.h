@@ -23,7 +23,7 @@
 
 #include <qdialog.h>
 #include <qlined.h>
-#include <qmultilinedit.h>
+#include <qtextedit.h>
 #include <qscrbar.h>
 #include <qevent.h>
 
@@ -110,7 +110,8 @@ protected:
     void focusOutEvent(QFocusEvent*);
     void focusInEvent(QFocusEvent*);
     void keyPressEvent(QKeyEvent*);
-    void mousePressEvent(QMouseEvent*);
+//    void mousePressEvent(QMouseEvent*);
+    QPopupMenu* createPopupMenu();
     void closeEvent(QCloseEvent*);
     void setIfChanged();
 
@@ -158,7 +159,8 @@ protected:
     void keyPressEvent(QKeyEvent*);
     void focusOutEvent(QFocusEvent*);
     void focusInEvent(QFocusEvent*);
-    void mousePressEvent(QMouseEvent*);
+//    void mousePressEvent(QMouseEvent*);
+    QPopupMenu* createPopupMenu();
 
 protected slots:
     void SetIndex(int ii);
@@ -185,7 +187,7 @@ public:
 */
 
 class TCellText:
-            public QMultiLineEdit,
+            public QTextEdit,
             public TCell
 {
     Q_OBJECT
@@ -201,7 +203,8 @@ protected:
     void focusOutEvent(QFocusEvent*);
     void focusInEvent(QFocusEvent*);
     void keyPressEvent(QKeyEvent*);
-    void mousePressEvent(QMouseEvent*);
+//    void contextMenuEvent(QContextMenuEvent*);
+    QPopupMenu* createPopupMenu(const QPoint& pos);
     void closeEvent(QCloseEvent*);
     void setIfChanged();
 

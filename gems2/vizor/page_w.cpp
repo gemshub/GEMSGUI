@@ -24,6 +24,7 @@
 #include <qtooltip.h>
 #include <qkeycode.h>
 #include <qaccel.h>
+#include <qvalidator.h>
 
 #include "units.h"
 #include "page_i.h"
@@ -44,6 +45,7 @@
 
 const char *GEMS_OBJNDX_HTML = "g_objndx.html";
 
+// for QTextEdit - has no QValidator
 bool IsCharAllowed(TObject& obj, uint ch)
 {
     if( ch == '*' || ch == '`' )
@@ -67,6 +69,30 @@ bool IsCharAllowed(TObject& obj, uint ch)
     case S_: 		//TValString
     default:		// 1..127
         return	true;
+    }
+}
+
+// for QLineEdit with QValidator
+const char* GetAllowedRegExp(TObject& obj)
+{
+    ObjType type = obj.GetType();
+    switch ( type )
+    {
+    case I_: 		//<short>
+    case L_: 		//<long>
+    case H_: 		//<signed char>
+        return	"([\\*`])|(-?\\d{0,9})";
+    case U_: 		//<unsigned short>
+    case X_: 		//<unsigned long>
+    case B_: 		//<unsigned char>
+        return	"([\\*`])|(\\d{0,9})";
+    case F_: 		//<float>
+    case D_: 		//<double>
+        return	"([\\*`])|(-?\\d{0,9}(\\.\\d{1,9})?(e-?\\d{1,2})?)";
+    case A_: 		//<char> - not used here
+    case S_: 		//TValString
+    default:		// 1..127
+        return	".*";
     }
 }
 
@@ -96,7 +122,6 @@ uint AllowedPos(TObject& obj)
         return	32000+1; //obj.GetM();
     default:
         return	(unsigned char)obj.GetType();
-        //         p = new TValFixString(type, sz, Dynamic);
     }
 
 }
@@ -327,6 +352,8 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
     pSV = pSH = 0;
     indTied = 0;
 
+    p->setFont( pVisorImp->getCellFont() );
+
     //--- Circular list section ---
     if( tied )
     {
@@ -380,7 +407,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
     {
         QLabel* p = new QLabel(this);
         p->setGeometry(0, 0, pVisorImp->getLabelWidth(), pVisorImp->getCharHeight());
-        p->setFont( pVisorImp->getCellFont() );
+//        p->setFont( pVisorImp->getCellFont() );
         p->setText(GetObj().GetKeywd());
         //    p->show();
 
@@ -733,9 +760,11 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
         ;
     }
 
-    setFont( pVisorImp->getCellFont() );
+//    setFont( pVisorImp->getCellFont() );
     updateCellBackground();
     Update();
+    
+    setValidator(new QRegExpValidator( QRegExp(GetAllowedRegExp(rO)), this ) );
 }
 
 
@@ -764,7 +793,7 @@ TCellInput::Update()
 void
 TCellInput::EvChange()
 {
-    if( edited() )	// it reacts now only on keyboard changes
+    if( isModified() )	// it reacts now only on keyboard changes
 	changed = true;
 }
 
@@ -855,6 +884,7 @@ TCellInput::keyPressEvent(QKeyEvent* e)
 /*    if( !edit )
         return;
 test Sveta*/
+/*
     if( e->key()==Key_Delete || e->ascii()=='\0' )
     {
         QLineEdit::keyPressEvent(e);
@@ -862,8 +892,9 @@ test Sveta*/
     }
    if( !edit )
         return;
-/*test Sveta*/
+//test Sveta
 
+// not used any more - AR 2004.07.11
     if( e->ascii()=='<' && !IsCharAllowed(rObj, e->ascii()) )
     {
 	setText("<empty>");
@@ -877,11 +908,14 @@ test Sveta*/
 		clear();
             QLineEdit::keyPressEvent(e);
 	}
+*/
+    QLineEdit::keyPressEvent(e);
 }
 
 /*! mouse press event
     handles context menu
 */
+/*
 void
 TCellInput::mousePressEvent(QMouseEvent* e)
 {
@@ -911,6 +945,29 @@ TCellInput::mousePressEvent(QMouseEvent* e)
     }
 
     menu->exec(e->globalPos());
+}
+*/
+QPopupMenu* 
+TCellInput::createPopupMenu()
+{
+    QPopupMenu* menu = new QPopupMenu();
+    menu->insertItem( "&Help\tF1", this, SLOT(CmHelp()), Key_F1 );
+    if( fieldType == ftRef )
+        menu->insertItem( "&SDRef-Record\tF2", this, SLOT(CmSDRef()), Key_F2 );
+//    if( fieldType == ftText )
+//        menu->insertItem( "&SDRef-Script\tF3", this, SLOT(CmScript()), Key_F3 );
+    if( fieldType == ftRecord )
+        menu->insertItem( "&Show record\tF7", this, SLOT(CmDComp()), Key_F7 );
+    if( fieldType == ftFloat )
+    {
+        menu->insertSeparator();
+        menu->setItemEnabled(
+            menu->insertItem( "&Calculator\tF8", this,
+                              SLOT(CmCalc()), Key_F8 ), edit );
+    }
+    menu->insertSeparator();
+    menu->insertItem( "&Edit", QLineEdit::createPopupMenu() );
+    return menu;
 }
 
 
@@ -985,10 +1042,8 @@ TCellInput::CmCalc()
 void
 TCellInput::CmDComp()
 {
-    if( fieldType != ftRecord )
-        return;
-
-    TProfil::pm->ShowDBWindow(rObj.GetKeywd(), N);
+    if( fieldType == ftRecord )
+	TProfil::pm->ShowDBWindow(rObj.GetKeywd(), N);
 }
 
 
@@ -1010,7 +1065,7 @@ TCellCheck::TCellCheck(TField& rfield, int x1, int y1, int npos, eShowType showT
     if( edit )
         connect(this, SIGNAL(fieldUpdate()), &rfield, SLOT(Update()));
 
-    setFont( pVisorImp->getCellFont() );
+//    setFont( pVisorImp->getCellFont() );
     updateCellBackground();
 
     SetString( rObj.GetString(N,M) );
@@ -1138,7 +1193,7 @@ TCellCheck::keyPressEvent(QKeyEvent* e)
     }
 }
 
-
+/*
 void
 TCellCheck::mousePressEvent(QMouseEvent* e)
 {
@@ -1158,8 +1213,7 @@ TCellCheck::mousePressEvent(QMouseEvent* e)
     menu->insertSeparator();
     menu->setItemEnabled(
         menu->insertItem("&Calculator\tF8", this, SLOT(CmCalc()),
-                         Key_F8, Vals.length()+1 ),
-        edit );
+                         Key_F8, Vals.length()+1 ), edit );
     menu->insertSeparator();
 
     for(uint ii=0; ii<Vals.length(); ii++)
@@ -1172,7 +1226,33 @@ TCellCheck::mousePressEvent(QMouseEvent* e)
             this, SLOT(SetIndex(int)));
     menu->exec(e->globalPos());
 }
+*/
 
+QPopupMenu* 
+TCellCheck::createPopupMenu()
+{
+    QPopupMenu* menu = new QPopupMenu();
+    menu->insertItem("&Help\tF1", this, SLOT(CmHelp()),
+                     Key_F1, Vals.length());
+    menu->insertSeparator();
+    menu->setItemEnabled(
+        menu->insertItem("&Calculator\tF8", this, SLOT(CmCalc()),
+                         Key_F8, Vals.length()+1 ), edit );
+
+    menu->insertSeparator();
+    for(uint ii=0; ii<Vals.length(); ii++)
+    {
+        gstring s(Vals, ii, 1);
+        int id = menu->insertItem(s.c_str(), ii);
+        menu->setItemEnabled(id, edit);
+    }
+    connect(menu, SIGNAL(activated(int)),
+        		    this, SLOT(SetIndex(int)));
+
+//    menu->insertSeparator();
+//    menu->insertItem( "&Edit", QLineEdit::createPopupMenu() );
+    return menu;
+}
 
 //------------------------------------------------
 // TCellText
@@ -1181,7 +1261,7 @@ TCellCheck::mousePressEvent(QMouseEvent* e)
 TCellText::TCellText(TField& rfield, int xx, int yy,
                      int npos, eShowType showType_,
                      TObject& rO, int n, int m, bool ed, int ht):
-        QMultiLineEdit(&rfield),
+        QTextEdit(&rfield),
         TCell(rO, n, m, ed, showType_, this),
         changed(false)
 {
@@ -1195,16 +1275,17 @@ TCellText::TCellText(TField& rfield, int xx, int yy,
         connect(this, SIGNAL(fieldUpdate()), &rfield, SLOT(Update()));
     }
 
-    ///  setMaxLength(AllowedPos(rO)+1);
-    //  setReadOnly( !edit );
-    setFont( pVisorImp->getCellFont() );
+    setTextFormat(QTextEdit::PlainText);
+//    setMaxLength(AllowedPos(rO)+1);
+    setReadOnly( !edit );
+//    setFont( pVisorImp->getCellFont() );
     updateCellBackground();
 
     setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
 
-    //  setTableFlags( Tbl_smoothScrolling /*| Tbl_autoVScrollBar*/ );
-    //  clearTableFlags( /*Tbl_autoHScrollBar*/ );
     QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
+
+    //setValidator(new QRegExpValidator( QRegExp(GetAllowedRegExp(rO)), this ) );
 }
 
 
@@ -1214,7 +1295,7 @@ TCellText::closeEvent(QCloseEvent* e)
     if( hasFocus() && changed )
         setValue();
 
-    QMultiLineEdit::closeEvent(e);
+    QTextEdit::closeEvent(e);
 }
 
 
@@ -1230,7 +1311,7 @@ TCellText::Update()
 void
 TCellText::EvChange()
 {
-    if( edited() )	// it reacts now only on keyboard changes
+    if( isModified() )	// it reacts now only on keyboard changes
 	changed = true;
 }
 
@@ -1246,17 +1327,17 @@ TCellText::setIfChanged()
 void
 TCellText::setValue()
 {
+/*
     gstring s;
-    int ii;
-    for( ii=0; ii<numLines()-1; ii++ )
+    for(int ii=0; ii<lines()-1; ii++ )
     {
         s += textLine(ii);
         s += '\n';
     }
     s += textLine(ii);
-
+*/
     changed = false;
-    if( !rObj.SetString(s.c_str(), N, M) )
+    if( !rObj.SetString(text().remove('\r'), N, M) )
     {
         vfMessage(this, rObj.GetKeywd(), "Sorry! Wrong value typed!" );
         setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
@@ -1269,7 +1350,7 @@ TCellText::setValue()
 void
 TCellText::focusInEvent(QFocusEvent* e)
 {
-    QMultiLineEdit::focusInEvent(e);
+    QTextEdit::focusInEvent(e);
     field()->focused = this;
     SetDescription();
     changed = false;
@@ -1278,7 +1359,7 @@ TCellText::focusInEvent(QFocusEvent* e)
 void
 TCellText::focusOutEvent(QFocusEvent* e)
 {
-    QMultiLineEdit::focusOutEvent(e);
+    QTextEdit::focusOutEvent(e);
     field()->focused = 0;
 
     if( changed )
@@ -1297,27 +1378,23 @@ TCellText::keyPressEvent(QKeyEvent* e)
 
     if( !edit || e->key()==Key_Delete || e->ascii()=='\0' )
     {
-        QMultiLineEdit::keyPressEvent(e);
+        QTextEdit::keyPressEvent(e);
         return;
     }
 
     if( e->ascii()==0x08 ||
             ( IsCharAllowed(rObj,e->ascii()) &&
               text().length() < AllowedPos(rObj)+1 )    )
-        QMultiLineEdit::keyPressEvent(e);
+        QTextEdit::keyPressEvent(e);
 }
 
 /*! mouse press event
     handles context menu
 */
+/*
 void
-TCellText::mousePressEvent(QMouseEvent* e)
+TCellText::contextMenuEvent(QContextMenuEvent* e)
 {
-    if( e->button() != RightButton )
-    {
-        QMultiLineEdit::mousePressEvent(e);
-        return;
-    }
     //  if( !edit )
     //    return;
 
@@ -1325,6 +1402,16 @@ TCellText::mousePressEvent(QMouseEvent* e)
     CHECK_PTR( menu );
     menu->insertItem( "&Help\tF1", this, SLOT(CmHelp()), Key_F1 );
     menu->exec(e->globalPos());
+}
+*/
+QPopupMenu* 
+TCellText::createPopupMenu(const QPoint& pos)
+{
+    QPopupMenu* menu = new QPopupMenu();
+    menu->insertItem( "&Help\tF1", this, SLOT(CmHelp()), Key_F1 );
+    menu->insertSeparator();
+    menu->insertItem( "&Edit", QTextEdit::createPopupMenu(pos) );
+    return menu;
 }
 
 
