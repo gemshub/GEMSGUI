@@ -835,6 +835,9 @@ TCellInput::keyPressEvent(QKeyEvent* e)
     case Key_F2:
         CmSDRef();
         return;
+//    case Key_F3:
+//        CmScript();
+//        return;
     case Key_F7:
         CmDComp();
         return;
@@ -888,7 +891,9 @@ TCellInput::mousePressEvent(QMouseEvent* e)
     CHECK_PTR( menu );
     menu->insertItem( "&Help\tF1", this, SLOT(CmHelp()), Key_F1 );
     if( fieldType == ftRef )
-        menu->insertItem( "&SDReference\tF2", this, SLOT(CmSDRef()), Key_F2 );
+        menu->insertItem( "&SDRef-Record\tF2", this, SLOT(CmSDRef()), Key_F2 );
+//    if( fieldType == ftText )
+//        menu->insertItem( "&SDRef-Script\tF3", this, SLOT(CmScript()), Key_F3 );
     if( fieldType == ftRecord )
         menu->insertItem( "&Show record\tF7", this, SLOT(CmDComp()), Key_F7 );
     if( fieldType == ftFloat )

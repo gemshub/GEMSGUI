@@ -205,7 +205,7 @@ TCModuleImp::LoadGeneralMenu()
         menuBar()->insertSeparator();
         QPopupMenu* p2 = new QPopupMenu;
         p2->insertItem( "&Help Contents", pVisorImp, SLOT(CmHelpMenuItem()), CTRL+Key_F1 );
-        p2->insertItem( "&Scripts...", this, SLOT(CmScript()) );
+        p2->insertItem( "&Scripts...", this, SLOT(CmScript()), Key_F3 );
         p2->insertSeparator(); // Above line fixed 05.01.01
         p2->insertItem( "&About", pVisorImp, SLOT(CmHelpAbout()) );
         menuBar()->insertItem( "&Help", p2 );
@@ -297,7 +297,7 @@ TCModuleImp::LoadProfileMenu()
         menuBar()->insertSeparator();
         QPopupMenu* p2 = new QPopupMenu();
         p2->insertItem( "&Help", this, SLOT(CmHelp()) );
-        p2->insertItem( "&Scripts...", this, SLOT(CmScript()) );
+        p2->insertItem( "&Scripts...", this, SLOT(CmScript()), Key_F3 );
         p2->insertSeparator();
         p2->insertItem( "&About", pVisorImp, SLOT(CmHelpAbout()) );
         menuBar()->insertItem( "&Help", p2 );
