@@ -29,12 +29,10 @@ SOURCES         = ..\..\vizor\libs\gstring.cpp \
         ..\s_fgl.cpp ..\submod\ms_datach_br.cpp
 
 OBJECTS =  ..\..\vizor\libs\gstring.obj ..\..\vizor\libs\gdatastream.obj \ 
-      main.obj ..\submod\ms_mueqexp.obj ms_param.obj\
-     ..\submod\ipm_sel_bc.obj ..\submod\ipm_gamma.obj ..\submod\ipm_fia_bc.obj \
-     ..\submod\ms_multi_file.obj ..\s_fgl.obj ..\submod\ms_datach_br.obj
+      main.obj ms_mueqexp.obj ms_param.obj\
+     ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj \
+     ms_multi_file.obj s_fgl.obj ms_datach_br.obj
 
-# OBJECTS =  gstring.obj main.obj ms_mueqexp.obj ms_param.obj\
-#     ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj ms_multi_file.obj
 
 TARGET		= gemipm2.exe
 
@@ -43,6 +41,29 @@ all:            $(OBJECTS) link
 link:
      ilink32 -v -c -x -Gn -ap -Tpe c0x32.obj -L$(BCB)\lib $(OBJECTS)\
                  , $(TARGET),  , $(NOQTLIBS)
+
+
+
+ms_mueqexp.obj:		../submod/ms_mueqexp.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
+
+ipm_sel_bc.obj:	../submod/ipm_sel_bc.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
+
+ipm_gamma.obj:		../submod/ipm_gamma.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
+
+ipm_fia_bc.obj:		../submod/ipm_fia_bc.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
+
+ms_multi_file.obj:	../submod/ms_multi_file.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
+
+s_fgl.obj:	../s_fgl.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
+
+ms_datach_br.obj:	../submod/ms_datach_br.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
 
 
 .cpp.obj:
