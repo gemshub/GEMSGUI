@@ -22,10 +22,15 @@
 #include <math.h>
 
 #include "m_param.h"
+
+#ifndef IPMGEMPLUGIN
+
 #include "visor.h"
 #include "visor_w.h"
 #include "service.h"
 #include "stepwise.h"
+
+#endif
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Advanced solver of a system of linear equations

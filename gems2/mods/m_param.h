@@ -21,6 +21,13 @@
 #ifndef _m_param_h_
 #define _m_param_h_
 
+#ifndef IPMGEMPLUGIN
+
+//#define IPMGEMPLUGIN
+
+#endif
+
+
 #include "v_mod.h"
 #include "submod/ms_rmults.h"
 #include "submod/ms_mtparm.h"

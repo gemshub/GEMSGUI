@@ -21,7 +21,582 @@
 #include <stdio.h>
 
 #include "m_param.h"
+
+#ifndef IPMGEMPLUGIN
+
 #include "service.h"
+#include "visor.h"
+#include "visor_w.h"
+#include "stepwise.h"
+
+#endif
+
+
+// Finding automatic initial approximation for the IPM algorithm
+// using modified simplex method with two-side constraints
+//
+bool TProfil::AutoInitialApprox( )
+{
+    int i, j, k, NN;
+    double minB=0.0, molB=0.0, sfactor=1.0;
+
+// Kostya correct DK & DHB as automatic
+    NN = pmp->N - pmp->E;
+    minB=pmp->B[0];
+    for(i=0;i<NN;i++)
+    {
+      if( pmp->B[i] < minB )
+          minB = pmp->B[i];
+      molB += pmp->B[i];
+    }
+if( minB < pa.p.DB )  // KD - foolproof
+    minB = pa.p.DB;
+
+//  check Ymin (cutoff)
+   if(pmp->lowPosNum>minB*0.01)
+      pmp->lowPosNum=minB*0.01;
+
+   sfactor = pow( molB, 0.4 )/7.7;
+   pmp->DHBM = sfactor * pa.p.DHB;  // 2.5 root
+   pmp->DHBM *= (0.097+0.95/(1+exp(-(log10(minB)+11)/0.4)));
+
+   pmp->DX = pa.p.DK;
+   pmp->DX *= sfactor;
+   pmp->DX *= (0.097+0.95/(1+exp(-(log10(minB)+6.1)/0.54)));
+   if( pmp->DX < 0.01 * pa.p.DK )
+       pmp->DX = 0.01 * pa.p.DK;
+   pmp->DSM = pa.p.DS;  // Shall we add  * sfactor ?
+
+#ifndef IPMGEMPLUGIN
+   pVisor->Update(false);
+#endif
+    // Analyzing if Simplex approximation is needed
+    if( !pmp->pNP  )  //  || ( pmp->pNP == -1 &&
+                      //  !vfQuestion(window(),  "IPM (initial approximation):",
+                      //  "Previous minimization result (Y)\n Automatic SIMPLEX approximation (N)? " )))
+    {   // Preparing to call Simplex method
+        pmp->FitVar[4] = pa.p.AG;  // smoothing parameter init
+        pmp->pRR1 = 0;
+        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+//      pmp->IC = 0.0;  Important - for reproducibility of simplex FIA
+        if( pa.p.PSM && pmp->FIs )
+            GammaCalc( LINK_FIA_MODE);
+        pmp->IT = 0;
+        pmp->pNP = 0;
+        // simplex method is called here
+        SimplexInitialApproximation( );
+//  STEPWISE (0) - stop point for examining results from simplex IA
+#ifndef IPMGEMPLUGIN
+STEP_POINT();
+#endif
+        // no multi-component phases?
+        if( !pmp->FIs )
+            return true; // goto OVER; // solved !
+        for( i=0; i<pmp->L; i++ )
+            if( pmp->Y[i] <= /* LOWESTDC_ */ pmp->lowPosNum )
+                //	       pmp->Y[i] = LOWESTDC_ / 10.;
+                //         pmp->Y[i] = pa.p.DFYaq;
+            {
+                // Trace DC quantity into zeros!
+                switch( pmp->DCC[i] )
+                {
+                case DC_AQ_PROTON:
+                case DC_AQ_ELECTRON:
+                case DC_AQ_SPECIES:
+                    pmp->Y[i] =  pa.p.DFYaq;
+                    break;
+                case DC_AQ_SOLVCOM:
+                case DC_AQ_SOLVENT:
+                    pmp->Y[i] =  pa.p.DFYw;
+                    break;
+
+                case DC_GAS_H2O:
+                case DC_GAS_CO2:
+                case DC_GAS_H2:
+                case DC_GAS_N2:
+                case DC_GAS_COMP:
+                case DC_SOL_IDEAL:
+                    pmp->Y[i] = pa.p.DFYid;
+                    break;
+
+                case DC_SOL_MINOR:
+                    pmp->Y[i] = pa.p.DFYh;
+                    break;
+                case DC_SOL_MAJOR:
+                    pmp->Y[i] =  pa.p.DFYr;
+                    break;
+
+                case DC_SCP_CONDEN:
+                    pmp->Y[i] =  pa.p.DFYc;
+                    break;
+                    // implementation for adsorption?
+                default:
+                    pmp->Y[i] =  pa.p.DFYaq;
+                    break;
+                }
+
+                pmp->Y[i] *= sfactor;  // 2.5 root
+
+            } // i
+    }
+
+    else  // Taking previous result as initial approximation
+    {
+        int jb, je;
+        double LnGam, FitVar3;
+        /*    pmp->IT *= pa.p.PLLG; */
+        FitVar3 = pmp->FitVar[3];
+        pmp->FitVar[3] = 1.0;
+        TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
+        for( j=0; j< pmp->L; j++ )
+            pmp->X[j] = pmp->Y[j];
+        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+        ConCalc( pmp->X, pmp->XF, pmp->XFA );
+        if( pmp->E && pmp->LO )
+            IS_EtaCalc();
+        /*    if( pa.p.PSM )  corr. 13.4.96 */
+        for( k=0, je=0; k<pmp->FI; k++ )
+        {
+            jb = je;
+            je += pmp->L1[k];
+            if( pmp->PHC[k] == PH_SORPTION )
+            {
+                GouyChapman(   jb, je, k );
+                SurfaceActivityTerm(   jb, je, k );
+            }
+            for( j=jb; j<je; j++ )
+            {
+                LnGam = pmp->lnGam[j];
+                if( fabs( LnGam ) > 1e-9 )
+                    pmp->Gamma[j] = exp( LnGam );
+                else pmp->Gamma[j] = 1.0;
+                pmp->F0[j] = Ej_init_calc( 0.0, j, k  );
+                pmp->G[j] = pmp->G0[j] + pmp->F0[j];
+                pmp->lnGmo[j] = LnGam;
+            }
+        }
+        pmp->FitVar[3] = FitVar3; // Restore smoothing parameter
+
+        if( pmp->pNP <= -1 )
+        { //  // With raising zeroed species and phases
+           for( i=0; i<pmp->L; i++ )
+              if( pmp->Y[i] <= pmp->lowPosNum )
+              { // Put trace DC quantity instead of zeros!
+                 switch( pmp->DCC[i] )
+                 {
+                   case DC_AQ_PROTON:
+                   case DC_AQ_ELECTRON:
+                   case DC_AQ_SPECIES: pmp->Y[i] = pa.p.DFYaq/1000.; break;
+                   case DC_AQ_SOLVCOM:
+                   case DC_AQ_SOLVENT: pmp->Y[i] = pa.p.DFYw;  break;
+
+                   case DC_GAS_H2O: case DC_GAS_CO2: case DC_GAS_H2:
+                   case DC_GAS_N2: case DC_GAS_COMP:
+                   case DC_SOL_IDEAL:  pmp->Y[i] = pa.p.DFYid/1000.; break;
+
+                   case DC_SOL_MINOR:  pmp->Y[i] = pa.p.DFYh/1000.; break;
+                   case DC_SOL_MAJOR:  pmp->Y[i] = pa.p.DFYr/100.; break;
+
+                   case DC_SCP_CONDEN: pmp->Y[i] = pa.p.DFYc/1000.; break;
+                   // implementation for adsorption?
+                   default:  pmp->Y[i] = pa.p.DFYaq/1000.; break;
+                 }
+              } // i
+        }
+    }
+    pmp->MK = 1;
+    // Sveta 18/01/1999 test init load
+    /*   if( ((TMulti *)aSubMod[MD_MULTI])->flCopy == true )
+         ((TMulti *)aSubMod[MD_MULTI])->dyn__test(
+                ((TMulti *)aSubMod[MD_MULTI])->copy1);
+      ((TMulti *)aSubMod[MD_MULTI])->dyn_new_test(
+                ((TMulti *)aSubMod[MD_MULTI])->copy1);
+    */
+// STEPWISE (1) - stop point to see IA from old solution or raised simplex
+#ifndef IPMGEMPLUGIN
+STEP_POINT();
+#endif
+    return false;
+    //   OVER: /* calc finished */
+    //   if( wn[W_EQCALC].status )
+    //     aSubMod[MD_EQCALC]->ModUpdate("EQ_done  EQilibrium STATe: computed OK");
+    //   return true;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Main sequence of IPM calculations
+//  Main place for implementation of diagnostics and setup
+//  of IPM precision and convergence
+//  Returns true   if IPM result is OK
+//          false  if good result could not be obtained
+//
+
+bool TProfil::MultiCalcMain( int &pll, double &FXold )
+{
+    int i, j, RepeatSel=0, eRet;
+    pmp->W1=0;
+
+    if( pmp->pULR && pmp->PLIM )
+        if( Set_DC_limits( DC_LIM_INIT ))
+#ifndef IPMGEMPLUGIN
+            if( !vfQuestion(window(), "IPM: ",
+                            "Inconsistent metastability restrictions to DC or phases.\n"
+                            "Continue calculation (take those restrictions as trivial)?" ))
+#endif
+                Error("IPM error: " ,
+                      "Inconsistent metastability restrictions to DC or phases.");
+    /* test insert in valid area */
+    mEFD:
+     if(pmp->PZ && pmp->W1)
+     { for( i=0; i<pmp->L; i++ )
+        pmp->Y[i]=pmp->X[i];
+      TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
+     }
+    eRet = EnterFeasibleDomain( );
+    if( eRet )
+        goto ERET_THINK;
+
+// STEPWISE (2)  - stop point to examine output from EFD()
+#ifndef IPMGEMPLUGIN
+#ifdef Use_mt_mode
+
+STEP_POINT();
+
+#endif
+#endif
+   /* minimization  IPM */
+    eRet = InteriorPointsMethod( );
+// STEPWISE (3)  - stop point to examine output from IPM()
+#ifndef IPMGEMPLUGIN
+STEP_POINT();
+#endif
+ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if( eRet )
+    {   if(eRet==2 )
+        { if( pmp->DX<1e-3 )
+            {
+               pmp->DX *= 10.;
+               goto mEFD;
+            }
+          else
+#ifndef IPMGEMPLUGIN
+          if( vfQuestion(window(), "IPM:",
+            "For a given IPM convergence criterion, vector b is not balanced,\n"
+            "or DC standard-state thermodynamic data inconsistent. \n"
+            "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?" ))
+            {  pVisor->Update( true );
+                return true;
+            }
+#else
+          cout << "For a given IPM convergence criterion, vector b is not balanced,\n"
+           << "or DC standard-state thermodynamic data inconsistent. \n"
+           <<  "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?"
+           << endl;
+
+#endif
+
+        }
+     /*   if( !pmp->MK  )
+            return true; //goto OVER;
+        if( pmp->pNP > 0 ) // error of initial approximation
+        {
+            pmp->pNP = 0;
+            pmp->PD = pa.p.PD;
+            goto AGAIN;
+        }  */
+        else
+        { if( pmp->DHBM<1e-5 )
+            {
+               pmp->DHBM *= 10.;
+               goto mEFD;
+            }
+          else
+#ifndef IPMGEMPLUGIN
+            if( !vfQuestion(window(),  "Invalid initial approximation for IPM:",
+                             "Proceed with automatic SIMPLEX approximation ?" ))
+#endif
+            Error("IPM error: ", "Invalid initial approximation for IPM.");
+        }
+
+      /*  else
+        {
+            pmp->DX *= 10.;
+            pmp->pNP = 0;
+            pmp->PD = pa.p.PD;
+            goto AGAIN;
+        }  */
+    }
+    pmp->FI1 = 0;
+    pmp->FI1s = 0;
+    for( i=0; i<pmp->FI; i++ )
+        if( pmp->YF[i] > 1e-18 )
+        {
+            pmp->FI1++;
+            if( i < pmp->FIs )
+                pmp->FI1s++;
+        }
+    if( !pa.p.PC )    //  ???
+        if( pmp->PD < 2 )
+            return true; //break;
+        else
+        {
+           // pmp->MK = 1;
+            goto ITDTEST;
+        }
+    /* call Selekt2() */
+   PhaseSelect();
+   if( pa.p.PC == 2 )
+       XmaxSAT_IPM2();  // Install upper limits to xj of surface species
+
+   if( !pmp->MK )
+     if( RepeatSel<3 )
+       { RepeatSel++;
+         goto mEFD;
+       }
+     else
+         cout<< "PhaseSelect : Insert phase cannot be reached."<< endl;
+    //   if( !vfQuestion(window(), "PhaseSelect : warning",
+    //        "Insert phase cannot be reached. Continue?" ))
+    //         return false;
+
+   MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
+// STEPWISE (4) Stop point after PhaseSelect()
+#ifndef IPMGEMPLUGIN
+#ifdef Use_mt_mode
+
+STEP_POINT();
+
+#endif
+   pVisor->Update( false );
+#endif
+   if(pmp->PZ && !pmp->W1)
+    { pmp->W1++;           // IPM-2 precision algorithm - 1st run
+      goto mEFD;
+    }
+   if(pmp->PZ && pmp->W1 && pmp->W1 <  pa.p.DW )
+    for(i=0;i<pmp->N-pmp->E;i++)
+     if( fabs(pmp->C[i]) > pmp->DHBM // * pa.p.GAS
+         || fabs(pmp->C[i]) > pmp->B[i] * pa.p.GAS )
+      if(pmp->W1 < pa.p.DW-1)
+        {
+            pmp->W1++;          // IPM-2 precision algorithm - 2nd run
+            goto mEFD;
+        }
+       else
+       { gstring  buf,buf1;
+         vstr pl(5);
+         int jj=0;
+          for( j=0; j<pmp->N-pmp->E; j++ )
+          //  if( fabs(pmp->C[j]) > pmp->DHBM  || fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
+            if( fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
+            { sprintf( pl, " %-2.2s  ", pmp->SB[j] );
+              buf1 +=pl;
+              jj=1;
+            }
+           if(!jj)
+               goto ITDTEST;
+           buf = "Prescribed balance precision cannot be reached\n for independent components: ";
+           buf += buf1;
+        //   buf += "Continue?";
+        //  if( !vfQuestion(window(), "IPM : warning", buf.c_str() ))
+        //      break;
+          cout<< buf.c_str()<< endl;
+          goto ITDTEST;
+       }
+
+ITDTEST: /* test flag modes */
+ /*   if( !pmp->MK )
+    {  // insert or deleted phase
+        FXold = pmp->FX;
+        goto RESET_GT;
+    }
+    if( pa.p.DK != pmp->DX && !pll )
+    { // bad convergence - how to improve ?  ???????????????????????
+        if( pmp->PD <= 1 )
+        {
+            pmp->MK = 0;
+            pll=1;
+            FXold = pmp->FX;
+            goto RESET_GT;
+        }
+    }
+    if( pmp->PD == 2 )  // test of total G(X) value
+        if( fabs( FXold - pmp->FX ) > tc_ISdelta )
+        {
+            pmp->MK=0;
+            FXold = pmp->FX;
+            goto RESET_GT;
+        }  */
+    /* if( pmp->PD == 3 ) */
+    /* pmp->MK = 0 */;
+// RESET_GT:  ??????????????????????????????????
+    memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
+    return false;
+// AGAIN: Call simplex if necessary
+//   return AutoInitialApprox();
+}
+
+//Calc equstat method IPM (iterations)
+void TProfil::MultiCalcIterations()
+{
+    pll=0;
+    FXold=0.0;
+
+ /*   do
+    { // cycle of iterations Selekt
+        // Stop calculations here Sveta
+        if( MultiCalcMain( pll, FXold ) == true )
+            break;
+
+        if( fStopCalc == true )	// 'Cancel' button
+            return;	// should we do some cleanup?
+
+    } while( !pmp->MK );  */
+    MultiCalcMain( pll, FXold );
+
+    //calc demo data
+    for( int ii=0; ii<pmp->N; ii++ )
+        pmp->U_r[ii] = pmp->U[ii]*pmp->RT;
+    GasParcP();
+
+    /* calc finished */
+    //   if( wn[W_EQCALC].status )
+    //  aMod[MD_EQCALC]->ModUpdate("EQ_done  EQilibrium STATe: computed OK");
+}
+
+// End of file ms_muload.cpp
+// ----------------------------------------------------------------
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Calculation of max.moles of surface species for SAT stabilization
+*  to improve IPM-2 convergence at high SAT values  KD 08.03.02
+*  xj0 values are placed as upper kunetic constraints
+*/
+void TProfil::XmaxSAT_IPM2( void )
+{
+    int i, j, k, jb, je=0, ist, Cj, iSite[6];
+    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm,
+            SATst, a, xjn, q1, q2;
+
+  if(!pmp->DUL )   // not possible to install upper kinetic constraint!
+      return;
+
+  for( k=0; k<pmp->FIs; k++ )
+  { /* loop on phases */
+     jb = je;
+     je += pmp->L1[k];
+     if( pmp->PHC[k] != PH_SORPTION )
+          continue;
+
+    if( pmp->XFA[k] < pmp->DSM ) // No sorbent retained by the IPM 
+        continue;
+    if( pmp->XF[k]-pmp->XFA[k] < pmp->lowPosNum /* *10. */ )
+        continue;  /* No surface species */
+
+    for(i=0; i<6; i++)
+        iSite[i] = -1;
+
+    /* Extraction of site indices */
+    for( j=jb; j<je; j++ )
+    {
+        if( pmp->SATT[j] != SAT_SITE )
+        {
+            if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_MINAL ||
+                    pmp->DCC[j] == DC_SUR_CARRIER ) continue;
+            ist = pmp->SATNdx[j][0] / MSPN; // MSPN = 2 - number of EDL planes
+            continue;
+        }
+        ist = pmp->SATNdx[j][0] / MSPN;
+        iSite[ist] = j;
+    }
+
+    for( j=jb; j<je; j++ )
+    { /* Loop for DC */
+        if( pmp->X[j] <= pmp->lowPosNum /* *10. */ )
+            continue;  /* This surface DC has been killed by IPM */
+        switch( pmp->DCC[j] )  /* code of species class */
+        {
+        default: /* pmp->lnGam[j] = 0.0; */
+            continue;
+        case DC_SSC_A0:
+        case DC_SSC_A1:
+        case DC_SSC_A2:
+        case DC_SSC_A3:
+        case DC_SSC_A4:
+        case DC_WSC_A0:
+        case DC_WSC_A1:
+        case DC_WSC_A2:
+        case DC_WSC_A3:
+        case DC_WSC_A4:
+        case DC_SUR_SITE:
+        case DC_IEWC_B:
+        case DC_SUR_COMPLEX:
+        case DC_SUR_IPAIR:
+        case DC_IESC_A:
+            /* Calculate ist - index of surface type */
+            ist = pmp->SATNdx[j][0] / MSPN;
+            /* Cj - index of carrier DC */
+            Cj = pmp->SATNdx[j][1];
+            if( Cj < 0 )
+            {  /* Assigned to the whole sorbent */
+                XVk = pmp->XFA[k];
+                Mm = pmp->FWGT[k] / XVk;
+            }
+            else
+            { /* Assigned to one of the sorbent end-members */
+                XVk = pmp->X[Cj];
+                if( XVk < pmp->DSM/10.0 )
+                    continue; /* This end-member is zeroed off by IPM */
+                Mm = pmp->MM[Cj] * XVk/pmp->XFA[k];  // mol.mass
+            }
+            XSk = pmp->XFTS[k][ist]; /* Tot.moles of sorbates on surf.type */
+            xj = pmp->X[j];  /* Current moles of this surf.species */
+            a=1.0; /* Frumkin factor - reserved for extension to FFG isotherm */
+            switch( pmp->SATT[j] )
+            {
+            case SAT_COMP: /* Competitive surface species on a surface type */
+                /* a = fabs(pmp->MASDJ[j]); */
+                if( iSite[ist] < 0 )
+                    xjn = 0.0;
+                else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
+                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; /* expected total in moles */
+                XSkC = XSk - xjn - xj; /* occupied by the competing species;
+  	                                   this sorbate cannot compete to itself */
+                /* New variant */
+                if( XSkC < pa.p.IEPS )
+                    XSkC = pa.p.IEPS;
+                xj0 = XS0 - XSkC;    /* expected moles of this sorbate */
+                if( xj0 < pa.p.IEPS )
+                    xj0 = pa.p.IEPS;  /* ensuring that it is non-negative */
+// Check!
+
+                pmp->DUL[j] = xj0 - pa.p.IEPS; // XS0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+                break;
+
+            case SAT_NCOMP: /* Non-competitive surface species */
+                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; /* in moles */
+
+                pmp->DUL[j] = xj0 - pa.p.IEPS; // xj0*(1.0-pa.p.IEPS); //pa.p.IEPS;
+                break;
+
+            case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) */
+                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; /* in moles */
+
+                pmp->DUL[j] =  XS0-pa.p.IEPS; // xj0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+                break;
+            case SAT_INDEF: /* No SAT calculation */
+            default:        /* pmp->lnGam[j] = 0.0; */
+                break;
+            }
+        }
+     }  /* j */
+  } /* k */
+}
+
+// Don't forget to clear such pmp->DUL constraints on entering simplex IA!
+//----------------------------------------------------------------------------
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // Load Thermodynamic Data from MTPARM to MULTI

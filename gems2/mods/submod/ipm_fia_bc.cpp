@@ -22,7 +22,10 @@
 #include <math.h>
 
 #include "m_param.h"
+
+#ifndef IPMGEMPLUGIN
 #include "service.h"
+#endif
 
 /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of mass-balance deviations in IPM
