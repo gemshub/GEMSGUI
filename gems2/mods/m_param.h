@@ -339,6 +339,7 @@ public:
     // Multi make functions
     void PMtest( const char *key );
     void SolModLoad();
+    void XmaxSAT_IPM2();
     void MultiRemake( const char *key );
     void EqstatExpand( const char *key );
     void CalcBcc(); // Calc bulk composition
