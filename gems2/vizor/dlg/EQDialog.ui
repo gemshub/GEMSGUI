@@ -156,7 +156,7 @@
                     </sizepolicy>
                 </property>
                 <property name="text">
-                    <string>Du&amp;al Thermodynamics (DUtherm)</string>
+                    <string>Du&amp;al Thermodynamics (DualTh)</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string></string>
@@ -175,7 +175,7 @@
                     </sizepolicy>
                 </property>
                 <property name="text">
-                    <string>Adaptive Modelling in the &amp;Uncertainty Space</string>
+                    <string>Sensitivity Analysis (&amp;UnSpace)</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string></string>
@@ -194,7 +194,7 @@
                     </sizepolicy>
                 </property>
                 <property name="text">
-                    <string>Coupled &amp;Mass Transport Modelling</string>
+                    <string>Coupling to Fluid &amp;Mass Transport (FMT-GEM)</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string></string>

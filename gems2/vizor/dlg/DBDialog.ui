@@ -379,42 +379,6 @@
             <string>Definitions of stoichiometry entities for setting up bulk composition of chemical systems</string>
         </property>
     </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>80</x>
-                <y>10</y>
-                <width>350</width>
-                <height>60</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <family>MS Sans Serif</family>
-                <pointsize>14</pointsize>
-                <italic>1</italic>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>Panel</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Raised</enum>
-        </property>
-        <property name="text">
-            <string>GEMS Thermodynamic Database Management</string>
-        </property>
-        <property name="alignment">
-            <set>WordBreak|AlignCenter</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-        <property name="wordwrap" stdset="0">
-        </property>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>PushButton1</cstring>
@@ -450,6 +414,42 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>Basic data describing stoichiometry units (eg. chemical elements)</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>10</y>
+                <width>350</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <family>MS Sans Serif</family>
+                <pointsize>14</pointsize>
+                <italic>1</italic>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>Panel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="text">
+            <string>Thermodynamic Database Management</string>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+        <property name="wordwrap" stdset="0">
         </property>
     </widget>
 </widget>

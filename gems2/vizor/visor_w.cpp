@@ -63,13 +63,13 @@ using namespace std;
 const char* GEMS_LOGO_ICON = "img/gems1.png";
 const char* GEMS_SYS_ICON = "img/sciences_section.xpm";
 const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.0.0-PSI (Linux)";
-const char* GEMS_DEFAULT_FONT_NAME = "Lucidatypewriter";
-const int GEMS_DEFAULT_FONT_SIZE = 12;
+const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
+const int GEMS_DEFAULT_FONT_SIZE = 10;
 #else
 const char* GEMS_LOGO_ICON = "img/gems1.png";
 const char* GEMS_SYS_ICON = "img/sciences_section.xpm";
 const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.0.0-PSI (Win32)";
-const char* GEMS_DEFAULT_FONT_NAME = "Courier";
+const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 const int GEMS_DEFAULT_FONT_SIZE = 9;
 #endif
 extern const char* GEMS_ABOUT_HTML;
