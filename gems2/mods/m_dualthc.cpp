@@ -634,9 +634,10 @@ TDualTh::Bn_Calc()
 
 }
 
-void Calc_muo_n( char eState )
+void
+TDualTh::Calc_muo_n( char eState )
 { // calculate mu_o DualTh
- short i, ii, j;
+ short ii, j;
  double muo, gam;
 
  for( ii=0; ii < dtp->nQ; ii++)
@@ -736,9 +737,10 @@ void Calc_muo_n( char eState )
 }
 
 
-void Calc_gam_n( char eState )
+void
+TDualTh::Calc_gam_n( char eState )
 {  // calculate gamma DualTh
- short i, ii, j;
+ short ii, j;
  double muo, gam;
 
 // dt_initiate( false );
@@ -834,13 +836,13 @@ void Calc_gam_n( char eState )
 */
          default:
             break; /* error in DC class code */
-        }
+       }
        dtp->gam_n[ii*dtp->nK+j] = gam;
     }
   }
 }
 
-//  void Calc_act_n( char eState )
+//  void TDualTh::Calc_act_n( char eState )
 // { // calculate activity DualTh
 
 
@@ -885,9 +887,6 @@ void Calc_gam_n( char eState )
                     break;
                default:
                     break; /* error in DC class code */
-
-*/
 // }
-
 
 // ------------------- End of m_dualthc.cpp --------------------------
