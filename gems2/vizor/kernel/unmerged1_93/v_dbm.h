@@ -462,6 +462,7 @@ public:
     //--- Manipulation files of Data Base
     void RebildFile(const TCIntArray& indx);
     int AddFileToList(TDBFile* file);
+    // int GetFileNum(const char* substr_name);
     void AddOpenFile(const TCIntArray& indx);
 
     //--- Manipulation records

@@ -174,10 +174,15 @@ TIComp::RecordPrint( const char *key )
 }
 
 void
-TIComp::CopyElements( const char * prfName, TCStringArray& aKeys )
+TIComp::CopyElements( const char * prfName, TCStringArray& aKeys,
+                      TCStringArray& names )
 {
+    // open selected kernel files
+    db->OpenOnlyFromList(names);
+
+
     // added to profile file icomp.copy.prfname
-    gstring Path = pVisor->userProfDir();
+    /*gstring Path = pVisor->userProfDir();
     Path += prfName;
     Path += "/";
     Path += db->GetKeywd();
@@ -188,7 +193,8 @@ TIComp::CopyElements( const char * prfName, TCStringArray& aKeys )
     Path += ".";
     Path += PDB_EXT;
     TDBFile *aFl= new TDBFile( Path );
-    int fnum_ = db->AddFileToList( aFl );
+    int fnum_ = db->AddFileToList( aFl );*/
+    int fnum_ = db->GetOpenFileNum( prfName );
     //  copy to it selected records
     // ( add to last key field first symbol from prfname )
     int nrec, j;
@@ -197,7 +203,9 @@ TIComp::CopyElements( const char * prfName, TCStringArray& aKeys )
         nrec = db->Find( aKeys[i].c_str() );
         db->Get( nrec );
         /// !!! changing record key
-        gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+       gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+       ChangeforTempl( str, "*", "invcase", db->FldLen( 2 ));
+/*
         for( j=0; j<db->FldLen( 2 ); j++ )
          if( str[j] == ' ' )
           break;
@@ -207,14 +215,20 @@ TIComp::CopyElements( const char * prfName, TCStringArray& aKeys )
             str[j] = ' ';
         else
             str[j] = *prfName;
-        str = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 )) + str;
-        str = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 )) + str;
+*/
+        str += ":";
+        gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
+        str1.strip();
+        str = str1 + ":" + str;
+        str1 = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 ));
+        str1.strip();
+        str = str1 + ":" + str;
         AddRecord( str.c_str(), fnum_ );
     }
     // close all no profile files
-    TCStringArray names;
-    names.Add(prfName);
-    db->OpenOnlyFromList(names);
+    TCStringArray names1;
+    names1.Add(prfName);
+    db->OpenOnlyFromList(names1);
 }
 
 

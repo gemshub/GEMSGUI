@@ -735,6 +735,19 @@ int TDataBase::AddFileToList(TDBFile* file)
     return fls.Find( aFile.GetCount()-1 );
 }
 
+
+/*// get number of file, that name conterned substring (only open files)
+int TDataBase::GetFileNum(const char* substr_name)
+{
+  for(int ii=fls.GetCount()-1; ii>=0; ii-- )
+  {
+   if( aFile[fls[ii]].Name().find( substr_name ) != gstring::npos )
+     return ii;
+  }
+  return -1;
+}
+*/
+
 // delete a file from DBfile list
 void TDataBase::DelFile(const gstring& path)
 {

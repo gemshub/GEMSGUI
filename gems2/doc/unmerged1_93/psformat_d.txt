@@ -3,8 +3,8 @@ Format dlya vyvoda tablic rezul'tatov:
 (All words are case sensitive)
 
 <FORMAT>    =::  <COMMAND> { <COMMAND> }
-<COMMAND>   =::  line [;<equation>;] <COLUMNS>  ¦ 
-                 list <obj_name> [;<equation>;] <COLUMNS>
+<COMMAND>   =::  line [## <equation> ##] <COLUMNS>  ¦ 
+                 list <obj_name> [## <equation> ##] <COLUMNS>
 <COLUMNS>   =::  <STATEMENT> {, <STATEMENT>}
 <STATEMENT> =::  <FORMAT> <DATA>
 <FORMAT>    =::  %[flags][width][.prec]type_char
@@ -15,14 +15,15 @@ Format dlya vyvoda tablic rezul'tatov:
  type_char
 
  - s	Prints characters until a null-terminator
- - f	Floating point	signed value of the form [-]dddd.dddd.
- - e	Floating point	signed value of the form [-]d.dddde[+/-]ddd
+ - f	Floating point signed value of the form                 [-]dddd.dddd.
+ - e	Floating point signed value of the form                       [-]d.dddde[+/-]ddd
  - g	Floating point	signed value in either e or f form,
         based on the given value and precision.
 
 <DATA>  =::  [all] [label] <obj_name> ¦
              [label] <obj_name[i]>    ¦
-             <obj_name[i,j]>          ¦   (substring from,to for string data)
+             <obj_name[i,j]>          ¦  (substring from,
+                                         to for string data)
              "text string"            ¦
              index                    ¦
              space                    ¦
@@ -30,24 +31,27 @@ Format dlya vyvoda tablic rezul'tatov:
              date                     ¦
              time                     ¦
 
- ;<equation>; =::  prn =: <condition> 
+ <equation> =::  prn =: <condition> 
 
-     <condition>     -- GEMS Math Script conditional expression which 
+   <condition>     -- GEMS Math Script conditional 
+                        expression which 
                         uses line index ii and returns 
-			0 (prn = 0 skips line) or 
+			0 (prn = 0 skips the line) or 
 			1 (prn <> 0 prints line)   
 
      line            -- command for printing one line
 
-     list <obj_name> -- print as many lines as defined by the first 
-                        dimension (N) in the <obj_name> data object
+     list <obj_name> -- print as many lines as defined by 
+                         the first dimension (N) in the
+                         <obj_name> data object
 
-     all             -- print all columns (second dimension M) from 
-                        <obj_name> data object in the previously specified
-                        format
+     all             -- print all columns (second dimension
+                          M) from <obj_name> data object 
+                          in previously specified format
 
-     label           -- print DOD label for the data object <obj_name>
-                        in the previously specified format
+     label           -- print DOD label for the data 
+                          object <obj_name>
+                          in previously specified format
 
      <obj_name>      -- pechataem znachenie ob'ekta <obj_name>
                       i = index ( current line), j = 0

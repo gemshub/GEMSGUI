@@ -193,6 +193,7 @@ protected:
     void OpenProfileMode(
         const char* key, bool changeAqGas, bool addFile );
     bool NewProfileMode();
+    bool NewProfileModeElements();
     void SaveOldList();
     void DeleteOldList();
     void TestChangeProfile();

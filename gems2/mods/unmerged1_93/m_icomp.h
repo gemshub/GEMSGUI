@@ -83,7 +83,8 @@ public:
 
     void GetElements( bool isotopes, TCStringArray& names,
                       TCStringArray& aIC, TCIntArray& aIndMT );
-    void CopyElements( const char * prfName, TCStringArray& aKeys );
+    void CopyElements( const char * prfName,
+                       TCStringArray& aKeys, TCStringArray& names);
 };
 
 #endif  // _m_icomp_h

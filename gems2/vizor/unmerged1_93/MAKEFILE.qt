@@ -1,0 +1,41 @@
+# Makefile.qt
+# include file for all Makefiles which use Qt
+#
+# For Borland C++ Builder 5 (bcc32 5.5.1)
+
+!if !$d(BCB)
+BCB = $(MAKEDIR)\..
+!endif
+
+QTDIR = c:\qt
+# change or comment out if QTDIR env.variable is set
+
+# compile variables
+
+INCLUDES	= -I"$(QTDIR)/include"
+# INCLUDES	= -I"c:\qt/include"
+RELEASE_FLAGS	= -DGEMS_RELEASE
+DEBUG_FLAGS	= -v
+PROF_FLAGS	=
+CCFLAGS		= -w -DQTv2 -D__bcc -tWM -DQT_THREAD_SUPPORT
+LDFLAGS		=
+LIBS		= $(QTDIR)\lib\qt.lib
+# LIBS		= c:\qt\lib\qt.lib
+
+# commands
+
+CC		= bcc32.exe
+LD		= tlib.exe
+LIB_PRG		= tlib.exe
+
+# this is suitable for Win32
+MOC		= $(QTDIR)\bin\moc.exe
+# MOC		= c:\qt\bin\moc.exe
+
+
+MAKEDEP_CMD	= makedepend -m -Y
+CLEAN_CMD	= del *.obj
+
+.SUFFIXES:
+.SUFFIXES:	 .obj .cpp
+
