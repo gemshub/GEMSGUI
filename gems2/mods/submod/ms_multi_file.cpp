@@ -311,8 +311,8 @@ void TMulti::to_text_file( gstring& path )
       outArray( ff, "Wabs", pm.Wabs, pm.Ls);
       outArray( ff, "Rion", pm.Rion, pm.Ls);
 
-      outArray( ff, "Qp", pm.Qp,  pm.FIs*20);
-      outArray( ff, "Qd", pm.Qd,  20);
+      outArray( ff, "Qp", pm.Qp,  pm.FIs*QPSIZE);
+      outArray( ff, "Qd", pm.Qd,  pm.FIs*QDSIZE);
 
     }
 
@@ -534,8 +534,8 @@ ff.writeArray((double*)pm.D, MST*MST);
       ff.writeArray(pm.Wabs, pm.Ls);
       ff.writeArray(pm.Rion, pm.Ls);
 
-      ff.writeArray(pm.Qp,pm.FIs*20);
-      ff.writeArray(pm.Qd, 20);
+      ff.writeArray(pm.Qp, pm.FIs*QPSIZE);
+      ff.writeArray(pm.Qd, pm.FIs*QDSIZE);
    }
 
 //  Added 16.11.2004 by Sveta
@@ -759,8 +759,8 @@ ff.readArray((double*)pm.D, MST*MST);
       ff.readArray(pm.Wabs, pm.Ls);
       ff.readArray(pm.Rion, pm.Ls);
 
-      ff.readArray(pm.Qp,pm.FIs*20);
-      ff.readArray(pm.Qd, 20);
+      ff.readArray(pm.Qp, pm.FIs*QPSIZE);
+      ff.readArray(pm.Qd, pm.FIs*QDSIZE);
    }
 //  Added 16.11.2004 by Sveta
    if( pm.sitNcat*pm.sitNcat )
@@ -1025,8 +1025,8 @@ else
     pm.Wb = new float[pm.Ls];
     pm.Wabs = new float[pm.Ls];
     pm.Rion = new float[pm.Ls];
-    pm.Qp = new double[pm.FIs*20];
-    pm.Qd = new double[20];
+    pm.Qp = new double[pm.FIs*QPSIZE];
+    pm.Qd = new double[pm.FIs*QDSIZE];
 
  }
  else

@@ -134,8 +134,8 @@ sMod = pmp->sMod[k];
             aObj[ o_nlnrt ].SetPtr(&pmp->FRT );
             aObj[ o_nu  ].SetPtr( pmp->U );
             aObj[ o_nu ].SetN( pmp->N);
-            aObj[ o_nqp ].SetPtr( pmp->Qp+k*20 );
-            aObj[ o_nqd ].SetPtr( pmp->Qd );       /* 20 cells! */
+            aObj[ o_nqp ].SetPtr( pmp->Qp+k*QPSIZE );
+            aObj[ o_nqd ].SetPtr( pmp->Qd+k*QDSIZE );  /* QDSIZE cells per phase */
             aObj[ o_nncp].SetPtr( pmp->LsMod+k );
             aObj[ o_nncd].SetPtr( pmp->LsMdc+k );
             aObj[ o_ndc ].SetPtr( pmp->L1+k );

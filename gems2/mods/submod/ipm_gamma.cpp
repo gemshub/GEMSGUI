@@ -1561,8 +1561,8 @@ void TProfil::pm_GC_ods_link( int k, int jb, int jpb, int jdb )
     aObj[o_nwx].SetN( pmp->L1[k]);
     aObj[ o_nmju].SetPtr( pmp->Fx+jb );
     aObj[o_nmju].SetN( pmp->L1[k]);
-    aObj[ o_nqp].SetPtr( pmp->Qp+k*20 );
-    aObj[ o_nqd].SetPtr( pmp->Qd );      /* 20 cells */
+    aObj[ o_nqp].SetPtr( pmp->Qp+k*QPSIZE );
+    aObj[ o_nqd].SetPtr( pmp->Qd+k*QDSIZE );   // Fixed 7.12.04 by KD
 #endif
 }
 
@@ -1722,7 +1722,7 @@ void TProfil::GammaCalc( int LinkMode  )
         jpe += pmp->LsMod[k];
         jdb = jde;
         jde += pmp->LsMdc[k]*pmp->L1[k];
-//  memset( pmp->Qd, 0, sizeof(double)*20 );  Dubious line! KD 03.07.02
+//  memset( pmp->Qd, 0, sizeof(double)*QDSIZE );  Dubious line! KD 03.07.02
 
         switch( pmp->PHC[k] )
         {   /* calculate activity coefficients by built-in functions */

@@ -895,8 +895,8 @@ pm.DCC3 = (char *)aObj[ o_wi_dcc3 ].Free();
         pm.Wb = (float *)aObj[ o_wio_wb].Alloc( pm.Ls, 1, F_ );
         pm.Wabs = (float *)aObj[ o_wio_wabs].Alloc( pm.Ls, 1, F_ );
         pm.Rion = (float *)aObj[ o_wi_rion].Alloc( pm.Ls, 1, F_ );
-        pm.Qp = (double *)aObj[ o_wi_qp].Alloc( pm.FIs, 20, D_ );
-        pm.Qd = (double *)aObj[ o_wi_qd].Alloc( 1, 20, D_ );
+        pm.Qp = (double *)aObj[ o_wi_qp].Alloc( pm.FIs, QPSIZE, D_ );
+        pm.Qd = (double *)aObj[ o_wi_qd].Alloc( pm.FIs, QDSIZE, D_ );
     }
     else
     {

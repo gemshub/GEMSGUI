@@ -24,8 +24,10 @@
 #include "v_module.h"
 
 const int MAXPHSYMB =      8,
-                           MAXPHGROUP =     16,
-                                            MAXPNCOEF =      1024;
+                MAXPHGROUP =     16,
+                           MAXPNCOEF =      1024,
+                                      QPSIZE = 40, // earlier 20
+                                               QDSIZE = 40;
 
 typedef struct
 {// Description  PHASE

@@ -278,4 +278,9 @@ enum SolDCodes {
     DC_ASYM_CARRIER = 'W'  /*This is carrier(solvent) DC in asymmetric phase*/
 };
 
+enum QpQdSizes {   // see m_phase.h 
+   QPSIZE = 40,    // This enum is for GEMIPM2K only!
+   QDSIZE = 40 
+};   
+
 #endif  // _m_param_h
