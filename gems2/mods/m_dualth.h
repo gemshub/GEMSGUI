@@ -26,6 +26,8 @@
 
 const int DT_RKLEN = 80;
 const int  MAXIDNAME = 12;
+const   int MAXFORMUNITDT=     40;
+
 
 typedef struct
 { // Description of DualTh data structure (revised in July 2004)
@@ -146,8 +148,8 @@ char
 (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
 (*nam_b)[MAXIDNAME], // [Q][16] id names of experiments
 (*nam_n)[MAXIDNAME], // [K][16] id names of DC (end-member) stoichiometry candidates
-(*for_n)[MAXFORMUNIT], // [K][40] formulae of DC (end-member) stoichiometry candidates
-(*for_b)[MAXFORMUNIT], // [Lb][40] formulae for setting basis system compositions
+(*for_n)[MAXFORMUNITDT], // [K][40] formulae of DC (end-member) stoichiometry candidates
+(*for_b)[MAXFORMUNITDT], // [Lb][40] formulae for setting basis system compositions
 (*stld)[EQ_RKLEN], // List of SysEq record keys [Q]
 
 *typ_n, // [K] type code of DC stoichiometry candidates {O M J I S ... }
@@ -232,7 +234,7 @@ protected:
     bool test_sizes();
     void dt_initiate( bool mode = true );   // must be changed with DK
     void dt_next();
-    void make_A( int siz_, char (*for_)[MAXFORMUNIT] );
+    void make_A( int siz_, char (*for_)[MAXFORMUNITDT] );
     void calc_eqstat();
     void dt_text_analyze();                 // translate &
     void CalcEquat( int type_ );            // calculate RPN

@@ -573,6 +573,8 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
     pexpr = (char *)aObj[ nOpex ].GetPtr();
 
     ls = strlen( pexpr );
+    if( !ls )
+      return;
     end = pexpr+ls;
     if( ls+1 > eLen )
         etext = (char *)aObj[ nOet ].Alloc( 1, ls+ls/6, S_ );

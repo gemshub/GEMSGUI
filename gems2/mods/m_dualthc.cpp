@@ -44,7 +44,7 @@ void TDualTh::Init_Generation()
 // setup data before analyse
 void TDualTh::Init_Analyse()
 {
-//   dt_text_analyze();
+   dt_text_analyze();
    // put data to Bn
    Bn_Calc();
 
@@ -53,12 +53,12 @@ void TDualTh::Init_Analyse()
 // analyse calculated equlibriums
 void TDualTh::Analyse( )
 {
-/* // only as examle
+ // only as examle
   if( dtp->PvChi == S_ON )
    CalcEquat( A_CHI );
   if( dtp->PvGam == S_ON )
    CalcEquat( A_GAM );
-*/
+
 }
 
 //set sizes of arrays
@@ -162,7 +162,7 @@ void TDualTh::dt_next()
 }
 
 //make matrix An
-void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNIT] )
+void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 {
   // Get full matrix A
   TIArray<TFormula> aFo;
@@ -172,7 +172,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNIT] )
   for( ii=0; ii<siz_; ii++ )
   {
      aFo.Add( new TFormula() );
-     form = gstring( for_[ii], 0, MAXFORMUNIT );
+     form = gstring( for_[ii], 0, MAXFORMUNITDT );
      form.strip();
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
   }

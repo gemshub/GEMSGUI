@@ -255,8 +255,8 @@ void TDualTh::dyn_set(int q)
     dtp->nam_n = (char (*)[MAXIDNAME])aObj[ o_dtnam_n ].GetPtr();
     aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
     aObj[ o_dtnam_nr].SetDim( 1, dtp->nK );
-    dtp->for_n = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_n ].GetPtr();
-    dtp->for_b = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_b ].GetPtr();
+    dtp->for_n = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_n ].GetPtr();
+    dtp->for_b = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_b ].GetPtr();
     dtp->stld = (char (*)[EQ_RKLEN])aObj[ o_dtstl ].GetPtr();
     dtp->typ_n = (char *)aObj[ o_dttyp_n ].GetPtr();
     dtp->CIclb = (char *)aObj[ o_dtciclb ].GetPtr();
@@ -301,8 +301,8 @@ void TDualTh::dyn_kill(int q)
     dtp->nam_n = (char (*)[MAXIDNAME])aObj[ o_dtnam_n ].Free();
     //aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
     //aObj[ o_dtnam_nr].SetDim( 1, 0 );
-    dtp->for_n = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_n ].Free();
-    dtp->for_b = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_b ].Free();
+    dtp->for_n = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_n ].Free();
+    dtp->for_b = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_b ].Free();
     dtp->stld = (char (*)[EQ_RKLEN])aObj[ o_dtstl ].Free();
     dtp->typ_n = (char *)aObj[ o_dttyp_n ].Free();
     dtp->CIclb = (char *)aObj[ o_dtciclb ].Free();
@@ -415,13 +415,13 @@ void TDualTh::dyn_new(int q)
    aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
    aObj[ o_dtnam_nr].SetDim( 1, dtp->nK );
 
-   dtp->for_n = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_n].Alloc(
-                                            1,  dtp->nK, MAXFORMUNIT );
+   dtp->for_n = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_n].Alloc(
+                                            1,  dtp->nK, MAXFORMUNITDT );
    if( dtp->La_b > 0 )
-     dtp->for_b = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_b].Alloc(
-                                             1, dtp->La_b, MAXFORMUNIT );
+     dtp->for_b = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_b].Alloc(
+                                             1, dtp->La_b, MAXFORMUNITDT );
    else
-     dtp->for_b = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_b ].Free();
+     dtp->for_b = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_b ].Free();
 
    dtp->stld = (char (*)[EQ_RKLEN])aObj[ o_dtstl].Alloc( dtp->nQ, 1, EQ_RKLEN );
    dtp->typ_n = (char *)aObj[ o_dttyp_n ].Alloc( dtp->nK, 1, A_ );
