@@ -43,6 +43,10 @@ SettingsDialog::SettingsDialog (QWidget* parent)
 
     pUpdateInterval->setValue( pVisorImp->updateInterval() );
 
+    pLocalDocDir->setText(pVisor->localDocDir().c_str());
+    pRemoteDocURL->setText(pVisor->remoteDocURL().c_str());
+    pLocalDoc->setChecked(pVisor->localDoc());
+    pRemoteDoc->setChecked(!pVisor->localDoc());
     pSysDBDir->setText(pVisor->sysGEMDir().c_str());
     pUserDBDir->setText(pVisor->userGEMDir().c_str());
     pFontRawName->setText(cellFont.rawName());
@@ -92,6 +96,10 @@ SettingsDialog::CmApply()
     pVisorImp->setUpdateInterval( pUpdateInterval->value() );
     pVisorImp->setConfigAutosave( pConfigAutosave->isChecked() );
     pVisor->setElemPrMode(rbNewPrMode->isChecked());
+
+    pVisor->setLocalDocDir(pLocalDocDir->text().latin1());
+    pVisor->setRemoteDocURL(pRemoteDocURL->text().latin1());
+    pVisor->setLocalDoc(pLocalDoc->isChecked());
 
     //pVisorImp->Update(true);
 }

@@ -5,7 +5,7 @@ include ./Makefile.qt
 
 subdirs    =  libs dlg kernel
 
-INC_LOCAL	= -I./kernel -I./libs -I../mods -I./
+INC_LOCAL	= -I./kernel -I./libs -I../mods -I../mods/submod -I./
 INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 #FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 
@@ -110,7 +110,7 @@ visor_w.o: dlg/ListFilesDialogData.h dlg/ElementsDialog.h
 visor_w.o: dlg/ElementsDialogData.h ../mods/filters_data.h dlg/LoadMessage.h
 visor_w.o: dlg/KeyDialog.h dlg/KeyDialogData.h dlg/KeyProfile.h
 visor_w.o: dlg/KeyProfileData.h dlg/ChangeKeyDialog.h
-visor_w.o: dlg/ChangeKeyDialogData.h
+visor_w.o: dlg/ChangeKeyDialogData.h ../mods/submod/stepwise.h
 module_w.o: visor.h ./libs/gstring.h ./libs/array.h ./kernel/v_module.h
 module_w.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 module_w.o: ./kernel/v_vals.h ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h

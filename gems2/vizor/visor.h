@@ -39,7 +39,10 @@ class TVisor
     gstring UserGEMDir;
     gstring UserProfDir;
 
-    gstring DocDir;
+    gstring LocalDocDir;
+    gstring RemoteDocURL;
+    bool LocalDoc;
+
     gstring ImgDir;
 
     bool isElementsProfileMode;
@@ -73,35 +76,59 @@ public:
     void Update(bool force=true);
     void CalcFinished();
 
-    const gstring sysGEMDir()
-    {
+    gstring sysGEMDir() const {
         return SysGEMDir;
     }
-    const gstring sysDBDir()
-    {
+    
+    gstring sysDBDir() const {
         return SysGEMDir + DefDBDir;
     }
-    const gstring sysProfDir()
-    {
+    
+    gstring sysProfDir() {
         return SysGEMDir + DefProfDir;
     }
-    const gstring userGEMDir()
-    {
+    
+    gstring userGEMDir() const {
         return UserGEMDir;
     }
-    const gstring userProfDir()
-    {
+    
+    gstring userProfDir() const {
         return UserGEMDir + UserProfDir;
     }
 
-    const gstring imgDir()
-    {
+    gstring imgDir() {
         return SysGEMDir + ImgDir;
     }
-    const gstring docDir()
-    {
-        return SysGEMDir + DocDir;
+    
+    gstring docDir() const {
+	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
+//        return SysGEMDir + DocDir;
     }
+
+    const gstring& localDocDir() const {
+        return LocalDocDir;
+    }
+
+    const gstring& remoteDocURL() const {
+        return RemoteDocURL;
+    }
+
+    const bool localDoc() const {
+        return LocalDoc;
+    }
+
+    void setLocalDocDir(const gstring& localDir) {
+        LocalDocDir = localDir;
+    }
+
+    void setRemoteDocURL(const gstring& remoteURL) {
+        RemoteDocURL = remoteURL;
+    }
+
+    void setLocalDoc(bool local) {
+        LocalDoc = local;
+    }
+
 
     void deleteDBDir( const char * dir);
     void CopyF( const char * fName, const char* fTempl );

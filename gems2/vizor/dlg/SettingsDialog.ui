@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>580</width>
-            <height>310</height>
+            <width>623</width>
+            <height>410</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -32,57 +32,99 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QButtonGroup">
             <property name="name">
-                <cstring>Layout5</cstring>
+                <cstring>ButtonGroup2</cstring>
+            </property>
+            <property name="title">
+                <string>Documentation Base</string>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <property name="margin">
-                    <number>0</number>
+                    <number>11</number>
                 </property>
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QLabel" row="1" column="1">
+                <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
-                        <cstring>pUserDBDir</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>Box</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
+                        <cstring>pLocalDoc</cstring>
                     </property>
                     <property name="text">
-                        <string>TextLabel1</string>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="2" column="0">
-                    <property name="name">
-                        <cstring>pConfigAutosave</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Save configuration at exit</string>
+                        <string>Local directory</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
                 </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>pRemoteDoc</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Remote URL</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>pLocalDocDir</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>pRemoteDocURL</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>GroupBox4</cstring>
+            </property>
+            <property name="title">
+                <string>DB Directories</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
                 <widget class="QLabel" row="0" column="1">
                     <property name="name">
                         <cstring>pSysDBDir</cstring>
                     </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                     <property name="frameShape">
-                        <enum>Box</enum>
+                        <enum>Panel</enum>
                     </property>
                     <property name="frameShadow">
                         <enum>Sunken</enum>
                     </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>TextLabel2</cstring>
+                    </property>
                     <property name="text">
-                        <string>TextLabel1</string>
+                        <string> Core database directory</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -93,12 +135,23 @@
                         <string> User's project directory</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="QLabel" row="1" column="1">
                     <property name="name">
-                        <cstring>TextLabel2</cstring>
+                        <cstring>pUserDBDir</cstring>
                     </property>
-                    <property name="text">
-                        <string> Core database directory</string>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="frameShape">
+                        <enum>Panel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Sunken</enum>
                     </property>
                 </widget>
             </grid>
@@ -297,6 +350,17 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>pConfigAutosave</cstring>
+            </property>
+            <property name="text">
+                <string>Save configuration at exit</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
         <widget class="Line">
             <property name="name">
                 <cstring>Line1</cstring>
@@ -397,6 +461,18 @@
         <signal>clicked()</signal>
         <receiver>SettingsDialogData</receiver>
         <slot>CmChangeFont()</slot>
+    </connection>
+    <connection>
+        <sender>pLocalDoc</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>pLocalDocDir</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>pRemoteDoc</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>pRemoteDocURL</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>

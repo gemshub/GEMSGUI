@@ -74,13 +74,6 @@ const char *WIN_CONF = "windows.conf";
 TVisor::TVisor(int c, char *v[]):
         argc(c), argv(v)
 {
-    DefDBDir = "DB.default/";
-    DefProfDir = "project/";
-    UserProfDir = "projects/";
-
-    DocDir = "doc/html/";
-    ImgDir = "img/";
-
     ProfileMode = false;
     DBChangedMode = false;
     isElementsProfileMode = true;
@@ -147,6 +140,15 @@ SysGEMDir = "/usr/lib/gems/";
 
 #endif //__unix
 
+    DefDBDir = "DB.default/";
+    DefProfDir = "project/";
+    UserProfDir = "projects/";
+    ImgDir = "img/";
+
+    RemoteDocURL = "http://les.web.psi.ch/software/GEMS-PSI/doc/html/";
+    LocalDoc = true;
+
+
     // parsing options -s and -u if given
 
     int isys = 0;		// index of sysdir option
@@ -177,6 +179,9 @@ SysGEMDir = "/usr/lib/gems/";
         if (UserGEMDir[UserGEMDir.length() - 1] != '/')
             UserGEMDir += '/';
     }
+
+    LocalDocDir = SysGEMDir + "doc/html/";
+
 }
 
 TVisor::~TVisor()
@@ -463,6 +468,10 @@ TVisor::toWinCFG()
     int win_num = aWinInfo.GetCount();
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;
     f_win_ini << "config_autosave\t=\t" << pVisorImp->getConfigAutosave() << endl;
+
+    f_win_ini << "local_doc_dir\t=\t" << LocalDocDir.c_str() << endl;
+    f_win_ini << "remote_doc_url\t=\t" << RemoteDocURL.c_str() << endl;
+    f_win_ini << "local_doc\t=\t" << LocalDoc << endl;
     f_win_ini.close();
 
     // Window-specific settings
@@ -530,6 +539,19 @@ TVisor::fromWinCFG()
             	else if( name == "config_autosave" ) {
 				pVisorImp->setConfigAutosave(visor_conf.getcInt());
 			}
+            	else if( name == "local_doc_dir" ) {
+				gstring gstr;
+				visor_conf.getcStr(gstr);
+				setLocalDocDir(gstr);
+			}
+            	else if( name == "remote_doc_url" ) {
+				gstring gstr;
+				visor_conf.getcStr(gstr);
+				setRemoteDocURL(gstr);
+			}
+            	else if( name == "local_doc" ) {
+				setLocalDoc(visor_conf.getcInt());
+			}
 			
         name = visor_conf.getNext();
     }
@@ -546,7 +568,7 @@ TVisor::fromWinCFG()
     // error Sveta 13/06/2001 reads only #
  //   f_win_ini >> name_str.p; // Don't compile in BCB5 without .p
 
-    for (int ii = 0; ii < aWinInfo.GetCount(); ii++)
+    for (uint ii = 0; ii < aWinInfo.GetCount(); ii++)
         aWinInfo[ii].fromWinCFG(f_win_ini);
 }
 

@@ -14,6 +14,8 @@
 #include <qdialog.h>
 #include <qstringlist.h>
 #include <qmap.h>
+#include <qmime.h>
+#include <qnetwork.h>
 
 class QComboBox;
 class QTextBrowser;
@@ -21,6 +23,38 @@ class QPopupMenu;
 class QMenuBar;
 class QToolBar;
 class QStatusBar;
+class QNetworkOperation;
+
+
+
+class HttpMimeSourceFactory:
+    public QObject,
+    public QMimeSourceFactory {
+    
+    Q_OBJECT
+
+    QString pathName;
+    bool ready;
+
+ public:
+    HttpMimeSourceFactory():
+	ready(false) {
+	qInitNetworkProtocols();
+    }
+    virtual const QMimeSource * data ( const QString & abs_name ) const;
+    QString makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const {
+	if( abs_or_rel_name.startsWith("http://") )
+	    return abs_or_rel_name;
+	else
+	    return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, context);
+    }
+    
+ protected slots:
+    void finished(QNetworkOperation *op);
+	    
+};
+
+
 
 class HelpWindow :
     public QDialog
@@ -28,7 +62,7 @@ class HelpWindow :
     Q_OBJECT
 
 public:
-    HelpWindow( const QString& home_,  const QString& path, QWidget* parent = 0, bool modal=false);
+    HelpWindow( const QString& path_, QWidget* parent = 0, bool modal=false);
     ~HelpWindow();
 
     void loadFile( const QString& path, QWidget* parent = 0 );

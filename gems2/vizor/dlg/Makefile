@@ -9,7 +9,7 @@
 
 include ../Makefile.qt
 
-INC_LOCAL	= -I.. -I../kernel -I../libs -I../../mods
+INC_LOCAL	= -I.. -I../kernel -I../libs -I../../mods -I../../mods/submod
 INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 #FLAGS	=	$(CCFLAGS) $(DEBUG_FLAGS)
 
@@ -175,6 +175,7 @@ ProgressDialog.o: ../../mods/m_phase.h ../../mods/submod/ms_multi.h
 ProgressDialog.o: ../../mods/v_ipnc.h ../../mods/submod/ms_calc.h
 ProgressDialog.o: ProgressDialog.h ProgressDialogData.h ../service.h
 ProgressDialog.o: ../visor.h ../visor_w.h ../graph.h
+ProgressDialog.o: ../../mods/submod/stepwise.h
 ProcessDialog.o: ProcessDialog.h ../libs/gstring.h ../libs/array.h
 ProcessDialog.o: ProcessDialogData.h ../visor_w.h ../kernel/v_vals.h
 ProcessDialog.o: ../graph.h ../kernel/v_module.h ../kernel/v_object.h

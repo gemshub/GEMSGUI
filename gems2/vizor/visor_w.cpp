@@ -52,7 +52,6 @@ using namespace std;
 #include "dlg/ListFilesDialog.h"
 #include "dlg/ElementsDialog.h"
 #include "dlg/LoadMessage.h"
-//#include "dlg/HLinpDialog.h"
 #include "dlg/KeyDialog.h"
 #include "dlg/KeyProfile.h"
 #include "dlg/ChangeKeyDialog.h"
@@ -405,10 +404,11 @@ TVisorImp::MakePlot(TCModule *md, TIArray<TPlot>& plts,
 void
 TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent, bool modal)
 {
-    gstring path (pVisor->docDir ());
+    gstring path(pVisor->docDir());
     path += file;
 
-    if( path.rfind( "#" ) == path.npos ) // look for the label
+    // adding ".html" if needed
+    if( path.rfind( "#" ) == path.npos )
        if( gstring(path, path.length()-5, 5) != ".html" )
           path += ".html";
 
@@ -420,7 +420,7 @@ TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent, bool mo
 
     if( !pHelpWidget )
     {
-	pHelpWidget = new HelpWindow(path.c_str(), ".", parent, modal); //0);
+	pHelpWidget = new HelpWindow(path.c_str(), parent, modal); //0);
 	connect( pHelpWidget, SIGNAL( destroyed() ), SLOT( evHelpClosed() ) );
 	//pHelpWidget->show();
         //pHelpWidget->loadFile(path.c_str(), 0);

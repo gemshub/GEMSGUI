@@ -36,18 +36,69 @@
 #include <qpainter.h>
 #include <qlayout.h>
 
+#include <qnetwork.h>
+#include <qurloperator.h>
+
 #include <ctype.h>
 
 #include "visor.h"
 
+bool opReady = false;
 
-HelpWindow::HelpWindow( const QString& home_, const QString& _path,
+const QMimeSource * 
+HttpMimeSourceFactory::data ( const QString & abs_name ) const
+{
+cerr << "got into ::data() " << abs_name << endl;
+
+    if( !abs_name.startsWith("http") )
+	return QMimeSourceFactory::data(abs_name);
+    else {
+cerr << "getting " << abs_name << endl;
+//	pathName = abs_name;
+	QUrlOperator oper;
+	oper.copy(abs_name, "/tmp");
+	connect(&oper, SIGNAL(finished(QNetworkOperation*)), 
+	    this, SLOT(finished(QNetworkOperation*)));
+	
+//	QNetworkOperation no;
+//	while( no.stat() == QNetworkOperation::Done
+//	    || no.stat() == QNetworkOperation::Failed ) {
+	opReady = false;
+	while( !opReady ) {
+	    qApp->processEvents();
+	}
+cerr << "bail out" << endl;
+	QString s("/tmp/");
+	s.append(abs_name.mid(abs_name.findRev("/")+1));
+	cerr << "returning from " << s << endl;
+	return QMimeSourceFactory::data(s);
+    }
+}
+
+void
+HttpMimeSourceFactory::finished(QNetworkOperation *op)
+{
+
+cerr << "finished" << endl;
+    ready = true;
+    opReady = true;
+    
+    if ( op && op->state() == QNetworkProtocol::StFailed ) {
+	// an error happend, let the user know that
+	QMessageBox::critical( 0, "ERROR", op->protocolDetail() );
+    }
+}
+
+/*! HelpWindow class represents window for displaying HTML documentation
+    it can work with local filesystem or with HTTP protocol
+*/
+
+HelpWindow::HelpWindow( const QString& path_,
 			QWidget* parent, bool modal )
     : QDialog( parent, 0, modal, WDestructiveClose ),
-      pathCombo( 0 ), selectedURL()
+      pathCombo( 0 ), 
+      selectedURL()
 {
-    QVBoxLayout *vlayout = new QVBoxLayout(this);
-
     menubar = new QMenuBar(this);
     toolbar = new QToolBar("Navigation Toolbar", 0, this);
     statusbar = new QStatusBar(this);
@@ -55,25 +106,24 @@ HelpWindow::HelpWindow( const QString& home_, const QString& _path,
     readHistory();
     readBookmarks();
 
+//    QMimeSourceFactory::setDefaultFactory(new HttpMimeSourceFactory());
     browser = new QTextBrowser( this );
-    browser->mimeSourceFactory()->setFilePath( _path );
+    browser->setMimeSourceFactory(new HttpMimeSourceFactory());
     browser->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     connect( browser, SIGNAL( textChanged() ),
 	     this, SLOT( textChanged() ) );
 
 //    setCentralWidget( browser );
+    QVBoxLayout *vlayout = new QVBoxLayout(this);
     vlayout->addWidget(menubar);
     vlayout->addWidget(toolbar);
     vlayout->addWidget(browser);
     vlayout->addWidget(statusbar);
     
-
-    loadFile( home_, parent );
-
     connect( browser, SIGNAL( highlighted( const QString&) ),
 	     statusBar(), SLOT( message( const QString&)) );
 
-    resize( 520,600 );
+    resize( 520, 600 );
 
     QPopupMenu* file = new QPopupMenu( this );
 //    file->insertItem( tr("&New Window"), this, SLOT( newWindow() ), ALT | Key_N );
@@ -157,7 +207,10 @@ HelpWindow::HelpWindow( const QString& home_, const QString& _path,
 //    setDockEnabled( Left, FALSE );
 //    setDockEnabled( Right, FALSE );
 
-    pathCombo->insertItem( home_ );
+    pathCombo->insertItem( path_ );
+
+    show();
+    loadFile( path_, parent );
 
     browser->setFocus();
 }
@@ -260,7 +313,7 @@ void HelpWindow::openFile()
 
 void HelpWindow::newWindow()
 {
-    ( new HelpWindow(browser->source(), "qbrowser") )->show();
+    ( new HelpWindow(browser->source()) )->show();
 }
 
 void HelpWindow::print()
