@@ -421,7 +421,7 @@ void TRTParm::expr_analyze()
         char *erscan = (char *)aObj[o_rtexpr].GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
-                      "Error in translation of equations of demonstration " );
+              "E95MSTran: Error in translation of RTParm math script: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
 }
@@ -441,7 +441,7 @@ void TRTParm::exprE_calc()
         char *erscan = (char *)aObj[o_rtexpre].GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
-                      "Error in translation of equations of empirical data" );
+  "E96MSTran: Error in RTParm script for empirical data: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
     // calc equations
@@ -551,7 +551,7 @@ TRTParm::RecCalc( const char *key )
         default:
             break;
         }
-        /* Set resalts to arreys */
+        /* Set results to arrays */
         aW.ods_link(0);
         if( P_old < 1e-6 && rpp->P[j] < 1e-6 )
         {  /* set pressision calc by TNP*/

@@ -189,8 +189,8 @@ void IPNCalc::IsAscii()
     d = (double)(*input);
     Push( IT_C, con_add(d) );
     input = strchr( input, '"' );
-    ErrorIf( !input ,"IPNTranslate",
-             "Error in gstring constant (missing \").");
+    ErrorIf( !input ,"E01MSTran: ",
+             "Missing \" in string constant.");
     input++;
 }
 
@@ -221,7 +221,7 @@ void IPNCalc::Ffun( char *str)
         err = "Function ";
         err += str;
         err+= "is not defined.";
-        Error( "IPNTranslate", err.c_str() );
+        Error( "E02MSTran: ", err.c_str() );
     }
     if( fun[i].par ) // argument is expression
     {
@@ -236,7 +236,7 @@ void IPNCalc::Ffun( char *str)
         {
             err = "Missing identifier of interval:\n";
             err += input;
-            Error( "IPNTranslate", err.c_str() );
+            Error( "E03MSTran: ", err.c_str() );
         }
         memset( st, '\0', MAXKEYWD );
         //st[MAXKEYWD-1] = '\0';
@@ -245,16 +245,16 @@ void IPNCalc::Ffun( char *str)
         if( (input=xblanc( input ))==0 ) goto OSH;
         if( *input!=')' )
         {
-            err = "Missing ):\n";
+            err = "Missing bracket ):\n";
             err += input;
-            Error( "IPNTranslate", err.c_str() );
+            Error( "E04MSTran: ", err.c_str() );
         }
         input++;
         Push( IT_F, i);
     }
     return;
 OSH:
-    Error( "IPNTranslate", "Unexpected end of Math Script text");
+    Error( "E05MSTran: ", "Unexpected end of Math Script text");
 }
 
 //analyse IPN variable
@@ -266,8 +266,8 @@ void IPNCalc::Variab( char *str)
     {
         gstring err = "Variable ";
         err += str;
-        err+= "is not declared.";
-        Error( "IPNTranslate", err.c_str() );
+        err+= "is not known.";
+        Error( "E06MSTran: ", err.c_str() );
     }
     if( aObj[j].GetN() > 1 )
     {
@@ -293,7 +293,7 @@ void IPNCalc::Variab( char *str)
     Push( IT_V, j);
     return;
 OSH:
-    Error( "IPNTranslate", "Unexpected end of Math Script text");
+    Error( "E15MSTran: ", "Unexpected end of Math Script text");
 }
 
 //analyse IPN interval variable
@@ -306,7 +306,7 @@ void IPNCalc::I_Variab( char * str)
         gstring err = "Variable ";
         err += str;
         err+= "is not declared.";
-        Error( "IPNTranslate", err.c_str() );
+        Error( "E16MSTran: ", err.c_str() );
     }
     if( aObj[j].GetN() > 1 )
     {
@@ -342,10 +342,10 @@ void IPNCalc::I_Variab( char * str)
     Push( IT_V, j);
     return;
 OSH:
-    Error( "IPNTranslate", "Unexpected end of Math Script text");
+    Error( "E25MSTran: ", "Unexpected end of Math Script text");
 }
 
-//get IPN cod of one equat
+//get IPN code of one math script operator
 void IPNCalc::bildEquat()
 {
     vstr str(MAXKEYWD);
@@ -354,7 +354,7 @@ void IPNCalc::bildEquat()
     int i,j;
 
     input = s = xblanc( input );
-    ErrorIf( s==0, "IPNTranslate", "No equations given");
+    ErrorIf( s==0, "E07MSTran: ", "Math script contains no operators.");
     while( (i = INDEX( s, CK_ )) >= 0 )
     {
         if( (input=xblanc( s ))==0 ) goto OSH;
@@ -387,9 +387,9 @@ void IPNCalc::bildEquat()
         j =INDEX( s, '=' );
         if( j<0 || j>i || *(s+(j+1)) != ':' )
         {
-            err = "=: needed for the assignment:\n";
+            err = "Assignment needs =: \n";
             err += s;
-            Error(  "IPNTranslate", err.c_str() );
+            Error(  "E08MSTran: ", err.c_str() );
         }
         input = strchr( s, '=' ) + 2;
         if( ( input=xblanc( input )) ==0 ) goto OSH;
@@ -397,15 +397,15 @@ void IPNCalc::bildEquat()
         {
             err = "Expression is needed here:\n";
             err += input;
-            Error(  "IPNTranslate", err.c_str() );
+            Error(  "E09MSTran: ", err.c_str() );
         }
         RPN_expr( CK_ );
         if( ( input=xblanc( s ))==0 ) goto OSH;
         if( !(IsLetter( *input )) )
         {
-            err = "Variable identifier is needed here:\n";
+            err = "Identifier (variable) is needed here:\n";
             err += input;
-            Error(  "IPNTranslate", err.c_str() );
+            Error(  "E10MSTran: ", err.c_str() );
         }
         memset( str, '\0', MAXKEYWD );
         //str[MAXKEYWD-1] = '\0';
@@ -426,13 +426,13 @@ void IPNCalc::bildEquat()
         input = xblanc( s );
     if( input!=0 )
     {
-        err = "Illegal characters at the end of expression text:\n";
+        err = "Invalid characters at the end of expression:\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E11MSTran: ", err.c_str() );
     }
     return;
 OSH :
-    Error( "IPNTranslate", "Unexpected end of Math Script text");
+    Error( "E35MSTran: ", "Unexpected end of Math Script text");
 }
 
 //get IPN cod operator while
@@ -448,7 +448,7 @@ void IPNCalc::bildWhile()
     {
         err = "Missing (:\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E14MSTran: ", err.c_str() );
     }
     input++;
     neqbg = aEq.GetCount();
@@ -457,7 +457,7 @@ void IPNCalc::bildWhile()
     {
         err = "Expression is needed here:\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E19MSTran: ", err.c_str() );
     }
     RPN_expr( ')' );
     Variab( "k_");
@@ -471,17 +471,17 @@ void IPNCalc::bildWhile()
     if( ( input=xblanc( input ))==0 ) goto OSH;
     if( strncmp( input, "begin", 5 ))
     {
-        err = "Missing begin:\n";
+        err = "Missing keyword begin :\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E12MSTran: ", err.c_str() );
     }
     input+=5;
     bildEquat();
     if( strncmp( input, "end", 3 ))
     {
-        err = "Missing end:\n";
+        err = "Missing keyword end :\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E13MSTran: ", err.c_str() );
     }
     input+=3;
     // unconditional jump to equation
@@ -492,7 +492,7 @@ void IPNCalc::bildWhile()
     input=xblanc( input );
     return;
 OSH :
-    Error( "IPNTranslate", "Unexpected end of Math Script text");
+    Error( "E35MSTran: ", "Unexpected end of Math Script text");
 }
 
 //get IPN cod operator if
@@ -507,9 +507,9 @@ void IPNCalc::bildIf()
     if( ( input=xblanc( input ))==0 ) goto OSH;
     if( *input!='(' )
     {
-        err = "Missing (:\n";
+        err = "Missing bracket ( :\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E24MSTran: ", err.c_str() );
     }
     input++;
     eq_add(  0, aItm.GetCount() );  // eq[Neqs].first = Nitems; // conditions
@@ -517,7 +517,7 @@ void IPNCalc::bildIf()
     {
         err = "Expression is needed here:\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E29MSTran: ", err.c_str() );
     }
     RPN_expr( ')' );
     Variab( "k_");
@@ -532,17 +532,17 @@ void IPNCalc::bildIf()
     if( ( input=xblanc( input ))==0 ) goto OSH;
     if( strncmp( input,"begin", 5 ))
     {
-        err = "Missing begin:\n";
+        err = "Missing keyword begin :\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E22MSTran: ", err.c_str() );
     }
     input+=5;
     bildEquat();
     if( strncmp( input,"end", 3 ))
     {
-        err = "Missing end:\n";
+        err = "Missing keyword end :\n";
         err += input;
-        Error(  "IPNTranslate", err.c_str() );
+        Error(  "E23MSTran: ", err.c_str() );
     }
     input+=3;
     // unconditional jump to equation
@@ -562,17 +562,17 @@ void IPNCalc::bildIf()
         if( ( input=xblanc( input ))==0 ) goto OSH;
         if( strncmp( input,"begin", 5 ))
         {
-            err = "Missing begin:\n";
+            err = "Missing keyword begin :\n";
             err += input;
-            Error(  "IPNTranslate", err.c_str() );
+            Error(  "E32MSTran: ", err.c_str() );
         }
         input+=5;
         bildEquat();
         if( strncmp( input,"end", 3 ))
         {
-            err = "Missing end:\n";
+            err = "Missing keyword end :\n";
             err += input;
-            Error(  "IPNTranslate", err.c_str() );
+            Error(  "E32MSTran: ", err.c_str() );
         }
         input+=3;
         // unconditional jump to equation
@@ -587,7 +587,7 @@ void IPNCalc::bildIf()
     input=xblanc( input );
     return;
 OSH :
-    Error( "IPNTranslate", "Unexpected end of Math Script text");
+    Error( "E45MSTran: ", "Unexpected end of Math Script text." );
 }
 
 //analyse IPN expression. ck -end of analyse text
@@ -665,16 +665,16 @@ void IPNCalc::RPN_expr( char ck )
                 if( (input=xblanc( input ))==0 ) goto OSH;
                 if( *input!=')')
                 {
-                    err = "Missing ):\n";
+                    err = "Missing bracket ) :\n";
                     err += input;
-                    Error(  "IPNTranslate", err.c_str() );
+                    Error(  "E34MSTran: ", err.c_str() );
                 }
                 input++;
                 Push( IT_U, 0 );
             }
             else
             {
-                ErrorIf( itec>=MAXSTACK-1,"IPNTranslate",
+                ErrorIf( itec>=MAXSTACK-1,"E19MSTran: ",
                          "Operation stack overflow.");
                 itec++;
                 stack[ itec ]='(';
@@ -696,9 +696,9 @@ void IPNCalc::RPN_expr( char ck )
                 }
                 else
                 {
-                    err = "No match of ( and ):\n";
+                    err = "No match of brackets ( and ) :\n";
                     err += input;
-                    Error("IPNTranslate", err.c_str() );
+                    Error("E20MSTran: ", err.c_str() );
                 }
             }
             input++;
@@ -740,7 +740,7 @@ void IPNCalc::RPN_expr( char ck )
                 }
                 else break;
             }
-            ErrorIf( itec>=MAXSTACK-1, "IPNTranslate",
+            ErrorIf( itec>=MAXSTACK-1, "E29MSTran: ",
                      "Operation stack overflow.");
             itec++;
             stack[itec]=op1;
@@ -760,9 +760,9 @@ void IPNCalc::RPN_expr( char ck )
             aItm[l].num = aItm.GetCount()-l;
             break;
         default :
-            err = "Illegal character:\n";
+            err = "Invalid symbol of operation:\n";
             err += input;
-            Error(  "IPNTranslate", err.c_str() );
+            Error(  "E21MSTran: ", err.c_str() );
         }
         if( (input=xblanc(input))==0 ) goto OSH;
     }
@@ -771,16 +771,16 @@ void IPNCalc::RPN_expr( char ck )
         op = stack[ itec-- ];
         if( op=='(' )
         {
-            err = "No match of ( and ):\n";
+            err = "No match of brackets ( and ):\n";
             err += input;
-            Error(  "IPNTranslate", err.c_str() );
+            Error(  "E30MSTran: ", err.c_str() );
         }
         Push( IT_O, INDEX( OPER, op ));
     }
     input++;
     return;
 OSH:
-    Error( "IPNTranslate", "Unexpected end of Math Script text");
+    Error( "E45MSTran: ", "Unexpected end of Math Script text.");
 }
 
 //get IPN notation
@@ -798,7 +798,7 @@ void IPNCalc::GetEquat( char *txt )
     con_add( 1.0 );
 
     bildEquat();
-    ErrorIf( input!=0, "IPNTranslate", "Math Script equation syntax error");
+    ErrorIf( input!=0, "E00MSTran: ", "Math Script operator syntax error");
 }
 
 #define StackEnd( i ) aStack[aStack.GetCount()-1+i]
@@ -824,7 +824,7 @@ void IPNCalc::CalcEquat()
         ni = aItm[i].num;
         if( ci == IT_W )  // conditional jump to equation
         {
-            ErrorIf( ni<ieq, "IPNCalc", "Illegal goto");
+            ErrorIf( ni<ieq, "E01MSExec", "Illegal conditional goto command");
             if( fabs( aObj[o_k_].Get() ) < 1e-10 )
                 ieq = ni;
             else ieq++;
@@ -832,8 +832,8 @@ void IPNCalc::CalcEquat()
         }
         if( ci == IT_B ) // unconditional jump to equation
         {
-            ErrorIf( ni > aEq.GetCount()+1, "IPNCalc",
-                     "Illegal goto");
+            ErrorIf( ni > aEq.GetCount()+1, "E02MSExec",
+                     "Illegal unconditional goto command");
             ieq =ni;
             continue;
         }
@@ -844,7 +844,7 @@ void IPNCalc::CalcEquat()
             {
             case IT_O :
                 if( aStack.GetCount()<2)
-                    Error( "IPNCalc", "No operands left in the stack");
+                    Error( "E03MSExec", "No operands left in execution stack");
                 switch( ni )
                 {
                 case 0 :
@@ -862,7 +862,7 @@ void IPNCalc::CalcEquat()
                     break;
                 case 3 :
                     ErrorIf( fabs(StackEnd(0)) < 1e-34,
-                             "IPNCalc","Attempt of zerodivide!");
+                             "E04MSExec","Attempt of zerodivide!");
                     StackEnd(-1) /= StackEnd(0);
                     StackDel();
                     break;
@@ -921,19 +921,19 @@ void IPNCalc::CalcEquat()
                     StackDel();
                     break;
                 default:
-                    Error("IPNCalc","Illegal binary operator");
+                    Error("E05MSExec","Illegal binary operator code.");
                 }
                 break;
             case IT_U :
-                ErrorIf( aStack.GetCount()<1, "IPNCalc",
-                         "No operands left in the stack (2)");
+                ErrorIf( aStack.GetCount()<1, "E13MSExec",
+                         "No operands left in execution stack.");
                 switch( ni )
                 {
                 case 0 :
                     StackEnd(0) = - StackEnd(0);
                     break;
                 default:
-                    Error("IPNCalc","Illegal unary operator");
+                    Error("E06MSExec","Illegal unary operator code.");
                 }
                 break;
             case IT_V :   // variable
@@ -963,15 +963,15 @@ void IPNCalc::CalcEquat()
                 aStack.Add( aCon[ni] );
                 break;
             case IT_F :
-                ErrorIf( aStack.GetCount()<1, "IPNCalc",
-                         "No operands left in the stack (3)");
+                ErrorIf( aStack.GetCount()<1, "E23MSExec",
+                         "No operands left in execution stack.");
                 switch( ni )
                 {
                 case abs_f:
                     StackEnd(0) = fabs( StackEnd(0) );
                     break;
                 case sign_f:
-                    if( fabs(StackEnd(0)) > 1e-34 )
+                    if( fabs(StackEnd(0)) > 1e-33 )
                         StackEnd(0) = StackEnd(0) /
                                       fabs( StackEnd(0) );
                     else StackEnd(0) = 0;
@@ -980,18 +980,18 @@ void IPNCalc::CalcEquat()
                     StackEnd(0) = exp( StackEnd(0) );
                     break;
                 case sqrt_f:
-                    ErrorIf( StackEnd(0)<=1e-34, "IPNCalc",
-                             "sqrt argument < 0");
+                    ErrorIf( StackEnd(0)<=1e-33, "E07MSExec",
+                             "Attempt of sqrt() argument <= 0");
                     StackEnd(0) = sqrt( StackEnd(0) );
                     break;
                 case ln_f:
-                    ErrorIf( StackEnd(0)<=1e-34, "IPNCalc",
-                             "ln argument < 0");
+                    ErrorIf( StackEnd(0)<=1e-33, "E08MSExec",
+                             "Attempt of ln() argument <= 0");
                     StackEnd(0) = log( StackEnd(0) );
                     break;
                 case lg_f:
-                    ErrorIf( StackEnd(0)<=1e-34, "IPNCalc",
-                             "lg argument < 0");
+                    ErrorIf( StackEnd(0)<=1e-33, "E09MSExec",
+                             "Attempt of lg() argument <= 0");
                     StackEnd(0) = 0.434294481* log( StackEnd(0) );
                     break;
                 case sin_f  :
@@ -1022,13 +1022,13 @@ void IPNCalc::CalcEquat()
                     StackEnd(0) =(double)ROUND(StackEnd(0));
                     break;
                 case asin_f :
-                    ErrorIf( fabs(StackEnd(0))>1, "IPNCalc",
-                             "asin |argument| < 0");
+                    ErrorIf( fabs(StackEnd(0))>1, "E10MSExec",
+                             "Attempt of asin() |argument| < 0");
                     StackEnd(0) = asin( StackEnd(0) );
                     break;
                 case acos_f :
-                    ErrorIf( fabs(StackEnd(0))>1, "IPNCalc",
-                             "acos |argument| < 0");
+                    ErrorIf( fabs(StackEnd(0))>1, "E11MSExec",
+                             "Attempt of acos() |argument| < 0");
                     StackEnd(0) = acos( StackEnd(0) );
                     break;
                 case atan_f :
@@ -1042,7 +1042,7 @@ void IPNCalc::CalcEquat()
                     break;
                 case mod_f  :
                     ErrorIf( StackEnd(0)==0||aStack.GetCount()<2,
-                             "IPNCalc","mod() execution error");
+                             "E12MSExec","Missing mod() argument(s).");
                     StackEnd(-1) =
                         (double)( ROUND (StackEnd(-1))%
                                   ROUND (StackEnd(0)) );
@@ -1050,17 +1050,17 @@ void IPNCalc::CalcEquat()
                     StackDel();
                     break;
                 default:
-                    Error("IPNCalc","Undefined function");
+                    Error("E00MSExec","Illegal function code");
                 }
                 break;
             case IT_I :    // interval
                 i++;
-                ErrorIf(aItm[i].code != IT_V, "IPNCalc",
-                        "Missing variable (interval function)");
+                ErrorIf(aItm[i].code != IT_V, "E14MSExec",
+                        "Missing interval function argument(s).");
                 ni = aItm[i].num;
                 i++;
-                ErrorIf(aItm[i].code != IT_F, "IPNCalc",
-                        "Missing function (interval function)");
+                ErrorIf(aItm[i].code != IT_F, "E15MSExec",
+                        "Missing interval function code.");
                 if( aObj[ni].GetM()>1 )
                 {
                     k4 = ROUND( StackEnd(0) );
@@ -1129,11 +1129,11 @@ void IPNCalc::CalcEquat()
                             aObj[ni].Put( 1., j1, j2 );
                     break;
                 default  :
-                    Error("IPNCalc","Undefined function!");
+                    Error("E20MSExec","Illegal function code");
                 }
                 break;
             case IT_T :
-                if( fabs(StackEnd(0)) < 1e-34 )
+                if( fabs(StackEnd(0)) < 1e-33 )
                     i += ni;
                 StackDel();
                 break;
@@ -1141,7 +1141,7 @@ void IPNCalc::CalcEquat()
                 i += ni-1;
                 break;
             default  :
-                Error("IPNCalc","Invalid element code!");
+                Error("E16MSExec","Invalid element code in execution stack.");
             }
             /*if( TraceStatus )
                 TraceStatus = TraceYNprint( rpn, ieq, i, nstack, stack, 0 );*/
@@ -1150,7 +1150,7 @@ void IPNCalc::CalcEquat()
             ni = aItm[i].num;
         }
         if( aStack.GetCount()>0 )
-            Error( "IPNCalc","Stack is not empty after calculation!");
+            Error( "E17MSExec","Stack is not empty after execution.");
     }
     return;
 }

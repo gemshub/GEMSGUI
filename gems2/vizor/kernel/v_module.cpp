@@ -237,11 +237,11 @@ TCModule::CheckEqText( const char *erscan, const char *msg )
 {
     gstring msger;
     if( msg==0 )
-        msger = "Error in translation of Math Script equations:\n ";
+        msger = "E90MSTran: Error in translation of Math Script:\n ";
     else
         msger = gstring(msg);
     msger += erscan;
-    msger += "\n  Would you like to make corrections? ";
+    msger += "\n  Would you like to make corrections now? ";
     if( !vfQuestion(window(), GetName() , msger ) )
         return false;
     pVisorImp->OpenModule(window(), nRT);

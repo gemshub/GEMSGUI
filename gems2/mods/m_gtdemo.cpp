@@ -489,7 +489,7 @@ void TGtDemo::gd_text_analyze()
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
-                      "Error in translation of equations of demonstration " );
+               "E91MSTran: Error in translation of GtDemo math script." );
         /*  if( iRet )
                goto AGAIN;  */
         Error(  GetName() , xcpt.mess.c_str() );
@@ -509,7 +509,7 @@ void TGtDemo::gd_EF_calc()
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
-                      "Error in translation of equations of empirical data" );
+    "E92MSTran: Error in GtDemo math script for empirical data: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
     // calc equations

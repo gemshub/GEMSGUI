@@ -273,7 +273,7 @@ void TProfil::sm_text_analyze( int nph, int Type,
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         TPhase::pm->CheckEqText(  erscan,
-                                  "Error in translation of equations in non-ideality model: " );
+           "E97MSTran: Error in Phase non-ideality model math scripts: " );
         /*  if( iRet )  goto AGAIN;  */
         Error(  "SolModLoad", xcpt.mess.c_str() );
     }
@@ -312,7 +312,8 @@ gstring TProfil::PressSolMod( int nP )
         EGlen = 0;
         /* get equation number jp in  PHASE */
         EGb = ExtractEG( aPH->php->dEq, jp, &EGlen, aPH->php->nDC );
-        ErrorIf( !EGb, "SolModLoad", "No equations for component." );
+        ErrorIf( !EGb,
+         "E12MSPrep:", "SolModLoad(): Missing operators group for a phase endmember." );
         if( EGlen )
         {  /* set text to bufer */
             etext += gstring( EGb, 0, EGlen );
@@ -409,7 +410,7 @@ int TProfil::find_icnum( char *name, int LNmode )
             if( !memcmp( ICs, pmp->SB[i], MAXICNAME/*+MAXSYMB*/ ))
                 return i;
         }
-        Error( ICs.p, "Invalid IC name in MULTI..." );
+        Error( ICs.p, "E04MSPrep: IC name cannot be found in Multi lists..." );
     }
     if( LNmode == 0 )
     {
@@ -418,9 +419,9 @@ int TProfil::find_icnum( char *name, int LNmode )
             if( !memcmp( ICs, mup->SB[i], MAXICNAME+MAXSYMB ))
                 return i;
         }
-        Error( ICs.p, "Invalid IC name in RMULTS..." );
+        Error( ICs.p, "E14MSPrep: IC name cannot be found in Project lists..." );
     }
-    Error( ICs.p, "Invalid search mode parameter..." );
+    Error( ICs.p, "E09MSPrep: Invalid IC search mode parameter..." );
     return -1;
 }
 
@@ -440,24 +441,26 @@ int TProfil::find_dcnum( char *name, int jb, int je, int LNmode )
         for( j=jb; j<=je && ii<8; j++ )
             if(!memcmp(name, pmp->SM[j], min(len,MAXDCNAME)))
                 jf[ii++] = j;
+        if( !ii )
+            Error( name, "E05MSPrep: DC name cannot be found in Multi lists..." );
     }
     if( LNmode == 0 )
     {
         for( j=jb; j<=je && ii<8; j++ )
             if(!memcmp(name, mup->SM[j]+MAXSYMB+MAXDRGROUP, min(len,MAXDCNAME)))
                 jf[ii++] = j;
+        if( !ii )
+            Error( name, "E15MSPrep: DC name cannot be found in Project lists..." );
     }
-    if( !ii )
-        Error( name, "Invalid DC name." );
     if( ii == 1 )
         return( jf[0] );
 
     /* more then one index found */
     vstr pbuf(164);
     sprintf( pbuf, "%d DC indices found for the name %s (->%d) \n"
-             "Take first one and continue (Y) or cancel (N)?", ii, name, LNmode );
-    if( !vfQuestion(window(), "MSPreprocessor", /*(const char *)*/pbuf.p ))
-        Error( "MSPreprocessor", "Cancel translation..." );
+             "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
+    if( !vfQuestion(window(), "W20MSPrep: ", /*(const char *)*/pbuf.p ))
+        Error( "E20MSPrep:", "Preprocessing cancelled by the user..." );
 
     return( jf[0] );
 }
@@ -477,23 +480,25 @@ int TProfil::find_phnum( char *name, int LNmode )
         for( k=0; k < pmp->FI && ii < 8; k++ )
             if( !memcmp(name, pmp->SF[k]+MAXSYMB, min(len,MAXPHNAME)))
                 kf[ii++] = k;
+        if( !ii )
+          Error( name, "E06MSPrep: Phase name cannot be found in Multi lists..." );
     }
     if( LNmode == 0 )
     {
         for( k=0; k < mup->Fi && ii < 8; k++ )
             if( !memcmp(name, mup->SF[k]+MAXSYMB+MAXPHSYMB, min(len,MAXPHNAME)))
                 kf[ii++] = k;
+        if( !ii )
+          Error( name, "E16MSPrep: Phase name cannot be found in Project lists..." );
     }
-    if( !ii )
-        Error( name, "Illegal phase name..." );
     if( ii == 1 )
         return( kf[0] );
     /* more then one useful index  */
     vstr pbuf(164);
-    sprintf( pbuf, "%d phase indices found for the name %s (->%d) \n"
-             "Take 1st and continue (Y) or cancel (N)?", ii, name, LNmode );
-    if( !vfQuestion(window(), "MSPreprocessor", /*(const char *)*/pbuf.p ))
-        Error( "MSPreprocessor", "Cancel translation..." );
+    sprintf( pbuf, "%d of Phase indices found for the phase name %s (->%d) \n"
+             "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
+    if( !vfQuestion(window(), "W21MSPrep: ", /*(const char *)*/pbuf.p ))
+        Error( "E21MSPrep: ", "Preprocessing cancelled by the user..." );
 
     return( kf[0] );
 }
@@ -508,21 +513,21 @@ int TProfil::find_acnum( char *name, int LNmode )
     int j, jf[8], ii=0, len;
 
     if( mup->La <= 0 )
-        Error( name, "No compositions list in Modelling Project..." );
+        Error( name, "E10MSPrep: This modelling project has no PCO name lists." );
     len = strlen( name );
     for( j=0; j<mup->La && ii< 8; j++ )
         if( !memcmp(name, mup->SA[j], min(len,MAXCMPNAME)))
             jf[ii++]=j;
     if( !ii )
-        Error( name, "Invalid composition name..." );
+        Error( name, "E07MSPrep: PCO name cannot be found in Project lists..." );
     if( ii == 1 )
         return( jf[0] );
     /* more then one matching index */
     vstr pbuf(164);
-    sprintf( pbuf, "%d composition indices found for the name %s (->%d) \n"
-             "Take 1st and continue (Y) or cancel (N)?", ii, name, LNmode );
-    if( !vfQuestion(window(), "MSPreprocessor", /*(const char *)*/pbuf.p ))
-        Error( "MSPreprocessor", "Cancel translation..." );
+    sprintf( pbuf, "%d of PCO indices found for the PCO name %s (->%d) \n"
+             "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
+    if( !vfQuestion(window(), "W08MSPrep: ", /*(const char *)*/pbuf.p ))
+        Error( "E08MSPrep: ", "Preprocessing cancelled by the user..." );
 
     return( jf[0] );
 }
@@ -614,17 +619,17 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
             ii = aObj.Find( odlab );
             if( ii<0 )
             { // wrong data object name
-                gstring err = "Variable ";
+                gstring err = "Identifier (variable) ";
                 err += odlab;
-                err += " is not declared.";
-                Error( "MSPreprocessor: ", err.c_str() );
+                err += " is not known.";
+                Error( "E00MSPrep: ", err.c_str() );
             }
             iCode = aObj[ii].GetIndexationCode();
             // Getting new indexation code  KD 30.03.01
                 switch( iCode )
             {  /* analyze indexation code */
                default:
-                  Error( "MSPreprocessor: wrong data object", odlab );
+                  Error( "E01MSPrep: Unknown indexation base for data object", odlab );
 //             case A_reset:
                case A_icx:
                case A_dcx:
@@ -758,7 +763,7 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
             case A_icxphx:
                 break;
             default:
-                Error( "MSPreprocessor: Invalid substitution", cur );
+                Error( "E02MSPrep: Cannot substitute index for ", cur );
             }
             if( *(ecur-1) != N_ARBG )
                 sprintf( nbuf, "[%d]", pj );
@@ -774,7 +779,7 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
             cc++;
             continue;
         }
-        Error( "MSPreprocessor: too long name for substitution", cur );
+        Error( "E03MSPrep: too long name for index substitution", cur );
     } /* end while */
     *ecur = 0;
 }

@@ -901,7 +901,7 @@ void TProcess::pe_text_analyze()
         char *erscan = (char *)aObj[o_peexpr].GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
-                    "Error in translation of equations of process: " );
+   "E93MSTran: Error in translation of Process Simulator math script: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
 
@@ -919,7 +919,7 @@ void TProcess::pe_text_analyze()
         char *erscan = (char *)aObj[o_pcexpr].GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         TProcess::pm->CheckEqText(  erscan,
-             "Error in translation of graph equations of process: " );
+  "E94MSTran: Error in translation of Process Demo Sampler math script: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
 }
