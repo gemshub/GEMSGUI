@@ -48,6 +48,41 @@ gems2/doc/units.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/vis_cn.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/vis_od.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/gems-1.93b-6.spec svn_keywords=Author+Date+Id+Revision
+gems2/img/arrow_left1.png -text
+gems2/img/arrow_right1.png -text
+gems2/img/back.xpm -text svneol=unset#application/octet-stream
+gems2/img/filenew.png -text
+gems2/img/fileopen.png -text
+gems2/img/fileprint.png -text
+gems2/img/filesave.png -text
+gems2/img/filesaveas.png -text
+gems2/img/forward.xpm -text svneol=unset#application/octet-stream
+gems2/img/gems1.png -text
+gems2/img/gems16.xpm -text svneol=unset#application/octet-stream
+gems2/img/gems32.xpm -text svneol=unset#application/octet-stream
+gems2/img/help.png -text
+gems2/img/home.xpm -text svneol=unset#application/octet-stream
+gems2/img/iconclose.png -text
+gems2/img/kcalc.png -text
+gems2/img/kpaint.png -text
+gems2/img/ordertool.png -text
+gems2/img/p_circle.png -text
+gems2/img/p_crossdiag.png -text
+gems2/img/p_fillcircle.png -text
+gems2/img/p_fillrombbus.png -text
+gems2/img/p_fillsquare.png -text
+gems2/img/p_point.png -text
+gems2/img/p_star.png -text
+gems2/img/p_wye.png -text
+gems2/img/pixlabel.png -text
+gems2/img/print.png -text
+gems2/img/progress.png -text
+gems2/img/reccalc.png -text
+gems2/img/sciences_section.xpm -text svneol=unset#application/octet-stream
+gems2/img/setup.png -text
+gems2/img/simbtype.png -text
+gems2/img/toolbutton.png -text
+gems2/img/xpaint.png -text
 gems2/lib/Readme.txt svn_keywords=Author+Date+Id+Revision
 gems2/makew.bat svn_keywords=Author+Date+Id+Revision
 gems2/mods/Makefile svn_keywords=Author+Date+Id+Revision
