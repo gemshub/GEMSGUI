@@ -1,9 +1,7 @@
 //-------------------------------------------------------------------
-// Id: gems/vizor/kernel/v_ipnc.h  version 2.0.0      2001
+// $Id$
 //
 // Declaration of IPNCalc class
-//
-// Created : 970207    Modified: 010908
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999

@@ -1,9 +1,7 @@
 //-------------------------------------------------------------------
-// Id: gems/vizor/kernel/v_ipnc.cpp  version 2.0.0  edited 2000-07-10
+// $Id$
 //
 // Implementation of IPNCalc
-//
-// Created : 970207    Modified: 010908
 //
 // Copyright (C) 1996-2001  S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
@@ -789,8 +787,10 @@ OSH:
 void IPNCalc::GetEquat( char *txt )
 {
     input = txt;
-    ErrorIf( !input || *input=='\0', "IPNTranslate",
-             "No Math Script text to analyse!");
+    if( !input || *input=='\0')
+         return;
+//    ErrorIf( !input || *input=='\0', "IPNTranslate",
+//             "No Math Script text to analyse!");
     aItm.Clear( false );
     aEq.Clear( false );
     aCon.Clear( false );
