@@ -509,7 +509,7 @@ COMP_COUNT:
     if( bcp->PcDC != S_OFF )
         for( i=0; i<bcp->Ld; i++ )
         {
-          uint Nr = aRclist.GetCount();
+          int Nr = aRclist.GetCount();
             if( i<Nr )
             {
                 memcpy( bcp->SM[i], aRclist[i].c_str(), DC_RKLEN );
@@ -797,7 +797,7 @@ IC_FOUND:
             memset( A, 0, sizeof(float)*bcp->Nmax );
             /* Get DC formula and test it */
             aFo.SetFormula( Formula );   // set formula to analyse
-            for(uint ii=0; ii<aFo.GetIn(); ii++ )
+            for(int ii=0; ii<aFo.GetIn(); ii++ )
             { /* terms */
                 ICs[IC_RKLEN-1]=0;
                 memset( ICs, ' ', IC_RKLEN-1 );

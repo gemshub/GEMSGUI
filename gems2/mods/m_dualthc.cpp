@@ -204,7 +204,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
                "Illegal data in dtp->Nb ");
 
   dtp->An = (float *)aObj[ o_dtan ].Alloc( siz_, dtp->Nb, F_ );
-  dtp->Asiz = siz_;
+  dtp->Asiz = (short)siz_;
   memset(dtp->An, 0, sizeof(float)*(siz_*dtp->Nb) );
   for( ii=0; ii<siz_; ii++ )
      aFo[ii].Stm_line( TProfil::pm->mup->N, dtp->An+ii*TProfil::pm->mup->N,
@@ -244,7 +244,7 @@ void TDualTh::calc_eqstat()
 void TDualTh::build_Ub()
 {
  short i, ii;
- double RT = 2479.;
+ double RT/* = 2479.*/;
 
  dt_initiate( false );
 
@@ -664,7 +664,7 @@ void
 TDualTh::Calc_muo_n( char eState )
 { // calculate muo_n DualTh
  short ii, j;
- double muo, gam=1., Dsur=0., RT = 2479., P=1., lnFmol=4.016535;
+ double muo, gam/*=1.*/, Dsur, RT/* = 2479.*/, P/*=1.*/, lnFmol=4.016535;
 
 // dt_initiate( false );
   Dsur = dtp->WmCb - 1.;
@@ -780,13 +780,13 @@ TDualTh::Calc_muo_n( char eState )
 
 // Calculation of statistics over muo_n columns
 void
-TDualTh::Calc_muo_n_stat( char eState )
+TDualTh::Calc_muo_n_stat( char /*eState*/ )
 {
 }
 
 // Calculation of statistics over Wg (gamma interaction parameters)
 void
-TDualTh::Calc_gam_n_stat( char eState )
+TDualTh::Calc_gam_n_stat( char /*eState*/ )
 {
 }
 
@@ -794,8 +794,8 @@ void
 TDualTh::Calc_gam_n( char eState )
 {  // calculate gamma DualTh
  short ii, j;
- double muoi, gam=1., Dsur=0., RT = 2479., P=1., lnFmol=4.016535;
- double Gex, Gmix, Gmech, Gid, chi, chiPr, Wg=0., gam0, gam1;
+ double muoi, gam=1., Dsur, RT /*= 2479.*/, P/*=1.*/, lnFmol=4.016535;
+ double Gex, Gmix, Gmech, Gid, chi, chiPr, Wg, gam0, gam1;
 
 // dt_initiate( false );
    Dsur = dtp->WmCb - 1.;
@@ -819,7 +819,7 @@ TDualTh::Calc_gam_n( char eState )
   // Calculation of activity coefficients
     if( eState == DT_STATE_S )
     {  // Stoichiometric saturation - applies to SS end-members only!
-      Gex = Gmix = Gmech = Gid = 0.0; chiPr = 1.;
+      Gmix = Gmech = Gid = 0.0; chiPr = 1.;
       for( j=0; j<dtp->nK; j++)
       {  // Calculation of Gmix for q-th experiment
          chi = dtp->chi[ii*dtp->nK+j];
@@ -941,7 +941,7 @@ TDualTh::Calc_act_n( char eState )
 { // calculate activity DualTh
 
  short ii, j;
- double muoi, activ = 1., Dsur=0., RT = 2479., P=1., lnFmol=4.016535;
+ double muoi, activ = 1., Dsur, RT/* = 2479.*/, P/*=1.*/, lnFmol=4.016535;
 
 // dt_initiate( false );
   Dsur = dtp->WmCb - 1.;

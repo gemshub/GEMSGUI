@@ -673,8 +673,8 @@ void TProfil::PackSystat()
     syst->setSizes();
     if( isSysEq ) // add to z_sp_config show mode 07/12/99
     {
-        STat->ssp->DM[22] += PHoff.GetCount();
-        STat->ssp->DM[23] += DCoff.GetCount();
+        STat->ssp->DM[22] += (short)PHoff.GetCount();
+        STat->ssp->DM[23] += (short)DCoff.GetCount();
     }
     multi->setSizes();
     STat->dyn_new();
@@ -707,7 +707,7 @@ void TProfil::CalcBcc()
 // don't call any GUI (Qt or VisorImp) functions!!!
 // exceptions should be kept inside the function either
 
-void TProfil::CalcEqstat( bool prg)
+void TProfil::CalcEqstat( bool /*prg*/)
 {
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     STat->ods_link(0);
@@ -894,7 +894,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
     mup->NfT = 0;
     for(uint i=0; i<aCnt.GetCount(); i++)
     {
-        mup->Nfl[i] = aCnt[i];
+        mup->Nfl[i] = (short)aCnt[i];
         mup->NfT += mup->Nfl[i];
     }
     mup->FN = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn].Alloc(

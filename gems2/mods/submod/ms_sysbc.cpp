@@ -146,7 +146,7 @@ void TSyst::mark_dc_to_ic()
         /* analyse DC formule */
         form = aFo.form_extr( j, mup->L, mup->DCF );
         aFo.SetFormula( form.c_str() );   // set formula to analyse
-        for(uint ii=0; ii<aFo.GetIn(); ii++ )
+        for(int ii=0; ii<aFo.GetIn(); ii++ )
         { /* cycle on formula terms  */
             ICs[IC_RKLEN-1]=0;
             memset( ICs, ' ', IC_RKLEN-1 );
@@ -180,7 +180,7 @@ void TSyst::mark_ic_to_dc()
         /* analyse DC formule */
         form = aFo.form_extr( j, mup->L, mup->DCF );
         aFo.SetFormula( form.c_str() );   // set formula to analyse
-        for(uint ii=0; ii<aFo.GetIn(); ii++ )
+        for(int ii=0; ii<aFo.GetIn(); ii++ )
         { /* cycle on formula terms  */
             ICs[IC_RKLEN-1]=0;
             memset( ICs, ' ', IC_RKLEN-1 );

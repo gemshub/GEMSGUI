@@ -38,8 +38,10 @@ ZPrTr = -0.1278034682e-1,
 void
 TDComp::calc_tpcv( int q, int p, int CE, int CV )
 {
-    double a=0., T=0., TC=0., Vst=0., Tst=0., T_Tst=0., Ts2=0., TT=0., dT=0.,
-    T2=0., T3=0., T4=0., T05=0., Tst2=0., Tst3=0., Tst4=0., Tst05=0.; 
+    double a=0., T/*=0.*/, TC/*=0.*/, /*Vst=0.,*/ Tst/*=0.*/,
+           T_Tst/*=0.*/, Ts2/*=0.*/, TT/*=0.*/, dT/*=0.*/,
+           T2/*=0.*/, T3/*=0.*/, T4/*=0.*/, T05/*=0.*/,
+           Tst2/*=0.*/, Tst3/*=0.*/, Tst4/*=0.*/, Tst05/*=0.*/;
     int k=0, i, j, jf;
     double ac[16];
     float a1;
@@ -47,9 +49,9 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
 // cout << endl << " q=" << q << " p=" << p << "  CE " << CE << "  CV " << CV << endl;
     // iRet = ZERO;
     // default values
-    Vst = (double)dc[q].mVs[0];
-    if( IsFloatEmpty( dc[q].mVs[0] ))
-        Vst = 0.;
+//    Vst = (double)dc[q].mVs[0];
+//    if( IsFloatEmpty( dc[q].mVs[0] ))
+//        Vst = 0.;
     dT = TK_DELTA;
     TC = aW.twp->TC;
     aW.twp->T =    T = aW.twp->TC + dT;
@@ -61,7 +63,7 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
 //    aW.twp->V = Vst;
     aW.twp->V = 0.0;
 // cout << " TC="<< TC << " T=" << aW.twp->T << " Tst=" << aW.twp->Tst << " Sst=" << aW.twp->S << " Gst="
-//     << aW.twp->G << " Hst=" << aW.twp->H << " Cpst=" << aW.twp->Cp << " Vst=" << aW.twp->V << endl; 
+//     << aW.twp->G << " Hst=" << aW.twp->H << " Cpst=" << aW.twp->Cp << " Vst=" << aW.twp->V << endl;
     if(( dc[q].pstate[0] == CP_GAS || dc[q].pstate[0] == CP_GASI )
             && aW.twp->P > 0.0 )
     { /* molar volume from the ideal gas law */
@@ -97,15 +99,15 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
     for( i=0; i</*MAXCPCOEF*/aObj[o_dccp].GetN(); i++ )
     {  // Cp(t)  current temperature only
         a1 = dc[q].Cp[i*dc[q].NeCp+k];
-        if( IsFloatEmpty( a1 ) || !a1 ) 
+        if( IsFloatEmpty( a1 ) || !a1 )
 	    ac[i] = 0.0;
         else ac[i] = (double)a1;
-     }	
+     }
      aW.twp->Cp = ( ac[0] + ac[1]*T + ac[2]/T2 + ac[3]/T05 + ac[4]*T2 
            + ac[5]*T3 + ac[6]*T4 + ac[7]/T3 + ac[8]/T + ac[9]*T05 /*+ ac[10]*log(T)*/);
 // cout << " T=" << T <<  " T^2=" << T2 << " T^3=" << T3 << " T^4=" << T4 << " T^0.5=" << T05 << endl 
 //     << "     ac: " << ac[0] << ' ' << ac[1] << ' ' << ac[2] << ' ' << ac[3] << ' ' << ac[4] << ' ' << ac[5] 
-//     << " Cp(T)=" << aW.twp->Cp << " k= " << k << endl; 
+//     << " Cp(T)=" << aW.twp->Cp << " k= " << k << endl;
 
     if( fabs( T - Tst ) > TEMPER_PREC )
         for( j=0, jf=0; j<=k; j++ )
@@ -145,26 +147,26 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
             for( i=0; i< /*MAXCPCOEF*/aObj[o_dccp].GetN(); i++ ) // fix 08.09.00
             {
 	        a1 = dc[q].Cp[i*dc[q].NeCp+j];
-                if( IsFloatEmpty( a1 ) || !a1 ) 
+                if( IsFloatEmpty( a1 ) || !a1 )
 		    ac[i] = 0.0;
-		else ac[i] = (double)a1;    
+		else ac[i] = (double)a1;
             }
             aW.twp->S  += ( ac[0] * log( TT ) + ac[1] * T_Tst + ac[2] * ( 1./Tst2 - 1./T2 ) / 2.
 	          + ac[3] * 2. * ( 1./Tst05 - 1./T05 ) + ac[4] * ( T2 - Tst2 ) / 2.
 		  + ac[5] * ( T3 - Tst3 ) / 3. + ac[6] * ( T4 - Tst4 ) / 4.
 		  + ac[7] * ( 1./ Tst3 - 1./ T3 ) / 3. + ac[8] * (1. / Tst - 1. / T )
-		  + ac[9] * 2.* ( T05 - Tst05 ) );   
+		  + ac[9] * 2.* ( T05 - Tst05 ) );
 
 	    aW.twp->G -= ( ac[0] * ( T * log( TT ) - T_Tst ) + ac[1] * Ts2 / 2. + ac[2] * Ts2 / T / Tst2 / 2.
 	          + ac[3] * 2. * (T05 - Tst05)*(T05 - Tst05) / Tst05 + ac[4] * ( T3 + 2.*Tst3 - 3.* T * Tst2 ) / 6.
 		  + ac[5] * ( T4 + 3.*Tst4 - 4.*T * Tst3 ) / 12. + ac[6] * ( T4*T + 4.*Tst4*Tst - 5.*T*Tst4 ) / 20.
 		  + ac[7] * ( Tst3 - 3.* T2 * Tst + 2.*T3 ) / 6./ T2 / Tst3 + ac[8] * ( TT - 1. - log( TT ))
 		  + ac[9] * 2.* ( 2.* T * T05 - 3.* T * Tst05 + Tst * Tst05 ) / 3. );
-	    
+
 	    aW.twp->H += ( ac[0] * T_Tst + a * ( T2 - Tst2 ) / 2. + ac[2] * ( 1./Tst - 1./T )
 	          + ac[3] * 2. * ( T05 - Tst05 ) + ac[4] * ( T3 - Tst3 ) / 3.
 		  + ac[5] * ( T4 - Tst4 ) / 4. + ac[6] * ( T4 * T - Tst4 * Tst ) / 5
-		  + ac[7] * ( 1./ Tst2 - 1./ T2 ) / 2. + ac[8] * log( TT ) 
+		  + ac[7] * ( 1./ Tst2 - 1./ T2 ) / 2. + ac[8] * log( TT )
 		  + ac[9] * 2.* ( T * T05 - Tst * Tst05 ) / 3.  );
 
 // cout << " j=" << j << " T-Tst=" << T_Tst << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G
@@ -180,7 +182,7 @@ NEXT:
         Tcr0 =  (double)dc[q].TCr;   // given in centigrade
         Smax = (double)dc[q].Smax;
         k298 = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
-        p = aW.twp->P;             // in bars   
+        p = aW.twp->P;             // in bars
         if( IsFloatEmpty( dc[q].Comp ))
            k298 = 0.;
         a0 = (double)dc[q].Expa; // This is the a parameter (at one bar) in 1/K !
@@ -240,8 +242,9 @@ NEXT:
 void
 TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
 {
-    double a=0., T=0., Vst=0., Tst=0., Pst=0., P=0., P_Pst=0., T_Tst=0., Ts2=0., dT=0., VP=0., VT=0.,
-    aC=0., aE=0., kap=0., T05=0., Tst05=0.;
+    double a/*=0.*/, T, Vst, Tst, Pst, P, P_Pst, T_Tst,
+          Ts2, /*dT,*/ VP, VT,
+          aC/*=0.*/, aE/*=0.*/, kap, T05, Tst05;
     int i;
 
     /* Init numbers - volume Vst must be in J/bar ! */
@@ -249,7 +252,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
     Vst = (double)dc[q].mVs[0];
     if( IsFloatEmpty( dc[q].mVs[0] ))
         Vst = 0.;
-    dT = TK_DELTA; //TC = aW.twp->TC;
+//    dT = TK_DELTA; //TC = aW.twp->TC;
     T = aW.twp->T;
     Tst = aW.twp->Tst;
     P = aW.twp->P;

@@ -904,7 +904,7 @@ void TSyst::sorption_data_load( TPhase* aPH, int k )
     } /* end for ist */
     if( sy.PSATT != S_OFF && sy.PMaSdj != S_OFF )
     {  /* Load arrays SATC_ and MaSdj_ */
-      int ja=0, kk;
+      int ja, kk;
         pnDC = aPH->php->nDC;
 // Calculate indexes of begin and end of list of DC in current phase in RMULTS
         for( i=0; i<k; i++ )
@@ -1049,10 +1049,10 @@ void TSyst::unpackData()
            continue;
         if( sy.PSATT != S_OFF )
         {
-            int mtM, msM, /* mtN, */ msN, kk;
+            int mtM, msM, /* mtN,  msN, */kk;
             msM = aObj[o_sysatc].GetM();
             mtM = aObj[o_sssatc].GetM();
-            msN = aObj[o_sysatc].GetN();
+//            msN = aObj[o_sysatc].GetN();
 //            mtN = aObj[o_sssatc].GetN();
             if(mtM >= msM)
             {
@@ -1070,10 +1070,10 @@ void TSyst::unpackData()
         if( sy.PMaSdj != S_OFF )
 // Extended by KD on 25.10.2004
         {
-            int mtM, msM, /* mtN, */ msN, kk ;
+            int mtM, msM, /* mtN,  msN,*/ kk ;
             msM = aObj[o_symasdj].GetM();
             mtM = aObj[o_ssmasdj].GetM();
-            msN = aObj[o_symasdj].GetN();
+//            msN = aObj[o_symasdj].GetN();
 //            mtN = aObj[o_ssmasdj].GetN();
             if(mtM >= msM)
             {
@@ -1147,8 +1147,8 @@ void TSyst::unpackData()
         }
     }
     // set sy.Ll
-    short ii=0, Nn, k;
-    for( i=0, j=0, k=0; i<mup->Fi; i++ )
+    short ii=0, Nn/*, k*/;
+    for( i=0, j=0/*, k=0*/; i<mup->Fi; i++ )
     {
         Nn = mup->Ll[i];
         ii+=Nn;
@@ -1157,10 +1157,10 @@ void TSyst::unpackData()
             if( sy.Dcl[j] != S_OFF )
             {
                 sy.Ll[i]++;
-                k++;
+                /*k++;*/
             }
     }
-    sy.LO = Prf->indDC( sy.LO );
+    sy.LO = (short)Prf->indDC( sy.LO );
 
 }
 
@@ -1481,7 +1481,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             if( fabs(sy.Phm[i])  > aPa->pa.p.DB ) // phc no zero in Phm
             {
                 ErrorIf( i1>= sy.Fib, GetName(), "sy.Fib illegal count" );
-                STat->ssp->phc[i1] = PHon[i];
+                STat->ssp->phc[i1] = (short)PHon[i];
                 STat->ssp->XPun[i1] = sy.XPun[i];
                 STat->ssp->Phm[i1++]= sy.Phm[i];
             }
@@ -1491,18 +1491,18 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             {
                 ErrorIf( i2>= STat->ssp->DM[22],GetName(),
                          "mu.Fi-sy.Fi illegal count");
-                STat->ssp->phf[i2++] = PHoff[iOff++];
+                STat->ssp->phf[i2++] = (short)PHoff[iOff++];
             }
             ErrorIf( i2>= STat->ssp->DM[22],GetName(),
                      "mu.Fi-sy.Fi illegal count");
-            STat->ssp->phf[i2++] = PHon[i];
+            STat->ssp->phf[i2++] = (short)PHon[i];
         }
         // phk  no zero in PUL/PLL
         if( ( sy.PULim != S_OFF && fabs(sy.PUL[i]) > aPa->pa.p.DB )||
                 ( sy.PLLim != S_OFF && fabs(sy.PLL[i]) > aPa->pa.p.DB ))
         {
             ErrorIf( i3>= sy.Fik, GetName(), "sy.Fik illegal count" );
-            STat->ssp->phk[i3] = PHon[i];
+            STat->ssp->phk[i3] = (short)PHon[i];
             if( sy.PULim != S_OFF ) STat->ssp->PUL[i3] = sy.PUL[i];
             if( sy.PLLim != S_OFF ) STat->ssp->PLL[i3] = sy.PLL[i];
             STat->ssp->RFLC[i3] = sy.RFLC[i];
@@ -1513,7 +1513,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
                 ( sy.PYOF != S_OFF && fabs(sy.YOF[i]) > aPa->pa.p.DB ))
         {
             ErrorIf( i4>= sy.Fie, GetName(), "sy.Fie illegal count" );
-            STat->ssp->phe[i4] = PHon[i];
+            STat->ssp->phe[i4] = (short)PHon[i];
             if( sy.PAalp != S_OFF ) STat->ssp->Aalp[i4] = sy.Aalp[i];
             if( sy.PYOF != S_OFF )  STat->ssp->YOF[i4] = sy.YOF[i];
             if( sy.PSigm != S_OFF )
@@ -1539,7 +1539,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
         if( sy.Pcl[i] != S_OFF && mup->PHC[i] == 'x' )
         {
             ErrorIf( i5>= sy.Fia, GetName(), "sy.Fia illegal count" );
-            STat->ssp->pha[i5] = PHon[i];
+            STat->ssp->pha[i5] = (short)PHon[i];
             for( j=0; j<sy.NsTm; j++ )
             {
                 if( sy.PNfsp != S_OFF )
@@ -1560,7 +1560,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
     while( iOff< PHoff.GetCount() )
     {
         ErrorIf( i2>= STat->ssp->DM[22],GetName(), "mu.Fi-sy.Fi illegal count");
-        STat->ssp->phf[i2++] = PHoff[iOff++];
+        STat->ssp->phf[i2++] = (short)PHoff[iOff++];
     }
 
     // DCOMP
@@ -1575,7 +1575,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             if( fabs(sy.XeD[i])  > aPa->pa.p.DB )// dcc no zero in XeD
             {
                 ErrorIf( i1>= sy.Lb, GetName(), "sy.Lb illegal count" );
-                STat->ssp->dcc[i1] = DCon[i];
+                STat->ssp->dcc[i1] = (short)DCon[i];
                 STat->ssp->XDun[i1] = sy.XDun[i];
                 STat->ssp->XeD[i1++]  = sy.XeD[i];
             }
@@ -1585,18 +1585,18 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             {
                 ErrorIf( i2>= STat->ssp->DM[23],GetName(),
                          "mu.L-sy.L illegal count");
-                STat->ssp->dcf[i2++] = DCoff[iOff++];
+                STat->ssp->dcf[i2++] = (short)DCoff[iOff++];
             }
 
             ErrorIf( i2>= STat->ssp->DM[23], GetName(), "mu.L-sy.L illegal count" );
-            STat->ssp->dcf[i2++] = DCon[i];
+            STat->ssp->dcf[i2++] = (short)DCon[i];
         }
         // dce  no zero in GEX/lnGmf
         if( ( sy.PGEX != S_OFF && fabs(sy.GEX[i]) > aPa->pa.p.DB )||
                 ( sy.PlnGf != S_OFF && fabs(sy.lnGmf[i]) > aPa->pa.p.DB ))
         {
             ErrorIf( i4>= sy.Le, GetName(), "sy.Le invalid count" );
-            STat->ssp->dce[i4] = DCon[i];
+            STat->ssp->dce[i4] = (short)DCon[i];
             if( sy.PGEX != S_OFF )  STat->ssp->GEX[i4] = sy.GEX[i];
             if( sy.PlnGf != S_OFF ) STat->ssp->lnGmf[i4] = sy.lnGmf[i];
             if( sy.PParc != S_OFF ) STat->ssp->Pparc[i4] = sy.Pparc[i];
@@ -1607,7 +1607,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
                 ( sy.DLLim != S_OFF && sy.DLL[i] > 0/*aPa->pa.p.DB*/ ))
         {
             ErrorIf( i3>= sy.Lk, GetName(), "sy.Lk illegal count" );
-            STat->ssp->dck[i3] = DCon[i];
+            STat->ssp->dck[i3] = (short)DCon[i];
             if( sy.DULim != S_OFF ) STat->ssp->DUL[i3] = sy.DUL[i];
             if( sy.DLLim != S_OFF ) STat->ssp->DLL[i3] = sy.DLL[i];
             STat->ssp->RLC[i3] = sy.RLC[i];
@@ -1623,7 +1623,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
             int ia, kk;
             ErrorIf( i5 >= sy.Lsor, GetName(), "sy.Lsor invalid count" );
             ia = i - (mup->Ls-mup->Lads);
-            STat->ssp->dca[i5] = DCon[i];
+            STat->ssp->dca[i5] = (short)DCon[i];
 //            STat->ssp->dca[i5] = i;
             if( sy.PSATT != S_OFF )
             {   // irreversible migration from old data structure 27.10.2004
@@ -1645,9 +1645,9 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
     while( iOff < DCoff.GetCount() )
     {
         ErrorIf( i2 >= STat->ssp->DM[23],GetName(),  "mu.L-sy.L invalid count");
-        STat->ssp->dcf[i2++] = DCoff[iOff++];
+        STat->ssp->dcf[i2++] = (short)DCoff[iOff++];
     }
-    STat->ssp->DM[15] = DCon[STat->ssp->DM[15]]; //sy.LO
+    STat->ssp->DM[15] = (short)DCon[STat->ssp->DM[15]]; //sy.LO
 
 
     contentsChanged = false;

@@ -62,7 +62,7 @@ bool TUnSpace::test_sizes( )
       usp->Q = 11;
    }
    usp->Q = near_prime_number( usp->Q );
-   usp->qQ = (int)(fabs(usp->quan_lev)*usp->Q);
+   usp->qQ = (short)(fabs(usp->quan_lev)*usp->Q);
    if(usp->qQ<1)
         usp->qQ=1;
 
@@ -282,7 +282,8 @@ void TUnSpace::unsp_eqkey()
 // building arrays for make pay off matrix
 void TUnSpace::buildTestedArrays()
 {
- int i, Ip;
+ int i;
+ short Ip;
 
  for( Ip=0; Ip<usp->Q; Ip++)
  {
@@ -541,10 +542,11 @@ void  TUnSpace::NexT(int J )
         xx = 2*usp->IntLg[j]*R-usp->IntLg[j];
         TProfil::pm->syp->Guns[j] = xx;
       }
-      if(usp->PsGen[1]== S_ON&& usp->NgLs[j]==i)
+/*      if(usp->PsGen[1]== S_ON&& usp->NgLs[j]==i)
       {  xx = usp->Ss[j] - usp->IntLs[j]+2*usp->IntLs[j]*R;
 //         usp->R1[ii*17+3]= xx;
       }
+*/
       if(usp->PsGen[5]== S_ON&& usp->NgLv[j]==i)
       {
         xx = 2*usp->IntLv[j]*R-usp->IntLv[j];

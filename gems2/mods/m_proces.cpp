@@ -1446,7 +1446,7 @@ TProcess::SaveGraphData( GraphData *gr )
     {
         plot[ii] = gr->lines[ii];
         //  lNam and lNamE back
-        if(ii < pep->dimXY[1] )
+        if( (int)ii < pep->dimXY[1] )
             strncpy(  pep->lNam[ii], plot[ii].name, MAXGRNAME );
         else
             strncpy(  pep->lNamE[ii-pep->dimXY[1]], plot[ii].name, MAXGRNAME );

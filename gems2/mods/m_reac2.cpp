@@ -32,7 +32,7 @@
 // from coefficients a0 to a4 of Haas-Fischer Cp=f(T)
 // Coeffs a5 to a9 are ignored
 
-void TReacDC::Convert_Cp_to_KT( int CE )
+void TReacDC::Convert_Cp_to_KT( int /*CE*/ )
 {
     double Rln10, T, lnT, T_2, T_05, T_3, Sr, Hr, lgK, Cpr;
     float *Cp, *A;
@@ -94,8 +94,8 @@ void TReacDC::Convert_Cp_to_KT( int CE )
 /*-----------------------------------------------------------------*/
 void TReacDC::Convert_KT_to_Cp( int CE )
 {
-    double Rln10, T, lnT, T_2, T_05, T_15, T_3,
-                                   Gr, Sr, Hr, Cpr=0.0, lgK;
+    double Rln10, T, lnT, T_2, T_05, /*T_15,*/ T_3,
+           Gr, Sr, Hr, Cpr, lgK;
     float *Cp, *A;
 
     Rln10 = R_CONSTANT * lg_to_ln;
@@ -104,11 +104,11 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     T_2 = T*T;
     T_3 = T_2*T;
     T_05 = sqrt( T );
-    T_15 = pow( T, 1.5 );
+//    T_15 = pow( T, 1.5 );
     Cp = rcp->DCp;
     A = rcp->pKt;
     Sr = rcp->Ss[0];
-    Hr = rcp->Hs[0];
+//    Hr = rcp->Hs[0];
     Gr = rcp->Gs[0];
     lgK = rcp->Ks[1];
     //AGAIN_CP:
@@ -888,9 +888,9 @@ void TReacDC::calc_akinf_r( int q, int p, int /*CE*/, int /*CV*/ )
 
 /*-----------------------------------------------------------------*/
 // Calculation of d(reaction) from logK = f(T)
-void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
+void TReacDC::calc_lgk_r( int q, int p, int CE, int /*CV*/ )
 {
-    double Rln10, T, lnT, T_2, T_05, T_15, T_3, DH, Tr, dGr_d,
+    double Rln10, T, lnT, T_2, T_05, /*T_15,*/ T_3, /*DH,*/ Tr, //dGr_d,
         dSr, dGr, dHr, dCpr, dVr, lgK, R_T; /* Units of measurement!!!!! */
     float *A, *Cp;
 
@@ -918,11 +918,11 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
     T_2 = T*T;
     T_3 = T_2*T;
     T_05 = sqrt( T );
-    T_15 = pow( T, 1.5 );
+//    T_15 = pow( T, 1.5 );
     A = rc[q].pKt;
     Cp = rc[q].DCp;
     dVr = rc[q].Vs[0];   //Gr = rc[q].Gs[0];
-    dGr = rc[q].Gs[0];
+//    dGr = rc[q].Gs[0];
     dHr = rc[q].Hs[0];
     dSr = rc[q].Ss[0];
     dCpr = rc[q].Cps[0];
@@ -938,19 +938,19 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
 // lgK = A[0];
             dCpr = 0.0;
             dHr = 0.0;
-            dGr_d = -dSr * T;
+//            dGr_d = -dSr * T;
             break;
        case CTM_EK1: // 1-term dGr = const
 // lgK = A[2]/T;
             dCpr = 0.0;
             dSr = 0.0;
-            dGr_d = dHr;
+//            dGr_d = dHr;
             lgK = - dHr / T / Rln10;
           break;
        case CTM_EK2:  // 2-term or 1-term lgK=const at dHr=0
 // lgK = A[0] + A[2]/T;
             dCpr = 0.0;
-            dGr_d = dHr - dSr * T;
+//            dGr_d = dHr - dSr * T;
             lgK = (dSr - dHr/T ) / Rln10;
           break;
        case CTM_EK3:  // 3-term
@@ -958,7 +958,7 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
             lgK = ( dSr - dHr/T - dCpr * ( 1 - Tr/T - log( T/Tr ))) / Rln10;
             dSr += dCpr * log( T / Tr );
             dHr += dCpr * (T - Tr );
-            dGr_d = dHr - dSr * T;
+//            dGr_d = dHr - dSr * T;
           break;
        case CTM_LGK:  // full 7-term logK approx
        case CTM_LGX:  // (derived from dCp=f(T))
@@ -968,7 +968,7 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
                      + 2.0*A[5]*T_3 - 0.5*A[6]*T_05 );
             dSr = Rln10 * ( A[0] + 2.0*A[1]*T + A[3]*(1.0+lnT) -
                        A[4]/T_2 + 3.0*A[5]*T_2 + 0.5*A[6]/T_05 );
-            dGr_d = dHr - dSr * T;
+//            dGr_d = dHr - dSr * T;
 //         if( rc[q].DCp )
             dCpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[4]*T_2 + Cp[3]/T_05;
 //            dHr = Rln10 * T_2 * ( A[1] - A[2]/T_2 + A[3]/T -
@@ -992,7 +992,7 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
     aW.WW(p).dS = dSr;
     aW.WW(p).dCp = dCpr;
   /* Checking consistency of Gr, Hr and Sr,  Gr == Hr - T*Sr; */
-    DH = dGr + T*dSr;
+//    DH = dGr + T*dSr;
 //    if( fabs( dGr - dGr_d ) > 1. || fabs( DH - dHr ) > 57.08 )  // J/mol
 //    {
 //       cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d;

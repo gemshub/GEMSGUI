@@ -17,6 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 const char *GEMS_RTP_HTML = "gm_rtparm";
 
 #include <math.h>
@@ -259,7 +260,7 @@ void TRTParm::set_def( int q)
         break;
     case 1:
     case 2:
-        rp[q].NV = rp[q].NP * rp[q].NT;
+        rp[q].NV = (short)(rp[q].NP * rp[q].NT);
         break;
     case 3:
         rp[q].NV = max( rp[q].NP, rp[q].NT );
@@ -348,11 +349,11 @@ AGAIN_SETUP:
         return ret;
     if( ret == VF3_1 )
     {
-        int ilx, len = 0;
+        int ilx, len;
         strncat( rpp->name, db->FldKey(2), db->FldLen(2));
         len = strlen( rpp->name );
         for( ilx=len-1; ilx>0; ilx-- )
-        { // remove tail spaces 
+        { // remove tail spaces
           if(rpp->name[ilx] == ' ')
             continue;
           rpp->name[ilx+1] = 0;
@@ -369,7 +370,7 @@ AGAIN_SETUP:
         break;
     case 1: // increments in cycle on P nested into cycle on T
     case 2: // increments in cycle on T nested into cycle on P (default)
-        rpp->NV = rpp->NP * rpp->NT;
+        rpp->NV = (short)(rpp->NP * rpp->NT);
         break;
     case 3: // parallel increments of T and P in one cycle
         rpp->NV = max( rpp->NP, rpp->NT );
@@ -659,10 +660,10 @@ TRTParm::SaveGraphData( GraphData *gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    rpp->axisType[0] = gr->axisType;
-    rpp->axisType[1] = gr->b_color[0];
-    rpp->axisType[2] = gr->b_color[1];
-    rpp->axisType[3] = gr->b_color[2];
+    rpp->axisType[0] = (short)gr->axisType;
+    rpp->axisType[1] = (short)gr->b_color[0];
+    rpp->axisType[2] = (short)gr->b_color[1];
+    rpp->axisType[3] = (short)gr->b_color[2];
     strncpy( rpp->xNames, gr->xName.c_str(), 9);
     strncpy( rpp->yNames, gr->yName.c_str(), 9);
     memcpy( &rpp->size[0], gr->region, 4*sizeof(float) );
@@ -670,7 +671,7 @@ TRTParm::SaveGraphData( GraphData *gr )
 
     plot = (TPlotLine *)
     aObj[ o_rppline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));
-    for(uint ii=0; ii<gr->lines.GetCount(); ii++ )
+    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
         //  lNam0 and lNamE back
@@ -681,7 +682,7 @@ TRTParm::SaveGraphData( GraphData *gr )
     }
     pVisor->Update();
     contentsChanged = true;
-    
+
     return true;
 }
 

@@ -104,7 +104,7 @@ void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
     for( i=0,j=0; j<pm.L; j++ )
         if( pm.X[j] > pm.lowPosNum )
         {
-            STat->stp->llf[i] = DCon[pm.muj[j]];
+            STat->stp->llf[i] = (short)DCon[pm.muj[j]];
             STat->stp->Y[i] = pm.X[j];
             STat->stp->lnGam[i] = pm.lnGam[j];
             /* Removed by KD 13 May 02 */
@@ -125,7 +125,7 @@ void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
     for( i=0, j=0; j<pm.FIs; j++ )
         if( pm.YF[j] > 1e-18 )
         {
-            STat->stp->phf[i] = PHon[pm.muk[j]];
+            STat->stp->phf[i] = (short)PHon[pm.muk[j]];
             for( int k=0; k<pm.N; k++ )
               *(STat->stp->Ba+i*pm.N+k) = *(pm.BF+j*pm.N+k);
             //       memcpy( STat->stp->SFp[i], pm.SF[i], MAXPHNAME );

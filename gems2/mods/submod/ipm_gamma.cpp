@@ -21,6 +21,8 @@
 //-------------------------------------------------------------------
 //
 #include "m_param.h"
+
+//#define _no_fgl_const_
 #include "s_fgl.h"
 
 #include <math.h>
@@ -299,7 +301,7 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
 void TProfil::ConCalc( double X[], double XF[], double XFA[])
 {
     int k, ii;
-    int i, j, ist=0, jj=0, jja=0;
+    int i, j, ist/*=0*/, jj/*=0*/, jja/*=0*/;
     double Factor=0.0, Dsur=0.0, MMC=0.0;
    // Kostya: debug calculating x from dual solution
       if( pmp->Ls < 2 || !pmp->FIs )
@@ -485,7 +487,7 @@ NEXT_PHASE:
 /* Calculation of surface charge */
 void TProfil::IS_EtaCalc()
 {
-    int k, i, ist=0, isp=0, j=0, ja=0;
+    int k, i, ist/*=0*/, isp/*=0*/, j=0, ja/*=0*/;
     double XetaS=0., XetaW=0.,  Ez, CD0, CDb, ObS;
     for( k=0; k<pmp->FIs; k++ )
     { /*cycle over phases */
@@ -696,7 +698,7 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 {
     int ist;
     double SigA=0., SigD=0., SigB=0., XetaA[MST], XetaB[MST], f1, f3;
-    double A=1e-9, Sig, F2RT, I, Cap;
+    double A/*=1e-9*/, Sig, F2RT, I, Cap;
     /* Del, F=F_CONSTANT, Cap0; */
     if( pmp->XF[k] < pa.p.ScMin )
         return; /* no sorbent */
@@ -949,11 +951,12 @@ GEMU_CALC:
 *  pmp->lnSAC[*][3] vector is now used to keep original DUL[j] to restore
 *  them after IPM-2 refinements for surface complexes.
 */
-void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
+void TProfil::SurfaceActivityCoeff( int jb, int je, int /*jpb*/, int /*jdb*/, int k )
 {
-    int i, ii, j, ja=0, ist=0, iss=0, dent=1, Cj=0, iSite[6];
-    double XS0,  xj0, XVk, XSk, XSkC=0., xj=0., Mm=0., rIEPS, ISAT, SAT, XSs=0.,
-             bet, SATst=1.0, xjn=0., q1, q2, Fi=0., cN=1., eF=0.;
+    int i, ii, j, ja/*=0*/, ist/*=0*/, iss/*=0*/, dent/*=1*/, Cj/*=0*/, iSite[6];
+    double XS0,  xj0, XVk, XSk, XSkC/*=0.*/, xj/*=0.*/, Mm/*=0.*/,
+             rIEPS, ISAT, /*SAT,*/ XSs/*=0.*/,
+             /*bet,*/ SATst/*=1.0*/, xjn/*=0.*/, q1, q2, Fi/*=0.*/, cN/*=1.*/, eF/*=0.*/;
 
     if( pmp->XFA[k] <= pmp->DSM ) /* No sorbent retained by the IPM */
         return;
@@ -999,7 +1002,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
 //        OSAT = pmp->lnGmo[j]; // added 6.07.01 by KDA
         ja = j - ( pmp->Ls - pmp->Lads );
         rIEPS = pa.p.IEPS;   // between 1e-8 and 1e-10 default 1e-9
-        dent = 1;  // default - monodentate
+//        dent = 1;  // default - monodentate
         switch( pmp->DCC[j] )  /* code of species class */
         {
         default: /* pmp->lnGam[j] = 0.0; */
@@ -1049,10 +1052,10 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
                cN = pmp->MASDJ[ja][PI_P2];  // Frumkin/Pivovarov water coord. number
                dent = (int)cN;              // dentateness for L and QCA isoterms
                Fi = pmp->MASDJ[ja][PI_P1];  // Frumkin lateral interaction energy term
-               bet = pmp->MASDJ[ja][PI_P3]; // BET beta parameter
+            //   bet = pmp->MASDJ[ja][PI_P3]; // BET beta parameter
             }
             else {
-               cN = 0.0; Fi = 0.0; bet = 1.0; dent = 1;
+               cN = 0.0; Fi = 0.0; /*bet = 1.0;*/ dent = 1;
             }
             switch( pmp->SATT[ja] ) // selection of the activity coeff. model
             {
@@ -1196,7 +1199,7 @@ pmp->lnSAC[ja][1] = eF;
                 if( fabs (Fi) < 1e-9 || fabs (cN) < 1e-9 )
                    eF = 0.0;
                 else {
-                   double pivovar = 1.0;
+                   double pivovar/* = 1.0*/;
                    eF = cN * Fi * xj / xj0 ;  // Fi = Fi'/(kT) Bockris p.938
             // Calculation of the Pivovarov 98 exponential correction term
                    pivovar = xj0 / ( xj0 + xj * ( cN -1 ));
@@ -1309,7 +1312,7 @@ pmp->lnSAC[ja][0] = ISAT;
                             // applies to the whole surface type!
                 XSs = 0.0;  // calc total moles on all sites on surface type
                 for( i=0; i<MST; i++ )
-                   XSs = pmp->D[i][ist];
+                   XSs += pmp->D[i][ist];
                 XSkC = XSs / XVk / Mm * 1e6  // total non-solvent surf.species
                    /pmp->Nfsp[k][ist]/ pmp->Aalp[k]/1.66054;  // per nm2
                 XS0 = max( pmp->MASDT[k][ist], pmp->MASDJ[ja][PI_DEN] );
@@ -1359,7 +1362,7 @@ cout << "     x[jn]= " << pmp->X[j] << " XSk= " << XSk << " XSkC=" << XSkC << " 
 */
 double TProfil::Ej_init_calc( double, int j, int k)
 {
-    int ja=0, ist=0, isp=0, jc=-1;
+    int ja=0, ist/*=0*/, isp/*=0*/, jc=-1;
     double F0=0.0, Fold, dF0, Mk=0.0, Ez, psiA, psiB, CD0, CDb, ObS;
 
     Fold = pmp->F0[j];
@@ -1917,11 +1920,12 @@ END_LOOP: /* if( LinkMode == LINK_TP_MODE ) */
 // SIT NEA PSI
 
 void
-TProfil::SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k )
+TProfil::SIT_aqac_PSI( int jb, int je, int /*jpb*/, int /*jdb*/, int /*k*/ )
 {
 
-    int j=0, icat=0, ian=0, ic=0, ia=0;
-    double T, A, B, a0=3.72, a0c, I, sqI, bg, bgi=0, Z2, lgGam, molt, SumSIT;
+    int j/*=0*/, icat/*=0*/, ian/*=0*/, ic/*=0*/, ia/*=0*/;
+    double T, A, B, /*a0=3.72, *//*a0c,*/
+           I, sqI, /*bg,*/ bgi=0, Z2, lgGam, /*molt,*/ SumSIT;
 //    float nPolicy;
 
     I= pmp->IC;
@@ -1931,7 +1935,7 @@ TProfil::SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k )
     A = 1.82483e6 * sqrt( pmp->denW ) / pow( T*pmp->epsW, 1.5 );
     B = 50.2916 * sqrt( pmp->denW ) / sqrt( T*pmp->epsW );
 
-    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
+//    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
     sqI = sqrt( I );
 
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
@@ -1991,7 +1995,7 @@ void
 TProfil::DebyeHueckel3Hel( int jb, int je, int jpb, int /*jdb*/, int /* k */ )
 {
     int j;
-    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam, molt;
+    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam/*, molt*/;
     float nPolicy;
 
     I= pmp->IC;
@@ -2004,7 +2008,7 @@ TProfil::DebyeHueckel3Hel( int jb, int je, int jpb, int /*jdb*/, int /* k */ )
     a0c = pmp->PMc[jpb+6];
     nPolicy = pmp->PMc[jpb+7];
 
-    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
+//    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
     sqI = sqrt( I );
 
 //Ask Dima!!! 20/04/2002
@@ -2378,7 +2382,7 @@ TProfil::MargulesBinary( int jb, int /*je*/, int jpb, int /* jdb */, int k )
 {
   double T, P, WU1, WS1, WV1, WU2, WS2, WV2, WG1, WG2,
          a1, a2, lnGam1, lnGam2, X1, X2;
-  double Vex, Sex, Hex, Uex;
+  double Vex/*, Sex, Hex, Uex*/;
 
 //  if( je != jb+1 )
 //    ; // Wrong dimensions - error message?
@@ -2410,9 +2414,9 @@ TProfil::MargulesBinary( int jb, int /*je*/, int jpb, int /* jdb */, int k )
   // To be used in total phase property calculations
   Vex = ( WV1*X1 + WV2*X2 ) * X1*X2;
 pmp->FVOL[k] += Vex*10.;
-  Sex = ( WS1*X1 + WS2*X2 ) * X1*X2;
-  Hex = ( (WU1+P*WV1)*X1 + (WU2+P*WV2)*X2 ) * X1*X2;
-  Uex = ( WU1*X1 + WU2*X2 ) * X1*X2;
+//  Sex = ( WS1*X1 + WS2*X2 ) * X1*X2;
+//  Hex = ( (WU1+P*WV1)*X1 + (WU2+P*WV2)*X2 ) * X1*X2;
+//  Uex = ( WU1*X1 + WU2*X2 ) * X1*X2;
  }
 
 // Ternary regular Margules model - parameters (in J/mol)
@@ -2425,7 +2429,7 @@ TProfil::MargulesTernary( int jb, int /*je*/, int jpb, int /*jdb*/, int k )
   double T, P, WU12, WS12, WV12, WU23, WS23, WV23, WU13, WS13, WV13,
          WU123, WS123, WV123, WG12, WG13, WG23, WG123,
          a12, a13, a23, a123, lnGam1, lnGam2, lnGam3, X1, X2, X3;
-  double Vex, Sex, Hex, Uex;
+  double Vex/*, Sex, Hex, Uex*/;
 
 //  if( je != jb+2 )
 //    ; // Wrong dimensions - error message?
@@ -2472,10 +2476,10 @@ TProfil::MargulesTernary( int jb, int /*je*/, int jpb, int /*jdb*/, int k )
   // To be done!
   Vex = WV12*X1*X2 + WV13*X1*X3 + WV23*X2*X3 + WV123*X1*X2*X3;
 pmp->FVOL[k] += Vex*10.;
-  Sex = WS12*X1*X2 + WS13*X1*X3 + WS23*X2*X3 + WS123*X1*X2*X3;
-  Uex = WU12*X1*X2 + WU13*X1*X3 + WU23*X2*X3 + WU123*X1*X2*X3;
-  Hex = (WU12+P*WV12)*X1*X2 + (WU13+P*WV13)*X1*X3
-         + (WU23+P*WV23)*X2*X3 + (WU123+P*WV123)*X1*X2*X3;
+//  Sex = WS12*X1*X2 + WS13*X1*X3 + WS23*X2*X3 + WS123*X1*X2*X3;
+//  Uex = WU12*X1*X2 + WU13*X1*X3 + WU23*X2*X3 + WU123*X1*X2*X3;
+//  Hex = (WU12+P*WV12)*X1*X2 + (WU13+P*WV13)*X1*X3
+//         + (WU23+P*WV23)*X2*X3 + (WU123+P*WV123)*X1*X2*X3;
 }
 
 //

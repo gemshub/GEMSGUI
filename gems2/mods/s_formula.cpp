@@ -388,7 +388,7 @@ void Formuan::icadd(  const char *icn,
 // scan <fterm> s
 double Formuan::scan_formulae( TIArray<ICTERM>& tt )
 {
-    char savc=' ';
+//    char savc=' ';
     char *pp, *fs;
     int ti, sur, len;
 
@@ -421,7 +421,7 @@ LOOPZ:
             double aZZ = charge( charge_s.c_str() );
             icadd( CHARGE_NAME, CHARGE_TYPE, 1, aZZ );
             aZ = 0.0;
-            savc = *(fs+ti);
+//            savc = *(fs+ti);
             *(fs+ti) = 0;
             len = ti;
 SUR_AGAIN:

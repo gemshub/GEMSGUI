@@ -347,7 +347,8 @@ static int rkeycmp(const void *e1, const void *e2)
 int
 TPhase::RecBuild( const char *key, int mode  )
 {
-    int iic, i, nCat, nAn;
+    int iic, i;
+    short nCat, nAn;
     vstr pkeydc(81);
     vstr pkeyrd(81);
 
@@ -510,7 +511,7 @@ AGAINRC:
        }
     }
 
-    php->nDC = aDclist.GetCount() + aRclist.GetCount();
+    php->nDC = (short)(aDclist.GetCount() + aRclist.GetCount());
 //    php->NR1 = aRclist.GetCount();   comm.out by KD on 25.10.2004
     iic = aDclist.GetCount();
 
@@ -519,7 +520,6 @@ AGAINRC:
 
     if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
     {  // pre-proc. loop for SIT: determining number of cations and anions
-       char cbr;
        int pos;
        gstring spName;
        for( i=0; i<php->nDC; i++ )
@@ -543,7 +543,6 @@ AGAINRC:
            default:
                      break;
          }
-         cbr = spName[pos];  // debugging
        }
        if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
             Error( GetName(),
@@ -669,12 +668,13 @@ AGAINRC:
 void
 TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 {
-   int i, iCat=0, iAn=0, pos;
+   int pos;
+   short i, iCat=0, iAn=0;
    gstring spName;
 
    if( WorkCount )
    {   // pre-proc. loop for SIT: determining number of cations and anions
-      int nAn=0, nCat=0;
+      short nAn=0, nCat=0;
       for( i=0; i<php->nDC; i++ )
       {
          spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
@@ -781,14 +781,14 @@ TPhase::RecCalc( const char *key )
 void
 TPhase::CalcPhaseRecord(  bool getDCC  )
 {
-    int  i, /*iic,*/ pa0=0, Kielland, ndc=php->NR1, nCat, nAn;
+    int  i, /*iic,*/ pa0=0, Kielland;
     short nsc;
     vstr dcn(MAXRKEYLEN);
     char Ctype;
     float a0, bp, Z, cN, Fi;
     time_t crt;
 
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+//    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
     TReacDC* aRDC=(TReacDC *)(&aMod[RT_REACDC]);
     aDC->ods_link(0);
@@ -798,8 +798,8 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     if( (php->PphC == PH_AQUEL /* || php->PphC == PH_SORPTION ||
                   php->PphC == PH_POLYEL */ ) && php->scoef )
     {
-        nsc = php->nscN * php->nscM;
-        nCat = 0; nAn = 0;
+        nsc = (short)(php->nscN * php->nscM);
+//        nCat = 0; nAn = 0;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
    "Parameters of aqueous species: Collect from DComp/ReacDC records?"))
         {
@@ -884,7 +884,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     if( php->PphC == PH_SORPTION || php->PphC == PH_POLYEL )
     {
 // Rewritten by KD on 13.09.04 for Frumkin and on 25.10.04 for CD EDL models
-      nsc = php->nscN * php->nscM;
+      nsc = (short)(php->nscN * php->nscM);
       memset( dcn, 0, MAXRKEYLEN );
       for( i=0; i<php->nDC; i++ )
       {  /*Get key */
@@ -958,7 +958,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     if( ( php->PphC == PH_FLUID || php->PphC == PH_LIQUID ) && php->scoef )
     {
         int kx, mcex;
-        nsc = php->nscN * php->nscM;
+        nsc = (short)(php->nscN * php->nscM);
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
    "CG2003 fluid EoS coefficients: Collect from DComp records?"))
         {
@@ -1213,12 +1213,12 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
         }
         ErrorIf( Nrc<1&&Ndc<1,  /*key,*/  "AutoAssemblePhase:",
               " No DComp and ReacDC records found! ");
-        php->nDC = Ndc + Nrc;
-        php->NR1 = aRclist.GetCount();
+        php->nDC = (short)(Ndc + Nrc);
+        php->NR1 = (short)aRclist.GetCount();
         iic = aDclist.GetCount();
     }
     else
-        php->nDC = lst.GetCount(); // php->NR1 ?
+        php->nDC = (short)lst.GetCount(); // php->NR1 ?
 
     dyn_new(0);
 
@@ -1226,7 +1226,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
     {   /* Get list of component : add aMcv and aMrv */
         for( i=0; i<php->nDC; i++ )
         {
-            if( i < aDclist.GetCount() )
+            if( i < (int)aDclist.GetCount() )
             {
                 memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_DCOMP;

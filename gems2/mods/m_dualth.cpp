@@ -664,7 +664,8 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
 
    // alloc memory & copy data from db
 
-    int j, i=0, ii=0, jj =0;
+    int j, ii, jj=0;
+    uint i=0;
     int Nold = dtp->Nb;
     double *p_Bb = new double[dtp->nQ*dtp->Nb];
         memcpy( p_Bb, dtp->Bb, dtp->nQ*dtp->Nb*sizeof(double));
@@ -701,9 +702,10 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
      dyn_new();
 
 //***************************************************
-    for(int ii=0; ii< dtp->Nb; ii++ )
+    for( ii=0; ii< dtp->Nb; ii++ )
       memcpy( dtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME  );
 
+    ii = 0;
     while( jj < dtp->Nb )
     {
       if( i < aIComp.GetCount() &&  aIComp[i].line == ii )

@@ -357,12 +357,11 @@ void TReacDC::RecInput( const char *key )
 
 int TReacDC::RecBuild( const char *key, int mode  )
 {
-    int i, iir, Ndc, Nrc, Nc1, Nn1 = 0, Nf1, Nr1;
+    int i, iir, /*Ndc, Nrc,*/ Nc1, Nn1 = 0, Nf1, Nr1;
     vstr pkey(81);
     int CM,CE,CV;
     gstring str;
-    short oldnDC = rcp->nDC/*, newnDC*/;
-    uint j;
+    //short oldnDC = rcp->nDC/*, newnDC*/;
 
     TCStringArray aDclist;
     TCStringArray aRclist;
@@ -528,7 +527,7 @@ AGAINRC:
     }
 
     /*================================*/
-    rcp->nDC = aDclist.GetCount()+aRclist.GetCount()+Nn1+Nf1;
+    rcp->nDC =(short)( aDclist.GetCount()+aRclist.GetCount()+Nn1+Nf1);
     // ???? 28/02/02 Sveta
     // if( (oldnDC != newnDC) && (newnDC != rcp->nDC) )
     //    rcp->nDC = newnDC;
@@ -540,13 +539,13 @@ AGAINRC:
     {
         if( !rcp->scDC[i] )
             rcp->scDC[i] = 1;
-        if( i < aRclist.GetCount() )
+        if( i < (int)aRclist.GetCount() )
         {
             memcpy( rcp->DCk[i], aRclist[i].c_str(), DC_RKLEN );
             rcp->rDC[i] = SRC_REACDC;
             iir++;
         }
-        else if( i< aDclist.GetCount()+aRclist.GetCount() )
+        else if( i< (int)(aDclist.GetCount()+aRclist.GetCount()) )
         {
             memcpy( rcp->DCk[i], aDclist[i-iir].c_str(), DC_RKLEN );
             rcp->rDC[i] = SRC_DCOMP;
@@ -594,7 +593,7 @@ TReacDC::RecCalc( const char* key )
         Error(  key , xcpt.mess.c_str() );
     }
     TCModule::RecCalc(key);
-    db->SetStatus(ONEF_);   //  Experimental - trying to bugfix! 13.01.05 
+    db->SetStatus(ONEF_);   //  Experimental - trying to bugfix! 13.01.05
 }
 
 //Calc thermodynamic values vedushego DC of REACDC for T,P
@@ -809,7 +808,7 @@ CALCULATE_DELTA_R:
     case CPM_CON:
     case CPM_VKE:
     case CPM_VBE:
-    case CPM_NUL:   // Added by KD on 15.07.03 
+    case CPM_NUL:   // Added by KD on 15.07.03
 //    case CPM_VBM:
 //    case CPM_CEH: // constant volume only in this version!
         calc_tpcv_r( q, p, CM, CV );
@@ -878,9 +877,9 @@ CALCULATE_DELTA_R:
 */
 void TReacDC::PronsPrep( const char *key )
 {
-    double BETA1,BETA2,BETA3,BETA4,ZC,GC,HC,SC,CPC,VC,ZL,GL,HL,SL,CPL,VL,
-    Z,/*G,*/H,S,CP,V, Z1,G1,H1,S1,CP1,V1, Z2,G2,H2,S2,CP2,V2,
-    Z3,G3,H3,S3,CP3,V3, Z4,G4,H4,S4,CP4,V4, DELGR1, DELGR2,
+    double BETA1,BETA2,BETA3,BETA4,ZC,/*GC,*/HC,SC,CPC,VC,ZL,/*GL,*/HL,SL,CPL,VL,
+    Z,/*G,*/H,S,CP,V, /*Z1,G1,*/H1,S1,CP1,V1, /*Z2,G2,*/H2,S2,CP2,V2,
+    /*Z3,G3,*/H3,S3,CP3,V3, /*Z4,G4,*/H4,S4,CP4,V4, DELGR1, DELGR2,
     DELGR3, DELGR4, AZ, AZP, BZ, BZP, ALPHA, BETA, DELS1,
     DELS2, DELS3, DELS4, DELSR1, DELSR2, DELSR3, DELSR4,
     DELHR1, DELHR2, DELHR3, DELHR4, DELCP1, DELCP2, DELCP3, DELCP4,
@@ -901,7 +900,7 @@ void TReacDC::PronsPrep( const char *key )
     }
     /* Loading data for cation */
     ZC = rcp->ParDC[iC][_Zs_];
-    GC = rcp->ParDC[iC][_Gs_]/cal_to_J;
+//    GC = rcp->ParDC[iC][_Gs_]/cal_to_J;
     HC = rcp->ParDC[iC][_Hs_]/cal_to_J;
     SC = rcp->ParDC[iC][_Ss_]/cal_to_J;
     CPC = rcp->ParDC[iC][_Cps_]/cal_to_J;
@@ -913,7 +912,7 @@ void TReacDC::PronsPrep( const char *key )
 
     /* Loading data for ligand */
     ZL = rcp->ParDC[iL][_Zs_];
-    GL = rcp->ParDC[iL][_Gs_]/cal_to_J;
+//    GL = rcp->ParDC[iL][_Gs_]/cal_to_J;
     HL = rcp->ParDC[iL][_Hs_]/cal_to_J;
     SL = rcp->ParDC[iL][_Ss_]/cal_to_J;
     CPL = rcp->ParDC[iL][_Cps_]/cal_to_J;
@@ -958,7 +957,7 @@ void TReacDC::PronsPrep( const char *key )
     */
     Z= ZC + ZL;
     DELGR1 = lg_to_ln * 1.98719 * 298.15 * BETA1;
-    G1 = DELGR1 + GC + GL;
+//    G1 = DELGR1 + GC + GL;
     /*
       Now the entropy predictor starts for the first complex
     */
@@ -988,7 +987,7 @@ void TReacDC::PronsPrep( const char *key )
     }
 
     S1 = DELSR1 + SC + SL;
-    Z1 = Z;
+//    Z1 = Z;
 
     DELHR1 = DELGR1 + (298.15*DELSR1);
     H1 = DELHR1 + HC + (1.0*HL);
@@ -1023,7 +1022,7 @@ void TReacDC::PronsPrep( const char *key )
         DELVR1  = (-0.25*Z-0.3)*VC + (3.32-2.88*Z);
 
     V1 = DELVR1 + VC + VL;
-    Z1 = Z;
+//    Z1 = Z;
     /*
      END OF PREDICTORS FOR THE FIRST COMPLEX
     */
@@ -1033,7 +1032,7 @@ void TReacDC::PronsPrep( const char *key )
     Z = Z + ZL;
 
     DELGR2 = lg_to_ln * 1.98719 * 298.15 * BETA2;
-    G2 = DELGR2 + GC + (2.0*GL);
+//    G2 = DELGR2 + GC + (2.0*GL);
 
     AZ= 0.016241*Z - 0.000479;
     AZP= -0.360972*Z + 0.3209;
@@ -1047,7 +1046,7 @@ void TReacDC::PronsPrep( const char *key )
     DELSR2= DELS1 + DELS2;
 
     S2 = DELSR2 + SC + (2.0*SL);
-    Z2 = Z;
+//    Z2 = Z;
 
     DELHR2 = DELGR2 + (298.15*DELSR2);
     H2 = DELHR2 + HC + (2.0*HL);
@@ -1057,11 +1056,11 @@ void TReacDC::PronsPrep( const char *key )
     GZ = 0.89*CPC + 0.72*CPL + 16.3;
     DELCP2 = DELCP1 + GZ;
     CP2 = DELCP2 + CP1 + CPL;
-    Z2 = Z;
+//    Z2 = Z;
 
     DELVR2  = 0.11419*V1 + 8.9432;
     V2 = DELVR2 + DELVR1 + VC + (2.0*VL);
-    Z2 = Z;
+//    Z2 = Z;
     /*
      END OF PREDICTORS FOR THE SECOND COMPLEX
     */
@@ -1070,7 +1069,7 @@ void TReacDC::PronsPrep( const char *key )
     Z = Z + ZL;
 
     DELGR3 = lg_to_ln * 1.98719 * 298.15 * BETA3;
-    G3 = DELGR3 + GC + (3.0*GL);
+//    G3 = DELGR3 + GC + (3.0*GL);
 
     AZ= 0.016241*Z - 0.000479;
     AZP= -0.360972*Z + 0.3209;
@@ -1084,7 +1083,7 @@ void TReacDC::PronsPrep( const char *key )
     DELSR3= DELS1 + DELS2 + DELS3;
 
     S3 = DELSR3 + SC + (3.0*SL);
-    Z3 = Z;
+//    Z3 = Z;
 
     DELHR3 = DELGR3 + (298.15*DELSR3);
     H3 = DELHR3 + HC + (3.0*HL);
@@ -1094,11 +1093,11 @@ void TReacDC::PronsPrep( const char *key )
     GZ = 0.89*CPC + 0.72*CPL + 16.3;
     DELCP3 = DELCP2 + GZ;
     CP3 = DELCP3 + CP2 + CPL;
-    Z3 = Z;
+//    Z3 = Z;
 
     DELVR3  = 0.11419*V2 + 8.9432;
     V3 = DELVR3 + DELVR2 + DELVR1 + VC + (3.0*VL);
-    Z3 = Z;
+//    Z3 = Z;
 
     /*
      END OF PREDICTORS FOR THE THIRD COMPLEX
@@ -1108,7 +1107,7 @@ void TReacDC::PronsPrep( const char *key )
 
     Z = Z + ZL;
     DELGR4 = lg_to_ln * 1.98719 * 298.15 * BETA4;
-    G4 = DELGR4 + GC + (4.0*GL);
+//    G4 = DELGR4 + GC + (4.0*GL);
 
     AZ= 0.016241*Z - 0.000479;
     AZP= -0.360972*Z + 0.3209;
@@ -1122,7 +1121,7 @@ void TReacDC::PronsPrep( const char *key )
     DELSR4= DELS1 + DELS2 + DELS3 + DELS4;
 
     S4 = DELSR4 + SC + (4.0*SL);
-    Z4 = Z;
+//    Z4 = Z;
 
     DELHR4 = DELGR4 + (298.15*DELSR4);
     H4 = DELHR4 + HC + (4.0*HL);
@@ -1132,18 +1131,18 @@ void TReacDC::PronsPrep( const char *key )
     GZ = 0.89*CPC + 0.72*CPL + 16.3;
     DELCP4 = DELCP3 + GZ;
     CP4 = DELCP4 + CP3 + CPL;
-    Z4 = Z;
+//    Z4 = Z;
 
     DELVR4  = 0.11419*V3 + 8.9432;
     V4 = DELVR4 + DELVR3 + DELVR2 + DELVR1 + VC + (4.0*VL);
-    Z4 = Z;
+//    Z4 = Z;
     /*
     	The following section has been altered so that
     	there will be output only from where BETA != 0
     */
     if( b1 )
     {
-        Z = Z1;
+//        Z = Z1;
 //        G = G1;
         H = H1;
         S = S1;
@@ -1152,7 +1151,7 @@ void TReacDC::PronsPrep( const char *key )
     }
     if( b2 )
     {
-        Z = Z2;
+//        Z = Z2;
 //        G = G2;
         H = H2;
         S = S2;
@@ -1161,7 +1160,7 @@ void TReacDC::PronsPrep( const char *key )
     }
     if( b3 )
     {
-        Z = Z3;
+//        Z = Z3;
 //        G = G3;
         H = H3;
         S = S3;
@@ -1170,7 +1169,7 @@ void TReacDC::PronsPrep( const char *key )
     }
     if( b4 )
     {
-        Z = Z4;
+//       Z = Z4;
 //        G = G4;
         H = H4;
         S = S4;

@@ -463,7 +463,7 @@ void TProfil::readMulti( GemDataStream& ff )
 
 //Delete record with key
 void
-TProfil::DeleteRecord( const char *key, bool errifNo )
+TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
 {
     TCStringArray aList;
     TCIntArray anR;

@@ -55,8 +55,8 @@ bool TSysEq::ifCalcFlag()
 void TSysEq::setCalcFlag( bool ifC )
 {
     if(ifC == true)
-        stp->Flags =stp->Flags|0x1;
-    else stp->Flags =stp->Flags&(0xF-0x1);
+        stp->Flags =(stp->Flags|0x1);
+    else stp->Flags =(stp->Flags&(0xF-0x1));
 }
 
 // Remake record in Calc Module
@@ -767,7 +767,7 @@ void TSysEq::newSizeifChange()
 void TSysEq::RenameList( const char* newName,
         const char *oldName )
 {
-    if( strlen(newName) > db->FldLen(0) )
+    if( (int)strlen(newName) > db->FldLen(0) )
       return;
 
     gstring str_old = gstring( oldName, 0, db->FldLen(0) );

@@ -31,7 +31,7 @@ void TMulti::makeStartDataChBR(
 {
 // set sizes for DataCh
   uint ii;
-
+  short i1;
 // realloc memory for     DATACH  *data_CH;  and  DATABR  *data_BR;
 
   if( !data_CH )
@@ -82,8 +82,8 @@ void TMulti::makeStartDataChBR(
 
   memcpy( data_CH->A, pm.A , data_CH->nIC*data_CH->nDC*sizeof(float));
 
-  for( ii=0; ii< data_CH->nIC; ii++ )
-     data_CH->ICmm[ii] = pm.Awt[ii];
+  for( i1=0; i1< data_CH->nIC; i1++ )
+     data_CH->ICmm[i1] = pm.Awt[i1];
 
   memcpy( data_CH->DCmm, pm.MM , data_CH->nDC*sizeof(double));
 
@@ -92,21 +92,21 @@ void TMulti::makeStartDataChBR(
   memcpy( data_CH->G0, pm.G0 , data_CH->nDC*sizeof(double));
   memcpy( data_CH->V0, pm.Vol , data_CH->nDC*sizeof(double));
 
-  for( ii=0; ii< data_CH->nDC; ii++ )
+  for( i1=0; i1< data_CH->nDC; i1++ )
   if ( pm.H0 )
-      data_CH->H0[ii] = pm.H0[ii];
+      data_CH->H0[i1] = pm.H0[i1];
   else
-      data_CH->H0[ii] = 0.;
+      data_CH->H0[i1] = 0.;
 
-  for( ii=0; ii< data_CH->nDC; ii++ )
+  for( i1=0; i1< data_CH->nDC; i1++ )
   if ( pm.Cp0 )
-      data_CH->Cp0[ii] = pm.Cp0[ii];
+      data_CH->Cp0[i1] = pm.Cp0[i1];
   else
-      data_CH->Cp0[ii] = 0.;
+      data_CH->Cp0[i1] = 0.;
 
   if( data_CH->nAalp >0 )
-      for( ii=0; ii< data_CH->nPH; ii++ )
-         data_CH->Aalp[ii] = pm.Aalp[ii];
+      for( i1=0; i1< data_CH->nPH; i1++ )
+         data_CH->Aalp[i1] = pm.Aalp[i1];
 
   memcpy( data_CH->ICNL, pm.SB , MaxICN*data_CH->nIC*sizeof(char));
   memcpy( data_CH->DCNL, pm.SM , MaxDCN*data_CH->nDC*sizeof(char));
@@ -137,8 +137,8 @@ void TMulti::makeStartDataChBR(
    data_BR->Ms = pm.MBX;
 
 // arrays
-   for( ii=0; ii<data_CH->nICb; ii++ )
-    data_BR->bIC[ii] = pm.B[ data_CH->xIC[ii] ];
+   for( i1=0; i1<data_CH->nICb; i1++ )
+    data_BR->bIC[i1] = pm.B[ data_CH->xIC[i1] ];
 
 // set calculated&dynamic data to DataBR
 
@@ -263,8 +263,9 @@ void TMulti::GEM_input_from_MT(
   data_BR->dt1 = p_dt1;
 // Checking if no-simplex IA is Ok
    for( ii=0; ii<data_CH->nICb; ii++ )
-   { if( fabs(data_BR->bIC[ii] - p_bIC[ii] ) > data_BR->bIC[ii]*1e-4 ) // bugfix KD 21.11.04
-          useSimplex = true;
+   {  //  Sveta 11/02/05 for test
+      //if( fabs(data_BR->bIC[ii] - p_bIC[ii] ) > data_BR->bIC[ii]*1e-4 ) // bugfix KD 21.11.04
+       //     useSimplex = true;
      data_BR->bIC[ii] = p_bIC[ii];
    }
    if( useSimplex && data_BR->NodeStatusCH == NEED_GEM_PIA )
@@ -402,7 +403,7 @@ data_BR->Eh = pm.FitVar[3];
 
    for( ii=0; ii<data_CH->nPSb; ii++ )
    for(short jj=0; jj<data_CH->nICb; jj++ )
-   { short new_ndx= (ii*data_CH->nICb)+jj,
+   { int   new_ndx= (ii*data_CH->nICb)+jj,
            mul_ndx = ( data_CH->xPH[ii]*data_CH->nIC )+ data_CH->xIC[jj];
      data_BR->bPS[new_ndx] = pm.BF[ mul_ndx ];
    }
@@ -460,7 +461,7 @@ pm.FitVar[3] = data_BR->Eh;
 
    for( ii=0; ii<data_CH->nPSb; ii++ )
    for(short jj=0; jj<data_CH->nICb; jj++ )
-   { short new_ndx= (ii*data_CH->nICb)+jj,
+   { int new_ndx= (ii*data_CH->nICb)+jj,
            mul_ndx = ( data_CH->xPH[ii]*data_CH->nIC )+ data_CH->xIC[jj];
      pm.BF[ mul_ndx ] = data_BR->bPS[new_ndx];
    }

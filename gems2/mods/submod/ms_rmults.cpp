@@ -323,7 +323,7 @@ void TRMults::DCListLoad(  gstring& AqKey, gstring& GasKey,
 
     if( aPhaseList.GetCount()<1 )
         Error("RMULT", "No records of Phases!");
-    mu.Fi  = aPhaseList.GetCount();
+    mu.Fi  = (short)aPhaseList.GetCount();
     mu.PmvPH = S_ON;
     mu.Ll = (short *)aObj[ o_mul1].Alloc( mu.Fi, 1, I_ );
     mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf].Alloc( mu.Fi, 1, PH_RKLEN );
@@ -366,7 +366,7 @@ TEST2:
         SPHP=0;
         goto TEST2;
     }
-    mu.L = List.GetCount();
+    mu.L = (short)List.GetCount();
     mu.FiE= mu.L;
     mu.PmvDC = S_ON;
     mu.SM = (char (*)[DC_RKLEN])aObj[ o_musm].Alloc( mu.L, 1, DC_RKLEN );
@@ -386,7 +386,7 @@ void TRMults::MakeRecordLists( gstring& AqKey, gstring& GasKey )
     rt[RT_ICOMP].GetKeyList( "*:*:*:", aICList, anRIC );
     if( aICList.GetCount()<1 )
         Error("RMULT", "No records of Independent component!");
-    mu.N  = aICList.GetCount();
+    mu.N  = (short)aICList.GetCount();
     mu.PmvIC = S_ON;
     mu.SB = (char (*)[IC_RKLEN])aObj[ o_musb].Alloc( mu.N, 1, IC_RKLEN );
     for( i=0; i< aICList.GetCount(); i++)
@@ -396,7 +396,7 @@ void TRMults::MakeRecordLists( gstring& AqKey, gstring& GasKey )
     TCStringArray aCompList;
     TCIntArray anRComp;
     rt[RT_COMPOS].GetKeyList( "*:*:*:", aCompList, anRComp );
-    mu.La = aCompList.GetCount();
+    mu.La = (short)aCompList.GetCount();
     if( mu.La<1 )
         mu.PmvSA = S_OFF;
     else

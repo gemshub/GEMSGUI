@@ -147,7 +147,8 @@ main( int argc, char* argv[] )
     m_rMB = (double*)malloc( nIC*sizeof(double) );
     m_uIC = (double*)malloc( nIC*sizeof(double) );
 
-    for( int ii=2; ii<=nNods; ii++)
+ for(int kk=0; kk<2; kk++ )
+    for( int ii=1; ii<=nNods; ii++)
     {
        int jj = -ii;
        MAIF_CALC( jj, // Fortran index; negative means readonly
@@ -163,7 +164,12 @@ main( int argc, char* argv[] )
         m_bPS, m_xPA, m_bIC, m_rMB, m_uIC,
         m_dRes1, m_dRes2 );
 
-/*       MAIF_CALC( ii, // Fortran index; negative means readonly
+       m_NodeStatusCH = NEED_GEM_PIA; //NEED_GEM_AIA
+         m_bIC[2] += 1e-6*kk;
+         m_bIC[3] += 1e-6*kk;
+ //      m_bIC[4] += 1e-7;
+
+       MAIF_CALC( ii, // Fortran index; negative means readonly
         m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
         m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
         m_T, m_P, m_Vs, m_Vi, m_Ms, m_Mi,
@@ -176,7 +182,8 @@ main( int argc, char* argv[] )
         m_bPS, m_xPA, m_bIC, m_rMB, m_uIC,
         m_dRes1, m_dRes2 );
 
-  */   }
+
+     }
 
 // Printouts here
 

@@ -47,7 +47,7 @@
 //
 #define  a(i,j) (*(A+(j)+(i)*N1))
 
-int TProfil::Gordan( int N, double DG, double *A, double *X )
+int TProfil::Gordan( int N, double /*DG*/, double *A, double *X )
 {
     double AMAX,DIA;      /*  A[N][N+1]  */
     int I,J,K,N1,II,IR,*INV,iRet=0;
@@ -132,7 +132,7 @@ int TProfil::SquareRoots( int N, double *R, double *X, double *B )
 //!!  fstream f_log("SquareRoots.txt", ios::out|ios::app );
 
     int I,J,K,P,Q,N1, iRet=0;
-    double F,G, E;
+    double F,G/*, E*/;
     N1 = N + 1;
     // ErrorIf( !B, "SquareRoots", "Error param B." );
     memset( B, 0, N*N1*sizeof(double));
@@ -237,8 +237,8 @@ KN:
 //
 void TProfil::PhaseSelect()
 {
-    short II,JJ,Z,I,J;//, iRet=0;
-    double F1,F2,F3=0.0,*F0;
+    short /*II,*/JJ,Z,I,J;//, iRet=0;
+    double F1,F2/*,F3=0.0*/,*F0;
 
     f_alpha( );
     F0 = pmp->Falp;
@@ -246,7 +246,7 @@ void TProfil::PhaseSelect()
     (pmp->K2)++;
     pmp->MK=0;
     JJ= -1;
-    II= -1;
+ //   II= -1;
     F1= F2= pmp->lowPosNum*10000.;  // 1E-16;
 
     for(Z=0;Z<pmp->FI;Z++)
@@ -259,14 +259,14 @@ void TProfil::PhaseSelect()
         if( F0[Z]>F2 && pmp->YF[Z]>pmp->lowPosNum )
         {
             F2=F0[Z];
-            II=Z;
+           // II=Z;
         }
     }
     if( F1 > pa.p.DF && JJ >= 0 )
     {
         double sfactor, molB=0.0;
         int i, NN;
-        F3=F1;
+ //       F3=F1;
         // There is a phase for which DF (0.01) is exceeded
         //   S2:;
         NN = pmp->N - pmp->E;
@@ -360,7 +360,7 @@ void TProfil::PhaseSelect()
                 if( fabs(pmp->Y[I]- pmp->XY[I]) > pa.p.DF*pmp->Y[I] ) // Check!
                     goto S6;
             pmp->PZ=2;
-            F1=F3;
+            /*F1=F3;*/
             goto S4;
         }
 S6: // copy X changed by SELEKT2 algorithm
@@ -371,12 +371,12 @@ S6: // copy X changed by SELEKT2 algorithm
         /*  else goto S5; */
     }
 S4: // No phases to insert or no distortions
-    if( F1<F2 )
+/*    if( F1<F2 )
     {
         F1=F2;
         JJ=II;
     }
-    // end of iterations of SELEKT2
+*/    // end of iterations of SELEKT2
     pmp->MK=1;
     return;
 }
@@ -462,7 +462,7 @@ int TProfil::EnterFeasibleDomain( )
         if( pmp->LO )
         {
             if( pmp->YF[0] < pmp->DSM && pmp->YFA[0] < pmp->lowPosNum*100.)
-                pmp->NR= pmp->N-1;
+                pmp->NR= (short)(pmp->N-1);
         }
         N=pmp->NR;
         N1=N+1;
@@ -888,7 +888,7 @@ int TProfil::InteriorPointsMethod( )
         if( pmp->LO ) // water-solvent is present
         {
             if( pmp->YF[0]<pmp->DSM && pmp->Y[pmp->LO]< pmp->lowPosNum *100.)
-                pmp->NR=pmp->N-1;
+                pmp->NR=(short)(pmp->N-1);
         }
 
         iRet = InteriorPointsIteration();
@@ -1095,8 +1095,9 @@ IN7: // PhaseListPress();
 
 void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 {
-    int i,j,ja=0,jj,ii,jb,je,k;
-    int isp=0, ist=0;  double Ez, Psi;   // added  KD 23.11.01
+    int i,j,ja/*=0*/,jj,ii,jb,je,k;
+    int isp/*=0*/, ist/*=0*/;
+    double Ez, Psi;   // added  KD 23.11.01
 //    double SPmol,SPmol1;
     double  Dsur, DsurT, MMC, *XU;
     XU = new double[pmp->L];
@@ -1149,8 +1150,8 @@ void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
                 ;    //     disabled by KD 23.11.01
 //                XU[j] += Dsur - 1.0 + 1.0 / ( 1.0 + Dsur )
 //                      - DsurT + DsurT / ( 1.0 + DsurT ) + log(XF[k]);
-            else  // rewritten by KD  23.11.01
-               Psi = 0.0;
+            else  {    // rewritten by KD  23.11.01
+               // Psi = 0.0;
                ja = j - ( pmp->Ls - pmp->Lads );
                Ez = pmp->EZ[j];
                /* Get ist - index of surface type */
@@ -1164,6 +1165,7 @@ void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
                   Psi = pmp->XpsiB[k][ist];
                XU[j] += Dsur + DsurT/( 1.0 + DsurT ) + log(XFA[k])+
                log( DsurT * pmp->Nfsp[k][ist] ) - pmp->FRT * Ez * Psi;
+             }
          }
          else
            XU[j] += log(XF[k]);

@@ -629,7 +629,7 @@ void TUnSpace::dyn_new(int q)
     usp->vT = (float *)aObj[ o_unvt].Alloc(usp->Q, 1, F_);
     usp->vP = (float *)aObj[ o_unvp].Alloc(usp->Q, 1, F_);
 
-    usp->qQ = (int)(usp->quan_lev*usp->Q);
+    usp->qQ = (short)(usp->quan_lev*usp->Q);
     if(usp->qQ<1)
         usp->qQ=1;
     usp->quanLap = (short *)aObj[ o_unqulapl].Alloc( usp->qQ, 1, I_ );
@@ -932,7 +932,7 @@ AGAIN:
 
 //Recalc record structure
 void
-TUnSpace::RecCalc( const char *key )
+TUnSpace::RecCalc( const char */*key*/ )
 {
     int nAdapt = 1;
 //    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
@@ -1094,7 +1094,8 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
 // pack and copy data from 1 to 0 (using deleting lists)
 //***************************************************
 
-    int j, i=0, ii=0, jj =0;
+    uint i=0;
+    int j, ii=0, jj =0;
 
 if( aIComp.GetCount() < 1)
   goto DCOMPS;

@@ -96,29 +96,29 @@ sMod = pmp->sMod[k];
                 continue;
             if( modT[SPHAS_TYP] != SM_AQSIT )
             {                          // Not an aq phase with SIT model
-               pmp->LsMod[k] = aPH->php->ncpN * aPH->php->ncpM;
+               pmp->LsMod[k] = (short)(aPH->php->ncpN * aPH->php->ncpM);
                pmp->LsMdc[k] = aPH->php->nscM; // * aPH->php->nscN;
             }
             else { // Aq phase with SIT model - interaction coeffs must be compressed
                // checking dimensions of the pnc table
-               int nCat=0, nAn=0, jj=0;
+               int nCat=0, nAn=0, jj;
 
                for( jj = jb; jj<je; jj++ )
                {
-                  if( pmp->EZ[jj] < 0 )
+                   if( pmp->EZ[jj] < 0 )
                     nAn++;
                   else if( pmp->EZ[jj] > 0 )
                     nCat++;
                   else ;
                }
-               pmp->LsMod[k] = (short)nCat * (short)nAn;
+               pmp->LsMod[k] = (short)(nCat * nAn);
                pmp->sitNcat = (short)nCat;
                pmp->sitNan = (short)nAn;
             }
             goto LOAD_NIDMCOEF;
         case SM_PRIVATE_:
         case SM_PUBLIC:   /* nonideal solution */
-            pmp->LsMod[k] = aPH->php->ncpN * aPH->php->ncpM;
+            pmp->LsMod[k] = (short)(aPH->php->ncpN * aPH->php->ncpM);
 //          pmp->LsMdc[k] = aPH->php->nscN * aPH->php->nscN;  ??
           pmp->LsMdc[k] = aPH->php->nscM;
             /*     if( !pm_GC_ods_link( q, k, jb, kc, kd ))
@@ -231,7 +231,7 @@ LOAD_NIDMCOEF:
                if( modT[SPHAS_TYP] != SM_AQSIT )
                    memcpy( pmp->PMc+kc, aPH->php->pnc, pmp->LsMod[k]*sizeof(float));
                else { // Aq phase with SIT model
-                  float *ppnc=0;
+                  float *ppnc;
                   ppnc = PackSITcoeffs( k, JB, JE, jb, je, pmp->LsMod[k] );
                   if( ppnc )
                   {  // ppnc is actually pmp->sitE !
@@ -284,8 +284,8 @@ LOAD_NIDMCOEF:
 float *
 TProfil::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
 {
-   int iCat=0, iAn=0, nCat=0, nAn=0, pos=0, icat=0, ian=0, nan=0;
-   short j=0, js=0, *nxCAT=0, *nxAN=0; //, *nxcat, *nxan;
+   int iCat=0, iAn=0, nCat/*=0*/, nAn/*=0*/, pos/*=0*/, icat=0, ian=0, nan/*=0*/;
+   short j, js, *nxCAT, *nxAN; //, *nxcat, *nxan;
    gstring spName;
    TPhase* aPH = TPhase::pm;
 
@@ -679,7 +679,7 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
     size_t eLen, ls, lb;
     int i, ii, pj, LNplace=1, Xplace=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
-      *prev, *last, iCode=A_NOx, odlab[MAXKEYWD+2]; // added KD 30.03.01
+      *prev, *last, iCode/*=A_NOx*/, odlab[MAXKEYWD+2]; // added KD 30.03.01
     vstr name(64), nbuf(64);
 
     etext = (char *)aObj[ nOet ].GetPtr();
@@ -927,9 +927,6 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
     *ecur = 0;
 }
 
-// -----------------------------------------------------------------
-const double tc_ISdelta = 1e-5;
-const double LOWESTDC_ = 1e-6;
 
 //Calculation by IPM (preparing for calculation, unpack data)
 // key contains SysEq record key
@@ -1077,7 +1074,7 @@ void TProfil::MultiCalcInit( const char *key )
 //
 void TProfil::EqstatExpand( const char *key )
 {
-    int i, j, k, jb, je=0, jpb, jpe=0, jdb, jde=0;
+    int i, j, k, jb, je/*=0*/, jpb, jpe=0, jdb, jde=0;
     double FitVar3;
 
 //    if( !pmp->NR )       Sveta 30/08/01

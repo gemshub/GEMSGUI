@@ -33,13 +33,17 @@
 #endif
 
 
+// -----------------------------------------------------------------
+//const double tc_ISdelta = 1e-5;
+//const double LOWESTDC_ = 1e-6;
+
 // Finding automatic initial approximation for the IPM algorithm
 // using modified simplex method with two-side constraints
 //
 bool TProfil::AutoInitialApprox( )
 {
     int i, j, k, NN;
-    double minB=0.0, molB=0.0, sfactor=1.0;
+    double minB/*=0.0*/, molB=0.0, sfactor/*=1.0*/;
 
 // Kostya correct DK & DHB as automatic
     NN = pmp->N - pmp->E;
@@ -294,7 +298,7 @@ STEP_POINT("Before FIA");
 //          false  if good result could not be obtained
 //
 
-bool TProfil::MultiCalcMain( int &pll, double &FXold )
+bool TProfil::MultiCalcMain( int& /*pll*/, double& /*FXold*/ )
 {
     int i, j, RepeatSel=0, eRet;
     pmp->W1=0;
@@ -547,8 +551,9 @@ void TProfil::MultiCalcIterations()
 */
 void TProfil::XmaxSAT_IPM2( void )
 {
-    int i, j, ja=0, k, jb, je=0, ist=0, Cj=0, iSite[6];
-    double XS0=0., xj0=0., XVk, XSk=0., XSkC=0., xj, Mm, rIEPS, oDUL, xjn=0.;
+    int i, j, ja/*=0*/, k, jb, je=0, ist=0, Cj/*=0*/, iSite[6];
+    double XS0/*=0.*/, xj0/*=0.*/, XVk, XSk/*=0.*/, XSkC/*=0.*/, xj,
+           Mm, rIEPS, /*oDUL,*/ xjn/*=0.*/;
 
   if(!pmp->DUL )   // not possible to install upper kinetic constraint!
       return;
@@ -588,7 +593,7 @@ void TProfil::XmaxSAT_IPM2( void )
         if( pmp->X[j] <= pmp->lowPosNum /* *10. */ )
             continue;  /* This surface DC has been killed by IPM */
         rIEPS = pa.p.IEPS;
-        oDUL = pmp->DUL[j];
+//        oDUL = pmp->DUL[j];
         ja = j - ( pmp->Ls - pmp->Lads );
 
         switch( pmp->DCC[j] )  /* code of species class */
@@ -710,7 +715,7 @@ rIEPS = pa.p.IEPS;
 // clearing pmp->DUL constraints!
 void TProfil::XmaxSAT_IPM2_reset( void )
 {
-    int j, ja=0, k, jb, je=0;
+    int j, ja/*=0*/, k, jb, je=0;
 
   if(!pmp->DUL )   // no upper kinetic constraints!
       return;

@@ -43,11 +43,11 @@ void TProfil::PMtest( const char *key )
     float T, P;
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
-    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
+//    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
 
     ///  pmp->pNP = -1;
     if( STat->ifCalcFlag())
-       pmp->pESU = 1; 
+       pmp->pESU = 1;
     else pmp->pESU = 0;
 
     if( pmp->pESU == 0 ) // no old solution
@@ -325,8 +325,8 @@ NEXT2:
 //
 void TProfil::multi_sys_dc()
 {
-    int j, ii, L, iZ;
-    short jj, jja=0, ja=0, kk;
+    int j, ii, L, iZ=0;
+    short jj, jja/*=0*/, ja/*=0*/, kk;
     float a, *A, Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
@@ -368,7 +368,7 @@ void TProfil::multi_sys_dc()
                 memcpy( pmp->SM2[j], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
             if( j < syp->Ls && j >= syp->Ls - syp->Lsor)
             {   // assembling DC name list for sorption surface species
-                ja = j-(syp->Ls-syp->Lsor);
+                ja = (short)(j-(syp->Ls-syp->Lsor));
                 memcpy( pmp->SM3[ja], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
                // surface species DC class code (usage will be obsolete)
                 pmp->DCC3[ja] = mup->DCC[jj];
@@ -394,7 +394,7 @@ void TProfil::multi_sys_dc()
       {  Reload parametres of components */
     if( pmp->E )
     { /*index of charge */
-        for( iZ=0, ii=0; ii<pmp->N; ii++ )
+        for(  ii=0; ii<pmp->N; ii++ )
             if( pmp->ICC[ii] == IC_CHARGE )
                 goto CH_FOUND;
         // error no charge
@@ -446,7 +446,7 @@ CH_FOUND:
             if( syp->DUL )
                 pmp->DUL[j] = syp->DUL[jj];
             else pmp->DUL[j] = 1e6;
-            ja = j-(pmp->Ls-pmp->Lads);
+            ja = (short)(j-(pmp->Ls-pmp->Lads));
             if( pmp->lnSAC && ja < pmp->Lads && ja >= 0 )
                pmp->lnSAC[ja][3] = pmp->DUL[j]; // Copy of DUL for SAT refining
             if( syp->DLL )
@@ -479,8 +479,8 @@ CH_FOUND:
         if( !( j < pmp->Ls && j >= pmp->Ls - pmp->Lads ) )
             continue;   // the following is not done for non-surface species
 
-        ja = j-(pmp->Ls-pmp->Lads);
-        jja = jj-(mup->Ls-mup->Lads);
+        ja = (short)(j-(pmp->Ls-pmp->Lads));
+        jja = (short)(jj-(mup->Ls-mup->Lads));
         // Loading MaSdj - max.sur.densities for non-competitive sorbates */
         if( syp->PMaSdj != S_OFF )
         {
@@ -625,7 +625,7 @@ void TProfil::multi_sys_ph()
     pmp->FIs = syp->Fis;
     pmp->FIa = 0;
     pmp->Lads = 0;   // Is this really needed?
-    ja=0;
+//    ja=0;
     for( kk=0, /*FI=0,*/ k=-1, /*jb=0,*/ je=0; kk<mup->Fi; kk++ )
     {
         if( syp->Pcl[kk] == S_OFF )
@@ -651,10 +651,10 @@ void TProfil::multi_sys_ph()
             // read informations from phase-solution
             memcpy( pmp->sMod[k], aPH->php->sol_t, 6 );
             if( aPH->php->Ppnc == S_ON )
-                pmp->LsMod[k] = aPH->php->ncpN * aPH->php->ncpM;  /* ?error? */
+                pmp->LsMod[k] = (short)(aPH->php->ncpN * aPH->php->ncpM);  /* ?error? */
             else pmp->LsMod[k] = 0;
             if( aPH->php->Psco == S_ON )
-                pmp->LsMdc[k] = aPH->php->nscN * aPH->php->nscM;
+                pmp->LsMdc[k] = (short)(aPH->php->nscN * aPH->php->nscM);
             else pmp->LsMdc[k] = 0;
         }
         else  // nothing to read in phase record
@@ -963,7 +963,7 @@ void TProfil::ph_sur_param( int k, int kk )
 void TProfil::ph_surtype_assign( int k, int kk, int jb, int je,
                                  short car_l[], int car_c, short Cjs )
 {
-    int j, jcl, ist=0, isi=0, ja=0;
+    int j, jcl, ist/*=0*/, isi/*=0*/, ja/*=0*/;
     /*  double SATst; */
 
     for( j=jb; j<je; j++ )

@@ -686,10 +686,10 @@ TGtDemo::SaveGraphData( GraphData *gr )
       return false;
      if( gr != gd_gr->getGraphData() )
       return false;
-    gdp->axisType[0] = gr->axisType;
-    gdp->axisType[1] = gr->b_color[0];
-    gdp->axisType[2] = gr->b_color[1];
-    gdp->axisType[3] = gr->b_color[2];
+    gdp->axisType[0] = (short)gr->axisType;
+    gdp->axisType[1] = (short)gr->b_color[0];
+    gdp->axisType[2] = (short)gr->b_color[1];
+    gdp->axisType[3] = (short)gr->b_color[2];
     strncpy( gdp->xNames, gr->xName.c_str(), 9);
     strncpy( gdp->yNames, gr->yName.c_str(), 9);
     memcpy( &gdp->size[0], gr->region, 4*sizeof(float) );
@@ -697,11 +697,11 @@ TGtDemo::SaveGraphData( GraphData *gr )
 
     plot = (TPlotLine *)
            aObj[ o_gdplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));
-    for(uint ii=0; ii<gr->lines.GetCount(); ii++ )
+    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
     {
         plot[ii] = gr->lines[ii];
         //  lNam0 and lNamE back
-        if(ii < gdp->dimXY[1] )
+        if( ii < gdp->dimXY[1] )
             strncpy(  gdp->lNam0[ii], plot[ii].name, MAXGRNAME );
         else
             strncpy(  gdp->lNamE[ii-gdp->dimXY[1]], plot[ii].name, MAXGRNAME );

@@ -1,3 +1,6 @@
+#include <iomanip>
+
+#include "m_param.h"
 
 int  NewNodeArray( int &nNodes, const char*  MULTI_filename,
                    const char *ipmfiles_lst_name, int *nodeTypes );
@@ -89,8 +92,9 @@ int __stdcall MAIF_START( int &nNodes,
     }
     string_cto_i2c[30]= '\0';          // end string in cpp
 
-    return
-       NewNodeArray( nNodes, string_cto_i1c, string_cto_i2c, nodeTypes);
+    int iRet =  NewNodeArray(
+         nNodes, string_cto_i1c, string_cto_i2c, nodeTypes);
+    return iRet;
 }
 
 
@@ -159,8 +163,7 @@ int __stdcall MAIF_CALC( int  &iNodeF, // fortran index; negative means read onl
    double  *p_dRes2
 )
 {
-  return
-    NodeCalcGEM( iNodeF,
+  int iRet = NodeCalcGEM( iNodeF,
             p_NodeHandle, p_NodeTypeHY, p_NodeTypeMT,
             p_NodeStatusFMT, p_NodeStatusCH, p_IterDone,
             p_T, p_P, p_Vs, p_Vi, p_Ms, p_Mi, p_Gs, p_Hs,
@@ -170,6 +173,53 @@ int __stdcall MAIF_CALC( int  &iNodeF, // fortran index; negative means read onl
             p_hDl, p_hDt, p_hDv, p_nPe,
             p_xDC, p_gam, p_xPH, p_vPS, p_mPS, p_bPS, p_xPA,
             p_bIC, p_rMB, p_uIC, p_dRes1, p_dRes2  );
+
+//***************************************************************
+  int ii;
+  int nIC, nDC, nPH;
+ // Extracting data bridge dimensionalities
+   nIC = TProfil::pm->multi->data_CH->nICb;
+   nDC = TProfil::pm->multi->data_CH->nDCb;
+   nPH = TProfil::pm->multi->data_CH->nPHb;
+
+  fstream f_log("MAIF_CALC.txt", ios::out|ios::app );
+
+  f_log << "Node = " <<  p_NodeHandle << "( " << iNodeF << " )";
+  f_log << "  NodeStatus = " <<  p_NodeStatusCH;
+  f_log << "  ReturnStatus = " <<  iRet;
+  f_log << "  IterDone = " <<  p_IterDone << endl;
+
+  f_log << "p_xDC" << endl;
+  for(ii=0; ii<nDC; ii++ )
+    f_log << setprecision(15) << scientific << p_xDC[ii]<< ", ";
+  f_log <<  endl;
+
+  f_log << "p_gam" << endl;
+  for(ii=0; ii<nDC; ii++ )
+    f_log << setprecision(15) << scientific << p_gam[ii]<< ", ";
+  f_log <<  endl;
+
+  f_log << "p_xPH" << endl;
+  for(ii=0; ii<nPH; ii++ )
+    f_log << setprecision(15) << scientific << p_xPH[ii]<< ", ";
+  f_log <<  endl;
+
+  f_log << "p_uIC" << endl;
+  for(ii=0; ii<nIC; ii++ )
+    f_log << setprecision(15) << scientific << p_uIC[ii]<< ", ";
+  f_log <<  endl;
+
+  f_log << "p_rMB" << endl;
+  for(ii=0; ii<nIC; ii++ )
+    f_log << setprecision(15) << scientific << p_rMB[ii]<< ", ";
+  f_log <<  endl;
+
+  f_log <<  endl;
+  f_log <<  endl;
+
+//*****************************************************************/
+
+  return iRet;
 
 }
 
