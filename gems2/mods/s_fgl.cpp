@@ -194,7 +194,8 @@ void TFGLcalc::ZAK(int PGL)
 float TFGLcalc::SAT( float T )
 { /*float a[8] = { -7.85823,1.83991,-11.7811,22.6705,-15.9393,1.77516,
                       PC=220.64, TC= 647.14}; */
-    float *A, TAU, KK;
+    float *A, KK;
+    double  TAU;
     TConst* aCon= TConst::pm;
     aCon->RecInput( "FGCONST:Sat_H2O:" );
     aCon->dyn_set();
@@ -427,8 +428,8 @@ int TFGLcalc::OPTION(float P)
 float TFGLcalc::PY()
 {
     float Z1,Z2,Z3,Z4,Z5,Z;
-    Z1=5.92714-6.09648/fg.TR-1.28862*log(fg.TR)+.169347*pow(fg.TR,6.);
-    Z2=15.2518-15.6875/fg.TR-13.4721*log(fg.TR)+.43577*pow(fg.TR,6.);
+    Z1=5.92714-6.09648/fg.TR-1.28862*log(fg.TR)+.169347*pow(double(fg.TR),6.);
+    Z2=15.2518-15.6875/fg.TR-13.4721*log(fg.TR)+.43577*pow(double(fg.TR),6.);
     Z3=fg.WW*Z2;
     Z4=Z1+Z3;
     Z5=exp(Z4);
@@ -487,7 +488,8 @@ ME:
 //--------------------------------------------------------------------//
 float TFGLcalc::NG()
 {
-    float K1,K2,K4,D,X,TR,KZ;
+    float K1,K2,K4,D,X,KZ;
+    double TR;
     TR=fg.TR;
     KZ=fg.KZ;
     if( KZ>0.3)
@@ -498,8 +500,8 @@ float TFGLcalc::NG()
     else if( KZ>.26)
         K2=60.2091-(402.063*KZ)+(501.0*(KZ*KZ))+(641.0*(KZ*KZ*KZ));
     K4=.93-K2;
-    D=1+(K1*pow(1-TR,.333333))+(K2*pow(1-TR,0.666667))+
-      (K4*pow(1-TR,1.333333));
+    D=1+(K1*pow(1.0-TR,.333333))+(K2*pow(1.0-TR,0.666667))+
+      (K4*pow(1.0-TR,1.333333));
     X=fg.KV/D;
     return(X);
 }
@@ -508,8 +510,8 @@ float TFGLcalc::NG()
 // calc delta G,H,KZ if  P>=1 and 0.1<PR<10  and  .3<TR<4
 void TFGLcalc::FESAX(int TT,float P1,float P2, float *GTP,float *DH )
 {
-    float A,B,C,D,RR,ZZ,TK,TR;  /*,PR;*/
-    float KT,KP,R;
+    float A,B,C,D,RR,ZZ; double TR,KT,TK;  /*,PR;*/
+    float KP,R;
     TK=fg.TK;
     KT=fg.KT;
     KP=fg.KP;
@@ -1259,7 +1261,7 @@ float TFGLcalc::FD()
     F1=(1/.3978)*(FR-F0);
     /*    printf(" %7.3f",F0);  */
     F=F0+(fg.WW*F1);
-    F=pow(10.,F);
+    F=pow(10.,double(F));
     return(F);
 }
 
@@ -1269,7 +1271,7 @@ float TFGLcalc::RK()
     float B, F, BX;
     B=(.086640350*82.04*fg.KT)/fg.KP;
     F=(1/fg.TR)*(1+(.48+1.574*fg.WW-.176*
-                    (fg.WW*fg.WW))*(1-(pow(fg.TR,.5))))*2;
+                    (fg.WW*fg.WW))*(1-(pow(double(fg.TR),.5))))*2;
     B=(fg.HV/(fg.HV-B)-(.4274802327*B*F/(.08664035*(fg.HV+B))));
     BX = (82.04*fg.TK/fg.P2)*B;
     return( BX );

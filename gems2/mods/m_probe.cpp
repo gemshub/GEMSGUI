@@ -595,7 +595,7 @@ float TProbe::UnsG( float x, float dx )
 
 int TProbe::WL(int i,int j,int QT)
 {
-    int W = i*j - floor(i*j/QT)*QT;
+    int W = i*j - floor(double(i)*double(j)/double(QT))*QT;
     if(QT-W<W) W=QT-W;
     return(W);
 }
@@ -614,7 +614,7 @@ void TProbe::BELOV()
         Error( GetName(), "No memory in BELOV.");
     memset( LI, 0, (QT2+1)*sizeof(int));
     memset( LI1, 0, (QT2+1)*sizeof(int));
-    W=floor(NG/QT2);
+    W=floor(double(NG)/double(QT2));
     if(W)
     {
         k=1;
@@ -632,7 +632,7 @@ void TProbe::BELOV()
     }
     prp->OVR[W+1]=k*QT2+1;
     for(i=1;i<=QT2;i++)
-        LI[i]=WL(i,prp->OVR[W+1],QT);
+        LI[i]=WL(i,int(prp->OVR[W+1]),QT);
     for(D=W+2;D<=NG;D++)
     {
         MC=0;
@@ -659,7 +659,7 @@ void TProbe::BELOV()
             }
         }
         for(i=1;i<=QT2;i++)
-            LI[i]+=WL(i,prp->OVR[D],QT);
+            LI[i]+=WL(i,int(prp->OVR[D]),QT);
     }
     delete[] LI;
     delete[] LI1;
@@ -891,7 +891,7 @@ float TProbe::PNTNOR(int I,int J,int QT)
 float TProbe::PNTBEL(int J,int QT,int OV)
 {
     float TB;
-    TB=fabs(J*OV-floor(J*OV/QT)*QT);
+    TB=fabs(J*OV-floor((double)J*(double)OV/(double)QT)*(double)QT);
     TB*=(QT-1)/2;
     while(1)
         if(TB>=QT) TB-=QT;
@@ -920,7 +920,7 @@ void TProbe::NexT( int J, int iT, int iP )
     {
         if( prp->ZPg[prp->NgT-1] == PRB_UNIFORM )
         {
-            RT = PNTBEL(J,prp->QT,prp->OVR[iT]);
+            RT = PNTBEL(J,(int)prp->QT,(int)prp->OVR[iT]);
             if(prp->QT>1) RT/=(prp->QT-1);
         }
         else RT=PNTNOR(iT,J,prp->QT);
@@ -938,7 +938,7 @@ void TProbe::NexT( int J, int iT, int iP )
         {
             if( prp->ZPg[prp->NgP-1] == PRB_UNIFORM )
             {
-                RP = PNTBEL(J,prp->QT,prp->OVR[iP]);
+                RP = PNTBEL(J,(int)prp->QT,(int)prp->OVR[iP]);
                 if(prp->QT>1) RP/=(prp->QT-1);
             }
             else RP=PNTNOR(iP,J,prp->QT);
@@ -962,7 +962,7 @@ void TProbe::NexT( int J, int iT, int iP )
             R=RT;
         else if( prp->ZPg[i-1] == PRB_UNIFORM )
         {
-            R = PNTBEL(J,prp->QT,prp->OVR[i1]);
+            R = PNTBEL(J,(int)prp->QT,(int)prp->OVR[i1]);
             if(prp->QT>1) R/=(prp->QT-1);
             i1++;
         }

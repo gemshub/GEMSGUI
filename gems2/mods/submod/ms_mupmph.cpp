@@ -263,43 +263,45 @@ void TProfil::MultiRemake( const char *key )
         pmp->U[i] = pmp->U_r[i] = pmp->C[i] = 0.0;
         memcpy( pmp->SB[i], mup->SB[ii], MAXICNAME+MAXSYMB );
         memcpy( pmp->SB1[i], mup->SB[ii], MAXICNAME  );
-        switch( pmp->ICC[i] )
-        {
-        case IC_ELEMENT:
-        case IC_ISOTOPE:
-        case IC_FORMULA:
-        case IC_METALION:
-        case IC_LIGAND:
-        case IC_ADDIT:
-            break;
-
-        case IC_OXYGEN16:
-        case IC_OXYGEN18: /* index and quantity of O? */
-        case IC_OXYGEN:
-            break;
-
-        case IC_PROTIUM:
-        case IC_DEYTERIUM:
-        case IC_TRITIUM:  /* index and quantity of  H? */
-        case IC_HYDROGEN:
-            break;
-
-        case IC_CHARGE:   /* charge - index */
-            if( !pmp->E )
-                break;  /* may be error  */
-            break;
-        case IC_VOLUME:   /* volume IC - index */
-            if( pmp->PV == VOL_UNDEF )
-                break;  /* may be error   */
-            break;
-        default: /* error in code IComp */
-            ;
-        }
+// Workaround for compile under gcc3.2 - KD 101002
+//        switch( pmp->ICC[i] )
+//        {
+//        case IC_ELEMENT:
+//        case IC_ISOTOPE:
+//        case IC_FORMULA:
+//        case IC_METALION:
+//        case IC_LIGAND:
+//        case IC_ADDIT:
+//            break;
+//
+//        case IC_OXYGEN16:
+//        case IC_OXYGEN18: /* index and quantity of O? */
+//        case IC_OXYGEN:
+//            break;
+//
+//        case IC_PROTIUM:
+//        case IC_DEYTERIUM:
+//        case IC_TRITIUM:  /* index and quantity of  H? */
+//        case IC_HYDROGEN:
+//            break;
+//
+//        case IC_CHARGE:   /* charge - index */
+//            if( !pmp->E )
+//                break;  /* may be error */
+//            break;
+//        case IC_VOLUME:   /* volume IC - index */
+//            if( pmp->PV == VOL_UNDEF )
+//                break;  /* may be error */
+//            break;
+//        default: /* error in code IComp */
+//            ;
+//        }
     }
     //   ErrorIf( N != pmp->N, "Multi", "Multi make error: N != pmp->N" );
     if( N != pmp->N )
         vfMessage( window(),
-                   "Multi make error: N != pmp->N", "Please, press BCC button first!" );
+                   "Multi make error: N != pmp->N", 
+		   "Please, press the BCC button first!" );
 NEXT2:
     // load data for dependent components
     multi_sys_dc();
