@@ -112,3 +112,6 @@ rpm:
 		cd /usr/src/RPM/SPECS; \
 		rpm -bb gems2.spec"
 	
+zip:
+	zip -r ~/Desktop/gems2-`date +%Y%m%d`.zip gems2.app
+

@@ -83,8 +83,12 @@ TVisor::TVisor(int c, char *v[]):
 
 #ifdef __unix
 #ifdef __APPLE__
-	SysGEMDir = "./gems2.app/Contents/MacOS/Gems2Data/program/";
-	UserGEMDir = "./gems2.app/Contents/MacOS/Gems2Data/";
+	char cur_dir[PATH_MAX];
+	getcwd(cur_dir, PATH_MAX);
+	SysGEMDir = cur_dir;
+	UserGEMDir = cur_dir;
+	SysGEMDir += "/gems2.app/Contents/MacOS/Gems2Data/program/";
+	UserGEMDir += "/gems2.app/Contents/MacOS/Gems2Data/";
 #else
         SysGEMDir = getenv("HOME");
         SysGEMDir += "/Gems2Data/program/";
