@@ -38,6 +38,7 @@ class ProgressDialog : public ProgressDialogData
     time_t last_update;
     CalcThread* calcThread;
     QTimer* timer;
+    bool autoclose;
 
     void switchToAccept(bool isAccept);
 
@@ -57,7 +58,7 @@ public:
     static ProgressDialog* pDia;
 
 #ifdef Use_mt_mode
-    ProgressDialog(QWidget* parent, bool step);
+    ProgressDialog(QWidget* parent, bool step, bool autoclose=false);
 #else
     ProgressDialog(QWidget* parent = NULL, bool step=false);
 #endif

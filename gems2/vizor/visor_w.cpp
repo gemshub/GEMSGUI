@@ -97,7 +97,8 @@ TVisorImp::TVisorImp(int c, char** v):
     pVisor->Setup();
   }
   catch(TError err) {
-    vfMessage(0, "GEMS setup error", "Could not load Vizor parameters!", vfErr);
+    //("Could not load Vizor parameters!");
+    vfMessage(0, err.title, err.mess, vfErr);
     exit(1);	
   }
 
@@ -294,8 +295,19 @@ TVisorImp::LoadSystem()
 void
 TVisorImp::CalcMulti()
 {
+#ifdef Use_mt_mode
     TProfil::pm->userCancel = false;
-// temporary if not Use_mt_mode
+    
+    try
+    {
+        ProgressDialog* dlg = new ProgressDialog(/*window()*/this, false, true);
+	dlg->exec();
+    }
+    catch( TError& xcpt )
+    {
+        vfMessage(this, xcpt.title, xcpt.mess);
+    }
+#else
     TProfil::pm->fStopCalc = false;
     
     try
@@ -306,6 +318,7 @@ TVisorImp::CalcMulti()
     {
         vfMessage(this, xcpt.title, xcpt.mess);
     }
+#endif
 }
 
 void

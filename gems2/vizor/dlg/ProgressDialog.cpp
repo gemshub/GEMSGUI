@@ -62,10 +62,11 @@ ProgressDialog::switchToAccept(bool isAccept)
 
 ProgressDialog* ProgressDialog::pDia = 0;
 
-ProgressDialog::ProgressDialog(QWidget* parent,	bool step):
-        Inherited( parent, 0, false ),
+ProgressDialog::ProgressDialog(QWidget* parent,	bool step, bool autoclose_):
+        Inherited( parent, 0, /*false*/autoclose_ ),
         last_update(0),
-	timer(0)
+	timer(0),
+	autoclose(autoclose_)
 {
     pDia = this;
     TProfil::pm->userCancel = false;
@@ -199,8 +200,14 @@ ProgressDialog::Run()
 void
 ProgressDialog::CalcFinished()
 {
+    if( autoclose ) {
+	close();
+	return;
+    }
+    
     switchToAccept(true);
-	pStepAccept->show();
+    
+    pStepAccept->show();
     pClose->setText("&Discard");
 
     QString str;

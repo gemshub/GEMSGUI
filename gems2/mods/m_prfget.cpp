@@ -636,8 +636,10 @@ void TProfil::CalcEqstat( bool prg)
     PMtest( keyp.c_str() );
     //MultiCalc( keyp.c_str() );
 //non-mt    if( prg )
-   if( prg )
-    pVisorImp->OpenProgress();
+#ifndef Use_mt_mode
+     if( prg )
+	pVisorImp->OpenProgress();
+#endif
     MultiCalcInit( keyp.c_str() );
     if( AutoInitialApprox() == false )
         MultiCalcIterations();

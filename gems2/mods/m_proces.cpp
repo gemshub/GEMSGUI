@@ -29,6 +29,7 @@ const char *GEMS_PE_HTML = "gm_proces";
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
+#include "visor_w.h"
 
 TProcess* TProcess::pm;
 
@@ -822,7 +823,9 @@ TProcess::RecCalc( const char *key )
         //       if( nRec < 0 || pep->syt < pep->pet )
 
         { // current key in base set before
-            PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SyStat
+//            PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SyStat
+	    pVisorImp->CalcMulti();
+
             TSysEq::pm->CmSave();  // save results
         }
 
@@ -898,7 +901,9 @@ TProcess::RecCalc( const char *key )
             pep->syt = rt[RT_SYSEQ].GetTime( nRec );
         if( nRec < 0 || pep->PsUX != S_OFF || pep->syt < pep->pet )
         {
-            PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
+//            PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
+	    pVisorImp->CalcMulti();
+
            if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
                  TSysEq::pm->CmSave();  // save results
         }

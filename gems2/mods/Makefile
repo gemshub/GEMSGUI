@@ -178,7 +178,7 @@ m_proces.o: ../vizor/kernel/v_dbm.h ../vizor/kernel/v_file.h m_syseq.h
 m_proces.o: m_param.h submod/ms_rmults.h submod/ms_mtparm.h
 m_proces.o: submod/ms_system.h m_phase.h submod/ms_multi.h submod/ms_calc.h
 m_proces.o: m_gtdemo.h ../vizor/graph.h ../vizor/service.h ../vizor/visor.h
-m_proces.o: m_sdata.h
+m_proces.o: ../vizor/visor_w.h m_sdata.h
 m_reac2.o: m_param.h v_mod.h ../vizor/kernel/v_vals.h ../vizor/libs/gstring.h
 m_reac2.o: ../vizor/libs/array.h submod/ms_rmults.h
 m_reac2.o: ../vizor/kernel/v_module.h ../vizor/kernel/v_object.h

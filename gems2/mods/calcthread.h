@@ -29,7 +29,7 @@ public:
 	error.title = "";
 	error.mess = "";
 	try {
-    	    TProfil::pm->CalcEqstat();
+    	    TProfil::pm->CalcEqstat(false);
 	}
 	catch( TError& err ) {
 	    error = err;

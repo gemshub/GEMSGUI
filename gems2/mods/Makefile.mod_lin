@@ -17,9 +17,7 @@ DEBUG_FLAGS	= -ggdb
 PROF_FLAGS	= -pg
 WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
-CCFLAGS		= -Wall -DQT_THREAD_SUPPORT -D__unix -pipe 
-#-frepo
-#-DUse_mt_mode
+CCFLAGS		= -Wall -DQT_THREAD_SUPPORT -D__unix -pipe -DUse_mt_mode
 
 INC_GLOBAL	= -I$(QTDIR)/include 
 LDFLAGS		=

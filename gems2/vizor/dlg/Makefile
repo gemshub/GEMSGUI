@@ -178,6 +178,11 @@ ProgressDialog.o: ../../mods/submod/ms_multi.h ../kernel/v_ipnc.h
 ProgressDialog.o: ../../mods/submod/ms_calc.h ProgressDialog.h
 ProgressDialog.o: ProgressDialogData.h ../service.h ../visor.h ../visor_w.h
 ProgressDialog.o: ../graph.h HLresDialog.h HLresDialogData.h
+KeyDialog.o: ../kernel/v_dbm.h ../libs/gstring.h ../libs/array.h
+KeyDialog.o: ../kernel/v_file.h ../kernel/v_user.h ../libs/verror.h
+KeyDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../kernel/v_vals.h
+KeyDialog.o: KeyDialog.h KeyDialogData.h KeyFilter.h ../visor_w.h ../graph.h
+KeyDialog.o: ../visor.h
 ChangeKeyDialog.o: ../visor_w.h ../kernel/v_vals.h ../libs/gstring.h
 ChangeKeyDialog.o: ../libs/array.h ../graph.h ../kernel/v_module.h
 ChangeKeyDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
