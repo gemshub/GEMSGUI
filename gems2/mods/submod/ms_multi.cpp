@@ -919,7 +919,7 @@ void TMulti::set_def( int /*q*/)
     memset( &pm.N, 0, 36*sizeof(short));
     memset( &pm.TC, 0, 54*sizeof(double));
     pm.sitNcat = 0;
-    pm.sitNcat = 0;
+    pm.sitNan = 0;
     pm.L1    = 0;
     pm.LsMod = 0;
     pm.LsMdc = 0;
