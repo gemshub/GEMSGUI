@@ -45,7 +45,7 @@ enum { RT_SDATA=0, RT_CONST=1 };
 
 enum { RT_INTEG=2, RT_PARAM=3, RT_ICOMP=4, RT_DCOMP=5, RT_COMPOS=6,
        RT_REACDC=7, RT_RTPARM=8, RT_PHASE=9, RT_SYSEQ=10, RT_PROCES=11,
-       RT_PROBE=12, RT_GTDEMO=13, RT_DUALTH=14,
+       RT_UNSPACE=12, RT_GTDEMO=13, RT_DUALTH=14,
 
        MD_RMULTS=15, MD_MTPARM=16, MD_SYSTEM=17,
        MD_MULTI=18, MD_EQCALC=19, MD_EQDEMO=20
@@ -132,7 +132,7 @@ enum param_objects {                  // work objects
     o_sygex,  o_sypul,   o_sypll,  o_syyof,  o_sylngmf,
     o_syaalp, o_symasdj, o_sysigm, o_syxr0h0, o_syxeps,
     o_synfsp, o_symasdt, o_syxcapa, o_syxcapb, o_syxfiec,
-    o_syxcapf, o_syxlam, o_syscmt,
+    o_syxcapf, o_syxlam, o_syscmt,  o_syguns, o_syvuns,
     // MULTI
     o_wi_pun,  o_wi_nnr, o_wi_ldim, o_wi_fdim, o_wo_fdim,
     o_wo_it, o_wi_mode, o_wo_ipar, o_wio_tc, o_wio_t,
@@ -677,22 +677,33 @@ enum gtdemo_objects {   // gtdemo
 };
 
 //---------------------------------
-// Probe
+// UnSpace
 //---------------------------------
 
 
-enum probe_objects {
-    o_prdim = o_gwtprn+1,  o_prntpv,  o_printt, o_printp,  o_printv,
-    o_prname,  o_prnotes,  o_przond,  o_print,  o_prfloat,
-    o_prl1,    o_prnnf,    o_prllf,   o_prkkf,  o_prnglg,
-    o_prngls,  o_prnglv,   o_prlgam,  o_prlgex, o_prngn,
-    o_prgs,    o_prilg,    o_prss,    o_prils,  o_prbs,
-    o_prin,    o_prvs,     o_prilv,   o_prgams, o_prigm,
-    o_prgex,   o_prigx,    o_provr,   o_priopt, o_prsgp,
-    o_przpg,   o_prexpr,   o_prstl,   o_prsdref,o_prsdval,
-    // work DOD
-    o_prsbp,   o_prsmp,   o_prsfp,    o_prnmv,  o_prloop,
-    o_prnrk,   o_prtm,    o_prnv,     o_prtprn,  };
+enum unspace_objects {                                                //105
+    o_unsts = o_gwtprn+1, o_unpsflg, o_unpaflg, o_unpvflg, o_unsiz,
+    o_unq, o_unres, o_unng,  o_unngtpv,  o_unpnt,
+    o_unnmb, o_unnpha, o_un_t, o_un_q,  o_un_g,
+    o_un_i, o_un_j, o_un_k, o_un_ka, o_un_tc,
+    o_un_p, o_un_v, o_un_ph, o_un_eh, o_un_ic,
+    o_unquan, o_unname, o_unnotes, o_unpapv, o_unint,
+    o_unfloat, o_un_cr, o_unpbd,  o_unnglg, o_unnggam,
+    o_unngls,  o_unnglv, o_unngnb,  o_unf_pha, o_unintlgo,
+    o_unintgam, o_unintls, o_unintlv, o_unintnb, o_unm_t_lo,
+    o_unm_t_up, o_unfug_lo, o_unfug_up, o_unintlg, o_ungs,
+    o_unss,  o_unvs,  o_ungams,  o_unncp, o_unbs,
+    o_unvg, o_unvy,  o_unvyf,   o_unvgam,   o_unvmol,
+    o_unvu, o_unvfug, o_unvt,  o_unvp,   o_unvph,
+    o_unovb, o_unovr, o_unovn, o_unqulapl, o_unquhom,
+    o_ununicn, o_unugdcn, o_unundcan, o_unsgp, o_unexpr,
+    o_unstl, o_unsdref,  o_unsdval, o_unstkey,              //4
+    o_unxnames, o_unynames, o_unaxis, o_ucsize, o_unplline,
+    o_unphndx,  o_unsv,   o_unphnum, o_unphaid, o_unphalst,
+    o_unafreg, o_unpmr,  o_unpom, o_unpor, o_una,
+    o_unzcp, o_unzmin, o_unzmax, o_unzmaxabs, o_unhom,
+    o_unprob, o_ununic, o_unugdc,  o_unuadc, o_unundca,
+    o_untprn,};
 
 //---------------------------------
 // Duterm
@@ -700,7 +711,7 @@ enum probe_objects {
 
 
 enum dualth_objects {
-o_dtpvfl= o_prtprn+1, o_dtpsflg, o_dtdim, o_dttmd, o_dtnvd,
+o_dtpvfl= o_untprn+1, o_dtpsflg, o_dtdim, o_dttmd, o_dtnvd,
 o_dtpd,   o_dttd,   o_dtvd, o_dtmsysb, o_dtt,
 o_dtp,   o_dtv, o_dtres,  o_dtq, o_dti,
 o_dtjm,  o_dtc_tm, o_dtc_nv, o_dtnam_nr,

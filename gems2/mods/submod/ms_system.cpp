@@ -165,6 +165,11 @@ void TSyst::ods_link( int /*q*/)
     aObj[o_syxcapf].SetDim(mup->Fis, sy.NsTm);
     aObj[ o_syxlam].SetPtr(sy.Xlam);
     aObj[o_syxlam].SetDim(mup->Fis, sy.NsTm );
+    
+    aObj[ o_syguns].SetPtr(   sy.Guns );
+    aObj[ o_syguns].SetDim( mup->L, 1 );
+    aObj[ o_syvuns].SetPtr(   sy.Vuns );
+    aObj[ o_syvuns].SetDim( mup->L, 1 );
 }
 
 // set dynamic Objects ptr to values
@@ -212,6 +217,9 @@ void TSyst::dyn_set(int /*q*/)
     sy.SCMT  = (char (*)[MNST])aObj[ o_syscmt ].GetPtr();
     sy.XcapF = (float (*)[MNST])aObj[ o_syxcapf].GetPtr();
     sy.Xlam =  (float (*)[MNST])aObj[ o_syxlam].GetPtr();
+    
+    sy.Guns = (float *)aObj[ o_syguns ].GetPtr();
+    sy.Vuns = (float *)aObj[ o_syvuns ].GetPtr();
 }
 
 // free dynamic memory in objects and values
@@ -259,6 +267,9 @@ void TSyst::dyn_kill(int /*q*/)
     sy.SCMT  = (char (*)[MNST])aObj[ o_syscmt ].Free();
     sy.XcapF = (float (*)[MNST])aObj[ o_syxcapf].Free();
     sy.Xlam =  (float (*)[MNST])aObj[ o_syxlam].Free();
+
+    sy.Guns = (float *)aObj[ o_syguns ].Free();
+    sy.Vuns = (float *)aObj[ o_syvuns ].Free();
 }
 
 // realloc dynamic memory
@@ -438,6 +449,9 @@ void TSyst::dyn_new(int /*q*/)
     if( sy.PXlam != S_OFF && sy.NsTm > 0 )
         sy.Xlam = (float (*)[MNST])aObj[ o_syxlam].Alloc(  mup->Fis, sy.NsTm, F_ );
     else sy.Xlam = (float (*)[MNST])aObj[ o_syxlam ].Free();
+
+    sy.Guns = (float *)aObj[ o_syguns ].Alloc( mup->L, 1, F_ );
+    sy.Vuns = (float *)aObj[ o_syvuns ].Alloc( mup->L, 1, F_ );
 }
 
 
@@ -524,6 +538,9 @@ void TSyst::set_def( int /*q*/)
     sy.SCMT  = 0;
     sy.XcapF = 0;
     sy.Xlam =  0;
+
+    sy.Guns =  0;
+    sy.Vuns =  0;
 
     //  memset ( sy.PhmKey, ' ', EQ_RKLEN-1 );  // Added 27.10.99 DAK
     //   sy.PhmKey[EQ_RKLEN-1] = 0;              //

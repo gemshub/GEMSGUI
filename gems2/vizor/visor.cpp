@@ -45,7 +45,7 @@ using namespace std;
 #include "m_phase.h"
 #include "m_syseq.h"
 #include "m_proces.h"
-#include "m_probe.h"
+#include "m_unspace.h"
 #include "m_gtdemo.h"
 #include "m_dualth.h"
 
@@ -646,7 +646,7 @@ TVisor::initModules()
         addModule(TPhase::pm = new TPhase(RT_PHASE));	// see below
         addModule(TSysEq::pm = new TSysEq(RT_SYSEQ));
         addModule(TProcess::pm = new TProcess(RT_PROCES));
-        addModule(TProbe::pm = new TProbe(RT_PROBE));
+        addModule(TUnSpace::pm = new TUnSpace(RT_UNSPACE));
         addModule(TGtDemo::pm = new TGtDemo(RT_GTDEMO));
         addModule(TDualTh::pm = new TDualTh(RT_DUALTH));
 
@@ -769,19 +769,20 @@ TVisor::defaultCFG()
     rt.Add(new TDataBase(rt.GetCount(), "proces", true, true,
                          o_pestr, 26+14/*11/03/02*/, 0, 10, proces_rkfrm));
 
-    // RT_PROBE default
-    unsigned char probe_rkfrm[9] =
-        { MAXMUNAME, MAXTDPCODE, MAXSYSNAME, MAXTIME, MAXPTN,
-          MAXPTN, MAXPTN, MAXNV, MAXNV
-        };
-    rt.Add(new TDataBase(rt.GetCount(), "probe", true, true,
-                         o_prname, 35, 0, 9, probe_rkfrm));
+    // RT_UNSPACE default
+    unsigned char unspace_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
+                 MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
+                                       };
+    rt.Add(new TDataBase(rt.GetCount(), "unspac", true, true,
+                         o_unname, 58, 0, 10, unspace_rkfrm));
+
 
     // RT_GTDEMO default
     unsigned char gtdemo_rkfrm[5] =
         { MAXMUNAME, MAXDATATYPE, MAXGTDCODE, MAXNV, MAXGDGROUP };
     rt.Add(new TDataBase(rt.GetCount(), "gtdemo", true, true,
                          o_gdps, 27, 0, 5, gtdemo_rkfrm));
+
     // RT_DUALTH default
     unsigned char dualth_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
@@ -799,7 +800,8 @@ TVisor::defaultCFG()
          for (uint ii = 0; ii < aDBFiles.GetCount(); ii++)
         { gstring flnm = gstring(aDBFiles[ii], 0, aDBFiles[ii].find("."));
             if ( flnm == rt[jj].GetKeywd() ||
-                ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
+                 ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
+                 ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
             {
                 gstring path = pVisor->sysDBDir();
                 path += aDBFiles[ii];
@@ -823,6 +825,7 @@ TVisor::defaultCFG()
           for (uint kk = 0; kk < aDBFiles.GetCount(); kk++)
           { gstring flnm = gstring(aDBFiles[kk], 0, aDBFiles[kk].find("."));
             if ( flnm == rt[jj].GetKeywd() ||
+                ( jj == RT_UNSPACE && flnm == "probe" ) ||   //set up old name
                 ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
                 {
                     gstring path(dir);

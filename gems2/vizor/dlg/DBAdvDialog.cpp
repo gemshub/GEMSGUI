@@ -70,8 +70,9 @@ DBAdvDialog::CmFormats()
 void
 DBAdvDialog::CmOpen_PROBE()
 {
-    qWarning( "DBAdvDialog::CmOpen_PROBE(): Not implemented yet!" );
-//    pVisorImp->OpenModule(this, RT_PROBE);
+//    qWarning( "DBAdvDialog::CmOpen_PROBE(): Not implemented yet!" );
+    pVisorImp->OpenModule(this, RT_UNSPACE);
+
 }
 
 void

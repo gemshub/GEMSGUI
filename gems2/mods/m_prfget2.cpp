@@ -18,7 +18,7 @@
 //-------------------------------------------------------------------
 //
 #include "m_param.h"
-#include "m_probe.h"
+#include "m_unspace.h"
 #include "m_syseq.h"
 #include "service.h"
 
@@ -345,11 +345,11 @@ void TProfil::TestChangeProfile()
         return;
     aList.Clear();
     anR.Clear();
-    rt[RT_PROBE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0, K_ANY,
-                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROBE].GetKeyList( pkey, aList, anR );
+    rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+      K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
 
-    TProbe* aPB=(TProbe *)(&aMod[RT_PROBE]);
+    TUnSpace* aPB=(TUnSpace *)(&aMod[RT_UNSPACE]);
     aPB->ods_link(0);
     for(uint i=0; i< aList.GetCount(); i++)
     {

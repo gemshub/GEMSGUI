@@ -590,7 +590,7 @@ TCModule::CmDerive()
     try
     {
         if( pVisor->ProfileMode != true && (nRT == RT_SYSEQ || nRT == RT_PROCES
-                 || nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO ) )
+                 || nRT == RT_UNSPACE  || nRT == RT_PARAM || nRT > RT_GTDEMO ) )
             Error( GetName(), "Please, do it in Project mode!");
         if( pVisor->ProfileMode == true &&
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
@@ -633,7 +633,7 @@ TCModule::CmCalc()
     try
     {
         if( pVisor->ProfileMode != true && (nRT == RT_SYSEQ || nRT == RT_PROCES
-                                            || nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO ) )
+          || nRT == RT_UNSPACE  || nRT == RT_PARAM || nRT > RT_GTDEMO ) )
             Error( GetName(), "Please, do it in Project mode!");
         if( pVisor->ProfileMode == true &&
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
@@ -670,7 +670,7 @@ TCModule::CmNew()
     try
     {
         if( nRT == RT_SYSEQ || nRT == RT_PROCES ||
-                nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
+                nRT == RT_UNSPACE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
             Error( GetName(), "Please, do it in Project mode!");
 
         if( ! MessageToSave() )
@@ -701,7 +701,7 @@ TCModule::CmCreate()
     try
     {
         if( nRT == RT_SYSEQ || nRT == RT_PROCES ||
-                nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
+                nRT == RT_UNSPACE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
             Error( GetName(), "Please, do it in Project mode!");
 
         if( ! MessageToSave() )
@@ -733,7 +733,7 @@ TCModule::CmFind() // ???? error in smShow
 {
    try{
        if( nRT == RT_SYSEQ || nRT == RT_PROCES ||
-            nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
+            nRT == RT_UNSPACE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
           Error( GetName(), "Do it in Project mode!");
        CmShow();
        if( check_input( db->UnpackKey() ) )
@@ -820,7 +820,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 
 //----------------------------------------------------------
 //--- Manipulation of the current record
-//--- Process, Probe, GTdemo, Duterm in project mode
+//--- Process, UnSpace, GTdemo, Duterm in project mode
 //----------------------------------------------------------
 
 // load record from data base (show in project mode)

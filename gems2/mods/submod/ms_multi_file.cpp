@@ -5,6 +5,18 @@
 #include "gdatastream.h"
 
 
+void TMulti::inArray( fstream& ff, char *name, short* arr, int size )
+{
+ char buf[200];
+ ff >> buf;
+ if( !memcmp( name, buf+1, strlen(name)))
+    Error( buf, "Illegal name of array");
+ for( int ii=0; ii<size; ii++  )
+ {
+    ff >> arr[ii];
+ }
+}
+
 //---------------------------------------------------------//
 // for test out data
 void TMulti::outArray( fstream& ff, char *name, char* arr,

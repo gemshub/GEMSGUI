@@ -1062,6 +1062,7 @@ void TProfil::EqstatExpand( const char *key )
 void TProfil::CompG0Load()
 {
     int j, jj, k, jb, je=0;
+    float Gg = 0., Vv = 0.;
 
     /* pTPD state of reload t/d data 0-all, 1 G0, 2 ­do not*/
     if( pmp->pTPD < 1 )
@@ -1089,7 +1090,9 @@ void TProfil::CompG0Load()
             for( j=jb; j<je; j++ )
             {
                 jj = pmp->muj[j];
-                pmp->G0[j] = Cj_init_calc( tpp->G[jj], j, k );
+                if( syp->Guns )
+                    Gg = syp->Guns[jj];
+                pmp->G0[j] = Cj_init_calc( tpp->G[jj]+Gg, j, k );
             }
         }
     }
@@ -1103,10 +1106,14 @@ void TProfil::CompG0Load()
                 switch( pmp->PV )
                 { /* make mol volumes of components */
                 case VOL_CONSTR:
-                    pmp->A[j*pmp->N] = tpp->Vm[jj];
+                    if( syp->Vuns )
+                       Vv = syp->Vuns[jj];
+                    pmp->A[j*pmp->N] = tpp->Vm[jj]+Vv;
                 case VOL_CALC:
                 case VOL_UNDEF:
-                    pmp->Vol[j] = tpp->Vm[jj] * 10.;  /* ?единицы? */
+                    if( syp->Vuns )
+                       Vv = syp->Vuns[jj];
+                    pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;  /* ?единицы? */
                     break;
                 }
             else pmp->Vol[j] = 0.0;

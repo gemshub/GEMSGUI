@@ -23,7 +23,8 @@ const char *GEMS_GTD_HTML = "gm_gtdemo";
 #include <stdio.h>
 
 #include "m_proces.h"
-#include "m_probe.h"
+#include "m_unspace.h"
+#include "m_gtdemo.h"
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
@@ -230,7 +231,7 @@ void TGtDemo::gd_ps_set()
 //    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
 //        gdp->nRT = RT_PROCES;
 //    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
-//        gdp->nRT = RT_PROBE;
+//        gdp->nRT = RT_UNSPACE;
 
     switch( gdp->nRT )
     {
@@ -259,7 +260,7 @@ void TGtDemo::gd_ps_set()
         strncpy( &gdp->PsIC, "------++-------", 15);
 //        gdp->nRT = RT_SYSEQ;   KD 20.01.03
         break;
-//    case RT_PROBE:
+//    case RT_UNSPACE:
 //        strncpy( &gdp->PsIC, "------+-+------", 15);
 //        gdp->nRT = RT_SYSEQ;
 //        break;
@@ -368,12 +369,12 @@ AGAIN:
         for( i=0; i<aObj[o_pestl].GetN(); i++ )
             aRklist.Add( aObj[o_pestl].GetString( i, 0 ));
     }
-    else  if( gdp->PsPB != S_OFF ) // GTdemo by Probe
+    else  if( gdp->PsPB != S_OFF ) // GTdemo by TUnSpace
     {
-        TProbe::pm->RecordLoadinProfile(key_p);
-        strncpy( gdp->prKey, rt[RT_PROBE].PackKey(), MAXRKEYLEN );
-        for( i=0; i<aObj[o_prstl].GetN(); i++ )
-            aRklist.Add( aObj[o_prstl].GetString( i, 0 ));
+        TUnSpace::pm->RecordLoadinProfile(key_p);
+        strncpy( gdp->prKey, rt[RT_UNSPACE].PackKey(), MAXRKEYLEN );
+        for( i=0; i<aObj[o_unstl].GetN(); i++ )
+            aRklist.Add( aObj[o_unstl].GetString( i, 0 ));
     }
     else // other type of records
     {
@@ -429,7 +430,7 @@ AGAIN:
 //    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
 //        gdp->nRT = RT_PROCES;
 //    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
-//        gdp->nRT = RT_PROBE;  comm.out KD 20.01.03
+//        gdp->nRT = RT_UNSPACE;  comm.out KD 20.01.03
 
     gdp->nRT = gd_rectype();
     gd_ps_set();
@@ -443,7 +444,7 @@ AGAIN:
     if( ret == VF_CANCEL )
         return ret;
 
-    if( gdp->nRT == RT_PROCES || gdp->nRT >= RT_PROBE )
+    if( gdp->nRT == RT_PROCES || gdp->nRT >= RT_UNSPACE )
         gdp->nRT = RT_SYSEQ;   // added by KD 20.01.03
 
     if(  gdp->Nwc<0 || gdp->Nqp<0 || gdp->dimEF[0]<0 || gdp->dimEF[1]<0  ||
@@ -589,7 +590,7 @@ TGtDemo::RecCalc( const char *key )
            "can only be updated after the Process sampler re-calculation");
     }
     if( gdp->PsPB != S_OFF && *gdp->prKey)    /* read probe record */
-        TProbe::pm->RecInput( gdp->prKey );
+        TUnSpace::pm->RecInput( gdp->prKey );
 
     for( gdp->jR = 0; gdp->jR< gdp->Nlrk; gdp->jR++ )
     {
@@ -609,15 +610,15 @@ TGtDemo::RecCalc( const char *key )
     /* calc empirical data */
     if( gdp->PtAEF != S_OFF && gdp->exprE && *gdp->expr )
         gd_EF_calc();
-    // calc statistic
+/*    // calc statistic
     if( gdp->PsPB != S_OFF && gst.iopt && gst.nI )
     {
-        TProbe* PRob = TProbe::pm;
+        TUnSpace* PRob = TUnSpace::pm;
         PRob->paragen( gdp->Nlrk, gst );
         PRob->pb_matr( gdp->Nlrk, gst );
         PRob->RecSave( gdp->prKey );
     }
-    pVisor->CloseMessage();
+*/    pVisor->CloseMessage();
     // set graph and demo resalts gtdemo_demo( key );
 }
 
@@ -787,13 +788,13 @@ void TGtDemo::probe_stat( const char *key )
     vstr pbuf(121);
     char  (*lNames)[MAXGRNAME];
     double *y, *U, par[9];
-    TProbe* PRob = (TProbe*)(&aMod[RT_PROBE]);
+    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
 
     if( gdp->PsPB != S_OFF && *gdp->prKey)    // read probe record 
-        TProbe::pm->RecInput( gdp->prKey );
+        TUnSpace::pm->RecInput( gdp->prKey );
     else
-        Error( GetName(), "No Probe mode in GtDemo!");
+        Error( GetName(), "No TUnSpace mode in GtDemo!");
 
     nI = PRob->GetnI();
     nF = PRob->GetnF();

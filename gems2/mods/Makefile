@@ -23,7 +23,7 @@ SOURCES 	= m_const.cpp m_sdata.cpp m_integ.cpp \
     m_reacdc.cpp  m_phase.cpp \
     m_proces.cpp m_reac2.cpp  \
     m_prfget.cpp m_prfget2.cpp m_syseq.cpp \
-    m_syst2.cpp m_probe.cpp m_probe2.cpp \
+    m_syst2.cpp m_unspace.cpp m_unsp_stat.cpp m_unsp_gen.cpp \
     m_dualth.cpp m_dualthc.cpp  \
     m_gtdemo.cpp m_rtparm.cpp
 

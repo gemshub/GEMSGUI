@@ -23,7 +23,8 @@ const char *GEMS_SP_HTML = "gm_project";
 #include <unistd.h>
 #endif
 
-#include "m_probe.h"
+#include "m_unspace.h"
+#include "m_gtdemo.h"
 #include "m_syseq.h"
 #include "m_dcomp.h"
 #include "m_icomp.h"
@@ -411,13 +412,13 @@ TProfil::DeleteRecord( const char *key, bool errifNo )
     for( i=0; i< aList.GetCount(); i++)
         TProcess::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //PROBE
+    aList.Clear();    //UNSPACE
     anR.Clear();
-    rt[RT_PROBE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_PROBE].GetKeyList( pkey, aList, anR );
+    rt[RT_UNSPACE].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+      K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
     for( i=0; i< aList.GetCount(); i++)
-        TProbe::pm->DeleteRecord(aList[i].c_str());
+        TUnSpace::pm->DeleteRecord(aList[i].c_str());
 
     aList.Clear();    //GTDEMO
     anR.Clear();

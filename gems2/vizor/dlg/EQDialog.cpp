@@ -88,7 +88,7 @@ EQDialog::CmHelp()
 void
 EQDialog::CmOpen_PROBE()
 {
-//    pVisorImp->OpenModule(this, RT_PROBE);
+    pVisorImp->OpenModule(this, RT_UNSPACE);
 }
 
 void

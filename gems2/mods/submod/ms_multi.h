@@ -316,6 +316,7 @@ public:
     void to_file( GemDataStream& ff );
     void to_text_file();
     void from_file( GemDataStream& ff );
+    void inArray( fstream& ff, char *name, short* arr, int size );
     void outArray( fstream& ff, char *name, short* arr, int size );
     void outArray( fstream& ff, char *name,  float* arr,
                              int size, int l_size=-1 );
@@ -332,6 +333,7 @@ public:
     void databr_realloc();
     void databr_free();
     void datach_to_text_file();
+    void datach_from_text_file();
     void databr_to_text_file();
 
     void makeStartDataChBR(

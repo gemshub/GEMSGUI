@@ -134,7 +134,6 @@ void
 AutoPhaseDialog::set_akey( gstring& a_key )
 {
   aqu_key = a_key;
-
 /*  if( aselU->isChecked())
       aqu_key = "a:*:*:*:*:";
   else*/  if( aselD->isChecked())
@@ -151,6 +150,7 @@ AutoPhaseDialog::set_akey( gstring& a_key )
 //                         aqu_key = dfAqKeyS;
                       else if( aselNo->isChecked())
                             aqu_key ="";
+
   apRkeyEdit->setText( aqu_key.c_str() );
 }
 
@@ -225,12 +225,19 @@ void
 AutoPhaseDialog::CmCheck()
 {
   float par[4];
+  gstring a_key = aqu_key;
+  gstring g_key = gas_key;
 
-  set_akey( aqu_key );
+  if( a_key.empty()  )
+      a_key = "a:*:*:*:*:";
+  if( g_key.empty()  )
+      g_key = "g:*:*:*:*:";
+
+  set_akey( a_key );
   get_acode();
   get_apar( par );
 
-  set_gkey( gas_key );
+  set_gkey( g_key );
   get_gcode();
   get_gpar( par );
 }

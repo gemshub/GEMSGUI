@@ -23,7 +23,7 @@
 
 #include "m_param.h"
 #include "m_proces.h"
-#include "m_probe.h"
+#include "m_unspace.h"
 #include "s_formula.h"
 #include "m_syseq.h"
 #include "service.h"
@@ -43,7 +43,7 @@ void TProfil::PMtest( const char *key )
     float T, P;
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
-    TProbe* Prob = (TProbe*)(&aMod[RT_PROBE]);
+    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
 
     ///  pmp->pNP = -1;
     if( STat->ifCalcFlag())
@@ -60,14 +60,14 @@ void TProfil::PMtest( const char *key )
         else
             pmp->pNP = 1;
     }
-    if( Prob->prp->pbcalc == P_EXECUTE )
+/*    if( Prob->usp->pbcalc == P_EXECUTE )    ??????? 
     {
-        if(Prob->prp->zond[11] == S_OFF )
+        if(Prob->usp->zond[11] == S_OFF )
             pmp->pNP = 0;
         else
             pmp->pNP = 1;
     }
-    pmp->pBAL =  BAL_compare();
+*/    pmp->pBAL =  BAL_compare();
     if( !pmp->pBAL )
         pmp->pIPN = 0;
     if( multi->qEp.GetCount()<1 || multi->qEd.GetCount()<1 )
@@ -343,7 +343,7 @@ void TProfil::multi_sys_dc()
 {
     int j, ii, L, iZ;
     short jj;
-    float a, *A;
+    float a, *A, Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
     gstring form;
@@ -437,10 +437,14 @@ CH_FOUND:
             switch( pmp->PV )
             { /* calc mol volume of component*/
             case VOL_CONSTR:
-                pmp->A[j*pmp->N] = tpp->Vm[jj];
+              if( syp->Vuns )
+                       Vv = syp->Vuns[jj];
+                pmp->A[j*pmp->N] = tpp->Vm[jj] + Vv;
             case VOL_CALC:
             case VOL_UNDEF:
-                pmp->Vol[j] = tpp->Vm[jj] * 10.; /* Check! */
+                if( syp->Vuns )
+                       Vv = syp->Vuns[jj];
+                pmp->Vol[j] = ( tpp->Vm[jj] + Vv )* 10.; /* Check! */
                 break;
             }
         else pmp->Vol[j] = 0.0;

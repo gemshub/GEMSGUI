@@ -28,6 +28,9 @@ class AutoPhaseDialog : public AutoPhaseDialogData
 {
     Q_OBJECT
 
+public slots:
+    void CmCheck();
+
 public:
     AutoPhaseDialog(
          const char* pr_key, char acode, char gcode, QWidget* parent = NULL);
@@ -56,7 +59,6 @@ private:
 
 protected slots:
     void CmHelp();
-    void CmCheck();
 
 };
 

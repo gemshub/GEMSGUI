@@ -324,6 +324,46 @@ void TMulti::datach_to_text_file( )
 
 }
 
+
+void TMulti::datach_from_text_file( )
+{
+ fstream ff("DataCH.out", ios::in );
+ ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
+
+  inArray( ff, "sCon",  &data_CH.nIC, 14 );
+/*  outArray( ff, "dCon",  &data_CH.Tmin, 10 );
+
+//dynamic data
+   outArray( ff, "nDCinPH", data_CH.nDCinPH, data_CH.nPH);
+//   if( data_CH.nICb >0 )
+   outArray( ff, "xIC", data_CH.xIC, data_CH.nICb);
+   outArray( ff, "xDC", data_CH.xDC, data_CH.nDCb);
+   outArray( ff, "xPH", data_CH.xPH, data_CH.nPHb);
+
+   outArray( ff, "A", data_CH.A, data_CH.nDC, data_CH.nIC );
+   outArray( ff, "ICmm", data_CH.ICmm, data_CH.nIC);
+   outArray( ff, "DCmm", data_CH.DCmm, data_CH.nDC);
+
+   outArray( ff, "G0", data_CH.G0,  data_CH.nDC*data_CH.nPp*data_CH.nTp);
+   outArray( ff, "V0", data_CH.V0,  data_CH.nDC*data_CH.nPp*data_CH.nTp);
+   outArray( ff, "H0", data_CH.H0,  data_CH.nDC*data_CH.nPp*data_CH.nTp);
+   outArray( ff, "Cp0", data_CH.Cp0,data_CH.nDC*data_CH.nPp*data_CH.nTp);
+
+   if( data_CH.nAalp >0 )
+      outArray( ff, "Aalp", data_CH.Aalp, data_CH.nPH);
+
+   outArray( ff, "ICNL", data_CH.ICNL[0], data_CH.nIC, MaxICN );
+   outArray( ff, "DCNL", data_CH.DCNL[0], data_CH.nDC, MaxDCN );
+   outArray( ff, "PHNL", data_CH.PHNL[0], data_CH.nPH, MaxPHN );
+
+   outArray( ff, "ccIC", data_CH.ccIC, data_CH.nIC, 1 );
+   outArray( ff, "ccDC", data_CH.ccDC, data_CH.nDC, 1 );
+   outArray( ff, "ccDCW", data_CH.ccDCW, data_CH.nDC, 1 );
+   outArray( ff, "ccPH", data_CH.ccPH, data_CH.nPH, 1 );
+*/
+}
+
+
 // allocate DataCH structure
 void TMulti::datach_realloc()
 {
@@ -472,6 +512,7 @@ void TMulti::databr_to_file( GemDataStream& ff )
 
    datach_to_text_file();
    databr_to_text_file();
+//   datach_from_text_file();
 }
 
 // reading DataBR to binary file
