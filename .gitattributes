@@ -50,6 +50,9 @@ gems2/doc/units.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/vis_cn.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/vis_od.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/gems-1.93b-6.spec svn_keywords=Author+Date+Id+Revision
+gems2/img/RunBCC.png -text
+gems2/img/RunIPM.png -text
+gems2/img/SetCompos.png -text
 gems2/img/arrow_left1.png -text
 gems2/img/arrow_right1.png -text
 gems2/img/back.xpm -text svneol=unset#application/octet-stream
