@@ -14,7 +14,7 @@ INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 #FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 # $(PROF_FLAGS)
 
-SOURCES	= v_user.cpp v_vals.cpp v_object.cpp v_ipnc.cpp \
+SOURCES	= v_user.cpp v_vals.cpp v_object.cpp \
     v_file.cpp v_dbm1.cpp v_dbm2.cpp t_print.cpp t_read.cpp v_module.cpp
 
 OBJECTS = $(subst .cpp,.o,$(SOURCES))

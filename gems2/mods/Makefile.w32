@@ -14,7 +14,7 @@ FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 LIB	=   tlib /C /P256
 
 SOURCES = m_const.cpp m_sdata.cpp m_integ.cpp \
-    m_param.cpp m_icomp.cpp \
+    m_param.cpp m_icomp.cpp v_ipnc.cpp \
     s_formula.cpp m_dcomp.cpp m_dcomp2.cpp \
     s_tpwork.cpp s_supcrt.cpp s_supcrt2.cpp \
     m_compos.cpp s_fgl.cpp s_fglbred.cpp \
@@ -26,7 +26,7 @@ SOURCES = m_const.cpp m_sdata.cpp m_integ.cpp \
     m_gtdemo.cpp   m_rtparm.cpp
 
 OBJECTS = m_const.obj m_sdata.obj m_integ.obj \
-     m_param.obj m_icomp.obj \
+     m_param.obj m_icomp.obj v_ipnc.obj\
      s_formula.obj s_tpwork.obj m_dcomp.obj m_dcomp2.obj \
      s_supcrt.obj s_supcrt2.obj m_compos.obj s_fgl.obj s_fglbred.obj \
      m_reacdc.obj m_phase.obj \
@@ -53,7 +53,7 @@ $(TARGET): subdirs_mk	$(OBJECTS)
         -del $(TARGET)
 	$(LIB) $(TARGET) @&&|
       +m_const.obj +m_sdata.obj +m_integ.obj \
-	+m_param.obj +m_icomp.obj \
+	+m_param.obj +m_icomp.obj +v_ipnc.obj\
 	+s_formula.obj +s_tpwork.obj +m_dcomp.obj +m_dcomp2.obj \
 	+s_supcrt.obj +s_supcrt2.obj +m_compos.obj +s_fgl.obj +s_fglbred.obj \
 	+m_reacdc.obj +m_phase.obj +m_proces.obj +m_reac2.obj \

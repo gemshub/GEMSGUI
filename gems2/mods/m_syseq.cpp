@@ -130,42 +130,23 @@ TSysEq::RecBuild( const char *key, int mode  )
         return ret;
     if( ssp->switches[13] != S_OFF )
     {
-        // Get all records
-        TCStringArray aList;
-        TCIntArray anR;
-        vstr pkey(81);
-        int nR=0, i;
+//        rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+//            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
 
-        rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-                               K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-        rt[nRT].GetKeyList( pkey, aList, anR );
-        if( aList.GetCount()<1 ) //no data in base files
-        {
-            if( vfQuestion(window(), GetName() ,
-                           "Warning: Feasible SysEq record is not accessible,\n"
-                           " maybe, appropriate PDB chain file is not linked.\n"
-                           "Cancel use of equilibrium phase compositions \n"
-                           " and continue assembling the system definition (Y)?\n"
-                           "Cancel remake of system definition (N)?" ))
-                ssp->switches[13] = S_OFF;
-            else Error( GetName(), "No key of record to supply.");
-        }
+
+        gstring skey = gstring(ssp->PhmKey, 0, EQ_RKLEN);
+        if( skey.empty() )
+           skey = "*";
         else
-        {
-            for(uint j=0; j< aList.GetCount(); j++ )
-            {
-                if( memcmp( ssp->PhmKey, aList[j].c_str(), EQ_RKLEN ))
-                    continue;
-                nR = j;
-                break;
-            }
-            do
-            {
-                i = vfChoice(window(), aList, "mu_eqphkey Please, select one SysEq record", nR);
-            }
-            while( i<0 );
-            memcpy( ssp->PhmKey, aList[i].c_str(), EQ_RKLEN );
-        }
+           rt[RT_SYSEQ].Find( skey.c_str() );
+
+        skey = vfKeyEdit( window(),
+           "Please, select one SysEq record",  nRT,  skey.c_str() );
+        if( skey.empty() )
+            memcpy( ssp->PhmKey, S_EMPTY, EQ_RKLEN );
+        else
+            memcpy( ssp->PhmKey, skey.c_str(), EQ_RKLEN );
+
         rt[RT_SYSEQ].Find( key );  // DAK fixed 27.10.99
     }
     // Check flags to alloc data

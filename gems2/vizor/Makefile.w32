@@ -81,7 +81,6 @@ link:
 +kernel\v_user.obj \
 +kernel\v_vals.obj \
 +kernel\v_object.obj \
-+kernel\v_ipnc.obj \
 +kernel\v_file.obj \
 +kernel\v_dbm1.obj \
 +kernel\v_dbm2.obj \

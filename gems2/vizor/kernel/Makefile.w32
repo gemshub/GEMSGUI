@@ -13,9 +13,9 @@ INC_LOCAL	= -I../kernel -I../../mods -I../libs  -I../
 INCLUDES	= $(INC_GLOBAL) $(INC_LOCAL)
 FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 
-SOURCES = v_user.cpp v_vals.cpp v_object.cpp v_ipnc.cpp \
+SOURCES = v_user.cpp v_vals.cpp v_object.cpp \
     v_file.cpp v_dbm1.cpp v_dbm2.cpp t_print.cpp t_read.cpp v_mpdule.cpp
-OBJECTS = v_user.obj v_vals.obj v_object.obj v_ipnc.obj \
+OBJECTS = v_user.obj v_vals.obj v_object.obj \
     v_file.obj v_dbm1.obj v_dbm2.obj t_print.obj t_read.obj v_module.obj
 
 TARGET	= core.lib

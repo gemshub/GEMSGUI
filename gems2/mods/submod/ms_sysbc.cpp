@@ -575,46 +575,50 @@ NEXT_DC:
     /* calc bulk chemical composition from phases - whole block fixed by DAK 27.10.99 */
     if( sy.PbPH != S_OFF )
     {
-        vstr pkey(81), skey(81);
+        gstring pkey;
+        gstring skey;
 
-        strncpy( pkey, rt[RT_SYSEQ].UnpackKey(), EQ_RKLEN );  // Save the initial rkey
+        // Added Sveta 14/03/02  if no Syseq Rec
+
+
+        pkey = rt[RT_SYSEQ].UnpackKey();  // Save the initial rkey
         //  strncpy(skey, sy.PhmKey, EQ_RKLEN);
 
         TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
-        strncpy(skey, aSE->ssp->PhmKey, EQ_RKLEN);
+        skey = gstring(aSE->ssp->PhmKey, 0, EQ_RKLEN);
 
-        //    aSE->ssp += 1; aSE->stp += 1;			// Second copy of TSysEq
-        //    Rnum = rt[RT_SYSEQ].Find( skey );  // does not work!
-        //    ErrorIf( Rnum < 0, GetName(), "SysBCC: SysEQ record missing!" );
-
-        aSE->ods_link(1);
-        try
+        // Added Sveta 14/03/02  if no Syseq Rec
+        if( !skey.empty() && skey[0] != '\0' &&
+            skey[0] != ' ' && skey[0] != '-' && skey != S_EMPTY)
         {
 
-            //  rt[RT_SYSEQ].Get( Rnum );
+          //    aSE->ssp += 1; aSE->stp += 1;			// Second copy of TSysEq
+          //    Rnum = rt[RT_SYSEQ].Find( skey );  // does not work!
+          //    ErrorIf( Rnum < 0, GetName(), "SysBCC: SysEQ record missing!" );
+           aSE->ods_link(1);
+           try
+           {
+              //  rt[RT_SYSEQ].Get( Rnum );
+              aSE->TryRecInp( skey.c_str(), crt, 1 );
+              //  aSE->dyn_set(1);
+              PHbcalc( &MsysC, &MaqC, &R1C, &VaqC, &VsysC );  // Calculation
+            }
+            catch( TError& xcpt )
+            {
+               // return to first record
+                aSE->ods_link(0);
+                rt[RT_SYSEQ].Find( pkey.c_str() ); // Set back the initial record key
+                Error( pkey.c_str() , xcpt.mess );
+            }
 
-            aSE->TryRecInp( skey, crt, 1 );
+            //    aSE->ssp -= 1; aSE->stp -= 1;// Back to first copy of TSysEq
 
-            //  aSE->dyn_set(1);
-
-            PHbcalc( &MsysC, &MaqC, &R1C, &VaqC, &VsysC );  // Calculation
-        }
-
-        catch( TError& xcpt )
-        {
             // return to first record
-            aSE->ods_link(0);
-            rt[RT_SYSEQ].Find( pkey );		// Set back the initial record key
-            Error( pkey.p , xcpt.mess );
-        }
-
-        //    aSE->ssp -= 1; aSE->stp -= 1;		    // Back to first copy of TSysEq
-
-        // return to first record
-        aSE->ods_link(0);
-        sy.PbPH = S_ON;
-
-        rt[RT_SYSEQ].Find( pkey );		// Set back the initial record key
+             aSE->ods_link(0);
+             sy.PbPH = S_ON;
+              	// Set back the initial record key
+             rt[RT_SYSEQ].Find( pkey.c_str() );
+       }
     }
     /* calc mass of system */
     sy.MBX = 0.0;

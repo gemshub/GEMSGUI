@@ -16,7 +16,7 @@ INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 
 
 SOURCES 	= m_const.cpp m_sdata.cpp m_integ.cpp \
-    m_param.cpp m_icomp.cpp \
+    m_param.cpp m_icomp.cpp v_ipnc.cpp \
     s_formula.cpp m_dcomp.cpp m_dcomp2.cpp \
     s_tpwork.cpp s_supcrt.cpp s_supcrt2.cpp \
     m_compos.cpp s_fgl.cpp s_fglbred.cpp \
