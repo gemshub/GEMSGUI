@@ -191,7 +191,8 @@ if( pa.p.PRD >= 8 )
             {
                if( pmp->E && pmp->LO )
                    GouyChapman( jb, je, k );
-               SurfaceActivityTerm( jb, je, k );
+//               SurfaceActivityTerm( jb, je, k );
+                 SurfaceActivityCoeff(  jb, je, k );
             }
             for( j=jb; j<je; j++ )
             {
@@ -665,6 +666,10 @@ rIEPS = pa.p.IEPS;
                 if( pmp->DUL[j] <= rIEPS )
                    pmp->DUL[j] = rIEPS;
                 break;
+// New methods added by KD 13.04.04
+case SAT_L_COMP:
+case SAT_QCA_NCOMP:
+case SAT_BET_NCOMP:
             case SAT_INDEF: /* No SAT calculation */
             default:        /* pmp->lnGam[j] = 0.0; */
                 break;

@@ -169,6 +169,8 @@ enum sorption_control {
     SC_NOT_USED = 'N',
     /* Methods of Surface Activity Terms calculation */
     SAT_COMP = 'C', SAT_NCOMP = 'N', SAT_SITE = 'S', SAT_INDEF = 'I',
+/* New methods for surface activity coefficient terms (2004) */
+ SAT_L_COMP = 'L', SAT_QCA_NCOMP = 'Q', SAT_BET_NCOMP = 'B',
     /* Assignment of surtype to carrier (end-member) */
     CCA_VOL = 'V', CCA_0 = '0', CCA_1, CCA_2, CCA_3, CCA_4, CCA_5,
     CCA_6, CCA_7, CCA_8, CCA_9

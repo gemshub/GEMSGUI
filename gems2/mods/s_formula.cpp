@@ -83,7 +83,8 @@ Formuan::~Formuan()
 // insert charge
 double Formuan::charge( const char *chan )
 {
-    int cha=1;
+//    int cha=1;
+float cha = 1.0;
     int sign = 1;
     double aZ = 0.0;
     switch( *chan )
@@ -99,9 +100,11 @@ double Formuan::charge( const char *chan )
             return aZ;
         }
         else
-            if( sscanf( chan+1, "%d", &cha ) )
+//            if( sscanf( chan+1, "%d", &cha ) )
+            if( sscanf( chan+1, "%g", &cha ) )
             {
-                aZ += (float)(cha*sign);
+//                aZ += (float)(cha*sign);
+                aZ += cha * (float)sign;
                 return aZ;
             }
     default:
@@ -729,12 +732,12 @@ void TFormula::Stm_line( int N, float *Sml, char *ICsym, short *ICval )
             gstring str = " in the formula: ";
             str +=  aFormula;
             str += "\n calculated charge: ";
-            vstr   buf(30);
-            sprintf( buf, "%g", aZ );
+            vstr   buf(40);
+            sprintf( buf, "%g != %g", aZ, tt );
             str += buf.p;
-
+ aSC[ii] = aZ;  // KD 03.01.04  - temporary workaround (adsorption)
             vfMessage( 0,  "W34FPrun: Charge disbalance ", str.c_str() );
-        }
+         }
 }
 
 // Get formule number nCK from list Cfor (L - number formules in list)

@@ -1033,7 +1033,8 @@ void TProfil::EqstatExpand( const char *key )
             if( pmp->E && pmp->LO )
                 GouyChapman( jb, je, k );
             /* calculation of surface activity terms */
-            SurfaceActivityTerm(  jb, je, k );
+            SurfaceActivityCoeff(  jb, je, k );
+//            SurfaceActivityTerm(  jb, je, k );
         }
         for( j=jb; j<je; j++ )
         {

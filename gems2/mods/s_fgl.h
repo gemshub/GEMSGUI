@@ -23,7 +23,7 @@
 // #include "m_dcomp.h"
 
 
-/* copyright (c) Ircutsk 1995  FGL */
+/* copyright (c) Irkutsk 1995  FGL */
 typedef struct
 { /* Working parameters */
     short Z;

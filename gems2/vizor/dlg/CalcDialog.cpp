@@ -98,13 +98,14 @@ double
 CalcDialog::fun(double val)
 {
     int ii;
-    for( ii=0; ii<15; ii++ )
+    for( ii=1; ii<15; ii++ )
     {
         QPushButton* p = dynamic_cast<QPushButton*>(pButtonBox->find(ii));
         if( p->isOn() )
-            break;
+            goto FOUND;
     }
-
+    ii=0;
+FOUND:
     double val2;
     if( ii <= 5 )
         val2 = QString( pValue->text() ).toDouble();  /// check for error

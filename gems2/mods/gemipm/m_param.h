@@ -171,13 +171,14 @@ protected:
 // surface complexation
     void IS_EtaCalc();
     void GouyChapman(  int jb, int je, int k );
-    void SurfaceActivityTerm( int jb, int je, int k );
+    void SurfaceActivityTerm( int jb, int je, int k );  // Obsolete
+    void SurfaceActivityCoeff( int jb, int je, int k );
 //  aqueous electrolyte
     void DebyeHueckel3Hel( int jb, int je, int jpb, int jdb, int k );
     void DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k );
     void DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k );
-    void DebyeHueckel1LL( int jb, int je, /* int jpb, int jdb, */ int k );
-    void Davies03temp( int jb, int je, /* int jpb, int jdb, */ int k );
+    void DebyeHueckel1LL( int jb, int je, int k );
+    void Davies03temp( int jb, int je, int k );
 // fluid mixtures
     void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
 // condensed mixtures
