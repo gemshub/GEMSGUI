@@ -141,7 +141,7 @@ typedef struct
     *phf; /* PROJECT indices of multicomp. phases in eqstate [Fis] */
     /* Optional at Psmt==1 */
     double
-    *B,  // B ‚b vector of bulk chemical composition, moles(packed)[N][0]
+    *B,  // B b vector of bulk chemical composition, moles(packed) [N][0]
     *U,  // U Dual solution u for IC (mole/mole), packed           [N][1]
     *Y, // Prime solution x for DC (moles), packed [L][0]
     *lnGam, //ln of DC activity coefficients, packed [L] [1]
@@ -208,6 +208,8 @@ public:
     void InsertChanges( TIArray<CompItem>& aIComp,
                         TIArray<CompItem>& aCompos, TIArray<CompItem>& aPhase,
                         TIArray<CompItem>&aDComp );
+    void RenameList( const char* newName, const char *oldName );
+
     bool MakeRecord( const char *key );
 
 };

@@ -589,8 +589,8 @@ TCModule::CmDerive()
 
         //check_input( db->UnpackKey() );
         RecBuild( str.c_str(), VF_REMAKE );
-        SetString("Remake finished OK"
-                  "It is recommended to re-calculate data");
+        SetString("Remake finished OK. "
+                  " It is recommended to re-calculate the data.");
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -634,7 +634,7 @@ TCModule::CmCalc()
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str() );
         RecCalc( str.c_str() );
-        SetString("Calculation finished OK");
+        SetString("Calculation finished OK. ");
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -656,7 +656,7 @@ TCModule::CmNew()
 
         MessageToSave();
         gstring str = GetKeyofRecord( db->PackKey(),
-                             "Insert new key of data record", KEY_NEW);
+                             "Insert a new record key, please ", KEY_NEW);
         if(  str.empty() )
             return;
         int  Rnum = db->Find( str.c_str() );
@@ -664,8 +664,8 @@ TCModule::CmNew()
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str() );
         RecBuild( str.c_str(), VF_REMAKE );
-        SetString("Remake of the new record finished OK"
-                  "It is recommended to re-calculate data");
+        SetString("Remake of the new record finished OK. "
+                  " It is recommended to re-calculate the data.");
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -685,7 +685,7 @@ TCModule::CmCreate()
 
         MessageToSave();
         gstring str = GetKeyofRecord( db->PackKey(),
-                             "Insert new key of data record", KEY_NEW);
+                             "Insert a new record key, please ", KEY_NEW);
         if(  str.empty() )
             return;
         int  Rnum = db->Find( str.c_str() );
@@ -693,8 +693,8 @@ TCModule::CmCreate()
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str() );
         RecBuild( str.c_str(), VF_CLEARALL );
-        SetString("Remake of the new record finished OK"
-                  "It is recommended to re-calculate data");
+        SetString("Remake of the new record finished OK. "
+                  " It is recommended to re-calculate the data");
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -768,7 +768,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 
             if( str.find_first_of("*?" ) != gstring::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
-                       "Insert new key of data record", KEY_NEW);
+                       "Insert a new record key, please ", KEY_NEW);
             if(  str.empty() )
                 Error( GetName(), "Record creation rejected!");
             int  Rnum = db->Find( str.c_str() );
@@ -777,8 +777,8 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
             gstring str1 = gstring( db->UnpackKey(), 0, db->KeyLen() );
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
-            SetString("Remake of the new record finished OK"
-                      "It is recommended to re-calculate data");
+            SetString("Remake of the new record finished OK. "
+                      " It is recommended to re-calculate the data");
             pVisor->Update();
             Error("Calculation failed!", "Check data fields and try calculation again!");
         } // break;
@@ -863,15 +863,15 @@ TCModule::CmNewinProfile()
         str += ":"; //04/09/01 ????
         for( int i=1; i<db->KeyNumFlds(); i++)
             str += "*:";
-        str = GetKeyofRecord( str.c_str(), "Please, enter a new key", KEY_NEW );
+        str = GetKeyofRecord( str.c_str(), "Please, enter a new record key", KEY_NEW );
         if(  str.empty() )
             return;
         int  Rnum = db->Find( str.c_str() );
         ErrorIf( Rnum>=0, GetName(), "This record alredy exists!");
         check_input( str.c_str(), 0 );
         RecBuild( str.c_str(), VF_REMAKE );
-        SetString("Remake of the new record finished OK"
-                  "It is recommended to re-calculate data");
+        SetString("Remake of the new record finished OK. "
+                  " It is recommended to re-calculate the data.");
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -893,15 +893,15 @@ TCModule::CmCreateinProfile()
         str += ":"; //04/09/01 ????
         for( int i=1; i<db->KeyNumFlds(); i++)
             str += "*:";
-        str = GetKeyofRecord( str.c_str(), "Please, enter a new key", KEY_NEW );
+        str = GetKeyofRecord( str.c_str(), "Please, enter a new record key ", KEY_NEW );
         if(  str.empty() )
             return;
         int  Rnum = db->Find( str.c_str() );
         ErrorIf( Rnum>=0, GetName(), "This record alredy exists!");
         check_input( str.c_str(), 0 );
         RecBuild( str.c_str(), VF_CLEARALL );
-        SetString("Remake of the new record finished OK"
-                  "It is recommended to re-calculate data");
+        SetString("Remake of the new record finished OK. "
+                  " It is recommended to re-calculate data");
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -1029,7 +1029,7 @@ TCModule::CmPrint()
         if( str.find_first_of("*?" ) != gstring::npos )
             Error( GetName(), "Current record is not defined!");*/
         RecordPrint();
-        SetString("Printing a record finished OK");
+        SetString("Printing of a record finished OK. ");
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -1081,7 +1081,7 @@ TCModule::CmRebildFile()
          "Please, wait...", 0, 100 );
 
         db->RebildFile(SelectFileList(closef|openf));
-        pVisorImp->CloseMessage();
+        // pVisorImp->CloseMessage();
         dyn_set();
         //        SetString("Compression finished OK");
         pVisor->Update();

@@ -102,7 +102,7 @@ void TProbe::keyTest( const char *key )
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k>=rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
             Error( key, "Illegal key (another Modelling Project)!");
         rt[RT_SYSEQ].MakeKey( RT_PROBE, pkey, RT_PROBE, 0, RT_PROBE, 1,
                                RT_PROBE, 2, RT_PROBE, 3, RT_PROBE, 4,
@@ -595,6 +595,7 @@ float TProbe::UnsG( float x, float dx )
 
 int TProbe::WL(int i,int j,int QT)
 {
+//    int W = i*j - floor((float)(i*j/QT))*QT;
     int W = i*j - floor(double(i)*double(j)/double(QT))*QT;
     if(QT-W<W) W=QT-W;
     return(W);
@@ -614,6 +615,7 @@ void TProbe::BELOV()
         Error( GetName(), "No memory in BELOV.");
     memset( LI, 0, (QT2+1)*sizeof(int));
     memset( LI1, 0, (QT2+1)*sizeof(int));
+//    W=floor((float)(NG/QT2));
     W=floor(double(NG)/double(QT2));
     if(W)
     {
@@ -891,6 +893,7 @@ float TProbe::PNTNOR(int I,int J,int QT)
 float TProbe::PNTBEL(int J,int QT,int OV)
 {
     float TB;
+//    TB=fabs(J*OV-floor((float)(J*OV/QT))*QT);
     TB=fabs(J*OV-floor((double)J*(double)OV/(double)QT)*(double)QT);
     TB*=(QT-1)/2;
     while(1)

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>MainDialogData</class>
 <comment>Main program window (poor but important :)</comment>
 <widget class="QWidget">
@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>518</width>
-            <height>321</height>
+            <width>521</width>
+            <height>322</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -101,7 +101,6 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>Ms Sans Serif</family>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
@@ -126,7 +125,6 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>Ms Sans Serif</family>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
@@ -151,7 +149,6 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>Ms Sans Serif</family>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
@@ -176,7 +173,6 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>Ms Sans Serif</family>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
@@ -214,7 +210,6 @@
         </property>
         <property name="font">
             <font>
-                <family>Ms Sans Serif</family>
                 <pointsize>16</pointsize>
                 <bold>1</bold>
             </font>
@@ -248,7 +243,6 @@
         </property>
         <property name="font">
             <font>
-                <family>Ms Sans Serif</family>
                 <pointsize>16</pointsize>
                 <bold>1</bold>
             </font>
@@ -260,15 +254,37 @@
             <string>Press this button to manage database records</string>
         </property>
     </widget>
+    <widget class="Line">
+        <property name="name">
+            <cstring>Line1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>240</y>
+                <width>500</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>HLine</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>TextLabel1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>70</x>
+                <x>80</x>
                 <y>20</y>
-                <width>440</width>
+                <width>430</width>
                 <height>60</height>
             </rect>
         </property>
@@ -282,7 +298,6 @@
         </property>
         <property name="font">
             <font>
-                <family>Ms Sans Serif</family>
                 <pointsize>14</pointsize>
                 <bold>1</bold>
                 <italic>1</italic>
@@ -295,7 +310,7 @@
             <enum>Raised</enum>
         </property>
         <property name="text">
-            <string>Geochemical Equilibrium Modelling by Gibbs Energy Minimization</string>
+            <string>Geochemical Equilibrium Modelling      by Gibbs Energy Minimization</string>
         </property>
         <property name="alignment">
             <set>WordBreak|AlignCenter</set>
@@ -303,28 +318,6 @@
         <property name="hAlign" stdset="0">
         </property>
         <property name="wordwrap" stdset="0">
-        </property>
-    </widget>
-    <widget class="Line">
-        <property name="name">
-            <cstring>Line1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>240</y>
-                <width>490</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="frameShape" stdset="0">
-            <enum>HLine</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
         </property>
     </widget>
 </widget>

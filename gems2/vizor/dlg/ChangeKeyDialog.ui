@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ChangeKeyDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -12,8 +12,13 @@
             <height>161</height>
         </rect>
     </property>
+    <property name="font">
+        <font>
+            <pointsize>10</pointsize>
+        </font>
+    </property>
     <property name="caption">
-        <string>Setup of template to change record keys</string>
+        <string>Setup of a template to change record keys</string>
     </property>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -46,7 +51,7 @@
                 </property>
             </widget>
             <spacer>
-                <property name="name" stdset="0">
+                <property name="name">
                     <cstring>Spacer1</cstring>
                 </property>
                 <property name="orientation">
@@ -71,7 +76,7 @@
                 </property>
             </widget>
             <spacer>
-                <property name="name" stdset="0">
+                <property name="name">
                     <cstring>Spacer1_2</cstring>
                 </property>
                 <property name="orientation">
@@ -103,7 +108,7 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>120</x>
+                <x>140</x>
                 <y>20</y>
                 <width>372</width>
                 <height>30</height>
@@ -166,7 +171,7 @@
             <rect>
                 <x>10</x>
                 <y>20</y>
-                <width>100</width>
+                <width>120</width>
                 <height>31</height>
             </rect>
         </property>
@@ -230,7 +235,7 @@
             <rect>
                 <x>10</x>
                 <y>70</y>
-                <width>100</width>
+                <width>120</width>
                 <height>31</height>
             </rect>
         </property>
@@ -247,9 +252,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>120</x>
+                <x>140</x>
                 <y>70</y>
-                <width>290</width>
+                <width>300</width>
                 <height>30</height>
             </rect>
         </property>

@@ -106,7 +106,7 @@ void TSysEq::keyTest( const char *key )
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k>=rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
             Error( GetName(), "Illegal key!");
     }
 }
@@ -745,4 +745,56 @@ void TSysEq::newSizeifChange()
         }
     stp->L = j;
 }
+
+
+//Rename record (Change first field: for SYSEQ, and >)
+// and change key in tPhEQ
+//Sveta 14/11/2002
+void TSysEq::RenameList( const char* newName,
+        const char *oldName )
+{
+    if( strlen(newName) > db->FldLen(0) )
+      return;
+
+    gstring str_old = gstring( oldName, 0, db->FldLen(0) );
+//04/09/01 ????    if( strlen(oldName)<FldLen(0) )
+        str_old += ":";
+    for( int i=1; i<db->KeyNumFlds(); i++)
+            str_old += "*:";
+
+    TCStringArray arKey;
+    TCIntArray arR;
+
+    uint Nrec = db->GetKeyList( str_old.c_str(), arKey, arR );
+    if( Nrec < 1)
+      return;
+
+    int nrec;
+    gstring str;
+
+    for(uint i=0; i<Nrec; i++ )
+    {
+        nrec =  db->Find( arKey[i].c_str() );
+        db->Get( nrec );
+        dyn_set();
+        // changing record key
+        str = db->PackKey();
+        db->Del( nrec );
+        str = str.replace( oldName, newName);
+        // change tPhEQ key (o_ssphst,PhmKey)
+        gstring tPhkey = gstring( ssp->PhmKey, 0 , EQ_RKLEN );
+        if( tPhkey.find(oldName) != gstring::npos)
+        {
+         db->SetKey( tPhkey.c_str() );
+         tPhkey = db->PackKey();
+         tPhkey = tPhkey.replace( oldName, newName);
+         memcpy( ssp->PhmKey, tPhkey.c_str(), EQ_RKLEN );
+        }
+        db->AddRecordToFile( str.c_str(), db->fNum );
+    }
+}
+
+
+
+
 //--------------------- End of m_syseq.cpp ---------------------------

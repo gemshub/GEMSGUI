@@ -31,10 +31,62 @@
 class TCModule;
 class HelpWindow;
 
+
+enum myThreadEvents { thMessage = QEvent::User +10, thQuestion,
+                      thChoice, thExcludeFillEdit  };
+
+
+// data for thread
+struct DThread
+{
+  int res;
+  bool wait;
+  //vfMessage & vfQuestion
+  gstring title;     //prompt(vfChoice), caption
+  gstring mess;
+  //vfChoice (error, open only one SysEq)
+  TCStringArray list;
+  int seli;
+  //vfExcludeFillEdit
+  TOArray<bool> sel;
+  double fill_data;
+
+  //Message&Quastion
+  void setDThread( const gstring& title_, const gstring& mess_ )
+  {  res =0;
+     wait = true;
+     title = title_;
+     mess =mess_;
+  }
+  //vfChoice
+  void setDThread( TCStringArray& arr, const char* prompt, int sel_ )
+  {  res =0;
+     wait = true;
+     title = prompt;
+     mess ="";
+     seli = sel_;
+     list.Clear();
+     for( uint ii=0; ii<arr.GetCount(); ii++ )
+       list.Add( arr[ii]);
+  }
+  //vfExcludeFillEdit
+  void setDThread( const char* caption, TCStringArray& aICkeys,
+             double fill_data_ )
+  {  res = 0;
+     wait = true;
+     title = caption;
+     fill_data = fill_data_;
+     list.Clear();
+     for( uint ii=0; ii<aICkeys.GetCount(); ii++ )
+       list.Add( aICkeys[ii]);
+  }
+};
+
 /*!
  \class TVisorImp
  \brief This class handles work of TVisor with real GUI classes
 */
+
 
 class TVisorImp:
             public QMainWindow
@@ -60,9 +112,16 @@ class TVisorImp:
 
     char TCpoint[32];  // Step point ID for stepwise mode
 
+    // thread data
+
+
+
+
 protected slots:
     void closeEvent( QCloseEvent* );
     void evHelpClosed();
+    void customEvent( QCustomEvent * e );
+
 
 public slots:
     bool SetProfileMode();
@@ -76,8 +135,10 @@ public slots:
 
     void CalcMulti();
     void SaveSystem();
-    
+
 public:
+    DThread thdata;
+
     TVisorImp(int c, char** v);
     ~TVisorImp();
 
@@ -127,7 +188,7 @@ public:
     {
         return CellFont;
     }
-    
+
     void setCellFont(const QFont& newCellFont);
     int getCharWidth() const;
     int getCharHeight() const;
@@ -171,5 +232,6 @@ public:
 };
 
 extern TVisorImp* pVisorImp;
+extern Qt::HANDLE pThread;
 
 #endif   // _visor_w_h

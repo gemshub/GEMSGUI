@@ -230,7 +230,15 @@ NewSystemDialog::LoadMenu()
     imgFile = imgDir + "help.png";
     new QToolButton( QPixmap(imgFile.c_str()), "Help", 0,
                      this, SLOT(CmHelp()), toolBar, "help" );
+   toolBar->addSeparator();
+   toolBar->addSeparator();
 
+   pLine = new QLineEdit( toolBar, "LineEdit7" );
+   pLine->setEnabled( TRUE );
+   pLine->setFocusPolicy( QLineEdit::ClickFocus );
+   pLine->setText( trUtf8( "lllllljg " ) );
+   pLine->setReadOnly( TRUE );
+   toolBar->setStretchableWidget( pLine );
 
 }
 
@@ -244,7 +252,8 @@ NewSystemDialog::Update()
 {
     MULTI* pData = TProfil::pm->pmp;
 
-    QString msg  = tr (rt[RT_SYSEQ].PackKey());
+    pLine->setText(tr (rt[RT_SYSEQ].PackKey()));
+    QString msg  = tr ("    ");
             msg += QString("  T = %1 K;").arg(pData->T, 7, 'f', 2);
             msg += QString("  P = %1 bar;").arg(pData->P, 7, 'f', 2);
             msg += QString("  V = %1 L;").arg(pData->VXc/1000., 9, 'g', 5);
@@ -451,6 +460,8 @@ NewSystemDialog::CmRemake()
     loadList1();
     loadList2();
     Update();
+    pVisor->OpenModule(this, MD_SYSTEM);
+
  }
  catch( TError& xcpt )
     {
@@ -463,7 +474,17 @@ NewSystemDialog::CmSave()
 {
   try
   {
+
     saveList1();
+    if( TSysEq::pm->ifCalcFlag()== false )
+    {
+      gstring key_s = rt[RT_SYSEQ].PackKey();
+      if( rt[RT_SYSEQ].Find( key_s.c_str()  ) < 0)
+      { vfMessage( this, key_s.c_str(),
+        "Please, calculate the equilibrium state before saving this record!");
+            return;
+      }
+    }
     TSysEq::pm->CmSave();
   }
     catch( TError& xcpt )
@@ -530,8 +551,10 @@ void
 NewSystemDialog::CmCommit()
 {
   try
-  {
-    saveList1();
+  {    // added Sveta 13/11/2002
+       gstring str=rt[RT_SYSEQ].UnpackKey();
+       if( !(str.find_first_of("*?" ) != gstring::npos) )
+          saveList1();
   }
     catch( TError& xcpt )
     {
@@ -1177,8 +1200,9 @@ void
 MLineEdit::focusOutEvent(QFocusEvent* e)
 {
     getData();
-    QLineEdit::focusOutEvent(e);
     hide();
+    QLineEdit::focusOutEvent(e);
+//    hide();
 }
 
 void MLineEdit::setData( QListViewItem *ait, int acol)
@@ -1221,8 +1245,10 @@ void MLineEdit::getData()
     double dd;
     vstr sv(20);
     if( sscanf(ss.c_str(), "%lg%s", &dd, sv.p ) != 1 )
-         vfMessage(topLevelWidget(), ss.c_str(), "Sorry! Wrong value typed!" );
-//    setText(it->text( col ));
+    {
+        setText( old_data.c_str());
+        vfMessage(topLevelWidget(), ss.c_str(), "Sorry! Wrong value typed!" );
+    }
     else
       it->setText( col, ss.c_str() );
    }
@@ -1238,7 +1264,10 @@ void MLineEdit::getData()
 //    Vals = aUnits[type].getVals(0);
     size_t ind1 = Vals.find(ss);
     if( ind1 == gstring::npos )
-     vfMessage(topLevelWidget(), ss.c_str(), "Sorry! Wrong value typed!" );
+    {
+       setText( old_data.c_str());
+       vfMessage(topLevelWidget(), ss.c_str(), "Sorry! Wrong value typed!" );
+    }
     else
       it->setText( col, ss.c_str() );
    }

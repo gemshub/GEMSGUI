@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ColorDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -12,70 +12,14 @@
             <height>207</height>
         </rect>
     </property>
+    <property name="font">
+        <font>
+            <pointsize>10</pointsize>
+        </font>
+    </property>
     <property name="caption">
         <string>ColorDialogData</string>
     </property>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>Layout7</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>361</x>
-                <y>17</y>
-                <width>110</width>
-                <height>60</height>
-            </rect>
-        </property>
-        <property name="layoutSpacing" stdset="0">
-        </property>
-        <vbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>PushButton10</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>5</hsizetype>
-                        <vsizetype>5</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Ok</string>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>PushButton11</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>5</hsizetype>
-                        <vsizetype>5</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Cancel</string>
-                </property>
-            </widget>
-        </vbox>
-    </widget>
     <widget class="QButtonGroup">
         <property name="name">
             <cstring>pGroup</cstring>
@@ -298,8 +242,8 @@
                 <rect>
                     <x>10</x>
                     <y>30</y>
-                    <width>300</width>
-                    <height>25</height>
+                    <width>320</width>
+                    <height>28</height>
                 </rect>
             </property>
             <property name="layoutSpacing" stdset="0">
@@ -348,9 +292,9 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>11</x>
+                    <x>10</x>
                     <y>140</y>
-                    <width>300</width>
+                    <width>320</width>
                     <height>30</height>
                 </rect>
             </property>
@@ -393,6 +337,67 @@
                 </widget>
             </hbox>
         </widget>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout7</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>361</x>
+                <y>17</y>
+                <width>110</width>
+                <height>70</height>
+            </rect>
+        </property>
+        <property name="layoutSpacing" stdset="0">
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>PushButton10</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>5</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="text">
+                    <string>&amp;Ok</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>PushButton11</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>5</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+            </widget>
+        </vbox>
     </widget>
 </widget>
 <images>

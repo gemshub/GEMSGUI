@@ -167,7 +167,6 @@ class TProfil : public TCModule
     int pll;
     double FXold;
 
-
     // to compare with old Project
     bool comp_change_all; 
     char
@@ -304,6 +303,9 @@ public:
    bool stepWise;
    bool calcFinished;
    const char * status;
+
+    bool useAqPhase;
+    bool useGasPhase;
 
 // temporary !Use_mt_mode
     bool fStopCalc;

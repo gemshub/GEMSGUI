@@ -51,6 +51,7 @@ public:
 #ifdef Use_mt_mode
 
 #include <time.h>
+#include <qevent.h>
 
 class ProcessThread;
 class QTimer;

@@ -596,6 +596,7 @@ void TSysEq::set_def( int q)
     memset( ss[q].PhmKey, 0, EQ_RKLEN );
     bool is_a = false;
     bool is_x = false;
+    bool is_g = false;
 
     if( pVisor->ProfileMode == true )
         for( int i=0; i<TProfil::pm->mup->Fi; i++)
@@ -604,12 +605,16 @@ void TSysEq::set_def( int q)
                 is_a = true;
             if( TProfil::pm->mup->PHC[i] == PH_SORPTION )
                 is_x = true;
+           if( TProfil::pm->mup->PHC[i] == PH_GASMIX ||
+               TProfil::pm->mup->PHC[i] == PH_PLASMA )
+                is_g = true;
+
         }
     else is_a = true;
     memcpy( ss[q].switches, aPa->pa.SYppc, 10 );
     memcpy( &ss[q].switches[10], aPa->pa.SYpvc, 28 );
     memcpy( &ss[q].switches[38], "--", 2 );
-    if( !is_a  && !is_x )
+    if( !is_a  && !is_x  && !is_g )
         ss[q].switches[0] = '-';
     if( is_x )
     {

@@ -1296,7 +1296,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
 
             if( str.find_first_of("*?" ) != gstring::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
-                                      "Insert a new data record key, please!", KEY_NEW);
+                                      "Enter a new data record key, please!", KEY_NEW);
             if(  str.empty() )
                 Error( GetName(), " Record create action dismissed...");
             int  Rnum = db->Find( str.c_str() );
@@ -1306,7 +1306,7 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             check_input( str1.c_str() );
             RecBuild( str.c_str() );
             SetString("Remake of new record finished OK. "
-                      "It is recommended to re-calculate the data");
+                      " It is recommended to re-calculate the data");
             pVisor->Update();
             Error("Calculation failed!", " Check data fields and try again!");
         } // break;

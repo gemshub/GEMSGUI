@@ -408,7 +408,9 @@ void TProfil::multi_sys_dc()
         // error no charge
         if( vfQuestion(window(), "Multi", "No DC with formula charge are included:\n"
                        "Proceed (Y), Cancel (N)?"  ))
-            pmp->E = 0;
+        {    pmp->E = 0;
+             syp->PE=S_OFF;  // Change Sveta 14/10/2002
+        }
         else
             Error( "Multi","No DC with formula charge are included" );
 CH_FOUND:

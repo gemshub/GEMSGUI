@@ -281,6 +281,7 @@ void
 GraphDialog::AddPoint( int nPlot, int nPoint )
 {
 
+  qApp->lock();
   if( nPlot>=0 && nPoint>=0 )
   {
     int nLn = gr_data.plots[nPlot].getFirstLine();
@@ -294,7 +295,8 @@ GraphDialog::AddPoint( int nPlot, int nPoint )
 
     plot->update();
   }
-    qApp->processEvents();
+  qApp->unlock();
+  //  qApp->processEvents();
 }
 
 void

@@ -43,7 +43,7 @@ struct VDBhead
     char Time[5];
     int nRT;                 // type of PDB chain
     int nRec;                // number records in file
-    int  FPosRE,FPosTRT;
+    int  stacOver,FPosTRT;
     char isDel;
     long MinDrLen, MaxDrLen; // min and max size of deleted block
     int curDr;               // number of deleted blocks
@@ -130,6 +130,7 @@ public:
         check_dh(), dh->nRec = n;
     }
     void GetDh( long& fPos, long& fLen );
+    bool GetDhOver();
     void SetDh( long& fLen, int nRec );
 
     //---  Manipulation files ---
@@ -346,7 +347,8 @@ protected:
     void getndx( int nF );
     long reclen( );
     long putrec( RecEntry& re, fstream& f );
-    long getrec( RecEntry& re, fstream& f );
+    long putrec( RecEntry& re, fstream& f, RecHead& rhh );
+    long getrec( RecEntry& re, fstream& f, RecHead& rh );
     void opfils();
     int scanfile( int nF, long& fPos, long& fLen, fstream& f);
     void fromCFG(fstream& f);

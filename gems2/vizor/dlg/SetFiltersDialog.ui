@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>SetFiltersDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -11,6 +11,11 @@
             <width>589</width>
             <height>442</height>
         </rect>
+    </property>
+    <property name="font">
+        <font>
+            <pointsize>10</pointsize>
+        </font>
     </property>
     <property name="caption">
         <string>Setup of files and filters to create/extend an independent modelling project</string>
@@ -47,7 +52,7 @@
                         <property name="clickable">
                             <bool>true</bool>
                         </property>
-                        <property name="resizeable">
+                        <property name="resizable">
                             <bool>true</bool>
                         </property>
                     </column>
@@ -58,7 +63,7 @@
                         <property name="clickable">
                             <bool>true</bool>
                         </property>
-                        <property name="resizeable">
+                        <property name="resizable">
                             <bool>true</bool>
                         </property>
                     </column>
@@ -122,7 +127,7 @@ project database</string>
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -240,7 +245,7 @@ project database</string>
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -406,7 +411,7 @@ Default database</string>
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -428,7 +433,7 @@ Default database</string>
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -671,7 +676,7 @@ records
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -693,7 +698,7 @@ records
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -931,7 +936,7 @@ records
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -953,7 +958,7 @@ records
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -1196,7 +1201,7 @@ records
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -1221,7 +1226,6 @@ records
                     <property name="font">
                         <font>
                             <family>Lucida Sans Unicode</family>
-                            <pointsize>10</pointsize>
                         </font>
                     </property>
                     <property name="text">
@@ -1400,7 +1404,7 @@ records
                             <height>20</height>
                         </rect>
                     </property>
-                    <property name="frameShape" stdset="0">
+                    <property name="frameShape">
                         <enum>HLine</enum>
                     </property>
                     <property name="frameShadow">
@@ -1554,7 +1558,7 @@ records
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer1</cstring>
                     </property>
                     <property name="orientation">
@@ -1579,7 +1583,7 @@ records
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Spacer4</cstring>
                     </property>
                     <property name="orientation">

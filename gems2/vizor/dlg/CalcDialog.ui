@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>CalcDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,24 +8,83 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>493</width>
+            <width>502</width>
             <height>284</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Data Object Cell Calculator</string>
+    <property name="font">
+        <font>
+            <pointsize>10</pointsize>
+        </font>
     </property>
+    <property name="caption">
+        <string>GEMS Data Object Cell Calculator</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>PushButton1_3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>240</y>
+                <width>200</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&amp;Ok - Do it!</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>PushButton1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>230</x>
+                <y>240</y>
+                <width>100</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&amp;Cancel</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>PushButton42</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>360</x>
+                <y>240</y>
+                <width>100</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&amp;Help</string>
+        </property>
+    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>TextLabel1_3</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>240</x>
+                <x>220</x>
                 <y>10</y>
-                <width>170</width>
+                <width>200</width>
                 <height>20</height>
             </rect>
+        </property>
+        <property name="acceptDrops">
+            <bool>false</bool>
         </property>
         <property name="text">
             <string>Value of Second Operand</string>
@@ -37,14 +96,17 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>20</x>
+                <x>10</x>
                 <y>10</y>
                 <width>200</width>
-                <height>22</height>
+                <height>30</height>
             </rect>
         </property>
+        <property name="acceptDrops">
+            <bool>true</bool>
+        </property>
         <property name="toolTip" stdset="0">
-            <string>Type in a value of second operand for binary operations</string>
+            <string>Type in here a value of second operand for binary operations</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -53,9 +115,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>230</x>
+                <x>220</x>
                 <y>200</y>
-                <width>250</width>
+                <width>270</width>
                 <height>21</height>
             </rect>
         </property>
@@ -69,9 +131,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>230</x>
+                <x>220</x>
                 <y>40</y>
-                <width>240</width>
+                <width>260</width>
                 <height>150</height>
             </rect>
         </property>
@@ -81,81 +143,15 @@
         <property name="toolTip" stdset="0">
             <string>Operations will be applied only to the selected range of cells</string>
         </property>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>PushButton22</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>70</x>
-                    <y>110</y>
-                    <width>150</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Select &amp;All Cells</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Press this button to select all cells in a vector or matrix</string>
-            </property>
-        </widget>
-        <widget class="QSpinBox">
-            <property name="name">
-                <cstring>pM2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>160</x>
-                    <y>70</y>
-                    <width>60</width>
-                    <height>23</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_2_3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>130</x>
-                    <y>70</y>
-                    <width>20</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>to</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
         <widget class="QSpinBox">
             <property name="name">
                 <cstring>pN2</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>160</x>
+                    <x>180</x>
                     <y>30</y>
-                    <width>60</width>
-                    <height>23</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QSpinBox">
-            <property name="name">
-                <cstring>pN1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>70</x>
-                    <y>30</y>
-                    <width>60</width>
+                    <width>70</width>
                     <height>23</height>
                 </rect>
             </property>
@@ -166,7 +162,7 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>130</x>
+                    <x>150</x>
                     <y>30</y>
                     <width>20</width>
                     <height>20</height>
@@ -183,36 +179,81 @@
         </widget>
         <widget class="QSpinBox">
             <property name="name">
-                <cstring>pM1</cstring>
+                <cstring>pM2</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>70</x>
+                    <x>180</x>
                     <y>70</y>
-                    <width>60</width>
+                    <width>70</width>
                     <height>23</height>
                 </rect>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>TextLabel1</cstring>
+                <cstring>TextLabel1_2_3</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>10</x>
-                    <y>30</y>
-                    <width>60</width>
+                    <x>150</x>
+                    <y>70</y>
+                    <width>20</width>
                     <height>20</height>
                 </rect>
             </property>
             <property name="text">
-                <string>N (rows)</string>
+                <string>to</string>
             </property>
             <property name="alignment">
-                <set>AlignCenter</set>
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="hAlign" stdset="0">
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>pN1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>80</x>
+                    <y>30</y>
+                    <width>70</width>
+                    <height>23</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>pM1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>80</x>
+                    <y>70</y>
+                    <width>70</width>
+                    <height>23</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton22</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>80</x>
+                    <y>110</y>
+                    <width>170</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Select &amp;All Cells</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Press this button to select all cells in a vector or matrix</string>
             </property>
         </widget>
         <widget class="QLabel">
@@ -223,12 +264,33 @@
                 <rect>
                     <x>10</x>
                     <y>70</y>
-                    <width>60</width>
+                    <width>70</width>
                     <height>20</height>
                 </rect>
             </property>
             <property name="text">
                 <string>M (cols)</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+            <property name="hAlign" stdset="0">
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>30</y>
+                    <width>70</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>N (rows)</string>
             </property>
             <property name="alignment">
                 <set>AlignCenter</set>
@@ -243,7 +305,7 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>20</x>
+                <x>10</x>
                 <y>40</y>
                 <width>200</width>
                 <height>180</height>
@@ -608,7 +670,29 @@
                 <number>0</number>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Set / Assign above Value to Cell</string>
+                <string>Set / Assign above Value to Cell(s)</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pClearBtn</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>20</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>n.&amp;d.</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Set Cell to 'No Data' Value</string>
             </property>
         </widget>
         <widget class="QPushButton">
@@ -636,79 +720,6 @@
                 <string>Add a Value to Cell</string>
             </property>
         </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>pClearBtn</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>140</x>
-                    <y>20</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>n.&amp;d.</string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Set Cell to 'No Data' Value</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>PushButton1_3</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>40</x>
-                <y>230</y>
-                <width>120</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;Ok - Do it!</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>PushButton1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>240</x>
-                <y>230</y>
-                <width>100</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;Cancel</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>PushButton42</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>371</x>
-                <y>230</y>
-                <width>100</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;Help</string>
-        </property>
     </widget>
 </widget>
 <connections>

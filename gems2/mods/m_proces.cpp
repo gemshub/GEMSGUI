@@ -121,7 +121,7 @@ void TProcess::keyTest( const char *key )
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k>=rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
             Error( key, "E08PErem: Illegal record key (another Modelling Project)!");
         rt[RT_SYSEQ].MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                                RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
@@ -1179,6 +1179,10 @@ TProcess::internalCalc()
                  "Calculating process; \n"
                  "Please, wait...", pep->c_nrk, pep->NR1);
 #endif
+    //  if(  vfQuestion(window(), GetName(),
+    //    "E01PErem: test" ))
+    //      break;
+   
         // calc equations of process
         if( pep->PsPro == S_OFF )
         {

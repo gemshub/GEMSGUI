@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>ProcessDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -11,6 +11,11 @@
             <width>531</width>
             <height>369</height>
         </rect>
+    </property>
+    <property name="font">
+        <font>
+            <pointsize>10</pointsize>
+        </font>
     </property>
     <property name="caption">
         <string>GEM-Selektor Create Process Wizard  </string>
@@ -138,7 +143,7 @@
                             <cstring>TextLabel1</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Number of process-generated points (&lt;1000)</string>
+                            <string>Number of process-generated points (&lt;1000)</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="1" column="1">
@@ -146,7 +151,7 @@
                             <cstring>TextLabel2</cstring>
                         </property>
                         <property name="text">
-                            <string>Number of columns in &amp;modC array (from 0 to 20)</string>
+                            <string>Number of columns in the modC array (from 0 to 20)</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="2" column="1">
@@ -154,7 +159,7 @@
                             <cstring>TextLabel1_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Number of plots (sampled &amp;columns, from 0 to 20)</string>
+                            <string>Number of plots (sampled columns, from 0 to 20)</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="3" column="1" rowspan="2" colspan="1">
@@ -163,7 +168,7 @@
                         </property>
                         <property name="text">
                             <string>Number of lines (points) and columns  for
- &amp;empirical data (if sampling or plots are specified)</string>
+ empirical data (if sampling or plots are specified)</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="5" column="1">
@@ -171,7 +176,7 @@
                             <cstring>TextLabel2_2</cstring>
                         </property>
                         <property name="text">
-                            <string>Number of SDref (bibliography) &amp;links</string>
+                            <string>Number of SDref (bibliography or comments record) links</string>
                         </property>
                     </widget>
                     <widget class="QSpinBox" row="5" column="0">
@@ -271,7 +276,7 @@
                         <string>OK</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <string></string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -281,7 +286,7 @@
                     </property>
                 </widget>
                 <spacer>
-                    <property name="name" stdset="0">
+                    <property name="name">
                         <cstring>Horizontal Spacing2</cstring>
                     </property>
                     <property name="orientation">
@@ -305,7 +310,7 @@
                         <string>Help</string>
                     </property>
                     <property name="accel">
-                        <number>4144</number>
+                        <string>F1</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
@@ -319,7 +324,7 @@
                         <string>Cancel</string>
                     </property>
                     <property name="accel">
-                        <number>0</number>
+                        <string></string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>

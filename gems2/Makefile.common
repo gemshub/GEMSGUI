@@ -15,8 +15,8 @@ endif
 
 OPT_FLAGS	= -O3 -mcpu=pentium -march=pentium -fexpensive-optimizations -ffast-math
 RELEASE_FLAGS	= -DGEMS_RELEASE
-DEBUG_FLAGS	= -ggdb
-PROF_FLAGS	= -pg
+DEBUG_FLAGS	= 
+PROF_FLAGS	= 
 WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
 CCFLAGS		= -Wall -DQTv3 -D__unix -pipe -DQT_THREAD_SUPPORT=1 \

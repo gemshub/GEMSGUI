@@ -30,6 +30,8 @@ bool
 TProfil::initCalcMode()
 {
     isSysEq = false;
+    useAqPhase = true;
+    useGasPhase = true;
 
 
     // free old data
@@ -98,7 +100,7 @@ TProfil::initCalcMode()
 */
         // update windows informations
    pVisor->CloseMessage();
-   ModUpdate("Insertion of Modelling Project record finished OK");
+   ModUpdate("Insertion of a Modelling Project record finished OK.");
         return true;
 }
 
@@ -536,7 +538,7 @@ void TProfil::deriveSystat()
         EqstatExpand( keyp.c_str() );
 
     pVisor->Update();
-    pVisor->OpenModule(window(), MD_SYSTEM);
+//    pVisor->OpenModule(window(), MD_SYSTEM);
 }
 
 
@@ -660,14 +662,17 @@ void TProfil::CalcEqstat( bool prg)
      if( prg )
 	pVisorImp->OpenProgress();
 #endif
+//    vfMessage(window(),"Test1", "Point1");
     MultiCalcInit( keyp.c_str() );
+//    vfMessage(window(),"Test1", "Point2");
     if( AutoInitialApprox() == false )
         MultiCalcIterations();
     else //Show results   //if( wn[W_EQCALC].status )
         aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
+//    vfMessage(window(),"Test1", "Point2");
 
     calcFinished = true;
-    
+
 //nmt    pVisor->Update();
 //nmt    pVisor->CalcFinished();
     STat->setCalcFlag( true );
@@ -799,8 +804,10 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
 // Rename records SysEq and >
 void TProfil::RenameFN( const char * prfName, const char* prfTemplate )
 {
+    // Rename records SysEq in New Project
+       TSysEq::pm->RenameList(prfName, prfTemplate);
     // Rename records in New Project > SysEq
-      for(uint i=RT_SYSEQ; i<aMod.GetCount(); i++)
+      for(uint i=RT_SYSEQ+1; i<aMod.GetCount(); i++)
       {
         if( aMod[i].IsSubModule() )
             continue;

@@ -38,6 +38,7 @@ using namespace std;
 #include "service.h"
 #include "visor_w.h"
 #include "visor.h"
+#include "stepwise.h"
 #include "module_w.h"
 #include "m_param.h"
 #include "m_proces.h"
@@ -72,7 +73,7 @@ const int GEMS_DEFAULT_FONT_SIZE = 9;
 #endif
 extern const char* GEMS_ABOUT_HTML;
 extern const char* GEMS_TOC_HTML;
-
+#include <qthread.h>
 //----------------------------------------------------------------
 // TVisor
 //----------------------------------------------------------------
@@ -111,6 +112,7 @@ TVisorImp::TVisorImp(int c, char** v):
     pixLogo = new QPixmap( logoFile.c_str() );
     logoFile = pVisor->sysGEMDir() + GEMS_SYS_ICON;
     pixSys = new QPixmap( logoFile.c_str() );
+    pThread = QThread::currentThread ();
 
     setCaption( GEMS_VERSION_STAMP );
 }
@@ -151,6 +153,38 @@ TVisorImp::closeEvent ( QCloseEvent * ev )
     }
 }
 
+void TVisorImp::customEvent( QCustomEvent * e )
+{
+  QWidget* par=0;
+  if( ProgressDialog::pDia )
+        par = ProgressDialog::pDia;
+  if( ProcessProgressDialog::pDia )
+        par = ProcessProgressDialog::pDia;
+
+       switch( e->type()  )
+       {
+        case thMessage:
+          vfMessage( par, thdata.title, thdata.mess );
+                       break;
+        case thQuestion:
+          thdata.res = vfQuestion( par, thdata.title, thdata.mess );
+                       break;
+        case thChoice:
+          thdata.res = vfChoice( par, thdata.list,
+                             thdata.title.c_str(), thdata.seli );
+                       break;
+        case thExcludeFillEdit:
+          thdata.res = vfExcludeFillEdit( par, thdata.title.c_str(),
+             thdata.list, thdata.sel, thdata.fill_data );
+                       break;
+        default:
+                       break;
+        }
+      thdata.wait = false;
+      ThreadControl::wakeOne();
+
+}
+
 void
 TVisorImp::evHelpClosed ( )
 {
@@ -175,6 +209,8 @@ TVisorImp::Update(bool force)
     if( ProcessProgressDialog::pDia )
         ProcessProgressDialog::pDia->Update();
 
+//    qApp->lock();
+
     if( NewSystemDialog::pDia )
         NewSystemDialog::pDia->Update();
 
@@ -183,6 +219,7 @@ TVisorImp::Update(bool force)
 
     for( uint ii=0; ii<aMod.GetCount(); ii++ )
         aMod[ii].Update(force);
+//   qApp->unlock();
 }
 /* not used if calcThread is on */
 void
@@ -558,6 +595,14 @@ bool
 vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
 {
 //cerr << "vfQ" << endl;
+     if( pThread != QThread::currentThread () )
+     {
+        pVisorImp->thdata.setDThread( title, mess );
+        qApp->postEvent( pVisorImp, new QCustomEvent(thQuestion) );
+        //while( pVisorImp->thdata.wait )
+         ThreadControl::wait();
+         return pVisorImp->thdata.res;
+     }
     qApp->lock();
     bool result = (QMessageBox::information(par, title.c_str(), mess.c_str(),
                                      "&Yes", "&No") == 0);
@@ -592,6 +637,14 @@ void
 vfMessage(QWidget* par, const gstring& title, const gstring& mess, WarnType type)
 {
 //cerr << "vfM" << endl;
+     if( pThread != QThread::currentThread () )
+     {
+        pVisorImp->thdata.setDThread( title, mess );
+        qApp->postEvent( pVisorImp, new QCustomEvent(thMessage) );
+        //while( pVisorImp->thdata.wait )
+         ThreadControl::wait();
+         return;
+     }
     qApp->lock();
     switch( type )
     {
@@ -658,6 +711,14 @@ vfQuestion3(QWidget* par, const gstring& title, const gstring& mess, const gstri
 int
 vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel)
 {
+     if( pThread != QThread::currentThread () )
+     {
+        pVisorImp->thdata.setDThread( arr, prompt, sel );
+        qApp->postEvent( pVisorImp, new QCustomEvent(thChoice) );
+        //while( pVisorImp->thdata.wait )
+         ThreadControl::wait();
+        return pVisorImp->thdata.res;
+     }
     qApp->lock();
     SelectDialog cw(par, prompt, arr, sel);
     cw.exec();
@@ -825,6 +886,9 @@ gstring
 vfKeyTemplEdit(QWidget* par, const char* caption, int iRt, const char* key,
                bool allowTemplate)
 {
+      if( pThread != QThread::currentThread () )
+       Error( key, "Must be no template key");
+
     KeyFilter dbk(par, iRt, key, caption, allowTemplate);
     if( !dbk.exec() )
         return "";
@@ -837,6 +901,22 @@ bool
 vfExcludeFillEdit(QWidget* par, const char* caption,
    TCStringArray& aICkeys, TOArray<bool>& sel, double& fill_data )
 {
+
+     if( pThread != QThread::currentThread () )
+     {
+        pVisorImp->thdata.setDThread( caption, aICkeys, fill_data );
+        qApp->postEvent( pVisorImp, new QCustomEvent(thExcludeFillEdit) );
+        //while( pVisorImp->thdata.wait )
+         ThreadControl::wait();
+        if( !pVisorImp->thdata.res )
+          return false;
+
+        sel = pVisorImp->thdata.sel;
+        fill_data = pVisorImp->thdata.fill_data;
+
+        return true;
+     }
+
     ExcludeFillDialog dbk(par, caption, aICkeys, fill_data );
     if( !dbk.exec() )
         return false;
@@ -986,7 +1066,7 @@ TVisorImp* pVisorImp;
 //------------------------------------------------------------------
 // thread staff
 
-#include "stepwise.h"
+Qt::HANDLE pThread;
 
 void ThreadControl::wakeOne()
 {

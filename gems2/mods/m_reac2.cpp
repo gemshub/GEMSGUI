@@ -27,7 +27,6 @@
 #include "service.h"
 #include "visor.h"
 
-
 /*-----------------------------------------------------------------*/
 void TReacDC::Convert_Cp_to_KT( int CE )
 {
@@ -301,7 +300,8 @@ void TReacDC::Recalc( int q, const char *key  )
     Error( GetName(),"Check stoichiometry, charge or valences in the formula.");
 NEXT:
     /* test value st.mol.volume */
-    if( rc[q].pstate[0] == CP_GAS &&  rc[q].Vs[1] < 1. )
+    if( ( rc[q].pstate[0] == CP_GAS || rc[q].pstate[0] == CP_GASI )
+     &&  rc[q].Vs[1] < 1. )
         rc[q].Vs[1] = GAS_MV_STND;
     /* Test standart T, P, Gst, Hst, Sst */
     st0 = IsFloatEmpty( rc[q].TCst );

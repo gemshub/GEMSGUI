@@ -101,7 +101,7 @@ void TDuterm::keyTest( const char *key )
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
-                ( key[k] != ':' && key[k] != ' ' && k>=rt[RT_PARAM].FldLen(0) )  )
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
             Error( key, "Illegal key (another Project)!");
         rt[RT_SYSEQ].MakeKey( RT_DUTERM, pkey, RT_DUTERM, 0, RT_DUTERM, 1,
                                RT_DUTERM, 2, RT_DUTERM, 3, RT_DUTERM, 4,

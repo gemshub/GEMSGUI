@@ -38,7 +38,7 @@ VDBhead::read(istream& is)
     is.read (Time, 5);
     is.read ((char*)&nRT, sizeof (int));                 // type of PDB chain
     is.read ((char*)&nRec, sizeof (int));                // number records in file
-    is.read ((char*)&FPosRE, sizeof (int));
+    is.read ((char*)&stacOver, sizeof (int));
     is.read ((char*)&FPosTRT, sizeof (int));
     is.read (&isDel, sizeof (char));
     is.read ((char*)&MinDrLen, sizeof(long));
@@ -57,7 +57,7 @@ VDBhead::write(ostream& is)
     is.write (Time, 5);
     is.write ((char*)&nRT, sizeof (int));                 // type of PDB chain
     is.write ((char*)&nRec, sizeof (int));                // number records in file
-    is.write ((char*)&FPosRE, sizeof (int));
+    is.write ((char*)&stacOver, sizeof (int));
     is.write ((char*)&FPosTRT, sizeof (int));
     is.write (&isDel, sizeof (char));
     is.write ((char*)&MinDrLen, sizeof(long));
@@ -193,7 +193,7 @@ TDBFile::clrh()
 //Set header of PDB file
 void
 TDBFile::vdbh_new( const char *VerP,
-                        const char *passwd,	int nRT, bool ifDel )
+     const char *passwd,	int nRT, bool ifDel )
 {
     if( dh==0 )
         dh = new VDBhead;
@@ -206,7 +206,7 @@ TDBFile::vdbh_new( const char *VerP,
         strncpy( dh->PassWd, passwd, 8 );
     vdbh_setdt();
     dh->nRT = nRT;
-    dh->FPosTRT = dh->FPosRE = VDBhead::data_size();
+    dh->FPosTRT = dh->stacOver = VDBhead::data_size();
     dh->isDel = ifDel;
     if( ifDel )
         dh->FPosTRT += DBentry::data_size() * MAXFESTACK;
@@ -303,7 +303,7 @@ TDBFile::Open( FileStatus mode )
 }
 
 //Close PDB file
-void 
+void
 TDBFile::Close()
 {
     delete dh;
@@ -335,15 +335,26 @@ TDBFile::AddSfe( RecEntry& re )
     if( dh->isDel )
     {
         check_sfe();
-        ErrorIf( Ndr>=MAXFESTACK , GetPath(),
-                 "Stack of deleted records overflow.");
-        sfe[Ndr].len = re.len;
-        sfe[Ndr].pos = re.pos;
-        dh->curDr++;
-        if( Ndr )   // sort sfe list
-            qsort( sfe, Ndr+1, sizeof(DBentry), rlencomp );
-        dh->MinDrLen = sfe[0].len;
-        dh->MaxDrLen = sfe[Ndr].len;
+        //changed 30/10/2002
+        //ErrorIf( Ndr>=MAXFESTACK , GetPath(),
+        //         "Stack of deleted records overflow.");
+        if( Ndr>=MAXFESTACK )
+        {
+          if( dh->stacOver >= 0 )
+          {
+            dh->stacOver = -1;
+           // vfMessage(0, GetPath(),"Stack of deleted records overflow." );
+          }
+        }
+        else
+        { sfe[Ndr].len = re.len;
+          sfe[Ndr].pos = re.pos;
+          dh->curDr++;
+          if( Ndr )   // sort sfe list
+              qsort( sfe, Ndr+1, sizeof(DBentry), rlencomp );
+          dh->MinDrLen = sfe[0].len;
+          dh->MaxDrLen = sfe[Ndr].len;
+        }
     }
     // mark deleted record in file
     f.seekg(re.pos, ios::beg );
@@ -409,6 +420,14 @@ TDBFile::GetDh( long& fPos, long& fLen )
     fLen = FPosFree;
 }
 
+//get information from dh
+bool
+TDBFile::GetDhOver()
+{
+    return (dh->stacOver < 0);
+}
+
+
 //set information to dh
 void
 TDBFile::SetDh( long& fLen, int nRec )
@@ -419,6 +438,7 @@ TDBFile::SetDh( long& fLen, int nRec )
     dh->MaxDrLen = 0;
     FPosFree = fLen;
     dh->nRec = nRec;
+    dh->stacOver = VDBhead::data_size();
     if( dh->isDel )
     {
         check_sfe();
@@ -433,7 +453,7 @@ TDBFile::SetDh( long& fLen, int nRec )
     int handle = f.rdbuf()->fd();
 #else
 cerr << "trunc dummy" << endl;
-///  WE HAVE TO GET HANDLE SOMEHOW!!! 
+///  WE HAVE TO GET HANDLE SOMEHOW!!!
     int handle = 0;
 #endif // __GCC__ != 3
     ftruncate( handle, fLen );

@@ -24,6 +24,7 @@
 #include "v_user.h"
 #include "v_mod.h"
 #include "visor.h"
+#include "service.h"
 
 //#define Change_DB_Mode   1 // Set readonly data Base mode
 
@@ -269,12 +270,46 @@ long TDataBase::putrec( RecEntry& rep, fstream& f )
     return StillLen;
 }
 
+// put record in DB file
+long TDataBase::putrec( RecEntry& rep, fstream& f, RecHead& rhh  )
+{
+    int j, len;
+    long StillLen;
+    RecHead rh;
+    char *pack_key = (char*)ind.PackKey();
+
+    // header of the record
+    strncpy( rh.bgm, MARKRECHEAD, 2 );
+    strncpy( rh.endm, MARKRECHEAD, 2 );
+    rh.nRT = nRT;               //warning: compatibility
+    rh.Nobj = nOD;
+    rh.rlen =  rep.len;
+    StillLen = rep.len;
+    rh.crt = rhh.crt;
+    f.seekg(rep.pos, ios::beg );
+    //   f.write( (char *)&rh, sizeof(RecHead) );
+    rh.write (f);
+    // put packed key
+    len = strlen( pack_key );
+    pack_key[len] = MARKRKEY;
+    f.write( pack_key, (len+1)*sizeof(char) );
+    pack_key[len] = '\0';
+    StillLen -= len+1;
+    ErrorIf( !f.good(), GetKeywd(),
+             "PDB file write error");
+    for( j=0; j<nOD; j++ )    // put objects to file
+        StillLen -= aObj[j+frstOD].toDB( f );
+    crt = rh.crt;
+    return StillLen;
+}
+
+
 // Gets a record from PDB file
-long TDataBase::getrec( RecEntry& rep, fstream& f )
+long TDataBase::getrec( RecEntry& rep, fstream& f, RecHead& rh )
 {
     int j;
     long StillLen;
-    RecHead rh;
+    // RecHead rh;
     char *key = (char*)ind.PackKey();
 
     StillLen = rep.len;
@@ -366,6 +401,7 @@ void TDataBase::Rep(int i)
     // delete record
     rh->len += RecHead::data_size();
     aFile[nF].AddSfe( *rh );
+
     ind.PutKey(i);
     rh->len = reclen() + RecHead::data_size() + strlen(ind.PackKey()) + 1;
     aFile[nF].FindSfe( *rh );
@@ -414,6 +450,7 @@ void TDataBase::Get(int i)
 {
     unsigned char nF;
     RecEntry* rh=ind.RecPosit(i);
+    RecHead rhh;
 
     ind.check_i(i);
     // test and open file
@@ -421,7 +458,7 @@ void TDataBase::Get(int i)
     check_file( nF );
 
     aFile[nF].Open( UPDATE_DBV );
-    getrec( *rh, aFile[nF].f );
+    getrec( *rh, aFile[nF].f, rhh );
     ind.PutKey(i);
     status = ONEF_;
     fNum = fls.Find( nF );
@@ -658,13 +695,25 @@ TDataBase::Open( bool type, FileStatus mode, const TCIntArray& nff )
         Create( fls[j] );
 try
   {
+    TCIntArray comp;
     for( j=0; j<fls.GetCount(); j++ )
     {
         aFile[fls[j]].Open( mode );
+        //added Sveta 04/11/2002 to index files
+        if( aFile[fls[j]].GetDhOver())
+         if( vfQuestion( 0, aFile[fls[j]].GetPath(),
+         "Stack of deleted records overflow.\nCompress?" ))
+             comp.Add(fls[j]);
+        // end added
         getndx( fls[j] );
         if( rclose )  aFile[fls[j]].Close();
     }
     opfils();
+    //added Sveta 04/11/2002 to index files
+        if( comp.GetCount() >0 )
+         RebildFile( comp);
+    // end added
+
   }
   catch( TError& xcpt )
   {
@@ -823,16 +872,29 @@ void TDataBase::AddOpenFile(const TCIntArray& nff)
   if( nff.GetCount()<1 )
         return;
 try{
+    TCIntArray comp;
+
     for( j=0; j<nff.GetCount(); j++)
     {  //fls.Add( nff[j] );
         Create( nff[j] );
         aFile[nff[j]].Open( UPDATE_DBV );
+        //added Sveta 04/11/2002 to index files
+        if( aFile[nff[j]].GetDhOver())
+         if( vfQuestion( 0, aFile[nff[j]].GetPath(),
+         "Stack of deleted records overflow.\nCompress?" ))
+             comp.Add(nff[j]);
+        // end added
         getndx( nff[j] );
         fls.Add( nff[j] );
         if( rclose )
             aFile[nff[j]].Close();
     }
     opfils();
+    //added Sveta 04/11/2002 to index files
+        if( comp.GetCount() >0 )
+         RebildFile( comp);
+    // end added
+
   }
   catch( TError& xcpt )
   {
@@ -872,6 +934,7 @@ int TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& a
 int TDataBase::scanfile( int nF, long& fPos, long& fLen, fstream& f)
 {
     RecEntry rh;
+    RecHead rhh;
     //RecEntry& rep = ind.RecPosit(0);
     char ch;
     long len, fEnd = fPos;
@@ -897,7 +960,7 @@ int TDataBase::scanfile( int nF, long& fPos, long& fLen, fstream& f)
         rh.pos = fPos;
         try
         {
-            len = getrec( rh, f);
+            len = getrec( rh, f, rhh);
         }
         catch( TError& xcpt )
         {  /* vfMessage( /xcpt.title, xcpt.mess);
@@ -916,7 +979,7 @@ int TDataBase::scanfile( int nF, long& fPos, long& fLen, fstream& f)
         //RecEntry& rep = ind.RecPosit(ni);
         ind.RecPosit(ni)->pos = fEnd;
         fEnd += len +  RecHead::data_size();
-        putrec( *ind.RecPosit(ni), f );
+        putrec( *ind.RecPosit(ni), f, rhh );
         nRec++;
         pVisor->Message( 0, 0, "Compressing database file \n"
          "Please, wait...", (int)fPos, (int)fLen);
@@ -959,6 +1022,7 @@ void TDataBase::RebildFile(const TCIntArray& nff)
         aFile[nF].Close();
         ind.delfile( nF );
     }
+    pVisor->CloseMessage();
     Open( true, UPDATE_DBV, fls_old );
 
 }

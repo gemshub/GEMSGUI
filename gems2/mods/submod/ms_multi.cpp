@@ -18,7 +18,6 @@
 //-------------------------------------------------------------------
 //
 #include "m_param.h"
-
 #include "v_object.h"
 #include "visor.h"
 
@@ -34,7 +33,6 @@ TMulti::TMulti( int nrt, SYSTEM* sy_ ):
 void TMulti::ods_link( int /*q*/)
 {
     //aObj[ o_wd_stkey].SetPtr( pm.stkey );
-    
     //aObj[ o_wd_nv_].SetPtr( pm.NV_ );
     aObj[ o_wi_pun ].SetPtr( &pm.PunE ); /*a 4*/
     aObj[ o_wi_nnr ].SetPtr( &pm.N );    /*i 2*/
@@ -129,7 +127,6 @@ void TMulti::ods_link( int /*q*/)
     aObj[ o_wi_pparc ].SetDim( pm.L, 1 );
 
     // part 2
-    
     aObj[o_wi_satndx].SetPtr( pm.SATNdx );
     if( pm.FIat > 0 ) aObj[ o_wi_satndx ].SetDim( pm.Ls, 2 );
     aObj[ o_wd_ym].SetPtr( pm.Y_m );
@@ -328,12 +325,10 @@ void TMulti::ods_link( int /*q*/)
 
 
 // set dynamic Objects ptr to values
-
 void TMulti::dyn_set(int /*q*/)
 {
 
-   pm.L1    = (short *)aObj[ o_wi_l1 ].GetPtr();
-    
+   pm.L1    = (short *)aObj[ o_wi_l1 ].GetPtr();    
    pm.LsMod = (short *)aObj[ o_wi_lsmod ].GetPtr();
     pm.LsMdc = (short *)aObj[ o_wi_lsmdc ].GetPtr();
     pm.mui   = (short *)aObj[ o_wi_mui ].GetPtr();
@@ -459,7 +454,6 @@ void TMulti::dyn_set(int /*q*/)
 
 
 // free dynamic memory in objects and values
-
 void TMulti::dyn_kill(int /*q*/)
 {
     pm.L1    = (short *)aObj[ o_wi_l1 ].Free();
@@ -588,7 +582,6 @@ void TMulti::dyn_kill(int /*q*/)
 
 
 // realloc dynamic memory
-
 void TMulti::dyn_new(int /*q*/)
 {
    if( pm.N < 2 || pm.L < 2 || pm.FI < 1 )
@@ -681,7 +674,6 @@ void TMulti::dyn_new(int /*q*/)
         pm.D     = (double *)aObj[ o_w_d ].Free();
     }
 
-
    // Part 2  not requited arrays
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
@@ -745,8 +737,7 @@ void TMulti::dyn_new(int /*q*/)
     }
 
    if( syp->PSigm != S_OFF )
-        
-        pm.Sigw = (float *)aObj[ o_wi_sigw].Alloc( pm.FI, 1, F_ );
+           pm.Sigw = (float *)aObj[ o_wi_sigw].Alloc( pm.FI, 1, F_ );
     else  pm.Sigw  = (float *)aObj[ o_wi_sigw ].Free();
 
     if( syp->PSigm != S_OFF )

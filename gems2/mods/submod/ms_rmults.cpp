@@ -557,7 +557,14 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
 
     NEW_AQ_PHASE_AGAIN:
     if( changePhases || mu.PmvAq == S_ON )
-    {     // modified KD 25.01.02 to implement default Davies eqn
+    {
+      if( TProfil::pm->useAqPhase == false )
+      {
+            mu.PmvAq = S_OFF;
+            AqKey = "";
+      }
+      else
+      {   // modified KD 25.01.02 to implement default Davies eqn
         switch( vfQuestion3( window(), "Creating Project:",
                 "Select an aqueous activity model:",
                "&Built-in EDH3", "Built-in &Davies", "&From list of phases" ))
@@ -572,10 +579,13 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
             mu.PmvAq = S_REM; AqKey = "a";
             break;
         }
+       }
     }
     if( (mu.PmvAq == S_REM) &&
             (( NewRec== true ) ||  ( NewRec== false &&
-                                     rt[RT_PHASE].Find(AqKey.c_str())<0 && AqKey[0] != 'a')))
+//                   rt[RT_PHASE].Find(AqKey.c_str())<0 && AqKey[0] != 'a')))
+                   rt[RT_PHASE].Find(AqKey.c_str())<0 && AqKey[0] != 'a') ||
+                   (AqKey=="a") ))
         AqKey = SelectAqPhase(); // Select aqueous phase from list
 
     if( mu.PmvAq == S_ON )
@@ -595,7 +605,13 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
 
     if( changePhases )
     {
-        switch( vfQuestion3( window(), "Creating Project:", "Select a gas fugacity model?",
+      if( TProfil::pm->useGasPhase == false )
+      {
+            mu.PmvGas = S_OFF;
+            GasKey = "";
+      }
+      else
+      {  switch( vfQuestion3( window(), "Creating Project:", "Select a gas fugacity model?",
                        "&Auto Ideal", "&From list of phases", "&No gas phase" ))
         {
         case VF3_1:
@@ -607,12 +623,16 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
             break;
         case VF3_3:  // Remove gas phase
             mu.PmvGas = S_OFF;
+            GasKey = "";
             break;
         }
+       }
     }
-    if( (mu.PmvGas != S_ON) &&
+    if( (mu.PmvGas == S_REM) &&
             (( NewRec== true ) || ( NewRec== false &&
-                                    rt[RT_PHASE].Find(GasKey.c_str())<0 && GasKey[0] != 'g')))
+//                rt[RT_PHASE].Find(GasKey.c_str())<0 && GasKey[0] != 'g')))
+                rt[RT_PHASE].Find(GasKey.c_str())<0 && GasKey[0] != 'g')
+                || (GasKey=="g") ))
         GasKey = SelectGasPhase(); // Select gaseous phase def
 
     if( mu.PmvGas == S_ON )  // default gaseous phase mode

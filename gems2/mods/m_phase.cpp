@@ -685,7 +685,7 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
     php->nDC = 0;
     php->NsiT = php->NR1 = 0;
     php->Asur =   php->Sigma0 =  php->SigmaG =   php->R0p =
-                                     php->h0p =  php->Eps =  php->Cond =  php->Rsp1 =  0.;
+                  php->h0p =  php->Eps =  php->Cond =  php->Rsp1 =  0.;
 
     //Get lists
     TCStringArray aDclist;
@@ -699,6 +699,17 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
 
         //DCOMP key list
         Ndc = rt[RT_DCOMP].GetKeyList( part, aDclist, anRDc );
+        if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
+        {
+          TCStringArray aDclist1;
+          TCIntArray anRDc1;
+          Ndc += rt[RT_DCOMP].GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
+          for(uint kk=0; kk<aDclist1.GetCount(); kk++)
+          {
+            aDclist.Add(aDclist1[kk]);
+            anRDc.Add(anRDc1[kk]);
+          }
+        }
         uint ii=0;
         while( ii< aDclist.GetCount() )
         {
@@ -721,6 +732,17 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
         }
         //REACDC  key list
         Nrc = rt[RT_REACDC].GetKeyList( part, aRclist, anRRc );
+        if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
+        {
+          TCStringArray aDclist1;
+          TCIntArray anRDc1;
+          Nrc += rt[RT_REACDC].GetKeyList( "p:*:*:*:", aDclist1, anRDc1 );
+          for(uint kk=0; kk<aDclist1.GetCount(); kk++)
+          {
+            aRclist.Add(aDclist1[kk]);
+            anRRc.Add(anRDc1[kk]);
+          }
+        }
         ii=0;
         while( ii< aRclist.GetCount() )
         {

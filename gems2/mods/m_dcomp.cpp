@@ -493,7 +493,8 @@ TDComp::RecCalc( const char *key )      // dcomp_test
     }
     Error( GetName(), "Check stoichiometry, charge or valences in the formula");
 NEXT:
-    if( dcp->pstate[0] == CP_GAS &&  dcp->mVs[0] < 1. )// test molar volume
+    if( ( dcp->pstate[0] == CP_GAS || dcp->pstate[0] == CP_GASI)
+        &&  dcp->mVs[0] < 1. )// test molar volume
         dcp->mVs[0] = GAS_MV_STND;
     // test values T, P, Gst, Hst, Sst
     st = IsFloatEmpty( dcp->TCst );
@@ -1023,7 +1024,7 @@ TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
 
             if( str.find_first_of("*?" ) != gstring::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
-                                      "Insert new key of Data Record", KEY_NEW);
+                                      "Enter a new record key, please ", KEY_NEW);
             if(  str.empty() )
                 Error( GetName(), "Record create action dismissed...");
             int  Rnum = db->Find( str.c_str() );
@@ -1032,8 +1033,8 @@ TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
             vstr str1( db->KeyLen(), db->UnpackKey());
             check_input( str1 );
             RecBuild( str.c_str() );
-            SetString("Remake of new record finished OK. "
-                      "It is recommended to re-calculate the data");
+            SetString("Remake of the new record finished OK. "
+                      " It is recommended to re-calculate the data.");
             pVisor->Update();
             Error("Calculation failed! ",
                   "Check data fields and try calculation again!");

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>GraphDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -12,8 +12,13 @@
             <height>410</height>
         </rect>
     </property>
+    <property name="font">
+        <font>
+            <pointsize>10</pointsize>
+        </font>
+    </property>
     <property name="caption">
-        <string>GEM-Selektor v.2.0-PSI Plotting Dialog</string>
+        <string>GEM-Selektor v.2.0-PSI Graphics Dialog</string>
     </property>
     <vbox>
         <property name="name">
@@ -121,6 +126,11 @@
                                         <width>125</width>
                                         <height>60</height>
                                     </rect>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <pointsize>8</pointsize>
+                                    </font>
                                 </property>
                                 <property name="text">
                                     <string>You may drag and drop legend labels to the plotting area.</string>

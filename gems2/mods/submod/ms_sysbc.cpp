@@ -341,7 +341,7 @@ void TSyst::make_syst_sizes()
         if( sy.Icl[i] == S_OFF )
             continue;
         sy.N++;
-        switch( mup->ICC[i] )
+     /*   switch( mup->ICC[i] )
         {
         case IC_ELEMENT:
         case IC_ISOTOPE:
@@ -352,25 +352,25 @@ void TSyst::make_syst_sizes()
             break;
 
         case IC_OXYGEN16:
-        case IC_OXYGEN18: /* index and quantity of O? */
+        case IC_OXYGEN18: * index and quantity of O? *
         case IC_OXYGEN:
             break;
 
         case IC_PROTIUM:
         case IC_DEYTERIUM:
-        case IC_TRITIUM:  /* index and quantity of  H? */
+        case IC_TRITIUM:  * index and quantity of  H? *
         case IC_HYDROGEN:
             break;
 
-        case IC_CHARGE:   /* charch - index */
+        case IC_CHARGE:   * charch - index *
             if( sy.PE != S_ON )
-                break;   /* may be error  */
-        case IC_VOLUME:   /* volume IC - index */
+                break;   * may be error  *
+        case IC_VOLUME:   * volume IC - index *
             if( sy.PV != S_ON )
-                break;  /* may be error   */
+                break;  * may be error   *
         default:
-            ; /* error in code IComp */
-        }
+            ; * error in code IComp *
+        } */
     }
     /* Calc quantity of selected components and phases */
     for( i=0,N=0; i<mup->N; i++ )

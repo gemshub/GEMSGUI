@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>DBDialogData</class>
 <widget class="QWidget">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>440</width>
-            <height>441</height>
+            <width>441</width>
+            <height>444</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -23,12 +23,6 @@
             <width>0</width>
             <height>0</height>
         </size>
-    </property>
-    <property name="font">
-        <font>
-            <family>Ms Sans Serif</family>
-            <pointsize>14</pointsize>
-        </font>
     </property>
     <property name="caption">
         <string>DBDialogData</string>
@@ -129,6 +123,12 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                        <italic>1</italic>
+                    </font>
+                </property>
                 <property name="text">
                     <string>&amp;Other Data</string>
                 </property>
@@ -164,82 +164,6 @@
                 </property>
             </widget>
         </hbox>
-    </widget>
-    <widget class="Line">
-        <property name="name">
-            <cstring>Line1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>370</y>
-                <width>410</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="frameShape" stdset="0">
-            <enum>HLine</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>PushButton2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>330</y>
-                <width>420</width>
-                <height>40</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>1</hsizetype>
-                <vsizetype>1</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="text">
-            <string>Predefined &amp;Compositions (Compos)</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Definitions of stoichiometry entities for setting up bulk composition of chemical systems</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>PushButton2_2_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>280</y>
-                <width>420</width>
-                <height>40</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>1</hsizetype>
-                <vsizetype>1</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="text">
-            <string> Thermodynamic &amp;Phases (Phase)</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Definitions of single- and multi-component phases to construct chemical systems</string>
-        </property>
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -277,6 +201,11 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
                 <property name="text">
                     <string>&amp;Dependent Components (DComp)</string>
                 </property>
@@ -295,6 +224,11 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
                 </property>
                 <property name="text">
                     <string>Dependent Components (&amp;ReacDC)</string>
@@ -315,6 +249,11 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
                 <property name="text">
                     <string>&amp;T/P Tabulations and Plots (RTparm)</string>
                 </property>
@@ -323,6 +262,64 @@
                 </property>
             </widget>
         </vbox>
+    </widget>
+    <widget class="Line">
+        <property name="name">
+            <cstring>Line1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>370</y>
+                <width>420</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>HLine</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>10</y>
+                <width>350</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+                <bold>1</bold>
+                <italic>1</italic>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>Panel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="text">
+            <string>GEMS Thermodynamic Database Management</string>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+        <property name="wordwrap" stdset="0">
+        </property>
     </widget>
     <widget class="QPushButton">
         <property name="name">
@@ -344,6 +341,11 @@
                 <verstretch>0</verstretch>
             </sizepolicy>
         </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+            </font>
+        </property>
         <property name="text">
             <string>&amp;Independent Components (IComp)</string>
         </property>
@@ -354,39 +356,68 @@
             <string>Basic data describing stoichiometry units (eg. chemical elements)</string>
         </property>
     </widget>
-    <widget class="QLabel">
+    <widget class="QPushButton">
         <property name="name">
-            <cstring>TextLabel1</cstring>
+            <cstring>PushButton2_2_2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>70</x>
-                <y>10</y>
-                <width>360</width>
-                <height>60</height>
+                <x>10</x>
+                <y>280</y>
+                <width>420</width>
+                <height>40</height>
             </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>1</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
         </property>
         <property name="font">
             <font>
-                <bold>1</bold>
-                <italic>1</italic>
+                <pointsize>14</pointsize>
             </font>
         </property>
-        <property name="frameShape">
-            <enum>Panel</enum>
+        <property name="text">
+            <string> Thermodynamic &amp;Phases (Phase)</string>
         </property>
-        <property name="frameShadow">
-            <enum>Raised</enum>
+        <property name="toolTip" stdset="0">
+            <string>Definitions of single- and multi-component phases to construct chemical systems</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>PushButton2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>330</y>
+                <width>420</width>
+                <height>40</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>1</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+            </font>
         </property>
         <property name="text">
-            <string>Thermodynamic Database Management</string>
+            <string>Predefined &amp;Compositions (Compos)</string>
         </property>
-        <property name="alignment">
-            <set>WordBreak|AlignCenter</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-        <property name="wordwrap" stdset="0">
+        <property name="toolTip" stdset="0">
+            <string>Definitions of stoichiometry entities for setting up bulk composition of chemical systems</string>
         </property>
     </widget>
 </widget>

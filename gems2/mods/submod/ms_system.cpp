@@ -452,6 +452,7 @@ void TSyst::set_def( int /*q*/)
 
     bool is_a = false;
     bool is_x = false;
+    bool is_g = false;
     if( pVisor->ProfileMode == true )
         for( int i=0; i<mup->Fi; i++)
         {
@@ -459,11 +460,13 @@ void TSyst::set_def( int /*q*/)
                 is_a = true;
             if( mup->PHC[i] == PH_SORPTION )
                 is_x = true;
+            if( mup->PHC[i] == PH_GASMIX || mup->PHC[i] == PH_PLASMA )
+                is_g = true;
         }
     else is_x = true;
     memcpy( &sy.PE, aPa->pa.SYppc, 10 );
     memcpy( &sy.PbIC, aPa->pa.SYpvc, 28 );
-    if( !is_a  && !is_x )
+    if( !is_a  && !is_x  && !is_g )
         sy.PE = '-';
     if( is_x )
     {

@@ -17,7 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_SP_HTML = "gm_profil";
+const char *GEMS_SP_HTML = "gm_project";
 
 #ifdef __unix
 #include <unistd.h>
@@ -525,6 +525,9 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
        f <<   "\n";
         ErrorIf( !f.good() , filename, "Writefile error");
     }
+
+    useAqPhase = elm_data.flags[cbAqueous_];
+    useGasPhase = elm_data.flags[cbGaseous_];
     return true;
 }
 

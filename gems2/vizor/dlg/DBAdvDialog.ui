@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>DBAdvDialogData</class>
 <widget class="QWidget">
     <property name="name">
@@ -23,6 +23,11 @@
             <width>0</width>
             <height>0</height>
         </size>
+    </property>
+    <property name="font">
+        <font>
+            <pointsize>10</pointsize>
+        </font>
     </property>
     <property name="caption">
         <string>DBAdvDialogData</string>
@@ -67,219 +72,6 @@
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>vbox1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>80</y>
-                <width>428</width>
-                <height>236</height>
-            </rect>
-        </property>
-        <property name="layoutSpacing" stdset="0">
-        </property>
-        <vbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>0</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pButtonSDref</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Ms Sans Serif</family>
-                        <pointsize>14</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>B&amp;ibliography and Scripts (SDref)</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Full references (opt. abstracts) to sources of input data</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pButtonConst</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Ms Sans Serif</family>
-                        <pointsize>14</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Numerical &amp;Constants (Const)</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Some tables of constants used in thermodynamic calculations</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pButtonProfile</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Ms Sans Serif</family>
-                        <pointsize>14</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Modelling &amp;Project (Project)</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Modeling application project of database files, phases and species</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pButtonSysEq</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Ms Sans Serif</family>
-                        <pointsize>14</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Single Chemical Sys&amp;tems (SysEq)</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Definitions of chemical systems and equilibrium states</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pButtonProcess</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Ms Sans Serif</family>
-                        <pointsize>14</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Process Simulators (Process)</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Definitions of process simulators (batch GEM calculations)</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pButtonGTdemo</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Ms Sans Serif</family>
-                        <pointsize>14</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Data &amp;Samplers and Plotters (GTdemo)</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Definitions of data samplers and graphics</string>
-                </property>
-            </widget>
-        </vbox>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>tlTitle</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>70</x>
-                <y>10</y>
-                <width>370</width>
-                <height>60</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <family>Ms Sans Serif</family>
-                <pointsize>14</pointsize>
-                <bold>1</bold>
-                <italic>1</italic>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>Panel</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Raised</enum>
-        </property>
-        <property name="text">
-            <string>Database Management (2)</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-        <property name="wordwrap" stdset="0">
-        </property>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
             <cstring>Layout20</cstring>
         </property>
         <property name="geometry">
@@ -314,8 +106,7 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>Ms Sans Serif</family>
-                        <pointsize>14</pointsize>
+                        <pointsize>12</pointsize>
                     </font>
                 </property>
                 <property name="text">
@@ -342,7 +133,6 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>Ms Sans Serif</family>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
@@ -367,7 +157,6 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>Ms Sans Serif</family>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
@@ -395,7 +184,6 @@
         <property name="font">
             <font>
                 <family>Ms Sans Serif</family>
-                <pointsize>10</pointsize>
             </font>
         </property>
         <property name="text">
@@ -437,7 +225,7 @@
                     </sizepolicy>
                 </property>
                 <property name="text">
-                    <string>Du&amp;al Thermodynamics (DUtherm)</string>
+                    <string>Du&amp;al Thermodynamics (DuTherm)</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string></string>
@@ -483,6 +271,176 @@
             </widget>
         </vbox>
     </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>vbox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>80</y>
+                <width>430</width>
+                <height>240</height>
+            </rect>
+        </property>
+        <property name="layoutSpacing" stdset="0">
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>0</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonSDref</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>B&amp;ibliography and Scripts (SDref)</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Full references (opt. abstracts) to sources of input data</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonConst</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Numerical &amp;Constants (Const)</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Some tables of constants used in thermodynamic calculations</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonProfile</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Modelling &amp;Project (Project)</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Modeling application project of database files, phases and species</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonSysEq</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Single Chemical Sys&amp;tems (SysEq)</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Definitions of chemical systems and equilibrium states</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonProcess</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Process Simulators (Process)</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Definitions of process simulators (batch GEM calculations)</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonGTdemo</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>14</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Data &amp;Samplers and Plotters (GtDemo)</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Definitions of data samplers and graphics</string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
     <widget class="Line">
         <property name="name">
             <cstring>Line1</cstring>
@@ -495,7 +453,7 @@
                 <height>20</height>
             </rect>
         </property>
-        <property name="frameShape" stdset="0">
+        <property name="frameShape">
             <enum>HLine</enum>
         </property>
         <property name="frameShadow">
@@ -503,6 +461,42 @@
         </property>
         <property name="orientation">
             <enum>Horizontal</enum>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>tlTitle</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>10</y>
+                <width>360</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>14</pointsize>
+                <bold>1</bold>
+                <italic>1</italic>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>Panel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="text">
+            <string>GEMS Database Management</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+        <property name="wordwrap" stdset="0">
         </property>
     </widget>
 </widget>

@@ -72,6 +72,7 @@ class NewSystemDialog : public NewSystemDialogData
    QListViewItem* item1;
    QListViewItem* item2;
    MLineEdit* colEdit;
+   QLineEdit* pLine;
 
 
    int pSimplexCheck;

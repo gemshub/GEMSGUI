@@ -55,6 +55,7 @@ public:
     ~ProcessThread() {}
 
     TError error;	// error message and title
+    TError msg;	        // message&questin message and title
 
     void run() {
 	error.title = "";

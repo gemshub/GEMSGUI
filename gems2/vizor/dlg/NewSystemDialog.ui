@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>NewSystemDialogData</class>
 <widget class="QMainWindow">
     <property name="name">
@@ -8,9 +8,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>734</width>
-            <height>531</height>
+            <width>764</width>
+            <height>562</height>
         </rect>
+    </property>
+    <property name="font">
+        <font>
+            <pointsize>10</pointsize>
+        </font>
     </property>
     <property name="caption">
         <string>GEM-Selektor v.2.0.0-PSI:    Single Chemical Thermodynamic System</string>
@@ -20,10 +25,10 @@
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
-            <number>0</number>
+            <number>11</number>
         </property>
         <property name="spacing">
-            <number>0</number>
+            <number>6</number>
         </property>
         <widget class="QTabWidget">
             <property name="name">
@@ -36,17 +41,17 @@
                 <attribute name="title">
                     <string>Input: System Definition</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
                     <property name="margin">
-                        <number>0</number>
+                        <number>11</number>
                     </property>
                     <property name="spacing">
-                        <number>0</number>
+                        <number>6</number>
                     </property>
-                    <widget class="QListView">
+                    <widget class="QListView" row="0" column="0">
                         <column>
                             <property name="text">
                                 <string>Phase/species name</string>
@@ -54,7 +59,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -65,7 +70,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -76,7 +81,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -87,7 +92,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -98,7 +103,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>false</bool>
                             </property>
                         </column>
@@ -109,7 +114,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -120,7 +125,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -131,7 +136,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -142,7 +147,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -153,7 +158,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -164,7 +169,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -175,7 +180,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -256,10 +261,6 @@
                         <property name="name">
                             <cstring>ListView1</cstring>
                         </property>
-                        <property name="font">
-                            <font>
-                            </font>
-                        </property>
                         <property name="focusPolicy">
                             <enum>ClickFocus</enum>
                         </property>
@@ -294,7 +295,7 @@
                             <bool>true</bool>
                         </property>
                     </widget>
-                </vbox>
+                </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -303,17 +304,17 @@
                 <attribute name="title">
                     <string>Results: Equilibrium State</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
                     <property name="margin">
-                        <number>0</number>
+                        <number>11</number>
                     </property>
                     <property name="spacing">
-                        <number>0</number>
+                        <number>6</number>
                     </property>
-                    <widget class="QListView">
+                    <widget class="QListView" row="0" column="0">
                         <column>
                             <property name="text">
                                 <string>Phase/species name</string>
@@ -321,7 +322,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -332,7 +333,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -343,7 +344,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -354,7 +355,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -365,7 +366,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -376,7 +377,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -387,7 +388,7 @@
                             <property name="clickable">
                                 <bool>true</bool>
                             </property>
-                            <property name="resizeable">
+                            <property name="resizable">
                                 <bool>true</bool>
                             </property>
                         </column>
@@ -438,10 +439,6 @@
                         <property name="name">
                             <cstring>ListView2</cstring>
                         </property>
-                        <property name="font">
-                            <font>
-                            </font>
-                        </property>
                         <property name="focusPolicy">
                             <enum>ClickFocus</enum>
                         </property>
@@ -476,7 +473,7 @@
                             <bool>true</bool>
                         </property>
                     </widget>
-                </vbox>
+                </grid>
             </widget>
         </widget>
     </vbox>
@@ -485,13 +482,17 @@
     <property name="name">
         <cstring>menubar</cstring>
     </property>
+    <property name="font">
+        <font>
+        </font>
+    </property>
     <item text="Record" name="PopupMenu_2">
     </item>
     <item text="Data" name="PopupMenu_3">
     </item>
-    <item text="Calculate" name="PopupMenu_4">
-    </item>
     <item text="View" name="PopupMenu_5">
+    </item>
+    <item text="Calculate" name="PopupMenu_4">
     </item>
     <item text="Print" name="PopupMenu_6">
     </item>
