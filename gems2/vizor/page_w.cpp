@@ -655,7 +655,7 @@ void TCell::updateCellBackground()
 	col = QColor(130, 130, 160);
     break;
     case stAux:
-	col = QColor(200, 200, 0);
+	col = QColor(170, 170, 60);
     break;
     case stHelp:
 	col = QColor(Qt::gray);
