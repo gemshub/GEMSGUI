@@ -383,6 +383,14 @@ AGAIN_MOD:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF3_3 && !( !bcp->PcIC || bcp->PcIC == ' ' ) )
         return ret;
+    if( ret == VF3_1 )
+    {
+        strncpy( bcp->name, db->FldKey(2), db->FldLen(2));
+        bcp->name[db->FldLen(2)] = '\0';
+        oldIC = 0;
+        oldDC = 0;
+    }
+
     if(  bcp->La < 0 ||  bcp->La > 64 || bcp->Nsd < 0 || bcp->Nsd > 4 )
         if( vfQuestion( window(), GetName(),
                         "Invalid number of formulae or SD references! Proceed?" ))
@@ -396,7 +404,7 @@ AGAIN_MOD:
     for( i=0; i<oldIC; i++ )
     {
       str = gstring( bcp->SB[i], 0, MAXICNAME+MAXSYMB );
-      str += "*:";
+      str += "*                     ";
       aIclist_old.Add( str );
     }
 LOOP_MARKIC:

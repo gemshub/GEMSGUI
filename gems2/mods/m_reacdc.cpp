@@ -377,7 +377,12 @@ AGAIN_MOD:
     if( ret == VF3_3 && !( !rcp->PreC || rcp->PreC == ' ' ) )
         return ret;
     if( ret == VF3_1 )
+    {
+        strncpy( rcp->rmtm, curDateSmol().c_str(), 9);
+        strncpy( rcp->name, db->FldKey(2), db->FldLen(2));
+        rcp->name[db->FldLen(2)] = '\0';
         Nn1 = 1;
+    }
     if( rcp->nTp < 0 || rcp->nPp < 0 || rcp->Nsd < 0 || rcp->Nsd > 4 )
         if( vfQuestion( window(), GetName(),"Invalid values! Repeat?" ))
             goto AGAIN_MOD;

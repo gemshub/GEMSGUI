@@ -69,7 +69,7 @@ SPP_SETTING pa_ = {
         3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-15,  /* IEPS */
         1e-4,  /* DKIN  */ 0,  /* tprn */
     },
-    "CSN   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
+    "CSC   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
     "+-----",   /* BCpc[6] */   "K3C   ",   /* REpct[6] */
     "SjjbC ",   /* REpdc[6]*/  "+-------", /* REpvc[8]  */
     "rjjbC-TK--",   /* RPpdc[10]  */

@@ -288,10 +288,27 @@ void TDComp::set_def( int q)
     memcpy( &dc[q].PdcC, aPa->pa.DCpdc, 9 );
     dc[q].Pst = aPa->pa.DRpst;
     dc[q].TCst =aPa->pa.DRtcst;
-    dc[q].NeCp = dc[q].Nft = dc[q].Nemp = 0;
+    dc[q].NeCp = 1;
+    dc[q].Nft = dc[q].Nemp = 0;
     dc[q].Nsd = 1;
     strncpy( dc[q].name, rt[rtNum()].FldKey(2), MAXDCNAME );
     dc[q].name[MAXDCNAME] = '\0';
+    if( dc[q].name[0] == 'a' )
+    {
+       memcpy( dc[q].pct, "HKF   ", 6 );
+       memcpy( &dc[q].PdcC, "SjjbC--+-", 9 );
+       dc[q].NeCp = 0;
+    }
+    else
+    {
+       memcpy( dc[q].pct, aPa->pa.DCpct, 6 );
+       memcpy( &dc[q].PdcC, aPa->pa.DCpdc, 9 );
+       dc[q].NeCp = 1;
+    }
+    dc[q].Pst = aPa->pa.DRpst;
+    dc[q].TCst =aPa->pa.DRtcst;
+    dc[q].Nft = dc[q].Nemp = 0;
+    dc[q].Nsd = 1;
     strcpy( dc[q].form, S_EMPTY );
     dc[q].form[1] ='\0';
     dc[q].Gs[0] = DOUBLE_EMPTY;
@@ -366,6 +383,13 @@ AGAIN:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         return ret;
+    if( ret == VF3_1 )
+    {
+        strncpy( dcp->rmtm, curDateSmol().c_str(), 9);
+        strncpy( dcp->name, db->FldKey(2), db->FldLen(2));
+        dcp->name[db->FldLen(2)] = '\0';
+    }
+
 
     CM = toupper( dcp->pct[0] );
     CE = toupper( dcp->pct[1] );

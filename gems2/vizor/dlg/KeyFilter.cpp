@@ -75,12 +75,12 @@ KeyFilter::KeyFilter(QWidget* win, int irt, const char* key,
 
     btn = new QPushButton(this);
     btn->setGeometry(230, 50, 80, 30);
-    btn->setText("Select &All");
+    btn->setText("&Reset");
     connect( btn, SIGNAL(clicked()), this, SLOT(EvSetAll()) );
 
     btn = new QPushButton(this);
     btn->setGeometry(230, 90, 80, 30);
-    btn->setText("Get &list");
+    btn->setText("&From List");
     connect( btn, SIGNAL(clicked()), this, SLOT(EvGetList()) );
 
     btn = new QPushButton(this);

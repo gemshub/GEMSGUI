@@ -19,26 +19,25 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+
 #ifndef _v_user_h_
 #define _v_user_h_
 
 #include <iostream>
+
 using namespace std;
 #include "gstring.h"
 #include "array.h"
 #include "verror.h"
 
 const int MAXKEYWD = 6+1;
-
 typedef TArrayF<gstring> TCStringArray;
-
 #ifdef __unix
 #include <algorithm>
 #else
 #include <algorith.h>
 typedef unsigned int uint;
 #endif // __unix
-
 
 inline
 int ROUND(double x)
@@ -72,12 +71,12 @@ void
 ChangeforTempl( gstring& data_str,  const gstring& from_templ1,
                 const gstring& to_templ1, uint len_ );
 
-
-
-// Returns string representation of current date in HH:MM format
+// Returns string representation of current date in dd/mm/yyyy format
 gstring curDate();
+// Returns string representation of current date in dd/mm/yy format
+gstring curDateSmol();
 
-// Returns string representation of current time in dd/mm/yyyy format
+// Returns string representation of current time in HH:MM  format
 gstring curTime();
 
 // Returns string representation of current date and time
@@ -101,14 +100,17 @@ struct vstr
         strncpy(p, s, ln);
         p[ln]='\0';
     }
+
     vstr(const char* s): p(new char[strlen(s)+1])
     {
-        strcpy(p, s);
+       strcpy(p, s);
     }
+
     ~vstr()
     {
         delete[] p;
     }
+
     operator char* ()
     {
         return p;
@@ -117,20 +119,19 @@ struct vstr
 private:
     vstr (const vstr&);
     const vstr& operator= (const vstr&);
-};
 
+};
 // read line to gstring class from istream with delimiter
 istream& u_getline(istream& instream, gstring& dst_string, char delimit = '\n');
-
 
 /*! return pointer after spaces in gstring 's'
 */
 /*
 inline
 const char* fastLeftStrip(const char* s)
-{ while(*s==' ') s++; 
+{ while(*s==' ') s++;
   return s;
-}  
+}
 */
 
 /*! returns length of fgstring without right blanks
@@ -140,14 +141,13 @@ inline
 unsigned int lenWithRightStrip(const char* s)
 {
   const char* pp = s+strlen(s)-1;
-  while(*pp==' ') pp--; 
+  while(*pp==' ') pp--;
   return pp-s+1;
-}  
+}
 */
+
 #ifdef __FreeBSD
-
 // replacement for missing function in FreeBSD
-
 inline char* gcvt(double num, size_t digit, char* buf)
 {
     sprintf(buf, "%*g", digit, num);
@@ -155,5 +155,4 @@ inline char* gcvt(double num, size_t digit, char* buf)
 }
 
 #endif  // __FreedBSD
-
 #endif // _v_user_h_

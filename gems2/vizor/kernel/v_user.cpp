@@ -100,6 +100,23 @@ gstring curDate()
     return tstr.p;
 }
 
+gstring curDateSmol()
+{
+    struct tm *time_now;
+    time_t secs_now;
+
+    tzset();
+    time(&secs_now);
+    time_now = localtime(&secs_now);
+
+    vstr tstr(11);
+
+    strftime(tstr, 11,
+             "%d/%m/%y",
+             time_now);
+
+    return tstr.p;
+}
 
 gstring curTime()
 {

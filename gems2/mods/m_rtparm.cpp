@@ -334,6 +334,12 @@ AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         return ret;
+    if( ret == VF3_1 )
+    {
+        strncpy( rpp->name, db->FldKey(2), db->FldLen(2));
+        rpp->name[db->FldLen(2)] = '\0';
+    }
+
     switch( rpp->Mode )
     {
     default:

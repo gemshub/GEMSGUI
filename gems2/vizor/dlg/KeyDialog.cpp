@@ -177,7 +177,9 @@ KeyDialog::getKey()
 void
 KeyDialog::CmFilter()
 {
-    KeyFilter dbFilter(this, iRt, keyFilter.c_str(), "Template");
+    gstring str_name = "Template for ";
+            str_name +=  rt[iRt].GetKeywd();
+    KeyFilter dbFilter(this, iRt, keyFilter.c_str(), str_name.c_str() );
     if( dbFilter.exec() )
     {
         keyFilter = dbFilter.getFilter();

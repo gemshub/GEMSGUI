@@ -78,10 +78,13 @@ ChangeforTempl( gstring& data_str,  const gstring& from_templ1,
 
 
 
-// Returns string representation of current date in HH:MM format
+// Returns string representation of current date in dd/mm/yyyy format
 gstring curDate();
+// Returns string representation of current date in dd/mm/yy format
+gstring curDateSmol();
 
-// Returns string representation of current time in dd/mm/yyyy format
+
+// Returns string representation of current time in HH:MM  format
 gstring curTime();
 
 // Returns string representation of current date and time

@@ -79,6 +79,7 @@ public:
     void set_def( int i=0);
 
     void RecInput( const char *key );
+    int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecordPrint( const char *key=0 );
     void CmHelp();                        
     //void RecBild( const char *key );

@@ -254,14 +254,14 @@ void TPhase::set_def( int q)
     ph[q].Nsd = 1;
     ph[q].nDC = ph[q].ncpN = ph[q].ncpM =0;
     ph[q].NsiT = ph[q].nscN = ph[q].nscM = ph[q].NR1 = 0;
-    ph[q].Asur =  FLOAT_EMPTY;
-    ph[q].Sigma0 =  FLOAT_EMPTY;
-    ph[q].SigmaG =  FLOAT_EMPTY;
-    ph[q].R0p =  FLOAT_EMPTY;
-    ph[q].h0p =  FLOAT_EMPTY;
-    ph[q].Eps =  FLOAT_EMPTY;
-    ph[q].Cond =  FLOAT_EMPTY;
-    ph[q].Rsp1 =  FLOAT_EMPTY;
+    ph[q].Asur =    0;//FLOAT_EMPTY;
+    ph[q].Sigma0 =  0;//FLOAT_EMPTY;
+    ph[q].SigmaG =  0;//FLOAT_EMPTY;
+    ph[q].R0p =     0;//FLOAT_EMPTY;
+    ph[q].h0p =     0;//FLOAT_EMPTY;
+    ph[q].Eps =     0;//FLOAT_EMPTY;
+    ph[q].Cond =    0;//FLOAT_EMPTY;
+    ph[q].Rsp1 =    0;//FLOAT_EMPTY;
     ph[q].SCMC =  0;
     ph[q].FsiT =  0;
     ph[q].XfIEC = 0;
@@ -315,6 +315,12 @@ AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL  &&!( !php->PphC || php->PphC == ' '))
         return ret;
+    if( ret == VF3_1 )
+    {
+        strncpy( php->name, db->FldKey(2), db->FldLen(2));
+        php->name[db->FldLen(2)] = '\0';
+    }
+
     if( php->nscN < 0 || php->nscM < 0 || php->ncpN < 0 || php->ncpM < 0 ||
             php->ncpN*php->ncpM > MAXPNCOEF || php->Nsd < 0 || php->Nsd > 16 ||
             php->NsiT < 0 || php->NsiT > 6 )
@@ -426,8 +432,8 @@ AGAINRC:
     {
         php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* cod istochnic  */
         php->SM[i][DC_RKLEN-1] = ' ';
-        if( !php->DCC[i] )
-            php->DCC[i] = '`';
+        if( !php->DCC[i] || php->DCC[i] == '`' )
+            php->DCC[i] = 'I'/*'`'*/;
     }
     switch( php->pst[0] )
     { /* Set type of phase */

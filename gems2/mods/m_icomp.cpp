@@ -113,6 +113,15 @@ void TIComp::set_def( int q)
     dyn_new();
 }
 
+int TIComp::RecBuild( const char *key, int mode  )
+{
+    int ret = TCModule::RecBuild( key, mode );
+    if( ret == VF3_1 )
+    {
+        strncpy( icp->name, db->FldKey(2), db->FldLen(2));
+        icp->name[db->FldLen(2)] = '\0';
+    }
+}
 // Input necessary data and link DOD
 void
 TIComp::RecInput( const char *key )
