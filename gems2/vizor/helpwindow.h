@@ -42,12 +42,7 @@ class HttpMimeSourceFactory:
 	qInitNetworkProtocols();
     }
     virtual const QMimeSource * data ( const QString & abs_name ) const;
-    QString makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const {
-	if( abs_or_rel_name.startsWith("http://") )
-	    return abs_or_rel_name;
-	else
-	    return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, context);
-    }
+    QString makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const;
     
  protected slots:
     void finished(QNetworkOperation *op);

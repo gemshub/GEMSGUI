@@ -46,19 +46,24 @@
 bool opReady = false;
 
 const QMimeSource * 
-HttpMimeSourceFactory::data ( const QString & abs_name ) const
+HttpMimeSourceFactory::data ( const QString & abs_name_ ) const
 {
+	QString abs_name(abs_name_);
+	if( abs_name.endsWith("/") )
+	    abs_name.append("index.html");
+
 cerr << "got into ::data() " << abs_name << endl;
 
-    if( !abs_name.startsWith("http") )
+    if( !abs_name.startsWith("http:") )
 	return QMimeSourceFactory::data(abs_name);
     else {
 cerr << "getting " << abs_name << endl;
-//	pathName = abs_name;
 	QUrlOperator oper;
-	oper.copy(abs_name, "/tmp");
 	connect(&oper, SIGNAL(finished(QNetworkOperation*)), 
 	    this, SLOT(finished(QNetworkOperation*)));
+
+	
+	    oper.copy(abs_name, "/tmp");
 	
 //	QNetworkOperation no;
 //	while( no.stat() == QNetworkOperation::Done
@@ -88,6 +93,31 @@ cerr << "finished" << endl;
 	QMessageBox::critical( 0, "ERROR", op->protocolDetail() );
     }
 }
+
+QString 
+HttpMimeSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const
+{
+cerr<< "makeAbsolute " << abs_or_rel_name << endl;
+if( !context.isEmpty() )
+    cerr << " context " << context << endl;
+	if( abs_or_rel_name.startsWith("http://") /*&& !context.startsWith("http://")*/ )
+	    return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, "");
+//	    return abs_or_rel_name;
+	else
+	    if( !context.isEmpty() && context.startsWith("http://") ) {
+		QString contextBase;
+		if( abs_or_rel_name.startsWith("/") )
+		    contextBase = context.left( context.find("/", 8) );
+		else
+		    contextBase = context.left( context.findRev("/")+1 );
+
+		return contextBase + abs_or_rel_name;
+	    }
+	    else
+		return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, context);
+}
+
+
 
 /*! HelpWindow class represents window for displaying HTML documentation
     it can work with local filesystem or with HTTP protocol
