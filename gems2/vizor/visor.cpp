@@ -51,15 +51,15 @@ using namespace std;
 
 
 // file names constants
+
+#ifndef GEMS_RELEASE
 const char *VISOR_INI = "data/vis_cn.ini";
 const char *OBJECT_INI = "data/vis_od.ini";
 const char *UNITS_INI = "data/units.ini";
+#endif
 
 const char *VISOBJ_DAT = "visor.data/visobj.dat";
 const char *VISOR_DAT = "visor.data/visor.dat";
-
-//const char *GEM_CFG = "gems.cfg";
-//const char *WIN_CFG = "windows.cfg";
 
 const char *GEM_CONF = "gemsdbf.conf";
 const char *VIS_CONF = "visor.conf";
@@ -178,6 +178,7 @@ TVisor::Setup()
     bool option_v = false;
 #ifdef __APPLE__
     bool option_c = true;
+    pVisorImp->setConfigAutosave( true );
 #else
     bool option_c = false;
 #endif

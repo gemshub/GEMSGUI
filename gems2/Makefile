@@ -119,5 +119,6 @@ rpm:
 		rpm -bb gems2.spec"
 	
 zip:
-	zip -r ~/Desktop/gems2-`date +%Y%m%d`.zip gems2.app/Contents/MacOS gems2.app/Contents/Resources
+	-rm ~/Desktop/gems2-`date +%Y%m%d`.zip
+	zip -r ~/Desktop/gems2-`date +%Y%m%d`.zip gems2.app/Contents/MacOS gems2.app/Contents/Resources gems2.app/Contents/Info.plist gems2.app/Contents/PkgInfo -x gems2.app/Contents/Resources/CVS/*
 
