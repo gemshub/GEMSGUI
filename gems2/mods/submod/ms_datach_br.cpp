@@ -27,7 +27,8 @@
 
 // Writing dataCH structure to binary file
 void TMulti::makeStartDataChBR(
-  TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH )
+  TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
+  short nTp_, short nPp_,float Tai[3], float Pai[3] )
 {
 // set sizes for DataCh
   uint ii;
@@ -44,7 +45,8 @@ void TMulti::makeStartDataChBR(
   data_CH->nDC = pm.L;
   data_CH->nPH = pm.FI;
   data_CH->nPS = pm.FIs;
-  data_CH->nTp = data_CH->nPp = 1;
+  data_CH->nTp = nTp_;
+  data_CH->nPp = nPp_;
   if( pm.Aalp )
     data_CH->nAalp = 1;
   else
@@ -62,8 +64,17 @@ void TMulti::makeStartDataChBR(
        break;
   data_CH->uRes3 = 0;
   data_CH->uRes4 = 0;
+  data_CH->dRes1 = 0.;
+  data_CH->dRes = 0.;
 
-  memset( &data_CH->Tmin, 0 , 10*sizeof(double));
+  data_CH->Tmin = Tai[START_];
+  data_CH->Tmax = Tai[STOP_];
+  data_CH->Tstep = Tai[STEP_];
+  data_CH->Ttol = 0;
+  data_CH->Pmin = Pai[START_];
+  data_CH->Pmax = Pai[STOP_];
+  data_CH->Pstep = Pai[STEP_];
+  data_CH->Ptol = 0;
 
 // realloc structures DataCh&DataBr
 
@@ -86,23 +97,6 @@ void TMulti::makeStartDataChBR(
      data_CH->ICmm[i1] = pm.Awt[i1];
 
   memcpy( data_CH->DCmm, pm.MM , data_CH->nDC*sizeof(double));
-
-// must be changed to matrix structure  ???????
-// setted data_CH->nPp*data_CH->nTp = 1
-  memcpy( data_CH->G0, pm.G0 , data_CH->nDC*sizeof(double));
-  memcpy( data_CH->V0, pm.Vol , data_CH->nDC*sizeof(double));
-
-  for( i1=0; i1< data_CH->nDC; i1++ )
-  if ( pm.H0 )
-      data_CH->H0[i1] = pm.H0[i1];
-  else
-      data_CH->H0[i1] = 0.;
-
-  for( i1=0; i1< data_CH->nDC; i1++ )
-  if ( pm.Cp0 )
-      data_CH->Cp0[i1] = pm.Cp0[i1];
-  else
-      data_CH->Cp0[i1] = 0.;
 
   if( data_CH->nAalp >0 )
       for( i1=0; i1< data_CH->nPH; i1++ )
@@ -144,6 +138,66 @@ void TMulti::makeStartDataChBR(
 
    packDataBr();
 
+// must be changed to matrix structure  ???????
+// setted data_CH->nPp*data_CH->nTp = 1
+   getG0_V0_H0_Cp0_matrix();
+
+}
+
+void TMulti::getG0_V0_H0_Cp0_matrix()
+{
+
+  double cT, cP, cDC;
+  double *G0, *V0, *H0, *Cp0;
+
+  G0 =  new double[TProfil::pm->mup->L];
+  V0 =  new double[TProfil::pm->mup->L];
+  if ( pm.H0 )
+    H0 =  new double[TProfil::pm->mup->L];
+  else
+    H0 = 0;
+  if ( pm.Cp0 )
+    Cp0 = new double[TProfil::pm->mup->L];
+  else
+    Cp0 = 0;
+
+  cT = data_CH->Tmin;
+  cP = data_CH->Pmin;
+
+  for( int ii=0; ii<data_CH->nTp; ii++)
+  {
+    for( int jj=0; jj<data_CH->nPp; jj++)
+    {
+     // calc new G0, V0, H0, Cp0
+     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, Cp0 );
+     // copy to arrays
+     for(int kk=0; kk<data_CH->nDC; kk++)
+      {
+         int ll = ( kk * data_CH->nPp + jj) * data_CH->nTp + ii;
+         data_CH->G0[ll] =  G0[pm.muj[kk]]; //
+         data_CH->V0[ll] =  V0[pm.muj[kk]];
+         if ( H0 )
+           data_CH->H0[ll] = H0[pm.muj[kk]];
+         else
+           data_CH->H0[ll] = 0.;
+         if ( Cp0 )
+           data_CH->Cp0[ll] = Cp0[pm.muj[kk]];
+         else
+           data_CH->Cp0[ll] = 0.;
+       }
+     // next step
+     cP += data_CH->Pstep;
+     }
+     cT += data_CH->Tstep;
+  }
+
+  // free memory
+  delete[] G0;
+  delete[] V0;
+  if( H0 )
+   delete[] H0;
+  if( Cp0 )
+   delete[] Cp0;
 }
 
 #else
@@ -577,10 +631,14 @@ void TMulti::datach_to_text_file( fstream& ff )
    outArray( ff, "ICmm", data_CH->ICmm, data_CH->nIC);
    outArray( ff, "DCmm", data_CH->DCmm, data_CH->nDC);
 
-   outArray( ff, "G0", data_CH->G0,  data_CH->nDC*data_CH->nPp*data_CH->nTp);
-   outArray( ff, "V0", data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp);
-   outArray( ff, "H0", data_CH->H0,  data_CH->nDC*data_CH->nPp*data_CH->nTp);
-   outArray( ff, "Cp0", data_CH->Cp0,data_CH->nDC*data_CH->nPp*data_CH->nTp);
+   outArray( ff, "G0", data_CH->G0, data_CH->nDC*data_CH->nPp*data_CH->nTp,
+                                    data_CH->nPp*data_CH->nTp );
+   outArray( ff, "V0", data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp,
+                                    data_CH->nPp*data_CH->nTp );
+   outArray( ff, "H0", data_CH->H0,  data_CH->nDC*data_CH->nPp*data_CH->nTp,
+                                     data_CH->nPp*data_CH->nTp );
+   outArray( ff, "Cp0", data_CH->Cp0,data_CH->nDC*data_CH->nPp*data_CH->nTp,
+                                     data_CH->nPp*data_CH->nTp  );
 
    if( data_CH->nAalp >0 )
       outArray( ff, "Aalp", data_CH->Aalp, data_CH->nPH);

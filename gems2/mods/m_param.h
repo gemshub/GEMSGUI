@@ -373,6 +373,8 @@ public:
 
     // Multi make functions
     void PMtest( const char *key );
+    void LoadFromMtparm(double T, double P,double *G0,
+        double *V0, double *H0, double *Cp0 );
     void SolModLoad();
     void XmaxSAT_IPM2();
     void XmaxSAT_IPM2_reset();

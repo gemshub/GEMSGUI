@@ -90,6 +90,26 @@ void TProfil::PMtest( const char *key )
     }
 }
 
+void TProfil::LoadFromMtparm(double T, double P,double *G0,
+        double *V0, double *H0, double *Cp0 )
+{
+    if( fabs( tpp->curT - T ) > 1.e-10 ||
+            fabs( tpp->curP - P ) > 1.e-10 )
+    { // load new MTPARM on T or P
+        mtparm->LoadMtparm( T, P );
+        pmp->pTPD = 0;
+    }
+    for( int jj=0; jj<mup->L; jj++ )
+    {
+      G0[jj] =  tpp->G[jj];
+      V0[jj] =  tpp->Vm[jj]* 10.;
+      if( H0 && tpp->H )
+        H0[jj] =  tpp->H[jj];
+      if( Cp0 && tpp->Cp )
+        Cp0[jj] =  tpp->Cp[jj];
+    }
+}
+
 // -------------------------------------------------------------------
 // Compare changes in the modified system relative to MULTI
 // if some vectors were allocated or some dimensions changed - return 0;
@@ -235,7 +255,7 @@ void TProfil::MultiRemake( const char *key )
     pmp->GWAT = syp->Mwat * 55.508373;
 
     pmp->RT = tpp->RT;  // R_CONSTANT * pmp->Tc
-    pmp->FRT = F_CONSTANT/pmp->RT; 
+    pmp->FRT = F_CONSTANT/pmp->RT;
 
     pmp->ln5551 = 4.0165339;
     pmp->lowPosNum = pa.p.DcMin;

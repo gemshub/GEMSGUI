@@ -356,7 +356,12 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
          "Please, mark phases for selection into DataBridge");
 
 // set default data and realloc arrays
-   multi->makeStartDataChBR( aSelIC, aSelDC, aSelPH );
+   float Tai[3], Pai[3];
+   Tai[0] = Tai[1] = 25.;
+   Pai[0] = Pai[1] = 1.;
+   Tai[2] = Pai[2] = 0.;
+
+   multi->makeStartDataChBR( aSelIC, aSelDC, aSelPH, 1, 1, Tai, Pai );
 
 // out dataCH&DataBR files
    Path_ = u_makepath( dir, name, "dch" );

@@ -421,7 +421,8 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
     mult->to_file( ff, path );
 
 // set default data and realloc arrays
-   mult->makeStartDataChBR( aSelIC, aSelDC, aSelPH );
+   mult->makeStartDataChBR( aSelIC, aSelDC, aSelPH,
+      mtp->nTai,  mtp->nPai, mtp->Tai, mtp->Pai );
 
 // out dataCH to binary file
    if( mtp->PsSbin != S_OFF )

@@ -351,7 +351,9 @@ public:
     void databr_from_text_file(fstream& ff );
 
     void makeStartDataChBR(
-       TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH );
+       TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
+       short nTp_, short nPp_,float Tai[3], float Pai[3] );
+    void getG0_V0_H0_Cp0_matrix();
     void packDataBr();
     void unpackDataBr();
 //    void multi_realloc( char PAalp, char PSigm );
