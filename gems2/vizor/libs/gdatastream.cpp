@@ -7,7 +7,7 @@
 #define __BYTE_ORDER BYTE_ORDER
 #define __BIG_ENDIAN BIG_ENDIAN
 #else
-#warning "other plaftorm - considering little endian"
+//#warning "other plaftorm - considering little endian"
 #define __BIG_ENDIAN 4321
 #define __BYTE_ORDER 1234
 #endif

@@ -247,10 +247,6 @@ enum pe_statcode {
     P_PVT ='P'
 };
 
-enum pe_valind { /* index control */
-    START_, STOP_, STEP_
-};
-
 
 
 #endif //   _m_proces_h

@@ -94,7 +94,7 @@ EQDialog::CmOpen_PROBE()
 void
 EQDialog::CmOpen_DUTERM()
 {
-//    pVisorImp->OpenModule(this, RT_DUTERM);
+    pVisorImp->OpenModule(this, RT_DUALTH);
 }
 
 void

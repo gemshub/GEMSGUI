@@ -24,7 +24,7 @@ SOURCES 	= m_const.cpp m_sdata.cpp m_integ.cpp \
     m_proces.cpp m_reac2.cpp  \
     m_prfget.cpp m_prfget2.cpp m_syseq.cpp \
     m_syst2.cpp m_probe.cpp m_probe2.cpp \
-    m_duterm.cpp m_dutx.cpp  \
+    m_dualth.cpp m_dualthc.cpp  \
     m_gtdemo.cpp m_rtparm.cpp
 
 OBJECTS = $(subst .cpp,.o,$(SOURCES))

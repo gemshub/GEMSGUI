@@ -47,7 +47,7 @@ using namespace std;
 #include "m_proces.h"
 #include "m_probe.h"
 #include "m_gtdemo.h"
-#include "m_duterm.h"
+#include "m_dualth.h"
 
 
 // file names constants
@@ -648,7 +648,7 @@ TVisor::initModules()
         addModule(TProcess::pm = new TProcess(RT_PROCES));
         addModule(TProbe::pm = new TProbe(RT_PROBE));
         addModule(TGtDemo::pm = new TGtDemo(RT_GTDEMO));
-        addModule(TDuterm::pm = new TDuterm(RT_DUTERM));
+        addModule(TDualTh::pm = new TDualTh(RT_DUALTH));
 
         TProfil::pm->InitSubModules();
     }
@@ -782,13 +782,12 @@ TVisor::defaultCFG()
         { MAXMUNAME, MAXDATATYPE, MAXGTDCODE, MAXNV, MAXGDGROUP };
     rt.Add(new TDataBase(rt.GetCount(), "gtdemo", true, true,
                          o_gdps, 27, 0, 5, gtdemo_rkfrm));
-    // RT_DUTERM default
-    unsigned char duterm_rkfrm[9] =
-        { MAXMUNAME, MAXTDPCODE, MAXSYSNAME, MAXTIME, MAXPTN,
-          MAXPTN, MAXPTN, MAXNV, MAXNV
-        };
-    rt.Add(new TDataBase(rt.GetCount(), "duterm", true, true,
-                         o_utpvs, 45, 0, 9, duterm_rkfrm));
+    // RT_DUALTH default
+    unsigned char dualth_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
+       MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
+                                  };
+    rt.Add(new TDataBase(rt.GetCount(), "dualth", true, true,
+                         o_dtname, 41, 0, 10, dualth_rkfrm));
 
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");
@@ -797,15 +796,17 @@ TVisor::defaultCFG()
     for (uint jj = 0; jj < rt.GetCount(); jj++)
     {
         int cnt = 0;
-        for (uint ii = 0; ii < aDBFiles.GetCount(); ii++)
-            if (gstring(aDBFiles[ii], 0, aDBFiles[ii].find("."))
-                    == rt[jj].GetKeywd())
+         for (uint ii = 0; ii < aDBFiles.GetCount(); ii++)
+        { gstring flnm = gstring(aDBFiles[ii], 0, aDBFiles[ii].find("."));
+            if ( flnm == rt[jj].GetKeywd() ||
+                ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
             {
                 gstring path = pVisor->sysDBDir();
                 path += aDBFiles[ii];
                 rt[jj].AddFile(path);
                 cnt++;
             }
+        }
         rt[jj].specialFilesNum = cnt;
     }
 
@@ -819,15 +820,17 @@ TVisor::defaultCFG()
 
         for (uint jj = 0; jj < rt.GetCount(); jj++)
         {
-            for (uint kk = 0; kk < aDBFiles.GetCount(); kk++)
-                if (gstring(aDBFiles[kk], 0, aDBFiles[kk].find("."))
-                        == rt[jj].GetKeywd())
+          for (uint kk = 0; kk < aDBFiles.GetCount(); kk++)
+          { gstring flnm = gstring(aDBFiles[kk], 0, aDBFiles[kk].find("."));
+            if ( flnm == rt[jj].GetKeywd() ||
+                ( jj == RT_DUALTH && flnm == "duterm" ) )   //set up old name
                 {
                     gstring path(dir);
                     path += "/";
                     path += aDBFiles[kk];
                     rt[jj].AddFile(path);
                 }
+          }
         }
     }
 

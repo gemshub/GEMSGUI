@@ -22,7 +22,7 @@ SOURCES = m_const.cpp m_sdata.cpp m_integ.cpp \
     m_proces.cpp m_reac2.cpp  \
     m_prfget.cpp m_prfget2.cpp m_syseq.cpp \
     m_syst2.cpp m_probe.cpp m_probe2.cpp \
-    m_duterm.cpp m_dutx.cpp  \
+    m_dualth.cpp m_dualthc.cpp  \
     m_gtdemo.cpp   m_rtparm.cpp
 
 OBJECTS = m_const.obj m_sdata.obj m_integ.obj \
@@ -33,7 +33,7 @@ OBJECTS = m_const.obj m_sdata.obj m_integ.obj \
      m_proces.obj m_reac2.obj \
      m_prfget.obj m_prfget2.obj m_syseq.obj \
      m_syst2.obj m_probe.obj m_probe2.obj \
-     m_duterm.obj m_dutx.obj \
+     m_dualth.obj m_dualthc.obj \
      m_gtdemo.obj m_rtparm.obj
 
 TARGET	= ..\lib\gemsel.lib
@@ -60,7 +60,7 @@ $(TARGET): subdirs_mk	$(OBJECTS)
 	+m_reacdc.obj +m_phase.obj +m_proces.obj +m_reac2.obj \
 	+m_prfget.obj +m_prfget2.obj +m_syseq.obj \
 	+m_syst2.obj +m_probe.obj +m_probe2.obj \
-	+m_duterm.obj +m_dutx.obj +m_gtdemo.obj \
+	+m_dualth.obj +m_dualthc.obj  +m_gtdemo.obj \
       +m_rtparm.obj +submod\ms_rmults.obj +submod\ms_mtparm.obj \
 	+submod\ms_multi.obj +submod\ms_multi_file.obj \
         +submod\ms_datach_br.obj +submod\ms_system.obj \

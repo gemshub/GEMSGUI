@@ -77,8 +77,8 @@ DBAdvDialog::CmOpen_PROBE()
 void
 DBAdvDialog::CmOpen_DUTERM()
 {
-    qWarning( "DBAdvDialog::CmOpen_DUTERM(): Not implemented yet!" );
-//    pVisorImp->OpenModule(this, RT_DUTERM);
+//    qWarning( "DBAdvDialog::CmOpen_DUTERM(): Not implemented yet!" );
+    pVisorImp->OpenModule(this, RT_DUALTH);
 }
 
 void

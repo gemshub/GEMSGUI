@@ -263,7 +263,7 @@ void TGtDemo::gd_ps_set()
 //        strncpy( &gdp->PsIC, "------+-+------", 15);
 //        gdp->nRT = RT_SYSEQ;
 //        break;
-//    case RT_DUTERM:strncpy( &gdp->PsIC,"------+--+-----", 15); break;
+//    case RT_DUALTH:strncpy( &gdp->PsIC,"------+--+-----", 15); break;
     default:
         Error( GetName(), " E02GDrem: Wrong record type");
     }
@@ -276,7 +276,7 @@ short TGtDemo::gd_rectype( )
     TCStringArray buf;
     int nRType;
 
-    for( uint i=RT_ICOMP; i < RT_DUTERM; i++ )
+    for( uint i=RT_ICOMP; i < RT_DUALTH; i++ )
         if( i != RT_GTDEMO )
             buf.Add( aMod[i].GetName());
 

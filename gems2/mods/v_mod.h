@@ -45,7 +45,7 @@ enum { RT_SDATA=0, RT_CONST=1 };
 
 enum { RT_INTEG=2, RT_PARAM=3, RT_ICOMP=4, RT_DCOMP=5, RT_COMPOS=6,
        RT_REACDC=7, RT_RTPARM=8, RT_PHASE=9, RT_SYSEQ=10, RT_PROCES=11,
-       RT_PROBE=12, RT_GTDEMO=13, RT_DUTERM=14,
+       RT_PROBE=12, RT_GTDEMO=13, RT_DUALTH=14,
 
        MD_RMULTS=15, MD_MTPARM=16, MD_SYSTEM=17,
        MD_MULTI=18, MD_EQCALC=19, MD_EQDEMO=20
@@ -646,6 +646,10 @@ enum statcode {  /* Code status of process  */
     P_UNDEF='0', P_STARTED, P_EXECUTE, P_INTERRUPT, P_FINISHED,
     P_MT_MODE, P_MT_STARTED, P_MT_EXECUTE, P_MT_INTERRUPT, P_MT_FINISHED };
 
+enum pe_valind { /* index control */
+    START_, STOP_, STEP_
+};
+
 
 
 //---------------------------------
@@ -694,18 +698,38 @@ enum probe_objects {
 // Duterm
 //---------------------------------
 
-enum duterm_objects {
-    o_utis = o_prtprn+1, o_utph, o_uteh,  o_utyms,  o_utstv,
-    o_utmvs,    o_utpvs,   o_utdim,  o_utfloat, o_utname,
-    o_utnotes,  o_utphkey, o_utllf,  o_utnnf,   o_utsdm,
-    o_utddf,    o_utdcc,   o_utdcs,  o_utreslt, o_utune,
-    o_utunwx,   o_utunic,  o_utsbm,  o_utexpr,  o_utmu,
-    o_utgt0,    o_utgtp,   o_utgex,  o_utgexk,  o_utuic,
-    o_ut_qp,    o_utwx,    o_utcx,   o_utgam,   o_utpsi,
-    o_utnsph,   o_utnsig,  o_utarea, o_utsigm,  o_utwarm,
-    o_utyarm,   o_uterrea, o_uticme, o_uticmc,  o_ut_ime,
-    o_ut_ima,   o_utwirm,  o_utyirm, o_utsdref, o_utsdval,
-    o_uttpkey,  o_uta,     o_uttprn,  };
+
+enum dualth_objects {
+o_dtpvfl= o_prtprn+1, o_dtpsflg, o_dtdim, o_dttmd, o_dtnvd,
+o_dtpd,   o_dttd,   o_dtvd, o_dtmsysb, o_dtt,
+o_dtp,   o_dtv, o_dtres,  o_dtq, o_dti,
+o_dtjm,  o_dtc_tm, o_dtc_nv, o_dtnam_nr,
+o_dtname, o_dtnotes,
+o_dtpspv, o_dtshort, o_dtfloat, o_dtbb, o_dtbn,
+o_dtub, o_dtchi, o_dtmu_n, o_dtcoul, o_dtgam_n,
+o_dtavg_g, o_dtsd_g, o_dtmuo_n, o_dtavg_m, o_dtsd_m ,
+o_dtqpn, o_dtqpg, o_dtcib, o_dtcin, o_dtcab,
+o_dtcan,  o_dtcexpr, o_dtgexpr, o_dtsdref, o_dtsdval,
+o_dtnam_b, o_dtnam_n, o_dtfor_n, o_dtfor_b, o_dtstl,
+o_dttyp_n, o_dtciclb, o_dtcicln, o_dtauclb,  o_dtaucln,
+o_dtsbm, o_dtan,  o_dtstkey, o_dttprn,  };
+
+typedef enum {
+
+    UNSP_GS_INDEF   = '0',
+    UNSP_GS_GOIN    = '1',
+    UNSP_GS_DONE    = '2',
+    UNSP_GS_ERR     = '3',
+
+    UNSP_AS_INDEF   = '0',
+    UNSP_AS_READY   = '1',
+    UNSP_AS_RUN     = '2',
+    UNSP_AS_DONE    = '3',
+
+
+} GS_AS_CLASSES;
 
 #endif // _v_mod_h
+
+
 

@@ -31,7 +31,7 @@ const char *GEMS_SP_HTML = "gm_project";
 #include "m_phase.h"
 #include "m_reacdc.h"
 #include "m_proces.h"
-#include "m_duterm.h"
+#include "m_dualth.h"
 #include "m_param.h"
 #include "v_object.h"
 #include "visor.h"
@@ -78,7 +78,7 @@ SPP_SETTING pa_ = {
     "INNINN",   /* PHsol_t[6] */  "s-----",   /* PHpvc[6] */
     "++++-+-+++", /* MUpmv[10] */ "jjbC++-+", /* TPpdc[8] */
     "*-------*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
-    "***-*-*---**-***-----------*", /* SYpvc[28]*/  "***-------", /* UTppc[10] */
+    "***-*-*---**-***-----------*", /* SYpvc[28]*/  "-++++++-AE", /* UTppc[10] */
     "0*----------", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
     "Plot ",                  /* GDpsc[7] */
@@ -408,13 +408,13 @@ TProfil::DeleteRecord( const char *key, bool errifNo )
     for( i=0; i< aList.GetCount(); i++)
         TGtDemo::pm->DeleteRecord(aList[i].c_str());
 
-    aList.Clear();    //DUTERM
+    aList.Clear();    //DUALTH
     anR.Clear();
-    rt[RT_DUTERM].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+    rt[RT_DUALTH].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                             K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-    rt[RT_DUTERM].GetKeyList( pkey, aList, anR );
+    rt[RT_DUALTH].GetKeyList( pkey, aList, anR );
     for( i=0; i< aList.GetCount(); i++)
-        TDuterm::pm->DeleteRecord(aList[i].c_str());
+        TDualTh::pm->DeleteRecord(aList[i].c_str());
 
     /*   aList.Clear();    //MASTRANSP
        anR.Clear();
