@@ -35,6 +35,7 @@
 #include "submod/ms_multi.h"
 #include "submod/ms_calc.h"
 
+class GemDataStream;
 
 // Physical constants - see m_param.cpp
 extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
@@ -84,7 +85,7 @@ struct BASE_PARAM
     DKIN; // Range of lower to upper kinetic restrictions for DC { 0.001 }
     char *tprn;       // internal
 
-    void write(ostream& oss);
+    void write(GemDataStream& oss);
 };
 
 struct SPP_SETTING
@@ -135,7 +136,7 @@ struct SPP_SETTING
     ResFloat   // one parameter for auto gas/fluid phase
     ;
 
-    void write(ostream& oss);
+    void write(GemDataStream& oss);
 };
 
 
