@@ -134,6 +134,7 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
 			gr_data.title.c_str());
 			
     plot->setGridCount(gr_data.axisType);
+    plot->setAxisTitles(gr_data.xName.c_str(), gr_data.yName.c_str());
 
     // Insert labels in legend box
     int y = 20;

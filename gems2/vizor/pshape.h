@@ -165,8 +165,9 @@ class TPlotWin:
     float	x1, y1, x2, y2;
     float	ax, ay;
     int		bx, by;
-//    QRect	canvasRect;
     QString	title;
+    QString	xTitle;
+    QString	yTitle;
     TIArray<PShape> shapes;
     int gridCount;
 
@@ -181,6 +182,7 @@ public:
 
     void setPlotBounds(FPoint pt1, FPoint pt2);
     void setGridCount(int numGrids);
+    void setAxisTitles(const char* xTitle, const char* yTitle);
 
     void PaintToDC(QPainter& dc);
     void paintGrid(QPainter& dc);

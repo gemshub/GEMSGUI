@@ -136,9 +136,9 @@ PText::setPosition(QPoint screenPoint)
 
 /* TPlotWin class is responcible for plotting area (lines, points, grid, labels..)
 */
-const int bottomGap = 20;
+const int bottomGap = 30;
 const int topGap = 20;
-const int leftGap = 20;
+const int leftGap = 30;
 
 TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title_):
         QWidget(p),
@@ -189,6 +189,13 @@ void
 TPlotWin::setGridCount(int numGrids)
 {
     gridCount = numGrids;    
+}
+
+void 
+TPlotWin::setAxisTitles(const char* xTitle_, const char* yTitle_)
+{
+    xTitle = xTitle_;
+    yTitle = yTitle_;
 }
 
 /*!
@@ -250,6 +257,19 @@ TPlotWin::paintGrid(QPainter& dc)
     float gridX = (float(canvas.width()-leftGap) / gridCount);
     float gridY = (float(canvas.height()-bottomGap-topGap) / gridCount);
 
+    QFontMetrics fm(dc.fontMetrics());
+
+    QFont fn = dc.font();
+    fn.setBold(true);
+    dc.setFont(fn);
+    dc.drawText( (width() - fm.width(xTitle))/2, height() - 7, xTitle);
+    dc.rotate(-90);
+    dc.drawText( -(width() - fm.width(yTitle))/2, 10, yTitle);    
+//    dc.drawText( dc.xForm(QPoint(7, (height() - fm.width(yTitle))/2)), yTitle);
+    dc.rotate(90);
+    fn.setBold(false);
+    dc.setFont(fn);
+
     if( gridX )
         for( int ii=0; ii<=gridCount ; ii++ )
         {
@@ -258,7 +278,7 @@ TPlotWin::paintGrid(QPainter& dc)
             dc.lineTo( x_pos, canvas.height() );
 	    QString str;
 	    str.sprintf("%.3g", x1 + (ii * (x2 - x1)) / gridCount);
-	    dc.drawText( x_pos + 2, canvas.height() - 7, str);
+	    dc.drawText( x_pos + 2, canvas.height() - 17, str);
         }
 
     if( gridY )
@@ -269,7 +289,7 @@ TPlotWin::paintGrid(QPainter& dc)
             dc.lineTo( canvas.width(), y_pos );
 	    QString str;
 	    str.sprintf("%.3g", y1 + ((gridCount - ii) * (y2 - y1)) / gridCount);
-	    dc.drawText( 2, y_pos - 1, str);
+	    dc.drawText( 12, y_pos - 1, str);
         }
 }
 
