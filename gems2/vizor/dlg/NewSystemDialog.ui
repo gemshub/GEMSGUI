@@ -36,6 +36,9 @@
             <property name="name">
                 <cstring>TabWid</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>To edit, right-click on input values; press Enter to change data</string>
+            </property>
             <widget class="QWidget">
                 <property name="name">
                     <cstring>tab</cstring>
