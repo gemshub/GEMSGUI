@@ -639,6 +639,30 @@ TCell::ObjectChanged()
 }
 
 
+void TCell::updateCellBackground()
+{
+    
+    switch( showType )
+    {
+    case stResult:
+	pw->setPalette(QPalette(Qt::cyan, pw->backgroundColor()));
+    break;
+    case stIO:
+	pw->setPalette(QPalette(Qt::green, pw->backgroundColor()));
+    break;
+    case stWork:
+	pw->setPalette(QPalette(Qt::blue, pw->backgroundColor()));
+    break;
+    case stAux:
+	pw->setPalette(QPalette(Qt::yellow, pw->backgroundColor()));
+    break;
+    case stHelp:
+	pw->setPalette(QPalette(Qt::gray, pw->backgroundColor()));
+    break;
+    }
+}
+
+
 // Critical function for visual speed
 // gone to page_w.h to be 'inline'
 /*
@@ -701,28 +725,7 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
     }
 
     setFont( pVisorImp->getCellFont() );
-
-    setBackgroundMode(Qt::FixedColor);
-/*
-    switch( showType )
-    {
-    case stResult:
-	setBackgroundColor(Qt::cyan);
-    break;
-    case stIO:
-	setBackgroundColor(Qt::magenta);
-    break;
-    case stWork:
-	setBackgroundColor(Qt::green);
-    break;
-    case stAux:
-	setBackgroundColor(Qt::darkGray);
-    break;
-    case stHelp:
-	//setBackgroundColor(Qt::gray);
-    break;
-    }
-*/
+    updateCellBackground();
     Update();
 }
 
@@ -747,29 +750,6 @@ TCellInput::Update()
     /// Should we call
     /// QToolTip::remove(this); ??
     QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
-    
-    QPalette palette(Qt::black, Qt::cyan);
-    QPalette palette1(Qt::green, Qt::cyan);
-
-    switch( showType )
-    {
-    case stResult:
-	setPalette(QPalette(Qt::blue, backgroundColor()));
-    break;
-    case stIO:
-	setPalette(QPalette(Qt::magenta, backgroundColor()));
-    break;
-    case stWork:
-	setPalette(QPalette(Qt::cyan, backgroundColor()));
-    break;
-    case stAux:
-	setPalette(QPalette(Qt::green, backgroundColor()));
-    break;
-    case stHelp:
-	setPalette(QPalette(Qt::gray, backgroundColor()));
-    break;
-    }
-
 }
 
 void
@@ -1017,6 +997,7 @@ TCellCheck::TCellCheck(TField& rfield, int x1, int y1, int npos, eShowType showT
         connect(this, SIGNAL(fieldUpdate()), &rfield, SLOT(Update()));
 
     setFont( pVisorImp->getCellFont() );
+    updateCellBackground();
 
     SetString( rObj.GetString(N,M) );
 
@@ -1203,6 +1184,7 @@ TCellText::TCellText(TField& rfield, int xx, int yy,
     ///  setMaxLength(AllowedPos(rO)+1);
     //  setReadOnly( !edit );
     setFont( pVisorImp->getCellFont() );
+    updateCellBackground();
 
     setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
 

@@ -83,6 +83,8 @@ public:
     {
         return (TField*)pw->parentWidget();
     }
+
+    void updateCellBackground();
 };
 
 /*!
