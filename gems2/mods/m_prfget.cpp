@@ -23,7 +23,6 @@
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
-#include "visor_w.h"
 
 
 //Init data to ProjectMode calculate

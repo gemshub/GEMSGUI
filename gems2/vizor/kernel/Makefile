@@ -39,8 +39,8 @@ dep:
 
 # DO NOT DELETE
 
-v_user.o: v_user.h ../libs/array.h ../libs/verror.h ../libs/gstring.h
-v_vals.o: v_user.h ../libs/array.h ../libs/verror.h ../libs/gstring.h
+v_user.o: v_user.h ../libs/gstring.h ../libs/array.h ../libs/verror.h
+v_vals.o: v_user.h ../libs/gstring.h ../libs/array.h ../libs/verror.h
 v_vals.o: v_vals.h v_vals_impl.h
 v_object.o: v_vals_impl.h v_vals.h ../libs/gstring.h ../libs/array.h v_user.h
 v_object.o: ../libs/verror.h v_object.h ../../mods/m_param.h

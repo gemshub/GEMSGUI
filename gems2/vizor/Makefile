@@ -138,11 +138,13 @@ page_win_w.o: ../mods/submod/ms_calc.h ../mods/m_sdata.h module_w.h page_w.h
 page_win_w.o: page_win_w.h service.h query_w.h help.h dlg/CalcDialog.h
 page_win_w.o: dlg/CalcDialogData.h dlg/CalcCheckDialog.h
 page_win_w.o: dlg/CalcCheckDialogData.h
-pshape.o: pshape.h ./kernel/v_user.h ./libs/array.h ./libs/verror.h
-pshape.o: ./libs/gstring.h
+pshape.o: pshape.h ./kernel/v_user.h ./libs/gstring.h ./libs/array.h
+pshape.o: ./libs/verror.h dlg/GraphDialog.h dlg/GraphDialogData.h
+pshape.o: ./kernel/v_module.h ./kernel/v_object.h ./kernel/v_vals.h
+pshape.o: ./kernel/v_dbm.h ./kernel/v_file.h graph.h
 help.o: help.h ./libs/gstring.h ./libs/array.h ./kernel/v_user.h
 help.o: ./libs/verror.h
-units.o: ./kernel/v_user.h ./libs/array.h ./libs/verror.h ./libs/gstring.h
+units.o: ./kernel/v_user.h ./libs/gstring.h ./libs/array.h ./libs/verror.h
 units.o: units.h ./libs/config.h
 helpwindow.o: helpwindow.h visor.h ./libs/gstring.h ./libs/array.h
 helpwindow.o: ./kernel/v_module.h ./kernel/v_object.h ./kernel/v_user.h

@@ -35,7 +35,7 @@
 #include "service.h"
 #include "visor.h"
 #include "visor_w.h"
-
+#include "stepwise.h"
 
 
 #define Inherited ProgressDialogData
@@ -117,7 +117,7 @@ ProgressDialog::CmStep()
     {
 	if( calcThread->running() ) {
 	    setCaption( "Running next step..." );
-	    pVisorImp->getWaitCalc().wakeOne();	// let's calc
+	    ThreadControl::wakeOne();	// let's calc
 	}
 	else {
 	    if( calcThread->error.title == "" ) {
@@ -137,7 +137,7 @@ ProgressDialog::CmStep()
 
     // seems like wait(sec) bails out no matter what timeout we set up :( - may be Qt bug?
     // but we have to specify seconds to prevend deadlock anyway
-	pVisorImp->getWaitProgress().wait(5000); // 5 sec
+	ThreadControl::wait(5000); // 5 sec
 
 	Update(true);
 	pVisorImp->Update( true );
@@ -243,7 +243,7 @@ ProgressDialog::CmClose()
     // or discard changes
 	if( calcThread->running() ) {
 	    TProfil::pm->userCancel = true;
-	    pVisorImp->getWaitCalc().wakeOne();	// let's tell the calc that all is over
+	    ThreadControl::wakeOne();	// let's tell the calc that all is over
 	    calcThread->wait();
 	}
     

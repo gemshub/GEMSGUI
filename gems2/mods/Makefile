@@ -102,7 +102,7 @@ v_ipnc.o: ../vizor/libs/gstring.h ../vizor/libs/array.h v_ipnc.h
 v_ipnc.o: ../vizor/kernel/v_user.h ../vizor/libs/verror.h
 v_ipnc.o: ../vizor/kernel/v_object.h ../vizor/kernel/v_vals.h
 s_formula.o: s_formula.h ../vizor/libs/array.h ../vizor/kernel/v_user.h
-s_formula.o: ../vizor/libs/verror.h ../vizor/libs/gstring.h v_mod.h
+s_formula.o: ../vizor/libs/gstring.h ../vizor/libs/verror.h v_mod.h
 s_formula.o: ../vizor/kernel/v_vals.h m_icomp.h ../vizor/kernel/v_module.h
 s_formula.o: ../vizor/kernel/v_object.h ../vizor/kernel/v_dbm.h
 s_formula.o: ../vizor/kernel/v_file.h ../vizor/service.h
@@ -129,10 +129,9 @@ s_tpwork.o: v_mod.h
 s_supcrt.o: s_supcrt.h ../vizor/libs/gstring.h ../vizor/libs/array.h v_mod.h
 s_supcrt.o: ../vizor/kernel/v_vals.h s_tpwork.h ../vizor/kernel/v_object.h
 s_supcrt.o: ../vizor/kernel/v_user.h ../vizor/libs/verror.h
-s_supcrt2.o: ../vizor/kernel/v_user.h ../vizor/libs/array.h
-s_supcrt2.o: ../vizor/libs/verror.h ../vizor/libs/gstring.h s_supcrt.h
-s_supcrt2.o: v_mod.h ../vizor/kernel/v_vals.h s_tpwork.h
-s_supcrt2.o: ../vizor/kernel/v_object.h
+s_supcrt2.o: ../vizor/kernel/v_user.h ../vizor/libs/gstring.h
+s_supcrt2.o: ../vizor/libs/array.h ../vizor/libs/verror.h s_supcrt.h v_mod.h
+s_supcrt2.o: ../vizor/kernel/v_vals.h s_tpwork.h ../vizor/kernel/v_object.h
 m_compos.o: ../vizor/service.h ../vizor/libs/array.h ../vizor/libs/gstring.h
 m_compos.o: ../vizor/kernel/v_user.h ../vizor/libs/verror.h
 m_compos.o: ../vizor/kernel/v_object.h ../vizor/kernel/v_vals.h
@@ -176,8 +175,7 @@ m_proces.o: ../vizor/kernel/v_module.h ../vizor/kernel/v_object.h
 m_proces.o: ../vizor/kernel/v_dbm.h ../vizor/kernel/v_file.h m_syseq.h
 m_proces.o: m_param.h submod/ms_rmults.h submod/ms_mtparm.h
 m_proces.o: submod/ms_system.h m_phase.h submod/ms_multi.h submod/ms_calc.h
-m_proces.o: ../vizor/service.h ../vizor/visor.h ../vizor/visor_w.h
-m_proces.o: ../vizor/kernel/t_print.h
+m_proces.o: ../vizor/service.h ../vizor/visor.h ../vizor/kernel/t_print.h
 m_reac2.o: m_param.h v_mod.h ../vizor/kernel/v_vals.h ../vizor/libs/gstring.h
 m_reac2.o: ../vizor/libs/array.h submod/ms_rmults.h
 m_reac2.o: ../vizor/kernel/v_module.h ../vizor/kernel/v_object.h
@@ -193,7 +191,7 @@ m_prfget.o: ../vizor/kernel/v_user.h ../vizor/libs/verror.h
 m_prfget.o: ../vizor/kernel/v_dbm.h ../vizor/kernel/v_file.h
 m_prfget.o: submod/ms_mtparm.h submod/ms_system.h m_phase.h submod/ms_multi.h
 m_prfget.o: v_ipnc.h submod/ms_calc.h m_probe.h m_gtdemo.h ../vizor/graph.h
-m_prfget.o: m_syseq.h ../vizor/service.h ../vizor/visor.h ../vizor/visor_w.h
+m_prfget.o: m_syseq.h ../vizor/service.h ../vizor/visor.h
 m_prfget2.o: m_param.h v_mod.h ../vizor/kernel/v_vals.h
 m_prfget2.o: ../vizor/libs/gstring.h ../vizor/libs/array.h submod/ms_rmults.h
 m_prfget2.o: ../vizor/kernel/v_module.h ../vizor/kernel/v_object.h
@@ -233,15 +231,15 @@ m_probe2.o: submod/ms_mtparm.h submod/ms_system.h m_phase.h submod/ms_multi.h
 m_probe2.o: v_ipnc.h submod/ms_calc.h m_gtdemo.h ../vizor/graph.h m_syseq.h
 m_probe2.o: ../vizor/service.h ../vizor/visor.h
 m_duterm.o: m_duterm.h v_ipnc.h ../vizor/libs/array.h
-m_duterm.o: ../vizor/kernel/v_user.h ../vizor/libs/verror.h
-m_duterm.o: ../vizor/libs/gstring.h v_mod.h ../vizor/kernel/v_vals.h
+m_duterm.o: ../vizor/kernel/v_user.h ../vizor/libs/gstring.h
+m_duterm.o: ../vizor/libs/verror.h v_mod.h ../vizor/kernel/v_vals.h
 m_duterm.o: ../vizor/kernel/v_module.h ../vizor/kernel/v_object.h
 m_duterm.o: ../vizor/kernel/v_dbm.h ../vizor/kernel/v_file.h m_syseq.h
 m_duterm.o: m_param.h submod/ms_rmults.h submod/ms_mtparm.h
 m_duterm.o: submod/ms_system.h m_phase.h submod/ms_multi.h submod/ms_calc.h
 m_duterm.o: s_formula.h ../vizor/service.h ../vizor/visor.h
 m_dutx.o: m_duterm.h v_ipnc.h ../vizor/libs/array.h ../vizor/kernel/v_user.h
-m_dutx.o: ../vizor/libs/verror.h ../vizor/libs/gstring.h v_mod.h
+m_dutx.o: ../vizor/libs/gstring.h ../vizor/libs/verror.h v_mod.h
 m_dutx.o: ../vizor/kernel/v_vals.h ../vizor/kernel/v_module.h
 m_dutx.o: ../vizor/kernel/v_object.h ../vizor/kernel/v_dbm.h
 m_dutx.o: ../vizor/kernel/v_file.h m_syseq.h m_param.h submod/ms_rmults.h

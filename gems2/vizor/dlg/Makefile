@@ -165,17 +165,16 @@ NewSystemDialog.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
 NewSystemDialog.o: ../../mods/submod/ms_multi.h ../../mods/v_ipnc.h
 NewSystemDialog.o: ../../mods/submod/ms_calc.h ../../mods/m_syseq.h
 NewSystemDialog.o: ../units.h
-ProgressDialog.o: ../../mods/calcthread.h ../../mods/m_param.h
-ProgressDialog.o: ../../mods/v_mod.h ../kernel/v_vals.h ../libs/gstring.h
-ProgressDialog.o: ../libs/array.h ../../mods/submod/ms_rmults.h
-ProgressDialog.o: ../kernel/v_module.h ../kernel/v_object.h
-ProgressDialog.o: ../kernel/v_user.h ../libs/verror.h ../kernel/v_dbm.h
-ProgressDialog.o: ../kernel/v_file.h ../../mods/submod/ms_mtparm.h
-ProgressDialog.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
-ProgressDialog.o: ../../mods/submod/ms_multi.h ../../mods/v_ipnc.h
-ProgressDialog.o: ../../mods/submod/ms_calc.h ProgressDialog.h
-ProgressDialog.o: ProgressDialogData.h ../service.h ../visor.h ../visor_w.h
-ProgressDialog.o: ../graph.h
+ProgressDialog.o: ../calcthread.h ../../mods/m_param.h ../../mods/v_mod.h
+ProgressDialog.o: ../kernel/v_vals.h ../libs/gstring.h ../libs/array.h
+ProgressDialog.o: ../../mods/submod/ms_rmults.h ../kernel/v_module.h
+ProgressDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
+ProgressDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h
+ProgressDialog.o: ../../mods/submod/ms_mtparm.h ../../mods/submod/ms_system.h
+ProgressDialog.o: ../../mods/m_phase.h ../../mods/submod/ms_multi.h
+ProgressDialog.o: ../../mods/v_ipnc.h ../../mods/submod/ms_calc.h
+ProgressDialog.o: ProgressDialog.h ProgressDialogData.h ../service.h
+ProgressDialog.o: ../visor.h ../visor_w.h ../graph.h
 ProcessDialog.o: ProcessDialog.h ../libs/gstring.h ../libs/array.h
 ProcessDialog.o: ProcessDialogData.h ../visor_w.h ../kernel/v_vals.h
 ProcessDialog.o: ../graph.h ../kernel/v_module.h ../kernel/v_object.h
@@ -251,7 +250,7 @@ ListFilesDialog.o: ../visor_w.h ../graph.h
 LoadMessage.o: LoadMessage.h
 ElementsDialog.o: ElementsDialog.h ElementsDialogData.h
 ElementsDialog.o: ../../mods/filters_data.h ../libs/array.h
-ElementsDialog.o: ../kernel/v_user.h ../libs/verror.h ../libs/gstring.h
+ElementsDialog.o: ../kernel/v_user.h ../libs/gstring.h ../libs/verror.h
 ElementsDialog.o: SetFiltersDialog.h SetFiltersDialogData.h ../visor.h
 ElementsDialog.o: ../kernel/v_module.h ../kernel/v_object.h
 ElementsDialog.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../kernel/v_file.h
@@ -259,7 +258,7 @@ ElementsDialog.o: ../visor_w.h ../graph.h ../../mods/m_icomp.h
 ElementsDialog.o: ../../mods/v_mod.h
 SetFiltersDialog.o: SetFiltersDialog.h SetFiltersDialogData.h
 SetFiltersDialog.o: ../../mods/filters_data.h ../libs/array.h
-SetFiltersDialog.o: ../kernel/v_user.h ../libs/verror.h ../libs/gstring.h
+SetFiltersDialog.o: ../kernel/v_user.h ../libs/gstring.h ../libs/verror.h
 SetFiltersDialog.o: ../visor_w.h ../kernel/v_vals.h ../graph.h
 SetFiltersDialog.o: ../kernel/v_module.h ../kernel/v_object.h
 SetFiltersDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h

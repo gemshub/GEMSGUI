@@ -28,7 +28,6 @@ const char *GEMS_PE_HTML = "gm_proces";
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
-#include "visor_w.h"
 #include "t_print.h"
 
 TProcess* TProcess::pm;

@@ -103,8 +103,7 @@ ms_muload.o: ../../vizor/libs/verror.h ../../vizor/kernel/v_dbm.h
 ms_muload.o: ../../vizor/kernel/v_file.h ../submod/ms_mtparm.h
 ms_muload.o: ../submod/ms_system.h ../m_phase.h ../submod/ms_multi.h
 ms_muload.o: ../v_ipnc.h ../submod/ms_calc.h ../s_formula.h
-ms_muload.o: ../../vizor/service.h ../../vizor/visor.h ../../vizor/visor_w.h
-ms_muload.o: ../../vizor/graph.h stepwise.h
+ms_muload.o: ../../vizor/service.h ../../vizor/visor.h ../stepwise.h
 ms_muleq.o: ../m_param.h ../v_mod.h ../../vizor/kernel/v_vals.h
 ms_muleq.o: ../../vizor/libs/gstring.h ../../vizor/libs/array.h
 ms_muleq.o: ../submod/ms_rmults.h ../../vizor/kernel/v_module.h
@@ -123,7 +122,7 @@ ms_mueqexp.o: ../../vizor/kernel/v_file.h ../submod/ms_mtparm.h
 ms_mueqexp.o: ../submod/ms_system.h ../m_phase.h ../submod/ms_multi.h
 ms_mueqexp.o: ../v_ipnc.h ../submod/ms_calc.h ../../vizor/service.h
 ms_mueqexp.o: ../../vizor/visor.h ../../vizor/visor_w.h ../../vizor/graph.h
-ms_mueqexp.o: stepwise.h
+ms_mueqexp.o: ../stepwise.h
 ipm_sel_bc.o: ../m_param.h ../v_mod.h ../../vizor/kernel/v_vals.h
 ipm_sel_bc.o: ../../vizor/libs/gstring.h ../../vizor/libs/array.h
 ipm_sel_bc.o: ../submod/ms_rmults.h ../../vizor/kernel/v_module.h
@@ -132,8 +131,7 @@ ipm_sel_bc.o: ../../vizor/libs/verror.h ../../vizor/kernel/v_dbm.h
 ipm_sel_bc.o: ../../vizor/kernel/v_file.h ../submod/ms_mtparm.h
 ipm_sel_bc.o: ../submod/ms_system.h ../m_phase.h ../submod/ms_multi.h
 ipm_sel_bc.o: ../v_ipnc.h ../submod/ms_calc.h ../../vizor/visor.h
-ipm_sel_bc.o: ../../vizor/visor_w.h ../../vizor/graph.h ../../vizor/service.h
-ipm_sel_bc.o: stepwise.h
+ipm_sel_bc.o: ../../vizor/service.h ../stepwise.h
 ipm_gamma.o: ../m_param.h ../v_mod.h ../../vizor/kernel/v_vals.h
 ipm_gamma.o: ../../vizor/libs/gstring.h ../../vizor/libs/array.h
 ipm_gamma.o: ../submod/ms_rmults.h ../../vizor/kernel/v_module.h

@@ -965,9 +965,27 @@ AGAIN:
     }
 }
 
-
-
 TVisorImp* pVisorImp;
+
+//------------------------------------------------------------------
+// thread staff
+
+#include <stepwise.h>
+
+void ThreadControl::wakeOne()
+{
+    pVisorImp->getWaitProgress().wakeOne();
+}
+
+bool ThreadControl::wait()
+{
+    pVisorImp->getWaitCalc().wait();
+}
+
+bool ThreadControl::wait(unsigned long time)
+{
+    pVisorImp->getWaitCalc().wait(time);
+}
 
 //--------------------- End of visor_w.cpp ---------------------------
 
