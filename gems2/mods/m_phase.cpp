@@ -652,10 +652,10 @@ AGAINRC:
 
        for( i=0; i<php->nDC; i++ )
        { // Determining if cation or anion
-         spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+         spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
          spName.strip();
          pos = spName.length()-1;
-         while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
+         while( pos>0 && spName[pos] <= '9' && spName[pos] >= '0' )
             pos--;
          switch( spName[pos] )
          {
@@ -670,7 +670,7 @@ AGAINRC:
                      continue;
          }
        }
-       if( iCat != php->ncpM || iAn != php->ncpM )
+       if( iCat != php->ncpN || iAn != php->ncpM )
             Error( GetName(),
               "E38PHrem: Mismatch in the number of cations or anions in the SIT model...");
     }
