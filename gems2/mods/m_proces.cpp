@@ -116,12 +116,12 @@ void TProcess::keyTest( const char *key )
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k>=rt[RT_PARAM].FldLen(0) )  )
-            Error( key, "Illegal key (another Modelling Project)!");
+            Error( key, "E08PErem: Illegal record key (another Modelling Project)!");
         rt[RT_SYSEQ].MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                                RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
                                RT_PROCES, 5, RT_PROCES, 6, RT_PROCES, 7, K_END);
         if( rt[RT_SYSEQ].Find(pkey) <0 )
-            Error( key, "Illegal key (no system)!");
+            Error( key, "E07PErem: Illegal record key (no system)!");
     }
 }
 
@@ -245,7 +245,7 @@ void TProcess::ods_link( int q)
 // set dynamic Objects ptr to values
 void TProcess::dyn_set(int q)
 {
-    ErrorIf( pep!=&pe[q], GetName(), "Illegal access to pe in dyn_set.");
+    ErrorIf( pep!=&pe[q], GetName(), "E06PErem: Illegal access to pe in dyn_set");
     // memcpy( pep->key , rt[nRT].UnpackKey(), PE_RKLEN );
     pe[q].tm =   (short *)aObj[ o_petmv ].GetPtr();
     pe[q].nv =   (short *)aObj[ o_penvv ].GetPtr();
@@ -276,7 +276,7 @@ void TProcess::dyn_set(int q)
 // free dynamic memory in objects and values
 void TProcess::dyn_kill(int q)
 {
-    ErrorIf( pep!=&pe[q], GetName(), "Illegal access to pe in dyn_kill.");
+    ErrorIf( pep!=&pe[q], GetName(), "E05PErem: Illegal access to pe in dyn_kill");
     pe[q].tm =   (short *)aObj[ o_petmv ].Free();
     pe[q].nv =   (short *)aObj[ o_penvv ].Free();
     pe[q].P =    (double *)aObj[ o_pepv ].Free();
@@ -307,7 +307,7 @@ void TProcess::dyn_kill(int q)
 // realloc dynamic memory
 void TProcess::dyn_new(int q)
 {
-    ErrorIf( pep!=&pe[q], GetName(), "Illegal access to pe in dyn_new.");
+    ErrorIf( pep!=&pe[q], GetName(), "E04PErem: Illegal access to pe in dyn_new.");
 
     if( pe[q].Pvtm != S_OFF )
         pe[q].tm = (short *)aObj[ o_petmv ].Alloc( pe[q].Ntm, 1, I_);
@@ -440,12 +440,13 @@ void  TProcess::set_type_flags( char type)
 //set default information
 void TProcess::set_def( int q)
 {
-    ErrorIf( pep!=&pe[q], GetName(), "Illegal access to pe in set_def");
+    ErrorIf( pep!=&pe[q], GetName(),
+        "E03PErem: Illegal access to pe in set_def");
     TProfil *aPa= TProfil::pm;
 
     set_type_flags( rt[rtNum()].FldKey(9)[0] );
     memcpy( &pe[q].Pvtm, aPa->pa.PEpvc, 12 );
-//    strncpy( pe[q].name,  rt[rtNum()].FldKey(8), MAXFORMULA );
+pe[q].PvR1 = '-';    // simplex on   KD: temporary for process create 
     strcpy( pe[q].name,  "`" );   // Fixed for debugging
     strcpy( pe[q].notes, "`" );
 
@@ -474,7 +475,7 @@ void TProcess::set_def( int q)
     pe[q].sdval = 0;
     pe[q].tprn = 0;
     // graphics
-    strcpy( pe[q].xNames, "xp" );  
+    strcpy( pe[q].xNames, "xp" );
     strcpy( pe[q].yNames, "yp" );
     pe[q].dimEF[1] = pe[q].dimEF[0] = 0;
     pe[q].dimXY[1] = pe[q].dimXY[0] = 0;
@@ -490,7 +491,7 @@ void TProcess::set_def( int q)
 }
 
 
-// return true if nessasary recalc base SYSEQ
+// return true if nesessary, recalc base SYSEQ
 bool TProcess::check_input( const char * /*key*/, int /*Level*/ )
 {
     vstr pkey(MAXRKEYLEN+10);
@@ -517,7 +518,7 @@ bool TProcess::pe_dimValid()
     bool i=true;
     // test data size
     ErrorIf( pep->Nxi<=0 || pep->Nxi > 1000, GetName(),
-             "You forgot to specify the number of points! \n Please, do it!");
+       "W02PErem: You forgot to specify the number of points! \n Please, do it!");
     if( pep->NeMax <= pep->Nxi )
     {
         i=false;
@@ -564,7 +565,8 @@ bool TProcess::pe_dimValid()
     }
 
     if( i==false )
-        vfMessage(window(), GetName(), "Invalid dimensions in PROCES data structure!", vfErr);
+        vfMessage(window(), GetName(),
+           "E00PErem: Invalid dimensions in Process data structure!", vfErr);
     // set and test flags
     if( pep->PsIN != S_OFF || pep->PsPro != S_OFF )
     {
@@ -597,7 +599,8 @@ bool TProcess::pe_dimValid()
     if( ii > 1 )
     {
         i=false;
-        vfMessage(window(), GetName(), "Invalid mode of PROCES simulations", vfErr);
+        vfMessage(window(), GetName(),
+        "E01PErem: Invalid Process Simulation mode", vfErr);
     }
     return i;
 }
@@ -677,7 +680,7 @@ TProcess::RecBuild( const char *key, int mode  )
     TProfil *aPa=TProfil::pm;
     vstr tbuf(100);
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Please, do it in Project mode!" );
+        Error( GetName(), "E09PErem: Please, do it in the Project mode!" );
 
 
    char type = '!';
@@ -980,7 +983,8 @@ TProcess::proc_titr()
         goto DONE;
     }
     if( (Fa*Fb) > 0)
-        Error( GetName(), "No result in specified interval! Change interval!");
+        Error( GetName(),
+  "W01PEexec: GoldenSection(): No result in specified interval! Change interval!");
     Fx1 = f_proc( x1);
     Fx2 = f_proc( x2);
     do
@@ -1035,7 +1039,7 @@ TProcess::CalcEquat(  )
         gstring str = xcpt.mess;
         str += "\n Cancel process?";
         if( vfQuestion(  window(), xcpt.title, str))
-            Error( GetName(), "Process simulation halted");
+            Error( GetName(), "E00PEexec: Process simulation stopped by the user");
     }
 }
 
@@ -1047,7 +1051,7 @@ TProcess::RecCalc( const char *key )
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
 
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Please, do it in Project mode!" );
+        Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
 
     char *text_fmt = 0;
     gstring sd_key = "";
@@ -1071,7 +1075,8 @@ TProcess::RecCalc( const char *key )
              ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
               text_fmt = (char *)aObj[o_sdabstr].GetPtr();
               if( !text_fmt )
-                Error( sd_key.c_str(), "No format text in this record.");
+                Error( sd_key.c_str(),
+                  "E00PSexec: No print script format text in this record.");
               if( !vfChooseFileSave(window(), filename,
                      "Please, provide a name of output file") )
                 text_fmt = 0;
@@ -1350,5 +1355,5 @@ TProcess::CmHelp()
 
 
 
-// ------------------- End of m_process.cpp --------------------------
+// ------------------- End of m_proces.cpp --------------------------
 
