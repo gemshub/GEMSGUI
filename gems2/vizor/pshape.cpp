@@ -85,7 +85,7 @@ PPoint::paint(QPainter& dc)
 {
     //  if( !draw )
     //    return;
-    dc.setPen( color );
+    dc.setPen( QPen(color, 2) );
     dc.setBrush( QBrush::NoBrush );
 
     switch(type)
@@ -250,14 +250,14 @@ TPlotWin::SetRect(FPoint pt1, FPoint pt2)
     else
         ax = canvasRect.width() / 0.0001;
 
-    bx = ROUND(x1*ax);
+    bx = ROUND(x1*ax) + 50;
     // height
     if( y2-y1 != 0 )
         ay = (canvasRect.height())/(y2-y1);	// 0 is upper
     else
         ay = canvasRect.height() / 0.0001;
 
-    by = ROUND(y1*ay);
+    by = ROUND(y1*ay) + 50;
 
     for( int ii=0; ii<arr.GetCount(); ii++ )
         arr[ii].ConvertCoordinates();
