@@ -493,7 +493,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
          aICnoused.Add(elm_data.ICrds[ii]);
 
     if( aICnoused.GetCount() > 0 )
-      vfChoice(  window(), aICnoused, "List of IComp no used" );
+      vfChoice(  window(), aICnoused, "List of unused Independent Components" );
 
     if( aPHnoused.GetCount() > 0 || aCMnoused.GetCount() > 0)
     {  // List of Phases or Compos with some species discarded

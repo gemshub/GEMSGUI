@@ -37,7 +37,8 @@ const char *GEMS_EQ_HTML = "ge_howto";
 #define Inherited EQDialogData
 
 EQDialog::EQDialog(QWidget* parent, const char* name):
-        Inherited( parent, name )
+//     Inherited( parent, 0, false /* true = modal */ )
+       Inherited( parent, name )
 {
     pLogoImg->setPixmap (pVisorImp->getLogo ());
 }

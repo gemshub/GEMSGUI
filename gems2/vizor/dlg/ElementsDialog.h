@@ -59,6 +59,8 @@ class ElementsDialog : public ElementsDialogData
     void openFiles( TCStringArray& names );
     bool isAqueous() const ;
     bool isGaseous() const ;
+    bool isSolids() const ;
+    bool isSolution() const ;
     bool isSorption() const ;
 
 
@@ -69,9 +71,11 @@ protected slots:
 //    void CmPrevious();
     void CmSetFilters();
 
-    void SetSorption();
     void SetAqueous();
     void SetGaseous();
+    void SetSolids();
+    void SetSolutions();
+    void SetSorption();
     void SetFiles();
 
 public:

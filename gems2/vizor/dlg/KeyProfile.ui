@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>460</width>
-            <height>517</height>
+            <width>490</width>
+            <height>519</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -25,7 +25,7 @@
         </font>
     </property>
     <property name="caption">
-        <string>GEM-Selektor v.2-PSI Modelling Projects</string>
+        <string>GEM-Selektor v.2-PSI: Modelling Projects</string>
     </property>
     <vbox>
         <property name="name">
@@ -85,7 +85,7 @@
                         <cstring>pAqGas</cstring>
                     </property>
                     <property name="text">
-                        <string>Re&amp;tain setup of aqueous/gas phases</string>
+                        <string>Re&amp;tain setup of aqueous (and gas) phases</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -105,7 +105,7 @@
                         <bool>false</bool>
                     </property>
                     <property name="text">
-                        <string>Change &amp;file configuration of selected project</string>
+                        <string>Change &amp;file configuration of the selected project</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -139,7 +139,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="text">
-                                <string>Create a new project &amp;using selected one</string>
+                                <string>Create a new project &amp;using the selected one as template</string>
                             </property>
                             <property name="checked">
                                 <bool>false</bool>
@@ -180,7 +180,7 @@
                                 <cstring>rbNewPrMode</cstring>
                             </property>
                             <property name="text">
-                                <string>Make new &amp;project by copying from kernel database </string>
+                                <string>Make a new &amp;project by copying records from the default database </string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -194,7 +194,7 @@
                                 <cstring>rbOldPrMode</cstring>
                             </property>
                             <property name="text">
-                                <string>Make new project by &amp;linking the database files</string>
+                                <string>Make a new project by &amp;linking files from the default database</string>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Switch on to select files from default database and link them to form a new project</string>

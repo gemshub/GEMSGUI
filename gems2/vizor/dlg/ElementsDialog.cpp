@@ -41,7 +41,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 {
 
         gstring str =
-          "Selection of Independent Components into Modelling Project :  ";
+          "Selection of Independent Components into Modelling Project   ";
                 str +=
            gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
     setCaption( trUtf8(str.c_str()) );
@@ -71,8 +71,8 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 
     EmptyData();
     rbKernel->setChecked( true );
-    rbKernel_2->setChecked( false );
-    rbUncertain->setChecked( false );
+    rbComplem->setChecked( false );
+    rbOrganic->setChecked( false );
     rbSpecific->setChecked( false );
     cbIsotopes->setChecked( false );
     setFilesList();
@@ -84,17 +84,19 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
     connect( bNext, SIGNAL( clicked() ), this, SLOT( CmOk() ) );
     connect( bReset, SIGNAL( clicked() ), this, SLOT( CmSetFilters() ) );
-//  connect( bReset, SIGNAL( clicked() ), this, SLOT( CmReset() ) );
+//  connect( bCancel, SIGNAL( clicked() ), this, SLOT( CmCancel() ) );
 //  connect( bPrevious, SIGNAL( clicked() ), this, SLOT( CmPrevious() ) );
 
+    connect( cbGas, SIGNAL( clicked() ), this, SLOT( SetGaseous() ) );
     connect( cbAqueous, SIGNAL( clicked() ), this, SLOT( SetAqueous() ) );
+    connect( cbSolids, SIGNAL( clicked() ), this, SLOT( SetSolids() ) );
+    connect( cbSolutions, SIGNAL( clicked() ), this, SLOT( SetSolutions() ) );
     connect( cbSorption, SIGNAL( clicked() ),this, SLOT( SetSorption() ) );
-    connect( cbGaseous, SIGNAL( clicked() ), this, SLOT( SetGaseous() ) );
     connect( cbIsotopes, SIGNAL( clicked() ),this, SLOT( SetFiles() ) );
 
     connect( rbKernel, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-    connect( rbKernel_2, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
-    connect( rbUncertain, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+    connect( rbComplem, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+    connect( rbOrganic, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
     connect( rbSpecific, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
 
 }
@@ -152,9 +154,11 @@ void ElementsDialog::EmptyData()
  for( ii=0; ii<99/*bgElem->count()-1*/; ii++ )
       bgElem->find(ii)->setEnabled( false );
 
-  cbSorption->setChecked( false );
+  cbGas->setChecked( true );
   cbAqueous->setChecked( true );
-  cbGaseous->setChecked( true );
+  cbSolids->setChecked( true );
+  cbSolutions->setChecked( false );
+  cbSorption->setChecked( false );
 }
 
 
@@ -190,6 +194,15 @@ void ElementsDialog::SetAqueous()
  }
 }
 
+bool ElementsDialog::isSolution() const
+{
+ return cbSolutions->isChecked();
+}
+
+void ElementsDialog::SetSolutions()
+{
+}
+
 bool ElementsDialog::isSorption() const
 {
  return cbSorption->isChecked();
@@ -206,10 +219,19 @@ void ElementsDialog::SetSorption()
 
 bool ElementsDialog::isGaseous() const
 {
- return cbGaseous->isChecked();
+ return cbGas->isChecked();
 }
 
 void ElementsDialog::SetGaseous()
+{
+}
+
+bool ElementsDialog::isSolids() const
+{
+ return cbSolids->isChecked();
+}
+
+void ElementsDialog::SetSolids()
 {
 }
 
@@ -227,13 +249,15 @@ void ElementsDialog::openFiles( TCStringArray& names )
   names.Clear();
   if(rbKernel->isChecked())
    names.Add(".kernel.");
-  if(rbUncertain->isChecked())
-   names.Add(".uncertain.");
+  if(rbComplem->isChecked())
+   names.Add(".complem.");
+  if(rbOrganic->isChecked())
+   names.Add(".organic.");
   if(rbSpecific->isChecked())
    names.Add(".specific.");
 }
 
-// 0 no changed (no kernel, specifik or uncertain)
+// 0 no changed (no kernel, specific, organic or complementary)
 // 1 to open, 2 to close
 int ElementsDialog::isOpenFile( gstring& name )
 {
@@ -244,8 +268,8 @@ int ElementsDialog::isOpenFile( gstring& name )
          else
            iret = 2;
    }
-   else  if(  name.find( ".uncertain." ) != gstring::npos )
-         {    if(rbUncertain->isChecked())
+   else  if(  name.find( ".organic." ) != gstring::npos )
+         {    if(rbOrganic->isChecked())
                  iret = 1;
               else
                  iret = 2;
@@ -256,12 +280,12 @@ int ElementsDialog::isOpenFile( gstring& name )
                      else
                            iret = 2;
                  }
-             else   if(  name.find( ".complem." ) != gstring::npos )
-                    {    if(rbKernel_2->isChecked())
-                           iret = 1;
-                        else
-                           iret = 2;
-                     }
+                 else   if(  name.find( ".complem." ) != gstring::npos )
+                       {    if(rbComplem->isChecked())
+                              iret = 1;
+                            else
+                              iret = 2;
+                       }
 
   return iret;
 }
@@ -283,7 +307,7 @@ ElementsDialog::SetICompList()
 
     //openFiles( names );
     openFilesICOMP();
-   // select all IComp keys and indMT (seted indMT to -1 for additional)
+   // select all IComp keys and indMT (set indMT to -1 for additional)
     TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
     aICdata->GetElements( cbIsotopes->isChecked(), aIC, aIndMT );
 
@@ -316,7 +340,7 @@ ElementsDialog::SetICompList()
      {
        bb = bgElem->find(aIndMT[ii]);
        if( !bb )
-        Error( aIC[ii].c_str(), "Illegal IComp ");
+        Error( aIC[ii].c_str(), "E01EDrem: Invalid IComp ");
        aBtmId1.Add( aIndMT[ii] );
        aICkey1.Add( aIC[ii] );
        bb->setEnabled( true );
@@ -410,8 +434,10 @@ void
 ElementsDialog::SetData()
 {
  el_data.flags[cbAqueous_] =  cbAqueous->isChecked();
+  el_data.flags[cbSolids_] = cbSolids->isChecked();
+ el_data.flags[cbGaseous_] =  cbGas->isChecked();
+  el_data.flags[cbSolutions_] =  cbSolutions->isChecked();
  el_data.flags[cbSorption_] = cbSorption->isChecked();
- el_data.flags[cbGaseous_] =  cbGaseous->isChecked();
  el_data.flags[cbIsotopes_] = cbIsotopes->isChecked();
 
  //openFiles( el_data.flNames );
@@ -508,7 +534,8 @@ ElementsDialog::openFilesSelection()
 {
   TCStringArray newSelKeywds;   // list of selected files
   int cnt=0;
-  ErrorIf( files_data.selCnt.GetCount()!=RT_PHASE+1, "", "internal error");
+  ErrorIf( files_data.selCnt.GetCount()!=RT_PHASE+1, "",
+               "E00EDrem: internal error");
 
  //files_data
    for(int i=RT_SDATA; i<=RT_PHASE; i++ )

@@ -8,7 +8,7 @@
 //
 // This file is part of the GEM-Vizor library which uses the
 // Qt v.2.x GUI Toolkit (Troll Tech AS, http://www.trolltech.com)
-// according to the Qt Duo Commercial license 
+// according to the Qt Duo Commercial license
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -160,12 +160,12 @@ void SetFiltersDialog::setData()
     cbPHsearch->setEditText( tr(data->ph_d.from_templ.c_str()));
     cbPHreplace->setEditText( tr(data->ph_d.to_templ.c_str()));
 
-    chbPHcopyS->setChecked( data->ph_d.flags[0] );
-    chbPHcopyF->setChecked( data->ph_d.flags[1] );
-    chbPHcopyL->setChecked( data->ph_d.flags[2] );
-    chbPHcopyN->setChecked( data->ph_d.flags[3] );
-    chbPHcopyA->setChecked( data->ph_d.flags[4] );
-    chbPHcopyY->setChecked( data->ph_d.flags[5] );
+    cbPHcopyL->setChecked( data->ph_d.flags[PHcopyL_] );
+    cbPHcopyF->setChecked( data->ph_d.flags[PHcopyF_] );
+    cbPHcopyD->setChecked( data->ph_d.flags[PHcopyD_] );
+    cbPHcopyN->setChecked( data->ph_d.flags[PHcopyN_] );
+    cbPHcopyA->setChecked( data->ph_d.flags[PHcopyA_] );
+    cbPHcopyY->setChecked( data->ph_d.flags[PHcopyY_] );
 
   // set Compos
     cbPCOsearch->setEditText( tr(data->cm_d.from_templ.c_str()));
@@ -205,12 +205,12 @@ void SetFiltersDialog::getData()
     data->ph_d.from_templ = (const char*)cbPHsearch->currentText();
     data->ph_d.to_templ = (const char*)cbPHreplace->currentText();
 
-    data->ph_d.flags[0] = chbPHcopyS->isChecked();
-    data->ph_d.flags[1] = chbPHcopyF->isChecked();
-    data->ph_d.flags[2] = chbPHcopyL->isChecked();
-    data->ph_d.flags[3] = chbPHcopyN->isChecked();
-    data->ph_d.flags[4] = chbPHcopyA->isChecked();
-    data->ph_d.flags[5] = chbPHcopyY->isChecked();
+    data->ph_d.flags[PHcopyL_] = cbPHcopyL->isChecked();
+    data->ph_d.flags[PHcopyF_] = cbPHcopyF->isChecked();
+    data->ph_d.flags[PHcopyD_] = cbPHcopyD->isChecked();
+    data->ph_d.flags[PHcopyN_] = cbPHcopyN->isChecked();
+    data->ph_d.flags[PHcopyA_] = cbPHcopyA->isChecked();
+    data->ph_d.flags[PHcopyY_] = cbPHcopyY->isChecked();
 
    // set Compos
     data->cm_d.from_templ = (const char*)cbPCOsearch->currentText();

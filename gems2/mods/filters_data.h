@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Internal declarations 
+// Internal declarations
 //
 // Copyright (C) 2002 S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
@@ -26,7 +26,9 @@
 enum selectType { cbAqueous_ = 0,
                   cbGaseous_,
                   cbSorption_,
-                  cbIsotopes_
+                  cbIsotopes_,
+                 cbSolids_,
+                 cbSolutions_
                  };
 
 struct elmWindowData
@@ -35,7 +37,7 @@ struct elmWindowData
    TCStringArray oldIComps; // list from parent project
 //   TCStringArray flNames; // kernel, uncertain, specific
 
-   bool flags[4];         // selectType
+   bool flags[6];         // selectType
 
    elmWindowData()
    {
@@ -43,12 +45,14 @@ struct elmWindowData
      flags[1] = true;
      flags[2] = false;
      flags[3] = false;
+     flags[4] = false;
+     flags[5] = false;
    }
 
   elmWindowData( elmWindowData& d )
   {
     uint ii;
-    for( ii=0; ii<4; ii++ )
+    for( ii=0; ii<6; ii++ )
      flags[ii] = d.flags[ii];
     for( ii=0; ii<d.ICrds.GetCount(); ii++ )
      ICrds.Add(d.ICrds[ii]);
@@ -61,7 +65,7 @@ struct elmWindowData
   const elmWindowData& operator=( const elmWindowData& d)
   {
     uint ii;
-    for( ii=0; ii<4; ii++ )
+    for( ii=0; ii<6; ii++ )
      flags[ii] = d.flags[ii];
     for( ii=0; ii<d.ICrds.GetCount(); ii++ )
      ICrds.Add(d.ICrds[ii]);
@@ -245,6 +249,15 @@ struct cmSetupData
   }
 
 };
+
+// Checkboxes in Phases page of SetFiltersDialog
+enum copyFlagX { PHcopyL_ = 0,
+                 PHcopyF_,
+                 PHcopyD_,
+                 PHcopyN_,
+                 PHcopyA_,
+                 PHcopyY_
+                 };
 
 struct phSetupData
 {

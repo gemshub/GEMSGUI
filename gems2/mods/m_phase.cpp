@@ -864,6 +864,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     // ( add to last key field first symbol from prfname )
     int i, cnt;
     bool nRec;
+    const char *pKey1, *pKey4;
     for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
     {
         uint jj;
@@ -873,39 +874,64 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
                 PH_RKLEN-MAXPHGROUP ))
          break;
 
-
      if( jj<aPHtmp.GetCount() )
         continue;
 
-     if( !el_data.flags[cbAqueous_] &&
-         ( aPHkey[ii][0]== 'a' || aPHkey[ii][0] == 'x' ))
+// Sorting out phase recs using setup in Elements and SetFilter dialogs
+     pKey1 = aPHkey[ii].c_str();
+     pKey4 = aPHkey[ii].c_str()+(MAXSYMB+MAXPHSYMB+MAXPHNAME)*sizeof(char);
+
+// Copy phase record for aqueous and/or gas (fluid) phases
+     if( !st_data.flags[PHcopyA_] && ( pKey1[0] == 'a' || pKey1[0] == 'g' ))
        continue;
-//     if( !el_data.flags[cbGaseous_] && *db->FldKey( 0 )== 'g' )
+
+// cbGaseous
+     if( !el_data.flags[cbGaseous_] && pKey1[0] == 'g' )
+       continue;
+
+// cbAqueous
+     if( !el_data.flags[cbAqueous_] && ( pKey1[0] == 'a' || pKey1[0] == 'x' ))
+       continue;
+
+// cbSorption
+     if( !el_data.flags[cbSorption_] && pKey1[0] == 'x' )
+       continue;
+//     if( !st_data.flags[PHcopyY_] && aPHkey[ii][0] == '?' )
 //       continue;
-     if( !el_data.flags[cbSorption_] && aPHkey[ii][0] == 'x' )
+
+// copy liquid phases together with solid ones
+     if( !st_data.flags[PHcopyL_] && ( pKey1[0] == 'l' || pKey1[0] == 'h' ))
        continue;
 
-// internal flags
-     if( !st_data.flags[4] &&
-         ( aPHkey[ii][0]== 'a' || aPHkey[ii][0] == 'g' ))
-       continue;
-     if( !st_data.flags[5] && aPHkey[ii][0] == 'x' )
-       continue;
+// cbSolids  - single-component
+     if( !el_data.flags[cbSolids_] && ( pKey1[0] == 's' ||
+          pKey1[0] == 'd' || pKey1[0] == 'l' || pKey1[0] == 'h' )
+//        && ( pKey4[0] == 'c' && pKey4[1] == ' ' ||
+//          pKey4[0] == 'd' && pKey4[1] == ' ' ||
+//          pKey4[0] == 'l' && pKey4[1] == ' ' ))
+          && pKey4[1] == ' ' )
+        continue;
 
+// cbSolutions - multi-component, non-gas, non-electrolyte
+     if( !el_data.flags[cbSolutions_] && ( pKey1[0] == 's'
+        || pKey1[0] == 'l' || pKey1[0] == 'd' || pKey1[0] == 'h' )
+    //  &&  !( pKey4[0] == 'c' || pKey4[0] == 'd' || pKey4[0] == 'l' ))
+          && pKey4[1] != ' ' )
+        continue;
+
+// Read the record here
      RecInput( aPHkey[ii].c_str() );
 
-// internal flags
-     if( !st_data.flags[0] && php->nDC<=1 )
-       continue;
-     if( !st_data.flags[3] && ( aPHkey[ii][0]== 's' || aPHkey[ii][0] == 'l' ) &&
-          php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
+// Copy non-ideal phases?
+     if( !st_data.flags[PHcopyN_] && php->nDC > 1 &&
+         php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
        continue;
 
-     //test record
+// Test existence of DComp/ReacDC records  
      for( i=0, cnt=0; i<php->nDC; i++ )
      {
         // test to exist of DCOMP or REACDC record later
-        // only 3 field
+        // only 3 fields
         gstring key = gstring( php->SM[i], 0, DC_RKLEN);
         if( php->DCS[i] == SRC_DCOMP )
             nRec = rt[RT_DCOMP].FindPart( php->SM[i], 3 );
@@ -915,9 +941,9 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
          cnt++;
      } // i
 
-     if( cnt < php->nDC && !( !st_data.flags[1] && cnt > 0  ))
+     if( cnt < php->nDC && !( !st_data.flags[PHcopyF_] && cnt > 0  ))
      {
-       if( st_data.flags[2] && php->nDC > 1 && cnt > 0  )
+       if( st_data.flags[PHcopyD_] && php->nDC > 1 && cnt > 0  )
          aPHnoused.Add( aPHkey[ii] );
        continue;
      }

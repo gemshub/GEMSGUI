@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>589</width>
-            <height>442</height>
+            <width>592</width>
+            <height>438</height>
         </rect>
     </property>
     <property name="font">
@@ -47,7 +47,7 @@
                 <widget class="QListView">
                     <column>
                         <property name="text">
-                            <string>Record Type / File Keywd</string>
+                            <string>Record Type / File Keyword</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -107,6 +107,8 @@
                     </property>
                     <property name="text">
                         <string>In the parent (old)
+
+
 project database</string>
                     </property>
                     <property name="alignment">
@@ -217,22 +219,6 @@ project database</string>
                         <string>Characters to search in the last field of record key</string>
                     </property>
                 </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>tlICreplace</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>170</x>
-                            <y>90</y>
-                            <width>400</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Characters to replace with during copying of records</string>
-                    </property>
-                </widget>
                 <widget class="Line">
                     <property name="name">
                         <cstring>Line1_2</cstring>
@@ -333,8 +319,14 @@ project database</string>
                     </property>
                     <property name="text">
                         <string>List of currently 
+
+
 selected IComp 
+
+
 symbols: in  the 
+
+
 Default database</string>
                     </property>
                     <property name="alignment">
@@ -389,6 +381,22 @@ Default database</string>
                     </property>
                     <property name="text">
                         <string>  IComp (Independent Component) records</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tlICreplace</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>170</x>
+                            <y>90</y>
+                            <width>380</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Characters to replace with during copying of records</string>
                     </property>
                 </widget>
             </widget>
@@ -457,8 +465,14 @@ Default database</string>
                     </property>
                     <property name="text">
                         <string>Filter script 
+
+
 for copying 
+
+
 records 
+
+
 (reserved)</string>
                     </property>
                     <property name="alignment">
@@ -610,38 +624,6 @@ records
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>tlPCOsearch</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>160</x>
-                            <y>70</y>
-                            <width>380</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Characters to search in the last field of record key</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>tlPCOreplace</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>160</x>
-                            <y>110</y>
-                            <width>400</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Characters to replace with during copying of records</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
                         <cstring>tlPCOtab</cstring>
                     </property>
                     <property name="geometry">
@@ -654,6 +636,38 @@ records
                     </property>
                     <property name="text">
                         <string>  Compos (Predefined Composition Object) records</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tlPCOreplace</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>160</x>
+                            <y>110</y>
+                            <width>390</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Characters to replace with during copying of records</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tlPCOsearch</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>160</x>
+                            <y>70</y>
+                            <width>390</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Characters to search in the last field of record key</string>
                     </property>
                 </widget>
             </widget>
@@ -722,8 +736,14 @@ records
                     </property>
                     <property name="text">
                         <string>Filter script 
+
+
 for copying 
+
+
 records 
+
+
 (reserved)</string>
                     </property>
                     <property name="alignment">
@@ -870,38 +890,6 @@ records
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>tlDCreplace</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>160</x>
-                            <y>110</y>
-                            <width>400</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Characters to replace with during copying of records</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>tlDCsearch</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>160</x>
-                            <y>70</y>
-                            <width>380</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Characters to search in the last field of record key</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
                         <cstring>tlDCtab</cstring>
                     </property>
                     <property name="geometry">
@@ -914,6 +902,38 @@ records
                     </property>
                     <property name="text">
                         <string>  DComp (standard thermochemical data) records</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tlDCsearch</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>160</x>
+                            <y>70</y>
+                            <width>390</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Characters to search in the last field of record key</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tlDCreplace</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>160</x>
+                            <y>110</y>
+                            <width>390</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Characters to replace with during copying of records</string>
                     </property>
                 </widget>
             </widget>
@@ -982,8 +1002,14 @@ records
                     </property>
                     <property name="text">
                         <string>Filter script 
+
+
 for copying 
+
+
 records 
+
+
 (reserved)</string>
                     </property>
                     <property name="alignment">
@@ -1120,38 +1146,6 @@ records
                         <number>0</number>
                     </property>
                 </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>tlREsearch</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>160</x>
-                            <y>70</y>
-                            <width>380</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Characters to search in the last field of record key</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>tlREreplace</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>160</x>
-                            <y>110</y>
-                            <width>400</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Characters to replace with during copying of records</string>
-                    </property>
-                </widget>
                 <widget class="QMultiLineEdit">
                     <property name="name">
                         <cstring>mleREfscript</cstring>
@@ -1179,6 +1173,38 @@ records
                     </property>
                     <property name="text">
                         <string>  ReacDC (reaction-defined standard data) records</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tlREsearch</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>160</x>
+                            <y>70</y>
+                            <width>390</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Characters to search in the last field of record key</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tlREreplace</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>160</x>
+                            <y>110</y>
+                            <width>390</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Characters to replace with during copying of records</string>
                     </property>
                 </widget>
             </widget>
@@ -1362,22 +1388,6 @@ records
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>tlPHsearch</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>160</x>
-                            <y>60</y>
-                            <width>380</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Characters to search in the last field of record key</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
                         <cstring>tlPHreplace</cstring>
                     </property>
                     <property name="geometry">
@@ -1414,39 +1424,36 @@ records
                         <enum>Horizontal</enum>
                     </property>
                 </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tlPHsearch</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>160</x>
+                            <y>60</y>
+                            <width>380</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Characters to search in the last field of record key</string>
+                    </property>
+                </widget>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>chbPHcopyS</cstring>
+                        <cstring>cbPHcopyL</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
                             <x>20</x>
                             <y>160</y>
-                            <width>480</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Copy Phase records for single-component phases</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>chbPHcopyL</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>20</x>
-                            <y>220</y>
                             <width>530</width>
                             <height>31</height>
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Create a list of discarded Phase records with some species retained</string>
+                        <string>Copy Phase records for liquid (glass, hydrocarbon, melt) phases</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -1454,13 +1461,13 @@ records
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>chbPHcopyF</cstring>
+                        <cstring>cbPHcopyF</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
                             <x>20</x>
                             <y>190</y>
-                            <width>480</width>
+                            <width>530</width>
                             <height>31</height>
                         </rect>
                     </property>
@@ -1473,18 +1480,18 @@ records
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>chbPHcopyN</cstring>
+                        <cstring>cbPHcopyD</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
                             <x>20</x>
-                            <y>250</y>
-                            <width>410</width>
+                            <y>220</y>
+                            <width>530</width>
                             <height>31</height>
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Copy definitions of non-ideal solid-solution phases</string>
+                        <string>Create a list of discarded, but partially usable Phase records</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -1492,34 +1499,53 @@ records
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>chbPHcopyA</cstring>
+                        <cstring>cbPHcopyN</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>20</x>
+                            <y>250</y>
+                            <width>530</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Copy also Phase records for non-ideal solution phases</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>cbPHcopyA</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
                             <x>20</x>
                             <y>280</y>
-                            <width>460</width>
+                            <width>530</width>
                             <height>31</height>
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Copy definitions of aqueous electrolyte and/or gas phase</string>
+                        <string>Copy Phase records for aqueous electrolyte and/or gas phase</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>chbPHcopyY</cstring>
+                        <cstring>cbPHcopyY</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
                             <x>20</x>
                             <y>310</y>
-                            <width>300</width>
+                            <width>530</width>
                             <height>31</height>
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Copy definitions of sorption phases</string>
+                        <string>Copy Phase records for non-aqueous adsorption phases (reserved)</string>
                     </property>
                 </widget>
             </widget>
