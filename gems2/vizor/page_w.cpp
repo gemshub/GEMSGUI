@@ -1334,7 +1334,8 @@ TCellInput::createPopupMenu()
     	    menu->setItemEnabled(
     		menu->insertItem( "Select &row\tCtrl+R", this, SLOT(CmSelectRow()), ALT + Key_R ),
 		    rObj.GetM() > 1 );
-//        menu->insertItem( "&Select cell\tShift+F12", this, SLOT(CmSelectObject()), SHIFT + Key_F12 );
+    	    menu->setItemEnabled(
+    		menu->insertItem( "Select &cells\tShift+Arrows", this, SLOT(CmSelectObject()) ), false );
 	    menu->insertSeparator();
 	    editMenu->setItemEnabled(
         	editMenu->insertItem( "Paste &Transposed\tCtrl+T", this,
