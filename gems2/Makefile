@@ -115,10 +115,10 @@ rpm:
 	cp gems2.spec /tmp
 #	rm -fr ./program
 #	rm -fr /tmp/gems-2.0
-	su -c "	mv /tmp/$(NAME)-$(VERSION).tar.bz2 /usr/src/RPM/SOURCES; \
-		mv /tmp/gems2.spec /usr/src/RPM/SPECS; \
-		cd /usr/src/RPM/SPECS; \
-		rpm -bb gems2.spec"
+	su -c "	mv /tmp/$(NAME)-$(VERSION).tar.bz2 /usr/src/packages/SOURCES; \
+		mv /tmp/gems2.spec /usr/src/packages/SPECS; \
+		cd /usr/src/packages/SPECS; \
+		rpmbuild -bb gems2.spec"
 	
 ifeq ("$(shell uname)", "Darwin")
 
