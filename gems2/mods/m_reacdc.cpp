@@ -353,6 +353,35 @@ void TReacDC::RecInput( const char *key )
 
 }
 
+/* opens window with 'Remake record' parameters
+*/
+void
+TReacDC::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[12];
+    int size[4];
+
+    p_key  = db->PackKey();
+    memcpy( flgs, rcp->pct, 12);
+    size[0] = rcp->nDC;
+    size[1] = rcp->nTp;
+    size[2] = rcp->nPp;
+    size[3] = rcp->Nsd;
+
+    if( !vfReacDCSet( window(), p_key, flgs, size ))
+         Error( p_key, "ReacDC record configuration cancelled by the user!" );
+     //  return;   // cancel
+
+    memcpy( rcp->pct, flgs, 12);
+    rcp->nDC = (short)size[0];
+    rcp->nTp = (short)size[1];
+    rcp->nPp = (short)size[2];
+    rcp->Nsd = (short)size[3];
+
+}
+
 //Rebild record structure before calc
 
 int TReacDC::RecBuild( const char *key, int mode  )

@@ -175,6 +175,7 @@ public:
     bool check_input( const char *key, int level=1 );
 
     void RecInput( const char *key );
+    void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char* key );
     void TryRecInp( const char *key, time_t& time_s, int q );

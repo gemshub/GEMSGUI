@@ -23,6 +23,7 @@ DATASRC =	MainDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessWizardData.cpp \
 		ComposWizardData.cpp \
+		ReacDCWizardData.cpp \
 		RTparmWizardData.cpp \
 		GtDemoWizardData.cpp \
 		PhaseWizardData.cpp \
@@ -49,6 +50,7 @@ DATAOBJ =       MainDialogData.obj \
 		ProgressDialogData.obj \
 		ProcessWizardData.obj \
 		ComposWizardData.obj \
+		ReacDCWizardData.obj \
 		RTparmWizardData.obj \
 		GtDemoWizardData.obj \
 		PhaseWizardData.obj \
@@ -76,6 +78,7 @@ SOURCES =	MainDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessWizard.cpp \
 		ComposWizard.cpp \
+		ReacDCWizard.cpp \
 		RTparmWizard.cpp \
 		GtDemoWizard.cpp \
 		PhaseWizard.cpp \
@@ -105,6 +108,7 @@ OBJECTS =	MainDialog.obj \
 		ProgressDialog.obj \
 		ProcessWizard.obj \
 		ComposWizard.obj \
+		ReacDCWizard.obj \
 		RTparmWizard.obj \
 		GtDemoWizard.obj \
 		PhaseWizard.obj \
@@ -141,6 +145,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_ProcessWizardData.obj \
 		..\tmp\moc_ComposWizard.obj \
 		..\tmp\moc_ComposWizardData.obj \
+		..\tmp\moc_ReacDCWizard.obj \
+		..\tmp\moc_ReacDCWizardData.obj \
 		..\tmp\moc_RTparmWizard.obj \
 		..\tmp\moc_RTparmWizardData.obj \
 		..\tmp\moc_GtDemoWizard.obj \
@@ -293,6 +299,19 @@ clean:
 
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ComposWizardData.cpp
 	-del moc_ComposWizardData.cpp
+
+..\tmp\moc_ReacDCWizard.obj: ReacDCWizard.h
+      	$(MOC) ReacDCWizard.h -o moc_ReacDCWizard.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ReacDCWizard.cpp
+	-del moc_ReacDCWizard.cpp
+
+
+..\tmp\moc_ReacDCWizardData.obj: ReacDCWizardData.h
+      	$(MOC) ReacDCWizardData.h -o moc_ReacDCWizardData.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ReacDCWizardData.cpp
+	-del moc_ReacDCWizardData.cpp
 
 ..\tmp\moc_RTparmWizard.obj: RTparmWizard.h
       	$(MOC) RTparmWizard.h -o moc_RTparmWizard.cpp
@@ -564,6 +583,10 @@ ProcessWizardData.cpp: ProcessWizard.ui
         $(UIC) $? -impl $(*).h -o $@
 
 ComposWizardData.cpp: ComposWizard.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+ReacDCWizardData.cpp: ReacDCWizard.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
