@@ -359,6 +359,10 @@ TPhase::RecBuild( const char *key, int mode  )
     gstring str;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     php->PphC = php->pst[0];
+    if( php->PphC == PH_FLUID /* && php->sol_t[SPHAS_TYP] == SM_OTHER */ )
+    {
+        php->nscN = 1; php->nscM = MAXEOSPARAM;
+    }
 
 AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
@@ -369,7 +373,6 @@ AGAIN_SETUP:
         strncpy( php->name, db->FldKey(2), db->FldLen(2));
         php->name[db->FldLen(2)] = '\0';
     }
-
     // Setting up the DC/phase coeffs depending on the
     // built-in activity coeff model
     if( php->sol_t[SGM_MODE] == SM_STNGAM )
@@ -604,7 +607,7 @@ AGAINRC:
         break;
         //
     case CP_LIQID:
-        php->PphC = PH_SOLUTION;
+        php->PphC = PH_LIQUID;
         break;
     case CP_SOLID: /* if( php->nDC == 1 ) Fixed 23.10.99 by DAK */
         php->PphC = PH_SINCOND;
@@ -754,7 +757,7 @@ TPhase::RecCalc( const char *key )
     bool getDCC;
 
     if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
-    {  // refreshing lists for SIT coefficients 
+    {  // refreshing lists for SIT coefficients
        MakeCatAnLists( true, true, true );
     }
 
@@ -778,7 +781,8 @@ TPhase::RecCalc( const char *key )
 void
 TPhase::CalcPhaseRecord(  bool getDCC  )
 {
-    int  i, /*iic,*/ pa0=0, Kielland, nsc, ndc=php->NR1, nCat, nAn;
+    int  i, /*iic,*/ pa0=0, Kielland, ndc=php->NR1, nCat, nAn;
+    short nsc;
     vstr dcn(MAXRKEYLEN);
     char Ctype;
     float a0, bp, Z, cN, Fi;
@@ -951,8 +955,9 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     }
 
     // Collecting coefficients of EoS for fluids
-    if( (php->PphC == PH_FLUID) && php->scoef )
+    if( ( php->PphC == PH_FLUID || php->PphC == PH_LIQUID ) && php->scoef )
     {
+        int kx, mcex;
         nsc = php->nscN * php->nscM;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
    "CG2003 fluid EoS coefficients: Collect from DComp records?"))
@@ -969,16 +974,18 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
                  aDC->TryRecInp( dcn, crt, 0 );
                  if( aDC->dcp->Cemp )
                  {
-                    s(i,0) = aDC->dcp->Cemp[0];
-                    s(i,1) = aDC->dcp->Cemp[1];
-                    s(i,2) = aDC->dcp->Cemp[2];
-                    s(i,3) = aDC->dcp->Cemp[3];
+                    mcex = min( aDC->dcp->Nemp, nsc );
+                    for( kx=0; kx< nsc; kx++ )
+                    {
+                      if( kx < mcex ) // Copying only what is possible  
+                        s(i,kx) = aDC->dcp->Cemp[kx];
+                      else
+                        s(i,kx) = 0.;
+                    }
                  }
-                 else { // Error - no array!
-                    s(i,0) = 0.0;
-                    s(i,1) = 0.0;
-                    s(i,2) = 0.0;
-                    s(i,3) = 0.0;
+                 else { // Error - no array in DComp or ReacDC!
+                    for( kx=0; kx< nsc; kx++ )
+                        s(i,kx) = 0.0;
                  }
                  Ctype = aDC->dcp->PdcC;
               }

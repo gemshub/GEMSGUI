@@ -677,7 +677,7 @@ PARLOAD: if( k < syp->Fis )
         case PH_HCARBL:
             pmp->PSOL = pmp->L1[k];
             break;
-        case PH_SOLUTION:
+        case PH_LIQUID:
         case PH_SINCOND:
         case PH_SIMELT:
             break;

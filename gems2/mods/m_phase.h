@@ -189,7 +189,7 @@ enum PH_CLASSES{  /* Possible values */
     PH_GASMIX   = 'g',  // mixture of gases
     PH_FLUID    = 'f',  // fluid phase
     PH_PLASMA   = 'p',  // plasma
-    PH_SOLUTION = 'l',  // non-electrolyte liquid (melt)
+    PH_LIQUID   = 'l',  // non-electrolyte liquid (melt)
     PH_SIMELT   = 'm',  // silicate (magmatic) melt or non-aqueous electrolyte
     PH_SORPTION = 'x',  // dilspersed solid with adsorption (ion exchange) in aqueous
     PH_POLYEL   = 'y',  // colloidal poly- (oligo)electrolyte

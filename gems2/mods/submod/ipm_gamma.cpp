@@ -408,7 +408,7 @@ void TProfil::ConCalc( double X[], double XF[], double XFA[])
         case PH_HCARBL:
         case PH_SINCOND:
         case PH_SINDIS:
-        case PH_SOLUTION:
+        case PH_LIQUID:
             pmp->YFk = XF[k];
             for(jj=j; jj<i; jj++)
             {
@@ -1773,7 +1773,7 @@ void TProfil::GammaCalc( int LinkMode  )
             else if( sMod[SGM_MODE] == SM_IDEAL )
                 goto END_LOOP;
             break;
-         case PH_SOLUTION:
+         case PH_LIQUID:
          case PH_SIMELT:
          case PH_SINCOND:
          case PH_SINDIS:

@@ -822,7 +822,7 @@ void TSyst::phase_data_load()
         case PH_GASMIX:
         case PH_PLASMA:
         case PH_HCARBL:
-        case PH_SOLUTION:
+        case PH_LIQUID:
         case PH_SINCOND:
         case PH_SIMELT:
             break;

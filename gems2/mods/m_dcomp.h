@@ -30,7 +30,7 @@ MAXCPCOEF =      12,
         MAXVTCOEF =      5,
            MAXODCOEF =     12, // Total number of V(T,P) coeffs BM Gottschalk
              MAXCRITPARAM =   7,
-                 MAXEOSPARAM = 13;  // Added at CSCS 09 May 2003
+                 MAXEOSPARAM = 20;  // Maximum number of EoS coefficients
 
 extern const double ZBALANCE_PREC,
     STANDARD_TC,
@@ -67,7 +67,7 @@ typedef struct
     short  NeCp,    // Numbers: of Cp(T) equations;
     Nft,     //  phase transitions;
     Nsd,     // SD references
-    Nemp;    // EOS coefficients, usually MAXEOSPARAM  
+    Nemp;    // EOS coefficients, usually MAXEOSPARAM
 
     float Zz,     // DC formula charge
     mwt,     // Molecular mass, g/mole
@@ -100,7 +100,7 @@ typedef struct
     *FtP,   // Column: TCf- at Pr; DltS,DltH,DltV; dV of phase transitions
     *FtBer, // Properties of phase transition (Berman): Tr; Tft; tilt; l1,l2 (reserved)
     // MAXCPFSCOEF
-    *Cemp;  // Array of empirical EOS coefficients (CG EOS: MAXEOSPARAM )
+    *Cemp;  // Array of empirical EOS coefficients (CG EOS: MAXCGPARAM = 13)
     char (*FtTyp)[MAXSYMB], // List of phase transition type codes (reserved)
     (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources
     (*sdval)[V_SD_VALEN]; // List of comments to data sources

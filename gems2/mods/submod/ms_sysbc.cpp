@@ -322,7 +322,7 @@ void TSyst::make_syst_sizes()
             sy.Lhc = sy.Ll[k];
             break;
         case PH_SIMELT:
-        case PH_SOLUTION:
+        case PH_LIQUID:
             break;
         case PH_POLYEL:
         case PH_SORPTION:
@@ -411,7 +411,7 @@ void TSyst::make_syst()
                 continue;
             switch( mup->PHC[k] )
             {
-            case PH_SOLUTION:
+            case PH_LIQUID:
             case PH_SINDIS:
             case PH_SORPTION:
                 if( sy.PAalp !=S_OFF )

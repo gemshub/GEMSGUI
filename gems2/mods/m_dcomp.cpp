@@ -120,8 +120,9 @@ void TDComp::ods_link( int q)
     //}
     //if( dc[q].Nemp > 0 ) {
     aObj[ o_dccemp ].SetPtr( dc[q].Cemp );
-    aObj[ o_dccemp ].SetDim( MAXEOSPARAM, 1 );
-//    aObj[ o_dccemp ].SetDim( dc[q].Nemp, 1 );
+    if( dc[q].Nemp > 0 )
+      aObj[ o_dccemp ].SetDim( dc[q].Nemp, 1 );
+//    aObj[ o_dccemp ].SetDim( dc[q].Nemp, MAXEOSPARAM );
     //}
     //if( dc[q].Nsd > 0 ) {
     aObj[ o_dcsdref ].SetPtr( dc[q].sdref );
@@ -230,11 +231,11 @@ void TDComp::dyn_new(int q)
             dc[q].FtBer = (float *)aObj[o_dcftpb].Alloc( 3, dc[q].Nft, F_ );
     }
 
-    if( dc[q].Nemp == 0 )
+    if( dc[q].Nemp <= 0 )
         dc[q].Cemp = (float *)aObj[ o_dccemp ].Free();
     else
-        dc[q].Cemp = (float *)aObj[ o_dccemp].Alloc( MAXEOSPARAM, 1, F_ );
-//      dc[q].Cemp = (float *)aObj[ o_dccemp].Alloc(dc[q].Nemp, 1, F_ );
+//        dc[q].Cemp = (float *)aObj[ o_dccemp].Alloc( MAXEOSPARAM, 1, F_ );
+      dc[q].Cemp = (float *)aObj[ o_dccemp].Alloc(dc[q].Nemp, 1, F_ );
 
     if( dc[q].Nsd == 0 )
     {
@@ -294,7 +295,7 @@ void TDComp::set_def( int q)
     dc[q].Nsd = 1;
     strncpy( dc[q].name, rt[rtNum()].FldKey(2), MAXDCNAME );
     dc[q].name[MAXDCNAME] = '\0';
-    if( dc[q].name[0] == 'a' )
+    if( dc[q].pstate[0] == CP_AQU )
     {
        memcpy( dc[q].pct, "HKF   ", 6 );
        memcpy( &dc[q].PdcC, "SjjbC--+-", 9 );
@@ -305,11 +306,13 @@ void TDComp::set_def( int q)
        memcpy( dc[q].pct, aPa->pa.DCpct, 6 );
        memcpy( &dc[q].PdcC, aPa->pa.DCpdc, 9 );
        dc[q].NeCp = 1;
+       if( dc[q].pstate[0] == CP_FLUID || dc[q].pstate[0] == CP_LIQID )
+          dc[q].Nemp = MAXEOSPARAM;
     }
     dc[q].Pst = aPa->pa.DRpst;
     dc[q].TCst =aPa->pa.DRtcst;
-    dc[q].Nft = dc[q].Nemp = 0;
-    dc[q].Nsd = 1;
+//    dc[q].Nft = dc[q].Nemp = 0;
+//    dc[q].Nsd = 1;
     strcpy( dc[q].form, S_EMPTY );
     dc[q].form[1] ='\0';
     dc[q].Gs[0] = DOUBLE_EMPTY;
@@ -365,12 +368,14 @@ TDComp::RecBuild( const char *key, int mode  )
 
     switch( dcp->pstate[0] )
     {
+    case  CP_LIQID: // EoS liquid component
+    case  CP_FLUID: // EoS fluid component
+                    dcp->Nemp = MAXEOSPARAM;
+                    break;
     case  CP_AQU:
     case  CP_GAS:
-    case  CP_FLUID:
     case  CP_SOLID:
     case  CP_GASI:
-    case  CP_LIQID:
     case  CP_HCARB:
     case  CP_MELT:
     case  CP_SORB:
@@ -398,7 +403,7 @@ AGAIN:
     CV = toupper( dcp->pct[2] );
     if( dcp->Nft < 0 || dcp->NeCp > 7 ||
             dcp->Nft < 0 || dcp->Nft > 7  ||
-            dcp->Nemp < 0 || dcp->Nemp > 20 )
+            dcp->Nemp < 0 || dcp->Nemp > MAXEOSPARAM )
         goto AGAIN;
 
     if( CM == CTPM_HKF && CE == CTM_WAT && CV == CPM_EMP )
@@ -438,7 +443,7 @@ AGAIN:
     switch( CV)
     {
       default:
-        dcp->Nemp = 0;
+//        dcp->Nemp = 0;
         break;
       case CPM_GAS:
         dcp->Nemp = 4;
@@ -446,7 +451,8 @@ AGAIN:
         break;
       case CPM_EMP:
         dcp->NeCp = 1;
-        dcp->Nemp = MAXEOSPARAM; // added 09.05.2003 CSCS KD
+        if( dcp->Nemp < 1 || dcp->Nemp > MAXEOSPARAM )
+           dcp->Nemp = MAXEOSPARAM; // added 09.05.2003 CSCS KD
         break;
     }
 //  if( dcp->Nemp > 0 ) dcp->PdcVT = S_ON;

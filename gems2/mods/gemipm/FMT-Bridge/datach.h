@@ -158,7 +158,7 @@ typedef enum {  /* Possible values */
     PH_AQUEL    = 'a',  // aqueous electrolyte
     PH_GASMIX   = 'g',  // mixture of gases
     PH_FLUID    = 'f',  // fluid phase
-    PH_SOLUTION = 'l',  // non-electrolyte liquid (melt)
+    PH_LIQUID   = 'l',  // non-electrolyte liquid (melt)
     PH_SORPTION = 'x',  // dilspersed solid with adsorption (ion exchange) in aqueous
     PH_POLYEL = 'y',    // colloidal poly- (oligo)electrolyte
     PH_SINCOND  = 's',  // condenced solid phase, also multicomponent
