@@ -284,8 +284,8 @@ long TDataBase::getrec( RecEntry& rep, fstream& f )
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
             strncmp( rh.endm, MARKRECHEAD, 2 ) || rh.Nobj != nOD )
         Error( GetKeywd(),"Record header format error");
-    f.getline( key, KeyLen(), MARKRKEY);
-    ErrorIf( f.gcount()>=KeyLen(), GetKeywd(),
+    f.getline( key, KeyLen()+KeyNumFlds(), MARKRKEY);
+    ErrorIf( f.gcount()>=(KeyLen()+KeyNumFlds()), GetKeywd(),
              "Error reading database record key" );
     StillLen -= f.gcount();  //???+1
     // test
