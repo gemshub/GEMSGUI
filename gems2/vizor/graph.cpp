@@ -1,5 +1,4 @@
-//-------------------------------------------------------------------
-// $Id$
+//-------------------------------------------------------------------// $Id$
 //
 // Implementation of TPlot, GraphData and GraphWindow classes
 // (Plotting system)
@@ -334,9 +333,9 @@ GraphWindow::~GraphWindow()
 {}
 
 void
-GraphWindow::AddPoint( int nPlot, int nPoint )
+GraphWindow::AddPoint( int nPlot, int nPoint, bool no_mt )
 {
-   graph_dlg->AddPoint( nPlot, nPoint );
+   graph_dlg->AddPoint( nPlot, nPoint, no_mt );
 }
 
 void
@@ -353,3 +352,5 @@ GraphWindow::getGraphData() const
 }
 
 //--------------------- End of graph.cpp ---------------------------
+
+ 

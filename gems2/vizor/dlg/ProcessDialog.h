@@ -37,6 +37,7 @@ public:
 
     void   getSizes( int size[6] );
     char   getType();
+    bool   getMode();
 
 
 protected slots:
@@ -45,3 +46,4 @@ protected slots:
 };
 
 #endif // ProcessDialog_included
+

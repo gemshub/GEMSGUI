@@ -645,7 +645,8 @@ enum proces_objects {   // PROCES
     };
 
 enum statcode {  /* Code status of process  */
-    P_UNDEF='0', P_STARTED, P_EXECUTE, P_INTERRUPT, P_FINISHED };
+    P_UNDEF='0', P_STARTED, P_EXECUTE, P_INTERRUPT, P_FINISHED,
+    P_MT_MODE, P_MT_STARTED, P_MT_EXECUTE, P_MT_INTERRUPT, P_MT_FINISHED };
 
 
 
@@ -709,3 +710,4 @@ enum duterm_objects {
     o_uttpkey,  o_uta,     o_uttprn,  };
 
 #endif // _v_mod_h
+

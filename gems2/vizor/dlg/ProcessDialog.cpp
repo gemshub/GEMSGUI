@@ -65,6 +65,11 @@ void   ProcessDialog::getSizes( int size[6] )
     size[5]= pSd->value();
 }
 
+bool   ProcessDialog::getMode()
+{
+  return pStepwise->isChecked();
+}
+
 char   ProcessDialog::getType()
 {
   char type='S';
@@ -95,4 +100,3 @@ ProcessDialog::CmHelp()
 }
 
 //--------------------- End of ProcessDialog.cpp ---------------------------
-

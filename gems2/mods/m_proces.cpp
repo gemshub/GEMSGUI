@@ -643,7 +643,9 @@ bool TProcess::pe_dimValid()
 // set begin initalization
 void TProcess::pe_initiate()
 {
-    pep->Istat = P_STARTED;
+    if( pep->Istat >=P_MT_MODE )
+         pep->Istat = P_MT_STARTED;
+    else pep->Istat = P_STARTED;
     pep->Loop = 1;
     pep->Nst = START_;
     pep->i = START_;
@@ -725,13 +727,16 @@ TProcess::RecBuild( const char *key, int mode  )
 AGAIN:
    if( mode == VF_CLEARALL )
    {
+     bool if_mt = false;
      type  = rt[rtNum()].FldKey(9)[0];
      ret =  mode;
-     if( !vfProcessSet( window(), key, type, sizes ))
+     if( !vfProcessSet( window(), key, if_mt, type, sizes ))
         return ret;   // cancel
      dyn_kill();
      set_def(); // set default data or zero if necessary
      set_type_flags( type );
+     if( if_mt )
+      pep->Istat = P_MT_MODE;
      pep->Nxi = (short)sizes[0];
      pep->Nsd = (short)sizes[5];
      pep->Nmc = (short)sizes[1];
@@ -1095,7 +1100,7 @@ TProcess::RecCalc( const char *key )
 /*  gstring */ filename = "";
 
 
-    if( pep->Istat != P_EXECUTE )
+    if( pep->Istat != P_EXECUTE && pep->Istat != P_MT_EXECUTE )
     {
        // Setup data for exporting mass transport
        if( pep->PsRT != S_OFF )
@@ -1129,7 +1134,10 @@ TProcess::RecCalc( const char *key )
         pe_initiate();
     }
 
-    pep->Istat = P_EXECUTE;
+    if( pep->Istat >=P_MT_MODE )
+      pep->Istat = P_MT_EXECUTE;
+    else
+      pep->Istat = P_EXECUTE;
     TCModule::RecCalc(key);
 
     pe_qekey();
@@ -1167,8 +1175,8 @@ TProcess::RecCalc( const char *key )
     ModUpdate("Pe_calc    Process simulation");
 
 #ifdef Use_mt_mode
-//     if( pointShow==-1 )
-//     { // use thread
+     if( pep->Istat >= P_MT_MODE )
+     { // use thread
        TProcess::pm->userCancel = false;
         try
         {
@@ -1178,9 +1186,9 @@ TProcess::RecCalc( const char *key )
          {
            vfMessage(window(), xcpt.title, xcpt.mess);
          }
-//     }
-//     else
-//      internalCalc();
+     }
+     else
+      internalCalc();
 #else
       internalCalc();
 #endif
@@ -1201,7 +1209,14 @@ TProcess::internalCalc()
     while( pep->Loop ) // main cycle of process
     {
 #ifdef Use_mt_mode
-    STEP_POINT2();
+    if( pep->Istat >= P_MT_MODE )
+    {     STEP_POINT2();  }
+    else
+     if( pointShow==-1 )
+       pVisor->Message( window(), GetName(),
+                 "Calculating process; \n"
+                 "Please, wait...", pep->c_nrk, pep->NR1);
+
 #else
      if( pointShow==-1 )
        pVisor->Message( window(), GetName(),
@@ -1323,12 +1338,20 @@ TProcess::internalCalc()
     }  /* end while() */
     calcFinished = true;
 
-#ifndef Use_mt_mode
+#ifdef Use_mt_mode
+ if( pep->Istat < P_MT_MODE )
+    if( pointShow == -1 )
+       pVisor->CloseMessage();
+#else
     if( pointShow == -1 )
        pVisor->CloseMessage();
 #endif
 
-    pep->Istat = P_FINISHED;
+    if( pep->Istat >=P_MT_MODE )
+      pep->Istat = P_MT_FINISHED;
+    else
+      pep->Istat = P_FINISHED;
+
 // Get startup syseq record for fitting
     rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
              RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
@@ -1350,7 +1373,7 @@ TProcess::CalcPoint( int nPoint )
      return;
     // Add point to graph screen
     if( gd_gr )
-        gd_gr->AddPoint( 0, nPoint );
+        gd_gr->AddPoint( 0, nPoint, pep->Istat < P_MT_MODE );
 }
 
 void
@@ -1444,4 +1467,3 @@ TProcess::CmHelp()
 
 
 // ------------------- End of m_proces.cpp --------------------------
-

@@ -82,7 +82,7 @@ vfElements(QWidget* par, const char * prfName,
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,
-            char& type, int size[6] );
+            bool& mode, char& type, int size[6] );
 
 gstring
 vfKeyEdit(QWidget* par, const char* title, int iRt, const char* key=0);
@@ -111,3 +111,4 @@ class TObject;
 void vfObjToFile(QWidget* par, TObject* obj);
 
 #endif // _service_h
+

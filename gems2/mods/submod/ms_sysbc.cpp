@@ -639,7 +639,8 @@ NEXT_DC:
         sy.MBX += sy.B[i] *  mup->BC[i];
     }
     sy.MBX /= 1000.;
-    /*  if( Incomplete *&& !( pe && (pe[0].Istat == P_EXECUTE))* )
+    /*  if( Incomplete *&& !( pe && (pe[0].Istat == P_EXECUTE ||
+        pe[0].Istat == P_MT_EXECUTE))* )
          vfMessage( GetName(),
          "Warning: there are COMPOS definitions used incompletely\n"
          "for calculation of 'b' vector (marked with '*')", vfErr);
@@ -650,7 +651,8 @@ NEXT_DC:
         N = mup->N - 1;
         if( fabs( sy.B[N] ) > aPa->pmp->DHBM/10. )  // Fixed by DAK 30.12.02
         {
-            if( /*( pe && (pe[0].Istat == P_EXECUTE))  ||*/
+            if( /*( pe && (pe[0].Istat == P_EXECUTE ||
+                pe[0].Istat == P_MT_EXECUTE ))  ||*/
                 vfQuestion(window(), rt[RT_SYSEQ].PackKey(),
                            "Warning: Charge imbalance in calculated \n"
                            "bulk composition!  Zero it off?"  ))
@@ -831,6 +833,3 @@ bool TSyst::BccCalculated( )
     return false;
 }
 //--------------------- End of ms_sysbc.cpp ---------------------------
-
-
-

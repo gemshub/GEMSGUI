@@ -269,7 +269,7 @@ ProcessProgressDialog::CmClose()
     // we have to cancel calculation here
 	if( calcThread->running() ) {
 	    TProcess::pm->userCancel = true;
-	    TProcess::pm->pep->Istat = P_UNDEF/*'0'*/;
+	    TProcess::pm->pep->Istat = P_MT_MODE/*'5'mt mode*/;
 
 	}
 
@@ -282,7 +282,7 @@ ProcessProgressDialog::CmBreak()
     // we have to cancel calculation here
 	if( calcThread->running() ) {
 	    TProcess::pm->userCancel = true;
-//	    TProcess::pm->pep->Istat = P_UNDEF/*'0'*/;
+//	    TProcess::pm->pep->Istat = P_MT_MODE/*'5'mt mode*/;
 	}
     close();
 }
@@ -305,3 +305,4 @@ void ProcessProgressDialog::Update()
 
 #endif
 //--------------------- End of LoadMessage.cpp ---------------------------
+

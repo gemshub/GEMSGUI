@@ -278,7 +278,7 @@ GraphDialog::Apply()
 
 
 void
-GraphDialog::AddPoint( int nPlot, int nPoint )
+GraphDialog::AddPoint( int nPlot, int nPoint, bool no_mt )
 {
 
   qApp->lock();
@@ -296,7 +296,8 @@ GraphDialog::AddPoint( int nPlot, int nPoint )
     plot->update();
   }
   qApp->unlock();
-  //  qApp->processEvents();
+  if( no_mt)
+    qApp->processEvents();
 }
 
 void
@@ -613,4 +614,3 @@ void PlotTypeBtn::setName( const char* name)
 
 
 //--------------------- End of GraphDialog.cpp ---------------------------
-

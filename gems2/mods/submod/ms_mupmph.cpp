@@ -52,7 +52,8 @@ void TProfil::PMtest( const char *key )
 
     if( pmp->pESU == 0 ) // no old solution
         pmp->pNP = 0;
-    if( Proc->pep->Istat == P_EXECUTE )
+    if( Proc->pep->Istat == P_EXECUTE ||
+        Proc->pep->Istat == P_MT_EXECUTE )
     {
         if(Proc->pep->PvR1 == S_OFF )
             pmp->pNP = 0;
@@ -1112,3 +1113,4 @@ double TProfil::Cj_init_calc( double g0, int j, int k )
 
 // End of file ms_mupmph.cpp
 // --------------------------------------------------------------------
+

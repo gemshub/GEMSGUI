@@ -835,13 +835,14 @@ vfElements(QWidget* par, const char * prfName,
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,
-            char& type, int size[6] )
+            bool& mode, char& type, int size[6] )
 {
      ProcessDialog pdlg( p_key, type, par );
      if( !pdlg.exec() )
       return false;
 
     type =  pdlg.getType();
+    mode =  pdlg.getMode();
     pdlg.getSizes( size );
 
     return true;
@@ -1099,4 +1100,3 @@ void ThreadControl::SetPoint(const char* str )
 }
 
 //--------------------- End of visor_w.cpp ---------------------------
-

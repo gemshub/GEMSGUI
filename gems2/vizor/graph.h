@@ -171,7 +171,7 @@ public:
             TCStringArray line_names = 0 );
   ~GraphWindow();
 
-  void AddPoint( int nPlot, int nPoint ); // Add new point to graph
+  void AddPoint( int nPlot, int nPoint, bool no_mt ); // Add new point to graph
   void Show(); // new show all lines
   GraphData *getGraphData() const;
 
@@ -179,3 +179,4 @@ public:
 
 
 #endif   // _graph_data_h
+

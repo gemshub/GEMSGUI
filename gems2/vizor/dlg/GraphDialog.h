@@ -103,7 +103,7 @@ public:
 
     void ShowNew();
     void Apply();    // Update changes
-    void AddPoint( int nPlot, int nPoint ); // Add new point to graph
+    void AddPoint( int nPlot, int nPoint, bool no_mt ); // Add new point to graph
 
     QColor getColor(int ii) const
     {
@@ -114,6 +114,5 @@ public:
     QColor getBackgrColor();
     void setBackgrColor( QColor color );
 };
-
 
 #endif   // graph_dialog_h

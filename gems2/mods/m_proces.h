@@ -46,7 +46,8 @@ typedef struct
     (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
 
  char
-    Istat, // PROCES status: 0-indefinite; 1-start; 2-run; 4-end
+    Istat, // PROCES status: 0 or 5 -undefinite; 1or 6-start; 2 or 7-run;
+           //    4 or 9 -end  ( > 5 using stepwise mode)
     PsTP,  // Is TPV of system changing in the process (+ -)
     PsBC,  //  Is there a change in bulk composition (+ -)
     PsRT,  // Are time dependent calculation and plotting mode (+ -)
@@ -250,5 +251,6 @@ enum pe_valind { /* index control */
     START_, STOP_, STEP_
 };
 
-#endif //   _m_proces_h
 
+
+#endif //   _m_proces_h
