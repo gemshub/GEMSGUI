@@ -508,8 +508,8 @@ AGAINRC:
     nCat = 0; nAn = 0;
 
     if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
-    {  // pre-processing cycle for SIT: determining number of cations and anions
-
+    {  // pre-proc. loop for SIT: determining number of cations and anions
+       char cbr;
        int pos;
        gstring spName;
        for( i=0; i<php->nDC; i++ )
@@ -525,14 +525,24 @@ AGAINRC:
              pos--;
          switch( spName[pos] )
          {
-           case '-': nAn++; break;
-           case '+': nCat++; break;
+           case '-': nAn++;
+                     break;
+           case '+': nCat++;
+                     break;
            case '@':
-           default:  break;
+           default:
+                     break;
          }
+         cbr = spName[pos];  // debugging 
        }
+       if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
+            Error( GetName(),
+              "E39PHrem: No cations or no anions - SIT model cannot be applied...");
+       php->ncpN = nCat;
+       php->ncpM = nAn;
     }
 //---------------------------------------------------------------------
+
     /* insert coeff of model of solid and other data */
     if( php->nscN * php->nscM ) php->Psco = S_ON;
     else  php->Psco = S_OFF;
@@ -634,6 +644,37 @@ AGAINRC:
     if( php->NsiT > 0 && php->PFsiT == S_ON )
         php->NR1 = DFCN; // Added for CD-MUSIC by KD on 25.10.2004
 
+//---------------------------------------------------------------------
+    if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
+    {  // Filling out name and index lists for cations and anions
+       int iCat=0, iAn=0, pos;
+       gstring spName;
+
+       for( i=0; i<php->nDC; i++ )
+       { // Determining if cation or anion
+         spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+         spName.strip();
+         pos = spName.length()-1;
+         while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
+            pos--;
+         switch( spName[pos] )
+         {
+           case '-': memcpy( php->lsAn[iAn], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                     php->nxAn[iAn++] = i;
+                     break;
+           case '+': memcpy( php->lsCat[iCat], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                     php->nxCat[iCat++] = i;
+                     break;
+           case '@':
+           default:
+                     continue;
+         }
+       }
+       if( iCat != php->ncpM || iAn != php->ncpM )
+            Error( GetName(),
+              "E38PHrem: Mismatch in the number of cations or anions in the SIT model...");
+    }
+//--------------------------------------------------------------
     SetString("PH_make   Remake of Phase definition OK");
     pVisor->Update();
     return ret;
@@ -649,6 +690,15 @@ TPhase::RecCalc( const char *key )
     bool getDCC;
     getDCC = vfQuestion(window(), GetName(),
        "Extract parameters from DComp/ReacDC records and refresh DC class codes?");
+
+    if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT &&
+        php->nxAn[0] <= 0 && php->nxCat[0] <=0 )
+    {
+        getDCC = vfQuestion(window(), GetName(),
+          "For the SIT model, please remake the record if not yet done.\n Proceed with extracting DC parameters (Y)?");
+        if(!getDCC)
+           return;
+    }
     CalcPhaseRecord( getDCC );
     SetString("PH_solm   PHASE-solution model OK");
     TCModule::RecCalc(key);
@@ -663,7 +713,6 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     char Ctype;
     float a0, bp, Z, cN, Fi;
     time_t crt;
-
 
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
