@@ -138,8 +138,8 @@ int MAIF_START( int nNodes,
           if( nodeTypes )
              for( int ii=0; ii<nNodes; ii++)
                   if( nodeTypes[ii] == i )
-                  {    TProfil::pm->multi->SaveCopyTo(ii);
-                       TProfil::pm->multi->SaveCopyFrom(ii);
+                  {    TProfil::pm->multi->SaveNodeCopyTo(ii);
+                       TProfil::pm->multi->GetNodeCopyFrom(ii);
                    }
           i++;
      }
@@ -147,8 +147,8 @@ int MAIF_START( int nNodes,
      ErrorIf( i==0, datachbr_file.c_str(), "No any dataBR record" );
      for( int ii=0; ii<nNodes; ii++)
        if(   !nodeTypes || nodeTypes[ii] >= i )
-       {    TProfil::pm->multi->SaveCopyTo(ii);
-            TProfil::pm->multi->SaveCopyFrom(ii);
+       {    TProfil::pm->multi->SaveNodeCopyTo(ii);
+            TProfil::pm->multi->GetNodeCopyFrom(ii);
        }
 
 
@@ -167,13 +167,13 @@ int MAIF_START( int nNodes,
 
 
 //-------------------------------------------------------------------------
-// calc one node data bridge instances
-
+// calc one node data bridge instance indexed iNode (fortran conv.) 
+// returns 1 if Ok; 0 or -1 if error
 
 //extern "C"
 //int __stdcall MAIF_CALC( int  iNode,
 extern "C"
-int MAIF_CALC( int  iNode,
+int MAIF_CALC( int  iNodeF,  // fortran index; negative means read only
    short& p_NodeHandle,    // Node identification handle
    short& p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short& p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -235,16 +235,19 @@ int MAIF_CALC( int  iNode,
    double  *p_dRes2
 )
 {
+  int iNode = abs( iNodeF )-1; // fortran to C index conversion
   fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {
-// cout << " MAIF_CALC begin Mode= " << p_NodeStatusCH << " iNode= " << iNode << endl; 
+// cout << " MAIF_CALC begin Mode= " << p_NodeStatusCH << " iNode= " << iNode << endl;
 //---------------------------------------------
 // need unpack data from transport into DATABR
-   TProfil::pm->multi->SaveCopyFrom(iNode);
+   TProfil::pm->multi->GetNodeCopyFrom( iNode );
+if( iNodeF > 0 )  // FMT -> GEM
+{
    TProfil::pm->multi->fromMT(  p_NodeHandle,  p_NodeStatusCH,
       p_T, p_P, p_Ms, p_dt, p_dt1,  p_bIC );   // test simplex
-
+}
 // put data for internal gems structures
     TProfil::pm->multi->unpackDataBr();
 //calc part
@@ -258,7 +261,7 @@ int MAIF_CALC( int  iNode,
    DATABR  *dBR = TProfil::pm->multi->data_BR;
    DATACH  *dCH = TProfil::pm->multi->data_CH;
 
-   p_NodeHandle = dBR->NodeHandle;
+//   p_NodeHandle = dBR->NodeHandle;
    p_NodeStatusCH = dBR->NodeStatusCH;
    p_IterDone = dBR->IterDone;
 
@@ -286,7 +289,7 @@ int MAIF_CALC( int  iNode,
   memcpy( p_uIC, dBR->uIC, dCH->nICb*sizeof(double) );
 
 //**************************************************************
-// only for test output results for files
+// only for testing output results for files
     gstring strr= "calculated.dbr";
 // binary DATABR
     GemDataStream out_br(strr, ios::out|ios::binary);
@@ -302,7 +305,8 @@ int MAIF_CALC( int  iNode,
     TProfil::pm->outMulti(o_m, strr );
 //********************************************************* */
 
-    TProfil::pm->multi->SaveCopyTo(iNode);
+if( iNodeF > 0 )
+    TProfil::pm->multi->SaveNodeCopyTo( iNode );
     return 1;
 }
     catch(TError& err)

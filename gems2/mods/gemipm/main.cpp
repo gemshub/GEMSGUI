@@ -1,6 +1,6 @@
 //masstransport
 //-------------------------------------------------------------------
-
+// Test run GEMIPM2k
 //#include <iostream>
 
 #include "verror.h"
@@ -14,7 +14,7 @@ extern "C" int MAIF_START( int nNodes,
    int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
 
 // extern "C" int __stdcall MAIF_CALC( int iNode,
-extern "C" int MAIF_CALC( int iNode,
+extern "C" int MAIF_CALC( int iNodeF, // negative: input only (fortran index)
    short& p_NodeHandle,    // Node identification handle
    short& p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short& p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -76,11 +76,11 @@ extern "C" int MAIF_CALC( int iNode,
    double  *p_dRes2
 );
 
-      DATABR  *dBR;
-      DATABR  *(*dBR1);
+//      DATABR  *dBR;
+//      DATABR  *(*dBR1);
 
 int
-main(int argc, char* argv[])
+main( int argc, char* argv[] )
 {
      gstring multu_in = "";
      gstring chbr_in   = "";
@@ -89,7 +89,7 @@ main(int argc, char* argv[])
       if (argc >= 2 )
         multu_in = argv[1];
       if (argc >= 3 )
-        chbr_in = argv[2]; 
+        chbr_in = argv[2];
       int  c_to_i1[30];
       int  c_to_i2[30];
       for( int i=0; i<30; i++ )
@@ -97,57 +97,103 @@ main(int argc, char* argv[])
         c_to_i1[i]=multu_in[i];
         c_to_i2[i]=chbr_in[i];
       }
-      dBR = 0;
+//      dBR = 0;
 
 // cout <<  multu_in.c_str() << " " << chbr_in.c_str() << endl;
-      MAIF_START( 3, c_to_i1, c_to_i2, 0 );
+
+// Initial reading of arrays
+      MAIF_START( 1, c_to_i1, c_to_i2, 0 );
+
 //      DATABR
 //      dBR = 0;
 //      DATABR *(
-      dBR1 = &dBR;
+//      dBR1 = &dBR;
 // cout << " After MAIF_START " << endl;
-      TProfil::pm->multi->CopyTo( dBR1 );
+//      TProfil::pm->multi->CopyTo( dBR1 );
 // cout << " Before MAIF_CALC Mode=" << dBR->NodeStatusCH << " IT=" << dBR->IterDone << endl;
 
-      MAIF_CALC( 0,
-        dBR->NodeHandle, dBR->NodeTypeHY, dBR->NodeTypeMT,
-        dBR->NodeStatusFMT, dBR->NodeStatusCH,  dBR->IterDone,
-        dBR->T, dBR->P, dBR->Vs, dBR->Vi, dBR->Ms, dBR->Mi,
-        dBR->Gs, dBR->Hs, dBR->Hi, dBR->IC, dBR->pH, dBR->pe,
-        dBR->Eh, dBR->denW, dBR->denWg, dBR->epsW, dBR->epsWg, dBR->Tm,
-        dBR->dt, dBR->dt1, dBR->ot, dBR->Vt, dBR->eps, dBR->Km,
-        dBR->Kf, dBR->S, dBR->Tr, dBR->h, dBR->rho, dBR->al,
-        dBR->at, dBR->av, dBR->hDl, dBR->hDt, dBR->hDv, dBR->nPe,
-        dBR->xDC,dBR->gam, dBR->xPH, dBR->vPS, dBR->mPS,
-        dBR->bPS,dBR->xPA, dBR->bIC, dBR->rMB, dBR->uIC,
-        dBR->dRes1, dBR->dRes2);
+  short m_NodeHandle=0, m_NodeTypeHY=0, m_NodeTypeMT=0,
+        m_NodeStatusFMT=0, m_NodeStatusCH=0,  m_IterDone=0;
+  double m_T=0., m_P=0., m_Vs=0., m_Vi=0., m_Ms=0., m_Mi=0.,
+        m_Gs=0., m_Hs=0., m_Hi=0., m_IC=0., m_pH=0., m_pe=0.,
+        m_Eh=0., m_denW=0., m_denWg=0., m_epsW=0., m_epsWg=0., m_Tm=0.,
+        m_dt=0., m_dt1=0., m_ot=0., m_Vt=0., m_eps=0., m_Km=0.,
+        m_Kf=0., m_S=0., m_Tr=0., m_h=0., m_rho=0., m_al=0.,
+        m_at=0., m_av=0., m_hDl=0., m_hDt=0., m_hDv=0., m_nPe=0.;
+  double *m_xDC, *m_gam, *m_xPH, *m_vPS, *m_mPS,
+        *m_bPS, *m_xPA, *m_bIC, *m_rMB, *m_uIC;
+  double m_dRes1[4], m_dRes2[6];
 
-/*      MAIF_CALC( 1,
-        dBR->NodeHandle, dBR->NodeTypeHY, dBR->NodeTypeMT,
-        dBR->NodeStatusFMT, dBR->NodeStatusCH,  dBR->IterDone,
-        dBR->T, dBR->P, dBR->Vs, dBR->Vi, dBR->Ms, dBR->Mi,
-        dBR->Gs, dBR->Hs, dBR->Hi, dBR->IC, dBR->pH, dBR->pe,
-        dBR->Eh, dBR->denW, dBR->denWg, dBR->epsW, dBR->epsWg, dBR->Tm,
-        dBR->dt, dBR->dt1, dBR->ot, dBR->Vt, dBR->eps, dBR->Km,
-        dBR->Kf, dBR->S, dBR->Tr, dBR->h, dBR->rho, dBR->al,
-        dBR->at, dBR->av, dBR->hDl, dBR->hDt, dBR->hDv, dBR->nPe,
-        dBR->xDC,dBR->gam, dBR->xPH, dBR->vPS, dBR->mPS,
-        dBR->bPS,dBR->xPA, dBR->bIC, dBR->rMB, dBR->uIC,
-        dBR->dRes1, dBR->dRes2);
-      MAIF_CALC( 2,
-        dBR->NodeHandle, dBR->NodeTypeHY, dBR->NodeTypeMT,
-        dBR->NodeStatusFMT, dBR->NodeStatusCH,  dBR->IterDone,
-        dBR->T, dBR->P, dBR->Vs, dBR->Vi, dBR->Ms, dBR->Mi,
-        dBR->Gs, dBR->Hs, dBR->Hi, dBR->IC, dBR->pH, dBR->pe,
-        dBR->Eh, dBR->denW, dBR->denWg, dBR->epsW, dBR->epsWg, dBR->Tm,
-        dBR->dt, dBR->dt1, dBR->ot, dBR->Vt, dBR->eps, dBR->Km,
-        dBR->Kf, dBR->S, dBR->Tr, dBR->h, dBR->rho, dBR->al,
-        dBR->at, dBR->av, dBR->hDl, dBR->hDt, dBR->hDv, dBR->nPe,
-        dBR->xDC,dBR->gam, dBR->xPH, dBR->vPS, dBR->mPS,
-        dBR->bPS,dBR->xPA, dBR->bIC, dBR->rMB, dBR->uIC,
-        dBR->dRes1, dBR->dRes2);
-*/
-    return 1;
+  int nIC=0, nDC=0, nPH=0, nPS=0, ndXf=-1;
+  short *xDC, *xIC, *xPH;
+
+   DATACH  *dCH = TProfil::pm->multi->data_CH;
+   DATABR  *dBR = TProfil::pm->multi->data_BR;
+
+if( !dCH || !dBR )
+   return 1;
+
+   // Extracting data bridge dimensionalities
+   nIC = dCH->nICb;
+   nDC = dCH->nDCb;
+   nPH = dCH->nPHb;
+   nPS = dCH->nPSb;
+
+// xDC = dCH->xDC;
+// xIC = dCH->xIC;
+// xPH = dCH->xPH;
+
+// cout << endl << "nIC= " << nIC << "  nDC= " << nDC <<
+//   "  nPH= " << nPH << "  nPS =" << nPS << endl;
+    m_xDC = (double*)malloc( nDC*sizeof(double) );
+    m_gam = (double*)malloc( nDC*sizeof(double) );
+    m_xPH = (double*)malloc( nPH*sizeof(double) );
+    m_vPS = (double*)malloc( nPS*sizeof(double) );
+    m_mPS = (double*)malloc( nPS*sizeof(double) );
+    m_bPS = (double*)malloc( nDC*nPS*sizeof(double) );
+    m_xPA = (double*)malloc( nPS*sizeof(double) );
+    m_bIC = (double*)malloc( nIC*sizeof(double) );
+    m_rMB = (double*)malloc( nIC*sizeof(double) );
+    m_uIC = (double*)malloc( nIC*sizeof(double) );
+
+    MAIF_CALC( ndXf, // Fortran index; negative means readonly
+        m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
+        m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
+        m_T, m_P, m_Vs, m_Vi, m_Ms, m_Mi,
+        m_Gs, m_Hs, m_Hi, m_IC, m_pH, m_pe,
+        m_Eh, m_denW, m_denWg, m_epsW, m_epsWg, m_Tm,
+        m_dt, m_dt1, m_ot, m_Vt, m_eps, m_Km,
+        m_Kf, m_S, m_Tr, m_h, m_rho, m_al,
+        m_at, m_av, m_hDl, m_hDt, m_hDv, m_nPe,
+        m_xDC, m_gam, m_xPH, m_vPS, m_mPS,
+        m_bPS, m_xPA, m_bIC, m_rMB, m_uIC,
+        m_dRes1, m_dRes2 );
+
+// Printouts here
+
+// cout << endl << "Read: " << m_NodeHandle << " " <<  m_NodeTypeHY << " "
+//     << m_NodeTypeMT << " " << m_NodeStatusFMT << " " << m_NodeStatusCH
+//     << " " << m_IterDone << endl;
+
+// Something else?
+
+
+
+
+// Finished!
+
+    free( m_xDC );
+    free( m_gam );
+    free( m_xPH );
+    free( m_vPS );
+    free( m_mPS );
+    free( m_bPS );
+    free( m_xPA );
+    free( m_bIC );
+    free( m_rMB );
+    free( m_uIC );
+
+    return 0;
 }
 
 //--------------------- End of main.cpp ---------------------------

@@ -143,7 +143,7 @@ TMulti::TMulti( int nNd  )
         arr_BR[ii] = 0;
 }
 
-void TMulti::SaveCopyFrom( int ii )
+void TMulti::GetNodeCopyFrom( int ii )
 {
   // from arr_BR[ii] to data_BR structure
   if( ii < 0 || ii>= nNodes )
@@ -206,7 +206,7 @@ void TMulti::CopyTo( DATABR *(*dBR) )
 
 
 
-void TMulti::SaveCopyTo( int ii )
+void TMulti::SaveNodeCopyTo( int ii )
 {
 
   if( ii < 0 || ii>= nNodes )

@@ -398,8 +398,8 @@ public:
         return "Multi";
     }
 
-    void SaveCopyFrom( int ii );
-    void SaveCopyTo( int ii );
+    void GetNodeCopyFrom( int ii );
+    void SaveNodeCopyTo( int ii );
     void CopyTo( DATABR *(*dBR) );
     void fromMT(
        short p_NodeHandle,    // Node identification handle
