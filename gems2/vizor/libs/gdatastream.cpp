@@ -1,17 +1,104 @@
+#include <iostream>
+
+#ifdef __linux__
+#include <endian.h>
+#elif defined(__APPLE__)
+#include <machine/endian.h>
+#define __BYTE_ORDER BYTE_ORDER
+#define __BIG_ENDIAN BIG_ENDIAN
+#else
+#warning "other plaftorm - considering little endian"
+#define __BIG_ENDIAN 4321
+#define __BYTE_ORDER 1234
+#endif
 
 #include "gdatastream.h"
 #include "verror.h"
 
 //--------------------------------------------------------------------
 
+#ifndef __BYTE_ORDER
+# error "Error: __BYTE_ORDER not defined\n";
+#endif
+
+inline short SWAP(short x) { 
+    return (((x>>8) & 0x00ff) | ((x<<8) & 0xff00)); 
+}
+
+inline int SWAP(int x) {
+    int x_new;
+    char* xc_new = (char*)&x_new;
+    char* xc = (char*)&x;
+    xc_new[0] = xc[3];
+    xc_new[1] = xc[2];
+    xc_new[2] = xc[1];
+    xc_new[3] = xc[0];
+    return x_new;
+}
+
+inline int SWAP(long x) {
+    long x_new;
+    char* xc_new = (char*)&x_new;
+    char* xc = (char*)&x;
+    xc_new[0] = xc[3];
+    xc_new[1] = xc[2];
+    xc_new[2] = xc[1];
+    xc_new[3] = xc[0];
+    return x_new;
+}
+
+
+/*
+inline long SWAP(long x) {
+    long x_new;
+    char* xc_new = (char*)&x_new;
+    char* xc = (char*)&x;
+    xc_new[0] = xc[7];
+    xc_new[1] = xc[6];
+    xc_new[2] = xc[5];
+    xc_new[3] = xc[4];
+    xc_new[4] = xc[3];
+    xc_new[5] = xc[2];
+    xc_new[6] = xc[1];
+    xc_new[7] = xc[0];
+    return x_new;
+}
+*/
+inline float SWAP(float x) {
+    float x_new;
+    char* xc_new = (char*)&x_new;
+    char* xc = (char*)&x;
+    xc_new[0] = xc[3];
+    xc_new[1] = xc[2];
+    xc_new[2] = xc[1];
+    xc_new[3] = xc[0];
+    return x_new;
+}
+
+inline double SWAP(double x) {
+    double x_new;
+    char* xc_new = (char*)&x_new;
+    char* xc = (char*)&x;
+    xc_new[0] = xc[7];
+    xc_new[1] = xc[6];
+    xc_new[2] = xc[5];
+    xc_new[3] = xc[4];
+    xc_new[4] = xc[3];
+    xc_new[5] = xc[2];
+    xc_new[6] = xc[1];
+    xc_new[7] = xc[0];
+    return x_new;
+}
+
 
 GemDataStream::GemDataStream( gstring& aPath, ios::openmode aMod  ):
         mod( aMod ),
         Path( aPath ),
-        byteorder( LittleEndian ),
+    //    byteorder( LittleEndian ),
         ff(aPath.c_str(), aMod)
 {
-      ErrorIf( !ff.good(), Path.c_str(), "Fileopen error");
+    setByteOrder(LittleEndian);
+    ErrorIf( !ff.good(), Path.c_str(), "Fileopen error");
 }
 
 GemDataStream::~GemDataStream()
@@ -22,11 +109,14 @@ GemDataStream::~GemDataStream()
 void GemDataStream::setByteOrder( int bo )
 {
     byteorder = bo;
-/*    if ( systemBigEndian )
-	noswap = byteorder == BigEndian;
-    else
-	noswap = byteorder == LittleEndian;
-*/
+
+#if __BYTE_ORDER == __BIG_ENDIAN
+	swap = (byteorder == LittleEndian);
+#warning "BIG ENDIAN architecture is not well tested yet!!!"
+#else
+	swap = (byteorder == BigEndian);
+#endif
+    cerr << "GemDataStream::swap == " << swap << endl;
 }
 
 
@@ -39,20 +129,38 @@ GemDataStream &GemDataStream::operator>>( char &i )
 GemDataStream &GemDataStream::operator>>( short &i )
 {
     ff.read((char*)&i, sizeof(short));
+    if( swap ) i = SWAP(i);
+    return *this;
+}
+
+GemDataStream &GemDataStream::operator>>( int &i )
+{
+    ff.read((char*)&i, sizeof(int));
+    if( swap ) i = SWAP(i);
+    return *this;
+}
+
+GemDataStream &GemDataStream::operator>>( long &i )
+{
+    ff.read((char*)&i, sizeof(long));
+    if( swap ) i = SWAP(i);
     return *this;
 }
 
 GemDataStream &GemDataStream::operator>>( float &f )
 {
     ff.read((char*)&f, sizeof(float));
+    if( swap ) f = SWAP(f);
     return *this;
 }
 
 GemDataStream &GemDataStream::operator>>( double &f )
 {
     ff.read((char*)&f, sizeof(double));
+    if( swap ) f = SWAP(f);
     return *this;
 }
+
 
 GemDataStream &GemDataStream::operator<<( char i )
 {
@@ -60,16 +168,31 @@ GemDataStream &GemDataStream::operator<<( char i )
     return *this;
 }
 
-
 GemDataStream &GemDataStream::operator<<( short i )
 {
+    if( swap ) i = SWAP(i);
     ff.write((char*)&i, sizeof(short));
+    return *this;
+}
+
+GemDataStream &GemDataStream::operator<<( int i )
+{
+    if( swap ) i = SWAP(i);
+    ff.write((char*)&i, sizeof(int));
+    return *this;
+}
+
+GemDataStream &GemDataStream::operator<<( long i )
+{
+    if( swap ) i = SWAP(i);
+    ff.write((char*)&i, sizeof(long));
     return *this;
 }
 
 
 GemDataStream &GemDataStream::operator<<( float f )
 {
+    if( swap ) f = SWAP(f);
     ff.write((char*)&f, sizeof(float));
     return *this;
 }
@@ -77,6 +200,7 @@ GemDataStream &GemDataStream::operator<<( float f )
 
 GemDataStream &GemDataStream::operator<<( double f )
 {
+    if( swap ) f = SWAP(f);
     ff.write((char*)&f, sizeof(double));
     return *this;
 }
@@ -90,6 +214,22 @@ void GemDataStream::readArray( char* arr, int size )
 }
 
 void GemDataStream::readArray( short* arr, int size )
+{
+  if( !arr )
+    return;
+  for(int ii=0; ii<size; ii++)
+   *this >> arr[ii];
+}
+
+void GemDataStream::readArray( int* arr, int size )
+{
+  if( !arr )
+    return;
+  for(int ii=0; ii<size; ii++)
+   *this >> arr[ii];
+}
+
+void GemDataStream::readArray( long* arr, int size )
 {
   if( !arr )
     return;
@@ -128,6 +268,23 @@ void GemDataStream::writeArray( short* arr, int size )
   for(int ii=0; ii<size; ii++)
    *this << arr[ii];
 }
+
+void GemDataStream::writeArray( int* arr, int size )
+{
+  if( !arr )
+    return;
+  for(int ii=0; ii<size; ii++)
+   *this << arr[ii];
+}
+
+void GemDataStream::writeArray( long* arr, int size )
+{
+  if( !arr )
+    return;
+  for(int ii=0; ii<size; ii++)
+   *this << arr[ii];
+}
+
 void GemDataStream::writeArray( float* arr, int size )
 {
   if( !arr )
