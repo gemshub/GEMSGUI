@@ -571,6 +571,8 @@ bool TProcess::pe_dimValid()
     pep->NTau = pep->Ntim;
     pep->NpXi = pep->Nxi;
     pep->NNu = pep->Nxi;
+    //if(  !pep->NR1 )
+        pep->NR1 = pep->Nxi;
 
     if( pep->PvKin != S_OFF && ( pep->Nrea <= 0 || pep->Nrp <= 0 ))
     {
@@ -588,8 +590,6 @@ bool TProcess::pe_dimValid()
         i=false;
         pep->Ntim = 1;
     }
-
-    if(  !pep->NR1 ) pep->NR1 = pep->Nxi;
 
     if( pep->PsGR == S_OFF )
         pep->PvEF = S_OFF;

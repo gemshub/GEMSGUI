@@ -274,37 +274,71 @@ TGtDemo::MakeQuery()
     const char * p_key;
     gstring prkey = gstring( gdp->prKey, 0, MAXRKEYLEN);
     int size[7];
+    int nRT = RT_ICOMP;
+
+    // nRT from flags
+    if( gdp->PsTR != S_OFF )
+     nRT = RT_GEM2MT;
+    else
+     if( gdp->PsUT != S_OFF )
+       nRT = RT_DUALTH;
+     else
+       if( gdp->PsPB != S_OFF )
+          nRT = RT_UNSPACE;
+       else
+         if( gdp->PsPE != S_OFF )
+           nRT = RT_PROCES;
+         else
+           if( gdp->PsST != S_OFF )
+              nRT = RT_SYSEQ;
+           else
+             if( gdp->PsPH != S_OFF )
+                nRT = RT_PHASE;
+             else
+               if( gdp->PsRP != S_OFF )
+                  nRT = RT_RTPARM;
+               else
+                 if( gdp->PsRE != S_OFF )
+                   nRT = RT_REACDC;
+                 else
+                   if( gdp->PsBC != S_OFF )
+                      nRT = RT_COMPOS;
+                   else
+                     if( gdp->PsDC != S_OFF )
+                        nRT = RT_DCOMP;
 
     p_key  = db->PackKey();
-    size[0] = gdp->nRT;
+    size[0] = nRT;//gdp->nRT;
     size[1] = gdp->Nsd;
     size[2] = gdp->Nwc;
     size[3] = gdp->Nqp;
     size[4] = gdp->dimEF[0];
     size[5] = gdp->dimEF[1];
     size[6] = gdp->dimXY[1];
-    if( prkey.empty())
+    if( prkey.empty() || prkey == "`")
         prkey = "*";
 
     if( !vfGtDemoSet( window(), p_key, size,  prkey ))
          Error( p_key, "GtDemo record configuration cancelled by the user!" );
      //  return;   // cancel
 
-    gdp->nRT = size[0];
-    gdp->Nsd = size[1];
-    gdp->Nwc = size[2];
-    gdp->Nqp = size[3];
-    gdp->dimEF[0] = size[4];
-    gdp->dimEF[1] = size[5];
-    gdp->dimXY[1] = size[6];
+    gdp->nRT = (short)size[0];
+    gdp->Nsd = (short)size[1];
+    gdp->Nwc = (short)size[2];
+    gdp->Nqp = (short)size[3];
+    gdp->dimEF[0] = (short)size[4];
+    gdp->dimEF[1] = (short)size[5];
+    gdp->dimXY[1] = (short)size[6];
+// set up process key
+    if( gdp->nRT <= RT_SYSEQ )
+      prkey = "*";
+    strncpy( gdp->prKey, prkey.c_str(), MAXRKEYLEN );
 // setup flags
     gd_ps_set();
     if( gdp->dimEF[0] >0 && gdp->dimEF[1] >0)
      gdp->PtAEF = S_ON;
     else
      gdp->PtAEF = S_OFF;
-// set up process key
-    strncpy( gdp->prKey, prkey.c_str(), MAXRKEYLEN );
 
 }
 
@@ -437,10 +471,10 @@ TGtDemo::RecBuild( const char *key, int mode  )
         delete[] gst.iopt;
     gst.iopt = 0;
 //AGAIN:
-    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
-        gdp->nRT = RT_PROCES;
-    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
-        gdp->nRT = RT_UNSPACE;
+//    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
+//        gdp->nRT = RT_PROCES;
+//    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
+//        gdp->nRT = RT_UNSPACE;
 
     int ret = TCModule::RecBuild( key, mode );
     if( gdp->nRT == RT_PROCES  ||  gdp->nRT == RT_UNSPACE )
