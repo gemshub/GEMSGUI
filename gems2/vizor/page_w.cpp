@@ -349,9 +349,12 @@ TCPage::SetFirstCellFocus()
 void
 TCPage::clearSelectedObjects()
 {
-    for( int ii=0; ii<getFieldCnt(); ii++ )
-        if( getField(ii) )
-            getField(ii)->setSelected(false);
+    QWidget* topw = topLevelWidget();
+    if( topw->inherits("QWidget") && !topw->inherits("QDialog") ) {
+	for( int ii=0; ii<getFieldCnt(); ii++ )
+    	    if( getField(ii) )
+        	getField(ii)->setSelected(false);
+    }
 }
 
 //----------------------------------------------------------------
