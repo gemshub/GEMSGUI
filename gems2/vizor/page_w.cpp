@@ -392,6 +392,11 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
     pSV = pSH = NULL;
     indTied = 0;
 
+    selectN1 = 
+    selectN2 = 
+    selectM1 = 
+    selectM2 = 0;
+
     p->setFont( pVisorImp->getCellFont() );
 
     //--- Circular list section ---
@@ -579,6 +584,44 @@ TField::Update()
         focused->SetDescription();
 }
 
+void 
+TField::getVisibleArea(int& n1, int& n2, int& m1, int& m2)
+{
+    if( pSV )
+        n1 = pSV->value();
+    else
+	n1 = 0;
+    n2 = n1 + (largeN ? rInfo.maxN : N) - 1;
+    
+    if( pSH )
+        m1 = pSH->value();
+    else
+	m1 = 0;
+    m2 = m1 + (largeM ? rInfo.maxM : M) - 1;
+}
+
+void
+TField::scrollVertically(int shift)
+{
+    if( pSV ) {
+	int val = pSV->value() + shift;
+	if( val < pSV->minValue() ) val = pSV->minValue();
+	if( val > pSV->maxValue() ) val = pSV->maxValue();
+	setYPos(val);
+    }
+}
+
+void
+TField::scrollHorizontally(int shift)
+{
+    if( pSH ) {
+	int val = pSH->value() + shift;
+	if( val < pSH->minValue() ) val = pSH->minValue();
+	if( val > pSH->maxValue() ) val = pSH->maxValue();
+	setXPos(val);
+    }
+}
+
 void
 TField::setYPos(int pos)
 {
@@ -663,14 +706,18 @@ void
 TField::setSelected(bool selected_)
 {
     if( selected_ != selected ) {
-//cerr << "TField::setSelected " << GetObj().GetKeywd() << " sel: " << selected_ << endl;
-
 	if( selected_ ) {
 	    getPage()->clearSelectedObjects();
 	    selectN1 = 0;
 	    selectN2 = GetObj().GetN();
 	    selectM1 = 0;
 	    selectM2 = GetObj().GetM();
+	}
+	else {
+	    selectN1 = 
+	    selectN2 = 
+	    selectM1 = 
+	    selectM2 = 0;
 	}
 
     	selected = selected_;
@@ -690,7 +737,6 @@ TField::setSelectedArea(int N1, int N2, int M1, int M2)
     selectM2 = M2;
 
 //cerr << "selectedArea " << N1 << " " << N2 << " " << M1 << " " << M2 << endl;
-
     for(uint ii=0; ii<aCtrl.GetCount(); ii++)
 	if( aCtrl[ii]->GetN() >= selectN1 && aCtrl[ii]->GetN() < selectN2 
 		&&  aCtrl[ii]->GetM() >= selectM1 && aCtrl[ii]->GetM() < selectM2 )
@@ -1080,6 +1126,13 @@ TCellInput::focusOutEvent(QFocusEvent* e)
 }
 
 void
+TCellInput::setGroupSelected(bool selected)
+{
+    deselect();
+    TCell::setGroupSelected(selected);
+}
+
+void
 TCellInput::keyPressEvent(QKeyEvent* e)
 {
     if ( e->state() & ControlButton ) {
@@ -1098,6 +1151,57 @@ TCellInput::keyPressEvent(QKeyEvent* e)
 	break;
 	case Key_L:
 	    CmSelectColumn();
+	    return;
+	break;
+	}
+    }
+    else
+    if ( e->state() & ShiftButton ) {
+	int n1, n2, m1, m2;
+	int vizN1, vizN2, vizM1, vizM2;
+	
+	if( field()->isSelected() )
+	    field()->getSelectedArea(n1, n2, m1, m2);
+	else {
+	    n1 = GetN();
+	    n2 = GetN() + 1;
+	    m1 = GetM();
+	    m2 = GetM() + 1;
+	}
+	
+	field()->getVisibleArea(vizN1, vizN2, vizM1, vizM2);
+	
+	switch ( e->key() ) {
+	case Key_Up:
+	    if( n1 > 0 ) {
+		field()->setSelectedArea(n1-1, n2, m1, m2);
+		if( n1-1 < vizN1 )
+		    field()->scrollVertically(-1);
+	    }
+	    return;
+	break;
+	case Key_Down:
+	    if( n2 < rObj.GetN() ) {
+		field()->setSelectedArea(n1, n2+1, m1, m2);
+		if( n2 > vizN2 )
+		    field()->scrollVertically(1);
+	    }
+	    return;
+	break;
+	case Key_Right:
+	    if( m2 < rObj.GetM() ) {
+		field()->setSelectedArea(n1, n2, m1, m2+1);
+		if( m2 > vizM2 )
+		    field()->scrollHorizontally(1);
+	    }
+	    return;
+	break;
+	case Key_Left:
+	    if( m1 > 0 ) {
+		field()->setSelectedArea(n1, n2, m1-1, m2);
+		if( m1-1 < vizM1 )
+		    field()->scrollHorizontally(-1);
+	    }
 	    return;
 	break;
 	}

@@ -89,7 +89,7 @@ public:
     }
 
     void updateCellBackground();
-    void setGroupSelected(bool selected);
+    virtual void setGroupSelected(bool selected);
 };
 
 /*!
@@ -139,6 +139,7 @@ public:
     {}
 
     void updateDisplay();
+    void setGroupSelected(bool selected);
 };
 
 
@@ -290,8 +291,9 @@ public:
 	   //, ScrollPlace tiedScroll, ScrollPlace stickedScroll);
     ~TField();
 
-//    void AddVScroller(ScrollPlace scrPlace);
-//    void AddHScroller(ScrollPlace scrPlace);
+    void scrollVertically(int shift);
+    void scrollHorizontally(int shift);
+    void getVisibleArea(int& n1, int& n2, int& m1, int& m2);
 
     TCPage* getPage() { return (TCPage*)parentWidget(); }
 
