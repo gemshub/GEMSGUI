@@ -30,6 +30,9 @@
 #include <string.h>
 #include "array.h"
 
+#ifdef IPMGEMPLUGIN
+   static const size_t npos = static_cast<size_t>(-1);
+#endif
 
 class gstring
 {
@@ -64,8 +67,9 @@ struct str_val:
     str_val* ps;
 
 public:
+#ifndef IPMGEMPLUGIN
     static const size_t npos = static_cast<size_t>(-1);
-
+#endif
     // various constructors and destructor
     gstring()
     {

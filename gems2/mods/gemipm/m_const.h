@@ -1,8 +1,13 @@
 #ifndef _m_const_h
 #define _m_const_h
 
+#include <iostream>
 #include <ctype.h>
 #include <fstream>
+
+//#ifndef IPMGEMPLUGIN
+// #define IPMGEMPLUGIN
+//#endif
 
 using namespace std;
 #include "verror.h"

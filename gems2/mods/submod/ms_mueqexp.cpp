@@ -93,7 +93,7 @@ if( pa.p.PRD >= 7 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
-    cout << " P. 7 with simplex: ";
+    std::cout << " P. 7 with simplex: ";
     multi->dyn__test( multi->GetPMcopy1() );
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
@@ -169,7 +169,7 @@ if( pa.p.PRD >= 8 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
-    cout << " Point 8: ";
+    std::cout << " Point 8: ";
     multi->dyn__test( multi->GetPMcopy1() );
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
@@ -254,7 +254,7 @@ if( pa.p.PRD >= 7 )
 {                      // Dima 18/05/2002 test init load before simplex
   if( multi->flCopy == true )
   {
-    cout << " P.7  no simplex: ";
+    std::cout << " P.7  no simplex: ";
     multi->dyn__test( multi->GetPMcopy1() );
   }
   multi->dyn_new_test( multi->GetPMcopy1() );
@@ -345,7 +345,7 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 return true;
             }
 #else
-          cout << "For a given IPM convergence criterion, vector b is not balanced,\n"
+          std::cout << "For a given IPM convergence criterion, vector b is not balanced,\n"
            << "or DC standard-state thermodynamic data inconsistent. \n"
            <<  "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?"
            << endl;
@@ -411,7 +411,7 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
          goto mEFD;
        }
      else
-         cout<< "Warning PhaseSelect: Insertion of phases was incomplete!"<< endl;
+         std::cout<< "Warning PhaseSelect: Insertion of phases was incomplete!"<< endl;
     //   if( !vfQuestion(window(), "PhaseSelect : warning",
     //        "Insert phase cannot be reached. Continue?" ))
     //         return false;
@@ -457,7 +457,7 @@ STEP_POINT("PhaseSelect");
         //   buf += "Continue?";
         //  if( !vfQuestion(window(), "IPM : warning", buf.c_str() ))
         //      break;
-          cout<< buf.c_str()<< endl;
+          std::cout<< buf.c_str()<< endl;
           goto ITDTEST;
        }
 

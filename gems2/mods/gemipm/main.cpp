@@ -86,7 +86,7 @@ main(int argc, char* argv[])
       f_getline( f_chbr, datachbr_file, ' ');
 //test flag -t or -b (by default -b)
       size_t pos = datachbr_file.find( '-');
-      if( pos != gstring::npos )
+      if( pos != /*gstring::*/npos )
       {
          if( datachbr_file[pos+1] == 't' )
             binary_f = false;
@@ -178,7 +178,7 @@ main(int argc, char* argv[])
     }
     catch(TError& err)
     {
-        cout << err.title.c_str() << "  : " << err.mess.c_str();
+        std::cout << err.title.c_str() << "  : " << err.mess.c_str();
     }
     catch(...)
     {

@@ -1042,8 +1042,12 @@ vfChooseFileSave(QWidget* par, gstring& path,
 {
     //    QString d=QFileDialog::getSaveFileName( ".", filter.c_str(), par, title );
 
-    gstring dir = pVisor->userGEMDir();
-            dir+= path;
+    gstring dir;
+      if( path.find('/') == gstring::npos )
+      {      dir = pVisor->userGEMDir();
+             dir+= path;
+      }
+      else   dir = path;
 
     gstring filt = "*;";
     if( filter )

@@ -28,6 +28,7 @@ using namespace std;
 #include "array.h"
 #include "verror.h"
 
+
 #ifdef __APPLE__
 
 #ifndef __unix
@@ -42,6 +43,8 @@ using namespace std;
 const int MAXKEYWD = 6+1;
 typedef TArrayF<gstring> TCStringArray;
 
+#ifndef IPMGEMPLUGIN
+
 #ifdef __unix
 
 #include <algorithm>
@@ -52,6 +55,7 @@ typedef TArrayF<gstring> TCStringArray;
 typedef unsigned int uint;
 
 #endif // __unix
+
 
 inline
 int ROUND(double x)
@@ -98,37 +102,6 @@ gstring curDateTime()
     return curDate() + curTime();
 }
 
-// dynamically allocated temporary 'char*'
-// for simple string manipulations
-// (used instead of stack char[] allocation to avoid stack problems)
-struct vstr
-{
-    char* p;
-    vstr(int ln): p(new char[ln+1])
-    { }
-
-    vstr(int ln, const char* s): p(new char[ln+1])    {
-        strncpy(p, s, ln);
-        p[ln]='\0';
-    }
-
-    vstr(const char* s): p(new char[strlen(s)+1])    {
-       strcpy(p, s);
-    }
-
-    ~vstr()    {
-        delete[] p;
-    }
-
-    operator char* ()    {
-        return p;
-    }
-
-private:
-    vstr (const vstr&);
-    const vstr& operator= (const vstr&);
-
-};
 // read line to gstring class from istream with delimiter
 istream& u_getline(istream& instream, gstring& dst_string, char delimit = '\n');
 
@@ -165,6 +138,45 @@ inline char* gcvt(double num, int digit, char* buf)
 #ifdef __APPLE__
 #include <algobase.h>
 #endif
+
+#endif
+
+// dynamically allocated temporary 'char*'
+// for simple string manipulations
+// (used instead of stack char[] allocation to avoid stack problems)
+struct vstr
+{
+    char* p;
+    vstr(int ln): p(new char[ln+1])
+    { }
+
+    vstr(int ln, const char* s): p(new char[ln+1])    {
+        strncpy(p, s, ln);
+        p[ln]='\0';
+    }
+
+    vstr(const char* s): p(new char[strlen(s)+1])    {
+       strcpy(p, s);
+    }
+
+    ~vstr()    {
+        delete[] p;
+    }
+
+    operator char* ()    {
+        return p;
+    }
+
+private:
+    vstr (const vstr&);
+    const vstr& operator= (const vstr&);
+
+};
+
+
+
+
+
 
 #endif // _v_user_h_
 

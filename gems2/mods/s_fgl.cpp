@@ -17,11 +17,14 @@
 //-------------------------------------------------------------------
      
 #include <math.h>
+#include <stdio.h>
 
 //#include "s_tpwork.h"
 #include "s_fgl.h"
-#include "m_const.h"
-//#include "service.h"
+#ifndef IPMGEMPLUGIN
+  #include "m_const.h"
+#endif
+  //#include "service.h"
 //#include "visor.h"
 
 //--------------------------------------------------------------------//

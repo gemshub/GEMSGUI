@@ -1450,7 +1450,7 @@ void TMulti::Test_Eq( int size, double *p1, double *p2, const char *key )
 #ifndef IPMGEMPLUGIN
 //       vfMessage( window(), "Double ", buf.p );
 #endif
-       cout << "Double " << buf.p << endl;
+       std::cout << "Double " << buf.p << endl;
 //       break;
     }
 }

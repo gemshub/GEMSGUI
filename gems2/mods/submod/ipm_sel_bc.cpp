@@ -415,7 +415,7 @@ int TProfil::EnterFeasibleDomain( )
                             "Inconsistent DC limits. Continue?" ))
                 goto SINGULAR;
 #else
-        cout<< "EnterFeasibleDomain: Inconsistent DC limits"<< endl;
+        std::cout<< "EnterFeasibleDomain: Inconsistent DC limits"<< endl;
 #endif
         }
     for(J=0;J<pmp->L;J++)

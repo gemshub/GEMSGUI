@@ -87,11 +87,16 @@ public:
     void writeArray( float* arr, int size );
     void writeArray( double* arr, int size );
 
+#ifndef IPMGEMPLUGIN
+
     template <class T> void writeArray( T* arr, int size );
     template <class T> void readArray( T* arr, int size );
+#endif
 };
 
-template <class T> 
+#ifndef IPMGEMPLUGIN
+
+template <class T>
 void GemDataStream::writeArray( T* arr, int size )
 {
   if( !arr )
@@ -100,7 +105,7 @@ void GemDataStream::writeArray( T* arr, int size )
    *this << arr[ii];
 }
 
-template <class T> 
+template <class T>
 void GemDataStream::readArray( T* arr, int size )
 {
   if( !arr )
@@ -109,4 +114,5 @@ void GemDataStream::readArray( T* arr, int size )
    *this >> arr[ii];
 }
 
+#endif
 #endif

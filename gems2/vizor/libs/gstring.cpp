@@ -40,6 +40,9 @@
 	StringLenError calss in gstring.h to access it in your app
 */
 
+
+//static const size_t gstring::npos = static_cast<size_t>(-1);
+
 struct StringLenError
     {}
 ;

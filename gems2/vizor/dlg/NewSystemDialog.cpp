@@ -314,7 +314,7 @@ NewSystemDialog::CmOutMulti()
 //      TProfil::pm->PMtest( keyp.c_str() );
 //      TProfil::pm->MultiCalcInit( keyp.c_str() );
 
-      TProfil::pm->outMulti(f);
+      TProfil::pm->outMulti( f );
     }
     catch( TError& xcpt )
     {
