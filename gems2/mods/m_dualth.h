@@ -234,7 +234,8 @@ protected:
     void Calc_muo_n( char eState ); // calculate mu_o DualTh
     void Calc_gam_n( char eState ); // calculate gamma DualTh
     void Calc_act_n( char eState ); // calculate activity DualTh
-
+    void Calc_muo_n_stat( char eState ); // statistics for EM candidates
+    void Calc_gam_n_stat( char eState ); // statistics for Wg/gamma calc.
 
 public:
 

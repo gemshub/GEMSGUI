@@ -153,8 +153,8 @@ void TDualTh::dt_initiate( bool mode )
     for( ii=0; ii<dtp->nK; ii++)
     {
      dtp->typ_n[ii] = 'I';
-     dtp->AUcln[ii] = 'M';
-     strncpy( dtp->for_n[ii], "H2O", 4 );
+//     dtp->AUcln[ii] = 'M';
+//     strncpy( dtp->for_n[ii], "H2O", 4 );
      sprintf( tbuf, "Endmember%d", ii );
      strncpy( dtp->nam_n[ii], tbuf, MAXIDNAME );
      for( i=0; i<dtp->nQ; i++)
@@ -168,6 +168,8 @@ void TDualTh::dt_initiate( bool mode )
     {
      dtp->AUclb[ii] = 'g';
      strncpy( dtp->for_b[ii], "H2O", 4 );
+     dtp->AUcln[ii] = 'M';
+     strncpy( dtp->for_n[ii], "H2O", 4 );
     }
   }
 }
@@ -773,14 +775,27 @@ TDualTh::Calc_muo_n( char eState )
        dtp->muo_n[ii*dtp->nK+j] = muo;
     }
   }
+  Calc_muo_n_stat( eState );
 }
 
+// Calculation of statistics over muo_n columns
+void
+TDualTh::Calc_muo_n_stat( char eState )
+{
+}
+
+// Calculation of statistics over Wg (gamma interaction parameters)
+void
+TDualTh::Calc_gam_n_stat( char eState )
+{
+}
 
 void
 TDualTh::Calc_gam_n( char eState )
 {  // calculate gamma DualTh
  short ii, j;
  double muoi, gam=1., Dsur=0., RT = 2479., P=1., lnFmol=4.016535;
+ double Gex, Gmix, Gmech, Gid, chi, chiPr, Wg=0., gam0, gam1;
 
 // dt_initiate( false );
    Dsur = dtp->WmCb - 1.;
@@ -800,26 +815,53 @@ TDualTh::Calc_gam_n( char eState )
        RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
        P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
     }
-  // zero off a cell in mu_n
-    for( j=0; j<dtp->nK; j++)
-    {
-       dtp->jm = j;
-       muoi = dtp->muo_i[ii*dtp->nK+j];
-       if( eState == DT_STATE_S )
-        switch(dtp->typ_n[j])  // Stoich. saturation  - to be finished!
-        {
-          default:
-          case DC_SCP_CONDEN:
-              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muoi);
-              break;
-          case DC_SOL_IDEAL:
-          case DC_SOL_MINOR:
-          case DC_SOL_MAJOR:
-              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muoi
-                  - log(dtp->chi[ii*dtp->nK+j]));
-              break;
-        }
-       else  // Equilibrium
+
+  // Calculation of activity coefficients
+    if( eState == DT_STATE_S )
+    {  // Stoichiometric saturation - applies to SS end-members only!
+      Gex = Gmix = Gmech = Gid = 0.0; chiPr = 1.;
+      for( j=0; j<dtp->nK; j++)
+      {  // Calculation of Gmix for q-th experiment
+         chi = dtp->chi[ii*dtp->nK+j];
+         if(chi <= 1e-9) chi = 1e-9;
+         Gmix += dtp->mu_n[ii*dtp->nK+j] * chi;
+         Gmech += dtp->muo_i[ii*dtp->nK+j] * chi;
+         Gid += RT * chi * log( chi );
+         chiPr *= chi;
+      }
+      //    Calculation of Gex for q-th experiment
+      Gex = Gmix - Gid - Gmech;
+// putting values provisionally in 1st column of Coul cells!
+      if(dtp->Coul)
+         dtp->Coul[ii*dtp->nK] = Gex;
+      dtp->muo_n[ii*dtp->nK] = Gmix;      // Temporarily!
+      dtp->muo_n[ii*dtp->nK+1] = Gid;     // Temporarily!
+// Interaction parameter (regular binary only)!
+      Wg = Gex / chiPr;
+// putting values provisionally in 2nd column of Coul cells!
+      if(dtp->Coul)
+         dtp->Coul[ii*dtp->nK+1] = Wg;
+// calculating activity coeffs of regular binary model
+      gam0 = Wg/RT * dtp->chi[ii*dtp->nK+1] * dtp->chi[ii*dtp->nK+1];
+      gam1 = Wg/RT * dtp->chi[ii*dtp->nK] * dtp->chi[ii*dtp->nK];
+// putting it provisionally in gam_n cells as activity coeffs
+      if( gam0 < -10. )
+          gam0 = -10;
+      if( gam1 < -10. )
+          gam1 = -10;
+      if( gam0 > 10. )
+          gam0 = 10;
+      if( gam1 > 10. )
+          gam1 = 10;
+      dtp->gam_n[ii*dtp->nK] = exp( gam0 );
+      dtp->gam_n[ii*dtp->nK+1] = exp( gam1 );
+// To be re-arranged and converted to script calculations!
+    }
+    else { // Equilibrium
+      for( j=0; j<dtp->nK; j++)
+      {
+        dtp->jm = j;
+        muoi = dtp->muo_i[ii*dtp->nK+j];
         switch(dtp->typ_n[j])
         {
           case DC_SCP_CONDEN:
@@ -884,11 +926,15 @@ TDualTh::Calc_gam_n( char eState )
 */
          default:
             break; /* error in DC class code */
-       }
-       dtp->gam_n[ii*dtp->nK+j] = gam;
-    }
-  }
+        }
+        dtp->gam_n[ii*dtp->nK+j] = gam;
+      } // j
+    } // else
+  } //  ii
+
+  Calc_gam_n_stat( eState );
 }
+
 
 void
 TDualTh::Calc_act_n( char eState )
