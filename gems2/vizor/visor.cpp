@@ -145,7 +145,7 @@ TVisor::TVisor(int c, char *v[]):
     UserProfDir = "projects/";
     ImgDir = "img/";
 
-    RemoteDocURL = "http://les.web.psi.ch/software/GEMS-PSI/doc/html/";
+    RemoteDocURL = "http://les.web.psi.ch/Software/GEMS-PSI/doc/html/";
     LocalDoc = true;
 
 

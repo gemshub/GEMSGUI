@@ -67,10 +67,10 @@ void TMulti::packData()
             STat->stp->llf[i] = pm.muj[j];
             STat->stp->Y[i] = pm.X[j];
             STat->stp->lnGam[i] = pm.lnGam[j];
-            /* Inserted by DAK 08 Mar 98 */
-            if( pm.lnSAT && ( pm.SATT[j] == SAT_SITE || pm.SATT[j] == SAT_COMP
-                              || pm.SATT[j] == SAT_NCOMP ))
-                STat->stp->lnGam[i] += pm.lnSAT[j];  /* end insert */
+            /* Removed by KD 13 May 02 */
+//          if( pm.lnSAT && ( pm.SATT[j] == SAT_SITE || pm.SATT[j] == SAT_COMP
+//                            || pm.SATT[j] == SAT_NCOMP ))
+//          STat->stp->lnGam[i] += pm.lnSAT[j];  /* end insert */
             //     memcpy( STat->stp->SMp[i], pm.SM[j], MAXDCNAME );
             i++;
         }
@@ -106,10 +106,10 @@ void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
             STat->stp->llf[i] = DCon[pm.muj[j]];
             STat->stp->Y[i] = pm.X[j];
             STat->stp->lnGam[i] = pm.lnGam[j];
-            /* Inserted by DAK 08 Mar 98 */
-            if( pm.lnSAT && ( pm.SATT[j] == SAT_SITE || pm.SATT[j] == SAT_COMP
-                              || pm.SATT[j] == SAT_NCOMP ))
-                STat->stp->lnGam[i] += pm.lnSAT[j];  /* end insert */
+            /* Removed by KD 13 May 02 */
+//          if( pm.lnSAT && ( pm.SATT[j] == SAT_SITE || pm.SATT[j] == SAT_COMP
+//                           || pm.SATT[j] == SAT_NCOMP ))
+//             STat->stp->lnGam[i] += pm.lnSAT[j];  /* end insert */
             //     memcpy( STat->stp->SMp[i], pm.SM[j], MAXDCNAME );
             i++;
         }
@@ -188,9 +188,10 @@ FOUND:
         pm.Y[jp] = STat->stp->Y[js];
         pm.lnGam[jp] = STat->stp->lnGam[js];
         /* Inserted by DAK 08 Mar 98 to handle SAT at PIA */
-        if( pm.lnSAT && ( pm.SATT[jp] == SAT_SITE || pm.SATT[jp] == SAT_COMP
-                          || pm.SATT[jp] == SAT_NCOMP ))
-            pm.lnSAT[jp] = STat->stp->lnGam[js];  /* end insert */
+// Removed by KD 13.05.02
+//        if( pm.lnSAT && ( pm.SATT[jp] == SAT_SITE || pm.SATT[jp] == SAT_COMP
+//                          || pm.SATT[jp] == SAT_NCOMP ))
+//            pm.lnSAT[jp] = STat->stp->lnGam[js];  /* end insert */
     }
     // short
     pm.pRR1 = STat->stp->itPar;  /* Level of tinkle supressor */
@@ -459,7 +460,7 @@ void TMulti::dyn_new_test(MULTI& tes)
     tes.XFTS = new double[pm.FIs][6]; 
      memcpy( tes.XFTS, pm.XFTS, pm.FIs*6*sizeof(double) ); 
     tes.lnSAT = new double[pm.Ls];
-     memcpy( tes.lnSAT, pm.lnSAT, pm.Ls*sizeof(double) ); 
+     memcpy( tes.lnSAT, pm.lnSAT, pm.Ls*sizeof(double) );
 //   tes.SATT = (char *)aObj[ o_wi_satt].Alloc( tes.Ls, 1, A_ ); 
  } 
 

@@ -10,8 +10,8 @@ subdirs	= vizor/libs vizor/kernel vizor mods mods/submod vizor/dlg
 cleandirs	= vizor/libs vizor/kernel vizor mods mods/submod vizor/dlg
 backupfiles	= doc data lib mods vizor Makefile*.* *.spec
 
-LIBS    = import32.lib cw32mti.lib qtmain.lib qtmt303.lib
-NOQTLIBS  = import32.lib cw32mti.lib lib\qtmain.lib lib\qtmt303.lib
+LIBS    = import32.lib cw32mti.lib qtmain.lib qtmt304.lib
+NOQTLIBS  = import32.lib cw32mti.lib lib\qtmain.lib lib\qtmt304.lib
 
 
 GEMS_L  = lib\gemviz.lib lib\gemsel.lib

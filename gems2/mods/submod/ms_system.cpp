@@ -559,7 +559,32 @@ void TSyst::loadData( bool newRec, int reBuildType )
             //	  memcpy( sy.PhmKey, STat->ssp->PhmKey, EQ_RKLEN-1 );
         }
         // The above  block inserted by DAK 27.10.99
-
+        int indk=0;
+        if( sy.DLLim != S_OFF && sy.RSC[mup->L-1] != QUAN_MOL )
+        {
+           int i; indk=1;
+           for( i=0; i<mup->L; i++ )
+           {
+               sy.DLL[i] = 0.;
+               sy.RSC[i] = QUAN_MOL;
+               if( sy.DULim != S_OFF )
+                  sy.RLC[i] = BOTH_LIM;
+               else sy.RLC[i] = LOWER_LIM;
+           }
+        }
+        if( sy.DULim != S_OFF && ( indk == 1 || sy.RSC[mup->L-1] != QUAN_MOL ))
+        {
+           int i;
+           for( i=0; i<mup->L; i++ )
+           {
+               sy.DUL[i] = 1e6;
+               sy.RSC[i] = QUAN_MOL;
+               if( sy.DLLim != S_OFF )
+                  sy.RLC[i] = BOTH_LIM;
+               else sy.RLC[i] = UPPER_LIM;
+           }
+        }
+        // The above block inserted by KD on 13.05.02
 
         if( reBuildType == VF3_1 )
             setDefData();
