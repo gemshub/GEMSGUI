@@ -161,7 +161,8 @@ nM,    //number of mixtures considered in non-basis sub-system (default 1)
    i,      // index of IC
    jm,     // index of non-basis sub-system component
    c_tm,         // Current Tm - SYSTEM CSD number
-   c_NV;         // Current Nv - MTPARM variant number
+   c_NV,         // Current Nv - MTPARM variant number
+Asiz;      // Current number of rows in the An matrix   
    char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
 }
 DUALTH;

@@ -230,7 +230,8 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtisq].SetDim( 1, dtp->nQ );
 
     aObj[ o_dtan].SetPtr(dtp->An);
-    aObj[ o_dtan].SetDim( dtp->Asiz, dtp->Nb );
+//    aObj[ o_dtan].SetDim( dtp->nK, dtp->Nb );
+    aObj[ o_dtan].SetDim( dtp->nK, dtp->Nb );  // dtp->Asiz ?????
     aObj[ o_dttprn].SetPtr(  dtp->tprn );
     //aObj[ o_dttprn].SetDim( 1, VIZmsize(dtp->tprn ));
 }
@@ -473,7 +474,7 @@ void TDualTh::dyn_new(int q)
     dtp->ISq = (float *)aObj[ o_dtisq ].Alloc( dtp->nQ, 1, F_ );
 
    dtp->An = (float *)aObj[ o_dtan ].Alloc( dtp->nK, dtp->Nb, F_ );
-   dtp->Asiz = dtp->nK;
+dtp->Asiz = dtp->nK;
 }
 
 
