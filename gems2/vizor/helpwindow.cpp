@@ -68,12 +68,8 @@ cerr << "request for http data: " << abs_name << endl;
 	connect(&oper, SIGNAL(data(const QByteArray&, QNetworkOperation*)), 
 	    this, SLOT(dataSlot(const QByteArray&, QNetworkOperation*)));
 
-//	oper.copy(abs_name, "/tmp");
 	oper.get();
 	
-//	QNetworkOperation no;
-//	while( no.stat() == QNetworkOperation::Done
-//	    || no.stat() == QNetworkOperation::Failed ) {
 	opReady = false;
 	while( !opReady ) {
 	    qApp->processEvents();
@@ -84,7 +80,6 @@ cerr << "bail out" << endl;
 	// get the right mimetype
 	QString e = fi.extension(FALSE);
 	QCString mimetype = "application/octet-stream";
-//	const char* imgfmt;
 	if ( e.startsWith("htm") )
 	    mimetype = QCString("text/")+QCString(e.lower().latin1());
 	else
@@ -96,12 +91,6 @@ cerr << "bail out" << endl;
 	allData.resize(0);
 
 	return sr;
-/*
-	QString s("/tmp/");
-	s.append(abs_name.mid(abs_name.findRev("/")+1));
-	cerr << "returning from " << s << endl;
-	return QMimeSourceFactory::data(s);
-*/
     }
 }
 
@@ -182,7 +171,6 @@ HelpWindow::HelpWindow( const QString& path_,
     readHistory();
     readBookmarks();
 
-//    QMimeSourceFactory::setDefaultFactory(new HttpMimeSourceFactory());
     browser = new QTextBrowser( this );
     browser->setMimeSourceFactory(new HttpMimeSourceFactory());
     browser->setFrameStyle( QFrame::Panel | QFrame::Sunken );
@@ -319,7 +307,7 @@ void HelpWindow::textChanged()
     else
 	setCaption( browser->documentTitle() ) ;
 
-    selectedURL = caption();
+    selectedURL = browser->context();
     if ( !selectedURL.isEmpty() && pathCombo ) {
 	bool exists = FALSE;
 	int i;
@@ -419,7 +407,7 @@ void HelpWindow::print()
 	    p.setFont( font );
 	    p.drawText( view.right() - p.fontMetrics().width( QString::number(page) ),
 			view.bottom() + p.fontMetrics().ascent() + 5, QString::number(page) );
-	    if ( view.top()  >= richText.height() )
+ 	    if ( view.top() >= body.top() + richText.height() )
 		break;
 	    printer.newPage();
 	    page++;
@@ -481,5 +469,5 @@ void HelpWindow::bookmChosen( int i )
 
 void HelpWindow::addBookmark()
 {
-    mBookmarks[ bookm->insertItem( caption() ) ] = caption();
+    mBookmarks[ bookm->insertItem( caption() ) ] = browser->context();
 }
