@@ -202,13 +202,14 @@ sMod = pmp->sMod[k];
 
         /* load coefficients in non-ideality model  */
 LOAD_NIDMCOEF:
-
         // Check if coeffs are properly compressed into MULTI !!!!!!!!!!!!!!!
         if( pmp->LsMod[k] )
         { /* coefficients for all phases */
             if( kc+pmp->LsMod[k] > sizeof( pmp->PMc )/sizeof(float))
                 pmp->PMc = (float *) aObj[ o_wi_pmc ].Alloc( (kc+pmp->LsMod[k]), 1, F_ );
-            memcpy( pmp->PMc+kc, aPH->php->pnc, pmp->LsMod[k]*sizeof(float));
+            if( aPH->php->pnc )
+                memcpy( pmp->PMc+kc, aPH->php->pnc, pmp->LsMod[k]*sizeof(float));
+            else pmp->LsMod[k] = 0;    
         }
         if( pmp->LsMdc[k] )
         { /* coefficients for components */

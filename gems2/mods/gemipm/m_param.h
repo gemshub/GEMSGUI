@@ -151,13 +151,9 @@ protected:
     double pH_via_hydroxyl( double x[], double Factor, int j);
     void TotalPhases( double X[], double XF[], double XFA[] );
     //   void eDmb( int N, int L, float *A, double *Y, double *B, double *C );
-    void IS_EtaCalc();
-    void GouyChapman(  int jb, int je, int k );
     void GasParcP();
 
-    // ipm_gamma
-    void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
-    void SurfaceActivityTerm( int jb, int je, int k );
+    // ipm_gamma subroutines 
     double Ej_init_calc( double YOF, int j, int k);
     void PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA[] );
     double  PrimeChemPot(  double G,  double logY,  double logYF,
@@ -170,9 +166,27 @@ protected:
     double GX( double LM  );
     void pm_GC_ods_link( int k, int jb, int jpb, int jdb );
     double TinkleSupressFactor( double ag, int ir);
-    void DebyeHueckel3HelKarp( int jb, int je, int jpb, int jdb, int k );
-    void Davies03temp( int jb, int je, int k ); // added by KD 25.01.02
+
+// Built-in functions for activity coefficients
+// surface complexation
+    void IS_EtaCalc();
+    void GouyChapman(  int jb, int je, int k );
+    void SurfaceActivityTerm( int jb, int je, int k );
+//  aqueous electrolyte
+    void DebyeHueckel3Hel( int jb, int je, int jpb, int jdb, int k );
+    void DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k );
+    void DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k );
+    void DebyeHueckel1LL( int jb, int je, int jpb, int jdb, int k );
+    void Davies03temp( int jb, int je, int jpb, int jdb, int k );
+// fluid mixtures
+    void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
+// condensed mixtures
+    void RedlichKister( int jb, int je, int jpb, int jdb, int k );
+    void MargulesBinary( int jb, int je, int jpb, int jdb, int k );
+    void MargulesTernary( int jb, int je, int jpb, int jdb, int k );
+// Main entry for non-ideality corrections
     void GammaCalc( int LinkMode );
+
     // ipm_fia_bc
     void MassBalanceDeviations( int N, int L, float *A, double *Y, double *B, double *C );
     void SimplexInitialApproximation( );

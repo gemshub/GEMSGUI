@@ -28,9 +28,9 @@
 #include "service.h"
 #include "visor.h"
 
-const char * defaultAqKey =  "a   AQELIA  aq_gen          aq  Generated       ";
-const char * defaultGasKey = "g   GASMXID gas_gen         gm  Generated       ";
-const char * defaultFluKey = "f   CGFLUID fluid_gen       gm  Generated       ";
+//const char * defaultAqKey =  "a   AQELIA  aq_gen          aq  Generated       ";
+//const char * defaultGasKey = "g   GASMXID gas_gen         gm  Generated       ";
+//const char * defaultFluKey = "f   CGFLUID fluid_gen       gm  Generated       ";
 
 TRMults::TRMults( int nrt ):
         TSubModule( nrt )
@@ -258,7 +258,7 @@ void TRMults::DCListLoad(  gstring& AqKey, gstring& GasKey,
     uint k;
     int j, kk;
     time_t tim;
-    int SPHP=1;  /* at first test phases-solution */
+    int SPHP=1;  /* at first test phases-solutions */
 
     // Get all records of PHase
     TCStringArray aPhaseList;
@@ -545,136 +545,134 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
 {
     int file;
     gstring AqKey;
+    gstring PrKey;
     gstring GasKey;
     gstring FluKey;
-    char emod = SM_AQDAV;    // Added KD 25.01.02
+    char amod = SM_AQDAV;    // Added KD 25.01.02
     char gmod = SM_IDEAL;    // Added KD 16.06.03
+    float aparam[4], gparam[4];
+
+TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    // Copying stored params for automatic aq models
+    aparam[0] = aPa->pa.aqPar[0];
+    aparam[1] = aPa->pa.aqPar[1];
+    aparam[2] = aPa->pa.aqPar[2];
+    aparam[3] = aPa->pa.aqPar[3];
+    gparam[0] = aPa->pa.ResFloat;
 
     if( NewRec == false )
-    { // Select aqueous and gaseous phase
+    { // Assemble aqueous and gaseous phase records automatically
+        amod = mu.PmvAq;
         if( mu.nAq >= 0)
+        {
             AqKey = gstring( mu.SF[mu.nAq], 0, PH_RKLEN );
-        else AqKey == "";
+        }
+        else {
+             AqKey == "";
+        }
+        gmod = mu.PmvGas;
         if( mu.nGas >= 0 )
+        {
             GasKey = gstring( mu.SF[mu.nGas], 0, PH_RKLEN );
-        else GasKey ="";
+        }
+        else {
+             GasKey ="";
+        }
     }
-
-//  gstring prfName = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
-//       Call AutoPhaseDialog!
-//  NEW_PHASE_AGAIN:
-//  if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
-//  {
-//       float aparam[4], gparam[4];
-//       char acode, gcode;
-
-// if( !vfAutoPhaseSet(QWidget* par, PrKey, AqKey, GasKey,
-//         acode, gcode, aparam, gparam )
-//             goto NEW_PHASE_AGAIN;   // cancel - infinite loop? 
-//   }
-//
-    NEW_AQ_PHASE_AGAIN:
-    if( changePhases || mu.PmvAq == S_ON )
+    gstring prfName = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+    StripLine( prfName );
+NEW_PHASE_AGAIN:
+    if( changePhases || mu.PmvAq == S_ON || mu.PmvGas == S_ON )
     {
-      if( TProfil::pm->useAqPhase == false )
-      {
+       if( TProfil::pm->useAqPhase == false )
+       {
             mu.PmvAq = S_OFF;
             AqKey = "";
-//            goto NEW_GAS_PHASE_AGAIN;
-      }
-      else
-      {   // modified KD 25.01.02 to implement default Davies eqn
-        switch( vfQuestion3( window(), "Creating Project:",
-                "Select an aqueous activity model:",
-               "&Built-in EDH3", "Built-in &Davies", "&From list of phases" ))
-        {
-        case VF3_1:
-            emod = SM_AQDH3; mu.PmvAq = emod;
-            break;
-        case VF3_2:
-            emod = SM_AQDAV; mu.PmvAq = emod;
-            break;
-        case VF3_3:
-            mu.PmvAq = S_REM; AqKey = "a";
-            break;
-        }
+            amod = '-';
        }
-    }
-    if( (mu.PmvAq == S_REM) &&
+       else {
+            mu.PmvAq = S_REM;   // Defaults
+//            if( changePhases == false )
+//            {
+              amod = 'D';
+              aparam[0] = 0.064;  // b_g = 0.064
+              aparam[1] = 3.72;   // a0 = 3.72 A
+              aparam[2] = 0.0;    // apply b_g to neutral in H or 3 models
+              aparam[3] = 0.5;    // up to I = 0.5 m
+//            }
+       }
+       if( TProfil::pm->useGasPhase == false )
+       {
+            mu.PmvGas = S_OFF;
+            GasKey = "";
+            gmod = '-';
+       }
+       else
+       {    gmod = 'I';
+            mu.PmvGas = S_REM;
+            gparam[0]=gparam[1]=gparam[2]=gparam[3]=0.0;
+       }
+// Calling the wizard to set generated aq and gas phases
+       if( !vfAutoPhaseSet( window(), prfName.c_str(), AqKey, GasKey,
+              amod, gmod, aparam, gparam ) )
+       {
+          if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
+            "Are you really sure?\n Repeat phase setup (Yes) or\nCancel creating the project (No)?" ))
+                goto NEW_PHASE_AGAIN;   // cancel - infinite loop?
+          else
+            Error( GetName(), "Project creation aborted by the user - bailing out..." );
+       }
+
+       if( amod == '-' )
+       {
+//       TProfil::pm->useAqPhase = false;
+          mu.PmvAq = S_OFF;
+          AqKey = "";
+       }
+       else { // Setting control parameters for the auto aq model
+            mu.PmvAq = amod;
+            aPa->pa.aqPar[0] = aparam[0];
+            aPa->pa.aqPar[1] = aparam[1];
+            aPa->pa.aqPar[2] = aparam[2];
+            aPa->pa.aqPar[3] = aparam[3];
+       }
+       if( gmod == '-' )
+       {
+//       TProfil::pm->useGasPhase == false;
+            mu.PmvGas = S_OFF;
+            GasKey = "";
+       }
+       else {
+           mu.PmvGas = gmod;
+           aPa->pa.ResFloat = gparam[0];
+       }
+
+       if( (mu.PmvAq == S_REM) &&
             (( NewRec== true ) ||  ( NewRec== false &&
                 rt[RT_PHASE].Find(AqKey.c_str())<0 && AqKey[0] != 'a') ||
                   (AqKey=="a") ))
-        AqKey = SelectAqPhase(); // Select aqueous phase from list
+          AqKey = SelectAqPhase( ); // Select aqueous phase from list
 
-    if( mu.PmvAq == S_ON )
-     // No phase to select from list or not selected - make default
-     goto NEW_AQ_PHASE_AGAIN;
+        if( mu.PmvAq == S_ON )
+        // No phase to select from list or not selected - make default
+        goto NEW_PHASE_AGAIN;
 
-    gstring prfName = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
-    StripLine( prfName );
-    file =rt[RT_PHASE].GetOpenFileNum( prfName.c_str() );
-    // make a default aqueous phase
-    if( mu.PmvAq == SM_AQDH3 || mu.PmvAq == SM_AQDAV )  // default aqueous phase mode
-    {
-        emod = mu.PmvAq;
-        TPhase::pm->newAqGasPhase( defaultAqKey, file, emod );
-        AqKey = defaultAqKey;
-    }
-
-    NEW_GAS_PHASE_AGAIN:
-    if( changePhases || mu.PmvGas == S_ON )
-    {
-      if( TProfil::pm->useGasPhase == false )
-      {
-            mu.PmvGas = S_OFF;
-            GasKey = "";
-      }
-      else    // This switch was changed by KD on 16.06.03 to add CG EoS
-      {  switch( vfQuestion3( window(), "Creating Project:", "Select a gas/fluid model?",
-                 "&Ideal/ideal mixture", "&Built-in CG2003 EoS", "&From list of phases"  ))
-        {
-        case VF3_1: // Ideal mixture of ideal gases
-//            mu.PmvGas = S_ON; // Ideal mixture of ideal gases
-            emod = SM_IDEAL; mu.PmvGas = emod;
-            GasKey = "g";
-            FluKey = "f";
-            break;
-        case VF3_2:  // CG EoS
-            emod = SM_FLUID; mu.PmvGas = emod;
-            GasKey = "";
-            FluKey = "f";
-            break;
-        case VF3_3:  // Select from list
-            mu.PmvGas = S_REM;
-            GasKey = "g";
-            FluKey = "f";
-            break;
-        }
-       }
-    }
-
-    if( (mu.PmvGas == S_REM) &&
-            (( NewRec== true ) || ( NewRec== false &&
-                rt[RT_PHASE].Find(GasKey.c_str())< 0 && GasKey[0] != 'g')
+        if( (mu.PmvGas == S_REM) &&
+          (( NewRec== true ) || ( NewRec== false &&
+             rt[RT_PHASE].Find(GasKey.c_str())< 0 && GasKey[0] != 'g')
                 || (GasKey[0] == 'g' || GasKey[0] == 'f' ) ))
-        GasKey = SelectGasPhase(); // Select gaseous phase def
-    if( mu.PmvGas == S_ON )
-     // No phase to select from list or not selected - make default
-      goto NEW_GAS_PHASE_AGAIN;
+          GasKey = SelectGasPhase(); // Select gaseous phase def
+        if( mu.PmvGas == S_ON )
+        // No phase to select from list or not selected - make default
+            goto NEW_PHASE_AGAIN;
+    }
+//    gstring prfName = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+//    StripLine( prfName );
+    file =rt[RT_PHASE].GetOpenFileNum( prfName.c_str() );
 
-    // make a default gas phase
-    if( mu.PmvGas == SM_IDEAL )
-    {
-        emod = mu.PmvGas;
-        TPhase::pm->newAqGasPhase( defaultGasKey, file, emod );
-        GasKey = defaultGasKey;
-    }
-    if( mu.PmvGas == SM_FLUID )
-    {
-        emod = mu.PmvGas;
-        TPhase::pm->newAqGasPhase( defaultFluKey, file, emod );
-        GasKey = defaultFluKey;
-    }
+    // Creating automatic aq and/or gas phases
+    TPhase::pm->newAqGasPhase( AqKey.c_str(), GasKey.c_str(), file,
+        amod, gmod, aparam, gparam /*,  bool useLst, TCStringArray lst */ );
 
     MakeRecordLists( AqKey, GasKey ); // build records lists and calc size of arrays
 
@@ -692,6 +690,8 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     SetAqGas( AqKey.c_str() , GasKey.c_str() );
 }
 
+extern const char * dfAqKeyD ;
+extern const char * dfGasKey ;
 // Select aqueous phase from available or make default
 gstring TRMults::SelectAqPhase()
 {
@@ -734,8 +734,7 @@ AGAIN:  i = vfChoice(window(), aPhaseList, "Please, choose an aqueous phase.");
     else return  aPhaseList[i];
 DEF_KEY:
     mu.PmvAq = S_ON;
-    return gstring(defaultAqKey);
-
+    return gstring(dfAqKeyD);
 }
 
 // Select gaseous phase from all or make default
@@ -776,7 +775,7 @@ gstring TRMults::SelectGasPhase()
     while( i<0 );
     return  aPhaseList[i];
 DEF_KEY:
-    return gstring(defaultGasKey);
+    return gstring(dfGasKey);
 }
 
 //Set indexes of selected aqueous and gaseous phase

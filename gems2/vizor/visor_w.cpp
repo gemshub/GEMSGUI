@@ -57,7 +57,7 @@ using namespace std;
 #include "dlg/KeyDialog.h"
 #include "dlg/KeyProfile.h"
 #include "dlg/ChangeKeyDialog.h"
-//#include "dlg/AutoPhaseDialog.h"
+#include "dlg/AutoPhaseDialog.h"
 
 #ifdef __unix
 const char* GEMS_LOGO_ICON = "img/gems1.png";
@@ -256,14 +256,16 @@ TVisorImp::SetProfileMode()
 
 //
 // System control functions
+extern const char * dfAqKeyD ;
+extern const char * dfGasKey ;
 //
 bool
 TVisorImp::SetGeneralMode()
 {
-    int nnrt = rt[RT_PHASE].Find(defaultAqKey);
+    int nnrt = rt[RT_PHASE].Find(dfAqKeyD);
     if( nnrt >= 0 )
         rt[RT_PHASE].Del(nnrt);
-    nnrt = rt[RT_PHASE].Find(defaultGasKey);
+    nnrt = rt[RT_PHASE].Find(dfGasKey);
     if( nnrt >= 0 )
         rt[RT_PHASE].Del(nnrt);
     TProfil::pm->dyn_kill();
@@ -286,7 +288,7 @@ TVisorImp::CalcMulti()
 {
 #ifdef Use_mt_mode
     TProfil::pm->userCancel = false;
-    
+
     try
     {
         ProgressDialog* dlg = new ProgressDialog(/*window()*/this, false, true);
@@ -850,16 +852,19 @@ vfProcessSet(QWidget* par, const char * p_key,
 }
 
 // call to AutoPhaseDialog  added 18.07.03
-/*
 bool
-vfAutoPhaseSet(QWidget* wpar, gstring pr_key, gstring a_key, gstring g_key,
-         char& acode, char& gcode, float apar[4], float gpar[4] );
+vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key,
+         char& acode, char& gcode, float apar[4], float gpar[4] )
 {
      AutoPhaseDialog apdlg( pr_key, acode, gcode, wpar );
+
+//         const char* pr_key, char acode, char gcode,
+//              QWidget* parent = NULL);
+
      apdlg.set_apar( apar );
      apdlg.set_gpar( gpar );
-     apdlg.set_akey( apar );
-     apdlg.set_gkey( gpar );
+     apdlg.set_akey( a_key );
+     apdlg.set_gkey( g_key );
 
      if( !apdlg.exec() )
       return false;
@@ -873,7 +878,8 @@ vfAutoPhaseSet(QWidget* wpar, gstring pr_key, gstring a_key, gstring g_key,
 
     return true;
 }
-*/
+
+
 //=============================================
 // KeyEdit dialog
 //=============================================

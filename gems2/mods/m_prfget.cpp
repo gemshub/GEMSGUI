@@ -104,6 +104,15 @@ TProfil::initCalcMode()
         return true;
 }
 
+extern const char * dfAqKeyD ;
+extern const char * dfAqKeyH ;
+extern const char * dfAqKey3 ;
+extern const char * dfAqKey2 ;
+extern const char * dfAqKey1 ;
+extern const char * dfAqKeyS ;
+extern const char * dfGasKey ;
+extern const char * dfFluKey ;
+
 //Opening Existing Project
 void TProfil::OpenProfileMode( const char* key,
        bool changeAqGas, bool addFile )
@@ -135,11 +144,26 @@ void TProfil::OpenProfileMode( const char* key,
         rt[RT_PARAM].SetKey( key );
         SaveOldList();
 
-        // delete default phases if it is
-        int nRec = rt[RT_PHASE].Find( defaultAqKey );
+        // delete auto-generated aq and gas phases if still in database
+        int nRec = rt[RT_PHASE].Find( dfAqKeyD );
         if( nRec >= 0 )
             rt[RT_PHASE].Del(nRec);
-        nRec = rt[RT_PHASE].Find( defaultGasKey );
+        nRec = rt[RT_PHASE].Find( dfAqKeyH );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey3 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey2 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey1 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfGasKey );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfFluKey );
         if( nRec >= 0 )
             rt[RT_PHASE].Del(nRec);
 
@@ -165,13 +189,30 @@ void TProfil::OpenProfileMode( const char* key,
    rt[RT_PARAM].Get( Rnum );
    dyn_set();
    DeleteOldList();
-        // delete default phases if it is
-    int nRec = rt[RT_PHASE].Find( defaultAqKey );
-    if( nRec >= 0 )
+
+        // delete auto-generated aq and gas phases if already created
+        int nRec = rt[RT_PHASE].Find( dfAqKeyD );
+        if( nRec >= 0 )
             rt[RT_PHASE].Del(nRec);
-    nRec = rt[RT_PHASE].Find( defaultGasKey );
-    if( nRec >= 0 )
+        nRec = rt[RT_PHASE].Find( dfAqKeyH );
+        if( nRec >= 0 )
             rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey3 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey2 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey1 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfGasKey );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfFluKey );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+
     fEdit = false;
     throw; // going on
  }
@@ -270,13 +311,28 @@ AGAIN:
          rt[RT_PARAM].SetKey( key_str.c_str() );
          SaveOldList();
 
-         // delete default phases if it is
-         int nRec = rt[RT_PHASE].Find( defaultAqKey );
-         if( nRec >= 0 )
-             rt[RT_PHASE].Del(nRec);
-         nRec = rt[RT_PHASE].Find( defaultGasKey );
-         if( nRec >= 0 )
-             rt[RT_PHASE].Del(nRec);
+        // delete auto-generated aq and gas phases if already created
+        int nRec = rt[RT_PHASE].Find( dfAqKeyD );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKeyH );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey3 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey2 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey1 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfGasKey );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfFluKey );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
        }
 
    pVisor->Message( 0, "Loading Modelling Project",
@@ -413,13 +469,28 @@ AGAIN:
          rt[RT_PARAM].SetKey( key_str.c_str() );
          SaveOldList();
 
-         // delete default phases if it is
-         int nRec = rt[RT_PHASE].Find( defaultAqKey );
-         if( nRec >= 0 )
-             rt[RT_PHASE].Del(nRec);
-         nRec = rt[RT_PHASE].Find( defaultGasKey );
-         if( nRec >= 0 )
-             rt[RT_PHASE].Del(nRec);
+         // delete auto-generated aq and gas phases if already created
+        int nRec = rt[RT_PHASE].Find( dfAqKeyD );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKeyH );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey3 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey2 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey1 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfGasKey );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfFluKey );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
        }
 
    pVisor->Message( 0, "Loading Modelling Project",

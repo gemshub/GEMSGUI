@@ -35,7 +35,8 @@ DATASRC =	MainDialogData.cpp \
 		GraphDialogData.cpp \
 		ListFilesDialogData.cpp \
 		ElementsDialogData.cpp \
-		SetFiltersDialogData.cpp
+		SetFiltersDialogData.cpp \
+		AutoPhaseDialogData.cpp 
 
 DATAOBJ =       MainDialogData.obj \
 		DBDialogData.obj \
@@ -56,7 +57,8 @@ DATAOBJ =       MainDialogData.obj \
 		LegendDialogData.obj \
 		ListFilesDialogData.obj \
 		ElementsDialogData.obj \
-		SetFiltersDialogData.obj
+		SetFiltersDialogData.obj \
+                AutoPhaseDialogData.obj
 
 
 SOURCES =	MainDialog.cpp \
@@ -81,7 +83,8 @@ SOURCES =	MainDialog.cpp \
 		ListFilesDialog.cpp \
 		ElementsDialog.cpp \
 		SetFiltersDialog.cpp \
- 		LoadMessage.cpp
+ 		LoadMessage.cpp \
+                AutoPhaseDialog.cpp
 
 OBJECTS =	MainDialog.obj \
 		DBDialog.obj \
@@ -105,7 +108,8 @@ OBJECTS =	MainDialog.obj \
 		ListFilesDialog.obj \
  		LoadMessage.obj \
 		ElementsDialog.obj \
-		SetFiltersDialog.obj
+		SetFiltersDialog.obj \
+                AutoPhaseDialog.obj
 
 OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_MainDialogData.obj \
@@ -149,7 +153,9 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
             ..\tmp\moc_ElementsDialog.obj \
 		..\tmp\moc_ElementsDialogData.obj \
 		..\tmp\moc_SetFiltersDialog.obj \
-		..\tmp\moc_SetFiltersDialogData.obj
+		..\tmp\moc_SetFiltersDialogData.obj \
+             ..\tmp\moc_AutoPhaseDialog.obj \
+             ..\tmp\moc_AutoPhaseDialogData.obj
 
 ####### Build rules
 
@@ -436,6 +442,18 @@ clean:
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_SetFiltersDialogData.cpp
 	-del moc_SetFiltersDialogData.cpp
 
+..\tmp\moc_AutoPhaseDialog.obj: AutoPhaseDialog.h
+      	$(MOC) AutoPhaseDialog.h -o moc_AutoPhaseDialog.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_AutoPhaseDialog.cpp
+	-del moc_AutoPhaseDialog.cpp
+
+..\tmp\moc_AutoPhaseDialogData.obj: AutoPhaseDialogData.h
+      	$(MOC) AutoPhaseDialogData.h -o moc_AutoPhaseDialogData.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_AutoPhaseDialogData.cpp
+	-del moc_AutoPhaseDialogData.cpp
+
 ..\tmp\moc_LoadMessage.obj: LoadMessage.h
         $(MOC) $? -o $(*).cpp
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c $(*).cpp
@@ -521,5 +539,9 @@ ElementsDialogData.cpp: ElementsDialog.ui
         $(UIC) $? -impl $(*).h -o $@
 
 SetFiltersDialogData.cpp: SetFiltersDialog.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+AutoPhaseDialogData.cpp: AutoPhaseDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@

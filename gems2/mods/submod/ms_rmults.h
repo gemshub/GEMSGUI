@@ -137,7 +137,7 @@ public:
     void SetAqGas( const char* AqKey, const char* GasKey );
 };
 
-extern const char * defaultAqKey;
-extern const char * defaultGasKey;
+// extern const char * defaultAqKey;
+// extern const char * defaultGasKey;
 
 #endif      //_ms_rmults_h

@@ -97,7 +97,7 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
                          double Factor, double MMC, double Dsur, int jb, int je, int k)
 {
     int j, ii;
-    double Muj, DsurT=0, SPmol, lnFmol=4.016535;
+    double Muj, DsurT, SPmol, lnFmol=4.016535;
 
     if( pmp->PHC[0] == PH_AQUEL )
     {  /* mole fraction to molality conversion */
@@ -558,7 +558,7 @@ void TProfil::IS_EtaCalc()
                 { /* This is B plane */
                     Ez = pmp->EZ[j];
                     if( pmp->SCM[k][ist] == SC_MTL )
-                    { /* Modified TL: Robertson, 1997 */
+                    { /* Modified TL: Robertson, 1997; also XTLM Kulik 2002 */
                         pmp->XetaB[k][ist] += pmp->X[j]*Ez;
                     }
                     else if( pmp->SCM[k][ist] == SC_TLM )
@@ -595,7 +595,21 @@ void TProfil::IS_EtaCalc()
                     { /* BSM for ion exchange on perm.charge surface */
                        pmp->XetaB[k][ist] += pmp->X[j]*Ez;
                     }
-                    /*    case DC_SUR_DL_ION:  XetaS += pmp->X[j]*pmp->EZ[j];  */
+                    else if( pmp->SCM[k][ist] == SC_CCM )
+                    { // Added 25.07.03 to implement extended CCM Nilsson ea 1996
+                      if( pmp->MASDJ[j] < 0.0 )
+                      {
+                          Ez -= 1.0;
+                          pmp->XetaB[k][ist] += pmp->X[j] * Ez;
+                          pmp->XetaA[k][ist] += pmp->X[j];
+                      }
+                      else {
+                          Ez += 1.0;
+                          pmp->XetaB[k][ist] += pmp->X[j] * Ez;
+                          pmp->XetaA[k][ist] -= pmp->X[j];
+                      }
+                    }
+                 /*    case DC_SUR_DL_ION:  XetaS += pmp->X[j]*pmp->EZ[j];  */
                 }
                 break;
             default:
@@ -628,7 +642,7 @@ NEXT_PHASE:
 void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 {
     int ist;
-    double SigA=0., SigD=0., XetaA[MST], XetaB[MST], f1, f3;
+    double SigA=0., SigD=0., SigB=0., XetaA[MST], XetaB[MST], f1, f3;
     double A=1e-9, Sig, F2RT, I, Cap;
     /* Del, F=F_CONSTANT, Cap0; */
     if( pmp->XF[k] < pa.p.ScMin )
@@ -673,9 +687,11 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
         /* calculating charge density at diffuse layer */
         switch( pmp->SCM[k][ist] )
         {
-        case SC_CCM:  /* Constant-Capacitance Model Schindler */
+        case SC_CCM:  /* Constant-Capacitance Model Schindler ext. Nilsson */
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
-            SigD = -SigA;
+//            SigD = -SigA;
+            SigD = -SigA - XetaB[ist];
+            SigB = XetaB[ist];
             break;
         case SC_DDLM: /* Diff. Double Layer Model Dzombak and Morel, 1990 */
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
@@ -761,17 +777,32 @@ GEMU_CALC:
             pmp->XpsiA[k][ist] = PsiD;
             pmp->XpsiB[k][ist] = PsiD;
             break;
-        case SC_CCM:  /* Constant-Capacitance Model   Schindler 1973 */
-            PsiA = SigA / pmp->XcapA[k][ist];
-            if( fabs( PsiA ) > 0.7 )
-            {
-//cout << "EDL (CCM) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
-//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiA = PsiA<0? -0.7: 0.7;
+        case SC_CCM:  /* Constant-Capacitance Model Schindler, ext. Nilsson */
+            if( pmp->XcapB[k][ist] > 0.001 )
+            {  // Classic CCM Schindler with inner-sphere species only
+               PsiA = SigA / pmp->XcapA[k][ist];
+               if( fabs( PsiA ) > 0.7 )
+               {
+                   PsiA = PsiA<0? -0.7: 0.7;
+               }
+               pmp->XpsiA[k][ist] = PsiA;
+            }   
+            else { // Extended CCM model Nilsson ea 1996 as TLM with PsiD = 0
+               PsiB = - SigB / pmp->XcapB[k][ist];
+               if( fabs( PsiB ) > 0.3 )  /* Cutoff potential */
+               {
+                   PsiB = PsiB<0? -0.3: 0.3;
+               }
+               PsiA = PsiB + SigA / pmp->XcapA[k][ist];
+               if( fabs( PsiA ) > 0.7 )
+               {
+                  PsiA = PsiA<0? -0.7: 0.7;
+               }
+               pmp->XpsiA[k][ist] = PsiA;
+               pmp->XpsiB[k][ist] = PsiB;
             }
-            pmp->XpsiA[k][ist] = PsiA;
             break;
-        case SC_MTL:  /* Modified Triple Layer Model for X- Robertson 1996 */
+        case SC_MTL:  /* Modified Triple Layer Model for X- Robertson | Kulik */
 // PsiD = 0.0; // test
             PsiB = PsiD - SigD / pmp->XcapB[k][ist];
             if( fabs( PsiB ) > 0.1 )  /* Cutoff potential */
@@ -866,7 +897,7 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
 {
     int i, j, ist, Cj, iSite[6];
     double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, ISAT, SAT,
-            OSAT=0.0, SATst, xjn, q1, q2;
+           /* OSAT, */ SATst, xjn, q1, q2;
 
     if( pmp->XFA[k] < pmp->DSM ) /* No sorbent retained by the IPM */
         return;
@@ -894,7 +925,7 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
     { /* Loop for DC */
         if( pmp->X[j] <= pmp->lowPosNum /* *10. */ )
             continue;  /* This surface DC has been killed by IPM */
-        OSAT = pmp->lnGmo[j]; // added 6.07.01 by KDA
+//        OSAT = pmp->lnGmo[j]; // added 6.07.01 by KDA
         rIEPS = pa.p.IEPS;   // between 1e-8 and 1e-10 default 1e-9
         switch( pmp->DCC[j] )  /* code of species class */
         {
@@ -1313,147 +1344,6 @@ double TProfil::TinkleSupressFactor( double ag, int ir)
     return TF;
 }
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* Aqueous electrolyte                        Brooklyn 5/15/97 DAK */
-/* Calculation of individual activity coefficients as proposed by
-* I.K.Karpov using DH(III) with Kielland' a0 parameters and common
-* 3rd parameter (HKF81) */
-void TProfil::DebyeHueckel3HelKarp( int jb, int je, int jpb, int jdb, int k )
-{
-    int j;
-    double T, A, B, a0, I, sqI, bg, bgi, Z2, lgGam;
-
-    I= pmp->IC;
-    if( I < pa.p.ICmin )
-        return;
-    T=pmp->Tc;
-    A= pmp->PMc[jpb+0];
-    B= pmp->PMc[jpb+1];
-    bg=pmp->PMc[jpb+5];
-    sqI = sqrt( I );
-
-//Ask Dima!!! 20/04/2002
-#ifndef IPMGEMPLUGIN
-    if( fabs(A) < 1e-9 )
-        A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
-    if( fabs(B) < 1e-9 )
-        B = 50.2916 * sqrt( tpp->RoW ) / sqrt( T*tpp->EpsW );
-#else
-    if( fabs(A) < 1e-9 )
-        A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
-    if( fabs(B) < 1e-9 )
-        B = 50.2916 * sqrt( multi->RoW_ ) / sqrt( T*multi->EpsW_ );
-#endif
-    ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel3HelKarp",
-        "Error: A,B were not calculated - no values of RoW and EpsW !" );
-    /* Calculation of DH equation */
-    bgi = bg;
-    for( j=jb; j<je; j++ )
-    {
-        a0 = pmp->DMc[jdb+j*pmp->LsMdc[k]];
-        if( pmp->LsMdc[k] > 1 )
-        { /* Individual bg coeff Truesdell-Jones (Parkhurst,1990) */
-            bgi = pmp->DMc[jdb+j*pmp->LsMdc[k]+1];
-            if( !bgi )
-                bgi = bg;
-        }
-        if( pmp->EZ[j] )
-        { /* Charged species */
-            Z2 = pmp->EZ[j]*pmp->EZ[j];
-            lgGam = ( -A * sqI * Z2 ) / ( 1 + B * a0 * sqI ) + bgi * I ;
-        }
-        else
-        { /* Neutral species */
-            if( a0 > 0 )
-            {
-                if( pmp->DCC[j] != DC_AQ_SOLVENT ) /* Setchenow coefficient */
-                    lgGam = a0 * I;
-                else /* water-solvent - a0 - osmotic coefficient */
-                    lgGam = a0 * I; /* correct: instead of I - sum.molality */
-            }
-            else
-            {
-                if( a0 < -0.99 )
-                    lgGam = 0;
-                else if( fabs( a0 ) < 1e-9 )
-                    lgGam = bgi * I;  /* Average Setchenow coeff. */
-                else lgGam = a0 * I;  /* Busenberg & Plummer */
-            }
-        }
-        pmp->lnGam[j] = lgGam * lg_to_ln;
-    } /* j */
-}
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* Aqueous electrolyte                      KD 25.01.02 */
-/* Calculation of individual activity coefficients
-* using Davies equation with common 0.3 parameter and
- temperature-dependent A parameter */
-void TProfil::Davies03temp( int jb, int je, int k )
-{
-    int j;
-    double T, A, I, sqI, Z2, lgGam;
-
-    I= pmp->IC;
-    if( I < pa.p.ICmin )
-        return;  // too low ionic strength
-
-    T=pmp->Tc;
-    sqI = sqrt( I );
-//    if( fabs(A) < 1e-9 )
-//Ask Dima!!! 20/04/2002
-#ifndef IPMGEMPLUGIN
-    A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
-#else
-    A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
-#endif
-//  at 25 C 1 bar: A = 0.5092
-    ErrorIf( fabs(A) < 1e-9, "Davies03temp",
-       "Error: A is not calculated - check values of RoW and EpsW !" );
-    /* Calculation of Davies equation: Langmuir 1997 p. 133 */
-    for( j=jb; j<je; j++ )
-    {
-        if( pmp->EZ[j] )
-        {   /* Charged species */
-            Z2 = pmp->EZ[j]*pmp->EZ[j];
-            lgGam = ( -A * Z2 ) * ( sqI/( 1 + sqI ) - 0.3 * I );
-        }
-        else
-        { /* Neutral species */
-          lgGam = 0;
-        }
-        pmp->lnGam[j] = lgGam * lg_to_ln;
-    } /* j */
-}
-
-// ---------------------------------------------------------------------
-void TProfil::ChurakovFluid( int jb, int je, int jpb, int jdb, int k )
-{
-   double *FugCoefs; float *EoSparam;
-   int j, jj;
-   TCGFcalc aCGF;
-
-   FugCoefs = (double*)malloc( pmp->L1[k]*sizeof(double) );
-//    for( j=jb; j<je; j++ )
-//    {
-//       a0 = pmp->DMc[jdb+j*pmp->LsMdc[k]];
-//
-//    }
-    EoSparam = pmp->DMc+jdb;
-
-    aCGF.CGActivCoefPT( pmp->X+jb, EoSparam, FugCoefs, pmp->L1[k],
-        pmp->Pc, pmp->Tc );
-
-    for( jj=0, j=jb; j<je; j++, jj++ )
-    {
-        if( FugCoefs[jj] > 1e-23 /* && pmp->Pparc[j] > 1e-23 */ )
-             pmp->lnGam[j] = log(FugCoefs[ jj ]/pmp->Pparc[j]);
-        else
-             pmp->lnGam[j] = 0;
-    } /* j */
-    free( FugCoefs );
-}
-
 static double ICold=0.;
 /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of the activity coefficient vector (lnGam[])
@@ -1574,25 +1464,39 @@ void TProfil::GammaCalc( int LinkMode  )
 
         switch( pmp->PHC[k] )
         {   /* calculate activity coefficients by built-in functions */
-        case PH_AQUEL:   /*calc by DH III appr. HKF */
-            if( sMod[SGM_MODE] == SM_STNGAM )
-            {
-                if( pmp->XF[k] > pa.p.XwMin &&
-                        pmp->IC > pa.p.ICmin )
+          case PH_AQUEL:   /*calc by DH III appr. HKF */
+             if( sMod[SGM_MODE] == SM_STNGAM && pmp->XF[k] > pa.p.XwMin
+                  && pmp->IC > pa.p.ICmin )
+             {
+                switch( sMod[SPHAS_TYP] )
                 {
-                    if( sMod[SPHAS_TYP] == SM_AQDH3 )
-                       DebyeHueckel3HelKarp(  jb, je, jpb, jdb, k );
-                    else if( sMod[SPHAS_TYP] == SM_AQDAV )
-                       Davies03temp( jb, je, k );
-                    /* Pitzer( q, jb, je, k ); */
-                    /* Donnan volume model */
+                  case SM_AQDH3:
+                       DebyeHueckel3Karp( jb, je, jpb, jdb, k );
+                          break;
+                  case SM_AQDH2:
+                       DebyeHueckel2Kjel( jb, je, jpb, jdb, k );
+                          break;
+                  case SM_AQDH1:
+                       DebyeHueckel1LL( jb, je, /* jpb, jdb, */ k );
+                          break;
+                  case SM_AQDHH:
+                       DebyeHueckel3Hel( jb, je, jpb, jdb, k );
+                          break;
+                  case SM_AQDAV:
+                       Davies03temp( jb, je, /* jpb, jdb, */ k );
+                          break;
+                  case SM_AQSIT:  // SIT - under construction
+                  default:
+                          break;
                 }
                 goto END_LOOP; /* break; */
-            }
-            else if( sMod[SGM_MODE] == SM_IDEAL )
+             }
+             else if( sMod[SGM_MODE] == SM_IDEAL )
                 goto END_LOOP;
-            break;
-        case PH_FLUID:
+             break;
+          case PH_GASMIX:
+          case PH_PLASMA:
+          case PH_FLUID:
             if( sMod[SGM_MODE] == SM_STNGAM )
             {
                 if( pmp->XF[k] > pmp->DSM )
@@ -1605,6 +1509,33 @@ void TProfil::GammaCalc( int LinkMode  )
             else if( sMod[SGM_MODE] == SM_IDEAL )
                 goto END_LOOP;
             break;
+         case PH_SOLUTION:
+         case PH_SIMELT:
+         case PH_SINCOND:
+         case PH_SINDIS:
+         case PH_HCARBL:  // solid and liquid nonel solutions
+             if( sMod[SGM_MODE] == SM_STNGAM && pmp->XF[k] > pmp->DSM )
+             {
+                switch( sMod[SPHAS_TYP] )
+                {
+                  case SM_REDKIS:
+                       RedlichKister( jb, je, jpb, jdb, k );
+                          break;
+                  case SM_MARGB:
+                       MargulesBinary( jb, je, jpb, jdb, k );
+                          break;
+                  case SM_MARGT:
+                       MargulesTernary( jb, je, jpb, jdb, k );
+                          break;
+                  case SM_RECIP: // under construction
+                  default:
+                          break;
+                }
+                goto END_LOOP; /* break; */
+             }
+             else if( sMod[SGM_MODE] == SM_IDEAL )
+                goto END_LOOP;
+             break;
         case PH_POLYEL:  /* PoissonBoltzmann( q, jb, je, k ) break; */
         case PH_SORPTION: /* calc elstatic potenials from Gouy-Chapman eqn */
             if( pmp->PHC[0] == PH_AQUEL && pmp->XF[k] > pmp->DSM
@@ -1712,6 +1643,505 @@ END_LOOP: /* if( LinkMode == LINK_TP_MODE ) */
     //  aSubMod[MD_EQCALC]->ModUpdate("PM_ipms   EqCalc() converged");
 }
 
+// ----------------------------------------------------------------------------
+// Built-in functions for activity coefficients
+//
+// aqueous electrolyte
+//  EDH with common ion-size parameter
+//
+void
+TProfil::DebyeHueckel3Hel( int jb, int je, int jpb, int /*jdb*/, int /* k */ )
+{
+    int j;
+    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam, molt;
+    float nPolicy;
+
+    I= pmp->IC;
+    if( I < pa.p.ICmin )
+        return;
+    T = pmp->Tc;
+    A = pmp->PMc[jpb+0];
+    B = pmp->PMc[jpb+1];
+    bg = pmp->PMc[jpb+5];
+    a0c = pmp->PMc[jpb+6];
+    nPolicy = pmp->PMc[jpb+7];
+
+    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
+    sqI = sqrt( I );
+
+//Ask Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
+    if( fabs(A) < 1e-9 )
+    {
+        A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
+//        pmp->PMc[jpb+0] = A;
+    }
+    if( fabs(B) < 1e-9 )
+    {
+        B = 50.2916 * sqrt( tpp->RoW ) / sqrt( T*tpp->EpsW );
+//        pmp->PMc[jpb+1] = B;
+    }
+#else
+    if( fabs(A) < 1e-9 )
+        A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
+    if( fabs(B) < 1e-9 )
+        B = 50.2916 * sqrt( multi->RoW_ ) / sqrt( T*multi->EpsW_ );
+#endif
+    ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel3Hel",
+        "Error: A,B were not calculated - no values of RoW and EpsW !" );
+    /* Calculation of EDH equation */
+//  bgi = bg;
+    for( j=jb; j<je; j++ )
+    {
+        bgi = bg; // Common third parameter
+        a0 = a0c; // Common ion-size parameter
+        if( pmp->EZ[j] )
+        { /* Charged species */
+            Z2 = pmp->EZ[j]*pmp->EZ[j];
+            lgGam = ( -A * sqI * Z2 ) / ( 1. + B * a0 * sqI ) + bgi * I ;
+        }
+        else
+        { /* Neutral species */
+            if( nPolicy >= 0.0 )
+            {
+               if( pmp->DCC[j] != DC_AQ_SOLVENT ) /* salt-out coefficient */
+                   lgGam = bgi * I;
+               else /* water-solvent - a0 - osmotic coefficient */
+                   lgGam = 0.;
+//                 lgGam = a0 * molt; /* corrected: instead of I - tot.molality */
+            }
+            else { // nPolicy < 0 - all gamma = 1 for neutral species
+               lgGam = 0.;
+            }
+        }
+        pmp->lnGam[j] = lgGam * lg_to_ln;
+    } /* j */
+}
+
+// Debye-Hueckel with Kielland ion-size
+// and optional salt-out corr. for neutral species
+//
+void
+TProfil::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
+{
+    int j;
+    double T, A, B, a0, /*a0c,*/ I, sqI, bg, bgi, Z2, lgGam, molt;
+    float nPolicy;
+
+    I= pmp->IC;
+    if( I < pa.p.ICmin )
+        return;
+    T = pmp->Tc;
+    A = pmp->PMc[jpb+0];
+    B = pmp->PMc[jpb+1];
+    bg = pmp->PMc[jpb+5];
+//    a0c = pmp->PMc[jpb+6];
+    nPolicy = pmp->PMc[jpb+7];
+
+    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
+    sqI = sqrt( I );
+
+//Ask Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
+    if( fabs(A) < 1e-9 )
+    {
+        A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
+//        pmp->PMc[jpb+0] = A;
+    }
+    if( fabs(B) < 1e-9 )
+    {
+        B = 50.2916 * sqrt( tpp->RoW ) / sqrt( T*tpp->EpsW );
+//        pmp->PMc[jpb+1] = B;
+    }
+#else
+    if( fabs(A) < 1e-9 )
+        A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
+    if( fabs(B) < 1e-9 )
+        B = 50.2916 * sqrt( multi->RoW_ ) / sqrt( T*multi->EpsW_ );
+#endif
+    ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel2Kjel",
+        "Error: A,B were not calculated - no values of RoW and EpsW !" );
+    /* Calculation of DH equation */
+    bgi = bg;
+    for( j=jb; j<je; j++ )
+    {
+        a0 = pmp->DMc[jdb+j*pmp->LsMdc[k]];
+        if( pmp->EZ[j] )
+        { /* Charged species */
+            Z2 = pmp->EZ[j]*pmp->EZ[j];
+            lgGam = ( -A * sqI * Z2 ) / ( 1. + B * a0 * sqI ); // + bgi * I ;
+        }
+        else
+        { /* Neutral species */
+            if( nPolicy >= 0.0 )
+            {
+               if( a0 > 0.0 )
+               {
+                  if( pmp->DCC[j] != DC_AQ_SOLVENT ) /* salt-out coefficient */
+                     lgGam = a0 * I;
+                  else /* water-solvent - a0 - rational osmotic coefficient */
+                     lgGam = a0 * molt; /* corrected: instead of I - sum.molality */
+               }
+               else {
+                  if( a0 < -0.99 )
+                      lgGam = 0.;
+                  else if( fabs( a0 ) < 1e-9 )
+                      lgGam = bgi * I;  /* Average salt-out coeff. */
+                  else lgGam = a0 * I;  /* Busenberg & Plummer */
+               }
+            }
+            else { // nPolicy < 0 - all gamma = 1 for neutral species
+               lgGam = 0.;
+            }
+        }
+        pmp->lnGam[j] = lgGam * lg_to_ln;
+    } /* j */
+}
+
+void
+TProfil::DebyeHueckel1LL( int jb, int je, /* int jpb, int jdb, */ int /* k */ )
+{
+    int j;
+    double T, A, /* a0, */ I, sqI, Z2, lgGam;
+//    float nPolicy;
+
+    I= pmp->IC;
+    if( I < pa.p.ICmin )
+        return;
+    T = pmp->Tc;
+//    A = pmp->PMc[jpb+0];
+    sqI = sqrt( I );
+
+//Ask Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
+//    if( fabs(A) < 1e-9 )
+        A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
+#else
+//    if( fabs(A) < 1e-9 )
+        A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
+#endif
+    ErrorIf( fabs(A) < 1e-9 /* || fabs(B) < 1e-9 */, "DebyeHueckel1LL",
+        "Error: A was not calculated - no values of RoW and EpsW !" );
+    /* Calculation of DH equation */
+    for( j=jb; j<je; j++ )
+    {
+        if( pmp->EZ[j] )
+        { /* Charged species */
+            Z2 = pmp->EZ[j]*pmp->EZ[j];
+            lgGam = ( -A * sqI * Z2 ); // / ( 1 + B * a0 * sqI ) + bgi * I ;
+        }
+        else  { /* Neutral species */
+            lgGam = 0.;
+        }
+        pmp->lnGam[j] = lgGam * lg_to_ln;
+    } /* j */
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Aqueous electrolyte                        Brooklyn 5/15/97 DAK */
+// Calculation of individual activity coefficients using extended
+// Debye-Hueckel equation with common 3rd parameter (HKF81)
+//  and individual (Kielland) ion size parameters
+//
+void TProfil::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
+{
+    int j;
+    double T, A, B, a0, /*a0c,*/ I, sqI, bg, bgi, Z2, lgGam, molt;
+    float nPolicy;
+
+    I= pmp->IC;
+    if( I < pa.p.ICmin )
+        return;
+    T = pmp->Tc;
+    A = pmp->PMc[jpb+0];
+    B = pmp->PMc[jpb+1];
+    bg = pmp->PMc[jpb+5];
+//    a0c = pmp->PMc[jpb+6];
+    nPolicy = pmp->PMc[jpb+7];
+
+    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
+    sqI = sqrt( I );
+
+//Ask Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
+    if( fabs(A) < 1e-9 )
+    {
+       A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
+//       pmp->PMc[jpb+0] = A;
+    }
+    if( fabs(B) < 1e-9 )
+    {
+       B = 50.2916 * sqrt( tpp->RoW ) / sqrt( T*tpp->EpsW );
+//       pmp->PMc[jpb+1] = B;
+    }
+#else
+    if( fabs(A) < 1e-9 )
+        A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
+    if( fabs(B) < 1e-9 )
+        B = 50.2916 * sqrt( multi->RoW_ ) / sqrt( T*multi->EpsW_ );
+#endif
+    ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel3Karp",
+        "Error: A,B were not calculated - no values of RoW and EpsW !" );
+    /* Calculation of EDH equation */
+//  bgi = bg;
+    for( j=jb; j<je; j++ )
+    {
+        bgi = bg;
+        a0 = pmp->DMc[jdb+j*pmp->LsMdc[k]];
+//        if( pmp->LsMdc[k] > 1 )
+//        { /* Individual bg coeff Truesdell-Jones (Parkhurst,1990) */
+//            bgi = pmp->DMc[jdb+j*pmp->LsMdc[k]+1];
+//            if( !bgi )
+//                bgi = bg;
+//        }
+        if( pmp->EZ[j] )
+        { /* Charged species */
+            Z2 = pmp->EZ[j]*pmp->EZ[j];
+            lgGam = ( -A * sqI * Z2 ) / ( 1. + B * a0 * sqI ) + bgi * I ;
+        }
+        else
+        { /* Neutral species */
+            if( nPolicy >= 0.0 )
+            {
+               if( a0 > 0.0 )
+               {
+                  if( pmp->DCC[j] != DC_AQ_SOLVENT ) /* Setchenow coefficient */
+                     lgGam = a0 * I;
+                  else /* water-solvent - a0 - rational osmotic coefficient */
+                     lgGam = a0 * molt; /* corrected: instead of I - sum.molality */
+               }
+               else {
+                  if( a0 < -0.99 )
+                      lgGam = 0.;
+                  else if( fabs( a0 ) < 1e-9 )
+                      lgGam = bgi * I;  /* Average Setchenow coeff. */
+                  else lgGam = a0 * I;  /* Busenberg & Plummer */
+               }
+            }
+            else { // nPolicy < 0 - all gamma = 1 for neutral species
+               lgGam = 0.;
+            }
+        }
+        pmp->lnGam[j] = lgGam * lg_to_ln;
+    } /* j */
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Aqueous electrolyte                      KD 25.01.02 */
+/* Calculation of individual activity coefficients
+* using Davies equation with common 0.3 parameter and
+ temperature-dependent A parameter */
+void TProfil::Davies03temp( int jb, int je, /* int jpb, int jdb, */ int /* k */ )
+{
+    int j;
+    double T, A, I, sqI, Z2, lgGam;
+
+    I= pmp->IC;
+    if( I < pa.p.ICmin )
+        return;  // too low ionic strength
+
+    T=pmp->Tc;
+    sqI = sqrt( I );
+//    if( fabs(A) < 1e-9 )
+//Ask Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
+    A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
+#else
+    A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
+#endif
+//  at 25 C 1 bar: A = 0.5114
+    ErrorIf( fabs(A) < 1e-9, "Davies03temp",
+       "Error: A is not calculated - check values of RoW and EpsW !" );
+    /* Calculation of Davies equation: Langmuir 1997 p. 133 */
+    for( j=jb; j<je; j++ )
+    {
+        if( pmp->EZ[j] )
+        {   /* Charged species */
+            Z2 = pmp->EZ[j]*pmp->EZ[j];
+            lgGam = ( -A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * I );
+        }
+        else
+        { /* Neutral species */
+          lgGam = 0;
+        }
+        pmp->lnGam[j] = lgGam * lg_to_ln;
+    } /* j */
+}
+
+// fluid mixtures
+// ---------------------------------------------------------------------
+void
+TProfil::ChurakovFluid( int jb, int je, int /* jpb */, int jdb, int k )
+{
+    double *FugCoefs; float *EoSparam;
+    int j, jj;
+    double ro;
+    TCGFcalc aCGF;
+
+    FugCoefs = (double*)malloc( pmp->L1[k]*sizeof(double) );
+    EoSparam = pmp->DMc+jdb;
+
+    ro = aCGF.CGActivCoefPT( pmp->X+jb, EoSparam, FugCoefs, pmp->L1[k],
+        pmp->Pc, pmp->Tc );
+    if (ro <= 0. )
+    {
+       cout << "\nCGFluid() error: ro= " << ro << endl;  // error message!
+       return;
+    }
+    // Phase volume of the fluid in cm3
+    pmp->FVOL[k] = pmp->FWGT[k] / ro;
+
+    for( jj=0, j=jb; j<je; j++, jj++ )
+    {
+        if( FugCoefs[jj] > 1e-23 /* && pmp->Pparc[j] > 1e-23 */ )
+             pmp->lnGam[j] = log(FugCoefs[ jj ]/pmp->Pparc[j]);
+        else
+             pmp->lnGam[j] = 0;
+    } /* j */
+    free( FugCoefs );
+
+}
+
+// ------------------ condensed mixtures --------------------------
+// Binary Redlich-Kister model - parameters (dimensionless)
+// in ph_cf Phase opt.array 2x3, see also Phase module
+// Implemented by KD on 31 July 2003
+//
+void
+TProfil::RedlichKister( int jb, int /* je */, int jpb, int /*jdb */, int k )
+{
+  double /* T, P, */ a0, a1, a2, lnGam1, lnGam2, X1, X2;
+
+//  if( je != jb+1 )
+//    ; // Wrong dimensions - error message?
+//  T = pmp->Tc;
+//  P = pmp->Pc;
+// parameters
+  a0 = pmp->PMc[jpb+0];
+  a1 = pmp->PMc[jpb+1];  // regular model - should be 0
+  a2 = pmp->PMc[jpb+2];  // regular model - should be 0
+// mole fractions
+  X1 = pmp->X[jb] / pmp->XF[k];
+  X2 = pmp->X[jb+1] / pmp->XF[k];
+// activity coeffs
+  lnGam1 = X2*X2 *(a0 + a1*( 3.*X1 - X2 ) + a2 *( X1 - X2 )*( 5.*X1 - X2 ) );
+  lnGam2 = X1*X1 *(a0 - a1*( 3.*X2 - X1 ) + a2 *( X2 - X1 )*( 5.*X2 - X1 ) );
+// assignment
+  pmp->lnGam[jb] = lnGam1;
+  pmp->lnGam[jb+1] = lnGam2;
+}
+
+// Binary Margules model - parameters (in J/mol) in ph_cf Phase opt.array 2x3
+// See also Phase module
+// Implemented by KD on 31 July 2003
+//
+void
+TProfil::MargulesBinary( int jb, int /*je*/, int jpb, int /* jdb */, int k )
+{
+  double T, P, WU1, WS1, WV1, WU2, WS2, WV2, WG1, WG2,
+         a1, a2, lnGam1, lnGam2, X1, X2;
+  double Vex, Sex, Hex, Uex;
+
+//  if( je != jb+1 )
+//    ; // Wrong dimensions - error message?
+  T = pmp->Tc;
+  P = pmp->Pc;
+  WU1 = pmp->PMc[jpb+0];
+  WS1 = pmp->PMc[jpb+1];  // in J/K/mol, if unknown should be 0
+  WV1 = pmp->PMc[jpb+2];  // in J/bar if unknown should be 0
+  WU2 = pmp->PMc[jpb+3];
+  WS2 = pmp->PMc[jpb+4];  // if unknown should be 0
+  WV2 = pmp->PMc[jpb+5];  // if unknown should be 0
+// parameters
+  WG1 = WU1 - T * WS1 + P * WV1;
+  WG2 = WU2 - T * WS2 + P * WV2;
+// if regular, WG1 should be equal WG2
+// if ideal, WG1 = WG2 = 0
+  a1 = WG1 / pmp->RT;
+  a2 = WG2 / pmp->RT;
+// mole fractions
+  X1 = pmp->X[jb] / pmp->XF[k];
+  X2 = pmp->X[jb+1] / pmp->XF[k];
+// activity coeffs
+  lnGam1 = ( 2.*a2 - a1 )* X2*X2 + 2.*( a1 - a2 )* X2*X2*X2;
+  lnGam2 = ( 2.*a1 - a2 )* X1*X1 + 2.*( a2 - a1 )* X1*X1*X1;
+// assignment
+  pmp->lnGam[jb] = lnGam1;
+  pmp->lnGam[jb+1] = lnGam2;
+  // Calculate excess volume, entropy and enthalpy !
+  // To be used in total phase property calculations
+  Vex = ( WV1*X1 + WV2*X2 ) * X1*X2;
+pmp->FVOL[k] += Vex*10.;
+  Sex = ( WS1*X1 + WS2*X2 ) * X1*X2;
+  Hex = ( (WU1+P*WV1)*X1 + (WU2+P*WV2)*X2 ) * X1*X2;
+  Uex = ( WU1*X1 + WU2*X2 ) * X1*X2;
+ }
+
+// Ternary regular Margules model - parameters (in J/mol)
+// in ph_cf Phase opt.array 4x3; see also Phase module
+// Implemented by KD on 31 July 2003
+//
+void
+TProfil::MargulesTernary( int jb, int /*je*/, int jpb, int /*jdb*/, int k )
+{
+  double T, P, WU12, WS12, WV12, WU23, WS23, WV23, WU13, WS13, WV13,
+         WU123, WS123, WV123, WG12, WG13, WG23, WG123,
+         a12, a13, a23, a123, lnGam1, lnGam2, lnGam3, X1, X2, X3;
+  double Vex, Sex, Hex, Uex;
+
+//  if( je != jb+2 )
+//    ; // Wrong dimensions - error message?
+  T = pmp->Tc;
+  P = pmp->Pc;
+  WU12 = pmp->PMc[jpb+0];
+  WS12 = pmp->PMc[jpb+1];  // if unknown should be 0
+  WV12 = pmp->PMc[jpb+2];  // if unknown should be 0
+  WU13 = pmp->PMc[jpb+3];
+  WS13 = pmp->PMc[jpb+4];  // if unknown should be 0
+  WV13 = pmp->PMc[jpb+5];  // if unknown should be 0
+  WU23 = pmp->PMc[jpb+6];
+  WS23 = pmp->PMc[jpb+7];  // if unknown should be 0
+  WV23 = pmp->PMc[jpb+8];  // if unknown should be 0
+  WU123 = pmp->PMc[jpb+9];
+  WS123 = pmp->PMc[jpb+10];  // if unknown should be 0
+  WV123 = pmp->PMc[jpb+11];  // if unknown should be 0
+
+  // parameters
+  WG12 = WU12 - T * WS12 + P * WV12;
+  WG13 = WU13 - T * WS13 + P * WV13;
+  WG23 = WU23 - T * WS23 + P * WV23;
+  WG123 = WU123 - T * WS123 + P * WV123;
+  a12 = WG12 / pmp->RT;
+  a13 = WG13 / pmp->RT;
+  a23 = WG23 / pmp->RT;
+  a123 = WG123 / pmp->RT;
+
+  // mole fractions
+  X1 = pmp->X[jb] / pmp->XF[k];
+  X2 = pmp->X[jb+1] / pmp->XF[k];
+  X3 = pmp->X[jb+2] / pmp->XF[k];
+  // activity coeffs
+  lnGam1 = a12 * X2 *( 1-X1 ) + a13 * X3 * ( 1-X1 ) - a23 * X2 * X3
+           + a123 * X2 * X3 * ( 1 - 2.*X1 );
+  lnGam2 = a23 * X3 *( 1-X2 ) + a12 * X1 * ( 1-X2 ) - a13 * X1 * X3
+           + a123 * X1 * X3 * ( 1 - 2.*X2 );
+  lnGam3 = a13 * X1 *( 1-X3 ) + a23 * X2 * ( 1-X3 ) - a12 * X1 * X2
+           + a123 * X1 * X2 * ( 1 - 2.*X3 );
+  // assignment
+  pmp->lnGam[jb] = lnGam1;
+  pmp->lnGam[jb+1] = lnGam2;
+  pmp->lnGam[jb+2] = lnGam3;
+  // Calculate excess volume, entropy and enthalpy !
+  // To be done!
+  Vex = WV12*X1*X2 + WV13*X1*X3 + WV23*X2*X3 + WV123*X1*X2*X3;
+pmp->FVOL[k] += Vex*10.;
+  Sex = WS12*X1*X2 + WS13*X1*X3 + WS23*X2*X3 + WS123*X1*X2*X3;
+  Uex = WU12*X1*X2 + WU13*X1*X3 + WU23*X2*X3 + WU123*X1*X2*X3;
+  Hex = (WU12+P*WV12)*X1*X2 + (WU13+P*WV13)*X1*X3
+         + (WU23+P*WV23)*X2*X3 + (WU123+P*WV123)*X1*X2*X3;
+}
+
+//
 // End of file ipm_gamma.cpp
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 

@@ -254,12 +254,45 @@ NewSystemDialog::Update()
 
     pLine->setText(tr (rt[RT_SYSEQ].PackKey()));
     QString msg  = tr ("    ");
-            msg += QString("  T = %1 K;").arg(pData->T, 7, 'f', 2);
-            msg += QString("  P = %1 bar;").arg(pData->P, 7, 'f', 2);
-            msg += QString("  V = %1 L;").arg(pData->VXc/1000., 9, 'g', 5);
-            msg += QString("  pH = %1;").arg(pData->pH, 7, 'g', 4);
-            msg += QString("  pe = %1;").arg(pData->pe, 8, 'g', 5);
-            msg += QString("  IS = %1").arg(pData->IC, 8, 'g', 5);
+            msg += QString("System:  T = %1 K;").arg(pData->Tc, 7, 'f', 2);
+            msg += QString("  P = %1 bar;").arg(pData->Pc, 8, 'f', 2);
+            msg += QString("  V = %1 L;").arg(pData->VXc/1000., 9, 'g', 4);
+    if( pData->PHC )
+    {
+       if( pData->PHC[0] == PH_AQUEL )
+       {
+          char *sMod;
+          msg += QString("  Aqueous:");
+          sMod = pData->sMod[0];
+          switch( sMod[0 /*SPHAS_TYP*/ ] )
+          {
+            case SM_AQDAV: // Davies
+                      msg += QString(" built-in Davies;");
+                      break;
+            case SM_AQDH1: // DH LL
+                      msg += QString(" built-in DH1;");
+                      break;
+            case SM_AQDH2: // DH Kielland
+                      msg += QString(" built-in DH2;");
+                      break;
+            case SM_AQDH3: // EDH Kielland
+                      msg += QString(" built-in EDH(K);");
+                      break;
+            case SM_AQDHH: // EDH Helgeson
+                      msg += QString(" built-in EDH(H);");
+                      break;
+            case SM_AQSIT: // SIT PSI (under construction)
+                      msg += QString(" built-in SIT;");
+                      break;
+            default:  // Other (user-def) aqueous models
+                      msg += QString(" user-defined;");
+                      break;
+          }
+            msg += QString("  pH = %1;").arg(pData->pH, 6, 'f', 3);
+            msg += QString("  pe = %1;").arg(pData->pe, 7, 'f', 3);
+            msg += QString("  IS = %1 m").arg(pData->IC, 6, 'f', 3);
+       }
+    }
     statusBar()->message( msg );
 }
 

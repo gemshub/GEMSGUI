@@ -15,7 +15,7 @@
 // See http://les.web.psi.ch/Software/GEMS-PSI for more information
 // E-mail: gems2.support@psi.ch; chud@igc.irk.ru
 //-------------------------------------------------------------------
-
+     
 #include <math.h>
 
 #include "s_tpwork.h"
@@ -284,9 +284,9 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
 
         return 1;// Error: Wrong type of equation
       };
-
+ // returns density!
       iRet = CGActivCoefPT( X, EoSparPT, FugPure, 1, P, T );
-      if( iRet  )
+      if( iRet < 0.  )
       {
           return iRet;
       };
@@ -305,7 +305,7 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
   }
 
 
-   int TCGFcalc::CGActivCoefPT(double *X,float *param,double *act, unsigned NN,
+   double TCGFcalc::CGActivCoefPT(double *X,float *param,double *act, unsigned NN,
         double Pbar, double T )
    {
       //double act[MAXPARAM];
@@ -337,7 +337,7 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
 
         ro=ROTOTALMIX(P,T,paar);
 if( ro < 0.0 ) //  Too low pressure - no corrections will be done
-  return ( -1 );
+  return ( -1. );
         Z=P/(R*T*ro);
         F0=FTOTALMIX(T,ro,paar);
 
@@ -381,9 +381,9 @@ if( ro < 0.0 ) //  Too low pressure - no corrections will be done
 
          //MLPutRealList(stdlink,act,paar.NCmp());
         delete [] xtmp;
-        delete [] Fx;;
+        delete [] Fx;
 
-         return 0;
+         return ro;
    };
 
 

@@ -81,11 +81,11 @@ vfElements(QWidget* par, const char * prfName,
            elmWindowData& elm_data, setFiltersData& sf_data );
 
 bool
-vfProcessSet(QWidget* par, const char * p_key,
+vfProcessSet(QWidget* par, const char* p_key,
             bool& mode, char& type, int size[6] );
 
 bool
- vfAutoPhaseSet(QWidget* par, gstring& pr_key, gstring& a_key, gstring& g_key,
+ vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,
         char& acode, char& gcode, float apar[4], float gpar[4] );
 
 gstring

@@ -146,6 +146,8 @@ link:
 +dlg\ElementsDialogData.obj \
 +dlg\SetFiltersDialog.obj \
 +dlg\SetFiltersDialogData.obj \
++dlg\AutoPhaseDialog.obj \
++dlg\AutoPhaseDialogData.obj \
 +dlg\LoadMessage.obj \
 +tmp\moc_MainDialog.obj \
 +tmp\moc_MainDialogData.obj \
@@ -189,6 +191,8 @@ link:
 +tmp\moc_ElementsDialogData.obj \
 +tmp\moc_SetFiltersDialog.obj \
 +tmp\moc_SetFiltersDialogData.obj \
++tmp\moc_AutoPhaseDialog.obj \
++tmp\moc_AutoPhaseDialogData.obj \
 +tmp\moc_LoadMessage.obj
 |
 

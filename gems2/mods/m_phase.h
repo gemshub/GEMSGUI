@@ -128,13 +128,16 @@ public:
     void RecCalc( const char *key );
     void CmHelp();
 
-    // make new phases (emod added KD 25.01.02)
-    void newAqGasPhase( const char *key, int file, const char emod = '3',
-                        bool useLst = false, TCStringArray lst = 0 );
+    // make new aq and/or gas phases (re-written by KD 30.07.03)
+    void newAqGasPhase( const char *akey, const char *gkey, int file,
+        const char amod, const char gmod, float apar[4], float gpar[4],
+            bool useLst = false, TCStringArray lst = 0 );
+    // Added by KD on 31.07.03 
+    void AssemblePhase( const char* key, const char* part, float param[4],
+           int file, bool useLst = false, TCStringArray lst = 0 );
 
     void CopyRecords( const char * prfName, TCStringArray& aPHnoused,
           TCStringArray& aPHtmp, elmWindowData el_data, phSetupData st_data);
-
 }
 ;
 
@@ -150,21 +153,24 @@ enum solmod_switches { /* indexes of keys of model solution*/
     /* This code (one upper-case letter or digit) defines type of mixing
     and default method of calculation of mixing properties before and at
     IPM iterations.   Possible values: (SPHAS_TYP) */
-    SM_IDEAL = 'I',  // ideal solution or single-component phase;
-    SM_REGULAR = 'R',// regular solution, also with limited miscibility
-    SM_FLUID = 'F',  // multicomp. EOS fluid Churakov&Gottschalk 2003
-    SM_RECIP = 'V',  // reciprocal solution (reserved)
+    SM_IDEAL =  'I', // ideal solution or single-component phase;
+    SM_REDKIS = 'G', // built-in Guggenheim (Redlich-Kister) binary SS model
+                     // (with 3 coeffs)
+    SM_MARGB = 'M',  // built-in binary Margules SS (subreg. w. 3 coeff U,P,T )
+    SM_MARGT = 'T',  // built-in ternary Margules SS (reg. w. 3 coeff U,P,T )
+    SM_FLUID = 'F',  // built-in multicomp. EOS fluid Churakov&Gottschalk 2003
+    SM_RECIP = 'R',  // reciprocal solution (to be done), formerly regular solution
     SM_AQDAV = 'D',  // built-in Davies equation (with 0.3) added KD 25.01.02
-    SM_AQDH1 = '1',  // limiting Debye-Hueckel law for aqueous species (reserved)
-    SM_AQDH2 = '2',  // 2-d approximation of Debye-Hueckel (reserved)
+    SM_AQDH1 = '1',  // built-in limiting Debye-Hueckel law for aqueous species
+    SM_AQDH2 = '2',  // built-in 2-term Debye-Hueckel (Kielland)
     SM_AQDH3 = '3',  // built-in 3-d approximation of Debye-Hueckel
-    SM_AQDHH = 'H',  // built-in 3-d approximation of Debye-Hueckel (Helgeson, reserved)
+    SM_AQDHH = 'H',  // built-in 3-d approximation of Debye-Hueckel (Helgeson)
+    SM_AQSIT = 'S',  // built-in SIT model for aq activity coeffs (reserved)
     SM_AQPITZ = 'P', // Pitzer's model for aqueous brines (reserved)
     SM_IONEX = 'E',  // ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A', // models of surface complexation at solid-aqueous interface
-    SM_SCIEM = 'U'  // combined ion exchange / adsorption on clay particles,
-               // oligoelectrolytes
-               //   O  -  other models of non-ideal solutions.
+    SM_USERDEF = 'U', // user-defined mixing model (in Phase record)
+    SM_OTHER = 'O'   //  other models of non-ideal solutions (reserved)
 };
 
 //    This code defines standard state and reference scale of concentra-

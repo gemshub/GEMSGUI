@@ -656,18 +656,42 @@ TVisor::initModules()
     }
 }
 
+extern const char * dfAqKeyD ;
+extern const char * dfAqKeyH ;
+extern const char * dfAqKey3 ;
+extern const char * dfAqKey2 ;
+extern const char * dfAqKey1 ;
+extern const char * dfAqKeyS ;
+extern const char * dfGasKey ;
+extern const char * dfFluKey ;
+
 // Exit of program, save cfg
 void
 TVisor::Exit()
 {
     try
     {
-        // delete default aq and gas phases if they exist
-        int nRec = rt[RT_PHASE].Find(defaultAqKey);
-        if (nRec >= 0)
+        // delete auto-generated aq and gas phases if still in database
+        int nRec = rt[RT_PHASE].Find( dfAqKeyD );
+        if( nRec >= 0 )
             rt[RT_PHASE].Del(nRec);
-        nRec = rt[RT_PHASE].Find(defaultGasKey);
-        if (nRec >= 0)
+        nRec = rt[RT_PHASE].Find( dfAqKeyH );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey3 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey2 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfAqKey1 );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfGasKey );
+        if( nRec >= 0 )
+            rt[RT_PHASE].Del(nRec);
+        nRec = rt[RT_PHASE].Find( dfFluKey );
+        if( nRec >= 0 )
             rt[RT_PHASE].Del(nRec);
 
         toModCFG();

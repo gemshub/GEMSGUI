@@ -93,7 +93,7 @@ SPP_SETTING pa_ = {
     1., 25.,      /* Pr, Tr */
     /* MULTI */
     1e-19, /* lowPosNum, */  1e-16, /* logXw, */   1e-9,  /* logYFk */
-    { 0., 0., 0., 0., 0. }   // Reserv
+    { 0.064, 3.72, 0., 0.5 }, 0.   // Reserv
 }; /* SPP_SETTING */
 
 

@@ -282,7 +282,7 @@ void TPhase::set_def( int q)
     ph[q].tprn = 0;
 }
 
-// Input nessasery data and links objects
+// Input necessary data and links objects
 void TPhase::RecInput( const char *key )
 {
     TCModule::RecInput( key );
@@ -295,7 +295,7 @@ static int rkeycmp(const void *e1, const void *e2)
     return RCmp;
 }
 
-//Rebild record structure before calc
+//Rebuild record structure before calc
 int
 TPhase::RecBuild( const char *key, int mode  )
 {
@@ -321,6 +321,59 @@ AGAIN_SETUP:
         php->name[db->FldLen(2)] = '\0';
     }
 
+    // Setting up the DC/phase coeffs depending on the
+    // built-in activity coeff model
+    if( php->sol_t[SGM_MODE] == SM_STNGAM )
+    {
+       php->sol_t[DCOMP_DEP] = SM_UNDEF;
+       php->sol_t[SPHAS_DEP] = SM_UNDEF;
+       php->sol_t[DCE_LINK] = SM_UNDEF;
+       php->sol_t[SCM_TYPE] = SM_UNDEF;
+
+       switch(php->sol_t[SPHAS_TYP])
+       {
+          case SM_REDKIS:   // Redlich-Kister
+                          php->nscN = php->nscM =0;
+                          php->ncpN = 1; php->ncpM = 3;
+                          break;
+          case SM_MARGB:  // Margules binary subregular
+                          php->nscN = php->nscM =0;
+                          php->ncpN = 2; php->ncpM = 3;
+                          break;
+          case SM_MARGT:  // Margules ternary regular
+                          php->nscN = php->nscM =0;
+                          php->ncpN = 4; php->ncpM = 3;
+                          break;
+//          case SM_RECIP:
+          case SM_FLUID:  // Churakov-Gottschalk EoS
+                          php->ncpN = php->ncpM =0;
+                          php->nscN = 1; php->nscM = 4;
+                          break;
+          case SM_AQDAV:  // Aqueous Davies
+                          php->ncpN = php->ncpM = 0;
+                          php->nscN = php->nscM = 0;
+                          break;
+          case SM_AQDH1:  // Aqueous DH LL
+                          php->ncpN = php->ncpM = 0;
+                          php->nscN = php->nscM = 0;
+                          break;
+          case SM_AQDH2:  // DH Kielland, salt-out for neutral
+                          php->ncpN = 2; php->ncpM = 4;
+                          php->nscN = php->nscM = 1;
+                          break;
+          case SM_AQDH3:  // EDH Kielland, salt-out for neutral
+                          php->ncpN = 2; php->ncpM = 4;
+                          php->nscN = php->nscM = 1;
+                          break;
+          case SM_AQDHH:  // EDH Helgeson, common a0, salt-out for neutral
+                          php->ncpN = 2; php->ncpM = 4;
+                          php->nscN = php->nscM = 0;
+                          break;
+          //          case SM_AQSIT:
+          default:  // other models
+             break;
+       }
+    }
     if( php->nscN < 0 || php->nscM < 0 || php->ncpN < 0 || php->ncpM < 0 ||
             php->ncpN*php->ncpM > MAXPNCOEF || php->Nsd < 0 || php->Nsd > 16 ||
             php->NsiT < 0 || php->NsiT > 6 )
@@ -513,7 +566,7 @@ TPhase::RecCalc( const char *key )
 void
 TPhase::CalcPhaseRecord(  bool getDCC  )
 {
-    int  i, iic, pa0=0, Kielland, nsc;
+    int  i, /*iic,*/ pa0=0, Kielland, nsc;
     vstr dcn(MAXRKEYLEN);
     char Ctype;
     float a0, bp, Z;
@@ -669,7 +722,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
            } // i
         }
      }
-NEXT:  /* define more precisely code of phase  */
+// NEXT:  /* define more precisely code of phase  */
 //    iic = 0;
     if( php->Asur > 1. )
         if( php->nDC == 1 )
@@ -683,65 +736,136 @@ NEXT:  /* define more precisely code of phase  */
 //    if( iic ) goto NEXT;
 }
 
-// to Project new  - extended by KD on 16.06.03 to add CG EoS
-void TPhase::newAqGasPhase( const char *key, int file, const char emod,
-                            bool useLst, TCStringArray lst )
+//-------------------------------------------------------------------------
+// called from Project - extended by KD on 16.06.03 to add CG EoS
+// Re-written (for AutoPhaseWizard) by KD on 31.07.03
+//
+void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
+   const char amod, const char gmod, float apar[4], float gpar[4],
+   bool useLst, TCStringArray lst )
 {
-    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    char *part;
+//    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    char *part, nbuf[MAXFORMULA];
+    gstring Name = "Auto-set ";
 
-    if( key[0] == 'a' ) // set flags  and sizes
+//  Setup of aqueous phase
+    switch( amod )
     {
-        part = "a:*:*:*:";
-        memcpy( php->sol_t, "3NNSNN", 6 );
-        if( emod != SM_AQDH3 )
-           php->sol_t[0] = emod;  // added Davies eq by KD 25.01.02
-        if( emod == SM_AQDH3)
-        {
-           memcpy( &php->PphC, "a++---", 6 );
-           php->ncpN = 1;
-             php->ncpM = 8;
-           php->nscN = php->nscM = 1;
-        }
-        else if(emod == SM_AQDAV)
-        {
-           memcpy( &php->PphC, "a-----", 6 );
-           php->ncpN = php->ncpM = 0;
-           php->nscN = php->nscM = 0;
-        }
+       case 'N': // No aqueous phase
+       case 'U': // User-selected aqueous phase
+                 goto MAKE_GAS_PHASE;
+       case 'D': // Davies equation, no a0 needed; opt. bg for neutral aq sp.
+                memcpy( php->sol_t, "DNNSNN", 6 );
+                memcpy( &php->PphC, "a-----", 6 );
+                php->ncpN = 0; php->ncpM = 0;
+                php->nscN = php->nscM = 0;
+                Name += "ion-association model, Davies equation";
+                apar[0] = apar[1] = apar[2] = 0.0;
+                sprintf( nbuf, "Parameters: I_max =%-5.3f ", apar[3] );
+                break;
+       case 'H': // EDH (Helgeson) with common bg and common a0
+                memcpy( php->sol_t, "HNNSNN", 6 );
+                memcpy( &php->PphC, "a+----", 6 );
+                php->ncpN = 2; php->ncpM = 4;
+                php->nscN = php->nscM = 0;
+                Name += "ion-association model, EDH(H) equation, common ion size";
+    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; a_size= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
+                 apar[0], apar[1], apar[2], apar[3] );
+                break;
+       case '3': // EDH with Kielland a0 and common bg
+                memcpy( php->sol_t, "3NNSNN", 6 );
+                memcpy( &php->PphC, "a++---", 6 );
+                php->ncpN = 2; php->ncpM = 4;
+                php->nscN = php->nscM = 1;
+                Name += "ion-association model, EDH(K) equation, Kielland ion sizes";
+                apar[1] = 0.0;
+    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
+                 apar[0], apar[2], apar[3] );
+                break;
+       case '2': // DH without bg and Kielland a0
+                memcpy( php->sol_t, "2NNSNN", 6 );
+                memcpy( &php->PphC, "a++---", 6 );
+                php->ncpN = 2; php->ncpM = 4;
+                php->nscN = php->nscM = 1;
+                Name += "ion-association model, DH equation, Kielland ion sizes";
+                apar[1] = 0.0;
+    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
+                 apar[0], apar[2], apar[3] );
+                break;
+       case '1': // DH limiting law (no a0 and bg required)
+                memcpy( php->sol_t, "1NNSNN", 6 );
+                memcpy( &php->PphC, "a-----", 6 );
+                php->ncpN = php->ncpM = 0;
+                php->nscN = php->nscM = 0;
+                Name += "ion-association model, Debye-Hueckel limiting law";
+                apar[0] = apar[1] = apar[2] = 0.0;
+//                apar[3] = 0.01;
+                sprintf( nbuf, "Parameters: I_max =%-5.3f ", apar[3] );
+                break;
+       default: // Unrecognized code - error message ?
+       case 'S': // SIT - under construction
+                 goto MAKE_GAS_PHASE;
     }
-    else if( key[0] == 'g' ) // set flags  and sizes
-         {
-           php->sol_t[0] = emod;
-           part = "g:*:*:*:";
-           memcpy( php->sol_t, "INNINN", 6 );
-           memcpy( &php->PphC, "g-----", 6 );
-           php->ncpN = php->ncpM =0;
-           php->nscN = php->nscM =0;
-         }
-    else if( key[0] == 'f' ) // added by KD on 16.06.03
-         {                   // Constructing the CG2003 fluid model
-           php->sol_t[0] = emod;
-           part = "f:*:*:*:";
-           if( emod == SM_FLUID )  // CG EoS fluid
-           {
-              memcpy( php->sol_t, "FNNSNN", 6 );
-              memcpy( &php->PphC, "f-+---", 6 );
-              php->ncpN = php->ncpM =0;
-              php->nscN = 1; php->nscM = 4;
-           }
-           else { // Ideal fluid ?
+    strcpy( php->name, Name.c_str() );
+    strcpy( php->notes, nbuf );
+    part = "a:*:*:*:";
+
+// Call assembling of the aqueous phase
+    AssemblePhase( akey, part, apar, file, useLst, lst );
+
+MAKE_GAS_PHASE:
+    Name = "Auto-set ";
+    switch( gmod )
+    {
+      case 'N': // No gas/fluid phase in the system
+      case 'U': // User - selected from database
+                goto DONE;
+      case 'I':  // Ideal mixture (default)
               memcpy( php->sol_t, "INNINN", 6 );
               memcpy( &php->PphC, "g-----", 6 );
               php->ncpN = php->ncpM =0;
               php->nscN = php->nscM =0;
-           }
-         }
+              Name += "ideal mixture of ideal or real gases";
+              strcpy( php->name, Name.c_str() );
+              strcpy( php->notes,
+     "Applicable at low P - elevated T (with CST gases - at elevated P)" );
+              break;
+      case 'F':  // Fluid CG EoS model
+              memcpy( php->sol_t, "FNNSNN", 6 );
+              memcpy( &php->PphC, "f-+---", 6 );
+              php->ncpN = php->ncpM =0;
+              php->nscN = 1; php->nscM = 4;
+              Name += "Perturbation-based EoS (Churakov&Gottschalk,2003)";
+              strcpy( php->name, Name.c_str() );
+              strcpy( php->notes,
+     "Applicable at high P - moderate T for mixed non-electrolyte fluids" );
+              break;
+      case 'P': // Peng-Robinson EoS, under construction
+      default:  // unrecognized code
+              goto DONE;
+    }
 
-    strncpy( php->name, key, MAXFORMULA-1);
-    php->name[MAXFORMULA-1] = '\0';
-    strcpy( php->notes, "`" );
+    part = "g:*:*:*:";
+    if( gkey[0] == 'f' )
+        part = "f:*:*:*:";
+// Assembling gas phase
+    AssemblePhase( gkey, part, gpar, file, useLst, lst );
 
+// Do sometning else here?
+   DONE:
+    fEdit = false;
+}
+
+// Assembling the phase (automatically generated aq or gas/fluid)
+// Separated by KD on 31.07.03
+void
+TPhase::AssemblePhase( const char* key, const char* part, float param[4],
+    int file, bool useLst, TCStringArray lst )
+{
+
+    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+
+// Initializing
     php->Nsd = 0;
     php->nDC = 0;
     php->NsiT = php->NR1 = 0;
@@ -815,9 +939,8 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
             }
             else ii++;
         }
-
-
-        ErrorIf( Nrc<1&&Ndc<1,  key, " No DComp and ReacDC records found! ");
+        ErrorIf( Nrc<1&&Ndc<1,  /*key,*/  "AutoAssemblePhase:",
+              " No DComp and ReacDC records found! ");
         php->nDC = Ndc + Nrc;
         php->NR1 = aRclist.GetCount();
         iic = aDclist.GetCount();
@@ -831,7 +954,7 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
     {   /* Get list of component : add aMcv and aMrv */
         for( i=0; i<php->nDC; i++ )
         {
-            if( i<aDclist.GetCount() )
+            if( i < aDclist.GetCount() )
             {
                 memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
                 php->SM[i][DC_RKLEN-1] = SRC_DCOMP;
@@ -842,7 +965,7 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
                 php->SM[i][DC_RKLEN-1] = SRC_REACDC;
             }
         }
-        /* Sort list of component */
+        /* Sort list of components */
         if( php->nDC > 2 )
             qsort( php->SM[0], (size_t)php->nDC, DC_RKLEN, rkeycmp );
     }
@@ -887,17 +1010,23 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
         php->PFsiT = S_ON;
     }
 
-    if( key[0] == 'a' )
-        if( php->pnc )
-            php->pnc[5] = 0.064;
+// set model parameters, if necessary
+    if( php->pnc && ( php->ncpN * php->ncpM >= 8 ) )
+    {
+       php->pnc[5] = param[0];
+       php->pnc[6] = param[1];
+       php->pnc[7] = param[2];
+    }
+// Calculating the phase record and saving it to database
     CalcPhaseRecord( true );
     int  Rnum = db->Find( key );
     if( Rnum<0 )
         db->AddRecordToFile( key, file );
     else
         db->Rep( Rnum );
-    fEdit = false;
+//    fEdit = false;
 }
+
 
 void
 TPhase::CmHelp()

@@ -34,7 +34,8 @@ DATASRC =	MainDialogData.cpp \
 		LegendDialogData.cpp \
 		ListFilesDialogData.cpp \
 		ElementsDialogData.cpp \
-		SetFiltersDialogData.cpp
+		SetFiltersDialogData.cpp \
+		AutoPhaseDialogData.cpp 
 
 DATAOBJ =	$(subst .cpp,.o,$(DATASRC))
 
@@ -60,7 +61,8 @@ SOURCES =	MainDialog.cpp \
 		ListFilesDialog.cpp \
 		LoadMessage.cpp \
 		ElementsDialog.cpp \
-		SetFiltersDialog.cpp
+		SetFiltersDialog.cpp \
+		AutoPhaseDialog.cpp 
 
 OBJECTS =	$(subst .cpp,.o,$(SOURCES))
 
@@ -106,7 +108,9 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_ElementsDialog.o \
 		moc_ElementsDialogData.o \
 		moc_SetFiltersDialog.o \
-		moc_SetFiltersDialogData.o
+		moc_SetFiltersDialogData.o \
+		moc_AutoPhaseDialog.o \
+		moc_AutoPhaseDialogData.o
 
 
 TARGET =    dlg.o

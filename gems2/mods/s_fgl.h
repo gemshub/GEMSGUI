@@ -381,7 +381,7 @@ public:
    double DENSITY(double *X,float *param, unsigned NN ,double Pbar, double T );
    int CGActivCoefRhoT(double *X,float *param, double *act, unsigned NN,
      double ro, double T );
-   int CGActivCoefPT(double *X,float *param,double *act, unsigned NN,
+   double CGActivCoefPT(double *X,float *param,double *act, unsigned NN,
      double Pbar, double T );
 
     int CGcalcFug( void );  // Calc. fugacity for 1 species at X=1
