@@ -110,6 +110,7 @@
                 <property name="font">
                     <font>
                         <family>Arial</family>
+                        <pointsize>10</pointsize>
                         <bold>1</bold>
                     </font>
                 </property>
@@ -169,7 +170,7 @@
                 <property name="font">
                     <font>
                         <family>Arial</family>
-                        <bold>1</bold>
+                        <pointsize>10</pointsize>
                     </font>
                 </property>
                 <property name="text">
@@ -215,8 +216,17 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
                 <property name="text">
-                    <string>Du&amp;al Thermodynamics (DuTherm)</string>
+                    <string>Du&amp;al Thermodynamics (DualTh)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+A</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string></string>
@@ -234,8 +244,17 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
                 <property name="text">
-                    <string>Adaptive Models and &amp;Uncertainty Spaces </string>
+                    <string>Sensitivity Studies (&amp;UnSpace)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+U</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string></string>
@@ -253,8 +272,17 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
                 <property name="text">
-                    <string>Coupled &amp;Mass Transport in a Megasystem</string>
+                    <string>Coupled Fluid-&amp;Mass Transport</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+M</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string></string>
@@ -298,6 +326,12 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
                 <property name="text">
                     <string>B&amp;ibliography and Scripts (SDref)</string>
                 </property>
@@ -320,8 +354,17 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
                 <property name="text">
                     <string>Numerical &amp;Constants (Const)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+C</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Some tables of constants used in thermodynamic calculations</string>
@@ -338,6 +381,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
                 </property>
                 <property name="text">
                     <string>Modelling P&amp;roject (Project)</string>
@@ -361,8 +410,17 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
                 <property name="text">
                     <string>Single Chemical Sys&amp;tems (SysEq)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+T</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Definitions of chemical systems and equilibrium states</string>
@@ -379,6 +437,12 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Process Simulators (Process)</string>
@@ -402,8 +466,17 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <pointsize>12</pointsize>
+                    </font>
+                </property>
                 <property name="text">
                     <string>Data &amp;Samplers and Plotters (GtDemo)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+S</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Definitions of data samplers and graphics</string>

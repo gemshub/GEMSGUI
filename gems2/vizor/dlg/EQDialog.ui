@@ -123,6 +123,12 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string>Single - &amp;System Equilibria (SysEq)</string>
             </property>
@@ -145,6 +151,12 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Process Simulation (Process)</string>
             </property>
@@ -166,6 +178,12 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
             </property>
             <property name="text">
                 <string>&amp;Data Sampling and Plotting (GtDemo) </string>
@@ -228,6 +246,12 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>10</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string>Du&amp;al Thermodynamics (DualTh)</string>
             </property>
@@ -249,6 +273,12 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>10</pointsize>
+                </font>
             </property>
             <property name="text">
                 <string>Sensitivity Analysis (&amp;UnSpace)</string>

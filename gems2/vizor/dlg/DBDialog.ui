@@ -123,6 +123,12 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Independent Components (IComp)</string>
             </property>
@@ -148,6 +154,12 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;Dependent Components (DComp)</string>
             </property>
@@ -170,8 +182,17 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string>Dependent Components (&amp;ReacDC)</string>
+            </property>
+            <property name="accel">
+                <string>Alt+R</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Formulae and standard-state data for a species defined via reactions with other species</string>
@@ -189,8 +210,17 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string>&amp;T/P Tabulations and Plots (RTparm)</string>
+            </property>
+            <property name="accel">
+                <string>Alt+T</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Definitions of T-P grid, calculation and plotting of thermodynamic data for dependent components</string>
@@ -208,8 +238,17 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string> Thermodynamic &amp;Phases (Phase)</string>
+            </property>
+            <property name="accel">
+                <string>Alt+P</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Definitions of single- and multi-component phases to construct chemical systems</string>
@@ -227,8 +266,17 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <pointsize>12</pointsize>
+                </font>
+            </property>
             <property name="text">
                 <string>Predefined &amp;Compositions (Compos)</string>
+            </property>
+            <property name="accel">
+                <string>Alt+C</string>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Definitions of stoichiometry entities for setting up bulk composition of chemical systems</string>
@@ -277,6 +325,7 @@
                     <property name="font">
                         <font>
                             <family>Arial</family>
+                            <pointsize>10</pointsize>
                             <bold>1</bold>
                         </font>
                     </property>
@@ -308,6 +357,7 @@
                     <property name="font">
                         <font>
                             <family>Arial</family>
+                            <pointsize>10</pointsize>
                             <bold>1</bold>
                         </font>
                     </property>
