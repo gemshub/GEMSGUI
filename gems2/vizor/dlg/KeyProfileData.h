@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'KeyProfile.ui'
 **
-** Created: Do 28. Feb 17:25:52 2002
+** Created: Fr 1. Mrz 15:02:36 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -14,11 +14,13 @@
 class QVBoxLayout; 
 class QHBoxLayout; 
 class QGridLayout; 
+class QButtonGroup;
 class QCheckBox;
 class QLabel;
 class QListBox;
 class QListBoxItem;
 class QPushButton;
+class QRadioButton;
 
 class KeyProfileData : public QDialog
 { 
@@ -30,12 +32,16 @@ public:
 
     QLabel* pLabel;
     QListBox* pList;
+    QCheckBox* pAqGas;
+    QCheckBox* pFiles;
+    QCheckBox* pTemplate;
+    QButtonGroup* ButtonGroup1;
+    QRadioButton* rbNewPrMode;
+    QRadioButton* rbOldPrMode;
     QPushButton* pGO_OKButton;
     QPushButton* pNewProfBtn;
     QPushButton* pHelpButton;
     QPushButton* pCancelButton;
-    QCheckBox* pAqGas;
-    QCheckBox* pFiles;
 
 
 public slots:
@@ -43,6 +49,7 @@ public slots:
     virtual void CmHelp();
 
 protected:
+    QVBoxLayout* Layout4;
     QHBoxLayout* Layout3;
 };
 

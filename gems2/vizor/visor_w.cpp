@@ -970,16 +970,29 @@ bool
 vfChooseFileOpen(QWidget* par, gstring& path, const char* title)
 {
     //    QString d=QFileDialog::getOpenFileName( ".", "*", par, title );
-    QFileDialog file_dlg( ".", "*", par, title, true );
-    file_dlg.setCaption("Open file");
-    file_dlg.setMode(QFileDialog::ExistingFile);
+    //QFileDialog file_dlg( ".", "*", par, title, true );
+    //file_dlg.setCaption("Open file");
+    //file_dlg.setMode(QFileDialog::ExistingFile);
 
-    if( !path.empty() )
-        file_dlg.setSelection(path.c_str());
+    //if( !path.empty() )
+    //    file_dlg.setSelection(path.c_str());
 
-    if( file_dlg.exec() )
+    //if( file_dlg.exec() )
+    //{
+    //    path = file_dlg.selectedFile();
+    //    return true;
+    //}
+    //else
+    //{
+    //    path = "";
+    //    return false;
+    //}
+    QString fn = QFileDialog::getOpenFileName(
+          ".", "*", par, title );
+    if ( !fn.isEmpty() )
     {
-        path = file_dlg.selectedFile();
+        const char* fl = fn;
+        path = fl;
         return true;
     }
     else
@@ -1002,18 +1015,23 @@ vfChooseFileSave(QWidget* par, gstring& path, const char* title)
     //    QString d=QFileDialog::getSaveFileName( ".", filter.c_str(), par, title );
 
     gstring dir = pVisor->userGEMDir();
-//    QFileDialog file_dlg( ".", "*;*.txt", par, title, true );
-    QFileDialog file_dlg( dir.c_str(), "*;*.txt", par, title, true );
 
-    file_dlg.setCaption("Save As");
-    file_dlg.setMode(QFileDialog::AnyFile);
+    //    QFileDialog file_dlg( ".", "*;*.txt", par, title, true );
+    //QFileDialog file_dlg( dir.c_str(), "*;*.txt", par, title, true );
 
-    if( !path.empty() )
-        file_dlg.setSelection(path.c_str());
+    //file_dlg.setCaption("Save As");
+    //file_dlg.setMode(QFileDialog::AnyFile);
 
-    if( file_dlg.exec() )
+    //if( !path.empty() )
+    //    file_dlg.setSelection(path.c_str());
+
+    //if( file_dlg.exec() )
+    QString fn = QFileDialog::getSaveFileName(
+          dir.c_str(), "*;*.txt", par, title );
+    if ( !fn.isEmpty() )
     {
-        path = file_dlg.selectedFile();
+        const char* fl = fn;
+        path = fl;
         return true;
     }
     else
@@ -1021,6 +1039,8 @@ vfChooseFileSave(QWidget* par, gstring& path, const char* title)
         path = "";
         return false;
     }
+
+
 }
 
 // exports obect to TXT file

@@ -23,10 +23,12 @@
 #define _t_read_h_
 
 #include "v_object.h"
+#include "v_ipnc.h"
+
 
   enum data_rftype { 
      read_r = 1 /*%nns*/, empty_r = 2 /*EMPTY*/,
-     skip_r = 3 /*SKIP*/, string_r =4 /*"string"*/
+     string_r =4 /*"string"*/
     };
 
 
@@ -39,14 +41,17 @@
 struct RFormat
 {
   int     type;
+  int     size;
   gstring fmt;
 
-  RFormat( const char aType, gstring aFmt ):
-    type( aType), fmt(aFmt)
-  {}
+  RFormat( const char aType, int aSize, gstring aFmt ):
+    type( aType), size(aSize), fmt(aFmt)
+  {
 
-  RFormat( PFormat& d ):
-    type( d.type), fmt( d.fmt)
+  }
+
+  RFormat( RFormat& d ):
+    type( d.type), size(d.size), fmt( d.fmt)
   {}
 
   int FmtType()
@@ -79,7 +84,7 @@ struct RData
    objNum(_index), i(i_index), j(j_index)
    { }
 
-  RData( PData& d ):
+  RData( RData& d ):
    objNum(d.objNum), i(d.i), j(d.j)
    { }
 

@@ -115,13 +115,34 @@ void TIComp::set_def( int q)
 
 int TIComp::RecBuild( const char *key, int mode  )
 {
-    int ret = TCModule::RecBuild( key, mode );
-    if( ret == VF3_1 )
+    int bldType = mode;
+    if( bldType == VF_UNDEF )
+       bldType = vfQuestion3(window(), "Reallocation of data arrays ",
+                              GetName()+ gstring(" : ") + key ,
+                              "&Bypass", "&Remake", "&Clear all");
+    int retType = bldType;
+
+    switch( bldType )
+    {
+    case VF3_3:    // VF3_1
+        retType = VF3_1;
+        dyn_kill();
+        set_def(); // set default data or zero if necessary
+    case VF3_2:
+        fEdit = true;
+        break;
+    case VF3_1:   // VF3_3   - do nothing
+        retType = VF3_3;
+        break;
+    }
+    if( retType == VF3_1 )
     {
         strncpy( icp->name, db->FldKey(2), db->FldLen(2));
         icp->name[db->FldLen(2)] = '\0';
     }
+    return  retType;
 }
+
 // Input necessary data and link DOD
 void
 TIComp::RecInput( const char *key )

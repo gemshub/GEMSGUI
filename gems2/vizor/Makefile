@@ -1,16 +1,13 @@
 # Makefile for GEMS Vizor
-# 
-# 
+#
+#
 
 include ./Makefile.qt
-
 subdirs    =  libs kernel dlg
-
 
 INC_LOCAL	= -I./kernel -I./libs -I../mods -I./
 INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 #FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
-
 
 SOURCES	= page_f.cpp \
           visor.cpp \
@@ -24,6 +21,7 @@ SOURCES	= page_f.cpp \
           units.cpp \
           helpwindow.cpp \
           graph.cpp
+
 
 OBJECTS = $(subst .cpp,.o,$(SOURCES))
 
@@ -39,40 +37,40 @@ METAOBJ = moc_visor_w.o \
 
 OBJ_SUB   = ./kernel/kernel.o ./dlg/dlg.o ./libs/config.o  ./libs/gstring.o
 
-
 TARGET	= ../lib/gemviz.o
 
-
 .PHONY: subdirs_mk all
-
 all:      $(TARGET)
-
 $(TARGET): subdir_mk $(OBJECTS) $(METAOBJ) $(OBJ_SUB) Makefile
+	$(LD) -r $(OBJECTS) $(METAOBJ) $(OBJ_SUB) -o $@
 
-	$(LD) -r $(OBJECTS) $(METAOBJ) $(OBJ_SUB) -o $@   
 
 subdir_mk:
 	@for i in $(subdirs); do \
          echo Making all in $$i ;  \
 	 $(MAKE) -C $$i all RELEASE=$(RELEASE) || exit 1; \
-        done     
+        done
 
-clean:  
+
+clean:
 	@for i in $(subdirs); do \
 	$(MAKE) -C $$i clean || exit 1; \
-        done     
+        done
 	$(CLEAN_CMD)
 
-dep:  
+
+dep:
 	@for i in $(subdirs); do \
 	$(MAKE) -C $$i dep || exit 1; \
-	done     
+	done
 	$(MAKEDEP_CMD) $(INC_LOCAL) $(SOURCES)
+
 
 # rules
 
 %.o:	%.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c $<
+
 
 # DO NOT DELETE
 

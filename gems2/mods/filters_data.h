@@ -83,7 +83,7 @@ struct icSetupData
 //   TCStringArray flKeywds;   // list files to open
 
    icSetupData():
-   from_templ("*?"), to_templ("*")
+   from_templ("*"), to_templ("*_")
    {}
 
    icSetupData( icSetupData& d ):
@@ -125,7 +125,7 @@ struct dcSetupData
 //   TCStringArray flKeywds;   // list files to open
 
    dcSetupData():
-   from_templ("*?"), to_templ("*"), f_script("")
+   from_templ("*?"), to_templ("*_"), f_script("")
    {}
 
    dcSetupData( dcSetupData& d ):
@@ -161,7 +161,7 @@ struct rdSetupData
 //   TCStringArray flKeywds;   // list files to open
 
    rdSetupData():
-   from_templ("*?"), to_templ("*"), f_script("")
+   from_templ("*?"), to_templ("*_"), f_script("")
    {}
 
    rdSetupData( rdSetupData& d ):
@@ -199,7 +199,7 @@ struct cmSetupData
 //   TCStringArray flKeywds;   // list files to open
 
    cmSetupData():
-   from_templ("*?"), to_templ("*"), onlyPCO(false)
+   from_templ("*"), to_templ("*_"), onlyPCO(false)
    {}
 
    cmSetupData( cmSetupData& d ):
@@ -235,7 +235,7 @@ struct phSetupData
 //   TCStringArray flKeywds;   // list files to open
 
    phSetupData():
-   from_templ("*?"), to_templ("*")
+   from_templ("*"), to_templ("*_")
    {
      flags[0] =true;
      flags[1] =false;

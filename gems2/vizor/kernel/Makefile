@@ -15,7 +15,7 @@ INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 # $(PROF_FLAGS)
 
 SOURCES	= v_user.cpp v_vals.cpp v_object.cpp v_ipnc.cpp \
-    v_file.cpp v_dbm1.cpp v_dbm2.cpp t_print.cpp v_module.cpp
+    v_file.cpp v_dbm1.cpp v_dbm2.cpp t_print.cpp t_read.cpp v_module.cpp
 
 OBJECTS = $(subst .cpp,.o,$(SOURCES))
 
@@ -30,7 +30,7 @@ $(TARGET):      $(OBJECTS) Makefile
 clean:
 	$(CLEAN_CMD)
 
-dep:   
+dep:
 	$(MAKEDEP_CMD) $(INC_LOCAL) $(SOURCES)
 
 %.o:	%.cpp

@@ -166,11 +166,11 @@ TCModuleImp::LoadGeneralMenu()
 
     {
         QPopupMenu* p2 = new QPopupMenu;
-        p2->insertItem( "&Create", this, SLOT(CmCreate()) );
-        p2->insertItem( "&New(Clone)", this, SLOT(CmNew()) );
+        p2->insertItem( "&Create...", this, SLOT(CmCreate()) );
+        p2->insertItem( "&New(Clone)...", this, SLOT(CmNew()) );
         p2->insertSeparator();
         p2->insertItem( "D&isplay", this, SLOT(CmShow()), Key_F6 );
-        p2->insertItem( "&Remake", this, SLOT(CmDerive()) );
+        p2->insertItem( "&Remake...", this, SLOT(CmDerive()) );
         p2->insertItem( "Calculat&e", this, SLOT(CmCalc()), Key_F9 );
         p2->insertSeparator();
         p2->insertItem( "&Save", this, SLOT(CmSave()) );
@@ -178,16 +178,16 @@ TCModuleImp::LoadGeneralMenu()
         p2->insertItem( "&Delete", this, SLOT(CmDelete()) );
         p2->insertSeparator();
         p2->insertItem( "Plo&t", this, SLOT(CmPlot()) );
-        p2->insertItem( "&Print", this, SLOT(CmPrint()) );
+        p2->insertItem( "&Print...", this, SLOT(CmPrint()) );
         p2->insertSeparator();
         p2->insertItem( "C&lose", this, SLOT(CloseWin()), CTRL + Key_F4 );
         menuBar()->insertItem( "&Record", p2 );
     }
     {
         QPopupMenu* p2 = new QPopupMenu;
-        p2->insertItem( "&Copy", this, SLOT(CmCopyList()) );
-        p2->insertItem( "&Move", this, SLOT(CmTransferList()) );
-        p2->insertItem( "&Delete", this, SLOT(CmDeleteList()) );
+        p2->insertItem( "&Copy...", this, SLOT(CmCopyList()) );
+        p2->insertItem( "&Move...", this, SLOT(CmTransferList()) );
+        p2->insertItem( "&Delete...", this, SLOT(CmDeleteList()) );
         p2->insertSeparator();
         p2->insertItem( "&List...", this, SLOT(CmKeysToTXT()) );
         p2->insertItem( "&Backup...", this, SLOT(CmBackup()) );
@@ -199,12 +199,12 @@ TCModuleImp::LoadGeneralMenu()
     }
     {
         QPopupMenu* p2 = new QPopupMenu;
-        p2->insertItem( "&Actualize files...", this, SLOT(CmReOpenFileList()) );
-        p2->insertItem( "&Link files...", this, SLOT(CmAddOpenFile()) );
-        p2->insertItem( "A&dd file...", this, SLOT(CmAddFileToList()) );
+        p2->insertItem( "&Configure...", this, SLOT(CmReOpenFileList()) );
+        p2->insertItem( "&Add Link...", this, SLOT(CmAddOpenFile()) );
+        p2->insertItem( "&New...", this, SLOT(CmAddFileToList()) );
         p2->insertSeparator();
-        p2->insertItem( "&Compress...", this, SLOT(CmRebildFile()) );
-        menuBar()->insertItem( "&Files", p2 );
+        p2->insertItem( "C&ompress...", this, SLOT(CmRebildFile()) );
+        menuBar()->insertItem( "&Database Files", p2 );
     }
     {
         menuBar()->insertSeparator();
@@ -279,11 +279,11 @@ TCModuleImp::LoadProfileMenu()
 
     {
         QPopupMenu* p2 = new QPopupMenu;
-        p2->insertItem( "&Create", this, SLOT(CmCreateinProfile()) );
-        p2->insertItem( "&New(Clone)", this, SLOT(CmNewinProfile()) );
+        p2->insertItem( "&Create...", this, SLOT(CmCreateinProfile()) );
+        p2->insertItem( "&New(Clone)...", this, SLOT(CmNewinProfile()) );
         p2->insertSeparator();
         p2->insertItem( "D&isplay", this, SLOT(CmLoadinProfile()), Key_F6 );
-        p2->insertItem( "&Remake", this, SLOT(CmDerive()) );
+        p2->insertItem( "&Remake...", this, SLOT(CmDerive()) );
         p2->insertItem( "Calculat&e", this, SLOT(CmCalc()), Key_F9 );
         p2->insertSeparator();
         p2->insertItem( "&Save", this, SLOT(CmSave()) );
@@ -291,7 +291,7 @@ TCModuleImp::LoadProfileMenu()
         p2->insertItem( "&Delete", this, SLOT(CmDelete()) );
         p2->insertSeparator();
         p2->insertItem( "Plo&t", this, SLOT(CmPlot()) );
-        p2->insertItem( "&Print", this, SLOT(CmPrint()) );
+        p2->insertItem( "&Print...", this, SLOT(CmPrint()) );
         p2->insertSeparator();
         p2->insertItem( "C&lose", this, SLOT(CloseWin()), CTRL + Key_F4 );
         menuBar()->insertItem( "&Record", p2 );

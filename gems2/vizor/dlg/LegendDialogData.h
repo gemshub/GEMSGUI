@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'LegendDialog.ui'
 **
-** Created: Do 28. Feb 17:25:55 2002
+** Created: Fr 1. Mrz 14:05:44 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

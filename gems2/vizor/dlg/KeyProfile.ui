@@ -1,46 +1,37 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>KeyProfileData</class>
 <comment>Dialog for selecting profile record</comment>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>KeyProfileData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
             <width>450</width>
-            <height>436</height>
+            <height>528</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>minimumSize</name>
+    <property name="minimumSize">
         <size>
             <width>450</width>
             <height>400</height>
         </size>
     </property>
-    <property stdset="1">
-        <name>font</name>
+    <property name="font">
         <font>
             <family>Lucida Sans Unicode</family>
         </font>
     </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>Profile key list</string>
+    <property name="caption">
+        <string>Modelling projects</string>
     </property>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>pLabel</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>0</x>
                 <y>10</y>
@@ -48,271 +39,324 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
                 <pointsize>11</pointsize>
             </font>
         </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Please, select one Modelling System Profile:</string>
+        <property name="text">
+            <string>Please, select one modelling project:</string>
         </property>
-        <property stdset="1">
-            <name>alignment</name>
+        <property name="alignment">
             <set>AlignCenter</set>
         </property>
-        <property>
-            <name>hAlign</name>
+        <property name="hAlign" stdset="0">
         </property>
     </widget>
-    <widget>
-        <class>QListBox</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QListBox">
+        <property name="name">
             <cstring>pList</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
-                <x>0</x>
-                <y>30</y>
-                <width>440</width>
-                <height>290</height>
+                <x>10</x>
+                <y>40</y>
+                <width>430</width>
+                <height>250</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>sizePolicy</name>
+        <property name="sizePolicy">
             <sizepolicy>
                 <hsizetype>7</hsizetype>
                 <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
             </sizepolicy>
         </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
                 <family>Courier</family>
                 <pointsize>9</pointsize>
             </font>
         </property>
-        <property>
-            <name>toolTip</name>
+        <property name="toolTip" stdset="0">
             <string></string>
         </property>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>301</y>
+                <width>430</width>
+                <height>170</height>
+            </rect>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>pAqGas</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Use old settings for aqueous/gas phases</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Uncheck to use different models of aqueous and/or gas phases</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>pFiles</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>true</bool>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="acceptDrops">
+                    <bool>false</bool>
+                </property>
+                <property name="text">
+                    <string>&amp;Change file configuration of selected project</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>pTemplate</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>true</bool>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="acceptDrops">
+                    <bool>false</bool>
+                </property>
+                <property name="text">
+                    <string>&amp;Create a new project using selected project</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>ButtonGroup1</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="title">
+                    <string>New projects only:</string>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>rbNewPrMode</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>390</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Make a new project by copying kernel data </string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Switch on to select elements and copy all related data from default database into new profile</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>rbOldPrMode</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>50</y>
+                            <width>400</width>
+                            <height>30</height>
+                        </rect>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Make a new project by linking database files</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Switch on to select files from default database and link them to form a new profile</string>
+                    </property>
+                </widget>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
             <cstring>Layout3</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
-                <x>0</x>
-                <y>380</y>
+                <x>10</x>
+                <y>480</y>
                 <width>430</width>
                 <height>37</height>
             </rect>
         </property>
         <hbox>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>6</number>
             </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pGO_OKButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
-                        <pointsize>10</pointsize>
+                        <pointsize>9</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Go!</string>
+                <property name="text">
+                    <string>&amp;Open Project</string>
                 </property>
-                <property stdset="1">
-                    <name>default</name>
+                <property name="default">
                     <bool>true</bool>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>This will open and load a selected System Profile</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pNewProfBtn</cstring>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
-                        <pointsize>10</pointsize>
+                        <pointsize>9</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>New &amp;Profile...</string>
+                <property name="text">
+                    <string>&amp;New Project..</string>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>This will start the wizard for setting up a new System Profile</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pHelpButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
-                        <pointsize>10</pointsize>
+                        <pointsize>9</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Help</string>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Learn about System Profile concept and profile configuration</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pCancelButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
-                        <pointsize>10</pointsize>
+                        <pointsize>9</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Cancel</string>
                 </property>
             </widget>
         </hbox>
-    </widget>
-    <widget>
-        <class>QCheckBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>pAqGas</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>320</y>
-                <width>430</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <pointsize>10</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Use old settings for aqueous/gas phases</string>
-        </property>
-        <property stdset="1">
-            <name>checked</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Uncheck to use different models of aqueous and/or gas phases</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QCheckBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>pFiles</cstring>
-        </property>
-        <property stdset="1">
-            <name>enabled</name>
-            <bool>true</bool>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>340</y>
-                <width>430</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <pointsize>10</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>acceptDrops</name>
-            <bool>false</bool>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Add new files to Profile</string>
-        </property>
-        <property stdset="1">
-            <name>checked</name>
-            <bool>false</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Uncheck to use different models of aqueous and/or gas phases</string>
-        </property>
     </widget>
 </widget>
 <connections>
@@ -346,7 +390,10 @@
         <receiver>KeyProfileData</receiver>
         <slot>CmHelp()</slot>
     </connection>
-    <slot access="public">CmNew()</slot>
-    <slot access="public">CmHelp()</slot>
 </connections>
+<slots>
+    <slot>CmNew()</slot>
+    <slot>CmHelp()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

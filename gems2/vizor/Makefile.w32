@@ -86,6 +86,7 @@ link:
 +kernel\v_dbm1.obj \
 +kernel\v_dbm2.obj \
 +kernel\t_print.obj \
++kernel\t_read.obj \
 +kernel\v_module.obj \
 +page_f.obj \
 +visor.obj \

@@ -87,9 +87,10 @@ TReadData::~TReadData()
 void
 TReadData::getFormat()
 {
-  if( *input == '%s' )
+  if( *input == '%' )
   {
     int i = 1;
+    int size = 400;
     while( isdigit(input[i]))
      i++;
      if( input[i] != 's' )
@@ -97,12 +98,17 @@ TReadData::getFormat()
         str_err += input;
         Error( key_format.c_str(), str_err.c_str() );
       }
-     aFmts.Add( new RFormat( read_r, gstring( input, 0, i+1) ) );
+    if( i>1 ) //digits
+    {
+      sscanf(input+1, "%d", &size );
+    }
+    aFmts.Add( new RFormat( read_r, size,
+                     gstring( input, 0, i+1) ) );
      input+=i+1;
   }
   else if( strncmp( input, "EMPTY", 5 ) )
        {
-         aFmts.Add( new RFormat( empty_r, S_EMPTY );
+         aFmts.Add( new RFormat( empty_r, 0, S_EMPTY ));
          input+=5;
        }
        else if( *input == '\"' )
@@ -114,8 +120,8 @@ TReadData::getFormat()
                  str_err += input;
                  Error( key_format.c_str(), str_err.c_str() );
               }
-              aFmts.Add( new RFormat( string_r,
-                            gstring( input, 0, pose-input ) );
+              aFmts.Add( new RFormat( string_r, 0,
+                            gstring( input, 0, pose-input ) ));
               input = pose+1;
             }
  else
@@ -225,12 +231,9 @@ TReadData::prnData( fstream& fin, RFormat& fmt, RData& dt )
   switch( fmt.type )
   {
       case read_r:
-                 fin >> strbuf;
+                 fin.read( strbuf.p, min(fmt.size, 500));
                  dat_str = gstring(strbuf.p);
                  break;
-      case skip_r:
-                 fin >> strbuf;
-                 return;
       case empty_r:
       case string_r:
                  dat_str = fmt.fmt;
@@ -239,10 +242,10 @@ TReadData::prnData( fstream& fin, RFormat& fmt, RData& dt )
   }
   if(  dt.objNum== -2 )
   { if( dt.i < rt[nRT].KeyNumFlds() )
-    strnspy( rt[nRT].FldKey( dt.i ), dat_str.c_str(), rt[nRT].FldLen( dt.i ));
+    strncpy( rt[nRT].FldKey( dt.i ), dat_str.c_str(), rt[nRT].FldLen( dt.i ));
   }
   else if(  dt.objNum > 0  )
-         aObj[dt.data].SetString( dat_str.c_str(), dt.i, dt.j );
+    aObj[dt.objNum].SetString( dat_str.c_str(), dt.i, dt.j );
 
 }
 
