@@ -21,30 +21,67 @@ Check QTDIR (if Qt is istalled):
 
   make RELEASE=YES
 
-It makes sense to re-read configuration 
-files before producing zip package (see below)
+This will create a release version of GEMS-PSI 
+in ./gems2.app/Contents/MacOS
 
-4. For further steps, see INSTALL-mac.txt
+4. Check that actual distribution directories 
+are located in work/gems2/gems2.app/Contents/Resources.
+It should look like this:
+  ./gems2.app/
+              Contents/
+	               Resources/
+		                 DB.default/
+		                 img/
+		                 doc/
+		                 data/
+                                 projects/
+                ...
 
+  make copy_data
 
-To run GEMS from virtual desktop (on Linux): 
+This will refresh configuration files.
+It makes sense to re-read configuration files before 
+producing the zip package. This needs a graphic desktop, 
+either native or virtual.
+
+5. To run GEMS from virtual desktop (on Linux): 
 
 start KDE virtual desktop client for 
   129.129.204.77:0  <password for user guest>
 
 After getting Mac desktop window, open a 
-terminal there and 
+terminal there and (if not done before):
 
   cd work/gems2
-  make RELEASE=YES
+  setenv CVS_RSH ssh
+  cvs update <password> 
+  make RELEASE=YES 
+  make copy_data
 
 when done, re-read configuration files: 
 
   ./gems2 ./rungems.sh -d 
 
 and then exit GEMS. 
- 
-For further steps, see INSTALL-mac.txt
+
+6. In terminal, execute 
+
+   make zip
+
+This will create the archive 'gems2-mac-{current_date}.zip' 
+on the current MacOS user's Desktop (if there is an existing 
+zip file, it will be renamed to 
+   ~/Desktop/gems2-mac-{current_date}.zip.bak).
+
+gems2-mac-{current_date}.zip file can be distributed by 
+copying it from the desktop to your (remote) location, 
+e.g. for Linux as follows:
+
+  scp guest@129.129.204.77:/Users/guest/Desktop/gems2-mac.*.zip .  
+
+and type the "guest" user's password on the prompt. 
+
+6. For installation steps, see INSTALL-mac.txt
 
 
 

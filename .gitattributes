@@ -23,6 +23,7 @@ gems2/doc/INSTALL-linux.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/INSTALL-mac.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/MKPATCH svn_keywords=Author+Date+Id+Revision
 gems2/doc/MakeGEMS-HOWTO svn_keywords=Author+Date+Id+Revision
+gems2/doc/PRODUCE-linux.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/PRODUCE-mac.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/Patch+Diff-HOWTO svn_keywords=Author+Date+Id+Revision
 gems2/doc/Porting-HOWTO svn_keywords=Author+Date+Id+Revision

@@ -1,38 +1,32 @@
 Installation procedure for Linux
 -----------------------------------------------------------------
 
+The distribution file  gems2-2.0-1.i586.rpm  should istall
+on SuSE, Mandrake and Fedora Linux machines. You will need 
+root password for installing the rpm. 
 
-1. make RELEASE=YES
-    will create a release version of gems in current directory
-    (uses static version of commercial Qt 3.3.x (mthread, noSTL))
+1. Copy or download  gems2-2.0-1.i586.rpm into your home
+directory. To install, type
 
-2. copy gems2 system contents into ./shared directory
-    should look like this:
-	...
-	mods
-	vizor
-	shared
-    	    DB.default/
-	    img/
-	    doc/
-	    ....
+  rpm -Uvh ./gems2-2.0-1.i586.rpm
 
-3. make rpm
-    when prompted, enter root password.
-    The rpm file (gems2-2.0-1.i586.rpm) will be created 
-        in /usr/src/RPM/i586
+and then the root password, when propmted. 
 
-4. This rpm should be able to install on Mandrake, SuSE and Fedora
-   Linux boxes.
+The program with distribution directories will be installed in
+  /usr/share/gems2. 
 
-5. At the first start of gems2, the default project /projects/TryNPTDB
-     (and other test projects, if provided) will be copied to 
-     to the user's home directory ~./gems2/projects 
+2. To start GEMS, click on the KDE desktop icon or select 
+the GEMS item in the start menu for applications. 
+
+At the very first start of gems2, the default project 
+   /projects/TryNPTDB (and other test projects, if provided) 
+will be copied to the user's home directory into
+  ~/.gems2/projects , where new user's projects will
+also be stored. 
 
 By default, GEMS is located in the following Linux directories: 
 
     Program:	/usr/share/gems2 (for release version)
-		~/.gems2_shared (for development version)
     
     User's data (\projects): in home directory	~/.gems2
 

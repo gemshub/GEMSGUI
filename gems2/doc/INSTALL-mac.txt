@@ -1,34 +1,17 @@
-Installation procedure for MacOS
+Installation procedure for MacOS version of GEMS-PSI
 
 -----------------------------------------------------------------
 
-1. make RELEASE=YES
-    will create a release version of gems in ./gems2.app/Contents/MacOS
+1. To install on Mac G3, G4 or G5 with MacOS X 10.2 or later, 
+   drop the distribution file to your user's desktop and double-click 
+   on the icon. The file will be unzipped into the bundle
+     /Applications/gems2.app.
 
-2. copy gems2 package contents into ./gems2.app/Contents/Resources
-    it should look like this:
-       gems2.app/
-	   Contents/
-	     Resources/
-		DB.default/
-		img/
-		doc/
-		....
+2. To start GEMS-PSI, double-click on its icon now appearing 
+on the desktop. 
 
-3. make zip
-    will create the archive 'gems2-mac-{current_date}.zip' on 
-    current MacOS user's Desktop  (if there's an existing zip file, 
-    it will be renamed to ~/Desktop/gems2-mac-{current_date}.zip.bak)
-
-4. gems2-mac-{current_date}.zip file can be distributed
-
-5. To install on Mac G3, G4 or G5 with MacOS X 10.2 or later, 
-   drop the distribution file to user's desktop and double-click 
-   on the icon. The file will be unzipped into /Applications/Gems2.app
-   bundle.
-
-6. At the first start of gems2, the default project(s) will be 
-automatically copied into the user's home directory (see below).
+At the first start of gems2, the default project(s) will be 
+automatically copied into your user's home directory.
 
   Default directories on Mac OS X:
     Program:	                ./gems2.app/Contents/Resources
@@ -37,10 +20,13 @@ automatically copied into the user's home directory (see below).
 NOTE: the application bundle on MacOS desktop should be called 'gems2',
 otherwise it will not be able to find the gems program files.
 
-7. To upgrade installed GEMS2 package, first drag the start gems2 
-   icon to Trash or using Finder, delete the GEMS2 program bundle
-   gems2.app in Applications directory. Then proceed with new
-   release zip file of GEMS2, as described under (5). Your user's
-   data (modelling projects) in your home directory will remain 
-   unchanged. 
+3. To upgrade the already installed GEMS2 package:
+
+  First, drag the start gems2 icon to Trash, or, using Finder, 
+  find the whole GEMS2 program bundle /gems2.app in the 
+  Applications directory and delete it. 
+ 
+  Proceed with the new release zip file of GEMS2, as described 
+  above. Your user's data (modelling projects) in your home 
+  directory will remain unchanged. 
     
