@@ -6,9 +6,10 @@
  #define IPMGEMPLUGIN
 #endif
 
-#include "gdatastream.h"
 #include "ms_multi.h"
 #include "verror.h"
+
+class GemDataStream;
 
 // Physical constants - see m_param.cpp
 extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,

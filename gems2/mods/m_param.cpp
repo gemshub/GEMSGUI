@@ -98,22 +98,22 @@ SPP_SETTING pa_ = {
 
 
 void
-BASE_PARAM::write(ostream& oss)
+BASE_PARAM::write(GemDataStream& oss)
 {
-    oss.write( (char*)&PC, 10*sizeof(short) );
-    oss.write( (char*)&DG, 28*sizeof(double) );
-    oss.write( (char*)&tprn, sizeof(char*) );
+    oss.writeArray( &PC, 10 );
+    oss.writeArray( &DG, 28 );
+    oss.writeArray( "0000", 4 );
 }
 
 
 void
-SPP_SETTING::write(ostream& oss)
+SPP_SETTING::write(GemDataStream& oss)
 {
-    oss.write( ver, TDBVERSION );
+    oss.writeArray( ver, TDBVERSION );
     p.write( oss );
-    oss.write( (char*)DCpct, 352 );
-    oss.write( (char*)&NP, 9*sizeof(short) );
-    oss.write( (char*)&Pi, 19*sizeof(float) );
+    oss.writeArray( DCpct, 352 );
+    oss.writeArray( &NP, 9 );
+    oss.writeArray( Pi, 19 );
 }
 
 

@@ -18,7 +18,7 @@
 //-------------------------------------------------------------------
 
 #include <math.h>
-#include <iostream.h>
+#include <iostream>
 
 #include <qapplication.h>
 #include <qprogressbar.h>

@@ -20,9 +20,10 @@
 #ifndef _ms_multi_h_
 #define _ms_multi_h_
 
-#include "gdatastream.h"
 #include "datach.h"
 #include "databr.h"
+
+class GemDataStream;
 
 #ifndef IPMGEMPLUGIN
 
