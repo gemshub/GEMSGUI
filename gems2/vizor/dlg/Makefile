@@ -143,26 +143,25 @@ MainDialog.o: EQDialog.h EQDialogData.h SettingsDialog.h SettingsDialogData.h
 MainDialog.o: ../visor.h ../libs/gstring.h ../libs/array.h
 MainDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../kernel/v_user.h
 MainDialog.o: ../libs/verror.h ../kernel/v_vals.h ../kernel/v_dbm.h
-MainDialog.o: ../kernel/v_file.h ../service.h ../visor_w.h
+MainDialog.o: ../service.h ../visor_w.h
 DBDialog.o: DBDialog.h DBDialogData.h ../../mods/v_mod.h ../kernel/v_vals.h
 DBDialog.o: ../libs/gstring.h ../libs/array.h ../module_w.h
 DBDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../kernel/v_user.h
-DBDialog.o: ../libs/verror.h ../kernel/v_dbm.h ../kernel/v_file.h
-DBDialog.o: ../visor_w.h MainDialog.h MainDialogData.h DBAdvDialog.h
-DBDialog.o: DBAdvDialogData.h
+DBDialog.o: ../libs/verror.h ../kernel/v_dbm.h ../visor_w.h MainDialog.h
+DBDialog.o: MainDialogData.h DBAdvDialog.h DBAdvDialogData.h
 EQDialog.o: EQDialog.h EQDialogData.h NewSystemDialog.h ../libs/gstring.h
 EQDialog.o: ../libs/array.h NewSystemDialogData.h MainDialog.h
 EQDialog.o: MainDialogData.h ../service.h ../kernel/v_user.h ../libs/verror.h
 EQDialog.o: ../visor.h ../kernel/v_module.h ../kernel/v_object.h
-EQDialog.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../kernel/v_file.h
-EQDialog.o: ../visor_w.h ../../mods/v_mod.h ../module_w.h
+EQDialog.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../visor_w.h
+EQDialog.o: ../../mods/v_mod.h ../module_w.h
 NewSystemDialog.o: NewSystemDialog.h ../libs/gstring.h ../libs/array.h
 NewSystemDialog.o: NewSystemDialogData.h ProgressDialog.h
 NewSystemDialog.o: ProgressDialogData.h ../../mods/v_mod.h ../kernel/v_vals.h
 NewSystemDialog.o: ../service.h ../kernel/v_user.h ../libs/verror.h
 NewSystemDialog.o: ../visor.h ../kernel/v_module.h ../kernel/v_object.h
-NewSystemDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h ../visor_w.h
-NewSystemDialog.o: ../../mods/m_param.h ../../mods/submod/ms_rmults.h
+NewSystemDialog.o: ../kernel/v_dbm.h ../visor_w.h ../../mods/m_param.h
+NewSystemDialog.o: ../../mods/submod/ms_rmults.h
 NewSystemDialog.o: ../../mods/submod/ms_mtparm.h
 NewSystemDialog.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
 NewSystemDialog.o: ../../mods/submod/ms_multi.h ../../mods/submod/datach.h
@@ -173,31 +172,30 @@ ProgressDialog.o: ../calcthread.h ../../mods/m_param.h ../../mods/v_mod.h
 ProgressDialog.o: ../kernel/v_vals.h ../libs/gstring.h ../libs/array.h
 ProgressDialog.o: ../../mods/submod/ms_rmults.h ../kernel/v_module.h
 ProgressDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
-ProgressDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h
-ProgressDialog.o: ../../mods/submod/ms_mtparm.h ../../mods/submod/ms_system.h
-ProgressDialog.o: ../../mods/m_phase.h ../../mods/submod/ms_multi.h
-ProgressDialog.o: ../../mods/submod/datach.h ../../mods/submod/databr.h
-ProgressDialog.o: ../../mods/v_ipnc.h ../../mods/submod/ms_calc.h
-ProgressDialog.o: ../../mods/m_proces.h ../graph.h ProgressDialog.h
-ProgressDialog.o: ProgressDialogData.h ../service.h ../visor.h ../visor_w.h
+ProgressDialog.o: ../kernel/v_dbm.h ../../mods/submod/ms_mtparm.h
+ProgressDialog.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
+ProgressDialog.o: ../../mods/submod/ms_multi.h ../../mods/submod/datach.h
+ProgressDialog.o: ../../mods/submod/databr.h ../../mods/v_ipnc.h
+ProgressDialog.o: ../../mods/submod/ms_calc.h ../../mods/m_proces.h
+ProgressDialog.o: ../graph.h ProgressDialog.h ProgressDialogData.h
+ProgressDialog.o: ../service.h ../visor.h ../visor_w.h
 ProgressDialog.o: ../../mods/submod/stepwise.h
 ProcessDialog.o: ProcessDialog.h ../libs/gstring.h ../libs/array.h
 ProcessDialog.o: ProcessDialogData.h ../visor_w.h ../kernel/v_vals.h
 KeyDialog.o: ../kernel/v_dbm.h ../libs/gstring.h ../libs/array.h
-KeyDialog.o: ../kernel/v_file.h ../kernel/v_user.h ../libs/verror.h
-KeyDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../kernel/v_vals.h
-KeyDialog.o: KeyDialog.h KeyDialogData.h KeyFilter.h ../visor_w.h ../visor.h
+KeyDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
+KeyDialog.o: ../kernel/v_vals.h ../kernel/v_module.h KeyDialog.h
+KeyDialog.o: KeyDialogData.h KeyFilter.h ../visor_w.h ../visor.h
 ChangeKeyDialog.o: ../visor_w.h ../kernel/v_vals.h ../libs/gstring.h
 ChangeKeyDialog.o: ../libs/array.h ChangeKeyDialog.h ChangeKeyDialogData.h
 KeyProfile.o: ../kernel/v_dbm.h ../libs/gstring.h ../libs/array.h
-KeyProfile.o: ../kernel/v_file.h ../kernel/v_user.h ../libs/verror.h
-KeyProfile.o: KeyProfile.h KeyProfileData.h ../visor_w.h ../kernel/v_vals.h
-KeyProfile.o: ../visor.h ../kernel/v_module.h ../kernel/v_object.h
+KeyProfile.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
+KeyProfile.o: ../kernel/v_vals.h KeyProfile.h KeyProfileData.h ../visor_w.h
+KeyProfile.o: ../visor.h ../kernel/v_module.h
 KeyFilter.o: ../kernel/v_module.h ../kernel/v_object.h ../libs/gstring.h
 KeyFilter.o: ../libs/array.h ../kernel/v_user.h ../libs/verror.h
-KeyFilter.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../kernel/v_file.h
-KeyFilter.o: ../service.h KeyFilter.h ../visor_w.h ../visor.h KeyDialog.h
-KeyFilter.o: KeyDialogData.h
+KeyFilter.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../service.h KeyFilter.h
+KeyFilter.o: ../visor_w.h ../visor.h KeyDialog.h KeyDialogData.h
 ExcludeFillDialog.o: ExcludeFillDialog.h ../libs/gstring.h ../libs/array.h
 ExcludeFillDialog.o: ../kernel/v_user.h ../libs/verror.h ../visor_w.h
 ExcludeFillDialog.o: ../kernel/v_vals.h
@@ -205,7 +203,6 @@ SettingsDialog.o: SettingsDialog.h SettingsDialogData.h ../visor_w.h
 SettingsDialog.o: ../kernel/v_vals.h ../libs/gstring.h ../libs/array.h
 SettingsDialog.o: ../visor.h ../kernel/v_module.h ../kernel/v_object.h
 SettingsDialog.o: ../kernel/v_user.h ../libs/verror.h ../kernel/v_dbm.h
-SettingsDialog.o: ../kernel/v_file.h
 SelectDialog.o: SelectDialog.h SelectDialogData.h ../libs/gstring.h
 SelectDialog.o: ../libs/array.h ../kernel/v_user.h ../libs/verror.h
 SelectDialog.o: ../visor_w.h ../kernel/v_vals.h
@@ -220,36 +217,35 @@ DBAdvDialog.o: DBAdvDialog.h DBAdvDialogData.h DBDialog.h DBDialogData.h
 DBAdvDialog.o: ../../mods/v_mod.h ../kernel/v_vals.h ../libs/gstring.h
 DBAdvDialog.o: ../libs/array.h ../module_w.h ../kernel/v_module.h
 DBAdvDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
-DBAdvDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h ../visor_w.h
+DBAdvDialog.o: ../kernel/v_dbm.h ../visor_w.h
 ColorDialog.o: ColorDialog.h ColorDialogData.h ../graph.h ../libs/array.h
 ColorDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../libs/gstring.h
 ColorDialog.o: ../kernel/v_user.h ../libs/verror.h ../kernel/v_vals.h
-ColorDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h
+ColorDialog.o: ../kernel/v_dbm.h
 GraphDialog.o: GraphDialog.h GraphDialogData.h ../libs/array.h
 GraphDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../libs/gstring.h
 GraphDialog.o: ../kernel/v_user.h ../libs/verror.h ../kernel/v_vals.h
-GraphDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h ../pshape.h ../graph.h
-GraphDialog.o: LegendDialog.h LegendDialogData.h ../visor_w.h
+GraphDialog.o: ../kernel/v_dbm.h ../pshape.h ../graph.h LegendDialog.h
+GraphDialog.o: LegendDialogData.h ../visor_w.h
 LegendDialog.o: ../service.h ../libs/array.h ../libs/gstring.h
 LegendDialog.o: ../kernel/v_user.h ../libs/verror.h LegendDialog.h
 LegendDialog.o: LegendDialogData.h GraphDialog.h GraphDialogData.h
 LegendDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../kernel/v_vals.h
-LegendDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h ../pshape.h ../graph.h
-LegendDialog.o: ../dlg/ColorDialog.h ColorDialogData.h ../graph.h
-LegendDialog.o: ../dlg/GraphDialog.h ../visor_w.h
+LegendDialog.o: ../kernel/v_dbm.h ../pshape.h ../graph.h ../dlg/ColorDialog.h
+LegendDialog.o: ColorDialogData.h ../graph.h ../dlg/GraphDialog.h
+LegendDialog.o: ../visor_w.h
 ListFilesDialog.o: ListFilesDialog.h ListFilesDialogData.h ../libs/gstring.h
 ListFilesDialog.o: ../libs/array.h ../visor.h ../kernel/v_module.h
 ListFilesDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
-ListFilesDialog.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../kernel/v_file.h
-ListFilesDialog.o: ../visor_w.h
+ListFilesDialog.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../visor_w.h
 LoadMessage.o: LoadMessage.h
 ElementsDialog.o: ElementsDialog.h ElementsDialogData.h
 ElementsDialog.o: ../../mods/filters_data.h ../libs/array.h
 ElementsDialog.o: ../kernel/v_user.h ../libs/gstring.h ../libs/verror.h
 ElementsDialog.o: SetFiltersDialog.h SetFiltersDialogData.h ../visor.h
 ElementsDialog.o: ../kernel/v_module.h ../kernel/v_object.h
-ElementsDialog.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../kernel/v_file.h
-ElementsDialog.o: ../visor_w.h ../../mods/m_icomp.h ../../mods/v_mod.h
+ElementsDialog.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../visor_w.h
+ElementsDialog.o: ../../mods/m_icomp.h ../../mods/v_mod.h
 ElementsDialog.o: ../../mods/m_param.h ../../mods/submod/ms_rmults.h
 ElementsDialog.o: ../../mods/submod/ms_mtparm.h ../../mods/submod/ms_system.h
 ElementsDialog.o: ../../mods/m_phase.h ../../mods/submod/ms_multi.h
@@ -259,6 +255,6 @@ SetFiltersDialog.o: SetFiltersDialog.h SetFiltersDialogData.h
 SetFiltersDialog.o: ../../mods/filters_data.h ../libs/array.h
 SetFiltersDialog.o: ../kernel/v_user.h ../libs/gstring.h ../libs/verror.h
 SetFiltersDialog.o: ../visor_w.h ../kernel/v_vals.h ../kernel/v_dbm.h
-SetFiltersDialog.o: ../kernel/v_file.h
+SetFiltersDialog.o: ../kernel/v_object.h
 AutoPhaseDialog.o: AutoPhaseDialog.h ../libs/gstring.h ../libs/array.h
 AutoPhaseDialog.o: AutoPhaseDialogData.h ../visor_w.h ../kernel/v_vals.h

@@ -19,6 +19,8 @@
 
 const char *GEMS_TOC_HTML = "gems_toc";
 
+#include "v_file.h"
+#include "v_dbfile.h"
 #include "v_module.h"
 #include "module_w.h"
 #include "visor_w.h"
@@ -27,11 +29,9 @@ const char *GEMS_TOC_HTML = "gems_toc";
 #include "v_mod.h"
 #include "t_print.h"
 #include "t_read.h"
-#ifdef __unix
-//#include <unistd.h>
-#endif
 
 #include "dlg/NewSystemDialog.h"
+
 
 // Default constructor and destructor
 
@@ -1157,7 +1157,7 @@ TCModule::CmAddFileToList()
         {  name = "." + name;
            name = db->GetKeywd()+ name;
         }
-        u_makepath( filename, dir, name, ext );
+        filename = u_makepath( dir, name, ext );
 
         TDBFile* file = new TDBFile(filename);
         /////////

@@ -46,6 +46,7 @@ class TVisor
     gstring ImgDir;
 
     bool isElementsProfileMode;
+    bool dbChangeMode;
 
 
     void initModules();
@@ -68,13 +69,14 @@ protected:
 
 public:
     bool ProfileMode;
-    bool DBChangedMode;
 
     TVisor(int argc, char* argv[]);
     ~TVisor();
 
     void Update(bool force=true);
     void CalcFinished();
+
+    bool isDBChangeMode() const { return dbChangeMode; }
 
     gstring sysGEMDir() const {
         return SysGEMDir;

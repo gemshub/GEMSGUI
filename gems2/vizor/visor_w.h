@@ -207,11 +207,11 @@ public:
 
     int getDoubleDigits() const
     {
-        return TValBase::doublePrecision - 1;
+        return TValBase::doublePrecision;
     }
     void setDoubleDigits(int newDoubleDigits)
     {
-        TValBase::doublePrecision = newDoubleDigits + 1;
+        TValBase::doublePrecision = newDoubleDigits;
     }
 
     void setConfigAutosave(bool autosave)

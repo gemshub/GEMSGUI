@@ -1,4 +1,3 @@
-
 #ifndef _gemdatastream_h_
 #define _gemdatastream_h_
 

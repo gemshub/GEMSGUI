@@ -101,7 +101,7 @@ void TRMults::dyn_set(int /*q*/)
     mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].GetPtr();
     mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].GetPtr();
     mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].GetPtr();
-    mu.FN  = (char (*)[FileNameLen])aObj[ o_mufn ].GetPtr();
+    mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].GetPtr();
     mu.PHC = (char *)aObj[ o_muphc ].GetPtr();
     mu.DCC = (char *)aObj[ o_mudcc ].GetPtr();
     mu.DCS = (char *)aObj[ o_mudcs ].GetPtr();
@@ -126,7 +126,7 @@ void TRMults::dyn_kill(int /*q*/)
     mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].Free();
     mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].Free();
     mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].Free();
-    mu.FN  = (char (*)[FileNameLen])aObj[ o_mufn ].Free();
+    mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].Free();
     mu.PHC = (char *)aObj[ o_muphc ].Free();
     mu.DCC = (char *)aObj[ o_mudcc ].Free();
     mu.DCS = (char *)aObj[ o_mudcs ].Free();
@@ -145,7 +145,7 @@ void TRMults::dyn_kill(int /*q*/)
 // realloc dynamic memory
 void TRMults::dyn_new(int /*q*/)
 {
-    mu.FN = (char (*)[FileNameLen])aObj[ o_mufn].Alloc( mu.NfT, 1, FileNameLen );
+    mu.FN = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn].Alloc( mu.NfT, 1, MAX_FILENAME_LEN );
     if( mu.PmvIC == S_ON )
     {
         mu.SB = (char (*)[IC_RKLEN])aObj[ o_musb].Alloc( mu.N, 1, IC_RKLEN );

@@ -42,7 +42,7 @@ char TFile::pa[9]="01041999";
 void
 TFile::write( fstream& out_stream )
 {
-//    os.write( Keywd, MAXFILEKEYWD );
+//    os.write( Keywd, MAX_FILENAME_LEN );
     out_stream << Keywd << "  "; // endl;
     int ln = Path.length() + 1;
 //    os.write((const char*)&ln, sizeof ln);
@@ -57,7 +57,7 @@ TFile::write( fstream& out_stream )
 void *
 TFile::read( fstream& in_stream )
 {
-//    is.read( Keywd, MAXFILEKEYWD );
+//    is.read( Keywd, MAX_FILENAME_LEN );
 // we should put length here !!
     in_stream >> Keywd;
     int ln;
@@ -133,8 +133,8 @@ TFile::makeKeyword()
 
     key += gstring(name, npos2, 6);
 
-    strncpy( Keywd, key.c_str(), MAXFILEKEYWD);
-    Keywd[MAXFILEKEYWD]='\0';
+    strncpy( Keywd, key.c_str(), MAX_FILENAME_LEN);
+    Keywd[MAX_FILENAME_LEN]='\0';
 */
     key = gstring(name, 0, 2);
     int npos = 0;
@@ -146,8 +146,8 @@ TFile::makeKeyword()
     }
     key += gstring(name, npos+2);
 
-    strncpy( Keywd, key.c_str(), MAXFILEKEYWD);
-    Keywd[MAXFILEKEYWD]='\0';
+    strncpy( Keywd, key.c_str(), MAX_FILENAME_LEN);
+    Keywd[MAX_FILENAME_LEN]='\0';
 }
 
 /*
@@ -174,7 +174,7 @@ void TFile::newFile( const gstring& newName, const gstring& newExt,
 //Get full name of file
 void TFile::Makepath()
 {
-    u_makepath( Path, dir, name, ext );
+    Path = u_makepath( dir, name, ext );
 }
 
 //Check for existence of file
@@ -228,6 +228,13 @@ if( mode== UPDATE_DBV && access( Path.c_str(), 02 ) != 0)
 	f.seekg(0, ios::beg);
 
     status = mode;
+}
+
+void TFile::OpenFromFileName( const gstring& filename, FileStatus mode )
+{
+    Close();
+    rename(filename.c_str(), GetPath().c_str());
+    Open(mode);
 }
 
 /*

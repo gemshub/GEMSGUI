@@ -21,139 +21,29 @@
 #ifndef __v_dbm_h_
 #define __v_dbm_h_
 
-#include <time.h>
-#include "gstring.h"
+#include <iostream>
 
+#include "gstring.h"
 #include "array.h"
-#include "v_file.h"
+#include "v_object.h"
 
 
 class GemDataStream;
+class TDBFile;
+class RecEntry;
 
-const int MAXFESTACK = 200; // size array deleted record
+typedef ios::openmode FileStatus;
 
-extern const char* MARKRECDEL;
-extern const char* MARKRECHEAD;
-extern const char MARKRKEY;
-extern const char* ALLKEY;
+const int 	MAX_FILENAME_LEN = 20;
 
-struct VDBhead
-{       // header of PDB file
-    char VerP[8];
-    char PassWd[8];
-    char Date[11];
-    char Time[5];
-    int nRT;                 // type of PDB chain
-    int nRec;                // number records in file
-    int  stacOver,FPosTRT;
-    char isDel;
-    long MinDrLen, MaxDrLen; // min and max size of deleted block
-    int curDr;               // number of deleted blocks
-
-    void read(GemDataStream& is);
-    void write(GemDataStream& is);
-
-    static size_t data_size()
-    {
-        return sizeof(char[8])*2
-               + sizeof(char[11]) + sizeof(char[5])
-               + sizeof(int)*4
-               + sizeof(char) + sizeof(long)*2
-               + sizeof(int);
-    }
-};
-
-struct DBentry
-{   // position and size of deleted block
-    long pos, len;
-
-    void read(GemDataStream& is);
-    void write(GemDataStream& is);
-
-    static size_t data_size()
-    {
-        return sizeof(long)*2;
-    }
-};
-
-struct RecEntry
-{   //position, size and file number of record
-    long pos, len;
-    unsigned char nFile;
-
-    void read(GemDataStream& is);
-    void write(GemDataStream& is);
-};
-
-
-// This is file of Data Base
-class TDBFile:
-            public TFile
-{
-    long FPosFree;  // len of file
-    VDBhead *dh;    // header of file
-    DBentry *sfe;   // stack of deleted record
-
-    TDBFile(const TDBFile&);
-    const TDBFile& operator=(const TDBFile&);
-
-protected:
-    void check_sfe();
-    void v_PDBtry(GemDataStream& fdb);
-    void getHead(GemDataStream& fdb);
-    void vdbh_new( const char *VerP, const char *passwd, int nRT, bool ifDel );
-    void clrh();
-
-public:
-    //  TDBFile();
-    TDBFile(const gstring& fName,
-            const gstring& fExt, const gstring& fDir );
-    TDBFile(const gstring& path);
-    TDBFile(fstream& f);
-
-    void check_dh();
-
-    //--- Selectors
-    VDBhead* Dh() const
-    {
-        return dh;
-    }    // header of file
-    long FLen() const
-    {
-        return  FPosFree;
-    }
-
-    void FNewLen( long dlt )
-    {
-        FPosFree-=dlt;
-    }
-    void SetnRec( int n )
-    {
-        check_dh(), dh->nRec = n;
-    }
-    void GetDh( long& fPos, long& fLen );
-    bool GetDhOver();
-    void SetDh( long& fLen, int nRec );
-
-    //---  Manipulation files ---
-    void Create( unsigned char nRT, bool isDel );
-    virtual void Open( FileStatus mode );
-    virtual void Close();
-    void PutHead( GemDataStream& fdb, int deltRec=0 );
-    void vdbh_setdt();
-
-    //---  Manipulation deleted blocks ---
-    void AddSfe( RecEntry& re );
-    void FindSfe( RecEntry& re );
-};
-
-//-------------------------------------------------------------
-
-const int MAXRKFRMSTR = 20,  // max fields in key
-                        IND_PLUS = 112;    // augment of index key buf
+const int	MAXRKFRMSTR = 20,  // max fields in key
+    		IND_PLUS = 112;    // augment of index key buf
 
 enum keyctrl {   // codes key bild
-    K_END=-5, K_EMP, K_ANY, K_IMM, K_ACT };
+    K_END = -5, K_EMP, K_ANY, K_IMM, K_ACT 
+};
+
+extern const char* ALLKEY;
 
 
 // This is struct contened the key of record
@@ -218,8 +108,6 @@ public:
 }
 ;
 
-//-------------------------------------------------------------
-
 //This class contened the list of indexes
 class TDBKeyList:
             public TDBKey
@@ -251,6 +139,8 @@ public:
     void check_i(int i);
 
     //--- Selectors
+    RecEntry* RecPosit(int i);
+
     int iRec() const
     {
         return nI;
@@ -258,10 +148,6 @@ public:
     long RecCount() const
     {
         return recInDB;
-    }
-    RecEntry* RecPosit(int i)
-    {
-        return &re[i];
     }
     char *RecKeyFld(int i, unsigned j) const
     {
@@ -352,9 +238,10 @@ protected:
     long putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
     long getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
     void opfils();
-    int scanfile( int nF, long& fPos, long& fLen, GemDataStream& f);
+    int scanfile( int nF, long& fPos, long& fLen, 
+	    GemDataStream& inStream, GemDataStream& outStream);
     void fromCFG(fstream& f);
-    bool changedDB( int nf, bool ifRep=false );
+    bool dbChangeAllowed( int nf, bool ifRep=false );
 
 public:
     int specialFilesNum;

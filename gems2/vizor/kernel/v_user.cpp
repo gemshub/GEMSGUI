@@ -28,15 +28,17 @@
 //____________________________________________________________________________
 
 
-void
-u_makepath(gstring& Path, const gstring& dir,
+gstring
+u_makepath(const gstring& dir,
            const gstring& name, const gstring& ext)
 {
-    Path = dir;
+    gstring Path(dir);
     Path += "/";
     Path += name;
     Path += ".";
     Path += ext;
+
+    return Path;
 }
 
 

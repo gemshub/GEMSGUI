@@ -60,8 +60,8 @@ int ROUND(double x)
 }
 
 // Combines path, directory, name and extension to full pathname
-void
-u_makepath(gstring& Path, const gstring& dir,
+gstring
+u_makepath(const gstring& dir,
            const gstring& name, const gstring& ext);
 
 // Splits full pathname to path, directory, name and extension

@@ -787,7 +787,7 @@ OSH:
 void IPNCalc::GetEquat( char *txt )
 {
     input = txt;
-    if( !input || *input=='\0' || *input=='\`' )
+    if( !input || *input=='\0' || *input=='`' )
          return;
 //    ErrorIf( !input || *input=='\0', "IPNTranslate",
 //             "No Math Script text to analyse!");

@@ -375,5 +375,3 @@ void TPlotLine::write(GemDataStream& stream)
 
 
 //--------------------- End of graph.cpp ---------------------------
-
- 

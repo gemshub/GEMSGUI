@@ -52,7 +52,6 @@ ListFilesDialog::ListFilesDialog(QWidget* win, const char * prfName,
 //    Path += prfName;  // created before
 
     QListViewItem* pMod;
-    QListViewItem* pFile;
     size_t pos1, pos2;
 
     for(int i=aMod.GetCount()-1; i>=0; i--)

@@ -16,12 +16,11 @@
 // See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-//
-#include <stdio.h>
-// No compatibility with Win32: fstream::fd() !!
-#include "v_object.h"
-#include "v_dbm.h"
+
 #include "v_user.h"
+#include "v_dbm.h"
+#include "v_dbfile.h"
+#include "v_object.h"
 #include "v_mod.h"
 #include "visor.h"
 #include "service.h"
@@ -43,18 +42,17 @@ const char MARKRKEY  = '#';
 
 #ifdef Change_DB_Mode
 
-bool TDataBase::changedDB( int /*nf*/, bool /*ifRep*/ )
+bool TDataBase::dbChangeAllowed( int /*nf*/, bool /*ifRep*/ )
 {
     return true;
 }
 
 #else
 
-bool TDataBase::changedDB( int nf, bool ifRep )
+bool TDataBase::dbChangeAllowed( int nf, bool ifRep )
 {
-    if( pVisor->DBChangedMode ==true /*&&  ifRep==true*/ )
-        return true;
-    else return !( nf < specialFilesNum );
+    return ( pVisor->isDBChangeMode() /*&&  ifRep==true*/ )
+	    || ( nf >= specialFilesNum );
 }
 
 #endif
@@ -202,7 +200,7 @@ void TDataBase::putndx( int nF )
     GemDataStream f;
 
     check_file(nF);
-    u_makepath( Path, aFile[nF].Dir(),
+    Path = u_makepath( aFile[nF].Dir(),
                 aFile[nF].Name(), NDX_EXT );
     f.open( Path.c_str(), WRITE_B);
     ErrorIf( !f.good(), Path.c_str(),"Index file open error");
@@ -220,7 +218,7 @@ void TDataBase::getndx( int nF )
     GemDataStream f;
 
     check_file( nF );
-    u_makepath( Path, aFile[nF].Dir(),
+    Path = u_makepath( aFile[nF].Dir(),
                 aFile[nF].Name(), NDX_EXT );
     f.open( Path.c_str(), RDONLY_B);
     if( !f.good() )
@@ -352,9 +350,9 @@ int TDataBase::AddRecordToFile( const char *pkey, int file )
     nF = (unsigned char)fls[file];
     check_file( nF );
 
-    if( !changedDB( nF ) )
-        Error( aFile[nF].Name(), "Cannot insert changes to PDB file!" );
-
+    ErrorIf( !dbChangeAllowed( nF ),
+	aFile[nF].Name(), "Cannot add record: changes to system database are not allowed!" );
+	
 
     aFile[nF].Open( UPDATE_DBV );
 
@@ -396,8 +394,8 @@ void TDataBase::Rep(int i)
     // test and open file
     nF = rh->nFile;
     check_file( nF );
-    ErrorIf( !changedDB( nF, true ), aFile[nF].Name(),
-             "Cannot insert changes to PDB file!" );
+    ErrorIf( !dbChangeAllowed( nF, true ), aFile[nF].Name(),
+                "Cannot modify record: changes to system database are not allowed!" );
 
     aFile[nF].Open( UPDATE_DBV );
     // delete record
@@ -433,9 +431,10 @@ void TDataBase::Del(int i)
     // test and open file
     nF = rh->nFile;
     check_file( nF );
-    ErrorIf( !changedDB( nF ), aFile[nF].Name(),
-             "Cannot insert changes to PDB file!" );
-
+    ErrorIf( !dbChangeAllowed( nF ), 
+	aFile[nF].Name(), "Cannot delete record: changes to system database are not allowed!");
+	
+	
     aFile[nF].Open( UPDATE_DBV );
     // delete record
     rh->len += RecHead::data_size();
@@ -933,100 +932,115 @@ int TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& a
 
 
 // Scan database file
-int TDataBase::scanfile( int nF, long& fPos, long& fLen, GemDataStream& f)
+int TDataBase::scanfile( int nF, long& fPos, long& fLen,
+		GemDataStream& inStream, GemDataStream& outStream)
 {
-    RecEntry rh;
-    RecHead rhh;
+    RecEntry recordEntry;
+    RecHead recordHead;
     //RecEntry& rep = ind.RecPosit(0);
-    char ch;
     long len, fEnd = fPos;
     int ni, nRec=0;
 
-    rh.nFile = (unsigned char)nF;             //warning
-    rh.len = 0;
+    recordEntry.nFile = (unsigned char)nF;             //warning
+    recordEntry.len = 0;
     while( fPos < fLen )
     {
-        f.seekg( fPos, ios::beg );
-        f.get(ch);
+	char ch;
+	
+        inStream.seekg( fPos, ios::beg );
+        inStream.get(ch);
         if( ch != MARKRECHEAD[0] )
         {
             fPos++;
             continue;
         }
-        f.get(ch);
+        inStream.get(ch);
         if( ch != MARKRECHEAD[0] )
         {
             fPos+=2;
             continue;
         }
-        rh.pos = fPos;
+        recordEntry.pos = fPos;
+	
         try
         {
-            len = getrec( rh, f, rhh);
+            len = getrec(recordEntry, inStream, recordHead);
         }
         catch( TError& xcpt )
-        {  /* vfMessage( /xcpt.title, xcpt.mess);
+        {	/*
                    if( !vfQuestion( Keywd,
                         " Continue with possible loss of data in \n"
-                        "the record (Y) or cancel PDB file compression (N)?"))
-
+                        "the record or cancel PDB file compression?"))
                      break;
             	*/
             fPos += 2;
             continue;
         }
+	
         fPos += (-len) + RecHead::data_size();
-        len = reclen()+strlen(ind.PackKey())+1;
+        len = reclen() + strlen(ind.PackKey()) + 1;
         ni = ind.addndx( nF, len, ind.PackKey() );
         //RecEntry& rep = ind.RecPosit(ni);
         ind.RecPosit(ni)->pos = fEnd;
-        fEnd += len +  RecHead::data_size();
-        putrec( *ind.RecPosit(ni), f, rhh );
+        fEnd += len + RecHead::data_size();
+
+        putrec( *ind.RecPosit(ni), outStream, recordHead );
+
         nRec++;
-        pVisor->Message( 0, 0, "Compressing database file \n"
-         "Please, wait...", (int)fPos, (int)fLen);
+
+        pVisor->Message( 0, 0, "Compressing database file\n"
+        		"Please, wait...", (int)fPos, (int)fLen);
     }
     fLen = fEnd;
+    
     return nRec;
 }
 
 //Get new index file and physically deleted records
 void TDataBase::RebildFile(const TCIntArray& nff)
 {
-    unsigned char nF;
-    int  nRec;
-    long fPos, fLen;
-
     // close&open db files added Sveta 06/03/02
     TCIntArray fls_old;
-    fls_old.Clear();
     for(uint j=0; j< fls.GetCount(); j++)
         fls_old.Add( fls[j] );
     Close();
 
     for(uint j=0; j<nff.GetCount(); j++)
     {
-        nF = (unsigned char)nff[j];
+	int  nRec;
+	long fPos, fLen;
+        unsigned char nF = (unsigned char)nff[j];
         // test and open file
         check_file( nF );
-        if( changedDB( nF )==false )
+        if( ! dbChangeAllowed( nF ) )
         {
             ///vfMessage( aFile[nF]->Name(), "Cannot rebuild PDB file!");
             continue;
         }
         aFile[nF].Open( UPDATE_DBV );
+
         //ind.delfile( nF );
         aFile[nF].GetDh( fPos, fLen );
-        nRec = scanfile( nF, fPos, fLen, aFile[nF].f );
+	
+	gstring tmpFileName = aFile[nF].GetPath() + ".tmp";
+	GemDataStream outStream( tmpFileName, ios::out | ios::trunc );
+	outStream.seekp(VDBhead::data_size(), ios::beg);
+	
+        nRec = scanfile( nF, fPos, fLen, aFile[nF].f, outStream );
+	outStream.close();
+	
+	aFile[nF].OpenFromFileName( tmpFileName, UPDATE_DBV );
         aFile[nF].SetDh( fLen, nRec );
+
         putndx( nF );
         status = UNDF_;
+
         aFile[nF].Close();
         ind.delfile( nF );
     }
+
     pVisor->CloseMessage();
     Open( true, UPDATE_DBV, fls_old );
-
 }
 
 //Set new open Files list  (Reopen by list)

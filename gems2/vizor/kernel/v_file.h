@@ -21,13 +21,12 @@
 #define _v_file_h_
 
 #include <fstream>
+
 #include "gstring.h"
 #include "v_user.h"
-//#include "gdatastream.h"
+#include "v_dbm.h"
 
 class GemDataStream;
-
-typedef ios::openmode FileStatus;
 
 static const FileStatus  NOT_OPEN = FileStatus(0),    // no file  opend
     RDONLY_T = ios::in/*|ios::nocreate*/,               //0x01, !
@@ -41,14 +40,13 @@ static const FileStatus  NOT_OPEN = FileStatus(0),    // no file  opend
     RDONLY_DBV = ios::in/*|ios::nocreate*/|ios::binary, //0x05, !
     UPDATE_DBV = ios::in|ios::out|ios::binary;       // 0x83 !
 
-const int MAXFILEKEYWD = 20;
 
 class TFile
 {
     static  char vv[9];
     static  char pa[9];
 
-    char Keywd[MAXFILEKEYWD+1];
+    char Keywd[MAX_FILENAME_LEN+1];
     FileStatus  status;
     gstring dir;
     gstring name;
@@ -107,6 +105,7 @@ public:
 //    bool CheckOverwrite(FileStatus mode);
     virtual void Open( FileStatus mode );
     virtual void Close();
+    void OpenFromFileName( const gstring& filename, FileStatus mode );
     //  void Reopen(const char* file, FileStatus mode);
 
     static const char* VV()

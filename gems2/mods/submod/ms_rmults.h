@@ -25,7 +25,6 @@
 
 const int MAXMUGROUP =     38;
 const int MAXNUMCHAINS =   20;  /* max. number of chains */
-const int FileNameLen  =   MAXFILEKEYWD;
 
 
 typedef struct
@@ -73,7 +72,7 @@ typedef struct
     (*SM)[DC_RKLEN],// List of DC definition keys (DCOMP, REACDC) [0:L-1] DB
     (*SA)[BC_RKLEN],// List of COMPOS definition keys [0:La-1]            DB
     (*SB)[IC_RKLEN],// List of ICOMP record keys (stoichiometry basis)[0:N-1] DB
-    (*FN)[FileNameLen]; // list file names for each modules [0:NfT-1] DB
+    (*FN)[MAX_FILENAME_LEN]; // list file names for each modules [0:NfT-1] DB
 
     char // build from PHASE  (calc from cfg)
     *PHC, // Classifier of phases { agpmslxdh } [0:Fi-1]

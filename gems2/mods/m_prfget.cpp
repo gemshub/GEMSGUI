@@ -901,11 +901,11 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
         mup->Nfl[i] = aCnt[i];
         mup->NfT += mup->Nfl[i];
     }
-    mup->FN = (char (*)[FileNameLen])aObj[ o_mufn].Alloc(
-                  aFls.GetCount(), 1, FileNameLen );
+    mup->FN = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn].Alloc(
+                  aFls.GetCount(), 1, MAX_FILENAME_LEN );
     // insert files name to FN
     for(uint j=0; j<aFls.GetCount(); j++)
-        strncpy( mup->FN[j], aFls[j].c_str(), FileNameLen);
+        strncpy( mup->FN[j], aFls[j].c_str(), MAX_FILENAME_LEN);
     return true;
 }
 
@@ -926,7 +926,7 @@ void TProfil::SetFN()
         aFls.Clear();
         for(j=0; j<mup->Nfl[i]; j++)
         {
-            s = gstring( mup->FN[k++], 0, FileNameLen);
+            s = gstring( mup->FN[k++], 0, MAX_FILENAME_LEN);
             aFls.Add(s);
         }
         rt[aMod[i].rtNum()].SetNewOpenFileList( aFls );

@@ -16,19 +16,15 @@
 // See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-//
-#include <stdio.h>
-#ifndef __unix
-# include <io.h>
-#else
-# include <unistd.h>
-#endif
+
+
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include "v_dbm.h"
-#include "v_object.h"
 #include "gdatastream.h"
+#include "v_dbm.h"
+#include "v_dbfile.h"
+#include "v_object.h"
 
 void
 VDBhead::read(GemDataStream& is)
@@ -264,7 +260,7 @@ void
 TDBFile::PutHead( GemDataStream& fdb, int deltRec )
 {
     check_dh();
-    dh->nRec +=deltRec;
+    dh->nRec += deltRec;
     vdbh_setdt();
     fdb.seekg(0L, ios::beg );
     // fdb.write( (char *)dh, sizeof(VDBhead) );
@@ -431,7 +427,7 @@ TDBFile::GetDhOver()
 
 //set information to dh
 void
-TDBFile::SetDh( long& fLen, int nRec )
+TDBFile::SetDh( long fLen, int nRec )
 {
     check_dh();
     dh->curDr = 0;
@@ -446,6 +442,7 @@ TDBFile::SetDh( long& fLen, int nRec )
         memset( (char *)sfe, 0, sizeof(DBentry)*MAXFESTACK );
     }
     PutHead( f );
+/*    
 #ifndef __unix
     int handle = f.rdbuf()->fd();
     chsize( handle, fLen );
@@ -459,6 +456,7 @@ cerr << "trunc dummy" << endl;
 #endif // __GCC__ != 3
     ftruncate( handle, fLen );
 #endif
+*/
     f.flush();
 }
 
@@ -895,6 +893,12 @@ TDBKeyList::~TDBKeyList()
     delete[] re;
 }
 
+RecEntry*
+TDBKeyList::RecPosit(int i)
+{
+    return &re[i];
+}
+
 // compare key i record and work key
 int 
 TDBKeyList::keycom( int i )
@@ -1139,6 +1143,5 @@ TDBKeyList::xlist( const char *pattern )
     }
     return aKey.GetCount();
 }
+
 //--------------------- End of v_dbm1.cpp ---------------------------
-
-

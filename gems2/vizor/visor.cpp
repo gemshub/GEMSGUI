@@ -32,6 +32,7 @@ using namespace std;
 #include "units.h"
 #include "visor_w.h"
 #include "page_win_w.h"
+#include "v_dbfile.h"
 
 #include "m_const.h"
 #include "m_sdata.h"
@@ -73,11 +74,8 @@ TVisor::TVisor(int c, char *v[]):
         argc(c), argv(v)
 {
     ProfileMode = false;
-    DBChangedMode = false;
+    dbChangeMode = false;
     isElementsProfileMode = true;
-
-    char* env_s;
-
 
 #ifdef __unix
 #ifdef __APPLE__
@@ -122,7 +120,7 @@ TVisor::TVisor(int c, char *v[]):
 #endif //__unix
 
 
-    env_s = getenv("GEMS_SYSDIR");
+    char* env_s = getenv("GEMS_SYSDIR");
     if (env_s)
     {
         SysGEMDir = env_s;
@@ -280,7 +278,7 @@ TVisor::Setup()
 
     // Sveta permission to change data in special DB files
     if (option_f)
-        DBChangedMode = true;
+        dbChangeMode = true;
 }
 
 

@@ -62,7 +62,7 @@ bool TUnSpace::test_sizes( )
       usp->Q = 11;
    }
    usp->Q = near_prime_number( usp->Q );
-   usp->qQ = (int)(abs(usp->quan_lev)*usp->Q);
+   usp->qQ = (int)(fabs(usp->quan_lev)*usp->Q);
    if(usp->qQ<1)
         usp->qQ=1;
 
@@ -197,7 +197,7 @@ void TUnSpace::init_generation( )
        { usp->nG++; continue; }
   }
   // start nG must be more than new nG and array PbD must be inserted after
-  // remake ??????????/
+  // remake ?????????? /
   // calculate kGB, kGR, kGN
   for( i=0; i< usp->nG; i++)
   {  if( !usp->PbD[i])
@@ -380,8 +380,8 @@ void TUnSpace::UNIFORM0( int reg )
     k=usp->nGN;
 
   for(i=0;i<k;i++)
-  {   j=random(1000);
-      R=ceil(24359738368.*j/1000.+10000000000.);
+  {   j=rand();
+      R=ceil(24359738368.*j/RAND_MAX + 10000000000.);
       if(!fmod(R,2))
          R=R+1.;
        if(!reg)
