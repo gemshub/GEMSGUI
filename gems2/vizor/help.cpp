@@ -96,6 +96,12 @@ ID:
         pos_name = line.find( o_name );
         if( pos_name != gstring::npos )
         {
+
+           size_t poss = o_name.length();
+                  poss+= pos_name;
+           if( line[poss] !=  '<'&&
+               line[poss] !=  '[' )
+             continue; // finding full name, not subtring
            ref = line.substr( posf );
            ref = ref.substr( 0, ref.find('\"') );
            if( pos_1 == gstring::npos )
