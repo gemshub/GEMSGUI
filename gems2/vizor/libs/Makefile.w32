@@ -10,7 +10,7 @@
 !include ../Makefile.qt_w32
 
 INCLUDES	= -I../kernel -I../libs
-FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
+#FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 
 OBJECTS = config.obj gstring.obj
 SRC	= config.cpp gstring.cpp

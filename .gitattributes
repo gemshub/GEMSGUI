@@ -92,6 +92,7 @@ gems2/lib/Readme.txt svn_keywords=Author+Date+Id+Revision
 gems2/makecl.bat svn_keywords=Author+Date+Id+Revision
 gems2/makew.bat svn_keywords=Author+Date+Id+Revision
 gems2/makew_noqt.bat svn_keywords=Author+Date+Id+Revision
+gems2/makew_r.bat svn_keywords=Author+Date+Id+Revision
 gems2/mods/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/mods/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/mods/Makefile.mod_lin svn_keywords=Author+Date+Id+Revision

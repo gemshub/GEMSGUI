@@ -6,7 +6,7 @@
 
 !include Makefile.qt_w32
 
-FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
+#FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 INC_LOCAL	= -I./kernel -I./libs -I./dlg -I../mods -I../mods/submod
 INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 LIB	=   tlib /C /P512
@@ -63,11 +63,11 @@ all:  $(TARGET)
 
 subdirs_mk:
       cd libs
-	$(MAKE) -f Makefile.w32 all
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
 	cd ..\dlg
-	$(MAKE) -f Makefile.w32 all
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
  	cd ..\kernel
-	$(MAKE) -f Makefile.w32 all
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
         cd ..
 
 $(TARGET):  subdirs_mk $(OBJECTS) $(METAOBJ) link

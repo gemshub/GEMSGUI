@@ -11,7 +11,7 @@
 
 INC_LOCAL	= -I../kernel -I../../mods -I../libs  -I../
 INCLUDES	= $(INC_GLOBAL) $(INC_LOCAL)
-FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
+#FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 
 SOURCES = v_user.cpp v_vals.cpp v_object.cpp \
     v_file.cpp v_dbm1.cpp v_dbm2.cpp t_print.cpp t_read.cpp v_mpdule.cpp

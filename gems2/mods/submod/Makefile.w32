@@ -11,7 +11,7 @@
 
 INC_LOCAL       = -I../../vizor/kernel -I../ -I../submod -I../../vizor/libs -I../../vizor -I..
 INCLUDES        = $(INC_LOCAL) $(INC_GLOBAL)
-FLAGS   = $(CCFLAGS) $(DEBUG_FLAGS)
+#FLAGS   = $(CCFLAGS) $(DEBUG_FLAGS)
 
 SOURCES         = ms_rmults.cpp ms_mtparm.cpp ms_multi.cpp ms_system.cpp \
      ms_sysbc.cpp ms_mupmph.cpp ms_muload.cpp ms_muleq.cpp ms_mueqexp.cpp \

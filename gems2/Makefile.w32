@@ -27,16 +27,16 @@ all:	subdirs_mk link
 
 subdirs_mk:
 	cd mods
-	$(MAKE) -f Makefile.w32 all
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
 	cd ..\vizor
-	$(MAKE) -f Makefile.w32 all
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
 	cd ..
 
 noqt:	mods_mk noqt_link
 
 mods_mk:
 	cd mods
-	$(MAKE) -f Makefile.w32 all
+	$(MAKE) -f Makefile.w32 RELEASE=$(RELEASE) all
 	cd ..
 
 link:

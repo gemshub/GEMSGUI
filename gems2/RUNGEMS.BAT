@@ -11,5 +11,5 @@ rem gems2 -d -s c:\gems2test\program -u c:\gems2test > gems.out
 
 rem Gives write access to database files in \DB.default\
 rem For developers only! Also, does the same as gems -c
-gems2 -f -c -s c:\gems2test\program -u c:\gems2test > gems.out
+gems2 -s c:\gems2test\program -u c:\gems2test > gems.out 2> gems.err
 

@@ -12,7 +12,7 @@
 
 INC_LOCAL	=	-I.. -I../kernel -I../libs -I../../mods -I../../mods/submod
 INCLUDES	=	$(INC_GLOBAL) $(INC_LOCAL)
-FLAGS	=	$(CCFLAGS) $(DEBUG_FLAGS)
+#FLAGS	=	$(CCFLAGS) $(DEBUG_FLAGS)
 
 ####### Files
 
