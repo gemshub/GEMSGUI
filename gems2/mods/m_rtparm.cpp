@@ -20,6 +20,7 @@
 const char *GEMS_RTP_HTML = "gm_rtparm";
 
 #include <math.h>
+#include <stdio.h>
 
 #include "m_rtparm.h"
 #include "m_param.h"

@@ -9,7 +9,7 @@
 # compile variables
 
 ifeq ("x$(QTDIR)","x")
-QTDIR		= /usr/local/qt2e
+QTDIR		= /usr/local/qt
 #QTDIR		= /usr/lib/qt2
 endif
 
