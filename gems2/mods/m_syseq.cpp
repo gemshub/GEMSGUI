@@ -63,7 +63,7 @@ void TSysEq::setCalcFlag( bool ifC )
 bool TSysEq::MakeRecord( const char *key )
 {
     // Get rekord key
-    gstring str = GetKeyofRecord( key, "Get a record key", KEY_NEW );
+    gstring str = GetKeyofRecord( key, "Please, select a record key ", KEY_NEW );
     if(  str.empty() )
         Error( GetName(), "Operation cancelled!" );
     keyTest( str.c_str() );

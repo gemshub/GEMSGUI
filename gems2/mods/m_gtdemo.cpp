@@ -47,7 +47,7 @@ TGtDemo::TGtDemo( int nrt ):
     aFldKeysHelp.Add("l<26 Record key comment to this GtDemo task");
     gdp=&gd[0];
     set_def();
-    start_title = " Definition of Data sampler, tabulator and plotter ";
+    start_title = " Definition of Data Sampler and Plotter ";
     gd_gr = 0;
 }
 
@@ -226,11 +226,11 @@ void TGtDemo::dyn_new(int q)
 // set default mode for rt type
 void TGtDemo::gd_ps_set()
 {
-
-    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
-        gdp->nRT = RT_PROCES;
-    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
-        gdp->nRT = RT_PROBE;
+//  The following 4 lines commented out by KD on 20.01.03
+//    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
+//        gdp->nRT = RT_PROCES;
+//    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
+//        gdp->nRT = RT_PROBE;
 
     switch( gdp->nRT )
     {
@@ -256,17 +256,18 @@ void TGtDemo::gd_ps_set()
         strncpy( &gdp->PsIC, "------+--------", 15);
         break;
     case RT_PROCES:
-        strncpy( &gdp->PsIC,"------++-------", 15);
-        gdp->nRT = RT_SYSEQ;
+        strncpy( &gdp->PsIC, "------++-------", 15);
+//        gdp->nRT = RT_SYSEQ;   KD 20.01.03
         break;
-    case RT_PROBE:
-        strncpy( &gdp->PsIC, "------+-+------", 15);
-        gdp->nRT = RT_SYSEQ;
-        break;
-        //case RT_DUTERM:strncpy( &gdp->PsIC,"------+--+-----", 15); break;
+//    case RT_PROBE:
+//        strncpy( &gdp->PsIC, "------+-+------", 15);
+//        gdp->nRT = RT_SYSEQ;
+//        break;
+//    case RT_DUTERM:strncpy( &gdp->PsIC,"------+--+-----", 15); break;
     default:
         Error( GetName(), " E02GDrem: Wrong record type");
     }
+
 }
 
 // get record type
@@ -275,9 +276,10 @@ short TGtDemo::gd_rectype( )
     TCStringArray buf;
     int nRType;
 
-    for( uint i=RT_ICOMP; i< RT_DUTERM; i++ )
+    for( uint i=RT_ICOMP; i < RT_DUTERM; i++ )
         if( i != RT_GTDEMO )
             buf.Add( aMod[i].GetName());
+
     nRType = gdp->nRT;
     if( nRType > RT_GTDEMO )
         nRType--;
@@ -285,12 +287,13 @@ short TGtDemo::gd_rectype( )
     do
     {
         nRType = vfChoice(window(), buf,
-                          "Please, choose the record type for the data sampling",
+             "Please, choose the record type for the data sampling",
                           nRType);
     }
     while( nRType<0 );
+
     nRType += RT_ICOMP;
-    if( nRType >= RT_GTDEMO ) nRType++;
+    if( nRType > RT_GTDEMO ) nRType++;
     return (short)nRType;
 }
 
@@ -301,7 +304,7 @@ void TGtDemo::set_def( int q)
 
     ErrorIf( gdp!=&gd[q], GetName(), "E03GDrem: Illegal access to gd in set_def");
     memset( gd, 0, sizeof( GTDEMO ));
-    if( check_RT( nR) == true )
+    if( check_RT( nR ) == true )
         gdp->nRT = nR;
     else gdp->nRT = RT_ICOMP;
     strcpy( gdp->wcrk, "*");
@@ -336,7 +339,7 @@ void TGtDemo::set_def( int q)
 }
 
 
-// Input nessasery data and links objects
+// Inputs necessary data and links objects
 void TGtDemo::RecInput( const char *key )
 {
     TCModule::RecInput( key );
@@ -375,13 +378,13 @@ AGAIN:
     else // other type of records
     {
 AGAINRC:    //get  keypart
-        str = vfKeyTemplEdit(window(), "Set template ", gdp->nRT, gdp->wcrk );
+        str = vfKeyTemplEdit(window(), "Please, set a record key filter ", gdp->nRT, gdp->wcrk );
         //      if(  str== "" )   Bugfix 19.12.00  DAK
         //          goto AGAINRC;
         Nr = rt[gdp->nRT].GetKeyList( str.c_str(), aRklist, anRk );
         if( Nr<1 )
             if( vfQuestion(window(), GetName(),
-                           "No record keys matching a template! Repeat?"))
+                           "W09GDrem: No record keys matching a template! Repeat?"))
                 goto AGAINRC;
             else Error( GetName(), "E00GDrem: No record keys matching a template" );
     }
@@ -399,7 +402,7 @@ AGAINRC:    //get  keypart
     }
     // Select records list
     aMrk = vfMultiChoiceSet(window(), aRklist,
-                            "gd_keys   Marking record keys for data extraction", aMrk );
+                            "Please, mark some record keys for data sampling", aMrk );
     if( aMrk.GetCount() < 1 )
         if( vfQuestion(window(), GetName(), "No record keys selected! Repeat marking?" ))
             goto AGAIN;
@@ -423,23 +426,26 @@ TGtDemo::RecBuild( const char *key, int mode  )
         delete[] gst.iopt;
     gst.iopt = 0;
 AGAIN:
-    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
-        gdp->nRT = RT_PROCES;
-    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
-        gdp->nRT = RT_PROBE;
-
+//    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
+//        gdp->nRT = RT_PROCES;
+//    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
+//        gdp->nRT = RT_PROBE;  comm.out KD 20.01.03
 
     gdp->nRT = gd_rectype();
     gd_ps_set();
-    if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
+    if( pVisor->ProfileMode != true  && gdp->nRT >= RT_SYSEQ )
         Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
-    int ret = TCModule::RecBuild( key, mode );
 
+    int ret = TCModule::RecBuild( key, mode );
 //    gd_ps_set();
-    if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
-        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
+//    if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
+//       Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
     if( ret == VF_CANCEL )
         return ret;
+
+    if( gdp->nRT == RT_PROCES || gdp->nRT >= RT_PROBE )
+        gdp->nRT = RT_SYSEQ;   // added by KD 20.01.03
+
     if(  gdp->Nwc<0 || gdp->Nqp<0 || gdp->dimEF[0]<0 || gdp->dimEF[1]<0  ||
             ( (gdp->dimEF[0]==0 || gdp->dimEF[1]==0) && gdp->PtAEF != S_OFF ) )
     {
