@@ -197,6 +197,7 @@ gems2/mods/v_ipnc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_ipnc.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_mod.h svn_keywords=Author+Date+Id+Revision
 gems2/rungems.sh svn_keywords=Author+Date+Id+Revision
+gems2/shared/README svn_keywords=Author+Date+Id+Revision
 gems2/vizor/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/vizor/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/vizor/Makefile.qt svn_keywords=Author+Date+Id+Revision
