@@ -163,30 +163,6 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>pselT</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>20</x>
-                            <y>20</y>
-                            <width>430</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>9</pointsize>
-                        </font>
-                    </property>
-                    <property name="text">
-                        <string>Direct titration (to change only bulk composition), &amp;T</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
                         <cstring>pselG</cstring>
                     </property>
                     <property name="geometry">
@@ -213,27 +189,6 @@
                     <property name="geometry">
                         <rect>
                             <x>20</x>
-                            <y>80</y>
-                            <width>430</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>9</pointsize>
-                        </font>
-                    </property>
-                    <property name="text">
-                        <string>Sequential reactor (using phase bulk compositions), &amp;R</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>pselS</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>20</x>
                             <y>110</y>
                             <width>430</width>
                             <height>21</height>
@@ -245,7 +200,7 @@
                         </font>
                     </property>
                     <property name="text">
-                        <string>Arbitrary change of composition and/or constraints, &amp;S</string>
+                        <string>Sequential reactor (using phase bulk compositions), &amp;R</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -269,6 +224,54 @@
                         <string>T and/or P change at fixed bulk composition, &amp;P</string>
                     </property>
                 </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>pselT</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>20</x>
+                            <y>80</y>
+                            <width>430</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>9</pointsize>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>One arbitrary inverse titration calculation, &amp;T</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>pselS</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>20</x>
+                            <y>20</y>
+                            <width>450</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>9</pointsize>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Direct change of bulk composition and/or constraints, &amp;S</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -278,163 +281,6 @@
             <attribute name="title">
                 <string>Dimensions and graphics</string>
             </attribute>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>20</y>
-                        <width>390</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Number of process-generated points (&lt;1000)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>110</y>
-                        <width>390</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Number of plots (sampled &amp;columns, from 0 to 20)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel1_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>150</y>
-                        <width>330</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Number of lines (points) and columns 
- for &amp;empirical data (if plots are specified)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>60</y>
-                        <width>280</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Number of columns in &amp;modC array</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>230</y>
-                        <width>280</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Number of SDref (bibliography) &amp;links</string>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pPoints</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>80</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="maxValue">
-                    <number>999</number>
-                </property>
-                <property name="minValue">
-                    <number>1</number>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pMods</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>60</y>
-                        <width>70</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="maxValue">
-                    <number>20</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="value">
-                    <number>1</number>
-                </property>
-            </widget>
             <widget class="QSpinBox">
                 <property name="name">
                     <cstring>pGraph</cstring>
@@ -509,6 +355,163 @@
             </widget>
             <widget class="QSpinBox">
                 <property name="name">
+                    <cstring>pPoints</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>80</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="maxValue">
+                    <number>999</number>
+                </property>
+                <property name="minValue">
+                    <number>1</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>20</y>
+                        <width>390</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Number of process-generated points (&lt;1000)</string>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pMods</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>60</y>
+                        <width>70</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>1</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>60</y>
+                        <width>380</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Number of columns in &amp;modC array (from 0 to 20)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>110</y>
+                        <width>390</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Number of plots (sampled &amp;columns, from 0 to 20)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>150</y>
+                        <width>383</width>
+                        <height>50</height>
+                    </rect>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Number of lines (points) and columns  for
+ &amp;empirical data (if sampling or plots are specified)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>230</y>
+                        <width>290</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Number of SDref (bibliography) &amp;links</string>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
                     <cstring>pSd</cstring>
                 </property>
                 <property name="geometry">
@@ -525,7 +528,7 @@
                     </font>
                 </property>
                 <property name="maxValue">
-                    <number>3</number>
+                    <number>5</number>
                 </property>
                 <property name="minValue">
                     <number>0</number>
@@ -577,7 +580,6 @@
 <includes>
     <include location="local" impldecl="in declaration"></include>
     <include location="local" impldecl="in declaration"></include>
-    <include location="local" impldecl="in implementation">ProcessDialog.ui.h</include>
 </includes>
 <slots>
     <slot>CmHelp()</slot>
