@@ -154,7 +154,7 @@ unsigned int lenWithRightStrip(const char* s)
 
 #ifdef __FreeBSD
 // replacement for missing function in FreeBSD
-inline char* gcvt(double num, size_t digit, char* buf)
+inline char* gcvt(double num, int digit, char* buf)
 {
     sprintf(buf, "%*g", digit, num);
     return buf;
