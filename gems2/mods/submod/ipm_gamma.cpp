@@ -1856,7 +1856,7 @@ void TProfil::GammaCalc( int LinkMode  )
                     for( pmp->js=0, pmp->is=0; pmp->js<pmp->L1[k]; pmp->js++ )
                         multi->qEd[k].CalcEquat();
                     break;
-                case SM_PRIVATE: /* separate equations for species */
+                case SM_PRIVATE_: /* separate equations for species */
                     multi->qEd[k].CalcEquat();
                     break;
                 }
@@ -1876,7 +1876,7 @@ void TProfil::GammaCalc( int LinkMode  )
                     for( pmp->js=0, pmp->is=0; pmp->js<pmp->L1[k]; pmp->js++ )
                         multi->qEd[k].CalcEquat();
                     break;
-                case SM_PRIVATE:  /* separate group of equations for each species */
+                case SM_PRIVATE_:  /* separate group of equations for each species */
                     multi->qEd[k].CalcEquat();
                     break;
                 }

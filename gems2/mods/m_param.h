@@ -34,7 +34,6 @@
 #include "submod/ms_system.h"
 #include "submod/ms_multi.h"
 #include "submod/ms_calc.h"
-#include "gdatastream.h"
 
 
 // Physical constants - see m_param.cpp

@@ -53,7 +53,7 @@ private:    vstr (const vstr&);
     /* link state */
     LINK_UX_MODE, LINK_TP_MODE, LINK_FIA_MODE,
     /* Posible values of  of keys of model solution - DCOMP_DEP, SPHAS_DEP */
-    SM_UNDEF = 'N', SM_TPDEP = 'T', SM_UXDEP = 'X', SM_PRIVATE = 'P',
+    SM_UNDEF = 'N', SM_TPDEP = 'T', SM_UXDEP = 'X', SM_PRIVATE_ = 'P',
     SM_PUBLIC = 'U',
     // Posible modes calculating of activity coefficients SGM_MODE
     SM_STNGAM = 'S', SM_NOSTGAM = 'N',

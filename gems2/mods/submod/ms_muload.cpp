@@ -97,7 +97,7 @@ sMod = pmp->sMod[k];
             pmp->LsMod[k] = aPH->php->ncpN * aPH->php->ncpM;
             pmp->LsMdc[k] = aPH->php->nscM; // * aPH->php->nscN;
             goto LOAD_NIDMCOEF;
-        case SM_PRIVATE:
+        case SM_PRIVATE_:
         case SM_PUBLIC:   /* nonideal solution */
             pmp->LsMod[k] = aPH->php->ncpN * aPH->php->ncpM;
 //          pmp->LsMdc[k] = aPH->php->nscN * aPH->php->nscN;  ??
