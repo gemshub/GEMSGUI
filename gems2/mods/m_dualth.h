@@ -46,7 +46,7 @@ typedef struct
    PvSd,     // Include references to data sources (+ -)?
    PvChi,    // Use math script for mole fractions of non-basis DCs (+ -)?
    PvGam,    // Use math script for activity coeffs of non-basis DCs (+ -)?
-PvTP,     // Use vectors for T and P of experiments (+ -)?
+PvTPI,     // Use vectors for T, P and IS of experiments (+ -)?
 
      // Controls on operation
    PsMode,  // DualTh mode of operation { M G A X }
@@ -97,7 +97,7 @@ PvTP,     // Use vectors for T and P of experiments (+ -)?
    cT,
    cP,
    cV,  // State factors T,P,V 
-   Flres    //reserved
+   Asur    // Specific surface area (for adsorbed species)
     ;
  double
    *Bb,   //  [Q][N] Table of bulk compositions of basis sub-systems
@@ -124,7 +124,8 @@ PvTP,     // Use vectors for T and P of experiments (+ -)?
    *CAb, // [Q][Lb] Table of quantity/concentration of formulae for basis sub-systems
    *CAn  // [Q][K] Table of quantity/concentration of DC formulae for non-basis sub-systems
 //  *Tdq,    //  [Q]  Temperatures of experiment
-//  *Pdq     //  [Q]  Pressures of experiment
+//  *Pdq,    //  [Q]  Pressures of experiment
+//  *ISq     //  [Q]  Effective ionic strength in experimental aq solutions 
     ;
  char
    *cExpr,  // Math script text for calculation of mole fractions of DC in non-basis
