@@ -944,6 +944,7 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
 // lgK = A[2]/T;
             dCpr = 0.0;
             dSr = 0.0;
+            dGr_d = dHr;
             lgK = - dHr / T / Rln10;
           break;
        case CTM_EK2:  // 2-term or 1-term lgK=const at dHr=0
@@ -994,7 +995,8 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
     DH = dGr + T*dSr;
     if( fabs( dGr - dGr_d ) > 1. || fabs( DH - dHr ) > 57.08 )  // J/mol
     {
-       cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d ;
+       cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d;
+       cout << " rKey:" /* << aW.WW(p).DRkey */ << rc[q].name ;
 //      To add an error message ?
     }
   // Correction for pressure at constant dVr ?
