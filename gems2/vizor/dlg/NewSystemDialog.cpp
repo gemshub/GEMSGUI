@@ -114,6 +114,9 @@ NewSystemDialog::LoadMenu()
         p2->insertSeparator();
         p2->insertItem( "&Commit ISD list view", this, SLOT(CmCommit()) );
         p2->insertItem( "&Reset ISD list view", this, SLOT(CmReset()) );
+        p2->insertSeparator();
+        p2->insertItem( "Out Multi (test)", this, SLOT(CmOutMulti()) );
+        p2->insertItem( "Read Multi (test)", this, SLOT(CmReadMulti()) );
         menuBar()->insertItem( "&Data", p2 );
     }
 
@@ -237,6 +240,56 @@ NewSystemDialog::Update()
             msg += QString("  pH = %1;").arg(pData->pH, 7, 'g', 4);
             msg += QString("  pe = %1").arg(pData->pe, 7, 'g', 4);
    statusBar()->message( msg );
+}
+
+void
+NewSystemDialog::CmOutMulti()
+{
+    try
+    {
+      // open file to output
+      gstring filename;
+      if( vfChooseFileSave(this, filename,
+          "Put file name for printing" ) == false )
+               return;
+      fstream f(filename.c_str(), ios::out|ios::binary);
+      ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+
+//Ask Dima!!! 20/04/2002
+//Setting start data before calc in calc_gems
+      gstring keyp = rt[RT_SYSEQ].UnpackKey();
+      TProfil::pm->PMtest( keyp.c_str() );
+      TProfil::pm->MultiCalcInit( keyp.c_str() );
+
+      TProfil::pm->outMulti(f);
+    }
+    catch( TError& xcpt )
+    {
+      vfMessage(this, xcpt.title, xcpt.mess);
+    }
+}
+
+void
+NewSystemDialog::CmReadMulti()
+{
+    try
+    {
+      // open file to output
+      gstring filename;
+      if( vfChooseFileOpen(this, filename,
+          "Get file name for reading" ) == false )
+               return;
+      fstream f(filename.c_str(), ios::in|ios::binary);
+      ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+      TProfil::pm->readMulti(f);
+       loadList1();            // Load...
+       loadList2();
+       Update();
+    }
+    catch( TError& xcpt )
+    {
+      vfMessage(this, xcpt.title, xcpt.mess);
+    }
 }
 
 void
@@ -429,6 +482,8 @@ NewSystemDialog::closeEvent(QCloseEvent* ev)
     QWidget::closeEvent(ev);
 }
 
+<<<<<<< NewSystemDialog.cpp
+=======
 bool
 NewSystemDialog::event(QEvent* ev)
 {
@@ -441,6 +496,7 @@ NewSystemDialog::event(QEvent* ev)
     return QWidget::event(ev);
 }
 
+>>>>>>> 1.5
 void                                 // Thermodynamic data
 NewSystemDialog::CmOpen_MTPARAM()
 {
@@ -1218,4 +1274,5 @@ MLineEdit::SetIndex(int ii)
 
 
 //-------- End of file NewSystemDialog.cpp ----------------------------
+
 

@@ -3,7 +3,7 @@
 //
 // Declaration of NewSystemDialog class
 //
-// Copyright (C) 1996-2001  A.Rysin, S.Dmytriyeva
+// Copyright (C) 1996-2002  A.Rysin, S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Vizor library which uses the
@@ -89,9 +89,6 @@ public:
 
 protected:
     void closeEvent(QCloseEvent* ev);
-//    void enterEvent(QEvent* ev);
-    bool event(QEvent* ev);
-
     void LoadMenu();
 
     void loadList1();
@@ -142,6 +139,9 @@ protected slots:
     void CmHowto();
     void CmScript();
 
+    //for test
+    void CmOutMulti();
+    void CmReadMulti();
 
 };
 #endif // NewSystemDialog_included
