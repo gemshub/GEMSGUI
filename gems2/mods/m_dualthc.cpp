@@ -64,9 +64,12 @@ void TDualTh::Analyse( )
   if( dtp->PsMode == DT_MODE_M || dtp->PsMode == DT_MODE_A )
      Calc_muo_n( dtp->PsSt );
   if( dtp->PsMode == DT_MODE_G )
+  {
      Calc_gam_n( dtp->PsSt );
-//  if( dtp->PsMode == DT_MODE_X )
-//     Calc_act_n( dtp->PsSt );
+     Calc_act_n( dtp->PsSt );
+  }
+  if( dtp->PsMode == DT_MODE_X )
+     Calc_act_n( dtp->PsSt );
 }
 
 //set sizes of arrays
