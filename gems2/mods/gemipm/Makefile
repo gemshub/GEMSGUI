@@ -70,7 +70,7 @@ ms_datach_br.o:	../submod/ms_datach_br.cpp
 
 
 %.o:	%.cpp
-	$(CC) $(FLAGS) $(INCLUDES) -c  $<
+	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 # DO NOT DELETE
 
