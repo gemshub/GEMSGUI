@@ -67,9 +67,20 @@ void TProfil::Push( TIArray<CompItem>& aList, int aLine,
     if( aDelta < 0 )
         stt += " record deleted. Continue?";
     else stt += " record inserted. Continue?";
-    if( !vfQuestion(window(), dbKeywd, stt.c_str()) )
-        Error( dbKeywd, "Comparison error!" );
-    aList.Add( new CompItem( aLine, aDelta));
+
+
+    if( comp_change_all == false )
+      switch( vfQuestion3(window(), dbKeywd, stt.c_str(),
+              "&Yes", "Yes for &All", "&Cancel" ))
+    {
+     case VF3_3:
+           Error( dbKeywd, "Comparison error!" );
+     case VF3_2:
+                comp_change_all = true;
+     case VF3_1:   ;
+
+     }
+   aList.Add( new CompItem( aLine, aDelta));
 }
 
 
@@ -293,6 +304,7 @@ void TProfil::TestChangeProfile()
 {
     vstr pkey(81);
 
+    comp_change_all = false;
     // compare ICOMP list
     TIArray<CompItem> aIComp(10, 5);  // list of IC changes
     ICcompare( aIComp);

@@ -169,6 +169,7 @@ class TProfil : public TCModule
 
 
     // to compare with old Project
+    bool comp_change_all; 
     char
     (*SFold)[PH_RKLEN],// List of PHASE definition keys [0:Fi-1]             DB
     (*SMold)[DC_RKLEN],// List of DC definition keys (DCOMP, REACDC) [0:L-1] DB

@@ -148,6 +148,7 @@ TProfil::TProfil( int nrt ):
     stepWise = false;
     calcFinished = false;
     fStopCalc = false;
+    comp_change_all = false;
 
 }
 
