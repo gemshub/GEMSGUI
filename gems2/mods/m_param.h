@@ -45,8 +45,9 @@ extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
 struct BASE_PARAM
 { // Flags and thersholds for numeric modules
     short PC,    // "Mode of Selekt2() subroutine operation"
-    PD,// Mode of DHH():0-invoke,1-at FIA only,2-last IPM it. 3-every IPM it.
-    PRD,//Mode GammaCalc(): 0-inactive, 1-FIA only, 2-SELEKT2 only 3-every IPM it.
+    PD, // Mode of DHH():0-invoke,1-at FIA only,2-last IPM it. 3-every IPM it.
+    PRD, // Number of repeated GEM IPM runs without Simplex() to refine primal solution (default 1)
+         // Obsolete: Mode GammaCalc(): 0-inactive, 1-FIA only, 2-SELEKT2 only 3-every IPM it.
     PSM,//  Mode of setting FIA Gamma in phases: 0-off; 1 - set activ.coeff. GAN
     DP, //  Max number of EnterFeasibleDomain() iterations { 100 }
     DW, // IPM-2 precision mode: 0- disable 1-enable

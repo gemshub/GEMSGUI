@@ -517,16 +517,14 @@ void TProfil::MultiCalcIterations()
 {
     pll=0;
     FXold=0.0;
-
+    int pp;
  /*   do
     { // cycle of iterations Selekt
         // Stop calculations here Sveta
         if( MultiCalcMain( pll, FXold ) == true )
             break;
-
         if( fStopCalc == true )	// 'Cancel' button
             return;	// should we do some cleanup?
-
     } while( !pmp->MK );  */
     MultiCalcMain( pll, FXold );
 

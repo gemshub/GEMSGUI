@@ -963,7 +963,7 @@ IN6:
                                                 pmp->PD==3 ) )  // ????????
         {
             if( pmp->LO && pmp->X[pmp->LO]>pmp->lowPosNum && pmp->PD==3 )
-                pmp->PD=2;
+                pmp->PD=2;     //  what does this mean?
             else  pmp->DX= 0.5 * pmp->PCI;
         }
         MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C );

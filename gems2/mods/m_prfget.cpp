@@ -740,6 +740,20 @@ void TProfil::CalcEqstat( bool /*prg*/)
         aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
 //    vfMessage(window(),"Test1", "Point2");
 
+    if( pa.p.PRD < 0 && pa.p.PRD > -50 && !pmp->pNP ) // max 50 loops
+    {  // Test refinement loops for highly non-ideal systems  KD 18.02.2005
+       int pp, TotIT = pmp->IT;
+       pmp->pNP = 1;
+       for( pp=0; pp < abs(pa.p.PRD); pp++ )
+       {
+         pmp->IT = 0;
+         if( AutoInitialApprox() == false )
+             MultiCalcIterations();
+         TotIT += pmp->IT;
+       }
+       pmp->pNP = 0;
+       pmp->IT = TotIT;
+    }
     calcFinished = true;
 
 //nmt    pVisor->Update();

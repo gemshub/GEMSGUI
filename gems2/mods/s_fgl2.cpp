@@ -1,7 +1,8 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (C) 1992-2000  K.Chudnenko, D.Kulik, S.Dmitrieva
+// Copyright (C) 1992-2000  K.Chudnenko, S.Churakov,
+//    D.Kulik, S.Dmitrieva
 //
 // Implementation of TFGLcalc class
 //
@@ -25,6 +26,7 @@
 //#include "visor.h"
 
 //--------------------------------------------------------------------//
+//
 int TCGFcalc::CGcalcFug( void )
 {
     double T, P, Fugacity = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
@@ -81,8 +83,6 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 //
     return retCode;
 }
-
-
 
 const float RG = 83.144;
 

@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (C) 1992-2000  K.Chudnenko, D.Kulik, S.Dmitrieva
+// Copyright (C) 2004-2005  S.Churakov, D.Kulik
 //
 // Implementation of TFGLcalc class
 //
@@ -1314,6 +1314,4 @@ void EOSPARAM::norm(double *X,unsigned mNum)
   }
  }
 
-
-/////////////////////////////////////////////////////////////////////////////
 //--------------------- End of s_fgl.cpp ---------------------------

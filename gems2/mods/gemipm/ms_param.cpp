@@ -77,6 +77,8 @@ TProfil::calcMulti()
 
     if( AutoInitialApprox() == false )
         MultiCalcIterations();
+
+
 }
 
 void TProfil::outMulti( GemDataStream& ff, gstring& path  )
