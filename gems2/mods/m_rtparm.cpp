@@ -242,7 +242,7 @@ void TRTParm::set_def( int q)
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
     memcpy( &rp[q].What, aPa->pa.RPpdc, 10 );
-    strcpy( rp[q].name,  "Temperature corrections - g0 function of " );   // Fixed for debugging
+    strcpy( rp[q].name,  "T (and P) corrections: g0 function of " );   // Fixed for debugging
     strcpy( rp[q].comment, "Please, change the script and/or remake, if necessary" );
     strcpy( rp[q].xNames,  "C  / bar" );   // Fixed for debugging
     strcpy( rp[q].yNames, "kJ/mol" );
@@ -262,7 +262,7 @@ void TRTParm::set_def( int q)
         rp[q].NV = rp[q].NP * rp[q].NT;
         break;
     case 3:
-        rp[q].NV = min( rp[q].NP, rp[q].NT );
+        rp[q].NV = max( rp[q].NP, rp[q].NT );
         break;
     }
     rp[q].Pi[0] = aPa->pa.Pi[0];
@@ -291,7 +291,7 @@ void TRTParm::set_def( int q)
     rpp->dimXY[1] = 1;
     rpp->expr = (char *)aObj[ o_rtexpr ].Alloc(1, 2048, S_);
     strcpy( (char *)aObj[o_rtexpr].GetPtr(),
-             " xT[jTP] =: twTC;\n yF[jTP][0] =: twG/1000;\n  " );
+  " xT[jTP] =: twTK;\n xP[jTP] =: twP;\n yF[jTP][0] =: twG/1000;\n  " );
     rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
                  rpp->dimXY[1], MAXGRNAME);
     strcpy( rpp->lNam[0], "g0 ");
@@ -331,13 +331,13 @@ bool TRTParm::check_input( const char *key, int Level )
 }
 
 
-// Input nessasery data and links objects
+// Input necessary data and link objects
 void TRTParm::RecInput( const char *key )
 {
     TCModule::RecInput( key );
 }
 
-//Rebild record structure before calc
+//Rebuild record structure before calculation
 int
 TRTParm::RecBuild( const char *key, int mode  )
 {
@@ -348,23 +348,31 @@ AGAIN_SETUP:
         return ret;
     if( ret == VF3_1 )
     {
+        int ilx, len = 0;
         strncat( rpp->name, db->FldKey(2), db->FldLen(2));
-//        strcat( rpp->name, "\0";
+        len = strlen( rpp->name );
+        for( ilx=len-1; ilx>0; ilx-- )
+        { // remove tail spaces 
+          if(rpp->name[ilx] == ' ')
+            continue;
+          rpp->name[ilx+1] = 0;
+          break;
+        }
     }
     rpp->What = *(key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB); // Foolproof !
 
     switch( rpp->Mode )
     {
     default:
-    case 0:
+    case 0: // the user must enter all P and T values in xP and xT vectors
         rpp->NV = max( rpp->NP, rpp->NT );
         break;
-    case 1:
-    case 2:
+    case 1: // increments in cycle on P nested into cycle on T
+    case 2: // increments in cycle on T nested into cycle on P (default)
         rpp->NV = rpp->NP * rpp->NT;
         break;
-    case 3:
-        rpp->NV = min( rpp->NP, rpp->NT );
+    case 3: // parallel increments of T and P in one cycle
+        rpp->NV = max( rpp->NP, rpp->NT );
         break;
     }
     if( rpp->NV < 1 || rpp->NV > 4192 )
@@ -472,9 +480,9 @@ TRTParm::RecCalc( const char *key )
    switch( rpp->Mode )
     {
     default:
-    case 0: /* insert by hand */
+    case 0: // the user must enter all P and T values in xP and xT vectors
         break;
-    case 1: /* by P, then by T */
+    case 1: // increments in cycle on P nested into cycle on T
         for( ij=0, i=0; i<rpp->NT; i++ )
         {
             rpp->T[ij] = rpp->Ti[0] + rpp->Ti[2] * i;
@@ -490,7 +498,7 @@ TRTParm::RecCalc( const char *key )
             }
         }
         break;
-    case 2: /* by T, then by P */
+    case 2: // increments in cycle on T nested into cycle on P (default)
         for( ij=0, i=0; i<rpp->NP; i++ )
         {
             rpp->P[ij] = rpp->Pi[0] + rpp->Pi[2] * i;
@@ -506,7 +514,7 @@ TRTParm::RecCalc( const char *key )
             }
         }
         break;
-    case 3: /* T,P index parallel */
+    case 3: // parallel increments of T and P in one cycle
         for( i=0; i<rpp->NV; i++ )
         {
             rpp->P[i] = rpp->Pi[0] + rpp->Pi[2] * i;
@@ -548,6 +556,7 @@ TRTParm::RecCalc( const char *key )
             {
                 TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
                 aW.twp->TCst = aDC->dcp->TCst;
+                aW.twp->Pst = aDC->dcp->Pst;
                 aDC->DCthermo( 0, 0 );
             }
             break;
@@ -555,6 +564,7 @@ TRTParm::RecCalc( const char *key )
             {
                 TReacDC* aRDC=(TReacDC *)(&aMod[RT_REACDC]);
                 aW.twp->TCst = aRDC->rcp->TCst;
+                aW.twp->Pst = aRDC->rcp->Pst;
                 aRDC->RCthermo( 0, 0 );
                 aRDC->ods_link(0);
             }
@@ -565,8 +575,8 @@ TRTParm::RecCalc( const char *key )
         /* Set results to arrays */
         aW.ods_link(0);
         if( P_old < 1e-6 && rpp->P[j] < 1e-6 )
-        {  /* set pressision calc by TNP*/
-            rpp->P[j] = aW.twp->P;
+        {  /* set precision calc by TNP*/
+            rpp->P[j] = aW.twp->P;  // ???????
         }
         // calculate equations of  data
         rpn[0].CalcEquat();

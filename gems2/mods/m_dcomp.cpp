@@ -267,8 +267,7 @@ void TDComp::dyn_new(int q)
     else
         dc[q].CPg = (float *)aObj[ o_dccritpg ].Free();
 
-    if( CE == CTM_BER &&
-            vfQuestion( window(), GetName(), "Will disorder coefficients d(i) be entered?"))
+    if( CV == CPM_VBM )     // 04.04.2003  Birch-Murnaghan coeffs 
         dc[q].ODc = (float *)aObj[ o_dcodc].Alloc(MAXODCOEF, 1, F_ );
     else
         dc[q].ODc = (float *)aObj[ o_dcodc ].Free();
@@ -599,7 +598,7 @@ NEXT:
     aW.twp->TCst = dcp->TCst;
     aW.twp->T = aW.twp->TC + C_to_K;
     memcpy( aW.twp->DRkey, dcp->pstate, DC_RKLEN );
-    DCthermo( 0/*q*/, 0 ); // calc thermodinamic
+    DCthermo( 0/*q*/, 0 ); // calc thermodynamic data
     dcp->Cps[0] = aW.twp->Cp;
     dcp->Cps[1] = aW.twp->devCp;
     dcp->mVs[0] = aW.twp->V;
@@ -609,7 +608,7 @@ RESULT:
     TCModule::RecCalc(key);
 }
 
-//Calculate thermodinamic
+//Calculate thermodynamic data
 void
 TDComp::DCthermo( int q, int p )
 {
@@ -626,7 +625,7 @@ TDComp::DCthermo( int q, int p )
     CV = toupper( dcp->pct[2] );
 
     if( CM == CTPM_HKF )
-    {// woter fiches
+    {// HKF calculations
 
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
                 ( aW.twp->P > 1e-4 && fabs( aW.twp->P - aSta.Pres ) > 0.001 ))

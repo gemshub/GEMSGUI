@@ -72,6 +72,7 @@ public:
     void set_def( int i=0);
 
     int RecBuild( const char *key, int mode = VF_UNDEF );
+    void RecSave( const char *key, bool onOld ); // Added 09.04.03 KD 
 
     void CmHelp();                       // 05.01.01
     char *getAbstr() const

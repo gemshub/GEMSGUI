@@ -28,7 +28,7 @@ MAXCPCOEF =      12,
   MAXCPFSCOEF=     9,
      MAXHKFCOEF =     8,
         MAXVTCOEF =      5,
-           MAXODCOEF =      8,
+           MAXODCOEF =     12, // Total number of V(T,P) coeffs BM Gottschalk
              MAXCRITPARAM =   7;
 
 extern const double ZBALANCE_PREC,
@@ -129,9 +129,18 @@ class TDComp : public TCModule
     DCOMP dc[2];
 
 protected:
-
+// Generic corrections
     void calc_tpcv( int q, int p, int CE, int CV );
     void calc_voldp( int q, int p, int CE, int CV );
+// For Gottschalk's database
+    void BirchMurnaghan( double Pst, double P, double Tst, double T, double Vst,
+         const float *BMcoef, double &VV0, double &alpha, double &beta,
+         double &GG0, double &HH0, double &SS0 );
+    double BM_Volume( double P, double vt, double kt0, double kp, double kpp,
+       double vstart);
+    double BM_IntVol(double P, double Pref, double vt, double vpt, double kt0,
+                 double kp, double kpp);
+// From SUPCRT92
     void calc_tpH2O( int pst );
     void calc_tphkf( int q, int p );
     void calc_thkf( AQSREF& arf, double P, double T, double Dw, double betaw,
@@ -149,6 +158,7 @@ protected:
                 double *dwdT, double *d2wdT2);
     // void S_import( short Mode, fstream& imp );
     // void B_import( int Nft, fstream& imp );
+// From PRONSPREP97
     void ParCor();
 
 public:

@@ -805,7 +805,7 @@ CALCULATE_DELTA_R:
     case CPM_CON:
     case CPM_VKE:
     case CPM_VBE:
-    case CPM_VBM:
+//    case CPM_VBM:
     case CPM_CEH:
         calc_tpcv_r( q, p, CM, CV );
     default:

@@ -398,28 +398,180 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
         /*       dc[q].Comp = (float)aW.twp->Alp;
                  dc[q].Expa = (float)aW.twp->Bet;  */
     }
-//    if( CV == CPM_VBM && dc[q].Vt )  /* Code 'B' */
-//    {
-//       double VV00=0.0, GG0=0.0, HH0=0.0, SS0=0.0;
-//       int errV = 0;
-//       errV = BirchMurnaghan( 0.1*Pst, 0.1*aW.twp->P, Tst, T, Vst, dc[q].ODc,
-//            &VV00, &GG0, &HH0, &SS0 );
-//
-//  int BirchMurnaghan( double Pst, double P, double Tst, double T, double Vst,
-//         float *BMcoef, double &VV00, double &GG0, double &HH0, double &SS0 );
-//
-//       if( !errV )  /* make an error message */
-//       {
-//          ; // To be inserted: increments to V, G, H, S
-//       }
-//       else ; /* make an error message */
-//    }
-//    if( fabs( aC ) > 1e-18 )
-//        aW.twp->Cv = aW.twp->Cp - T* aW.twp->V * aE * aE / aC;
-// Finished
+    if( CV == CPM_VBM && dc[q].ODc )  /* Code 'B' - Birch-Murnaghan */
+    { // Inserted 04.04.2003 M.Gottschalk and KD
+      if( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
+      {
+         double VV0=0.0, GG0=0.0, HH0=0.0, SS0=0.0, aC=0.0, aE=0.0;
+
+         BirchMurnaghan( 0.1*Pst, 0.1*aW.twp->P, Tst, T, Vst*10., dc[q].ODc,
+                         VV0, aC, aE, GG0, HH0, SS0 );
+         // increments to V, G, H, S
+         aW.twp->V += VV0/10.;
+         aW.twp->S += SS0;
+         aW.twp->G += GG0;
+         aW.twp->H += HH0;
+         aW.twp->Alp = aC;
+         aW.twp->Bet = aE;
+      }
+   }  // End Birch-Murnaghan section
 }
 
-//--------------------------------------------------------------------//
+//---------------------------------------------------------------------------
+// Calculations related to Burch-Murnaghan (1947) equation (12 coeffs)
+// Written in fortran by M.Gottschalk, GFZ Potsdam
+// Translated to C/C++ by D.Kulik, PSI LES, 08 April 2003
+//
+// calculate the volume integral
+double TDComp::BM_IntVol(double P, double Pref, double vt, double vpt,
+                         double kt0, double kp, double kpp)
+{
+   double vt23, pint;
+
+   vt23 = pow( vt/vpt, 2./3. );
+
+   pint = (-3.*kt0*vt*(6.*(199. - 75.*kp + 9.*kp*kp + 9.*kpp*kt0)*vpt*vt*
+          pow( vt/vpt, 1./3. ) +
+          vt*vt*(-668. + kp*(276. - 63.*vt23) + 9*kp*kp*(-4. + vt23) +
+          9.*kpp*kt0*(-4. + vt23) + 143.*vt23) +
+          vpt*vpt*(287. + kp*kp*(9. - 36.*vt23) +
+          9.*kpp*kt0*(1. - 4.*vt23) - 956.*vt23 + kp*(-87. + 324.*vt23))
+          ))/(128.*vpt*vpt);
+
+// return vdP
+   return -Pref*vt+P*vpt-pint;
+}
+
+//-----------------------------------------------------------------------
+// calculate the volume at P and T
+//
+double TDComp::BM_Volume( double P, double vt, double kt0, double kp,
+                         double kpp, double vstart)
+{
+      double  veq, vv, vvnew, vvold, vt23, dveq;
+      int i=0;
+
+      vv    = vstart;
+      vvold = vv;
+      vvnew = vvold + 1.;
+
+// Newton iteration (max. 50 iterations)
+  while ( fabs(vvnew-vvold) > 1e-10 && i++ < 50 )
+  {
+        vt23 = pow( vt/vv, 2./3.);
+        veq =  3./2.*kt0*(1.+3./4.*(kp-4.)*(vt23-1.)
+             +3./8.*(143./9.-7.*kp+kp*kp+kpp*kt0)*(vt23-1.)*(vt23-1.))
+             *(vt23-1.)*pow( vt/vv, 5./3. ) - P;
+        dveq = (kt0*vt*(vt*vt*(4509. + kp*kp*(243. - 99.*vt23)
+             + 9.*kpp*kt0*(27. - 11.*vt23) + 9.*kp*(-207. + 77.*vt23)
+             - 1573.*vt23) - 21.*(199. - 75.*kp + 9.*kp*kp + 9.*kpp*kt0)
+             *vt*pow( vt/vv, 1./3. ) *vv
+             + 5.*(239. - 81.*kp + 9.*kp*kp + 9.*kpp*kt0)
+             *vt23*vv*vv))/(48.*vv*vv*vv*vv);
+        vvold = vv;
+        vvnew = vv - veq/dveq/2.;
+        vv    = vvnew;
+   }
+// returns volume
+      return vv;
+}
+
+//------------------------------------------------------------------------
+// calculate the integral vdP using the Birch-Murnaghan EOS
+// this function will be incorporated into GEM-Selektor v.2.1.0 code
+//
+void
+TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
+          const float *BMConst, double &vv, double &alpha, double &beta,
+          double &dG, double &dH, double &dS )
+{
+   double vt, vpt, a1, a2, a3,    //  a4, a5,
+          kt00, kt0, dkdt, kp, kpp, vstart,
+          Volume, IntVol, Pincr=0.01, Tincr=0.1,
+          Pplus, Pminus, Tplus, Tminus,
+          vPplus, vPminus, vTplus, vTminus,
+          kt0Tplus, kt0Tminus, kppTplus, kppTminus,
+          vtTplus, vtTminus, dGTplus, dGTminus;
+//
+//      v0   = BMConst(1) - in GEMS passed as a separate function parameter
+    a1   = BMConst[0];
+    a2   = BMConst[1];
+    a3   = BMConst[2];
+//    a4   = BMConst[3];  for future extensions
+//    a5   = BMConst[4];
+    kt00 = BMConst[5];
+    dkdt = BMConst[6];
+    kp   = BMConst[7];
+    kpp  = BMConst[8];
+//
+    Pplus  = P + Pincr;
+    Pminus = P - Pincr;
+    Tplus  = T + Tincr;
+    Tminus = T - Tincr;
+//
+// calculate bulk modulus at T and its T increments
+//
+    kt0        = kt00 + dkdt*(T - Tref);
+    kt0Tplus   = kt00 + dkdt*(Tplus - Tref);
+    kt0Tminus  = kt00 + dkdt*(Tminus - Tref);
+//
+// set kpp if not already defined and its T increments
+//
+    if ( fabs(kpp) < 1e-20 )
+    {
+      kpp       = -((35./9.+(3.-kp)*(4.-kp))/kt0);
+      kppTplus  = -((35./9.+(3.-kp)*(4.-kp))/kt0Tplus);
+      kppTminus = -((35./9.+(3.-kp)*(4.-kp))/kt0Tminus);
+    }
+//
+// calculate volume at T and Pref and its T increments
+//
+    vt = v0* exp( a1*(T-Tref)
+         + a2/2.*(T*T-Tref*Tref)
+         + a3*(-1./T+1./Tref) );
+    vtTplus  =  v0* exp( a1*(Tplus-Tref)
+         + a2/2.*(Tplus*Tplus-Tref*Tref)
+         + a3*(-1./Tplus+1./Tref) );
+    vtTminus =  v0* exp( a1*(Tminus-Tref)
+         + a2/2.*(Tminus*Tminus-Tref*Tref)
+         + a3*(-1./Tminus+1./Tref) );
+//
+// calculate volume to start iterations
+    vstart = vt* exp( -1./kt0*(P-Pref) );
+//
+// calculate volumes at P and T and its increments
+//
+    vv      = BM_Volume(P, vt, kt0, kp, kpp, vstart);
+    vPplus  = BM_Volume(Pplus, vt, kt0, kp, kpp, vv);
+    vPminus = BM_Volume(Pminus, vt, kt0, kp, kpp, vv);
+    vTplus  = BM_Volume(P, vtTplus, kt0Tplus, kp, kppTplus, vv);
+    vTminus = BM_Volume(P, vtTminus,kt0Tminus,kp,kppTminus, vv);
+//
+// calculate aplha and beta at P and T
+//
+    alpha =  1./vv*((vTplus-vTminus)/(2.*Tincr));
+    beta  = -1./vv*((vPplus-vPminus)/(2.*Pincr));
+//
+// calculate vdP (P-T correction of G ->  dG)
+//
+    dG = BM_IntVol(P, Pref, vt, vv, kt0, kp, kpp);
+//
+// calculate d(vdP)/dT (dS)
+//
+    dGTplus  = BM_IntVol(P,Pref,vtTplus,vTplus,kt0Tplus,kp,kppTplus);
+    dGTminus = BM_IntVol(P,Pref,vtTminus,vTminus,kt0Tminus,kp,kppTminus);
+    dS = (dGTplus-dGTminus)/(2.*Tincr);
+//
+// calculate dH
+//
+    dH = dG + T*dS;
+//
+}
+// End of section for Birch-Murnaghan calculations
+//
+//--------------------------------------------------------------------
+// Begin section converted from SUPCRT92
+// 
 void
 TDComp::calc_tpH2O( int pst )
 {

@@ -62,8 +62,16 @@ void TSData::set_def(int)
 {
     nREf = 0;
     dyn_new();
-    *auth = *year = *type = *volyr = *pages = *authors = *editn = *notes = '\0';
-    *title = *abstr = '\0';
+    strcpy( auth, "Einstein_ea" );
+    strcpy( year, "2003" );
+    strcpy( type, "wow" );
+    strcpy( authors, "Einstein, A. and others" );
+    strcpy( title, "Forgotten discovery of greatest importance" );
+    strcpy( volyr, "2003, v.33" );
+    strcpy( pages, "222-333" );
+    strcpy( editn, "Journal of Systematic Research" );
+    strcpy( notes, "Something wonderful" );
+    strcpy( abstr, "Precise description of Universe" );
 }
 
 // reallocate dynamic memory
@@ -108,6 +116,12 @@ AGAIN:
     dyn_new();
     pVisor->Update();
     return ret;
+}
+
+//Save record structure - added 09.04.03 KD
+void TSData::RecSave( const char *key, bool onOld )
+{
+    TCModule::RecSave( key, onOld );
 }
 
 void
