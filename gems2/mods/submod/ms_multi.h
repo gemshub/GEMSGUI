@@ -287,8 +287,8 @@ class TMulti :
     //MTPARM *tpp;
 
     // transport
-    DATACH  data_CH;
-    DATABR  data_BR;
+    DATACH  *data_CH;
+    DATABR  *data_BR;
 public:
 
     TIArray<IPNCalc> qEp;
@@ -383,8 +383,10 @@ class TMulti
    MULTI pm;
 
     // transport
-    DATACH  data_CH;
-    DATABR  data_BR;
+    int nNodes;
+    DATACH  *data_CH;
+    DATABR  *data_BR;
+    DATABR  *(*arr_BR);
 
    char PAalp_;
    char PSigm_;
@@ -402,13 +404,16 @@ public:
         return &pm;
     }
 
-    TMulti( /*int nrt, SYSTEM* sy_*/ )
-    {}
+    TMulti( int );
 
     const char* GetName() const
     {
         return "Multi";
     }
+
+    void SaveCopyFrom( int ii );
+    void SaveCopyTo( int ii );
+    void CopyTo( DATABR *(*dBR) );
 
     //mass transport
     void to_file( GemDataStream& ff, gstring& path  );

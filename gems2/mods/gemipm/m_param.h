@@ -225,13 +225,13 @@ protected:
 
 public:
 
-
+    static TProfil* pm;
     TMulti* multi;
     MULTI *pmp;
 
     SPP_SETTING pa;
 
-    TProfil();
+    TProfil( int );
 
     const char* GetName() const
     {

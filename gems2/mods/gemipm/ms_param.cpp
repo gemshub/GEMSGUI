@@ -6,6 +6,8 @@
 #include "m_param.h"
 #include "gdatastream.h"
 
+TProfil* TProfil::pm;
+
 const double R_CONSTANT = 8.31451,
               NA_CONSTANT = 6.0221367e23,
                 F_CONSTANT = 96485.309,
@@ -55,10 +57,10 @@ SPP_SETTING::write(ostream& oss)
 }
 
 
-TProfil::TProfil()
+TProfil::TProfil( int nNd )
 {
     pa= pa_;
-    multi = new TMulti();
+    multi = new TMulti( nNd );
     pmp = multi->GetPM();
 }
 

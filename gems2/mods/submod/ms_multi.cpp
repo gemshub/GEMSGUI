@@ -26,6 +26,9 @@ TMulti::TMulti( int nrt, SYSTEM* sy_ ):
         TSubModule( nrt ), syp(sy_)
 {
     set_def();
+    data_CH = 0;
+    data_BR = 0;
+
     flCopy = false;
 }
 
