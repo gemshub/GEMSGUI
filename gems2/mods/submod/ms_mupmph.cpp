@@ -47,11 +47,12 @@ void TProfil::PMtest( const char *key )
 
     ///  pmp->pNP = -1;
     if( STat->ifCalcFlag())
-        pmp->pESU = 1;
+       pmp->pESU = 1; 
     else pmp->pESU = 0;
 
     if( pmp->pESU == 0 ) // no old solution
         pmp->pNP = 0;
+
     if( Proc->pep->Istat == P_EXECUTE ||
         Proc->pep->Istat == P_MT_EXECUTE )
     {
@@ -70,7 +71,7 @@ void TProfil::PMtest( const char *key )
 */    pmp->pBAL =  BAL_compare();
     if( !pmp->pBAL )
         pmp->pIPN = 0;
-//    if( multi->qEp.GetCount()<1 || multi->qEd.GetCount()<1 )  Caution! 
+//    if( multi->qEp.GetCount()<1 || multi->qEd.GetCount()<1 )  Caution!
     if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE )
         pmp->pIPN = 0;
     // Get P and T from key

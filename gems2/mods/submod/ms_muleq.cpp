@@ -160,8 +160,8 @@ void TMulti::unpackData()
         //   err += "' IComp in system.";
         Error( GetName(), "no such IComp in this system" );
 FOUNDI:
-        pm.U[ip] = STat->stp->U[is];
-        pm.B[ip] = STat->stp->B[is];    // Added
+     //   pm.U[ip] = STat->stp->U[is];
+     //   pm.B[ip] = STat->stp->B[is];    // Added     //Deleted Sveta 10/02/05
     }
 
     /* Inserted by DAK 15.11.98 in Mainz */
