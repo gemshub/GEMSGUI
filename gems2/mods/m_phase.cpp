@@ -37,13 +37,13 @@ TPhase::TPhase( int nrt ):
 {
     nQ = 1;
     aFldKeysHelp.Add(
-        "l<4 Code of aggregate state of a phase { a g p m l x d h }_");
+        "l<4 Code of aggregate state of a phase { a g l h s d x }_");
     aFldKeysHelp.Add(
-        "l<8 Symbol of phase definition (letters, digits, _)");
+        "l<8 Symbol of this phase definition (letters, digits, _)");
     aFldKeysHelp.Add(
-        "l<16 Name of phase definition_");
+        "l<16 Name of this phase definition_");
     aFldKeysHelp.Add(
-        "l<4 Phase class { c l h u aq gm ss xs xg xa pl ls hm mm }_");
+        "l<4 Phase class { c d l gm ss ssd ls aq xsa xc }_");
     aFldKeysHelp.Add(
         "l<16 Record key comment to phase definition_");
     php=&ph[0];
@@ -54,7 +54,7 @@ TPhase::TPhase( int nrt ):
 // link values to objects
 void TPhase::ods_link( int q)
 {
-    ErrorIf( q > nQ, GetName(), "Illegal link q>nQ.");
+    ErrorIf( q > nQ, GetName(), "E00PHrem: Illegal link q>nQ");
     //aObj[ o_phpst].SetPtr(  ph[q].pst );
     //aObj[ o_phsymb].SetPtr( ph[q].symb );
     //aObj[ o_phnam].SetPtr(  ph[q].nam );
@@ -121,7 +121,7 @@ void TPhase::ods_link( int q)
 void TPhase::dyn_set(int q)
 {
     ErrorIf( php!=&ph[q], GetName(),
-             "Illegal access to ph in dyn_set.");
+             "E01PHrem: Illegal access to ph in dyn_set()");
     memcpy( php->pst, rt[nRT].UnpackKey(), PH_RKLEN );
     ph[q].SCMC =  (char *)aObj[ o_phscmc ].GetPtr();
     ph[q].FsiT =  (float *)aObj[ o_phfsit ].GetPtr();
@@ -146,7 +146,7 @@ void TPhase::dyn_set(int q)
 // free dynamic memory in objects and values
 void TPhase::dyn_kill(int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "Illegal access to ph in dyn_kill.");
+    ErrorIf( php!=&ph[q], GetName(), "E02PHrem: Illegal access to ph in dyn_kill()");
     ph[q].SCMC =  (char *)aObj[ o_phscmc ].Free();
     ph[q].FsiT =  (float *)aObj[ o_phfsit ].Free();
     ph[q].XfIEC = (float *)aObj[ o_phxfiec ].Free();
@@ -170,8 +170,8 @@ void TPhase::dyn_kill(int q)
 // realloc dynamic memory
 void TPhase::dyn_new(int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "Illegal access to ph in dyn_new.");
-    ErrorIf( ph[q].nDC <= 0, GetName(), "N of DC in phase definition <= 0.");
+    ErrorIf( php!=&ph[q], GetName(), "E03PHrem: Illegal access to ph in dyn_new()");
+    ErrorIf( ph[q].nDC <= 0, GetName(), "E04PHrem: Number of DC in the phase definition <= 0");
     ph[q].SM = (char (*)[DC_RKLEN])aObj[ o_phsm ].Alloc( ph[q].nDC, 1, DC_RKLEN );
     ph[q].DCS = (char *)aObj[ o_phdcs ].Alloc( ph[q].nDC, 1, A_ );
     ph[q].DCC = (char *)aObj[ o_phdcc ].Alloc( ph[q].nDC, 1, A_ );
@@ -244,7 +244,7 @@ void TPhase::dyn_new(int q)
 
 void TPhase::set_def( int q)
 {
-    ErrorIf( php!=&ph[q], GetName(), "Illegal access to ph in set_def.");
+    ErrorIf( php!=&ph[q], GetName(), "E05PHrem: Illegal access to ph in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( ph[q].sol_t, aPa->pa.PHsol_t, 6 );
     memcpy( &ph[q].PphC, aPa->pa.PHpvc, 6 );
@@ -326,11 +326,11 @@ AGAIN_SETUP:
             php->NsiT < 0 || php->NsiT > 6 )
     {
         if(vfQuestion(window(), GetName(),
-                      "Invalid number of coeffs in the non-ideal solution model! Proceed?"))
+ "W06PHrem: Invalid number of coeffs in the non-ideal solution model! Proceed?"))
             goto AGAIN_SETUP;
-        else   Error( GetName(), "Invalid mode of calculation.");
+        else   Error( GetName(), "E07PHrem: Invalid mode of calculation!");
     }
-    SetString("PH_make   Remaking PHASE definition");
+    SetString("PH_make   Remaking Phase definition");
     pVisor->Update();
 
     //DCOMP keypart
@@ -368,18 +368,18 @@ AGAIN_SETUP:
 
 AGAINRC:
     aRclist = vfMultiKeysSet( window(),
-       "Please, mark ReacDC keys to be included into Phase",
+       "Please, mark ReacDC keys to be included into the Phase",
        RT_REACDC, pkeyrd, aRclist_old );
     aDclist = vfMultiKeysSet( window(),
-       "Please, mark DComp keys to be included into Phase",
+       "Please, mark DComp keys to be included into the Phase",
        RT_DCOMP, pkeydc, aDclist_old );
 
 
     if( aRclist.GetCount() < 1 && aDclist.GetCount() < 1 )
     {
        switch ( vfQuestion3(window(), GetName(),
-            "Number of selected ReacDC&DComp keys < 1.\n"
-            " Mark again, proceed without ReacDC&DComp or Cancel?",
+            "W08PHrem: Number of selected ReacDC/DComp keys < 1.\n"
+            " Mark again, proceed without ReacDC/DComp or Cancel?",
             "&Repeat", "&Proceed"))
        {
          case VF3_1:
@@ -388,7 +388,7 @@ AGAINRC:
          case VF3_2:
                 break;
          case VF3_3:  Error( GetName(),
-                      "No ReacDC&DComp records selected into Phase...");
+                 "E09PHrem: No ReacDC/DComp records selected into Phase...");
        }
     }
 
@@ -529,17 +529,18 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     {
         nsc = php->nscN * php->nscM;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
-                "Effective radii of aqueous species: Collect from DCOMP/REACDC records?"))
+   "Effective radii of aqueous species: Collect from DComp/ReacDC records?"))
         {
             pa0 = 1;
             Kielland = 0;
         }
         else
         {
-            switch ( vfQuestion3(window(), GetName(), "Set default values automatically:\n"
-                                 "from (Kielland 1936), from (Helgeson ea 1981) or \n"
-                                 "Not collect and not set automatically? ",
-                                 "&Kielland", "&Helgeson" ) )
+            switch ( vfQuestion3(window(), GetName(),
+            "W10PHrem: Shall I set default values automatically:\n"
+            "from (Kielland 1936), from (Helgeson ea 1981) or \n"
+            "Not collect and not set automatically? ",
+                 "&Kielland", "&Helgeson" ) )
             {
             case VF3_1:
                 Kielland = 1;
