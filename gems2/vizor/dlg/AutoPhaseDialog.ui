@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>694</width>
+            <width>756</width>
             <height>405</height>
         </rect>
     </property>
@@ -33,7 +33,7 @@
             <rect>
                 <x>11</x>
                 <y>349</y>
-                <width>670</width>
+                <width>740</width>
                 <height>50</height>
             </rect>
         </property>
@@ -153,7 +153,7 @@
             <rect>
                 <x>10</x>
                 <y>10</y>
-                <width>670</width>
+                <width>740</width>
                 <height>337</height>
             </rect>
         </property>
@@ -164,184 +164,6 @@
             <attribute name="title">
                 <string>Select Aqueous Electrolyte Model</string>
             </attribute>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>280</y>
-                        <width>130</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Phase record key:</string>
-                </property>
-            </widget>
-            <widget class="QGroupBox">
-                <property name="name">
-                    <cstring>groupBox1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>520</x>
-                        <y>0</y>
-                        <width>140</width>
-                        <height>300</height>
-                    </rect>
-                </property>
-                <property name="title">
-                    <string>Parameters</string>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel2_5</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>60</y>
-                            <width>110</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>b_gamma</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel2_3_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>180</y>
-                            <width>120</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Policy_to_neutral</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel2_4_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>240</y>
-                            <width>120</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>I_max_applicable</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>120</y>
-                            <width>127</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Ion_size (common)</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>apEdit0</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>80</y>
-                            <width>80</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>This value of third EDH parameter will be used in H and 3 models and in 2 (aqueous species only)</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>apEdit1</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>140</y>
-                            <width>80</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>This value (to be used in the H model) can be changed here</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>apEdit2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>200</y>
-                            <width>80</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>This value can be 0 (default) or -1 (set gamma=1 for all neutral species)</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>apEdit3</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>260</y>
-                            <width>80</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>This reminds you up to what ionic strength the chosen model can be used</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1_2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>20</y>
-                            <width>120</width>
-                            <height>35</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>for aqueous &lt;br&gt;
-
-phase model</string>
-                    </property>
-                </widget>
-            </widget>
             <widget class="QButtonGroup">
                 <property name="name">
                     <cstring>ButtonGroup1</cstring>
@@ -350,99 +172,13 @@ phase model</string>
                     <rect>
                         <x>10</x>
                         <y>10</y>
-                        <width>500</width>
+                        <width>560</width>
                         <height>260</height>
                     </rect>
                 </property>
                 <property name="title">
                     <string></string>
                 </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>aselD</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>11</x>
-                            <y>12</y>
-                            <width>481</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Ion-association (IA)  with Davies equation, &amp;D (default)</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>aselH</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>11</x>
-                            <y>39</y>
-                            <width>481</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>IA with extended Debye-Hueckel equation, common bg and a0, &amp;H</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>asel3</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>11</x>
-                            <y>66</y>
-                            <width>481</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>IA with extended Debye-Hueckel equation, common bg, individual a0, &amp;3</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>asel2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>11</x>
-                            <y>93</y>
-                            <width>481</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>IA with Debye-Hueckel equation, no bg, individual (Kielland) a0, &amp;2</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>asel1</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>11</x>
-                            <y>120</y>
-                            <width>481</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>IA with Debye-Hueckel limiting law (very low ionic strength), &amp;1</string>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>spacer7</cstring>
@@ -470,18 +206,18 @@ phase model</string>
                 </spacer>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>aselU</cstring>
+                        <cstring>asel3</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
                             <x>11</x>
-                            <y>196</y>
-                            <width>481</width>
+                            <y>66</y>
+                            <width>530</width>
                             <height>21</height>
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Do not generate; select a user-defined Phase record from database, &amp;U</string>
+                        <string>IA with extended Debye-Hueckel equation, common bg, individual a0, &amp;3</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -489,21 +225,34 @@ phase model</string>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>aselNo</cstring>
+                        <cstring>asel2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
                             <x>11</x>
-                            <y>223</y>
-                            <width>481</width>
+                            <y>93</y>
+                            <width>540</width>
                             <height>21</height>
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Do not include aqueous electrolyte phase into the system definition, &amp;N</string>
+                        <string>IA with Debye-Hueckel equation, no bg, individual (Kielland) a0, &amp;2</string>
                     </property>
-                    <property name="checked">
-                        <bool>false</bool>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>asel1</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>120</y>
+                            <width>530</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>IA with Debye-Hueckel limiting law (very low ionic strength), &amp;1</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -522,6 +271,79 @@ phase model</string>
                         <string>SIT (NEA-OECD version), under construction, &amp;S</string>
                     </property>
                 </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>aselU</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>196</y>
+                            <width>540</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Do not generate; select a user-defined Phase record from database, &amp;U</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>aselNo</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>220</y>
+                            <width>540</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Do not include aqueous electrolyte phase into the system definition, &amp;N</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>aselH</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>39</y>
+                            <width>530</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>IA with extended Debye-Hueckel equation, common bg and a0, &amp;H</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>aselD</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>11</x>
+                            <y>12</y>
+                            <width>490</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Ion-association (IA)  with Davies equation, &amp;D (default)</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
             </widget>
             <widget class="QLineEdit">
                 <property name="name">
@@ -529,15 +351,195 @@ phase model</string>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>140</x>
+                        <x>160</x>
                         <y>278</y>
-                        <width>370</width>
+                        <width>400</width>
                         <height>22</height>
                     </rect>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>This field shows a record key of the aqueous Phase to be automatically generated</string>
                 </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>280</y>
+                        <width>150</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Phase record key:</string>
+                </property>
+            </widget>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>570</x>
+                        <y>0</y>
+                        <width>160</width>
+                        <height>300</height>
+                    </rect>
+                </property>
+                <property name="title">
+                    <string>Parameters</string>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>130</width>
+                            <height>35</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>for aqueous &lt;br&gt;
+
+
+
+phase model</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2_5</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>60</y>
+                            <width>110</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>b_gamma</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>120</y>
+                            <width>140</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Ion_size (common)</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2_3_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>180</y>
+                            <width>140</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Policy_to_neutral</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2_4_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>240</y>
+                            <width>140</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>I_max_applicable</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>apEdit0</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>60</x>
+                            <y>80</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This value of third EDH parameter will be used in H and 3 models and in 2 (aqueous species only)</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>apEdit2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>60</x>
+                            <y>200</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This value can be 0 (default) or -1 (set gamma=1 for all neutral species)</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>apEdit3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>60</x>
+                            <y>260</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This reminds you up to what ionic strength the chosen model can be used</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>apEdit1</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>60</x>
+                            <y>140</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This value in 1e-8 cm (to be used in the H model) can be changed here</string>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -547,22 +549,6 @@ phase model</string>
             <attribute name="title">
                 <string>Select Gas/Fluid Mixture Model</string>
             </attribute>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>270</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Phase record key:</string>
-                </property>
-            </widget>
             <widget class="QButtonGroup">
                 <property name="name">
                     <cstring>ButtonGroup1_2</cstring>
@@ -571,7 +557,7 @@ phase model</string>
                     <rect>
                         <x>10</x>
                         <y>10</y>
-                        <width>496</width>
+                        <width>550</width>
                         <height>160</height>
                     </rect>
                 </property>
@@ -642,21 +628,117 @@ phase model</string>
                     </widget>
                 </vbox>
             </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>270</y>
+                        <width>150</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Phase record key:</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>gpRkeyEdit</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>160</x>
+                        <y>270</y>
+                        <width>390</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>This field shows a record key of the gas/fluid Phase to be automatically generated</string>
+                </property>
+            </widget>
             <widget class="QGroupBox">
                 <property name="name">
                     <cstring>groupBox1</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>510</x>
+                        <x>560</x>
                         <y>0</y>
-                        <width>150</width>
+                        <width>170</width>
                         <height>300</height>
                     </rect>
                 </property>
                 <property name="title">
                     <string>Parameters</string>
                 </property>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>gpEdit0</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>70</x>
+                            <y>80</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Reserved for use in future versions</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>gpEdit1</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>70</x>
+                            <y>120</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Reserved for use in future versions</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>gpEdit2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>70</x>
+                            <y>160</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Reserved for use in future versions</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>gpEdit3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>70</x>
+                            <y>200</y>
+                            <width>90</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Reserved for use in future versions</string>
+                    </property>
+                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>textLabel2</cstring>
@@ -665,7 +747,7 @@ phase model</string>
                         <rect>
                             <x>10</x>
                             <y>60</y>
-                            <width>40</width>
+                            <width>50</width>
                             <height>30</height>
                         </rect>
                     </property>
@@ -681,7 +763,7 @@ phase model</string>
                         <rect>
                             <x>10</x>
                             <y>100</y>
-                            <width>40</width>
+                            <width>50</width>
                             <height>30</height>
                         </rect>
                     </property>
@@ -713,7 +795,7 @@ phase model</string>
                         <rect>
                             <x>10</x>
                             <y>180</y>
-                            <width>40</width>
+                            <width>50</width>
                             <height>30</height>
                         </rect>
                     </property>
@@ -729,7 +811,7 @@ phase model</string>
                         <rect>
                             <x>10</x>
                             <y>20</y>
-                            <width>140</width>
+                            <width>150</width>
                             <height>35</height>
                         </rect>
                     </property>
@@ -737,86 +819,6 @@ phase model</string>
                         <string>for generated Phase&lt;br&gt;(under construction)</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>gpEdit0</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>80</y>
-                            <width>90</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Reserved for use in future versions</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>gpEdit1</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>120</y>
-                            <width>90</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Reserved for use in future versions</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>gpEdit2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>160</y>
-                            <width>90</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Reserved for use in future versions</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>gpEdit3</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>50</x>
-                            <y>200</y>
-                            <width>90</width>
-                            <height>22</height>
-                        </rect>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Reserved for use in future versions</string>
-                    </property>
-                </widget>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>gpRkeyEdit</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>140</x>
-                        <y>270</y>
-                        <width>360</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>This field shows a record key of the gas/fluid Phase to be automatically generated</string>
-                </property>
             </widget>
         </widget>
     </widget>
