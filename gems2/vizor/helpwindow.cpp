@@ -190,12 +190,12 @@ HelpWindow::HelpWindow( const QString& path_,
     resize( 520, 600 );
 
     QPopupMenu* file = new QPopupMenu( this );
-//    file->insertItem( tr("&New Window"), this, SLOT( newWindow() ), ALT | Key_N );
-    file->insertItem( tr("&Open File"), this, SLOT( openFile() ), ALT | Key_O );
-    file->insertItem( tr("&Print"), this, SLOT( print() ), ALT | Key_P );
+//    file->insertItem( tr("&New Window"), this, SLOT( newWindow() ), CTRL+Key_N );
+    file->insertItem( tr("&Open File"), this, SLOT( openFile() ), CTRL+Key_O );
+    file->insertItem( tr("&Print"), this, SLOT( print() ), CTRL+Key_P );
     file->insertSeparator();
-    file->insertItem( tr("&Close"), this, SLOT( close() ), ALT | Key_Q );
-//    file->insertItem( tr("E&xit"), qApp, SLOT( closeAllWindows() ), ALT | Key_X );
+    file->insertItem( tr("&Close"), this, SLOT( close() ), CTRL+Key_Q );
+//    file->insertItem( tr("E&xit"), qApp, SLOT( closeAllWindows() ), CTRL+Key_X );
 
     // The same three icons are used twice each.
     gstring img = pVisor->imgDir() + "back.xpm";
@@ -208,10 +208,10 @@ HelpWindow::HelpWindow( const QString& path_,
     QPopupMenu* go = new QPopupMenu( this );
     backwardId = go->insertItem( icon_back,
 				 "&Backward", browser, SLOT( backward() ),
-				 ALT | Key_Left );
+				 CTRL+Key_Left );
     forwardId = go->insertItem( icon_forward,
 				"&Forward", browser, SLOT( forward() ),
-				ALT | Key_Right );
+				CTRL+Key_Right );
     go->insertItem( icon_home, "&Home", browser, SLOT( home() ) );
 
     QPopupMenu* help = new QPopupMenu( this );
