@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/submod/ms_multi.cpp  version 2.0.0   2001
+// $Id$
 //
 // Implementation of TMulti class, config functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010908
+// Rewritten from C to C++ by S.Dmytriyeva  
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic

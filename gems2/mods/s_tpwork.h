@@ -1,7 +1,5 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/s_tpwork.h
-//      version 2.0.0                           edited 2001-09-08
-//  Created: 1992-1997
+// $Id$
 //
 // Copyright (C) 1992-2000  D.Kulik, S.Dmitrieva
 //
@@ -15,7 +13,7 @@
 // QA Licence (GEMSPSI.QAL)
 //
 // See http://les.web.psi.ch/Software/GEMS-PSI for more information
-// E-mail: gems2.support@psi.ch; chud@igc.irk.ru
+// E-mail: gems2.support@psi.ch;
 //-------------------------------------------------------------------
 //
 #include "v_object.h"

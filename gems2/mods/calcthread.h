@@ -1,3 +1,5 @@
+// $Id$
+
 /*
 
     Class CalcThread gives CalcEqstat functions different thread

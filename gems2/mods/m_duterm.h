@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/m_duterm.h  version 2.0.0   2001
+// $Id$
 // To be finalized in Version 4.0 (2005)
 // Declaration of TDuterm class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010904
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic

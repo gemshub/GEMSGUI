@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/m_probe.cpp  version 2.0.0   2001
+// $Id$
 // Under construction, to be included in version 3.0 (2003)
 // Implementation of TProbe class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010904
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 K.Chudnenko, S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic

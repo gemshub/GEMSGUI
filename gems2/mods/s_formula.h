@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/s_formula.h  version 2.0.0   2001
+// $Id$
 //
 // Declaration of TFormula - gems chemical formulas parser
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010908
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001  D.Kulik, S.Dmytriyeva
 //
 // This file is part of a GEM-Selektor library for thermodynamic

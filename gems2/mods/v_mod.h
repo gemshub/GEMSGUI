@@ -1,9 +1,8 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/v_mod.h  version 2.0.0   2001
+// $Id$
 //
 // Declaration of internak constants: objnumbers, sizes, codes ....
 //
-//                                                 modified 010908
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic

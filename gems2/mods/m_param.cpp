@@ -3,7 +3,7 @@
 //
 // Implementation of config and basic methods of TProfile class
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic

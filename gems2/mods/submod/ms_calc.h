@@ -1,9 +1,8 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/submod/ms_calc.h  version 2.0.0   2001
+// $Id$
 //
 // Declaration of TEQCalc and TEQDemo classes, config  functions
 //
-//                                               modified 010908
 // Copyright (C) 1995-2001 S.Dmytriyeva
 //
 // This file is part of a GEM-Selektor library for thermodynamic

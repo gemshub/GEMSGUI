@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/m_dutx.cpp  version 2.0.0   2001
+// $Id$
 // To be finalized in Version 4.0 (2005)
 // Implementation of TDuterm class, calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010904
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic

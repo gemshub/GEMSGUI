@@ -1,3 +1,21 @@
+//-------------------------------------------------------------------
+// $Id$
+//
+// Internal declarations 
+//
+// Copyright (C) 2002 S.Dmytriyeva
+// Uses  gstring class (C) A.Rysin 1999
+//
+// This file is part of a GEM-Selektor library for thermodynamic
+// modelling by Gibbs energy minimization
+// Uses: GEM-Vizor GUI DBMS library, gems/lib/gemvizor.lib
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// E-mail: gems2.support@psi.ch
+//-------------------------------------------------------------------
 
 #ifndef filters_data_included
 #define filters_data_included

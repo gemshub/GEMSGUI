@@ -1,16 +1,14 @@
 //-------------------------------------------------------------------
-// Id: gems/vizor/dlg/SetFiltersDialog.h  version 2.0.0    2001
+// $Id$
 //
 // Declaration of SetFiltersDialog class
-//
-// Created : 180102
 //
 // Copyright (C) 2001  S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Vizor library which uses the
 // Qt v.2.x GUI Toolkit (Troll Tech AS, http://www.trolltech.com)
-// according to the Qt Duo Commercial license #1435515
+// according to the Qt Duo Commercial license
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)

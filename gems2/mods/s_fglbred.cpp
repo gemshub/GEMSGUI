@@ -1,7 +1,5 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/s_fglbred.cpp
-//      version 2.0.0                           edited 2001-09-08
-//  Created: 1992-1997
+// $Id$
 //
 // Copyright (C) 1992-2000  K.Chudnenko, D.Kulik, S.Dmitrieva
 //
