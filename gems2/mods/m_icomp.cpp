@@ -214,10 +214,17 @@ TIComp::CopyElements( const char * prfName,
     //  copy to it selected records
     // ( add to last key field first symbol from prfname )
     int nrec;
-    for(uint i=0; i<el_data.ICrds.GetCount(); i++ )
+    for(uint j, i=0; i<el_data.ICrds.GetCount(); i++ )
     {
-        nrec = db->Find( el_data.ICrds[i].c_str() );
-        db->Get( nrec );
+       for( j=0; j<el_data.oldIComps.GetCount(); j++ )
+        if( !memcmp( el_data.ICrds[i].c_str(),
+            el_data.oldIComps[j].c_str(), MAXICNAME+MAXSYMB ))
+         break;
+       if( j<el_data.oldIComps.GetCount() )
+         continue;
+
+       nrec = db->Find( el_data.ICrds[i].c_str() );
+       db->Get( nrec );
         /// !!! changing record key
        gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
        ChangeforTempl( str, st_data.from_templ,

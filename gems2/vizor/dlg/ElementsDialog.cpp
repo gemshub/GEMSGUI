@@ -41,6 +41,28 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
         Inherited( win, 0, true /* false = modeless */ ),
         prf_name ( prfName )
 {
+
+   // build IComp list from template database
+    TCIntArray aIndMT;
+    TCStringArray aIC;
+    TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
+    aICdata->GetElements( true, aIC, aIndMT );
+    sf_data.ic_d.oldIComps.Clear();
+
+    for( uint ii=0; ii<aIC.GetCount(); ii++ )
+    {
+     sf_data.ic_d.oldIComps.Add( aIC[ii] );
+     el_data.oldIComps.Add( aIC[ii] );
+     if( aIndMT[ii] == -1) // additional
+     {
+         aICkey2_sel.Add( aIC[ii] );
+     }
+     else //elements
+     {
+       aBtmId1_sel.Add( aIndMT[ii] );
+     }
+    }
+
     EmptyData();
     rbKernel->setChecked( true );
     rbUncertain->setChecked( true );
@@ -85,18 +107,25 @@ ElementsDialog::CmSetFilters()
     // Here to call SetFiltersDialog !!
     SetData();
     sf_data.ic_d.newIComps.Clear();
-    for(uint ii=0; ii<el_data.ICrds.GetCount(); ii++ )
-     sf_data.ic_d.newIComps.Add( el_data.ICrds[ii] );
+    for(uint jj, ii=0; ii<el_data.ICrds.GetCount(); ii++ )
+    {
+      for( jj=0; jj<sf_data.ic_d.oldIComps.GetCount(); jj++)
+        if( !memcmp( el_data.ICrds[ii].c_str(),
+            sf_data.ic_d.oldIComps[jj].c_str(), MAXICNAME+MAXSYMB ) )
+         break;
+      if( jj== sf_data.ic_d.oldIComps.GetCount() )
+        sf_data.ic_d.newIComps.Add( el_data.ICrds[ii] );
+    }
 
     SetFiltersDialog  dlg( this, &files_data, &sf_data, prf_name.c_str() );
     dlg.exec();
 
-  if(    files_data.changed  )  // we changed file cnf for icomp
-  {  ResetData();
-     EmptyData();
-     SetICompList();
-     SetAqueous();
-  }
+   if(  files_data.changed  )  // we changed file cnf for icomp
+   {  ResetData();
+      EmptyData();
+      SetICompList();
+      SetAqueous();
+   }
 }
 
 void
@@ -277,6 +306,45 @@ ElementsDialog::SetICompList()
        aICkey1.Add( aIC[ii] );
        bb->setEnabled( true );
      }
+
+  // set selection form template
+  for( uint ii=0; ii<aBtmId1_sel.GetCount(); ii++ )
+  {
+       bb = bgElem->find(aBtmId1_sel[ii]);
+       bb->setEnabled( false );
+       ((QPushButton *)bb)->setOn( true );
+  }
+  for( uint ii=0; ii<aICkey2_sel.GetCount(); ii++ )
+  {
+       int jj;
+       gstring name= gstring( aICkey2_sel[ii],
+                      0, rt[RT_ICOMP].FldLen(0) );
+       name.strip();
+       for( jj=0; jj<nmbOther; jj++ )
+       {
+         bb =  bgOther->find(jj);
+         const char *ttl =
+             (const char*)bb->text();
+         if( name == ttl )
+         {
+          bb->setEnabled( false );
+          ((QPushButton *)bb)->setOn( true );
+          break;
+         }
+       }
+       if( jj==nmbOther )
+       {
+         bb = bgOther->find(nmbOther);
+         bb->setText( tr( name.c_str() ) );
+         bb->setEnabled( false );
+         ((QPushButton *)bb)->setOn( true );
+         aBtmId2.Add( nmbOther );
+         aICkey2.Add( aICkey2_sel[ii] );
+         nmbOther ++;
+       }
+  }
+
+
 }
 
 /*! returns selection array  (IComp record keys )

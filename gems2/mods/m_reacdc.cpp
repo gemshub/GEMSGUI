@@ -1367,22 +1367,24 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
     int i;
+    int itmpl;
     uint j;
     TFormula aFo;
 
     for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
     {
      if( !el_data.flags[cbAqueous_] &&
-         ( *db->FldKey( 0 )== 'a' || *db->FldKey( 0 )== 'x' ))
+         ( aDCkey[ii][0]== 'a' || aDCkey[ii][0]== 'x' ))
        continue;
-     if( !el_data.flags[cbGaseous_] && *db->FldKey( 0 )== 'g' )
+     if( !el_data.flags[cbGaseous_] && aDCkey[ii][0] == 'g' )
        continue;
-     if( !el_data.flags[cbSorption_] && *db->FldKey( 0 )== 'c' )
+     if( !el_data.flags[cbSorption_] && aDCkey[ii][0] == 'c' )
        continue;
 
      RecInput( aDCkey[ii].c_str() );
      //test record
-       aFo.SetFormula( rcp->form ); // and ce_fscan
+     aFo.SetFormula( rcp->form ); // and ce_fscan
+     itmpl=0;
      for( i=0; i<aFo.GetIn(); i++ )
      {
        for( j=0; j<el_data.ICrds.GetCount(); j++ )
@@ -1390,6 +1392,13 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
           break;
        if( j == el_data.ICrds.GetCount() )
         break;
+
+       //template
+       for( j=0; j<el_data.oldIComps.GetCount(); j++ )
+        if( !memcmp( el_data.oldIComps[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
+          { itmpl++;
+            break;
+          }
       }
       if( i < aFo.GetIn() )
         continue;
@@ -1404,6 +1413,10 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
        for( j=0; j<el_data.ICrds.GetCount(); j++ )
         if( !memcmp( el_data.ICrds[j].c_str(), "Vol", 3 ) )
           cnt[j]++;
+
+    if( itmpl== aFo.GetIn()) //all icomps in template
+        continue;
+
     // !!! changing record key
      gstring str= gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
     ChangeforTempl( str, st_data.from_templ,

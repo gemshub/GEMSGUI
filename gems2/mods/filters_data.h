@@ -14,6 +14,7 @@ enum selectType { cbAqueous_ = 0,
 struct elmWindowData
 {
    TCStringArray ICrds;   // list of selected IComp
+   TCStringArray oldIComps; // list from parent project
 //   TCStringArray flNames; // kernel, uncertain, specific
 
    bool flags[4];         // selectType
@@ -33,6 +34,8 @@ struct elmWindowData
      flags[ii] = d.flags[ii];
     for( ii=0; ii<d.ICrds.GetCount(); ii++ )
      ICrds.Add(d.ICrds[ii]);
+    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
+     oldIComps.Add(d.oldIComps[ii]);
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
   }
@@ -44,6 +47,8 @@ struct elmWindowData
      flags[ii] = d.flags[ii];
     for( ii=0; ii<d.ICrds.GetCount(); ii++ )
      ICrds.Add(d.ICrds[ii]);
+    for( ii=0; ii<d.oldIComps.GetCount(); ii++ )
+     oldIComps.Add(d.oldIComps[ii]);
 //    for( ii=0; ii<d.flNames.GetCount(); ii++ )
 //     flNames.Add(d.flNames[ii]);
 
@@ -194,16 +199,14 @@ struct cmSetupData
    gstring to_templ;
    gstring f_script;
 
-   bool onlyPCO;
-
 //   TCStringArray flKeywds;   // list files to open
 
    cmSetupData():
-   from_templ("*"), to_templ("*_"), onlyPCO(false)
+   from_templ("*"), to_templ("*_"), f_script("")
    {}
 
    cmSetupData( cmSetupData& d ):
-    from_templ( d.from_templ), to_templ(d.to_templ), onlyPCO(d.onlyPCO)
+    from_templ( d.from_templ), to_templ(d.to_templ), f_script(d.f_script)
   {
 //    uint ii;
 //    for( ii=0; ii<d.flKeywds.GetCount(); ii++ )
@@ -215,7 +218,7 @@ struct cmSetupData
 //    uint ii;
     from_templ =  d.from_templ;
     to_templ   =  d.to_templ;
-    onlyPCO   =  d.onlyPCO;
+    f_script   =  d.f_script;
 
 //    for( ii=0; ii<d.flKeywds.GetCount(); ii++ )
 //     flKeywds.Add(d.flKeywds[ii]);
@@ -238,8 +241,8 @@ struct phSetupData
    from_templ("*"), to_templ("*_")
    {
      flags[0] =true;
-     flags[1] =false;
-     flags[2] =false;
+     flags[1] =true;
+     flags[2] =true;
      flags[3] =true;
      flags[4] =false;
      flags[5] =false;

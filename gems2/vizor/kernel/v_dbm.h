@@ -457,7 +457,7 @@ public:
       const char *prfName, const char * f_name=0 );
     void OpenOnlyFromList( TCStringArray& names );
     void GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey );
-
+    bool ifDefaultOpen() const;
 
     //--- Manipulation Data Base
     void Create( int nF );

@@ -40,6 +40,10 @@ class ElementsDialog : public ElementsDialogData
     TCIntArray aBtmId2;     // lists correspondanse betvin bgOther
     TCStringArray aICkey2;  // buttons and IComp records
 
+    // from template
+    TCIntArray aBtmId1_sel;  // lists from template bgElem
+    TCStringArray aICkey2_sel;  // lists from template bgOther
+
     void EmptyData();
     void ResetData();
     void SetICompList();

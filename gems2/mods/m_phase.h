@@ -134,7 +134,7 @@ public:
                         bool useLst = false, TCStringArray lst = 0 );
 
     void CopyRecords( const char * prfName, TCStringArray& aPHnoused,
-            elmWindowData el_data, phSetupData st_data);
+          TCStringArray& aPHtmp, elmWindowData el_data, phSetupData st_data);
 
 }
 ;

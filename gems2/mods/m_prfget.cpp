@@ -251,6 +251,8 @@ AGAIN:
         InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
         RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
       }
+
+     rt[RT_PARAM].SetKey( key_str.c_str() );
        // get opens files list
        if( !GetFN( fstKeyFld.c_str() ) )
         Error( key_str.c_str(),
@@ -341,9 +343,28 @@ AGAIN:
         "\nPlease, enter another name.");
       goto AGAIN;
     }
-   rt[RT_PARAM].SetKey( key_str.c_str() );
-   dyn_kill();
-   set_def(); // set default data or zero if necessary
+    templ_str = key_templ;
+    if( !templ_str.empty() )
+    {
+      templ_key = true;
+
+      int  Rnum = rt[RT_PARAM].Find( templ_str.c_str() );
+      ErrorIf( Rnum < 0, templ_str.c_str() ,
+          "Project record was not existed!");
+      rt[RT_PARAM].Get( Rnum ); // read record
+      dyn_set();
+      SetFN();                  // reopen files of data base
+      // if no elements profile as template
+      if( rt[RT_ICOMP].ifDefaultOpen() )
+       Error( templ_str.c_str(),
+        "This project cannot be extended using Elements Dialog.");
+    }
+    else
+    {
+       rt[RT_PARAM].SetKey( key_str.c_str() );
+       dyn_kill();
+       set_def(); // set default data or zero if necessary
+    }
 
    RecBuild( key_str.c_str() );  // Edit flags
 
@@ -355,7 +376,19 @@ AGAIN:
 //     gstring fstKeyFld(_fstKeyFld);
 //     StripLine(fstKeyFld);
 
-   InitFN( fstKeyFld.c_str(), 0  ); // make Project directory
+     if( templ_key == false  )
+        InitFN( fstKeyFld.c_str(), 0  ); // make Project directory
+     else  // using existing Project
+     {
+        rt[RT_PARAM].SetKey( templ_str.c_str() );
+        vstr _fstKeyFld_t(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+        gstring fstKeyFld_t(_fstKeyFld_t);
+        StripLine(fstKeyFld_t);
+
+        InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
+        RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
+      }
+   rt[RT_PARAM].SetKey( key_str.c_str() );
 
    if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
          ;//goto BACK;

@@ -853,6 +853,7 @@ TPhase::RecordPrint( const char *key )
 
 
 void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
+            TCStringArray& aPHtmp,
             elmWindowData el_data, phSetupData st_data )
 {
     TCIntArray anR;
@@ -872,15 +873,41 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     bool nRec;
     for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
     {
+        uint jj;
+// compare keys for template project
+       for( jj=0; jj<aPHtmp.GetCount(); jj++ )
+        if( !memcmp( aPHtmp[jj].c_str(), aPHkey[ii].c_str(),
+                PH_RKLEN-MAXPHGROUP ))
+         break;
+
+
+     if( jj<aPHtmp.GetCount() )
+        continue;
+
      if( !el_data.flags[cbAqueous_] &&
-         ( *db->FldKey( 0 )== 'a' || *db->FldKey( 0 )== 'x' ))
+         ( aPHkey[ii][0]== 'a' || aPHkey[ii][0] == 'x' ))
        continue;
 //     if( !el_data.flags[cbGaseous_] && *db->FldKey( 0 )== 'g' )
 //       continue;
-     if( !el_data.flags[cbSorption_] && *db->FldKey( 0 )== 'x' )
+     if( !el_data.flags[cbSorption_] && aPHkey[ii][0] == 'x' )
+       continue;
+
+// internal flags
+     if( !st_data.flags[4] &&
+         ( aPHkey[ii][0]== 'a' || aPHkey[ii][0] == 'g' ))
+       continue;
+     if( !st_data.flags[5] && aPHkey[ii][0] == 'x' )
        continue;
 
      RecInput( aPHkey[ii].c_str() );
+
+// internal flags
+     if( !st_data.flags[0] && php->nDC<=1 )
+       continue;
+     if( !st_data.flags[3] && ( aPHkey[ii][0]== 's' || aPHkey[ii][0] == 'l' ) &&
+          php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
+       continue;
+
      //test record
      for( i=0, cnt=0; i<php->nDC; i++ )
      {
@@ -894,9 +921,10 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
         if( nRec )
          cnt++;
      } // i
-     if( cnt < php->nDC )
+
+     if( cnt < php->nDC && !( !st_data.flags[1] && cnt > 0  ))
      {
-       if( php->nDC > 1 && cnt > 0 )
+       if( st_data.flags[2] && php->nDC > 1 && cnt > 0  )
          aPHnoused.Add( aPHkey[ii] );
        continue;
      }

@@ -130,7 +130,7 @@ public:
     void RecordPrint( const char *key=0 );
     void CmHelp();
 
-    void CopyRecords( const char * prfName,
+    void CopyRecords( const char * prfName, TCStringArray& aCMnoused,
                      elmWindowData el_data, cmSetupData st_data );
 }
 ;

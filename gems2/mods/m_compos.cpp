@@ -953,11 +953,12 @@ TCompos::RecordPrint( const char *key )
 }
 
 
-void TCompos::CopyRecords( const char * prfName,
+void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
             elmWindowData el_data, cmSetupData st_data )
 {
     TCIntArray anR;
     TCStringArray aComp;
+    aCMnoused.Clear();
 
     // open selected kernel files
     // db->OpenOnlyFromList(el_data.flNames);
@@ -968,22 +969,40 @@ void TCompos::CopyRecords( const char * prfName,
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i, ij;
+    int i, ij, itmp;
+    uint jj;
     for(uint ii=0; ii<aComp.GetCount(); ii++ )
     {
      RecInput( aComp[ii].c_str() );
      //test record
      ij = 0;
+     itmp = 0;
      for( i=0; i< bcp->N; i++ )
      {
-      for(uint jj=0; jj<el_data.ICrds.GetCount(); jj++ )
+      for( jj=0; jj<el_data.ICrds.GetCount(); jj++ )
          if( !memcmp( el_data.ICrds[jj].c_str(), bcp->SB[i], MAXICNAME+MAXSYMB))
             {  ij++;
                break;
             }
+
+      for( jj=0; jj<el_data.oldIComps.GetCount(); jj++ )
+         if( !memcmp( el_data.oldIComps[jj].c_str(),
+                           bcp->SB[i], MAXICNAME+MAXSYMB))
+            {  itmp++;
+               break;
+            }
+
      } // i
+
      if( !(ij==bcp->N))
-      continue;                // no all icomp
+     {
+        if( ij>0)
+          aCMnoused.Add( aComp[ii] );
+       continue;                // no all icomp
+     }
+     if( (itmp>=bcp->N))
+      continue;                // all icomp in template
+
 
      // !!! changing record key
      gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));

@@ -1055,6 +1055,16 @@ void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
     }
 }
 
+// true if opened some files from default data base
+bool TDataBase::ifDefaultOpen() const
+{
+    for(uint i=0; i<fls.GetCount(); i++)
+        if( aFile[fls[i]].GetPath().find( pVisor->sysDBDir())
+              != gstring::npos )
+            return true;
+    return false;
+}
+
 //-------------------------------------------------------------
 // DataBaseList
 //-------------------------------------------------------------

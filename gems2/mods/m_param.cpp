@@ -451,8 +451,16 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     setFiltersData sf_data;
     elmWindowData  elm_data;
 
-//    TCStringArray ICkeys;
-    TCIntArray    ICcnt;
+//    Save list of phases from template profile:
+    TCStringArray names1;
+    names1.Add(prfName);
+    rt[RT_ICOMP].OpenOnlyFromList(names1);
+    rt[RT_PHASE].OpenOnlyFromList(names1);
+
+   TCStringArray PHkeys;
+   TCIntArray    ICcnt;
+   rt[RT_PHASE].GetKeyList( "*:*:*:*:*:", PHkeys, ICcnt );
+
 //    TCStringArray dbNames;
 //    bool aAqueous, aGaseous, aSorption;
 //    if( !vfElements(window(), prfName, ICkeys,
@@ -476,7 +484,8 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 
     //compos
     TCompos* aCOdata=(TCompos *)(&aMod[RT_COMPOS]);
-    aCOdata->CopyRecords( prfName, elm_data, sf_data.cm_d );
+    TCStringArray aCMnoused;
+    aCOdata->CopyRecords( prfName, aCMnoused, elm_data, sf_data.cm_d );
 
     //dcomp
     TDComp* aDCdata=(TDComp *)(&aMod[RT_DCOMP]);
@@ -489,7 +498,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     //phase
     TPhase* aPHdata=(TPhase *)(&aMod[RT_PHASE]);
     TCStringArray aPHnoused;
-    aPHdata->CopyRecords( prfName, aPHnoused, elm_data, sf_data.ph_d );
+    aPHdata->CopyRecords( prfName, aPHnoused, PHkeys, elm_data, sf_data.ph_d );
 
     //show errors
     TCStringArray aICnoused;
@@ -500,10 +509,10 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     if( aICnoused.GetCount() > 0 )
       vfChoice(  window(), aICnoused, "List of IComp no used" );
 
-    if( aPHnoused.GetCount() > 0 )
-    {  // List of Phases with some species discarded
+    if( aPHnoused.GetCount() > 0 || aCMnoused.GetCount() > 0)
+    {  // List of Phases or Compos with some species discarded
         ios::openmode mod = ios::out;
-        const char *filename = "DiscardedPhases.txt";
+        const char *filename = "DiscardedRecords.txt";
 
         if( !(::access( filename, 0 )) ) //file exists
             switch( vfQuestion3( window(), filename,
@@ -521,9 +530,13 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
             }
         fstream f( filename, mod );
         ErrorIf( !f.good() , filename, "Fileopen error");
+        f <<   "Phases\n";
         for( ii=0; ii<aPHnoused.GetCount(); ii++ )
              f << aPHnoused[ii].c_str() <<  "\n";
-       f <<   "\n\n";
+        f <<   "\n\nComposes\n";
+        for( ii=0; ii<aCMnoused.GetCount(); ii++ )
+             f << aCMnoused[ii].c_str() <<  "\n";
+       f <<   "\n";
         ErrorIf( !f.good() , filename, "Writefile error");
     }
     return true;

@@ -83,6 +83,8 @@ SetFiltersDialog::SetFiltersDialog(QWidget* win,
     connect( pbReset, SIGNAL( clicked() ), this, SLOT( CmReset() ) );
     connect( pbApply, SIGNAL( clicked() ), this, SLOT( CmApply() ) );
     connect( pbOk, SIGNAL( clicked() ), this, SLOT( CmOk() ) );
+    connect( lvDefDBfiles, SIGNAL( selectionChanged() ),
+         this, SLOT( CmChangeFilesCfg() ) );
 }
 
 SetFiltersDialog::~SetFiltersDialog()
@@ -93,6 +95,12 @@ void
 SetFiltersDialog::CmHelp()
 {
     pVisorImp->OpenHelp( GEMS_SFD_HTML );
+}
+
+void
+SetFiltersDialog::CmChangeFilesCfg()
+{
+  el_data->changed = true;
 }
 
 void
@@ -124,7 +132,13 @@ void SetFiltersDialog::setData()
     cbICreplace->setEditText( tr(data->ic_d.to_templ.c_str()));
 
     QString txt = tr("");
+    for( uint ii=0; ii<data->ic_d.oldIComps.GetCount(); ii++ )
+    {
+      txt += tr( data->ic_d.oldIComps[ii].c_str() );
+      txt += tr("\n");
+    }
     tvIClistP->setText( txt );
+    txt = tr("");
     for( uint ii=0; ii<data->ic_d.newIComps.GetCount(); ii++ )
     {
       txt += tr( data->ic_d.newIComps[ii].c_str() );
@@ -159,13 +173,13 @@ void SetFiltersDialog::setData()
     cbPCOsearch->setEditText( tr(data->cm_d.from_templ.c_str()));
     cbPCOreplace->setEditText( tr(data->cm_d.to_templ.c_str()));
 
-    chbPCOcopy->setChecked( data->cm_d.onlyPCO );
     mlePCOfscript->setText( tr(data->cm_d.f_script.c_str()) );
 
   // set files list
   //( RT_SDATA, RT_CONST, X, X, RT_ICOMP, RT_DCOMP, RT_COMPOS,
   //   RT_REACDC, X, RT_PHASE )
   setFiles();
+  el_data->changed = false;
 
 }
 
@@ -205,16 +219,19 @@ void SetFiltersDialog::getData()
     data->cm_d.to_templ = (const char*)cbPCOreplace->currentText();
     data->cm_d.f_script = (const char*)mlePCOfscript->text();
 
-    data->cm_d.onlyPCO = chbPCOcopy->isChecked();
-
   // get files list (or reopen files)
   //( RT_SDATA, RT_CONST, X, X, RT_ICOMP, RT_DCOMP, RT_COMPOS,
   //   RT_REACDC, X, RT_PHASE )
   getFiles();
+
 }
 
 void SetFiltersDialog::getFiles()
 {
+
+
+    if( el_data->changed == false )
+      return;
 
     uint cnt = 0;
     QListViewItem* pMod1 = pkern->firstChild();

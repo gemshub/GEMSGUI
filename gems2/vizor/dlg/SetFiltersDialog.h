@@ -46,7 +46,8 @@ protected slots:
     void CmReset();
     void CmApply();
     void CmOk();
-
+    void CmChangeFilesCfg();
+    
 public:
 
     SetFiltersDialog(QWidget* win,
