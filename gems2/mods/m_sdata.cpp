@@ -35,12 +35,12 @@ TSData::TSData( int nrt ):
     refs = 0;
     title = abstr = 0;
     aFldKeysHelp.Add(
-        "l<20 Author's name(s) for Data Source _");
-    aFldKeysHelp.Add("l<5  Year of issue (publication) { 1990 }_");
+        "l<20 Script name or author's name(s) for Data Source _");
+    aFldKeysHelp.Add("l<5 Script number or year of publication { 1990 }_");
     aFldKeysHelp.Add(
-"l<7  Data Source type { pap book chap abst rep prog dbase ref diss man etc }_");
+"l<7  Script module name { dcomp } or data source type { pap book chap }_");
     set_def();
-    start_title = " Bibliographic information about the data sources ";
+    start_title = " Scripts or Bibliographic References ";
 }
 
 // link values to objects

@@ -1454,14 +1454,14 @@ TQueryWindow::AddFields()
     //  if( prevField == 0 )
     //    accept();
 
-    if( mwidth < 40 )
-        mwidth = 40;
+    if( mwidth < 200 )  // Bugfix gems 19.07.02
+        mwidth = 200;
 
     setFixedSize(mwidth+10, mheight+15+40);
 
     hint = new QLabel(this);
     hint->setGeometry(3, mheight+4, mwidth, 12);
-    hint->setText("Please select any field");
+    hint->setText("Select fields, look at tooltips!");
     hint->show();
 
     QPushButton* btn = new QPushButton(this);
