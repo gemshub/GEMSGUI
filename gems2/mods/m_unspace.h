@@ -273,7 +273,7 @@ UNSPACE;
 // Current UnSpace
 class TUnSpace : public TCModule
 {
-    UNSPACE us[1];
+    UNSPACE us[2];
 
     GraphWindow *gd_gr;
     TPlotLine *plot;

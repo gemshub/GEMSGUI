@@ -700,6 +700,7 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
      dtp->Nb = TProfil::pm->mup->N;
      dyn_new();
 
+//***************************************************
     for(int ii=0; ii< dtp->Nb; ii++ )
       memcpy( dtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME  );
 
@@ -717,12 +718,12 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
             if( dtp->PvICb == S_ON )
             {
               dtp->CIb[j*dtp->Nb+jj] = 0.;
-              dtp->CIclb[j*dtp->Nb+jj] = QUAN_GRAM;
+              dtp->CIclb[jj] = QUAN_GRAM;
             }
             if( dtp->PvICn == S_ON )
             {
               dtp->CIn[j*dtp->Nb+jj] = 0.;
-              dtp->CIcln[j*dtp->Nb+jj] = QUAN_GRAM;
+              dtp->CIcln[jj] = QUAN_GRAM;
              }
           }
           for( j =0; j<dtp->nK; j++ )
@@ -748,12 +749,12 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
                if( dtp->PvICb == S_ON )
                {
                  dtp->CIb[j*dtp->Nb+jj] = p_CIb[j*Nold+ii];
-                 dtp->CIclb[j*dtp->Nb+jj] = p_CIclb[j*Nold+ii];
+                 dtp->CIclb[jj] = p_CIclb[ii];
                 }
                if( dtp->PvICn == S_ON )
                {
                  dtp->CIn[j*dtp->Nb+jj] = p_CIn[j*Nold+ii];
-                 dtp->CIcln[j*dtp->Nb+jj] = p_CIcln[j*Nold+ii];
+                 dtp->CIcln[jj] = p_CIcln[ii];
                }
              }
              for( j =0; j<dtp->nK; j++ )
@@ -763,6 +764,8 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
         ii++;
        }
     }
+//*************************************************************
+
 // free memory
    delete[] p_Bb;
    delete[] p_Bn;

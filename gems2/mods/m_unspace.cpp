@@ -34,7 +34,7 @@ TUnSpace* TUnSpace::pm;
 TUnSpace::TUnSpace( int nrt ):
         TCModule( nrt )
 {
-    nQ = 1;
+    nQ = 2;
     aFldKeysHelp.Add("l<10 Identifier of the parent modelling project <-Project");
     aFldKeysHelp.Add("l<3  Symbol of thermodynamic potential to minimize <-SysEq");
     aFldKeysHelp.Add("l<12 Identifier of the parent chemical system definition <-SysEq");
@@ -46,6 +46,8 @@ TUnSpace::TUnSpace( int nrt ):
     aFldKeysHelp.Add("l<18 Identifier of this unspace simulator definition");
     aFldKeysHelp.Add("l<4  Batch simulator type code, a combination of {T, P, S, G, R}");
 
+    usp=&us[1];
+    set_def(1);
     usp=&us[0];
     set_def();
     start_title  = " Probing Uncertainty Space  ";
@@ -192,8 +194,8 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unm_t_lo].SetDim( usp->N, 1 );
     aObj[ o_unm_t_up].SetPtr( usp->m_t_up );
     aObj[ o_unm_t_up].SetDim( usp->N, 1 );
-    aObj[ o_unintnb].SetPtr( usp->fug_lo );
-    aObj[ o_unintnb].SetDim( usp->Ls, 1 );
+    aObj[ o_unfug_lo].SetPtr( usp->fug_lo );
+    aObj[ o_unfug_lo].SetDim( usp->Ls, 1 );
     aObj[ o_unfug_up].SetPtr( usp->fug_up );
     aObj[ o_unfug_up].SetDim( usp->Ls, 1 );
     aObj[ o_unintlg].SetPtr( usp->IntLg );
@@ -256,8 +258,8 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unphalst].SetDim( usp->nPhA, 1 );
     aObj[ o_unafreg].SetPtr( usp->PhAfreq );
     aObj[ o_unafreg].SetDim( usp->nPhA, 1 );
-    aObj[ o_unpmr].SetPtr( usp->pmr );
-    aObj[ o_unpmr].SetDim( usp->Q, 1 );
+//    aObj[ o_unpmr].SetPtr( usp->pmr );
+//    aObj[ o_unpmr].SetDim( usp->Q, 1 );
     aObj[ o_unpom].SetPtr( usp->POM );
     aObj[ o_unpom].SetDim( usp->Q, usp->Q );
     aObj[ o_unpor].SetPtr( usp->POR );
@@ -331,7 +333,7 @@ void TUnSpace::dyn_set(int q)
     usp->IntNb = (float *)aObj[ o_unintnb].GetPtr();
     usp->m_t_lo = (float *)aObj[ o_unm_t_lo].GetPtr();
     usp->m_t_up = (float *)aObj[ o_unm_t_up].GetPtr();
-    usp->fug_lo = (float *)aObj[ o_unintnb].GetPtr();
+    usp->fug_lo = (float *)aObj[ o_unfug_lo].GetPtr();
     usp->fug_up = (float *)aObj[ o_unfug_up].GetPtr();
     usp->IntLg = (float *)aObj[ o_unintlg].GetPtr();
     usp->Gs = (float *)aObj[ o_ungs].GetPtr();
@@ -372,7 +374,7 @@ void TUnSpace::dyn_set(int q)
     usp->PhAID = (char (*)[8])aObj[ o_unphaid].GetPtr();
     usp->PhAlst = (char (*)[80])aObj[ o_unphalst].GetPtr();
     usp->PhAfreq = (float *)aObj[ o_unafreg].GetPtr();
-    usp->pmr = (float *)aObj[ o_unpmr].GetPtr();
+//    usp->pmr = (float *)aObj[ o_unpmr].GetPtr();
     usp->POM = (float *)aObj[ o_unpom].GetPtr();
     usp->POR = (float *)aObj[ o_unpor].GetPtr();
     usp->A = (float *)aObj[ o_una].GetPtr();
@@ -418,7 +420,7 @@ void TUnSpace::dyn_kill(int q)
     usp->IntNb = (float *)aObj[ o_unintnb].Free();
     usp->m_t_lo = (float *)aObj[ o_unm_t_lo].Free();
     usp->m_t_up = (float *)aObj[ o_unm_t_up].Free();
-    usp->fug_lo = (float *)aObj[ o_unintnb].Free();
+    usp->fug_lo = (float *)aObj[ o_unfug_lo].Free();
     usp->fug_up = (float *)aObj[ o_unfug_up].Free();
     usp->IntLg = (float *)aObj[ o_unintlg].Free();
     usp->Gs = (float *)aObj[ o_ungs].Free();
@@ -452,7 +454,8 @@ void TUnSpace::dyn_kill(int q)
     plot  = (TPlotLine *)aObj[ o_unplline ].Free();
     usp->tprn = (char *)aObj[ o_untprn].Free();
 
-   work_dyn_kill();
+   if( q == 0)
+      work_dyn_kill();
 }
 
 
@@ -467,9 +470,11 @@ void TUnSpace::work_dyn_kill()
     usp->PhAID = (char (*)[8])aObj[ o_unphaid].Free();
     usp->PhAlst = (char (*)[80])aObj[ o_unphalst].Free();
     usp->PhAfreq = (float *)aObj[ o_unafreg].Free();
-    usp->pmr = 0;
+//    usp->pmr = 0;
     usp->POM = (float *)aObj[ o_unpom].Free();
     usp->POR = (float *)aObj[ o_unpor].Free();
+//    aObj[ o_unpmr].SetPtr( usp->pmr );
+//    aObj[ o_unpmr].SetDim( usp->Q, 1 );
     usp->A = (float *)aObj[ o_una].Free();
     usp->Zcp = (double *)aObj[ o_unzcp].Free();
     usp->Zmin = (double *)aObj[ o_unzmin].Free();
@@ -522,10 +527,10 @@ void TUnSpace::work_dyn_new()
     usp->Hom = (double *)aObj[ o_unhom].Alloc(usp->Q, 1, D_);
     usp->Prob = (double *)aObj[ o_unprob].Alloc(usp->Q, 1, D_);
 
-    usp->pmr = 0;
+ //   usp->pmr = 0;
     if( usp->PvPOR == S_ON )
     {  usp->POR = (float *)aObj[ o_unpor].Alloc( 1, usp->Q, F_ );
-       usp->pmr = usp->POR;
+  //     usp->pmr = usp->POR;
     }
     else
       usp->POR = (float *)aObj[ o_unpor].Free();
@@ -533,9 +538,12 @@ void TUnSpace::work_dyn_new()
     if( usp->PvPOM == S_ON )
     {
       usp->POM = (float *)aObj[ o_unpom].Alloc( usp->Q, usp->Q, F_ );
-      usp->pmr = usp->POM;
+ //     usp->pmr = usp->POM;
     }
     else   usp->POM = (float *)aObj[ o_unpom].Free();
+
+//    aObj[ o_unpmr].SetPtr( usp->pmr );
+//    aObj[ o_unpmr].SetDim( usp->Q, 1 );
 
 
   usp->UnIC = (double (*)[UNSP_SIZE1])aObj[ o_ununic].Alloc(
@@ -716,7 +724,8 @@ void TUnSpace::dyn_new(int q)
    else
       usp->f_PhA = (short *)aObj[ o_unf_pha].Free();
 
-  nG_dyn_new();                //!!!!!!!!!!!!!!!!!!
+  if( q == 0)
+     nG_dyn_new();                //!!!!!!!!!!!!!!!!!!
 
  //  internal
    usp->stl = (char (*)[EQ_RKLEN])aObj[ o_unstl].Alloc( usp->Q, 1, EQ_RKLEN);
@@ -744,9 +753,10 @@ void TUnSpace::dyn_new(int q)
     }
    plot  = (TPlotLine *)aObj[ o_unplline ].Free();
 
-  work_dyn_new();
-  phase_lists_new();
-
+   if( q == 0)
+   {  work_dyn_new();
+      phase_lists_new();
+    }
 }
 
 
@@ -985,5 +995,88 @@ TUnSpace::CmHelp()
 void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
     TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
 {
+// make copy of UNSPACE  structure (only for changed arrays )
+   ods_link(1);
+   memcpy( &us[1].N, &us[0].N, 16 );
+   memcpy( &us[1].PunE, &us[0].PunE, 38 );
+   dyn_new(1);
+
+/********************************************************
+   // copy arrays
+  if(usp->PsGen[0] == S_ON )
+  {
+    memcpy( us[1].Gs, us[0].Gs, us[1].L*sizeof(float) );
+    memcpy( us[1].NgLg, us[0].NgLg, us[1].L*sizeof(short) );
+    memcpy( us[1].IntLg, us[0].IntLg, us[1].L*sizeof(float) );
+    memcpy( us[1].IntLg0, us[0].IntLg0, us[1].L*sizeof(float) );
+
+    memcpy( us[1].vG, us[0].vG, us[1].Q*us[1].L*sizeof(double) );
+    memcpy( us[1].vY, us[0].vY, us[1].Q*us[1].L*sizeof(double) );
+    memcpy( us[1].vYF, us[0].vYF, us[1].Q*us[1].Fi*sizeof(double) );
+    memcpy( us[1].vGam, us[0].vGam, us[1].Q*us[1].L*sizeof(double) );
+    memcpy( us[1].vMol, us[0].vMol, us[1].Q*us[1].N*sizeof(double) );
+    memcpy( us[1].vU, us[0].vU,     us[1].Q*us[1].N*sizeof(double) );
+  }
+
+  if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+  {
+    memcpy( us[1].m_t_lo, us[0].m_t_lo, us[1].N*sizeof(float) );
+    memcpy( us[1].m_t_up, us[0].m_t_up, us[1].N*sizeof(float) );
+  }
+
+  if( usp->PsGen[0] == S_ON  && usp->Ls )
+    memcpy( us[1].vFug, us[0].vFug, us[1].Q*us[1].Ls*sizeof(double) );
+
+  if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+  {
+    memcpy( us[1].fug_lo, us[0].fug_lo, us[1].Ls*sizeof(float) );
+    memcpy( us[1].fug_up, us[0].fug_up, us[1].Ls*sizeof(float) );
+  }
+
+  if(usp->PsGen[1]== S_ON)
+  {
+    memcpy( us[1].Ss, us[0].Ss, us[1].L*sizeof(float) );
+    memcpy( us[1].NgLs, us[0].NgLs, us[1].L*sizeof(short) );
+    memcpy( us[1].IntLs, us[0].IntLs, us[1].L*sizeof(float) );
+  }
+
+  if(usp->PsGen[5]== S_ON)
+  {
+    memcpy( us[1].Vs, us[0].Vs, us[1].L*sizeof(float) );
+    memcpy( us[1].NgLv, us[0].NgLv, us[1].L*sizeof(short) );
+    memcpy( us[1].IntLv, us[0].IntLv, us[1].L*sizeof(float) );
+  }
+
+  if(usp->PsGen[2]== S_ON)
+  {
+    memcpy( us[1].NgNb, us[0].NgNb, us[1].N*sizeof(short) );
+    memcpy( us[1].IntNb, us[0].IntNb, us[1].N*sizeof(float) );
+    memcpy( us[1].Bs, us[0].Bs, us[1].N*sizeof(double) );
+  }
+
+  if(usp->PsGen[6]== S_ON)   // new by DK
+  {
+    memcpy( us[1].NgGam, us[0].NgGam, us[1].Ls*sizeof(short) );
+    memcpy( us[1].IntGam, us[0].IntGam, us[1].Ls*sizeof(float) );
+    memcpy( us[1].GAMs, us[0].GAMs, us[1].Ls*sizeof(float) );
+  }
+
+  if(//usp->PsGen[0??] == S_ON  &&
+     usp->Pa_f_pha == S_ON)
+    memcpy( us[1].f_PhA, us[0].f_PhA, us[1].N*sizeof(short) );
+
+//*********************************************************/
+//  resize us[0]
+
+   ods_link(0);
+   usp->N = TProfil::pm->mup->N;
+   usp->L = TProfil::pm->mup->L;
+   usp->Fi = TProfil::pm->mup->Fi;
+   usp->Fis = TProfil::pm->mup->Fis;
+   usp->Ls = TProfil::pm->mup->Ls;
+   dyn_new(0);
+
+// pack and copy data from 1 to 2 (using deleting lists)
+
 }
 

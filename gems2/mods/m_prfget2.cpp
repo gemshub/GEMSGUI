@@ -373,11 +373,17 @@ void TProfil::TestChangeProfile()
 
     TUnSpace* aPB=(TUnSpace *)(&aMod[RT_UNSPACE]);
     aPB->ods_link(0);
-    for(uint i=0; i< aList.GetCount(); i++)
-    {
+    if( aList.GetCount() > 0 )
+    {  for(uint i=0; i< aList.GetCount(); i++)
+       {
+    //    aPB->ods_link(0);
         aPB->RecInput( aList[i].c_str() );
         aPB->InsertChanges( aIComp, aPhase, aDComp );
         aPB->RecSave( aList[i].c_str(), true );
+       }
+//        aPB->ods_link(1);
+//        aPB->din_kill(1);
+//        aPB->ods_link(0);
     }
 }
 
