@@ -47,18 +47,24 @@ void TDualTh::Init_Analyse()
    dt_text_analyze();
    // put data to Bn
    Bn_Calc();
-
+   build_mu_n();  // calculate new mu_n matrix
 }
 
-// analyse calculated equlibriums
+// analyse calculated equlibria
 void TDualTh::Analyse( )
 {
- // only as examle
+ // only as example
   if( dtp->PvChi == S_ON )
    CalcEquat( A_CHI );
   if( dtp->PvGam == S_ON )
    CalcEquat( A_GAM );
-
+  // Calculation of DualThermo results
+  if( dtp->PsMode == DT_MODE_M || dtp->PsMode == DT_MODE_A )
+     Calc_muo_n( dtp->PsSt );
+  if( dtp->PsMode == DT_MODE_G )
+     Calc_gam_n( dtp->PsSt );
+//  if( dtp->PsMode == DT_MODE_X )
+//     Calc_act_n( dtp->PsSt );
 }
 
 //set sizes of arrays
@@ -111,7 +117,7 @@ void TDualTh::dt_initiate( bool mode )
 
   if( mode )
   {
-    int ii;
+    int ii,i;
     vstr tbuf(100);
 
     dtp->gStat = UNSP_GS_INDEF;
@@ -141,6 +147,11 @@ void TDualTh::dt_initiate( bool mode )
      strncpy( dtp->for_n[ii], "H2O", 4 );
      sprintf( tbuf, "Endmember%d", ii );
      strncpy( dtp->nam_n[ii], tbuf, MAXIDNAME );
+     for( i=0; i<dtp->nQ; i++)
+     {
+        dtp->gam_n[i*dtp->nK+ii] = 1.;  // default for gamma 1.0
+        dtp->chi[i*dtp->nK+ii] = 1.;  // default for chi 1.0
+     }
     }
 
     for( ii=0; ii<dtp->La_b; ii++)
@@ -217,7 +228,7 @@ void TDualTh::calc_eqstat()
        memcpy( dtp->stld+dtp->q, dtp->sykey, EQ_RKLEN );
 }
 
-// building Ub matrix
+// Generating Ub matrix
 void TDualTh::build_Ub()
 {
  short i, ii;
@@ -253,7 +264,32 @@ void TDualTh::build_Ub()
   }
 }
 
-// Translate, analyze and unpack equations of the process
+// Generating the mu_n matrix
+void TDualTh::build_mu_n()
+{
+ short i, ii, j;
+ double mu_sum;
+
+// dt_initiate( false );
+
+ for( ii=0; ii<dtp->nQ; ii++)
+ {
+   dtp->q = ii;
+  // zero off a cell in mu_n
+    for( j=0; j<dtp->nK; j++)
+    {
+       dtp->jm = j;
+ //       dtp->mu_n[dtp->q*dtp->nK+j] = 0.;
+//   calculate mu_n from Ub
+       mu_sum = 0.0;
+       for( i=0; i<dtp->Nb; i++)
+         mu_sum += dtp->Ub[ii*dtp->Nb +i] * double(dtp->An[j*dtp->Nb +i]);
+       dtp->mu_n[ii*dtp->nK+j] = mu_sum;
+    }
+  }
+}
+
+// Translate, analyze and unpack dual-thermo math script for mole fractions
 void TDualTh::dt_text_analyze()
 {
   TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
@@ -597,6 +633,261 @@ TDualTh::Bn_Calc()
   delete[]  ICw;
 
 }
+
+void Calc_muo_n( char eState )
+{ // calculate mu_o DualTh
+ short i, ii, j;
+ double muo, gam;
+
+ for( ii=0; ii < dtp->nQ; ii++)
+ {
+    dtp->q = ii;
+    for( j=0; j<dtp->nK; j++)
+    {
+       dtp->jm = j;
+       gam = dtp->gam_n[ii*dtp->nK+j];
+       if( dtp->PsMode == DT_MODE_A)
+           gam = 1.0;
+       if( eState == DT_STATE_S )
+        switch(dtp->typ_n[j])  // Stoich. saturation
+        {
+          default:
+          case DC_SCP_CONDEN:
+              muo = dtp->mu_n[ii*dtp->nK+j];
+              break;
+          case DC_SOL_IDEAL:
+          case DC_SOL_MINOR:
+          case DC_SOL_MAJOR:
+              muo = dtp->mu_n[ii*dtp->nK+j] - gam - log(dtp->chi[ii*dtp->nK+j]);
+              break;
+        }
+       else  // Equilibrium
+        switch(dtp->typ_n[j])
+        {
+          case DC_SCP_CONDEN:
+              muo = dtp->mu_n[ii*dtp->nK+j];
+              break;
+          case DC_SOL_IDEAL:
+          case DC_SOL_MINOR:
+          case DC_SOL_MAJOR:
+              muo = dtp->mu_n[ii*dtp->nK+j] - gam - log(dtp->chi[ii*dtp->nK+j]);
+              break;
+/*          case DC_AQ_ELECTRON: /* pE  SPmol = X[j]*Factor; *
+              break;
+          case DC_AQ_PROTON:
+//            pmp->pH = -ln_to_lg*(Muj-pmp->G0[j]+Dsur+lnFmol);
+              break;
+          case DC_AQ_SPECIES:
+              muo = dtp->mu_n[ii*dtp->nK+j] - gam - log(dtp->chi_n[ii*dtp->nK+j]);
+              break;
+          case DC_AQ_SOLVENT:
+          case DC_AQ_SOLVCOM:
+            pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j]
+                                        + Dsur - 1. + 1. / ( 1.+Dsur ) );
+            break;
+        case DC_GAS_COMP:
+        case DC_GAS_H2O:
+        case DC_GAS_CO2:   /* gases *
+        case DC_GAS_H2:
+        case DC_GAS_N2:
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+            if( pmp->Pc > 1e-9 )
+                pmp->Y_la[j] += log10( pmp->Pc );
+            break;
+/*
+// adsorption:
+/*
+        case DC_SUR_SITE:
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+            break;
+        case DC_SSC_A0:
+        case DC_SSC_A1:
+        case DC_SSC_A2:
+        case DC_SSC_A3:
+        case DC_SSC_A4:
+        case DC_WSC_A0:
+        case DC_WSC_A1:
+        case DC_WSC_A2:
+        case DC_WSC_A3:
+        case DC_WSC_A4:  /* case DC_SUR_SITE: *
+        case DC_SUR_COMPLEX:
+        case DC_SUR_IPAIR:
+        case DC_IESC_A:
+        case DC_IEWC_B:
+            DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+            break; // Coulombic term to be considered !!!!!!!!!!
+        case DC_PEL_CARRIER:
+        case DC_SUR_MINAL:
+        case DC_SUR_CARRIER: /* sorbent *
+            DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                           + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
+            break;
+*/
+         default:
+            break; /* error in DC class code */
+        }
+       dtp->muo_n[ii*dtp->nK+j] = muo;
+    }
+  }
+}
+
+
+void Calc_gam_n( char eState )
+{  // calculate gamma DualTh
+ short i, ii, j;
+ double muo, gam;
+
+// dt_initiate( false );
+
+ for( ii=0; ii<dtp->nQ; ii++)
+ {
+   dtp->q = ii;
+  // zero off a cell in mu_n
+    for( j=0; j<dtp->nK; j++)
+    {
+       dtp->jm = j;
+       muo = dtp->muo_n[ii*dtp->nK+j];
+       if( eState == DT_STATE_S )
+        switch(dtp->typ_n[j])  // Stoich. saturation
+        {
+          default:
+          case DC_SCP_CONDEN:
+              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muo);
+              break;
+          case DC_SOL_IDEAL:
+          case DC_SOL_MINOR:
+          case DC_SOL_MAJOR:
+              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muo
+                  - log(dtp->chi[ii*dtp->nK+j]));
+              break;
+        }
+       else  // Equilibrium
+        switch(dtp->typ_n[j])
+        {
+          case DC_SCP_CONDEN:
+              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muo);
+              break;
+          case DC_SOL_IDEAL:
+          case DC_SOL_MINOR:
+          case DC_SOL_MAJOR:
+              gam = exp(dtp->mu_n[ii*dtp->nK+j] - muo
+                   - log(dtp->chi[ii*dtp->nK+j]));
+              break;
+/*          case DC_AQ_ELECTRON: /* pE  SPmol = X[j]*Factor; *
+              break;
+          case DC_AQ_PROTON:
+//            pmp->pH = -ln_to_lg*(Muj-pmp->G0[j]+Dsur+lnFmol);
+              break;
+          case DC_AQ_SPECIES:
+              muo = dtp->mu_n[ii*dtp->nK+j] - gam - log(dtp->chi_n[ii*dtp->nK+j]);
+              break;
+          case DC_AQ_SOLVENT:
+          case DC_AQ_SOLVCOM:
+            pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j]
+                                        + Dsur - 1. + 1. / ( 1.+Dsur ) );
+            break;
+        case DC_GAS_COMP:
+        case DC_GAS_H2O:
+        case DC_GAS_CO2:   /* gases *
+        case DC_GAS_H2:
+        case DC_GAS_N2:
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+            if( pmp->Pc > 1e-9 )
+                pmp->Y_la[j] += log10( pmp->Pc );
+            break;
+/*
+// adsorption:
+/*
+        case DC_SUR_SITE:
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+            break;
+        case DC_SSC_A0:
+        case DC_SSC_A1:
+        case DC_SSC_A2:
+        case DC_SSC_A3:
+        case DC_SSC_A4:
+        case DC_WSC_A0:
+        case DC_WSC_A1:
+        case DC_WSC_A2:
+        case DC_WSC_A3:
+        case DC_WSC_A4:  /* case DC_SUR_SITE: *
+        case DC_SUR_COMPLEX:
+        case DC_SUR_IPAIR:
+        case DC_IESC_A:
+        case DC_IEWC_B:
+            DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+            break; // Coulombic term to be considered !!!!!!!!!!
+        case DC_PEL_CARRIER:
+        case DC_SUR_MINAL:
+        case DC_SUR_CARRIER: /* sorbent *
+            DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                           + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
+            break;
+*/
+         default:
+            break; /* error in DC class code */
+        }
+       dtp->gam_n[ii*dtp->nK+j] = gam;
+    }
+  }
+}
+
+//  void Calc_act_n( char eState )
+// { // calculate activity DualTh
+
+
+/*
+               case DC_SCP_CONDEN:
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+                    break;
+               case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
+                    pmp->Y_la[j] = ln_to_lg*(Muj - pmp->G0[j]
+                                        + Dsur + lnFmol);
+                    break;
+               case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
+                    pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j]
+                                        + Dsur - 1. + 1. / ( 1.+Dsur ) );
+                    break;
+               case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:   /* gases *
+               case DC_GAS_H2: case DC_GAS_N2:
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+                    if( pmp->Pc > 1e-9 )
+                        pmp->Y_la[j] += log10( pmp->Pc );
+                    break;
+               case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+                    break;
+               case DC_SUR_SITE:
+                    DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+                    break;
+               case DC_SSC_A0: case DC_SSC_A1: case DC_SSC_A2: case DC_SSC_A3:
+               case DC_SSC_A4: case DC_WSC_A0: case DC_WSC_A1: case DC_WSC_A2:
+               case DC_WSC_A3: case DC_WSC_A4: case DC_SUR_COMPLEX:
+               case DC_SUR_IPAIR: case DC_IESC_A: case DC_IEWC_B:
+                    DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+                    break; // Coulombic term to be considered !!!!!!!!!!
+               case DC_PEL_CARRIER: case DC_SUR_MINAL: case DC_SUR_CARRIER: /* sorbent *
+                    DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                       + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
+                    break;
+               default:
+                    break; /* error in DC class code */
+
+*/
+// }
 
 
 // ------------------- End of m_dualthc.cpp --------------------------
