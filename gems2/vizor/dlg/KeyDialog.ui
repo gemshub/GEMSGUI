@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KeyDialogData</class>
 <author>Andy Rysin &lt;arysin@yahoo.com&gt;</author>
 <widget class="QDialog">
@@ -19,13 +19,6 @@
             <height>380</height>
         </size>
     </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
-    </property>
     <property name="caption">
         <string>List of GEMS database record keys</string>
     </property>
@@ -42,6 +35,12 @@
         <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
                 <cstring>Layout2</cstring>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <bold>1</bold>
+                </font>
             </property>
             <hbox>
                 <property name="name">
@@ -65,8 +64,21 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Ok</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
                     </property>
                     <property name="default">
                         <bool>true</bool>
@@ -100,6 +112,10 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
                     </property>
                     <property name="text">
                         <string>&amp;Filter...</string>
@@ -137,6 +153,10 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Select All</string>
                     </property>
@@ -172,6 +192,10 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
                     </property>
                     <property name="text">
                         <string>C&amp;lear All</string>
@@ -209,8 +233,21 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
                     </property>
                 </widget>
             </hbox>

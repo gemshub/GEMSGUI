@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ProcessDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,16 +8,9 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>559</width>
+            <width>444</width>
             <height>369</height>
         </rect>
-    </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
     </property>
     <property name="caption">
         <string>GEM-Selektor Create Process Wizard  </string>
@@ -323,21 +316,27 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout5</cstring>
+                <cstring>layout90</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
                     </property>
                     <property name="text">
                         <string>OK</string>
@@ -349,6 +348,32 @@
                         <bool>true</bool>
                     </property>
                     <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
                         <bool>true</bool>
                     </property>
                 </widget>
@@ -364,7 +389,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>20</width>
+                            <width>430</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -373,25 +398,23 @@
                     <property name="name">
                         <cstring>buttonHelp</cstring>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>Help</string>
                     </property>
                     <property name="accel">
                         <string>F1</string>
-                    </property>
-                    <property name="autoDefault">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>buttonCancel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Cancel</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>

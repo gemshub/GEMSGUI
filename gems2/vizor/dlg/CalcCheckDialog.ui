@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CalcCheckDialogData</class>
 <comment>Dialog for changing object values withing range</comment>
 <widget class="QDialog">
@@ -9,284 +9,239 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>315</width>
-            <height>277</height>
+            <width>244</width>
+            <height>209</height>
         </rect>
-    </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
     </property>
     <property name="caption">
         <string>Change Value to Set Cells</string>
     </property>
-    <widget class="QLabel">
+    <vbox>
         <property name="name">
-            <cstring>TextLabel2</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>20</y>
-                <width>140</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Value to Set Cells</string>
-        </property>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>pObjectBox</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>60</y>
-                <width>290</width>
-                <height>150</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Object Cell Selection</string>
-        </property>
-        <widget class="QLabel">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>TextLabel1_2</cstring>
+                <cstring>layout45</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>150</x>
-                    <y>30</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>to</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
-        <widget class="QSpinBox">
-            <property name="name">
-                <cstring>pN1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>80</x>
-                    <y>30</y>
-                    <width>70</width>
-                    <height>30</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>30</y>
-                    <width>61</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>N: from</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel1_2_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>80</y>
-                    <width>61</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>M:</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>pM</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>80</x>
-                    <y>70</y>
-                    <width>70</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="frameShape">
-                <enum>Panel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Raised</enum>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignLeft</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
-        <widget class="QSpinBox">
-            <property name="name">
-                <cstring>pN2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>190</x>
-                    <y>30</y>
-                    <width>70</width>
-                    <height>30</height>
-                </rect>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>PushButton3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>80</x>
-                    <y>110</y>
-                    <width>180</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>3</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Select All Cells</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Press this button to select all cells in a vector or matrix object </string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>layout2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>220</y>
-                <width>290</width>
-                <height>40</height>
-            </rect>
-        </property>
-        <grid>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <widget class="QPushButton" row="0" column="0">
+            <hbox>
                 <property name="name">
-                    <cstring>PushButton1</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>7</hsizetype>
-                        <vsizetype>7</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Ok</string>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QPushButton" row="0" column="2">
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Value for the Cells:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>pValue</cstring>
+                    </property>
+                    <property name="acceptDrops">
+                        <bool>true</bool>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>All selected cells will be set to a value that you type into this field</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>pObjectBox</cstring>
+            </property>
+            <property name="title">
+                <string>Object Cell Selection</string>
+            </property>
+            <grid>
                 <property name="name">
-                    <cstring>PushButton1_2</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>7</hsizetype>
-                        <vsizetype>7</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Cancel</string>
-                </property>
-            </widget>
-            <spacer row="0" column="1">
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>TextLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>N: from</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="hAlign" stdset="0">
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1">
+                    <property name="name">
+                        <cstring>pM</cstring>
+                    </property>
+                    <property name="frameShape">
+                        <enum>Panel</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignLeft</set>
+                    </property>
+                    <property name="hAlign" stdset="0">
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="0" column="3">
+                    <property name="name">
+                        <cstring>pN2</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>TextLabel1_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>M:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="hAlign" stdset="0">
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="2">
+                    <property name="name">
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>to</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="hAlign" stdset="0">
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>pN1</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="2" column="1" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>PushButton3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Select All Cells</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Press this button to select all cells in a vector or matrix object </string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <grid>
                 <property name="name">
-                    <cstring>spacer1</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>72</width>
-                        <height>31</height>
-                    </size>
-                </property>
-            </spacer>
-        </grid>
-    </widget>
-    <widget class="QComboBox">
-        <property name="name">
-            <cstring>pValue</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>170</x>
-                <y>20</y>
-                <width>130</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="acceptDrops">
-            <bool>true</bool>
-        </property>
-        <property name="editable">
-            <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>All selected cells will be set to a value that you type into this field</string>
-        </property>
-    </widget>
+                <widget class="QPushButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>PushButton1</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Ok</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="2">
+                    <property name="name">
+                        <cstring>PushButton1_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>7</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                </widget>
+                <spacer row="0" column="1">
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>72</width>
+                            <height>31</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
+    </vbox>
 </widget>
 <connections>
     <connection>

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ElementsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>668</width>
+            <width>698</width>
             <height>545</height>
         </rect>
     </property>
@@ -268,260 +268,6 @@
     <property name="sizeGripEnabled">
         <bool>true</bool>
     </property>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>layout13</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>450</y>
-                <width>640</width>
-                <height>80</height>
-            </rect>
-        </property>
-        <grid>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <widget class="QPushButton" row="1" column="2">
-                <property name="name">
-                    <cstring>bNext</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Ok</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Proceed to create database files and collect data for phases and species for this new modelling project</string>
-                </property>
-            </widget>
-            <widget class="QLayoutWidget" row="1" column="1">
-                <property name="name">
-                    <cstring>layout6</cstring>
-                </property>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>rbKernel</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Kernel (Nagra-PSI)  </string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to collect data from the kernel chemical  thermodynamic data base (Nagra-PSI 01/01)  </string>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>rbComplem</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Complem.(Slop98)     </string>
-                        </property>
-                        <property name="checked">
-                            <bool>false</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to collect data also from the complementary (Slop98/Supcrt92) data base (inorganic part) </string>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>rbOrganic</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Organic</string>
-                        </property>
-                        <property name="checked">
-                            <bool>false</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to collect data also for organic species from Slop98 and RPS data bases</string>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>rbSpecific</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Specific  </string>
-                        </property>
-                        <property name="checked">
-                            <bool>false</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to collect thermodynamic data also from the specific extension data base(s)</string>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-            <widget class="QPushButton" row="0" column="0">
-                <property name="name">
-                    <cstring>bReset</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Set &amp;Filters</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Click here to customize filters for copying records from default databases into the new modelling project</string>
-                </property>
-            </widget>
-            <widget class="QPushButton" row="1" column="0">
-                <property name="name">
-                    <cstring>bHelp</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Help</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Click here to learn more about this dialog and creation of independent modelling projects</string>
-                </property>
-            </widget>
-            <widget class="QPushButton" row="0" column="2">
-                <property name="name">
-                    <cstring>pCancelButton</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Cancel</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Cancels creation of an independent modelling project and returns to Main dialog</string>
-                </property>
-            </widget>
-            <widget class="QLayoutWidget" row="0" column="1">
-                <property name="name">
-                    <cstring>layout5</cstring>
-                </property>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>TextLabel1_2</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>1</bold>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>  Phases:
-  Data: </string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Select phases to be included into the new project in checkboxes to the right; and source default database files - using radoubuttions in the row below</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>cbGas</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Gas</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include the gaseous  (fluid) phase </string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>cbAqueous</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Aqueous</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include the aqueous electrolyte phase</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>cbSolids</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Soli&amp;ds</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include solid (optionally, liquid) single-component phases  </string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>cbSolutions</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Solutions</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include solid (optionally, liquid) multi-component (solution) phases</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox">
-                        <property name="name">
-                            <cstring>cbSorption</cstring>
-                        </property>
-                        <property name="text">
-                            <string>S&amp;orption</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include sorption phase(s) with surface complexes at the mineral-water interface</string>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-        </grid>
-    </widget>
     <widget class="QButtonGroup">
         <property name="name">
             <cstring>bgElem</cstring>
@@ -786,7 +532,7 @@
         </property>
         <property name="font">
             <font>
-                <family>Ms Sans Serif</family>
+                <family>Arial</family>
                 <bold>1</bold>
             </font>
         </property>
@@ -1033,27 +779,6 @@
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>tlEp_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>80</y>
-                    <width>20</width>
-                    <height>31</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>2</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignLeft</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
                 <cstring>tlEp_3</cstring>
             </property>
             <property name="geometry">
@@ -1090,27 +815,6 @@
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignLeft</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>tlEg_1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>30</x>
-                    <y>20</y>
-                    <width>50</width>
-                    <height>31</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>I</string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
             </property>
             <property name="hAlign" stdset="0">
             </property>
@@ -1402,38 +1106,6 @@
             </property>
             <property name="buttonGroupId">
                 <number>7</number>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>pbE_8</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>280</x>
-                    <y>80</y>
-                    <width>50</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>127</blue>
-                </color>
-            </property>
-            <property name="text">
-                <string>    O</string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="buttonGroupId">
-                <number>8</number>
             </property>
         </widget>
         <widget class="QPushButton">
@@ -3489,35 +3161,6 @@
         </widget>
         <widget class="QPushButton">
             <property name="name">
-                <cstring>pbE_101</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>130</x>
-                    <y>320</y>
-                    <width>50</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="text">
-                <string>ACT</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>101</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Placeholder for actinide elements</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
                 <cstring>pbE_57</cstring>
             </property>
             <property name="enabled">
@@ -4526,6 +4169,80 @@
             <property name="hAlign" stdset="0">
             </property>
         </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pbE_8</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>280</x>
+                    <y>80</y>
+                    <width>50</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>127</blue>
+                </color>
+            </property>
+            <property name="text">
+                <string>    O</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>8</number>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>tlEg_1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>30</x>
+                    <y>20</y>
+                    <width>50</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>I</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+            <property name="hAlign" stdset="0">
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>tlEp_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>80</y>
+                    <width>20</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>2</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
+            </property>
+            <property name="hAlign" stdset="0">
+            </property>
+        </widget>
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>cbIsotopes</cstring>
@@ -4548,6 +4265,306 @@
                 <string>Check to include isotopes if provided</string>
             </property>
         </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pbE_101</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>130</x>
+                    <y>320</y>
+                    <width>50</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="text">
+                <string>ACT</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>101</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Placeholder for actinide elements</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout13</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>450</y>
+                <width>640</width>
+                <height>80</height>
+            </rect>
+        </property>
+        <grid>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QPushButton" row="1" column="2">
+                <property name="name">
+                    <cstring>bNext</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <bold>1</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Ok</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+O</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Proceed to create database files and collect data for phases and species for this new modelling project</string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget" row="1" column="1">
+                <property name="name">
+                    <cstring>layout6</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>rbKernel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Kernel (Nagra-PSI)  </string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to collect data from the kernel chemical  thermodynamic data base (Nagra-PSI 01/01)  </string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>rbComplem</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Complem.(Slop98)     </string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to collect data also from the complementary (Slop98/Supcrt92) data base (inorganic part) </string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>rbOrganic</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Organic</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to collect data also for organic species from Slop98 and RPS data bases</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>rbSpecific</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Specific  </string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to collect thermodynamic data also from the specific extension data base(s)</string>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QPushButton" row="0" column="0">
+                <property name="name">
+                    <cstring>bReset</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <bold>1</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Set &amp;Filters</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+F</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Click here to customize filters for copying records from default databases into the new modelling project</string>
+                </property>
+            </widget>
+            <widget class="QPushButton" row="1" column="0">
+                <property name="name">
+                    <cstring>bHelp</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <bold>1</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Help</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+H</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Click here to learn more about this dialog and creation of independent modelling projects</string>
+                </property>
+            </widget>
+            <widget class="QPushButton" row="0" column="2">
+                <property name="name">
+                    <cstring>pCancelButton</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Arial</family>
+                        <bold>1</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+C</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Cancels creation of an independent modelling project and returns to Main dialog</string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget" row="0" column="1">
+                <property name="name">
+                    <cstring>layout5</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>TextLabel1_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>  Phases:
+  Data: </string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Select phases to be included into the new project in checkboxes to the right; and source default database files - using radoubuttions in the row below</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>cbGas</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Gas</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+G</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to include the gaseous  (fluid) phase </string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>cbAqueous</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Aqueous</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to include the aqueous electrolyte phase</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>cbSolids</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Soli&amp;ds</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to include solid (optionally, liquid) single-component phases  </string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>cbSolutions</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Solutions</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to include solid (optionally, liquid) multi-component (solution) phases</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>cbSorption</cstring>
+                        </property>
+                        <property name="text">
+                            <string>So&amp;rption</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+R</string>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Check to include sorption phase(s) with surface complexes at the mineral-water interface</string>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+        </grid>
     </widget>
     <widget class="QButtonGroup">
         <property name="name">
@@ -4813,7 +4830,7 @@
         </property>
         <property name="font">
             <font>
-                <family>Ms Sans Serif</family>
+                <family>Arial</family>
                 <bold>1</bold>
             </font>
         </property>

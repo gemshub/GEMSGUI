@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KeyProfileData</class>
 <comment>Dialog for selecting profile record</comment>
 <widget class="QDialog">
@@ -18,13 +18,6 @@
             <width>450</width>
             <height>400</height>
         </size>
-    </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
     </property>
     <property name="caption">
         <string>GEM-Selektor v.2-PSI: Modelling Projects</string>
@@ -210,6 +203,12 @@
             <property name="name">
                 <cstring>Layout3</cstring>
             </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <bold>1</bold>
+                </font>
+            </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
@@ -231,6 +230,10 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
                     </property>
                     <property name="text">
                         <string>&amp;Open Project</string>
@@ -254,6 +257,10 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;New Project..</string>
                     </property>
@@ -273,6 +280,10 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Help</string>
                     </property>
@@ -291,6 +302,10 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
                     </property>
                     <property name="text">
                         <string>&amp;Cancel</string>

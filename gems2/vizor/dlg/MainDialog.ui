@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MainDialogData</class>
 <comment>Main program window (poor but important :)</comment>
 <widget class="QWidget">
@@ -36,75 +36,6 @@
     <property name="caption">
         <string>GEM-Selektor</string>
     </property>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>pLogoImg</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>20</y>
-                <width>60</width>
-                <height>60</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="frameShape">
-            <enum>Panel</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Raised</enum>
-        </property>
-        <property name="scaledContents">
-            <bool>true</bool>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>pButtonEQ</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>40</x>
-                <y>100</y>
-                <width>428</width>
-                <height>66</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>1</hsizetype>
-                <vsizetype>1</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="font">
-            <font>
-                <family>Arial</family>
-                <pointsize>18</pointsize>
-                <bold>0</bold>
-            </font>
-        </property>
-        <property name="text">
-            <string>&amp;Computation of Equilibria</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Press this button to calculate thermodynamic models</string>
-        </property>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>pButtonDB</cstring>
@@ -161,50 +92,6 @@
             <enum>Horizontal</enum>
         </property>
     </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>80</x>
-                <y>10</y>
-                <width>430</width>
-                <height>70</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>5</hsizetype>
-                <vsizetype>1</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="font">
-            <font>
-                <family>Arial Narrow</family>
-                <pointsize>16</pointsize>
-                <italic>1</italic>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>Panel</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Raised</enum>
-        </property>
-        <property name="text">
-            <string>Geochemical Equilibrium Modelling &lt;br&gt;by Gibbs Energy Minimization</string>
-        </property>
-        <property name="alignment">
-            <set>WordBreak|AlignCenter</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-        <property name="wordwrap" stdset="0">
-        </property>
-    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout9</cstring>
@@ -249,6 +136,9 @@
                 <property name="text">
                     <string>&amp;Exit</string>
                 </property>
+                <property name="accel">
+                    <string>Alt+E</string>
+                </property>
                 <property name="default">
                     <bool>false</bool>
                 </property>
@@ -268,12 +158,15 @@
                 <property name="font">
                     <font>
                         <family>Arial</family>
-                        <pointsize>12</pointsize>
+                        <pointsize>14</pointsize>
                         <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
                     <string>&amp;Preferences...</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+P</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Press to adjust fonts on screen forms and set work directories</string>
@@ -294,12 +187,15 @@
                 <property name="font">
                     <font>
                         <family>Arial</family>
-                        <pointsize>12</pointsize>
+                        <pointsize>14</pointsize>
                         <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
                     <string>Get &amp;Started</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+S</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Press, if you are new to GEM-Selektor </string>
@@ -320,12 +216,15 @@
                 <property name="font">
                     <font>
                         <family>Arial</family>
-                        <pointsize>12</pointsize>
+                        <pointsize>14</pointsize>
                         <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
                     <string>&amp;About</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+A</string>
                 </property>
                 <property name="default">
                     <bool>false</bool>
@@ -335,6 +234,122 @@
                 </property>
             </widget>
         </hbox>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>pLogoImg</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>60</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="frameShape">
+            <enum>Panel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="scaledContents">
+            <bool>true</bool>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>80</x>
+                <y>10</y>
+                <width>430</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>1</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="font">
+            <font>
+                <family>Arial</family>
+                <pointsize>16</pointsize>
+                <italic>1</italic>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>Panel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="text">
+            <string>Geochemical Equilibrium Modelling &lt;br&gt;by Gibbs Energy Minimization</string>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+        <property name="wordwrap" stdset="0">
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pButtonEQ</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>40</x>
+                <y>90</y>
+                <width>428</width>
+                <height>66</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>1</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="font">
+            <font>
+                <family>Arial</family>
+                <pointsize>18</pointsize>
+                <bold>0</bold>
+            </font>
+        </property>
+        <property name="text">
+            <string>&amp;Computation of Equilibria</string>
+        </property>
+        <property name="accel">
+            <string>Alt+C</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Press this button to calculate thermodynamic models</string>
+        </property>
     </widget>
 </widget>
 <connections>

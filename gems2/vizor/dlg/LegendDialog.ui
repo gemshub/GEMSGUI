@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>LegendDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -12,109 +12,9 @@
             <height>412</height>
         </rect>
     </property>
-    <property name="font">
-        <font>
-            <pointsize>10</pointsize>
-        </font>
-    </property>
     <property name="caption">
         <string>Legend and Configuration for: </string>
     </property>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>Layout3</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>430</x>
-                <y>20</y>
-                <width>123</width>
-                <height>180</height>
-            </rect>
-        </property>
-        <vbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pBtnOk</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>System</family>
-                        <bold>1</bold>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;OK</string>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Apply changes to the graph and close this dialog</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pBtnApply</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>System</family>
-                        <bold>1</bold>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Apply</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Apply changes to the graph and do not close this dialog</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pBthCancel</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>System</family>
-                        <bold>1</bold>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Cancel</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Discard  changes and close this dialog</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pBtnBackgr</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>System</family>
-                        <bold>1</bold>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Background...</string>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Set background color of the graph area</string>
-                </property>
-            </widget>
-        </vbox>
-    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>GroupBox1</cstring>
@@ -126,12 +26,6 @@
                 <width>410</width>
                 <height>191</height>
             </rect>
-        </property>
-        <property name="font">
-            <font>
-                <family>System</family>
-                <bold>1</bold>
-            </font>
         </property>
         <property name="title">
             <string>Axis Setup</string>
@@ -297,6 +191,93 @@
                 </property>
             </widget>
         </grid>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>430</x>
+                <y>20</y>
+                <width>123</width>
+                <height>180</height>
+            </rect>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBtnOk</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;OK</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Apply changes to the graph and close this dialog</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBtnApply</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Apply</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Apply changes to the graph and do not close this dialog</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBthCancel</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Discard  changes and close this dialog</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBtnBackgr</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Background...</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Set background color of the graph area</string>
+                </property>
+            </widget>
+        </vbox>
     </widget>
 </widget>
 <connections>

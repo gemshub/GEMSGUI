@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ListFilesDialogData</class>
 <comment>Dialog for selecting profile record</comment>
 <widget class="QDialog">
@@ -18,13 +18,6 @@
             <width>450</width>
             <height>400</height>
         </size>
-    </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
     </property>
     <property name="caption">
         <string>Database File Configuration for Modelling Project</string>
@@ -87,17 +80,11 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout2</cstring>
+                <cstring>layout87</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
                 </property>
                 <widget class="QPushButton">
                     <property name="name">
@@ -111,8 +98,23 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Ok</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
                     </property>
                     <property name="default">
                         <bool>true</bool>
@@ -123,7 +125,7 @@
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>pHelpButton</cstring>
+                        <cstring>pCancelButton</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -133,11 +135,23 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
                     </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Learn aboutModelling Project concept and project configuration</string>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
                     </property>
                 </widget>
                 <spacer>
@@ -152,14 +166,14 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>20</width>
+                            <width>351</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>pCancelButton</cstring>
+                        <cstring>pHelpButton</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -169,8 +183,26 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
                     <property name="text">
-                        <string>&amp;Cancel</string>
+                        <string>&amp;Help</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+H</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Learn aboutModelling Project concept and project configuration</string>
                     </property>
                 </widget>
             </hbox>

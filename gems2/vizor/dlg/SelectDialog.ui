@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SelectDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -17,19 +17,6 @@
             <width>640</width>
             <height>420</height>
         </size>
-    </property>
-    <property name="baseSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
-    </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
     </property>
     <property name="caption">
         <string>Multiple Selection Dialog</string>
@@ -100,8 +87,17 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Ok</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
                     </property>
                     <property name="default">
                         <bool>true</bool>
@@ -119,8 +115,17 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Select All</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -135,8 +140,17 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>C&amp;lear All</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+L</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -151,8 +165,17 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
                     </property>
                 </widget>
             </hbox>

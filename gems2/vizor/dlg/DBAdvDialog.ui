@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DBAdvDialogData</class>
 <widget class="QWidget">
     <property name="name">
@@ -31,13 +31,6 @@
             <width>0</width>
             <height>0</height>
         </size>
-    </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
     </property>
     <property name="caption">
         <string>DBAdvDialogData</string>
@@ -116,13 +109,15 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
+                        <family>Arial</family>
+                        <bold>1</bold>
                     </font>
                 </property>
                 <property name="text">
                     <string>&amp;Back</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+B</string>
                 </property>
                 <property name="default">
                     <bool>true</bool>
@@ -145,13 +140,15 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
+                        <family>Arial</family>
+                        <bold>1</bold>
                     </font>
                 </property>
                 <property name="text">
                     <string>&amp;Help</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+H</string>
                 </property>
                 <property name="default">
                     <bool>false</bool>
@@ -171,10 +168,8 @@
                 </property>
                 <property name="font">
                     <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
-                        <italic>1</italic>
+                        <family>Arial</family>
+                        <bold>1</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -303,15 +298,11 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
-                    </font>
-                </property>
                 <property name="text">
                     <string>B&amp;ibliography and Scripts (SDref)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+I</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Full references (opt. abstracts) to sources of input data</string>
@@ -328,13 +319,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Numerical &amp;Constants (Const)</string>
@@ -355,15 +339,11 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
-                    </font>
-                </property>
                 <property name="text">
-                    <string>Modelling &amp;Project (Project)</string>
+                    <string>Modelling P&amp;roject (Project)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+R</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Modeling application project of database files, phases and species</string>
@@ -380,13 +360,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Single Chemical Sys&amp;tems (SysEq)</string>
@@ -407,15 +380,11 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Process Simulators (Process)</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+P</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Definitions of process simulators (batch GEM calculations)</string>
@@ -432,13 +401,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>MS Sans Serif</family>
-                        <pointsize>14</pointsize>
-                        <bold>0</bold>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Data &amp;Samplers and Plotters (GtDemo)</string>
@@ -485,8 +447,9 @@
         </property>
         <property name="font">
             <font>
-                <family>MS Sans Serif</family>
+                <family>Arial</family>
                 <pointsize>14</pointsize>
+                <bold>1</bold>
                 <italic>1</italic>
             </font>
         </property>
@@ -514,13 +477,16 @@
         <property name="geometry">
             <rect>
                 <x>30</x>
-                <y>330</y>
+                <y>328</y>
                 <width>160</width>
                 <height>21</height>
             </rect>
         </property>
         <property name="font">
             <font>
+                <family>System</family>
+                <pointsize>10</pointsize>
+                <bold>1</bold>
             </font>
         </property>
         <property name="text">

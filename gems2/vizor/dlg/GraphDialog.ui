@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>GraphDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,15 +9,8 @@
             <x>0</x>
             <y>0</y>
             <width>622</width>
-            <height>414</height>
+            <height>413</height>
         </rect>
-    </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
     </property>
     <property name="caption">
         <string>GEM-Selektor v.2.0-PSI Graphics Dialog</string>
@@ -66,7 +59,8 @@
                     </property>
                     <property name="font">
                         <font>
-                            <pointsize>8</pointsize>
+                            <family>Arial</family>
+                            <pointsize>10</pointsize>
                         </font>
                     </property>
                     <property name="frameShape">
@@ -108,11 +102,6 @@
                                     <height>270</height>
                                 </size>
                             </property>
-                            <property name="font">
-                                <font>
-                                    <pointsize>8</pointsize>
-                                </font>
-                            </property>
                             <property name="frameShape">
                                 <enum>Box</enum>
                             </property>
@@ -139,13 +128,6 @@
                                         <height>60</height>
                                     </rect>
                                 </property>
-                                <property name="font">
-                                    <font>
-                                        <family>MS Sans Serif</family>
-                                        <pointsize>8</pointsize>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
                                 <property name="text">
                                     <string>You may drag and drop legend labels to the plotting area.</string>
                                 </property>
@@ -161,6 +143,12 @@
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>Layout3</cstring>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Arial</family>
+                    <bold>1</bold>
+                </font>
             </property>
             <hbox>
                 <property name="name">
@@ -184,8 +172,15 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>C&amp;lose</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+L</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Closes the plot and goes back to the parent window</string>
@@ -202,6 +197,10 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
                     </property>
                     <property name="text">
                         <string>&amp;Fragment</string>
@@ -221,6 +220,10 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
                     </property>
                     <property name="text">
                         <string>&amp;Customize...</string>
@@ -244,6 +247,10 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
                     <property name="text">
                         <string>&amp;Print...</string>
                     </property>
@@ -254,6 +261,10 @@
                 <widget class="QPushButton">
                     <property name="name">
                         <cstring>PushButton5</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
                     </property>
                     <property name="text">
                         <string>Save Image...</string>

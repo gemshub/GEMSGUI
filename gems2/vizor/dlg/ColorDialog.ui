@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ColorDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,383 +8,257 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>484</width>
-            <height>207</height>
+            <width>402</width>
+            <height>163</height>
         </rect>
-    </property>
-    <property name="font">
-        <font>
-            <family>System</family>
-            <pointsize>10</pointsize>
-            <bold>1</bold>
-        </font>
     </property>
     <property name="caption">
         <string>ColorDialogData</string>
     </property>
-    <widget class="QLayoutWidget">
+    <hbox>
         <property name="name">
-            <cstring>Layout7</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>361</x>
-                <y>17</y>
-                <width>110</width>
-                <height>70</height>
-            </rect>
-        </property>
-        <property name="layoutSpacing" stdset="0">
-        </property>
-        <vbox>
+        <widget class="QButtonGroup">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>pGroup</cstring>
             </property>
-            <property name="margin">
-                <number>0</number>
+            <property name="title">
+                <string>Symbol Type</string>
             </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>PushButton10</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>5</hsizetype>
-                        <vsizetype>5</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Ok</string>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>PushButton11</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>5</hsizetype>
-                        <vsizetype>5</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Cancel</string>
-                </property>
-            </widget>
-        </vbox>
-    </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>pGroup</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>340</width>
-                <height>180</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Symbol Type</string>
-        </property>
-        <property name="exclusive">
-            <bool>true</bool>
-        </property>
-        <property name="radioButtonExclusive">
-            <bool>true</bool>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p6</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>133</x>
-                    <y>99</y>
-                    <width>54</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image0</pixmap>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>72</x>
-                    <y>71</y>
-                    <width>55</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image1</pixmap>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p7</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>193</x>
-                    <y>99</y>
-                    <width>55</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image2</pixmap>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>99</y>
-                    <width>55</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image3</pixmap>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>193</x>
-                    <y>71</y>
-                    <width>55</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image4</pixmap>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p9</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>254</x>
-                    <y>99</y>
-                    <width>55</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image5</pixmap>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>254</x>
-                    <y>71</y>
-                    <width>55</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image6</pixmap>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p5</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>133</x>
-                    <y>71</y>
-                    <width>54</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image7</pixmap>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p0</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>11</x>
-                    <y>71</y>
-                    <width>55</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image8</pixmap>
-            </property>
-            <property name="checked">
+            <property name="exclusive">
                 <bool>true</bool>
             </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>p8</cstring>
+            <property name="radioButtonExclusive">
+                <bool>true</bool>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>72</x>
-                    <y>99</y>
-                    <width>55</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>image9</pixmap>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>hbox1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>30</y>
-                    <width>320</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property name="layoutSpacing" stdset="0">
-            </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>15</number>
-                </property>
-                <widget class="QLabel">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>TextLabel1</cstring>
+                        <cstring>hbox1</cstring>
                     </property>
-                    <property name="text">
-                        <string>Line Size</string>
+                    <property name="layoutSpacing" stdset="0">
                     </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>15</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Line Size</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>pLine</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Symbol Size</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>pSize</cstring>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
-                <widget class="QSpinBox">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>pLine</cstring>
+                        <cstring>layout54</cstring>
                     </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton" row="1" column="4">
+                            <property name="name">
+                                <cstring>p9</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image0</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>p0</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image1</pixmap>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="0" column="4">
+                            <property name="name">
+                                <cstring>p3</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image2</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="0" column="2">
+                            <property name="name">
+                                <cstring>p5</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image3</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="1" column="1">
+                            <property name="name">
+                                <cstring>p8</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image4</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="1" column="2">
+                            <property name="name">
+                                <cstring>p6</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image5</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="1" column="0">
+                            <property name="name">
+                                <cstring>p4</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image6</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="0" column="3">
+                            <property name="name">
+                                <cstring>p2</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image7</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>p1</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image8</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton" row="1" column="3">
+                            <property name="name">
+                                <cstring>p7</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>image9</pixmap>
+                            </property>
+                        </widget>
+                    </grid>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>TextLabel2</cstring>
+                        <cstring>Layout6</cstring>
                     </property>
-                    <property name="text">
-                        <string>Symbol Size</string>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QFrame">
+                            <property name="name">
+                                <cstring>pColor</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>StyledPanel</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Raised</enum>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>PushButton12</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>C&amp;hange Color...</string>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>pSize</cstring>
-                    </property>
-                </widget>
-            </hbox>
+            </vbox>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout6</cstring>
+                <cstring>layout56</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>140</y>
-                    <width>320</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <hbox>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>pColor</cstring>
-                    </property>
-                    <property name="frameShape">
-                        <enum>StyledPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                </widget>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>PushButton12</cstring>
+                        <cstring>PushButton10</cstring>
                     </property>
                     <property name="sizePolicy">
                         <sizepolicy>
@@ -394,44 +268,110 @@
                             <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
                     <property name="text">
-                        <string>C&amp;hange Color...</string>
+                        <string>&amp;Ok</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
                     </property>
                 </widget>
-            </hbox>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>PushButton11</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer19</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>71</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
         </widget>
-    </widget>
+    </hbox>
 </widget>
 <images>
     <image name="image0">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703902baaac8c260a16401030b5200e0c239900e44210aab9ca6080611b42102aaa8c02f0abc5692e563760752f0ebf610d07e242b2d69a0b00aba95224</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a360573310079a2ca608026aaac8c240c1355564616868a2a2ba308434495955185692b8add0d38dc8bc36f38c2819890acb5e60200905e4f41</data>
     </image>
     <image name="image1">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703902eaaac8c1001b1a16a11c26016cc04983084869b0be1422511b68104603a90dca0ac0c371dd965082b09a9c56a2e563760752f56bfe10807ac6186215a6bcd05006f24532c</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a36057331c080892a2b2b638a2a2b2384c913c56e2ecd7c41ae68ad351700558d5474</data>
     </image>
     <image name="image2">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d3606413017039027aa0c0668a21001a8304c14a60a424345618250164414210861d35614bb1b70b81787df7084038e304311adb5e602003e4952ea</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a36057331005e516564302a8a264a4a48a28bd65a73010018554e18</data>
     </image>
     <image name="image3">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703101655c626aaacac8c290a14830bc345c12230619828940fa5a0a270bd10064414610f84894f14bb09386cc3e1321cbec0e1631ca183047088d65a73010067b55342</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a3605733100e9a2caca303e8405550b1386d23013205c9824dc5c9000dc20846dcaca08d391dc80101c1aa248008768ad351700c84c53cf</data>
     </image>
     <image name="image4">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703e0155546060445e1ba87b428f13e262524d1456badb900e84f518a</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a36057331006151656ca2cacaca98a2caca0861b8a8b23292304c54591959182aaaac8c220c1155564615c6278add041cb6e170190e5fe0f0318ed0c1119248a2b5d65c00c6465125</data>
     </image>
     <image name="image5">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d3606413017039027aa0c0668a2caca48c2305165656461a8a8b2328a30445459195598b6a2d8dd80c3bd38fc86231c8809c95a6b2e0081d94f38</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a3605733100b9a2caca68a260010401530be2c0309209402e04a19aab0c0618b62104a1a2ca2800bf5a9ce662750356f7e2f01bd670202e246badb900ba2e522d</data>
     </image>
     <image name="image6">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703e015554606a3a268a2a48424ba68ad35170009d04e0f</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a36057331006151656ca2cacaca98a24031b8305c142c0213868942f9500a2a0ad70b61404411f64098f844b19b80c3361c2ec3e10b1c3ec6113a48008768ad351700763a534b</data>
     </image>
     <image name="image7">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703902eaaac0ce3435850b53061280d3301c28549c2cd0509c00d42d8a6ac8c301dc90d08c1a1218a047088d65a730100b9c753c6</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a36057331005e516564405014ae7b488b12ef635242125db4d69a0b00f6d45193</data>
     </image>
     <image name="image8">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d3606413017030c98a8b2b232a6a8b23242983c51ece6d2cc17e48ad65a7301004708546b</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a3605733100e9a2caca0811101baa16210c66c14c80094368b8b9102e5412611b4800a603c90dcaca70d3915d86b092905aace662750356f762f51b8e70c01a6618a2b5d65c007da95335</data>
     </image>
     <image name="image9">
-        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703101655c626aaacac8c29aaac8c10868b2a2b2309c34495959185a1a2caca28c21051656554617ca2d84dc0611b0e97e1f0050e1fe3081d1c2189245a6bcd0500b7c1511c</data>
+        <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b6303030b6310570fc44d364d364a360573310079a2ca6080260a11800ac34461aa203454142608654144118210366d45b1bb01877b71f80d4738e0083314d15a6b2e004cce52f3</data>
     </image>
 </images>
 <connections>
