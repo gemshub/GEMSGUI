@@ -356,6 +356,7 @@ void TMulti::GEM_input_back_to_MT(
    double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
    )
 {
+ int ii;
   p_NodeHandle = data_BR->NodeHandle;
   p_NodeStatusCH = data_BR->NodeStatusCH;
   p_T = data_BR->T;
@@ -364,9 +365,9 @@ void TMulti::GEM_input_back_to_MT(
   p_dt = data_BR->dt;
   p_dt1 = data_BR->dt1;
 // Checking if no-simplex IA is Ok
-   for(int ii=0; ii<data_CH->nICb; ii++ )
+   for( ii=0; ii<data_CH->nICb; ii++ )
      p_bIC[ii] = data_BR->bIC[ii];
-   for(int ii=0; ii<data_CH->nDCb; ii++ )
+   for( ii=0; ii<data_CH->nDCb; ii++ )
    {  p_dul[ii] = data_BR->dul[ii];
       p_dll[ii] = data_BR->dll[ii];
    }

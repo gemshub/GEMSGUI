@@ -3,6 +3,7 @@
 #include <unistd.h>
 #endif
 
+#include <math.h>
 #include "m_param.h"
 #include "gdatastream.h"
 
