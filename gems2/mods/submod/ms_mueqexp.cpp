@@ -244,7 +244,12 @@ int TProfil::Set_DC_limits( int Mode )
                 KK = k;
                 sprintf( tbuf, "Inconsistent upper limits j=%d k=%d XU=%g XFU=%g",
                          JJ, KK, XU, XFU );
+#ifndef IPMGEMPLUGIN
                 vfMessage(window(), "Set_DC_limits",tbuf.p );
+#else
+                cout << tbuf.p << endl;
+#endif
+
                 XU = XFU; // - pmp->lowPosNum;
             }
             if( XL < XFL )
@@ -254,7 +259,11 @@ int TProfil::Set_DC_limits( int Mode )
                 KK = k;
                 sprintf( tbuf, "Inconsistent lower limits j=%d k=%d XL=%g XFL=%g",
                          JJ, KK, XL, XFL );
+#ifndef IPMGEMPLUGIN
                 vfMessage(window(), "Set_DC_limits",tbuf.p );
+#else
+                cout << tbuf.p << endl;
+#endif
                 XL = XFL; // - pmp->lowPosNum;
             }
             pmp->DUL[j]=XU;
@@ -661,9 +670,11 @@ void TProfil::EqstatExpand( const char *key )
     /* recalc kinetic restrictions for DC */
     if( pmp->pULR && pmp->PLIM )
         if( Set_DC_limits( DC_LIM_INIT ))
+#ifndef IPMGEMPLUGIN
             if( !vfQuestion(window(), "IPM:",
                             "Inconsistent metastability restrictions to DC or phases.\n"
                             "Continue calculation (take those restrictions as trivial)?") )
+#endif
                 Error( "IPM","Inconsistent metastability restrictions." );
     TotalPhases( pmp->X, pmp->XF, pmp->XFA );
     for( j=0; j<pmp->L; j++ )

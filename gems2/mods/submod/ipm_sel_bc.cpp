@@ -23,8 +23,8 @@
 
 #include "m_param.h"
 #include "visor.h"
-#include "service.h"
 #include "visor_w.h"
+#include "service.h"
 #include "stepwise.h"
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -326,8 +326,9 @@ void TProfil::PhaseSelect()
             J+=pmp->L1[Z];
         }
         //  if( wn[W_WORK1].status )
+#ifndef IPMGEMPLUGIN
         pVisor->Update(false);  // "PhaseSelection"
-
+#endif
         if( pmp->K2>1 )
         { // more then first step - solution is not improved
             for(I=0;I<pmp->L;I++)
@@ -399,9 +400,13 @@ int TProfil::EnterFeasibleDomain( )
     if( pmp->PLIM )
         if( Set_DC_limits(  DC_LIM_INIT ) )
         {
+#ifndef IPMGEMPLUGIN
             if( !vfQuestion(window(), "EnterFeasibleDomain()",
                             "Inconsistent DC limits. Continue?" ))
                 goto SINGULAR;
+#else
+        cout<< "EnterFeasibleDomain: Inconsistent DC limits"<< endl;
+#endif
         }
     for(J=0;J<pmp->L;J++)
     {
@@ -436,8 +441,9 @@ int TProfil::EnterFeasibleDomain( )
         N1=N+1;
   MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C);
 
+#ifndef IPMGEMPLUGIN
   pVisor->Update( false );
-
+#endif
   Z=pmp->N - pmp->E;
   if(!pmp->W1)
    for(I=0;I<Z;I++)
@@ -577,8 +583,9 @@ BB7:
         for(J=0;J<pmp->L;J++)
             pmp->Y[J] += LM * MU[J];
 // STEPWISE (5) Stop point at end of iteration of FIA()
+#ifndef IPMGEMPLUGIN
 STEP_POINT();
-
+#endif
         // calculation of new total moles of phases
         // added by DAK in 1995
         // TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
@@ -771,7 +778,9 @@ TRY_GORDAN:
     sRet = Gordan( N, pa.p.DG, R1, pmp->U );
     if( sRet == 1 )
     {
+#ifndef IPMGEMPLUGIN
         pVisor->Update(false); // "Degeneration in InPoint()"
+#endif
         pmp->Ec=1;
         return 1;
     }
@@ -976,7 +985,9 @@ IN6:
             JJ+=pmp->L1[Z];
         };
 // STEPWISE (6)  Stop point at IPM() main iteration
+#ifndef IPMGEMPLUGIN
 STEP_POINT();
+#endif
         if( pmp->PCI < pmp->DX )  // Dikin criterion satisfied
             goto IN7;
     } // end of main IPM cycle

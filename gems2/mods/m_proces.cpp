@@ -783,45 +783,96 @@ TProcess::pe_test()
 */
     // test increments
 
-    if( pep->tmi[STEP_]!= 0 )
-      if( pep->c_tm == pep->tmi[STOP_] )
+    if( pep->tmi[STEP_] > 0 )
+    {  if( pep->c_tm > pep->tmi[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->tmi[STEP_] < 0 )
+         {  if( pep->c_tm < pep->tmi[STOP_] )
+             pep->Loop = 0;
+         }
 
-    if( pep->NVi[STEP_]!= 0 )
-      if( pep->c_NV == pep->NVi[STOP_] )
+    if( pep->NVi[STEP_] > 0 )
+    {  if( pep->c_NV > pep->NVi[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->NVi[STEP_] < 0 )
+         {  if( pep->c_NV < pep->NVi[STOP_] )
+             pep->Loop = 0;
+         }
 
-    if( pep->Pi[STEP_]!= 0 )
-      if( fabs( pep->c_P - pep->Pi[STOP_]) < 1e-30 )
+    if( pep->Pi[STEP_] > 0 )
+    {  if( pep->c_P > pep->Pi[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->Pi[STEP_] < 0 )
+         {  if( pep->c_P < pep->Pi[STOP_] )
+             pep->Loop = 0;
+         }
 
-    if( pep->Ti[STEP_]!= 0 )
-      if( fabs( pep->c_T - pep->Ti[STOP_]) < 1e-30 )
+    if( pep->Ti[STEP_] > 0 )
+    {  if( pep->c_T > pep->Ti[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->Ti[STEP_] < 0 )
+         {  if( pep->c_T < pep->Ti[STOP_] )
+             pep->Loop = 0;
+         }
 
-    if( pep->Vi[STEP_]!= 0 )
-      if( fabs( pep->c_V - pep->Vi[STOP_]) < 1e-30 )
+    if( pep->Vi[STEP_] > 0 )
+    {  if( pep->c_V > pep->Vi[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->Vi[STEP_] < 0 )
+         {  if( pep->c_V < pep->Vi[STOP_] )
+             pep->Loop = 0;
+         }
+
 ////!!!!!!
-    if( pep->Taui[STEP_]!= 0 )
-      if( fabs( pep->c_Tau - pep->Taui[STOP_]) < 1e-30 )
+    if( pep->Taui[STEP_] > 0 )
+    {  if( pep->c_Tau > pep->Taui[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->Taui[STEP_] < 0 )
+         {  if( pep->c_Tau < pep->Taui[STOP_] )
+             pep->Loop = 0;
+         }
 
-    if( pep->pXii[STEP_]!= 0 )
-      if( fabs( pep->c_pXi - pep->pXii[STOP_]) < 1e-30 )
+    if( pep->pXii[STEP_] > 0 )
+    {  if( pep->c_pXi > pep->pXii[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->pXii[STEP_] < 0 )
+         {  if( pep->c_pXi < pep->pXii[STOP_] )
+             pep->Loop = 0;
+         }
 
-   if( pep->Nui[STEP_]!= 0 )
-      if( fabs( pep->c_Nu - pep->Nui[STOP_]) < 1e-30 )
+    if( pep->Nui[STEP_] > 0 )
+    {  if( pep->c_Nu > pep->Nui[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->Nui[STEP_] < 0 )
+         {  if( pep->c_Nu < pep->Nui[STOP_] )
+             pep->Loop = 0;
+         }
 
-   if( pep->Nui[STEP_]!= 0 )
-      if( fabs( pep->c_pH - pep->Nui[STOP_]) < 1e-30 )
+    if( pep->pHi[STEP_] > 0 )
+    {  if( pep->c_pH > pep->pHi[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->pHi[STEP_] < 0 )
+         {  if( pep->c_pH < pep->pHi[STOP_] )
+             pep->Loop = 0;
+         }
 
-   if( pep->pei[STEP_]!= 0 )
-      if( fabs( pep->c_pe - pep->pei[STOP_]) < 1e-30 )
+    if( pep->pei[STEP_] > 0 )
+    {  if( pep->c_pe > pep->pei[STOP_] )
           pep->Loop = 0;
+    }
+    else if( pep->pei[STEP_] < 0 )
+         {  if( pep->c_pe < pep->pei[STOP_] )
+             pep->Loop = 0;
+         }
     /////
 
     if( pep->PsIN != S_OFF  )  nIt--;

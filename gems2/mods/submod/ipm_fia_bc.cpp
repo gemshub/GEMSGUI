@@ -23,7 +23,6 @@
 
 #include "m_param.h"
 #include "service.h"
-#include "visor.h"
 
 /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of mass-balance deviations in IPM
@@ -54,7 +53,6 @@ void TProfil::SimplexInitialApproximation( )
     register int i,j,k;
     double GZ,EPS,*DN=0,*DU=0,*AA=0,*B1=0;
     /*  char DCC, ICC, PHC; */
-
     try
     {  // Allocation of work arrays
         pmp->Ec=0;
@@ -83,7 +81,9 @@ void TProfil::SimplexInitialApproximation( )
         if( pmp->PLIM ) // Setting constraints on x elements
             if( Set_DC_limits(  DC_LIM_INIT ) )
             {
+#ifndef IPMGEMPLUGIN
                 if( !vfQuestion(window(), "SimplexInitialApproximation", "Inconsistent DC limits. Continue?"))
+#endif
                     Error( "SimplexInitialApproximation", "Inconsistent DC limits.");
             }
         for(i=0;i<Q;i++)
@@ -517,9 +517,15 @@ void TProfil::Simplex(int M, int N, int T, double GZ, double EPS,
             if( UNO)
                 goto FINISH; // No minimum - solution at boundary of constraints polyhedron
         }
+
+#ifndef IPMGEMPLUGIN
         vfMessage(window(), "Warning:",
             "The simplex solution cannot be found with required precision.", vfInfo);
-       
+#else
+         cout<< "The simplex solution cannot be found with required precision."
+         << endl;
+#endif
+
 FINISH: FIN( EPS, M, N, STR, NMB, BASE, UND, UP, U, AA, A, Q, &ITER);
         delete[] A;
         delete[] Q;

@@ -21,6 +21,7 @@
 #include "v_object.h"
 #include "visor.h"
 
+
 TMulti::TMulti( int nrt, SYSTEM* sy_ ):
         TSubModule( nrt ), syp(sy_)
 {

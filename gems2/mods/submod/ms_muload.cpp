@@ -931,7 +931,7 @@ bool TProfil::AutoInitialApprox( )
           minB = pmp->B[i];
       molB += pmp->B[i];
     }
-if( minB < pa.p.DB )  // KD - foolproof 
+if( minB < pa.p.DB )  // KD - foolproof
     minB = pa.p.DB;
 
 //  check Ymin (cutoff)
@@ -949,7 +949,9 @@ if( minB < pa.p.DB )  // KD - foolproof
        pmp->DX = 0.01 * pa.p.DK;
    pmp->DSM = pa.p.DS;  // Shall we add  * sfactor ?
 
+#ifndef IPMGEMPLUGIN
    pVisor->Update(false);
+#endif
     // Analyzing if Simplex approximation is needed
     if( !pmp->pNP  )  //  || ( pmp->pNP == -1 &&
                       //  !vfQuestion(window(),  "IPM (initial approximation):",
@@ -966,7 +968,9 @@ if( minB < pa.p.DB )  // KD - foolproof
         // simplex method is called here
         SimplexInitialApproximation( );
 //  STEPWISE (0) - stop point for examining results from simplex IA
+#ifndef IPMGEMPLUGIN
 STEP_POINT();
+#endif
         // no multi-component phases?
         if( !pmp->FIs )
             return true; // goto OVER; // solved !
@@ -1091,7 +1095,9 @@ STEP_POINT();
                 ((TMulti *)aSubMod[MD_MULTI])->copy1);
     */
 // STEPWISE (1) - stop point to see IA from old solution or raised simplex
+#ifndef IPMGEMPLUGIN
 STEP_POINT();
+#endif
     return false;
     //   OVER: /* calc finished */
     //   if( wn[W_EQCALC].status )
@@ -1114,9 +1120,11 @@ bool TProfil::MultiCalcMain( int &pll, double &FXold )
 
     if( pmp->pULR && pmp->PLIM )
         if( Set_DC_limits( DC_LIM_INIT ))
+#ifndef IPMGEMPLUGIN
             if( !vfQuestion(window(), "IPM: ",
                             "Inconsistent metastability restrictions to DC or phases.\n"
                             "Continue calculation (take those restrictions as trivial)?" ))
+#endif
                 Error("IPM error: " ,
                       "Inconsistent metastability restrictions to DC or phases.");
     /* test insert in valid area */
@@ -1131,15 +1139,19 @@ bool TProfil::MultiCalcMain( int &pll, double &FXold )
         goto ERET_THINK;
 
 // STEPWISE (2)  - stop point to examine output from EFD()
+#ifndef IPMGEMPLUGIN
 #ifdef Use_mt_mode
 
 STEP_POINT();
 
 #endif
+#endif
    /* minimization  IPM */
     eRet = InteriorPointsMethod( );
 // STEPWISE (3)  - stop point to examine output from IPM()
+#ifndef IPMGEMPLUGIN
 STEP_POINT();
+#endif
 ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if( eRet )
     {   if(eRet==2 )
@@ -1149,6 +1161,7 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
                goto mEFD;
             }
           else
+#ifndef IPMGEMPLUGIN
           if( vfQuestion(window(), "IPM:",
             "For a given IPM convergence criterion, vector b is not balanced,\n"
             "or DC standard-state thermodynamic data inconsistent. \n"
@@ -1156,6 +1169,14 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
             {  pVisor->Update( true );
                 return true;
             }
+#else
+          cout << "For a given IPM convergence criterion, vector b is not balanced,\n"
+           << "or DC standard-state thermodynamic data inconsistent. \n"
+           <<  "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?"
+           << endl;
+
+#endif
+
         }
      /*   if( !pmp->MK  )
             return true; //goto OVER;
@@ -1172,8 +1193,10 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
                goto mEFD;
             }
           else
+#ifndef IPMGEMPLUGIN
             if( !vfQuestion(window(),  "Invalid initial approximation for IPM:",
                              "Proceed with automatic SIMPLEX approximation ?" ))
+#endif
             Error("IPM error: ", "Invalid initial approximation for IPM.");
         }
 
@@ -1220,12 +1243,14 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
    MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
 // STEPWISE (4) Stop point after PhaseSelect()
+#ifndef IPMGEMPLUGIN
 #ifdef Use_mt_mode
 
 STEP_POINT();
 
 #endif
    pVisor->Update( false );
+#endif
    if(pmp->PZ && !pmp->W1)
     { pmp->W1++;           // IPM-2 precision algorithm - 1st run
       goto mEFD;
@@ -1326,12 +1351,12 @@ void TProfil::MultiCalcIterations()
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of max.moles of surface species for SAT stabilization
 *  to improve IPM-2 convergence at high SAT values  KD 08.03.02
-*  xj0 values are placed as upper kunetic constraints 
+*  xj0 values are placed as upper kunetic constraints
 */
 void TProfil::XmaxSAT_IPM2( void )
 {
     int i, j, k, jb, je=0, ist, Cj, iSite[6];
-    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, 
+    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm,
             SATst, a, xjn, q1, q2;
 
   if(!pmp->DUL )   // not possible to install upper kinetic constraint!
