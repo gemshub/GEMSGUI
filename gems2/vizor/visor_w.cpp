@@ -52,6 +52,7 @@ using namespace std;
 #include "dlg/ExcludeFillDialog.h"
 #include "dlg/ProgressDialog.h"
 #include "dlg/ProcessDialog.h"
+#include "dlg/ComposWizard.h"
 #include "dlg/NewSystemDialog.h"
 #include "dlg/ListFilesDialog.h"
 #include "dlg/ElementsDialog.h"
@@ -860,6 +861,23 @@ vfProcessSet(QWidget* par, const char * p_key,
 
     return true;
 }
+
+bool
+vfComposSet(QWidget* par, const char * p_key,
+            char flgs[6], int size[2], double& r2  )
+{
+     ComposWizard cdlg( p_key, flgs, size, r2, par );
+     if( !cdlg.exec() )
+      return false;
+
+    cdlg.getFlags( flgs );
+    cdlg.getSizes( size );
+    r2 = cdlg.getR2();
+
+    return true;
+}
+
+
 
 // call to AutoPhaseDialog  added 18.07.03
 bool

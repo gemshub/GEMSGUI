@@ -263,7 +263,7 @@ void TCompos::set_def( int q)
     bc[q].Vaq  =0;
     bc[q].Pg  =0;
     bc[q].R1  =0;
-    bc[q].R2 =0;
+    bc[q].R2 =1;
     // pointers
     bc[q].C=0;
     bc[q].CFOR=0;
@@ -361,6 +361,33 @@ void TCompos::bc_work_dyn_kill()
     }
 }
 
+/* opens window with 'Remake record' parameters
+*/
+void
+TCompos::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[6];
+    int size[2];
+    double r2 = bcp->R2;
+
+    p_key  = db->PackKey();
+    memcpy( flgs, &bcp->PcIC, 6);
+    size[0] = bcp->La;
+    size[1] = bcp->Nsd;
+
+    if( !vfComposSet( window(), p_key, flgs, size, r2 ))
+        return;   // cancel
+
+    memcpy( &bcp->PcIC, flgs, 6);
+    bcp->La = (short)size[0];
+    bcp->Nsd = (short)size[1];
+    bcp->R2 = r2;
+
+}
+
+
 //Rebuild record structure before calc
 int
 TCompos::RecBuild( const char *key, int mode  )
@@ -376,7 +403,7 @@ TCompos::RecBuild( const char *key, int mode  )
     TCStringArray aDclist_old;
     TCStringArray aRclist_old;
 
-AGAIN_MOD:
+//AGAIN_MOD:
     if( bcp->PcIC != S_OFF  ) oldIC = bcp->N;
     if( bcp->PcDC != S_OFF  ) oldDC = bcp->Ld;
 
@@ -390,13 +417,14 @@ AGAIN_MOD:
         oldIC = 0;
         oldDC = 0;
     }
-
+/*
     if(  bcp->La < 0 ||  bcp->La > 64 || bcp->Nsd < 0 || bcp->Nsd > 4 )
         if( vfQuestion( window(), GetName(),
                         "Invalid number of formulae or SD references! Proceed?" ))
             goto AGAIN_MOD;
         else
             Error( GetName(), "Invalid number of formulae or SD references!");
+*/
     bcp->N = 0;
     // select ICOMP
     // Build old selections
@@ -818,7 +846,7 @@ IC_FOUND:
                 Xincr = Reduce_Conc( bcp->AUcl[j-Ld], bcp->CA[j-Ld], DCmw, 1.0,
                   bcp->R1, bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
             else
-                Xincr = Reduce_Conc( CON_WTPROC, bcp->R2, DCmw, 1.0,
+                Xincr = Reduce_Conc( bcp->PcRes, bcp->R2, DCmw, 1.0,
                  bcp->R1, bcp->Msys, bcp->Mwat, bcp->Vaq, bcp->Maq, bcp->Vsys );
             /*   if( Xincr < 1e-15 )
                    continue;   30.4.96 */

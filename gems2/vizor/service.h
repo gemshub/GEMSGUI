@@ -83,6 +83,10 @@ vfElements(QWidget* par, const char * prfName,
 bool
 vfProcessSet(QWidget* par, const char* p_key,
             bool& mode, char& type, int size[6] );
+bool
+vfComposSet(QWidget* par, const char * p_key,
+            char flgs[6], int sizes[2], double& r2 );
+
 
 bool
  vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,

@@ -36,7 +36,7 @@ typedef struct
     PcAU,  // Create formula units for GCO definition? { + * - }
     PcFO,  // Create large formula text for GCO definition? { + * - }
     PcdC,  // Create delC vector of uncertainties for GCO definition? {+ * - }
-    PcRes, // Reserved
+    PcRes, // Units of concentration/amount for Ctext formula (default M) 
     name[MAXFORMULA],    // Name of geochemical predefined composition object
     notes[MAXFORMULA]    // Comments
     ;
@@ -54,7 +54,7 @@ typedef struct
     Vaq,  // Vaq (volume of aqueous solution for molarities)
     Pg,   // Pg (pressure in gas, for partial pressures)
     R1,   // total number of IC moles in GCO, normalization
-    R2;   //mas % of matter specified by Ctext, relative to the whole GCO mass
+    R2;   // amount/concentration of compound specified by Ctext
     double *C;  // Resulting GCO bulk: numbers of moles of IC [0:N-1]
     char *CFOR,  // Text-formula of GCO increment
     (*SB)[MAXICNAME+MAXSYMB],// List of IC symbols
@@ -122,6 +122,7 @@ public:
     void set_def( int i=0);
 
     void RecInput( const char *key );
+    void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     double Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,

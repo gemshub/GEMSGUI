@@ -117,6 +117,8 @@ link:
 +dlg\ProgressDialogData.obj \
 +dlg\ProcessDialog.obj \
 +dlg\ProcessDialogData.obj \
++dlg\ComposWizard.obj \
++dlg\ComposWizardData.obj \
 +dlg\KeyDialog.obj \
 +dlg\KeyDialogData.obj \
 +dlg\ChangeKeyDialog.obj \
@@ -162,6 +164,8 @@ link:
 +tmp\moc_ProgressDialogData.obj \
 +tmp\moc_ProcessDialog.obj \
 +tmp\moc_ProcessDialogData.obj \
++tmp\moc_ComposWizard.obj \
++tmp\moc_ComposWizardData.obj \
 +tmp\moc_KeyDialog.obj \
 +tmp\moc_KeyDialogData.obj \
 +tmp\moc_ChangeKeyDialog.obj \

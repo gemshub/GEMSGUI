@@ -21,6 +21,7 @@ DATASRC =	MainDialogData.cpp \
 		NewSystemDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessDialogData.cpp \
+		ComposWizardData.cpp \
 		KeyDialogData.cpp \
 		ChangeKeyDialogData.cpp \
 		KeyProfileData.cpp \
@@ -35,7 +36,7 @@ DATASRC =	MainDialogData.cpp \
 		ListFilesDialogData.cpp \
 		ElementsDialogData.cpp \
 		SetFiltersDialogData.cpp \
-		AutoPhaseDialogData.cpp 
+		AutoPhaseDialogData.cpp
 
 DATAOBJ =	$(subst .cpp,.o,$(DATASRC))
 
@@ -45,6 +46,7 @@ SOURCES =	MainDialog.cpp \
 		NewSystemDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessDialog.cpp \
+		ComposWizard.cpp \
 		KeyDialog.cpp \
 		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
@@ -78,6 +80,8 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_ProgressDialogData.o \
 		moc_ProcessDialog.o \
 		moc_ProcessDialogData.o \
+		moc_ComposWizard.o \
+		moc_ComposWizardData.o \
 		moc_KeyDialog.o \
 		moc_KeyDialogData.o \
 		moc_ChangeKeyDialog.o \

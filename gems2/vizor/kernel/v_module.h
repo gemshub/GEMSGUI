@@ -244,7 +244,7 @@ public:
 
     TCIntArray SelectFileList(int mode);
 
-    void MakeQuery();
+    virtual void MakeQuery();
 
     //-- Module manipulation
     virtual gstring  GetKeyofRecord( const char *oldKey, const char *strTitle,

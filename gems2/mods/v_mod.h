@@ -411,8 +411,8 @@ enum compos_objects {   // COMPOS
 
 typedef enum { // Units of measurement of quontities and concentrations
     /* number of components and phases */
-    QUAN_MKMOL = 'Y',  QUAN_MMOL = 'h',  QUAN_MOL = 'M', // NUMBER OF MOLES
-    QUAN_MGRAM = 'y',  QUAN_GRAM = 'g',  QUAN_KILO = 'G',// MASS
+    QUAN_MKMOL = 'Y',  QUAN_MMOL = 'h',  QUAN_MOL = 'M',  // NUMBER OF MOLES
+    QUAN_MGRAM = 'y',  QUAN_GRAM = 'g',  QUAN_KILO = 'G', // MASS
     /* concentrations of components and phases*/
     CON_MOLFR = 'n', CON_MOLPROC = 'N', CON_pMOLFR = 'f', // MOLE FRACTION
     CON_VOLFR = 'v', CON_VOLPROC = 'V', CON_pVOLFR = 'u', // VOLUME FRACTION

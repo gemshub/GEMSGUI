@@ -22,6 +22,7 @@ DATASRC =	MainDialogData.cpp \
 		NewSystemDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessDialogData.cpp \
+		ComposWizardData.cpp \
 		KeyDialogData.cpp \
 		ChangeKeyDialogData.cpp \
 		KeyProfileData.cpp \
@@ -44,6 +45,7 @@ DATAOBJ =       MainDialogData.obj \
 		NewSystemDialogData.obj \
 		ProgressDialogData.obj \
 		ProcessDialogData.obj \
+		ComposWizardData.obj \
 		KeyDialogData.obj \
 		ChangeKeyDialogData.obj \
 		KeyProfileData.obj \
@@ -67,6 +69,7 @@ SOURCES =	MainDialog.cpp \
 		NewSystemDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessDialog.cpp \
+		ComposWizard.cpp \
 		KeyDialog.cpp \
 		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
@@ -92,6 +95,7 @@ OBJECTS =	MainDialog.obj \
 		NewSystemDialog.obj \
 		ProgressDialog.obj \
 		ProcessDialog.obj \
+		ComposWizard.obj \
 		KeyDialog.obj \
 		ChangeKeyDialog.obj \
 		KeyProfile.obj \
@@ -123,6 +127,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_ProgressDialogData.obj \
 		..\tmp\moc_ProcessDialog.obj \
 		..\tmp\moc_ProcessDialogData.obj \
+		..\tmp\moc_ComposWizard.obj \
+		..\tmp\moc_ComposWizardData.obj \
 		..\tmp\moc_ChangeKeyDialog.obj \
 		..\tmp\moc_ChangeKeyDialogData.obj \
 		..\tmp\moc_KeyDialog.obj \
@@ -256,6 +262,20 @@ clean:
 
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialogData.cpp
 	-del moc_ProcessDialogData.cpp
+
+..\tmp\moc_ComposWizard.obj: ComposWizard.h
+      	$(MOC) ComposWizard.h -o moc_ComposWizard.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ComposWizard.cpp
+	-del moc_ComposWizard.cpp
+
+
+..\tmp\moc_ComposWizardData.obj: ComposWizardData.h
+      	$(MOC) ComposWizardData.h -o moc_ComposWizardData.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ComposWizardData.cpp
+	-del moc_ComposWizardData.cpp
+
 
 
 ..\tmp\moc_KeyDialog.obj: KeyDialog.h
@@ -485,6 +505,11 @@ ProgressDialogData.cpp: ProgressDialog.ui
 ProcessDialogData.cpp: ProcessDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
+
+ComposWizardData.cpp: ComposWizard.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
 
 KeyDialogData.cpp: KeyDialog.ui
         $(UIC) $? -o $(*).h

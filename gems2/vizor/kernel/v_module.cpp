@@ -584,7 +584,8 @@ TCModule::RecBuild( const char *key, int mode  )
         {    Show(pVisorImp, "Remaking...");
 
         }
-        pImp->MakeQuery();
+//        pImp->MakeQuery();
+        MakeQuery();
 
         if( pVisor->ProfileMode == true && nRT == RT_SYSEQ )
             pImp->CloseWin();
