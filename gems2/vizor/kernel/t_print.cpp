@@ -34,10 +34,21 @@ TPrintData::TPrintData(const char *sd_key,
 {
   ErrorIf( !fout.good() , rt[nRT].GetKeywd(), "Fileopen error");
   input = (char*)fmt_text;
+
+  prr = 1;
+  iir = 0;
+  int o_prn_= aObj.Find("prn");
+  int o_ii_ = aObj.Find("ii");
+
+  aObj[o_prn_].SetPtr(&prr);
+  aObj[o_ii_].SetPtr(&iir);
+
   while( *input )
   {
     int i=0, j=-1, count;
     int code = getToken( i, j );
+    ifcond = false;
+
     if( code == line_d )
         count = 1;
      else if(  code == list_d )
@@ -51,12 +62,38 @@ TPrintData::TPrintData(const char *sd_key,
             }
             else
               count = 1;
-           }
-           else
+          }
+          else
            {  gstring str_err = "Illegal command: \n";
               str_err += input;
               Error( key_format.c_str(), str_err.c_str() );
             }
+    // insert condition  ## <math script>  ##
+          skipSpace();
+          if( *input == '#' && *(input+1) == '#' )
+          {
+            input+=2;
+            char* pose = strchr( input, '#');
+            while( pose )
+            {
+               if( *(pose+1) == '#' )
+                 break;
+               pose = strchr( pose+1, '#');
+            }
+            if( !pose )
+            {  gstring str_err = "Illegal condition: \n";
+               str_err += input;
+               Error( key_format.c_str(), str_err.c_str() );
+            }
+            cond = gstring( input, 0, pose-input );
+            input = pose+2;
+            ifcond = true;
+            rpn.GetEquat( (char *)cond.c_str() );
+          }
+          // end insert
+
+
+
      aFmts.Clear();  // list of formats
      aDts.Clear();     // list of datas
      //Read formats
@@ -74,7 +111,15 @@ TPrintData::TPrintData(const char *sd_key,
     }while( *input == ',' /**input != '\0'*/ );
     //Print formats
     for( int ii=0; ii<count; ii++ )
-    {   for( uint jj=0; jj<aDts.GetCount(); jj++ )
+    {
+       if( ifcond )
+       {
+         iir = ii;
+         rpn.CalcEquat();
+         if( prr == 0 )
+          continue;
+       }
+       for( uint jj=0; jj<aDts.GetCount(); jj++ )
          prnData( fout, ii, aFmts[jj], aDts[jj] );
         fout << "\n";
     }

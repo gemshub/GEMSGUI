@@ -23,6 +23,7 @@
 #define _t_print_h_
 
 #include "v_object.h"
+#include "v_ipnc.h"
 
  // Format: % [flags] [width] [.prec] type_char
  // flags: '+' or '-';  width = nn; [.prec]= .nn
@@ -35,16 +36,16 @@
 
 struct PFormat
 {
-  gstring fmt;
   char type;
   char long_;
+  gstring fmt;
 
   PFormat( const char aType, gstring aFmt ):
-    fmt(aFmt), type( aType), long_(' ')
+    type( aType), long_(' '), fmt(aFmt)
   {}
 
   PFormat( PFormat& d ):
-    fmt( d.fmt), type( d.type), long_(d.long_)
+    type( d.type), long_(d.long_), fmt( d.fmt)
   {}
 
   gstring FmtOut()
@@ -108,6 +109,14 @@ class TPrintData  // print resalts of module calc
     char *input;               // current position
     TIArray<PFormat> aFmts;  // list of formats
     TIArray<PData> aDts;     // list of datas
+
+    bool  ifcond;
+    gstring cond;      // Text with IPN-expression << prn=: cond; >>
+                       // ii - index of line in expression
+    IPNCalc rpn;       // IPN of equats of print condition
+    int prr;           // internal
+    int iir;           // internal
+
 
 protected:
     bool getFormat( const char * aFmt );
