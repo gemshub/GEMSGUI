@@ -35,3 +35,4 @@ dep:
 
 config.o: config.h gstring.h array.h ../kernel/v_user.h verror.h
 gstring.o: gstring.h array.h
+gdatastream.o: gdatastream.h gstring.h array.h verror.h

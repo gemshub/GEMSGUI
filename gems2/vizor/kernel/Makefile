@@ -47,15 +47,16 @@ v_object.o: ../libs/verror.h v_object.h ../../mods/m_param.h
 v_object.o: ../../mods/v_mod.h ../../mods/submod/ms_rmults.h v_module.h
 v_object.o: v_dbm.h v_file.h ../../mods/submod/ms_mtparm.h
 v_object.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
-v_object.o: ../../mods/submod/ms_multi.h ../../mods/v_ipnc.h
-v_object.o: ../../mods/submod/ms_calc.h ../libs/config.h
+v_object.o: ../../mods/submod/ms_multi.h ../libs/gdatastream.h
+v_object.o: ../../mods/submod/datach.h ../../mods/submod/databr.h
+v_object.o: ../../mods/v_ipnc.h ../../mods/submod/ms_calc.h ../libs/config.h
 v_file.o: v_file.h ../libs/gstring.h ../libs/array.h v_user.h
 v_file.o: ../libs/verror.h
 v_dbm1.o: v_dbm.h ../libs/gstring.h ../libs/array.h v_file.h v_user.h
 v_dbm1.o: ../libs/verror.h v_object.h v_vals.h
 v_dbm2.o: v_object.h ../libs/gstring.h ../libs/array.h v_user.h
 v_dbm2.o: ../libs/verror.h v_vals.h v_dbm.h v_file.h ../../mods/v_mod.h
-v_dbm2.o: ../visor.h v_module.h
+v_dbm2.o: ../visor.h v_module.h ../service.h
 t_print.o: t_print.h v_object.h ../libs/gstring.h ../libs/array.h v_user.h
 t_print.o: ../libs/verror.h v_vals.h ../../mods/v_ipnc.h v_dbm.h v_file.h
 t_print.o: ../service.h
@@ -66,4 +67,4 @@ v_module.o: v_module.h v_object.h ../libs/gstring.h ../libs/array.h v_user.h
 v_module.o: ../libs/verror.h v_vals.h v_dbm.h v_file.h ../module_w.h
 v_module.o: ../visor_w.h ../graph.h ../visor.h ../service.h
 v_module.o: ../../mods/v_mod.h t_print.h ../../mods/v_ipnc.h t_read.h
-v_module.o: ../dlg/NewSystemDialog.h ../dlg/NewSystemDialogData.h
+v_module.o: ../dlg/NewSystemDialog.h
