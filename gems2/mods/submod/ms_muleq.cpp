@@ -36,7 +36,7 @@ void TMulti::setSizes()
     STat->stp->Fi = pm.FI1;
     STat->stp->Fis = pm.FI1s;
     STat->stp->itIPM = pm.IT;
-    STat->stp->itPar = pm.pRR1;  /* Level of tinkle supressor */
+    STat->stp->itPar = pm.W1;  // Number of IPM-2 loops KD 29.11.01
     // float
     STat->stp->V = pm.VXc;
     STat->stp->T = pm.Tc;
