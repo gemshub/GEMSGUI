@@ -99,15 +99,8 @@ TVisorImp::TVisorImp(int c, char** v):
     defaultFont = QApplication::font();
     setCellFont( QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE) );
 
-    try{
-	pVisor = new TVisor(argc, argv);
-	pVisor->Setup();
-    }
-    catch(TError err) {
-	//("Could not load Vizor parameters!");
-	vfMessage(0, err.title, err.mess, vfErr);
-	exit(1);	
-    }
+    pVisor = new TVisor(argc, argv);
+    pVisor->Setup();
 
     gstring logoFile = pVisor->sysGEMDir() + GEMS_LOGO_ICON;
     pixLogo = new QPixmap( logoFile.c_str() );
