@@ -642,24 +642,27 @@ TCell::ObjectChanged()
 void TCell::updateCellBackground()
 {
     
+    QColor col;
     switch( showType )
     {
     case stResult:
-	pw->setPalette(QPalette(Qt::cyan, pw->backgroundColor()));
+	col = QColor(Qt::cyan);
     break;
     case stIO:
-	pw->setPalette(QPalette(Qt::green, pw->backgroundColor()));
+	col = QColor(130, 160, 130);
     break;
     case stWork:
-	pw->setPalette(QPalette(Qt::blue, pw->backgroundColor()));
+	col = QColor(130, 130, 160);
     break;
     case stAux:
-	pw->setPalette(QPalette(Qt::yellow, pw->backgroundColor()));
+	col = QColor(200, 200, 0);
     break;
     case stHelp:
-	pw->setPalette(QPalette(Qt::gray, pw->backgroundColor()));
+	col = QColor(Qt::gray);
     break;
     }
+
+    pw->setPalette(QPalette(col, pw->backgroundColor()));
 }
 
 
