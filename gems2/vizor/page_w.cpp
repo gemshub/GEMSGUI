@@ -937,7 +937,12 @@ void
 TCellInput::updateDisplay()
 {
     setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
-    setCursorPosition(100);
+
+// temporary fix for Qt bug on right-alighned QLineEdit with contents larger then display size
+    if( (fieldType == ftNumeric || fieldType == ftFloat) )
+//		&& text().length()*pVisorImp->getCharWidth() > width()-5 )
+	repaint();
+
     setCursorPosition(0);
 }
 
