@@ -344,7 +344,7 @@ NEXT2:
 void TProfil::multi_sys_dc()
 {
     int j, ii, L, iZ;
-    short jj, jja, ja, kk;
+    short jj, jja=0, ja=0, kk;
     float a, *A, Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
@@ -464,8 +464,9 @@ CH_FOUND:
             if( syp->DUL )
                 pmp->DUL[j] = syp->DUL[jj];
             else pmp->DUL[j] = 1e6;
-            if( pmp->lnSAC && jj < pmp->Ls && jj >= pmp->Ls - pmp->Lads )
-               pmp->lnSAC[j-(pmp->Ls-pmp->Lads)][3] = pmp->DUL[j]; // Copy of DUL for SAT refining
+            ja = j-(pmp->Ls-pmp->Lads);
+            if( pmp->lnSAC && ja < pmp->Lads && ja >= 0 )
+               pmp->lnSAC[ja][3] = pmp->DUL[j]; // Copy of DUL for SAT refining
             if( syp->DLL )
                 pmp->DLL[j] = syp->DLL[jj];
             else pmp->DLL[j] = 0.0;
@@ -629,7 +630,7 @@ CH_FOUND:
 void TProfil::multi_sys_ph()
 {
     int k, i;
-    short kk, j, je, jb, ja;
+    short kk, j, je, jb, ja=0;
     vstr pkey(MAXRKEYLEN);
     time_t crt;
     double G;
@@ -1010,7 +1011,7 @@ void TProfil::ph_sur_param( int k, int kk )
 void TProfil::ph_surtype_assign( int k, int kk, int jb, int je,
                                  short car_l[], int car_c, short Cjs )
 {
-    int j, jcl, ist, isi, ja;
+    int j, jcl, ist=0, isi=0, ja=0;
     /*  double SATst; */
 
     for( j=jb; j<je; j++ )

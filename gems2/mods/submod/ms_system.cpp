@@ -904,7 +904,7 @@ void TSyst::sorption_data_load( TPhase* aPH, int k )
     } /* end for ist */
     if( sy.PSATT != S_OFF && sy.PMaSdj != S_OFF )
     {  /* Load arrays SATC_ and MaSdj_ */
-      int ja, kk;
+      int ja=0, kk;
         pnDC = aPH->php->nDC;
 // Calculate indexes of begin and end of list of DC in current phase in RMULTS
         for( i=0; i<k; i++ )

@@ -1075,8 +1075,8 @@ IN7: // PhaseListPress();
 
 void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 {
-    int i,j,ja,jj,ii,jb,je,k;
-    int isp, ist;  double Ez, Psi;   // added  KD 23.11.01
+    int i,j,ja=0,jj,ii,jb,je,k;
+    int isp=0, ist=0;  double Ez, Psi;   // added  KD 23.11.01
 //    double SPmol,SPmol1;
     double  Dsur, DsurT, MMC, *XU;
     XU = new double[pmp->L];
@@ -1129,7 +1129,7 @@ void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 //                      - DsurT + DsurT / ( 1.0 + DsurT ) + log(XF[k]);
             else  // rewritten by KD  23.11.01
                Psi = 0.0;
-ja = j - ( pmp->Ls - pmp->Lads );
+               ja = j - ( pmp->Ls - pmp->Lads );
                Ez = pmp->EZ[j];
                /* Get ist - index of surface type */
                ist = pmp->SATX[ja][XL_ST] / MSPN;

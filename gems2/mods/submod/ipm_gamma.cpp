@@ -299,7 +299,7 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
 void TProfil::ConCalc( double X[], double XF[], double XFA[])
 {
     int k, ii;
-    int i, j, ist, jj, jja;
+    int i, j, ist=0, jj=0, jja=0;
     double Factor=0.0, Dsur=0.0, MMC=0.0;
    // Kostya: debug calculating x from dual solution
       if( pmp->Ls < 2 || !pmp->FIs )
@@ -485,7 +485,7 @@ NEXT_PHASE:
 /* Calculation of surface charge */
 void TProfil::IS_EtaCalc()
 {
-    int k, i, ist, isp, j=0, ja;
+    int k, i, ist=0, isp=0, j=0, ja=0;
     double XetaS=0., XetaW=0.,  Ez, CD0, CDb, ObS;
     for( k=0; k<pmp->FIs; k++ )
     { /*cycle over phases */
@@ -951,9 +951,9 @@ GEMU_CALC:
 */
 void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
 {
-    int i, ii, j, ja, ist, iss, dent, Cj, iSite[6];
-    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, ISAT, SAT, XSs, bet,
-           /* OSAT, */ SATst, xjn, q1, q2, Fi, cN, eF;
+    int i, ii, j, ja=0, ist=0, iss=0, dent=1, Cj=0, iSite[6];
+    double XS0,  xj0, XVk, XSk, XSkC=0., xj=0., Mm=0., rIEPS, ISAT, SAT, XSs=0.,
+             bet, SATst=1.0, xjn=0., q1, q2, Fi=0., cN=1., eF=0.;
 
     if( pmp->XFA[k] <= pmp->DSM ) /* No sorbent retained by the IPM */
         return;
@@ -1305,8 +1305,11 @@ pmp->lnSAC[ja][0] = ISAT;
                 pmp->lnGam[j] = ISAT;
 pmp->lnSAC[ja][0] = ISAT;
                 break;
-            case SAT_SOLV:  /* Neutral surface site (e.g. >O0.5H@ group) */
-// rIEPS = pa.p.IEPS;
+            case SAT_SOLV:  // Neutral surface site (e.g. >O0.5H@ group)
+                            // applies to the whole surface type!
+                XSs = 0.0;  // calc total moles on all sites on surface type
+                for( i=0; i<MST; i++ )
+                   XSs = pmp->D[i][ist];
                 XSkC = XSs / XVk / Mm * 1e6  // total non-solvent surf.species
                    /pmp->Nfsp[k][ist]/ pmp->Aalp[k]/1.66054;  // per nm2
                 XS0 = max( pmp->MASDT[k][ist], pmp->MASDJ[ja][PI_DEN] );
@@ -1441,7 +1444,7 @@ double TProfil::Ej_init_calc( double, int j, int k)
 // see also Table 4 in Zachara & Westall, 1999
 // Old version:  TLM Hayes & Leckie, 1987 uses the sign indicator at density
                 else {
-                  if( pmp->MASDJ[ja][PI_DEN] < 0 )
+                  if( ObS < 0 )
                   {
                       Ez -= 1.0;
                       F0 += ( psiA + Ez * psiB )* pmp->FRT;
@@ -1459,7 +1462,7 @@ double TProfil::Ej_init_calc( double, int j, int k)
                if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
                   F0 += ( psiA*CD0 + psiB*CDb )* pmp->FRT;
                 else {
-                  if( pmp->MASDJ[ja][PI_DEN] < 0 )
+                  if( ObS < 0 )
                   {
                       Ez -= 1.0;
                       F0 += ( psiA + Ez * psiB )* pmp->FRT;

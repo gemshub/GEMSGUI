@@ -539,8 +539,8 @@ void TProfil::MultiCalcIterations()
 */
 void TProfil::XmaxSAT_IPM2( void )
 {
-    int i, j, ja, k, jb, je=0, ist, Cj, iSite[6];
-    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, oDUL, xjn;
+    int i, j, ja=0, k, jb, je=0, ist=0, Cj=0, iSite[6];
+    double XS0=0., xj0=0., XVk, XSk=0., XSkC=0., xj, Mm, rIEPS, oDUL, xjn=0.;
 
   if(!pmp->DUL )   // not possible to install upper kinetic constraint!
       return;
@@ -702,7 +702,7 @@ rIEPS = pa.p.IEPS;
 // clearing pmp->DUL constraints!
 void TProfil::XmaxSAT_IPM2_reset( void )
 {
-    int j, ja, k, jb, je=0;
+    int j, ja=0, k, jb, je=0;
 
   if(!pmp->DUL )   // no upper kinetic constraints!
       return;
@@ -717,7 +717,8 @@ void TProfil::XmaxSAT_IPM2_reset( void )
     for( j=jb; j<je; j++ )
     { /* Loop for DC */
       ja = j - ( pmp->Ls - pmp->Lads );
-      pmp->DUL[j] = pmp->lnSAC[ja][3];  // temp. storing initial DUL constr.
+      if( pmp->lnSAC && ja >= 0 && ja < pmp->Lads )
+          pmp->DUL[j] = pmp->lnSAC[ja][3];  // temp. storing initial DUL constr.
     }  /* j */
   } /* k */
 }
