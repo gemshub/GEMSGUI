@@ -154,7 +154,7 @@ public:
     {
 	return pV->IsEmpty( ndx(N, M) );
     }
-    const gstring GetDescription(int Ni);
+    const gstring GetDescription(int Ni, int Mi);
 
     //--- Object parameters manipulation
     void SetN(unsigned newN)

@@ -914,7 +914,7 @@ void
 TCell::SetDescription()
 {
     QWidget* topw = pw->topLevelWidget();
-    const gstring& desc = rObj.GetDescription(rObj.ndx(N,M));
+    const gstring& desc = rObj.GetDescription(N,M);
     vstr s(desc.length()+45);
     if( rObj.GetN()!=1 || rObj.GetM()!=1 )
         sprintf(s, "%s [%u,%u] : %s", rObj.GetKeywd(), N, M, desc.c_str());
@@ -1045,7 +1045,7 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
     //    setFont( pVisorImp->getCellFont() );
     updateCellBackground();
     updateDisplay();
-    QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
+    QToolTip::add(this, (rObj.GetDescription(N,M)).c_str() );
 }
 
 
@@ -1495,7 +1495,7 @@ TCellCheck::TCellCheck(TField& rfield, int x1, int y1, int npos, eShowType showT
 
     SetString( rObj.GetString(N,M) );
 
-    QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
+    QToolTip::add(this, (rObj.GetDescription(N,M)).c_str() );
 }
 
 void
@@ -1663,7 +1663,7 @@ TCellText::TCellText(TField& rfield, int xx, int yy,
     updateCellBackground();
     setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
 
-    QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
+    QToolTip::add(this, (rObj.GetDescription(N,M)).c_str() );
 }
 
 

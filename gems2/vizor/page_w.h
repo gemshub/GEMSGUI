@@ -80,7 +80,7 @@ public:
         N = n; M = m;
         updateDisplay();
 	setGroupSelected(cellSelected);
-        QToolTip::add(pw, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
+        QToolTip::add(pw, (rObj.GetDescription(N,M)).c_str() );
     }
 
     TField* field() const

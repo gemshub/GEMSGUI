@@ -218,6 +218,7 @@ void   ProcessWizard::getFlags( char flgs[24] )
 
    if( c_PsSY->isChecked() ) //setted before, not switch off
        flgs[4] = '+';
+    else flgs[4] = '-';
 
 //Putting flags, using sizes  is out of function
 }

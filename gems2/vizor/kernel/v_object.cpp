@@ -92,7 +92,7 @@ TObject::GetFullName(int aN, int aM)
 // Gets description line from Ni line of DOD list
 //    e.g., for displaying a tooltip
 const gstring
-TObject::GetDescription(int Ni)
+TObject::GetDescription(int Ni, int Mi)
 {
     size_t prev_pos = 0;
     size_t pos = Descr.find('\n');
@@ -100,7 +100,11 @@ TObject::GetDescription(int Ni)
     if( pos == gstring::npos )
         return Descr;
 
-    for(int ii=0;  ii < Ni /*&& pos != gstring::npos*/; ii++ )
+    int NMi = Ni;   // Description by lines
+    if( N <= 1 || Descr[0] == '|' )     // Decriptions by colums
+           NMi = Mi;
+
+    for(int ii=0;  ii < NMi /*&& pos != gstring::npos*/; ii++ )
     {
         prev_pos = pos + 1;
 

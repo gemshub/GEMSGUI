@@ -508,7 +508,7 @@ NEXT:
                 break;
             case BOTH_LIM:
                 W[J]=((pmp->Y[J]-pmp->DLL[J])*(pmp->Y[J]-pmp->DLL[J])
-                      < (pmp->DUL[J]-pmp->Y[J])*(pmp->DUL[J]-pmp->Y[J]))
+                     < (pmp->DUL[J]-pmp->Y[J])*(pmp->DUL[J]-pmp->Y[J]))
                      ? (pmp->Y[J]-pmp->DLL[J])*(pmp->Y[J]-pmp->DLL[J]):
                      (pmp->DUL[J]-pmp->Y[J])*(pmp->DUL[J]-pmp->Y[J]);
             }
