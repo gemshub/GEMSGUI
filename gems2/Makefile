@@ -31,6 +31,7 @@ LIBS		+= -lXft -lXcursor -lXinerama -lXrandr
 endif
 endif
 
+SHARED_SRC_DIR	= shared
 
 # commands
 CC		= c++
@@ -116,7 +117,7 @@ backupd:
 	 tar cv ~/GEMS2test | bzip2 > gems_data-`date +%Y%m%d`.tar.bz2
 
 # builds bianary package (rpm -bb)
-rpm:
+rpm:	check_shared
 	mkdir -p /tmp/$(NAME)-$(VERSION)
 	tar c --exclude-from doc/tar_backup.exclude $(rpmfiles) | tar -xC /tmp/$(NAME)-$(VERSION)
 #	cp -fr /usr/share/gems2 /tmp/$(NAME)-$(VERSION)/shared
@@ -139,7 +140,18 @@ copy_data:
 		cp -R ./data ./shared/ 
 endif	
 
-zip:
+zip:	check_shared
 	-mv ~/Desktop/gems2-mac-`date +%Y%m%d`.zip ~/Desktop/gems2-mac-`date +%Y%m%d`.zip.bak
 	zip -r ~/Desktop/gems2-mac-`date +%Y%m%d`.zip gems2.app/Contents/MacOS gems2.app/Contents/Resources gems2.app/Contents/Info.plist gems2.app/Contents/PkgInfo -x gems2.app/Contents/Resources/CVS/*
 
+
+check_shared:
+	if [ -d $(SHARED_SRC_DIR)/DB.default ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/projects/TryNPTDB ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/visor.data ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/doc/html ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/doc/pdf ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/doc/txt ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/img ]; then /bin/true; else /bin/false; fi
+	if [ -f $(SHARED_SRC_DIR)/img/gems32.xpm ]; then /bin/true; else /bin/false; fi
+	if [ -f doc/gems2.desktop ]; then /bin/true; else /bin/false; fi
