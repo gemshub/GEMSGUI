@@ -81,6 +81,8 @@ private:    vstr (const vstr&);
     SM_OTHER = 'O'   //  other models of non-ideal solutions (reserved)
 };
 
+#ifndef _chbr_classes_h_
+
 typedef enum {  /* Classifications of DC */
     /* Type of input data for */
     SRC_DCOMP =  'd',  // the key points to existing PDB record in DCOMP chain
@@ -139,6 +141,7 @@ typedef enum {  /* Classifications of DC */
 
 } DC_CLASSES;
 
+
 //    This code defines standard state and reference scale of concentra-
 // tions for components of this phase. It is used by many subroutines
 // during calculations of equilibrium states
@@ -155,6 +158,19 @@ enum PH_CLASSES{  /* Possible values */
     PH_SINDIS   = 'd',  // dispersed solid phase, also multicomponent
     PH_HCARBL   = 'h'   // mixture of condensed hydrocarbons
 };
+
+#else
+
+//    This code defines standard state and reference scale of concentra-
+// tions for components of this phase. It is used by many subroutines
+// during calculations of equilibrium states
+enum PH_CLASSES2{  /* Possible values */
+    PH_PLASMA   = 'p',  // plasma
+    PH_SIMELT   = 'm',  // silicate (magmatic) melt or non-aqueous electrolyte
+    PH_HCARBL   = 'h'   // mixture of condensed hydrocarbons
+};
+
+#endif
 
 typedef enum {  /* Limits on DC and phases */
     /* type of lmits */

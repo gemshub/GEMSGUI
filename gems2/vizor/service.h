@@ -109,7 +109,8 @@ vfExcludeFillEdit(QWidget* par, const char* caption,
 
 
 bool vfChooseFileOpen(QWidget* par, gstring& path, const char* title=0);
-bool vfChooseFileSave(QWidget* par, gstring& path, const char* title=0);
+bool vfChooseFileSave(QWidget* par, gstring& path,
+  const char* title=0 , const char* filter=0);
 
 class TObject;
 void vfObjToFile(QWidget* par, TObject* obj);

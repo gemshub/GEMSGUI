@@ -296,6 +296,68 @@ TProfil::CmHelp()
     pVisor->OpenHelp( GEMS_SP_HTML );  //  05.01.01
 }
 
+void TProfil::outMulti( GemDataStream& ff )
+{
+    TCStringArray aList;
+    gstring filename;
+
+    ff.writeArray( &pa.p.PC, 10 );
+    ff.writeArray( &pa.p.DG, 28 );
+    multi->to_file( ff );
+
+// added for dataCH and DataBr structures
+
+// select lists
+    aList.Clear();
+    for(int ii=0; ii<multi->GetPM()->N; ii++ )
+       aList.Add( gstring( multi->GetPM()->SB[ii], 0, MAXICNAME+MAXSYMB));
+    TCIntArray aSelIC = vfMultiChoice(window(), aList,
+         "Please, mark independent components for selection into DataBridge");
+
+    aList.Clear();
+    for(int ii=0; ii<multi->GetPM()->L; ii++ )
+       aList.Add( gstring( multi->GetPM()->SM[ii], 0, MAXDCNAME));
+    TCIntArray aSelDC = vfMultiChoice(window(), aList,
+         "Please, mark dependent components for selection into DataBridge");
+
+    aList.Clear();
+    for(int ii=0; ii<multi->GetPM()->FI; ii++ )
+       aList.Add( gstring( multi->GetPM()->SF[ii], 0, MAXPHNAME+MAXSYMB));
+    TCIntArray aSelPH = vfMultiChoice(window(), aList,
+         "Please, mark phases for selection into DataBridge");
+
+// set default data and realloc arrays
+   multi->makeStartDataChBR( aSelIC, aSelDC, aSelPH );
+
+// out dataCH&DataBR files
+   filename = "GEMSystem.dch";
+   if( vfChooseFileSave(window(), filename,
+          "Please, enter DataCH file name", "*.dch" )  )
+   {
+     GemDataStream  f_ch(filename, ios::out|ios::binary);
+      multi->datach_to_file(f_ch);
+   }
+   filename = "GEMNode.dbr";
+   if( vfChooseFileSave(window(), filename,
+          "Please, enter DataBR file name", "*.dbr" )  )
+   {
+     GemDataStream  f_br(filename, ios::out|ios::binary);
+     multi->databr_to_file(f_br);
+   }
+
+   multi->datach_free();
+   multi->databr_free();
+}
+
+
+void TProfil::readMulti( GemDataStream& ff )
+{
+
+      ff.readArray( &pa.p.PC, 10 );
+      ff.readArray( &pa.p.DG, 28 );
+      multi->from_file( ff );
+}
+
 //Delete record whis key
 void
 TProfil::DeleteRecord( const char *key, bool errifNo )

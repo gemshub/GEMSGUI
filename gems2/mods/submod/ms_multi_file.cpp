@@ -1,8 +1,10 @@
 
 #include "m_param.h"
+
+
 //---------------------------------------------------------//
 // for test out data
-void outArray( fstream& ff, char *name, short* arr, int size )
+void TMulti::outArray( fstream& ff, char *name, short* arr, int size )
 {
  ff << endl << name << endl;
  for( int ii=0, jj=1; ii<size; ii++, jj++  )
@@ -13,7 +15,7 @@ void outArray( fstream& ff, char *name, short* arr, int size )
  }
 }
 
-void outArray( fstream& ff, char *name,  float* arr, int size )
+void TMulti::outArray( fstream& ff, char *name,  float* arr, int size )
 {
  ff << endl << name << endl;
  for( int ii=0, jj=1; ii<size; ii++, jj++  )
@@ -25,7 +27,7 @@ void outArray( fstream& ff, char *name,  float* arr, int size )
 }
 
 
-void outArray( fstream& ff, char *name, double* arr, int size )
+void TMulti::outArray( fstream& ff, char *name, double* arr, int size )
 {
  ff << endl << name << endl;
  for( int ii=0, jj=1; ii<size; ii++, jj++  )
@@ -132,8 +134,16 @@ void TMulti::to_text_file( )
       outArray( ff, "YFA", pm.YFA,  pm.FIs);
       outArray( ff, "LsMod", pm.LsMod, pm.FIs);
       outArray( ff, "LsMdc", pm.LsMdc, pm.FIs);
-      outArray( ff, "PMc", pm.PMc,  pm.FIs);
-      outArray( ff, "DMc", pm.DMc,  pm.Ls);
+      int LsModSum = 0;
+      int LsMdcSum = 0;
+      for(int i=0; i<pm.FIs; i++)
+      {
+        LsModSum += pm.LsMod[i];
+        LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
+      }
+      outArray( ff, "PMc", pm.PMc,  LsModSum);
+      outArray( ff, "DMc", pm.DMc,  LsMdcSum);
+
       outArray( ff, "PUL", pm.PUL,  pm.FIs);
       outArray( ff, "PLL", pm.PLL,  pm.FIs);
 
@@ -217,7 +227,7 @@ void TMulti::to_text_file( )
 //---------------------------------------------------------//
 
 // writing MULTI to binary file
-void TMulti::to_file( fstream& ff )
+void TMulti::to_file( GemDataStream& ff )
 {
    if( pm.N < 2 || pm.L < 2 || pm.FI < 1 )
         Error( GetName(), "pm.N < 2 || pm.L < 2 || pm.FI < 1" );
@@ -228,7 +238,9 @@ void TMulti::to_file( fstream& ff )
    float EpsW;
    float RoW;
 
+
 #ifndef IPMGEMPLUGIN
+
    PAalp = syp->PAalp;
    PSigm = syp->PSigm;
    EpsW = TProfil::pm->tpp->EpsW;
@@ -241,183 +253,191 @@ void TMulti::to_file( fstream& ff )
 #endif
 
 
-   ff.write (pm.stkey, sizeof(char)*(EQ_RKLEN+5));
-   ff.write ((char*)&pm.N, sizeof(short)*36);
-   ff.write ((char*)&pm.TC, sizeof(double)*55);
-   ff.write (&PAalp, sizeof(char));
-   ff.write (&PSigm, sizeof(char));
-   ff.write ((char*)&EpsW, sizeof(float));
-   ff.write ((char*)&RoW, sizeof(float));
+   ff.writeArray(pm.stkey, sizeof(char)*(EQ_RKLEN+5));
+   ff.writeArray( &pm.N, 36);
+   ff.writeArray(&pm.TC, 55);
+   ff << PAalp;
+   ff << PSigm;
+   ff << EpsW;
+   ff << RoW;
 
    //dynamic values
 
     // Part 1
 
     /* need  always to alloc vectors */
-   ff.write ((char*)pm.L1,  sizeof(short)*pm.FI);
-   ff.write ((char*)pm.muk, sizeof(short)*pm.FI);
-   ff.write ((char*)pm.mui, sizeof(short)*pm.N);
-   ff.write ((char*)pm.muj, sizeof(short)*pm.L);
-   ff.write ((char*)pm.DUL, sizeof(double)*pm.L);
-   ff.write ((char*)pm.DLL, sizeof(double)*pm.L);
-   ff.write ((char*)pm.Vol, sizeof(double)*pm.L);
-   ff.write ((char*)pm.Pparc, sizeof(double)*pm.L);
-   ff.write ((char*)pm.MM, sizeof(double)*pm.L);
-   ff.write ((char*)pm.Awt, sizeof(float)*pm.N);
-   ff.write ((char*)pm.A, sizeof(float)*pm.N*pm.L);
-   ff.write ((char*)pm.XFs, sizeof(float)*pm.FI);
-   ff.write ((char*)pm.Falps, sizeof(float)*pm.FI);
-   ff.write ((char*)pm.G, sizeof(double)*pm.L);
-   ff.write ((char*)pm.G0, sizeof(double)*pm.L);
-   ff.write ((char*)pm.lnGam, sizeof(double)*pm.L);
-   ff.write ((char*)pm.lnGmo, sizeof(double)*pm.L);
-   ff.write ((char*)pm.B, sizeof(double)*pm.N);
-   ff.write ((char*)pm.U, sizeof(double)*pm.N);
-   ff.write ((char*)pm.U_r, sizeof(double)*pm.N);
-   ff.write ((char*)pm.C, sizeof(double)*pm.N);
-   ff.write ((char*)pm.XF, sizeof(double)*pm.FI);
-   ff.write ((char*)pm.YF, sizeof(double)*pm.FI);
-   ff.write ((char*)pm.Falp, sizeof(double)*pm.FI);
-   ff.write ((char*)pm.X, sizeof(double)*pm.L);
-   ff.write ((char*)pm.Y, sizeof(double)*pm.L);
-   ff.write ((char*)pm.XY, sizeof(double)*pm.L);
-   ff.write ((char*)pm.MU, sizeof(double)*pm.L);
-   ff.write ((char*)pm.EMU, sizeof(double)*pm.L);
-   ff.write ((char*)pm.NMU, sizeof(double)*pm.L);
-   ff.write ((char*)pm.W, sizeof(double)*pm.L);
-   ff.write ((char*)pm.F, sizeof(double)*pm.L);
-   ff.write ((char*)pm.F0, sizeof(double)*pm.L);
-   ff.write ((char*)pm.YOF, sizeof(double)*pm.FI);
+   ff.writeArray(pm.L1,  pm.FI);
+   ff.writeArray(pm.muk, pm.FI);
+   ff.writeArray(pm.mui, pm.N);
+   ff.writeArray(pm.muj, pm.L);
+   ff.writeArray(pm.DUL, pm.L);
+   ff.writeArray(pm.DLL, pm.L);
+   ff.writeArray(pm.Vol, pm.L);
+   ff.writeArray(pm.Pparc, pm.L);
+   ff.writeArray(pm.MM, pm.L);
+   ff.writeArray(pm.Awt, pm.N);
+   ff.writeArray(pm.A,  pm.N*pm.L);
+   ff.writeArray(pm.XFs, pm.FI);
+   ff.writeArray(pm.Falps, pm.FI);
+   ff.writeArray(pm.G, pm.L);
+   ff.writeArray(pm.G0, pm.L);
+   ff.writeArray(pm.lnGam, pm.L);
+   ff.writeArray(pm.lnGmo, pm.L);
+   ff.writeArray(pm.B, pm.N);
+   ff.writeArray(pm.U,  pm.N);
+   ff.writeArray(pm.U_r, pm.N);
+   ff.writeArray(pm.C, pm.N);
+   ff.writeArray(pm.XF, pm.FI);
+   ff.writeArray(pm.YF, pm.FI);
+   ff.writeArray(pm.Falp, pm.FI);
+   ff.writeArray(pm.X, pm.L);
+   ff.writeArray(pm.Y, pm.L);
+   ff.writeArray(pm.XY, pm.L);
+   ff.writeArray(pm.MU, pm.L);
+   ff.writeArray(pm.EMU,  pm.L);
+   ff.writeArray(pm.NMU, pm.L);
+   ff.writeArray(pm.W, pm.L);
+   ff.writeArray(pm.F, pm.L);
+   ff.writeArray(pm.F0, pm.L);
+   ff.writeArray(pm.YOF, pm.FI);
 
-   ff.write ((char*)pm.SB, sizeof(char)*(MAXICNAME+MAXSYMB)*pm.N);
-   ff.write ((char*)pm.SB1, sizeof(char)* MAXICNAME * pm.N);
-   ff.write ((char*)pm.SFs, sizeof(char)*(MAXPHNAME+MAXSYMB)*pm.FI);
-   ff.write ((char*)pm.SM, sizeof(char)* MAXDCNAME * pm.L);
-   ff.write ((char*)pm.SF, sizeof(char)*(MAXPHNAME+MAXSYMB)*pm.FI);
-   ff.write ((char*)pm.SM2, sizeof(char)* MAXDCNAME * pm.Ls);
-   ff.write ((char*)pm.SF2, sizeof(char)*(MAXPHNAME+MAXSYMB)*pm.FIs);
+   ff.writeArray((char*)pm.SB, (MAXICNAME+MAXSYMB)*pm.N);
+   ff.writeArray((char*)pm.SB1, MAXICNAME * pm.N);
+   ff.writeArray((char*)pm.SFs, (MAXPHNAME+MAXSYMB)*pm.FI);
+   ff.writeArray((char*)pm.SM, MAXDCNAME * pm.L);
+   ff.writeArray((char*)pm.SF, (MAXPHNAME+MAXSYMB)*pm.FI);
+   ff.writeArray((char*)pm.SM2, MAXDCNAME * pm.Ls);
+   ff.writeArray((char*)pm.SF2, (MAXPHNAME+MAXSYMB)*pm.FIs);
 
-   ff.write ( pm.RLC, sizeof(char)  * pm.L);
-   ff.write ( pm.RSC, sizeof(char)  * pm.L);
-   ff.write ( pm.ICC, sizeof(char)  * pm.N);
-   ff.write ( pm.DCC, sizeof(char)  * pm.L);
-   ff.write ( pm.PHC, sizeof(char)  * pm.FI);
-   ff.write ( pm.DCCW, sizeof(char)  * pm.L);
+   ff.writeArray( pm.RLC, pm.L);
+   ff.writeArray( pm.RSC, pm.L);
+   ff.writeArray( pm.ICC, pm.N);
+   ff.writeArray( pm.DCC, pm.L);
+   ff.writeArray( pm.PHC, pm.FI);
+   ff.writeArray( pm.DCCW, pm.L);
 
-   ff.write ((char*)pm.lnGmM, sizeof(double)*pm.L);
-   ff.write ((char*)pm.GEX, sizeof(double)*pm.L);
-   ff.write ((char*)pm.FVOL, sizeof(double)*pm.FI);
-   ff.write ((char*)pm.FWGT, sizeof(double)*pm.FI);
+   ff.writeArray( pm.lnGmM, pm.L);
+   ff.writeArray( pm.GEX,   pm.L);
+   ff.writeArray( pm.FVOL, pm.FI);
+   ff.writeArray( pm.FWGT, pm.FI);
 
     if( pm.L > 0 )
     {
-      ff.write ((char*)pm.Y_la, sizeof(double)*pm.L);
-      ff.write ((char*)pm.Y_w, sizeof(double)*pm.L);
-      ff.write ((char*)pm.Fx, sizeof(double)*pm.L);
-      ff.write ((char*)pm.Wx, sizeof(double)*pm.L);
-      ff.write ((char*)pm.VL, sizeof(float)*pm.L);
-      ff.write ((char*)pm.Gamma, sizeof(double)*pm.L);
-      ff.write ((char*)pm.lnGmf, sizeof(double)*pm.L);
-      ff.write ((char*)pm.D, sizeof(double)*pm.L);
+      ff.writeArray(pm.Y_la, pm.L);
+      ff.writeArray(pm.Y_w, pm.L);
+      ff.writeArray(pm.Fx, pm.L);
+      ff.writeArray(pm.Wx, pm.L);
+      ff.writeArray(pm.VL, pm.L);
+      ff.writeArray(pm.Gamma, pm.L);
+      ff.writeArray(pm.lnGmf, pm.L);
+      ff.writeArray(pm.D, pm.L);
     }
 
    // Part 2  not requited arrays
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
-      ff.write ((char*)pm.BF, sizeof(double)*pm.FIs*pm.N);
-      ff.write ((char*)pm.XFA, sizeof(double)*pm.FIs);
-      ff.write ((char*)pm.YFA, sizeof(double)*pm.FIs);
-      ff.write ((char*)pm.LsMod, sizeof(short)*pm.FIs);
-      ff.write ((char*)pm.LsMdc, sizeof(short)*pm.FIs);
-      ff.write ((char*)pm.PMc, sizeof(float)*pm.FIs);
-      ff.write ((char*)pm.DMc, sizeof(float)*pm.Ls);
-      ff.write ((char*)pm.PUL, sizeof(double)*pm.FIs);
-      ff.write ((char*)pm.PLL, sizeof(double)*pm.FIs);
+      ff.writeArray(pm.BF, pm.FIs*pm.N);
+      ff.writeArray(pm.XFA, pm.FIs);
+      ff.writeArray(pm.YFA, pm.FIs);
+      ff.writeArray(pm.LsMod, pm.FIs);
+      ff.writeArray(pm.LsMdc, pm.FIs);
+      int LsModSum = 0;
+      int LsMdcSum = 0;
+      for(int i=0; i<pm.FIs; i++)
+      {
+        LsModSum += pm.LsMod[i];
+        LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
+      }
+      ff.writeArray(pm.PMc, LsModSum);
+      ff.writeArray(pm.DMc, LsMdcSum);
+      ff.writeArray(pm.PUL, pm.FIs);
+      ff.writeArray(pm.PLL, pm.FIs);
 
-      ff.write ((char*)pm.sMod, sizeof(char)*6*pm.FIs);
-      ff.write ( pm.RFLC, sizeof(char)* pm.FIs);
-      ff.write ( pm.RFSC, sizeof(char)* pm.FIs);
+      ff.writeArray((char*)pm.sMod, 6*pm.FIs);
+      ff.writeArray( pm.RFLC, pm.FIs);
+      ff.writeArray( pm.RFSC, pm.FIs);
     }
 
     if( pm.LO > 1 )
     {
-      ff.write ((char*)pm.Y_m, sizeof(double)*pm.L);
-      ff.write ((char*)pm.IC_m, sizeof(double)*pm.N);
-      ff.write ((char*)pm.IC_lm, sizeof(double)*pm.N);
-      ff.write ((char*)pm.IC_wm, sizeof(double)*pm.N);
+      ff.writeArray(pm.Y_m, pm.L);
+      ff.writeArray(pm.IC_m, pm.N);
+      ff.writeArray(pm.IC_lm, pm.N);
+      ff.writeArray(pm.IC_wm,  pm.N);
     }
 
     /* dispersion and sorbtion phases */
     if( PAalp != S_OFF )
     {
-      ff.write ((char*)pm.Aalp, sizeof(float)*pm.FI);
-      ff.write ((char*)pm.Xr0h0, sizeof(float)*pm.FI*2);
+      ff.writeArray(pm.Aalp, pm.FI);
+      ff.writeArray((float *)pm.Xr0h0, pm.FI*2);
     }
 
    if( PSigm != S_OFF )
-      ff.write ((char*)pm.Sigw, sizeof(float)*pm.FI);
+      ff.writeArray(pm.Sigw, pm.FI);
 
     if( PSigm != S_OFF )
-      ff.write ((char*)pm.Sigg, sizeof(float)*pm.FI);
+      ff.writeArray(pm.Sigg, pm.FI);
 
     if( pm.E )
     {
-      ff.write ((char*)pm.EZ, sizeof(double)*pm.L);
-      ff.write ((char*)pm.Xcond, sizeof(float)*pm.FI);
-      ff.write ((char*)pm.Xeps, sizeof(float)*pm.FI);
+      ff.writeArray(pm.EZ,  pm.L);
+      ff.writeArray(pm.Xcond, pm.FI);
+      ff.writeArray(pm.Xeps,  pm.FI);
     }
 
     if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
     { /* ADSORBTION AND ION IXCHANDG */
-      ff.write ((char*)pm.SATNdx, sizeof(short)*2*pm.Ls);
-      ff.write ((char*)pm.SCM, sizeof(char)*pm.FIs*pm.FIat);
+      ff.writeArray((short*)pm.SATNdx, 2*pm.Ls);
+      ff.writeArray((char*)pm.SCM, pm.FIs*pm.FIat);
 
-      ff.write ((char*)pm.Nfsp, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.MASDT, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XcapA, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XcapB, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XcapD, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XcapF, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XdlA, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XdlB, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XdlD, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XpsiA, sizeof(double)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XpsiB, sizeof(double)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XpsiD, sizeof(double)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XlamA, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.Xetaf, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XetaA, sizeof(double)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XetaB, sizeof(double)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XFTS, sizeof(double)*pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.Nfsp, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.MASDT, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.XcapA, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.XcapB, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.XcapD, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.XcapF, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.XdlA, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.XdlB, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.XdlD, pm.FIs*pm.FIat);
+      ff.writeArray((double*)pm.XpsiA, pm.FIs*pm.FIat);
+      ff.writeArray((double*)pm.XpsiB, pm.FIs*pm.FIat);
+      ff.writeArray((double*)pm.XpsiD, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.XlamA, pm.FIs*pm.FIat);
+      ff.writeArray((float*)pm.Xetaf, pm.FIs*pm.FIat);
+      ff.writeArray((double*)pm.XetaA, pm.FIs*pm.FIat);
+      ff.writeArray((double*)pm.XetaB, pm.FIs*pm.FIat);
+      ff.writeArray((double*)pm.XFTS, pm.FIs*pm.FIat);
 
-      ff.write (pm.SATT, sizeof(char)*pm.Ls);
-      ff.write ((char*)pm.MASDJ, sizeof(float)*pm.Ls);
-      ff.write ((char*)pm.lnSAT, sizeof(double)*pm.Ls);
+      ff.writeArray(pm.SATT, pm.Ls);
+      ff.writeArray(pm.MASDJ, pm.Ls);
+      ff.writeArray(pm.lnSAT, pm.Ls);
     }
 
     if( pm.PG > 0 )
     {
-      ff.write ((char*)pm.Fug, sizeof(float)*pm.PG);
-      ff.write ((char*)pm.Fug_l, sizeof(float)*pm.PG);
-      ff.write ((char*)pm.Ppg_l, sizeof(float)*pm.PG);
+      ff.writeArray(pm.Fug,  pm.PG);
+      ff.writeArray(pm.Fug_l,  pm.PG);
+      ff.writeArray(pm.Ppg_l,  pm.PG);
     }
 
     // Part 3
 
     if( pm.Ls > 1 && pm.FIs > 0 )
     {
-      ff.write ((char*)pm.Wb, sizeof(float)*pm.Ls);
-      ff.write ((char*)pm.Wabs, sizeof(float)*pm.Ls);
-      ff.write ((char*)pm.Rion, sizeof(float)*pm.Ls);
+      ff.writeArray(pm.Wb, pm.Ls);
+      ff.writeArray(pm.Wabs, pm.Ls);
+      ff.writeArray(pm.Rion, pm.Ls);
 
-      ff.write ((char*)pm.Qp, sizeof(double)*pm.FIs*20);
-      ff.write ((char*)pm.Qd, sizeof(double)*20);
+      ff.writeArray(pm.Qp,pm.FIs*20);
+      ff.writeArray(pm.Qd, 20);
    }
    to_text_file();
+
 }
 
 // reading MULTI from binary file
-void TMulti::from_file( fstream& ff )
+void TMulti::from_file( GemDataStream& ff )
 {
    //static values
    char PAalp;
@@ -425,13 +445,14 @@ void TMulti::from_file( fstream& ff )
    float EpsW;
    float RoW;
 
-   ff.read (pm.stkey, sizeof(char)*(EQ_RKLEN+5));
-   ff.read ((char*)&pm.N, sizeof(short)*36);
-   ff.read ((char*)&pm.TC, sizeof(double)*55);
-   ff.read (&PAalp, sizeof(char));
-   ff.read (&PSigm, sizeof(char));
-   ff.read ((char*)&EpsW, sizeof(float));
-   ff.read ((char*)&RoW, sizeof(float));
+   ff.readArray(pm.stkey, sizeof(char)*(EQ_RKLEN+5));
+   ff.readArray( &pm.N, 36);
+   ff.readArray(&pm.TC, 55);
+   ff >> PAalp;
+   ff >> PSigm;
+   ff >> EpsW;
+   ff >> RoW;
+
 
 
 #ifndef IPMGEMPLUGIN
@@ -450,171 +471,181 @@ void TMulti::from_file( fstream& ff )
 #endif
 
    //dynamic values
-   // Part 1
+
+    // Part 1
 
     /* need  always to alloc vectors */
-   ff.read ((char*)pm.L1,  sizeof(short)*pm.FI);
-   ff.read ((char*)pm.muk, sizeof(short)*pm.FI);
-   ff.read ((char*)pm.mui, sizeof(short)*pm.N);
-   ff.read ((char*)pm.muj, sizeof(short)*pm.L);
-   ff.read ((char*)pm.DUL, sizeof(double)*pm.L);
-   ff.read ((char*)pm.DLL, sizeof(double)*pm.L);
-   ff.read ((char*)pm.Vol, sizeof(double)*pm.L);
-   ff.read ((char*)pm.Pparc, sizeof(double)*pm.L);
-   ff.read ((char*)pm.MM, sizeof(double)*pm.L);
-   ff.read ((char*)pm.Awt, sizeof(float)*pm.N);
-   ff.read ((char*)pm.A, sizeof(float)*pm.N*pm.L);
-   ff.read ((char*)pm.XFs, sizeof(float)*pm.FI);
-   ff.read ((char*)pm.Falps, sizeof(float)*pm.FI);
-   ff.read ((char*)pm.G, sizeof(double)*pm.L);
-   ff.read ((char*)pm.G0, sizeof(double)*pm.L);
-   ff.read ((char*)pm.lnGam, sizeof(double)*pm.L);
-   ff.read ((char*)pm.lnGmo, sizeof(double)*pm.L);
-   ff.read ((char*)pm.B, sizeof(double)*pm.N);
-   ff.read ((char*)pm.U, sizeof(double)*pm.N);
-   ff.read ((char*)pm.U_r, sizeof(double)*pm.N);
-   ff.read ((char*)pm.C, sizeof(double)*pm.N);
-   ff.read ((char*)pm.XF, sizeof(double)*pm.FI);
-   ff.read ((char*)pm.YF, sizeof(double)*pm.FI);
-   ff.read ((char*)pm.Falp, sizeof(double)*pm.FI);
-   ff.read ((char*)pm.X, sizeof(double)*pm.L);
-   ff.read ((char*)pm.Y, sizeof(double)*pm.L);
-   ff.read ((char*)pm.XY, sizeof(double)*pm.L);
-   ff.read ((char*)pm.MU, sizeof(double)*pm.L);
-   ff.read ((char*)pm.EMU, sizeof(double)*pm.L);
-   ff.read ((char*)pm.NMU, sizeof(double)*pm.L);
-   ff.read ((char*)pm.W, sizeof(double)*pm.L);
-   ff.read ((char*)pm.F, sizeof(double)*pm.L);
-   ff.read ((char*)pm.F0, sizeof(double)*pm.L);
-   ff.read ((char*)pm.YOF, sizeof(double)*pm.FI);
+   ff.readArray(pm.L1,  pm.FI);
+   ff.readArray(pm.muk, pm.FI);
+   ff.readArray(pm.mui, pm.N);
+   ff.readArray(pm.muj, pm.L);
+   ff.readArray(pm.DUL, pm.L);
+   ff.readArray(pm.DLL, pm.L);
+   ff.readArray(pm.Vol, pm.L);
+   ff.readArray(pm.Pparc, pm.L);
+   ff.readArray(pm.MM, pm.L);
+   ff.readArray(pm.Awt, pm.N);
+   ff.readArray(pm.A,  pm.N*pm.L);
+   ff.readArray(pm.XFs, pm.FI);
+   ff.readArray(pm.Falps, pm.FI);
+   ff.readArray(pm.G, pm.L);
+   ff.readArray(pm.G0, pm.L);
+   ff.readArray(pm.lnGam, pm.L);
+   ff.readArray(pm.lnGmo, pm.L);
+   ff.readArray(pm.B, pm.N);
+   ff.readArray(pm.U,  pm.N);
+   ff.readArray(pm.U_r, pm.N);
+   ff.readArray(pm.C, pm.N);
+   ff.readArray(pm.XF, pm.FI);
+   ff.readArray(pm.YF, pm.FI);
+   ff.readArray(pm.Falp, pm.FI);
+   ff.readArray(pm.X, pm.L);
+   ff.readArray(pm.Y, pm.L);
+   ff.readArray(pm.XY, pm.L);
+   ff.readArray(pm.MU, pm.L);
+   ff.readArray(pm.EMU,  pm.L);
+   ff.readArray(pm.NMU, pm.L);
+   ff.readArray(pm.W, pm.L);
+   ff.readArray(pm.F, pm.L);
+   ff.readArray(pm.F0, pm.L);
+   ff.readArray(pm.YOF, pm.FI);
 
-   ff.read ((char*)pm.SB, sizeof(char)*(MAXICNAME+MAXSYMB)*pm.N);
-   ff.read ((char*)pm.SB1, sizeof(char)* MAXICNAME * pm.N);
-   ff.read ((char*)pm.SFs, sizeof(char)*(MAXPHNAME+MAXSYMB)*pm.FI);
-   ff.read ((char*)pm.SM, sizeof(char)* MAXDCNAME * pm.L);
-   ff.read ((char*)pm.SF, sizeof(char)*(MAXPHNAME+MAXSYMB)*pm.FI);
-   ff.read ((char*)pm.SM2, sizeof(char)* MAXDCNAME * pm.Ls);
-   ff.read ((char*)pm.SF2, sizeof(char)*(MAXPHNAME+MAXSYMB)*pm.FIs);
+   ff.readArray((char*)pm.SB, (MAXICNAME+MAXSYMB)*pm.N);
+   ff.readArray((char*)pm.SB1, MAXICNAME * pm.N);
+   ff.readArray((char*)pm.SFs, (MAXPHNAME+MAXSYMB)*pm.FI);
+   ff.readArray((char*)pm.SM, MAXDCNAME * pm.L);
+   ff.readArray((char*)pm.SF, (MAXPHNAME+MAXSYMB)*pm.FI);
+   ff.readArray((char*)pm.SM2, MAXDCNAME * pm.Ls);
+   ff.readArray((char*)pm.SF2, (MAXPHNAME+MAXSYMB)*pm.FIs);
 
-   ff.read ( pm.RLC, sizeof(char)  * pm.L);
-   ff.read ( pm.RSC, sizeof(char)  * pm.L);
-   ff.read ( pm.ICC, sizeof(char)  * pm.N);
-   ff.read ( pm.DCC, sizeof(char)  * pm.L);
-   ff.read ( pm.PHC, sizeof(char)  * pm.FI);
-   ff.read ( pm.DCCW, sizeof(char)  * pm.L);
+   ff.readArray( pm.RLC, pm.L);
+   ff.readArray( pm.RSC, pm.L);
+   ff.readArray( pm.ICC, pm.N);
+   ff.readArray( pm.DCC, pm.L);
+   ff.readArray( pm.PHC, pm.FI);
+   ff.readArray( pm.DCCW, pm.L);
 
-   ff.read ((char*)pm.lnGmM, sizeof(double)*pm.L);
-   ff.read ((char*)pm.GEX, sizeof(double)*pm.L);
-   ff.read ((char*)pm.FVOL, sizeof(double)*pm.FI);
-   ff.read ((char*)pm.FWGT, sizeof(double)*pm.FI);
+   ff.readArray( pm.lnGmM, pm.L);
+   ff.readArray( pm.GEX,   pm.L);
+   ff.readArray( pm.FVOL, pm.FI);
+   ff.readArray( pm.FWGT, pm.FI);
 
     if( pm.L > 0 )
     {
-      ff.read ((char*)pm.Y_la, sizeof(double)*pm.L);
-      ff.read ((char*)pm.Y_w, sizeof(double)*pm.L);
-      ff.read ((char*)pm.Fx, sizeof(double)*pm.L);
-      ff.read ((char*)pm.Wx, sizeof(double)*pm.L);
-      ff.read ((char*)pm.VL, sizeof(float)*pm.L);
-      ff.read ((char*)pm.Gamma, sizeof(double)*pm.L);
-      ff.read ((char*)pm.lnGmf, sizeof(double)*pm.L);
-      ff.read ((char*)pm.D, sizeof(double)*pm.L);
+      ff.readArray(pm.Y_la, pm.L);
+      ff.readArray(pm.Y_w, pm.L);
+      ff.readArray(pm.Fx, pm.L);
+      ff.readArray(pm.Wx, pm.L);
+      ff.readArray(pm.VL, pm.L);
+      ff.readArray(pm.Gamma, pm.L);
+      ff.readArray(pm.lnGmf, pm.L);
+      ff.readArray(pm.D, pm.L);
     }
 
    // Part 2  not requited arrays
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
-      ff.read ((char*)pm.BF, sizeof(double)*pm.FIs*pm.N);
-      ff.read ((char*)pm.XFA, sizeof(double)*pm.FIs);
-      ff.read ((char*)pm.YFA, sizeof(double)*pm.FIs);
-      ff.read ((char*)pm.LsMod, sizeof(short)*pm.FIs);
-      ff.read ((char*)pm.LsMdc, sizeof(short)*pm.FIs);
-      ff.read ((char*)pm.PMc, sizeof(float)*pm.FIs);
-      ff.read ((char*)pm.DMc, sizeof(float)*pm.Ls);
-      ff.read ((char*)pm.PUL, sizeof(double)*pm.FIs);
-      ff.read ((char*)pm.PLL, sizeof(double)*pm.FIs);
+      ff.readArray(pm.BF, pm.FIs*pm.N);
+      ff.readArray(pm.XFA, pm.FIs);
+      ff.readArray(pm.YFA, pm.FIs);
+      ff.readArray(pm.LsMod, pm.FIs);
+      ff.readArray(pm.LsMdc, pm.FIs);
 
-      ff.read ((char*)pm.sMod, sizeof(char)*6*pm.FIs);
-      ff.read ( pm.RFLC, sizeof(char)* pm.FIs);
-      ff.read ( pm.RFSC, sizeof(char)* pm.FIs);
+      int LsModSum = 0;
+      int LsMdcSum = 0;
+      for(int i=0; i<pm.FIs; i++)
+      {
+        LsModSum += pm.LsMod[i];
+        LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
+      }
+     pm.PMc = new float[LsModSum];
+     pm.DMc = new float[LsMdcSum];
+      ff.readArray(pm.PMc, LsModSum);
+      ff.readArray(pm.DMc, LsMdcSum);
+      ff.readArray(pm.PUL, pm.FIs);
+      ff.readArray(pm.PLL, pm.FIs);
+
+      ff.readArray((char*)pm.sMod, 6*pm.FIs);
+      ff.readArray( pm.RFLC, pm.FIs);
+      ff.readArray( pm.RFSC, pm.FIs);
     }
 
     if( pm.LO > 1 )
     {
-      ff.read ((char*)pm.Y_m, sizeof(double)*pm.L);
-      ff.read ((char*)pm.IC_m, sizeof(double)*pm.N);
-      ff.read ((char*)pm.IC_lm, sizeof(double)*pm.N);
-      ff.read ((char*)pm.IC_wm, sizeof(double)*pm.N);
+      ff.readArray(pm.Y_m, pm.L);
+      ff.readArray(pm.IC_m, pm.N);
+      ff.readArray(pm.IC_lm, pm.N);
+      ff.readArray(pm.IC_wm,  pm.N);
     }
 
     /* dispersion and sorbtion phases */
     if( PAalp != S_OFF )
     {
-      ff.read ((char*)pm.Aalp, sizeof(float)*pm.FI);
-      ff.read ((char*)pm.Xr0h0, sizeof(float)*pm.FI*2);
+      ff.readArray(pm.Aalp, pm.FI);
+      ff.readArray((float *)pm.Xr0h0, pm.FI*2);
     }
 
    if( PSigm != S_OFF )
-      ff.read ((char*)pm.Sigw, sizeof(float)*pm.FI);
+      ff.readArray(pm.Sigw, pm.FI);
 
     if( PSigm != S_OFF )
-      ff.read ((char*)pm.Sigg, sizeof(float)*pm.FI);
+      ff.readArray(pm.Sigg, pm.FI);
 
     if( pm.E )
     {
-      ff.read ((char*)pm.EZ, sizeof(double)*pm.L);
-      ff.read ((char*)pm.Xcond, sizeof(float)*pm.FI);
-      ff.read ((char*)pm.Xeps, sizeof(float)*pm.FI);
+      ff.readArray(pm.EZ,  pm.L);
+      ff.readArray(pm.Xcond, pm.FI);
+      ff.readArray(pm.Xeps,  pm.FI);
     }
 
     if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
     { /* ADSORBTION AND ION IXCHANDG */
-      ff.read ((char*)pm.SATNdx, sizeof(short)*2*pm.Ls);
-      ff.read ((char*)pm.SCM, sizeof(char)*pm.FIs*pm.FIat);
+      ff.readArray((short*)pm.SATNdx, 2*pm.Ls);
+      ff.readArray((char*)pm.SCM, pm.FIs*pm.FIat);
 
-      ff.read ((char*)pm.Nfsp, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.MASDT, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XcapA, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XcapB, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XcapD, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XcapF, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XdlA, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XdlB, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XdlD, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XpsiA, sizeof(double)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XpsiB, sizeof(double)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XpsiD, sizeof(double)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XlamA, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.Xetaf, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XetaA, sizeof(double)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XetaB, sizeof(double)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XFTS, sizeof(double)*pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.Nfsp, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.MASDT, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.XcapA, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.XcapB, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.XcapD, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.XcapF, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.XdlA, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.XdlB, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.XdlD, pm.FIs*pm.FIat);
+      ff.readArray((double*)pm.XpsiA, pm.FIs*pm.FIat);
+      ff.readArray((double*)pm.XpsiB, pm.FIs*pm.FIat);
+      ff.readArray((double*)pm.XpsiD, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.XlamA, pm.FIs*pm.FIat);
+      ff.readArray((float*)pm.Xetaf, pm.FIs*pm.FIat);
+      ff.readArray((double*)pm.XetaA, pm.FIs*pm.FIat);
+      ff.readArray((double*)pm.XetaB, pm.FIs*pm.FIat);
+      ff.readArray((double*)pm.XFTS, pm.FIs*pm.FIat);
 
-      ff.read (pm.SATT, sizeof(char)*pm.Ls);
-      ff.read ((char*)pm.MASDJ, sizeof(float)*pm.Ls);
-      ff.read ((char*)pm.lnSAT, sizeof(double)*pm.Ls);
+      ff.readArray(pm.SATT, pm.Ls);
+      ff.readArray(pm.MASDJ, pm.Ls);
+      ff.readArray(pm.lnSAT, pm.Ls);
     }
 
     if( pm.PG > 0 )
     {
-      ff.read ((char*)pm.Fug, sizeof(float)*pm.PG);
-      ff.read ((char*)pm.Fug_l, sizeof(float)*pm.PG);
-      ff.read ((char*)pm.Ppg_l, sizeof(float)*pm.PG);
+      ff.readArray(pm.Fug,  pm.PG);
+      ff.readArray(pm.Fug_l,  pm.PG);
+      ff.readArray(pm.Ppg_l,  pm.PG);
     }
 
     // Part 3
 
     if( pm.Ls > 1 && pm.FIs > 0 )
     {
-      ff.read ((char*)pm.Wb, sizeof(float)*pm.Ls);
-      ff.read ((char*)pm.Wabs, sizeof(float)*pm.Ls);
-      ff.read ((char*)pm.Rion, sizeof(float)*pm.Ls);
+      ff.readArray(pm.Wb, pm.Ls);
+      ff.readArray(pm.Wabs, pm.Ls);
+      ff.readArray(pm.Rion, pm.Ls);
 
-      ff.read ((char*)pm.Qp, sizeof(double)*pm.FIs*20);
-      ff.read ((char*)pm.Qd, sizeof(double)*20);
-
-    }
-
+      ff.readArray(pm.Qp,pm.FIs*20);
+      ff.readArray(pm.Qd, 20);
+   }
 }
+
 
 #ifdef IPMGEMPLUGIN
 
@@ -713,8 +744,10 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
    pm.YFA = new double[pm.FIs];
    pm.LsMod = new short[pm.FIs];
    pm.LsMdc = new short[pm.FIs];
-   pm.PMc = new float[pm.FIs];
-   pm.DMc = new float[pm.Ls];
+     pm.PMc = 0;
+     pm.DMc = 0;
+//   pm.PMc = new float[pm.FIs];
+//   pm.DMc = new float[pm.Ls];
    pm.PUL = new double[pm.FIs];
    pm.PLL = new double[pm.FIs];
 

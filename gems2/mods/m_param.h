@@ -34,6 +34,7 @@
 #include "submod/ms_system.h"
 #include "submod/ms_multi.h"
 #include "submod/ms_calc.h"
+#include "gdatastream.h"
 
 
 // Physical constants - see m_param.cpp
@@ -394,19 +395,9 @@ public:
 
    class UserCancelException {};
 
-   //test
-   void outMulti( fstream& ff )
-   {
-      ff.write ((char*)&pa.p, sizeof(BASE_PARAM));
-      multi->to_file( ff );
-   }
-
-   void readMulti( fstream& ff )
-   {
-      ff.read ((char*)&pa.p, sizeof(BASE_PARAM));
-      multi->from_file( ff );
-   }
-
+    //test
+   void outMulti( GemDataStream& ff );
+   void readMulti( GemDataStream& ff );
 };
 
 /* Work codes of surface site type indices in pm->AtNdx vector */

@@ -75,6 +75,21 @@ TProfil::calcMulti()
         MultiCalcIterations();
 }
 
+void TProfil::outMulti( GemDataStream& ff )
+{
+    ff.writeArray( &pa.p.PC, 10 );
+    ff.writeArray( &pa.p.DG, 28 );
+    multi->to_file( ff );
+}
+
+
+void TProfil::readMulti( GemDataStream& ff )
+{
+      ff.readArray( &pa.p.PC, 10 );
+      ff.readArray( &pa.p.DG, 28 );
+      multi->from_file( ff );
+}
+
 
 // ------------------ End of m_param.cpp -----------------------
 

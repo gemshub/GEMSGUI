@@ -34,7 +34,7 @@ METAOBJ = moc_visor_w.o \
           moc_graph.o
 
 
-OBJ_SUB   = ./kernel/kernel.o ./dlg/dlg.o ./libs/config.o  ./libs/gstring.o
+OBJ_SUB   = ./kernel/kernel.o ./dlg/dlg.o ./libs/config.o  ./libs/gstring.o   ./libs/datastream.o
 
 TARGET	= ../lib/gemviz.o
 

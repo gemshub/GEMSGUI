@@ -20,6 +20,9 @@
 #ifndef _ms_multi_h_
 #define _ms_multi_h_
 
+#include "gdatastream.h"
+#include "datach.h"
+#include "databr.h"
 
 #ifndef IPMGEMPLUGIN
 
@@ -274,6 +277,9 @@ class TMulti :
     SYSTEM *syp;
     //MTPARM *tpp;
 
+    // transport
+    DATACH  data_CH;
+    DATABR  data_BR;
 public:
 
     TIArray<IPNCalc> qEp;
@@ -306,9 +312,28 @@ public:
     void unpackData();
 
     //mass transport
-    void to_file( fstream& ff );
+    void to_file( GemDataStream& ff );
     void to_text_file();
-    void from_file( fstream& ff );
+    void from_file( GemDataStream& ff );
+    void outArray( fstream& ff, char *name, short* arr, int size );
+    void outArray( fstream& ff, char *name,  float* arr, int size );
+    void outArray( fstream& ff, char *name, double* arr, int size );
+
+    void datach_to_file( GemDataStream& ff );
+    void datach_from_file( GemDataStream& ff );
+    void databr_to_file( GemDataStream& ff );
+    void databr_from_file( GemDataStream& ff );
+    void datach_realloc();
+    void datach_free();
+    void databr_realloc();
+    void databr_free();
+    void datach_to_text_file();
+    void databr_to_text_file();
+
+    void makeStartDataChBR(
+       TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH );
+    void packDataBr();
+    void unpackDataBr();
 //    void multi_realloc( char PAalp, char PSigm );
 //    void multi_free();
 
@@ -336,9 +361,12 @@ class TMulti
 {
    MULTI pm;
 
+    // transport
+    DATACH  data_CH;
+    DATABR  data_BR;
+
    char PAalp_;
    char PSigm_;
-
 public:
 
    float EpsW_;
@@ -362,12 +390,28 @@ public:
     }
 
     //mass transport
-    void to_file( fstream& ff );
+    void to_file( GemDataStream& ff );
     void to_text_file();
-    void from_file( fstream& ff );
+    void from_file( GemDataStream& ff );
     void multi_realloc( char PAalp, char PSigm );
     void multi_free();
+    void outArray( fstream& ff, char *name, short* arr, int size );
+    void outArray( fstream& ff, char *name,  float* arr, int size );
+    void outArray( fstream& ff, char *name, double* arr, int size );
 
+    void datach_to_file( GemDataStream& ff );
+    void datach_from_file( GemDataStream& ff );
+    void databr_to_file( GemDataStream& ff );
+    void databr_from_file( GemDataStream& ff );
+    void datach_realloc();
+    void datach_free();
+    void databr_realloc();
+    void databr_free();
+    void datach_to_text_file();
+    void databr_to_text_file();
+
+    void packDataBr();
+    void unpackDataBr();
     // test
     void dyn_kill_test(MULTI& tes);
     void dyn_new_test(MULTI& tes);

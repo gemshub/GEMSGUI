@@ -21,15 +21,17 @@ INC_LOCAL       =  -I.. -I..\ -I..\submod -I..\..\vizor\libs -I..\..\vizor\kerne
 INCLUDES        = $(INC_LOCAL)
 FLAGS   = $(CCFLAGS) $(DEBUG_FLAGS)
 
-SOURCES         = ..\..\vizor\libs\gstring.cpp main.cpp \
+SOURCES         = ..\..\vizor\libs\gstring.cpp \
+        ..\..\vizor\libs\gdatastream.cpp main.cpp \
 	..\submod\ms_mueqexp.cpp ms_param.cpp \
      	..\submod\ipm_sel_bc.cpp ..\submod\ipm_gamma.cpp \
 	..\submod\ipm_fia_bc.cpp ..\submod\ms_multi_file.cpp \
-        ..\s_fgl.cpp
+        ..\s_fgl.cpp ..\submod\ms_datach_br.cpp
 
-OBJECTS =  ..\..\vizor\libs\gstring.obj main.obj ..\submod\ms_mueqexp.obj ms_param.obj\
+OBJECTS =  ..\..\vizor\libs\gstring.obj ..\..\vizor\libs\gdatastream.obj \ 
+      main.obj ..\submod\ms_mueqexp.obj ms_param.obj\
      ..\submod\ipm_sel_bc.obj ..\submod\ipm_gamma.obj ..\submod\ipm_fia_bc.obj \
-     ..\submod\ms_multi_file.obj ..\s_fgl.obj 
+     ..\submod\ms_multi_file.obj ..\s_fgl.obj ..\submod\ms_datach_br.obj
 
 # OBJECTS =  gstring.obj main.obj ms_mueqexp.obj ms_param.obj\
 #     ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj ms_multi_file.obj

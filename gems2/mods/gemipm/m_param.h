@@ -6,6 +6,7 @@
  #define IPMGEMPLUGIN
 #endif
 
+#include "gdatastream.h"
 #include "ms_multi.h"
 #include "verror.h"
 
@@ -254,18 +255,8 @@ public:
     double pb_GX( double *Gxx  );
 
    //test
-   void outMulti( fstream& ff )
-   {
-      ff.write ((char*)&pa.p, sizeof(BASE_PARAM));
-      multi->to_file( ff );
-   }
-
-   void readMulti( fstream& ff )
-   {
-      ff.read ((char*)&pa.p, sizeof(BASE_PARAM));
-      multi->from_file( ff );
-   }
-
+   void outMulti( GemDataStream& ff );
+   void readMulti( GemDataStream& ff );
    void calcMulti();
 
 };

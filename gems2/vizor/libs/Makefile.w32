@@ -12,8 +12,8 @@
 INCLUDES	= -I../kernel -I../libs
 #FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
 
-OBJECTS = config.obj gstring.obj
-SRC	= config.cpp gstring.cpp
+OBJECTS = config.obj gstring.obj gdatastream.obj
+SRC	= config.cpp gstring.cpp gdatastream.cpp
 
 all:		$(OBJECTS)
 

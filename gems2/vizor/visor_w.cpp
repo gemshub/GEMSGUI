@@ -1032,11 +1032,19 @@ vfChooseFileOpen(QWidget* par, gstring& path, const char* title)
 // @param title - dialog title
 
 bool
-vfChooseFileSave(QWidget* par, gstring& path, const char* title)
+vfChooseFileSave(QWidget* par, gstring& path,
+       const char* title, const char *filter)
 {
     //    QString d=QFileDialog::getSaveFileName( ".", filter.c_str(), par, title );
 
     gstring dir = pVisor->userGEMDir();
+            dir+= path;
+
+    gstring filt = "*;";
+    if( filter )
+        filt += filter;
+    else
+        filt += "*.txt";
 
     //    QFileDialog file_dlg( ".", "*;*.txt", par, title, true );
     //QFileDialog file_dlg( dir.c_str(), "*;*.txt", par, title, true );
@@ -1049,7 +1057,7 @@ vfChooseFileSave(QWidget* par, gstring& path, const char* title)
 
     //if( file_dlg.exec() )
     QString fn = QFileDialog::getSaveFileName(
-          dir.c_str(), "*;*.txt", par, title );
+          dir.c_str(), filt.c_str(), par, 0, title );
     if ( !fn.isEmpty() )
     {
         const char* fl = fn;

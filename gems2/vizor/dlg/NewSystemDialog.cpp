@@ -302,18 +302,16 @@ NewSystemDialog::CmOutMulti()
     try
     {
       // open file to output
-      gstring filename;
+      gstring filename = "GEMSystem.ipm";
       if( vfChooseFileSave(this, filename,
-          "Put file name for printing" ) == false )
+          "Please, enter IPM work structure file name", "*.ipm" ) == false )
                return;
-      fstream f(filename.c_str(), ios::out|ios::binary);
-      ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
-
+      GemDataStream  f(filename, ios::out|ios::binary);
 //Ask Dima!!! 20/04/2002
 //Setting start data before calc in calc_gems
-      gstring keyp = rt[RT_SYSEQ].UnpackKey();
-      TProfil::pm->PMtest( keyp.c_str() );
-      TProfil::pm->MultiCalcInit( keyp.c_str() );
+//      gstring keyp = rt[RT_SYSEQ].UnpackKey();
+//      TProfil::pm->PMtest( keyp.c_str() );
+//      TProfil::pm->MultiCalcInit( keyp.c_str() );
 
       TProfil::pm->outMulti(f);
     }
@@ -333,8 +331,7 @@ NewSystemDialog::CmReadMulti()
       if( vfChooseFileOpen(this, filename,
           "Get file name for reading" ) == false )
                return;
-      fstream f(filename.c_str(), ios::in|ios::binary);
-      ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
+      GemDataStream f(filename, ios::in|ios::binary);
       TProfil::pm->readMulti(f);
        loadList1();            // Load...
        loadList2();
