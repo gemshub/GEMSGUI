@@ -31,7 +31,11 @@ LIBS		+= -lXft -lXcursor -lXinerama -lXrandr
 endif
 endif
 
+ifeq ("$(shell uname)", "Darwin")
+SHARED_SRC_DIR	= gems2.app/Contents/Resources
+else
 SHARED_SRC_DIR	= shared
+endif
 
 # commands
 CC		= c++
@@ -52,7 +56,7 @@ endif
 
 subdirs		= mods vizor
 backupfiles	= doc data vizor mods  Makefile* *.spec
-rpmfiles	= lib doc vizor mods shared Makefile* *.spec
+rpmfiles	= lib doc vizor mods shared img projects Makefile* *.spec
 
 ifeq ("$(shell ls /usr/src/packages -d)", "/usr/src/packages")
 RPMDIR=/usr/src/packages
@@ -116,7 +120,7 @@ backup:
 backupd: 
 	 tar cv ~/GEMS2test | bzip2 > gems_data-`date +%Y%m%d`.tar.bz2
 
-# builds bianary package (rpm -bb)
+# builds binary package (rpm -bb)
 rpm:	check_shared
 	mkdir -p /tmp/$(NAME)-$(VERSION)
 	tar c --exclude-from doc/tar_backup.exclude $(rpmfiles) | tar -xC /tmp/$(NAME)-$(VERSION)
@@ -153,5 +157,6 @@ check_shared:
 	if [ -d $(SHARED_SRC_DIR)/doc/pdf ]; then /bin/true; else /bin/false; fi
 	if [ -d $(SHARED_SRC_DIR)/doc/txt ]; then /bin/true; else /bin/false; fi
 	if [ -d $(SHARED_SRC_DIR)/img ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/data ]; then /bin/true; else /bin/false; fi
 	if [ -f $(SHARED_SRC_DIR)/img/gems32.xpm ]; then /bin/true; else /bin/false; fi
 	if [ -f doc/gems2.desktop ]; then /bin/true; else /bin/false; fi
