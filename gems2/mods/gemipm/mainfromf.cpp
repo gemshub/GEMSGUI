@@ -17,13 +17,13 @@ istream& f_getline(istream& is, gstring& str, char delim);
 // -t/-b <dataCH file name> <dataBR file name1> ... <dataBR file nameN>
 //
 
-//extern "C"
-//int __stdcall MAIF_START( int nNodes,
-//   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
-
 extern "C"
-int MAIF_START( int nNodes,
-   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
+int __stdcall MAIF_START( int &nNodes,
+  int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
+
+//extern "C"
+//int MAIF_START( int &nNodes,
+//   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
 {
 
 //-------------------------------------------------------------------
@@ -170,54 +170,54 @@ int MAIF_START( int nNodes,
 // calc one node data bridge instance indexed iNode (fortran conv.) 
 // returns 1 if Ok; 0 or -1 if error
 
-//extern "C"
-//int __stdcall MAIF_CALC( int  iNode,
 extern "C"
-int MAIF_CALC( int  iNodeF,  // fortran index; negative means read only
-   short& p_NodeHandle,    // Node identification handle
-   short& p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
-   short& p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
-   short& p_NodeStatusFMT, // Node status code FMT; see typedef NODECODEFMT
-   short& p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-   short& p_IterDone,      // Number of iterations performed by IPM (if not need GEM)
+int __stdcall MAIF_CALC( int  &iNodeF,
+//extern "C"
+//int MAIF_CALC( int  &iNodeF,  // fortran index; negative means read only
+   short &p_NodeHandle,    // Node identification handle
+   short &p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
+   short &p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
+   short &p_NodeStatusFMT, // Node status code FMT; see typedef NODECODEFMT
+   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
+   short &p_IterDone,      // Number of iterations performed by IPM (if not need GEM)
 // Chemical scalar variables
-   double& p_T,     // Temperature T, K                        +      +      -     -
-   double& p_P,     // Pressure P, bar                         +      +      -     -
-   double& p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
-   double& p_Vi,    // Volume of inert subsystem  ?            +      -      -     +
-   double& p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
-   double& p_Mi,    // Mass of inert part, kg    ?             +      -      -     +
-   double& p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
-   double& p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
-   double& p_Hi,    // Enthalpy of inert subsystem (J) ?       +      -      -     +
-   double& p_IC,    // Effective molal aq ionic strength           -      -      +     +
-   double& p_pH,    // pH of aqueous solution                      -      -      +     +
-   double& p_pe,    // pe of aqueous solution                      -      -      +     +
-   double& p_Eh,    // Eh of aqueous solution, V                   -      -      +     +
-   double& p_denW,
-   double& p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
-   double& p_epsW,
-   double& p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
+   double &p_T,     // Temperature T, K                        +      +      -     -
+   double &p_P,     // Pressure P, bar                         +      +      -     -
+   double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
+   double &p_Vi,    // Volume of inert subsystem  ?            +      -      -     +
+   double &p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
+   double &p_Mi,    // Mass of inert part, kg    ?             +      -      -     +
+   double &p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
+   double &p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
+   double &p_Hi,    // Enthalpy of inert subsystem (J) ?       +      -      -     +
+   double &p_IC,    // Effective molal aq ionic strength           -      -      +     +
+   double &p_pH,    // pH of aqueous solution                      -      -      +     +
+   double &p_pe,    // pe of aqueous solution                      -      -      +     +
+   double &p_Eh,    // Eh of aqueous solution, V                   -      -      +     +
+   double &p_denW,
+   double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
+   double &p_epsW,
+   double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
 //  FMT variables (units need dimensionsless form)
-   double& p_Tm,    // actual total simulation time
-   double& p_dt,    // actual time step
-   double& p_dt1,   // priveous time step
-   double& p_ot,    // output time control for postprocessing
-   double& p_Vt,    // total volume of node (voxel) = dx*dy*dz, m**3
-   double& p_eps,   // effective (actual) porosity normalized to 1
-   double& p_Km,    // actual permeability, m**2
-   double& p_Kf,    // actual DARCY`s constant, m**2/s
-   double& p_S,	    // specific storage coefficient, dimensionless
-   double& p_Tr,    // transmissivity m**2/s
-   double& p_h,	    // actual hydraulic head (hydraulic potential), m
-   double& p_rho,   // actual carrier density for density driven flow, g/cm**3
-   double& p_al,    // specific longitudinal dispersivity of porous media, m
-   double& p_at,    // specific transversal dispersivity of porous media, m
-   double& p_av,    // specific vertical dispersivity of porous media, m
-   double& p_hDl,   // hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
-   double& p_hDt,   // hydraulic transversal dispersivity, m**2/s
-   double& p_hDv,   // hydraulic vertical dispersivity, m**2/s
-   double& p_nPe,   // node Peclet number, dimensionless
+   double &p_Tm,    // actual total simulation time
+   double &p_dt,    // actual time step
+   double &p_dt1,   // priveous time step
+   double &p_ot,    // output time control for postprocessing
+   double &p_Vt,    // total volume of node (voxel) = dx*dy*dz, m**3
+   double &p_eps,   // effective (actual) porosity normalized to 1
+   double &p_Km,    // actual permeability, m**2
+   double &p_Kf,    // actual DARCY`s constant, m**2/s
+   double &p_S,	    // specific storage coefficient, dimensionless
+   double &p_Tr,    // transmissivity m**2/s
+   double &p_h,	    // actual hydraulic head (hydraulic potential), m
+   double &p_rho,   // actual carrier density for density driven flow, g/cm**3
+   double &p_al,    // specific longitudinal dispersivity of porous media, m
+   double &p_at,    // specific transversal dispersivity of porous media, m
+   double &p_av,    // specific vertical dispersivity of porous media, m
+   double &p_hDl,   // hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
+   double &p_hDt,   // hydraulic transversal dispersivity, m**2/s
+   double &p_hDv,   // hydraulic vertical dispersivity, m**2/s
+   double &p_nPe,   // node Peclet number, dimensionless
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH
    double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +

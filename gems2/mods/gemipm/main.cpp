@@ -7,14 +7,14 @@
 #include "m_param.h"
 #include "gdatastream.h"
 
-// extern "C" int __stdcall MAIF_START( int nNodes,
-//   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
-
-extern "C" int MAIF_START( int nNodes,
+extern "C" int __stdcall MAIF_START( int &nNodes,
    int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
 
-// extern "C" int __stdcall MAIF_CALC( int iNode,
-extern "C" int MAIF_CALC( int iNodeF, // negative: input only (fortran index)
+// extern "C" int MAIF_START( int &nNodes,
+//   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
+
+extern "C" int __stdcall MAIF_CALC( int &iNodeF,
+// extern "C" int MAIF_CALC( int &iNodeF, // negative: input only (fortran index)
    short &p_NodeHandle,    // Node identification handle
    short &p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short &p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -82,6 +82,7 @@ extern "C" int MAIF_CALC( int iNodeF, // negative: input only (fortran index)
 int
 main( int argc, char* argv[] )
 {
+     int nNods = 1;
      gstring multu_in = "";
      gstring chbr_in   = "";
 
@@ -102,7 +103,7 @@ main( int argc, char* argv[] )
 // cout <<  multu_in.c_str() << " " << chbr_in.c_str() << endl;
 
 // Initial reading of arrays
-      MAIF_START( 1, c_to_i1, c_to_i2, 0 );
+      MAIF_START( nNods, c_to_i1, c_to_i2, 0 );
 
 //      DATABR
 //      dBR = 0;
