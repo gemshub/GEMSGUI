@@ -518,7 +518,8 @@ TVisor::fromWinCFG()
                 pVisorImp->setUpdateInterval( visor_conf.getcInt() );
             }
             else
-#ifdef __unix
+//#ifdef __unix
+#if 1
                 if( name == "general_font_string" ) {
                     visor_conf.getcStr(name);
                     name.strip();
