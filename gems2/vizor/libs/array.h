@@ -82,11 +82,11 @@ TAllocator<T>::realloc(size_t sz, size_t old_cnt)
 {
     T* pt = new T[sz];
     for( size_t ii=0; ii<old_cnt; ii++ )
-        pt[ii] = p[ii];
+        pt[ii] = this->p[ii];
 
-    delete[] p;
-    size = sz;
-    return p = pt;
+    delete[] this->p;
+    this->size = sz;
+    return this->p = pt;
 }
 
 /* Changes the size of the array and 
@@ -97,16 +97,16 @@ size_t
 TAllocator<T>::resize(size_t ind)
 {
     //  IF_THROW( ind<0, EIndex );
-    size_t old_cnt = count;
-    if( ind >= count )
-        count = ind+1;
-    if( ind < size )
-        return size;
+    size_t old_cnt = this->count;
+    if( ind >= this->count )
+        this->count = ind+1;
+    if( ind < this->size )
+        return this->size;
 
     size_t sz = ( ind/uGRAN + 1) * uGRAN;
-    realloc(sz,old_cnt);
+    realloc(sz, old_cnt);
 
-    return size;
+    return this->size;
 }
 
 /* Constructor. Takes the initial size of the array
@@ -131,8 +131,8 @@ TAllocator<T>::Remove(size_t ind)
 {
     IF_THROW( (ind >= count), EIndex );
     for( size_t ii=ind; ii<count-1; ii++ )
-        p[ii] = p[ii+1];
-    count--;
+        this->p[ii] = this->p[ii+1];
+    this->count--;
     return ind;
 }
 
@@ -143,13 +143,13 @@ template <class T>
 void
 TAllocator<T>::Clear(bool freeMem)
 {
-    delete[] p;
-    count = 0;
+    delete[] this->p;
+    this->count = 0;
     if( freeMem )
-        size = uGRAN;
+        this->size = uGRAN;
     //  else 'size' leaves the same
 
-    p = new T[size];
+    p = new T[this->size];
     //  IF_THROW( !p, EAlloc );
 }
 
@@ -176,11 +176,11 @@ public:
     T& elem(size_t ind) const;
     T& operator[](size_t ind) const
     {
-        return elem(ind);
+        return this->elem(ind);
     }
     T* _ptr()
     {
-        return p;
+        return this->p;
     }
 
 // modificators
@@ -195,9 +195,9 @@ template <class T>
 TOArray<T>::TOArray(const TOArray& a):
         TAllocator<T>(a.size, a.gran)
 {
-    count = a.count;
-    for( size_t ii=0; ii<count; ii++ )
-        p[ii] = a.p[ii];
+    this->count = a.count;
+    for( size_t ii=0; ii<this->count; ii++ )
+        this->p[ii] = a.p[ii];
 }
 
 /* returns element at position 'index'
@@ -206,11 +206,11 @@ template <class T>
 inline
 T& TOArray<T>::elem(size_t index) const
 {
-    IF_THROW( (index >= count), EIndex );
+    IF_THROW( (index >= this->count), EIndex );
     // maybe try this:
     // resize( ind );
 
-    return p[index];
+    return this->p[index];
 }
 
 /* TOArray assignment operator
@@ -219,17 +219,17 @@ template <class T>
 const TOArray<T>&
 TOArray<T>::operator=(const TOArray<T>& a)
 {
-    if( p == a.p )
+    if( this->p == a.p )
         return *this;
 
-    delete[] p;
-    gran = a.gran;
-    size = a.size;
-    count = a.count;
+    delete[] this->p;
+    this->gran = a.gran;
+    this->size = a.size;
+    this->count = a.count;
 
-    p = new T[size];
-    for( size_t ii=0; ii<count; ii++ )
-        p[ii] = a.p[ii];
+    this->p = new T[this->size];
+    for( size_t ii=0; ii<this->count; ii++ )
+        this->p[ii] = a.p[ii];
 
     return *this;
 }
@@ -240,9 +240,9 @@ template <class T>
 size_t
 TOArray<T>::Add(const T& t)
 {
-    resize(count);
-    p[count-1] = t;
-    return count-1;
+    resize(this->count);
+    this->p[this->count - 1] = t;
+    return this->count - 1;
 }
 
 /* Adds element to the array at position 'index'
@@ -251,14 +251,14 @@ template <class T>
 size_t
 TOArray<T>::AddAt(const T& t, size_t index)
 {
-    if( index < count )
-        resize(count);
+    if( index < this->count )
+        this->resize(this->count);
     else
-        resize(index);
+        this->resize(index);
 
-    for( size_t ii=count-1; ii>index; ii-- )
-        p[ii] = p[ii-1];
-    p[index] = t;
+    for( size_t ii=this->count-1; ii>index; ii-- )
+        this->p[ii] = this->p[ii-1];
+    this->p[index] = t;
     return index;
 }
 
@@ -269,13 +269,13 @@ template <class T>
 void
 TOArray<T>::SetToArray(T* ptr_n, size_t cnt)
 {
-    delete[] p;
-    p = new T[cnt];
+    delete[] this->p;
+    this->p = new T[cnt];
     //  IF_THROW( !p, EAlloc );
 
-    count = size = cnt;
+    this->count = this->size = cnt;
     for( size_t ii=0; ii<cnt; ii++ )
-        p[ii] = ptr_n[ii];
+        this->p[ii] = ptr_n[ii];
 }
 
 /* TArrayF - extends TOArray with Find() and Sort() functions
@@ -308,8 +308,8 @@ template <class T>
 int
 TArrayF<T>::Find(const T& object) const
 {
-    for( size_t ii=0; ii<GetCount(); ii++ )
-        if( object == elem(ii) )
+    for( size_t ii=0; ii<this->GetCount(); ii++ )
+        if( object == this->elem(ii) )
             return ii;
 
     return -1;
@@ -321,15 +321,15 @@ template <class T>
 void
 TArrayF<T>::Sort()
 {
-    for( int ii=GetCount()-1; ii>0; ii-- )
+    for( int ii=this->GetCount()-1; ii>0; ii-- )
     {
         int imax = ii;
         for( int jj=ii-1; jj>=0; jj-- )
-            if( elem(imax) > elem(ii) )
+            if( this->elem(imax) > this->elem(ii) )
             {
-                T tmp = elem(imax);
-                elem(imax) = elem(jj);
-                elem(jj) = tmp;
+                T tmp = this->elem(imax);
+                this->elem(imax) = this->elem(jj);
+                this->elem(jj) = tmp;
                 imax = jj;
             }
     }
@@ -369,7 +369,7 @@ public:
     T& elem(size_t ind) const;
     T& operator[](size_t ind) const
     {
-        return elem(ind);
+        return this->elem(ind);
     }
     int Find(const T&) const;
     //  T& GetLast() { return elem( GetCount()-1 ); }
@@ -384,9 +384,9 @@ template <class T>
 size_t
 TIArray<T>::Add(T* t)
 {
-    resize(count);
-    p[count-1].reset(t);
-    return count-1;
+    resize(this->count);
+    this->p[this->count - 1].reset(t);
+    return this->count - 1;
 }
 
 /* Adds pointer to the element to the array at position 'index'
@@ -395,13 +395,13 @@ template <class T>
 size_t
 TIArray<T>::AddAt(T* t, size_t ind)
 {
-    if( ind < count )
-        resize(count);
+    if( ind < this->count )
+        this->resize(this->count);
     else
-        resize(ind);
-    for( size_t ii=count-1; ii>ind; ii-- )
-        p[ii] = p[ii-1];
-    p[ind].reset(t);
+        this->resize(ind);
+    for( size_t ii=this->count-1; ii>ind; ii-- )
+        this->p[ii] = this->p[ii-1];
+    this->p[ind].reset(t);
     return ind;
 }
 
@@ -412,10 +412,10 @@ inline
 T&
 TIArray<T>::elem(size_t index) const
 {
-    IF_THROW( (index>=count), EAlloc );
+    IF_THROW( (index >= this->count), EAlloc );
     //  resize( ind );
 
-    return *(p[index]);
+    return *(this->p[index]);
 }
 
 
@@ -443,8 +443,8 @@ template <class T>
 int
 TIArrayF<T>::Find(const T& object) const
 {
-    for( size_t ii=0; ii<GetCount(); ii++ )
-        if( object == elem(ii) )
+    for( size_t ii=0; ii<this->GetCount(); ii++ )
+        if( object == this->elem(ii) )
             return ii;
     return -1;
 }
