@@ -480,7 +480,7 @@ SUR_AGAIN:
             iso_get( ic_isotop );
             break;
         default:
-            Error( cur, "Must be a symbol of element");
+            Error( cur, " E30FPrun: A symbol of element expected here!");
         }
         State = icsymb(); // symbol of element
         switch( State )
@@ -489,9 +489,9 @@ SUR_AGAIN:
             symb_get( ic_symb );
             break;
         default:
-            Error( cur, "Must be a symbol of element");
+            Error( cur, " E30FPrun: A symbol of element expected here!");
         }
-        State = icval(); // valenthe
+        State = icval(); // valence
         switch( State )
         {
         case SCAN_END:
@@ -518,7 +518,8 @@ SUR_AGAIN:
     }
     // if( savc != ' ') *(fs+ti) = savc;
     // all terms scanned
-    ErrorIf( !itt_.GetCount() || lev, form_buf, "Scan formula error" );
+    ErrorIf( !itt_.GetCount() || lev, form_buf,
+             "E31FPrun: Errors in scanning chemical formula" );
     tt.Clear();
     for(uint ii=0; ii<itt_.GetCount(); ii++)
         tt.Add( new ICTERM(itt_[ii]) );
@@ -599,7 +600,7 @@ void TFormula::SetFormula( const char * StrForm )
     len = strcspn( StrForm, EQDEL_CHARS );
     ti = strlen( StrForm );
     len = ( len < ti )? len: ti;
-    ErrorIf( !len, "TFormula", "Null length of formula string");
+    ErrorIf( !len, "TFormula", "E32FPrun: Null length of the formula string");
 
     gstring fbuf = gstring( StrForm, 0, len );
 
@@ -706,7 +707,7 @@ void TFormula::Stm_line( int N, float *Sml, char *ICsym, short *ICval )
             }
         }
         if( jj==-1 )
-            Error( icsp, "No name in ICsym");
+            Error( icsp, "E33FPrun: This is not a symbol of IComp!");
         Sml[jj] += aSC[i];
         if( aVal[i] == SHORT_EMPTY/*I_EMPTY*/ )
             aVal[i] = ICval[jj];
@@ -725,14 +726,14 @@ void TFormula::Stm_line( int N, float *Sml, char *ICsym, short *ICval )
     if( ii < aCn.GetCount() )
         if( fabs( (double)(aZ - tt) ) > 1e-6 )
         {
-            gstring str = "In formula: ";
+            gstring str = " in the formula: ";
             str +=  aFormula;
             str += "\n calculated charge: ";
             vstr   buf(30);
             sprintf( buf, "%g", aZ );
             str += buf.p;
 
-            vfMessage( 0,  "Charge disbalance!", str.c_str() );
+            vfMessage( 0,  "W34FPrun: Charge disbalance ", str.c_str() );
         }
 }
 
@@ -742,13 +743,13 @@ gstring TFormula::form_extr( int nCk, int L, char *Cfor )
     int i, len;
     char  *Fbg;
 
-    ErrorIf( nCk >= L || nCk < 0, "Formula", "Error in formula index" );
+    ErrorIf( nCk >= L || nCk < 0, "Formula", "E35FPrun: Error in the formula list!" );
     Fbg = Cfor;
     if( nCk )
         for( i=0; i<nCk; i++ )
         {
             len = strcspn( Fbg, EQDEL_CHARS );
-            ErrorIf( !len && nCk < L-1, "Formula", "Error in formula list" );
+            ErrorIf( !len && nCk < L-1, "Formula", "E35FPrun: Error in the formula list" );
             Fbg += len+1;
             Fbg += strspn( Fbg, BLANK_SYMBOLS );
         }
@@ -757,7 +758,7 @@ gstring TFormula::form_extr( int nCk, int L, char *Cfor )
     else
         len = strcspn( Fbg, EQDEL_CHARS );
 
-    ErrorIf( !len, "Formula", "Error in formula length" );
+    ErrorIf( !len, "Formula", "E36FPrun: Invalid formula length!" );
 
     gstring rez( Fbg, 0, len );
     return rez;
@@ -788,10 +789,10 @@ void TFormula::TestIC( const char* key, int N, char *ICsym )
         {
             gstring msg = "IComp: ";
             msg += gstring(ICS.p, 0, MAXICNAME+MAXSYMB );
-            msg += "\n in DComp&ReacDC record: \n";
+            msg += "\n in formula in DComp/ReacDC record: \n";
             msg += gstring( key, 0, DC_RKLEN);
 
-            Error( "Invalid IComp", msg.c_str() );
+            Error( "E37FPrun: Invalid symbol ", msg.c_str() );
         }
     }
 }

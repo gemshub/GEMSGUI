@@ -141,7 +141,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
         K[6]=0.0;
         break;
     default:
-        Error( GetName(),"Illegal CE in Convert_KT_to_Cp.");
+        Error( GetName(),"E23RErun: Illegal method code in Convert_KT_to_Cp()");
     }
 
     /* Calc lgK, Hr and Sr */
@@ -169,7 +169,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
             fabs( rcp->Gs[0] - Gr ) >= 57.08 ||
             fabs( rcp->Ks[1] - lgK ) >= 0.01 )
     {
-        gstring msgbuf = "Warning: calculated pK = ";
+        gstring msgbuf = "W24RErun: Warning: calculated pK = ";
         vstr doublbuf(100);
 
         sprintf( doublbuf, "%g", lgK );
@@ -177,10 +177,10 @@ void TReacDC::Convert_KT_to_Cp( int CE )
         msgbuf += ", G0 = ";
         sprintf( doublbuf, "%g", Gr );
         msgbuf += doublbuf;
-        msgbuf += ", \n Sr = ";
+        msgbuf += ", \n dSr = ";
         sprintf( doublbuf, "%g", Sr );
         msgbuf += doublbuf;
-        msgbuf += " or Hr = ";
+        msgbuf += " or dHr = ";
         sprintf( doublbuf, "%g", Hr );
         msgbuf += doublbuf;
         msgbuf += " values are inconsistent\n";
@@ -191,7 +191,8 @@ void TReacDC::Convert_KT_to_Cp( int CE )
             rcp->Hs[0] = Hr;
             rcp->Cps[0] = Cpr;
             rcp->Ks[1] = lgK;
-            Error( GetName(),"calculated pKt, dSr or dHr values are inconsistent.");
+            Error( GetName(),
+        "E25RErun: Calculated pK, dSr or dHr are inconsistent - bailing out!");
         }
     }
     return;
@@ -272,7 +273,7 @@ void TReacDC::Recalc( int q, const char *key  )
     else rc[q].Zz = (float)Z;
     rc[q].mwt = (float)MW;
 
-    SetString("RC_test   Checking REACDC definition");
+    SetString("RC_test   Checking this ReacDC definition");
     Update();
 
     switch( rc[q].pstate[0] )
@@ -297,7 +298,8 @@ void TReacDC::Recalc( int q, const char *key  )
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
     }
-    Error( GetName(),"Check stoichiometry, charge or valences in the formula.");
+    Error( GetName(),
+    "W26RErun: Please, check stoichiometry, charge or valences in the formula.");
 NEXT:
     /* test value st.mol.volume */
     if( ( rc[q].pstate[0] == CP_GAS || rc[q].pstate[0] == CP_GASI )
@@ -347,11 +349,11 @@ NEXT:
     if( CM == CTPM_REA && rc[q].pct[2] == CPM_PCR && rc[q].PrAki != S_OFF )
     {   /*  Call PRONSPREP  added 19.05.98 */
         if( vfQuestion(window(), GetName(),
-                       "Estimate S, H, Cp, V with PRONSPREP97 algorithm?" ))
+                       "Estimate S, H, Cp, V using PRONSPREP97 algorithm?" ))
         { /* Check if this is dissociation reaction */
             if( rc[q].scDC[rc[q].nDC-1] < 0 )
                 PronsPrep( key );
-            else Error( GetName()," PP97 requires a dissociation reaction, please fix it! ");
+            else Error( GetName(),"W27RErun: PP97 requires a dissociation reaction!");
         }
     }
 }
@@ -460,7 +462,7 @@ STAGE1:
         LK = -rcp->Gs[0] / lg_to_ln / R_T;
         if( fabs( LK-rcp->Ks[1] ) >= 0.01 )
             if( !vfQuestion(window(), GetName(),
-                            "Inconsistent dGr and logK: take logK (Y) or dGr (N)?" ))
+          "W28RErun: Inconsistent dGr and logK: take logK (yes) or dGr (no)?" ))
                 rcp->Ks[1] = LK;
         rcp->Gs[0] = -rcp->Ks[1] * lg_to_ln * R_T;
         ;
@@ -470,7 +472,7 @@ STAGE1:
     }
 
 STAGE2:
-    /* etap 2:foS excluded and rearranged 5 Dec 96 DAK (see remnants at end of file)*/
+    /* 2: foS excluded and rearranged 5 Dec 96 DAK (see remnants at end of file)*/
     for( i=0; i<rcp->nDC-1; i++ )
     {
         G  += rcp->scDC[i]*rcp->ParDC[i][_Gs_];
@@ -491,7 +493,7 @@ STAGE2:
     }
     else if( stG && stH && stS ) ;
     else
-        Error( GetName(),"One of values Gs, Hs and Ss is missing.");
+        Error( GetName(),"W29RErun: One of values dGr, dHr, or dSr is missing.");
 
     /* calc Cp and V for vedushiy component  */
     if( IsFloatEmpty( rcp->Cps[0] ))
@@ -592,7 +594,7 @@ void TReacDC::Recalc_ISO1( double /*foS*/ )
             rcp->Ks[1] = log( rcp->Ks[0] ) * 1000.;
         if( fabs( LK-rcp->Ks[1] ) >= 0.01 )
             if( !vfQuestion(window(), GetName(),
-                            "Inconsistent dGr and logK: take logK (Y) or dGr (N)?" ))
+                "W30Rerun: Inconsistent dGr and logK: take logK (Y) or dGr (N)?" ))
                 rcp->Ks[1] = LK;
         rcp->Gs[0] = -rcp->Ks[1] * R_T/1000.;
         rcp->Ks[0] = exp( rcp->Ks[1]/1000. );
@@ -600,7 +602,7 @@ void TReacDC::Recalc_ISO1( double /*foS*/ )
     }
     if(!stK && !stLK && !stG )
         Error( GetName(),
-               "One of values K, 1000lnK, dGr is not specified");
+               "W31RErun: One of values K, 1000lnK, dGr was not specified");
 STAGE2:
     return;
 }
@@ -697,7 +699,7 @@ void TReacDC::Recalc_ISO2( double foS )
                          (rcp->Hs[0] - H)/rcp->scDC[rcp->nDC-1];
         goto FINITA;
     }
-    Error( GetName(),"One of values Gs, Hs and Ss is missing in Recalc_ISO2. ");
+    Error( GetName(),"W32RErun: One of values dGr, dHr, or dSr is missing (Iso2)");
 FINITA:
     /*calc Cp and  V for vedushiy component */
     Cp = 0.0;
@@ -928,7 +930,7 @@ void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
         if( Pa >= rc[q].Pint[0] && Pa < rc[q].Pint[1] )
             Pa = rc[q].Pint[0];
         else
-            Error( GetName(),"Illegal Pa in calc_r_interp.");
+            Error( GetName(),"E33RErun: Invalid Pa in calc_r_interp()");
         nP = 1;
         break;
     case 2:
@@ -942,7 +944,7 @@ void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
         nP = rc[q].nPp;
         break;
     }
-    /* call interpolyations */
+    /* call interpolations */
     lgK = lagr( rc[q].TCint, rc[q].Pint, rc[q].logK,
                 Pa, aW.WW(p).TC, nP, rc[q].nTp );
     //  if( lgK > 7777776. )
@@ -976,9 +978,9 @@ float TReacDC::lagr(float *a, float *x, float *y, float x1,
     int pa, px, i=0, j, j1, k, ja, ja1;
 
     if (x2 < a[0])
-        Error( GetName(), "x2  ­ no smoler that T[0].");
+        Error( GetName(), "E34RErun: x2 less than Tmin!");
     if(x1 < x[0])
-        Error( GetName(),"x1  ­ no smoler that Pint[0].");
+        Error( GetName(), "E35RErun: x1 less than Pmin!");
     /*s=0.;*/
     pa = p1-1;
     px = p0-1;

@@ -38,11 +38,11 @@ TReacDC::TReacDC( int nrt ):
 {
     nQ =8;
     aFldKeysHelp.Add(
-        "l<4  Phase state of (reaction-defined) DC <-REACDC (<-DCOMP)");
+        "l<4  Phase state of new (reaction-defined) DC <-REACDC (<-DCOMP)");
     aFldKeysHelp.Add(
         "l<8  Identifier of (REAC)DC group  <-REACDC (<-DCOMP)");
     aFldKeysHelp.Add(
-        "l<16 Name of reaction-defined DC (compound) <-REACDC (<-DCOMP)");
+        "l<16 Name of new (reaction-defined) DC (compound) <-REACDC (<-DCOMP)");
     aFldKeysHelp.Add(
         "l<4  Code of thermodynamic dataset (file) <-REACDC (<-DCOMP)");
 
@@ -53,13 +53,13 @@ TReacDC::TReacDC( int nrt ):
     }
     rcp=&rc[0];
     set_def();
-    start_title = " Reaction format thermodynamic data for species";
+    start_title = " Reaction-defined format thermodynamic data for DC (species)";
 }
 
 // link values to objects
 void TReacDC::ods_link( int q)
 {
-    ErrorIf( q >= nQ, GetName(), "Illegal link (q>=8)!" );
+    ErrorIf( q >= nQ, GetName(), "E00RErem: Illegal link (q>=8)!" );
 
     // static
     //aObj[ o_repst].SetPtr( rc[q].pstate );
@@ -133,7 +133,7 @@ void TReacDC::ods_link( int q)
 // set dynamic Objects ptr to values
 void TReacDC::dyn_set(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "Illegal access to rc in dyn_set.");
+    ErrorIf( rcp!=&rc[q], GetName(), "E01RErem: Illegal access to rc in dyn_set()");
     memcpy( rcp->pstate, rt[nRT].UnpackKey(), RE_RKLEN );
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].GetPtr();
     rc[q].rDC =   (char *)aObj[ o_rerdc ].GetPtr();
@@ -155,7 +155,7 @@ void TReacDC::dyn_set(int q)
 // free dynamic memory in objects and values
 void TReacDC::dyn_kill(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "Illegal access to bc in dyn_kill.");
+    ErrorIf( rcp!=&rc[q], GetName(), "E02RErem: Illegal access to rc in dyn_kill()");
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].Free();
     rc[q].rDC =   (char *)aObj[ o_rerdc ].Free();
     rc[q].scDC =  (double *)aObj[ o_rescdc ].Free();
@@ -184,9 +184,9 @@ void TReacDC::w_dyn_kill()
 // realloc dynamic memory
 void TReacDC::dyn_new(int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "Illegal access to bc in dyn_new.");
+    ErrorIf( rcp!=&rc[q], GetName(), "E03RErem: Illegal access to rc in dyn_new()");
     short nTp, nPp;
-    ErrorIf( rc[q].nDC < 1, GetName(), "Count of DC is < 1." );
+    ErrorIf( rc[q].nDC < 1, GetName(), "E04RErem: Number of DC in reaction is < 1" );
 
     rc[q].DCk =   (char (*)[DC_RKLEN])aObj[ o_redck ].Alloc(rc[q].nDC, 1,DC_RKLEN);
     rc[q].rDC =   (char *)aObj[ o_rerdc ].Alloc(rc[q].nDC, 1, A_);
@@ -253,7 +253,7 @@ void TReacDC::w_dyn_new()
 //set default information
 void TReacDC::set_def( int q)
 {
-    ErrorIf( rcp!=&rc[q], GetName(), "Illegal access to rc in set_def.");
+    ErrorIf( rcp!=&rc[q], GetName(), "E05RErem: Illegal access to rc in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
     //memset( rc[q].pct, 0, sizeof( REACDC )-DC_RKLEN );
@@ -384,10 +384,11 @@ AGAIN_MOD:
         Nn1 = 1;
     }
     if( rcp->nTp < 0 || rcp->nPp < 0 || rcp->Nsd < 0 || rcp->Nsd > 4 )
-        if( vfQuestion( window(), GetName(),"Invalid values! Repeat?" ))
+        if( vfQuestion( window(), GetName(),
+           "W06RErem: Some counters (nTp, nCp, Nsd) are invalid! Remake again?" ))
             goto AGAIN_MOD;
         else
-            Error( GetName(), "Invalid values!");
+            Error( GetName(), "E07RErem: Invalid counters (nTp, nCp, Nsd) - bailing out!");
     CM = toupper( rcp->pct[0] );
     CE = toupper( rcp->pct[1] );
     CV = toupper( rcp->pct[2] );
@@ -477,7 +478,7 @@ AGAIN_MOD:
                 Nf1++;
                 continue;
             default:
-                Error( GetName(), "Invalid rcp->rDC[i]");
+                Error( GetName(), "E08RErem: Invalid reaction species code!");
             }
         }
      }
@@ -511,8 +512,8 @@ AGAINRC:
     if( aRclist.GetCount() < 1 && aDclist.GetCount() < 1 )
     {
        switch ( vfQuestion3(window(), GetName(),
-            "Number of selected ReacDC&DComp keys < 1.\n"
-            " Mark again, proceed without ReacDC&DComp or Cancel?",
+            "W09RErem: Number of selected ReacDC/DComp keys < 1.\n"
+            " Mark again, proceed without ReacDC/DComp or Cancel?",
             "&Repeat", "&Proceed"))
        {
          case VF3_1:
@@ -521,11 +522,9 @@ AGAINRC:
          case VF3_2:
                 break;
          case VF3_3:  Error( GetName(),
-                      "No ReacDC&DComp records selected...");
+                "E10RErem: No ReacDC/DComp records selected - bailing out!");
        }
     }
-
-
 
     /*================================*/
     rcp->nDC = aDclist.GetCount()+aRclist.GetCount()+Nn1+Nf1;
@@ -535,7 +534,7 @@ AGAINRC:
     dyn_new();
 
     /*================================*/
-    // get aMcv+aMrv  (Remake cod! Must be by component groups )
+    // get aMcv+aMrv  (Remake code! Must be by component groups )
     for( i=0,iir=0; i<rcp->nDC; i++ )
     {
         if( !rcp->scDC[i] )
@@ -707,18 +706,18 @@ TReacDC::RCthermo( int q, int p )
             aDC->DCthermo( 0, p+1 );
             aW.WW(p).P = aW.twp->P;  /* !!!!!!return P on KNP */
             break;
-        case SRC_NEWDC: /* vedushiy component */
+        case SRC_NEWDC: /* new component */
             aW.twp->pSD = SRC_NEWDC;
             aW.twp->pTM = S_REM;
             isotop = 0;
             goto CALCULATE_DELTA_R;
-        case SRC_NEWISO: /* isotop form  */
+        case SRC_NEWISO: /* isotopic form  */
             aW.twp->pSD = SRC_NEWISO;
             aW.twp->pTM = S_REM;
             isotop = 1;
             goto CALCULATE_DELTA_R;
         default:
-            Error( GetName(),"Invalid DC code in RCthermo.");
+            Error( GetName(),"E01RErun: Invalid DC code in RCthermo()");
         }
 
         /* Unload work structure to REACDC */
@@ -750,7 +749,7 @@ CALCULATE_DELTA_R:
         switch( CE )
         {
         default:
-            Error(dckey.p,"Invalid code in CE.");
+            Error(dckey.p, "E12RErun: Invalid CE method flag!");
         case CTM_HKF:
             calc_tphkf_r( q, p );
             break; /* calc aqueous species */
@@ -780,22 +779,22 @@ CALCULATE_DELTA_R:
             /*                    case CTM_DKE:  calc_dissoc_r( q, p, CE, CV ); */
             break;
         default:
-            Error(dckey.p,"Invalid code in CE.");
+            Error(dckey.p,"E13RErem: Invalid CE method flag!");
         }
         break;
     case CTPM_ISO:
         calc_iso_a( q, p );
         break;
-    case CTPM_SOR: /* sorbcion  */
+    case CTPM_SOR: /* sorption  */
         calc_exion_r( q, p );
         break;
     default:
-        {  /* Illegal cod method of calculation  */
-            gstring msg = "Error in PDB record '";
+        {  /* Illegal code method of calculation  */
+            gstring msg = "W14RErun: Invalid CM method flag!";
             msg += dckey;
-            msg += "'.\nChange record?";
+            msg += "'.\n Change the record?";
             //if( !vfQuestion( GetName(), buf );
-            Error( dckey.p, "Invalid code of calculation method for REACDC!");
+            Error( dckey.p, "E14RErun: Invalid CM method flag in ReacDC!");
             //  else  RecBuild( dckey );  // !!!!!! Recalc new record?
         }
 
@@ -867,7 +866,7 @@ CALCULATE_DELTA_R:
        SVERJENSKY, SHOCK, AND HELGESON (1997):
        "Prediction of the thermodynamic properties of aqueous metal complexes
         to 1000 C and 5kb" (Geochim. Cosmochim. Acta, 61, 1359-1412).
- 
+
    --- THIS VERSION IS VALID FOR MONOVALENT LIGANDS ONLY EXCEPT OH- ---
    --- Modified by D.A.Kulik to inclide 1st complexes of SO4-2 and CO3-2
          Modified by Sverjensky and Shock, 1992.
@@ -907,7 +906,7 @@ void TReacDC::PronsPrep( const char *key )
     CSC = rcp->scDC[iC];
     scC = fabs(CSC);
     if ( scC > 1. )
-        Error( GetName(), "fabs of Cps values for DC  > 1 in PronsPrep");
+        Error( GetName(), "E15RErun: |Cps| > 1 in PronsPrep for this reaction!");
 
     /* Loading data for ligand */
     ZL = rcp->ParDC[iL][_Zs_];
@@ -948,7 +947,7 @@ void TReacDC::PronsPrep( const char *key )
         break;
     default:
         Error( GetName(),
-               "Invalid stoichiometry coefficients of DC in reaction.");
+               "E16RErun: Invalid stoich.coefficients of DC in reaction!");
     }
 
     /*
@@ -1186,9 +1185,10 @@ void TReacDC::PronsPrep( const char *key )
     rcp->Cps[1] = CP * cal_to_J;
     rcp->Vs[1] = V/10.0;
 
-    aMod[RT_REACDC].ModUpdate("PRONSPREP correlations done");
+    aMod[RT_REACDC].ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
 
-    if( !vfQuestion( window(), "DCOMP", "Would you like to create/modify DCOMP record?" ))
+    if( !vfQuestion( window(), "DComp",
+               "Would you like to create/modify a DComp record?" ))
         return;
     /* Trying to read resulting DCOMP */
 
@@ -1228,16 +1228,16 @@ void TReacDC::PronsPrep( const char *key )
     /* Creating/saving DCOMP record */
     if( Rfind>=0 )
     {
-        if( !vfQuestion( window(), "DCOMP",
-                         "DCOMP record already exist! Modify it (Y) or skip (N)?" ))
+        if( !vfQuestion( window(), "DComp",
+             "The DComp record already exists! Modify it (Y) or skip (N)?" ))
             return;
         //Rnum = rt[RT_DCOMP].Find(dcn);
         rt[RT_DCOMP].Rep(Rfind/*Rnum*/);
     }
     else TDComp::pm->AddRecord(dcn);
     /* A reminder */
-    vfQuestion( window(), "DCOMP", "PP97: DCOMP record is ready. "
-                "Don't forget re-calculate it! ");
+    vfQuestion( window(), "DComp", "PRONSPREP Step 2: the DComp record is ready!"
+                "Don't forget to re-calculate it! ");
 }
 
 
@@ -1281,26 +1281,26 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     case NONE_:
     case EMPC_:
         {
-            msg = "PDB chain  ";
+            msg = "W17RErun: In database chain  ";
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
             msg += gstring( key, 0, db->KeyLen() );
-            msg += "'.\n Maybe, a PDB file is not linked to chain.\n";
+            msg += "'.\n Maybe, a database file is not linked to chain.\n";
             if(pVisor->ProfileMode == true)
                 Error( GetName(), msg.c_str() );
-            msg +=  "Create new record?";
+            msg +=  "Create a new record?";
             if( !vfQuestion(window(), GetName(), msg ))
-                Error( GetName(), " New record create action dismissed...");
+                Error( GetName(), " E18RErun: New record create action dismissed...");
             gstring str = key.p;
 
             if( str.find_first_of("*?" ) != gstring::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
-                                      "Enter a new data record key, please!", KEY_NEW);
+                            "Enter a new data record key, please!", KEY_NEW);
             if(  str.empty() )
-                Error( GetName(), " Record create action dismissed...");
+                Error( GetName(), " E19RErun: Record create action dismissed (no key)...");
             int  Rnum = db->Find( str.c_str() );
-            ErrorIf( Rnum>=0, GetName(), " Record alredy exist!");
+            ErrorIf( Rnum>=0, GetName(), " W20RErun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT);
             gstring str1 = db->UnpackKey();
             check_input( str1.c_str() );
@@ -1308,15 +1308,16 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
             SetString("Remake of new record finished OK. "
                       " It is recommended to re-calculate the data");
             pVisor->Update();
-            Error("Calculation failed!", " Check data fields and try again!");
+            Error("E21RErun: Calculation failed!",
+                    " Please, check data fields and try again!");
         } // break;
     case FAIL_:
-        msg = "Failure!!! PDB chain ";
+        msg = "E22RErun: Failure!!! Database chain ";
         msg += GetName();
         msg += " is corrupt,\n"
-               "Data record key '";
+               "data record key '";
         msg += gstring( key, 0, db->KeyLen() );
-        msg += "'\n Try to unload or re-index this PDB chain!";
+        msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }
 }

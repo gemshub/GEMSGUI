@@ -425,7 +425,7 @@ TDComp::calc_tpH2O( int pst )
 {
     double CaltoJ = cal_to_J;
 
-    ErrorIf( !aW.twp, GetName(), "Udefined twp!" );
+    ErrorIf( !aW.twp, GetName(), "E23DCrun: Undefined twp!" );
     aW.twp->T = aSta.Temp;
     aW.twp->P = aSta.Pres;
     aW.twp->V = dcp->mwt / aSta.Dens[pst] / 10.;  /* j/bar */
@@ -546,7 +546,7 @@ void TDComp::gfun92(double TdegC, double Pbars, double Dgcm3, double betab,
     *dgdT   = 0.0e0;
     *d2gdT2 = 0.0e0;
     if ((TdegC > TMAX+TOL) || (Pbars > PMAX+TOL))
-        Error( GetName(), "(TdegC > TMAX+TOL) || (Pbars > PMAX+TOL)!" );
+        Error( GetName(), "E24DCrun: (TdegC > TMAX+TOL) || (Pbars > PMAX+TOL)!" );
     /* use Shock et al.(1991) equations with f(P,T) difference function */
     if (geqn == 3)
     {
@@ -554,7 +554,7 @@ void TDComp::gfun92(double TdegC, double Pbars, double Dgcm3, double betab,
                g,dgdP,dgdT,d2gdT2);
     }
     else
-        Error( GetName(), "gfun92 - geqn!=3 no cod" );
+        Error( GetName(), "E25DCrun: gfun92()- error in HGK calculations" );
 }
 
 //--------------------------------------------------------------------//
@@ -670,7 +670,7 @@ void TDComp::calc_tphkf( int q, int /*p*/ )
 
     AQSREF arf;
     ErrorIf(!dc[q].HKFc, GetName(),
-            "Record dc dosn`t have HKF coefficients!");
+       "E26DCrun: This DComp record does not have HKF EoS coefficients!");
     arf.Gfaqs  = dc[q].Gs[0] * JtoCal;
     arf.Hfaqs  = dc[q].Hs[0] * JtoCal;
     arf.SPrTra = dc[q].Ss[0] * JtoCal;

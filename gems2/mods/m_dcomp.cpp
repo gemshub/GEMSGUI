@@ -53,14 +53,14 @@ TDComp::TDComp( int nrt ):
     aFldKeysHelp.Add(
         "l<8  Identifier of DC group (capital letters, digits, _ )");
     aFldKeysHelp.Add(
-        "l<16 Name of Dependent Component (DC, compound)");
+        "l<16 Name of Dependent Component (species, compound)");
     aFldKeysHelp.Add(
         "l<4  Code of data subset { sa xs ... }");
     dcp=&dc[1];
     set_def(1);
     dcp=&dc[0];
     set_def();
-    start_title = " Thermodynamic/EOS format data for species ";
+    start_title = " Thermochemical/EOS format data for DC (species) ";
 }
 
 // link values to objects
@@ -135,7 +135,7 @@ void TDComp::ods_link( int q)
 void TDComp::dyn_set(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "Illegal access to dc in dyn_set");
+             "E00DCrem: Illegal access to dc in dyn_set()");
     memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
     dc[q].TCint= (float *)aObj[ o_dccpint ].GetPtr();
     dc[q].Cp =   (float *)aObj[ o_dccp ].GetPtr();
@@ -152,22 +152,22 @@ void TDComp::dyn_set(int q)
     dc[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_dcsdval ].GetPtr();
 
     if( dc[q].Cp && aObj[ o_dccp ].GetN() != MAXCPCOEF )
-        vfMessage( 0, dcp->pstate, "Illegal size ai_Cp (Remake record)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_Cp (Remake needed)" );
 
     if( dc[q].CpFS && aObj[ o_dccpfs ].GetN() != MAXCPFSCOEF )
-        vfMessage( 0, dcp->pstate, "Illegal size aiCpFS (Remake record)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size aiCpFS (Remake needed)" );
 
     if( dc[q].HKFc && aObj[ o_dchkf ].GetN() != MAXHKFCOEF )
-        vfMessage( 0, dcp->pstate, "Illegal size ai_HKF (Remake record)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_HKF (Remake needed)" );
 
     if( dc[q].Vt && aObj[ o_dcvt ].GetN() != MAXVTCOEF )
-        vfMessage( 0, dcp->pstate, "Illegal size ai_Vtp (Remake record)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_Vtp (Remake needed)" );
 
     if( dc[q].CPg && aObj[ o_dccritpg ].GetN() != MAXCRITPARAM )
-        vfMessage( 0, dcp->pstate, "Illegal size CritPg (Remake record)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size CritPg (Remake needed)" );
 
     if( dc[q].ODc && aObj[ o_dcodc ].GetN() != MAXODCOEF )
-        vfMessage( 0, dcp->pstate, "Illegal size ai_ODc (Remake record)" );
+        vfMessage( 0, dcp->pstate, "W01DCrem: Invalid size ai_ODc (Remake needed)" );
 
 }
 
@@ -175,7 +175,7 @@ void TDComp::dyn_set(int q)
 void TDComp::dyn_kill(int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "Illegal access to dc in dyn_kill.");
+             "E02DCrem: Illegal access to dc in dyn_kill()");
     dc[q].TCint= (float *)aObj[ o_dccpint ].Free();
     dc[q].Cp =    (float *)aObj[ o_dccp ].Free();
     dc[q].CpFS =  (float *)aObj[ o_dccpfs ].Free();
@@ -197,7 +197,7 @@ void TDComp::dyn_new(int q)
 {
     int CM,CE,CV;
     ErrorIf( dcp!=&dc[q], GetName(),
-             "Illegal access to dc in dyn_new");
+             "E03DCrem: Illegal access to dc in dyn_new()");
 
     CM = toupper( dc[q].pct[0] );
     CE = toupper( dc[q].pct[1] );
@@ -282,7 +282,7 @@ void TDComp::dyn_new(int q)
 void TDComp::set_def( int q)
 {
     ErrorIf( dcp!=&dc[q], GetName(),
-             "Illegal access to dc in set_def");
+             "E04DCrem: Illegal access to dc in set_def()");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     memcpy( dc[q].pct, aPa->pa.DCpct, 6 );
     memcpy( &dc[q].PdcC, aPa->pa.DCpdc, 9 );
@@ -377,7 +377,7 @@ TDComp::RecBuild( const char *key, int mode  )
     case  CP_UNIV:
         break;
     default:
-        Error( GetName(), "Invalid character in record key!");
+        Error( GetName(), "E05DCrem: Invalid code in DComp record key!");
     }
 AGAIN:
     int ret = TCModule::RecBuild( key, mode );
@@ -421,13 +421,14 @@ AGAIN:
         case CTM_CHP:
             break;
         default:
-            vfMessage(window(), "Error in a numerical subroutine", "RecBuild", vfErr);
+            vfMessage(window(),
+            "E06DCrem: Invalid method code", "RecBuild", vfErr);
             goto AGAIN;
         }
     }
     else if( CM != CTPM_HKF && CM != CTPM_EOS )
     {
-        vfMessage(window(), "Error in a numerical subroutine", "RecBuild", vfErr);
+        vfMessage(window(), "E06DCrem: Invalid method code", "RecBuild", vfErr);
         goto AGAIN;
     }
     if( dcp->NeCp > 0 )  dcp->PdcMK = S_ON;
@@ -451,6 +452,8 @@ AGAIN:
 
 
 //Recalculation of DComp record
+#define LROUND(x)      ((long)((x)+.5))
+
 // 19/10/1999: ATTENTION! variable _S was changed to S_1
 void
 TDComp::RecCalc( const char *key )      // dcomp_test
@@ -491,7 +494,8 @@ TDComp::RecCalc( const char *key )      // dcomp_test
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
     }
-    Error( GetName(), "Check stoichiometry, charge or valences in the formula");
+    Error( GetName(),
+  "W07DCrun: Please, check stoichiometry, charge or valences in the formula");
 NEXT:
     if( ( dcp->pstate[0] == CP_GAS || dcp->pstate[0] == CP_GASI)
         &&  dcp->mVs[0] < 1. )// test molar volume
@@ -542,17 +546,17 @@ NEXT:
             {
                 G = H - T * ( S - foS );
                 vstr Msgb(20);
-                gstring s="Inconsistent values of Hs, Ss and Gs -> ";
+                gstring s="W08DCrun: Inconsistent values of H0, S0 or G0 -> ";
                 sprintf( Msgb, "%g", G );
                 s += gstring(Msgb);
                 if( vfQuestion( window(), GetName(), s.c_str() ))
                     dcp->Gs[0] = G;
                 else
-                    Error( GetName(), "Inconsistent values");
+                    Error( GetName(), "E09DCrun: Inconsistent DC standard properties - bailing out...");
             }
     }
     else
-        Error( GetName(), "One of values Gs, Hs and Ss is missing");
+        Error( GetName(), "W10DCrun: One of values G0, H0, or S0 is missing!");
     // test pogreshnostey
     if( !stdG && stdH && !stdS )
     {
@@ -572,19 +576,19 @@ NEXT:
     else if( stdG || stdH || stdS )
     {
         if( !vfQuestion( window(), GetName(),
-                         "Insufficient data to recalculate uncertainties. Continue?" ))
-            Error( GetName(), "Insufficient data to recalculate uncertainties.");
+     "W11DCrun: Insufficient data to recalculate uncertainties. Continue?" ))
+         Error( GetName(), "R12DCrun: Insufficient data for uncertainties - bailing out...");
     }
     // insert parcor
     if( dcp->PdcHKF != S_OFF && toupper( dcp->pct[2] ) == CPM_PCR )
     {   /*  Call PARCOR  added 19.05.98 */
         if( vfQuestion( window(), GetName(),
-                        "Estimate parameters of HKF EOS with PARCOR algorithm?" ))
+                 "Estimate parameters of HKF EoS with PARCOR algorithm?" ))
             ParCor();
         goto RESULT;
     }
     if( !vfQuestion( window(), GetName(),
-                     "Calculate standard values of Cp, Vm, (Alpha, Beta)?" ))
+                 "Calculate standard values of Cp, Vm, (Alpha, Beta)?" ))
         goto RESULT;
     // load TPWORK to calc Cp Vm
     aW.ods_link( 0 );
@@ -681,7 +685,7 @@ TDComp::DCthermo( int q, int p )
 
                 default:
                     Error( GetName(),
-                           "Illegal method cod!");
+                           "E13DCrun: Invalid method code!");
                 }
                 break;
             default:
@@ -691,7 +695,7 @@ TDComp::DCthermo( int q, int p )
         }
         break;
     default:
-        gstring msg = "Error in PDB record '";
+        gstring msg = "E14DCrun: Invalid method code or data! ";
         msg += dcp->pstate;
         msg += "'.\nChange record?";
         if( !vfQuestion(window(),  GetName(), msg ))
@@ -739,7 +743,7 @@ TDComp::DCthermo( int q, int p )
       by Helgeson et al. (1981).
 */
 
-#define LROUND(x)      ((long)((x)+.5))
+// #define LROUND(x)      ((long)((x)+.5))
 
 void TDComp::ParCor(  )
 {
@@ -815,7 +819,7 @@ void TDComp::ParCor(  )
             }
 
             else
-                Error("PARCOR error",  "If Z!=0, either S or Rx must be given!" );
+                Error("E15DCrun: PARCOR error",  "If Z!=0, either S or Rx must be given!" );
         }
         wabs = eta*z*z/re;
         wcon = wabs-z*wabsh;
@@ -1009,43 +1013,43 @@ TDComp::TryRecInp( const char *key_, time_t& time_s, int q )
     case NONE_:
     case EMPC_:
         {
-            msg = "PDB chain  ";
+            msg = "E16DCrun: In database chain  ";
             msg +=  GetName();
             msg += ": Data record not found, \n"
                    " key  '";
             msg += gstring( key, 0, db->KeyLen() );
-            msg += "'.\n Maybe, a PDB file is not linked to chain.\n";
+            msg += "'.\n Maybe, a database file is not linked.\n";
             if(pVisor->ProfileMode == true)
                 Error( GetName(), msg.c_str() );
-            msg +=  "Create new record?";
+            msg +=  "Create a new record?";
             if( !vfQuestion(0, GetName(), msg ))
-                Error( GetName(), "New record create action dismissed...");
+                Error( GetName(), "E17DCrun: New record creation dismissed...");
             gstring str = key.p;
 
             if( str.find_first_of("*?" ) != gstring::npos)  // pattern
                 str = GetKeyofRecord( str.c_str(),
                                       "Enter a new record key, please ", KEY_NEW);
             if(  str.empty() )
-                Error( GetName(), "Record create action dismissed...");
+                Error( GetName(), "E18DCrun: Record creation dismissed...");
             int  Rnum = db->Find( str.c_str() );
-            ErrorIf( Rnum>=0, GetName(), "Record alredy exist!");
+            ErrorIf( Rnum>=0, GetName(), " E19DCrun: This record alredy exists!");
             pVisor->OpenModule(window(), nRT);
             vstr str1( db->KeyLen(), db->UnpackKey());
             check_input( str1 );
             RecBuild( str.c_str() );
-            SetString("Remake of the new record finished OK. "
+            SetString(" W20DCrun: Remake of the new record finished OK. "
                       " It is recommended to re-calculate the data.");
             pVisor->Update();
-            Error("Calculation failed! ",
+            Error("W21DCrun: Calculation failed! ",
                   "Check data fields and try calculation again!");
         } // break;
     case FAIL_:
-        msg = "Failure!!! PDB chain ";
+        msg = "E22DCrun: Failure!!! Database chain ";
         msg += GetName();
         msg += " is corrupt,\n"
                "Data record key '";
         msg += gstring( key, 0, db->KeyLen() );
-        msg += "'\n Try to unload or re-index this PDB chain.";
+        msg += "'\n Try to backup/restore or compress files in this database chain!";
         Error( GetName(),  msg.c_str() );
     }
 }

@@ -38,7 +38,7 @@ TpworkList::~TpworkList()
 void TpworkList::ods_link( int q )
 {
     if( q > (int)GetCount() )
-        Error( "TpworkList", "Illegal number TPWORK!");
+        Error( "E27DCrun: TpworkList", "Invalid number of TPWORK structures!");
     if( q == (int)GetCount() )
     {
         Add( new TPWORK() );
@@ -82,7 +82,7 @@ void TpworkList::ods_link( int q )
 void TpworkList::set_zero( int q )
 {
     if( q >= (int)GetCount() )
-        Error( "TpworkList", "Illegal number TPWORK!");
+        Error( "TpworkList", "Invalid number of TPWORK structures!");
     memset( (void *)&elem(q), 0, sizeof(TPWORK) );
 }
 //--------------------- End of s_tpwork.cpp ---------------------------
