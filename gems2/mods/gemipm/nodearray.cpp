@@ -50,7 +50,8 @@ istream& f_getline(istream& is, gstring& str, char delim);
 //   0: OK; 1: GEMIPM read file error; -1: System error (e.g. memory allocation)
 //
 //-------------------------------------------------------------------
-int  NewNodeArray( int &nNodes, const char*  MULTI_filename,
+int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
+                   const char*  MULTI_filename,
                    const char *ipmfiles_lst_name, int *nodeTypes )
 {
   int i;
@@ -59,10 +60,11 @@ int  NewNodeArray( int &nNodes, const char*  MULTI_filename,
   try
     {
 // Allocate memory for internal structures
-      TProfil::pm = new TProfil( nNodes );
+      TProfil::pm = new TProfil( sizeN, sizeM, sizeK );
       bool binary_f = true;
       gstring multu_in = MULTI_filename;
       gstring chbr_in = ipmfiles_lst_name;
+      int nNodes = TProfil::pm->nNodes();
 
 // Reading structure MULTI (GEM IPM work structure)
       GemDataStream f_m(multu_in, ios::in|ios::binary);
@@ -172,7 +174,10 @@ int  NewNodeArray( int &nNodes, const char*  MULTI_filename,
 //
 //-------------------------------------------------------------------
 
-int  NodeCalcGEM( int  &iNodeF, // fortran index; negative means read only
+int  NodeCalcGEM( int  &readF, // negative means read only
+   int &indN,  // fortran index; 0 working only with work structure
+   int &indM,  // fortran index; 0 working only with work structure
+   int &indK,  // fortran index; 0 working only with work structure
    short &p_NodeHandle,    // Node identification handle
    short &/*p_NodeTypeHY*/,    // Node type (hydraulic); see typedef NODETYPE
    short &/*p_NodeTypeMT*/,    // Node type (mass transport); see typedef NODETYPE
@@ -234,7 +239,12 @@ int  NodeCalcGEM( int  &iNodeF, // fortran index; negative means read only
    double  */*p_dRes2*/
 )
 {
-  int iNode = abs( iNodeF )-1; // fortran to C index conversion
+
+// fortran to C index conversion & make one index from three
+  int iNode = ( (indK-1) * TProfil::pm->sizeM +( indM-1 ) ) *
+                   TProfil::pm->sizeN + (indN-1);
+
+  int onlyWork = indK*indM*indN;
   fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {
@@ -242,9 +252,10 @@ int  NodeCalcGEM( int  &iNodeF, // fortran index; negative means read only
 //---------------------------------------------
 
 // Copying data for node iNode from node array into work DATABR structure
+if( onlyWork > 0)
    TProfil::pm->multi->GetNodeCopyFromArray( iNode );
 
-if( iNodeF > 0 )  // calculation mode: passing input GEM data changed on previous FMT iteration
+if( readF > 0 )  // calculation mode: passing input GEM data changed on previous FMT iteration
 {                 //                   into work DATABR structure
    TProfil::pm->multi->GEM_input_from_MT(  p_NodeHandle,  p_NodeStatusCH,
       p_T, p_P, p_Ms, p_dt, p_dt1,  p_bIC );   // test simplex
@@ -267,7 +278,7 @@ if( iNodeF > 0 )  // calculation mode: passing input GEM data changed on previou
         p_xDC, p_gam, p_xPH, p_vPS, p_mPS, p_bPS,
         p_xPA, p_bIC, p_rMB, p_uIC );
 
-if( iNodeF < 0 )  // readonly mode: passing input GEM data to FMT
+if( readF < 0 )  // readonly mode: passing input GEM data to FMT
    TProfil::pm->multi->GEM_input_back_to_MT(p_NodeHandle,  p_NodeStatusCH,
       p_T, p_P, p_Ms, p_dt, p_dt1,  p_bIC);
 
@@ -290,7 +301,7 @@ if( iNodeF < 0 )  // readonly mode: passing input GEM data to FMT
 //********************************************************* */
 
 // Copying data for node iNode back from work DATABR structure into the node array
-if( iNodeF > 0 )
+if( readF > 0 &&  onlyWork > 0)
     TProfil::pm->multi->SaveNodeCopyToArray( iNode );
     return 0;
 }

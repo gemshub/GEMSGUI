@@ -22,6 +22,7 @@ DATASRC =	MainDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessWizardData.cpp \
 		ComposWizardData.cpp \
+		GtDemoWizardData.cpp \
 		PhaseWizardData.cpp \
 		KeyDialogData.cpp \
 		ChangeKeyDialogData.cpp \
@@ -48,6 +49,7 @@ SOURCES =	MainDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessWizard.cpp \
 		ComposWizard.cpp \
+		GtDemoWizard.cpp \
 		PhaseWizard.cpp \
 		KeyDialog.cpp \
 		ChangeKeyDialog.cpp \
@@ -84,6 +86,8 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_ProcessWizardData.o \
 		moc_ComposWizard.o \
 		moc_ComposWizardData.o \
+		moc_GtDemoWizard.o \
+		moc_GtDemoWizardData.o \
 		moc_PhaseWizard.o \
 		moc_PhaseWizardData.o \
 		moc_KeyDialog.o \

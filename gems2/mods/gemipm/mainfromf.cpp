@@ -2,9 +2,13 @@
 
 #include "m_param.h"
 
-int  NewNodeArray( int &nNodes, const char*  MULTI_filename,
+int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
+                   const char*  MULTI_filename,
                    const char *ipmfiles_lst_name, int *nodeTypes );
-int  NodeCalcGEM( int  &iNodeF, // fortran index; negative means read only
+int  NodeCalcGEM( int  &readF, // negative means read only
+   int &indN,  // fortran index; 0 working only with work structure
+   int &indM,  // fortran index; 0 working only with work structure
+   int &indK,  // fortran index; 0 working only with work structure
    short &p_NodeHandle,    // Node identification handle
    short &p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short &p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -69,7 +73,7 @@ int  NodeCalcGEM( int  &iNodeF, // fortran index; negative means read only
 //-------------------------------------------------------------------
 
 extern "C"
-int __stdcall MAIF_START( int &nNodes,
+int __stdcall MAIF_START( int &sizeN, int &sizeM, int &sizeK,
   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
 {
 
@@ -93,7 +97,7 @@ int __stdcall MAIF_START( int &nNodes,
     string_cto_i2c[30]= '\0';          // end string in cpp
 
     int iRet =  NewNodeArray(
-         nNodes, string_cto_i1c, string_cto_i2c, nodeTypes);
+         sizeN, sizeM, sizeK, string_cto_i1c, string_cto_i2c, nodeTypes);
     return iRet;
 }
 
@@ -101,7 +105,10 @@ int __stdcall MAIF_START( int &nNodes,
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 extern "C"
-int __stdcall MAIF_CALC( int  &iNodeF, // fortran index; negative means read only
+int __stdcall MAIF_CALC( int  readF, // negative means read only
+   int indN,  // fortran index; 0 working only with work structure
+   int indM,  // fortran index; 0 working only with work structure
+   int indK,  // fortran index; 0 working only with work structure
    short &p_NodeHandle,    // Node identification handle
    short &p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short &p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -163,7 +170,7 @@ int __stdcall MAIF_CALC( int  &iNodeF, // fortran index; negative means read onl
    double  *p_dRes2
 )
 {
-  int iRet = NodeCalcGEM( iNodeF,
+  int iRet = NodeCalcGEM( readF, indN, indM,  indK,
             p_NodeHandle, p_NodeTypeHY, p_NodeTypeMT,
             p_NodeStatusFMT, p_NodeStatusCH, p_IterDone,
             p_T, p_P, p_Vs, p_Vi, p_Ms, p_Mi, p_Gs, p_Hs,
@@ -184,7 +191,8 @@ int __stdcall MAIF_CALC( int  &iNodeF, // fortran index; negative means read onl
 
   fstream f_log("MAIF_CALC.txt", ios::out|ios::app );
 
-  f_log << "Node = " <<  p_NodeHandle << "( " << iNodeF << " )";
+  f_log << "Node = " <<  p_NodeHandle << "( " << readF << ", " <<
+         indN << ", " << indM << ", " <<  indK << " )";
   f_log << "  NodeStatus = " <<  p_NodeStatusCH;
   f_log << "  ReturnStatus = " <<  iRet;
   f_log << "  IterDone = " <<  p_IterDone << endl;

@@ -23,6 +23,7 @@ DATASRC =	MainDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessWizardData.cpp \
 		ComposWizardData.cpp \
+		GtDemoWizardData.cpp \
 		PhaseWizardData.cpp \
 		KeyDialogData.cpp \
 		ChangeKeyDialogData.cpp \
@@ -47,6 +48,7 @@ DATAOBJ =       MainDialogData.obj \
 		ProgressDialogData.obj \
 		ProcessWizardData.obj \
 		ComposWizardData.obj \
+		GtDemoWizardData.obj \
 		PhaseWizardData.obj \
 		KeyDialogData.obj \
 		ChangeKeyDialogData.obj \
@@ -72,6 +74,7 @@ SOURCES =	MainDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessWizard.cpp \
 		ComposWizard.cpp \
+		GtDemoWizard.cpp \
 		PhaseWizard.cpp \
 		KeyDialog.cpp \
 		ChangeKeyDialog.cpp \
@@ -99,6 +102,7 @@ OBJECTS =	MainDialog.obj \
 		ProgressDialog.obj \
 		ProcessWizard.obj \
 		ComposWizard.obj \
+		GtDemoWizard.obj \
 		PhaseWizard.obj \
 		KeyDialog.obj \
 		ChangeKeyDialog.obj \
@@ -133,6 +137,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_ProcessWizardData.obj \
 		..\tmp\moc_ComposWizard.obj \
 		..\tmp\moc_ComposWizardData.obj \
+		..\tmp\moc_GtDemoWizard.obj \
+		..\tmp\moc_GtDemoWizardData.obj \
 		..\tmp\moc_PhaseWizard.obj \
 		..\tmp\moc_PhaseWizardData.obj \
 		..\tmp\moc_ChangeKeyDialog.obj \
@@ -281,6 +287,19 @@ clean:
 
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ComposWizardData.cpp
 	-del moc_ComposWizardData.cpp
+
+..\tmp\moc_GtDemoWizard.obj: GtDemoWizard.h
+      	$(MOC) GtDemoWizard.h -o moc_GtDemoWizard.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_GtDemoWizard.cpp
+	-del moc_GtDemoWizard.cpp
+
+
+..\tmp\moc_GtDemoWizardData.obj: GtDemoWizardData.h
+      	$(MOC) GtDemoWizardData.h -o moc_GtDemoWizardData.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_GtDemoWizardData.cpp
+	-del moc_GtDemoWizardData.cpp
 
 ..\tmp\moc_PhaseWizard.obj: PhaseWizard.h
       	$(MOC) PhaseWizard.h -o moc_PhaseWizard.cpp
@@ -526,6 +545,10 @@ ProcessWizardData.cpp: ProcessWizard.ui
         $(UIC) $? -impl $(*).h -o $@
 
 ComposWizardData.cpp: ComposWizard.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+GtDemoWizardData.cpp: GtDemoWizard.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 

@@ -84,6 +84,9 @@ bool
 vfProcessSet(QWidget* par, const char * p_key,
               char flds[24], int size[6] );
 bool
+vfGtDemoSet(QWidget* par, const char * p_key, int size[7] );
+
+bool
 vfComposSet(QWidget* par, const char * p_key,
             char flgs[6], int sizes[2], double& r2 );
 

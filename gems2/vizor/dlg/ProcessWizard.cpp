@@ -3,7 +3,7 @@
 //
 // Implementation of ProcessWizard class
 //
-// Copyright (C) 1996-2001  A.Rysin, S.Dmytriyeva
+// Copyright (C) 2005  S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Vizor library which uses the
@@ -25,6 +25,7 @@ const char *PROCESS_HTML = "process_setup";
 
 
 #include "ProcessWizard.h"
+#include "gstring.h"
 #include "visor_w.h"
 
 

@@ -227,12 +227,6 @@ void TGtDemo::dyn_new(int q)
 // set default mode for rt type
 void TGtDemo::gd_ps_set()
 {
-//  The following 4 lines commented out by KD on 20.01.03
-//    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
-//        gdp->nRT = RT_PROCES;
-//    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
-//        gdp->nRT = RT_UNSPACE;
-
     switch( gdp->nRT )
     {
     case RT_ICOMP:
@@ -258,12 +252,12 @@ void TGtDemo::gd_ps_set()
         break;
     case RT_PROCES:
         strncpy( &gdp->PsIC, "------++-------", 15);
-//        gdp->nRT = RT_SYSEQ;   KD 20.01.03
+        gdp->nRT = RT_SYSEQ;
         break;
-//    case RT_UNSPACE:
-//        strncpy( &gdp->PsIC, "------+-+------", 15);
-//        gdp->nRT = RT_SYSEQ;
-//        break;
+    case RT_UNSPACE:
+        strncpy( &gdp->PsIC, "------+-+------", 15);
+        gdp->nRT = RT_SYSEQ;
+       break;
 //    case RT_DUALTH:strncpy( &gdp->PsIC,"------+--+-----", 15); break;
     default:
         Error( GetName(), " E02GDrem: Wrong record type");
@@ -271,31 +265,42 @@ void TGtDemo::gd_ps_set()
 
 }
 
-// get record type
-short TGtDemo::gd_rectype( )
+/* opens window with 'Remake record' parameters
+*/
+void
+TGtDemo::MakeQuery()
 {
-    TCStringArray buf;
-    int nRType;
+//    pImp->MakeQuery();
+    const char * p_key;
+    int size[7];
 
-    for( uint i=RT_ICOMP; i < RT_DUALTH; i++ )
-        if( i != RT_GTDEMO )
-            buf.Add( aMod[i].GetName());
+    p_key  = db->PackKey();
+    size[0] = gdp->nRT;
+    size[1] = gdp->Nsd;
+    size[2] = gdp->Nwc;
+    size[3] = gdp->Nqp;
+    size[4] = gdp->dimEF[0];
+    size[5] = gdp->dimEF[1];
+    size[6] = gdp->dimXY[1];
 
-    nRType = gdp->nRT;
-    if( nRType > RT_GTDEMO )
-        nRType--;
-    nRType -= RT_ICOMP;
-    do
-    {
-        nRType = vfChoice(window(), buf,
-             "Please, choose the record type for the data sampling",
-                          nRType);
-    }
-    while( nRType<0 );
+    if( !vfGtDemoSet( window(), p_key, size ))
+         Error( p_key, "GtDemo record configuration cancelled by the user!" );
+     //  return;   // cancel
 
-    nRType += RT_ICOMP;
-    if( nRType > RT_GTDEMO ) nRType++;
-    return (short)nRType;
+    gdp->nRT = size[0];
+    gdp->Nsd = size[1];
+    gdp->Nwc = size[2];
+    gdp->Nqp = size[3];
+    gdp->dimEF[0] = size[4];
+    gdp->dimEF[1] = size[5];
+    gdp->dimXY[1] = size[6];
+// setup flags
+    gd_ps_set();
+    if( gdp->dimEF[0] >0 && gdp->dimEF[1] >0)
+     gdp->PtAEF = S_ON;
+    else
+     gdp->PtAEF = S_OFF;
+
 }
 
 //set default information
@@ -426,42 +431,36 @@ TGtDemo::RecBuild( const char *key, int mode  )
     if( gst.iopt )
         delete[] gst.iopt;
     gst.iopt = 0;
-AGAIN:
-//    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
-//        gdp->nRT = RT_PROCES;
-//    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
-//        gdp->nRT = RT_UNSPACE;  comm.out KD 20.01.03
+//AGAIN:
+    if( gdp->PsPE != S_OFF && gdp->nRT == RT_SYSEQ)
+        gdp->nRT = RT_PROCES;
+    if( gdp->PsPB != S_OFF && gdp->nRT == RT_SYSEQ)
+        gdp->nRT = RT_UNSPACE;
 
-    gdp->nRT = gd_rectype();
-    gd_ps_set();
+    int ret = TCModule::RecBuild( key, mode );
+    if( gdp->nRT == RT_PROCES  ||  gdp->nRT == RT_UNSPACE )
+        gdp->nRT = RT_SYSEQ;
+
     if( pVisor->ProfileMode != true  && gdp->nRT >= RT_SYSEQ )
         Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
 
-    int ret = TCModule::RecBuild( key, mode );
-//    gd_ps_set();
-//    if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
-//       Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
     if( ret == VF_CANCEL )
         return ret;
 
-    if( gdp->nRT == RT_PROCES || gdp->nRT >= RT_UNSPACE )
-        gdp->nRT = RT_SYSEQ;   // added by KD 20.01.03
-
-    if(  gdp->Nwc<0 || gdp->Nqp<0 || gdp->dimEF[0]<0 || gdp->dimEF[1]<0  ||
+/*    if(  gdp->Nwc<0 || gdp->Nqp<0 || gdp->dimEF[0]<0 || gdp->dimEF[1]<0  ||
             ( (gdp->dimEF[0]==0 || gdp->dimEF[1]==0) && gdp->PtAEF != S_OFF ) )
     {
         vfMessage(window(), GetName(), "E01GDexec: Invalid counters or flags");
         goto AGAIN;
     }
+*/
     gdp->rtLen =  (short)rt[ gdp->nRT ].KeyLen();
     bld_rec_list();
     gdp->dimXY[0] = gdp->Nlrk;
     if(  gdp->dimXY[1] <= 0 )  gdp->dimXY[1] = 2;
 
-    if( gdp->dimXY[0] < gdp->Nlrk  ||
-            gdp->dimXY[1] <= 0 || gdp->dimXY[1] > 20 )
-        goto AGAIN;
     dyn_new();
+
     if( gdp->PtAEF != S_OFF && gdp->exprE && !*gdp->exprE )
     {
         strcpy( gdp->exprE, "next=:next;" );
@@ -478,6 +477,7 @@ AGAIN:
         if( !*gdp->lNam0[j]|| *gdp->lNam0[j] == ' ' )
             strncpy( gdp->lNam0[j], tbuf, MAXGRNAME );
     }
+
     pVisor->Update();
     return ret;
 }

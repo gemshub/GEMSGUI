@@ -134,7 +134,6 @@ protected:
     bool check_RT( int nrt );
 
     void gd_ps_set();
-    short gd_rectype();
     void bld_rec_list();
     void gd_text_analyze();
     void gd_EF_calc();
@@ -161,6 +160,7 @@ public:
     void set_def( int i=0);
 
     void RecInput( const char *key );
+    void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void RecordPlot( const char *key );

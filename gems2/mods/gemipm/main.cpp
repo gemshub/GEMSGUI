@@ -7,14 +7,17 @@
 #include "verror.h"
 #include "gdatastream.h"
 
-extern "C" int __stdcall MAIF_START( int &nNodes,
+extern "C" int __stdcall MAIF_START( int &sizeN, int &sizeM, int &sizeK,
    int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
 
-// extern "C" int MAIF_START( int &nNodes,
+// extern "C" int MAIF_START( int &sizeN, int &sizeM, int &sizeK,
 //   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
 
-extern "C" int __stdcall MAIF_CALC( int &iNodeF,
-// extern "C" int MAIF_CALC( int &iNodeF, // negative: input only (fortran index)
+extern "C" int __stdcall MAIF_CALC( int  readF, // negative means read only
+   int indN,  // fortran index; 0 working only with work structure
+   int indM,  // fortran index; 0 working only with work structure
+   int indK,  // fortran index; 0 working only with work structure
+// extern "C" int MAIF_CALC( int  readF, // negative means read only
    short &p_NodeHandle,    // Node identification handle
    short &p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    short &p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -83,7 +86,7 @@ int
 main( int argc, char* argv[] )
 {
      int nNods = 2;
-     int nodeType[2];
+     int nodeType[8];
      gstring multu_in1 = "";
      gstring chbr_in1   = "";
 
@@ -105,8 +108,15 @@ main( int argc, char* argv[] )
 
 // Initial reading of arrays
       nodeType[1] = 1;
+      nodeType[2] = 1;
+      nodeType[3] = 1;
+      nodeType[4] = 1;
+      nodeType[5] = 1;
+      nodeType[5] = 1;
+      nodeType[6] = 1;
+      nodeType[7] = 1;
       nodeType[0] = 2;
-      MAIF_START( nNods, c_to_i1, c_to_i2, nodeType );
+      MAIF_START( nNods, nNods, nNods, c_to_i1, c_to_i2, nodeType );
 
 
   short m_NodeHandle=0, m_NodeTypeHY=0, m_NodeTypeMT=0,
@@ -147,11 +157,10 @@ main( int argc, char* argv[] )
     m_rMB = (double*)malloc( nIC*sizeof(double) );
     m_uIC = (double*)malloc( nIC*sizeof(double) );
 
- for(int kk=0; kk<2; kk++ )
+ for(int kk=1; kk<=nNods; kk++ )
     for( int ii=1; ii<=nNods; ii++)
     {
-       int jj = -ii;
-       MAIF_CALC( jj, // Fortran index; negative means readonly
+       MAIF_CALC( -1, ii, 1, kk,
         m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
         m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
         m_T, m_P, m_Vs, m_Vi, m_Ms, m_Mi,
@@ -169,7 +178,7 @@ main( int argc, char* argv[] )
          m_bIC[3] += 1e-6*kk;
  //      m_bIC[4] += 1e-7;
 
-       MAIF_CALC( ii, // Fortran index; negative means readonly
+       MAIF_CALC( 1, ii, 0, kk,
         m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
         m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
         m_T, m_P, m_Vs, m_Vi, m_Ms, m_Mi,

@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $$
 //
-// Declaration of ProcessWizard class
+// Declaration of GtDemoWizard class
 //
 // Copyright (C) 2005  S.Dmytriyeva
 //
@@ -16,24 +16,24 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#ifndef ProcessWizard_included
-#define ProcessWizard_included
+#ifndef GtDemoWizard_included
+#define GtDemoWizard_included
 
-#include "ProcessWizardData.h"
+#include "GtDemoWizardData.h"
 
-class ProcessWizard : public ProcessWizardData
+class GtDemoWizard : public GtDemoWizardData
 {
     Q_OBJECT
 
 public:
 
-    ProcessWizard( const char* pkey, char flgs[24], int sizes[6],
+    GtDemoWizard( const char* pkey, int sizes[7],
                    QWidget* parent = NULL);
-    virtual ~ProcessWizard();
+    virtual ~GtDemoWizard();
 
 
-    void   getSizes( int size[6] );
-    void   getFlags( char flgs[24] );
+    void   getSizes( int size[7] );
+//    void   getFlags( char flgs[24] );
 //    double   getR2();
 
 protected slots:
@@ -42,4 +42,4 @@ protected slots:
 //    void accept();
 
 };
-#endif // ProcessWizard_included
+#endif // GtDemoWizard_included

@@ -52,6 +52,7 @@ using namespace std;
 #include "dlg/ExcludeFillDialog.h"
 #include "dlg/ProgressDialog.h"
 #include "dlg/ProcessWizard.h"
+#include "dlg/GtDemoWizard.h"
 #include "dlg/ComposWizard.h"
 #include "dlg/PhaseWizard.h"
 #include "dlg/NewSystemDialog.h"
@@ -861,6 +862,18 @@ vfProcessSet(QWidget* par, const char * p_key,
 
     return true;
 }
+
+bool
+vfGtDemoSet(QWidget* par, const char * p_key, int size[7] )
+{
+     GtDemoWizard cdlg( p_key, size, par );
+     if( !cdlg.exec() )
+       return false;
+    cdlg.getSizes( size );
+
+    return true;
+}
+
 
 bool
 vfComposSet(QWidget* par, const char * p_key,

@@ -233,13 +233,18 @@ public:
 
     SPP_SETTING pa;
 
-    TProfil( int );
+    TProfil( int, int, int );
 
     const char* GetName() const
     {
         return "Project";
     }
 
+    int sizeN;
+    int sizeM;
+    int sizeK;
+    int nNodes()
+      { return sizeN*sizeM*sizeK; }
 
     // Multi make functions
     void PMtest( const char *key );

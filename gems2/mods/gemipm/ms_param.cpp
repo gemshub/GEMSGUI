@@ -57,9 +57,11 @@ SPP_SETTING::write(ostream& oss)
 }
 
 
-TProfil::TProfil( int nNd )
+TProfil::TProfil( int szN, int szM, int szK ):
+ sizeN(szN), sizeM(szM), sizeK(szK)
 {
     pa= pa_;
+    int nNd = nNodes();
     multi = new TMulti( nNd );
     pmp = multi->GetPM();
 }
