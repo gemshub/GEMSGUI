@@ -163,9 +163,9 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtgam_n ].SetPtr( dtp->gam_n );
     aObj[ o_dtgam_n ].SetDim( dtp->nQ, dtp->nK );
     aObj[ o_dtavg_g ].SetPtr( dtp->avg_g );
-    aObj[ o_dtavg_g ].SetDim( 1, dtp->nK );
+    aObj[ o_dtavg_g ].SetDim( 1, dtp->nM );
     aObj[ o_dtsd_g ].SetPtr( dtp->sd_g );
-    aObj[ o_dtsd_g ].SetDim( 1, dtp->nK );
+    aObj[ o_dtsd_g ].SetDim( 1, dtp->nM );
     aObj[ o_dtmuo_n ].SetPtr( dtp->muo_n );
     aObj[ o_dtmuo_n ].SetDim( dtp->nQ, dtp->nK );
     aObj[ o_dtavg_m ].SetPtr( dtp->avg_m );
@@ -396,8 +396,8 @@ void TDualTh::dyn_new(int q)
       dtp->Coul = (double *)aObj[ o_dtcoul ].Free();
 
     dtp->gam_n = (double *)aObj[ o_dtgam_n ].Alloc( dtp->nQ, dtp->nK, D_ );
-    dtp->avg_g = (double *)aObj[ o_dtavg_g ].Alloc( 1, dtp->nK,  D_ );
-    dtp->sd_g = (double *)aObj[ o_dtsd_g ].Alloc( 1, dtp->nK, D_ );
+    dtp->avg_g = (double *)aObj[ o_dtavg_g ].Alloc( 1, dtp->nM,  D_ );
+    dtp->sd_g = (double *)aObj[ o_dtsd_g ].Alloc( 1, dtp->nM, D_ );
     dtp->muo_n = (double *)aObj[ o_dtmuo_n ].Alloc( dtp->nQ, dtp->nK, D_ );
     dtp->avg_m = (double *)aObj[ o_dtavg_m ].Alloc( 1, dtp->nK, D_ );
     dtp->sd_m = (double *)aObj[ o_dtsd_m ].Alloc( 1, dtp->nK,  D_ );
