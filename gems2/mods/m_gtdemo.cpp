@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/m_gtdemo.cpp  version 2.0.0   2001
+// $Id$
 //
 // Implementation of TGtDemo class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010904
+// Rewritten from C to C++ by S.Dmytriyeva  
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -24,7 +24,6 @@ const char *GEMS_GTD_HTML = "gm_gtdemo";
 
 #include "m_proces.h"
 #include "m_probe.h"
-//#include "m_sdata.h"
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"

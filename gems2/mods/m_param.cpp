@@ -143,6 +143,12 @@ TProfil::TProfil( int nrt ):
     SAold = 0;
     SBold = 0;
     Llold =0;
+
+    userCancel = false;
+    stepWise = false;
+    calcFinished = false;
+    fStopCalc = false;
+
 }
 
 // init submodules to calc module

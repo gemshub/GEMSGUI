@@ -961,8 +961,8 @@ TProcess::RecCalc( const char *key )
     pe_qekey();
     pep->pet= rt[RT_PROCES].Rtime();
     // load current record SysEq
-    if( pep->PsUX != S_OFF  )
-    {
+//    if( pep->PsUX != S_OFF  )
+//    {
         if( !pep->Nst )
             rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
              RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
@@ -987,7 +987,7 @@ TProcess::RecCalc( const char *key )
             TSysEq::pm->CmSave();  // save results
         }
 
-    }
+//    }
     pe_text_analyze();  //translate equations of process
 
     ModUpdate("Pe_calc    Process simulation");
@@ -1051,14 +1051,14 @@ TProcess::RecCalc( const char *key )
         nRec = rt[RT_SYSEQ].Find(pep->stkey);
         if( nRec >= 0 )
             pep->syt = rt[RT_SYSEQ].GetTime( nRec );
-        if( nRec < 0 || pep->PsUX != S_OFF || pep->syt < pep->pet )
-        {
+//        if( nRec < 0 || pep->PsUX != S_OFF || pep->syt < pep->pet )
+//        {
             PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
 //	    pVisorImp->CalcMulti();
 
            if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
                  TSysEq::pm->CmSave();  // save results
-        }
+//        }
 
 
      // set results
