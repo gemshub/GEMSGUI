@@ -100,7 +100,7 @@ ElementsDialog::~ElementsDialog()
 void
 ElementsDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_EL_HTML );
+    pVisorImp->OpenHelp( GEMS_EL_HTML, 0, this, true );
 }
 
 void

@@ -91,7 +91,7 @@ char   ProcessDialog::getType()
 void
 ProcessDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( PROCESS_HTML );
+  pVisorImp->OpenHelp( PROCESS_HTML, 0, this, true );
 }
 
 //--------------------- End of ProcessDialog.cpp ---------------------------

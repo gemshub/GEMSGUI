@@ -95,7 +95,6 @@ MainDialog::CmHelp()
 void
 MainDialog::CmAbout()
 {
-//    pVisorImp->OpenHelp("GEMS-Linux-index");
     pVisorImp->OpenHelp( GEMS_ABOUT_HTML );  // 05.01.01
 }
 

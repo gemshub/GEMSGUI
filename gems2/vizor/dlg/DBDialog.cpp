@@ -92,8 +92,7 @@ DBDialog::CmAdvanced()
 void
 DBDialog::CmHelp()
 {
-//  pVisorImp->OpenHelp("GEMS-Linux-index");
-    pVisorImp->OpenHelp( GEMS_TD_HTML );  // 05.01.01
+    pVisorImp->OpenHelp( GEMS_TD_HTML );
 }
 
 void

@@ -10,6 +10,7 @@
 
 #include "helpwindow.h"
 #include <qstatusbar.h>
+#include <qtextbrowser.h>
 #include <qpixmap.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>

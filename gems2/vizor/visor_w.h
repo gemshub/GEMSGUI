@@ -21,13 +21,11 @@
 #define _visor_w_h
 
 #include <qthread.h>
-
 #include <qmainwindow.h>
 #include <qfont.h>
 
 #include "v_vals.h"
 #include "graph.h"
-
 
 
 class TCModule;
@@ -100,14 +98,6 @@ public:
 
     void PrintText( const char* title, char* text);
 
-/*    GraphDialog* MakePlot(TCModule *pmod, TIArray<TPlot>& plts, const char* title,
-                      float* sizeReg, float* sizePrt,
-                      TPlotLine* aLines, int aAxisType=0,
-                      const char* aXName=0, const char* aYName=0);
-    GraphDialog* MakePlot(TCModule *pmod, TIArray<TPlot>& plts, const char * title,
-                      int aAxisType=0, const char* aXName=0, const char* aYName=0);
-
-*/
     unsigned short updateInterval() const
     {
         return updateTime;

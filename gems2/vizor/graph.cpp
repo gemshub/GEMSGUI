@@ -59,14 +59,16 @@ TPlot::TPlot( int aObjX, int aObjY ):
 }
 
 
-gstring TPlot::getName( int ii )
+gstring 
+TPlot::getName( int ii )
 {
     vstr s(15);
     sprintf(s.p, "%s[%u]",aObj[nObjY].GetKeywd(), ii);
     return gstring(s.p);
 }
 
-gstring TPlot::getNames()
+gstring 
+TPlot::getNames()
 {
     vstr s(15);
     sprintf(s.p, "%s  %s",aObj[nObjX].GetKeywd(), aObj[nObjY].GetKeywd());
@@ -311,7 +313,6 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
 
    GraphData data(aPlots, aTitle, sizeReg, sizePart,
                aLinesDesc, aAxisType, aXName, aYName);
-   //graph_dlg = pVisorImp->MakePlot( pmodule, &data);
    graph_dlg = new GraphDialog( pmodule, data );
    graph_dlg->show();
 }
@@ -325,8 +326,7 @@ GraphWindow::GraphWindow(TCModule *pmodule, TIArray<TPlot>& aPlots,
                TCStringArray line_names  )
 {
     GraphData  data( aPlots, aTitle, aXName, aYName, line_names );
-   //graph_dlg = pVisorImp->MakePlot( pmodule, &data);
-   graph_dlg = new GraphDialog( pmodule, data);
+   graph_dlg = new GraphDialog(pmodule, data);
    graph_dlg->show();
 }
 
@@ -347,10 +347,9 @@ GraphWindow::Show()
 
 
 GraphData *
-  GraphWindow::getGraphData() const
+GraphWindow::getGraphData() const
 {
-
  return &graph_dlg->gr_data;
 }
-//--------------------- End of graph.cpp ---------------------------
 
+//--------------------- End of graph.cpp ---------------------------

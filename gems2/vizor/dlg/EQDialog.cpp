@@ -81,8 +81,7 @@ EQDialog::CmAdvanced()
 void
 EQDialog::CmHelp()
 {
-//    pVisorImp->OpenHelp("GEMS-Linux-index");
-    pVisorImp->OpenHelp( GEMS_EQ_HTML );  // 05.01.01
+    pVisorImp->OpenHelp( GEMS_EQ_HTML );
 }
 
 void

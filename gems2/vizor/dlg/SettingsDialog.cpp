@@ -100,7 +100,7 @@ SettingsDialog::CmApply()
 void
 SettingsDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_SETUP_HTML );
+  pVisorImp->OpenHelp( GEMS_SETUP_HTML, 0, this, true );
 }
 
 /*

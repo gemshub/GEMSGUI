@@ -57,13 +57,13 @@ DBAdvDialog::CmBack()
 void
 DBAdvDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_MISC_HTML );  //  05.01.01
+    pVisorImp->OpenHelp( GEMS_MISC_HTML );
 }
 
 void
 DBAdvDialog::CmFormats()
 {
-    pVisorImp->OpenHelp( GEMS_FORM_HTML );  //  05.01.01
+    pVisorImp->OpenHelp( GEMS_FORM_HTML );
 }
 
 

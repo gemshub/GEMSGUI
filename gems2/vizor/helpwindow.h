@@ -12,20 +12,21 @@
 #define HELPWINDOW_H
 
 #include <qdialog.h>
-#include <qtextbrowser.h>
 #include <qstringlist.h>
 #include <qmap.h>
-#include <qdir.h>
 
 class QComboBox;
+class QTextBrowser;
 class QPopupMenu;
 class QMenuBar;
 class QToolBar;
 class QStatusBar;
 
-class HelpWindow : public QDialog
+class HelpWindow :
+    public QDialog
 {
     Q_OBJECT
+
 public:
     HelpWindow( const QString& home_,  const QString& path, QWidget* parent = 0, bool modal=false);
     ~HelpWindow();
@@ -59,7 +60,8 @@ private:
     QStringList history, bookmarks;
     QMap<int, QString> mHistory, mBookmarks;
     QPopupMenu *hist, *bookm;
-    
+
+// simulating QMainWindow    
     QToolBar* toolbar;
     QMenuBar* menubar;
     QStatusBar* statusbar;
@@ -69,9 +71,4 @@ private:
     QToolBar* toolBar() { return toolbar; }    
 };
 
-
-
-
-
 #endif
-

@@ -120,7 +120,7 @@ void
 ListFilesDialog::CmHelp()
 {
 //  pVisorImp->OpenHelp( GEMS_GP_HTML, 0, this );
-    pVisorImp->OpenHelp( GEMS_LF_HTML );  // 14.03.01
+    pVisorImp->OpenHelp( GEMS_LF_HTML, 0, this, true );  // 14.03.01
 }
 
 /*! returns selection array
