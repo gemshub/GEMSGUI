@@ -485,6 +485,7 @@ void IPNCalc::bildWhile()
     Push( IT_B, neqbg );
     eq_add( aItm.GetCount() );
     aItm[it].num = aEq.GetCount();
+    input=xblanc( input );
     return;
 OSH :
     Error( "IPNTranslate", "Unexpected end of Math Script text");
@@ -579,6 +580,7 @@ void IPNCalc::bildIf()
           eq_add();*/
         aItm[it2].num = aEq.GetCount();
     }
+    input=xblanc( input );
     return;
 OSH :
     Error( "IPNTranslate", "Unexpected end of Math Script text");

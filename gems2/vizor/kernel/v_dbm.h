@@ -444,22 +444,26 @@ public:
 
     //--- Information about of open file list
     int GetOpenFileNum( const char *secondName  );
-    void SetNewOpenFileList( const TCStringArray& aFlNames);
+    void SetNewOpenFileList( const TCStringArray& aFlNames );
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
     //  int GetNumFiles() { return aFile.GetCount(); }
     void  MakeInNewProfile( const gstring& dir,
       const char *prfName, const char * f_name=0 );
+    void OpenOnlyFromList( TCStringArray& names );
+    void GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey );
+
 
     //--- Manipulation Data Base
     void Create( int nF );
     void Open( bool type, FileStatus mode, const TCIntArray& indx);
-    void OpenAllFiles();
+    void OpenAllFiles( bool only_kernel = false );
     void Close();
 
     //--- Manipulation files of Data Base
     void RebildFile(const TCIntArray& indx);
-    void AddFileToList(TDBFile* file);
+    int AddFileToList(TDBFile* file);
+    // int GetFileNum(const char* substr_name);
     void AddOpenFile(const TCIntArray& indx);
 
     //--- Manipulation records
@@ -469,6 +473,7 @@ public:
     void Get( int i);
     int Find( const char *key);
     RecStatus Rtest( const char *key, int mode = 1);
+    bool FindPart( const char *key_, int field );
     //  RecStatus TryRec( RecStatus rs, char *key, int mode = 1);
 
     //--- Manipulation list of records

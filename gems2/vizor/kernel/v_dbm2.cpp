@@ -556,6 +556,18 @@ AGAIN:
     }
 }
 
+bool TDataBase::FindPart( const char *key_, int field )
+{
+
+    vstr key(KeyLen(), key_);
+    TDBKey dbKey(GetDBKey());
+    dbKey.SetKey(key);
+    dbKey.SetFldKey(field,"*");
+    gstring str_key( dbKey.UnpackKey(), 0, KeyLen() );
+    RecStatus iRet = Rtest( str_key.c_str(), 0 );
+    return ( iRet==MANY_ || iRet==ONEF_ );
+}
+
 // test work record key (equat)
 bool TDataBase::KeyTest( const char* key )
 {
@@ -657,7 +669,7 @@ TDataBase::Open( bool type, FileStatus mode, const TCIntArray& nff )
 
 // open all files in PDB chain
 void
-TDataBase::OpenAllFiles( )
+TDataBase::OpenAllFiles( bool only_kernel )
 {
     uint j;
 
@@ -666,6 +678,9 @@ TDataBase::OpenAllFiles( )
 
     Close();
     for( j=0; j< aFile.GetCount(); j++)
+     if( only_kernel && j >=  specialFilesNum )
+       continue;
+     else
         fls.Add( j );
 
     Open( true, UPDATE_DBV, 0 );
@@ -684,8 +699,29 @@ void TDataBase::Close()
 }
 
 
+//close files in PDB
+void TDataBase::OpenOnlyFromList( TCStringArray& names )
+{
+    if( aFile.GetCount() == 0 )
+        return;
+
+    Close();
+    uint ii, jj;
+
+    for( ii=0; ii< aFile.GetCount(); ii++)
+    {
+      for( jj=0; jj< names.GetCount(); jj++)
+        if(  aFile[ii].Name().find( names[jj] ) != gstring::npos )
+         break;
+      if( jj < names.GetCount() )
+         fls.Add( ii );
+    }
+
+    Open( true, UPDATE_DBV, 0 );
+}
+
 // add new file to DBfile list
-void TDataBase::AddFileToList(TDBFile* file)
+int TDataBase::AddFileToList(TDBFile* file)
 {
     aFile.Add( file );
 
@@ -696,7 +732,21 @@ void TDataBase::AddFileToList(TDBFile* file)
     if( rclose )
         file->Close();
     opfils();
+    return fls.Find( aFile.GetCount()-1 );
 }
+
+
+/*// get number of file, that name conterned substring (only open files)
+int TDataBase::GetFileNum(const char* substr_name)
+{
+  for(int ii=fls.GetCount()-1; ii>=0; ii-- )
+  {
+   if( aFile[fls[ii]].Name().find( substr_name ) != gstring::npos )
+     return ii;
+  }
+  return -1;
+}
+*/
 
 // delete a file from DBfile list
 void TDataBase::DelFile(const gstring& path)
@@ -914,6 +964,20 @@ int TDataBase::GetOpenFileNum( const char* secondName )
         if( name == aFile[fls[i]].Name() )
             return i;
     return 0;
+}
+
+// get list of files keywds, that contained name
+void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
+{
+    gstring name = ".";
+    name +=_name;
+    name += ".";
+
+    for(uint ii=0; ii< aFile.GetCount(); ii++)
+    {
+      if(  aFile[ii].GetPath().find( name ) != gstring::npos )
+          aFlkey.Add( aFile[ii].GetKeywd() );
+    }
 }
 
 //-------------------------------------------------------------

@@ -66,6 +66,14 @@ IsSpace(char ch)
 void
 StripLine(gstring& line);
 
+// Added Sveta 22/12/2001
+// Change string on templates
+void
+ChangeforTempl( gstring& data_str,  const gstring& from_templ1,
+                const gstring& to_templ1, uint len_ );
+
+
+
 // Returns string representation of current date in HH:MM format
 gstring curDate();
 
