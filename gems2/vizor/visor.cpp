@@ -94,7 +94,7 @@ TVisor::TVisor(int c, char *v[]):
 	SysGEMDir = "/usr/share/gems2/";
 #else
         SysGEMDir = getenv("HOME");
-        SysGEMDir += "/.gems2_shared";
+        SysGEMDir += "/.gems2_shared/";
 #endif
 	UserGEMDir += getenv("HOME");
 	UserGEMDir += "/.gems2/";

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=gems2
-Exec=gems2
-Icon=gems2
+Exec=/usr/bin/gems2 -c
+Icon=gems2.png
 Type=Application
 Comment=This program permits to calculate complex geochemical equilibria and prepare consistent thermodynamic databases
+Categories=Application;Science;Geology;
+Terminal=false
