@@ -241,7 +241,11 @@ TVisor::load()
     fname = sysGEMDir();
     fname += VISOR_INI;
 
+#ifdef __unix
     TConfig cnf(fname.c_str(), ' ');
+#else
+    TConfig& cnf = *new TConfig(fname.c_str(), ' ');
+#endif
 
     for (uint ii = 0; ii < aMod.GetCount(); ii++)
         aWinInfo.Add(new CWinInfo(aMod[ii], cnf));
@@ -480,7 +484,11 @@ TVisor::fromWinCFG()
 {
     gstring fname_ini = /*userGEMDir*/userProfDir() + VIS_CONF;
 
+#ifdef __unix
     TConfig visor_conf( fname_ini.c_str() );
+#else
+    TConfig& visor_conf = *new TConfig( fname_ini.c_str() );
+#endif
 
     int win_num = 0;
     QFont general_font = QFont::defaultFont();
@@ -521,13 +529,8 @@ TVisor::fromWinCFG()
                     win_num = visor_conf.getcInt();
                 }
             	else if( name == "config_autosave" ) {
-                    visor_conf.getcStr(name);
-                    name.strip();
-		    if( name == "1" )
-			pVisorImp->setConfigAutosave(true);
-		    else
-			pVisorImp->setConfigAutosave(false);
-		}
+				pVisorImp->setConfigAutosave(visor_conf.getcInt());
+			}
 			
         name = visor_conf.getNext();
     }

@@ -77,7 +77,8 @@ TVisorImp::TVisorImp(int c, char** v):
         QMainWindow( 0, GEMS_VERSION_STAMP ),
         argc(c),
         argv(v),
-        CellFont( GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE )
+        CellFont( GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE ),
+	  configAutosave(false)
 {
     pVisorImp = this;
     pHelpWidget = 0;
