@@ -41,7 +41,7 @@ struct PageInfo;
 struct FieldInfo;
 
 
-enum eShowType { stResult='i', stIO='r', stWork='o', stAux='w', stHelp='h' };
+enum eShowType { stResult='r', stIO='i', stWork='o', stAux='w', stHelp='h' };
 
 enum eFieldType { ftNumeric=1, ftFloat, ftString, ftText,
                   ftCheckBox, ftRef, ftRecord, ftUndefined=0 };

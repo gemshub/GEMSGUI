@@ -677,17 +677,17 @@ gstring visualizeEmpty(const gstring& text)
 //------------------------------------------------
 
 TCellInput::TCellInput(TField& rfield, int xx, int yy,
-                       eFieldType ft, int npos, eShowType st,
+                       eFieldType ft, int npos, eShowType showType_,
                        TObject& rO, int n, int m, bool ed, int ht):
         QLineEdit(&rfield),
-        TCell(rO, n, m, ed, this),
+        TCell(rO, n, m, ed, showType_, this),
         fieldType(ft),
         changed(false)
 {
     move(xx, yy);
     setFixedSize(wdF(fieldType, npos), htF(fieldType, ht));
     if( !edit )
-        setReadOnly(true);/*Sveta test setReadOnly(true)*/
+        setReadOnly(true);
     else
     {
 	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(EvChange()) );
@@ -705,10 +705,30 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
         ;
     }
 
-
     setFont( pVisorImp->getCellFont() );
-    Update();
 
+    setBackgroundMode(Qt::FixedColor);
+/*
+    switch( showType )
+    {
+    case stResult:
+	setBackgroundColor(Qt::cyan);
+    break;
+    case stIO:
+	setBackgroundColor(Qt::magenta);
+    break;
+    case stWork:
+	setBackgroundColor(Qt::green);
+    break;
+    case stAux:
+	setBackgroundColor(Qt::darkGray);
+    break;
+    case stHelp:
+	//setBackgroundColor(Qt::gray);
+    break;
+    }
+*/
+    Update();
 }
 
 
@@ -732,6 +752,29 @@ TCellInput::Update()
     /// Should we call
     /// QToolTip::remove(this); ??
     QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
+    
+    QPalette palette(Qt::black, Qt::cyan);
+    QPalette palette1(Qt::green, Qt::cyan);
+
+    switch( showType )
+    {
+    case stResult:
+	setPalette(QPalette(Qt::blue, backgroundColor()));
+    break;
+    case stIO:
+	setPalette(QPalette(Qt::magenta, backgroundColor()));
+    break;
+    case stWork:
+	setPalette(QPalette(Qt::cyan, backgroundColor()));
+    break;
+    case stAux:
+	setPalette(QPalette(Qt::green, backgroundColor()));
+    break;
+    case stHelp:
+	setPalette(QPalette(Qt::gray, backgroundColor()));
+    break;
+    }
+
 }
 
 void
@@ -964,10 +1007,10 @@ TCellInput::CmDComp()
 // TCellCheck
 //==========================================
 
-TCellCheck::TCellCheck(TField& rfield, int x1, int y1, int npos, eShowType,
+TCellCheck::TCellCheck(TField& rfield, int x1, int y1, int npos, eShowType showType_,
                        TObject& rO, int n, int m, bool ed1):
         QLineEdit(&rfield),
-        TCell(rO, n, m, ed1, this),
+        TCell(rO, n, m, ed1, showType_, this),
         Vals(aUnits[npos].getVals(M))
 {
     move(x1, y1);
@@ -1145,10 +1188,10 @@ TCellCheck::mousePressEvent(QMouseEvent* e)
 //------------------------------------------------
 
 TCellText::TCellText(TField& rfield, int xx, int yy,
-                     int npos, eShowType st,
+                     int npos, eShowType showType_,
                      TObject& rO, int n, int m, bool ed, int ht):
         QMultiLineEdit(&rfield),
-        TCell(rO, n, m, ed, this),
+        TCell(rO, n, m, ed, showType_, this),
         changed(false)
 {
     move(xx, yy);

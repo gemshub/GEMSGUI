@@ -49,26 +49,26 @@ protected:
     TObject& rObj;
     int N, M;
     bool edit;
+    const eShowType showType;
 
     void CmHelp();
 
 public:
     QWidget* pw;
 
-    TCell(TObject& ro, int n, int m, bool e, QWidget* p):
-            rObj(ro), N(n), M(m), edit(e), pw(p)
+    TCell(TObject& ro, int n, int m, bool edit_, eShowType showType_, QWidget* p):
+            rObj(ro), N(n), M(m), edit(edit_), showType(showType_), pw(p)
     {}
 
     virtual ~TCell()
     {}
-    ;
 
     // reread value from Object and display
     virtual void Update()=0;
     // for scrolling (set Value in Object & set description)
     virtual void setIfChanged()
     {}
-    ;
+
     void SetDescription();
     void SetNM(int n, int m)
     {
