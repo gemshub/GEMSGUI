@@ -1,14 +1,14 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'CalcDialog.ui'
 **
-** Created: Fri Nov 16 14:53:54 2001
+** Created: Пнд Гру 17 12:44:02 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
 #include "CalcDialogData.h"
 
-#include <qvariant.h>   // first for gcc 2.7.2
+#include <qvariant.h>
 #include <qbuttongroup.h>
 #include <qgroupbox.h>
 #include <qlabel.h>

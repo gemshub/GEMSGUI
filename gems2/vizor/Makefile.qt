@@ -8,8 +8,8 @@
 
 # compile variables
 
-#QTDIR		= /usr/local/qt2e
-QTDIR		= /usr/lib/qt2
+QTDIR		= /usr/local/qt2e
+#QTDIR		= /usr/lib/qt2
 
 OPT_FLAGS	= -O2 -mcpu=pentium
 RELEASE_FLAGS	= -DGEMS_RELEASE

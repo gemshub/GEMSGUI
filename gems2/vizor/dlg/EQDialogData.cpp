@@ -1,14 +1,14 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'EQDialog.ui'
 **
-** Created: Fri Nov 16 14:53:50 2001
+** Created: Пнд Гру 17 12:43:53 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
 #include "EQDialogData.h"
 
-#include <qvariant.h>   // first for gcc 2.7.2
+#include <qvariant.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qpushbutton.h>

@@ -1,14 +1,14 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'ProgressDialog.ui'
 **
-** Created: Fri Nov 16 14:53:52 2001
+** Created: Пнд Гру 17 12:43:57 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
 #include "ProgressDialogData.h"
 
-#include <qvariant.h>   // first for gcc 2.7.2
+#include <qvariant.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qprogressbar.h>
@@ -197,20 +197,22 @@ ProgressDialogData::ProgressDialogData( QWidget* parent,  const char* name, bool
 
     Line1 = new QFrame( this, "Line1" );
     Line1->setGeometry( QRect( 10, 390, 290, 20 ) ); 
+    Line1->setProperty( "frameShape", (int)QFrame::HLine );
+    Line1->setFrameShadow( QFrame::Sunken );
     Line1->setFrameShape( QFrame::HLine );
 
     QWidget* privateLayoutWidget_2 = new QWidget( this, "Layout4" );
     privateLayoutWidget_2->setGeometry( QRect( 21, 411, 270, 39 ) ); 
     Layout4 = new QHBoxLayout( privateLayoutWidget_2, 0, 6, "Layout4"); 
 
-    pStep = new QPushButton( privateLayoutWidget_2, "pStep" );
-    pStep->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, pStep->sizePolicy().hasHeightForWidth() ) );
-    QFont pStep_font(  pStep->font() );
-    pStep_font.setPointSize( 12 );
-    pStep->setFont( pStep_font ); 
-    pStep->setText( trUtf8( "&Step" ) );
-    QToolTip::add( pStep, trUtf8( "Make next iteration in Stepwise mode" ) );
-    Layout4->addWidget( pStep );
+    pStepAccept = new QPushButton( privateLayoutWidget_2, "pStepAccept" );
+    pStepAccept->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, pStepAccept->sizePolicy().hasHeightForWidth() ) );
+    QFont pStepAccept_font(  pStepAccept->font() );
+    pStepAccept_font.setPointSize( 12 );
+    pStepAccept->setFont( pStepAccept_font ); 
+    pStepAccept->setText( trUtf8( "&Step" ) );
+    QToolTip::add( pStepAccept, trUtf8( "Make next iteration in Stepwise mode" ) );
+    Layout4->addWidget( pStepAccept );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout4->addItem( spacer );
 
@@ -229,15 +231,6 @@ ProgressDialogData::ProgressDialogData( QWidget* parent,  const char* name, bool
     pBottle->setFrameShadow( QFrame::Raised );
     QToolTip::add( pBottle, trUtf8( "Shows current mass ratio of gas (white), liquid (blue) and solid (black) phases " ) );
 
-    pProgress = new QProgressBar( this, "pProgress" );
-    pProgress->setGeometry( QRect( 10, 30, 290, 31 ) ); 
-    QFont pProgress_font(  pProgress->font() );
-    pProgress_font.setPointSize( 12 );
-    pProgress->setFont( pProgress_font ); 
-    pProgress->setTotalSteps( 7 );
-    pProgress->setProgress( 1 );
-    QToolTip::add( pProgress, trUtf8( "Shows how far the GEM IPM proceeded from FIA to G(x) minimum" ) );
-
     pKey = new QLabel( this, "pKey" );
     pKey->setGeometry( QRect( 10, 90, 290, 30 ) ); 
     QFont pKey_font(  pKey->font() );
@@ -248,19 +241,17 @@ ProgressDialogData::ProgressDialogData( QWidget* parent,  const char* name, bool
     pKey->setText( trUtf8( ":" ) );
     QToolTip::add( pKey, trUtf8( "Key of the currently processed SysEq database record" ) );
 
-    pAccept = new QPushButton( this, "pAccept" );
-    pAccept->setGeometry( QRect( 20, 410, 80, 37 ) ); 
-    pAccept->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, pAccept->sizePolicy().hasHeightForWidth() ) );
-    QFont pAccept_font(  pAccept->font() );
-    pAccept_font.setPointSize( 12 );
-    pAccept->setFont( pAccept_font ); 
-    pAccept->setText( trUtf8( "&Accept" ) );
-    QToolTip::add( pAccept, trUtf8( "Save IPM results to database" ) );
+    pProgress = new QProgressBar( this, "pProgress" );
+    pProgress->setGeometry( QRect( 10, 30, 290, 31 ) ); 
+    QFont pProgress_font(  pProgress->font() );
+    pProgress_font.setPointSize( 12 );
+    pProgress->setFont( pProgress_font ); 
+    pProgress->setTotalSteps( 7 );
+    pProgress->setProgress( 1 );
+    QToolTip::add( pProgress, trUtf8( "Shows how far the GEM IPM proceeded from FIA to G(x) minimum" ) );
 
     // signals and slots connections
-    connect( pStep, SIGNAL( clicked() ), this, SLOT( CmStep() ) );
     connect( pClose, SIGNAL( clicked() ), this, SLOT( CmClose() ) );
-    connect( pAccept, SIGNAL( clicked() ), this, SLOT( CmAccept() ) );
 }
 
 /*  

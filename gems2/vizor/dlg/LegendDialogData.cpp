@@ -1,14 +1,14 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'LegendDialog.ui'
 **
-** Created: Fri Nov 16 14:53:57 2001
+** Created: Пнд Гру 17 12:44:07 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
 #include "LegendDialogData.h"
 
-#include <qvariant.h>   // first for gcc 2.7.2
+#include <qvariant.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>

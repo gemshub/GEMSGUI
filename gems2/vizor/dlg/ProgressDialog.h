@@ -24,7 +24,7 @@
 
 #include <time.h>
 #include "setthread.h"
- #ifdef Use_mt_mode 
+#ifdef Use_mt_mode 
 //#include "ProgressDialogData_mt.h"
 #include "ProgressDialogData.h"
 class CalcThread;

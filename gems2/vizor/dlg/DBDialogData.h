@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'DBDialog.ui'
 **
-** Created: Fri Nov 16 14:53:49 2001
+** Created: Пнд Гру 17 12:43:52 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'ProgressDialog.ui'
 **
-** Created: Fri Nov 16 14:53:51 2001
+** Created: Пнд Гру 17 12:43:57 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -44,12 +44,11 @@ public:
     QLabel* TextLabel3_2_2;
     QLabel* TextLabel3;
     QFrame* Line1;
-    QPushButton* pStep;
+    QPushButton* pStepAccept;
     QPushButton* pClose;
     QFrame* pBottle;
-    QProgressBar* pProgress;
     QLabel* pKey;
-    QPushButton* pAccept;
+    QProgressBar* pProgress;
 
 
 protected slots:

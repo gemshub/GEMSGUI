@@ -96,7 +96,7 @@ visor.o: ../mods/m_gtdemo.h ../mods/m_duterm.h
 main.o: visor.h ./libs/gstring.h ./libs/array.h ./kernel/v_module.h
 main.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 main.o: ./kernel/v_vals.h ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h
-main.o: ../mods/setthread.h graph.h dlg/MainDialog.h
+main.o: ../mods/setthread.h graph.h dlg/MainDialog.h dlg/MainDialogData.h
 visor_w.o: helpwindow.h service.h ./libs/array.h ./libs/gstring.h
 visor_w.o: ./kernel/v_user.h ./libs/verror.h visor_w.h ../mods/setthread.h
 visor_w.o: ./kernel/v_vals.h graph.h ./kernel/v_module.h ./kernel/v_object.h
@@ -105,10 +105,13 @@ visor_w.o: ../mods/m_param.h ../mods/v_mod.h ../mods/submod/ms_rmults.h
 visor_w.o: ../mods/submod/ms_mtparm.h ../mods/submod/ms_system.h
 visor_w.o: ../mods/m_phase.h ../mods/submod/ms_multi.h ./kernel/v_ipnc.h
 visor_w.o: ../mods/submod/ms_calc.h ../mods/m_syseq.h page_win_w.h page_s.h
-visor_w.o: ./libs/config.h dlg/MainDialog.h dlg/SelectDialog.h
-visor_w.o: dlg/KeyFilter.h dlg/KeyFilter.h dlg/ProgressDialog.h
-visor_w.o: dlg/SystemDialog.h dlg/ListFilesDialog.h dlg/LoadMessage.h
-visor_w.o: dlg/KeyDialog.h dlg/KeyProfile.h
+visor_w.o: ./libs/config.h dlg/MainDialog.h dlg/MainDialogData.h
+visor_w.o: dlg/SelectDialog.h dlg/SelectDialogData.h dlg/KeyFilter.h
+visor_w.o: dlg/KeyFilter.h dlg/ProgressDialog.h dlg/ProgressDialogData.h
+visor_w.o: dlg/SystemDialog.h dlg/SystemDialogData.h dlg/ListFilesDialog.h
+visor_w.o: dlg/ListFilesDialogData.h dlg/LoadMessage.h dlg/HLinpDialog.h
+visor_w.o: dlg/HLinpDialogData.h dlg/KeyDialog.h dlg/KeyDialogData.h
+visor_w.o: dlg/KeyProfile.h dlg/KeyProfileData.h
 module_w.o: visor.h ./libs/gstring.h ./libs/array.h ./kernel/v_module.h
 module_w.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 module_w.o: ./kernel/v_vals.h ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h
@@ -123,7 +126,8 @@ page_w.o: ../mods/submod/ms_mtparm.h ../mods/submod/ms_system.h
 page_w.o: ../mods/m_phase.h ../mods/submod/ms_multi.h ./kernel/v_ipnc.h
 page_w.o: ../mods/submod/ms_calc.h ../mods/setthread.h ../mods/m_sdata.h
 page_w.o: module_w.h page_w.h page_win_w.h visor_w.h graph.h service.h
-page_w.o: query_w.h help.h dlg/CalcDialog.h dlg/CalcCheckDialog.h
+page_w.o: query_w.h help.h dlg/CalcDialog.h dlg/CalcDialogData.h
+page_w.o: dlg/CalcCheckDialog.h dlg/CalcCheckDialogData.h
 page_win_w.o: units.h ./libs/array.h ./libs/gstring.h page_i.h page_s.h
 page_win_w.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 page_win_w.o: ./kernel/v_vals.h ./kernel/v_module.h ./kernel/v_dbm.h
@@ -133,7 +137,8 @@ page_win_w.o: ../mods/submod/ms_mtparm.h ../mods/submod/ms_system.h
 page_win_w.o: ../mods/m_phase.h ../mods/submod/ms_multi.h ./kernel/v_ipnc.h
 page_win_w.o: ../mods/submod/ms_calc.h ../mods/setthread.h ../mods/m_sdata.h
 page_win_w.o: module_w.h page_w.h page_win_w.h visor_w.h graph.h service.h
-page_win_w.o: query_w.h help.h dlg/CalcDialog.h dlg/CalcCheckDialog.h
+page_win_w.o: query_w.h help.h dlg/CalcDialog.h dlg/CalcDialogData.h
+page_win_w.o: dlg/CalcCheckDialog.h dlg/CalcCheckDialogData.h
 pshape.o: pshape.h ./kernel/v_user.h ./libs/gstring.h ./libs/array.h
 pshape.o: ./libs/verror.h
 help.o: help.h ./libs/gstring.h ./libs/array.h ./kernel/v_user.h
@@ -147,4 +152,4 @@ helpwindow.o: ./kernel/v_file.h
 graph.o: graph.h ./libs/array.h ./kernel/v_module.h ./kernel/v_object.h
 graph.o: ./libs/gstring.h ./kernel/v_user.h ./libs/verror.h ./kernel/v_vals.h
 graph.o: ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h ../mods/setthread.h
-graph.o: dlg/GraphDialog.h pshape.h
+graph.o: dlg/GraphDialog.h dlg/GraphDialogData.h pshape.h

@@ -1,14 +1,14 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'ListFilesDialog.ui'
 **
-** Created: Fri Nov 16 14:53:58 2001
+** Created: Пнд Гру 17 12:44:08 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
 #include "ListFilesDialogData.h"
 
-#include <qvariant.h>   // first for gcc 2.7.2
+#include <qvariant.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlistview.h>

@@ -1,14 +1,14 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'SystemDialog.ui'
 **
-** Created: Fri Nov 16 14:53:51 2001
+** Created: Пнд Гру 17 12:43:56 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
 #include "SystemDialogData.h"
 
-#include <qvariant.h>   // first for gcc 2.7.2
+#include <qvariant.h>
 #include <qcheckbox.h>
 #include <qframe.h>
 #include <qgroupbox.h>

@@ -1,14 +1,14 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'CalcCheckDialog.ui'
 **
-** Created: Fri Nov 16 14:53:55 2001
+** Created: Пнд Гру 17 12:44:03 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
 #include "CalcCheckDialogData.h"
 
-#include <qvariant.h>   // first for gcc 2.7.2
+#include <qvariant.h>
 #include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qlabel.h>

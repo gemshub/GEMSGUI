@@ -35,6 +35,23 @@
 #include "visor.h"
 #include "visor_w.h"
 
+
+
+void 
+ProgressDialog::switchToAccept(bool isAccept)
+{
+	if( isAccept ) {
+		pStepAccept->disconnect();
+		connect( pStepAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
+		pStepAccept->setText("&Accept");
+	}
+	else {
+		pStepAccept->disconnect();
+		connect( pStepAccept, SIGNAL(clicked()), this, SLOT(CmStep()) );
+		pStepAccept->setText("&Step");
+	}
+}
+
 #ifdef Use_mt_mode
 
 #include <qthread.h>
@@ -86,21 +103,6 @@ ProgressDialog::~ProgressDialog()
     delete calcThread;
 // timer deleted with the parent
 //    delete timer;  
-}
-
-void 
-ProgressDialog::switchToAccept(bool isAccept)
-{
-	if( isAccept ) {
-		pStepAccept->disconnect();
-		connect( pStepAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
-		pStepAccept->setText("Accept");
-	}
-	else {
-		pStepAccept->disconnect();
-		connect( pStepAccept, SIGNAL(clicked()), this, SLOT(CmStep()) );
-		pStepAccept->setText("&Step");
-	}
 }
 
 
@@ -366,9 +368,9 @@ ProgressDialog::ProgressDialog(QWidget* parent,	bool step):
     setCaption( "Running..." );
 
     if( !step )
-        pStep->hide();
+	switchToAccept(true);
     else
-        pStep->setText("&Step");
+	switchToAccept(false);
 
     Update(true);
 }
@@ -450,8 +452,7 @@ ProgressDialog::CalcFinished()
     MULTI* pData = TProfil::pm->pmp;
 
     pClose->setText("&Discard");
-    pStep->setText("&Accept");
-    pStep->show();
+    switchToAccept(true);
     QString str;
     str.sprintf("Converged at DK=%.2g", pData->DX );
     setCaption(str);
