@@ -461,15 +461,8 @@ TVisor::toWinCFG()
     f_win_ini << "double_precision\t=\t" << n << endl;
     f_win_ini << "update_interval\t=\t" << pVisorImp->updateInterval() << endl;
 
-    QFont font = pVisorImp->getCellFont();
-
-    // all font settings are exported (for possible Unix->Win export)
-    // but general_font_string is now is the only potrable way
-    f_win_ini << "general_font_string\t=\t\"" << font.toString() << "\"" << endl;
-
-    f_win_ini << "general_font_family\t=\t" << font.family() << endl;
-    f_win_ini << "general_font_points\t=\t" << font.pointSize() << endl;
-    f_win_ini << "general_font_weight\t=\t" << font.weight() << endl;
+    f_win_ini << "general_font_string\t=\t\"" << pVisorImp->getCellFont().toString() << "\"" << endl;
+    f_win_ini << "axis_label_font_string\t=\t\"" << pVisorImp->getAxisLabelFont().toString() << "\"" << endl;
 
     int win_num = aWinInfo.GetCount();
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;
@@ -505,7 +498,6 @@ TVisor::fromWinCFG()
 #endif
 
     int win_num = 0;
-    QFont cellFont = pVisorImp->getCellFont();
     gstring name = visor_conf.getFirst();
 
     while ( !name.empty() )
@@ -517,27 +509,20 @@ TVisor::fromWinCFG()
             if( name == "update_interval" ) {
                 pVisorImp->setUpdateInterval( visor_conf.getcInt() );
             }
-            else
-//#ifdef __unix
-#if 1
-                if( name == "general_font_string" ) {
+            else if( name == "general_font_string" ) {
                     visor_conf.getcStr(name);
                     name.strip();
+		    QFont cellFont;
                     cellFont.fromString( name.c_str() );
+		    pVisorImp->setCellFont(cellFont);
                 }
-#else
-                if( name == "general_font_family" ) {
+        	else if( name == "axis_label_font_string" ) {
                     visor_conf.getcStr(name);
                     name.strip();
-                    cellFont.setFamily( name.c_str() );
+		    QFont axisLabelFont;
+                    axisLabelFont.fromString( name.c_str() );
+		    pVisorImp->setAxisLabelFont(axisLabelFont);
                 }
-                else if( name == "general_font_size" ) {
-                    cellFont.setPointSize( visor_conf.getcInt() );
-                }
-                else if( name == "general_font_weight" ) {
-                    cellFont.setWeight( visor_conf.getcInt() );
-                }
-#endif
                 else if( name == "number_of_windows" ) {
                     win_num = visor_conf.getcInt();
                 }
@@ -560,8 +545,6 @@ TVisor::fromWinCFG()
 			
         name = visor_conf.getNext();
     }
-
-    pVisorImp->setCellFont( cellFont );
 
     // Window-specific settings
     gstring fwin_ini_name = /*userGEMDir*/userProfDir() + WIN_CONF;

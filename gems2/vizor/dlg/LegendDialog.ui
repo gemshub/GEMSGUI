@@ -15,183 +15,6 @@
     <property name="caption">
         <string>Legend and Configuration for: </string>
     </property>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>GroupBox1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>410</width>
-                <height>191</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Axis Setup</string>
-        </property>
-        <grid>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>11</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QLabel" row="2" column="2">
-                <property name="name">
-                    <cstring>TextLabel1_2_2_2</cstring>
-                </property>
-                <property name="text">
-                    <string>y:</string>
-                </property>
-            </widget>
-            <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
-                <property name="name">
-                    <cstring>TextLabel1_2</cstring>
-                </property>
-                <property name="text">
-                    <string>Graph</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="4" column="4">
-                <property name="name">
-                    <cstring>pfYn</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Maximum</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="3" column="4">
-                <property name="name">
-                    <cstring>pfXn</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Maximum</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="2" column="4">
-                <property name="name">
-                    <cstring>pYn</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Maximum</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="0" column="4">
-                <property name="name">
-                    <cstring>pYname</cstring>
-                </property>
-                <property name="maxLength">
-                    <number>9</number>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Name of  y  axis</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="4" column="3">
-                <property name="name">
-                    <cstring>pfY0</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Minimum</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="3" column="3">
-                <property name="name">
-                    <cstring>pfX0</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Minimum</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="2" column="3">
-                <property name="name">
-                    <cstring>pY0</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Minimum</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="1" column="3">
-                <property name="name">
-                    <cstring>pX0</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Minimum</string>
-                </property>
-            </widget>
-            <widget class="QLabel" row="1" column="2">
-                <property name="name">
-                    <cstring>TextLabel1_2_2</cstring>
-                </property>
-                <property name="text">
-                    <string>x:</string>
-                </property>
-            </widget>
-            <widget class="QLabel" row="4" column="2">
-                <property name="name">
-                    <cstring>TextLabel1_2_2_2_2</cstring>
-                </property>
-                <property name="text">
-                    <string>y:</string>
-                </property>
-            </widget>
-            <widget class="QLabel" row="3" column="0" rowspan="1" colspan="2">
-                <property name="name">
-                    <cstring>TextLabel1_2_3</cstring>
-                </property>
-                <property name="text">
-                    <string>Fragment</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="0" column="3">
-                <property name="name">
-                    <cstring>pXname</cstring>
-                </property>
-                <property name="maxLength">
-                    <number>9</number>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Name of  x  axis</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit" row="1" column="4">
-                <property name="name">
-                    <cstring>pXn</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Maximum</string>
-                </property>
-            </widget>
-            <widget class="QSpinBox" row="0" column="1" rowspan="1" colspan="2">
-                <property name="name">
-                    <cstring>pAxis</cstring>
-                </property>
-                <property name="maxValue">
-                    <number>20</number>
-                </property>
-            </widget>
-            <widget class="QLabel" row="0" column="0">
-                <property name="name">
-                    <cstring>TextLabel1</cstring>
-                </property>
-                <property name="text">
-                    <string>Axis type</string>
-                </property>
-            </widget>
-            <widget class="QLabel" row="3" column="2">
-                <property name="name">
-                    <cstring>TextLabel1_2_2_3</cstring>
-                </property>
-                <property name="text">
-                    <string>x:</string>
-                </property>
-            </widget>
-        </grid>
-    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout3</cstring>
@@ -279,6 +102,241 @@
             </widget>
         </vbox>
     </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>410</width>
+                <height>190</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Axis Setup</string>
+        </property>
+        <grid>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>11</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton" row="5" column="2" rowspan="1" colspan="2">
+                <property name="name">
+                    <cstring>pBtnChangeFont</cstring>
+                </property>
+                <property name="text">
+                    <string>...</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="1" column="0" rowspan="1" colspan="3">
+                <property name="name">
+                    <cstring>TextLabel1_2</cstring>
+                </property>
+                <property name="text">
+                    <string>Graph</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="2" column="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>y:</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="1" column="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>x:</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="4" column="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_2_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>y:</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_3</cstring>
+                </property>
+                <property name="text">
+                    <string>Fragment</string>
+                </property>
+            </widget>
+            <widget class="QSpinBox" row="0" column="1" rowspan="1" colspan="3">
+                <property name="name">
+                    <cstring>pAxis</cstring>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+            </widget>
+            <widget class="QLabel" row="0" column="0">
+                <property name="name">
+                    <cstring>TextLabel1</cstring>
+                </property>
+                <property name="text">
+                    <string>Axis type</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="3" column="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_2_3</cstring>
+                </property>
+                <property name="text">
+                    <string>x:</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="5" column="0" rowspan="1" colspan="2">
+                <property name="name">
+                    <cstring>textLabel2</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="text">
+                    <string>Label font:</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget" row="0" column="4" rowspan="6" colspan="1">
+                <property name="name">
+                    <cstring>layout10</cstring>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout7</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit" row="0" column="0">
+                                <property name="name">
+                                    <cstring>pXname</cstring>
+                                </property>
+                                <property name="maxLength">
+                                    <number>9</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Name of  x  axis</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pX0</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Minimum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="3" column="1">
+                                <property name="name">
+                                    <cstring>pfXn</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Maximum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="4" column="1">
+                                <property name="name">
+                                    <cstring>pfYn</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Maximum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>pXn</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Maximum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="4" column="0">
+                                <property name="name">
+                                    <cstring>pfY0</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Minimum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="2" column="0">
+                                <property name="name">
+                                    <cstring>pY0</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Minimum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>pYname</cstring>
+                                </property>
+                                <property name="maxLength">
+                                    <number>9</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Name of  y  axis</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="3" column="0">
+                                <property name="name">
+                                    <cstring>pfX0</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Minimum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="2" column="1">
+                                <property name="name">
+                                    <cstring>pYn</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Maximum</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QLineEdit">
+                        <property name="name">
+                            <cstring>pLabelFont</cstring>
+                        </property>
+                        <property name="readOnly">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>This label font is common for all graphs</string>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
+        </grid>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -305,6 +363,12 @@
         <receiver>LegendDialogData</receiver>
         <slot>CmBackground()</slot>
     </connection>
+    <connection>
+        <sender>pBtnChangeFont</sender>
+        <signal>clicked()</signal>
+        <receiver>LegendDialogData</receiver>
+        <slot>CmChangeLabelFont()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>pAxis</tabstop>
@@ -326,6 +390,7 @@
 <slots>
     <slot>CmApply()</slot>
     <slot>CmBackground()</slot>
+    <slot access="protected">CmChangeLabelFont()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

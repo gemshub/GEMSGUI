@@ -27,6 +27,7 @@
 
 #include "pshape.h"
 #include "dlg/GraphDialog.h"
+#include "visor_w.h"
 
 
 // ----------------------------------------------
@@ -101,8 +102,8 @@ PText::paint(QPainter& dc)
     QPoint screenPoint = par->RealToVisible(point);
 
     dc.setPen( QPen(color, 2) );
-    QFont font = dc.font();
-cerr << "PText::font " << font.toString() << endl;
+//    QFont font = dc.font();
+    QFont font = pVisorImp->getAxisLabelFont();
     if( !font.bold() )
 	font.setBold(true);
     if( font.pixelSize() < 11 ) 
@@ -230,7 +231,8 @@ TPlotWin::paintEvent(QPaintEvent* qpev)
 void
 TPlotWin::PaintToDC(QPainter& dc)
 {
-    QFont font = dc.font();
+//    QFont font = dc.font();
+    QFont font = pVisorImp->getAxisLabelFont();
     if( font.pixelSize() < 11 ) {
 	font.setPixelSize(11);
 	dc.setFont(font);
@@ -267,24 +269,25 @@ TPlotWin::paintGrid(QPainter& dc)
 
     QFontMetrics fm(dc.fontMetrics());
 
-    QFont fn = dc.font();
-    fn.setBold(true);
-    dc.setFont(fn);
+//    QFont fn = dc.font();
+    QFont font = pVisorImp->getAxisLabelFont();
+    font.setBold(true);
+    dc.setFont(font);
     dc.drawText( (width() - fm.width(xTitle))/2, height() - 7, xTitle);
     dc.rotate(-90);
     dc.drawText( -(width() - fm.width(yTitle))/2, 10, yTitle);    
 //    dc.drawText( dc.xForm(QPoint(7, (height() - fm.width(yTitle))/2)), yTitle);
     dc.rotate(90);
-    fn.setBold(false);
-    dc.setFont(fn);
+    font.setBold(false);
+    dc.setFont(font);
 
     QString cr("(c) GEMS");
-    int fontSize = fn.pointSize();
-    fn.setPointSize(9);
-    dc.setFont(fn);
-    dc.drawText( width() - QFontMetrics(fn).width(cr) - 2, height() - 5, cr);
-    fn.setPointSize(fontSize);
-    dc.setFont(fn);
+    int fontSize = font.pointSize();
+    font.setPointSize(9);
+    dc.setFont(font);
+    dc.drawText( width() - QFontMetrics(font).width(cr) - 2, height() - 5, cr);
+    font.setPointSize(fontSize);
+    dc.setFont(font);
 
     if( gridX )
         for( int ii=0; ii<=gridCount ; ii++ )
@@ -374,8 +377,6 @@ TPlotWin::mousePressEvent( QMouseEvent *e ) {
 	    QPainter dc(&pixmap);
 //	    dc.setBackgroundMode(Qt::TransparentMode);
 	    //dc.setBackgroundColor(Qt::gray);
-//	    dc.setPen(Qt::yellow);
-//	    dc.setFont(QFont("Arial", 10));
 	    dc.drawText(0, fm.height(), txtLabel->text());
 	    //txtLabel->paint(dc);
 	    dc.flush();

@@ -27,11 +27,13 @@
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qvalidator.h>
+#include <qfontdialog.h>
 
 #include "service.h"
 #include "LegendDialog.h"
 #include "dlg/ColorDialog.h"
 #include "dlg/GraphDialog.h"
+#include "visor_w.h"
 
 
 //----------------------------------------------------------
@@ -44,6 +46,9 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
 
     gstring cap = "Customize Graph: ";
     cap += graph->title;
+
+    labelFont = pVisorImp->getAxisLabelFont();
+    pLabelFont->setText(labelFont.toString());
 
     setCaption( cap.c_str() );
     pAxis->setValue( graph->axisType );
@@ -90,7 +95,7 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
     {
 
         QLabel* qtarch_Label_7;
-        qtarch_Label_7 = new QLabel( this, "Label_7" );
+        qtarch_Label_7 = new QLabel( this );
         qtarch_Label_7->setGeometry( 30, y, 140, 20 );
         qtarch_Label_7->setText( graph->plots[ii].getNames().c_str() );
 
@@ -158,6 +163,8 @@ void LegendDialog::CmApply()
 
 int LegendDialog::apply()
 {
+    pVisorImp->setAxisLabelFont(labelFont);
+
     double x0 =  pX0->text().toDouble();
     double xn =  pXn->text().toDouble();
     double y0 =  pY0->text().toDouble();
@@ -212,5 +219,19 @@ void LegendDialog::SetLine(int ii)
     if( cd.exec() )
         b->setData(  cd.GetPlotLine()) ;
 }
+
+void LegendDialog::CmChangeLabelFont()
+{
+    bool ok;
+    QFont selected_font = QFontDialog::getFont(&ok, labelFont, this);
+
+    if( ok )
+    {
+        labelFont = selected_font;
+        pLabelFont->setText( labelFont.toString() );
+    }
+}
+
+
 //--------------------- End of LegendDialog.cpp ---------------------------
 

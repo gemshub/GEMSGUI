@@ -25,6 +25,7 @@
 #include <qspinbox.h>
 #include <qlineedit.h>
 #include <qlabel.h>
+#include <qfont.h>
 
 #include "LegendDialogData.h"
 #include "GraphDialog.h"
@@ -39,6 +40,7 @@ class LegendDialog :
     GraphDialog * graph_dlg;
     QPushButton *BackGrountBut;
     QColor backgroundColor;
+    QFont labelFont;
     
     int apply();
 
@@ -51,6 +53,7 @@ protected slots:
     virtual void SetLine(int);
     virtual void accept();
     virtual void CmBackground();
+    virtual void CmChangeLabelFont();
 
 protected:
     TIArray<PlotTypeBtn> pLines;
