@@ -284,7 +284,7 @@ void TCModule::CmSaveM()
         gstring str=db->PackKey();
        if( str.find_first_of("*?" ) != gstring::npos
             || ( db->GetStatus() == UNDF_ ) )   // 09/11/2004 Sveta
-        Error( GetName(), "Current record key is not defined or readed!");
+        Error( GetName(), "Cannot save under record key template, or record contents are not yet loaded!");
         CmSave();
      }
    catch( TError& xcpt )
@@ -619,7 +619,7 @@ TCModule::CmDerive()
                     //db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
             || ( db->GetStatus() == UNDF_ ) )   // 09/11/2004 Sveta
-            Error( GetName(), "Current record key is not defined or readed!");
+            Error( GetName(), "Cannot save under record key template, or record contents are not yet loaded!");
 
         //check_input( db->UnpackKey() );
         RecBuild( str.c_str(), VF_REMAKE );
@@ -662,7 +662,7 @@ TCModule::CmCalc()
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
                || ( db->GetStatus()== UNDF_ ))      // 09/11/2004 Sveta
-            Error( GetName(), "Current record key is not defined or readed!");
+            Error( GetName(), "Cannot save under record key template, or record contents are not yet loaded!");
         //int  Rnum = db->Find( str.c_str() );
         //ErrorIf( Rnum<0, GetKeywd(),
         // "Record to calculate not found!");
