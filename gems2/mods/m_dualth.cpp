@@ -412,8 +412,8 @@ void TDualTh::dyn_new(int q)
        (char (*)[MAXIDNAME])aObj[ o_dtnam_b].Alloc( dtp->nQ, 1, MAXIDNAME );
    dtp->nam_n =
        (char (*)[MAXIDNAME])aObj[ o_dtnam_n].Alloc( dtp->nK, 1, MAXIDNAME );
-//   aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
-//   aObj[ o_dtnam_nr].SetDim( 1, dtp->nK );
+   aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
+   aObj[ o_dtnam_nr].SetDim( 1, dtp->nK );
 
    dtp->for_n = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_n].Alloc(
                                             1,  dtp->nK, MAXFORMUNIT );
