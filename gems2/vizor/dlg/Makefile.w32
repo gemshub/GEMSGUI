@@ -34,6 +34,8 @@ DATASRC =	MainDialogData.cpp \
 		ListFilesDialogData.cpp \
 		HLresDialogData.cpp \
 		HLinpDialogData.cpp \
+		ElementsDialogData.cpp \
+		SetFiltersDialogData.cpp
 
 DATAOBJ =       MainDialogData.obj \
 		DBDialogData.obj \
@@ -53,6 +55,8 @@ DATAOBJ =       MainDialogData.obj \
 		ListFilesDialogData.obj \
 		HLresDialogData.obj \
 		HLinpDialogData.obj \
+		ElementsDialogData.obj \
+		SetFiltersDialogData.obj
 
 
 SOURCES =	MainDialog.cpp \
@@ -74,6 +78,8 @@ SOURCES =	MainDialog.cpp \
 		ListFilesDialog.cpp \
 		HLresDialog.cpp \
 		HLinpDialog.cpp \
+		ElementsDialog.cpp \
+		SetFiltersDialog.cpp \
  		LoadMessage.cpp
 
 OBJECTS =	MainDialog.obj \
@@ -95,7 +101,9 @@ OBJECTS =	MainDialog.obj \
 		ListFilesDialog.obj \
 		HLresDialog.obj \
 		HLinpDialog.obj \
- 		LoadMessage.obj
+ 		LoadMessage.obj \
+		ElementsDialog.obj \
+		SetFiltersDialog.obj
 
 OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_MainDialogData.obj \
@@ -128,13 +136,17 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_GraphDialogData.obj \
 		..\tmp\moc_LegendDialog.obj  \
 		..\tmp\moc_LegendDialogData.obj \
-            ..\tmp\moc_ListFilesDialog.obj \
+                ..\tmp\moc_ListFilesDialog.obj \
 		..\tmp\moc_ListFilesDialogData.obj \
 		..\tmp\moc_HLresDialog.obj \
 		..\tmp\moc_HLresDialogData.obj \
 		..\tmp\moc_HLinpDialog.obj \
 		..\tmp\moc_HLinpDialogData.obj \
- 		..\tmp\moc_LoadMessage.obj
+ 		..\tmp\moc_LoadMessage.obj \
+                ..\tmp\moc_ElementsDialog.obj \
+		..\tmp\moc_ElementsDialogData.obj \
+		..\tmp\moc_SetFiltersDialog.obj \
+		..\tmp\moc_SetFiltersDialogData.obj
 
 ####### Build rules
 
@@ -388,6 +400,17 @@ clean:
         $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_HLinpDialogData.cpp
 	-del moc_HLinpDialogData.cpp
 
+..\tmp\moc_ElementsDialogData.obj: ElementsDialogData.h
+      	$(MOC) ElementsDialogData.h -o moc_ElementsDialogData.cpp
+
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ElementsDialogData.cpp
+	-del moc_ElementsDialogData.cpp
+
+..\tmp\moc_SetFiltersDialogData.obj: SetFiltersDialogData.h
+      	$(MOC) SetFiltersDialogData.h -o moc_SetFiltersDialogData.cpp
+
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SetFiltersDialogData.cpp
+	-del moc_SetFiltersDialogData.cpp
 
 ..\tmp\moc_LoadMessage.obj: LoadMessage.h
         $(MOC) $? -o $(*).cpp
@@ -469,3 +492,10 @@ HLinpDialogData.cpp: HLinpDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
+ElementsDialogData.cpp: ElementsDialog.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+SetFiltersDialogData.cpp: SetFiltersDialog.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@

@@ -7,7 +7,7 @@
 !include Makefile.qt_w32
 
 FLAGS	= $(CCFLAGS) $(DEBUG_FLAGS)
-INC_LOCAL	= -I./kernel -I./libs -I../mods
+INC_LOCAL	= -I./kernel -I./libs -I./dlg -I../mods
 INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 LIB	=   tlib /C /P512
 
