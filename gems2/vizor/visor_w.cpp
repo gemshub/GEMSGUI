@@ -617,7 +617,7 @@ vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
          return pVisorImp->thdata.res;
      }
     qApp->lock();
-    bool result = (QMessageBox::information(par, title.c_str(), mess.c_str(),
+    bool result = (QMessageBox::question(par, title.c_str(), mess.c_str(),
                                      "&Yes", "&No") == 0);
     qApp->unlock();
     return result;
@@ -629,7 +629,7 @@ vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess)
 {
 //cerr << "vfYNC" << endl;
     qApp->lock();
-    int result = QMessageBox::information(
+    int result = QMessageBox::question(
                 par, title.c_str(), mess.c_str(), "&Yes", "&No", "&Cancel",
                 0, 2);
     qApp->unlock();
@@ -682,18 +682,18 @@ int
 vfQuestion3(QWidget* par, const gstring& title, const gstring& mess, const gstring& s1,
             const gstring& s2,  const gstring& s3, bool i_mov )
 {
-//cerr << "vfQ3" << endl;
     qApp->lock();
     QMessageBox qm( title.c_str(), mess.c_str(),
-                    QMessageBox::Information,
+                    QMessageBox::Question,
                     QMessageBox::Yes | QMessageBox::Default,
-                    QMessageBox::No,
-                    QMessageBox::Cancel | QMessageBox::Escape,
+                    (s3.empty()) ? (QMessageBox::No | QMessageBox::Escape) : QMessageBox::No,
+                    (s3.empty()) ? QMessageBox::NoButton : (QMessageBox::Cancel | QMessageBox::Escape),
                     par);
 
     qm.setButtonText(QMessageBox::Yes, s1.c_str());
     qm.setButtonText(QMessageBox::No, s2.c_str());
-    qm.setButtonText(QMessageBox::Cancel, s3.c_str());
+    if( !s3.empty() )
+	qm.setButtonText(QMessageBox::Cancel, s3.c_str());
     if( i_mov )
         qm.move(posx, posy);
     int res = qm.exec();

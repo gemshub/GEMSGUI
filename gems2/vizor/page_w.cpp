@@ -635,8 +635,8 @@ TField::SetFirstCellFocus()
 void
 TField::setFocused(TCell* cell)
 {
-// XXX: is called on right click - can not use to clear selection :(
-///    getPage()->clearSelectedObjects();
+    if( !selected )
+	getPage()->clearSelectedObjects();
     focused = cell;
 }
 
@@ -685,21 +685,23 @@ TField::setFromString(const QString& str) throw(TError)
 	const QStringList rows = QStringList::split('\n', str, true);
 
 	int rowNum = 0;
-	for(QStringList::const_iterator it = rows.begin(); it != rows.end(); ++it, rowNum++) {
+	QStringList::const_iterator it;
+	for( it = rows.begin(); it != rows.end() && rowNum < GetObj().GetN(); ++it, rowNum++) {
 	    const QStringList cells = QStringList::split('\t', *it, true);
 	    int cellNum = 0;
-
-	    for(QStringList::const_iterator cellIt = cells.begin(); cellIt != cells.end(); ++cellIt, cellNum++) {
+	    QStringList::const_iterator cellIt;
+	    for( cellIt = cells.begin(); 
+			cellIt != cells.end() && cellNum < GetObj().GetM(); ++cellIt, cellNum++) {
 		QString value(*cellIt);
 
 		if( value.isEmpty() )
 		    value = S_EMPTY;
-		cerr << "pasting row " << rowNum << " cell " << cellNum << ": '" << value << "'" << endl;
+		//cerr << "pasting row " << rowNum << " cell " << cellNum << ": '" << value << "'" << endl;
 
 		if( ! GetObj().SetString( value, rowNum, cellNum ) ) {
 		    vstr err(200);
-		    sprintf(err, "Invalid value for cell [%d, %d]!",
-				rowNum, cellNum);
+		    sprintf(err, "Invalid value for cell [%d, %d]: '%s'!",
+				rowNum, cellNum, (const char*)value);
 		    throw TError("Object paste", err.p);
 		}
 	    }
@@ -712,15 +714,15 @@ TField::CmPasteFromClipboard()
     const QString clipboard = QApplication::clipboard()->text(QClipboard::Clipboard);
     const int clipN = clipboard.contains('\n') + 1;
     QString undoString;
-
-    cerr << clipN << " rows" << endl;
+    bool largerN = false, largerM = false;
 
     try {
 	if( clipN > N ) {
 	    vstr err(200);
-	    sprintf(err, "Paste number of rows bigger that object dimension N (%d > %d)!",
+	    sprintf(err, "Paste number of rows larger than object dimension N (%d > %d)!",
 			    clipN, N);
-	    throw TError("Object paste error", err.p);
+//	    throw TError("Object paste error", err.p);
+	    largerN = true;
 	}
     
 	const QStringList rows = QStringList::split('\n', clipboard, true);
@@ -728,18 +730,25 @@ TField::CmPasteFromClipboard()
 	
 	for(QStringList::const_iterator it = rows.begin(); it != rows.end(); ++it, rowNum++) {
 	    int clipM = (*it).contains('\t') + 1;
-	    cerr << "row " << rowNum << ": " << clipM << " cells" << endl;
 	    if( clipM > M ) {
 		vstr err(200);
 		sprintf(err, "Paste number of cells bigger that object dimension M (%d > %d) for row %d!",
 			    clipM, M, rowNum);
-		throw TError("Object paste error", err.p);
+//		throw TError("Object paste error", err.p);
+		largerM = true;
 	    }
 	    
 	    const QStringList cells = QStringList::split('\t', *it, true);
 	    for(QStringList::const_iterator cellIt = cells.begin(); cellIt != cells.end(); ++cellIt) {
 		///checkCellValue();
 	    }
+	}
+    
+	if( largerN || largerM ) {
+	    if( vfQuestion3(topLevelWidget(), "Object paste", 
+		    "Pasting contents has larger dimensions then the object!", 
+		    "Discard extra cells", "Cancel", "") != VF3_1 )
+		return;
 	}
     
 	undoString = createString();
@@ -864,12 +873,11 @@ void TCell::updateCellBackground()
         break;
     }
 
-    pw->setPalette(QPalette(col, pw->backgroundColor()));
+    pw->setPalette(QPalette(col, backgroundColor));
 }
 
 void TCell::setGroupSelected(bool selected)
 {
-    ((TCellInput*)pw)->deselect();
     pw->setPaletteBackgroundColor( selected ? Qt::yellow : backgroundColor );
 }
 
@@ -889,14 +897,15 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
 {
     move(xx, yy);
     setFixedSize(wdF(fieldType, npos), htF(fieldType, ht));
-    if( !edit )
-        setReadOnly(true);
-    else
+    setReadOnly(!edit);
+
+    if( edit )
     {
         connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(EvChange()) );
         connect(this, SIGNAL(fieldUpdate()), &rfield, SLOT(Update()));
+	setMaxLength(AllowedPos(rO)+1);
+	setValidator(new QRegExpValidator( QRegExp(GetAllowedRegExp(rO)), this ) );
     }
-    setMaxLength(AllowedPos(rO)+1);
 
     connect(this, SIGNAL(selectionChanged()), field(), SLOT(selectionChanged()));
 
@@ -913,8 +922,6 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
     //    setFont( pVisorImp->getCellFont() );
     updateCellBackground();
     updateDisplay();
-
-    setValidator(new QRegExpValidator( QRegExp(GetAllowedRegExp(rO)), this ) );
 }
 
 
@@ -1179,6 +1186,7 @@ TCellInput::CmDComp()
 void
 TCellInput::CmSelectObject()
 {
+    ((TCellInput*)pw)->deselect();
     field()->setSelected(!field()->isSelected());
 }
 
@@ -1376,7 +1384,6 @@ TCellText::TCellText(TField& rfield, int xx, int yy,
     setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
 
     QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
-    //setValidator(new QRegExpValidator( QRegExp(GetAllowedRegExp(rO)), this ) );
 }
 
 
