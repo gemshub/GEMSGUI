@@ -57,6 +57,9 @@ class TVisorImp:
     // other settings
     bool	configAutosave;
 
+    int charWidth;
+    int charHeight;
+
 protected slots:
     void closeEvent( QCloseEvent* );
     void evHelpClosed();
@@ -131,10 +134,12 @@ public:
     {
         return CellFont;
     }
-    void setCellFont(const QFont& newCellFont)
-    {
-        CellFont = newCellFont;
-    }
+    
+    void setCellFont(const QFont& newCellFont);
+    int getCharWidth() const;
+    int getCharHeight() const;
+    int getLabelWidth() const;
+    int getCellWidth() const;
 
     int getDoubleDigits() const
     {

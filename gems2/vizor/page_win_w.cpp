@@ -65,11 +65,11 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
 
     pSH = new QScrollBar(QScrollBar::Horizontal, this);
     connect( pSH, SIGNAL(valueChanged(int)), SLOT(EvHScroll(int)) );
-    pSH->setSteps(wdCELL, wdCELL*3);
+    pSH->setSteps(pVisorImp->getCellWidth(), pVisorImp->getCellWidth()*3);
 
     pSV = new QScrollBar(QScrollBar::Vertical, this);
     connect( pSV, SIGNAL(valueChanged(int)), SLOT(EvVScroll(int)) );
-    pSV->setSteps(htCELL, htCELL*3);
+    pSV->setSteps(pVisorImp->getCharHeight(), pVisorImp->getCharHeight()*3);
 
     pTab = new QButtonGroup(this);
     pTab->setExclusive(true);
@@ -111,7 +111,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
     if( !getCModule().IsSubModule() )
     {
         pFilesBut = new QPushButton(this);//f
-        pFilesBut->setGeometry(pos, 4, szFButton, htLABEL);
+        pFilesBut->setGeometry(pos, 2, szFButton, pTab->find(0)->height());
         pFilesBut->setToggleButton(true);
         QToolTip::add( pFilesBut, "Show open database files" );
         pFilesBut->setText("F");
@@ -119,8 +119,8 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
     }
 
     pPackKey = new QLabel(this);
-    pPackKey->move(pos+szFButton+6, 3);
-    pPackKey->setFixedHeight(htLABEL);
+    pPackKey->move(pos + szFButton + 6, 1);
+    pPackKey->setFixedHeight(szTab - 2);
     pPackKey->setFrameStyle( QFrame::Box | QFrame::Raised );
     pPackKey->setAutoResize(true);
     
@@ -129,11 +129,11 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
     pPackKey->setFont(pk_font);
 
     pRTime = new QLabel(this);
-    pRTime->move(pos+szFButton+4+100, 3);
-//    pRTime->setAlignment( AlignCenter );
-    pRTime->setFixedHeight(htLABEL);
+//    pRTime->move(pos + szFButton + 4 + 100, 1);	// moved in ShowInfo
+    pRTime->setFixedHeight(szTab - 2);
     pRTime->setFrameStyle( QFrame::Box | QFrame::Raised );
     pRTime->setAutoResize(true);
+//    pRTime->setAlignment( AlignCenter );
 
     ShowInfo();
 
@@ -275,7 +275,7 @@ TCWindow::AjustScrollers()
     {
         max = pg.width() - (width()-vScr);
         pSH->setRange(0, max);
-        pSH->setSteps(wdCELL, width()-vScr);
+        pSH->setSteps(pVisorImp->getCellWidth(), width()-vScr);
         pSH->show();
     }
     else
@@ -285,7 +285,7 @@ TCWindow::AjustScrollers()
     {
         max = pg.height() - (height()-szTab-hScr);
         pSV->setRange(0, max);
-        pSV->setSteps(htCELL, height()-szTab-hScr);
+        pSV->setSteps(pVisorImp->getCharHeight(), height()-szTab-hScr);
         pSV->show();
     }
     else
@@ -312,7 +312,7 @@ TCWindow::ShowInfo()
     pPackKey->setText( rt[nR].PackKey() );
 
     pRTime->setText( str.p );
-    pRTime->move(pPackKey->x() + pPackKey->width() + 4, 3);
+    pRTime->move(pPackKey->x() + pPackKey->width() + 4, 1);
 
 }
 

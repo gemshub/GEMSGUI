@@ -81,8 +81,7 @@ TVisorImp::TVisorImp(int c, char** v):
         QMainWindow( 0, GEMS_VERSION_STAMP ),
         argc(c),
         argv(v),
-        CellFont( GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE ),
-	  configAutosave(false)
+	configAutosave(false)
 {
     pVisorImp = this;
     pHelpWidget = 0;
@@ -101,6 +100,8 @@ TVisorImp::TVisorImp(int c, char** v):
     vfMessage(0, err.title, err.mess, vfErr);
     exit(1);	
   }
+
+    setCellFont( QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE) );
 
     gstring logoFile = pVisor->sysGEMDir() + GEMS_LOGO_ICON;
     pixLogo = new QPixmap( logoFile.c_str() );
@@ -471,6 +472,37 @@ TVisorImp::OpenModule(QWidget* par, int irt, int page, bool viewmode)
         vfMessage(pVisorImp, "Error opening module", e.mess.c_str() );
     }
 }
+
+
+void TVisorImp::setCellFont(const QFont& newCellFont)
+{
+    CellFont = newCellFont;
+    QFontMetrics fm(CellFont);
+    charWidth = fm.width("5");
+    charHeight = fm.height();
+}
+
+int TVisorImp:: getCharWidth() const
+{
+    return charWidth;
+}
+
+int TVisorImp:: getCharHeight() const
+{
+    return charHeight;
+}
+
+int TVisorImp:: getCellWidth() const
+{
+    return charWidth * 9;
+}
+
+int TVisorImp:: getLabelWidth() const
+{
+    return charWidth * 6;
+}
+
+
 
 QWaitCondition calcWait;
 QWaitCondition progressWait;
@@ -918,6 +950,8 @@ AGAIN:
         obj->toTXT( f );
     }
 }
+
+
 
 TVisorImp* pVisorImp;
 

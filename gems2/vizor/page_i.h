@@ -20,19 +20,20 @@
 #define page_i_h
 
 #include "page_s.h"
+#include "visor_w.h"
 
-const int wdCELL = 90;
-const int htCELL = 18;
-const int htCHECK = htCELL;
-const int wdCHECK = htCHECK;
+//const int wdCELL = 90;
+//const int htCELL = 18;
+//const int htCHECK = htCELL;
+//const int wdCHECK = htCHECK;
 
 const int wdSPACE = 8;
 const int htSPACE = 2;
 const int wdFSPACE = wdSPACE;
 const int htFSPACE = htSPACE;
 
-const int wdLABEL = 60;
-const int htLABEL = htCELL;
+//const int wdLABEL = 60;
+//const int htLABEL = htCELL;
 
 const int szTab = 25;		// height of a tab control
 const int szFButton = 20;		// width of a files list button
@@ -44,11 +45,29 @@ const int szSBAR = 12;		// size of TFiled 'Grid' ScrollBar
 
 inline int wdF(eFieldType ft, int npos)
 {
-    return (ft==ftCheckBox)?(wdCHECK):(npos*wdCELL/10);
+    if( ft == ftCheckBox ) {	// we'd like to get square 'checkbox cell'
+	int width = pVisorImp->getCharWidth();
+	int height = pVisorImp->getCharHeight();
+	return max(width, height);
+    }
+    else {
+	return npos * pVisorImp->getCharWidth();
+    }
 }
+
 inline int htF(eFieldType ft, int ht)
 {
-    return (ft==ftText) ? htCELL*ht/2 : htCELL;
+    if( ft==ftText ) {
+	return pVisorImp->getCharHeight()*ht/2;
+    }
+    else if( ft == ftCheckBox ) {
+	int width = pVisorImp->getCharWidth();
+	int height = pVisorImp->getCharHeight();
+	return max(width, height);
+    }
+    else {
+	return pVisorImp->getCharHeight();
+    }
 }
 
 

@@ -108,18 +108,13 @@ const int htWIN = 400;
 const int wdTab = 200;
 const int szScroll = 15;
 
+const int X0 = 10;	// position of the 1st Field
+const int Y0 = 10;	// on the Page
+
 
 //----------------------------------------------------------------
 // TCPage
 //----------------------------------------------------------------
-
-const int XUnits = wdCELL;
-const int YUnits = htCELL;
-const int XPageUnits = XUnits*10;
-const int YPageUnits = YUnits*10;
-
-const int X0 = 10;	// position of the 1st Field
-const int Y0 = 10;	// on the Page
 
 TCPage::TCPage(PageInfo& r):
         QWidget(&r.GetWin()),
@@ -204,7 +199,7 @@ void
 TCPage::AddFields()
 {
     TField* prevField = 0;
-    int LineH = htCELL;
+    int LineH = pVisorImp->getCharHeight();
 
     for( int ii=0; ii<getFieldCnt(); ii++ )
     {
@@ -255,14 +250,14 @@ TCPage::AddFields()
                 break;
 
             case FieldInfo::SkipLine:
-                y += LineH + htCELL;
+                y += LineH + pVisorImp->getCharHeight();
                 x = 10;
                 break;
             }
             prevHeight = prevField->GetH();
         }
         else
-            x = X0, y = Y0, LineH = htCELL,
+            x = X0, y = Y0, LineH = pVisorImp->getCharHeight(),
                                     prevHeight = 0;
 
         fi.pField = new TField(this, fi, x, y, pTied, pSticked);
@@ -384,7 +379,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
     if( Lab )
     {
         QLabel* p = new QLabel(this);
-        p->setGeometry(0, 0, wdLABEL, htLABEL);
+        p->setGeometry(0, 0, pVisorImp->getLabelWidth(), pVisorImp->getCharHeight());
         p->setFont( pVisorImp->getCellFont() );
         p->setText(GetObj().GetKeywd());
         //    p->show();
@@ -392,12 +387,12 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
         if( GetObj().GetN() > 1 )
         {
             p->setAlignment( AlignLeft );
-            yy += htLABEL + htSPACE;
+            yy += pVisorImp->getCharHeight() + htSPACE;
         }
         else
         {
             p->setAlignment( AlignRight );
-            xx += wdLABEL + wdSPACE;
+            xx += pVisorImp->getLabelWidth() + wdSPACE;
         }
     }
     else		// aligning with labels of tied fields
@@ -409,7 +404,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
                 {
                     Lab = true;	// creation of scroll bars
                     // depends on Lab
-                    yy += htLABEL + htSPACE;
+                    yy += pVisorImp->getCharHeight() + htSPACE;
                     break;
                 }
     }
@@ -467,7 +462,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
 
     if( largeM )
     {
-        int labW = (Lab && GetObj().GetN()==1) ? wdLABEL+wdSPACE : 0;
+        int labW = (Lab && GetObj().GetN()==1) ? pVisorImp->getLabelWidth()+wdSPACE : 0;
         pSH = new QScrollBar(
                   0, GetObj().GetM()-rInfo.maxM,
                   1, rInfo.maxM,
@@ -480,7 +475,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
 
     if( largeN && indTied == 0 )
     {
-        int labH = (Lab && GetObj().GetN()>1) ? htLABEL+htSPACE : 0;
+        int labH = (Lab && GetObj().GetN()>1) ? pVisorImp->getCharHeight()+htSPACE : 0;
         pSV = new QScrollBar(
                   0, GetObj().GetN()-rInfo.maxN,
                   1, rInfo.maxN,
@@ -1014,7 +1009,8 @@ TCellCheck::TCellCheck(TField& rfield, int x1, int y1, int npos, eShowType showT
         Vals(aUnits[npos].getVals(M))
 {
     move(x1, y1);
-    setFixedSize(wdCHECK, htCHECK);
+    int size = wdF(ftCheckBox, 0);
+    setFixedSize(size, size);
     setMaxLength(2);
 
     if( edit )
@@ -1049,7 +1045,7 @@ TCellCheck::SetString(const gstring& s)
 void
 TCellCheck::SetIndex(int ii)
 {
-    if( ii>=Vals.length() )		// 'Help' or 'Calc' menu
+    if( ii >= (int)Vals.length() )		// 'Help' or 'Calc' menu
         return;
 
     gstring val(Vals, ii, 1);
@@ -1375,7 +1371,7 @@ void
 TQueryWindow::AddFields()
 {
     TField* prevField = 0;	// previous cell
-    int LineH = htCELL;
+    int LineH = pVisorImp->getCharHeight();
 //  PageInfo& pginfo = rInfo.aPageInfo[0];
     int LastPage = rInfo.aPageInfo.GetCount()-1;
     PageInfo& pginfo = rInfo.aPageInfo[LastPage];
@@ -1422,12 +1418,12 @@ TQueryWindow::AddFields()
                 y += prevField->GetH() + htFSPACE;
                 break;
             case FieldInfo::SkipLine:
-                y += LineH + htCELL;
+                y += LineH + pVisorImp->getCharHeight();
                 x = 10;
                 break;
             }
         else
-            x = X0, y = Y0, LineH = htCELL;
+            x = X0, y = Y0, LineH = pVisorImp->getCharHeight();
 
         FieldInfo nfi = fi;
         nfi.edit = eYes;
@@ -1446,7 +1442,7 @@ TQueryWindow::AddFields()
         {
         case FieldInfo::First:
             if( fi.pField == NULL )    // Bugfix  DAK 19.12.00
-                LineH = htCELL;
+                LineH = pVisorImp->getCharHeight();
             else LineH = fi.pField->GetH();
             break;
         case FieldInfo::Tied:
@@ -1454,7 +1450,7 @@ TQueryWindow::AddFields()
         case FieldInfo::Fixed:
         case FieldInfo::NextP:
             if( fi.pField == NULL )    // Bugfix  DAK 19.12.00
-                LineH = htCELL;
+                LineH = pVisorImp->getCharHeight();
             else LineH = max(LineH,fi.pField->GetH());
             break;
         case FieldInfo::Under:
@@ -1464,7 +1460,7 @@ TQueryWindow::AddFields()
         case FieldInfo::Down:
         case FieldInfo::SkipLine:
             if( fi.pField == NULL )    // Bugfix  DAK 19.12.00
-                LineH = htCELL;
+                LineH = pVisorImp->getCharHeight();
             else LineH = fi.pField->GetH();
             break;
         }
