@@ -976,7 +976,7 @@ int TDataBase::scanfile( int nF, long& fPos, long& fLen,
             fPos += 2;
             continue;
         }
-	
+
         fPos += (-len) + RecHead::data_size();
         len = reclen() + strlen(ind.PackKey()) + 1;
         ni = ind.addndx( nF, len, ind.PackKey() );
@@ -1023,9 +1023,9 @@ void TDataBase::RebildFile(const TCIntArray& nff)
         aFile[nF].GetDh( fPos, fLen );
 	
 	gstring tmpFileName = aFile[nF].GetPath() + ".tmp";
-	GemDataStream outStream( tmpFileName, ios::out | ios::trunc );
-	outStream.seekp(VDBhead::data_size(), ios::beg);
-	
+	GemDataStream outStream( tmpFileName, ios::out | ios::trunc |ios::binary);
+	outStream.seekp(fPos/*VDBhead::data_size()*/, ios::beg);
+
         nRec = scanfile( nF, fPos, fLen, aFile[nF].f, outStream );
 	outStream.close();
 	

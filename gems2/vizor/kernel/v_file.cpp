@@ -233,7 +233,8 @@ if( mode== UPDATE_DBV && access( Path.c_str(), 02 ) != 0)
 void TFile::OpenFromFileName( const gstring& filename, FileStatus mode )
 {
     Close();
-    rename(filename.c_str(), GetPath().c_str());
+    remove( GetPath().c_str() );
+    rename(  filename.c_str(), GetPath().c_str());
     Open(mode);
 }
 
