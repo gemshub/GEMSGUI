@@ -902,7 +902,8 @@ TCell::CmHelp()
     	// Changed to return file locator in item   DAK 05.01.01
         //16/06/04  Sveta          pVisorImp->OpenHelp( item.c_str() );
         if( pw->topLevelWidget()->inherits("QDialog") )
-            pVisorImp->OpenHelp( item.c_str(), rObj.GetKeywd(), pw->topLevelWidget()/*, true*/ );
+            pVisorImp->OpenHelp( item.c_str(), NULL, pw->topLevelWidget());  // Fix 15.09.04
+//            pVisorImp->OpenHelp( item.c_str(), rObj.GetKeywd(), pw->topLevelWidget());
         else
             pVisorImp->OpenHelp( item.c_str() );
         // end changes Sveta
