@@ -167,7 +167,7 @@ class TPlotWin:
     int		bx, by;
 //    QRect	canvasRect;
     QString	title;
-    TIArray<PShape> shapes;
+    TOArray<PShape*> shapes;
     int gridCount;
 
 protected:
