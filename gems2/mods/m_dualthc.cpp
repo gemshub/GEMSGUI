@@ -739,7 +739,7 @@ TDualTh::Calc_muo_n( char eState )
               break;
 /*
 // adsorption:
-        case DC_SUR_SITE:
+        case DC_SUR_GROUP:
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
             break;
@@ -752,7 +752,7 @@ TDualTh::Calc_muo_n( char eState )
         case DC_WSC_A1:
         case DC_WSC_A2:
         case DC_WSC_A3:
-        case DC_WSC_A4:  /* case DC_SUR_SITE: *
+        case DC_WSC_A4:  /* case DC_SUR_GROUP: *
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:
         case DC_IESC_A:
@@ -894,7 +894,7 @@ TDualTh::Calc_gam_n( char eState )
               break;
 /*
 // adsorption:
-        case DC_SUR_SITE:
+        case DC_SUR_GROUP:
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
             break;
@@ -907,7 +907,7 @@ TDualTh::Calc_gam_n( char eState )
         case DC_WSC_A1:
         case DC_WSC_A2:
         case DC_WSC_A3:
-        case DC_WSC_A4:  /* case DC_SUR_SITE: *
+        case DC_WSC_A4:  /* case DC_SUR_GROUP: *
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:
         case DC_IESC_A:
@@ -1013,7 +1013,7 @@ TDualTh::Calc_act_n( char eState )
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
                     activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
                     break;
-/*               case DC_SUR_SITE:
+/*               case DC_SUR_GROUP:
                     DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );

@@ -258,13 +258,13 @@ void TSyst::make_syst_sizes()
             sy.Ls++;
             break;
         case DC_SUR_MINAL:
-            sy.Ls++;
+            sy.Ls++; sy.Lsor++;
             break;
         case DC_PEL_CARRIER:
         case DC_SUR_CARRIER:
             if( aPa->pa.p.PSM && aPa->pa.p.GAR > 0 ) // DAK testing
                 sy.lnGmf[j] = log( aPa->pa.p.GAR );      // 27.10.99
-            sy.Ls++;
+            sy.Ls++; sy.Lsor++;
             break;
             /* one component phase */
         case DC_SCP_CONDEN:
@@ -280,7 +280,7 @@ void TSyst::make_syst_sizes()
         case DC_WSC_A2:
         case DC_WSC_A3:
         case DC_WSC_A4:
-        case DC_SUR_SITE:
+        case DC_SUR_GROUP:
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:
         case DC_IESC_A:

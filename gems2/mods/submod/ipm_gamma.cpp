@@ -140,7 +140,7 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
                     break;
-               case DC_SUR_SITE:
+               case DC_SUR_GROUP:
                     DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
@@ -241,7 +241,7 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
             // Obsolete               pmp->Y_la[j] = ln_to_lg * (log(pmp->Wx[j]) + pmp->lnGam[j] );
             break;
             /* adsorption: Simplified by DAK 11.01.00 */
-        case DC_SUR_SITE:
+        case DC_SUR_GROUP:
             pmp->Y_m[j] = X[j]*Factor; /* molality */
             pmp->Y_w[j] =  /* mg/g sorbent */
                 1e3 * X[j] * pmp->MM[j] / (MMC*XFA[k]);
@@ -258,7 +258,7 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
         case DC_WSC_A1:
         case DC_WSC_A2:
         case DC_WSC_A3:
-        case DC_WSC_A4:  /* case DC_SUR_SITE: */
+        case DC_WSC_A4:  /* case DC_SUR_GROUP: */
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:
         case DC_IESC_A:
@@ -549,7 +549,7 @@ void TProfil::IS_EtaCalc()
             case DC_WSC_A2:
             case DC_WSC_A3:
             case DC_WSC_A4:
-            case DC_SUR_SITE:
+            case DC_SUR_GROUP:
             case DC_SUR_COMPLEX:
             case DC_SUR_IPAIR:
             case DC_IESC_A:
@@ -1014,7 +1014,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
         case DC_WSC_A2:
         case DC_WSC_A3:
         case DC_WSC_A4:
-        case DC_SUR_SITE:
+        case DC_SUR_GROUP:
         case DC_IEWC_B:
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:
@@ -1380,18 +1380,20 @@ pmp->lnSAC[ja][0] = pmp->lnGam[j];
 */
 double TProfil::Ej_init_calc( double, int j, int k)
 {
-    int ja, ist, isp, jc=0;
+    int ja=0, ist=0, isp=0, jc=-1;
     double F0=0.0, Fold, dF0, Mk=0.0, Ez, psiA, psiB, CD0, CDb, ObS;
 
     Fold = pmp->F0[j];
-    ja = j - ( pmp->Ls - pmp->Lads );
-    if( pmp->FIat > 0 )
+    if( pmp->FIat > 0 && j < pmp->Ls && j >= pmp->Ls - pmp->Lads )
+    {
+        ja = j - ( pmp->Ls - pmp->Lads );
         jc = pmp->SATX[ja][XL_EM];
+    }
     if( k < pmp->FIs && pmp->XFA[k] > 1e-12)
     {
-        if( jc < 0 ) /* phase (carrier) molar mass g/mkmol */
-            Mk = pmp->FWGT[k]/pmp->XFA[k]*1e-6;
-        else Mk = pmp->MM[jc]*(pmp->X[jc]/pmp->XFA[k])*1e-6;
+           if( jc < 0 ) /* phase (carrier) molar mass g/mkmol */
+              Mk = pmp->FWGT[k]/pmp->XFA[k]*1e-6;
+           else Mk = pmp->MM[jc]*(pmp->X[jc]/pmp->XFA[k])*1e-6;
         /* DC carrier molar mass g/mkmol */
     }
     switch( pmp->DCC[j] )
@@ -1423,7 +1425,7 @@ double TProfil::Ej_init_calc( double, int j, int k)
     case DC_WSC_A2:
     case DC_WSC_A3:
     case DC_WSC_A4:
-    case DC_SUR_SITE:
+    case DC_SUR_GROUP:
     case DC_SUR_COMPLEX:
     case DC_SUR_IPAIR:
     case DC_IESC_A:
@@ -2480,7 +2482,7 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
         case DC_WSC_A2:
         case DC_WSC_A3:
         case DC_WSC_A4:
-        case DC_SUR_SITE:
+        case DC_SUR_GROUP:
         case DC_IEWC_B:
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:

@@ -344,7 +344,7 @@ NEXT2:
 void TProfil::multi_sys_dc()
 {
     int j, ii, L, iZ;
-    short jj, jja, ja;
+    short jj, jja, ja, kk;
     float a, *A, Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
@@ -387,10 +387,9 @@ void TProfil::multi_sys_dc()
             if( j < syp->Ls && j >= syp->Ls - syp->Lsor)
             {   // assembling DC name list for sorption surface species
                 ja = j-(syp->Ls-syp->Lsor);
-                jja = jj-(mup->Ls-mup->Lads);
-                memcpy( pmp->SM3[ja], mup->SM[jja]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+                memcpy( pmp->SM3[ja], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
                // surface species DC class code (usage will be obsolete)
-                pmp->DCC3[ja] = mup->DCC[jja];
+                pmp->DCC3[ja] = mup->DCC[jj];
             }
             mm = 0.0;
             for( ii=0; ii<pmp->N; ii++ ) /* compressing the stoichiometry matrix */
@@ -427,7 +426,7 @@ void TProfil::multi_sys_dc()
 CH_FOUND:
         iZ = ii;
     }
-    for( j=-1, jj=0; jj<mup->L; jj++ )
+    for( j=-1, jj=0; jj<mup->L; jj++ ) // Main loop for data loading
     {
         if( syp->Dcl[jj] == S_OFF )
             continue;
@@ -441,7 +440,6 @@ CH_FOUND:
         /*    pmp->X[j] = pmp->Y[j] = */
         pmp->XY[j] = 0.0;
         pmp->G0[j] = tpp->G[jj]; //  /(RT) ? + ln P ? + ln 55.51 ?
-        /* Doubtful !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 
         if( tpp->PtvVm == S_ON )
             switch( pmp->PV )
@@ -466,7 +464,7 @@ CH_FOUND:
             if( syp->DUL )
                 pmp->DUL[j] = syp->DUL[jj];
             else pmp->DUL[j] = 1e6;
-            if( jj < mup->Ls && pmp->lnSAC )
+            if( pmp->lnSAC && jj < pmp->Ls && jj >= pmp->Ls - pmp->Lads )
                pmp->lnSAC[j-(pmp->Ls-pmp->Lads)][3] = pmp->DUL[j]; // Copy of DUL for SAT refining
             if( syp->DLL )
                 pmp->DLL[j] = syp->DLL[jj];
@@ -494,17 +492,15 @@ CH_FOUND:
                 pmp->lnGmM[j] = syp->lnGmf[jj];
         }
         else pmp->lnGmf[j] = 0.0;
-        /*
-             if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_CARRIER
-                || pmp->DCC[j] == DC_SUR_MINAL )
-              continue;
-        */
+
+        if( !( j < pmp->Ls && j >= pmp->Ls - pmp->Lads ) )
+            continue;   // the following is not done for non-surface species
+
+        ja = j-(pmp->Ls-pmp->Lads);
+        jja = jj-(mup->Ls-mup->Lads);
         // Loading MaSdj - max.sur.densities for non-competitive sorbates */
-        if( jj < mup->Ls && syp->PMaSdj != S_OFF )
+        if( syp->PMaSdj != S_OFF )
         {
-            int kk, ja, jja;
-            ja = j-(pmp->Ls-pmp->Lads);
-            jja = jj-(mup->Ls-mup->Lads);
             for( kk=0; kk<DFCN; kk++ )
                if( !IsFloatEmpty( syp->MaSdj[jja][kk] ) )
                    pmp->MASDJ[ja][kk] = syp->MaSdj[jja][kk];
@@ -513,11 +509,8 @@ CH_FOUND:
 //                pmp->MASDJ[j] = syp->MaSdj[jj];    1/nm2!
 //            else pmp->MASDJ[j] = 0;
         }
-        if( jj < mup->Ls && syp->PSATT != S_OFF )
+        if( syp->PSATT != S_OFF )
         { // Loading SATC - codes of methods for SAT calculation
-            int ja, jja;
-            ja = j-(pmp->Ls-pmp->Lads);
-            jja = jj-(mup->Ls-mup->Lads);
             pmp->SATT[ja] = syp->SATC[jja][SA_MCA];
 
 // Loading allocation to surface types
@@ -648,7 +641,7 @@ void TProfil::multi_sys_ph()
     /* load data to phases */
     pmp->FIs = syp->Fis;
     pmp->FIa = 0;
-    pmp->Lads = 0;
+    pmp->Lads = 0;   // Is this really needed?
     ja=0;
     for( kk=0, /*FI=0,*/ k=-1, /*jb=0,*/ je=0; kk<mup->Fi; kk++ )
     {
@@ -752,10 +745,10 @@ PARLOAD:
                 Cjs = j;
                 PMM = pmp->MM[j];
                 /*cQ=car_c;*/
-                car_l[car_c++]=j;
+                car_l[car_c++]=j;  pmp->Lads++; ja++;
                 break;
             case DC_SUR_MINAL:
-                car_l[car_c++]=j;
+                car_l[car_c++]=j;  pmp->Lads++; ja++;
                 break;
                 /*   Remapping DC codes to indices in pm->SATX */
                 /* even - strong surface complex on site type 0,1,2,3,4 - A plane */
@@ -812,7 +805,7 @@ PARLOAD:
                 break;
                 /* Aliaces for 1-site model */
                 /* Surface site A plane -> '0' */
-            case DC_SUR_SITE:
+            case DC_SUR_GROUP:
                 pmp->SATX[ja][XL_ST] = AT_SA0;
                 pmp->Lads++; ja++;
                 break;
@@ -1106,7 +1099,7 @@ void TProfil::ConvertDCC()
                 DCCW = DC_ASYM_SPECIES;
                 break;
                 /* Remapping */
-            case DC_SUR_SITE:
+            case DC_SUR_GROUP:
             case DC_SUR_COMPLEX:
                 DCCW = DC_ASYM_SPECIES;
                 pmp->DCC[j] = DC_SSC_A0;
@@ -1194,7 +1187,7 @@ double TProfil::Cj_init_calc( double g0, int j, int k )
     case DC_WSC_A2:
     case DC_WSC_A3:
     case DC_WSC_A4:
-    case DC_SUR_SITE:
+    case DC_SUR_GROUP:
     case DC_SUR_COMPLEX:
     case DC_SUR_IPAIR:
     case DC_IESC_A:

@@ -597,7 +597,7 @@ void TProfil::XmaxSAT_IPM2( void )
         case DC_WSC_A2:
         case DC_WSC_A3:
         case DC_WSC_A4:
-        case DC_SUR_SITE:
+        case DC_SUR_GROUP:
         case DC_IEWC_B:
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:

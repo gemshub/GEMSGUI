@@ -117,7 +117,7 @@ typedef enum {  /* Classifications of DC */
     DC_IEWC_B  = 'B', /* Weak exchange ion const-charge plane */
 
     /* Aliaces for 1-site model */
-    DC_SUR_SITE    = 'X',  /* Surface site A plane -> '0' */
+    DC_SUR_GROUP    = 'X',  /* Surface site A plane -> '0' */
     DC_SUR_COMPLEX = 'Y',  /* Strong sur. complex A plane -> '0' */
     DC_SUR_IPAIR   = 'Z',  /* Weak sur complex B plane -> '1' */
 

@@ -39,12 +39,12 @@ void
 TDComp::calc_tpcv( int q, int p, int CE, int CV )
 {
     double a=0., T=0., TC=0., Vst=0., Tst=0., T_Tst=0., Ts2=0., TT=0., dT=0., T2=0., T3=0., T4=0.,
-    T05=0., Tst2=0., Tst3=0., Tst4=0., Tst05=0., Tcr_; // qQ=0., Tcr1=0., Tcr=0., Smax=0., Vmax=0.;
+    T05=0., Tst2=0., Tst3=0., Tst4=0., Tst05=0., Tcr_=0.; // qQ=0., Tcr1=0., Tcr=0., Smax=0., Vmax=0.;
     int k=0, i=0, j=0, jf=0;
     double ac[16];
     float a1=0.0;
 
-cout << endl << " q=" << q << " p=" << p << "  CE " << CE << "  CV " << CV << endl;
+// cout << endl << " q=" << q << " p=" << p << "  CE " << CE << "  CV " << CV << endl;
     // iRet = ZERO;
     // default values
     Vst = (double)dc[q].mVs[0];
@@ -59,8 +59,8 @@ cout << endl << " q=" << q << " p=" << p << "  CE " << CE << "  CV " << CV << en
     aW.twp->G = dc[q].Gs[0]; /* - aW.twp->S * (T-Tst); */
     aW.twp->H = dc[q].Hs[0];
     aW.twp->V = Vst;
-cout << " TC="<< TC << " T=" << aW.twp->T << " Tst=" << aW.twp->Tst << " Sst=" << aW.twp->S << " Gst=" 
-     << aW.twp->G << " Hst=" << aW.twp->H << " Cpst=" << aW.twp->Cp << " Vst=" << aW.twp->V << endl; 
+// cout << " TC="<< TC << " T=" << aW.twp->T << " Tst=" << aW.twp->Tst << " Sst=" << aW.twp->S << " Gst=" 
+//     << aW.twp->G << " Hst=" << aW.twp->H << " Cpst=" << aW.twp->Cp << " Vst=" << aW.twp->V << endl; 
     if(( dc[q].pstate[0] == CP_GAS || dc[q].pstate[0] == CP_GASI )
             && aW.twp->P > 0.0 )
     { /* molar volume from the ideal gas law */
@@ -101,10 +101,10 @@ cout << " TC="<< TC << " T=" << aW.twp->T << " Tst=" << aW.twp->Tst << " Sst=" <
         else ac[i] = (double)a1;
      }	
      aW.twp->Cp = ( ac[0] + ac[1]*T + ac[2]/T2 + ac[3]/T05 + ac[4]*T2 
-                 + ac[5]*T3 + ac[6]*T4 + ac[7]/T3 + ac[8]/T + ac[9]*T05 /*+ ac[10]*log(T)*/);
-cout << " T=" << T <<  " T^2=" << T2 << " T^3=" << T3 << " T^4=" << T4 << " T^0.5=" << T05 << endl 
-     << "     ac: " << ac[0] << ' ' << ac[1] << ' ' << ac[2] << ' ' << ac[3] << ' ' << ac[4] << ' ' << ac[5] 
-     << " Cp(T)=" << aW.twp->Cp << " k= " << k << endl; 
+           + ac[5]*T3 + ac[6]*T4 + ac[7]/T3 + ac[8]/T + ac[9]*T05 /*+ ac[10]*log(T)*/);
+// cout << " T=" << T <<  " T^2=" << T2 << " T^3=" << T3 << " T^4=" << T4 << " T^0.5=" << T05 << endl 
+//     << "     ac: " << ac[0] << ' ' << ac[1] << ' ' << ac[2] << ' ' << ac[3] << ' ' << ac[4] << ' ' << ac[5] 
+//     << " Cp(T)=" << aW.twp->Cp << " k= " << k << endl; 
 
     if( fabs( T - Tst ) > TEMPER_PREC )
         for( j=0, jf=0; j<=k; j++ )
@@ -166,9 +166,8 @@ cout << " T=" << T <<  " T^2=" << T2 << " T^3=" << T3 << " T^4=" << T4 << " T^0.
 		  + ac[7] * ( 1./ Tst2 - 1./ T2 ) / 2. + ac[8] * log( TT ) 
 		  + ac[9] * 2.* ( T * T05 - Tst * Tst05 ) / 3.  );
 
-cout << " j=" << j << " T-Tst=" << T_Tst << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G 
-     << " H(T)=" << aW.twp->H << endl; 
-
+// cout << " j=" << j << " T-Tst=" << T_Tst << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G 
+//     << " H(T)=" << aW.twp->H << endl; 
         }
     T=aW.twp->T; 
 NEXT:  
@@ -180,7 +179,7 @@ NEXT:
         Smax = (double)dc[q].Smax;
         if( !IsFloatEmpty( dc[q].TCr ) && !IsFloatEmpty( dc[q].Smax ))
         {
-// Added 21.09.04 from Th.Wagner
+// Added 21.09.04 from input by Th.Wagner
             Vmax = (double)dc[q].Der;
             if( IsFloatEmpty( dc[q].Der ))
             {
@@ -195,9 +194,9 @@ NEXT:
                 qQ = 1. - T / Tcr; a=qQ;
                 aA = 2.* Tcr * Smax; 
                 aW.twp->Cp += T * Smax / 2. / sqrt( Tcr ) / sqrt( Tcr-T );
-                aW.twp->S  += Smax * ( 1.- sqrt( qQ ));
-                aW.twp->G -= Smax *( Tcr-T ) * sqrt( qQ ) - aA * qQ * sqrt( qQ ) / 6.;
-                aW.twp->H += aA * ( qQ * sqrt( qQ ) / 6. - sqrt( qQ ) / 2. + 1./3. );
+                aW.twp->S  += Smax * ( 1.- sqrt( qQ ));                                // to check!
+                aW.twp->G -= Smax *( Tcr-T ) * sqrt( qQ ) - aA * qQ * sqrt( qQ ) / 6.; // to check!
+                aW.twp->H += aA * ( qQ * sqrt( qQ ) / 6. - sqrt( qQ ) / 2. + 1./3. );  // to check! 
             }
             else
             {
@@ -207,13 +206,13 @@ NEXT:
             }
         }
     }
-cout << "   qQ=" << a << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G << " H(T)=" 
-     << aW.twp->H << " Cp(T)=" << aW.twp->Cp << " Tcr=" << Tcr_ << endl; 
+// cout << "   qQ=" << a << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G << " H(T)=" 
+//     << aW.twp->H << " Cp(T)=" << aW.twp->Cp << " Tcr=" << Tcr_ << endl; 
 
     calc_voldp( q, p, CE, CV );
 
-cout << " P=" << aW.twp->P << " S(T,P)=" << aW.twp->S << " G(T,P)=" << aW.twp->G 
-     << " H(T,P)=" << aW.twp->H << " V(T,P)=" << aW.twp->V <<  endl; 
+// cout << " P=" << aW.twp->P << " S(T,P)=" << aW.twp->S << " G(T,P)=" << aW.twp->G 
+//     << " H(T,P)=" << aW.twp->H << " V(T,P)=" << aW.twp->V <<  endl; 
 
 }
 
