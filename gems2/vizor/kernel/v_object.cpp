@@ -71,6 +71,24 @@ TObject::ToCFG(ostream& f)
     write(f);
 }
 
+gstring
+TObject::GetFullName(int aN, int aM)
+{
+  vstr v(15);
+  gstring item = GetKeywd();
+  if( N > 1 )
+  {
+    sprintf(v, "[%u]", aN );
+    item += v;
+  }
+  if( M > 1 && Type != S_)
+  {
+    sprintf(v, "[%u]", aM );
+    item += v;
+  }
+  return item;
+}
+
 // Gets description line from Ni line of DOD list
 //    e.g., for displaying a tooltip
 const gstring

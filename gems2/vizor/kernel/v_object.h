@@ -112,6 +112,7 @@ public:
     {
         return Keywd;
     }
+    gstring GetFullName(int aN, int aM);
     ObjType GetType() const
     {
         return Type;
@@ -149,7 +150,7 @@ public:
     {
 	return pV->IsAny( ndx(N, M) );
     }
-    bool IsEmpty(int N, int M) const 
+    bool IsEmpty(int N, int M) const
     {
 	return pV->IsEmpty( ndx(N, M) );
     }

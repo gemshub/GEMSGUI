@@ -931,13 +931,15 @@ TCell::SetDescription()
 void
 TCell::CmHelp()
 {
-    vstr v(15);
-    int Ndx = rObj.ndx( N, M );
-    gstring item = rObj.GetKeywd();
+    // Sveta 16/02/2005
+    gstring item = rObj.GetFullName(N,M);
+//    vstr v(15);
+//    int Ndx = rObj.ndx( N, M );
+//    gstring item = rObj.GetKeywd();
 
-    item += "_";
-    sprintf(v, "%u", Ndx );  // N);  fixed 16.01.01
-    item += v;  /// # of the cell
+//    item += "_";
+//    sprintf(v, "%u", Ndx );  // N);  fixed 16.01.01
+//    item += v;  /// # of the cell
     try
     {
         gstring item1 = item;
