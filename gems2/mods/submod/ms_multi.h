@@ -54,7 +54,7 @@ typedef struct
     LO,       	// LO -   index of water-solvent in IPM DC list
     PG,       	// PG -   number of DC in gas phase
     PSOL,     	// PSOL - number of DC in liquid hydrocarbon phase
-    Lads,     	// Lads - number of DC in sorption phases
+Lads,     	// Lads - number of DC in sorption phases
     FI,       	// FI -   number of phases in IPM problem
     FIs,      	// FIs -   number of multicomponent phases
     FIa,      	// FIa -   number of sorption phases
@@ -129,8 +129,10 @@ typedef struct
     *mui,   // IC indices in RMULTS IC list [N]
     *muk,   // Phase indices in RMULTS phase list [FI]
     *muj,   // DC indices in RMULTS DC list [L]
-    (*SATNdx)[2];  /* surface site type index, 0,1,...,Fiat-1 [0:Ls-1][2] */
-    /* and assign. sur.DC to carrier end-member indices */
+(*SATX)[4]; // New: work table [Lads]: link indexes to surface type [XL_ST];
+            // sorbent em [XL_EM]; surf.site [XL-SI] and EDL plane [XL_SP]
+            /* formerly SATndx: surface type index, 0,1,...,Fiat-1 [0:Ls-1][2] */
+            /* and assign. sur.DC to carrier end-member indices */
     float
     *PMc,   // Non-ideality coefficients f(TP) -> LsMod
     *DMc,   // Non-ideality coefficients f(TPX) for DC -> LsMdc
@@ -170,7 +172,7 @@ typedef struct
     *Fug,   // Partial fugacities of gases [0:PG-1]
     *Fug_l, // log  partial fugacities of gases [0:PG-1]
     *Ppg_l, // log  partial pressures of gases [0:PG-1]
-    (*MASDJ)[DFCN];  /* Density, Frumkin, CD-MUSIC params new [Ls][DFCN] */
+(*MASDJ)[DFCN];  // Max. density, CD-music and isotherm params [Lads][DFCN]
     double
     *DUL,  // VG Vector of upper restrictions to x_j (reserved) [L]
     *DLL,  // NG Vector of lower restrictions to x_j, moles [L]
@@ -195,7 +197,7 @@ typedef struct
     *G0,   // Input normalized g0_j(T,P) for DC at unified standard scale[L]
     *lnGam, // ln of DC activity coefficients [0:L-1]
     *lnGmo, // Copy of lnGam from previous IPM iteration (reserved)
-    *lnSAT, // Ln of surface activity terms           [0:Ls-1]
+(*lnSAC)[4], // former lnSAT ln surface activity coeff and Coulomb's term  [Lads][4]
     *B,  // Input bulk chem. compos. of the system-b vector, moles of IC[N]
     *U,  // IC chemical potentials u_i (mole/mole) - dual IPM solution [N]
     *U_r, // IC chemical potentials u_i (J/mole) [0:N-1]
@@ -228,7 +230,7 @@ typedef struct
     *Wx,  // Mole fractions Wx of DC in multi-component phases [0:L-1]
     *F, //Prime DC chemical potentials defined via g0_j, Wx_j and lnGam_j[L]
     *F0,  // Excess Gibbs energies for (metastable) DC, mole/mole [0:L-1]
-    *D,    /* Reserved */
+(*D)[MST],    // Reserved; new work array for calc. surface act.coeff.
     *R,    // R matrix of IPM linear equations [0:NR][0:NR+1]
     *R1;   // Copy of R for Jordan()
     char
@@ -237,10 +239,12 @@ typedef struct
     (*SB1)[MAXICNAME], // List of IC names in the system [0:N-1]
     (*SM)[MAXDCNAME],  // List of DC names in the system [0:L-1]
     (*SF)[MAXPHNAME+MAXSYMB],  // List of phase names in the system [0:FI-1]
-    (*SM2)[MAXDCNAME],  // List of multicomp. DC names in the system [Ls]
+    (*SM2)[MAXDCNAME],  // List of multicomp. phase DC names in the system [Ls]
+(*SM3)[MAXDCNAME],  // List of adsorption DC names in the system [Lads]
+*DCC3,   // Classifier of DC in sorption phases [Lads]
     (*SF2)[MAXPHNAME+MAXSYMB], // List of multicomp. phase names in the syst [FIs]
     (*SFs)[MAXPHNAME+MAXSYMB],
-    // List of phase currently present in non-zero quantities [0:FI-1]
+    // List of phases currently present in non-zero quantities [0:FI-1]
     *pbuf, 	// Text buffer for EQSTATe table printout
     *RLC,   // Classifier of restriction types for x_j 0:L-1
     *RSC,   // Classifier of restriction scales for x_j 0:L-1
@@ -249,8 +253,8 @@ typedef struct
     *ICC,   // Classifier of IC { e o h a z v i <int> } 0:N-1
     *DCC,   // Classifier of DC { TESWGVCHNIJMDRAB0123XYZPQO } 0:L-1
     *PHC,   // Classifier of phases { a g p m l x d h } 0:FI-1
-    (*SCM)[MST], //classifier of adsorption models for sur types [FIs][FIat]{DCTMIN}
-    *SATT,  /* classifier of methods of SAT calculation [0:Ls] { C N S I }*/
+    (*SCM)[MST], //classifier of adsorption models for sur types [FIs][FIat]
+*SATT,  /* classifier of methods of SAT calculation [0:Lads] */
     *DCCW;  // reserved                0:L-1
     // codes see in file S_CLASS.H
 
@@ -266,6 +270,10 @@ typedef struct
 }
 MULTI;
 
+enum { // link indexes to surface type [XL_ST] sorbent em [XL_EM]
+//  surf.site [XL-SI] and EDL plane [XL_SP]
+   XL_ST = 0, XL_EM, XL_SI, XL_SP
+} ADS_LINK_NDX;
 
 #ifndef IPMGEMPLUGIN
 

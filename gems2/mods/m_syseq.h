@@ -92,12 +92,10 @@ typedef struct
     /*NG*/  *DLL,// Vector of lower DC restrictions to x_j at eqstate [sy.Lk]
     *PUL,//Vector of upper restrictions to phases X_a at eqstate(res.)[sy.Fik]
     *PLL;//Vector of lower restrictions to phases X_a at eqstate(res)[sy.Fik]
-    /* Adsorption / EDL models     default OFF */
+    // Adsorption / EDL models     default OFF 
     /* DC parameters */
-    char (*SATC)[2]; /* Classifier of methods of SAT calculation [sy.Lsor] */
-    /* and allocation of sur DC to carrier components */
-    float
-    (*MaSdj)[DFCN]; // Density, Frumkin, CD-MUSIC params new [sy.Lsor][DFCN] */
+    char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [sy.Lsor][MCAS]
+    float (*MaSdj)[DFCN]; // Density, Frumkin, CD-MUSIC params new [sy.Lsor][DFCN]
     /* Phase parameters */
     char
     (*SCMT)[MNST]; /* Classifier of EDL models for surface types [sy.Fia][6] */

@@ -90,9 +90,10 @@ enum integ_objects {                  // work objects
 
 const int
 MAXPARAMKEY =    24,
-             MNST =   6,
-                      MST =   6, // number of surface types
-                              DFCN = 6; // number of columns in MASDJ table 
+       MNST =   6,
+              MST =   6, // number of surface types
+                     MCAS  = 6,  // number of columns in SATC table
+                            DFCN = 6; // number of columns in MASDJ table
 
 enum param_objects {                  // work objects
     o_paver =  o_ivaldy+1,
@@ -114,6 +115,7 @@ enum param_objects {                  // work objects
     o_muphc, o_mudcc, /*o_mudcs,*/ o_muicc,  o_mudcf,
     o_muicf, o_muidcref, o_muval, o_mupl, o_mubc,
     o_muas, o_muav, o_musf2, o_musm2,
+o_musm3, o_mudcc3, // new !!!
     // MTPARM
     o_tpunits, o_tpsv, o_tpptv, o_tp_T,  o_tp_P,
     o_tp_RT,  o_tprow,  o_tpepsw, o_tpvisw, o_tp_L,
@@ -121,7 +123,7 @@ enum param_objects {                  // work objects
     o_tps,    o_tpdevs,  o_tpcp,  o_tpdevcp,  o_tpvm,
     o_tpdevv,  o_tpf,   o_tpu,   o_tpcv,  o_tpalp,
     o_tpbet,   o_tpwbor, o_tpwrad, o_tpfug,  o_tpdvg,
-    // SYSTEM inbiuld
+    // SYSTEM built-in
     o_syphst, o_syname, o_synotes, o_sypmod, o_sypvec,
     o_syn,   o_syl, o_syfi, o_sylbc,  o_sylns,
     o_sypmm,  o_sytmm,  o_syvmm,  o_syhmm,  o_symass,
@@ -164,9 +166,13 @@ enum param_objects {                  // work objects
     o_wo_mu,  o_w_emu,  o_w_nmu,  o_w_w,  o_wo_fxa,
     o_wo_wx,  o_wo_f,  o_w_f0,  o_w_d,  o_wi_smod,
     o_wd_sb,  o_wd_sm,  o_wd_sf,  o_wd_sfs,
-    o_wd_sm2, o_wd_sf2, o_wd_txtb,
+    o_wd_sm2,
+o_wd_sm3,  //  new
+    o_wd_sf2, o_wd_txtb,
     o_wi_rlc,  o_wi_rsc,  o_wi_rflc,  o_wi_rfsc,  o_wi_icc,
-    o_wi_dcc, o_wi_phc,  o_wi_scm,  o_wi_satt,  o_wi_dccw,
+    o_wi_dcc,
+o_wi_dcc3, // new
+    o_wi_phc,  o_wi_scm,  o_wi_satt,  o_wi_dccw,
     o_w_r, o_w_r1, o_w_sbh, o_w_tprn,
     // GammaCalc() - adjustable DOD for calculation of activity coefficients
     o_neqtxt,  o_nsmod,  o_ntc,  o_ntk,  o_np ,
@@ -176,7 +182,7 @@ enum param_objects {                  // work objects
     o_ngtn,  o_ngam,  o_nlngam,  o_nu,  o_nas,
     o_nxa,  o_nxaa,  o_nxast,  o_nxcec, o_nxx,
     o_nwx,   o_nmju,  o_nqp, o_nqd,  o_nwtext,
-    // BASE
+    // BASE  (in project record )
     o_spppar,   // Params
     o_mupmv, o_muname, o_munotes, o_mudim, o_munfl, // Rmults
     o_mul1,  o_musf, o_musm,  o_musa,  o_musb,  o_mufn, o_mudcs,

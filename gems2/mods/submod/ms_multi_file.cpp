@@ -215,10 +215,10 @@ void TMulti::to_text_file( gstring& path )
       outArray( ff, "VL", pm.VL, pm.L);
       outArray( ff, "Gamma", pm.Gamma,  pm.L);
       outArray( ff, "lnGmf", pm.lnGmf,  pm.L);
-      outArray( ff, "D", pm.D,  pm.L);
+//      outArray( ff, "D", pm.D,  pm.L);
     }
 
-   // Part 2  not requited arrays
+   // Part 2  not always required arrays
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
       outArray( ff, "BF", pm.BF,  pm.FIs*pm.N);
@@ -249,7 +249,7 @@ void TMulti::to_text_file( gstring& path )
       outArray( ff, "IC_wm", pm.IC_wm,  pm.N);
     }
 
-    /* dispersion and sorbtion phases */
+    /* dispersed and sorption phases */
     if( PAalp != S_OFF )
     {
       outArray( ff, "Aalp", pm.Aalp, pm.FI);
@@ -270,9 +270,7 @@ void TMulti::to_text_file( gstring& path )
     }
 
     if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
-    { /* ADSORBTION AND ION IXCHANDG */
-      outArray( ff, "SATNdx", &pm.SATNdx[0][0], 2*pm.Ls);
-
+    { /* ADSORPTION AND ION EXCHANGE */
       outArray( ff, "Nfsp", &pm.Nfsp[0][0], pm.FIs*pm.FIat);
       outArray( ff, "MASDT", &pm.MASDT[0][0], pm.FIs*pm.FIat);
       outArray( ff, "XcapA", &pm.XcapA[0][0], pm.FIs*pm.FIat);
@@ -291,9 +289,11 @@ void TMulti::to_text_file( gstring& path )
       outArray( ff, "XetaB", &pm.XetaB[0][0],  pm.FIs*pm.FIat);
       outArray( ff, "XFTS", &pm.XFTS[0][0],  pm.FIs*pm.FIat);
 
+      outArray( ff, "SATX", &pm.SATX[0][0], pm.Lads*4);
 //      outArray( ff, "MASDJ", pm.MASDJ, pm.Ls);
-      outArray( ff, "MASDJ", &pm.MASDJ[0][0], pm.Ls*DFCN);
-      outArray( ff, "lnSAT", pm.lnSAT,  pm.Ls);
+      outArray( ff, "MASDJ", &pm.MASDJ[0][0], pm.Lads*DFCN);
+      outArray( ff, "lnSAC", &pm.lnSAC[0][0],  pm.Lads*4);
+      outArray( ff, "D", &pm.D[0][0], MST*MST);
     }
 
     if( pm.PG > 0 )
@@ -423,7 +423,7 @@ void TMulti::to_file( GemDataStream& ff, gstring& path  )
       ff.writeArray(pm.VL, pm.L);
       ff.writeArray(pm.Gamma, pm.L);
       ff.writeArray(pm.lnGmf, pm.L);
-      ff.writeArray(pm.D, pm.L);
+//      ff.writeArray(pm.D, pm.L);
     }
 
    // Part 2  not requited arrays
@@ -480,10 +480,8 @@ void TMulti::to_file( GemDataStream& ff, gstring& path  )
     }
 
     if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
-    { /* ADSORBTION AND ION IXCHANDG */
-      ff.writeArray((short*)pm.SATNdx, 2*pm.Ls);
+    { /* ADSORPTION AND ION EXCHANGE */
       ff.writeArray((char*)pm.SCM, pm.FIs*pm.FIat);
-
       ff.writeArray((float*)pm.Nfsp, pm.FIs*pm.FIat);
       ff.writeArray((float*)pm.MASDT, pm.FIs*pm.FIat);
       ff.writeArray((float*)pm.XcapA, pm.FIs*pm.FIat);
@@ -502,10 +500,14 @@ void TMulti::to_file( GemDataStream& ff, gstring& path  )
       ff.writeArray((double*)pm.XetaB, pm.FIs*pm.FIat);
       ff.writeArray((double*)pm.XFTS, pm.FIs*pm.FIat);
 
-      ff.writeArray(pm.SATT, pm.Ls);
-      ff.writeArray((float*)pm.MASDJ, pm.Ls*DFCN);
+ff.writeArray((short*)pm.SATX, pm.Lads*4);
+ff.writeArray(pm.SATT, pm.Lads);
+ff.writeArray((float*)pm.MASDJ, pm.Lads*DFCN);
 //      ff.writeArray(pm.MASDJ, pm.Ls);
-      ff.writeArray(pm.lnSAT, pm.Ls);
+ff.writeArray( (double*)pm.lnSAC, pm.Lads*4 );
+ff.writeArray((char*)pm.SM3, MAXDCNAME * pm.Lads);
+ff.writeArray( pm.DCC3, pm.Lads);
+ff.writeArray((double*)pm.D, MST*MST);
     }
 
     if( pm.PG > 0 )
@@ -634,7 +636,7 @@ void TMulti::from_file( GemDataStream& ff )
       ff.readArray(pm.VL, pm.L);
       ff.readArray(pm.Gamma, pm.L);
       ff.readArray(pm.lnGmf, pm.L);
-      ff.readArray(pm.D, pm.L);
+//      ff.readArray(pm.D, pm.L);
     }
 
    // Part 2  not requited arrays
@@ -695,9 +697,7 @@ void TMulti::from_file( GemDataStream& ff )
 
     if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
     { /* ADSORBTION AND ION IXCHANDG */
-      ff.readArray((short*)pm.SATNdx, 2*pm.Ls);
       ff.readArray((char*)pm.SCM, pm.FIs*pm.FIat);
-
       ff.readArray((float*)pm.Nfsp, pm.FIs*pm.FIat);
       ff.readArray((float*)pm.MASDT, pm.FIs*pm.FIat);
       ff.readArray((float*)pm.XcapA, pm.FIs*pm.FIat);
@@ -716,10 +716,15 @@ void TMulti::from_file( GemDataStream& ff )
       ff.readArray((double*)pm.XetaB, pm.FIs*pm.FIat);
       ff.readArray((double*)pm.XFTS, pm.FIs*pm.FIat);
 
-      ff.readArray(pm.SATT, pm.Ls);
-      ff.readArray((float*)pm.MASDJ, pm.Ls*DFCN);
+ff.readArray((short*)pm.SATX, pm.Lads*4);
+ff.readArray(pm.SATT, pm.Lads);
+ff.readArray((float*)pm.MASDJ, pm.Lads*DFCN);
 //      ff.readArray(pm.MASDJ, pm.Ls);
-      ff.readArray(pm.lnSAT, pm.Ls);
+ff.readArray((double*)pm.lnSAC, pm.Lads*4);
+ff.readArray((char*)pm.SM3, MAXDCNAME * pm.Lads);
+ff.readArray( pm.DCC3, pm.Lads);
+ff.readArray((double*)pm.D, MST*MST);
+
     }
 
     if( pm.PG > 0 )
@@ -817,7 +822,7 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
    pm.VL = new float[pm.L];
    pm.Gamma = new double[pm.L];
    pm.lnGmf = new double[pm.L];
-   pm.D = new double[pm.L];
+//   pm.D = new double[pm.L];
  }
  else
  {
@@ -828,10 +833,10 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
    pm.VL = 0;
    pm.Gamma = 0;
    pm.lnGmf = 0;
-   pm.D = 0;
+//   pm.D = 0;
  }
 
-   // Part 2  not requited arrays
+   // Part 2  not always required arrays
 
  if( pm.FIs > 0 && pm.Ls > 0 )
  {
@@ -919,7 +924,7 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
 
  if( pm.FIat > 0 /*&& pm.Lads > 0*/ && pm.FIs > 0 )
  { // ADSORBTION AND ION IXCHANDG
-   pm.SATNdx = new short[pm.Ls][2];
+pm.SATX = new short[pm.Lads][4];
    pm.SCM  = new char[pm.FIs][MST];
 
     pm.Nfsp = new float[pm.FIs][MST];
@@ -938,17 +943,19 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
     pm.Xetaf = new float[pm.FIs][MST];
     pm.XetaA = new double[pm.FIs][MST];
     pm.XetaB = new double[pm.FIs][MST];
-    pm.MASDJ = new float[pm.Ls][DFCN];
+pm.MASDJ = new float[pm.Lads][DFCN];
 //    pm.MASDJ = new float[pm.Ls];
-    pm.XFTS = new double[pm.FIs][MST];
-    pm.lnSAT = new double[pm.Ls];
-    pm.SATT = new char[pm.Ls];
+pm.XFTS = new double[pm.FIs][MST];
+pm.lnSAC = new double[pm.Lads][4];
+pm.SATT = new char[pm.Lads];
+pm.SM3 = new char[pm.Lads][MAXDCNAME];
+pm.DCC3 = new char[pm.Lads];
+pm.D = new double[MST][MST];
  }
 else
  { // ADSORPTION AND ION EXCHANGE
-   pm.SATNdx = 0;
+pm.SATNdx = 0;
    pm.SCM  = 0;
-
     pm.Nfsp = 0;
     pm.MASDT = 0;
     pm.XcapA = 0;
@@ -967,8 +974,11 @@ else
     pm.XetaB = 0;
     pm.MASDJ = 0;
     pm.XFTS = 0;
-    pm.lnSAT = 0;
-    pm.SATT = 0;
+pm.lnSAC = 0;
+pm.SATT = 0;
+pm.SM3 = 0;
+pm.DCC3 = 0;
+pm.D = 0;
  }
 
  if( pm.PG > 0 )
@@ -1072,7 +1082,7 @@ void TMulti::multi_free()
    if( pm.VL ) delete[] pm.VL;
    if( pm.Gamma ) delete[] pm.Gamma;
    if( pm.lnGmf ) delete[] pm.lnGmf;
-   if( pm.D ) delete[] pm.D;
+//   if( pm.D ) delete[] pm.D;
 
    // Part 2  not requited arrays
 
@@ -1105,7 +1115,7 @@ void TMulti::multi_free()
    if( pm.Xeps ) delete[] pm.Xeps;
 
 
-   if( pm.SATNdx ) delete[] pm.SATNdx;
+if( pm.SATX ) delete[] pm.SATX;
    if( pm.SCM ) delete[] pm.SCM;
    if( pm.Nfsp ) delete[] pm.Nfsp;
    if( pm.MASDT ) delete[] pm.MASDT;
@@ -1123,10 +1133,14 @@ void TMulti::multi_free()
    if( pm.Xetaf ) delete[] pm.Xetaf;
    if( pm.XetaA ) delete[] pm.XetaA;
    if( pm.XetaB ) delete[] pm.XetaB;
-   if( pm.MASDJ ) delete[] pm.MASDJ;
+if( pm.MASDJ ) delete[] pm.MASDJ;
    if( pm.XFTS ) delete[] pm.XFTS;
-   if( pm.lnSAT ) delete[] pm.lnSAT;
-   if( pm.SATT ) delete[] pm.SATT;
+if( pm.lnSAC ) delete[] pm.lnSAC;
+if( pm.SATT ) delete[] pm.SATT;
+if( pm.SM3 ) delete[] pm.SM3;
+if( pm.DCC3 ) delete[] pm.DCC3;
+if( pm.D ) delete[] pm.D;
+
 
    if( pm.Fug ) delete[] pm.Fug;
    if( pm.Fug_l ) delete[] pm.Fug_l;
@@ -1335,7 +1349,8 @@ void TMulti::dyn_new_test(MULTI& tes)
 
  if( tes.FIat > 0 && tes.Lads > 0 && tes.FIs > 0 )
  { // ADSORBTION AND ION EXCHANGE
-//   tes.SATNdx = (short (*)[2])aObj[ o_wi_satndx].Alloc( tes.Ls, 2, I_ );
+    tes.SATX = new short[pm.Lads][4];
+    memcpy( tes.SATX, pm.SATX, pm.Lads*4*sizeof(short) );
 //   tes.SCM  = (char (*)[MST])aObj[ o_wi_scm].Alloc( tes.FIs, tes.FIat, A_ );
 //   memset( tes.SCM, SC_NOT_USED, tes.FIs*tes.FIat );
     tes.Nfsp = new float[pm.FIs][MST];
@@ -1376,8 +1391,8 @@ void TMulti::dyn_new_test(MULTI& tes)
      memcpy( tes.XetaB, pm.XetaB, pm.FIs*MST*sizeof(double) );
     tes.XFTS = new double[pm.FIs][MST];
      memcpy( tes.XFTS, pm.XFTS, pm.FIs*MST*sizeof(double) );
-    tes.lnSAT = new double[pm.Ls];
-     memcpy( tes.lnSAT, pm.lnSAT, pm.Ls*sizeof(double) );
+    tes.lnSAC = new double[pm.Lads][4];
+     memcpy( tes.lnSAC, pm.lnSAC, pm.Lads*4*sizeof(double) );
 //   tes.SATT = (char *)aObj[ o_wi_satt].Alloc( tes.Ls, 1, A_ );
  }
 
@@ -1414,7 +1429,7 @@ void TMulti::dyn_kill_test(MULTI& tes)
 // memset( &pm.TC, 0, 54*sizeof(double));
  delete[] tes.L1; /* delete[] tes.LsMod;   delete[] tes.LsMdc; */
  delete[] tes.mui;    delete[] tes.muk  ;    delete[] tes.muj  ;
- delete[] tes.SATNdx;    delete[] tes.DUL  ;    delete[] tes.DLL  ;
+ delete[] tes.SATX;    delete[] tes.DUL  ;    delete[] tes.DLL  ;
  delete[] tes.GEX;    delete[] tes.PUL  ;    delete[] tes.PLL  ;
  delete[] tes.YOF; /*  delete[] tes.PMc  ;    delete[] tes.DMc  ; */
  delete[] tes.Vol;    delete[] tes.HYM  ;    delete[] tes.VL   ;
@@ -1435,7 +1450,7 @@ void TMulti::dyn_kill_test(MULTI& tes)
  delete[] tes.Falps;    delete[] tes.Fug  ;    delete[] tes.Fug_l;
  delete[] tes.Ppg_l;    delete[] tes.XFTS ;    delete[] tes.MASDJ;
  delete[] tes.G;    delete[] tes.G0   ;    delete[] tes.lnGam;
- delete[] tes.lnGmo;    delete[] tes.lnSAT;    delete[] tes.B    ;
+ delete[] tes.lnGmo;    delete[] tes.lnSAC;    delete[] tes.B    ;
  delete[] tes.U;    delete[] tes.U_r  ;    delete[] tes.C    ;
  delete[] tes.IC_m;    delete[] tes.IC_lm;    delete[] tes.IC_wm;
  delete[] tes.BF;    delete[] tes.XF   ;    delete[] tes.YF   ;

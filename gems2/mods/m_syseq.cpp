@@ -708,18 +708,19 @@ void TSysEq::newSizeifChange()
             if( ssp->MaSdj )
             {
 // Extended by KD on 25.10.2004
-            ssp->MaSdj[j][PI_DENS]  = ssp->MaSdj[i][PI_DENS];
-            ssp->MaSdj[j][PI_CD_0]  = ssp->MaSdj[i][PI_CD_0];
-            ssp->MaSdj[j][PI_CD_B]  = ssp->MaSdj[i][PI_CD_B];
-            ssp->MaSdj[j][PI_FR_CN] = ssp->MaSdj[i][PI_FR_CN];
-            ssp->MaSdj[j][PI_FR_FI] = ssp->MaSdj[i][PI_FR_FI];
-            ssp->MaSdj[j][PI_COMP_GR] = ssp->MaSdj[i][PI_COMP_GR];
+              int kk;
+              for(kk=0; kk<DFCN; kk++)
+                  ssp->MaSdj[j][kk]  = ssp->MaSdj[i][kk];
 //               ssp->MaSdj[j] = ssp->MaSdj[i];
             }
             if( ssp->SATC )
             {
-                ssp->SATC[j][0] = ssp->SATC[i][0];
-                ssp->SATC[j][1] = ssp->SATC[i][1];
+// Extended by KD on 27.10.2004
+              int kk;
+              for(kk=0; kk<MCAS; kk++)
+                  ssp->SATC[j][kk]  = ssp->SATC[i][kk];
+//              ssp->SATC[j][0] = ssp->SATC[i][0];
+//              ssp->SATC[j][1] = ssp->SATC[i][1];
             }
             j++;
         }

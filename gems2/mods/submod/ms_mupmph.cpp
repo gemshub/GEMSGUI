@@ -344,7 +344,7 @@ NEXT2:
 void TProfil::multi_sys_dc()
 {
     int j, ii, L, iZ;
-    short jj;
+    short jj, jja, ja;
     float a, *A, Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
@@ -384,8 +384,16 @@ void TProfil::multi_sys_dc()
             memcpy( pmp->SM[j], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
             if( j < syp->Ls )
                 memcpy( pmp->SM2[j], mup->SM[jj]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+            if( j < syp->Ls && j >= syp->Ls - syp->Lsor)
+            {   // assembling DC name list for sorption surface species
+                ja = j-(syp->Ls-syp->Lsor);
+                jja = jj-(mup->Ls-mup->Lads);
+                memcpy( pmp->SM3[ja], mup->SM[jja]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+               // surface species DC class code (usage will be obsolete)
+                pmp->DCC3[ja] = mup->DCC[jja];
+            }
             mm = 0.0;
-            for( ii=0; ii<pmp->N; ii++ ) /* compressing stoichiometry matrix */
+            for( ii=0; ii<pmp->N; ii++ ) /* compressing the stoichiometry matrix */
             {
                 a = A[jj*mup->N + pmp->mui[ii]];
                 pmp->A[j*pmp->N+ii] = a;
@@ -458,8 +466,8 @@ CH_FOUND:
             if( syp->DUL )
                 pmp->DUL[j] = syp->DUL[jj];
             else pmp->DUL[j] = 1e6;
-            if( jj < mup->Ls && pmp->lnSAT )
-               pmp->lnSAT[j] = pmp->DUL[j]; // Copy of DUL for SAT refining
+            if( jj < mup->Ls && pmp->lnSAC )
+               pmp->lnSAC[j-(pmp->Ls-pmp->Lads)][3] = pmp->DUL[j]; // Copy of DUL for SAT refining
             if( syp->DLL )
                 pmp->DLL[j] = syp->DLL[jj];
             else pmp->DLL[j] = 0.0;
@@ -494,69 +502,127 @@ CH_FOUND:
         // Loading MaSdj - max.sur.densities for non-competitive sorbates */
         if( jj < mup->Ls && syp->PMaSdj != S_OFF )
         {
-            if( !IsFloatEmpty( syp->MaSdj[jj][PI_DENS] ) )
-                pmp->MASDJ[j][PI_DENS] = syp->MaSdj[jj][PI_DENS];
-            else pmp->MASDJ[j][PI_DENS]= 0;
-            if( !IsFloatEmpty( syp->MaSdj[jj][PI_CD_0] ) )
-                pmp->MASDJ[j][PI_CD_0] = syp->MaSdj[jj][PI_CD_0];
-            else pmp->MASDJ[j][PI_CD_0]= 0;
-            if( !IsFloatEmpty( syp->MaSdj[jj][PI_CD_B] ) )
-                pmp->MASDJ[j][PI_CD_B] = syp->MaSdj[jj][PI_CD_B];
-            else pmp->MASDJ[j][PI_CD_B]= 0;
-            if( !IsFloatEmpty( syp->MaSdj[jj][PI_FR_CN] ) )
-                pmp->MASDJ[j][PI_FR_CN] = syp->MaSdj[jj][PI_FR_CN];
-            else pmp->MASDJ[j][PI_FR_CN]= 0;
-            if( !IsFloatEmpty( syp->MaSdj[jj][PI_FR_FI] ) )
-                pmp->MASDJ[j][PI_FR_FI] = syp->MaSdj[jj][PI_FR_FI];
-            else pmp->MASDJ[j][PI_FR_FI]= 0;
-            if( !IsFloatEmpty( syp->MaSdj[jj][PI_COMP_GR] ) )
-                pmp->MASDJ[j][PI_COMP_GR] = syp->MaSdj[jj][PI_COMP_GR];
-            else pmp->MASDJ[j][PI_COMP_GR]= 0;
+            int kk, ja, jja;
+            ja = j-(pmp->Ls-pmp->Lads);
+            jja = jj-(mup->Ls-mup->Lads);
+            for( kk=0; kk<DFCN; kk++ )
+               if( !IsFloatEmpty( syp->MaSdj[jja][kk] ) )
+                   pmp->MASDJ[ja][kk] = syp->MaSdj[jja][kk];
+               else pmp->MASDJ[ja][kk]= 0.0;
 //            if( !IsFloatEmpty( syp->MaSdj[jj] ) )
 //                pmp->MASDJ[j] = syp->MaSdj[jj];    1/nm2!
 //            else pmp->MASDJ[j] = 0;
         }
         if( jj < mup->Ls && syp->PSATT != S_OFF )
-        { /* Loading SATC - codes of methods for SAT calculation */
-            pmp->SATT[j] = syp->SATC[jj][0];
-            /* Loading allocation to carrier end-members */
-            switch( syp->SATC[jj][1] )
+        { // Loading SATC - codes of methods for SAT calculation
+            int ja, jja;
+            ja = j-(pmp->Ls-pmp->Lads);
+            jja = jj-(mup->Ls-mup->Lads);
+            pmp->SATT[ja] = syp->SATC[jja][SA_MCA];
+
+// Loading allocation to surface types
+            switch( syp->SATC[jja][SA_STX] )
             {
-            case CCA_0:
-                pmp->SATNdx[j][1] = 0;
+              default:
+              case CST_0:
+                pmp->SATX[ja][XL_ST] = 0;
                 break;
-            case CCA_1:
-                pmp->SATNdx[j][1] = 1;
+              case CST_1:
+                pmp->SATX[ja][XL_ST] = 1;
                 break;
-            case CCA_2:
-                pmp->SATNdx[j][1] = 2;
+              case CST_2:
+                pmp->SATX[ja][XL_ST] = 2;
                 break;
-            case CCA_3:
-                pmp->SATNdx[j][1] = 3;
+              case CST_3:
+                pmp->SATX[ja][XL_ST] = 3;
                 break;
-            case CCA_4:
-                pmp->SATNdx[j][1] = 4;
+              case CST_4:
+                pmp->SATX[ja][XL_ST] = 4;
                 break;
-            case CCA_5:
-                pmp->SATNdx[j][1] = 5;
+              case CST_5:
+                pmp->SATX[ja][XL_ST] = 5;
                 break;
-            case CCA_6:
-                pmp->SATNdx[j][1] = 6;
+            }
+
+            /* Loading allocation to carrier end-members */
+            switch( syp->SATC[jja][SA_EMX] )
+            {
+              case CCA_0:
+                pmp->SATX[ja][XL_EM] = 0;
                 break;
-            case CCA_7:
-                pmp->SATNdx[j][1] = 7;
+              case CCA_1:
+                pmp->SATX[ja][XL_EM] = 1;
                 break;
-            case CCA_8:
-                pmp->SATNdx[j][1] = 8;
+              case CCA_2:
+                pmp->SATX[ja][XL_EM] = 2;
                 break;
-            case CCA_9:
-                pmp->SATNdx[j][1] = 9;
+              case CCA_3:
+                pmp->SATX[ja][XL_EM] = 3;
                 break;
-            case CCA_VOL:
-                pmp->SATNdx[j][1] = -1; /* whole carrier */
+              case CCA_4:
+                pmp->SATX[ja][XL_EM] = 4;
                 break;
-            default:
-                pmp->SATNdx[j][1] = -2; /* main carrier DC */
+              case CCA_5:
+                pmp->SATX[ja][XL_EM] = 5;
+                break;
+//              case CCA_6:
+//                pmp->SATX[ja][XL_EM] = 6;
+//                break;
+//              case CCA_7:
+//                pmp->SATX[ja][XL_EM] = 7;
+//                break;
+//              case CCA_8:
+//                pmp->SATX[ja][XL_EM] = 8;
+//                break;
+//              case CCA_9:
+//                pmp->SATX[ja][XL_EM] = 9;
+//                break;
+              case CCA_VOL:
+                pmp->SATX[ja][XL_EM] = -1; /* whole sorbent */
+                break;
+              default:
+                pmp->SATX[ja][XL_EM] = -2; /* main DC of the sorbent */
+                break;
+            }
+
+            /* Loading allocation to surface sites */
+            switch( syp->SATC[jja][SA_SITX] )
+            {
+              default:
+              case CSI_0:
+                pmp->SATX[ja][XL_SI] = 0;
+                break;
+              case CSI_1:
+                pmp->SATX[ja][XL_SI] = 1;
+                break;
+              case CSI_2:
+                pmp->SATX[ja][XL_SI] = 2;
+                break;
+              case CSI_3:
+                pmp->SATX[ja][XL_SI] = 3;
+                break;
+              case CSI_4:
+                pmp->SATX[ja][XL_SI] = 4;
+                break;
+              case CSI_5:
+                pmp->SATX[ja][XL_SI] = 5;
+                break;
+            }
+            /* Loading allocation to surface planes */
+            switch( syp->SATC[jja][SA_PLAX] )
+            {
+              default:
+              case SPL_0:   // 0 plane
+                pmp->SATX[ja][XL_SP] = 0;
+                break;
+              case SPL_B:   // beta plane
+                pmp->SATX[ja][XL_SP] = 1;
+                break;
+              case SPL_C:   // beta plane for anions (4-layer model)
+                pmp->SATX[ja][XL_SP] = 2;
+                break;
+              case SPL_D:   // diffuse layer
+                pmp->SATX[ja][XL_SP] = 3;
                 break;
             }
         }
@@ -570,7 +636,7 @@ CH_FOUND:
 void TProfil::multi_sys_ph()
 {
     int k, i;
-    short kk, j, je, jb;
+    short kk, j, je, jb, ja;
     vstr pkey(MAXRKEYLEN);
     time_t crt;
     double G;
@@ -579,12 +645,11 @@ void TProfil::multi_sys_ph()
     TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
     aPH->ods_link(0);
 
-
     /* load data to phases */
     pmp->FIs = syp->Fis;
     pmp->FIa = 0;
     pmp->Lads = 0;
-
+    ja=0;
     for( kk=0, /*FI=0,*/ k=-1, /*jb=0,*/ je=0; kk<mup->Fi; kk++ )
     {
         if( syp->Pcl[kk] == S_OFF )
@@ -692,74 +757,74 @@ PARLOAD:
             case DC_SUR_MINAL:
                 car_l[car_c++]=j;
                 break;
-                /*   Remapping DC codes to indices in pm->SATNdx */
+                /*   Remapping DC codes to indices in pm->SATX */
                 /* even - strong surface complex on site type 0,1,2,3,4 - A plane */
             case DC_SSC_A0:
-                pmp->SATNdx[j][0] = AT_SA0;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SA0;
+                pmp->Lads++; ja++;
                 break;
             case DC_SSC_A1:
-                pmp->SATNdx[j][0] = AT_SA1;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SA1;
+                pmp->Lads++; ja++;
                 break;
             case DC_SSC_A2:
-                pmp->SATNdx[j][0] = AT_SA2;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SA2;
+                pmp->Lads++; ja++;
                 break;
             case DC_SSC_A3:
-                pmp->SATNdx[j][0] = AT_SA3;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SA3;
+                pmp->Lads++; ja++;
                 break;
             case DC_SSC_A4:
-                pmp->SATNdx[j][0] = AT_SA4;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SA4;
+                pmp->Lads++; ja++;
                 break;
                 /* odd - weak surface complex on site type 0,1,2,3,4 - B plane */
             case DC_WSC_A0:
-                pmp->SATNdx[j][0] = AT_SB0;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SB0;
+                pmp->Lads++; ja++;
                 break;
             case DC_WSC_A1:
-                pmp->SATNdx[j][0] = AT_SB1;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SB1;
+                pmp->Lads++; ja++;
                 break;
             case DC_WSC_A2:
-                pmp->SATNdx[j][0] = AT_SB2;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SB2;
+                pmp->Lads++; ja++;
                 break;
             case DC_WSC_A3:
-                pmp->SATNdx[j][0] = AT_SB3;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SB3;
+                pmp->Lads++; ja++;
                 break;
             case DC_WSC_A4:
-                pmp->SATNdx[j][0] = AT_SB4;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SB4;
+                pmp->Lads++; ja++;
                 break;
                 /* Strong exchange ion at const-charge plane */
             case DC_IESC_A:
-                pmp->SATNdx[j][0] = AT_SA5;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SA5;
+                pmp->Lads++; ja++;
                 break;
                 /* Weak exchange ion at const-charge plane */
             case DC_IEWC_B:
-                pmp->SATNdx[j][0] = AT_SB5;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SB5;
+                pmp->Lads++; ja++;
                 break;
                 /* Aliaces for 1-site model */
                 /* Surface site A plane -> '0' */
             case DC_SUR_SITE:
-                pmp->SATNdx[j][0] = AT_SA0;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SA0;
+                pmp->Lads++; ja++;
                 break;
                 /* Strong sur. complex A plane -> '0' */
             case DC_SUR_COMPLEX:
-                pmp->SATNdx[j][0] = AT_SA0;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SA0;
+                pmp->Lads++; ja++;
                 break;
                 /* Weak sur complex B plane -> '1' */
             case DC_SUR_IPAIR:
-                pmp->SATNdx[j][0] = AT_SB0;
-                pmp->Lads++;
+                pmp->SATX[ja][XL_ST] = AT_SB0;
+                pmp->Lads++; ja++;
                 break;
                 /* End extension */
             case DC_SOL_MAJOR:
@@ -769,7 +834,7 @@ PARLOAD:
                 break;
             default: /* if( isdigit( pmp->DCC[j] ))
                                     pmp->Lads++;
-                                  else */ 
+                                  else */
                 PMM += pmp->MM[j]; /* test it???? */
                 break;
             }
@@ -948,10 +1013,11 @@ void TProfil::ph_sur_param( int k, int kk )
 }
 
 // Assigning surface types to carrier (DC) - added 5/13/97 DAK
+// Extended for CD-MUSIC by KD 31.10.2004
 void TProfil::ph_surtype_assign( int k, int kk, int jb, int je,
                                  short car_l[], int car_c, short Cjs )
 {
-    int j, jcl, ist;
+    int j, jcl, ist, isi, ja;
     /*  double SATst; */
 
     for( j=jb; j<je; j++ )
@@ -959,29 +1025,30 @@ void TProfil::ph_surtype_assign( int k, int kk, int jb, int je,
         if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_CARRIER
                 || pmp->DCC[j] == DC_SUR_MINAL )
             continue;
-
-        ist = pmp->SATNdx[j][0] / MSPN;   /* index of surtype */
-
-        jcl = pmp->SATNdx[j][1];
+        ja = j - ( pmp->Ls - pmp->Lads );
+        ist = pmp->SATX[ja][XL_ST] / MSPN;   // index of surtype
+isi = pmp->SATX[ja][XL_SI];                 // index of site on this surface type
+pmp->D[ist][isi] = 0.0;                    // cleanining the totals for sites
+        jcl = pmp->SATX[ja][XL_EM];
         if( jcl < car_c && jcl >= 0 )
-            pmp->SATNdx[j][1] = car_l[jcl];
+            pmp->SATX[ja][XL_EM] = car_l[jcl];
         else if( jcl >= car_c || jcl == -1 )
-            pmp->SATNdx[j][1] = -1;   /* whole carrier */
-        else pmp->SATNdx[j][1] = Cjs; /* main carrier DC */
+            pmp->SATX[ja][XL_EM] = -1;   /* whole carrier */
+        else pmp->SATX[ja][XL_EM] = Cjs; /* main carrier DC */
 
-        if( pmp->SATT[j] != SAT_COMP )
+        if( pmp->SATT[ja] != SAT_COMP )
 // To be fixed !!!!!!!!!!!
-            pmp->MASDJ[j][PI_DENS] *= syp->Aalp[kk]*1.66054;  /* 1/nm2 to mkmol/g */
+            pmp->MASDJ[ja][PI_DEN] *= syp->Aalp[kk]*1.66054;  /* 1/nm2 to mkmol/g */
 //            pmp->MASDJ[j] *= syp->Aalp[kk]*1.66054;  /* mkmol/g */
-        if( !pmp->MASDJ[j] )
+        if( !pmp->MASDJ[ja] )
         {
             //      if( pmp->SATT[j] == SAT_SITE )
             //         pmp->MASDJ[j] = pmp->MASDT[k][ist] - pmp->MISDT[k][ist] ;
-            if( pmp->SATT[j] == SAT_NCOMP )
-                pmp->MASDJ[j][PI_DENS] = pmp->MASDT[k][ist]; // Do we really need this?
+            if( pmp->SATT[ja] == SAT_NCOMP )
+                pmp->MASDJ[ja][PI_DEN] = pmp->MASDT[k][ist]; // Do we really need this?
 //              pmp->MASDJ[j] = pmp->MASDT[k][ist];
-            if( pmp->SATT[j] == SAT_COMP )
-                pmp->MASDJ[j][PI_DENS] = 1.0;
+            if( pmp->SATT[ja] == SAT_COMP )
+                pmp->MASDJ[ja][PI_DEN] = 1.0;
 //                pmp->MASDJ[j] = 1.0;
         }
         /*  if( pmp->SATT[j] == SAT_SITE )

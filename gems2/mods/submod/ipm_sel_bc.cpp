@@ -1031,8 +1031,8 @@ IN7: // PhaseListPress();
  //           GammaCalc( LINK_UX_MODE );
     if(pmp->PZ && pmp->W1)
       Mol_u( pmp->Y, pmp->X, pmp->XF, pmp->XFA );
-    for( I=0; I<pmp->L; I++ )
-       pmp->D[I]=pmp->Y[I]-pmp->X[I];
+//    for( I=0; I<pmp->L; I++ )  calculated but not used! KD 27.10.2004
+//       pmp->D[I]=pmp->Y[I]-pmp->X[I];
     if( pmp->PD==1 || pmp->PD == 2  /*|| pmp->PD == 3*/  )
         GammaCalc( LINK_UX_MODE);
     else ConCalc( pmp->X, pmp->XF, pmp->XFA );
@@ -1075,7 +1075,7 @@ IN7: // PhaseListPress();
 
 void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 {
-    int i,j,jj,ii,jb,je,k;
+    int i,j,ja,jj,ii,jb,je,k;
     int isp, ist;  double Ez, Psi;   // added  KD 23.11.01
 //    double SPmol,SPmol1;
     double  Dsur, DsurT, MMC, *XU;
@@ -1129,11 +1129,12 @@ void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 //                      - DsurT + DsurT / ( 1.0 + DsurT ) + log(XF[k]);
             else  // rewritten by KD  23.11.01
                Psi = 0.0;
+ja = j - ( pmp->Ls - pmp->Lads );
                Ez = pmp->EZ[j];
                /* Get ist - index of surface type */
-               ist = pmp->SATNdx[j][0] / MSPN;
+               ist = pmp->SATX[ja][XL_ST] / MSPN;
                /* and isp - index of surface plane  */
-               isp = pmp->SATNdx[j][0] % MSPN;
+               isp = pmp->SATX[ja][XL_ST] % MSPN;
                if( !isp )
                    /* This is A (0) plane */
                    Psi = pmp->XpsiA[k][ist];

@@ -348,8 +348,8 @@ void TMulti::dyn_new_test(MULTI& tes)
    memcpy( tes.Gamma, pm.Gamma, pm.L*sizeof(double) );
    tes.lnGmf = new double[pm.L];
    memcpy( tes.lnGmf, pm.lnGmf, pm.L*sizeof(double) );
-   tes.D = new double[pm.L];
-   memcpy( tes.D, pm.D, pm.L*sizeof(double) );
+   tes.D = new double[MST][MST];
+   memcpy( tes.D, pm.D, MST*MST*sizeof(double) );
  }
 
    // Part 2  not requited arrays
@@ -459,8 +459,8 @@ void TMulti::dyn_new_test(MULTI& tes)
      memcpy( tes.XetaB, pm.XetaB, pm.FIs*MST*sizeof(double) );
     tes.XFTS = new double[pm.FIs][MST];
      memcpy( tes.XFTS, pm.XFTS, pm.FIs*MST*sizeof(double) );
-    tes.lnSAT = new double[pm.Ls];
-     memcpy( tes.lnSAT, pm.lnSAT, pm.Ls*sizeof(double) );
+    tes.lnSAC = new double[pm.Lads][4];
+     memcpy( tes.lnSAC, pm.lnSAC, pm.Lads*4*sizeof(double) );
 //   tes.SATT = (char *)aObj[ o_wi_satt].Alloc( tes.Ls, 1, A_ );
  }
 
@@ -497,7 +497,7 @@ void TMulti::dyn_kill_test(MULTI& tes)
 // memset( &pm.TC, 0, 54*sizeof(double));
  delete[] tes.L1; /* delete[] tes.LsMod;   delete[] tes.LsMdc; */
  delete[] tes.mui;    delete[] tes.muk  ;    delete[] tes.muj  ;
- delete[] tes.SATNdx;    delete[] tes.DUL  ;    delete[] tes.DLL  ;
+ delete[] tes.SATX;    delete[] tes.DUL  ;    delete[] tes.DLL  ;
  delete[] tes.GEX;    delete[] tes.PUL  ;    delete[] tes.PLL  ;
  delete[] tes.YOF; /*  delete[] tes.PMc  ;    delete[] tes.DMc  ; */
  delete[] tes.Vol;    delete[] tes.HYM  ;    delete[] tes.VL   ;
@@ -518,7 +518,7 @@ void TMulti::dyn_kill_test(MULTI& tes)
  delete[] tes.Falps;    delete[] tes.Fug  ;    delete[] tes.Fug_l;
  delete[] tes.Ppg_l;    delete[] tes.XFTS ;    delete[] tes.MASDJ;
  delete[] tes.G;    delete[] tes.G0   ;    delete[] tes.lnGam;
- delete[] tes.lnGmo;    delete[] tes.lnSAT;    delete[] tes.B    ;
+ delete[] tes.lnGmo;    delete[] tes.lnSAC;    delete[] tes.B    ;
  delete[] tes.U;    delete[] tes.U_r  ;    delete[] tes.C    ;
  delete[] tes.IC_m;    delete[] tes.IC_lm;    delete[] tes.IC_wm;
  delete[] tes.BF;    delete[] tes.XF   ;    delete[] tes.YF   ;
@@ -535,7 +535,7 @@ void TMulti::dyn_kill_test(MULTI& tes)
  delete[] tes.RFSC;  */  delete[] tes.ICC  ;    delete[] tes.DCC  ;
  delete[] tes.PHC;    delete[] tes.SCM  ;  /*  delete[] tes.SATT ; */
  delete[] tes.DCCW;    delete[] tes.XcapF;    delete[] tes.SM2   ;
- delete[] tes.SF2;
+ delete[] tes.SM3;   delete[] tes.DCC3; delete[] tes.SF2;
 
 }
 
@@ -633,7 +633,7 @@ void TMulti::dyn__test(MULTI& tes)
  Test_Eq( pm.L, tes.VL, pm.VL, "VL" );
  Test_Eq( pm.L, tes.Gamma, pm.Gamma, "Gamma" );
  Test_Eq( pm.L, tes.lnGmf, pm.lnGmf, "lnGmf" );
- Test_Eq( pm.L, tes.D, pm.D, "D" );
+// Test_Eq( pm.L, tes.D, pm.D, "D" );
  }
 
    // Part 2  not required arrays
@@ -690,12 +690,13 @@ void TMulti::dyn__test(MULTI& tes)
  Test_Eq( pm.FIs*MST, &tes.XlamA[0][0], &pm.XlamA[0][0], "XlamA" );
  Test_Eq( pm.FIs*MST, &tes.Xetaf[0][0], &pm.Xetaf[0][0], "Xetaf" );
  Test_Eq( pm.FIs*MST, &tes.XpsiA[0][0], &pm.XpsiA[0][0], "XpsiA" );
- Test_Eq( pm.Ls*DFCN, &tes.MASDJ[0][0], &pm.MASDJ[0][0], "MASDJ" );
+ Test_Eq( pm.Lads*DFCN, &tes.MASDJ[0][0], &pm.MASDJ[0][0], "MASDJ" );
 // Test_Eq( pm.Ls, tes.MASDJ, pm.MASDJ, "MASDJ" );
  Test_Eq( pm.FIs*MST, &tes.XetaA[0][0], &pm.XetaA[0][0], "XetaA" );
  Test_Eq( pm.FIs*MST, &tes.XetaB[0][0], &pm.XetaB[0][0], "XetaB" );
  Test_Eq( pm.FIs*MST, &tes.XFTS[0][0], &pm.XFTS[0][0], "XFTS" );
-// Test_Eq( pm.Ls, tes.lnSAT, pm.lnSAT, "lnSAT" );
+ Test_Eq( MST*MST, &tes.D[0][0], &pm.D[0][0], "D" );
+ Test_Eq( pm.Lads*4, &tes.lnSAC[0][0], &pm.lnSAC[0][0], "lnSAC" );
  }
 
  if( tes.PG > 0 )

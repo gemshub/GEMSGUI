@@ -539,7 +539,7 @@ void TProfil::MultiCalcIterations()
 */
 void TProfil::XmaxSAT_IPM2( void )
 {
-    int i, j, k, jb, je=0, ist, Cj, iSite[6];
+    int i, j, ja, k, jb, je=0, ist, Cj, iSite[6];
     double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, oDUL, xjn;
 
   if(!pmp->DUL )   // not possible to install upper kinetic constraint!
@@ -563,15 +563,16 @@ void TProfil::XmaxSAT_IPM2( void )
     /* Extraction of site indices */
     for( j=jb; j<je; j++ )
     {
-        if( pmp->SATT[j] != SAT_SITE )
+        ja = j - ( pmp->Ls - pmp->Lads );
+        if( pmp->SATT[ja] != SAT_SITE )
         {
             if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_MINAL ||
                     pmp->DCC[j] == DC_SUR_CARRIER ) continue;
-            ist = pmp->SATNdx[j][0] / MSPN; // MSPN = 2 - number of EDL planes
+            ist = pmp->SATX[ja][XL_ST] / MSPN; // MSPN = 2 - number of EDL planes
             continue;
         }
-        ist = pmp->SATNdx[j][0] / MSPN;
-        iSite[ist] = j;
+        ist = pmp->SATX[ja][XL_ST] / MSPN;
+        iSite[ist] = j;     // To be checked !!!
     }
 
     for( j=jb; j<je; j++ )
@@ -580,6 +581,8 @@ void TProfil::XmaxSAT_IPM2( void )
             continue;  /* This surface DC has been killed by IPM */
         rIEPS = pa.p.IEPS;
         oDUL = pmp->DUL[j];
+        ja = j - ( pmp->Ls - pmp->Lads );
+
         switch( pmp->DCC[j] )  /* code of species class */
         {
         default: /* pmp->lnGam[j] = 0.0; */
@@ -600,9 +603,9 @@ void TProfil::XmaxSAT_IPM2( void )
         case DC_SUR_IPAIR:
         case DC_IESC_A:
             /* Calculate ist - index of surface type */
-            ist = pmp->SATNdx[j][0] / MSPN;
+            ist = pmp->SATX[ja][XL_ST] / MSPN;
             /* Cj - index of carrier DC */
-            Cj = pmp->SATNdx[j][1];
+            Cj = pmp->SATX[ja][XL_EM];
             if( Cj < 0 )
             {  /* Assigned to the whole sorbent */
                 XVk = pmp->XFA[k];
@@ -618,7 +621,7 @@ void TProfil::XmaxSAT_IPM2( void )
             XSk = pmp->XFTS[k][ist]; /* Tot.moles of sorbates on surf.type */
             xj = pmp->X[j];  /* Current moles of this surf.species */
 //            a=1.0;  Frumkin factor - reserved for extension to FFG isotherm
-            switch( pmp->SATT[j] )
+            switch( pmp->SATT[ja] )
             {
             case SAT_COMP: /* Competitive surface species on a surface type */
                 /* a = fabs(pmp->MASDJ[j]); */
@@ -635,8 +638,8 @@ void TProfil::XmaxSAT_IPM2( void )
 //                if( XSkC > XS0 )
 //                    XSkC = XS0 - 2.0 * rIEPS;
                 xj0 = XS0 - XSkC;    /* expected moles of this sorbate */
-                if( xj0 > pmp->lnSAT[j] )
-                    xj0 = pmp->lnSAT[j];
+                if( xj0 > pmp->lnSAC[ja][3] )
+                    xj0 = pmp->lnSAC[ja][3];
                 if( xj0 < rIEPS )
                    xj0 = rIEPS;  /* ensuring that it will not zero off */
                 pmp->DUL[j] = xj0; // XS0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
@@ -652,7 +655,7 @@ cout << "XmaxSAT_IPM2 Comp. IT= " << pmp->IT << " j= " << j << " oDUL=" << oDUL 
 // rIEPS = pa.p.IEPS * 2;
 //                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
 //                      * pmp->Nfsp[k][ist];  in moles
-                 xj0 = fabs( pmp->MASDJ[j][PI_DENS] ) * XVk * Mm / 1e6
+                 xj0 = fabs( pmp->MASDJ[ja][PI_DEN] ) * XVk * Mm / 1e6
 // MASDJ() in mkmol/g: to be fixed to mkmol/m2
                       * pmp->Nfsp[k][ist]; /* in moles */
                  pmp->DUL[j] = xj0 - rIEPS;
@@ -700,7 +703,7 @@ case SAT_PIVO_NCOMP:
 // clearing pmp->DUL constraints!
 void TProfil::XmaxSAT_IPM2_reset( void )
 {
-    int j, k, jb, je=0;
+    int j, ja, k, jb, je=0;
 
   if(!pmp->DUL )   // no upper kinetic constraints!
       return;
@@ -714,7 +717,8 @@ void TProfil::XmaxSAT_IPM2_reset( void )
 
     for( j=jb; j<je; j++ )
     { /* Loop for DC */
-      pmp->DUL[j] = pmp->lnSAT[j];  // temp. storing initial DUL constr.
+      ja = j - ( pmp->Ls - pmp->Lads );
+      pmp->DUL[j] = pmp->lnSAC[ja][3];  // temp. storing initial DUL constr.
     }  /* j */
   } /* k */
 }

@@ -82,7 +82,7 @@ typedef struct
     L,    // N of DC selected into system <= mu.L
     Ls,   // Ls - final N of DC in all multicomponent phases
     Lw,   // Lw - final N of aqueous+solvent species
-    Lsor, // Lsor - final N of DC in sorption phases
+Lsor, // Lsor - final N of DC in sorption phases
     Lg,   // Lg - final N of DC in gaseous phase
     Lhc,  //  Lhc - final N of DC in liquid hydrocarbon phase (reserved)
     Fi,   // N of phases selected into system  Fi
@@ -147,19 +147,20 @@ typedef struct
     *XeA,  // COMPOS quanity/concentration to calculate  b vector [0:mu.La-1]
     *XeD,  // DC quantity/concentration to calculate  b vector [0:mn.L-1]
     *Phm; //PHASE(equilibrium) quantity/concentration to calculate  b vector [mu.Fi]
-    char (*SATC)[2]; /* Classifier of methods of SAT calculation { CNSI }[mu.Ls] */
+char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [mu.Lads][MCAS]
+    /* Classifier of methods of SAT calculation { CNSI }[mu.Ls] */
     /* and allocation of sur DC to carrier components */
     float
     *Pparc, // DC partial pressures, bar [0:mu.L-1]
-    /*VG*/  *DUL,// Vector of upper DC restrictions to x_j at eqstate (res)[mu.Ls]
-    /*NG*/  *DLL,// Vector of lower DC restrictions to x_j at eqstate [mu.Ls]
+    /*VG*/  *DUL,// Vector of upper DC restrictions to x_j at eqstate (res)[mu.L]
+    /*NG*/  *DLL,// Vector of lower DC restrictions to x_j at eqstate [mu.L]
     *GEX,// Excess free energy increment for DC, J/mole [mu.L]
     *PUL,//Vector of upper restrictions to phases X_a at eqstate(res.)[mu.Fi]
     *PLL,//Vector of lower restrictions to phases X_a at eqstate(res)[mu.Fi]
     *YOF,   // Phase metastability parameter, J/g [mu.Fi]
     *lnGmf, // ln of initial DC activity coefficients [mu.L]
     *Aalp,  // Specific surface area of dispersed phases, m2/g [mu.Fi]
-    (*MaSdj)[DFCN], // Density, Frumkin, CD-MUSIC params new [mu.Ls][DFCN]
+(*MaSdj)[DFCN], // Density, CD-MUSIC, ads.isotherm params [mu.Lads][DFCN]
     (*Sigm)[2],//Specific surface energy of solid-aqueous (gas) interface, J/m2 [mu.Fi][2]
     (*Xr0h0)[2],//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [mu.Fi][2]
     (*XEpsC)[2],// Dielectric constant & conductivity of phase carrier, reserved [mu.Fi][2]
@@ -171,7 +172,7 @@ typedef struct
     (*XfIEC)[MNST], // Fix surf charge density or IEC mkeq/m2    [mu.Fis][6]
     (*Xlam)[MNST],  // Factor of discretnes IDL 0 < 1 - in PHASE  [mu.Fis][6] */
     *Guns,  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
-    *Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm 
+    *Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm
     char
     (*SCMT)[MNST]; /* Classifier of EDL models for surface types [mu.Fis][NsTm] */
 }

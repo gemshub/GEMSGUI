@@ -123,7 +123,8 @@ void TSyst::ods_link( int /*q*/)
     aObj[ o_sypparc].SetPtr( sy.Pparc );
     aObj[ o_sypparc].SetDim( mup->L, 1 );
     aObj[ o_sysatc].SetPtr(  sy.SATC );
-    aObj[ o_sysatc].SetDim( mup->Ls, 2 );
+    aObj[ o_sysatc].SetDim( mup->Lads, MCAS );
+//    aObj[ o_sysatc].SetDim( mup->Ls, 2 );
 
     aObj[ o_sydul].SetPtr(   sy.DUL );
     aObj[ o_sydul].SetDim( mup->L, 1 );
@@ -141,7 +142,7 @@ void TSyst::ods_link( int /*q*/)
     aObj[ o_sylngmf].SetDim( mup->L, 1 );
     aObj[ o_symasdj].SetPtr( sy.MaSdj );
 //    aObj[ o_symasdj].SetDim( mup->Ls, 1 );
-    aObj[ o_symasdj].SetDim( mup->Ls, DFCN );  // changed 25.10.2004 by KD
+    aObj[ o_symasdj].SetDim( mup->Lads, DFCN );  // changed 25.10.2004 by KD
     aObj[ o_syaalp].SetPtr(  sy.Aalp );
     aObj[ o_syaalp].SetDim( mup->Fi, 1 );
     aObj[ o_sysigm].SetPtr(  sy.Sigm );
@@ -196,7 +197,7 @@ void TSyst::dyn_set(int /*q*/)
     sy.XeD = (double *)aObj[ o_syxed ].GetPtr();
     sy.Phm = (double *)aObj[ o_syphm ].GetPtr();
     sy.Pparc = (float *)aObj[ o_sypparc ].GetPtr();
-    sy.SATC = (char (*)[2])aObj[ o_sysatc ].GetPtr();
+    sy.SATC = (char (*)[MCAS])aObj[ o_sysatc ].GetPtr();
 
     sy.DUL = (float *)aObj[ o_sydul ].GetPtr();
     sy.DLL = (float *)aObj[ o_sydll ].GetPtr();
@@ -246,7 +247,7 @@ void TSyst::dyn_kill(int /*q*/)
     sy.XeD = (double *)aObj[ o_syxed ].Free();
     sy.Phm = (double *)aObj[ o_syphm ].Free();
     sy.Pparc = (float *)aObj[ o_sypparc ].Free();
-    sy.SATC = (char (*)[2])aObj[ o_sysatc ].Free();
+    sy.SATC = (char (*)[MCAS])aObj[ o_sysatc ].Free();
 
     sy.DUL = (float *)aObj[ o_sydul ].Free();
     sy.DLL = (float *)aObj[ o_sydll ].Free();
@@ -383,15 +384,16 @@ void TSyst::dyn_new(int /*q*/)
     else sy.Pparc = (float *)aObj[ o_sypparc ].Free();
 
     if( sy.PSATT != S_OFF )
-        sy.SATC = (char (*)[2])aObj[ o_sysatc].Alloc( mup->Ls, 2, A_ );
-    else sy.SATC = (char (*)[2])aObj[ o_sysatc ].Free();
+        sy.SATC = (char (*)[MCAS])aObj[ o_sysatc].Alloc( mup->Lads, MCAS, A_ );
+//        sy.SATC = (char (*)[2])aObj[ o_sysatc].Alloc( mup->Ls, 2, A_ );
+    else sy.SATC = (char (*)[MCAS])aObj[ o_sysatc ].Free();
 
     if( sy.PGEX != S_OFF )
         sy.GEX = (float *)aObj[ o_sygex].Alloc( mup->L, 1, F_ );
     else sy.GEX = (float *)aObj[ o_sygex ].Free();
 
     if( sy.PMaSdj != S_OFF )
-        sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj].Alloc( mup->Ls, DFCN, F_ );
+        sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj].Alloc( mup->Lads, DFCN, F_ );
 //  sy.MaSdj = (float *)aObj[ o_symasdj].Alloc( mup->Ls, 1, F_ );
     else sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj ].Free();
 
@@ -762,11 +764,12 @@ void TSyst::setDefData()
         }
     }
     if( sy.PSATT != S_OFF )
-        memset( sy.SATC, A_EMPTY, /* SAT_INDEF,*/ mup->Ls*2 );
+        memset( sy.SATC, A_EMPTY, mup->Lads*MCAS );
+//        memset( sy.SATC, A_EMPTY, /* SAT_INDEF,*/ mup->Ls*2 );
     if( sy.PMaSdj != S_OFF && sy.NsTm > 0 )
-        for( i=0; i<mup->Ls; i++ )
-           for( j=0; j < DFCN; j++)
-               sy.MaSdj[i][j] = FLOAT_EMPTY;  // changed 25.10.2004 by KD
+        for( i=0; i<mup->Lads; i++ )
+           for( j=0; j < DFCN; j++ )
+               sy.MaSdj[i][j] = FLOAT_EMPTY; // changed 25.10.2004 by KD
 //             sy.MaSdj[i] = FLOAT_EMPTY;
     if( sy.PNfsp == S_REM && sy.NsTm > 0 )
     {
@@ -900,14 +903,15 @@ void TSyst::sorption_data_load( TPhase* aPH, int k )
         }
     } /* end for ist */
     if( sy.PSATT != S_OFF && sy.PMaSdj != S_OFF )
-    {  /* Load arrays SATT_ and MaSdj_ */
+    {  /* Load arrays SATC_ and MaSdj_ */
+      int ja, kk;
         pnDC = aPH->php->nDC;
-        /* Calc indexes begin and end of list of DC in carrent phase in RMULTS */
+// Calculate indexes of begin and end of list of DC in current phase in RMULTS
         for( i=0; i<k; i++ )
             jb += mup->Ll[i];
-        je = jb + mup->Ll[k];
+        je = jb + mup->Ll[k];       // Ls
         for( j=jb; j<je; j++ )
-        { /* Check dependent component and search it name in phase */
+        { /* Check dependent component and search it's name in phase */
             for( ii=0; ii<pnDC; ii++ )
             {
                 if( !memcmp( mup->SM[j], aPH->php->SM[ii], DC_RKLEN-4 ) )
@@ -916,16 +920,16 @@ void TSyst::sorption_data_load( TPhase* aPH, int k )
             if( ii>=pnDC )
                 continue;
             jp = ii;
+            ja = j  - (mup->Ls - mup->Lads); // index in SATC_ and MaSdj_
             /* data copy */
-            sy.SATC[j][0] = aPH->php->SATC[jp][0];
-            sy.SATC[j][1] = aPH->php->SATC[jp][1];
+            for(kk=0; kk<MCAS; kk++)
+              sy.SATC[ja][kk]  = aPH->php->SATC[jp][kk];
+//            sy.SATC[j][0] = aPH->php->SATC[jp][0];
+//            sy.SATC[j][1] = aPH->php->SATC[jp][1];
 // Extended by KD on 25.10.2004
-            sy.MaSdj[j][PI_DENS]  = aPH->php->MaSdj[jp][PI_DENS];
-            sy.MaSdj[j][PI_CD_0]  = aPH->php->MaSdj[jp][PI_CD_0];
-            sy.MaSdj[j][PI_CD_B]  = aPH->php->MaSdj[jp][PI_CD_B];
-            sy.MaSdj[j][PI_FR_CN] = aPH->php->MaSdj[jp][PI_FR_CN];
-            sy.MaSdj[j][PI_FR_FI] = aPH->php->MaSdj[jp][PI_FR_FI];
-            sy.MaSdj[j][PI_COMP_GR] = aPH->php->MaSdj[jp][PI_COMP_GR];
+            for(kk=0; kk<DFCN; kk++)
+              sy.MaSdj[ja][kk]  = aPH->php->MaSdj[jp][kk];
+//            sy.MaSdj[j][PI_DEN]  = aPH->php->MaSdj[jp][PI_DEN];
 //            sy.MaSdj[j] = aPH->php->MaSdj[jp];
         }  /* end j */
     }
@@ -1044,27 +1048,51 @@ void TSyst::unpackData()
         if( ind < 0 ) continue;
         if( sy.PSATT != S_OFF )
         {
-            sy.SATC[ind][0] = STat->ssp->SATC[i][0];
-            sy.SATC[ind][1] = STat->ssp->SATC[i][1];
+            int mtM, msM, /* mtN, */ msN, kk, inds=ind;
+            msM = aObj[o_sysatc].GetM();
+            mtM = aObj[o_sssatc].GetM();
+            msN = aObj[o_sysatc].GetN();
+//            mtN = aObj[o_sssatc].GetN();
+            inds = ind+(mup->Ls-mup->Lads);
+            if(mtM >= msM)
+            {
+               if( msN <= mup->Lads )
+                   inds = ind+(mup->Ls-mup->Lads);
+               for( kk=0; kk<MCAS; kk++ )
+                    sy.SATC[inds][kk] = STat->ssp->SATC[i][kk];
+            }
+            else
+            {
+               if( msN <= mup->Lads )
+                  inds = ind+(mup->Ls-mup->Lads);
+               sy.SATC[inds][SA_MCA] = STat->ssp->SATC[i][SA_MCA];
+               sy.SATC[inds][SA_EMX] = STat->ssp->SATC[i][SA_EMX];
+//               sy.SATC[ind][0] = STat->ssp->SATC[i][0];
+//               sy.SATC[ind][1] = STat->ssp->SATC[i][1];
+            }
         }
         if( sy.PMaSdj != S_OFF )
 // Extended by KD on 25.10.2004
         {
-            int mtM, msM;
+            int mtM, msM, /* mtN, */ msN, kk, inds = ind;
             msM = aObj[o_symasdj].GetM();
             mtM = aObj[o_ssmasdj].GetM();
-            if(mtM >= msM )
+            msN = aObj[o_symasdj].GetN();
+//            mtN = aObj[o_ssmasdj].GetN();
+            if(mtM >= msM)
             {
-               sy.MaSdj[ind][PI_DENS]  = STat->ssp->MaSdj[i][PI_DENS];
-               sy.MaSdj[ind][PI_CD_0]  = STat->ssp->MaSdj[i][PI_CD_0];
-               sy.MaSdj[ind][PI_CD_B]  = STat->ssp->MaSdj[i][PI_CD_B];
-               sy.MaSdj[ind][PI_FR_CN] = STat->ssp->MaSdj[i][PI_FR_CN];
-               sy.MaSdj[ind][PI_FR_FI] = STat->ssp->MaSdj[i][PI_FR_FI];
-               sy.MaSdj[ind][PI_COMP_GR] = STat->ssp->MaSdj[i][PI_COMP_GR];
+               if(msN <= mup->Lads)
+                  inds = ind+(mup->Ls-mup->Lads);
+               for( kk=0; kk<DFCN; kk++ )
+                  sy.MaSdj[inds][kk] = STat->ssp->MaSdj[i][kk];
+//               sy.MaSdj[ind][PI_CD0] = STat->ssp->MaSdj[i][PI_CD0];
             }
-            else  // For reading old SysEq records
-               sy.MaSdj[ind][PI_DENS]  = STat->ssp->MaSdj[0][i];
+            else { // For reading old SysEq records
+               if(msN <= mup->Lads)
+                  inds = ind+(mup->Ls-mup->Lads);
+               sy.MaSdj[inds][PI_DEN]  = STat->ssp->MaSdj[0][i];
 //            sy.MaSdj[ind]  = STat->ssp->MaSdj[i];
+            }
         }
     }
     if( sy.PULim != S_OFF || sy.PLLim != S_OFF )
@@ -1384,25 +1412,26 @@ void TSyst::packData()
         if( i >= mup->Ls )
             continue;
 
-        // dca dcomp ON adsorbtion  ( mup->DCC[]=='X' ) Sveta 12/09/99 ? to Dima
+        // dca dcomp ON adsorption  ( mup->DCC[]=='X' ) Sveta 12/09/99 ? to Dima
         if( sy.Dcl[i] != S_OFF && ( strchr( SORPTION_DC, mup->DCC[i])  != NULL) )
         {
-            ErrorIf( i5 >= sy.Lsor, GetName(), "sy.Lsor illegal count" );
+            int ia, kk;
+            ErrorIf( i5 >= sy.Lsor, GetName(), "sy.Lsor invalid count" );
+            ia = i - (mup->Ls-mup->Lads);
             STat->ssp->dca[i5] = i;
+//            STat->ssp->dca[i5] = i;
             if( sy.PSATT != S_OFF )
-            {
-                STat->ssp->SATC[i5][0] = sy.SATC[i][0];
-                STat->ssp->SATC[i5][1] = sy.SATC[i][1];
+            {   // irreversible migration from old data structure 27.10.2004
+               for( kk=0; kk<DFCN; kk++ )
+                   STat->ssp->SATC[i5][kk] = sy.SATC[ia][kk];
+//                STat->ssp->SATC[i5][1] = sy.SATC[i][1];
             }
             if( sy.PMaSdj != S_OFF )
             {
 // Extended by KD on 25.10.2004
-               STat->ssp->MaSdj[i5][PI_DENS]  = sy.MaSdj[i][PI_DENS];
-               STat->ssp->MaSdj[i5][PI_CD_0]  = sy.MaSdj[i][PI_CD_0];
-               STat->ssp->MaSdj[i5][PI_CD_B]  = sy.MaSdj[i][PI_CD_B];
-               STat->ssp->MaSdj[i5][PI_FR_CN] = sy.MaSdj[i][PI_FR_CN];
-               STat->ssp->MaSdj[i5][PI_FR_FI] = sy.MaSdj[i][PI_FR_FI];
-               STat->ssp->MaSdj[i5][PI_COMP_GR] = sy.MaSdj[i][PI_COMP_GR];
+               for( kk=0; kk<DFCN; kk++ )
+                   STat->ssp->MaSdj[i5][kk]  = sy.MaSdj[ia][kk];
+//               STat->ssp->MaSdj[i5][PI_CD0]  = sy.MaSdj[i][PI_CD0];
 //              STat->ssp->MaSdj[i5] = sy.MaSdj[i];
             }
             i5++;
@@ -1542,11 +1571,11 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
     }
 
     // DCOMP
-    if( sy.PMaSdj != S_OFF ) // Temporary!!!!    25.10.2004 KD
-    {  // realloc to prevent memory corruption for old SysEq records
-       STat->ssp->MaSdj = (float (*)[DFCN])aObj[o_ssmasdj].Free();
-       STat->ssp->MaSdj = (float (*)[DFCN])aObj[ o_symasdj].Alloc( mup->Ls, DFCN, F_ );
-    }
+//    if( sy.PMaSdj != S_OFF ) // Temporary!!!!    25.10.2004 KD
+//    {  // realloc to prevent memory corruption for old SysEq records
+//       STat->ssp->MaSdj = (float (*)[DFCN])aObj[o_ssmasdj].Free();
+//       STat->ssp->MaSdj = (float (*)[DFCN])aObj[ o_symasdj].Alloc( mup->Ls, DFCN, F_ );
+//    }
     for( i=0, i1=0, i2=0, i3=0, i4=0, i5=0, iOff=0; i<mup->L; i++)
     {
         if( sy.PbDC != S_OFF )
@@ -1573,7 +1602,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
         if( ( sy.PGEX != S_OFF && fabs(sy.GEX[i]) > aPa->pa.p.DB )||
                 ( sy.PlnGf != S_OFF && fabs(sy.lnGmf[i]) > aPa->pa.p.DB ))
         {
-            ErrorIf( i4>= sy.Le, GetName(), "sy.Le illegal count" );
+            ErrorIf( i4>= sy.Le, GetName(), "sy.Le invalid count" );
             STat->ssp->dce[i4] = DCon[i];
             if( sy.PGEX != S_OFF )  STat->ssp->GEX[i4] = sy.GEX[i];
             if( sy.PlnGf != S_OFF ) STat->ssp->lnGmf[i4] = sy.lnGmf[i];
@@ -1598,30 +1627,31 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
         // dca dcomp ON adsorption  ( mup->DCC[]=='X' ) Sveta 12/09/99 ? to Dima
         if( sy.Dcl[i] != S_OFF && ( strchr( SORPTION_DC, mup->DCC[i])  != NULL) )
         {
-            ErrorIf( i5>= sy.Lsor, GetName(), "sy.Lsor illegal count" );
+            int ia, kk;
+            ErrorIf( i5 >= sy.Lsor, GetName(), "sy.Lsor invalid count" );
+            ia = i - (mup->Ls-mup->Lads);
             STat->ssp->dca[i5] = DCon[i];
+//            STat->ssp->dca[i5] = i;
             if( sy.PSATT != S_OFF )
-            {
-                STat->ssp->SATC[i5][0] = sy.SATC[i][0];
-                STat->ssp->SATC[i5][1] = sy.SATC[i][1];
+            {   // irreversible migration from old data structure 27.10.2004
+               for( kk=0; kk<DFCN; kk++ )
+                   STat->ssp->SATC[i5][kk] = sy.SATC[ia][kk];
+//                STat->ssp->SATC[i5][1] = sy.SATC[i][1];
             }
             if( sy.PMaSdj != S_OFF )
             {
 // Extended by KD on 25.10.2004
-               STat->ssp->MaSdj[i5][PI_DENS]  = sy.MaSdj[i][PI_DENS];
-               STat->ssp->MaSdj[i5][PI_CD_0]  = sy.MaSdj[i][PI_CD_0];
-               STat->ssp->MaSdj[i5][PI_CD_B]  = sy.MaSdj[i][PI_CD_B];
-               STat->ssp->MaSdj[i5][PI_FR_CN] = sy.MaSdj[i][PI_FR_CN];
-               STat->ssp->MaSdj[i5][PI_FR_FI] = sy.MaSdj[i][PI_FR_FI];
-               STat->ssp->MaSdj[i5][PI_COMP_GR] = sy.MaSdj[i][PI_COMP_GR];
+               for( kk=0; kk<DFCN; kk++ )
+                  STat->ssp->MaSdj[i5][kk]  = sy.MaSdj[ia][kk];
+//               STat->ssp->MaSdj[i5][PI_CD0]  = sy.MaSdj[i][PI_CD0];
 //              STat->ssp->MaSdj[i5] = sy.MaSdj[i];
             }
             i5++;
         }
     }
-    while( iOff< DCoff.GetCount())
+    while( iOff < DCoff.GetCount() )
     {
-        ErrorIf( i2>= STat->ssp->DM[23],GetName(),  "mu.L-sy.L illegal count");
+        ErrorIf( i2 >= STat->ssp->DM[23],GetName(),  "mu.L-sy.L invalid count");
         STat->ssp->dcf[i2++] = DCoff[iOff++];
     }
     STat->ssp->DM[15] = DCon[STat->ssp->DM[15]]; //sy.LO

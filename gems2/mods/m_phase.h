@@ -68,10 +68,9 @@ typedef struct
     *XfIEC,   // Constant surface charge density or IEC, mkeq/g   [NsiT]
     (*MSDT)[2], // SAT: Max & min density of reacted species, 1/nm2 [NsiT]
     (*CapT)[2]; // Inner EDL capacitance density, F/m2 (TLM, CCM)
-    // Outer EDL capacitance density, F/m2 (TLM)  [NsiT]
-    char (*SATC)[2]; /* Classifier of methods of SAT calculation
-                        & alloc.to carrier DC, [nDC][2] */
-    float (*MaSdj)[DFCN], // Max. non-comp.density 1/nm2, CD-music and Frumkin params [nDC][NR1]
+                // Outer EDL capacitance density, F/m2 (TLM)  [NsiT]
+    char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [nDC][DFCN]
+    float (*MaSdj)[DFCN], // Max. density, CD-music and isotherm params [nDC][NR1]
     *PXres, // Reserved
     *pnc, //Array of phase-related coefficients of non-ideality model [ncpN][ncpM]
     *scoef;//Array of DC-related coefficients of non-ideality model[nDC][nscN][nscM]
@@ -199,15 +198,21 @@ enum sorption_control {
     SAT_COMP = 'C', SAT_NCOMP = 'N', SAT_SITE = 'S', SAT_INDEF = 'I',
 /* New methods for surface activity coefficient terms (2004) */
  SAT_L_COMP = 'L', SAT_QCA_NCOMP = 'Q', SAT_QCA1_NCOMP = '1',
- SAT_QCA2_NCOMP = '2', SAT_QCA3_NCOMP = '3',
+ SAT_QCA2_NCOMP = '2', SAT_QCA3_NCOMP = '3', SAT_FREU_NCOMP = 'f',
  SAT_QCA4_NCOMP = '4', SAT_BET_NCOMP = 'B', SAT_VIR_NCOMP = 'W',
  SAT_FRUM_NCOMP = 'F', SAT_FRUM_COMP = 'R', SAT_PIVO_NCOMP = 'P',
     /* Assignment of surtype to carrier (end-member) */
     CCA_VOL = 'V', CCA_0 = '0', CCA_1, CCA_2, CCA_3, CCA_4, CCA_5,
-    CCA_6, CCA_7, CCA_8, CCA_9,
+    CCA_6, CCA_7, CCA_8, CCA_9, SPL_0='0', SPL_B, SPL_C, SPL_D,
+    SDU_N = 'n', SDU_m = 'm', SDU_M = 'M', SDU_g = 'g',
+    CST_0 = '0', CST_1, CST_2, CST_3, CST_4, CST_5, // surface type index
+    CSI_0 = '0', CSI_1, CSI_2, CSI_3, CSI_4, CSI_5, // surface site index
 // Number of parameters per surface species in the MaSdj array
-// D_F_CD_NP = 6 = DFCN ; position index    added by KD 25.10.2004 
- PI_DENS=0, PI_COMP_GR, PI_CD_0, PI_CD_B, PI_FR_CN, PI_FR_FI
+// MCAS = 6 = DFCN ; position index    added by KD 25.10.2004
+// Column indices of surface species allocation table MCAS
+   SA_MCA=0, SA_EMX, SA_STX, SA_PLAX, SA_SITX, SA_UNIT,
+// Column indices of MaSdj table of adsorption parameters
+   PI_DEN=0, PI_CD0, PI_CDB, PI_P1, PI_P2, PI_P3
 };
 
 enum volume_code {  /* Codes of volume parameter ??? */

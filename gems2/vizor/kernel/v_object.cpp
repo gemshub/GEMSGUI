@@ -321,9 +321,12 @@ TObject::Free()
 {
     if( !IsDynamic() )
         throw TError(GetKeywd(), "TObject:E05 Attempt to free static data object");
+//    if( !pV )
+//        throw TError(GetKeywd(), "TObject:E055 Attempt to free not allocated data object");
 
     M = 0;
-    delete pV;   // deleting Val
+    if( pV )
+      delete pV;   // deleting Val
     return pV=0;
 }
 

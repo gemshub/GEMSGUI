@@ -475,6 +475,7 @@ void TProfil::Set_z_sp_config( const char *profil )
     // insert data to short key lists
     memcpy( mup->SF2, mup->SF, mup->Fis*PH_RKLEN*sizeof(char));
     memcpy( mup->SM2, mup->SM, mup->Ls*DC_RKLEN*sizeof(char));
+memcpy( mup->SM3, mup->SM+mup->Ls-mup->Lads, mup->Lads*DC_RKLEN*sizeof(char));
     // test data base ICOMP  before calc
     //rmults->TestIComp();
 

@@ -65,16 +65,19 @@ void TRMults::ods_link( int /*q*/ )
     aObj[ o_musf2].SetDim( mu.Fis, 1 );
     aObj[ o_musm2].SetPtr(  mu.SM2 );
     aObj[ o_musm2].SetDim( mu.Ls, 1 );
+aObj[ o_musm3].SetPtr(  mu.SM3 );
+aObj[ o_musm3].SetDim( mu.Lads, 1 );
 
     aObj[ o_muphc].SetPtr( mu.PHC );
     aObj[ o_muphc].SetDim( mu.Fi, 1 );
     aObj[ o_mudcc].SetPtr( mu.DCC );
     aObj[ o_mudcc].SetDim( mu.L, 1 );
+aObj[ o_mudcc3].SetPtr( mu.DCC3 );
+aObj[ o_mudcc3].SetDim( mu.Lads, 1 );
     aObj[ o_mudcs].SetPtr( mu.DCS );
     aObj[ o_mudcs].SetDim( mu.L, 1 );
     aObj[ o_muicc].SetPtr( mu.ICC );
     aObj[ o_muicc].SetDim( mu.N, 1 );
-
 
     aObj[ o_mudcf].SetPtr( mu.DCF );  //aObj[ o_mudcf].SetDim( 1,VIZmsize(mu.DCF));
     aObj[ o_muicf].SetPtr( mu.ICF );  //aObj[ o_muicf].SetDim( 1,VIZmsize(mu.ICF));
@@ -99,11 +102,13 @@ void TRMults::dyn_set(int /*q*/)
     mu.SM  = (char (*)[DC_RKLEN])aObj[ o_musm ].GetPtr();
     mu.SF2  = (char (*)[PH_RKLEN])aObj[ o_musf2 ].GetPtr();
     mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].GetPtr();
+mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].GetPtr();
     mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].GetPtr();
     mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].GetPtr();
     mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].GetPtr();
     mu.PHC = (char *)aObj[ o_muphc ].GetPtr();
     mu.DCC = (char *)aObj[ o_mudcc ].GetPtr();
+mu.DCC3 = (char *)aObj[ o_mudcc3 ].GetPtr();
     mu.DCS = (char *)aObj[ o_mudcs ].GetPtr();
     mu.Pl  = (short *)aObj[ o_mupl ].GetPtr();
     mu.ICC = (char *)aObj[ o_muicc ].GetPtr();
@@ -124,11 +129,13 @@ void TRMults::dyn_kill(int /*q*/)
     mu.SM  = (char (*)[DC_RKLEN])aObj[ o_musm ].Free();
     mu.SF2  = (char (*)[PH_RKLEN])aObj[ o_musf2 ].Free();
     mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].Free();
+mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].Free();
     mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].Free();
     mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].Free();
     mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].Free();
     mu.PHC = (char *)aObj[ o_muphc ].Free();
     mu.DCC = (char *)aObj[ o_mudcc ].Free();
+mu.DCC3 = (char *)aObj[ o_mudcc3 ].Free();
     mu.DCS = (char *)aObj[ o_mudcs ].Free();
     mu.Pl  = (short *)aObj[ o_mupl ].Free();
     mu.ICC = (char *)aObj[ o_muicc ].Free();
@@ -196,6 +203,15 @@ void TRMults::dyn_new(int /*q*/)
         if( mu.Ls )
             mu.Pl = (short *)aObj[ o_mupl].Alloc( mu.Ls, 1, I_ );
         else  mu.Pl  = (short *)aObj[ o_mupl ].Free();
+if(mu.Lads) // added 28.10.2004 by KD for implementation of CD MUSIC
+{
+   mu.SM3 = (char (*)[DC_RKLEN])aObj[ o_musm3].Alloc( mu.Lads, 1, DC_RKLEN );
+   mu.DCC3 = (char *)aObj[ o_mudcc3].Alloc( mu.Lads, 1, A_ );
+}
+else {
+   mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].Free();
+   mu.DCC3 = (char *)aObj[ o_mudcc3 ].Free();
+}
     }
     else
     {
@@ -231,11 +247,13 @@ void TRMults::set_def( int /*q*/)
     mu.SM  = 0;
     mu.SF2  = 0;
     mu.SM2  = 0;
+mu.SM3  = 0;
     mu.SA  = 0;
     mu.SB  = 0;
     mu.FN  = 0;
     mu.PHC = 0;
     mu.DCC = 0;
+mu.DCC3 = 0;
     mu.DCS = 0;
     mu.Pl  = 0;
     mu.ICC = 0;
@@ -315,7 +333,7 @@ void TRMults::DCListLoad(  gstring& AqKey, gstring& GasKey,
     aPH->ods_link(0);
     // Build list of DCOMP&REACDC from PHASE
     kk=-1;
-    mu.Ls = mu.Fis = 0;
+    mu.Ls = mu.Lads = mu.Fis = 0;
 TEST2:
     for( k=0; k<aPhaseList.GetCount(); k++)
     {
@@ -339,6 +357,8 @@ TEST2:
         {
             mu.Ls += mu.Ll[kk];
             mu.Fis++;
+            if( aPH->php->NsiT > 0 && aPH->php->NsiT < 5 )
+               mu.Lads += mu.Ll[kk];
         }
     } /* k */
     if( SPHP==1)
@@ -351,7 +371,9 @@ TEST2:
     mu.PmvDC = S_ON;
     mu.SM = (char (*)[DC_RKLEN])aObj[ o_musm].Alloc( mu.L, 1, DC_RKLEN );
     for(uint i=0; i< List.GetCount(); i++)
+    {
         memcpy( mu.SM[i], List[i].c_str(), DC_RKLEN );
+    }
 }
 
 //Make record of base Rmults from files
@@ -679,7 +701,13 @@ NEW_PHASE_AGAIN:
 
     // insert data to short key lists
     memcpy( mu.SF2, mu.SF, mu.Fis*PH_RKLEN*sizeof(char));
-    memcpy( mu.SM2, mu.SM, mu.Ls*DC_RKLEN*sizeof(char));
+    if( mu.Ls && mu.SM2 )  // Fix of a potential bug
+        memcpy( mu.SM2, mu.SM, mu.Ls*DC_RKLEN*sizeof(char));
+ if( mu.Lads && mu.SM3 && mu.DCC3 )
+ {
+    memcpy( mu.SM3, mu.SM+mu.Ls-mu.Lads, mu.Lads*DC_RKLEN*sizeof(char));
+    memcpy( mu.DCC3, mu.DCC+mu.Ls-mu.Lads, mu.Lads*sizeof(char));
+ }
     // test data base ICOMP  before calc
     TestIComp();
 

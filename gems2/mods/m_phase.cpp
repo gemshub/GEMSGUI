@@ -85,7 +85,8 @@ void TPhase::ods_link( int q)
     aObj[ o_phfsit].SetDim( ph[q].NsiT, 1 );
     //nDC
     aObj[ o_phsatc].SetPtr(  ph[q].SATC );
-    aObj[ o_phsatc].SetDim( ph[q].nDC,  2 );
+//    aObj[ o_phsatc].SetDim( ph[q].nDC,  2 );
+    aObj[ o_phsatc].SetDim( ph[q].nDC,  MCAS );
     aObj[ o_phmasdj].SetPtr( ph[q].MaSdj);
 //    aObj[ o_phmasdj].SetDim( ph[q].nDC, 1 );
     aObj[ o_phmasdj].SetDim( ph[q].nDC, DFCN );
@@ -129,7 +130,7 @@ void TPhase::dyn_set(int q)
     ph[q].XfIEC = (float *)aObj[ o_phxfiec ].GetPtr();
     ph[q].MSDT  = (float (*)[2])aObj[ o_phmsdt ].GetPtr();
     ph[q].CapT  = (float (*)[2])aObj[ o_phcapt ].GetPtr();
-    ph[q].SATC  = (char (*)[2])aObj[ o_phsatc ].GetPtr();
+    ph[q].SATC  = (char (*)[MCAS])aObj[ o_phsatc ].GetPtr();
     ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].GetPtr();
     ph[q].PXres = (float *)aObj[ o_phpxres ].GetPtr();
     ph[q].pnc =   (float *)aObj[ o_phpnc ].GetPtr();
@@ -153,7 +154,7 @@ void TPhase::dyn_kill(int q)
     ph[q].XfIEC = (float *)aObj[ o_phxfiec ].Free();
     ph[q].MSDT =  (float (*)[2])aObj[ o_phmsdt ].Free();
     ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Free();
-    ph[q].SATC =  (char (*)[2])aObj[ o_phsatc ].Free();
+    ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Free();
     ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Free();
     ph[q].PXres = (float *)aObj[ o_phpxres ].Free();
     ph[q].pnc =   (float *)aObj[ o_phpnc ].Free();
@@ -195,7 +196,8 @@ void TPhase::dyn_new(int q)
         ph[q].XfIEC = (float *)aObj[ o_phxfiec ].Alloc( ph[q].NsiT, 1, F_);
         ph[q].MSDT =  (float (*)[2])aObj[ o_phmsdt ].Alloc( ph[q].NsiT, 2, F_);
         ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Alloc( ph[q].NsiT, 2, F_);
-        ph[q].SATC =  (char (*)[2])aObj[ o_phsatc ].Alloc( ph[q].nDC, 2, A_);
+//        ph[q].SATC =  (char (*)[2])aObj[ o_phsatc ].Alloc( ph[q].nDC, 2, A_);
+        ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Alloc( ph[q].nDC, MCAS, A_);
 //        ph[q].MaSdj = (float *)aObj[ o_phmasdj ].Alloc( ph[q].nDC, 1, F_);
     ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Alloc( ph[q].nDC, DFCN, F_);
         ph[q].PXres = (float *)aObj[ o_phpxres ].Alloc( ph[q].nDC, 1, F_);
@@ -207,7 +209,7 @@ void TPhase::dyn_new(int q)
         ph[q].XfIEC = (float *)aObj[ o_phxfiec ].Free();
         ph[q].MSDT =  (float (*)[2])aObj[ o_phmsdt ].Free();
         ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Free();
-        ph[q].SATC =  (char (*)[2])aObj[ o_phsatc ].Free();
+        ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Free();
         ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Free();
         ph[q].PXres = (float *)aObj[ o_phpxres ].Free();
     }
@@ -543,10 +545,13 @@ AGAINRC:
         for( i=0; i<php->nDC; i++ )
         {
             /* if( !php->SATC[i][0] || php->SATC[i][0] ==A_NUL ) */
-            php->SATC[i][0] = SAT_COMP;
+            php->SATC[i][SA_MCA] = SAT_L_COMP;
             /* if( !php->SATC[i][1] || php->SATC[i][1] ==A_NUL ) */
-            php->SATC[i][1] = CCA_VOL;  /* Default! */
-            /* ..................... */
+            php->SATC[i][SA_EMX] = CCA_VOL;  /* Default! */
+            php->SATC[i][SA_STX] = CST_0;
+            php->SATC[i][SA_EMX] = SPL_0;  /* Default! */
+            php->SATC[i][SA_MCA] = CSI_0;
+            php->SATC[i][SA_EMX] = SDU_N;  /* Default! */
         }
         php->PFsiT = S_ON;
     }
@@ -725,10 +730,10 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
         {
            if( fabs( cN ) < 1e-20 )
               cN = 0.0;
-           php->MaSdj[i][PI_FR_CN] = cN;    // Frumkin isotherm parameter cN
+           php->MaSdj[i][PI_P2] = cN;    // Frumkin isotherm parameter cN
            if( fabs( Fi ) < 1e-20 )
               Fi = 0.0;
-           php->MaSdj[i][PI_FR_FI] = Fi;  // Frumkin isotherm parameter Fi
+           php->MaSdj[i][PI_P1] = Fi;  // Frumkin isotherm parameter Fi
 // EDL CD parameters
            if( fabs( a0 ) < 1e-20 && fabs( bp ) < 1e-20 )
               if( !(php->DCC[i] == DC_WSC_A0 || php->DCC[i] == DC_WSC_A1 ||
@@ -741,8 +746,8 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
               else { // this is outer-sphere species (charge on beta-plane only)
                 a0 = 0; bp = Z;
               }
-           php->MaSdj[i][PI_CD_0] = a0;
-           php->MaSdj[i][PI_CD_B] = bp;
+           php->MaSdj[i][PI_CD0] = a0;
+           php->MaSdj[i][PI_CDB] = bp;
         }
       } // i
     }
@@ -1062,12 +1067,19 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
         }
 
         for( i=0; i<php->nDC; i++ )
-        {
-            if( !php->SATC[i][0] || php->SATC[i][0] ==A_NUL )
-                php->SATC[i][0] = SAT_INDEF;
-            if( !php->SATC[i][1] || php->SATC[i][1] ==A_NUL )
-                php->SATC[i][1] = CCA_VOL;  /* Default! */
-            /* ..................... */
+        {   // Restoring defaults if zeros or null-character 
+            if( !php->SATC[i][SA_MCA] || php->SATC[i][SA_MCA] ==A_NUL )
+                php->SATC[i][SA_MCA] = SAT_INDEF;
+            if( !php->SATC[i][SA_EMX] || php->SATC[i][SA_EMX] ==A_NUL )
+                php->SATC[i][SA_EMX] = CCA_VOL;  /* Default! */
+            if( !php->SATC[i][SA_STX] || php->SATC[i][SA_STX] ==A_NUL )
+                php->SATC[i][SA_STX] = CST_0;
+            if( !php->SATC[i][SA_PLAX] || php->SATC[i][SA_EMX] ==A_NUL )
+                php->SATC[i][SA_EMX] = SPL_0;  /* Default! */
+            if( !php->SATC[i][SA_SITX] || php->SATC[i][SA_MCA] ==A_NUL )
+                php->SATC[i][SA_MCA] = CSI_0;
+            if( !php->SATC[i][SA_UNIT] || php->SATC[i][SA_EMX] ==A_NUL )
+                php->SATC[i][SA_EMX] = SDU_N;  /* Default! */
         }
         php->PFsiT = S_ON;
     }

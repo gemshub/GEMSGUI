@@ -55,7 +55,7 @@ typedef struct
     Fis,     // FIs - total number of multi-component phases
     La,      // La  - of references to COMPOS records
     Ls,      // Ls  - total number of DC in multi-component phases
-    Lx,      // total number of surface species
+Lads,      // former Lx: total number of surface species
     FiE,     // FIe - number of phases with sorption (and EDL)
     NfT,     // Total number of linked files sigma(Nfl)
 
@@ -65,9 +65,12 @@ typedef struct
     short
     *Ll,// L1 vector, shows a number of DC included to each phase [0:Fi-1] DB
     Nfl[MAXNUMCHAINS]; // Number of open files for each modules DB
+
     char
     (*SF2)[PH_RKLEN],// List of multicomponent PHASE definition keys [Fis]             DB
-    (*SM2)[DC_RKLEN],// List of multicomp DC definition keys  [Ls] DB
+    (*SM2)[DC_RKLEN],// List of multicomp DC definition keys  [Ls]
+(*SM3)[DC_RKLEN],// List of adsorption DC definition keys  [Lads]  new 
+
     (*SF)[PH_RKLEN],// List of PHASE definition keys [0:Fi-1]             DB
     (*SM)[DC_RKLEN],// List of DC definition keys (DCOMP, REACDC) [0:L-1] DB
     (*SA)[BC_RKLEN],// List of COMPOS definition keys [0:La-1]            DB
@@ -77,6 +80,7 @@ typedef struct
     char // build from PHASE  (calc from cfg)
     *PHC, // Classifier of phases { agpmslxdh } [0:Fi-1]
     *DCC, // DC classes { TESWGVCHNIJM<digit>XYZABPQRO }[0:L-1]
+*DCC3, // DC classes for adsorption [Lads]
     *DCS; // Code of data source for DC: d-DCOMP r-REACDC { dr }[0:L-1]
     short   *Pl;   // indexes of DC in PHASE [0:Ls-1]
     char // build from  ICOMP records

@@ -241,7 +241,7 @@ void TMTparm::set_def( int /*q*/)
     /*  tp.L = mup->L;
       tp.Ls = mup->Ls;
       tp.Lg = mup->Pg;
-      tp.Lx = mup->Lx;
+      tp.Lx = mup->Lads;
      */
     tp.L = tp.Ls =  tp.Lg =  tp.Lx = 0;
     memset( &tp.T, 0, 10*sizeof(float));
@@ -274,7 +274,7 @@ void TMTparm::MTparmAlloc( )
     tp.L = mup->L;
     tp.Ls = mup->Ls;
     tp.Lg = mup->Pg;
-    tp.Lx = mup->Lx;
+    tp.Lx = mup->Lads;
     char *PtvM_ = &tp.PtvG; /* set recalc */
     for(int i=0; i<20; i++ )
         if( PtvM_[i] == S_ON )
@@ -289,7 +289,7 @@ void TMTparm::MTparmAlloc( )
      tp.PtvFg = S_REM;
   }
     dyn_new();
-    aSta.setdef();  //Added by Sveta 15/06/2002 
+    aSta.setdef();  //Added by Sveta 15/06/2002
 }
 
 // realoc memory to MTPARM structure and load data to arrays
@@ -304,7 +304,7 @@ void TMTparm::LoadMtparm( float cT, float cP )
     aRC->ods_link(0);
 
     if( tp.L != mup->L ||  tp.Ls != mup->Ls ||
-            tp.Lg != mup->Pg ||  tp.Lx != mup->Lx )
+            tp.Lg != mup->Pg ||  tp.Lx != mup->Lads )
         Error( "MTparm", "Modelling project dimension error!");
 
     tp.curT=cT;
