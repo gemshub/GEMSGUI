@@ -123,12 +123,18 @@ TVisorImp::closeEvent ( QCloseEvent * ev )
                 aMod[ii].pImp->close();
 
     QWidget* central = centralWidget();
+
     // if there's central widget already open
     if( central )
         // and it could be closed OK
         if( central->close() )
-        {    delete central;
-             central = 0; /* Sveta*/
+        {
+// do we need this deleting ?????
+// under Win32/Qt3 it gives crash, other configs seems ok :-(
+#ifdef __unix
+    		 delete central;
+             central = 0; /* Sveta*/ // why? AR
+#endif
         }
 
         QWidget::closeEvent(ev);
