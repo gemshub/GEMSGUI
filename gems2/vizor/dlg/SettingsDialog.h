@@ -40,6 +40,7 @@ protected slots:
 //    void CmUserDBDirSelect();
 //    void CmSysDBDirSelect();
     void CmChangeFont();
+    void CmDefaultFont();
     void accept();
 };
 

@@ -461,8 +461,10 @@ TVisor::toWinCFG()
     f_win_ini << "double_precision\t=\t" << n << endl;
     f_win_ini << "update_interval\t=\t" << pVisorImp->updateInterval() << endl;
 
-    f_win_ini << "general_font_string\t=\t\"" << pVisorImp->getCellFont().toString() << "\"" << endl;
-    f_win_ini << "axis_label_font_string\t=\t\"" << pVisorImp->getAxisLabelFont().toString() << "\"" << endl;
+//    if( pVisorImp->getCellFont() != pVisorImp->getDefaultFont() )
+	f_win_ini << "general_font_string\t=\t\"" << pVisorImp->getCellFont().toString() << "\"" << endl;
+//    if( pVisorImp->getAxisLabelFont() != pVisorImp->getDefaultFont() )
+	f_win_ini << "axis_label_font_string\t=\t\"" << pVisorImp->getAxisLabelFont().toString() << "\"" << endl;
 
     int win_num = aWinInfo.GetCount();
     f_win_ini << "number_of_windows\t=\t" << win_num << endl;

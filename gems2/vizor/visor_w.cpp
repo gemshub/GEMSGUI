@@ -69,8 +69,8 @@ const int GEMS_DEFAULT_FONT_SIZE = 10;
 const char* GEMS_LOGO_ICON = "img/gems1.png";
 const char* GEMS_SYS_ICON = "img/sciences_section.xpm";
 const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.0.0-PSI (Win32)";
-const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
-const int GEMS_DEFAULT_FONT_SIZE = 9;
+//const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
+//const int GEMS_DEFAULT_FONT_SIZE = 9;
 #endif
 extern const char* GEMS_ABOUT_HTML;
 extern const char* GEMS_TOC_HTML;
@@ -97,7 +97,8 @@ TVisorImp::TVisorImp(int c, char** v):
     updateTime = 1; // second
 #endif
 
-    setCellFont( QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE) );
+    defaultFont = QApplication::font();
+//    setCellFont( QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE) );
 
     try{
 	pVisor = new TVisor(argc, argv);

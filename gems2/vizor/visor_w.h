@@ -104,6 +104,7 @@ class TVisorImp:
     QPixmap*    pixSys;
     QFont	CellFont;
     QFont	axisLabelFont;
+    QFont	defaultFont;
     //  int	DoubleDigits;
     // other settings
     bool	configAutosave;
@@ -192,6 +193,10 @@ public:
     {
         return axisLabelFont;
     }
+    const QFont& getDefaultFont() const
+    {
+        return defaultFont;
+    }    
 
     void setCellFont(const QFont& newCellFont);
     void setAxisLabelFont(const QFont& newAxisLabelFont) 

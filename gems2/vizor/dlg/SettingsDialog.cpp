@@ -166,5 +166,12 @@ SettingsDialog::CmChangeFont()
     }
 }
 
+void
+SettingsDialog::CmDefaultFont()
+{
+    cellFont = pVisorImp->getDefaultFont();
+    pFontRawName->setText( cellFont.toString() );
+}
+
 //--------------------- End of SettingsDialog.cpp ---------------------------
 

@@ -309,17 +309,11 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout5</cstring>
+                <cstring>layout4</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
                 </property>
                 <widget class="QLabel">
                     <property name="name">
@@ -349,6 +343,14 @@
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Here you can change font for the data screen forms</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Default</string>
                     </property>
                 </widget>
             </hbox>
@@ -522,6 +524,12 @@
         <receiver>pRemoteDocURL</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
+    <connection>
+        <sender>pushButton5</sender>
+        <signal>clicked()</signal>
+        <receiver>SettingsDialogData</receiver>
+        <slot>CmDefaultFont()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>pButtonOK</tabstop>
@@ -537,6 +545,7 @@
     <slot access="protected">CmUserDBDirSelect()</slot>
     <slot access="protected">CmApply()</slot>
     <slot access="protected">CmHelp()</slot>
+    <slot access="protected">CmDefaultFont()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
