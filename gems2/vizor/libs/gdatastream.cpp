@@ -170,7 +170,7 @@ GemDataStream &GemDataStream::operator>>( double &f )
 
 GemDataStream &GemDataStream::operator<<( char i )
 {
-    ff.write((char*)&i, sizeof(char));
+    ff.write(&i, sizeof(char));
     return *this;
 }
 
@@ -215,8 +215,10 @@ void GemDataStream::readArray( char* arr, int size )
 {
   if( !arr )
     return;
-  for(int ii=0; ii<size; ii++)
-   *this >> arr[ii];
+    
+  ff.read(arr, size);
+//  for(int ii=0; ii<size; ii++)
+//   *this >> arr[ii];
 }
 
 void GemDataStream::readArray( short* arr, int size )
@@ -263,8 +265,10 @@ void GemDataStream::writeArray( char* arr, int size )
 {
   if( !arr )
     return;
-  for(int ii=0; ii<size; ii++)
-   *this << arr[ii];
+
+  ff.write(arr, size);
+//  for(int ii=0; ii<size; ii++)
+//   *this << arr[ii];
 }
 
 void GemDataStream::writeArray( short* arr, int size )
