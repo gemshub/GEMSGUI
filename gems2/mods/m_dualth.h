@@ -69,13 +69,14 @@ typedef struct
 // input I
    nQ,   // Q - number of experiments (equilibria) in basis sub-system
    La_b, // Lb - number of formula units to set compositions in basis sub-system
-   nK,   // K - number of DC (end-member) candidates in non-basis sub-system
+   nK,   // K - number of DC (end-member) candidates in non-basis sub-system (variants, default 2)
    Nsd,  // N of references to data sources
    Nqpn, // Number of elements in the math script work arrays qpn per non-basis DC
    Nqpg, // Number of elements in the math script work arrays qpg per non-basis DC
    Nb,    // N - number of independent components (in basis sub-system, taken
         // from project system dimensions automatically)
-   Asiz,    //reserved
+nM,    //number of mixtures considered in non-basis sub-system (default 1)
+*mia,  // [K] allocation indexes of NB end-member candidates to mixtures
 // for generating syseq record keys
    tmd[3],  // SYSTEM CSD definition #: start, end, step (initial)
    NVd[3]  // Restrictions variant #: start, end, step
@@ -106,8 +107,7 @@ typedef struct
    *chi,   //  [Q][K] Table of mole fractions of DC (end-member) candidates
    *mu_n,  //  [Q][K] Table of DualTh chemical potentials of K DC (end-member)
            // candidates in Q experiments
-   *Coul,  //  [Q][K] Table of excess Gibbs energies of mixture for candidates
-           // (Coulombic terms for surface complexes)
+   *Coul,  //  [Q][K] Coulombic terms for surface complexes (optional)
    *gam_n, //  [Q][K] Table of activity coefficients for DC candidates
    *avg_g, //  [K] mean over gam_n columns (experiments) for DC candidates
    *sd_g,  //  [K] st.deviation over gam_n columns (experiments) for DC candidates
@@ -116,8 +116,11 @@ typedef struct
    *sd_m,  //  [K] st.deviation over muo_n columns (experiments) for DC candidates
    *muo_i, // [Q][K] input st.state chem. potentials for candidates (or EMPTY if unknown)
    *act_n, // [Q][K] table of DualTh-calculated activities
-   *qpn,   //  [Nqpn] Work array for chi calculation math script
-   *qpg    //  [Nqpg] Work array for gamma calculation math script
+*gm_n,   // [Q][M] integral Gibbs energy of mixture for Q experiments and M mixtures
+*gmx_n,  // [Q][M] total Gibbs energy of mixing for Q experiments and M mixtures
+*gex_n,  // [Q][M] excess Gibbs energy of mixing for Q experiments and M mixtures
+   *qpn,   //  [Nqpn] Array for chi calculation math script (ionic fractions?)
+   *qpg    //  [Nqpg] Array for gamma calculation math script (interact. params?)
     ;
  float
    *CIb,  // [Q][N] Table of quantity/concentration of IC in basis sub-systems
@@ -163,44 +166,44 @@ typedef struct
 }
 DUALTH;
 
-/* Work objects for DualTh scripts */
-typedef struct
+/* Work objects for DualTh scripts - to add??? */
+typedef struct   // not used yet 
 {
-    double RT,      /* множитель RT */
-    F,       /* константа Фарадея */
-    Nu,      /* Двойственный хим.потенциал ЗК (через u, A )*/
-    Mu,      /* Прямой хим.потенциал ЗК (через Mu0 и активность) */
-    G0,      /* Стандартный part.mol. хим.потенциал для TP == Mu0 */
-    lnAx,    /* ln активности ЗК */
-    Ax,    /* Активность ЗК (в соотв. системе сравнения) */
-    dGex,    /* парц. мольн. энергия метастабильности (кинет.) */
-    Gdis,    /* парц. мольн. своб. энергия дисперсности носителя */
-    Asig,  /* удельная своб. энергия поверхности носителя Дж/м2 */
-    Asur,  /* удельная площадь поверхности носителя м2/г */
-    Amw,   /* мольная масса носителя г/моль */
-    Gid,     /* парц. мольн. своб.энергия идеального смешения */
-    lnCx,  /* log( Cx ) */
-    Cx,    /* мольная доля солюта (сорбата) в фазе */
-    Mx,  /* моляльность солюта (сорбата) */
-    lnMx, /* ln отношения xj/Xw (для солютов и сорбатов) */
-    lnWx,  /* log( Wx ) */
-    Wx,    /* мольная доля носителя (сольвента) в фазе */
-    Gcas,  /* Член коррекции асимметрии для носителя (сольвента) */
-    Gsas,  /* Член коррекции асимметрии для солюта (сорбата) */
-    Gsm,   /* Член перевода в моляльную шкалу log(1000/WH2O) 4.01653 */
-    Gsd,   /* Корректирующий член для сорбата на поз. р-го типа */
-    Tetp, /* мольная доля позиций р-го типа от их общего числа */
-    Nx,   /* мольная доля всех сорбатов (позиций) ко всей фазе */
-    Agmx, /* плотность активных позиций моль/м2 */
-    Agx, /* плотность активных позиций, 1/нм2 */
-    Gex,     /* парц.мольн.избыточная своб.энергия неидеальности */
-    Gamma, /* коэф. активности (фугитивности) */
-    lnGam, /* ln коэф. активности */
-    Gpsi,    /* парц. мольн. электрохимическая своб. энергия */
-    Ze,    /* заряд ЗК (сорбата, солюта) */
-    Psi,   /* Вольта-потенциал ЗК */
-    lnPg;    /* ln P общ для газов */
-    /* 32 double - числа */
+    double RT,
+    F,
+    Nu,
+    Mu,
+    G0,
+    lnAx,
+    Ax,
+    dGex,
+    Gdis,
+    Asig,
+    Asur,
+    Amw,
+    Gid,
+    lnCx,
+    Cx,
+    Mx,
+    lnMx,
+    lnWx,
+    Wx,
+    Gcas,
+    Gsas,
+    Gsm,
+    Gsd,
+    Tetp,
+    Nx,
+    Agmx,
+    Agx,
+    Gex,
+    Gamma,
+    lnGam,
+    Gpsi,
+    Ze,
+    Psi,
+    lnPg;
+    /* 32 double */
 }
 DualThSet;
 

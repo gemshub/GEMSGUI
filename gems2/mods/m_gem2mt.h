@@ -44,12 +44,12 @@ typedef struct
    PvSd,     // Include references to data sources (+ -)?
    PvMSt,    // Use math script for running the mass transport (+ -)?
    PvMSg,    // Use math script for graphic presentation (+ -)?
-   PvEF      // Use empirical data for graphics  (+ -)?
-   PvRes1,
-   PvRes2,
+   PvEF,      // Use empirical data for graphics  (+ -)?
+   PvPGD,    // Use phase groups definitions (+ -)?
+   PvFDL,    // Use flux definition list (+ -)
 
      // Controls on operation
-   PsMode,  // GEM2MT mode of operation {  }
+   PsMode,  // Code of GEM2MT mode of operation {  }
 //  Status and control flags (+-)
    gStat,  // GEM2MT generation status: 0 -indefinite; 1 on-going generation run;
         //  2 - done generation run; 3 - generation run error (+ 5: the same in stepwise mode)
@@ -69,6 +69,8 @@ typedef struct
    nC,   // nQ - number of local equilibrium compartments (nodes)
 // xC, yC, zC  numbers of nodes along x, y, z coordinates
    nIV,  // number of initial variants of the chemical system, nIV <= nC
+   nPG,  // number of mobile phase groups (0 or >1)
+   nFD,  // number of flux definitions    (0 or >1)
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
@@ -80,7 +82,7 @@ typedef struct
 
    DiCp[],  // array of indexes of initial system variants for
             // distributing to nodes [nC]
-
+   *FDLi[2],  //[nFD][2] Box indices in the flux definition list
 // iterators for generating syseq record keys for initial system variants
    tmi[3],  // SYSTEM CSD definition #: start, end, step (initial)
    NVi[3]  // Restrictions variant #: start, end, step
@@ -123,6 +125,8 @@ typedef struct
    *CIb, // [nIV][N] Table of quantity/concentration of IC in initial systems
    *CIn, // [nIV][N] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
+   *FDLf[2], // [nFD][2] Part of the flux defnition list (MPG quantities)
+   *PGT  // Quantities of phases in MPG [Fi][nPG]
     ;
  char
    *tExpr,  // Math script text for calculation of initial system compositions
@@ -135,6 +139,11 @@ typedef struct
 //
    *CIclb, // [N] Units of IC quantity/concentration for initial systems compositions
    *AUcln, // [Lbi] Units of setting UDF quantities for initial system compositions
+   *(FDLid)[MAXSYMB], // [nFD] ID of fluxes
+   *(FDLop)[MAXSYMB], // [nFD] Operation codes (letters)
+   *(FDLmp)[MAXSYMB], // [nPG] ID of MPG to move in this flux 
+   *(MPGid)[MAXSYMB], // [nPG] ID list of mobile phase groups
+   *UMPG,  // [nFi] units for setting phase quantities in MPG (see PGT ),
 //
    (*SBM)[MAXICNAME+MAXSYMB],  // Keys (names) of IC
 //  graphics

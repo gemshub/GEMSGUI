@@ -8,12 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>598</width>
-            <height>480</height>
+            <width>602</width>
+            <height>490</height>
         </rect>
     </property>
     <property name="caption">
-        <string>GEM-Selektor Compos Wizard</string>
+        <string>GEM-Selektor Process Wizard</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>false</bool>
@@ -23,7 +23,7 @@
             <cstring>WizardPage1</cstring>
         </property>
         <attribute name="title">
-            <string>Step 1 - PCO configuration</string>
+            <string>Step 1 - Process Simulator configuration</string>
         </attribute>
         <widget class="QButtonGroup">
             <property name="name">
@@ -32,9 +32,9 @@
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>190</y>
-                    <width>530</width>
-                    <height>200</height>
+                    <y>200</y>
+                    <width>560</width>
+                    <height>190</height>
                 </rect>
             </property>
             <property name="title">
@@ -49,7 +49,10 @@
                         <cstring>pselS</cstring>
                     </property>
                     <property name="text">
-                        <string>Direct change of bulk composition and/or constraints, &amp;S</string>
+                        <string>&amp;S    Direct (sequential) change of bulk composition and/or constraints (default)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -77,7 +80,7 @@
                         <cstring>pselG</cstring>
                     </property>
                     <property name="text">
-                        <string>Batch inverse titration sequence (pH steps etc.), &amp;G</string>
+                        <string>&amp;G   Batch inverse titration sequence (for incremented pH values etc.)</string>
                     </property>
                     <property name="accel">
                         <string>Alt+G</string>
@@ -105,7 +108,10 @@
                         <cstring>pselT</cstring>
                     </property>
                     <property name="text">
-                        <string>One arbitrary inverse titration calculation, &amp;T</string>
+                        <string>&amp;T    One arbitrary inverse titration calculation (defined in Process script)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+T</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -133,7 +139,7 @@
                         <cstring>pselR</cstring>
                     </property>
                     <property name="text">
-                        <string>Sequential reactor (using phase bulk compositions), &amp;R</string>
+                        <string>&amp;R   Simple reactor scheme (reciprocal, uses phase bulk compositions at equilibrium)</string>
                     </property>
                     <property name="accel">
                         <string>Alt+R</string>
@@ -161,7 +167,10 @@
                         <cstring>pselP</cstring>
                     </property>
                     <property name="text">
-                        <string>T and/or P change at fixed bulk composition, &amp;P</string>
+                        <string>&amp;P   Sequential temperature and/or pressure change at fixed bulk composition</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+P</string>
                     </property>
                 </widget>
             </vbox>
@@ -179,9 +188,9 @@
                 </rect>
             </property>
             <property name="text">
-                <string>&lt;p&gt;&lt;b&gt;Compos record keeps data on bulk elemental composition of a Predefined Composition Objects (PCO). PCO can describe a salt, the air, a mineral, a rock, a natural water etc. which can be complex, but can be referred to by a name or a record key. &lt;/b&gt;&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;The Compos record can be configured to represent the PCO in the most convenient way, depending on the source data: as amounts/concentrations of chemical elements, or of stoichiometries of dependent components from available DComp/ReacDC records, or  of user-defined formulae (UDF), or of a large formula entered into a text editor field.&lt;/b&gt;&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Upon the Compos record calculation, all such data will be converted into moles of independent components, optionally scaled to a given total PCO mass, and summed into a single PCO vector. &lt;/b&gt;&lt;/p&gt;</string>
+                <string>&lt;p&gt;The Process Simulator module is a tool for automation of "batch" calculation of many equilibrium states, as well as sampling and plotting of results. This tool helps in modeling various irreversible (geo)chemical processes such as mixing, dissolution, titration, corrosion, or weathering .&lt;/p&gt;
+&lt;p&gt;The Process Simulator can be configured to perform in the most convenient way. To tell it what input data to modify and what output data to sample and plot,  you may have to type two scripts that control generation of the simulated points (P_expr) and data sampling (pgExpr), respectively.&lt;/p&gt;
+&lt;p&gt;There are three major kinds of process simulators: (1) &lt;b&gt;Sequential&lt;/b&gt;, where only input GEM parameters are modified; (2) &lt;b&gt;Reciprocal&lt;/b&gt;, where the next step depends on some GEM output parameters (e.g. pH, concentrations) obtained from previous step; (3) &lt;b&gt;Inverse&lt;/b&gt;, where GEM input parameters must be automatically adjusted to obtain prescribed value of GEM output parameter.&lt;/p&gt;</string>
             </property>
         </widget>
     </widget>
@@ -190,8 +199,206 @@
             <cstring>WizardPage</cstring>
         </property>
         <attribute name="title">
-            <string>Dimensions</string>
+            <string>Step 2 - Important dimensions</string>
         </attribute>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup11</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>320</y>
+                    <width>580</width>
+                    <height>90</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Allocation of optional data vectors</string>
+            </property>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvNV</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>460</x>
+                        <y>30</y>
+                        <width>110</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Constraints # NV</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvT</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>340</x>
+                        <y>30</y>
+                        <width>110</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Temperature T,C</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvV</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>130</x>
+                        <y>30</y>
+                        <width>83</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>volume V, l</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvTm</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>100</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>CSD variant #</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvNu</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>60</y>
+                        <width>120</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>process extent Nu</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvpXi</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>150</x>
+                        <y>60</y>
+                        <width>120</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>process extent pXi</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvKin</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>300</x>
+                        <y>60</y>
+                        <width>140</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>kinetic parameters vKin</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvTau</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>460</x>
+                        <y>60</y>
+                        <width>83</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>time Tau</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvP</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>230</x>
+                        <y>30</y>
+                        <width>100</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>pressure P, bar</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>580</width>
+                    <height>60</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>In spin-boxes below, at least the first one (nPV) must be carefully chosen. nPV defines how many steps of process simulation will be performed, as well as it sets number of rows in several data arrays. Set also number of experimental points (rows in xE, yE) if you wish to perform graphical fitting.</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>270</y>
+                    <width>580</width>
+                    <height>50</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>The optional data vectors (of length nPV, can be allocated below) correspond to process iterators and can be used in process scripts (with J index) to accumulate respective values for all process steps performed.</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup7</cstring>
@@ -199,9 +406,9 @@
             <property name="geometry">
                 <rect>
                     <x>0</x>
-                    <y>0</y>
-                    <width>560</width>
-                    <height>240</height>
+                    <y>60</y>
+                    <width>580</width>
+                    <height>210</height>
                 </rect>
             </property>
             <property name="title">
@@ -209,50 +416,21 @@
             </property>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>TextLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>153</x>
-                        <y>37</y>
-                        <width>264</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of process-generated points (&lt;1000)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
                     <cstring>TextLabel2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>153</x>
-                        <y>79</y>
-                        <width>264</width>
-                        <height>20</height>
+                        <x>100</x>
+                        <y>60</y>
+                        <width>460</width>
+                        <height>30</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Number of columns in the modC array (from 0 to 20)</string>
+                    <string>Number of columns in modC array (from 1 to 20, 0 - not used) to store data used in process scritps; number of rows will be nPV.</string>
                 </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>153</x>
-                        <y>121</y>
-                        <width>264</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of plots (sampled columns, from 0 to 20)</string>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
             <widget class="QSpinBox">
@@ -261,9 +439,9 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>21</x>
-                        <y>163</y>
-                        <width>126</width>
+                        <x>20</x>
+                        <y>150</y>
+                        <width>60</width>
                         <height>20</height>
                     </rect>
                 </property>
@@ -280,9 +458,9 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>21</x>
-                        <y>205</y>
-                        <width>126</width>
+                        <x>20</x>
+                        <y>180</y>
+                        <width>60</width>
                         <height>20</height>
                     </rect>
                 </property>
@@ -292,52 +470,35 @@
                 <property name="minValue">
                     <number>0</number>
                 </property>
+                <property name="value">
+                    <number>1</number>
+                </property>
             </widget>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>TextLabel1_2_2</cstring>
+                    <cstring>TextLabel1</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>153</x>
-                        <y>163</y>
-                        <width>264</width>
-                        <height>62</height>
+                        <x>100</x>
+                        <y>30</y>
+                        <width>460</width>
+                        <height>20</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Number of lines (points) and columns  for
- empirical data (if sampling or plots are specified)</string>
+                    <string>&lt;b&gt;nPV&lt;/b&gt;   Number of steps (1 to 1000 ) to be generated in this process simulation (always to be set)</string>
                 </property>
             </widget>
             <widget class="QSpinBox">
                 <property name="name">
-                    <cstring>pPoints</cstring>
+                    <cstring>pGraph</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>30</y>
-                        <width>126</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="maxValue">
-                    <number>999</number>
-                </property>
-                <property name="minValue">
-                    <number>1</number>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pMods</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>21</x>
-                        <y>79</y>
-                        <width>126</width>
+                        <y>110</y>
+                        <width>60</width>
                         <height>20</height>
                     </rect>
                 </property>
@@ -353,13 +514,13 @@
             </widget>
             <widget class="QSpinBox">
                 <property name="name">
-                    <cstring>pGraph</cstring>
+                    <cstring>pMods</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>21</x>
-                        <y>121</y>
-                        <width>126</width>
+                        <x>20</x>
+                        <y>70</y>
+                        <width>60</width>
                         <height>20</height>
                     </rect>
                 </property>
@@ -369,165 +530,81 @@
                 <property name="minValue">
                     <number>0</number>
                 </property>
+                <property name="value">
+                    <number>1</number>
+                </property>
             </widget>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup11</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>250</y>
-                    <width>560</width>
-                    <height>150</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>Flags for optionalarrays of values</string>
-            </property>
-            <widget class="QCheckBox">
+            <widget class="QSpinBox">
                 <property name="name">
-                    <cstring>c_PvTm</cstring>
+                    <cstring>pPoints</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>30</y>
-                        <width>77</width>
+                        <width>60</width>
                         <height>20</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>CSD tm</string>
+                <property name="maxValue">
+                    <number>999</number>
+                </property>
+                <property name="minValue">
+                    <number>1</number>
+                </property>
+                <property name="value">
+                    <number>21</number>
                 </property>
             </widget>
-            <widget class="QCheckBox">
+            <widget class="QLabel">
                 <property name="name">
-                    <cstring>c_PvNV</cstring>
+                    <cstring>TextLabel1_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>20</x>
-                        <y>60</y>
-                        <width>90</width>
-                        <height>20</height>
+                        <x>100</x>
+                        <y>100</y>
+                        <width>460</width>
+                        <height>30</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>MTPARM NV</string>
+                    <string>Number of plots (columns in the yp table, from 0 to 20) to sample simulated data in the process script pgExpr for export or plotting; number of rows will be nPV</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
-            <widget class="QCheckBox">
+            <widget class="QLabel">
                 <property name="name">
-                    <cstring>c_PvTau</cstring>
+                    <cstring>TextLabel1_2_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>20</x>
-                        <y>90</y>
-                        <width>83</width>
-                        <height>20</height>
+                        <x>100</x>
+                        <y>150</y>
+                        <width>470</width>
+                        <height>30</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>time Tau</string>
+                    <string>Number of rows (points) in the xEp, yEp arrays for plotting experimental data (optional)</string>
                 </property>
             </widget>
-            <widget class="QCheckBox">
+            <widget class="QLabel">
                 <property name="name">
-                    <cstring>c_PvP</cstring>
+                    <cstring>TextLabel1_2_2_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>130</x>
-                        <y>30</y>
-                        <width>83</width>
-                        <height>20</height>
+                        <x>100</x>
+                        <y>170</y>
+                        <width>470</width>
+                        <height>30</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>pressure P</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>c_PvT</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>130</x>
-                        <y>60</y>
-                        <width>100</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>temperature TC</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>c_PvKin</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>250</x>
-                        <y>90</y>
-                        <width>160</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>kinetic parameters vKin</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>c_PvNu</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>250</x>
-                        <y>60</y>
-                        <width>120</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>process extent Nu</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>c_PvpXi</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>250</x>
-                        <y>30</y>
-                        <width>110</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>process extent pXi</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>c_PvV</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>130</x>
-                        <y>90</y>
-                        <width>83</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>volume V</string>
+                    <string>Number of columns (plots) in the xEp, yEp arrays for plotting experimental data</string>
                 </property>
             </widget>
         </widget>
@@ -537,8 +614,24 @@
             <cstring>WizardPage</cstring>
         </property>
         <attribute name="title">
-            <string>Flags</string>
+            <string>Step 3 - Additional settings</string>
         </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>10</y>
+                    <width>570</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>On this page, some modes of operation can be changed (in rare specific cases).</string>
+            </property>
+        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup9</cstring>
@@ -546,28 +639,31 @@
             <property name="geometry">
                 <rect>
                     <x>0</x>
-                    <y>0</y>
+                    <y>50</y>
                     <width>580</width>
-                    <height>320</height>
+                    <height>190</height>
                 </rect>
             </property>
             <property name="title">
-                <string>buttonGroup9</string>
+                <string>Optional modes of operation </string>
             </property>
             <widget class="QCheckBox">
                 <property name="name">
-                    <cstring>c_PvR1</cstring>
+                    <cstring>c_PsEqn</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>10</x>
-                        <y>50</y>
-                        <width>370</width>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>540</width>
                         <height>20</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Use previous EQSTAT result or Simplex inital approximation</string>
+                    <string>Use scripts (P_expr and pgExpr) in defining process simulation and sampling of results</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
                 </property>
             </widget>
             <widget class="QCheckBox">
@@ -576,46 +672,14 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>396</width>
-                        <height>19</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>    Use stepwise mode</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>c_PsRT</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>80</y>
-                        <width>360</width>
+                        <x>20</x>
+                        <y>150</y>
+                        <width>540</width>
                         <height>20</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Are time dependent calculation and plotting mode</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>c_PsEqn</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>140</y>
-                        <width>320</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Will IPN_equations be specified in process definition</string>
+                    <string>Use stepwise mode of process simulation (for debugging purposes)</string>
                 </property>
             </widget>
             <widget class="QCheckBox">
@@ -624,16 +688,69 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>10</x>
-                        <y>110</y>
-                        <width>290</width>
+                        <x>20</x>
+                        <y>60</y>
+                        <width>540</width>
                         <height>20</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Save changed SYSTEM definition record to PDB</string>
+                    <string>Save generated SysEq records to the project data base (direct simulation only)</string>
                 </property>
             </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PvR1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>120</y>
+                        <width>540</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Use previous GEM IPM result instead of the automatic (Simplex) inital approximation</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PsRT</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>90</y>
+                        <width>540</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Use time dependent calculations and plotting mode (for simple mass transport simulations)</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>260</y>
+                    <width>570</width>
+                    <height>140</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Math scripts are used in most cases except a few trivial ones (for instance, if temperature is changed using an iterator, but the bulk composition of the system remains constant). The scripts must be typed in before attempting to run the process simulation.&lt;br&gt;&lt;br&gt;
+Saving process-generated SysEq records will increase size of project database. Use it only if you plan to extract more data from generated systems e.g. using GtDemo samplers. Note that this flag has no effect on reciprocal and inverse titration sequences, where optimal SysEq records will be always saved.&lt;br&gt;&lt;br&gt;
+Other three flags can be changed by advanced users only.</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
         </widget>
     </widget>
     <widget class="QWidget">
@@ -641,100 +758,8 @@
             <cstring>WizardPage2</cstring>
         </property>
         <attribute name="title">
-            <string>Step 2 - Useful hints</string>
+            <string>Step 4 - Useful hints</string>
         </attribute>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup19</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>80</y>
-                    <width>570</width>
-                    <height>320</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>What will happen after you click "Finish"</string>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel13</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>30</y>
-                        <width>560</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(1) If PCO definition via amounts of Independent Components was selected then the program will display a list of available IComp records, asking you to mark necessary ones. Using the left mouse button, mark one or more keys, and click "Ok" to proceed.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel12</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>91</y>
-                        <width>550</width>
-                        <height>80</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(2) If PCO definition via formulae from DComp/ReacDC was selected then the program will display a list of available ReacDC records, asking you to mark those stoichiometries from which you need. Using the left mouse button, mark one or more keys, or click "Clear All" if you are not going to use ReacDC species; click "Ok" to proceed to selection of the DComp species. In total, minimum one species (either DComp or ReacDC) must be marked. Proceed with "Ok".</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel14</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>180</y>
-                        <width>551</width>
-                        <height>60</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(3) When Page 1 of the "Compos" window appears on the desktop, enter the full PCO name into the BCname field and (optionally) a comment into the BCnote line. Depending on the configuration, you may need to enter the UDF formulae in the FormU list, or the long formula text into the Ctext field. Then enter concentration unit codes into CIcl, AUcl, CDcl (what applies) and necessary numbers into CI, CA or CD columns.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel15</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>250</y>
-                        <width>540</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(4) Click on the "Calculate" toolbar button to compute the PCO vector. If necessary, check or enter the normalization values in the MasVol vector and calculate again. Note that setting MasVol[0] and MasVol[6] to zeros disables the normalization of PCO to total mass or amount of moles, respectively. Save the record to database.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup18</cstring>
@@ -744,7 +769,7 @@
                     <x>10</x>
                     <y>0</y>
                     <width>570</width>
-                    <height>80</height>
+                    <height>60</height>
                 </rect>
             </property>
             <property name="title">
@@ -780,6 +805,117 @@
                 </property>
                 <property name="maxValue">
                     <number>4</number>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup19</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>70</y>
+                    <width>570</width>
+                    <height>330</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>What will happen after you click "Finish"</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel14</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>120</y>
+                        <width>551</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(3) Enter the full simulator name into the PEname field and (optionally) a comment into the PEnote line. If process scripts will be used then type the scripts on Pages 1 and 2 (use template scripts accessible through "Help" "Scripts" menu command).</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel13</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>550</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(1) The necessary arrays will be allocated and Page 1 of the Proces module window will appear.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel12</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>50</y>
+                        <width>550</width>
+                        <height>70</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(2) In this window, you will have to set up the necessary iterators - three-cell columns that specify the start value, the end value, and the increment of certain control parameters. From an iterator with zero increment, only the first value will be used. The first 5 iterators are used for generation of new SysEq record keys, thus, at least one of them must have a non-zero increment.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel15</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>190</y>
+                        <width>540</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(4) Click on the "Calculate" toolbar button to start process simulation (in the case of messages about errors in scripts, fix them and try calculation again). During the first calculation, do not use the graphic window. After the simulation has finished, you can see the sampled results on the Graph page. Type in the axis and plot names, and cLick on the "Plot data" button to see customizable graphs.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel13_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>260</y>
+                        <width>550</width>
+                        <height>50</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(1) If you wish to plot some experimental values of one of calculated and sampled data, then close the graph dialog, find on the "Graph" page arrays xEp and yEp, and type the empirical data in there. When ready, open the plot again and customie it.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
         </widget>
