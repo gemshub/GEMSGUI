@@ -1,16 +1,14 @@
 //-------------------------------------------------------------------
-// Id: gems/vizor/kernel/v_module.cpp  version 2.0.0    2001
+// $Id$
 //
 // Implementation of TSubModule, TModule and TModList classes
-//
-// Created : 970207    Modified: 010908
 //
 // Copyright (C) 1996-2001 A.Rysin, S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Vizor library which uses the
 // Qt v.2.x GUI Toolkit (Troll Tech AS, http://www.trolltech.com)
-// according to the Qt Duo Commercial license #1435515
+// according to the Qt Duo Commercial license
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -826,7 +824,7 @@ void TCModule::CmLoadinProfile()
 {
     try
     {
-        if( nRT < RT_SYSEQ  )
+        if( nRT < RT_SYSEQ && nRT != RT_SDATA)
             Error( GetName(),  "Please, do it in Database mode!");
 
         MessageToSave();
@@ -847,7 +845,7 @@ TCModule::CmNewinProfile()
 {
     try
     {
-        if( nRT < RT_SYSEQ  )
+        if( nRT < RT_SYSEQ  && nRT != RT_SDATA )
             Error( GetName(),  "Please, do it in Database mode!");
         MessageToSave();
         // Get record key
@@ -877,7 +875,7 @@ TCModule::CmCreateinProfile()
 {
     try
     {
-        if( nRT < RT_SYSEQ  )
+        if( nRT < RT_SYSEQ && nRT != RT_SDATA )
             Error( GetName(),  "Please, do it in Database mode!");
         MessageToSave();
         // Get record key

@@ -407,6 +407,20 @@ AGAIN:
            "Project configuration aborted by the user!" );
    SetFN();
 
+       if( templ_key == true  )
+       {
+         rt[RT_PARAM].SetKey( key_str.c_str() );
+         SaveOldList();
+
+         // delete default phases if it is
+         int nRec = rt[RT_PHASE].Find( defaultAqKey );
+         if( nRec >= 0 )
+             rt[RT_PHASE].Del(nRec);
+         nRec = rt[RT_PHASE].Find( defaultGasKey );
+         if( nRec >= 0 )
+             rt[RT_PHASE].Del(nRec);
+       }
+
    pVisor->Message( 0, "Loading Modelling Project",
       "Loading lists of IComp, Compos, Phase\n"
                 "  and DComp/ReacDC record keys", 10);
@@ -417,6 +431,12 @@ AGAIN:
 
    pVisor->Message( 0, "Loading Modelling Project",
          "Detecting changes in thermodynamic database", 40 );
+
+   if( templ_key == true )
+   {
+            TestChangeProfile();  // test and insert changes to data base file
+            DeleteOldList();
+   }
 
   // save results   RecSave(str.c_str());
    AddRecord( key_str.c_str() );
@@ -543,7 +563,7 @@ void TProfil::newSystat()
     if( rt[RT_SYSEQ].Find( str.c_str() ) >= 0 )
         Error("SyStat", "This record already exists!");
 
-    int ret = TSysEq::pm->RecBuild( str.c_str() );
+    int ret = TSysEq::pm->RecBuild( str.c_str(), VF_BYPASS );
     //  fEdit = false;
     //  TSysEq::pm->CloseWin();
     //  fEdit = true;
