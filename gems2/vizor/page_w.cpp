@@ -3,7 +3,7 @@
 //
 // Implementation of TCPage, TField, TCell, TCellInput
 //  TCellCheck, TCellText and TQueryWindow classes
-// 
+//
 // Copyright (C) 1996-2001  A.Rysin
 // Uses  gstring class (C) A.Rysin 1999
 //
@@ -25,6 +25,7 @@
 #include <qkeycode.h>
 #include <qaccel.h>
 #include <qvalidator.h>
+#include <qclipboard.h>
 
 #include "units.h"
 #include "page_i.h"
@@ -45,7 +46,18 @@
 
 const char *GEMS_OBJNDX_HTML = "g_objndx.html";
 
+// temporary workaround to make empty value look better
+const gstring emptiness("---");
+const gstring short_emptiness("---");
+
+inline
+gstring visualizeEmpty(const gstring& text)
+{
+    return (text==S_EMPTY) ? emptiness : text;
+}
+
 // for QTextEdit - has no QValidator
+static
 bool IsCharAllowed(TObject& obj, uint ch)
 {
     if( ch == '*' || ch == '`' )
@@ -73,6 +85,7 @@ bool IsCharAllowed(TObject& obj, uint ch)
 }
 
 // for QLineEdit with QValidator
+static
 const char* GetAllowedRegExp(TObject& obj)
 {
     ObjType type = obj.GetType();
@@ -97,6 +110,7 @@ const char* GetAllowedRegExp(TObject& obj)
 }
 
 //inline
+static
 uint AllowedPos(TObject& obj)
 {
     switch ( obj.GetType() )
@@ -127,14 +141,14 @@ uint AllowedPos(TObject& obj)
 }
 
 
-const int wdWIN = 500;
-const int htWIN = 400;
+static const int wdWIN = 500;
+static const int htWIN = 400;
 
-const int wdTab = 200;
-const int szScroll = 15;
+static const int wdTab = 200;
+static const int szScroll = 15;
 
-const int X0 = 10;	// position of the 1st Field
-const int Y0 = 10;	// on the Page
+static const int X0 = 10;	// position of the 1st Field
+static const int Y0 = 10;	// on the Page
 
 
 //----------------------------------------------------------------
@@ -145,13 +159,13 @@ TCPage::TCPage(PageInfo& r):
         QWidget(&r.GetWin()),
         rInfo(r),
         fRedraw(true),
-	firstRedraw(true)
+        firstRedraw(true)
 {
     r.pPage = this;
 
     for( int ii=0; ii<getFieldCnt(); ii++ )
     { // added Sveta 24/08/01
-       rInfo.aFieldInfo[ii].pField = 0;
+        rInfo.aFieldInfo[ii].pField = 0;
     }
     mwidth = x = X0;
     mheight = y = Y0;
@@ -207,15 +221,15 @@ TCPage::RedrawFields()
     fRedraw = false;
 
     if( !firstRedraw ) {
-    for( int ii=0; ii<getFieldCnt(); ii++ )
-        if( getField(ii) )
-        {
-            delete getField(ii);
-            rInfo.aFieldInfo[ii].pField=0;
-        }
+        for( int ii=0; ii<getFieldCnt(); ii++ )
+            if( getField(ii) )
+            {
+                delete getField(ii);
+                rInfo.aFieldInfo[ii].pField=0;
+            }
     }
     else
-	firstRedraw = false;
+        firstRedraw = false;
 
     AddFields();
 }
@@ -250,11 +264,11 @@ TCPage::AddFields()
 
             case FieldInfo::Tied:
                 pTied = prevField;
-    int jj;
-    for( jj = ii+1; jj<getFieldCnt() && rInfo.aFieldInfo[jj].pObj->IsNull(); jj++ );	// searching for next 'not null' field
-    if( jj == getFieldCnt() || rInfo.aFieldInfo[jj].place != FieldInfo::Tied )
-	prevField->indTied = -1;	// this is the last field in the chain
-	
+                int jj;
+                for( jj = ii+1; jj<getFieldCnt() && rInfo.aFieldInfo[jj].pObj->IsNull(); jj++ );	// searching for next 'not null' field
+                if( jj == getFieldCnt() || rInfo.aFieldInfo[jj].place != FieldInfo::Tied )
+                    prevField->indTied = -1;	// this is the last field in the chain
+
             case FieldInfo::Right:
                 x += prevField->GetW();
                 break;
@@ -332,6 +346,14 @@ TCPage::SetFirstCellFocus()
         rInfo.aFieldInfo[0].pField->SetFirstCellFocus();
 }
 
+void
+TCPage::clearSelectedObjects()
+{
+    for( int ii=0; ii<getFieldCnt(); ii++ )
+        if( getField(ii) )
+            getField(ii)->setSelected(false);
+}
+
 //----------------------------------------------------------------
 // TField
 //----------------------------------------------------------------
@@ -345,6 +367,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
         M(rInfo.pObj->GetM()),
         Lab(rInfo.label),
         X(xx0), Y(yy0),
+        selected(false),
         pTied(0),
         pSticked(0)
 {
@@ -359,18 +382,18 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
     {
         TField*& TiedToLast = tied->pTied;
         if( TiedToLast )	// previous field already in the chain
-	{
+        {
             pTied = TiedToLast;
         }
-	else {
+        else {
             pTied = tied;	// second field in new chain
-	    tied->indTied = 0;
-	}
-	indTied = tied->indTied + 1;
-	    
+            tied->indTied = 0;
+        }
+        indTied = tied->indTied + 1;
+
         TiedToLast = this;
     }
-    
+
     //--- Circular list section ---
     if( sticked )
     {
@@ -407,7 +430,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
     {
         QLabel* p = new QLabel(this);
         p->setGeometry(0, 0, pVisorImp->getLabelWidth(), pVisorImp->getCharHeight());
-//        p->setFont( pVisorImp->getCellFont() );
+        //        p->setFont( pVisorImp->getCellFont() );
         p->setText(GetObj().GetKeywd());
         //    p->show();
 
@@ -540,7 +563,7 @@ TField::setYPos(int pos)
     iN = pos;
     Update();
     if( pSV )
-	pSV->setValue(iN);
+        pSV->setValue(iN);
 }
 
 void
@@ -586,10 +609,16 @@ TField::EvHScroll(int m)
 bool
 TField::SizeChanged()
 {
-    if( GetObj().IsDynamic() &&
-            (GetObj().GetN()!=N || GetObj().GetM()!=M) )
-        return true;
-    return false;
+    return GetObj().IsDynamic() &&
+           (GetObj().GetN() != N || GetObj().GetM() != M);
+}
+
+void
+TField::objectChanged()
+{
+    QWidget* topw = topLevelWidget();
+    if( topw->inherits("QWidget") && !topw->inherits("QDialog") )
+        ((TCModuleImp*)(topw))->CellChanged();
 }
 
 void
@@ -606,12 +635,155 @@ TField::SetFirstCellFocus()
 void
 TField::setFocused(TCell* cell)
 {
+// XXX: is called on right click - can not use to clear selection :(
+///    getPage()->clearSelectedObjects();
     focused = cell;
+}
+
+void
+TField::setSelected(bool selected_)
+{
+    if( selected_ != selected ) {
+        if( selected_ )
+            getPage()->clearSelectedObjects();
+
+        selected = selected_;
+        for(uint ii=0; ii<aCtrl.GetCount(); ii++)
+            aCtrl[ii]->setGroupSelected(selected);
+    }
+}
+
+QString
+TField::createString()
+{
+    const TObject& object = GetObj();
+    QString clipText;
+
+    for(int nn=0; nn<object.GetN(); nn++) {
+        for(int mm=0; mm<object.GetM(); mm++) {
+            //        if( aCtrl[ii]->isSelected() )
+            clipText += visualizeEmpty(object.GetString(nn, mm)).c_str();
+            if( mm < object.GetM() - 1 )
+                clipText += "\t";
+        }
+        if( nn < object.GetN() - 1 )
+            clipText += "\n";
+    }
+    
+    return clipText;
+}
+
+void
+TField::CmCopyToClipboard()
+{
+    QApplication::clipboard()->setText(createString(), QClipboard::Clipboard);
+}
+
+void
+TField::setFromString(const QString& str) throw(TError)
+{
+	const QStringList rows = QStringList::split('\n', str, true);
+
+	int rowNum = 0;
+	for(QStringList::const_iterator it = rows.begin(); it != rows.end(); ++it, rowNum++) {
+	    const QStringList cells = QStringList::split('\t', *it, true);
+	    int cellNum = 0;
+
+	    for(QStringList::const_iterator cellIt = cells.begin(); cellIt != cells.end(); ++cellIt, cellNum++) {
+		QString value(*cellIt);
+
+		if( value.isEmpty() )
+		    value = S_EMPTY;
+		cerr << "pasting row " << rowNum << " cell " << cellNum << ": '" << value << "'" << endl;
+
+		if( ! GetObj().SetString( value, rowNum, cellNum ) ) {
+		    vstr err(200);
+		    sprintf(err, "Invalid value for cell [%d, %d]!",
+				rowNum, cellNum);
+		    throw TError("Object paste", err.p);
+		}
+	    }
+	}
+}
+
+void
+TField::CmPasteFromClipboard()
+{
+    const QString clipboard = QApplication::clipboard()->text(QClipboard::Clipboard);
+    const int clipN = clipboard.contains('\n') + 1;
+    QString undoString;
+
+    cerr << clipN << " rows" << endl;
+
+    try {
+	if( clipN > N ) {
+	    vstr err(200);
+	    sprintf(err, "Paste number of rows bigger that object dimension N (%d > %d)!",
+			    clipN, N);
+	    throw TError("Object paste error", err.p);
+	}
+    
+	const QStringList rows = QStringList::split('\n', clipboard, true);
+	int rowNum = 0;
+	
+	for(QStringList::const_iterator it = rows.begin(); it != rows.end(); ++it, rowNum++) {
+	    int clipM = (*it).contains('\t') + 1;
+	    cerr << "row " << rowNum << ": " << clipM << " cells" << endl;
+	    if( clipM > M ) {
+		vstr err(200);
+		sprintf(err, "Paste number of cells bigger that object dimension M (%d > %d) for row %d!",
+			    clipM, M, rowNum);
+		throw TError("Object paste error", err.p);
+	    }
+	    
+	    const QStringList cells = QStringList::split('\t', *it, true);
+	    for(QStringList::const_iterator cellIt = cells.begin(); cellIt != cells.end(); ++cellIt) {
+		///checkCellValue();
+	    }
+	}
+    
+	undoString = createString();
+    
+	setFromString(clipboard);
+	
+	QWidget* topw = topLevelWidget();
+	if( topw->inherits("QWidget") && !topw->inherits("QDialog") )
+    	    ((TCModuleImp*)(topw))->CellChanged();
+	    
+	Update();
+	
+	groupUndoContents = undoString;	// for possible group undo
+    }
+    catch(TError& ex) {
+	vfMessage(topLevelWidget(), "Object paste error", ex.mess , vfErr);
+	if( !undoString.isEmpty() )
+	    try { setFromString(undoString); } catch(...) {}
+	    
+    }
+}
+
+
+void
+TField::selectionChanged()
+{
+    //    setSelected(false);
+    getPage()->clearSelectedObjects();
 }
 
 //------------------------------------------------
 // TCell
 //------------------------------------------------
+
+
+TCell::TCell(TObject& ro, int n, int m, bool edit_, eShowType showType_, QWidget* p):
+    rObj(ro), 
+    N(n), M(m), 
+    edit(edit_), 
+    showType(showType_), 
+    pw(p)
+{
+    backgroundColor = pw->paletteBackgroundColor();
+}
 
 void
 TCell::SetDescription()
@@ -634,103 +806,73 @@ TCell::SetDescription()
 void
 TCell::CmHelp()
 {
-    QWidget* topw = pw->topLevelWidget();
-    gstring item(rObj.GetKeywd());
-    item += "_";
     vstr v(15);
     int Ndx = rObj.ndx( N, M );
+    gstring item = rObj.GetKeywd();
+
+    item += "_";
     sprintf(v, "%u", Ndx );  // N);  fixed 16.01.01
     item += v;  /// # of the cell
-    gstring item1 = item;
     try
     {
+        gstring item1 = item;
         gstring docDir = pVisor->sysGEMDir();
         docDir += "doc/html/";
         Helper hlp(docDir);
-// Get file URL to DOD item description
+        // Get file URL to DOD item description
         hlp.checkForRef( GEMS_OBJNDX_HTML, item );
 
         if( item.empty() )
-            vfMessage(pw, "Help",(item1+=": No such item in HTML files!").c_str(), vfErr);
+            throw TError("Help", item1 + ": No such item in HTML files!");
+
+    	// Changed to return file locator in item   DAK 05.01.01
+        //16/06/04  Sveta          pVisorImp->OpenHelp( item.c_str() );
+        if( pw->topLevelWidget()->inherits("QDialog") )
+            pVisorImp->OpenHelp( item.c_str(), rObj.GetKeywd(), pw->topLevelWidget()/*, true*/ );
         else
-// Changed to return file locator in item   DAK 05.01.01
-//16/06/04  Sveta          pVisorImp->OpenHelp( item.c_str() );
-    if( topw->inherits("QDialog") )
-        pVisorImp->OpenHelp( item.c_str(), rObj.GetKeywd(), topw/*, true*/ );
-    else
-        pVisorImp->OpenHelp( item.c_str() );
-// end changes Sveta
-//          pVisorImp->OpenHelp("objind.html", item.c_str() );
+            pVisorImp->OpenHelp( item.c_str() );
+        // end changes Sveta
+        //          pVisorImp->OpenHelp("objind.html", item.c_str() );
     }
-    catch(...)
-    {
-        vfMessage(pw, "Helper","File browsing error");
+    catch(TError err) {
+        vfMessage(pw->topLevelWidget(), "Help", err.mess, vfErr);
     }
 }
 
-
-void
-TCell::ObjectChanged()
-{
-    QWidget* topw = pw->topLevelWidget();
-    if( topw->inherits("QWidget") &&  !topw->inherits("QDialog") )
-        ((TCModuleImp*)(topw))->CellChanged();
-}
 
 
 void TCell::updateCellBackground()
 {
-    
+
     QColor col;
     switch( showType )
     {
     case stResult:
-	col = QColor(Qt::cyan);
-    break;
+        col = QColor(Qt::cyan);
+        break;
     case stIO:
-	col = QColor(130, 160, 130);
-    break;
+        col = QColor(130, 160, 130);
+        break;
     case stWork:
-	col = QColor(130, 130, 160);
-    break;
+        col = QColor(130, 130, 160);
+        break;
     case stAux:
-	col = QColor(150, 150, 90);
-    break;
+        col = QColor(150, 150, 90);
+        break;
     case stHelp:
-	col = QColor(Qt::gray);
-    break;
+        col = QColor(Qt::gray);
+        break;
     }
 
     pw->setPalette(QPalette(col, pw->backgroundColor()));
 }
 
-
-// Critical function for visual speed
-// gone to page_w.h to be 'inline'
-/*
-void
-TCell::SetNM(int n, int m)
+void TCell::setGroupSelected(bool selected)
 {
-    // Sveta 12/05/99 saveIfChanged();
-    N = n, M = m;
-    Update();
-    if( pw->hasFocus() )
-	SetDescription();
+    ((TCellInput*)pw)->deselect();
+    pw->setPaletteBackgroundColor( selected ? Qt::yellow : backgroundColor );
 }
-*/
 
-
-/*! temporary workaround to make empty value look better
-
-*/
-
-const gstring emptiness("---");
-const gstring short_emptiness("---");
-
-gstring visualizeEmpty(const gstring& text)
-{
-    return (text==S_EMPTY) ? emptiness : text;
-}
 
 
 //------------------------------------------------
@@ -751,10 +893,12 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
         setReadOnly(true);
     else
     {
-	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(EvChange()) );
+        connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(EvChange()) );
         connect(this, SIGNAL(fieldUpdate()), &rfield, SLOT(Update()));
     }
     setMaxLength(AllowedPos(rO)+1);
+
+    connect(this, SIGNAL(selectionChanged()), field(), SLOT(selectionChanged()));
 
     switch( fieldType )
     {
@@ -766,10 +910,10 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
         ;
     }
 
-//    setFont( pVisorImp->getCellFont() );
+    //    setFont( pVisorImp->getCellFont() );
     updateCellBackground();
-    Update();
-    
+    updateDisplay();
+
     setValidator(new QRegExpValidator( QRegExp(GetAllowedRegExp(rO)), this ) );
 }
 
@@ -785,22 +929,18 @@ TCellInput::closeEvent(QCloseEvent* e)
 
 
 void
-TCellInput::Update()
+TCellInput::updateDisplay()
 {
     setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
     setCursorPosition(0);
-
-    /// probably ERROR/leak !!!!!!!!
-    /// Should we call
-    /// QToolTip::remove(this); ??
-    QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
+//    QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
 }
 
 void
 TCellInput::EvChange()
 {
     if( isModified() )	// it reacts now only on keyboard changes
-	changed = true;
+        changed = true;
 }
 
 
@@ -818,22 +958,22 @@ TCellInput::setValue()
     changed = false;
     if( !rObj.SetString(text(), N, M) )
     {
-	if( text() == emptiness || text() == short_emptiness )
-	{
-	    rObj.SetString(S_EMPTY, N, M);
-	    setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
-	}
-	else
-	{
-    	    vfMessage(this, rObj.GetKeywd(), "Sorry! Wrong value typed!" );
-    	    setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
-    	    setCursorPosition(0);
-	}
+        if( text() == emptiness || text() == short_emptiness )
+        {
+            rObj.SetString(S_EMPTY, N, M);
+            setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+        }
+        else
+        {
+            vfMessage(topLevelWidget(), rObj.GetKeywd(), "Sorry! Wrong value typed!" );
+            setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+            setCursorPosition(0);
+        }
     }
     else
     {
-        ObjectChanged();
-	setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
+        field()->objectChanged();
+        setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
     }
 }
 
@@ -842,11 +982,12 @@ void
 TCellInput::focusInEvent(QFocusEvent* e)
 {
     QLineEdit::focusInEvent(e);
+
     field()->setFocused(this);
     SetDescription();
     changed = false;
-//    if( rObj.IsEmpty(N, M) )
-//	selectAll();
+    //    if( rObj.IsEmpty(N, M) )
+    //	selectAll();
 }
 
 
@@ -854,10 +995,10 @@ void
 TCellInput::focusOutEvent(QFocusEvent* e)
 {
     field()->setFocused(0);
-    QLineEdit::focusOutEvent(e);
-
     if( changed )
         setValue();
+
+    QLineEdit::focusOutEvent(e);
 }
 
 void
@@ -868,52 +1009,43 @@ TCellInput::keyPressEvent(QKeyEvent* e)
     case Key_Enter:
     case Key_Return:
         if( changed )
-    	    setValue();
-	return;
+            setValue();
+        return;
     case Key_F1:
         CmHelp();
         return;
     case Key_F2:
         CmSDRef();
         return;
-//    case Key_F3:
-//        CmScript();
-//        return;
+        //    case Key_F3:
+        //        CmScript();
+        //        return;
     case Key_F7:
         CmDComp();
         return;
     case Key_F8:
         CmCalc();
         return;
+    case Key_F12:
+        CmSelectObject();
+        return;
     }
 
-/*    if( !edit )
-        return;
-test Sveta*/
+    // not used any more - AR 2004.07.11
 /*
-    if( e->key()==Key_Delete || e->ascii()=='\0' )
-    {
-        QLineEdit::keyPressEvent(e);
-        return;
-    }
-   if( !edit )
-        return;
-//test Sveta
-
-// not used any more - AR 2004.07.11
-    if( e->ascii()=='<' && !IsCharAllowed(rObj, e->ascii()) )
-    {
-	setText("<empty>");
-	setValue();
-    }
-    else
-        if( e->ascii()==0x08 ||
-            IsCharAllowed(rObj, e->ascii()) )
-	{
-	    if( text() == emptiness )
-		clear();
-            QLineEdit::keyPressEvent(e);
-	}
+        if( e->ascii()=='<' && !IsCharAllowed(rObj, e->ascii()) )
+        {
+    	setText("<empty>");
+    	setValue();
+        }
+        else
+            if( e->ascii()==0x08 ||
+                IsCharAllowed(rObj, e->ascii()) )
+    	{
+    	    if( text() == emptiness )
+    		clear();
+                QLineEdit::keyPressEvent(e);
+    	}
 */
     QLineEdit::keyPressEvent(e);
 }
@@ -921,47 +1053,15 @@ test Sveta*/
 /*! mouse press event
     handles context menu
 */
-/*
-void
-TCellInput::mousePressEvent(QMouseEvent* e)
-{
-    if( e->button() != RightButton )
-    {
-        QLineEdit::mousePressEvent(e);
-        return;
-    }
-    //  if( !edit )
-    //    return;
-
-    QPopupMenu* menu = new QPopupMenu;
-    CHECK_PTR( menu );
-    menu->insertItem( "&Help\tF1", this, SLOT(CmHelp()), Key_F1 );
-    if( fieldType == ftRef )
-        menu->insertItem( "&SDRef-Record\tF2", this, SLOT(CmSDRef()), Key_F2 );
-//    if( fieldType == ftText )
-//        menu->insertItem( "&SDRef-Script\tF3", this, SLOT(CmScript()), Key_F3 );
-    if( fieldType == ftRecord )
-        menu->insertItem( "&Show record\tF7", this, SLOT(CmDComp()), Key_F7 );
-    if( fieldType == ftFloat )
-    {
-        menu->insertSeparator();
-        menu->setItemEnabled(
-            menu->insertItem( "&Calculator\tF8", this,
-                              SLOT(CmCalc()), Key_F8 ), edit );
-    }
-
-    menu->exec(e->globalPos());
-}
-*/
-QPopupMenu* 
+QPopupMenu*
 TCellInput::createPopupMenu()
 {
     QPopupMenu* menu = new QPopupMenu();
     menu->insertItem( "&Help\tF1", this, SLOT(CmHelp()), Key_F1 );
     if( fieldType == ftRef )
         menu->insertItem( "&SDRef-Record\tF2", this, SLOT(CmSDRef()), Key_F2 );
-//    if( fieldType == ftText )
-//        menu->insertItem( "&SDRef-Script\tF3", this, SLOT(CmScript()), Key_F3 );
+    //    if( fieldType == ftText )
+    //        menu->insertItem( "&SDRef-Script\tF3", this, SLOT(CmScript()), Key_F3 );
     if( fieldType == ftRecord )
         menu->insertItem( "&Show record\tF7", this, SLOT(CmDComp()), Key_F7 );
     if( fieldType == ftFloat )
@@ -971,8 +1071,31 @@ TCellInput::createPopupMenu()
             menu->insertItem( "&Calculator\tF8", this,
                               SLOT(CmCalc()), Key_F8 ), edit );
     }
+
     menu->insertSeparator();
-    menu->insertItem( "&Edit", QLineEdit::createPopupMenu() );
+    if( field()->isSelected() )
+        menu->insertItem( "&Unselect object\tF12", this, SLOT(CmSelectObject()), Key_F12 );
+    else
+        menu->insertItem( "&Select object\tF12", this, SLOT(CmSelectObject()), Key_F12 );
+
+    if( field()->isSelected() ) {
+        const bool clipboardEmpty = QApplication::clipboard()->text(QClipboard::Clipboard).isEmpty();
+        QPopupMenu* objectMenu = new QPopupMenu();
+        objectMenu->insertItem( "&Copy", field(), SLOT(CmCopyToClipboard()) );
+        objectMenu->setItemEnabled(
+            objectMenu->insertItem( "&Paste", field(),
+                              SLOT(CmPasteFromClipboard()) ), edit && !clipboardEmpty );
+
+    //    menu->insertSeparator();
+        menu->insertItem( "&Object Edit", objectMenu );
+    }
+    else {
+    //    menu->insertSeparator();
+        menu->insertItem( "&Edit", QLineEdit::createPopupMenu() );
+    }
+
+    setIfChanged();
+
     return menu;
 }
 
@@ -1007,7 +1130,7 @@ TCellInput::CmSDRef()
             //save new SDrefs
             if( !strcmp(rObj.GetKeywd(), "SDrefs") )
             {
-               // setValue();
+                // setValue();
                 if( sd_key.find_first_of("*?") == gstring::npos )  // pattern
                     TSData::pm->RecSave( sd_key.c_str(), FALSE );
             }
@@ -1015,13 +1138,13 @@ TCellInput::CmSDRef()
 
         if( rt[RT_SDATA].Find( str.c_str() )>= 0)
             TSData::pm->RecInput( str.c_str() );
+
         pVisorImp->OpenModule(topLevelWidget(), RT_SDATA);
         TSData::pm->Update();
     }
-    catch( TError& xcpt )
+    catch( TError& err )
     {
-        vfMessage(this, xcpt.title, xcpt.mess );
-        return;
+        vfMessage(topLevelWidget(), err.title, err.mess );
     }
 }
 
@@ -1033,14 +1156,15 @@ TCellInput::CmCalc()
 
     // check selection
     QRect sel(M,N,1,1);
-    CalcDialog calc(pw->topLevelWidget(), rObj, sel);
+    CalcDialog calc(topLevelWidget(), rObj, sel);
 
     if( calc.exec() )
     {
         for(int nn=sel.top(); nn<=sel.bottom(); nn++)
             for(int mm=sel.left(); mm<=sel.right(); mm++ )
                 rObj.Put(calc.fun(rObj.Get(nn, mm)), nn, mm);
-        ObjectChanged();
+
+        field()->objectChanged();
         emit fieldUpdate();
     }
 }
@@ -1049,9 +1173,14 @@ void
 TCellInput::CmDComp()
 {
     if( fieldType == ftRecord )
-	TProfil::pm->ShowDBWindow(rObj.GetKeywd(), N);
+        TProfil::pm->ShowDBWindow(rObj.GetKeywd(), N);
 }
 
+void
+TCellInput::CmSelectObject()
+{
+    field()->setSelected(!field()->isSelected());
+}
 
 //==========================================
 // TCellCheck
@@ -1071,7 +1200,7 @@ TCellCheck::TCellCheck(TField& rfield, int x1, int y1, int npos, eShowType showT
     if( edit )
         connect(this, SIGNAL(fieldUpdate()), &rfield, SLOT(Update()));
 
-//    setFont( pVisorImp->getCellFont() );
+    //    setFont( pVisorImp->getCellFont() );
     updateCellBackground();
 
     SetString( rObj.GetString(N,M) );
@@ -1082,18 +1211,18 @@ TCellCheck::TCellCheck(TField& rfield, int x1, int y1, int npos, eShowType showT
 void
 TCellCheck::SetString(const gstring& s)
 {
-    size_t ind1 = Vals.find(s);
-    if( ind1 == gstring::npos )
+    size_t ind = Vals.find(s);
+    if( ind == gstring::npos )
     {
-//        vstr str(80);
-//        sprintf( str, "%s[%d:%d] ", rObj.GetKeywd(), N, M );
-//        vfMessage(this, str.p, "CellCheck: Bad value, reset to <empty>!" );
-        ind = 4;
+        //        vstr str(80);
+        //        sprintf( str, "%s[%d:%d] ", rObj.GetKeywd(), N, M );
+        //        vfMessage(this, str.p, "CellCheck: Bad value, reset to <empty>!" );
+        currentIndex = 4;
         setText( "`" /*defVALS[4]*/ );
-//     throw TError( "CellCheck validator: Bad value!", str.p );
+        //     throw TError( "CellCheck validator: Bad value!", str.p );
     }
     else {
-        ind = ind1;
+        currentIndex = ind;
         setText( s.c_str() );
     }
 }
@@ -1107,7 +1236,8 @@ TCellCheck::SetIndex(int ii)
     gstring val(Vals, ii, 1);
     rObj.SetString(val.c_str(), N, M);
     setText(val.c_str());
-    ObjectChanged();
+
+    field()->objectChanged();
 }
 
 
@@ -1115,6 +1245,7 @@ void
 TCellCheck::focusInEvent(QFocusEvent* e)
 {
     QLineEdit::focusInEvent(e);
+
     field()->setFocused(this);
     SetDescription();
 }
@@ -1123,13 +1254,14 @@ TCellCheck::focusInEvent(QFocusEvent* e)
 void
 TCellCheck::focusOutEvent(QFocusEvent* e)
 {
-    QLineEdit::focusOutEvent(e);
     field()->setFocused(0);
+
+    QLineEdit::focusOutEvent(e);
 }
 
 
 void
-TCellCheck::Update()
+TCellCheck::updateDisplay()
 {
     SetString(rObj.GetString(N,M));
 }
@@ -1142,7 +1274,7 @@ TCellCheck::CmCalc()
 
     // check selection
     QRect sel(M,N,1,1);
-    CalcCheckDialog calc(pw->topLevelWidget(), rObj, Vals, sel);
+    CalcCheckDialog calc(topLevelWidget(), rObj, Vals, sel);
 
     if( calc.exec() )
     {
@@ -1150,7 +1282,7 @@ TCellCheck::CmCalc()
         for(int nn=sel.top(); nn<=sel.bottom(); nn++)
             rObj.SetString( gstring(Vals, ii, 1).c_str(),
                             nn, M);
-        ObjectChanged();
+        field()->objectChanged();
         emit fieldUpdate();
     }
 }
@@ -1175,66 +1307,25 @@ TCellCheck::keyPressEvent(QKeyEvent* e)
 
     if( key == ' ' )
     {
-        if( ++ind == Vals.length() )
-            ind = 0;
+        uint newIndex = ++currentIndex;
+        if( newIndex == Vals.length() )
+            newIndex = 0;
 
-        gstring val(Vals, ind, 1);
-        rObj.SetString(val.c_str(), N, M);
-        setText(val.c_str());
-        ObjectChanged();
-        return;
+        SetIndex(newIndex);
     }
-
+    else
     if( key >= 0x21 && key < 0xFF )
     {
-        size_t ind1 = Vals.find(char(key));
-        if( ind1 == gstring::npos )
+        size_t newIndex = Vals.find(char(key));
+        if( newIndex == gstring::npos )
             return;
 
-        ind = ind1;
-        gstring val(Vals, ind, 1);
-        rObj.SetString(val.c_str(), N, M);
-        setText(val.c_str());
-        ObjectChanged();
+        SetIndex(newIndex);
     }
 }
 
-/*
-void
-TCellCheck::mousePressEvent(QMouseEvent* e)
-{
-    if( e->button() != RightButton )
-    {
-        QLineEdit::mousePressEvent(e);
-        return;
-    }
-    //  if( !edit )
-    //    return;
 
-    QPopupMenu* menu = new QPopupMenu;
-    CHECK_PTR(menu);
-
-    menu->insertItem("&Help\tF1", this, SLOT(CmHelp()),
-                     Key_F1, Vals.length());
-    menu->insertSeparator();
-    menu->setItemEnabled(
-        menu->insertItem("&Calculator\tF8", this, SLOT(CmCalc()),
-                         Key_F8, Vals.length()+1 ), edit );
-    menu->insertSeparator();
-
-    for(uint ii=0; ii<Vals.length(); ii++)
-    {
-        gstring s(Vals, ii, 1);
-        int id = menu->insertItem(s.c_str(), ii);
-        menu->setItemEnabled(id, edit);
-    }
-    connect(menu, SIGNAL(activated(int)),
-            this, SLOT(SetIndex(int)));
-    menu->exec(e->globalPos());
-}
-*/
-
-QPopupMenu* 
+QPopupMenu*
 TCellCheck::createPopupMenu()
 {
     QPopupMenu* menu = new QPopupMenu();
@@ -1252,11 +1343,8 @@ TCellCheck::createPopupMenu()
         int id = menu->insertItem(s.c_str(), ii);
         menu->setItemEnabled(id, edit);
     }
-    connect(menu, SIGNAL(activated(int)),
-        		    this, SLOT(SetIndex(int)));
+    connect(menu, SIGNAL(activated(int)), this, SLOT(SetIndex(int)));
 
-//    menu->insertSeparator();
-//    menu->insertItem( "&Edit", QLineEdit::createPopupMenu() );
     return menu;
 }
 
@@ -1273,24 +1361,21 @@ TCellText::TCellText(TField& rfield, int xx, int yy,
 {
     move(xx, yy);
     setFixedSize(wdF(ftText, npos), htF(ftText, ht));
-    if( !edit )
-        setReadOnly(true);
-    else
-    {
+
+    if( edit ) {
         connect(this, SIGNAL(textChanged()), this, SLOT(EvChange()) );
         connect(this, SIGNAL(fieldUpdate()), &rfield, SLOT(Update()));
     }
 
-    setTextFormat(QTextEdit::PlainText);
-//    setMaxLength(AllowedPos(rO)+1);
+    //    setMaxLength(AllowedPos(rO)+1);
+    //    setFont( pVisorImp->getCellFont() );
     setReadOnly( !edit );
-//    setFont( pVisorImp->getCellFont() );
-    updateCellBackground();
+    setTextFormat(QTextEdit::PlainText);
 
+    updateCellBackground();
     setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
 
     QToolTip::add(this, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
-
     //setValidator(new QRegExpValidator( QRegExp(GetAllowedRegExp(rO)), this ) );
 }
 
@@ -1306,19 +1391,22 @@ TCellText::closeEvent(QCloseEvent* e)
 
 
 void
-TCellText::Update()
+TCellText::updateDisplay()
 {
     setText(visualizeEmpty(rObj.GetString(N,M)).c_str());
-    //  if( hasFocus() )
-    //      SetDescription();
 }
 
 
 void
 TCellText::EvChange()
 {
-    if( isModified() )	// it reacts now only on keyboard changes
-	changed = true;
+    if( text().length() >= AllowedPos(rObj)+1 ) {
+        vfMessage(topLevelWidget(), "Text object", "String is too long for this object", vfErr);
+	undo();
+    }
+    else {
+	changed = changed || isModified();	// it reacts now only on keyboard changes
+    }
 }
 
 void
@@ -1333,23 +1421,23 @@ TCellText::setIfChanged()
 void
 TCellText::setValue()
 {
-/*
-    gstring s;
-    for(int ii=0; ii<lines()-1; ii++ )
-    {
+    /*
+        gstring s;
+        for(int ii=0; ii<lines()-1; ii++ )
+        {
+            s += textLine(ii);
+            s += '\n';
+        }
         s += textLine(ii);
-        s += '\n';
-    }
-    s += textLine(ii);
-*/
+    */
     changed = false;
     if( !rObj.SetString(text().remove('\r'), N, M) )
     {
-        vfMessage(this, rObj.GetKeywd(), "Sorry! Wrong value typed!" );
+        vfMessage(topLevelWidget(), rObj.GetKeywd(), "Sorry! Wrong value typed!" );
         setText( visualizeEmpty(rObj.GetString(N,M)).c_str() );
     }
     else
-        ObjectChanged();
+        field()->objectChanged();
 }
 
 
@@ -1357,6 +1445,7 @@ void
 TCellText::focusInEvent(QFocusEvent* e)
 {
     QTextEdit::focusInEvent(e);
+
     field()->setFocused(this);
     SetDescription();
     changed = false;
@@ -1365,11 +1454,11 @@ TCellText::focusInEvent(QFocusEvent* e)
 void
 TCellText::focusOutEvent(QFocusEvent* e)
 {
-    QTextEdit::focusOutEvent(e);
     field()->setFocused(0);
-
     if( changed )
         setValue();
+
+    QTextEdit::focusOutEvent(e);
 }
 
 void
@@ -1381,7 +1470,7 @@ TCellText::keyPressEvent(QKeyEvent* e)
         CmHelp();
         return;
     }
-
+/*
     if( !edit || e->key()==Key_Delete || e->ascii()=='\0' )
     {
         QTextEdit::keyPressEvent(e);
@@ -1391,26 +1480,18 @@ TCellText::keyPressEvent(QKeyEvent* e)
     if( e->ascii()==0x08 ||
             ( IsCharAllowed(rObj,e->ascii()) &&
               text().length() < AllowedPos(rObj)+1 )    )
-        QTextEdit::keyPressEvent(e);
+*/
+    QTextEdit::keyPressEvent(e);
+
+//    if( text().length() >= AllowedPos(rObj)+1 
+//	    ||  text().section(QRegExp(GetAllowedRegExp(rObj)), 0) != text() )
+//	undo();
 }
 
 /*! mouse press event
     handles context menu
 */
-/*
-void
-TCellText::contextMenuEvent(QContextMenuEvent* e)
-{
-    //  if( !edit )
-    //    return;
-
-    QPopupMenu* menu = new QPopupMenu;
-    CHECK_PTR( menu );
-    menu->insertItem( "&Help\tF1", this, SLOT(CmHelp()), Key_F1 );
-    menu->exec(e->globalPos());
-}
-*/
-QPopupMenu* 
+QPopupMenu*
 TCellText::createPopupMenu(const QPoint& pos)
 {
     QPopupMenu* menu = new QPopupMenu();
@@ -1461,10 +1542,10 @@ TQueryWindow::AddFields()
 {
     TField* prevField = 0;	// previous cell
     int LineH = pVisorImp->getCharHeight();
-//  PageInfo& pginfo = rInfo.aPageInfo[0];
+    //  PageInfo& pginfo = rInfo.aPageInfo[0];
     int LastPage = rInfo.aPageInfo.GetCount()-1;
     PageInfo& pginfo = rInfo.aPageInfo[LastPage];
-//  Fixed for collecting flags from the last page  DAK
+    //  Fixed for collecting flags from the last page  DAK
 
     int x = X0, y = Y0;
     int mwidth = X0, mheight = Y0;
@@ -1476,7 +1557,7 @@ TQueryWindow::AddFields()
             continue;
         if( fi.pObj->IsNull() )
         {    fi.pField = NULL;    //added Sveta 24/08/01
-             continue; /// may be error?
+            continue; /// may be error?
         }
 
         TField* pSticked = 0;
@@ -1573,6 +1654,7 @@ TQueryWindow::AddFields()
     btn->setText("&Ok");
     btn->setDefault(true);
     btn->show();
+
     connect( btn, SIGNAL(clicked()), this, SLOT(accept()) );
 }
 

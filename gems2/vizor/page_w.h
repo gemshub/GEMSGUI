@@ -26,10 +26,12 @@
 #include <qtextedit.h>
 #include <qscrbar.h>
 #include <qevent.h>
+#include <qcolor.h>
 
 #include "v_object.h"
 #include "module_w.h"
 #include "page_s.h"
+#include "verror.h"
 
 
 //===========================================
@@ -48,43 +50,40 @@ class TCell
 protected:
     TObject& rObj;
     int N, M;
-    bool edit;
+    const bool edit;
     const eShowType showType;
+
+    QColor backgroundColor;
 
     void CmHelp();
 
 public:
     QWidget* pw;
 
-    TCell(TObject& ro, int n, int m, bool edit_, eShowType showType_, QWidget* p):
-            rObj(ro), N(n), M(m), edit(edit_), showType(showType_), pw(p)
-    {}
-
-    virtual ~TCell()
-    {}
+    TCell(TObject& ro, int n, int m, bool edit_, eShowType showType_, QWidget* p);
+    virtual ~TCell() {}
 
     // reread value from Object and display
-    virtual void Update()=0;
+    virtual void updateDisplay() = 0;
     // for scrolling (set Value in Object & set description)
-    virtual void setIfChanged()
-    {}
+    virtual void setIfChanged() {}
 
     void SetDescription();
     void SetNM(int n, int m)
     {
-        N = n, M = m;
-        Update();
+        N = n; M = m;
+        updateDisplay();
         //    if( pw->hasFocus() )  // transfered to TField::Update for speed up
         //	SetDescription();
     }
 
-    void ObjectChanged();
     TField* field() const
     {
         return (TField*)pw->parentWidget();
     }
 
     void updateCellBackground();
+    void setGroupSelected(bool selected);
 };
 
 /*!
@@ -117,14 +116,11 @@ protected:
 
 protected slots:
     void EvChange();
-    void Update();
     void CmSDRef();
     void CmDComp();
     void CmCalc();
-    void CmHelp()
-    {
-        TCell::CmHelp();
-    }
+    void CmSelectObject();
+    void CmHelp() { TCell::CmHelp(); }
 
 public:
     TCellInput(TField&, int x, int y, eFieldType ft, int npos, eShowType,
@@ -132,7 +128,7 @@ public:
     ~TCellInput()
     {}
 
-
+    void updateDisplay();
 };
 
 
@@ -148,7 +144,7 @@ class TCellCheck:
     Q_OBJECT
 
     gstring Vals;
-    uint ind;
+    uint currentIndex;
 
     void SetString(const gstring& s);
 
@@ -165,10 +161,7 @@ protected:
 protected slots:
     void SetIndex(int ii);
     void CmCalc();
-    void CmHelp()
-    {
-        TCell::CmHelp();
-    }
+    void CmHelp() { TCell::CmHelp(); }
 
 public:
     TCellCheck(TField&, int x, int y, int npos, eShowType,
@@ -176,8 +169,7 @@ public:
     ~TCellCheck()
     {}
 
-
-    void Update();
+    void updateDisplay();
 };
 
 
@@ -210,11 +202,7 @@ protected:
 
 protected slots:
     void EvChange();
-    void Update();
-    void CmHelp()
-    {
-        TCell::CmHelp();
-    }
+    void CmHelp() { TCell::CmHelp(); }
 
 public:
     TCellText(TField&, int x, int y, int npos, eShowType,
@@ -222,6 +210,7 @@ public:
     ~TCellText()
     {}
 
+    void updateDisplay();
 };
 
 
@@ -255,6 +244,12 @@ class TField:
 
     TCell* focused;
 
+    bool selected;
+    int selectN1, selectN2;
+    int selectM1, selectM2;
+
+    QString groupUndoContents;
+
     QScrollBar* pSV;
     QScrollBar* pSH;
 
@@ -265,6 +260,9 @@ class TField:
 
     void setYPos(int pos);
     void setXPos(int pos);
+
+    QString createString();
+    void setFromString(const QString& str) throw (TError);
 
 protected slots:
     void EvVScroll(int);
@@ -287,6 +285,8 @@ public:
 //    void AddVScroller(ScrollPlace scrPlace);
 //    void AddHScroller(ScrollPlace scrPlace);
 
+    TCPage* getPage() { return (TCPage*)parentWidget(); }
+
     bool SizeChanged();
     int GetW() const
     {
@@ -299,8 +299,15 @@ public:
     void SetFirstCellFocus();
     void setFocused(TCell* cell);
 
+    void setSelected(bool selected);
+    bool isSelected() const { return selected; }
+    
 public slots:
     void Update();
+    void CmCopyToClipboard();
+    void CmPasteFromClipboard();
+    void selectionChanged();
+    void objectChanged();
 };
 
 
@@ -353,6 +360,7 @@ public:
     void Update();
 
     void SetFirstCellFocus();
+    void clearSelectedObjects();
 
     const char* GetName() const
     {

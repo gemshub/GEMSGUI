@@ -69,17 +69,17 @@ class TObject
     //  TObject();  // for TArray
 
 protected:
-    void check()
+    void check() const
     {
         ErrorIf(IsNull(), GetKeywd(), "Access to null object");
     }
-    void check_dim(int n, int m)
+    void check_dim(int n, int m) const
     {
         check();
         ErrorIf(n >= N
                 || m >= M, GetKeywd(), "Cell index beyond object dimension");
     }
-    void check_type(ObjType typ)
+    void check_type(ObjType typ) const
     {
         ErrorIf(typ > 126 || typ < N_TYPE_, GetKeywd(), "Illegal object type");
     }
@@ -175,12 +175,12 @@ public:
     void Put(double value, int n = 0, int m = 0);
     // Put cell of object to gstring. Return the lengs of gstring.
     // need inline - time critical function
-    gstring GetString(int aN = 0, int aM = 0)
+    gstring GetString(int aN = 0, int aM = 0) const
     {
         check_dim(aN, aM);
         return ((GetPtr())? pV->GetString(ndx(aN, aM)) : gstring (S_EMPTY));
     }
-    gstring GetStringEmpty(int aN = 0, int aM = 0)
+    gstring GetStringEmpty(int aN = 0, int aM = 0) const
     {
         return ((GetPtr())? pV->GetString(ndx(aN, aM)) : gstring (S_EMPTY));
     }
