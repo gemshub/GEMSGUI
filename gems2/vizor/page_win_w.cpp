@@ -111,7 +111,7 @@ TCWindow::TCWindow(TCModuleImp* pImp, CWinInfo& i, int page):
     if( !getCModule().IsSubModule() )
     {
         pFilesBut = new QPushButton(this);//f
-        pFilesBut->setGeometry(pos, 2, szFButton, pTab->find(0)->height());
+        pFilesBut->setGeometry(pos, 2, szFButton, szTab-4);
         pFilesBut->setToggleButton(true);
         QToolTip::add( pFilesBut, "Show open database files" );
         pFilesBut->setText("F");
