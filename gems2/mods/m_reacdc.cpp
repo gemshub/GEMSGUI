@@ -571,6 +571,8 @@ void
 TReacDC::RecCalc( const char* key )
 {
     int i,q;
+//    RecStatus oldStatus;
+
     for( i=0; i<nQ; i++)
         if( rcp == &rc[i])
             break;
@@ -592,6 +594,7 @@ TReacDC::RecCalc( const char* key )
         Error(  key , xcpt.mess.c_str() );
     }
     TCModule::RecCalc(key);
+    db->SetStatus(ONEF_);   //  Experimental - trying to bugfix! 13.01.05 
 }
 
 //Calc thermodynamic values vedushego DC of REACDC for T,P

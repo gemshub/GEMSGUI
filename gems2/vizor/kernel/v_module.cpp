@@ -186,8 +186,8 @@ TCModule::MessageToSave()
     	return true;
 
     gstring key_str = db->PackKey();
-    if( contentsChanged && key_str.find_first_of("*?") == gstring::npos
-        && ( db->GetStatus()!= UNDF_ ) )   // 09/11/2004 Sveta
+    if( contentsChanged && key_str.find_first_of("*?") == gstring::npos )
+//        && ( db->GetStatus()!= UNDF_ ) )   // 09/11/2004 Sveta
     {
         int res = vfQuestion3(window(), key_str.c_str(),
                        "Data record has been changed!",

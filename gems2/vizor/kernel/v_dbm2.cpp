@@ -925,7 +925,7 @@ try{
 int TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& anR)
 {
     int l = ind.xlist( keypat );
-    status = UNDF_;         // 09/11/2004
+//    status = UNDF_;         // 09/11/2004 Sveta    Is it necessary ? KD 13.01.05
     aKey = ind.KeyList();
     anR =ind.RnList();
     return l;
