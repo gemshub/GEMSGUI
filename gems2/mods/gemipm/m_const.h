@@ -1,4 +1,12 @@
+#ifndef _m_const_h
+#define _m_const_h
+
+#include <ctype.h>
+#include <fstream>
+
+using namespace std;
 #include "verror.h"
+#include "v_user.h"
 
 const int MST =  6;
 const unsigned int
@@ -12,40 +20,8 @@ const int
     MAXPHNAME =      16,
     EQ_RKLEN = 58;
 
-#include <ctype.h>
-#include <fstream>
-using namespace std;
 
-// dynamically allocated temporary 'char*'
-// for simple string manipulations
-// (used instead of stack char[] allocation to avoid stack problems)
-struct vstr
-{
-    char* p;
-    vstr(int ln): p(new char[ln+1])
-    { }
-
-    vstr(int ln, const char* s): p(new char[ln+1])    {
-        strncpy(p, s, ln);
-        p[ln]='\0';
-    }
-
-    vstr(const char* s): p(new char[strlen(s)+1])    {
-       strcpy(p, s);
-    }
-
-    ~vstr()    {
-        delete[] p;
-    }
-
-    operator char* ()    {
-        return p;
-    }
-
-private:    vstr (const vstr&);
-    const vstr& operator= (const vstr&);
-
-};enum solmod_switches { /* indexes of keys of model solution*/
+enum solmod_switches { /* indexes of keys of model solution*/
     SPHAS_TYP, DCOMP_DEP, SPHAS_DEP, SGM_MODE, DCE_LINK, SCM_TYPE,
     /* link state */
     LINK_UX_MODE, LINK_TP_MODE, LINK_FIA_MODE,
@@ -246,3 +222,4 @@ const char S_OFF = '-',
                           S_REM = '*',
                                   A_NUL ='?';
 
+#endif

@@ -1,4 +1,3 @@
-
 #ifndef _m_param_h_
 #define _m_param_h_
 
@@ -278,5 +277,3 @@ enum SolDCodes {
 };
 
 #endif  // _m_param_h
-
-
