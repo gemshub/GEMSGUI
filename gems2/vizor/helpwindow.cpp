@@ -33,6 +33,7 @@
 #include <qsimplerichtext.h>
 #include <qpaintdevicemetrics.h>
 #include <qpainter.h>
+#include <qlayout.h>
 
 #include <ctype.h>
 
@@ -40,10 +41,16 @@
 
 
 HelpWindow::HelpWindow( const QString& home_, const QString& _path,
-			QWidget* parent, const char *name )
-    : QMainWindow( parent, name, WDestructiveClose ),
+			QWidget* parent, bool modal )
+    : QDialog( parent, 0, modal, WDestructiveClose ),
       pathCombo( 0 ), selectedURL()
 {
+    QVBoxLayout *vlayout = new QVBoxLayout(this);
+
+    menubar = new QMenuBar(this);
+    toolbar = new QToolBar("Navigation Toolbar", 0, this);
+    statusbar = new QStatusBar(this);
+
     readHistory();
     readBookmarks();
 
@@ -53,7 +60,12 @@ HelpWindow::HelpWindow( const QString& home_, const QString& _path,
     connect( browser, SIGNAL( textChanged() ),
 	     this, SLOT( textChanged() ) );
 
-    setCentralWidget( browser );
+//    setCentralWidget( browser );
+    vlayout->addWidget(menubar);
+    vlayout->addWidget(toolbar);
+    vlayout->addWidget(browser);
+    vlayout->addWidget(statusbar);
+    
 
     loadFile( home_, parent );
 
@@ -80,16 +92,15 @@ HelpWindow::HelpWindow( const QString& home_, const QString& _path,
 
     QPopupMenu* go = new QPopupMenu( this );
     backwardId = go->insertItem( icon_back,
-				 tr("&Backward"), browser, SLOT( backward() ),
+				 "&Backward", browser, SLOT( backward() ),
 				 ALT | Key_Left );
     forwardId = go->insertItem( icon_forward,
-				tr("&Forward"), browser, SLOT( forward() ),
+				"&Forward", browser, SLOT( forward() ),
 				ALT | Key_Right );
-    go->insertItem( icon_home, tr("&Home"), browser, SLOT( home() ) );
+    go->insertItem( icon_home, "&Home", browser, SLOT( home() ) );
 
     QPopupMenu* help = new QPopupMenu( this );
-    help->insertItem( tr("&About ..."), this, SLOT( about() ) );
-//    help->insertItem( tr("About &Qt ..."), this, SLOT( aboutQt() ) );
+    help->insertItem( "&About ...", this, SLOT( about() ) );
 
     hist = new QPopupMenu( this );
     QStringList::Iterator it = history.begin();
@@ -99,7 +110,7 @@ HelpWindow::HelpWindow( const QString& home_, const QString& _path,
 	     this, SLOT( histChosen( int ) ) );
 
     bookm = new QPopupMenu( this );
-    bookm->insertItem( tr( "Add Bookmark" ), this, SLOT( addBookmark() ) );
+    bookm->insertItem( "Add Bookmark", this, SLOT( addBookmark() ) );
     bookm->insertSeparator();
 
     QStringList::Iterator it2 = bookmarks.begin();
@@ -123,8 +134,8 @@ HelpWindow::HelpWindow( const QString& home_, const QString& _path,
 	     this, SLOT( setForwardAvailable( bool ) ) );
 
 
-    QToolBar* toolbar = new QToolBar( this );
-    addToolBar( toolbar, "Toolbar");
+//    QToolBar* toolbar = new QToolBar( this );
+//    addToolBar( toolbar, "Toolbar");
     QToolButton* button;
 
     button = new QToolButton( icon_back, tr("Backward"), "", browser, SLOT(backward()), toolbar );
@@ -141,9 +152,9 @@ HelpWindow::HelpWindow( const QString& home_, const QString& _path,
     connect( pathCombo, SIGNAL( activated( const QString & ) ),
 	     this, SLOT( pathSelected( const QString & ) ) );
     toolbar->setStretchableWidget( pathCombo );
-    setRightJustification( TRUE );
-    setDockEnabled( Left, FALSE );
-    setDockEnabled( Right, FALSE );
+//    setRightJustification( TRUE );
+//    setDockEnabled( Left, FALSE );
+//    setDockEnabled( Right, FALSE );
 
     pathCombo->insertItem( home_ );
 
@@ -226,10 +237,8 @@ HelpWindow::~HelpWindow()
 
 void HelpWindow::about()
 {
-    QMessageBox::about( this, "HelpViewer Example",
-			"<p>This example implements a simple HTML help viewer "
-			"using Qt's rich text capabilities</p>"
-			"<p>It's just about 100 lines of C++ code, so don't expect too much :-)</p>"
+    QMessageBox::about( this, "Help Window",
+			"Allows to browse rich text documentation."
 			);
 }
 

@@ -11,7 +11,7 @@
 #ifndef HELPWINDOW_H
 #define HELPWINDOW_H
 
-#include <qmainwindow.h>
+#include <qdialog.h>
 #include <qtextbrowser.h>
 #include <qstringlist.h>
 #include <qmap.h>
@@ -19,12 +19,15 @@
 
 class QComboBox;
 class QPopupMenu;
+class QMenuBar;
+class QToolBar;
+class QStatusBar;
 
-class HelpWindow : public QMainWindow
+class HelpWindow : public QDialog
 {
     Q_OBJECT
 public:
-    HelpWindow( const QString& home_,  const QString& path, QWidget* parent = 0, const char *name=0 );
+    HelpWindow( const QString& home_,  const QString& path, QWidget* parent = 0, bool modal=false);
     ~HelpWindow();
 
     void loadFile( const QString& path, QWidget* parent = 0 );
@@ -57,6 +60,13 @@ private:
     QMap<int, QString> mHistory, mBookmarks;
     QPopupMenu *hist, *bookm;
     
+    QToolBar* toolbar;
+    QMenuBar* menubar;
+    QStatusBar* statusbar;
+
+    QMenuBar* menuBar() { return menubar; }    
+    QStatusBar* statusBar() { return statusbar; }    
+    QToolBar* toolBar() { return toolbar; }    
 };
 
 

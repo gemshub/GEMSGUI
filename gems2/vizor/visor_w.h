@@ -91,7 +91,7 @@ public:
     void SetDialog(QWidget* centralDialog);
 
     void OpenModule(QWidget* parent, int i, int page=0, bool viewmode=false);
-    void OpenHelp(const char* file, const char* item=0, QWidget* parent=0);
+    void OpenHelp(const char* file, const char* item=0, QWidget* parent=0, bool modal=false);
     void OpenProgress(bool step=false);
     void CloseProgress();
     void Message( QWidget* parent, const char* name,

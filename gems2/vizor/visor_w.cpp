@@ -398,7 +398,7 @@ TVisorImp::MakePlot(TCModule *md, TIArray<TPlot>& plts,
 */
 
 void
-TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent)
+TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent, bool modal)
 {
     gstring path (pVisor->docDir ());
     path += file;
@@ -417,9 +417,10 @@ TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent)
     if( !pHelpWidget )
     {
 //        pHelpWidget = new HelpWin(this, path.c_str());
-	pHelpWidget = new HelpWindow(path.c_str(), ".", parent); //0);
+	pHelpWidget = new HelpWindow(path.c_str(), ".", parent, modal); //0);
 	connect( pHelpWidget, SIGNAL( destroyed() ), SLOT( evHelpClosed() ) );
 	pHelpWidget->show();
+        pHelpWidget->loadFile(path.c_str(), 0);
     }
     else
     {

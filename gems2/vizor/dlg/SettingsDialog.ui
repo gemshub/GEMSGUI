@@ -34,7 +34,7 @@
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout4</cstring>
+                <cstring>Layout5</cstring>
             </property>
             <grid>
                 <property name="name">
@@ -46,25 +46,6 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QCheckBox" row="2" column="0">
-                    <property name="name">
-                        <cstring>pConfigAutosave</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Save configuration at exit</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>TextLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string> Core database directory</string>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="1" column="1">
                     <property name="name">
                         <cstring>pUserDBDir</cstring>
@@ -77,6 +58,17 @@
                     </property>
                     <property name="text">
                         <string>TextLabel1</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>pConfigAutosave</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Save configuration at exit</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="1">
@@ -101,11 +93,19 @@
                         <string> User's project directory</string>
                     </property>
                 </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>TextLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string> Core database directory</string>
+                    </property>
+                </widget>
             </grid>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout4</cstring>
+                <cstring>Layout6</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -124,47 +124,42 @@
                     <property name="title">
                         <string>Creating/Upgrading Modelling Projects</string>
                     </property>
-                    <widget class="QRadioButton">
+                    <vbox>
                         <property name="name">
-                            <cstring>rbOldPrMode</cstring>
+                            <cstring>unnamed</cstring>
                         </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>10</x>
-                                <y>50</y>
-                                <width>290</width>
-                                <height>31</height>
-                            </rect>
+                        <property name="margin">
+                            <number>11</number>
                         </property>
-                        <property name="text">
-                            <string>Link default database files to project</string>
+                        <property name="spacing">
+                            <number>6</number>
                         </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Switch on to select files from default database and link them to form a new project</string>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton">
-                        <property name="name">
-                            <cstring>rbNewPrMode</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>10</x>
-                                <y>20</y>
-                                <width>290</width>
-                                <height>31</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Make an independent project</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Switch on to select elements and copy all related data from default database into new project</string>
-                        </property>
-                    </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>rbNewPrMode</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Make an independent project</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Switch on to select elements and copy all related data from default database into new project</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>rbOldPrMode</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Link default database files to project</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Switch on to select files from default database and link them to form a new project</string>
+                            </property>
+                        </widget>
+                    </vbox>
                 </widget>
                 <widget class="QGroupBox">
                     <property name="name">
@@ -173,126 +168,89 @@
                     <property name="title">
                         <string>Displaying Data</string>
                     </property>
-                    <widget class="QLabel">
+                    <grid>
                         <property name="name">
-                            <cstring>TextLabel1_2_2</cstring>
+                            <cstring>unnamed</cstring>
                         </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>131</x>
-                                <y>50</y>
-                                <width>100</width>
-                                <height>26</height>
-                            </rect>
+                        <property name="margin">
+                            <number>11</number>
                         </property>
-                        <property name="text">
-                            <string>in 1/10 sec</string>
+                        <property name="spacing">
+                            <number>6</number>
                         </property>
-                        <property name="buddy" stdset="0">
-                            <cstring></cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>TextLabel1_2</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>10</x>
-                                <y>50</y>
-                                <width>70</width>
-                                <height>26</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Update</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>TextLabel1</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>11</x>
-                                <y>20</y>
-                                <width>50</width>
-                                <height>26</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Show</string>
-                        </property>
-                    </widget>
-                    <widget class="QSpinBox">
-                        <property name="name">
-                            <cstring>pUpdateInterval</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>71</x>
-                                <y>50</y>
-                                <width>50</width>
-                                <height>26</height>
-                            </rect>
-                        </property>
-                        <property name="maxValue">
-                            <number>100</number>
-                        </property>
-                        <property name="minValue">
-                            <number>0</number>
-                        </property>
-                        <property name="lineStep">
-                            <number>2</number>
-                        </property>
-                        <property name="value">
-                            <number>10</number>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Interval (in centiseconds) for updating the dialogs and screen forms during GEM IPM calculations</string>
-                        </property>
-                    </widget>
-                    <widget class="QSpinBox">
-                        <property name="name">
-                            <cstring>pNumDigits</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>71</x>
-                                <y>20</y>
-                                <width>50</width>
-                                <height>26</height>
-                            </rect>
-                        </property>
-                        <property name="maxValue">
-                            <number>20</number>
-                        </property>
-                        <property name="value">
-                            <number>7</number>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Number of decimal digits shown in screenform cells for the real floating-point numbers</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>TextLabel1_4</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>131</x>
-                                <y>20</y>
-                                <width>100</width>
-                                <height>26</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>digits in 'real'</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring></cstring>
-                        </property>
-                    </widget>
+                        <widget class="QLabel" row="0" column="2">
+                            <property name="name">
+                                <cstring>TextLabel1_4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>digits in 'real'</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring></cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="2">
+                            <property name="name">
+                                <cstring>TextLabel1_2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>in 1/10 sec</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring></cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>TextLabel1_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Update</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>TextLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Show</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="0" column="1">
+                            <property name="name">
+                                <cstring>pNumDigits</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>20</number>
+                            </property>
+                            <property name="value">
+                                <number>7</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Number of decimal digits shown in screenform cells for the real floating-point numbers</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>pUpdateInterval</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>100</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="lineStep">
+                                <number>2</number>
+                            </property>
+                            <property name="value">
+                                <number>10</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Interval (in centiseconds) for updating the dialogs and screen forms during GEM IPM calculations</string>
+                            </property>
+                        </widget>
+                    </grid>
                 </widget>
             </hbox>
         </widget>
@@ -339,9 +297,23 @@
                 </widget>
             </hbox>
         </widget>
+        <widget class="Line">
+            <property name="name">
+                <cstring>Line1</cstring>
+            </property>
+            <property name="frameShape" stdset="0">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>Layout28</cstring>
+                <cstring>Layout8</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -366,18 +338,10 @@
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>pButtonApply</cstring>
+                        <cstring>pButtonCancel</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Apply</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>pButtonHelp</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Help</string>
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
                 <spacer>
@@ -399,10 +363,10 @@
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>pButtonCancel</cstring>
+                        <cstring>pButtonHelp</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Cancel</string>
+                        <string>&amp;Help</string>
                     </property>
                 </widget>
             </hbox>
@@ -423,12 +387,6 @@
         <slot>reject()</slot>
     </connection>
     <connection>
-        <sender>pButtonApply</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialogData</receiver>
-        <slot>CmApply()</slot>
-    </connection>
-    <connection>
         <sender>pButtonHelp</sender>
         <signal>clicked()</signal>
         <receiver>SettingsDialogData</receiver>
@@ -442,7 +400,6 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>pButtonApply</tabstop>
     <tabstop>pButtonOK</tabstop>
     <tabstop>pButtonCancel</tabstop>
     <tabstop>pFontRawName</tabstop>
