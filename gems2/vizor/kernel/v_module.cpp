@@ -812,7 +812,7 @@ void TCModule::RecordLoadinProfile( const char *key )
             str += "*:";
         //      db->MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
         // K_ANY, K_ANY, K_ANY, K_ANY,K_ANY, K_ANY, K_ANY, K_ANY, K_ANY,  K_END);
-        str = GetKeyofRecord( str.c_str(), "Get a record key: ", KEY_OLD );
+        str = GetKeyofRecord( str.c_str(), "Please, select a record key ", KEY_OLD );
         // ErrorIf( str.empty(), GetName(), "Operation cancelled!");
     }
     else str=gstring(key);
