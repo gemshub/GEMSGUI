@@ -30,6 +30,7 @@ const char *GEMS_PCO_HTML = "gm_compos";
 #include "m_sdata.h"
 #include "m_reacdc.h"
 #include "s_formula.h"
+#include "filters_data.h"
 
 TCompos* TCompos::pm;
 
@@ -1015,30 +1016,15 @@ TCompos::RecordPrint( const char *key )
 
 
 void TCompos::CopyRecords( const char * prfName,
-            TCStringArray& aIC, TCStringArray& names,
-            bool /*aAqueous*/, bool /*aGaseous*/)
+            elmWindowData el_data, cmSetupData st_data )
 {
     TCIntArray anR;
     TCStringArray aComp;
 
     // open selected kernel files
-    db->OpenOnlyFromList(names);
-
-    // added to profile file compos.copy.prfname
-    /*gstring Path = pVisor->userProfDir();
-    Path += prfName;
-    Path += "/";
-    Path += db->GetKeywd();
-    Path += ".";
-    Path += "copy";
-    Path += ".";
-    Path += prfName;
-    Path += ".";
-    Path += PDB_EXT;
-    TDBFile *aFl= new TDBFile( Path );
-    int fnum_ = db->AddFileToList( aFl );
-    */
+    // db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
+
     // get list of records
     db->GetKeyList( "*:*:*:", aComp, anR );
 
@@ -1052,8 +1038,8 @@ void TCompos::CopyRecords( const char * prfName,
      ij = 0;
      for( i=0; i< bcp->N; i++ )
      {
-      for(uint jj=0; jj<aIC.GetCount(); jj++ )
-         if( !memcmp( aIC[jj].c_str(), bcp->SB[i], MAXICNAME+MAXSYMB ))
+      for(uint jj=0; jj<el_data.ICrds.GetCount(); jj++ )
+         if( !memcmp( el_data.ICrds[jj].c_str(), bcp->SB[i], MAXICNAME+MAXSYMB))
             {  ij++;
                break;
             }
@@ -1063,17 +1049,8 @@ void TCompos::CopyRecords( const char * prfName,
 
      // !!! changing record key
      gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
-    ChangeforTempl( str, "*??", "*invcase", db->FldLen( 2 ));
-/*     for( i=0; i<db->FldLen( 2 ); i++ )
-         if( str[i] == ' ' )
-          break;
-     if( i == db->FldLen( 2 ) )
-          i--;
-     if( str[i] == *prfName )
-            str[i] = ' ';
-      else
-            str[i] = *prfName;
-*/
+     ChangeforTempl( str, st_data.from_templ,
+                    st_data.to_templ, db->FldLen( 2 ));
         str += ":";
         gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
         str1.strip();
@@ -1083,6 +1060,7 @@ void TCompos::CopyRecords( const char * prfName,
         str = str1 + ":" + str;
         AddRecord( str.c_str(), fnum_ );
     }
+
     // close all no profile files
     TCStringArray names1;
     names1.Add(prfName);

@@ -48,7 +48,7 @@ const double R_CONSTANT = 8.31451,
                             ln_to_lg = 0.434294481;
 
 SPP_SETTING pa_ = {
-    "GEM-Selektor v1.93b-PSI: Controls&defaults for numeric modules",
+    "GEM-Selektor v2.0.x-PSI: Controls&defaults for numeric modules",
     {
         1,  /* PC */  3,     /* PD */   3,   /* PRD */
         1,  /* PSM  */ 144,  /* DP */   15,   /* DW */
@@ -438,21 +438,25 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
     }
 }
 
-
+#include "filters_data.h"
 // Save file configuration to Profil structure
 bool TProfil::rCopyFilterProfile( const char * prfName )
 {
 
     uint ii;
-    TCStringArray ICkeys;
+    setFiltersData sf_data;
+    elmWindowData  elm_data;
+
+//    TCStringArray ICkeys;
     TCIntArray    ICcnt;
-    TCStringArray dbNames;
-    bool aAqueous, aGaseous, aSorption;
-    if( !vfElements(window(), prfName, ICkeys,
-            dbNames, aAqueous, aGaseous, aSorption ))
+//    TCStringArray dbNames;
+//    bool aAqueous, aGaseous, aSorption;
+//    if( !vfElements(window(), prfName, ICkeys,
+//            dbNames, aAqueous, aGaseous, aSorption ))
+    if( !vfElements(window(), prfName, elm_data, sf_data ))
       return false;
 
-    dbNames.Add(prfName);
+//    elm_data.flNames.Add(prfName);
     pVisor->Message( 0, "Loading Profile",
       "Copying Kernel database records to Profile; Please, wait...", 10  );
 
@@ -461,55 +465,62 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     // add to last key field first symbol from prfname
     // close all kernel files
     TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
-    aICdata->CopyElements( prfName, ICkeys, dbNames );
+    aICdata->CopyElements( prfName, elm_data, sf_data.ic_d );
     ICcnt.Clear();
-    for( ii=0; ii<ICkeys.GetCount(); ii++ )
+    for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
        ICcnt.Add(0);
 
     //compos
     TCompos* aCOdata=(TCompos *)(&aMod[RT_COMPOS]);
-    aCOdata->CopyRecords( prfName, ICkeys, dbNames, aAqueous, aGaseous );
+    aCOdata->CopyRecords( prfName, elm_data, sf_data.cm_d );
 
     //dcomp
     TDComp* aDCdata=(TDComp *)(&aMod[RT_DCOMP]);
-    aDCdata->CopyRecords( prfName, ICkeys, ICcnt, dbNames,
-                          aAqueous, aGaseous, aSorption );
+    aDCdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.dc_d );
+
     //reacds
     TReacDC* aRDdata=(TReacDC *)(&aMod[RT_REACDC]);
-    aRDdata->CopyRecords( prfName, ICkeys, ICcnt, dbNames,
-                          aAqueous, aGaseous, aSorption );
+    aRDdata->CopyRecords( prfName, ICcnt, elm_data, sf_data.rd_d );
+
     //phase
     TPhase* aPHdata=(TPhase *)(&aMod[RT_PHASE]);
     TCStringArray aPHnoused;
-    aPHdata->CopyRecords( prfName, ICkeys, dbNames, aPHnoused,
-                          aAqueous, aGaseous, aSorption );
+    aPHdata->CopyRecords( prfName, aPHnoused, elm_data, sf_data.ph_d );
 
     //show errors
     TCStringArray aICnoused;
-    for( ii=0; ii<ICkeys.GetCount(); ii++ )
+    for( ii=0; ii<elm_data.ICrds.GetCount(); ii++ )
        if( ICcnt[ii] == 0 )
-         aICnoused.Add(ICkeys[ii]);
+         aICnoused.Add(elm_data.ICrds[ii]);
 
     if( aICnoused.GetCount() > 0 )
       vfChoice(  window(), aICnoused, "List of IComp no used" );
 
     if( aPHnoused.GetCount() > 0 )
-    {  vfChoice(  window(), aPHnoused,
-          "List of Phases with some species discarded" );
-       if ( vfQuestion( window(),
-         "List of Phases with some species discarded", "Printing?"))
-       {
-        gstring filename;
-        if( vfChooseFileSave(window(), filename,
-           "Please, select file to write Phases record keys") )
-        {
-          fstream f(filename.c_str(), ios::out);
-          ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
-          for( ii=0; ii<aPHnoused.GetCount(); ii++ )
+    {  // List of Phases with some species discarded
+        int mod = ios::out;
+        const char *filename = "DiscardedPhases.txt";
+
+        if( !(::access( filename, 0 )) ) //file exists
+            switch( vfQuestion3( window(), filename,
+                                 "This file exists! What to do?",
+                                 "&Append", "&Overwrite", "&Cancel") )
+            {
+            case VF3_2:
+                mod = ios::out;
+                break;
+            case VF3_1:
+                mod = ios::app;
+                break;
+            case VF3_3:
+                return true;
+            }
+        fstream f( filename, mod );
+        ErrorIf( !f.good() , filename, "Fileopen error");
+        for( ii=0; ii<aPHnoused.GetCount(); ii++ )
              f << aPHnoused[ii].c_str() <<  "\n";
-          ErrorIf( !f.good() , filename.c_str(), "Writefile error");
-        }
-     }
+       f <<   "\n\n";
+        ErrorIf( !f.good() , filename, "Writefile error");
     }
     return true;
 }

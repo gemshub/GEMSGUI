@@ -36,16 +36,16 @@
 
 struct PFormat
 {
-  char long_;
   char type;
+  char long_;
   gstring fmt;
 
   PFormat( const char aType, gstring aFmt ):
-    type( aType), fmt(aFmt), long_(' ')
+    type( aType), long_(' '), fmt(aFmt)
   {}
 
   PFormat( PFormat& d ):
-    type( d.type), fmt( d.fmt), long_(d.long_)
+    type( d.type), long_(d.long_), fmt( d.fmt)
   {}
 
   gstring FmtOut()

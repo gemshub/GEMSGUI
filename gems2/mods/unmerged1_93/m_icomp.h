@@ -47,6 +47,9 @@ typedef struct
 
 ICOMP;
 
+struct elmWindowData;
+struct icSetupData;
+
 
 // Current IComp
 class TIComp : public TCModule
@@ -77,14 +80,14 @@ public:
 
     void RecInput( const char *key );
     void RecordPrint( const char *key=0 );
-    void CmHelp();                        
+    void CmHelp();
     //void RecBild( const char *key );
     //void RecCalc( const char *key );
 
-    void GetElements( bool isotopes, TCStringArray& names,
-                      TCStringArray& aIC, TCIntArray& aIndMT );
+    void GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT );
     void CopyElements( const char * prfName,
-                       TCStringArray& aKeys, TCStringArray& names);
+                       elmWindowData el_data, icSetupData st_data );
+
 };
 
 #endif  // _m_icomp_h

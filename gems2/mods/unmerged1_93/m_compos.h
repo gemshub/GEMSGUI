@@ -82,6 +82,10 @@ typedef struct
 
 COMPOS;
 
+struct elmWindowData;
+struct cmSetupData;
+
+
 // Current Compos
 class TCompos : public TCModule
 {
@@ -127,8 +131,7 @@ public:
     void CmHelp();
 
     void CopyRecords( const char * prfName,
-            TCStringArray& aIC, TCStringArray& names,
-            bool aAqueous, bool aGaseous );
+                     elmWindowData el_data, cmSetupData st_data );
 }
 ;
 

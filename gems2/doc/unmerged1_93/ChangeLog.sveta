@@ -1,3 +1,11 @@
+25/01/2002
+  Finalised ElementsDialog, SetFiltersDialog, implementation
+  of two alternative modes of assembling system profiles.
+
+25/01/2002
+  Fixed pop-up of the EqDemo List View after calculation of
+  a single equilibrium state.  
+
 24/12/2001
   Added functions for changed key by templates
 

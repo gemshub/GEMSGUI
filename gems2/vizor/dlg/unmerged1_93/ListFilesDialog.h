@@ -44,8 +44,6 @@ public:
     virtual ~ListFilesDialog();
 
     void allSelected( TCStringArray& aFls, TCIntArray& aCnt);
-    bool isElementsDialog() const
-    {  return RadioButton1->isChecked(); }
 
 };
 

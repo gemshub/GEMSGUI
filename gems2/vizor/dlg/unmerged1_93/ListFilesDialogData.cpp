@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'ListFilesDialog.ui'
 **
-** Created: Mon Nov 19 22:07:49 2001
+** Created: Thu Jan 17 13:31:00 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -12,7 +12,6 @@
 #include <qlabel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
-#include <qradiobutton.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qtooltip.h>
@@ -30,7 +29,7 @@ ListFilesDialogData::ListFilesDialogData( QWidget* parent,  const char* name, bo
 {
     if ( !name )
 	setName( "ListFilesDialogData" );
-    resize( 574, 454 ); 
+    resize( 570, 454 ); 
     setMinimumSize( QSize( 450, 400 ) );
     QFont f( font() );
     f.setFamily( "Lucida Sans Unicode" );
@@ -51,15 +50,6 @@ ListFilesDialogData::ListFilesDialogData( QWidget* parent,  const char* name, bo
     pHelpButton->setText( tr( "&Help" ) );
     QToolTip::add(  pHelpButton, tr( "Learn about System Profile concept and profile configuration" ) );
     Layout3->addWidget( pHelpButton );
-
-    RadioButton1 = new QRadioButton( privateLayoutWidget, "RadioButton1" );
-    QFont RadioButton1_font(  RadioButton1->font() );
-    RadioButton1_font.setPointSize( 9 );
-    RadioButton1->setFont( RadioButton1_font ); 
-    RadioButton1->setText( tr( "To Elements Selection Dialog    " ) );
-    RadioButton1->setChecked( FALSE );
-    QToolTip::add(  RadioButton1, tr( "Activate to copy selected records of IC/elements, their species and phases to profile files" ) );
-    Layout3->addWidget( RadioButton1 );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout3->addItem( spacer );
 
@@ -126,9 +116,6 @@ bool ListFilesDialogData::event( QEvent* ev )
 	QFont pHelpButton_font(  pHelpButton->font() );
 	pHelpButton_font.setPointSize( 10 );
 	pHelpButton->setFont( pHelpButton_font ); 
-	QFont RadioButton1_font(  RadioButton1->font() );
-	RadioButton1_font.setPointSize( 9 );
-	RadioButton1->setFont( RadioButton1_font ); 
 	QFont pGO_OKButton_font(  pGO_OKButton->font() );
 	pGO_OKButton_font.setPointSize( 10 );
 	pGO_OKButton->setFont( pGO_OKButton_font ); 

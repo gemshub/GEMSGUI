@@ -1,0 +1,34 @@
+Subject:
+Date: Fri, 09 Nov 2001 11:44:14 +0200
+From: Bondar Alex <Alexb@ukrpost.net>
+To: Kulik Dima <dia.kulik@bluewin.ch>
+
+Zdravstvuyte Dima, Ira i Anton!
+
+U nas vse normal`no. Masha rastet ponemnogu.
+
+Ya sdelala:
+
+-- ustanovku default znacheniy v strukturu Profile v
+   sluchae novyy profil` bez template; prover`
+
+-- redaktirovanie spisochnoy structury Listview:
+   iniciiruem nazhatiem  pravoy knopki myshi, pri vyhode iz
+   polay redaktirovaniya zanosyatsya dannye v Listview, ya
+   sdelala proverku na chislo i sootvetstvuyushie znacheniya
+   dlya flagov (kak v pole vvoda nashih dialogov), esli ne dopustimyy
+   to poyavlyaetsya soobshenie.
+
+Scol`ko smogla proverila, no prover` sam kak pol`zovatel`.
+
+Rtparm posmotryu.
+
+Dima, eshe nuzhno opisat` mne usloviya vybora :Dcomp,
+React, Compos, Phase po tablice Mendeleeva, esli ty eshe hochesh
+eto sdelat`.
+
+Privet vsem! Udachi Sveta, Sasha i Masha.
+
+                   Name: 08112001.zip
+   08112001.zip    Type: Zip Compressed Data (application/x-zip-compressed)
+               Encoding: base64

@@ -803,44 +803,53 @@ vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArra
 #endif // Use_mt_mode
 
 bool
-vfListFiles(QWidget* par, const char * prfName,
+vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
                 TCStringArray& fls, TCIntArray& cnt )
 {
     ListFilesDialog cw( par, prfName );
+    if( show_dlg )
+    {
 BACK:
-    if( !cw.exec() )
-      return false;
+       if( !cw.exec() )
+         return false;
 
-    switch( vfQuestion3(par, prfName,
+        switch( vfQuestion3(par, prfName,
        "Did you really completed  selection of \n"
        " database files to be linked to the profile?",
        "&Yes/Proceed", "&No/Go back", "&Help" ))
-    {
-    case VF3_1:
-        break;
-    case VF3_3:
-    case VF3_2:
-        goto BACK;
+       {
+        case VF3_1:
+           break;
+        case VF3_3:
+        case VF3_2:
+           goto BACK;
+       }
     }
     cw.allSelected( fls, cnt );
     return true;
 }
 
+//bool
+//vfElements(QWidget* par, const char * prfName,
+//            TCStringArray& rds, TCStringArray& names,
+//            bool& aAqueous, bool& aGaseous, bool& aSorption)
 bool
 vfElements(QWidget* par, const char * prfName,
-            TCStringArray& rds, TCStringArray& names,
-            bool& aAqueous, bool& aGaseous, bool& aSorption)
+            elmWindowData& elm_data, setFiltersData& sf_data )
 {
      ElementsDialog eldlg( par, prfName );
      if( !eldlg.exec() )
       return false;
 
-    eldlg.allSelected( rds );
-    eldlg.openFiles( names );
-    aAqueous =   eldlg.isAqueous();
-    aGaseous =   eldlg.isGaseous();
-    aSorption =  eldlg.isSorption();
-   // vfChoice(  par, rds, "Test selected elements" );
+//    eldlg.allSelected( rds );
+//    eldlg.openFiles( names );
+//    aAqueous =   eldlg.isAqueous();
+//    aGaseous =   eldlg.isGaseous();
+//    aSorption =  eldlg.isSorption();
+
+    sf_data =  eldlg.getFilters();
+    elm_data = eldlg.getData();
+
     return true;
 }
 

@@ -1,0 +1,78 @@
+Here is a sequence of dialogs that appear 
+in the "ElementsDialog" mode.
+
+Dialog name		User action
+
+1. MainDialog             Press "Calculation of Equilibria"
+
+2. SystemProfilesDialog   Press "New profile"
+
+3. Profile:EnterNewKey    type in new Profile key (comment A)
+
+4. Test SelektElements   Press Yes (comment B)
+
+5. Reallocation of...    Press "Clear All" (comment C)
+
+6. Profile Configuration Type MSname, MSnote (comment D)
+
+7. ElementsDialog        Select elements (by pressing 
+                         buttons), evtl. "SetFilters"
+                         (comment E)
+
+8. List of phases...     Press Ok (comment F) 
+
+9. YNonly: "printing"    (comment G) Press No
+
+10. Database file conf.  "Ok" (comment H)
+
+11. Profile window       Close (comment I)
+
+12. Computation of...    Select "Single-System Equilibria"
+
+13. SystemDialog         Click "Create"
+
+14. SysEq: enter new key Type new key (comment J)
+ 
+15. Compos:System page   Enter composition, press BCC
+
+16. SystemDialog         Press IPM (comment K)
+
+17. ProgressDialog       Press Accept
+
+18. SystemDialog         explore results (comment L)
+
+
+Comments to this sequence:
+
+A. Suggest "MyWork:MyData" instead of "*:*:".
+
+B. This has to be removed when the checkbox will be added to 
+   SettingsDialog.
+
+C. This question is not necessary if a new profile is
+   created. 
+
+D. Automatically copy 1st and 2nd fields of Profile 
+   record key into MSname and MSnote, resp. - 
+   the user will just press "Ok" in most cases. 
+
+E. From SetFilters dialog, come back to ElementsDialog.
+
+F,G. List of rejected phases must be either printed to 
+   file (then it makes no sense to show it), or make
+   it possible to select and copy some phases. 
+
+H. As FileConfig dialog will be implemented in a 
+   SetFiltersDialog card, here it is not necessary 
+   and can be removed.
+
+I. Is this necessary? I think, showing the profile 
+   record here can be skipped.    
+
+K. Here, instead of showing "<Profile>:*:*:*:*:*:*:*:", 
+   show "<Profile>:G:MySystem:0:0:1:25:0:". The user
+   will then maybe correct the system name or can 
+   immediately press "Ok".   
+
+L. After calculation of equilibria, it's better to 
+   open at once ListView with calculation results. 

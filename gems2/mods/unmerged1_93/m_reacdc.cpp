@@ -1,4 +1,4 @@
-//-------------------------------------------------------------------
+//------------------------------------------------------------------
 // Id: gems/mods/m_reacdc.cpp  version 2.0.0   2001
 //
 // Implementation of TReacDC class, config and calculation functions
@@ -29,6 +29,7 @@ const char *GEMS_RE_HTML = "gm_reacdc";
 #include "s_formula.h"
 #include "service.h"
 #include "visor.h"
+#include "filters_data.h"
 
 TReacDC* TReacDC::pm;
 
@@ -1402,30 +1403,14 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     }
 }
 
-void TReacDC::CopyRecords( const char * prfName,
-            TCStringArray& rds, TCIntArray& cnt, TCStringArray& names,
-            bool aAqueous, bool aGaseous, bool aSorption)
+void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
+                      elmWindowData el_data, rdSetupData st_data)
 {
     TCIntArray anR;
     TCStringArray aDCkey;
 
     // open selected kernel files
-    db->OpenOnlyFromList(names);
-
-    // added to profile file reacdc.copy.prfname
-    /*gstring Path = pVisor->userProfDir();
-    Path += prfName;
-    Path += "/";
-    Path += db->GetKeywd();
-    Path += ".";
-    Path += "copy";
-    Path += ".";
-    Path += prfName;
-    Path += ".";
-    Path += PDB_EXT;
-    TDBFile *aFl= new TDBFile( Path );
-    int fnum_ = db->AddFileToList( aFl );
-    */
+    // db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
 
     // get list of records
@@ -1439,11 +1424,12 @@ void TReacDC::CopyRecords( const char * prfName,
 
     for(uint ii=0; ii<aDCkey.GetCount(); ii++ )
     {
-     if( !aAqueous && ( *db->FldKey( 0 )== 'a' || *db->FldKey( 0 )== 'x' ))
+     if( !el_data.flags[cbAqueous_] &&
+         ( *db->FldKey( 0 )== 'a' || *db->FldKey( 0 )== 'x' ))
        continue;
-     if( !aGaseous && *db->FldKey( 0 )== 'g' )
+     if( !el_data.flags[cbGaseous_] && *db->FldKey( 0 )== 'g' )
        continue;
-     if( !aSorption && *db->FldKey( 0 )== 'c' )
+     if( !el_data.flags[cbSorption_] && *db->FldKey( 0 )== 'c' )
        continue;
 
      RecInput( aDCkey[ii].c_str() );
@@ -1451,10 +1437,10 @@ void TReacDC::CopyRecords( const char * prfName,
        aFo.SetFormula( rcp->form ); // and ce_fscan
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<rds.GetCount(); j++ )
-        if( !memcmp( rds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
+       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+        if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           break;
-       if( j == rds.GetCount() )
+       if( j == el_data.ICrds.GetCount() )
         break;
       }
       if( i < aFo.GetIn() )
@@ -1462,24 +1448,18 @@ void TReacDC::CopyRecords( const char * prfName,
      // add cnt
      for( i=0; i<aFo.GetIn(); i++ )
      {
-       for( j=0; j<rds.GetCount(); j++ )
-        if( !memcmp( rds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
+       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+        if( !memcmp( el_data.ICrds[j].c_str(), aFo.GetCn(i), MAXICNAME ) )
           cnt[j]++;
      }
-     // !!! changing record key
+    // test Vol
+       for( j=0; j<el_data.ICrds.GetCount(); j++ )
+        if( !memcmp( el_data.ICrds[j].c_str(), "Vol", 3 ) )
+          cnt[j]++;
+    // !!! changing record key
      gstring str= gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
-    ChangeforTempl( str, "??*", "rdc*", db->FldLen( 3 ));
-
-/*     for( i=0; i<db->FldLen( 3 ); i++ )
-         if( str[i] == ' ' )
-          break;
-     if( i == db->FldLen( 3 ) )
-          i--;
-     if( str[i] == *prfName )
-            str[i] = ' ';
-      else
-            str[i] = *prfName;
-*/            
+    ChangeforTempl( str, st_data.from_templ,
+                    st_data.to_templ, db->FldLen( 3 ));
         str += ":";
         gstring str1 = gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
         str1.strip();
@@ -1492,6 +1472,7 @@ void TReacDC::CopyRecords( const char * prfName,
         str = str1 + ":" + str;
      AddRecord( str.c_str(), fnum_ );
     }
+
     // close all no profile files
     TCStringArray names1;
     names1.Add(prfName);

@@ -24,8 +24,8 @@
 #include "v_module.h"
 
 const int MAXPHSYMB =      8,
-                           MAXPHGROUP =     16,
-                                            MAXPNCOEF =      10;
+          MAXPHGROUP =     16,
+          MAXPNCOEF =      10;
 
 typedef struct
 {// Description  PHASE
@@ -90,6 +90,9 @@ typedef struct
 
 PHASE;
 
+struct elmWindowData;
+struct phSetupData;
+
 // Current Phase
 class TPhase : public TCModule
 {
@@ -126,13 +129,12 @@ public:
     void RecordPrint( const char *key=0 );
     void CmHelp();
 
-    // make new phases
-    void newAqGasPhase( const char *key, int file,
+    // make new phases (emod added KD 25.01.02)
+    void newAqGasPhase( const char *key, int file, const char emod = '3',
                         bool useLst = false, TCStringArray lst = 0 );
 
-    void CopyRecords( const char * prfName, TCStringArray& rds,
-            TCStringArray& names, TCStringArray& aPHnoused,
-            bool aAqueous, bool aGaseous, bool aSorption);
+    void CopyRecords( const char * prfName, TCStringArray& aPHnoused,
+            elmWindowData el_data, phSetupData st_data);
 
 }
 ;
@@ -152,10 +154,11 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_IDEAL = 'I',  // ideal solution or single-component phase;
     SM_REGULAR = 'R',// regular solution, also with limited miscibility
     SM_RECIP = 'V',  // reciprocal solution (reserved)
+    SM_AQDAV = 'D',  // built-in Davies equation (with 0.3) added KD 25.01.02
     SM_AQDH1 = '1',  // limiting Debye-Hueckel law for aqueous species (reserved)
     SM_AQDH2 = '2',  // 2-d approximation of Debye-Hueckel (reserved)
     SM_AQDH3 = '3',  // built-in 3-d approximation of Debye-Hueckel
-    SM_AQDHH = 'H',  // built-in 3-d approximation of Debye-Hueckel
+    SM_AQDHH = 'H',  // built-in 3-d approximation of Debye-Hueckel (Helgeson, reserved)
     SM_AQPITZ = 'P', // Pitzer's model for aqueous brines (reserved)
     SM_IONEX = 'E',  // ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A', // models of surface complexation at solid-aqueous interface

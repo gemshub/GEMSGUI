@@ -778,7 +778,7 @@ TCStringArray readDirs(const char *dir)
     {
 #ifdef __unix
         cout << "Error :" << dir << endl;
-#endif        
+#endif
         throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");
     }
 
@@ -895,8 +895,17 @@ TVisor::makeDBDir(const char *dir)
 {
   // make directory dir (find system function)
     QDir d(dir);
-    if ( d.exists() && d.count()<= 2 )
+    if ( d.exists() )
+    { if( d.count()>2)
+      {
+         QStringList lst = d.entryList( "*.ndx;*.pdb" );
+         if (lst.count()<=0)
+           vfMessage(0, dir, "This directory is not empty.");
+         else
+          Error( dir, "Error creating System Profile directory!");
+      }
       return;
+    }
     if( !d.mkdir( dir ))
         Error( dir, "Error creating System Profile directory!");
 }

@@ -1,0 +1,224 @@
+Zdravstvuyte Dima, Ira i Anton!
+
+Pozdravlyayu vas s dnem svyatogo Nikolaya!
+
+Dima, sprosi pozhaluysta u Tani Peretyazhko, chyo delat` s
+ee den`gami v METE. Oni u Tani Borisovoy.
+
+U menya tozhe prednovogodnyaya zaparka. Sasha rabotaet po subbotam,
+poetomu sovsem net vremeni porabitat`.
+
+Ya vysylayu chast` ispravleniy, luchshe perekompiliruy vse, a
+to mogut byt` oshibki pri rabote dialogov.
+
+
+>Prover', ne zacepleno li chego v
+>interpretatore - u menja perestal rabotat' script v vodnoj
+>phase po uravneniju Davies (profil Test1 s etim primerom 
+>prilagaetsja, etot profil sdelan cherez ElementsDialog). 
+>Pri popytke poschitat' ravnovesije (tam ih dva, poprobuj 
+>kazhdoe) poluchajem oshibku "Unexpected end of math script text"
+>i tekst vsego scripta dlja rasscheta Davies equation. Prichem
+>ranshe ono prekrasno schitalos'.   
+
+Seychas ya interpritator ne trogala, eto ispravleniey ot 09/99.
+Odno ispravlyaem, drugoe letit. Poetomu ya tak nelyublyu uluchsheniya.
+Ya vrode etot sluchay ispravila, no ... 
+
+
+>>-- Statistika ne ispol`zuemyh IComp v DComp/ReactDC vyvodim v spisok.
+>Eto poka chto ne sluchalos', mozhet, nado sovsem isportit' bazu...
+
+Poprobuy vklyuchit` "Vol". U menya eta zapis` vydavalas` v etot spisok. 
+
+>>-- Statistika mnogokomponentnyh Phases s odnim i bolee nezabrakovanyh
+>>    DComp/ReactDC v spisok i file.
+
+>Eto rabotaet. Ja dumaju, esli uzh pokazyvat' takoj spisok, to 
+>nado dat' useru otmetit' te phasy, kotorye on vse-taki hochet 
+>skopirovat', i zatem ih skopirovat'. Esli eto trudno realizovat', 
+>togda ne nado pokazyvat' spisok v dialoge, a srazu predlagat' 
+>ego napechatat' v file (user potom posmotrit), hotja eto i huzhe. 
+
+
+Kopirovanie sdelat` ne trudno, no sborka profile proishodit, naskol`ko
+ya pomnyu, po vsem komponentam phase. I chto budet, esli ih ne okazhetsya? 
+Esli srazu peredavat` spisok v file, to ya dumayu ne stoit sprashivat` i imya file,
+kuda pisat` etot spisok. Kuda ty predlagaesh pomestit` etot file i kak ego
+obozvat`?
+
+
+>Vprochem, esli ostaesja tolko pustaja dir, 
+>mozhno ee srazu ispolzovat' dlja sozdanija novogo profilja s 
+>takim zhe imenem (pri proverke, nado esche proverjat' skolko
+>failov imeetsja v direktorii). 
+
+Ya pishu dannye v pustoy direktoriy.
+Ostaetsya problema, esli direktoriy ne pust, no profilya takogo net.
+Naprimer kakie-to testy. V etom sluchae files v etom direktorii
+udalyatsya kak v lyubom sluchae oshibki sozdaniya Profile.
+No vseh situaziy ne predusmotrish. 
+
+>SettingsDialog ... Sejchas 
+>nado dobavit' vybor rezhima sozdanija novogo profilja. 
+>Staryj rezhim nado polnostju sohranit' - on tozhe imeet pravo
+>na zhizn'.   
+
+
+Sdelala, prover`.
+
+
+>Da, ja nashel, pochemu u menja ne sozdavalis' sledujuschie 
+>profili. Ja nazhimal "Bypass" vmesto "Clear all" pri sozdanii 
+>pervogo profilja. esli ego sozdat' cherez "Clear all", vse 
+>rabotaet. A nuzhen li voobsche etot vopros pri sozdanii novogo
+>profilja? Mozhet, srazu delat' "Clear All" i tak uprostit' 
+>process? 
+
+
+U menya srabotalo i "Bypass" vmesto "Clear all". Ya sozdala
+Test11, Test12, Test13. A dannye v Profile ya zanulyayu kak
+i v sluchae bez template. Vo vsyakom sluchae seychas. 
+Ubrat` vopros trudno, tak
+kak ispol`zuem standartnuyu funkciyu iz Modules. 
+I nado li, esli my budem dobavlyat` template mode.
+
+>>Mne legche ispol`zovat` po dva file v novom profil`, 
+>>mozhno poka tak ostavit`?
+
+
+Ispravila, vse pishem v odin standartnyy file.
+ 
+Nu vot vrode vse po oshibkam i zamechaniyam ,
+ teper` poppytayus` dvigat`sya dal`she.
+
+
+//----------------------------------------------------------------------
+
+Sdelala:
+
+>> Ya predlagayu ogranichetsya nebol`shim naborom (vo vsyakom 
+>> sluchae legko opisat` i men`she oshibok) NAPRIMER:
+
+//      *    *<characters> - dobavit` simvoly v konec
+//
+//      *    <characters> - zamenit` vse simvoly na posledomatel`nost`
+//
+//      *    invcase      - perevesti vse simvoly v drugoj registr
+//
+//      ?...?*    <characters>* - zamenit` pervye n simvolov na posledomatel`nost`
+//        n          m           iz m simvolov
+//
+//      *?...?    *<characters> - zamenit` poslednie n simvolov na posledomatel`nost`
+//        n          m           iz m simvolov
+//
+//      ?...?*  invcase* - perevesti pervye n simvolov v drugoj registr
+//        n
+//
+//      *?...?  *invcase - perevesti poslednie n simvolov v drugoj registr
+//        n
+
+Ya dumayu etogo budet dostatochno. Bolee shirokiy nabor (ispol`zovanie
+simvolov vnutri shablona na zamenu) mozhet vyzvat` mnogo oshibok u pol`zovateley.
+Tak kak on ne ohvatyvaet vse klyuchi, i chasto mozhet byt` oshibki na razbore shablona:
+
+      <characters1>*    <characters2>* - zamenit` pervye n simvolov na posledomatel`nost` 
+        n               m           iz m simvolov  (simbols1 moget soderzhat` '?')
+
+      *<characters1>    *<characters2> - zamenit` poslednie n simvolov na posledomatel`nost` 
+        n               m           iz m simvolov  (simbols1 moget soderzhat` '?')
+
+> My ne mozhem predusmotret' vseh glupostej, kotorye mozhet uporot' 
+> opytnyj user... A neopytnyj sjuda ne zalezet.
+
+Vo vsyakom sluchae ogranichev nabor, ogranichim chislo oshibok. Inache priydetsya vydavat` 
+soobshenie na nesovpadenie shablona.
+Ya ne proveryayu na glupost` v shablonah.
+
+Ya sdelala test (poka tol`ko kak konstanty pri vyzove):
+
+  IComp:     "*" "invcase"
+  DComp:     "*" "*d"
+  ReacDc:     "??*" "rdc*"
+  Compos:     "*??" "*invcase"
+  Phase:     "?*" "invcase*d" : v principe mozhno menyat` klyuch odnovremenno
+                                v nachale i konce.
+
+
+Nekotorye zamechaniya po NewProfile.txt
+
+
+C. This question is not necessary if a new profile is
+   created. 
+I. Is this necessary? I think, showing the profile 
+   record here can be skipped.    
+
+Eto standartnaya funkziya dlya vseh moduley i ya ne hochu ee menyat`. Po
+idei my dolzhny vvesti flagi i ustanovki tochnosti.
+Vo vsyakom sluchae napomnit` ob etom pol`zovatelyam ne povredit.
+Esli ty ne hochesh I. to vyberi "Bypass", vse ravno vse dannye pered
+voprosom stavim na default= "Clear All".
+Smotri eshe vyshe.
+
+H. As FileConfig dialog will be implemented in a 
+   SetFiltersDialog card, here it is not necessary 
+   and can be removed.
+
+Ya predlagayu ego ostavit`, na etom etape my podkluchim Sdref, Constant,
+i vozmozhno drugie nekopiruemye dannye k Profile. 
+
+
+E. From SetFilters dialog, come back to ElementsDialog.
+
+Eto budu delat` pozzhe, koe-kakie protivorechiya obsudim pri
+vstreche. Napishi orientirovachno kogda, tak kak mne nado splanirovat`
+lechenie i vozmozhno Mashu v sadik.
+
+F,G. List of rejected phases must be either printed to 
+   file (then it makes no sense to show it), or make
+   it possible to select and copy some phases. 
+
+Smotri voprosy vyshe.
+
+L. After calculation of equilibria, it's better to 
+   open at once ListView with calculation results. 
+
+Mne eto ne nravitsya. Luchshe tut dat` pol`zovatelyu svobodu vybora,
+chem kazhdyy raz zakryvat` nenuzhnoe okno, expertu inogda luchshe
+ispol`zovat` starye okna.
+Mozhet emu dostatochno Ph. Krome togo mogut vozniknut` problemy v
+Process i Gtdemo.
+
+
+Ya sdelala:
+
+A. Suggest "MyWork:MyData" instead of "*:*:".
+
+B. This has to be removed when the checkbox will be added to 
+   SettingsDialog.
+
+D. Automatically copy 1st and 2nd fields of Profile 
+   record key into MSname and MSnote, resp. - 
+   the user will just press "Ok" in most cases. 
+
+K. Here, instead of showing "<Profile>:*:*:*:*:*:*:*:", 
+   show "<Profile>:G:MySystem:0:0:1:25:0:". The user
+   will then maybe correct the system name or can 
+   immediately press "Ok".   
+
+(Kak ya ponyala K.=J.) , no gde K.
+Dima, esli my sozdaem novuyu zapis`, to ispol`zuem klyuch staroy.
+Ya eto delala ran`she. Poetomu ya ostavila eto svoystvo i podstavlyayu
+zadannyy klyuch tol`ko pri shablone (skoree vsego tol`ko dlya pervoy zapisi).
+
+Nu vot poka i vse, ostal`noe v sleduyushem godu.....
+
+//-----------------------------------------------------------------
+Dorogie Dima, Ira i Anton!
+
+Pozdravlyaem vas s Nastupayushim Novym Godom, Rozhdestvom.
+Zelaem schast`ya, krepkogo zdorov`ya i udachi vo vseh delah i nachinaniyah.
+Pust` sleduyushiy god priniset vam tol`ko schast`e i radost`. 
+
+                               Udachi, i eshe raz udaci 
+                               Sveta, Sasha i Masha.  

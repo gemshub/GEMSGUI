@@ -23,10 +23,16 @@
 #define ElementsDialog_included
 
 #include "ElementsDialogData.h"
-#include "gstring.h"
+#include "filters_data.h"
+
 
 class ElementsDialog : public ElementsDialogData
 {
+    gstring prf_name;
+    setFiltersData sf_data;
+    elmWindowData  el_data;
+    elmFilesConfData files_data;
+
     Q_OBJECT
 
     TCIntArray aBtmId1;     // lists correspondanse betvin bgElem
@@ -37,6 +43,21 @@ class ElementsDialog : public ElementsDialogData
     void EmptyData();
     void ResetData();
     void SetICompList();
+
+    // 0 no changed (no kernel, specifik or uncertain)
+    // 1 to open, 2 to close
+    int  isOpenFile( gstring& name );
+    void setFilesList();
+    void resetFilesSelection();
+    void openFilesSelection();
+    void openFilesICOMP();
+
+    void SetData();
+    void allSelected( TCStringArray& aICkeys );
+    void openFiles( TCStringArray& names );
+    bool isAqueous() const ;
+    bool isGaseous() const ;
+    bool isSorption() const ;
 
 
 protected slots:
@@ -57,11 +78,9 @@ public:
          const char* caption = 0 );
     virtual ~ElementsDialog();
 
-    void allSelected( TCStringArray& aICkeys );
-    void openFiles( TCStringArray& names );
-    bool isAqueous() const ;
-    bool isGaseous() const ;
-    bool isSorption() const ;
+    const setFiltersData&  getFilters();
+    const elmWindowData&   getData();
+
 };
 
 #endif // ElementsDialog_included

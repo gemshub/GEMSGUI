@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'SetFiltersDialog.ui'
 **
-** Created: Sun Dec 9 17:42:23 2001
+** Created: Wed Jan 23 15:04:25 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
-#ifndef SETFILTERSDIALOG_H
-#define SETFILTERSDIALOG_H
+#ifndef SETFILTERSDIALOGDATA_H
+#define SETFILTERSDIALOGDATA_H
 
 #include <qvariant.h>
 #include <qdialog.h>
@@ -26,19 +26,24 @@ class QTabWidget;
 class QTextView;
 class QWidget;
 
-class SetFiltersDialog : public QDialog
+class SetFiltersDialogData : public QDialog
 { 
     Q_OBJECT
 
 public:
-    SetFiltersDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-    ~SetFiltersDialog();
+    SetFiltersDialogData( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    ~SetFiltersDialogData();
 
+    QPushButton* pbHelp;
+    QPushButton* pbCancel;
+    QPushButton* pbReset;
+    QPushButton* pbApply;
+    QPushButton* pbOk;
     QTabWidget* twSetFilters;
     QWidget* tpFiles;
-    QListView* lvDefDBfiles;
     QCheckBox* cbCopyDef;
     QCheckBox* cbCopyPar;
+    QListView* lvDefDBfiles;
     QWidget* tpIComp;
     QFrame* Line1;
     QFrame* Line1_2;
@@ -96,15 +101,10 @@ public:
     QCheckBox* chbPHcopyY;
     QCheckBox* chbPHcopyA;
     QCheckBox* chbPHcopyN;
-    QPushButton* pbHelp;
-    QPushButton* pbCancel;
-    QPushButton* pbReset;
-    QPushButton* pbApply;
-    QPushButton* pbClose;
 
 protected:
     QHBoxLayout* Layout7;
     bool event( QEvent* );
 };
 
-#endif // SETFILTERSDIALOG_H
+#endif // SETFILTERSDIALOGDATA_H

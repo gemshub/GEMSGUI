@@ -130,7 +130,7 @@ StripLine(gstring& line)
     //    line.erase(0,ii);
         if( ii>=line.length() )//line.empty() )
           return;
-        int jj = line.length()-1;  
+        int jj = line.length()-1;
         for( ; jj>=0 && IsSpace(line[jj]); jj--);
         line = line.substr(ii, jj-ii+1);
     */

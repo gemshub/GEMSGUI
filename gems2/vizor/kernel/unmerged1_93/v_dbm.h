@@ -444,13 +444,14 @@ public:
 
     //--- Information about of open file list
     int GetOpenFileNum( const char *secondName  );
-    void SetNewOpenFileList( TCStringArray aFlNames);
+    void SetNewOpenFileList( TCStringArray& aFlNames);
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
     //  int GetNumFiles() { return aFile.GetCount(); }
     void  MakeInNewProfile( const gstring& dir,
       const char *prfName, const char * f_name=0 );
     void OpenOnlyFromList( TCStringArray& names );
+    void GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey );
 
 
     //--- Manipulation Data Base

@@ -23,6 +23,7 @@ const char *GEMS_IC_HTML = "gm_icomp";
 #include "v_object.h"
 #include "visor.h"
 #include "service.h"
+#include "filters_data.h"
 
 TIComp* TIComp::pm;
 
@@ -126,15 +127,14 @@ TIComp::CmHelp()
 }
 
 void
-TIComp::GetElements( bool isotopes, TCStringArray& names,
-                      TCStringArray& aIC, TCIntArray& aIndMT )
+TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
 {
 
  TCIntArray anR;
  TCStringArray aIC1;
 
  //open selected files in kernel database
- db->OpenOnlyFromList(names);
+ //db->OpenOnlyFromList(names);
  //db->OpenAllFiles(true);
  db->GetKeyList( "*:*:*:", aIC1, anR );
 
@@ -174,48 +174,24 @@ TIComp::RecordPrint( const char *key )
 }
 
 void
-TIComp::CopyElements( const char * prfName, TCStringArray& aKeys,
-                      TCStringArray& names )
+TIComp::CopyElements( const char * prfName,
+         elmWindowData el_data, icSetupData st_data )
 {
     // open selected kernel files
-    db->OpenOnlyFromList(names);
-
-
-    // added to profile file icomp.copy.prfname
-    /*gstring Path = pVisor->userProfDir();
-    Path += prfName;
-    Path += "/";
-    Path += db->GetKeywd();
-    Path += ".";
-    Path += "copy";
-    Path += ".";
-    Path += prfName;
-    Path += ".";
-    Path += PDB_EXT;
-    TDBFile *aFl= new TDBFile( Path );
-    int fnum_ = db->AddFileToList( aFl );*/
+   //db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
+
     //  copy to it selected records
     // ( add to last key field first symbol from prfname )
-    int nrec, j;
-    for(uint i=0; i<aKeys.GetCount(); i++ )
+    int nrec;
+    for(uint i=0; i<el_data.ICrds.GetCount(); i++ )
     {
-        nrec = db->Find( aKeys[i].c_str() );
+        nrec = db->Find( el_data.ICrds[i].c_str() );
         db->Get( nrec );
         /// !!! changing record key
        gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
-       ChangeforTempl( str, "*", "invcase", db->FldLen( 2 ));
-/*
-        for( j=0; j<db->FldLen( 2 ); j++ )
-         if( str[j] == ' ' )
-          break;
-        if( j == db->FldLen( 2 ) )
-          j--;
-        if( str[j] == *prfName )
-            str[j] = ' ';
-        else
-            str[j] = *prfName;
-*/
+       ChangeforTempl( str, st_data.from_templ,
+                       st_data.to_templ, db->FldLen( 2 ));
         str += ":";
         gstring str1 = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 ));
         str1.strip();
@@ -225,10 +201,12 @@ TIComp::CopyElements( const char * prfName, TCStringArray& aKeys,
         str = str1 + ":" + str;
         AddRecord( str.c_str(), fnum_ );
     }
+
     // close all no profile files
     TCStringArray names1;
     names1.Add(prfName);
     db->OpenOnlyFromList(names1);
+
 }
 
 

@@ -138,6 +138,8 @@ $(TARGET):   $(OBJECTS) $(METAOBJ)
 +dlg\ListFilesDialogData.obj \
 +dlg\ElementsDialog.obj \
 +dlg\ElementsDialogData.obj \
++dlg\SetFiltersDialog.obj \
++dlg\SetFiltersDialogData.obj \
 +dlg\HLresDialog.obj \
 +dlg\HLresDialogData.obj \
 +dlg\HLinpDialog.obj \
@@ -178,6 +180,8 @@ $(TARGET):   $(OBJECTS) $(METAOBJ)
 +tmp\moc_ListFilesDialogData.obj \
 +tmp\moc_ElementsDialog.obj \
 +tmp\moc_ElementsDialogData.obj \
++tmp\moc_SetFiltersDialog.obj \
++tmp\moc_SetFiltersDialogData.obj \
 +tmp\moc_HLresDialog.obj \
 +tmp\moc_HLresDialogData.obj \
 +tmp\moc_HLinpDialog.obj \
@@ -252,6 +256,8 @@ clean:
      -del  dlg\ListFilesDialogData.obj
      -del  dlg\ElementsDialog.obj
      -del  dlg\ElementsDialogData.obj
+     -del  dlg\SetFiltersDialog.obj
+     -del  dlg\SetFiltersDialogData.obj
      -del  dlg\HLresDialog.obj
      -del  dlg\HLresDialogData.obj
      -del  dlg\HLinpDialog.obj
@@ -292,6 +298,8 @@ clean:
      -del  tmp\moc_ListFilesDialogData.obj
      -del  tmp\moc_ElementsDialog.obj
      -del  tmp\moc_ElementsDialogData.obj
+     -del  tmp\moc_SetFiltersDialog.obj
+     -del  tmp\moc_SetFiltersDialogData.obj
      -del  tmp\moc_HLresDialog.obj
      -del  tmp\moc_HLresDialogData.obj
      -del  tmp\moc_HLinpDialog.obj

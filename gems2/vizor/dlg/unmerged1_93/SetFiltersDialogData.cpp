@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'SetFiltersDialog.ui'
 **
-** Created: Sun Dec 9 17:42:47 2001
+** Created: Wed Jan 23 15:04:32 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,28 +23,54 @@
 #include <qvariant.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include <qimage.h>
-#include <qpixmap.h>
-
 
 /* 
- *  Constructs a SetFiltersDialog which is a child of 'parent', with the 
+ *  Constructs a SetFiltersDialogData which is a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f' 
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-SetFiltersDialog::SetFiltersDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
+SetFiltersDialogData::SetFiltersDialogData( QWidget* parent,  const char* name, bool modal, WFlags fl )
     : QDialog( parent, name, modal, fl )
 {
     if ( !name )
-	setName( "SetFiltersDialog" );
-    resize( 601, 472 ); 
+	setName( "SetFiltersDialogData" );
+    resize( 589, 472 ); 
     QFont f( font() );
     f.setFamily( "Lucida Sans Unicode" );
     f.setPointSize( 9 );
     setFont( f ); 
     setCaption( tr( "Set filters to create an independent system profile" ) );
+
+    QWidget* privateLayoutWidget = new QWidget( this, "Layout7" );
+    privateLayoutWidget->setGeometry( QRect( 10, 420, 570, 40 ) ); 
+    Layout7 = new QHBoxLayout( privateLayoutWidget ); 
+    Layout7->setSpacing( 6 );
+    Layout7->setMargin( 0 );
+
+    pbHelp = new QPushButton( privateLayoutWidget, "pbHelp" );
+    pbHelp->setText( tr( "&Help" ) );
+    Layout7->addWidget( pbHelp );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    Layout7->addItem( spacer );
+
+    pbCancel = new QPushButton( privateLayoutWidget, "pbCancel" );
+    pbCancel->setText( tr( "&Cancel" ) );
+    Layout7->addWidget( pbCancel );
+
+    pbReset = new QPushButton( privateLayoutWidget, "pbReset" );
+    pbReset->setText( tr( "&Reset" ) );
+    Layout7->addWidget( pbReset );
+
+    pbApply = new QPushButton( privateLayoutWidget, "pbApply" );
+    pbApply->setText( tr( "&Apply" ) );
+    pbApply->setDefault( TRUE );
+    Layout7->addWidget( pbApply );
+
+    pbOk = new QPushButton( privateLayoutWidget, "pbOk" );
+    pbOk->setText( tr( "&Ok" ) );
+    Layout7->addWidget( pbOk );
 
     twSetFilters = new QTabWidget( this, "twSetFilters" );
     twSetFilters->setGeometry( QRect( 10, 10, 580, 401 ) ); 
@@ -54,60 +80,6 @@ SetFiltersDialog::SetFiltersDialog( QWidget* parent,  const char* name, bool mod
 
     tpFiles = new QWidget( twSetFilters, "tpFiles" );
 
-    lvDefDBfiles = new QListView( tpFiles, "lvDefDBfiles" );
-    lvDefDBfiles->addColumn( tr( "Record Type / File Name (click toggles selection)" ) );
-    QListViewItem * item_2 = new QListViewItem( lvDefDBfiles, 0 );
-    item_2->setOpen( TRUE );
-    QListViewItem * item_3 = new QListViewItem( item_2, 0 );
-    item_3->setOpen( TRUE );
-    QListViewItem * item = new QListViewItem( item_3, 0 );
-    item->setText( 0, tr( "SDref" ) );
-    item_3->setOpen( TRUE );
-    QListViewItem * item_4 = new QListViewItem( item_3, item );
-    item_4->setOpen( TRUE );
-    item = new QListViewItem( item_4, item );
-    item->setText( 0, tr( "icomp.nagra.uncertain.pdb" ) );
-    item_4->setOpen( TRUE );
-    item = new QListViewItem( item_4, item );
-    item->setText( 0, tr( "icomp.nagra.kernel.pdb" ) );
-    item_4->setText( 0, tr( "IComp" ) );
-    item_3->setOpen( TRUE );
-    item = new QListViewItem( item_3, item_4 );
-    item->setText( 0, tr( "Compos" ) );
-    item_3->setOpen( TRUE );
-    item = new QListViewItem( item_3, item );
-    item->setText( 0, tr( "DComp" ) );
-    item_3->setOpen( TRUE );
-    item = new QListViewItem( item_3, item );
-    item->setText( 0, tr( "ReacDC" ) );
-    item_3->setOpen( TRUE );
-    item = new QListViewItem( item_3, item );
-    item->setText( 0, tr( "Phase" ) );
-    item_3->setText( 0, tr( "Default" ) );
-    item_2->setOpen( TRUE );
-    QListViewItem * item_5 = new QListViewItem( item_2, item_3 );
-    item_5->setOpen( TRUE );
-    item = new QListViewItem( item_5, item_3 );
-    item->setText( 0, tr( "IComp" ) );
-    item_5->setOpen( TRUE );
-    item = new QListViewItem( item_5, item );
-    item->setText( 0, tr( "Compos" ) );
-    item_5->setOpen( TRUE );
-    item = new QListViewItem( item_5, item );
-    item->setText( 0, tr( "DComp" ) );
-    item_5->setOpen( TRUE );
-    item = new QListViewItem( item_5, item );
-    item->setText( 0, tr( "ReacDC" ) );
-    item_5->setOpen( TRUE );
-    item = new QListViewItem( item_5, item );
-    item->setText( 0, tr( "Phase" ) );
-    item_5->setText( 0, tr( "OldProfile" ) );
-    item_2->setText( 0, tr( "Database" ) );
-
-    lvDefDBfiles->setGeometry( QRect( 10, 10, 560, 320 ) ); 
-    lvDefDBfiles->setSelectionMode( QListView::Extended );
-    lvDefDBfiles->setRootIsDecorated( TRUE );
-
     cbCopyDef = new QCheckBox( tpFiles, "cbCopyDef" );
     cbCopyDef->setGeometry( QRect( 30, 330, 240, 30 ) ); 
     cbCopyDef->setText( tr( "Copy from default database" ) );
@@ -116,6 +88,13 @@ SetFiltersDialog::SetFiltersDialog( QWidget* parent,  const char* name, bool mod
     cbCopyPar = new QCheckBox( tpFiles, "cbCopyPar" );
     cbCopyPar->setGeometry( QRect( 290, 330, 250, 30 ) ); 
     cbCopyPar->setText( tr( "Copy from the parent profile" ) );
+
+    lvDefDBfiles = new QListView( tpFiles, "lvDefDBfiles" );
+    lvDefDBfiles->addColumn( tr( "Record Type / File Keywd" ) );
+    lvDefDBfiles->addColumn( tr( " File Name (click toggles selection) " ) );
+    lvDefDBfiles->setGeometry( QRect( 10, 10, 560, 320 ) ); 
+    lvDefDBfiles->setSelectionMode( QListView::Single );
+    lvDefDBfiles->setRootIsDecorated( TRUE );
     twSetFilters->insertTab( tpFiles, tr( "Database Files" ) );
 
     tpIComp = new QWidget( twSetFilters, "tpIComp" );
@@ -442,41 +421,12 @@ SetFiltersDialog::SetFiltersDialog( QWidget* parent,  const char* name, bool mod
     chbPHcopyN->setText( tr( "Copy definitions of non-ideal solid-solution phases" ) );
     chbPHcopyN->setChecked( TRUE );
     twSetFilters->insertTab( tpPhase, tr( "Phases" ) );
-
-    QWidget* privateLayoutWidget = new QWidget( this, "Layout7" );
-    privateLayoutWidget->setGeometry( QRect( 10, 420, 570, 40 ) ); 
-    Layout7 = new QHBoxLayout( privateLayoutWidget ); 
-    Layout7->setSpacing( 6 );
-    Layout7->setMargin( 0 );
-
-    pbHelp = new QPushButton( privateLayoutWidget, "pbHelp" );
-    pbHelp->setText( tr( "&Help" ) );
-    Layout7->addWidget( pbHelp );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Layout7->addItem( spacer );
-
-    pbCancel = new QPushButton( privateLayoutWidget, "pbCancel" );
-    pbCancel->setText( tr( "&Cancel" ) );
-    Layout7->addWidget( pbCancel );
-
-    pbReset = new QPushButton( privateLayoutWidget, "pbReset" );
-    pbReset->setText( tr( "&Reset" ) );
-    Layout7->addWidget( pbReset );
-
-    pbApply = new QPushButton( privateLayoutWidget, "pbApply" );
-    pbApply->setText( tr( "&Apply" ) );
-    pbApply->setDefault( TRUE );
-    Layout7->addWidget( pbApply );
-
-    pbClose = new QPushButton( privateLayoutWidget, "pbClose" );
-    pbClose->setText( tr( "C&lose" ) );
-    Layout7->addWidget( pbClose );
 }
 
 /*  
  *  Destroys the object and frees any allocated resources
  */
-SetFiltersDialog::~SetFiltersDialog()
+SetFiltersDialogData::~SetFiltersDialogData()
 {
     // no need to delete child widgets, Qt does it all for us
 }
@@ -485,7 +435,7 @@ SetFiltersDialog::~SetFiltersDialog()
  *  Main event handler. Reimplemented to handle application
  *  font changes
  */
-bool SetFiltersDialog::event( QEvent* ev )
+bool SetFiltersDialogData::event( QEvent* ev )
 {
     bool ret = QDialog::event( ev ); 
     if ( ev->type() == QEvent::ApplicationFontChange ) {

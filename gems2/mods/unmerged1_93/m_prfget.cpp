@@ -360,7 +360,7 @@ AGAIN:
    if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
          ;//goto BACK;
    // get opens files list
-      if( !GetFN( fstKeyFld.c_str() ) )
+      if( !GetFN( fstKeyFld.c_str(), false ) )
         Error( key_str.c_str(),
            "Profile configuration aborted by the user!" );
    SetFN();
@@ -603,7 +603,7 @@ void TProfil::CalcEqstat( bool prg)
         aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
 
     calcFinished = true;
-    
+
 //    pVisor->Update();
 //    pVisor->CalcFinished();
     STat->setCalcFlag( true );
@@ -776,12 +776,12 @@ void TProfil::RenameFN( const char * prfName, const char* prfTemplate )
       }
 }
 // Save file configuration to Profil structure
-bool TProfil::GetFN( const char * prfName )
+bool TProfil::GetFN( const char * prfName, bool show_dlg )
 {
 
     TCStringArray aFls;
     TCIntArray aCnt;
-    if( ! vfListFiles(window(), prfName, aFls, aCnt ))
+    if( ! vfListFiles(window(), show_dlg, prfName, aFls, aCnt ))
       return false;
 
     memset(mup->Nfl, 0, MAXNUMCHAINS*sizeof(short));

@@ -1,0 +1,203 @@
+Privet Sveta!
+
+Iz-za otchetov i seminarov, ja tolko v subbotu 15 Dec. smog 
+zanjatsja programmoj i tvoimi izmemenijami.
+
+>-- Pechat` tablic s usloviem: ## <math script> ##
+>   odno `#` ispol`zuetsya vnutri interval`noy peremennnoy,
+>   oshibka maloveroyatna, no vozmozhna.
+
+Ja esche ne gonjal math script, no dumaju, mozhno poka tak 
+ostavit', kak ty sdelala. Prover', ne zacepleno li chego v
+interpretatore - u menja perestal rabotat' script v vodnoj
+phase po uravneniju Davies (profil Test1 s etim primerom 
+prilagaetsja, etot profil sdelan cherez ElementsDialog). 
+Pri popytke poschitat' ravnovesije (tam ih dva, poprobuj 
+kazhdoe) poluchajem oshibku "Unexpected end of math script text"
+i tekst vsego scripta dlja rasscheta Davies equation. Prichem
+ranshe ono prekrasno schitalos'.   
+
+>-- v dialoge HLinpDialog ya sdelala: esli v phase stavim '-' ili
+>   menyaem c `-` na '+' ili '*', to srazu zhe stavim to zhe znachenie
+>   vo vse komponenty. Mne kazhetsya tak budet udobnee, chem pri "Ok".
+
+Eto proveril, vse Ok, tak gorazdo udobnee. 
+
+>-- Statistika ne ispol`zuemyh IComp v DComp/ReactDC vyvodim v spisok.
+
+Eto poka chto ne sluchalos', mozhet, nado sovsem isportit' bazu...
+
+>-- Statistika mnogokomponentnyh Phases s odnim i bolee nezabrakovanyh
+>    DComp/ReactDC v spisok i file.
+
+Eto rabotaet. Ja dumaju, esli uzh pokazyvat' takoj spisok, to 
+nado dat' useru otmetit' te phasy, kotorye on vse-taki hochet 
+skopirovat', i zatem ih skopirovat'. Esli eto trudno realizovat', 
+togda ne nado pokazyvat' spisok v dialoge, a srazu predlagat' 
+ego napechatat' v file (user potom posmotrit), hotja eto i huzhe. 
+
+>-- Ya dobavila proverku na dublirovanie imeni profilya (kataloga).
+>   V etom sluchae pol`zovatelyu predlagaetsy povtorit` vvod.
+>   Soobshenie mozhesh izmenit`.
+
+Rabotaet. Soobschenije nado izmenit' na takoe:
+"Profile cannot be created - such directory already exists. 
+Please, enter another name."
+
+> Pochemu ne udalyaetsya katalog poka ne razobralas`, eto proishodit
+> v lyubom sluchae sboya v sozdanii profilya. Katalog kak by zanyat i
+> komanda ego udaleniya ne srabatyvaet. Mozhet Andy podskazhet.
+
+Ja dumaju, dir is locked i ego mozhno udalit' tolko posle 
+perezapuska GEMS (ili najti sistemnuju funkciju Win32 kotoraja
+"unlock" direktoriju). Vprochem, esli ostaesja tolko pustaja dir, 
+mozhno ee srazu ispolzovat' dlja sozdanija novogo profilja s 
+takim zhe imenem (pri proverke, nado esche proverjat' skolko
+failov imeetsja v direktorii). 
+
+--  Ya bez problem podryad sodala tri profile Test1, Test2 i Test3.
+    Eta problema byla u menya v processe testirovaniya. No potom sama po
+    sebe propala. Na sleduyushiy den` ya vklyuchila komp`yuter i vse
+
+Da, ja nashel, pochemu u menja ne sozdavalis' sledujuschie 
+profili. Ja nazhimal "Bypass" vmesto "Clear all" pri sozdanii 
+pervogo profilja. esli ego sozdat' cherez "Clear all", vse 
+rabotaet. A nuzhen li voobsche etot vopros pri sozdanii novogo
+profilja? Mozhet, srazu delat' "Clear All" i tak uprostit' 
+process? 
+
+>SettingDialog mne nado rassmotret` vnimatel`nee, ya ego ne pisala, 
+>i mne poka neponyatno kak mozhno menyat` v processe raboty "Core 
+>database directory" i "User`s profile directory". Kto eto pisal 
+>i pisali li etu chast` voobshe?
+
+SettingsDialog napisal Andy, v osnovnom iz-za ustanovok fonts 
+i kolichestva znachaschih zifr v jachejkah dannyh Vizor-okon. 
+Direktories pokazany tam dlja informacii, knopki Browse 
+Andy poobeschal ubrat', tak kak oni bespolezny. V buduschem 
+my v etot dialog budem dobavljat' chto ponadobitsja. Sejchas 
+nado dobavit' vybor rezhima sozdanija novogo profilja. 
+Staryj rezhim nado polnostju sohranit' - on tozhe imeet pravo
+na zhizn'.   
+
+> Ideya "Set Filters" poka ne sovsem ponyatna. 
+
+Proshitaj esche raz, chto ja ob etom napisal. Pervym delom nado 
+realizovat' pereimenovanie zapisej pri "multiple copy". Filtry 
+obschego tipa (scripts etc.) - delo chut' bolee dalekogo buduschego.
+  
+> Poka ya zaymus` obshim sluchaem fil`trov. 
+> Etu problemu nado izuchit`.
+
+Da, esche est' vremja podumat' ob etom.
+
+>I naconec pervaya kartochka - spisok files, eto potrebuet polnost`yu
+>izmenit` vse funczii kopirovaniya... 
+
+Net, ja tak ne dumaju. Nado, konecho, i nad etim esche podumat'. 
+Ideja za etim spiskom files sostoit v tom, chtoby mozhno bylo 
+rasshirjat' profil s pomoschju ElementsDialog. Ja soglasen, 
+eto lucshe delat' kogda ty priedesh v PSI v fevrale-marte. 
+
+>Mne legche ispol`zovat` po dva file v novom profil`, 
+>mozhno poka tak ostavit`?
+
+Eto budet trudno objasnit' useram... No poka tak ostavim, 
+esli trudno zapisi v odin file pisat' pri kopirovanii. 
+
+>Ya predlagayu otkaszat`sya ot idei razbit` vsyu bazu
+>na "kernel", "unsertain", "specific", a vse vybory files 
+>povesit` na otmetku v pervom okne "Set Filters". 
+>Eto dva dubliruyushih sluchaya, prichem vtoroy 
+>("Set Filters") polnost`yu vklyuchaet pervyy. 
+>V etom sluchae vo-pervyh - net neobhodimosti menyat` starye 
+>zapisi, vo-vtoryh mozhno gorazdo gibche menyat` svyaazi, 
+>v-tret`ih pol`zovatel` imeet odin, standartnyy sposob 
+>vybora filov vo vseh rezhimah. Nadeyus` ty ponyal moyu ideyu.
+
+Konechno, ja ponjal tvoju ideju, my eto vse obsuzhdali. 
+Slova "kernel", "uncertain" i "specific" voobsche-to 
+nuzhny tolko dlja podkluchenija failov DB.default DO
+vhozhdenija v SetFiltersDialog. Bolshinstvo userov 
+(po krajnej mere poka ne nauchatsja) voobsche ne budut 
+chto-libo menjat' v etom dialoge ili zagljadyvat' tuda. 
+Tak kak vsja zateja s ElementsDialog napravlena na 
+to, chtoby sdelat' sozdanije novyh profilej operaciej 
+prostoj i bystroj, ja dumaju, ne nuzhno otkazyvatsja 
+ot razbienija failov v DB.default "kernel", "uncertain" 
+i "specific". Iz opyta seminarov v Mainz ja tochno znaju,
+chto u nachinajuschih lucshe vsego poluchaetsja nazhimat'
+"Ok" i otmetit' nuzhnye himicheskie elementy. 
+
+SetFiltersDialog neobhodim dlja bolee opytnyh userov. 
+Samoe prjamoe ego primenenie mozhet byt' takim. 
+V DB.Default budut faily, imena kotoryh ne soderzhat
+slov "kernel", "uncertain" i "specific". Takie faily 
+podkluchajutsja cherez pervuju kartochku SetFiltersDialog. 
+Drugoe primenenie, kotoroe ja vizhu, - eto podkljuchenie 
+failov ranee sozdannogo profilja dlja kopirovanija ih 
+soderzhimogo vo vnov' sozdavaemyj profil. Tut nado esche
+podumat', kak obespechit' prioritet pri kopirovanii, 
+t.e. iz failov DB.Default kopirovat' tolko te zapisi, 
+kotorye ne byli uzhe skopirovany iz failov starogo 
+profilja.  
+
+> Teper` po povodu shablonov zameny klyuchey, nado opisat` 
+> strogo nabor sluchaev, libo operetsya na kakoy-libo 
+> standasrtnyy sposob. Pol`zovatelya vse ravno nado budet
+> eto opisat` v dokumentacii. 
+
+Soglasen. Standartnyj sposob - eto naprimer shablony 
+na imena failov v bash ili sh skriptah Unix. 
+
+> Ya predlagayu ogranichetsya nebol`shim naborom (vo vsyakom 
+> sluchae legko opisat` i men`she oshibok) NAPRIMER:
+
+      ?...?*    <symbols>* - zamenit` pervye n simvolov na posledomatel`nost` 
+        n          m           iz m simvolov 
+
+      *?...?    *<symbols> - zamenit` poslednie n simvolov na posledomatel`nost` 
+        n          m           iz m simvolov 
+ 
+      *    <symbols> - zamenit` vse simvoly na posledomatel`nost` 
+
+      *    *<symbols> - dobavit` simvoly v konec 
+
+      ?...?*  invcase* - perevesti pervye n simvolov v drugoj registr
+        n                   
+
+      *?...?  *invcase - perevesti poslednie n simvolov v drugoj registr
+        n                   
+
+>Tak kak my budem ispol`zovat` eto poka tol`ko dlya poslednego polya 
+>klyuchey, dlya Copy v tom chisle, predlagayu etim ogranochetsya.
+
+Soglasen, ja chto-to vrode etogo i predlagal...
+Variant s "invcase" lucshe - ne nado znat', v kakom registre byli 
+simvoly. '-' perevoditsja v '_' i naoborot. 
+
+> Posledovatel`nosti vida uzhe slozhnye i vrydli budut ispol`zovat`sya.
+
+      <symbols1>*    <symbols2>* - zamenit` pervye n simvolov na posledomatel`nost` 
+        n               m           iz m simvolov  (simbols1 moget soderzhat` '?')
+
+      *<symbols1>    *<symbols2> - zamenit` poslednie n simvolov na posledomatel`nost` 
+        n               m           iz m simvolov  (simbols1 moget soderzhat` '?')
+
+Lusche pisat' ne <symbols> a <characters> ili <substring>
+
+> No nado uchityvat`, chto dlina klyucha ogranichena => Naprimer 
+> zamenit` probel na T ne vsegda vozmozhno, tak kak ego v klyuche 
+> prosto mozhet ne byt`.
+> Nado obgovorit` kak postupit`, esli my prevysim razmer klyucha, 
+> no nado poluchit` unikal`nyy klyuch. 
+
+My ne mozhem predusmotret' vseh glupostej, kotorye mozhet uporot' 
+opytnyj user... A neopytnyj sjuda ne zalezet.
+
+>U nas sil`nyy snegopad.
+
+A u nas moroz -10, veter, snega prakticheski net...
+
+Vsem privet! Udachi, 
+Dima.  

@@ -1,0 +1,13 @@
+Zdravstvuy Dima!
+
+  V poslednih ispravleniya byla oshibka: ne zapominalas` kombinaciya
+otkrytyh files.Ya eto ispravila.
+  Podklyuchila dialog SetFilters, teper` mozhno zadavat` shablony. 
+Pozhaluysta podkorektiruy varianty v combobox, ne ispol`zuy kommentarii,
+tol`ko coderzhimoe shablona. 
+  Spiski files i component poka ne realizovany v SetFilters, no idei uzhe 
+poyavilis`. Eshe ostalos` podklyuchit` vse SDref i Const. 
+
+ Po-povodu poezdki. Mozhno s 25 fevralya. 
+
+Privet vsem! Udachi Sveta, Sasha i Masha.

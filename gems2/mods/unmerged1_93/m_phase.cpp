@@ -28,6 +28,7 @@ const char *GEMS_PH_HTML = "gm_phase";
 #include "m_reacdc.h"
 #include "m_phase.h"
 #include "m_param.h"
+#include "filters_data.h"
 
 TPhase* TPhase::pm;
 
@@ -673,22 +674,31 @@ NEXT:  /* define more precisely code of phase  */
 }
 
 // to Profile new
-void TPhase::newAqGasPhase( const char *key, int file,
+void TPhase::newAqGasPhase( const char *key, int file, const char emod,
                             bool useLst, TCStringArray lst )
 {
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     char *part;
 
-    if( key[0] == 'a' )
-        // set flags  and sizes
+    if( key[0] == 'a' ) // set flags  and sizes
     {
         part = "a:*:*:*:";
         memcpy( php->sol_t, "3NNSNN", 6 );
-        memcpy( &php->PphC, "a++---", 6 );
-        php->ncpN = 1;
-        php->ncpM =8;
-        php->nscN = php->nscM = 1;
-
+        if( emod != SM_AQDH3 )
+           php->sol_t[0] = emod;  // added Davies eq by KD 25.01.02
+        if( emod == SM_AQDH3)
+        {
+           memcpy( &php->PphC, "a++---", 6 );
+           php->ncpN = 1;
+           php->ncpM = 8;
+           php->nscN = php->nscM = 1;
+        }
+        else if(emod == SM_AQDAV)
+        {
+           memcpy( &php->PphC, "a-----", 6 );
+           php->ncpN = php->ncpM = 0;
+           php->nscN = php->nscM = 0;
+        }
     }
     else
     {
@@ -706,7 +716,7 @@ void TPhase::newAqGasPhase( const char *key, int file,
     php->nDC = 0;
     php->NsiT = php->NR1 = 0;
     php->Asur =   php->Sigma0 =  php->SigmaG =   php->R0p =
-                                     php->h0p =  php->Eps =  php->Cond =  php->Rsp1 =  0.;
+        php->h0p =  php->Eps =  php->Cond =  php->Rsp1 =  0.;
 
     //Get lists
     TCStringArray aDclist;
@@ -873,31 +883,15 @@ TPhase::RecordPrint( const char *key )
 }
 
 
-void TPhase::CopyRecords( const char * prfName, TCStringArray& rds,
-            TCStringArray& names, TCStringArray& aPHnoused,
-            bool aAqueous, bool aGaseous, bool aSorption)
+void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
+            elmWindowData el_data, phSetupData st_data )
 {
     TCIntArray anR;
     TCStringArray aPHkey;
     aPHnoused.Clear();
 
     // open selected kernel files
-    db->OpenOnlyFromList(names);
-
-    // added to profile file phase.copy.prfname
-    /*gstring Path = pVisor->userProfDir();
-    Path += prfName;
-    Path += "/";
-    Path += db->GetKeywd();
-    Path += ".";
-    Path += "copy";
-    Path += ".";
-    Path += prfName;
-    Path += ".";
-    Path += PDB_EXT;
-    TDBFile *aFl= new TDBFile( Path );
-    int fnum_ = db->AddFileToList( aFl );
-    */
+    // db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
 
     // get list of records
@@ -909,11 +903,12 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& rds,
     bool nRec;
     for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
     {
-     if( !aAqueous && ( *db->FldKey( 0 )== 'a' || *db->FldKey( 0 )== 'x' ))
+     if( !el_data.flags[cbAqueous_] &&
+         ( *db->FldKey( 0 )== 'a' || *db->FldKey( 0 )== 'x' ))
        continue;
-//     if( !aGaseous && *db->FldKey( 0 )== 'g' )
+//     if( !el_data.flags[cbGaseous_] && *db->FldKey( 0 )== 'g' )
 //       continue;
-     if( !aSorption && *db->FldKey( 0 )== 'x' )
+     if( !el_data.flags[cbSorption_] && *db->FldKey( 0 )== 'x' )
        continue;
 
      RecInput( aPHkey[ii].c_str() );
@@ -936,20 +931,11 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& rds,
          aPHnoused.Add( aPHkey[ii] );
        continue;
      }
+
      // !!! changing record key
-/*     gstring str= gstring(db->FldKey( 4 ), 0, db->FldLen( 4 ));
-     for( i=0; i<db->FldLen( 4 ); i++ )
-         if( str[i] == ' ' )
-          break;
-     if( i == db->FldLen( 4 ) )
-          i--;
-     if( str[i] == *prfName )
-            str[i] = ' ';
-      else
-            str[i] = *prfName;
-*/
     gstring str= gstring(db->FldKey( 4 ), 0, db->FldLen( 4 ));
-    ChangeforTempl( str, "?*", "invcase*d", db->FldLen( 4 ));
+    ChangeforTempl( str, st_data.from_templ,
+                    st_data.to_templ, db->FldLen( 4 ));
         str += ":";
         gstring str1 = gstring(db->FldKey( 3 ), 0, db->FldLen( 3 ));
         str1.strip();
@@ -965,6 +951,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& rds,
         str = str1 + ":" + str;
      AddRecord( str.c_str(), fnum_ );
     }
+
     // close all no profile files
     TCStringArray names1;
     names1.Add(prfName);

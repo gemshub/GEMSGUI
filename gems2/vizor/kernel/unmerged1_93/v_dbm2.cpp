@@ -891,7 +891,7 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 }
 
 //Set new open Files list  (Reopen by list)
-void TDataBase::SetNewOpenFileList(TCStringArray aFlKeywd)
+void TDataBase::SetNewOpenFileList(TCStringArray& aFlKeywd)
 {
     int nF;
 
@@ -963,6 +963,20 @@ int TDataBase::GetOpenFileNum( const char* secondName )
         if( name == aFile[fls[i]].Name() )
             return i;
     return 0;
+}
+
+// get list of files keywds, that contained name
+void TDataBase::GetProfileFileKeywds( const char *_name, TCStringArray& aFlkey )
+{
+    gstring name = ".";
+    name +=_name;
+    name += ".";
+
+    for(uint ii=0; ii< aFile.GetCount(); ii++)
+    {
+      if(  aFile[ii].GetPath().find( name ) != gstring::npos )
+          aFlkey.Add( aFile[ii].GetKeywd() );
+    }
 }
 
 //-------------------------------------------------------------

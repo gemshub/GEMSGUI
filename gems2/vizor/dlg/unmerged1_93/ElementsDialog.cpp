@@ -26,23 +26,27 @@ const char *GEMS_EL_HTML = "elements";
 #include <qlabel.h>
 
 #include "ElementsDialog.h"
+#include "SetFiltersDialog.h"
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include "visor.h"
 #include "visor_w.h"
 #include "m_icomp.h"
 
 
-ElementsDialog::ElementsDialog(QWidget* win, const char * /*prfName*/,
+ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
            const char* /*caption*/):
-        Inherited( win, 0, true /* false = modeless */ )
+        Inherited( win, 0, true /* false = modeless */ ),
+        prf_name ( prfName )
 {
     EmptyData();
     rbKernel->setChecked( true );
     rbUncertain->setChecked( true );
     rbSpecific->setChecked( false );
     cbIsotopes->setChecked( false );
+    setFilesList();
 
     SetICompList();
     SetAqueous();
@@ -78,16 +82,22 @@ ElementsDialog::CmHelp()
 void
 ElementsDialog::CmSetFilters()
 {
-    ResetData();
-    update();
     // Here to call SetFiltersDialog !!
-}
+    SetData();
+    sf_data.ic_d.newIComps.Clear();
+    for(uint ii=0; ii<el_data.ICrds.GetCount(); ii++ )
+     sf_data.ic_d.newIComps.Add( el_data.ICrds[ii] );
 
-// void
-// ElementsDialog::CmPrevious()
-// {
-//   reject();
-// }
+    SetFiltersDialog  dlg( this, &files_data, &sf_data, prf_name.c_str() );
+    dlg.exec();
+
+  if(    files_data.changed  )  // we changed file cnf for icomp
+  {  ResetData();
+     EmptyData();
+     SetICompList();
+     SetAqueous();
+  }
+}
 
 void
 ElementsDialog::CmOk()
@@ -168,11 +178,11 @@ void ElementsDialog::SetGaseous()
 
 void ElementsDialog::SetFiles()
 {
+  resetFilesSelection();
   ResetData();
   EmptyData();
   SetICompList();
   SetAqueous();
-
 }
 
 void ElementsDialog::openFiles( TCStringArray& names )
@@ -186,6 +196,33 @@ void ElementsDialog::openFiles( TCStringArray& names )
    names.Add(".specific.");
 }
 
+// 0 no changed (no kernel, specifik or uncertain)
+// 1 to open, 2 to close
+int ElementsDialog::isOpenFile( gstring& name )
+{
+   int iret=0;
+   if(  name.find( ".kernel." ) != gstring::npos )
+   {    if(rbKernel->isChecked())
+           iret = 1;
+         else
+           iret = 2;
+   }
+   else  if(  name.find( ".uncertain." ) != gstring::npos )
+         {    if(rbUncertain->isChecked())
+                 iret = 1;
+              else
+                 iret = 2;
+          }
+          else   if(  name.find( ".specific." ) != gstring::npos )
+                {    if(rbSpecific->isChecked())
+                          iret = 1;
+                     else
+                           iret = 2;
+                 }
+  return iret;
+}
+
+
 void
 ElementsDialog::SetICompList()
 {
@@ -193,13 +230,18 @@ ElementsDialog::SetICompList()
     TCStringArray aIC;
     QButton* bb;
     int nmbOther=1;
-    TCStringArray names;
+//    TCStringArray names;
 
+    aBtmId1.Clear();
+    aICkey1.Clear();
+    aBtmId2.Clear();
+    aICkey2.Clear();
 
-    openFiles( names );
+    //openFiles( names );
+    openFilesICOMP();
    // select all IComp keys and indMT (seted indMT to -1 for additional)
     TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
-    aICdata->GetElements( cbIsotopes->isChecked(), names, aIC, aIndMT );
+    aICdata->GetElements( cbIsotopes->isChecked(), aIC, aIndMT );
 
     for( uint ii=0; ii<aIC.GetCount(); ii++ )
      if( aIndMT[ii] == -1) // additional
@@ -248,8 +290,8 @@ ElementsDialog::allSelected( TCStringArray& aICkeys )
     uint ii;
     aICkeys.Clear();
 
-    if( !result() )
-        return;
+//    if( !result() )
+//        return;
 
     SetSorption();
     SetAqueous();
@@ -265,6 +307,159 @@ ElementsDialog::allSelected( TCStringArray& aICkeys )
      if( bgOther->find( aBtmId2[ii] )->isOn()  )
         aICkeys.Add( aICkey2[ii] );
     }
+}
+
+const setFiltersData&
+ElementsDialog::getFilters()
+{  // open all files
+   openFilesSelection();
+   return sf_data;
+}
+
+const elmWindowData&
+ElementsDialog::getData()
+{
+ SetData();
+ return  el_data;
+}
+
+void
+ElementsDialog::SetData()
+{
+ el_data.flags[cbAqueous_] =  cbAqueous->isChecked();
+ el_data.flags[cbSorption_] = cbSorption->isChecked();
+ el_data.flags[cbGaseous_] =  cbGaseous->isChecked();
+ el_data.flags[cbIsotopes_] = cbIsotopes->isChecked();
+
+ //openFiles( el_data.flNames );
+ allSelected( el_data.ICrds );
+}
+
+void
+ElementsDialog::setFilesList()
+{
+   size_t pos1, pos2;
+   int cnt, cnt_sel, ind;
+ //files_data
+   for(int i=RT_SDATA; i<=RT_PHASE; i++ )
+    {
+        if( aMod[i].IsSubModule() )
+            continue;
+        TCStringArray names;
+        TCIntArray indx;
+        TCIntArray sel;
+        rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
+        cnt = 0;
+        cnt_sel = 0;
+        for(int ii=names.GetCount()-1; ii>=0; ii-- )
+        {
+          // select only DB.default files
+          if( names[ii].find( pVisor->sysDBDir())== gstring::npos )
+              continue;
+          // get 2 colums
+          pos1 = names[ii].find_first_of(" ");
+          pos2 = names[ii].rfind("/");
+          files_data.flKeywds.Add( names[ii].substr( 0, pos1 ) );
+          files_data.flNames.Add( names[ii].substr( pos2+1 ).c_str() );
+          cnt++;
+          ind = files_data.flKeywds.GetCount()-1;
+          if( i == RT_SDATA || i == RT_CONST ||
+              isOpenFile( files_data.flNames[ind] ) == 1 )
+          {
+            files_data.selKeywds.Add( files_data.flKeywds[ind] );
+            cnt_sel++;
+          }
+        }
+        files_data.flCnt.Add( cnt );
+        files_data.selCnt.Add( cnt_sel );
+    }
+
+}
+
+void
+ElementsDialog::resetFilesSelection()
+{
+  TCStringArray newSelKeywds;   // list of selected files
+  TCIntArray    newSelCnt;      // count of selected files  for type
+   int cnt=0;
+   int cnt2=0;
+
+ //files_data
+
+   for(uint i=0; i<files_data.flCnt.GetCount(); i++ )
+    {
+        int cnt_sel = 0;
+        for(int ii=0; ii<files_data.flCnt[i]; ii++ )
+        {
+          switch( isOpenFile( files_data.flNames[cnt+ii] ) )
+          {
+            case 2: break;
+            case 1: newSelKeywds.Add( files_data.flKeywds[cnt+ii] );
+                    cnt_sel++;
+                    break;
+            case 0: for(int jj=0; jj<files_data.selCnt[i]; jj++ )
+                      if(  files_data.flKeywds[cnt+ii] ==
+                           files_data.selKeywds[cnt2+jj] )
+                      {
+                        newSelKeywds.Add( files_data.flKeywds[cnt+ii] );
+                        cnt_sel++;
+                      }
+                    break;
+           }
+          }
+        cnt += files_data.flCnt[i];
+        cnt2 += files_data.selCnt[i];
+       newSelCnt.Add( cnt_sel );
+    }
+
+    files_data.selKeywds.Clear();
+    files_data.selCnt.Clear();
+    for(uint ii=0; ii<newSelCnt.GetCount(); ii++ )
+     files_data.selCnt.Add( newSelCnt[ii] );
+    for(uint ii=0; ii<newSelKeywds.GetCount(); ii++ )
+     files_data.selKeywds.Add( newSelKeywds[ii] );
+}
+
+void
+ElementsDialog::openFilesSelection()
+{
+  TCStringArray newSelKeywds;   // list of selected files
+  int cnt=0;
+  ErrorIf( files_data.selCnt.GetCount()!=RT_PHASE+1, "", "internal error");
+
+ //files_data
+   for(int i=RT_SDATA; i<=RT_PHASE; i++ )
+   {
+     newSelKeywds.Clear();
+
+     for(int ii=0; ii<files_data.selCnt[i]; ii++ )
+      newSelKeywds.Add(files_data.selKeywds[cnt+ii]);
+     cnt += files_data.selCnt[i];
+     // add profile files keywds
+     rt[i].GetProfileFileKeywds( prf_name.c_str(), newSelKeywds );
+     //open all files
+     rt[i].SetNewOpenFileList( newSelKeywds );
+    }
+}
+
+void
+ElementsDialog::openFilesICOMP()
+{
+  TCStringArray newSelKeywds;   // list of selected files
+  int cnt=0;
+
+ //files_data
+   for(int i=RT_SDATA; i<=RT_PHASE; i++ )
+   {
+     if( i == RT_ICOMP )
+     {  newSelKeywds.Clear();
+        for(int ii=0; ii<files_data.selCnt[i]; ii++ )
+           newSelKeywds.Add(files_data.selKeywds[cnt+ii]);
+        rt[i].SetNewOpenFileList( newSelKeywds );
+        break;
+     }
+     cnt += files_data.selCnt[i];
+   }
 }
 
 

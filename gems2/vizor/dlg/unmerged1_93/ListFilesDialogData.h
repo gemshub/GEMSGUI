@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'ListFilesDialog.ui'
 **
-** Created: Mon Nov 19 22:07:41 2001
+** Created: Thu Jan 17 13:29:55 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -18,7 +18,6 @@ class QLabel;
 class QListView;
 class QListViewItem;
 class QPushButton;
-class QRadioButton;
 
 class ListFilesDialogData : public QDialog
 { 
@@ -29,7 +28,6 @@ public:
     ~ListFilesDialogData();
 
     QPushButton* pHelpButton;
-    QRadioButton* RadioButton1;
     QPushButton* pGO_OKButton;
     QPushButton* pCancelButton;
     QListView* pListFiles;

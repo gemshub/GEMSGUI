@@ -65,12 +65,14 @@ TCIntArray
 vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArray& sel);
 
 bool
-vfListFiles(QWidget* par, const char * prfName,
+vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
                 TCStringArray& fls, TCIntArray& cnt );
+
+struct elmWindowData;
+struct setFiltersData;
 bool
 vfElements(QWidget* par, const char * prfName,
-            TCStringArray& rds, TCStringArray& names,
-            bool& aAqueous, bool& aGaseous, bool& aSorption);
+           elmWindowData& elm_data, setFiltersData& sf_data );
 
 gstring
 vfKeyEdit(QWidget* par, const char* title, int iRt, const char* key=0);

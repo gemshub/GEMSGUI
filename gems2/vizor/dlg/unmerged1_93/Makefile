@@ -51,6 +51,8 @@ SOURCES =	MainDialog.cpp \
 		ListFilesDialogData.cpp \
 		ElementsDialog.cpp \
 		ElementsDialogData.cpp \
+		SetFiltersDialog.cpp \
+		SetFiltersDialogData.cpp \
 		HLresDialog.cpp \
 		HLresDialogData.cpp \
 		HLinpDialog.cpp \
@@ -92,6 +94,8 @@ OBJECTS =	MainDialog.obj \
 		ListFilesDialogData.obj \
 		ElementsDialog.obj \
 		ElementsDialogData.obj \
+		SetFiltersDialog.obj \
+		SetFiltersDialogData.obj \
 		HLresDialog.obj \
 		HLresDialogData.obj \
 		HLinpDialog.obj \
@@ -133,6 +137,8 @@ SRCMOC	=	moc_MainDialogData.cpp \
 		moc_ListFilesDialogData.cpp \
                 moc_ElementsDialog.cpp \
 		moc_ElementsDialogData.cpp \
+                moc_SetFiltersDialog.cpp \
+		moc_SetFiltersDialogData.cpp \
 		moc_HLresDialog.cpp \
 		moc_HLresDialogData.cpp \
 		moc_HLinpDialog.cpp \
@@ -174,6 +180,8 @@ OBJMOC	=	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_ListFilesDialogData.obj \
                 ..\tmp\moc_ElementsDialog.obj \
 		..\tmp\moc_ElementsDialogData.obj \
+                ..\tmp\moc_SetFiltersDialog.obj \
+		..\tmp\moc_SetFiltersDialogData.obj \
 		..\tmp\moc_HLresDialog.obj \
 		..\tmp\moc_HLresDialogData.obj \
 		..\tmp\moc_HLinpDialog.obj \
@@ -428,6 +436,18 @@ clean:
 
         $(CC) $(CCFLAGS) $(INC) -o$@ -c moc_ElementsDialogData.cpp
 	-del moc_ElementsDialogData.cpp
+
+..\tmp\moc_SetFiltersDialog.obj: SetFiltersDialog.h
+      	$(MOC) SetFiltersDialog.h -o moc_SetFiltersDialog.cpp
+
+        $(CC) $(CCFLAGS) $(INC) -o$@ -c moc_SetFiltersDialog.cpp
+	-del moc_SetFiltersDialog.cpp
+
+..\tmp\moc_SetFiltersDialogData.obj: SetFiltersDialogData.h
+      	$(MOC) SetFiltersDialogData.h -o moc_SetFiltersDialogData.cpp
+
+        $(CC) $(CCFLAGS) $(INC) -o$@ -c moc_SetFiltersDialogData.cpp
+	-del moc_SetFiltersDialogData.cpp
 
 ..\tmp\moc_HLresDialog.obj: HLresDialog.h
       	$(MOC) HLresDialog.h -o moc_HLresDialog.cpp

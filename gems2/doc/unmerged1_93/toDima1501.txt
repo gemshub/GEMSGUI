@@ -1,0 +1,52 @@
+Zdravstvuy Dima!
+
+Ya sdelala (no luchshee vrag horoshego):
+
+ --- Ne vclyuchat` "Vol" v spisok pustyh(bez Dcomp/React) icomp.
+
+ --- Vyvod phases v "DiscardedPhases.txt", tol`ko vyvodim v katalog,
+     gde .exe file. Mozhno sdelat` v Profiles direktoriy, no gde
+     rungems.bat ochen` problematichno.
+
+ --- Esli pri sozdanii Prifile sushestvuet ne pustoy katalog, vydaem soobshenie:
+       vfMessage(0, dir, "This directory is not empty."); 
+    ( Esli tam est` .pdb ili .ndx files ==>> soobshenie ob oshibke, inache
+      programma sletaet ) 
+
+ --- Ne pokazyvayu FileSelectionDialog i t.d.
+     Ubrala radiobutton
+
+ --- Podklyuchila ListView s rezul`tatami, no ne v mt rezume.
+     Tam eto nado budet sdelat` bolee vnimatel`no. Ya ne vse ponyala v
+     funkcii CmRunIPM(). Budu zhdat` poslednego varianta Andy.
+
+  Nu vot poka vse, chto uspela. Seychas zanimayus` SetFilters, opisyvayu
+structury peredachi informacii i pytayus` razreshit` protivorechie mezhdu dvumya
+tipami vybora konfiguracii files dlya kopirovaniya. Poka ya sobirayus` posle
+vybora po SetFilters blokirovat` izmenenie flagov "kernel"....
+Mozhet poka napishu razberus`. 
+
+Eshe raz pozdravlyayu vas so vsemi proshedshimi
+prazdnikami. Ustala ot nih uzhasno. Mne uzhe 3-go chisla kazalos`, chto
+po krayney mere dve nedeli proshlo. Eshe Mashu svozili na priem k
+doktoru i v Zirk, teper` vdvoem boleem.
+
+Po-povodu poezdki. Ya dimayu mozhno s 18 fevralya. Pravda Sasha
+smenil rabotu i ne smozhet uyti v otpusk, budet smotret` moya mama.
+Masha seychas voobshe ne otpuskaet menya. Dazhe noch`yu 3-4 raza 
+proveryaet na moe prisutstvie.
+
+Uzhasno rada za Tanyu, pereday ey moi pozdravleniya. 
+
+Inna seychas v Germanii i hochet s toboy posovetovat`sya po-povodu
+dal`neyshego sotrudnichastva. Ya byla by ochen` tebe blagodarna za sovet.
+Ona dolzhna napisat` tebe sama. 
+
+Nu vot vrode i vse. Nadeyus`, chto na vyhodnyh udasttsya porabotat` bolee
+produktivno i do konca sleduyushey nedeli podklyuchit` SetFilters.
+A dal`she zaymus` formatnym vvodom. 
+Dima, buckup files iz PmatchC voydut v dopustimyy format dlya vvoda ili
+my vozmem nekiy vid output iz PmatchC?  
+
+
+Privet vsem! Udachi Sveta, Sasha i Masha.

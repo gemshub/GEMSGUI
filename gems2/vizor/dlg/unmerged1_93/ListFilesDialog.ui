@@ -12,7 +12,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>574</width>
+            <width>570</width>
             <height>454</height>
         </rect>
     </property>
@@ -83,31 +83,6 @@
                 <property>
                     <name>toolTip</name>
                     <string>Learn about System Profile concept and profile configuration</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QRadioButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>RadioButton1</cstring>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>To Elements Selection Dialog    </string>
-                </property>
-                <property stdset="1">
-                    <name>checked</name>
-                    <bool>false</bool>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Activate to copy selected records of IC/elements, their species and phases to profile files</string>
                 </property>
             </widget>
             <spacer>

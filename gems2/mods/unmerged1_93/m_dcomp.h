@@ -120,6 +120,9 @@ typedef struct
 }
 AQSREF;
 
+struct elmWindowData;
+struct dcSetupData;
+
 // Current IComp
 class TDComp : public TCModule
 {
@@ -181,9 +184,8 @@ public:
     // necessary new command in menu
     void DCthermo( int q, int p);
 
-    void CopyRecords( const char * prfName,
-            TCStringArray& rds, TCIntArray& cnt, TCStringArray& names,
-            bool aAqueous, bool aGaseous, bool aSorption);
+    void CopyRecords( const char * prfName, TCIntArray& cnt,
+                 elmWindowData el_data, dcSetupData st_data );
 
 };
 

@@ -1,0 +1,56 @@
+"pscript             0000 system "
+'GEMS-PSI Development and Support Team '
+^^1 39 0~~
+'Print scripts template library
+System'
+'PSI'
+'2001'
+'see g_useref.html'
+^^1 2787 0~~
+'line %s    "Comparison of System record"
+line %s   rkey
+line %s ""
+line %s "                                                         Table 1"
+line %s "          Parameters of Independent Components (IC) "
+line %s "|================================|==|==|=============|=============|"
+line %s "| Independent Component          |  |  | Bulk        | Quantity/   |"
+line %s "|                                |  |  | Composition | Concentrat. |"
+line %s "|================================|==|==|=============|=============|"
+list #ICvp ;prn=: IC_on[ii] <> "-";
+   %33.32s #ICvp, %2s #IC_on, %2s #BCun_,  %-13.7g #B_, %-12.6g #bi_
+line %s "|================================|==|==|=============|=============|"
+line %s ""
+line %s "                                                         Table 2"
+line %s "          Parameters of GCO (COMPOS)               "
+line %s "|===============================================|==|==|=============|"
+line %s "| Geochemical Composition Object (GCO) Rkey     |  |  | Quan./Conc. |"
+line %s "|===============================================|==|==|=============|"
+list #CCvp
+   %48.47s #CCvp, %2s #AC_on, %2s #XAun_,  %-12.6g #xa_
+line %s "|===============================================|==|==|=============|"
+line %s ""
+line %s "                                                         Table 3"
+line %s "          PARAMETERS OF DEPENDENT COMPONENTS          "
+line %s "|=|================================|=|=|=|=============|=============|=|=============|=|=============|"
+line %s "    Dependent Component                   ", %-13.10s label #xd_,
+     %-13.10s label #gEx_, %s " ", %-13.10s label #dul_, %1s " ", %-13.10s label #dll_
+line %s "|=|================================|=|=|=|=============|=============|=|=============|=|=============|"
+list #DCvp ;prn=: DC_on[ii] <> "-" & gEx_[ii]<>0;
+    %2s #DC_on, %-32.32s #DCvp, %1s #DCSvp, %1s #mDCC, %1s #XDun_, %13.13s  #xd_,
+    %13.13s  #gEx_, %1s #RLC_, %13.13s #dul_, %1s #RSC_, %13.13s #dll_
+line %s "|=|================================|=|=|=|=============|=============|=|=============|=|=============|"
+line %s ""
+line %s "                                                         Table 4"
+line %s "          PARAMETERS OF PHASES        "
+line %s "|=|================================|===|=|===|=============|=============|=============|"
+line %s "    Phase                                       ",
+         %-13.10s label #xp_,%-13.10s label #Yof_,%-13.10s label #Aalp_
+line %s "|=|================================|===|=|===|=============|=============|=============|"
+list #PHvp
+    %2s #PC_on, %-32.32s #PHvp, %3s #L1_, %1s #mPHC, %3s #L1vp,
+    %13.13s  #xp_,  %13.13s #Yof_,  %13.13s #Aalp_
+line %s "|=|================================|===|=|===|=============|=============|=============|"
+'
+^^1 0 32~~
+'A template script for printout of System data arrays'
+^^1 0 32~~
