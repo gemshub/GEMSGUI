@@ -30,7 +30,7 @@ const   int MAXFORMUNITMT= 40;
 
 
 typedef struct
-{ // Description of GEM2MT data structure (prototype of 15 Feb. 2005)
+{ // Description of GEM2MT data structure (prototype of 21 Feb. 2005)
   // Record key format: the same as Proces
   char
    PunE,          // Units of energy   { j;  J c C N reserved }
@@ -49,8 +49,8 @@ typedef struct
    PvFDL,    // Use flux definition list (+ -)
 
      // Controls on operation
-   PsMode,  // Code of GEM2MT mode of operation {  }
-//  Status and control flags (+-)
+   PsMode,  // Code of GEM2MT mode of operation { S F A D T }
+//  Status and control flags (+ -)
    gStat,  // GEM2MT generation status: 0 -indefinite; 1 on-going generation run;
         //  2 - done generation run; 3 - generation run error (+ 5: the same in stepwise mode)
    iStat,  // GEM2MT iteration status:  0 - indefinite; 1 ready for analysis;
@@ -58,8 +58,8 @@ typedef struct
    PsSYd,  // Save generated SysEq records to data base (+ -)
    PsSdat,  //  Save Multi, DataCH and inital DataBR files as text files
    PsSbin,  //  Save Multi, DataCH and inital DataBR files as binary files
+   PsNbin,  //  Save also the nodes DataBR array as a binary file
    PsRes1,  // reserved
-   PsRes2,  // reserved
 
    name[MAXFORMULA],  //  Name of GEM2MT task
    notes[MAXFORMULA]  //  Comments
@@ -76,26 +76,30 @@ typedef struct
    Nqpt, // Number of elements in the script work array qpi for transport
    Nqpg, // Number of elements in the script work array qpc for graphics
    Nb,   // N - number of independent components (set automatically from Multi)
-
+   bTau, // Time point for the simulation break (Tau[0] at start)
+   nS,   // Total number of points to sample the results in xt, yt
+   nYS,  // number of plots (columns in the yt array)
+   nE,   // Total number of experiments points (in xEt, yEt) to plot over
+   nYE,  // number of experimental parameters (columns in the yEt array)
    nPai,  // Number of P points in MTP interpolation array in DataCH ( 1 to 10 )
    nTai,  // Number of T points in MTP interpolation array in DataCH ( 1 to 20 )
 
-   DiCp[],  // array of indexes of initial system variants for
-            // distributing to nodes [nC]
-   *FDLi[2],  //[nFD][2] Box indices in the flux definition list
+   DiCp[],   // array of indexes of initial system variants for
+             // distributing to nodes [nC]
+   *FDLi[2], //[nFD][2] Box indices in the flux definition list
 // iterators for generating syseq record keys for initial system variants
-   tmi[3],  // SYSTEM CSD definition #: start, end, step (initial)
-   NVi[3]  // Restrictions variant #: start, end, step
+   tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
+   NVi[3]    // Restrictions variant #: start, end, step
 // graphics
-    dimEF[2],    // Dimensions of array of empirical data
-    dimXY[2],    // Dimensions of data sampler tables: col.1 - N of time points
-    axisType[6],         // axis graph type, background(3) reserved(2)
+    dimEF[2],  // Dimensions of array of empirical data
+    dimXY[2],  // Dimensions of data sampler tables: col.1 - N of time points
+    axisType[6],  // axis graph type, background(3) reserved(2)
    ;
   float        // input
    Pi[],    // Pressure P, bar for initial systems (values within Pai range) [nIV]
    Ti[],    // Temperature T, C for initial systems (values within Pai range) [nIV]
-   Vi[],    // Volume of the system (L) [nIV] usually zeros
-
+   Vi[];    // Volume of the system (L) [nIV] usually zeros
+  double
   // Input for compositions of initial systems
    Msysb, // Masses (kg) and volumes (L) for initial systems: Ms (total mass, normalize)
    Vsysb, // Vs (total volume of the object, for volume concentrations)
@@ -105,19 +109,23 @@ typedef struct
    Pgb,   // Pg (pressure in gas, for partial pressures)
    Tmolb, // MOL total mole amount for basis sub-system composition calculations
    WmCb,  // mole fraction of the carrier DC (e.g. sorbent or solvent)
-   Asur,  // Specific surface area of the sorbent (for adsorbed species)
-
+   Asur;  // Specific surface area of the sorbent (for adsorbed species)
+  float
 // Iterators for MTP interpolation array in DataCH
    Pai[3],  // Pressure P, bar: start, end, increment for MTP array in DataCH
-   Tai[3]   // Temperature T, C: start, end, increment for MTP array in DataCH
+   Tai[3],  // Temperature T, C: start, end, increment for MTP array in DataCH
+   Tau[3],  // Physical time iterator
 // graphics
-   size[2][4]; // Graph axis scale for the region and the fragment
-    ;
+   size[2][4], // Graph axis scale for the region and the fragment
+   *xEt,    // Abscissa for experimental points [nXE]
+   *yEt;    // Ordinates for experimental points to plot [nXE, nYE]
  double
    *Bn,    //  [nIV][N] Table of bulk compositions of initial systems
    *qpi,   //  [Nqpi] Work array for initial systems math script
-   *qpc,   //  [Nqpc] Work array for mass transport math script
-//
+   *qpc    //  [Nqpc] Work array for mass transport math script,
+   *xt,    //  Abscissa for sampled data [nS]
+   *yt     //  Ordinates for sampled data [nS][nYS]
+   //
 //   *Bc,    // table of bulk compositions of reactive part of nodes
 //  More to be added here for seq reactors?
     ;
@@ -141,7 +149,7 @@ typedef struct
    *AUcln, // [Lbi] Units of setting UDF quantities for initial system compositions
    *(FDLid)[MAXSYMB], // [nFD] ID of fluxes
    *(FDLop)[MAXSYMB], // [nFD] Operation codes (letters)
-   *(FDLmp)[MAXSYMB], // [nPG] ID of MPG to move in this flux 
+   *(FDLmp)[MAXSYMB], // [nPG] ID of MPG to move in this flux
    *(MPGid)[MAXSYMB], // [nPG] ID list of mobile phase groups
    *UMPG,  // [nFi] units for setting phase quantities in MPG (see PGT ),
 //
@@ -149,8 +157,8 @@ typedef struct
 //  graphics
     xNames[MAXAXISNAME],        // Abscissa name
     yNames[MAXAXISNAME],       // Ordinate name
-    (*lNam)[MAXGRNAME],        // List of ID of lines on Graph
-    (*lNamE)[MAXGRNAME];       // List of ID of lines of empirical data
+    (*lNam)[MAXGRNAME],        // List of ID of lines on Graph [nYS]
+    (*lNamE)[MAXGRNAME];       // List of ID of lines of empirical data [nYE]
 
    ;
 /* Work arrays */
@@ -163,13 +171,26 @@ typedef struct
    qc,     // current index of the compartment ( 1 to nC )
    kv,     // current index of the initial system variant (1 to nIV )
    jqc,    // script c-style index (= qc-1) for transport
-   jqs,    // script c-style index (= qc-1) for graphics 
+   jqs,    // script c-style index (= qc-1) for graphics
+   jt      // index of sampled point (for sampling scripts)
+   rei1,
+   rei2,
+   rei3,
+   rei4,
+   rei5
    ;
 
  float
    cT, // current value of T
    cP, // current value of P
-   cV // current value of V
+   cV, // current value of V
+   cTau, // current physical time
+   dTau, // current time step value
+   oTau, // old time step value
+   ref1,
+   ref2,
+   ref3,
+   ref4
   ;
 
    char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
@@ -210,15 +231,15 @@ protected:
 
 public:
 
-    static TDualTh* pm;
+    static TGEM2MT* pt;
 
-    DUALTH *dtp;
+    GEM2MT *mtp;
 
-    TDualTh( int nrt );
+    TGEM2MT( int nrt );
 
     const char* GetName() const
     {
-        return "DualTh";
+        return "GEM2MT";
     }
 
     void ods_link( int i=0);
@@ -235,7 +256,7 @@ public:
     void RecCalc( const char *key );
     void CmHelp();
 
-    void InsertChanges( TIArray<CompItem>& aIComp );
+    void InsertChanges( TIArray<CompItem>& aIComp ); // ???????
 };
 
 
