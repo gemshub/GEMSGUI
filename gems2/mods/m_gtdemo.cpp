@@ -272,6 +272,7 @@ TGtDemo::MakeQuery()
 {
 //    pImp->MakeQuery();
     const char * p_key;
+    gstring prkey;
     int size[7];
 
     p_key  = db->PackKey();
@@ -283,7 +284,7 @@ TGtDemo::MakeQuery()
     size[5] = gdp->dimEF[1];
     size[6] = gdp->dimXY[1];
 
-    if( !vfGtDemoSet( window(), p_key, size ))
+    if( !vfGtDemoSet( window(), p_key, size,  prkey ))
          Error( p_key, "GtDemo record configuration cancelled by the user!" );
      //  return;   // cancel
 
@@ -300,6 +301,8 @@ TGtDemo::MakeQuery()
      gdp->PtAEF = S_ON;
     else
      gdp->PtAEF = S_OFF;
+// set up process key
+    strncpy( gdp->prKey, prkey.c_str(), MAXRKEYLEN );
 
 }
 

@@ -20,6 +20,7 @@
 #define GtDemoWizard_included
 
 #include "GtDemoWizardData.h"
+#include "gstring.h"
 
 class GtDemoWizard : public GtDemoWizardData
 {
@@ -28,11 +29,12 @@ class GtDemoWizard : public GtDemoWizardData
 public:
 
     GtDemoWizard( const char* pkey, int sizes[7],
-                   QWidget* parent = NULL);
+                  const char *proc_key, QWidget* parent = NULL);
     virtual ~GtDemoWizard();
 
 
     void   getSizes( int size[7] );
+    gstring getPrKey();
 //    void   getFlags( char flgs[24] );
 //    double   getR2();
 

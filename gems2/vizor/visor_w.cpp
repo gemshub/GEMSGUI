@@ -864,12 +864,13 @@ vfProcessSet(QWidget* par, const char * p_key,
 }
 
 bool
-vfGtDemoSet(QWidget* par, const char * p_key, int size[7] )
+vfGtDemoSet(QWidget* par, const char * p_key, int size[7], gstring& prkey )
 {
-     GtDemoWizard cdlg( p_key, size, par );
+     GtDemoWizard cdlg( p_key, size, prkey.c_str(), par );
      if( !cdlg.exec() )
        return false;
     cdlg.getSizes( size );
+    prkey = cdlg.getPrKey();
 
     return true;
 }

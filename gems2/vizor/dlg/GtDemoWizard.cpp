@@ -21,6 +21,7 @@ const char *GTDEMO_HTML = "gtdemo_setup";
 #include <qcheckbox.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
+#include <qlineedit.h>
 
 
 #include "GtDemoWizard.h"
@@ -31,7 +32,8 @@ const char *GTDEMO_HTML = "gtdemo_setup";
 
 #define Inherited GtDemoWizardData
 
-GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], QWidget* parent):
+GtDemoWizard::GtDemoWizard( const char* pkey, int size[7],
+                            const char *proc_key, QWidget* parent):
         Inherited( parent, 0, true )
 {
     gstring str1= "Setup to Create GtDemo:  ";
@@ -65,7 +67,7 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], QWidget* parent):
     pECol->setValue(size[5]);
 //Page3
     spinBox18->setValue(size[1]);
-
+    lineEditProcesKey->setText( proc_key );
 }
 
 
@@ -116,6 +118,13 @@ void   GtDemoWizard::getSizes( int size[7] )
 
 }
 
+gstring
+GtDemoWizard::getPrKey()
+{
+  const char* ss = lineEditProcesKey->text();
+  gstring str = ss;
+  return str;
+}
 
 
 void
