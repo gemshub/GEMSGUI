@@ -1048,11 +1048,13 @@ TCModule::CmScript()
         sd_key += db->GetKeywd();
         sd_key += ":";
       sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
-          sd_key.c_str(), "Select key of script record", KEY_OLD);
+          sd_key.c_str(), "Select an appropriate script record", KEY_OLD);
       if( sd_key.empty() )
       return;
       ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
-       pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
+       if( pImp )
+           pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
+       else pVisorImp->OpenModule(0, RT_SDATA);  // KD: workaround for NewSystemDialog 
       ((TCModule *)&aMod[RT_SDATA])->Update();
 
     }
