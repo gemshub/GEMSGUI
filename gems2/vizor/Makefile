@@ -43,7 +43,7 @@ OBJ_SUB   = ./kernel/kernel.o ./dlg/dlg.o ./libs/config.o  ./libs/gstring.o
 TARGET	= ../lib/gemviz.o
 
 
-.PHONY subdirs_mk all
+.PHONY: subdirs_mk all
 
 all:      $(TARGET)
 
