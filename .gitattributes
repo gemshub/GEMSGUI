@@ -250,7 +250,6 @@ gems2/vizor/dlg/SetFiltersDialog.ui svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/SettingsDialog.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/SettingsDialog.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/SettingsDialog.ui svn_keywords=Author+Date+Id+Revision
-gems2/vizor/dlg/tmp_moc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/graph.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/graph.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/help.cpp svn_keywords=Author+Date+Id+Revision
