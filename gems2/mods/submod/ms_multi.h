@@ -307,6 +307,7 @@ public:
 
     //mass transport
     void to_file( fstream& ff );
+    void to_text_file();
     void from_file( fstream& ff );
 //    void multi_realloc( char PAalp, char PSigm );
 //    void multi_free();
@@ -362,6 +363,7 @@ public:
 
     //mass transport
     void to_file( fstream& ff );
+    void to_text_file();
     void from_file( fstream& ff );
     void multi_realloc( char PAalp, char PSigm );
     void multi_free();

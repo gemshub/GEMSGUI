@@ -300,6 +300,7 @@ STEP_POINT();
 #endif
    /* minimization  IPM */
     eRet = InteriorPointsMethod( );
+
 // STEPWISE (3)  - stop point to examine output from IPM()
 #ifndef IPMGEMPLUGIN
 STEP_POINT();
@@ -468,6 +469,7 @@ ITDTEST: /* test flag modes */
 // RESET_GT:  ??????????????????????????????????
     memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
     return false;
+
 // AGAIN: Call simplex if necessary
 //   return AutoInitialApprox();
 }
@@ -813,7 +815,7 @@ int TProfil::Set_DC_limits( int Mode )
                     XL = pmp->DLL[j]*XFL;
                     break;
                 case CON_WTFR:
-//Ask to Dima!!! 20/04/2002
+//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
                     XU = pmp->DUL[j]*XFU*MWXW /
                          syst->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );

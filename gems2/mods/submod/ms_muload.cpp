@@ -214,7 +214,8 @@ LOAD_NIDMCOEF:
                 /*        pmp->DMc = (float *)realloc( (void *)pmp->DMc,
                            (kd+pmp->LsMdc[k]*pmp->L1[k])*sizeof(float));
                 */        pmp->DMc = (float *) aObj[ o_wi_dmc ].Alloc(
-                                         kd+pmp->LsMdc[k]*pmp->L1[k], 1, F_ );
+                                     /* pmp->Ls Predlagayu postavit`*/
+                                       kd+pmp->LsMdc[k]*pmp->L1[k], 1, F_ );
 
             ErrorIf( pmp->DMc==NULL, "SolModLoad", "Error realloc memory for pmp->DMc." );
             for( j = JB, jkd=0; j < JE; j++ )

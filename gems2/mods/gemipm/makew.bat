@@ -1,1 +1,1 @@
-make -f Makefile.w32 RELEASE=NO > compile.out
+make -f Makefile.w32 > compile.out

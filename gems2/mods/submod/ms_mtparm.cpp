@@ -284,6 +284,7 @@ void TMTparm::MTparmAlloc( )
     if( tp.PtvVm == S_OFF )
         tp.PtvVm = S_REM;  /* default array */
     dyn_new();
+    aSta.setdef();  //Added Sveta 15/06/2002 !!!!
 }
 
 // realoc memory to MTPARM structure and load data to arrays

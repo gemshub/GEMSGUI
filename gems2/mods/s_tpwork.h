@@ -124,6 +124,12 @@ struct STATES
         Pres = -1;
         Dens[0] =Dens[1] = 0.;
     }
+    void setdef()
+    {
+        Temp = -274.;
+        Pres = -1;
+        Dens[0] =Dens[1] = 0.;
+    }
 };
 
 extern struct STATES aSta;

@@ -1,5 +1,220 @@
 
 #include "m_param.h"
+//---------------------------------------------------------//
+// for test out data
+void outArray( fstream& ff, char *name, short* arr, int size )
+{
+ ff << endl << name << endl;
+ for( int ii=0, jj=1; ii<size; ii++, jj++  )
+ {
+    ff << arr[ii] << " ";
+    if(jj == 10)
+    { jj=0;  ff << endl;}
+ }
+}
+
+void outArray( fstream& ff, char *name,  float* arr, int size )
+{
+ ff << endl << name << endl;
+ for( int ii=0, jj=1; ii<size; ii++, jj++  )
+ {
+    ff << arr[ii] << " ";
+    if(jj == 10)
+    { jj=0;  ff << endl;}
+ }
+}
+
+
+void outArray( fstream& ff, char *name, double* arr, int size )
+{
+ ff << endl << name << endl;
+ for( int ii=0, jj=1; ii<size; ii++, jj++  )
+ {
+    ff << arr[ii] << " ";
+    if(jj == 10)
+    { jj=0;  ff << endl;}
+ }
+}
+
+void TMulti::to_text_file( )
+{
+    //static values
+   char PAalp;
+   char PSigm;
+   float EpsW;
+   float RoW;
+
+#ifndef IPMGEMPLUGIN
+   PAalp = syp->PAalp;
+   PSigm = syp->PSigm;
+   EpsW = TProfil::pm->tpp->EpsW;
+   RoW = TProfil::pm->tpp->RoW;
+#else
+   PAalp = PAalp_;
+   PSigm = PSigm_;
+   EpsW = EpsW_;
+   RoW = RoW_;
+#endif
+
+ fstream ff("Multi_Out", ios::out );
+ ErrorIf( !ff.good() , "Multi_Out", "Fileopen error");
+
+ ff << pm.stkey << endl;
+
+   outArray( ff, "Short_Const",  &pm.N, 36 );
+   outArray( ff, "Double_Const",  &pm.TC, 55 );
+   outArray( ff, "EpsW", &EpsW, 1);
+   outArray( ff, "RoW", &RoW, 1);
+
+   //dynamic values
+
+    // Part 1
+
+    /* need  always to alloc vectors */
+   outArray( ff, "L1", pm.L1,  pm.FI);
+   outArray( ff, "muk", pm.muk, pm.FI);
+   outArray( ff, "mui", pm.mui, pm.N);
+   outArray( ff, "muj", pm.muj,  pm.L);
+   outArray( ff, "DUL", pm.DUL,  pm.L);
+   outArray( ff, "DLL", pm.DLL,  pm.L);
+   outArray( ff, "Vol", pm.Vol,  pm.L);
+   outArray( ff, "Pparc", pm.Pparc,  pm.L);
+   outArray( ff, "MM", pm.MM,  pm.L);
+   outArray( ff, "Awt", pm.Awt, pm.N);
+   outArray( ff, "A", pm.A,  pm.N*pm.L);
+   outArray( ff, "XFs", pm.XFs, pm.FI);
+   outArray( ff, "Falps", pm.Falps,  pm.FI);
+   outArray( ff, "G", pm.G,  pm.L);
+   outArray( ff, "G0", pm.G0,  pm.L);
+   outArray( ff, "lnGam", pm.lnGam,  pm.L);
+   outArray( ff, "lnGmo", pm.lnGmo,  pm.L);
+   outArray( ff, "B", pm.B,  pm.N);
+   outArray( ff, "U", pm.U,  pm.N);
+   outArray( ff, "U_r", pm.U_r,  pm.N);
+   outArray( ff, "C", pm.C,  pm.N);
+   outArray( ff, "XF", pm.XF,  pm.FI);
+   outArray( ff, "YF", pm.YF,  pm.FI);
+   outArray( ff, "Falp", pm.Falp,  pm.FI);
+   outArray( ff, "X", pm.X,  pm.L);
+   outArray( ff, "Y", pm.Y,  pm.L);
+   outArray( ff, "XY", pm.XY,  pm.L);
+   outArray( ff, "MU", pm.MU,  pm.L);
+   outArray( ff, "EMU", pm.EMU,  pm.L);
+   outArray( ff, "NMU", pm.NMU,  pm.L);
+   outArray( ff, "W", pm.W,  pm.L);
+   outArray( ff, "F", pm.F,  pm.L);
+   outArray( ff, "F0", pm.F0,  pm.L);
+   outArray( ff, "YOF", pm.YOF,  pm.FI);
+
+
+   outArray( ff, "lnGmM", pm.lnGmM,  pm.L);
+   outArray( ff, "GEX", pm.GEX,  pm.L);
+   outArray( ff, "FVOL", pm.FVOL,  pm.FI);
+   outArray( ff, "FWGT", pm.FWGT,  pm.FI);
+
+    if( pm.L > 0 )
+    {
+      outArray( ff, "Y_la", pm.Y_la,  pm.L);
+      outArray( ff, "Y_w", pm.Y_w,  pm.L);
+      outArray( ff, "Fx", pm.Fx,  pm.L);
+      outArray( ff, "Wx", pm.Wx,  pm.L);
+      outArray( ff, "VL", pm.VL, pm.L);
+      outArray( ff, "Gamma", pm.Gamma,  pm.L);
+      outArray( ff, "lnGmf", pm.lnGmf,  pm.L);
+      outArray( ff, "D", pm.D,  pm.L);
+    }
+
+   // Part 2  not requited arrays
+    if( pm.FIs > 0 && pm.Ls > 0 )
+    {
+      outArray( ff, "BF", pm.BF,  pm.FIs*pm.N);
+      outArray( ff, "XFA", pm.XFA,  pm.FIs);
+      outArray( ff, "YFA", pm.YFA,  pm.FIs);
+      outArray( ff, "LsMod", pm.LsMod, pm.FIs);
+      outArray( ff, "LsMdc", pm.LsMdc, pm.FIs);
+      outArray( ff, "PMc", pm.PMc,  pm.FIs);
+      outArray( ff, "DMc", pm.DMc,  pm.Ls);
+      outArray( ff, "PUL", pm.PUL,  pm.FIs);
+      outArray( ff, "PLL", pm.PLL,  pm.FIs);
+
+    }
+
+    if( pm.LO > 1 )
+    {
+      outArray( ff, "Y_m", pm.Y_m,  pm.L);
+      outArray( ff, "IC_m", pm.IC_m,  pm.N);
+      outArray( ff, "IC_lm", pm.IC_lm,  pm.N);
+      outArray( ff, "IC_wm", pm.IC_wm,  pm.N);
+    }
+
+    /* dispersion and sorbtion phases */
+    if( PAalp != S_OFF )
+    {
+      outArray( ff, "Aalp", pm.Aalp, pm.FI);
+      outArray( ff, "Xr0h0", &pm.Xr0h0[0][0],  pm.FI*2);
+    }
+
+   if( PSigm != S_OFF )
+      outArray( ff, "Sigw", pm.Sigw,  pm.FI);
+
+    if( PSigm != S_OFF )
+      outArray( ff, "Sigg", pm.Sigg,  pm.FI);
+
+    if( pm.E )
+    {
+      outArray( ff, "EZ", pm.EZ,  pm.L);
+      outArray( ff, "Xcond", pm.Xcond,  pm.FI);
+      outArray( ff, "Xeps", pm.Xeps,  pm.FI);
+    }
+
+    if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
+    { /* ADSORBTION AND ION IXCHANDG */
+      outArray( ff, "SATNdx", &pm.SATNdx[0][0], 2*pm.Ls);
+
+      outArray( ff, "Nfsp", &pm.Nfsp[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "MASDT", &pm.MASDT[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XcapA", &pm.XcapA[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XcapB", &pm.XcapB[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XcapD", &pm.XcapD[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XcapF", &pm.XcapF[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XdlA", &pm.XdlA[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XdlB", &pm.XdlB[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XdlD", &pm.XdlD[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XpsiA", &pm.XpsiA[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XpsiB", &pm.XpsiB[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XpsiD", &pm.XpsiD[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XlamA", &pm.XlamA[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "Xetaf", &pm.Xetaf[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XetaA", &pm.XetaA[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XetaB", &pm.XetaB[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XFTS", &pm.XFTS[0][0],  pm.FIs*pm.FIat);
+
+      outArray( ff, "MASDJ", pm.MASDJ, pm.Ls);
+      outArray( ff, "lnSAT", pm.lnSAT,  pm.Ls);
+    }
+
+    if( pm.PG > 0 )
+    {
+      outArray( ff, "Fug", pm.Fug, pm.PG);
+      outArray( ff, "Fug_l", pm.Fug_l, pm.PG);
+      outArray( ff, "Ppg_l", pm.Ppg_l, pm.PG);
+    }
+
+    // Part 3
+
+    if( pm.Ls > 1 && pm.FIs > 0 )
+    {
+      outArray( ff, "Wb", pm.Wb, pm.Ls);
+      outArray( ff, "Wabs", pm.Wabs, pm.Ls);
+      outArray( ff, "Rion", pm.Rion, pm.Ls);
+
+      outArray( ff, "Qp", pm.Qp,  pm.FIs*20);
+      outArray( ff, "Qd", pm.Qd,  20);
+
+    }
+}
+
+//---------------------------------------------------------//
 
 // writing MULTI to binary file
 void TMulti::to_file( fstream& ff )
@@ -197,8 +412,8 @@ void TMulti::to_file( fstream& ff )
 
       ff.write ((char*)pm.Qp, sizeof(double)*pm.FIs*20);
       ff.write ((char*)pm.Qd, sizeof(double)*20);
-
-    }
+   }
+   to_text_file();
 }
 
 // reading MULTI from binary file
@@ -235,8 +450,7 @@ void TMulti::from_file( fstream& ff )
 #endif
 
    //dynamic values
-
-    // Part 1
+   // Part 1
 
     /* need  always to alloc vectors */
    ff.read ((char*)pm.L1,  sizeof(short)*pm.FI);

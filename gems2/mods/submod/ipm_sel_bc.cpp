@@ -741,7 +741,7 @@ int TProfil::InteriorPointsIteration( )
         case BOTH_LIM:
             W[j]= ((pmp->Y[j]-pmp->DLL[j])<(pmp->DUL[j]-pmp->Y[j]))?
                   (pmp->Y[j]-pmp->DLL[j]): (pmp->DUL[j]-pmp->Y[j]);
-            break;    // added to bugfix by DAK 22.08.01 PSI      
+            break;    // added to bugfix by DAK 22.08.01 PSI
         default: // big error
             Error( "InteriorPointsIteration", "Error in code pmp->RLC[j]!!!!" );
         }
@@ -856,6 +856,8 @@ int TProfil::InteriorPointsMethod( )
     for( IT1 = 0; IT1 < pa.p.IIM; IT1++, pmp->IT++ )
     {  /* main cycle of IPM iterations */
        // if(pmp->W1)
+  //  if( IT1 > 22 )
+  //   multi->to_text_file();  //test for calck 17/06/02
 
         pmp->NR=pmp->N;
         if( pmp->LO ) // water-solvent is present

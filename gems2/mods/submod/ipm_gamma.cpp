@@ -1169,7 +1169,7 @@ double TProfil::Ej_init_calc( double, int j, int k)
 /* Link DOD for Non-ideality Equations in GammaCalc() */
 void TProfil::pm_GC_ods_link( int k, int jb, int jpb, int jdb )
 {
-//Ask to Dima!!! 20/04/2002
+//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
     ErrorIf( k < 0 || k >= pmp->FIs , "GammaCalc", "Illegal link: k=0||>FIs" );
     aObj[ o_nsmod].SetPtr( pmp->sMod[k] );
@@ -1280,7 +1280,7 @@ void TProfil::DebyeHueckel3HelKarp( int jb, int je, int jpb, int jdb, int k )
     bg=pmp->PMc[jpb+5];
     sqI = sqrt( I );
 
-//Ask to Dima!!! 20/04/2002
+//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
     if( fabs(A) < 1e-9 )
         A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
@@ -1349,7 +1349,7 @@ void TProfil::Davies03temp( int jb, int je, int k )
     T=pmp->Tc;
     sqI = sqrt( I );
 //    if( fabs(A) < 1e-9 )
-//Ask to Dima!!! 20/04/2002
+//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
     A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
 #else
