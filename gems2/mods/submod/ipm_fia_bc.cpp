@@ -518,17 +518,18 @@ void TProfil::Simplex(int M, int N, int T, double GZ, double EPS,
                 goto FINISH;  // Converged
             WORK( GZ, EPS, &I0, &J0, &Z, &ITER, M, STR, NMB, AA, BASE, &UNO, UP, A, Q);
             if( UNO)
-                goto FINISH; // No minimum - solution at boundary of constraints polyhedron
+                goto FINISH; // Solution at boundary of the constraints polyhedron
         }
-
+        if( EPS > 1.0e-6 )
+        {
 #ifndef IPMGEMPLUGIN
-        vfMessage(window(), "Warning:",
-            "The simplex solution cannot be found with required precision.", vfInfo);
+           vfMessage( window(), "E01IPM: ",
+             "Simplex solution cannot be obtained with sufficient precision.", vfInfo);
 #else
-         cout<< "The simplex solution cannot be found with required precision."
+         cout<< "E01IPM: Simplex solution cannot be obtained with sufficient precision."
          << endl;
 #endif
-
+        }
 FINISH: FIN( EPS, M, N, STR, NMB, BASE, UND, UP, U, AA, A, Q, &ITER);
         delete[] A;
         delete[] Q;
