@@ -28,6 +28,7 @@ const char *GEMS_TOC_HTML = "gems_toc";
 #include "service.h"
 #include "v_mod.h"
 #include "t_print.h"
+#include "t_read.h"
 #ifdef __unix
 #include <unistd.h>
 #endif
@@ -1197,6 +1198,7 @@ TCModule::CmExport()
     try
     {
         MessageToSave();
+        RecExport( Filter.c_str() );
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -1229,6 +1231,7 @@ TCModule::CmImport()
     try
     {
         MessageToSave();
+        RecImport();
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -1343,6 +1346,332 @@ TCModule::KeysToTXT( const char *pattern )
     ErrorIf( !f.good() , GetName(), "Writefile error");
 }
 
+// Unloads Data Record to txt-file
+void
+TCModule::RecToTXT( const char *pattern )
+{
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark records to be unloaded into txt-file",
+       nRT, pattern );
+    if( aKey.GetCount() <1 )
+        return;
+
+    gstring s = GetName();
+    gstring filename;
+    s += " : Please, give a file name for unloading records";
+    if( vfChooseFileSave( pImp, filename, s.c_str() ) == false )
+        return;
+    fstream f(filename.c_str(), ios::out);
+    ErrorIf( !f.good() , GetName(), "File write error");
+
+    for(uint i=0; i<aKey.GetCount(); i++ )
+    {
+       int Rnum = db->Find( aKey[i].c_str() );
+       db->Get( Rnum );
+       aObj[o_reckey].SetPtr( (void *)aKey[i].c_str());
+       aObj[o_reckey].toTXT(f);
+       for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
+            aObj[no].toTXT(f);
+    }
+
+    ErrorIf( !f.good() , GetName(), "Filewrite error");
+    dyn_set();
+}
+
+// Loads Data Records from txt-file
+
+void
+TCModule::RecOfTXT()
+{
+    vstr buf(150);
+    int Rnum;
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
+
+    gstring s =gstring( GetName() )+" : Please, select file with unloaded records";
+    gstring filename;
+    if( vfChooseFileOpen( pImp, filename, s.c_str() ) == false )
+        return;
+    fstream f(filename.c_str(), ios::in);
+    ErrorIf( !f.good() , GetName(), "Fileread error...");
+
+    while( !f.eof() )
+    {
+        aObj[o_reckey].SetPtr(buf);
+        aObj[o_reckey].ofTXT(f);
+        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
+            aObj[no].ofTXT(f);
+        buf[db->KeyLen()] = '\0';
+        Rnum = db->Find( buf );
+        if( Rnum >= 0 )
+        {
+           if( vfQuestion(pImp, buf.p,
+               "Data record with this key already exists! Replace?"))
+              db->Rep( Rnum);
+        }
+        else {  AddRecord( buf, fnum );
+                if( fnum == -2 )
+                  break;
+             }
+        s = gstring( buf );
+        do
+         {
+            f.get(buf[0]);
+            if( !f.good() )
+                break;
+         } while( buf[0] == ' ' || buf[0]=='\n' );
+        if( f.eof() )
+            break;
+        f.putback( buf[0] );
+    }
+    if( f.bad() )
+    {
+      gstring str = "File read error! \n";
+              str += "Last good record :";
+              str += s;
+      Error( GetName(), str.c_str() );
+     }
+     dyn_set();
+}
+
+// Unloads Data Record to user format
+void
+TCModule::RecExport( const char *pattern )
+{
+
+    // read sdref record with format prn
+    gstring sd_key = "escript*:*:";
+            sd_key += db->GetKeywd();
+            sd_key += ":";
+    sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+          sd_key.c_str(), "Select key of escript format", KEY_OLD);
+    if( sd_key.empty() )
+     return;
+    ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+    char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+    if( !text_fmt )
+       Error( sd_key.c_str(), "No format text in this record.");
+
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark records to be unloaded into txt-file",
+       nRT, pattern );
+    if( aKey.GetCount() <1 )
+        return;
+
+    gstring s = GetName();
+    gstring filename;
+    s += " : Please, give a file name for unloading records";
+    if( vfChooseFileSave( pImp, filename, s.c_str() ) == false )
+        return;
+   ios::openmode mod = ios::out;
+   if( !(::access(filename.c_str(), 0 )) ) //file exists
+     switch( vfQuestion3( pImp, filename.c_str(),
+                   "This file exists! What to do?",
+                  "&Append", "&Overwrite", "&Cancel") )
+     {
+       case VF3_2:
+                mod = ios::out;
+                break;
+      case VF3_1:
+                mod = ios::app;
+                break;
+      case VF3_3:
+                return;
+     }
+    fstream f(filename.c_str(), ios::out);
+    ErrorIf( !f.good() , GetName(), "File write error");
+
+    for(uint i=0; i<aKey.GetCount(); i++ )
+    {
+       int Rnum = db->Find( aKey[i].c_str() );
+       db->Get( Rnum );
+       TPrintData dat( sd_key.c_str(), nRT, f, text_fmt );
+    }
+
+    ErrorIf( !f.good() , GetName(), "Filewrite error");
+    dyn_set();
+}
+
+// Loads Data Records from user format
+void
+TCModule::RecImport()
+{
+    vstr buf(150);
+    int Rnum;
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
+    char ch;
+
+    // read sdref record with format read
+    gstring sd_key = "iscript*:*:";
+            sd_key += db->GetKeywd();
+            sd_key += ":";
+    sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+          sd_key.c_str(), "Select key of iscript format", KEY_OLD);
+    if( sd_key.empty() )
+     return;
+    ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+    char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+    if( !text_fmt )
+       Error( sd_key.c_str(), "No format text in this record.");
+
+    // translate scripts
+    TReadData dat( sd_key.c_str(), nRT, text_fmt );
+
+    gstring s =gstring( GetName() )+" : Please, select file with imported records";
+    gstring filename;
+    if( vfChooseFileOpen( pImp, filename, s.c_str() ) == false )
+        return;
+    fstream f(filename.c_str(), ios::in);
+    ErrorIf( !f.good() , GetName(), "Fileread error...");
+
+    int iter = 0;
+    while( !f.eof() )
+    {
+        dat.readRecord( iter, f );
+        gstring keyp = db->UnpackKey();
+        Rnum = db->Find( keyp.c_str() );
+        if( Rnum >= 0 )
+        {
+           if( vfQuestion(pImp, keyp.c_str(),
+               "Data record with this key already exists! Replace?"))
+              db->Rep( Rnum );
+        }
+        else {  AddRecord( keyp.c_str(), fnum );
+                if( fnum == -2 )
+                  break;
+             }
+        s = keyp;     
+        do
+         {
+            f.get(ch);
+            if( !f.good() )
+                break;
+         } while( ch == ' ' || ch =='\n' );
+        if( f.eof() )
+            break;
+        f.putback( ch );
+        iter++;
+    }
+    if( f.bad() )
+    {
+      gstring str = "File read error! \n";
+              str += "Last good record :";
+              str += s;
+      Error( GetName(), str.c_str() );
+     }
+     dyn_set();
+}
+
+
+// delete list of records from Data Base
+void
+TCModule::DelList( const char *pattern )
+{
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark record keys to be deleted from database",
+       nRT, pattern );
+
+    for(uint i=0; i<aKey.GetCount(); i++ )
+    {
+        gstring str = "Please, confirm deleting record with key: ";
+        str += aKey[i];
+        if( ! vfQuestion(pImp, GetName(), str.c_str() ) )
+            continue;
+        DeleteRecord( aKey[i].c_str(), false );
+    }
+}
+
+// transfer list of records in Data Base to another file
+// (ever used???)  Has to be re-implemented, indeed !
+
+void
+TCModule::Transfer( const char *pattern )
+{
+    int nrec = 0;
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
+
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark record keys to be moved",
+       nRT, pattern );
+
+
+    for(uint i=0; i<aKey.GetCount(); i++ )
+    {
+        nrec = db->Find( aKey[i].c_str() );
+        db->Get( nrec );
+        /// !!!
+        int oldfile = db->fNum;
+        db->Del( nrec );
+        AddRecord( aKey[i].c_str(), fnum );
+        if( fnum == -2 )
+        { db->AddRecordToFile( aKey[i].c_str(), oldfile );
+          break;
+         }
+    }
+}
+
+// copy list of records in Data Base to another file
+// (Sveta 15/06/01)
+
+void
+TCModule::CopyRecordsList( const char *pattern )
+{
+    int nrec = 0;
+    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
+
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark record keys to be copied",
+       nRT, pattern );
+
+    for(uint i=0; i<aKey.GetCount(); i++ )
+    {
+        nrec = db->Find( aKey[i].c_str() );
+        db->Get( nrec );
+        /// !!! changing record key
+        gstring str= aKey[i];
+        str = GetKeyofRecord( str.c_str(),
+                 "Insert new record keye ", KEY_NEW );
+        if(  str.empty() )
+            return ;
+        AddRecord( str.c_str(), fnum );
+        if( fnum == -2 )
+            break;
+    }
+}
+
+TCIntArray
+TCModule::SelectFileList(int mode)
+{
+    TCStringArray names;
+    TCIntArray indx;
+    TCIntArray sel;
+
+    db->GetFileList(mode, names, indx, sel);
+
+    TCIntArray aSel = vfMultiChoiceSet(pImp, names, "Selection of files", sel);
+
+    TCIntArray arr;
+    for( uint i=0; i<aSel.GetCount(); i++ )
+        arr.Add( indx[aSel[i]] );
+
+    return arr;
+}
+
+//========================================================
+
+// descructor for TModList for cleaning up Modules from memory
+
+TModuleList::~TModuleList()
+{
+//    for( unsigned ii=0; ii<GetCount(); ii++ )
+//        delete elem(ii);
+}
+
+// public list of modules
+TModuleList aMod;
+
+
+// out     ========================
+/*
 // Unloads Data Record to txt-file
 
 void
@@ -1499,113 +1828,7 @@ TCModule::RecOfTXT()
     dyn_set();
 }
 
-// delete list of records from Data Base
-
-void
-TCModule::DelList( const char *pattern )
-{
-    TCStringArray aKey = vfMultiKeys( pImp,
-       "Please, mark record keys to be deleted from database",
-       nRT, pattern );
-
-    for(uint i=0; i<aKey.GetCount(); i++ )
-    {
-        gstring str = "Please, confirm deleting record with key: ";
-        str += aKey[i];
-        if( ! vfQuestion(pImp, GetName(), str.c_str() ) )
-            continue;
-        DeleteRecord( aKey[i].c_str(), false );
-    }
-}
-
-// transfer list of records in Data Base to another file
-// (ever used???)  Has to be re-implemented, indeed !
-
-void
-TCModule::Transfer( const char *pattern )
-{
-    int nrec = 0;
-    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
-
-    TCStringArray aKey = vfMultiKeys( pImp,
-       "Please, mark record keys to be moved",
-       nRT, pattern );
-
-
-    for(uint i=0; i<aKey.GetCount(); i++ )
-    {
-        nrec = db->Find( aKey[i].c_str() );
-        db->Get( nrec );
-        /// !!!
-        int oldfile = db->fNum;
-        db->Del( nrec );
-        AddRecord( aKey[i].c_str(), fnum );
-        if( fnum == -2 )
-        { db->AddRecordToFile( aKey[i].c_str(), oldfile );
-          break;
-         }
-    }
-}
-
-// copy list of records in Data Base to another file
-// (Sveta 15/06/01)
-
-void
-TCModule::CopyRecordsList( const char *pattern )
-{
-    int nrec = 0;
-    int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
-
-    TCStringArray aKey = vfMultiKeys( pImp,
-       "Please, mark record keys to be copied",
-       nRT, pattern );
-
-    for(uint i=0; i<aKey.GetCount(); i++ )
-    {
-        nrec = db->Find( aKey[i].c_str() );
-        db->Get( nrec );
-        /// !!! changing record key
-        gstring str= aKey[i];
-        str = GetKeyofRecord( str.c_str(),
-                 "Insert new record keye ", KEY_NEW );
-        if(  str.empty() )
-            return ;
-        AddRecord( str.c_str(), fnum );
-        if( fnum == -2 )
-            break;
-    }
-}
-
-TCIntArray
-TCModule::SelectFileList(int mode)
-{
-    TCStringArray names;
-    TCIntArray indx;
-    TCIntArray sel;
-
-    db->GetFileList(mode, names, indx, sel);
-
-    TCIntArray aSel = vfMultiChoiceSet(pImp, names, "Selection of files", sel);
-
-    TCIntArray arr;
-    for( uint i=0; i<aSel.GetCount(); i++ )
-        arr.Add( indx[aSel[i]] );
-
-    return arr;
-}
-
-//========================================================
-
-// descructor for TModList for cleaning up Modules from memory
-
-TModuleList::~TModuleList()
-{
-//    for( unsigned ii=0; ii<GetCount(); ii++ )
-//        delete elem(ii);
-}
-
-// public list of modules
-TModuleList aMod;
+*/
 
 //--------------------- End of v_module.cpp ---------------------------
 

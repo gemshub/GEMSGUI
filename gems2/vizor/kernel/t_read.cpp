@@ -81,56 +81,128 @@ TReadData::~TReadData()
 // Format:
 //        %s	        Read characters until a " "
 //             using only SetString() => no use any formats
-//        EMPTY         Set empty value
-//        SKIP          Skip value
-//        "characters"  Set values for object (SetString())
+//        EMPTY          Set empty value
+//        IREC           Set reading record number
+//        "characters"   Set string value
+//        #obj_name
+//        #obj_name[i]
+//        #obj_name[i,j] Set values from object (GetString())
 void
 TReadData::getFormat()
 {
-  if( *input == '%' )
+  switch( *input )
   {
-    int i = 1;
-    int size = 400;
-    while( isdigit(input[i]))
-     i++;
-     if( input[i] != 's' )
-     {  gstring str_err = "Illegal format: \n";
-        str_err += input;
-        Error( key_format.c_str(), str_err.c_str() );
-      }
-    if( i>1 ) //digits
-    {
-      sscanf(input+1, "%d", &size );
-    }
-    aFmts.Add( new RFormat( read_r, size,
-                     gstring( input, 0, i+1) ) );
-     input+=i+1;
-  }
-  else if( strncmp( input, "EMPTY", 5 ) )
+   case '%': {
+       int i = 1;
+       int size = 400;
+       while( isdigit(input[i]))
+               i++;
+       if( input[i] != 's' )
+       {  gstring str_err = "Illegal format (must be '%nns'): \n";
+                str_err += input;
+         Error( key_format.c_str(), str_err.c_str() );
+       }
+       if( i>1 ) //digits
+       {
+        sscanf(input+1, "%d", &size );
+       }
+       aFmts.Add( new RFormat( read_r, size,
+               gstring( input, 0, i+1) ) );
+       input+=i+1;
+       break;
+       }
+   case 'I':
+       if( !strncmp( input, "IREC", 4 ) )
+       {
+         aFmts.Add( new RFormat( irec_r, 0, "" ));
+         input+=4;
+       } else
+       {gstring str_err = "Illegal format (must be IREC): \n";
+                str_err += input;
+         Error( key_format.c_str(), str_err.c_str() );
+       }
+       break;
+   case 'E':
+       if( !strncmp( input, "EMPTY", 5 ) )
        {
          aFmts.Add( new RFormat( empty_r, 0, S_EMPTY ));
          input+=5;
-       }
-       else if( *input == '\"' )
-            {
-              input++;
-              char* pose = strchr( input, '\"');
-              if( !pose )
-              {  gstring str_err = "Illegal string: \n";
-                 str_err += input;
-                 Error( key_format.c_str(), str_err.c_str() );
-              }
-              aFmts.Add( new RFormat( string_r, 0,
-                            gstring( input, 0, pose-input ) ));
-              input = pose+1;
+       } else
+         { gstring str_err = "Illegal format (must be EMPTY): \n";
+                str_err += input;
+           Error( key_format.c_str(), str_err.c_str() );
+          }
+       break;
+   case '#': {
+        input++;
+        int  ii, jj, i=0;
+        while( input[i] != ',' && input[i] != ' ' &&
+               input[i] != '$'  && input[i] != '\t'&&
+               input[i] != '[' && input[i] != '\0'&&
+               input[i] != '\n')
+           i++;
+        gstring str = gstring( input, 0, i );
+        int data = aObj.Find( str.c_str() );
+        if( data == -1 )
+        {  gstring str_err = "Illegal object name: \n";
+            str_err += str;
+           Error( key_format.c_str(), str_err.c_str() );
+        }
+        input += i;
+        skipSpace();
+        if( *input == '[' )  // sizes
+        {
+          input++;
+          skipSpace();
+          i=0;
+          while( isdigit(input[i]) && input[i] != '\0')
+              i++;
+          if( i > 0 )
+            sscanf( input, "%d", &ii);
+          input += i;
+          skipSpace();
+          if( *input == ',' )
+          {
+            input++;
+            skipSpace();
+            i=0;
+            while( isdigit(input[i]) && input[i] != '\0')
+                i++;
+            if( i > 0 )
+              sscanf( input, "%d", &jj);
+            input += i;
+          }
+          skipSpace();
+          if( *input != ']')
+           {  gstring str_err = "Illegal format (left ']'): \n";
+               str_err += input;
+              Error( key_format, str_err.c_str() );
             }
- else
-  {  gstring str_err = "Illegal format: \n";
-     str_err += input;
-     Error( key_format.c_str(), str_err.c_str() );
-  }
+          input++;
+        }
+        aFmts.Add( new RFormat( object_r, data, ii, jj ));
+       }
+       break;
+   case '\"': {
+       input++;
+       char* pose = strchr( input, '\"');
+       if( !pose )
+       {  gstring str_err = "Illegal string ( left simbol '\"'): \n";
+              str_err += input;
+          Error( key_format.c_str(), str_err.c_str() );
+       }
+       aFmts.Add( new RFormat( string_r, 0,
+                   gstring( input, 0, pose-input ) ));
+       input = pose+1;
+       }
+       break;
+   default:
+      {  gstring str_err = "Illegal format: \n";
+         str_err += input;
+         Error( key_format.c_str(), str_err.c_str() );
+      }
+   }
   skipSpace();
-
 }
 
 
@@ -223,41 +295,58 @@ TReadData::getData( bool isList )
 
 
 void
-TReadData::prnData( fstream& fin, RFormat& fmt, RData& dt )
+TReadData::readData( fstream& fin, RFormat& fmt, RData& dt )
 {
   vstr strbuf(500);
   gstring dat_str;
 
+  
   switch( fmt.type )
   {
       case read_r:
-                 fin.read( strbuf.p, min(fmt.size, 500));
+                 if( fmt.size < 400  )
+                  fin.read( strbuf.p, fmt.size );
+                 else
+                  fin >> strbuf.p;
                  dat_str = gstring(strbuf.p);
                  break;
       case empty_r:
       case string_r:
                  dat_str = fmt.fmt;
                  break;
+      case irec_r:
+                 sprintf( strbuf, "%d", fmt.size );
+                 dat_str = gstring(strbuf.p);
+                 break;
+      case object_r:
+                 dat_str = aObj[fmt.size].GetStringEmpty( fmt.i, fmt.j );
+                 break;
 
   }
   if(  dt.objNum== -2 )
   { if( dt.i < rt[nRT].KeyNumFlds() )
-    strncpy( rt[nRT].FldKey( dt.i ), dat_str.c_str(), rt[nRT].FldLen( dt.i ));
+    {
+     memset( rt[nRT].FldKey( dt.i ), ' ', rt[nRT].FldLen( dt.i ));
+     strncpy( rt[nRT].FldKey( dt.i ), dat_str.c_str(),
+         min( (int)rt[nRT].FldLen( dt.i ), (int)dat_str.length() ));
+    }
   }
   else if(  dt.objNum > 0  )
     aObj[dt.objNum].SetString( dat_str.c_str(), dt.i, dt.j );
 
 }
 
-void  TReadData::readRecord( fstream& fread )
+void  TReadData::readRecord( int n_itr, fstream& fread )
 {
 
  for(uint ii=0; ii<aList.GetCount(); ii++)
  {
+   if( aFmts[ii].type == irec_r)
+       aFmts[ii].size = n_itr;
    if( aList[ii] == false )
-    prnData( fread, aFmts[ii], aDts[ii] );
-  else
-  {
+    readData( fread, aFmts[ii], aDts[ii] );
+   else
+   {
     int iN, iM;
     iN = aDts[ii].i;
     iM = aDts[ii].j;
@@ -266,9 +355,11 @@ void  TReadData::readRecord( fstream& fread )
      {
       aDts[ii].i = i;
       aDts[ii].j = j;
-      prnData( fread, aFmts[ii], aDts[ii] );
+      readData( fread, aFmts[ii], aDts[ii] );
      }
-  }
+    aDts[ii].i = iN;
+    aDts[ii].j = iM;
+   }
  }
  rpn.CalcEquat();
 }

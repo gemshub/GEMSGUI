@@ -256,6 +256,8 @@ public:
     void KeysToTXT( const char *pattern );
     void RecToTXT( const char *pattern );
     void RecOfTXT( );
+    void RecExport( const char *pattern );
+    void RecImport( );
 
     TCIntArray SelectFileList(int mode);
 

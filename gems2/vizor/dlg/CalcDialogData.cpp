@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'CalcDialog.ui'
 **
-** Created: Fr 1. Mrz 14:05:42 2002
+** Created: Mo 4. Mrz 11:35:32 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

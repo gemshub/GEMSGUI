@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'HLresDialog.ui'
 **
-** Created: Fr 1. Mrz 14:05:46 2002
+** Created: Mo 4. Mrz 11:35:35 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

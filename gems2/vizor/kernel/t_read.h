@@ -27,31 +27,47 @@
 
 
   enum data_rftype { 
-     read_r = 1 /*%nns*/, empty_r = 2 /*EMPTY*/,
-     string_r =4 /*"string"*/
+     read_r = 1, /*%nns*/
+     empty_r = 2, /*EMPTY*/
+     object_r = 3,/*#obj_name[i,j]*/
+     string_r =4, /*"string"*/
+     irec_r =5, /*IREC*/
     };
 
 
 // Format:
-//        %nns	        Read characters until a " " or nn
+//        %nns	         Read characters until a " " or nn
 //             using only SetString() => no use any formats
-//        EMPTY         Set empty value
-//        "characters"  Set values for object (SetString())
+//        EMPTY          Set empty value
+//        IREC           Set reading record number
+//        "characters"   Set string value
+//        #obj_name
+//        #obj_name[i]
+//        #obj_name[i,j] Set values from object (GetString())
 
 struct RFormat
 {
   int     type;
-  int     size;
+  int     size; // number of characters to read
+                // or object index for object_r type
+  int  i;        // to object_r i(N) index
+  int  j;        // to object_r j(M) index
   gstring fmt;
 
   RFormat( const char aType, int aSize, gstring aFmt ):
-    type( aType), size(aSize), fmt(aFmt)
+    type( aType), size(aSize), i(0), j(0), fmt(aFmt)
+  {
+
+  }
+
+  RFormat( const char aType, int obj_ndx,int i_ndx, int j_ndx ):
+    type( aType), size(obj_ndx),i(i_ndx), j(j_ndx), fmt("")
   {
 
   }
 
   RFormat( RFormat& d ):
-    type( d.type), size(d.size), fmt( d.fmt)
+    type( d.type), size(d.size), i(d.i), j(d.j), fmt( d.fmt)
   {}
 
   int FmtType()
@@ -92,7 +108,6 @@ struct RData
 
 
 // Format: RFormat RData, or
-//         RFormat RData ... RData, or (more than 1 , not reliased)
 //         list RFormat  #obj_name[sizeN,sizeM],
 //             ( reading sizeN*sizeM values )
 
@@ -114,7 +129,7 @@ protected:
    void skipSpace();
    void getFormat();
    void getData( bool isList );
-   void prnData( fstream& fin, RFormat& fmt, RData& dt );
+   void readData( fstream& fin, RFormat& fmt, RData& dt );
 
 public:
 
@@ -122,7 +137,7 @@ public:
     int nrt, const char *fmt_text );
     ~TReadData();
 
-    void  readRecord( fstream& fread );
+    void  readRecord( int n_itr, fstream& fread );
 };
 
 #endif  // _t_read_h

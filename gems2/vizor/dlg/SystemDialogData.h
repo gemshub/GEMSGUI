@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'SystemDialog.ui'
 **
-** Created: Fr 1. Mrz 14:05:39 2002
+** Created: Mo 4. Mrz 11:35:28 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

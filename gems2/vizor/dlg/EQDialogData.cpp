@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'EQDialog.ui'
 **
-** Created: Fr 1. Mrz 14:05:38 2002
+** Created: Mo 4. Mrz 11:35:28 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -1,18 +1,19 @@
 Format dlya vyvoda tablic rezul'tatov:
 
-All words case sensitive   !!!!!
+(All words are case sensitive)
 
-
-<FORMAT> =:: <COMMAND> { <COMMAND> }
-<COMMAND> =:: line <COLUMNS>  ¦ list <obj_name> <COLUMNS>
-<COLUMNS> =:: <STATEMENT> {, <STATEMENT>}
-<STATEMENT> =:: <FORMAT> <DATA>
-<FORMAT>    =:: %[flags][width][.prec]type_char
+<FORMAT>    =::  <COMMAND> { <COMMAND> }
+<COMMAND>   =::  line [## <equations> ##] <COLUMNS>  ¦
+                 list <obj_name> [## <equations> ##] <COLUMNS>
+<COLUMNS>   =::  <STATEMENT> {, <STATEMENT>}
+<STATEMENT> =::  <FORMAT> <DATA>
+<FORMAT>    =::  %[flags][width][.prec]type_char
 
  flags: "+" or "-";
  width = integer from 0 to 256;
  [.prec]= integer from 0 to 14
  type_char
+
  - s	Prints characters until a null-terminator
  - f	Floating point	signed value of the form [-]dddd.dddd.
  - e	Floating point	signed value of the form [-]d.dddde[+/-]ddd
@@ -21,49 +22,53 @@ All words case sensitive   !!!!!
 
 <DATA>  =::  [all] [label] <obj_name> ¦
              [label] <obj_name[i]>    ¦
-             <obj_name[i,j]>          ¦   (substring from-to for string data)
+             <obj_name[i,j]>          ¦   (substring from,to for string data)
              "text string"            ¦
              index                    ¦
              space                    ¦
              rkey                     ¦
-
              date                     ¦
-
              time                     ¦
 
+ <equations> =::  prn =: <condition>;
 
-     line            -- komanda pechati odnoy stroki
+     <condition>     -- GEMS Math Script conditional expression which
+                        uses line index ii and returns
+			0 (prn = 0 skips line) or
+			1 (prn <> 0 prints line)
 
-     list <obj_name> -- pechat' stol'ko strok, skol'ko
-                        strok (GetN()) v ob'ekte <obj_name>
-                        (the first dimension in DOD)
+     line            -- command for printing one line
 
-      all            -- pechataem vse kolonki <obj_name>  (GetM)
+     list <obj_name> -- print as many lines as defined by the first
+                        dimension (N) in the <obj_name> data object
+
+     all             -- print all columns (second dimension M) from
+                        <obj_name> data object in the previously specified
+                        format
+
+     label           -- print DOD label for the data object <obj_name>
+                        in the previously specified format
+
+     <obj_name>      -- pechataem znachenie ob'ekta <obj_name>
+                      i = index ( current line), j = 0
                         v zadannom pered etim formate
 
-      label           -- pechataem DOD label <obj_name>
-                        v zadannom pered etim formate
-
-      <obj_name>       -- pechataem znachenie ob'ekta <obj_name>
-                        i = index ( current line), j = 0
-                        v zadannom pered etim formate
-
-      <obj_name[col]>  -- pechataem znachenie ob'ekta <obj_name>
+     <obj_name[col]>  -- pechataem znachenie ob'ekta <obj_name>
                         i = index, j = col
                         v zadannom pered etim formate
-      <obj_name[from, num]>  -- Tol'ko dlya spiskov strok
+     <obj_name[from, num]>  -- Tol'ko dlya spiskov strok
                        pechataem dlya ob'ekta <obj_name>
                         i = index, j = 0 podstroku s pozicii from,
                         num - cumvolov
                         v zadannom pered etim formate
 
-      space           -- pechat' probelov po formatu
+     space           -- pechat' probelov po formatu
 
-      index          -- index stroki tablicy
+     index          -- index stroki tablicy
 
-      rkey           -- kluch tekushey zapisi v upakovanom vide
-      date           -- tekushaya data
-      time           -- tekushee vremya
+     rkey           -- kluch tekushey zapisi v upakovanom vide
+     date           -- tekushaya data
+     time           -- tekushee vremya
 
 
     Dlya vyvoda pustoy stroki: line %s ""

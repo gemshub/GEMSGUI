@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'KeyProfile.ui'
 **
-** Created: Fr 1. Mrz 15:02:37 2002
+** Created: Mo 4. Mrz 11:35:30 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
