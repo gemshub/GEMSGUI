@@ -41,12 +41,12 @@ typedef struct
 // Allocation flags
    PvICi,    // Use IC quantities for initial system compositions? { + * - }
    PvAUi,    // Use formula units for initial sub-system compositions? { + * - }
-   PvSd,     // Include references to data sources (+ -)?
    PvMSt,    // Use math script for running the mass transport (+ -)?
    PvMSg,    // Use math script for graphic presentation (+ -)?
    PvEF,      // Use empirical data for graphics  (+ -)?
    PvPGD,    // Use phase groups definitions (+ -)?
    PvFDL,    // Use flux definition list (+ -)
+   PvSd,     // reserved?
 
      // Controls on operation
    PsMode,  // Code of GEM2MT mode of operation { S F A D T }
@@ -84,16 +84,13 @@ typedef struct
    nPai,  // Number of P points in MTP interpolation array in DataCH ( 1 to 10 )
    nTai,  // Number of T points in MTP interpolation array in DataCH ( 1 to 20 )
 
-   DiCp[],   // array of indexes of initial system variants for
-             // distributing to nodes [nC]
-   *FDLi[2], //[nFD][2] Box indices in the flux definition list
 // iterators for generating syseq record keys for initial system variants
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
    NVi[3]    // Restrictions variant #: start, end, step
-// graphics
-    dimEF[2],  // Dimensions of array of empirical data
-    dimXY[2],  // Dimensions of data sampler tables: col.1 - N of time points
-    axisType[6],  // axis graph type, background(3) reserved(2)
+   axisType[6],  // axis graph type, background(3) reserved(2)
+   DiCp[],   // array of indexes of initial system variants for
+             // distributing to nodes [nC]
+   *FDLi[2], //[nFD][2] Box indices in the flux definition list
    ;
   float        // input
    Pi[],    // Pressure P, bar for initial systems (values within Pai range) [nIV]
@@ -141,7 +138,7 @@ typedef struct
    *gExpr,  // Math script text for calculation of mass transport
    (*sdref)[V_SD_RKLEN], // "List of bibl. refs to data sources" [0:Nsd-1]
    (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
-   (*nam_i)[MAXIDNAME], // [nIV][16] id names of initial systems
+   (*nam_i)[MAXIDNAME], // [nIV][12] id names of initial systems
    (*for_i)[MAXFORMUNITDT], // [Lbi][40] formulae for setting initial system compositions
    (*stld)[EQ_RKLEN], // List of SysEq record keys for initial systems [nIV]
 //
@@ -163,6 +160,7 @@ typedef struct
    ;
 /* Work arrays */
    char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
+   *etext,              // internal
    *tprn;              // internal
 //work data
  short
@@ -195,7 +193,7 @@ typedef struct
 
    char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
 }
-GEM2MT;
+GEM2MT_;
 
 // Pointers to DataCH and DataBR (current) fields in memory ?
 // They are located in MULTI
@@ -203,14 +201,18 @@ GEM2MT;
 // Current GEM2MT
 class GEM2MT : public TCModule
 {
-    GEM2MT dt[1];
+    GEM2MT_ mt[1];
 
-    IPNCalc rpn[2];      // IPN of DualTh
+    IPNCalc rpn[2];      // IPN 
+
+    GraphWindow *gd_gr;
+    TPlotLine *plot;
+    gstring titler;
 
 protected:
 
     void keyTest( const char *key );
-    // internal
+/*    // internal
     bool test_sizes();
     void mt_initiate( bool mode = true );   // must be changed with DK
     void mt_next();
@@ -227,13 +229,13 @@ protected:
     void save_DataCH();      // Save multi and dataCH files
     void save_IV();          // save initial systems as DataBR files
     void Iterate();          // analyse the results (change DK)
-
+*/
 
 public:
 
-    static TGEM2MT* pt;
+    static TGEM2MT* pm;
 
-    GEM2MT *mtp;
+    GEM2MT_ *mtp;
 
     TGEM2MT( int nrt );
 

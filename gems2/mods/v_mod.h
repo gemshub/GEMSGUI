@@ -725,7 +725,7 @@ enum unspace_objects {                                                //105
 enum dualth_objects {
 o_dtpvfl= o_untprn+1, o_dtpsflg, o_dtdim, o_dttmd, o_dtnvd,
 o_dtpd,   o_dttd,   o_dtvd, o_dtmsysb, o_dtt,
-o_dtp,   o_dtv, o_dtres,  o_dtq, o_dti,
+o_dtp,   o_dtv, o_dtres,  o_dtq, o_dkp, o_dti,
 o_dtjm,  o_dtc_tm, o_dtc_nv, o_dtnam_nr, o_dtan, 
 o_dtname, o_dtnotes,
 o_dtpspv, o_dtshort, o_dtfloat, o_dtbb, o_dtbn,
@@ -736,8 +736,9 @@ o_dtcan,  o_dtcexpr, o_dtgexpr, o_dtsdref, o_dtsdval,
 o_dtnam_b, o_dtnam_n, o_dtfor_n, o_dtfor_b, o_dtstl,
 o_dttyp_n, o_dtciclb, o_dtcicln, o_dtauclb,  o_dtaucln,
 o_dtsbm, o_dtmuo_i, o_dtact_n, o_dttdq, o_dtpdq,
-o_dtisq, o_mia, o_gm_n, o_gmx_n, o_gex_n,
-o_dtstkey, o_dttprn,  };
+o_dtisq, o_mia,  o_gmx_n, o_gxt_n, o_gxi_n,
+o_gxe_n, o_alp, o_dtstkey, o_dttprn,
+};
 
 typedef enum {
 

@@ -135,6 +135,7 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtp ].SetPtr(  &dtp->cP );
     aObj[ o_dtv ].SetPtr(  &dtp->cV );
     aObj[ o_dtq ].SetPtr(  &dtp->q );
+    aObj[ o_dkp ].SetPtr(  &dtp->kp );
     aObj[ o_dti ].SetPtr(  &dtp->i );
     aObj[ o_dtjm ].SetPtr(  &dtp->jm );
     aObj[ o_dtc_tm ].SetPtr(  &dtp->c_tm );
@@ -231,12 +232,16 @@ void TDualTh::ods_link( int q)
 //Added  new objects
     aObj[ o_mia].SetPtr(dtp->mia);
     aObj[ o_mia].SetDim( dtp->nK, 1 );
-    aObj[ o_gm_n ].SetPtr( dtp->gm_n );
-    aObj[ o_gm_n ].SetDim( dtp->nQ, dtp->nM );
     aObj[ o_gmx_n ].SetPtr( dtp->gmx_n );
-    aObj[ o_gmx_n ].SetDim( dtp->nQ, dtp->nM );
-    aObj[ o_gex_n ].SetPtr( dtp->gex_n );
-    aObj[ o_gex_n ].SetDim( dtp->nQ, dtp->nM );
+    aObj[ o_gmx_n ].SetDim( dtp->nQ, 1 );
+    aObj[ o_gxt_n ].SetPtr( dtp->gxt_n );
+    aObj[ o_gxt_n ].SetDim( dtp->nQ, 1 );
+    aObj[ o_gxi_n ].SetPtr( dtp->gxi_n );
+    aObj[ o_gxi_n ].SetDim( dtp->nQ, 1 );
+    aObj[ o_gxe_n ].SetPtr( dtp->gxe_n );
+    aObj[ o_gxe_n ].SetDim( dtp->nQ, 1 );
+    aObj[ o_alp ].SetPtr( dtp->alp );
+    aObj[ o_alp ].SetDim( dtp->nQ, dtp->nM );
 
     aObj[ o_dtan].SetPtr(dtp->An);
 //    aObj[ o_dtan].SetDim( dtp->nK, dtp->Nb );
@@ -298,9 +303,11 @@ void TDualTh::dyn_set(int q)
     dtp->ISq = (float *)aObj[ o_dtisq ].GetPtr();
 //Added  new objects
     dtp->mia = (short *)aObj[ o_mia ].GetPtr();
-    dtp->gm_n = (double *)aObj[ o_gm_n ].GetPtr();
     dtp->gmx_n = (double *)aObj[ o_gmx_n ].GetPtr();
-    dtp->gex_n = (double *)aObj[ o_gex_n ].GetPtr();
+    dtp->gxt_n = (double *)aObj[ o_gxt_n ].GetPtr();
+    dtp->gxi_n = (double *)aObj[ o_gxi_n ].GetPtr();
+    dtp->gxe_n = (double *)aObj[ o_gxe_n ].GetPtr();
+    dtp->alp = (double *)aObj[ o_alp ].GetPtr();
 
     dtp->An = (float *)aObj[ o_dtan ].GetPtr();
     dtp->tprn = (char *)aObj[ o_dttprn ].GetPtr();
@@ -359,9 +366,11 @@ void TDualTh::dyn_kill(int q)
     dtp->ISq = (float *)aObj[ o_dtisq ].Free();
 //Added  new objects
     dtp->mia = (short *)aObj[ o_mia ].Free();
-    dtp->gm_n = (double *)aObj[ o_gm_n ].Free();
     dtp->gmx_n = (double *)aObj[ o_gmx_n ].Free();
-    dtp->gex_n = (double *)aObj[ o_gex_n ].Free();
+    dtp->gxt_n = (double *)aObj[ o_gxt_n ].Free();
+    dtp->gxi_n = (double *)aObj[ o_gxi_n ].Free();
+    dtp->gxe_n = (double *)aObj[ o_gxe_n ].Free();
+    dtp->alp = (double *)aObj[ o_alp ].Free();
 
     dtp->An = (float *)aObj[ o_dtan ].Free();
     dtp->tprn = (char *)aObj[ o_dttprn ].Free();
@@ -494,18 +503,15 @@ void TDualTh::dyn_new(int q)
 
 //Added  new objects
     dtp->mia = (short *)aObj[ o_mia ].Alloc( dtp->nK, 1, I_ );
+
+    dtp->gmx_n = (double *)aObj[ o_gmx_n ].Alloc( dtp->nQ, 1, D_ );
+    dtp->gxt_n = (double *)aObj[ o_gxt_n ].Alloc( dtp->nQ, 1, D_ );
+    dtp->gxi_n = (double *)aObj[ o_gxi_n ].Alloc( dtp->nQ, 1, D_ );
+    dtp->gxe_n = (double *)aObj[ o_gxe_n ].Alloc( dtp->nQ, 1, D_ );
     if( dtp->nM > 0 )
-    {
-      dtp->gm_n = (double *)aObj[ o_gm_n ].Alloc( dtp->nQ, dtp->nM, D_ );
-      dtp->gmx_n = (double *)aObj[ o_gmx_n ].Alloc( dtp->nQ, dtp->nM, D_ );
-      dtp->gex_n = (double *)aObj[ o_gex_n ].Alloc( dtp->nQ, dtp->nM, D_ );
-    }
+      dtp->alp = (double *)aObj[ o_alp ].Alloc( dtp->nQ, dtp->nM, D_ );
     else
-    {
-       dtp->gm_n = (double *)aObj[ o_gm_n ].Free();
-       dtp->gmx_n = (double *)aObj[ o_gmx_n ].Free();
-       dtp->gex_n = (double *)aObj[ o_gex_n ].Free();
-    }
+       dtp->alp = (double *)aObj[ o_alp ].Free();
 
    dtp->An = (float *)aObj[ o_dtan ].Alloc( dtp->nK, dtp->Nb, F_ );
    dtp->Asiz = dtp->nK;
@@ -589,9 +595,11 @@ void TDualTh::set_def( int q)
     dtp->ISq = 0;
 //Added  new objects
     dtp->mia = 0;
-    dtp->gm_n = 0;
     dtp->gmx_n = 0;
-    dtp->gex_n = 0;
+    dtp->gxt_n = 0;
+    dtp->gxi_n = 0;
+    dtp->gxe_n = 0;
+    dtp->alp = 0;
 
     dtp->An = 0;
     dtp->tprn = 0;

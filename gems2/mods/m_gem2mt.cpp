@@ -33,162 +33,319 @@ GEM2MT* GEM2MT::pmt;
 GEM2MT::GEM2MT( int nrt ):
         TCModule( nrt )
 {
-    aFldKeysHelp.Add("l<24  integrator Key");
+    nQ = 1;
+    aFldKeysHelp.Add("l<10 Identifier of the parent modelling project <-Project");
+    aFldKeysHelp.Add("l<3  Symbol of thermodynamic potential to minimize <-SysEq");
+    aFldKeysHelp.Add("l<12 Identifier of the parent chemical system definition <-SysEq");
+    aFldKeysHelp.Add("l<5  CSD variant number <integer> <-SysEq");
+    aFldKeysHelp.Add("l<8  Volume V of the system (L) or 0 (no volume constraint) <float> <-SysEq");
+    aFldKeysHelp.Add("l<8  Pressure P, bar <float> or 0 (Psat H2O) <-SysEq");
+    aFldKeysHelp.Add("l<8  Temperature T, in Centigrade <float>  <-SysEq");
+    aFldKeysHelp.Add("l<4  Variant number of thermodynamic PT-data <integer> <-SysEq");
+    aFldKeysHelp.Add("l<18 Identifier of this coupled model simulator definition");
+    aFldKeysHelp.Add("l<4  Batch simulator type code, a combination of {}");
+
+    mtp=&mt[0];
     set_def();
-    start_title = " Coupled models: Under construction";
+    start_title =
+       " Definition of a GEM2MT (Coupled model)";
 }
 
-
-
-
-/*-----------------------------------------------------------------*/
-// Interpolation over tabulated values (array y) using the Lagrange method
-// for extracting thermodynamic data in gemipm2k or in gem2mt
-// parameters:
-//  y[N] - discrete values of argument over rows (ascending order)
-//  x[M] - discrete values of arguments over columns (ascending order)
-//  d[N][M] - discrete values of a function of x and y arguments
-//  xoi - column (x) argument of interest ( x[0] <= xi <= x[M-1] )
-//  yoi - row (y) argument of interest  ( y[0] <= yi <= y[N-1] )
-//  N - number of rows in y array;
-//  M - number of columns in y array.
-//  Function returns an interpolated value of d(yoi,xoi) or 0 if
-//  yoi or xoi are out of range
-//
-float TGEM2MT::LagranInterp(float *y, float *x, float *d, float yoi,
-                    float xoi, int M, int N)
+// get key of record
+gstring
+GEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
+                          int keyType )
 {
-    double s=0,z,s1[21];
-    int py, px, i=0, j, j1, k, jy, jy1;
+    gstring str;
 
-//    if (yoi < y[0])
-//        Error( GetName(), "E34RErun: yoi < y[0] (minimal row argument value)");
-//    if(xoi < x[0])
-//        Error( GetName(), "E35RErun: xoi < x[0] (minimal column argument value)");
-    py = N-1;
-    px = M-1;
-
-    if(yoi < y[0] || xoi < x[0] || yoi > y[py] || xoi > x[px] )
-       return s;  // one of arguments outside the range
-
-    for(j1=0;j1<N;j1++)
-        if (yoi >= y[j1] && yoi <= y[j1+1])
-            goto m1;
-    //z=yoi;
-    goto m2;
-m1:
-    for(i=0;i<M;i++)
-        if(xoi >= x[i] && xoi <= x[i+1])
-            goto m;
-    // z=xoi;
-    if(xoi <= x[px])
-        goto m;
-m2:
-    if(yoi <= y[py])
-        goto m;
-m:
-    if(i < M-px)
-        j=i;
-    else j=M-px-1;
-    if(j1 >= N-pa)
-        j1=N-pa-1;
-    ja1=j1;
-    for(ja=0;ja <= pa; ja++)
+    if( oldKey == 0 )
     {
-        s=0.;
-        for(i=0;i<=px;i++)
+        if(Filter.empty())
+            str = ALLKEY;
+        else str = Filter;
+    }
+    else str = oldKey;
+
+    if( keyType==KEY_NEW  )
+    { // Get key of base SyStat
+        vstr pkey(MAXRKEYLEN+10);
+        rt[RT_GEM2MT].SetKey(str.c_str());
+        rt[RT_SYSEQ].MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
+                               RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
+                               RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
+        str = TSysEq::pm->GetKeyofRecord( pkey,
+          "Please, select a parent System for a new GEM2MT ", KEY_OLD );
+        if(  str.empty() )
         {
-            z=1; //z1=1;
-            for(k=0;k<=px;k++)
-                if(k!=i)
-                    z*=(xoi-x[k+j])/(x[i+j]-x[k+j]);
-            s+=d[i+j+(j1)*M]*z;
+            str = pkey.p;
+            str+= "*:*:";
         }
-        s1[ja]=s;
-        j1++;
+        else
+            str += "*:*:";
     }
-    s=0.;
-    for(i=0;i<=pa;i++)
-    {
-        z=1;
-        for(k=0;k<=pa;k++)
-            if(k!=i)
-                z*=(yoi-y[k+ja1])/(y[i+ja1]-y[k+ja1]);
-        s+=s1[i]*z;
-    }
-    return(float)s);
+    str = TCModule::GetKeyofRecord( str.c_str(), strTitle, keyType );
+    if(  str.empty() )
+        return str;
+    rt[RT_GEM2MT].SetKey(str.c_str());
+    keyTest( str.c_str() );
+    return str;
 }
 
+// test GEM2MT key to calc mode
+void GEM2MT::keyTest( const char *key )
+{
+    vstr pkey(MAXRKEYLEN+10);
 
-
-
+    if( pVisor->ProfileMode == true )
+    { // test project key
+        gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+        StripLine(prfKey);
+        int k = prfKey.length();
+        if( memcmp(key, prfKey.c_str(), k ) ||
+                ( key[k] != ':' && key[k] != ' ' && k<rt[RT_PARAM].FldLen(0) )  )
+            Error( key, "E08PErem: Illegal record key (another Modelling Project)!");
+        rt[RT_SYSEQ].MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
+                               RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
+                               RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
+        if( rt[RT_SYSEQ].Find(pkey) <0 )
+            Error( key, "E07PErem: Illegal record key (no system)!");
+    }
+}
 
 // link values to objects
-void TInteg::ods_link(int)
+void GEM2MT::ods_link(int q)
 {
-    aObj[o_ipstr].SetPtr( keywd );
-    aObj[o_igexpr].SetPtr( &Nequ );
-    aObj[o_ipdoub].SetPtr( &x_bg );
-    aObj[o_igkey].SetPtr( keywd );
-    aObj[o_igname].SetPtr( name );
-    aObj[o_igbgen].SetPtr( &x_bg );
-    aObj[o_igeps].SetPtr( &Eps );
-    aObj[o_igstep].SetPtr( &step );
-    aObj[o_ival_x].SetPtr( &arg_x );
-    aObj[o_imaxit].SetPtr( &MaxIter );
-    aObj[o_ignstp].SetPtr( &nfcn );
-    /*y_bg = 0;
-    param = 0;
-    TxtEqu = 0;
-    val_y = 0;
-    valdy = 0;
-    allx = 0;
-    ally = 0;
-    allpr = 0;
-    allst = 0;*/
+    mtp=&mt[q];
+
+// static
+    aObj[o_mtpufl].SetPtr( &mtp->PunE );   /* a4 */
+    aObj[o_mtpvfl].SetPtr( &mtp->PvICi );  /* a8 */
+    aObj[o_mtpsfl].SetPtr( &mtp->PsMode ); /* a8 */
+    aObj[o_mtcipf].SetPtr( &mtp->nC );     /* i4 */
+    aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i6 */
+    aObj[o_mtnsne].SetPtr( &mtp->nS );   /* i4 */
+    aObj[o_mtptai].SetPtr( &mtp->nPai );  /* i2 */
+    aObj[o_mttmi].SetPtr( mtp->tmi );     /* i3 */
+    aObj[o_mtnvi].SetPtr( mtp->NVi );     /* i3 */
+    aObj[o_mtaxis].SetPtr( mtp->axisType ); /* i6 */
+    aObj[o_mtpai].SetPtr( mtp->Pai );     /* d3 */
+    aObj[o_mttai].SetPtr( mtp->Tai );     /* d3 */
+    aObj[o_mttau].SetPtr( mtp->Tau );     /* d3 */
+    aObj[o_mtsize].SetPtr( mtp->size[0] );     /* d8 */
+// work
+    aObj[o_mtsykey].SetPtr( mtp->sykey );
+    aObj[o_mtctm].SetPtr( &mtp->ctm );
+    aObj[o_mtcnv].SetPtr( &mtp->cnv );
+    aObj[o_mtqc].SetPtr( &mtp->qc );
+    aObj[o_mtkv].SetPtr( &mtp->kv );
+    aObj[o_mtjqc].SetPtr( &mtp->jqc );
+    aObj[o_mtjqs].SetPtr( &mtp->jqs );
+    aObj[o_mtjt].SetPtr( &mtp->jt );
+    aObj[o_mtrei1].SetPtr( &mtp->rei1 );
+    aObj[o_mtrei2].SetPtr( &mtp->rei2 );
+    aObj[o_mtrei3].SetPtr( &mtp->rei3 );
+    aObj[o_mtrei4].SetPtr( &mtp->rei4 );
+    aObj[o_mtrei5].SetPtr( &mtp->rei5 );
+    aObj[o_mtct].SetPtr( &mtp->cT );
+    aObj[o_mtcp].SetPtr( &mtp->cP );
+    aObj[o_mtcv].SetPtr( &mtp->cV );
+    aObj[o_mtctau].SetPtr( &mtp->cTau );
+    aObj[o_mtdtau].SetPtr( &mtp->dTau );
+    aObj[o_mtotau].SetPtr( &mtp->oTau );
+    aObj[o_mtref1].SetPtr( &mtp->ref1 );
+    aObj[o_mtref2].SetPtr( &mtp->ref2 );
+    aObj[o_mtref3].SetPtr( &mtp->ref3 );
+    aObj[o_mtref4].SetPtr( &mtp->ref4 );
+
+// DBase 46
+    aObj[ o_mtname].SetPtr(  mtp->name );
+    aObj[ o_mtnotes].SetPtr(   mtp->notes );
+    aObj[o_mtflag].SetPtr( &mtp->PunE );    /* a20 */
+    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i28 */
+    aObj[o_mtdoudl].SetPtr( &mtp->Msysb );    /* d9 */
+    aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f17 */
+    aObj[ o_mtxnames].SetPtr(  mtp->xNames );
+    aObj[ o_mtynames].SetPtr(  mtp->yNames );
+
+// dynamic
+    aObj[ o_mtlnam].SetPtr( mtp->lNam[0] );
+    aObj[ o_mtlnam].SetDim( 1, mtp->nYS );
+    aObj[ o_mtlname].SetPtr( mtp->lNamE[0] );
+    aObj[ o_mtlname].SetDim( 1, mtp->nYE );
+    aObj[o_mttexpr].SetPtr( mtp->tExpr );
+    //aObj[o_mttexpr].SetDim(1,len(mtp->tExpr));
+    aObj[o_mtgexpr].SetPtr( mtp->gExpr);
+    //aObj[o_mtgexpr].SetDim(1,l(mtp->gExpr));
+    aObj[ o_mtsdref].SetPtr( mtp->sdref);
+    aObj[ o_mtsdref].SetDim( mtp->Nsd, 1 );
+    aObj[ o_mtsdval].SetPtr( mtp->sdval);
+    aObj[ o_mtsdval].SetDim( mtp->Nsd, 1 );
+    aObj[ o_mtdicp].SetPtr( mtp->DiCp);
+    aObj[ o_mtdicp].SetDim( mtp->nC, 1 );
+    aObj[ o_mtfdli].SetPtr( mtp->FDLi);
+    aObj[ o_mtfdli].SetDim( mtp->nFD, 2 );
+    aObj[ o_mtpi].SetPtr( mtp->Pi);
+    aObj[ o_mtpi].SetDim( mtp->nIV, 1 );
+    aObj[ o_mtti].SetPtr( mtp->Ti);
+    aObj[ o_mtti].SetDim( mtp->nIV, 1 );
+    aObj[ o_mtvi].SetPtr( mtp->Vi);
+    aObj[ o_mtvi].SetDim( mtp->nIV, 1 );
+    aObj[ o_mtxet].SetPtr( mtp->xEt);
+    aObj[ o_mtxet].SetDim( mtp->nE, 1 );
+    aObj[ o_mtyet].SetPtr( mtp->yEt);
+    aObj[ o_mtyet].SetDim( mtp->nE, mtp->nYE );
+    aObj[ o_mtbn].SetPtr( mtp->Bn);
+    aObj[ o_mtbn].SetDim( mtp->nIV, mtp->Nb );
+    aObj[ o_mtqpi].SetPtr( mtp->qpi);
+    aObj[ o_mtqpi].SetDim( mtp->Nqpt, 1 );
+    aObj[ o_mtqpc].SetPtr( mtp->qpc);
+    aObj[ o_mtqpc].SetDim( mtp->Nqpg, 1 );
+    aObj[ o_mtxt].SetPtr( mtp->xt);
+    aObj[ o_mtxt].SetDim( mtp->nS, 1 );
+    aObj[ o_mtyt].SetPtr( mtp->yt);
+    aObj[ o_mtyt].SetDim( mtp->nS, mtp->nYS );
+    aObj[ o_mtcib].SetPtr( mtp->CIb);
+    aObj[ o_mtcib].SetDim( mtp->nIV, mtp->Nb );
+    aObj[ o_mtcin].SetPtr( mtp->CIn);
+    aObj[ o_mtcin].SetDim( mtp->nIV, mtp->Nb );
+    aObj[ o_mtcab].SetPtr( mtp->CAn);
+    aObj[ o_mtcab].SetDim( mtp->nIV, mtp->Lbi );
+    aObj[ o_mtfdlf].SetPtr( mtp->FDLf);
+    aObj[ o_mtfdlf].SetDim( mtp->nFD, 2 );
+    aObj[ o_mtpgt].SetPtr( mtp->PGT);
+    aObj[ o_mtpgt].SetDim( ->Fi, mtp->nPG );       //???????????????????
+    aObj[ o_mtnam_i].SetPtr( mtp->nam_i );
+    aObj[ o_mtnam_i].SetDim(  mtp->nIV, 1 );
+    aObj[ o_mtfor_i].SetPtr( mtp->for_i );
+    aObj[ o_mtfor_i].SetDim(  mtp->Lbi, 1 );
+    aObj[ o_mtstld].SetPtr( mtp->stld );
+    aObj[ o_mtstld].SetDim(  mtp->nIV, 1 );
+    aObj[ o_mtciclb].SetPtr( mtp->CIclb );
+    aObj[ o_mtciclb].SetDim(  mtp->Nb, 1 );
+    aObj[ o_mtaucln].SetPtr( mtp->AUcln );
+    aObj[ o_mtaucln].SetDim(  mtp->Lbi, 1 );
+    aObj[ o_mtfdlid].SetPtr( mtp->FDLid );
+    aObj[ o_mtfdlid].SetDim(  mtp->nFD, 1 );
+    aObj[ o_mtfdlop].SetPtr( mtp->FDLop );
+    aObj[ o_mtfdlop].SetDim(  mtp->nFD, 1 );
+    aObj[ o_mtfdlmp].SetPtr( mtp->FDLmp );
+    aObj[ o_mtfdlmp].SetDim(  mtp->nPG, 1 );
+    aObj[ o_mtmpgid].SetPtr( mtp->MPGid );
+    aObj[ o_mtmpgid].SetDim(  mtp->nPG, 1 );
+    aObj[ o_mtumpg].SetPtr( mtp->UMPG );
+    aObj[ o_mtumpg].SetDim(  ->Fi, 1 );     //????????????????
+    aObj[ o_mtbm].SetPtr( mtp->SBM );
+    aObj[ o_mtbm].SetDim(  mtp->Nb, 1 );
+    aObj[ o_mtplline].SetPtr( plot );
+    aObj[ o_mtplline].SetDim( mtp->nYS+mtp->nYE,  sizeof(TPlotLine));
+// work
+    aObj[ o_mwetext].SetPtr( mtp->etext );
+    // aObj[ o_mwetext].SetDim(1, 0 );
+    aObj[ o_mwtprn].SetPtr(  mtp->tprn  );
+    // aObj[ o_mwtprn].SetDim( 1,l( mtp->tprn));
+
 }
 
 // set dynamic Objects ptr to values
-void TInteg::dyn_set(int)
+void GEM2MT::dyn_set(int q)
 {
-    y_bg = (double *)aObj[o_ipy_bg].GetPtr();
-    param = (double *)aObj[o_iparam].GetPtr();
-    TxtEqu = (char *)aObj[o_ig_txt].GetPtr();
-    val_y = (double *)aObj[o_ival_y].GetPtr();
-    valdy = (double *)aObj[o_ivaldy].GetPtr();
-    allx = (double *)aObj[o_i_allx].GetPtr();
-    ally = (double *)aObj[o_i_ally].GetPtr();
-    allpr = (short *)aObj[o_iallpr].GetPtr();
-    allst = (double *)aObj[o_iallst].GetPtr();
+    ErrorIf( mtp!=&mt[q], GetName(),
+       "E06GDrem: Illegal access to mt in dyn_set");
+
+    mtp->lNam[0] = = (char (*)[MAXGRNAME])aObj[ o_mtlnam].GetPtr();
+    mtp->lNamE[0] = (char (*)[MAXGRNAME])aObj[ o_mtlname].GetPtr();
+    mtp->tExpr = (char *)aObj[o_mttexpr].GetPtr();
+    mtp->gExpr = (char *)aObj[o_mtgexpr].GetPtr();
+    mtp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].GetPtr();
+    mtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_mtsdval].GetPtr();
+    mtp->DiCp = (short *)aObj[ o_mtdicp].GetPtr();
+    mtp->FDLi = (short (*)[2])aObj[ o_mtfdli].GetPtr();
+    mtp->Pi = (float *)aObj[ o_mtpi].GetPtr();
+    mtp->Ti = (float *)aObj[ o_mtti].GetPtr();
+    mtp->Vi = (float *)aObj[ o_mtvi].GetPtr();
+    mtp->xEt = (float *)aObj[ o_mtxet].GetPtr();
+    mtp->yEt = (float *)aObj[ o_mtyet].GetPtr();
+    mtp->Bn = (double *)aObj[ o_mtbn].GetPtr();
+    mtp->qpi = (double *)aObj[ o_mtqpi].GetPtr();
+    mtp->qpc = (double *)aObj[ o_mtqpc].GetPtr();
+    mtp->xt = (double *)aObj[ o_mtxt].GetPtr();
+    mtp->yt = (double *)aObj[ o_mtyt].GetPtr();
+    mtp->CIb = (float *)aObj[ o_mtcib].GetPtr();
+    mtp->CIn = (float *)aObj[ o_mtcin].GetPtr();
+    mtp->CAn = (float *)aObj[ o_mtcab].GetPtr();
+    mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].GetPtr();
+    mtp->PGT = (float *)aObj[ o_mtpgt].GetPtr();
+    mtp->nam_i = (char (*)[MAXIDNAME])aObj[ o_mtnam_i].GetPtr();
+    mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].GetPtr();
+    mtp->stld = (char (*)[EQ_RKLEN])aObj[ o_mtstld].GetPtr();
+    mtp->CIclb = (char *)aObj[ o_mtciclb].GetPtr();
+    mtp->AUcln = (char *)aObj[ o_mtaucln].GetPtr();
+    mtp->FDLid = (char (*)[MAXSYMB])aObj[ o_mtfdlid].GetPtr();
+    mtp->FDLop = (char (*)[MAXSYMB])aObj[ o_mtfdlop].GetPtr();
+    mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp].GetPtr();
+    mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid].GetPtr();
+    mtp->UMPG = (char *)aObj[ o_mtumpg].GetPtr();
+    mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].GetPtr();
+    plot = (TPlotLine *)aObj[ o_mtplline].GetPtr();
+// work
+    mtp->etext = (char *)aObj[ o_mwetext].GetPtr();
+    mtp->tprn = (char *)aObj[ o_mwtprn].GetPtr();
 }
 
 // free dynamic memory in objects and values
-void TInteg::dyn_kill(int)
+void GEM2MT::dyn_kill(int q)
 {
-    y_bg = (double *)aObj[o_ipy_bg].Free();
-    param = (double *)aObj[o_iparam].Free();
-    TxtEqu = (char *)aObj[o_ig_txt].Free();
-    val_y = (double *)aObj[o_ival_y].Free();
-    valdy = (double *)aObj[o_ivaldy].Free();
-    allx = (double *)aObj[o_i_allx].Free();
-    ally = (double *)aObj[o_i_ally].Free();
-    allpr = (short *)aObj[o_iallpr].Free();
-    allst = (double *)aObj[o_iallst].Free();
+    ErrorIf( mtp!=&mt[q], GetName(),
+       "E05DTrem: Illegal access to mt in dyn_kill");
+
+    mtp->lNam[0] = = (char (*)[MAXGRNAME])aObj[ o_mtlnam].Free();
+    mtp->lNamE[0] = (char (*)[MAXGRNAME])aObj[ o_mtlname].Free();
+    mtp->tExpr = (char *)aObj[o_mttexpr].Free();
+    mtp->gExpr = (char *)aObj[o_mtgexpr].Free();
+    mtp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].Free();
+    mtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_mtsdval].Free();
+    mtp->DiCp = (short *)aObj[ o_mtdicp].Free();
+    mtp->FDLi = (short (*)[2])aObj[ o_mtfdli].Free();
+    mtp->Pi = (float *)aObj[ o_mtpi].Free();
+    mtp->Ti = (float *)aObj[ o_mtti].Free();
+    mtp->Vi = (float *)aObj[ o_mtvi].Free();
+    mtp->xEt = (float *)aObj[ o_mtxet].Free();
+    mtp->yEt = (float *)aObj[ o_mtyet].Free();
+    mtp->Bn = (double *)aObj[ o_mtbn].Free();
+    mtp->qpi = (double *)aObj[ o_mtqpi].Free();
+    mtp->qpc = (double *)aObj[ o_mtqpc].Free();
+    mtp->xt = (double *)aObj[ o_mtxt].Free();
+    mtp->yt = (double *)aObj[ o_mtyt].Free();
+    mtp->CIb = (float *)aObj[ o_mtcib].Free();
+    mtp->CIn = (float *)aObj[ o_mtcin].Free();
+    mtp->CAn = (float *)aObj[ o_mtcab].Free();
+    mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].Free();
+    mtp->PGT = (float *)aObj[ o_mtpgt].Free();
+    mtp->nam_i = (char (*)[MAXIDNAME])aObj[ o_mtnam_i].Free();
+    mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].Free();
+    mtp->stld = (char (*)[EQ_RKLEN])aObj[ o_mtstld].Free();
+    mtp->CIclb = (char *)aObj[ o_mtciclb].Free();
+    mtp->AUcln = (char *)aObj[ o_mtaucln].Free();
+    mtp->FDLid = (char (*)[MAXSYMB])aObj[ o_mtfdlid].Free();
+    mtp->FDLop = (char (*)[MAXSYMB])aObj[ o_mtfdlop].Free();
+    mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp].Free();
+    mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid].Free();
+    mtp->UMPG = (char *)aObj[ o_mtumpg].Free();
+    mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Free();
+    plot = (TPlotLine *)aObj[ o_mtplline].Free();
+// work
+    mtp->etext = (char *)aObj[ o_mwetext].Free();
+    mtp->tprn = (char *)aObj[ o_mwtprn].Free();
 }
 
 // realloc dynamic memory
-void TInteg::dyn_new(int)
+void GEM2MT::dyn_new(int q)
 {
-    if( TxtEqu == 0 )
-        TxtEqu = (char *)aObj[o_ig_txt].Alloc( 1, 256, S_ );
-    y_bg = (double *)aObj[o_ipy_bg].Alloc( Nequ, 1, D_ );
-    param = (double *)aObj[o_iparam].Alloc( Nequ, 1, D_ );
-    val_y = (double *)aObj[o_ival_y].Alloc( Nequ, 1, D_ );
-    valdy = (double *)aObj[o_ivaldy].Alloc( Nequ, 1, D_ );
-    allx = (double *)aObj[o_i_allx].Alloc( INT_BLOK, 1, D_ );
-    ally = (double *)aObj[o_i_ally].Alloc( INT_BLOK, Nequ, D_ );
-    allpr = (short *)aObj[o_iallpr].Alloc( INT_BLOK, 1, I_ );
-    allst = (double *)aObj[o_iallst].Alloc( INT_BLOK, 1, D_ );
+  ErrorIf( mtp!=&mt[q], GetName(),
+      "E04DTrem: Illegal access to mt in dyn_new.");
+
+
+
 }
 
 //set default information

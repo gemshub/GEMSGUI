@@ -58,9 +58,9 @@ typedef struct
    aStat,  // DualTh analysis status:  0 - indefinite; 1 ready for analysis;
         //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
    PsSYd,  // Save generated SysEq records to data base (+ -)
+PsIPf,    // interaction parameter formalism code (R T M V O)
+PsIPu,    // interaction parameter units code (J N O)
    PsRes1,    // reserved
-   PsRes2,    // reserved
-   PsRes3,    // reserved
 
    name[MAXFORMULA],  //  "Name of DualTh task"
    notes[MAXFORMULA] //  "Comments"
@@ -75,11 +75,11 @@ typedef struct
    Nqpg, // Number of elements in the math script work arrays qpg per non-basis DC
    Nb,    // N - number of independent components (in basis sub-system, taken
         // from project system dimensions automatically)
-nM,    //number of mixtures considered in non-basis sub-system (default 1)
+nM,    //number of interaction parameters in the non-basis mixture (default 1 - regular)
 // for generating syseq record keys
    tmd[3],  // SYSTEM CSD definition #: start, end, step (initial)
    NVd[3],  // Restrictions variant #: start, end, step
-*mia  // [K] allocation indexes of NB end-member candidates to mixtures
+*mia  // [K] reserved (only one mixture per DualTh record is assumed)
    ;
   float
    Pd[3],    // Pressure P, bar: start, end, increment
@@ -116,11 +116,13 @@ nM,    //number of mixtures considered in non-basis sub-system (default 1)
    *sd_m,  //  [K] st.deviation over muo_n columns (experiments) for DC candidates
    *muo_i, // [Q][K] input st.state chem. potentials for candidates (or EMPTY if unknown)
    *act_n, // [Q][K] table of DualTh-calculated activities
-*gm_n,   // [Q][M] integral Gibbs energy of mixture for Q experiments and M mixtures
-*gmx_n,  // [Q][M] total Gibbs energy of mixing for Q experiments and M mixtures
-*gex_n,  // [Q][M] excess Gibbs energy of mixing for Q experiments and M mixtures
+*gmx_n,   // [Q] integral Gibbs energy of mixture for Q experiments (j/mol)
+*gxt_n,   // [Q] total Gibbs energy of mixing for Q experiments (col. 1)
+*gxi_n,   // [Q] Gibbs energy of ideal mixing for Q experiments (col. 2)
+*gxe_n,   // [Q] excess Gibbs energy of mixing for Q experiments (col. 3)
+*alp,      // [Q][M] interaction parameters for the mixing model (Redlich-Kister)
    *qpn,   //  [Nqpn] Array for chi calculation math script (ionic fractions?)
-   *qpg    //  [Nqpg] Array for gamma calculation math script (interact. params?)
+   *qpg    //  [Nqpg] Array for gamma calculation math script (interaction params?)
     ;
  float
    *CIb,  // [Q][N] Table of quantity/concentration of IC in basis sub-systems
@@ -160,15 +162,16 @@ nM,    //number of mixtures considered in non-basis sub-system (default 1)
    q,      // index of experiment
    i,      // index of IC
    jm,     // index of non-basis sub-system component
+kp,    // index of the interaction parameter
    c_tm,         // Current Tm - SYSTEM CSD number
    c_NV,         // Current Nv - MTPARM variant number
-Asiz;      // Current number of rows in the An matrix   
+Asiz;      // Current number of rows in the An matrix
    char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
 }
 DUALTH;
 
 /* Work objects for DualTh scripts - to add??? */
-typedef struct   // not used yet 
+typedef struct   // not used yet
 {
     double RT,
     F,
@@ -278,34 +281,26 @@ public:
 enum dualth_inernal {
               A_CHI = 1,  A_GAM =2,
 
-              DT_MODE_M = 'M',
-              DT_MODE_G = 'G',
-              DT_MODE_A = 'A',
-              DT_MODE_X = 'X',
+              DT_MODE_M = 'M',   // Estimation of G0 for end-members
+              DT_MODE_G = 'G',   // Estimation of activity coeffs and inter.param.
+              DT_MODE_A = 'A',   // Estimation of activities of end-members
+              DT_MODE_X = 'X',   // Estimation of mole fractions of end-members
 
-              DT_STATE_E = 'E',
-              DT_STATE_P = 'P',
-              DT_STATE_S = 'S',
+              DT_STATE_E = 'E',  // equilibrium
+              DT_STATE_P = 'P',  // primary saturation
+              DT_STATE_S = 'S',  // stoichiometric saturation
+
+                                // interaction parameter codes
+              DT_IPF_R = 'R',   // Redlich-Kister
+              DT_IPF_G = 'G',   // Guggenheim
+              DT_IPF_T = 'T',   // Thompson-Waldbaum
+              DT_IPF_M = 'M',   // Margules
+              DT_IPF_V = 'V',   // Van Laar
+              DT_IPF_O = 'O',   // Other
+                                // interaction parameter units of measurement
+              DT_IPU_J = 'J',   // J/mol
+              DT_IPU_K = 'K',   // kJ/mol
+              DT_IPU_N = 'N',   // normalized
                     };
-
-enum duterm_rescode {  /* Коды результата расчета DUTERM 11.6.96 DAK
-                          Сх - эмпирические, Wx - расчетные концентрации  */
-    DUT_MU_NU = 'M',     /* Расчет Mu и разности хим. потенциалов */
-    DUT_G0TP = 'G',      /* Расчет g0(T,P) по u, Cx, gamma, dGex       */
-    DUT_GETPX = 'Z',     /* Расчет RT*ln(gamma) по g0(T,P), u, Cx, dGex */
-    DUT_GEKIN = 'K',     /* Расчет dGex(metast) по g0, u, Cx(x), gamma */
-    DUT_CONDC = 'C',     /* Расчет Wx по g0(T,P), dGex, u, gamma       */
-    DUT_DEVDC = 'D',     /* Расчет Wx как для CONDC и ^2 невязок Wx-Cx */
-    DUT_DEVIC = 'U',     /* Расчет ^2 невязок mE-mC для подмн. НК */
-    DUT_DEVAC = 'E',     /* Расчет степени комплексации для НК в aq */
-    DUT_DISG = 'R',      /* Расчет св. энергии дисперсности частиц */
-    DUT_DISAREA = 'A',   /* Расчет Asur по g0,u,Cx,Sigma,gamma,Nsur,Psi*/
-    DUT_DISSIG = 'S',    /* Расчет Sigma по g0,u,Cx,Asur,gamma,Nsur,Psi*/
-    DUT_SURNSG = 'N',    /* Расчет Nsur по g0,u,Cx,Sigma,Asur,gamma,Psi*/
-    DUT_SURPSI = 'P',    /* Расчет Psi по g0,u,Cx,Sigma,Asur,gamma,Nsur*/
-    DUT_SURAC = 'Y',     /* Расчет Sur gamma по g0,u,Cx,Sigma,Asur,Nsur,Psi*/
-    DUT_EUSER = 'F'      /* Расчет любых парам. по пользов. формуле IIPN
-                                           gamma по Cx можно считать в IIPN всегда */
-};
 
 #endif //_m_dualth_h_
