@@ -1010,7 +1010,7 @@ void TProfil::EqstatExpand( const char *key )
         default: /* greatest error  */ ; //break;
             Error( "Internal error", "Wrong IPM weight factor type!" );
         }
-        if( pmp->W[j] < 0. ) pmp->W[j]=0.;    /* !!this is know how of Mr.Chudnenko !! */
+        if( pmp->W[j] < 0. ) pmp->W[j]=0.;    /* !! know-how of Mr.Chudnenko !! */
     }
     /* Calculate elemental chemical potentials in J/mole */
     for( i=0; i<pmp->N; i++ )
@@ -1041,7 +1041,7 @@ void TProfil::EqstatExpand( const char *key )
             if( pmp->E && pmp->LO )
                 GouyChapman( jb, je, k );
             /* calculation of surface activity terms */
-            SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
+            SurfaceActivityCoeff( jb, je, jpb, jdb, k );
 //            SurfaceActivityTerm(  jb, je, k );
         }
         for( j=jb; j<je; j++ )

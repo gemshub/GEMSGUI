@@ -1044,29 +1044,25 @@ void TSyst::unpackData()
 //   for( i=0; i<sy.Lsor; i++) dca dcomp ON adsorption ( mup->DCC[]=='X' )
     for( i=0; i<STat->ssp->DM[4]; i++)
     {
-        ind = Prf->indDC( STat->ssp->dca[i] );
-        if( ind < 0 ) continue;
+        ind = Prf->indDC( STat->ssp->dca[i] ) - ( mup->Ls - mup->Lads );
+        if( ind < 0 )
+           continue;
         if( sy.PSATT != S_OFF )
         {
-            int mtM, msM, /* mtN, */ msN, kk, inds=ind;
+            int mtM, msM, /* mtN, */ msN, kk;
             msM = aObj[o_sysatc].GetM();
             mtM = aObj[o_sssatc].GetM();
             msN = aObj[o_sysatc].GetN();
 //            mtN = aObj[o_sssatc].GetN();
-            inds = ind+(mup->Ls-mup->Lads);
             if(mtM >= msM)
             {
-               if( msN <= mup->Lads )
-                   inds = ind+(mup->Ls-mup->Lads);
                for( kk=0; kk<MCAS; kk++ )
-                    sy.SATC[inds][kk] = STat->ssp->SATC[i][kk];
+                    sy.SATC[ind][kk] = STat->ssp->SATC[i][kk];
             }
             else
-            {
-               if( msN <= mup->Lads )
-                  inds = ind+(mup->Ls-mup->Lads);
-               sy.SATC[inds][SA_MCA] = STat->ssp->SATC[i][SA_MCA];
-               sy.SATC[inds][SA_EMX] = STat->ssp->SATC[i][SA_EMX];
+            {  char * satc_ = &STat->ssp->SATC[0][0];
+               sy.SATC[ind][SA_MCA] = satc_[ i*2 + SA_MCA ];
+               sy.SATC[ind][SA_EMX] = satc_[ i*2 + SA_EMX ];
 //               sy.SATC[ind][0] = STat->ssp->SATC[i][0];
 //               sy.SATC[ind][1] = STat->ssp->SATC[i][1];
             }
@@ -1074,23 +1070,20 @@ void TSyst::unpackData()
         if( sy.PMaSdj != S_OFF )
 // Extended by KD on 25.10.2004
         {
-            int mtM, msM, /* mtN, */ msN, kk, inds = ind;
+            int mtM, msM, /* mtN, */ msN, kk ;
             msM = aObj[o_symasdj].GetM();
             mtM = aObj[o_ssmasdj].GetM();
             msN = aObj[o_symasdj].GetN();
 //            mtN = aObj[o_ssmasdj].GetN();
             if(mtM >= msM)
             {
-               if(msN <= mup->Lads)
-                  inds = ind+(mup->Ls-mup->Lads);
                for( kk=0; kk<DFCN; kk++ )
-                  sy.MaSdj[inds][kk] = STat->ssp->MaSdj[i][kk];
+                  sy.MaSdj[ind][kk] = STat->ssp->MaSdj[i][kk];
 //               sy.MaSdj[ind][PI_CD0] = STat->ssp->MaSdj[i][PI_CD0];
             }
             else { // For reading old SysEq records
-               if(msN <= mup->Lads)
-                  inds = ind+(mup->Ls-mup->Lads);
-               sy.MaSdj[inds][PI_DEN]  = STat->ssp->MaSdj[0][i];
+               float *masdj_ = &STat->ssp->MaSdj[0][0];
+               sy.MaSdj[ind][PI_DEN]  = masdj[i*2];     // check if *2
 //            sy.MaSdj[ind]  = STat->ssp->MaSdj[i];
             }
         }

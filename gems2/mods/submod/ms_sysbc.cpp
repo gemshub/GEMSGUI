@@ -269,7 +269,7 @@ void TSyst::make_syst_sizes()
             /* one component phase */
         case DC_SCP_CONDEN:
             break;
-            /* sorbtion phase */
+            /* sorption phase components */
         case DC_SSC_A0:
         case DC_SSC_A1:
         case DC_SSC_A2:

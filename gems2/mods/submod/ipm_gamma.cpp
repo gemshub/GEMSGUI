@@ -983,11 +983,11 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
             continue;
         // Calculate ist - index of surface type
         ist = pmp->SATX[ja][XL_ST] / MSPN;
-        if( ist < 0 || ist > MST )
+        if( ist < 0 || ist >= MST )
             ist = 0;  // default: zero surface type
         // Calculate iss - index of site on surf.type
         iss = pmp->SATX[ja][XL_SI];
-        if( iss < 0 || iss > MST )
+        if( iss < 0 || iss >= MST )
             iss = 0;  // default: zero site is the weekest and the most abundant one
         pmp->D[iss][ist] += pmp->X[j]; // adding to total amount on a site
     }
@@ -1023,7 +1023,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
             ist = pmp->SATX[ja][XL_ST] / MSPN;
             /* Calculate iss - index of site on surf.type */
             iss = pmp->SATX[ja][XL_SI];
-            if( iss < 0 || iss > MST )
+            if( iss < 0 || iss >= MST )
               iss = 0;  // zero site is the weekest and the most abundant one
             /* Cj - index of carrier DC */
             Cj = pmp->SATX[ja][XL_EM];
@@ -1064,9 +1064,9 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
                 XSkC = XSs - xjn; // occupied by the competing species;
 //              XSkC = XSk - xjn; obsolete for the whole surface type
 	                          // this sorbate also competes to itself!
-                XSkC = XSkC / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
-                       / pmp->Aalp[k]/1.66054;  // per nm2
-                XS0 = pmp->MASDJ[ja][PI_DEN]/pmp->Aalp[k]/1.66054; // max.dens.per nm2
+                XSkC = XSkC / XVk / Mm * 1e6
+                   /pmp->Nfsp[k][ist]/ pmp->Aalp[k]/1.66054;  // per nm2        check this!!!!!!!
+                XS0 = fabs(pmp->MASDJ[ja][PI_DEN])/pmp->Aalp[k]/1.66054; // max.dens.per nm2
 //                XS0 = pmp->MASDT[k][ist]/pmp->Aalp[k]/1.66054; obsolete
 /*            XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; expected total sites in moles */
