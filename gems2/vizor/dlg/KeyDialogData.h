@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'KeyDialog.ui'
 **
-** Created: Mo 4. Mrz 11:35:30 2002
+** Created: Mo 4. Mrz 17:09:06 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
