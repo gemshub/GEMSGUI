@@ -141,7 +141,7 @@ o_musm3, o_mudcc3, // new !!!
     o_wi_ve, o_wi_mbx, o_wo_fx, o_wo_ic,  o_wd_ph,
     o_wd_pe, o_wd_eh, o_wi_mol,  o_wi_gwat,o_wi_ymet,
     o_wio_denw, o_wio_epsw, o_wo_psi, o_wo_lnp, o_wo_rt,
-    o_wo_frt,  o_wo_yw,  o_wio_cons,  o_wio_fitv, o_wd_sitn, 
+    o_wo_frt,  o_wo_yw,  o_wio_cons,  o_wio_fitv, o_wd_sitn,
     o_wi_l1,
     o_wi_lsmod,  o_wi_lsmdc,  o_wi_mui, o_wi_muk, o_wi_muj,
     o_wi_satndx, o_wi_dul,  o_wi_dll,  o_wi_gex,  o_wi_pul,
@@ -275,7 +275,7 @@ enum DC_CNTRL_CODES {
     CTM_CST = 'S',/*calculation of ordinary integral using 11-term Cp=f(T) equations
                      (up to 3 phase transitions or up to 3 Cp=f(T) equations
                       for a DCOMP definition) */
-    CTM_CHP = 'H', //the same with modifications by Holland&Powell,1990 (minerals);
+    CTM_CHP = 'H', //the same with modifications by Holland&Powell,1998 (minerals);
     CTM_BER = 'B', // the same with modifications by Berman,1988 (minerals)
     CTM_FEI = 'F', // Cp=f(T) equation by Fei&Saxena,1986 (reserved)
     CTM_LGX = 'X', // REACDC: calculation of reaction properties from empirical
@@ -336,19 +336,21 @@ enum DC_CNTRL_CODES {
     /*  CPM_AKI  = 'A', *calculation of partial molal volumes for aqueous ions after
           EOS (Akinfiev, 1995) - reserved; */
     CPM_PCR  = 'P',  /* PARCOR estimation of HKF EOS params 19.05.98 */
-
+// Added 5.03.2005 by KD for CORK EoS (D.Dolejs, Th.Wagner)
+CPM_CORK = 'R', /* CORK EoS calculation acc.to Holland&Powell,1998 */
+      /* Selection of routines for H2O, CO2 and others done using DC Class code*/
     // CTPM_REA
     CPM_INK  = 'Z', /* calculation using Lagrange polinomial interpolation over
                      the array  of lgK(T,P). */
-    CPM_EMP  = 'S'  /* calculation from CG2003 Equation of State */
-               /*4. Codes for calculations of pressure impact on properties derived via
-                  REACDC lgK functions.
-                K - V=f(T,P) equation in the form (Dorogokupets et.al.,1988);
-                V - V=f(T,P) equation in the form (Berman,1988);
-                Z - calculation using Lagrange polinomial interpolation over the array
-                    of lgK(T,P).
-                0 - for 1,2,3 - parametric approximations of isocoulombic reactions
-                    assuming dVr = const.
+    CPM_EMP  = 'S'  /* calculation from CG2004 Equation of State */
+    /*4. Codes for calculations of pressure impact on properties derived via
+      REACDC lgK functions.
+      K - V=f(T,P) equation in the form (Dorogokupets et.al.,1988);
+      V - V=f(T,P) equation in the form (Berman,1988);
+      Z - calculation using Lagrange polinomial interpolation over the array
+          of lgK(T,P).
+     0 - for 1,2,3 - parametric approximations of isocoulombic reactions
+           assuming dVr = const.
                                               */
 };
 
@@ -364,7 +366,7 @@ enum DC_phase_state {   // Code of phase state identification of DC record keys
     CP_SORB  = 'x',  // exchangeable ion
     CP_CPEL = 'y',   // complex on poly- (oligo)electrolyte (reserved)
     CP_MACR = 'q',   // carrier (macromolecule) of poly- (oligo)electrolyte,
-    // or constantcharge carrier of clay mineral or ion exchange resin
+    // or constant charge carrier of clay mineral or ion exchange resin
     CP_HCARB = 'h',  // components of mixture of liquid hydrocarbons
     CP_UNIV  = 'u'   // component of condensed phase with I type phase transitions
 };

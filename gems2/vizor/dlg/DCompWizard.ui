@@ -89,6 +89,16 @@
                 </item>
                 <item>
                     <property name="text">
+                        <string>V    H2O (vapour) gas or fluid component</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>C    CO2 (carbon dioxide) gas or fluid component</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
                         <string>I      Ideal end-member (ideal mixing, Raoult's law)</string>
                     </property>
                 </item>
@@ -189,22 +199,6 @@
                     </rect>
                 </property>
             </widget>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>120</y>
-                    <width>580</width>
-                    <height>80</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.&lt;/b&gt;</string>
-            </property>
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
@@ -419,6 +413,22 @@
                     </rect>
                 </property>
             </widget>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>120</y>
+                    <width>580</width>
+                    <height>80</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.&lt;/b&gt;</string>
+            </property>
         </widget>
     </widget>
     <widget class="QWidget">
