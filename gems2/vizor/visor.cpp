@@ -81,10 +81,29 @@ TVisor::TVisor(int c, char *v[]):
 
 #ifdef __unix
 #ifdef __APPLE__
+	char work_path[PATH_MAX];
 	char cur_dir[PATH_MAX];
+	
+	// let's try to find resources by path of the executable
 	getcwd(cur_dir, PATH_MAX);
-	SysGEMDir = cur_dir;
-	SysGEMDir += "/gems2.app/Contents/Resources/";
+	strcpy(work_path, argv[0]);
+	char* rest = strstr(work_path, "/MacOS/gems");
+	if( rest != NULL ) {
+		strcpy(rest, "/Resources/");
+
+		if( work_path[0] == '.' && work_path[1] == '/' ) 
+			SysGEMDir = gstring(cur_dir) + (work_path+1);
+		else
+		if( work_path[0] != '/' )
+			SysGEMDir = (gstring(cur_dir) + "/") + work_path;
+		else 
+			SysGEMDir = work_path;
+	}
+	else {
+	// non-standard executable path, search for resources starting with current dir
+		SysGEMDir = cur_dir;
+		SysGEMDir += "/gems2.app/Contents/Resources/";
+	}
         UserGEMDir = getenv("HOME");
 	UserGEMDir += "/Library/gems2/";
 #else
