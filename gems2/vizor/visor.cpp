@@ -200,7 +200,10 @@ TVisor::Setup()
 #ifndef GEMS_RELEASE
         if (strcmp(argv[ii], "-d") == 0
                 || strcmp(argv[ii], "--from-ini-files") == 0 )
-            option_d = true;
+        {   
+           option_d = true;
+           pVisorImp->setConfigAutosave( true );
+        }
         else
 #endif
             if (strcmp(argv[ii], "-f") == 0
@@ -208,7 +211,10 @@ TVisor::Setup()
                 option_f = true;
             else if (strcmp(argv[ii], "-c") == 0
                      || strcmp(argv[ii], "--with-default-config") == 0 )
+            {
                 option_c = true;
+                pVisorImp->setConfigAutosave( true );
+            }
     }
 #ifndef GEMS_RELEASE
     if (option_d)

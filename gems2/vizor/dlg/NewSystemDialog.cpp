@@ -48,7 +48,8 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* name):
         Inherited( parent, name, true )
 {
     gstring titl = pVisorImp->getGEMTitle();
-            titl+= " : Single Chemical Thermodynamic System";
+            titl+= " : Single Thermodynamic System in Project";
+//            titl+=  project name  
 
     setCaption( titl.c_str() );
     pDia = this;
@@ -234,12 +235,13 @@ NewSystemDialog::Update()
     MULTI* pData = TProfil::pm->pmp;
 
     QString msg  = tr (rt[RT_SYSEQ].PackKey());
-            msg += QString("     T = %1 K;").arg(pData->T, 6, 'f', 2);
-            msg += QString("  P = %1 bar;").arg(pData->P, 6, 'f', 2);
-            msg += QString("    V = %1 L;").arg(pData->VX_, 6, 'g', 2);
+            msg += QString("  T = %1 K;").arg(pData->T, 7, 'f', 2);
+            msg += QString("  P = %1 bar;").arg(pData->P, 7, 'f', 2);
+            msg += QString("  V = %1 L;").arg(pData->VXc/1000., 9, 'g', 5);
             msg += QString("  pH = %1;").arg(pData->pH, 7, 'g', 4);
-            msg += QString("  pe = %1").arg(pData->pe, 7, 'g', 4);
-   statusBar()->message( msg );
+            msg += QString("  pe = %1;").arg(pData->pe, 8, 'g', 5);
+            msg += QString("  IS = %1").arg(pData->IC, 8, 'g', 5);
+    statusBar()->message( msg );
 }
 
 void
@@ -575,6 +577,7 @@ NewSystemDialog::CmRunIPM()
        saveList1();
 
 #ifdef Use_mt_mode
+       TProfil::pm->userCancel = false;
 
 	ProgressDialog* dlg = new ProgressDialog(this,
            menu->isItemChecked( pStepwiseCheck )  );

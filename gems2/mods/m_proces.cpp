@@ -77,7 +77,7 @@ TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
                                RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
                                RT_PROCES, 5, RT_PROCES, 6, RT_PROCES, 7, K_END);
         str = TSysEq::pm->GetKeyofRecord( pkey,
-          "Please, select a parent system for a new Process ", KEY_OLD );
+          "Please, select a parent System for a new Process ", KEY_OLD );
         if(  str.empty() )
         {
             str = pkey.p;
@@ -1054,7 +1054,7 @@ TProcess::RecCalc( const char *key )
            sd_key += db->GetKeywd();
            sd_key += ":";
            sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
-             sd_key.c_str(), "Select key of pscript format", KEY_OLD);
+             sd_key.c_str(), "Select a print script SDref record key", KEY_OLD);
 
            if( !sd_key.empty() )
            {
@@ -1063,7 +1063,7 @@ TProcess::RecCalc( const char *key )
               if( !text_fmt )
                 Error( sd_key.c_str(), "No format text in this record.");
               if( !vfChooseFileSave(window(), filename,
-                     "Please, provide name of output file") )
+                     "Please, provide a name of output file") )
                 text_fmt = 0;
            }
          }

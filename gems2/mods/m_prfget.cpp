@@ -186,8 +186,8 @@ bool TProfil::NewProfileMode(
 
     gstring  templ_str;
 AGAIN:
-    gstring  key_str = GetKeyofRecord( "MyWork:MyData"/*ALLKEY*/,
-            "Please, enter a new modelling project key", KEY_NEW );
+    gstring  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
+            "Enter a new record key, please!", KEY_NEW );
     if( key_str.empty() )
       return false; // cancel command
 
@@ -325,8 +325,8 @@ bool TProfil::NewProfileModeElements(
 
     gstring  templ_str;
 AGAIN:
-    gstring  key_str = GetKeyofRecord( "MyWork:MyData"/*ALLKEY*/,
-            "Please, enter a new modelling project key", KEY_NEW );
+    gstring  key_str = GetKeyofRecord( "MyWork:My1stProject"/*ALLKEY*/,
+            "Enter a new record key, please", KEY_NEW );
     if( key_str.empty() )
       return false; // cancel command
 

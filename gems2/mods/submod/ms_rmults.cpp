@@ -557,8 +557,8 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
 
     NEW_AQ_PHASE_AGAIN:
     if( changePhases || mu.PmvAq == S_ON )
-    {     // modified KD 25.01.02 to implement default Davies aq
-        switch( vfQuestion3( window(), GetName(), "Change aqueous phase?",
+    {     // modified KD 25.01.02 to implement default Davies eqn
+        switch( vfQuestion3( window(), "Project:", "Which aqueous phase model?",
                "&Auto DHH3", "Auto &Davies", "&Select from list" ))
         {
         case VF3_1:
@@ -568,11 +568,11 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
             emod = SM_AQDAV; mu.PmvAq = emod;
             break;
         case VF3_3:
-            mu.PmvAq = S_OFF; AqKey = "s";
+            mu.PmvAq = S_REM; AqKey = "a";
             break;
         }
     }
-    if( (mu.PmvAq == S_OFF) &&
+    if( (mu.PmvAq == S_REM) &&
             (( NewRec== true ) ||  ( NewRec== false &&
                                      rt[RT_PHASE].Find(AqKey.c_str())<0 && AqKey[0] != 'a')))
         AqKey = SelectAqPhase(); // Select aqueous phase from list
@@ -585,7 +585,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     StripLine( prfName );
     file =rt[RT_PHASE].GetOpenFileNum( prfName.c_str() );
     // make a default aqueous phase
-    if( mu.PmvAq != S_OFF )  // default aqueous phase mode
+    if( mu.PmvAq == SM_AQDH3 || mu.PmvAq == SM_AQDAV )  // default aqueous phase mode
     {
         emod = mu.PmvAq;
         TPhase::pm->newAqGasPhase( defaultAqKey, file, emod );
@@ -594,17 +594,18 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
 
     if( changePhases )
     {
-        switch( vfQuestion3( window(), GetName(), "Change gaseous phase?",
-                             "&Default", "&Select new" ))
+        switch( vfQuestion3( window(), "Project:", "Which gas phase model?",
+                             "&Default", "&Select from list", "Remove" ))
         {
         case VF3_1:
             mu.PmvGas = S_ON;
             break;
         case VF3_2:
-            mu.PmvGas = S_OFF;
-            GasKey = "s";
+            mu.PmvGas = S_REM;
+            GasKey = "g";
             break;
-        case VF3_3:
+        case VF3_3:  // Remove gas phase
+            mu.PmvGas = S_OFF;
             break;
         }
     }
@@ -636,31 +637,46 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     SetAqGas( AqKey.c_str() , GasKey.c_str() );
 }
 
-// Select aqueous phase from all or make default
+// Select aqueous phase from available or make default
 gstring TRMults::SelectAqPhase()
 {
     int i;
     TCStringArray aPhaseList;
     TCIntArray anRPhase;
 
-    if( mu.PmvAq != S_OFF )  // default phase mode
+    if( mu.PmvAq != S_REM )  // default phase mode
         goto DEF_KEY;
-    // Get all records of PHase
+    // Get all records of Phase
     rt[RT_PHASE].GetKeyList( "a:*:*:*:*:", aPhaseList, anRPhase );
     if( aPhaseList.GetCount()<1 ) //no aqueous phase in open data base files
-    {  // Sveta 17/05/99 mu.PmvAq = S_ON; no phase selec and use
-        mu.PmvAq = S_ON;
-        return "";
+    {
+        if( vfQuestion( window(), "Project: What aqueous phase?",
+            "No definitions of aqueous phase available!\n Make default(Yes) or remove (No)?" ))
+        {
+          mu.PmvAq = S_ON; return "";
+        }
+        else {
+          mu.PmvAq = S_OFF; return "";
+        }
     }
     if( aPhaseList.GetCount()==1 )
         return  aPhaseList[0];
     // select phase
-    do
-    {
-        i = vfChoice(window(), aPhaseList, "mu_aqkey Please, choose aqueous phase.");
+//    do
+//    {
+AGAIN:  i = vfChoice(window(), aPhaseList, "Please, choose an aqueous phase.");
+//    }
+//    while( i<0 );
+    if( i < 0 )
+    {            // rejected
+      if( vfQuestion( window(), "Project: What aqueous phase?",
+            "No definitions of aqueous phase selected!\n Choose again (Yes) or remove (No)?" ))
+      goto AGAIN;
+      else {
+          mu.PmvAq = S_OFF; return "";
+      }
     }
-    while( i<0 );
-    return  aPhaseList[i];
+    else return  aPhaseList[i];
 DEF_KEY:
     mu.PmvAq = S_ON;
     return gstring(defaultAqKey);
