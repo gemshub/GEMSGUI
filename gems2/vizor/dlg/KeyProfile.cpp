@@ -118,6 +118,19 @@ KeyProfile::getFilesState()
 
 }
 
+bool
+KeyProfile::getRemakeState()
+{
+
+    if( newKey == false )
+        return false;    // not new record => only read
+
+    if( CheckBox4->isChecked() )
+        return true;   // remake flags
+    else return false;
+
+}
+
 gstring
 KeyProfile::getTemplateKey()
 {

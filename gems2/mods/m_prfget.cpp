@@ -40,10 +40,11 @@ TProfil::initCalcMode()
 
     // Get Project record key from old list
     bool changeAqGas = false,
-            addfiles = false;
+         addfiles = false,
+         remakeRec = false;
     gstring key_templ;
     gstring str = vfKeyProfile( window(), "Modelling projects",
-          nRT, changeAqGas, addfiles, key_templ );
+          nRT, changeAqGas, addfiles, remakeRec, key_templ );
 
     if( str.empty() ) // cancel command
           return false;
@@ -52,11 +53,11 @@ TProfil::initCalcMode()
     if( str == ALLKEY )
      {
        if( pVisor->getElemPrMode() )
-       { if(  !NewProfileModeElements( key_templ ) )
+       { if(  !NewProfileModeElements( remakeRec, key_templ ) )
             return false;
        }
        else
-     {    if(  !NewProfileMode( key_templ ) )
+     {    if(  !NewProfileMode( remakeRec, key_templ ) )
             return false;
       }
      }
@@ -177,7 +178,8 @@ void TProfil::OpenProfileMode( const char* key,
 }
 
 //Making new Modelling Project
-bool TProfil::NewProfileMode( gstring& key_templ__ )
+bool TProfil::NewProfileMode(
+   bool remakeRec, gstring& key_templ__ )
 {
  try
  {
@@ -228,8 +230,11 @@ AGAIN:
        dyn_kill();
        set_def(); // set default data or zero if necessary
     }
+   if( remakeRec )
+     RecBuild( key_str.c_str(), VF_REMAKE );  // Edit flags
+   else
+     RecBuild( key_str.c_str(), VF_BYPASS ); 
 
-     RecBuild( key_str.c_str() );  // Edit flags
 
     pVisor->Message( window(), "Loading Modelling Project",
       "Opening data base files to Project", 5  );
@@ -312,7 +317,8 @@ AGAIN:
 }
 
 //Making new Project  (new elements mode)
-bool TProfil::NewProfileModeElements( gstring& key_templ )
+bool TProfil::NewProfileModeElements(
+   bool remakeRec, gstring& key_templ )
 {
  try
  {
@@ -366,7 +372,10 @@ AGAIN:
        set_def(); // set default data or zero if necessary
     }
 
-   RecBuild( key_str.c_str() );  // Edit flags
+   if( remakeRec )
+     RecBuild( key_str.c_str(), VF_REMAKE );  // Edit flags
+   else
+     RecBuild( key_str.c_str(), VF_BYPASS );
 
    pVisor->Message( window(), "Loading Modelling Project",
       "Opening data base files to Project", 5  );

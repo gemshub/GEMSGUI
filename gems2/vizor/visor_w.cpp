@@ -780,7 +780,8 @@ vfKeyEdit(QWidget* par, const char* caption, int iRt, const char* key)
 
 gstring
 vfKeyProfile(QWidget* par, const char* caption, int iRt,
-    bool& chAqGas, bool& addFiles, gstring& key_templ )
+    bool& chAqGas, bool& addFiles,
+    bool& remake,  gstring& key_templ )
 {
 
     KeyProfile dbk(par, iRt, caption);
@@ -790,6 +791,7 @@ vfKeyProfile(QWidget* par, const char* caption, int iRt,
     chAqGas = dbk.getAqGasState();
     addFiles = dbk.getFilesState();
     key_templ = dbk.getTemplateKey();
+    remake = dbk.getRemakeState();
 
     return dbk.getKey();
 }

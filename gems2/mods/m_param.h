@@ -191,8 +191,8 @@ protected:
 
     void OpenProfileMode(
         const char* key, bool changeAqGas, bool addFile );
-    bool NewProfileMode( gstring& key_templ );
-    bool NewProfileModeElements( gstring& key_templ );
+    bool NewProfileMode( bool remakeRec, gstring& key_templ );
+    bool NewProfileModeElements( bool remakeRec, gstring& key_templ );
     void SaveOldList();
     void DeleteOldList();
     void TestChangeProfile();

@@ -273,6 +273,289 @@
     <property name="sizeGripEnabled">
         <bool>true</bool>
     </property>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout6</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>440</y>
+                <width>620</width>
+                <height>56</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>bHelp</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Lucida Sans Unicode</family>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Help</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>bReset</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Lucida Sans Unicode</family>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Set &amp;Filters</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Customize filters for copying records from default database into new modelling project</string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>Layout5</cstring>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>Layout3</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>TextLabel1</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <family>Lucida Sans Unicode</family>
+                                        <pointsize>9</pointsize>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>    Data:</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>cbGaseous</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <family>Lucida Sans Unicode</family>
+                                        <pointsize>8</pointsize>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Gaseous</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to include gaseous aggregate state phases</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>cbAqueous</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <family>Lucida Sans Unicode</family>
+                                        <pointsize>8</pointsize>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Aqueous</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to include aqueous electrolyte phase</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>cbSorption</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <family>Lucida Sans Unicode</family>
+                                        <pointsize>8</pointsize>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Sorption</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to include sorption phase(s)</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>Layout4</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>rbKernel</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <family>Lucida Sans Unicode</family>
+                                        <pointsize>8</pointsize>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>Kernel  </string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to collect certain (kernel) thermodynamic data </string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>rbUncertain</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <family>Lucida Sans Unicode</family>
+                                        <pointsize>8</pointsize>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>Uncertain  </string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to collect uncertain generic thermodynamic data </string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>rbKernel_2</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <family>Lucida Sans Unicode</family>
+                                        <pointsize>8</pointsize>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>Complem. </string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to collect certain (kernel) thermodynamic data </string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>rbSpecific</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <family>Lucida Sans Unicode</family>
+                                        <pointsize>8</pointsize>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>Specific   </string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Check to include system-specific thermodynamic data</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </vbox>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>bNext</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Lucida Sans Unicode</family>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Ok</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Proceed to create database files for this project</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
     <widget class="QButtonGroup">
         <property name="name">
             <cstring>bgOther</cstring>
@@ -23951,223 +24234,6 @@
                 <number>36</number>
             </property>
         </widget>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>Layout2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>440</y>
-                <width>620</width>
-                <height>54</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>bHelp</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Help</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>Layout1</cstring>
-                </property>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>0</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <widget class="QRadioButton" row="1" column="1">
-                        <property name="name">
-                            <cstring>rbUncertain</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Lucida Sans Unicode</family>
-                                <pointsize>9</pointsize>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>Uncertain  </string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to collect uncertain generic thermodynamic data </string>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton" row="1" column="0">
-                        <property name="name">
-                            <cstring>rbKernel</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Lucida Sans Unicode</family>
-                                <pointsize>9</pointsize>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>Kernel  </string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to collect certain (kernel) thermodynamic data </string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox" row="0" column="0">
-                        <property name="name">
-                            <cstring>cbGaseous</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Lucida Sans Unicode</family>
-                                <pointsize>9</pointsize>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>Gaseous</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include gaseous aggregate state phases</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox" row="0" column="1">
-                        <property name="name">
-                            <cstring>cbAqueous</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Lucida Sans Unicode</family>
-                                <pointsize>9</pointsize>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>Aqueous</string>
-                        </property>
-                        <property name="checked">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include aqueous electrolyte phase</string>
-                        </property>
-                    </widget>
-                    <widget class="QCheckBox" row="0" column="2">
-                        <property name="name">
-                            <cstring>cbSorption</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Lucida Sans Unicode</family>
-                                <pointsize>9</pointsize>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>Sorption</string>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include sorption phase(s)</string>
-                        </property>
-                    </widget>
-                    <widget class="QRadioButton" row="1" column="2">
-                        <property name="name">
-                            <cstring>rbSpecific</cstring>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Lucida Sans Unicode</family>
-                                <pointsize>9</pointsize>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>Specific   </string>
-                        </property>
-                        <property name="checked">
-                            <bool>false</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Check to include system-specific thermodynamic data</string>
-                        </property>
-                    </widget>
-                </grid>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>bReset</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>Set &amp;Filters</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Customize filters for copying records from default database into new modelling project</string>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>bNext</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;OK/Next</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Proceed to create database files for this project</string>
-                </property>
-            </widget>
-        </hbox>
     </widget>
 </widget>
 <images>

@@ -65,7 +65,8 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
 
     EmptyData();
     rbKernel->setChecked( true );
-    rbUncertain->setChecked( true );
+    rbKernel_2->setChecked( false );
+    rbUncertain->setChecked( false );
     rbSpecific->setChecked( false );
     cbIsotopes->setChecked( false );
     setFilesList();
@@ -86,6 +87,7 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
     connect( cbIsotopes, SIGNAL( clicked() ),this, SLOT( SetFiles() ) );
 
     connect( rbKernel, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+    connect( rbKernel_2, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
     connect( rbUncertain, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
     connect( rbSpecific, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
 
@@ -248,6 +250,13 @@ int ElementsDialog::isOpenFile( gstring& name )
                      else
                            iret = 2;
                  }
+             else   if(  name.find( ".complem." ) != gstring::npos )
+                    {    if(rbKernel_2->isChecked())
+                           iret = 1;
+                        else
+                           iret = 2;
+                     }
+
   return iret;
 }
 

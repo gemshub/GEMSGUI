@@ -46,6 +46,7 @@ public:
     gstring getKey();
     bool   getAqGasState();
     bool   getFilesState();
+    bool   getRemakeState();
     gstring getTemplateKey();
 
 };

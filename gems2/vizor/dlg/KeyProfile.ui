@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>450</width>
-            <height>528</height>
+            <width>460</width>
+            <height>517</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -27,32 +27,6 @@
     <property name="caption">
         <string>Modelling projects</string>
     </property>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>pLabel</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>10</y>
-                <width>438</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <pointsize>11</pointsize>
-            </font>
-        </property>
-        <property name="text">
-            <string>Please, select one modelling project:</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-    </widget>
     <widget class="QListBox">
         <property name="name">
             <cstring>pList</cstring>
@@ -61,8 +35,8 @@
             <rect>
                 <x>10</x>
                 <y>40</y>
-                <width>430</width>
-                <height>250</height>
+                <width>440</width>
+                <height>240</height>
             </rect>
         </property>
         <property name="sizePolicy">
@@ -85,168 +59,13 @@
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>Layout4</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>301</y>
-                <width>430</width>
-                <height>170</height>
-            </rect>
-        </property>
-        <vbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>pAqGas</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>&amp;Use old settings for aqueous/gas phases</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Uncheck to use different models of aqueous and/or gas phases</string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>pFiles</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>true</bool>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="acceptDrops">
-                    <bool>false</bool>
-                </property>
-                <property name="text">
-                    <string>&amp;Change file configuration of selected project</string>
-                </property>
-                <property name="checked">
-                    <bool>false</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string></string>
-                </property>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>pTemplate</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>true</bool>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="acceptDrops">
-                    <bool>false</bool>
-                </property>
-                <property name="text">
-                    <string>&amp;Create a new project using selected project</string>
-                </property>
-                <property name="checked">
-                    <bool>false</bool>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string></string>
-                </property>
-            </widget>
-            <widget class="QButtonGroup">
-                <property name="name">
-                    <cstring>ButtonGroup1</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="title">
-                    <string>New projects only:</string>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>rbNewPrMode</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>20</y>
-                            <width>390</width>
-                            <height>31</height>
-                        </rect>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="text">
-                        <string>Make a new project by copying kernel data </string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Switch on to select elements and copy all related data from default database into new project</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>rbOldPrMode</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>50</y>
-                            <width>400</width>
-                            <height>30</height>
-                        </rect>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="text">
-                        <string>Make a new project by linking database files</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Switch on to select files from default database and link them to form a new project</string>
-                    </property>
-                </widget>
-            </widget>
-        </vbox>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
             <cstring>Layout3</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>10</x>
-                <y>480</y>
-                <width>430</width>
+                <y>470</y>
+                <width>440</width>
                 <height>37</height>
             </rect>
         </property>
@@ -357,6 +176,216 @@
                 </property>
             </widget>
         </hbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>290</y>
+                <width>440</width>
+                <height>180</height>
+            </rect>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>pAqGas</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Re&amp;tain setup of aqueous/gas phases</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Uncheck to use different models of aqueous and/or gas phases</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>pFiles</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>true</bool>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="acceptDrops">
+                    <bool>false</bool>
+                </property>
+                <property name="text">
+                    <string>Change &amp;file configuration of selected project</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>Layout3</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>pTemplate</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>true</bool>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <pointsize>9</pointsize>
+                            </font>
+                        </property>
+                        <property name="acceptDrops">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>Create a new project &amp;using selected one</string>
+                        </property>
+                        <property name="checked">
+                            <bool>false</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string></string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>CheckBox4</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <pointsize>9</pointsize>
+                            </font>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Remake</string>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>ButtonGroup1</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="title">
+                    <string>New projects only:</string>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>rbNewPrMode</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>420</width>
+                            <height>31</height>
+                        </rect>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Make new &amp;project by copying from kernel database </string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Switch on to select elements and copy all related data from default database into new project</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>rbOldPrMode</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>50</y>
+                            <width>420</width>
+                            <height>30</height>
+                        </rect>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Make new project by &amp;linking the database files</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Switch on to select files from default database and link them to form a new project</string>
+                    </property>
+                </widget>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>pLabel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>10</y>
+                <width>438</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>11</pointsize>
+            </font>
+        </property>
+        <property name="text">
+            <string>Please, select one modelling project to open:</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
     </widget>
 </widget>
 <connections>
