@@ -717,6 +717,8 @@ void NewSystemDialog::loadList2()
 
    for( int ii=aObj[o_wd_sf].GetN()-1; ii>=0 ; ii--)
    {
+    if( l1_ == NULL )
+      break;
     sprintf( buf, " %d", l1_[ii] );
     phase = new QListViewItem( item2,
      aObj[o_wd_sf].GetStringEmpty(ii).c_str(), buf.p,
@@ -1200,5 +1202,4 @@ MLineEdit::SetIndex(int ii)
 
 
 //-------- End of file NewSystemDialog.cpp ----------------------------
-
 

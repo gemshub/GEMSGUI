@@ -75,7 +75,6 @@ void TMulti::ods_link( int /*q*/)
     aObj[ o_wio_fitv ].SetPtr(pm.FitVar ); /*d 5*/
 
     // dynamic part 1
-
     aObj[ o_wi_l1 ].SetPtr( pm.L1 );
     aObj[ o_wi_l1 ].SetDim( pm.FI, 1 );
     aObj[ o_wi_lsmod ].SetPtr(pm.LsMod );
@@ -128,7 +127,6 @@ void TMulti::ods_link( int /*q*/)
     aObj[ o_wi_pparc ].SetDim( pm.L, 1 );
 
     // part 2
-
     aObj[o_wi_satndx].SetPtr( pm.SATNdx );
     if( pm.FIat > 0 ) aObj[ o_wi_satndx ].SetDim( pm.Ls, 2 );
     aObj[ o_wd_ym].SetPtr( pm.Y_m );
@@ -222,7 +220,6 @@ void TMulti::ods_link( int /*q*/)
     aObj[ o_wd_icwm ].SetDim( pm.N, 1 );
 
     // part 3
-
     aObj[ o_w_xfts].SetPtr( pm.XFTS );
     aObj[ o_w_xfts ].SetDim(pm.FIs,pm.FIat);
     aObj[ o_wo_masdj].SetPtr( pm.MASDJ );
@@ -326,10 +323,12 @@ void TMulti::ods_link( int /*q*/)
     aObj[ o_wo_lnsat ].SetDim( pm.Ls, 1 );
 }
 
+
 // set dynamic Objects ptr to values
 void TMulti::dyn_set(int /*q*/)
 {
-    pm.L1    = (short *)aObj[ o_wi_l1 ].GetPtr();
+
+   pm.L1    = (short *)aObj[ o_wi_l1 ].GetPtr();
     pm.LsMod = (short *)aObj[ o_wi_lsmod ].GetPtr();
     pm.LsMdc = (short *)aObj[ o_wi_lsmdc ].GetPtr();
     pm.mui   = (short *)aObj[ o_wi_mui ].GetPtr();
@@ -453,6 +452,7 @@ void TMulti::dyn_set(int /*q*/)
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].GetPtr();
 }
 
+
 // free dynamic memory in objects and values
 void TMulti::dyn_kill(int /*q*/)
 {
@@ -540,7 +540,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.YF    = (double *)aObj[ o_wo_yf ].Free();
     pm.XFA   = (double *)aObj[ o_ww_xfa ].Free();
     pm.YFA   = (double *)aObj[ o_ww_yfa ].Free();
-    pm.Falp  = (double *)aObj[ o_wo_falp ].Free();
+   pm.Falp  = (double *)aObj[ o_wo_falp ].Free();
     pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa ].Free();
     pm.XetaB = (double (*)[MST])aObj[ o_w_xetab ].Free();
     pm.X     = (double *)aObj[ o_w_x ].Free();
@@ -580,10 +580,11 @@ void TMulti::dyn_kill(int /*q*/)
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].Free();
 }
 
+
 // realloc dynamic memory
 void TMulti::dyn_new(int /*q*/)
 {
-    if( pm.N < 2 || pm.L < 2 || pm.FI < 1 )
+   if( pm.N < 2 || pm.L < 2 || pm.FI < 1 )
         Error( GetName(), "pm.N < 2 || pm.L < 2 || pm.FI < 1" );
 
     // Part 1
@@ -623,7 +624,6 @@ void TMulti::dyn_new(int /*q*/)
     pm.F = (double *)aObj[ o_wo_f].Alloc( pm.L, 1, D_);
     pm.F0 = (double *)aObj[ o_w_f0].Alloc( pm.L, 1, D_);
     pm.YOF = (double *)aObj[ o_wi_yof].Alloc( pm.FI, 1, D_ );
-
     pm.SB = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_wd_sb].Alloc(
                 pm.N, 1, MAXICNAME+MAXSYMB );
     pm.SB1 = (char (*)[MAXICNAME])aObj[ o_w_sbh].Alloc( 1, pm.N, MAXICNAME );
@@ -674,8 +674,8 @@ void TMulti::dyn_new(int /*q*/)
         pm.D     = (double *)aObj[ o_w_d ].Free();
     }
 
-    // Part 2  not requited arrays
 
+   // Part 2  not requited arrays
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
         pm.BF = (double *)aObj[ o_wo_bf].Alloc( pm.FIs, pm.N, D_ );
@@ -737,7 +737,7 @@ void TMulti::dyn_new(int /*q*/)
         pm.Xr0h0 = (float (*)[2])aObj[ o_wi_xr0h0 ].Free();
     }
 
-    if( syp->PSigm != S_OFF )
+   if( syp->PSigm != S_OFF )
         pm.Sigw = (float *)aObj[ o_wi_sigw].Alloc( pm.FI, 1, F_ );
     else  pm.Sigw  = (float *)aObj[ o_wi_sigw ].Free();
 
@@ -872,7 +872,7 @@ void TMulti::set_def( int /*q*/)
     pm.HYM   = 0;
     pm.VL    = 0;
     pm.MM    = 0;
-    pm.H0    = 0;
+   pm.H0    = 0;
     pm.A0    = 0;
     pm.U0    = 0;
     pm.S0    = 0;
@@ -913,68 +913,68 @@ void TMulti::set_def( int /*q*/)
     pm.Awt   = 0;
     pm.A     = 0;
     pm.XFs   = 0;
-    pm.Falps = 0;
-    pm.Fug   = 0;
-    pm.Fug_l = 0;
-    pm.Ppg_l = 0;
-    pm.XFTS  = 0;
-    pm.MASDJ = 0;
-    pm.G     = 0;
-    pm.G0    = 0;
-    pm.lnGam = 0;
-    pm.lnGmo = 0;
-    pm.lnSAT = 0;
-    pm.B     = 0;
-    pm.U     = 0;
-    pm.U_r   = 0;
-    pm.C     = 0;
-    pm.IC_m  = 0;
-    pm.IC_lm = 0;
-    pm.IC_wm = 0;
-    pm.BF    = 0;
-    pm.XF    = 0;
-    pm.YF    = 0;
-    pm.XFA   = 0;
-    pm.YFA   = 0;
-    pm.Falp  = 0;
-    pm.XetaA = 0;
-    pm.XetaB = 0;
-    pm.X     = 0;
-    pm.Y     = 0;
-    pm.XY    = 0;
-    pm.Qp    = 0;
-    pm.Qd    = 0;
-    pm.MU    = 0;
-    pm.EMU   = 0;
-    pm.NMU   = 0;
-    pm.W     = 0;
-    pm.Fx    = 0;
-    pm.Wx    = 0;
-    pm.F     = 0;
-    pm.F0    = 0;
-    pm.D     = 0;
-    pm.R     = 0;
-    pm.R1    = 0;
-    pm.sMod  = 0;
-    pm.SB    = 0;
-    pm.SB1    = 0; // added Sveta 6/07/2001
-    pm.SM    = 0;
-    pm.SF    = 0;
-    pm.SFs   = 0;
-    pm.pbuf  = 0; //
-    pm.RLC   = 0;
-    pm.RSC   = 0;
-    pm.RFLC  = 0;
-    pm.RFSC  = 0;
-    pm.ICC   = 0;
-    pm.DCC   = 0;
-    pm.PHC   = 0;
-    pm.SCM   = 0;
-    pm.SATT  = 0;
-    pm.DCCW  = 0;
-    pm.XcapF = 0;
-    pm.SM2    = 0;
-    pm.SF2    = 0;
-}
-//--------------------- End of ms_multi.cpp ---------------------------
+        pm.Falps = 0;
+        pm.Fug   = 0;
+        pm.Fug_l = 0;
+        pm.Ppg_l = 0;
+        pm.XFTS  = 0;
+        pm.MASDJ = 0;
+        pm.G     = 0;
+        pm.G0    = 0;
+        pm.lnGam = 0;
+        pm.lnGmo = 0;
+        pm.lnSAT = 0;
+        pm.B     = 0;
+        pm.U     = 0;
+        pm.U_r   = 0;
+        pm.C     = 0;
+        pm.IC_m  = 0;
+        pm.IC_lm = 0;
+        pm.IC_wm = 0;
+        pm.BF    = 0;
+        pm.XF    = 0;
+        pm.YF    = 0;
+        pm.XFA   = 0;
+        pm.YFA   = 0;
+        pm.Falp  = 0;
+        pm.XetaA = 0;
+        pm.XetaB = 0;
+        pm.X     = 0;
+        pm.Y     = 0;
+        pm.XY    = 0;
+        pm.Qp    = 0;
+        pm.Qd    = 0;
+        pm.MU    = 0;
+        pm.EMU   = 0;
+        pm.NMU   = 0;
+        pm.W     = 0;
+        pm.Fx    = 0;
+        pm.Wx    = 0;
+        pm.F     = 0;
+        pm.F0    = 0;
+        pm.D     = 0;
+        pm.R     = 0;
+        pm.R1    = 0;
+        pm.sMod  = 0;
+        pm.SB    = 0;
+        pm.SB1    = 0; // added Sveta 6/07/2001
+        pm.SM    = 0;
+        pm.SF    = 0;
+        pm.SFs   = 0;
+        pm.pbuf  = 0; //
+        pm.RLC   = 0;
+        pm.RSC   = 0;
+        pm.RFLC  = 0;
+        pm.RFSC  = 0;
+        pm.ICC   = 0;
+        pm.DCC   = 0;
+        pm.PHC   = 0;
+        pm.SCM   = 0;
+        pm.SATT  = 0;
+        pm.DCCW  = 0;
+        pm.XcapF = 0;
+        pm.SM2    = 0;
+        pm.SF2    = 0;
+    }
 
+//--------------------- End of ms_multi.cpp ---------------------------
