@@ -24,10 +24,13 @@ const char *GEMS_GP_HTML = "gp_howto";
 
 #include <qlistbox.h>
 #include <qcheckbox.h>
+#include <qradiobutton.h>
 
 #include "v_dbm.h"
 #include "KeyProfile.h"
 #include "visor_w.h"
+#include "visor.h"
+
 
 KeyProfile::KeyProfile( QWidget* win, int irt, const char* caption):
         Inherited( win, 0, true /* false = modeless */ ),
@@ -39,7 +42,16 @@ KeyProfile::KeyProfile( QWidget* win, int irt, const char* caption):
     TCStringArray keyList;
 
     setCaption( caption );
-//    gstring s = "Select Profile record";
+    if( pVisor->getElemPrMode() )
+    {   rbNewPrMode->setChecked( true );
+        rbOldPrMode->setChecked( false );
+    }
+    else
+    {   rbNewPrMode->setChecked( false );
+        rbOldPrMode->setChecked( true );
+    }
+
+//    gstring s = "Select Project record";
 //    pLabel->setText(s.c_str());
 
     int n = rt[irt].GetKeyList( "*", keyList, temp);
@@ -56,7 +68,8 @@ gstring
 KeyProfile::getKey()
 {
 
-    if( newKey == true )
+   pVisor->setElemPrMode(rbNewPrMode->isChecked());
+   if( newKey == true )
         return ALLKEY;
     int sel = pList->currentItem();
     if( sel != -1 )
@@ -101,8 +114,21 @@ KeyProfile::getFilesState()
 
     if( pFiles->isChecked() )
         return true;
-    else return false; // add files from profile directory
+    else return false; // add files from project directory
 
+}
+
+gstring
+KeyProfile::getTemplateKey()
+{
+    if( newKey == true && pTemplate->isChecked() )
+    {
+      int sel = pList->currentItem();
+      if( sel != -1 )
+        return gstring(pList->text(sel));
+      Error( "New Modelling Project", "No template record selected");
+    }
+    return gstring();
 }
 
 // --------------------- End KeyProfile.cpp -------------------------

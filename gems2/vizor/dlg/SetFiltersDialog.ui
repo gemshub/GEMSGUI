@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>SetFiltersDialogData</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>SetFiltersDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,25 +12,20 @@
             <height>472</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>font</name>
+    <property name="font">
         <font>
             <family>Lucida Sans Unicode</family>
             <pointsize>9</pointsize>
         </font>
     </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>Set filters to create an independent system profile</string>
+    <property name="caption">
+        <string>Set filters to create an independent Modelling project</string>
     </property>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLayoutWidget">
+        <property name="name">
             <cstring>Layout7</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>420</y>
@@ -42,104 +34,82 @@
             </rect>
         </property>
         <hbox>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>6</number>
             </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pbHelp</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Help</string>
                 </property>
             </widget>
             <spacer>
-                <property>
-                    <name>name</name>
+                <property name="name" stdset="0">
                     <cstring>Spacer1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
-                <property stdset="1">
-                    <name>sizeType</name>
+                <property name="sizeType">
                     <enum>Expanding</enum>
                 </property>
-                <property>
-                    <name>sizeHint</name>
+                <property name="sizeHint">
                     <size>
                         <width>20</width>
                         <height>20</height>
                     </size>
                 </property>
             </spacer>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pbCancel</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Cancel</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pbReset</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Reset</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pbApply</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Apply</string>
                 </property>
-                <property stdset="1">
-                    <name>default</name>
+                <property name="default">
                     <bool>true</bool>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pbOk</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Ok</string>
                 </property>
             </widget>
         </hbox>
     </widget>
-    <widget>
-        <class>QTabWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QTabWidget">
+        <property name="name">
             <cstring>twSetFilters</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>10</y>
@@ -147,33 +117,25 @@
                 <height>401</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
             </font>
         </property>
-        <property stdset="1">
-            <name>tabShape</name>
+        <property name="tabShape">
             <enum>Rounded</enum>
         </property>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>tpFiles</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>Database Files</string>
             </attribute>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QCheckBox">
+                <property name="name">
                     <cstring>cbCopyDef</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>30</x>
                         <y>330</y>
@@ -181,71 +143,40 @@
                         <height>30</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Copy from default database</string>
                 </property>
-                <property stdset="1">
-                    <name>checked</name>
+                <property name="checked">
                     <bool>true</bool>
                 </property>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbCopyPar</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>290</x>
-                        <y>330</y>
-                        <width>250</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Copy from the parent profile</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QListView</class>
+            <widget class="QListView">
                 <column>
-                    <property>
-                        <name>text</name>
+                    <property name="text">
                         <string>Record Type / File Keywd</string>
                     </property>
-                    <property>
-                        <name>clickable</name>
+                    <property name="clickable">
                         <bool>true</bool>
                     </property>
-                    <property>
-                        <name>resizeable</name>
+                    <property name="resizeable">
                         <bool>true</bool>
                     </property>
                 </column>
                 <column>
-                    <property>
-                        <name>text</name>
+                    <property name="text">
                         <string> File Name (click toggles selection) </string>
                     </property>
-                    <property>
-                        <name>clickable</name>
+                    <property name="clickable">
                         <bool>true</bool>
                     </property>
-                    <property>
-                        <name>resizeable</name>
+                    <property name="resizeable">
                         <bool>true</bool>
                     </property>
                 </column>
-                <property stdset="1">
-                    <name>name</name>
+                <property name="name">
                     <cstring>lvDefDBfiles</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>10</y>
@@ -253,34 +184,42 @@
                         <height>320</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>selectionMode</name>
+                <property name="selectionMode">
                     <enum>Single</enum>
                 </property>
-                <property stdset="1">
-                    <name>rootIsDecorated</name>
+                <property name="rootIsDecorated">
                     <bool>true</bool>
                 </property>
             </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>cbCopyPar</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>290</x>
+                        <y>330</y>
+                        <width>250</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Copy from the parent project</string>
+                </property>
+            </widget>
         </widget>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>tpIComp</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>IComp</string>
             </attribute>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>40</y>
@@ -288,19 +227,21 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>130</y>
@@ -308,19 +249,21 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlICtab</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>10</y>
@@ -328,145 +271,20 @@
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>  IComp (Independent Component) records</string>
                 </property>
             </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*? last char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*??</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>?* first char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>??*</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*  all nonspace</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbICsearch</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>60</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>nothing</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbICreplace</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>100</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlICsearch</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>60</y>
@@ -474,19 +292,15 @@
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to search in the last field of record key</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlICreplace</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>100</y>
@@ -494,19 +308,15 @@
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to replace with during copying of records</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlIClist1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>160</y>
@@ -514,57 +324,23 @@
                         <height>80</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Lists of currently 
 selected IComp 
 symbols: in  the 
 Default database</string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>tlIClist2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>270</y>
-                        <width>140</width>
-                        <height>40</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>In the parent (old)
-profile database</string>
-                </property>
-                <property stdset="1">
-                    <name>alignment</name>
-                    <set>AlignVCenter|AlignRight</set>
-                </property>
-                <property>
-                    <name>hAlign</name>
-                </property>
-            </widget>
-            <widget>
-                <class>QTextView</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QTextView">
+                <property name="name">
                     <cstring>tvIClistD</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>161</x>
                         <y>150</y>
@@ -572,19 +348,15 @@ profile database</string>
                         <height>104</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>resizePolicy</name>
+                <property name="resizePolicy">
                     <enum>Manual</enum>
                 </property>
             </widget>
-            <widget>
-                <class>QTextView</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QTextView">
+                <property name="name">
                     <cstring>tvIClistP</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>161</x>
                         <y>250</y>
@@ -592,30 +364,173 @@ profile database</string>
                         <height>104</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>resizePolicy</name>
+                <property name="resizePolicy">
                     <enum>Manual</enum>
                 </property>
             </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>tlIClist2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>270</y>
+                        <width>140</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>In the parent (old)
+project database</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+                <property name="hAlign" stdset="0">
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>?*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>??*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>???*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*?</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*??</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*???</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbICsearch</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>60</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*_</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*TEXT</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbICreplace</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>100</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
         </widget>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>tpCompos</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>Compos</string>
             </attribute>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_3_2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>150</y>
@@ -623,19 +538,21 @@ profile database</string>
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlPCOfilter</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>210</y>
@@ -643,29 +560,23 @@ profile database</string>
                         <height>80</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Filter script 
 for copying 
 records 
 (optional)</string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget>
-                <class>QMultiLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QMultiLineEdit">
+                <property name="name">
                     <cstring>mlePCOfscript</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>120</x>
                         <y>210</y>
@@ -674,14 +585,11 @@ records
                     </rect>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlPCOtab</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>10</y>
@@ -689,25 +597,20 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>  Compos (Predefined Composition Object) records</string>
                 </property>
             </widget>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_3</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>40</y>
@@ -715,139 +618,21 @@ records
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*? last char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*??</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>?* first char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>??*</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*  all nonspace</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbPCOsearch</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>70</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>nothing</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbPCOreplace</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>110</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlPCOsearch</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>70</y>
@@ -855,19 +640,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to search in the last field of record key</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlPCOreplace</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>110</y>
@@ -875,19 +656,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to replace with during copying of records</string>
                 </property>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QCheckBox">
+                <property name="name">
                     <cstring>chbPCOcopy</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>170</y>
@@ -895,30 +672,151 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Copy only PCO records that are fully conformable to the IComp list</string>
                 </property>
             </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>?*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>??*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>???*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*?</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*??</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*???</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbPCOsearch</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>70</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*_</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*TEXT</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbPCOreplace</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>110</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
         </widget>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>tpDComp</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>DComp</string>
             </attribute>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_3_4</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>150</y>
@@ -926,19 +824,21 @@ records
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlDCtab</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>10</y>
@@ -946,25 +846,20 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>  DComp (standard thermochemical data) records</string>
                 </property>
             </widget>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_3_3</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>40</y>
@@ -972,139 +867,21 @@ records
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*? last char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*??</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>?* first char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>??*</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*  all nonspace</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbDCsearch</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>70</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>nothing</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbDCreplace</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>110</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlDCsearch</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>70</y>
@@ -1112,19 +889,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to search in the last field of record key</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlDCreplace</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>110</y>
@@ -1132,19 +905,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to replace with during copying of records</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlDCfilter</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>220</y>
@@ -1152,29 +921,23 @@ records
                         <height>80</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Filter script 
 for copying 
 records 
 (optional)</string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget>
-                <class>QMultiLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QMultiLineEdit">
+                <property name="name">
                     <cstring>mleDCfscript</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>120</x>
                         <y>180</y>
@@ -1183,25 +946,142 @@ records
                     </rect>
                 </property>
             </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>?*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>??*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>???*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*?</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*??</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*???</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbDCsearch</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>70</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*_</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*TEXT</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbDCreplace</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>110</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
         </widget>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>tpReacDC</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>ReacDC</string>
             </attribute>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_3_3_2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>40</y>
@@ -1209,19 +1089,21 @@ records
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_3_3_3</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>150</y>
@@ -1229,19 +1111,21 @@ records
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlREtab</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>10</y>
@@ -1249,145 +1133,20 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>  ReacDC (reaction-defined standard data) records</string>
                 </property>
             </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*? last char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*??</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>?* first char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>??*</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*  all nonspace</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbREsearch</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>70</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>nothing</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbREreplace</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>110</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlREsearch</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>70</y>
@@ -1395,19 +1154,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to search in the last field of record key</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlREreplace</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>110</y>
@@ -1415,19 +1170,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to replace with during copying of records</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlREfilter</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>200</y>
@@ -1435,29 +1186,23 @@ records
                         <height>80</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Filter script 
 for copying 
 records 
 (optional)</string>
                 </property>
-                <property stdset="1">
-                    <name>alignment</name>
+                <property name="alignment">
                     <set>AlignVCenter|AlignRight</set>
                 </property>
-                <property>
-                    <name>hAlign</name>
+                <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget>
-                <class>QMultiLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QMultiLineEdit">
+                <property name="name">
                     <cstring>mleREfscript</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>120</x>
                         <y>180</y>
@@ -1466,25 +1211,147 @@ records
                     </rect>
                 </property>
             </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>?*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>??*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>???*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*?</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*??</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*???</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbREsearch</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>70</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*_</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*TEXT</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbREreplace</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>110</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
         </widget>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>tpPhase</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>Phases</string>
             </attribute>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_3_5</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>40</y>
@@ -1492,19 +1359,21 @@ records
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1_3_6</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>150</y>
@@ -1512,19 +1381,21 @@ records
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlPHtab</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>10</y>
@@ -1532,145 +1403,20 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>  Phase (Definition of Thermodynamic Phase) records</string>
                 </property>
             </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*? last char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*??</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>?* first char.</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>??*</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>*  all nonspace</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbPHsearch</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>70</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QComboBox</class>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string></string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>   space</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>_  underscore</string>
-                    </property>
-                </item>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>nothing</string>
-                    </property>
-                </item>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>cbPHreplace</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>20</x>
-                        <y>110</y>
-                        <width>140</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>editable</name>
-                    <bool>true</bool>
-                </property>
-                <property stdset="1">
-                    <name>currentItem</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlPHsearch</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>70</y>
@@ -1678,19 +1424,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to search in the last field of record key</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>tlPHreplace</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>110</y>
@@ -1698,19 +1440,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Characters to replace with during copying of records</string>
                 </property>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QCheckBox">
+                <property name="name">
                     <cstring>chbPHcopyS</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>170</y>
@@ -1718,23 +1456,18 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Copy Phase records for single-component phases</string>
                 </property>
-                <property stdset="1">
-                    <name>checked</name>
+                <property name="checked">
                     <bool>true</bool>
                 </property>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QCheckBox">
+                <property name="name">
                     <cstring>chbPHcopyF</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>200</y>
@@ -1742,19 +1475,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Copy only Phase records that retain all species after filtering</string>
                 </property>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QCheckBox">
+                <property name="name">
                     <cstring>chbPHcopyL</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>40</x>
                         <y>230</y>
@@ -1762,19 +1491,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Show a list of discarded Phase records with some species retained</string>
                 </property>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QCheckBox">
+                <property name="name">
                     <cstring>chbPHcopyY</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>320</y>
@@ -1782,19 +1507,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Copy definitions of sorption phases</string>
                 </property>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QCheckBox">
+                <property name="name">
                     <cstring>chbPHcopyA</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>290</y>
@@ -1802,19 +1523,15 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Copy definitions of aqueous electrolyte</string>
                 </property>
             </widget>
-            <widget>
-                <class>QCheckBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QCheckBox">
+                <property name="name">
                     <cstring>chbPHcopyN</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>260</y>
@@ -1822,16 +1539,143 @@ records
                         <height>31</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Copy definitions of non-ideal solid-solution phases</string>
                 </property>
-                <property stdset="1">
-                    <name>checked</name>
+                <property name="checked">
                     <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>?*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>??*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>???*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*?</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*??</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*???</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbPHsearch</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>70</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>*_</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*TEXT</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>*</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>invcase</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>TEXT</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>cbPHreplace</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>110</y>
+                        <width>140</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="editable">
+                    <bool>true</bool>
+                </property>
+                <property name="currentItem">
+                    <number>0</number>
                 </property>
             </widget>
         </widget>
     </widget>
 </widget>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

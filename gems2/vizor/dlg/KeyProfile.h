@@ -46,6 +46,8 @@ public:
     gstring getKey();
     bool   getAqGasState();
     bool   getFilesState();
+    gstring getTemplateKey();
+
 };
 #endif // KeyProfile_included
 

@@ -1311,7 +1311,7 @@ void TSyst::packData()
     fEdit = false;
 }
 
-// pack system in z_sp_conf mode (save for full profile mode)
+// pack system in z_sp_conf mode (save for full project mode)
 void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
                       TCIntArray DCon, TCIntArray DCoff )
 {

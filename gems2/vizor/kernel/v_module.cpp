@@ -389,7 +389,7 @@ TCModule::CmShow()
     {
         if( pVisor->ProfileMode == true &&
                 ( nRT >= RT_SYSEQ  || nRT == RT_PARAM )  )
-            Error( GetName(), "Illegal command in Profile mode!");
+            Error( GetName(), "Illegal command in Project mode!");
 
         MessageToSave();
         // get key of record
@@ -568,7 +568,7 @@ TCModule::CmDerive()
     {
         if( pVisor->ProfileMode != true && (nRT == RT_SYSEQ || nRT == RT_PROCES
                  || nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO ) )
-            Error( GetName(), "Please, do it in Profile mode!");
+            Error( GetName(), "Please, do it in Project mode!");
         if( pVisor->ProfileMode == true &&
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
             Error( GetName(), "Please, do it in Database mode!");
@@ -609,7 +609,7 @@ TCModule::CmCalc()
     {
         if( pVisor->ProfileMode != true && (nRT == RT_SYSEQ || nRT == RT_PROCES
                                             || nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO ) )
-            Error( GetName(), "Please, do it in Profile mode!");
+            Error( GetName(), "Please, do it in Project mode!");
         if( pVisor->ProfileMode == true &&
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
             Error( GetName(), "Please, do it in Database mode!");
@@ -644,7 +644,7 @@ TCModule::CmNew()
     {
         if( nRT == RT_SYSEQ || nRT == RT_PROCES ||
                 nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
-            Error( GetName(), "Please, do it in Profile mode!");
+            Error( GetName(), "Please, do it in Project mode!");
 
         MessageToSave();
         gstring str = GetKeyofRecord( db->PackKey(),
@@ -673,7 +673,7 @@ TCModule::CmCreate()
     {
         if( nRT == RT_SYSEQ || nRT == RT_PROCES ||
                 nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
-            Error( GetName(), "Please, do it in Profile mode!");
+            Error( GetName(), "Please, do it in Project mode!");
 
         MessageToSave();
         gstring str = GetKeyofRecord( db->PackKey(),
@@ -703,7 +703,7 @@ TCModule::CmFind() // ???? error in smShow
    try{
        if( nRT == RT_SYSEQ || nRT == RT_PROCES ||
             nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
-          Error( GetName(), "Do it in Profile mode!");
+          Error( GetName(), "Do it in Project mode!");
        CmShow();
        if( check_input( db->UnpackKey() ) )
        {   CmCalc();
@@ -787,10 +787,10 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 
 //----------------------------------------------------------
 //--- Manipulation of the current record
-//--- Process, Probe, GTdemo, Duterm in profile mode
+//--- Process, Probe, GTdemo, Duterm in project mode
 //----------------------------------------------------------
 
-// load record from data base (show in profile mode)
+// load record from data base (show in project mode)
 
 void TCModule::RecordLoadinProfile( const char *key )
 {
@@ -819,7 +819,7 @@ void TCModule::RecordLoadinProfile( const char *key )
 }
 
 
-// loads the profile
+// loads the project
 
 
 void TCModule::CmLoadinProfile()
@@ -840,7 +840,7 @@ void TCModule::CmLoadinProfile()
 }
 
 
-// Adds new record to DB in Profile mode
+// Adds new record to DB in Project mode
 
 void
 TCModule::CmNewinProfile()

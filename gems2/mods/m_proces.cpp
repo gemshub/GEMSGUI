@@ -36,7 +36,7 @@ TProcess::TProcess( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("l<10 Identifier of the parent system profile <-Profile");
+    aFldKeysHelp.Add("l<10 Identifier of the parent modelling project <-Project");
     aFldKeysHelp.Add("l<3  Symbol of thermodynamic potential to minimize <-SysEq");
     aFldKeysHelp.Add("l<12 Identifier of the parent chemical system definition <-SysEq");
     aFldKeysHelp.Add("l<5  CSD variant number <integer> <-SysEq");
@@ -99,13 +99,13 @@ void TProcess::keyTest( const char *key )
     vstr pkey(MAXRKEYLEN+10);
 
     if( pVisor->ProfileMode == true )
-    { // test profile key
+    { // test project key
         gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k>=rt[RT_PARAM].FldLen(0) )  )
-            Error( key, "Illegal key (another Profile)!");
+            Error( key, "Illegal key (another Modelling Project)!");
         rt[RT_SYSEQ].MakeKey( RT_PROCES, pkey, RT_PROCES, 0, RT_PROCES, 1,
                                RT_PROCES, 2, RT_PROCES, 3, RT_PROCES, 4,
                                RT_PROCES, 5, RT_PROCES, 6, RT_PROCES, 7, K_END);
@@ -521,7 +521,7 @@ TProcess::RecBuild( const char *key, int mode  )
 {
 
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Please, do it in Profile mode!" );
+        Error( GetName(), "Please, do it in Project mode!" );
 
 AGAIN:
     int ret = TCModule::RecBuild( key, mode );
@@ -775,7 +775,7 @@ TProcess::RecCalc( const char *key )
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
 
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Please, do it in Profile mode!" );
+        Error( GetName(), "Please, do it in Project mode!" );
 
     if( pep->Istat != P_EXECUTE )
     {
@@ -964,7 +964,7 @@ TProcess::RecordPrint( const char *key )
         break;
        }
    if( sd_key.empty() )
-      sd_key = "pscript:0000:process";
+      sd_key = "pscript:0000:proces:";
   }
  // read sdref record with format prn
  TSData::pm->RecInput( sd_key.c_str() );

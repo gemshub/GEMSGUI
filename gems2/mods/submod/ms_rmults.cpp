@@ -309,7 +309,7 @@ void TRMults::DCListLoad(  gstring& AqKey, gstring& GasKey,
     mu.PmvPH = S_ON;
     mu.Ll = (short *)aObj[ o_mul1].Alloc( mu.Fi, 1, I_ );
     mu.SF = (char (*)[PH_RKLEN])aObj[ o_musf].Alloc( mu.Fi, 1, PH_RKLEN );
-    // List of DCOMP&REACDC component in Profile
+    // List of DCOMP&REACDC component in Project
     TCStringArray List;
     TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
     aPH->ods_link(0);

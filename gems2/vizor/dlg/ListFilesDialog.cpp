@@ -35,7 +35,7 @@ ListFilesDialog::ListFilesDialog(QWidget* win, const char * prfName,
            const char* /*caption*/):
         Inherited( win, 0, true /* false = modeless */ )
  {
-    gstring label = "Please, check files linked to Profile ";
+    gstring label = "Please, check files linked to Modelling project ";
              label += prfName;
     pLabel->setText( tr(label.c_str()) );
 
@@ -95,7 +95,7 @@ ListFilesDialog::ListFilesDialog(QWidget* win, const char * prfName,
         rt[i].GetFileList(closef|openf|oldself, names, indx, sel);
         for(int ii=names.GetCount()-1; ii>=0; ii-- )
         {
-          // select only Profile files
+          // select only Projecte files
           if( names[ii].find( prfName/*Path*/ ) == gstring::npos )
               continue;
           // get 2 colums

@@ -238,7 +238,7 @@ LOAD_NIDMCOEF:
 // Type: 0-equations for the whole phase,
 //       1 - one group of equations for all DC,
 //       2 - separate group of expressions fo each component
-//  npj, JB, JE - indexes of phase and DC in RMULTS (Profile)
+//  npj, JB, JE - indexes of phase and DC in RMULTS (Project)
 //  jb, je - indexes of DC in structure MULTI
 //  (C) S.Dmytrieva 1991-1996
 //
@@ -509,7 +509,7 @@ int TProfil::find_acnum( char *name, int LNmode )
     int j, jf[8], ii=0, len;
 
     if( mup->La <= 0 )
-        Error( name, "No compositions list in System Profile..." );
+        Error( name, "No compositions list in Modelling Project..." );
     len = strlen( name );
     for( j=0; j<mup->La && ii< 8; j++ )
         if( !memcmp(name, mup->SA[j], min(len,MAXCMPNAME)))

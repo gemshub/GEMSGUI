@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>EQDialogData</class>
-<widget>
-    <class>QWidget</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QWidget">
+    <property name="name">
         <cstring>EQDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,39 +12,31 @@
             <height>441</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>minimumSize</name>
+    <property name="minimumSize">
         <size>
             <width>440</width>
             <height>440</height>
         </size>
     </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>EQDialogData</string>
-    </property>
-    <property stdset="1">
-        <name>font</name>
-        <font>
-            <family>Lucida Sans Unicode</family>
-            <pointsize>8</pointsize>
-        </font>
-    </property>
-    <property stdset="1">
-        <name>baseSize</name>
+    <property name="baseSize">
         <size>
             <width>0</width>
             <height>0</height>
         </size>
     </property>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <property name="font">
+        <font>
+            <family>Lucida Sans Unicode</family>
+        </font>
+    </property>
+    <property name="caption">
+        <string>EQDialogData</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel2</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>40</x>
                 <y>230</y>
@@ -55,26 +44,21 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Under Construction:</string>
-        </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
                 <pointsize>9</pointsize>
                 <italic>1</italic>
             </font>
         </property>
+        <property name="text">
+            <string>Under Construction:</string>
+        </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>pLogoImg</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>10</y>
@@ -82,41 +66,34 @@
                 <height>60</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>scaledContents</name>
-            <bool>true</bool>
-        </property>
-        <property stdset="1">
-            <name>sizePolicy</name>
+        <property name="sizePolicy">
             <sizepolicy>
                 <hsizetype>0</hsizetype>
                 <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
             </sizepolicy>
         </property>
-        <property stdset="1">
-            <name>frameShadow</name>
-            <enum>Raised</enum>
-        </property>
-        <property stdset="1">
-            <name>frameShape</name>
+        <property name="frameShape">
             <enum>Panel</enum>
         </property>
-        <property stdset="1">
-            <name>alignment</name>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="scaledContents">
+            <bool>true</bool>
+        </property>
+        <property name="alignment">
             <set>AlignCenter</set>
         </property>
-        <property>
-            <name>hAlign</name>
+        <property name="hAlign" stdset="0">
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>pTitleTL</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>70</x>
                 <y>10</y>
@@ -124,45 +101,35 @@
                 <height>60</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Computation of Geochemical Equilibrium Models</string>
-        </property>
-        <property stdset="1">
-            <name>alignment</name>
-            <set>WordBreak|AlignCenter</set>
-        </property>
-        <property stdset="1">
-            <name>frameShape</name>
-            <enum>Panel</enum>
-        </property>
-        <property stdset="1">
-            <name>frameShadow</name>
-            <enum>Raised</enum>
-        </property>
-        <property stdset="1">
-            <name>font</name>
+        <property name="font">
             <font>
                 <pointsize>13</pointsize>
                 <bold>1</bold>
                 <italic>1</italic>
             </font>
         </property>
-        <property>
-            <name>hAlign</name>
+        <property name="frameShape">
+            <enum>Panel</enum>
         </property>
-        <property>
-            <name>wordwrap</name>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="text">
+            <string>Computation of Geochemical Equilibrium Models</string>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+        <property name="wordwrap" stdset="0">
         </property>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLayoutWidget">
+        <property name="name">
             <cstring>vbox1</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>80</y>
@@ -171,112 +138,97 @@
             </rect>
         </property>
         <vbox>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>0</number>
             </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pSysEqButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Single - &amp;System Equilibria (SysEq)</string>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="text">
+                    <string>Single - &amp;System Equilibria (SysEq)</string>
+                </property>
+                <property name="toolTip" stdset="0">
                     <string>Calculation of equilibrium states in a single thermodynamic system configuration</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pProcessButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Process Simulation (Process)</string>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="text">
+                    <string>&amp;Process Simulation (Process)</string>
+                </property>
+                <property name="toolTip" stdset="0">
                     <string>Simulation of irreversible processes (batch GEM calculations)</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pGtDemoButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Data Sampling and Plotting (GtDemo) </string>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>12</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>default</name>
+                <property name="text">
+                    <string>&amp;Data Sampling and Plotting (GtDemo) </string>
+                </property>
+                <property name="default">
                     <bool>false</bool>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Definition of data samplers and plots of the results</string>
                 </property>
             </widget>
         </vbox>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLayoutWidget">
+        <property name="name">
             <cstring>hbox</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>390</y>
@@ -285,116 +237,100 @@
             </rect>
         </property>
         <hbox>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>6</number>
             </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pBackButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Back</string>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>default</name>
+                <property name="text">
+                    <string>&amp;Back</string>
+                </property>
+                <property name="default">
                     <bool>false</bool>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Back to 'Thermodynamic database management' dialog</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pNumCtrlButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>10</pointsize>
+                    </font>
+                </property>
+                <property name="text">
                     <string>&amp;Numerical Controls...</string>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Press to check/adjust controls of the numerical modules (saved in Profile record)</string>
+                <property name="toolTip" stdset="0">
+                    <string>Press to check/adjust controls of the numerical modules (saved in Project record)</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pHelpButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Help</string>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>default</name>
+                <property name="text">
+                    <string>&amp;Help</string>
+                </property>
+                <property name="default">
                     <bool>true</bool>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string>Learn about GEM chemical thermodynamic modelling technique</string>
                 </property>
             </widget>
         </hbox>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLayoutWidget">
+        <property name="name">
             <cstring>vbox2</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>40</x>
                 <y>250</y>
@@ -403,119 +339,108 @@
             </rect>
         </property>
         <vbox>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>0</number>
             </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pDutermButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
                     <string>Du&amp;al Thermodynamics (DUtherm)</string>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pProbeButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="font">
+                    <font>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property name="text">
                     <string>Adaptive Modelling in the &amp;Uncertainty Space</string>
                 </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="toolTip" stdset="0">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pIntegButton</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Coupled &amp;Mass Transport Modelling</string>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
+                <property name="sizePolicy">
                     <sizepolicy>
                         <hsizetype>1</hsizetype>
                         <vsizetype>1</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>9</pointsize>
                     </font>
                 </property>
-                <property>
-                    <name>toolTip</name>
+                <property name="text">
+                    <string>Coupled &amp;Mass Transport Modelling</string>
+                </property>
+                <property name="toolTip" stdset="0">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>Line</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="Line">
+                <property name="name">
                     <cstring>Line1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="frameShape" stdset="0">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
             </widget>
         </vbox>
     </widget>
-    <widget>
-        <class>Line</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="Line">
+        <property name="name">
             <cstring>Line10</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>370</y>
@@ -523,8 +448,13 @@
                 <height>20</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>orientation</name>
+        <property name="frameShape" stdset="0">
+            <enum>HLine</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="orientation">
             <enum>Horizontal</enum>
         </property>
     </widget>
@@ -584,6 +514,8 @@
         <receiver>EQDialogData</receiver>
         <slot>CmAdvanced()</slot>
     </connection>
+</connections>
+<slots>
     <slot access="protected">CmBack()</slot>
     <slot access="protected">CmHelp()</slot>
     <slot access="protected">CmOpen_DUTERM()</slot>
@@ -593,5 +525,6 @@
     <slot access="protected">CmOpen_PROCESS()</slot>
     <slot access="protected">CmSystemDialog()</slot>
     <slot access="protected">CmAdvanced()</slot>
-</connections>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -139,7 +139,7 @@ TCModuleImp::MakeQuery()
 }
 
 /*!
-    Loads menu for General or Profile mode
+    Loads menu for General or Project mode
 */
 void
 TCModuleImp::LoadMenu()

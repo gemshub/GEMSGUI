@@ -336,7 +336,7 @@ NEXT2:
     pmp->pBAL = 2;
 }
 
-//Load data for DC from Profile System definition to structure MULTI
+//Load data for DC from Modelling Project definition to structure MULTI
 //
 void TProfil::multi_sys_dc()
 {

@@ -26,7 +26,7 @@
 // const double LOWESTPHASE_=1e-18;
 
 typedef struct
-{  // MULTI is base to Profil (local values)
+{  // MULTI is base to Project (local values)
     char
     stkey[EQ_RKLEN+1],   // Record key identifying IPM minimization problem
     // NV_[MAXNV], nulch, nulch1, // Variant Nr for fixed b,P,T,V; index in a megasystem

@@ -174,63 +174,6 @@
             </widget>
         </hbox>
     </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>ButtonGroup1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>100</y>
-                <width>310</width>
-                <height>101</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Creating/Upgrading System Profiles</string>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>rbNewPrMode</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>20</y>
-                    <width>290</width>
-                    <height>31</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Make an independent profile   </string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Switch on to select elements and copy all related data from default database into new profile</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>rbOldPrMode</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>50</y>
-                    <width>290</width>
-                    <height>31</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Link default database files to profile</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Switch on to select files from default database and link them to form a new profile</string>
-            </property>
-        </widget>
-    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>GroupBox1</cstring>
@@ -367,14 +310,71 @@
             </property>
         </widget>
     </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>ButtonGroup1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>100</y>
+                <width>310</width>
+                <height>101</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Creating/Upgrading Modelling Projects</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>rbNewPrMode</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>290</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Make an independent project</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Switch on to select elements and copy all related data from default database into new project</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>rbOldPrMode</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>50</y>
+                    <width>290</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Link default database files to project</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Switch on to select files from default database and link them to form a new project</string>
+            </property>
+        </widget>
+    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout4</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>2</x>
-                <y>9</y>
+                <x>0</x>
+                <y>0</y>
                 <width>570</width>
                 <height>77</height>
             </rect>
@@ -441,7 +441,7 @@
                     <cstring>TextLabel2_2</cstring>
                 </property>
                 <property name="text">
-                    <string> User's profile directory</string>
+                    <string> User's project directory</string>
                 </property>
             </widget>
         </grid>

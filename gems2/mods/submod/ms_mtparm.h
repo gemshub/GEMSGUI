@@ -29,7 +29,7 @@ enum SQUEEZE_CODES { /*delete DC in MTPARM */
 
 
 typedef struct
-{ // MTPARM is base to Profil (t/d parametres for DC)
+{ // MTPARM is base to Project (t/d parametres for DC)
     char //symb[MAXMUNAME],    // Identifier of root multisystem <- RMULTS
     //P_[MAXPTN], nchp,   // Pressure P, bar or 0 (Psat H2O)
     //TC_[MAXPTN], ncht,  // Temperature T, deg.C
@@ -44,7 +44,7 @@ typedef struct
     Pfgl,    // Link to FGL functions { + - }? (reserved)
     Pres1,   // Include vector of quality for TP dependencies of DC { +*- }
 
-    // indicators for states of profil arrays (Flags for the result data vectors)
+    // indicators for states of project arrays (Flags for the result data vectors)
     PtvG, PtvdG,   /* G, delG, + - * (if * recalc) */
     PtvH, PtvdH,   /* H, delH, + - *     */
     PtvS, PtvdS,   /* S, delS, + - *     */

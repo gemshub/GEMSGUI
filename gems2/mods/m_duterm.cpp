@@ -35,7 +35,7 @@ TDuterm::TDuterm( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("l<10 Identifier of root multisystem <-PROFILE");
+    aFldKeysHelp.Add("l<10 Identifier of root multisystem <-PROJECT");
     aFldKeysHelp.Add("l<3 Symbol of thermodynamic potential to minimize<-SYSTEM");
     aFldKeysHelp.Add("l<12 Identifier of chemical system definition <-SYSTEM");
     aFldKeysHelp.Add("l<5  CSD variant number <integer> <-SYSTEM");
@@ -96,13 +96,13 @@ void TDuterm::keyTest( const char *key )
     vstr pkey(MAXRKEYLEN+10);
 
     if( pVisor->ProfileMode == true )
-    { // test profile key
+    { // test project key
         gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k>=rt[RT_PARAM].FldLen(0) )  )
-            Error( key, "Illegal key (another Profile)!");
+            Error( key, "Illegal key (another Project)!");
         rt[RT_SYSEQ].MakeKey( RT_DUTERM, pkey, RT_DUTERM, 0, RT_DUTERM, 1,
                                RT_DUTERM, 2, RT_DUTERM, 3, RT_DUTERM, 4,
                                RT_DUTERM, 5, RT_DUTERM, 6, RT_DUTERM, 7, K_END);
@@ -515,7 +515,7 @@ TDuterm::RecBuild( const char *key, int mode  )
 
 
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
 
     LD = utp->Ld;
     ND = utp->Nr;
@@ -848,7 +848,7 @@ void
 TDuterm::RecCalc( const char *key )
 {
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in PRofile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
     duterm_calc();
     TCModule::RecCalc(key);
 }

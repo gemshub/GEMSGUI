@@ -435,7 +435,7 @@ ElementsDialog::openFilesSelection()
      for(int ii=0; ii<files_data.selCnt[i]; ii++ )
       newSelKeywds.Add(files_data.selKeywds[cnt+ii]);
      cnt += files_data.selCnt[i];
-     // add profile files keywds
+     // add project files keywds
      rt[i].GetProfileFileKeywds( prf_name.c_str(), newSelKeywds );
      //open all files
      rt[i].SetNewOpenFileList( newSelKeywds );

@@ -78,7 +78,7 @@ struct icSetupData
    gstring from_templ;
    gstring to_templ;
 
-   TCStringArray oldIComps; // list from parent profile
+   TCStringArray oldIComps; // list from parent project
    TCStringArray newIComps; // list from default database
 //   TCStringArray flKeywds;   // list files to open
 

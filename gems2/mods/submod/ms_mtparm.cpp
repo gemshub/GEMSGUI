@@ -268,7 +268,7 @@ void TMTparm::set_def( int /*q*/)
 }
 
 // realoc memory to MTPARM structure
-// cfg vectors and size in Profile is const
+// cfg vectors and size in Project is const
 void TMTparm::MTparmAlloc( )
 {
     tp.L = mup->L;
@@ -299,7 +299,7 @@ void TMTparm::LoadMtparm( float cT, float cP )
 
     if( tp.L != mup->L ||  tp.Ls != mup->Ls ||
             tp.Lg != mup->Pg ||  tp.Lx != mup->Lx )
-        Error( "MTparm", "Profile dimension error!");
+        Error( "MTparm", "Modelling project dimension error!");
 
     tp.curT=cT;
     tp.curP=cP;

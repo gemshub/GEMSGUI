@@ -36,7 +36,7 @@ TProbe::TProbe( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("l<10 Identifier of system profile_");
+    aFldKeysHelp.Add("l<10 Identifier of modelling project_");
     aFldKeysHelp.Add("l<3 Symbol of thermodynamic potential to minimize_");
     aFldKeysHelp.Add("l<12 Identifier of chemical system definition_");
     aFldKeysHelp.Add("l<5  Composition variant number <integer>_");
@@ -97,13 +97,13 @@ void TProbe::keyTest( const char *key )
     vstr pkey(MAXRKEYLEN+10);
 
     if( pVisor->ProfileMode == true )
-    { // test profile key
+    { // test project key
         gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
         if( memcmp(key, prfKey.c_str(), k ) ||
                 ( key[k] != ':' && key[k] != ' ' && k>=rt[RT_PARAM].FldLen(0) )  )
-            Error( key, "Illegal key (another Profile)!");
+            Error( key, "Illegal key (another Modelling Project)!");
         rt[RT_SYSEQ].MakeKey( RT_PROBE, pkey, RT_PROBE, 0, RT_PROBE, 1,
                                RT_PROBE, 2, RT_PROBE, 3, RT_PROBE, 4,
                                RT_PROBE, 5, RT_PROBE, 6, RT_PROBE, 7, K_END);
@@ -729,7 +729,7 @@ TProbe::RecBuild( const char *key, int mode  )
     int i;
 
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
 
 AGAIN:
     prp->QT = get_simple( prp->QT );
@@ -1031,7 +1031,7 @@ void
 TProbe::RecCalc( const char *key )
 {
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
     TCModule::RecCalc(key);
 
     int I1, i,i1,i2,iT, iP;

@@ -27,7 +27,8 @@ TSysEq::TSysEq( int nrt ):
         TCModule( nrt )
 {
     nQ = 2;
-    aFldKeysHelp.Add("l<10 Identifier of root multisystem <-Profile name>");
+    aFldKeysHelp.Add(
+        "l<10 Identifier of root multisystem <-Modelling project name>");
     aFldKeysHelp.Add("l<3 Symbol of potential to minimize {G GV}");
     aFldKeysHelp.Add("l<12 Identifier of chemical system definition (CSD)");
     aFldKeysHelp.Add("l<5 Variant number for bulk composition <integer>");
@@ -96,11 +97,11 @@ TSysEq::RecSave( const char *key, bool onOld )
 }
 
 
-// test Profile key to calc mode
+// test Project key to calc mode
 void TSysEq::keyTest( const char *key )
 {
     if( pVisor->ProfileMode == true )
-    { // test profile key
+    { // test project key
         gstring prfKey = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
         StripLine(prfKey);
         int k = prfKey.length();
@@ -232,7 +233,7 @@ void
 TSysEq::RecordPrint( const char *key )
 {
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
 
 // select  SDref key
  gstring sd_key;
@@ -259,7 +260,7 @@ TSysEq::RecordPrint( const char *key )
 
 }
 
-// insert changes in Profile to TSysEq
+// insert changes in Project to TSysEq
 
 void TSysEq::InsertChanges( TIArray<CompItem>& aIComp,
                             TIArray<CompItem>& aCompos, TIArray<CompItem>& aPhase,
@@ -427,7 +428,7 @@ PHASE_TEST:
                 }
             }
         }
-        if( stp->phf )  // PROFILE indices of multicomp. phases in eqstate [Fis]
+        if( stp->phf )  // PROJECT indices of multicomp. phases in eqstate [Fis]
         {
             while( (stp->phf[j6] < aPhase[i].line) && (j6<stp->Fis) )
                 stp->phf[j6++] += delta;

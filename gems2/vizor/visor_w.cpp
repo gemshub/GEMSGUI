@@ -723,7 +723,7 @@ BACK:
 
     switch( vfQuestion3(par, prfName,
        "Did you really completed  selection of \n"
-       " database files to be linked to the profile?",
+       " database files to be linked to the project?",
        "&Yes/Proceed", "&No/Go back", "&Help" ))
     {
     case VF3_1:
@@ -780,7 +780,7 @@ vfKeyEdit(QWidget* par, const char* caption, int iRt, const char* key)
 
 gstring
 vfKeyProfile(QWidget* par, const char* caption, int iRt,
-    bool& chAqGas, bool& addFiles )
+    bool& chAqGas, bool& addFiles, gstring& key_templ )
 {
 
     KeyProfile dbk(par, iRt, caption);
@@ -789,6 +789,7 @@ vfKeyProfile(QWidget* par, const char* caption, int iRt,
 
     chAqGas = dbk.getAqGasState();
     addFiles = dbk.getFilesState();
+    key_templ = dbk.getTemplateKey();
 
     return dbk.getKey();
 }

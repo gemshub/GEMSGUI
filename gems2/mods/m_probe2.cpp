@@ -26,7 +26,7 @@
 #include "service.h"
 #include "visor.h"
 
-// insert changes in Profile to TSysEq
+// insert changes in Project to TSysEq
 void TProbe::InsertChanges( TIArray<CompItem>& aIComp,
     TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
 {
@@ -449,7 +449,7 @@ void
 TProbe::RecordPrint( const char *key)
 {
     if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
     _pr_tab( key );
 }
 
@@ -603,7 +603,7 @@ void  TProbe::_pr_tab( const char *key )
         prTab.PutString( pbz_tab_15 );
     }
     // list og groups
-    prTab.PutString( "\n\n           List of Profile groups   \n"
+    prTab.PutString( "\n\n           List of Project groups   \n"
                      "|=======|====================|=======|\n"
                      "|  N    | Name of group      | Type  |\n"
                      "|=======|====================|=======|" );

@@ -992,7 +992,7 @@ void TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
     Open(false, UPDATE_DBV, fls);
 }
 
-//Make new profile-file and close another profile files (make new Profile)
+//Make new project-file and close another project files (make new Project)
 void TDataBase::MakeInNewProfile(const gstring& dir,
    const char *prfName, const char * f_name )
 {
@@ -1012,7 +1012,7 @@ void TDataBase::MakeInNewProfile(const gstring& dir,
     if( fls.GetCount() >= 1)
         Open(false, UPDATE_DBV, fl);
 
-    /* add new profile files*/
+    /* add new project files*/
     gstring name(dir);
     name += "/";
 

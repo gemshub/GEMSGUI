@@ -24,7 +24,7 @@
 #include "m_phase.h"
 
 typedef struct
-{  // SYSTEM is base to Profil (local values)
+{  // SYSTEM is base to Project (local values)
     char
     //       mus[MAXMUNAME],   // Identifier of root multisystem <- RMULTS
     //       pot[MAXTDPCODE],  // Symbol of thermodynamic potential to minimize{G,GV}

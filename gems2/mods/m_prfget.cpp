@@ -26,22 +26,24 @@
 #include "visor_w.h"
 
 
-//Init data to ProfileMode calculate
+//Init data to ProjectMode calculate
 bool
 TProfil::initCalcMode()
 {
     isSysEq = false;
+
 
     // free old data
     dyn_kill();
     // Open all files in list to select
     rt[RT_PARAM].OpenAllFiles();
 
-    // Get Profile record key from old list
+    // Get Project record key from old list
     bool changeAqGas = false,
             addfiles = false;
-    gstring str = vfKeyProfile( window(),
-           "System Profiles", nRT, changeAqGas, addfiles);
+    gstring key_templ;
+    gstring str = vfKeyProfile( window(), "Modelling projects",
+          nRT, changeAqGas, addfiles, key_templ );
 
     if( str.empty() ) // cancel command
           return false;
@@ -50,18 +52,19 @@ TProfil::initCalcMode()
     if( str == ALLKEY )
      {
        if( pVisor->getElemPrMode() )
-       { if(  !NewProfileModeElements(  ) )
+       { if(  !NewProfileModeElements( key_templ ) )
             return false;
        }
        else
-     {    if(  !NewProfileMode(  ) )
+     {    if(  !NewProfileMode( key_templ ) )
             return false;
       }
      }
     else
        OpenProfileMode(  str.c_str(),changeAqGas, addfiles );
 
-    pVisor->Message( 0, "Loading Profile", "Loading thermodynamic data", 80 );
+    pVisor->Message( 0, "Loading Modelling Project",
+        "Loading thermodynamic data", 80 );
 
     // Test MTparm
         mtparm->MTparmAlloc();
@@ -95,11 +98,11 @@ TProfil::initCalcMode()
 */
         // update windows informations
    pVisor->CloseMessage();
-   ModUpdate("Insertion of Profile record finished OK");
+   ModUpdate("Insertion of Modelling Project record finished OK");
         return true;
 }
 
-//Opening Existing Profile
+//Opening Existing Project
 void TProfil::OpenProfileMode( const char* key,
        bool changeAqGas, bool addFile )
 {
@@ -107,10 +110,10 @@ void TProfil::OpenProfileMode( const char* key,
  try
  {
         Rnum = rt[RT_PARAM].Find( key );
-        ErrorIf( Rnum < 0, "Profile" , "Profile record was not existed!");
+        ErrorIf( Rnum < 0,  key , "Project record was not existed!");
 
-      pVisor->Message( 0, "Loading Profile",
-       "Opening data base files to Profile", 5 );
+      pVisor->Message( 0, "Loading Modelling Project",
+       "Opening data base files to Project", 5 );
 
         rt[RT_PARAM].Get( Rnum ); // read record
         dyn_set();
@@ -138,7 +141,7 @@ void TProfil::OpenProfileMode( const char* key,
         if( nRec >= 0 )
             rt[RT_PHASE].Del(nRec);
 
-      pVisor->Message( 0, "Loading Profile",
+      pVisor->Message( 0, "Loading Modelling Project",
        "Loading lists of IComp, Compos, Phase\n"
                   "  and DComp/ReacDC record keys", 10 );
 
@@ -146,7 +149,7 @@ void TProfil::OpenProfileMode( const char* key,
         Rnum = rt[RT_PARAM].Find( key );
         rmults->LoadRmults( false, changeAqGas );
 
-      pVisor->Message( 0, "Loading Profile",
+      pVisor->Message( 0, "Loading Modelling Project",
        "Detecting changes in thermodynamic database", 40 );
 
 
@@ -173,8 +176,8 @@ void TProfil::OpenProfileMode( const char* key,
 
 }
 
-//Making new Profile
-bool TProfil::NewProfileMode()
+//Making new Modelling Project
+bool TProfil::NewProfileMode( gstring& key_templ__ )
 {
  try
  {
@@ -183,7 +186,7 @@ bool TProfil::NewProfileMode()
     gstring  templ_str;
 AGAIN:
     gstring  key_str = GetKeyofRecord( "MyWork:MyData"/*ALLKEY*/,
-            "Please, enter a new profile key", KEY_NEW );
+            "Please, enter a new modelling project key", KEY_NEW );
     if( key_str.empty() )
       return false; // cancel command
 
@@ -192,7 +195,7 @@ AGAIN:
     gstring fstKeyFld(_fstKeyFld);
     StripLine(fstKeyFld);
 
-    //Test equal profile names
+    //Test equal project names
     templ_str = fstKeyFld;
     templ_str += ":*:";
     TCStringArray aKey__;
@@ -201,20 +204,20 @@ AGAIN:
     if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
     {
       vfMessage(window(), fstKeyFld.c_str(),
-        "Profile cannot be created - such directory already exists."
+        "Project cannot be created - such directory already exists."
         "\nPlease, enter another name.");
       goto AGAIN;
     }
-   // select profile record key to template
-    templ_str = GetKeyofRecord( ALLKEY,
-            "Please, select a template profile", KEY_OLD );
+
+   // select project record key to template
+    templ_str = key_templ__;
     if( !templ_str.empty() )
     {
       templ_key = true;
 
       int  Rnum = rt[RT_PARAM].Find( templ_str.c_str() );
       ErrorIf( Rnum < 0, templ_str.c_str() ,
-          "Profile record was not existed!");
+          "Project record was not existed!");
       rt[RT_PARAM].Get( Rnum ); // read record
       dyn_set();
       SetFN();                  // reopen files of data base
@@ -228,8 +231,8 @@ AGAIN:
 
      RecBuild( key_str.c_str() );  // Edit flags
 
-   pVisor->Message( window(), "Loading Profile",
-      "Opening data base files to Profile", 5  );
+    pVisor->Message( window(), "Loading Modelling Project",
+      "Opening data base files to Project", 5  );
 
      rt[RT_PARAM].SetKey( key_str.c_str() );
 //     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
@@ -237,21 +240,21 @@ AGAIN:
 //     StripLine(fstKeyFld);
 
      if( templ_key == false  )
-        InitFN( fstKeyFld.c_str(), 0  ); // make Profile directory
-     else  // using existing Profile
+        InitFN( fstKeyFld.c_str(), 0  ); // make Project directory
+     else  // using existing Project
      {
         rt[RT_PARAM].SetKey( templ_str.c_str() );
         vstr _fstKeyFld_t(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
         gstring fstKeyFld_t(_fstKeyFld_t);
         StripLine(fstKeyFld_t);
 
-        InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Profile directory
+        InitFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  ); // make Project directory
         RenameFN( fstKeyFld.c_str(), fstKeyFld_t.c_str()  );
       }
        // get opens files list
        if( !GetFN( fstKeyFld.c_str() ) )
         Error( key_str.c_str(),
-           "Profile configuration aborted by the user!" );
+           "Modelling project configuration aborted by the user!" );
        SetFN();
 
        if( templ_key == true  )
@@ -268,7 +271,7 @@ AGAIN:
              rt[RT_PHASE].Del(nRec);
        }
 
-   pVisor->Message( 0, "Loading Profile",
+   pVisor->Message( 0, "Loading Modelling Project",
       "Loading lists of IComp, Compos, Phase\n"
                 "  and DComp/ReacDC record keys", 10);
 
@@ -276,7 +279,7 @@ AGAIN:
         rt[RT_PARAM].SetKey( key_str.c_str() );
         rmults->LoadRmults( true, true );
 
-   pVisor->Message( 0, "Loading Profile",
+   pVisor->Message( 0, "Loading Modelling Project",
          "Detecting changes in thermodynamic database", 40 );
 
    if( templ_key == true )
@@ -293,7 +296,7 @@ AGAIN:
     {
      pVisor->CloseMessage();
       fEdit = false;
-      //delete profile directory, if Profile record create error
+      //delete projct directory, if Project record create error
       gstring fstKeyFld =
                 gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
       StripLine(fstKeyFld);
@@ -306,8 +309,8 @@ AGAIN:
     return true;
 }
 
-//Making new Profile  (new elements mode)
-bool TProfil::NewProfileModeElements()
+//Making new Project  (new elements mode)
+bool TProfil::NewProfileModeElements( gstring& key_templ )
 {
  try
  {
@@ -316,7 +319,7 @@ bool TProfil::NewProfileModeElements()
     gstring  templ_str;
 AGAIN:
     gstring  key_str = GetKeyofRecord( "MyWork:MyData"/*ALLKEY*/,
-            "Please, enter a new profile key", KEY_NEW );
+            "Please, enter a new modelling project key", KEY_NEW );
     if( key_str.empty() )
       return false; // cancel command
 
@@ -325,7 +328,7 @@ AGAIN:
     gstring fstKeyFld(_fstKeyFld);
     StripLine(fstKeyFld);
 
-    //Test equal profile names
+    //Test equal project names
     templ_str = fstKeyFld;
     templ_str += ":*:";
     TCStringArray aKey__;
@@ -334,7 +337,7 @@ AGAIN:
     if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
     {
       vfMessage(window(), fstKeyFld.c_str(),
-        "Profile cannot be created - such directory already exists."
+        "Project cannot be created - such directory already exists."
         "\nPlease, enter another name.");
       goto AGAIN;
     }
@@ -344,25 +347,25 @@ AGAIN:
 
    RecBuild( key_str.c_str() );  // Edit flags
 
-   pVisor->Message( window(), "Loading Profile",
-      "Opening data base files to Profile", 5  );
+   pVisor->Message( window(), "Loading Modelling Project",
+      "Opening data base files to Project", 5  );
 
    rt[RT_PARAM].SetKey( key_str.c_str() );
 //     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
 //     gstring fstKeyFld(_fstKeyFld);
 //     StripLine(fstKeyFld);
 
-   InitFN( fstKeyFld.c_str(), 0  ); // make Profile directory
+   InitFN( fstKeyFld.c_str(), 0  ); // make Project directory
 
    if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
          ;//goto BACK;
    // get opens files list
       if( !GetFN( fstKeyFld.c_str(), false ) )
         Error( key_str.c_str(),
-           "Profile configuration aborted by the user!" );
+           "Project configuration aborted by the user!" );
    SetFN();
 
-   pVisor->Message( 0, "Loading Profile",
+   pVisor->Message( 0, "Loading Modelling Project",
       "Loading lists of IComp, Compos, Phase\n"
                 "  and DComp/ReacDC record keys", 10);
 
@@ -370,7 +373,7 @@ AGAIN:
         rt[RT_PARAM].SetKey( key_str.c_str() );
         rmults->LoadRmults( true, true );
 
-   pVisor->Message( 0, "Loading Profile",
+   pVisor->Message( 0, "Loading Modelling Project",
          "Detecting changes in thermodynamic database", 40 );
 
   // save results   RecSave(str.c_str());
@@ -381,7 +384,7 @@ AGAIN:
     {
      pVisor->CloseMessage();
       fEdit = false;
-      //delete profile directory, if Profile record create error
+      //delete project directory, if Project record create error
       gstring fstKeyFld =
                 gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
       StripLine(fstKeyFld);
@@ -645,8 +648,8 @@ bool TProfil::DebagCalcEqstatStep()
 
 
 
-//add new Profile structure
-// Save file configuration to Profil structure
+//add new Project structure
+// Save file configuration to Project structure
 void TProfil::InitFN( const char * prfName, const char* prfTemplate )
 {
 
@@ -665,7 +668,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
         rt[aMod[i].rtNum()].MakeInNewProfile( Path, prfName );
       }
      }
-    else // copy records from template profile
+    else // copy records from template project
     {
        gstring tmpDirPath = pVisor->userProfDir();
        tmpDirPath += prfTemplate;
@@ -688,7 +691,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
           pVisor->CopyF( f_new.c_str(), f_tmp.c_str() );
     }
 
-/*   // copy template profile
+/*   // copy template project
 
         gstring cmd;
 
@@ -707,7 +710,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
 #endif
 
         if (system(cmd.c_str()) != 0)
-            throw TFatalError( prfName, "Cannot copy template profile");
+            throw TFatalError( prfName, "Cannot copy template project");
 */
 
     // add files to module list
@@ -731,7 +734,7 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
 // Rename records SysEq and >
 void TProfil::RenameFN( const char * prfName, const char* prfTemplate )
 {
-    // Rename records in New Profile > SysEq
+    // Rename records in New Project > SysEq
       for(uint i=RT_SYSEQ; i<aMod.GetCount(); i++)
       {
         if( aMod[i].IsSubModule() )
@@ -739,7 +742,7 @@ void TProfil::RenameFN( const char * prfName, const char* prfTemplate )
         rt[i].RenameList(prfName, prfTemplate);
       }
 }
-// Save file configuration to Profil structure
+// Save file configuration to Project structure
 bool TProfil::GetFN( const char * prfName, bool show_dlg )
 {
 
@@ -764,7 +767,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
 }
 
 
-// Reopen file configuration on data in Profil structure
+// Reopen file configuration on data in Project structure
 void TProfil::SetFN()
 {
     unsigned i;

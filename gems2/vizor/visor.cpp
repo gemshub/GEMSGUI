@@ -77,8 +77,8 @@ TVisor::TVisor(int c, char *v[]):
         argc(c), argv(v)
 {
     DefDBDir = "DB.default/";
-    DefProfDir = "profile/";
-    UserProfDir = "profiles/";
+    DefProfDir = "project/";
+    UserProfDir = "projects/";
 
     DocDir = "doc/html/";
     ImgDir = "img/";
@@ -329,7 +329,7 @@ TVisor::fromDAT(bool option_c)
                 || !userGEM.mkdir(userProfDir().c_str(), true) )
             throw TFatalError("GEMS Init", "Cannot create user GEMS directory");
 
-        // copy default profile
+        // copy default project
 
         gstring cmd;
 
@@ -355,7 +355,7 @@ TVisor::fromDAT(bool option_c)
 #endif
 
         if (system(cmd.c_str()) != 0)
-            throw TFatalError("GEMS Init", "Cannot copy default profile to user directory");
+            throw TFatalError("GEMS Init", "Cannot copy default project to user directory");
     }
 
     if( firstTimeStart || option_c )
@@ -669,7 +669,7 @@ TVisor::defaultCFG()
 
     // RT_PROFIL default
     unsigned char param_rkfrm[2] = { MAXMUNAME, MAXMUGROUP };
-    rt.Add(new TDataBase(rt.GetCount(), "profil", true, true,
+    rt.Add(new TDataBase(rt.GetCount(), "projec", true, true,
                          o_spppar, 13, 0, 2, param_rkfrm));
 
     // RT_ICOMP default
@@ -757,7 +757,7 @@ TVisor::defaultCFG()
         rt[jj].specialFilesNum = cnt;
     }
 
-    // reading profile dirs
+    // reading project dirs
     TCStringArray aDBDirs = readDirs(pVisor->userProfDir().c_str());
     for (uint ii = 0; ii < aDBDirs.GetCount(); ii++)
     {
@@ -914,12 +914,12 @@ TVisor::makeDBDir(const char *dir)
          if (lst.count()<=0)
            vfMessage(0, dir, "This directory is not empty.");
          else
-          Error( dir, "Error creating System Profile directory!");
+          Error( dir, "Error creating Modelling Project directory!");
       }
       return;
     }
     if( !d.mkdir( dir ))
-        Error( dir, "Error creating System Profile directory!");
+        Error( dir, "Error creating Modelling Project directory!");
 }
 
 TCStringArray TVisor::readPDBDir(const char *dir, const char *filter )

@@ -119,7 +119,7 @@ SystemDialog::CmRunIPM()
     }
 }
 
-    // Access to Profile data
+    // Access to Project data
 
 void                                 // Thermodynamic data
 SystemDialog::CmOpen_MTPARAM()
@@ -134,7 +134,7 @@ SystemDialog::CmOpen_SYSTEM_ICOMP()
     pVisorImp->OpenModule(this, MD_SYSTEM, 3); // ICOMP page
 }
 
-// System profile phase - species hierarchy list view
+// System project phase - species hierarchy list view
 void
 SystemDialog::CmOpen_inp_PHASE_HL()
 {

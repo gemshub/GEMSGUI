@@ -642,7 +642,7 @@ NEXT:  /* define more precisely code of phase  */
     if( iic ) goto NEXT;
 }
 
-// to Profile new
+// to Project new
 void TPhase::newAqGasPhase( const char *key, int file, const char emod,
                             bool useLst, TCStringArray lst )
 {
@@ -921,7 +921,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
      AddRecord( str.c_str(), fnum_ );
     }
 
-    // close all no profile files
+    // close all no project files
     TCStringArray names1;
     names1.Add(prfName);
     db->OpenOnlyFromList(names1);

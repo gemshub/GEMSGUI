@@ -121,9 +121,9 @@ TProfil::TProfil( int nrt ):
         TCModule( nrt )
 {
     aFldKeysHelp.Add(
-        "l<10 Identifier of root profil definition");
+        "l<10 Identifier of root project definition");
     aFldKeysHelp.Add(
-        "l<38 Record key comment to profil definition");
+        "l<38 Record key comment to project definition");
     start_title = " Numerical and Configuration Settings ";
     pa= pa_;
     pa.p.tprn=0;
@@ -282,7 +282,7 @@ void TProfil::set_def( int )
     if( multi ) multi->set_def();
 }
 
-// Help on System Profile module ( ? button )
+// Help on Modelling Project module ( ? button )
 void
 TProfil::CmHelp()
 {
@@ -295,13 +295,13 @@ void
 TProfil::RecordPrint( const char *key )
 {
   if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
 
  gstring sd_key;
   if( key )
   sd_key=key;
  else
-  sd_key = "pscript:0000:profile";
+  sd_key = "pscript:0000:projec:";
  // read sdref record with format prn
  TSData::pm->RecInput( sd_key.c_str() );
  char * text_fmt = TSData::pm->getAbstr();
@@ -326,7 +326,7 @@ TProfil::DeleteRecord( const char *key, bool errifNo )
     SetFN();                  // reopen files of data base
     rt[nRT].SetKey( key);
 
-    // Delete all records connected to profile
+    // Delete all records connected to project
     aList.Clear();    //SYSEQ
     anR.Clear();
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
@@ -443,7 +443,7 @@ void TProfil::ShowDBWindow( const char *objName, int nLine )
 }
 
 #include "filters_data.h"
-// Save file configuration to Profil structure
+// Save file configuration to Project structure
 bool TProfil::rCopyFilterProfile( const char * prfName )
 {
 
@@ -461,10 +461,10 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
       return false;
 
 //    elm_data.flNames.Add(prfName);
-    pVisor->Message( 0, "Loading Profile",
-      "Copying Kernel database records to Profile; Please, wait...", 10  );
+    pVisor->Message( 0, "Loading Modelling Project",
+"Copying Kernel database records to Modelling Project;\n Please, wait...", 10  );
 
-    // added to profile file icomp.kernel.prfname
+    // added to project file icomp.kernel.prfname
     // and copy to it selected records
     // add to last key field first symbol from prfname
     // close all kernel files

@@ -232,7 +232,7 @@ TIComp::CopyElements( const char * prfName,
         AddRecord( str.c_str(), fnum_ );
     }
 
-    // close all no profile files
+    // close all no project files
     TCStringArray names1;
     names1.Add(prfName);
     db->OpenOnlyFromList(names1);

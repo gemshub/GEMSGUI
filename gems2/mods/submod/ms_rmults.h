@@ -29,7 +29,7 @@ const int FileNameLen  =   MAXFILEKEYWD;
 
 
 typedef struct
-{ // RMULTS is base to Profil
+{ // RMULTS is base to Project
     char symb[MAXMUNAME],    // Identifier of root multisystem definition
     grp[MAXMUGROUP],    // Record Key Comment to RMULTS definition
     // Switches DB

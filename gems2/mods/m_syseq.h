@@ -27,24 +27,24 @@ typedef struct
     name[MAXFORMULA],// Full name of this CSD definition
     notes[MAXFORMULA],// Comments
     switches[40],    /* SYSTEM switches line */
-    Px[14];         /* Switches of profile index vectors */
+    Px[14];         /* Switches of project index vectors */
 
     short DM[24]; /* Fact dimensions of system */
     float PPm[20];  // Parametres of System at all
-    short /* Profile indices for non-zero increments to bulk composition */
+    short /* Project indices for non-zero increments to bulk composition */
     *nnc, /* IC     on  in  BI[]      [sy.Na]  */
     *llc, /* COMPOS on  in  XeA[]     [sy.La]  */
     *phc, /* PHASE  on  in  Phm[]     [sy.Fib] */
     *dcc, /* DC     on  in  XeD[]     [sy.Lb]  */
 
-    /* Profile indices for configuration of components and phases */
+    /* Project indices for configuration of components and phases */
     *nnf, /* IC    ON   in B[], system [sy.N]    */
     *phf, /* PHASE OFF  in system  [mu.FI-sy.Fi] */
     *dcf, /* DC    OFF  in system  [mu.L-sy.L]   */
     *pha, /* PHASE ON   adsorption EDL data [sy.Fia] */
     *dca, /* DC    ON   adsorption SAT data [sy.Lsor] */
 
-    /* Profile indices for kinetic and metastability constraints */
+    /* Project indices for kinetic and metastability constraints */
     *phk, /* PHASE ON  in PUL[]/PLL[]     [sy.Fik] */
     *dck, /* DC    ON  in DUL[]/DLL[]     [sy.Lk]  */
     *dce, /* DC    ON  in GEX[], lnGmf[]  [sy.Le]  */
@@ -138,7 +138,7 @@ typedef struct
     short
     *nnf, // RMULTS-indices of IC [N]
     *llf, // RMULTS-indices of DC [L]
-    *phf; /* PROFILE indices of multicomp. phases in eqstate [Fis] */
+    *phf; /* PROJECT indices of multicomp. phases in eqstate [Fis] */
     /* Optional at Psmt==1 */
     double
     *B,  // B ‚b vector of bulk chemical composition, moles(packed)[N][0]

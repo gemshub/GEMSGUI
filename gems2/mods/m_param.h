@@ -160,7 +160,7 @@ class TProfil : public TCModule
     double FXold;
 
 
-    // to compare with old Profile
+    // to compare with old Project
     char
     (*SFold)[PH_RKLEN],// List of PHASE definition keys [0:Fi-1]             DB
     (*SMold)[DC_RKLEN],// List of DC definition keys (DCOMP, REACDC) [0:L-1] DB
@@ -174,7 +174,7 @@ class TProfil : public TCModule
     Laold,      // La  - of references to COMPOS records
     Lsold;      // Ls  - total number of DC in multi-component phases
 
-    // data to load SysEq <profil>:G:z_cp_config:0:0:1:25:0
+    // data to load SysEq <project>:G:z_cp_config:0:0:1:25:0
     bool  isSysEq;
     TCIntArray DCon;
     TCIntArray PHon;
@@ -191,8 +191,8 @@ protected:
 
     void OpenProfileMode(
         const char* key, bool changeAqGas, bool addFile );
-    bool NewProfileMode();
-    bool NewProfileModeElements();
+    bool NewProfileMode( gstring& key_templ );
+    bool NewProfileModeElements( gstring& key_templ );
     void SaveOldList();
     void DeleteOldList();
     void TestChangeProfile();
@@ -315,7 +315,7 @@ public:
 
     const char* GetName() const
     {
-        return "Profile";
+        return "Project";
     }
 
     void ods_link(int i=0);
@@ -327,7 +327,7 @@ public:
     void DeleteRecord( const char *key, bool errinNo=true );
     void CmHelp();    // 05.01.01
 
-    // work with Profile
+    // work with Project
     bool initCalcMode();
     void loadSystat( const char *key=0 );
     void newSystat();

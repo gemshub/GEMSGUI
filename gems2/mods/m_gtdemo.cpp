@@ -41,7 +41,7 @@ TGtDemo::TGtDemo( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
-    aFldKeysHelp.Add("l<10 Identifier of the parent System Profile");
+    aFldKeysHelp.Add("l<10 Identifier of the parent Modelling Project");
     aFldKeysHelp.Add("l<8  Top chain type for data sampling { PR SY PH RE...}");
     aFldKeysHelp.Add("l<16 Identifier of this GtDemo sampler definition");
     aFldKeysHelp.Add("l<4  Variant number of this GtDemo task <integer>");
@@ -424,12 +424,12 @@ AGAIN:
     gdp->nRT = gd_rectype();
     gd_ps_set();
     if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
     int ret = TCModule::RecBuild( key, mode );
 
 //    gd_ps_set();
     if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
     if( ret == VF_CANCEL )
         return ret;
     if(  gdp->Nwc<0 || gdp->Nqp<0 || gdp->dimEF[0]<0 || gdp->dimEF[1]<0  ||
@@ -472,7 +472,7 @@ TGtDemo::RecBuildinProcess( short size, const char *key,
      const char *sy_key, const char *pe_key )
 {
     if( pVisor->ProfileMode != true   )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
     TProfil *aPa=TProfil::pm;
     vstr tbuf(100);
 
@@ -622,7 +622,7 @@ void
 TGtDemo::RecCalc( const char *key )
 {
     if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
-        Error( GetName(), "Do it in Profile mode!" );
+        Error( GetName(), "Do it in Project mode!" );
     TCModule::RecCalc(key);
 
     strcpy( gdp->SYS_key, "*" );
