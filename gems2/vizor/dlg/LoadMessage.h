@@ -22,6 +22,7 @@
 
 #include <qapplication.h>
 #include <qprogressdialog.h>
+#include <qdialog.h>
 
 class LoadMessage : public QProgressDialog
 {
@@ -46,5 +47,50 @@ public:
     void Update( const char* mess, int prog, int total = -1 );
 
 };
+
+#ifdef Use_mt_mode
+
+#include <time.h>
+
+class ProcessThread;
+class QTimer;
+
+class ProcessProgressDialog: public QDialog
+{
+    Q_OBJECT
+
+    ProcessThread* calcThread;
+    QTimer* timer;
+
+    QPushButton*  pStopStep;
+    QPushButton*  pClose;
+    QPushButton*  pBreak;
+    QPushButton*  pResume;
+    QProgressBar* pProgress;
+
+public slots:
+    void CmClose();
+
+protected slots:
+    void CmStep();
+    void CmStop();
+    void CmResume();
+    void CmBreak();
+    void Run();
+
+protected:
+    void closeEvent(QCloseEvent* ev);
+
+public:
+    static ProcessProgressDialog* pDia;
+
+    ProcessProgressDialog(QWidget* parent );
+    virtual ~ProcessProgressDialog();
+
+    void Update();
+    void CalcFinished();
+};
+
+#endif
 
 #endif // LoadMessage_included

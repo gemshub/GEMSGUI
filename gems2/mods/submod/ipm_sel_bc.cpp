@@ -589,7 +589,7 @@ BB7:
             pmp->Y[J] += LM * MU[J];
 // STEPWISE (5) Stop point at end of iteration of FIA()
 #ifndef IPMGEMPLUGIN
-STEP_POINT();
+STEP_POINT("FIA Iteration");
 #endif
         // calculation of new total moles of phases
         // added by DAK in 1995
@@ -999,7 +999,7 @@ IN6:
         };
 // STEPWISE (6)  Stop point at IPM() main iteration
 #ifndef IPMGEMPLUGIN
-STEP_POINT();
+STEP_POINT( "IPM Iteration" );
 #endif
         if( pmp->PCI < pmp->DX )  // Dikin criterion satisfied
             goto IN7;

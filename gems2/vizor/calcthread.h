@@ -17,6 +17,7 @@
 
 #include <qthread.h>
 #include "m_param.h"
+#include "m_proces.h"
 
 class CalcThread:
     public QThread {
@@ -37,6 +38,34 @@ public:
 	    error = err;
 	}
 	catch( TProfil::UserCancelException& ex ) {
+	}
+    }
+    
+    // put the code here to clean up after
+    // calculations have been cancelled (or finished)
+    void clean_up() {
+    }
+};
+
+class ProcessThread:
+    public QThread {
+
+public:
+    ProcessThread() {}
+    ~ProcessThread() {}
+
+    TError error;	// error message and title
+
+    void run() {
+	error.title = "";
+	error.mess = "";
+	try {
+    	    TProcess::pm->internalCalc();
+	}
+	catch( TError& err ) {
+	    error = err;
+	}
+	catch( TProcess::UserCancelException& ex ) {
 	}
     }
     

@@ -1013,6 +1013,12 @@ TVisor::CloseProgress()
 }
 
 void
+TVisor::ProcessProgress( QWidget* parent )
+{
+    pVisorImp->ProcessProgress( parent );
+}
+
+void
 TVisor::Message( QWidget* parent, const char* name,
              const char* msg, int prog, int total)
 {

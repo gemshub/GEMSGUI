@@ -58,6 +58,8 @@ class TVisorImp:
     int charWidth;
     int charHeight;
 
+    char TCpoint[32];  // Step point ID for stepwise mode
+
 protected slots:
     void closeEvent( QCloseEvent* );
     void evHelpClosed();
@@ -95,6 +97,7 @@ public:
     void Message( QWidget* parent, const char* name,
              const char* msg, int prog, int total);
     void CloseMessage();
+    void ProcessProgress( QWidget* parent );
 
     void PrintText( const char* title, char* text);
 
@@ -154,6 +157,17 @@ public:
 // functions for threaded calculation
     QWaitCondition& getWaitProgress();
     QWaitCondition& getWaitCalc();
+
+    char* getTCpoint()
+    {
+      return TCpoint;
+    }
+
+    void setTCpoint( const char* str )
+    {
+      strncpy( TCpoint, str, 15 );
+    }
+    
 };
 
 extern TVisorImp* pVisorImp;

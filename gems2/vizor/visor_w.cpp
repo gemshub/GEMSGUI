@@ -40,6 +40,7 @@ using namespace std;
 #include "visor.h"
 #include "module_w.h"
 #include "m_param.h"
+#include "m_proces.h"
 #include "m_syseq.h"
 #include "page_win_w.h"
 #include "dlg/MainDialog.h"
@@ -169,7 +170,11 @@ TVisorImp::Update(bool force)
 #ifndef Use_mt_mode
     if( ProgressDialog::pDia )
         ProgressDialog::pDia->Update(force);
+
 #endif
+    if( ProcessProgressDialog::pDia )
+        ProcessProgressDialog::pDia->Update();
+
     if( NewSystemDialog::pDia )
         NewSystemDialog::pDia->Update();
 
@@ -367,6 +372,16 @@ TVisorImp::CloseMessage()
        LoadMessage::pDia->close();
 }
 
+void
+TVisorImp::ProcessProgress( QWidget* parent )
+{
+    TProcess::pm->userCancel = false;
+
+        ProcessProgressDialog* dlg =
+             new ProcessProgressDialog( parent );
+	dlg->show();
+}
+
 /*
 GraphDialog*
 TVisorImp::MakePlot(TCModule *md, TIArray<TPlot>& plts,
@@ -524,7 +539,8 @@ QWaitCondition progressWait;
 QWaitCondition&
 TVisorImp::getWaitCalc()
 {
-    return calcWait;
+//    return calcWait;
+    return progressWait;
 }
 
 QWaitCondition&
@@ -970,11 +986,16 @@ TVisorImp* pVisorImp;
 //------------------------------------------------------------------
 // thread staff
 
-#include <stepwise.h>
+#include "stepwise.h"
 
 void ThreadControl::wakeOne()
 {
     pVisorImp->getWaitProgress().wakeOne();
+}
+
+void ThreadControl::wakeAll()
+{
+    pVisorImp->getWaitProgress().wakeAll();
 }
 
 bool ThreadControl::wait()
@@ -985,6 +1006,16 @@ bool ThreadControl::wait()
 bool ThreadControl::wait(unsigned long time)
 {
     return pVisorImp->getWaitCalc().wait(time);
+}
+
+char* ThreadControl::GetPoint()
+{
+    return pVisorImp->getTCpoint();
+}
+
+void ThreadControl::SetPoint(const char* str )
+{
+    pVisorImp->setTCpoint( str );
 }
 
 //--------------------- End of visor_w.cpp ---------------------------

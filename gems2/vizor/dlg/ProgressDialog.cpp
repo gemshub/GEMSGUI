@@ -28,6 +28,7 @@
 #include <qpushbutton.h>
 #include <qthread.h>
 #include <qtimer.h>
+#include <qtooltip.h>
 #include "calcthread.h"
 
 #include "ProgressDialog.h"
@@ -43,15 +44,40 @@
 void 
 ProgressDialog::switchToAccept(bool isAccept)
 {
+ QToolTip::remove( pStepAccept );
+ QToolTip::remove( pResume );
+ QToolTip::remove( pClose );
+ QToolTip::add( pClose, trUtf8( "Cancel IPM run" ) );
+
 	if( isAccept ) {
 		pStepAccept->disconnect();
 		connect( pStepAccept, SIGNAL(clicked()), this, SLOT(CmAccept()) );
 		pStepAccept->setText("&Accept");
+
+		pResume->disconnect();
+		connect( pResume, SIGNAL(clicked()), this, SLOT(CmStop()) );
+		pResume->setText("&Stop");
+
+                QToolTip::add( pStepAccept, trUtf8(
+                  "Save results to Database" ) );
+                QToolTip::add( pResume, trUtf8(
+                  "Switch to Stepwise mode" ) );
 	}
 	else {
 		pStepAccept->disconnect();
 		connect( pStepAccept, SIGNAL(clicked()), this, SLOT(CmStep()) );
 		pStepAccept->setText("&Step");
+		pStepAccept->setAccel(Key_F8);
+
+        	pResume->disconnect();
+		connect( pResume, SIGNAL(clicked()), this, SLOT(CmResume()) );
+		pResume->setText("&Resume");
+
+                QToolTip::add( pStepAccept, trUtf8(
+                   "Make next iteration in Stepwise mode" ) );
+                QToolTip::add( pResume, trUtf8(
+                   "Make all iteration in Stepwise mode" ) );
+
 	}
 }
 
@@ -73,16 +99,20 @@ ProgressDialog::ProgressDialog(QWidget* parent,	bool step, bool autoclose_):
     calcThread = new CalcThread();
 
     //pStepAccept->hide();
-	switchToAccept(false);
-
-    Update(true);
+    // switchToAccept(false);
+    connect( pResume, SIGNAL(clicked()), this, SLOT(CmResume()) );
 
     if( step ) {
-        setCaption( "Ready to rumble..." );
+	switchToAccept(false);
+        setCaption( "Ready to proceed stepwise :)" );
+	calcThread->start();
+
     }
     else {
 	setCaption( "Running..." );
-      pStepAccept->hide();
+        switchToAccept(true);
+        pStepAccept->hide();
+//        pResume->hide();
 	pClose->setText("&Cancel");
 
 	timer = new QTimer( this );
@@ -93,6 +123,8 @@ ProgressDialog::ProgressDialog(QWidget* parent,	bool step, bool autoclose_):
 
 	timer->start( pVisorImp->updateInterval()*100, TRUE );
     }
+     Update(true);
+
 }
 
 
@@ -113,6 +145,9 @@ ProgressDialog::~ProgressDialog()
 void
 ProgressDialog::CmStep()
 {
+    QString str;
+    MULTI* pData = TProfil::pm->pmp;
+
     try
     {
 	if( calcThread->running() ) {
@@ -122,7 +157,8 @@ ProgressDialog::CmStep()
 	else {
 	    if( calcThread->error.title == "" ) {
 		setCaption( "Running first step..." );
-		calcThread->start();
+         	    ThreadControl::wakeOne();	// let's calc
+//		calcThread->start();
 	    }
 	    else {
 		throw calcThread->error;
@@ -137,13 +173,17 @@ ProgressDialog::CmStep()
 
     // seems like wait(sec) bails out no matter what timeout we set up :( - may be Qt bug?
     // but we have to specify seconds to prevend deadlock anyway
-	ThreadControl::wait(5000); // 5 sec
+//	ThreadControl::wait(5000); // 5 sec
 
 	Update(true);
 	pVisorImp->Update( true );
-	setCaption( "Stepped..." );
+
+        str.sprintf("Stepped in %-15s", ThreadControl::GetPoint() );
+        setCaption( str );
+//	setCaption( "Stepped..." );
 
 	if( TProfil::pm->calcFinished ) {
+            switchToAccept(true);
 	    CalcFinished();
 	    return;
 	}
@@ -155,8 +195,60 @@ ProgressDialog::CmStep()
     }
 }
 
+
+/*!
+    go to Step mode
+*/
+
+void
+ProgressDialog::CmStop()
+{
+
+    try
+    {
+      timer->stop();
+      TProfil::pm->stepWise = true;
+      switchToAccept(false);
+
+      pStepAccept->show();
+   }
+    catch( TError& err )
+    {
+        vfMessage(this, err.title, err.mess);
+    }
+}
+
+
+void
+ProgressDialog::CmResume()
+{
+    try
+    {
+
+     TProfil::pm->stepWise = false;
+     switchToAccept(true);
+     pStepAccept->hide();
+     //pResume->hide();
+     //pStepAccept->disconnect();
+     ThreadControl::wakeOne();	// let's calc
+
+     timer = new QTimer( this );
+     connect( timer, SIGNAL(timeout()),	this, SLOT(Run()) );
+     timer->start( pVisorImp->updateInterval()*100, TRUE );
+
+     if( TProfil::pm->calcFinished ) {
+	    CalcFinished();
+	    return;
+	}
+    }
+    catch( TError& err )
+    {
+        vfMessage(this, err.title, err.mess);
+    }
+}
+
 /*! Run
-    it's called by QTimer timeout 
+    it's called by QTimer timeout
     to display updates in stepless mode
 */
 
@@ -205,8 +297,11 @@ ProgressDialog::CalcFinished()
     
     switchToAccept(true);
     
+    pResume->hide();
     pStepAccept->show();
     pClose->setText("&Discard");
+    QToolTip::remove( pClose );
+    QToolTip::add( pClose, trUtf8( "Do not save IPM results to database" ) );
 
     QString str;
     str.sprintf("Converged at DK=%.2g", TProfil::pm->pa.p.DK);

@@ -117,6 +117,7 @@ TPrintData::TPrintData(const char *sd_key,
        ii = ii;
        if( ifcond )
        {
+         prr = 1;
          iir = ii;
          rpn.CalcEquat();
          if( prr == 0 )

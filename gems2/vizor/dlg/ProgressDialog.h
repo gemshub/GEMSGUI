@@ -45,7 +45,9 @@ public slots:
 
 protected slots:
     void CmStep();
+    void CmStop();
     void CmAccept();
+    void CmResume();
     void Run();
 
 protected:

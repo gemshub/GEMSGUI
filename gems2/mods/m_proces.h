@@ -171,7 +171,10 @@ class TProcess : public TCModule
     GraphWindow *gd_gr;
     TPlotLine *plot;
 
-    gstring titler;
+    char *text_fmt;
+    gstring sd_key;
+    gstring filename;
+
 
 protected:
     IPNCalc rpn[2];      // IPN of process simulator equations&&graph
@@ -193,9 +196,15 @@ protected:
     void CalcPoint( int nPoint );
     void set_type_flags( char type);
 
+
 public:
 
     static TProcess* pm;
+
+    bool userCancel;
+//    bool stopCalc;
+    bool stepWise;
+    bool calcFinished;
 
     PROCESS *pep;
 
@@ -226,7 +235,9 @@ public:
     bool NoSave() const
     { return ( pep->PsSY == S_OFF ); }
 
-    const gstring& GetString();
+   class UserCancelException {};
+    void internalCalc();
+
 };
 
 enum pe_statcode {

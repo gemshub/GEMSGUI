@@ -53,6 +53,7 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     pNumDigits->setValue(pVisorImp->getDoubleDigits());
     pUpdateInterval->setValue(pVisorImp->updateInterval());
     pConfigAutosave->setChecked(pVisorImp->getConfigAutosave());
+//    pConfigAutosave->setChecked( true );
 
     if( pVisor->getElemPrMode() )
     {   rbNewPrMode->setChecked( true );

@@ -280,6 +280,9 @@ GraphDialog::Apply()
 void
 GraphDialog::AddPoint( int nPlot, int nPoint )
 {
+
+  if( nPlot>=0 && nPoint>=0 )
+  {
     int nLn = gr_data.plots[nPlot].getFirstLine();
 
     for( int jj=0; jj<gr_data.plots[nPlot].getLinesNumber(); jj++, nLn++ )
@@ -290,6 +293,7 @@ GraphDialog::AddPoint( int nPlot, int nPoint )
     }
 
     plot->update();
+  }
     qApp->processEvents();
 }
 

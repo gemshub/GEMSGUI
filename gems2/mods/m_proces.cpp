@@ -17,6 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 const char *GEMS_PE_HTML = "gm_proces";
 
 #include <math.h>
@@ -29,6 +30,7 @@ const char *GEMS_PE_HTML = "gm_proces";
 #include "service.h"
 #include "visor.h"
 #include "t_print.h"
+#include "stepwise.h"
 
 TProcess* TProcess::pm;
 
@@ -52,8 +54,13 @@ TProcess::TProcess( int nrt ):
     gd_gr = 0;
     start_title =
        " Definition of a Process Simulator (batch calculation)";
-}
 
+    userCancel = false;
+    stepWise = false;
+    calcFinished = false;
+
+}
+/*
 const gstring&
 TProcess::GetString()
 {
@@ -62,8 +69,7 @@ TProcess::GetString()
     titler += TSubModule::GetString();
     return titler;
 }
-
-
+*/
 // get key of record
 gstring
 TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
@@ -1049,13 +1055,15 @@ TProcess::RecCalc( const char *key )
 {
     int nRec;
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+    TProfil::pm->userCancel = false;
+    TProfil::pm->stepWise = false;
 
     if( pVisor->ProfileMode != true )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );
 
-    char *text_fmt = 0;
-    gstring sd_key = "";
-    gstring filename = "";
+/*  char * */ text_fmt = 0;
+/*  gstring */ sd_key = "";
+/*  gstring */ filename = "";
 
 
     if( pep->Istat != P_EXECUTE )
@@ -1075,10 +1083,9 @@ TProcess::RecCalc( const char *key )
              ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
               text_fmt = (char *)aObj[o_sdabstr].GetPtr();
               if( !text_fmt )
-                Error( sd_key.c_str(),
-                  "E00PSexec: No print script format text in this record.");
+                 Error( GetName(), "E00PSexec: No print script format text in this record.");
               if( !vfChooseFileSave(window(), filename,
-                     "Please, provide a name of output file") )
+                     "Please, provide a name of an output file") )
                 text_fmt = 0;
            }
          }
@@ -1130,13 +1137,48 @@ TProcess::RecCalc( const char *key )
 
     ModUpdate("Pe_calc    Process simulation");
 
+#ifdef Use_mt_mode
+//     if( pointShow==-1 )
+//     { // use thread
+       TProcess::pm->userCancel = false;
+        try
+        {
+           pVisor->ProcessProgress(window());
+         }
+         catch( TError& xcpt )
+         {
+           vfMessage(window(), xcpt.title, xcpt.mess);
+         }
+//     }
+//     else
+//      internalCalc();
+#else
+      internalCalc();
+#endif
+
+}
+
+//internal calc record structure
+void
+TProcess::internalCalc()
+{
+    int nRec;
+    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+    calcFinished = false;
+
+    ModUpdate("Working...");
+
+
     while( pep->Loop ) // main cycle of process
     {
+#ifdef Use_mt_mode
+    STEP_POINT2();
+#else
      if( pointShow==-1 )
        pVisor->Message( window(), GetName(),
                  "Calculating process; \n"
                  "Please, wait...", pep->c_nrk, pep->NR1);
-
+#endif
         // calc equations of process
         if( pep->PsPro == S_OFF )
         {
@@ -1208,7 +1250,11 @@ TProcess::RecCalc( const char *key )
 
         if( pointShow >= 0 )
          if( pep->PsRT == S_OFF )
+         {   if( pep->PsPro == S_OFF || pep->NP == 1 )
            CalcPoint( pep->c_nrk);
+             else
+                 CalcPoint( -1 );
+         }
          else  // masstransport show
             {
               if( pep->Nst >= pep->Nxi-1 )
@@ -1237,11 +1283,14 @@ TProcess::RecCalc( const char *key )
             pep->Nst++;
 
     }  /* end while() */
+    calcFinished = true;
 
-//    pVisor->CloseProgress();
-    pep->Istat = P_FINISHED;
-    if( pointShow==-1 )
+#ifndef Use_mt_mode
+    if( pointShow == -1 )
        pVisor->CloseMessage();
+#endif
+
+    pep->Istat = P_FINISHED;
 // Get startup syseq record for fitting
     rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
              RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
@@ -1253,6 +1302,7 @@ TProcess::RecCalc( const char *key )
     ModUpdate("Pe_calc    Finished OK");
 
 }
+
 
 //Calculate one point to graph
 void

@@ -101,7 +101,7 @@ if( pa.p.PRD >= 7 )
         SimplexInitialApproximation( );
 //  STEPWISE (0) - stop point for examining results from simplex IA
 #ifndef IPMGEMPLUGIN
-STEP_POINT();
+STEP_POINT( "End Simplex" );
 #endif
         // no multi-component phases?
         if( !pmp->FIs )
@@ -248,7 +248,7 @@ if( pa.p.PRD >= 7 )
     */
 // STEPWISE (1) - stop point to see IA from old solution or raised simplex
 #ifndef IPMGEMPLUGIN
-STEP_POINT();
+STEP_POINT("Before FIA");
 #endif
     return false;
     //   OVER: /* calc finished */
@@ -294,7 +294,7 @@ bool TProfil::MultiCalcMain( int &pll, double &FXold )
 #ifndef IPMGEMPLUGIN
 #ifdef Use_mt_mode
 
-STEP_POINT();
+STEP_POINT("After FIA");
 
 #endif
 #endif
@@ -303,7 +303,7 @@ STEP_POINT();
 
 // STEPWISE (3)  - stop point to examine output from IPM()
 #ifndef IPMGEMPLUGIN
-STEP_POINT();
+STEP_POINT("After IPM");
 #endif
 ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if( eRet )
@@ -399,7 +399,7 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #ifndef IPMGEMPLUGIN
 #ifdef Use_mt_mode
 
-STEP_POINT();
+STEP_POINT("PhaseSelect");
 
 #endif
    pVisor->Update( false );
