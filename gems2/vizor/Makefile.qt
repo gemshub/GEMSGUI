@@ -16,7 +16,7 @@ endif
 
 OPT_FLAGS	= -O2 
 ifeq ("$(shell uname)", "Linux")
-OPT_FLAGS	= $(OPT_FLAGS) -march=pentiumpro
+OPT_FLAGS	+= -march=pentiumpro
 endif
 RELEASE_FLAGS	= -DGEMS_RELEASE
 DEBUG_FLAGS	= -ggdb
