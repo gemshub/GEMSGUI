@@ -12,3 +12,4 @@ out
 *.rpo
 tmp.moc.cpp
 CVS
+gems2.app

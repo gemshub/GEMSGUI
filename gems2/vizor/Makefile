@@ -43,7 +43,7 @@ TARGET	= ../lib/gemviz.o
 all:      $(TARGET)
 
 
-$(TARGET): subdir_mk $(OBJECTS) $(METAOBJ) $(OBJ_SUB) Makefile
+$(TARGET): subdir_mk $(OBJECTS) $(METAOBJ) $(OBJ_SUB)
 	$(LD) -r $(OBJECTS) $(METAOBJ) $(OBJ_SUB) -o $@
 
 

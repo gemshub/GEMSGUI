@@ -2,6 +2,9 @@
 # SHELL=/bin/sh
 # compile variables
 
+NAME		= gems2
+VERSION		= 2.0
+
 ifeq ("x$(QTDIR)","x")
 QTDIR		= /usr/lib/qt3
 #QTDIR		= /usr/local/qt
@@ -22,7 +25,10 @@ endif
 ifeq ("$(shell uname)", "Darwin")
 LIBS		= $(QTLIBS) -lz -framework Carbon
 else
-LIBS		= $(QTLIBS) -lz -lX11 -lXext -lXt -lm -lstdc++ 
+LIBS		= $(QTLIBS) -lz -lX11 -lXext -lXt -lm -lstdc++ -lpthread 
+ifeq ($(RELEASE), YES)
+LIBS		+= -lXft -lXcursor -lXinerama -lXrandr
+endif
 endif
 
 
@@ -100,14 +106,14 @@ backupd:
 
 # builds bianary package (rpm -bb)
 rpm:
-	mkdir -p /tmp/gems-2.0
-	tar c --exclude-from doc/tar_backup.exclude $(rpmfiles) | tar -xC /tmp/gems-2.0
-	cp -fr $(HOME)/GEMS2test/program /tmp/gems-2.0
-	tar Ccv /tmp --remove-files gems-2.0 | bzip2 > /tmp/gems-2.0.tar.bz2
+	mkdir -p /tmp/$(NAME)-$(VERSION)
+	tar c --exclude-from doc/tar_backup.exclude $(rpmfiles) | tar -xC /tmp/$(NAME)-$(VERSION)
+	cp -fr /usr/share/gems2 /tmp/$(NAME)-$(VERSION)/shared
+	tar Ccv /tmp --remove-files $(NAME)-$(VERSION) | bzip2 > /tmp/$(NAME)-$(VERSION).tar.bz2
 	cp gems2.spec /tmp
 #	rm -fr ./program
 #	rm -fr /tmp/gems-2.0
-	su -c "	mv /tmp/gems-2.0.tar.bz2 /usr/src/RPM/SOURCES; \
+	su -c "	mv /tmp/$(NAME)-$(VERSION).tar.bz2 /usr/src/RPM/SOURCES; \
 		mv /tmp/gems2.spec /usr/src/RPM/SPECS; \
 		cd /usr/src/RPM/SPECS; \
 		rpm -bb gems2.spec"
