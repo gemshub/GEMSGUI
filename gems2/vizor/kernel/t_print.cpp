@@ -398,7 +398,7 @@ TPrintData::getData( )
 void
 TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
 {
-  vstr strbuf(500);
+  vstr strbuf(8192);
   switch( dt.data )
   {
     case space_d: fmt.type = 's';
