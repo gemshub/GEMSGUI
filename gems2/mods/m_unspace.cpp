@@ -121,6 +121,12 @@ void TUnSpace::keyTest( const char *key )
 // link values to objects
 void TUnSpace::ods_link( int q)
 {
+  int qq = q;
+  if( q == -1 )
+    q = 0;
+  if( q == -2 )
+    q = 1;
+
   usp=&us[q];
 
 // static objects
@@ -245,7 +251,9 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unsgp].SetPtr( usp->SGp );
     aObj[ o_unsgp].SetDim( usp->nG, 1 );
 
-//  work (not in record)
+  if( qq >= 0)
+  {
+  //  work (not in record)
     aObj[ o_unphndx].SetPtr( usp->PhAndx );
     aObj[ o_unphndx].SetDim( usp->nPhA, usp->N );  // must be set nPhA = Q
     aObj[ o_unsv].SetPtr( usp->sv );
@@ -258,12 +266,12 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unphalst].SetDim( usp->nPhA, 1 );
     aObj[ o_unafreg].SetPtr( usp->PhAfreq );
     aObj[ o_unafreg].SetDim( usp->nPhA, 1 );
-//    aObj[ o_unpmr].SetPtr( usp->pmr );
-//    aObj[ o_unpmr].SetDim( usp->Q, 1 );
+    aObj[ o_unpmr].SetPtr( usp->pmr );
+    aObj[ o_unpmr].SetDim( usp->Q, 1 );
     aObj[ o_unpom].SetPtr( usp->POM );
     aObj[ o_unpom].SetDim( usp->Q, usp->Q );
     aObj[ o_unpor].SetPtr( usp->POR );
-    aObj[ o_unpor].SetDim( usp->Q, 1 );
+    aObj[ o_unpor].SetDim( 1, usp->Q );
     aObj[ o_una].SetPtr( usp->A );
     aObj[ o_una].SetDim( usp->L, usp->N );
     aObj[ o_unzcp].SetPtr( usp->Zcp );
@@ -286,7 +294,7 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unuadc].SetDim( usp->L, UNSP_SIZE1 );
     aObj[ o_unundca].SetPtr( usp->UnDCA );
     aObj[ o_unundca].SetDim( usp->L, UNSP_SIZE2 );
-
+   }
    //  internal
     aObj[ o_unsdref].SetPtr(usp->sdref);
     aObj[ o_unsdref].SetDim(usp->Nsd, 1 );
@@ -367,6 +375,7 @@ void TUnSpace::dyn_set(int q)
     plot  = (TPlotLine *)aObj[ o_unplline ].GetPtr();
     usp->tprn = (char *)aObj[ o_untprn].GetPtr();
 
+/*---------------------------------------------------------------------
 //  work (not in record)
     usp->PhAndx = (short *)aObj[ o_unphndx].GetPtr();
     usp->sv = (short *)aObj[ o_unsv].GetPtr();
@@ -388,6 +397,7 @@ void TUnSpace::dyn_set(int q)
     usp->UgDC = (double (*)[UNSP_SIZE1])aObj[ o_unugdc].GetPtr();
     usp->UaDC = (double (*)[UNSP_SIZE1])aObj[ o_unuadc].GetPtr();
     usp->UnDCA = (double (*)[UNSP_SIZE2])aObj[ o_unundca].GetPtr();
+*/
 
     // make work arrays
     if( pVisor->ProfileMode != true )
@@ -470,11 +480,11 @@ void TUnSpace::work_dyn_kill()
     usp->PhAID = (char (*)[8])aObj[ o_unphaid].Free();
     usp->PhAlst = (char (*)[80])aObj[ o_unphalst].Free();
     usp->PhAfreq = (float *)aObj[ o_unafreg].Free();
-//    usp->pmr = 0;
+    usp->pmr = 0;
     usp->POM = (float *)aObj[ o_unpom].Free();
     usp->POR = (float *)aObj[ o_unpor].Free();
-//    aObj[ o_unpmr].SetPtr( usp->pmr );
-//    aObj[ o_unpmr].SetDim( usp->Q, 1 );
+    aObj[ o_unpmr].SetPtr( usp->pmr );
+    aObj[ o_unpmr].SetDim( usp->Q, 1 );
     usp->A = (float *)aObj[ o_una].Free();
     usp->Zcp = (double *)aObj[ o_unzcp].Free();
     usp->Zmin = (double *)aObj[ o_unzmin].Free();
@@ -527,10 +537,10 @@ void TUnSpace::work_dyn_new()
     usp->Hom = (double *)aObj[ o_unhom].Alloc(usp->Q, 1, D_);
     usp->Prob = (double *)aObj[ o_unprob].Alloc(usp->Q, 1, D_);
 
- //   usp->pmr = 0;
+    usp->pmr = 0;
     if( usp->PvPOR == S_ON )
     {  usp->POR = (float *)aObj[ o_unpor].Alloc( 1, usp->Q, F_ );
-  //     usp->pmr = usp->POR;
+       usp->pmr = usp->POR;
     }
     else
       usp->POR = (float *)aObj[ o_unpor].Free();
@@ -538,12 +548,12 @@ void TUnSpace::work_dyn_new()
     if( usp->PvPOM == S_ON )
     {
       usp->POM = (float *)aObj[ o_unpom].Alloc( usp->Q, usp->Q, F_ );
- //     usp->pmr = usp->POM;
+      usp->pmr = usp->POM;
     }
     else   usp->POM = (float *)aObj[ o_unpom].Free();
 
-//    aObj[ o_unpmr].SetPtr( usp->pmr );
-//    aObj[ o_unpmr].SetDim( usp->Q, 1 );
+    aObj[ o_unpmr].SetPtr( usp->pmr );
+    aObj[ o_unpmr].SetDim( usp->Q, 1 );
 
 
   usp->UnIC = (double (*)[UNSP_SIZE1])aObj[ o_ununic].Alloc(
@@ -996,12 +1006,12 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
     TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
 {
 // make copy of UNSPACE  structure (only for changed arrays )
-   ods_link(1);
+   ods_link(-2);
    memcpy( &us[1].N, &us[0].N, 16 );
    memcpy( &us[1].PunE, &us[0].PunE, 38 );
    dyn_new(1);
 
-/********************************************************
+//********************************************************
    // copy arrays
   if(usp->PsGen[0] == S_ON )
   {
@@ -1068,7 +1078,7 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
 //*********************************************************/
 //  resize us[0]
 
-   ods_link(0);
+   ods_link(-1);
    usp->N = TProfil::pm->mup->N;
    usp->L = TProfil::pm->mup->L;
    usp->Fi = TProfil::pm->mup->Fi;
