@@ -100,32 +100,33 @@ typedef struct
    cV  // State factors T,P,V
     ;
  double
-   *Bb,   //  [Q][N] Table of bulk compositions of basis sub-systems
-   *Bn,   //  [Q][N] Table of bulk compositions of non-basis sub-systems
-   *Ub,   //  [Q][N] Table of dual solution values for basis sub-systems
+   *Bb,    //  [Q][N] Table of bulk compositions of basis sub-systems
+   *Bn,    //  [Q][N] Table of bulk compositions of non-basis sub-systems
+   *Ub,    //  [Q][N] Table of dual solution values for basis sub-systems
    *chi,   //  [Q][K] Table of mole fractions of DC (end-member) candidates
    *mu_n,  //  [Q][K] Table of DualTh chemical potentials of K DC (end-member)
            // candidates in Q experiments
-   *Coul,  //  [Q][K] Table of Coulombic terms for DC candidates (optional)
+   *Coul,  //  [Q][K] Table of excess Gibbs energies of mixture for candidates
+           // (Coulombic terms for surface complexes)
    *gam_n, //  [Q][K] Table of activity coefficients for DC candidates
    *avg_g, //  [K] mean over gam_n columns (experiments) for DC candidates
    *sd_g,  //  [K] st.deviation over gam_n columns (experiments) for DC candidates
    *muo_n, //  [Q][K] Table of standard Gibbs energies for DC candidates
    *avg_m, //  [K] mean over muo_n columns (experiments) for DC candidates
    *sd_m,  //  [K] st.deviation over muo_n columns (experiments) for DC candidates
-   *muo_i,   // [Q][K] input st.state chem. potentials for candidates (or EMPTY if unknown)
-   *act_n,   // [Q][K] table of DualTh-calculated activities
+   *muo_i, // [Q][K] input st.state chem. potentials for candidates (or EMPTY if unknown)
+   *act_n, // [Q][K] table of DualTh-calculated activities
    *qpn,   //  [Nqpn] Work array for chi calculation math script
    *qpg    //  [Nqpg] Work array for gamma calculation math script
     ;
  float
-   *CIb, // [Q][N] Table of quantity/concentration of IC in basis sub-systems
-   *CIn, // [Q][N] Table of quantity/concentration of IC in non-basis sub-systems
-   *CAb, // [Q][Lb] Table of quantity/concentration of formulae for basis sub-systems
+   *CIb,  // [Q][N] Table of quantity/concentration of IC in basis sub-systems
+   *CIn,  // [Q][N] Table of quantity/concentration of IC in non-basis sub-systems
+   *CAb,  // [Q][Lb] Table of quantity/concentration of formulae for basis sub-systems
    *CAn,  // [Q][Lb] Table of quantity/concentration of DC formulae for non-basis sub-systems
-  *Tdq,    //  [Q]  Temperatures of experiment
-  *Pdq,    //  [Q]  Pressures of experiment
-  *ISq     //  [Q]  Effective ionic strength in experimental aq solutions
+  *Tdq,   //  [Q]  Temperatures of experiment
+  *Pdq,   //  [Q]  Pressures of experiment
+  *ISq    //  [Q]  Effective ionic strength in experimental aq solutions
     ;
  char
    *cExpr,  // Math script text for calculation of mole fractions of DC in non-basis

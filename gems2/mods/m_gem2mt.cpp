@@ -16,7 +16,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-const char *GEMS_FMT_HTML = "gm_gem2mt";
+const char *GEMS_MT_HTML = "gm_gem2mt";
 
 #include <math.h>
 #include <stdio.h>
@@ -37,6 +37,91 @@ GEM2MT::GEM2MT( int nrt ):
     set_def();
     start_title = " Coupled models: Under construction";
 }
+
+
+
+
+/*-----------------------------------------------------------------*/
+// Interpolation over tabulated values (array y) using the Lagrange method
+// for extracting thermodynamic data in gemipm2k or in gem2mt
+// parameters:
+//  y[N] - discrete values of argument over rows (ascending order)
+//  x[M] - discrete values of arguments over columns (ascending order)
+//  d[N][M] - discrete values of a function of x and y arguments
+//  xoi - column (x) argument of interest ( x[0] <= xi <= x[M-1] )
+//  yoi - row (y) argument of interest  ( y[0] <= yi <= y[N-1] )
+//  N - number of rows in y array;
+//  M - number of columns in y array.
+//  Function returns an interpolated value of d(yoi,xoi) or 0 if
+//  yoi or xoi are out of range
+//
+float TGEM2MT::LagranInterp(float *y, float *x, float *d, float yoi,
+                    float xoi, int M, int N)
+{
+    double s=0,z,s1[21];
+    int py, px, i=0, j, j1, k, jy, jy1;
+
+//    if (yoi < y[0])
+//        Error( GetName(), "E34RErun: yoi < y[0] (minimal row argument value)");
+//    if(xoi < x[0])
+//        Error( GetName(), "E35RErun: xoi < x[0] (minimal column argument value)");
+    py = N-1;
+    px = M-1;
+
+    if(yoi < y[0] || xoi < x[0] || yoi > y[py] || xoi > x[px] )
+       return s;  // one of arguments outside the range
+
+    for(j1=0;j1<N;j1++)
+        if (yoi >= y[j1] && yoi <= y[j1+1])
+            goto m1;
+    //z=yoi;
+    goto m2;
+m1:
+    for(i=0;i<M;i++)
+        if(xoi >= x[i] && xoi <= x[i+1])
+            goto m;
+    // z=xoi;
+    if(xoi <= x[px])
+        goto m;
+m2:
+    if(yoi <= y[py])
+        goto m;
+m:
+    if(i < M-px)
+        j=i;
+    else j=M-px-1;
+    if(j1 >= N-pa)
+        j1=N-pa-1;
+    ja1=j1;
+    for(ja=0;ja <= pa; ja++)
+    {
+        s=0.;
+        for(i=0;i<=px;i++)
+        {
+            z=1; //z1=1;
+            for(k=0;k<=px;k++)
+                if(k!=i)
+                    z*=(xoi-x[k+j])/(x[i+j]-x[k+j]);
+            s+=d[i+j+(j1)*M]*z;
+        }
+        s1[ja]=s;
+        j1++;
+    }
+    s=0.;
+    for(i=0;i<=pa;i++)
+    {
+        z=1;
+        for(k=0;k<=pa;k++)
+            if(k!=i)
+                z*=(yoi-y[k+ja1])/(y[i+ja1]-y[k+ja1]);
+        s+=s1[i]*z;
+    }
+    return(float)s);
+}
+
+
+
+
 
 // link values to objects
 void TInteg::ods_link(int)
