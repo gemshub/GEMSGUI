@@ -8,8 +8,11 @@
 
 # compile variables
 
+
+ifeq ("x$(QTDIR)","x")
 QTDIR		= /usr/local/qt2e
 #QTDIR		= /usr/lib/qt2
+endif
 
 OPT_FLAGS	= -O2 -mcpu=pentium
 RELEASE_FLAGS	= -DGEMS_RELEASE

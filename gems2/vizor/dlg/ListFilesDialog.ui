@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>570</width>
+            <width>596</width>
             <height>454</height>
         </rect>
     </property>
@@ -22,166 +22,153 @@
     <property name="caption">
         <string>Database File Configuration for Modelling Project</string>
     </property>
-    <widget class="QLayoutWidget">
+    <vbox>
         <property name="name">
-            <cstring>Layout3</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>410</y>
-                <width>560</width>
-                <height>37</height>
-            </rect>
+        <property name="margin">
+            <number>11</number>
         </property>
-        <hbox>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLabel">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>pLabel</cstring>
             </property>
-            <property name="margin">
-                <number>0</number>
+            <property name="text">
+                <string>  Please, check files linked to Project:</string>
             </property>
-            <property name="spacing">
-                <number>6</number>
+            <property name="alignment">
+                <set>AlignVCenter|AlignLeft</set>
             </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pHelpButton</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
+            <property name="hAlign" stdset="0">
+            </property>
+        </widget>
+        <widget class="QListView">
+            <column>
                 <property name="text">
-                    <string>&amp;Help</string>
+                    <string>File Keyword</string>
                 </property>
-                <property name="toolTip" stdset="0">
-                    <string>Learn aboutModelling Project concept and project configuration</string>
-                </property>
-            </widget>
-            <spacer>
-                <property name="name" stdset="0">
-                    <cstring>Spacer1</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pGO_OKButton</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="text">
-                    <string>&amp;Ok</string>
-                </property>
-                <property name="default">
+                <property name="clickable">
                     <bool>true</bool>
                 </property>
-                <property name="toolTip" stdset="0">
-                    <string>Files selections is finisded OK</string>
+                <property name="resizeable">
+                    <bool>true</bool>
                 </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>pCancelButton</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>1</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
+            </column>
+            <column>
                 <property name="text">
-                    <string>&amp;Cancel</string>
+                    <string>File Path</string>
                 </property>
-            </widget>
-        </hbox>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>pLabel</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>440</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>   Please, check files linked to Project:</string>
-        </property>
-        <property name="alignment">
-            <set>AlignVCenter|AlignLeft</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-    </widget>
-    <widget class="QListView">
-        <column>
-            <property name="text">
-                <string>File Keyword</string>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizeable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>pListFiles</cstring>
             </property>
-            <property name="clickable">
-                <bool>true</bool>
+            <property name="allColumnsShowFocus">
+                <bool>false</bool>
             </property>
-            <property name="resizeable">
-                <bool>true</bool>
+            <property name="itemMargin">
+                <number>1</number>
             </property>
-        </column>
-        <column>
-            <property name="text">
-                <string>File Path</string>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout2</cstring>
             </property>
-            <property name="clickable">
-                <bool>true</bool>
-            </property>
-            <property name="resizeable">
-                <bool>true</bool>
-            </property>
-        </column>
-        <property name="name">
-            <cstring>pListFiles</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>30</y>
-                <width>560</width>
-                <height>370</height>
-            </rect>
-        </property>
-        <property name="allColumnsShowFocus">
-            <bool>false</bool>
-        </property>
-        <property name="itemMargin">
-            <number>1</number>
-        </property>
-    </widget>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pGO_OKButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Ok</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Files selections is finisded OK</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pHelpButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Help</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Learn aboutModelling Project concept and project configuration</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pCancelButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
 </widget>
 <connections>
     <connection>
