@@ -102,11 +102,12 @@ PText::paint(QPainter& dc)
 
     dc.setPen( QPen(color, 2) );
     QFont font = dc.font();
+cerr << "PText::font " << font.toString() << endl;
     if( !font.bold() )
-    {
 	font.setBold(true);
-    	dc.setFont(font);
-    }
+    if( font.pixelSize() < 11 ) 
+	font.setPixelSize(11);
+    dc.setFont(font);
 
     dc.drawText( screenPoint, txt );
     
@@ -230,8 +231,8 @@ void
 TPlotWin::PaintToDC(QPainter& dc)
 {
     QFont font = dc.font();
-    if( font.fixelSize() < 10 ) {
-	font.setPixelSize(10);
+    if( font.pixelSize() < 11 ) {
+	font.setPixelSize(11);
 	dc.setFont(font);
     }
 
