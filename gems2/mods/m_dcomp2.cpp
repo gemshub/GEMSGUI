@@ -301,14 +301,15 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          Holland & Powell, 1998 */
       // reading and checking the coeffs
       aC = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
-      aC *= 1000.;   // Check! conversion from kbar to bar
+//      aC *= 1000.;   Check! conversion from kbar to bar
       if( IsDoubleEmpty( aC ))
           aC = 0.;
       aE = (double)dc[q].Expa; // This is the a parameter in 1/K !
       if( IsDoubleEmpty( aE ))
           aE = 0.;
       if(( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
-           && fabs(Vst) > 1e-9 && aC > 1. && aE > 0.1 )  // No zero molar volume !
+           && fabs(Vst) > 1e-9 && fabs(aC) > 1e-9 && fabs(aE) > 1e-9 )
+                             // No zero molar volume !
       {
 // Inserted 01.07.03 - calculations acc. to Holland&Powell, 1998
          double PP = P*0.001; // P seems to be in kbar in HP98 eqns!
@@ -324,7 +325,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          aW.twp->G += 1./3.* aW.twp->V * kap * (pow((1.-4.*PP/kap),0.75 )- 1.);
          aW.twp->S -= Vst * P * ( aE - 10.*aE / T05 );
          aW.twp->H += -T * Vst * P * ( aE - 10.*aE / T05 )
-              + 1./3. * aW.twp->V * kap * ( pow((1.-4.*P/kap),0.75 ) - 1.);
+              + 1./3. * aW.twp->V * kap * ( pow((1.-4.*PP/kap),0.75 ) - 1.);
          aW.twp->V *= pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
 //       aW.twp->V *= pow( (kap / (kap + 4*PP )), 0.25);  // Corr. C. De Capitani
                 // Check calculation of H !

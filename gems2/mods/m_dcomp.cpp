@@ -629,11 +629,12 @@ TDComp::DCthermo( int q, int p )
     aW.twp->Tst = aW.twp->TCst + C_to_K;
     aW.twp->RT = R_CONSTANT * aW.twp->T;
     aW.twp->Fug = aW.twp->P;
-    // method calculation
+    // method of calculation
     CM = toupper( dcp->pct[0] );
     CE = toupper( dcp->pct[1] );
     CV = toupper( dcp->pct[2] );
-
+    if( CM != CTPM_HKF && aW.twp->P < 1e-9 )
+         aW.twp->P = 1e-8;
     if( CM == CTPM_HKF || aW.twp->P < 1e-9 )  // fixed by KD 03.07.03 
     {// HKF calculations or determination of P_sat if P=0
 
