@@ -83,6 +83,13 @@ TVisorImp::TVisorImp(int c, char** v):
         argv(v),
 	configAutosave(false)
 {
+// just in case
+	charWidth = 12;
+	charHeight = 18;
+ofstream of1("c:\\vizor1.out");
+of1 << "w: " << charWidth << " h: " << charHeight << endl;
+of1.close();
+
     pVisorImp = this;
     pHelpWidget = 0;
 #ifdef Use_mt_mode
@@ -102,6 +109,9 @@ TVisorImp::TVisorImp(int c, char** v):
   }
 
     setCellFont( QFont(GEMS_DEFAULT_FONT_NAME, GEMS_DEFAULT_FONT_SIZE) );
+ofstream of2("c:\\vizor2.out");
+of2 << "w: " << charWidth << " h: " << charHeight << endl;
+of2.close();
 
     gstring logoFile = pVisor->sysGEMDir() + GEMS_LOGO_ICON;
     pixLogo = new QPixmap( logoFile.c_str() );
@@ -480,6 +490,9 @@ void TVisorImp::setCellFont(const QFont& newCellFont)
     QFontMetrics fm(CellFont);
     charWidth = fm.width("5");
     charHeight = fm.height();
+ofstream of("c:\\vizor.out");
+of << "w: " << charWidth << " h: " << charHeight << endl;
+of.close();
 }
 
 int TVisorImp:: getCharWidth() const
@@ -489,7 +502,7 @@ int TVisorImp:: getCharWidth() const
 
 int TVisorImp:: getCharHeight() const
 {
-    return charHeight;
+    return charHeight + 2;
 }
 
 int TVisorImp:: getCellWidth() const

@@ -387,7 +387,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
         if( GetObj().GetN() > 1 )
         {
             p->setAlignment( AlignLeft );
-            yy += pVisorImp->getCharHeight() + htSPACE;
+            yy += pVisorImp->getCharHeight(); /// + htSPACE;
         }
         else
         {
@@ -404,7 +404,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
                 {
                     Lab = true;	// creation of scroll bars
                     // depends on Lab
-                    yy += pVisorImp->getCharHeight() + htSPACE;
+                    yy += pVisorImp->getCharHeight(); /// + htSPACE;
                     break;
                 }
     }
@@ -475,7 +475,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
 
     if( largeN && indTied == 0 )
     {
-        int labH = (Lab && GetObj().GetN()>1) ? pVisorImp->getCharHeight()+htSPACE : 0;
+        int labH = (Lab && GetObj().GetN()>1) ? pVisorImp->getCharHeight()/*///+htSPACE*/ : 0;
         pSV = new QScrollBar(
                   0, GetObj().GetN()-rInfo.maxN,
                   1, rInfo.maxN,
