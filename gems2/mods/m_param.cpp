@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
-// Id: gems/mods/m_param.cpp  version 2.0.0   2001
+// $Id$
 //
 // Implementation of config and basic methods of TProfile class
 //
-// Rewritten from C to C++ by S.Dmytriyeva  970207 modified 010904
+// Rewritten from C to C++ by S.Dmytriyeva  970207 
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -77,7 +77,7 @@ SPP_SETTING pa_ = {
     "INNINN",   /* PHsol_t[6] */  "s-----",   /* PHpvc[6] */
     "++++-+-+++", /* MUpmv[10] */ "jjbC++-+", /* TPpdc[8] */
     "*-------*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
-    "***-------**-***-----------*", /* SYpvc[28]*/  "***-------", /* UTppc[10] */
+    "***-*-*---**-***-----------*", /* SYpvc[28]*/  "***-------", /* UTppc[10] */
     "0*----------", /* PEpsc[12]  */  "----------+-", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
     "Plot ",                  /* GDpsc[7] */
