@@ -42,16 +42,16 @@ TRTParm::GetKeyofRecord( const char *oldKey, const char *strTitle,
     if( keyType == KEY_NEW )
     {
         switch ( vfQuestion3(window(), GetName(),
-                             "Get key from records?", "&DComp", "&React" ))
+            "Please, select a source record from:", "&DComp", "&ReacDC" ))
         {
         case VF3_1:
             str = TDComp::pm->GetKeyofRecord( ALLKEY,
-                 "Select DComp key to new RTparm.", true);
+                 "Select one key of a source DComp record ", true);
             str +="d:*:";
             break;
         case VF3_2:
             str = TReacDC::pm->GetKeyofRecord( ALLKEY,
-                 "Select DComp key to new RTparm.", true);
+                 "Select one key of a source ReacDC record ", true);
             str +="r:*:";
             break;
         case VF3_3:
@@ -71,27 +71,27 @@ TRTParm::TRTParm( int nrt ):
 {
     nQ = 1;
     aFldKeysHelp.Add(
-        "l<4  Phase state of (reaction-defined) DC <-REACDC (<-DCOMP)");
+        "l<4  Phase state of source Dependent Component <-ReacDC (<-DComp)");
     aFldKeysHelp.Add(
-        "l<8  Identifier of (REAC)DC group  <-REACDC (<-DCOMP)");
+        "l<8  Identifier of source DC group <-ReacDC (<-DComp)");
     aFldKeysHelp.Add(
-        "l<16 Name of reaction-defined DC (compound) <-REACDC (<-DCOMP)");
+        "l<16 Name of source Dependent Component <-ReacDC (<-DComp)");
     aFldKeysHelp.Add(
-        "Code of thermodynamic dataset (file) <-REACDC (<-DCOMP)");
+        "l<4 Code of source thermodynamic data set <-ReacDC (<-DComp)");
     aFldKeysHelp.Add(
-    "l<4  Source of input data for RTPARM-task { r d }, r: REACDC, d: DCOMP");
+    "l<4 Source of input data for DC { r d }, r: <-ReacDC, d: <-DComp");
     aFldKeysHelp.Add(
-        "l<12  Variant number of RTPARM-task <integer>");
+        "l<12  Variant number of this RTParm task <integer>");
     rpp=&rp[0];
     set_def();
-    start_title = " Tabulation/plots of thermodynamic data for one species";
+    start_title = " Tabulation/plot of thermodynamic data for one DC (species)";
     gd_gr = 0;
 }
 
 // link values to objects
 void TRTParm::ods_link( int q)
 {
-    ErrorIf( q > nQ, GetName(), "Illegal link q>nQ.");
+    ErrorIf( q > nQ, GetName(), "E00RTrem: Illegal link q>nQ.");
     // static objects
     aObj[ o_rpunit].SetPtr( &rp[q].What );    /*10*/
     aObj[ o_rpdim].SetPtr(  &rp[q].NP );      /*i3*/
