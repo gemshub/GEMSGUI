@@ -51,7 +51,7 @@ endif
 
 subdirs		= mods vizor
 backupfiles	= doc data vizor mods  Makefile* *.spec
-rpmfiles	= lib doc vizor mods Makefile* *.spec
+rpmfiles	= lib doc vizor mods shared Makefile* *.spec
 
 OBJS		= ./lib/gemsel.o ./lib/gemviz.o
 		    
@@ -108,7 +108,7 @@ backupd:
 rpm:
 	mkdir -p /tmp/$(NAME)-$(VERSION)
 	tar c --exclude-from doc/tar_backup.exclude $(rpmfiles) | tar -xC /tmp/$(NAME)-$(VERSION)
-	cp -fr /usr/share/gems2 /tmp/$(NAME)-$(VERSION)/shared
+#	cp -fr /usr/share/gems2 /tmp/$(NAME)-$(VERSION)/shared
 	tar Ccv /tmp --remove-files $(NAME)-$(VERSION) | bzip2 > /tmp/$(NAME)-$(VERSION).tar.bz2
 	cp gems2.spec /tmp
 #	rm -fr ./program
