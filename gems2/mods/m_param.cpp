@@ -353,17 +353,32 @@ void TProfil::outMulti( GemDataStream& ff )
 // out dataCH&DataBR files
    filename = "GEMSystem.dch";
    if( vfChooseFileSave(window(), filename,
-          "Please, enter DataCH file name", "*.dch" )  )
+          "Please, enter DataCH binary file name", "*.dch" )  )
    {
      GemDataStream  f_ch(filename, ios::out|ios::binary);
       multi->datach_to_file(f_ch);
    }
+   filename = "GEMSystem.dat";
+   if( vfChooseFileSave(window(), filename,
+          "Please, enter DataCH text file name", "*.dat" )  )
+   {
+      fstream  f_ch(filename.c_str(), ios::out);
+      multi->datach_to_text_file(f_ch);
+   }
+
    filename = "GEMNode.dbr";
    if( vfChooseFileSave(window(), filename,
-          "Please, enter DataBR file name", "*.dbr" )  )
+          "Please, enter DataBR binary file name", "*.dbr" )  )
    {
      GemDataStream  f_br(filename, ios::out|ios::binary);
      multi->databr_to_file(f_br);
+   }
+   filename = "GEMNode.dat";
+   if( vfChooseFileSave(window(), filename,
+          "Please, enter DataBR text file name", "*.dat" )  )
+   {
+     fstream  f_br(filename.c_str(), ios::out);
+     multi->databr_to_text_file(f_br);
    }
 
    multi->datach_free();

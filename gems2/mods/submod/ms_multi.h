@@ -338,9 +338,10 @@ public:
     void datach_free();
     void databr_realloc();
     void databr_free();
-    void datach_to_text_file();
-    void datach_from_text_file();
-    void databr_to_text_file();
+    void datach_to_text_file( fstream& ff );
+    void datach_from_text_file( fstream& ff);
+    void databr_to_text_file(fstream& ff );
+    void databr_from_text_file(fstream& ff );
 
     void makeStartDataChBR(
        TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH );
@@ -429,8 +430,10 @@ public:
     void datach_free();
     void databr_realloc();
     void databr_free();
-    void datach_to_text_file();
-    void databr_to_text_file();
+    void datach_to_text_file( fstream& ff );
+    void datach_from_text_file( fstream& ff);
+    void databr_to_text_file(fstream& ff );
+    void databr_from_text_file(fstream& ff );
 
     void packDataBr();
     void unpackDataBr();

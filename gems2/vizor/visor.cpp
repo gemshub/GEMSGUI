@@ -786,7 +786,7 @@ TVisor::defaultCFG()
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                   };
     rt.Add(new TDataBase(rt.GetCount(), "dualth", true, true,
-                         o_dtname, 41, 0, 10, dualth_rkfrm));
+                         o_dtname, 46, 0, 10, dualth_rkfrm));
 
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");

@@ -42,7 +42,7 @@ typedef struct
    PvCoul,   // Use coulombic factors for non-basis DCs (+ -)
    PvICb,    // Use IC quantities for basis sub-system compositions? { + * - }
    PvICn,    // Use IC quantities for non-basis sub-system compositions? { + * - }
-   PvAUb,    // Use formula units for basis sub-system compositions? { + * - }
+   PvAUb,    // Use formula units for basis and non-basis sub-system compositions? { + * - }
    PvSd,     // Include references to data sources (+ -)?
    PvChi,    // Use math script for mole fractions of non-basis DCs (+ -)?
    PvGam,    // Use math script for activity coeffs of non-basis DCs (+ -)?
@@ -94,10 +94,10 @@ typedef struct
    Pgb,   // Pg (pressure in gas, for partial pressures)
    Tmolb, // MOL total mole amount for basis sub-system composition calculations
    WmCb,  // molar mass of carrier DC (e.g. sorbent or solvent), reserved
+   Asur,  // Specific surface area (for adsorbed species)
    cT,
    cP,
-   cV,  // State factors T,P,V 
-   Asur    // Specific surface area (for adsorbed species)
+   cV  // State factors T,P,V
     ;
  double
    *Bb,   //  [Q][N] Table of bulk compositions of basis sub-systems
@@ -113,16 +113,16 @@ typedef struct
    *muo_n, //  [Q][K] Table of standard Gibbs energies for DC candidates
    *avg_m, //  [K] mean over muo_n columns (experiments) for DC candidates
    *sd_m,  //  [K] st.deviation over muo_n columns (experiments) for DC candidates
-   *muo_i,   // [K] input st.state chem. potentials for candidates (or EMPTY if unknown)
+   *muo_i,   // [Q][K] input st.state chem. potentials for candidates (or EMPTY if unknown)
    *act_n,   // [Q][K] table of DualTh-calculated activities
    *qpn,   //  [Nqpn] Work array for chi calculation math script
    *qpg    //  [Nqpg] Work array for gamma calculation math script
     ;
  float
    *CIb, // [Q][N] Table of quantity/concentration of IC in basis sub-systems
-   *CIn, // [K][N] Table of quantity/concentration of IC in non-basis sub-systems
+   *CIn, // [Q][N] Table of quantity/concentration of IC in non-basis sub-systems
    *CAb, // [Q][Lb] Table of quantity/concentration of formulae for basis sub-systems
-   *CAn,  // [Q][K] Table of quantity/concentration of DC formulae for non-basis sub-systems
+   *CAn,  // [Q][Lb] Table of quantity/concentration of DC formulae for non-basis sub-systems
   *Tdq,    //  [Q]  Temperatures of experiment
   *Pdq,    //  [Q]  Pressures of experiment
   *ISq     //  [Q]  Effective ionic strength in experimental aq solutions
@@ -135,14 +135,14 @@ typedef struct
    (*nam_b)[MAXIDNAME], // [Q][16] id names of experiments
    (*nam_n)[MAXIDNAME], // [K][16] id names of DC (end-member) stoichiometry candidates
    (*for_n)[MAXFORMUNITDT], // [K][40] formulae of DC (end-member) stoichiometry candidates
-   (*for_b)[MAXFORMUNITDT], // [Lb][40] formulae for setting basis system compositions
+   (*for_b)[MAXFORMUNITDT], // [Lb][40] formulae for setting basis and non-basis system compositions
    (*stld)[EQ_RKLEN], // List of SysEq record keys [Q]
 //
    *typ_n, // [K] type code of DC stoichiometry candidates {O M J I S ... }
    *CIclb, // [N] Units of IC quantity/concentration for basis compositions
    *CIcln, // [N] Units of IC quantity/concentration for non-basis compositions
    *AUclb, // [Lb] Units of setting quantities of formula units for basis system composition
-   *AUcln, // [K] Units of setting quantities of DC formulae for non-basis system composition
+   *AUcln, // [Lb] Units of setting quantities of DC formulae for non-basis system composition
 //
    (*SBM)[MAXICNAME+MAXSYMB] // Keys (names) of IC
    ;

@@ -31,6 +31,9 @@ f_getline(istream& is, gstring& str, char delim)
 }
 
 
+// first argv name of binary file with MULTI structure
+// second argv file that contained
+// -t/-b <dataCH file name> <dataBR file name1> ... <dataBR file nameN> 
 
 int
 main(int argc, char* argv[])
@@ -47,6 +50,16 @@ main(int argc, char* argv[])
       if (argc >= 3 )
         chbr_in = argv[2];
 
+// test working with txt files
+      fstream f_ch(multu_in.c_str(), ios::in );
+      ErrorIf( !f_ch.good() , multu_in.c_str(), "DataCH Fileopen error");
+
+      fstream f_ch(chbr_in.c_str(), ios::in );
+      ErrorIf( !f_ch.good() , chbr_in.c_str(), "DataBr Fileopen error");
+
+
+
+     return;
 // read multi structure
       GemDataStream f_m(multu_in, ios::in|ios::binary);
       task_.readMulti(f_m);

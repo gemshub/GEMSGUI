@@ -183,7 +183,7 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtcab ].SetPtr( dtp->CAb );
     aObj[ o_dtcab ].SetDim( dtp->nQ, dtp->La_b );
     aObj[ o_dtcan ].SetPtr( dtp->CAn );
-    aObj[ o_dtcan ].SetDim( dtp->nQ, dtp->nK );
+    aObj[ o_dtcan ].SetDim( dtp->nQ, dtp->La_b );
     aObj[ o_dtcexpr].SetPtr( dtp->cExpr );
     // aObj[ o_dtcexpr].SetDim( 1, VIZmsize(dtp->cExpr));
     aObj[ o_dtgexpr].SetPtr( dtp->gExpr );
@@ -200,6 +200,8 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtnam_nr].SetDim( 1, dtp->nK );
     aObj[ o_dtfor_n].SetPtr(dtp->for_n);
     aObj[ o_dtfor_n].SetDim( 1, dtp->nK );
+    aObj[ o_dtres].SetPtr(dtp->for_n);
+    aObj[ o_dtres].SetDim(  dtp->nK, 1 );
     aObj[ o_dtfor_b].SetPtr(dtp->for_b);
     aObj[ o_dtfor_b].SetDim( 1, dtp->La_b );
     aObj[ o_dtstl].SetPtr(dtp->stld);
@@ -213,12 +215,12 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtauclb].SetPtr(dtp->AUclb);
     aObj[ o_dtauclb].SetDim( 1, dtp->La_b );
     aObj[ o_dtaucln].SetPtr(dtp->AUcln);
-    aObj[ o_dtaucln].SetDim( 1, dtp->nK );
+    aObj[ o_dtaucln].SetDim( 1, dtp->La_b );
     aObj[ o_dtsbm].SetPtr(dtp->SBM);
     aObj[ o_dtsbm].SetDim( 1, dtp->Nb );
 
     aObj[ o_dtmuo_i].SetPtr(dtp->muo_i);
-    aObj[ o_dtmuo_i].SetDim( 1, dtp->nK );
+    aObj[ o_dtmuo_i].SetDim( dtp->nQ, dtp->nK);
     aObj[ o_dtact_n].SetPtr(dtp->act_n);
     aObj[ o_dtact_n].SetDim( dtp->nQ, dtp->nK );
     aObj[ o_dttdq].SetPtr(dtp->Tdq);
@@ -268,6 +270,9 @@ void TDualTh::dyn_set(int q)
     aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
     aObj[ o_dtnam_nr].SetDim( 1, dtp->nK );
     dtp->for_n = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_n ].GetPtr();
+    aObj[ o_dtres].SetPtr(dtp->for_n);
+    aObj[ o_dtres].SetDim(  dtp->nK, 1 );
+
     dtp->for_b = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_b ].GetPtr();
     dtp->stld = (char (*)[EQ_RKLEN])aObj[ o_dtstl ].GetPtr();
     dtp->typ_n = (char *)aObj[ o_dttyp_n ].GetPtr();
@@ -399,14 +404,16 @@ void TDualTh::dyn_new(int q)
     {
       dtp->CAb = (float *)aObj[ o_dtcab ].Alloc( dtp->nQ, dtp->La_b, F_ );
       dtp->AUclb = (char *)aObj[ o_dtauclb ].Alloc( 1, dtp->La_b, A_ );
+      dtp->CAn = (float *)aObj[ o_dtcan ].Alloc( dtp->nQ, dtp->La_b, F_ );
+      dtp->AUcln = (char *)aObj[ o_dtaucln ].Alloc( 1, dtp->La_b, A_ );
     }
     else
     {
       dtp->CAb = (float *)aObj[ o_dtcab ].Free();
       dtp->AUclb = (char *)aObj[ o_dtauclb ].Free();
+      dtp->CAn = (float *)aObj[ o_dtcan ].Free();
+      dtp->AUcln = (char *)aObj[ o_dtaucln ].Free();
     }
-    dtp->CAn = (float *)aObj[ o_dtcan ].Alloc( dtp->nQ, dtp->nK, F_ );
-    dtp->AUcln = (char *)aObj[ o_dtaucln ].Alloc( 1, dtp->nK, A_ );
 
     if( dtp->PvChi == S_ON )
         dtp->cExpr = (char *)aObj[ o_dtcexpr].Alloc( 1, 2048, S_);
@@ -442,7 +449,10 @@ void TDualTh::dyn_new(int q)
    aObj[ o_dtnam_nr].SetDim( 1, dtp->nK );
 
    dtp->for_n = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_n].Alloc(
-                                            1,  dtp->nK, MAXFORMUNITDT );
+                                         1,  dtp->nK, MAXFORMUNITDT );
+   aObj[ o_dtres].SetPtr(dtp->for_n);
+   aObj[ o_dtres].SetDim(  dtp->nK, 1 );
+
    if( dtp->La_b > 0 )
      dtp->for_b = (char (*)[MAXFORMUNITDT])aObj[ o_dtfor_b].Alloc(
                                              1, dtp->La_b, MAXFORMUNITDT );
@@ -454,7 +464,7 @@ void TDualTh::dyn_new(int q)
    dtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_dtsbm].Alloc(
                                      1, dtp->Nb, MAXICNAME+MAXSYMB );
 
-    dtp->muo_i = (double *)aObj[ o_dtmuo_i ].Alloc( 1, dtp->nK, D_ );
+    dtp->muo_i = (double *)aObj[ o_dtmuo_i ].Alloc( dtp->nQ, dtp->nK, D_ );
     dtp->act_n = (double *)aObj[ o_dtact_n ].Alloc( dtp->nQ, dtp->nK, D_ );
     dtp->Tdq = (float *)aObj[ o_dttdq ].Alloc( dtp->nQ, 1, F_ );
     dtp->Pdq = (float *)aObj[ o_dtpdq ].Alloc( dtp->nQ, 1, F_ );

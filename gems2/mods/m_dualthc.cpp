@@ -47,6 +47,8 @@ void TDualTh::Init_Analyse()
    dt_text_analyze();
    // put data to Bn
    Bn_Calc();
+   // for_n
+   make_A( dtp->nK, dtp->for_n );
    build_mu_n();  // calculate new mu_n matrix
 }
 
@@ -512,6 +514,9 @@ TDualTh::Bn_Calc()
     float *A;
     time_t crt;
 
+    if( dtp->PvICn == S_OFF  &&   dtp->PvAUb == S_OFF )
+       return;
+
 // get data fron IComp
     TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
     aIC->ods_link(0);
@@ -530,8 +535,8 @@ TDualTh::Bn_Calc()
         // icp->val;
     }
 
-// make An from dtp->for_n
-       make_A( dtp->nK, dtp->for_n );
+// make An from dtp->for_b
+       make_A( dtp->La_b, dtp->for_b );
 
   Msysb_bk = dtp->Msysb;
   Tmolb_bk = dtp->Tmolb;
@@ -564,19 +569,21 @@ TDualTh::Bn_Calc()
         } //  i
     }
 
+ if( dtp->PvAUb != S_OFF )
+ { // formul list
 
-    for( j=0; j < dtp->nK; j++ )
+    for( j=0; j < dtp->La_b; j++ )
     {
          A = dtp->An + j * dtp->Nb;
-         if( !dtp->CAn[ii*dtp->nK + j] ||
-            IsFloatEmpty( dtp->CAn[ii*dtp->nK + j] ))
+         if( !dtp->CAn[ii*dtp->La_b + j] ||
+            IsFloatEmpty( dtp->CAn[ii*dtp->La_b + j] ))
                     continue;
          DCmw = 0.;
          for( i=0; i<dtp->Nb; i++ )
          // calculation of molar mass
              DCmw += A[i]* ICw[i];
          Xincr = TCompos::pm->Reduce_Conc( dtp->AUcln[j],
-                dtp->CAn[ii*dtp->nK + j],
+                dtp->CAn[ii*dtp->La_b + j],
                  DCmw, 1.0, dtp->Tmolb, dtp->Msysb, dtp->Mwatb,
                  dtp->Vaqb, dtp->Maqb, dtp->Vsysb );
          // recalc stoichiometry
@@ -589,8 +596,8 @@ TDualTh::Bn_Calc()
           }
         } //  j
 
+     }
       MsysC /= 1e3;
-
       // Analyze control sum
       if( fabs( dtp->Tmolb ) < 1e-12 )
         dtp->Tmolb = R1C;

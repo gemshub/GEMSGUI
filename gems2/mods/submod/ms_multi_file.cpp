@@ -50,20 +50,16 @@ void TMulti::inArray( fstream& ff, char *name, char* arr,
  ff >> buf;
  if( !memcmp( name, buf+1, strlen(name)))
     Error( buf, "Illegal name of array");
-/*
- for( int ii=0, jj=0; ii<size; ii++, jj++  )
+
+ for( int ii=0; ii<size; ii++  )
  {
     ff.get(ch);
-    while( is.good() && ch |= '\'' )
+    while( ff.good() && ch != '\'' )
        ff.get(ch);
-    ff.getline( buf)
-    if(jj == 10)
-    { jj=0;  ff << endl;}
-    gstring str = gstring( arr +(ii*arr_siz), 0, arr_siz );
-    str.strip();
-    ff  << "\'" << str.c_str() << "\'" << " ";
+    ff.get( buf, arr_siz+1, '\'');
+    strncpy( arr +(ii*arr_siz), buf, arr_siz );
  }
- */
+
 }
 
 
