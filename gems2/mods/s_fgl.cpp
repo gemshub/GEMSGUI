@@ -15,7 +15,6 @@
 // See http://les.web.psi.ch/Software/GEMS-PSI for more information
 // E-mail: gems2.support@psi.ch; chud@igc.irk.ru
 //-------------------------------------------------------------------
-//
 
 #include <math.h>
 
@@ -38,7 +37,7 @@ void TFGLcalc::calc_FGL( DCOMP *dcp, int /*p*/ )
     ErrorIf( !aW.twp, "FGL", "Undefined twp");
 
     fg.Z = 1;    /* calc all */
-    fg.P2 = aW.twp->P;    /* P 10^5 Pa  i */
+    fg.P2 = aW.twp->P;    /* P 10^5   i */
     PB = aW.twp->P;
     fg.MM = dcp->mwt;        /* molar massa  */
     fg.TK = aW.twp->TC+273.15;   /* T  K i */
@@ -211,9 +210,8 @@ float TFGLcalc::SAT( float T )
       iRet = DBfind( RT_CONST, "FGCONST:Sat_H2O:" );
      }*/
     TAU=1-T/A[7];
-    KK=A[7]/T*(A[0]*TAU+A[1]*pow(TAU,(float)1.5)+A[2]*pow(TAU,(float)3)+
-             A[3]*pow(TAU,(float)3.5)+
-               A[4]*pow(TAU,(float)4)+A[5]*pow(TAU,(float)7.5));
+    KK=A[7]/T*(A[0]*TAU+A[1]*pow(TAU,1.5)+A[2]*pow(TAU,3)+A[3]*pow(TAU,3.5)+
+               A[4]*pow(TAU,4)+A[5]*pow(TAU,7.5));
     KK=A[6]*exp(KK);
     return KK;
 }
@@ -429,8 +427,6 @@ int TFGLcalc::OPTION(float P)
 float TFGLcalc::PY()
 {
     float Z1,Z2,Z3,Z4,Z5,Z;
-//    Z1=5.92714-6.09648/fg.TR-1.28862*log(fg.TR)+.169347*pow(fg.TR,(float)6.);
-//    Z2=15.2518-15.6875/fg.TR-13.4721*log(fg.TR)+.43577*pow(fg.TR,(float)6.);
     Z1=5.92714-6.09648/fg.TR-1.28862*log(fg.TR)+.169347*pow(double(fg.TR),6.);
     Z2=15.2518-15.6875/fg.TR-13.4721*log(fg.TR)+.43577*pow(double(fg.TR),6.);
     Z3=fg.WW*Z2;
@@ -503,8 +499,6 @@ float TFGLcalc::NG()
     else if( KZ>.26)
         K2=60.2091-(402.063*KZ)+(501.0*(KZ*KZ))+(641.0*(KZ*KZ*KZ));
     K4=.93-K2;
-//    D=1+(K1*pow(1-TR,(float).333333))+(K2*pow(1-TR,(float)0.666667))+
-//      (K4*pow(1-TR,(float)1.333333));
     D=1+(K1*pow(1.0-TR,.333333))+(K2*pow(1.0-TR,0.666667))+
       (K4*pow(1.0-TR,1.333333));
     X=fg.KV/D;
@@ -529,7 +523,7 @@ void TFGLcalc::FESAX(int TT,float P1,float P2, float *GTP,float *DH )
       fc.COF[7][TT]/TR/TR/TR+fc.COF[8][TT]*log(TR);
     C=fc.COF[9][TT]+fc.COF[10][TT]/TR+fc.COF[11][TT]/TR/TR;
     C+=fc.COF[12][TT]/TR/TR/TR+fc.COF[13][TT]/TR/TR/TR/TR+
-       fc.COF[14][TT]/pow(TR,(float)1.5)+fc.COF[15][TT]*log(TR);
+       fc.COF[14][TT]/pow(TR,1.5)+fc.COF[15][TT]*log(TR);
     D=fc.COF[16][TT]+fc.COF[17][TT]/TR+fc.COF[18][TT]/TR/TR;
     D+=fc.COF[19][TT]/(TR*TR*TR);
     R=A*log(P2/P1)+B*(P2-P1)/KP+C*(P2*P2-P1*P1)/KP/KP/2.;
@@ -545,8 +539,8 @@ void TFGLcalc::FESAX(int TT,float P1,float P2, float *GTP,float *DH )
     B=-(fc.COF[5][TT]*KT)/(TK*TK)-2.*fc.COF[6][TT]*KT*KT/(TK*TK*TK)-
       3.*fc.COF[7][TT]*KT*KT*KT/(TK*TK*TK*TK)+fc.COF[8][TT]/TK;
     C=-fc.COF[10][TT]*KT/(TK*TK)-2.*fc.COF[11][TT]*KT*KT/(TK*TK*TK)-
-      3.*fc.COF[12][TT]*KT*KT*KT/pow(TK,(float)4.)-4.*fc.COF[13][TT]*pow(KT,(float)4.)/
-      pow(TK,(float)5.)-1.5*fc.COF[14][TT]*pow(KT,(float)1.5)/pow(TK,(float)2.5)
+      3.*fc.COF[12][TT]*KT*KT*KT/pow(TK,4.)-4.*fc.COF[13][TT]*pow(KT,4.)/
+      pow(TK,5.)-1.5*fc.COF[14][TT]*pow(KT,1.5)/pow(TK,2.5)
       +fc.COF[15][TT]/TK;
     D=-fc.COF[17][TT]*KT/(TK*TK)-2.*fc.COF[18][TT]*KT*KT/(TK*TK*TK)
       -3.*fc.COF[19][TT]*(KT*KT*KT)/(TK*TK*TK*TK);
@@ -1266,7 +1260,6 @@ float TFGLcalc::FD()
     F1=(1/.3978)*(FR-F0);
     /*    printf(" %7.3f",F0);  */
     F=F0+(fg.WW*F1);
-//    F=pow((float)10.,F);
     F=pow(10.,double(F));
     return(F);
 }
@@ -1277,7 +1270,6 @@ float TFGLcalc::RK()
     float B, F, BX;
     B=(.086640350*82.04*fg.KT)/fg.KP;
     F=(1/fg.TR)*(1+(.48+1.574*fg.WW-.176*
-//                    (fg.WW*fg.WW))*(1-(pow(fg.TR,(float).5))))*2;
                     (fg.WW*fg.WW))*(1-(pow(double(fg.TR),.5))))*2;
     B=(fg.HV/(fg.HV-B)-(.4274802327*B*F/(.08664035*(fg.HV+B))));
     BX = (82.04*fg.TK/fg.P2)*B;
