@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $$
+// $Id$
 //
 // Implementation of DCompWizard class
 //
@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *DCOMP_HTML = "dcomp_setup";
+const char *DCOMP_HTML = "gm_dcomp";
 
 #include <qcheckbox.h>
 #include <qspinbox.h>

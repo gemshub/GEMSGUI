@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $$
+// $Id$
 //
 // Implementation of GtDemoWizard class
 //
@@ -16,7 +16,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GTDEMO_HTML = "gtdemo_setup";
+const char *GTDEMO_HTML = "gm_gtdemo";
 
 #include <qcheckbox.h>
 #include <qspinbox.h>

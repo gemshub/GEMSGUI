@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $$
+// $Id$
 //
 // Implementation of RTparmWizard class
 //
@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *RTPARM_HTML = "rtparm_setup";
+const char *RTPARM_HTML = "gm_rtparm";
 
 #include <qspinbox.h>
 #include <qstring.h>

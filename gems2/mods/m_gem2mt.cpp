@@ -687,7 +687,7 @@ TGEM2MT::RecCalc( const char * key )
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
 
-   if( mtp->PvMSg )
+   if( mtp->PvMSg != S_OFF )
     Expr_analyze( o_mtgexpr );
 
    mt_reset();

@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $$
+// $Id$
 //
 // Implementation of ReacDCWizard class
 //
@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *REACDC_HTML = "reacdc_setup";
+const char *REACDC_HTML = "gm_reacdc";
 
 #include <qcheckbox.h>
 #include <qspinbox.h>

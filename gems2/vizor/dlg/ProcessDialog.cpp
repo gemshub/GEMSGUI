@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *PROCESS_HTML = "process_setup";
+const char *PROCESS_HTML = "gm_process";
 
 #include <qcheckbox.h>
 #include <qspinbox.h>

@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $$
+// $Id$
 //
 // Implementation of ComposWizard class
 //
@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *COMPOS_HTML = "compos_setup";
+const char *COMPOS_HTML = "gm_compos";
 
 #include <qcheckbox.h>
 #include <qspinbox.h>

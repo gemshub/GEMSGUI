@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $$
+// $Id$                   
 //
 // Implementation of ProcessWizard class
 //
@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *PROCESS_HTML = "process_setup";
+const char *PROCESS_HTML = "gm_proces";
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
