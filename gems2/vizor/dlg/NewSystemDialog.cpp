@@ -3,7 +3,7 @@
 //
 // Implementation of NewSystemDialog class
 //
-// Copyright (C) 1996-2001 S.Dmytriyeva
+// Copyright (C) 1996-2002 S.Dmytriyeva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Vizor library which uses the
@@ -482,8 +482,6 @@ NewSystemDialog::closeEvent(QCloseEvent* ev)
     QWidget::closeEvent(ev);
 }
 
-<<<<<<< NewSystemDialog.cpp
-=======
 bool
 NewSystemDialog::event(QEvent* ev)
 {
@@ -496,7 +494,6 @@ NewSystemDialog::event(QEvent* ev)
     return QWidget::event(ev);
 }
 
->>>>>>> 1.5
 void                                 // Thermodynamic data
 NewSystemDialog::CmOpen_MTPARAM()
 {
