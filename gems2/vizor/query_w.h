@@ -21,6 +21,7 @@
 
 #include <qdialog.h>
 #include <qlabel.h>
+#include <qsizepolicy.h>
 
 #include "page_s.h"
 

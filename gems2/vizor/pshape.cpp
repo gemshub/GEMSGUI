@@ -1,4 +1,4 @@
-;//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 // $Id$
 //
 // Implementation of PShape, PLine, PGrid, PPoint and TPlotWin classes
@@ -26,10 +26,11 @@
 #include <math.h>
 
 #include "pshape.h"
+#include "dlg/GraphDialog.h"
 
 
 // ----------------------------------------------
-// PShape
+// PShape class
 
 PShape::PShape(TPlotWin* p, QColor col):
         par(p),
@@ -41,7 +42,7 @@ PShape::~PShape()
 {}
 
 // ----------------------------------------------
-// PLine
+// PLine class
 
 PLine::PLine(TPlotWin* par,
              const FPoint& pi1, const FPoint& pi2, QColor col, int line_size_):
@@ -49,18 +50,12 @@ PLine::PLine(TPlotWin* par,
         fp1(pi1), fp2(pi2), line_size( line_size_ )
 {}
 
-
-void
-PLine::ConvertCoordinates()
-{
-    par->RealToVisible(fp1, p1);
-    par->RealToVisible(fp2, p2);
-}
-
-
 void
 PLine::paint(QPainter& dc)
 {
+    QPoint p1 = par->RealToVisible(fp1);
+    QPoint p2 = par->RealToVisible(fp2);
+
     QPen pen(color, line_size);
     dc.setPen( pen );
     dc.moveTo(p1);
@@ -73,144 +68,95 @@ PLine::paint(QPainter& dc)
 
 PPoint::PPoint(TPlotWin* par, FPoint pi, int tp, int sz, QColor col):
         PShape(par, col),
-        fp(pi), type(tp), size(sz)
+        fp(pi), 
+	type(tp), 
+	size(sz)
 {}
 
-
-void
-PPoint::ConvertCoordinates()
-{
-    par->RealToVisible(fp, p);
-}
 
 void
 PPoint::paint(QPainter& dc)
 {
-    //  if( !draw )
-    //    return;
+    QPoint point = par->RealToVisible(fp);
     dc.setPen( QPen(color, 2) );
     dc.setBrush( QBrush::NoBrush );
 
-    switch(type)
-    {
-    case	 P_POINT:        // point
-        size = 0;
-        dc.drawEllipse( QRect(p-QPoint(size,size),p+QPoint(size+1,size+1)) );
-        break;
-    case	 P_CROSSDIAG:    // X
-        dc.drawLine( p.x()-size, p.y()+size, p.x()+size, p.y()-size);
-        dc.drawLine( p.x()-size, p.y()-size, p.x()+size, p.y()+size);
-        break;
-    case	 P_SQUARE:       // square
-        dc.drawRect(QRect(p-QPoint(size,size),p+QPoint(size+1,size+1)));
-        break;
-    case	 P_FILLSQUARE:   // fill square
-        dc.drawRect(QRect(p-QPoint(size,size),p+QPoint(size+1,size+1)));
-        dc.fillRect(QRect(p-QPoint(size,size),p+QPoint(size+1,size+1)),
-                    QBrush(color));
-        break;
-    case  P_RHOMBUS:      // rhombus
-        dc.drawLine( p.x()-size, p.y(), p.x(), p.y()-size);
-        dc.drawLine( p.x(), p.y()-size, p.x()+size, p.y());
-        dc.drawLine( p.x()+size, p.y(), p.x(), p.y()+size);
-        dc.drawLine( p.x(), p.y()+size, p.x()-size, p.y());
-        break;
-    case  P_WYE:          // Y
-        dc.drawLine( p.x()-size, p.y()-size, p.x(), p.y());
-        dc.drawLine( p.x()+size, p.y()-size, p.x(), p.y());
-        dc.drawLine( p.x(), p.y(), p.x(), p.y()+size);
-        break;
-    case	 P_STAR:         // star
-        {
-            dc.drawLine( p.x()-size, p.y(), p.x()+size, p.y());
-            dc.drawLine( p.x(), p.y()-size, p.x(), p.y()+size);
-            int scale = (int)((float)size*0.7+0.5);
-            dc.drawLine( p.x()-scale, p.y()-scale, p.x()+scale, p.y()+scale);
-            dc.drawLine( p.x()-scale, p.y()+scale, p.x()+scale, p.y()-scale);
-            break;
-        }
-    case	 P_CIRCLE:        // circle
-        dc.drawEllipse( QRect(p-QPoint(size,size),p+QPoint(size+1,size+1)) );
-        break;
-    case	 P_FILLCIRCLE:        // fill circle
-        dc.drawEllipse( QRect(p-QPoint(size,size),p+QPoint(size+1,size+1)) );
-        dc.setBrush( color );
-        dc.drawEllipse( QRect(p-QPoint(size,size),p+QPoint(size+1,size+1)) );
-        break;
-
-    case  P_FILLRHOMBUS:      // fill rhombus
-        QPointArray arr(4);
-        dc.setBrush( color );
-        arr.setPoint( 0, p.x()-size, p.y());
-        arr.setPoint( 1, p.x(), p.y()-size);
-        arr.setPoint( 2, p.x()+size, p.y());
-        arr.setPoint( 3, p.x(), p.y()+size);
-        dc.drawPolygon( arr, true);
-        break;
-    }
+    PlotTypeBtn::drawSymbol(&dc, point, type, size, color, 2);
 }
 
 
-PText::PText(TPlotWin* par, QPoint pi, QColor col, QString text_):
+/* PText is the class for the labels dragged to the plotting area
+*/
+
+PText::PText(TPlotWin* par, QPoint screenPoint, QColor col, QString text_):
         PShape(par, col),
-        point(pi),
-	text(text_)
-{}
+	txt(text_)
+{
+    setPosition(screenPoint);
+}
 
 void
 PText::paint(QPainter& dc)
 {
+    QPoint screenPoint = par->RealToVisible(point);
+
     dc.setPen( QPen(color, 2) );
     QFont font = dc.font();
     font.setBold(true);
     dc.setFont(font);
 
-    dc.drawText( point, text );
+    dc.drawText( screenPoint, txt );
+    
+    // if after PText there are some objects painted
+    // we have to (may) need to reset bold font
+    // font = dc.font();
+    // font.setBold(false);
+    // dc.setFont(font);
+}
+
+bool
+PText::contains(QPoint pt)
+{
+    QPoint screenPoint = par->RealToVisible(point);
+    QFontMetrics fm(QPainter(par).fontMetrics());
+    QRect rect(screenPoint, QSize(fm.width(txt), fm.height()));
+    rect.moveBy(0, -fm.height());
+    return rect.contains(pt);
+}
+
+void 
+PText::setPosition(QPoint screenPoint)
+{
+    point = par->VisibleToReal(screenPoint);
 }
 
 
-// TPlotWin class
+/* TPlotWin class is responcible for plotting area (lines, points, grid, labels..)
+*/
 const int bottomGap = 20;
 const int topGap = 20;
 const int leftGap = 20;
 
-TPlotWin::TPlotWin(QWidget* p, QRect rec, FPoint pt1, FPoint pt2, gstring title_):
+TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, gstring title_):
         QWidget(p),
         x1(pt1.x), y1(pt1.y), x2(pt2.x), y2(pt2.y),
-//	canvasRect(rec),
-	title(title_)
+	title(title_.c_str())
 {
     setAcceptDrops(TRUE);
-
-    QRect rect = parentWidget()->geometry();
-    setGeometry(rect.x()+2, rect.y()+2, rect.width()-4, rect.height()-4);
+    QSizePolicy mySize( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    setSizePolicy(mySize);
+    
     setPlotBounds(pt1, pt2);
 
-// seems like geomtry is not set up before show() call
-// so we have to call init() later
     show();
-    init();
 }
 
 TPlotWin::~TPlotWin()
 {
 }
 
-void
-TPlotWin::init() 
-{
-//    QFontMetrics fm(font());
-    const QFont fn("");
-    QFontMetrics fm(fn);
-    int txtWidth = fm.width(title.c_str());
-    PText* txtLabel = new PText(this, 
-	    QPoint((parentWidget()->width()-4 - txtWidth)/2, 13), Qt::black, title.c_str());
-    shapes.Add(txtLabel);
-    cerr << "width " << parentWidget()->width() << " txtWidth " << txtWidth << endl;
-}
-
 /*!
-    Sets painting area for plot and converts all coordinates
+    Sets real coordinates of painting area and recalculates coefficients for screen points
 */
 void
 TPlotWin::setPlotBounds(FPoint pt1, FPoint pt2)
@@ -233,10 +179,7 @@ TPlotWin::setPlotBounds(FPoint pt1, FPoint pt2)
     else
         ay = (geometry().height()-bottomGap-topGap) / 0.0001;
 
-    by = ROUND(y1*ay) - topGap; // we shift here only on top gap - not bottom
-
-    for( uint ii=0; ii<shapes.GetCount(); ii++ )
-        shapes[ii].ConvertCoordinates();
+    by = /*ROUND(y1*ay)*/0 - topGap; // we shift here only on top gap - not bottom
 }
 
 void 
@@ -252,8 +195,7 @@ void
 TPlotWin::resizeEvent(QResizeEvent* qpev)
 {
     QRect rect = parentWidget()->geometry();
-    setGeometry(rect.x()+2, rect.y()+2, rect.width()-4, rect.height()-4);
-    setPlotBounds(FPoint(x1, y1), FPoint(x2, y2));
+    setGeometry(2, 2, rect.width()-4, rect.height()-4);
     update();
 }
 
@@ -264,18 +206,23 @@ TPlotWin::resizeEvent(QResizeEvent* qpev)
 void
 TPlotWin::paintEvent(QPaintEvent* qpev)
 {
-    //  dc.SetBkMode(TRANSPARENT);
+    setPlotBounds(FPoint(x1, y1), FPoint(x2, y2));
+
     QPainter dc(this);
-    PaintToDC(dc, dc.window());
+    PaintToDC(dc);
 }
 
 /*!
-    Paints contents of the plot to the DC within canvas rectangle
+    Paints contents of the plot to the DC
 */
 void
-TPlotWin::PaintToDC(QPainter& dc, QRect DC_canvas)
+TPlotWin::PaintToDC(QPainter& dc)
 {
     paintGrid(dc);
+
+    int txtWidth = dc.fontMetrics().width(title);
+    QPoint point((dc.window().width() - txtWidth)/2, 13);
+    dc.drawText(point, title);
 
     for( uint ii=0; ii<shapes.GetCount(); ii++ )
         shapes[ii].paint(dc);
@@ -328,10 +275,16 @@ TPlotWin::paintGrid(QPainter& dc)
     Converts floating point coordinates to integer respecting to current plotting area
     Also does reversing by OY, because 0,0 on screen is upper left - not lower left as in real world
 */
-void TPlotWin::RealToVisible(const FPoint& f, QPoint& to)
+QPoint TPlotWin::RealToVisible(const FPoint& f)
 {
-    to.setX((int)ROUND(ax * f.x - bx));
-    to.setY((int)ROUND(ay * (y2-f.y) - by));
+    return QPoint((int)ROUND(ax * f.x - bx),
+		(int)ROUND(ay * (y2-f.y) - by));
+}
+
+FPoint TPlotWin::VisibleToReal(const QPoint& vis)
+{
+    return FPoint(  (float(vis.x() + bx) / ax),
+		    (y2 - (float(vis.y() + by) / ay)) );
 }
 
 void
@@ -346,18 +299,51 @@ TPlotWin::dragEnterEvent(QDragEnterEvent* event)
 void
 TPlotWin::dropEvent(QDropEvent* event)
 {
-    QImage image;
+//    QImage image;
     QString text;
 
-    if ( QImageDrag::decode(event, image) ) {
+//    if ( QImageDrag::decode(event, image) ) {
       //insertImageAt(image, event->pos());
-    }
-    else if ( QTextDrag::decode(event, text) ) {
-      shapes.Add(new PText(this, event->pos(), Qt::black, text));
+//    }
+//    else 
+    if ( QTextDrag::decode(event, text) ) {
+
+	int ii;
+        for(ii=shapes.GetCount()-1; ii>=0; ii--) {
+	    PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
+	    if( txtLabel != 0 && txtLabel->text() == text ) {
+		txtLabel->setPosition(event->pos());
+	    }
+	}
+	if( ii < 0 )
+    	    shapes.Add(new PText(this, event->pos(), Qt::black, text));
       update();
     }
 }
 
+void 
+TPlotWin::mousePressEvent( QMouseEvent *e ) {
+//QWidget::mousePressEvent( e );
+
+    for(int ii=shapes.GetCount()-1; ii>=0; ii--) {
+	PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
+	if( txtLabel != 0 && txtLabel->contains(e->pos()) ) {
+
+	    QFontMetrics fm = QPainter(this).fontMetrics();
+	    QPixmap pixmap(fm.width(txtLabel->text()), fm.height());
+	    QPainter dc(&pixmap);
+	    txtLabel->paint(dc);
+	    //dc.setPen( Qt::black );
+	    //dc.drawText(0, 0, txtLabel->text());
+
+	    QTextDrag *drag = new QTextDrag( txtLabel->text(), this );
+	    drag->setPixmap(pixmap, QPoint(0, pixmap.height()));
+	    drag->drag();
+	    break;
+	}
+    }
+
+}
 
 // ----------------------------------------------
 // PGrid

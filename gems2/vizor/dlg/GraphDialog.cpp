@@ -27,8 +27,8 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qpaintdevicemetrics.h>
-#include <qsimplerichtext.h>
 #include <qdragobject.h>
+#include <qimage.h>
 
 #include "GraphDialog.h"
 #include "LegendDialog.h"
@@ -43,7 +43,7 @@ QColor plotColor(int n)
     return QColor( (n*30)%256, (128+(n*33))%256, (256-(n*37))%256);
 }
 
-/*! Label of the legend frame, that allows to drag the name to the plotting area
+/*! Labels in the legend frame, that allows to drag the name to the plotting area
 */
 
 class DragLabel:
@@ -62,6 +62,52 @@ class DragLabel:
 	}
 };
 
+/*! Symbols in the legend frame, that allows to drag the name to the plotting area
+*/
+
+class SymbolLabel:
+    public QLabel
+{
+	int type;
+	int lineSize;
+	QColor color;
+
+    protected:
+/*	void mousePressEvent( QMouseEvent *e ) {
+	    QTextDrag *drag = new QTextDrag( text(), this );
+	    drag->setPixmap(QPixmap::grabWidget(this), QPoint(0,height()-5));
+	    drag->drag();
+	}
+*/
+	void drawContents(QPainter* dc);
+	
+    public:
+	SymbolLabel(QWidget* parent, const TPlotLine& line):
+	    QLabel(parent) {
+		setData(line);
+	    }
+	void setData(const TPlotLine& ln) {
+	    color = QColor(ln.red, ln.green, ln.blue );
+            type = ln.type;
+	    lineSize = ln.line_size;
+	}
+};
+
+void 
+SymbolLabel::drawContents(QPainter* dc)
+{
+    const int size = 4;
+    QRect rect(3, 3, width()-6, height()-6);
+    QPoint center = rect.center();
+    PlotTypeBtn::drawSymbol(dc, center, type, size, color);
+
+    if( lineSize > 0 )
+    {
+	dc->drawLine( rect.x(), center.y(), center.x()-size, center.y());
+	dc->drawLine( center.x()+size, center.y(), rect.width(), center.y());
+    }
+}
+
 
 /*!
    The constructor
@@ -79,10 +125,7 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
     if( maxX == minX ) maxX += 1.;
     if( maxY == minY ) maxY += 1.;
 
-    resize(490, 310);
-    QRect win(10, 5, width()-100, height()-20);
-
-    plot = new TPlotWin(plotFrame, win,
+    plot = new TPlotWin(plotFrame,
 		    FPoint(minX, minY),
                     FPoint(maxX, maxY),
 			gr_data.title);
@@ -96,6 +139,17 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
 
 GraphDialog::~GraphDialog()
 {}
+
+
+/* if this is for adding points - we don't need Clear() and Show() - just add
+*/
+void GraphDialog::ShowNew()
+{
+    plot->Clear();
+    Show();
+    plot->update();
+    qApp->processEvents();
+}
 
 
 // show all graphs
@@ -113,19 +167,18 @@ void GraphDialog::Show()
 
     // Insert Lines for legend box
 
-    int y=30; //420;
+    int y = 20;
     for( uint ii=0, kk=0; ii<gr_data.plots.GetCount(); ii++, y+=10 )
     {
-        for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++, y+=25 )
+        for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++, y+=20 )
         {
-            PlotTypeBtn* pBtn = new PlotTypeBtn( gr_data.lines[kk], pGrpLegend ); //this );
-	    aLegendButtons.Add( pBtn );
-            pBtn->setFlat(true);
-	    pBtn->setGeometry( 3, y, 32, 15 );
+            SymbolLabel* pLabel1 = new SymbolLabel( pGrpLegend, gr_data.lines[kk]);
+	    aSymbolLabels.Add( pLabel1 );
+	    pLabel1->setGeometry( 3, y, 32, 17 );
 
             QLabel* pLabel = new DragLabel( pGrpLegend );
 	    aLegendLabels.Add( pLabel );
-            pLabel->setGeometry( 3+35, y, 65, 20 );
+            pLabel->setGeometry( 3 + 35, y, 65, 17 );
             pLabel->setText( gr_data.lines[kk].name );
         }
     }
@@ -147,13 +200,14 @@ void GraphDialog::ShowPlots()
             { //check location into min-max region
                 /*      if( pnts[i].x >= minX && pnts[i].x<= maxX &&
                           pnts[i].y >= minY && pnts[i].y<= maxY )
-                */      plot->Add(new PPoint(plot, pnts[i],
-                    gr_data.getType(nLn), gr_data.getSize(nLn),
-                    getColor(nLn)));
-                if( gr_data.getLineSize(nLn)>0 && i != 0)
+                */
+		plot->Add(new PPoint(plot, pnts[i],
+            			gr_data.getType(nLn), gr_data.getSize(nLn), getColor(nLn)));
+		    
+                if( gr_data.getLineSize(nLn) > 0 && i != 0 )
                 { // insert line
                     plot->Add(new PLine(plot, pnts[i-1], pnts[i],
-                    getColor(nLn), gr_data.getLineSize(nLn) ));
+                		    getColor(nLn), gr_data.getLineSize(nLn) ));
                 }
             }
         }
@@ -162,20 +216,9 @@ void GraphDialog::ShowPlots()
 void
 GraphDialog::resizeEvent(QResizeEvent* qpev)
 {
-//    pGroupBox->move(10, height() - pGroupBox->height() - 10);
-//    pGrpLegend->move(width()-115, 10);
-
-//    plot->resize(width()-130, height()-20);
+    GraphDialogData::resizeEvent(qpev);
+    plot->resize(plotFrame->width(), plotFrame->height());
     update();
-}
-
-void GraphDialog::ShowNew()
-{
-    plot->Clear();
-    plot->init();
-    Show();
-    plot->update();
-    qApp->processEvents();
 }
 
 void
@@ -212,19 +255,17 @@ GraphDialog::Apply()
     if( maxX == minX ) maxX += 1.;
     if( maxY == minY ) maxY += 1.;
 
-    int y=30; //420;
+    int y = 20;
     for( uint ii=0, kk=0; ii<gr_data.plots.GetCount(); ii++, y+=10 )
     {
         for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++, y+=25 )
         {
-	    aLegendButtons[kk].setData( gr_data.lines[kk] );
+	    aSymbolLabels[kk].setData( gr_data.lines[kk] );
 	    aLegendLabels[kk].setText( gr_data.lines[kk].name );
         }
     }
 
-
     plot->Clear();
-    plot->init();
     Show();
     plot->update();
     pGrpLegend->update();
@@ -279,6 +320,37 @@ GraphDialog::CmFragment()
     //date();
 }
 
+void
+GraphDialog::CmSave()
+{
+    QStrList formatList = QImageIO::outputFormats();
+    
+    QString filter;
+    QStrListIterator it( formatList );
+    for( ; it != 0; ++it ) {
+	if( !filter.isEmpty() )
+	    filter.append(";;");
+	QString str = *it;
+	filter.append(str);
+	filter.append(" Files (*.");
+	filter.append(str.lower());
+	filter.append(")");
+    }
+
+    QString selectedFilter;
+    QString fn = QFileDialog::getSaveFileName(
+          ".", filter, this, "savedlg", "Saving Plotting Image", &selectedFilter );
+    if ( !fn.isEmpty() )
+    {
+	QString format( selectedFilter.left(3) );
+	if( !fn.contains('.') )
+	{
+	    fn.append(".");
+	    fn.append(format.lower());
+	}
+	QPixmap::grabWidget(plot).save(fn, format);
+    }
+}
 
 #ifndef __unix
 #if QT_VERSION < 3
@@ -294,7 +366,7 @@ GraphDialog::CmPrint()
 
     if( prt.setup() )
     {
-        QPainter p(&prt);
+        QPainter painter(&prt);
 
 #ifndef __unix
 #if QT_VERSION < 3
@@ -302,7 +374,7 @@ GraphDialog::CmPrint()
 #endif
 #endif
 
-        QPaintDeviceMetrics metrics(p.device());
+        QPaintDeviceMetrics metrics(painter.device());
 //        int dpix = metrics.logicalDpiX();
 //        int dpiy = metrics.logicalDpiY();
 //        const int margin = 10;//72; // pt
@@ -311,24 +383,15 @@ GraphDialog::CmPrint()
 //        metrics.width()-margin*dpix/72*2,
 //        metrics.height()-margin*dpiy/72*2 );
 
-        QColor c;
-        c.setHsv( 0, 0, 0) ;//(1 * 255)/2, 255/2, 255 );// rainbow effect
-        p.setPen(c);
-	p.setFont(QFont("Times", 10));
+        //QColor c;
+        //c.setHsv(0, 0, 0) ;//(1 * 255)/2, 255/2, 255 );// rainbow effect
+        painter.setPen(Qt::black);
+	painter.setFont(QFont("Times", 10));
 
-// fake - not used
-//	QRect win( body.x()+40, body.height()+20, body.width()-130, body.height()-50);
-
-//	p.scale(metrics.width()/double(plot->width()), metrics.height()/double(plot->height()));
-	p.translate(40, 50);
-	p.scale(metrics.logicalDpiX()/72., metrics.logicalDpiY()/72.); // seems to be always = 1
-/*        p.drawText( 5, plot->height() + 20, px0->text() );
-        p.drawText( plot->width() - 30, plot->height() + 20, px1->text() );
-        p.drawText( -20, plot->height() - 15, py0->text() );
-        p.drawText( -20, 5, py1->text() );
-*/
-	QRect win;
-	plot->PaintToDC(p, win);
+//	painter.scale(metrics.width()/double(plot->width()), metrics.height()/double(plot->height()));
+	painter.translate(40, 50);
+	painter.scale(metrics.logicalDpiX()/72., metrics.logicalDpiY()/72.); // seems to be always = 1
+	plot->PaintToDC(painter);
 
     }
 }
@@ -343,7 +406,7 @@ GraphDialog::setBackgrColor( QColor color )
     gr_data.isBackgr_color = true;
 
     plot->setBackgroundColor( color );
-    update();
+//    update();
     plot->update();
 }
 
@@ -353,10 +416,12 @@ GraphDialog::getBackgrColor()
     return  plot->backgroundColor();
 }
 
-// ----------------------------
-//--------- PlotTypeBtn -------
 
-void PlotTypeBtn::drawButtonLabel(QPainter * paint)
+//*************************************************
+//--------- PlotTypeBtn -------
+//*************************************************
+
+void PlotTypeBtn::drawButtonLabel(QPainter* paint)
 {
     QColor color( plLine.red, plLine.green, plLine.blue);
 
@@ -365,6 +430,8 @@ void PlotTypeBtn::drawButtonLabel(QPainter * paint)
 
     int size = 4;//plLine.size;
 
+    drawSymbol(paint, center, plLine.type, size, color);
+/*
     //paint->setBrush( QBrush::NoBrush );
     paint->setPen( color );
     switch(plLine.type)
@@ -424,7 +491,7 @@ void PlotTypeBtn::drawButtonLabel(QPainter * paint)
         paint->drawPolygon(arr, true);
         break;
     }
-
+*/
     // line, not crossing the point mark
     if(plLine.line_size > 0 )
     {
@@ -433,7 +500,73 @@ void PlotTypeBtn::drawButtonLabel(QPainter * paint)
     }
 
     QPushButton::drawButtonLabel(paint);
+}
 
+
+// static
+void 
+PlotTypeBtn::drawSymbol(QPainter *paint, const QPoint& center, 
+			    int type, int size, const QColor& color, int width)
+{
+    //paint->setBrush( QBrush::NoBrush );
+    paint->setPen( QPen(color, width) );
+    switch(type)
+    {
+    case	 P_POINT:        // point
+        size = 2;
+        paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size+1,size+1)) );
+        break;
+    case	 P_CROSSDIAG:    // X
+        paint->drawLine( center.x()-size, center.y()+size, center.x()+size, center.y()-size);
+        paint->drawLine( center.x()-size, center.y()-size, center.x()+size, center.y()+size);
+        break;
+    case	 P_SQUARE:       // square
+        paint->drawRect(QRect(center-QPoint(size,size), center+QPoint(size,size)));
+        break;
+    case	 P_FILLSQUARE:   // fill square
+        paint->drawRect(QRect(center-QPoint(size,size), center+QPoint(size,size)));
+        paint->fillRect(QRect(center-QPoint(size,size), center+QPoint(size,size)), QBrush(color));
+        break;
+    case  P_RHOMBUS:      // rhombus
+        size++;
+        paint->drawLine( center.x()-size, center.y(), center.x(), center.y()-size);
+        paint->drawLine( center.x(), center.y()-size, center.x()+size, center.y());
+        paint->drawLine( center.x()+size, center.y(), center.x(), center.y()+size);
+        paint->drawLine( center.x(), center.y()+size, center.x()-size, center.y());
+        break;
+    case  P_WYE:          // Y
+        paint->drawLine( center.x()-size, center.y()-size, center.x(), center.y());
+        paint->drawLine( center.x()+size, center.y()-size, center.x(), center.y());
+        paint->drawLine( center.x(), center.y(), center.x(), center.y()+size);
+        break;
+    case	 P_STAR:         // star
+        {
+            paint->drawLine( center.x()-size, center.y(), center.x()+size, center.y());
+            paint->drawLine( center.x(), center.y()-size, center.x(), center.y()+size);
+            int scale = (int)ROUND((float)size*0.7+0.5);
+            paint->drawLine( center.x()-scale, center.y()-scale, center.x()+scale, center.y()+scale);
+            paint->drawLine( center.x()-scale, center.y()+scale, center.x()+scale, center.y()-scale);
+            break;
+        }
+    case	 P_CIRCLE:        // circle
+        paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size,size)) );
+        break;
+    case	 P_FILLCIRCLE:        // fill circle
+        paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size+1,size+1)) );
+        paint->setBrush( color );
+        paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size+1,size+1)) );
+        break;
+    case  P_FILLRHOMBUS:      // fill rhombus
+        size++;
+        QPointArray arr(4);
+        paint->setBrush( color );
+        arr.setPoint( 0, center.x()-size, center.y());
+        arr.setPoint( 1, center.x(), center.y()-size);
+        arr.setPoint( 2, center.x()+size, center.y());
+        arr.setPoint( 3, center.x(), center.y()+size);
+        paint->drawPolygon(arr, true);
+        break;
+    }
 }
 
 void PlotTypeBtn::setData( TPlotLine& ln)

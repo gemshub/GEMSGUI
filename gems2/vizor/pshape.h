@@ -33,11 +33,11 @@
 */
 struct FPoint
 {
-    float x,y;
+    float x, y;
 
     FPoint()
     {
-        x=y=0;
+        x = y = 0;
     }
     FPoint(float xx, float yy)
     {
@@ -79,12 +79,12 @@ public:
     PShape(TPlotWin* par, QColor col);
     virtual ~PShape();
 
-    void SetColor(QColor col)
-    {
+    virtual void paint(QPainter& dc) = 0;
+
+    void SetColor(QColor col) {
         color = col;
     }
-    virtual void paint(QPainter& dc)=0;
-    virtual void ConvertCoordinates()=0;
+//    virtual void ConvertCoordinates()=0;
 };
 
 
@@ -95,7 +95,7 @@ class PLine:
             public PShape
 {
     FPoint fp1, fp2;
-    QPoint p1, p2;
+//    QPoint p1, p2;
     int line_size;
 
 public:
@@ -103,7 +103,7 @@ public:
           const FPoint& pi1, const FPoint& pi2, QColor col, int size);
 
     virtual void paint(QPainter& dc);
-    void ConvertCoordinates();
+//    void ConvertCoordinates();
 };
 
 enum PlotPointType { // using point types
@@ -125,16 +125,13 @@ enum PlotPointType { // using point types
 class PPoint:
             public PShape
 {
-    //  bool draw;
     FPoint fp;
-    QPoint p;
     int type;
     int size;
 public:
     PPoint(TPlotWin* par, FPoint pi, int tp, int sz, QColor col);
 
     virtual void paint(QPainter& dc);
-    void ConvertCoordinates();
 };
 
 /*!
@@ -144,14 +141,64 @@ public:
 class PText:
             public PShape
 {
-    QPoint point;
-    QString text;
+    FPoint point;
+    QString txt;
 
 public:
     PText(TPlotWin* par, QPoint pi, QColor col, QString text);
 
     virtual void paint(QPainter& dc);
-    void ConvertCoordinates() {}
+    bool contains(QPoint pt);
+    void setPosition(QPoint pt);
+    QString text() {
+	return txt;
+    }
+};
+
+
+/*!
+    Plotting area window
+*/
+class TPlotWin:
+            public QWidget
+{
+    float	x1, y1, x2, y2;
+    float	ax, ay;
+    int		bx, by;
+//    QRect	canvasRect;
+    QString	title;
+    TIArray<PShape> shapes;
+    int gridCount;
+
+protected:
+    virtual void paintEvent(QPaintEvent* qpev);
+    virtual void resizeEvent(QResizeEvent* qpev);
+    virtual void mousePressEvent( QMouseEvent *e );
+    
+public:
+    TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, gstring title);
+    ~TPlotWin();
+
+    void setPlotBounds(FPoint pt1, FPoint pt2);
+    void setGridCount(int numGrids);
+
+    void PaintToDC(QPainter& dc);
+    void paintGrid(QPainter& dc);
+    void Clear() {
+	shapes.Clear();
+    }
+
+    int Add(PShape* p) {
+//        p->ConvertCoordinates();
+        return shapes.Add(p);
+    }
+//    void mul(const FPoint& f, QPoint& to);
+    QPoint RealToVisible(const FPoint& real);
+    FPoint VisibleToReal(const QPoint& screen);
+//    const QRect& getCanvasRect() { return canvasRect; }
+
+    void dragEnterEvent(QDragEnterEvent* event);
+    void dropEvent(QDropEvent* event);
 };
 
 
@@ -187,50 +234,5 @@ public:
     {}
 };
 */
-
-/*!
-    Plotting area window
-*/
-class TPlotWin:
-            public QWidget
-{
-    float	x1, y1, x2, y2;
-    float	ax, ay;
-    int		bx, by;
-    QRect	canvasRect;
-    gstring	title;
-    TIArray<PShape> shapes;
-    int gridCount;
-
-protected:
-    virtual void paintEvent(QPaintEvent* qpev);
-    virtual void resizeEvent(QResizeEvent* qpev);
-
-public:
-    TPlotWin(QWidget* p, QRect rec, FPoint pt1, FPoint pt2, gstring title);
-    ~TPlotWin();
-
-    void setPlotBounds(FPoint pt1, FPoint pt2);
-    void setGridCount(int numGrids);
-    void init();
-
-    void PaintToDC(QPainter& dc, QRect canvas);
-    void paintGrid(QPainter& dc);
-    void Clear() {
-	shapes.Clear();
-    }
-
-    int Add(PShape* p) {
-        p->ConvertCoordinates();
-        return shapes.Add(p);
-    }
-//    void mul(const FPoint& f, QPoint& to);
-    void RealToVisible(const FPoint& f, QPoint& to);
-    const QRect& getCanvasRect() { return canvasRect; }
-
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dropEvent(QDropEvent* event);
-};
-
 
 #endif    // _pshape_h

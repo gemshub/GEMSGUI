@@ -24,6 +24,7 @@
 #include <qpushbutton.h>
 #include <qdialog.h>
 #include <qcolor.h>
+#include <qfiledialog.h>
 
 #include "GraphDialogData.h"
 
@@ -40,13 +41,14 @@ class PlotTypeBtn:
     TPlotLine plLine;
 
 protected:
-//    void mousePressEvent( QMouseEvent * /*e*/ );
     void drawButtonLabel(QPainter* paint);
 
 public:
-    PlotTypeBtn(  TPlotLine& ln, QWidget* parent=0, const char* name=0):
-            QPushButton( parent, name ), plLine(ln)
+    PlotTypeBtn(TPlotLine& ln, QWidget* parent=0, const char* name=0):
+            QPushButton( parent, name ),
+	    plLine(ln)
     { }
+
 
     void setName( const char* );
     void setData( TPlotLine& ln);
@@ -54,8 +56,12 @@ public:
     {
         return plLine;
     }
+
+    static void drawSymbol(QPainter* painter, const QPoint& center, 
+			    int type, int size, const QColor& color, int width=1);
 };
 
+class SymbolLabel;
 
 class GraphDialog:
             public GraphDialogData
@@ -69,7 +75,7 @@ class GraphDialog:
     bool isFragment;
     float minX, minY;
     float maxX, maxY;
-    TIArray<PlotTypeBtn> aLegendButtons;
+    TIArray<SymbolLabel> aSymbolLabels;
     TIArray<QLabel> aLegendLabels;
 
     void Show();
@@ -81,6 +87,7 @@ protected slots:
     void CmLegend();
     void CmFragment();
     void CmPrint();
+    void CmSave();
 
 protected:
     void resizeEvent(QResizeEvent* qpev);
@@ -89,7 +96,7 @@ public:
 
     GraphData gr_data;
 
-    GraphDialog( TCModule *pmodule, GraphData& data);
+    GraphDialog(TCModule *pmodule, GraphData& data);
     ~GraphDialog();
 
 
