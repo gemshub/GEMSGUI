@@ -148,7 +148,7 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
 
             DragLabel* pLabel = new DragLabel( pGrpLegend );
 	    aLegendLabels.Add( pLabel );
-            pLabel->setGeometry( 3 + 35, y, 65, 17 );
+            pLabel->setGeometry( 3 + 35, y, 85, 17 );
             pLabel->setText( gr_data.lines[kk].name );
         }
     }
