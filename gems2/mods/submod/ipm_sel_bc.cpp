@@ -1059,6 +1059,7 @@ IN7: // PhaseListPress();
 void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 {
     int i,j,jj,ii,jb,je,k;
+    int isp, ist;  double Ez, Psi;   // added  KD 23.11.01
 //    double SPmol,SPmol1;
     double  Dsur, DsurT, MMC, *XU;
     XU = new double[pmp->L];
@@ -1089,14 +1090,15 @@ void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 
     for(j=jb;j<je;j++)
     {
-      if( XF[k] > pmp->lowPosNum )
+      if( XF[k] >= pmp->DSM ) // pmp->lowPosNum ) fixed by KD 23.11.01
       {
          XU[j] = -pmp->G0[j] -pmp->lnGam[j]
                  + DualChemPot( pmp->U, pmp->A+j*pmp->N, pmp->NR );
          if( pmp->PHC[k] == PH_AQUEL ) // pmp->LO && k==0)
          {
             if(j == pmp->LO)
-                XU[j] += Dsur - 1. + 1. / ( 1.+ Dsur ) + log(XF[k]);
+                ;     //     disabled by KD 23.11.01
+//                XU[j] += Dsur - 1. + 1. / ( 1.+ Dsur ) + log(XF[k]);
             else
                 XU[j] += Dsur + log(XFA[k]);
          }
@@ -1105,10 +1107,23 @@ void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
             if( pmp->DCC[j] == DC_PEL_CARRIER ||
                  pmp->DCC[j] == DC_SUR_CARRIER ||
                  pmp->DCC[j] == DC_SUR_MINAL )
-                XU[j] += Dsur - 1.0 + 1.0 / ( 1.0 + Dsur )
-                       - DsurT + DsurT / ( 1.0 + DsurT ) + log(XF[k]);
-            else
-                XU[j] += Dsur + DsurT/( 1.0 + DsurT ) + log(XFA[k]);
+                ;    //     disabled by KD 23.11.01
+//                XU[j] += Dsur - 1.0 + 1.0 / ( 1.0 + Dsur )
+//                      - DsurT + DsurT / ( 1.0 + DsurT ) + log(XF[k]);
+            else  // rewritten by KD  23.11.01
+               Psi = 0.0;
+               Ez = pmp->EZ[j];
+               /* Get ist - index of surface type */
+               ist = pmp->SATNdx[j][0] / MSPN;
+               /* and isp - index of surface plane  */
+               isp = pmp->SATNdx[j][0] % MSPN;
+               if( !isp )
+                   /* This is A (0) plane */
+                   Psi = pmp->XpsiA[k][ist];
+               else /* This is B plane */
+                  Psi = pmp->XpsiB[k][ist];
+               XU[j] += Dsur + DsurT/( 1.0 + DsurT ) + log(XFA[k])+
+               log( DsurT * pmp->Nfsp[k][ist] ) - pmp->FRT * Ez * Psi;
          }
          else
            XU[j] += log(XF[k]);

@@ -954,7 +954,7 @@ if( minB < pa.p.DB )  // KD - foolproof
    pmp->DX *= (0.097+0.95/(1+exp(-(log10(minB)+6.1)/0.54)));
    if( pmp->DX < 0.01 * pa.p.DK )
        pmp->DX = 0.01 * pa.p.DK;
-   pmp->DSM = pa.p.DS;
+   pmp->DSM = pa.p.DS;  // Shall we add  * sfactor ?
 
    pVisor->Update(false);
     // Analyzing if Simplex approximation is needed
