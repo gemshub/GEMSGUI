@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if [ "`uname`" == "Darwin" ]; then 
-exec `pwd`/gems2.app/Contents/MacOS/gems2 -s ~/Gems2Lin/program -u ~/Gems2Lin 
+exec `pwd`/gems2.app/Contents/MacOS/gems2 -s ~/Gems2Data/program -u ~/Gems2Data
 else
-exec ./gems2 -c -s ~/Gems2Lin/program -u ~/Gems2Lin
+exec ./gems2 -c -s ~/Gems2Data/program -u ~/Gems2Data
 fi
 
