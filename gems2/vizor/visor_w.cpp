@@ -493,7 +493,11 @@ int TVisorImp:: getCharWidth() const
 
 int TVisorImp:: getCharHeight() const
 {
+#ifdef __unix
     return charHeight + 2;
+#else
+    return charHeight + 4;
+#endif
 }
 
 int TVisorImp:: getCellWidth() const
