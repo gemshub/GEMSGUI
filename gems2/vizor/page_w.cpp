@@ -695,11 +695,13 @@ TField::SetFirstCellFocus()
 void
 TField::setFocused(TCell* cell)
 {
-    if( selected )
-	getPage()->clearSelectedObjects();
-    focused = cell;
-    if( focused )
-	focused->SetDescription();
+    if( cell != focused ) {
+	if( selected )
+	    getPage()->clearSelectedObjects();
+	focused = cell;
+	if( focused )
+	    focused->SetDescription();
+    }
 }
 
 void
@@ -779,7 +781,7 @@ TField::CmCopyToClipboard()
 }
 
 void
-TField::setFromString(const QString& str, int N1, int N2, int M1, int M2) throw(TError)
+TField::setFromString(const QString& str, int N1, int N2, int M1, int M2, bool transpose) throw(TError)
 {
 	if( str.isEmpty() )
 	    return;
@@ -787,28 +789,40 @@ TField::setFromString(const QString& str, int N1, int N2, int M1, int M2) throw(
 	const QStringList rows = QStringList::split('\n', str, true);
 
 	int rowNum = N1;
+	const int nLimit = (transpose) ? (N1 + M2-M1) : N2;
 	QStringList::const_iterator it;
-	for( it = rows.begin(); it != rows.end() && rowNum < N2; ++it, rowNum++) {
+	for( it = rows.begin(); it != rows.end() && rowNum < nLimit; ++it, rowNum++) {
 	    if( (*it).isEmpty() )
 		continue;
 	
 	    const QStringList cells = QStringList::split('\t', *it, true);
 
 	    int cellNum = M1;
+	    const int mLimit = (transpose) ? (M1 + N2-N1) : M2;
 	    QStringList::const_iterator cellIt;
 	    for( cellIt = cells.begin(); 
-			cellIt != cells.end() && cellNum < M2; ++cellIt, cellNum++) {
+			cellIt != cells.end() && cellNum < mLimit; ++cellIt, cellNum++) {
 		QString value(*cellIt);
 
 		if( value.isEmpty() )
 		    value = S_EMPTY;
 		//cerr << "pasting row " << rowNum << " cell " << cellNum << ": '" << value << "'" << endl;
 
+		if( transpose ) {
+		if( ! GetObj().SetString( value, (cellNum-M1)+N1, (rowNum-N1)+M1 ) ) {
+		    vstr err(200);
+		    sprintf(err, "Invalid value for cell [%d, %d]: '%.100s'!",
+				rowNum, cellNum, (const char*)value);
+		    throw TError("Object paste", err.p);
+		}
+		}
+		else {
 		if( ! GetObj().SetString( value, rowNum, cellNum ) ) {
 		    vstr err(200);
 		    sprintf(err, "Invalid value for cell [%d, %d]: '%.100s'!",
 				rowNum, cellNum, (const char*)value);
 		    throw TError("Object paste", err.p);
+		}
 		}
 	    }
 	}
@@ -817,15 +831,21 @@ TField::setFromString(const QString& str, int N1, int N2, int M1, int M2) throw(
 void
 TField::CmPasteFromClipboard()
 {
-    pasteIntoArea(selectN1, selectN2, selectM1, selectM2);
+    pasteIntoArea(selectN1, selectN2, selectM1, selectM2, false);
+}
+
+void
+TField::CmPasteTransposedFromClipboard()
+{
+    pasteIntoArea(selectN1, selectN2, selectM1, selectM2, true);
 }
 
 void 
-TField::pasteIntoArea(int N1, int N2, int M1, int M2)
+TField::pasteIntoArea(int N1, int N2, int M1, int M2, bool transpose)
 {
     QString clipboard = QApplication::clipboard()->text(QClipboard::Clipboard);
 
-//cerr << "pasteInto " << N1 << " " << N2 << " " << M1 << " " << M2 << endl;
+//cerr << "pasteInto " << N1 << " " << N2 << " " << M1 << " " << M2 << " transpose: " << transpose << endl;
     
     uint lastCR = clipboard.findRev('\n');
     if( lastCR == clipboard.length() - 1 )
@@ -833,21 +853,19 @@ TField::pasteIntoArea(int N1, int N2, int M1, int M2)
     
     const int clipN = clipboard.contains('\n') + 1;
     QString undoString;
-    bool largerN = false, largerM = false;
 
     try {
-	if( clipN > (N2 - N1) ) {
-	    largerN = true;
-	}
+	const bool largerN = transpose ? (clipN > (M2 - M1)) : (clipN > (N2 - N1));
     
 	const QStringList rows = QStringList::split('\n', clipboard, true);
 	int rowNum = N1;
 	
+	bool largerM = false;
 	for(QStringList::const_iterator it = rows.begin(); it != rows.end(); ++it, rowNum++) {
 	    int clipM = (*it).contains('\t') + 1;
-	    if( clipM > (M2 - M1) ) {
-		largerM = true;
-	    }
+	    largerM = transpose ? (clipM > (N2 - N1)) : (clipM > (M2 - M1));
+	    if( largerM )
+		break;
 	    
 ///	    const QStringList cells = QStringList::split('\t', *it, true);
 ///	    for(QStringList::const_iterator cellIt = cells.begin(); cellIt != cells.end(); ++cellIt) {
@@ -864,7 +882,7 @@ TField::pasteIntoArea(int N1, int N2, int M1, int M2)
     
 	undoString = createString(N1, N2, M1, M2);
     
-	setFromString(clipboard, N1, N2, M1, M2);
+	setFromString(clipboard, N1, N2, M1, M2, transpose);
 	
 	objectChanged();
 	Update();
@@ -874,7 +892,7 @@ TField::pasteIntoArea(int N1, int N2, int M1, int M2)
     catch(TError& ex) {
 	vfMessage(topLevelWidget(), "Object paste error", ex.mess , vfErr);
 	if( !undoString.isEmpty() )
-	    try { setFromString(undoString, N1, N2, M1, M2); } catch(...) {}
+	    try { setFromString(undoString, N1, N2, M1, M2, false); } catch(...) {}
 	    
     }
 }
@@ -1295,6 +1313,9 @@ TCellInput::createPopupMenu()
         objectMenu->setItemEnabled(
             objectMenu->insertItem( "&Paste\tCtrl+V", field(),
                               SLOT(CmPasteFromClipboard()) ), edit && !clipboardEmpty );
+        objectMenu->setItemEnabled(
+            objectMenu->insertItem( "Paste &Transposed", field(),
+                              SLOT(CmPasteTransposedFromClipboard()) ), edit && !clipboardEmpty );
 
     //    menu->insertSeparator();
         menu->insertItem( "&Edit", objectMenu );
@@ -1466,7 +1487,7 @@ TCellInput::paste()
 	if( QApplication::clipboard()->text().find('\t') != -1 || 
 		QApplication::clipboard()->text().find('\n') != -1 ) {
 	// clipboard contents seems to be table - try to paste from current cell
-	    field()->pasteIntoArea(N, rObj.GetN(), M, rObj.GetM());
+	    field()->pasteIntoArea(N, rObj.GetN(), M, rObj.GetM(), false);
 	} 
 	else
 	    QLineEdit::paste();

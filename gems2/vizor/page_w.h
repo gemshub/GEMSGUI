@@ -271,7 +271,7 @@ class TField:
     void setXPos(int pos);
 
     QString createString(int N1, int N2, int M1, int M2);
-    void setFromString(const QString& str, int N1, int N2, int M1, int M2) throw (TError);
+    void setFromString(const QString& str, int N1, int N2, int M1, int M2, bool transpose) throw (TError);
 
 protected slots:
     void EvVScroll(int);
@@ -312,13 +312,14 @@ public:
     bool isSelected() const { return selected; }
     void setSelected(bool selected);
     void setSelectedArea(int N1, int N2, int M1, int M2);
-    void pasteIntoArea(int N1, int N2, int M1, int M2);
+    void pasteIntoArea(int N1, int N2, int M1, int M2, bool transposed);
     void getSelectedArea(int& N1, int& N2, int& N3, int& N4) const;
     
 public slots:
     void Update();
     void CmCopyToClipboard();
     void CmPasteFromClipboard();
+    void CmPasteTransposedFromClipboard();
     void selectionChanged();
     void objectChanged();
 };
