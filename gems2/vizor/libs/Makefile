@@ -11,7 +11,6 @@ include ../Makefile.qt
 
 INC_LOCAL	= -I../kernel -I../libs
 INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
-#FLAGS		= $(CCFLAGS) $(DEBUG_FLAGS)
 
 OBJECTS = config.o gstring.o gdatastream.o
 SOURCES	= config.cpp gstring.cpp gdatastream.cpp
@@ -29,7 +28,7 @@ dep:
 
 
 %.o:	%.cpp
-	 $(CC) -ggdb $(FLAGS) $(INCLUDES) -c $<
+	 $(CC) $(FLAGS) $(INCLUDES) -c $<
 
 # DO NOT DELETE
 
