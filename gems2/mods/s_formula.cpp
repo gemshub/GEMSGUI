@@ -723,7 +723,7 @@ void TFormula::Stm_line( int N, float *Sml, char *ICsym, short *ICval )
     // Sveta
     float tt=aSC[ii];
     if( ii < aCn.GetCount() )
-        if( fabs( (double)(aZ - tt) ) > 1e-12 )
+        if( fabs( (double)(aZ - tt) ) > 1e-6 )
         {
             gstring str = "In formula: ";
             str +=  aFormula;
