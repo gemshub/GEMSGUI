@@ -1429,21 +1429,21 @@ void TProfil::XmaxSAT_IPM2( void )
                     xj0 = pa.p.IEPS;  /* ensuring that it is non-negative */
 // Check!
 
-                pmp->DUL[j] = xj0 - 1e-9; // XS0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+                pmp->DUL[j] = xj0 - pa.p.IEPS; // XS0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
                 break;
 
             case SAT_NCOMP: /* Non-competitive surface species */
                 xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
 
-                pmp->DUL[j] = xj0 - 1e-9; // xj0*(1.0-pa.p.IEPS); //pa.p.IEPS;
+                pmp->DUL[j] = xj0 - pa.p.IEPS; // xj0*(1.0-pa.p.IEPS); //pa.p.IEPS;
                 break;
 
             case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) */
                 XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
 
-                pmp->DUL[j] =  XS0-1e-9; // xj0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+                pmp->DUL[j] =  XS0-pa.p.IEPS; // xj0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
                 break;
             case SAT_INDEF: /* No SAT calculation */
             default:        /* pmp->lnGam[j] = 0.0; */

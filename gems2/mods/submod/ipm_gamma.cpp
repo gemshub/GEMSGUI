@@ -828,7 +828,7 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
                 if(  xj0 < pa.p.IEPS )
                     xj0 = pa.p.IEPS;  /* ensuring that it is non-negative */
 
-                if(xj>= xj0) xj=xj0-1e-9;  // testing
+                if(xj>= xj0) xj=xj0-pa.p.IEPS;  // testing
 
                 if( xj * 2 <= xj0 )
                     ISAT = 0.0;
@@ -857,7 +857,7 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
                 xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
 
-                if(xj>= xj0) xj=xj0-1e-9;  // testing
+                if(xj>= xj0) xj=xj0-pa.p.IEPS;  // testing
                // if(xj>= xj0) xj=xj0*(1.0-pa.p.IEPS);  // testing
 
                 if( xj * 2 <= xj0 )    // Linear adsorption
