@@ -35,9 +35,9 @@ enum translat_codes { /* codes for translations of equations */
     N_ARBG =  '[',  N_AREND = ']',  A_arcnt = '@',  EQSET_DELIM = '@',
     A_delim_IPM = '\\',
     /* indexes by  RMULTS, SYSTEM*/
-    A_ICx = 'I', A_DCx = 'J', A_PHx = 'A', A_ACx = 'K',
+    A_ICx = 'I', A_DCx = 'J', A_PHx = 'A', A_ACx = 'K', A_DCSx = 'S',
     /*indexes by MULTI */
-    A_icx = 'i', A_dcx = 'j', A_phx = 'a',
+    A_icx = 'i', A_dcx = 'j', A_phx = 'a', A_dcsx = 's',
     /* No indexation related to this data object */
     A_NOx = 'N',
     /* Tables [I][J], [i][j], [J][I], ... */
@@ -763,6 +763,7 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
 //             case A_reset:
                case A_icx:
                case A_dcx:
+               case A_dcsx:
                case A_phx:
                     LNplace = 1; /* search index in MULTI */
 //                  cstate = iCode;
@@ -770,6 +771,7 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
                case A_ICx:
                case A_ACx:
                case A_DCx:
+               case A_DCSx:
                case A_PHx:
                     LNplace = 0;   /* search index in RMULTS */
 //                  cstate = iCode;
@@ -824,8 +826,16 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
             case A_DCx:
                 i = find_dcnum( name, JB, JE, LNplace );
                 break;
+            case A_DCSx:
+                i = find_dcnum( name, JB, JE, LNplace );
+                i -=  mup->Ls - mup->Lads ;
+                break;
             case A_dcx:
                 i = find_dcnum( name, jb, je, LNplace );
+                break;
+            case A_dcsx:
+                i = find_dcnum( name, jb, je, LNplace );
+                i -= pmp->Ls - pmp->Lads;
                 break;
             case A_phx:
             case A_PHx:
@@ -879,7 +889,9 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
             case A_icx:
             case A_ICx: /* index */
             case A_dcx:
+            case A_dcsx:
             case A_DCx:
+            case A_DCSx:
             case A_PHx:
             case A_ACx:
             case A_phx:
