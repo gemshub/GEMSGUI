@@ -297,7 +297,7 @@ void TRTParm::set_def( int q)
     strcpy( rpp->lNam[0], "g0 ");
 }
 
-// return true if necessary recalc
+// return true if recalc is necessary
 bool TRTParm::check_input( const char *key, int Level )
 {
     vstr pkey(MAXRKEYLEN+10);
@@ -486,13 +486,13 @@ TRTParm::RecCalc( const char *key )
         for( ij=0, i=0; i<rpp->NT; i++ )
         {
             rpp->T[ij] = rpp->Ti[0] + rpp->Ti[2] * i;
-            if( rpp->T[ij] > rpp->Ti[1] )
-                rpp->T[ij] = rpp->Ti[1];
+//            if( rpp->T[ij] > rpp->Ti[1] )
+//                rpp->T[ij] = rpp->Ti[1];
             for( j=0; j<rpp->NP; j++ )
             {
                 rpp->P[ij] = rpp->Pi[0] + rpp->Pi[2] * j;
-                if( rpp->P[ij] > rpp->Pi[1] )
-                    rpp->P[i] = rpp->Pi[1];
+//               if( rpp->P[ij] > rpp->Pi[1] )
+//                    rpp->P[i] = rpp->Pi[1];
                 if( j ) rpp->T[ij] = rpp->T[ij-1];
                 ij++;
             }
@@ -502,13 +502,13 @@ TRTParm::RecCalc( const char *key )
         for( ij=0, i=0; i<rpp->NP; i++ )
         {
             rpp->P[ij] = rpp->Pi[0] + rpp->Pi[2] * i;
-            if( rpp->P[ij] > rpp->Pi[1] )
-                rpp->P[ij] = rpp->Pi[1];
+//            if( rpp->P[ij] > rpp->Pi[1] )
+//                rpp->P[ij] = rpp->Pi[1];
             for( j=0; j<rpp->NT; j++ )
             {
                 rpp->T[ij] = rpp->Ti[0] + rpp->Ti[2] * j;
-                if( rpp->T[ij] > rpp->Ti[1] )
-                    rpp->T[ij] = rpp->Ti[1];
+//                if( rpp->T[ij] > rpp->Ti[1] )
+//                    rpp->T[ij] = rpp->Ti[1];
                 if( j ) rpp->P[ij] = rpp->P[ij-1];
                 ij++;
             }
@@ -518,11 +518,11 @@ TRTParm::RecCalc( const char *key )
         for( i=0; i<rpp->NV; i++ )
         {
             rpp->P[i] = rpp->Pi[0] + rpp->Pi[2] * i;
-            if( rpp->P[i] > rpp->Pi[1] )
-                rpp->P[i] = rpp->Pi[1];
+//            if( rpp->P[i] > rpp->Pi[1] )
+//                rpp->P[i] = rpp->Pi[1];
             rpp->T[i] = rpp->Ti[0] + rpp->Ti[2] * i;
-            if( rpp->T[i] > rpp->Ti[1] )
-                rpp->T[i] = rpp->Ti[1];
+//            if( rpp->T[i] > rpp->Ti[1] )
+//                rpp->T[i] = rpp->Ti[1];
         }
         break;
     }

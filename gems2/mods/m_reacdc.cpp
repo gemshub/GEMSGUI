@@ -426,6 +426,7 @@ AGAIN_MOD:
         case CTM_LGK:
         case CTM_LGX:
             rcp->PreDC = S_ON;
+        case CTM_EK0:
         case CTM_EK1:
         case CTM_EK3:
         case CTM_EK2:
@@ -637,10 +638,10 @@ TReacDC::RCthermo( int q, int p )
 
     if( CM == CTPM_HKF )
     {
-        /* calc water fitches */
+        /* calculate water properties */
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
                 ( aW.twp->P > 1e-4 && fabs( aW.twp->P - aSta.Pres ) > 0.001 ))
-        { /* calc fitches water for HGK */
+        { /* calculate water from HGK EoS */
             aSta.Temp = aW.twp->TC;
             aSta.Pres = aW.twp->P;
 
@@ -657,13 +658,13 @@ TReacDC::RCthermo( int q, int p )
         }
     }
     w_dyn_new();
-    /*test component of reactions and calc that t/d fitches*/
+    /*test the component of reaction and calc its t/d properties*/
     for( j=0; j<rc[q].nDC; j++ )
     {
-        strncpy( dckey, rc[q].DCk[j], DC_RKLEN );
-        /* !!!!!!!! exept field t/d base any? (*) */
+        strncpy( dckey, rc[q].DCk[j], DC_RKLEN );  // Override off !!!
+/* !!!!!!!! exept field t/d base any? (*) */
         aW.ods_link( p+1 );
-        /* clear new work structure */
+        /* clear new TPwork structure */
         aW.set_zero( p+1 );
         aW.twp->P = aW.WW(p).P;
         aW.twp->Pst = aW.WW(p).Pst;
@@ -676,13 +677,13 @@ TReacDC::RCthermo( int q, int p )
         aW.twp->wEps = aW.WW(p).wEps;
 //        aW.twp->wVis = aW.WW(p).wVis;
 
-        aW.twp->unE = aW.WW(p).unE;  /* test edinic izmereniya */
+        aW.twp->unE = aW.WW(p).unE;  /* test units of measurement */
         aW.twp->unV = aW.WW(p).unV;
         memcpy( aW.twp->DRkey, dckey, DC_RKLEN );
 
         switch( rc[q].rDC[j] )
         {
-        case SRC_REACDC: /* recursion load new record */
+        case SRC_REACDC: /* recursively load another ReacDC record */
             ods_link( q+1 );
             TryRecInp( dckey, tim, q+1 );
             aW.twp->pSD = SRC_REACDC;
@@ -690,10 +691,10 @@ TReacDC::RCthermo( int q, int p )
             aW.twp->Pst = rc[q+1].Pst;
             aW.twp->TCst = rc[q+1].TCst;
             aW.twp->T = aW.twp->TC + C_to_K;
-            /* Call RCthermo! */
+            /* Recursive call RCthermo()! */
             RCthermo( q+1, p+1 );
             break;
-        case SRC_FICT:   /* fictiv component */
+        case SRC_FICT:   /* fictive component */
             break;
         case SRC_DCOMP: /* thermochemical component */
             aDC->ods_link( 0 );   /* (q+1) ??? */
@@ -703,7 +704,7 @@ TReacDC::RCthermo( int q, int p )
             aW.twp->Pst = aDC->dcp->Pst;
             aW.twp->TCst = aDC->dcp->TCst;
             aW.twp->T = aW.twp->TC + C_to_K;
-            aDC->DCthermo( 0, p+1 );
+            aDC->DCthermo( 0, p+1 ); // calculate properties at T,P
             aW.WW(p).P = aW.twp->P;  /* !!!!!!return P on KNP */
             break;
         case SRC_NEWDC: /* new component */
@@ -711,7 +712,7 @@ TReacDC::RCthermo( int q, int p )
             aW.twp->pTM = S_REM;
             isotop = 0;
             goto CALCULATE_DELTA_R;
-        case SRC_NEWISO: /* isotopic form  */
+        case SRC_NEWISO: /* new isotopic form  */
             aW.twp->pSD = SRC_NEWISO;
             aW.twp->pTM = S_REM;
             isotop = 1;
@@ -728,7 +729,7 @@ TReacDC::RCthermo( int q, int p )
         rc[q].ParDC[j][_Vs_] = aW.twp->V;
 
     } /* j */
-    /* Is it error? */  aW.WW(p).pTM = S_REM;
+    /* Error? */  aW.WW(p).pTM = S_REM;
 
 CALCULATE_DELTA_R:
     aW.ods_link( p );
@@ -736,16 +737,16 @@ CALCULATE_DELTA_R:
         ods_link( q );
     if( rc[q].rDC[rc[q].nDC-1] == SRC_DCOMP ||
             rc[q].rDC[rc[q].nDC-1] == SRC_REACDC )
-    { /*Calc parametres of reaction if vedushiy d or r */
+    { /*Calc parameters of reaction without a new component */
         Calc_rDCD( q, p );
         return;
     }
 
-    /* calc delta reactions if data TP */
+    /* calc delta for the reaction at TP */
     aW.WW(p).pTM = S_REM;
     switch( CM )
     {
-    case CTPM_HKF:
+    case CTPM_HKF:   // Not used in reacDC presently !
         switch( CE )
         {
         default:
@@ -759,12 +760,12 @@ CALCULATE_DELTA_R:
         }
         break;
     case CTPM_CPT:
-    case CTPM_REA: /* reactions if vedushiy component not new */
+    case CTPM_REA: /* calculate reaction properties at T,P */
         switch( CE )
         {
-        case CTM_CST:
         case CTM_LGX:
         case CTM_LGK:
+        case CTM_EK0:
         case CTM_EK1:
         case CTM_EK3:
         case CTM_EK2:
@@ -775,17 +776,17 @@ CALCULATE_DELTA_R:
             break;
             /*  case CTM_EK1:  dbc = calc_isocoul_r( q, p, CE, CV );
                                break;  */
-        case CTM_DKR:
-            /*                    case CTM_DKE:  calc_dissoc_r( q, p, CE, CV ); */
+        case CTM_DKR: // not used in this version
+            /*  case CTM_DKE:  calc_dissoc_r( q, p, CE, CV ); */
             break;
         default:
             Error(dckey.p,"E13RErem: Invalid CE method flag!");
         }
         break;
     case CTPM_ISO:
-        calc_iso_a( q, p );
+        calc_iso_a( q, p ); // isotopic forms
         break;
-    case CTPM_SOR: /* sorption  */
+    case CTPM_SOR: /* sorption - not used in this version */
         calc_exion_r( q, p );
         break;
     default:
@@ -799,21 +800,22 @@ CALCULATE_DELTA_R:
         }
 
     }
-    /* Volium */
+    /* Volume */
     switch ( CV )
     {
     case CPM_CON:
     case CPM_VKE:
     case CPM_VBE:
+    case CPM_NUL:   // Added by KD on 15.07.03 
 //    case CPM_VBM:
-    case CPM_CEH:
+//    case CPM_CEH: // constant volume only in this version!
         calc_tpcv_r( q, p, CM, CV );
     default:
         break;
     }
-    /* Calc t/d fitches of vedushego componenta */
+    /* Calc t/d properties of new component */
     if( !isotop )
-    { /* this is usual reactions  */
+    { /* this is a usual reaction  */
         double G=0.0, S=0.0, H=0.0, Cp=0.0, V=0.0;
         for( j=0; j<rc[q].nDC-1; j++ )
         {
@@ -823,7 +825,6 @@ CALCULATE_DELTA_R:
             Cp += rc[q].scDC[j]*rc[q].ParDC[j][_Cps_];
             V  += rc[q].scDC[j]*rc[q].ParDC[j][_Vs_];
         }
-        /*  No calc steh coeff */
         aW.WW(p).G =  (aW.WW(p).dG - G)/rc[q].scDC[rc[q].nDC-1];
         aW.WW(p).S =  (aW.WW(p).dS - S)/rc[q].scDC[rc[q].nDC-1] /* -foS */ ;
         aW.WW(p).H =  (aW.WW(p).dH - H)/rc[q].scDC[rc[q].nDC-1];
@@ -831,7 +832,7 @@ CALCULATE_DELTA_R:
         aW.WW(p).V =  (aW.WW(p).dV - V)/rc[q].scDC[rc[q].nDC-1];
     }
     else
-    { /*This is isotop form  */
+    { /*This is an isotopic form pseudo-reaction */
         double R_T, LNK;
         double G=0.0, S=0.0, H=0.0, Cp=0.0, V=0.0;
 
@@ -874,7 +875,6 @@ CALCULATE_DELTA_R:
 */
 void TReacDC::PronsPrep( const char *key )
 {
-
     double BETA1,BETA2,BETA3,BETA4,ZC,GC,HC,SC,CPC,VC,ZL,GL,HL,SL,CPL,VL,
     Z,/*G,*/H,S,CP,V, Z1,G1,H1,S1,CP1,V1, Z2,G2,H2,S2,CP2,V2,
     Z3,G3,H3,S3,CP3,V3, Z4,G4,H4,S4,CP4,V4, DELGR1, DELGR2,
@@ -1240,15 +1240,12 @@ void TReacDC::PronsPrep( const char *key )
                 "Don't forget to re-calculate it! ");
 }
 
-
-
 // Help on ReacDC module ( ? button )
 void
 TReacDC::CmHelp()
 {
     pVisor->OpenHelp( GEMS_RE_HTML );  //  05.01.01
 }
-
 
 // Test record with key
 void

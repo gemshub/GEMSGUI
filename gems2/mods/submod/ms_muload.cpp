@@ -55,6 +55,7 @@ void TProfil::SolModLoad( )
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, Type;
     vstr pkey(MAXRKEYLEN);
     vstr modT(16);
+    char *sMod;
     time_t crt;
     TPhase* aPH = TPhase::pm;
 
@@ -87,6 +88,7 @@ void TProfil::SolModLoad( )
         /*  modT = pmp->sMod[k]; */
         memcpy( modT, aPH->php->sol_t, MAXKEYWD );
         memcpy( pmp->sMod[k], modT, MAXKEYWD );
+sMod = pmp->sMod[k];
         switch( modT[DCE_LINK] )
         {
         case SM_UNDEF:  /* no equations */
@@ -225,7 +227,17 @@ LOAD_NIDMCOEF:
                 jp = mup->Pl[j]; /* mup->Pl[pmp->muj[j]]; */
                 memcpy( pmp->DMc+kd+jkd, aPH->php->scoef+jp*pmp->LsMdc[k],
                         pmp->LsMdc[k]*sizeof(float));
-                jkd += pmp->LsMdc[k];
+               // Correction of CG fluid EoS coeffs
+               if( (aPH->php->PphC == PH_FLUID) && (sMod[SPHAS_TYP] == SM_FLUID) )
+               {
+                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
+                 {
+                    memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
+                       pmp->LsMdc[k]*sizeof(float));
+                    pmp->Pparc[jp] = tpp->Fug[j-JB];   
+                 }
+               }
+               jkd += pmp->LsMdc[k];
             } /* j */
         }
     } /* k */

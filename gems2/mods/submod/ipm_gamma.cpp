@@ -21,6 +21,7 @@
 //-------------------------------------------------------------------
 //
 #include "m_param.h"
+#include "s_fgl.h"
 
 #include <math.h>
 #include <iostream>
@@ -39,7 +40,8 @@ void TProfil::GasParcP()
     {
         jb = je;
         je = jb+pmp->L1[k];
-        if( pmp->PHC[k] == PH_GASMIX || pmp->PHC[k] == PH_PLASMA )
+        if( pmp->PHC[k] == PH_GASMIX || pmp->PHC[k] == PH_PLASMA
+           || pmp->PHC[k] == PH_FLUID )
         {
 #ifndef IPMGEMPLUGIN
             char (*SMbuf)[MAXDCNAME] =
@@ -400,6 +402,7 @@ void TProfil::ConCalc( double X[], double XF[], double XFA[])
             pmp->pe = ln_to_lg* pmp->U[pmp->N-1];
             pmp->Eh = 0.000086 * pmp->U[pmp->N-1] * pmp->T;
         case PH_GASMIX:
+        case PH_FLUID:
         case PH_PLASMA:
         case PH_SIMELT:
         case PH_HCARBL:
@@ -1423,6 +1426,33 @@ void TProfil::Davies03temp( int jb, int je, int k )
     } /* j */
 }
 
+// ---------------------------------------------------------------------
+void TProfil::ChurakovFluid( int jb, int je, int jpb, int jdb, int k )
+{
+   double *FugCoefs; float *EoSparam;
+   int j, jj;
+   TCGFcalc aCGF;
+
+   FugCoefs = (double*)malloc( pmp->L1[k]*sizeof(double) );
+//    for( j=jb; j<je; j++ )
+//    {
+//       a0 = pmp->DMc[jdb+j*pmp->LsMdc[k]];
+//
+//    }
+    EoSparam = pmp->DMc+jdb;
+
+    aCGF.CGActivCoefPT( pmp->X+jb, EoSparam, FugCoefs, pmp->L1[k],
+        pmp->Pc, pmp->Tc );
+
+    for( jj=0, j=jb; j<je; j++, jj++ )
+    {
+        if( FugCoefs[jj] > 1e-23 /* && pmp->Pparc[j] > 1e-23 */ )
+             pmp->lnGam[j] = log(FugCoefs[ jj ]/pmp->Pparc[j]);
+        else
+             pmp->lnGam[j] = 0;
+    } /* j */
+    free( FugCoefs );
+}
 
 static double ICold=0.;
 /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1556,6 +1586,19 @@ void TProfil::GammaCalc( int LinkMode  )
                        Davies03temp( jb, je, k );
                     /* Pitzer( q, jb, je, k ); */
                     /* Donnan volume model */
+                }
+                goto END_LOOP; /* break; */
+            }
+            else if( sMod[SGM_MODE] == SM_IDEAL )
+                goto END_LOOP;
+            break;
+        case PH_FLUID:
+            if( sMod[SGM_MODE] == SM_STNGAM )
+            {
+                if( pmp->XF[k] > pmp->DSM )
+                {
+                    if( sMod[SPHAS_TYP] == SM_FLUID )
+                       ChurakovFluid( jb, je, jpb, jdb, k );
                 }
                 goto END_LOOP; /* break; */
             }

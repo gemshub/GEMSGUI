@@ -62,6 +62,7 @@ private:    vstr (const vstr&);
     IPM iterations.   Possible values: (SPHAS_TYP) */
     SM_IDEAL = 'I',  // ideal solution or single-component phase;
     SM_REGULAR = 'R',// regular solution, also with limited miscibility
+    SM_FLUID = 'F',  // multicomp. EOS fluid Churakov&Gottschalk 2003
     SM_RECIP = 'V',  // reciprocal solution (reserved)
     SM_AQDAV = 'D',  // built-in Davies equation (with 0.3) added KD 25.01.02
     SM_AQDH1 = '1',  // limiting Debye-Hueckel law for aqueous species (reserved)
@@ -140,6 +141,7 @@ typedef enum {  /* Classifications of DC */
 enum PH_CLASSES{  /* Possible values */
     PH_AQUEL    = 'a',  // aqueous electrolyte
     PH_GASMIX   = 'g',  // mixture of gases
+    PH_FLUID    = 'f',  // fluid phase
     PH_PLASMA   = 'p',  // plasma
     PH_SOLUTION = 'l',  // non-electrolyte liquid (melt)
     PH_SIMELT   = 'm',  // silicate (magmatic) melt or non-aqueous electrolyte

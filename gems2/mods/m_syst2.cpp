@@ -606,7 +606,8 @@ void TSysEq::set_def( int q)
             if( TProfil::pm->mup->PHC[i] == PH_SORPTION )
                 is_x = true;
            if( TProfil::pm->mup->PHC[i] == PH_GASMIX ||
-               TProfil::pm->mup->PHC[i] == PH_PLASMA )
+               TProfil::pm->mup->PHC[i] == PH_PLASMA ||
+               TProfil::pm->mup->PHC[i] == PH_FLUID )
                 is_g = true;
 
         }

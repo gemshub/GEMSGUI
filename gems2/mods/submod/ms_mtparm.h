@@ -98,7 +98,7 @@ typedef struct
     *Wbor, // Born factor relative for aq & sorb (reserved) [0:Ls-1]
     *Wrad, // Eff solvation radius (HKF) (reserved)[0:Ls-1]
     *Fug,  // Fugacity (FGL), reserved [0:Lg-1]
-    *dVg   // Increment of Vm0 from TrPr to TP (FGL) (reserved) [0:Lg-1]
+    *dVg   // Work array for CG EoS coeffs (reserved) [Lg*4]
     ;
 }
 MTPARM;

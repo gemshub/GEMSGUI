@@ -314,6 +314,7 @@ void TSyst::make_syst_sizes()
             break; /* Error code of aqueous species */
         case PH_PLASMA:
         case PH_GASMIX:
+        case PH_FLUID:
             if( sy.Ll[k] == sy.Lg )
                 break;
             break; /* error code of gases */

@@ -28,10 +28,14 @@
 #include "visor.h"
 
 /*-----------------------------------------------------------------*/
+// Calculates coefficients A0 to A6 of logK=f(T)
+// from coefficients a0 to a4 of Haas-Fischer Cp=f(T)
+// Coeffs a5 to a9 are ignored
+
 void TReacDC::Convert_Cp_to_KT( int CE )
 {
-    double Rln10, T, lnT, T_2, T_05, T_3, Sr, Hr;
-    float *Cp, *K;
+    double Rln10, T, lnT, T_2, T_05, T_3, Sr, Hr, lgK, Cpr;
+    float *Cp, *A;
 
     Rln10 = R_CONSTANT * lg_to_ln;
     T = rcp->TCst + C_to_K;
@@ -42,20 +46,26 @@ void TReacDC::Convert_Cp_to_KT( int CE )
     Sr = rcp->Ss[0];
     Hr = rcp->Hs[0];
     Cp = rcp->DCp;
-    K = rcp->pKt;
+    A = rcp->pKt;
 
-    // calc coef. logK=f(T)
-    K[1] = Cp[1]/(2.0*Rln10);
-    K[3] = Cp[0]/Rln10;
-    K[4] = Cp[2]/(2.0*Rln10);
-    K[5] = Cp[4]/(6.0*Rln10);
-    K[6] = -4.0*Cp[3]/Rln10;
+// calculation of logK=f(T) coeffs
+    A[0] = ( Sr - Cp[0] - Cp[0]*lnT - Cp[1]*T + Cp[2]/(2.0*T_2)
+                  + 2.0*Cp[3]/T_05 - Cp[4]*T_2/2.0 ) / Rln10;
+    A[1] = Cp[1]/(2.0*Rln10);
+    A[2] = -( Hr - Cp[0]*T - Cp[1]*T_2/2.0 + Cp[2]/T
+               - 2.0*Cp[3]*T_05 - Cp[4]*T_3/3.0 ) / Rln10;
+    A[3] = Cp[0]/Rln10;
+    A[4] = Cp[2]/(2.0*Rln10);
+    A[5] = Cp[4]/(6.0*Rln10);
+    A[6] = -4.0*Cp[3]/Rln10;
 
-    K[0] = Sr/Rln10 - ( Cp[1]*T + Cp[0]*(1.0+lnT) - Cp[2]/(2.0*T_2) +
+// Old version - comment out after debugging !
+    A[0] = Sr/Rln10 - ( Cp[1]*T + Cp[0]*(1.0+lnT) - Cp[2]/(2.0*T_2) +
                         Cp[4]*T_2/2.0 - 2.0*Cp[3]/T_05 ) / Rln10;
-    K[2] = ( Cp[1]*T_2/2.0 + Cp[0]*T -Cp[2]/T + Cp[4]*T_3/3.0 +
+    A[2] = ( Cp[1]*T_2/2.0 + Cp[0]*T -Cp[2]/T + Cp[4]*T_3/3.0 +
              2.0*Cp[3]*T_05 - Hr ) / Rln10;
-    switch(CE)
+/* commented out by KD on 15.07.03
+    switch(CE) // zeroing off unnecessary coeffs for specific cases
     {
     case CTM_LGK:
     case CTM_LGX:
@@ -73,7 +83,12 @@ void TReacDC::Convert_Cp_to_KT( int CE )
     default:
         return;
     }
-    return;
+*/   // Calculation of Cpr and lgK at 25 C
+    Cpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[4]*T_2 + Cp[3]/T_05;
+    lgK = A[0] + A[1]*T + A[2]/T + A[3]*lnT + A[4]/T_2 +
+          A[5]*T_2 + A[6]/T_05;
+    rcp->Cps[0] = Cpr;
+    rcp->Ks[1] = lgK;
 }
 
 /*-----------------------------------------------------------------*/
@@ -81,7 +96,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
 {
     double Rln10, T, lnT, T_2, T_05, T_15, T_3,
                                    Gr, Sr, Hr, Cpr=0.0, lgK;
-    float *Cp, *K;
+    float *Cp, *A;
 
     Rln10 = R_CONSTANT * lg_to_ln;
     T = rcp->TCst + C_to_K;
@@ -91,108 +106,135 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     T_05 = sqrt( T );
     T_15 = pow( T, 1.5 );
     Cp = rcp->DCp;
-    K = rcp->pKt;
+    A = rcp->pKt;
+    Sr = rcp->Ss[0];
+    Hr = rcp->Hs[0];
+    Gr = rcp->Gs[0];
+    lgK = rcp->Ks[1];
     //AGAIN_CP:
     switch( CE )
-    { /* calc on 2- and 3-term param approximation */
-    case CTM_LGK:
-    case CTM_LGX:
+    { // calc on 2- and 3-term param approximation
+    case CTM_LGK:  // Here, all logK-f(T) coeffs are given
+//    case CTM_LGX:
         break;
-    case CTM_IKZ:
+    case CTM_IKZ:  // Isotopic forms
         return;
-    case CTM_EK1: /* 1-term approx */
-        K[2] = -rcp->Hs[0]/Rln10;
-        K[0] =0.0;
-        K[3] =0.0;
-        K[1]=0.0;
-        K[4]=0.0;
-        K[5]=0.0;
-        K[6]=0.0;
+    case CTM_EK0: // Generating 1-term extrapolation at logK = const
+        A[0]= rcp->Ss[0]/Rln10;
+        A[1]=0.0;
+        A[2]=0.0;
+        A[3]=0.0;
+        A[4]=0.0;
+        A[5]=0.0;
+        A[6]=0.0;
         break;
-    case CTM_EK3: /* 3-term approx- it was correct from Vasilii */
-        if( !Cp )
+    case CTM_EK1: // Generating 1-term extrapolation at dGr = const
+        A[0]=0.0;
+        A[1]=0.0;
+        A[2] = -rcp->Hs[0]/Rln10;
+        A[3]=0.0;
+        A[4]=0.0;
+        A[5]=0.0;
+        A[6]=0.0;
+        break;
+    case CTM_EK2: // Generating 2-term (Vant Hoff) extrapolation
+        A[0] = rcp->Ss[0]/Rln10;
+        A[1]=0.0;
+        A[2] = -rcp->Hs[0]/Rln10;
+        A[3]=0.0;
+        A[4]=0.0;
+        A[5]=0.0;
+        A[6]=0.0;
+        break;
+    case CTM_EK3: // Generating 3-term extrapolation at constant dCpr
+        if( Cp )
         {
-            K[3] = rcp->Cps[0] / Rln10;
-            K[0] = ( rcp->Ss[0] - rcp->Cps[0]*(1.+lnT) ) / Rln10;
-            K[2] = ( rcp->Cps[0]*T - rcp->Hs[0] ) / Rln10;
-            K[1]=0.0;
-            K[4]=0.0;
-            K[5]=0.0;
-            K[6]=0.0;
+          Cp[1] = Cp[2] = Cp[3] = Cp[4] = 0.0;
+          rcp->Cps[0] = Cp[0];
         }
-        else
-        { /* 5-term approx- Sveta to PM2SEL */
-            K[1] = Cp[1] / (2*Rln10);
-            K[3] = Cp[0] / Rln10;
-            K[4] = Cp[2] / (2*Rln10);
-            K[0] = ( rcp->Ss[0] - Cp[0]*(1.+lnT)-Cp[1]*T+Cp[2]/(2*T_2) ) / Rln10;
-            K[2] = ( Cp[0]*T+Cp[1]/2*T_2+Cp[2]/T-rcp->Hs[0] ) / Rln10;
-            K[5] = 0.0;
-            K[6] = 0.0;
-        }
-        break;
-    case CTM_EK2: /* 2-term approx */
-        K[0] = rcp->Ss[0]/Rln10;
-        K[2] = -rcp->Hs[0]/Rln10;
-        K[3] =0.0;
-        K[1]=0.0;
-        K[4]=0.0;
-        K[5]=0.0;
-        K[6]=0.0;
+        Cpr = rcp->Cps[0];
+        A[0] = ( rcp->Ss[0] - Cpr*(1.+lnT) ) / Rln10;
+        A[1]=0.0;
+        A[2] = ( Cpr*T - rcp->Hs[0] ) / Rln10;
+        A[3] = Cpr / Rln10;
+        A[4]=0.0;
+        A[5]=0.0;
+        A[6]=0.0;
         break;
     default:
-        Error( GetName(),"E23RErun: Illegal method code in Convert_KT_to_Cp()");
+        Error( GetName(),"E23RErun: Invalid method code in Convert_KT_to_Cp()");
     }
 
-    /* Calc lgK, Hr and Sr */
-    lgK = K[0] + K[1]*T + K[2]/T + K[3]*lnT + K[4]/T_2 +
-          K[5]*T_2 + K[6]/T_05;
-    Hr = Rln10 * T_2 * ( K[1] - K[2]/T_2 + K[3]/T -
-                         2.0*K[4]/T_3 + 2.0*K[5]*T - 0.5*K[6]/T_15 );
-    Sr = Rln10 * ( K[0] + 2.0*K[1]*T + K[3]*(1.0+lnT) -
-                   K[4]/T_2 + 3.0*K[5]*T_2 + 0.5*K[6]/T_05 );
-
-    if( (CE == CTM_LGK || CE == CTM_LGX) && Cp )
-    { /*calc coef  Cp */
-        Cp[0] = Rln10 * K[3];
-        Cp[1] = Rln10 * 2.0 * K[1];
-        Cp[2] = Rln10 * 2.0 * K[4];
-        Cp[4] = Rln10 * 6.0 * K[5];
-        Cp[3] = -Rln10 * 0.25 * K[6];
-        Cpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[4]*T_2 + Cp[3]/T_05;
+    switch( CE )
+    {
+    case CTM_LGK:
+       /* Calc lgK, Hr and Sr */
+       lgK = A[0] + A[1]*T + A[2]/T + A[3]*lnT + A[4]/T_2 +
+             A[5]*T_2 + A[6]/T_05;
+       Hr = Rln10 * ( A[1]*T_2 - A[2] + A[3]*T -
+                         2.0*A[4]/T + 2.0*A[5]*T_3 - 0.5*A[6]*T_05 );
+       Sr = Rln10 * ( A[0] + 2.0*A[1]*T + A[3]*(1.0 + lnT)
+                   - A[4]/T_2 + 3.0*A[5]*T_2 + 0.5*A[6]/T_05 );
+// Old variant - commented out after debugging !!
+//    Hr = Rln10 * T_2 * ( A[1] - A[2]/T_2 + A[3]/T -
+//                         2.0*A[4]/T_3 + 2.0*A[5]*T - 0.5*A[6]/T_15 );
+//    Sr = Rln10 * ( A[0] + 2.0*A[1]*T + A[3]*(1.0+lnT) -
+//                   A[4]/T_2 + 3.0*A[5]*T_2 + 0.5*A[6]/T_05 );
+       if( Cp )
+       { // calc coef  Cp
+          Cp[0] = Rln10 * A[3];
+          Cp[1] = Rln10 * 2.0 * A[1];
+          Cp[2] = Rln10 * 2.0 * A[4];
+          Cp[3] = -Rln10 * 0.25 * A[6];
+          Cp[4] = Rln10 * 6.0 * A[5];
+          Cpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[4]*T_2 + Cp[3]/T_05;
+       }
+       else { // no Cp coef array!
+          Cpr = Rln10*A[3];
+          // Error message ?
+       }
+       rcp->Ss[0] = Sr;  // In this case, everything will be inserted
+       rcp->Hs[0] = Hr;
+       rcp->Cps[0] = Cpr;
+       rcp->Ks[1] = lgK;
+       if( fabs( lgK ) < 100. )
+           rcp->Ks[0] = pow(10., lgK );
+       rcp->Gs[0] = -Rln10*T*lgK;
     }
-    else Cpr = Rln10*K[3];
     /* Checking consistency of delta-reaction data */
-    Gr = Hr - T*Sr;
+    Hr = Gr + T*Sr;
     if( fabs( rcp->Ss[0] - Sr ) >= 0.19 ||
             fabs( rcp->Hs[0] - Hr ) >= 57.08 ||
             fabs( rcp->Gs[0] - Gr ) >= 57.08 ||
             fabs( rcp->Ks[1] - lgK ) >= 0.01 )
     {
-        gstring msgbuf = "W24RErun: Warning: calculated pK = ";
+        gstring msgbuf = "W24RErun: Warning: Some of the calculated values\n logK = ";
         vstr doublbuf(100);
-
         sprintf( doublbuf, "%g", lgK );
         msgbuf += doublbuf;
-        msgbuf += ", G0 = ";
+        msgbuf += ", dGr = ";
         sprintf( doublbuf, "%g", Gr );
         msgbuf += doublbuf;
-        msgbuf += ", \n dSr = ";
+        msgbuf += ", dSr = ";
         sprintf( doublbuf, "%g", Sr );
         msgbuf += doublbuf;
         msgbuf += " or dHr = ";
         sprintf( doublbuf, "%g", Hr );
         msgbuf += doublbuf;
-        msgbuf += " values are inconsistent\n";
-        msgbuf += "with input values to >0.01 pK. Insert calculated values?";
+        msgbuf += "\n values are inconsistent\n";
+        msgbuf += " with previous values in >0.01 logK units.\n\n";
+        msgbuf += "Replace with calculated values (Y)\n";
+        msgbuf += " or keep the previous values (N)?";
         if( vfQuestion(window(), GetName(), msgbuf.c_str() ))
         {
             rcp->Ss[0] = Sr;
             rcp->Hs[0] = Hr;
-            rcp->Cps[0] = Cpr;
+            rcp->Gs[0] = Gr;
             rcp->Ks[1] = lgK;
-            Error( GetName(),
-        "E25RErun: Calculated pK, dSr or dHr are inconsistent - bailing out!");
+        }
+        else {
+                Error( GetName(),
+        "E25RErun: Input logK, dSr or dHr remain inconsistent - bailing out!");
         }
     }
     return;
@@ -315,7 +357,15 @@ NEXT:
 
     if( CM == CTPM_REA )
     {
-        if( CE == CTM_EK1 )
+        if( CE == CTM_EK0 )
+        {
+            rc[q].Ss[0] = FLOAT_EMPTY;
+            rc[q].Hs[0] = 0.0;
+            rc[q].Cps[0] = 0.0;
+            if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
+                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+        }
+        else if( CE == CTM_EK1 )
         {
             rc[q].Ss[0] = 0.0;
             rc[q].Hs[0] = DOUBLE_EMPTY;
@@ -324,11 +374,21 @@ NEXT:
                 rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
         }
         else if( CE == CTM_EK2 )
+        {
             rc[q].Cps[0] = 0.0;
+            if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
+                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+        }
+        else if( CE == CTM_EK3 )
+        {
+            if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
+                rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+        }
         else if( CE == CTM_LGK )
         {
-            if( IsFloatEmpty( rc[q].Cps[0] ) )
-                rc[q].Cps[0] = 0.0;
+            for( i=0; i<7; i++ )
+              if( IsFloatEmpty( rc[q].Cps[i] ) )
+                  rc[q].Cps[i] = 0.0;
         }
     }
     /*----------------------------------------------------*/
@@ -342,10 +402,14 @@ NEXT:
     }
     else // calc delta reactions
         Recalc_rDCD();
-    if( CM == CTPM_CPT )
+    if( CM == CTPM_CPT && CE == CTM_LGX )
         Convert_Cp_to_KT( CE );
     if( CM == CTPM_REA )
+    {
         Convert_KT_to_Cp( CE );
+        if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWDC )  // added by KD on 16.07.03 
+           Recalc_rDCN( foS  );
+    }
     if( CM == CTPM_REA && rc[q].pct[2] == CPM_PCR && rc[q].PrAki != S_OFF )
     {   /*  Call PRONSPREP  added 19.05.98 */
         if( vfQuestion(window(), GetName(),
@@ -824,15 +888,15 @@ void TReacDC::calc_akinf_r( int q, int p, int /*CE*/, int /*CV*/ )
 
 /*-----------------------------------------------------------------*/
 // Calculation of d(reaction) from logK = f(T)
-void TReacDC::calc_lgk_r( int q, int p, int CE, int /*CV*/ )
+void TReacDC::calc_lgk_r( int q, int p, int CE, int CV )
 {
-    double R = R_CONSTANT, Rln10, T, lnT, T_2, T_05, T_15, T_3,
-        Sr, Gr, Hr, Cpr, Vr, lgK, R_T; /* Units of measurement!!!!! */
-    float *Kt, *Cp;
+    double Rln10, T, lnT, T_2, T_05, T_15, T_3, DH, Tr, dGr_d,
+        dSr, dGr, dHr, dCpr, dVr, lgK, R_T; /* Units of measurement!!!!! */
+    float *A, *Cp;
 
     Rln10 = R_CONSTANT * lg_to_ln;
-    R_T = aW.WW(p).T * R;  /* R_T = aW.WW(p).RT; */
-    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
+    R_T = aW.WW(p).T * R_CONSTANT;  /* R_T = aW.WW(p).RT; */
+    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.1 )
     {
         aW.WW(p).K =   rc[q].Ks[0];
         aW.WW(p).lgK = rc[q].Ks[1];
@@ -848,48 +912,95 @@ void TReacDC::calc_lgk_r( int q, int p, int CE, int /*CV*/ )
         aW.WW(p).Cp =  rc[q].Cps[1];
         goto FINITA;
     }
+    Tr = rc[q].TCst+273.15;
     T = aW.WW(p).T;
     lnT = log( T );
     T_2 = T*T;
     T_3 = T_2*T;
     T_05 = sqrt( T );
     T_15 = pow( T, 1.5 );
-    Kt = rc[q].pKt;
+    A = rc[q].pKt;
     Cp = rc[q].DCp;
-    Vr = rc[q].Vs[0];   //Gr = rc[q].Gs[0];
-    Hr = rc[q].Hs[0];
-    Sr = rc[q].Ss[0];
-    Cpr = rc[q].Cps[0];
-    lgK = 0;
-
-    if( ( CE == CTM_LGK || CE == CTM_LGX || CE == CTM_EK1 || CE == CTM_EK2
-            || CE == CTM_EK3 ) && rc[q].pKt )
-    { /* Calculation of lg K = f(T) */
-        lgK = Kt[0] + Kt[1] * T + Kt[2]/T + Kt[3] * lnT + Kt[4] / T_2 +
-              Kt[5] * T_2 + Kt[6] / T_05;
-        /* Calculation of Hr and Sr */
-        Hr = Rln10 * T_2 * ( Kt[1] - Kt[2]/T_2 + Kt[3]/T -
-                             2.0*Kt[4]/T_3 + 2.0*Kt[5]*T - 0.5*Kt[6]/T_15 );
-        Sr = Rln10 * ( Kt[0] + 2.0*Kt[1]*T + Kt[3]*(1.0+lnT) -
-                       Kt[4]/T_2 + 3.0*Kt[5]*T_2 + 0.5*Kt[6]/T_05 );
-        if( (CE == CTM_LGK || CE == CTM_LGX) && rc[q].DCp )
-            Cpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[4]*T_2 + Cp[3]/T_05;
-    }
+    dVr = rc[q].Vs[0];   //Gr = rc[q].Gs[0];
+    dGr = rc[q].Gs[0];
+    dHr = rc[q].Hs[0];
+    dSr = rc[q].Ss[0];
+    dCpr = rc[q].Cps[0];
+    lgK = rc[q].Ks[1];
+//    if( ( CE == CTM_LGK || CE == CTM_LGX || CE == CTM_EK1 || CE == CTM_EK2
+//            || CE == CTM_EK3 ) && rc[q].pKt )
+    // Re-written by KD on 15.07.03 to implement partial 1,2 and 3 term
     /*  else if( CE == CTM_EK1 ) Only dG(Tr)=const was specified * 05.12.96
          lgK = -Gr/R_T/lg_to_ln; */
-    Gr = -R_T * lgK * lg_to_ln;
+    switch (CE)
+    {
+       case CTM_EK0: // 1-term lgK = const
+// lgK = A[0];
+            dCpr = 0.0;
+            dHr = 0.0;
+            dGr_d = -dSr * T;
+            break;
+       case CTM_EK1: // 1-term dGr = const
+// lgK = A[2]/T;
+            dCpr = 0.0;
+            dSr = 0.0;
+            lgK = - dHr / T / Rln10;
+          break;
+       case CTM_EK2:  // 2-term or 1-term lgK=const at dHr=0
+// lgK = A[0] + A[2]/T;
+            dCpr = 0.0;
+            dGr_d = dHr - dSr * T;
+            lgK = (dSr - dHr/T ) / Rln10;
+          break;
+       case CTM_EK3:  // 3-term
+// lgK = A[0] + A[2]/T + A[3] * lnT;
+            lgK = ( dSr - dHr/T - dCpr * ( 1 - Tr/T - log( T/Tr ))) / Rln10;
+            dSr += dCpr * log( T / Tr );
+            dHr += dCpr * (T - Tr );
+            dGr_d = dHr - dSr * T;
+          break;
+       case CTM_LGK:  // full 7-term logK approx
+       case CTM_LGX:  // (derived from dCp=f(T))
+            lgK = A[0] + A[1] * T + A[2]/T + A[3] * lnT + A[4] / T_2 +
+                  A[5] * T_2 + A[6] / T_05;
+            dHr = Rln10 *( A[1]*T_2 - A[2] + A[3]*T - 2.0*A[4]/T
+                     + 2.0*A[5]*T_3 - 0.5*A[6]*T_05 );
+            dSr = Rln10 * ( A[0] + 2.0*A[1]*T + A[3]*(1.0+lnT) -
+                       A[4]/T_2 + 3.0*A[5]*T_2 + 0.5*A[6]/T_05 );
+            dGr_d = dHr - dSr * T;
+//         if( rc[q].DCp )
+            dCpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[4]*T_2 + Cp[3]/T_05;
+//            dHr = Rln10 * T_2 * ( A[1] - A[2]/T_2 + A[3]/T -
+//                             2.0*A[4]/T_3 + 2.0*A[5]*T - 0.5*A[6]/T_15 );
+//            dSr = Rln10 * ( A[0] + 2.0*A[1]*T + A[3]*(1.0+lnT) -
+//                       A[4]/T_2 + 3.0*A[5]*T_2 + 0.5*A[6]/T_05 );
+          break;
+       default:
+       ; // error message ?
+    }
+    // Calculation of dGr
+    dGr = -R_T * lgK * lg_to_ln;
     /* Loading output data */
     aW.WW(p).lgK = lgK;
     if( fabs(lgK) < 34. )
         aW.WW(p).K = exp( lgK*lg_to_ln );
     else aW.WW(p).K = FLOAT_EMPTY;
-    aW.WW(p).dG = Gr;
-    /* Checking consistency of Gr, Hr and Sr,  Gr == Hr - T*Sr; */
-    aW.WW(p).dH =  Hr;
-    aW.WW(p).dS = Sr;
-    aW.WW(p).dCp = Cpr;
-    aW.WW(p).dV = Vr;
-FINITA:
+//
+    aW.WW(p).dG = dGr;
+    aW.WW(p).dH =  dHr;
+    aW.WW(p).dS = dSr;
+    aW.WW(p).dCp = dCpr;
+  /* Checking consistency of Gr, Hr and Sr,  Gr == Hr - T*Sr; */
+    DH = dGr + T*dSr;
+    if( fabs( dGr - dGr_d ) > 1. || fabs( DH - dHr ) > 57.08 )  // J/mol
+    {
+       cout << "\nlgK_r: DH=" << DH << " | " << dHr << " ;   dGr=" << dGr_d ;
+//      To add an error message ?
+    }
+  // Correction for pressure at constant dVr ?
+    aW.WW(p).dV = dVr;
+
+ FINITA: // Copying uncertainties
     aW.WW(p).dlgK =rc[q].Ks[2];
     aW.WW(p).devG = rc[q].Gs[2];
     aW.WW(p).devH =rc[q].Hs[2];
@@ -899,7 +1010,7 @@ FINITA:
 }
 
 /*-----------------------------------------------------------------*/
-// Interpolyation on tabls values    logK for par TP
+// Interpolation on tabulated values of logK for TP pairs
 void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
 {
     int nP;
@@ -1154,12 +1265,13 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
         aW.twp->dV = T / aW.twp->P * R_CONSTANT;
     }
 
+/*
     if( CV == CPM_CEH )
-    { /* calc compression-deconpress */
+    { // calc compression-deconpress
         aC = (double)rc[q].Comp;
         aE = (double)rc[q].Expa;
         if( !IsDoubleEmpty( aC ) && !IsDoubleEmpty( aE ))
-        { /* calc coef compression-deconpress */
+        { // calc coef compression-deconpress
             if( fabs( aW.twp->P - Pst ) > PRESSURE_PREC ||
                     fabs( T - Tst ) > TEMPER_PREC )
             {
@@ -1174,7 +1286,9 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
             }
         }
     }
-    else if( CV == CPM_VKE && rc[q].DVt )
+    else
+*/
+    if( (CV == CPM_VKE || CV == CPM_VBE) && rc[q].DVt )
     {  /* calc on equation V(P,T) */
         aC = 0.;
         aE = 0.;
@@ -1251,13 +1365,16 @@ void TReacDC::calc_tpcv_r( int q, int /*p*/, int /*CM*/, int CV )
         /*       rc[q].Comp = (float)aW.twp->Alp;
                  rc[q].Expa = (float)aW.twp->Bet;  */
     }
-    /*     if( fabs( aC ) > 1e-18 )
-             aW.twp->dCv = aW.twp->dCp - T* aW.twp->dV * aE * aE / aC; */
-    /*Calc aW.twp->dU ¨ aW.twp->dF */
-    /*     aW.twp->dU = aW.twp->dH - aW.twp->P*aW.twp->dV;
-         aW.twp->dF = aW.twp->dG - aW.twp->P*aW.twp->dV; */
+    if( CV == CPM_CON || CV == CPM_NUL )
+    {
+            P_Pst = aW.twp->P - Pst;
+            VP = Vst * P_Pst;
+//            VT = Vst * T_Tst;
+            aW.twp->dG += VP;
+            aW.twp->dH += VP;
+    }
+// Calculating pressure correction to logK
     aW.twp->lgK -= aW.twp->dV * (aW.twp->P - aW.twp->Pst) / aW.twp->RT / lg_to_ln;
-    /* w[p].dV =  rc[q].Vs[0]; w[p].V  =  rc[q].Vs[1]; w[p].devV =rc[q].Vs[2];*/
 }
 
 // ------------------ End of m_reac2.cpp --------------------------

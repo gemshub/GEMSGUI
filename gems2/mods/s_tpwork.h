@@ -46,7 +46,13 @@ struct TPWORK
     RT,            // RT factor
     wRo, wEps,     //Density of H2O fluid, Dielectric constant of H2O fluid
     wtW[10];       //Work cells for RTparam script
-
+// work objects copied from DComp structure (invisible in GUI)
+    float *CPg,   // Input critical parameters (for FGL)
+    *Cemp,        // Array of empirical EOS coefficients (CG EOS)
+    mwt,          // molar mass of DC
+    TClow;        // Lowest TC for CG EoS 
+    char PdcC,    // DC code
+    cre1, cre2, cre3;
     TPWORK()
     {}
 

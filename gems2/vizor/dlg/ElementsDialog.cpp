@@ -32,7 +32,7 @@ const char *GEMS_EL_HTML = "elements";
 #include "visor.h"
 #include "visor_w.h"
 #include "m_icomp.h"
-
+ #include "m_param.h"
 
 ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
            const char* /*caption*/):
@@ -141,6 +141,8 @@ ElementsDialog::CmSetFilters()
 void
 ElementsDialog::CmOk()
 {
+       TProfil::pm->useAqPhase = el_data.flags[cbAqueous_];  // Added 16.06.03 
+       TProfil::pm->useGasPhase = el_data.flags[cbGaseous_];
    accept();
 }
 

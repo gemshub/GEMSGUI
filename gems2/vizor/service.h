@@ -84,6 +84,10 @@ bool
 vfProcessSet(QWidget* par, const char * p_key,
             bool& mode, char& type, int size[6] );
 
+bool
+ vfAutoPhaseSet(QWidget* par, gstring& pr_key, gstring& a_key, gstring& g_key,
+        char& acode, char& gcode, float apar[4], float gpar[4] );
+
 gstring
 vfKeyEdit(QWidget* par, const char* title, int iRt, const char* key=0);
 

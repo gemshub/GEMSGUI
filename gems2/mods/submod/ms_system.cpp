@@ -791,6 +791,7 @@ void TSyst::phase_data_load()
         switch( mup->PHC[k] )
         { /* Load begin parametres */
         case PH_AQUEL:
+        case PH_FLUID:
         case PH_GASMIX:
         case PH_PLASMA:
         case PH_HCARBL:

@@ -120,7 +120,8 @@ void TDComp::ods_link( int q)
     //}
     //if( dc[q].Nemp > 0 ) {
     aObj[ o_dccemp ].SetPtr( dc[q].Cemp );
-    aObj[ o_dccemp ].SetDim( dc[q].Nemp, 1 );
+    aObj[ o_dccemp ].SetDim( MAXEOSPARAM, 1 );
+//    aObj[ o_dccemp ].SetDim( dc[q].Nemp, 1 );
     //}
     //if( dc[q].Nsd > 0 ) {
     aObj[ o_dcsdref ].SetPtr( dc[q].sdref );
@@ -232,7 +233,8 @@ void TDComp::dyn_new(int q)
     if( dc[q].Nemp == 0 )
         dc[q].Cemp = (float *)aObj[ o_dccemp ].Free();
     else
-        dc[q].Cemp = (float *)aObj[ o_dccemp].Alloc(dc[q].Nemp, 1, F_ );
+        dc[q].Cemp = (float *)aObj[ o_dccemp].Alloc( MAXEOSPARAM, 1, F_ );
+//      dc[q].Cemp = (float *)aObj[ o_dccemp].Alloc(dc[q].Nemp, 1, F_ );
 
     if( dc[q].Nsd == 0 )
     {
@@ -262,12 +264,12 @@ void TDComp::dyn_new(int q)
     else
         dc[q].Vt = (float *)aObj[ o_dcvt].Alloc(MAXVTCOEF, 1, F_ );
 
-    if( CV == CPM_GAS || CV == CPM_EMP  )
+    if( CV == CPM_GAS /* || CV == CPM_EMP */  )
         dc[q].CPg = (float *)aObj[ o_dccritpg].Alloc(MAXCRITPARAM, 1, F_ );
     else
         dc[q].CPg = (float *)aObj[ o_dccritpg ].Free();
 
-    if( CV == CPM_VBM )     // 04.04.2003  Birch-Murnaghan coeffs 
+    if( CV == CPM_VBM )     // 04.04.2003  Birch-Murnaghan coeffs
         dc[q].ODc = (float *)aObj[ o_dcodc].Alloc(MAXODCOEF, 1, F_ );
     else
         dc[q].ODc = (float *)aObj[ o_dcodc ].Free();
@@ -365,6 +367,7 @@ TDComp::RecBuild( const char *key, int mode  )
     {
     case  CP_AQU:
     case  CP_GAS:
+    case  CP_FLUID:
     case  CP_SOLID:
     case  CP_GASI:
     case  CP_LIQID:
@@ -434,15 +437,19 @@ AGAIN:
     if( dcp->Nft > 0 )   dcp->PdcFT = S_ON;
     switch( CV)
     {
-    default:
+      default:
         dcp->Nemp = 0;
         break;
-    case CPM_GAS:
+      case CPM_GAS:
         dcp->Nemp = 4;
-    case CPM_EMP:
         dcp->NeCp = 1;
+        break;
+      case CPM_EMP:
+        dcp->NeCp = 1;
+        dcp->Nemp = MAXEOSPARAM; // added 09.05.2003 CSCS KD
+        break;
     }
-    if( dcp->Nemp > 0 ) dcp->PdcVT = S_ON;
+//  if( dcp->Nemp > 0 ) dcp->PdcVT = S_ON;
     if( CM == CTPM_HKF ) dcp->PdcHKF = S_ON;
     dyn_new();
     pVisor->Update();
@@ -474,6 +481,7 @@ TDComp::RecCalc( const char *key )      // dcomp_test
     { //  analysing consistency of chemical formula
     case CP_SOLID:
     case CP_GAS:
+    case CP_FLUID:
     case CP_UNIV:
     case CP_HCARB:
     case CP_LIQID: // no charge
@@ -496,7 +504,8 @@ TDComp::RecCalc( const char *key )      // dcomp_test
     Error( GetName(),
   "W07DCrun: Please, check stoichiometry, charge or valences in the formula");
 NEXT:
-    if( ( dcp->pstate[0] == CP_GAS || dcp->pstate[0] == CP_GASI)
+    if( ( dcp->pstate[0] == CP_GAS || dcp->pstate[0] == CP_GASI ||
+          dcp->pstate[0] == CP_FLUID )
         &&  dcp->mVs[0] < 1. )// test molar volume
         dcp->mVs[0] = GAS_MV_STND;
     // test values T, P, Gst, Hst, Sst
@@ -619,13 +628,14 @@ TDComp::DCthermo( int q, int p )
         ods_link( q );
     aW.twp->Tst = aW.twp->TCst + C_to_K;
     aW.twp->RT = R_CONSTANT * aW.twp->T;
+    aW.twp->Fug = aW.twp->P;
     // method calculation
     CM = toupper( dcp->pct[0] );
     CE = toupper( dcp->pct[1] );
     CV = toupper( dcp->pct[2] );
 
-    if( CM == CTPM_HKF )
-    {// HKF calculations
+    if( CM == CTPM_HKF || aW.twp->P < 1e-9 )  // fixed by KD 03.07.03 
+    {// HKF calculations or determination of P_sat if P=0
 
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
                 ( aW.twp->P > 1e-4 && fabs( aW.twp->P - aSta.Pres ) > 0.001 ))
@@ -654,7 +664,20 @@ TDComp::DCthermo( int q, int p )
         if( CV == CPM_GAS && ( aW.twp->P > 10. && aW.twp->TC > 100. ) )
         {
             TFGLcalc aFGL;
-            aFGL.calc_FGL( dcp, p );
+            aW.twp->CPg = dcp->CPg;
+            aW.twp->mwt = dcp->mwt;
+            aW.twp->PdcC = dcp->PdcC;
+            aFGL.calc_FGL( );
+            aW.twp->CPg = NULL;
+        }
+        else if( CV == CPM_EMP )  // Calculation of fugacity at X=1 using GC EoS
+        {                         // Churakov & Gottschalk 2003 GCA
+            TCGFcalc aCGF;
+            aW.twp->Cemp = dcp->Cemp;
+            aW.twp->PdcC = dcp->PdcC;
+            aW.twp->TClow = dcp->TCint[0];
+            aCGF.CGcalcFug( );
+            aW.twp->Cemp = NULL;
         }
         break;
     case CTPM_HKF:
@@ -668,17 +691,17 @@ TDComp::DCthermo( int q, int p )
                     idx = 1; /* H2O_liquid */
                 switch( aSpc.isat )
                 {
-                case 0: /* 1-faza region */
+                case 0: /* 1-phase region */
                     if(idx != 0)
                     {
                         idx = 0; /* get water-liquid */
                         calc_tpH2O( idx );
                     }
-                    else //Calc water-gason shema Cà
+                    else //Calc water-gas on from Cp=f(T)
                         //(on isat = 0)
                         calc_tpcv( q, p, CE, CV );
                     break;
-                case 1: /* KHP 2-faza region */
+                case 1: /* KHP 2-phase region */
                     calc_tpH2O( idx );
                     break;
 

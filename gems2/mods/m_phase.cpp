@@ -446,6 +446,9 @@ AGAINRC:
     case CP_GAS:
         php->PphC = PH_GASMIX;
         break;
+   case CP_FLUID:
+        php->PphC = PH_FLUID;
+        break;
         //
     case CP_LIQID:
         php->PphC = PH_SOLUTION;
@@ -604,7 +607,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
             if( Kielland && pa0 )  /* Helgeson */
             { if( Z < 0.01 ) s(i,0) = 0;
                 if( Z > 0.99 ) s(i,0) = 3.84;
-                /* do it by HKF ! */
+                /* do it by HKF ! */    //  3.72 !
             }
         }
         if(( php->PphC == PH_SORPTION || php->PphC == PH_POLYEL) && php->scoef )
@@ -626,11 +629,48 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
             { if( Z < 0.01 ) s(i,0) = aPa->pa.p.DNS;
                 if( Z > 0.99 ) s(i,0) = 2.31;
             }
-        }
+        } // i
 
-    } /* i */
+    }
+    // Collecting coefficients of EoS for fluids
+    if( (php->PphC == PH_FLUID) && php->scoef )
+    {
+        nsc = php->nscN * php->nscM;
+        if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
+   "CG2003 fluid EoS coefficients: Collect from DComp records?"))
+        {
+           memset( dcn, 0, MAXRKEYLEN );
+           for( i=0; i<php->nDC; i++ )
+           {  /*Get key */
+              memcpy( dcn, php->SM[i], DC_RKLEN );
+              dcn[DC_RKLEN]=0;
+              Ctype = A_NUL;
+              /* Read record */
+              if( php->DCS[i] == SRC_DCOMP )
+              {
+                 aDC->TryRecInp( dcn, crt, 0 );
+                 if( aDC->dcp->Cemp )
+                 {
+                    s(i,0) = aDC->dcp->Cemp[0];
+                    s(i,1) = aDC->dcp->Cemp[1];
+                    s(i,2) = aDC->dcp->Cemp[2];
+                    s(i,3) = aDC->dcp->Cemp[3];
+                 }
+                 else { // Error - no array!
+                    s(i,0) = 0.0;
+                    s(i,1) = 0.0;
+                    s(i,2) = 0.0;
+                    s(i,3) = 0.0;
+                 }
+                 Ctype = aDC->dcp->PdcC;
+              }
+              if( getDCC==true || php->DCC[i] == A_NUL || php->DCC[i] == '`')
+                 php->DCC[i] = Ctype;
+           } // i
+        }
+     }
 NEXT:  /* define more precisely code of phase  */
-    iic = 0;
+//    iic = 0;
     if( php->Asur > 1. )
         if( php->nDC == 1 )
         {
@@ -640,10 +680,10 @@ NEXT:  /* define more precisely code of phase  */
         {
             php->PphC = PH_SORPTION; /* iic++; */
         }
-    if( iic ) goto NEXT;
+//    if( iic ) goto NEXT;
 }
 
-// to Project new
+// to Project new  - extended by KD on 16.06.03 to add CG EoS
 void TPhase::newAqGasPhase( const char *key, int file, const char emod,
                             bool useLst, TCStringArray lst )
 {
@@ -658,10 +698,10 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
            php->sol_t[0] = emod;  // added Davies eq by KD 25.01.02
         if( emod == SM_AQDH3)
         {
-        memcpy( &php->PphC, "a++---", 6 );
-        php->ncpN = 1;
-           php->ncpM = 8;
-        php->nscN = php->nscM = 1;
+           memcpy( &php->PphC, "a++---", 6 );
+           php->ncpN = 1;
+             php->ncpM = 8;
+           php->nscN = php->nscM = 1;
         }
         else if(emod == SM_AQDAV)
         {
@@ -670,14 +710,34 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
            php->nscN = php->nscM = 0;
         }
     }
-    else
-    {
-        part = "g:*:*:*:";
-        memcpy( php->sol_t, "INNINN", 6 );
-        memcpy( &php->PphC, "g-----", 6 );
-        php->ncpN = php->ncpM =0;
-        php->nscN = php->nscM =0;
-    }
+    else if( key[0] == 'g' ) // set flags  and sizes
+         {
+           php->sol_t[0] = emod;
+           part = "g:*:*:*:";
+           memcpy( php->sol_t, "INNINN", 6 );
+           memcpy( &php->PphC, "g-----", 6 );
+           php->ncpN = php->ncpM =0;
+           php->nscN = php->nscM =0;
+         }
+    else if( key[0] == 'f' ) // added by KD on 16.06.03
+         {                   // Constructing the CG2003 fluid model
+           php->sol_t[0] = emod;
+           part = "f:*:*:*:";
+           if( emod == SM_FLUID )  // CG EoS fluid
+           {
+              memcpy( php->sol_t, "FNNSNN", 6 );
+              memcpy( &php->PphC, "f-+---", 6 );
+              php->ncpN = php->ncpM =0;
+              php->nscN = 1; php->nscM = 4;
+           }
+           else { // Ideal fluid ?
+              memcpy( php->sol_t, "INNINN", 6 );
+              memcpy( &php->PphC, "g-----", 6 );
+              php->ncpN = php->ncpM =0;
+              php->nscN = php->nscM =0;
+           }
+         }
+
     strncpy( php->name, key, MAXFORMULA-1);
     php->name[MAXFORMULA-1] = '\0';
     strcpy( php->notes, "`" );
@@ -697,7 +757,6 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
 
     if( useLst == false )
     {
-
         //DCOMP key list
         Ndc = rt[RT_DCOMP].GetKeyList( part, aDclist, anRDc );
         if( part[0] == 'g' ) // Added Sveta 28/10/02 for plasma
@@ -758,7 +817,7 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
         }
 
 
-        ErrorIf( Nrc<1&&Ndc<1,  key, " No keys DCOMP and REACDC.");
+        ErrorIf( Nrc<1&&Ndc<1,  key, " No DComp and ReacDC records found! ");
         php->nDC = Ndc + Nrc;
         php->NR1 = aRclist.GetCount();
         iic = aDclist.GetCount();
@@ -797,7 +856,7 @@ void TPhase::newAqGasPhase( const char *key, int file, const char emod,
 
     for( i=0; i<php->nDC; i++ )
     {
-        php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* cod istochnic  */
+        php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* source code  */
         php->SM[i][DC_RKLEN-1] = ' ';
         php->DCC[i] = '`';
     }

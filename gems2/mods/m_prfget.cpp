@@ -112,7 +112,7 @@ void TProfil::OpenProfileMode( const char* key,
  try
  {
         Rnum = rt[RT_PARAM].Find( key );
-        ErrorIf( Rnum < 0,  key , "Project record was not existed!");
+        ErrorIf( Rnum < 0,  key , "Project record do not exist!");
 
       pVisor->Message( 0, "Loading Modelling Project",
        "Opening data base files to Project", 5 );
@@ -234,7 +234,7 @@ AGAIN:
    if( remakeRec )
      RecBuild( key_str.c_str(), VF_REMAKE );  // Edit flags
    else
-     RecBuild( key_str.c_str(), VF_BYPASS ); 
+     RecBuild( key_str.c_str(), VF_BYPASS );
 
 
     pVisor->Message( window(), "Loading Modelling Project",

@@ -227,7 +227,7 @@ void TMTparm::dyn_new(int /*q*/)
     else tp.Fug =  (float *)aObj[ o_tpfug ].Free();
 
     if( tp.PtvdVg != S_OFF )
-        tp.dVg = (float *)aObj[ o_tpdvg].Alloc( tp.Lg, 1, F_ );
+        tp.dVg = (float *)aObj[ o_tpdvg].Alloc( tp.Lg, 4, F_ );
     else tp.dVg =  (float *)aObj[ o_tpdvg ].Free();
 }
 
@@ -283,8 +283,13 @@ void TMTparm::MTparmAlloc( )
         tp.PtvG = S_REM;  /* default array */
     if( tp.PtvVm == S_OFF )
         tp.PtvVm = S_REM;  /* default array */
+  if( tp.Lg )  // Added on 13.06.03 by KD
+  {
+     tp.PtvdVg = S_REM; // Arrays used by CG-EoS for fluids !
+     tp.PtvFg = S_REM;
+  }
     dyn_new();
-    aSta.setdef();  //Added Sveta 15/06/2002 !!!!
+    aSta.setdef();  //Added by Sveta 15/06/2002 
 }
 
 // realoc memory to MTPARM structure and load data to arrays
@@ -379,8 +384,19 @@ void TMTparm::LoadMtparm( float cT, float cP )
 //        if( tp.PtvWb != S_OFF && j< tp.Ls )   tp.Wbor[j] = aW.twp->Wbor;
 //        if( tp.PtvWr != S_OFF && j< tp.Ls )   tp.Wrad[j] = aW.twp->Wrad;
         if( tp.PtvFg != S_OFF && j< tp.Lg )   tp.Fug[j] = aW.twp->Fug;
-        if( tp.PtvdVg != S_OFF && j< tp.Lg )  tp.dVg[j] = aW.twp->dVg;
 
+//        if( tp.PtvdVg != S_OFF && j< tp.Lg )  tp.dVg[j] = aW.twp->dVg;
+// For passing corrected EoS coeffs to calculation of fluid
+// mixture
+        if( tp.PtvdVg != S_OFF && j< tp.Lg )
+        {
+          tp.dVg[j*4] = aW.twp->wtW[6];
+          tp.dVg[j*4+1] = aW.twp->wtW[7];
+          tp.dVg[j*4+2] = aW.twp->wtW[8];
+          tp.dVg[j*4+3] = aW.twp->wtW[9];
+//          tp.dVg[j*5+4] = aW.twp->wtW[9];
+        }
+//
         /* set scales - not done yet !
         switch( tp.PunT )
     {

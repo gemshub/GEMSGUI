@@ -412,6 +412,7 @@ ProgressDialog::Update(bool force)
         switch( pData->PHC[ii] )
         {
         case 'g':
+        case 'f':
             g += pData->FWGT[ii];
             break;
         case 'a':

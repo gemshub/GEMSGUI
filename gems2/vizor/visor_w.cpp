@@ -57,6 +57,7 @@ using namespace std;
 #include "dlg/KeyDialog.h"
 #include "dlg/KeyProfile.h"
 #include "dlg/ChangeKeyDialog.h"
+//#include "dlg/AutoPhaseDialog.h"
 
 #ifdef __unix
 const char* GEMS_LOGO_ICON = "img/gems1.png";
@@ -848,7 +849,31 @@ vfProcessSet(QWidget* par, const char * p_key,
     return true;
 }
 
+// call to AutoPhaseDialog  added 18.07.03
+/*
+bool
+vfAutoPhaseSet(QWidget* wpar, gstring pr_key, gstring a_key, gstring g_key,
+         char& acode, char& gcode, float apar[4], float gpar[4] );
+{
+     AutoPhaseDialog apdlg( pr_key, acode, gcode, wpar );
+     apdlg.set_apar( apar );
+     apdlg.set_gpar( gpar );
+     apdlg.set_akey( apar );
+     apdlg.set_gkey( gpar );
 
+     if( !apdlg.exec() )
+      return false;
+
+    acode = apdlg.get_acode();
+    gcode = apdlg.get_gcode();
+    apdlg.get_apar( apar );
+    apdlg.get_gpar( gpar );
+    apdlg.get_akey( a_key );
+    apdlg.get_gkey( g_key );
+
+    return true;
+}
+*/
 //=============================================
 // KeyEdit dialog
 //=============================================

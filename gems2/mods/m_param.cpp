@@ -121,7 +121,7 @@ TProfil::TProfil( int nrt ):
         TCModule( nrt )
 {
     aFldKeysHelp.Add(
-        "l<10 Identifier of root project definition");
+        "l<10 Identifier of root modelling project definition");
     aFldKeysHelp.Add(
         "l<38 Record key comment to project definition");
     start_title = " Numerical and Configuration Settings ";

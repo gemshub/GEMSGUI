@@ -34,7 +34,6 @@ ZPrTr = -0.1278034682e-1,
                                             psi = 0.26e4,
                                                   gref = 0.0e0;
 
-
 //--------------------------------------------------------------------//
 void
 TDComp::calc_tpcv( int q, int p, int CE, int CV )
@@ -129,7 +128,6 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
             break;
             //        case 10: aW.twp->Cp += a * log( T ); break;
         }
-
     }
     if( fabs( T - Tst ) > TEMPER_PREC )
         for( j=0, jf=0; j<=k; j++ )
@@ -153,7 +151,7 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
             TT = T / Tst;
 
             if( j && dc[q].Nft && dc[q].FtP[jf] <= Tst-dT )
-            {
+            {   // Adding parameters of phase transition
                 if( !IsFloatEmpty( dc[q].FtP[dc[q].Nft+jf] ))  /* dS */
                     aW.twp->S += dc[q].FtP[dc[q].Nft+jf];
                 if( !IsFloatEmpty( dc[q].FtP[dc[q].Nft*2+jf] ))  /* dH */
@@ -273,7 +271,8 @@ NEXT:
 void
 TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
 {
-    double a, T, Vst, Tst, Pst, P_Pst, T_Tst, Ts2, dT, VP, VT, aC, aE;
+    double a, T, Vst, Tst, Pst, P, P_Pst, T_Tst, Ts2, dT, VP, VT,
+    aC, aE, kap, T05, Tst05;
     int i;
 
     /* Init numbers - volume Vst must be in J/bar ! */
@@ -284,37 +283,66 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
     dT = TK_DELTA; //TC = aW.twp->TC;
     aW.twp->T =    T = aW.twp->TC + dT;
     aW.twp->Tst =  Tst = (double)dc[q].TCst + dT;
-    aC = 0.; aE = 0.;
+    P = aW.twp->P;
     P_Pst = aW.twp->P - Pst;
     T_Tst = T - Tst;
     Ts2 = T_Tst * T_Tst;
+    T05 = sqrt(T);
+    Tst05 = sqrt(Tst);
 
-    if( CV == CPM_CEH || CV == CPM_CON )
+    if( CV == CPM_CON )
+    { // Molar volume assumed independent of T and P
+      aW.twp->V = Vst;
+      aW.twp->G += Vst * P_Pst;
+      aW.twp->H += P_Pst * Vst;
+    }
+    else if( CV == CPM_CEH )
     { /* Calculation over compressibility/expandability according to
-         Holland & Powell, 1990 */
-        if( CV == CPM_CEH )
-        {  // reading and checking the coeffs
-           aC = (double)dc[q].Comp;
-           if( IsDoubleEmpty( aC ))
-              aC = 0.;
-           aE = (double)dc[q].Expa;
-           if( IsDoubleEmpty( aE ))
-              aE = 0.;
-        }
-        if(( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
-             && fabs(Vst) > 1e-10 )  // No zero molar volume !
-        {
-            aE /= Vst;  // ?  check
-            aC /= Vst;  // ?  check
-//            aW.twp->V  = Vst * ( 1.+ aE * T_Tst ) * ( 1.- aC * aW.twp->P );
-//            aW.twp->S  -= Vst * aW.twp->P * aE * (1. - aC * aW.twp->P / 2.);
-//            aW.twp->G+=Vst*(1.+ aE * T_Tst)*( aW.twp->P-aC*aW.twp->P*aW.twp->P/2.);
-//            aW.twp->H += aW.twp->P*Vst*(1.-aC*aW.twp->P/2.)*(1.+aE*T_Tst - aE );
-            aW.twp->V = Vst * ( 1. + aE * T_Tst ) * ( 1.- aC * P_Pst );
-            aW.twp->S -= Vst * P_Pst * aE * (1. - aC * P_Pst / 2.);
-            aW.twp->G += Vst * (1. + aE * T_Tst)*( P_Pst - aC * P_Pst * P_Pst/2.);
-            aW.twp->H += P_Pst * Vst * (1.-aC * P_Pst / 2.)*(1.+aE * T_Tst - aE );
-        }
+         Holland & Powell, 1998 */
+      // reading and checking the coeffs
+      aC = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
+      aC *= 1000.;   // Check! conversion from kbar to bar
+      if( IsDoubleEmpty( aC ))
+          aC = 0.;
+      aE = (double)dc[q].Expa; // This is the a parameter in 1/K !
+      if( IsDoubleEmpty( aE ))
+          aE = 0.;
+      if(( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
+           && fabs(Vst) > 1e-9 && aC > 1. && aE > 0.1 )  // No zero molar volume !
+      {
+// Inserted 01.07.03 - calculations acc. to Holland&Powell, 1998
+         double PP = P*0.001; // P seems to be in kbar in HP98 eqns!
+//       double PP = P_Pst*0.001;  // this is used by C.DeCapitani in Theriac  
+         // Coeff. of thermal expansion at T
+         aW.twp->Alp = aE * (1. - 10./T05 );
+         // Bulk modulus at T
+         kap = aC * ( 1. - 1.5e-4*T_Tst );
+         // Compressibility at T  - check !
+         aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));
+// Molar properties
+         aW.twp->V = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
+         aW.twp->G += 1./3.* aW.twp->V * kap * (pow((1.-4.*PP/kap),0.75 )- 1.);
+         aW.twp->S -= Vst * P * ( aE - 10.*aE / T05 );
+         aW.twp->H += -T * Vst * P * ( aE - 10.*aE / T05 )
+              + 1./3. * aW.twp->V * kap * ( pow((1.-4.*P/kap),0.75 ) - 1.);
+         aW.twp->V *= pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
+//       aW.twp->V *= pow( (kap / (kap + 4*PP )), 0.25);  // Corr. C. De Capitani
+                // Check calculation of H !
+//  Abandoned from 01.07.03 KD - old HP90 calculations, appear wrong
+//          aE /= Vst;  // ?  check
+//          aC /= Vst;  // ?  check
+//          aW.twp->V = Vst * ( 1. + aE * T_Tst ) * ( 1.- aC * P_Pst );
+//          aW.twp->S -= Vst * P_Pst * aE; // * (1. - aC * P_Pst / 2.);
+//          aW.twp->G += Vst * (1. + aE * T_Tst)*( P_Pst - aC * P_Pst * P_Pst/2.);
+//          aW.twp->H += P_Pst * Vst * (1.-aC * P_Pst / 2.)*(1.+aE * T_Tst - aE );
+      }
+      else {  // aE and aC are not provided
+// Warning here?
+        // Molar volume assumed independent of T and P
+        aW.twp->V = Vst;
+        aW.twp->G += Vst * P_Pst;
+        aW.twp->H += P_Pst * Vst;
+      }
     }
     else if( (CV == CPM_VKE || CV == CPM_VBE ) && dc[q].Vt )
     {  /* Vm = f(T,P) equations */
@@ -344,15 +372,16 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                 aC -= a;
                 break;
             case 4:
-//              aC -= a * 2. * aW.twp->P;
-                aC -= a * 2. * P_Pst;
+              aC -= a * 2. * P;
+//                aC -= a * 2. * P_Pst;
                 break;
             }
         }
         if( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
-        { /* can calculate */
+        { /* can be calculated */
 //          P_Pst = aW.twp->P - Pst;
-            VP = Vst * P_Pst;
+//            VP = Vst * P_Pst;
+            VP = Vst * P;
             VT = Vst * T_Tst;
             aW.twp->G += VP;
             aW.twp->H += VP;
@@ -382,14 +411,14 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                     break;
                 case 3:
                     aW.twp->V += a * VP;
-                    aW.twp->G += a * VP * P_Pst / 2.;
-                    aW.twp->H += a * VP * P_Pst / 2.;
+                    aW.twp->G += a * VP * P / 2.;
+                    aW.twp->H += a * VP * P / 2.;
                     break;
                 case 4:
-                    aW.twp->V += a * VP * P_Pst;
-                    aW.twp->G += a * VP * ( aW.twp->P*aW.twp->P - Pst*Pst ) / 3.;
-                    aW.twp->H += a * VP * ( aW.twp->P*aW.twp->P - Pst*Pst ) / 3.;
-                    break;                      // Check why not P_Pst*P_Pst
+                    aW.twp->V += a * VP * P;
+                    aW.twp->G += a * VP * ( P*P ) / 3.;
+                    aW.twp->H += a * VP * ( P*P ) / 3.;
+                    break;
                 }
             }
         }
@@ -398,13 +427,13 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
         /*       dc[q].Comp = (float)aW.twp->Alp;
                  dc[q].Expa = (float)aW.twp->Bet;  */
     }
-    if( CV == CPM_VBM && dc[q].ODc )  /* Code 'B' - Birch-Murnaghan */
+    else if( CV == CPM_VBM && dc[q].ODc )  /* Code 'B' - Birch-Murnaghan */
     { // Inserted 04.04.2003 M.Gottschalk and KD
       if( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
       {
          double VV0=0.0, GG0=0.0, HH0=0.0, SS0=0.0, aC=0.0, aE=0.0;
 
-         BirchMurnaghan( 0.1*Pst, 0.1*aW.twp->P, Tst, T, Vst*10., dc[q].ODc,
+         BirchMurnaghan( 0.1*Pst, 0.1*P, Tst, T, Vst*10., dc[q].ODc,
                          VV0, aC, aE, GG0, HH0, SS0 );
          // increments to V, G, H, S
          aW.twp->V += VV0/10.;
@@ -414,7 +443,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          aW.twp->Alp = aC;
          aW.twp->Bet = aE;
       }
-   }  // End Birch-Murnaghan section
+   }  // End of Birch-Murnaghan section
 }
 
 //---------------------------------------------------------------------------
@@ -485,9 +514,9 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
           const float *BMConst, double &vv, double &alpha, double &beta,
           double &dG, double &dH, double &dS )
 {
-   double vt, vpt, a1, a2, a3,    //  a4, a5,
+   double vt, /*vpt,*/ a1, a2, a3,    //  a4, a5,
           kt00, kt0, dkdt, kp, kpp, vstart,
-          Volume, IntVol, Pincr=0.01, Tincr=0.1,
+          /*Volume, IntVol, */ Pincr=0.01, Tincr=0.1,
           Pplus, Pminus, Tplus, Tminus,
           vPplus, vPminus, vTplus, vTminus,
           kt0Tplus, kt0Tminus, kppTplus, kppTminus,

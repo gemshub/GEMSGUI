@@ -268,9 +268,11 @@ enum DC_CNTRL_CODES {
     CTM_CST = 'S',/*calculation of ordinary integral using 11-term Cp=f(T) equations
                      (up to 3 phase transitions or up to 3 Cp=f(T) equations
                       for a DCOMP definition) */
-    CTM_CHP = 'H',//the same with modifications by Holland&Powell,1990 (minerals);
-    CTM_BER = 'B',// the same with modifications by Berman,1988 (minerals)
-    CTM_FEI = 'F',// Cp=f(T) equation by Fei&Saxena,1986 (reserved)
+    CTM_CHP = 'H', //the same with modifications by Holland&Powell,1990 (minerals);
+    CTM_BER = 'B', // the same with modifications by Berman,1988 (minerals)
+    CTM_FEI = 'F', // Cp=f(T) equation by Fei&Saxena,1986 (reserved)
+    CTM_LGX = 'X', // REACDC: calculation of reaction properties from empirical
+                   // function lgK=f(T) in 7-term form obtained from 5-term Cp(T)
     // (H) CTPM_HKF
     CTM_HKF = 'K',//calculation with HKF EOS (for aqueous species) as in SUPCRT92
     CTM_WAT = 'W',/* calculation of H2O water(steam) properties from HGK and LVS
@@ -278,16 +280,11 @@ enum DC_CNTRL_CODES {
     CTM_AKI = 'A',// modified HKF EOS for ion pairs by Akinfiev,1992 (reserved);
     // (K) CTPM_REA
     CTM_LGK = 'L',/* calculation from empirical function lgK=f(T) in 7-term form
-                      (Nordstrom&Munoz,1986) - REACDC only; */
-
-    CTM_LGX = 'X',  /* reserved */
-    CTM_EK1 = '1', /* calculation from a one-parametric approximation for iso-
-                     coulombic reactions (Gu et al.,1994), assuming dGr(T) = dGr(Tr)
-                     = const and dSr(Tr) = 0 - REACDC only;*/
-    CTM_EK2 = '2', /* the same, but using a two-parametric approximation + dHr(Tr)
-                    (Vant Hoff equation) - REACDC only;  */
-    CTM_EK3 = '3',  /*the same, using a three-parameter approximation
-                     (dCpr = const)- REACDC only;*/
+                      (Nordstrom&Munoz,1988) - REACDC only; */
+    CTM_EK0 = '0', /* one-term extrapolation at dHr = 0 and logK = const added 15.07.03*/
+    CTM_EK1 = '1', /* one-term extrapolation (Gu et al.,1994), dGr(T)= const */
+    CTM_EK2 = '2', /* two-term extrapolation Vant Hoff) - REACDC only;  */
+    CTM_EK3 = '3',  /*three-term extrapolation (dCpr = const)- REACDC only;*/
     CTM_IKZ = 'Z',/* calculation using Lagrange polynomial interpolation over the
                     array of lgK for several fixed T (P) points (REACDC only). */
     CTM_DKR = 'R',  /* calculation of lgK of dissociation reactions at elevated TP
@@ -336,7 +333,7 @@ enum DC_CNTRL_CODES {
     // CTPM_REA
     CPM_INK  = 'Z', /* calculation using Lagrange polinomial interpolation over
                      the array  of lgK(T,P). */
-    CPM_EMP  = 'S'  /* calculation from Equation of State (reserved) */
+    CPM_EMP  = 'S'  /* calculation from CG2003 Equation of State */
                /*4. Codes for calculations of pressure impact on properties derived via
                   REACDC lgK functions.
                 K - V=f(T,P) equation in the form (Dorogokupets et.al.,1988);
@@ -352,6 +349,7 @@ enum DC_phase_state {   // Code of phase state identification of DC record keys
     CP_AQU   = 'a',  // aqueous electrolyte
     CP_GAS   = 'g',  // gaseous species
     CP_GASI  = 'p',  // plasma species
+    CP_FLUID = 'f',  // component of fluid
     CP_SOLID = 's',  // components of condensed solid phases, incl. sorption carriers
     CP_LIQID = 'l',  // components of condensed liquid non-electrolyte phases
     CP_MELT  = 'm',  // non-aqueous electrolyte species (eq., in magmatic melt)

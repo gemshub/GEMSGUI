@@ -208,7 +208,7 @@ void TProfil::PHcompare( TIArray<CompItem>& aPhase,
     j = 0;
     while( i<Fisold && j<mup->Fis )
     {
-        l = memcmp( SFold[i], mup->SF[j], PH_RKLEN );
+        l = memcmp( SFold[i], mup->SF[j], PH_RKLEN-MAXPHGROUP ); // fix KD 24.06.03
         if( l==0 )
         {
             DCcompare( aDComp, id, jd, id+Llold[i], jd+mup->Ll[j]);
@@ -359,10 +359,10 @@ void TProfil::TestChangeProfile()
     }
 }
 
-
+/*
 // load and set default SysEq to build short lists
 // delete only phase and dcomp/reacdc fron default phases
-
+// not used anymore?
 void TProfil::Set_z_sp_config( const char *profil )
 {
 
@@ -424,6 +424,7 @@ void TProfil::Set_z_sp_config( const char *profil )
     if( nGas >=0 && mup->PmvGas == S_ON )
     {
         TCStringArray lst;
+        char emod;
         for( ii=nGasf; ii<nGasf+mup->Ll[nGas]; ii++  )
             if( syp->Dcl[ii] != S_OFF )
             {
@@ -432,7 +433,8 @@ void TProfil::Set_z_sp_config( const char *profil )
                 lst.Add( gstring(ss.p) );
                 mup->SM[ii][DC_RKLEN-1] = ' ';
             }
-        TPhase::pm->newAqGasPhase( GasKey.c_str(), file, SM_AQDH3, true, lst);
+        emod = mup->PmvGas;
+        TPhase::pm->newAqGasPhase( GasKey.c_str(), file, emod, true, lst);
     }
 
     //save DClist old
@@ -510,7 +512,7 @@ void TProfil::Set_z_sp_config( const char *profil )
     syst->setDefData();
 
 }
-
+*/
 
 int TProfil::indPH( int i )
 {
@@ -534,7 +536,9 @@ int TProfil::indDC( int i )
     return -1;
 }
 
+/*
 // Show phase information in System Configurator
+// not used anymore ?
 // This has to be re-implemented using ListView dialog
 void TProfil::ShowPhaseWindow()
 {
@@ -543,7 +547,7 @@ void TProfil::ShowPhaseWindow()
 
     for( k=0; k<mup->Fi; k++ )
         aPHList.Add( gstring( mup->SF[k], 0, PH_RKLEN) );
-    nPHrec = vfChoice(window(), aPHList, "c_phnam  Select Phase name to show record");
+    nPHrec = vfChoice(window(), aPHList, "Select a Phase name to show record");
     if( nPHrec >= 0 )
     {
         TPhase::pm->RecInput( mup->SF[nPHrec] );
@@ -553,6 +557,7 @@ void TProfil::ShowPhaseWindow()
 
 // Show species/phase equilibrium data
 // This has to be re-implemented using ListView dialog
+
 void TProfil::ShowEqPhaseWindow()
 {
     int k, nPHrec;
@@ -560,7 +565,7 @@ void TProfil::ShowEqPhaseWindow()
 
     for( k=0; k<mup->Fi; k++ )
         aPHList.Add( gstring( mup->SF[k], 0, PH_RKLEN) );
-    nPHrec = vfChoice(window(), aPHList, "c_phnam  Select Phase name to show record");
+    nPHrec = vfChoice(window(), aPHList, "Select a Phase name to show record");
     if( nPHrec >= 0 )
     {
         TPhase::pm->RecInput( mup->SF[nPHrec] );
@@ -568,8 +573,6 @@ void TProfil::ShowEqPhaseWindow()
     }
 }
 
-
-
-
+*/
 //------------------ End of m_prfget2.cpp --------------------------
 

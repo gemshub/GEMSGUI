@@ -217,7 +217,7 @@ void TProfil::MultiRemake( const char *key )
     }
 
     pmp->Ec = pmp->K2 = pmp->MK = 0;
-    pmp->PZ = pa.p.DW; // IPM-2 default   
+    pmp->PZ = pa.p.DW; // IPM-2 default
     pmp->W1 = 0;
     pmp->is = 0;
     pmp->js = 0;
@@ -607,6 +607,7 @@ PARLOAD:
             break;
         case PH_GASMIX:
         case PH_PLASMA:
+        case PH_FLUID:
             pmp->PG = pmp->L1[k];
             break;
         case PH_HCARBL:

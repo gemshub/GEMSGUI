@@ -156,6 +156,7 @@ protected:
     void GasParcP();
 
     // ipm_gamma
+    void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
     void SurfaceActivityTerm( int jb, int je, int k );
     double Ej_init_calc( double YOF, int j, int k);
     void PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA[] );
