@@ -1619,7 +1619,7 @@ void TProfil::GammaCalc( int LinkMode  )
 {
     int k, j, jb, je=0, jpb, jpe=0, jdb, jde=0;
     char *sMod;
-    double LnGam;
+    double LnGam, pmpXFk;
     //  high-precision IPM-2
  //   if(pmp->PZ && pmp->W1 > 1 )
  //     goto END_LOOP;
@@ -1717,7 +1717,9 @@ void TProfil::GammaCalc( int LinkMode  )
         sMod = pmp->sMod[k];
         if( sMod[SGM_MODE] == SM_IDEAL )
             goto END_LOOP;
-
+pmpXFk = 0.;  // Added 07.01.05 by KD
+for( j = jb; j < je; j++ )
+   pmpXFk += pmp->X[j];
         jpb = jpe;
         jpe += pmp->LsMod[k];
         jdb = jde;
@@ -1725,9 +1727,9 @@ void TProfil::GammaCalc( int LinkMode  )
 //  memset( pmp->Qd, 0, sizeof(double)*QDSIZE );  Dubious line! KD 03.07.02
 
         switch( pmp->PHC[k] )
-        {   /* calculate activity coefficients by built-in functions */
+        {   /* calculate activity coefficients using built-in functions */
           case PH_AQUEL:   /*calc by DH III appr. HKF */
-             if( sMod[SGM_MODE] == SM_STNGAM && pmp->XF[k] > pa.p.XwMin
+             if( sMod[SGM_MODE] == SM_STNGAM && /* pmp->XF[k] */ pmpXFk > pa.p.XwMin
                   && pmp->IC > pa.p.ICmin )
              {
                 switch( sMod[SPHAS_TYP] )
@@ -1763,7 +1765,7 @@ void TProfil::GammaCalc( int LinkMode  )
           case PH_FLUID:
             if( sMod[SGM_MODE] == SM_STNGAM )
             {
-                if( pmp->XF[k] > pmp->DSM )
+                if( /* pmp->XF[k] */ pmpXFk > pmp->DSM )
                 {
                     if( sMod[SPHAS_TYP] == SM_FLUID && pmp->XF[k] > pa.p.PhMin )
                        ChurakovFluid( jb, je, jpb, jdb, k );
@@ -1778,7 +1780,7 @@ void TProfil::GammaCalc( int LinkMode  )
          case PH_SINCOND:
          case PH_SINDIS:
          case PH_HCARBL:  // solid and liquid nonel solutions
-             if( sMod[SGM_MODE] == SM_STNGAM && pmp->XF[k] > pmp->DSM )
+             if( sMod[SGM_MODE] == SM_STNGAM && /* pmp->XF[k] */ pmpXFk > pmp->DSM )
              {
                 switch( sMod[SPHAS_TYP] )
                 {
@@ -1802,7 +1804,7 @@ void TProfil::GammaCalc( int LinkMode  )
              break;
         case PH_POLYEL:  /* PoissonBoltzmann( q, jb, je, k ) break; */
         case PH_SORPTION: /* calc elstatic potenials from Gouy-Chapman eqn */
-            if( pmp->PHC[0] == PH_AQUEL && pmp->XF[k] > pmp->DSM
+            if( pmp->PHC[0] == PH_AQUEL && /* pmp->XF[k] */ pmpXFk > pmp->DSM
                    && pmp->XF[0] > pa.p.XwMin )
             {
 //              ConCalc( pmp->X, pmp->XF, pmp->XFA  );  Debugging

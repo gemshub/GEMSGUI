@@ -51,7 +51,7 @@ enum translat_codes { /* codes for translations of equations */
 //
 void TProfil::SolModLoad( )
 {
-    int kk, k, j, jp, jkd,
+    int kk, k, j, jj, jp, jkd,
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, Type;
     vstr pkey(MAXRKEYLEN);
     vstr modT(16);
@@ -253,7 +253,7 @@ LOAD_NIDMCOEF:
                                        kd+pmp->LsMdc[k]*pmp->L1[k], 1, F_ );
 
             ErrorIf( pmp->DMc == NULL, "SolModLoad", "Error by reallocating memory for pmp->DMc." );
-            for( j = JB, jkd=0; j < JE; j++ )
+            for( jj=jb, j=JB, jkd=0; j < JE; j++ )
             { /*set index of components */
                 if( syp->Dcl[j] == S_OFF )
                     continue;
@@ -267,11 +267,11 @@ LOAD_NIDMCOEF:
                  {
                     memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
                        pmp->LsMdc[k]*sizeof(float));
-                    pmp->Pparc[j] = tpp->Fug[j-JB];
+                    pmp->Pparc[jj] = tpp->Fug[j-JB];
 //                   pmp->Pparc[jp] = tpp->Fug[j-JB];
                  }
                }
-               jkd += pmp->LsMdc[k];
+               jkd += pmp->LsMdc[k]; jj++;
             } /* j */
         }
     } /* k */
