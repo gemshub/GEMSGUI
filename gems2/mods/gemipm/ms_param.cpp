@@ -64,6 +64,7 @@ TProfil::TProfil( int nNd )
     pmp = multi->GetPM();
 }
 
+// GEM IPM calculation of equilibrium state in MULTI
 void
 TProfil::calcMulti()
 {
@@ -85,7 +86,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
     multi->to_file( ff, path );
 }
 
-
+// Reading structure MULTI (GEM IPM work structure)
 void TProfil::readMulti( GemDataStream& ff )
 {
       ff.readArray( &pa.p.PC, 10 );
@@ -94,7 +95,7 @@ void TProfil::readMulti( GemDataStream& ff )
 }
 
 
-// ------------------ End of m_param.cpp -----------------------
+// ------------------ End of ms_param.cpp -----------------------
 
 
 

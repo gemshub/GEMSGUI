@@ -272,6 +272,8 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
 //      {
         xtmp=new double [NN];
           Fx=new double [NN];
+
+
 //      }
 //      catch(xalloc)
 //      {
@@ -359,6 +361,7 @@ if( ro < 0.0 ) //  Too low pressure - no corrections will be done
 //      {
         xtmp=new double [NN];
         Fx=new double [NN];
+
 //      }
 //      catch(xalloc)
 //      {
@@ -441,6 +444,8 @@ if( ro < 0.0 ) //  Too low pressure - no corrections will be done
 //      try
 //      {
         xtmp=new double [NN];
+
+
 //      }
 //      catch(xalloc)
 //      {
@@ -475,6 +480,7 @@ if( ro < 0.0 ) //  Too low pressure - no corrections will be done
 //      try
 //      {
         xtmp=new double [NN];
+
 //      }
 //      catch(xalloc)
 //      {

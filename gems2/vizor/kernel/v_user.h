@@ -128,6 +128,10 @@ inline char* gcvt(double num, int digit, char* buf)
 #ifdef __APPLE__
 #include <algobase.h>
 #endif
+#else
+
+#define max( a, b )  ( (a) >( b) ? (a) : (b) )
+
 
 #endif    // IPMGEMPLUGIN
 

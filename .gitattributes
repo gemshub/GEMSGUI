@@ -124,6 +124,7 @@ gems2/mods/gemipm/main.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/mainfromf.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/makew.bat svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/ms_param.cpp svn_keywords=Author+Date+Id+Revision
+gems2/mods/gemipm/nodearray.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_compos.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_compos.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_const.cpp svn_keywords=Author+Date+Id+Revision

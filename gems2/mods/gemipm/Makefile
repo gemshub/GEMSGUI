@@ -15,14 +15,14 @@ INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 
 
 SOURCES         = ../../vizor/libs/gstring.cpp ../../vizor/libs/gdatastream.cpp \
-	main.cpp mainfromf.cpp ms_param.cpp \
+	main.cpp mainfromf.cpp nodearray.cpp ms_param.cpp \
 	../submod/ms_mueqexp.cpp \
 	../submod/ipm_sel_bc.cpp ../submod/ipm_gamma.cpp \
 	../submod/ipm_fia_bc.cpp ../submod/ms_multi_file.cpp \
 	../s_fgl.cpp ../submod/ms_datach_br.cpp
 
 OBJECTS         = ../../vizor/libs/gstring.o ../../vizor/libs/gdatastream.o \
-	main.o mainfromf.o ms_param.o \
+	main.o mainfromf.o nodearray.o ms_param.o \
 	ms_mueqexp.o \
 	ipm_sel_bc.o ipm_gamma.o \
 	ipm_fia_bc.o ms_multi_file.o \

@@ -3,8 +3,8 @@
 // Test run GEMIPM2k
 //#include <iostream>
 
-#include "verror.h"
 #include "m_param.h"
+#include "verror.h"
 #include "gdatastream.h"
 
 extern "C" int __stdcall MAIF_START( int &nNodes,
@@ -82,15 +82,19 @@ extern "C" int __stdcall MAIF_CALC( int &iNodeF,
 int
 main( int argc, char* argv[] )
 {
-     int nNods = 1;
-     gstring multu_in = "";
-     gstring chbr_in   = "";
+     int nNods = 2;
+     int nodeType[2];
+     gstring multu_in1 = "";
+     gstring chbr_in1   = "";
 
-      // from argv
+// from argv
       if (argc >= 2 )
-        multu_in = argv[1];
+        multu_in1 = argv[1];
       if (argc >= 3 )
-        chbr_in = argv[2];
+        chbr_in1 = argv[2];
+
+     const char *  multu_in = multu_in1.c_str();
+     const char *  chbr_in = chbr_in1.c_str();
       int  c_to_i1[30];
       int  c_to_i2[30];
       for( int i=0; i<30; i++ )
@@ -98,20 +102,12 @@ main( int argc, char* argv[] )
         c_to_i1[i]=multu_in[i];
         c_to_i2[i]=chbr_in[i];
       }
-//      dBR = 0;
-
-// cout <<  multu_in.c_str() << " " << chbr_in.c_str() << endl;
 
 // Initial reading of arrays
-      MAIF_START( nNods, c_to_i1, c_to_i2, 0 );
+      nodeType[1] = 1;
+      nodeType[0] = 2;
+      MAIF_START( nNods, c_to_i1, c_to_i2, nodeType );
 
-//      DATABR
-//      dBR = 0;
-//      DATABR *(
-//      dBR1 = &dBR;
-// cout << " After MAIF_START " << endl;
-//      TProfil::pm->multi->CopyTo( dBR1 );
-// cout << " Before MAIF_CALC Mode=" << dBR->NodeStatusCH << " IT=" << dBR->IterDone << endl;
 
   short m_NodeHandle=0, m_NodeTypeHY=0, m_NodeTypeMT=0,
         m_NodeStatusFMT=0, m_NodeStatusCH=0,  m_IterDone=0;
@@ -131,8 +127,8 @@ main( int argc, char* argv[] )
    DATACH  *dCH = TProfil::pm->multi->data_CH;
    DATABR  *dBR = TProfil::pm->multi->data_BR;
 
-if( !dCH || !dBR )
-   return 1;
+  if( !dCH || !dBR )
+      return 1;
 
    // Extracting data bridge dimensionalities
    nIC = dCH->nICb;
@@ -140,12 +136,6 @@ if( !dCH || !dBR )
    nPH = dCH->nPHb;
    nPS = dCH->nPSb;
 
-// xDC = dCH->xDC;
-// xIC = dCH->xIC;
-// xPH = dCH->xPH;
-
-// cout << endl << "nIC= " << nIC << "  nDC= " << nDC <<
-//   "  nPH= " << nPH << "  nPS =" << nPS << endl;
     m_xDC = (double*)malloc( nDC*sizeof(double) );
     m_gam = (double*)malloc( nDC*sizeof(double) );
     m_xPH = (double*)malloc( nPH*sizeof(double) );
@@ -157,7 +147,10 @@ if( !dCH || !dBR )
     m_rMB = (double*)malloc( nIC*sizeof(double) );
     m_uIC = (double*)malloc( nIC*sizeof(double) );
 
-    MAIF_CALC( ndXf, // Fortran index; negative means readonly
+    for( int ii=2; ii<=nNods; ii++)
+    {
+       int jj = -ii;
+       MAIF_CALC( jj, // Fortran index; negative means readonly
         m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
         m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
         m_T, m_P, m_Vs, m_Vi, m_Ms, m_Mi,
@@ -170,6 +163,21 @@ if( !dCH || !dBR )
         m_bPS, m_xPA, m_bIC, m_rMB, m_uIC,
         m_dRes1, m_dRes2 );
 
+/*       MAIF_CALC( ii, // Fortran index; negative means readonly
+        m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
+        m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
+        m_T, m_P, m_Vs, m_Vi, m_Ms, m_Mi,
+        m_Gs, m_Hs, m_Hi, m_IC, m_pH, m_pe,
+        m_Eh, m_denW, m_denWg, m_epsW, m_epsWg, m_Tm,
+        m_dt, m_dt1, m_ot, m_Vt, m_eps, m_Km,
+        m_Kf, m_S, m_Tr, m_h, m_rho, m_al,
+        m_at, m_av, m_hDl, m_hDt, m_hDv, m_nPe,
+        m_xDC, m_gam, m_xPH, m_vPS, m_mPS,
+        m_bPS, m_xPA, m_bIC, m_rMB, m_uIC,
+        m_dRes1, m_dRes2 );
+
+  */   }
+
 // Printouts here
 
 // cout << endl << "Read: " << m_NodeHandle << " " <<  m_NodeTypeHY << " "
@@ -177,9 +185,6 @@ if( !dCH || !dBR )
 //     << " " << m_IterDone << endl;
 
 // Something else?
-
-
-
 
 // Finished!
 

@@ -41,9 +41,6 @@ bool TProfil::AutoInitialApprox( )
     int i, j, k, NN;
     double minB=0.0, molB=0.0, sfactor=1.0;
 
-//test 11
-//   multi->to_text_file( "Multi1.txt" );
-
 // Kostya correct DK & DHB as automatic
     NN = pmp->N - pmp->E;
     minB=pmp->B[0];
@@ -311,6 +308,7 @@ bool TProfil::MultiCalcMain( int &pll, double &FXold )
 #endif
                 Error("IPM error: " ,
                       "Inconsistent metastability restrictions to DC or phases.");
+
     /* test insert in valid area */
     mEFD:
      if(pmp->PZ && pmp->W1)
@@ -318,6 +316,7 @@ bool TProfil::MultiCalcMain( int &pll, double &FXold )
         pmp->Y[i]=pmp->X[i];
       TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
      }
+
     eRet = EnterFeasibleDomain( );
     if( eRet )
         goto ERET_THINK;
@@ -330,8 +329,11 @@ STEP_POINT("After FIA");
 
 #endif
 #endif
+
+
    /* minimization  IPM */
     eRet = InteriorPointsMethod( );
+
 
 // STEPWISE (3)  - stop point to examine output from IPM()
 #ifndef IPMGEMPLUGIN
@@ -512,9 +514,6 @@ void TProfil::MultiCalcIterations()
     pll=0;
     FXold=0.0;
 
-// Test2
-//       multi->to_text_file( "Multi2.txt" );
-
  /*   do
     { // cycle of iterations Selekt
         // Stop calculations here Sveta
@@ -530,11 +529,7 @@ void TProfil::MultiCalcIterations()
     //calc demo data
     for( int ii=0; ii<pmp->N; ii++ )
         pmp->U_r[ii] = pmp->U[ii]*pmp->RT;
-//Test3
-//       multi->to_text_file( "Multi3.txt" );
     GasParcP();
-//Test4
-//       multi->to_text_file( "Multi4.txt" );
 
     /* calc finished */
     //   if( wn[W_EQCALC].status )

@@ -20,6 +20,7 @@
 //-------------------------------------------------------------------
 //
 #include <math.h>
+#include <float.h>
 #include <iostream>
 
 #include "m_param.h"
@@ -52,8 +53,8 @@ int TProfil::Gordan( int N, double DG, double *A, double *X )
     int I,J,K,N1,II,IR,*INV,iRet=0;
 
     INV = new int[N];
-    memset(INV, 0, sizeof(int)*N );
     ErrorIf( !INV, "Gordan", "Error of memory allocation" );
+    memset(INV, 0, sizeof(int)*N );
     N1 = N+1;
     for(I=0;I<N;I++)
     {
@@ -127,41 +128,56 @@ KN:
 //
 int TProfil::SquareRoots( int N, double *R, double *X, double *B )
 {
+
+//!!  fstream f_log("SquareRoots.txt", ios::out|ios::app );
+
     int I,J,K,P,Q,N1, iRet=0;
-    double F,G;
+    double F,G, E;
     N1 = N + 1;
     // ErrorIf( !B, "SquareRoots", "Error param B." );
     memset( B, 0, N*N1*sizeof(double));
     Q=-1;
+
     for(I=0;I<N;I++)
     {
         for(J=I;J<N;J++)
             B[Q+J-I+1]= r(I,J);  /*       *(R+I*N1+J); */
         Q=Q+N-I;
     }
+
     for(I=0;I<N;I++)
         X[I]=  r(I,N);      /*       *(R+I*N1+N); */
+
     Q=0;
     for(I=0;I<N;I++)
     {
+//!!    f_log << I << endl;
         F=B[Q];
         P=I;
+//!!    f_log << "F = " << F << " P = " << P << endl;
         for(J=0;J<=I-1;J++)
         {
             G=B[P];
             F-=G*G;
+//            E = sqrt(F);
+//            F = (E+G)*(E-G);
+//
             for(K=1;K<N-I;K++)
                 B[Q+K]-=G*B[P+K];
             P+=N-J-1;
+//!!            f_log << "G = " << G << " F = " << F << " P=" << P << endl;
         }
-        if( F<1E-39)
+        if( F < DBL_EPSILON )
         {
             iRet=1;
             goto KN;
         }
-        F=1/sqrt(F);
+       F=1./sqrt(F);
+//        F=pow(F, -0.5);
+//        F=exp(-0.5*log(F));
         B[Q]=F;
-        for(K=1;K<N-I;K++)
+//!!    f_log << " F = " << F << endl;
+       for(K=1;K<N-I;K++)
             B[Q+K]*=F;
         Q+=N-I;
     }
@@ -418,6 +434,7 @@ int TProfil::EnterFeasibleDomain( )
         std::cout<< "EnterFeasibleDomain: Inconsistent DC limits"<< endl;
 #endif
         }
+
     for(J=0;J<pmp->L;J++)
     {
         if( pmp->Y[J] < pmp->lowPosNum )
@@ -449,6 +466,7 @@ int TProfil::EnterFeasibleDomain( )
         }
         N=pmp->NR;
         N1=N+1;
+
   MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C);
 
 #ifndef IPMGEMPLUGIN
@@ -505,8 +523,10 @@ NEXT:
             }
         for(I=0;I<N;I++)
             r(I,N) = pmp->C[I];
+
         /* Solving system of linear equations */
         sRet = SquareRoots( N, R, pmp->U, R1 );
+
         if( sRet == 1 )
             goto TRY_GORDAN;
         goto SOLVED;
@@ -1080,6 +1100,8 @@ void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 //    double SPmol,SPmol1;
     double  Dsur, DsurT, MMC, *XU;
     XU = new double[pmp->L];
+    ErrorIf( !XU, "Simplex", "Memory alloc error ");
+    memset(XU, 0, sizeof(double)*(pmp->L) );
 
  //   ofstream ofs("c:/gems_b/x_u.txt",ios::out | ios::app);
 

@@ -331,7 +331,8 @@ public:
     void outArray( fstream& ff, char *name, short* arr, int size );
     void outArray( fstream& ff, char *name,  float* arr,
                              int size, int l_size=-1 );
-    void outArray( fstream& ff, char *name, double* arr, int size );
+    void outArray( fstream& ff, char *name, double* arr,
+                             int size, int l_size=-1 );
     void outArray( fstream& ff, char *name, char* arr,
                               int size, int arr_siz );
 
@@ -398,10 +399,10 @@ public:
         return "Multi";
     }
 
-    void GetNodeCopyFrom( int ii );
-    void SaveNodeCopyTo( int ii );
+    void GetNodeCopyFromArray( int ii );
+    void SaveNodeCopyToArray( int ii );
     void CopyTo( DATABR *(*dBR) );
-    void fromMT(
+    void GEM_input_from_MT(
        short p_NodeHandle,    // Node identification handle
        short p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
        double p_T,     // Temperature T, K                        +      +      -     -
@@ -411,6 +412,47 @@ public:
        double p_dt1,   // priveous time step
        double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
    );
+   void GEM_input_back_to_MT(
+   short &p_NodeHandle,    // Node identification handle
+   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
+   double &p_T,     // Temperature T, K                        +      +      -     -
+   double &p_P,     // Pressure P, bar                         +      +      -     -
+   double &p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
+   double &p_dt,    // actual time step
+   double &p_dt1,   // priveous time step
+   double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
+   );
+   void GEM_output_to_MT(
+   short &p_NodeHandle,    // Node identification handle
+   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
+   short &p_IterDone,      // Number of iterations performed by IPM (if not need GEM)
+// Chemical scalar variables
+   double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
+   double &p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
+   double &p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
+   double &p_IC,    // Effective molal aq ionic strength           -      -      +     +
+   double &p_pH,    // pH of aqueous solution                      -      -      +     +
+   double &p_pe,    // pe of aqueous solution                      -      -      +     +
+   double &p_Eh,    // Eh of aqueous solution, V                   -      -      +     +
+   double &p_denW,
+   double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
+   double &p_epsW,
+   double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
+// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
+// exchange of values occurs through lists of indices, e.g. xDC, xPH
+   double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
+   double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
+   double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
+   double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
+   double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
+   double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
+   double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+   double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
+   double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
+   double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
+   );
+
+
 
     //mass transport
     void to_file( GemDataStream& ff, gstring& path  );
@@ -428,7 +470,8 @@ public:
     void outArray( fstream& ff, char *name, short* arr, int size );
     void outArray( fstream& ff, char *name,  float* arr,
                              int size, int l_size=-1 );
-    void outArray( fstream& ff, char *name, double* arr, int size );
+    void outArray( fstream& ff, char *name,  double* arr,
+                             int size, int l_size=-1 );
     void outArray( fstream& ff, char *name, char* arr,
                               int size, int arr_siz );
 

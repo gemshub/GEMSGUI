@@ -401,7 +401,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    fout << newname.c_str() << ".dbr\"\n";
    fout.close();
 
-   newname = gstring( rt[RT_SYSEQ].FldKey(4), 0, rt[RT_SYSEQ].FldLen(4));
+   newname = gstring( rt[RT_SYSEQ].FldKey(3), 0, rt[RT_SYSEQ].FldLen(3));
    newname.strip();
    newname = name+"-dbr-"+newname;
    Path_ = u_makepath( dir, newname, "dat" );
@@ -452,7 +452,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 
 }
 
-
+// Reading structure MULTI (GEM IPM work structure)
 void TProfil::readMulti( GemDataStream& ff )
 {
 
@@ -461,7 +461,7 @@ void TProfil::readMulti( GemDataStream& ff )
       multi->from_file( ff );
 }
 
-//Delete record whis key
+//Delete record with key
 void
 TProfil::DeleteRecord( const char *key, bool errifNo )
 {

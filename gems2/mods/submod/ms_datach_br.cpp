@@ -1,3 +1,22 @@
+//-------------------------------------------------------------------
+// $Id$
+//
+// C/C++ interface between GEM IPM and FMT node array
+// Working whith DATACH and DATABR structures
+//
+// Copyright (C) 2004-2005 S.Dmytriyeva, D.Kulik
+//
+// This file is part of a GEM-Selektor library for thermodynamic
+// modelling by Gibbs energy minimization
+// Uses: GEM-Vizor GUI DBMS library, gems/lib/gemvizor.lib
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// E-mail: gems2.support@psi.ch
+//-------------------------------------------------------------------
+
 #include "m_param.h"
 #include "gdatastream.h"
 #include <math.h>
@@ -6,7 +25,7 @@
 
 #ifndef IPMGEMPLUGIN
 
-// writing DataCH to binary file
+// Writting dataCH structure to binary file
 void TMulti::makeStartDataChBR(
   TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH )
 {
@@ -143,7 +162,8 @@ TMulti::TMulti( int nNd  )
         arr_BR[ii] = 0;
 }
 
-void TMulti::GetNodeCopyFrom( int ii )
+// Copying data for node iNode from node array into work DATABR structure
+void TMulti::GetNodeCopyFromArray( int ii )
 {
   // from arr_BR[ii] to data_BR structure
   if( ii < 0 || ii>= nNodes )
@@ -205,8 +225,8 @@ void TMulti::CopyTo( DATABR *(*dBR) )
 }
 
 
-
-void TMulti::SaveNodeCopyTo( int ii )
+// Copying data for node iNode back from work DATABR structure into the node array
+void TMulti::SaveNodeCopyToArray( int ii )
 {
 
   if( ii < 0 || ii>= nNodes )
@@ -218,8 +238,9 @@ void TMulti::SaveNodeCopyTo( int ii )
   databr_realloc();
 }
 
-
-void TMulti::fromMT(
+// calculation mode: passing input GEM data changed on previous FMT iteration
+//                   into work DATABR structure
+void TMulti::GEM_input_from_MT(
    short p_NodeHandle,    // Node identification handle
    short p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
    double p_T,     // Temperature T, K                        +      +      -     -
@@ -248,12 +269,97 @@ void TMulti::fromMT(
    }
    if( useSimplex && data_BR->NodeStatusCH == NEED_GEM_PIA )
      data_BR->NodeStatusCH = NEED_GEM_AIA;
-   // Switch only if PIA is ordered, leave if simplex is ordered (KD) 
+   // Switch only if PIA is ordered, leave if simplex is ordered (KD)
 }
+
+// readonly mode: passing input GEM data to FMT
+void TMulti::GEM_input_back_to_MT(
+   short &p_NodeHandle,    // Node identification handle
+   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
+   double &p_T,     // Temperature T, K                        +      +      -     -
+   double &p_P,     // Pressure P, bar                         +      +      -     -
+   double &p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
+   double &p_dt,    // actual time step
+   double &p_dt1,   // priveous time step
+   double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
+   )
+{
+  p_NodeHandle = data_BR->NodeHandle;
+  p_NodeStatusCH = data_BR->NodeStatusCH;
+  p_T = data_BR->T;
+  p_P = data_BR->P;
+  p_Ms = data_BR->Ms;
+  p_dt = data_BR->dt;
+  p_dt1 = data_BR->dt1;
+// Checking if no-simplex IA is Ok
+   for(int ii=0; ii<data_CH->nICb; ii++ )
+     p_bIC[ii] = data_BR->bIC[ii];
+}
+
+// Copying results that must be returned into the FMT part into MAIF_CALC parameters
+void TMulti::GEM_output_to_MT(
+   short &p_NodeHandle,    // Node identification handle
+   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
+   short &p_IterDone,      // Number of iterations performed by IPM (if not need GEM)
+// Chemical scalar variables
+   double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
+   double &p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
+   double &p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
+   double &p_IC,    // Effective molal aq ionic strength           -      -      +     +
+   double &p_pH,    // pH of aqueous solution                      -      -      +     +
+   double &p_pe,    // pe of aqueous solution                      -      -      +     +
+   double &p_Eh,    // Eh of aqueous solution, V                   -      -      +     +
+   double &p_denW,
+   double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
+   double &p_epsW,
+   double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
+// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
+// exchange of values occurs through lists of indices, e.g. xDC, xPH
+   double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
+   double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
+   double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
+   double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
+   double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
+   double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
+   double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+   double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
+   double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
+   double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
+   )
+{
+
+   p_NodeHandle = data_BR->NodeHandle;
+   p_NodeStatusCH = data_BR->NodeStatusCH;
+   p_IterDone = data_BR->IterDone;
+
+   p_Vs = data_BR->Vs;
+   p_Gs = data_BR->Gs;
+   p_Hs = data_BR->Hs;
+   p_IC = data_BR->IC;
+   p_pH = data_BR->pH;
+   p_pe = data_BR->pe;
+   p_Eh = data_BR->Eh;
+   p_denW = data_BR->denW;
+   p_denWg = data_BR->denWg;
+   p_epsW = data_BR->epsW;
+   p_epsWg = data_BR->epsWg;
+
+  memcpy( p_xDC, data_BR->xDC, data_CH->nDCb*sizeof(double) );
+  memcpy( p_gam, data_BR->gam, data_CH->nDCb*sizeof(double) );
+  memcpy( p_xPH, data_BR->xPH, data_CH->nPHb*sizeof(double) );
+  memcpy( p_vPS, data_BR->vPS, data_CH->nPSb*sizeof(double) );
+  memcpy( p_mPS, data_BR->mPS, data_CH->nPSb*sizeof(double) );
+  memcpy( p_bPS, data_BR->bPS, data_CH->nPSb*data_CH->nICb*sizeof(double) );
+  memcpy( p_xPA, data_BR->xPA, data_CH->nPSb*sizeof(double) );
+  memcpy( p_bIC, data_BR->bIC, data_CH->nICb*sizeof(double) );
+  memcpy( p_rMB, data_BR->rMB, data_CH->nICb*sizeof(double) );
+  memcpy( p_uIC, data_BR->uIC, data_CH->nICb*sizeof(double) );
+}
+
 
 #endif
 
-// set nessasary data from Multi structure to DataBr structure
+// Extracting and packing GEM IPM results into work DATABR structure
 void TMulti::packDataBr()
 {
  short ii;
@@ -312,7 +418,8 @@ data_BR->Eh = pm.FitVar[3];
 
 }
 
-// Set necessary data from DataBr structure to Multi structure
+// Unpacking work DATABR structure into MULTI
+//(GEM IPM work structure): uses DATACH
 void TMulti::unpackDataBr()
 {
  short ii;
@@ -372,7 +479,7 @@ pm.FitVar[3] = data_BR->Eh;
 
 // new structures i/o
 
-// writing DataCH to binary file
+// Writting DataCH to binary file
 void TMulti::datach_to_file( GemDataStream& ff )
 {
 // const data
@@ -409,7 +516,7 @@ void TMulti::datach_to_file( GemDataStream& ff )
 
 }
 
-// reading DataCH from binary file
+// Reading dataCH structure from binary file
 void TMulti::datach_from_file( GemDataStream& ff )
 {
 // const data
@@ -488,7 +595,7 @@ void TMulti::datach_to_text_file( fstream& ff )
 
 }
 
-
+// Reading dataCH structure from text file
 void TMulti::datach_from_text_file(fstream& ff)
 {
 // fstream ff("DataCH.out", ios::in );
@@ -527,7 +634,7 @@ void TMulti::datach_from_text_file(fstream& ff)
    inArray( ff, "ccDC", data_CH->ccDC, data_CH->nDC, 1 );
    inArray( ff, "ccDCW", data_CH->ccDCW, data_CH->nDC, 1 );
    inArray( ff, "ccPH", data_CH->ccPH, data_CH->nPH, 1 );
-   
+
 }
 
 
@@ -681,7 +788,7 @@ void TMulti::databr_to_file( GemDataStream& ff )
 //   databr_to_text_file();
 }
 
-// reading DataBR to binary file
+// Reading work dataBR structure from binary file
 void TMulti::databr_from_file( GemDataStream& ff )
 {
 // const data
@@ -729,7 +836,7 @@ void TMulti::databr_to_text_file( fstream& ff )
 
 }
 
-
+// Reading work dataBR structure from text file
 void TMulti::databr_from_text_file( fstream& ff )
 {
 // fstream ff("DataBR.out", ios::out );
@@ -775,6 +882,10 @@ void TMulti::databr_realloc()
 // free dynamic memory
 void TMulti::databr_free()
 {
+
+  memset( &data_BR->NodeHandle, 0, 6*sizeof(short));
+  memset( &data_BR->T, 0, 36*sizeof(double));
+
  if( data_BR->xDC )
   { delete[] data_BR->xDC;
     data_BR->xDC = 0;
@@ -820,5 +931,5 @@ void TMulti::databr_free()
 }
 
 
-//---------------------------------------------------------------
+//-----------------------End of ms_datach_br.cpp--------------------------
 

@@ -109,17 +109,22 @@ void TMulti::outArray( fstream& ff, char *name,  float* arr,
  }
 }
 
-
-void TMulti::outArray( fstream& ff, char *name, double* arr, int size )
+void TMulti::outArray( fstream& ff, char *name,  double* arr,
+            int size, int l_size )
 {
+ int sz = 10;
+ if( l_size > 0 )
+       sz = l_size;
+
  ff << endl << "\'" << name << "\'" << endl;
  for( int ii=0, jj=0; ii<size; ii++, jj++  )
  {
-    if(jj == 10)
+    if(jj == sz)
     { jj=0;  ff << endl;}
     ff << setprecision(18) << scientific << arr[ii] << " ";
  }
 }
+
 
 void TMulti::to_text_file( gstring& path )
 {
@@ -323,6 +328,11 @@ void TMulti::to_text_file( gstring& path )
      outArray( ff, "sitXcat", pm.sitXcat, pm.sitNcat );
    if( pm.sitNan )
       outArray( ff, "sitXan", pm.sitXan, pm.sitNan );
+
+   if(pm.R)
+   outArray( ff, "R", pm.R,  pm.N*(pm.N+1), pm.N+1);
+   if(pm.R1)
+   outArray( ff, "R1", pm.R1,  pm.N*(pm.N+1), pm.N+1);
 
 }
 
@@ -1051,6 +1061,10 @@ else
        pm.sitXan = new short[pm.sitNan];
     else
        pm.sitXan = 0;
+
+  pm.R = 0;
+  pm.R1 = 0;
+
 }
 
 
