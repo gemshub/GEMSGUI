@@ -52,11 +52,9 @@ using namespace std;
 
 // file names constants
 
-#ifndef GEMS_RELEASE
 const char *VISOR_INI = "data/vis_cn.ini";
 const char *OBJECT_INI = "data/vis_od.ini";
 const char *UNITS_INI = "data/units.ini";
-#endif
 
 const char *VISOBJ_DAT = "visor.data/visobj.dat";
 const char *VISOR_DAT = "visor.data/visor.dat";
@@ -185,7 +183,6 @@ TVisor::Setup()
 
     for (int ii = 1; ii < argc; ii++)	//Sveta 16/06/1999
     {
-#ifndef GEMS_RELEASE
         if (strcmp(argv[ii], "-d") == 0
                 || strcmp(argv[ii], "--from-ini-files") == 0 )
         {   
@@ -193,28 +190,30 @@ TVisor::Setup()
            pVisorImp->setConfigAutosave( true );
         }
         else
-#endif
-            if (strcmp(argv[ii], "-f") == 0
-                    || strcmp(argv[ii], "--allow-db-change") == 0 )
-                option_f = true;
-            else if (strcmp(argv[ii], "-c") == 0
-                     || strcmp(argv[ii], "--with-default-config") == 0 )
-            {
-                option_c = true;
-                pVisorImp->setConfigAutosave( true );
-            }
-            else if (strcmp(argv[ii], "-v") == 0
-                     || strcmp(argv[ii], "--with-default-settings") == 0 )
-            {
-                option_v = true;
-                pVisorImp->setConfigAutosave( true );
-            }
+	if (strcmp(argv[ii], "-f") == 0
+                || strcmp(argv[ii], "--allow-db-change") == 0 ) 
+	{
+            option_f = true;
+	}
+        else 
+	if (strcmp(argv[ii], "-c") == 0
+                || strcmp(argv[ii], "--with-default-config") == 0 ) 
+	{
+            option_c = true;
+            pVisorImp->setConfigAutosave( true );
+        }
+        else 
+	if (strcmp(argv[ii], "-v") == 0
+                || strcmp(argv[ii], "--with-default-settings") == 0 ) 
+	{
+            option_v = true;
+            pVisorImp->setConfigAutosave( true );
+        }
     }
-#ifndef GEMS_RELEASE
+
     if (option_d)
         load();
     else
-#endif // GEMS_RELEASE
         fromDAT(option_c, option_d);
 
     // Sveta permission to change data in special DB files
@@ -227,7 +226,6 @@ const int lnWINSIG = 2;
 const char SigBEG[lnWINSIG + 1] = "Vs";
 const char SigEND[lnWINSIG + 1] = "sX";
 
-#ifndef GEMS_RELEASE
 void
 TVisor::load()
 {
@@ -292,7 +290,7 @@ TVisor::toDAT()
     // Units' part to save
     aUnits.toDAT(visor_dat);
 }
-#endif // GEMS_RELEASE
+
 
 const char *vSigERROR_VISOR = "Error in visor data file visor.dat - wrong markers";
 const char *vSigERROR_VISOBJ = "Error in visor data file visobj.dat - wrong markers";
@@ -828,12 +826,7 @@ TCStringArray readDirs(const char *dir)
 
     QDir thisDir(dir);
     if (!thisDir.isReadable())
-    {
-#ifdef __unix
-        cout << "Error :" << dir << endl;
-#endif        
-        throw TFatalError(/*"GEMS Init"*/dir, "GEMS DB directory is not readable");
-    }
+        throw TFatalError("GEMS Init", gstring(dir) + ": GEMS DB directory is not readable");
 
     thisDir.setFilter(QDir::Dirs);
     //    thisDir.setNameFilter("*.pdb");
@@ -857,7 +850,6 @@ TCStringArray readDirs(const char *dir)
         }
         // else 'special file'
     }
-
 
     return aFiles;
 }

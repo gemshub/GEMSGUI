@@ -26,10 +26,7 @@ using namespace std;
 
 #include "v_object.h"
 #include "v_module.h"
-
-#ifndef GEMS_RELEASE
 #include "config.h"
-#endif
 
 
 class TCPage;
@@ -108,10 +105,8 @@ struct PageInfo
     TCWindow& GetWin();
 
     PageInfo(const CWinInfo& wi, istream& is);
-#ifndef GEMS_RELEASE
     PageInfo(const CWinInfo& wi, TConfig& cnf, gstring name);
     void load(TConfig& c);
-#endif
 
     void toDAT(ostream& os);
     void fromDAT(istream& os);	// must be protected
@@ -139,10 +134,8 @@ struct CWinInfo
     int init_height;
 
     CWinInfo(TSubModule& r, istream& is);
-#ifndef GEMS_RELEASE
     CWinInfo(TSubModule& r, TConfig& cnf);
     void load(TConfig& c);
-#endif
 
     void toDAT(ostream& os);
     void fromDAT(istream& is);	// must be protected

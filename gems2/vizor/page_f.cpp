@@ -24,10 +24,7 @@ using namespace std;
 
 #include "page_s.h"
 #include "units.h"
-
-#ifndef GEMS_RELEASE
 #include "config.h"
-#endif
 
 
 TIArray < CWinInfo > aWinInfo;
@@ -41,7 +38,6 @@ CWinInfo::CWinInfo(TSubModule & m, istream & visor_dat):
     fromDAT(visor_dat);
 }
 
-#ifndef GEMS_RELEASE
 CWinInfo::CWinInfo(TSubModule & m, TConfig & cnf):
         pWin(0), rM(m)
 {
@@ -75,7 +71,6 @@ CWinInfo::load(TConfig & cnf)
         ss = cnf.GetNextSubSection();
     }
 }
-#endif //GEMS_RELEASE
 
 const int lnWINSIG = 2;
 const char SigBEG[lnWINSIG + 1] = "Wd";
@@ -157,7 +152,6 @@ PageInfo::PageInfo(const CWinInfo & wi, istream & is):
 }
 
 
-#ifndef GEMS_RELEASE
 PageInfo::PageInfo(const CWinInfo & wi, TConfig & cnf, gstring s):
         rWinInfo(wi), pPage(0), name(s)
 {
@@ -233,7 +227,6 @@ PageInfo::load(TConfig & cnf)
     }
 }
 
-#endif //GEMS_RELEASE
 
 const char PSigBEG[lnWINSIG + 1] = "Pd";
 const char PSigEND[lnWINSIG + 1] = "dp";

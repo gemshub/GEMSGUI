@@ -25,10 +25,7 @@
 #include "v_object.h"
 #include "m_param.h"
 #include "graph.h"
-
-#ifndef GEMS_RELEASE
 #include "config.h"
-#endif
 
 // Global array of Objects
 
@@ -971,9 +968,8 @@ TObjList::fromDAT(istream& f)
         Add( new TObject(f) );
 }
 
-#ifndef GEMS_RELEASE
 
-const int nTypes=12;
+const int nTypes = 12;
 static char OBtype[nTypes][3] =
     { "S_", "I_", "U_", "L_", "X_", "F_",
       "D_", "C_", "N_", "A_", "B_", "H_" };
@@ -1041,7 +1037,5 @@ TConfig cnf(f_obj,' ');
 
 }
 
-#endif //GEMS_RELEASE
 //--------------------- End of v_object.cpp ---------------------------
-
 

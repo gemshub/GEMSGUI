@@ -23,10 +23,7 @@ using namespace std;
 
 #include "v_user.h"
 #include "units.h"
-
-#ifndef GEMS_RELEASE
 #include "config.h"
-#endif
 
 
 //=============================================
@@ -128,7 +125,6 @@ TUnitsList::fromDAT(istream& visor_dat)
 }
 
 
-#ifndef GEMS_RELEASE
 void
 TUnitsList::load(const char *f_units)
 {
@@ -147,7 +143,6 @@ TUnitsList::load(const char *f_units)
         par = cnf.getNext();
     }
 }
-#endif
 
 int
 TUnitsList::Find(const gstring &s)

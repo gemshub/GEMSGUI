@@ -224,9 +224,7 @@ public:
 
     void fromDAT(istream& f);
     void toDAT(ostream& f);
-#ifndef GEMS_RELEASE
     void load(const char* f_obj, int N = -1);	// from '.ini'
-#endif
 
     //--- Selectors
     int Find(const char* keywd);
