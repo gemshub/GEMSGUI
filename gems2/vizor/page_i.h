@@ -39,7 +39,7 @@ const int szTab = 25;		// height of a tab control
 const int szFButton = 20;		// width of a files list button
 const int szTime = 120;
 
-const int szSBAR = 12;		// size of TFiled 'Grid' ScrollBar
+const int szSBAR = 16;		// size of TFiled 'Grid' ScrollBar
 
 
 
