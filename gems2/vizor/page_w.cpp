@@ -774,7 +774,7 @@ TField::createString(int N1, int N2, int M1, int M2)
 }
 
 void
-TField::CmCopyToClipboard()
+TField::copy()
 {
     QString clipText = createString(selectN1, selectN2, selectM1, selectM2);
     QApplication::clipboard()->setText(clipText, QClipboard::Clipboard);
@@ -829,13 +829,29 @@ TField::setFromString(const QString& str, int N1, int N2, int M1, int M2, bool t
 }
 
 void
-TField::CmPasteFromClipboard()
+TField::clear()
+{
+    for(uint ii=0; ii<aCtrl.GetCount(); ii++)
+	if( aCtrl[ii]->GetN() >= selectN1 && aCtrl[ii]->GetN() < selectN2 
+		&&  aCtrl[ii]->GetM() >= selectM1 && aCtrl[ii]->GetM() < selectM2 )
+    	    ((TCellInput*)aCtrl[ii])->clear();
+}
+
+void
+TField::cut()
+{
+    copy();
+    clear();
+}
+
+void
+TField::paste()
 {
     pasteIntoArea(selectN1, selectN2, selectM1, selectM2, false);
 }
 
 void
-TField::CmPasteTransposedFromClipboard()
+TField::pasteTransposed()
 {
     pasteIntoArea(selectN1, selectN2, selectM1, selectM2, true);
 }
@@ -1313,13 +1329,15 @@ TCellInput::createPopupMenu()
 //        menu->insertItem( "&Unselect object\tF12", this, SLOT(CmSelectObject()), Key_F12 );
 
         QPopupMenu* objectMenu = new QPopupMenu();
-        objectMenu->insertItem( "&Copy\tCtrl+C", field(), SLOT(CmCopyToClipboard()) );
+        objectMenu->insertItem( "Cu&t\tCtrl+X", field(), SLOT(cut()) );
+        objectMenu->insertItem( "&Copy\tCtrl+C", field(), SLOT(copy()) );
         objectMenu->setItemEnabled(
             objectMenu->insertItem( "&Paste\tCtrl+V", field(),
-                              SLOT(CmPasteFromClipboard()) ), edit && !clipboardEmpty );
+                              SLOT(paste()) ), edit && !clipboardEmpty );
         objectMenu->setItemEnabled(
             objectMenu->insertItem( "Paste &Transposed\tCtrl+T", field(),
-                              SLOT(CmPasteTransposedFromClipboard())), edit && !clipboardEmpty );
+                              SLOT(pasteTransposed())), edit && !clipboardEmpty );
+        objectMenu->insertItem( "Clear", field(), SLOT(clear()) );
 
     //    menu->insertSeparator();
         menu->insertItem( "&Edit", objectMenu );
@@ -1479,12 +1497,29 @@ TCellInput::CmSelectAll()
 void
 TCellInput::copy()
 {
-//cerr << "copy: field sel: " << field()->isSelected() << endl;
-//    TField* selectedField = field()->getPage()->getSelectedObject();
     if( field()->isSelected() )
-	field()->CmCopyToClipboard();
+	field()->copy();
     else
 	QLineEdit::copy();
+}
+
+void
+TCellInput::cut()
+{
+    if( field()->isSelected() ) {
+	field()->copy();
+	field()->clear();
+    }
+    else {
+	QLineEdit::copy();
+	clear();
+    }
+}
+
+void
+TCellInput::clear()
+{
+    setText(S_EMPTY);
 }
 
 void
@@ -1493,7 +1528,7 @@ TCellInput::paste()
 //cerr << "paste: field sel: " << field()->isSelected() << endl;
 //    TField* selectedField = field()->getPage()->getSelectedObject();
     if( field()->isSelected() )
-	field()->CmPasteFromClipboard();
+	field()->paste();
     else
 	if( QApplication::clipboard()->text().find('\t') != -1 || 
 		QApplication::clipboard()->text().find('\n') != -1 ) {
@@ -1510,7 +1545,7 @@ TCellInput::pasteTransposed()
 //cerr << "paste: field sel: " << field()->isSelected() << endl;
 //    TField* selectedField = field()->getPage()->getSelectedObject();
     if( field()->isSelected() )
-	field()->CmPasteTransposedFromClipboard();
+	field()->pasteTransposed();
     else
 	if( QApplication::clipboard()->text().find('\t') != -1 || 
 		QApplication::clipboard()->text().find('\n') != -1 ) {

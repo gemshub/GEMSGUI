@@ -129,9 +129,6 @@ protected slots:
 //    void CmSelectCell();
     void CmHelp() { TCell::CmHelp(); }
     void CmSelectAll();
-    void copy();
-    void paste();
-    void pasteTransposed();
 
 public:
     TCellInput(TField&, int x, int y, eFieldType ft, int npos, eShowType,
@@ -141,6 +138,13 @@ public:
 
     void updateDisplay();
     void setGroupSelected(bool selected);
+    
+public slots:
+    void clear();
+    void copy();
+    void cut();
+    void paste();
+    void pasteTransposed();
 };
 
 
@@ -318,9 +322,11 @@ public:
     
 public slots:
     void Update();
-    void CmCopyToClipboard();
-    void CmPasteFromClipboard();
-    void CmPasteTransposedFromClipboard();
+    void copy();
+    void paste();
+    void pasteTransposed();
+    void clear();
+    void cut();
     void selectionChanged();
     void objectChanged();
 };
