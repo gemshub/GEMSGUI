@@ -1,2 +1,6 @@
+*Data.cpp
+*Data.h
 *.o
+*.obj
+*.bak
 *~
