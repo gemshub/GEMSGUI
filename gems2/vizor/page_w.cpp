@@ -1266,6 +1266,7 @@ TCellInput::CmCalc()
             for(int mm=sel.M1; mm<=sel.M2; mm++ )
                 rObj.Put(calc.fun(rObj.Get(nn, mm)), nn, mm);
 
+//	field()->setSelectedArea(sel.N1, sel.N2+1, sel.M1, sel.M2+1);
         field()->objectChanged();
         emit fieldUpdate();
     }
