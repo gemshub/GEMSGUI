@@ -188,6 +188,12 @@
                                 <verstretch>0</verstretch>
                             </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>450</width>
+                                <height>350</height>
+                            </size>
+                        </property>
                         <property name="acceptDrops">
                             <bool>true</bool>
                         </property>
@@ -210,11 +216,17 @@
                                 <verstretch>0</verstretch>
                             </sizepolicy>
                         </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>140</width>
+                                <height>0</height>
+                            </size>
+                        </property>
                         <property name="frameShape">
                             <enum>Box</enum>
                         </property>
                         <property name="title">
-                            <string>Plotting Legend</string>
+                            <string>Legend</string>
                         </property>
                     </widget>
                 </grid>

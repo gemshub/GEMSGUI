@@ -20,6 +20,7 @@
 #include <qpainter.h>
 #include <qbrush.h>
 #include <qfontmetrics.h>
+#include <qfont.h>
 #include <qdragobject.h>
 
 #include <math.h>
@@ -198,11 +199,14 @@ TPlotWin::~TPlotWin()
 void
 TPlotWin::init() 
 {
-    QFontMetrics fm(font());
+//    QFontMetrics fm(font());
+    const QFont fn("");
+    QFontMetrics fm(fn);
     int txtWidth = fm.width(title.c_str());
     PText* txtLabel = new PText(this, 
 	    QPoint((parentWidget()->width()-4 - txtWidth)/2, 13), Qt::black, title.c_str());
     shapes.Add(txtLabel);
+    cerr << "width " << parentWidget()->width() << " txtWidth " << txtWidth << endl;
 }
 
 /*!
