@@ -1519,7 +1519,8 @@ TCellInput::cut()
 void
 TCellInput::clear()
 {
-    setText(S_EMPTY);
+    setText("0");
+    setValue();
 }
 
 void
