@@ -598,8 +598,17 @@ NEXT_DC:
            aSE->ods_link(1);
            try
            {
-              //  rt[RT_SYSEQ].Get( Rnum );
-              aSE->TryRecInp( skey.c_str(), crt, 1 );
+                  int Rnum = rt[RT_SYSEQ].Find( skey.c_str() );
+                  if( Rnum<0 )
+                  {
+                        gstring msg = "Record ";
+                         msg += skey;
+                         msg += " not found!" ;
+                         Error( GetName(), msg.c_str());
+                  }
+                  rt[RT_SYSEQ].Get( Rnum );
+                  aSE->dyn_set(1);
+//              aSE->TryRecInp( skey.c_str(), crt, 1 );
               //  aSE->dyn_set(1);
               PHbcalc( &MsysC, &MaqC, &R1C, &VaqC, &VsysC );  // Calculation
             }
@@ -639,7 +648,7 @@ NEXT_DC:
     if( !memcmp( mup->SB[mup->N-1], "Zz", 2 ))
     {
         N = mup->N - 1;
-        if( sy.B[N] > aPa->pmp->DHBM/10.0 )        // Fixed by DAK 27.10.99
+        if( sy.B[N] > aPa->pmp->DHBM/10.0 )  // Fixed by DAK 14.03.02
         {
             if( /*( pe && (pe[0].Istat == P_EXECUTE))  ||*/
                 vfQuestion(window(), rt[RT_SYSEQ].PackKey(),
