@@ -343,6 +343,39 @@ static int rkeycmp(const void *e1, const void *e2)
     return RCmp;
 }
 
+/* opens window with 'Remake record' parameters
+*/
+void
+TPhase::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[12];
+    int size[6];
+    double r2 = php->Asur;
+
+    p_key  = db->PackKey();
+    memcpy( flgs, php->sol_t, 12);
+    size[0] = php->Nsd;
+    size[1] = php->ncpN;
+    size[2] = php->ncpM;
+    size[3] = php->nscN;
+    size[4] = php->nscM;
+    size[5] = php->NsiT;
+
+    if( !vfPhaseSet( window(), p_key, flgs, size, r2 ))
+        return;   // cancel
+
+    memcpy( php->sol_t, flgs, 12);
+    php->Nsd = size[0];
+    php->ncpN = size[1];
+    php->ncpM = size[2];
+    php->nscN = size[3];
+    php->nscM = size[4];
+    php->NsiT = size[5];
+    php->Asur = r2;
+}
+
 //Rebuild record structure before calc
 int
 TPhase::RecBuild( const char *key, int mode  )

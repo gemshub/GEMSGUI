@@ -23,6 +23,7 @@ DATASRC =	MainDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessDialogData.cpp \
 		ComposWizardData.cpp \
+		PhaseWizardData.cpp \
 		KeyDialogData.cpp \
 		ChangeKeyDialogData.cpp \
 		KeyProfileData.cpp \
@@ -46,6 +47,7 @@ DATAOBJ =       MainDialogData.obj \
 		ProgressDialogData.obj \
 		ProcessDialogData.obj \
 		ComposWizardData.obj \
+		PhaseWizardData.obj \
 		KeyDialogData.obj \
 		ChangeKeyDialogData.obj \
 		KeyProfileData.obj \
@@ -70,6 +72,7 @@ SOURCES =	MainDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessDialog.cpp \
 		ComposWizard.cpp \
+		PhaseWizard.cpp \
 		KeyDialog.cpp \
 		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
@@ -96,6 +99,7 @@ OBJECTS =	MainDialog.obj \
 		ProgressDialog.obj \
 		ProcessDialog.obj \
 		ComposWizard.obj \
+		PhaseWizard.obj \
 		KeyDialog.obj \
 		ChangeKeyDialog.obj \
 		KeyProfile.obj \
@@ -129,6 +133,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_ProcessDialogData.obj \
 		..\tmp\moc_ComposWizard.obj \
 		..\tmp\moc_ComposWizardData.obj \
+		..\tmp\moc_PhaseWizard.obj \
+		..\tmp\moc_PhaseWizardData.obj \
 		..\tmp\moc_ChangeKeyDialog.obj \
 		..\tmp\moc_ChangeKeyDialogData.obj \
 		..\tmp\moc_KeyDialog.obj \
@@ -275,6 +281,19 @@ clean:
 
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ComposWizardData.cpp
 	-del moc_ComposWizardData.cpp
+
+..\tmp\moc_PhaseWizard.obj: PhaseWizard.h
+      	$(MOC) PhaseWizard.h -o moc_PhaseWizard.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_PhaseWizard.cpp
+	-del moc_PhaseWizard.cpp
+
+
+..\tmp\moc_PhaseWizardData.obj: PhaseWizardData.h
+      	$(MOC) PhaseWizardData.h -o moc_PhaseWizardData.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_PhaseWizardData.cpp
+	-del moc_PhaseWizardData.cpp
 
 
 
@@ -510,6 +529,9 @@ ComposWizardData.cpp: ComposWizard.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
+PhaseWizardData.cpp: PhaseWizard.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
 
 KeyDialogData.cpp: KeyDialog.ui
         $(UIC) $? -o $(*).h

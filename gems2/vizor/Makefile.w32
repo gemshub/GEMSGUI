@@ -119,6 +119,8 @@ link:
 +dlg\ProcessDialogData.obj \
 +dlg\ComposWizard.obj \
 +dlg\ComposWizardData.obj \
++dlg\PhaseWizard.obj \
++dlg\PhaseWizardData.obj \
 +dlg\KeyDialog.obj \
 +dlg\KeyDialogData.obj \
 +dlg\ChangeKeyDialog.obj \
@@ -166,6 +168,8 @@ link:
 +tmp\moc_ProcessDialogData.obj \
 +tmp\moc_ComposWizard.obj \
 +tmp\moc_ComposWizardData.obj \
++tmp\moc_PhaseWizard.obj \
++tmp\moc_PhaseWizardData.obj \
 +tmp\moc_KeyDialog.obj \
 +tmp\moc_KeyDialogData.obj \
 +tmp\moc_ChangeKeyDialog.obj \
