@@ -1327,7 +1327,7 @@ TQueryWindow::TQueryWindow(CWinInfo& w):
         rInfo(w)
 {
     gstring s = w.rM.GetName();
-    s += ": Remake parameters";
+    s += ": Remake dialog (press Ok to use default parameters)";
     setCaption(s.c_str());
 
     AddFields();

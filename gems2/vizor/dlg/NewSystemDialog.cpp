@@ -48,7 +48,7 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* name):
         Inherited( parent, name, true )
 {
     gstring titl = pVisorImp->getGEMTitle();
-            titl+= " : Single Thermodynamic System in Project ";
+            titl+= " : Single Thermodynamic System in Project  ";
             titl+= gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
 
 
@@ -177,46 +177,53 @@ NewSystemDialog::LoadMenu()
 
 
    imgFile = imgDir + "arrow_left1.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Previous", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Display the previous SysEq record", 0,
                      this, SLOT(CmPrevious()), toolBar, "previous" );
 
     imgFile = imgDir + "arrow_right1.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Next", 0,
+    new QToolButton( QPixmap(imgFile.c_str()), "Display the next SysEq record", 0,
                      this, SLOT(CmNext()), toolBar, "next" );
 
 
     imgFile = imgDir + "fileopen.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Display", 0,
+    new QToolButton( QPixmap(imgFile.c_str()),
+        "Display existing systems (SysEq records) and load one of them", 0,
                      this, SLOT(CmSelect()), toolBar, "display" );
 
-    imgFile = imgDir + "SetCompos.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Bulk composition", 0,
+     imgFile = imgDir + "SetCompos.png";
+    new QToolButton( QPixmap(imgFile.c_str()),
+       "Press to set bulk chemical composition (BCC) of the system", 0,
                      this, SLOT(CmOpen_SYSTEM_ICOMP()), toolBar, "bulk" );
 
 
     toolBar->addSeparator();
 
     imgFile = imgDir + "RunBCC.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Calculate BCC", 0,
+    new QToolButton( QPixmap(imgFile.c_str()),
+       "Press to check the system definition and calculate BCC", 0,
                      this, SLOT(CmRunBCC()), toolBar, "BCC" );
 
 
     imgFile = imgDir + "RunIPM.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Calculate IPM", 0,
+    new QToolButton( QPixmap(imgFile.c_str()),
+       "Press to calculate the equilibrium state using GEM IPM", 0,
                      this, SLOT(CmRunIPM()), toolBar, "calc IPM" );
 
     imgFile = imgDir + "ordertool.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Dual Solution", 0,
+    new QToolButton( QPixmap(imgFile.c_str()),
+       "Press to explore detailed GEM IPM results", 0,
                      this, SLOT(CmOpen_EQSTAT_ICOMP()), toolBar, "dual" );
 
     toolBar->addSeparator();
 
     imgFile = imgDir + "filesave.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Save", 0,
+    new QToolButton( QPixmap(imgFile.c_str()),
+       "Save this SysEq record to project database", 0,
                      this, SLOT(CmSave()), toolBar, "show" );
 
     imgFile = imgDir + "fileprint.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Print", 0,
+    new QToolButton( QPixmap(imgFile.c_str()),
+       "Print system definition, thermodynamic data or GEM IPM results", 0,
                      this, SLOT(CmPrintEqstat()), toolBar, "print" );
 
    toolBar->addSeparator();
@@ -301,6 +308,8 @@ NewSystemDialog::CmReadMulti()
 void
 NewSystemDialog::CmNext()
 {
+    if( rt[RT_SYSEQ].RecCount() <= 0 )
+      return;
     try
     {
        int i_next = 0;
@@ -340,6 +349,8 @@ NewSystemDialog::CmNext()
 void
 NewSystemDialog::CmPrevious()
 {
+    if( rt[RT_SYSEQ].RecCount() <= 0)
+      return;
     try
     {
        int i_next = 0;
@@ -381,6 +392,9 @@ NewSystemDialog::CmPrevious()
 void
 NewSystemDialog::CmSelect()
 {
+
+    if( rt[RT_SYSEQ].RecCount() <= 0)
+      return;
     try
     {
     //  TProfil::pm->pmp->pFAG = 1;
