@@ -160,49 +160,6 @@
                     <string>1</string>
                 </property>
             </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>M   moles </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>h    millimoles</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Y  micromoles</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>g   grams</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>G  kilograms</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>y   milligrams</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>comboBox1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>50</y>
-                        <width>120</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel2</cstring>
@@ -251,6 +208,49 @@
                     <string>Create user-defined formula text for defining this PCO? (unchecked by default)</string>
                 </property>
             </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>M   moles </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>h    millimoles</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>Y  micromoles</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>g   grams</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>G  kilograms</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>y   milligrams</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>50</y>
+                        <width>120</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
         </widget>
     </widget>
     <widget class="QWidget">
@@ -260,98 +260,6 @@
         <attribute name="title">
             <string>Step 2 - Useful hints</string>
         </attribute>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup19</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>80</y>
-                    <width>570</width>
-                    <height>320</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>What will happen after you click "Finish"</string>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel13</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>30</y>
-                        <width>560</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(1) If PCO definition via amounts of Independent Components was selected then the program will display a list of available IComp records, asking you to mark necessary ones. Using the left mouse button, mark one or more keys, and click "Ok" to proceed.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel12</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>91</y>
-                        <width>550</width>
-                        <height>80</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(2) If PCO definition via formulae from DComp/ReacDC was selected then the program will display a list of available ReacDC records, asking you to mark those stoichiometries from which you need. Using the left mouse button, mark one or more keys, or click "Clear All" if you are not going to use ReacDC species; click "Ok" to proceed to selection of the DComp species. In total, minimum one species (either DComp or ReacDC) must be marked. Proceed with "Ok".</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel14</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>180</y>
-                        <width>551</width>
-                        <height>60</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(3) When Page 1 of the "Compos" window appears on the desktop, enter the full PCO name into the BCname field and (optionally) a comment into the BCnote line. Depending on the configuration, you may need to enter the UDF formulae in the FormU list, or the long formula text into the Ctext field. Then enter concentration unit codes into CIcl, AUcl, CDcl (what applies) and necessary numbers into CI, CA or CD columns.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel15</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>250</y>
-                        <width>540</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(4) Click on the "Calculate" toolbar button to compute the PCO vector. If necessary, check or enter the normalization values in the MasVol vector and calculate again. Note that setting MasVol[0] and MasVol[6] to zeros disables the normalization of PCO to total mass or amount of moles, respectively. Save the record to database.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup18</cstring>
@@ -413,6 +321,98 @@
                 </property>
                 <property name="maxValue">
                     <number>4</number>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup19</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>110</y>
+                    <width>570</width>
+                    <height>350</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>What will happen after you click "Finish"</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel12</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>90</y>
+                        <width>550</width>
+                        <height>90</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(2) If PCO definition via formulae from DComp/ReacDC was selected then the program will display a list of available ReacDC records, asking you to mark those stoichiometries from which you need. Using the left mouse button, mark one or more keys, or click "Clear All" if you are not going to use ReacDC species; click "Ok" to proceed to selection of the DComp species. In total, minimum one species (either DComp or ReacDC) must be marked. Proceed with "Ok".</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel14</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>190</y>
+                        <width>551</width>
+                        <height>70</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(3) When Page 1 of the "Compos" window appears on the desktop, enter the full PCO name into the BCname field and (optionally) a comment into the BCnote line. Depending on the configuration, you may need to enter the UDF formulae in the FormU list, or the long formula text into the Ctext field. Then enter concentration unit codes into CIcl, AUcl, CDcl (what applies) and necessary numbers into CI, CA or CD columns.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel15</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>270</y>
+                        <width>540</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(4) Click on the "Calculate" toolbar button to compute the PCO vector. If necessary, check or enter the normalization values in the MasVol vector and calculate again. Note that setting MasVol[0] and MasVol[6] to zeros disables the normalization of PCO to total mass or amount of moles, respectively. Save the record to database.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel13</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>550</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(1) If PCO definition via amounts of Independent Components was selected then the program will display a list of available IComp records, asking you to mark necessary ones. Using the left mouse button, mark one or more keys, and click "Ok" to proceed.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
         </widget>

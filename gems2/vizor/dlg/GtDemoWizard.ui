@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>602</width>
-            <height>441</height>
+            <height>524</height>
         </rect>
     </property>
     <property name="caption">
-        <string>GEM-Selektor Process Wizard</string>
+        <string>GEM-Selektor GtDemo Wizard</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>false</bool>
@@ -23,64 +23,40 @@
             <cstring>WizardPage1</cstring>
         </property>
         <attribute name="title">
-            <string>Step 1 - Process Simulator configuration</string>
+            <string>Step 1 - Generic tabulation and demonstration (GtDemo) configuration</string>
         </attribute>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel10</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>560</width>
-                    <height>170</height>
-                </rect>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <property name="text">
-                <string>&lt;p&gt;The Process Simulator module is a tool for automation of "batch" calculation of many equilibrium states, as well as sampling and plotting of results. This tool helps in modeling various irreversible (geo)chemical processes such as mixing, dissolution, titration, corrosion, or weathering .&lt;/p&gt;
-&lt;p&gt;The Process Simulator can be configured to perform in the most convenient way. To tell it what input data to modify and what output data to sample and plot,  you may have to type two scripts that control generation of the simulated points (P_expr) and data sampling (pgExpr), respectively.&lt;/p&gt;
-&lt;p&gt;There are three major kinds of process simulators: (1) &lt;b&gt;Sequential&lt;/b&gt;, where only input GEM parameters are modified; (2) &lt;b&gt;Reciprocal&lt;/b&gt;, where the next step depends on some GEM output parameters (e.g. pH, concentrations) obtained from previous step; (3) &lt;b&gt;Inverse&lt;/b&gt;, where GEM input parameters must be automatically adjusted to obtain prescribed value of GEM output parameter.&lt;/p&gt;</string>
-            </property>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>ButtonGroup1</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>10</x>
-                    <y>200</y>
-                    <width>560</width>
-                    <height>150</height>
+                    <x>390</x>
+                    <y>10</y>
+                    <width>180</width>
+                    <height>420</height>
                 </rect>
             </property>
             <property name="title">
-                <string>Sample data from PDB chain</string>
+                <string>Select type of records to read </string>
             </property>
             <widget class="QRadioButton">
                 <property name="name">
-                    <cstring>psPB</cstring>
+                    <cstring>psPH</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>90</y>
-                        <width>90</width>
+                        <y>150</y>
+                        <width>110</width>
                         <height>19</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>&amp;Unspace</string>
+                    <string>P&amp;hase</string>
                 </property>
                 <property name="accel">
-                    <string>Alt+U</string>
+                    <string>Alt+H</string>
                 </property>
                 <property name="checked">
                     <bool>false</bool>
@@ -88,21 +64,46 @@
             </widget>
             <widget class="QRadioButton">
                 <property name="name">
-                    <cstring>psPE</cstring>
+                    <cstring>psRP</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>60</y>
-                        <width>120</width>
+                        <y>120</y>
+                        <width>110</width>
                         <height>19</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>&amp;Process</string>
+                    <string>R&amp;TParm</string>
                 </property>
                 <property name="accel">
-                    <string>Alt+P</string>
+                    <string>Alt+T</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>psRE</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>90</y>
+                        <width>110</width>
+                        <height>19</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;ReacDC</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+R</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
                 </property>
             </widget>
             <widget class="QRadioButton">
@@ -111,9 +112,9 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>160</x>
+                        <x>20</x>
                         <y>60</y>
-                        <width>130</width>
+                        <width>110</width>
                         <height>19</height>
                     </rect>
                 </property>
@@ -129,13 +130,35 @@
             </widget>
             <widget class="QRadioButton">
                 <property name="name">
+                    <cstring>psIC</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>90</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;IComp</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+I</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
                     <cstring>psBC</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>160</x>
-                        <y>90</y>
-                        <width>130</width>
+                        <x>20</x>
+                        <y>180</y>
+                        <width>120</width>
                         <height>19</height>
                     </rect>
                 </property>
@@ -156,8 +179,8 @@
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>30</y>
-                        <width>130</width>
+                        <y>210</y>
+                        <width>110</width>
                         <height>19</height>
                     </rect>
                 </property>
@@ -173,21 +196,21 @@
             </widget>
             <widget class="QRadioButton">
                 <property name="name">
-                    <cstring>psUT</cstring>
+                    <cstring>psPE</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>410</x>
-                        <y>30</y>
-                        <width>70</width>
+                        <x>20</x>
+                        <y>240</y>
+                        <width>100</width>
                         <height>19</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>&amp;Duterm</string>
+                    <string>&amp;Process</string>
                 </property>
                 <property name="accel">
-                    <string>Alt+D</string>
+                    <string>Alt+P</string>
                 </property>
             </widget>
             <widget class="QRadioButton">
@@ -196,36 +219,36 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>410</x>
-                        <y>60</y>
+                        <x>20</x>
+                        <y>380</y>
+                        <width>110</width>
+                        <height>19</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&amp;GEM2MT</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+G</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>psPB</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>350</y>
                         <width>100</width>
                         <height>19</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>&amp;Mass transport</string>
+                    <string>&amp;UnSpace</string>
                 </property>
                 <property name="accel">
-                    <string>Alt+M</string>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>psIC</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>160</x>
-                        <y>30</y>
-                        <width>80</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&amp;IComp</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+I</string>
+                    <string>Alt+U</string>
                 </property>
                 <property name="checked">
                     <bool>false</bool>
@@ -233,70 +256,67 @@
             </widget>
             <widget class="QRadioButton">
                 <property name="name">
-                    <cstring>psRE</cstring>
+                    <cstring>psUT</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>280</x>
-                        <y>30</y>
-                        <width>80</width>
+                        <x>20</x>
+                        <y>320</y>
+                        <width>90</width>
                         <height>19</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>&amp;Reacdc</string>
+                    <string>&amp;DualTh</string>
                 </property>
                 <property name="accel">
-                    <string>Alt+R</string>
-                </property>
-                <property name="checked">
-                    <bool>false</bool>
+                    <string>Alt+D</string>
                 </property>
             </widget>
-            <widget class="QRadioButton">
+            <widget class="QLabel">
                 <property name="name">
-                    <cstring>psPH</cstring>
+                    <cstring>textLabel1_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>280</x>
-                        <y>60</y>
-                        <width>80</width>
-                        <height>19</height>
+                        <x>10</x>
+                        <y>290</y>
+                        <width>151</width>
+                        <height>21</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>P&amp;hase</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+H</string>
-                </property>
-                <property name="checked">
-                    <bool>false</bool>
+                    <string>&lt;i&gt;Under Construction&lt;/i&gt;</string>
                 </property>
             </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>psRP</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>280</x>
-                        <y>90</y>
-                        <width>80</width>
-                        <height>19</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>R&amp;tparam</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+T</string>
-                </property>
-                <property name="checked">
-                    <bool>false</bool>
-                </property>
-            </widget>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel10</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>10</y>
+                    <width>320</width>
+                    <height>420</height>
+                </rect>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>&lt;p&gt;The GtDemo module is a tool for sampling generic data from GEMS database records, plotting and exporting them into text files or (using copy-paste)  into the Excel or another commercial spreadsheet. &lt;/p&gt;
+&lt;p&gt; &lt;br&gt;  &lt;/p&gt;
+&lt;p&gt;The records to be sampled must already exist in your project database. You have to select a record type on this wizard page. The particular records to be processed can be chosen after this wizard is finished.&lt;/p&gt;
+&lt;p&gt; &lt;br&gt;  &lt;/p&gt;
+&lt;p&gt;If the Process type is chosen for data sampling, you will have to select only one Process record, and this makes all SysEq records generated by that process simulator available to this GtDemo sampling. In this way, many GEM-calculated parameters can be monitored in many GtDemo records in e.g. an irreversible process such as mixing or titration, created by a single Process record. &lt;/p&gt;
+&lt;p&gt;&lt;br&gt; &lt;/p&gt;
+&lt;p&gt;To tell GtDemo exactly what output data to sample and plot,  you will have to type some expressions in the math script fiield Gexpr later on. To make this task easier, a collection of example scripts is provided under the "Help" "View Scripts..." menu command in the GtDemo window.&lt;/p&gt;</string>
+            </property>
         </widget>
     </widget>
     <widget class="QWidget">
@@ -306,91 +326,21 @@
         <attribute name="title">
             <string>Step 2 - Important dimensions</string>
         </attribute>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>580</width>
-                    <height>60</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>In spin-boxes below, at least the first one (nPV) must be carefully chosen. nPV defines how many steps of process simulation will be performed, as well as it sets number of rows in several data arrays. Set also number of experimental points (rows in xE, yE) if you wish to perform graphical fitting.</string>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignVCenter</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>310</y>
-                    <width>580</width>
-                    <height>50</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>The optional data vectors (of length nPV, can be allocated below) correspond to process iterators and can be used in process scripts (with J index) to accumulate respective values for all process steps performed.</string>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignVCenter</set>
-            </property>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup7</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>0</x>
-                    <y>60</y>
-                    <width>580</width>
-                    <height>260</height>
+                    <x>10</x>
+                    <y>110</y>
+                    <width>570</width>
+                    <height>270</height>
                 </rect>
             </property>
             <property name="title">
-                <string>Dimensions and graphics</string>
+                <string>Setup of dimensions of data arrays</string>
             </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel1_2_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>210</y>
-                        <width>470</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of columns (plots) in the xEp, yEp arrays for plotting experimental data</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel1_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>180</y>
-                        <width>470</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of rows (points) in the xEp, yEp arrays for plotting experimental data (optional)</string>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>TextLabel1_2</cstring>
@@ -404,7 +354,7 @@
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Number of plots (columns in the yp table, from 0 to 20) to sample simulated data in the process script pgExpr for export or plotting; number of rows will be nPV. Important: if this field is set to 1 or more, the pgExpr script editor field will also be created.</string>
+                    <string>&lt;b&gt;Number of plots&lt;/b&gt; (columns in the y0 table, from 1 to 20) to collect data sampled for export or plotting using the math script in the gExpr field. Default value is 1.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
@@ -432,22 +382,6 @@
                     <number>1</number>
                 </property>
             </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>TextLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>90</x>
-                        <y>90</y>
-                        <width>460</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>dimension of Vector-row of work cells for GtDemo math scripts (optional)</string>
-                </property>
-            </widget>
             <widget class="QSpinBox">
                 <property name="name">
                     <cstring>pNwc</cstring>
@@ -468,6 +402,25 @@
                 </property>
                 <property name="value">
                     <number>1</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>80</y>
+                        <width>460</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Optional: number of work cells in the gd_wc vector-row (for using in the gExpr script). Default: 0 (gd_wc vector not available)</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
             <widget class="QSpinBox">
@@ -501,11 +454,11 @@
                         <x>90</x>
                         <y>130</y>
                         <width>460</width>
-                        <height>30</height>
+                        <height>40</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Number of lines Table of work cells - a row per sampled record (optional)</string>
+                    <string>Optional: Number of columns in the gQp table (number of rows will be that of sampled records). Default: 0 (gQp table not available).</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
@@ -518,7 +471,7 @@
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>180</y>
+                        <y>190</y>
                         <width>60</width>
                         <height>20</height>
                     </rect>
@@ -528,6 +481,25 @@
                 </property>
                 <property name="minValue">
                     <number>0</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>180</y>
+                        <width>450</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Optional: Number of rows (points) in the xE, yE arrays for plotting experimental data. Default: 0 (xE and yE arrays not available).</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
             <widget class="QSpinBox">
@@ -552,126 +524,70 @@
                     <number>1</number>
                 </property>
             </widget>
-        </widget>
-    </widget>
-    <widget class="QWidget">
-        <property name="name">
-            <cstring>WizardPage2</cstring>
-        </property>
-        <attribute name="title">
-            <string>Step 4 - Useful hints</string>
-        </attribute>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup19</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>70</y>
-                    <width>570</width>
-                    <height>330</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>What will happen after you click "Finish"</string>
-            </property>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>textLabel13</cstring>
+                    <cstring>TextLabel1_2_2_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>550</width>
+                        <x>90</x>
+                        <y>220</y>
+                        <width>470</width>
                         <height>30</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>(1) The necessary arrays will be allocated and Page 1 of the Proces module window will appear.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel12</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>50</y>
-                        <width>550</width>
-                        <height>70</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(2) In this window, you will have to set up the necessary iterators - three-cell columns that specify the start value, the end value, and the increment of certain control parameters. From an iterator with zero increment, only the first value will be used. The first 5 iterators are used for generation of new SysEq record keys, thus, at least one of them must have a non-zero increment.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel14</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>120</y>
-                        <width>551</width>
-                        <height>60</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(3) Enter the full simulator name into the PEname field and (optionally) a comment into the PEnote line. If process or sampler scripts will be used then type the scripts on Pages 1 and 2, respectively. Use template scripts accessible through "Help" "Scripts" menu command.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel15</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>190</y>
-                        <width>540</width>
-                        <height>60</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(4) Click on the "Calculate" toolbar button to start process simulation (in the case of messages about errors in scripts, fix them and try calculation again). During the first calculation, do not use the graphic window. After the simulation has finished, you can see the sampled results on the Graph page. Type in the axis and plot names, and cLick on the "Plot data" button to see customizable graphs.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel13_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>260</y>
-                        <width>550</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(1) If you wish to plot some experimental values of one of calculated and sampled data, then close the graph dialog, find on the "Graph" page arrays xEp and yEp, and type the empirical data in there. When ready, open the plot again and customie it.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
+                    <string>Optional: Number of columns (plots) in the yE array for plotting experimental data. Default: 1.</string>
                 </property>
             </widget>
         </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>390</y>
+                    <width>560</width>
+                    <height>60</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Optional work arrays gd_wc and/or gQp can be used in GtDemo math script (with jR index of current record ) to store intermediate calculated data.</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>0</y>
+                    <width>570</width>
+                    <height>100</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;p&gt;At least the first spin-box must be set to 1 or more - the number of plots or columns in the y0 table of sampled data. The number of rows in the y0 and x0 arrays is defined autmatically from the number of selected records to be processed.&lt;/p&gt; 
+&lt;p&gt;As an option, you may set the number of experimental points (rows in xE, yE) and the number of columns in yE table to plot experimental data over the sampled data curves .&lt;/p&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage3</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 3- Useful hints</string>
+        </attribute>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup18</cstring>
@@ -687,22 +603,6 @@
             <property name="title">
                 <string>Optional</string>
             </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel11</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>90</x>
-                        <y>20</y>
-                        <width>451</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&lt;b&gt;Set here the number of links to SDref bibliography records (default 0)&lt;/b&gt;</string>
-                </property>
-            </widget>
             <widget class="QSpinBox">
                 <property name="name">
                     <cstring>spinBox18</cstring>
@@ -717,6 +617,181 @@
                 </property>
                 <property name="maxValue">
                     <number>4</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel11</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>20</y>
+                        <width>451</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Set here the number of links to SDref bibliography records (default: 0)</string>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup19</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>160</y>
+                    <width>570</width>
+                    <height>280</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>What will happen after you click "Finish"</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel13_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>230</y>
+                        <width>550</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(1) If you wish to plot some experimental values against sampled data, close the graph dialog, find on the "Graph" page arrays xE and yE, and type the empirical data in there. Open the plot again and customie it, if necessary.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel15</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>160</y>
+                        <width>540</width>
+                        <height>70</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(4) When ready, click on the "Calculate" toolbar button to start consecutive reading of records and data sampling (in the case of messages about errors in scripts, fix them and try calculation again). After the sampling has finished, you can see the sampled results on Page 2. Type in the axis and plot names, and click on the "Plot data" button to see customizable graphs.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel14</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>100</y>
+                        <width>540</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(3) Enter the full data sampler name into the GDname field and (optionally) a comment into the GDcom line. Then type the math script into the gExpr area. Use template scripts accessible through the "Help" "View Scripts" menu command.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel13_3_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>60</y>
+                        <width>550</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(2) The program will show a list of available records to sample data. Mark one or more keys and click "Ok" to proceed. The GtDemo arrays will be allocated, and Page 1 of the GtDemo module window appears.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel13_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>550</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(1) If the field above is active and contains a Process record key template, the program will show a list of available Proces records; mark a desired one and click "Ok".</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup18_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>70</y>
+                    <width>570</width>
+                    <height>80</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Optional (only if Process simulator will be sampled)</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel11_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>340</x>
+                        <y>20</y>
+                        <width>220</width>
+                        <height>50</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Here the Process record key (template)  can be edited (will appear as GDproc line on Page 3 of GtDemo window).</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>lineEditProcesKey</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>30</y>
+                        <width>320</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>*:*:*:*:*:*:*:*:</string>
                 </property>
             </widget>
         </widget>

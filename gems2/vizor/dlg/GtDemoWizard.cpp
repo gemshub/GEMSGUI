@@ -38,7 +38,7 @@ GtDemoWizard::GtDemoWizard( const char* pkey, int size[7], QWidget* parent):
             str1 += pkey;
     setCaption( str1.c_str() );
 
-    setFinishEnabled( WizardPage2, true);
+    setFinishEnabled( WizardPage3, true);
 
 //Page1
    switch( size[0]) //nRT - chain index

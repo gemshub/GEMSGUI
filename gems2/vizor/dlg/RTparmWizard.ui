@@ -1,0 +1,839 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>RTparmWizardData</class>
+<widget class="QWizard">
+    <property name="name">
+        <cstring>RTparmWizardData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>602</width>
+            <height>522</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>GEM-Selektor RTparm Wizard</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>false</bool>
+    </property>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage1</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 1 - Thermodynaimc data tabulation (RTParm) configuration</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel10</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>0</y>
+                    <width>570</width>
+                    <height>210</height>
+                </rect>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
+            <property name="text">
+                <string>&lt;p&gt;The RTparm module is a tool for tabulating and plotting thermodynamic data for a dependent component as function of temperature T and/or pressure P. The source standard thermodynamic data must be provided in a "parent" DComp or ReacDC record before this RTparm record is created.&lt;/p&gt;
+&lt;p&gt;During the RTparm calculation, the necessary thermodynamic properties at each T,P point will be collected (by executing the user-provided tExpr script) into arrays on the "Tables" page of the RTParm window. After that, the data can be plotted, exporting into a text file, or (using copy-paste)  into the Excel or another commercial spreadsheet. &lt;/p&gt;
+&lt;p&gt;To tell RTparm module exactly which thermodynamic data to sample and plot,  you will have to type some expressions in the math script fiield tExpr later on. To make this task easier, a collection of example scripts is provided under the "Help" "View Scripts..." menu command in the GtDemo window.&lt;/p&gt;</string>
+            </property>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>ButtonGroup1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>210</y>
+                    <width>570</width>
+                    <height>220</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>No need to change in this version of GEMS-PSI </string>
+            </property>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>C   Celsius  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>K   Kelvin</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>F   Fahrenheit</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>170</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_3_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>170</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Plain</enum>
+                </property>
+                <property name="text">
+                    <string>Units of measurement of temperature in this RTparm record (default: C)</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>b    bar  = 10^5 Pa</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>B    kbar (kilobar)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>p    Pa  (Pascal)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>P    MPa  = 10^6 Pa  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>A    atm (=1.013 bar)</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>140</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>j    J/bar  = 0.1 cm3/mol</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>a   cal/bar</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>m   cm3/mol</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>110</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_3_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>140</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Units of measurement of pressure in this RTparm record (default: b)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>110</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Units of measurement of volume in this RTparm record (default:  j)</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>j     J/mol(/K) </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>c    cal/mol(/K)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>J     kJ/mol(/K)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>C    kcal/mol(/K)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>N   Normalized</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>80</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>80</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Units of measurement of energy in this RTparm record (default: j)</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>d   DComp record </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>r   ReacDC record</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>180</x>
+                        <y>30</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Source of input data for this RTparm task  (default: d )</string>
+                </property>
+            </widget>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 2 - Important dimensions</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>0</y>
+                    <width>570</width>
+                    <height>110</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;p&gt;Select the mode of generating T and P argument arrays and specify the number of different temperatures and pressures. Set also  the number of plots or columns in the yF table of collected data. The number of rows in the xT, xP and yF arrays will be defined autmatically.&lt;/p&gt; 
+&lt;p&gt;As an option, you may set the number of experimental points (rows in xTE, xPE,  ytE) and the number of columns in the ytE table to plot experimental data over the calculated data.&lt;/p&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup7</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>110</y>
+                    <width>570</width>
+                    <height>270</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Setup of dimensions of data arrays</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>210</x>
+                        <y>30</y>
+                        <width>351</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Select a Mode for generating and using  xP and xT arguments values. Default mode: 2.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pNwc</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>70</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>999</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>1</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pGraph</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>100</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>15</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pECol</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>230</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>10</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>1</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pELine</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>200</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>100</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>190</y>
+                        <width>450</width>
+                        <height>50</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Optional: Number of rows (points) in the xTE, xPE, ytE arrays for plotting experimental data. Default: 0 (arrays not available).</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pNqp</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>150</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>230</y>
+                        <width>450</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Optional: Number of columns (plots) in the ytE array for plotting experimental data. Default: 1.</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>0   Pairwise given T and P  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>1   P, then T increments</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>2   T, then P increments</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>3    P and T increments</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1_2_4</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>170</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="currentItem">
+                    <number>2</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>60</y>
+                        <width>450</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&lt;b&gt;Number of different pressures (nP). Default: 1 (fixed pressure).&lt;/b&gt;</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>90</y>
+                        <width>450</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&lt;b&gt;Number of different temperatures (nT). Default value is 15.&lt;/b&gt;</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>130</y>
+                        <width>450</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&lt;b&gt;Number of columns in the yF table&lt;/b&gt; (plot lines), 1 to 10. Default: 1. The number of rows (T,P pairs, abscissa points) in yF, xP, xT arrays will be assigned automatically.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>380</y>
+                    <width>560</width>
+                    <height>70</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Note: the generation modes 1, 2 and 3 will require to set the iterators for T and P after this wizard is finished. &lt;br&gt;The actual sampling of results into the yF table requires a math script which should use data objects from the TPwork page of RTparm window.</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage3</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 3- Useful hints</string>
+        </attribute>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup19</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>160</y>
+                    <width>570</width>
+                    <height>280</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>What will happen after you click "Finish"</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel13_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>200</y>
+                        <width>540</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(3) If you wish to plot some experimental values against sampled data, close the graph dialog, find on the "Graph" page arrays xE and yE, and type the empirical data in there. Open the plot again and customie it, if necessary.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel15</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>110</y>
+                        <width>540</width>
+                        <height>70</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(2) When ready, click on the "Calculate" toolbar button to start consecutive reading of records and data sampling (in the case of messages about errors in scripts, fix them and try calculation again). After the sampling has finished, you can see the sampled results on Page 2. Type in the axis and plot names, and click on the "Plot data" button to see customizable graphs.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel14</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>540</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(1) The RTparm arrays will be allocated, and Page 1 of the RTparm module window appears. Enter the full data sampler name into the RPname field and (optionally) a comment into the RPnote line. Then type the math script into the rExpr area. Use template scripts accessible through the "Help" "View Scripts" menu command.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup18</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>0</y>
+                    <width>570</width>
+                    <height>140</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Optional</string>
+            </property>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>C   Celsius  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>K   Kelvin</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1_2_3_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>100</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>T   Temperature  </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>P   Pressure</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1_2_3_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>70</y>
+                        <width>140</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>spinBox18</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>30</y>
+                        <width>60</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>4</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel11</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>160</x>
+                        <y>30</y>
+                        <width>380</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Set here the number of links to SDref bibliography records (default: 0)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel11_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>160</x>
+                        <y>70</y>
+                        <width>390</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>What to use as an abscissa for the plots? Default: T (i.e. use the xT vector).</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel11_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>160</x>
+                        <y>100</y>
+                        <width>390</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Which temperature units to use for the abscissa? Default: C.</string>
+                </property>
+            </widget>
+        </widget>
+    </widget>
+</widget>
+<tabstops>
+    <tabstop>spinBox18</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
