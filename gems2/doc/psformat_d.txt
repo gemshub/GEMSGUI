@@ -1,90 +1,125 @@
-Format dlya vyvoda tablic rezul'tatov:
+Export&Print scripts:
 
-(All words are case sensitive)
+Export script is processed by a CmExport method
+which is executed if "RecordList" "Export"
+menu command is selected.
+SDref list contains a reference to "escript*:*:<rectype>:"
+SDref record with the Export Script text.
+
+Print script is processed by a CmPrint method
+which is executed if "Record" "Print"
+menu command is selected.
+SDref list contains a reference to "pscript*:*:<rectype>:"
+SDref record with the Print Script text.
+
+Export script is executed for list of selected records,
+print is executed for current record.
+
+
+Structure of escript&pscript:
+(All words are case sensitive !!!)
 
 <FORMAT>    =::  <COMMAND> { <COMMAND> }
-<COMMAND>   =::  line [## <equations> ##] <COLUMNS>  ¦
-                 list <obj_name> [## <equations> ##] <COLUMNS>
+<COMMAND>   =::  line [## <EQUATIONS> ##] <COLUMNS>  ¦
+                 list #obj_name [## <equations> ##] <COLUMNS>
 <COLUMNS>   =::  <STATEMENT> {, <STATEMENT>}
 <STATEMENT> =::  <FORMAT> <DATA>
-<FORMAT>    =::  %[flags][width][.prec]type_char
 
+<FORMAT>    =::  %[flags][width][.prec]type_char
  flags: "+" or "-";
  width = integer from 0 to 256;
  [.prec]= integer from 0 to 14
  type_char
-
  - s	Prints characters until a null-terminator
  - f	Floating point	signed value of the form [-]dddd.dddd.
  - e	Floating point	signed value of the form [-]d.dddde[+/-]ddd
  - g	Floating point	signed value in either e or f form,
         based on the given value and precision.
 
-<DATA>  =::  [all] [label] <obj_name> ¦
-             [label] <obj_name[i]>    ¦
-             <obj_name[i,j]>          ¦   (substring from,to for string data)
+<DATA>  =::  [all] [label] [substr[i_from,i_to]] #obj_name ¦
+             [label] [substr[i_from,i_to]] #obj_name[col]  ¦
+             [substr[i_from,i_to]] #obj_name[line,col]     ¦
              "text string"            ¦
              index                    ¦
              space                    ¦
              rkey                     ¦
              date                     ¦
-             time                     ¦
+             time
 
- <equations> =::  prn =: <condition>;
+<EQUATION> =: <MSequations> prn =: <condition>;
 
-     <condition>     -- GEMS Math Script conditional expression which
-                        uses line index ii and returns
+where:
+
+
+ <MSequations>    Any GEMS Math Script expressions
+
+ <condition>      GEMS Math Script conditional expression which
+                  uses line index ii and returns
 			0 (prn = 0 skips line) or
 			1 (prn <> 0 prints line)
 
-     line            -- command for printing one line
+ line             Command for printing one line
 
-     list <obj_name> -- print as many lines as defined by the first
-                        dimension (N) in the <obj_name> data object
+ list #obj_name   Command for printing as many lines as defined
+                  by the first dimension (N) in the #obj_name data object
 
-     all             -- print all columns (second dimension M) from
-                        <obj_name> data object in the previously specified
-                        format
+ all              Flag for printing all columns (second dimension M) from
+                   #obj_name data object in the previously specified format
 
-     label           -- print DOD label for the data object <obj_name>
-                        in the previously specified format
+ label            Flag for printing DOD label for the data object #obj_name
+                  in the previously specified format
 
-     <obj_name>      -- pechataem znachenie ob'ekta <obj_name>
-                      i = index ( current line), j = 0
-                        v zadannom pered etim formate
+ substr[index,count]  (Only for string types)
+                     Flag for printing substring of string data.
+                     The substring contains count characters beginning at index.
 
-     <obj_name[col]>  -- pechataem znachenie ob'ekta <obj_name>
-                        i = index, j = col
-                        v zadannom pered etim formate
-     <obj_name[from, num]>  -- Tol'ko dlya spiskov strok
-                       pechataem dlya ob'ekta <obj_name>
-                        i = index, j = 0 podstroku s pozicii from,
-                        num - cumvolov
-                        v zadannom pered etim formate
+ #obj_name[i, j]   Printing values from #obj_name data object
+                   in the previously specified format.
+                   Where i line number, j column number.
+                   ( Using only in "line command", in "list command"
+                     value i is ignored )
 
-     space           -- pechat' probelov po formatu
+ #obj_name[col]   Printing values from #obj_name data object
+                   in the previously specified format.
+                   Where line number equal 0 for "line command" and
+                   equal current line numbers for "list command",
+                   col column number.
 
-     index          -- index stroki tablicy
+ #obj_name         Printing values from #obj_name data object
+                   in the previously specified format.
+                   Where line number equal 0 for "line command" and
+                   equal current line numbers for "list command",
+                   column number equal 0 or changed if "all flag" was setted.
 
-     rkey           -- kluch tekushey zapisi v upakovanom vide
-     date           -- tekushaya data
-     time           -- tekushee vremya
+ space             Printing spaces  in the previously specified format.
 
+ index             Printing current line index in the previously
+                   specified format.
 
-    Dlya vyvoda pustoy stroki: line %s ""
+ rkey              Printing current record key in the previously
+                   specified format.
 
+ date              Printing current date in the previously
+                   specified format.
 
+ time              Printing current time in the previously
+                   specified format.
 
-Example:
+ Any string started from $ ignored (comment line)
 
-line  %s "Data Sampling Tabulation"
-line  %s "   Record key:",  %s rkey
-line  %s #GDname
-line  %s #GDcom
-line
-     %14.7s  #gX_Nam,  %14.7s all #gLnam,  %s  "Record key variant"
-list #x0  %14.7e  #x0, %14.7e all #y0 , %s   #GD_rkl[17,10]
+ Putting empty string for output as: line %s ""
 
-line  %14.7s  #gX_Nam, %14.7s all #gLnamE
-list #xE  %14.7e  #xE, %14.7e all #yE
+Example print script "pscript:0000:gtdemo:"
+--------------------------------------------------------
+line %s "  GtDemo record key:", %s rkey
+line %s #GDname
+line %s #GDcom
+line %s "  System: ", %s substr[0,42] #GD_rkl
+line %s ""
+line %-7s #gX_Nam, %-10.7s all #gLnam, %-10.8s "Eq.point"
+line %s "--------"
+list #x0 %-7.3f #x0, %-10.5f all #y0,
+     %-10.7s substr[20,5] #GD_rkl
+line %s "--------"
+line %s "  End of table"
 

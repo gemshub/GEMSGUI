@@ -51,8 +51,9 @@ TPrintData::TPrintData(const char *sd_key,
 
     if( code == line_d )
         count = 1;
-     else if(  code == list_d )
-          {
+    else
+       if(  code == list_d )
+       {
             code = getToken( i, j );
             if( code >=0 )
             {
@@ -62,16 +63,16 @@ TPrintData::TPrintData(const char *sd_key,
             }
             else
               count = 1;
-          }
-          else
+       }
+       else
            {  gstring str_err = "Illegal command: \n";
               str_err += input;
               Error( key_format.c_str(), str_err.c_str() );
             }
     // insert condition  ## <math script>  ##
-          skipSpace();
-          if( *input == '#' && *(input+1) == '#' )
-          {
+    skipSpace();
+    if( *input == '#' && *(input+1) == '#' )
+    {
             input+=2;
             char* pose = strchr( input, '#');
             while( pose )
@@ -89,10 +90,8 @@ TPrintData::TPrintData(const char *sd_key,
             input = pose+2;
             ifcond = true;
             rpn.GetEquat( (char *)cond.c_str() );
-          }
-          // end insert
-
-
+    }
+    // end insert
 
      aFmts.Clear();  // list of formats
      aDts.Clear();     // list of datas
@@ -120,7 +119,13 @@ TPrintData::TPrintData(const char *sd_key,
           continue;
        }
        for( uint jj=0; jj<aDts.GetCount(); jj++ )
-         prnData( fout, ii, aFmts[jj], aDts[jj] );
+       {
+          if( code == line_d && aDts[jj].index_i != 0)
+            prnData( fout, aDts[jj].index_i,
+                     aFmts[jj], aDts[jj] );
+          else
+           prnData( fout, ii, aFmts[jj], aDts[jj] );
+       }
         fout << "\n";
     }
     skipSpace();
@@ -230,6 +235,42 @@ TPrintData::getToken( int& ii, int& jj )
           i++;
 */
     str = gstring( input, 0, i );
+
+    if( str.equals("substr") )
+    {  data = substr_d;
+       input += i;
+
+       skipSpace();
+       if( *input == '[' )  // sizes
+       {
+        input++;
+        skipSpace();
+        i=0;
+        while( isdigit(input[i]) && input[i] != '\0')
+               i++;
+        if( i > 0 ) sscanf( input, "%d", &ii);
+        input += i;
+        skipSpace();
+        if( *input == ',' )
+        {
+          input++;
+          skipSpace();
+          i=0;
+          while( isdigit(input[i]) && input[i] != '\0')
+                i++;
+          if( i > 0 ) sscanf( input, "%d", &jj);
+          input += i;
+        }
+        skipSpace();
+        if( *input != ']')
+        {  gstring str_err = "Illegal format: \n";
+               str_err += input;
+            Error( key_format, str_err.c_str() );
+        }
+        input++;
+      }
+      return data;
+    }
     if( str.equals("list") ) data = list_d;
     else if( str.equals("line") ) data = line_d;
       else if( str.equals("all") ) data = all_d;
@@ -242,6 +283,8 @@ TPrintData::getToken( int& ii, int& jj )
     else
     {  gstring str_err = "Illegal token: \n";
            str_err += str;
+       if( i==0 )
+           str_err += input;
        Error( key_format, str_err.c_str() );
     }
     input += i;
@@ -259,6 +302,8 @@ TPrintData::getToken( int& ii, int& jj )
     if( data < 0 )
     {  gstring str_err = "Illegal object name: \n";
            str_err += str;
+       if( i==0 )
+           str_err += input;
        Error( key_format.c_str(), str_err.c_str() );
     }
     input += i;
@@ -304,20 +349,32 @@ TPrintData::getData( )
  bool _all = false;
  bool _label  = false;
  int i=0, j=-1;
+ int bg_s=-1, end_s=-1;
 
  int _data = getToken( i, j );
 
  if( _data == all_d)
  {
   _all = true;
+   i=0; j=-1;
   _data = getToken( i, j );
  }
 
  if( _data == label_d)
  {
   _label = true;
+   i=0; j=-1;
   _data = getToken( i, j );
  }
+
+ if( _data == substr_d)
+ {
+   bg_s = i;
+   end_s = j;
+   i=0; j=-1;
+   _data = getToken( i, j );
+ }
+
  if( _data == text_d )
  {
    aDts.Add( new PData( _data, gstring( input, 0, i ).c_str() ) );
@@ -332,8 +389,9 @@ TPrintData::getData( )
            str+= input;
    Error( key_format, str.c_str());
  }
-
- aDts.Add( new PData( _data, i, j, _all, _label ) );
+ if( j < 0  )
+ { j=i; i=0; }
+ aDts.Add( new PData(_data, i, j, bg_s, end_s, _all, _label));
 
 }
 
@@ -386,7 +444,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
               for(int ii=0; ii<count; ii++)
               {
                if( dt.is_all )
-                  dt.index = ii;
+                  dt.index_j = ii;
                if( dt.is_label )
                  sprintf( strbuf, fmt.FmtOut().c_str(),
                         aObj[dt.data].GetKeywd() );
@@ -397,23 +455,23 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                    gstring str_data;
                    if( dt.end_sub > 0 && ( aObj[dt.data].GetType() >= 0 ) )
                    { // substring only for string type
-                    str_data = aObj[dt.data].GetString( ind, 0 );
-                    str_data = str_data.substr( dt.index, dt.end_sub );
+                    str_data = aObj[dt.data].GetString( ind, dt.index_j );
+                    str_data = str_data.substr( dt.bg_sub, dt.end_sub );
                     }
                    else
-                     str_data = aObj[dt.data].GetStringEmpty( ind, dt.index );
+                     str_data = aObj[dt.data].GetStringEmpty( ind, dt.index_j );
                    sprintf( strbuf, fmt.FmtOut().c_str(), str_data.c_str() );
                   }
                   else // float or double data
                   {
                      if( aObj[dt.data].IsNull()  ||
-                       aObj[dt.data].IsEmpty( ind, dt.index) )
+                       aObj[dt.data].IsEmpty( ind, dt.index_j) )
                      {
                        fmt.type = 's';
                        sprintf( strbuf, fmt.FmtOut().c_str(), S_EMPTY );
                      }
                      else sprintf( strbuf, fmt.FmtOut().c_str(),
-                           aObj[dt.data].Get( ind, dt.index) );
+                           aObj[dt.data].Get( ind, dt.index_j) );
                   }
                 }
                 fout << strbuf << " ";

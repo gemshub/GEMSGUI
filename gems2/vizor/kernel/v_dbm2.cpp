@@ -934,6 +934,13 @@ void TDataBase::RebildFile(const TCIntArray& nff)
     int  nRec;
     long fPos, fLen;
 
+    // close&open db files added Sveta 06/03/02
+    TCIntArray fls_old;
+    fls_old.Clear();
+    for(uint j=0; j< fls.GetCount(); j++)
+        fls_old.Add( fls[j] );
+    Close();
+
     for(uint j=0; j<nff.GetCount(); j++)
     {
         nF = (unsigned char)nff[j];
@@ -945,19 +952,17 @@ void TDataBase::RebildFile(const TCIntArray& nff)
             continue;
         }
         aFile[nF].Open( UPDATE_DBV );
-        ind.delfile( nF );
+        //ind.delfile( nF );
         aFile[nF].GetDh( fPos, fLen );
         nRec = scanfile( nF, fPos, fLen, aFile[nF].f );
         aFile[nF].SetDh( fLen, nRec );
         putndx( nF );
         status = UNDF_;
-        if( rclose )  aFile[nF].Close();
-        if( fls.Find( nF ) == -1 )
-        {
-            aFile[nF].Close();
-            ind.delfile( nF );
-        }
+        aFile[nF].Close();
+        ind.delfile( nF );
     }
+    Open( true, UPDATE_DBV, fls_old );
+
 }
 
 //Set new open Files list  (Reopen by list)
