@@ -254,12 +254,19 @@ void TDualTh::build_Ub()
    pVisor->Message( window(), GetName(),
              "Generation of EqStat records\n"
                  "Please, wait...", dtp->q, dtp->nQ);
- // put Bb data to system  ( into B and bi_)
+     // put Bb data to system  ( into B and bi_)
     for( i=0; i<dtp->Nb; i++)
     {
-       TProfil::pm->syp->B[i] = dtp->Bb[ dtp->q*dtp->Nb+i ];
-       TProfil::pm->syp->BI[i] = dtp->Bb[ dtp->q*dtp->Nb+i ];
-     }
+       TProfil::pm->syp->B[i] =  dtp->Bb[  dtp->q*dtp->Nb+i ];
+       TProfil::pm->syp->BI[i] =  dtp->Bb[  dtp->q*dtp->Nb+i];
+       TProfil::pm->syp->BIun[i] =  QUAN_MOL;
+    }
+// set zeros to xd_ and xa_
+    for( i=0; i < TProfil::pm->mup->L; i++)
+       TProfil::pm->syp->XeD[i] = 0.;
+    for( i=0; i < TProfil::pm->mup->La; i++)
+       TProfil::pm->syp->XeA[i] = 0.;
+
  // calculate EqStat record (Thermodynamic&Equlibria)
    //  TProfil::pm->pmp->pTPD = 0;
      calc_eqstat();
