@@ -52,10 +52,10 @@ typedef struct
     ;
     short nDC,      // N of DC in phase definition >= 1
     Nsd,        //  N of references to Data Sources  <= 4
-    ncpN, ncpM, // Dimensions of 'ph_cf' array (to set up on remake)
+    ncpN, ncpM, // Dimensions of 'ph_cf' array (to set up on remake) for SIT: cations and anions
     nscN, nscM, // Dimensions of 'dc_cf' array (to set up on remake)
     NsiT,       // N of surface site types (to set up on remake)
-    NR1;        // Number of elements per species in MaSdj array (1: old 4: new)
+    NR1;        // Number of elements per species in MaSdj array (1: old 6: new)
     float Asur,  // Specific surface area of major component (carrier), m2/g
     Sigma0,// Standard mean surface energy of solid-aqueous interface, J/m2
     SigmaG,// Standard mean surface energy of gas-aqueous interface, J/m2
@@ -71,7 +71,7 @@ typedef struct
                 // Outer EDL capacitance density, F/m2 (TLM)  [NsiT]
     char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [nDC][DFCN]
     float (*MaSdj)[DFCN], // Max. density, CD-music and isotherm params [nDC][NR1]
-    *PXres, // Reserved
+*PXres, // Reserved
     *pnc, //Array of phase-related coefficients of non-ideality model [ncpN][ncpM]
     *scoef;//Array of DC-related coefficients of non-ideality model[nDC][nscN][nscM]
     char (*SM)[DC_RKLEN], // List of DC record keys included into phase[0:nDC-1]
@@ -84,7 +84,13 @@ typedef struct
     (*sdref)[V_SD_RKLEN], // List of Data Sources SDref keys
     (*sdval)[V_SD_VALEN],  // Comments to Data Sources
 
-    *tprn;               // internal
+    *tprn,               // internal
+
+(*lsCat)[MAXDCNAME],       // work object - vector of names of cations
+(*lsAn)[MAXDCNAME];        // work object - vector of names of anions
+    short
+*nxCat,                  // Vector of indexes for cations in SIT coeff table
+*nxAn;                   // vector of indexes for anions  in SIT coeff table
 }
 
 PHASE;

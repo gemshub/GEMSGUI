@@ -115,6 +115,17 @@ void TPhase::ods_link( int q)
     aObj[ o_phsdval].SetDim( ph[q].Nsd, 1 );
     /// ??????
     aObj[o_phtprn].SetPtr( ph[q].tprn );
+
+// Added for SIT aqueous model implementation
+aObj[o_ph_w_lsc].SetPtr( ph[q].lsCat );
+aObj[o_ph_w_lsc].SetDim( ph[q].ncpN, 1 );
+aObj[o_ph_w_lsa].SetPtr( ph[q].lsAn );
+aObj[o_ph_w_lsa].SetDim( 1, ph[q].ncpM );
+aObj[o_ph_w_nxc].SetPtr( ph[q].nxCat );
+aObj[o_ph_w_nxc].SetDim( ph[q].ncpN, 1 );
+aObj[o_ph_w_nxa].SetPtr( ph[q].nxAn );
+aObj[o_ph_w_nxa].SetDim( 1, ph[q].ncpM );
+
     //    aObj[ o_phtprn].SetDim( 1,strlen(ph[q].tprn));
     php=&ph[q];
 }
@@ -143,6 +154,11 @@ void TPhase::dyn_set(int q)
     ph[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_phsdref ].GetPtr();
     ph[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_phsdval ].GetPtr();
     ph[q].tprn = (char *)aObj[ o_phtprn ].GetPtr();
+// Added for SIT aqueous model
+ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].GetPtr();
+ph[q].lsAn = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].GetPtr();
+ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].GetPtr();
+ph[q].nxAn = (short *)aObj[ o_ph_w_nxa ].GetPtr();
 }
 
 // free dynamic memory in objects and values
@@ -167,6 +183,11 @@ void TPhase::dyn_kill(int q)
     ph[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_phsdref ].Free();
     ph[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_phsdval ].Free();
     ph[q].tprn = (char *)aObj[ o_phtprn ].Free();
+
+ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
+ph[q].lsAn =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Free();
+ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Free();
+ph[q].nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
 }
 
 // realloc dynamic memory
@@ -241,6 +262,23 @@ void TPhase::dyn_new(int q)
             ph[q].dEq  =  (char *)aObj[ o_phdeq ].Alloc( 1, MAXFORMULA, S_);
             *ph[q].dEq = '`';
         }
+
+// Work objects for SIT aqueous model
+    if( ph[q].Ppnc == S_ON && ph[q].sol_t[SPHAS_TYP] == SM_AQSIT )
+    {
+         ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Alloc(
+                          ph[q].ncpN, 1, MAXDCNAME );
+         ph[q].lsAn  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Alloc(
+                          1, ph[q].ncpM, MAXDCNAME );
+         ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( ph[q].ncpN, 1, I_);
+         ph[q].nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( 1, ph[q].ncpM, I_);
+    }
+    else {
+        ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
+        ph[q].lsAn =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Free();
+        ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Free();
+        ph[q].nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
+    }
     //  ph[q].tprn = (char *)aObj[ o_phtprn ].Free();
 }
 
@@ -284,6 +322,12 @@ void TPhase::set_def( int q)
     ph[q].sdref = 0;
     ph[q].sdval = 0;
     ph[q].tprn = 0;
+// Work objects for SIT
+ph[q].lsCat = 0;
+ph[q].lsAn =  0;
+ph[q].nxCat = 0;
+ph[q].nxAn =  0;
+
 }
 
 // Input necessary data and links objects

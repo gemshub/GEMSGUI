@@ -577,12 +577,14 @@ enum phase_objects {   // PHASE
     o_phfsit,  /*f dyn*/  o_phpnc,   /*f dyn*/   o_phscoef, /*f dyn*/
     o_phsm,    /*s dyn*/  o_phdcc,   /*a dyn*/   o_phdcs,   /*a dyn*/
     o_phpeq,   /* txt */  o_phdeq,   /* txt */   o_phsdref, /*s dyn*/
-    o_phsdval, /*s dyn*/   o_phtprn, /*txt*/
+    o_phsdval, /*s dyn*/
+o_ph_w_lsc, o_ph_w_lsa, o_ph_w_nxc, o_ph_w_nxa,  // new work dyn objects
+    o_phtprn, /*txt*/
 };
 
 
 //---------------------------------
-// SysEq = System(packed)+Equstat
+// SysEq = System(packed)+Eqstat
 //---------------------------------
 
 const int MAXSYWHAT =     18;

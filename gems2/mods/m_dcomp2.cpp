@@ -196,9 +196,9 @@ NEXT:
             else
                Tcr = Tcr0 + Vmax/Smax * p;
             Tcr += dT;
-            Q298 = pow( 1.-Tst/Tcr0, 0.25 );
+            Q298 = pow( 1.- Tst/Tcr0, 0.25 );
             if( T<Tcr )
-               Qq = pow( 1.-Tst/Tcr, 0.25 );
+               Qq = pow( 1.- T/Tcr, 0.25 );
             else
                Qq = 0.;
             pp = p/1000.; // p is in bar, pp in kbar, kT and k298 in kbar
