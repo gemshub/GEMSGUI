@@ -37,28 +37,28 @@
 void TDualTh::Init_Generation()
 {
    // put data to Bb
-    CIb_Calc();
+    Bb_Calc();
 }
 
 
 // setup data before analyse
 void TDualTh::Init_Analyse()
 {
-    dt_text_analyze();
+//   dt_text_analyze();
    // put data to Bn
-   // CIn_Calc();
+   Bn_Calc();
 
 }
 
 // analyse calculated equlibriums
 void TDualTh::Analyse( )
 {
- // only as examle
+/* // only as examle
   if( dtp->PvChi == S_ON )
    CalcEquat( A_CHI );
   if( dtp->PvGam == S_ON )
    CalcEquat( A_GAM );
-
+*/
 }
 
 //set sizes of arrays
@@ -324,7 +324,7 @@ TDualTh::CalcEquat( int type_ )
 
 // Calculate data for matrix Bb
 void
-TDualTh::CIb_Calc()
+TDualTh::Bb_Calc()
 {
     int i, j;
     double Msysb_bk, Tmolb_bk;
@@ -463,6 +463,140 @@ TDualTh::CIb_Calc()
 
 }
 
+// Calculate data for matrix Bn
+void
+TDualTh::Bn_Calc()
+{
+    int i, j;
+    double Msysb_bk, Tmolb_bk;
+    double MsysC = 0., R1C = 0.;
+    double Xincr, ICmw, DCmw;
+    vstr  pkey(MAXRKEYLEN+10);
+    float  *ICw;  //IC atomic (molar) masses [0:Nmax-1]
+    float *A;
+    time_t crt;
+
+// get data fron IComp
+    TIComp* aIC=(TIComp *)(&aMod[RT_ICOMP]);
+    aIC->ods_link(0);
+    ICw = new float[dtp->Nb];
+    memset( pkey, 0, MAXRKEYLEN+9 );
+    for( i=0; i<dtp->Nb; i++ )
+    {
+        // load molar mass
+        memcpy( pkey, TProfil::pm->mup->SB[i], IC_RKLEN );
+        pkey[IC_RKLEN] = 0;
+        aIC->TryRecInp( pkey, crt, 0 );
+        // atomic mass and valence
+        if( IsFloatEmpty( aIC->icp->awt ))
+            ICw[i] = 0;
+        else ICw[i] = aIC->icp->awt;
+        // icp->val;
+    }
+
+// make An from dtp->for_n
+       make_A( dtp->nK, dtp->for_n );
+
+  Msysb_bk = dtp->Msysb;
+  Tmolb_bk = dtp->Tmolb;
+
+  for( int ii=0; ii< dtp->nQ; ii++ )
+  {
+    // set line in Bn to zeros
+    memset( dtp->Bn + ii*dtp->Nb, 0, dtp->Nb*sizeof(double) );
+    dtp->Msysb = Msysb_bk;
+    dtp->Tmolb = Tmolb_bk;
+
+
+    if( dtp->PvICn != S_OFF )
+    { //  Through IC
+        for( i=0; i<dtp->Nb; i++ )
+        {
+          if( !dtp->CIn[ii*dtp->Nb + i] ||
+                 IsFloatEmpty( dtp->CIn[ ii*dtp->Nb + i ] ))
+                continue;
+
+          ICmw = ICw[i];
+          Xincr = TCompos::pm->Reduce_Conc( dtp->CIcln[i],
+             dtp->CIn[ii*dtp->Nb+i],
+             ICmw, 1.0, dtp->Tmolb, dtp->Msysb, dtp->Mwatb,
+             dtp->Vaqb, dtp->Maqb, dtp->Vsysb );
+
+           dtp->Bn[ii*dtp->Nb+i] += Xincr;
+           MsysC += Xincr*ICmw;
+           R1C += Xincr;
+        } //  i
+    }
+
+
+    for( j=0; j < dtp->nK; j++ )
+    {
+         A = dtp->An + j * dtp->Nb;
+         if( !dtp->CAn[ii*dtp->nK + j] ||
+            IsFloatEmpty( dtp->CAn[ii*dtp->nK + j] ))
+                    continue;
+         DCmw = 0.;
+         for( i=0; i<dtp->Nb; i++ )
+         // calculation of molar mass
+             DCmw += A[i]* ICw[i];
+         Xincr = TCompos::pm->Reduce_Conc( dtp->AUcln[j],
+                dtp->CAn[ii*dtp->nK + j],
+                 DCmw, 1.0, dtp->Tmolb, dtp->Msysb, dtp->Mwatb,
+                 dtp->Vaqb, dtp->Maqb, dtp->Vsysb );
+         // recalc stoichiometry
+         for( i=0; i<dtp->Nb; i++ )
+          if( A[i] )
+          {
+            dtp->Bn[ii*dtp->Nb+i] += Xincr*A[i]; // calc control sum
+            MsysC += Xincr * A[i] * ICw[i];
+            R1C += Xincr * A[i];
+          }
+        } //  j
+
+      MsysC /= 1e3;
+
+      // Analyze control sum
+      if( fabs( dtp->Tmolb ) < 1e-12 )
+        dtp->Tmolb = R1C;
+      if( fabs( dtp->Tmolb - R1C ) < 1e-12 || fabs( R1C ) < 1e-15 )
+        /*Xincr = 1.*/;
+       else
+       { // normalisation
+          Xincr = dtp->Tmolb / R1C;
+          MsysC = 0.0;
+          for( i=0; i<dtp->Nb; i++ )
+            if( fabs( dtp->Bn[ii*dtp->Nb+i] ) >= 1e-12 )
+            {
+                dtp->Bn[ii*dtp->Nb+i] *= Xincr;
+                MsysC += dtp->Bn[ii*dtp->Nb+i] * ICw[i];
+            }
+          dtp->Tmolb = R1C;
+          MsysC /= 1e3;
+       }
+
+       if( fabs( dtp->Msysb ) < 1e-12 )
+           dtp->Msysb = MsysC;
+       if( fabs( dtp->Msysb - MsysC ) < 1e-12 || fabs( MsysC ) < 1e-15 )
+        /*Xincr = 1.*/;
+      else
+      { // normalisation
+         Xincr = dtp->Msysb / MsysC;
+         R1C = 0.0;
+         for( i=0; i<dtp->Nb; i++ )
+             if( fabs( dtp->Bn[ii*dtp->Nb+i] ) >= 1e-12 )
+             {
+                dtp->Bn[ii*dtp->Nb+i] *= Xincr;
+                R1C += dtp->Bn[ii*dtp->Nb+i];
+             }
+         dtp->Tmolb = R1C;
+      }
+  } // ii
+
+  dtp->Msysb = Msysb_bk;
+  dtp->Tmolb = Tmolb_bk;
+  delete[]  ICw;
+
+}
 
 
 // ------------------- End of m_dualthc.cpp --------------------------
