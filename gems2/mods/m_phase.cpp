@@ -853,7 +853,7 @@ MAKE_GAS_PHASE:
 
 // Do sometning else here?
    DONE:
-    fEdit = false;
+    contentsChanged = false;
 }
 
 // Assembling the phase (automatically generated aq or gas/fluid)
@@ -1024,7 +1024,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
         db->AddRecordToFile( key, file );
     else
         db->Rep( Rnum );
-//    fEdit = false;
+//    contentsChanged = false;
 }
 
 

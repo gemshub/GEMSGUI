@@ -213,7 +213,7 @@ void TProfil::OpenProfileMode( const char* key,
         if( nRec >= 0 )
             rt[RT_PHASE].Del(nRec);
 
-    fEdit = false;
+    contentsChanged = false;
     throw; // going on
  }
 
@@ -359,7 +359,7 @@ AGAIN:
  catch( TError& xcpt )
     {
      pVisor->CloseMessage();
-      fEdit = false;
+      contentsChanged = false;
       //delete projct directory, if Project record create error
       gstring fstKeyFld =
                 gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
@@ -517,7 +517,7 @@ AGAIN:
  catch( TError& xcpt )
     {
      pVisor->CloseMessage();
-      fEdit = false;
+      contentsChanged = false;
       //delete project directory, if Project record create error
       gstring fstKeyFld =
                 gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
@@ -586,9 +586,9 @@ void TProfil::deriveSystat()
     if( keyp.find_first_of( "*?") != gstring::npos )
         Error("SyStat", "Undefined current record!");
     int ret = TSysEq::pm->RecBuild( keyp.c_str() );
-    //  fEdit = false;
+    //  contentsChanged = false;
     //  TSysEq::pm->CloseWin();
-    //  fEdit = true;
+    //  contentsChanged = true;
 
     // unpack to SYSTEM structure
     syst->loadData( false, ret );  // set def and unpack syseq to system
@@ -637,9 +637,9 @@ void TProfil::newSystat( int mode )
         Error("SyStat", "This record already exists!");
 
     int ret = TSysEq::pm->RecBuild( str.c_str(), mode );
-    //  fEdit = false;
+    //  contentsChanged = false;
     //  TSysEq::pm->CloseWin();
-    //  fEdit = true;
+    //  contentsChanged = true;
 
     syst->loadData( true, ret ); // set def and unpack syseq to system
 

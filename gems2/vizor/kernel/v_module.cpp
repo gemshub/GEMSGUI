@@ -28,16 +28,18 @@ const char *GEMS_TOC_HTML = "gems_toc";
 #include "t_print.h"
 #include "t_read.h"
 #ifdef __unix
-#include <unistd.h>
+//#include <unistd.h>
 #endif
+
+#include "dlg/NewSystemDialog.h"
 
 // Default constructor and destructor
 
 TSubModule::TSubModule( int nrt ):
         nRT( nrt ),
-        fEdit(false),
+        contentsChanged(false),
         //   sBw(600), sBh(460),
-        pImp(0)
+        pImp(NULL)
 {}
 
 
@@ -58,12 +60,12 @@ TSubModule::Setup()
 // Called from TModuleImp right before
 // window is closed
 
-void
+bool
 TSubModule::EvClose()
 {
+    return true;
 }
 
-#include "dlg/NewSystemDialog.h"
 
 QWidget* TSubModule::window()
 {
@@ -148,27 +150,25 @@ TCModule::Setup()
     ///  SetCaption( (char*)GetName() );
 }
 
-
-// Called from TModuleImp right when
-// window is created
-
-
-void
+/*! returns true if we can close the window
+*/
+bool
 TCModule::EvClose()
 {
     try
     {
-        MessageToSave();
+        return MessageToSave();
     }
     catch( TError& xcpt )
     {
         vfMessage(pImp, xcpt.title, xcpt.mess);
     }
+    return false;	// can close on error ??
 }
 
 
-// opens window with 'Remake record' parameters
-
+/* opens window with 'Remake record' parameters
+*/
 void
 TCModule::MakeQuery()
 {
@@ -176,24 +176,30 @@ TCModule::MakeQuery()
 }
 
 
-// save solicitation
-
-void
+/*! returns true if user pressed 'save' or 'discard' and false on 'cancel'
+*/
+bool
 TCModule::MessageToSave()
 {
     if( nRT != RT_SDATA &&
-        (pVisor->ProfileMode == true && nRT < RT_SYSEQ ) )
-        return;
+    		(pVisor->ProfileMode == true && nRT < RT_SYSEQ) )
+    	return true;
 
-    const char* key= db->PackKey();
-    gstring str=key;
-    if( fEdit==true && str.find_first_of("*?" ) == gstring::npos )
+    gstring key_str = db->PackKey();
+    if( contentsChanged && key_str.find_first_of("*?") == gstring::npos )
     {
-        if( vfQuestion(window(), str.c_str(),
-                       "Data record has been changed! Save changes?"))
-            RecSave( str.c_str() );
+        int res = vfQuestion3(window(), key_str.c_str(),
+                       "Data record has been changed!",
+		       "Save changes", "Discard changes", "Cancel");
+	if( res == VF3_3 )
+	    return false;
+	    
+	if( res == VF3_1 )
+            RecSave( key_str.c_str() );
     }
-    fEdit = false;
+    contentsChanged = false;
+
+    return true;
 }
 
 // get key of record (existing key, new key or key temlate )
@@ -245,8 +251,9 @@ TCModule::CheckEqText( const char *erscan, const char *msg )
     if( !vfQuestion(window(), GetName() , msger ) )
         return false;
     pVisorImp->OpenModule(window(), nRT);
+
     return true;
-    // fEdit = true; "Replace record in database files?"
+    // contentsChanged = true; "Replace record in database files?"
 }
 
 //----------------------------------------------------------
@@ -266,7 +273,7 @@ TCModule::RecSave( const char *key, bool onOld )
         if( onOld == true || vfQuestion(window(), key,
                  "This data record already exists! Replace?") )
             db->Rep( Rnum );
-    fEdit = false;
+    contentsChanged = false;
 }
 
 // Save record to DB file
@@ -362,7 +369,7 @@ TCModule::CmDelete()
                    "Confirm deletion of data record keyed "+str ))
             return;
         DeleteRecord( str.c_str() );
-        fEdit = false;
+        contentsChanged = false;
     }
     catch( TError& xcpt )
     {
@@ -385,7 +392,7 @@ TCModule::RecInput( const char *key )
     }
     db->Get( Rnum );
     dyn_set();
-    fEdit = false;
+    contentsChanged = false;
     //  pVisor->Update();
 }
 
@@ -396,18 +403,20 @@ TCModule::CmShow()
     try
     {
         if( pVisor->ProfileMode == true &&
-                ( nRT >= RT_SYSEQ  || nRT == RT_PARAM )  )
+                ( nRT >= RT_SYSEQ || nRT == RT_PARAM )  )
             Error( GetName(), "Illegal command in Project mode!");
 
-        MessageToSave();
-        // get key of record
-        gstring str = GetKeyofRecord(
-      /*db->PackKey()*/0, "Select data record key ", KEY_OLD );
-        if(  str.empty() )
-            return ;
-        RecInput( str.c_str() );
-        SetTitle();
-        pVisor->Update( true );
+        if( ! MessageToSave() )
+	    return;
+
+    	// get key of record
+	gstring str = GetKeyofRecord(
+    	/*db->PackKey()*/0, "Select data record key ", KEY_OLD );
+    	if( str.empty() )
+    	    return;
+    	RecInput( str.c_str() );
+    	SetTitle();
+    	pVisor->Update( true );
     }
     catch( TError& xcpt )
     {
@@ -422,7 +431,9 @@ TCModule::CmFilter()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         gstring str = Filter;
         str = GetKeyofRecord( str.c_str(),
                          "Please, give a key template", KEY_TEMP );
@@ -454,7 +465,9 @@ TCModule::CmNext()
     try
     {
        int i_next = 0;
-       MessageToSave();
+       if( ! MessageToSave() )
+	    return;
+	    
        // get current record key
        gstring str=db->UnpackKey();
        // select scroll list
@@ -494,7 +507,9 @@ TCModule::CmPrevious()
     try
     {
        int i_next = 0;
-       MessageToSave();
+       if( ! MessageToSave() )
+    	return;
+	
        // get current record key
        gstring str=db->UnpackKey();
        // select scroll list
@@ -558,7 +573,7 @@ TCModule::RecBuild( const char *key, int mode  )
         if( pVisor->ProfileMode == true && nRT == RT_SYSEQ )
             pImp->CloseWin();
 
-        fEdit = true;
+        contentsChanged = true;
         break;
     case VF3_1:   // VF3_3   - do nothing
         retType = VF3_3;
@@ -581,8 +596,10 @@ TCModule::CmDerive()
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
             Error( GetName(), "Please, do it in Database mode!");
 
-        MessageToSave();
-        gstring str= gstring( db->UnpackKey(), 0, db->KeyLen() );
+        if( ! MessageToSave() )
+	    return;
+	    
+        gstring str = gstring( db->UnpackKey(), 0, db->KeyLen() );
                     //db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos )
             Error( GetName(), "Current record key is not defined!");
@@ -605,7 +622,7 @@ TCModule::CmDerive()
 void
 TCModule::RecCalc( const char* )
 {
-    fEdit = true;
+    contentsChanged = true;
 }
 
 // Calc loading before record (error if current record undefined)
@@ -622,7 +639,9 @@ TCModule::CmCalc()
              ( nRT < RT_SYSEQ && nRT != RT_SDATA ) )
             Error( GetName(), "Please, do it in Database mode!");
 
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos )
             Error( GetName(), "Current record key is not defined!");
@@ -654,7 +673,9 @@ TCModule::CmNew()
                 nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
             Error( GetName(), "Please, do it in Project mode!");
 
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         gstring str = GetKeyofRecord( db->PackKey(),
                              "Insert a new record key, please ", KEY_NEW);
         if(  str.empty() )
@@ -683,7 +704,9 @@ TCModule::CmCreate()
                 nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
             Error( GetName(), "Please, do it in Project mode!");
 
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         gstring str = GetKeyofRecord( db->PackKey(),
                              "Insert a new record key, please ", KEY_NEW);
         if(  str.empty() )
@@ -734,7 +757,9 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
     vstr key( db->KeyLen(), _key);
     // gstring  key( _key, 0, db->KeyLen());
 
-    MessageToSave();
+    if( ! MessageToSave() )
+	return;
+	
     RecStatus iRet = db->Rtest( key, 1 );
     gstring msg;
 
@@ -817,8 +842,9 @@ void TCModule::RecordLoadinProfile( const char *key )
     }
     else str=gstring(key);
     // get record
-    if(  str.empty() )
-            return ;
+    if( str.empty() )
+            return;
+	    
     RecInput( str.c_str() );
     if( check_input( str.c_str(), 0 ) ) // read and unpack base SyStat
         vfMessage(window(), GetName(),
@@ -837,7 +863,9 @@ void TCModule::CmLoadinProfile()
         if( nRT < RT_SYSEQ && nRT != RT_SDATA)
             Error( GetName(),  "Please, do it in Database mode!");
 
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         RecordLoadinProfile();
         pVisor->Update(true);
     }
@@ -857,7 +885,9 @@ TCModule::CmNewinProfile()
     {
         if( nRT < RT_SYSEQ  && nRT != RT_SDATA )
             Error( GetName(),  "Please, do it in Database mode!");
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         // Get record key
         gstring str = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
         str += ":"; //04/09/01 ????
@@ -887,7 +917,10 @@ TCModule::CmCreateinProfile()
     {
         if( nRT < RT_SYSEQ && nRT != RT_SDATA )
             Error( GetName(),  "Please, do it in Database mode!");
-        MessageToSave();
+
+        if( ! MessageToSave() )
+	    return;
+	    
         // Get record key
         gstring str = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
         str += ":"; //04/09/01 ????
@@ -929,7 +962,9 @@ TCModule::CmPlot()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos )
             Error( GetName(), "Current record key is not provided!");
@@ -1024,7 +1059,9 @@ TCModule::CmPrint()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         /*gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos )
             Error( GetName(), "Current record is not defined!");*/
@@ -1076,7 +1113,9 @@ TCModule::CmRebildFile()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         pVisor->Message( window(), GetName(), "Compressing database file(s) \n"
          "Please, wait...", 0, 100 );
 
@@ -1099,7 +1138,8 @@ TCModule::CmAddFileToList()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
 
         gstring filename;
         if( vfChooseFileSave(window(), filename,
@@ -1140,7 +1180,9 @@ TCModule::CmAddOpenFile()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         db->AddOpenFile(SelectFileList(closef));
         db->SetKey( ALLKEY );
         //        SetString("Command finished OK");
@@ -1160,7 +1202,9 @@ TCModule::CmReOpenFileList()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         TCIntArray arr = SelectFileList(closef|openf|oldself);
 
         if( arr.GetCount() < 1 )
@@ -1192,7 +1236,8 @@ TCModule::CmKeysToTXT()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
 
         KeysToTXT( Filter.c_str() );
         db->SetKey( ALLKEY );
@@ -1213,7 +1258,9 @@ TCModule::CmDeleteList()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         DelList( Filter.c_str() );
         db->SetKey( ALLKEY );
     }
@@ -1231,11 +1278,13 @@ TCModule::CmCopyList( )
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         CopyRecordsList( Filter.c_str(), false );
 
-         dyn_set();
-         pVisor->Update();
+        dyn_set();
+        pVisor->Update();
     }
     catch( TError& xcpt )
     {
@@ -1248,11 +1297,13 @@ TCModule::CmRenameList( )
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         CopyRecordsList( Filter.c_str(), true );
 
-         dyn_set();
-         pVisor->Update();
+        dyn_set();
+        pVisor->Update();
     }
     catch( TError& xcpt )
     {
@@ -1267,7 +1318,9 @@ TCModule::CmTransferList()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         Transfer( Filter.c_str() );
         dyn_set();
         //       SetString("Command finished OK");
@@ -1286,7 +1339,9 @@ TCModule::CmExport()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         RecExport( Filter.c_str() );
         pVisor->Update();
     }
@@ -1301,7 +1356,9 @@ TCModule::CmBackup()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         RecToTXT( Filter.c_str() );
         //  SetString("Command finished OK");
         pVisor->Update();
@@ -1319,7 +1376,9 @@ TCModule::CmImport()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         RecImport();
         pVisor->Update();
     }
@@ -1334,7 +1393,9 @@ TCModule::CmRestore()
 {
     try
     {
-        MessageToSave();
+        if( ! MessageToSave() )
+	    return;
+	    
         RecOfTXT( );
         //     SetString("Command finished OK");
         pVisor->Update();

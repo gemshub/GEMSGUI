@@ -630,7 +630,7 @@ TGtDemo::RecordPlot( const char* /*key*/ )
      if(  gdp->PsRes4 == S_ON)
       {
            gdp->PsRes4 = S_OFF;
-           fEdit = true;
+           contentsChanged = true;
            return;
       }
 
@@ -707,7 +707,8 @@ TGtDemo::SaveGraphData( GraphData *gr )
     }
     //    }
     pVisor->Update();
-    fEdit = true;
+    contentsChanged = true;
+    
     return true;
 }
 

@@ -82,15 +82,14 @@ TCModuleImp::closeEvent(QCloseEvent* e)
         qApp->focusWidget()->clearFocus();
     // save state for user window
 
-    pWin->close();
-
     // close module
-    rMod.EvClose();
-    rMod.pImp = 0;
-    //  rMod.sBw = width();
-    // rMod.sBh = height();
-
-    QWidget::closeEvent(e);
+    if( rMod.EvClose() ) {
+	pWin->close();
+	rMod.pImp = NULL;
+	//  rMod.sBw = width();
+	// rMod.sBh = height();
+	QWidget::closeEvent(e);
+    }
 }
 
 /*!

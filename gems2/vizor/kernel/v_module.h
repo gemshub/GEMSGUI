@@ -48,7 +48,7 @@ private:
 
 protected:
     int nRT;
-    bool fEdit;     // needs to save
+    bool contentsChanged;     // needs to save
 
     // Events part
     virtual void CloseWin();
@@ -60,7 +60,7 @@ protected:
 
 public:
     virtual void Setup();
-    virtual void EvClose();
+    virtual bool EvClose();
     virtual void CmHelp();
 /*    gstring GetString()
     {
@@ -79,16 +79,16 @@ public:
         return true;
     }
     virtual void SetTitle()
-    {
-    }
+    {}
+    
     // this function is called when active page of submodule is changed
     virtual void EvPageChanged(int /*nPage*/)
     {}
-    ;
+    
     // used by TCell derivatives to mark changes in the module
     virtual void CellChanged()
     {
-        fEdit = true;
+        contentsChanged = true;
     }
 
 
@@ -152,10 +152,10 @@ protected:
     TCStringArray aFldKeysHelp;      // gstring help of fields
     gstring start_title;
 
-    void MessageToSave();  // save solicitation
+    bool MessageToSave();  // save solicitation
 
     virtual void Setup();
-    virtual void EvClose();
+    virtual bool EvClose();
     void PrintSDref( const char* sd_key , char* text_fmt );
 
 public:	// moved to public to remove 'friend' for TCModuleImp

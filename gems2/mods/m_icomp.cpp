@@ -129,7 +129,7 @@ int TIComp::RecBuild( const char *key, int mode  )
         dyn_kill();
         set_def(); // set default data or zero if necessary
     case VF3_2:
-        fEdit = true;
+        contentsChanged = true;
         break;
     case VF3_1:   // VF3_3   - do nothing
         retType = VF3_3;

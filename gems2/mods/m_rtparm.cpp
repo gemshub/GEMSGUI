@@ -678,7 +678,8 @@ TRTParm::SaveGraphData( GraphData *gr )
             strncpy(  rpp->lNamE[ii-rpp->dimXY[1]], plot[ii].name, MAXGRNAME );
     }
     pVisor->Update();
-    fEdit = true;
+    contentsChanged = true;
+    
     return true;
 }
 

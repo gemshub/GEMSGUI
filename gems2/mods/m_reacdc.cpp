@@ -1255,7 +1255,8 @@ TReacDC::TryRecInp( const char *key_, time_t& time_s, int q )
     TCStringArray aDclist;
     TCIntArray anRDc;
 
-    MessageToSave();
+    if( ! MessageToSave() )
+	return;
 
     vstr key(db->KeyLen(), key_);
     TDBKey dbKey(db->GetDBKey());

@@ -598,7 +598,7 @@ void TSyst::loadData( bool newRec, int reBuildType )
         mark_dc_to_ic();
         mark_ic_to_bc();
         make_syst_sizes();//         make_syst();
-        fEdit = true;
+        contentsChanged = true;
     }
 }
 
@@ -632,7 +632,7 @@ void TSyst::PhaseExit()
 // System test functions ( chek system arrays )
 void TSyst::SyTest()
 {
-    //  if( fEdit == false )     // no changes
+    //  if( contentsChanged == false )     // no changes
     //      return;
     if( strchr( rt[RT_SYSEQ].PackKey(), '*') != NULL )
         Error( "The system is not defined! ",
@@ -647,7 +647,7 @@ void TSyst::SyTest()
 
 void TSyst::SyTestSizes()
 {
-    //  if( fEdit == false )     // no changes
+    //  if( contentsChanged == false )     // no changes
     //      return;
     if( strchr( rt[RT_SYSEQ].PackKey(), '*') != NULL )
         Error( "The system is not defined! ",
@@ -1337,7 +1337,7 @@ void TSyst::packData()
             i5++;
         }
     }
-    fEdit = false;
+    contentsChanged = false;
 }
 
 // pack system in z_sp_conf mode (save for full project mode)
@@ -1542,7 +1542,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
     STat->ssp->DM[15] = DCon[STat->ssp->DM[15]]; //sy.LO
 
 
-    fEdit = false;
+    contentsChanged = false;
 }
 
 //--------------------- End of ms_system.cpp ---------------------------

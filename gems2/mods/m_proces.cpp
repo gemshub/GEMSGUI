@@ -1453,7 +1453,8 @@ TProcess::SaveGraphData( GraphData *gr )
     }
     //    }
     pVisor->Update();
-    fEdit = true;
+    contentsChanged = true;
+    
     return true;
 }
 
