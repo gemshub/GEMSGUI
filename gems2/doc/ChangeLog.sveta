@@ -1,4 +1,58 @@
+25/01/2002
+  Finalised ElementsDialog, SetFiltersDialog, implementation
+  of two alternative modes of assembling system profiles.
 
+25/01/2002
+  Fixed pop-up of the EqDemo List View after calculation of
+  a single equilibrium state.  
+
+24/12/2001
+  Added functions for changed key by templates
+
+19/12/2001
+  Added  selection mode of making new Profile to
+  SettingsDialog
+  
+19/12/2001
+  Using old direktori to make new Profile, if this directory
+  empty.
+
+08/12/2001
+  In mode  "Select Elements" type to make new Profile , maked
+  statistic of no used IComps and no selected Phases to list
+  and files.
+
+
+08/12/2001
+ Added checking of new Profile name (first field of key)
+ for duplicating it.
+
+08/12/2001
+ Added posibility to select values from list in editing mode
+  in HLimpDialog:
+   signal: rightButtonPressed
+  end change selections of DComp/ReactDC if Phase selections change
+
+01/12/2001
+  Added new "Select Elements" type to make new Profile
+
+16/11/2001
+ Added for class TPrintData ( formating output records )
+ condition output : ## <math script> ##
+
+
+08/11/2001
+ Added posibility to edit data in HLimpDialog:
+   signal: rightButtonPressed
+
+
+02/11/2001
+ Setted in mode "make new Profile without template"
+ default data to structure Param
+ (All buttons in remake equal "Clear all" )
+
+
+-----------------------------------------------------
 11/08/2001
   Assemble&test the instalation packages of GEM-Selektor v.2 PSI
   executable code for Linux operation system.
