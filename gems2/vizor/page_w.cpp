@@ -835,6 +835,15 @@ TField::selectionChanged()
     getPage()->clearSelectedObjects();
 }
 
+void 
+TField::getSelectedArea(int& N1, int& N2, int& M1, int& M2) const
+{
+    N1 = selectN1;
+    N2 = selectN2;
+    M1 = selectM1;
+    M2 = selectM2;
+}
+
 //------------------------------------------------
 // TCell
 //------------------------------------------------
@@ -1063,7 +1072,7 @@ TCellInput::focusOutEvent(QFocusEvent* e)
     if( isModified() )
     	setValue();
 	
-//    if( QFocusEvent::reason() != QFocusEvent::Popup )
+    if( QFocusEvent::reason() != QFocusEvent::Popup )
 	field()->setFocused(NULL);
 
     QLineEdit::focusOutEvent(e);
@@ -1230,17 +1239,31 @@ TCellInput::CmSDRef()
 void
 TCellInput::CmCalc()
 {
-    if( !edit || fieldType!=ftFloat )
+    if( !edit || fieldType != ftFloat )
         return;
 
     // check selection
-    QRect sel(M,N,1,1);
+    Selection sel;
+    sel.N1 = N;
+    sel.N2 = N;
+    sel.M1 = M;
+    sel.M2 = M;
+    
+    if( field()->isSelected() ) {
+	field()->getSelectedArea(sel.N1, sel.N2, sel.M1, sel.M2);
+	sel.N2--;
+	sel.M2--;
+    }
+    
+//    cerr << "n1: " << n1 << " n2: " << n2 << " m1: " << m1 << " m2: " << m2 << endl;
+    
+//    QRect sel(n, m, ncells, mcells);
     CalcDialog calc(topLevelWidget(), rObj, sel);
 
     if( calc.exec() )
     {
-        for(int nn=sel.top(); nn<=sel.bottom(); nn++)
-            for(int mm=sel.left(); mm<=sel.right(); mm++ )
+        for(int nn=sel.N1; nn<=sel.N2; nn++)
+            for(int mm=sel.M1; mm<=sel.M2; mm++ )
                 rObj.Put(calc.fun(rObj.Get(nn, mm)), nn, mm);
 
         field()->objectChanged();

@@ -30,19 +30,18 @@
 #define Inherited CalcDialogData
 
 CalcDialog::CalcDialog(QWidget* parent, TObject& obj,
-                       QRect& selection):
+                       Selection& sel):
         Inherited( parent, 0, true ),
-        sel( selection ),
-        rObj(obj)
+        rObj(obj),
+        selection(sel)
 {
     pObjectBox->setTitle(obj.GetKeywd());
 
-
     // set selection
-    pN1->setValue( sel.top() );
-    pN2->setValue( sel.bottom() );
-    pM1->setValue( sel.left() );
-    pM2->setValue( sel.right() );
+    pN1->setValue( selection.N1 );
+    pN2->setValue( selection.N2 );
+    pM1->setValue( selection.M1 );
+    pM2->setValue( selection.M2 );
 
     pN1->setRange( 0, obj.GetN()-1 );
     pN2->setRange( 0, obj.GetN()-1 );
@@ -86,10 +85,10 @@ CalcDialog::ok()
         return;
     }
 
-    sel.setLeft( pM1->value() );
-    sel.setRight( pM2->value() );
-    sel.setTop( pN1->value() );
-    sel.setBottom( pN2->value() );
+    selection.M1 = pM1->value();
+    selection.M2 = pM2->value();
+    selection.N1 = pN1->value();
+    selection.N2 = pN2->value();
 
     accept();
 }

@@ -23,12 +23,19 @@
 #include "CalcDialogData.h"
 #include "v_object.h"
 
+struct Selection {
+    int N1;
+    int N2;
+    int M1;
+    int M2;
+};
+
 class CalcDialog : public CalcDialogData
 {
     Q_OBJECT
 
-    QRect& sel;
     const TObject& rObj;
+    Selection& selection;
 
 protected slots:
     void unaryMode();
@@ -38,7 +45,7 @@ protected slots:
     void help();
 
 public:
-    CalcDialog(QWidget* parent, TObject& obj, QRect& sel);
+    CalcDialog(QWidget* parent, TObject& obj, Selection& sel);
     virtual ~CalcDialog();
 
     double fun(double val);

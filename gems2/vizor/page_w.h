@@ -311,6 +311,7 @@ public:
     void setSelected(bool selected);
     void setSelectedArea(int N1, int N2, int M1, int M2);
     void pasteIntoArea(int N1, int N2, int M1, int M2);
+    void getSelectedArea(int& N1, int& N2, int& N3, int& N4) const;
     
 public slots:
     void Update();
