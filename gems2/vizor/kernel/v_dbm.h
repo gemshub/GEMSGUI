@@ -28,6 +28,8 @@
 #include "v_file.h"
 
 
+class GemDataStream;
+
 const int MAXFESTACK = 200; // size array deleted record
 
 extern const char* MARKRECDEL;
@@ -48,8 +50,8 @@ struct VDBhead
     long MinDrLen, MaxDrLen; // min and max size of deleted block
     int curDr;               // number of deleted blocks
 
-    void read(istream& is);
-    void write(ostream& is);
+    void read(GemDataStream& is);
+    void write(GemDataStream& is);
 
     static size_t data_size()
     {
@@ -65,8 +67,8 @@ struct DBentry
 {   // position and size of deleted block
     long pos, len;
 
-    void read(istream& is);
-    void write(ostream& is);
+    void read(GemDataStream& is);
+    void write(GemDataStream& is);
 
     static size_t data_size()
     {
@@ -79,8 +81,8 @@ struct RecEntry
     long pos, len;
     unsigned char nFile;
 
-    void read(istream& is);
-    void write(ostream& is);
+    void read(GemDataStream& is);
+    void write(GemDataStream& is);
 };
 
 
@@ -97,8 +99,8 @@ class TDBFile:
 
 protected:
     void check_sfe();
-    void v_PDBtry(fstream& fdb);
-    void getHead(fstream& fdb);
+    void v_PDBtry(GemDataStream& fdb);
+    void getHead(GemDataStream& fdb);
     void vdbh_new( const char *VerP, const char *passwd, int nRT, bool ifDel );
     void clrh();
 
@@ -137,7 +139,7 @@ public:
     void Create( unsigned char nRT, bool isDel );
     virtual void Open( FileStatus mode );
     virtual void Close();
-    void PutHead( fstream& fdb, int deltRec=0 );
+    void PutHead( GemDataStream& fdb, int deltRec=0 );
     void vdbh_setdt();
 
     //---  Manipulation deleted blocks ---
@@ -283,8 +285,8 @@ public:
     void delndx(int i);
     int  findx( const char *key );
     int  xlist( const char *pattern );
-    void PutKeyList( int nF, fstream& f);
-    void GetKeyList_i( int nF,int nRec, fstream& f );
+    void PutKeyList( int nF, GemDataStream& f);
+    void GetKeyList_i( int nF,int nRec, GemDataStream& f );
     void delfile( int nF );
 
     //--- Manipulation key
@@ -312,8 +314,8 @@ struct RecHead
     time_t crt;
     char endm[2];
 
-    void read(istream& is);
-    void write(ostream& os);
+    void read(GemDataStream& is);
+    void write(GemDataStream& os);
 
     static size_t data_size()
     {
@@ -346,11 +348,11 @@ protected:
     void putndx( int nF );
     void getndx( int nF );
     long reclen( );
-    long putrec( RecEntry& re, fstream& f );
-    long putrec( RecEntry& re, fstream& f, RecHead& rhh );
-    long getrec( RecEntry& re, fstream& f, RecHead& rh );
+    long putrec( RecEntry& re, GemDataStream& f );
+    long putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
+    long getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
     void opfils();
-    int scanfile( int nF, long& fPos, long& fLen, fstream& f);
+    int scanfile( int nF, long& fPos, long& fLen, GemDataStream& f);
     void fromCFG(fstream& f);
     bool changedDB( int nf, bool ifRep=false );
 

@@ -28,95 +28,96 @@
 
 #include "v_dbm.h"
 #include "v_object.h"
+#include "gdatastream.h"
 
 void
-VDBhead::read(istream& is)
+VDBhead::read(GemDataStream& is)
 {
-    is.read (VerP, 8 );
-    is.read (PassWd, 8);
-    is.read (Date, 11);
-    is.read (Time, 5);
-    is.read ((char*)&nRT, sizeof (int));                 // type of PDB chain
-    is.read ((char*)&nRec, sizeof (int));                // number records in file
-    is.read ((char*)&stacOver, sizeof (int));
-    is.read ((char*)&FPosTRT, sizeof (int));
-    is.read (&isDel, sizeof (char));
-    is.read ((char*)&MinDrLen, sizeof(long));
-    is.read ((char*)&MaxDrLen, sizeof(long)); // min and max size of deleted block
-    is.read ((char*)&curDr, sizeof(int));
+    is.readArray (VerP, 8 );
+    is.readArray (PassWd, 8);
+    is.readArray (Date, 11);
+    is.readArray (Time, 5);
+    is >> nRT;                 // type of PDB chain
+    is >> nRec;                // number records in file
+    is >> stacOver;
+    is >> FPosTRT;
+    is >> isDel;
+    is >> MinDrLen;
+    is >> MaxDrLen; // min and max size of deleted block
+    is >> curDr;
     ;               // number of deleted blocks
 }
 
 
 void
-VDBhead::write(ostream& is)
+VDBhead::write(GemDataStream& is)
 {
-    is.write (VerP, 8 );
-    is.write (PassWd, 8);
-    is.write (Date, 11);
-    is.write (Time, 5);
-    is.write ((char*)&nRT, sizeof (int));                 // type of PDB chain
-    is.write ((char*)&nRec, sizeof (int));                // number records in file
-    is.write ((char*)&stacOver, sizeof (int));
-    is.write ((char*)&FPosTRT, sizeof (int));
-    is.write (&isDel, sizeof (char));
-    is.write ((char*)&MinDrLen, sizeof(long));
-    is.write ((char*)&MaxDrLen, sizeof(long)); // min and max size of deleted block
-    is.write ((char*)&curDr, sizeof(int));
+    is.writeArray (VerP, 8 );
+    is.writeArray (PassWd, 8);
+    is.writeArray (Date, 11);
+    is.writeArray (Time, 5);
+    is << nRT;                 // type of PDB chain
+    is << nRec;                // number records in file
+    is << stacOver;
+    is << FPosTRT;
+    is << isDel;
+    is << MinDrLen;
+    is << MaxDrLen; // min and max size of deleted block
+    is << curDr;
     ;               // number of deleted blocks
 }
 
 
 void
-DBentry::read(istream& is)
+DBentry::read(GemDataStream& is)
 {
-    is.read ((char*)&pos, sizeof (long));
-    is.read ((char*)&len, sizeof (long));
+    is >> pos;
+    is >> len;
 }
 
 void
-DBentry::write(ostream& is)
+DBentry::write(GemDataStream& is)
 {
-    is.write ((char*)&pos, sizeof (long));
-    is.write ((char*)&len, sizeof (long));
+    is << pos;
+    is << len;
 }
 
 void
-RecEntry::read(istream& is)
+RecEntry::read(GemDataStream& is)
 {
-    is.read ((char*)&pos, sizeof (long));
-    is.read ((char*)&len, sizeof (long));
-    is.read ((char*)&nFile, sizeof (unsigned char));
+    is >> pos;
+    is >> len;
+    is >> nFile;
 }
 
 void
-RecEntry::write(ostream& is)
+RecEntry::write(GemDataStream& is)
 {
-    is.write ((char*)&pos, sizeof (long));
-    is.write ((char*)&len, sizeof (long));
-    is.write ((char*)&nFile, sizeof (unsigned char));
+    is << pos;
+    is << len;
+    is << nFile;
 }
 
 void
-RecHead::read(istream& is)
+RecHead::read(GemDataStream& is)
 {
-    is.read (bgm, 2);
-    is.read ((char*)&nRT, sizeof (unsigned char));
-    is.read ((char*)&Nobj, sizeof (unsigned char));
-    is.read ((char*)&rlen, sizeof (long));    // full len the record in file
-    is.read ((char*)&crt, sizeof (time_t));
-    is.read (endm, 2);
+    is.readArray (bgm, 2);
+    is >> nRT;
+    is >> Nobj;
+    is >> rlen;
+    is >> crt;
+    is.readArray (endm, 2);
 }
 
 void
-RecHead::write(ostream& is)
+RecHead::write(GemDataStream& is)
 {
-    is.write (bgm, 2);
-    is.write ((char*)&nRT, sizeof (unsigned char));
-    is.write ((char*)&Nobj, sizeof (unsigned char));
-    is.write ((char*)&rlen, sizeof (long));    // full len the record in file
-    is.write ((char*)&crt, sizeof (time_t));
-    is.write (endm, 2);
+    is.writeArray (bgm, 2);
+    is << nRT;
+    is << Nobj;
+    is << rlen;
+    is << crt;
+    is.writeArray (endm, 2);
 }
 
 // class TDBFile, TDBKey, TDBKeyList
@@ -220,7 +221,7 @@ TDBFile::vdbh_new( const char *VerP,
 void 
 TDBFile::Create( unsigned char nRT, bool isDel )
 {
-    fstream ff;
+    GemDataStream ff;
 
     // if( exist() ) return; in DB
 
@@ -240,7 +241,7 @@ TDBFile::Create( unsigned char nRT, bool isDel )
 
 // Read the control structure of PDB file.
 void  
-TDBFile::getHead(fstream& fdb)
+TDBFile::getHead(GemDataStream& fdb)
 {
     check_dh();
     fdb.seekg( 0L, ios::beg );
@@ -260,7 +261,7 @@ TDBFile::getHead(fstream& fdb)
 
 // Write the control structure of PDB file.
 void
-TDBFile::PutHead( fstream& fdb, int deltRec )
+TDBFile::PutHead( GemDataStream& fdb, int deltRec )
 {
     check_dh();
     dh->nRec +=deltRec;
@@ -278,7 +279,7 @@ TDBFile::PutHead( fstream& fdb, int deltRec )
 
 //Read and test VDBhead
 void 
-TDBFile::v_PDBtry( fstream& fdb )
+TDBFile::v_PDBtry( GemDataStream& fdb )
 {
     if( dh==0 )
         dh = new VDBhead;
@@ -453,7 +454,7 @@ TDBFile::SetDh( long& fLen, int nRec )
     int handle = f.rdbuf()->fd();
 #else
 cerr << "trunc dummy" << endl;
-///  WE HAVE TO GET HANDLE SOMEHOW!!!
+//  WE HAVE TO GET HANDLE SOMEHOW!!!
     int handle = 0;
 #endif // __GCC__ != 3
     ftruncate( handle, fLen );
@@ -1020,14 +1021,14 @@ TDBKeyList::RecKey(int i, gstring& kbuf )
 
 // write the keys of records to ndx file
 void 
-TDBKeyList::PutKeyList( int nF, fstream& f)
+TDBKeyList::PutKeyList( int nF, GemDataStream& f)
 {
     unsigned char j;
     for(int i=0; i< recInDB; i++ )
         if( re[i].nFile == nF )
         {
             for( j=0; j<KeyNumFlds(); j++)
-                f.write(  RecKeyFld(i,j), FldLen(j) );
+                f.writeArray(  RecKeyFld(i,j), FldLen(j) );
             //        f.write( (char *)(re+i), sizeof(RecEntry) );
             re[i].write (f);
         }
@@ -1036,7 +1037,7 @@ TDBKeyList::PutKeyList( int nF, fstream& f)
 
 // read the keys of records from ndx file
 void 
-TDBKeyList::GetKeyList_i(int nF, int nRec, fstream& f)
+TDBKeyList::GetKeyList_i(int nF, int nRec, GemDataStream& f)
 {
     RecEntry re_;
 
@@ -1044,7 +1045,7 @@ TDBKeyList::GetKeyList_i(int nF, int nRec, fstream& f)
     memset( key, 0, KeyLen()+1);
     for( int i=0; i< nRec; i++ )
     {
-        f.read( key, KeyLen());
+        f.readArray( key, KeyLen());
         //     f.read( (char *)&re_, sizeof(RecEntry));
         re_.read (f);
         int indRec = addndx( nF, re_.len, key);

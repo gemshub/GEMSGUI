@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec ./gems2 -c -s ~/GEMS2demo/program -u ~/GEMS2demo 
+exec ./gems2 -s ~/Gems2Lin/program -u ~/Gems2Lin  2> err.out

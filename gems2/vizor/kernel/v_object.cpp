@@ -462,7 +462,7 @@ TObject::lenDB() const
 // Contains GEMS-specific workarounds for SPP_SETTING alignments
 // for different architectures and optimizations
 // with debug messages. Needs to be improved !!!!!!!!!!!!!!
-size_t  TObject::toDB( fstream& f )
+size_t  TObject::toDB( GemDataStream& f )
 {
     size_t size;
 
@@ -476,21 +476,23 @@ size_t  TObject::toDB( fstream& f )
     {
         if( Type != S_ )
         {
-            size = (size_t)csize*(size_t)N*(size_t)M;
+            size = (size_t)csize * (size_t)N * (size_t)M;
             Odim_N = N;
             Odim_M = M;
         }
         else
         {
             if( pV && pV->GetPtr() )
-                size = strlen( (char *)pV->GetPtr() )+1;
+                size = strlen( (char *)pV->GetPtr() ) + 1;
             else
                 size = 0;
-            Odim_N = size? 1: 0;
+            Odim_N = size ? 1 : 0;
             Odim_M = M;
         }
     }
-    else  size = Odim_N = Odim_M = 0;
+    else
+	size = Odim_N = Odim_M = 0;
+	
     Lbegin[0] = TOKENOLABEL;
     Lbegin[1] = TOKENOLABEL;
     Obegin[0] = TOKENOBJBEGIN;
@@ -498,16 +500,16 @@ size_t  TObject::toDB( fstream& f )
 
 
     if( Type == S_ )  Odim_M = size;
-    f.write( Lbegin, sizeof Lbegin );
-    f.write( (char*)&Type, sizeof Type );
-    f.write( (char*)&csize, sizeof csize );
-    f.write( (char*)&Odim_N, sizeof Odim_N );
-    f.write( (char*)&Odim_M, sizeof Odim_M );
+    f.writeArray( Lbegin, sizeof Lbegin );
+    f << (signed char)Type;
+    f << csize;
+    f << Odim_N;
+    f << Odim_M;
 
     //  size_t Osize = szOLABEL - 2;//(size_t)sizeof(OLABEL)-2;
     if( size )
     {
-        f.write( Obegin, 2 );
+        f.writeArray( Obegin, 2 );
         // temp workaround of alingment
         if( strcmp(Keywd, "SPPpar") == 0 )
         {
@@ -516,14 +518,12 @@ size_t  TObject::toDB( fstream& f )
 #endif
             ((SPP_SETTING*)GetPtr())->write(f);
             //padding
-            for( int ii=0; ii<size-758; ii++)
+            for( unsigned int ii=0; ii<size-758; ii++)
                 f.put('%');
-
             //	    size = 758;
         }
-
         else
-            f.write( (char *)GetPtr(), size );
+            pV->write( f, size );
 
         return szOLABEL + size;
     }
@@ -533,7 +533,7 @@ size_t  TObject::toDB( fstream& f )
 // Gets data object from binary database file
 // Contains GEMS-specific workarounds for SPP_SETTING alignments
 // with debug messages. Needs to be improved !!!!!!!!!!!!!!
-size_t  TObject::ofDB( fstream& f )
+size_t  TObject::ofDB( GemDataStream& f )
 {
     size_t ssize;
     int cmp;
@@ -545,11 +545,16 @@ size_t  TObject::ofDB( fstream& f )
     unsigned int Odim_M;
     char Obegin[2];
 
-    f.read( Lbegin, sizeof Lbegin );
-    f.read( (char*)&Otype, sizeof Otype );
-    f.read( (char*)&csize, sizeof csize );
-    f.read( (char*)&Odim_N, sizeof Odim_N );
-    f.read( (char*)&Odim_M, sizeof Odim_M );
+
+    f.readArray( Lbegin, sizeof Lbegin );
+    f >> Otype;
+    f >> csize;
+    f >> Odim_N;
+    f >> Odim_M;
+
+//cerr << "ofDB: begin for " << GetKeywd() << endl;
+//cerr << "Type " << (int)Type << endl;
+//cerr << "Otype " << (int)Otype << " csize " << (int)csize << " Odim_N " << Odim_N << " Odim_M " << Odim_M << endl;
 
     //  f.read( (char *)&OlbufRead, sizeof( OLABEL )-2 );
     //  cmp = olab_comp( OlbufRead, OlenRead );
@@ -609,7 +614,7 @@ size_t  TObject::ofDB( fstream& f )
         return szOLABEL - 2;///(size_t)(sizeof( OLABEL )-2);
     }
 
-    f.read( Obegin, 2);
+    f.readArray( Obegin, 2);
     if( Obegin[0] != TOKENOBJBEGIN ||
             Obegin[1] != TOKENOBJBEGIN)
         Error(GetKeywd(),
@@ -690,19 +695,19 @@ size_t  TObject::ofDB( fstream& f )
         size_t cnt = 64 + 10*sizeof(short) +
                      28*sizeof(double) + sizeof(char*) + 352 + 9*sizeof(short) + 19*sizeof(float);
 
-        f.read( (char *)GetPtr() , 64/*ssize*/ ); // version
+        f.readArray( (char *)GetPtr() , 64/*ssize*/ ); // version
+//cerr << "version: " << (char*)GetPtr() << endl;
+        f.readArray( (short*)((char *)GetPtr() + off_p), 10 );
 
-        f.read( (char *)GetPtr() + off_p, 10*sizeof(short) );
+        f.readArray( (double*)((char *)GetPtr() + off_DG), 28 );
 
-        f.read( (char *)GetPtr() + off_DG, 28*sizeof(double) );
+        f.readArray( (char *)GetPtr() + off_tprn, sizeof(char*) ); // garbage - 4 bytes
 
-        f.read( (char *)GetPtr() + off_tprn, sizeof(char*) );
+        f.readArray( (char *)GetPtr() + off_DCpct, 352/*ssize*/ );  // default codes of values
 
-        f.read( (char *)GetPtr() + off_DCpct, 352/*ssize*/ );  // default codes of values
+        f.readArray( (short*)((char *)GetPtr() + off_NP), 9/*ssize*/ );
 
-        f.read( (char *)GetPtr() + off_NP, 9*sizeof(short)/*ssize*/ );
-
-        f.read( (char *)GetPtr() + off_Pi, 19*sizeof(float)/*ssize*/ );
+        f.readArray( (float*)((char *)GetPtr() + off_Pi), 19/*ssize*/ );
 #ifdef __unix
         cerr << "read " << cnt << endl;
 #endif
@@ -710,10 +715,11 @@ size_t  TObject::ofDB( fstream& f )
         f.seekg( off + f.tellg(), ios::beg );
         //ssize = 768;
     }
-
     else
-        //#endif
-        f.read( (char *)GetPtr(), ssize );
+        pV->read( f, ssize );
+
+//cerr << "ofDB: end" << endl;
+
     return szOLABEL + ssize;
 }
 
@@ -901,7 +907,7 @@ void TObject::ofTXT( fstream& of )
 int
 TObjList::Find(const char* s)
 {
-    for( int ii=0; ii<GetCount(); ii++ )
+    for( int ii=0; ii<(int)GetCount(); ii++ )
         if( strcmp(s, elem(ii).GetKeywd() )==0 )
             return ii;
 

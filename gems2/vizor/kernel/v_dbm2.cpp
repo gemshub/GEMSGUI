@@ -25,6 +25,8 @@
 #include "v_mod.h"
 #include "visor.h"
 #include "service.h"
+#include "gdatastream.h"
+
 
 //#define Change_DB_Mode   1 // Set readonly data Base mode
 
@@ -197,7 +199,7 @@ void TDataBase::AddFile(const gstring& path)
 void TDataBase::putndx( int nF )
 {
     gstring Path;
-    fstream f;
+    GemDataStream f;
 
     check_file(nF);
     u_makepath( Path, aFile[nF].Dir(),
@@ -215,7 +217,7 @@ void TDataBase::getndx( int nF )
 {
     gstring Path;
     VDBhead dh;
-    fstream f;
+    GemDataStream f;
 
     check_file( nF );
     u_makepath( Path, aFile[nF].Dir(),
@@ -238,7 +240,7 @@ long TDataBase::reclen( )
 }
 
 // put record in DB file
-long TDataBase::putrec( RecEntry& rep, fstream& f )
+long TDataBase::putrec( RecEntry& rep, GemDataStream& f )
 {
     int j, len;
     long StillLen;
@@ -259,7 +261,7 @@ long TDataBase::putrec( RecEntry& rep, fstream& f )
     // put packed key
     len = strlen( pack_key );
     pack_key[len] = MARKRKEY;
-    f.write( pack_key, (len+1)*sizeof(char) );
+    f.writeArray( pack_key, (len+1) );
     pack_key[len] = '\0';
     StillLen -= len+1;
     ErrorIf( !f.good(), GetKeywd(),
@@ -271,7 +273,7 @@ long TDataBase::putrec( RecEntry& rep, fstream& f )
 }
 
 // put record in DB file
-long TDataBase::putrec( RecEntry& rep, fstream& f, RecHead& rhh  )
+long TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
 {
     int j, len;
     long StillLen;
@@ -292,7 +294,7 @@ long TDataBase::putrec( RecEntry& rep, fstream& f, RecHead& rhh  )
     // put packed key
     len = strlen( pack_key );
     pack_key[len] = MARKRKEY;
-    f.write( pack_key, (len+1)*sizeof(char) );
+    f.writeArray( pack_key, (len+1) );
     pack_key[len] = '\0';
     StillLen -= len+1;
     ErrorIf( !f.good(), GetKeywd(),
@@ -305,7 +307,7 @@ long TDataBase::putrec( RecEntry& rep, fstream& f, RecHead& rhh  )
 
 
 // Gets a record from PDB file
-long TDataBase::getrec( RecEntry& rep, fstream& f, RecHead& rh )
+long TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
 {
     int j;
     long StillLen;
@@ -750,7 +752,7 @@ TDataBase::OpenAllFiles( bool only_kernel )
 
     Close();
     for( j=0; j< aFile.GetCount(); j++)
-     if( only_kernel && j >=  specialFilesNum )
+     if( only_kernel && (int)j >=  specialFilesNum )
        continue;
      else
         fls.Add( j );
@@ -931,7 +933,7 @@ int TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& a
 
 
 // Scan database file
-int TDataBase::scanfile( int nF, long& fPos, long& fLen, fstream& f)
+int TDataBase::scanfile( int nF, long& fPos, long& fLen, GemDataStream& f)
 {
     RecEntry rh;
     RecHead rhh;

@@ -23,7 +23,9 @@
 #include <fstream>
 #include "gstring.h"
 #include "v_user.h"
+//#include "gdatastream.h"
 
+class GemDataStream;
 
 typedef ios::openmode FileStatus;
 
@@ -56,12 +58,12 @@ class TFile
     void makeKeyword();
 
 protected:
-    virtual void write( ostream& );
-    virtual void *read( istream& );
-    void check();
+    virtual void write( fstream& );
+    virtual void *read( fstream& );
+//    void check();
 
 public:
-    fstream f;
+    GemDataStream& f;
 
     //  TFile();
     TFile(const gstring& fName,
@@ -102,7 +104,7 @@ public:
                   const gstring& newDir );
     void Makepath();
     bool Exist();
-    bool CheckOverwrite(FileStatus mode);
+//    bool CheckOverwrite(FileStatus mode);
     virtual void Open( FileStatus mode );
     virtual void Close();
     //  void Reopen(const char* file, FileStatus mode);

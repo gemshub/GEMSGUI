@@ -28,6 +28,9 @@
 #include "v_user.h"
 #include "v_vals.h"
 
+class GemDataStream;
+
+
 const char TOKENOLABEL = '^';
 const char TOKENOBJBEGIN = '~';
 
@@ -196,8 +199,8 @@ public:
     void* Free();
 
     size_t lenDB() const;
-    size_t toDB(fstream& f);
-    size_t ofDB(fstream& f);
+    size_t toDB(GemDataStream& f);
+    size_t ofDB(GemDataStream& f);
     void toTXT(fstream& f);
     void ofTXT(fstream& f);
 

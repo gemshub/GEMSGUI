@@ -39,6 +39,7 @@ const char *GEMS_HOWTO_HTML = "gems_howto";
 #include "m_param.h"
 #include "m_syseq.h"
 #include "units.h"
+#include "gdatastream.h"
 
 #define Inherited NewSystemDialogData
 

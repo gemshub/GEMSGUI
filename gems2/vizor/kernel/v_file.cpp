@@ -29,6 +29,7 @@ using namespace std;
 #endif
 
 #include "v_file.h"
+#include "gdatastream.h"
 
 
 //----------------------------------------------------------
@@ -39,32 +40,32 @@ char TFile::vv[9]="GEMBASE1";
 char TFile::pa[9]="01041999";
 
 void
-TFile::write( ostream& out_stream )
+TFile::write( fstream& out_stream )
 {
 //    os.write( Keywd, MAXFILEKEYWD );
-out_stream << Keywd << "  "; // endl;
-int ln = Path.length() + 1;
+    out_stream << Keywd << "  "; // endl;
+    int ln = Path.length() + 1;
 //    os.write((const char*)&ln, sizeof ln);
 //    os.write(Path.c_str(), ln);
-out_stream << ln << ' '; // endl;
-out_stream << Path.c_str() << endl;
+    out_stream << ln << ' '; // endl;
+    out_stream << Path.c_str() << endl;
 
     ErrorIf( out_stream.bad(), GetKeywd(),
              "Error writing TFile to configurator.");
 }
 
 void *
-TFile::read( istream& in_stream )
+TFile::read( fstream& in_stream )
 {
 //    is.read( Keywd, MAXFILEKEYWD );
 // we should put length here !!
-in_stream >> Keywd;
+    in_stream >> Keywd;
     int ln;
 //    is.read((char*)&ln, sizeof ln);
-in_stream >> ln;
+    in_stream >> ln;
     vstr sss(ln);
 //    is.read(sss.p, ln);
-in_stream >> sss.p;  // without .p does not compile in BCC32 5.1
+    in_stream >> sss.p;  // without .p does not compile in BCC32 5.1
       sss.p[ln] = '\0';
 
     Path = sss;
@@ -82,7 +83,8 @@ void TFile::toCFG(fstream& fcfg)
 }
 
 TFile::TFile(fstream& fcfg):
-        status( NOT_OPEN )
+        status( NOT_OPEN ),
+	f(*new GemDataStream())
 {
     read(fcfg);
     Makepath();
@@ -91,7 +93,7 @@ TFile::TFile(fstream& fcfg):
 TFile::TFile(const gstring& fName,
              const gstring& fExt, const gstring& fDir):
         status( NOT_OPEN ),
-        f()
+	f(*new GemDataStream())
 {
     newFile( fName, fExt, fDir );
     makeKeyword();
@@ -99,7 +101,8 @@ TFile::TFile(const gstring& fName,
 
 TFile::TFile(const gstring& path):
         status( NOT_OPEN ),
-        Path(path)
+        Path(path),
+	f(*new GemDataStream())
 {
     u_splitpath(Path, dir, name, ext);
     makeKeyword();
@@ -109,6 +112,7 @@ TFile::~TFile()
 {
     if( status != NOT_OPEN )
         Close();
+    delete &f;
 }
 
 void
@@ -146,13 +150,13 @@ TFile::makeKeyword()
     Keywd[MAXFILEKEYWD]='\0';
 }
 
-
+/*
 void TFile::check()
 {
     ErrorIf( !status || !f.good(), GetKeywd(),
              "Can't open file...");
 }
-
+*/
 // Set new full file name. Old file closed.
 void TFile::newFile( const gstring& newName, const gstring& newExt,
                      const gstring& newDir )
@@ -226,6 +230,7 @@ if( mode== UPDATE_DBV && access( Path.c_str(), 02 ) != 0)
     status = mode;
 }
 
+/*
 // check file in special mode
 bool TFile::CheckOverwrite( FileStatus mode )
 {
@@ -233,7 +238,7 @@ bool TFile::CheckOverwrite( FileStatus mode )
         return true;
     return false;
 }
-
+*/
 
 //Close file
 void TFile::Close()
