@@ -21,6 +21,7 @@ DATASRC =	MainDialogData.cpp \
 		EQDialogData.cpp \
 		SystemDialogData.cpp \
 		ProgressDialogData.cpp \
+		ProcessDialogData.cpp \
 		KeyDialogData.cpp \
 		ChangeKeyDialogData.cpp \
 		KeyProfileData.cpp \
@@ -43,6 +44,7 @@ DATAOBJ =       MainDialogData.obj \
 		EQDialogData.obj \
 		SystemDialogData.obj \
 		ProgressDialogData.obj \
+		ProcessDialogData.obj \
 		KeyDialogData.obj \
 		ChangeKeyDialogData.obj \
 		KeyProfileData.obj \
@@ -66,6 +68,7 @@ SOURCES =	MainDialog.cpp \
 		EQDialog.cpp \
 		SystemDialog.cpp \
 		ProgressDialog.cpp \
+		ProcessDialog.cpp \
 		KeyDialog.cpp \
 		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
@@ -90,6 +93,7 @@ OBJECTS =	MainDialog.obj \
 		EQDialog.obj \
 		SystemDialog.obj \
 		ProgressDialog.obj \
+		ProcessDialog.obj \
 		KeyDialog.obj \
 		ChangeKeyDialog.obj \
 		KeyProfile.obj \
@@ -119,6 +123,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_SystemDialogData.obj \
 		..\tmp\moc_ProgressDialog.obj \
 		..\tmp\moc_ProgressDialogData.obj \
+		..\tmp\moc_ProcessDialog.obj \
+		..\tmp\moc_ProcessDialogData.obj \
 		..\tmp\moc_ChangeKeyDialog.obj \
 		..\tmp\moc_ChangeKeyDialogData.obj \
 		..\tmp\moc_KeyDialog.obj \
@@ -240,6 +246,19 @@ clean:
 
         $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ProgressDialogData.cpp
 	-del moc_ProgressDialogData.cpp
+
+..\tmp\moc_ProcessDialog.obj: ProcessDialog.h
+      	$(MOC) ProcessDialog.h -o moc_ProcessDialog.cpp
+
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialog.cpp
+	-del moc_ProcessDialog.cpp
+
+
+..\tmp\moc_ProcessDialogData.obj: ProcessDialogData.h
+      	$(MOC) ProcessDialogData.h -o moc_ProcessDialogData.cpp
+
+        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialogData.cpp
+	-del moc_ProcessDialogData.cpp
 
 
 ..\tmp\moc_KeyDialog.obj: KeyDialog.h
@@ -469,6 +488,10 @@ SystemDialogData.cpp: SystemDialog.ui
         $(UIC) $? -impl $(*).h -o $@
 
 ProgressDialogData.cpp: ProgressDialog.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+ProcessDialogData.cpp: ProcessDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 

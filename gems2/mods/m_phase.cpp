@@ -823,35 +823,6 @@ TPhase::CmHelp()
     pVisor->OpenHelp( GEMS_PH_HTML );  //  05.01.01
 }
 
-#include "m_sdata.h"
-void
-TPhase::RecordPrint( const char *key )
-{
-// select  SDref key
- gstring sd_key;
-  if( key )
-  sd_key=key;
- else
- {
-   if( php->sdref )
-     for( int ii=0; ii<php->Nsd; ii++ )
-       if( gstring( php->sdref[ii], 0, V_SD_RKLEN ).find( "pscript" )
-           != gstring::npos)
-       { sd_key = gstring( php->sdref[ii]);
-         break;
-        }
-    if( sd_key.empty() )
-       sd_key = "pscript:0000:phase:";
-  }
- // read sdref record with format prn
- TSData::pm->RecInput( sd_key.c_str() );
- char * text_fmt = TSData::pm->getAbstr();
- if( !text_fmt )
-   Error( sd_key.c_str(), "No format text in this record.");
- PrintSDref( sd_key.c_str(), text_fmt );
-}
-
-
 void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
             TCStringArray& aPHtmp,
             elmWindowData el_data, phSetupData st_data )

@@ -24,7 +24,7 @@ const char *GEMS_GTD_HTML = "gm_gtdemo";
 
 #include "m_proces.h"
 #include "m_probe.h"
-#include "m_sdata.h"
+//#include "m_sdata.h"
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
@@ -467,64 +467,6 @@ AGAIN:
     return ret;
 }
 
-int
-TGtDemo::RecBuildinProcess( short size, const char *key,
-     const char *sy_key, const char *pe_key )
-{
-    if( pVisor->ProfileMode != true   )
-        Error( GetName(), "Do it in Project mode!" );
-    TProfil *aPa=TProfil::pm;
-    vstr tbuf(100);
-
-    if( gst.iopt )
-        delete[] gst.iopt;
-    gst.iopt = 0;
-AGAIN:
-    gdp->nRT = RT_PROCES;
-    gd_ps_set();
-
-    gdp->Nlrk = gdp->dimXY[0] = size;
-    int ret = TCModule::RecBuild( key );
-    if( ret == VF_CANCEL )
-        return ret;
-    if(  gdp->Nwc<0 || gdp->Nqp<0 || gdp->dimEF[0]<0 || gdp->dimEF[1]<0  ||
-            ( (gdp->dimEF[0]==0 || gdp->dimEF[1]==0) && gdp->PtAEF != S_OFF ) ||
-            (  gdp->dimXY[1] <= 0 || gdp->dimXY[1] > 20 ) )
-    {
-        vfMessage(window(), GetName(), "Some sizes or flags invalid!");
-        goto AGAIN;
-    }
-    gdp->rtLen =  (short)rt[ gdp->nRT ].KeyLen();
-    gdp->Nlrk = size;
-    gdp->rkey = (char *)aObj[ o_gdrkey ].Alloc( gdp->Nlrk, 1, gdp->rtLen );
-    // make list of record
-   strncpy( gdp->prKey, pe_key, MAXRKEYLEN );
-   for(int i=0; i<gdp->Nlrk; i++ )
-        memcpy( gdp->rkey+i*gdp->rtLen, sy_key, gdp->rtLen );
-    gdp->dimXY[0] = gdp->Nlrk;
-
-    dyn_new();
-    if( gdp->PtAEF != S_OFF && gdp->exprE && !*gdp->exprE )
-    {
-        strcpy( gdp->exprE, "next=:next;" );
-        for(int i=0; i<gdp->dimEF[1]; i++ )
-        {
-            sprintf( tbuf, "%s%d", aPa->pa.GDpsc, i+1 );
-            if( !*gdp->lNamE[i] || *gdp->lNamE[i] == ' ' )
-                strncpy( gdp->lNamE[i], tbuf,MAXGRNAME );
-        }
-    }
-    for(int j=0; j< gdp->dimXY[1]; j++ )
-    {
-        sprintf( tbuf, "%s%d", aPa->pa.GDpsc, j+1 );
-        if( !*gdp->lNam0[j]|| *gdp->lNam0[j] == ' ' )
-            strncpy( gdp->lNam0[j], tbuf, MAXGRNAME );
-    }
-    gdp->PsRes4 = S_ON;
-    pVisor->Update();
-    return ret;
-}
-
 
 // Translate, analyze and unpack equations of process
 void TGtDemo::gd_text_analyze()
@@ -666,28 +608,6 @@ TGtDemo::RecCalc( const char *key )
 }
 
 
-//Calculate one point to graph
-
-void
-TGtDemo::CalcPoint( int nPoint )
-{
-    if( gdp->PsPE == S_OFF && *gdp->prKey)   /* read process record */
-        Error( GetName(), "Must be in Process calculation mode!" );
-
-    if( nPoint >= gdp->dimXY[0] )
-     return;
-    gdp->jR = nPoint;
-
-    // It may be done in Process calkulation   gd_rec_read( gdp->jR );
-    // retranlate text of equations
-    gd_text_analyze();
-    strncpy( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey(), EQ_RKLEN );
-    rpn[0].CalcEquat();
-    //aMod[RT_GTDEMO]->ModUpdate("GD_calc   Calculation of GTDEMO arrays");
-    // Add point to graph screen
-    if( gd_gr )
-        gd_gr->AddPoint( 0, nPoint );
-}
 
 void
 TGtDemo::RecordPlot( const char* /*key*/ )
@@ -783,41 +703,6 @@ TGtDemo::CmHelp()
     pVisor->OpenHelp( GEMS_GTD_HTML );  //  05.01.01
 }
 
-/*--------------------------------------------------------*/
-//Print record
-void
-TGtDemo::RecordPrint( const char *key )
-{
-/*    if( pVisor->ProfileMode == true && gdp->PsPB != S_OFF  )
-        if( vfQuestion(window(), GetName(),"Calculate statistics from sampled data?"))
-        {
-            probe_stat( key );
-            return;
-        }
-*/
-// select  SDref key
- gstring sd_key;
-  if( key )
-  sd_key=key;
- else
- {
-   if( gdp->sdref )
-     for( int ii=0; ii<gdp->Nsd; ii++ )
-      if( gstring( gdp->sdref[ii], 0, V_SD_RKLEN ).find( "pscript" )
-              != gstring::npos)
-      { sd_key = gstring( gdp->sdref[ii]);
-        break;
-      }
-   if( sd_key.empty() )
-      sd_key = "pscript:0000:gtdemo:";
-  }
- // read sdref record with format prn
- TSData::pm->RecInput( sd_key.c_str() );
- char * text_fmt = TSData::pm->getAbstr();
- if( !text_fmt )
-   Error( sd_key.c_str(), "No format text in this record.");
- PrintSDref( sd_key.c_str(), text_fmt );
-}
 //-----------------------------------------------------------------------
 // Statistic to probe
 /*

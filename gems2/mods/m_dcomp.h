@@ -178,7 +178,6 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void TryRecInp( const char *key, time_t& time_s, int q );
-    void RecordPrint( const char *key=0 );
     void CmHelp();
 
     // necessary new command in menu

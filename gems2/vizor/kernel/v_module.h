@@ -233,6 +233,7 @@ public:
     void RecordLoadinProfile( const char *key=0 );
     void CmLoadinProfile();
     void CmPrint();
+    void CmScript();
 
     virtual bool check_input( const char *key, int level=1 )
     {

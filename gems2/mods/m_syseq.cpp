@@ -227,38 +227,6 @@ TSysEq::RecCalc( const char *key )
     TCModule::RecCalc(key);
 }
 
-#include "m_sdata.h"
-//Print unpacked record of SysEq
-void
-TSysEq::RecordPrint( const char *key )
-{
-    if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in Project mode!" );
-
-// select  SDref key
- gstring sd_key;
-  if( key )
-  sd_key=key;
- else
- {
-   if( ssp->sdref )
-    for( int ii=0; ii<ssp->DM[16]; ii++ )
-      if( gstring( ssp->sdref[ii], 0, V_SD_RKLEN ).find( "pscript" )
-        != gstring::npos)
-      { sd_key = gstring( ssp->sdref[ii]);
-        break;
-      }
-  if( sd_key.empty() )
-     sd_key = "pscript:0000:syseq:";
- }
- // read sdref record with format prn
- TSData::pm->RecInput( sd_key.c_str() );
- char * text_fmt = TSData::pm->getAbstr();
- if( !text_fmt )
-   Error( sd_key.c_str(), "No format text in this record.");
- PrintSDref( sd_key.c_str(), text_fmt );
-
-}
 
 // insert changes in Project to TSysEq
 

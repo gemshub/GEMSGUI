@@ -20,6 +20,7 @@ DATASRC =	MainDialogData.cpp \
 		EQDialogData.cpp \
 		SystemDialogData.cpp \
 		ProgressDialogData.cpp \
+		ProcessDialogData.cpp \
 		KeyDialogData.cpp \
 		ChangeKeyDialogData.cpp \
 		KeyProfileData.cpp \
@@ -44,6 +45,7 @@ SOURCES =	MainDialog.cpp \
 		EQDialog.cpp \
 		SystemDialog.cpp \
 		ProgressDialog.cpp \
+		ProcessDialog.cpp \
 		KeyDialog.cpp \
 		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
@@ -75,6 +77,8 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_SystemDialogData.o \
 		moc_ProgressDialog.o \
 		moc_ProgressDialogData.o \
+		moc_ProcessDialog.o \
+		moc_ProcessDialogData.o \
 		moc_KeyDialog.o \
 		moc_KeyDialogData.o \
 		moc_ChangeKeyDialog.o \

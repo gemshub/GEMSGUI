@@ -715,7 +715,7 @@ TVisor::defaultCFG()
                                        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                      };
     rt.Add(new TDataBase(rt.GetCount(), "proces", true, true,
-                         o_pestr, 26, 0, 10, proces_rkfrm));
+                         o_pestr, 26+14/*11/03/02*/, 0, 10, proces_rkfrm));
 
     // RT_PROBE default
     unsigned char probe_rkfrm[9] =

@@ -82,6 +82,10 @@ bool
 vfElements(QWidget* par, const char * prfName,
            elmWindowData& elm_data, setFiltersData& sf_data );
 
+bool
+vfProcessSet(QWidget* par, const char * p_key,
+            char& type, int size[6] );
+
 gstring
 vfKeyEdit(QWidget* par, const char* title, int iRt, const char* key=0);
 

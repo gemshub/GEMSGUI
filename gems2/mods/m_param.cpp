@@ -78,7 +78,7 @@ SPP_SETTING pa_ = {
     "++++-+-+++", /* MUpmv[10] */ "jjbC++-+", /* TPpdc[8] */
     "*-------*-----------", /* TPpvc[20] */ "+-+-+-----", /* SYppc[10] */
     "***-*-*---**-***-----------*", /* SYpvc[28]*/  "***-------", /* UTppc[10] */
-    "0*----------", /* PEpsc[12]  */  "----------+-", /* PEpvc[12] */
+    "0*----------", /* PEpsc[12]  */  "------------", /* PEpvc[12] */
     { "GTDEMO task name   ", "Graphic screen # " } ,   /* GDcode[2][20] */
     "Plot ",                  /* GDpsc[7] */
     { "Abscissa","Ordinate"},    /* GDpcc[2][9] */
@@ -287,27 +287,6 @@ void
 TProfil::CmHelp()
 {
     pVisor->OpenHelp( GEMS_SP_HTML );  //  05.01.01
-}
-
-#include "m_sdata.h"
-// Print contents - to be revised and re-written ! 
-void
-TProfil::RecordPrint( const char *key )
-{
-  if( pVisor->ProfileMode != true )
-        Error( GetName(), "Do it in Project mode!" );
-
- gstring sd_key;
-  if( key )
-  sd_key=key;
- else
-  sd_key = "pscript:0000:projec:";
- // read sdref record with format prn
- TSData::pm->RecInput( sd_key.c_str() );
- char * text_fmt = TSData::pm->getAbstr();
- if( !text_fmt )
-   Error( sd_key.c_str(), "No format text in this record.");
- PrintSDref( sd_key.c_str(), text_fmt );
 }
 
 //Delete record whis key

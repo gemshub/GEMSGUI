@@ -116,6 +116,8 @@ link:
 +dlg\SystemDialogData.obj \
 +dlg\ProgressDialog.obj \
 +dlg\ProgressDialogData.obj \
++dlg\ProcessDialog.obj \
++dlg\ProcessDialogData.obj \
 +dlg\KeyDialog.obj \
 +dlg\KeyDialogData.obj \
 +dlg\ChangeKeyDialog.obj \
@@ -160,6 +162,8 @@ link:
 +tmp\moc_SystemDialogData.obj \
 +tmp\moc_ProgressDialog.obj \
 +tmp\moc_ProgressDialogData.obj \
++tmp\moc_ProcessDialog.obj \
++tmp\moc_ProcessDialogData.obj \
 +tmp\moc_KeyDialog.obj \
 +tmp\moc_KeyDialogData.obj \
 +tmp\moc_ChangeKeyDialog.obj \

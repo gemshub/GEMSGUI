@@ -205,11 +205,13 @@ void
     if( data_str.empty() )
         return;
 
+
     gstring  from_templ = from_templ1;
     gstring  to_templ = to_templ1;
     bool inv_case = false;
     uint ii;
     data_str.strip();
+    gstring old_str = data_str;
 
     if( from_templ.equals("*") )
     {
@@ -227,6 +229,14 @@ void
          data_str = to_templ;
 
       data_str.substr(0, len_);
+      if( data_str == old_str )
+      {
+       int ii = data_str.length()-1;
+       if( data_str[ii] == '9' )
+        data_str[ii] = '_';
+       else
+        data_str[ii] = '9';
+      }
       return;
     }
 
@@ -296,6 +306,14 @@ void
    data_str = gstring( data_str, 0, k );
    data_str += to_templ;
    data_str.substr(0, len_);
+   if( data_str == old_str )
+   {
+       int ii = data_str.length()-1;
+       if( data_str[ii] == '9' )
+        data_str[ii] = '_';
+       else
+        data_str[ii] = '9';
+    }
 }
 
 

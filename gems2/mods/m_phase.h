@@ -126,7 +126,6 @@ public:
     void RecInput( const char *key );
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
-    void RecordPrint( const char *key=0 );
     void CmHelp();
 
     // make new phases (emod added KD 25.01.02)

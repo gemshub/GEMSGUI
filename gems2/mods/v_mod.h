@@ -634,9 +634,17 @@ enum proces_objects {   // PROCES
     o_pevv,  /*f dyn*/    o_petv,  /*f dyn*/    o_petauv,/*f dyn*/
     o_pepxiv,/*f dyn*/    o_penuv, /*f dyn*/    o_pekinv,/*f dyn*/
     o_pemodc,/*f dyn*/    o_peexpr,/* txt */    o_pestl, /*s dyn*/
-    o_pesdref,/*s dyn*/   o_pesdval,/*s dyn*/  o_pegdkey,    o_pestkey,
-    o_petpkey,            o_peint2, /*i 8*/    o_pedouble,/*d 11*/
-    o_petprn ,/*txt*/ };
+    o_pesdref,/*s dyn*/   o_pesdval,/*s dyn*/  o_pegdkey,
+    o_pestkey,            o_petpkey,            o_peint2, /*i 8*/
+    o_pedouble,/*d 11*/   o_petprn ,/*txt*/
+    /* new gtdemo */
+    o_pcxnames,           o_pcynames,           o_pcdimxy,
+    o_pcdimef,            o_pcaxis,             o_pcsize,
+    o_pclnam,             o_pclname,            o_pcexpr,
+    o_pcx0,               o_pcy0,               o_pcxe,
+    o_pcye,               o_pcplline,
+    /* end new */
+    };
 
 enum statcode {  /* Code status of process  */
     P_UNDEF='0', P_STARTED, P_EXECUTE, P_INTERRUPT, P_FINISHED };
@@ -655,7 +663,7 @@ enum grr_constants { // gstring len for graph
 
 
 enum gtdemo_objects {   // gtdemo
-    o_gdps = o_petprn+1, o_gdnlrk, o_gdnwcq, o_gddimxy, o_gddimef,
+    o_gdps = o_pcplline+1, o_gdnlrk, o_gdnwcq, o_gddimxy, o_gddimef,
     o_gdname, o_gdcom, o_gdxnames,  o_gdynames, o_gdaxis,
     o_gwwkb, o_gdproc, o_gdsize,  o_gdlnam,  o_gdlname,
     o_gdexpr, o_gdexpre, o_gdrkey, o_gdsdref, o_gdsdval,

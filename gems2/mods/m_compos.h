@@ -127,7 +127,6 @@ public:
     double Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
      double R1, double Msys, double Mwat, double Vaq, double Maq, double Vsys);
 
-    void RecordPrint( const char *key=0 );
     void CmHelp();
 
     void CopyRecords( const char * prfName, TCStringArray& aCMnoused,

@@ -1117,35 +1117,6 @@ TProbe::CmHelp()
     pVisor->OpenHelp( GEMS_USP_HTML );  //  05.01.01
 }
 
-#include "m_sdata.h"
-/*--------------------------------------------------------*/
-//Print record
-void
-TProbe::RecordPrint( const char *key )
-{
-// select  SDref key
- gstring sd_key;
-  if( key )
-  sd_key=key;
- else
- {
-   if( prp->sdref )
-      for( int ii=0; ii<prp->Nsd; ii++ )
-        if( gstring( prp->sdref[ii], 0, V_SD_RKLEN ).find( "pscript" )
-          != gstring::npos)
-        { sd_key = gstring( prp->sdref[ii]);
-          break;
-        }
-   if( sd_key.empty() )
-      sd_key = "pscript:0000:probe:";
- }
- // read sdref record with format prn
- TSData::pm->RecInput( sd_key.c_str() );
- char * text_fmt = TSData::pm->getAbstr();
- if( !text_fmt )
-   Error( sd_key.c_str(), "No format text in this record.");
- PrintSDref( sd_key.c_str(), text_fmt );
-}
 
 
 //-------------------------- End of m_probe.cpp ----------------------------

@@ -323,7 +323,6 @@ public:
     void dyn_kill(int i=0);
     void dyn_new(int i=0);
     void set_def(int i=0);
-    void RecordPrint( const char *key=0 );
     void DeleteRecord( const char *key, bool errinNo=true );
     void CmHelp();    // 05.01.01
 

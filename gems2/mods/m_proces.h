@@ -20,8 +20,9 @@
 #ifndef _m_process_h_
 #define _m_process_h_
 
-#include "v_ipnc.h"
 #include "v_mod.h"
+#include "v_ipnc.h"
+#include "graph.h"
 #include "v_module.h"
 
 const int PE_RKLEN = 80;
@@ -38,15 +39,20 @@ typedef struct
     //pcode[MAXPECODE],      // PROCES type code {T, G, R, S, P }
 
     name[MAXFORMULA],      // Name of PROCES simulator definition
-    notes[MAXFORMULA];     // Notes
-    char
+    notes[MAXFORMULA],     // Notes
+    xNames[MAXAXISNAME], // Abscissa name
+    yNames[MAXAXISNAME], // Ordinate name
+    (*lNam)[MAXGRNAME],    // List of ID of lines on Graph
+    (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
+
+ char
     Istat, // PROCES status: 0-indefinite; 1-start; 2-run; 4-end
     PsTP,  // Is TPV of system changing in the process (+ -)
     PsBC,  //  Is there a change in bulk composition (+ -)
     PsRS,  // Are there changes in constraints or metastability parameters (+ -)
     PsSY,  // Save changed SYSTEM definition records to PDB (+ -)
     PsGT,  // Is this a Sequential Reactor simulation (+ -)
-    PsGR,  // Connect to GtDemo (+ -)
+    PsGR,  // Use graphics window (+ -)
     PsUX,  // Do PROCES depend on output equilibrium parameters (pH, Eh etc.)(+-)
     PsIN,  // Is this an inverse titration problem (+ -)
     PsKI,  // Is this a problem with kinetically-restricted DC (+ -)
@@ -64,7 +70,7 @@ typedef struct
     PvKin, // kinetic parameters vKin (+ - *)
     PvModc,// empirical parameters modC (+ - *)
     PvR1,  // Use previous EQSTAT result (+) or SIMPLEX initial approximation(+-)
-    PvR2   // Reserved
+    PvEF   // Use empirical data for graphics
     ;
     short  // N of points controled parameters of process
     // !! Ntim, Nnu,  NT, NV, NphH, Npe, R1 - not use; NP - intermal
@@ -82,10 +88,14 @@ typedef struct
     tmi[3],  // SYSTEM CSD definition #: start, end, step (initial)
     NVi[3],  // MTPARM variant #: start, end, step
 
+    dimEF[2],    // Dimensions of array of empirical data
+    dimXY[2],    // Dimensions of data sampler tables: col.1 - N of records;
+    axisType[6],         // axis graph type, background(3) reserved(2)
+
     *tm,    // Array of tm (SYSTEM CSD #) values [0:Ntm-1]
     *nv;    // Array of NV (MTPARM variant) values [0:NNV-1]
 
-    float       // Units of measuremen get from start  SYSTEM
+    double       // Units of measuremen get from start  SYSTEM
     Pi[3],    // Pressure P, bar: start, end, increment
     Ti[3],    // Temperature T, C: start, end, increment
     Vi[3],    // Volume of the system (L): start, end, increment
@@ -108,13 +118,23 @@ typedef struct
     *Kin,    // Array of (reaction) kinetic parameters [0:Nrea-1][0:Nrp-1]
     *Modc    // Array of empirical parameters  [0:Ntm-1][Nmc]
     ;
-    char *Expr,  // Text of process simulator equations
+    double
+     *x0,   // Vector of abscissa dimXY[][1]
+     *y0,  // Sampled data array dimXY[][]
+     *xE, *yE;         // Input empirical data XE, YE
+
+    float
+     size[2][4]; // Graph axis scale for region and fragment
+
+    char
+    *Expr,  // Text of process simulator equations
+    *gr_expr,     // Text with IPN-expressions for data sampler
     (*stl)[EQ_RKLEN], // List of EQSTAT record keys [0:NeMax-1]
 
     (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources
     (*sdval)[V_SD_VALEN], // Comments on data sources
 
-    gdkey[GD_RKLEN],   // current keys of records GtDemo
+    gdkey[GD_RKLEN],   // reserved
     stkey[EQ_RKLEN+10],// SyStat
     tpkey[TP_RKLEN];
 
@@ -146,8 +166,12 @@ class TProcess : public TCModule
 {
     PROCESS pe[1];
 
+    GraphWindow *gd_gr;
+    TPlotLine *plot;
+
+
 protected:
-    IPNCalc rpn;       // IPN of process simulator equations -- Expr
+    IPNCalc rpn[2];      // IPN of process simulator equations&&graph
     int pointShow;
 
     bool pe_dimValid();
@@ -161,6 +185,8 @@ protected:
     void keyTest( const char *key );
     void _pr_tab( const char *key );
     void CalcEquat();
+    void CalcPoint( int nPoint );
+    void set_type_flags( char type);
 
 public:
 
@@ -189,7 +215,8 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void RecordPlot( const char *key );
-    void RecordPrint( const char *key=0 );
+    bool SaveGraphData( GraphData* graph );
+
     void CmHelp();
     bool NoSave() const
     { return ( pep->PsSY == S_OFF ); }

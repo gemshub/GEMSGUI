@@ -48,6 +48,7 @@ using namespace std;
 #include "dlg/SelectDialog.h"
 #include "dlg/KeyFilter.h"
 #include "dlg/ProgressDialog.h"
+#include "dlg/ProcessDialog.h"
 #include "dlg/SystemDialog.h"
 #include "dlg/ListFilesDialog.h"
 #include "dlg/ElementsDialog.h"
@@ -770,6 +771,20 @@ vfElements(QWidget* par, const char * prfName,
 
     sf_data =  eldlg.getFilters();
     elm_data = eldlg.getData();
+
+    return true;
+}
+
+bool
+vfProcessSet(QWidget* par, const char * p_key,
+            char& type, int size[6] )
+{
+     ProcessDialog pdlg( p_key, type, par );
+     if( !pdlg.exec() )
+      return false;
+
+    type =  pdlg.getType();
+    pdlg.getSizes( size );
 
     return true;
 }

@@ -161,11 +161,8 @@ public:
 
     void RecInput( const char *key );
     int RecBuild( const char *key, int mode = VF_UNDEF );
-    int RecBuildinProcess( short size, const char *key,
-        const char *sy_key, const char *pe_key );
     void RecCalc( const char *key );
     void RecordPlot( const char *key );
-    void RecordPrint( const char *key=0 );
 
     //Get key from list
     const char * GetRkey( int j) const
@@ -174,7 +171,6 @@ public:
     }
 
     bool SaveGraphData( GraphData* graph );
-    void CalcPoint( int nPoint );
 
     void CmHelp();
 };

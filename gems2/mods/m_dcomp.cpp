@@ -969,35 +969,6 @@ void TDComp::ParCor(  )
     /* Finished */
 }
 
-#include "m_sdata.h"
-//Print record
-void
-TDComp::RecordPrint( const char *key )
-{
-// select  SDref key
- gstring sd_key;
-  if( key )
-  sd_key=key;
- else
- {
-    if( dcp->sdref )
-     for( int ii=0; ii<dcp->Nsd; ii++ )
-       if( gstring( dcp->sdref[ii], 0, V_SD_RKLEN ).find( "pscript" )
-         != gstring::npos)
-       { sd_key = gstring( dcp->sdref[ii]);
-         break;
-       }
-    if( sd_key.empty() )
-       sd_key = "pscript:0000:dcomp:";
-  }     
- // read sdref record with format prn
- TSData::pm->RecInput( sd_key.c_str() );
- char * text_fmt = TSData::pm->getAbstr();
- if( !text_fmt )
-   Error( sd_key.c_str(), "No format text in this record.");
- PrintSDref( sd_key.c_str(), text_fmt );
-}
-
 // Help on DComp module ( ? button )
 void
 TDComp::CmHelp()

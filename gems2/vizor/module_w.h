@@ -81,6 +81,7 @@ public/* protected*/ slots:
     void CmBackup();
     void CmRestore();
     void CmPrint();
+    void CmScript();
 
     //--- Manipulation current record
     void CmSave();

@@ -80,7 +80,6 @@ public:
 
     void RecInput( const char *key );
     int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecordPrint( const char *key=0 );
     void CmHelp();                        
     //void RecBild( const char *key );
     //void RecCalc( const char *key );

@@ -148,23 +148,6 @@
             <attribute name="title">
                 <string>Database Files</string>
             </attribute>
-            <spacer>
-                <property name="name" stdset="0">
-                    <cstring>Spacer3</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>20</width>
-                        <height>20</height>
-                    </size>
-                </property>
-            </spacer>
             <widget class="QListView">
                 <column>
                     <property name="text">

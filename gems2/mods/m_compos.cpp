@@ -27,7 +27,7 @@ const char *GEMS_PCO_HTML = "gm_compos";
 #include "m_param.h"
 #include "m_icomp.h"
 #include "m_dcomp.h"
-#include "m_sdata.h"
+//#include "m_sdata.h"
 #include "m_reacdc.h"
 #include "s_formula.h"
 #include "filters_data.h"
@@ -921,35 +921,6 @@ void
 TCompos::CmHelp()
 {
     pVisor->OpenHelp( GEMS_PCO_HTML );  //  05.01.01
-}
-
-
-void
-TCompos::RecordPrint( const char *key )
-{
-// select  SDref key
- gstring sd_key;
- if( key )
-  sd_key=key;
- else
- {
-   if( bcp->sdref )
-     for( int ii=0; ii<bcp->Nsd; ii++ )
-       if( gstring( bcp->sdref[ii], 0, V_SD_RKLEN ).find( "pscript" )
-          != gstring::npos)
-        { sd_key = gstring( bcp->sdref[ii]);
-          break;
-         }
-   if( sd_key.empty() )
-     sd_key = "pscript:0000:compos:";
-  }
- // read sdref record with format prn
- TSData::pm->RecInput( sd_key.c_str() );
- char * text_fmt = TSData::pm->getAbstr();
- if( !text_fmt )
-   Error( sd_key.c_str(), "No format text in this record.");
- PrintSDref( sd_key.c_str(), text_fmt );
-
 }
 
 

@@ -979,9 +979,29 @@ TCModule::PrintSDref( const char* sd_key, char* text_fmt )
 // to make some plotting
 
 void
-TCModule::RecordPrint( const char* /*key*/ )
+TCModule::RecordPrint( const char* key )
 {
-    vfMessage(pImp, GetName(), "Printing?\n\nNot here, yet... Sorry!");
+  // select  SDref key
+ gstring sd_key;
+ if( key )
+  sd_key=key;
+ else
+ {
+    // read sdref record with format prn
+    sd_key = "pscript*:*:";
+    sd_key += db->GetKeywd();
+    sd_key += ":";
+    sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+          sd_key.c_str(), "Select key of pscript format", KEY_OLD);
+    if( sd_key.empty() )
+     return;
+  }
+  ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+  char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
+  if( !text_fmt )
+       Error( sd_key.c_str(), "No format text in this record.");
+
+  PrintSDref( sd_key.c_str(), text_fmt );
 }
 
 // callback for 'print' command
@@ -1004,6 +1024,31 @@ TCModule::CmPrint()
         vfMessage(pImp, xcpt.title, xcpt.mess);
     }
 }
+
+void
+TCModule::CmScript()
+{
+    try
+    {
+          // read sdref record with format prn
+      gstring sd_key = "?script*:*:";
+        sd_key += db->GetKeywd();
+        sd_key += ":";
+      sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
+          sd_key.c_str(), "Select key of script record", KEY_OLD);
+      if( sd_key.empty() )
+      return;
+      ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
+       pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
+      ((TCModule *)&aMod[RT_SDATA])->Update();
+
+    }
+    catch( TError& xcpt )
+    {
+        vfMessage(pImp, xcpt.title, xcpt.mess);
+    }
+}
+
 
 //----------------------------------------------------------
 //--- Manipulation with database files   (Service functions )
@@ -1399,7 +1444,8 @@ TCModule::RecToTXT( const char *pattern )
        db->Get( Rnum );
        aObj[o_reckey].SetPtr( (void *)aKey[i].c_str());
        aObj[o_reckey].toTXT(f);
-       for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
+        for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount();
+             no++)
             aObj[no].toTXT(f);
     }
 

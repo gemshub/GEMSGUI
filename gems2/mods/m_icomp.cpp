@@ -183,26 +183,6 @@ TIComp::GetElements( bool isotopes, TCStringArray& aIC, TCIntArray& aIndMT )
  }
 }
 
-
-
-#include "m_sdata.h"
-void
-TIComp::RecordPrint( const char *key )
-{
-
- gstring sd_key;
-  if( key )
-  sd_key=key;
- else
-  sd_key = "pscript:0000:icomp:";
- // read sdref record with format prn
- TSData::pm->RecInput( sd_key.c_str() );
- char * text_fmt = TSData::pm->getAbstr();
- if( !text_fmt )
-   Error( sd_key.c_str(), "No format text in this record.");
- PrintSDref( sd_key.c_str(), text_fmt );
-}
-
 void
 TIComp::CopyElements( const char * prfName,
          elmWindowData el_data, icSetupData st_data )
