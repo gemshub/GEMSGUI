@@ -1491,7 +1491,7 @@ void TProfil::GammaCalc( int LinkMode  )
         jpe += pmp->LsMod[k];
         jdb = jde;
         jde += pmp->LsMdc[k]*pmp->L1[k];
-        memset( pmp->Qd, 0, sizeof(double)*20 );
+//  memset( pmp->Qd, 0, sizeof(double)*20 );  Dubious line! KD 03.07.02
 
         switch( pmp->PHC[k] )
         {   /* calculate activity coefficients by built-in functions */
