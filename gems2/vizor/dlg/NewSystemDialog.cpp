@@ -432,6 +432,27 @@ NewSystemDialog::closeEvent(QCloseEvent* ev)
     QWidget::closeEvent(ev);
 }
 
+bool
+NewSystemDialog::event(QEvent* ev)
+{
+    if( ev->type() == QEvent::WindowActivate ) {
+	cerr << "activated event" << endl;
+	CmReset();
+    }
+    if( ev->type() == QEvent::WindowDeactivate ) {
+	cerr << "deactivated event" << endl;
+	CmCommit();
+    }
+    return QWidget::event(ev);
+}
+/*
+void
+NewSystemDialog::leaveEvent(QEvent* ev)
+{
+    cerr << "leave event" << endl;
+    QWidget::leaveEvent(ev);
+}
+*/
 void                                 // Thermodynamic data
 NewSystemDialog::CmOpen_MTPARAM()
 {
