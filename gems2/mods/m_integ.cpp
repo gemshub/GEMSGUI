@@ -144,9 +144,9 @@ void TInteg::RecInput( const char *key )
 
 //Rebild record structure before calc
 int
-TInteg::RecBuild( const char *key )
+TInteg::RecBuild( const char *key, int mode )
 {
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     memcpy( keywd, key, 23 );
     if( ret != VF3_3 )
     {  //memcpy( keywd, key, 23 );

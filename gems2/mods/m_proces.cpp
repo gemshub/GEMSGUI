@@ -517,14 +517,14 @@ void TProcess::RecInput( const char *key )
 
 //Rebuild record structure before calc
 int
-TProcess::RecBuild( const char *key )
+TProcess::RecBuild( const char *key, int mode  )
 {
 
     if( pVisor->ProfileMode != true )
         Error( GetName(), "Please, do it in Profile mode!" );
 
 AGAIN:
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         goto SET_OK;
     if( pe_dimValid()==false  )

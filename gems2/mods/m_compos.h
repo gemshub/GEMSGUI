@@ -122,7 +122,7 @@ public:
     void set_def( int i=0);
 
     void RecInput( const char *key );
-    int RecBuild( const char *key );
+    int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     double Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
      double R1, double Msys, double Mwat, double Vaq, double Maq, double Vsys);

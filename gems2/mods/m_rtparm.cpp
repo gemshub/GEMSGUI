@@ -328,10 +328,10 @@ void TRTParm::RecInput( const char *key )
 
 //Rebild record structure before calc
 int
-TRTParm::RecBuild( const char *key )
+TRTParm::RecBuild( const char *key, int mode  )
 {
 AGAIN_SETUP:
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         return ret;
     switch( rpp->Mode )

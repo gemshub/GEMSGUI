@@ -97,10 +97,10 @@ void TSData::dyn_kill(int)
 }
 
 //Rebuild record structure before calc
-int TSData::RecBuild( const char *key )
+int TSData::RecBuild( const char *key, int mode  )
 {
 AGAIN:
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         return ret;
     if( nREf < 0 || nREf > 7 )

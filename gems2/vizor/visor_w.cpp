@@ -53,6 +53,8 @@ using namespace std;
 #include "dlg/ElementsDialog.h"
 #include "dlg/LoadMessage.h"
 #include "dlg/HLinpDialog.h"
+#include "dlg/KeyDialog.h"
+#include "dlg/KeyProfile.h"
 
 #ifdef __unix
 const char* GEMS_LOGO_ICON = "img/gems1.png";
@@ -687,6 +689,29 @@ vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArra
     return cw.allSelected();
 }
 
+TCStringArray
+vfMultiKeys(QWidget* par, const char* caption,
+        int iRt, const char* key )
+{
+    TCStringArray sel;
+    qApp->lock();
+    KeyDialog dbk(par, iRt, sel, key, caption);
+    dbk.exec();
+    qApp->unlock();
+    return dbk.allSelectedKeys();
+}
+
+TCStringArray
+vfMultiKeysSet(QWidget* par, const char* caption,
+        int iRt, const char* key, TCStringArray& sel )
+{
+    qApp->lock();
+    KeyDialog dbk(par, iRt, sel, key, caption);
+    dbk.exec();
+    qApp->unlock();
+    return dbk.allSelectedKeys();
+}
+
 #else
 
 //----------------------------------------------------------------
@@ -815,6 +840,26 @@ vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArra
     return cw.allSelected();
 }
 
+TCStringArray
+vfMultiKeys(QWidget* par, const char* caption,
+        int iRt, const char* key )
+{
+    TCStringArray sel;
+    KeyDialog dbk(par, iRt, sel, key, caption);
+    dbk.exec();
+    return dbk.allSelectedKeys();
+}
+
+TCStringArray
+vfMultiKeysSet(QWidget* par, const char* caption,
+        int iRt, const char* key, TCStringArray& sel )
+{
+    KeyDialog dbk(par, iRt, sel, key, caption);
+    dbk.exec();
+    return dbk.allSelectedKeys();
+}
+
+
 #endif // Use_mt_mode
 
 bool
@@ -873,8 +918,6 @@ vfElements(QWidget* par, const char * prfName,
 // KeyEdit dialog
 //=============================================
 
-#include "dlg/KeyDialog.h"
-#include "dlg/KeyProfile.h"
 
 gstring
 vfKeyEdit(QWidget* par, const char* caption, int iRt, const char* key)

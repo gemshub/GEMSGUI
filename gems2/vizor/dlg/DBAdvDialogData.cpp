@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'DBAdvDialog.ui'
 **
-** Created: Втр Лют 5 12:33:49 2002
+** Created: Do 28. Feb 13:33:34 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -37,7 +37,7 @@ DBAdvDialogData::DBAdvDialogData( QWidget* parent,  const char* name, WFlags fl 
 
     Line1 = new QFrame( this, "Line1" );
     Line1->setGeometry( QRect( 10, 430, 390, 20 ) ); 
-    Line1->setFrameShape( QFrame::HLine );
+    Line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     Line1->setFrameShadow( QFrame::Sunken );
     Line1->setProperty( "frameShape", (int)QFrame::HLine );
 

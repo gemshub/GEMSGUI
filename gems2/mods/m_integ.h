@@ -90,7 +90,7 @@ public:
     void set_def( int i=0);
 
     void RecInput( const char *key );
-    int RecBuild( const char *key );
+    int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void RecordPlot( const char */*key*/ );
 

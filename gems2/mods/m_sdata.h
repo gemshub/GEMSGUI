@@ -71,7 +71,7 @@ public:
     void dyn_new( int i=0);
     void set_def( int i=0);
 
-    int RecBuild( const char *key );
+    int RecBuild( const char *key, int mode = VF_UNDEF );
 
     void CmHelp();                       // 05.01.01
     char *getAbstr() const

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'KeyDialog.ui'
 **
-** Created: Втр Лют 5 12:33:42 2002
+** Created: Do 28. Feb 13:33:29 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -27,19 +27,24 @@ public:
     KeyDialogData( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~KeyDialogData();
 
-    QLabel* pLabel;
     QListBox* pList;
-    QPushButton* PushButton1;
-    QPushButton* pFilterButton;
+    QLabel* pLabel;
     QPushButton* PushButton3;
+    QPushButton* pFilterButton;
+    QPushButton* pButton2;
+    QPushButton* pButton3;
+    QPushButton* PushButton1;
 
+
+public slots:
+    virtual void CmSelectAll();
+    virtual void CmClearAll();
 
 protected slots:
     virtual void CmFilter();
 
 protected:
-    QVBoxLayout* KeyDialogDataLayout;
-    QHBoxLayout* Layout6;
+    QHBoxLayout* Layout2;
 };
 
 #endif // KEYDIALOGDATA_H

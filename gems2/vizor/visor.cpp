@@ -85,7 +85,7 @@ TVisor::TVisor(int c, char *v[]):
 
     ProfileMode = false;
     DBChangedMode = false;
-    isElementsProfileMode = false;
+    isElementsProfileMode = true;
 
     char* env_s;
 

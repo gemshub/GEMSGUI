@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'EQDialog.ui'
 **
-** Created: Втр Лют 5 12:33:37 2002
+** Created: Do 28. Feb 13:33:27 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -159,12 +159,12 @@ EQDialogData::EQDialogData( QWidget* parent,  const char* name, WFlags fl )
     vbox2->addWidget( pIntegButton );
 
     Line1 = new QFrame( privateLayoutWidget_3, "Line1" );
-    Line1->setFrameShape( QFrame::HLine );
+    Line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     vbox2->addWidget( Line1 );
 
     Line10 = new QFrame( this, "Line10" );
     Line10->setGeometry( QRect( 10, 370, 411, 20 ) ); 
-    Line10->setFrameShape( QFrame::HLine );
+    Line10->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     // signals and slots connections
     connect( pBackButton, SIGNAL( clicked() ), this, SLOT( CmBack() ) );

@@ -264,6 +264,7 @@ void TReacDC::set_def( int q)
     strcpy( rc[q].form, "`" );
     strcpy( rc[q].rmtm, "`" );
     memset( &rc[q].nDC, 0, 8*sizeof(int));
+    rc[q].Nsd =1;
     rc[q].Zz = rc[q].mwt = 0.;
     //    values
     rc[q].Comp = rc[q].Expa = rc[q].Der = rc[q].DerB = FLOAT_EMPTY;
@@ -354,31 +355,27 @@ void TReacDC::RecInput( const char *key )
 
 //Rebild record structure before calc
 
-int TReacDC::RecBuild( const char *key )
+int TReacDC::RecBuild( const char *key, int mode  )
 {
     int i, iir, Ndc, Nrc, Nc1, Nn1 = 0, Nf1, Nr1;
     vstr pkey(81);
     int CM,CE,CV;
     gstring str;
-    short oldnDC = rcp->nDC, newnDC;
+    short oldnDC = rcp->nDC/*, newnDC*/;
     uint j;
 
     TCStringArray aDclist;
-    TCIntArray anRDc;
     TCStringArray aRclist;
-    TCIntArray anRRc;
-    TCIntArray aMcv;
-    TCIntArray aMrv;
+    TCStringArray aDclist_old;
+    TCStringArray aRclist_old;
 
 AGAIN_MOD:
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     memcpy( rcp->pstate, key/*rt[nRT].UnpackKey()*/, RE_RKLEN );
-    newnDC = rcp->nDC;
-    rcp->nDC = oldnDC;
+    /*newnDC = rcp->nDC;
+    rcp->nDC = oldnDC; */
     if( ret == VF3_3 && !( !rcp->PreC || rcp->PreC == ' ' ) )
         return ret;
-    if( ret == VF3_2 && vfQuestion(window(), GetName(),"Skip remake of REACDC definition?"))
-        goto RECALCULATIONS;
     if( ret == VF3_1 )
         Nn1 = 1;
     if( rcp->nTp < 0 || rcp->nPp < 0 || rcp->Nsd < 0 || rcp->Nsd > 4 )
@@ -452,31 +449,8 @@ AGAIN_MOD:
     Nr1 = 0;
     Nf1 = 0;
 
-    //REACDC  keypart
+    //REACDC&DCOMP  keypart
     rt[RT_REACDC].MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-AGAINRC:
-    str = GetKeyofRecord( pkey, "Set template", KEY_TEMP );
-//  if(  str== "" )     Bugfix  19.12.00  DAK
-//      goto AGAINRC;
-    Nrc = rt[RT_REACDC].GetKeyList( str.c_str(), aRclist, anRRc );
-    if( Nrc<1 )
-        if( vfQuestion( window(), GetName(),
-                        "No REACDC records or error at PDB access! Repeat?"))
-            goto AGAINRC;
-
-    //DCOMP keypart
-    rt[RT_DCOMP].MakeKey( RT_REACDC, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-AGAINDC:
-    str = TDComp::pm->GetKeyofRecord( pkey, "Set template", KEY_TEMP );
-//  if(  str== "" )    Bugfix 19.12.00  DAK
-//      goto AGAINDC;
-    Ndc = rt[RT_DCOMP].GetKeyList( str.c_str(), aDclist, anRDc );
-    if( Ndc<1 )
-        if( vfQuestion( window(), GetName(),
-                        "No DCOMP records or error at PDB access! Repeat?"))
-            goto AGAINDC;
-        else
-            ErrorIf( Nrc<1, GetName(), "No DCOMP and REACDC records selected!");
 
     if( rcp->rDC )
     { // calc count DC and RC
@@ -501,105 +475,75 @@ AGAINDC:
                 Error( GetName(), "Invalid rcp->rDC[i]");
             }
         }
-        // made vectors selections DCOMP and REACDC
-        if( Nc1 && Ndc )
-        {
-            aMcv.Clear();
-            for( i=0; i<rcp->nDC; i++ )
-            {
-                if( rcp->rDC[i] == SRC_DCOMP )
-                    for( j=0; j< aDclist.GetCount(); j++ )
-                    {
-                        if( memcmp( rcp->DCk[i], aDclist[j].c_str(), DC_RKLEN ))
-                            continue;
-                        aMcv.Add(j);
-                        break;
-                    } /* !DCOMP key don`t find */
-            }
-        }
-        if( Nr1 && Nrc )
-        {
-            aMrv.Clear();
-            for( i=0; i<rcp->nDC; i++ )
-            {
-                if( rcp->rDC[i] == SRC_REACDC )
-                    for( j=0; j< aRclist.GetCount(); j++ )
-                    {
-                        if( memcmp( rcp->DCk[i], aRclist[j].c_str(), DC_RKLEN ))
-                            continue;
-                        aMrv.Add(j);
-                        break;
-                    }  /* !REACDC key don`t find */
-            }
-        }
-    }
-    // Select records REACDC
-    if( Nrc <= 0 )
-        goto COMP_MARK;
-LOOP_MARKRC:
-    aMrv = vfMultiChoiceSet( window(), aRclist,
-                             " Please, mark ReacDC keys to be included", aMrv );
-    if( aMrv.GetCount() < 1 )
-        switch ( vfQuestion3( window(), GetName(), "Number of selected ReacDC keys < 1.\n"
-                              "Mark again or proceed without ReacDC", "&Repeat", "&Proceed" ))
-        {
-        case VF3_1:
-            goto AGAINRC;
-        case VF3_2:
-            break;
-        case VF3_3:
-            Error( GetName(),"No ReacDC records selected into reaction...");
-        }
-    // Select records DCOMP
-COMP_MARK:
-    if( Ndc <= 0 )
+     }
+    // made vectors selections DCOMP and REACDC
+    if( Nc1>0 || Nr1>0 )
     {
-        if( aMrv.GetCount() > 0 )
-            goto CONTINUE_BUILDUP;
-        else goto LOOP_MARKRC;
-    }
-    aMcv = vfMultiChoiceSet( window(), aDclist,
-                             " Please, mark DComp keys to be included", aMcv );
-    if( aMcv.GetCount() < 1 )
-        switch ( vfQuestion3( window(), GetName(),
-                              "Number of selected DComp record keys < 1.\n"
-                              "Mark again or proceed without DComp", "&Repeat", "&Proceed" ))
+        /* Build old selections DCOMP and REACDC */
+        aDclist_old.Clear();
+        aRclist_old.Clear();
+
+        for( i=0; i<rcp->nDC; i++ )
         {
-        case VF3_1:
-            goto AGAINDC;
-        case VF3_2:
-            if( aMrv.GetCount()>0 ) break;
-        case VF3_3:
-            Error( GetName(),"No DComp records selected into reaction...");
+          gstring key_dr = gstring( rcp->DCk[i], 0, DC_RKLEN );
+          if( rcp->rDC[i] == SRC_DCOMP )
+              aDclist_old.Add( key_dr.c_str() );
+          else
+             if( rcp->rDC[i] == SRC_REACDC )
+                aRclist_old.Add( key_dr.c_str() );
         }
-CONTINUE_BUILDUP:
-    /* sort?
-       if( Nc >= 2 )
-          qsort( mcv, (size_t)Nc, sizeof( int ), intcmp );
-       if( Nr >= 2 )
-          qsort( mrv, (size_t)Nr, sizeof( int ), intcmp );
-    */
+    }
+
+AGAINRC:
+    aRclist = vfMultiKeysSet( window(),
+       "Please, mark ReacDC keys to be included",
+       RT_REACDC, pkey, aRclist_old );
+    aDclist = vfMultiKeysSet( window(),
+       "Please, mark DComp keys to be included",
+       RT_DCOMP, pkey, aDclist_old );
+
+
+    if( aRclist.GetCount() < 1 && aDclist.GetCount() < 1 )
+    {
+       switch ( vfQuestion3(window(), GetName(),
+            "Number of selected ReacDC&DComp keys < 1.\n"
+            " Mark again, proceed without ReacDC&DComp or Cancel?",
+            "&Repeat", "&Proceed"))
+       {
+         case VF3_1:
+                goto AGAINRC;
+                ;
+         case VF3_2:
+                break;
+         case VF3_3:  Error( GetName(),
+                      "No ReacDC&DComp records selected...");
+       }
+    }
+
+
+
     /*================================*/
-    rcp->nDC = aMcv.GetCount()+aMrv.GetCount()+Nn1+Nf1;
-    if( (oldnDC != newnDC) && (newnDC != rcp->nDC) )
-        rcp->nDC = newnDC;
-    // Edit(rcp->nDC); if( rcp->nDC < aMcv.GetCount()+aMrv.GetCount() ) repead;
+    rcp->nDC = aDclist.GetCount()+aRclist.GetCount()+Nn1+Nf1;
+    // ???? 28/02/02 Sveta
+    // if( (oldnDC != newnDC) && (newnDC != rcp->nDC) )
+    //    rcp->nDC = newnDC;
     dyn_new();
+
     /*================================*/
     // get aMcv+aMrv  (Remake cod! Must be by component groups )
     for( i=0,iir=0; i<rcp->nDC; i++ )
     {
         if( !rcp->scDC[i] )
             rcp->scDC[i] = 1;
-        if( i < aMrv.GetCount() )
+        if( i < aRclist.GetCount() )
         {
-            memcpy( rcp->DCk[i], aRclist[aMrv[i]].c_str(), DC_RKLEN );
+            memcpy( rcp->DCk[i], aRclist[i].c_str(), DC_RKLEN );
             rcp->rDC[i] = SRC_REACDC;
             iir++;
         }
-        else if( i< aMcv.GetCount()+aMrv.GetCount() )
+        else if( i< aDclist.GetCount()+aRclist.GetCount() )
         {
-            memcpy( rcp->DCk[i], aDclist[aMcv[i-iir]].c_str(), DC_RKLEN );
+            memcpy( rcp->DCk[i], aDclist[i-iir].c_str(), DC_RKLEN );
             rcp->rDC[i] = SRC_DCOMP;
         }
         else
@@ -613,7 +557,6 @@ CONTINUE_BUILDUP:
     } //i
 
     /**************/
-RECALCULATIONS:
     rt[nRT].SetKey(key); //   RecInput( key );
     return ret;
 }

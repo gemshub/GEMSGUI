@@ -80,6 +80,8 @@ public/* protected*/ slots:
     void CmTransferList();
     void CmImport();
     void CmExport();
+    void CmBackup();
+    void CmRestore();
     void CmPrint();
 
     //--- Manipulation current record
@@ -94,10 +96,12 @@ public/* protected*/ slots:
     void CmPlot();  //
     //  void CmFind();  //Derive (find, calculate, create) Data Record
     void CmNew();
+    void CmCreate();
     void CmNext();
     void CmPrevious();
 
     void CmNewinProfile();
+    void CmCreateinProfile();
     void CmLoadinProfile();
 
     void CmHelp();

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'CalcDialog.ui'
 **
-** Created: Втр Лют 5 12:33:46 2002
+** Created: Do 28. Feb 13:33:32 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

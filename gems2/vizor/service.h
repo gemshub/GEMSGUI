@@ -64,6 +64,14 @@ vfMultiChoice(QWidget* par, TCStringArray& arr, const char* prompt);
 TCIntArray
 vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArray& sel);
 
+TCStringArray
+vfMultiKeys(QWidget* par, const char* caption,
+        int iRt, const char* key );
+
+TCStringArray
+vfMultiKeysSet(QWidget* par, const char* caption,
+        int iRt, const char* key, TCStringArray& sel );
+
 bool
 vfListFiles(QWidget* par, bool show_dlg, const char * prfName,
                 TCStringArray& fls, TCIntArray& cnt );

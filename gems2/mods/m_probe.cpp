@@ -721,7 +721,7 @@ void TProbe::pr_init()
 
 //Rebild record structure before calc
 int
-TProbe::RecBuild( const char *key )
+TProbe::RecBuild( const char *key, int mode  )
 {
     TCIntArray aMdv;
     TCIntArray aMiv;
@@ -733,7 +733,7 @@ TProbe::RecBuild( const char *key )
 
 AGAIN:
     prp->QT = get_simple( prp->QT );
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         goto SET_OK;
     if( !is_simple(prp->QT) || prp->Nsd< 0   )

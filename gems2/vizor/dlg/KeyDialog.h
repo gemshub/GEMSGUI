@@ -32,20 +32,30 @@ class KeyDialog : public KeyDialogData
     Q_OBJECT
 
     //  TStringArray keyList;
+    bool multi;
     gstring keyFilter;
     int iRt;
+    TCStringArray old_sel;
+
+    void SetList();
 
 protected slots:
     void CmFilter();
+    void CmClearAll();
+    void CmSelectAll();
+
 
 public:
 
     KeyDialog(QWidget* win, int irt, const char* key = "*",
               const char* caption = 0, bool filter=true);
+    KeyDialog(QWidget* win, int irt, TCStringArray& sel,
+              const char* key = "*", const char* caption = 0 );
 
     virtual ~KeyDialog();
 
 
+    TCStringArray allSelectedKeys();
     gstring getKey();
 };
 

@@ -501,7 +501,7 @@ bool TDuterm::check_input( const char */*key*/, int /*Level*/ )
 
 //Rebild record structure before calc
 int
-TDuterm::RecBuild( const char *key )
+TDuterm::RecBuild( const char *key, int mode  )
 {
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
     TCStringArray aDclist;
@@ -520,7 +520,7 @@ TDuterm::RecBuild( const char *key )
     LD = utp->Ld;
     ND = utp->Nr;
 AGAIN:
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         goto SET_OK;
     if( ret == VF3_1 )

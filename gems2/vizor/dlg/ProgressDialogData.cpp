@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'ProgressDialog.ui'
 **
-** Created: Втр Лют 5 12:33:42 2002
+** Created: Do 28. Feb 13:33:29 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -427,6 +427,11 @@ public:
     {
         ind.SetKey(key);
     }
+    void SetFldKey( int i, const char *fld )
+    {
+        ind.SetFldKey( i, fld );
+    }
+
     void MakeKey( unsigned char nRtwrk, char *pkey, ...);
     long RecCount() const
     {

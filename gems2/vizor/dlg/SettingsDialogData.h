@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'SettingsDialog.ui'
 **
-** Created: Di 12. Feb 15:07:23 2002
+** Created: Do 28. Feb 13:33:30 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

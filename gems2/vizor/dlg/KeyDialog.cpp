@@ -30,15 +30,16 @@
 
 KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
                      const char* caption, bool filter):
-        Inherited( win, 0, true), 
-        iRt(irt)
+        Inherited( win, 0, true),
+        multi(false), iRt(irt)
 {
+    old_sel.Clear();
     pList->setFont( pVisorImp->getCellFont() );
+    setCaption( caption );
 
     TCIntArray temp;
     TCStringArray keyList;
 
-    setCaption( caption );
 
     bool yesFilter = false;
 
@@ -66,15 +67,82 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
         if( /*(yesFilter==false) && */keyList[ii]==s )
             sel = ii;
     }
+
+    pList->setMultiSelection(false);
     pList->setSelected(sel, true);
+    pButton3->hide();
+    pButton2->hide();
+
+    pList->setFocus();
 
     if( !filter )
         pFilterButton->hide();
 }
 
+KeyDialog::KeyDialog(QWidget* win, int irt, TCStringArray& sel,
+              const char* key, const char* caption):
+        Inherited( win, 0, true),
+        multi(true), iRt(irt)
+{
+    old_sel.Clear();
+    for(uint ii=0; ii<sel.GetCount(); ii++)
+    {   if( strchr( sel[ii].c_str(), ':' ))  // key in packed form
+        {
+          rt[irt].SetKey( sel[ii].c_str() );
+          old_sel.Add(rt[irt].UnpackKey());
+        }
+        else
+          old_sel.Add( sel[ii] );
+    }
+    pList->setFont( pVisorImp->getCellFont() );
+    pList->setMultiSelection(true);
+    setCaption( caption );
+
+    ErrorIf(!key, "KeyDialog", "pkey is null");
+    if( strpbrk(key, "*?") == 0 )
+        keyFilter = "*";
+    else
+        keyFilter = key;
+
+    SetList();
+    pList->setFocus();
+
+}
+
 
 KeyDialog::~KeyDialog()
 {}
+
+void
+KeyDialog::SetList()
+{
+    TCIntArray temp;
+    TCStringArray keyList;
+
+    gstring s = "Filter: ";
+    s +=  keyFilter;
+    pLabel->setText(s.c_str());
+
+    int n = rt[iRt].GetKeyList( keyFilter.c_str(), keyList, temp);
+
+    for( int ii=0; ii<n; ii++ )
+    {
+        pList->insertItem(keyList[ii].c_str());
+        if( multi )
+        {  for(uint jj=0; jj<old_sel.GetCount(); jj++)
+           {
+            // comparing parts before '*' for overwrite dcomp, reacdc ....
+            size_t pos = old_sel[jj].find('*');
+            gstring str(old_sel[jj], 0, pos);
+            if( keyList[ii].find(str) != gstring::npos )
+            {
+              pList->setSelected(ii, true);
+              break;
+            }
+           }
+       }
+    }
+}
 
 
 
@@ -113,20 +181,45 @@ KeyDialog::CmFilter()
     if( dbFilter.exec() )
     {
         keyFilter = dbFilter.getFilter();
-
-        TCIntArray temp;
-        TCStringArray keyList;
-
-        int n = rt[iRt].GetKeyList( keyFilter.c_str(), keyList, temp);
-
         pList->clear();
-        for( int ii=0; ii<n; ii++ )
-            pList->insertItem(keyList[ii].c_str());
+        SetList();
     }
+}
 
-    gstring s = "Filter: ";
-    s +=  keyFilter;
-    pLabel->setText(s.c_str());
+void
+KeyDialog::CmSelectAll()
+{
+    // select all gstrings
+    for( uint ii=0; ii<pList->count(); ii++ )
+        pList->setSelected(ii, true);
+}
+
+
+void
+KeyDialog::CmClearAll()
+{
+    pList->clearSelection();
+}
+
+/*! returns selection array
+    array is empty if nothing is selected
+*/
+
+TCStringArray
+KeyDialog::allSelectedKeys()
+{
+    TCStringArray arr;
+
+    if( !result() )
+        return arr;
+
+    for( uint ii=0; ii<pList->count(); ii++ )
+        if( pList->isSelected(ii) )
+        {
+         const char* s = pList->text(ii);
+         arr.Add(s);
+        }
+    return arr;
 }
 
 //--------------------- End of KeyDialog.cpp ---------------------------

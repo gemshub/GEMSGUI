@@ -297,22 +297,22 @@ static int rkeycmp(const void *e1, const void *e2)
 
 //Rebild record structure before calc
 int
-TPhase::RecBuild( const char *key )
+TPhase::RecBuild( const char *key, int mode  )
 {
-    int i, iic, j, Ndc, Nrc;
-    vstr pkey(81);
+    int iic, i;
+    vstr pkeydc(81);
+    vstr pkeyrd(81);
 
     TCStringArray aDclist;
-    TCIntArray anRDc;
-    TCIntArray aMcv;
     TCStringArray aRclist;
-    TCIntArray anRRc;
-    TCIntArray aMrv;
+    TCStringArray aDclist_old;
+    TCStringArray aRclist_old;
+
     gstring str;
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
 AGAIN_SETUP:
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL  &&!( !php->PphC || php->PphC == ' '))
         return ret;
     if( php->nscN < 0 || php->nscM < 0 || php->ncpN < 0 || php->ncpM < 0 ||
@@ -326,106 +326,69 @@ AGAIN_SETUP:
     }
     SetString("PH_make   Remaking PHASE definition");
     pVisor->Update();
+
     //DCOMP keypart
-    rt[RT_DCOMP].MakeKey( RT_PHASE, pkey, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END);
-    if( pkey[1] != ':') pkey[1] = '*';
-AGAINDC:
-    str = TDComp::pm->GetKeyofRecord( pkey, "Set template", KEY_TEMP );
-//  if(  str== "" )    Bugfix 19.12.00  DAK
-//     goto AGAINDC;
-    Ndc = rt[RT_DCOMP].GetKeyList( str.c_str(), aDclist, anRDc );
-    if( Ndc<1 )
-        if( vfQuestion(window(), GetName(),
-                       "No DCOMP records or error at PDB access! Repeat?"))
-            goto AGAINDC;
+    rt[RT_DCOMP].MakeKey( RT_PHASE, pkeydc, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END);
+    if( pkeydc[1] != ':') pkeydc[1] = '*';
+
     //REACDC  keypart
-    rt[RT_REACDC].MakeKey( RT_PHASE, pkey, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
-    if( pkey[1] != ':') pkey[1] = '*';
-AGAINRC:
-    str = TReacDC::pm->GetKeyofRecord( pkey, "Set template", KEY_TEMP);
-//    if(  str== "" )  bugfix  19.12.00  DAK
-//       goto AGAINRC;
-    Nrc = rt[RT_REACDC].GetKeyList( str.c_str(), aRclist, anRRc );
-    if( Nrc<1 )
-        if( vfQuestion(window(), GetName(),
-                       "No REACDC records or error at PDB access! Repeat?"))
-            goto AGAINRC;
-        else ErrorIf( Ndc<1, GetName(), "No keys DCOMP and REACDC.");
+    rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
+    if( pkeyrd[1] != ':') pkeyrd[1] = '*';
+
 
     if( php->nDC && php->SM )
     {
         /* Build old selections DCOMP and REACDC */
-        aMcv.Clear();
-        aMrv.Clear();
+        aDclist_old.Clear();
+        aRclist_old.Clear();
         for( i=0; i<php->nDC; i++ )
         {
-            if( php->DCS[i] == SRC_DCOMP )
-            {
-                for( j=0; j< Ndc; j++ )
-                {
-                    if( memcmp( php->SM[i], aDclist[j].c_str(), DC_RKLEN-MAXSYMB ))
-                        continue;
-                    aMcv.Add(j);
-                    break;
-                }
-            }
+          gstring key_dr = gstring( php->SM[i], 0, DC_RKLEN );
+          if( php->DCS[i] == SRC_DCOMP )
+          {
+              rt[RT_DCOMP].SetKey( key_dr.c_str() );
+              rt[RT_DCOMP].SetFldKey( 3, "*" );
+              aDclist_old.Add( rt[RT_DCOMP].UnpackKey() );
+          }
             else
                 if( php->DCS[i] == SRC_REACDC )
                 {
-                    for( j=0; j< Nrc; j++ )
-                    {
-                        if( memcmp( php->SM[i], aRclist[j].c_str(), DC_RKLEN-MAXSYMB ))
-                            continue;
-                        aMrv.Add(j);
-                        break;
-                    }
+                  rt[RT_REACDC].SetKey( key_dr.c_str() );
+                  rt[RT_REACDC].SetFldKey( 3, "*" );
+                  aRclist_old.Add( rt[RT_REACDC].UnpackKey() );
                 }
         }
     }
-    if( Nrc > 0 )
+
+AGAINRC:
+    aRclist = vfMultiKeysSet( window(),
+       "Please, mark ReacDC keys to be included into Phase",
+       RT_REACDC, pkeyrd, aRclist_old );
+    aDclist = vfMultiKeysSet( window(),
+       "Please, mark DComp keys to be included into Phase",
+       RT_DCOMP, pkeydc, aDclist_old );
+
+
+    if( aRclist.GetCount() < 1 && aDclist.GetCount() < 1 )
     {
-        aMrv = vfMultiChoiceSet(window(), aRclist,
-                                "Please, mark ReacDC keys to be included into Phase", aMrv );
-        if( aMrv.GetCount() < 1 )
-            switch ( vfQuestion3(window(), GetName(), "Number of selected ReacDC keys < 1.\n"
-                                 " Mark again, proceed without ReacDC or Cancel?", "&Repeat", "&Proceed"))
-            {
-            case VF3_1:
+       switch ( vfQuestion3(window(), GetName(),
+            "Number of selected ReacDC&DComp keys < 1.\n"
+            " Mark again, proceed without ReacDC&DComp or Cancel?",
+            "&Repeat", "&Proceed"))
+       {
+         case VF3_1:
                 goto AGAINRC;
                 ;
-            case VF3_2:
+         case VF3_2:
                 break;
-            case VF3_3:
-                Error( GetName(),"No ReacDC records selected into Phase...");
-            }
-    }
-    if( Ndc > 0 )
-    {
-        aMcv = vfMultiChoiceSet(window(), aDclist,
-                                "Please, mark DComp keys to be included into Phase", aMcv );
-        if( aMcv.GetCount() < 1 )
-            switch ( vfQuestion3(window(), GetName(),"Number of selected DComp record keys < 1.\n"
-                                 " Mark again, proceed without DComp or Cancel?", "&Repeat", "&Proceed"))
-            {
-            case VF3_1:
-                goto AGAINDC;
-                ;
-            case VF3_2:
-                break;
-            case VF3_3:
-                Error( GetName(),"No DComp records selected into Phase...");
-            }
+         case VF3_3:  Error( GetName(),
+                      "No ReacDC&DComp records selected into Phase...");
+       }
     }
 
-    /* Sort list of selections */
-    /*   if( aMcv.GetCount() >= 2 )
-          aMcv.qsort(); // int array
-       if( aMrv.GetCount() >= 2 )
-          aMrv.qsort(); // int array
-    */
-    php->nDC = aMcv.GetCount() + aMrv.GetCount();
-    php->NR1 = aMrv.GetCount();
-    iic = aMcv.GetCount();
+    php->nDC = aDclist.GetCount() + aRclist.GetCount();
+    php->NR1 = aRclist.GetCount();
+    iic = aDclist.GetCount();
 
     /* insert coeff of model of solid and other data */
     if( php->nscN * php->nscM ) php->Psco = S_ON;
@@ -444,14 +407,14 @@ AGAINRC:
     /* Get list of component : add aMcv and aMrv */
     for( i=0; i<php->nDC; i++ )
     {
-        if( i< aMcv.GetCount() )
+        if( i < iic )
         {
-            memcpy( php->SM[i], aDclist[aMcv[i]].c_str(), DC_RKLEN );
+            memcpy( php->SM[i], aDclist[i].c_str(), DC_RKLEN );
             php->SM[i][DC_RKLEN-1] = SRC_DCOMP;
         }
         else
         {
-            memcpy( php->SM[i], aRclist[aMrv[i-iic]].c_str(), DC_RKLEN );
+            memcpy( php->SM[i], aRclist[i-iic].c_str(), DC_RKLEN );
             php->SM[i][DC_RKLEN-1] = SRC_REACDC;
         }
     }

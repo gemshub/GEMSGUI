@@ -363,29 +363,24 @@ void TCompos::bc_work_dyn_kill()
 
 //Rebuild record structure before calc
 int
-TCompos::RecBuild( const char *key )
+TCompos::RecBuild( const char *key, int mode  )
 {
-    int Ndc, Nrc, Nic;
     int oldIC=0, oldDC=0;
     vstr pkey(81);
-    int i,Nc, Nr;
-    uint j;
+    int i;
     gstring str;
     TCStringArray aIclist;
-    TCIntArray anRIc;
     TCStringArray aDclist;
-    TCIntArray anRDc;
     TCStringArray aRclist;
-    TCIntArray anRRc;
-    TCIntArray aMiv;
-    TCIntArray aMcv;
-    TCIntArray aMrv;
+    TCStringArray aIclist_old;
+    TCStringArray aDclist_old;
+    TCStringArray aRclist_old;
 
 AGAIN_MOD:
     if( bcp->PcIC != S_OFF  ) oldIC = bcp->N;
     if( bcp->PcDC != S_OFF  ) oldDC = bcp->Ld;
 
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     if( ret == VF3_3 && !( !bcp->PcIC || bcp->PcIC == ' ' ) )
         return ret;
     if(  bcp->La < 0 ||  bcp->La > 64 || bcp->Nsd < 0 || bcp->Nsd > 4 )
@@ -396,161 +391,94 @@ AGAIN_MOD:
             Error( GetName(), "Invalid number of formulae or SD references!");
     bcp->N = 0;
     // select ICOMP
-    Nic = rt[RT_ICOMP].GetKeyList( "*:*:*:", aIclist, anRIc );
-    ErrorIf( Nic<1, GetName(), "ICOMP data record keys are not selected \n"
-             "(maybe, some PDB chain files are not linked)");
-    bcp->Nmax = (short)Nic;
-LOOP_MARKIC: // select IC from calc sostav
-    bcp->PcIC = S_REM;
-    if( oldIC ) // old selections in IComp
+    // Build old selections
+    aIclist_old.Clear();
+    for( i=0; i<oldIC; i++ )
     {
-        aMiv.Clear();
-        for( i=0; i<oldIC; i++ )
-        {
-            for( j=0; j< aIclist.GetCount(); j++ )
-            {
-                if( memcmp( bcp->SB[i], aIclist[j].c_str(), MAXICNAME+MAXSYMB ))
-                    continue;
-                aMiv.Add(j);
-                break;
-            }
-        }
+      str = gstring( bcp->SB[i], 0, MAXICNAME+MAXSYMB );
+      str += "*:";
+      aIclist_old.Add( str );
     }
+LOOP_MARKIC:
+    aIclist = vfMultiKeysSet( window(),
+       "Please, mark IComp keys for PCO definition",
+       RT_ICOMP, "*:*:*:", aIclist_old );
 
-    aMiv = vfMultiChoiceSet( window(), aIclist,
-                             "Please, mark IComp keys for PCO definition", aMiv );
-    if( aMiv.GetCount() < 1 )
+    bcp->Nmax = (short)aIclist.GetCount();
+    // must be Nic = rt[RT_ICOMP].GetKeyList("*:*:*:",.,.);
+    bcp->PcIC = S_REM;
+    if( aIclist.GetCount() < 1 )
         switch ( vfQuestion3( window(), GetName(),
-                              " < 1 IComp keys marked for PCO definition\n"
-                              "Repeat marking, Proceed to defining PCO in different ways, or\n"
-                              " Cancel assembling PCO definition?", "&Repeat", "&Proceed" ))
+         " < 1 IComp keys marked for PCO definition\n"
+         "Repeat marking, Proceed to defining PCO in different ways, or\n"
+         " Cancel assembling PCO definition?", "&Repeat", "&Proceed" ))
         {
         case VF3_2:
             bcp->PcIC = S_OFF;
-            goto NEXT_COMPOUNDS;
+            break;
         case VF3_1:
             goto LOOP_MARKIC;
         case VF3_3:
-            Error( GetName()," < 1 IComp keys selected for PCO definition...");
+            Error( GetName(),
+            " < 1 IComp keys selected for PCO definition...");
         }
     else
-        bcp->PcIC = S_ON;
-    bcp->N = (short)aMiv.GetCount(); /*   bc[q].Nmax = Nic;  */
-NEXT_COMPOUNDS:
+     {    bcp->PcIC = S_ON;
+          bcp->N = (short)aIclist.GetCount(); /*   bc[q].Nmax = Nic;  */
+     }
+
     //  select DCOMP if PcDC = S_ON
-    if( bcp->PcDC == S_OFF
-            /*!vfQuestion( window(), GetName(),
-                        "Will DCOMP stoichiometry be used for COMPOS definition?" )*/)
+    if( bcp->PcDC == S_OFF)
+    /*!vfQuestion( window(), GetName(),
+    "Will DCOMP stoichiometry be used for COMPOS definition?" )*/
     {
-        /*Ndc = 0;*/ aDclist.Clear();
+        aDclist.Clear();
         goto COMP_COUNT; //goto RE_SELECT;
     }
-
     rt[RT_DCOMP].MakeKey( RT_COMPOS, pkey, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-AGAINDC:
-    str = TDComp::pm->GetKeyofRecord( pkey,
-                                      "Set template", KEY_TEMP );
-//    if(  str== "" )   Bugfix  19.12.00  DAK
-//        goto AGAINDC;
-    Ndc = rt[RT_DCOMP].GetKeyList( str.c_str(), aDclist, anRDc );
-    if( Ndc<1 )
-        if( vfQuestion( window(), GetName(),
-                        " No DComp records selected to PCO (maybe, bad template /n"
-                        " or some database files are not linked). Mark again (Y/N)? " ))
-            goto AGAINDC;
-        else
-            Error( GetName(), "DComp records are not selected to PCO...");
-    //LOOP_MARKDC:
-    if( oldDC ) // old selections in DComp
-    {
-        aMcv.Clear();
-        for( i=0; i<oldDC; i++ )
-        {
-            if( bcp->DCS[i]  == SRC_DCOMP )
-                for( j=0; j< aDclist.GetCount(); j++ )
-                {
-                    if( memcmp( bcp->SM[i], aDclist[j].c_str(), DC_RKLEN ))
-                        continue;
-                    aMcv.Add(j);
-                    break;
-                }
-        }
-    }
+    aDclist_old.Clear();
+    for( i=0; i<oldDC; i++ )
+      if( bcp->DCS[i]  == SRC_DCOMP )
+      {
+        str = gstring( bcp->SM[i], 0, DC_RKLEN );
+        aDclist_old.Add( str );
+      }
+LOOP_MARKDC:
+    aDclist = vfMultiKeysSet( window(),
+       " Please, mark DComp keys for use in PCO definition",
+       RT_DCOMP, pkey, aDclist_old );
 
-    aMcv = vfMultiChoiceSet( window(), aDclist,
-                             " Please, mark DComp keys for use in PCO definition", aMcv);
-    if( aMcv.GetCount() < 1 )
-        switch ( vfQuestion3( window(), GetName(),  " < 1 DComp keys marked for PCO.\n"
-                              " Repeat marking,  Proceed to defining composition in different ways or\n"
-                              "Cancel assembling PCO definition?", "&Repeat", "&Proceed" ))
+    // select REACT
+    aRclist_old.Clear();
+    for( i=0; i<oldDC; i++ )
+      if( bcp->DCS[i]  == SRC_REACDC )
+      {
+        str = gstring( bcp->SM[i], 0, DC_RKLEN );
+        aRclist_old.Add( str );
+      }
+    aRclist = vfMultiKeysSet( window(),
+       "Please, mark ReacDC keys for use in PCO definition",
+       RT_REACDC, pkey, aRclist_old );
+
+    if( aRclist.GetCount() < 1 && aDclist.GetCount() < 1 )
+        switch ( vfQuestion3( window(), GetName(),
+                  " < 1 ReacDC&DComp keys marked for PCO.\n"
+                  " Repeat marking,  \n"
+                  "Proceed to defining composition in different ways or\n"
+                  "Cancel assembling PCO definition?", "&Repeat", "&Proceed" ))
         {
         case VF3_1:
-            goto AGAINDC;
+            goto LOOP_MARKDC;
         case VF3_2:   /*if( Nc )*/
             break;
         case VF3_3:
-            Error( GetName()," < 1 DComp records selected for PCO definition");
+            Error( GetName(),
+                " < 1 ReacDC records selected for PCO definition");
         }
-    //RE_SELECT: // select REACT
-    /*   if( !vfQuestion( window(), GetName(),
-                   "Will Reacdc stoichiometry be used for COMPOS definition?" ))
-       {
-         *Nrc = 0;* aRclist.Clear(); goto COMP_COUNT;
-       }
-    */   rt[RT_REACDC].MakeKey( RT_COMPOS, pkey,  K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-AGAINRC:
-    str = TReacDC::pm->GetKeyofRecord( pkey,
-                                       "Set template", KEY_TEMP );
-// if(  str== "" )     Bugfix 19.12.00  DAK
-//     goto AGAINRC;
-    Nrc = rt[RT_REACDC].GetKeyList( str.c_str(), aRclist, anRRc );
-    if( Nrc<1 )
-        if( vfQuestion( window(), GetName(),
-                        " No ReacDC records selected (maybe, bad template /n"
-                        " or some database files are not linked). Mark again? " ))
-            goto AGAINRC;
-        else
-            Error( GetName(), "ReacDC data record keys are not selected...");
-    //LOOP_MARKRC:
-    if( oldDC ) // old selections in ReactDC
-    {
-        aMrv.Clear();
-        for( i=0; i<oldDC; i++ )
-        {
-            if( bcp->DCS[i]  == SRC_REACDC )
-                for( j=0; j< aRclist.GetCount(); j++ )
-                {
-                    if( memcmp( bcp->SM[i], aRclist[j].c_str(), DC_RKLEN ))
-                        continue;
-                    aMrv.Add(j);
-                    break;
-                }
-        }
-    }
-    aMrv = vfMultiChoiceSet( window(), aRclist,
-                             "Please, mark ReacDC keys for use in PCO definition", aMrv );
-    if( aMrv.GetCount() < 1 )
-        switch ( vfQuestion3( window(), GetName(),  " < 1 ReacDC keys marked for PCO.\n"
-                              " Repeat marking,  Proceed to defining PCO in different ways or\n"
-                              "Cancel assembling PCO definition?", "&Repeat", "&Proceed" ))
-        {
-        case VF3_1:
-            goto AGAINRC;
-        case VF3_2:
-            break;
-        case VF3_3:
-            Error( GetName()," < 1 ReacDC records selected for PCO definition...");
-        }
-COMP_COUNT:
-    Nc = aMcv.GetCount();
-    Nr = aMrv.GetCount();
-    //   if( Nc >= 2 )
-    //     aMcv.Sort();
-    //      qsort( mcv, (size_t)Nc, sizeof( int ), intcmp );
-    //   if( Nr >= 2 )
-    //      qsort( mrv, (size_t)Nr, sizeof( int ), intcmp );
 
-    bcp->Ld = (short)(Nc+Nr);
+COMP_COUNT:
+
+    bcp->Ld = (short)(aRclist.GetCount()+aDclist.GetCount());
     if( bcp->Ld < 1 )
         bcp->PcDC = S_OFF;
     else bcp->PcDC = S_ON;
@@ -561,27 +489,29 @@ COMP_COUNT:
         bcp->PcFO = S_ON;
     // realloc memory
     dyn_new();
+
     if( bcp->PcIC != S_OFF )
-        for(uint l=0; l<aMiv.GetCount(); l++ )
+        for(uint l=0; l<aIclist.GetCount(); l++ )
         { // Get list IC
-            memcpy( bcp->SB[l], aIclist[aMiv[l]].c_str(), MAXICNAME+MAXSYMB );
+            memcpy( bcp->SB[l], aIclist[l].c_str(), MAXICNAME+MAXSYMB );
             if( !bcp->CIcl[l] || bcp->CIcl[l]==A_NUL )
                 bcp->CIcl[l] = QUAN_MOL;
         }
-    // Add aMcv and aMrv //,,,?????//
+
     if( bcp->PcDC != S_OFF )
         for( i=0; i<bcp->Ld; i++ )
         {
+          uint Nr = aRclist.GetCount();
             if( i<Nr )
             {
-                memcpy( bcp->SM[i], aRclist[aMrv[i]].c_str(), DC_RKLEN );
+                memcpy( bcp->SM[i], aRclist[i].c_str(), DC_RKLEN );
                 bcp->DCS[i] = SRC_REACDC;
                 if( !bcp->CDcl[i] || bcp->CDcl[i]==A_NUL )
                     bcp->CDcl[i] = QUAN_MOL;
             }
             else
             {
-                memcpy( bcp->SM[i], aDclist[aMcv[i-Nr]].c_str(), DC_RKLEN );
+                memcpy( bcp->SM[i], aDclist[i-Nr].c_str(), DC_RKLEN );
                 bcp->DCS[i] = SRC_DCOMP;
                 if( !bcp->CDcl[i] || bcp->CDcl[i]==A_NUL)
                     bcp->CDcl[i] = QUAN_MOL;

@@ -166,17 +166,18 @@ TCModuleImp::LoadGeneralMenu()
 
     {
         QPopupMenu* p2 = new QPopupMenu;
-        p2->insertItem( "&Show", this, SLOT(CmShow()), Key_F6 );
-        p2->insertItem( "&Remake", this, SLOT(CmDerive()) );
-        p2->insertItem( "&Create", this, SLOT(CmNew()) );
+        p2->insertItem( "&Create", this, SLOT(CmCreate()) );
+        p2->insertItem( "&New(Clone)", this, SLOT(CmNew()) );
         p2->insertSeparator();
-        p2->insertItem( "&Calculate", this, SLOT(CmCalc()), Key_F9 );
+        p2->insertItem( "D&isplay", this, SLOT(CmShow()), Key_F6 );
+        p2->insertItem( "&Remake", this, SLOT(CmDerive()) );
+        p2->insertItem( "Calculat&e", this, SLOT(CmCalc()), Key_F9 );
         p2->insertSeparator();
         p2->insertItem( "&Save", this, SLOT(CmSave()) );
         p2->insertItem( "Save &As...", this, SLOT(CmSaveAs()) );
         p2->insertItem( "&Delete", this, SLOT(CmDelete()) );
         p2->insertSeparator();
-        p2->insertItem( "&Plot", this, SLOT(CmPlot()) );
+        p2->insertItem( "Plo&t", this, SLOT(CmPlot()) );
         p2->insertItem( "&Print", this, SLOT(CmPrint()) );
         p2->insertSeparator();
         p2->insertItem( "C&lose", this, SLOT(CloseWin()), CTRL + Key_F4 );
@@ -188,18 +189,21 @@ TCModuleImp::LoadGeneralMenu()
         p2->insertItem( "&Move", this, SLOT(CmTransferList()) );
         p2->insertItem( "&Delete", this, SLOT(CmDeleteList()) );
         p2->insertSeparator();
-        p2->insertItem( "&List", this, SLOT(CmKeysToTXT()) );
+        p2->insertItem( "&List...", this, SLOT(CmKeysToTXT()) );
+        p2->insertItem( "&Backup...", this, SLOT(CmBackup()) );
+        p2->insertItem( "&Restore...", this, SLOT(CmRestore()) );
+        p2->insertSeparator();
         p2->insertItem( "&Export...", this, SLOT(CmExport()) );
         p2->insertItem( "&Import...", this, SLOT(CmImport()) );
         menuBar()->insertItem( "Record &List", p2 );
     }
     {
         QPopupMenu* p2 = new QPopupMenu;
-        p2->insertItem( "&Actualize files", this, SLOT(CmReOpenFileList()) );
-        p2->insertItem( "&Link file", this, SLOT(CmAddOpenFile()) );
-        p2->insertItem( "A&dd files", this, SLOT(CmAddFileToList()) );
+        p2->insertItem( "&Actualize files...", this, SLOT(CmReOpenFileList()) );
+        p2->insertItem( "&Link files...", this, SLOT(CmAddOpenFile()) );
+        p2->insertItem( "A&dd file...", this, SLOT(CmAddFileToList()) );
         p2->insertSeparator();
-        p2->insertItem( "&Rebuild index", this, SLOT(CmRebildFile()) );
+        p2->insertItem( "&Compress...", this, SLOT(CmRebildFile()) );
         menuBar()->insertItem( "&Files", p2 );
     }
     {
@@ -229,8 +233,8 @@ TCModuleImp::LoadGeneralMenu()
                      this, SLOT(CmFilter()), toolBar, "filter" );
 
     imgFile = imgDir + "fileopen.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Show", 0,
-                     this, SLOT(CmShow()), toolBar, "show" );
+    new QToolButton( QPixmap(imgFile.c_str()), "Display", 0,
+                     this, SLOT(CmShow()), toolBar, "display" );
 
     toolBar->addSeparator();
 
@@ -275,20 +279,21 @@ TCModuleImp::LoadProfileMenu()
 
     {
         QPopupMenu* p2 = new QPopupMenu;
-        p2->insertItem( "&Load", this, SLOT(CmLoadinProfile()), Key_F6 );
-        p2->insertItem( "Cr&eate", this, SLOT(CmNewinProfile()) );
-        p2->insertItem( "&Remake", this, SLOT(CmDerive()) );
+        p2->insertItem( "&Create", this, SLOT(CmCreateinProfile()) );
+        p2->insertItem( "&New(Clone)", this, SLOT(CmNewinProfile()) );
         p2->insertSeparator();
-        p2->insertItem( "&Calculate", this, SLOT(CmCalc()), Key_F9 );
+        p2->insertItem( "D&isplay", this, SLOT(CmLoadinProfile()), Key_F6 );
+        p2->insertItem( "&Remake", this, SLOT(CmDerive()) );
+        p2->insertItem( "Calculat&e", this, SLOT(CmCalc()), Key_F9 );
         p2->insertSeparator();
         p2->insertItem( "&Save", this, SLOT(CmSave()) );
         p2->insertItem( "Save &As...", this, SLOT(CmSaveAs()));
         p2->insertItem( "&Delete", this, SLOT(CmDelete()) );
         p2->insertSeparator();
-        p2->insertItem( "&Plot", this, SLOT(CmPlot()) );
-        p2->insertItem( "Pr&int", this, SLOT(CmPrint()) );
+        p2->insertItem( "Plo&t", this, SLOT(CmPlot()) );
+        p2->insertItem( "&Print", this, SLOT(CmPrint()) );
         p2->insertSeparator();
-        p2->insertItem( "Close", this, SLOT(CloseWin()), CTRL + Key_F4 );
+        p2->insertItem( "C&lose", this, SLOT(CloseWin()), CTRL + Key_F4 );
         menuBar()->insertItem( "&Record", p2 );
     }
 
@@ -321,8 +326,8 @@ TCModuleImp::LoadProfileMenu()
                      this, SLOT(CmFilter()), toolBar, "filter" );
 
     imgFile = imgDir + "fileopen.png";
-    new QToolButton( QPixmap(imgFile.c_str()), "Show", 0,
-                     this, SLOT(CmLoadinProfile()), toolBar, "show" );
+    new QToolButton( QPixmap(imgFile.c_str()), "Display", 0,
+                     this, SLOT(CmLoadinProfile()), toolBar, "display" );
 
     toolBar->addSeparator();
 
@@ -416,6 +421,7 @@ TCM_EV_COMMAND(CM_TRANSFERLIST, CmTransferList);
 TCM_EV_COMMAND(CM_RECSAVEAS, CmSaveAs);
 TCM_EV_COMMAND(CM_RECDELETE, CmDelete);
 TCM_EV_COMMAND(CM_RECNEW, CmNew);
+TCM_EV_COMMAND(CM_RECCREATE, CmCreate);
 TCM_EV_COMMAND(CM_RECCALC, CmCalc);
 TCM_EV_COMMAND(CM_RECPLOT, CmPlot);
 
@@ -424,10 +430,13 @@ TCM_EV_COMMAND(CM_RECDERIVE, CmDerive);
 // TCM_EV_COMMAND(CM_RECSHOW, CmShow);
 TCM_EV_COMMAND(CM_IMPORT, CmImport);
 TCM_EV_COMMAND(CM_EXPORT, CmExport);
+TCM_EV_COMMAND(CM_IMPORT2, CmBackup);
+TCM_EV_COMMAND(CM_EXPORT2, CmRestore);
 TCM_EV_COMMAND(CM_PRINT, CmPrint);
 
 TCM_EV_COMMAND(CM_11, CmLoadinProfile);
 TCM_EV_COMMAND(CM_12, CmNewinProfile);
+TCM_EV_COMMAND(CM_121, CmCreateinProfile);
 
 TCM_EV_COMMAND(CM_PRINT, CmHelp);
 // TCM_EV_COMMAND(CM_PRINT, CmHelpMenuItem);

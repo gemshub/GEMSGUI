@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'DBDialog.ui'
 **
-** Created: Втр Лют 5 12:33:36 2002
+** Created: Do 28. Feb 13:33:26 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -148,7 +148,7 @@ DBDialogData::DBDialogData( QWidget* parent,  const char* name, WFlags fl )
 
     Line1 = new QFrame( this, "Line1" );
     Line1->setGeometry( QRect( 10, 360, 410, 20 ) ); 
-    Line1->setFrameShape( QFrame::HLine );
+    Line1->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     // signals and slots connections
     connect( PushButton3, SIGNAL( clicked() ), this, SLOT( CmBack() ) );

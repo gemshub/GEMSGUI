@@ -340,7 +340,7 @@ void TDComp::RecInput( const char *key )
 // Remake or create DCOMP record structure
 //
 int
-TDComp::RecBuild( const char *key )
+TDComp::RecBuild( const char *key, int mode  )
 {
     int CM, CE, CV;
     //  int q=0;
@@ -363,7 +363,7 @@ TDComp::RecBuild( const char *key )
         Error( GetName(), "Invalid character in record key!");
     }
 AGAIN:
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         return ret;
 

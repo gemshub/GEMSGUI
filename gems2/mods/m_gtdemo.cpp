@@ -405,7 +405,7 @@ AGAINRC:    //get  keypart
 
 //Rebild record structure before calc
 int
-TGtDemo::RecBuild( const char *key )
+TGtDemo::RecBuild( const char *key, int mode  )
 {
     TProfil *aPa=TProfil::pm;
     vstr tbuf(100);
@@ -425,7 +425,7 @@ AGAIN:
     gd_ps_set();
     if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
         Error( GetName(), "Do it in Profile mode!" );
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode );
 
 //    gd_ps_set();
     if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )

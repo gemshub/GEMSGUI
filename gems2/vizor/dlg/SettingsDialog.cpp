@@ -26,6 +26,8 @@ const char *GEMS_SETUP_HTML = "gemsetup";
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qlabel.h>
+#include <qradiobutton.h>
+
 
 #include "SettingsDialog.h"
 
@@ -49,6 +51,15 @@ SettingsDialog::SettingsDialog (QWidget* parent)
     pNumDigits->setValue(pVisorImp->getDoubleDigits());
     pUpdateInterval->setValue(pVisorImp->updateInterval());
     pConfigAutosave->setChecked(pVisorImp->getConfigAutosave());
+
+    if( pVisor->getElemPrMode() )
+    {   rbNewPrMode->setChecked( true );
+        rbOldPrMode->setChecked( false );
+    }
+    else
+    {   rbNewPrMode->setChecked( false );
+        rbOldPrMode->setChecked( true );
+    }
 
 #ifndef __unix
     pFontRawName->setReadOnly(true);	// no meaning for Win32 (now)
@@ -82,6 +93,7 @@ SettingsDialog::CmApply()
     pVisorImp->setDoubleDigits(pNumDigits->value());
     pVisorImp->setUpdateInterval( pUpdateInterval->value() );
     pVisorImp->setConfigAutosave( pConfigAutosave->isChecked() );
+    pVisor->setElemPrMode(rbNewPrMode->isChecked());
 
     //pVisorImp->Update(true);
 }

@@ -522,13 +522,15 @@ TCModule::CmPrevious()
 // Rebuild dialog for the record structure before calc
 // To be converted into wizard form
 int
-TCModule::RecBuild( const char *key )
+TCModule::RecBuild( const char *key, int mode  )
 {
     // returns IDYES, IDNO or IDCANCEL
-    int bldType = vfQuestion3(pImp, "Reallocation of data arrays ",
+
+    int bldType = mode;
+    if( bldType == VF_UNDEF )
+       bldType = vfQuestion3(pImp, "Reallocation of data arrays ",
                               GetName()+ gstring(" : ") + key ,
                               "&Bypass", "&Remake", "&Clear all");
-//  Fixed KD 04.01.01        "&Clear all", "&Remake", "&Bypass" );
     int retType = bldType;
 
     switch( bldType )
@@ -577,7 +579,7 @@ TCModule::CmDerive()
             Error( GetName(), "Current record key is not defined!");
 
         //check_input( db->UnpackKey() );
-        RecBuild( str.c_str() );
+        RecBuild( str.c_str(), VF_REMAKE );
         SetString("Remake finished OK"
                   "It is recommended to re-calculate data");
         pVisor->Update();
@@ -652,7 +654,36 @@ TCModule::CmNew()
         ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str() );
-        RecBuild( str.c_str() );
+        RecBuild( str.c_str(), VF_REMAKE );
+        SetString("Remake of the new record finished OK"
+                  "It is recommended to re-calculate data");
+        pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        vfMessage(pImp, xcpt.title, xcpt.mess);
+    }
+}
+
+void
+TCModule::CmCreate()
+{
+    try
+    {
+        if( nRT == RT_SYSEQ || nRT == RT_PROCES ||
+                nRT == RT_PROBE  || nRT == RT_PARAM || nRT > RT_GTDEMO )
+            Error( GetName(), "Please, do it in Profile mode!");
+
+        MessageToSave();
+        gstring str = GetKeyofRecord( db->PackKey(),
+                             "Insert new key of data record", KEY_NEW);
+        if(  str.empty() )
+            return;
+        int  Rnum = db->Find( str.c_str() );
+        ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
+        str = gstring( db->UnpackKey(), 0, db->KeyLen() );
+        check_input( str.c_str() );
+        RecBuild( str.c_str(), VF_CLEARALL );
         SetString("Remake of the new record finished OK"
                   "It is recommended to re-calculate data");
         pVisor->Update();
@@ -829,7 +860,37 @@ TCModule::CmNewinProfile()
         int  Rnum = db->Find( str.c_str() );
         ErrorIf( Rnum>=0, GetName(), "This record alredy exists!");
         check_input( str.c_str(), 0 );
-        RecBuild( str.c_str() );
+        RecBuild( str.c_str(), VF_REMAKE );
+        SetString("Remake of the new record finished OK"
+                  "It is recommended to re-calculate data");
+        pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        vfMessage(pImp, xcpt.title, xcpt.mess);
+    }
+}
+
+void
+TCModule::CmCreateinProfile()
+{
+    try
+    {
+        if( nRT < RT_SYSEQ  )
+            Error( GetName(),  "Please, do it in Database mode!");
+        MessageToSave();
+        // Get record key
+        gstring str = gstring( rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0) );
+        str += ":"; //04/09/01 ????
+        for( int i=1; i<db->KeyNumFlds(); i++)
+            str += "*:";
+        str = GetKeyofRecord( str.c_str(), "Please, enter a new key", KEY_NEW );
+        if(  str.empty() )
+            return;
+        int  Rnum = db->Find( str.c_str() );
+        ErrorIf( Rnum>=0, GetName(), "This record alredy exists!");
+        check_input( str.c_str(), 0 );
+        RecBuild( str.c_str(), VF_CLEARALL );
         SetString("Remake of the new record finished OK"
                   "It is recommended to re-calculate data");
         pVisor->Update();
@@ -1059,11 +1120,7 @@ TCModule::CmKeysToTXT()
     {
         MessageToSave();
 
-        gstring str = GetKeyofRecord( 0,
-                      "Please, give a key template", KEY_TEMP );
-        if(  str.empty() )
-            return;
-        KeysToTXT( str.c_str() );
+        KeysToTXT( Filter.c_str() );
         db->SetKey( ALLKEY );
         //        SetString("Command finished OK");
         pVisor->Update(); // no objecs change, only title
@@ -1083,11 +1140,7 @@ TCModule::CmDeleteList()
     try
     {
         MessageToSave();
-        gstring str = GetKeyofRecord( 0,
-                    "Please, give a key template", KEY_TEMP );
-        if(  str.empty() )
-            return;
-        DelList( str.c_str() );
+        DelList( Filter.c_str() );
         db->SetKey( ALLKEY );
     }
     catch( TError& xcpt )
@@ -1105,11 +1158,7 @@ TCModule::CmCopyList( )
     try
     {
         MessageToSave();
-        gstring str = GetKeyofRecord( 0,
-                         "Please, give a key template", KEY_TEMP );
-        if(  str.empty() )
-            return;
-        CopyRecords( str.c_str() );
+        CopyRecordsList( Filter.c_str() );
 
          dyn_set();
          pVisor->Update();
@@ -1129,11 +1178,7 @@ TCModule::CmTransferList()
     try
     {
         MessageToSave();
-        gstring str = GetKeyofRecord( 0,
-                         "Please, give a key template", KEY_TEMP );
-        if(  str.empty() )
-            return;
-        Transfer( str.c_str() );
+        Transfer( Filter.c_str() );
         dyn_set();
         //       SetString("Command finished OK");
         pVisor->Update();
@@ -1152,11 +1197,21 @@ TCModule::CmExport()
     try
     {
         MessageToSave();
-        gstring str = GetKeyofRecord( 0,
-                    "Please, give a key template", KEY_TEMP );
-        if(  str.empty() )
-            return;
-        RecToTXT( str.c_str() );
+        pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        vfMessage(pImp, xcpt.title, xcpt.mess);
+    }
+}
+
+void
+TCModule::CmBackup()
+{
+    try
+    {
+        MessageToSave();
+        RecToTXT( Filter.c_str() );
         //  SetString("Command finished OK");
         pVisor->Update();
     }
@@ -1170,6 +1225,20 @@ TCModule::CmExport()
 
 void
 TCModule::CmImport()
+{
+    try
+    {
+        MessageToSave();
+        pVisor->Update();
+    }
+    catch( TError& xcpt )
+    {
+        vfMessage(pImp, xcpt.title, xcpt.mess);
+    }
+}
+
+void
+TCModule::CmRestore()
 {
     try
     {
@@ -1242,7 +1311,7 @@ TCModule::AddRecord(const char* key, int& fnum )
     if( file >= 0 )
       db->AddRecordToFile(key, file);
     else
-       fnum = - 2;  
+       fnum = - 2;
 }
 
 // Unloades Data Record keys to txt-file
@@ -1250,18 +1319,11 @@ TCModule::AddRecord(const char* key, int& fnum )
 void
 TCModule::KeysToTXT( const char *pattern )
 {
-    TCStringArray aKey;
-    TCIntArray anR;
-
-    int Nrec = db->GetKeyList( pattern, aKey, anR );
-    ErrorIf( Nrec<1, GetName(), "No records in the list");
-
-    TCIntArray aSel;
-    aSel = vfMultiChoice( pImp, aKey,
-          "Please, mark record keys to be listed in txt-file");
-    if( aSel.GetCount() <1 )
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark record keys to be listed in txt-file",
+       nRT, pattern );
+    if( aKey.GetCount() <1 )
         return;
-
 
     gstring s = GetName();
     gstring filename;
@@ -1270,13 +1332,13 @@ TCModule::KeysToTXT( const char *pattern )
         return;
     fstream f(filename.c_str(), ios::out);
     ErrorIf( !f.good() , GetName(), "Fileopen error");
+
     // check for errors
     f << " " << GetName() << " \'" << pattern << "\' Nrec="
-    << aSel.GetCount() << "\n";
-    for(uint i=0; i<aSel.GetCount(); i++ )
+    << aKey.GetCount() << "\n";
+    for(uint i=0; i<aKey.GetCount(); i++ )
     {
-        int  Rnum = aSel[i];
-        f << aKey[Rnum].c_str() << " : " << anR[Rnum] << "\n";
+        f << aKey[i].c_str() << "\n";
     }
     ErrorIf( !f.good() , GetName(), "Writefile error");
 }
@@ -1286,18 +1348,13 @@ TCModule::KeysToTXT( const char *pattern )
 void
 TCModule::RecToTXT( const char *pattern )
 {
-    TCStringArray aKey;
-    TCIntArray anR;
-    int ichs, Rnum;
+    int ichs;
     uint i;
 
-    int Nrec = db->GetKeyList( pattern, aKey, anR );
-    ErrorIf( Nrec<1, GetName(), "No records in the list");
-
-    TCIntArray aSel =
-        vfMultiChoice(pImp, aKey,
-         "Please, mark records to be unloaded into txt-file");
-    if( aSel.GetCount()<1 )
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark records to be unloaded into txt-file",
+       nRT, pattern );
+    if( aKey.GetCount() <1 )
         return;
 
     gstring s = GetName();
@@ -1319,15 +1376,16 @@ TCModule::RecToTXT( const char *pattern )
     default:
         return;
     }
+
     i=0;
-    while( i<aSel.GetCount() )
+    while( i<aKey.GetCount() )
     {
-        Rnum = aSel[i];
-        db->Get( anR[Rnum] );
+       int Rnum = db->Find( aKey[i].c_str() );
+       db->Get( Rnum );
         if( ichs )
         {
             pVisor->Update(); // no objecs change, only title
-            switch( vfQuestion3(pImp, aKey[Rnum], "Unload record?",
+            switch( vfQuestion3(pImp, aKey[i], "Unload record?",
                                 "&Yes", "&No", "&Unload All" ))
             {
             case VF3_3:
@@ -1339,7 +1397,7 @@ TCModule::RecToTXT( const char *pattern )
                 continue;
             }
         }
-        aObj[o_reckey].SetPtr( (void *)aKey[Rnum].c_str());
+        aObj[o_reckey].SetPtr( (void *)aKey[i].c_str());
         aObj[o_reckey].toTXT(f);
         for(int no=db->GetObjFirst(); no<db->GetObjFirst()+db->GetObjCount(); no++)
             aObj[no].toTXT(f);
@@ -1446,21 +1504,17 @@ TCModule::RecOfTXT()
 void
 TCModule::DelList( const char *pattern )
 {
-    TCStringArray aKey, delKey;
-    TCIntArray anR;
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark record keys to be deleted from database",
+       nRT, pattern );
 
-    int Nrec = db->GetKeyList( pattern, aKey, anR );
-    ErrorIf( Nrec<1, GetName(), "No records in the list");
-    TCIntArray aSel =
-        vfMultiChoice(pImp, aKey,
-                      "Please, mark record keys to be deleted from database");
-    for(uint i=0; i<aSel.GetCount(); i++ )
+    for(uint i=0; i<aKey.GetCount(); i++ )
     {
         gstring str = "Please, confirm deleting record with key: ";
-        str += aKey[aSel[i]];
+        str += aKey[i];
         if( ! vfQuestion(pImp, GetName(), str.c_str() ) )
             continue;
-        DeleteRecord( aKey[aSel[i]].c_str(), false );
+        DeleteRecord( aKey[i].c_str(), false );
     }
 }
 
@@ -1470,27 +1524,24 @@ TCModule::DelList( const char *pattern )
 void
 TCModule::Transfer( const char *pattern )
 {
-    TCStringArray aKey;
-    TCIntArray anR;
-    int Rnum, nrec = 0;
+    int nrec = 0;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
-    int Nrec = db->GetKeyList( pattern, aKey, anR );
-    ErrorIf( Nrec<1, GetName(), "No records in the list");
-    TCIntArray aSel =
-        vfMultiChoice(pImp, aKey,
-                      "Mark record keys to be moved:");
-    for(uint i=0; i<aSel.GetCount(); i++ )
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark record keys to be moved",
+       nRT, pattern );
+
+
+    for(uint i=0; i<aKey.GetCount(); i++ )
     {
-        Rnum = aSel[i];
-        nrec = db->Find( aKey[Rnum].c_str() );
-        db->Get( nrec/*anR[Rnum]*/ );
+        nrec = db->Find( aKey[i].c_str() );
+        db->Get( nrec );
         /// !!!
         int oldfile = db->fNum;
-        db->Del( nrec/*anR[Rnum]*/ );
-        AddRecord( aKey[Rnum].c_str(), fnum );
+        db->Del( nrec );
+        AddRecord( aKey[i].c_str(), fnum );
         if( fnum == -2 )
-        { db->AddRecordToFile( aKey[Rnum].c_str(), oldfile );
+        { db->AddRecordToFile( aKey[i].c_str(), oldfile );
           break;
          }
     }
@@ -1500,27 +1551,23 @@ TCModule::Transfer( const char *pattern )
 // (Sveta 15/06/01)
 
 void
-TCModule::CopyRecords( const char *pattern )
+TCModule::CopyRecordsList( const char *pattern )
 {
-    TCStringArray aKey;
-    TCIntArray anR;
-    int Rnum, nrec = 0;
+    int nrec = 0;
     int fnum= -1 ;// FileSelection dialog: implement "Ok to All"
 
-    int Nrec = db->GetKeyList( pattern, aKey, anR );
-    ErrorIf( Nrec<1, GetName(), "No records in the list");
-    TCIntArray aSel =
-        vfMultiChoice(pImp, aKey,
-                      "Mark record keys to be copied:");
-    for(uint i=0; i<aSel.GetCount(); i++ )
+    TCStringArray aKey = vfMultiKeys( pImp,
+       "Please, mark record keys to be copied",
+       nRT, pattern );
+
+    for(uint i=0; i<aKey.GetCount(); i++ )
     {
-        Rnum = aSel[i];
-        nrec = db->Find( aKey[Rnum].c_str() );
-        db->Get( nrec/*anR[Rnum]*/ );
+        nrec = db->Find( aKey[i].c_str() );
+        db->Get( nrec );
         /// !!! changing record key
-        gstring str= aKey[Rnum];
+        gstring str= aKey[i];
         str = GetKeyofRecord( str.c_str(),
-                 "Insert new record keyed ", KEY_NEW );
+                 "Insert new record keye ", KEY_NEW );
         if(  str.empty() )
             return ;
         AddRecord( str.c_str(), fnum );

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'MainDialog.ui'
 **
-** Created: Втр Лют 5 12:33:34 2002
+** Created: Do 28. Feb 13:33:25 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!

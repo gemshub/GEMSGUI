@@ -141,6 +141,12 @@ const int KEY_OLD = 1;
 const int KEY_NEW = 2;
 const int KEY_TEMP = 3;
 
+/// --- Parametres of function RecBuild()
+const int VF_UNDEF =   0;
+const int VF_BYPASS =  6;
+const int VF_REMAKE =  7;
+const int VF_CLEARALL = 2;
+
 
 /*
     TCModule class represents full-featured modules of the program
@@ -187,6 +193,8 @@ public:	// moved to public to remove 'friend' for TCModuleImp
 
     virtual void CmImport();
     virtual void CmExport();
+    virtual void CmBackup();
+    virtual void CmRestore();
 
     //--- Manipulation current record
     void CmDelete();
@@ -194,6 +202,7 @@ public:	// moved to public to remove 'friend' for TCModuleImp
     void CmShow();  //Demonstrate (show) Data Record
     void CmFilter();  // set Data Record filter
     void CmNew();
+    void CmCreate();
     void CmNext();
     void CmPrevious();
 
@@ -219,6 +228,7 @@ public:
     void CmCalc();  //Calculate or create Data Record
 
     void CmNewinProfile();
+    void CmCreateinProfile();
     void RecordLoadinProfile( const char *key=0 );
     void CmLoadinProfile();
     void CmPrint();
@@ -230,7 +240,7 @@ public:
 
     virtual void RecSave( const char *key, bool onOld= true );
     virtual void RecInput( const char *key );
-    virtual int RecBuild( const char *key );
+    virtual int RecBuild( const char *key, int mode = VF_UNDEF );
     virtual void RecCalc( const char *key );
     virtual void TryRecInp( const char *key, time_t& time, int q );
     virtual void AddRecord(const char* key);
@@ -242,7 +252,7 @@ public:
     //-- Database manipulation
     void DelList( const char *pattern );
     void Transfer( const char *pattern );
-    void CopyRecords( const char *pattern );
+    void CopyRecordsList( const char *pattern );
     void KeysToTXT( const char *pattern );
     void RecToTXT( const char *pattern );
     void RecOfTXT( );

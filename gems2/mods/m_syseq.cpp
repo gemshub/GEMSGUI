@@ -112,7 +112,7 @@ void TSysEq::keyTest( const char *key )
 
 //Rebild record structure before calc
 int
-TSysEq::RecBuild( const char *key )
+TSysEq::RecBuild( const char *key, int mode  )
 {
     if( pVisor->ProfileMode != true )
         Error( GetName(), "Illegal mode!");
@@ -123,7 +123,7 @@ TSysEq::RecBuild( const char *key )
         dyn_kill();
         set_def();
     }
-    int ret = TCModule::RecBuild( key );
+    int ret = TCModule::RecBuild( key, mode  );
     // System
     if( ret == VF_CANCEL && ssp->DM[0] && ssp->DM[1] )
         return ret;
