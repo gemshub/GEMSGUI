@@ -1748,6 +1748,8 @@ void TProfil::GammaCalc( int LinkMode  )
                        Davies03temp( jb, je, /* jpb, jdb, */ k );
                           break;
                   case SM_AQSIT:  // SIT - under construction
+                       SIT_aqac_PSI( jb, je, jpb, jdb, k );
+                          break;
                   default:
                           break;
                 }
@@ -1910,6 +1912,77 @@ END_LOOP: /* if( LinkMode == LINK_TP_MODE ) */
 // Built-in functions for activity coefficients
 //
 // aqueous electrolyte
+// SIT NEA PSI
+
+void
+TProfil::SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k )
+{
+
+    int j=0, icat=0, ian=0, ic=0, ia=0;
+    double T, A, B, a0=3.72, a0c, I, sqI, bg, bgi=0, Z2, lgGam, molt, SumSIT;
+//    float nPolicy;
+
+    I= pmp->IC;
+    if( I < pa.p.ICmin )
+        return;
+    T = pmp->Tc;
+    A = 1.82483e6 * sqrt( pmp->denW ) / pow( T*pmp->epsW, 1.5 );
+    B = 50.2916 * sqrt( pmp->denW ) / sqrt( T*pmp->epsW );
+
+    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
+    sqI = sqrt( I );
+
+    ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
+        "Error: A,B were not calculated - no values of RoW and EpsW !" );
+
+    /* Calculation of EDH equation */
+//  bgi = bg;
+    ian= -1;
+    icat = -1;
+    for( j=jb; j<je; j++ )
+    {
+// Determining index of cation or anion
+      if( pmp->EZ[j] < 0 )
+          ian++;
+      else if( pmp->EZ[j] > 0 )
+          icat++;
+      else ;
+
+      if( pmp->EZ[j] )
+      {       // Charged species : calculation of the DH part
+           Z2 = pmp->EZ[j]*pmp->EZ[j];
+           lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
+              // Calculation of SIT sums
+           SumSIT = 0.;
+           if( pmp->EZ[j] > 0 )
+           {       // this is a cation
+              for( ia=0; ia<pmp->sitNan; ia++ )
+                 SumSIT += pmp->sitE[ icat*pmp->sitNan + ia ]
+                        * I * pmp->Y_m[pmp->sitXan[ia]];
+              lgGam += SumSIT;
+           }
+           else {  // this is an anion
+              for( ic=0; ic<pmp->sitNcat; ic++ )
+                 SumSIT += pmp->sitE[ ic*pmp->sitNan + ian ]
+                        * I * pmp->Y_m[pmp->sitXcat[ic]];
+              lgGam += SumSIT;
+           }
+      }
+      else
+      { // Neutral species */
+         if( pmp->DCC[j] != DC_AQ_SOLVENT ) // common salt-out coefficient ??
+               lgGam = bgi * I;
+            else /* water-solvent - a0 - osmotic coefficient */
+               lgGam = 0.;
+      }
+      pmp->lnGam[j] = lgGam * lg_to_ln;
+    } /* j */
+    if( ++icat != pmp->sitNcat || ++ian != pmp->sitNan )
+       Error( "SITgamma",
+          "Inconsistent numbers of cations and anions in gamma calculation" );
+
+}
+//------------------------------------
 //  EDH with common ion-size parameter
 //
 void

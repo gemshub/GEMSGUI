@@ -225,6 +225,7 @@ protected:
                             short car_l[], int car_c, short Cjs );
     void ConvertDCC();
     double Cj_init_calc( double g0, int j, int k );
+float *PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA );
     void sm_text_analyze( int nph, int Type, int JB, int JE, int jb, int je );
     gstring PressSolMod( int nP );
     char *ExtractEG( char *Etext, int jp, int *EGlen, int Nes );
@@ -272,6 +273,7 @@ protected:
     void DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k );
     void DebyeHueckel1LL( int jb, int je, /* int jpb, int jdb, */ int k );
     void Davies03temp( int jb, int je, /* int jpb, int jdb, */ int k );
+void SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k );
 // fluid mixtures
     void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
 // condensed mixtures

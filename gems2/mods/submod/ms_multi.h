@@ -255,18 +255,12 @@ Lads,     	// Lads - number of DC in sorption phases
     *PHC,   // Classifier of phases { a g p m l x d h } 0:FI-1
     (*SCM)[MST], //classifier of adsorption models for sur types [FIs][FIat]
 *SATT,  /* classifier of methods of SAT calculation [0:Lads] */
-    *DCCW;  // reserved                0:L-1
-    // codes see in file S_CLASS.H
-
-    /* add functions to calc sum potentuals *
-    double (*GX)(double LM, int q );    * calc G(X) *
-    double (*LMD)(double LM, int q );   * calc delta *
-    double (*HX)(double Par, int q );     *  *
-    double (*UX)(double Par, int q );     *  *
-    double (*SX)(double Par, int q );     *  *
-    double (*VX)(double Par, int q );     *  *
-    double (*CpX)(double Par, int q );    *  *
-    double (*CvX)(double Par, int q );    *  */
+    *DCCW;  // reserved 0:L-1 codes see in file S_CLASS.H
+short sitNcat,  // SIT: number of cations
+      sitNan,   // SIT: number of anions 
+      *sitXcat, // SIT: indices of cations
+      *sitXan;  // SIT: indices of anions
+float *sitE;    // pointer to SIT coeff. table
 }
 MULTI;
 
