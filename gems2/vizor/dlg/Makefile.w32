@@ -21,7 +21,7 @@ DATASRC =	MainDialogData.cpp \
 		EQDialogData.cpp \
 		NewSystemDialogData.cpp \
 		ProgressDialogData.cpp \
-		ProcessDialogData.cpp \
+		ProcessWizardData.cpp \
 		ComposWizardData.cpp \
 		PhaseWizardData.cpp \
 		KeyDialogData.cpp \
@@ -45,7 +45,7 @@ DATAOBJ =       MainDialogData.obj \
 		EQDialogData.obj \
 		NewSystemDialogData.obj \
 		ProgressDialogData.obj \
-		ProcessDialogData.obj \
+		ProcessWizardData.obj \
 		ComposWizardData.obj \
 		PhaseWizardData.obj \
 		KeyDialogData.obj \
@@ -70,7 +70,7 @@ SOURCES =	MainDialog.cpp \
 		EQDialog.cpp \
 		NewSystemDialog.cpp \
 		ProgressDialog.cpp \
-		ProcessDialog.cpp \
+		ProcessWizard.cpp \
 		ComposWizard.cpp \
 		PhaseWizard.cpp \
 		KeyDialog.cpp \
@@ -97,7 +97,7 @@ OBJECTS =	MainDialog.obj \
 		EQDialog.obj \
 		NewSystemDialog.obj \
 		ProgressDialog.obj \
-		ProcessDialog.obj \
+		ProcessWizard.obj \
 		ComposWizard.obj \
 		PhaseWizard.obj \
 		KeyDialog.obj \
@@ -129,8 +129,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_NewSystemDialogData.obj \
 		..\tmp\moc_ProgressDialog.obj \
 		..\tmp\moc_ProgressDialogData.obj \
-		..\tmp\moc_ProcessDialog.obj \
-		..\tmp\moc_ProcessDialogData.obj \
+		..\tmp\moc_ProcessWizard.obj \
+		..\tmp\moc_ProcessWizardData.obj \
 		..\tmp\moc_ComposWizard.obj \
 		..\tmp\moc_ComposWizardData.obj \
 		..\tmp\moc_PhaseWizard.obj \
@@ -256,18 +256,18 @@ clean:
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProgressDialogData.cpp
 	-del moc_ProgressDialogData.cpp
 
-..\tmp\moc_ProcessDialog.obj: ProcessDialog.h
-      	$(MOC) ProcessDialog.h -o moc_ProcessDialog.cpp
+..\tmp\moc_ProcessWizard.obj: ProcessWizard.h
+      	$(MOC) ProcessWizard.h -o moc_ProcessWizard.cpp
 
-        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialog.cpp
-	-del moc_ProcessDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProcessWizard.cpp
+	-del moc_ProcessWizard.cpp
 
 
-..\tmp\moc_ProcessDialogData.obj: ProcessDialogData.h
-      	$(MOC) ProcessDialogData.h -o moc_ProcessDialogData.cpp
+..\tmp\moc_ProcessWizardData.obj: ProcessWizardData.h
+      	$(MOC) ProcessWizardData.h -o moc_ProcessWizardData.cpp
 
-        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialogData.cpp
-	-del moc_ProcessDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProcessWizardData.cpp
+	-del moc_ProcessWizardData.cpp
 
 ..\tmp\moc_ComposWizard.obj: ComposWizard.h
       	$(MOC) ComposWizard.h -o moc_ComposWizard.cpp
@@ -521,7 +521,7 @@ ProgressDialogData.cpp: ProgressDialog.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 
-ProcessDialogData.cpp: ProcessDialog.ui
+ProcessWizardData.cpp: ProcessWizard.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 

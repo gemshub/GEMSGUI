@@ -560,6 +560,7 @@ void TProfil::loadSystat( const char *key )
     syst->loadData( false );  // set def and unpack syseq to system
 
     // Test MULTY for change (if new System cfg or T, P - new)
+    pmp->pESU = 0;  //Sveta 17/02/2005
     gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
     PMtest( keyp.c_str() );
     //  if( pmp->pBAL < 2 )  // rebuild multi
@@ -594,7 +595,7 @@ void TProfil::deriveSystat()
     syst->loadData( false, ret );  // set def and unpack syseq to system
 
     // Test MULTY for change (if new System cfg or T, P - new)
-
+    pmp->pESU = 0;  //Sveta 17/02/2005
     PMtest( keyp.c_str() );
     //    if( pmp->pBAL < 2 )  // rebuild multi
     MultiRemake( keyp.c_str() );
@@ -642,6 +643,7 @@ void TProfil::newSystat( int mode )
     //  contentsChanged = true;
 
     syst->loadData( true, ret ); // set def and unpack syseq to system
+    pmp->pESU = 0;  //Sveta 17/02/2005
 
     // Test MULTY for change (if new System cfg or T, P - new)
     gstring keyp = rt[RT_SYSEQ].UnpackKey();

@@ -709,6 +709,54 @@ void TProcess::RecInput( const char *key )
     TCModule::RecInput( key );
 }
 
+/* opens window with 'Remake record' parameters
+*/
+void
+TProcess::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[24];
+    int size[6];
+
+    p_key  = db->PackKey();
+    memcpy( flgs, &pep->Istat, 24);
+    size[0] = pep->Nxi;
+    size[1] = pep->Nmc;
+    size[2] = pep->dimXY[1];
+    size[3] = pep->dimEF[0];
+    size[4] = pep->dimEF[1];
+    size[5] = pep->Nsd;
+
+    if( !vfProcessSet( window(), p_key, flgs, size ))
+         Error( p_key, "Process record configuration cancelled by the user!" );
+     //  return;   // cancel
+
+    memcpy( &pep->Istat, flgs, 24);
+    pep->Nxi = (short)size[0];
+    pep->Nsd = (short)size[5];
+    pep->Nmc = (short)size[1];
+     if( pep->Nmc == 0  )
+         pep->PvModc = S_OFF;
+     else
+         pep->PvModc = S_ON;
+     pep->dimXY[1] = (short)size[2];
+     if( pep->dimXY[1] == 0  )
+         pep->PsGR = S_OFF;
+     else
+     {    pep->PsGR = S_ON;
+          pep->dimXY[0] = pep->Nxi;
+     }
+     pep->dimEF[0] = (short)size[3];
+     pep->dimEF[1] = (short)size[4];
+     if( pep->dimEF[1] == 0 || pep->dimEF[0] == 0  )
+         pep->PvEF = S_OFF;
+     else
+         pep->PvEF = S_ON;
+
+}
+
+
 //Rebuild record structure before calc
 int
 TProcess::RecBuild( const char *key, int mode  )
@@ -719,51 +767,13 @@ TProcess::RecBuild( const char *key, int mode  )
     if( pVisor->ProfileMode != true )
         Error( GetName(), "E09PErem: Please, do it in the Project mode!" );
 
-
-   char type = '!';
-   int  sizes[6];
    int ret;
 
 AGAIN:
-   if( mode == VF_CLEARALL )
-   {
-     bool if_mt = false;
-     type  = rt[rtNum()].FldKey(9)[0];
-     ret =  mode;
-     if( !vfProcessSet( window(), key, if_mt, type, sizes ))
-        return ret;   // cancel
-     dyn_kill();
-     set_def(); // set default data or zero if necessary
-     set_type_flags( type );
-     if( if_mt )
-      pep->Istat = P_MT_MODE;
-     pep->Nxi = (short)sizes[0];
-     pep->Nsd = (short)sizes[5];
-     pep->Nmc = (short)sizes[1];
-     if( pep->Nmc == 0  )
-         pep->PvModc = S_OFF;
-     else
-         pep->PvModc = S_ON;
-     pep->dimXY[1] = (short)sizes[2];
-     if( pep->dimXY[1] == 0  )
-         pep->PsGR = S_OFF;
-     else
-     {    pep->PsGR = S_ON;
-          pep->dimXY[0] = pep->Nxi;
-     }
-     pep->dimEF[0] = (short)sizes[3];
-     pep->dimEF[1] = (short)sizes[4];
-     if( pep->dimEF[1] == 0 || pep->dimEF[0] == 0  )
-         pep->PvEF = S_OFF;
-     else
-         pep->PvEF = S_ON;
-   }
-   else
-   {
-     ret = TCModule::RecBuild( key, mode );
-     if( ret == VF_BYPASS )
-      goto SET_OK;
-   }
+   ret = TCModule::RecBuild( key, mode );
+   if( ret == VF_BYPASS )
+          goto SET_OK;
+
    if( pe_dimValid()==false  )
         goto AGAIN;
    dyn_new();

@@ -132,6 +132,7 @@ void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
             i++;
         }
 }
+
 // unpacked equstat arrays to multi (Y to pm.Y)
 void TMulti::unpackData()
 {
@@ -140,8 +141,9 @@ void TMulti::unpackData()
 
     int i, j, js, jp, is, ip;
 
-    if( pm.pESU == 2 )   /*?multi?*/
+   if( pm.pESU == 2 )   /*?multi?*/
         return;
+
     for( is=0; is<STat->stp->N; is++ )
     {
         i = STat->stp->nnf[is];
@@ -161,7 +163,7 @@ void TMulti::unpackData()
         Error( GetName(), "no such IComp in this system" );
 FOUNDI:
         pm.U[ip] = STat->stp->U[is];
-        pm.B[ip] = STat->stp->B[is];    // Added     
+        /*if( pm.pESU != 2 )*/ pm.B[ip] = STat->stp->B[is];    // Added
     }
 
     /* Inserted by DAK 15.11.98 in Mainz */
@@ -194,6 +196,7 @@ FOUND:
 //                          || pm.SATT[jp] == SAT_NCOMP ))
 //            pm.lnSAT[jp] = STat->stp->lnGam[js];  /* end insert */
     }
+
     // short
     pm.pRR1 = STat->stp->itPar;  /* Level of tinkle supressor */
     pm.FI1 = STat->stp->Fi;

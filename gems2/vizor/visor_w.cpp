@@ -51,7 +51,7 @@ using namespace std;
 #include "dlg/KeyFilter.h"
 #include "dlg/ExcludeFillDialog.h"
 #include "dlg/ProgressDialog.h"
-#include "dlg/ProcessDialog.h"
+#include "dlg/ProcessWizard.h"
 #include "dlg/ComposWizard.h"
 #include "dlg/PhaseWizard.h"
 #include "dlg/NewSystemDialog.h"
@@ -850,14 +850,13 @@ vfElements(QWidget* par, const char * prfName,
 
 bool
 vfProcessSet(QWidget* par, const char * p_key,
-            bool& mode, char& type, int size[6] )
+              char flgs[24], int size[6] )
 {
-     ProcessDialog pdlg( p_key, type, par );
+     ProcessWizard pdlg( p_key, flgs, size, par );
      if( !pdlg.exec() )
       return false;
 
-    type =  pdlg.getType();
-    mode =  pdlg.getMode();
+    pdlg.getFlags( flgs );
     pdlg.getSizes( size );
 
     return true;

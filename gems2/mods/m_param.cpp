@@ -434,17 +434,6 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    fout << "rem gemipm2k.exe " << name.c_str() <<
        ".ipm ipmfiles-bin.lst\n";
    fout.close();
-/*
-// setup before calculate
-//Setting start data before calc in calc_gems
-     gstring keyp = rt[RT_SYSEQ].UnpackKey();
-//      TProfil::pm->PMtest( keyp.c_str() );
-      if( pmp->pNP == 1 )
-      { pmp->pIPN = 0;
-        pmp->pESU = 1;
-        MultiCalcInit( keyp.c_str() );
-      }
-*/
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );
     multi->to_file( ff, path );

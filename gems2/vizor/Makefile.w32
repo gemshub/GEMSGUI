@@ -115,8 +115,8 @@ link:
 +dlg\NewSystemDialogData.obj \
 +dlg\ProgressDialog.obj \
 +dlg\ProgressDialogData.obj \
-+dlg\ProcessDialog.obj \
-+dlg\ProcessDialogData.obj \
++dlg\ProcessWizard.obj \
++dlg\ProcessWizardData.obj \
 +dlg\ComposWizard.obj \
 +dlg\ComposWizardData.obj \
 +dlg\PhaseWizard.obj \
@@ -164,8 +164,8 @@ link:
 +tmp\moc_NewSystemDialogData.obj \
 +tmp\moc_ProgressDialog.obj \
 +tmp\moc_ProgressDialogData.obj \
-+tmp\moc_ProcessDialog.obj \
-+tmp\moc_ProcessDialogData.obj \
++tmp\moc_ProcessWizard.obj \
++tmp\moc_ProcessWizardData.obj \
 +tmp\moc_ComposWizard.obj \
 +tmp\moc_ComposWizardData.obj \
 +tmp\moc_PhaseWizard.obj \

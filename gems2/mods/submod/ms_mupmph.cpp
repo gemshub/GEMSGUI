@@ -47,7 +47,9 @@ void TProfil::PMtest( const char *key )
 
     ///  pmp->pNP = -1;
     if( STat->ifCalcFlag())
-       pmp->pESU = 1;
+    { if( !pmp->pESU )
+          pmp->pESU = 1;
+    }
     else pmp->pESU = 0;
 
     if( pmp->pESU == 0 ) // no old solution

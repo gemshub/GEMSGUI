@@ -227,7 +227,6 @@
                         </property>
                         <property name="text">
                             <string>Number of lines (points) and columns  for
-
  empirical data (if sampling or plots are specified)</string>
                         </property>
                     </widget>

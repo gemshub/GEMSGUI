@@ -81,8 +81,8 @@ vfElements(QWidget* par, const char * prfName,
            elmWindowData& elm_data, setFiltersData& sf_data );
 
 bool
-vfProcessSet(QWidget* par, const char* p_key,
-            bool& mode, char& type, int size[6] );
+vfProcessSet(QWidget* par, const char * p_key,
+              char flds[24], int size[6] );
 bool
 vfComposSet(QWidget* par, const char * p_key,
             char flgs[6], int sizes[2], double& r2 );

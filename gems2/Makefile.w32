@@ -59,7 +59,7 @@ vizor\helpwindow.obj vizor\tmp\moc_visor_w.obj vizor\tmp\moc_module_w.obj \
 vizor\tmp\moc_page_w.obj vizor\page_win_w.obj vizor\graph.obj \
 vizor\tmp\moc_query_w.obj vizor\tmp\moc_page_win_w.obj vizor\tmp\moc_helpwindow.obj \
 vizor\dlg\MainDialog.obj vizor\dlg\MainDialogData.obj vizor\dlg\DBDialog.obj \
-vizor\dlg\DBDialogData.obj vizor\dlg\ProcessDialog.obj vizor\dlg\ProcessDialogData.obj \
+vizor\dlg\DBDialogData.obj vizor\dlg\ProcessWizard.obj vizor\dlg\ProcessWizardData.obj \
 vizor\dlg\ComposWizard.obj vizor\dlg\ComposWizardData.obj vizor\dlg\PhaseWizard.obj \
 vizor\dlg\PhaseWizardData.obj vizor\dlg\EQDialog.obj vizor\dlg\EQDialogData.obj \
 vizor\dlg\NewSystemDialog.obj vizor\dlg\NewSystemDialogData.obj \
@@ -75,7 +75,7 @@ vizor\dlg\GraphDialogData.obj vizor\dlg\LegendDialog.obj  vizor\dlg\LegendDialog
 vizor\dlg\ListFilesDialog.obj vizor\dlg\ListFilesDialogData.obj vizor\dlg\AutoPhaseDialog.obj \
 vizor\dlg\AutoPhaseDialogData.obj vizor\dlg\LoadMessage.obj vizor\tmp\moc_MainDialog.obj \
 vizor\tmp\moc_MainDialogData.obj vizor\tmp\moc_DBDialog.obj \
-vizor\tmp\moc_DBDialogData.obj vizor\tmp\moc_ProcessDialog.obj vizor\tmp\moc_ProcessDialogData.obj \
+vizor\tmp\moc_DBDialogData.obj vizor\tmp\moc_ProcessWizard.obj vizor\tmp\moc_ProcessWizardData.obj \
 vizor\tmp\moc_ComposWizard.obj vizor\tmp\moc_ComposWizardData.obj \
 vizor\tmp\moc_PhaseWizard.obj vizor\tmp\moc_PhaseWizardData.obj \
 vizor\tmp\moc_EQDialog.obj vizor\tmp\moc_EQDialogData.obj vizor\tmp\moc_NewSystemDialog.obj \

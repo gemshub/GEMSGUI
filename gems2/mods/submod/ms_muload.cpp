@@ -980,7 +980,7 @@ void TProfil::MultiCalcInit( const char *key )
         MultiRemake( key );
 
     // unpack SysEq record
-    if( pmp->pESU == 1 && pmp->pNP )
+    if( pmp->pESU /*== 1*/ && pmp->pNP )
     {
         multi->unpackData(); // loading data from EqstatUnpack( key );
         pmp->IC = 0.;
