@@ -37,6 +37,7 @@ const char *GEMS_SP_HTML = "gm_project";
 #include "visor.h"
 #include "v_mod.h"
 #include "service.h"
+#include "gdatastream.h"
 
 TProfil* TProfil::pm;
 

@@ -169,7 +169,7 @@ NewSystemDialog.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
 NewSystemDialog.o: ../../mods/submod/ms_multi.h ../../mods/submod/datach.h
 NewSystemDialog.o: ../../mods/submod/databr.h ../../mods/v_ipnc.h
 NewSystemDialog.o: ../../mods/submod/ms_calc.h ../../mods/m_syseq.h
-NewSystemDialog.o: ../units.h
+NewSystemDialog.o: ../units.h ../libs/gdatastream.h
 ProgressDialog.o: ../calcthread.h ../../mods/m_param.h ../../mods/v_mod.h
 ProgressDialog.o: ../kernel/v_vals.h ../libs/gstring.h ../libs/array.h
 ProgressDialog.o: ../../mods/submod/ms_rmults.h ../kernel/v_module.h
