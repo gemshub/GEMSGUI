@@ -74,15 +74,9 @@ main(int argc, char* argv[])
 
         return res;
     }
-    catch(TFatalError& err)
-    {
-        gstring s = err.title;
-        s += ": ";
-        s += err.mess;
-        QMessageBox::critical(0, "GEMS fatal error", s.c_str());
-    }
     catch(TError& err)
     {
+	cerr << "gems2: " << err.mess.c_str() << endl;
         gstring s = err.title;
         s += ": ";
         s += err.mess;
@@ -91,6 +85,7 @@ main(int argc, char* argv[])
     catch(...)
     {
         return -1;
+	cerr << "gems2: Unknown exception: program aborted" << endl;
     }
     return 0;
 }

@@ -80,47 +80,22 @@ TVisor::TVisor(int c, char *v[]):
 
     char* env_s;
 
+
 #ifdef __unix
-    env_s = getenv("GEMS_DIR");
-    if (env_s)
-    {
-        SysGEMDir = env_s;
-        if (SysGEMDir[SysGEMDir.length() - 1] != '/')
-            SysGEMDir += '/';
-    }
-    else
-    {
-#ifndef GEMS_RELEASE
-        SysGEMDir = getenv("HOME");
-        SysGEMDir += "/GEMS2test/program/";
+#ifdef __APPLE__
+	SysGEMDir = "./gems2.app/Contents/MacOS/Gems2Data/program/";
+	UserGEMDir = "./gems2.app/Contents/MacOS/Gems2Data/";
 #else
-	SysGEMDir = "/usr/share/gems2/";
-#endif //GEMS_RELEASE
-    }
-
-    env_s = getenv("GEMS_USERDIR");
-    if (env_s)
-    {
-        UserGEMDir = env_s;
-        if (UserGEMDir[UserGEMDir.length() - 1] != '/')
-            UserGEMDir += '/';
-    }
-    else
-    {
-        UserGEMDir = getenv("HOME");
-        UserGEMDir += "/GEMS2test/";
-    }
-
-
-#else // Win32 - to expand (comm.line etc.)
+        SysGEMDir = getenv("HOME");
+        SysGEMDir += "/Gems2Data/program/";
+	UserGEMDir += getenv("HOME");
+	UserGEMDir += "/Gems2Data/";
+#endif //__APPLE__
+#else //__unix
     SysGEMDir = "c:/GEMS2test/program/";
     UserGEMDir = "c:/GEMS2test/";
+#endif //__unix
 
-    // If either of two directories is located on other disk(s)
-    // or not in the root directory, then in Autoexec.bat,
-    // it must be set explicitly, for instance,
-    //   SET GEMS_SYSDIR=d:\MYGEMS\gems.sys
-    //   SET GEMS_USERDIR=d:\MYGEMS\gemsdata
 
     env_s = getenv("GEMS_SYSDIR");
     if (env_s)
@@ -138,7 +113,6 @@ TVisor::TVisor(int c, char *v[]):
             UserGEMDir += '/';
     }
 
-#endif //__unix
 
     DefDBDir = "DB.default/";
     DefProfDir = "project/";
@@ -193,7 +167,11 @@ TVisor::Setup()
 {
     bool option_d = false;
     bool option_f = false;
+#ifdef __APPLE__
+    bool option_c = true;
+#else
     bool option_c = false;
+#endif
 
     for (int ii = 1; ii < argc; ii++)	//Sveta 16/06/1999
     {
