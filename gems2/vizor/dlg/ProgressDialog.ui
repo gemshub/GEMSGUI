@@ -20,7 +20,9 @@
     </property>
     <property name="font">
         <font>
+            <family>System</family>
             <pointsize>10</pointsize>
+            <bold>1</bold>
         </font>
     </property>
     <property name="caption">
@@ -84,6 +86,7 @@
                     <font>
                         <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="frameShape">
@@ -109,6 +112,7 @@
                     <font>
                         <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="frameShape">
@@ -147,6 +151,7 @@
                     <font>
                         <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="frameShape">
@@ -172,6 +177,7 @@
                     <font>
                         <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="frameShape">
@@ -210,6 +216,7 @@
                     <font>
                         <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="frameShape">
@@ -235,6 +242,7 @@
                     <font>
                         <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="frameShape">
@@ -260,6 +268,7 @@
                     <font>
                         <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="frameShape">

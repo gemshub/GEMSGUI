@@ -29,7 +29,8 @@
     </property>
     <property name="font">
         <font>
-            <family>Arial</family>
+            <family>System</family>
+            <bold>1</bold>
         </font>
     </property>
     <property name="caption">
@@ -106,7 +107,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Arial</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -130,7 +133,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Arial</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -154,7 +159,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Arial</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -178,7 +185,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Arial</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -215,7 +224,9 @@
         </property>
         <property name="font">
             <font>
+                <family>Arial</family>
                 <pointsize>18</pointsize>
+                <bold>0</bold>
             </font>
         </property>
         <property name="text">
@@ -247,7 +258,9 @@
         </property>
         <property name="font">
             <font>
+                <family>Arial</family>
                 <pointsize>18</pointsize>
+                <bold>0</bold>
             </font>
         </property>
         <property name="text">
@@ -303,7 +316,6 @@
             <font>
                 <family>Arial Narrow</family>
                 <pointsize>16</pointsize>
-                <bold>1</bold>
                 <italic>1</italic>
             </font>
         </property>

@@ -34,7 +34,9 @@
     </property>
     <property name="font">
         <font>
+            <family>System</family>
             <pointsize>10</pointsize>
+            <bold>1</bold>
         </font>
     </property>
     <property name="caption">
@@ -114,7 +116,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -141,7 +145,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -165,7 +171,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -176,27 +184,6 @@
                 </property>
             </widget>
         </hbox>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>30</x>
-                <y>330</y>
-                <width>160</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <family>Ms Sans Serif</family>
-            </font>
-        </property>
-        <property name="text">
-            <string>Under Construction:</string>
-        </property>
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -317,7 +304,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -341,7 +330,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -365,7 +356,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -389,7 +382,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -413,7 +408,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -437,7 +434,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -485,8 +484,8 @@
         </property>
         <property name="font">
             <font>
+                <family>MS Sans Serif</family>
                 <pointsize>14</pointsize>
-                <bold>1</bold>
                 <italic>1</italic>
             </font>
         </property>
@@ -505,6 +504,26 @@
         <property name="hAlign" stdset="0">
         </property>
         <property name="wordwrap" stdset="0">
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>30</x>
+                <y>330</y>
+                <width>160</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="text">
+            <string>Under Construction:</string>
         </property>
     </widget>
 </widget>

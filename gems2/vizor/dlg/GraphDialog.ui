@@ -9,12 +9,14 @@
             <x>0</x>
             <y>0</y>
             <width>622</width>
-            <height>410</height>
+            <height>414</height>
         </rect>
     </property>
     <property name="font">
         <font>
+            <family>System</family>
             <pointsize>10</pointsize>
+            <bold>1</bold>
         </font>
     </property>
     <property name="caption">
@@ -62,6 +64,11 @@
                             <height>350</height>
                         </size>
                     </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>8</pointsize>
+                        </font>
+                    </property>
                     <property name="frameShape">
                         <enum>Box</enum>
                     </property>
@@ -101,6 +108,11 @@
                                     <height>270</height>
                                 </size>
                             </property>
+                            <property name="font">
+                                <font>
+                                    <pointsize>8</pointsize>
+                                </font>
+                            </property>
                             <property name="frameShape">
                                 <enum>Box</enum>
                             </property>
@@ -129,7 +141,9 @@
                                 </property>
                                 <property name="font">
                                     <font>
+                                        <family>MS Sans Serif</family>
                                         <pointsize>8</pointsize>
+                                        <bold>0</bold>
                                     </font>
                                 </property>
                                 <property name="text">

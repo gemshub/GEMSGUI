@@ -8,13 +8,15 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>531</width>
+            <width>559</width>
             <height>369</height>
         </rect>
     </property>
     <property name="font">
         <font>
+            <family>System</family>
             <pointsize>10</pointsize>
+            <bold>1</bold>
         </font>
     </property>
     <property name="caption">
@@ -55,92 +57,125 @@
                         <property name="title">
                             <string></string>
                         </property>
-                        <widget class="QRadioButton">
+                        <vbox>
                             <property name="name">
-                                <cstring>pselS</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>11</y>
-                                    <width>461</width>
-                                    <height>18</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>Direct change of bulk composition and/or constraints, &amp;S</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>pselG</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>49</y>
-                                    <width>461</width>
-                                    <height>18</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>Batch inverse titration sequence (pH steps etc.), &amp;G</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>pselT</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>87</y>
-                                    <width>461</width>
-                                    <height>18</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>One arbitrary inverse titration calculation, &amp;T</string>
-                            </property>
-                            <property name="checked">
-                                <bool>false</bool>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>pselP</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>163</y>
-                                    <width>461</width>
-                                    <height>18</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>T and/or P change at fixed bulk composition, &amp;P</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>pselR</cstring>
-                            </property>
-                            <property name="geometry">
-                                <rect>
-                                    <x>11</x>
-                                    <y>125</y>
-                                    <width>461</width>
-                                    <height>18</height>
-                                </rect>
-                            </property>
-                            <property name="text">
-                                <string>Sequential reactor (using phase bulk compositions), &amp;R</string>
-                            </property>
-                        </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>pselS</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Direct change of bulk composition and/or constraints, &amp;S</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer16</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>pselG</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Batch inverse titration sequence (pH steps etc.), &amp;G</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer16_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>pselT</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>One arbitrary inverse titration calculation, &amp;T</string>
+                                </property>
+                                <property name="checked">
+                                    <bool>false</bool>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer16_3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>pselR</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Sequential reactor (using phase bulk compositions), &amp;R</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer16_4</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>pselP</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>T and/or P change at fixed bulk composition, &amp;P</string>
+                                </property>
+                            </widget>
+                        </vbox>
                     </widget>
                     <widget class="QCheckBox">
                         <property name="name">
@@ -199,6 +234,7 @@
                         </property>
                         <property name="text">
                             <string>Number of lines (points) and columns  for
+
  empirical data (if sampling or plots are specified)</string>
                         </property>
                     </widget>
@@ -412,4 +448,3 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
- 

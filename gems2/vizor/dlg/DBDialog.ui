@@ -32,6 +32,13 @@
             <height>0</height>
         </size>
     </property>
+    <property name="font">
+        <font>
+            <family>System</family>
+            <pointsize>10</pointsize>
+            <bold>1</bold>
+        </font>
+    </property>
     <property name="caption">
         <string>DBDialogData</string>
     </property>
@@ -106,7 +113,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -133,7 +142,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                         <italic>1</italic>
                     </font>
                 </property>
@@ -158,7 +169,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>12</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -211,7 +224,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -235,7 +250,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -259,7 +276,9 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>MS Sans Serif</family>
                         <pointsize>14</pointsize>
+                        <bold>0</bold>
                     </font>
                 </property>
                 <property name="text">
@@ -315,7 +334,9 @@
         </property>
         <property name="font">
             <font>
+                <family>MS Sans Serif</family>
                 <pointsize>14</pointsize>
+                <bold>0</bold>
             </font>
         </property>
         <property name="text">
@@ -347,7 +368,9 @@
         </property>
         <property name="font">
             <font>
+                <family>MS Sans Serif</family>
                 <pointsize>14</pointsize>
+                <bold>0</bold>
             </font>
         </property>
         <property name="text">
@@ -371,8 +394,8 @@
         </property>
         <property name="font">
             <font>
+                <family>MS Sans Serif</family>
                 <pointsize>14</pointsize>
-                <bold>1</bold>
                 <italic>1</italic>
             </font>
         </property>
@@ -415,7 +438,9 @@
         </property>
         <property name="font">
             <font>
+                <family>MS Sans Serif</family>
                 <pointsize>14</pointsize>
+                <bold>0</bold>
             </font>
         </property>
         <property name="text">

@@ -15,12 +15,30 @@
     </property>
     <property name="font">
         <font>
+            <family>System</family>
             <pointsize>10</pointsize>
+            <bold>1</bold>
         </font>
     </property>
     <property name="caption">
         <string>Change Value to Set Cells</string>
     </property>
+    <widget class="QComboBox">
+        <property name="name">
+            <cstring>pValue</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>170</x>
+                <y>20</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>All selected cells will be set to a value that you type into this field</string>
+        </property>
+    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>TextLabel2</cstring>
@@ -41,57 +59,6 @@
             <string>Value to Set Cells</string>
         </property>
     </widget>
-    <widget class="QComboBox">
-        <property name="name">
-            <cstring>pValue</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>170</x>
-                <y>20</y>
-                <width>130</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>All selected cells will be set to a value that you type into this field</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>PushButton1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>20</x>
-                <y>228</y>
-                <width>90</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;Ok</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>PushButton1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>180</x>
-                <y>228</y>
-                <width>90</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;Cancel</string>
-        </property>
-    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>pObjectBox</cstring>
@@ -107,25 +74,6 @@
         <property name="title">
             <string>Object Cell Selection</string>
         </property>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>PushButton3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>80</x>
-                    <y>108</y>
-                    <width>190</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Select All Cells</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Press this button to select all cells in a vector or matrix object </string>
-            </property>
-        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>TextLabel1_2</cstring>
@@ -239,6 +187,79 @@
                 </rect>
             </property>
         </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>80</x>
+                    <y>110</y>
+                    <width>180</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Select All Cells</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Press this button to select all cells in a vector or matrix object </string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout6</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>30</x>
+                <y>220</y>
+                <width>250</width>
+                <height>34</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>PushButton1</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;Ok</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>51</width>
+                        <height>31</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>PushButton1_2</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+            </widget>
+        </hbox>
     </widget>
 </widget>
 <connections>
