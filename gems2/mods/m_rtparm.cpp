@@ -235,17 +235,17 @@ void TRTParm::dyn_new(int q)
 }
 
 
-//set default information
+//set default information - streamlined on Apr.1,2003 by KD
 void TRTParm::set_def( int q)
 {
     ErrorIf( rpp!=&rp[q], GetName(), "E04RTrem: Illegal access to rp in set_def().");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
     memcpy( &rp[q].What, aPa->pa.RPpdc, 10 );
-    strcpy( rp[q].name,  "`" );   // Fixed for debugging
-    strcpy( rp[q].comment, "`" );
-    strcpy( rp[q].xNames,  "xTP" );   // Fixed for debugging
-    strcpy( rp[q].yNames, "yF" );
+    strcpy( rp[q].name,  "Temperature corrections - g0 function of " );   // Fixed for debugging
+    strcpy( rp[q].comment, "Please, change the script and/or remake, if necessary" );
+    strcpy( rp[q].xNames,  "C  / bar" );   // Fixed for debugging
+    strcpy( rp[q].yNames, "kJ/mol" );
 
     rp[q].NT = aPa->pa.NT;
     rp[q].NP = aPa->pa.NP;
@@ -286,6 +286,15 @@ void TRTParm::set_def( int q)
     plot  = 0;
     rpp->sdref = 0;
     rpp->sdval = 0;
+// Added to set a default script 01.04.2003 KD
+//    rpp->Pplot = S_ON;
+    rpp->dimXY[1] = 1;
+    rpp->expr = (char *)aObj[ o_rtexpr ].Alloc(1, 2048, S_);
+    strcpy( (char *)aObj[o_rtexpr].GetPtr(),
+             " xT[jTP] =: twTC;\n yF[jTP][0] =: twG/1000;\n  " );
+    rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
+                 rpp->dimXY[1], MAXGRNAME);
+    strcpy( rpp->lNam[0], "g0 ");
 }
 
 // return true if necessary recalc
@@ -332,15 +341,17 @@ void TRTParm::RecInput( const char *key )
 int
 TRTParm::RecBuild( const char *key, int mode  )
 {
+
 AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         return ret;
     if( ret == VF3_1 )
     {
-        strncpy( rpp->name, db->FldKey(2), db->FldLen(2));
-        rpp->name[db->FldLen(2)] = '\0';
+        strncat( rpp->name, db->FldKey(2), db->FldLen(2));
+//        strcat( rpp->name, "\0";
     }
+    rpp->What = *(key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB); // Foolproof !
 
     switch( rpp->Mode )
     {
@@ -382,7 +393,7 @@ AGAIN_SETUP:
         "W08RTrem: Wrong dimensions set for the data array yF!");
         goto AGAIN_SETUP;
     }
-    rpp->What = *(key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB);
+//    rpp->What = *(key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB);
     rpp->dimXY[0] = rpp->NV;
     dyn_new();
 
