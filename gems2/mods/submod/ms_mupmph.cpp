@@ -639,7 +639,7 @@ void TProfil::multi_sys_ph()
     TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
     aPH->ods_link(0);
 
-    /* load data to phases */
+    pmp->Ls = 0;/* load data to phases */
     pmp->FIs = syp->Fis;
     pmp->FIa = 0;
     pmp->Lads = 0;   // Is this really needed?
@@ -682,12 +682,12 @@ void TProfil::multi_sys_ph()
                 pmp->LsMdc[k] = 0;
                 memset( pmp->sMod[k], ' ', 6 );
             }
-PARLOAD:
-        ;
+PARLOAD: if( k < syp->Fis )
+             pmp->Ls += pmp->L1[k];
         switch( pmp->PHC[k] )
         { // load parameters necessary
         case PH_AQUEL:
-            break;
+             break;
         case PH_GASMIX:
         case PH_PLASMA:
         case PH_FLUID:
