@@ -9,8 +9,8 @@
 # compile variables
 
 ifeq ("x$(QTDIR)","x")
-QTDIR		= /usr/local/qt
-#QTDIR		= /usr/lib/qt2
+#QTDIR		= /usr/local/qt
+QTDIR		= /usr/lib/qt3
 endif
 
 OPT_FLAGS	= -O2 -mcpu=pentium

@@ -9,8 +9,8 @@
 # compile variables
 
 ifeq ("x$(QTDIR)","x")
-#QTDIR		= /usr/lib/qt2
-QTDIR		= /usr/local/qt
+QTDIR		= /usr/lib/qt3
+#QTDIR		= /usr/local/qt
 endif
 
 OPT_FLAGS	= -O3 -mcpu=pentium -march=pentium -fexpensive-optimizations -ffast-math
@@ -33,7 +33,7 @@ LIBS		= -lqt-mt -lX11 -lXext -lXt -lm -lstdc++
 CC		= c++
 LD		= ld
 MOC		= $(QTDIR)/bin/moc
-UIC		= /usr/bin/uic
+UIC		= $(QTDIR)/bin/uic
 
 ifeq ($(RELEASE),YES)
 
