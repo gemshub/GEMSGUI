@@ -62,11 +62,11 @@ public:
     virtual void Setup();
     virtual void EvClose();
     virtual void CmHelp();
-    gstring GetString()
+/*    gstring GetString()
     {
         return state;
     }
-
+*/
 public:
     TCModuleImp* pImp;		// for visor implementation
     QWidget* window();
@@ -110,7 +110,7 @@ public:
     void Show(QWidget* parent, const char *str=0, bool viewmode=false );
 
     void Update(bool force=true);
-    const gstring& GetString() const
+    virtual const gstring& GetString()
     {
         return state;
     }

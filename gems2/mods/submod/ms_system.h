@@ -181,6 +181,8 @@ class TSyst :
 {
     RMULTS* mup;
     SYSTEM sy;
+    gstring titler;
+
 
 protected:
     void phase_data_load();
@@ -248,6 +250,13 @@ public:
     //Multi calck
     double MolWeight( int N, float *ICaw, float *Smline );
 
+    const gstring& GetString()
+    {
+     titler = rt[RT_SYSEQ].PackKey();
+     //titler += " : ";
+     //titler += TSubModule::GetString();
+     return titler;
+    }
 
 };
 

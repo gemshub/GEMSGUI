@@ -126,6 +126,7 @@ class TGtDemo : public TCModule
 
     GraphWindow *gd_gr;
     TPlotLine *plot;
+    gstring titler;
 
 protected:
     IPNCalc rpn[2];       // IPN of equats of process  -- Expr
@@ -173,6 +174,8 @@ public:
     bool SaveGraphData( GraphData* graph );
 
     void CmHelp();
+    const gstring& GetString();
+
 };
 
 #endif  // _m_gtdemo_h_

@@ -48,10 +48,11 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* name):
         Inherited( parent, name, true )
 {
     gstring titl = pVisorImp->getGEMTitle();
-            titl+= " : Single Thermodynamic System in Project";
-//            titl+=  project name  
+            titl+= " : Single Thermodynamic System in Project ";
+            titl+= gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
 
-    setCaption( titl.c_str() );
+
+    setCaption( trUtf8(titl.c_str()) );
     pDia = this;
 
     colEdit = 0;
@@ -84,6 +85,9 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* name):
     menu->setItemChecked( pStepwiseCheck, false );
 
     Update();
+    // 07/08/2002 Sveta "Create, if no any record syseq"
+    if( rt[RT_SYSEQ].RecCount() <= 0)
+        CmCreate();
 }
 
 void

@@ -171,6 +171,7 @@ class TProcess : public TCModule
     GraphWindow *gd_gr;
     TPlotLine *plot;
 
+    gstring titler;
 
 protected:
     IPNCalc rpn[2];      // IPN of process simulator equations&&graph
@@ -224,6 +225,8 @@ public:
     void CmHelp();
     bool NoSave() const
     { return ( pep->PsSY == S_OFF ); }
+
+    const gstring& GetString();
 };
 
 enum pe_statcode {

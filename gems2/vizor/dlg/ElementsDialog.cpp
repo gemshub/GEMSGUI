@@ -40,6 +40,12 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * prfName,
         prf_name ( prfName )
 {
 
+        gstring str =
+          "Selection of Independent Components into Modelling Project :  ";
+                str +=
+           gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));;
+    setCaption( trUtf8(str.c_str()) );
+
     pLogoImg->setPixmap(pVisorImp->getLogo());
 
    // build IComp list from template database

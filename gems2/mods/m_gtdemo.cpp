@@ -51,6 +51,15 @@ TGtDemo::TGtDemo( int nrt ):
     gd_gr = 0;
 }
 
+const gstring&
+TGtDemo::GetString()
+{
+    titler = gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+    titler += " : ";
+    titler += TSubModule::GetString();
+    return titler;
+}
+
 // link values to objects
 void TGtDemo::ods_link( int q)
 {

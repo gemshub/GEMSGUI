@@ -54,6 +54,16 @@ TProcess::TProcess( int nrt ):
        " Definition of a Process Simulator (batch calculation)";
 }
 
+const gstring&
+TProcess::GetString()
+{
+    titler = gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+    titler += " : ";
+    titler += TSubModule::GetString();
+    return titler;
+}
+
+
 // get key of record
 gstring
 TProcess::GetKeyofRecord( const char *oldKey, const char *strTitle,
