@@ -218,7 +218,7 @@ AGAIN:
 
       int  Rnum = rt[RT_PARAM].Find( templ_str.c_str() );
       ErrorIf( Rnum < 0, templ_str.c_str() ,
-          "Project record was not existed!");
+          "Project record does not exist!");
       rt[RT_PARAM].Get( Rnum ); // read record
       dyn_set();
       SetFN();                  // reopen files of data base
@@ -236,7 +236,7 @@ AGAIN:
 
 
     pVisor->Message( window(), "Loading Modelling Project",
-      "Opening data base files to Project", 5  );
+      "Opening database files to Project", 5  );
 
      rt[RT_PARAM].SetKey( key_str.c_str() );
 //     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
@@ -260,7 +260,7 @@ AGAIN:
        // get opens files list
        if( !GetFN( fstKeyFld.c_str() ) )
         Error( key_str.c_str(),
-           "Modelling project configuration aborted by the user!" );
+           "Project configuration aborted by the user!" );
        SetFN();
 
        if( templ_key == true  )
@@ -355,7 +355,7 @@ AGAIN:
 
       int  Rnum = rt[RT_PARAM].Find( templ_str.c_str() );
       ErrorIf( Rnum < 0, templ_str.c_str() ,
-          "Project record was not existed!");
+          "Project record does not exist!");
       rt[RT_PARAM].Get( Rnum ); // read record
       dyn_set();
       SetFN();                  // reopen files of data base
@@ -377,7 +377,7 @@ AGAIN:
      RecBuild( key_str.c_str(), VF_BYPASS );
 
    pVisor->Message( window(), "Loading Modelling Project",
-      "Opening data base files to Project", 5  );
+      "Opening database files to Project", 5  );
 
    rt[RT_PARAM].SetKey( key_str.c_str() );
 //     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));

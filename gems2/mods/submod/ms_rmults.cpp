@@ -558,8 +558,8 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     NEW_AQ_PHASE_AGAIN:
     if( changePhases || mu.PmvAq == S_ON )
     {     // modified KD 25.01.02 to implement default Davies eqn
-        switch( vfQuestion3( window(), "Project:", "Which aqueous phase model?",
-               "&Auto DHH3", "Auto &Davies", "&Select from list" ))
+        switch( vfQuestion3( window(), "Creating Project:", "Which aqueous phase model?",
+               "&Auto EDH3", "Auto &Davies", "&Select from list" ))
         {
         case VF3_1:
             emod = SM_AQDH3; mu.PmvAq = emod;
@@ -594,8 +594,8 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
 
     if( changePhases )
     {
-        switch( vfQuestion3( window(), "Project:", "Which gas phase model?",
-                             "&Default", "&Select from list", "Remove" ))
+        switch( vfQuestion3( window(), "Creating Project:", "Which gas phase model?",
+                       "&Auto Ideal", "&Select from list", "&No gas phase" ))
         {
         case VF3_1:
             mu.PmvGas = S_ON;
