@@ -988,21 +988,21 @@ double TProfil::Ej_init_calc( double, int j, int k)
                 if( pmp->MASDJ[j] < 0 )
                 {
                     Ez -= 1.0;
-                    if( pmp->DCC[j] == DC_SUR_IPAIR ) // Doubtful!
-                        F0 += Ez*pmp->XpsiB[k][ist] * pmp->FRT;
-                    else
-                        F0 += (pmp->XpsiA[k][ist]+Ez*pmp->XpsiB[k][ist])
-                              *pmp->FRT;
+ //                   if( pmp->DCC[j] == DC_SUR_IPAIR ) // Doubtful!
+ //                       F0 += Ez*pmp->XpsiB[k][ist] * pmp->FRT;
+ //                   else
+                    F0 += (pmp->XpsiA[k][ist]+Ez*pmp->XpsiB[k][ist])
+                          *pmp->FRT;
                 }
                 else
                 {
                     Ez += 1.0;
-                    if( pmp->DCC[j] == DC_SUR_IPAIR ) // Doubtful!
-                        F0 += Ez*pmp->XpsiB[k][ist] * pmp->FRT;
-                    else
-                        F0 += (Ez*pmp->XpsiB[k][ist]-pmp->XpsiA[k][ist])
-                              *pmp->FRT;
-                }		             ;
+//                    if( pmp->DCC[j] == DC_SUR_IPAIR ) // Doubtful!
+//                        F0 += Ez*pmp->XpsiB[k][ist] * pmp->FRT;
+//                    else
+                    F0 += (Ez*pmp->XpsiB[k][ist]-pmp->XpsiA[k][ist])
+                          *pmp->FRT;
+                }
             }
             else if( pmp->SCM[k][ist] == SC_MTL )
             { /* Modified TLM after Robertson, 1996 */
@@ -1337,7 +1337,7 @@ void TProfil::GammaCalc( int LinkMode  )
                         pmp->IC > pa.p.ICmin )
                 {
                     if( sMod[SPHAS_TYP] == SM_AQDH3 )
-                    DebyeHueckel3HelKarp(  jb, je, jpb, jdb, k );
+                       DebyeHueckel3HelKarp(  jb, je, jpb, jdb, k );
                     else if( sMod[SPHAS_TYP] == SM_AQDAV )
                        Davies03temp( jb, je, k );
                     /* Pitzer( q, jb, je, k ); */

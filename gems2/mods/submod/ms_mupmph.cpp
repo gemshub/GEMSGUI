@@ -888,11 +888,12 @@ void TProfil::ph_sur_param( int k, int kk )
           pmp->XCEC[k][i] = syp->Nsph[kk][i] * syp->Aalp[kk]*
                                syp->Nfsp[kk][i]*1.6606;        mkmol/g */
 
-        if( syp->PXfIEC != S_OFF && fabs(syp->XfIEC[kk][i])>1e-9 )
-        {  /* Ion-exchange capacity */
-            pmp->MASDT[k][i] = syp->XfIEC[kk][i];
-            //    pmp->MISDT[k][i] = syp->XfIEC[kk][i];     /* mkeq/g */
-            pmp->Xetaf[k][i] = syp->XfIEC[kk][i]/syp->Aalp[kk]*.09648531; /* C/m2 */
+        if( syp->PXfIEC != S_OFF )
+        {  /* Permanent surface charge density Ion-exchange capacity */
+           // XfIEC[] in mkeq/m2; Xetaf[] in C/m2
+            if( fabs(syp->XfIEC[kk][i])>1e-9 )
+                pmp->Xetaf[k][i] = syp->XfIEC[kk][i]*.09648531;
+            else pmp->Xetaf[k][i] = 0.0;
         }
         if( syp->PXcapA != S_OFF )
             pmp->XcapA[k][i] = syp->XcapA[kk][i];

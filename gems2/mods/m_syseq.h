@@ -107,7 +107,7 @@ typedef struct
     (*XcapA)[MNST],// Inner-layer capacitance density (TLM,CCM) for surface types, F/m2 [sy.Fia][6]
     (*XcapB)[MNST],// Outer-layer capacitance sensity (TLM) for surface types, F/m2[sy.Fia][6]
     (*XcapF)[MNST], // Min.total reactive species density 1/nm2 [sy.Fia][6]
-    (*XfIEC)[MNST], // Fix surf charge density or IEC mkeq/g    [sy.Fia][6]
+    (*XfIEC)[MNST], // Fix surf charge density or IEC mkeq/m2    [sy.Fia][6]
     (*Xlam)[MNST];  // Factor of discretnes IDL 0 < 1 - in PHASE  [sy.Fia][6] */
     char
     (*sdref)[V_SD_RKLEN], /* List of SDref keys to sources of data [sy.Nsd] */

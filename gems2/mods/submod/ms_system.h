@@ -168,7 +168,7 @@ typedef struct
     (*XcapA)[MNST],// Inner-layer capacitance density (TLM,CCM) for surface types, F/m2 [mu.Fis][6]
     (*XcapB)[MNST],// Outer-layer capacitance sensity (TLM) for surface types, F/m2[mu.Fis][6]
     (*XcapF)[MNST], // Min.total reactive species density 1/nm2 [mu.Fis][6]
-    (*XfIEC)[MNST], // Fix surf charge density or IEC mkeq/g    [mu.Fis][6]
+    (*XfIEC)[MNST], // Fix surf charge density or IEC mkeq/m2    [mu.Fis][6]
     (*Xlam)[MNST];  // Factor of discretnes IDL 0 < 1 - in PHASE  [mu.Fis][6] */
     char
     (*SCMT)[MNST]; /* Classifier of EDL models for surface types [mu.Fis][NsTm] */

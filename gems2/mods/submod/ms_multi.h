@@ -154,7 +154,7 @@ typedef struct
     (*XpsiB)[MST], /* Galvani potential at B EDL plane,V    [FIs][FIat] */
     (*XpsiD)[MST], /* Galvani potential at diffuse plane,V  [FIs][FIat] */
     (*XlamA)[MST], /* Factor of EDL discretness  A < 1      [FIs][FIat] */
-    (*Xetaf)[MST], /* Fixed charge density at carrier facet C/m2 [FIs][FIat] */
+    (*Xetaf)[MST], /* Fixed charge density at surface type, C/m2 [FIs][FIat] */
     *XFs,  // Current quantities of phases X_a at IPM iterations [0:FI-1]
     *Falps, // Current Karpov criteria of phase stability  F_a [0:FI-1]
     *Fug,   // Partial fugacities of gases [0:PG-1]
