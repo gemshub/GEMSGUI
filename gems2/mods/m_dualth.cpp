@@ -299,8 +299,8 @@ void TDualTh::dyn_kill(int q)
     dtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_dtsdval ].Free();
     dtp->nam_b = (char (*)[MAXIDNAME])aObj[ o_dtnam_b ].Free();
     dtp->nam_n = (char (*)[MAXIDNAME])aObj[ o_dtnam_n ].Free();
-    aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
-    aObj[ o_dtnam_nr].SetDim( 1, 0 );
+    //aObj[ o_dtnam_nr].SetPtr(dtp->nam_n);
+    //aObj[ o_dtnam_nr].SetDim( 1, 0 );
     dtp->for_n = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_n ].Free();
     dtp->for_b = (char (*)[MAXFORMUNIT])aObj[ o_dtfor_b ].Free();
     dtp->stld = (char (*)[EQ_RKLEN])aObj[ o_dtstl ].Free();

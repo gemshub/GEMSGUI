@@ -111,7 +111,43 @@ void TDualTh::dt_initiate( bool mode )
 
   if( mode )
   {
+    int ii;
+    vstr tbuf(100);
+
     dtp->gStat = UNSP_GS_INDEF;
+
+    dtp->Msysb = 0.;
+    dtp->Vsysb = 0.;
+    dtp->Mwatb = 1.;
+    dtp->Maqb = 1.;
+    dtp->Vaqb = 1.;
+
+    for( ii=0; ii<dtp->Nb; ii++)
+    {
+     dtp->CIclb[ii] = 'g';
+     dtp->CIcln[ii] = 'g';
+    }
+
+    for( ii=0; ii<dtp->nQ; ii++)
+    {
+     sprintf( tbuf, "Experiment%d", ii );
+     strncpy( dtp->nam_b[ii], tbuf, MAXIDNAME );
+    }
+
+    for( ii=0; ii<dtp->nK; ii++)
+    {
+     dtp->typ_n[ii] = 'I';
+     dtp->AUcln[ii] = 'M';
+     strncpy( dtp->for_n[ii], "H2O", 4 );
+     sprintf( tbuf, "Endmember%d", ii );
+     strncpy( dtp->nam_n[ii], tbuf, MAXIDNAME );
+    }
+
+    for( ii=0; ii<dtp->La_b; ii++)
+    {
+     dtp->AUclb[ii] = 'g';
+     strncpy( dtp->for_b[ii], "H2O", 4 );
+    }
   }
 }
 
