@@ -888,14 +888,14 @@ void NewSystemDialog::CmEdit( QListViewItem *it,
 {
   if( it == 0 || col < 3  )
     return;
-    
+
   QString data = it->text( col );
   if( data.isEmpty() )
     return;
-    
+
   if( colEdit==0 )
     colEdit = new MLineEdit(ListView1/*this*/);
-    
+
   QRect rec = ListView1->itemRect( it );
 /*
   rec.setLeft( rec.left()+ ListView1->header()->sectionPos(col )+
@@ -1202,6 +1202,7 @@ void MLineEdit::getData()
     vstr sv(20);
     if( sscanf(ss.c_str(), "%lg%s", &dd, sv.p ) != 1 )
          vfMessage(topLevelWidget(), ss.c_str(), "Sorry! Wrong value typed!" );
+//    setText(it->text( col ));
     else
       it->setText( col, ss.c_str() );
    }
@@ -1217,7 +1218,7 @@ void MLineEdit::getData()
 //    Vals = aUnits[type].getVals(0);
     size_t ind1 = Vals.find(ss);
     if( ind1 == gstring::npos )
-      vfMessage(topLevelWidget(), ss.c_str(), "Sorry! Wrong value typed!" );
+     vfMessage(topLevelWidget(), ss.c_str(), "Sorry! Wrong value typed!" );
     else
       it->setText( col, ss.c_str() );
    }

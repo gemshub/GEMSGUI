@@ -22,21 +22,21 @@ INCLUDES        = $(INC_LOCAL)
 FLAGS   = $(CCFLAGS) $(DEBUG_FLAGS)
 
 SOURCES         = ..\..\vizor\libs\gstring.cpp main.cpp \
-	..\submod\ms_mueqexp.cpp ..\submod\ms_param.cpp \
+	..\submod\ms_mueqexp.cpp ms_param.cpp \
      	..\submod\ipm_sel_bc.cpp ..\submod\ipm_gamma.cpp \
 	..\submod\ipm_fia_bc.cpp ..\submod\ms_multi_file.cpp
 
-#OBJECTS =  ..\..\vizor\libs\gstring.obj main.obj ..\submod\ms_mueqexp.obj ms_param.obj\
-#     ..\submod\ipm_sel_bc.obj ..\submod\ipm_gamma.obj ..\submod\ipm_fia_bc.obj ..\submod\ms_multi_file.obj
-OBJECTS =  gstring.obj main.obj ms_mueqexp.obj ms_param.obj\
-     ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj ms_multi_file.obj
+OBJECTS =  ..\..\vizor\libs\gstring.obj main.obj ..\submod\ms_mueqexp.obj ms_param.obj\
+     ..\submod\ipm_sel_bc.obj ..\submod\ipm_gamma.obj ..\submod\ipm_fia_bc.obj ..\submod\ms_multi_file.obj
+#OBJECTS =  gstring.obj main.obj ms_mueqexp.obj ms_param.obj\
+#     ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj ms_multi_file.obj
 
 TARGET		= gemipm2.exe
 
 all:            $(OBJECTS) link
 
-link: 
-     ilink32 -v -c -x -Gn -aa -Tpe -L$(BCB)\lib $(OBJECTS)\
+link:
+     ilink32 -v -c -x -Gn -ap -Tpe c0x32.obj -L$(BCB)\lib $(OBJECTS)\
                  , $(TARGET),  , $(NOQTLIBS)
 
 

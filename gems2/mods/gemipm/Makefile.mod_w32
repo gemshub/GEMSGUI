@@ -4,7 +4,7 @@
 # For Borland C++ Builder 5 (bcc32 5.5.1)
 
 !if !$d(BCB)
-BCB = $(MAKEDIR)\..
+ BCB = $(MAKEDIR)\..
 !endif
 
 MAKE = make -f Makefile.w32
@@ -17,7 +17,8 @@ MAKE = make -f Makefile.w32
 RELEASE_FLAGS   = -DGEMS_RELEASE
 DEBUG_FLAGS     = -v -y
 PROF_FLAGS      =
-CCFLAGS         = -w -D__bcc -DIPMGEMPLUGIN
+CCFLAGS         =  -tWC -tWM -Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -D__bcc -DIPMGEMPLUGIN
+#CCFLAGS         = -w -D__bcc -DIPMGEMPLUGIN
 LDFLAGS         =
 
 
