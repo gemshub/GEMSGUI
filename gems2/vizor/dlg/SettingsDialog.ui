@@ -1,500 +1,442 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>SettingsDialogData</class>
 <comment>Dialog for configuring base GEMS parameters</comment>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>SettingsDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>590</width>
-            <height>281</height>
+            <width>580</width>
+            <height>310</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>minimumSize</name>
+    <property name="minimumSize">
         <size>
-            <width>590</width>
-            <height>280</height>
+            <width>580</width>
+            <height>310</height>
         </size>
     </property>
-    <property stdset="1">
-        <name>font</name>
+    <property name="font">
         <font>
             <family>Lucida Sans Unicode</family>
             <pointsize>9</pointsize>
         </font>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Set GEM-Selektor preferences</string>
     </property>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Layout5</cstring>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout4</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>10</y>
-                <width>570</width>
-                <height>37</height>
+                <width>550</width>
+                <height>60</height>
             </rect>
         </property>
-        <hbox>
-            <property stdset="1">
-                <name>margin</name>
+        <grid>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>6</number>
             </property>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel1_3</cstring>
+            <widget class="QLabel" row="0" column="1">
+                <property name="name">
+                    <cstring>pSysDBDir</cstring>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Font</string>
+                <property name="frameShape">
+                    <enum>Box</enum>
                 </property>
-            </widget>
-            <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pFontRawName</cstring>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
                 </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Currently applied font for data screen forms</string>
+                <property name="text">
+                    <string>TextLabel1</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pButtonChFont</cstring>
+            <widget class="QLabel" row="0" column="0">
+                <property name="name">
+                    <cstring>TextLabel2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>C&amp;hange font...</string>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Here you can change font for the data screen forms</string>
+                <property name="text">
+                    <string> Core database directory</string>
                 </property>
             </widget>
-        </hbox>
+            <widget class="QLabel" row="1" column="0">
+                <property name="name">
+                    <cstring>TextLabel2_2</cstring>
+                </property>
+                <property name="text">
+                    <string> User's profile directory</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="1" column="1">
+                <property name="name">
+                    <cstring>pUserDBDir</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>Box</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="text">
+                    <string>TextLabel1</string>
+                </property>
+            </widget>
+        </grid>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Layout28</cstring>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>ButtonGroup1</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
-                <y>230</y>
+                <y>90</y>
+                <width>310</width>
+                <height>101</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Creating/Upgrading System Profiles</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>rbNewPrMode</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>290</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Make an independent profile   </string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Switch on to select elements and copy all related data from default database into new profile</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>rbOldPrMode</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>50</y>
+                    <width>290</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Link default database files to profile</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Switch on to select files from default database and link them to form a new profile</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>330</x>
+                <y>90</y>
+                <width>240</width>
+                <height>101</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Displaying Data</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>131</x>
+                    <y>50</y>
+                    <width>100</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>in 1/10 sec</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring></cstring>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>50</y>
+                    <width>70</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Update</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>20</y>
+                    <width>50</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Show</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>pUpdateInterval</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>71</x>
+                    <y>50</y>
+                    <width>50</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="minValue">
+                <number>0</number>
+            </property>
+            <property name="lineStep">
+                <number>2</number>
+            </property>
+            <property name="value">
+                <number>10</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Interval (in centiseconds) for updating the dialogs and screen forms during GEM IPM calculations</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>pNumDigits</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>71</x>
+                    <y>20</y>
+                    <width>50</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="maxValue">
+                <number>20</number>
+            </property>
+            <property name="value">
+                <number>7</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Number of decimal digits shown in screenform cells for the real floating-point numbers</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>131</x>
+                    <y>20</y>
+                    <width>100</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>digits in 'real'</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring></cstring>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>200</y>
                 <width>560</width>
                 <height>37</height>
             </rect>
         </property>
         <hbox>
-            <property stdset="1">
-                <name>margin</name>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
                 <number>0</number>
             </property>
-            <property stdset="1">
-                <name>spacing</name>
+            <property name="spacing">
                 <number>6</number>
             </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_3</cstring>
+                </property>
+                <property name="text">
+                    <string>Font</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>pFontRawName</cstring>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Currently applied font for data screen forms</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pButtonChFont</cstring>
+                </property>
+                <property name="text">
+                    <string>C&amp;hange font...</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Here you can change font for the data screen forms</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout28</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>250</y>
+                <width>560</width>
+                <height>37</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pButtonOK</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Ok</string>
                 </property>
-                <property stdset="1">
-                    <name>default</name>
+                <property name="default">
                     <bool>true</bool>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pButtonApply</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Apply</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pButtonHelp</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Help</string>
                 </property>
             </widget>
             <spacer>
-                <property>
-                    <name>name</name>
+                <property name="name" stdset="0">
                     <cstring>Spacer1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>orientation</name>
+                <property name="orientation">
                     <enum>Horizontal</enum>
                 </property>
-                <property stdset="1">
-                    <name>sizeType</name>
+                <property name="sizeType">
                     <enum>Expanding</enum>
                 </property>
-                <property>
-                    <name>sizeHint</name>
+                <property name="sizeHint">
                     <size>
                         <width>20</width>
                         <height>20</height>
                     </size>
                 </property>
             </spacer>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>pButtonCancel</cstring>
                 </property>
-                <property stdset="1">
-                    <name>font</name>
+                <property name="font">
                     <font>
                         <pointsize>10</pointsize>
                     </font>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&amp;Cancel</string>
                 </property>
             </widget>
         </hbox>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>vbox1</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>60</y>
-                <width>568</width>
-                <height>80</height>
-            </rect>
-        </property>
-        <grid>
-            <property stdset="1">
-                <name>margin</name>
-                <number>0</number>
-            </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
-            </property>
-            <widget row="0"  column="2" >
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pButtonBrwDB</cstring>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Browse ...</string>
-                </property>
-                <property stdset="1">
-                    <name>default</name>
-                    <bool>false</bool>
-                </property>
-            </widget>
-            <widget row="1"  column="1" >
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pUserDBDir</cstring>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>0</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>minimumSize</name>
-                    <size>
-                        <width>250</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Path to the directory in which the user keeps the model application profiles</string>
-                </property>
-            </widget>
-            <widget row="0"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string> Core database directory</string>
-                </property>
-            </widget>
-            <widget row="1"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel2_2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string> User's profile directory</string>
-                </property>
-            </widget>
-            <widget row="1"  column="2" >
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pButtonBrwProf</cstring>
-                </property>
-                <property stdset="1">
-                    <name>font</name>
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Browse ...</string>
-                </property>
-            </widget>
-            <widget row="0"  column="1" >
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pDBDir</cstring>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>1</hsizetype>
-                        <vsizetype>0</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>minimumSize</name>
-                    <size>
-                        <width>250</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Path to the directory with configuration and core thermodynamic database files</string>
-                </property>
-            </widget>
-        </grid>
-    </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Layout5</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>11</x>
-                <y>157</y>
-                <width>219</width>
-                <height>60</height>
-            </rect>
-        </property>
-        <grid>
-            <property stdset="1">
-                <name>margin</name>
-                <number>0</number>
-            </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
-            </property>
-            <widget row="0"  column="2" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel1_4</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>digits</string>
-                </property>
-                <property>
-                    <name>buddy</name>
-                    <cstring></cstring>
-                </property>
-            </widget>
-            <widget row="1"  column="1" >
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pUpdateInterval</cstring>
-                </property>
-                <property stdset="1">
-                    <name>maxValue</name>
-                    <number>100</number>
-                </property>
-                <property stdset="1">
-                    <name>minValue</name>
-                    <number>0</number>
-                </property>
-                <property stdset="1">
-                    <name>lineStep</name>
-                    <number>2</number>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>10</number>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Interval (in centiseconds) for updating the dialogs and screen forms during GEM IPM calculations</string>
-                </property>
-            </widget>
-            <widget row="0"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel1</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Precision of 'real'</string>
-                </property>
-            </widget>
-            <widget row="1"  column="0" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel1_2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Run update interval</string>
-                </property>
-            </widget>
-            <widget row="0"  column="1" >
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>pNumDigits</cstring>
-                </property>
-                <property stdset="1">
-                    <name>maxValue</name>
-                    <number>20</number>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>7</number>
-                </property>
-                <property>
-                    <name>toolTip</name>
-                    <string>Number of decimal digits shown in screenform cells for the real floating-point numbers</string>
-                </property>
-            </widget>
-            <widget row="1"  column="2" >
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel1_2_2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>1/10 seconds</string>
-                </property>
-                <property>
-                    <name>buddy</name>
-                    <cstring></cstring>
-                </property>
-            </widget>
-        </grid>
-    </widget>
 </widget>
 <connections>
-    <connection>
-        <sender>pButtonBrwDB</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialogData</receiver>
-        <slot>CmSysDBDirSelect()</slot>
-    </connection>
-    <connection>
-        <sender>pButtonBrwProf</sender>
-        <signal>clicked()</signal>
-        <receiver>SettingsDialogData</receiver>
-        <slot>CmUserDBDirSelect()</slot>
-    </connection>
     <connection>
         <sender>pButtonOK</sender>
         <signal>clicked()</signal>
@@ -525,11 +467,6 @@
         <receiver>SettingsDialogData</receiver>
         <slot>CmChangeFont()</slot>
     </connection>
-    <slot access="protected">CmChangeFont()</slot>
-    <slot access="protected">CmSysDBDirSelect()</slot>
-    <slot access="protected">CmUserDBDirSelect()</slot>
-    <slot access="protected">CmApply()</slot>
-    <slot access="protected">CmHelp()</slot>
 </connections>
 <tabstops>
     <tabstop>pButtonApply</tabstop>
@@ -537,11 +474,15 @@
     <tabstop>pButtonCancel</tabstop>
     <tabstop>pFontRawName</tabstop>
     <tabstop>pButtonChFont</tabstop>
-    <tabstop>pButtonBrwDB</tabstop>
-    <tabstop>pUserDBDir</tabstop>
-    <tabstop>pButtonBrwProf</tabstop>
-    <tabstop>pDBDir</tabstop>
     <tabstop>pUpdateInterval</tabstop>
     <tabstop>pNumDigits</tabstop>
 </tabstops>
+<slots>
+    <slot access="protected">CmChangeFont()</slot>
+    <slot access="protected">CmSysDBDirSelect()</slot>
+    <slot access="protected">CmUserDBDirSelect()</slot>
+    <slot access="protected">CmApply()</slot>
+    <slot access="protected">CmHelp()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

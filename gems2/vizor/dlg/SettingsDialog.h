@@ -39,8 +39,8 @@ public:
 protected slots:
     void CmApply();
     void CmHelp();
-    void CmUserDBDirSelect();
-    void CmSysDBDirSelect();
+//    void CmUserDBDirSelect();
+//    void CmSysDBDirSelect();
     void CmChangeFont();
     void accept();
 };

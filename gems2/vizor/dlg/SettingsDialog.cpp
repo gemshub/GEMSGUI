@@ -22,9 +22,10 @@
 const char *GEMS_SETUP_HTML = "gemsetup";
 
 #include <qfontdialog.h>
-#include <qfiledialog.h>
-#include <qspinbox.h>
+//#include <qfiledialog.h>
 #include <qlineedit.h>
+#include <qspinbox.h>
+#include <qlabel.h>
 
 #include "SettingsDialog.h"
 
@@ -42,7 +43,7 @@ SettingsDialog::SettingsDialog (QWidget* parent)
 
     pUpdateInterval->setValue( pVisorImp->updateInterval() );
 
-    pDBDir->setText(pVisor->sysGEMDir().c_str());
+    pSysDBDir->setText(pVisor->sysGEMDir().c_str());
     pUserDBDir->setText(pVisor->userGEMDir().c_str());
     pFontRawName->setText(cellFont.rawName());
     pNumDigits->setValue(pVisorImp->getDoubleDigits());
@@ -90,7 +91,7 @@ SettingsDialog::CmHelp()
   pVisorImp->OpenHelp( GEMS_SETUP_HTML );
 }
 
-
+/*
 void
 SettingsDialog::CmSysDBDirSelect()
 {
@@ -119,7 +120,7 @@ SettingsDialog::CmUserDBDirSelect()
 	pUserDBDir->setText( "Changing DB dirs on the fly is not supported! :(");
     }
 }
-
+*/
 
 void
 SettingsDialog::CmChangeFont()
