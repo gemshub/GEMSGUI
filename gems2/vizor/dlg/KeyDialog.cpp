@@ -67,8 +67,7 @@ KeyDialog::KeyDialog(QWidget* win, int irt, const char* key,
     }
 
     pList->setMultiSelection(false);
-cerr << "selection " << sel << endl;
-    if( sel < 0 || (uint)sel > n )
+    if( sel < 0 || sel > n )
 	sel = 0;
     pList->setSelected(sel, true);
     pButton3->hide();

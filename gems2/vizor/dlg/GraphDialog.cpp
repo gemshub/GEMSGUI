@@ -55,10 +55,10 @@ class DragLabel:
 	    }
 
     protected:
-	void mousePressEvent( QMouseEvent * /*e*/ ) {
+	void mousePressEvent( QMouseEvent *e ) {
 	    QTextDrag *drag = new QTextDrag( text(), this );
-	    //drag->setPixmap(QPixmap(picture_xpm),QPoint(8,8));
-	    drag->dragCopy();
+	    drag->setPixmap(QPixmap::grabWidget(this), QPoint(0,height()-5));
+	    drag->drag();
 	}
 };
 

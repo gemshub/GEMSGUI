@@ -19,7 +19,6 @@
 //-------------------------------------------------------------------
 #include <qpainter.h>
 #include <qbrush.h>
-//#include <qfont.h>
 #include <qfontmetrics.h>
 #include <qdragobject.h>
 
@@ -201,7 +200,6 @@ TPlotWin::init()
 {
     QFontMetrics fm(font());
     int txtWidth = fm.width(title.c_str());
-//    cerr << txtWidth << " " << parentWidget()->width()-4 << endl;
     PText* txtLabel = new PText(this, 
 	    QPoint((parentWidget()->width()-4 - txtWidth)/2, 13), Qt::black, title.c_str());
     shapes.Add(txtLabel);
@@ -283,63 +281,41 @@ TPlotWin::PaintToDC(QPainter& dc, QRect DC_canvas)
 void
 TPlotWin::paintGrid(QPainter& dc)
 {
-QPoint grid;
-QPoint offset(leftGap, topGap);
-
     if( gridCount <= 0 || gridCount > 20 )
         return;
     //  dc.SetBkMode(TRANSPARENT);
 
     QRect canvas = geometry(); //this->getCanvasRect();
-//    QPoint zero;
-//    par->RealToVisible( FPoint(0,0), zero );
+    QPoint offset(leftGap, topGap);
     
     QPen pen( Qt::black, 1 );
     pen.setStyle( QPen::DotLine );
-
     dc.setPen( pen );
-    grid.setX((canvas.width()-leftGap) / gridCount);
-    grid.setY((canvas.height()-bottomGap-topGap) / gridCount);
 
-    int deltaX = (canvas.width()-leftGap) % gridCount;
-    int deltaY = (canvas.height()-bottomGap-topGap) % gridCount;
+    // need float grid interval to make it precise
+    float gridX = (float(canvas.width()-leftGap) / gridCount);
+    float gridY = (float(canvas.height()-bottomGap-topGap) / gridCount);
 
-    if( grid.x() )
-//        for( int ii=offset.x(); ii<=canvas.width() ; ii+=grid.x() )
+    if( gridX )
         for( int ii=0; ii<=gridCount ; ii++ )
         {
-	    int x_pos = offset.x() + grid.x() * ii;
-	    
-            if( deltaX > ii )
-            {
-                //ii++;
-                //deltaX--;
-		//x_pos++;
-            }
-            dc.moveTo( QPoint(x_pos, 0) );
-            dc.lineTo( QPoint(x_pos, canvas.height()) );
+	    int x_pos = (int)ROUND(offset.x() + gridX * ii);
+            dc.moveTo( x_pos, 0 );
+            dc.lineTo( x_pos, canvas.height() );
 	    QString str;
 	    str.sprintf("%.3g", x1 + (ii * (x2 - x1)) / gridCount);
-	    dc.drawText( x_pos+2, canvas.height() - 7, str);
+	    dc.drawText( x_pos + 2, canvas.height() - 7, str);
         }
 
-    if( grid.y() )
-//        for( int ii=offset.y(); ii<=canvas.height() ; ii+=grid.y() )
+    if( gridY )
         for( int ii=0; ii<=gridCount ; ii++ )
         {
-	    int y_pos = offset.y() + grid.y() * ii;
-	    
-            if( deltaY > 0 )
-            {
-//                ii++;
-//                deltaY--;
-		//y_pos++;
-            }
-            dc.moveTo( QPoint(0, y_pos) );
-            dc.lineTo( QPoint(canvas.width(), y_pos) );
+	    int y_pos = (int)ROUND(offset.y() + gridY * ii);
+            dc.moveTo( 0, y_pos );
+            dc.lineTo( canvas.width(), y_pos );
 	    QString str;
 	    str.sprintf("%.3g", y1 + ((gridCount - ii) * (y2 - y1)) / gridCount);
-	    dc.drawText( 2, y_pos-1, str);
+	    dc.drawText( 2, y_pos - 1, str);
         }
 }
 
@@ -358,8 +334,8 @@ void
 TPlotWin::dragEnterEvent(QDragEnterEvent* event)
 {
     event->accept(
-        QTextDrag::canDecode(event) ||
-        QImageDrag::canDecode(event)
+        QTextDrag::canDecode(event) 
+//       || QImageDrag::canDecode(event)
     );
 }
 

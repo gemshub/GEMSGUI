@@ -43,7 +43,6 @@ SelectDialog::SelectDialog( QWidget* parent, const char* title,
     }
 
     pList->setMultiSelection(false);
-cerr << "selection " << sel << endl;
     if( sel < 0 || (uint)sel > list.GetCount() )
 	sel = 0;
     pList->setSelected(sel, true);
