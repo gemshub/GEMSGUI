@@ -422,8 +422,8 @@ TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent, bool mo
     {
 	pHelpWidget = new HelpWindow(path.c_str(), ".", parent, modal); //0);
 	connect( pHelpWidget, SIGNAL( destroyed() ), SLOT( evHelpClosed() ) );
-	pHelpWidget->show();
-        pHelpWidget->loadFile(path.c_str(), 0);
+	//pHelpWidget->show();
+        //pHelpWidget->loadFile(path.c_str(), 0);
     }
     else
     {
@@ -979,12 +979,12 @@ void ThreadControl::wakeOne()
 
 bool ThreadControl::wait()
 {
-    pVisorImp->getWaitCalc().wait();
+    return pVisorImp->getWaitCalc().wait();
 }
 
 bool ThreadControl::wait(unsigned long time)
 {
-    pVisorImp->getWaitCalc().wait(time);
+    return pVisorImp->getWaitCalc().wait(time);
 }
 
 //--------------------- End of visor_w.cpp ---------------------------
