@@ -15,11 +15,11 @@ FLAGS   = $(CCFLAGS) $(DEBUG_FLAGS)
 
 SOURCES         = ms_rmults.cpp ms_mtparm.cpp ms_multi.cpp ms_system.cpp \
      ms_sysbc.cpp ms_mupmph.cpp ms_muload.cpp ms_muleq.cpp ms_mueqexp.cpp \
-     ipm_sel_bc.cpp ipm_gamma.cpp ipm_fia_bc.cpp
+     ipm_sel_bc.cpp ipm_gamma.cpp ipm_fia_bc.cpp ms_multi_file.cpp
 
 OBJECTS =  ms_rmults.obj ms_mtparm.obj ms_multi.obj ms_system.obj \
      ms_sysbc.obj ms_mupmph.obj ms_muload.obj ms_muleq.obj ms_mueqexp.obj \
-     ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj
+     ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj  ms_multi_file.obj
 
 all:            $(OBJECTS)
 

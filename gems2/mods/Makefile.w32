@@ -61,7 +61,7 @@ $(TARGET): subdirs_mk	$(OBJECTS)
 	+m_syst2.obj +m_probe.obj +m_probe2.obj \
 	+m_duterm.obj +m_dutx.obj +m_gtdemo.obj \
       +m_rtparm.obj +submod\ms_rmults.obj +submod\ms_mtparm.obj \
-	+submod\ms_multi.obj +submod\ms_system.obj \
+	+submod\ms_multi.obj +submod\ms_multi_file.obj +submod\ms_system.obj \
 	+submod\ms_sysbc.obj +submod\ms_mupmph.obj \
 	+submod\ms_muload.obj +submod\ms_muleq.obj +submod\ms_mueqexp.obj \
 	+submod\ipm_sel_bc.obj +submod\ipm_gamma.obj +submod\ipm_fia_bc.obj

@@ -159,6 +159,7 @@ gems2/mods/submod/ms_muleq.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_muload.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_multi.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_multi.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/submod/ms_multi_file.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_mupmph.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_rmults.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_rmults.h svn_keywords=Author+Date+Id+Revision

@@ -41,11 +41,13 @@ void TProfil::GasParcP()
         je = jb+pmp->L1[k];
         if( pmp->PHC[k] == PH_GASMIX || pmp->PHC[k] == PH_PLASMA )
         {
+#ifndef IPMGEMPLUGIN
             char (*SMbuf)[MAXDCNAME] =
                 (char (*)[MAXDCNAME])aObj[ o_w_tprn].Alloc( pmp->PG, 1, MAXDCNAME );
             memcpy(SMbuf,pmp->SM[jb], pmp->PG*MAXDCNAME*sizeof(char) );
             //     aObj[ o_w_tprn].SetPtr( pmp->SM[jb] );
             //     aObj[ o_w_tprn].SetDim( pmp->PG, 1 );
+#endif
             for( j=jb,jj=0; j<je; j++,jj++ )
             {  /* fixed 02.03.98 DAK */
                 pmp->Fug_l[jj] = -pmp->G0[j] /* + pmp->lnGam[j] */;
@@ -1063,6 +1065,8 @@ double TProfil::Ej_init_calc( double, int j, int k)
 /* Link DOD for Non-ideality Equations in GammaCalc() */
 void TProfil::pm_GC_ods_link( int k, int jb, int jpb, int jdb )
 {
+//Ask to Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
     ErrorIf( k < 0 || k >= pmp->FIs , "GammaCalc", "Illegal link: k=0||>FIs" );
     aObj[ o_nsmod].SetPtr( pmp->sMod[k] );
     aObj[ o_nncp].SetPtr( pmp->LsMod+k );
@@ -1110,6 +1114,7 @@ void TProfil::pm_GC_ods_link( int k, int jb, int jpb, int jdb )
     aObj[o_nmju].SetN( pmp->L1[k]);
     aObj[ o_nqp].SetPtr( pmp->Qp+k*20 );
     aObj[ o_nqd].SetPtr( pmp->Qd );      /* 20 cells */
+#endif
 }
 
 // Calculation of smoothing factor for high non-ideality
@@ -1170,10 +1175,19 @@ void TProfil::DebyeHueckel3HelKarp( int jb, int je, int jpb, int jdb, int k )
     B= pmp->PMc[jpb+1];
     bg=pmp->PMc[jpb+5];
     sqI = sqrt( I );
+
+//Ask to Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
     if( fabs(A) < 1e-9 )
         A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
     if( fabs(B) < 1e-9 )
         B = 50.2916 * sqrt( tpp->RoW ) / sqrt( T*tpp->EpsW );
+#else
+    if( fabs(A) < 1e-9 )
+        A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
+    if( fabs(B) < 1e-9 )
+        B = 50.2916 * sqrt( multi->RoW_ ) / sqrt( T*multi->EpsW_ );
+#endif
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel3HelKarp",
         "Error: A,B were not calculated - no values of RoW and EpsW !" );
     /* Calculation of DH equation */
@@ -1231,7 +1245,12 @@ void TProfil::Davies03temp( int jb, int je, int k )
     T=pmp->Tc;
     sqI = sqrt( I );
 //    if( fabs(A) < 1e-9 )
+//Ask to Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
     A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
+#else
+    A = 1.82483e6 * sqrt( multi->RoW_ ) / pow( T*multi->EpsW_, 1.5 );
+#endif
 //  at 25 C 1 bar: A = 0.5092
     ErrorIf( fabs(A) < 1e-9, "Davies03temp",
        "Error: A is not calculated - check values of RoW and EpsW !" );
@@ -1393,6 +1412,8 @@ void TProfil::GammaCalc( int LinkMode  )
                 && LinkMode == LINK_UX_MODE )
             goto END_LOOP; /* Ionic strength is too low for aqueous solution */
         else ICold = pmp->IC;
+//Ask to Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
         /* Link DOD and set sizes of work arrays */
         pm_GC_ods_link( k, jb, jpb, jdb );
         pmp->is=0;
@@ -1441,6 +1462,7 @@ void TProfil::GammaCalc( int LinkMode  )
         default:
             Error("GammaCalc","Illegal LinkMode 2");
         }
+#endif
 END_LOOP: /* if( LinkMode == LINK_TP_MODE ) */
         /* make lnGam with priority*/
         for( j=jb; j<je; j++ )

@@ -373,6 +373,20 @@ public:
     double pb_GX( double *Gxx  );
 
    class UserCancelException {};
+
+   //test
+   void outMulti( fstream& ff )
+   {
+      ff.write ((char*)&pa.p, sizeof(BASE_PARAM));
+      multi->to_file( ff );
+   }
+
+   void readMulti( fstream& ff )
+   {
+      ff.read ((char*)&pa.p, sizeof(BASE_PARAM));
+      multi->from_file( ff );
+   }
+
 };
 
 /* Work codes of surface site type indices in pm->AtNdx vector */

@@ -3,7 +3,7 @@
 //
 // Declaration of TMulti class, config functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -20,8 +20,17 @@
 #ifndef _ms_multi_h_
 #define _ms_multi_h_
 
+
+#ifndef IPMGEMPLUGIN
+
 #include "m_param.h"
 #include "v_ipnc.h"
+
+#else
+
+#include "m_const.h"
+
+#endif
 
 // const double LOWESTPHASE_=1e-18;
 
@@ -55,7 +64,7 @@ typedef struct
     PLIM,    // PU - flag of activation of DC/phase restrictions { 0 1 }
     Ec,    // GammaCalc() return code: 0 (OK) or 1 (error)
     K2,    // Number of Selekt2() loops
-    PZ,    // Indicator of IPM-2 precision algorithm activation 
+    PZ,    // Indicator of IPM-2 precision algorithm activation
     /* funT, sysT, */
     pNP, //Mode of FIA selection: 0-auto-SIMPLEX,1-old eqstate,-1-user's choice
     pESU,  // Unpack old eqstate from EQSTAT record?  0-no 1-yes
@@ -253,11 +262,15 @@ typedef struct
 }
 MULTI;
 
+
+#ifndef IPMGEMPLUGIN
+
 // Data of MULTI
 class TMulti :
             public TSubModule
 {
     MULTI pm;
+
     SYSTEM *syp;
     //MTPARM *tpp;
 
@@ -292,6 +305,13 @@ public:
     void loadData( bool newRec );
     void unpackData();
 
+    //mass transport
+    void to_file( fstream& ff );
+    void from_file( fstream& ff );
+//    void multi_realloc( char PAalp, char PSigm );
+//    void multi_free();
+
+
     // test
     void dyn_kill_test(MULTI& tes);
     void dyn_new_test(MULTI& tes);
@@ -301,6 +321,49 @@ public:
     MULTI copy1;
     bool flCopy;
 };
+
+#else
+
+// Data of MULTI
+class TMulti
+//:public TSubModule
+{
+   MULTI pm;
+
+   char PAalp_;
+   char PSigm_;
+
+public:
+
+   float EpsW_;
+   float RoW_;
+
+//    TIArray<IPNCalc> qEp;
+//    TIArray<IPNCalc> qEd;
+
+
+    MULTI* GetPM()
+    {
+        return &pm;
+    }
+
+    TMulti( /*int nrt, SYSTEM* sy_*/ )
+    {}
+
+    const char* GetName() const
+    {
+        return "Multi";
+    }
+
+    //mass transport
+    void to_file( fstream& ff );
+    void from_file( fstream& ff );
+    void multi_realloc( char PAalp, char PSigm );
+    void multi_free();
+
+};
+
+#endif
 
 #endif   //_ms_multi_h
 

@@ -26,7 +26,7 @@
 
 #include "service.h"
 #include "visor.h"
-//#include "visor_w.h"
+#include "visor_w.h"
 #include "stepwise.h"
 
 #endif
@@ -598,65 +598,6 @@ void TProfil::XmaxSAT_IPM2( void )
 // Don't forget to clear such pmp->DUL constraints on entering simplex IA!
 //----------------------------------------------------------------------------
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-// Load Thermodynamic Data from MTPARM to MULTI
-void TProfil::CompG0Load()
-{
-    int j, jj, k, jb, je=0;
-
-    /* pTPD state of reload t/d data 0-all, 1 G0, 2 ­do not*/
-    if( pmp->pTPD < 1 )
-    {
-        pmp->T = pmp->Tc = tpp->T + C_to_K;
-        pmp->TC = pmp->TCc = tpp->T;
-        pmp->P = pmp->Pc = tpp->P;
-        pmp->denW = tpp->RoW;
-        pmp->denWg = tpp->RoV;
-        pmp->epsW = tpp->EpsW;
-        pmp->epsWg = tpp->EpsV;
-        pmp->RT = tpp->RT; // R_CONSTANT * pm->Tc
-        pmp->FRT = F_CONSTANT/pmp->RT;
-        pmp->lnP = 0.;
-        if( tpp->P != 1. ) /* ??????? */
-            pmp->lnP = log( tpp->P );
-    }
-    if( pmp->pTPD <= 1 )
-    {
-        for( k=0; k<pmp->FI; k++ )
-        {
-            jb = je;
-            je += pmp->L1[k];
-            /*load t/d data from DC */
-            for( j=jb; j<je; j++ )
-            {
-                jj = pmp->muj[j];
-                pmp->G0[j] = Cj_init_calc( tpp->G[jj], j, k );
-            }
-        }
-    }
-    if( !pmp->pTPD )
-    {
-        for( j=0; j<pmp->L; j++ )
-        {
-            jj = pmp->muj[j];
-
-            if( tpp->PtvVm == S_ON )
-                switch( pmp->PV )
-                { /* make mol volumes of components */
-                case VOL_CONSTR:
-                    pmp->A[j*pmp->N] = tpp->Vm[jj];
-                case VOL_CALC:
-                case VOL_UNDEF:
-                    pmp->Vol[j] = tpp->Vm[jj] * 10.;  /* ?åäèíèöû? */
-                    break;
-                }
-            else pmp->Vol[j] = 0.0;
-
-            /* load ather t/d parametres - do it! */
-        }
-    }
-    pmp->pTPD = 2;
-}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // calc value of dual chemical potencial
@@ -795,10 +736,14 @@ int TProfil::Set_DC_limits( int Mode )
                     XL = pmp->DLL[j]*XFL;
                     break;
                 case CON_WTFR:
+//Ask to Dima!!! 20/04/2002
+#ifndef IPMGEMPLUGIN
                     XU = pmp->DUL[j]*XFU*MWXW /
                          syst->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );
                     XL = pmp->DLL[j]*XFL*MWXW /
                          syst->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );
+
+#endif
                     break;
                 case CON_VOLFR:
                     XU = pmp->DUL[j]*XFU*MXV/ pmp->Vol[j];
@@ -1212,117 +1157,6 @@ NEXT_PHASE:
     return(FX);
 }
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-// Calculation of full structure MULTI by expanding
-// SysEq main vectors read from the database
-//
-void TProfil::EqstatExpand( const char *key )
-{
-    int i, j, k, jb, je;
-    double FitVar3;
-
-//    if( !pmp->NR )       Sveta 30/08/01
-        pmp->NR = pmp->N;
-
-    /* Load thermodynamic data for DC, if necessary */
-    if( pmp->pTPD < 2 )
-    {
-        CompG0Load();
-        memcpy( pmp->stkey, key, EQ_RKLEN );
-        pmp->stkey[EQ_RKLEN]='\0';
-    }
-    /* Load activity coeffs for phases-solutions */
-    if( pmp->FIs )
-    {
-        for( j=0; j< pmp->Ls; j++ )
-        {
-            pmp->lnGmo[j] = pmp->lnGam[j];
-            if( fabs( pmp->lnGam[j] ) <= 84. )
-                pmp->Gamma[j] = exp( pmp->lnGam[j] );
-            else pmp->Gamma[j] = 1;
-        }
-    }
-    /* recalc kinetic restrictions for DC */
-    if( pmp->pULR && pmp->PLIM )
-        if( Set_DC_limits( DC_LIM_INIT ))
-#ifndef IPMGEMPLUGIN
-            if( !vfQuestion(window(), "IPM:",
-                            "Inconsistent metastability restrictions to DC or phases.\n"
-                            "Continue calculation (take those restrictions as trivial)?") )
-#endif
-                Error( "IPM","Inconsistent metastability restrictions." );
-    TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-    for( j=0; j<pmp->L; j++ )
-        pmp->Y[j] = pmp->X[j];
-    for( k=0; k<pmp->FI; k++ )
-    {
-        pmp->YF[k] = pmp->XF[k];
-        if( k<pmp->FIs )
-            pmp->YFA[k] = pmp->XFA[k];
-    }
-    /* set IPM weight multipliers for DC*/
-    for(j=0;j<pmp->L;j++)
-    {
-        switch( pmp->RLC[j] )
-        {
-        case NO_LIM:
-        case LOWER_LIM:
-            pmp->W[j] = pmp->Y[j]-pmp->DLL[j];
-            break;
-        case UPPER_LIM:
-            pmp->W[j] = pmp->DUL[j]-pmp->Y[j];
-            break;
-        case BOTH_LIM:
-            pmp->W[j]= ((pmp->Y[j]-pmp->DLL[j])<(pmp->DUL[j]-pmp->Y[j]))?
-                       (pmp->Y[j]-pmp->DLL[j]): (pmp->DUL[j]-pmp->Y[j]);
-            break;
-        default: /* greatest error  */ ; //break;
-            Error( "Internal error", "Wrong IPM weight factor type!" );
-        }
-        if( pmp->W[j] < 0. ) pmp->W[j]=0.;    /* !!this is know how of Mr.Chudnenko !! */
-    }
-    /* Calculate elemental chemical potentials in J/mole */
-    for( i=0; i<pmp->N; i++ )
-        pmp->U_r[i] = pmp->U[i]*pmp->RT;
-
-    ConCalc( pmp->X, pmp->XF, pmp->XFA);
-    /* Calculate mass-balance deviations (moles) */
-    MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C );
-    /* Calc Eh, pe, pH,and other stuff */
-    if( pmp->E && pmp->LO )
-        IS_EtaCalc();
-
-    FitVar3 = pmp->FitVar[3];   /* Switch off smoothing factor */
-    pmp->FitVar[3] = 1.0;
-    /* Scan phases to retrieve concentrations and activities */
-    for( k=0, je=0; k<pmp->FIs; k++ )
-    {
-        jb = je;
-        je = jb+pmp->L1[k];
-        if( pmp->PHC[k] == PH_SORPTION )
-        {
-            GouyChapman(  jb, je, k );
-            /* calculation of surface activity terms */
-            SurfaceActivityTerm(  jb, je, k );
-        }
-        for( j=jb; j<je; j++ )
-        {
-            /* calc Excess Gibbs energies F0 and values c_j */
-            pmp->F0[j] = Ej_init_calc( 0, j, k );
-            pmp->G[j] = pmp->G0[j] + pmp->F0[j];
-            /* pmp->Gamma[j] = exp( pmp->lnGam[j] ); */
-        }
-    }
-    pmp->FitVar[3]=FitVar3;
-    pmp->GX_ = pmp->FX * pmp->RT;
-    /* calc Prime DC chemical potentials defined via g0_j, Wx_j and lnGam_j */
-    PrimeChemicalPotentials( pmp->F, pmp->X, pmp->XF, pmp->XFA );
-    /*calc Karpov phase criteria */
-    f_alpha();
-    /*calc gas partial pressures  -- obsolete? */
-    GasParcP();
-    pmp->pFAG = 2;
-}
 
 //--------------------- End of ms_muexp.cpp ---------------------------
 

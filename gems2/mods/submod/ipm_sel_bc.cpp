@@ -26,7 +26,7 @@
 #ifndef IPMGEMPLUGIN
 
 #include "visor.h"
-//#include "visor_w.h"
+#include "visor_w.h"
 #include "service.h"
 #include "stepwise.h"
 
@@ -624,8 +624,10 @@ STEP_POINT();
 
 SINGULAR:
     // wn[W_EQCALC].status = 1;
+#ifndef IPMGEMPLUGIN
 #ifndef Use_mt_mode
     pVisor->Update(false);  // "Feasible Approx: error"
+#endif
 #endif
     pmp->Ec=1;
     iRet = 1;
@@ -941,8 +943,12 @@ IN6:
 
         //    if( wn[W_EQCALC].status )
         //    {
+#ifndef IPMGEMPLUGIN
+
 #ifndef Use_mt_mode
     pVisor->Update(false);
+#endif
+
 #endif
         //      if( time( &new_time ) - old_time >= (long)pa.p.DT )
         //      {
@@ -1026,8 +1032,10 @@ IN7: // PhaseListPress();
     MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
     //  if( wn[W_EQCALC].status )
     //    aSubMod[MD_EQCALC]->ModUpdate("PM_ipms   EqCalc() converged");
-#ifndef Use_mt_mode
+#ifndef IPMGEMPLUGIN
+ #ifndef Use_mt_mode
     pVisor->Update( false );
+ #endif
 #endif
     return 0;
 }
