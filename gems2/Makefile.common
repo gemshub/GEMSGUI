@@ -26,7 +26,6 @@ LDFLAGS		=
 LIBS		= -lqt-mt -lX11 -lXext -lXt -lm -lstdc++ 
 #-lefence
 #-lcwd
-#-lefence 
 
 # commands
 CC		= /usr/bin/g++

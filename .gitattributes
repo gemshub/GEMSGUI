@@ -1,4 +1,5 @@
 * text=auto !eol
+gems2/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/Makefile.common svn_keywords=Author+Date+Id+Revision
 gems2/Makefile.w32 svn_keywords=Author+Date+Id+Revision
