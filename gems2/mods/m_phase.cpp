@@ -419,8 +419,8 @@ AGAIN_SETUP:
                           break;
           case SM_AQSIT:  // SIT model in NEA variant
                           break;
-                          php->ncpN = max( 3, php->ncpN );
-                          php->ncpM = max( 2, php->ncpM );
+                          php->ncpN = max( (short)3, php->ncpN );
+                          php->ncpM = max( (short)2, php->ncpM );
                           php->nscN = php->nscM = 1;
           default:  // other models
              break;
@@ -504,25 +504,35 @@ AGAINRC:
 //    php->NR1 = aRclist.GetCount();   comm.out by KD on 25.10.2004
     iic = aDclist.GetCount();
 
-
-
-
+//-------------------------------------------------------
+    nCat = 0; nAn = 0;
 
     if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
     {  // pre-processing cycle for SIT: determining number of cations and anions
-       int nCat = 0, nAn = 0;
-       char spName[MAXDCNAME+1];
-       spName[MAXDCNAME] = 0;
 
+       int pos;
+       gstring spName;
        for( i=0; i<php->nDC; i++ )
        {
-          memcpy( spName, php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+          if( i < iic )
+            spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+         else
+            spName = gstring( aRclist[i-iic], MAXSYMB+MAXDRGROUP, MAXDCNAME);
 
+         spName.strip();
+         pos = spName.length()-1;
+         while( pos>0 && spName[pos] <=  '9' && spName[pos] >= '0' )
+             pos--;
+         switch( spName[pos] )
+         {
+           case '-': nAn++; break;
+           case '+': nCat++; break;
+           case '@':
+           default:  break;
+         }
        }
     }
-
-
-
+//---------------------------------------------------------------------
     /* insert coeff of model of solid and other data */
     if( php->nscN * php->nscM ) php->Psco = S_ON;
     else  php->Psco = S_OFF;
