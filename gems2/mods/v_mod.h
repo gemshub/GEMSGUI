@@ -320,8 +320,7 @@ enum DC_CNTRL_CODES {
     CPM_VBE  = 'V', /* calculation via V=f(T,P) as modified by (Berman,1988); */
     // CTPM_CPT
 
-    CPM_VBL  = 'B', /* the same, but with account for disordering (complete scheme
-                        by Berman, 1988) - reserved; */
+    CPM_VBM  = 'B', /* alloc. array; calculate Birch-Murnaghan (1947) V(T,P) */
     CPM_CEH  = 'E',/*DC molar volume V(T,P) is calculated from isothermal compres-
                       sibility and isobaric expandability (Holland&Powell,1990); */
     CPM_GAS  = 'G', /*calculation of fugacities of gases from their critical para-

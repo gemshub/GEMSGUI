@@ -49,8 +49,8 @@ bool TProfil::AutoInitialApprox( )
           minB = pmp->B[i];
       molB += pmp->B[i];
     }
-if( minB < pa.p.DB )  // KD - foolproof
-    minB = pa.p.DB;
+    if( minB < pa.p.DB )  // KD - foolproof
+       minB = pa.p.DB;
 
 //  check Ymin (cutoff)
    if(pmp->lowPosNum>minB*0.01)
@@ -80,10 +80,24 @@ if( minB < pa.p.DB )  // KD - foolproof
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
 //      pmp->IC = 0.0;  Important - for reproducibility of simplex FIA
         if( pa.p.PSM && pmp->FIs )
-            GammaCalc( LINK_FIA_MODE);
+            GammaCalc(LINK_FIA_MODE);
+        if( pa.p.PC == 2 )
+           XmaxSAT_IPM2_reset();  // Reset upper limits for surface species
         pmp->IT = 0;
         pmp->pNP = 0;
-        // simplex method is called here
+        pmp->K2 = 0;
+        pmp->PCI = 0;
+
+if( pa.p.PRD >= 7 )
+{                      // Dima 18/05/2002 test init load before simplex
+  if( multi->flCopy == true )
+  {
+    cout << " P. 7 with simplex: ";
+    multi->dyn__test( multi->GetPMcopy1() );
+  }
+  multi->dyn_new_test( multi->GetPMcopy1() );
+}
+  // simplex method is called here
         SimplexInitialApproximation( );
 //  STEPWISE (0) - stop point for examining results from simplex IA
 #ifndef IPMGEMPLUGIN
@@ -93,6 +107,7 @@ STEP_POINT();
         if( !pmp->FIs )
             return true; // goto OVER; // solved !
         for( i=0; i<pmp->L; i++ )
+        {
             if( pmp->Y[i] <= /* LOWESTDC_ */ pmp->lowPosNum )
                 //	       pmp->Y[i] = LOWESTDC_ / 10.;
                 //         pmp->Y[i] = pa.p.DFYaq;
@@ -134,17 +149,24 @@ STEP_POINT();
                     pmp->Y[i] =  pa.p.DFYaq;
                     break;
                 }
-
                 pmp->Y[i] *= sfactor;  // 2.5 root
-
-            } // i
+             }
+           } // i
     }
-
     else  // Taking previous result as initial approximation
     {
         int jb, je;
         double LnGam, FitVar3;
         /*    pmp->IT *= pa.p.PLLG; */
+if( pa.p.PRD >= 8 )
+{                      // Dima 18/05/2002 test init load before simplex
+  if( multi->flCopy == true )
+  {
+    cout << " Point 8: ";
+    multi->dyn__test( multi->GetPMcopy1() );
+  }
+  multi->dyn_new_test( multi->GetPMcopy1() );
+}
         FitVar3 = pmp->FitVar[3];
         pmp->FitVar[3] = 1.0;
         TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
@@ -159,10 +181,11 @@ STEP_POINT();
         {
             jb = je;
             je += pmp->L1[k];
-            if( pmp->PHC[k] == PH_SORPTION )
+            if( pmp->PHC[k] == PH_SORPTION || pmp->PHC[k] == PH_POLYEL )
             {
-                GouyChapman(   jb, je, k );
-                SurfaceActivityTerm(   jb, je, k );
+               if( pmp->E && pmp->LO )
+                   GouyChapman( jb, je, k );
+               SurfaceActivityTerm( jb, je, k );
             }
             for( j=jb; j<je; j++ )
             {
@@ -173,13 +196,14 @@ STEP_POINT();
                 pmp->F0[j] = Ej_init_calc( 0.0, j, k  );
                 pmp->G[j] = pmp->G0[j] + pmp->F0[j];
                 pmp->lnGmo[j] = LnGam;
-            }
-        }
+            }  // j
+        } // k
         pmp->FitVar[3] = FitVar3; // Restore smoothing parameter
 
         if( pmp->pNP <= -1 )
-        { //  // With raising zeroed species and phases
+        {  // With raising zeroed species and phases
            for( i=0; i<pmp->L; i++ )
+           {
               if( pmp->Y[i] <= pmp->lowPosNum )
               { // Put trace DC quantity instead of zeros!
                  switch( pmp->DCC[i] )
@@ -202,7 +226,17 @@ STEP_POINT();
                    default:  pmp->Y[i] = pa.p.DFYaq/1000.; break;
                  }
               } // i
+           }
         }
+if( pa.p.PRD >= 7 )
+{                      // Dima 18/05/2002 test init load before simplex
+  if( multi->flCopy == true )
+  {
+    cout << " P.7  no simplex: ";
+    multi->dyn__test( multi->GetPMcopy1() );
+  }
+  multi->dyn_new_test( multi->GetPMcopy1() );
+}
     }
     pmp->MK = 1;
     // Sveta 18/01/1999 test init load
@@ -354,7 +388,7 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
          goto mEFD;
        }
      else
-         cout<< "PhaseSelect : Insert phase cannot be reached."<< endl;
+         cout<< "Warning PhaseSelect: Insertion of phases was incomplete!"<< endl;
     //   if( !vfQuestion(window(), "PhaseSelect : warning",
     //        "Insert phase cannot be reached. Continue?" ))
     //         return false;
@@ -405,6 +439,8 @@ STEP_POINT();
        }
 
 ITDTEST: /* test flag modes */
+//   if( pa.p.PC == 2 )
+//       XmaxSAT_IPM2_Reset();  // Reset upper limits for surface species
  /*   if( !pmp->MK )
     {  // insert or deleted phase
         FXold = pmp->FX;
@@ -474,8 +510,7 @@ void TProfil::MultiCalcIterations()
 void TProfil::XmaxSAT_IPM2( void )
 {
     int i, j, k, jb, je=0, ist, Cj, iSite[6];
-    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm,
-            SATst, a, xjn, q1, q2;
+    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, oDUL, xjn;
 
   if(!pmp->DUL )   // not possible to install upper kinetic constraint!
       return;
@@ -487,7 +522,7 @@ void TProfil::XmaxSAT_IPM2( void )
      if( pmp->PHC[k] != PH_SORPTION )
           continue;
 
-    if( pmp->XFA[k] < pmp->DSM ) // No sorbent retained by the IPM 
+    if( pmp->XFA[k] < pmp->DSM ) // No sorbent retained by the IPM
         continue;
     if( pmp->XF[k]-pmp->XFA[k] < pmp->lowPosNum /* *10. */ )
         continue;  /* No surface species */
@@ -513,6 +548,8 @@ void TProfil::XmaxSAT_IPM2( void )
     { /* Loop for DC */
         if( pmp->X[j] <= pmp->lowPosNum /* *10. */ )
             continue;  /* This surface DC has been killed by IPM */
+        rIEPS = pa.p.IEPS;
+        oDUL = pmp->DUL[j];
         switch( pmp->DCC[j] )  /* code of species class */
         {
         default: /* pmp->lnGam[j] = 0.0; */
@@ -550,41 +587,61 @@ void TProfil::XmaxSAT_IPM2( void )
             }
             XSk = pmp->XFTS[k][ist]; /* Tot.moles of sorbates on surf.type */
             xj = pmp->X[j];  /* Current moles of this surf.species */
-            a=1.0; /* Frumkin factor - reserved for extension to FFG isotherm */
+//            a=1.0;  Frumkin factor - reserved for extension to FFG isotherm
             switch( pmp->SATT[j] )
             {
             case SAT_COMP: /* Competitive surface species on a surface type */
                 /* a = fabs(pmp->MASDJ[j]); */
+// rIEPS = pa.p.IEPS * 0.1;
                 if( iSite[ist] < 0 )
                     xjn = 0.0;
                 else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
                 XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* expected total in moles */
-                XSkC = XSk - xjn - xj; /* occupied by the competing species;
-  	                                   this sorbate cannot compete to itself */
-                /* New variant */
-                if( XSkC < pa.p.IEPS )
-                    XSkC = pa.p.IEPS;
+// Experimental  rIEPS = pa.p.IEPS * XS0;
+                XSkC = XSk - xjn - xj; /* occupied by the competing species */
+                if( XSkC < 0.0 )
+                    XSkC = rIEPS; // 0.0;   ??????????
+//                if( XSkC > XS0 )
+//                    XSkC = XS0 - 2.0 * rIEPS;
                 xj0 = XS0 - XSkC;    /* expected moles of this sorbate */
-                if( xj0 < pa.p.IEPS )
-                    xj0 = pa.p.IEPS;  /* ensuring that it is non-negative */
-// Check!
-
-                pmp->DUL[j] = xj0 - pa.p.IEPS; // XS0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
-                break;
+                if( xj0 > pmp->lnSAT[j] )
+                    xj0 = pmp->lnSAT[j];
+                if( xj0 < rIEPS )
+                   xj0 = rIEPS;  /* ensuring that it will not zero off */
+                pmp->DUL[j] = xj0; // XS0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+// pmp->DUL[j] = XS0 - rIEPS;
+                // Compare with old DUL from previous iteration!
+/*                if( pmp->W1 != 1 && pmp->IT > 0 && fabs( (pmp->DUL[j] - oDUL)/pmp->DUL[j] ) > 0.1 )
+                {
+cout << "XmaxSAT_IPM2 Comp. IT= " << pmp->IT << " j= " << j << " oDUL=" << oDUL << " DUL=" << pmp->DUL[j] << endl;
+                }
+*/                break;
 
             case SAT_NCOMP: /* Non-competitive surface species */
+// rIEPS = pa.p.IEPS * 2;
                 xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
-
-                pmp->DUL[j] = xj0 - pa.p.IEPS; // xj0*(1.0-pa.p.IEPS); //pa.p.IEPS;
-                break;
+                pmp->DUL[j] = xj0 - rIEPS;
+// Experimental  rIEPS = pa.p.IEPS * xj0;
+//                 if( xj0 > 2.0*rIEPS )
+//                   pmp->DUL[j] = xj0 - rIEPS; // xj0*(1.0-pa.p.IEPS); //pa.p.IEPS;
+//                 else pmp->DUL[j] = rIEPS;
+// Compare with old DUL from previous iteration!
+/*                if( pmp->W1 != 1 && pmp->IT > 0 && fabs( (pmp->DUL[j] - oDUL)/pmp->DUL[j] ) > 0.1 )
+                {
+cout << "XmaxSAT_IPM2 Ncomp IT= " << pmp->IT << " j= " << j << " oDUL=" << oDUL << " DUL=" << pmp->DUL[j] << endl;
+                }
+*/                break;
 
             case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) */
+rIEPS = pa.p.IEPS;
                 XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
-
-                pmp->DUL[j] =  XS0-pa.p.IEPS; // xj0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+// Experimental   rIEPS = pa.p.IEPS * XS0;
+                pmp->DUL[j] =  XS0 - rIEPS; // xj0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+                if( pmp->DUL[j] <= rIEPS )
+                   pmp->DUL[j] = rIEPS;
                 break;
             case SAT_INDEF: /* No SAT calculation */
             default:        /* pmp->lnGam[j] = 0.0; */
@@ -595,7 +652,27 @@ void TProfil::XmaxSAT_IPM2( void )
   } /* k */
 }
 
-// Don't forget to clear such pmp->DUL constraints on entering simplex IA!
+// clearing pmp->DUL constraints!
+void TProfil::XmaxSAT_IPM2_reset( void )
+{
+    int j, k, jb, je=0;
+
+  if(!pmp->DUL )   // no upper kinetic constraints!
+      return;
+
+  for( k=0; k<pmp->FIs; k++ )
+  { /* loop on phases */
+     jb = je;
+     je += pmp->L1[k];
+     if( pmp->PHC[k] != PH_SORPTION )
+          continue;
+
+    for( j=jb; j<je; j++ )
+    { /* Loop for DC */
+      pmp->DUL[j] = pmp->lnSAT[j];  // temp. storing initial DUL constr.
+    }  /* j */
+  } /* k */
+}
 //----------------------------------------------------------------------------
 
 
@@ -897,6 +974,23 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
         Yf= YF[k]; /* calculate number of moles of carrier */
         if( pmp->FIs && k<pmp->FIs )
             pmp->YFk = YFA[k];
+        if( Yf >= 1e6 )
+        {                 // error - will result in zerodivide!
+           char pbuf[80];
+           sprintf( pbuf, "%20s", pmp->SF[k] ); pbuf[20] = 0;
+cout << "Error in IPM PrimeChemicalPotentials(): IT = " << pmp->IT << endl;
+cout << "  Phase " << pbuf << " k= " << k << " Yf= " << Yf;
+cout << " YFa= " << pmp->YFk << " Yf fixed to " << pmp->YFk << endl;
+//           for( ; j<i; j++ )
+//           {
+//             if( Y[j] > pmp->YFk )
+//             {
+//               sprintf( pbuf, "%16s", pmp->SM[j] ); pbuf[MAXDCNAME] = 0;
+// cout << "    j= " << j << " " << pbuf << "  Y= " << Y[j] << endl;
+//             }
+//           }
+           Yf = pmp->YFk;
+        }
         if( pmp->YFk > pmp->lowPosNum*10. )
         {
             pmp->logXw = log(pmp->YFk);

@@ -95,7 +95,7 @@ typedef struct
     *HKFc,  // Empirical coefficients of HKF EOS [MAXHKFCOEF]
     *Vt,    // Coefficients of mV=f(T,P) [MAXVTCOEF]
     *CPg,   // Critical parameters (for FGL)  [MAXCRITPARAM]
-    *ODc,   // Disordering eq coeffs Berman (1988), reserved[MAXODCOEF]
+    *ODc,   // Coeffs of V(T,P) Birch-Murnaghan 1947 Gottschalk [MAXODCOEF]
     *FtP,   // Column: TCf- at Pr; DltS,DltH,DltV; dV of phase transitions
     *FtBer, // Properties of phase transition (Berman): Tr; Tft; tilt; l1,l2 (reserved)
     // MAXCPFSCOEF

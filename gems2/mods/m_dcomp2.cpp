@@ -316,7 +316,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
             aW.twp->H += P_Pst * Vst * (1.-aC * P_Pst / 2.)*(1.+aE * T_Tst - aE );
         }
     }
-    else if( (CV == CPM_VKE || CV == CPM_VBE || CV == CPM_VBL) && dc[q].Vt )
+    else if( (CV == CPM_VKE || CV == CPM_VBE ) && dc[q].Vt )
     {  /* Vm = f(T,P) equations */
         aC = 0.;
         aE = 0.;
@@ -398,9 +398,25 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
         /*       dc[q].Comp = (float)aW.twp->Alp;
                  dc[q].Expa = (float)aW.twp->Bet;  */
     }
+//    if( CV == CPM_VBM && dc[q].Vt )  /* Code 'B' */
+//    {
+//       double VV00=0.0, GG0=0.0, HH0=0.0, SS0=0.0;
+//       int errV = 0;
+//       errV = BirchMurnaghan( 0.1*Pst, 0.1*aW.twp->P, Tst, T, Vst, dc[q].ODc,
+//            &VV00, &GG0, &HH0, &SS0 );
+//
+//  int BirchMurnaghan( double Pst, double P, double Tst, double T, double Vst,
+//         float *BMcoef, double &VV00, double &GG0, double &HH0, double &SS0 );
+//
+//       if( !errV )  /* make an error message */
+//       {
+//          ; // To be inserted: increments to V, G, H, S
+//       }
+//       else ; /* make an error message */
+//    }
 //    if( fabs( aC ) > 1e-18 )
 //        aW.twp->Cv = aW.twp->Cp - T* aW.twp->V * aE * aE / aC;
-// Finished 
+// Finished
 }
 
 //--------------------------------------------------------------------//

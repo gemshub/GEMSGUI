@@ -226,6 +226,7 @@ public:
     void PMtest( const char *key );
     void SolModLoad();
     void XmaxSAT_IPM2();
+    void XmaxSAT_IPM2_reset();
     void MultiRemake( const char *key );
     void EqstatExpand( const char *key );
     void CalcBcc(); // Calc bulk composition

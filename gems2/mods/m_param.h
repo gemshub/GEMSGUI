@@ -80,7 +80,7 @@ struct BASE_PARAM
     PhMin, // Cutoff N of moles of a phase { 1e-12 }
     ICmin, // Cutoff value of ionic strength to run DH equation { 1e-5 }
     EPS,   // Precision of FIA by SIMPLEX-method { 1e-15 }
-    IEPS,  // Accuracy of cutoff limits 1+eps for surface activity terms {1e-8}
+    IEPS,  // Accuracy of cutoff limits 1+eps for surface activity terms {1e-9}
     DKIN; // Range of lower to upper kinetic restrictions for DC { 0.001 }
     char *tprn;       // internal
 
@@ -349,6 +349,7 @@ public:
     void PMtest( const char *key );
     void SolModLoad();
     void XmaxSAT_IPM2();
+    void XmaxSAT_IPM2_reset();
     void MultiRemake( const char *key );
     void EqstatExpand( const char *key );
     void CalcBcc(); // Calc bulk composition

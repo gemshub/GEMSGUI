@@ -317,10 +317,15 @@ public:
     void dyn_new_test(MULTI& tes);
     void Test_Eq( int size, double *p1, double *p2, const char *key );
     void Test_Eq( int size, float *p1, float *p2, const char *key );
+    void Test_Eq( int size, short *p1, short *p2, const char *key );
     void dyn__test(MULTI& tes);
     MULTI copy1;
     bool flCopy;
-};
+    MULTI& GetPMcopy1()
+    {
+        return copy1;
+    }
+ };
 
 #else
 

@@ -252,8 +252,8 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
 */
 void TProfil::ConCalc( double X[], double XF[], double XFA[])
 {
+    int k, ii;
     int i, j, ist, jj;
-    short k,ii;
     double Factor=0.0, Dsur=0.0, MMC=0.0;
    // Kostya: debug calculating x from dual solution
       if( pmp->Ls < 2 || !pmp->FIs )
@@ -389,6 +389,7 @@ void TProfil::ConCalc( double X[], double XF[], double XFA[])
             }
             pmp->logYFk = log(pmp->YFk);
             Dsur = XFA[k]/XF[k] - 1.0;  // Also for sorption phases
+            if( Dsur <= -1.0 ) Dsur = -0.999999; // Debugging!!!!!
 // double DsurTT=0.0;  //  Temporarily!
 // DsurTT = XFA[k] * MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
 // Dsur = DsurTT / XF[k] - 1.0;
@@ -538,6 +539,10 @@ void TProfil::IS_EtaCalc()
                             pmp->XetaA[k][ist] -= pmp->X[j];
                         }
                     }
+                    else if( pmp->SCM[k][ist] == SC_MXC )
+                    { /* BSM for ion exchange on perm.charge surface */
+                       pmp->XetaB[k][ist] += pmp->X[j]*Ez;
+                    }
                     /*    case DC_SUR_DL_ION:  XetaS += pmp->X[j]*pmp->EZ[j];  */
                 }
                 break;
@@ -571,39 +576,46 @@ NEXT_PHASE:
 void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 {
     int ist;
-    double SigA=0., SigD=0., PSIo, XetaA[MST], XetaB[MST], f1, f3;
-    double A=1e-9, Sig, F2RT, I, Cap, PsiD, PsiB, PsiA, Ro = 1.0;
+    double SigA=0., SigD=0., XetaA[MST], XetaB[MST], f1, f3;
+    double A=1e-9, Sig, F2RT, I, Cap;
     /* Del, F=F_CONSTANT, Cap0; */
     if( pmp->XF[k] < pa.p.ScMin )
         return; /* no sorbent */
 
     /* sorbent mass in grams */
     pmp->YFk = pmp->FWGT[k];
+    if(pmp->YFk < pmp->lowPosNum*100.)
+       pmp->YFk = pmp->lowPosNum*100.;
 
     for( ist=0; ist<pmp->FIat; ist++ ) /* cycle by surface types */
     {
+        double PsiD, PSIo, PsiA, PsiB;
+
         if( pmp->SCM[k][ist] == SC_NOT_USED || pmp->Nfsp[k][ist] < 1e-9  )
             continue;
         /* Calculation of charge densities */
-        if( fabs( pmp->XetaA[k][ist]) >1e-9 )
+        if( fabs( pmp->XetaA[k][ist]) > pmp->lowPosNum*100. )
             XetaA[ist] = pmp->XetaA[k][ist]*F_CONSTANT/pmp->YFk/pmp->Aalp[k]
                          /pmp->Nfsp[k][ist]; /* C/m2 */
         else XetaA[ist] = 0.0;
-        if( fabs( pmp->XetaB[k][ist]) >1e-9 )/* moles */
+        if( fabs( pmp->XetaB[k][ist]) > pmp->lowPosNum*100. )/* moles */
             XetaB[ist] = pmp->XetaB[k][ist] *F_CONSTANT/pmp->YFk/pmp->Aalp[k]
                          /pmp->Nfsp[k][ist]; /* C/m2 */
         else XetaB[ist] = 0.0;
-        /* Limiting charge densities to 2 C/m2 */
-        if( fabs(XetaA[ist]) > 2.0 )
-            XetaA[ist] = XetaA[ist]<0.0?-2.0:2.0;
-        if( fabs(XetaB[ist]) > 2.0 )
-            XetaB[ist] = XetaB[ist]<0.0?-2.0:2.0;
-
-        PsiD=0.0;
-        PSIo=0.0;
-        PsiA=0.0;
-        PsiB=0.0;
-        if( fabs( XetaA[ist] ) < 1e-7 )
+        /* Limit charge densities to 0.7 and 1.7 C/m2 */
+        if( fabs(XetaA[ist]) > 0.7 )
+        {
+// cout << "EDL charge density A " << XetaA[ist] << " truncated to +- 0.7 C/m2" <<
+//        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+            XetaA[ist] = XetaA[ist] < 0.0 ? -0.7: 0.7;
+        }
+        if( fabs(XetaB[ist]) > 1.7 )
+        {
+// cout << "EDL charge density B " << XetaB[ist] << " truncated to +- 1.7 C/m2" <<
+//        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+            XetaB[ist] = XetaB[ist] < 0.0 ? -1.7: 1.7;
+        }
+        if( fabs( XetaA[ist] ) < pmp->lowPosNum*1e6 )
             goto GEMU_CALC;  /* skipping at near-zero charge */
 
         /* calculating charge density at diffuse layer */
@@ -629,9 +641,9 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
             SigD = -SigA - XetaB[ist];
             break;
-        case SC_MXC:  /* Ion-Exchange without SC on const.charge surface */
-            SigA = pmp->Xetaf[k][ist];
-            SigD = -SigA;
+        case SC_MXC:  /* BSM for Ion-Exchange on perm.charge surface */
+            SigA = pmp->Xetaf[k][ist] + XetaA[ist];
+            SigD = -SigA - XetaB[ist];
             break;
         case SC_NNE:  /* Non-Electrostatic Sorption */
             SigA = 0;
@@ -640,6 +652,12 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
         default:
             continue;
         }
+//        if( fabs( SigD ) > 1 )
+//        {
+//cout << "EDL charge density D " << SigD << " truncated to +- 1 C/m2" <<
+//        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+//            SigD = SigD < 0.0 ? -1.0: 1.0;
+//        }
         /* Gouy-Chapman equation */
         /* params of diffuse layer using Damaskin, 1987,p.192-195 */
         F2RT = pmp->FRT / 2.;
@@ -648,16 +666,17 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
         if( I > 1e-7 )
             /* Aq solution density Ro included acc. to Machesky ea., 1999 */
             /* Only for the basic Stern model for now (Jan 5, 2000 DAK)! */
-            { if( pmp->SCM[k][ist] == SC_BSM && pmp->FVOL[0] > 1e-16 )
+        {
+            double Ro = 1.0;
+            if( pmp->SCM[k][ist] == SC_BSM && pmp->FVOL[0] > 1e-16 )
                 Ro = pmp->FWGT[0] / pmp->FVOL[0];
-            else Ro = 1.0;
             A = sqrt( 2000. * 8.854e-12 * pmp->epsW * pmp->RT * I * Ro );
         }
         Cap = F2RT * sqrt( 4.*A*A + Sig*Sig );
 
         /* Sveta: workaround because of problems with log argument */
         f3 =  sqrt( 1.+Sig*Sig/(4.*A*A) ) - Sig/(2.*A);
-        //cout<< f1 << ' '<< f2 << ' ' << f3 << endl;
+//cout<< f1 << ' '<< f2 << ' ' << f3 << endl;
         if( f3 < 1 )
         {
             f1 = exp( -3 * F2RT);
@@ -669,81 +688,133 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
             if( f3>f1 ) f3 = f1;
         }
         PSIo = log(f3)/F2RT;
-        //  PSIo = log( sqrt( 1.+Sig*Sig/(4.*A*A) ) - Sig/(2.*A) ) / F2RT;
-
-        /*  Cap0 = fabs(Sig/PSIo);
-            Del = A*1e9/(2.*I*F)/cosh(PSIo*F2RT);
-            pmp->XdlD[k] = Del;
-        */
+//          PSIo = log( sqrt( 1.+Sig*Sig/(4.*A*A) ) - Sig/(2.*A) ) / F2RT;
+//          Cap0 = fabs(Sig/PSIo);
+//          Del = A*1e9/(2.*I*F)/cosh(PSIo*F2RT);
+//          pmp->XdlD[k] = Del;
         pmp->XcapD[k][ist] = Cap;
         pmp->XpsiD[k][ist] = PSIo;
         PsiD = PSIo; /* PsiA = PsiB = 0; */
-
+        if( fabs( PsiD ) > 0.4 )
+        {
+// cout << "All EDL models: PsiD = " << PsiD << " truncated to +- 0.4 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiD = PsiD<0? -0.4: 0.4;
+        }
 GEMU_CALC:
         /* calculating potentials at EDL planes */
         switch( pmp->SCM[k][ist] )
         {
+        case SC_DDLM: /* Diffuse Double Layer Model  Dzombak & Morel 1990 */
+            pmp->XpsiA[k][ist] = PsiD;
+            pmp->XpsiB[k][ist] = PsiD;
+            break;
         case SC_CCM:  /* Constant-Capacitance Model   Schindler 1973 */
             PsiA = SigA / pmp->XcapA[k][ist];
+            if( fabs( PsiA ) > 0.7 )
+            {
+//cout << "EDL (CCM) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiA = PsiA<0? -0.7: 0.7;
+            }
             pmp->XpsiA[k][ist] = PsiA;
             break;
-        case SC_MTL:  /* Modified Triple Layer Model  Robertson 1996 */
+        case SC_MTL:  /* Modified Triple Layer Model for X- Robertson 1996 */
+// PsiD = 0.0; // test
             PsiB = PsiD - SigD / pmp->XcapB[k][ist];
-            if( fabs( PsiB ) > 1.0 )  /* Cutoff potential */
-                PsiB = PsiB<0? -1.0: 1.0;
+            if( fabs( PsiB ) > 0.1 )  /* Cutoff potential */
+            {
+// cout << "EDL (MTL) PsiB = " << PsiB << " truncated to +- 0.1 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiB = PsiB<0? -0.1: 0.1;
+            }
             PsiA = PsiB + SigA / pmp->XcapA[k][ist];
             if( fabs( PsiA ) > 1.0 )
+            {
+// cout << "EDL (MTL) PsiA = " << PsiA << " truncated to +- 1.0 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiA = PsiA<0? -1.0: 1.0;
+            }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
             break;
         case SC_TLM:  /* Triple-Layer Model   Hayes 1987 */
             PsiB = PsiD - SigD / pmp->XcapB[k][ist];
-            if( fabs( PsiB ) > 1.0 ) /* Cutoff potential */
-                PsiB = PsiB<0? -1.0: 1.0;
+            if( fabs( PsiB ) > 0.3 )  /* Cutoff potential */
+            {
+// cout << "EDL (TLM) PsiB = " << PsiB << " truncated to +- 0.3 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiB = PsiB<0? -0.3: 0.3;
+            }
             PsiA = PsiB + SigA / pmp->XcapA[k][ist];
-            if( fabs( PsiA ) > 1.0 )
-                PsiA = PsiA<0? -1.0: 1.0;
+            if( fabs( PsiA ) > 0.7 )
+            {
+// cout << "EDL (TLM) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiA = PsiA<0? -0.7: 0.7;
+            }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
             break;
         case SC_BSM: /* Basic Stern model, Christl & Kretzschmar, 1999 */
             PsiB = PsiD;
-            if( fabs( PsiB ) > 1.0 ) /* Cutoff potential */
-                PsiB = PsiB<0? -1.0: 1.0;
+            if( fabs( PsiB ) > 0.3 )  /* Cutoff potential */
+            {
+//cout << "EDL (BSM) PsiB = " << PsiB << " truncated to +- 0.3 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiB = PsiB<0? -0.3: 0.3;
+            }
             PsiA = PsiB + SigA / pmp->XcapA[k][ist];
-            if( fabs( PsiA ) > 1.0 )
-                PsiA = PsiA<0? -1.0: 1.0;
+            if( fabs( PsiA ) > 0.7 )
+            {
+//cout << "EDL (BSM) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiA = PsiA<0? -0.7: 0.7;
+            }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
             break;
-        case SC_DDLM: /* Diffuse Double Layer Model  Dzombak & Morel 1990 */
-            pmp->XpsiA[k][ist] = PsiD;
-            pmp->XpsiB[k][ist] = PsiD;
-            break;
-        case SC_MXC:  /* Ion-Exchange on const.charge surface */
-            //PsiA = PsiD;
-            pmp->XpsiA[k][ist] = PsiD;
+        case SC_MXC:  /* BSM for const.charge surfaces */
+            PsiB = PsiD;
+            if( fabs( PsiB ) > 0.07 )  /* Cutoff potential */
+            {
+// cout << "EDL (MTL) PsiB = " << PsiB << " truncated to +- 0.07 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiB = PsiB<0? -0.07: 0.07;
+            }
+            PsiA = PsiB + SigA / pmp->XcapA[k][ist];
+            if( fabs( PsiA ) > 0.7 )
+            {
+// cout << "EDL (MTL) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiA = PsiA<0? -0.7: 0.7;
+            }
+            pmp->XpsiA[k][ist] = PsiA;
+            pmp->XpsiB[k][ist] = PsiB;
             break;
         case SC_NNE:  /* Non-Electrostatic Sorption */
+            pmp->XpsiA[k][ist] = 0.0;
+            pmp->XpsiB[k][ist] = 0.0;
+            break;
         default:
             break;
         }
-        /* phases */
-    }
+    }  // ist    surf. types
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* Calculation of surface activity terms (Kulik & Aja, 1997)
+/* Calculation of surface activity terms (Kulik, 1998, 2000, 2002)
 * Revised by DAK on 03.Jan.2000 in Mainz ( cf. Kulik, 1999a,b )
-*   to improve on IPM convergence at high SAT values.
+*  to improve on IPM convergence at high SAT values.
 * SAT are now placed into pmp->lnGam[j], as any activity coeffs
-*   pmp->lnSAT vector is now obsolete */
+*  pmp->lnSAT vector is now used to keep original DUL[j] to restore
+*  them after IPM-2 refinements for surface complexes.
+*/
 void TProfil::SurfaceActivityTerm( int jb, int je, int k )
 {
     int i, j, ist, Cj, iSite[6];
-    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, ISAT=0.0, SAT=1.0,
-            OSAT=0.0, SATst, a, xjn, q1, q2;
+    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, ISAT, SAT,
+            OSAT=0.0, SATst, xjn, q1, q2;
 
     if( pmp->XFA[k] < pmp->DSM ) /* No sorbent retained by the IPM */
         return;
@@ -753,16 +824,16 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
     for(i=0; i<6; i++)
         iSite[i] = -1;
 
-    /* Extraction of site indices */
+    /* Extraction of site indices for neutral >OH groups */
     for( j=jb; j<je; j++ )
     {
         if( pmp->SATT[j] != SAT_SITE )
-        {
-            if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_MINAL ||
-                    pmp->DCC[j] == DC_SUR_CARRIER ) continue;
-            ist = pmp->SATNdx[j][0] / MSPN; // MSPN = 2 - number of EDL planes
+//        {
+//            if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_MINAL ||
+//                    pmp->DCC[j] == DC_SUR_CARRIER ) continue;
+//          ist = pmp->SATNdx[j][0] / MSPN; // MSPN = 2 - number of EDL planes
             continue;
-        }
+//        }
         ist = pmp->SATNdx[j][0] / MSPN;
         iSite[ist] = j;
     }
@@ -772,6 +843,7 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
         if( pmp->X[j] <= pmp->lowPosNum /* *10. */ )
             continue;  /* This surface DC has been killed by IPM */
         OSAT = pmp->lnGmo[j]; // added 6.07.01 by KDA
+        rIEPS = pa.p.IEPS;   // between 1e-8 and 1e-10 default 1e-9
         switch( pmp->DCC[j] )  /* code of species class */
         {
         default: /* pmp->lnGam[j] = 0.0; */
@@ -809,105 +881,141 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
             }
             XSk = pmp->XFTS[k][ist]; /* Tot.moles of sorbates on surf.type */
             xj = pmp->X[j];  /* Current moles of this surf.species */
-            a=1.0; /* Frumkin factor - reserved for extension to FFG isotherm */
+//          a=1.0;    Frumkin factor - reserved for extension to FFG isotherm
             switch( pmp->SATT[j] )
             {
-            case SAT_COMP: /* Competitive surface species on a surface type */
+            case SAT_COMP: // Competitive surface species on a surface type
                 /* a = fabs(pmp->MASDJ[j]); */
+// rIEPS = pa.p.IEPS * 0.8;
                 if( iSite[ist] < 0 )
                     xjn = 0.0;
                 else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
                 XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
-                      * pmp->Nfsp[k][ist]; /* expected total in moles */
-                XSkC = XSk - xjn - xj; /* occupied by the competing species;
-                		                            this sorbate cannot compete to itself */
-                /* New variant */
-                if( XSkC < pa.p.IEPS )
-                    XSkC = pa.p.IEPS;
-                xj0 = XS0 - XSkC;    /* expected moles of this sorbate */
-                if(  xj0 < pa.p.IEPS )
-                    xj0 = pa.p.IEPS;  /* ensuring that it is non-negative */
-
-                if(xj>= xj0) xj=xj0-pa.p.IEPS;  // testing
-
+                      * pmp->Nfsp[k][ist]; // expected total in moles
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * XS0;  // relative IEPS
+                XSkC = XSk - xjn - xj; // occupied by the competing species;
+	                             // this sorbate cannot compete to itself
+                if( XSkC < 0.0 )
+                    XSkC = 0.0;
+                if( XSkC >= XS0 )  // Limits
+                    XSkC = XS0 - 2.0 * rIEPS;
+                xj0 = XS0 - XSkC;    // expected moles of this sorbate
+                if(xj >= xj0)
+                       xj = xj0 - rIEPS; // limits: 2 * rIEPS to XS0 - rIEPS
                 if( xj * 2 <= xj0 )
-                    ISAT = 0.0;
+                    ISAT = 0.0;      // ideal case
                 else
                 {
-                  q1 = xj0 - xj;
-                  if( pa.p.PC == 2 && !pmp->W1  || pa.p.PC != 2 )
-                  {  if( q1 > pa.p.IEPS )
-                        q2 = log( q1 );
-                    else q2 = log( pa.p.IEPS );
-                  }
-                  else
-                     q2 = log( q1 );
-                  ISAT = log( xj ) - q2;
-                    /*                     q1 = ( XS0 - XSkC + xj ) / xj;
-                                           if( q1 > 1.0 )
-                                           {  q2 = q1;               // How did it work?
-                                              ISAT = q2<=1.0? q2-1.0: 1.0;   }
-                                           else ISAT = pa.p.IEPS;
-                                           pmp->lnGam[j] = -log( ISAT );
-                    */
+                   q1 = xj0 - xj;
+                   q2 = rIEPS * XS0;
+                   if( pa.p.PC == 2 && !pmp->W1 || pa.p.PC != 2 )
+                   {
+                      if( q1 > q2 )
+                        q2 = q1;
+                   }
+                   else {
+                      q2 = q1;
+                      if( q2 <= 1e-33 )
+                         q2 = 1e-33;
+                   }
+                   ISAT = log( xj ) - log( q2 );
                 }
-                pmp->lnGam[j] = ISAT;
+                // Test and compare with OSAT
+/*                if( pmp->IT > 0 &&
+                   ( ISAT < 0 || ISAT > 0-log(rIEPS) || fabs(ISAT-OSAT) > 3 ))
+                {
+cout << "IT=" << pmp->IT << ": Compt SAT for j= " << j << " old lnSAT= " << OSAT << " new lnSAT= " << ISAT << endl;
+cout << "     x[j]= " << pmp->X[j] << " xj= " << xj << " xj0= " << xj0 << " XSkC= " << XSkC << " XSk= " << XSk << endl;
+// ISAT = OSAT + 1;           // experiment
+                }
+*/              pmp->lnGam[j] = ISAT;
                 break;
             case SAT_NCOMP: /* Non-competitive surface species */
+// rIEPS = pa.p.IEPS * 2;
                 xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
-
-                if(xj>= xj0) xj=xj0-pa.p.IEPS;  // testing
-               // if(xj>= xj0) xj=xj0*(1.0-pa.p.IEPS);  // testing
-
-                if( xj * 2 <= xj0 )    // Linear adsorption
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * xj0;  // relative IEPS
+                if(xj >= xj0)
+                     xj = xj0 - rIEPS;  // upper limit
+                if( xj * 2.0 <= xj0 )  // Linear adsorption - to improve !
                     ISAT = 0.0;
                 else
                 {
-                    q1 = xj0 - xj;
-                    q2 = xj0 * pa.p.IEPS; // eps6
+                    q1 = xj0 - xj;  // limits: rIEPS to 0.5*xj0
+                    q2 = xj0 * rIEPS;
                     if( pa.p.PC == 2 && pmp->W1 )
-                      ISAT = log( xj ) - log( q1 );
-                    else
-                    { if( q1 > q2 )
                        ISAT = log( xj ) - log( q1 );
-                      else
-                     {             // What to do ?
-                        ISAT = log( xj ) - log( q2 );
-                        // if( ISAT < OSAT )
-                        //    ISAT -= log(pa.p.IEPS);
-                     }   // 10 lines above fixed by KDA 6.07.01
-                   }
+                    else {
+                       if( q1 > q2 )
+                          ISAT = log( xj ) - log( q1 );
+                       else
+                          ISAT = log( xj ) - log( q2 );
+                    }
+                 }
+//                    if( pa.p.PC == 2 && !pmp->W1 || pa.p.PC != 2 )
+/*                  if( pa.p.PC == 2 && pmp->W1 )
+                    {
+                         q2 = q1;
+                    }
+                    else {
+                       if( q1 > q2 )
+                           q2 = q1;
+                    }
+                    if( q2 <= 1e-33 )
+                        q2 = 1e-33;
+                    ISAT = log( xj ) - log( q2 );
                 }
-                pmp->lnGam[j] = ISAT;
+*/                // Test and compare with OSAT
+/*                if( pmp->IT > 0 &&
+                  ( ISAT < 0 || ISAT > 0-log(rIEPS) || fabs(ISAT-OSAT) > 3 ))
+                {
+cout << "IT=" << pmp->IT << ": Ncomp SAT for j= " << j << " old lnSAT= " << OSAT << " new lnSAT= " << ISAT << endl;
+cout << "     x[j]= " << pmp->X[j] << " xj= " << xj << " xj0= " << xj0 << " XSk= " << XSk << endl;
+// ISAT = OSAT + 1;           // experiment
+                }
+*/              pmp->lnGam[j] = ISAT;
                 break;
             case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) */
-                XSkC = XSk - xj;
+// rIEPS = pa.p.IEPS;
                 XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
-
-                if(XSk>= XS0  || XSkC>= XS0 ) XSkC=XS0- pa.p.IEPS;  // testing
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * XS0;  // relative IEPS
+                XSkC = XSk - xj;
+                if( XSkC < 0.0 ) // potentially a serious error !
+                    XSkC = 0.0;
+//                if( XSkC >= XS0 )  // Limits
+//                    XSkC = XS0 - 2.0 * rIEPS;
                 if( pmp->MASDJ[j] <= 0.0 )
                     SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
                             pmp->MASDT[k][ist];
                 else SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
                                  pmp->MASDJ[j];
-                if( fabs(XS0-XSkC) > pa.p.IEPS /* 1e-14 */ )
+                if( fabs(XS0-XSkC) > XS0*rIEPS )
                 {
-                    if( XSkC > XS0 )
+                    if( XSkC > XS0 )  // case 1
                         SAT = 1.0;
                     else
                     {
-                        SAT = xj/(XS0-XSkC);
+                        SAT = xj/(XS0-XSkC);      // case 2
                         if( XSk > XS0 )
-                            SAT *= XSk/(XS0-XSkC);
+                            SAT *= XSk/(XS0-XSkC);    // case 3
                     }
                 }
-                else SAT = xj * pa.p.IEPS /* 1e14 */ ;
-                if( SAT < 1e-2 /* pa.p.IEPS */ )
-                    SAT = 1e-2; /* pa.p.IEPS; to allow killing */
-                if( SAT > 1.0/pa.p.IEPS )
-                    SAT = 1.0/pa.p.IEPS;
+                else SAT = xj * XS0*rIEPS;     // boost ?????
+/*                if( pmp->IT > 0 &&
+                  ( SAT < 1e-2 || SAT > 1.0/rIEPS || fabs(log(SAT)+log(SATst)-OSAT) > 3 ) )
+                {
+cout << "IT=" << pmp->IT << ": NSite SAT for j= " << j << " old lnSAT= " << OSAT << " new lnSAT= " << ISAT << endl;
+cout << "     x[jn]= " << pmp->X[j] << " XSk= " << XSk << " XSkC=" << XSkC << " XS0=" << XS0 << " SATst=" << SATst << endl;
+//  ISAT = OSAT + 1;           // experiment
+                }
+*/              if( SAT < 1e-2 )  // limits
+                    SAT = 1e-2;  // to limit boosting
+                if( SAT > 1.0/rIEPS )
+                    SAT = 1.0/rIEPS;  // to limit from above
                 pmp->lnGam[j] = log( SAT );
                 pmp->lnGam[j] += log( SATst );
                 break;
@@ -929,7 +1037,7 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
 double TProfil::Ej_init_calc( double, int j, int k)
 {
     int ist, isp, jc=0;
-    double F0=0.0, Fold, dF0, Mk=0.0, Ez;
+    double F0=0.0, Fold, dF0, Mk=0.0, Ez, psiA, psiB;
 
     Fold = pmp->F0[j];
     if( pmp->FIat > 0 )
@@ -979,25 +1087,25 @@ double TProfil::Ej_init_calc( double, int j, int k)
         /* get ist - index of surface type and isp - index of surface plane  */
         ist = pmp->SATNdx[j][0] / MSPN;
         isp = pmp->SATNdx[j][0] % MSPN;
+        psiA = double(pmp->XpsiA[k][ist]);
+        psiB = double(pmp->XpsiB[k][ist]);
+        Ez = double(pmp->EZ[j]);
         if( !isp )  /* This is  A (0) plane */
-            F0 += pmp->XpsiA[k][ist]*pmp->EZ[j]*pmp->FRT;
+            F0 += psiA * Ez * pmp->FRT;
         else  /* This is B plane */
         {
-            Ez = pmp->EZ[j];
             if( pmp->SCM[k][ist] == SC_TLM )
             { /* TLM model after Hayes, 1987,
-                		           see also Table 4 in Zachara & Westall, 1999 */
+                 see also Table 4 in Zachara & Westall, 1999 */
                 if( pmp->MASDJ[j] < 0 )
                 {
                     Ez -= 1.0;
-                    F0 += (pmp->XpsiA[k][ist]+Ez*pmp->XpsiB[k][ist])
-                          *pmp->FRT;
+                    F0 += ( psiA + Ez * psiB )* pmp->FRT;
                 }
                 else
                 {
                     Ez += 1.0;
-                    F0 += (Ez*pmp->XpsiB[k][ist]-pmp->XpsiA[k][ist])
-                          *pmp->FRT;
+                    F0 += ( Ez * psiB - psiA )* pmp->FRT;
                 }
             }
             else if( pmp->SCM[k][ist] == SC_BSM )
@@ -1005,25 +1113,21 @@ double TProfil::Ej_init_calc( double, int j, int k)
                 if( pmp->MASDJ[j] < 0 )
                 {
                     Ez -= 1.0;
- //                   if( pmp->DCC[j] == DC_SUR_IPAIR ) // Doubtful!
- //                       F0 += Ez*pmp->XpsiB[k][ist] * pmp->FRT;
- //                   else
-                    F0 += (pmp->XpsiA[k][ist]+Ez*pmp->XpsiB[k][ist])
-                          *pmp->FRT;
+                    F0 += ( psiA + Ez * psiB )* pmp->FRT;
                 }
                 else
                 {
                     Ez += 1.0;
-//                    if( pmp->DCC[j] == DC_SUR_IPAIR ) // Doubtful!
-//                        F0 += Ez*pmp->XpsiB[k][ist] * pmp->FRT;
-//                    else
-                    F0 += (Ez*pmp->XpsiB[k][ist]-pmp->XpsiA[k][ist])
-                          *pmp->FRT;
+                    F0 += ( Ez * psiB - psiA )* pmp->FRT;
                 }
             }
             else if( pmp->SCM[k][ist] == SC_MTL )
             { /* Modified TLM after Robertson, 1996 */
-                F0 += pmp->XpsiB[k][ist] * Ez * pmp->FRT;
+                F0 += psiB * Ez * pmp->FRT;
+            }
+            else if( pmp->SCM[k][ist] == SC_MXC )
+            { /* BSM for ion exchange on permanent charge surface */
+                F0 += psiB * Ez * pmp->FRT;
             }
         }
         if( Mk > 1e-9 )
@@ -1303,16 +1407,28 @@ void TProfil::GammaCalc( int LinkMode  )
                 if( pmp->X[j] < pmp->lowPosNum )
                     pmp->X[j] = pa.p.DFYaq;
             ConCalc( pmp->X, pmp->XF, pmp->XFA );
-            if( pmp->E )
-                IS_EtaCalc( );
+//            if( pmp->E )
+//                IS_EtaCalc( );
 //          pmp->IC = max( pmp->MOL, pmp->IC );
             pmp->IC = 0.0;  // Important for simplex FIA reproducibility
-            if( pmp->FIat > 0 )
+            if( pmp->E && pmp->FIat > 0 )
             {
-                pmp->XetaA[0][0] = 0.0;
-                pmp->XetaB[0][0] = 0.0;
-            }
-        }
+               for( k=0; k<pmp->FIs; k++ )
+               {
+                 int ist;
+                 if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )
+                   for( ist=0; ist<pmp->FIat; ist++ ) /* cycle by surface types */
+                   {
+                     pmp->XetaA[k][ist] = 0.0;
+                     pmp->XetaB[k][ist] = 0.0;
+                     pmp->XpsiA[k][ist] = 0.0;
+                     pmp->XpsiB[k][ist] = 0.0;
+                     pmp->XpsiD[k][ist] = 0.0;
+                     pmp->XcapD[k][ist] = 0.0;
+                   }  // ist
+               }  // k
+            } // FIat
+        }   // LO
         /* clearing vectors of  activity coefficients */
         for( j=0; j<pmp->L; j++ )
         {
@@ -1323,13 +1439,13 @@ void TProfil::GammaCalc( int LinkMode  )
             pmp->Gamma[j] = 1.;
         }
     case LINK_TP_MODE:  /* Equations depending on T,P only */
-        if( pmp->LO && pmp->Lads )
+/*      if( pmp->LO && pmp->Lads )           Debugging!
         {
             ConCalc( pmp->X, pmp->XF, pmp->XFA  );
             if( pmp->E )
                 IS_EtaCalc();
         }
-        pmp->FitVar[3] = 1.0;
+*/      pmp->FitVar[3] = 1.0;  // is it really necessary ?
         break;
     case LINK_UX_MODE: /* calc concentrations of DC on IPM iteration */
         ConCalc( pmp->X, pmp->XF, pmp->XFA );
@@ -1340,7 +1456,22 @@ void TProfil::GammaCalc( int LinkMode  )
             pmp->Gamma[j] = 1.;
         }
         if( pmp->E ) /* calc charge in the phase */
-            IS_EtaCalc();
+        {
+//          IS_EtaCalc();
+          if( pmp->FIat > 0 )
+             for( k=0; k<pmp->FIs; k++ )
+             {
+               if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )
+               {  int ist;
+                  for( ist=0; ist<pmp->FIat; ist++ ) /* cycle by surface types */
+                  {  // Clear electrostatic potentials
+                     pmp->XpsiA[k][ist] = 0.0;
+                     pmp->XpsiB[k][ist] = 0.0;
+                     pmp->XpsiD[k][ist] = 0.0;
+                  }  // ist
+                }
+             }  // k
+         } // pmp->E
         break;
     default:
         Error("GammaCalc","Illegal Link Mode.");
@@ -1384,14 +1515,21 @@ void TProfil::GammaCalc( int LinkMode  )
             break;
         case PH_POLYEL:  /* PoissonBoltzmann( q, jb, je, k ) break; */
         case PH_SORPTION: /* calc elstatic potenials from Gouy-Chapman eqn */
-            if( pmp->PHC[0] == PH_AQUEL &&
-                    pmp->XF[k] > pmp->DSM &&
-                    pmp->XF[0] > pa.p.XwMin )
+            if( pmp->PHC[0] == PH_AQUEL && pmp->XF[k] > pmp->DSM
+                   && pmp->XF[0] > pa.p.XwMin )
             {
-                GouyChapman(   jb, je, k );
-                /* PoissonBoltzmann( q, jb, je, k ) */
-                /* Calculate surface activity coeffs */
-                SurfaceActivityTerm(  jb, je, k );
+//              ConCalc( pmp->X, pmp->XF, pmp->XFA  );  Debugging
+                if( LinkMode == LINK_UX_MODE )
+                {
+                    if( pmp->E )
+                    {
+                       IS_EtaCalc();
+                       GouyChapman( jb, je, k );
+                    /* PoissonBoltzmann( q, jb, je, k ) */
+                    }
+                    /* Calculate surface activity coeffs */
+                    SurfaceActivityTerm(  jb, je, k );
+                }
             }
             if( sMod[SGM_MODE] == SM_IDEAL )
                 goto END_LOOP;
@@ -1412,7 +1550,7 @@ void TProfil::GammaCalc( int LinkMode  )
                 && LinkMode == LINK_UX_MODE )
             goto END_LOOP; /* Ionic strength is too low for aqueous solution */
         else ICold = pmp->IC;
-//Ask to Dima!!! 20/04/2002
+//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
         /* Link DOD and set sizes of work arrays */
         pm_GC_ods_link( k, jb, jpb, jdb );

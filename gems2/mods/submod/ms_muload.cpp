@@ -912,6 +912,14 @@ void TProfil::MultiCalcInit( const char *key )
         pmp->Falps[k] = pmp->Falp[k];
         memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
     }
+
+   // Dima 18/05/2002 test init load before simplex
+//   if( multi->flCopy == true )
+//   {
+//     cout << " Point 6: ";
+//     multi->dyn__test( multi->GetPMcopy1() );
+//   }
+//   multi->dyn_new_test( multi->GetPMcopy1() );
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1003,7 +1011,8 @@ void TProfil::EqstatExpand( const char *key )
         je = jb+pmp->L1[k];
         if( pmp->PHC[k] == PH_SORPTION )
         {
-            GouyChapman(  jb, je, k );
+            if( pmp->E && pmp->LO )
+                GouyChapman( jb, je, k );
             /* calculation of surface activity terms */
             SurfaceActivityTerm(  jb, je, k );
         }
