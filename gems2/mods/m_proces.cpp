@@ -775,7 +775,7 @@ TProcess::RecBuild( const char *key, int mode  )
 
 AGAIN:
    ret = TCModule::RecBuild( key, mode );
-   if( ret == VF_BYPASS )
+   if( ret == VF3_3 )
           goto SET_OK;
 
    if( pe_dimValid()==false  )
