@@ -265,7 +265,7 @@ protected:
     void IS_EtaCalc();
     void GouyChapman(  int jb, int je, int k );
     void SurfaceActivityTerm( int jb, int je, int k );  // Obsolete
-    void SurfaceActivityCoeff( int jb, int je, int k );
+    void SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k );
 //  aqueous electrolyte
     void DebyeHueckel3Hel( int jb, int je, int jpb, int jdb, int k );
     void DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k );

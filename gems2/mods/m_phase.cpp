@@ -87,7 +87,8 @@ void TPhase::ods_link( int q)
     aObj[ o_phsatc].SetPtr(  ph[q].SATC );
     aObj[ o_phsatc].SetDim( ph[q].nDC,  2 );
     aObj[ o_phmasdj].SetPtr( ph[q].MaSdj);
-    aObj[ o_phmasdj].SetDim( ph[q].nDC, 1 );
+//    aObj[ o_phmasdj].SetDim( ph[q].nDC, 1 );
+    aObj[ o_phmasdj].SetDim( ph[q].nDC, DFCN );
     aObj[ o_phpxres].SetPtr( ph[q].PXres);
     aObj[ o_phpxres].SetDim( ph[q].nDC, 1 );
     aObj[ o_phsm].SetPtr(   ph[q].SM[0] );
@@ -129,7 +130,7 @@ void TPhase::dyn_set(int q)
     ph[q].MSDT  = (float (*)[2])aObj[ o_phmsdt ].GetPtr();
     ph[q].CapT  = (float (*)[2])aObj[ o_phcapt ].GetPtr();
     ph[q].SATC  = (char (*)[2])aObj[ o_phsatc ].GetPtr();
-    ph[q].MaSdj = (float *)aObj[ o_phmasdj ].GetPtr();
+    ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].GetPtr();
     ph[q].PXres = (float *)aObj[ o_phpxres ].GetPtr();
     ph[q].pnc =   (float *)aObj[ o_phpnc ].GetPtr();
     ph[q].scoef = (float *)aObj[ o_phscoef ].GetPtr();
@@ -153,7 +154,7 @@ void TPhase::dyn_kill(int q)
     ph[q].MSDT =  (float (*)[2])aObj[ o_phmsdt ].Free();
     ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Free();
     ph[q].SATC =  (char (*)[2])aObj[ o_phsatc ].Free();
-    ph[q].MaSdj = (float *)aObj[ o_phmasdj ].Free();
+    ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Free();
     ph[q].PXres = (float *)aObj[ o_phpxres ].Free();
     ph[q].pnc =   (float *)aObj[ o_phpnc ].Free();
     ph[q].scoef = (float *)aObj[ o_phscoef ].Free();
@@ -195,7 +196,8 @@ void TPhase::dyn_new(int q)
         ph[q].MSDT =  (float (*)[2])aObj[ o_phmsdt ].Alloc( ph[q].NsiT, 2, F_);
         ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Alloc( ph[q].NsiT, 2, F_);
         ph[q].SATC =  (char (*)[2])aObj[ o_phsatc ].Alloc( ph[q].nDC, 2, A_);
-        ph[q].MaSdj = (float *)aObj[ o_phmasdj ].Alloc( ph[q].nDC, 1, F_);
+//        ph[q].MaSdj = (float *)aObj[ o_phmasdj ].Alloc( ph[q].nDC, 1, F_);
+    ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Alloc( ph[q].nDC, DFCN, F_);
         ph[q].PXres = (float *)aObj[ o_phpxres ].Alloc( ph[q].nDC, 1, F_);
     }
     else
@@ -206,7 +208,7 @@ void TPhase::dyn_new(int q)
         ph[q].MSDT =  (float (*)[2])aObj[ o_phmsdt ].Free();
         ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Free();
         ph[q].SATC =  (char (*)[2])aObj[ o_phsatc ].Free();
-        ph[q].MaSdj = (float *)aObj[ o_phmasdj ].Free();
+        ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Free();
         ph[q].PXres = (float *)aObj[ o_phpxres ].Free();
     }
     if( ph[q].Nsd )
@@ -389,11 +391,14 @@ AGAIN_SETUP:
     //DCOMP keypart
     rt[RT_DCOMP].MakeKey( RT_PHASE, pkeydc, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END);
     if( pkeydc[1] != ':') pkeydc[1] = '*';
+if( php->NsiT > 0 )  // template for adsorption
+  pkeydc[0] = CP_SOLID; // added by KD 25.10.2004
 
     //REACDC  keypart
     rt[RT_REACDC].MakeKey( RT_PHASE, pkeyrd, K_ACT, 0, K_ANY, K_ANY, K_ANY, K_END );
     if( pkeyrd[1] != ':') pkeyrd[1] = '*';
-
+if( php->NsiT > 0 )  // template for adsorption
+  pkeyrd[0] = CP_SSPC;  // added by KD 25.10.2004
 
     if( php->nDC && php->SM )
     {
@@ -446,7 +451,7 @@ AGAINRC:
     }
 
     php->nDC = aDclist.GetCount() + aRclist.GetCount();
-    php->NR1 = aRclist.GetCount();
+//    php->NR1 = aRclist.GetCount();   comm.out by KD on 25.10.2004
     iic = aDclist.GetCount();
 
     /* insert coeff of model of solid and other data */
@@ -545,18 +550,22 @@ AGAINRC:
         }
         php->PFsiT = S_ON;
     }
-    SetString("PH_make   Remaking PHASE definition OK");
+    if( php->NsiT > 0 && php->PFsiT == S_ON )
+        php->NR1 = DFCN; // Added for CD-MUSIC by KD on 25.10.2004
+    SetString("PH_make   Remake of Phase definition OK");
     pVisor->Update();
     return ret;
 }
 
 #define s(i,j) php->scoef[(j)+(i)*nsc]
+// #define m(i,j) php->MaSdj[(j)+(i)*DFCN]
 //Recalc record structure
 void
 TPhase::RecCalc( const char *key )
 {
     bool getDCC;
-    getDCC = vfQuestion(window(), GetName(),"Remake DC classes list?");
+    getDCC = vfQuestion(window(), GetName(),
+       "Extract parameters from DComp/ReacDC records and refresh DC class codes?");
     CalcPhaseRecord( getDCC );
     SetString("PH_solm   PHASE-solution model OK");
     TCModule::RecCalc(key);
@@ -566,10 +575,10 @@ TPhase::RecCalc( const char *key )
 void
 TPhase::CalcPhaseRecord(  bool getDCC  )
 {
-    int  i, /*iic,*/ pa0=0, Kielland, nsc;
+    int  i, /*iic,*/ pa0=0, Kielland, nsc, ndc=php->NR1;
     vstr dcn(MAXRKEYLEN);
     char Ctype;
-    float a0, bp, Z;
+    float a0, bp, Z, cN, Fi;
     time_t crt;
 
 
@@ -585,7 +594,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     {
         nsc = php->nscN * php->nscM;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
-   "Effective radii of aqueous species: Collect from DComp/ReacDC records?"))
+   "Kielland radii of aqueous species: Collect from DComp/ReacDC records?"))
         {
             pa0 = 1;
             Kielland = 0;
@@ -662,29 +671,82 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
                 if( Z > 0.99 ) s(i,0) = 3.84;
                 /* do it by HKF ! */    //  3.72 !
             }
-        }
-        if(( php->PphC == PH_SORPTION || php->PphC == PH_POLYEL) && php->scoef )
-        {
-            Z = fabs(Z);
-            if( pa0 && !Kielland )
-            {
-                s(i,0) = a0;
-                if( nsc > 1 ) s(i,1) = bp;
-            }
-            if( Kielland && !pa0 )
-            {
-                if( Z < 0.01 ) s(i,0) = aPa->pa.p.DNS;
-                if( fabs(Z-1.0) < 0.01 ) s(i,0) = aPa->pa.p.DNS/2.;
-                if( fabs(Z-2.0) < 0.01 ) s(i,0) = aPa->pa.p.DNS/3.;
-                if( Z > 2.99 ) s(i,0) = 3.0; /* Make a table! */
-            }
-            if( Kielland && pa0 )  /* Default */
-            { if( Z < 0.01 ) s(i,0) = aPa->pa.p.DNS;
-                if( Z > 0.99 ) s(i,0) = 2.31;
-            }
         } // i
-
     }
+
+    if( php->PphC == PH_SORPTION || php->PphC == PH_POLYEL )
+    {
+// Rewritten by KD on 13.09.04 for Frumkin and on 25.10.04 for CD EDL models
+      nsc = php->nscN * php->nscM;
+      memset( dcn, 0, MAXRKEYLEN );
+      for( i=0; i<php->nDC; i++ )
+      {  /*Get key */
+           memcpy( dcn, php->SM[i], DC_RKLEN );
+           dcn[DC_RKLEN]=0;
+           Ctype = A_NUL;
+           /* Read record */
+        if( php->DCS[i] == SRC_DCOMP )
+        {
+            aDC->TryRecInp( dcn, crt, 0 );
+            a0 = aDC->dcp->Der;
+            bp = aDC->dcp->DerB;
+            Z = aDC->dcp->Zz;
+            cN = aDC->dcp->Comp;
+            Fi = aDC->dcp->Expa;
+            Ctype = aDC->dcp->PdcC;
+         }
+        else if( php->DCS[i] == SRC_REACDC )
+        {
+             aRDC->TryRecInp( dcn, crt, 0 );
+             a0 = aRDC->rcp->Der;
+             bp = aRDC->rcp->DerB;
+             Z = aRDC->rcp->Zz;
+             cN = aRDC->rcp->Comp;
+             Fi = aRDC->rcp->Expa;
+             Ctype = aRDC->rcp->PreC;
+        }
+        if( getDCC==true || php->DCC[i] == A_NUL || php->DCC[i] == '`')
+            php->DCC[i] = Ctype;
+// this block is now obsolete !
+//      if( php->scoef )
+//      {
+//          Z = fabs(Z);
+//          if( fabs( a0 ) < 1e-20 )
+//            a0 = 1.0;
+//          s(i,0) = a0;    // Frumkin isotherm parameter cN
+//          if( fabs( bp ) < 1e-20 )
+//            bp = 0.0;
+//          if( nsc > 1 )
+//            s(i,1) = bp;  // Frumkin isotherm parameter Fi
+//      }
+// Transferring data into MaSdj array   KD 25.10.2004
+// Now a0 and b0 contain CD (charge distribution) for 0 and beta planes, resp.
+        if( php->NR1 == DFCN && php->MaSdj )
+        {
+           if( fabs( cN ) < 1e-20 )
+              cN = 0.0;
+           php->MaSdj[i][PI_FR_CN] = cN;    // Frumkin isotherm parameter cN
+           if( fabs( Fi ) < 1e-20 )
+              Fi = 0.0;
+           php->MaSdj[i][PI_FR_FI] = Fi;  // Frumkin isotherm parameter Fi
+// EDL CD parameters
+           if( fabs( a0 ) < 1e-20 && fabs( bp ) < 1e-20 )
+              if( !(php->DCC[i] == DC_WSC_A0 || php->DCC[i] == DC_WSC_A1 ||
+                 php->DCC[i] == DC_WSC_A2 || php->DCC[i] == DC_WSC_A3 ||
+                 php->DCC[i] == DC_WSC_A4 || php->DCC[i] == DC_IEWC_B ||
+                 php->DCC[i] == DC_SUR_IPAIR ) )
+              {  // this is inner-sphere species
+                a0 = Z; bp = 0;
+              }
+              else { // this is outer-sphere species (charge on beta-plane only)
+                a0 = 0; bp = Z;
+              }
+           php->MaSdj[i][PI_CD_0] = a0;
+           php->MaSdj[i][PI_CD_B] = bp;
+        }
+      } // i
+    }
+
     // Collecting coefficients of EoS for fluids
     if( (php->PphC == PH_FLUID) && php->scoef )
     {

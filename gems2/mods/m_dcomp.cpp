@@ -635,7 +635,7 @@ TDComp::DCthermo( int q, int p )
     CV = toupper( dcp->pct[2] );
     if( CM != CTPM_HKF && aW.twp->P < 1e-9 )
          aW.twp->P = 1e-8;
-    if( CM == CTPM_HKF || aW.twp->P < 1e-9 )  // fixed by KD 03.07.03 
+    if( CM == CTPM_HKF || aW.twp->P < 1e-9 )  // fixed by KD 03.07.03
     {// HKF calculations or determination of P_sat if P=0
 
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
@@ -661,6 +661,9 @@ TDComp::DCthermo( int q, int p )
     switch( CM )
     {
     case CTPM_CPT:
+//        if( CE == CTM_CHP && CV == CPM_CHE )
+//        {  // Added for passing
+//        }
         calc_tpcv( q, p, CE, CV );
         if( CV == CPM_GAS && ( aW.twp->P > 10. && aW.twp->TC > 100. ) )
         {

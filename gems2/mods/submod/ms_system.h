@@ -60,7 +60,7 @@ typedef struct
     PSATT, //PSATT_ to classify SAT calculation methods&allocation for sur DC
     PGEX,  // gEx_ excess free energies for (metastable) DC { + * - }
     PYOF,  // Yof_ metastability parameter for phases { + * - }
-    PMaSdj, // MaSdj_ maximum reacted surface DC density for surtypes (SAT)
+    PMaSdj, // MaSdj_ array for Density, Frumkin, CD-MUSIC (new) { + * - }
     PlnGf, // lnGmf_ Initial activity coefficients of DC { + * - }
     PAalp, // Aalp_ specific surface areas for phases { + * - }
     PSigm, //Sigm_ specific surface energy for solid phase-aqueous(gas)interface
@@ -159,7 +159,7 @@ typedef struct
     *YOF,   // Phase metastability parameter, J/g [mu.Fi]
     *lnGmf, // ln of initial DC activity coefficients [mu.L]
     *Aalp,  // Specific surface area of dispersed phases, m2/g [mu.Fi]
-    *MaSdj, /* Max reacted sur DC density for ST 1/nm2 [0:mu.Ls-1] */
+    (*MaSdj)[DFCN], // Density, Frumkin, CD-MUSIC params new [mu.Ls][DFCN]
     (*Sigm)[2],//Specific surface energy of solid-aqueous (gas) interface, J/m2 [mu.Fi][2]
     (*Xr0h0)[2],//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [mu.Fi][2]
     (*XEpsC)[2],// Dielectric constant & conductivity of phase carrier, reserved [mu.Fi][2]

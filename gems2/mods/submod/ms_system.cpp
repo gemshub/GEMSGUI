@@ -140,7 +140,8 @@ void TSyst::ods_link( int /*q*/)
     aObj[ o_sylngmf].SetPtr( sy.lnGmf );
     aObj[ o_sylngmf].SetDim( mup->L, 1 );
     aObj[ o_symasdj].SetPtr( sy.MaSdj );
-    aObj[ o_symasdj].SetDim( mup->Ls, 1 );
+//    aObj[ o_symasdj].SetDim( mup->Ls, 1 );
+    aObj[ o_symasdj].SetDim( mup->Ls, DFCN );  // changed 25.10.2004 by KD
     aObj[ o_syaalp].SetPtr(  sy.Aalp );
     aObj[ o_syaalp].SetDim( mup->Fi, 1 );
     aObj[ o_sysigm].SetPtr(  sy.Sigm );
@@ -204,7 +205,7 @@ void TSyst::dyn_set(int /*q*/)
     sy.PLL = (float *)aObj[ o_sypll ].GetPtr();
     sy.YOF = (float *)aObj[ o_syyof ].GetPtr();
     sy.lnGmf = (float *)aObj[ o_sylngmf ].GetPtr();
-    sy.MaSdj = (float *)aObj[ o_symasdj ].GetPtr();
+    sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj ].GetPtr();
     sy.Aalp = (float *)aObj[ o_syaalp ].GetPtr();
     sy.Sigm = (float (*)[2])aObj[ o_sysigm ].GetPtr();
     sy.Xr0h0 = (float (*)[2])aObj[ o_syxr0h0 ].GetPtr();
@@ -254,7 +255,7 @@ void TSyst::dyn_kill(int /*q*/)
     sy.PLL = (float *)aObj[ o_sypll ].Free();
     sy.YOF = (float *)aObj[ o_syyof ].Free();
     sy.lnGmf = (float *)aObj[ o_sylngmf ].Free();
-    sy.MaSdj = (float *)aObj[ o_symasdj ].Free();
+    sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj ].Free();
     sy.Aalp = (float *)aObj[ o_syaalp ].Free();
     sy.Sigm = (float (*)[2])aObj[ o_sysigm ].Free();
     sy.Xr0h0 = (float (*)[2])aObj[ o_syxr0h0 ].Free();
@@ -390,8 +391,9 @@ void TSyst::dyn_new(int /*q*/)
     else sy.GEX = (float *)aObj[ o_sygex ].Free();
 
     if( sy.PMaSdj != S_OFF )
-        sy.MaSdj = (float *)aObj[ o_symasdj].Alloc( mup->Ls, 1, F_ );
-    else sy.MaSdj = (float *)aObj[ o_symasdj ].Free();
+        sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj].Alloc( mup->Ls, DFCN, F_ );
+//  sy.MaSdj = (float *)aObj[ o_symasdj].Alloc( mup->Ls, 1, F_ );
+    else sy.MaSdj = (float (*)[DFCN])aObj[ o_symasdj ].Free();
 
     if( sy.PlnGf != S_OFF )
         sy.lnGmf = (float *)aObj[ o_sylngmf].Alloc( mup->L, 1, F_ );
@@ -677,10 +679,13 @@ void TSyst::SyTestSizes()
     make_syst_sizes();
 }
 
+//#define ms(i,j) (sy.MaSdj[(j)+(i)*D_F_CD_NP])
+// added 25.10.2004 by KD
+
 // Set default informations to arrays
 void TSyst::setDefData()
 {
-    int i, k;
+    int i, j, k;
 
     if( sy.B )
         memset( sy.B, 0, mup->N*sizeof(double) );
@@ -758,10 +763,12 @@ void TSyst::setDefData()
     }
     if( sy.PSATT != S_OFF )
         memset( sy.SATC, A_EMPTY, /* SAT_INDEF,*/ mup->Ls*2 );
-    if( sy.PMaSdj != S_OFF && sy.NsTm >0 )
+    if( sy.PMaSdj != S_OFF && sy.NsTm > 0 )
         for( i=0; i<mup->Ls; i++ )
-            sy.MaSdj[i] = FLOAT_EMPTY;
-    if( sy.PNfsp == S_REM && sy.NsTm>0 )
+           for( j=0; j < DFCN; j++)
+               sy.MaSdj[i][j] = FLOAT_EMPTY;  // changed 25.10.2004 by KD
+//             sy.MaSdj[i] = FLOAT_EMPTY;
+    if( sy.PNfsp == S_REM && sy.NsTm > 0 )
     {
         memset( sy.SCMT, A_EMPTY, /* SC_NOT_USED,*/ mup->Fis*sy.NsTm );
         for( k=0; k<mup->Fis; k++ )
@@ -844,7 +851,10 @@ void TSyst::phase_data_load()
     }  /* k */
 }
 
-// Load default informations from sorbtion phases
+//#define mp(i,j) (aPH->php->MaSdj[(j)+(i)*D_F_CD_NP])
+// Added on 25.10.2004 by KD
+
+// Load default informations from sorption phases
 void TSyst::sorption_data_load( TPhase* aPH, int k )
 {
     int ist, i, j, jb=0, je, jp;
@@ -909,7 +919,14 @@ void TSyst::sorption_data_load( TPhase* aPH, int k )
             /* data copy */
             sy.SATC[j][0] = aPH->php->SATC[jp][0];
             sy.SATC[j][1] = aPH->php->SATC[jp][1];
-            sy.MaSdj[j] = aPH->php->MaSdj[jp];
+// Extended by KD on 25.10.2004
+            sy.MaSdj[j][PI_DENS]  = aPH->php->MaSdj[jp][PI_DENS];
+            sy.MaSdj[j][PI_CD_0]  = aPH->php->MaSdj[jp][PI_CD_0];
+            sy.MaSdj[j][PI_CD_B]  = aPH->php->MaSdj[jp][PI_CD_B];
+            sy.MaSdj[j][PI_FR_CN] = aPH->php->MaSdj[jp][PI_FR_CN];
+            sy.MaSdj[j][PI_FR_FI] = aPH->php->MaSdj[jp][PI_FR_FI];
+            sy.MaSdj[j][PI_COMP_GR] = aPH->php->MaSdj[jp][PI_COMP_GR];
+//            sy.MaSdj[j] = aPH->php->MaSdj[jp];
         }  /* end j */
     }
 }
@@ -926,6 +943,9 @@ void TSyst::set_aqu_gas_phase()
     sy.Pcl[mup->nGas] = S_ON;
     mark_ph_to_dc();
 }
+
+//#define mt(i,j) (STat->ssp->MaSdj[(j)+(i)*D_F_CD_NP])
+// Added on 25.10.2004 by KD
 
 // unpack data from TSysEq record
 void TSyst::unpackData()
@@ -991,13 +1011,14 @@ void TSyst::unpackData()
         if( ind < 0 ) continue;
         sy.Dcl[ind] = S_OFF;
     }
-    for( i=0; i<sy.Fia; i++) // pha Phase ON adsorbtion  ( mup->PHC[]=='x' )
+
+//  for( i=0; i<sy.Fia; i++) // pha Phase ON adsorbtion  ( mup->PHC[]=='x' )
+    for( i=0; i<STat->ssp->DM[20]; i++)
     {
         ind = Prf->indPH( STat->ssp->pha[i] );
         if( ind < 0 ) continue;
         for( j=0; j<sy.NsTm; j++ )
         {
-
             if( sy.PNfsp != S_OFF )
                 sy.SCMT[ind][j] = STat->ssp->SCMT[i][j];
             if( sy.PNfsp != S_OFF )
@@ -1016,7 +1037,8 @@ void TSyst::unpackData()
                 sy.Xlam[ind][j] = STat->ssp->Xlam[i][j];
         }
     }
-    for( i=0; i<sy.Lsor; i++) // dca dcomp ON adsorbtion  ( mup->DCC[]=='X' )
+//   for( i=0; i<sy.Lsor; i++) dca dcomp ON adsorption ( mup->DCC[]=='X' )
+    for( i=0; i<STat->ssp->DM[4]; i++)
     {
         ind = Prf->indDC( STat->ssp->dca[i] );
         if( ind < 0 ) continue;
@@ -1026,7 +1048,24 @@ void TSyst::unpackData()
             sy.SATC[ind][1] = STat->ssp->SATC[i][1];
         }
         if( sy.PMaSdj != S_OFF )
-            sy.MaSdj[ind]  = STat->ssp->MaSdj[i];
+// Extended by KD on 25.10.2004
+        {
+            int mtM, msM;
+            msM = aObj[o_symasdj].GetM();
+            mtM = aObj[o_ssmasdj].GetM();
+            if(mtM >= msM )
+            {
+               sy.MaSdj[ind][PI_DENS]  = STat->ssp->MaSdj[i][PI_DENS];
+               sy.MaSdj[ind][PI_CD_0]  = STat->ssp->MaSdj[i][PI_CD_0];
+               sy.MaSdj[ind][PI_CD_B]  = STat->ssp->MaSdj[i][PI_CD_B];
+               sy.MaSdj[ind][PI_FR_CN] = STat->ssp->MaSdj[i][PI_FR_CN];
+               sy.MaSdj[ind][PI_FR_FI] = STat->ssp->MaSdj[i][PI_FR_FI];
+               sy.MaSdj[ind][PI_COMP_GR] = STat->ssp->MaSdj[i][PI_COMP_GR];
+            }
+            else  // For reading old SysEq records
+               sy.MaSdj[ind][PI_DENS]  = STat->ssp->MaSdj[0][i];
+//            sy.MaSdj[ind]  = STat->ssp->MaSdj[i];
+        }
     }
     if( sy.PULim != S_OFF || sy.PLLim != S_OFF )
         for( i=0; i<sy.Fik; i++) // phk  no zero in PUL/PLL
@@ -1103,7 +1142,6 @@ void TSyst::unpackData()
     sy.LO = Prf->indDC( sy.LO );
 
 }
-
 
 // packed system arrays (get size and alloc memory)
 void TSyst::setSizes()
@@ -1298,7 +1336,13 @@ void TSyst::packData()
             i5++;
         }
     }
-    // DCOMP
+
+//  DCOMP
+//    if( STat->ssp->MaSdj ) // Temporary!
+//    {  // realloc to prevent memory corruption for old SysEq records
+//       STat->ssp->MaSdj = (float (*)[DFCN])aObj[o_ssmasdj].Free();
+//       STat->ssp->MaSdj = (float (*)[DFCN])aObj[ o_ssmasdj].Alloc( STat->ssp->DM[4], DFCN, F_ );
+//    }
     for( i=0, i1=0, i2=0, i3=0, i4=0, i5=0; i<mup->L; i++)
     {
         if( sy.PbDC != S_OFF )
@@ -1343,14 +1387,24 @@ void TSyst::packData()
         // dca dcomp ON adsorbtion  ( mup->DCC[]=='X' ) Sveta 12/09/99 ? to Dima
         if( sy.Dcl[i] != S_OFF && ( strchr( SORPTION_DC, mup->DCC[i])  != NULL) )
         {
-            ErrorIf( i5>= sy.Lsor, GetName(), "sy.Lsor illegal count" );
+            ErrorIf( i5 >= sy.Lsor, GetName(), "sy.Lsor illegal count" );
             STat->ssp->dca[i5] = i;
             if( sy.PSATT != S_OFF )
             {
                 STat->ssp->SATC[i5][0] = sy.SATC[i][0];
                 STat->ssp->SATC[i5][1] = sy.SATC[i][1];
             }
-            if( sy.PMaSdj != S_OFF ) STat->ssp->MaSdj[i5] = sy.MaSdj[i];
+            if( sy.PMaSdj != S_OFF )
+            {
+// Extended by KD on 25.10.2004
+               STat->ssp->MaSdj[i5][PI_DENS]  = sy.MaSdj[i][PI_DENS];
+               STat->ssp->MaSdj[i5][PI_CD_0]  = sy.MaSdj[i][PI_CD_0];
+               STat->ssp->MaSdj[i5][PI_CD_B]  = sy.MaSdj[i][PI_CD_B];
+               STat->ssp->MaSdj[i5][PI_FR_CN] = sy.MaSdj[i][PI_FR_CN];
+               STat->ssp->MaSdj[i5][PI_FR_FI] = sy.MaSdj[i][PI_FR_FI];
+               STat->ssp->MaSdj[i5][PI_COMP_GR] = sy.MaSdj[i][PI_COMP_GR];
+//              STat->ssp->MaSdj[i5] = sy.MaSdj[i];
+            }
             i5++;
         }
     }
@@ -1487,8 +1541,12 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
         STat->ssp->phf[i2++] = PHoff[iOff++];
     }
 
-
     // DCOMP
+    if( sy.PMaSdj != S_OFF ) // Temporary!!!!    25.10.2004 KD
+    {  // realloc to prevent memory corruption for old SysEq records
+       STat->ssp->MaSdj = (float (*)[DFCN])aObj[o_ssmasdj].Free();
+       STat->ssp->MaSdj = (float (*)[DFCN])aObj[ o_symasdj].Alloc( mup->Ls, DFCN, F_ );
+    }
     for( i=0, i1=0, i2=0, i3=0, i4=0, i5=0, iOff=0; i<mup->L; i++)
     {
         if( sy.PbDC != S_OFF )
@@ -1537,7 +1595,7 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
         if( i >= mup->Ls )
             continue;
 
-        // dca dcomp ON adsorbtion  ( mup->DCC[]=='X' ) Sveta 12/09/99 ? to Dima
+        // dca dcomp ON adsorption  ( mup->DCC[]=='X' ) Sveta 12/09/99 ? to Dima
         if( sy.Dcl[i] != S_OFF && ( strchr( SORPTION_DC, mup->DCC[i])  != NULL) )
         {
             ErrorIf( i5>= sy.Lsor, GetName(), "sy.Lsor illegal count" );
@@ -1547,7 +1605,17 @@ void TSyst::packData( TCIntArray PHon, TCIntArray PHoff,
                 STat->ssp->SATC[i5][0] = sy.SATC[i][0];
                 STat->ssp->SATC[i5][1] = sy.SATC[i][1];
             }
-            if( sy.PMaSdj != S_OFF ) STat->ssp->MaSdj[i5] = sy.MaSdj[i];
+            if( sy.PMaSdj != S_OFF )
+            {
+// Extended by KD on 25.10.2004
+               STat->ssp->MaSdj[i5][PI_DENS]  = sy.MaSdj[i][PI_DENS];
+               STat->ssp->MaSdj[i5][PI_CD_0]  = sy.MaSdj[i][PI_CD_0];
+               STat->ssp->MaSdj[i5][PI_CD_B]  = sy.MaSdj[i][PI_CD_B];
+               STat->ssp->MaSdj[i5][PI_FR_CN] = sy.MaSdj[i][PI_FR_CN];
+               STat->ssp->MaSdj[i5][PI_FR_FI] = sy.MaSdj[i][PI_FR_FI];
+               STat->ssp->MaSdj[i5][PI_COMP_GR] = sy.MaSdj[i][PI_COMP_GR];
+//              STat->ssp->MaSdj[i5] = sy.MaSdj[i];
+            }
             i5++;
         }
     }

@@ -529,6 +529,9 @@ EXIT_TEST:
 
 }
 
+// #define sm(i,j) ssp->MaSdj[(j)+(i)*D_F_CD_NP]
+// added by KD on 25.10.2004
+
 // pack arrays if deleted records in base cfg
 void TSysEq::newSizeifChange()
 {
@@ -702,7 +705,17 @@ void TSysEq::newSizeifChange()
         if( ssp->dca[i] >= 0 ) // no delete num
         {
             ssp->dca[j] = ssp->dca[i];
-            if( ssp->MaSdj ) ssp->MaSdj[j] = ssp->MaSdj[i];
+            if( ssp->MaSdj )
+            {
+// Extended by KD on 25.10.2004
+            ssp->MaSdj[j][PI_DENS]  = ssp->MaSdj[i][PI_DENS];
+            ssp->MaSdj[j][PI_CD_0]  = ssp->MaSdj[i][PI_CD_0];
+            ssp->MaSdj[j][PI_CD_B]  = ssp->MaSdj[i][PI_CD_B];
+            ssp->MaSdj[j][PI_FR_CN] = ssp->MaSdj[i][PI_FR_CN];
+            ssp->MaSdj[j][PI_FR_FI] = ssp->MaSdj[i][PI_FR_FI];
+            ssp->MaSdj[j][PI_COMP_GR] = ssp->MaSdj[i][PI_COMP_GR];
+//               ssp->MaSdj[j] = ssp->MaSdj[i];
+            }
             if( ssp->SATC )
             {
                 ssp->SATC[j][0] = ssp->SATC[i][0];

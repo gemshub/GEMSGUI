@@ -39,7 +39,7 @@ void
 TDComp::calc_tpcv( int q, int p, int CE, int CV )
 {
     double a, T, TC, Vst, Tst, T_Tst, Ts2, TT, dT, T2, T3, T4,
-    T05, Tst2, Tst3, Tst4, Tst05, qQ, Tcr, Smax;
+    T05, Tst2, Tst3, Tst4, Tst05, qQ, Tcr1, Tcr, Smax, Vmax;
     int k, i, j, jf;
 
     // iRet = ZERO;
@@ -237,11 +237,20 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
     /*     }    */
 NEXT:
     if( CE == CTM_CHP )
-    {
-        Tcr =  (double)dc[q].TCr;
+    {   // Parameters of lambda-transition 
+        Tcr1 =  (double)dc[q].TCr;
         Smax = (double)dc[q].Smax;
         if( !IsDoubleEmpty( Tcr ) && !IsDoubleEmpty( Smax ))
         {
+// Added 21.09.04 from Th.Wagner
+            Vmax = (double)dc[q].Der;
+            if(IsDoubleEmpty( Vmax ))
+            {
+               Vmax = 0.0; Tcr = Tcr1;
+            }
+            else
+               Tcr = Tcr1 + Vmax/Smax * aW.twp->P;
+// end added
             Tcr += dT;
             if( T<Tcr )
             {
@@ -322,10 +331,10 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));
 // Molar properties
          aW.twp->V = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
-         aW.twp->G += 1./3.* aW.twp->V * kap * (pow((1.-4.*PP/kap),0.75 )- 1.);
+         aW.twp->G += 1./3.* aW.twp->V * kap * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
          aW.twp->S -= Vst * P * ( aE - 10.*aE / T05 );
          aW.twp->H += -T * Vst * P * ( aE - 10.*aE / T05 )
-              + 1./3. * aW.twp->V * kap * ( pow((1.-4.*PP/kap),0.75 ) - 1.);
+              + 1./3. * aW.twp->V * kap * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
          aW.twp->V *= pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
 //       aW.twp->V *= pow( (kap / (kap + 4*PP )), 0.25);  // Corr. C. De Capitani
                 // Check calculation of H !

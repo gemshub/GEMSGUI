@@ -467,12 +467,15 @@ NEXT_PHASE:
                     pmp->IC_wm[ii] *= pmp->Awt[ii]*1000./pmp->FWGT[k];
                 else
                     pmp->IC_wm[ii] = 0;
-               }     
+               }
             }
         j = i;
     }  /* k */
 
 }
+
+//#define mp(i,j) (float)pmp->MASDJ[(j)+(i)*D_F_CD_NP]
+// Added by KD on 24.10.2004 for implementation of CD-MUSIC, Frumkin etc.
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Multi-surface (ad)sorption phases   Brooklyn 5/15/97 DAK */
@@ -481,7 +484,7 @@ NEXT_PHASE:
 void TProfil::IS_EtaCalc()
 {
     int k, i, ist, isp, j=0;
-    double XetaS=0., XetaW=0.,  Ez;
+    double XetaS=0., XetaW=0.,  Ez, CD0, CDb, ObS;
     for( k=0; k<pmp->FIs; k++ )
     { /*cycle over phases */
         i=j+pmp->L1[k];
@@ -546,68 +549,114 @@ void TProfil::IS_EtaCalc()
             case DC_SUR_COMPLEX:
             case DC_SUR_IPAIR:
             case DC_IESC_A:
-            case DC_IEWC_B: /* Get ist - index of surface type
-                                      and isp - index of surface plane  */
+            case DC_IEWC_B: // Get ist - index of surface type
+                            // and isp - index of surface plane
                 ist = pmp->SATNdx[j][0] / MSPN;
                 isp = pmp->SATNdx[j][0] % MSPN;
+                            // Get charge distribution information
+// From now on, the mp(j,PI_DENS) macro replaces pmp->MASDJ[j]
+                CD0 = pmp->MASDJ[j][PI_CD_0];  // species charge that goes into 0 plane
+                CDb = pmp->MASDJ[j][PI_CD_B];  // species charge that goes into B plane
+                ObS = pmp->MASDJ[j][PI_DENS];  // obsolete - the sign for outer-sphere charge
+                if( ObS >= 0.0 )
+                   ObS = 1.0;
+                else ObS = -1.0;
+                Ez = pmp->EZ[j];
+
                 if( !isp )
-                { /* This is A (0) plane */
-                    pmp->XetaA[k][ist] += pmp->X[j]*pmp->EZ[j];
+                { // This is the 0 (A) plane
+                    if( fabs( CD0 ) > 1e-20 )  // Doubtful...
+                       Ez = CD0;
+                    pmp->XetaA[k][ist] += pmp->X[j]*Ez;
                 }
                 else
-                { /* This is B plane */
-                    Ez = pmp->EZ[j];
+                { /* This is the B plane */
+//                    Ez = pmp->EZ[j];
                     if( pmp->SCM[k][ist] == SC_MTL )
                     { /* Modified TL: Robertson, 1997; also XTLM Kulik 2002 */
+                        if( fabs( CDb ) > 1e-20 )  // Doubtful...
+                           Ez = CDb;
                         pmp->XetaB[k][ist] += pmp->X[j]*Ez;
                     }
                     else if( pmp->SCM[k][ist] == SC_TLM )
-                    { /* TLM Hayes & Leckie, 1987 */
-                        if( pmp->MASDJ[j] < 0.0 )
+                    {
+// New CD version of TLM  added 25.10.2004
+                        if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
                         {
+                           pmp->XetaB[k][ist] += pmp->X[j] * CDb;
+                           pmp->XetaA[k][ist] += pmp->X[j] * CD0;
+                        }
+// Old version:  TLM Hayes & Leckie, 1987 uses the sign indicator at density
+                        else {
+                          if( ObS < 0.0 )
+                          {
                             Ez -= 1.0;
                             pmp->XetaB[k][ist] += pmp->X[j] * Ez;
                             pmp->XetaA[k][ist] += pmp->X[j];
-                        }
-                        else
-                        {
+                          }
+                          else
+                          {
                             Ez += 1.0;
                             pmp->XetaB[k][ist] += pmp->X[j] * Ez;
                             pmp->XetaA[k][ist] -= pmp->X[j];
+                          }
                         }
                     }
                     else if( pmp->SCM[k][ist] == SC_BSM )
-                    { /* Basic Stern model Christl & Kretzschmar, 1999 */
-                        if( pmp->MASDJ[j] < 0.0 )
+                    { // Basic Stern model Christl & Kretzschmar, 1999
+// New CD version of BSM  added 25.10.2004
+                        if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
                         {
+                           pmp->XetaB[k][ist] += pmp->X[j] * CDb;
+                           pmp->XetaA[k][ist] += pmp->X[j] * CD0;
+                        }
+// Old version: uses the sign indicator at density
+                        else {
+                          if( ObS < 0.0 )
+                          {
                             Ez -= 1.0;
                             pmp->XetaB[k][ist] += pmp->X[j] * Ez;
                             pmp->XetaA[k][ist] += pmp->X[j];
-                        }
-                        else
-                        {
+                          }
+                          else
+                          {
                             Ez += 1.0;
                             pmp->XetaB[k][ist] += pmp->X[j] * Ez;
                             pmp->XetaA[k][ist] -= pmp->X[j];
+                          }
                         }
                     }
                     else if( pmp->SCM[k][ist] == SC_MXC )
                     { /* BSM for ion exchange on perm.charge surface */
-                       pmp->XetaB[k][ist] += pmp->X[j]*Ez;
+                        if( fabs( CDb ) > 1e-20 )  // Doubtful...
+                           Ez = CDb;
+                        pmp->XetaB[k][ist] += pmp->X[j]*Ez;
+                        if( fabs( CD0 ) > 1e-20 )
+                            pmp->XetaA[k][ist] += pmp->X[j]*CD0;  // experimental
                     }
                     else if( pmp->SCM[k][ist] == SC_CCM )
-                    { // Added 25.07.03 to implement extended CCM Nilsson ea 1996
-                      if( pmp->MASDJ[j] < 0.0 )
-                      {
-                          Ez -= 1.0;
-                          pmp->XetaB[k][ist] += pmp->X[j] * Ez;
-                          pmp->XetaA[k][ist] += pmp->X[j];
-                      }
-                      else {
-                          Ez += 1.0;
-                          pmp->XetaB[k][ist] += pmp->X[j] * Ez;
-                          pmp->XetaA[k][ist] -= pmp->X[j];
-                      }
+                    { // Added 25.07.03 to implement the extended CCM Nilsson ea 1996
+// New CD version of BSM  added 25.10.2004
+                        if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
+                        {
+                           pmp->XetaB[k][ist] += pmp->X[j] * CDb;
+                           pmp->XetaA[k][ist] += pmp->X[j] * CD0;
+                        }
+// Old version: uses the sign indicator at density
+                        else {
+                          if( ObS < 0.0 )
+                          {
+                            Ez -= 1.0;
+                            pmp->XetaB[k][ist] += pmp->X[j] * Ez;
+                            pmp->XetaA[k][ist] += pmp->X[j];
+                          }
+                          else
+                          {
+                            Ez += 1.0;
+                            pmp->XetaB[k][ist] += pmp->X[j] * Ez;
+                            pmp->XetaA[k][ist] -= pmp->X[j];
+                          }
+                        }
                     }
                  /*    case DC_SUR_DL_ION:  XetaS += pmp->X[j]*pmp->EZ[j];  */
                 }
@@ -668,18 +717,18 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
             XetaB[ist] = pmp->XetaB[k][ist] *F_CONSTANT/pmp->YFk/pmp->Aalp[k]
                          /pmp->Nfsp[k][ist]; /* C/m2 */
         else XetaB[ist] = 0.0;
-        /* Limit charge densities to 0.7 and 1.7 C/m2 */
-        if( fabs(XetaA[ist]) > 0.7 )
+        /* Limit charge densities to 0.7 C/m2 */
+        if( fabs(XetaA[ist]) > 1.4 )
         {
 // cout << "EDL charge density A " << XetaA[ist] << " truncated to +- 0.7 C/m2" <<
 //        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-            XetaA[ist] = XetaA[ist] < 0.0 ? -0.7: 0.7;
+            XetaA[ist] = XetaA[ist] < 0.0 ? -1.4: 1.4;
         }
-        if( fabs(XetaB[ist]) > 1.7 )
+        if( fabs(XetaB[ist]) > 2.0 )
         {
 // cout << "EDL charge density B " << XetaB[ist] << " truncated to +- 1.7 C/m2" <<
 //        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-            XetaB[ist] = XetaB[ist] < 0.0 ? -1.7: 1.7;
+            XetaB[ist] = XetaB[ist] < 0.0 ? -2.0: 2.0;
         }
         if( fabs( XetaA[ist] ) < pmp->lowPosNum*1e6 )
             goto GEMU_CALC;  /* skipping at near-zero charge */
@@ -728,6 +777,7 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 //        }
         /* Gouy-Chapman equation */
         /* params of diffuse layer using Damaskin, 1987,p.192-195 */
+        A = 1e-9;
         F2RT = pmp->FRT / 2.;
         Sig = SigD;
         I=pmp->IC;
@@ -747,12 +797,12 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 //cout<< f1 << ' '<< f2 << ' ' << f3 << endl;
         if( f3 < 1 )
         {
-            f1 = exp( -3 * F2RT);
+            f1 = exp( -3. * F2RT );
             if( f3<f1) f3 = f1;
         }
         else
         {
-            f1 = exp( 3*F2RT );
+            f1 = exp( 3. * F2RT );
             if( f3>f1 ) f3 = f1;
         }
         PSIo = log(f3)/F2RT;
@@ -786,7 +836,7 @@ GEMU_CALC:
                    PsiA = PsiA<0? -0.7: 0.7;
                }
                pmp->XpsiA[k][ist] = PsiA;
-            }   
+            }
             else { // Extended CCM model Nilsson ea 1996 as TLM with PsiD = 0
                PsiB = - SigB / pmp->XcapB[k][ist];
                if( fabs( PsiB ) > 0.3 )  /* Cutoff potential */
@@ -805,72 +855,72 @@ GEMU_CALC:
         case SC_MTL:  /* Modified Triple Layer Model for X- Robertson | Kulik */
 // PsiD = 0.0; // test
             PsiB = PsiD - SigD / pmp->XcapB[k][ist];
-            if( fabs( PsiB ) > 0.1 )  /* Cutoff potential */
+            if( fabs( PsiB ) > 0.6)  /* Cutoff potential */
             {
-// cout << "EDL (MTL) PsiB = " << PsiB << " truncated to +- 0.1 V" <<
+// cout << "EDL (MTL) PsiB = " << PsiB << " truncated to +- 0.3 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiB = PsiB<0? -0.1: 0.1;
+                PsiB = PsiB<0? -0.6: 0.6;
             }
             PsiA = PsiB + SigA / pmp->XcapA[k][ist];
-            if( fabs( PsiA ) > 1.0 )
+            if( fabs( PsiA ) > 1.1 )
             {
 // cout << "EDL (MTL) PsiA = " << PsiA << " truncated to +- 1.0 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiA = PsiA<0? -1.0: 1.0;
+                PsiA = PsiA<0? -1.1: 1.1;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
             break;
         case SC_TLM:  /* Triple-Layer Model   Hayes 1987 */
             PsiB = PsiD - SigD / pmp->XcapB[k][ist];
-            if( fabs( PsiB ) > 0.3 )  /* Cutoff potential */
+            if( fabs( PsiB ) > 0.6 )  /* Cutoff potential */
             {
 // cout << "EDL (TLM) PsiB = " << PsiB << " truncated to +- 0.3 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiB = PsiB<0? -0.3: 0.3;
+                PsiB = PsiB<0? -0.6: 0.6;
             }
             PsiA = PsiB + SigA / pmp->XcapA[k][ist];
-            if( fabs( PsiA ) > 0.7 )
+            if( fabs( PsiA ) > 1.1 )
             {
 // cout << "EDL (TLM) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiA = PsiA<0? -0.7: 0.7;
+                PsiA = PsiA<0? -1.1: 1.1;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
             break;
         case SC_BSM: /* Basic Stern model, Christl & Kretzschmar, 1999 */
             PsiB = PsiD;
-            if( fabs( PsiB ) > 0.3 )  /* Cutoff potential */
+            if( fabs( PsiB ) > 0.6 )  /* Cutoff potential */
             {
-//cout << "EDL (BSM) PsiB = " << PsiB << " truncated to +- 0.3 V" <<
+//cout << "EDL (BSM) PsiB = " << PsiB << " truncated to +- 0.6 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiB = PsiB<0? -0.3: 0.3;
+                PsiB = PsiB<0? -0.6: 0.6;
             }
             PsiA = PsiB + SigA / pmp->XcapA[k][ist];
-            if( fabs( PsiA ) > 0.7 )
+            if( fabs( PsiA ) > 1.1 )
             {
-//cout << "EDL (BSM) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
+//cout << "EDL (BSM) PsiA = " << PsiA << " truncated to +- 1.0 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiA = PsiA<0? -0.7: 0.7;
+                PsiA = PsiA<0? -1.1: 1.1;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
             break;
         case SC_MXC:  /* BSM for const.charge surfaces */
             PsiB = PsiD;
-            if( fabs( PsiB ) > 0.07 )  /* Cutoff potential */
+            if( fabs( PsiB ) > 0.6 )  /* Cutoff potential */
             {
-// cout << "EDL (MTL) PsiB = " << PsiB << " truncated to +- 0.07 V" <<
+// cout << "EDL (MXC) PsiB = " << PsiB << " truncated to +- 0.6 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiB = PsiB<0? -0.07: 0.07;
+                PsiB = PsiB<0? -0.6: 0.6;
             }
             PsiA = PsiB + SigA / pmp->XcapA[k][ist];
-            if( fabs( PsiA ) > 0.7 )
+            if( fabs( PsiA ) > 1.1 )
             {
-// cout << "EDL (MTL) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
+// cout << "EDL (MXC) PsiA = " << PsiA << " truncated to +- 1.0 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-                PsiA = PsiA<0? -0.7: 0.7;
+                PsiA = PsiA<0? -1.1: 1.1;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
@@ -895,13 +945,13 @@ GEMU_CALC:
 *  pmp->lnSAT vector is now used to keep original DUL[j] to restore
 *  them after IPM-2 refinements for surface complexes.
 */
-void TProfil::SurfaceActivityCoeff( int jb, int je, int k )
+void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
 {
     int i, j, ist, dent, Cj, iSite[6];
     double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, ISAT, SAT,
-           /* OSAT, */ SATst, xjn, q1, q2;
+           /* OSAT, */ SATst, xjn, q1, q2, Fi, cN, eF;
 
-    if( pmp->XFA[k] < pmp->DSM ) /* No sorbent retained by the IPM */
+    if( pmp->XFA[k] <= pmp->DSM ) /* No sorbent retained by the IPM */
         return;
     if( pmp->XF[k]-pmp->XFA[k] < pmp->lowPosNum /* *10. */ )
         return;  /* No surface species */
@@ -909,7 +959,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int k )
     for(i=0; i<6; i++)
         iSite[i] = -1;
 
-    /* Extraction of site indices for neutral >OH groups */
+    /* Extraction of site indices for the neutral >OH group */
     for( j=jb; j<je; j++ )
     {
         if( pmp->SATT[j] != SAT_SITE )
@@ -962,7 +1012,22 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int k )
             }
             XSk = pmp->XFTS[k][ist]; /* Tot.moles of sorbates on surf.type */
             xj = pmp->X[j];  /* Current moles of this surf.species */
-//          a=1.0;    Frumkin factor - reserved for extension to FFG isotherm
+
+//          Frumkin isotherm parameters - extracted from DMc array, obsolete
+//            if( pmp->DMc && pmp->LsMdc[k] > 1 )
+//            {
+//               cN = pmp->DMc[jdb+(j-jb)*pmp->LsMdc[k]];
+//               Fi = pmp->DMc[jdb+(j-jb)*pmp->LsMdc[k]+1];
+//            }
+// Frumkin isotherm parameters - new
+            if( pmp->MASDJ )
+            {
+               cN = pmp->MASDJ[j][PI_FR_CN];  // water coord. number
+               Fi = pmp->MASDJ[j][PI_FR_FI];  // lateral interaction energy term
+            }
+            else {
+               cN = 0.0; Fi = 0.0;
+            }
             switch( pmp->SATT[j] )
             {
             case SAT_L_COMP: // Competitive monodent. Langmuir on a surface type
@@ -1040,7 +1105,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int k )
             case SAT_QCA2_NCOMP:             /* code '2' */
             case SAT_QCA_NCOMP:  dent++;   /* bidentate is default for QCA */
             case SAT_QCA1_NCOMP:             /* code '1' */
-                xj0 = fabs(pmp->MASDJ[j])/pmp->Aalp[k]/1.66054;
+                xj0 = fabs(pmp->MASDJ[j][PI_DENS])/pmp->Aalp[k]/1.66054;
                                              // Max site density per nm2
 /*              xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist];     in moles */
@@ -1064,7 +1129,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int k )
                 break;
             case SAT_NCOMP: /* Non-competitive truncated L SAT (old, obsolete) */
 // rIEPS = pa.p.IEPS * 2;
-                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
+                xj0 = fabs( pmp->MASDJ[j][PI_DENS] ) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
                 if( pa.p.PC == 1 )
                     rIEPS = pa.p.IEPS * xj0;  // relative IEPS
@@ -1098,11 +1163,11 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int k )
                     XSkC = 0.0;
 //                if( XSkC >= XS0 )  // Limits
 //                    XSkC = XS0 - 2.0 * rIEPS;
-                if( pmp->MASDJ[j] <= 0.0 )
+                if( pmp->MASDJ[j][PI_DENS] <= 0.0 )  // what does it mean?
                     SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
                             pmp->MASDT[k][ist];
-                else SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
-                                 pmp->MASDJ[j];
+                else SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/ pmp->MASDJ[j][PI_DENS];
+//                               pmp->MASDJ[j];
                 if( fabs(XS0-XSkC) > XS0*rIEPS )
                 {
                     if( XSkC > XS0 )  // case 1
@@ -1128,6 +1193,120 @@ cout << "     x[jn]= " << pmp->X[j] << " XSk= " << XSk << " XSkC=" << XSkC << " 
                     SAT = 1.0/rIEPS;  // to limit from above
                 pmp->lnGam[j] = log( SAT );
                 pmp->lnGam[j] += log( SATst );
+                break;
+            case SAT_FRUM_NCOMP: /* Non-competitive Frumkin isotherm for perm.charge surfaces */
+                dent = 1; // monodentate for now
+                xj0 = fabs(pmp->MASDJ[j][PI_DENS])/pmp->Aalp[k]/1.66054;
+                                             // Max site density per nm2
+                xj = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
+                     /pmp->Aalp[k]/1.66054; // Current density per nm2
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * xj0; // relative IEPS
+                if(xj >= xj0/dent)
+                     xj = xj0/dent - rIEPS;  // upper limit
+                q2 = xj0 - xj*dent;  // Computing differences in QCA gamma
+                q1 = xj0 - xj;
+                if( q1 < 1e-22 )
+                    q1 = 1e-22;
+                if( q2 < 1e-22 )
+                    q2 = 1e-22;
+                ISAT = log(xj0) + log(q1)*(dent-1) - log(q2)*dent;
+            // Calculation of the Frumkin exponential term
+                if( fabs (Fi) < 1e-9 || fabs (cN) < 1e-9 )
+                   eF = 0.0;
+                else {
+                   eF = cN * Fi * xj / xj0 ;  // Fi = Fi'/(kT) Bockris p.938
+                }
+                pmp->lnGam[j] = ISAT + eF;
+                break;
+            case SAT_FRUM_COMP: /* Competitive Frumkin isotherm for perm.charge surfaces */
+                if( iSite[ist] < 0 )               // monodentate only!
+                    xjn = 0.0;
+                else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
+                XSkC = XSk - xjn; // occupied by the competing species;
+	                          // this sorbate also competes to itself!
+                XSkC = XSkC / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
+                       / pmp->Aalp[k]/1.66054;  // per nm2
+                XS0 = pmp->MASDT[k][ist]/pmp->Aalp[k]/1.66054; /* max.dens.per nm2 */
+/*            XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; expected total sites in moles */
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * XS0;  // relative IEPS
+                if( XSkC < 0.0 )
+                    XSkC = 0.0;
+                if( XSkC >= XS0 )  // Limits
+                    XSkC = XS0 - 2.0 * rIEPS;
+                q1 = XS0 - XSkC;
+                if( pa.p.PC == 2 && !pmp->W1 || pa.p.PC != 2 )
+                {
+                  q2 = rIEPS * XS0;
+                  if( q1 > q2 )
+                      q2 = q1;
+                }
+                else {
+                   q2 = q1;
+                   if( q2 <= 1e-22 )
+                       q2 = 1e-22;
+                }
+                ISAT = log( XS0 ) - log( q2 );
+            // Calculation of the Frumkin exponential term (competitive)
+                if( fabs (Fi) < 1e-9 || fabs (cN) < 1e-9 )
+                   eF = 0.0;
+                else {
+ XSkC = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6 /pmp->Aalp[k]/1.66054; // Trial
+ if(xj >= xj0)  XSkC = XS0 - 2.*rIEPS;                                 // Trial
+// if(pmp->IC > 1e-6) cN = pow( pmp->IC, 0.3333333 );
+                   eF = cN * Fi * XSkC / XS0;  // Fi = Fi'/(kT) Bockris p.938
+                }
+                pmp->lnGam[j] = ISAT + eF;
+                break;
+            case SAT_PIVO_NCOMP: /* Non-competitive Pivovarov isotherm */
+                dent = 1; // monodentate for now
+                xj0 = fabs(pmp->MASDJ[j][PI_DENS])/pmp->Aalp[k]/1.66054;
+                                             // Max site density per nm2
+                xj = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
+                     /pmp->Aalp[k]/1.66054; // Current density per nm2
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * xj0; // relative IEPS
+                if(xj >= xj0/dent)
+                     xj = xj0/dent - rIEPS;  // upper limit
+                q2 = xj0 - xj*dent;  // Computing differences in QCA gamma
+                q1 = xj0 - xj;
+                if( q1 < 1e-22 )
+                    q1 = 1e-22;
+                if( q2 < 1e-22 )
+                    q2 = 1e-22;
+                ISAT = log(xj0) + log(q1)*(dent-1) - log(q2)*dent;
+            // Calculation of the Frumkin exponential term
+                if( fabs (Fi) < 1e-9 || fabs (cN) < 1e-9 )
+                   eF = 0.0;
+                else {
+                   double pivovar = 1.0;
+                   eF = cN * Fi * xj / xj0 ;  // Fi = Fi'/(kT) Bockris p.938
+            // Calculation of the Pivovarov 98 exponential correction term
+                   pivovar = xj0 / ( xj0 + xj * ( cN -1 ));
+                   eF *= pivovar;
+                }
+                pmp->lnGam[j] = ISAT + eF;
+                break;
+            case SAT_VIR_NCOMP: /* Non-Competitive virial isotherm */
+                dent = 1; // monodentate for now
+                xj0 = fabs(pmp->MASDJ[j][PI_DENS])/pmp->Aalp[k]/1.66054;
+                                             // Max site density per nm2
+                xj = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
+                     /pmp->Aalp[k]/1.66054; // Current density per nm2
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * xj0; // relative IEPS
+                if(xj >= xj0/dent)
+                     xj = xj0/dent - rIEPS;  // upper limit
+                ISAT = 0.0;
+            // Calculation of the Frumkin exponential term
+                if( fabs (Fi) < 1e-9 || fabs (cN) < 1e-9 )
+                   eF = 0.0;
+                else {
+                   eF = cN * Fi * xj / xj0 ;  // Fi = Fi'/(kT) Bockris p.938
+                }
+                pmp->lnGam[j] = ISAT + eF;
                 break;
             case SAT_BET_NCOMP: /* Non-competitive BET for surf.precipitation */
                 ISAT = 0.0;
@@ -1277,7 +1456,7 @@ cout << "     x[j]= " << pmp->X[j] << " xj= " << xj << " xj0= " << xj0 << " XSkC
                 break;
             case SAT_NCOMP: /* Non-competitive surface species */
 // rIEPS = pa.p.IEPS * 2;
-                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
+                xj0 = fabs(pmp->MASDJ[j][PI_DENS]) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
                 if( pa.p.PC == 1 )
                     rIEPS = pa.p.IEPS * xj0;  // relative IEPS
@@ -1332,11 +1511,11 @@ cout << "     x[j]= " << pmp->X[j] << " xj= " << xj << " xj0= " << xj0 << " XSk=
                     XSkC = 0.0;
 //                if( XSkC >= XS0 )  // Limits
 //                    XSkC = XS0 - 2.0 * rIEPS;
-                if( pmp->MASDJ[j] <= 0.0 )
+                if( pmp->MASDJ[j][PI_DENS] <= 0.0 )
                     SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
                             pmp->MASDT[k][ist];
-                else SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
-                                 pmp->MASDJ[j];
+                else SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/pmp->MASDJ[j][PI_DENS];
+//                                 pmp->MASDJ[j];
                 if( fabs(XS0-XSkC) > XS0*rIEPS )
                 {
                     if( XSkC > XS0 )  // case 1
@@ -1381,7 +1560,7 @@ cout << "     x[jn]= " << pmp->X[j] << " XSk= " << XSk << " XSkC=" << XSkC << " 
 double TProfil::Ej_init_calc( double, int j, int k)
 {
     int ist, isp, jc=0;
-    double F0=0.0, Fold, dF0, Mk=0.0, Ez, psiA, psiB;
+    double F0=0.0, Fold, dF0, Mk=0.0, Ez, psiA, psiB, CD0, CDb, ObS;
 
     Fold = pmp->F0[j];
     if( pmp->FIat > 0 )
@@ -1431,47 +1610,66 @@ double TProfil::Ej_init_calc( double, int j, int k)
         /* get ist - index of surface type and isp - index of surface plane  */
         ist = pmp->SATNdx[j][0] / MSPN;
         isp = pmp->SATNdx[j][0] % MSPN;
+        CD0 = pmp->MASDJ[j][PI_CD_0];  // species charge that goes into 0 plane
+        CDb = pmp->MASDJ[j][PI_CD_B];  // species charge that goes into B plane
+        ObS = pmp->MASDJ[j][PI_DENS];  // obsolete - the sign for outer-sphere charge
+        if( ObS >= 0.0 )
+            ObS = 1.0;
+        else ObS = -1.0;
         psiA = pmp->XpsiA[k][ist];
         psiB = pmp->XpsiB[k][ist];
         Ez = double(pmp->EZ[j]);
-        if( !isp )  /* This is  A (0) plane */
+        if( !isp )  // This is the 0 (A) plane species
+        {
+            if( fabs( CD0 ) > 1e-20 )  // Doubtful...
+                Ez = CD0;
             F0 += psiA * Ez * pmp->FRT;
+        }
         else  /* This is B plane */
         {
+            if( pmp->SCM[k][ist] == SC_MTL || pmp->SCM[k][ist] == SC_MXC )
+            { /* Modified TL: Robertson, 1997; also XTLM Kulik 2002 */
+                  if( fabs( CDb ) > 1e-20 )  // Doubtful...
+                      Ez = CDb;
+                  F0 += psiB * Ez * pmp->FRT;
+            }
             if( pmp->SCM[k][ist] == SC_TLM )
-            { /* TLM model after Hayes, 1987,
-                 see also Table 4 in Zachara & Westall, 1999 */
-                if( pmp->MASDJ[j] < 0 )
-                {
-                    Ez -= 1.0;
-                    F0 += ( psiA + Ez * psiB )* pmp->FRT;
-                }
-                else
-                {
-                    Ez += 1.0;
-                    F0 += ( Ez * psiB - psiA )* pmp->FRT;
-                }
+            {
+// New CD version of TLM  added 25.10.2004
+               if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
+                  F0 += ( psiA*CD0 + psiB*CDb )* pmp->FRT;
+// see also Table 4 in Zachara & Westall, 1999
+// Old version:  TLM Hayes & Leckie, 1987 uses the sign indicator at density
+                else {
+                  if( pmp->MASDJ[j][PI_DENS] < 0 )
+                  {
+                      Ez -= 1.0;
+                      F0 += ( psiA + Ez * psiB )* pmp->FRT;
+                  }
+                  else
+                  {
+                      Ez += 1.0;
+                      F0 += ( Ez * psiB - psiA )* pmp->FRT;
+                  }
+               }
             }
-            else if( pmp->SCM[k][ist] == SC_BSM )
+            else if( pmp->SCM[k][ist] == SC_BSM || pmp->SCM[k][ist] == SC_CCM )
             { /* Basic Stern model Christl & Kretzschmar, 1999 */
-                if( pmp->MASDJ[j] < 0 )
-                {
-                    Ez -= 1.0;
-                    F0 += ( psiA + Ez * psiB )* pmp->FRT;
-                }
-                else
-                {
-                    Ez += 1.0;
-                    F0 += ( Ez * psiB - psiA )* pmp->FRT;
-                }
-            }
-            else if( pmp->SCM[k][ist] == SC_MTL )
-            { /* Modified TLM after Robertson, 1996 */
-                F0 += psiB * Ez * pmp->FRT;
-            }
-            else if( pmp->SCM[k][ist] == SC_MXC )
-            { /* BSM for ion exchange on permanent charge surface */
-                F0 += psiB * Ez * pmp->FRT;
+// New CD version of TLM  added 25.10.2004
+               if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
+                  F0 += ( psiA*CD0 + psiB*CDb )* pmp->FRT;
+                else {
+                  if( pmp->MASDJ[j][PI_DENS] < 0 )
+                  {
+                      Ez -= 1.0;
+                      F0 += ( psiA + Ez * psiB )* pmp->FRT;
+                  }
+                  else
+                  {
+                      Ez += 1.0;
+                      F0 += ( Ez * psiB - psiA )* pmp->FRT;
+                  }
+               }
             }
         }
         if( Mk > 1e-9 )
@@ -1813,7 +2011,7 @@ void TProfil::GammaCalc( int LinkMode  )
                     }
                     /* Calculate surface activity coeffs */
 //                  SurfaceActivityTerm(  jb, je, k );
-                    SurfaceActivityCoeff(  jb, je, k );
+                    SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
                 }
             }
             if( sMod[SGM_MODE] == SM_IDEAL )

@@ -291,7 +291,8 @@ void TMulti::to_text_file( gstring& path )
       outArray( ff, "XetaB", &pm.XetaB[0][0],  pm.FIs*pm.FIat);
       outArray( ff, "XFTS", &pm.XFTS[0][0],  pm.FIs*pm.FIat);
 
-      outArray( ff, "MASDJ", pm.MASDJ, pm.Ls);
+//      outArray( ff, "MASDJ", pm.MASDJ, pm.Ls);
+      outArray( ff, "MASDJ", &pm.MASDJ[0][0], pm.Ls*DFCN);
       outArray( ff, "lnSAT", pm.lnSAT,  pm.Ls);
     }
 
@@ -502,7 +503,8 @@ void TMulti::to_file( GemDataStream& ff, gstring& path  )
       ff.writeArray((double*)pm.XFTS, pm.FIs*pm.FIat);
 
       ff.writeArray(pm.SATT, pm.Ls);
-      ff.writeArray(pm.MASDJ, pm.Ls);
+      ff.writeArray((float*)pm.MASDJ, pm.Ls*DFCN);
+//      ff.writeArray(pm.MASDJ, pm.Ls);
       ff.writeArray(pm.lnSAT, pm.Ls);
     }
 
@@ -715,7 +717,8 @@ void TMulti::from_file( GemDataStream& ff )
       ff.readArray((double*)pm.XFTS, pm.FIs*pm.FIat);
 
       ff.readArray(pm.SATT, pm.Ls);
-      ff.readArray(pm.MASDJ, pm.Ls);
+      ff.readArray((float*)pm.MASDJ, pm.Ls*DFCN);
+//      ff.readArray(pm.MASDJ, pm.Ls);
       ff.readArray(pm.lnSAT, pm.Ls);
     }
 
@@ -917,31 +920,32 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  if( pm.FIat > 0 /*&& pm.Lads > 0*/ && pm.FIs > 0 )
  { // ADSORBTION AND ION IXCHANDG
    pm.SATNdx = new short[pm.Ls][2];
-   pm.SCM  = new char[pm.FIs][6];
+   pm.SCM  = new char[pm.FIs][MST];
 
-    pm.Nfsp = new float[pm.FIs][6];
-    pm.MASDT = new float[pm.FIs][6];
-    pm.XcapA = new float[pm.FIs][6];
-    pm.XcapB = new float[pm.FIs][6];
-    pm.XcapD = new float[pm.FIs][6];
-    pm.XcapF = new float[pm.FIs][6];
-    pm.XdlA = new float[pm.FIs][6];
-    pm.XdlB = new float[pm.FIs][6];
-    pm.XdlD = new float[pm.FIs][6];
-    pm.XpsiA = new double[pm.FIs][6];
-    pm.XpsiB = new double[pm.FIs][6];
-    pm.XpsiD = new double[pm.FIs][6];
-    pm.XlamA = new float[pm.FIs][6];
-    pm.Xetaf = new float[pm.FIs][6];
-    pm.XetaA = new double[pm.FIs][6];
-    pm.XetaB = new double[pm.FIs][6];
-    pm.MASDJ = new float[pm.Ls];
-    pm.XFTS = new double[pm.FIs][6];
+    pm.Nfsp = new float[pm.FIs][MST];
+    pm.MASDT = new float[pm.FIs][MST];
+    pm.XcapA = new float[pm.FIs][MST];
+    pm.XcapB = new float[pm.FIs][MST];
+    pm.XcapD = new float[pm.FIs][MST];
+    pm.XcapF = new float[pm.FIs][MST];
+    pm.XdlA = new float[pm.FIs][MST];
+    pm.XdlB = new float[pm.FIs][MST];
+    pm.XdlD = new float[pm.FIs][MST];
+    pm.XpsiA = new double[pm.FIs][MST];
+    pm.XpsiB = new double[pm.FIs][MST];
+    pm.XpsiD = new double[pm.FIs][MST];
+    pm.XlamA = new float[pm.FIs][MST];
+    pm.Xetaf = new float[pm.FIs][MST];
+    pm.XetaA = new double[pm.FIs][MST];
+    pm.XetaB = new double[pm.FIs][MST];
+    pm.MASDJ = new float[pm.Ls][DFCN];
+//    pm.MASDJ = new float[pm.Ls];
+    pm.XFTS = new double[pm.FIs][MST];
     pm.lnSAT = new double[pm.Ls];
     pm.SATT = new char[pm.Ls];
  }
 else
- { // ADSORBTION AND ION IXCHANDG
+ { // ADSORPTION AND ION EXCHANGE
    pm.SATNdx = 0;
    pm.SCM  = 0;
 
@@ -967,7 +971,7 @@ else
     pm.SATT = 0;
  }
 
- if( pm.PG > 0 ) 
+ if( pm.PG > 0 )
  {
   pm.Fug = new float[pm.PG];
   pm.Fug_l = new float[pm.PG];
@@ -1334,43 +1338,44 @@ void TMulti::dyn_new_test(MULTI& tes)
 //   tes.SATNdx = (short (*)[2])aObj[ o_wi_satndx].Alloc( tes.Ls, 2, I_ );
 //   tes.SCM  = (char (*)[MST])aObj[ o_wi_scm].Alloc( tes.FIs, tes.FIat, A_ );
 //   memset( tes.SCM, SC_NOT_USED, tes.FIs*tes.FIat );
-    tes.Nfsp = new float[pm.FIs][6];
-     memcpy( tes.Nfsp, pm.Nfsp, pm.FIs*6*sizeof(float) );
-    tes.MASDT = new float[pm.FIs][6];
-     memcpy( tes.MASDT, pm.MASDT, pm.FIs*6*sizeof(float) );
-    tes.XcapA = new float[pm.FIs][6];
-     memcpy( tes.XcapA, pm.XcapA, pm.FIs*6*sizeof(float) );
-    tes.XcapB = new float[pm.FIs][6];
-     memcpy( tes.XcapB, pm.XcapB, pm.FIs*6*sizeof(float) );
-    tes.XcapD = new float[pm.FIs][6];
-     memcpy( tes.XcapD, pm.XcapD, pm.FIs*6*sizeof(float) );
-    tes.XcapF = new float[pm.FIs][6];
-     memcpy( tes.XcapF, pm.XcapF, pm.FIs*6*sizeof(float) );
-    tes.XdlA = new float[pm.FIs][6];
-     memcpy( tes.XdlA, pm.XdlA, pm.FIs*6*sizeof(float) );
-    tes.XdlB = new float[pm.FIs][6];
-     memcpy( tes.XdlB, pm.XdlB, pm.FIs*6*sizeof(float) );
-    tes.XdlD = new float[pm.FIs][6];
-     memcpy( tes.XdlD, pm.XdlD, pm.FIs*6*sizeof(float) );
-    tes.XpsiA = new double[pm.FIs][6];
-     memcpy( tes.XpsiA, pm.XpsiA, pm.FIs*6*sizeof(double) );
-    tes.XpsiB = new double[pm.FIs][6];
-     memcpy( tes.XpsiB, pm.XpsiB, pm.FIs*6*sizeof(double) );
-    tes.XpsiD = new double[pm.FIs][6];
-     memcpy( tes.XpsiD, pm.XpsiD, pm.FIs*6*sizeof(double) );
-    tes.XlamA = new float[pm.FIs][6];
-     memcpy( tes.XlamA, pm.XlamA, pm.FIs*6*sizeof(float) );
-    tes.Xetaf = new float[pm.FIs][6];
-     memcpy( tes.Xetaf, pm.Xetaf, pm.FIs*6*sizeof(float) );
-    tes.MASDJ = new float[pm.Ls];
-     memcpy( tes.MASDJ, pm.MASDJ, pm.Ls*sizeof(float) );
-
-    tes.XetaA = new double[pm.FIs][6];
-     memcpy( tes.XetaA, pm.XetaA, pm.FIs*6*sizeof(double) );
-    tes.XetaB = new double[pm.FIs][6];
-     memcpy( tes.XetaB, pm.XetaB, pm.FIs*6*sizeof(double) );
-    tes.XFTS = new double[pm.FIs][6];
-     memcpy( tes.XFTS, pm.XFTS, pm.FIs*6*sizeof(double) );
+    tes.Nfsp = new float[pm.FIs][MST];
+     memcpy( tes.Nfsp, pm.Nfsp, pm.FIs*MST*sizeof(float) );
+    tes.MASDT = new float[pm.FIs][MST];
+     memcpy( tes.MASDT, pm.MASDT, pm.FIs*MST*sizeof(float) );
+    tes.XcapA = new float[pm.FIs][MST];
+     memcpy( tes.XcapA, pm.XcapA, pm.FIs*MST*sizeof(float) );
+    tes.XcapB = new float[pm.FIs][MST];
+     memcpy( tes.XcapB, pm.XcapB, pm.FIs*MST*sizeof(float) );
+    tes.XcapD = new float[pm.FIs][MST];
+     memcpy( tes.XcapD, pm.XcapD, pm.FIs*MST*sizeof(float) );
+    tes.XcapF = new float[pm.FIs][MST];
+     memcpy( tes.XcapF, pm.XcapF, pm.FIs*MST*sizeof(float) );
+    tes.XdlA = new float[pm.FIs][MST];
+     memcpy( tes.XdlA, pm.XdlA, pm.FIs*MST*sizeof(float) );
+    tes.XdlB = new float[pm.FIs][MST];
+     memcpy( tes.XdlB, pm.XdlB, pm.FIs*MST*sizeof(float) );
+    tes.XdlD = new float[pm.FIs][MST];
+     memcpy( tes.XdlD, pm.XdlD, pm.FIs*MST*sizeof(float) );
+    tes.XpsiA = new double[pm.FIs][MST];
+     memcpy( tes.XpsiA, pm.XpsiA, pm.FIs*MST*sizeof(double) );
+    tes.XpsiB = new double[pm.FIs][MST];
+     memcpy( tes.XpsiB, pm.XpsiB, pm.FIs*MST*sizeof(double) );
+    tes.XpsiD = new double[pm.FIs][MST];
+     memcpy( tes.XpsiD, pm.XpsiD, pm.FIs*MST*sizeof(double) );
+    tes.XlamA = new float[pm.FIs][MST];
+     memcpy( tes.XlamA, pm.XlamA, pm.FIs*MST*sizeof(float) );
+    tes.Xetaf = new float[pm.FIs][MST];
+     memcpy( tes.Xetaf, pm.Xetaf, pm.FIs*MST*sizeof(float) );
+    tes.MASDJ = new float[pm.Ls][DFCN];
+     memcpy( tes.MASDJ, pm.MASDJ, pm.Ls*DFCN*sizeof(float) );
+//    tes.MASDJ = new float[pm.Ls];
+//     memcpy( tes.MASDJ, pm.MASDJ, pm.Ls*sizeof(float) );
+    tes.XetaA = new double[pm.FIs][MST];
+     memcpy( tes.XetaA, pm.XetaA, pm.FIs*MST*sizeof(double) );
+    tes.XetaB = new double[pm.FIs][MST];
+     memcpy( tes.XetaB, pm.XetaB, pm.FIs*MST*sizeof(double) );
+    tes.XFTS = new double[pm.FIs][MST];
+     memcpy( tes.XFTS, pm.XFTS, pm.FIs*MST*sizeof(double) );
     tes.lnSAT = new double[pm.Ls];
      memcpy( tes.lnSAT, pm.lnSAT, pm.Ls*sizeof(double) );
 //   tes.SATT = (char *)aObj[ o_wi_satt].Alloc( tes.Ls, 1, A_ );
@@ -1587,25 +1592,26 @@ void TMulti::dyn__test(MULTI& tes)
 
  if( tes.FIat > 0 && tes.Lads > 0 && tes.FIs > 0 )
  {
- Test_Eq( pm.FIs*6, &tes.Nfsp[0][0], &pm.Nfsp[0][0], "Nfsp" );
- Test_Eq( pm.FIs*6, &tes.MASDT[0][0], &pm.MASDT[0][0], "MASDT" );
- Test_Eq( pm.FIs*6, &tes.XcapA[0][0], &pm.XcapA[0][0], "XcapA" );
- Test_Eq( pm.FIs*6, &tes.XcapB[0][0], &pm.XcapB[0][0], "XcapB" );
- Test_Eq( pm.FIs*6, &tes.XcapD[0][0], &pm.XcapD[0][0], "XcapD" );
- Test_Eq( pm.FIs*6, &tes.XcapF[0][0], &pm.XcapF[0][0], "XcapF" );
- Test_Eq( pm.FIs*6, &tes.XdlA[0][0], &pm.XdlA[0][0], "XdlA" );
- Test_Eq( pm.FIs*6, &tes.XdlB[0][0], &pm.XdlB[0][0], "XdlB" );
- Test_Eq( pm.FIs*6, &tes.XdlD[0][0], &pm.XdlD[0][0], "XdlD" );
- Test_Eq( pm.FIs*6, &tes.XpsiA[0][0], &pm.XpsiA[0][0], "XpsiA" );
- Test_Eq( pm.FIs*6, &tes.XpsiB[0][0], &pm.XpsiB[0][0], "XpsiB" );
- Test_Eq( pm.FIs*6, &tes.XpsiD[0][0], &pm.XpsiD[0][0], "XpsiD" );
- Test_Eq( pm.FIs*6, &tes.XlamA[0][0], &pm.XlamA[0][0], "XlamA" );
- Test_Eq( pm.FIs*6, &tes.Xetaf[0][0], &pm.Xetaf[0][0], "Xetaf" );
- Test_Eq( pm.FIs*6, &tes.XpsiA[0][0], &pm.XpsiA[0][0], "XpsiA" );
- Test_Eq( pm.Ls, tes.MASDJ, pm.MASDJ, "MASDJ" );
- Test_Eq( pm.FIs*6, &tes.XetaA[0][0], &pm.XetaA[0][0], "XetaA" );
- Test_Eq( pm.FIs*6, &tes.XetaB[0][0], &pm.XetaB[0][0], "XetaB" );
- Test_Eq( pm.FIs*6, &tes.XFTS[0][0], &pm.XFTS[0][0], "XFTS" );
+ Test_Eq( pm.FIs*MST, &tes.Nfsp[0][0], &pm.Nfsp[0][0], "Nfsp" );
+ Test_Eq( pm.FIs*MST, &tes.MASDT[0][0], &pm.MASDT[0][0], "MASDT" );
+ Test_Eq( pm.FIs*MST, &tes.XcapA[0][0], &pm.XcapA[0][0], "XcapA" );
+ Test_Eq( pm.FIs*MST, &tes.XcapB[0][0], &pm.XcapB[0][0], "XcapB" );
+ Test_Eq( pm.FIs*MST, &tes.XcapD[0][0], &pm.XcapD[0][0], "XcapD" );
+ Test_Eq( pm.FIs*MST, &tes.XcapF[0][0], &pm.XcapF[0][0], "XcapF" );
+ Test_Eq( pm.FIs*MST, &tes.XdlA[0][0], &pm.XdlA[0][0], "XdlA" );
+ Test_Eq( pm.FIs*MST, &tes.XdlB[0][0], &pm.XdlB[0][0], "XdlB" );
+ Test_Eq( pm.FIs*MST, &tes.XdlD[0][0], &pm.XdlD[0][0], "XdlD" );
+ Test_Eq( pm.FIs*MST, &tes.XpsiA[0][0], &pm.XpsiA[0][0], "XpsiA" );
+ Test_Eq( pm.FIs*MST, &tes.XpsiB[0][0], &pm.XpsiB[0][0], "XpsiB" );
+ Test_Eq( pm.FIs*MST, &tes.XpsiD[0][0], &pm.XpsiD[0][0], "XpsiD" );
+ Test_Eq( pm.FIs*MST, &tes.XlamA[0][0], &pm.XlamA[0][0], "XlamA" );
+ Test_Eq( pm.FIs*MST, &tes.Xetaf[0][0], &pm.Xetaf[0][0], "Xetaf" );
+ Test_Eq( pm.FIs*MST, &tes.XpsiA[0][0], &pm.XpsiA[0][0], "XpsiA" );
+ Test_Eq( pm.Ls*DFCN, &tes.MASDJ[0][0], &pm.MASDJ[0][0], "MASDJ" );
+// Test_Eq( pm.Ls, tes.MASDJ, pm.MASDJ, "MASDJ" );
+ Test_Eq( pm.FIs*MST, &tes.XetaA[0][0], &pm.XetaA[0][0], "XetaA" );
+ Test_Eq( pm.FIs*MST, &tes.XetaB[0][0], &pm.XetaB[0][0], "XetaB" );
+ Test_Eq( pm.FIs*MST, &tes.XFTS[0][0], &pm.XFTS[0][0], "XFTS" );
 // Test_Eq( pm.Ls, tes.lnSAT, pm.lnSAT, "lnSAT" );
  }
 

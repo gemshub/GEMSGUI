@@ -170,7 +170,7 @@ typedef struct
     *Fug,   // Partial fugacities of gases [0:PG-1]
     *Fug_l, // log  partial fugacities of gases [0:PG-1]
     *Ppg_l, // log  partial pressures of gases [0:PG-1]
-    *MASDJ;  /* Max sur dens for non-compet.species mkmol/g [Ls] */
+    (*MASDJ)[DFCN];  /* Density, Frumkin, CD-MUSIC params new [Ls][DFCN] */
     double
     *DUL,  // VG Vector of upper restrictions to x_j (reserved) [L]
     *DLL,  // NG Vector of lower restrictions to x_j, moles [L]

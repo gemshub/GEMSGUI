@@ -686,12 +686,6 @@ void TProfil::PackSystat()
     else multi->packData();
     pVisor->Update();
 
-
-
-
-
-
-
     //Sveta
 }
 

@@ -162,7 +162,7 @@ STEP_POINT( "End Simplex" );
     }
     else  // Taking previous result as initial approximation
     {
-        int jb, je;
+        int jb, je=0, jpb, jpe=0, jdb, jde=0;
         double LnGam, FitVar3;
         /*    pmp->IT *= pa.p.PLLG; */
 if( pa.p.PRD >= 8 )
@@ -184,16 +184,20 @@ if( pa.p.PRD >= 8 )
         if( pmp->E && pmp->LO )
             IS_EtaCalc();
         /*    if( pa.p.PSM )  corr. 13.4.96 */
-        for( k=0, je=0; k<pmp->FI; k++ )
+        for( k=0; k<pmp->FI; k++ )
         {
             jb = je;
             je += pmp->L1[k];
+            jpb = jpe;
+            jpe += pmp->LsMod[k];
+            jdb = jde;
+            jde += pmp->LsMdc[k]*pmp->L1[k];
             if( pmp->PHC[k] == PH_SORPTION || pmp->PHC[k] == PH_POLYEL )
             {
                if( pmp->E && pmp->LO )
                    GouyChapman( jb, je, k );
 //               SurfaceActivityTerm( jb, je, k );
-                 SurfaceActivityCoeff(  jb, je, k );
+                 SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
             }
             for( j=jb; j<je; j++ )
             {
@@ -526,6 +530,8 @@ void TProfil::MultiCalcIterations()
 
 // End of file ms_muload.cpp
 // ----------------------------------------------------------------
+
+//#define mp(i,j) pmp->MASDJ[(j)+(i)*D_F_CD_NP]
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of max.moles of surface species for SAT stabilization
 *  to improve IPM-2 convergence at high SAT values  KD 08.03.02
@@ -644,9 +650,12 @@ cout << "XmaxSAT_IPM2 Comp. IT= " << pmp->IT << " j= " << j << " oDUL=" << oDUL 
 
             case SAT_NCOMP: /* Non-competitive surface species */
 // rIEPS = pa.p.IEPS * 2;
-                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
+//                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
+//                      * pmp->Nfsp[k][ist];  in moles
+                 xj0 = fabs( pmp->MASDJ[j][PI_DENS] ) * XVk * Mm / 1e6
+// MASDJ() in mkmol/g: to be fixed to mkmol/m2
                       * pmp->Nfsp[k][ist]; /* in moles */
-                pmp->DUL[j] = xj0 - rIEPS;
+                 pmp->DUL[j] = xj0 - rIEPS;
 // Experimental  rIEPS = pa.p.IEPS * xj0;
 //                 if( xj0 > 2.0*rIEPS )
 //                   pmp->DUL[j] = xj0 - rIEPS; // xj0*(1.0-pa.p.IEPS); //pa.p.IEPS;
@@ -670,7 +679,15 @@ rIEPS = pa.p.IEPS;
 // New methods added by KD 13.04.04
 case SAT_L_COMP:
 case SAT_QCA_NCOMP:
+case SAT_QCA1_NCOMP:
+case SAT_QCA2_NCOMP:
+case SAT_QCA3_NCOMP:
+case SAT_QCA4_NCOMP:
 case SAT_BET_NCOMP:
+case SAT_FRUM_NCOMP:
+case SAT_VIR_NCOMP:
+case SAT_FRUM_COMP:
+case SAT_PIVO_NCOMP:
             case SAT_INDEF: /* No SAT calculation */
             default:        /* pmp->lnGam[j] = 0.0; */
                 break;

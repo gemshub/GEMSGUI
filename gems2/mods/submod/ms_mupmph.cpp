@@ -337,6 +337,8 @@ NEXT2:
     pmp->pBAL = 2;
 }
 
+//#define ms(i,j) syp->MaSdj[(j)+(i)*D_F_CD_NP]
+//#define mp(i,j) pmp->MASDJ[(j)+(i)*D_F_CD_NP]
 //Load data for DC from Modelling Project definition to structure MULTI
 //
 void TProfil::multi_sys_dc()
@@ -492,9 +494,27 @@ CH_FOUND:
         // Loading MaSdj - max.sur.densities for non-competitive sorbates */
         if( jj < mup->Ls && syp->PMaSdj != S_OFF )
         {
-            if( !IsFloatEmpty( syp->MaSdj[jj] ) )
-                pmp->MASDJ[j] = syp->MaSdj[jj];    /* 1/nm2! */
-            else pmp->MASDJ[j] = 0;
+            if( !IsFloatEmpty( syp->MaSdj[jj][PI_DENS] ) )
+                pmp->MASDJ[j][PI_DENS] = syp->MaSdj[jj][PI_DENS];
+            else pmp->MASDJ[j][PI_DENS]= 0;
+            if( !IsFloatEmpty( syp->MaSdj[jj][PI_CD_0] ) )
+                pmp->MASDJ[j][PI_CD_0] = syp->MaSdj[jj][PI_CD_0];
+            else pmp->MASDJ[j][PI_CD_0]= 0;
+            if( !IsFloatEmpty( syp->MaSdj[jj][PI_CD_B] ) )
+                pmp->MASDJ[j][PI_CD_B] = syp->MaSdj[jj][PI_CD_B];
+            else pmp->MASDJ[j][PI_CD_B]= 0;
+            if( !IsFloatEmpty( syp->MaSdj[jj][PI_FR_CN] ) )
+                pmp->MASDJ[j][PI_FR_CN] = syp->MaSdj[jj][PI_FR_CN];
+            else pmp->MASDJ[j][PI_FR_CN]= 0;
+            if( !IsFloatEmpty( syp->MaSdj[jj][PI_FR_FI] ) )
+                pmp->MASDJ[j][PI_FR_FI] = syp->MaSdj[jj][PI_FR_FI];
+            else pmp->MASDJ[j][PI_FR_FI]= 0;
+            if( !IsFloatEmpty( syp->MaSdj[jj][PI_COMP_GR] ) )
+                pmp->MASDJ[j][PI_COMP_GR] = syp->MaSdj[jj][PI_COMP_GR];
+            else pmp->MASDJ[j][PI_COMP_GR]= 0;
+//            if( !IsFloatEmpty( syp->MaSdj[jj] ) )
+//                pmp->MASDJ[j] = syp->MaSdj[jj];    1/nm2!
+//            else pmp->MASDJ[j] = 0;
         }
         if( jj < mup->Ls && syp->PSATT != S_OFF )
         { /* Loading SATC - codes of methods for SAT calculation */
@@ -950,15 +970,19 @@ void TProfil::ph_surtype_assign( int k, int kk, int jb, int je,
         else pmp->SATNdx[j][1] = Cjs; /* main carrier DC */
 
         if( pmp->SATT[j] != SAT_COMP )
-            pmp->MASDJ[j] *= syp->Aalp[kk]*1.66054;  /* mkmol/g */
+// To be fixed !!!!!!!!!!!
+            pmp->MASDJ[j][PI_DENS] *= syp->Aalp[kk]*1.66054;  /* 1/nm2 to mkmol/g */
+//            pmp->MASDJ[j] *= syp->Aalp[kk]*1.66054;  /* mkmol/g */
         if( !pmp->MASDJ[j] )
         {
             //      if( pmp->SATT[j] == SAT_SITE )
             //         pmp->MASDJ[j] = pmp->MASDT[k][ist] - pmp->MISDT[k][ist] ;
             if( pmp->SATT[j] == SAT_NCOMP )
-                pmp->MASDJ[j] = pmp->MASDT[k][ist];
+                pmp->MASDJ[j][PI_DENS] = pmp->MASDT[k][ist]; // Do we really need this?
+//              pmp->MASDJ[j] = pmp->MASDT[k][ist];
             if( pmp->SATT[j] == SAT_COMP )
-                pmp->MASDJ[j] = 1.0;
+                pmp->MASDJ[j][PI_DENS] = 1.0;
+//                pmp->MASDJ[j] = 1.0;
         }
         /*  if( pmp->SATT[j] == SAT_SITE )
             { * Correction for neutr.site at ƒ0,max *

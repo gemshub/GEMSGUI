@@ -97,7 +97,7 @@ typedef struct
     char (*SATC)[2]; /* Classifier of methods of SAT calculation [sy.Lsor] */
     /* and allocation of sur DC to carrier components */
     float
-    *MaSdj; /* Max surface DC density for non-compet.SAT 1/nm2 [sy.Lsor] */
+    (*MaSdj)[DFCN]; // Density, Frumkin, CD-MUSIC params new [sy.Lsor][DFCN] */
     /* Phase parameters */
     char
     (*SCMT)[MNST]; /* Classifier of EDL models for surface types [sy.Fia][6] */

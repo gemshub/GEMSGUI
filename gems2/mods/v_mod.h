@@ -90,8 +90,9 @@ enum integ_objects {                  // work objects
 
 const int
 MAXPARAMKEY =    24,
-                 MNST =           6,
-                                  MST =           MNST;
+             MNST =   6,
+                      MST =   6, // number of surface types
+                              DFCN = 6; // number of columns in MASDJ table 
 
 enum param_objects {                  // work objects
     o_paver =  o_ivaldy+1,

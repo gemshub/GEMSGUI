@@ -209,7 +209,7 @@ LOAD_NIDMCOEF:
                 pmp->PMc = (float *) aObj[ o_wi_pmc ].Alloc( (kc+pmp->LsMod[k]), 1, F_ );
             if( aPH->php->pnc )
                 memcpy( pmp->PMc+kc, aPH->php->pnc, pmp->LsMod[k]*sizeof(float));
-            else pmp->LsMod[k] = 0;    
+            else pmp->LsMod[k] = 0;
         }
         if( pmp->LsMdc[k] )
         { /* coefficients for components */
@@ -220,7 +220,7 @@ LOAD_NIDMCOEF:
                                      /* pmp->Ls Predlagayu postavit`*/
                                        kd+pmp->LsMdc[k]*pmp->L1[k], 1, F_ );
 
-            ErrorIf( pmp->DMc==NULL, "SolModLoad", "Error realloc memory for pmp->DMc." );
+            ErrorIf( pmp->DMc == NULL, "SolModLoad", "Error realloc memory for pmp->DMc." );
             for( j = JB, jkd=0; j < JE; j++ )
             { /*set index of components */
                 if( syp->Dcl[j] == S_OFF )
@@ -235,7 +235,7 @@ LOAD_NIDMCOEF:
                  {
                     memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
                        pmp->LsMdc[k]*sizeof(float));
-                    pmp->Pparc[jp] = tpp->Fug[j-JB];   
+                    pmp->Pparc[jp] = tpp->Fug[j-JB];
                  }
                }
                jkd += pmp->LsMdc[k];
@@ -949,7 +949,7 @@ void TProfil::MultiCalcInit( const char *key )
 //
 void TProfil::EqstatExpand( const char *key )
 {
-    int i, j, k, jb, je;
+    int i, j, k, jb, je=0, jpb, jpe=0, jdb, jde=0;
     double FitVar3;
 
 //    if( !pmp->NR )       Sveta 30/08/01
@@ -1026,16 +1026,22 @@ void TProfil::EqstatExpand( const char *key )
     FitVar3 = pmp->FitVar[3];   /* Switch off smoothing factor */
     pmp->FitVar[3] = 1.0;
     /* Scan phases to retrieve concentrations and activities */
-    for( k=0, je=0; k<pmp->FIs; k++ )
+    je = 0;
+    for( k=0; k<pmp->FIs; k++ )
     {
         jb = je;
         je = jb+pmp->L1[k];
+        jpb = jpe;
+        jpe += pmp->LsMod[k];
+        jdb = jde;
+        jde += pmp->LsMdc[k]*pmp->L1[k];
+
         if( pmp->PHC[k] == PH_SORPTION )
         {
             if( pmp->E && pmp->LO )
                 GouyChapman( jb, je, k );
             /* calculation of surface activity terms */
-            SurfaceActivityCoeff(  jb, je, k );
+            SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
 //            SurfaceActivityTerm(  jb, je, k );
         }
         for( j=jb; j<je; j++ )

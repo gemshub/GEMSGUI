@@ -117,7 +117,8 @@ void TSysEq::ods_link( int q)
     aObj[o_sssatc].SetPtr( ss[q].SATC );
     aObj[o_sssatc].SetDim(ss[q].DM[4], 2 );
     aObj[o_ssmasdj].SetPtr(ss[q].MaSdj);
-    aObj[o_ssmasdj].SetDim(ss[q].DM[4], 1 );
+//    aObj[o_ssmasdj].SetDim(ss[q].DM[4], 1 );
+    aObj[o_ssmasdj].SetDim(ss[q].DM[4], DFCN );
     aObj[o_ssscmt].SetPtr( ss[q].SCMT );
     aObj[o_ssscmt].SetDim(ss[q].DM[20], ss[q].DM[17] );
     aObj[o_ssnfsp].SetPtr( ss[q].Nfsp );
@@ -225,7 +226,7 @@ void TSysEq::dyn_set(int q)
     ss[q].PUL = (float *)aObj[o_sspul].GetPtr();
     ss[q].PLL = (float *)aObj[o_sspll].GetPtr();
     ss[q].SATC = (char (*)[2])aObj[o_sssatc].GetPtr();
-    ss[q].MaSdj= (float *)aObj[o_ssmasdj].GetPtr();
+    ss[q].MaSdj= (float (*)[DFCN])aObj[o_ssmasdj].GetPtr();
     ss[q].SCMT = (char (*)[MNST])aObj[o_ssscmt].GetPtr();
     ss[q].Nfsp = (float (*)[MNST])aObj[o_ssnfsp].GetPtr();
     ss[q].MaSdt = (float (*)[MNST])aObj[o_ssmasdt].GetPtr();
@@ -302,7 +303,7 @@ void TSysEq::dyn_kill(int q)
     ss[q].PUL = (float *)aObj[o_sspul].Free();
     ss[q].PLL = (float *)aObj[o_sspll].Free();
     ss[q].SATC = (char (*)[2])aObj[o_sssatc].Free();
-    ss[q].MaSdj= (float *)aObj[o_ssmasdj].Free();
+    ss[q].MaSdj= (float (*)[DFCN])aObj[o_ssmasdj].Free();
     ss[q].SCMT = (char (*)[MNST])aObj[o_ssscmt].Free();
     ss[q].Nfsp = (float (*)[MNST])aObj[o_ssnfsp].Free();
     ss[q].MaSdt = (float (*)[MNST])aObj[o_ssmasdt].Free();
@@ -470,37 +471,38 @@ void TSysEq::dyn_new( int q )
         ss[q].RFSC = (char *)aObj[ o_ssrfsc ].Free();
     }
     /* add parameterd */
-    if( ss[q].switches[21] != S_OFF )
+    if( ss[q].switches[21] != S_OFF && ss[q].DM[19] > 0 )
         ss[q].YOF = (float *)aObj[ o_ssyof].Alloc( ss[q].DM[19], 1, F_ );
     else ss[q].YOF = (float *)aObj[ o_ssyof ].Free();
 
-    if( ss[q].switches[34] != S_OFF )
+    if( ss[q].switches[34] != S_OFF && ss[q].DM[18] > 0 )
         ss[q].Pparc = (float *)aObj[ o_sspparc].Alloc( ss[q].DM[18], 1, F_ );
     else ss[q].Pparc = (float *)aObj[ o_sspparc ].Free();
 
-    if( ss[q].switches[19] != S_OFF )
+    if( ss[q].switches[19] != S_OFF && ss[q].DM[4] > 0 )
         ss[q].SATC = (char (*)[2])aObj[ o_sssatc].Alloc( ss[q].DM[4], 2, A_ );
     else ss[q].SATC = (char (*)[2])aObj[ o_sssatc ].Free();
 
-    if( ss[q].switches[20] != S_OFF )
+    if( ss[q].switches[20] != S_OFF && ss[q].DM[18] > 0 )
         ss[q].GEX = (float *)aObj[ o_ssgex].Alloc( ss[q].DM[18], 1, F_ );
     else ss[q].GEX = (float *)aObj[ o_ssgex ].Free();
 
-    if( ss[q].switches[29] != S_OFF )
-        ss[q].MaSdj = (float *)aObj[ o_ssmasdj].Alloc( ss[q].DM[4], 1, F_ );
-    else ss[q].MaSdj = (float *)aObj[ o_ssmasdj ].Free();
+    if( ss[q].switches[29] != S_OFF && ss[q].DM[4] > 0 )
+        ss[q].MaSdj = (float (*)[DFCN])aObj[ o_ssmasdj].Alloc( ss[q].DM[4], DFCN, F_ );
+//      ss[q].MaSdj = (float *)aObj[ o_ssmasdj].Alloc( ss[q].DM[4], 1, F_ );
+    else ss[q].MaSdj = (float (*)[DFCN])aObj[ o_ssmasdj ].Free();
 
-    if( ss[q].switches[23] != S_OFF )
+    if( ss[q].switches[23] != S_OFF && ss[q].DM[18] > 0 )
         ss[q].lnGmf = (float *)aObj[ o_sslngmf].Alloc( ss[q].DM[18], 1, F_ );
     else ss[q].lnGmf = (float *)aObj[ o_sslngmf ].Free();
 
     /* Params of dispers phase */
-    if( ss[q].switches[24] != S_OFF )
+    if( ss[q].switches[24] != S_OFF && ss[q].DM[19] > 0 )
         ss[q].Aalp = (float *)aObj[ o_ssaalp].Alloc( ss[q].DM[19], 1, F_ );
     else ss[q].Aalp = (float *)aObj[ o_ssaalp ].Free();
 
     /* Modifications  */
-    if( ss[q].switches[25] != S_OFF )
+    if( ss[q].switches[25] != S_OFF && ss[q].DM[19] > 0 )
         ss[q].Sigm = (float (*)[2])aObj[ o_sssigm].Alloc( ss[q].DM[19], 2, F_ );
     else ss[q].Sigm = (float (*)[2])aObj[ o_sssigm ].Free();
 
@@ -512,7 +514,7 @@ void TSysEq::dyn_new( int q )
         ss[q].Xr0h0 = (float (*)[2])aObj[ o_ssxr0h0].Alloc( ss[q].DM[19], 2, F_ );
     else ss[q].Xr0h0 = (float (*)[2])aObj[ o_ssxr0h0 ].Free();
 
-    if( ss[q].switches[28] != S_OFF && ss[q].DM[17] > 0 )
+    if( ss[q].switches[28] != S_OFF && ss[q].DM[20] > 0 )
     {
         ss[q].Nfsp =(float (*)[MNST])aObj[o_ssnfsp].Alloc(ss[q].DM[20], ss[q].DM[17], F_);
         ss[q].SCMT =(char (*)[MNST])aObj[o_ssscmt].Alloc(ss[q].DM[20], ss[q].DM[17], A_);
@@ -523,32 +525,32 @@ void TSysEq::dyn_new( int q )
         ss[q].SCMT  = (char (*)[MNST])aObj[ o_ssscmt ].Free();
     }
 
-    if( ss[q].switches[29] != S_OFF && ss[q].DM[17] > 0 )
+    if( ss[q].switches[29] != S_OFF && ss[q].DM[20] > 0 )
         ss[q].MaSdt = (float (*)[MNST])aObj[ o_ssmasdt].Alloc(
                           ss[q].DM[20], ss[q].DM[17], F_ );
     else ss[q].MaSdt = (float (*)[MNST])aObj[ o_ssmasdt ].Free();
 
-    if( ss[q].switches[31] != S_OFF && ss[q].DM[17] > 0 )
+    if( ss[q].switches[31] != S_OFF && ss[q].DM[20] > 0 )
         ss[q].XcapA = (float (*)[MNST])aObj[ o_ssxcapa].Alloc(
                           ss[q].DM[20], ss[q].DM[17], F_ );
     else ss[q].XcapA = (float (*)[MNST])aObj[ o_ssxcapa ].Free();
 
-    if( ss[q].switches[32] != S_OFF && ss[q].DM[17] > 0 )
+    if( ss[q].switches[32] != S_OFF && ss[q].DM[20] > 0 )
         ss[q].XcapB = (float (*)[MNST])aObj[ o_ssxcapb].Alloc(
                           ss[q].DM[20], ss[q].DM[17], F_ );
     else ss[q].XcapB = (float (*)[MNST])aObj[ o_ssxcapb ].Free();
 
-    if( ss[q].switches[33] != S_OFF && ss[q].DM[17] > 0 )
+    if( ss[q].switches[33] != S_OFF && ss[q].DM[20] > 0 )
         ss[q].XfIEC = (float (*)[MNST])aObj[ o_ssxfiec].Alloc(
                           ss[q].DM[20], ss[q].DM[17], F_ );
     else ss[q].XfIEC = (float (*)[MNST])aObj[ o_ssxfiec ].Free();
 
-    if( ss[q].switches[30] != S_OFF && ss[q].DM[17] > 0 )
+    if( ss[q].switches[30] != S_OFF && ss[q].DM[20] > 0 )
         ss[q].XcapF = (float (*)[MNST])aObj[ o_ssxcapf].Alloc(
                           ss[q].DM[20], ss[q].DM[17], F_ );
     else ss[q].XcapF = (float (*)[MNST])aObj[ o_ssxcapf ].Free();
 
-    if( ss[q].switches[36] != S_OFF && ss[q].DM[17] > 0 )
+    if( ss[q].switches[36] != S_OFF && ss[q].DM[20] > 0 )
         ss[q].Xlam = (float (*)[MNST])aObj[ o_ssxlam].Alloc(
                          ss[q].DM[20], ss[q].DM[17], F_ );
     else ss[q].Xlam = (float (*)[MNST])aObj[ o_ssxlam ].Free();
