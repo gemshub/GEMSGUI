@@ -992,7 +992,7 @@ int TDataBase::scanfile( int nF, long& fPos, long& fLen,
         		"Please, wait...", (int)fPos, (int)fLen);
     }
     fLen = fEnd;
-    
+
     return nRec;
 }
 
@@ -1007,7 +1007,7 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 
     for(uint j=0; j<nff.GetCount(); j++)
     {
-	int  nRec;
+	int  nRec, nRT; bool isDel;
 	long fPos, fLen;
         unsigned char nF = (unsigned char)nff[j];
         // test and open file
@@ -1020,17 +1020,19 @@ void TDataBase::RebildFile(const TCIntArray& nff)
         aFile[nF].Open( UPDATE_DBV );
 
         //ind.delfile( nF );
-        aFile[nF].GetDh( fPos, fLen );
-	
+        aFile[nF].GetDh( fPos, fLen, nRT, isDel );
+
 	gstring tmpFileName = aFile[nF].GetPath() + ".tmp";
 	GemDataStream outStream( tmpFileName, ios::out | ios::binary );
 	outStream.seekp(fPos/*VDBhead::data_size()*/, ios::beg);
 
         nRec = scanfile( nF, fPos, fLen, aFile[nF].f, outStream );
+
 	outStream.close();
-	
+
 	aFile[nF].OpenFromFileName( tmpFileName, UPDATE_DBV );
-        aFile[nF].SetDh( fLen, nRec );
+
+        aFile[nF].SetDh( fLen, nRec, nRT, isDel );
 
         putndx( nF );
         status = UNDF_;

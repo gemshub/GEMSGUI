@@ -132,9 +132,9 @@ public:
     {
         check_dh(), dh->nRec = n;
     }
-    void GetDh( long& fPos, long& fLen );
+    void GetDh( long& fPos, long& fLen, int& nRT, bool& isDel );
     bool GetDhOver();
-    void SetDh( long fLen, int nRec );
+    void SetDh( long fLen, int nRec, int nRT, bool isDel );
 
     //---  Manipulation files ---
     void Create( unsigned char nRT, bool isDel );

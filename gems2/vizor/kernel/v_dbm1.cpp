@@ -214,7 +214,7 @@ TDBFile::vdbh_new( const char *VerP,
 }
 
 //Create new PDB file. If file exist, it will be deletet.
-void 
+void
 TDBFile::Create( unsigned char nRT, bool isDel )
 {
     GemDataStream ff;
@@ -236,7 +236,7 @@ TDBFile::Create( unsigned char nRT, bool isDel )
 }
 
 // Read the control structure of PDB file.
-void  
+void
 TDBFile::getHead(GemDataStream& fdb)
 {
     check_dh();
@@ -409,12 +409,14 @@ NoBlock:
 }
 
 //get information from dh
-void 
-TDBFile::GetDh( long& fPos, long& fLen )
+void
+TDBFile::GetDh( long& fPos, long& fLen, int& nRT, bool& isDel )
 {
     check_dh();
     fPos = dh->FPosTRT;
     fLen = FPosFree;
+    nRT = dh->nRT;
+    isDel = dh->isDel;
 }
 
 //get information from dh
@@ -424,25 +426,35 @@ TDBFile::GetDhOver()
     return (dh->stacOver < 0);
 }
 
-
-//set information to dh
+// sets information into compressed PDB file header
+// Fixed 07.09.04
 void
-TDBFile::SetDh( long fLen, int nRec )
+TDBFile::SetDh( long fLen, int nRec, int nRT, bool isDel )
 {
-    check_dh();
+    if( dh==0 )
+        dh = new VDBhead;
+    if( isDel && sfe == 0 )
+        sfe = new DBentry[MAXFESTACK];
+    clrh();
+    strncpy( dh->VerP, TFile::VV(), 8 );
+    strncpy( dh->PassWd, TFile::PA(), 8 );
+    vdbh_setdt();
+    dh->nRT = nRT;
+    dh->FPosTRT = dh->stacOver = VDBhead::data_size();
+    dh->isDel = isDel;
+    if( isDel )
+    {
+        dh->FPosTRT += DBentry::data_size() * MAXFESTACK;
+        check_sfe();
+        memset( (char*)sfe, 0, DBentry::data_size() * MAXFESTACK );
+    }
+    dh->nRec = nRec;
     dh->curDr = 0;
     dh->MinDrLen = 0;
     dh->MaxDrLen = 0;
     FPosFree = fLen;
-    dh->nRec = nRec;
-    dh->stacOver = VDBhead::data_size();
-    if( dh->isDel )
-    {
-        check_sfe();
-        memset( (char *)sfe, 0, sizeof(DBentry)*MAXFESTACK );
-    }
     PutHead( f );
-/*    
+/*
 #ifndef __unix
     int handle = f.rdbuf()->fd();
     chsize( handle, fLen );
