@@ -1006,8 +1006,8 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
     TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
 {
 // make copy of UNSPACE  structure (only for changed arrays )
-   ods_link(-2);
-   memcpy( &us[1].N, &us[0].N, 16 );
+   ods_link(-2);  //1
+   memcpy( &us[1].N, &us[0].N, 32 );
    memcpy( &us[1].PunE, &us[0].PunE, 38 );
    dyn_new(1);
 
@@ -1071,9 +1071,10 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
     memcpy( us[1].GAMs, us[0].GAMs, us[1].Ls*sizeof(float) );
   }
 
-  if(//usp->PsGen[0??] == S_ON  &&
-     usp->Pa_f_pha == S_ON)
-    memcpy( us[1].f_PhA, us[0].f_PhA, us[1].N*sizeof(short) );
+//  not for icomps, free array
+//  if(//usp->PsGen[0??] == S_ON  &&
+//     usp->Pa_f_pha == S_ON)
+//    memcpy( us[1].f_PhA, us[0].f_PhA, us[1].N*sizeof(short) );
 
 //*********************************************************/
 //  resize us[0]
@@ -1086,7 +1087,246 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
    usp->Ls = TProfil::pm->mup->Ls;
    dyn_new(0);
 
-// pack and copy data from 1 to 2 (using deleting lists)
+   // recorb must be remaked and recalculated
+   usp->Gstat = UNSP_GS_INDEF;
+   usp->Astat = UNSP_AS_INDEF;
 
-}
+// pack and copy data from 1 to 0 (using deleting lists)
+//***************************************************
+
+    int j, i=0, ii=0, jj =0;
+
+if( aIComp.GetCount() < 1)
+  goto DCOMPS;
+
+// IComps  ( size  N )
+    while( jj < usp->N )
+    {
+      if( i < aIComp.GetCount() &&  aIComp[i].line == ii )
+      {
+        if( aIComp[i].delta == 1 )
+        { // add line
+          if(usp->PsGen[0] == S_ON )
+              for( j =0; j<usp->Q; j++ )
+              {
+                usp->vMol[j*usp->N+jj] = 0.;
+                usp->vU[j*usp->N+jj] = 0.;
+              }
+          if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+          {
+             usp->m_t_lo[jj] = 0.;
+             usp->m_t_up[jj] = 0.;
+          }
+          if(usp->PsGen[2]== S_ON)
+          {
+             usp->NgNb[jj] = 0;
+             usp->IntNb[jj] = 0.;
+             usp->Bs[jj] = 0.;
+          }
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < us[1].N )
+         {
+          if(usp->PsGen[0] == S_ON )
+              for( j =0; j<usp->Q; j++ )
+              {
+                usp->vMol[j*usp->N+jj] = us[1].vMol[j*us[1].N+ii];
+                usp->vU[j*usp->N+jj] = us[1].vU[j*us[1].N+ii];
+              }
+          if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+          {
+             usp->m_t_lo[jj] = us[1].m_t_lo[ii];
+             usp->m_t_up[jj] = us[1].m_t_up[ii];
+          }
+          if(usp->PsGen[2]== S_ON)
+          {
+             usp->NgNb[jj] = us[1].NgNb[ii];
+             usp->IntNb[jj] = us[1].IntNb[ii];
+             usp->Bs[jj] = us[1].Bs[ii];
+          }
+          }
+        jj++;
+        ii++;
+       }
+    }
+
+DCOMPS:
+if( aDComp.GetCount() < 1)
+  goto PHASES;
+
+// DComps  ( size  L )
+    ii=0; jj =0; i=0;
+
+    while( jj < usp->L )
+    {
+      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      {
+        if( aDComp[i].delta == 1 )
+        { // add line
+          if(usp->PsGen[0] == S_ON )
+          {   for( j =0; j<usp->Q; j++ )
+              {
+                usp->vG[j*usp->L+jj] = 0.;
+                usp->vY[j*usp->L+jj] = 0.;
+                usp->vGam[j*usp->L+jj] = 0.;
+              }
+                usp->Gs[jj] = 0.;
+                usp->NgLg[jj] = 0;
+                usp->IntLg[jj] = 0.;
+                usp->IntLg0[jj] = 0.;
+            }
+            if(usp->PsGen[1]== S_ON)
+            {
+                usp->Ss[jj] = 0.;
+                usp->NgLs[jj] = 0;
+                usp->IntLs[jj] = 0.;
+            }
+            if(usp->PsGen[5]== S_ON)
+            {
+                usp->Vs[jj] = 0.;
+                usp->NgLv[jj] = 0;
+                usp->IntLv[jj] = 0.;
+            }
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < us[1].L )
+         {
+          if(usp->PsGen[0] == S_ON )
+          {   for( j =0; j<usp->Q; j++ )
+              {
+                usp->vG[j*usp->L+jj] = us[1].vG[j*us[1].L+ii];
+                usp->vY[j*usp->L+jj] = us[1].vY[j*us[1].L+ii];
+                usp->vGam[j*usp->L+jj] = us[1].vGam[j*us[1].L+ii];
+              }
+                usp->Gs[jj] = us[1].Gs[ii];
+                usp->NgLg[jj] = us[1].NgLg[ii];
+                usp->IntLg[jj] = us[1].IntLg[ii];
+                usp->IntLg0[jj] = us[1].IntLg0[ii];
+            }
+            if(usp->PsGen[1]== S_ON)
+            {
+                usp->Ss[jj] = us[1].Ss[ii];
+                usp->NgLs[jj] = us[1].NgLs[ii];
+                usp->IntLs[jj] = us[1].IntLs[ii];
+            }
+            if(usp->PsGen[5]== S_ON)
+            {
+                usp->Vs[jj] = us[1].Vs[ii];
+                usp->NgLv[jj] = us[1].NgLv[ii];
+                usp->IntLv[jj] = us[1].IntLv[ii];
+            }
+          }
+        jj++;
+        ii++;
+       }
+    }
+
+ // DComps  ( size  Ls )
+    ii=0; jj =0;  i=0;
+
+    while( jj < usp->Ls )
+    {
+      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      {
+        if( aDComp[i].delta == 1 )
+        { // add line
+           if( usp->PsGen[0] == S_ON  && usp->Ls )
+                usp->vFug[jj] = 0.;
+           if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+            {
+                usp->fug_lo[jj] = 0.;
+                usp->fug_up[jj] = 0.;
+             }
+           if(usp->PsGen[6]== S_ON)   // new by DK
+            {
+                usp->NgGam[jj] = 0;
+                usp->IntGam[jj] = 0.;
+                usp->GAMs[jj] = 0.;
+             }
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < us[1].Ls )
+         {
+           if( usp->PsGen[0] == S_ON  && usp->Ls )
+                usp->vFug[jj] = us[1].vFug[ii];
+           if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+            {
+                usp->fug_lo[jj] = us[1].fug_lo[ii];
+                usp->fug_up[jj] = us[1].fug_up[ii];
+             }
+           if(usp->PsGen[6]== S_ON)   // new by DK
+            {
+                usp->NgGam[jj] = us[1].NgGam[ii];
+                usp->IntGam[jj] = us[1].IntGam[ii];
+                usp->GAMs[jj] = us[1].GAMs[ii];
+             }
+          }
+        jj++;
+        ii++;
+       }
+    }
+
+
+//*************************************************************
+PHASES:
+
+if( aPhase.GetCount() < 1)
+  return;
+
+    ii=0; jj =0; i=0;
+// PHases  ( size  Fi )
+    while( jj < usp->Fi )
+    {
+      if( i < aPhase.GetCount() &&  aPhase[i].line == ii )
+      {
+        if( aPhase[i].delta == 1 )
+        { // add line
+          if(usp->PsGen[0] == S_ON )
+              for( j =0; j<usp->Q; j++ )
+                usp->vYF[j*usp->Fi+jj] = 0.;
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < us[1].Fi )
+         {
+          if(usp->PsGen[0] == S_ON )
+              for( j =0; j<usp->Q; j++ )
+                usp->vYF[j*usp->Fi+jj] = us[1].vYF[j*us[1].Fi+ii];
+          }
+        jj++;
+        ii++;
+       }
+    }
+}   // end of   InsertChanges
 

@@ -372,7 +372,7 @@ void TProfil::TestChangeProfile()
     rt[RT_UNSPACE].GetKeyList( pkey, aList, anR );
 
     TUnSpace* aPB=(TUnSpace *)(&aMod[RT_UNSPACE]);
-    aPB->ods_link(-1);
+    aPB->ods_link(-1); //0
     if( aList.GetCount() > 0 )
     {  for(uint i=0; i< aList.GetCount(); i++)
        {

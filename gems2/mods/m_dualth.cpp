@@ -716,16 +716,15 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
             dtp->Bn[j*dtp->Nb+jj] = 0.;
             dtp->Ub[j*dtp->Nb+jj] = 0.;
             if( dtp->PvICb == S_ON )
-            {
               dtp->CIb[j*dtp->Nb+jj] = 0.;
-              dtp->CIclb[jj] = QUAN_GRAM;
-            }
             if( dtp->PvICn == S_ON )
-            {
               dtp->CIn[j*dtp->Nb+jj] = 0.;
-              dtp->CIcln[jj] = QUAN_GRAM;
-             }
           }
+          if( dtp->PvICb == S_ON )
+              dtp->CIclb[jj] = QUAN_GRAM;
+          if( dtp->PvICn == S_ON )
+              dtp->CIcln[jj] = QUAN_GRAM;
+
           for( j =0; j<dtp->nK; j++ )
             dtp->An[j*dtp->Nb+jj] = 0.;
 
@@ -747,16 +746,14 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
                dtp->Bn[j*dtp->Nb+jj] = p_Bn[j*Nold+ii];
                dtp->Ub[j*dtp->Nb+jj] = p_Ub[j*Nold+ii];
                if( dtp->PvICb == S_ON )
-               {
                  dtp->CIb[j*dtp->Nb+jj] = p_CIb[j*Nold+ii];
-                 dtp->CIclb[jj] = p_CIclb[ii];
-                }
                if( dtp->PvICn == S_ON )
-               {
                  dtp->CIn[j*dtp->Nb+jj] = p_CIn[j*Nold+ii];
-                 dtp->CIcln[jj] = p_CIcln[ii];
-               }
              }
+               if( dtp->PvICb == S_ON )
+                 dtp->CIclb[jj] = p_CIclb[ii];
+               if( dtp->PvICn == S_ON )
+                 dtp->CIcln[jj] = p_CIcln[ii];
              for( j =0; j<dtp->nK; j++ )
                 dtp->An[j*dtp->Nb+jj] = p_An[j*Nold+ii];
           }
