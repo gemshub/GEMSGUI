@@ -89,6 +89,8 @@ public:
 
 protected:
     void closeEvent(QCloseEvent* ev);
+    bool event(QEvent* e);
+
     void LoadMenu();
 
     void loadList1();
