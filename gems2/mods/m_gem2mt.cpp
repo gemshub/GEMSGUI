@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Implementation of GEM2MT class, config and calculation functions
+// Implementation of TGEM2MT class, config and calculation functions
 //
 // Copyright (C) 2005 S.Dmytriyeva, D.Kulik
 //
@@ -28,9 +28,9 @@ const char *GEMS_MT_HTML = "gm_gem2mt";
 
 #include "v_mod.h"
 
-GEM2MT* GEM2MT::pmt;
+TGEM2MT* TGEM2MT::pm;
 
-GEM2MT::GEM2MT( int nrt ):
+TGEM2MT::TGEM2MT( int nrt ):
         TCModule( nrt )
 {
     nQ = 1;
@@ -53,7 +53,7 @@ GEM2MT::GEM2MT( int nrt ):
 
 // get key of record
 gstring
-GEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
+TGEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
                           int keyType )
 {
     gstring str;
@@ -92,7 +92,7 @@ GEM2MT::GetKeyofRecord( const char *oldKey, const char *strTitle,
 }
 
 // test GEM2MT key to calc mode
-void GEM2MT::keyTest( const char *key )
+void TGEM2MT::keyTest( const char *key )
 {
     vstr pkey(MAXRKEYLEN+10);
 
@@ -113,7 +113,7 @@ void GEM2MT::keyTest( const char *key )
 }
 
 // link values to objects
-void GEM2MT::ods_link(int q)
+void TGEM2MT::ods_link(int q)
 {
     mtp=&mt[q];
 
@@ -208,12 +208,12 @@ void GEM2MT::ods_link(int q)
     aObj[ o_mtcib].SetDim( mtp->nIV, mtp->Nb );
     aObj[ o_mtcin].SetPtr( mtp->CIn);
     aObj[ o_mtcin].SetDim( mtp->nIV, mtp->Nb );
-    aObj[ o_mtcab].SetPtr( mtp->CAn);
+    aObj[ o_mtcab].SetPtr( mtp->CAb);
     aObj[ o_mtcab].SetDim( mtp->nIV, mtp->Lbi );
     aObj[ o_mtfdlf].SetPtr( mtp->FDLf);
     aObj[ o_mtfdlf].SetDim( mtp->nFD, 2 );
     aObj[ o_mtpgt].SetPtr( mtp->PGT);
-    aObj[ o_mtpgt].SetDim( ->Fi, mtp->nPG );       //???????????????????
+    aObj[ o_mtpgt].SetDim( TProfil::pm->pmp->FI, mtp->nPG );
     aObj[ o_mtnam_i].SetPtr( mtp->nam_i );
     aObj[ o_mtnam_i].SetDim(  mtp->nIV, 1 );
     aObj[ o_mtfor_i].SetPtr( mtp->for_i );
@@ -221,7 +221,7 @@ void GEM2MT::ods_link(int q)
     aObj[ o_mtstld].SetPtr( mtp->stld );
     aObj[ o_mtstld].SetDim(  mtp->nIV, 1 );
     aObj[ o_mtciclb].SetPtr( mtp->CIclb );
-    aObj[ o_mtciclb].SetDim(  mtp->Nb, 1 );
+    aObj[ o_mtciclb].SetDim(  1, mtp->Nb );
     aObj[ o_mtaucln].SetPtr( mtp->AUcln );
     aObj[ o_mtaucln].SetDim(  mtp->Lbi, 1 );
     aObj[ o_mtfdlid].SetPtr( mtp->FDLid );
@@ -233,9 +233,9 @@ void GEM2MT::ods_link(int q)
     aObj[ o_mtmpgid].SetPtr( mtp->MPGid );
     aObj[ o_mtmpgid].SetDim(  mtp->nPG, 1 );
     aObj[ o_mtumpg].SetPtr( mtp->UMPG );
-    aObj[ o_mtumpg].SetDim(  ->Fi, 1 );     //????????????????
+    aObj[ o_mtumpg].SetDim( TProfil::pm->pmp->FI, 1 );
     aObj[ o_mtbm].SetPtr( mtp->SBM );
-    aObj[ o_mtbm].SetDim(  mtp->Nb, 1 );
+    aObj[ o_mtbm].SetDim(  1, mtp->Nb );
     aObj[ o_mtplline].SetPtr( plot );
     aObj[ o_mtplline].SetDim( mtp->nYS+mtp->nYE,  sizeof(TPlotLine));
 // work
@@ -247,13 +247,13 @@ void GEM2MT::ods_link(int q)
 }
 
 // set dynamic Objects ptr to values
-void GEM2MT::dyn_set(int q)
+void TGEM2MT::dyn_set(int q)
 {
     ErrorIf( mtp!=&mt[q], GetName(),
        "E06GDrem: Illegal access to mt in dyn_set");
 
-    mtp->lNam[0] = = (char (*)[MAXGRNAME])aObj[ o_mtlnam].GetPtr();
-    mtp->lNamE[0] = (char (*)[MAXGRNAME])aObj[ o_mtlname].GetPtr();
+    mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam].GetPtr();
+    mtp->lNamE = (char (*)[MAXGRNAME])aObj[ o_mtlname].GetPtr();
     mtp->tExpr = (char *)aObj[o_mttexpr].GetPtr();
     mtp->gExpr = (char *)aObj[o_mtgexpr].GetPtr();
     mtp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].GetPtr();
@@ -272,7 +272,7 @@ void GEM2MT::dyn_set(int q)
     mtp->yt = (double *)aObj[ o_mtyt].GetPtr();
     mtp->CIb = (float *)aObj[ o_mtcib].GetPtr();
     mtp->CIn = (float *)aObj[ o_mtcin].GetPtr();
-    mtp->CAn = (float *)aObj[ o_mtcab].GetPtr();
+    mtp->CAb = (float *)aObj[ o_mtcab].GetPtr();
     mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].GetPtr();
     mtp->PGT = (float *)aObj[ o_mtpgt].GetPtr();
     mtp->nam_i = (char (*)[MAXIDNAME])aObj[ o_mtnam_i].GetPtr();
@@ -293,13 +293,13 @@ void GEM2MT::dyn_set(int q)
 }
 
 // free dynamic memory in objects and values
-void GEM2MT::dyn_kill(int q)
+void TGEM2MT::dyn_kill(int q)
 {
     ErrorIf( mtp!=&mt[q], GetName(),
        "E05DTrem: Illegal access to mt in dyn_kill");
 
-    mtp->lNam[0] = = (char (*)[MAXGRNAME])aObj[ o_mtlnam].Free();
-    mtp->lNamE[0] = (char (*)[MAXGRNAME])aObj[ o_mtlname].Free();
+    mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam].Free();
+    mtp->lNamE = (char (*)[MAXGRNAME])aObj[ o_mtlname].Free();
     mtp->tExpr = (char *)aObj[o_mttexpr].Free();
     mtp->gExpr = (char *)aObj[o_mtgexpr].Free();
     mtp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].Free();
@@ -318,7 +318,7 @@ void GEM2MT::dyn_kill(int q)
     mtp->yt = (double *)aObj[ o_mtyt].Free();
     mtp->CIb = (float *)aObj[ o_mtcib].Free();
     mtp->CIn = (float *)aObj[ o_mtcin].Free();
-    mtp->CAn = (float *)aObj[ o_mtcab].Free();
+    mtp->CAb = (float *)aObj[ o_mtcab].Free();
     mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].Free();
     mtp->PGT = (float *)aObj[ o_mtpgt].Free();
     mtp->nam_i = (char (*)[MAXIDNAME])aObj[ o_mtnam_i].Free();
@@ -339,428 +339,509 @@ void GEM2MT::dyn_kill(int q)
 }
 
 // realloc dynamic memory
-void GEM2MT::dyn_new(int q)
+void TGEM2MT::dyn_new(int q)
 {
   ErrorIf( mtp!=&mt[q], GetName(),
       "E04DTrem: Illegal access to mt in dyn_new.");
 
+ mtp->DiCp = (short *)aObj[ o_mtdicp].Alloc( mtp->nC, 1, I_);
+ mtp->nam_i=(char (*)[MAXIDNAME])aObj[o_mtnam_i].Alloc( mtp->nIV, 1, MAXIDNAME);
+ mtp->Pi = (float *)aObj[ o_mtpi].Alloc( mtp->nIV, 1, F_);
+ mtp->Ti = (float *)aObj[ o_mtti].Alloc( mtp->nIV, 1, F_);
+ mtp->Vi = (float *)aObj[ o_mtvi].Alloc( mtp->nIV, 1, F_);
+ mtp->stld = (char (*)[EQ_RKLEN])aObj[ o_mtstld].Alloc( mtp->nIV, 1, EQ_RKLEN);
 
+    if( mtp->PvICi == S_OFF )
+    {
+      mtp->Bn = (double *)aObj[ o_mtbn].Free();
+      mtp->CIb = (float *)aObj[ o_mtcib].Free();
+      mtp->CIn = (float *)aObj[ o_mtcin].Free();
+      mtp->CIclb = (char *)aObj[ o_mtciclb].Free();
+      mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Free();
+      mtp->Nb = 0;
+    }
+    else
+    {
+      mtp->Bn = (double *)aObj[ o_mtbn].Alloc( mtp->nIV, mtp->Nb, D_);
+      mtp->CIb = (float *)aObj[ o_mtcib].Alloc( mtp->nIV, mtp->Nb, F_);
+      mtp->CIn = (float *)aObj[ o_mtcin].Alloc( mtp->nIV, mtp->Nb, F_);
+      mtp->CIclb = (char *)aObj[ o_mtciclb].Alloc(1, mtp->Nb, A_);
+      mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Alloc(
+             1, mtp->Nb, MAXICNAME+MAXSYMB);
+    }
 
+    if( mtp->PvAUi == S_OFF )
+    {
+      mtp->CAb = (float *)aObj[ o_mtcab].Free();
+      mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].Free();
+      mtp->AUcln = (char *)aObj[ o_mtaucln].Free();
+      mtp->Lbi = 0;
+    }
+    else
+    {
+      mtp->CAb = (float *)aObj[ o_mtcab ].Alloc( mtp->nIV, mtp->Lbi, F_);
+      mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].Alloc(
+          1, mtp->Lbi, MAXFORMUNITDT);
+      mtp->AUcln = (char *)aObj[ o_mtaucln].Alloc( 1, mtp->Lbi, A_);
+    }
+
+   if( mtp->PvFDL == S_OFF )
+   {
+     mtp->FDLi = (short (*)[2])aObj[ o_mtfdli].Free();
+     mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].Free();
+     mtp->FDLid = (char (*)[MAXSYMB])aObj[ o_mtfdlid].Free();
+     mtp->FDLop = (char (*)[MAXSYMB])aObj[ o_mtfdlop].Free();
+     mtp->nFD = 0;
+   }
+   else
+   {
+      mtp->FDLi = (short (*)[2])aObj[ o_mtfdli ].Alloc( mtp->nFD, 2, I_);
+      mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf ].Alloc( mtp->nFD, 2, F_);
+     mtp->FDLid=(char (*)[MAXSYMB])aObj[o_mtfdlid].Alloc( mtp->nFD, 1, MAXSYMB);
+     mtp->FDLop=(char (*)[MAXSYMB])aObj[o_mtfdlop].Alloc( mtp->nFD, 1, MAXSYMB);
+   }
+
+   if( mtp->PvPGD == S_OFF )
+   {
+     mtp->PGT = (float *)aObj[ o_mtpgt].Free();
+     mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp].Free();
+     mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid].Free();
+     mtp->UMPG = (char *)aObj[ o_mtumpg].Free();
+     mtp->nPG = 0;
+   }
+   else
+   {
+      mtp->PGT  = (float *)aObj[ o_mtpgt ].Alloc( TProfil::pm->pmp->FI, mtp->nPG, F_);
+      mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp ].Alloc(
+                    1, mtp->nPG, MAXSYMB);
+      mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid ].Alloc(
+                    1, mtp->nPG, MAXSYMB);
+      mtp->UMPG = (char *)aObj[ o_mtumpg].Alloc( TProfil::pm->pmp->FI, 1, A_);
+   }
+
+   if( mtp->Nqpt > 0  )
+    mtp->qpi   = (double *)aObj[ o_mtqpi ].Alloc(mtp->Nqpt, 1, D_);
+   else
+    mtp->qpi = (double *)aObj[ o_mtqpi].Free();
+
+   if( mtp->Nqpg > 0  )
+    mtp->qpc   = (double *)aObj[ o_mtqpc ].Alloc(mtp->Nqpg, 1, D_);
+   else
+    mtp->qpc = (double *)aObj[ o_mtqpc].Free();
+
+   if( mtp->PvMSt == S_OFF )
+      mtp->tExpr = (char *)aObj[o_mttexpr].Free();
+   else
+      mtp->tExpr = (char *)aObj[ o_mttexpr ].Alloc(1, 4096, S_);
+
+    if( mtp->PvMSg == S_OFF )
+    {
+      mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam].Free();
+      mtp->gExpr = (char *)aObj[o_mtgexpr].Free();
+      mtp->xt = (double *)aObj[ o_mtxt].Free();
+      mtp->yt = (double *)aObj[ o_mtyt].Free();
+      plot = (TPlotLine *)aObj[ o_mtplline].Free();
+      mtp->nS = mtp->nYS = 0;
+    }
+    else
+    {
+      mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam ].Alloc(
+                    1, mtp->nYS, MAXGRNAME);
+      mtp->gExpr = (char *)aObj[ o_mtgexpr ].Alloc(1, 2048, S_);
+      mtp->xt   = (double *)aObj[ o_mtxt ].Alloc(mtp->nD, 1, D_);
+      mtp->yt   = (double *)aObj[ o_mtyt ].Alloc(mtp->nS, mtp->nYS, D_);
+    }
+
+    if( mtp->PvEF == S_OFF )
+    {
+      mtp->lNamE = (char (*)[MAXGRNAME])aObj[ o_mtlname].Free();
+      mtp->xEt = (float *)aObj[ o_mtxet].Free();
+      mtp->yEt = (float *)aObj[ o_mtyet].Free();
+      mtp->nE = mtp->nYE = 0;
+    }
+    else
+    {
+        mtp->lNamE = (char (*)[MAXGRNAME])aObj[ o_mtlname ].Alloc(
+                              1, mtp->nYE, MAXGRNAME);
+        mtp->xEt   = (float *)aObj[ o_mtxet ].Alloc(mtp->nE, 1, F_);
+        mtp->yEt   = (float *)aObj[ o_mtyet ].Alloc(mtp->nE, mtp->nYE, F_);
+    }
+
+    if( mtp->Nsd > 0 )
+    {
+      mtp->sdref =
+        (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].Alloc( mtp->Nsd, 1, V_SD_RKLEN );
+      mtp->sdval =
+         (char (*)[V_SD_VALEN])aObj[ o_mtsdval].Alloc( mtp->Nsd, 1, V_SD_VALEN );
+    }
+    else
+    {
+      mtp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].Free();
+      mtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_mtsdval].Free();
+    }
+    mtp->etext = (char *)aObj[ o_mwetext ].Alloc(1, 4096, S_);
+    mtp->prtab = (char *)aObj[ o_mwtprn ].Alloc(1, 2048, S_);
 }
 
-//set default information
-void TInteg::set_def(int)
+// return true if nesessary, recalc base SYSEQ
+bool TGEM2MT::check_input( const char * /*key*/, int /*Level*/ )
 {
-    name[0][0] = '\0';
-    name[1][0] = '\0';
-    Nequ = 1;
-    x_bg =0.;
-    x_end = 1.;
-    step_bg = 1.;
-    Eps = 1e-10;
-    step =0.;
-    nfcn = nstep = naccept = nrejct = 0;
-    arg_x = 0.;
-    Bsize = 0;
-    MaxIter = MAXITER;
+    vstr pkey(MAXRKEYLEN+10);
+    if( pVisor->ProfileMode != true )
+        return true;
 
-    y_bg = 0;
-    param = 0;
-    TxtEqu = 0;
-    val_y = 0;
-    valdy = 0;
-    allx = 0;
-    ally = 0;
-    allpr = 0;
-    allst = 0;
-    dyn_new();
+    //Get base SysEq key from process key
+    rt[RT_SYSEQ].MakeKey( RT_GEM2MT, pkey, RT_GEM2MT, 0, RT_GEM2MT, 1,
+                           RT_GEM2MT, 2, RT_GEM2MT, 3, RT_GEM2MT, 4,
+                           RT_GEM2MT, 5, RT_GEM2MT, 6, RT_GEM2MT, 7, K_END);
+    // read SysEq record and unpack data
+    TProfil::pm->loadSystat( pkey );
+    // test changes in system after process calc
+    if( rt[RT_SYSEQ].Rtime() > rt[nRT].Rtime() )
+        return true;
+    return false;
+}
+
+
+//set default information
+void TGEM2MT::set_def(int q)
+{
+    ErrorIf( mtp!=&mt[q], GetName(),
+        "E03DTrem: Illegal access to mt in set_def");
+
+    TProfil *aPa= TProfil::pm;
+    memcpy( &mtp->PunE, aPa->pa.TPpdc, 4 );
+    memcpy( &mtp->PvICi, "+-------S00+-+--", 16 );
+    strcpy( mtp->name,  "`" );
+    strcpy( mtp->notes, "`" );
+    memset( &mtp->nC, 0, sizeof(short)*16 );
+    memset( &mtp->Msysb, 0, sizeof(double)*9 );
+    memset( mtp->size[0], 0, sizeof(float)*8 );
+    memset( mtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
+    mtp->nC =1;
+    mtp->nIV =1;
+    mtp->nYS =1;
+    mtp->nYE =1;
+    mtp->nPai =1;
+    mtp->nTai =1;
+    mtp->tmi[START_] = 1000;
+    mtp->tmi[STOP_] = 1200;
+    mtp->tmi[STEP_] = 1;
+    mtp->NVi[START_] = 0;
+    mtp->NVi[STOP_] = 0;
+    mtp->NVi[STEP_] = 0;
+    mtp->Pai[START_] = 1.;
+    mtp->Pai[STOP_] = 1.;
+    mtp->Pai[STEP_] = 0.;
+    mtp->Tai[START_] = 25.;
+    mtp->Tai[STOP_] = 25.;
+    mtp->Tai[STEP_] = 0.;
+    mtp->Tau[START_] = 0.;
+    mtp->Tau[STOP_] = 0.;
+    mtp->Tau[STEP_] = 0.;
+// pointers
+    mtp->lNam = 0;
+    mtp->lNamE = 0;
+    mtp->tExpr = 0;
+    mtp->gExpr = 0;
+    mtp->sdref = 0;
+    mtp->sdval = 0;
+    mtp->DiCp = 0;
+    mtp->FDLi = 0;
+    mtp->Pi = 0;
+    mtp->Ti = 0;
+    mtp->Vi = 0;
+    mtp->xEt = 0;
+    mtp->yEt = 0;
+    mtp->Bn = 0;
+    mtp->qpi = 0;
+    mtp->qpc = 0;
+    mtp->xt = 0;
+    mtp->yt = 0;
+    mtp->CIb = 0;
+    mtp->CIn = 0;
+    mtp->CAb = 0;
+    mtp->FDLf = 0;
+    mtp->PGT = 0;
+    mtp->nam_i = 0;
+    mtp->for_i = 0;
+    mtp->stld = 0;
+    mtp->CIclb = 0;
+    mtp->AUcln = 0;
+    mtp->FDLid = 0;
+    mtp->FDLop = 0;
+    mtp->FDLmp = 0;
+    mtp->MPGid = 0;
+    mtp->UMPG = 0;
+    mtp->SBM = 0;
+    plot = 0;
+// work
+    mtp->etext = 0;
+    mtp->tprn = 0;
 }
 
 // Input nessasery data and links objects
-void TInteg::RecInput( const char *key )
+void TGEM2MT::RecInput( const char *key )
 {
     //  strncpy( keywd, key, 24 );
     TCModule::RecInput( key );
 }
 
+bool
+TGEM2MT::test_sizes( )
+{
+  gstring err_str;
+
+  if( mtp->PvICi != S_OFF )
+    mtp->Nb = TProfil::pm->pmp->N;
+
+  if( mtp->nC<=0 || mtp->nIV <= 0)
+  {  err_str +=
+"W02PErem: You forgot to specify the number of inital variants! \n Please, do it!");
+    mtp->nC = mtp->nIV = 1;
+  }
+
+  if( mtp->PvAUi != S_OFF )
+    if( mtp->Lbi <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of formula units! \n Please, do it!");
+       mtp->Lbi = 1;
+     }
+
+  if( mtp->PvFDL != S_OFF )
+    if( mtp->nFD <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of flux definitions! \n Please, do it!");
+       mtp->nFD = 1;
+     }
+
+  if( mtp->PvPGD != S_OFF )
+    if( mtp->nPG <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of mobile phase groups! \n Please, do it!");
+       mtp->nPG = 1;
+     }
+
+  if( mtp->PvMSg != S_OFF )
+    if( mtp->nS <= 0 || mtp->nYS <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of points or plots! \n Please, do it!");
+      if( mtp->nS <= 0 ) mtp->nS = 1;
+      if( mtp->nYS <= 0 ) mtp->nYS = 1;
+     }
+
+  if( mtp->PvEF != S_OFF )
+    if( mtp->nE <= 0 || mtp->nYE <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of experimental points! \n Please, do it!");
+      if( mtp->nE <= 0 ) mtp->nE = 1;
+      if( mtp->nYE <= 0 ) mtp->nYE = 1;
+     }
+
+   if( !err_str.empty() )
+    {
+        vfMessage(window(), GetName(), err_str.c_str(), vfErr);
+        return false;
+    }
+    return true;
+}
+
+
 //Rebild record structure before calc
 int
-TInteg::RecBuild( const char *key, int mode )
+TGEM2MT::RecBuild( const char *key, int mode )
 {
+
+    vstr tbuf(100);
+    if( pVisor->ProfileMode != true )
+      Error( GetName(), "E09DTrem: Please, do it in the Project mode!" );
+
+AGAIN:
     int ret = TCModule::RecBuild( key, mode );
-    memcpy( keywd, key, 23 );
-    if( ret != VF3_3 )
-    {  //memcpy( keywd, key, 23 );
-        step = step_bg;
+    if( ret == VF_CANCEL )
+        return ret;
+
+    if( !test_sizes() )
+    {  mode = VF_REMAKE;
+      goto AGAIN;
     }
+
     dyn_new();
-    SetString("Rec build OK");
+
+//   init_arrays( set_def );
+   if( mtp->PvEF != S_OFF  )
+        for(int i=0; i<mtp->nYE; i++ )
+        {
+            sprintf( tbuf, "%s%d", aPa->pa.GDpsc, i+1 );
+            if( !*mtp->lNamE[i] || *mtp->lNamE[i] == ' ' )
+                strncpy( mtp->lNamE[i], tbuf,  MAXGRNAME );
+        }
+    if( mtp->PvMSg != S_OFF  )
+         for(int j=0; j< mtp->nYS; j++ )
+         {
+            sprintf( tbuf, "%s%d", aPa->pa.GDpsc, j+1 );
+            if( !*mtp->lNam[j]|| *mtp->lNam[j] == ' ' )
+               strncpy( mtp->lNam[j], tbuf, MAXGRNAME );
+          }
+    if( mtp->SBM )      // set data to SBM
+      for(int ii=0; ii< mtp->Nb; ii++ )
+        memcpy( mtp->SBM[ii], TProfil::pm->pmp->SB[ii], MAXICNAME+MAXSYMB  );
+
+    SetString("Record build OK");
     pVisor->Update();
     return ret;
 }
 
 //Calculate record
 void
-TInteg::RecCalc( const char * key )
+TGEM2MT::RecCalc( const char * key )
 {
-    int Npoint, i;
+   if( pVisor->ProfileMode != true  )
+       Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
+
     TCModule::RecCalc( key );
-
-    //Расчет
-    //Начальные установки
-    dyn_new();
-    arg_x = x_bg;
-    for( i=0; i<Nequ; i++ )
-        val_y[i] = y_bg[i];
-    step = step_bg;
-    nfcn = nstep = naccept = nrejct = 0;
-
-
-    SetString("Integ: Calculating...");
-    pVisor->Update();
-    //сброс-настройка графики
-    // запрос на поточечный вывод wi->FlagGraf = YNonly( msg(iv_yn_graph));
-    char* ss = (char *)aObj[o_ig_txt].GetPtr();
-    rpn.GetEquat( ss );  //Get IPN of equats
-    // настройка экрана для поточечного вывода
-    INTEG( o_ival_y, o_ivaldy, o_ival_x, Eps, step, x_bg, x_end );
-    // rpn.CalcEquat();
-    // realloc arrays for Npoint
-    Npoint = naccept+1;
-    allx = (double *)aObj[o_i_allx].Alloc( Npoint, 1 );
-    ally = (double *)aObj[o_i_ally].Alloc( Npoint, Nequ );
-    allst = (double *)aObj[o_iallst].Alloc( Npoint, 1 );
-    allpr = (short *)aObj[o_iallpr].Alloc( Npoint, 1 );
-    // установка графики после расчета
-
 }
 
-//--------------------------------------------------------------------
-// Integration process
 
-const int NMAX = 800;
-const int KM = 8;
-const double UROUND = 1.73e-18;
-const double FAC1 = 2.e-2;
-const double FAC2 = 4.0;
-const double FAC3 = .9;
-const double FAC4 = .8;
-const double SAFE1 = .65;
-const double SAFE2 = .94;
-const double MAXSTEP = 1.7;
-const int MAXINTEGEXPR = 200;
-
-double *x;
-double *dx;
-double *tv;
-
-static double tt[9][ MAXINTEGEXPR ];
-static double hh[9];
-static double w[9];
-static double err;
-static double epsd4;
-static int    nj[9]={2,4,6,8,10,12,14,16,18};
-static double a1[9]={3.0,7.0,13.0,21.0,31.0,43.0,57.0,73.0,91.0};
-
-// calculate 1-step from system of equation ( расчет производных по ОПЗ )
 void
-TInteg::Solut( int ix, int id, int it,
-               double *t1, double *t2, double t3 )
+TGEM2MT::CmHelp()
 {
-    aObj[ ix ].SetPtr( t1 );
-    aObj[ id ].SetPtr( t2 );
-    aObj[ it ].SetPtr( &t3 );
-    rpn.CalcEquat();
-    aObj[ it ].SetPtr( tv );
+    pVisor->OpenHelp( GEMS_INT_HTML );
 }
 
-//Процедура вычисляет j-ю линию экстрополяционной таблицы
-//и обеспечивает оптимальный шаг
-void
-TInteg::MIDEX( int j, double t, double h,
-               int ix, int id, int it )
+// insert changes in Project to GEM2MT
+void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp )
 {
-    double *z1=0, *z2=0, *dz=0;
-    double hj, scal, fac, facmin, expo, ys, v1, v2;
-    int i,m,mm,l,n;
+}
+
+// working with scripts --------------------------------------------
+// Translate, analyze and unpack equations (o_mttexpr or o_mtgexpr)
+void TGEM2MT::Expr_analyze( int obj_num )
+{
     try
     {
-        n = aObj[ix].GetN();
-        z1 = new double[n];
-        z2 = new double[n];
-        dz = new double[n];
-        memset( z1, 0, sizeof(double)*n );
-        memset( z2, 0, sizeof(double)*n );
-        memset( dz, 0, sizeof(double)*n );
+        TProfil* PRof = TProfil::pm;
+        int mupL=0, pmpL =0;
 
-        hj = h / (double)nj[ j ];
-        // начальный шаг
-        for( i=0; i < n; i++ )
+        if( pVisor->ProfileMode == true )
         {
-            z1[ i ] = x[ i ];
-            z2[ i ] = x[ i ] + hj * dx[ i ];
+            mupL = PRof->mup->L;
+            pmpL = PRof->pmp->L;
         }
-        // правило точной средней точки
-        m = nj[ j ] - 1;
-        for( mm=0; mm < m; mm++ )
-        {
-            Solut( ix, id, it, z2, dz, t+hj*(double)(mm+1) );
-            for( i=0; i < n; i++ )
-            {
-                ys = z1[ i ];
-                z1[ i ] = z2[ i ];
-                z2[ i ] = ys + hj * dz[ i ] * 2.;
-            }
-        }
-        // последний сглаживающий шаг
-        Solut( ix, id, it, z2, dz, t+h );
-        for( i=0; i < n; i++ )
-            tt[ j ][ i ] = ( z1[ i ] + z2[ i ] + hj * dz[ i ] ) / 2.;
-        nfcn += nj[ j ];
-        //полиномиальная экстраполяция
-        if(j == 0)
-            goto VEL;
-        for( l=j; l >= 1; l-- )
-        {
-            fac = pow( (double)nj[ j ] / (double)nj[ l-1 ], 2.) - 1.;
-            for( i=0; i < n; i++ )
-                tt[ l-1 ][ i ] = tt[ l ][ i ] +
-                                 ( tt[ l ][ i ] - tt[ l-1 ][ i ] ) / fac;
-        }
-        err = 0e0;
-        for( i=0; i < n; i++ )
-        { // взбираемся по лестнице
-            v2 = fabs( tt[ 0 ][ i ] );
-            v1 = fabs( x[ i ] );
-            v1 = max( v1, v2 );
-            v2 = max( 1.e-6, UROUND / epsd4 );
-            scal = max( v1, v2 );
-            err += pow( (tt[ 0 ][ i ] - tt[ 1 ][ i ] ) / scal, 2. );
-        }
-        err = pow( err / (double)n, .5 );
-        //вычисление оптимального шага
-        expo = 1.e0 / (double)( 2 * ( j + 1 )-1 );
-        facmin = pow( FAC1, expo );
-        v1 = max( facmin, pow( err/epsd4, expo ) / SAFE2 );
-        fac = min( FAC2/facmin, v1 );
-        fac= 1.e0 / fac;
-        hh[ j ] = min( h * fac, MAXSTEP );
-        w[ j ] = a1[ j ] / hh[ j ];
-
-VEL:
-        delete[] z1;
-        delete[] z2;
-        delete[] dz;
+        PRof->ET_translate( o_mwetext, obj_num, 0, mupL, 0, pmpL );
+        rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
     }
-    catch( ... )
+    catch( TError& xcpt )
     {
-        if( z1 ) delete[] z1;
-        if( z2 ) delete[] z2;
-        if( dz ) delete[] dz;
-        Error( "INTEG ", "Error in MIXED!");
+        char *erscan = (char *)aObj[obj_num].GetPtr();
+        vfMessage(window(), xcpt.title, xcpt.mess);
+        CheckEqText(  erscan,
+               "E91MSTran: Error in translation of GtDemo math script: " );
+        Error(  GetName() , xcpt.mess.c_str() );
     }
 }
 
-//Вывод результата и перераспределение массивов
-// (Поместить на таймер вывод результата)
+// plotting the record -------------------------------------------------
+//Added one point to graph
 void
-TInteg::PR( int Ni,int pr, double x, double step, double *y )
+TGEM2MT::CalcPoint( int nPoint )
 {
-    int i,dimN, dimM;
-    dimN = aObj[o_i_allx].GetN();
-    dimM = aObj[o_i_ally].GetM();
-    if( Ni >= dimN )
-    {
-        dimN+=INT_BLOK;
-        allx = (double *)aObj[o_i_allx].Alloc( dimN, 1 );
-        ally = (double *)aObj[o_i_ally].Alloc( dimN, dimM );
-        allst = (double *)aObj[o_iallst].Alloc( dimN, 1 );
-        allpr = (short *)aObj[o_iallpr].Alloc( dimN, 1 );
-    }
-    allx[Ni] = x;
-    allst[Ni] = step;
-    allpr[Ni] = (short)pr;
-    for( i=0; i<dimM; i++)
-        ally[Ni*dimM+i] = y[i];
-    /*if( wi->FlagGraf )  show new point in graphic scren
-        { pl[PR_PLOT].CurNdxP[0] = Ni;
-          pl[ST_PLOT].CurNdxP[0] = Ni;
-          for( i=0; i<ip->Nequ; i++)
-             pl[FN_PLOT].CurNdxP[i] = Ni;
-          DrawCount (PR_PLOT, 1, 1);
-          DrawCount (ST_PLOT, 2, 1);
-          DrawCount (FN_PLOT, 3, 1);
-        }
-      else  */
-
-    // ?????Перерисовка экрана на таймере  i = Vaccess( W_INTEG, msg(iv_wn_calc) );
-    if( Ni%100 == 0 )
-        pVisor->Update();
+    if( mtp->PvMSg == S_OFF || nPoint >= mtp->nS )
+     return;
+    // Add point to graph screen
+    if( gd_gr )
+        gd_gr->AddPoint( 0, nPoint, true );
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  Функция INTEG решает задачу Коши вида
-//		 dyi/dx = f( y1,y2, ... ,yn,x )  i=1,...,n
-//               yi( x0 )=yi0
-//  методом єкстраполяции с переменнім порядком и переменной
-//  длиной шага
+// Plotting record
 void
-TInteg::INTEG( int iy, int id, int ix, double eps,
-               double& step, double t_begin, double t_end )
+TGEM2MT::RecordPlot( const char* /*key*/ )
 {
-    double  t, h1, h, v1;
-    int     j,i,reject,last,kc,kopt,k;
+    if( mtp->PvMSg == S_OFF )
+      return;
 
-    x = (double *)aObj[ iy ].GetPtr();
-    dx = (double *)aObj[ id ].GetPtr();
-    tv = (double *)aObj[ ix ].GetPtr();
+    TIArray<TPlot> plt;
 
-    h = step;
-    epsd4 = eps * SAFE1;
-    v1 = -log10(eps)*.6+1.5;
-    v1 = min( 8.0, v1 );
-    k = (int)max( 3.0, v1 ) - 1;
-    t = t_begin;
-    h1 = t_end-t;
-    v1 = min( MAXSTEP, h1/2. );
-    h = min( h, v1 );
-    PR( 0, k, t, h, x );
-    err = w[ 0 ] = 0.0;
-    reject = last = 0;   /*false*/
-
-    //достигли конца?
-    while( fabs( h1 ) >= UROUND )
+    plt.Add( new TPlot(o_mtxt, o_mtyt ));
+    int  nLn = plt[ 0 ].getLinesNumber();
+    if( mtp->PvEF != S_OFF )
     {
-        v1 = min( h1, MAXSTEP);
-        h = min( h, v1 );
-        if( h >= ( h1 - UROUND ) )  last = 1;      /*true*/
-        Solut(  iy, id, ix, x, dx, t );
-        nfcn++;
-        if (( nstep == 0 )||( last ))     //1-й и последний шаг
+        plt.Add( new TPlot(o_mtxet, o_mtyet ));
+        nLn += plt[1].getLinesNumber();
+    }
+    if( plot )
+    {
+        int oldN = aObj[o_mtplline].GetN();
+        TPlotLine defpl("", 4);
+
+        plot = (TPlotLine * )aObj[ o_mtplline ].Alloc( nLn, sizeof(TPlotLine) );
+        for(int ii=0; ii<nLn; ii++ )
         {
-            nstep++;
-            for( j=0; j <= k; j++ )
-            {
-                kc=j;
-                MIDEX( j, t, h,iy, id, ix );
-                if( ( j > 0 ) && ( err <= eps ) ) goto l60;
-            }
-            goto l55;
+            if( ii >= oldN )
+                plot[ii] = defpl;
+            if(ii < mtp->nYS )
+                strncpy( plot[ii].name, mtp->lNam[ii], MAXGRNAME );
+            else
+                strncpy( plot[ii].name, mtp->lNamE[ii-mtp->nYS], MAXGRNAME );
+            plot[ii].name[MAXGRNAME] = '\0';
         }
-        //основной шаг интегрирования
-l30:
-        nstep++;
-        ErrorIf( nstep >= MaxIter, "INTEG", "Excess iteration number" );
-        kc = k-1;
-        for( j=0; j <= kc; j++ )
-            MIDEX( j, t, h, iy, id, ix );
-        // сходимость в 1-й точке
-        if( !( k == 1 || reject ) )
-        {
-            if( err <= eps ) goto l60;
-            if( ( err/eps ) >
-                    ( pow( (double)(nj[k+1]*nj[k])/4., 2. ) ) )  goto l100;
-        }
-        MIDEX( k, t, h, iy, id, ix );
-        kc = k;
-        if( err <= eps ) goto l60;
-        // надежда на сходимость на к+1-м шаге
-l55:
-        if( err/eps > pow( (double)(nj[k])/2.0, 2.0 ) ) goto l100;
-        kc = k + 1;
-        MIDEX( kc, t, h, iy, id, ix );
-        if( err > eps ) goto l100;
-        // шаг допущен
-l60:
-        t += h;
-        step = h;
-        arg_x = t;
-        for( i=0; i < aObj[ iy ].GetN(); i++ )
-            x[i] = tt[0][i];
-        Solut( iy, id, ix, x, dx, t );
-        naccept++;
-        PR( naccept, kc, t, h, x );
-        //вычисление оптимального порядка
-        if( kc == 1 )
-        {
-            kopt = 2;
-            if( reject ) kopt = 1;
-        }
-        else if( kc <= k )
-        {
-            kopt = kc;
-            if( w[kc-1] < w[kc]*FAC3 ) kopt = kc - 1;
-            if( w[kc] < w[kc-1]*FAC3 )
-                kopt = min( (kc+1) , (KM-1) );
-        }
+        gd_gr = new GraphWindow( this, plt, mtp->name,
+              mtp->size[0], mtp->size[1], plot,
+              mtp->axisType, mtp->xNames, mtp->yNames);
+    }
+    else
+    {
+      TCStringArray lnames;
+      int ii;
+      for( ii=0; ii<mtp->nYS; ii++ )
+          lnames.Add( gstring(mtp->lNam[ii], 0, MAXGRNAME ));
+      for( ii=0; ii<mtp->nYE; ii++ )
+          lnames.Add( gstring( mtp->lNamE[ii], 0, MAXGRNAME ));
+      gd_gr = new GraphWindow( this, plt, mtp->name,
+          mtp->xNames, mtp->yNames, lnames );
+    }
+}
+
+
+// Save changes was done in Plotting dialog
+bool
+TGEM2MT::SaveGraphData( GraphData *gr )
+{
+// We can only have one Plot dialog (modal one) so condition should be omitted!!
+     if( !gd_gr )
+      return false;
+     if( gr != gd_gr->getGraphData() )
+      return false;
+    mtp->axisType[0] = (short)gr->axisType;
+    mtp->axisType[1] = (short)gr->b_color[0];
+    mtp->axisType[2] = (short)gr->b_color[1];
+    mtp->axisType[3] = (short)gr->b_color[2];
+    strncpy( mtp->xNames, gr->xName.c_str(), 9);
+    strncpy( mtp->yNames, gr->yName.c_str(), 9);
+    memcpy( &mtp->size[0], gr->region, 4*sizeof(float) );
+    memcpy( &mtp->size[1], gr->part,  4*sizeof(float) );
+
+    plot = (TPlotLine *) aObj[ o_mtplline].Alloc(
+       gr->lines.GetCount(), sizeof(TPlotLine));
+    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    {
+        plot[ii] = gr->lines[ii];
+        //  lNam0 and lNamE back
+        if( ii < mtp->nYS )
+            strncpy(  mtp->lNam[ii], plot[ii].name, MAXGRNAME );
         else
-        {
-            kopt = kc-1;
-            if( kc > 2 && w[kc-2] < w[kc-1]*FAC3 )
-                kopt = kc - 2;
-            if( w[kc] < w[kopt]*FAC3 )
-                kopt = min( kc, (KM-1) );
-        }
-        // после недопушенного шага
-        if( reject )
-        {
-            k = min( kopt, kc );
-            h = min( h, hh[ k ] );
-            reject = 0;           /*false*/
-        }
-        else
-        {  // вычислим длину шага на следующем этапе
-            if( kopt <= kc )
-                h = hh[ kopt ];
-            else if( kc < k && ( w[kc] < ( w[kc-1] * FAC4 ) ))
-                h = hh[kc] * a1[kopt+1] / a1[kc];
-            else h = hh[kc] * a1[kopt] / a1[kc];
-            k = kopt;
-        }
-        h1=t_end-t;
-    }     /*while*/
-    *tv = t;
-    aObj[ iy ].SetPtr( x );
-    aObj[ id ].SetPtr( dx );
-    aObj[ ix ].SetPtr( tv );
-    step = h;
-    return;
-l100:
-    k = min( k, kc );
-    if( k > 1 && ( w[k-1] < w[k] * FAC3 ) )
-        k--;
-    nrejct++;
-    h = hh[k];
-    reject = 1;
-    goto l30;
+            strncpy(  mtp->lNamE[ii-mtp->nYS], plot[ii].name, MAXGRNAME );
+    }
+
+    pVisor->Update();
+    contentsChanged = true;
+
+    return true;
 }
 
 
-void
-TInteg::RecordPlot( const char* /*key*/ )
-{
-/*Sveta 14/08/01    TIArray<TPlot> plt;
-
-    plt.Add( new TPlot( o_i_allx, o_i_allx));
-    pVisorImp->MakePlot( this, plt, name[0]);
-    plt.Clear();
-
-    plt.Add( new TPlot( o_i_allx, o_iallst));
-    pVisorImp->MakePlot( this, plt, "Steps");
-    plt.Clear();
-
-    plt.Add( new TPlot( o_i_allx, o_iallpr));
-    pVisorImp->MakePlot( this, plt, "Integration");
-*/
-}
-
-void
-TInteg::CmHelp()
-{
-    pVisor->OpenHelp( GEMS_INT_HTML ); 
-}
 
 
-// --------------------- end of integ.cpp ---------------------------
+// --------------------- end of m_gem2mt.cpp ---------------------------
 
 

@@ -193,17 +193,17 @@ typedef struct
 
    char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
 }
-GEM2MT_;
+GEM2MT;
 
 // Pointers to DataCH and DataBR (current) fields in memory ?
 // They are located in MULTI
 
 // Current GEM2MT
-class GEM2MT : public TCModule
+class TGEM2MT : public TCModule
 {
-    GEM2MT_ mt[1];
+    GEM2MT mt[1];
 
-    IPNCalc rpn[2];      // IPN 
+    IPNCalc rpn[2];      // IPN
 
     GraphWindow *gd_gr;
     TPlotLine *plot;
@@ -212,6 +212,11 @@ class GEM2MT : public TCModule
 protected:
 
     void keyTest( const char *key );
+    void Expr_analyze( int obj_num );
+    void CalcPoint( int nPoint );
+    bool test_sizes();
+
+
 /*    // internal
     bool test_sizes();
     void mt_initiate( bool mode = true );   // must be changed with DK
@@ -235,7 +240,7 @@ public:
 
     static TGEM2MT* pm;
 
-    GEM2MT_ *mtp;
+    GEM2MT *mtp;
 
     TGEM2MT( int nrt );
 
@@ -256,9 +261,12 @@ public:
     void RecInput( const char *key );
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
+    void RecordPlot( const char *key );
+    bool SaveGraphData( GraphData* graph );
+
     void CmHelp();
 
-    void InsertChanges( TIArray<CompItem>& aIComp ); // ???????
+    void InsertChanges( TIArray<CompItem>& aIComp ); 
 };
 
 
