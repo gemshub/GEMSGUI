@@ -1,0 +1,430 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ComposWizardData</class>
+<widget class="QWizard">
+    <property name="name">
+        <cstring>ComposWizardData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>598</width>
+            <height>560</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>GEM-Selektor Compos Wizard</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>false</bool>
+    </property>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage1</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 1 - PCO configuration</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel10</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>570</width>
+                    <height>170</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;p&gt;&lt;b&gt;Compos record keeps data on bulk elemental composition of a Predefined Composition Objects (PCO). PCO can describe a salt, the air, a mineral, a rock, a natural water etc. which can be complex, but can be referred to by a name or a record key. &lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;The Compos record can be configured to represent the PCO in the most convenient way, depending on the source data: as amounts/concentrations of chemical elements, or of stoichiometries of dependent components from available DComp/ReacDC records, or  of user-defined formulae (UDF), or of a large formula entered into a text editor field.&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Upon the Compos record calculation, all such data will be converted into moles of independent components, optionally scaled to a given total PCO mass, and summed into a single PCO vector. &lt;/b&gt;&lt;/p&gt;</string>
+            </property>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup12</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>190</y>
+                    <width>560</width>
+                    <height>150</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Configuration</string>
+            </property>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>checkBox2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>531</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Use amounts of Independent Components (IComp) in defining the PCO? (checked by default)</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>checkBox2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>60</y>
+                        <width>531</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Use Dependent Components formulae (DComp/ReacDC) in defining the PCO? (unchecked by default)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel9</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>100</y>
+                        <width>450</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Set the number of entries in the user-defined formula list for this PCO definition (0 by default)</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>spinBox11</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>100</y>
+                        <width>60</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>64</number>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>350</y>
+                    <width>560</width>
+                    <height>120</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Optional</string>
+            </property>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>lineEdit1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>80</y>
+                        <width>70</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>1</string>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>M   moles </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>h    millimoles</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>Y  micromoles</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>g   grams</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>G  kilograms</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>y   milligrams</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>comboBox1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>50</y>
+                        <width>120</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>110</x>
+                        <y>80</y>
+                        <width>411</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Enter the amount of the formula text stoichiometry (default: 1)</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>160</x>
+                        <y>50</y>
+                        <width>370</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Select a code for units of measurement  (default: M)</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>checkBox2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>20</y>
+                        <width>510</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Create user-defined formula text for defining this PCO? (unchecked by default)</string>
+                </property>
+            </widget>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage2</cstring>
+        </property>
+        <attribute name="title">
+            <string>Step 2 - Useful hints</string>
+        </attribute>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup19</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>80</y>
+                    <width>570</width>
+                    <height>320</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>What will happen after you click "Finish"</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel13</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>30</y>
+                        <width>560</width>
+                        <height>50</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(1) If PCO definition via amounts of Independent Components was selected then the program will display a list of available IComp records, asking you to mark necessary ones. Using the left mouse button, mark one or more keys, and click "Ok" to proceed.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel12</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>91</y>
+                        <width>550</width>
+                        <height>80</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(2) If PCO definition via formulae from DComp/ReacDC was selected then the program will display a list of available ReacDC records, asking you to mark those stoichiometries from which you need. Using the left mouse button, mark one or more keys, or click "Clear All" if you are not going to use ReacDC species; click "Ok" to proceed to selection of the DComp species. In total, minimum one species (either DComp or ReacDC) must be marked. Proceed with "Ok".</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel14</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>180</y>
+                        <width>551</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(3) When Page 1 of the "Compos" window appears on the desktop, enter the full PCO name into the BCname field and (optionally) a comment into the BCnote line. Depending on the configuration, you may need to enter the UDF formulae in the FormU list, or the long formula text into the Ctext field. Then enter concentration unit codes into CIcl, AUcl, CDcl (what applies) and necessary numbers into CI, CA or CD columns.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel15</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>250</y>
+                        <width>540</width>
+                        <height>50</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(4) Click on the "Calculate" toolbar button to compute the PCO vector. If necessary, check or enter the normalization values in the MasVol vector and calculate again. Note that setting MasVol[0] and MasVol[6] to zeros disables the normalization of PCO to total mass or amount of moles, respectively. Save the record to database.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup18</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>0</y>
+                    <width>570</width>
+                    <height>80</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Optional</string>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel11</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>20</y>
+                        <width>451</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>&lt;b&gt;Set here the number of links to SDref bibliography records (default 0)&lt;/b&gt;</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>checkBox8</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>50</y>
+                        <width>490</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Create the vector of uncertainties for this PCO) definition  (unchecked by default)</string>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>spinBox18</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>60</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>4</number>
+                </property>
+            </widget>
+        </widget>
+    </widget>
+</widget>
+<tabstops>
+    <tabstop>checkBox2</tabstop>
+    <tabstop>checkBox2_2</tabstop>
+    <tabstop>checkBox2_2_2</tabstop>
+    <tabstop>spinBox11</tabstop>
+    <tabstop>spinBox18</tabstop>
+    <tabstop>checkBox8</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
