@@ -1253,13 +1253,14 @@ TProcess::internalCalc()
             memcpy( pep->stl+pep->c_nrk, pep->stkey, EQ_RKLEN );
 
         if( pointShow >= 0 )
-         if( pep->PsRT == S_OFF )
-         {   if( pep->PsPro == S_OFF || pep->NP == 1 )
-           CalcPoint( pep->c_nrk);
-             else
+        {
+          if( pep->PsRT == S_OFF )
+          {   if( pep->PsPro == S_OFF || pep->NP == 1 )
+                 CalcPoint( pep->c_nrk);
+              else
                  CalcPoint( -1 );
-         }
-         else  // masstransport show
+          }
+          else  // masstransport show
             {
               if( pep->Nst >= pep->Nxi-1 )
               {
@@ -1283,6 +1284,10 @@ TProcess::internalCalc()
                 continue;
               }
            }
+         }
+         else
+           CalcPoint( -1 );
+
         if( !(pep->PsPro != S_OFF && pep->NP == 1 ))
             pep->Nst++;
 
