@@ -13,14 +13,14 @@
         </rect>
     </property>
     <property name="caption">
-        <string>GEM-Selektor ReacDC Wizard</string>
+        <string>GEM-Selektor DComp Wizard</string>
     </property>
     <widget class="QWidget">
         <property name="name">
             <cstring>PhaseWizardPage1</cstring>
         </property>
         <attribute name="title">
-            <string>Step 1 - Defining the reaction new component type and the calculation method codes</string>
+            <string>Step 1 - Defining the dependent component type and the calculation method codes</string>
         </attribute>
         <widget class="QButtonGroup">
             <property name="name">
@@ -35,7 +35,7 @@
                 </rect>
             </property>
             <property name="title">
-                <string>Select here to which class the new reaction-defined component belongs</string>
+                <string>Select here to which class the dependent component belongs</string>
             </property>
             <widget class="QLabel">
                 <property name="name">
@@ -185,6 +185,22 @@
                 </property>
             </widget>
         </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>120</y>
+                    <width>580</width>
+                    <height>80</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.&lt;/b&gt;</string>
+            </property>
+        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>MixingModelGroup</cstring>
@@ -198,134 +214,8 @@
                 </rect>
             </property>
             <property name="title">
-                <string>Select here the methods for temperature and pressure corrections for reaction-defined DC</string>
+                <string>Select here the methods for temperature and pressure corrections </string>
             </property>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>3   Three-term extrapolation of logK (T ) at dCpr(T) = const </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>2   Two-term extrapolation of logK (T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>1   One-term extrapolation of logK (T )  assuming dGr (T ) = dGr (Tr ) = const,</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>0   One-term extrapolation of logK (T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>X   Calculation of logKT   for reactions from the empirical coefficients</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>S   Calculation of g0T , h0T, S0T  from standard entropy integration</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>K   Calculation using HKF EoS coefficients (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>W  Calculation of properties of H2O liquid and vapor (reserved) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>L    Calculation of logKT  for reactions (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>G   Calculation of standard Gibbs energy function g0T  </string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>p_pct_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>90</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>N   No pressure correction to be done</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>C   Molar volume from dVr  of reaction</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>B   Molar volume corrected using Birch-Murnaghan EoS coefficients</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>0   Account for pressure dependence is inherent</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>K   Molar volume is calculated from 5 empirical coefficients</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>E   Molar volume V (T,P )  increment to V0 (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>P   Application of built-in PRONSPREP97  (for aqueous dissociation reactions)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>F   Pressure corrections for the properties of H2O liquid (reserved)</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>p_pct_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>150</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>AC_modeLabel</cstring>
@@ -398,22 +288,12 @@
             <widget class="QComboBox">
                 <item>
                     <property name="text">
-                        <string>K   Calculation through the logK of reaction TP dependencies</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>H   Calculation on the basis of revised HKF EoS (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
                         <string>C   Calculation on the basis of standard S0  and Cp0  integration</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>I    Calculation of thermodynamic properties for isotopic forms of compounds</string>
+                        <string>H   Calculation on the basis of revised HKF EoS (reserved)</string>
                     </property>
                 </item>
                 <property name="name">
@@ -428,22 +308,87 @@
                     </rect>
                 </property>
             </widget>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>120</y>
-                    <width>580</width>
-                    <height>80</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;By setting the codes below, you will configure the ReacDC record data objects and tell the program how the temperature and pressure corrections for the reaction and its new dependent component should be calculated.&lt;/b&gt;</string>
-            </property>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>S   Calculation of g0T , h0T, S0T  from standard entropy integration</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>W  Calculation of properties of H2O liquid and vapor using HGK EoS </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>K   Calculation of partial molal properties using HKF EoS coefficients</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>p_pct_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>90</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>C   Pressure corrections assuming constant molar volume V0</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>E   Pressure corrections using dV (T,P ) according to Holland &amp;Powell 1998</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>F   Pressure corrections to 5 kbar using HKF EoS for aqueous species or HGK for water</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>N   No pressure corrections at all to be done</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>B   Pressure corrections using V(T,P) from Birch-Murnaghan EoS coefficients</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>K   Pressure corrections using dV(T,P) calculated from 5 empirical coefficients</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>P   Application of built-in PARCOR (PRONSPREP97) to retrieve HKF EoS coefficients</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>0   Account for pressure dependence is inherent e.g. in EoS model</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>p_pct_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>150</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
         </widget>
     </widget>
     <widget class="QWidget">
@@ -453,54 +398,6 @@
         <attribute name="title">
             <string>Step 2 - Specific dimensions and settings</string>
         </attribute>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup7</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>620</width>
-                    <height>70</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>Dimension to cange only in special cases (e.g. to find properties of reaction between existing DCs)</string>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>30</y>
-                        <width>500</width>
-                        <height>28</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of Cp(T) equations</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pNeCp</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>30</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-            </widget>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>ButtonGroup1</cstring>
@@ -733,49 +630,36 @@
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
-                <cstring>buttonGroup4</cstring>
+                <cstring>buttonGroup7</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>90</y>
+                    <y>10</y>
                     <width>620</width>
-                    <height>100</height>
+                    <height>190</height>
                 </rect>
             </property>
             <property name="title">
-                <string>Dimensions to set only for the logK array for T,P corrections by interpolation (KZZ method codes)   </string>
+                <string>Dimensions to change only in special cases </string>
             </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>420</x>
-                        <y>60</y>
-                        <width>170</width>
-                        <height>28</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of EOS coefficients</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
             <widget class="QSpinBox">
                 <property name="name">
-                    <cstring>pNemp</cstring>
+                    <cstring>pNeCp</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>340</x>
-                        <y>60</y>
+                        <x>20</x>
+                        <y>30</y>
                         <width>50</width>
                         <height>20</height>
                     </rect>
+                </property>
+                <property name="maxValue">
+                    <number>5</number>
+                </property>
+                <property name="value">
+                    <number>1</number>
                 </property>
             </widget>
             <widget class="QSpinBox">
@@ -785,10 +669,42 @@
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>60</y>
+                        <y>70</y>
                         <width>50</width>
                         <height>20</height>
                     </rect>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pNemp</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>110</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>20</y>
+                        <width>500</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Number of Cp(T) equations can be changed here if Cp(T) coefficients are available for more than one temperature interval (usually for minerals with phase transitions). Default is 1, maximum 5 intervals.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
             <widget class="QLabel">
@@ -799,12 +715,31 @@
                     <rect>
                         <x>90</x>
                         <y>60</y>
-                        <width>150</width>
-                        <height>30</height>
+                        <width>500</width>
+                        <height>40</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Number of phase transitions</string>
+                    <string>Number of phase transitions can be changed here, if necessary (usually one less than the number of Cp=f(T) equations). Default is 0, maximal 4.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>100</y>
+                        <width>500</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Number of EoS coefficients can be set here if certain EoS models for fluids will be used. The coefficients will be collected automatically into Phase record.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
@@ -816,14 +751,14 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>24</x>
-                        <y>28</y>
-                        <width>270</width>
+                        <x>50</x>
+                        <y>150</y>
+                        <width>550</width>
                         <height>20</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Flag of Vm=f(P, T) coefficient vector</string>
+                    <string>Check here to allocate the Vm=f(P, T) vector of coefficients (reserved)</string>
                 </property>
             </widget>
         </widget>
@@ -890,9 +825,9 @@
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>90</y>
+                    <y>80</y>
                     <width>620</width>
-                    <height>300</height>
+                    <height>330</height>
                 </rect>
             </property>
             <property name="title">
@@ -900,18 +835,37 @@
             </property>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>textLabel6</cstring>
+                    <cstring>textLabel7</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>20</y>
                         <width>580</width>
+                        <height>50</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(1) Page 1 of the "DComp" window appears on the desktop. Enter there the full name of the component into the DCname field and the formula of the component into the DCform field.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>70</y>
+                        <width>581</width>
                         <height>100</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>(1) The program will display a list of available ReacDC records, asking you to mark those you need to get involved in the reaction and click "Ok". Then the program will display a list of available DComp records, asking you to mark those you need to get involved in the reaction and click "Ok". In total, minimum one species (DComp or ReacDC) must be selected if the reaction defines a new dependent component, or at least two records must be selected if the properties of the reaction shall be calculated from only the molar properties of existing components.</string>
+                    <string>(2) Next, enter the available standard molar properties of the substance into V0d,G0d, H0d, S0d, Cp0d cells. If some properties are unknown (e.g. H0d), enter "empty" value "---" into the respective cell. In general, it is sufficient to enter any two of three properties G0, H0 and S0 - the unknown one (with "empty" value) will be retrieved upon the DComp module calculation. If all three values are entered as non-empty then the program will check their consitency and issue a message when needed.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
@@ -924,13 +878,13 @@
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>210</y>
+                        <y>170</y>
                         <width>580</width>
-                        <height>80</height>
+                        <height>60</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>(3) Click on the "Calculate" toolbar button - the missing values for the reaction and its newly defined component (always the last one) will be calculated and will appear on Page 1. Save the ReacDC record to database. You may test the temperature-pressure corrections for properties of the reaction or its new DC by creating a RTParm tabulation record later on.</string>
+                    <string>(3) Switch to Page 2 of DComp window and enter necessary values into TCint, ai_Cp or aiHKF arrays, depending on the selected method of temperature and pressure corrections. In some cases, fluid EoS coefficients, critical parameters, or V(T,P) coefficients may need to be entered.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
@@ -938,18 +892,18 @@
             </widget>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>textLabel7</cstring>
+                    <cstring>textLabel8_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>20</x>
-                        <y>120</y>
+                        <y>230</y>
                         <width>580</width>
                         <height>90</height>
                     </rect>
                 </property>
                 <property name="text">
-                    <string>(2) When Page 1 of the "ReacDC" window appears on the desktop, enter the full name of the new reaction-defined component into the RDname field and the formula of that component the RDform field. Next, enter the reaction stoichiometry coefficients into the SC_DC column (positive for products, negative for reactants). Then enter the available dVr, logK or dGr, dHr or dSr, dCpr values. If some parameters of the reaction are unknown (e.g. dHr), enter "empty" value "---" in the respective cell.</string>
+                    <string>(4) Switch back to Page 1 and click on the "Calculate" toolbar button. Missing standard molar properties of the substance will be calculated and will appear on Page 1. If Cp=f(T) coefficients or HKF coefficients were provided, the Cp0 value will also be calculated. Save the DComp record to database. You may test the temperature-pressure corrections for properties of this DC by creating a RTParm tabulation record later on.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>

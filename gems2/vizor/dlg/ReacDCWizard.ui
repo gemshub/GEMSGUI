@@ -685,54 +685,6 @@
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
-                <cstring>buttonGroup7</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>620</width>
-                    <height>70</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>Dimension to cange only in special cases (e.g. to find properties of reaction between existing DCs)</string>
-            </property>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pnDC</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>30</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>30</y>
-                        <width>500</width>
-                        <height>28</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of dependent components in reaction (usually set automatically by the program after the reaction components were selected)</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
                 <cstring>buttonGroup4</cstring>
             </property>
             <property name="geometry">
@@ -805,6 +757,54 @@
                 </property>
                 <property name="text">
                     <string>Number of interpolation points along P (more than one, less than 10)</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup7</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>620</width>
+                    <height>70</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Dimension to change only in special cases (e.g. to find properties of reaction between existing DCs)</string>
+            </property>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pnDC</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>30</y>
+                        <width>500</width>
+                        <height>28</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Number of dependent components in reaction (usually set automatically by the program after the reaction components were selected)</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
