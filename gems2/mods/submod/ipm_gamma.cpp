@@ -95,10 +95,16 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
                          double Factor, double MMC, double Dsur, int jb, int je, int k)
 {
     int j, ii;
-    double Muj, DsurT, SPmol, lnFmol=4.016535;
+    double Muj, DsurT=0, SPmol, lnFmol=4.016535;
+
+    if( pmp->PHC[0] == PH_AQUEL )
+    {  /* mole fraction to molality conversion */
+        if( !k ) lnFmol = log(1000./MMC);  // aq species
+        else lnFmol = 4.016535; 	   // other species
+    }
 
     for( j=jb; j<je; j++ )
-    { /* cycle by DC. */
+    { /* cycle by DC - important bugfixes 02.04.2003 */
         Muj = DualChemPot( pmp->U, pmp->A+j*pmp->N, pmp->NR );
         pmp->Fx[j] = Muj * pmp->RT;     /* el-chem potential in J/mole */
 
@@ -106,17 +112,54 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
         { /* zeroing off */
             pmp->Wx[j] = 0.0;
             pmp->VL[j] = 0.0;
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* + Dsur */ );
-            //      pmp->Y_la[j] = 0.0;  Log activity or fugacity
             pmp->Y_w[j] = 0.0;
+            pmp->lnGam[j] = 0.0;
             if( pmp->PHC[0] == PH_AQUEL )
-                pmp->Y_m[j] = 0.0;
+               pmp->Y_m[j] = 0.0;
+            switch( pmp->DCC[j] ) /* choice of expressions */
+            {
+               case DC_SCP_CONDEN:
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+                    break;
+               case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
+                    pmp->Y_la[j] = ln_to_lg*(Muj - pmp->G0[j]
+                                        + Dsur + lnFmol);
+                    break;
+               case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
+                    pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j]
+                                        + Dsur - 1. + 1. / ( 1.+Dsur ) );
+                    break;
+               case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:   /* gases */
+               case DC_GAS_H2: case DC_GAS_N2:
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+                    if( pmp->Pc > 1e-9 )
+                        pmp->Y_la[j] += log10( pmp->Pc );
+                    break;
+               case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] );
+                    break;
+               case DC_SUR_SITE:
+                    DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+                    break;
+               case DC_SSC_A0: case DC_SSC_A1: case DC_SSC_A2: case DC_SSC_A3:
+               case DC_SSC_A4: case DC_WSC_A0: case DC_WSC_A1: case DC_WSC_A2:
+               case DC_WSC_A3: case DC_WSC_A4: case DC_SUR_COMPLEX:
+               case DC_SUR_IPAIR: case DC_IESC_A: case DC_IEWC_B:
+                    DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+                    break; // Coulombic term to be considered !!!!!!!!!!
+               case DC_PEL_CARRIER: case DC_SUR_MINAL: case DC_SUR_CARRIER: /* sorbent */
+                    DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
+                       + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
+                    break;
+               default:
+                    break; /* error in DC class code */
+            }
             continue;
-        }
-        if( pmp->PHC[0] == PH_AQUEL )
-        {  /* mole fraction to molality conversion */
-            if( !k ) lnFmol = log(1000./MMC);  // aq species
-            else lnFmol = 4.016535; 	   // other species
         }
         /* calculation of mole fraction */
         pmp->Wx[j] = X[j]/XF[k];
@@ -323,7 +366,12 @@ void TProfil::ConCalc( double X[], double XF[], double XFA[])
                 pmp->Y_w[jj] = 0.0;
                 pmp->Fx[jj] = DualChemPot( pmp->U, pmp->A+jj*pmp->N, pmp->NR );
                 pmp->Y_la[jj] = ln_to_lg * ( pmp->Fx[jj] - pmp->G0[jj] /* + Dsur */ );
+                if(pmp->PHC[k] == PH_AQUEL || pmp->PHC[k] == PH_SORPTION )
+                   pmp->Y_la[jj] += 1.74438;
+                if(pmp->PHC[k] == PH_GASMIX || pmp->PHC[k] == PH_PLASMA )
+                   pmp->Y_la[jj] += log10( pmp->Pc );
                 pmp->Fx[jj] *= pmp->RT;     /* el-chem potential */
+                pmp->lnGam[jj] = 0.0;
             }
             goto NEXT_PHASE;
         }
