@@ -594,7 +594,7 @@ void TReacDC::Recalc_ISO1( double /*foS*/ )
             rcp->Ks[1] = log( rcp->Ks[0] ) * 1000.;
         if( fabs( LK-rcp->Ks[1] ) >= 0.01 )
             if( !vfQuestion(window(), GetName(),
-                "W30Rerun: Inconsistent dGr and logK: take logK (Y) or dGr (N)?" ))
+                "W30RErun: Inconsistent dGr and logK: take logK (Y) or dGr (N)?" ))
                 rcp->Ks[1] = LK;
         rcp->Gs[0] = -rcp->Ks[1] * R_T/1000.;
         rcp->Ks[0] = exp( rcp->Ks[1]/1000. );

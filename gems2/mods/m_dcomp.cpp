@@ -577,7 +577,7 @@ NEXT:
     {
         if( !vfQuestion( window(), GetName(),
      "W11DCrun: Insufficient data to recalculate uncertainties. Continue?" ))
-         Error( GetName(), "R12DCrun: Insufficient data for uncertainties - bailing out...");
+         Error( GetName(), "E12DCrun: Insufficient data for uncertainties - bailing out...");
     }
     // insert parcor
     if( dcp->PdcHKF != S_OFF && toupper( dcp->pct[2] ) == CPM_PCR )
