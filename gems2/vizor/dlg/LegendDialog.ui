@@ -1,427 +1,25 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>LegendDialogData</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>LegendDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>531</width>
+            <width>535</width>
             <height>394</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>font</name>
-        <font>
-            <family>Lucida Sans Unicode</family>
-            <pointsize>9</pointsize>
-        </font>
-    </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Legend and Configuration for: </string>
     </property>
-    <widget>
-        <class>QGroupBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>GroupBox1</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>410</width>
-                <height>200</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>title</name>
-            <string>Axis Setup</string>
-        </property>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>10</x>
-                    <y>30</y>
-                    <width>70</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Axis type</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QSpinBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pAxis</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>80</x>
-                    <y>30</y>
-                    <width>56</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>maxValue</name>
-                <number>20</number>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1_2_2</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>121</x>
-                    <y>70</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>x:</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1_2_2_2</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>121</x>
-                    <y>94</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>y:</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1_2_2_3</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>121</x>
-                    <y>140</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>x:</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1_2_2_2_2</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>121</x>
-                    <y>165</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>y:</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1_2</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>30</x>
-                    <y>70</y>
-                    <width>61</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Graph</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>TextLabel1_2_3</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>30</x>
-                    <y>140</y>
-                    <width>70</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Fragment</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pX0</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>150</x>
-                    <y>70</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Minimum</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pXn</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>280</x>
-                    <y>70</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Maximum</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pY0</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>150</x>
-                    <y>94</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Minimum</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pYn</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>280</x>
-                    <y>94</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Maximum</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pfX0</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>150</x>
-                    <y>140</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Minimum</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pfXn</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>280</x>
-                    <y>140</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Maximum</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pfY0</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>150</x>
-                    <y>165</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Minimum</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pfYn</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>280</x>
-                    <y>165</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Maximum</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pYname</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>280</x>
-                    <y>30</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>maxLength</name>
-                <number>9</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Name of  y  axis</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QLineEdit</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pXname</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>150</x>
-                    <y>30</y>
-                    <width>110</width>
-                    <height>22</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>maxLength</name>
-                <number>9</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Name of  x  axis</string>
-            </property>
-        </widget>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>pBtnApply</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>430</x>
                 <y>60</y>
@@ -429,23 +27,18 @@
                 <height>30</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>&amp;Apply</string>
         </property>
-        <property>
-            <name>toolTip</name>
+        <property name="toolTip" stdset="0">
             <string>Apply changes to the graph and do not close this dialog</string>
         </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>pBthCancel</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>430</x>
                 <y>100</y>
@@ -453,47 +46,18 @@
                 <height>30</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>&amp;Cancel</string>
         </property>
-        <property>
-            <name>toolTip</name>
+        <property name="toolTip" stdset="0">
             <string>Discard  changes and close this dialog</string>
         </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>pBtnBackgr</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>430</x>
-                <y>140</y>
-                <width>100</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Background...</string>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Set background color of the graph area</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>pBtnOk</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>430</x>
                 <y>20</y>
@@ -501,17 +65,343 @@
                 <height>30</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>&amp;OK</string>
         </property>
-        <property stdset="1">
-            <name>default</name>
+        <property name="default">
             <bool>true</bool>
         </property>
-        <property>
-            <name>toolTip</name>
+        <property name="toolTip" stdset="0">
             <string>Apply changes to the graph and close this dialog</string>
+        </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>410</width>
+                <height>200</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Axis Setup</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>30</y>
+                    <width>70</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Axis type</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>pAxis</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>80</x>
+                    <y>30</y>
+                    <width>56</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="maxValue">
+                <number>20</number>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>121</x>
+                    <y>70</y>
+                    <width>30</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>x:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>121</x>
+                    <y>94</y>
+                    <width>30</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>y:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2_2_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>121</x>
+                    <y>140</y>
+                    <width>30</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>x:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2_2_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>121</x>
+                    <y>165</y>
+                    <width>30</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>y:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>30</x>
+                    <y>70</y>
+                    <width>61</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Graph</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>30</x>
+                    <y>140</y>
+                    <width>70</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Fragment</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pX0</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>150</x>
+                    <y>70</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Minimum</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pXn</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>280</x>
+                    <y>70</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Maximum</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pY0</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>150</x>
+                    <y>94</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Minimum</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pYn</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>280</x>
+                    <y>94</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Maximum</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pfX0</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>150</x>
+                    <y>140</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Minimum</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pfXn</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>280</x>
+                    <y>140</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Maximum</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pfY0</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>150</x>
+                    <y>165</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Minimum</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pfYn</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>280</x>
+                    <y>165</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Maximum</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pYname</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>280</x>
+                    <y>30</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="maxLength">
+                <number>9</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Name of  y  axis</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>pXname</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>150</x>
+                    <y>30</y>
+                    <width>110</width>
+                    <height>22</height>
+                </rect>
+            </property>
+            <property name="maxLength">
+                <number>9</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Name of  x  axis</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pBtnBackgr</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>430</x>
+                <y>140</y>
+                <width>100</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&amp;Background...</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Set background color of the graph area</string>
         </property>
     </widget>
 </widget>
@@ -540,8 +430,6 @@
         <receiver>LegendDialogData</receiver>
         <slot>CmBackground()</slot>
     </connection>
-    <slot access="public">CmApply()</slot>
-    <slot access="public">CmBackground()</slot>
 </connections>
 <tabstops>
     <tabstop>pAxis</tabstop>
@@ -560,4 +448,9 @@
     <tabstop>pBthCancel</tabstop>
     <tabstop>pBtnBackgr</tabstop>
 </tabstops>
+<slots>
+    <slot>CmApply()</slot>
+    <slot>CmBackground()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

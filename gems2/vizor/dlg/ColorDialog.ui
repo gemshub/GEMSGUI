@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ColorDialogData</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>ColorDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,25 +12,75 @@
             <height>207</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>font</name>
-        <font>
-            <family>Lucida Sans Unicode</family>
-            <pointsize>8</pointsize>
-        </font>
-    </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>ColorDialogData</string>
     </property>
-    <widget>
-        <class>QButtonGroup</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout7</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>361</x>
+                <y>17</y>
+                <width>110</width>
+                <height>60</height>
+            </rect>
+        </property>
+        <property name="layoutSpacing" stdset="0">
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>PushButton10</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>5</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="text">
+                    <string>&amp;Ok</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>PushButton11</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>5</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
             <cstring>pGroup</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>10</x>
                 <y>10</y>
@@ -41,26 +88,20 @@
                 <height>180</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>title</name>
+        <property name="title">
             <string>Symbol Type</string>
         </property>
-        <property stdset="1">
-            <name>exclusive</name>
+        <property name="exclusive">
             <bool>true</bool>
         </property>
-        <property stdset="1">
-            <name>radioButtonExclusive</name>
+        <property name="radioButtonExclusive">
             <bool>true</bool>
         </property>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p6</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>133</x>
                     <y>99</y>
@@ -68,23 +109,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image0</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p1</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>72</x>
                     <y>71</y>
@@ -92,23 +128,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image1</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p7</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>193</x>
                     <y>99</y>
@@ -116,23 +147,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image2</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p4</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>11</x>
                     <y>99</y>
@@ -140,23 +166,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image3</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p2</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>193</x>
                     <y>71</y>
@@ -164,23 +185,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image4</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p9</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>254</x>
                     <y>99</y>
@@ -188,23 +204,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image5</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p3</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>254</x>
                     <y>71</y>
@@ -212,23 +223,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image6</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p5</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>133</x>
                     <y>71</y>
@@ -236,23 +242,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image7</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p0</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>11</x>
                     <y>71</y>
@@ -260,27 +261,21 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image8</pixmap>
             </property>
-            <property stdset="1">
-                <name>checked</name>
+            <property name="checked">
                 <bool>true</bool>
             </property>
         </widget>
-        <widget>
-            <class>QRadioButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QRadioButton">
+            <property name="name">
                 <cstring>p8</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>72</x>
                     <y>99</y>
@@ -288,23 +283,18 @@
                     <height>22</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string></string>
             </property>
-            <property stdset="1">
-                <name>pixmap</name>
+            <property name="pixmap">
                 <pixmap>image9</pixmap>
             </property>
         </widget>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLayoutWidget">
+            <property name="name">
                 <cstring>hbox1</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>10</x>
                     <y>30</y>
@@ -312,64 +302,51 @@
                     <height>25</height>
                 </rect>
             </property>
-            <property>
-                <name>layoutSpacing</name>
+            <property name="layoutSpacing" stdset="0">
             </property>
             <hbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>0</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>15</number>
                 </property>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QLabel">
+                    <property name="name">
                         <cstring>TextLabel1</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Line Size</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QSpinBox</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QSpinBox">
+                    <property name="name">
                         <cstring>pLine</cstring>
                     </property>
                 </widget>
-                <widget>
-                    <class>QLabel</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QLabel">
+                    <property name="name">
                         <cstring>TextLabel2</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>Symbol Size</string>
                     </property>
                 </widget>
-                <widget>
-                    <class>QSpinBox</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QSpinBox">
+                    <property name="name">
                         <cstring>pSize</cstring>
                     </property>
                 </widget>
             </hbox>
         </widget>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLayoutWidget">
+            <property name="name">
                 <cstring>Layout6</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>11</x>
                     <y>140</y>
@@ -378,159 +355,75 @@
                 </rect>
             </property>
             <hbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>0</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget>
-                    <class>QFrame</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QFrame">
+                    <property name="name">
                         <cstring>pColor</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>frameShape</name>
+                    <property name="frameShape">
                         <enum>StyledPanel</enum>
                     </property>
-                    <property stdset="1">
-                        <name>frameShadow</name>
+                    <property name="frameShadow">
                         <enum>Raised</enum>
                     </property>
                 </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>PushButton12</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>sizePolicy</name>
+                    <property name="sizePolicy">
                         <sizepolicy>
                             <hsizetype>5</hsizetype>
                             <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
                         </sizepolicy>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="text">
                         <string>C&amp;hange Color...</string>
                     </property>
                 </widget>
             </hbox>
         </widget>
     </widget>
-    <widget>
-        <class>QLayoutWidget</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>Layout7</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>361</x>
-                <y>17</y>
-                <width>110</width>
-                <height>60</height>
-            </rect>
-        </property>
-        <property>
-            <name>layoutSpacing</name>
-        </property>
-        <vbox>
-            <property stdset="1">
-                <name>margin</name>
-                <number>0</number>
-            </property>
-            <property stdset="1">
-                <name>spacing</name>
-                <number>6</number>
-            </property>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>PushButton10</cstring>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>5</hsizetype>
-                        <vsizetype>5</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Ok</string>
-                </property>
-                <property stdset="1">
-                    <name>default</name>
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>PushButton11</cstring>
-                </property>
-                <property stdset="1">
-                    <name>sizePolicy</name>
-                    <sizepolicy>
-                        <hsizetype>5</hsizetype>
-                        <vsizetype>5</vsizetype>
-                    </sizepolicy>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>&amp;Cancel</string>
-                </property>
-            </widget>
-        </vbox>
-    </widget>
 </widget>
 <images>
-    <image>
-        <name>image0</name>
+    <image name="image0">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703902baaac8c260a16401030b5200e0c239900e44210aab9ca6080611b42102aaa8c02f0abc5692e563760752f0ebf610d07e242b2d69a0b00aba95224</data>
     </image>
-    <image>
-        <name>image1</name>
+    <image name="image1">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703902eaaac8c1001b1a16a11c26016cc04983084869b0be1422511b68104603a90dca0ac0c371dd965082b09a9c56a2e563760752f56bfe10807ac6186215a6bcd05006f24532c</data>
     </image>
-    <image>
-        <name>image2</name>
+    <image name="image2">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d3606413017039027aa0c0668a21001a8304c14a60a424345618250164414210861d35614bb1b70b81787df7084038e304311adb5e602003e4952ea</data>
     </image>
-    <image>
-        <name>image3</name>
+    <image name="image3">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703101655c626aaacac8c290a14830bc345c12230619828940fa5a0a270bd10064414610f84894f14bb09386cc3e1321cbec0e1631ca183047088d65a73010067b55342</data>
     </image>
-    <image>
-        <name>image4</name>
+    <image name="image4">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703e0155546060445e1ba87b428f13e262524d1456badb900e84f518a</data>
     </image>
-    <image>
-        <name>image5</name>
+    <image name="image5">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d3606413017039027aa0c0668a2caca48c2305165656461a8a8b2328a30445459195598b6a2d8dd80c3bd38fc86231c8809c95a6b2e0081d94f38</data>
     </image>
-    <image>
-        <name>image6</name>
+    <image name="image6">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703e015554606a3a268a2a48424ba68ad35170009d04e0f</data>
     </image>
-    <image>
-        <name>image7</name>
+    <image name="image7">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703902eaaac0ce3435850b53061280d3301c28549c2cd0509c00d42d8a6ac8c301dc90d08c1a1218a047088d65a730100b9c753c6</data>
     </image>
-    <image>
-        <name>image8</name>
+    <image name="image8">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d3606413017030c98a8b2b232a6a8b23242983c51ece6d2cc17e48ad65a7301004708546b</data>
     </image>
-    <image>
-        <name>image9</name>
+    <image name="image9">
         <data format="XPM.GZ" length="473">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade65232b4500022230543251d2e2565856405650b0303030b0310570fc44d360641301703101655c626aaacac8c29aaac8c10868b2a2b2309c34495959185a1a2caca28c21051656554617ca2d84dc0611b0e97e1f0050e1fe3081d1c2189245a6bcd0500b7c1511c</data>
     </image>
 </images>
@@ -553,6 +446,9 @@
         <receiver>ColorDialogData</receiver>
         <slot>CmSelectColor()</slot>
     </connection>
-    <slot access="protected">CmSelectColor()</slot>
 </connections>
+<slots>
+    <slot access="protected">CmSelectColor()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

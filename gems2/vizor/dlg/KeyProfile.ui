@@ -19,44 +19,9 @@
             <height>400</height>
         </size>
     </property>
-    <property name="font">
-        <font>
-            <family>Lucida Sans Unicode</family>
-        </font>
-    </property>
     <property name="caption">
         <string>Modelling projects</string>
     </property>
-    <widget class="QListBox">
-        <property name="name">
-            <cstring>pList</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>40</y>
-                <width>440</width>
-                <height>240</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="font">
-            <font>
-                <family>Courier</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string></string>
-        </property>
-    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout3</cstring>
@@ -91,11 +56,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Open Project</string>
                 </property>
@@ -118,11 +78,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;New Project..</string>
                 </property>
@@ -142,11 +97,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Help</string>
                 </property>
@@ -165,11 +115,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Cancel</string>
@@ -203,11 +148,6 @@
                 <property name="name">
                     <cstring>pAqGas</cstring>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Re&amp;tain setup of aqueous/gas phases</string>
                 </property>
@@ -224,11 +164,6 @@
                 </property>
                 <property name="enabled">
                     <bool>true</bool>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
                 </property>
                 <property name="acceptDrops">
                     <bool>false</bool>
@@ -264,11 +199,6 @@
                         <property name="enabled">
                             <bool>true</bool>
                         </property>
-                        <property name="font">
-                            <font>
-                                <pointsize>9</pointsize>
-                            </font>
-                        </property>
                         <property name="acceptDrops">
                             <bool>false</bool>
                         </property>
@@ -286,11 +216,6 @@
                         <property name="name">
                             <cstring>CheckBox4</cstring>
                         </property>
-                        <property name="font">
-                            <font>
-                                <pointsize>9</pointsize>
-                            </font>
-                        </property>
                         <property name="text">
                             <string>&amp;Remake</string>
                         </property>
@@ -300,11 +225,6 @@
             <widget class="QButtonGroup">
                 <property name="name">
                     <cstring>ButtonGroup1</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
                 </property>
                 <property name="title">
                     <string>New projects only:</string>
@@ -320,10 +240,6 @@
                             <width>420</width>
                             <height>31</height>
                         </rect>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
                     </property>
                     <property name="text">
                         <string>Make new &amp;project by copying from kernel database </string>
@@ -347,10 +263,6 @@
                             <height>30</height>
                         </rect>
                     </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
                     <property name="text">
                         <string>Make new project by &amp;linking the database files</string>
                     </property>
@@ -373,11 +285,6 @@
                 <height>21</height>
             </rect>
         </property>
-        <property name="font">
-            <font>
-                <pointsize>11</pointsize>
-            </font>
-        </property>
         <property name="text">
             <string>Please, select one modelling project to open:</string>
         </property>
@@ -385,6 +292,30 @@
             <set>AlignCenter</set>
         </property>
         <property name="hAlign" stdset="0">
+        </property>
+    </widget>
+    <widget class="QListBox">
+        <property name="name">
+            <cstring>pList</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>40</y>
+                <width>440</width>
+                <height>240</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>7</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string></string>
         </property>
     </widget>
 </widget>

@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>SelectDialogData</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>SelectDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,207 +12,140 @@
             <height>454</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>Multiple Selection Dialog</string>
-    </property>
-    <property stdset="1">
-        <name>font</name>
-        <font>
-            <family>Courier</family>
-            <pointsize>9</pointsize>
-        </font>
-    </property>
-    <property stdset="1">
-        <name>minimumSize</name>
+    <property name="minimumSize">
         <size>
             <width>640</width>
             <height>420</height>
         </size>
     </property>
-    <property stdset="1">
-        <name>baseSize</name>
+    <property name="baseSize">
         <size>
             <width>0</width>
             <height>0</height>
         </size>
     </property>
+    <property name="caption">
+        <string>Multiple Selection Dialog</string>
+    </property>
     <vbox>
-        <property stdset="1">
-            <name>margin</name>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
             <number>11</number>
         </property>
-        <property stdset="1">
-            <name>spacing</name>
+        <property name="spacing">
             <number>6</number>
         </property>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel">
+            <property name="name">
                 <cstring>pLabel</cstring>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>Please, mark/select one or more items:</string>
             </property>
-            <property stdset="1">
-                <name>alignment</name>
+            <property name="alignment">
                 <set>AlignCenter</set>
             </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <family>Lucida Sans Unicode</family>
-                    <pointsize>12</pointsize>
-                </font>
-            </property>
-            <property>
-                <name>hAlign</name>
+            <property name="hAlign" stdset="0">
             </property>
         </widget>
-        <widget>
-            <class>QListBox</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QListBox">
+            <property name="name">
                 <cstring>pList</cstring>
             </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>sizePolicy</name>
+            <property name="sizePolicy">
                 <sizepolicy>
                     <hsizetype>5</hsizetype>
                     <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
         </widget>
-        <widget>
-            <class>QLayoutWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLayoutWidget">
+            <property name="name">
                 <cstring>hbox</cstring>
             </property>
-            <property>
-                <name>layoutMargin</name>
+            <property name="layoutMargin" stdset="0">
             </property>
-            <property>
-                <name>layoutSpacing</name>
+            <property name="layoutSpacing" stdset="0">
             </property>
             <hbox>
-                <property stdset="1">
-                    <name>margin</name>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
                     <number>6</number>
                 </property>
-                <property stdset="1">
-                    <name>spacing</name>
+                <property name="spacing">
                     <number>20</number>
                 </property>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>PushButton1</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
                         <string>&amp;Ok</string>
                     </property>
-                    <property stdset="1">
-                        <name>default</name>
+                    <property name="default">
                         <bool>true</bool>
                     </property>
-                    <property stdset="1">
-                        <name>font</name>
-                        <font>
-                            <family>Lucida Sans Unicode</family>
-                            <pointsize>11</pointsize>
-                        </font>
-                    </property>
-                    <property stdset="1">
-                        <name>sizePolicy</name>
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                        </sizepolicy>
-                    </property>
                 </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>pButton2</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
                         <string>&amp;Select All</string>
                     </property>
-                    <property stdset="1">
-                        <name>font</name>
-                        <font>
-                            <family>Lucida Sans Unicode</family>
-                            <pointsize>11</pointsize>
-                        </font>
-                    </property>
-                    <property stdset="1">
-                        <name>sizePolicy</name>
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                        </sizepolicy>
-                    </property>
                 </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>pButton3</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
                         <string>C&amp;lear All</string>
                     </property>
-                    <property stdset="1">
-                        <name>font</name>
-                        <font>
-                            <family>Lucida Sans Unicode</family>
-                            <pointsize>11</pointsize>
-                        </font>
-                    </property>
-                    <property stdset="1">
-                        <name>sizePolicy</name>
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                        </sizepolicy>
-                    </property>
                 </widget>
-                <widget>
-                    <class>QPushButton</class>
-                    <property stdset="1">
-                        <name>name</name>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>PushButton4</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>&amp;Cancel</string>
-                    </property>
-                    <property stdset="1">
-                        <name>font</name>
-                        <font>
-                            <family>Lucida Sans Unicode</family>
-                            <pointsize>11</pointsize>
-                        </font>
-                    </property>
-                    <property stdset="1">
-                        <name>sizePolicy</name>
+                    <property name="sizePolicy">
                         <sizepolicy>
                             <hsizetype>1</hsizetype>
                             <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
                     </property>
                 </widget>
             </hbox>
@@ -253,7 +183,10 @@
         <receiver>SelectDialogData</receiver>
         <slot>accept()</slot>
     </connection>
+</connections>
+<slots>
     <slot access="protected">CmSelectAll()</slot>
     <slot access="protected">CmClearAll()</slot>
-</connections>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

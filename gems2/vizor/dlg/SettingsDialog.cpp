@@ -144,7 +144,12 @@ SettingsDialog::CmChangeFont()
     {
         cellFont = selected_font;
         // for Win32 this line does not have a lot of sence
-        pFontRawName->setText( selected_font.rawName() );
+#ifdef __unix
+	QString fontName( selected_font.rawName() );
+#else
+	QString fontName( selected_font.rawName() );
+#endif
+        pFontRawName->setText( fontName );
     }
 }
 

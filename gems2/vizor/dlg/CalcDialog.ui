@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>CalcDialogData</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>CalcDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,25 +12,14 @@
             <height>284</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>caption</name>
+    <property name="caption">
         <string>Data Object Cell Calculator</string>
     </property>
-    <property stdset="1">
-        <name>font</name>
-        <font>
-            <family>Lucida Sans Unicode</family>
-            <pointsize>8</pointsize>
-        </font>
-    </property>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel1_3</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>240</x>
                 <y>10</y>
@@ -41,559 +27,15 @@
                 <height>20</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>Value of Second Operand</string>
         </property>
     </widget>
-    <widget>
-        <class>QButtonGroup</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>pButtonBox</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>20</x>
-                <y>40</y>
-                <width>200</width>
-                <height>180</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>title</name>
-            <string>   Operation</string>
-        </property>
-        <property stdset="1">
-            <name>exclusive</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>After any operation, previous contents of all selected cells will be lost!</string>
-        </property>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton3</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>60</x>
-                    <y>50</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;-</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>2</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Subtract a Value from Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton4</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>100</x>
-                    <y>50</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;*</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>3</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Multiply Cell to a Value</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton5</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>140</x>
-                    <y>50</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;/</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>4</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Divide Cell by a Value (except 0)</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton6</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>80</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;^</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>5</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Raise Cell to a Value Power</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton7</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>100</x>
-                    <y>80</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;1/x</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>6</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Invert Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton8</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>140</x>
-                    <y>80</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>s&amp;qrt</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>7</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Square Root from (non-negative) Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton9</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>110</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;log</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>8</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Decimal Logarithm from (positive) Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton10</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>60</x>
-                    <y>110</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>l&amp;n</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>9</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Natural Logarithm from (positive) Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton12</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>140</x>
-                    <y>110</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;exp</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>11</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Exponent from Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton13</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>140</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;sin</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>12</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Sine from Cell (Radians)</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton15</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>100</x>
-                    <y>140</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;tg</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>14</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Tangent from Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton14</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>60</x>
-                    <y>140</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>c&amp;os</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>13</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Cosine from Cell (Radians)</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton11</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>100</x>
-                    <y>110</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>1&amp;0^x</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>10</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Decimal Exponent from Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pAssignBtn</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>20</y>
-                    <width>80</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;=</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>on</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>0</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Set / Assign above Value to Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>PushButton2</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>20</x>
-                    <y>50</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>&amp;+</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>1</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Add a Value to Cell</string>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pClearBtn</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>140</x>
-                    <y>20</y>
-                    <width>40</width>
-                    <height>28</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>n.&amp;d.</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Set Cell to 'No Data' Value</string>
-            </property>
-        </widget>
-    </widget>
-    <widget>
-        <class>QLineEdit</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLineEdit">
+        <property name="name">
             <cstring>pValue</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>20</x>
                 <y>10</y>
@@ -601,19 +43,15 @@
                 <height>22</height>
             </rect>
         </property>
-        <property>
-            <name>toolTip</name>
+        <property name="toolTip" stdset="0">
             <string>Type in a value of second operand for binary operations</string>
         </property>
     </widget>
-    <widget>
-        <class>QLabel</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel1_4</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>230</x>
                 <y>200</y>
@@ -621,19 +59,15 @@
                 <height>21</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string> Each cell is taken as  First Operand</string>
         </property>
     </widget>
-    <widget>
-        <class>QGroupBox</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QGroupBox">
+        <property name="name">
             <cstring>pObjectBox</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>230</x>
                 <y>40</y>
@@ -641,22 +75,17 @@
                 <height>150</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>title</name>
+        <property name="title">
             <string>Object Cell Selection Range</string>
         </property>
-        <property>
-            <name>toolTip</name>
+        <property name="toolTip" stdset="0">
             <string>Operations will be applied only to the selected range of cells</string>
         </property>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QPushButton">
+            <property name="name">
                 <cstring>PushButton22</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>70</x>
                     <y>110</y>
@@ -664,23 +93,18 @@
                     <height>28</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>Select &amp;All Cells</string>
             </property>
-            <property>
-                <name>toolTip</name>
+            <property name="toolTip" stdset="0">
                 <string>Press this button to select all cells in a vector or matrix</string>
             </property>
         </widget>
-        <widget>
-            <class>QSpinBox</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QSpinBox">
+            <property name="name">
                 <cstring>pM2</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>160</x>
                     <y>70</y>
@@ -689,14 +113,11 @@
                 </rect>
             </property>
         </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel">
+            <property name="name">
                 <cstring>TextLabel1_2_3</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>130</x>
                     <y>70</y>
@@ -704,26 +125,20 @@
                     <height>20</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>to</string>
             </property>
-            <property stdset="1">
-                <name>alignment</name>
+            <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
             </property>
-            <property>
-                <name>hAlign</name>
+            <property name="hAlign" stdset="0">
             </property>
         </widget>
-        <widget>
-            <class>QSpinBox</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QSpinBox">
+            <property name="name">
                 <cstring>pN2</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>160</x>
                     <y>30</y>
@@ -732,14 +147,11 @@
                 </rect>
             </property>
         </widget>
-        <widget>
-            <class>QSpinBox</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QSpinBox">
+            <property name="name">
                 <cstring>pN1</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>70</x>
                     <y>30</y>
@@ -748,14 +160,11 @@
                 </rect>
             </property>
         </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel">
+            <property name="name">
                 <cstring>TextLabel1_2</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>130</x>
                     <y>30</y>
@@ -763,26 +172,20 @@
                     <height>20</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>to</string>
             </property>
-            <property stdset="1">
-                <name>alignment</name>
+            <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
             </property>
-            <property>
-                <name>hAlign</name>
+            <property name="hAlign" stdset="0">
             </property>
         </widget>
-        <widget>
-            <class>QSpinBox</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QSpinBox">
+            <property name="name">
                 <cstring>pM1</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>70</x>
                     <y>70</y>
@@ -791,14 +194,11 @@
                 </rect>
             </property>
         </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel">
+            <property name="name">
                 <cstring>TextLabel1</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>10</x>
                     <y>30</y>
@@ -806,26 +206,20 @@
                     <height>20</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>N (rows)</string>
             </property>
-            <property stdset="1">
-                <name>alignment</name>
+            <property name="alignment">
                 <set>AlignCenter</set>
             </property>
-            <property>
-                <name>hAlign</name>
+            <property name="hAlign" stdset="0">
             </property>
         </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QLabel">
+            <property name="name">
                 <cstring>TextLabel1_2_2</cstring>
             </property>
-            <property stdset="1">
-                <name>geometry</name>
+            <property name="geometry">
                 <rect>
                     <x>10</x>
                     <y>70</y>
@@ -833,27 +227,443 @@
                     <height>20</height>
                 </rect>
             </property>
-            <property stdset="1">
-                <name>text</name>
+            <property name="text">
                 <string>M (cols)</string>
             </property>
-            <property stdset="1">
-                <name>alignment</name>
+            <property name="alignment">
                 <set>AlignCenter</set>
             </property>
-            <property>
-                <name>hAlign</name>
+            <property name="hAlign" stdset="0">
             </property>
         </widget>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>pButtonBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>20</x>
+                <y>40</y>
+                <width>200</width>
+                <height>180</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>   Operation</string>
+        </property>
+        <property name="exclusive">
+            <bool>true</bool>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>After any operation, previous contents of all selected cells will be lost!</string>
+        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>60</x>
+                    <y>50</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;-</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>2</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Subtract a Value from Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>50</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;*</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>3</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Multiply Cell to a Value</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton5</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>50</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;/</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>4</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Divide Cell by a Value (except 0)</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton6</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>80</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;^</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>5</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Raise Cell to a Value Power</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton7</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>80</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;1/x</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>6</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Invert Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton8</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>80</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>s&amp;qrt</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>7</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Square Root from (non-negative) Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton9</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>110</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;log</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>8</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Decimal Logarithm from (positive) Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton10</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>60</x>
+                    <y>110</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>l&amp;n</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>9</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Natural Logarithm from (positive) Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton12</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>110</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;exp</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>11</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Exponent from Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton13</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>140</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;sin</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>12</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Sine from Cell (Radians)</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton15</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>140</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;tg</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>14</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Tangent from Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton14</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>60</x>
+                    <y>140</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>c&amp;os</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>13</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Cosine from Cell (Radians)</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton11</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>110</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>1&amp;0^x</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>10</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Decimal Exponent from Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pAssignBtn</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>20</y>
+                    <width>80</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;=</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="on">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>0</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Set / Assign above Value to Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>PushButton2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>50</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&amp;+</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="buttonGroupId">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Add a Value to Cell</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pClearBtn</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>140</x>
+                    <y>20</y>
+                    <width>40</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>n.&amp;d.</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Set Cell to 'No Data' Value</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>PushButton1_3</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>40</x>
                 <y>230</y>
@@ -861,29 +671,18 @@
                 <height>30</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>&amp;Ok - Do it!</string>
         </property>
-        <property stdset="1">
-            <name>default</name>
+        <property name="default">
             <bool>true</bool>
         </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>PushButton1_2</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>240</x>
                 <y>230</y>
@@ -891,25 +690,15 @@
                 <height>30</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>&amp;Cancel</string>
         </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>PushButton42</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>371</x>
                 <y>230</y>
@@ -917,15 +706,8 @@
                 <height>30</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>&amp;Help</string>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <pointsize>9</pointsize>
-            </font>
         </property>
     </widget>
 </widget>
@@ -1050,9 +832,12 @@
         <receiver>CalcDialogData</receiver>
         <slot>binaryMode()</slot>
     </connection>
+</connections>
+<slots>
     <slot access="protected">binaryMode()</slot>
     <slot access="protected">ok()</slot>
     <slot access="protected">selectAll()</slot>
     <slot access="protected">unaryMode()</slot>
-</connections>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>

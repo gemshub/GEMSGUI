@@ -19,12 +19,6 @@
             <height>310</height>
         </size>
     </property>
-    <property name="font">
-        <font>
-            <family>Lucida Sans Unicode</family>
-            <pointsize>9</pointsize>
-        </font>
-    </property>
     <property name="caption">
         <string>Set GEM-Selektor preferences</string>
     </property>
@@ -54,10 +48,6 @@
                 <property name="name">
                     <cstring>pButtonOK</cstring>
                 </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Ok</string>
                 </property>
@@ -69,11 +59,6 @@
                 <property name="name">
                     <cstring>pButtonApply</cstring>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Apply</string>
                 </property>
@@ -81,11 +66,6 @@
             <widget class="QPushButton">
                 <property name="name">
                     <cstring>pButtonHelp</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Help</string>
@@ -111,11 +91,6 @@
             <widget class="QPushButton">
                 <property name="name">
                     <cstring>pButtonCancel</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Cancel</string>
@@ -150,7 +125,7 @@
                     <cstring>TextLabel1_3</cstring>
                 </property>
                 <property name="text">
-                    <string>Font</string>
+                    <string>Cell Font</string>
                 </property>
             </widget>
             <widget class="QLineEdit">
@@ -376,7 +351,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>570</width>
-                <height>77</height>
+                <height>86</height>
             </rect>
         </property>
         <grid>

@@ -19,59 +19,9 @@
             <height>420</height>
         </size>
     </property>
-    <property name="font">
-        <font>
-            <family>Courier</family>
-            <pointsize>9</pointsize>
-        </font>
-    </property>
     <property name="caption">
         <string>List of database record keys</string>
     </property>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>pLabel</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>-1</x>
-                <y>9</y>
-                <width>618</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>12</pointsize>
-            </font>
-        </property>
-        <property name="text">
-            <string>Please, select one record key</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-        <property name="hAlign" stdset="0">
-        </property>
-    </widget>
-    <widget class="QListBox">
-        <property name="name">
-            <cstring>pList</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>40</y>
-                <width>620</width>
-                <height>320</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-            </font>
-        </property>
-    </widget>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout2</cstring>
@@ -105,12 +55,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>12</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Ok</string>
@@ -148,12 +92,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>12</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Filter...</string>
                 </property>
@@ -189,12 +127,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>12</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Select All</string>
@@ -232,12 +164,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>12</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>C&amp;lear All</string>
                 </property>
@@ -274,17 +200,45 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>12</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Cancel</string>
                 </property>
             </widget>
         </hbox>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>pLabel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>-1</x>
+                <y>9</y>
+                <width>618</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Please, select one record key</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
+    </widget>
+    <widget class="QListBox">
+        <property name="name">
+            <cstring>pList</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>40</y>
+                <width>620</width>
+                <height>320</height>
+            </rect>
+        </property>
     </widget>
 </widget>
 <connections>

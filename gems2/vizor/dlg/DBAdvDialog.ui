@@ -24,12 +24,6 @@
             <height>0</height>
         </size>
     </property>
-    <property name="font">
-        <font>
-            <family>Lucida Sans Unicode</family>
-            <pointsize>9</pointsize>
-        </font>
-    </property>
     <property name="caption">
         <string>DBAdvDialogData</string>
     </property>
@@ -92,11 +86,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>8</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Du&amp;al Thermodynamics (DUtherm)</string>
                 </property>
@@ -115,11 +104,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>8</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Adaptive Models and &amp;Uncertainty Spaces </string>
@@ -140,11 +124,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>8</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Coupled &amp;Mass Transport in a Megasystem</string>
                 </property>
@@ -153,27 +132,6 @@
                 </property>
             </widget>
         </vbox>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>40</x>
-                <y>310</y>
-                <width>160</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <italic>1</italic>
-            </font>
-        </property>
-        <property name="text">
-            <string>Under Construction:</string>
-        </property>
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -213,6 +171,7 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
@@ -237,6 +196,7 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
@@ -261,6 +221,7 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
@@ -285,6 +246,7 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
@@ -309,6 +271,7 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
@@ -333,6 +296,7 @@
                 </property>
                 <property name="font">
                     <font>
+                        <family>Lucida Sans Unicode</family>
                         <pointsize>11</pointsize>
                     </font>
                 </property>
@@ -379,11 +343,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Back</string>
                 </property>
@@ -406,11 +365,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Help</string>
                 </property>
@@ -429,11 +383,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Formats</string>
@@ -458,6 +407,7 @@
         </property>
         <property name="font">
             <font>
+                <family>Lucida Sans Unicode</family>
                 <pointsize>13</pointsize>
                 <bold>1</bold>
                 <italic>1</italic>
@@ -513,6 +463,22 @@
             <set>AlignCenter</set>
         </property>
         <property name="hAlign" stdset="0">
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>40</x>
+                <y>310</y>
+                <width>160</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Under Construction:</string>
         </property>
     </widget>
 </widget>

@@ -24,36 +24,9 @@
             <height>0</height>
         </size>
     </property>
-    <property name="font">
-        <font>
-            <family>Lucida Sans Unicode</family>
-        </font>
-    </property>
     <property name="caption">
         <string>EQDialogData</string>
     </property>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>40</x>
-                <y>230</y>
-                <width>171</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <pointsize>9</pointsize>
-                <italic>1</italic>
-            </font>
-        </property>
-        <property name="text">
-            <string>Under Construction:</string>
-        </property>
-    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>pLogoImg</cstring>
@@ -103,6 +76,7 @@
         </property>
         <property name="font">
             <font>
+                <family>Lucida Sans Unicode</family>
                 <pointsize>13</pointsize>
                 <bold>1</bold>
                 <italic>1</italic>
@@ -159,11 +133,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>12</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Single - &amp;System Equilibria (SysEq)</string>
                 </property>
@@ -183,11 +152,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>12</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Process Simulation (Process)</string>
                 </property>
@@ -206,11 +170,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>12</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Data Sampling and Plotting (GtDemo) </string>
@@ -258,11 +217,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Back</string>
                 </property>
@@ -285,11 +239,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Numerical Controls...</string>
                 </property>
@@ -308,11 +257,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>&amp;Help</string>
@@ -360,11 +304,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Du&amp;al Thermodynamics (DUtherm)</string>
                 </property>
@@ -384,11 +323,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Adaptive Modelling in the &amp;Uncertainty Space</string>
                 </property>
@@ -407,11 +341,6 @@
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                     </sizepolicy>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Coupled &amp;Mass Transport Modelling</string>
@@ -456,6 +385,22 @@
         </property>
         <property name="orientation">
             <enum>Horizontal</enum>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>40</x>
+                <y>230</y>
+                <width>171</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Under Construction:</string>
         </property>
     </widget>
 </widget>

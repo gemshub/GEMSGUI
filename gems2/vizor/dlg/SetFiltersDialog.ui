@@ -12,12 +12,6 @@
             <height>442</height>
         </rect>
     </property>
-    <property name="font">
-        <font>
-            <family>Lucida Sans Unicode</family>
-            <pointsize>9</pointsize>
-        </font>
-    </property>
     <property name="caption">
         <string>Set filters to create an independent modelling project</string>
     </property>
@@ -134,10 +128,6 @@
                 <height>380</height>
             </rect>
         </property>
-        <property name="font">
-            <font>
-            </font>
-        </property>
         <property name="tabShape">
             <enum>Rounded</enum>
         </property>
@@ -217,27 +207,6 @@ project database</string>
                     <set>AlignVCenter|AlignRight</set>
                 </property>
                 <property name="hAlign" stdset="0">
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>tlICtab</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>0</y>
-                        <width>380</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>  IComp (Independent Component) records</string>
                 </property>
             </widget>
             <widget class="Line">
@@ -500,6 +469,22 @@ Default database</string>
                     <enum>Manual</enum>
                 </property>
             </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>tlICtab</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>0</y>
+                        <width>380</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>  IComp (Independent Component) records</string>
+                </property>
+            </widget>
         </widget>
         <widget class="QWidget">
             <property name="name">
@@ -528,27 +513,6 @@ Default database</string>
                 </property>
                 <property name="orientation">
                     <enum>Horizontal</enum>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>tlPCOtab</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>10</y>
-                        <width>440</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>  Compos (Predefined Composition Object) records</string>
                 </property>
             </widget>
             <widget class="Line">
@@ -770,6 +734,22 @@ records
                     <string>Characters to replace with during copying of records</string>
                 </property>
             </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>tlPCOtab</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>10</y>
+                        <width>440</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>  Compos (Predefined Composition Object) records</string>
+                </property>
+            </widget>
         </widget>
         <widget class="QWidget">
             <property name="name">
@@ -798,27 +778,6 @@ records
                 </property>
                 <property name="orientation">
                     <enum>Horizontal</enum>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>tlDCtab</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>10</y>
-                        <width>440</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>  DComp (standard thermochemical data) records</string>
                 </property>
             </widget>
             <widget class="Line">
@@ -1035,6 +994,22 @@ records
                     <string>Characters to search in the last field of record key</string>
                 </property>
             </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>tlDCtab</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>10</y>
+                        <width>440</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>  DComp (standard thermochemical data) records</string>
+                </property>
+            </widget>
         </widget>
         <widget class="QWidget">
             <property name="name">
@@ -1085,27 +1060,6 @@ records
                 </property>
                 <property name="orientation">
                     <enum>Horizontal</enum>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>tlREtab</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>440</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
-                <property name="text">
-                    <string>  ReacDC (reaction-defined standard data) records</string>
                 </property>
             </widget>
             <widget class="QLabel">
@@ -1305,6 +1259,22 @@ records
                     </rect>
                 </property>
             </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>tlREtab</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>440</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>  ReacDC (reaction-defined standard data) records</string>
+                </property>
+            </widget>
         </widget>
         <widget class="QWidget">
             <property name="name">
@@ -1349,6 +1319,7 @@ records
                 </property>
                 <property name="font">
                     <font>
+                        <family>Lucida Sans Unicode</family>
                         <pointsize>10</pointsize>
                     </font>
                 </property>

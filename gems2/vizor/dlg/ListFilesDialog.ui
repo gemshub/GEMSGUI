@@ -19,11 +19,6 @@
             <height>400</height>
         </size>
     </property>
-    <property name="font">
-        <font>
-            <family>Lucida Sans Unicode</family>
-        </font>
-    </property>
     <property name="caption">
         <string>Database File Configuration for Modelling Project</string>
     </property>
@@ -61,11 +56,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Help</string>
                 </property>
@@ -102,11 +92,6 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Ok</string>
                 </property>
@@ -129,16 +114,32 @@
                         <verstretch>0</verstretch>
                     </sizepolicy>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>10</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Cancel</string>
                 </property>
             </widget>
         </hbox>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>pLabel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>440</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>   Please, check files linked to Project:</string>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter|AlignLeft</set>
+        </property>
+        <property name="hAlign" stdset="0">
+        </property>
     </widget>
     <widget class="QListView">
         <column>
@@ -179,32 +180,6 @@
         </property>
         <property name="itemMargin">
             <number>1</number>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>pLabel</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>440</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="font">
-            <font>
-                <pointsize>10</pointsize>
-            </font>
-        </property>
-        <property name="text">
-            <string>   Please, check files linked to Project:</string>
-        </property>
-        <property name="alignment">
-            <set>AlignVCenter|AlignLeft</set>
-        </property>
-        <property name="hAlign" stdset="0">
         </property>
     </widget>
 </widget>

@@ -44,12 +44,6 @@
                 <property name="name">
                     <cstring>buttonOk</cstring>
                 </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>OK</string>
                 </property>
@@ -84,12 +78,6 @@
                 <property name="name">
                     <cstring>buttonHelp</cstring>
                 </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Help</string>
                 </property>
@@ -103,12 +91,6 @@
             <widget class="QPushButton">
                 <property name="name">
                     <cstring>buttonCancel</cstring>
-                </property>
-                <property name="font">
-                    <font>
-                        <family>Lucida Sans Unicode</family>
-                        <pointsize>9</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Cancel</string>
@@ -134,11 +116,6 @@
                 <height>310</height>
             </rect>
         </property>
-        <property name="font">
-            <font>
-                <family>Lucida Sans Unicode</family>
-            </font>
-        </property>
         <widget class="QWidget">
             <property name="name">
                 <cstring>Widget8</cstring>
@@ -163,6 +140,25 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
+                        <cstring>pselS</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>20</x>
+                            <y>20</y>
+                            <width>450</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Direct change of bulk composition and/or constraints, &amp;S</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
                         <cstring>pselG</cstring>
                     </property>
                     <property name="geometry">
@@ -173,13 +169,27 @@
                             <height>21</height>
                         </rect>
                     </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>9</pointsize>
-                        </font>
-                    </property>
                     <property name="text">
                         <string>Batch inverse titration sequence (pH steps etc.), &amp;G</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>pselT</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>20</x>
+                            <y>80</y>
+                            <width>430</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>One arbitrary inverse titration calculation, &amp;T</string>
+                    </property>
+                    <property name="checked">
+                        <bool>false</bool>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -193,11 +203,6 @@
                             <width>430</width>
                             <height>21</height>
                         </rect>
-                    </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>9</pointsize>
-                        </font>
                     </property>
                     <property name="text">
                         <string>Sequential reactor (using phase bulk compositions), &amp;R</string>
@@ -215,61 +220,8 @@
                             <height>21</height>
                         </rect>
                     </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>9</pointsize>
-                        </font>
-                    </property>
                     <property name="text">
                         <string>T and/or P change at fixed bulk composition, &amp;P</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>pselT</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>20</x>
-                            <y>80</y>
-                            <width>430</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>9</pointsize>
-                        </font>
-                    </property>
-                    <property name="text">
-                        <string>One arbitrary inverse titration calculation, &amp;T</string>
-                    </property>
-                    <property name="checked">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>pselS</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>20</x>
-                            <y>20</y>
-                            <width>450</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>9</pointsize>
-                        </font>
-                    </property>
-                    <property name="text">
-                        <string>Direct change of bulk composition and/or constraints, &amp;S</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
                     </property>
                 </widget>
             </widget>
@@ -281,102 +233,6 @@
             <attribute name="title">
                 <string>Dimensions and graphics</string>
             </attribute>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pGraph</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>100</y>
-                        <width>70</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="maxValue">
-                    <number>20</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pELine</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>150</y>
-                        <width>70</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="maxValue">
-                    <number>100</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pECol</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>180</y>
-                        <width>70</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="maxValue">
-                    <number>10</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pPoints</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>80</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="maxValue">
-                    <number>999</number>
-                </property>
-                <property name="minValue">
-                    <number>1</number>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>TextLabel1</cstring>
@@ -389,40 +245,8 @@
                         <height>21</height>
                     </rect>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>&amp;Number of process-generated points (&lt;1000)</string>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pMods</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>60</y>
-                        <width>70</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
-                <property name="maxValue">
-                    <number>20</number>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="value">
-                    <number>1</number>
                 </property>
             </widget>
             <widget class="QLabel">
@@ -436,11 +260,6 @@
                         <width>380</width>
                         <height>31</height>
                     </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Number of columns in &amp;modC array (from 0 to 20)</string>
@@ -458,11 +277,6 @@
                         <height>21</height>
                     </rect>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Number of plots (sampled &amp;columns, from 0 to 20)</string>
                 </property>
@@ -478,11 +292,6 @@
                         <width>383</width>
                         <height>50</height>
                     </rect>
-                </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
                 </property>
                 <property name="text">
                     <string>Number of lines (points) and columns  for
@@ -501,11 +310,6 @@
                         <height>31</height>
                     </rect>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="text">
                     <string>Number of SDref (bibliography) &amp;links</string>
                 </property>
@@ -522,11 +326,6 @@
                         <height>31</height>
                     </rect>
                 </property>
-                <property name="font">
-                    <font>
-                        <pointsize>9</pointsize>
-                    </font>
-                </property>
                 <property name="maxValue">
                     <number>5</number>
                 </property>
@@ -534,6 +333,104 @@
                     <number>0</number>
                 </property>
                 <property name="value">
+                    <number>1</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pECol</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>180</y>
+                        <width>70</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>10</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pELine</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>150</y>
+                        <width>70</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>100</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pGraph</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>100</y>
+                        <width>70</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pMods</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>60</y>
+                        <width>70</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+                <property name="minValue">
+                    <number>0</number>
+                </property>
+                <property name="value">
+                    <number>1</number>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>pPoints</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>80</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="maxValue">
+                    <number>999</number>
+                </property>
+                <property name="minValue">
                     <number>1</number>
                 </property>
             </widget>

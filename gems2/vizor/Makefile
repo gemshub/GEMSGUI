@@ -53,7 +53,8 @@ subdir_mk:
 	 $(MAKE) -C $$i all RELEASE=$(RELEASE) || exit 1; \
 	done
 
-clean:	@for i in $(subdirs); do \
+clean:
+	@for i in $(subdirs); do \
 	$(MAKE) -C $$i clean || exit 1; \
         done
 	$(CLEAN_CMD)
