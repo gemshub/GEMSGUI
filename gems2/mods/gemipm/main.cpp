@@ -182,8 +182,11 @@ main( int argc, char* argv[] )
   //       m_bIC[2] += 1e-6*kk;
  //        m_bIC[3] += 1e-6*kk;
  //      m_bIC[4] += 1e-7;
-       m_T += 15;
-       
+       if(kk>1) m_T += 25;
+        else m_T += 15;
+       if(ii>1)
+        m_P +=5;
+
        MAIF_CALC( 1, ii, 0, kk,
         m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
         m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,

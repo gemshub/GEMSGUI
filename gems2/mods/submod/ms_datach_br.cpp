@@ -154,7 +154,7 @@ void TMulti::getG0_V0_H0_Cp0_matrix()
 {
 
   double cT, cP, cDC;
-  double *G0, *V0, *H0, *Cp0;
+  double *G0, *V0, *H0, *Cp0, roW, epsW;
 
   G0 =  new double[TProfil::pm->mup->L];
   V0 =  new double[TProfil::pm->mup->L];
@@ -174,7 +174,9 @@ void TMulti::getG0_V0_H0_Cp0_matrix()
     {
       cP = data_CH->Pval[jj];
      // calc new G0, V0, H0, Cp0
-     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, Cp0 );
+     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, Cp0, roW, epsW );
+     data_CH->roW[ jj * data_CH->nTp + ii] = roW;
+     data_CH->epsW[ jj * data_CH->nTp + ii] = epsW;
      // copy to arrays
      for(int kk=0; kk<data_CH->nDC; kk++)
       {
@@ -588,6 +590,8 @@ void TMulti::datach_to_file( GemDataStream& ff )
    ff.writeArray( data_CH->Tval,  data_CH->nTp );
    ff.writeArray( data_CH->Pval,  data_CH->nPp );
 
+   ff.writeArray( data_CH->roW,  data_CH->nPp*data_CH->nTp );
+   ff.writeArray( data_CH->epsW, data_CH->nPp*data_CH->nTp );
    ff.writeArray( data_CH->G0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
    ff.writeArray( data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
    ff.writeArray( data_CH->H0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
@@ -631,6 +635,8 @@ void TMulti::datach_from_file( GemDataStream& ff )
    ff.readArray( data_CH->Tval,  data_CH->nTp );
    ff.readArray( data_CH->Pval,  data_CH->nPp );
 
+   ff.readArray( data_CH->roW,  data_CH->nPp*data_CH->nTp );
+   ff.readArray( data_CH->epsW, data_CH->nPp*data_CH->nTp );
    ff.readArray( data_CH->G0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
    ff.readArray( data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
    ff.readArray( data_CH->H0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
@@ -673,6 +679,8 @@ void TMulti::datach_to_text_file( fstream& ff )
    outArray( ff, "Tval", data_CH->Tval, data_CH->nTp );
    outArray( ff, "Pval", data_CH->Pval, data_CH->nPp );
 
+   outArray( ff, "roW", data_CH->roW, data_CH->nPp*data_CH->nTp );
+   outArray( ff, "epsW", data_CH->epsW,  data_CH->nPp*data_CH->nTp );
    outArray( ff, "G0", data_CH->G0, data_CH->nDC*data_CH->nPp*data_CH->nTp,
                                     data_CH->nPp*data_CH->nTp );
    outArray( ff, "V0", data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp,
@@ -722,6 +730,8 @@ void TMulti::datach_from_text_file(fstream& ff)
    inArray( ff, "Tval", data_CH->Tval, data_CH->nTp );
    inArray( ff, "Pval", data_CH->Pval, data_CH->nPp );
 
+   inArray( ff, "roW", data_CH->roW,   data_CH->nPp*data_CH->nTp);
+   inArray( ff, "epsW", data_CH->epsW, data_CH->nPp*data_CH->nTp);
    inArray( ff, "G0", data_CH->G0,  data_CH->nDC*data_CH->nPp*data_CH->nTp);
    inArray( ff, "V0", data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp);
    inArray( ff, "H0", data_CH->H0,  data_CH->nDC*data_CH->nPp*data_CH->nTp);
@@ -764,6 +774,8 @@ void TMulti::datach_realloc()
   data_CH->Tval = new float[data_CH->nTp];
   data_CH->Pval = new float[data_CH->nPp];
 
+  data_CH->roW = new double[ data_CH->nPp*data_CH->nTp];
+  data_CH->epsW = new double[ data_CH->nPp*data_CH->nTp];
   data_CH->G0 = new double[data_CH->nDC*data_CH->nPp*data_CH->nTp];
   data_CH->V0 = new double[data_CH->nDC*data_CH->nPp*data_CH->nTp];
   data_CH->H0 = new double[data_CH->nDC*data_CH->nPp*data_CH->nTp];
@@ -824,6 +836,14 @@ void TMulti::datach_free()
     data_CH->Pval = 0;
   }
 
+ if( data_CH->roW )
+  { delete[] data_CH->roW;
+    data_CH->roW = 0;
+  }
+ if( data_CH->epsW )
+  { delete[] data_CH->epsW;
+    data_CH->epsW = 0;
+  }
  if( data_CH->G0 )
   { delete[] data_CH->G0;
     data_CH->G0 = 0;

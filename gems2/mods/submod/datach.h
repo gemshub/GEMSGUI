@@ -63,6 +63,8 @@ typedef struct
 
 // Thermodynamic data
 // Require Lagrange interpolation subroutine to extract data for given P,T
+    *roW,    //density of water solvent [ nPp, nTp]
+    *epsW,    // dielectric  constant of water solvent [ nPp, nTp]
     *G0,    // standard molar Gibbs energy [nDC, nPp, nTp]
     *V0,    // standard molar volume [nDC, nPp, nTp]
 //  *S0,    // standard molar entropy [nDC, nPp, nTp]

@@ -177,6 +177,12 @@ void TProfil::CompG0Load()
         break;
    }
 
+//Test outpur ***********************************
+//  fstream f_log("CompG0Load.txt", ios::out|ios::app );
+
+//  f_log << "TC = " <<  TC << "  P =  " << P << endl;
+//Test outpur ***********************************
+
  if( fabs( pmp->TC - TC ) < 1.e-10 &&
             fabs( pmp->P - P ) < 1.e-10 )
    return;    //T, P not changed
@@ -185,10 +191,17 @@ void TProfil::CompG0Load()
  pmp->T = pmp->Tc = TC + C_to_K;
  pmp->TC = pmp->TCc = TC;
  pmp->P = pmp->Pc = P;
- //       pmp->denW = tpp->RoW;
+ pmp->denW = LagranInterp( dCH->Pval, dCH->Tval, dCH->roW,
+                          P, TC, dCH->nTp, dCH->nPp );
  //       pmp->denWg = tpp->RoV;
- //       pmp->epsW = tpp->EpsW;
+ pmp->epsW = LagranInterp( dCH->Pval, dCH->Tval, dCH->epsW,
+                          P, TC, dCH->nTp, dCH->nPp );
  //       pmp->epsWg = tpp->EpsV;
+
+//Test outpur ***********************************
+//  f_log << "roW = " <<  pmp->denW << "  epsW =  " << pmp->epsW << endl;
+//Test outpur ***********************************
+
  pmp->RT = R_CONSTANT * pmp->Tc;
  pmp->FRT = F_CONSTANT/pmp->RT;
  pmp->lnP = 0.;
@@ -206,6 +219,9 @@ void TProfil::CompG0Load()
       Gg = LagranInterp( dCH->Pval, dCH->Tval, dCH->G0+jj,
                           P, TC, dCH->nTp, dCH->nPp );
       pmp->G0[j] = Cj_init_calc( Gg, j, k );
+//Test outpur ***********************************
+//  f_log << j  << " Gg = " <<  Gg  << "  GO =  " << pmp->G0[j] << endl;
+//Test outpur ***********************************
     }
  }
  for( j=0; j<pmp->L; j++ )
@@ -222,6 +238,9 @@ void TProfil::CompG0Load()
                     pmp->Vol[j] = Vv  * 10.;
                     break;
     }
+//Test outpur ***********************************
+//  f_log << j  << " Vv = " <<  Vv  << "  VO =  " << pmp->Vol[j] << endl;
+//Test outpur ***********************************
  }
 }
 
