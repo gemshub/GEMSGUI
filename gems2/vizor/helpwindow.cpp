@@ -38,32 +38,38 @@
 
 #include <qnetwork.h>
 #include <qurloperator.h>
+#include <qdragobject.h>
 
 #include <ctype.h>
 
 #include "visor.h"
 
 bool opReady = false;
+static QByteArray allData;
 
 const QMimeSource * 
 HttpMimeSourceFactory::data ( const QString & abs_name_ ) const
 {
 	QString abs_name(abs_name_);
-	if( abs_name.endsWith("/") )
-	    abs_name.append("index.html");
-
-cerr << "got into ::data() " << abs_name << endl;
+	
+    // not good - works only in some cases
+    if( abs_name.endsWith("/") )
+        abs_name.append("index.html");
 
     if( !abs_name.startsWith("http:") )
 	return QMimeSourceFactory::data(abs_name);
     else {
-cerr << "getting " << abs_name << endl;
-	QUrlOperator oper;
-	connect(&oper, SIGNAL(finished(QNetworkOperation*)), 
-	    this, SLOT(finished(QNetworkOperation*)));
 
-	
-	    oper.copy(abs_name, "/tmp");
+cerr << "request for http data: " << abs_name << endl;
+    
+	QUrlOperator oper(abs_name);
+	connect(&oper, SIGNAL(finished(QNetworkOperation*)), 
+	    this, SLOT(finishedSlot(QNetworkOperation*)));
+	connect(&oper, SIGNAL(data(const QByteArray&, QNetworkOperation*)), 
+	    this, SLOT(dataSlot(const QByteArray&, QNetworkOperation*)));
+
+//	oper.copy(abs_name, "/tmp");
+	oper.get();
 	
 //	QNetworkOperation no;
 //	while( no.stat() == QNetworkOperation::Done
@@ -73,15 +79,50 @@ cerr << "getting " << abs_name << endl;
 	    qApp->processEvents();
 	}
 cerr << "bail out" << endl;
+
+	QFileInfo fi(abs_name);
+	// get the right mimetype
+	QString e = fi.extension(FALSE);
+	QCString mimetype = "application/octet-stream";
+//	const char* imgfmt;
+	if ( e.startsWith("htm") )
+	    mimetype = QCString("text/")+QCString(e.lower().latin1());
+	else
+	    mimetype = QCString("image/")+QCString(e.lower().latin1());
+
+	QStoredDrag* sr = new QStoredDrag( mimetype );
+	sr->setEncodedData( allData );
+
+	allData.resize(0);
+
+	return sr;
+/*
 	QString s("/tmp/");
 	s.append(abs_name.mid(abs_name.findRev("/")+1));
 	cerr << "returning from " << s << endl;
 	return QMimeSourceFactory::data(s);
+*/
     }
 }
 
+
+void 
+HttpMimeSourceFactory::dataSlot(const QByteArray & data, QNetworkOperation * op)
+{
+    if( data.size() == 0 )
+	return;
+	
+    size_t newSize = allData.size() + data.size();
+    char* newArray = new char[newSize];
+
+    if( allData.size() > 0 )
+	memcpy(newArray, allData.data(), allData.size());
+    memcpy(newArray + allData.size(), data.data(), data.size());
+    allData.assign(newArray, newSize);
+}
+
 void
-HttpMimeSourceFactory::finished(QNetworkOperation *op)
+HttpMimeSourceFactory::finishedSlot(QNetworkOperation *op)
 {
 
 cerr << "finished" << endl;
@@ -97,14 +138,19 @@ cerr << "finished" << endl;
 QString 
 HttpMimeSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const
 {
-cerr<< "makeAbsolute " << abs_or_rel_name << endl;
-if( !context.isEmpty() )
-    cerr << " context " << context << endl;
-	if( abs_or_rel_name.startsWith("http://") /*&& !context.startsWith("http://")*/ )
+	if( abs_or_rel_name.startsWith("http://") /*&& !context.startsWith("http://")*/ ) {
+	cerr<< "makeAbsolute " << abs_or_rel_name << endl;
+	if( !context.isEmpty() )
+	    cerr << " context " << context << endl;
 	    return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, "");
 //	    return abs_or_rel_name;
+	}
 	else
 	    if( !context.isEmpty() && context.startsWith("http://") ) {
+		cerr<< "makeAbsolute " << abs_or_rel_name << endl;
+		if( !context.isEmpty() )
+		    cerr << " context " << context << endl;
+
 		QString contextBase;
 		if( abs_or_rel_name.startsWith("/") )
 		    contextBase = context.left( context.find("/", 8) );

@@ -45,8 +45,8 @@ class HttpMimeSourceFactory:
     QString makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const;
     
  protected slots:
-    void finished(QNetworkOperation *op);
-	    
+    void finishedSlot(QNetworkOperation *op);
+    void dataSlot( const QByteArray & data, QNetworkOperation * op );
 };
 
 
