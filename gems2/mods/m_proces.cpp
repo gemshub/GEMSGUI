@@ -674,7 +674,7 @@ double TProcess::f_proc( double x )
     pep->c_Eh = x;
     CalcEquat();
     // calc SyStat on iterations
-    PRof->CalcEqstat( pointShow==-1 ); // calc current SyStat
+    PRof->CalcEqstat( false /*pointShow==-1*/ ); // calc current SyStat
     pep->Loop = 1;
     CalcEquat();
     return( pep->c_Nu );
@@ -822,7 +822,7 @@ TProcess::RecCalc( const char *key )
         //       if( nRec < 0 || pep->syt < pep->pet )
 
         { // current key in base set before
-            PRof->CalcEqstat(pointShow==-1); // calc current SyStat
+            PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SyStat
             TSysEq::pm->CmSave();  // save results
         }
 
@@ -834,6 +834,11 @@ TProcess::RecCalc( const char *key )
 
     while( pep->Loop ) // main cycle of process
     {
+     if( pointShow==-1 )
+       pVisor->Message( window(), GetName(),
+                 "Calculating process; \n"
+                 "Please, wait...", pep->c_nrk, pep->NR1);
+
         // calc equations of process
         if( pep->PsPro == S_OFF )
         {
@@ -893,7 +898,7 @@ TProcess::RecCalc( const char *key )
             pep->syt = rt[RT_SYSEQ].GetTime( nRec );
         if( nRec < 0 || pep->PsUX != S_OFF || pep->syt < pep->pet )
         {
-            PRof->CalcEqstat(pointShow==-1); // calc current SyStat
+            PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
            if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
                  TSysEq::pm->CmSave();  // save results
         }
@@ -913,6 +918,9 @@ TProcess::RecCalc( const char *key )
     }  /* end while() */
     pVisor->CloseProgress();
     pep->Istat = P_FINISHED;
+    if( pointShow==-1 )
+       pVisor->CloseMessage();
+
     if( pointShow != -1 )
       vfMessage(window(), GetName(),
         "Process - GtDemo batch calculation finished: \n"
