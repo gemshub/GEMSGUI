@@ -53,20 +53,29 @@ main(int argc, char* argv[])
 // test working with txt files
       fstream f_ch(multu_in.c_str(), ios::in );
       ErrorIf( !f_ch.good() , multu_in.c_str(), "DataCH Fileopen error");
+      task_.multi->datach_from_text_file(f_ch);
 
-      fstream f_ch(chbr_in.c_str(), ios::in );
-      ErrorIf( !f_ch.good() , chbr_in.c_str(), "DataBr Fileopen error");
+      fstream f_br(chbr_in.c_str(), ios::in );
+      ErrorIf( !f_br.good() , chbr_in.c_str(), "DataBr Fileopen error");
+      task_.multi->databr_from_text_file(f_br);
 
 
+      fstream f_ch1(multu_in.c_str(), ios::out );
+      ErrorIf( !f_ch1.good() , multu_in.c_str(), "DataCH out Fileopen error");
+      task_.multi->datach_to_text_file(f_ch1);
 
-     return;
+      fstream f_br1(chbr_in.c_str(), ios::out );
+      ErrorIf( !f_br1.good() , chbr_in.c_str(), "DataBr out Fileopen error");
+      task_.multi->databr_to_text_file(f_br1);
+
+/*
 // read multi structure
       GemDataStream f_m(multu_in, ios::in|ios::binary);
       task_.readMulti(f_m);
 
 // read dataCH structure, and some databr structures
 // mtr_data structure is:
-//   "<dataCH file name>" ,"<dataBR file1 name>", ..., "<dataBR fileN name>"
+//  -t/-b  "<dataCH file name>" ,"<dataBR file1 name>", ..., "<dataBR fileN name>"
 // Get DataCH file name
       fstream f_chbr(chbr_in.c_str(), ios::in );
       ErrorIf( !f_chbr.good() , chbr_in.c_str(), "Fileopen error");
@@ -106,7 +115,7 @@ main(int argc, char* argv[])
       task_.multi->datach_free();
       task_.multi->databr_free();
 
-      return 1;
+*/      return 1;
     }
     catch(TError& err)
     {
