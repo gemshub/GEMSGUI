@@ -532,7 +532,6 @@ TRTParm::RecCalc( const char *key )
     if( rpp->Pplot != S_OFF )
         exprE_calc();
 
-
     /* calc t/d  properties */
     for( j=0; j<rpp->NV; j++ )
     {
@@ -549,13 +548,14 @@ TRTParm::RecCalc( const char *key )
         aW.twp->T = aW.twp->TC + C_to_K;
         aW.twp->unE = rpp->PunE;
         aW.twp->unV = rpp->PunV;
-        /* calc t/d properties of component  */
+        /* calc t/d properties of component */
         switch( rpp->What )
         {
         case SRC_DCOMP:
             {
                 TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
                 aW.twp->TCst = aDC->dcp->TCst;
+		aW.twp->Tst = aW.twp->TCst + C_to_K;
                 aW.twp->Pst = aDC->dcp->Pst;
                 aDC->DCthermo( 0, 0 );
             }
@@ -564,16 +564,18 @@ TRTParm::RecCalc( const char *key )
             {
                 TReacDC* aRDC=(TReacDC *)(&aMod[RT_REACDC]);
                 aW.twp->TCst = aRDC->rcp->TCst;
+		aW.twp->Tst = aW.twp->TCst + C_to_K;
                 aW.twp->Pst = aRDC->rcp->Pst;
                 aRDC->RCthermo( 0, 0 );
                 aRDC->ods_link(0);
+		aW.ods_link(0);
             }
             break;
         default:
             break;
         }
         /* Set results to arrays */
-        aW.ods_link(0);
+//        aW.ods_link(0);
         if( P_old < 1e-6 && rpp->P[j] < 1e-6 )
         {  /* set precision calc by TNP*/
             rpp->P[j] = aW.twp->P;  // ???????

@@ -38,48 +38,53 @@ ZPrTr = -0.1278034682e-1,
 void
 TDComp::calc_tpcv( int q, int p, int CE, int CV )
 {
-    double a, T, TC, Vst, Tst, T_Tst, Ts2, TT, dT, T2, T3, T4,
-    T05, Tst2, Tst3, Tst4, Tst05, qQ, Tcr1, Tcr, Smax, Vmax;
-    int k, i, j, jf;
+    double a=0., T=0., TC=0., Vst=0., Tst=0., T_Tst=0., Ts2=0., TT=0., dT=0., T2=0., T3=0., T4=0.,
+    T05=0., Tst2=0., Tst3=0., Tst4=0., Tst05=0., Tcr_; // qQ=0., Tcr1=0., Tcr=0., Smax=0., Vmax=0.;
+    int k=0, i=0, j=0, jf=0;
+    double ac[16];
+    float a1=0.0;
 
+cout << endl << " q=" << q << " p=" << p << "  CE " << CE << "  CV " << CV << endl;
     // iRet = ZERO;
     // default values
     Vst = (double)dc[q].mVs[0];
-    if( IsDoubleEmpty( Vst ))
+    if( IsFloatEmpty( dc[q].mVs[0] ))
         Vst = 0.;
     dT = TK_DELTA;
     TC = aW.twp->TC;
     aW.twp->T =    T = aW.twp->TC + dT;
     aW.twp->Tst =  Tst = (double)dc[q].TCst + dT;
 
-    aW.twp->S = dc[q].Ss[0];
+    aW.twp->S = (double)dc[q].Ss[0];
     aW.twp->G = dc[q].Gs[0]; /* - aW.twp->S * (T-Tst); */
     aW.twp->H = dc[q].Hs[0];
     aW.twp->V = Vst;
+cout << " TC="<< TC << " T=" << aW.twp->T << " Tst=" << aW.twp->Tst << " Sst=" << aW.twp->S << " Gst=" 
+     << aW.twp->G << " Hst=" << aW.twp->H << " Cpst=" << aW.twp->Cp << " Vst=" << aW.twp->V << endl; 
     if(( dc[q].pstate[0] == CP_GAS || dc[q].pstate[0] == CP_GASI )
             && aW.twp->P > 0.0 )
     { /* molar volume from the ideal gas law */
         aW.twp->V = T / aW.twp->P * R_CONSTANT;
     }
-    aW.twp->devG = (double)dc[q].Gs[1];
+    aW.twp->devG = dc[q].Gs[1];
 //    aW.twp->Cv = 0.;
     aW.twp->Cp = 0.;
     if( !dc[q].Cp )
     {
-        aW.twp->Cp = dc[q].Cps[0];
+        aW.twp->Cp = (double)dc[q].Cps[0];
         goto NEXT;
     }
     // get interval
-    if( dc[q].TCint[0] > TC )
+    if((double)dc[q].TCint[0] > TC )
     {
         k=0;  /*iRet = 1;*/
     }
-    else if( dc[q].TCint[2*dc[q].NeCp-1] <= TC )
+    else if( (double)dc[q].TCint[2*dc[q].NeCp-1] <= TC )
     {
         k= dc[q].NeCp-1;   /*iRet = 1;*/
     }
     else for( j=0; j<dc[q].NeCp; j++ )
-            if( dc[q].TCint[j] <= TC && dc[q].TCint[j+dc[q].NeCp] > TC )
+            if( (double)dc[q].TCint[j] <= TC && (double)dc[q].TCint[j+dc[q].NeCp] > TC )
             {
                 k=j;
                 break;
@@ -89,59 +94,31 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
     T4 = T3 * T;
     T05 = sqrt( T );
     for( i=0; i</*MAXCPCOEF*/aObj[o_dccp].GetN(); i++ )
-    {  // Cp(t)
-        float a1;
-        a1 = /*(double)*/dc[q].Cp[i*dc[q].NeCp+k];
-        if( IsFloatEmpty( a1 ) || !a1 ) continue;
-        a = a1;
-        switch( i )
-        {
-        case 0:
-            aW.twp->Cp += a;
-            break;
-        case 1:
-            aW.twp->Cp += a * T;
-            break;
-        case 2:
-            aW.twp->Cp += a / T2;
-            break;
-        case 3:
-            aW.twp->Cp += a / T05;
-            break;
-        case 4:
-            aW.twp->Cp += a * T2;
-            break;
-        case 5:
-            aW.twp->Cp += a * T3;
-            break;
-        case 6:
-            aW.twp->Cp += a * T4;
-            break;
-        case 7:
-            aW.twp->Cp += a / T3;
-            break;
-        case 8:
-            aW.twp->Cp += a / T;
-            break;
-        case 9:
-            aW.twp->Cp += a * T05;
-            break;
-            //        case 10: aW.twp->Cp += a * log( T ); break;
-        }
-    }
+    {  // Cp(t)  current temperature only
+        a1 = dc[q].Cp[i*dc[q].NeCp+k];
+        if( IsFloatEmpty( a1 ) || !a1 ) 
+	    ac[i] = 0.0;
+        else ac[i] = (double)a1;
+     }	
+     aW.twp->Cp = ( ac[0] + ac[1]*T + ac[2]/T2 + ac[3]/T05 + ac[4]*T2 
+                 + ac[5]*T3 + ac[6]*T4 + ac[7]/T3 + ac[8]/T + ac[9]*T05 /*+ ac[10]*log(T)*/);
+cout << " T=" << T <<  " T^2=" << T2 << " T^3=" << T3 << " T^4=" << T4 << " T^0.5=" << T05 << endl 
+     << "     ac: " << ac[0] << ' ' << ac[1] << ' ' << ac[2] << ' ' << ac[3] << ' ' << ac[4] << ' ' << ac[5] 
+     << " Cp(T)=" << aW.twp->Cp << " k= " << k << endl; 
+
     if( fabs( T - Tst ) > TEMPER_PREC )
         for( j=0, jf=0; j<=k; j++ )
         {
             if( j == k )
                 T = aW.twp->TC + dT;
-            else T = dc[q].TCint[j+dc[q].NeCp] + dT;
+            else T = (double)dc[q].TCint[j+dc[q].NeCp] + dT;
             T2 = T * T;
             T3 = T2 * T;
             T4 = T3 * T;
             T05 = sqrt( T );
             if( !j )
                 Tst = (double)dc[q].TCst + dT;
-            else  Tst = dc[q].TCint[j] + dT;  // Bugfix DAK 8.09.00  + dT
+            else  Tst = (double)dc[q].TCint[j] + dT;  // Bugfix DAK 8.09.00  + dT
             Tst2 = Tst * Tst;
             Tst3 = Tst2 * Tst;
             Tst4 = Tst3 * Tst;
@@ -150,127 +127,94 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
             Ts2 = T_Tst * T_Tst;
             TT = T / Tst;
 
-            if( j && dc[q].Nft && dc[q].FtP[jf] <= Tst-dT )
+            if( j && dc[q].Nft && (double)dc[q].FtP[jf] <= Tst-dT )
             {   // Adding parameters of phase transition
                 if( !IsFloatEmpty( dc[q].FtP[dc[q].Nft+jf] ))  /* dS */
                     aW.twp->S += dc[q].FtP[dc[q].Nft+jf];
                 if( !IsFloatEmpty( dc[q].FtP[dc[q].Nft*2+jf] ))  /* dH */
-                    aW.twp->H += dc[q].FtP[dc[q].Nft*2+jf];
+                    aW.twp->H += (double)dc[q].FtP[dc[q].Nft*2+jf];
                 if( !IsFloatEmpty( dc[q].FtP[dc[q].Nft*3+jf] ))  /* dV */
                     aW.twp->V += dc[q].FtP[dc[q].Nft*3+jf];
-                /* Наклон фазового перехода */
+                /* More to be added ? */
                 jf++;
             }
             /*     if(j) */
-            aW.twp->G = aW.twp->G - aW.twp->S * T_Tst;
+            aW.twp->G -= aW.twp->S * T_Tst;
             /* aW.twp->Cp = 0.; */
             for( i=0; i< /*MAXCPCOEF*/aObj[o_dccp].GetN(); i++ ) // fix 08.09.00
             {
-                a = (double)dc[q].Cp[i*dc[q].NeCp+j];
-                if( IsDoubleEmpty( a ) || !a ) continue;
-                switch( i )
-                {
-                case 0: /* aW.twp->Cp += a; */
-                    aW.twp->S  += a * log( TT );
-                    aW.twp->G -= a * ( T * log( TT ) - T_Tst );
-                    aW.twp->H += a * T_Tst;
-                    break;
-                case 1: /* aW.twp->Cp += a * T; */
-                    aW.twp->S  += a * T_Tst;
-                    aW.twp->G -= a * Ts2 / 2.;
-                    aW.twp->H += a * ( T2 - Tst2 ) / 2.;
-                    break;
-                case 2: /* aW.twp->Cp += a / T2; */
-                    aW.twp->S  += a * ( 1./Tst2 - 1./T2 ) / 2.;
-                    aW.twp->G -= a * Ts2 / T / Tst2 / 2.;
-                    aW.twp->H += a * ( 1./Tst - 1./T );
-                    break;
-                case 3: /* aW.twp->Cp += a / T05; */
-                    aW.twp->S  += a * 2. * ( 1./Tst05 - 1./T05 );
-                    aW.twp->G -= a * 2. * (T05 - Tst05)*(T05 - Tst05) / Tst05;
-                    aW.twp->H += a * 2. * ( T05 - Tst05 );
-                    break;
-                case 4: /* aW.twp->Cp += a * T2; */
-                    aW.twp->S  += a * ( T2 - Tst2 ) / 2.;
-                    aW.twp->G -= a * ( T3 + 2.*Tst3 - 3.* T * Tst2 ) / 6.;
-                    aW.twp->H += a * ( T3 - Tst3 ) / 3.;
-                    break;
-                case 5: /* aW.twp->Cp += a * T3; */
-                    aW.twp->S  += a * ( T3 - Tst3 ) / 3.;
-                    aW.twp->G -= a * ( T4 + 3.*Tst4 - 4.*T * Tst3 ) / 12.;
-                    aW.twp->H += a * ( T4 - Tst4 ) / 4.;
-                    break;
-                case 6: /* aW.twp->Cp += a * T4; */
-                    aW.twp->S  += a * ( T4 - Tst4 ) / 4.;
-                    aW.twp->G -= a * ( T4*T + 4.*Tst4*Tst - 5.*T*Tst4 ) / 20.;
-                    aW.twp->H += a * ( T4 * T - Tst4 * Tst ) / 5;
-                    break;
-                case 7: /* aW.twp->Cp += a / T3; */
-                    aW.twp->S  += a * ( 1./ Tst3 - 1./ T3 ) / 3.;
-                    aW.twp->G -= a * ( Tst3 - 3.* T2 * Tst + 2.*T3 ) /
-                                 6./ T2 / Tst3;
-                    aW.twp->H += a * ( 1./ Tst2 - 1./ T2 ) / 2.;
-                    break;
-                case 8: /* aW.twp->Cp += a / T; */
-                    aW.twp->S  += a * (1. / Tst - 1. / T );
-                    aW.twp->G -= a * ( TT - 1. - log( TT ));
-                    aW.twp->H += a * log( TT );
-                    break;
-                case 9: /* aW.twp->Cp += a * T05; */
-                    aW.twp->S  += a * 2.* ( T05 - Tst05 );
-                    aW.twp->G -= a * 2.* ( 2.* T * T05 - 3.* T * Tst05 +
-                                           Tst * Tst05 ) / 3.;
-                    aW.twp->H += a * 2.* ( T * T05 - Tst * Tst05 ) / 3.;
-                    break;
-                    //         case 10: break;  /*Do it! */
-                }
-
+	        a1 = dc[q].Cp[i*dc[q].NeCp+j];
+                if( IsFloatEmpty( a1 ) || !a1 ) 
+		    ac[i] = 0.0;
+		else ac[i] = (double)a1;    
             }
+            aW.twp->S  += ( ac[0] * log( TT ) + ac[1] * T_Tst + ac[2] * ( 1./Tst2 - 1./T2 ) / 2.
+	          + ac[3] * 2. * ( 1./Tst05 - 1./T05 ) + ac[4] * ( T2 - Tst2 ) / 2.
+		  + ac[5] * ( T3 - Tst3 ) / 3. + ac[6] * ( T4 - Tst4 ) / 4.
+		  + ac[7] * ( 1./ Tst3 - 1./ T3 ) / 3. + ac[8] * (1. / Tst - 1. / T )
+		  + ac[9] * 2.* ( T05 - Tst05 ) );   
+	    
+	    aW.twp->G -= ( ac[0] * ( T * log( TT ) - T_Tst ) + ac[1] * Ts2 / 2. + ac[2] * Ts2 / T / Tst2 / 2.
+	          + ac[3] * 2. * (T05 - Tst05)*(T05 - Tst05) / Tst05 + ac[4] * ( T3 + 2.*Tst3 - 3.* T * Tst2 ) / 6.
+		  + ac[5] * ( T4 + 3.*Tst4 - 4.*T * Tst3 ) / 12. + ac[6] * ( T4*T + 4.*Tst4*Tst - 5.*T*Tst4 ) / 20.
+		  + ac[7] * ( Tst3 - 3.* T2 * Tst + 2.*T3 ) / 6./ T2 / Tst3 + ac[8] * ( TT - 1. - log( TT ))
+		  + ac[9] * 2.* ( 2.* T * T05 - 3.* T * Tst05 + Tst * Tst05 ) / 3. );
+	    
+	    aW.twp->H += ( ac[0] * T_Tst + a * ( T2 - Tst2 ) / 2. + ac[2] * ( 1./Tst - 1./T )
+	          + ac[3] * 2. * ( T05 - Tst05 ) + ac[4] * ( T3 - Tst3 ) / 3.
+		  + ac[5] * ( T4 - Tst4 ) / 4. + ac[6] * ( T4 * T - Tst4 * Tst ) / 5
+		  + ac[7] * ( 1./ Tst2 - 1./ T2 ) / 2. + ac[8] * log( TT ) 
+		  + ac[9] * 2.* ( T * T05 - Tst * Tst05 ) / 3.  );
+
+cout << " j=" << j << " T-Tst=" << T_Tst << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G 
+     << " H(T)=" << aW.twp->H << endl; 
+
         }
-    /*     if( k > 1 )
-         {  */
-    T=aW.twp->T; // Tst = aW.twp->Tst;
-    //T2 = T * T;  //T3 = T2 * T;   //T4 = T3 * T;   //T05 = sqrt( T );
-    // Tst2 = Tst * Tst;  //Tst3 = Tst2 * Tst;
-    //Tst4 = Tst3 * Tst; // Tst05 = sqrt( Tst );
-    // T_Tst = T - Tst;   //Ts2 = T_Tst * T_Tst;  // TT = T / Tst;
-    /*     }    */
-NEXT:
+    T=aW.twp->T; 
+NEXT:  
     if( CE == CTM_CHP )
-    {   // Parameters of lambda-transition 
+    {   
+        double aA=0., qQ=0., Tcr, Tcr1, Smax, Vmax;
+        // Parameters of lambda-transition 
         Tcr1 =  (double)dc[q].TCr;
         Smax = (double)dc[q].Smax;
-        if( !IsDoubleEmpty( Tcr ) && !IsDoubleEmpty( Smax ))
+        if( !IsFloatEmpty( dc[q].TCr ) && !IsFloatEmpty( dc[q].Smax ))
         {
 // Added 21.09.04 from Th.Wagner
             Vmax = (double)dc[q].Der;
-            if(IsDoubleEmpty( Vmax ))
+            if( IsFloatEmpty( dc[q].Der ))
             {
                Vmax = 0.0; Tcr = Tcr1;
             }
             else
                Tcr = Tcr1 + Vmax/Smax * aW.twp->P;
 // end added
-            Tcr += dT;
+            Tcr += dT;  Tcr_ = Tcr;
             if( T<Tcr )
             {
-                qQ = 1. - T / Tcr;
-                a = 2.* Tcr * Smax;
+                qQ = 1. - T / Tcr; a=qQ;
+                aA = 2.* Tcr * Smax; 
                 aW.twp->Cp += T * Smax / 2. / sqrt( Tcr ) / sqrt( Tcr-T );
                 aW.twp->S  += Smax * ( 1.- sqrt( qQ ));
-                aW.twp->G -= Smax *( Tcr-T )*sqrt( qQ ) - a * qQ * sqrt( qQ ) / 6.;
-                aW.twp->H += a * ( qQ* sqrt( qQ ) /6. - sqrt( qQ ) / 2. + 1./3. );
+                aW.twp->G -= Smax *( Tcr-T ) * sqrt( qQ ) - aA * qQ * sqrt( qQ ) / 6.;
+                aW.twp->H += aA * ( qQ * sqrt( qQ ) / 6. - sqrt( qQ ) / 2. + 1./3. );
             }
             else
             {
                 aW.twp->S  += Smax;
-                aW.twp->G -= Smax*(T-Tcr);
+                aW.twp->G -= Smax * (T-Tcr);
                 aW.twp->H += 2.* Smax * Tcr / 3.;
             }
         }
     }
+cout << "   qQ=" << a << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G << " H(T)=" 
+     << aW.twp->H << " Cp(T)=" << aW.twp->Cp << " Tcr=" << Tcr_ << endl; 
 
     calc_voldp( q, p, CE, CV );
+
+cout << " P=" << aW.twp->P << " S(T,P)=" << aW.twp->S << " G(T,P)=" << aW.twp->G 
+     << " H(T,P)=" << aW.twp->H << " V(T,P)=" << aW.twp->V <<  endl; 
+
 }
 
 //--------------------------------------------------------------------//
@@ -280,18 +224,18 @@ NEXT:
 void
 TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
 {
-    double a, T, Vst, Tst, Pst, P, P_Pst, T_Tst, Ts2, dT, VP, VT,
-    aC, aE, kap, T05, Tst05;
+    double a=0., T=0., Vst=0., Tst=0., Pst=0., P=0., P_Pst=0., T_Tst=0., Ts2=0., dT=0., VP=0., VT=0.,
+    aC=0., aE=0., kap=0., T05=0., Tst05=0.;
     int i;
 
     /* Init numbers - volume Vst must be in J/bar ! */
     Pst = (double)dc[q].Pst;
     Vst = (double)dc[q].mVs[0];
-    if( IsDoubleEmpty( Vst ))
+    if( IsFloatEmpty( dc[q].mVs[0] ))
         Vst = 0.;
     dT = TK_DELTA; //TC = aW.twp->TC;
-    aW.twp->T =    T = aW.twp->TC + dT;
-    aW.twp->Tst =  Tst = (double)dc[q].TCst + dT;
+    T = aW.twp->T;
+    Tst = aW.twp->Tst;
     P = aW.twp->P;
     P_Pst = aW.twp->P - Pst;
     T_Tst = T - Tst;
@@ -311,10 +255,10 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
       // reading and checking the coeffs
       aC = (double)dc[q].Comp; // This is the bulk modulus k in kbar at 298 K!
 //      aC *= 1000.;   Check! conversion from kbar to bar
-      if( IsDoubleEmpty( aC ))
+      if( IsFloatEmpty( dc[q].Comp ))
           aC = 0.;
       aE = (double)dc[q].Expa; // This is the a parameter in 1/K !
-      if( IsDoubleEmpty( aE ))
+      if( IsFloatEmpty( dc[q].Expa ))
           aE = 0.;
       if(( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
            && fabs(Vst) > 1e-9 && fabs(aC) > 1e-9 && fabs(aE) > 1e-9 )
@@ -328,7 +272,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          // Bulk modulus at T
          kap = aC * ( 1. - 1.5e-4*T_Tst );
          // Compressibility at T  - check !
-         aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));  // ???
+         aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));  // to check (compressibility)
 // Molar properties
          aW.twp->V = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
          aW.twp->G += 1./3.* aW.twp->V * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004

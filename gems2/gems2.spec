@@ -1,6 +1,6 @@
 %define	name	gems2
 %define	version	2.0
-%define	release	1
+%define	release	1rc7
 %define install_dir /usr
 %define shared_dir %{install_dir}/share
 %define shared_src_dir shared
@@ -10,7 +10,7 @@
 
 
 Name:		%{name}
-Summary: 	chemistry geochemistry Gibbs energy minimization
+Summary: 	Chemistry, geochemistry, Gibbs energy minimization
 Version:	%{version}
 Release:	%{release}
 Copyright:	Distributable
@@ -24,8 +24,8 @@ Url:		http://les.web.psi.ch/Software/GEMS-PSI/
 #Requires:	%{libname} = %{version}-%{release}
 
 %description
-This program permits to calculate complex geochemical equilibria
-and prepare consistent thermodynamic databases
+This program calculates complex geochemical equilibria
+and helps preparing consistent thermodynamic databases
 
 %prep
 
