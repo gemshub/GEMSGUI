@@ -142,6 +142,10 @@ link:
 +dlg\HLresDialogData.obj \
 +dlg\HLinpDialog.obj \
 +dlg\HLinpDialogData.obj \
++dlg\ElementsDialog.obj \
++dlg\ElementsDialogData.obj \
++dlg\SetFiltersDialog.obj \
++dlg\SetFiltersDialogData.obj \
 +dlg\LoadMessage.obj \
 +tmp\moc_MainDialog.obj \
 +tmp\moc_MainDialogData.obj \
@@ -180,6 +184,10 @@ link:
 +tmp\moc_HLresDialogData.obj \
 +tmp\moc_HLinpDialog.obj \
 +tmp\moc_HLinpDialogData.obj \
++tmp\moc_ElementsDialog.obj \
++tmp\moc_ElementsDialogData.obj \
++tmp\moc_SetFiltersDialog.obj \
++tmp\moc_SetFiltersDialogData.obj \
 +tmp\moc_LoadMessage.obj
 |
 
