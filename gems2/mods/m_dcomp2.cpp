@@ -328,13 +328,13 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          // Bulk modulus at T
          kap = aC * ( 1. - 1.5e-4*T_Tst );
          // Compressibility at T  - check !
-         aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));
+         aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));  // ???
 // Molar properties
          aW.twp->V = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
-         aW.twp->G += 1./3.* aW.twp->V * kap * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
+         aW.twp->G += 1./3.* aW.twp->V * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
          aW.twp->S -= Vst * P * ( aE - 10.*aE / T05 );
          aW.twp->H += -T * Vst * P * ( aE - 10.*aE / T05 )
-              + 1./3. * aW.twp->V * kap * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
+              + 1./3. * aW.twp->V * kap * 1000. * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
          aW.twp->V *= pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
 //       aW.twp->V *= pow( (kap / (kap + 4*PP )), 0.25);  // Corr. C. De Capitani
                 // Check calculation of H !

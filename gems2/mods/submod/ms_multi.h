@@ -273,7 +273,7 @@ MULTI;
 enum { // link indexes to surface type [XL_ST] sorbent em [XL_EM]
 //  surf.site [XL-SI] and EDL plane [XL_SP]
    XL_ST = 0, XL_EM, XL_SI, XL_SP
-} ADS_LINK_NDX;
+};
 
 #ifndef IPMGEMPLUGIN
 
