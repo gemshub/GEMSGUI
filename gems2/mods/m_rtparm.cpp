@@ -146,7 +146,7 @@ void TRTParm::ods_link( int q)
 void TRTParm::dyn_set(int q)
 {
     ErrorIf( rpp!=&rp[q], GetName(),
-             "Illegal access to rp in dyn_set.");
+             "E01RTrem: Illegal access to rp in dyn_set().");
 //    memcpy( rpp->pstate, rt[nRT].UnpackKey(), RP_RKLEN-MAXSYMB-1 );
 //    rpp->nvch = 0;
     rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].GetPtr();
@@ -169,7 +169,7 @@ void TRTParm::dyn_set(int q)
 void TRTParm::dyn_kill(int q)
 {
     ErrorIf( rpp!=&rp[q], GetName(),
-             "Illegal access to rp in dyn_kill.");
+             "E02RTrem: Illegal access to rp in dyn_kill().");
     rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Free();
     rpp->lNamE = (char (*)[MAXGRNAME])aObj[ o_rtlname ].Free();
     rpp->expr = (char *)aObj[ o_rtexpr ].Free();
@@ -189,8 +189,8 @@ void TRTParm::dyn_kill(int q)
 // realloc dynamic memory
 void TRTParm::dyn_new(int q)
 {
-    ErrorIf( rpp!=&rp[q], GetName(), "Illegal access to rp in dyn_new.");
-    ErrorIf( rp[q].NV < 1, GetName(), "Total N of points (rp[q].NV) < 1.");
+    ErrorIf( rpp!=&rp[q], GetName(), "E03RTrem: Illegal access to rp in dyn_new().");
+    ErrorIf( rp[q].NV < 1, GetName(), "E04RTrem: Total N of points (rp[q].NV) < 1.");
 
     rpp->lNam = (char (*)[MAXGRNAME])aObj[ o_rtlnam ].Alloc( 1,
                  rpp->dimXY[1], MAXGRNAME);
@@ -238,7 +238,7 @@ void TRTParm::dyn_new(int q)
 //set default information
 void TRTParm::set_def( int q)
 {
-    ErrorIf( rpp!=&rp[q], GetName(), "Illegal access to rp in set_def.");
+    ErrorIf( rpp!=&rp[q], GetName(), "E04RTrem: Illegal access to rp in set_def().");
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
     memcpy( &rp[q].What, aPa->pa.RPpdc, 10 );
@@ -359,10 +359,10 @@ AGAIN_SETUP:
     if( rpp->NV < 1 || rpp->NV > 4192 )
     {
         if(vfQuestion(window(), GetName(),
-                 "Invalid mode of calculation of P and T arrays,\n"
+                 "W05RTrem: Invalid mode of calculation of P and T arrays,\n"
                  "or wrong number of TP points! Change?"))
             goto AGAIN_SETUP;
-        else   Error( GetName(), "Invalid mode of calculation.");
+        else   Error( GetName(), "E06RTrem: Invalid mode of calculation - bailing out...");
     }
 
     if( rpp->Pplot == S_OFF )
@@ -372,14 +372,14 @@ AGAIN_SETUP:
     if( (rpp->dimEF[0]<=0 || rpp->dimEF[1]<=0) && rpp->Pplot != S_OFF )
     {
         vfMessage(window(), GetName(),
-        "Wrong dimensions set for the empirical data array!");
+        "W07RTrem: Wrong dimensions set for the empirical data array ytE!");
         goto AGAIN_SETUP;
     }
 
     if(  rpp->dimXY[1] < 1 || rpp->dimXY[1] > 20 )
     {
         vfMessage(window(), GetName(),
-        "Wrong dimensions set for the data array!");
+        "W08RTrem: Wrong dimensions set for the data array yF!");
         goto AGAIN_SETUP;
     }
     rpp->What = *(key + MAXSYMB+MAXDRGROUP+MAXDCNAME+MAXSYMB);
