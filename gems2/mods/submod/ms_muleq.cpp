@@ -142,7 +142,9 @@ void TMulti::unpackData()
     int i, j, js, jp, is, ip;
 
    if( pm.pESU == 2 )   /*?multi?*/
+   {     pm.IT = 0;
         return;
+   }
 
     for( is=0; is<STat->stp->N; is++ )
     {
@@ -163,7 +165,7 @@ void TMulti::unpackData()
         Error( GetName(), "no such IComp in this system" );
 FOUNDI:
         pm.U[ip] = STat->stp->U[is];
-        /*if( pm.pESU != 2 )*/ pm.B[ip] = STat->stp->B[is];    // Added
+        if( pm.pESU != 2 ) pm.B[ip] = STat->stp->B[is];    // Added
     }
 
     /* Inserted by DAK 15.11.98 in Mainz */

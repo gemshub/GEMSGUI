@@ -408,7 +408,8 @@ int TProfil::EnterFeasibleDomain( )
     memset( MU, 0, pmp->L*sizeof(double));
     memset( W, 0, pmp->L*sizeof(double));
 
-    E = 1E-30;  // pa.p.DKIN? Default min value of Lagrange multiplier p
+    E = 1E-8;  // pa.p.DKIN? Default min value of Lagrange multiplier p
+//    E = 1E-30;  // pa.p.DKIN? Default min value of Lagrange multiplier p
     DHB = pmp->DHBM;  // Convergence (balance precision) criterion
     pmp->Ec=0;  // Return code
 
