@@ -69,7 +69,7 @@ const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.0.0-PSI (Linux/MacOS)";
 #ifdef __APPLE__
 const int GEMS_DEFAULT_FONT_SIZE = 12;
 #else
-const int GEMS_DEFAULT_FONT_SIZE = 10;
+const int GEMS_DEFAULT_FONT_SIZE = 12;
 #endif
 #else
 const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.0.0-PSI (Win32)";
