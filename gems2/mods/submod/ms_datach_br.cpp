@@ -135,7 +135,8 @@ void TMulti::packDataBr()
   data_BR.IC = pm.IC;
   data_BR.pH = pm.pH;
   data_BR.pe = pm.pe;
-  data_BR.Eh = pm.Eh;
+//  data_BR.Eh = pm.Eh;
+data_BR.Eh = pm.FitVar[3];
   data_BR.denW = pm.denW;
   data_BR.denWg = pm.denWg;
   data_BR.epsW = pm.epsW;
@@ -192,6 +193,7 @@ void TMulti::unpackDataBr()
   pm.Pc  = data_BR.P;
   pm.MBX = data_BR.Ms;
   pm.IC = data_BR.IC;
+pm.FitVar[3] = data_BR.Eh;
 // arrays
    for( ii=0; ii<data_CH.nICb; ii++ )
     pm.B[ data_CH.xIC[ii] ] = data_BR.bIC[ii];
@@ -219,7 +221,7 @@ void TMulti::unpackDataBr()
      pm.BF[ mul_ndx ] = data_BR.bPS[new_ndx];
    }
    for( ii=0; ii<data_CH.nPSb; ii++ )
-    pm.XFA[ data_CH.xPH[ii] ] = data_BR.xPA[ii];
+    pm.XFA[ data_CH.xPH[ii] ] = pm.YFA[ data_CH.xPH[ii] ] = data_BR.xPA[ii];
 
    for( ii=0; ii<data_CH.nICb; ii++ )
     pm.C[ data_CH.xIC[ii] ] = data_BR.rMB[ii];

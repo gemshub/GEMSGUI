@@ -1,4 +1,5 @@
 #include <math.h>
+#include <iomanip.h>
 #include <iostream>
 
 #include "m_param.h"
@@ -104,7 +105,7 @@ void TMulti::outArray( fstream& ff, char *name,  float* arr,
  {
     if(jj == sz)
     { jj=0;  ff << endl;}
-    ff << arr[ii] << " ";
+    ff << setprecision(7)  << arr[ii] << " ";
  }
 }
 
@@ -116,7 +117,7 @@ void TMulti::outArray( fstream& ff, char *name, double* arr, int size )
  {
     if(jj == 10)
     { jj=0;  ff << endl;}
-    ff << arr[ii] << " ";
+    ff << setprecision(14)  << arr[ii] << " ";
  }
 }
 
