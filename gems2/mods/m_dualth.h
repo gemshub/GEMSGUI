@@ -46,7 +46,7 @@ typedef struct
    PvSd,     // Include references to data sources (+ -)?
    PvChi,    // Use math script for mole fractions of non-basis DCs (+ -)?
    PvGam,    // Use math script for activity coeffs of non-basis DCs (+ -)?
-PvTPI,     // Use vectors for T, P and IS of experiments (+ -)?
+   PvTPI,     // Use vectors for T, P and IS of experiments (+ -)?
 
      // Controls on operation
    PsMode,  // DualTh mode of operation { M G A X }
@@ -113,8 +113,8 @@ PvTPI,     // Use vectors for T, P and IS of experiments (+ -)?
    *muo_n, //  [Q][K] Table of standard Gibbs energies for DC candidates
    *avg_m, //  [K] mean over muo_n columns (experiments) for DC candidates
    *sd_m,  //  [K] st.deviation over muo_n columns (experiments) for DC candidates
-// *muo_i,   // [K] input st.state chem. potentials for candidates (or EMPTY if unknown)
-// *act_n,   // [Q][K] table of DualTh-calculated activities
+   *muo_i,   // [K] input st.state chem. potentials for candidates (or EMPTY if unknown)
+   *act_n,   // [Q][K] table of DualTh-calculated activities
    *qpn,   //  [Nqpn] Work array for chi calculation math script
    *qpg    //  [Nqpg] Work array for gamma calculation math script
     ;
@@ -122,10 +122,10 @@ PvTPI,     // Use vectors for T, P and IS of experiments (+ -)?
    *CIb, // [Q][N] Table of quantity/concentration of IC in basis sub-systems
    *CIn, // [K][N] Table of quantity/concentration of IC in non-basis sub-systems
    *CAb, // [Q][Lb] Table of quantity/concentration of formulae for basis sub-systems
-   *CAn  // [Q][K] Table of quantity/concentration of DC formulae for non-basis sub-systems
-//  *Tdq,    //  [Q]  Temperatures of experiment
-//  *Pdq,    //  [Q]  Pressures of experiment
-//  *ISq     //  [Q]  Effective ionic strength in experimental aq solutions 
+   *CAn,  // [Q][K] Table of quantity/concentration of DC formulae for non-basis sub-systems
+  *Tdq,    //  [Q]  Temperatures of experiment
+  *Pdq,    //  [Q]  Pressures of experiment
+  *ISq     //  [Q]  Effective ionic strength in experimental aq solutions
     ;
  char
    *cExpr,  // Math script text for calculation of mole fractions of DC in non-basis
@@ -233,7 +233,7 @@ protected:
     void Analyse();          // analyse the results (change DK)
     void Calc_muo_n( char eState ); // calculate mu_o DualTh
     void Calc_gam_n( char eState ); // calculate gamma DualTh
-//  void Calc_act_n( char eState ); // calculate activity DualTh
+    void Calc_act_n( char eState ); // calculate activity DualTh
 
 
 public:
@@ -273,7 +273,7 @@ enum dualth_inernal {
               DT_MODE_M = 'M',
               DT_MODE_G = 'G',
               DT_MODE_A = 'A',
-//            DT_MODE_X = 'X',
+              DT_MODE_X = 'X',
 
               DT_STATE_E = 'E',
               DT_STATE_P = 'P',

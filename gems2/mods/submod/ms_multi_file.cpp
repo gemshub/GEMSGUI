@@ -17,6 +17,56 @@ void TMulti::inArray( fstream& ff, char *name, short* arr, int size )
  }
 }
 
+void TMulti::inArray( fstream& ff, char *name, float* arr, int size )
+{
+ char buf[200];
+ ff >> buf;
+ if( !memcmp( name, buf+1, strlen(name)))
+    Error( buf, "Illegal name of array");
+ for( int ii=0; ii<size; ii++  )
+ {
+    ff >> arr[ii];
+ }
+}
+
+void TMulti::inArray( fstream& ff, char *name, double* arr, int size )
+{
+ char buf[200];
+ ff >> buf;
+ if( !memcmp( name, buf+1, strlen(name)))
+    Error( buf, "Illegal name of array");
+ for( int ii=0; ii<size; ii++  )
+ {
+    ff >> arr[ii];
+ }
+}
+
+
+void TMulti::inArray( fstream& ff, char *name, char* arr,
+                              int size, int arr_siz )
+{
+ char ch;
+ char buf[200];
+ ff >> buf;
+ if( !memcmp( name, buf+1, strlen(name)))
+    Error( buf, "Illegal name of array");
+/*
+ for( int ii=0, jj=0; ii<size; ii++, jj++  )
+ {
+    ff.get(ch);
+    while( is.good() && ch |= '\'' )
+       ff.get(ch);
+    ff.getline( buf)
+    if(jj == 10)
+    { jj=0;  ff << endl;}
+    gstring str = gstring( arr +(ii*arr_siz), 0, arr_siz );
+    str.strip();
+    ff  << "\'" << str.c_str() << "\'" << " ";
+ }
+ */
+}
+
+
 //---------------------------------------------------------//
 // for test out data
 void TMulti::outArray( fstream& ff, char *name, char* arr,

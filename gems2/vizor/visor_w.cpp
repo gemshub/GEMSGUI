@@ -237,7 +237,7 @@ TVisorImp::CalcFinished()
 
 bool
 TVisorImp::SetProfileMode()
-{
+{   
     try
     {
         pVisor->ProfileMode = true;

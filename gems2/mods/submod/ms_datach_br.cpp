@@ -512,7 +512,6 @@ void TMulti::databr_to_file( GemDataStream& ff )
 
    datach_to_text_file();
    databr_to_text_file();
-//   datach_from_text_file();
 }
 
 // reading DataBR to binary file

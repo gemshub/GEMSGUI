@@ -723,7 +723,8 @@ o_dtqpn, o_dtqpg, o_dtcib, o_dtcin, o_dtcab,
 o_dtcan,  o_dtcexpr, o_dtgexpr, o_dtsdref, o_dtsdval,
 o_dtnam_b, o_dtnam_n, o_dtfor_n, o_dtfor_b, o_dtstl,
 o_dttyp_n, o_dtciclb, o_dtcicln, o_dtauclb,  o_dtaucln,
-o_dtsbm, o_dtan,  o_dtstkey, o_dttprn,  };
+o_dtsbm, o_dtmuo_i, o_dtact_n, o_dttdq, o_dtpdq,
+o_dtisq, o_dtan,  o_dtstkey, o_dttprn,  };
 
 typedef enum {
 
