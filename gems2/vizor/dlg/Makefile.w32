@@ -174,271 +174,271 @@ clean:
 
 ..\tmp\moc_MainDialogData.obj: MainDialogData.h
         $(MOC) MainDialogData.h -o $(*).cpp
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c $(*).cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c $(*).cpp
         -del $(*).cpp
 
 ..\tmp\moc_MainDialog.obj: MainDialog.h
         $(MOC) MainDialog.h -o $(*).cpp
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c $(*).cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c $(*).cpp
         -del $(*).cpp
 
 
 ..\tmp\moc_DBDialog.obj: DBDialog.h
       	$(MOC) DBDialog.h -o moc_DBDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_DBDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_DBDialog.cpp
 	-del moc_DBDialog.cpp
 
 
 ..\tmp\moc_DBDialogData.obj: DBDialogData.h
       	$(MOC) DBDialogData.h -o moc_DBDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_DBDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_DBDialogData.cpp
 	-del moc_DBDialogData.cpp
 
 
 ..\tmp\moc_EQDialog.obj: EQDialog.h
       	$(MOC) EQDialog.h -o moc_EQDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_EQDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_EQDialog.cpp
 	-del moc_EQDialog.cpp
 
 
 ..\tmp\moc_EQDialogData.obj: EQDialogData.h
       	$(MOC) EQDialogData.h -o moc_EQDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_EQDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_EQDialogData.cpp
 	-del moc_EQDialogData.cpp
 
 
 ..\tmp\moc_NewSystemDialog.obj: NewSystemDialog.h
       	$(MOC) NewSystemDialog.h -o moc_NewSystemDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_NewSystemDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_NewSystemDialog.cpp
 	-del moc_NewSystemDialog.cpp
 
 
 ..\tmp\moc_NewSystemDialogData.obj: NewSystemDialogData.h
       	$(MOC) NewSystemDialogData.h -o moc_NewSystemDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_NewSystemDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_NewSystemDialogData.cpp
 	-del moc_NewSystemDialogData.cpp
 
 
 ..\tmp\moc_ProgressDialog.obj: ProgressDialog.h
       	$(MOC) ProgressDialog.h -o moc_ProgressDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ProgressDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProgressDialog.cpp
 	-del moc_ProgressDialog.cpp
 
 
 ..\tmp\moc_ProgressDialogData.obj: ProgressDialogData.h
       	$(MOC) ProgressDialogData.h -o moc_ProgressDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ProgressDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProgressDialogData.cpp
 	-del moc_ProgressDialogData.cpp
 
 ..\tmp\moc_ProcessDialog.obj: ProcessDialog.h
       	$(MOC) ProcessDialog.h -o moc_ProcessDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialog.cpp
 	-del moc_ProcessDialog.cpp
 
 
 ..\tmp\moc_ProcessDialogData.obj: ProcessDialogData.h
       	$(MOC) ProcessDialogData.h -o moc_ProcessDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ProcessDialogData.cpp
 	-del moc_ProcessDialogData.cpp
 
 
 ..\tmp\moc_KeyDialog.obj: KeyDialog.h
       	$(MOC) KeyDialog.h -o moc_KeyDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_KeyDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_KeyDialog.cpp
 	-del moc_KeyDialog.cpp
 
 
 ..\tmp\moc_KeyDialogData.obj: KeyDialogData.h
       	$(MOC) KeyDialogData.h -o moc_KeyDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_KeyDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_KeyDialogData.cpp
 	-del moc_KeyDialogData.cpp
 
 
 ..\tmp\moc_ChangeKeyDialog.obj: ChangeKeyDialog.h
       	$(MOC) ChangeKeyDialog.h -o moc_ChangeKeyDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ChangeKeyDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ChangeKeyDialog.cpp
 	-del moc_ChangeKeyDialog.cpp
 
 
 ..\tmp\moc_ChangeKeyDialogData.obj: ChangeKeyDialogData.h
       	$(MOC) ChangeKeyDialogData.h -o moc_ChangeKeyDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ChangeKeyDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ChangeKeyDialogData.cpp
 	-del moc_ChangeKeyDialogData.cpp
 
 
 ..\tmp\moc_KeyProfile.obj: KeyProfile.h
       	$(MOC) KeyProfile.h -o moc_KeyProfile.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_KeyProfile.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_KeyProfile.cpp
 	-del moc_KeyProfile.cpp
 
 ..\tmp\moc_KeyProfileData.obj: KeyProfileData.h
       	$(MOC) KeyProfileData.h -o moc_KeyProfileData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_KeyProfileData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_KeyProfileData.cpp
 	-del moc_KeyProfileData.cpp
 
 ..\tmp\moc_KeyFilter.obj: KeyFilter.h
       	$(MOC) KeyFilter.h -o moc_KeyFilter.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_KeyFilter.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_KeyFilter.cpp
 	-del moc_KeyFilter.cpp
 
 ..\tmp\moc_ExcludeFillDialog.obj: ExcludeFillDialog.h
       	$(MOC) ExcludeFillDialog.h -o moc_ExcludeFillDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ExcludeFillDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ExcludeFillDialog.cpp
 	-del moc_ExcludeFillDialog.cpp
 
 ..\tmp\moc_SettingsDialog.obj: SettingsDialog.h
       	$(MOC) SettingsDialog.h -o moc_SettingsDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SettingsDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_SettingsDialog.cpp
 	-del moc_SettingsDialog.cpp
 
 ..\tmp\moc_SettingsDialogData.obj: SettingsDialogData.h
       	$(MOC) SettingsDialogData.h -o moc_SettingsDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SettingsDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_SettingsDialogData.cpp
 	-del moc_SettingsDialogData.cpp
 
 ..\tmp\moc_SelectDialog.obj: SelectDialog.h
       	$(MOC) SelectDialog.h -o moc_SelectDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SelectDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_SelectDialog.cpp
 	-del moc_SelectDialog.cpp
 
 ..\tmp\moc_SelectDialogData.obj: SelectDialogData.h
       	$(MOC) SelectDialogData.h -o moc_SelectDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SelectDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_SelectDialogData.cpp
 	-del moc_SelectDialogData.cpp
 
 ..\tmp\moc_CalcDialog.obj: CalcDialog.h
       	$(MOC) CalcDialog.h -o moc_CalcDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_CalcDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_CalcDialog.cpp
 	-del moc_CalcDialog.cpp
 
 ..\tmp\moc_CalcDialogData.obj: CalcDialogData.h
       	$(MOC) CalcDialogData.h -o moc_CalcDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_CalcDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_CalcDialogData.cpp
 	-del moc_CalcDialogData.cpp
 
 ..\tmp\moc_CalcCheckDialog.obj: CalcCheckDialog.h
       	$(MOC) CalcCheckDialog.h -o moc_CalcCheckDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_CalcCheckDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_CalcCheckDialog.cpp
 	-del moc_CalcCheckDialog.cpp
 
 ..\tmp\moc_CalcCheckDialogData.obj: CalcCheckDialogData.h
       	$(MOC) CalcCheckDialogData.h -o moc_CalcCheckDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_CalcCheckDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_CalcCheckDialogData.cpp
 	-del moc_CalcCheckDialogData.cpp
 
 ..\tmp\moc_DBAdvDialog.obj: DBAdvDialog.h
       	$(MOC) DBAdvDialog.h -o moc_DBAdvDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_DBAdvDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_DBAdvDialog.cpp
 	-del moc_DBAdvDialog.cpp
 
 ..\tmp\moc_DBAdvDialogData.obj: DBAdvDialogData.h
       	$(MOC) DBAdvDialogData.h -o moc_DBAdvDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_DBAdvDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_DBAdvDialogData.cpp
 	-del moc_DBAdvDialogData.cpp
 
 ..\tmp\moc_ColorDialog.obj: ColorDialog.h
       	$(MOC) ColorDialog.h -o moc_ColorDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ColorDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ColorDialog.cpp
 	-del moc_ColorDialog.cpp
 
 ..\tmp\moc_ColorDialogData.obj: ColorDialogData.h
       	$(MOC) ColorDialogData.h -o moc_ColorDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ColorDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ColorDialogData.cpp
 	-del moc_ColorDialogData.cpp
 
 ..\tmp\moc_GraphDialog.obj: GraphDialog.h
       	$(MOC) GraphDialog.h -o moc_GraphDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_GraphDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_GraphDialog.cpp
 	-del moc_GraphDialog.cpp
 
 ..\tmp\moc_GraphDialogData.obj: GraphDialogData.h
       	$(MOC) GraphDialogData.h -o moc_GraphDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_GraphDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_GraphDialogData.cpp
 	-del moc_GraphDialogData.cpp
 
 ..\tmp\moc_LegendDialog.obj: LegendDialog.h
       	$(MOC) LegendDialog.h -o moc_LegendDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_LegendDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_LegendDialog.cpp
 	-del moc_LegendDialog.cpp
 
 ..\tmp\moc_LegendDialogData.obj: LegendDialogData.h
       	$(MOC) LegendDialogData.h -o moc_LegendDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_LegendDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_LegendDialogData.cpp
 	-del moc_LegendDialogData.cpp
 
 ..\tmp\moc_ListFilesDialog.obj: ListFilesDialog.h
       	$(MOC) ListFilesDialog.h -o moc_ListFilesDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ListFilesDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ListFilesDialog.cpp
 	-del moc_ListFilesDialog.cpp
 
 ..\tmp\moc_ListFilesDialogData.obj: ListFilesDialogData.h
       	$(MOC) ListFilesDialogData.h -o moc_ListFilesDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ListFilesDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ListFilesDialogData.cpp
 	-del moc_ListFilesDialogData.cpp
 
 ..\tmp\moc_ElementsDialog.obj: ElementsDialog.h
       	$(MOC) ElementsDialog.h -o moc_ElementsDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ElementsDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ElementsDialog.cpp
 	-del moc_ElementsDialog.cpp
 
 ..\tmp\moc_ElementsDialogData.obj: ElementsDialogData.h
       	$(MOC) ElementsDialogData.h -o moc_ElementsDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_ElementsDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ElementsDialogData.cpp
 	-del moc_ElementsDialogData.cpp
 
 ..\tmp\moc_SetFiltersDialog.obj: SetFiltersDialog.h
       	$(MOC) SetFiltersDialog.h -o moc_SetFiltersDialog.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SetFiltersDialog.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_SetFiltersDialog.cpp
 	-del moc_SetFiltersDialog.cpp
 
 ..\tmp\moc_SetFiltersDialogData.obj: SetFiltersDialogData.h
       	$(MOC) SetFiltersDialogData.h -o moc_SetFiltersDialogData.cpp
 
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_SetFiltersDialogData.cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_SetFiltersDialogData.cpp
 	-del moc_SetFiltersDialogData.cpp
 
 ..\tmp\moc_LoadMessage.obj: LoadMessage.h
         $(MOC) $? -o $(*).cpp
-        $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c $(*).cpp
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c $(*).cpp
         -del $(*).cpp
 
 #//////////////////////

@@ -72,7 +72,6 @@ subdirs_mk:
 
 $(TARGET):  subdirs_mk $(OBJECTS) $(METAOBJ) link
 
-
 link:
       -del $(TARGET)
 	$(LIB) $(TARGET) @&&|
@@ -208,31 +207,31 @@ clean:
 
 tmp\moc_visor_w.obj: visor_w.h
 		$(MOC) visor_w.h -o moc_visor_w.cpp
-                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_visor_w.cpp
+                $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_visor_w.cpp
 		-del moc_visor_w.cpp
 
 
 tmp\moc_module_w.obj: module_w.h
 		$(MOC) module_w.h -o moc_module_w.cpp
-                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_module_w.cpp
+                $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_module_w.cpp
 		-del moc_module_w.cpp
 
 tmp\moc_page_w.obj: page_w.h
 		$(MOC) page_w.h -o moc_page_w.cpp
-                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_page_w.cpp
+                $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_page_w.cpp
 		-del moc_page_w.cpp
 
 tmp\moc_query_w.obj: query_w.h
 		$(MOC) query_w.h -o moc_query_w.cpp
-                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_query_w.cpp
+                $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_query_w.cpp
 		-del moc_query_w.cpp
 
 tmp\moc_page_win_w.obj: page_win_w.h
       	$(MOC) page_win_w.h -o moc_page_win_w.cpp
-                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_page_win_w.cpp
+                $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_page_win_w.cpp
 		-del moc_page_win_w.cpp
 
 tmp\moc_helpwindow.obj: helpwindow.h
 		$(MOC) helpwindow.h -o moc_helpwindow.cpp
-                $(CC) $(CCFLAGS) $(INCLUDES) -o$@ -c moc_helpwindow.cpp
+                $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_helpwindow.cpp
 		-del moc_helpwindow.cpp

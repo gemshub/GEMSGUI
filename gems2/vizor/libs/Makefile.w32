@@ -18,7 +18,7 @@ SRC	= config.cpp gstring.cpp
 all:		$(OBJECTS)
 
 .cpp.obj:
-	 $(CC) $(INCLUDES) $(FLAGS) -c  $<
+	 $(CC) $(FLAGS) $(INCLUDES) -c  $<
 
 clean:
 	$(CLEAN_CMD)

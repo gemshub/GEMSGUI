@@ -7,9 +7,10 @@ rem gems2 -c -s c:\gems2test\program -u c:\gems2test
 
 rem New *.ini files - remake DOD and module dialog configs
 rem In addition, does the same as  gems -c
-rem gems2 -d -s c:\gems2test\program -u c:\gems2test > gems.out
+rem gems2 -d -s c:\gems2test\program -u c:\gems2test > gems2.out
 
 rem Gives write access to database files in \DB.default\
 rem For developers only! Also, does the same as gems -c
-gems2 -s c:\gems2test\program -u c:\gems2test > gems.out 2> gems.err
+gems2 -f -c -s c:\gems2test\program -u c:\gems2test > gems2.out
+rem gems2 -s c:\gems2test\program -u c:\gems2test > gems2.out 2> gems2.err
 
