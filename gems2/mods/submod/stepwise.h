@@ -1,3 +1,4 @@
+#ifdef Use_mt_mode
 
 #define STEP_POINT() { \
 	if( stepWise ) { \
@@ -8,3 +9,8 @@
             throw UserCancelException(); \
 	}
 
+#else
+
+#define STEP_POINT()
+
+#endif

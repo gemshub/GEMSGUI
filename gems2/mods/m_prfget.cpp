@@ -23,10 +23,7 @@
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
-
-#ifdef Use_mt_mode
 #include "visor_w.h"
-#endif
 
 
 //Init data to ProfileMode calculate
@@ -573,8 +570,6 @@ void TProfil::CalcBcc()
     TSysEq::pm->CellChanged();    // DAK
 }
 
-#ifdef Use_mt_mode
-
 //Calculated multy
 // this function is run in another thread!
 // don't call any GUI (Qt or VisorImp) functions!!!
@@ -595,6 +590,7 @@ void TProfil::CalcEqstat( bool prg)
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     PMtest( keyp.c_str() );
     //MultiCalc( keyp.c_str() );
+//non-mt    if( prg )
     pVisorImp->OpenProgress();
     MultiCalcInit( keyp.c_str() );
     if( AutoInitialApprox() == false )
@@ -604,43 +600,11 @@ void TProfil::CalcEqstat( bool prg)
 
     calcFinished = true;
     
-//    pVisor->Update();
-//    pVisor->CalcFinished();
+//nmt    pVisor->Update();
+//nmt    pVisor->CalcFinished();
     STat->setCalcFlag( true );
     STat->CellChanged();
 }
-
-
-#else
-
-//Calculated multy
-
-void TProfil::CalcEqstat( bool prg )
-{
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
-    STat->ods_link(0);
-    syst->SyTest();
-    if( !syst->BccCalculated() )
-        Error( "System", "Please, specify bulk composition of the system!");
-
-    gstring keyp = rt[RT_SYSEQ].UnpackKey();
-    PMtest( keyp.c_str() );
-    //MultiCalc( keyp.c_str() );
-    if( prg )
-      pVisor->OpenProgress();
-    MultiCalcInit( keyp.c_str() );
-    if( AutoInitialApprox() == false )
-        MultiCalcIterations();
-    else //Show results   //if( wn[W_EQCALC].status )
-        aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
-
-    pVisor->Update();
-    pVisor->CalcFinished();
-    STat->setCalcFlag( true );
-    STat->CellChanged();
-}
-
-#endif
 
 //Calculated multy with debug
 void TProfil::DebagCalcEqstatInit()

@@ -28,6 +28,9 @@
 #include <qcolor.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qthread.h>
+#include <qtimer.h>
+#include "calcthread.h"
 
 #include "ProgressDialog.h"
 #include "m_param.h"
@@ -36,6 +39,8 @@
 #include "visor_w.h"
 
 
+
+#define Inherited ProgressDialogData
 
 void 
 ProgressDialog::switchToAccept(bool isAccept)
@@ -53,12 +58,6 @@ ProgressDialog::switchToAccept(bool isAccept)
 }
 
 #ifdef Use_mt_mode
-
-#include <qthread.h>
-#include <qtimer.h>
-#include "calcthread.h"
-
-#define Inherited ProgressDialogData
 
 
 ProgressDialog* ProgressDialog::pDia = 0;
@@ -354,8 +353,6 @@ ProgressDialog::Update(bool force)
 
 #else
 
-#define Inherited ProgressDialogData
-
 ProgressDialog* ProgressDialog::pDia = 0;
 
 ProgressDialog::ProgressDialog(QWidget* parent,	bool step):
@@ -538,5 +535,6 @@ ProgressDialog::Update(bool force)
 }
 
 #endif
+
 //--------------------- End of ProgressDialog.cpp ---------------------------
 

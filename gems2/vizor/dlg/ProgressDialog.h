@@ -23,18 +23,10 @@
 #define ProgressDialog_included
 
 #include <time.h>
-#include "setthread.h"
-#ifdef Use_mt_mode 
-//#include "ProgressDialogData_mt.h"
 #include "ProgressDialogData.h"
+
 class CalcThread;
 class QTimer;
-
-#else
-
-#include "ProgressDialogData.h"
-
-#endif
 
 class ProgressDialog : public ProgressDialogData
 {
@@ -44,10 +36,8 @@ class ProgressDialog : public ProgressDialogData
     int ht_a;
     int ht_s;
     time_t last_update;
-#ifdef Use_mt_mode
     CalcThread* calcThread;
     QTimer* timer;
-#endif
 
     void switchToAccept(bool isAccept);
 

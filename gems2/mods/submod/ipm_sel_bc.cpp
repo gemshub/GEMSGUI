@@ -26,12 +26,8 @@
 #include "m_param.h"
 #include "visor.h"
 #include "service.h"
-#ifdef Use_mt_mode
-
 #include "visor_w.h"
 #include "stepwise.h"
-
-#endif
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Advanced solver of a system of linear equations
@@ -583,11 +579,7 @@ BB7:
         for(J=0;J<pmp->L;J++)
             pmp->Y[J] += LM * MU[J];
 // STEPWISE (5) Stop point at end of iteration of FIA()
-#ifdef Use_mt_mode
-
 STEP_POINT();
-
-#endif
 
         // calculation of new total moles of phases
         // added by DAK in 1995
@@ -986,11 +978,7 @@ IN6:
             JJ+=pmp->L1[Z];
         };
 // STEPWISE (6)  Stop point at IPM() main iteration
-#ifdef Use_mt_mode
-
 STEP_POINT();
-
-#endif
         if( pmp->PCI < pmp->DX )  // Dikin criterion satisfied
             goto IN7;
     } // end of main IPM cycle

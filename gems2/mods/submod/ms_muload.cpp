@@ -29,13 +29,8 @@
 #include "s_formula.h"
 #include "service.h"
 #include "visor.h"
-
-#ifdef Use_mt_mode
-
 #include "visor_w.h"
 #include "stepwise.h"
-
-#endif
 
 enum translat_codes { /* codes for translations of equations */
     N_BEGIN = '{',  N_END = '}',    A_reset = '#',
@@ -973,11 +968,7 @@ if( minB < pa.p.DB )  // KD - foolproof
         // simplex method is called here
         SimplexInitialApproximation( );
 //  STEPWISE (0) - stop point for examining results from simplex IA
-#ifdef Use_mt_mode
-
 STEP_POINT();
-
-#endif
         // no multi-component phases?
         if( !pmp->FIs )
             return true; // goto OVER; // solved !
@@ -1102,11 +1093,7 @@ STEP_POINT();
                 ((TMulti *)aSubMod[MD_MULTI])->copy1);
     */
 // STEPWISE (1) - stop point to see IA from old solution or raised simplex
-#ifdef Use_mt_mode
-
 STEP_POINT();
-
-#endif
     return false;
     //   OVER: /* calc finished */
     //   if( wn[W_EQCALC].status )
@@ -1154,11 +1141,7 @@ STEP_POINT();
    /* minimization  IPM */
     eRet = InteriorPointsMethod( );
 // STEPWISE (3)  - stop point to examine output from IPM()
-#ifdef Use_mt_mode
-
 STEP_POINT();
-
-#endif
 ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if( eRet )
     {   if(eRet==2 )

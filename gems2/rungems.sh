@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec ./program/gems2 -c -s /home/dima/gems2test/program -u /home/dima/gems2test 
+exec ./gems2 -c -s ~/GEMS2test/program -u ~/GEMS2test 

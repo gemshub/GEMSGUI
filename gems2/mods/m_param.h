@@ -27,7 +27,6 @@
 #include "submod/ms_multi.h"
 #include "submod/ms_calc.h"
 
-#include "setthread.h"
 
 // Physical constants - see m_param.cpp
 extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
@@ -291,17 +290,14 @@ protected:
 public:
 
     static TProfil* pm;
-#ifdef Use_mt_mode
 
    bool userCancel;
    bool stepWise;
    bool calcFinished;
    const char * status;
 
-#else
-
+// temporary !Use_mt_mode
     bool fStopCalc;
-#endif
 
     RMULTS* mup;
 
@@ -367,11 +363,7 @@ public:
     // to Probe
     double pb_GX( double *Gxx  );
 
-#ifdef Use_mt_mode
-
    class UserCancelException {};
-#endif
-
 };
 
 /* Work codes of surface site type indices in pm->AtNdx vector */

@@ -39,8 +39,8 @@ dep:
 
 # DO NOT DELETE
 
-v_user.o: v_user.h ../libs/gstring.h ../libs/array.h ../libs/verror.h
-v_vals.o: v_user.h ../libs/gstring.h ../libs/array.h ../libs/verror.h
+v_user.o: v_user.h ../libs/array.h ../libs/verror.h ../libs/gstring.h
+v_vals.o: v_user.h ../libs/array.h ../libs/verror.h ../libs/gstring.h
 v_vals.o: v_vals.h v_vals_impl.h
 v_object.o: v_vals_impl.h v_vals.h ../libs/gstring.h ../libs/array.h v_user.h
 v_object.o: ../libs/verror.h v_object.h ../../mods/m_param.h
@@ -48,7 +48,7 @@ v_object.o: ../../mods/v_mod.h ../../mods/submod/ms_rmults.h v_module.h
 v_object.o: v_dbm.h v_file.h ../../mods/submod/ms_mtparm.h
 v_object.o: ../../mods/submod/ms_system.h ../../mods/m_phase.h
 v_object.o: ../../mods/submod/ms_multi.h v_ipnc.h ../../mods/submod/ms_calc.h
-v_object.o: ../../mods/setthread.h ../libs/config.h
+v_object.o: ../libs/config.h
 v_ipnc.o: ../libs/gstring.h ../libs/array.h v_ipnc.h v_user.h
 v_ipnc.o: ../libs/verror.h v_object.h v_vals.h
 v_file.o: v_file.h ../libs/gstring.h ../libs/array.h v_user.h
@@ -60,7 +60,9 @@ v_dbm2.o: ../libs/verror.h v_vals.h v_dbm.h v_file.h ../../mods/v_mod.h
 v_dbm2.o: ../visor.h v_module.h
 t_print.o: t_print.h v_object.h ../libs/gstring.h ../libs/array.h v_user.h
 t_print.o: ../libs/verror.h v_vals.h v_ipnc.h v_dbm.h v_file.h ../service.h
+t_read.o: t_read.h v_object.h ../libs/gstring.h ../libs/array.h v_user.h
+t_read.o: ../libs/verror.h v_vals.h v_ipnc.h v_dbm.h v_file.h ../service.h
 v_module.o: v_module.h v_object.h ../libs/gstring.h ../libs/array.h v_user.h
 v_module.o: ../libs/verror.h v_vals.h v_dbm.h v_file.h ../module_w.h
-v_module.o: ../../mods/setthread.h ../visor_w.h ../graph.h ../visor.h
-v_module.o: ../service.h ../../mods/v_mod.h t_print.h v_ipnc.h
+v_module.o: ../visor_w.h ../graph.h ../visor.h ../service.h
+v_module.o: ../../mods/v_mod.h t_print.h v_ipnc.h

@@ -502,7 +502,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 
     if( aPHnoused.GetCount() > 0 )
     {  // List of Phases with some species discarded
-        int mod = ios::out;
+        ios::openmode mod = ios::out;
         const char *filename = "DiscardedPhases.txt";
 
         if( !(::access( filename, 0 )) ) //file exists

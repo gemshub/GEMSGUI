@@ -42,9 +42,7 @@ TCModuleImp::TCModuleImp(int irt, int page, bool viewmode):
         QMainWindow(0),
         iMod(irt),
         rMod( aMod[irt] )
-#ifndef Use_mt_mode
         , last_update( 0 )
-#endif
 {
     setWFlags( getWFlags() | WDestructiveClose );
 
@@ -117,9 +115,7 @@ TCModuleImp::Update(bool force)
     s += rMod.GetString();
     SetCaption( s.c_str() );
 
-#ifndef Use_mt_mode
     last_update = time(0);
-#endif
 }
 
 void

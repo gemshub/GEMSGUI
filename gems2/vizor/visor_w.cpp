@@ -293,11 +293,10 @@ TVisorImp::LoadSystem()
 void
 TVisorImp::CalcMulti()
 {
-#ifdef Use_mt_mode
     TProfil::pm->userCancel = false;
-#else
+// temporary if not Use_mt_mode
     TProfil::pm->fStopCalc = false;
-#endif
+    
     try
     {
         TProfil::pm->CalcEqstat();
@@ -523,8 +522,6 @@ TVisorImp::OpenModule(QWidget* par, int irt, int page, bool viewmode)
     }
 }
 
-#ifdef Use_mt_mode
-
 QWaitCondition calcWait;
 QWaitCondition progressWait;
 
@@ -711,156 +708,6 @@ vfMultiKeysSet(QWidget* par, const char* caption,
     qApp->unlock();
     return dbk.allSelectedKeys();
 }
-
-#else
-
-//----------------------------------------------------------------
-// GUI Service functions for modules
-//----------------------------------------------------------------
-
-bool
-vfQuestion(QWidget* par, const gstring& title, const gstring& mess)
-{
-    return (QMessageBox::information(par, title.c_str(), mess.c_str(),
-                                     "&Yes", "&No") == 0);
-}
-
-
-int
-vfQuestYesNoCancel(QWidget* par, const gstring& title, const gstring& mess)
-{
-    switch( QMessageBox::information(
-                par, title.c_str(), mess.c_str(), "&Yes", "&No", "&Cancel",
-                0, 2) )
-    {
-    case 0:
-        return VF_YES;
-    case 1:
-        return VF_NO;
-        //   case 2:
-        //     return VF_YES;
-    }
-
-    return VF_CANCEL;
-}
-
-void
-vfMessage(QWidget* par, const gstring& title, const gstring& mess, WarnType type)
-{
-    switch( type )
-    {
-    case vfWarn:
-        QMessageBox::warning(par, title.c_str(), mess.c_str() );
-        break;
-    case vfErr:
-        QMessageBox::critical(par, title.c_str(), mess.c_str() );
-        break;
-    default:
-        QMessageBox::information(par, title.c_str(), mess.c_str() );
-    }
-}
-
-//----------------------------------------------------------------
-
-static int posx=0, posy=0;
-
-// returns VF3_1, VF3_2 or VF3_3
-int
-vfQuestion3(QWidget* par, const gstring& title, const gstring& mess, const gstring& s1,
-            const gstring& s2,  const gstring& s3, bool i_mov )
-{
-    QMessageBox qm( title.c_str(), mess.c_str(),
-                    QMessageBox::Information,
-                    QMessageBox::Yes | QMessageBox::Default,
-                    QMessageBox::No,
-                    QMessageBox::Cancel | QMessageBox::Escape,
-                    par);
-
-    qm.setButtonText(QMessageBox::Yes, s1.c_str());
-    qm.setButtonText(QMessageBox::No, s2.c_str());
-    qm.setButtonText(QMessageBox::Cancel, s3.c_str());
-    if( i_mov )
-        qm.move(posx, posy);
-    int res = qm.exec();
-
-    if( i_mov )
-    {
-        posx = qm.x();
-        posy = qm.y();
-    }
-
-    switch( res )
-    {
-    case QMessageBox::Yes :
-        return VF3_1;
-    case QMessageBox::No :
-        return VF3_2;
-    case QMessageBox::Cancel :
-        return VF3_3;
-    }
-    return VF3_3;
-}
-
-//==================
-// vfChoice
-//==============
-
-int
-vfChoice(QWidget* par, TCStringArray& arr, const char* prompt, int sel)
-{
-    SelectDialog cw(par, prompt, arr, sel);
-    cw.exec();
-    return cw.selected();
-}
-
-int
-vfChoice2(QWidget* par, TCStringArray& arr, const char* prompt,
-               int sel, bool& all_)
-{
-    SelectDialog cw(par, prompt, arr, sel, all_);
-    cw.exec();
-    return cw.selected( all_ );
-}
-
-TCIntArray
-vfMultiChoice(QWidget* par, TCStringArray& arr, const char* prompt)
-{
-    TCIntArray sel;
-    SelectDialog cw(par, prompt, arr, sel);
-    cw.exec();
-    return cw.allSelected();
-}
-
-
-TCIntArray
-vfMultiChoiceSet(QWidget* par, TCStringArray& arr, const char* prompt, TCIntArray& sel )
-{
-    SelectDialog cw(par, prompt, arr, sel);
-    cw.exec();
-    return cw.allSelected();
-}
-
-TCStringArray
-vfMultiKeys(QWidget* par, const char* caption,
-        int iRt, const char* key )
-{
-    TCStringArray sel;
-    KeyDialog dbk(par, iRt, sel, key, caption);
-    dbk.exec();
-    return dbk.allSelectedKeys();
-}
-
-TCStringArray
-vfMultiKeysSet(QWidget* par, const char* caption,
-        int iRt, const char* key, TCStringArray& sel )
-{
-    KeyDialog dbk(par, iRt, sel, key, caption);
-    dbk.exec();
-    return dbk.allSelectedKeys();
-}
-
-
-#endif // Use_mt_mode
 
 bool
 vfListFiles(QWidget* par, bool show_dlg, const char * prfName,

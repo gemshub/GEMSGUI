@@ -7,6 +7,7 @@ backupfiles	= doc data vizor mods  Makefile* *.spec
 rpmfiles	= lib doc vizor mods Makefile* *.spec
 
 OBJS		= ./lib/gemsel.o ./lib/gemviz.o
+#OBJS		= ./mods/*.o ./mods/submod/*.o ./vizor/*.o ./vizor/dlg/*.o ./vizor/kernel/*.o ./vizor/libs/*.o
 		    
 
 TARGET		= gems2

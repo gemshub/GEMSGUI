@@ -28,7 +28,6 @@
 #include <qmenubar.h>
 
 #include "v_module.h"
-#include "setthread.h"
 
 class TCWindow;
 
@@ -50,9 +49,7 @@ class TCModuleImp:
     TSubModule& rMod;
     TCWindow* pWin;
 
-#ifndef Use_mt_mode
     time_t last_update;
-#endif
 
     void LoadGeneralMenu();
     void LoadProfileMenu();

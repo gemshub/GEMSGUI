@@ -22,12 +22,7 @@
 #ifndef _visor_w_h
 #define _visor_w_h
 
-#include "setthread.h"
-#ifdef Use_mt_mode
-
 #include <qthread.h>
-
-#endif
 
 #include <qmainwindow.h>
 #include <qfont.h>
@@ -165,12 +160,10 @@ public:
         return configAutosave;
     }
 
-#ifdef Use_mt_mode
 
-QWaitCondition& getWaitProgress();
+// functions for threaded calculation
+    QWaitCondition& getWaitProgress();
     QWaitCondition& getWaitCalc();
-
-#endif
 };
 
 extern TVisorImp* pVisorImp;
