@@ -127,7 +127,6 @@ copy_data:
 else
 
 copy_data:	
-		cp -R ./data ~/.gems2_shared/program/ 
 		cp -R ./data ./shared/ 
 endif	
 
