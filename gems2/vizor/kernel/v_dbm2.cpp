@@ -286,7 +286,7 @@ long TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
     rh.rlen =  rep.len;
     StillLen = rep.len;
     rh.crt = rhh.crt;
-    f.seekg(rep.pos, ios::beg );
+    f.seekp(rep.pos, ios::beg );
     //   f.write( (char *)&rh, sizeof(RecHead) );
     rh.write (f);
     // put packed key
@@ -1023,7 +1023,7 @@ void TDataBase::RebildFile(const TCIntArray& nff)
         aFile[nF].GetDh( fPos, fLen );
 	
 	gstring tmpFileName = aFile[nF].GetPath() + ".tmp";
-	GemDataStream outStream( tmpFileName, ios::out | ios::trunc |ios::binary);
+	GemDataStream outStream( tmpFileName, ios::out | ios::binary );
 	outStream.seekp(fPos/*VDBhead::data_size()*/, ios::beg);
 
         nRec = scanfile( nF, fPos, fLen, aFile[nF].f, outStream );
