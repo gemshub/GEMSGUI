@@ -1080,6 +1080,13 @@ TProcess::RecCalc( const char *key )
     pep->Istat = P_FINISHED;
     if( pointShow==-1 )
        pVisor->CloseMessage();
+// Get startup syseq record for fitting
+    rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+             RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
+                            RT_PROCES, 6, RT_PROCES, 7, K_END );
+    nRec = rt[RT_SYSEQ].Find(pep->stkey);
+    if( nRec >= 0)
+       PRof->loadSystat( pep->stkey );   // read SysEq record and unpack data
 
     ModUpdate("Pe_calc    Finished OK");
 
