@@ -125,6 +125,8 @@ protected:
     // multi load
     short BAL_compare();
 
+    double LagranInterp(float *y, float *x, double *d, float yoi,
+                    float xoi, int M, int N);
 
     void multi_sys_dc();
     void multi_sys_ph();

@@ -793,7 +793,7 @@ TVisor::defaultCFG()
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                   };
     rt.Add(new TDataBase(rt.GetCount(), "gem2mt", true, true,
-                         o_mtname, 42, 0, 10, gem2mt_rkfrm));
+                         o_mtname, 44, 0, 10, gem2mt_rkfrm));
 
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");

@@ -62,6 +62,8 @@ int  NodeCalcGEM( int  &readF, // negative means read only
    double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
    double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
    double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+   double  *p_dul,  // upper kinetic restrictions [nDCb]           +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]           +      +      -     -
    double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
    double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
    double  *p_uIC,  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
@@ -162,6 +164,8 @@ int __stdcall MAIF_CALC( int  readF, // negative means read only
    double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
    double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
    double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+   double  *p_dul,  // upper kinetic restrictions [nDCb]           +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]           +      +      -     -
    double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
    double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
    double  *p_uIC,  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
@@ -179,9 +183,10 @@ int __stdcall MAIF_CALC( int  readF, // negative means read only
             p_Kf, p_S, p_Tr, p_h, p_rho, p_al, p_at, p_av,
             p_hDl, p_hDt, p_hDv, p_nPe,
             p_xDC, p_gam, p_xPH, p_vPS, p_mPS, p_bPS, p_xPA,
+            p_dul, p_dll,
             p_bIC, p_rMB, p_uIC, p_dRes1, p_dRes2  );
 
-//***************************************************************
+/**************************************************************
   int ii;
   int nIC, nDC, nPH;
  // Extracting data bridge dimensionalities

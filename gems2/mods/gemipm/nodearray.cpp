@@ -167,7 +167,7 @@ int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
 // If the fortran node index iNodeF is negative then this call
 // does not require any input parameters and will just return
 // data from the node to FMT (readonly mode). Otherwise, at least p_T, p_P,
-//  p_bIC and p_NodeStatusCH parameters must be specified.
+//  p_bIC, p_dll, p_dul and p_NodeStatusCH parameters must be specified.
 //
 //  Function returns:
 //   0: OK; 1: GEMIPM2K calculation error; 1: system error
@@ -231,6 +231,8 @@ int  NodeCalcGEM( int  &readF, // negative means read only
    double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
    double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
    double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+   double  *p_dul,  // upper kinetic restrictions [nDCb]           +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]           +      +      -     -
    double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
    double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
    double  *p_uIC,  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
@@ -258,7 +260,7 @@ if( onlyWork > 0)
 if( readF > 0 )  // calculation mode: passing input GEM data changed on previous FMT iteration
 {                 //                   into work DATABR structure
    TProfil::pm->multi->GEM_input_from_MT(  p_NodeHandle,  p_NodeStatusCH,
-      p_T, p_P, p_Ms, p_dt, p_dt1,  p_bIC );   // test simplex
+      p_T, p_P, p_Ms, p_dt, p_dt1,  p_dul, p_dll, p_bIC );   // test simplex
 }
 
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
@@ -276,11 +278,11 @@ if( readF > 0 )  // calculation mode: passing input GEM data changed on previous
         p_Vs, p_Gs, p_Hs, p_IC, p_pH, p_pe, p_Eh, p_denW,
         p_denWg, p_epsW, p_epsWg,
         p_xDC, p_gam, p_xPH, p_vPS, p_mPS, p_bPS,
-        p_xPA, p_bIC, p_rMB, p_uIC );
+        p_xPA, p_dul, p_dll, p_bIC, p_rMB, p_uIC );
 
 if( readF < 0 )  // readonly mode: passing input GEM data to FMT
    TProfil::pm->multi->GEM_input_back_to_MT(p_NodeHandle,  p_NodeStatusCH,
-      p_T, p_P, p_Ms, p_dt, p_dt1,  p_bIC);
+      p_T, p_P, p_Ms, p_dt, p_dt1, p_dul, p_dll, p_bIC);
 
 
 //**************************************************************

@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $$
+// $ Id:$
 //
 // Implementation of TGEM2MT class, calculation functions
 //
@@ -39,8 +39,8 @@ void TGEM2MT::mt_reset()
 // setup flags and counters
   mtp->gStat = '0';
   mtp->iStat = '0';
-  mtp->cT = mtp->Tai[START_];
-  mtp->cP = mtp->Pai[START_];
+//  mtp->cT = mtp->Tai[START_];
+//  mtp->cP = mtp->Pai[START_];
   mtp->cV = 0.;
   mtp->cTau = mtp->Tau[START_];
   mtp->ctm = mtp->tmi[START_];
@@ -48,6 +48,8 @@ void TGEM2MT::mt_reset()
   mtp->qc = 0;
   mtp->kv = 0;
   mtp->jt = 0;
+  mtp->cT = mtp->Ti[START_];
+  mtp->cP = mtp->Pi[START_];
 }
 
 // setup begin initalization
@@ -122,11 +124,32 @@ void TGEM2MT::init_arrays( bool mode )
   }
 }
 
+// generate Tval and Pval arrays
+void TGEM2MT::gen_TPval()
+{
+  int ii;
+  mtp->cT = mtp->Tai[START_];
+  mtp->cP = mtp->Pai[START_];
+
+  for( ii=0; ii<mtp->nTai; ii++ )
+  {
+    mtp->Tval[ii] = mtp->cT;
+    mtp->cT += mtp->Tai[STEP_];
+  }
+
+  for( ii=0; ii<mtp->nPai; ii++ )
+  {
+    mtp->Pval[ii] = mtp->cP;
+    mtp->cP += mtp->Pai[STEP_];
+  }
+}
+
+
 // recalc working parametres
 void TGEM2MT::mt_next()
 {
-     mtp->cT += mtp->Tai[STEP_];
-     mtp->cP += mtp->Pai[STEP_];
+//     mtp->cT += mtp->Tai[STEP_];
+//     mtp->cP += mtp->Pai[STEP_];
      mtp->cTau += mtp->Tau[STEP_];
 //     mtp->cV += 0;
      mtp->ctm += mtp->tmi[STEP_];
@@ -137,6 +160,9 @@ void TGEM2MT::mt_next()
 void TGEM2MT::calc_eqstat()
 {
     vstr buf(40);
+
+    mtp->cT = mtp->Ti[mtp->kv];
+    mtp->cP = mtp->Pi[mtp->kv];
 
     sprintf(buf, "%.4d", mtp->ctm);
     memset(mtp->timep, 0, 5 );
@@ -379,6 +405,9 @@ void TGEM2MT::outMulti()
   gstring newname;
   gstring path;
 
+// generate Tval&Pval arrays
+if( mtp->PsTPai != S_OFF )
+    gen_TPval();
 
 if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 {
@@ -422,7 +451,7 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 
 // set default data and realloc arrays
    mult->makeStartDataChBR( aSelIC, aSelDC, aSelPH,
-      mtp->nTai,  mtp->nPai, mtp->Tai, mtp->Pai );
+      mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3], mtp->Tval, mtp->Pval );
 
 // out dataCH to binary file
    if( mtp->PsSbin != S_OFF )

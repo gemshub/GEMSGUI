@@ -71,6 +71,8 @@ extern "C" int __stdcall MAIF_CALC( int  readF, // negative means read only
    double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
    double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
    double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+   double  *p_dul,  // upper kinetic restrictions [nDCb]           +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]           +      +      -     -
    double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
    double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
    double  *p_uIC,  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
@@ -128,7 +130,7 @@ main( int argc, char* argv[] )
         m_Kf=0., m_S=0., m_Tr=0., m_h=0., m_rho=0., m_al=0.,
         m_at=0., m_av=0., m_hDl=0., m_hDt=0., m_hDv=0., m_nPe=0.;
   double *m_xDC, *m_gam, *m_xPH, *m_vPS, *m_mPS,
-        *m_bPS, *m_xPA, *m_bIC, *m_rMB, *m_uIC;
+        *m_bPS, *m_xPA, *m_dul, *m_dll, *m_bIC, *m_rMB, *m_uIC;
   double m_dRes1[4], m_dRes2[6];
 
   int nIC=0, nDC=0, nPH=0, nPS=0, ndXf=-1;
@@ -153,6 +155,8 @@ main( int argc, char* argv[] )
     m_mPS = (double*)malloc( nPS*sizeof(double) );
     m_bPS = (double*)malloc( nDC*nPS*sizeof(double) );
     m_xPA = (double*)malloc( nPS*sizeof(double) );
+    m_dul = (double*)malloc( nDC*sizeof(double) );
+    m_dll = (double*)malloc( nDC*sizeof(double) );
     m_bIC = (double*)malloc( nIC*sizeof(double) );
     m_rMB = (double*)malloc( nIC*sizeof(double) );
     m_uIC = (double*)malloc( nIC*sizeof(double) );
@@ -170,14 +174,16 @@ main( int argc, char* argv[] )
         m_Kf, m_S, m_Tr, m_h, m_rho, m_al,
         m_at, m_av, m_hDl, m_hDt, m_hDv, m_nPe,
         m_xDC, m_gam, m_xPH, m_vPS, m_mPS,
-        m_bPS, m_xPA, m_bIC, m_rMB, m_uIC,
+        m_bPS, m_xPA, m_dul, m_dll, m_bIC, m_rMB, m_uIC,
         m_dRes1, m_dRes2 );
 
-       m_NodeStatusCH = NEED_GEM_PIA; //NEED_GEM_AIA
-         m_bIC[2] += 1e-6*kk;
-         m_bIC[3] += 1e-6*kk;
- //      m_bIC[4] += 1e-7;
+       m_NodeStatusCH = NEED_GEM_AIA; //NEED_GEM_PIA
 
+  //       m_bIC[2] += 1e-6*kk;
+ //        m_bIC[3] += 1e-6*kk;
+ //      m_bIC[4] += 1e-7;
+       m_T += 15;
+       
        MAIF_CALC( 1, ii, 0, kk,
         m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
         m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
@@ -188,7 +194,7 @@ main( int argc, char* argv[] )
         m_Kf, m_S, m_Tr, m_h, m_rho, m_al,
         m_at, m_av, m_hDl, m_hDt, m_hDv, m_nPe,
         m_xDC, m_gam, m_xPH, m_vPS, m_mPS,
-        m_bPS, m_xPA, m_bIC, m_rMB, m_uIC,
+        m_bPS, m_xPA, m_dul, m_dll,  m_bIC, m_rMB, m_uIC,
         m_dRes1, m_dRes2 );
 
 
@@ -211,6 +217,8 @@ main( int argc, char* argv[] )
     free( m_mPS );
     free( m_bPS );
     free( m_xPA );
+    free( m_dul );
+    free( m_dll );
     free( m_bIC );
     free( m_rMB );
     free( m_uIC );

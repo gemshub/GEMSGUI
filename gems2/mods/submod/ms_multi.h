@@ -351,8 +351,9 @@ public:
     void databr_from_text_file(fstream& ff );
 
     void makeStartDataChBR(
-       TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
-       short nTp_, short nPp_,float Tai[3], float Pai[3] );
+         TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
+         short nTp_, short nPp_, float Ttol_, float Ptol_,
+         float *Tai, float *Pai );
     void getG0_V0_H0_Cp0_matrix();
     void packDataBr();
     void unpackDataBr();
@@ -413,6 +414,8 @@ public:
        double p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
        double p_dt,    // actual time step
        double p_dt1,   // priveous time step
+       double  *p_dul, // upper kinetic restrictions [nDCb]            +      +      -     -
+       double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
        double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
    );
    void GEM_input_back_to_MT(
@@ -423,6 +426,8 @@ public:
    double &p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
    double &p_dt,    // actual time step
    double &p_dt1,   // priveous time step
+   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
    double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
    );
    void GEM_output_to_MT(
@@ -452,6 +457,8 @@ public:
    double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
    double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
    double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
+   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
    double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
    );
 

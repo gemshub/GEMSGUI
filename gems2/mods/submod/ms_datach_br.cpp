@@ -28,7 +28,8 @@
 // Writing dataCH structure to binary file
 void TMulti::makeStartDataChBR(
   TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
-  short nTp_, short nPp_,float Tai[3], float Pai[3] )
+  short nTp_, short nPp_, float Ttol_, float Ptol_,
+  float *Tai, float *Pai )
 {
 // set sizes for DataCh
   uint ii;
@@ -67,14 +68,8 @@ void TMulti::makeStartDataChBR(
   data_CH->dRes1 = 0.;
   data_CH->dRes = 0.;
 
-  data_CH->Tmin = Tai[START_];
-  data_CH->Tmax = Tai[STOP_];
-  data_CH->Tstep = Tai[STEP_];
-  data_CH->Ttol = 0;
-  data_CH->Pmin = Pai[START_];
-  data_CH->Pmax = Pai[STOP_];
-  data_CH->Pstep = Pai[STEP_];
-  data_CH->Ptol = 0;
+  data_CH->Ttol = Ttol_;
+  data_CH->Ptol = Ptol_;
 
 // realloc structures DataCh&DataBr
 
@@ -134,12 +129,23 @@ void TMulti::makeStartDataChBR(
    for( i1=0; i1<data_CH->nICb; i1++ )
     data_BR->bIC[i1] = pm.B[ data_CH->xIC[i1] ];
 
+   for( i1=0; i1<data_CH->nDCb; i1++ )
+   {
+     data_BR->dul[i1] = pm.DUL[ data_CH->xDC[i1] ];
+     data_BR->dll[i1] = pm.DLL[ data_CH->xDC[i1] ];
+    }
+
 // set calculated&dynamic data to DataBR
 
    packDataBr();
 
 // must be changed to matrix structure  ???????
 // setted data_CH->nPp*data_CH->nTp = 1
+   for( i1=0; i1<data_CH->nTp; i1++ )
+    data_CH->Tval[i1] = Tai[i1];
+   for( i1=0; i1<data_CH->nPp; i1++ )
+    data_CH->Pval[i1] = Pai[i1];
+
    getG0_V0_H0_Cp0_matrix();
 
 }
@@ -161,13 +167,12 @@ void TMulti::getG0_V0_H0_Cp0_matrix()
   else
     Cp0 = 0;
 
-  cT = data_CH->Tmin;
-  cP = data_CH->Pmin;
-
   for( int ii=0; ii<data_CH->nTp; ii++)
   {
+    cT = data_CH->Tval[ii];
     for( int jj=0; jj<data_CH->nPp; jj++)
     {
+      cP = data_CH->Pval[jj];
      // calc new G0, V0, H0, Cp0
      TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, Cp0 );
      // copy to arrays
@@ -185,10 +190,7 @@ void TMulti::getG0_V0_H0_Cp0_matrix()
          else
            data_CH->Cp0[ll] = 0.;
        }
-     // next step
-     cP += data_CH->Pstep;
      }
-     cT += data_CH->Tstep;
   }
 
   // free memory
@@ -237,6 +239,8 @@ void TMulti::GetNodeCopyFromArray( int ii )
   memcpy( data_BR->bPS, arr_BR[ii]->bPS,
                           data_CH->nPSb*data_CH->nICb*sizeof(double) );
   memcpy( data_BR->xPA, arr_BR[ii]->xPA, data_CH->nPSb*sizeof(double) );
+  memcpy( data_BR->dul, arr_BR[ii]->dul, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->dll, arr_BR[ii]->dll, data_CH->nDCb*sizeof(double) );
   memcpy( data_BR->bIC, arr_BR[ii]->bIC, data_CH->nICb*sizeof(double) );
   memcpy( data_BR->rMB, arr_BR[ii]->rMB, data_CH->nICb*sizeof(double) );
   memcpy( data_BR->uIC, arr_BR[ii]->uIC, data_CH->nICb*sizeof(double) );
@@ -271,6 +275,8 @@ void TMulti::CopyTo( DATABR *(*dBR) )
   memcpy( data_BR->bPS, (*dBR)->bPS,
                           data_CH->nPSb*data_CH->nICb*sizeof(double) );
   memcpy( data_BR->xPA, (*dBR)->xPA, data_CH->nPSb*sizeof(double) );
+  memcpy( data_BR->dul, (*dBR)->dul, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->dll, (*dBR)->dll, data_CH->nDCb*sizeof(double) );
   memcpy( data_BR->bIC, (*dBR)->bIC, data_CH->nICb*sizeof(double) );
   memcpy( data_BR->rMB, (*dBR)->rMB, data_CH->nICb*sizeof(double) );
   memcpy( data_BR->uIC, (*dBR)->uIC, data_CH->nICb*sizeof(double) );
@@ -302,6 +308,8 @@ void TMulti::GEM_input_from_MT(
    double p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
    double p_dt,    // actual time step
    double p_dt1,   // priveous time step
+   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
    double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
    )
 {
@@ -322,6 +330,11 @@ void TMulti::GEM_input_from_MT(
        //     useSimplex = true;
      data_BR->bIC[ii] = p_bIC[ii];
    }
+   for( ii=0; ii<data_CH->nDCb; ii++ )
+   {
+     data_BR->dul[ii] = p_dul[ii];
+     data_BR->dll[ii] = p_dll[ii];
+   }
    if( useSimplex && data_BR->NodeStatusCH == NEED_GEM_PIA )
      data_BR->NodeStatusCH = NEED_GEM_AIA;
    // Switch only if PIA is ordered, leave if simplex is ordered (KD)
@@ -336,6 +349,8 @@ void TMulti::GEM_input_back_to_MT(
    double &p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
    double &p_dt,    // actual time step
    double &p_dt1,   // priveous time step
+   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
    double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
    )
 {
@@ -349,6 +364,10 @@ void TMulti::GEM_input_back_to_MT(
 // Checking if no-simplex IA is Ok
    for(int ii=0; ii<data_CH->nICb; ii++ )
      p_bIC[ii] = data_BR->bIC[ii];
+   for(int ii=0; ii<data_CH->nDCb; ii++ )
+   {  p_dul[ii] = data_BR->dul[ii];
+      p_dll[ii] = data_BR->dll[ii];
+   }
 }
 
 // Copying results that must be returned into the FMT part into MAIF_CALC parameters
@@ -377,6 +396,8 @@ void TMulti::GEM_output_to_MT(
    double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
    double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
    double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
+   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
    double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
    double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
    double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
@@ -406,6 +427,8 @@ void TMulti::GEM_output_to_MT(
   memcpy( p_mPS, data_BR->mPS, data_CH->nPSb*sizeof(double) );
   memcpy( p_bPS, data_BR->bPS, data_CH->nPSb*data_CH->nICb*sizeof(double) );
   memcpy( p_xPA, data_BR->xPA, data_CH->nPSb*sizeof(double) );
+  memcpy( p_dul, data_BR->dul, data_CH->nDCb*sizeof(double) );
+  memcpy( p_dll, data_BR->dll, data_CH->nDCb*sizeof(double) );
   memcpy( p_bIC, data_BR->bIC, data_CH->nICb*sizeof(double) );
   memcpy( p_rMB, data_BR->rMB, data_CH->nICb*sizeof(double) );
   memcpy( p_uIC, data_BR->uIC, data_CH->nICb*sizeof(double) );
@@ -464,6 +487,11 @@ data_BR->Eh = pm.FitVar[3];
    for( ii=0; ii<data_CH->nPSb; ii++ )
     data_BR->xPA[ii] = pm.XFA[ data_CH->xPH[ii] ];
 
+   for( ii=0; ii<data_CH->nDCb; ii++ )          //??? only insert
+   {
+    data_BR->dul[ii] = pm.DUL[ data_CH->xDC[ii] ];
+    data_BR->dll[ii] = pm.DLL[ data_CH->xDC[ii] ];
+   }
    for( ii=0; ii<data_CH->nICb; ii++ )          //??? only insert
     data_BR->bIC[ii] = pm.B[ data_CH->xIC[ii] ];
    for( ii=0; ii<data_CH->nICb; ii++ )
@@ -494,6 +522,11 @@ void TMulti::unpackDataBr()
   pm.IC = data_BR->IC;
 pm.FitVar[3] = data_BR->Eh;
 // arrays
+   for( ii=0; ii<data_CH->nDCb; ii++ )
+   {
+    pm.DUL[ data_CH->xDC[ii] ] = data_BR->dul[ii];
+    pm.DLL[ data_CH->xDC[ii] ] = data_BR->dll[ii];
+   }
    for( ii=0; ii<data_CH->nICb; ii++ )
     pm.B[ data_CH->xIC[ii] ] = data_BR->bIC[ii];
 
@@ -539,7 +572,7 @@ void TMulti::datach_to_file( GemDataStream& ff )
 {
 // const data
    ff.writeArray( &data_CH->nIC, 14 );
-   ff.writeArray( &data_CH->Tmin, 10 );
+   ff.writeArray( &data_CH->Ttol, 4 );
 
 //dynamic data
    ff.writeArray( data_CH->nDCinPH, data_CH->nPH );
@@ -551,6 +584,9 @@ void TMulti::datach_to_file( GemDataStream& ff )
    ff.writeArray( data_CH->A, data_CH->nIC*data_CH->nDC );
    ff.writeArray( data_CH->ICmm, data_CH->nIC );
    ff.writeArray( data_CH->DCmm, data_CH->nDC );
+
+   ff.writeArray( data_CH->Tval,  data_CH->nTp );
+   ff.writeArray( data_CH->Pval,  data_CH->nPp );
 
    ff.writeArray( data_CH->G0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
    ff.writeArray( data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
@@ -576,7 +612,7 @@ void TMulti::datach_from_file( GemDataStream& ff )
 {
 // const data
    ff.readArray( &data_CH->nIC, 14 );
-   ff.readArray( &data_CH->Tmin, 10 );
+   ff.readArray( &data_CH->Ttol, 4 );
 
   datach_realloc();
   databr_realloc();
@@ -591,6 +627,9 @@ void TMulti::datach_from_file( GemDataStream& ff )
    ff.readArray( data_CH->A, data_CH->nIC*data_CH->nDC );
    ff.readArray( data_CH->ICmm, data_CH->nIC );
    ff.readArray( data_CH->DCmm, data_CH->nDC );
+
+   ff.readArray( data_CH->Tval,  data_CH->nTp );
+   ff.readArray( data_CH->Pval,  data_CH->nPp );
 
    ff.readArray( data_CH->G0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
    ff.readArray( data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp );
@@ -618,7 +657,7 @@ void TMulti::datach_to_text_file( fstream& ff )
 // ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
 
   outArray( ff, "sCon",  &data_CH->nIC, 14 );
-  outArray( ff, "dCon",  &data_CH->Tmin, 10 );
+  outArray( ff, "dCon",  &data_CH->Ttol, 4 );
 
 //dynamic data
    outArray( ff, "nDCinPH", data_CH->nDCinPH, data_CH->nPH);
@@ -630,6 +669,9 @@ void TMulti::datach_to_text_file( fstream& ff )
    outArray( ff, "A", data_CH->A, data_CH->nDC*data_CH->nIC, data_CH->nIC );
    outArray( ff, "ICmm", data_CH->ICmm, data_CH->nIC);
    outArray( ff, "DCmm", data_CH->DCmm, data_CH->nDC);
+
+   outArray( ff, "Tval", data_CH->Tval, data_CH->nTp );
+   outArray( ff, "Pval", data_CH->Pval, data_CH->nPp );
 
    outArray( ff, "G0", data_CH->G0, data_CH->nDC*data_CH->nPp*data_CH->nTp,
                                     data_CH->nPp*data_CH->nTp );
@@ -661,7 +703,7 @@ void TMulti::datach_from_text_file(fstream& ff)
 // ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
 
   inArray( ff, "sCon",  &data_CH->nIC, 14 );
-  inArray( ff, "dCon",  &data_CH->Tmin, 10 );
+  inArray( ff, "dCon",  &data_CH->Ttol, 4 );
 
   datach_realloc();
   databr_realloc();
@@ -676,6 +718,9 @@ void TMulti::datach_from_text_file(fstream& ff)
    inArray( ff, "A", data_CH->A, data_CH->nDC*data_CH->nIC );
    inArray( ff, "ICmm", data_CH->ICmm, data_CH->nIC);
    inArray( ff, "DCmm", data_CH->DCmm, data_CH->nDC);
+
+   inArray( ff, "Tval", data_CH->Tval, data_CH->nTp );
+   inArray( ff, "Pval", data_CH->Pval, data_CH->nPp );
 
    inArray( ff, "G0", data_CH->G0,  data_CH->nDC*data_CH->nPp*data_CH->nTp);
    inArray( ff, "V0", data_CH->V0,  data_CH->nDC*data_CH->nPp*data_CH->nTp);
@@ -715,6 +760,9 @@ void TMulti::datach_realloc()
   data_CH->A = new float[data_CH->nIC*data_CH->nDC];
   data_CH->ICmm = new double[data_CH->nIC];
   data_CH->DCmm = new double[data_CH->nDC];
+
+  data_CH->Tval = new float[data_CH->nTp];
+  data_CH->Pval = new float[data_CH->nPp];
 
   data_CH->G0 = new double[data_CH->nDC*data_CH->nPp*data_CH->nTp];
   data_CH->V0 = new double[data_CH->nDC*data_CH->nPp*data_CH->nTp];
@@ -765,6 +813,15 @@ void TMulti::datach_free()
  if( data_CH->DCmm )
   { delete[] data_CH->DCmm;
     data_CH->DCmm = 0;
+  }
+
+ if( data_CH->Tval )
+  { delete[] data_CH->Tval;
+    data_CH->Tval = 0;
+  }
+ if( data_CH->Pval )
+  { delete[] data_CH->Pval;
+    data_CH->Pval = 0;
   }
 
  if( data_CH->G0 )
@@ -836,6 +893,8 @@ void TMulti::databr_to_file( GemDataStream& ff )
 
    ff.writeArray( data_BR->bPS, data_CH->nPSb*data_CH->nICb );
    ff.writeArray( data_BR->xPA, data_CH->nPSb );
+   ff.writeArray( data_BR->dul, data_CH->nDCb );
+   ff.writeArray( data_BR->dll, data_CH->nDCb );
    ff.writeArray( data_BR->bIC, data_CH->nICb );
    ff.writeArray( data_BR->rMB, data_CH->nICb );
    ff.writeArray( data_BR->uIC, data_CH->nICb );
@@ -863,6 +922,8 @@ void TMulti::databr_from_file( GemDataStream& ff )
 
    ff.readArray( data_BR->bPS, data_CH->nPSb*data_CH->nICb );
    ff.readArray( data_BR->xPA, data_CH->nPSb );
+   ff.readArray( data_BR->dul, data_CH->nDCb );
+   ff.readArray( data_BR->dll, data_CH->nDCb );
    ff.readArray( data_BR->bIC, data_CH->nICb );
    ff.readArray( data_BR->rMB, data_CH->nICb );
    ff.readArray( data_BR->uIC, data_CH->nICb );
@@ -889,6 +950,8 @@ void TMulti::databr_to_text_file( fstream& ff )
 
   outArray( ff, "bPS",  data_BR->bPS, data_CH->nPSb*data_CH->nICb );
   outArray( ff, "xPA",  data_BR->xPA, data_CH->nPSb );
+  outArray( ff, "dul",  data_BR->dul, data_CH->nDCb );
+  outArray( ff, "dll",  data_BR->dll, data_CH->nDCb );
   outArray( ff, "bIC",  data_BR->bIC, data_CH->nICb );
   outArray( ff, "rMB",  data_BR->rMB, data_CH->nICb );
   outArray( ff, "uIC",  data_BR->uIC, data_CH->nICb );
@@ -913,6 +976,8 @@ void TMulti::databr_from_text_file( fstream& ff )
 
   inArray( ff, "bPS",  data_BR->bPS, data_CH->nPSb*data_CH->nICb );
   inArray( ff, "xPA",  data_BR->xPA, data_CH->nPSb );
+  inArray( ff, "dul",  data_BR->dul, data_CH->nDCb );
+  inArray( ff, "dll",  data_BR->dll, data_CH->nDCb );
   inArray( ff, "bIC",  data_BR->bIC, data_CH->nICb );
   inArray( ff, "rMB",  data_BR->rMB, data_CH->nICb );
   inArray( ff, "uIC",  data_BR->uIC, data_CH->nICb );
@@ -930,6 +995,8 @@ void TMulti::databr_realloc()
 
  data_BR->bPS = new double[data_CH->nPSb*data_CH->nICb];
  data_BR->xPA = new double[data_CH->nPSb];
+ data_BR->dul = new double[data_CH->nDCb];
+ data_BR->dll = new double[data_CH->nDCb];
  data_BR->bIC = new double[data_CH->nICb];
  data_BR->rMB = new double[data_CH->nICb];
  data_BR->uIC = new double[data_CH->nICb];
@@ -973,6 +1040,14 @@ void TMulti::databr_free()
  if( data_BR->xPA )
   { delete[] data_BR->xPA;
     data_BR->xPA = 0;
+  }
+ if( data_BR->dul )
+  { delete[] data_BR->dul;
+    data_BR->dul = 0;
+  }
+ if( data_BR->dll )
+  { delete[] data_BR->dll;
+    data_BR->dll = 0;
   }
  if( data_BR->bIC )
   { delete[] data_BR->bIC;

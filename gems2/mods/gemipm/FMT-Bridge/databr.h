@@ -86,6 +86,8 @@ typedef struct
     *bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
     *xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
 
+    *dul,  // upper kinetic restrictions [nDCb]           +      +      -     -
+    *dll,  // lower kinetic restrictions [nDCb]           +      +      -     -
   // IC (stoichiometry units)
     *bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
     *rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +

@@ -130,9 +130,9 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mttmi].SetPtr( mtp->tmi );     /* i3 */
     aObj[o_mtnvi].SetPtr( mtp->NVi );     /* i3 */
     aObj[o_mtaxis].SetPtr( mtp->axisType ); /* i6 */
-    aObj[o_mtpai].SetPtr( mtp->Pai );     /* d3 */
-    aObj[o_mttai].SetPtr( mtp->Tai );     /* d3 */
-    aObj[o_mttau].SetPtr( mtp->Tau );     /* d3 */
+    aObj[o_mtpai].SetPtr( mtp->Pai );     /* f4 */
+    aObj[o_mttai].SetPtr( mtp->Tai );     /* f4 */
+    aObj[o_mttau].SetPtr( mtp->Tau );     /* f3 */
     aObj[o_mtsize].SetPtr( mtp->size[0] );     /* d8 */
 // work
     aObj[o_mtsykey].SetPtr( mtp->sykey );
@@ -165,7 +165,7 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtflag].SetPtr( &mtp->PunE );    /* a20 */
     aObj[o_mtshort].SetPtr( &mtp->nC );     /* i29 */
     aObj[o_mtdoudl].SetPtr( &mtp->Msysb );    /* d9 */
-    aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f17 */
+    aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f19 */
     aObj[ o_mtxnames].SetPtr(  mtp->xNames );
     aObj[ o_mtynames].SetPtr(  mtp->yNames );
 
@@ -214,6 +214,10 @@ void TGEM2MT::ods_link(int q)
     aObj[ o_mtfdlf].SetDim( mtp->nFD, 2 );
     aObj[ o_mtpgt].SetPtr( mtp->PGT);
     aObj[ o_mtpgt].SetDim( mtp->FIb, mtp->nPG );
+    aObj[ o_mttval].SetPtr( mtp->Tval);
+    aObj[ o_mttval].SetDim( mtp->nTai, 1 );
+    aObj[ o_mtpval].SetPtr( mtp->Pval);
+    aObj[ o_mtpval].SetDim( mtp->nPai, 1 );
     aObj[ o_mtnam_i].SetPtr( mtp->nam_i );
     aObj[ o_mtnam_i].SetDim(  mtp->nIV, 1 );
     aObj[ o_mtfor_i].SetPtr( mtp->for_i );
@@ -278,6 +282,8 @@ void TGEM2MT::dyn_set(int q)
     mtp->CAb = (float *)aObj[ o_mtcab].GetPtr();
     mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].GetPtr();
     mtp->PGT = (float *)aObj[ o_mtpgt].GetPtr();
+    mtp->Tval = (float *)aObj[ o_mttval].GetPtr();
+    mtp->Pval = (float *)aObj[ o_mtpval].GetPtr();
     mtp->nam_i = (char (*)[MAXIDNAME])aObj[ o_mtnam_i].GetPtr();
     mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].GetPtr();
     mtp->stld = (char (*)[EQ_RKLEN])aObj[ o_mtstld].GetPtr();
@@ -324,6 +330,8 @@ void TGEM2MT::dyn_kill(int q)
     mtp->CAb = (float *)aObj[ o_mtcab].Free();
     mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].Free();
     mtp->PGT = (float *)aObj[ o_mtpgt].Free();
+    mtp->Tval = (float *)aObj[ o_mttval].Free();
+    mtp->Pval = (float *)aObj[ o_mtpval].Free();
     mtp->nam_i = (char (*)[MAXIDNAME])aObj[ o_mtnam_i].Free();
     mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].Free();
     mtp->stld = (char (*)[EQ_RKLEN])aObj[ o_mtstld].Free();
@@ -354,6 +362,9 @@ void TGEM2MT::dyn_new(int q)
  mtp->Ti = (float *)aObj[ o_mtti].Alloc( mtp->nIV, 1, F_);
  mtp->Vi = (float *)aObj[ o_mtvi].Alloc( mtp->nIV, 1, F_);
  mtp->stld = (char (*)[EQ_RKLEN])aObj[ o_mtstld].Alloc( mtp->nIV, 1, EQ_RKLEN);
+
+ mtp->Tval  = (float *)aObj[ o_mttval ].Alloc( mtp->nTai, 1, F_);
+ mtp->Pval  = (float *)aObj[ o_mtpval ].Alloc( mtp->nPai, 1, F_);
 
  mtp->Bn = (double *)aObj[ o_mtbn].Alloc( mtp->nIV, mtp->Nb, D_);
  mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Alloc(
@@ -513,7 +524,7 @@ void TGEM2MT::set_def(int q)
 
 //    TProfil *aPa= TProfil::pm;
     memcpy( &mtp->PunE, "jjbC", 4 );
-    memcpy( &mtp->PvICi, "+-------S00+-+--", 16 );
+    memcpy( &mtp->PvICi, "+-------S00+-+-+", 16 );
     strcpy( mtp->name,  "`" );
     strcpy( mtp->notes, "`" );
     strcpy( mtp->xNames, "X" );
@@ -537,9 +548,11 @@ void TGEM2MT::set_def(int q)
     mtp->Pai[START_] = 1.;
     mtp->Pai[STOP_] = 1.;
     mtp->Pai[STEP_] = 0.;
+    mtp->Pai[3] = .5;      //Ptol
     mtp->Tai[START_] = 25.;
     mtp->Tai[STOP_] = 25.;
     mtp->Tai[STEP_] = 0.;
+    mtp->Tai[0] = 1.;     //Ttol
     mtp->Tau[START_] = 0.;
     mtp->Tau[STOP_] = 0.;
     mtp->Tau[STEP_] = 0.;
@@ -566,6 +579,8 @@ void TGEM2MT::set_def(int q)
     mtp->CAb = 0;
     mtp->FDLf = 0;
     mtp->PGT = 0;
+    mtp->Tval = 0;
+    mtp->Pval = 0;
     mtp->nam_i = 0;
     mtp->for_i = 0;
     mtp->stld = 0;

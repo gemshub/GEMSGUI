@@ -76,16 +76,18 @@ typedef struct
    double
    // DC (species) in reactive subsystem
     *xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
-    *gam,    // activity coeffs of DC [nDCb]               -      -      +     +   
+    *gam,    // activity coeffs of DC [nDCb]               -      -      +     +
 
    // Phases in reactive subsystem
-    *xPH,  // total mole amounts of phases [nPHb]          -      -      +     +  
+    *xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
 
     *vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
-    *mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +  
+    *mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
     *bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
     *xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
 
+    *dul,  // upper kinetic restrictions [nDCb]           +      +      -     -
+    *dll,  // lower kinetic restrictions [nDCb]           +      +      -     -
   // IC (stoichiometry units)
     *bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
     *rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +

@@ -19,6 +19,10 @@ const double R_CONSTANT = 8.31451,
                           lg_to_ln = 2.302585093,
                             ln_to_lg = 0.434294481;
 
+enum volume_code {  /* Codes of volume parameter ??? */
+    VOL_UNDEF, VOL_CALC, VOL_CONSTR
+};
+                            
 SPP_SETTING pa_ = {
     "GEM-Selektor v2-PSI: Controls and defaults for numeric modules",
     {
@@ -66,6 +70,162 @@ TProfil::TProfil( int szN, int szM, int szK ):
     pmp = multi->GetPM();
 }
 
+/*-----------------------------------------------------------------*/
+// Interpolation over tabulated values (array y) using the Lagrange method
+// for extracting thermodynamic data in gemipm2k or in gem2mt
+// parameters:
+//  y[N] - discrete values of argument over rows (ascending order)
+//  x[M] - discrete values of arguments over columns (ascending order)
+//  d[N][M] - discrete values of a function of x and y arguments
+//  xoi - column (x) argument of interest ( x[0] <= xi <= x[M-1] )
+//  yoi - row (y) argument of interest  ( y[0] <= yi <= y[N-1] )
+//  N - number of rows in y array;
+//  M - number of columns in y array.
+//  Function returns an interpolated value of d(yoi,xoi) or 0 if
+//  yoi or xoi are out of range
+//
+double TProfil::LagranInterp(float *y, float *x, double *d, float yoi,
+                    float xoi, int M, int N)
+{
+    double s=0,z,s1[21];
+    int py, px, i=0, j, j1, k, jy, jy1;
+
+//    if (yoi < y[0])
+//        Error( GetName(), "E34RErun: yoi < y[0] (minimal row argument value)");
+//    if(xoi < x[0])
+//        Error( GetName(), "E35RErun: xoi < x[0] (minimal column argument value)");
+    py = N-1;
+    px = M-1;
+
+    if(yoi < y[0] || xoi < x[0] || yoi > y[py] || xoi > x[px] )
+       return s;  // one of arguments outside the range
+
+    for(j1=0;j1<N;j1++)
+        if (yoi >= y[j1] && yoi <= y[j1+1])
+            goto m1;
+    //z=yoi;
+    goto m2;
+m1:
+    for(i=0;i<M;i++)
+        if(xoi >= x[i] && xoi <= x[i+1])
+            goto m;
+    // z=xoi;
+    if(xoi <= x[px])
+        goto m;
+m2:
+    if(yoi <= y[py])
+        goto m;
+m:
+    if(i < M-px)
+        j=i;
+    else j=M-px-1;
+    if( j1 >= N-py)
+        j1=N-py-1;
+    jy1=j1;
+    for(jy=0;jy <= py; jy++)
+    {
+        s=0.;
+        for(i=0;i<=px;i++)
+        {
+            z=1; //z1=1;
+            for(k=0;k<=px;k++)
+                if(k!=i)
+                    z*=(xoi-x[k+j])/(x[i+j]-x[k+j]);
+            s+=d[i+j+(j1)*M]*z;
+        }
+        s1[jy]=s;
+        j1++;
+    }
+    s=0.;
+    for(i=0;i<=py;i++)
+    {
+        z=1;
+        for(k=0;k<=py;k++)
+            if(k!=i)
+                z*=(yoi-y[k+jy1])/(y[i+jy1]-y[k+jy1]);
+        s+=s1[i]*z;
+    }
+    return(s);
+}
+
+
+// Load Thermodynamic Data from MTPARM to MULTI using LagranInterp
+void TProfil::CompG0Load()
+{
+  int j, jj, k, jb, je=0;
+  double Gg, Vv;
+  float TC, P;
+
+  DATACH  *dCH = multi->data_CH;
+  DATABR  *dBR = multi->data_BR;
+
+  if( dCH->nTp <=1 && dCH->nPp <=1 )
+    return;
+
+  TC = dBR->T-C_to_K;
+  P = dBR->P;
+  for( jj=0; jj<dCH->nTp; jj++)
+    if( fabs( TC - dCH->Tval[jj] ) < dCH->Ttol )
+    {
+        TC = dCH->Tval[jj];
+        break;
+    }
+  for( jj=0; jj<dCH->nPp; jj++)
+   if( fabs( P - dCH->Pval[jj] ) < dCH->Ptol )
+   {
+        P = dCH->Pval[jj];
+        break;
+   }
+
+ if( fabs( pmp->TC - TC ) < 1.e-10 &&
+            fabs( pmp->P - P ) < 1.e-10 )
+   return;    //T, P not changed
+
+
+ pmp->T = pmp->Tc = TC + C_to_K;
+ pmp->TC = pmp->TCc = TC;
+ pmp->P = pmp->Pc = P;
+ //       pmp->denW = tpp->RoW;
+ //       pmp->denWg = tpp->RoV;
+ //       pmp->epsW = tpp->EpsW;
+ //       pmp->epsWg = tpp->EpsV;
+ pmp->RT = R_CONSTANT * pmp->Tc;
+ pmp->FRT = F_CONSTANT/pmp->RT;
+ pmp->lnP = 0.;
+ if( P != 1. ) /* ??????? */
+   pmp->lnP = log( P );
+
+ for( k=0; k<pmp->FI; k++ )
+ {
+   jb = je;
+   je += pmp->L1[k];
+   /*load t/d data from DC */
+    for( j=jb; j<je; j++ )
+    {
+      jj =  j * dCH->nPp * dCH->nTp;
+      Gg = LagranInterp( dCH->Pval, dCH->Tval, dCH->G0+jj,
+                          P, TC, dCH->nTp, dCH->nPp );
+      pmp->G0[j] = Cj_init_calc( Gg, j, k );
+    }
+ }
+ for( j=0; j<pmp->L; j++ )
+ {
+    jj =  j * dCH->nPp * dCH->nTp;
+    Vv = LagranInterp( dCH->Pval, dCH->Tval, dCH->V0+jj,
+                          P, TC, dCH->nTp, dCH->nPp );
+    switch( pmp->PV )
+    { /* make mol volumes of components */
+       case VOL_CONSTR:
+                    pmp->A[j*pmp->N] = Vv;
+       case VOL_CALC:
+       case VOL_UNDEF:
+                    pmp->Vol[j] = Vv  * 10.;
+                    break;
+    }
+ }
+}
+
+
 // GEM IPM calculation of equilibrium state in MULTI
 void
 TProfil::calcMulti()
@@ -77,6 +237,7 @@ TProfil::calcMulti()
     memset( pmp->R, 0, pmp->N*(pmp->N+1)*sizeof(double));
     memset( pmp->R1, 0, pmp->N*(pmp->N+1)*sizeof(double));
 
+    CompG0Load();
     if( AutoInitialApprox() == false )
         MultiCalcIterations();
 

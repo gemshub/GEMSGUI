@@ -57,7 +57,7 @@ typedef struct
    PsSdat,  //  Save Multi, DataCH and inital DataBR files as text files
    PsSbin,  //  Save Multi, DataCH and inital DataBR files as binary files
    PsNbin,  //  Save also the nodes DataBR array as a binary file
-   PsRes1,  // reserved
+   PsTPai,  //  Create T,P values in Tval, Pval using iterator(+) or enter(-)
 
    name[MAXFORMULA],  //  Name of GEM2MT task
    notes[MAXFORMULA]  //  Comments
@@ -108,8 +108,8 @@ typedef struct
    Asur;  // Specific surface area of the sorbent (for adsorbed species)
   float
 // Iterators for MTP interpolation array in DataCH
-   Pai[3],  // Pressure P, bar: start, end, increment for MTP array in DataCH
-   Tai[3],  // Temperature T, C: start, end, increment for MTP array in DataCH
+   Pai[4],  // Pressure P, bar: start, end, increment for MTP array in DataCH , Ptol
+   Tai[4],  // Temperature T, C: start, end, increment for MTP array in DataCH , Ttol
    Tau[3],  // Physical time iterator
 // graphics
    size[2][4], // Graph axis scale for the region and the fragment
@@ -126,6 +126,9 @@ typedef struct
 //  More to be added here for seq reactors?
     ;
  float
+   *Tval,   // discrete values of T [nTai]
+   *Pval,   // discrete values of P [nPai]
+
    *CIb, // [nIV][N] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
    (*FDLf)[2], // [nFD][2] Part of the flux defnition list (MPG quantities)
@@ -223,26 +226,7 @@ protected:
     void gen_task();
     void make_A( int siz_, char (*for_)[MAXFORMUNITDT] );
     void Bn_Calc();
-
-
-/*    // internal
-    bool test_sizes();
-    void mt_initiate( bool mode = true );   // must be changed with DK
-    void mt_next();
-    void calc_eqstat();
-    void mt_text_analyze();                 // translate &
-    void CalcEquat( int type_ );            // calculate RPN
-    void Biv_Calc();
-    void MT_Calc();
-
-    // last level
-    void Init_Generation();
-    void build_IV();         // generate initial systems
-    void distribute_IV();    // distribute initial systems
-    void save_DataCH();      // Save multi and dataCH files
-    void save_IV();          // save initial systems as DataBR files
-    void Iterate();          // analyse the results (change DK)
-*/
+    void gen_TPval();
 
 public:
 

@@ -45,11 +45,13 @@ typedef struct
     *xPH;   // PHNL indices in DATABR phase vectors [nPHb]
 
   float 
+    *Tval,   // discrete values of T [nTp]
+    *Pval,   // discrete values of P [nPp]
     *A;     // DC stoichiometry matrix A composed of a_ij [nIC][nDC]
             // float reduces storage demand here 
   double 
-    Tmin, Tmax, Tstep, Ttol, // Temperature T, K, min.,-max., step, tolerance
-    Pmin, Pmax, Pstep, Ptol, // Pressure P, bar, min.,-max., step, tolerance
+    Ttol, // Temperature T, K, tolerance
+    Ptol, // Pressure P, bar, tolerance
     dRes1, dRes,
 
 // Data vectors

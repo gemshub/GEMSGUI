@@ -361,7 +361,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    Pai[0] = Pai[1] = 1.;
    Tai[2] = Pai[2] = 0.;
 
-   multi->makeStartDataChBR( aSelIC, aSelDC, aSelPH, 1, 1, Tai, Pai );
+   multi->makeStartDataChBR( aSelIC, aSelDC, aSelPH, 1, 1, 1., 1.,Tai, Pai );
 
 // out dataCH&DataBR files
    Path_ = u_makepath( dir, name, "dch" );

@@ -102,7 +102,7 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,
     for( int jj=0; jj<mup->L; jj++ )
     {
       G0[jj] =  tpp->G[jj];
-      V0[jj] =  tpp->Vm[jj]* 10.;
+      V0[jj] =  tpp->Vm[jj];
       if( H0 && tpp->H )
         H0[jj] =  tpp->H[jj];
       if( Cp0 && tpp->Cp )
@@ -1109,71 +1109,6 @@ NEXT_PHASE:
     ErrorIf( iRet>0, "Multi", "Error in DCC code.");
 }
 
-// Calc value cj (G0) by type of DC and standart value g(T,P)
-// k - index of phase, j - index DC in phase
-// if error code return 777777777.
-double TProfil::Cj_init_calc( double g0, int j, int k )
-{
-    double G, YOF;
-
-    G = g0/pmp->RT;
-    /*  if( k < pmp->FIs )  */
-    YOF = pmp->YOF[k];
-    /* учесть единицы измерения!!!!! */
-    switch( pmp->DCC[j] )
-    { /* Aqueous electrolyte */
-    case DC_AQ_PROTON:
-    case DC_AQ_ELECTRON:
-    case DC_AQ_SPECIES:
-        G += pmp->ln5551;
-        /* calc mol weight of solvent !!!!!!!!!!!!!!!!!!!!!!!!!!! */
-    case DC_AQ_SOLVCOM:
-    case DC_AQ_SOLVENT:
-        if( syp->PYOF != S_OFF )
-            pmp->GEX[j] += YOF;
-        break;
-        /* as phase- test add ln P general !!!!!!!!!!!!!!!!!!!!!! */
-    case DC_GAS_COMP: /* gases exept H2O and CO2 */
-    case DC_GAS_H2O: /* index to switch off? */
-    case DC_GAS_CO2:
-    case DC_GAS_H2:
-    case DC_GAS_N2:
-        if( pmp->Pparc[j] != 1.0 && pmp->Pparc[j] > 1e-30 )
-            G += log( pmp->Pparc[j] );
-        /* Solution non-electrolyte */
-    case DC_SCP_CONDEN: /*a single-component phase */
-    case DC_SOL_IDEAL:
-    case DC_SOL_MINOR:
-    case DC_SOL_MAJOR:
-    case DC_SUR_MINAL:
-    case DC_SUR_CARRIER:
-    case DC_PEL_CARRIER:
-        if( syp->PYOF != S_OFF )
-            pmp->GEX[j] += YOF;
-        break;
-        /* Sorption phases */
-    case DC_SSC_A0:
-    case DC_SSC_A1:
-    case DC_SSC_A2:
-    case DC_SSC_A3:
-    case DC_SSC_A4:
-    case DC_WSC_A0:
-    case DC_WSC_A1:
-    case DC_WSC_A2:
-    case DC_WSC_A3:
-    case DC_WSC_A4:
-    case DC_SUR_GROUP:
-    case DC_SUR_COMPLEX:
-    case DC_SUR_IPAIR:
-    case DC_IESC_A:
-    case DC_IEWC_B:
-        G += pmp->ln5551;
-        break;
-    default: /* error code */
-        return 7777777.;
-    }
-    return G += pmp->GEX[j];
-}
 
 // End of file ms_mupmph.cpp
 // --------------------------------------------------------------------
