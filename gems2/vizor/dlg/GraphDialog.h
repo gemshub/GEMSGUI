@@ -101,6 +101,7 @@ public:
     ~GraphDialog();
 
 
+    void ShowNew();
     void Apply();    // Update changes
     void AddPoint( int nPlot, int nPoint ); // Add new point to graph
 

@@ -173,6 +173,7 @@ public:
   ~GraphWindow();
 
   void AddPoint( int nPlot, int nPoint ); // Add new point to graph
+  void Show(); // new show all lines
   GraphData *getGraphData() const;
 
 };

@@ -49,7 +49,7 @@ typedef struct
     Istat, // PROCES status: 0-indefinite; 1-start; 2-run; 4-end
     PsTP,  // Is TPV of system changing in the process (+ -)
     PsBC,  //  Is there a change in bulk composition (+ -)
-    PsRS,  // Are there changes in constraints or metastability parameters (+ -)
+    PsRT,  // Are time dependent calculation and plotting mode (+ -)
     PsSY,  // Save changed SYSTEM definition records to PDB (+ -)
     PsGT,  // Is this a Sequential Reactor simulation (+ -)
     PsGR,  // Use graphics window (+ -)
@@ -73,8 +73,10 @@ typedef struct
     PvEF   // Use empirical data for graphics
     ;
     short  // N of points controled parameters of process
-    // !! Ntim, Nnu,  NT, NV, NphH, Npe, R1 - not use; NP - intermal
-    Ntim,Nxi,Nnu, // N of points: control parameter(s); time; process extent variable(s)
+    // !!  Nnu,  NT, NV, NphH, Npe, R1 - not use; NP - intermal
+    Ntim,Nxi,Nnu, // Ntim Number of mass-transport integration points
+                  // Nxi number of points to be generated ;
+                  // process extent variable(s)
     NP,NT,NV,     // N of points: along P; along T; along V
     NpH, Npe, R1, // N of inverse titration points: along pH; along pe(Eh);reserved
     Mode,    // Mode of points indexation { 0 - 8 }
@@ -176,6 +178,8 @@ protected:
 
     bool pe_dimValid();
     void pe_initiate();
+    void pe_reset();
+
     void pe_next();
     void pe_qekey();
     void pe_test();

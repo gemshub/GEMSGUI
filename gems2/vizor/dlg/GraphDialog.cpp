@@ -199,6 +199,13 @@ GraphDialog::resizeEvent(QResizeEvent* qpev)
     update();
 }
 
+void GraphDialog::ShowNew()
+{
+    plot->Clear();
+    Show();
+    plot->update();
+    qApp->processEvents();
+}
 
 void
 GraphDialog::CmLegend()
@@ -253,6 +260,7 @@ GraphDialog::Apply()
     plot->update();
     pGrpLegend->update();
 }
+
 
 void
 GraphDialog::AddPoint( int nPlot, int nPoint )

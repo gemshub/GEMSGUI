@@ -126,7 +126,7 @@ void TProcess::ods_link( int q)
     //aObj[ o_pepcode].SetPtr( pe[q].pcode );
     aObj[ o_pepsts ].SetPtr( &pe[q].Istat );/*a 12*/
     aObj[ o_pepvv ].SetPtr(  &pe[q].Pvtm ); /*a 12*/
-    aObj[ o_pentxi ].SetPtr( &pe[q].Nxi ); /*i 1*/
+    aObj[ o_pentxi ].SetPtr( &pe[q].Ntim ); /*i 2*/
     aObj[ o_penpvt ].SetPtr( &pe[q].Nnu );  /*i 4*/
     aObj[ o_penphpe].SetPtr( &pe[q].NpH );  /*i 3*/
     aObj[ o_pemode ].SetPtr( &pe[q].Mode ); /*i 1*/
@@ -518,7 +518,7 @@ bool TProcess::pe_dimValid()
     pep->dNP = pep->Nxi;
     pep->dNT = pep->Nxi;
     pep->dNV = pep->Nxi;
-    pep->NTau = pep->Nxi;
+    pep->NTau = pep->Ntim;
     pep->NpXi = pep->Nxi;
     pep->NNu = pep->Nxi;
 
@@ -531,6 +531,12 @@ bool TProcess::pe_dimValid()
     {
         i=false;
         pep->Nmc = 1;
+    }
+
+    if( pep->PsRT != S_OFF && pep->Ntim <= 0 )
+    {
+        i=false;
+        pep->Ntim = 1;
     }
 
     if(  !pep->NR1 ) pep->NR1 = pep->Nxi;
@@ -562,7 +568,23 @@ bool TProcess::pe_dimValid()
         pep->PsUX = S_ON;
     }
 
-    if( pep->PsIN !=S_OFF && pep->PsPro != S_OFF)
+    if( pep->PsRT != S_OFF  )
+    {
+        pep->PsBC = S_ON;
+        pep->PsUX = S_ON;
+        pep->PsEqn = S_ON;
+        pep->PsGR = S_ON;
+    }
+
+    int ii=0;
+    if( pep->PsIN !=S_OFF )
+     ii++;
+    if( pep->PsPro !=S_OFF )
+     ii++;
+    if( pep->PsRT !=S_OFF )
+     ii++;
+
+    if( ii > 1 )
     {
         i=false;
         vfMessage(window(), GetName(), "Invalid mode of PROCES simulations", vfErr);
@@ -592,6 +614,25 @@ void TProcess::pe_initiate()
     pep->NP = 0;
 }
 
+// set begin initalization
+void TProcess::pe_reset()
+{
+    pep->Loop = 1;
+    pep->Nst = START_;
+    pep->j = START_;
+    pep->c_nrk = START_;
+    pep->c_tm = pep->tmi[START_];
+    pep->c_NV = pep->NVi[START_];
+    pep->c_P = pep->Pi[START_];
+    pep->c_T = pep->Ti[START_];
+    pep->c_V = pep->Vi[START_];
+    pep->c_pXi = pep->pXii[START_];
+    pep->c_Nu = pep->Nui[START_];
+    pep->c_pH = pep->pHi[START_];
+    pep->c_pe = pep->pei[START_];
+    pep->NP = 0;
+}
+
 // recalc working parametres, if no math script is given
 void TProcess::pe_next()
 {
@@ -605,7 +646,7 @@ void TProcess::pe_next()
     pep->c_P += pep->Pi[STEP_];
     pep->c_T += pep->Ti[STEP_];
     pep->c_V += pep->Vi[STEP_];
-    pep->c_Tau += pep->Taui[STEP_];
+//    pep->c_Tau += pep->Taui[STEP_];
     pep->c_pXi += pep->pXii[STEP_];
     pep->c_Nu += pep->Nui[STEP_];
     pep->c_pH += pep->pHi[STEP_];
@@ -729,7 +770,7 @@ TProcess::pe_test()
         pep->j = nIt /*+1*/;
     }
     pep->c_nrk = min( nIt, (short)(pep->NR1-1));
-
+/*
     if( pep->Ntm>nIt && pep->Pvtm != S_OFF ) pep->tm[nIt] = pep->c_tm;
     if( pep->dNNV>nIt && pep->PvNV != S_OFF ) pep->nv[nIt] = pep->c_NV;
     if( pep->dNP>nIt && pep->PvP != S_OFF ) pep->P[nIt] = pep->c_P;
@@ -738,7 +779,7 @@ TProcess::pe_test()
     if( pep->NTau>nIt && pep->PvTau != S_OFF ) pep->Tau[nIt] = pep->c_Tau;
     if( pep->NpXi>nIt && pep->PvpXi != S_OFF ) pep->pXi[nIt] = pep->c_pXi;
     if( pep->NNu>nIt && pep->PvNu != S_OFF )  pep->Nu[nIt] = pep->c_Nu;
-
+*/
     // test increments
 
     if( pep->tmi[STEP_]!= 0 )
@@ -750,35 +791,35 @@ TProcess::pe_test()
           pep->Loop = 0;
 
     if( pep->Pi[STEP_]!= 0 )
-      if( fabs( pep->c_P - pep->Pi[STOP_]) < fabs(pep->Pi[STEP_]) )
+      if( fabs( pep->c_P - pep->Pi[STOP_]) < 1e-30 )
           pep->Loop = 0;
 
     if( pep->Ti[STEP_]!= 0 )
-      if( fabs( pep->c_T - pep->Ti[STOP_]) < fabs(pep->Ti[STEP_]) )
+      if( fabs( pep->c_T - pep->Ti[STOP_]) < 1e-30 )
           pep->Loop = 0;
 
     if( pep->Vi[STEP_]!= 0 )
-      if( fabs( pep->c_V - pep->Vi[STOP_]) < fabs(pep->Vi[STEP_]) )
+      if( fabs( pep->c_V - pep->Vi[STOP_]) < 1e-30 )
           pep->Loop = 0;
-
+////!!!!!!
     if( pep->Taui[STEP_]!= 0 )
-      if( fabs( pep->c_Tau - pep->Taui[STOP_]) < fabs(pep->Taui[STEP_]) )
+      if( fabs( pep->c_Tau - pep->Taui[STOP_]) < 1e-30 )
           pep->Loop = 0;
 
     if( pep->pXii[STEP_]!= 0 )
-      if( fabs( pep->c_pXi - pep->pXii[STOP_]) < fabs(pep->pXii[STEP_]) )
+      if( fabs( pep->c_pXi - pep->pXii[STOP_]) < 1e-30 )
           pep->Loop = 0;
 
    if( pep->Nui[STEP_]!= 0 )
-      if( fabs( pep->c_Nu - pep->Nui[STOP_]) < fabs(pep->Nui[STEP_]) )
+      if( fabs( pep->c_Nu - pep->Nui[STOP_]) < 1e-30 )
           pep->Loop = 0;
 
    if( pep->Nui[STEP_]!= 0 )
-      if( fabs( pep->c_pH - pep->Nui[STOP_]) < fabs(pep->Nui[STEP_]) )
+      if( fabs( pep->c_pH - pep->Nui[STOP_]) < 1e-30 )
           pep->Loop = 0;
 
    if( pep->pei[STEP_]!= 0 )
-      if( fabs( pep->c_pe - pep->pei[STOP_]) < fabs(pep->pei[STEP_]) )
+      if( fabs( pep->c_pe - pep->pei[STOP_]) < 1e-30 )
           pep->Loop = 0;
     /////
 
@@ -1032,7 +1073,7 @@ TProcess::RecCalc( const char *key )
         // Stop Process from Andy Sveta
 
         // make system ( SyTest() always in CalcEqstat() )
-        if( pep->PsBC != S_OFF || pep->PsRS != S_OFF)
+        if( pep->PsBC != S_OFF )
         {
             if( pep->PsGT != S_OFF ) // evaporation
                 memcpy( TSysEq::pm->ssp->PhmKey, pep->stkey, EQ_RKLEN );
@@ -1063,14 +1104,33 @@ TProcess::RecCalc( const char *key )
 
      // set results
 
-        if(  pep->PsGR != S_OFF )
+        if(  pep->PsGR != S_OFF  )
             rpn[1].CalcEquat();
         if( pep->stl )
             memcpy( pep->stl+pep->c_nrk, pep->stkey, EQ_RKLEN );
 
         if( pointShow >= 0 )
-          CalcPoint( pep->c_nrk);
+         if( pep->PsRT == S_OFF )
+           CalcPoint( pep->c_nrk);
+         else  // masstransport show
+            {
+              if( pep->Nst >= pep->Nxi-1 )
+              {
+                // show full graph
+                if( gd_gr )
+                  gd_gr->Show();
 
+                // export script
+
+
+                pe_reset();
+                pep->i++;
+                pep->c_Tau += pep->Taui[STEP_];
+                if( pep->i >= pep->Ntim )
+                    pep->Loop = false;
+                continue;
+              }
+           }
         if( !(pep->PsPro != S_OFF && pep->NP == 1 ))
             pep->Nst++;
 

@@ -173,11 +173,13 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
                TPlotLine* aLinesDesc, short *aAxisType,
                const char *aXName, const char *aYName ):
         title(aTitle), axisType(aAxisType[0]),
-        xName(aXName), yName(aYName), isBackgr_color(true)
+        isBackgr_color(true)
 {
     uint ii;
     int jj, nLines;
 
+    xName = gstring( aXName, 0, 9);
+    yName = gstring( aYName, 0, 9);
     // Insert Plots and lines description
     plots.Clear();
     lines.Clear();
@@ -212,7 +214,7 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
                const char *aXName, const char *aYName,
                TCStringArray line_names):
         title(aTitle), axisType(5),
-        xName(aXName), yName(aYName), isBackgr_color(false)
+        isBackgr_color(false)
 {
     uint ii;
     int jj, nLines;
@@ -220,6 +222,8 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
     float minX, maxX, minY, maxY;
 
 
+    xName = gstring( aXName, 0, 9);
+    yName = gstring( aYName, 0, 9);
     // Insert Plots and lines description
     plots.Clear();
     lines.Clear();
@@ -336,6 +340,12 @@ void
 GraphWindow::AddPoint( int nPlot, int nPoint )
 {
    graph_dlg->AddPoint( nPlot, nPoint );
+}
+
+void
+GraphWindow::Show()
+{
+   graph_dlg->ShowNew();
 }
 
 
