@@ -825,17 +825,24 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
                 if( XSkC < pa.p.IEPS )
                     XSkC = pa.p.IEPS;
                 xj0 = XS0 - XSkC;    /* expected moles of this sorbate */
-                if( xj0 < pa.p.IEPS )
+                if(  xj0 < pa.p.IEPS )
                     xj0 = pa.p.IEPS;  /* ensuring that it is non-negative */
+
+                if(xj>= xj0) xj=xj0-1e-9;  // testing
+
                 if( xj * 2 <= xj0 )
                     ISAT = 0.0;
                 else
                 {
-                    q1 = xj0 - xj;
-                    if( q1 > pa.p.IEPS )
+                  q1 = xj0 - xj;
+                  if( pa.p.PC == 2 && !pmp->W1  || pa.p.PC != 2 )
+                  {  if( q1 > pa.p.IEPS )
                         q2 = log( q1 );
                     else q2 = log( pa.p.IEPS );
-                    ISAT = log( xj ) - q2;
+                  }
+                  else
+                     q2 = log( q1 );
+                  ISAT = log( xj ) - q2;
                     /*                     q1 = ( XS0 - XSkC + xj ) / xj;
                                            if( q1 > 1.0 )
                                            {  q2 = q1;               // How did it work?
@@ -849,27 +856,37 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
             case SAT_NCOMP: /* Non-competitive surface species */
                 xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
+
+                if(xj>= xj0) xj=xj0-1e-9;  // testing
+               // if(xj>= xj0) xj=xj0*(1.0-pa.p.IEPS);  // testing
+
                 if( xj * 2 <= xj0 )    // Linear adsorption
                     ISAT = 0.0;
                 else
                 {
                     q1 = xj0 - xj;
                     q2 = xj0 * pa.p.IEPS; // eps6
-                    if( q1 > q2 )
-                       ISAT = log( xj ) - log( q1 );
+                    if( pa.p.PC == 2 && pmp->W1 )
+                      ISAT = log( xj ) - log( q1 );
                     else
-                    {             // What to do ?
-                       ISAT = log( xj ) - log( q2 );
-                       if( ISAT < OSAT )
-                           ISAT -= log(pa.p.IEPS);
-                    }   // 10 lines above fixed by KDA 6.07.01
-                }   
+                    { if( q1 > q2 )
+                       ISAT = log( xj ) - log( q1 );
+                      else
+                     {             // What to do ?
+                        ISAT = log( xj ) - log( q2 );
+                        // if( ISAT < OSAT )
+                        //    ISAT -= log(pa.p.IEPS);
+                     }   // 10 lines above fixed by KDA 6.07.01
+                   }
+                }
                 pmp->lnGam[j] = ISAT;
                 break;
             case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) */
                 XSkC = XSk - xj;
                 XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; /* in moles */
+
+                if(XSk>= XS0  || XSkC>= XS0 ) XSkC=XS0- pa.p.IEPS;  // testing
                 if( pmp->MASDJ[j] <= 0.0 )
                     SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
                             pmp->MASDT[k][ist];

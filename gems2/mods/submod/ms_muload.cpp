@@ -1145,7 +1145,7 @@ STEP_POINT();
 ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if( eRet )
     {   if(eRet==2 )
-        { if( pmp->DX<1e-4 )
+        { if( pmp->DX<1e-3 )
             {
                pmp->DX *= 10.;
                goto mEFD;
@@ -1168,7 +1168,7 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
             goto AGAIN;
         }  */
         else
-        { if( pmp->DHBM<1e-6 )
+        { if( pmp->DHBM<1e-5 )
             {
                pmp->DHBM *= 10.;
                goto mEFD;
@@ -1206,15 +1206,19 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
     /* call Selekt2() */
    PhaseSelect();
+   if( pa.p.PC == 2 )
+       XmaxSAT_IPM2();  // Install upper limits to xj of surface species
+
    if( !pmp->MK )
      if( RepeatSel<3 )
        { RepeatSel++;
          goto mEFD;
        }
      else
-       if( !vfQuestion(window(), "PhaseSelect : warning",
-            "Insert phase cannot be reached. Continue?" ))
-             return false;
+         cout<< "PhaseSelect : Insert phase cannot be reached."<< endl;
+    //   if( !vfQuestion(window(), "PhaseSelect : warning",
+    //        "Insert phase cannot be reached. Continue?" ))
+    //         return false;
 
    MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
 // STEPWISE (4) Stop point after PhaseSelect()
@@ -1228,7 +1232,7 @@ STEP_POINT();
     { pmp->W1++;           // IPM-2 precision algorithm - 1st run
       goto mEFD;
     }
-   if(pmp->PZ && pmp->W1 && pmp->W1 < pa.p.DW )
+   if(pmp->PZ && pmp->W1 && pmp->W1 <  pa.p.DW )
     for(i=0;i<pmp->N-pmp->E;i++)
      if( fabs(pmp->C[i]) > pmp->DHBM // * pa.p.GAS
          || fabs(pmp->C[i]) > pmp->B[i] * pa.p.GAS )
@@ -1252,12 +1256,11 @@ STEP_POINT();
                goto ITDTEST;
            buf = "Prescribed balance precision cannot be reached\n for independent components: ";
            buf += buf1;
-           buf += "Continue?";
-          if( !vfQuestion(window(), "IPM : warning",
-               buf.c_str() ))
-        //  "Prescribed mass balance precision cannot be reached. Continue?" ))
-             break;
-           goto ITDTEST;
+        //   buf += "Continue?";
+        //  if( !vfQuestion(window(), "IPM : warning", buf.c_str() ))
+        //      break;
+          cout<< buf.c_str()<< endl;
+          goto ITDTEST;
        }
 
 ITDTEST: /* test flag modes */
@@ -1322,6 +1325,136 @@ void TProfil::MultiCalcIterations()
 
 // End of file ms_muload.cpp
 // ----------------------------------------------------------------
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Calculation of max.moles of surface species for SAT stabilization
+*  to improve IPM-2 convergence at high SAT values  KD 08.03.02
+*  xj0 values are placed as upper kunetic constraints 
+*/
+void TProfil::XmaxSAT_IPM2( void )
+{
+    int i, j, k, jb, je=0, ist, Cj, iSite[6];
+    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, 
+            SATst, a, xjn, q1, q2;
+
+  if(!pmp->DUL )   // not possible to install upper kinetic constraint!
+      return;
+
+  for( k=0; k<pmp->FIs; k++ )
+  { /* loop on phases */
+     jb = je;
+     je += pmp->L1[k];
+     if( pmp->PHC[k] != PH_SORPTION )
+          continue;
+
+    if( pmp->XFA[k] < pmp->DSM ) // No sorbent retained by the IPM 
+        continue;
+    if( pmp->XF[k]-pmp->XFA[k] < pmp->lowPosNum /* *10. */ )
+        continue;  /* No surface species */
+
+    for(i=0; i<6; i++)
+        iSite[i] = -1;
+
+    /* Extraction of site indices */
+    for( j=jb; j<je; j++ )
+    {
+        if( pmp->SATT[j] != SAT_SITE )
+        {
+            if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_MINAL ||
+                    pmp->DCC[j] == DC_SUR_CARRIER ) continue;
+            ist = pmp->SATNdx[j][0] / MSPN; // MSPN = 2 - number of EDL planes
+            continue;
+        }
+        ist = pmp->SATNdx[j][0] / MSPN;
+        iSite[ist] = j;
+    }
+
+    for( j=jb; j<je; j++ )
+    { /* Loop for DC */
+        if( pmp->X[j] <= pmp->lowPosNum /* *10. */ )
+            continue;  /* This surface DC has been killed by IPM */
+        switch( pmp->DCC[j] )  /* code of species class */
+        {
+        default: /* pmp->lnGam[j] = 0.0; */
+            continue;
+        case DC_SSC_A0:
+        case DC_SSC_A1:
+        case DC_SSC_A2:
+        case DC_SSC_A3:
+        case DC_SSC_A4:
+        case DC_WSC_A0:
+        case DC_WSC_A1:
+        case DC_WSC_A2:
+        case DC_WSC_A3:
+        case DC_WSC_A4:
+        case DC_SUR_SITE:
+        case DC_IEWC_B:
+        case DC_SUR_COMPLEX:
+        case DC_SUR_IPAIR:
+        case DC_IESC_A:
+            /* Calculate ist - index of surface type */
+            ist = pmp->SATNdx[j][0] / MSPN;
+            /* Cj - index of carrier DC */
+            Cj = pmp->SATNdx[j][1];
+            if( Cj < 0 )
+            {  /* Assigned to the whole sorbent */
+                XVk = pmp->XFA[k];
+                Mm = pmp->FWGT[k] / XVk;
+            }
+            else
+            { /* Assigned to one of the sorbent end-members */
+                XVk = pmp->X[Cj];
+                if( XVk < pmp->DSM/10.0 )
+                    continue; /* This end-member is zeroed off by IPM */
+                Mm = pmp->MM[Cj] * XVk/pmp->XFA[k];  // mol.mass
+            }
+            XSk = pmp->XFTS[k][ist]; /* Tot.moles of sorbates on surf.type */
+            xj = pmp->X[j];  /* Current moles of this surf.species */
+            a=1.0; /* Frumkin factor - reserved for extension to FFG isotherm */
+            switch( pmp->SATT[j] )
+            {
+            case SAT_COMP: /* Competitive surface species on a surface type */
+                /* a = fabs(pmp->MASDJ[j]); */
+                if( iSite[ist] < 0 )
+                    xjn = 0.0;
+                else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
+                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; /* expected total in moles */
+                XSkC = XSk - xjn - xj; /* occupied by the competing species;
+  	                                   this sorbate cannot compete to itself */
+                /* New variant */
+                if( XSkC < pa.p.IEPS )
+                    XSkC = pa.p.IEPS;
+                xj0 = XS0 - XSkC;    /* expected moles of this sorbate */
+                if( xj0 < pa.p.IEPS )
+                    xj0 = pa.p.IEPS;  /* ensuring that it is non-negative */
+// Check!
+
+                pmp->DUL[j] = xj0 - 1e-9; // XS0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+                break;
+
+            case SAT_NCOMP: /* Non-competitive surface species */
+                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; /* in moles */
+
+                pmp->DUL[j] = xj0 - 1e-9; // xj0*(1.0-pa.p.IEPS); //pa.p.IEPS;
+                break;
+
+            case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) */
+                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; /* in moles */
+
+                pmp->DUL[j] =  XS0-1e-9; // xj0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+                break;
+            case SAT_INDEF: /* No SAT calculation */
+            default:        /* pmp->lnGam[j] = 0.0; */
+                break;
+            }
+        }
+     }  /* j */
+  } /* k */
+}
+
+// Don't forget to clear such pmp->DUL constraints on entering simplex IA!
 
 
 
