@@ -360,8 +360,8 @@ void Formuan::icadd(  const char *icn,
     uint ii=0;
 
     memset( ICkey, ' ',MAXICNAME+MAXSYMB );
-    strncpy( ICkey, icn, min( strlen(icn),MAXICNAME) );
-    strncpy( ICkey+MAXICNAME, iso, min(strlen(iso),MAXSYMB) );
+    strncpy( ICkey, icn, min( strlen(icn),(size_t)MAXICNAME) );
+    strncpy( ICkey+MAXICNAME, iso, min(strlen(iso),(size_t)MAXSYMB) );
     ICkey[MAXICNAME+MAXSYMB] = '\0';
     if( lev )
         for(int i=0; i<lev; i++ )

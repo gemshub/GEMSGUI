@@ -770,7 +770,7 @@ TDataBase::MakeKey( unsigned char nRTwrk, char *pkey, ... )
             break;
         case K_IMM:  // field in gstring
             imf = va_arg( Marker, char * );
-            strncat( pkey, imf, min( strlen(imf), rkflen ));
+            strncat( pkey, imf, min( strlen(imf), (size_t)rkflen ));
             break;
         case K_ACT:  // get field from  PRIE request
             rts = nRTwrk;

@@ -399,7 +399,7 @@ int TProfil::find_icnum( char *name, int LNmode )
     { /* this is ordinary IC */
         ICs[MAXICNAME] = IC_ELEMENT;
     }
-    memcpy( ICs, nbg, min( (unsigned int)6, strlen( nbg )));
+    memcpy( ICs, nbg, min( (size_t)6, strlen( nbg )));
     aFo.fixup_ics( ICs );
     if( LNmode == 1 )
     {

@@ -23,21 +23,6 @@
 #include "v_dbm.h"
 
 
-class TSubModule;
-
-// TSubModule and TCModule container
-class TModuleList:
-            public TIArray<TSubModule>
-{
-public:
-    TModuleList():
-            TIArray<TSubModule>(40)
-    {}
-
-    ~TModuleList();
-};
-
-
 class TCModuleImp;
 class QWidget;
 
@@ -295,6 +280,19 @@ public:
         Filter = filt;
     }
 
+};
+
+
+// TSubModule and TCModule container
+class TModuleList:
+            public TIArray<TSubModule>
+{
+public:
+    TModuleList():
+            TIArray<TSubModule>(40)
+    {}
+
+    ~TModuleList();
 };
 
 extern TModuleList aMod;

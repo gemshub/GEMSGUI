@@ -19,7 +19,7 @@
 //
 const char *GEMS_SP_HTML = "gm_profil";
 
-#ifdef __unix__
+#ifdef __unix
 #include <unistd.h>
 #endif
 

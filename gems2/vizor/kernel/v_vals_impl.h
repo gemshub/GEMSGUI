@@ -348,3 +348,4 @@ TVal<T>::VerifyString(const char* s, T& v)
 */
 
 #endif // _v_vals_impl_h_
+

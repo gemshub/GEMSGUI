@@ -28,6 +28,17 @@ using namespace std;
 #include "array.h"
 #include "verror.h"
 
+#ifdef __APPLE__
+
+#ifndef __unix
+#define __unix
+#endif
+#ifndef __FreeBSD
+#define __FreeBSD
+#endif
+
+#endif
+
 const int MAXKEYWD = 6+1;
 typedef TArrayF<gstring> TCStringArray;
 
@@ -150,4 +161,10 @@ inline char* gcvt(double num, size_t digit, char* buf)
 }
 
 #endif  // __FreedBSD
+
+#ifdef __APPLE__
+#include <algobase.h>
+#endif
+
 #endif // _v_user_h_
+
