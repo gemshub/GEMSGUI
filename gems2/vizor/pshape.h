@@ -137,6 +137,23 @@ public:
     void ConvertCoordinates();
 };
 
+/*!
+    Class represents some Text on the plot
+    Uses only screen coordinates
+*/
+class PText:
+            public PShape
+{
+    QPoint point;
+    QString text;
+
+public:
+    PText(TPlotWin* par, QPoint pi, QColor col, QString text);
+
+    virtual void paint(QPainter& dc);
+    void ConvertCoordinates() {}
+};
+
 
 /*!
     Class represents Grid on the plot
@@ -183,6 +200,7 @@ class TPlotWin:
     QRect	canvasRect;
     gstring	title;
     TIArray<PShape> shapes;
+    int gridCount;
 
 protected:
     virtual void paintEvent(QPaintEvent* qpev);
@@ -193,18 +211,25 @@ public:
     ~TPlotWin();
 
     void setPlotBounds(FPoint pt1, FPoint pt2);
+    void setGridCount(int numGrids);
+    void init();
+
     void PaintToDC(QPainter& dc, QRect canvas);
     void paintGrid(QPainter& dc);
-    void Clear();
+    void Clear() {
+	shapes.Clear();
+    }
 
-    int Add(PShape* p)
-    {
+    int Add(PShape* p) {
         p->ConvertCoordinates();
         return shapes.Add(p);
     }
 //    void mul(const FPoint& f, QPoint& to);
     void RealToVisible(const FPoint& f, QPoint& to);
     const QRect& getCanvasRect() { return canvasRect; }
+
+    void dragEnterEvent(QDragEnterEvent* event);
+    void dropEvent(QDropEvent* event);
 };
 
 

@@ -8,175 +8,218 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>610</width>
-            <height>451</height>
+            <width>628</width>
+            <height>496</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
-            <width>610</width>
-            <height>450</height>
+            <width>620</width>
+            <height>480</height>
         </size>
     </property>
     <property name="caption">
-        <string>GraphDialogData</string>
+        <string>GraphDemo Plotting</string>
     </property>
-    <widget class="QGroupBox">
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>pGroupBox</cstring>
+            <cstring>Layout2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>480</x>
+                <x>10</x>
                 <y>10</y>
-                <width>110</width>
-                <height>140</height>
+                <width>604</width>
+                <height>470</height>
             </rect>
         </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>5</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="title">
-            <string></string>
-        </property>
-        <widget class="QPushButton">
+        <grid>
             <property name="name">
-                <cstring>pBtn1</cstring>
+                <cstring>unnamed</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>0</y>
-                    <width>110</width>
-                    <height>33</height>
-                </rect>
+            <property name="margin">
+                <number>0</number>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
+            <property name="spacing">
+                <number>6</number>
             </property>
-            <property name="text">
-                <string>C&amp;lose</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Closes the plot and goes back to the parent window</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>pFragmentBtn</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>35</y>
-                    <width>110</width>
-                    <height>33</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Fragment</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Shows a fragment of the plot - set up size and position under Configure...</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>pBtn3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>70</y>
-                    <width>110</width>
-                    <height>33</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Print...</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Prints the plot and its legend (under construction)</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>pBtn4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>106</y>
-                    <width>110</width>
-                    <height>33</height>
-                </rect>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Customize...</string>
-            </property>
-            <property name="toggleButton">
-                <bool>false</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Press to set up axii, colors, and graph legend symbols</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>pGrpLegend</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>480</x>
-                <y>160</y>
-                <width>110</width>
-                <height>270</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>Box</enum>
-        </property>
-        <property name="title">
-            <string>Legend</string>
-        </property>
+            <widget class="QButtonGroup" row="1" column="0">
+                <property name="name">
+                    <cstring>ButtonGroup1</cstring>
+                </property>
+                <property name="title">
+                    <string></string>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pBtn1</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>10</y>
+                            <width>143</width>
+                            <height>28</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;lose</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Closes the plot and goes back to the parent window</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pFragmentBtn</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>160</x>
+                            <y>10</y>
+                            <width>130</width>
+                            <height>28</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Fragment</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Shows a fragment of the plot - set up size and position under Configure...</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pBtn3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>300</x>
+                            <y>10</y>
+                            <width>143</width>
+                            <height>28</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Print...</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Prints the plot and its legend (under construction)</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pBtn4</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>450</x>
+                            <y>10</y>
+                            <width>142</width>
+                            <height>28</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Customize...</string>
+                    </property>
+                    <property name="toggleButton">
+                        <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Press to set up axii, colors, and graph legend symbols</string>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QLayoutWidget" row="0" column="0">
+                <property name="name">
+                    <cstring>Layout1</cstring>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QFrame" row="0" column="0">
+                        <property name="name">
+                            <cstring>plotFrame</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>7</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="acceptDrops">
+                            <bool>true</bool>
+                        </property>
+                        <property name="frameShape">
+                            <enum>Box</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Sunken</enum>
+                        </property>
+                    </widget>
+                    <widget class="QGroupBox" row="0" column="1">
+                        <property name="name">
+                            <cstring>pGrpLegend</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>7</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="frameShape">
+                            <enum>Box</enum>
+                        </property>
+                        <property name="title">
+                            <string>Plotting Legend</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+        </grid>
     </widget>
 </widget>
 <connections>

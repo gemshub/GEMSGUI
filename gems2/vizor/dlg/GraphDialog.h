@@ -40,13 +40,13 @@ class PlotTypeBtn:
     TPlotLine plLine;
 
 protected:
+//    void mousePressEvent( QMouseEvent * /*e*/ );
     void drawButtonLabel(QPainter* paint);
 
 public:
     PlotTypeBtn(  TPlotLine& ln, QWidget* parent=0, const char* name=0):
             QPushButton( parent, name ), plLine(ln)
     { }
-
 
     void setName( const char* );
     void setData( TPlotLine& ln);
@@ -70,6 +70,7 @@ class GraphDialog:
     float minX, minY;
     float maxX, maxY;
     TIArray<PlotTypeBtn> aLegendButtons;
+    TIArray<QLabel> aLegendLabels;
 
     void Show();
     void ShowPlots();

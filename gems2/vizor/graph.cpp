@@ -215,8 +215,6 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
         title(aTitle), axisType(5),
         isBackgr_color(false)
 {
-    uint ii;
-    int jj, nLines;
     float min1, max1, min2, max2;
     float minX, maxX, minY, maxY;
 
@@ -226,15 +224,15 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
     // Insert Plots and lines description
     plots.Clear();
     lines.Clear();
-    for( ii=0, nLines=0; ii<aPlots.GetCount(); ii++)
+    for( uint ii=0, nLines=0; ii<aPlots.GetCount(); ii++)
     {
         plots.Add( new TPlot(aPlots[ii], nLines ));
-        for( jj=0; jj<plots[ii].getLinesNumber(); jj++, nLines++ )
+        for( int jj=0; jj<plots[ii].getLinesNumber(); jj++, nLines++ )
         {
           if( nLines < line_names.GetCount() )
             lines.Add( new TPlotLine( line_names[nLines].c_str() ) );
           else
-             lines.Add( new TPlotLine( plots[ii].getName(jj).c_str() ) );
+            lines.Add( new TPlotLine( plots[ii].getName(jj).c_str() ) );
         }
     }
 
@@ -242,7 +240,7 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
 
     plots[0].getMaxMin(  minX, maxX, minY, maxY );
 
-    for( ii=1; ii<aPlots.GetCount(); ii++)
+    for( uint ii=1; ii<aPlots.GetCount(); ii++)
     {
         plots[ii].getMaxMin(  min1, max1, min2, max2 );
         if( minX > min1 ) minX = min1;
