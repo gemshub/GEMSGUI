@@ -48,6 +48,12 @@ int TCGFcalc::CGcalcFug( void )
             Volume = 8.31451*T/P;
             aW.twp->V = Volume;
             aW.twp->Fug = Fugacity;
+            aW.twp->wtW[6] = Coeff[0];
+            if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
+                aW.twp->wtW[6] = 1.;                 // foolproof temporary
+            aW.twp->wtW[7] = Coeff[1];
+            aW.twp->wtW[8] = Coeff[2];
+            aW.twp->wtW[9] = Coeff[3];
             return retCode;
           }
 
@@ -67,6 +73,8 @@ int TCGFcalc::CGcalcFug( void )
 // For passing corrected EoS coeffs to calculation of fluid
 // mixtures
     aW.twp->wtW[6] = Eos4parPT[0];
+if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
+  aW.twp->wtW[6] = 1.;                            // foolproof temporary
     aW.twp->wtW[7] = Eos4parPT[1];
     aW.twp->wtW[8] = Eos4parPT[2];
     aW.twp->wtW[9] = Eos4parPT[3];

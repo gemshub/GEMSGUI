@@ -1765,7 +1765,7 @@ void TProfil::GammaCalc( int LinkMode  )
             {
                 if( pmp->XF[k] > pmp->DSM )
                 {
-                    if( sMod[SPHAS_TYP] == SM_FLUID )
+                    if( sMod[SPHAS_TYP] == SM_FLUID && pmp->XF[k] > pa.p.PhMin )
                        ChurakovFluid( jb, je, jpb, jdb, k );
                 }
                 goto END_LOOP; /* break; */

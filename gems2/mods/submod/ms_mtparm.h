@@ -62,7 +62,7 @@ typedef struct
     short L,  //Numbers: L of DC = mu.L
     Ls,   // Ls of DC in multi-component phases
     Lg,   // PG of DC in gas phase (for FGL)
-    Lx    // Lx of surface species
+    La    // Laq number of aqueous species and water - changed from Lx on 05.01.05
     ;
     float  /* genP[8] */
     curT, curP, // current T & P

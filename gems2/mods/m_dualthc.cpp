@@ -700,7 +700,7 @@ TDualTh::Calc_muo_n( char eState )
               break;
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
-          case DC_SOL_MAJOR:
+          case DC_SOL_MAJOR: // Check this calculation !!!!
               muo = dtp->mu_n[ii*dtp->nK+j]
                   - RT*(gam + log(dtp->chi[ii*dtp->nK+j]));
               break;

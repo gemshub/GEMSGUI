@@ -241,9 +241,9 @@ void TMTparm::set_def( int /*q*/)
     /*  tp.L = mup->L;
       tp.Ls = mup->Ls;
       tp.Lg = mup->Pg;
-      tp.Lx = mup->Lads;
+      tp.La = mup->Laq;
      */
-    tp.L = tp.Ls =  tp.Lg =  tp.Lx = 0;
+    tp.L = tp.Ls =  tp.Lg =  tp.La = 0;
     memset( &tp.T, 0, 10*sizeof(float));
     tp.mark = 0;
     tp.G =    0;
@@ -274,7 +274,7 @@ void TMTparm::MTparmAlloc( )
     tp.L = mup->L;
     tp.Ls = mup->Ls;
     tp.Lg = mup->Pg;
-    tp.Lx = mup->Lads;
+    tp.La = mup->Laq;
     char *PtvM_ = &tp.PtvG; /* set recalc */
     for(int i=0; i<20; i++ )
         if( PtvM_[i] == S_ON )
@@ -295,7 +295,7 @@ void TMTparm::MTparmAlloc( )
 // realoc memory to MTPARM structure and load data to arrays
 void TMTparm::LoadMtparm( float cT, float cP )
 {
-    int j;
+    int j, jf;
     double P_old, TC, TK, P;
     time_t tim;
     TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
@@ -304,7 +304,7 @@ void TMTparm::LoadMtparm( float cT, float cP )
     aRC->ods_link(0);
 
     if( tp.L != mup->L ||  tp.Ls != mup->Ls ||
-            tp.Lg != mup->Pg ||  tp.Lx != mup->Lads )
+            tp.Lg != mup->Pg ||  tp.La != mup->Laq )
         Error( "MTparm", "Modelling project dimension error!");
 
     tp.curT=cT;
@@ -315,7 +315,7 @@ void TMTparm::LoadMtparm( float cT, float cP )
     tp.T = TC; tp.TK = TK; /* scales !!! */
     tp.P = P;
     tp.RT = R_CONSTANT * TK;
-    if( mup->Laq && TC < 120. && TC >= 0.0 )
+    if( tp.La && TC < 120. && TC >= 0.0 )
     { /* calc approximation of water properties Nordstrom ea, 1990 */
         if( TC < 0.01 )
         {
@@ -383,20 +383,22 @@ void TMTparm::LoadMtparm( float cT, float cP )
         if( tp.PtvB != S_OFF )    tp.Bet[j] = aW.twp->Bet;
 //        if( tp.PtvWb != S_OFF && j< tp.Ls )   tp.Wbor[j] = aW.twp->Wbor;
 //        if( tp.PtvWr != S_OFF && j< tp.Ls )   tp.Wrad[j] = aW.twp->Wrad;
-        if( tp.PtvFg != S_OFF && j< tp.Lg )   tp.Fug[j] = aW.twp->Fug;
-
-//        if( tp.PtvdVg != S_OFF && j< tp.Lg )  tp.dVg[j] = aW.twp->dVg;
-// For passing corrected EoS coeffs to calculation of fluid
-// mixture
-        if( tp.PtvdVg != S_OFF && j< tp.Lg )
+        jf = j - tp.La; // gas/fluid phase(s) must immediately follow aqueous phase
+        if( jf >= 0 && jf < tp.Lg )
         {
-          tp.dVg[j*4] = aW.twp->wtW[6];
-          tp.dVg[j*4+1] = aW.twp->wtW[7];
-          tp.dVg[j*4+2] = aW.twp->wtW[8];
-          tp.dVg[j*4+3] = aW.twp->wtW[9];
-//          tp.dVg[j*5+4] = aW.twp->wtW[9];
+// TP corrected fugacity and EoS coeffs for gases/fluids
+          if( tp.PtvFg != S_OFF )
+             tp.Fug[jf] = aW.twp->Fug;
+// For passing corrected EoS coeffs to calculation of fluid mixture
+          if( tp.PtvdVg != S_OFF )
+          {
+            tp.dVg[jf*4] = aW.twp->wtW[6];
+            tp.dVg[jf*4+1] = aW.twp->wtW[7];
+            tp.dVg[jf*4+2] = aW.twp->wtW[8];
+            tp.dVg[jf*4+3] = aW.twp->wtW[9];
+//          tp.dVg[jf*5+4] = aW.twp->wtW[9];
+          }
         }
-//
         /* set scales - not done yet !
         switch( tp.PunT )
     {
