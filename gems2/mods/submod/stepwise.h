@@ -2,10 +2,19 @@
 
 #ifdef Use_mt_mode
 
+class ThreadControl {
+    
+ public:
+    static void wakeOne();
+    static bool wait ();
+    static bool wait ( unsigned long time );
+};
+
+
 #define STEP_POINT() { \
 	if( stepWise ) { \
-    	    pVisorImp->getWaitProgress().wakeOne(); \
-    	    pVisorImp->getWaitCalc().wait(); \
+    	    ThreadControl::wakeOne(); \
+    	    ThreadControl::wait(); \
 	} \
         if( userCancel ) \
             throw UserCancelException(); \
