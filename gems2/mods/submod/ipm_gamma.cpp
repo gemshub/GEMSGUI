@@ -154,13 +154,14 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
             SPmol = X[j]*Factor;  /* molality */
             pmp->IC +=  /* calc effective molal ionic strength */
                 0.5* SPmol *(pmp->EZ[j]*pmp->EZ[j]);
-            pmp->FVOL[k] += pmp->Vol[j]*SPmol;
+
+//    pmp->FVOL[k] += pmp->Vol[j]*SPmol;  Error - found by B.Lothenbach 03.02.03
+          pmp->FVOL[k] += pmp->Vol[j]*X[j]; // fixed 04.02.03 KD
             pmp->Y_m[j] = SPmol;
             pmp->Y_la[j] = ln_to_lg*(Muj - pmp->G0[j]
                                         + Dsur + lnFmol); //    Variant: Without Dsur?
             // obsolete        pmp->Y_la[j] = ln_to_lg* (log( SPmol ) + pmp->lnGam[j] );
-            pmp->Y_w[j] =
-                1e6 * X[j] * pmp->MM[j] / pmp->FWGT[k];
+            pmp->Y_w[j] = 1e6 * X[j] * pmp->MM[j] / pmp->FWGT[k];
             for( ii=0; ii<pmp->NR; ii++ )
             {
                 pmp->IC_m[ii] += SPmol* a(j,ii);
