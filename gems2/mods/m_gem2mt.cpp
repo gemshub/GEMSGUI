@@ -680,16 +680,15 @@ TGEM2MT::RecCalc( const char * key )
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
 
+   if( mtp->PvMSg )
+    Expr_analyze( o_mtgexpr );
+
    mt_reset();
+
    if( mtp->PsMode == 'S' )
      outMulti();
 
-
-
-
    TCModule::RecCalc( key );
-   pVisor->Update();
-
 }
 
 
@@ -719,7 +718,10 @@ void TGEM2MT::Expr_analyze( int obj_num )
             pmpL = PRof->pmp->L;
         }
         PRof->ET_translate( o_mwetext, obj_num, 0, mupL, 0, pmpL );
-        rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
+        if( obj_num == o_mttexpr )
+          rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
+        else
+          rpn[1].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
     }
     catch( TError& xcpt )
     {

@@ -38,6 +38,7 @@ void TGEM2MT::mt_reset()
   mtp->iStat = '0';
   mtp->cT = mtp->Tai[START_];
   mtp->cP = mtp->Pai[START_];
+  mtp->cV = 0.;
   mtp->cTau = mtp->Tau[START_];
   mtp->ctm = mtp->tmi[START_];
   mtp->cnv = mtp->NVi[START_];
@@ -170,6 +171,15 @@ void TGEM2MT::gen_task()
  // calculate EqStat record (Thermodynamic&Equlibria)
    //  TProfil::pm->pmp->pTPD = 0;
      calc_eqstat();
+
+//calculate graphics
+   if( mtp->PvMSg )
+   {
+      mtp->jt = min( mtp->kv, (short)(mtp->nS-1));
+      rpn[1].CalcEquat();
+   }
+   aMod[RT_GEM2MT].ModUpdate("GEM2MT data sampling in progress...");
+
 }
 
 

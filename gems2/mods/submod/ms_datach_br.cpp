@@ -410,8 +410,8 @@ data_BR->Eh = pm.FitVar[3];
    for( ii=0; ii<data_CH->nPSb; ii++ )
     data_BR->xPA[ii] = pm.XFA[ data_CH->xPH[ii] ];
 
-//   for( ii=0; ii<data_CH->nICb; ii++ )          ??? only insert
-//    data_BR->bIC[ii] = pm.B[ data_CH->xIC[ii] ];
+   for( ii=0; ii<data_CH->nICb; ii++ )          //??? only insert
+    data_BR->bIC[ii] = pm.B[ data_CH->xIC[ii] ];
    for( ii=0; ii<data_CH->nICb; ii++ )
     data_BR->rMB[ii] = pm.C[ data_CH->xIC[ii] ];
    for( ii=0; ii<data_CH->nICb; ii++ )
