@@ -438,12 +438,12 @@ void TMulti::dyn_new_test(MULTI& tes)
      memcpy( tes.XdlB, pm.XdlB, pm.FIs*6*sizeof(float) );
     tes.XdlD = new float[pm.FIs][6];
      memcpy( tes.XdlD, pm.XdlD, pm.FIs*6*sizeof(float) );
-    tes.XpsiA = new float[pm.FIs][6];
-     memcpy( tes.XpsiA, pm.XpsiA, pm.FIs*6*sizeof(float) );
-    tes.XpsiB = new float[pm.FIs][6];
-     memcpy( tes.XpsiB, pm.XpsiB, pm.FIs*6*sizeof(float) );
-    tes.XpsiD = new float[pm.FIs][6];
-     memcpy( tes.XpsiD, pm.XpsiD, pm.FIs*6*sizeof(float) );
+    tes.XpsiA = new double[pm.FIs][6];
+     memcpy( tes.XpsiA, pm.XpsiA, pm.FIs*6*sizeof(double) );
+    tes.XpsiB = new double[pm.FIs][6];
+     memcpy( tes.XpsiB, pm.XpsiB, pm.FIs*6*sizeof(double) );
+    tes.XpsiD = new double[pm.FIs][6];
+     memcpy( tes.XpsiD, pm.XpsiD, pm.FIs*6*sizeof(double) );
     tes.XlamA = new float[pm.FIs][6];
      memcpy( tes.XlamA, pm.XlamA, pm.FIs*6*sizeof(float) );
     tes.Xetaf = new float[pm.FIs][6];
@@ -683,7 +683,6 @@ void TMulti::dyn__test(MULTI& tes)
  Test_Eq( pm.FIs*6, &tes.XdlB[0][0], &pm.XdlB[0][0], "XdlB" );
  Test_Eq( pm.FIs*6, &tes.XdlD[0][0], &pm.XdlD[0][0], "XdlD" );
  Test_Eq( pm.FIs*6, &tes.XpsiA[0][0], &pm.XpsiA[0][0], "XpsiA" );
-
  Test_Eq( pm.FIs*6, &tes.XpsiB[0][0], &pm.XpsiB[0][0], "XpsiB" );
  Test_Eq( pm.FIs*6, &tes.XpsiD[0][0], &pm.XpsiD[0][0], "XpsiD" );
  Test_Eq( pm.FIs*6, &tes.XlamA[0][0], &pm.XlamA[0][0], "XlamA" );

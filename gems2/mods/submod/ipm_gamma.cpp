@@ -1087,8 +1087,8 @@ double TProfil::Ej_init_calc( double, int j, int k)
         /* get ist - index of surface type and isp - index of surface plane  */
         ist = pmp->SATNdx[j][0] / MSPN;
         isp = pmp->SATNdx[j][0] % MSPN;
-        psiA = double(pmp->XpsiA[k][ist]);
-        psiB = double(pmp->XpsiB[k][ist]);
+        psiA = pmp->XpsiA[k][ist];
+        psiB = pmp->XpsiB[k][ist];
         Ez = double(pmp->EZ[j]);
         if( !isp )  /* This is  A (0) plane */
             F0 += psiA * Ez * pmp->FRT;

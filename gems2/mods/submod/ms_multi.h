@@ -159,9 +159,6 @@ typedef struct
     (*XdlA)[MST],  /* eff.thickness of A EDL layer, nm      [FIs][FIat] */
     (*XdlB)[MST],  /* eff.thickness of B EDL layer, nm      [FIs][FIat] */
     (*XdlD)[MST],  /* eff.thickness of diffuse layer, nm    [FIs][FIat] */
-    (*XpsiA)[MST], /* Galvani potential at A(0) EDL plane,V [FIs][FIat] */
-    (*XpsiB)[MST], /* Galvani potential at B EDL plane,V    [FIs][FIat] */
-    (*XpsiD)[MST], /* Galvani potential at diffuse plane,V  [FIs][FIat] */
     (*XlamA)[MST], /* Factor of EDL discretness  A < 1      [FIs][FIat] */
     (*Xetaf)[MST], /* Fixed charge density at surface type, C/m2 [FIs][FIat] */
     *XFs,  // Current quantities of phases X_a at IPM iterations [0:FI-1]
@@ -210,6 +207,9 @@ typedef struct
     *Falp,  // Karpov phase stability criteria F_a [0:FI-1]
     (*XetaA)[MST], // Total EDL charge on A EDL phase surface, moles [FIs][FIat]
     (*XetaB)[MST], // Total charge of surface species on B EDL layer, moles[FIs][FIat]
+    (*XpsiA)[MST], /* Galvani potential at A(0) EDL plane,V [FIs][FIat] */
+    (*XpsiB)[MST], /* Galvani potential at B EDL plane,V    [FIs][FIat] */
+    (*XpsiD)[MST], /* Galvani potential at diffuse plane,V  [FIs][FIat] */
     (*XFTS)[MST],  // Total number of moles of surface DC at surtype [FIs][FIat]
     *X,  // DC quantities at eqstate x_j, moles - prime IPM solution [L]
     *Y,  // Copy of x_j from previous IPM iteration [0:L-1]

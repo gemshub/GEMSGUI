@@ -166,9 +166,9 @@ void TMulti::to_file( fstream& ff )
       ff.write ((char*)pm.XdlA, sizeof(float)*pm.FIs*pm.FIat);
       ff.write ((char*)pm.XdlB, sizeof(float)*pm.FIs*pm.FIat);
       ff.write ((char*)pm.XdlD, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XpsiA, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XpsiB, sizeof(float)*pm.FIs*pm.FIat);
-      ff.write ((char*)pm.XpsiD, sizeof(float)*pm.FIs*pm.FIat);
+      ff.write ((char*)pm.XpsiA, sizeof(double)*pm.FIs*pm.FIat);
+      ff.write ((char*)pm.XpsiB, sizeof(double)*pm.FIs*pm.FIat);
+      ff.write ((char*)pm.XpsiD, sizeof(double)*pm.FIs*pm.FIat);
       ff.write ((char*)pm.XlamA, sizeof(float)*pm.FIs*pm.FIat);
       ff.write ((char*)pm.Xetaf, sizeof(float)*pm.FIs*pm.FIat);
       ff.write ((char*)pm.XetaA, sizeof(double)*pm.FIs*pm.FIat);
@@ -366,9 +366,9 @@ void TMulti::from_file( fstream& ff )
       ff.read ((char*)pm.XdlA, sizeof(float)*pm.FIs*pm.FIat);
       ff.read ((char*)pm.XdlB, sizeof(float)*pm.FIs*pm.FIat);
       ff.read ((char*)pm.XdlD, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XpsiA, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XpsiB, sizeof(float)*pm.FIs*pm.FIat);
-      ff.read ((char*)pm.XpsiD, sizeof(float)*pm.FIs*pm.FIat);
+      ff.read ((char*)pm.XpsiA, sizeof(double)*pm.FIs*pm.FIat);
+      ff.read ((char*)pm.XpsiB, sizeof(double)*pm.FIs*pm.FIat);
+      ff.read ((char*)pm.XpsiD, sizeof(double)*pm.FIs*pm.FIat);
       ff.read ((char*)pm.XlamA, sizeof(float)*pm.FIs*pm.FIat);
       ff.read ((char*)pm.Xetaf, sizeof(float)*pm.FIs*pm.FIat);
       ff.read ((char*)pm.XetaA, sizeof(double)*pm.FIs*pm.FIat);
@@ -588,9 +588,9 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
     pm.XdlA = new float[pm.FIs][6];
     pm.XdlB = new float[pm.FIs][6];
     pm.XdlD = new float[pm.FIs][6];
-    pm.XpsiA = new float[pm.FIs][6];
-    pm.XpsiB = new float[pm.FIs][6];
-    pm.XpsiD = new float[pm.FIs][6];
+    pm.XpsiA = new double[pm.FIs][6];
+    pm.XpsiB = new double[pm.FIs][6];
+    pm.XpsiD = new double[pm.FIs][6];
     pm.XlamA = new float[pm.FIs][6];
     pm.Xetaf = new float[pm.FIs][6];
     pm.XetaA = new double[pm.FIs][6];
