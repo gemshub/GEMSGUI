@@ -85,7 +85,7 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* name):
     menu->setItemChecked( pStepwiseCheck, false );
 
     Update();
-    // 07/08/2002 Sveta "Create, if no any record syseq"
+// 07/08/2002 Sveta   Create, if no syseq is present in the project
     if( rt[RT_SYSEQ].RecCount() <= 0)
         CmCreate();
 }
@@ -190,13 +190,12 @@ NewSystemDialog::LoadMenu()
         "Display existing systems (SysEq records) and load one of them", 0,
                      this, SLOT(CmSelect()), toolBar, "display" );
 
+    toolBar->addSeparator();
+
      imgFile = imgDir + "SetCompos.png";
     new QToolButton( QPixmap(imgFile.c_str()),
-       "Press to set bulk chemical composition (BCC) of the system", 0,
+       "Press to set up bulk chemical composition (BCC) of the system", 0,
                      this, SLOT(CmOpen_SYSTEM_ICOMP()), toolBar, "bulk" );
-
-
-    toolBar->addSeparator();
 
     imgFile = imgDir + "RunBCC.png";
     new QToolButton( QPixmap(imgFile.c_str()),
@@ -309,7 +308,7 @@ void
 NewSystemDialog::CmNext()
 {
     if( rt[RT_SYSEQ].RecCount() <= 0 )
-      return;
+      return;    // Added to avoid a pitfall at creating new project
     try
     {
        int i_next = 0;
@@ -350,7 +349,7 @@ void
 NewSystemDialog::CmPrevious()
 {
     if( rt[RT_SYSEQ].RecCount() <= 0)
-      return;
+      return; // Added to avoid a pitfall at creating new project
     try
     {
        int i_next = 0;
@@ -394,7 +393,7 @@ NewSystemDialog::CmSelect()
 {
 
     if( rt[RT_SYSEQ].RecCount() <= 0)
-      return;
+      return;   // Added to avoid a pitfall at creating new project
     try
     {
     //  TProfil::pm->pmp->pFAG = 1;
