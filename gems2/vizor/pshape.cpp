@@ -145,7 +145,7 @@ TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title_):
         x1(pt1.x), y1(pt1.y), x2(pt2.x), y2(pt2.y),
 	title(title_)
 {
-//    setAcceptDrops(TRUE);
+    setAcceptDrops(TRUE);
 //    QSizePolicy mySize( QSizePolicy::Expanding, QSizePolicy::Expanding );
 //    setSizePolicy(mySize);
     
@@ -228,7 +228,7 @@ TPlotWin::PaintToDC(QPainter& dc)
     dc.drawText(point, title);
 
     for( uint ii=0; ii<shapes.GetCount(); ii++ )
-        shapes[ii]->paint(dc);
+        shapes[ii].paint(dc);
 }
 
 
@@ -313,7 +313,7 @@ TPlotWin::dropEvent(QDropEvent* event)
 
 	int ii;
         for(ii=shapes.GetCount()-1; ii>=0; ii--) {
-	    PText* txtLabel = dynamic_cast<PText*>(shapes[ii]);
+	    PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
 	    if( txtLabel != 0 && txtLabel->text() == text ) {
 		txtLabel->setPosition(event->pos());
 	    }
@@ -329,7 +329,7 @@ TPlotWin::mousePressEvent( QMouseEvent *e ) {
 //QWidget::mousePressEvent( e );
 
     for(int ii=shapes.GetCount()-1; ii>=0; ii--) {
-	PText* txtLabel = dynamic_cast<PText*>(shapes[ii]);
+	PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
 	if( txtLabel != 0 && txtLabel->contains(e->pos()) ) {
 
 	    QFontMetrics fm = QPainter(this).fontMetrics();

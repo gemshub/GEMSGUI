@@ -263,8 +263,8 @@ GraphDialog::Apply()
     {
         for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++ )
         {
-	    aSymbolLabels[kk].setData( gr_data.lines[kk] );
-	    aLegendLabels[kk].setText( gr_data.lines[kk].name );
+	    aSymbolLabels[kk]->setData( gr_data.lines[kk] );
+	    aLegendLabels[kk]->setText( gr_data.lines[kk].name );
         }
     }
     pGrpLegend->update();
@@ -389,7 +389,7 @@ GraphDialog::CmPrint()
         //QColor c;
         //c.setHsv(0, 0, 0) ;//(1 * 255)/2, 255/2, 255 );// rainbow effect
         painter.setPen(Qt::black);
-	painter.setFont(QFont("Times", 10));
+	painter.setFont(QFont("Arial", 10));
 
 //	painter.scale(metrics.width()/double(plot->width()), metrics.height()/double(plot->height()));
 	painter.translate(40, 50);

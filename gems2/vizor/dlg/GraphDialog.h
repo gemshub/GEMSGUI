@@ -76,8 +76,8 @@ class GraphDialog:
     bool isFragment;
     float minX, minY;
     float maxX, maxY;
-    TIArray<SymbolLabel> aSymbolLabels;
-    TIArray<DragLabel> aLegendLabels;
+    TOArray<SymbolLabel*> aSymbolLabels;
+    TOArray<DragLabel*> aLegendLabels;
 
     void Show();
     void ShowPlots();
