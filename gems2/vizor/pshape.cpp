@@ -229,6 +229,12 @@ TPlotWin::paintEvent(QPaintEvent* qpev)
 void
 TPlotWin::PaintToDC(QPainter& dc)
 {
+    QFont font = dc.font();
+    if( font.fixelSize() < 10 ) {
+	font.setPixelSize(10);
+	dc.setFont(font);
+    }
+
     paintGrid(dc);
 
     int txtWidth = dc.fontMetrics().width(title);
