@@ -119,6 +119,7 @@ void GemDataStream::setByteOrder( int bo )
 //    cerr << "GemDataStream::swap == " << swap << endl;
 }
 
+// NOTE: these functions better to write as a templates!!
 
 GemDataStream &GemDataStream::operator>>( char &i )
 {
@@ -160,6 +161,11 @@ GemDataStream &GemDataStream::operator>>( double &f )
     if( swap ) f = SWAP(f);
     return *this;
 }
+
+
+// NOTE: these functions are inefficient !!!
+// it's faster to read the whole array
+// and then loop through it to reverse byte order!!!
 
 
 GemDataStream &GemDataStream::operator<<( char i )
