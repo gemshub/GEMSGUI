@@ -401,11 +401,7 @@ GraphDialog::CmPrint()
 //        metrics.height()-margin*dpiy/72*2 );
 
         painter.setPen(Qt::black);
-#ifndef __unix
-	painter.setFont(QFont("Arial", 10));
-#else
-	painter.setFont(QFont("Arial", 12));
-#endif
+	painter.setFont(pVisorImp->getAxisLabelFont());
 
 //	painter.scale(metrics.width()/double(plot->width()), metrics.height()/double(plot->height()));
 	painter.translate(40, 50);

@@ -106,15 +106,12 @@ PText::paint(QPainter& dc)
     QFont font = pVisorImp->getAxisLabelFont();
     if( !font.bold() )
 	font.setBold(true);
-    if( font.pixelSize() < 11 ) 
-	font.setPixelSize(11);
     dc.setFont(font);
 
     dc.drawText( screenPoint, txt );
     
     // if after PText there are some objects painted
     // we have to (may) need to reset bold font
-    // font = dc.font();
     // font.setBold(false);
     // dc.setFont(font);
 }
@@ -233,10 +230,7 @@ TPlotWin::PaintToDC(QPainter& dc)
 {
 //    QFont font = dc.font();
     QFont font = pVisorImp->getAxisLabelFont();
-    if( font.pixelSize() < 11 ) {
-	font.setPixelSize(11);
-	dc.setFont(font);
-    }
+    dc.setClipRect(0, 0, width(), height(), QPainter::CoordPainter);
 
     paintGrid(dc);
 
