@@ -837,6 +837,20 @@ BACK:
     return true;
 }
 
+bool
+vfElements(QWidget* par, const char * prfName,
+           TCStringArray& rds, bool& aAqueous, bool& aSorption)
+{
+     ElementsDialog eldlg( par, prfName );
+     if( !eldlg.exec() )
+      return false;
+     eldlg.allSelected( rds );
+     aAqueous =   eldlg.isAqueous();
+     aSorption =  eldlg.isSorption();
+     vfChoice(  par, rds, "Test selected elements" );
+    return true;
+}
+
 
 //=============================================
 // KeyEdit dialog

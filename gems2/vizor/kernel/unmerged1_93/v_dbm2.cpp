@@ -687,8 +687,29 @@ void TDataBase::Close()
 }
 
 
+//close files in PDB
+void TDataBase::OpenOnlyFromList( TCStringArray& names )
+{
+    if( aFile.GetCount() == 0 )
+        return;
+
+    Close();
+    uint ii, jj;
+
+    for( ii=0; ii< aFile.GetCount(); ii++)
+    {
+      for( jj=0; jj< names.GetCount(); jj++)
+        if(  aFile[ii].Name().find( names[jj] ) != gstring::npos )
+         break;
+      if( jj < names.GetCount() )
+         fls.Add( ii );
+    }
+
+    Open( true, UPDATE_DBV, 0 );
+}
+
 // add new file to DBfile list
-void TDataBase::AddFileToList(TDBFile* file)
+int TDataBase::AddFileToList(TDBFile* file)
 {
     aFile.Add( file );
 
@@ -699,6 +720,7 @@ void TDataBase::AddFileToList(TDBFile* file)
     if( rclose )
         file->Close();
     opfils();
+    return aFile.GetCount()-1;
 }
 
 // delete a file from DBfile list

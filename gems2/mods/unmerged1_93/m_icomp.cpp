@@ -167,6 +167,53 @@ TIComp::RecordPrint( const char *key )
  PrintSDref( sd_key.c_str(), text_fmt );
 }
 
+void
+TIComp::CopyElements( const char * prfName, TCStringArray& aKeys )
+{
+    // added to profile file icomp.kernel.prfname
+    gstring Path = pVisor->userProfDir();
+    Path += prfName;
+    Path += "/";
+    Path += db->GetKeywd();
+    Path += ".";
+    Path += "copy";
+    Path += ".";
+    Path += prfName;
+    Path += ".";
+    Path += PDB_EXT;
+    TDBFile *aFl= new TDBFile( Path );
+    int fnum_ = db->AddFileToList( aFl );
+    //  copy to it selected records
+    // ( add to last key field first symbol from prfname )
+    int nrec, j;
+    for(uint i=0; i<aKeys.GetCount(); i++ )
+    {
+        nrec = db->Find( aKeys[i].c_str() );
+        db->Get( nrec );
+        /// !!! changing record key
+        gstring str= gstring(db->FldKey( 2 ), 0, db->FldLen( 2 ));
+        for( j=0; j<db->FldLen( 2 ); j++ )
+         if( str[j] == ' ' )
+          break;
+        if( j == db->FldLen( 2 ) )
+          j--;
+        if( str[j] == *prfName )
+            str[j] = ' ';
+        else
+            str[j] = *prfName;
+        str = gstring(db->FldKey( 1 ), 0, db->FldLen( 1 )) + str;
+        str = gstring(db->FldKey( 0 ), 0, db->FldLen( 0 )) + str;
+        AddRecord( str.c_str(), fnum_ );
+    }
+    // close all no profile files
+    TCStringArray names;
+    names.Add(prfName);
+    db->OpenOnlyFromList(names);
+}
+
+
+
+
 // ------------- End of file  m_icomp.cpp -------------------
 
 

@@ -450,6 +450,8 @@ public:
     //  int GetNumFiles() { return aFile.GetCount(); }
     void  MakeInNewProfile( const gstring& dir,
       const char *prfName, const char * f_name=0 );
+    void OpenOnlyFromList( TCStringArray& names );
+
 
     //--- Manipulation Data Base
     void Create( int nF );
@@ -459,7 +461,7 @@ public:
 
     //--- Manipulation files of Data Base
     void RebildFile(const TCIntArray& indx);
-    void AddFileToList(TDBFile* file);
+    int AddFileToList(TDBFile* file);
     void AddOpenFile(const TCIntArray& indx);
 
     //--- Manipulation records

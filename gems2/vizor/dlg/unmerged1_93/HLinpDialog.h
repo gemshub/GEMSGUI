@@ -40,12 +40,19 @@ class QPushButton;
 class MLineEdit :
           public QLineEdit
 {
+   Q_OBJECT
+
     QListViewItem* it;
     int col;
     int type;
+    gstring Vals;
 
 protected:
     void focusOutEvent(QFocusEvent*);
+    void mousePressEvent(QMouseEvent* e);
+
+protected slots:
+    void SetIndex(int ii);
 
 public:
 

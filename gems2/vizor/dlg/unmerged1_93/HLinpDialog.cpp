@@ -35,6 +35,7 @@ const char *GEMS_LINP_HTML = "gm_syseq";
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qheader.h>
+#include <qpopmenu.h>
 /*
 int objOnList[20] = { //phase
      o_musf, -1, o_muphc, o_sypcl,
@@ -82,7 +83,9 @@ void MLineEdit::setData( QListViewItem *ait, int acol)
   if( type == -1 )
      setMaxLength( 20 );
   else
-     setMaxLength( 2 );
+  {   setMaxLength( 2 );
+      Vals = aUnits[type].getVals(0);
+  }
 }
 
 const gstring emptiness("---");
@@ -117,15 +120,49 @@ void MLineEdit::getData()
    }
    else
    {
-    gstring Vals(aUnits[type].getVals(0));
+//    Vals = aUnits[type].getVals(0);
     size_t ind1 = Vals.find(ss);
     if( ind1 == gstring::npos )
       vfMessage(topLevelWidget(), ss.c_str(), "Sorry! Wrong value typed!" );
     else
       it->setText( col, ss.c_str() );
-   }   
+   }
   }
 }
+
+void
+MLineEdit::mousePressEvent(QMouseEvent* e)
+{
+    if( e->button() != RightButton || type < 0 )
+    {
+        QLineEdit::mousePressEvent(e);
+        return;
+    }
+    QPopupMenu* menu = new QPopupMenu;
+    CHECK_PTR(menu);
+
+    for(uint ii=0; ii<Vals.length(); ii++)
+    {
+        gstring s(Vals, ii, 1);
+        int id = menu->insertItem(s.c_str(), ii);
+        menu->setItemEnabled(id, true);
+    }
+    connect(menu, SIGNAL(activated(int)),
+            this, SLOT(SetIndex(int)));
+    menu->exec(e->globalPos());
+}
+
+void
+MLineEdit::SetIndex(int ii)
+{
+    if( ii>=Vals.length() )
+        return;
+
+    gstring val(Vals, ii, 1);
+    setText(val.c_str());
+    it->setText( col, val.c_str() );
+}
+
 
 //----------------------------------------------------------
 
@@ -138,7 +175,7 @@ HLinpDialog::HLinpDialog( QWidget* parent,  const char* name )
     pDia = this;
     ListView1->setSorting(-1);
     // ListView1->setRootIsDecorated(true);
-    ListView1->setAllColumnsShowFocus(false);
+    ListView1->setAllColumnsShowFocus(true);
 
     connect( ListView1, SIGNAL(
      rightButtonPressed( QListViewItem *, const QPoint &, int )  ),

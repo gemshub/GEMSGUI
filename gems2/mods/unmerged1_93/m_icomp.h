@@ -82,6 +82,7 @@ public:
     //void RecCalc( const char *key );
 
     void GetElements( TCStringArray& aIC, TCIntArray& aIndMT );
+    void CopyElements( const char * prfName, TCStringArray& aKeys );
 };
 
 #endif  // _m_icomp_h
