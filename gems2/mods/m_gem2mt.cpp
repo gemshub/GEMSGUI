@@ -676,10 +676,14 @@ TGEM2MT::RecBuild( const char *key, int mode )
     if( pVisor->ProfileMode != true )
       Error( GetName(), "E09DTrem: Please, do it in the Project mode!" );
 
+    int setdef = false;
 AGAIN:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )
         return ret;
+
+    if( ret == VF3_1 )
+       setdef = true;
 
     if( !test_sizes() )
     {  mode = VF_REMAKE;
@@ -688,7 +692,7 @@ AGAIN:
 
     dyn_new();
 
-   init_arrays( ( ret==VF3_1 ) ); //clear all
+   init_arrays( setdef ); //clear all
 
     SetString("Record build OK");
     pVisor->Update();

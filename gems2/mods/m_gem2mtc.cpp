@@ -60,7 +60,7 @@ void TGEM2MT::init_arrays( bool mode )
 // set data to SBM (IComp names)
     if( mtp->SBM )
       for(int ii=0; ii< mtp->Nb; ii++ )
-        memcpy( mtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME+MAXSYMB  );
+        memcpy( mtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME/*+MAXSYMB*/  );
 
 // setup flags and counters
    mt_reset();
@@ -76,17 +76,19 @@ void TGEM2MT::init_arrays( bool mode )
     mtp->Vaqb = 1.;
 
     for( ii=0; ii<mtp->Nb; ii++)
-     mtp->CIclb[ii] = QUAN_GRAM;
+     mtp->CIclb[ii] = QUAN_MOL;
 
     for( ii=0; ii<mtp->nIV; ii++)
     {
      sprintf( tbuf, "Variant%d", ii );
      strncpy( mtp->nam_i[ii], tbuf, MAXIDNAME );
+     mtp->Pi[ii] = 1.;
+     mtp->Ti[ii] = 25.;
     }
 
     for( ii=0; ii<mtp->Lbi; ii++)
     {
-     mtp->AUcln[ii] = 'M';
+     mtp->AUcln[ii] = QUAN_MOL;
      strncpy( mtp->for_i[ii], "H2O", 4 );
     }
 
