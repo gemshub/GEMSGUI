@@ -1,13 +1,22 @@
+Win32: for GEMS developers without Qt Enterprise license
+
 Place in this directory: 
 
-qt.lib      - a binary Qt Toolkit library for Win32 (for linking only)
+qtmt300.lib 
+qtmain.lib   - binary Qt Toolkit libraries for Win32 (for linking only)
 
-gemviz.lib  - compiled from /vizor source code tree using Qt headers by 
-              Qt-licensed developers; 
-              used for linking only by scientists without Qt licenses;
+gemviz.lib  - compiled from /vizor source code tree using Qt headers - 
+              must be provided by Qt-licensed developers; 
+              used for linking only.
 
 gemsel.lib  - compiled by all GEMS developers from /mods source tree 
-              for linking with gemviz.lib and qt.lib 
+              for linking with gemviz.lib and qtmt300.dll 
 
 To re-compile from /mods, first delete gemsel.lib
-To re-compile from /vizor, delete gemviz.lib (for Qt-licensed developers)
+
+To re-compile from /vizor, delete gemviz.lib (Qt-licensed developers only)
+
+To run gems.exe, qtmt300.dll and cc3250mt.dll files are necessary
+(can be placed in the same directory with gems.exe).
+
+
