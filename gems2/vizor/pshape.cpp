@@ -149,7 +149,7 @@ PPoint::paint(QPainter& dc)
 
 // ----------------------------------------------
 // PGrid
-
+/*
 PGrid::PGrid(TPlotWin* p, QColor col, int nLines ):
         PShape(p, col),
         NumberLines(nLines)
@@ -211,12 +211,14 @@ PGrid::paint(QPainter& dc)
             dc.lineTo( QPoint(canvas.width(), ii) );
         }
 }
-
+*/
 
 // ----------------------------------------------
 // PLine
 
 // TPlotWin class
+const int bottomGap = 20;
+const int leftGap = 20;
 
 TPlotWin::TPlotWin(QWidget* p, QRect rec, FPoint pt1, FPoint pt2):
         QWidget(p),
@@ -240,26 +242,26 @@ void
 TPlotWin::SetRect(FPoint pt1, FPoint pt2)
 {
     x1 = pt1.x;
-         x2 = pt2.x;
-              y1 = pt1.y;
-                   y2 = pt2.y;
+    x2 = pt2.x;
+    y1 = pt1.y;
+    y2 = pt2.y;
 
     // width
     if( x2-x1 != 0 )
-        ax = (canvasRect.width())/(x2-x1);
+        ax = (canvasRect.width()-leftGap)/(x2-x1);
     else
-        ax = canvasRect.width() / 0.0001;
+        ax = (canvasRect.width()-leftGap) / 0.0001;
 
-    bx = ROUND(x1*ax) + 50;
+    bx = ROUND(x1*ax) - leftGap;
     // height
     if( y2-y1 != 0 )
-        ay = (canvasRect.height())/(y2-y1);	// 0 is upper
+        ay = (canvasRect.height()-bottomGap)/(y2-y1);	// 0 is upper
     else
-        ay = canvasRect.height() / 0.0001;
+        ay = (canvasRect.height()-bottomGap) / 0.0001;
 
-    by = ROUND(y1*ay) + 50;
+    by = ROUND(y1*ay); // we don't shift here because we have only bottom gap - no top one
 
-    for( int ii=0; ii<arr.GetCount(); ii++ )
+    for( uint ii=0; ii<arr.GetCount(); ii++ )
         arr[ii].ConvertCoordinates();
 }
 
@@ -272,7 +274,8 @@ TPlotWin::paintEvent(QPaintEvent* qpev)
 {
     //  dc.SetBkMode(TRANSPARENT);
     QPainter dc(this);
-    for( int ii=0; ii<arr.GetCount(); ii++ )
+    paintGrid(dc);
+    for( uint ii=0; ii<arr.GetCount(); ii++ )
         arr[ii].paint(dc);
 }
 
@@ -288,31 +291,83 @@ TPlotWin::resizeEvent(QResizeEvent* qpev)
 }
 
 
+void
+TPlotWin::paintGrid(QPainter& dc)
+{
+short NumberLines = 5;
+QPoint grid;
+QPoint offset(leftGap, 0);
+QColor color(Qt::black);
+
+    if( NumberLines <= 0 || NumberLines > 20 )
+        return;
+    //  dc.SetBkMode(TRANSPARENT);
+
+    QRect canvas = this->getCanvasRect();
+//    QPoint zero;
+//    par->RealToVisible( FPoint(0,0), zero );
+    
+    QPen pen( color, 1 );
+    pen.setStyle( QPen::DotLine );
+
+    dc.setPen( pen );
+//    offset.setX(0);
+//    offset.setY(0);
+    grid.setX((canvas.width()-leftGap-1)/NumberLines);
+    grid.setY((canvas.height()-bottomGap-3)/NumberLines);
+
+    int deltaX = (canvas.width()-leftGap-1)%NumberLines;
+    int deltaY = (canvas.height()-bottomGap-3)%NumberLines;
+
+    if( grid.x() )
+        for( int ii=offset.x(); ii<=canvas.width() ; ii+=grid.x() )
+        {
+            if( deltaX > 0 )
+            {
+                ii++;
+                deltaX--;
+            }
+            dc.moveTo( QPoint(ii, 0) );
+            dc.lineTo( QPoint(ii, canvas.height()) );
+	    QString str;
+	    str.sprintf("%.3g", (ii - leftGap + bx) / ax);
+	    dc.drawText( ii+2, canvas.height() - 7, str);
+        }
+
+    if( grid.y() )
+        for( int ii=offset.y(); ii<=canvas.height() ; ii+=grid.y() )
+        {
+            if( deltaY > 0 )
+            {
+                ii++;
+                deltaY--;
+            }
+            dc.moveTo( QPoint(0, ii) );
+            dc.lineTo( QPoint(canvas.width(), ii) );
+	    QString str;
+	    str.sprintf("%.3g", y2 - ((ii + by) / ay));
+	    dc.drawText( 2, ii-1, str);
+        }
+}
+
+
 /*!
     Clears the plot
 */
 void TPlotWin::Clear()
 {
-
     arr.Clear();
 }
 
-/*
-void TPlotWin::mul(const FPoint& f, QPoint& to)
-    {
-        to.setX((int)ROUND(ax * f.x));
-        to.setY((int)ROUND(ay * f.y));
-    }
-*/
 /*!
     Converts floating point coordinates to integer respecting to current plotting area
     Also does reversing by OY, because 0,0 on screen is upper left - not lower left as in real world
 */
 void TPlotWin::RealToVisible(const FPoint& f, QPoint& to)
-    {
-        to.setX((int)ROUND(ax * f.x - bx));
-        to.setY((int)ROUND(ay * (y2-f.y)/* - by*/));
-    }
+{
+    to.setX((int)ROUND(ax * f.x - bx));
+    to.setY((int)ROUND(ay * (y2-f.y) - by));
+}
 
 
 /*!
@@ -324,7 +379,8 @@ TPlotWin::PaintToDC(QPainter& dc, QRect DC_canvas)
 // set Printer area
 //    canvasRect = DC_canvas;
 //    SetRect(FPoint(x1, y1), FPoint(x2, y2));
-    for( int ii=0; ii<arr.GetCount(); ii++ )
+    paintGrid(dc);
+    for( uint ii=0; ii<arr.GetCount(); ii++ )
         arr[ii].paint(dc);
 // back to window area
 //    canvasRect = geometry();

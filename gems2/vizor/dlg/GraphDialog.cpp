@@ -58,7 +58,7 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
     if( maxY == minY ) maxY += 1.;
 
     resize(490, 310);
-    QRect win(40, 20, width()-190, height()-50);
+    QRect win(10, 5, width()-160, height()-35);
 
     plot = new TPlotWin(this, win,
                         FPoint(0, 0),
@@ -76,6 +76,7 @@ GraphDialog::~GraphDialog()
 
 void GraphDialog::init()
 {
+/*
     px0 = new QLabel(this);
     px0->setAutoResize(true);
     px0->setAlignment(AlignCenter);
@@ -88,6 +89,7 @@ void GraphDialog::init()
     py1 = new QLabel(this);
     py1->setAutoResize(true);
     py1->setAlignment(AlignLeft);
+*/
 }
 
 // show all graph
@@ -101,12 +103,12 @@ void GraphDialog::Show()
       plot->setBackgroundColor( backgroundColor().dark(110) );
 
     ShowPlots();
-
+/*
     px0->move(40, height()-18);
     px1->move(width()-170, height()-18);
     py0->move(3, height()-34);
     py1->move(3, 6);
-
+*/
 /*
     QButtonGroup* B_2;
     B_2 = new QButtonGroup( this, "ButtonGroup_1" );
@@ -150,12 +152,13 @@ void GraphDialog::ShowAxis()
     plot->SetRect( FPoint(minX-dx/1000, minY-dy/1000),
                    FPoint(maxX+dx/1000, maxY+dy/1000));
 
-    plot->Add(new PGrid(plot, black, gr_data.axisType ) );
-
+//    plot->Add(new PGrid(plot, black, gr_data.axisType ) );
+/*
     px0->setNum(minX);
     px1->setNum(maxX);
     py0->setNum(minY);
     py1->setNum(maxY);
+*/
 }
 
 // show plots
@@ -185,11 +188,11 @@ void GraphDialog::ShowPlots()
 void
 GraphDialog::resizeEvent(QResizeEvent* qpev)
 {
-    px0->move(40, height()-18);
+/*    px0->move(40, height()-18);
     px1->move(width()-170, height()-18);
     py0->move(3, height()-34);
     py1->move(3, 6);
-
+*/
     pGroupBox->move(width()-115, 20);
     pGrpLegend->move(width()-115, 170);
 
@@ -304,12 +307,12 @@ GraphDialog::CmFragment()
 
     float dx = maxX-minX;
     float dy = maxY-minY;
-
+/*
     px0->setNum(minX);
     px1->setNum(maxX);
     py0->setNum(minY);
     py1->setNum(maxY);
-
+*/
     plot->SetRect( FPoint(minX-dx/1000, minY-dy/1000),
                    FPoint(maxX+dx/1000, maxY+dy/1000));
     plot->update();
@@ -359,11 +362,11 @@ GraphDialog::CmPrint()
 //	p.scale(metrics.width()/double(plot->width()), metrics.height()/double(plot->height()));
 	p.translate(40, 50);
 	p.scale(metrics.logicalDpiX()/72., metrics.logicalDpiY()/72.); // seems to be always = 1
-        p.drawText( 5, plot->height() + 20, px0->text() );
+/*        p.drawText( 5, plot->height() + 20, px0->text() );
         p.drawText( plot->width() - 30, plot->height() + 20, px1->text() );
         p.drawText( -20, plot->height() - 15, py0->text() );
         p.drawText( -20, 5, py1->text() );
-
+*/
 	QRect win;
 	plot->PaintToDC(p, win);
 

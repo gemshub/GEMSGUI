@@ -193,6 +193,7 @@ public:
     void SetRect(FPoint pt1, FPoint pt2);
 //    void SetCanvasRect(QRect newCanvaRect); 
     void PaintToDC(QPainter& dc, QRect canvas);
+    void paintGrid(QPainter& dc);
     void Clear();
 
     int Add(PShape* p)

@@ -38,6 +38,7 @@
 
 #include "visor.h"
 
+
 HelpWindow::HelpWindow( const QString& home_, const QString& _path,
 			QWidget* parent, const char *name )
     : QMainWindow( parent, name, WDestructiveClose ),
