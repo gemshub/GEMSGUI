@@ -1,0 +1,169 @@
+Instruction:
+
+Add new wizards for Remake/Create module procedure:
+(see ComposWizard as example)
+
+1. Create ModuleWizard.ui file using QtDisigner,
+   and put it to gems2\vizor\dlg catalog
+
+2. Execute commands in gems2\vizor\dlg catalog:
+   uic ModuleWizard.ui -o ModuleWizardData.h
+   uic ModuleWizard.ui -impl ModuleWizardData.h -o ModuleWizardData.cpp
+
+3. Make ModuleWizard.h file, that must contained:
+
+#ifndef ComposWizard_included
+#define ComposWizard_included
+
+
+#include "ComposWizardData.h"
+
+//#include <qwizard.h>
+
+class ComposWizard : public ComposWizardData
+{
+    Q_OBJECT
+
+public:
+
+    ComposWizard( const char* pkey, char flgs[6], int sizes[2],
+                  double r2, QWidget* parent = NULL);
+    virtual ~ComposWizard();
+
+
+    void   getSizes( int size[2] );
+    void   getFlags( char flgs[6] );
+    double   getR2();
+
+protected slots:
+
+    void help();
+//    void accept();
+
+};
+
+#endif // ComposWizard_included
+
+Where values: flgs, sizes, r2 - variables, that must be returned to
+work structure of module.
+Dimensions can be changed.
+
+4. Make ModuleWizard.cpp file implamentation of ModuleWizard.h
+
+//-------------------------------------------------------------------
+
+const char *COMPOS_HTML = "compos_setup";
+
+#include <qcheckbox.h>
+#include <qspinbox.h>
+#include <qstring.h>
+#include <qlineedit.h>
+#include <qvalidator.h>
+#include <qcombobox.h>
+
+#include "ComposWizard.h"
+#include "visor_w.h"
+
+#define Inherited ComposWizardData
+ComposWizard::ComposWizard( const char* pkey, char flgs[6], int size[2],
+                            double r2, QWidget* parent):
+        Inherited( parent, 0, true )
+{
+    gstring str1= "Setup to Create Compos:  ";
+            str1 += pkey;
+    setCaption( str1.c_str() );
+
+    setFinishEnabled( WizardPage2, true);
+. . . // setup startup data using flgs, size, r2
+}
+
+
+ComposWizard::~ComposWizard()
+{}
+
+void   ComposWizard::getSizes( int size[2] )
+{
+    size[0]= spinBox11->value();
+    size[1]= spinBox18->value();
+}
+
+double   ComposWizard::getR2()
+{
+ double r=lineEdit1->text().toDouble();
+
+ if( r == 0. && checkBox2_2_2->isChecked() )
+       r = 1.;
+  return r;
+}
+
+
+void ComposWizard::getFlags( char flgs[6] )
+{
+  if( checkBox2->isChecked() )
+       flgs[0] = '+';
+  else flgs[0] = '-';
+
+. . .
+  QString str = comboBox1->currentText();
+  flgs[5] = str[0].latin1();
+
+}
+
+void
+ComposWizard::help()
+{
+  pVisorImp->OpenHelp( COMPOS_HTML, 0, this/*, true*/ );
+}
+
+
+5. Added function vfModuleSet to visor_w.cpp and user.h files
+
+#include "dlg/ComposWizard.h"
+
+bool
+vfComposSet(QWidget* par, const char * p_key,
+            char flgs[6], int size[2], double& r2  )
+{
+     ComposWizard cdlg( p_key, flgs, size, r2, par );
+     if( !cdlg.exec() )
+      return false;
+
+    cdlg.getFlags( flgs );
+    cdlg.getSizes( size );
+    r2 = cdlg.getR2();
+
+    return true;
+}
+
+6. Added function MakeQuery() to m_module.cpp/.h files
+
+/* opens window with 'Remake record' parameters
+*/
+void
+TCompos::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[6];
+    int size[2];
+    double r2 = bcp->R2;
+
+    p_key  = db->PackKey();
+    memcpy( flgs, &bcp->PcIC, 6);
+    size[0] = bcp->La;
+    size[1] = bcp->Nsd;
+
+    if( !vfComposSet( window(), p_key, flgs, size, r2 ))
+        return;   // cancel
+
+    memcpy( &bcp->PcIC, flgs, 6);
+    bcp->La = (short)size[0];
+    bcp->Nsd = (short)size[1];
+    bcp->R2 = r2;
+
+}
+
+
+7. Add all new files for all Makefile.* files
+    ( as example do: Search/Find in Files: "ComposWizard" (No all words) in "Makefile.*" )
+  and recompile all.
