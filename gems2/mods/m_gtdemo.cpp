@@ -123,7 +123,7 @@ void TGtDemo::ods_link( int q)
 // set dynamic Objects ptr to values
 void TGtDemo::dyn_set(int q)
 {
-    ErrorIf( gdp!=&gd[q], GetName(), "Illegal access to gd in dyn_set.");
+    ErrorIf( gdp!=&gd[q], GetName(), "E06GDrem: Illegal access to gd in dyn_set");
     // memcpy( gdp->symb , rt[nRT].UnpackKey(), GD_RKLEN );
     gdp->lNam0 = (char (*)[MAXGRNAME])aObj[ o_gdlnam ].GetPtr();
     gdp->lNamE = (char (*)[MAXGRNAME])aObj[ o_gdlname ].GetPtr();
@@ -148,7 +148,7 @@ void TGtDemo::dyn_set(int q)
 // free dynamic memory in objects and values
 void TGtDemo::dyn_kill(int q)
 {
-    ErrorIf( gdp!=&gd[q], GetName(), "Illegal access to gd in dyn_kill.");
+    ErrorIf( gdp!=&gd[q], GetName(), "E05GDrem: Illegal access to gd in dyn_kill");
     gdp->lNam0 = (char (*)[MAXGRNAME])aObj[ o_gdlnam ].Free();
     gdp->lNamE = (char (*)[MAXGRNAME])aObj[ o_gdlname ].Free();
     gdp->expr = (char *)aObj[ o_gdexpr ].Free();
@@ -172,7 +172,7 @@ void TGtDemo::dyn_kill(int q)
 // realloc dynamic memory
 void TGtDemo::dyn_new(int q)
 {
-    ErrorIf( gdp!=&gd[q], GetName(), "Illegal access to gd in dyn_new.");
+    ErrorIf( gdp!=&gd[q], GetName(), "E04GDrem: Illegal access to gd in dyn_new");
 
     gdp->lNam0 = (char (*)[MAXGRNAME])aObj[ o_gdlnam ].Alloc( 1,
                  gdp->dimXY[1], MAXGRNAME);
@@ -265,7 +265,7 @@ void TGtDemo::gd_ps_set()
         break;
         //case RT_DUTERM:strncpy( &gdp->PsIC,"------+--+-----", 15); break;
     default:
-        Error( GetName(), "Illegal record type.");
+        Error( GetName(), " E02GDrem: Wrong record type");
     }
 }
 
@@ -285,7 +285,7 @@ short TGtDemo::gd_rectype( )
     do
     {
         nRType = vfChoice(window(), buf,
-                          "gd_rttype Please, choose chain type for demo data extraction",
+                          "Please, choose the record type for the data sampling",
                           nRType);
     }
     while( nRType<0 );
@@ -299,7 +299,7 @@ void TGtDemo::set_def( int q)
 {
     short nR = gdp->nRT;
 
-    ErrorIf( gdp!=&gd[q], GetName(), "Illegal access to gd in set_def.");
+    ErrorIf( gdp!=&gd[q], GetName(), "E03GDrem: Illegal access to gd in set_def");
     memset( gd, 0, sizeof( GTDEMO ));
     if( check_RT( nR) == true )
         gdp->nRT = nR;
@@ -375,7 +375,7 @@ AGAIN:
     else // other type of records
     {
 AGAINRC:    //get  keypart
-        str = vfKeyTemplEdit(window(), "Set template", gdp->nRT, gdp->wcrk );
+        str = vfKeyTemplEdit(window(), "Set template ", gdp->nRT, gdp->wcrk );
         //      if(  str== "" )   Bugfix 19.12.00  DAK
         //          goto AGAINRC;
         Nr = rt[gdp->nRT].GetKeyList( str.c_str(), aRklist, anRk );
@@ -383,7 +383,7 @@ AGAINRC:    //get  keypart
             if( vfQuestion(window(), GetName(),
                            "No record keys matching a template! Repeat?"))
                 goto AGAINRC;
-            else Error( GetName(), "No record keys matching a template!" );
+            else Error( GetName(), "E00GDrem: No record keys matching a template" );
     }
     if( gdp->rkey )  // old selections
     {
@@ -403,7 +403,7 @@ AGAINRC:    //get  keypart
     if( aMrk.GetCount() < 1 )
         if( vfQuestion(window(), GetName(), "No record keys selected! Repeat marking?" ))
             goto AGAIN;
-        else Error( GetName(), "No record keys selected!");
+        else Error( GetName(), "E01GDrem: No record keys selected...");
     gdp->Nlrk = (short)aMrk.GetCount();
     gdp->rkey = (char *)aObj[ o_gdrkey ].Alloc( gdp->Nlrk, 1, rtlen );
     // make list of record
@@ -432,18 +432,18 @@ AGAIN:
     gdp->nRT = gd_rectype();
     gd_ps_set();
     if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
-        Error( GetName(), "Do it in Project mode!" );
+        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
     int ret = TCModule::RecBuild( key, mode );
 
 //    gd_ps_set();
     if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
-        Error( GetName(), "Do it in Project mode!" );
+        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
     if( ret == VF_CANCEL )
         return ret;
     if(  gdp->Nwc<0 || gdp->Nqp<0 || gdp->dimEF[0]<0 || gdp->dimEF[1]<0  ||
             ( (gdp->dimEF[0]==0 || gdp->dimEF[1]==0) && gdp->PtAEF != S_OFF ) )
     {
-        vfMessage(window(), GetName(), "Illegal sizes or flags!");
+        vfMessage(window(), GetName(), "E01GDexec: Invalid counters or flags");
         goto AGAIN;
     }
     gdp->rtLen =  (short)rt[ gdp->nRT ].KeyLen();
@@ -498,7 +498,7 @@ void TGtDemo::gd_text_analyze()
         vfMessage(window(), xcpt.title, xcpt.mess);
         /*bool   iRet = */
         CheckEqText(  erscan,
-               "E91MSTran: Error in translation of GtDemo math script." );
+               "E91MSTran: Error in translation of GtDemo math script: " );
         /*  if( iRet )
                goto AGAIN;  */
         Error(  GetName() , xcpt.mess.c_str() );
@@ -531,7 +531,7 @@ void
 TGtDemo::gd_rec_read( int nI )
 {
 
-    ErrorIf( nI < 0 || nI > gdp->Nlrk, GetName(), "Illegal record number!" );
+    ErrorIf( nI < 0 || nI > gdp->Nlrk, GetName(), "E03GDexec: Invalid record number" );
 
     memset( gdp->Wkb, 0, MAXRKEYLEN );
     strncpy( gdp->Wkb, gdp->rkey+nI*gdp->rtLen, gdp->rtLen );
@@ -567,20 +567,20 @@ TGtDemo::gd_rec_read( int nI )
     }
 }
 
-//Recalc record structure
+//Recalculate the GtDemo record
 void
 TGtDemo::RecCalc( const char *key )
 {
     if( pVisor->ProfileMode != true  && gdp->nRT == RT_SYSEQ )
-        Error( GetName(), "Do it in Project mode!" );
+        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
     TCModule::RecCalc(key);
 
     strcpy( gdp->SYS_key, "*" );
     if( gdp->PsPE != S_OFF && *gdp->prKey)   /* read process record */
     {    TProcess::pm->RecInput( gdp->prKey );
          if( TProcess::pm->NoSave())
-           Error( key, "x0, y0 arrays in this GtDemo definition \n"
-           "can only be updated by Process recalculation.");
+           Error( key, "E04GDexec: The x0, y0 arrays in this GtDemo sampler \n"
+           "can only be updated after the Process sampler re-calculation");
     }
     if( gdp->PsPB != S_OFF && *gdp->prKey)    /* read probe record */
         TProbe::pm->RecInput( gdp->prKey );
@@ -588,16 +588,16 @@ TGtDemo::RecCalc( const char *key )
     for( gdp->jR = 0; gdp->jR< gdp->Nlrk; gdp->jR++ )
     {
         pVisor->Message( window(), GetName(),
-                 "Sampling the x0, y0 data \n"
+                 "Sampling the data into GtDemo x0, y0 arrays \n"
                  "Please, wait...", gdp->jR, gdp->Nlrk);
         gd_rec_read( gdp->jR );
         if( strcmp( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey() ))
-        {  /* retranlate text of equations */
+        {  /* retranslate the math script text */
             gd_text_analyze();
             strncpy( gdp->SYS_key, rt[RT_SYSEQ].UnpackKey(), EQ_RKLEN );
         }
         rpn[0].CalcEquat();
-        aMod[RT_GTDEMO].ModUpdate("GD_calc   Calculation of GTDEMO arrays");
+        aMod[RT_GTDEMO].ModUpdate("GtDemo data sampling in progress...");
         // Stop Process from Andy Sveta
     }
     /* calc empirical data */
@@ -716,7 +716,7 @@ TGtDemo::CmHelp()
 /*
 void
 TGtDemo::elst(int N,double *U,double *par)
-//   N  -  size; U  -   vector to analiz
+//   N  -  size; U  -   vector to analyze
 //  par: {  Max,Min,M(mat. expectation),Me(median), D(dispersija)
 //  SG (kvadrat.otklonenue),OS(error srednego), KV (coeff variation),
 //  VS (variation of average)  }
