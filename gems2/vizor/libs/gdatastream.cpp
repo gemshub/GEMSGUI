@@ -112,11 +112,11 @@ void GemDataStream::setByteOrder( int bo )
 
 #if __BYTE_ORDER == __BIG_ENDIAN
 	swap = (byteorder == LittleEndian);
-#warning "BIG ENDIAN architecture is not well tested yet!!!"
+#warning "Compiling for BIG ENDIAN architecture!"
 #else
 	swap = (byteorder == BigEndian);
 #endif
-    cerr << "GemDataStream::swap == " << swap << endl;
+//    cerr << "GemDataStream::swap == " << swap << endl;
 }
 
 
