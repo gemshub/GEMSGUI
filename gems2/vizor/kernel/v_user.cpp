@@ -33,7 +33,8 @@ u_makepath(const gstring& dir,
            const gstring& name, const gstring& ext)
 {
     gstring Path(dir);
-    Path += "/";
+    if( dir != "")
+      Path += "/";
     Path += name;
     Path += ".";
     Path += ext;
@@ -48,7 +49,7 @@ u_splitpath(const gstring& Path, gstring& dir,
 {
     size_t pos = Path.rfind("/");
     if( pos != gstring::npos )
-        dir = Path.substr(0, pos);
+        dir = Path.substr(0, pos), pos++;
     else
         dir = "",
               pos = 0;
@@ -57,12 +58,12 @@ u_splitpath(const gstring& Path, gstring& dir,
     if( pose != gstring::npos )
     {
         ext = Path.substr( pose+1, gstring::npos );
-        name = Path.substr(pos+1, pose-pos-1);
+        name = Path.substr(pos, pose-pos);
     }
     else
     {
         ext = "";
-        name = Path.substr(pos+1, gstring::npos);
+        name = Path.substr(pos, gstring::npos);
     }
 }
 

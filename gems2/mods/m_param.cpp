@@ -320,6 +320,7 @@ TProfil::CmHelp()
 void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 {
     TCStringArray aList;
+    fstream fout;
 //    gstring filename;
 
     ff.writeArray( &pa.p.PC, 10 );
@@ -392,6 +393,14 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
      f_br1.close();
 //   }
 
+
+// put data to pmfiles-bin.lst file
+   Path_ = u_makepath( dir, "ipmfiles-bin", "lst" );
+   fout.open(Path_.c_str(), ios::out);
+   fout << "-b \"" << name.c_str() << ".dch\", \"";
+   fout << newname.c_str() << ".dbr\"\n";
+   fout.close();
+
    newname = gstring( rt[RT_SYSEQ].FldKey(4), 0, rt[RT_SYSEQ].FldLen(4));
    newname.strip();
    newname = name+"-dbr-"+newname;
@@ -405,11 +414,26 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
      f_br2.close();
 //   }
 
+// put data to pmfiles-dat.lst file
+   Path_ = u_makepath( dir, "ipmfiles-dat", "lst" );
+   fout.open(Path_.c_str(), ios::out);
+   fout << "-t \"" << name.c_str() << "-dch.dat\", \"";
+   fout << newname.c_str() << ".dat\"\n";
+   fout.close();
+
    multi->datach_free();
    multi->databr_free();
 
-// put data to work files
-//   Path_ = u_makepath( dir, "ipmfiles-bin", "lst" );
+// put data to IPMRUN.BAT file
+   Path_ = u_makepath( dir, "IPMRUN", "BAT" );
+   fout.open(Path_.c_str(), ios::out);
+   fout << "echo off\n";
+   fout << "rem Normal runs\n";
+   fout << "gemipm2k.exe " << name.c_str() <<
+        ".ipm ipmfiles-dat.lst > log-dat.txt \n";
+   fout << "rem gemipm2k.exe " << name.c_str() <<
+       ".ipm ipmfiles-bin.lst > log-bin.txt\n";
+   fout.close();
 
 }
 
