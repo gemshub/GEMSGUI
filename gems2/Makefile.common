@@ -15,7 +15,7 @@ endif
 
 OPT_FLAGS	= -O3 -mcpu=pentium -march=pentium -fexpensive-optimizations -ffast-math
 RELEASE_FLAGS	= -DGEMS_RELEASE
-DEBUG_FLAGS	= 
+DEBUG_FLAGS	= -ggdb 
 PROF_FLAGS	= 
 WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
