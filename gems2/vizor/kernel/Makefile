@@ -65,4 +65,4 @@ t_read.o: ../libs/verror.h v_vals.h v_ipnc.h v_dbm.h v_file.h ../service.h
 v_module.o: v_module.h v_object.h ../libs/gstring.h ../libs/array.h v_user.h
 v_module.o: ../libs/verror.h v_vals.h v_dbm.h v_file.h ../module_w.h
 v_module.o: ../visor_w.h ../graph.h ../visor.h ../service.h
-v_module.o: ../../mods/v_mod.h t_print.h v_ipnc.h
+v_module.o: ../../mods/v_mod.h t_print.h v_ipnc.h t_read.h

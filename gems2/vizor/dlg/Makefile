@@ -44,6 +44,7 @@ SOURCES =	MainDialog.cpp \
 		EQDialog.cpp \
 		SystemDialog.cpp \
 		ProgressDialog.cpp \
+		KeyDialog.cpp \
 		ChangeKeyDialog.cpp \
 		KeyProfile.cpp \
 		KeyFilter.cpp \
@@ -177,15 +178,15 @@ ProgressDialog.o: ../../mods/submod/ms_multi.h ../kernel/v_ipnc.h
 ProgressDialog.o: ../../mods/submod/ms_calc.h ProgressDialog.h
 ProgressDialog.o: ProgressDialogData.h ../service.h ../visor.h ../visor_w.h
 ProgressDialog.o: ../graph.h HLresDialog.h HLresDialogData.h
-KeyDialog.o: ../kernel/v_dbm.h ../libs/gstring.h ../libs/array.h
-KeyDialog.o: ../kernel/v_file.h ../kernel/v_user.h ../libs/verror.h
-KeyDialog.o: ../kernel/v_module.h ../kernel/v_object.h ../kernel/v_vals.h
-KeyDialog.o: KeyDialog.h KeyDialogData.h KeyFilter.h ../visor_w.h ../graph.h
-KeyDialog.o: ../visor.h
+ChangeKeyDialog.o: ../visor_w.h ../kernel/v_vals.h ../libs/gstring.h
+ChangeKeyDialog.o: ../libs/array.h ../graph.h ../kernel/v_module.h
+ChangeKeyDialog.o: ../kernel/v_object.h ../kernel/v_user.h ../libs/verror.h
+ChangeKeyDialog.o: ../kernel/v_dbm.h ../kernel/v_file.h ChangeKeyDialog.h
+ChangeKeyDialog.o: ChangeKeyDialogData.h
 KeyProfile.o: ../kernel/v_dbm.h ../libs/gstring.h ../libs/array.h
 KeyProfile.o: ../kernel/v_file.h ../kernel/v_user.h ../libs/verror.h
 KeyProfile.o: KeyProfile.h KeyProfileData.h ../visor_w.h ../kernel/v_vals.h
-KeyProfile.o: ../graph.h ../kernel/v_module.h ../kernel/v_object.h
+KeyProfile.o: ../graph.h ../kernel/v_module.h ../kernel/v_object.h ../visor.h
 KeyFilter.o: ../kernel/v_module.h ../kernel/v_object.h ../libs/gstring.h
 KeyFilter.o: ../libs/array.h ../kernel/v_user.h ../libs/verror.h
 KeyFilter.o: ../kernel/v_vals.h ../kernel/v_dbm.h ../kernel/v_file.h

@@ -107,6 +107,7 @@ visor_w.o: dlg/ListFilesDialogData.h dlg/ElementsDialog.h
 visor_w.o: dlg/ElementsDialogData.h ../mods/filters_data.h dlg/LoadMessage.h
 visor_w.o: dlg/HLinpDialog.h dlg/HLinpDialogData.h dlg/KeyDialog.h
 visor_w.o: dlg/KeyDialogData.h dlg/KeyProfile.h dlg/KeyProfileData.h
+visor_w.o: dlg/ChangeKeyDialog.h dlg/ChangeKeyDialogData.h
 module_w.o: visor.h ./libs/gstring.h ./libs/array.h ./kernel/v_module.h
 module_w.o: ./kernel/v_object.h ./kernel/v_user.h ./libs/verror.h
 module_w.o: ./kernel/v_vals.h ./kernel/v_dbm.h ./kernel/v_file.h visor_w.h
