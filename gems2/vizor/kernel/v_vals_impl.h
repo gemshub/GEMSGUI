@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include "v_vals.h"
 #include "v_user.h"
+#include "gdatastream.h"
+
 
 /* TVal template is defining implementation
     of TValBase interface for manipulation of
@@ -105,6 +107,13 @@ struct TVal:
 	returns false on failure
     */
     bool SetString(const char* s, size_t ndx);
+
+    void write(GemDataStream& s, size_t size) {
+	s.writeArray((T*)ptr, size/sizeof(T));
+    }
+    void read(GemDataStream& s, size_t size) {
+	s.readArray((T*)ptr, size/sizeof(T));
+    }
 };
 
 
@@ -168,6 +177,13 @@ struct TValFixString:
     }
     //  bool VerifyString(const char* s);
     bool SetString(const char* s, size_t ndx);
+
+    void write(GemDataStream& s, size_t size) {
+	s.writeArray((char*)ptr, size);
+    }
+    void read(GemDataStream& s, size_t size) {
+	s.readArray((char*)ptr, size);
+    }
 };
 
 
@@ -223,6 +239,13 @@ struct TValString:
     }
     //  bool VerifyString(const char* s);
     bool SetString(const char* s, size_t ndx);
+
+    void write(GemDataStream& s, size_t size) {
+	s.writeArray((char*)ptr, size);
+    }
+    void read(GemDataStream& s, size_t size) {
+	s.readArray((char*)ptr, size);
+    }
 };
 
 //

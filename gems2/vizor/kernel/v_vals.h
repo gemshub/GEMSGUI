@@ -21,7 +21,8 @@
 #define _v_vals_h_
 
 #include "gstring.h"
-//using namespace std;
+
+class GemDataStream;
 
 /* TValBase class represents interface for values use in calculating modules
     this interface used by DB, GUI and calculating modules
@@ -66,6 +67,9 @@ struct TValBase
     virtual gstring GetString(size_t ndx) const = 0;
     //  virtual bool VerifyString(const char* s)=0;
     virtual bool SetString(const char* s, size_t ndx) = 0;
+
+    virtual void write(GemDataStream& s, size_t size) = 0;
+    virtual void read(GemDataStream& s, size_t size) = 0;
 
 private:
 // forbidding copying and assigning - it's dangerous!
