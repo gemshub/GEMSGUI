@@ -58,13 +58,13 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
     if( maxY == minY ) maxY += 1.;
 
     resize(490, 310);
-    QRect win(10, 5, width()-160, height()-35);
+    QRect win(10, 5, width()-130, height()-20);
 
     plot = new TPlotWin(this, win,
                         FPoint(0, 0),
-                        FPoint(1, 1));
+                        FPoint(1, 1),
+			gr_data.title);
 
-    init();
     Show();
 
     setCaption( gr_data.title.c_str() );
@@ -74,48 +74,18 @@ GraphDialog::~GraphDialog()
 {}
 
 
-void GraphDialog::init()
-{
-/*
-    px0 = new QLabel(this);
-    px0->setAutoResize(true);
-    px0->setAlignment(AlignCenter);
-    px1 = new QLabel(this);
-    px1->setAutoResize(true);
-    px1->setAlignment(AlignRight);
-    py0 = new QLabel(this);
-    py0->setAutoResize(true);
-    py0->setAlignment(AlignLeft);
-    py1 = new QLabel(this);
-    py1->setAutoResize(true);
-    py1->setAlignment(AlignLeft);
-*/
-}
-
-// show all graph
+// show all graphs
 
 void GraphDialog::Show()
 {
     if( gr_data.isBackgr_color )
       plot->setBackgroundColor( QColor( gr_data.b_color[0],
-       gr_data.b_color[1], gr_data.b_color[2]) );
+    					gr_data.b_color[1], 
+					gr_data.b_color[2]) );
     else
       plot->setBackgroundColor( backgroundColor().dark(110) );
 
     ShowPlots();
-/*
-    px0->move(40, height()-18);
-    px1->move(width()-170, height()-18);
-    py0->move(3, height()-34);
-    py1->move(3, 6);
-*/
-/*
-    QButtonGroup* B_2;
-    B_2 = new QButtonGroup( this, "ButtonGroup_1" );
-    B_2->setGeometry( 10, 205, 380, 0 );
-    B_2->setTitle( "Plots list" );
-//    connect( B_2, SIGNAL(clicked(int)), SLOT(SetLine(int)) );
- */
 
     // Insert Lines for legend box
 
@@ -137,28 +107,10 @@ void GraphDialog::Show()
             //pNames.Add(pName1);
         }
     }
-//    B_2->resize(380, y-200);
     update();
 
-    ShowAxis();
-}
-
-// show axis
-void GraphDialog::ShowAxis()
-{
-
-    float dx = maxX-minX;
-    float dy = maxY-minY;
-    plot->SetRect( FPoint(minX-dx/1000, minY-dy/1000),
-                   FPoint(maxX+dx/1000, maxY+dy/1000));
-
-//    plot->Add(new PGrid(plot, black, gr_data.axisType ) );
-/*
-    px0->setNum(minX);
-    px1->setNum(maxX);
-    py0->setNum(minY);
-    py1->setNum(maxY);
-*/
+    plot->setPlotBounds( FPoint(minX, minY),
+                   FPoint(maxX, maxY));
 }
 
 // show plots
@@ -307,14 +259,9 @@ GraphDialog::CmFragment()
 
     float dx = maxX-minX;
     float dy = maxY-minY;
-/*
-    px0->setNum(minX);
-    px1->setNum(maxX);
-    py0->setNum(minY);
-    py1->setNum(maxY);
-*/
-    plot->SetRect( FPoint(minX-dx/1000, minY-dy/1000),
-                   FPoint(maxX+dx/1000, maxY+dy/1000));
+
+    plot->setPlotBounds( FPoint(minX, minY),
+                   FPoint(maxX, maxY));
     plot->update();
     //date();
 }

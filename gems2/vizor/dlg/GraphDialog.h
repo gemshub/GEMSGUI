@@ -71,16 +71,9 @@ class GraphDialog:
     float maxX, maxY;
     TIArray<PlotTypeBtn> aLegendButtons;
 
-    void init();
-
     void Show();
-    void ShowAxis();
     void ShowPlots();
 
-    QLabel *px0;
-    QLabel *px1;
-    QLabel *py0;
-    QLabel *py1;
 
 protected slots:
 
@@ -103,10 +96,10 @@ public:
     void Apply();    // Update changes
     void AddPoint( int nPlot, int nPoint ); // Add new point to graph
 
-     QColor getColor(int ii) const
+    QColor getColor(int ii) const
     {
         return QColor( gr_data.lines[ii].red,
-         gr_data.lines[ii].green, gr_data.lines[ii].blue);
+        	    gr_data.lines[ii].green, gr_data.lines[ii].blue);
     }
 
     QColor getBackgrColor();

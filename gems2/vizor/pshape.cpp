@@ -41,9 +41,9 @@ PShape::~PShape()
 // PLine
 
 PLine::PLine(TPlotWin* par,
-             const FPoint& pi1, const FPoint& pi2, QColor col, int size):
+             const FPoint& pi1, const FPoint& pi2, QColor col, int line_size_):
         PShape(par,col),
-        fp1(pi1), fp2(pi2), line_size( size )
+        fp1(pi1), fp2(pi2), line_size( line_size_ )
 {}
 
 
@@ -213,21 +213,21 @@ PGrid::paint(QPainter& dc)
 }
 */
 
-// ----------------------------------------------
-// PLine
 
 // TPlotWin class
 const int bottomGap = 20;
+const int topGap = 20;
 const int leftGap = 20;
 
-TPlotWin::TPlotWin(QWidget* p, QRect rec, FPoint pt1, FPoint pt2):
+TPlotWin::TPlotWin(QWidget* p, QRect rec, FPoint pt1, FPoint pt2, gstring title_):
         QWidget(p),
         x1(pt1.x), y1(pt1.y), x2(pt2.x), y2(pt2.y),
-	canvasRect(rec)
+	canvasRect(rec),
+	title(title_)
 {
     setGeometry( rec );
 
-    SetRect(pt1, pt2);
+    setPlotBounds(pt1, pt2);
     show();
 }
 
@@ -239,7 +239,7 @@ TPlotWin::~TPlotWin()
     Sets painting area for plot and converts all coordinates
 */
 void
-TPlotWin::SetRect(FPoint pt1, FPoint pt2)
+TPlotWin::setPlotBounds(FPoint pt1, FPoint pt2)
 {
     x1 = pt1.x;
     x2 = pt2.x;
@@ -255,14 +255,25 @@ TPlotWin::SetRect(FPoint pt1, FPoint pt2)
     bx = ROUND(x1*ax) - leftGap;
     // height
     if( y2-y1 != 0 )
-        ay = (canvasRect.height()-bottomGap)/(y2-y1);	// 0 is upper
+        ay = (canvasRect.height()-bottomGap-topGap)/(y2-y1);	// 0 is upper
     else
-        ay = (canvasRect.height()-bottomGap) / 0.0001;
+        ay = (canvasRect.height()-bottomGap-topGap) / 0.0001;
 
-    by = ROUND(y1*ay); // we don't shift here because we have only bottom gap - no top one
+    by = ROUND(y1*ay) - topGap; // we shift here only on top gap - not bottom
 
-    for( uint ii=0; ii<arr.GetCount(); ii++ )
-        arr[ii].ConvertCoordinates();
+    for( uint ii=0; ii<shapes.GetCount(); ii++ )
+        shapes[ii].ConvertCoordinates();
+}
+
+/*!
+    Recalculates coordiantes after size change
+*/
+void
+TPlotWin::resizeEvent(QResizeEvent* qpev)
+{
+    canvasRect = geometry();
+    setPlotBounds(FPoint(x1, y1), FPoint(x2, y2));
+    update();
 }
 
 
@@ -274,20 +285,23 @@ TPlotWin::paintEvent(QPaintEvent* qpev)
 {
     //  dc.SetBkMode(TRANSPARENT);
     QPainter dc(this);
-    paintGrid(dc);
-    for( uint ii=0; ii<arr.GetCount(); ii++ )
-        arr[ii].paint(dc);
+    PaintToDC(dc, dc.window());
 }
 
 /*!
-    Recalculates coordiantes after size change
+    Paints contents of the plot to the DC within canvas rectangle
 */
 void
-TPlotWin::resizeEvent(QResizeEvent* qpev)
+TPlotWin::PaintToDC(QPainter& dc, QRect DC_canvas)
 {
-    canvasRect = geometry();
-    SetRect(FPoint(x1, y1), FPoint(x2, y2));
-    update();
+    QFontMetrics fm = dc.fontMetrics();
+    int width = fm.width(title.c_str());
+    dc.drawText((dc.window().width() - width)/2, 13, title.c_str());
+
+    paintGrid(dc);
+
+    for( uint ii=0; ii<shapes.GetCount(); ii++ )
+        shapes[ii].paint(dc);
 }
 
 
@@ -296,8 +310,7 @@ TPlotWin::paintGrid(QPainter& dc)
 {
 short NumberLines = 5;
 QPoint grid;
-QPoint offset(leftGap, 0);
-QColor color(Qt::black);
+QPoint offset(leftGap, topGap);
 
     if( NumberLines <= 0 || NumberLines > 20 )
         return;
@@ -307,46 +320,54 @@ QColor color(Qt::black);
 //    QPoint zero;
 //    par->RealToVisible( FPoint(0,0), zero );
     
-    QPen pen( color, 1 );
+    QPen pen( Qt::black, 1 );
     pen.setStyle( QPen::DotLine );
 
     dc.setPen( pen );
 //    offset.setX(0);
 //    offset.setY(0);
-    grid.setX((canvas.width()-leftGap-1)/NumberLines);
-    grid.setY((canvas.height()-bottomGap-3)/NumberLines);
+    grid.setX((canvas.width()-leftGap) / NumberLines);
+    grid.setY((canvas.height()-bottomGap-topGap) / NumberLines);
 
-    int deltaX = (canvas.width()-leftGap-1)%NumberLines;
-    int deltaY = (canvas.height()-bottomGap-3)%NumberLines;
+    int deltaX = (canvas.width()-leftGap) % NumberLines;
+    int deltaY = (canvas.height()-bottomGap-topGap) % NumberLines;
 
     if( grid.x() )
-        for( int ii=offset.x(); ii<=canvas.width() ; ii+=grid.x() )
+//        for( int ii=offset.x(); ii<=canvas.width() ; ii+=grid.x() )
+        for( int ii=0; ii<=NumberLines ; ii++ )
         {
-            if( deltaX > 0 )
+	    int x_pos = offset.x() + grid.x() * ii;
+	    
+            if( deltaX > ii )
             {
-                ii++;
-                deltaX--;
+                //ii++;
+                //deltaX--;
+		//x_pos++;
             }
-            dc.moveTo( QPoint(ii, 0) );
-            dc.lineTo( QPoint(ii, canvas.height()) );
+            dc.moveTo( QPoint(x_pos, 0) );
+            dc.lineTo( QPoint(x_pos, canvas.height()) );
 	    QString str;
-	    str.sprintf("%.3g", (ii - leftGap + bx) / ax);
-	    dc.drawText( ii+2, canvas.height() - 7, str);
+	    str.sprintf("%.3g", x1 + (ii * (x2 - x1)) / NumberLines);
+	    dc.drawText( x_pos+2, canvas.height() - 7, str);
         }
 
     if( grid.y() )
-        for( int ii=offset.y(); ii<=canvas.height() ; ii+=grid.y() )
+//        for( int ii=offset.y(); ii<=canvas.height() ; ii+=grid.y() )
+        for( int ii=0; ii<=NumberLines ; ii++ )
         {
+	    int y_pos = offset.y() + grid.y() * ii;
+	    
             if( deltaY > 0 )
             {
-                ii++;
-                deltaY--;
+//                ii++;
+//                deltaY--;
+		//y_pos++;
             }
-            dc.moveTo( QPoint(0, ii) );
-            dc.lineTo( QPoint(canvas.width(), ii) );
+            dc.moveTo( QPoint(0, y_pos) );
+            dc.lineTo( QPoint(canvas.width(), y_pos) );
 	    QString str;
-	    str.sprintf("%.3g", y2 - ((ii + by) / ay));
-	    dc.drawText( 2, ii-1, str);
+	    str.sprintf("%.3g", y1 + ((NumberLines - ii) * (y2 - y1)) / NumberLines);
+	    dc.drawText( 2, y_pos-1, str);
         }
 }
 
@@ -356,7 +377,7 @@ QColor color(Qt::black);
 */
 void TPlotWin::Clear()
 {
-    arr.Clear();
+    shapes.Clear();
 }
 
 /*!
@@ -370,21 +391,4 @@ void TPlotWin::RealToVisible(const FPoint& f, QPoint& to)
 }
 
 
-/*!
-    Paints contents of the plot to the DC within canvas rectangle
-*/
-void
-TPlotWin::PaintToDC(QPainter& dc, QRect DC_canvas)
-{
-// set Printer area
-//    canvasRect = DC_canvas;
-//    SetRect(FPoint(x1, y1), FPoint(x2, y2));
-    paintGrid(dc);
-    for( uint ii=0; ii<arr.GetCount(); ii++ )
-        arr[ii].paint(dc);
-// back to window area
-//    canvasRect = geometry();
-}
-
-//--------------------- End of mpshape.cpp ---------------------------
-
+//--------------------- End of pshape.cpp ---------------------------

@@ -140,7 +140,7 @@ public:
 
 /*!
     Class represents Grid on the plot
-*/
+
 class PGrid:
             public PShape
 {
@@ -155,11 +155,11 @@ public:
     virtual void paint(QPainter& dc);
     void ConvertCoordinates();
 };
-
+*/
 
 /*!
     Array of drawings on the plot
-*/
+
 
 class TShapeArr:
             public TIArray<PShape>
@@ -169,6 +169,7 @@ public:
             TIArray<PShape>(20)
     {}
 };
+*/
 
 /*!
     Plotting area window
@@ -176,22 +177,22 @@ public:
 class TPlotWin:
             public QWidget
 {
-    float x1,y1,x2,y2;
-    float ax,ay;
-    int bx,by;
-    QRect canvasRect;
-    TShapeArr arr;
+    float	x1, y1, x2, y2;
+    float	ax, ay;
+    int		bx, by;
+    QRect	canvasRect;
+    gstring	title;
+    TIArray<PShape> shapes;
 
 protected:
     virtual void paintEvent(QPaintEvent* qpev);
     virtual void resizeEvent(QResizeEvent* qpev);
 
 public:
-    TPlotWin(QWidget* p, QRect rec, FPoint pt1, FPoint pt2);
+    TPlotWin(QWidget* p, QRect rec, FPoint pt1, FPoint pt2, gstring title);
     ~TPlotWin();
 
-    void SetRect(FPoint pt1, FPoint pt2);
-//    void SetCanvasRect(QRect newCanvaRect); 
+    void setPlotBounds(FPoint pt1, FPoint pt2);
     void PaintToDC(QPainter& dc, QRect canvas);
     void paintGrid(QPainter& dc);
     void Clear();
@@ -199,7 +200,7 @@ public:
     int Add(PShape* p)
     {
         p->ConvertCoordinates();
-        return arr.Add(p);
+        return shapes.Add(p);
     }
 //    void mul(const FPoint& f, QPoint& to);
     void RealToVisible(const FPoint& f, QPoint& to);
