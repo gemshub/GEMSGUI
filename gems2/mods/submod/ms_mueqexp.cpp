@@ -564,7 +564,7 @@ void TProfil::XmaxSAT_IPM2( void )
     for( j=jb; j<je; j++ )
     {
         ja = j - ( pmp->Ls - pmp->Lads );
-        if( pmp->SATT[ja] != SAT_SITE )
+        if( pmp->SATT[ja] != SAT_SOLV )
         {
             if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_MINAL ||
                     pmp->DCC[j] == DC_SUR_CARRIER ) continue;
@@ -629,8 +629,8 @@ void TProfil::XmaxSAT_IPM2( void )
                 if( iSite[ist] < 0 )
                     xjn = 0.0;
                 else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
-                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
-                      * pmp->Nfsp[k][ist]; /* expected total in moles */
+                XS0 = max(pmp->MASDT[k][ist], pmp->MASDJ[ja][PI_DEN]);
+                XS0 = XS0 * XVk * Mm / 1e6 * pmp->Nfsp[k][ist]; /* expected total in moles */
 // Experimental  rIEPS = pa.p.IEPS * XS0;
                 XSkC = XSk - xjn - xj; /* occupied by the competing species */
                 if( XSkC < 0.0 )
@@ -650,13 +650,22 @@ void TProfil::XmaxSAT_IPM2( void )
 cout << "XmaxSAT_IPM2 Comp. IT= " << pmp->IT << " j= " << j << " oDUL=" << oDUL << " DUL=" << pmp->DUL[j] << endl;
                 }
 */                break;
-
+            case SAT_L_COMP:
+            case SAT_QCA_NCOMP:
+            case SAT_QCA1_NCOMP:
+            case SAT_QCA2_NCOMP:
+            case SAT_QCA3_NCOMP:
+            case SAT_QCA4_NCOMP:
+            case SAT_BET_NCOMP:
+            case SAT_FRUM_COMP:
+            case SAT_FRUM_NCOMP:
+            case SAT_PIVO_NCOMP:
+            case SAT_VIR_NCOMP:
             case SAT_NCOMP: /* Non-competitive surface species */
 // rIEPS = pa.p.IEPS * 2;
 //                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
 //                      * pmp->Nfsp[k][ist];  in moles
                  xj0 = fabs( pmp->MASDJ[ja][PI_DEN] ) * XVk * Mm / 1e6
-// MASDJ() in mkmol/g: to be fixed to mkmol/m2
                       * pmp->Nfsp[k][ist]; /* in moles */
                  pmp->DUL[j] = xj0 - rIEPS;
 // Experimental  rIEPS = pa.p.IEPS * xj0;
@@ -670,27 +679,17 @@ cout << "XmaxSAT_IPM2 Ncomp IT= " << pmp->IT << " j= " << j << " oDUL=" << oDUL 
                 }
 */                break;
 
-            case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) */
+            case SAT_SOLV:  /* Neutral surface site (e.g. >O0.5H@ group) */
 rIEPS = pa.p.IEPS;
-                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
-                      * pmp->Nfsp[k][ist]; /* in moles */
+                XS0 = max( pmp->MASDT[k][ist], pmp->MASDJ[ja][PI_DEN] );
+                XS0 = XS0 * XVk * Mm / 1e6 * pmp->Nfsp[k][ist]; /* in moles */
+
 // Experimental   rIEPS = pa.p.IEPS * XS0;
                 pmp->DUL[j] =  XS0 - rIEPS; // xj0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
                 if( pmp->DUL[j] <= rIEPS )
                    pmp->DUL[j] = rIEPS;
                 break;
 // New methods added by KD 13.04.04
-case SAT_L_COMP:
-case SAT_QCA_NCOMP:
-case SAT_QCA1_NCOMP:
-case SAT_QCA2_NCOMP:
-case SAT_QCA3_NCOMP:
-case SAT_QCA4_NCOMP:
-case SAT_BET_NCOMP:
-case SAT_FRUM_NCOMP:
-case SAT_VIR_NCOMP:
-case SAT_FRUM_COMP:
-case SAT_PIVO_NCOMP:
             case SAT_INDEF: /* No SAT calculation */
             default:        /* pmp->lnGam[j] = 0.0; */
                 break;

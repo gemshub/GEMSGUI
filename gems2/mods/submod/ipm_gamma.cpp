@@ -970,7 +970,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
     for( j=jb; j<je; j++ )
     {
         ja = j - ( pmp->Ls - pmp->Lads );
-        if( pmp->SATT[ja] == SAT_SITE )
+        if( pmp->SATT[ja] == SAT_SOLV )
         {
            ist = pmp->SATX[ja][XL_ST] / MSPN;
            iSite[ist] = j;
@@ -979,7 +979,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
         if( pmp->DCC[j] == DC_SUR_CARRIER ||
             pmp->DCC[j] == DC_SUR_MINAL ||
             pmp->DCC[j] == DC_PEL_CARRIER ||
-            pmp->SATT[ja] == SAT_SITE )
+            pmp->SATT[ja] == SAT_SOLV )
             continue;
         // Calculate ist - index of surface type
         ist = pmp->SATX[ja][XL_ST] / MSPN;
@@ -1057,20 +1057,11 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
             switch( pmp->SATT[ja] ) // selection of the activity coeff. model
             {
             case SAT_L_COMP: // Competitive monodent. Langmuir on a surface and site type
-                if( iSite[ist] < 0 )
-                    xjn = 0.0;
-                else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
-
-                XSkC = XSs - xjn; // occupied by the competing species;
-//              XSkC = XSk - xjn; obsolete for the whole surface type
-	                          // this sorbate also competes to itself!
-                XSkC = XSkC / XVk / Mm * 1e6
+                XSkC = XSs / XVk / Mm * 1e6
                    /pmp->Nfsp[k][ist]/ pmp->Aalp[k]/1.66054;  // per nm2        check this!!!!!!!
                 XS0 = fabs(pmp->MASDJ[ja][PI_DEN])/pmp->Aalp[k]/1.66054; // max.dens.per nm2
-//                XS0 = pmp->MASDT[k][ist]/pmp->Aalp[k]/1.66054; obsolete
 /*            XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; expected total sites in moles */
-
                 if( pa.p.PC == 1 )
                     rIEPS = pa.p.IEPS * XS0;  // relative IEPS
                 if( XSkC < 0.0 )
@@ -1093,7 +1084,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k )
                 pmp->lnGam[j] = ISAT;
 pmp->lnSAC[ja][0] = ISAT;
                 break;
-    // Non-competitive QCA-L for 1 to 4 dentate species
+    // (Non)competitive QCA-L for 1 to 4 dentate species
 //            case SAT_QCA4_NCOMP: dent++;     /* code '4' */
 //            case SAT_QCA3_NCOMP: dent++;     /* code '3' */
 //            case SAT_QCA2_NCOMP:             /* code '2' */
@@ -1103,8 +1094,8 @@ pmp->lnSAC[ja][0] = ISAT;
                                              // Max site density per nm2
 /*              xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist];     in moles */
-                xj = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
-                     /pmp->Aalp[k]/1.66054; // Density per nm2
+                xj = XSs / XVk / Mm / pmp->Nfsp[k][ist] * 1e6     // xj
+                     /pmp->Aalp[k]/1.66054; // Density per nm2 on site type iss
                 if( pa.p.PC == 1 )
                     rIEPS = pa.p.IEPS * xj0; // relative IEPS
                 if(xj >= xj0/(double)dent)
@@ -1122,11 +1113,11 @@ pmp->lnSAC[ja][0] = ISAT;
                 pmp->lnGam[j] = ISAT;
 pmp->lnSAC[ja][0] = ISAT;
                 break;
-            case SAT_FRUM_NCOMP: /* Non-competitive Frumkin isotherm for perm.charge surfaces */
+            case SAT_FRUM_COMP:
                 dent = 1; // monodentate for now
                 xj0 = fabs(pmp->MASDJ[ja][PI_DEN])/pmp->Aalp[k]/1.66054;
                                              // Max site density per nm2
-                xj = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
+                xj = XSs / XVk / Mm / pmp->Nfsp[k][ist] * 1e6  //  xj
                      /pmp->Aalp[k]/1.66054; // Current density per nm2
                 if( pa.p.PC == 1 )
                     rIEPS = pa.p.IEPS * xj0; // relative IEPS
@@ -1143,21 +1134,16 @@ pmp->lnSAC[ja][0] = ISAT;
                 if( fabs (Fi) < 1e-9 || fabs (cN) < 1e-9 )
                    eF = 0.0;
                 else {
-                   eF = cN * Fi * xj / xj0 ;  // Fi = Fi'/(kT) Bockris p.938
+                   eF = cN * Fi * xj*dent / xj0 ;  // Fi = Fi'/(kT) Bockris p.938
                 }
                 pmp->lnGam[j] = ISAT + eF;
 pmp->lnSAC[ja][0] = ISAT;
 pmp->lnSAC[ja][1] = eF;
                 break;
-            case SAT_FRUM_COMP: /* Competitive Frumkin isotherm for perm.charge surfaces */
-                if( iSite[ist] < 0 )               // monodentate only!
-                    xjn = 0.0;
-                else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
-                XSkC = XSk - xjn; // occupied by the competing species;
-	                          // this sorbate also competes to itself!
-                XSkC = XSkC / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
+            case SAT_FRUM_NCOMP: /* (Non)competitive Frumkin isotherm for perm.charge surfaces */
+                XSkC = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
                        / pmp->Aalp[k]/1.66054;  // per nm2
-                XS0 = pmp->MASDT[k][ist]/pmp->Aalp[k]/1.66054; /* max.dens.per nm2 */
+                XS0 = pmp->MASDJ[ja][PI_DEN]/pmp->Aalp[k]/1.66054; /* max.dens.per nm2 */
 /*            XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
                       * pmp->Nfsp[k][ist]; expected total sites in moles */
                 if( pa.p.PC == 1 )
@@ -1183,20 +1169,17 @@ pmp->lnSAC[ja][1] = eF;
                 if( fabs (Fi) < 1e-9 || fabs (cN) < 1e-9 )
                    eF = 0.0;
                 else {
- XSkC = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6 /pmp->Aalp[k]/1.66054; // Trial
- if(xj >= xj0)  XSkC = XS0 - 2.*rIEPS;                                 // Trial
-// if(pmp->IC > 1e-6) cN = pow( pmp->IC, 0.3333333 );
                    eF = cN * Fi * XSkC / XS0;  // Fi = Fi'/(kT) Bockris p.938
                 }
                 pmp->lnGam[j] = ISAT + eF;
 pmp->lnSAC[ja][0] = ISAT;
 pmp->lnSAC[ja][1] = eF;
                 break;
-            case SAT_PIVO_NCOMP: /* Non-competitive Pivovarov isotherm */
+            case SAT_PIVO_NCOMP: /* (Non)competitive Pivovarov isotherm */
                 dent = 1; // monodentate for now
                 xj0 = fabs(pmp->MASDJ[ja][PI_DEN])/pmp->Aalp[k]/1.66054;
                                              // Max site density per nm2
-                xj = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
+                xj = XSs / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
                      /pmp->Aalp[k]/1.66054; // Current density per nm2
                 if( pa.p.PC == 1 )
                     rIEPS = pa.p.IEPS * xj0; // relative IEPS
@@ -1227,16 +1210,16 @@ pmp->lnSAC[ja][1] = eF;
                 dent = 1; // monodentate for now
                 xj0 = fabs(pmp->MASDJ[ja][PI_DEN])/pmp->Aalp[k]/1.66054;
                                              // Max site density per nm2
-                xj = xj / XVk / Mm / pmp->Nfsp[k][ist] * 1e6
+                xj = XSs / XVk / Mm / pmp->Nfsp[k][ist] * 1e6  // xj / XVk ...
                      /pmp->Aalp[k]/1.66054; // Current density per nm2
                 if( pa.p.PC == 1 )
                     rIEPS = pa.p.IEPS * xj0; // relative IEPS
                 if(xj >= xj0/dent)
                      xj = xj0/dent - rIEPS;  // upper limit
-                ISAT = 0.0;                                  // Calculation of the Frumkin exponential term
+                ISAT = 0.0;
                 if( fabs (Fi) < 1e-9 || fabs (cN) < 1e-9 )
                    eF = 0.0;
-                else {
+                else {         // Calculation of the Frumkin exponential term
                    eF = cN * Fi * xj / xj0 ;  // Fi = Fi'/(kT) Bockris p.938
                 }
                 pmp->lnGam[j] = ISAT + eF;
@@ -1257,7 +1240,7 @@ pmp->lnSAC[ja][0] = 0;
                 break;
             default:        /* pmp->lnGam[j] = 0.0; */
                 break;
-//  Old obsolete SAT calculations 
+//  Old obsolete SAT calculations
             case SAT_COMP: // Competitive SAT (old, obsolete) on a surface type
                 if( iSite[ist] < 0 )
                     xjn = 0.0;
@@ -1322,49 +1305,42 @@ pmp->lnSAC[ja][0] = ISAT;
                 pmp->lnGam[j] = ISAT;
 pmp->lnSAC[ja][0] = ISAT;
                 break;
-            case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) */
+            case SAT_SOLV:  /* Neutral surface site (e.g. >O0.5H@ group) */
 // rIEPS = pa.p.IEPS;
-                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
-                      * pmp->Nfsp[k][ist]; /* in moles */
+                XSkC = XSs / XVk / Mm * 1e6  // total non-solvent surf.species
+                   /pmp->Nfsp[k][ist]/ pmp->Aalp[k]/1.66054;  // per nm2
+                XS0 = max( pmp->MASDT[k][ist], pmp->MASDJ[ja][PI_DEN] );
+                SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/XS0;
+                XS0 = XS0 / pmp->Aalp[k]/1.66054;
                 if( pa.p.PC == 1 )
                     rIEPS = pa.p.IEPS * XS0;  // relative IEPS
-                XSkC = XSk - xj;
-                if( XSkC < 0.0 ) // potentially a serious error !
+                if( XSkC < 0.0 )
                     XSkC = 0.0;
-//                if( XSkC >= XS0 )  // Limits
-//                    XSkC = XS0 - 2.0 * rIEPS;
-                if( pmp->MASDJ[ja][PI_DEN] <= 0.0 )  // what does it mean?
-                    SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
-                            pmp->MASDT[k][ist];
-                else SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/ pmp->MASDJ[ja][PI_DEN];
-//                               pmp->MASDJ[j];
-                if( fabs(XS0-XSkC) > XS0*rIEPS )
+                if( XSkC >= XS0 )  // Limits
+                    XSkC = XS0 - 2.0 * rIEPS;
+                q1 = XS0 - XSkC;
+                if( pa.p.PC == 2 && !pmp->W1 || pa.p.PC != 2 )
                 {
-                    if( XSkC > XS0 )  // case 1
-                        SAT = 1.0;
-                    else
-                    {
-                        SAT = xj/(XS0-XSkC);      // case 2
-                        if( XSk > XS0 )
-                            SAT *= XSk/(XS0-XSkC);    // case 3
-                    }
+                  q2 = rIEPS * XS0;
+                  if( q1 > q2 )
+                      q2 = q1;
                 }
-                else SAT = xj * XS0*rIEPS;     // boost ?????
+                else {
+                   q2 = q1;
+                   if( q2 <= 1e-22 )
+                       q2 = 1e-22;
+                }
+                ISAT = log( XS0 ) - log( q2 );
+                pmp->lnGam[j] = ISAT + log( SATst );
+pmp->lnSAC[ja][0] = ISAT;
+pmp->lnSAC[ja][1] = log(SATst);
 /*                if( pmp->IT > 0 &&
                   ( SAT < 1e-2 || SAT > 1.0/rIEPS || fabs(log(SAT)+log(SATst)-OSAT) > 3 ) )
                 {
 cout << "IT=" << pmp->IT << ": NSite SAT for j= " << j << " old lnSAT= " << OSAT << " new lnSAT= " << ISAT << endl;
 cout << "     x[jn]= " << pmp->X[j] << " XSk= " << XSk << " XSkC=" << XSkC << " XS0=" << XS0 << " SATst=" << SATst << endl;
 //  ISAT = OSAT + 1;           // experiment
-                }
-*/              if( SAT < 1e-2 )  // limits
-                    SAT = 1e-2;  // to limit boosting
-                if( SAT > 1.0/rIEPS )
-                    SAT = 1.0/rIEPS;  // to limit from above
-                pmp->lnGam[j] = log( SAT );
-                pmp->lnGam[j] += log( SATst );
-pmp->lnSAC[ja][0] = pmp->lnGam[j];
-                break;
+*/                break;
             }
         }
     }  /* j */
