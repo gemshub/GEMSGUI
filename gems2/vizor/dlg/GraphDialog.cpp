@@ -53,6 +53,7 @@ class DragLabel:
 	DragLabel(QWidget* parent):
 	    QLabel(parent) {
 	    }
+	virtual ~DragLabel() {}
 
     protected:
 	void mousePressEvent( QMouseEvent *e ) {
@@ -86,6 +87,8 @@ class SymbolLabel:
 	    QLabel(parent) {
 		setData(line);
 	    }
+	virtual ~SymbolLabel() {}
+
 	void setData(const TPlotLine& ln) {
 	    color = QColor(ln.red, ln.green, ln.blue );
             type = ln.type;
@@ -116,7 +119,6 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
         GraphDialogData(pmodule->window(), NULL, false /* true =modal */ ),
         pModule(pmodule),  isFragment(false), gr_data(data)
 {
-
     minX = gr_data.region[0];
     maxX = gr_data.region[1];
     minY = gr_data.region[2];
@@ -131,6 +133,23 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
 			gr_data.title);
 			
     plot->setGridCount(gr_data.axisType);
+
+    // Insert labels in legend box
+    int y = 20;
+    for( uint ii=0, kk=0; ii<gr_data.plots.GetCount(); ii++, y+=10 )
+    {
+        for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++, y+=20 )
+        {
+            SymbolLabel* pLabel1 = new SymbolLabel( pGrpLegend, gr_data.lines[kk]);
+	    aSymbolLabels.Add( pLabel1 );
+	    pLabel1->setGeometry( 3, y, 32, 17 );
+
+            DragLabel* pLabel = new DragLabel( pGrpLegend );
+	    aLegendLabels.Add( pLabel );
+            pLabel->setGeometry( 3 + 35, y, 65, 17 );
+            pLabel->setText( gr_data.lines[kk].name );
+        }
+    }
 
     Show();
 
@@ -165,23 +184,6 @@ void GraphDialog::Show()
 
     ShowPlots();
 
-    // Insert Lines for legend box
-
-    int y = 20;
-    for( uint ii=0, kk=0; ii<gr_data.plots.GetCount(); ii++, y+=10 )
-    {
-        for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++, y+=20 )
-        {
-            SymbolLabel* pLabel1 = new SymbolLabel( pGrpLegend, gr_data.lines[kk]);
-	    aSymbolLabels.Add( pLabel1 );
-	    pLabel1->setGeometry( 3, y, 32, 17 );
-
-            QLabel* pLabel = new DragLabel( pGrpLegend );
-	    aLegendLabels.Add( pLabel );
-            pLabel->setGeometry( 3 + 35, y, 65, 17 );
-            pLabel->setText( gr_data.lines[kk].name );
-        }
-    }
     update();
 
     plot->setPlotBounds( FPoint(minX, minY),

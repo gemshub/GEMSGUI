@@ -102,8 +102,11 @@ PText::paint(QPainter& dc)
 
     dc.setPen( QPen(color, 2) );
     QFont font = dc.font();
-    font.setBold(true);
-    dc.setFont(font);
+    if( !font.bold() )
+    {
+	font.setBold(true);
+    	dc.setFont(font);
+    }
 
     dc.drawText( screenPoint, txt );
     
@@ -137,14 +140,14 @@ const int bottomGap = 20;
 const int topGap = 20;
 const int leftGap = 20;
 
-TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, gstring title_):
+TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title_):
         QWidget(p),
         x1(pt1.x), y1(pt1.y), x2(pt2.x), y2(pt2.y),
-	title(title_.c_str())
+	title(title_)
 {
-    setAcceptDrops(TRUE);
-    QSizePolicy mySize( QSizePolicy::Expanding, QSizePolicy::Expanding );
-    setSizePolicy(mySize);
+//    setAcceptDrops(TRUE);
+//    QSizePolicy mySize( QSizePolicy::Expanding, QSizePolicy::Expanding );
+//    setSizePolicy(mySize);
     
     setPlotBounds(pt1, pt2);
 

@@ -176,7 +176,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent *e );
     
 public:
-    TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, gstring title);
+    TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title);
     ~TPlotWin();
 
     void setPlotBounds(FPoint pt1, FPoint pt2);

@@ -62,6 +62,7 @@ public:
 };
 
 class SymbolLabel;
+class DragLabel;
 
 class GraphDialog:
             public GraphDialogData
@@ -76,7 +77,7 @@ class GraphDialog:
     float minX, minY;
     float maxX, maxY;
     TIArray<SymbolLabel> aSymbolLabels;
-    TIArray<QLabel> aLegendLabels;
+    TIArray<DragLabel> aLegendLabels;
 
     void Show();
     void ShowPlots();
