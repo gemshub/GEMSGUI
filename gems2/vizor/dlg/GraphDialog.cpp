@@ -270,6 +270,7 @@ GraphDialog::Apply()
     }
     pGrpLegend->update();
 
+    plot->setAxisTitles(gr_data.xName.c_str(), gr_data.yName.c_str());
     plot->Clear();
     Show();
     plot->update();
@@ -387,16 +388,26 @@ GraphDialog::CmPrint()
 //        metrics.width()-margin*dpix/72*2,
 //        metrics.height()-margin*dpiy/72*2 );
 
-        //QColor c;
-        //c.setHsv(0, 0, 0) ;//(1 * 255)/2, 255/2, 255 );// rainbow effect
         painter.setPen(Qt::black);
-	painter.setFont(QFont("Arial", 10));
+	painter.setFont(QFont("Arial", 12));
 
 //	painter.scale(metrics.width()/double(plot->width()), metrics.height()/double(plot->height()));
 	painter.translate(40, 50);
 	painter.scale(metrics.logicalDpiX()/72., metrics.logicalDpiY()/72.); // seems to be always = 1
 	plot->PaintToDC(painter);
 
+/*	QPixmap pixmap(metrics.width(), metrics.height());
+	QPainter painter1(&pixmap);
+        painter1.setPen(Qt::black);
+	painter1.setFont(QFont("Arial", 12));
+
+	painter.scale(metrics.width()/double(plot->width()), metrics.height()/double(plot->height()));
+	painter1.translate(40, 50);
+	painter1.scale(metrics.logicalDpiX()/72., metrics.logicalDpiY()/72.); // seems to be always = 1
+	plot->PaintToDC(painter1);
+	painter1.flush();
+	painter.drawPixmap(40, 50, pixmap);
+*/
     }
 }
 

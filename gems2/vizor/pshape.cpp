@@ -139,6 +139,7 @@ PText::setPosition(QPoint screenPoint)
 const int bottomGap = 30;
 const int topGap = 20;
 const int leftGap = 30;
+const int rightGap = 30;
 
 TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title_):
         QWidget(p),
@@ -171,16 +172,16 @@ TPlotWin::setPlotBounds(FPoint pt1, FPoint pt2)
 
     // width
     if( x2-x1 != 0 )
-        ax = (geometry().width()-leftGap)/(x2-x1);
+        ax = (width()-leftGap-rightGap)/(x2-x1);
     else
-        ax = (geometry().width()-leftGap) / 0.0001;
+        ax = (width()-leftGap-rightGap) / 0.0001;
 
     bx = ROUND(x1*ax) - leftGap;
     // height
     if( y2-y1 != 0 )
-        ay = (geometry().height()-bottomGap-topGap)/(y2-y1);	// 0 is upper
+        ay = (height()-bottomGap-topGap)/(y2-y1);	// 0 is upper
     else
-        ay = (geometry().height()-bottomGap-topGap) / 0.0001;
+        ay = (height()-bottomGap-topGap) / 0.0001;
 
     by = /*ROUND(y1*ay)*/0 - topGap; // we shift here only on top gap - not bottom
 }
@@ -254,8 +255,8 @@ TPlotWin::paintGrid(QPainter& dc)
     dc.setPen( pen );
 
     // need float grid interval to make it precise
-    float gridX = (float(canvas.width()-leftGap) / gridCount);
-    float gridY = (float(canvas.height()-bottomGap-topGap) / gridCount);
+    float gridX = (float(width()-leftGap-rightGap) / gridCount);
+    float gridY = (float(height()-bottomGap-topGap) / gridCount);
 
     QFontMetrics fm(dc.fontMetrics());
 
@@ -268,6 +269,14 @@ TPlotWin::paintGrid(QPainter& dc)
 //    dc.drawText( dc.xForm(QPoint(7, (height() - fm.width(yTitle))/2)), yTitle);
     dc.rotate(90);
     fn.setBold(false);
+    dc.setFont(fn);
+
+    QString cr("(c) GEMS");
+    int fontSize = fn.pointSize();
+    fn.setPointSize(9);
+    dc.setFont(fn);
+    dc.drawText( width() - QFontMetrics(fn).width(cr) - 2, height() - 5, cr);
+    fn.setPointSize(fontSize);
     dc.setFont(fn);
 
     if( gridX )
