@@ -108,49 +108,55 @@ STEP_POINT( "End Simplex" );
             return true; // goto OVER; // solved !
         for( i=0; i<pmp->L; i++ )
         {
-            if( pmp->Y[i] <= /* LOWESTDC_ */ pmp->lowPosNum )
+//            if( pmp->Y[i] <= /* LOWESTDC_ */ pmp->lowPosNum )
                 //	       pmp->Y[i] = LOWESTDC_ / 10.;
                 //         pmp->Y[i] = pa.p.DFYaq;
-            {
+//            if( pmp->Y[i] < pa.p.DFYc * sfactor ) // 24.02.03
+//            {
                 // Trace DC quantity into zeros!
                 switch( pmp->DCC[i] )
                 {
                 case DC_AQ_PROTON:
                 case DC_AQ_ELECTRON:
                 case DC_AQ_SPECIES:
-                    pmp->Y[i] =  pa.p.DFYaq;
+                    if( pmp->Y[i] < pa.p.DFYaq * sfactor /*= pmp->lowPosNum */ )
+                       pmp->Y[i] =  pa.p.DFYaq * sfactor;
                     break;
                 case DC_AQ_SOLVCOM:
                 case DC_AQ_SOLVENT:
-                    pmp->Y[i] =  pa.p.DFYw;
+                    if( pmp->Y[i] < pa.p.DFYw * sfactor )
+                       pmp->Y[i] =  pa.p.DFYw * sfactor;
                     break;
-
                 case DC_GAS_H2O:
                 case DC_GAS_CO2:
                 case DC_GAS_H2:
                 case DC_GAS_N2:
                 case DC_GAS_COMP:
                 case DC_SOL_IDEAL:
-                    pmp->Y[i] = pa.p.DFYid;
+                    if( pmp->Y[i] < /* = pmp->lowPosNum */ pa.p.DFYid*sfactor )
+                       pmp->Y[i] = pa.p.DFYid * sfactor;
                     break;
-
                 case DC_SOL_MINOR:
-                    pmp->Y[i] = pa.p.DFYh;
+                    if( pmp->Y[i] < /* = pmp->lowPosNum */ pa.p.DFYh*sfactor )
+                       pmp->Y[i] = pa.p.DFYh * sfactor;
                     break;
                 case DC_SOL_MAJOR:
-                    pmp->Y[i] =  pa.p.DFYr;
+                    if( pmp->Y[i] < pa.p.DFYr * sfactor )
+                        pmp->Y[i] =  pa.p.DFYr * sfactor;
                     break;
 
                 case DC_SCP_CONDEN:
-                    pmp->Y[i] =  pa.p.DFYc;
+                    if( pmp->Y[i] < /* pmp->lowPosNum */ pa.p.DFYc * sfactor )
+                        pmp->Y[i] =  pa.p.DFYc * sfactor;
                     break;
                     // implementation for adsorption?
                 default:
-                    pmp->Y[i] =  pa.p.DFYaq;
+                    if( pmp->Y[i] < pa.p.DFYaq *sfactor /* pmp->lowPosNum */ )
+                        pmp->Y[i] =  pa.p.DFYaq * sfactor;
                     break;
                 }
-                pmp->Y[i] *= sfactor;  // 2.5 root
-             }
+//              pmp->Y[i] *= sfactor;  // 2.5 root
+//             }
            } // i
     }
     else  // Taking previous result as initial approximation
@@ -204,29 +210,43 @@ if( pa.p.PRD >= 8 )
         {  // With raising zeroed species and phases
            for( i=0; i<pmp->L; i++ )
            {
-              if( pmp->Y[i] <= pmp->lowPosNum )
-              { // Put trace DC quantity instead of zeros!
+//            if( pmp->Y[i] <= pmp->lowPosNum )
+//              { // Put trace DC quantity instead of zeros!
                  switch( pmp->DCC[i] )
                  {
                    case DC_AQ_PROTON:
                    case DC_AQ_ELECTRON:
-                   case DC_AQ_SPECIES: pmp->Y[i] = pa.p.DFYaq/1000.; break;
+                   case DC_AQ_SPECIES:
+                      if( pmp->Y[i] <= pmp->lowPosNum )
+                           pmp->Y[i] = pa.p.DFYaq/1000.;
+                      break;
                    case DC_AQ_SOLVCOM:
-                   case DC_AQ_SOLVENT: pmp->Y[i] = pa.p.DFYw;  break;
-
+                   case DC_AQ_SOLVENT:
+                        if( pmp->Y[i] < pa.p.DFYw )
+                           pmp->Y[i] = pa.p.DFYw;
+                      break;
                    case DC_GAS_H2O: case DC_GAS_CO2: case DC_GAS_H2:
                    case DC_GAS_N2: case DC_GAS_COMP:
-                   case DC_SOL_IDEAL:  pmp->Y[i] = pa.p.DFYid/1000.; break;
-
-                   case DC_SOL_MINOR:  pmp->Y[i] = pa.p.DFYh/1000.; break;
-                   case DC_SOL_MAJOR:  pmp->Y[i] = pa.p.DFYr/100.; break;
-
-                   case DC_SCP_CONDEN: pmp->Y[i] = pa.p.DFYc/1000.; break;
+                   case DC_SOL_IDEAL:
+                        if( pmp->Y[i] <= pmp->lowPosNum )
+                          pmp->Y[i] = pa.p.DFYid/1000.;
+                      break;
+                   case DC_SOL_MINOR:
+                        if( pmp->Y[i] <= pmp->lowPosNum )
+                          pmp->Y[i] = pa.p.DFYh/1000.; break;
+                   case DC_SOL_MAJOR:
+                        if( pmp->Y[i] < pa.p.DFYr )
+                          pmp->Y[i] = pa.p.DFYr; break;
+                   case DC_SCP_CONDEN:
+                        if( pmp->Y[i] < pa.p.DFYc )
+                        pmp->Y[i] = pa.p.DFYc; break;
                    // implementation for adsorption?
-                   default:  pmp->Y[i] = pa.p.DFYaq/1000.; break;
+                   default:
+                        if( pmp->Y[i] <= pmp->lowPosNum )
+                        pmp->Y[i] = pa.p.DFYaq/1000.; break;
                  }
               } // i
-           }
+//           }
         }
 if( pa.p.PRD >= 7 )
 {                      // Dima 18/05/2002 test init load before simplex

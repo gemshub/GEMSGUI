@@ -221,7 +221,7 @@ KN:
 void TProfil::PhaseSelect()
 {
     short II,JJ,Z,I,J;//, iRet=0;
-    double F1,F2,F3,*F0;
+    double F1,F2,F3=0.0,*F0;
 
     f_alpha( );
     F0 = pmp->Falp;
@@ -230,16 +230,16 @@ void TProfil::PhaseSelect()
     pmp->MK=0;
     JJ= -1;
     II= -1;
-    F1= F2= pmp->lowPosNum*100.;  // 1E-16;
+    F1= F2= pmp->lowPosNum*10000.;  // 1E-16;
 
     for(Z=0;Z<pmp->FI;Z++)
     {
-        if( F0[Z]>F1 && pmp->YF[Z]<pmp->lowPosNum*10. )
+        if( F0[Z]>F1 && pmp->YF[Z]<pmp->lowPosNum )
         {
             F1=F0[Z];  // selection of max Fa and phase index
             JJ=Z;
         }
-        if( F0[Z]>F2 && pmp->YF[Z]>pmp->lowPosNum*10. )
+        if( F0[Z]>F2 && pmp->YF[Z]>pmp->lowPosNum )
         {
             F2=F0[Z];
             II=Z;
@@ -247,15 +247,21 @@ void TProfil::PhaseSelect()
     }
     if( F1 > pa.p.DF && JJ >= 0 )
     {
+        double sfactor, molB=0.0;
+        int i, NN;
         F3=F1;
         // There is a phase for which DF (0.01) is exceeded
         //   S2:;
+        NN = pmp->N - pmp->E;
+        for(i=0;i<NN;i++)
+           molB += pmp->B[i];
+        sfactor = pow( molB, 0.4 )/7.7; // see ms_mueqexp.cpp(59)
         do
         {  // insert all phases with  F1 > DFM
             J=0; // insert this phase and set Y[j] for its components
             // with account for asymmetry and non-ideality
-            for( I=0; I<JJ-1; I++ )
-                J+=pmp->L1[I];
+            for( I=0; I<JJ/*-1*/; I++ )   // A bug ?
+                 J+=pmp->L1[I];
             pmp->YF[JJ] = 0.;
             for(I=J; I<J+pmp->L1[JJ]; I++)
             {
@@ -264,69 +270,66 @@ void TProfil::PhaseSelect()
                 case DC_AQ_PROTON:
                 case DC_AQ_ELECTRON:
                 case DC_AQ_SPECIES:
-                    pmp->Y[I] = pa.p.DFYaq;
+                    pmp->Y[I] = pa.p.DFYaq * sfactor;
                     break;
                 case DC_AQ_SOLVCOM:
                 case DC_AQ_SOLVENT:
-                    pmp->Y[I] = pa.p.DFYw;
+                    pmp->Y[I] = pa.p.DFYw * sfactor;
                     break;
-
                 case DC_GAS_H2O:
                 case DC_GAS_CO2:
                 case DC_GAS_H2:
                 case DC_GAS_N2:
                 case DC_GAS_COMP:
                 case DC_SOL_IDEAL:
-                    pmp->Y[I] = pa.p.DFYid;
+                    pmp->Y[I] = pa.p.DFYid * sfactor;
                     break;
-
                 case DC_SOL_MINOR:
-                    pmp->Y[I] = pa.p.DFYh;
+                    pmp->Y[I] = pa.p.DFYh * sfactor;
                     break;
                 case DC_SOL_MAJOR:
-                    pmp->Y[I] = pa.p.DFYr;
+                    pmp->Y[I] = pa.p.DFYr * sfactor;
                     break;
-
                 case DC_SCP_CONDEN:
-                    pmp->Y[I] = pa.p.DFYc;
+                    pmp->Y[I] = pa.p.DFYc * sfactor;
                     break;
                     // implementation for adsorption?
                 default:
-                    pmp->Y[I] = pa.p.DFYid;
+                    pmp->Y[I] = pa.p.DFYaq * sfactor;
                     break;
                 }
                 pmp->YF[JJ] += pmp->Y[I];
             } /* I */
             pmp->FI1++;  // check phase rule
             if( pmp->FI1 >= pmp->NR+1 )
-            { // There is no more phases to insert
+            { // No more phase can be inserted
                 break; /* goto S5; */
             }
-            // find new phase to insert
-            F1= pa.p.DFM-pa.p.DF; /* 1E-16; */
+            // find a new phase to insert, if any
+            F1= pmp->lowPosNum*10000.; // 1e-16
+//          F1= pa.p.DFM-pa.p.DF; /* 1E-16; */
             JJ = -1;
             for( Z=0; Z<pmp->FI; Z++ )
-                if( F0[Z] > F1 && pmp->YF[Z] < pmp->lowPosNum * 100. /* 1E-17 */ )
+                if( F0[Z] > F1 && pmp->YF[Z] < pmp->lowPosNum )
                 {
                     F1=F0[Z];
                     JJ=Z;
                 }
         }
-        while( F1 > pa.p.DFM && JJ >= 0/* 1E-15 */ );  /* goto S2; */
+        while( F1 > pa.p.DF && JJ >= 0/* 1E-15 */ );  /* goto S2; */
         // end of insertion cycle
         J=0;   /* S5: insert prime IPM solution */
         for(Z=0;Z<pmp->FIs;Z++)
         {
-            if( pmp->YF[Z ] > pmp->lowPosNum * 10. /* 1E-18 */ )
+            if( pmp->YF[Z ] > pmp->lowPosNum /* 1E-18 */ )
             {
                 pmp->YF[Z]=0.;
                 for(I=J;I<J+pmp->L1[Z];I++)
                 {
-                    if( pmp->Y[I] < pmp->lowPosNum )
-                        pmp->Y[I] = /* pa.p.DFMs; */ 1E-12;
+                   if( pmp->Y[I] < pmp->lowPosNum ) // Check what to insert !
+                       pmp->Y[I] = pa.p.DFM; // lowPosNum?
                     pmp->YF[Z]+=pmp->Y[I]; // calc new  quantities of phases
                 }
-
             }
             J+=pmp->L1[Z];
         }
@@ -337,7 +340,7 @@ void TProfil::PhaseSelect()
         if( pmp->K2>1 )
         { // more then first step - solution is not improved
             for(I=0;I<pmp->L;I++)
-                if( fabs(pmp->Y[I]-pmp->XY[I]) > pa.p.DF*pmp->Y[I] )
+                if( fabs(pmp->Y[I]- pmp->XY[I]) > pa.p.DF*pmp->Y[I] ) // Check!
                     goto S6;
             pmp->PZ=2;
             F1=F3;
@@ -346,6 +349,7 @@ void TProfil::PhaseSelect()
 S6: // copy X changed by SELEKT2 algorithm
         for(I=0;I<pmp->L;I++)
             pmp->XY[I]=pmp->Y[I];
+// Copy here also to pmp->X[I]?
         return;
         /*  else goto S5; */
     }
@@ -364,8 +368,8 @@ S4: // No phases to insert or no distortions
 // ------------------- ------------------ ----------------
 // Calculation of feasible IPM initial approximation point
 //
-// Algorithm: see Karpov, Chudnenko, Kulik 1997 Amer.J.Sci.
-// vol 297 p. 798-799 (Appendix B)
+// Algorithm: see Karpov, Chudnenko, Kulik 1997 Amer.J.Sci. vol 297 p. 798-799
+// (Appendix B)
 //
 // Returns: 0 - OK,
 //          1 - no convergence at specified precision DHB

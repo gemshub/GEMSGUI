@@ -17,14 +17,14 @@ const double R_CONSTANT = 8.31451,
                             ln_to_lg = 0.434294481;
 
 SPP_SETTING pa_ = {
-    "GEM-Selektor v2.0.x-PSI: Controls&defaults for numeric modules",
+    "GEM-Selektor v2-PSI: Controls and defaults for numeric modules",
     {
         1,  /* PC */  3,     /* PD */   3,   /* PRD */
         1,  /* PSM  */ 144,  /* DP */   15,   /* DW */
         -2, /* DT */  0,     /* PLLG */   1,   /* PE */
         500,   /* IIM */
         1e-30, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
-        1e-5,  /* DK */  0.01,  /* DF */  -0.1,  /* DFM */
+        1e-5,  /* DK */  0.01,  /* DF */  1e-12,  /* DFM */
         1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
         1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
         1e-12, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */

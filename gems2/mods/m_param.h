@@ -58,8 +58,8 @@ struct BASE_PARAM
     DHB, // Precision of mass balance deviations at EFD { 1e-8 }
     DS,  // Cutoff number of moles of a phase { 1e-10 }
     DK,  // Threshold of Dikin criterion of IPM convergence { 1e-5 }
-    DF,   // Threshold of Karpov' criteria for phase stability { 0.01 }
-    DFM,  // Threshold for Karpov' criteria for insertion of phases { -0.1 }
+    DF,   // Threshold of Karpov' criteria for phase stability in Selekt2 { 0.01 }
+    DFM,  // Value for insertion into zeroed-off species in stable phases { 1e-12 }
     DFYw, // N of moles of H2O-solvent for phase insertion { 2e-5 }
     DFYaq,// N of moles of aqueous DC for phase insertion { 1e-7 }
     DFYid,// N of moles of DC in ideal solution for phase insertion { 1e-6 }
