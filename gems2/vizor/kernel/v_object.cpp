@@ -609,10 +609,12 @@ size_t  TObject::ofDB( GemDataStream& f )
     case 0: // old size = new size
         break;
     }
+    
     if( !ssize )
     {
-        if( GetPtr()!=0 && Type == S_ )
+        if( GetPtr() != NULL && Type == S_ )
             *((char *)GetPtr()) = '\0';
+
         return szOLABEL - 2;///(size_t)(sizeof( OLABEL )-2);
     }
 
@@ -621,17 +623,17 @@ size_t  TObject::ofDB( GemDataStream& f )
             Obegin[1] != TOKENOBJBEGIN)
         Error(GetKeywd(),
               "TObject:E08 Wrong format on getting data object from database");
+
     // temporary workaround of different alignment in SPP_SETTING
-    //#ifndef __unix
     if( strcmp(Keywd, "SPPpar") == 0 )
     {
         size_t off = 0;
-
         size_t r_pos = f.tellg();
+
         f.seekg( 758+r_pos, ios::beg );
         f.sync();
+
         char ch;
-        //            char padding;
         do
         {
             f.get( ch );
@@ -648,71 +650,8 @@ size_t  TObject::ofDB( GemDataStream& f )
 
         f.seekg( r_pos, ios::beg );
         f.sync();
-#ifdef __unix
-        cerr << "parameter ssize:" << ssize << endl;
-        cerr << "memory size:" << sizeof(SPP_SETTING) << endl;
-        cerr << "SPP_SETTING record size in file differ from flat one by: " << off;
-        cerr << ", (" << (off+758) << ") total" << endl;
-#endif
-        SPP_SETTING& pa = ((TProfil *)&aMod[RT_PARAM])->pa;
-        size_t off_p = (char*)&pa.p - (char*)&pa;    // p.PC
-#ifdef __unix
-        cerr << "memory '&pa.p - &pa' offset:" << off_p << endl;
-#endif
-        size_t off_DG = (char*)&pa.p.DG - (char*)&pa;
-#ifdef __unix
-        cerr << "memory '&pa.p.DG - &pa' offset:" << off_DG << endl;
-#endif
-        size_t off_tprn = (char*)&pa.p.tprn - (char*)&pa;
-#ifdef __unix
-        cerr << "memory '&pa.p.tprn - &pa' offset:" << off_tprn << endl;
-#endif
-        size_t off_DCpct = (char*)&pa.DCpct - (char*)&pa;
-#ifdef __unix
-        cerr << "memory 'pa.DCpct - &pa' offset:" << off_DCpct << endl;
-#endif
-        size_t off_NP = (char*)&pa.NP - (char*)&pa;
-#ifdef __unix
-        cerr << "memory 'pa.NP - &pa' offset:" << off_NP << endl;
-#endif
-        size_t off_Pi = (char*)&pa.Pi - (char*)&pa;
-#ifdef __unix
-        cerr << "memory 'pa.Pi - &pa' offset:" << off_Pi << endl;
-#endif
-        //                f.read( (char *)GetPtr() + 88, 228/*ssize*/ );
-        //	if( off == 4 )
-        //	    f.seekg( 4, ios::cur );
-        /*
-        	if( off == 2 )
-        	{
-        	    f.seekg( 4, ios::cur );
-        	    off -= 2;
-        	    cerr << "Shifted on p.DG by 2" << endl;
-        	}
-        */
-        // for flat file:
-        // 84 for pa.p.DG
-        // 312 for pa.DCpct
 
-        size_t cnt = 64 + 10*sizeof(short) +
-                     28*sizeof(double) + sizeof(char*) + 352 + 9*sizeof(short) + 19*sizeof(float);
-
-        f.readArray( (char *)GetPtr() , 64/*ssize*/ ); // version
-//cerr << "version: " << (char*)GetPtr() << endl;
-        f.readArray( (short*)((char *)GetPtr() + off_p), 10 );
-
-        f.readArray( (double*)((char *)GetPtr() + off_DG), 28 );
-
-        f.readArray( (char *)GetPtr() + off_tprn, sizeof(char*) ); // garbage - 4 bytes
-
-        f.readArray( (char *)GetPtr() + off_DCpct, 352/*ssize*/ );  // default codes of values
-
-        f.readArray( (short*)((char *)GetPtr() + off_NP), 9/*ssize*/ );
-
-        f.readArray( (float*)((char *)GetPtr() + off_Pi), 19/*ssize*/ );
-#ifdef __unix
-        cerr << "read " << cnt << endl;
-#endif
+        ((SPP_SETTING*)GetPtr())->read(f);
         // ios::cur - dosen't work in BCB4 :-(
         f.seekg( off + f.tellg(), ios::beg );
         //ssize = 768;

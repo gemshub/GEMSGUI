@@ -86,6 +86,7 @@ struct BASE_PARAM
     char *tprn;       // internal
 
     void write(GemDataStream& oss);
+    void read(GemDataStream& oss);
 };
 
 struct SPP_SETTING
@@ -137,6 +138,7 @@ struct SPP_SETTING
     ;
 
     void write(GemDataStream& oss);
+    void read(GemDataStream& oss);
 };
 
 

@@ -106,6 +106,15 @@ BASE_PARAM::write(GemDataStream& oss)
     oss.writeArray( "0000", 4 );
 }
 
+void
+BASE_PARAM::read(GemDataStream& iss)
+{
+    char tmp[4];
+    iss.readArray( &PC, 10 );
+    iss.readArray( &DG, 28 );
+    iss.readArray( tmp, 4 );
+}
+
 
 void
 SPP_SETTING::write(GemDataStream& oss)
@@ -115,6 +124,16 @@ SPP_SETTING::write(GemDataStream& oss)
     oss.writeArray( DCpct, 352 );
     oss.writeArray( &NP, 9 );
     oss.writeArray( Pi, 19 );
+}
+
+void
+SPP_SETTING::read(GemDataStream& iss)
+{
+    iss.readArray( ver, TDBVERSION );
+    p.read( iss );
+    iss.readArray( DCpct, 352 );
+    iss.readArray( &NP, 9 );
+    iss.readArray( Pi, 19 );
 }
 
 
