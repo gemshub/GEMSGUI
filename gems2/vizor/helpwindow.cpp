@@ -158,12 +158,18 @@ HttpMimeSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QSt
     it can work with local filesystem or with HTTP protocol
 */
 
+static QString HISTORY_FILE;
+static QString BOOKMARKS_FILE;
+
 HelpWindow::HelpWindow( const QString& path_,
 			QWidget* parent, bool modal )
     : QDialog( parent, 0, modal, WDestructiveClose ),
       pathCombo( 0 ), 
       selectedURL()
 {
+    HISTORY_FILE = QString(pVisor->userGEMDir().c_str()) +  "/.helpviewer_history";
+    BOOKMARKS_FILE = QString(pVisor->userGEMDir().c_str()) +  "/.helpviewer_bookmarks";
+
     menubar = new QMenuBar(this);
     toolbar = new QToolBar("Navigation Toolbar", 0, this);
     statusbar = new QStatusBar(this);
@@ -329,12 +335,13 @@ void HelpWindow::textChanged()
 
 HelpWindow::~HelpWindow()
 {
-/*    history.clear();
+    history.clear();
     QMap<int, QString>::Iterator it = mHistory.begin();
     for ( ; it != mHistory.end(); ++it )
 	history.append( *it );
 
-    QFile f( QDir::currentDirPath() + "/.history" );
+//    QFile f( QDir::currentDirPath() + "/.history" );
+    QFile f( HISTORY_FILE );
     f.open( IO_WriteOnly );
     QDataStream s( &f );
     s << history;
@@ -345,19 +352,18 @@ HelpWindow::~HelpWindow()
     for ( ; it2 != mBookmarks.end(); ++it2 )
 	bookmarks.append( *it2 );
 
-    QFile f2( QDir::currentDirPath() + "/.bookmarks" );
+//    QFile f2( QDir::currentDirPath() + "/.bookmarks" );
+    QFile f2( BOOKMARKS_FILE );
     f2.open( IO_WriteOnly );
     QDataStream s2( &f2 );
     s2 << bookmarks;
     f2.close();
-*/
 }
 
 void HelpWindow::about()
 {
     QMessageBox::about( this, "Help Window",
-			"Allows to browse GEM-Selektor HTML documentation"
-			);
+			"Allows to browse GEM-Selektor HTML documentation");
 }
 
 
@@ -433,8 +439,8 @@ void HelpWindow::pathSelected( const QString &_path )
 
 void HelpWindow::readHistory()
 {
-    if ( QFile::exists( QDir::currentDirPath() + "/.history" ) ) {
-	QFile f( QDir::currentDirPath() + "/.history" );
+    if ( QFile::exists( HISTORY_FILE ) ) {
+	QFile f( HISTORY_FILE );
 	f.open( IO_ReadOnly );
 	QDataStream s( &f );
 	s >> history;
@@ -446,8 +452,8 @@ void HelpWindow::readHistory()
 
 void HelpWindow::readBookmarks()
 {
-    if ( QFile::exists( QDir::currentDirPath() + "/.bookmarks" ) ) {
-	QFile f( QDir::currentDirPath() + "/.bookmarks" );
+    if ( QFile::exists( BOOKMARKS_FILE ) ) {
+	QFile f( BOOKMARKS_FILE );
 	f.open( IO_ReadOnly );
 	QDataStream s( &f );
 	s >> bookmarks;

@@ -18,6 +18,7 @@
 //-------------------------------------------------------------------
 //
 #include <stdio.h>
+#include <math.h>
 
 #include "m_param.h"
 #include "m_syseq.h"
