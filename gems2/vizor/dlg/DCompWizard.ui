@@ -64,7 +64,7 @@
                 </item>
                 <item>
                     <property name="text">
-                        <string>T    Hydrogen ion H+</string>
+                        <string>T    Hydrogen ion H+ in aqueous electrolyte</string>
                     </property>
                 </item>
                 <item>
@@ -74,7 +74,7 @@
                 </item>
                 <item>
                     <property name="text">
-                        <string>W   Water H2O (solvent in aqueous phase)</string>
+                        <string>W   Water H2O - solvent in aqueous electrolyte phase</string>
                     </property>
                 </item>
                 <item>
@@ -84,32 +84,32 @@
                 </item>
                 <item>
                     <property name="text">
-                        <string>G    Gas (ideal component)</string>
+                        <string>G    Gas substance, a component of gas or fluid mixture</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>V    H2O (vapour) gas or fluid component</string>
+                        <string>V    H2O (vapour)  gas/fluid component (CORK EoS)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>C    CO2 (carbon dioxide) gas or fluid component</string>
+                        <string>C    CO2 (carbon dioxide) gas/fluid component (CORK EoS)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>I      Ideal end-member (ideal mixing, Raoult's law)</string>
+                        <string>I      Ideal solution end-member (symmetric ideal mixing, Raoult's law)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>M    Major end-member (solvent, non-ideal mixing)</string>
+                        <string>M    Major solution end-member (solvent, non-ideal mixing)</string>
                     </property>
                 </item>
                 <item>
                     <property name="text">
-                        <string>J     Junior end-member (solute, non-ideal mixing)</string>
+                        <string>J     Junior solution end-member (solute, non-ideal mixing)</string>
                     </property>
                 </item>
                 <item>
@@ -200,6 +200,22 @@
                 </property>
             </widget>
         </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>120</y>
+                    <width>580</width>
+                    <height>60</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.</string>
+            </property>
+        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>MixingModelGroup</cstring>
@@ -207,9 +223,9 @@
             <property name="geometry">
                 <rect>
                     <x>0</x>
-                    <y>210</y>
+                    <y>190</y>
                     <width>630</width>
-                    <height>200</height>
+                    <height>210</height>
                 </rect>
             </property>
             <property name="title">
@@ -221,9 +237,9 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>380</x>
+                        <x>390</x>
                         <y>20</y>
-                        <width>240</width>
+                        <width>230</width>
                         <height>50</height>
                     </rect>
                 </property>
@@ -246,9 +262,9 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>380</x>
+                        <x>390</x>
                         <y>80</y>
-                        <width>240</width>
+                        <width>230</width>
                         <height>50</height>
                     </rect>
                 </property>
@@ -271,9 +287,9 @@
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>380</x>
+                        <x>390</x>
                         <y>141</y>
-                        <width>230</width>
+                        <width>220</width>
                         <height>50</height>
                     </rect>
                 </property>
@@ -282,29 +298,6 @@
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>C   Calculation on the basis of standard S0  and Cp0  integration</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>H   Calculation on the basis of revised HKF EoS (reserved)</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>p_pct_1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>30</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
                 </property>
             </widget>
             <widget class="QComboBox">
@@ -335,7 +328,30 @@
                     <rect>
                         <x>10</x>
                         <y>90</y>
-                        <width>350</width>
+                        <width>360</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>C   Calculation on the basis of standard S0  and Cp0  integration</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>H   Calculation on the basis of revised HKF EoS (reserved)</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>p_pct_1</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>30</y>
+                        <width>360</width>
                         <height>31</height>
                     </rect>
                 </property>
@@ -353,7 +369,7 @@
                 </item>
                 <item>
                     <property name="text">
-                        <string>F   Pressure corrections to 5 kbar using HKF EoS for aqueous species or HGK for water</string>
+                        <string>F    Pressure corrections using HKF EoS for aqueous species or HGK EoS for water</string>
                     </property>
                 </item>
                 <item>
@@ -388,17 +404,7 @@
                 </item>
                 <item>
                     <property name="text">
-                        <string>H   Pressure corrections using CORK EoS for H2O (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>I    Pressure corrections using CORK EoS for CO2 (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>J    Pressure corrections using CORK EoS corresponding-states routine (reserved)</string>
+                        <string>R   Pressure corrections using CORK EoS with corresponding states calculations</string>
                     </property>
                 </item>
                 <property name="name">
@@ -408,27 +414,11 @@
                     <rect>
                         <x>10</x>
                         <y>150</y>
-                        <width>350</width>
+                        <width>360</width>
                         <height>31</height>
                     </rect>
                 </property>
             </widget>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>120</y>
-                    <width>580</width>
-                    <height>80</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.&lt;/b&gt;</string>
-            </property>
         </widget>
     </widget>
     <widget class="QWidget">

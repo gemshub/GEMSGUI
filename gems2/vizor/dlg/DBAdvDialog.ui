@@ -279,7 +279,7 @@
                     </font>
                 </property>
                 <property name="text">
-                    <string>Coupled Fluid-&amp;Mass Transport</string>
+                    <string>Coupled Fluid-&amp;Mass Transport (GEM2MT)</string>
                 </property>
                 <property name="accel">
                     <string>Alt+M</string>
