@@ -77,7 +77,7 @@ gems2-mac-{current_date}.zip file can be distributed by
 copying it from the desktop to your (remote) location, 
 e.g. for Linux as follows:
 
-  scp guest@129.129.204.77:/Users/guest/Desktop/gems2-mac.*.zip .  
+  scp guest@129.129.204.77:/Users/guest/Desktop/gems2-mac*.zip .  
 
 and type the "guest" user's password on the prompt. 
 
