@@ -58,7 +58,8 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
     aW.twp->S = (double)dc[q].Ss[0];
     aW.twp->G = dc[q].Gs[0]; /* - aW.twp->S * (T-Tst); */
     aW.twp->H = dc[q].Hs[0];
-    aW.twp->V = Vst;
+//    aW.twp->V = Vst;
+    aW.twp->V = 0.0;
 // cout << " TC="<< TC << " T=" << aW.twp->T << " Tst=" << aW.twp->Tst << " Sst=" << aW.twp->S << " Gst="
 //     << aW.twp->G << " Hst=" << aW.twp->H << " Cpst=" << aW.twp->Cp << " Vst=" << aW.twp->V << endl; 
     if(( dc[q].pstate[0] == CP_GAS || dc[q].pstate[0] == CP_GASI )
@@ -216,7 +217,7 @@ NEXT:
                          + Smax * ((T-Tcr)*Qq*Qq + Tcr*pow(Qq,6.)/3.);
             aW.twp->H += smq - Smax*Tcr*( Qq*Qq - pow(Qq,6.)/3. )
                          + ivdp - T*idvdtdp;   // check this!
-            aW.twp->V += v_bis;    // in J/bar 
+            aW.twp->V = v_bis;    // in J/bar
 
             if( T<Tcr )  // Cp is corrected at subcritical T only
                 aW.twp->Cp += T * Smax / 2. / sqrt( Tcr ) / sqrt( Tcr-T );
@@ -227,8 +228,8 @@ NEXT:
 
     calc_voldp( q, p, CE, CV );
 
-// cout << " P=" << aW.twp->P << " S(T,P)=" << aW.twp->S << " G(T,P)=" << aW.twp->G 
-//     << " H(T,P)=" << aW.twp->H << " V(T,P)=" << aW.twp->V <<  endl; 
+// cout << " P=" << aW.twp->P << " S(T,P)=" << aW.twp->S << " G(T,P)=" << aW.twp->G
+//     << " H(T,P)=" << aW.twp->H << " V(T,P)=" << aW.twp->V <<  endl;
 
 }
 
@@ -280,7 +281,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                              // No zero molar volume !
       {
 // Inserted 01.07.03 - calculations acc. to Holland&Powell, 1998
-         double PP = P*0.001; // P seems to be in kbar in HP98 eqns!
+         double VT, PP = P*0.001; // P seems to be in kbar in HP98 eqns!
 //       double PP = P_Pst*0.001;  // this is used by C.DeCapitani in Theriac
          // Coeff. of thermal expansion at T
          aW.twp->Alp = aE * (1. - 10./T05 );
@@ -289,12 +290,16 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          // Compressibility at T  - check !
          aW.twp->Bet = 1./PP * (1. - pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 ));  // to check (compressibility)
 // Molar properties
-         aW.twp->V = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
-         aW.twp->G += 1./3.* aW.twp->V * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
+//         aW.twp->V = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
+         VT = Vst *(1.+ aE*T_Tst - 20.*aE*(T05 - Tst05));
+//         aW.twp->G += 1./3.* aW.twp->V * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
+         aW.twp->G += 1./3.* VT * kap * 1000. * (pow((1.+4.*PP/kap),0.75 )- 1.); // sign in pow((1-4... fixed 21.10.2004
          aW.twp->S -= Vst * P * ( aE - 10.*aE / T05 );
          aW.twp->H += -T * Vst * P * ( aE - 10.*aE / T05 )
-              + 1./3. * aW.twp->V * kap * 1000. * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
-         aW.twp->V *= pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
+//              + 1./3. * aW.twp->V * kap * 1000. * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
+              + 1./3. * VT * kap * 1000. * ( pow((1.+4.*PP/kap),0.75 ) - 1.);  // sign in pow((1-4... fixed 21.10.2004
+//         aW.twp->V *= pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
+         aW.twp->V += VT * pow( (1.- 4.*PP/(kap + 4.*PP )), 0.25 );
 //       aW.twp->V *= pow( (kap / (kap + 4*PP )), 0.25);  // Corr. C. De Capitani
                 // Check calculation of H !
 //  Abandoned from 01.07.03 KD - old HP90 calculations, appear wrong
@@ -346,10 +351,9 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                 break;
             }
         }
+        aW.twp->V = Vst;                 // added by KD 22.11.04
         if( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
         { /* can be calculated */
-//          P_Pst = aW.twp->P - Pst;
-//            VP = Vst * P_Pst;
             VP = Vst * P;
             VT = Vst * T_Tst;
             aW.twp->G += VP;
@@ -405,7 +409,8 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
          BirchMurnaghan( 0.1*Pst, 0.1*P, Tst, T, Vst*10., dc[q].ODc,
                          VV0, aC, aE, GG0, HH0, SS0 );
          // increments to V, G, H, S
-         aW.twp->V += VV0/10.;
+         aW.twp->V += Vst+VV0/10.;    // fixed by KD on 22.11.04
+//         aW.twp->V += VV0/10.;
          aW.twp->S += SS0;
          aW.twp->G += GG0;
          aW.twp->H += HH0;
