@@ -55,7 +55,7 @@ void TGEM2MT::init_arrays( bool mode )
 // set data to SBM (IComp names)
     if( mtp->SBM )
       for(int ii=0; ii< mtp->Nb; ii++ )
-        memcpy( mtp->SBM[ii], TProfil::pm->pmp->SB[ii], MAXICNAME+MAXSYMB  );
+        memcpy( mtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME+MAXSYMB  );
 
 // setup flags and counters
    mt_reset();
@@ -158,16 +158,34 @@ void TGEM2MT::calc_eqstat()
        memcpy( mtp->stld+mtp->kv, mtp->sykey, EQ_RKLEN );
 }
 
+//make matrix An  As Bb_Calc in Dualth
+void TGEM2MT::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
+{
+}
+
+// Calculate data for matrix Bn As Bb_Calc in Dualth
+void
+TGEM2MT::Bn_Calc()
+{}
+
 
 // Generating new SysEq
 void TGEM2MT::gen_task()
 {
+    int i;
  // put Bb data to system  ( into B and bi_)
-    for(int i=0; i<mtp->Nb; i++)
+    for( i=0; i<mtp->Nb; i++)
     {
        TProfil::pm->syp->B[i] =  mtp->Bn[ mtp->kv*mtp->Nb+i ];
-       TProfil::pm->syp->BI[i] = mtp->Bn[ mtp->kv*mtp->Nb+i ];
-     }
+       TProfil::pm->syp->BI[i] =  mtp->Bn[ mtp->kv*mtp->Nb+i ];
+    }
+// set zeros to xd_ and xa_
+    for( i=0; i < TProfil::pm->mup->L; i++)
+       TProfil::pm->syp->XeD[i] = 0.;
+    for( i=0; i < TProfil::pm->mup->La; i++)
+       TProfil::pm->syp->XeA[i] = 0.;
+
+
  // calculate EqStat record (Thermodynamic&Equlibria)
    //  TProfil::pm->pmp->pTPD = 0;
      calc_eqstat();
@@ -195,6 +213,10 @@ void TGEM2MT::outMulti()
   gstring name;
   gstring newname;
   gstring path;
+
+  // calculate start data
+  Bn_Calc();
+
 
 if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 {

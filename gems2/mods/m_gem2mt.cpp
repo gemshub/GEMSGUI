@@ -590,8 +590,8 @@ TGEM2MT::test_sizes( )
   gstring err_str;
 
   if( mtp->PvICi != S_OFF )
-    mtp->Nb = TProfil::pm->pmp->N;
-  mtp->FIb = TProfil::pm->pmp->FI;
+    mtp->Nb = TProfil::pm->mup->N;
+  mtp->FIb = TProfil::pm->mup->Fi;
 
 
   if( mtp->nC<=0 || mtp->nIV <= 0)

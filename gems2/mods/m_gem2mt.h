@@ -219,8 +219,8 @@ protected:
     void mt_next();
     void mt_reset();
     void gen_task();
-
-
+    void make_A( int siz_, char (*for_)[MAXFORMUNITDT] );
+    void Bn_Calc();
 
 
 /*    // internal
