@@ -253,6 +253,8 @@ class TField:
 
     int X, Y;		// OWL
 
+    TCell* focused;
+
     QScrollBar* pSV;
     QScrollBar* pSH;
 
@@ -275,7 +277,6 @@ public:
     short indTied;
     TField* pSticked;	// synchronized horizontal scroll
     short indSticked;
-    TCell* focused;
 
 
     TField(QWidget* p, const FieldInfo& fi, int x, int y,
@@ -296,6 +297,7 @@ public:
         return yy;
     }
     void SetFirstCellFocus();
+    void setFocused(TCell* cell);
 
 public slots:
     void Update();

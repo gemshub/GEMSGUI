@@ -603,6 +603,12 @@ TField::SetFirstCellFocus()
     }
 }
 
+void
+TField::setFocused(TCell* cell)
+{
+    focused = cell;
+}
+
 //------------------------------------------------
 // TCell
 //------------------------------------------------
@@ -836,7 +842,7 @@ void
 TCellInput::focusInEvent(QFocusEvent* e)
 {
     QLineEdit::focusInEvent(e);
-    field()->focused = this;
+    field()->setFocused(this);
     SetDescription();
     changed = false;
 //    if( rObj.IsEmpty(N, M) )
@@ -847,7 +853,7 @@ TCellInput::focusInEvent(QFocusEvent* e)
 void
 TCellInput::focusOutEvent(QFocusEvent* e)
 {
-    field()->focused = 0;
+    field()->setFocused(0);
     QLineEdit::focusOutEvent(e);
 
     if( changed )
@@ -1109,7 +1115,7 @@ void
 TCellCheck::focusInEvent(QFocusEvent* e)
 {
     QLineEdit::focusInEvent(e);
-    field()->focused = this;
+    field()->setFocused(this);
     SetDescription();
 }
 
@@ -1118,7 +1124,7 @@ void
 TCellCheck::focusOutEvent(QFocusEvent* e)
 {
     QLineEdit::focusOutEvent(e);
-    field()->focused = 0;
+    field()->setFocused(0);
 }
 
 
@@ -1351,7 +1357,7 @@ void
 TCellText::focusInEvent(QFocusEvent* e)
 {
     QTextEdit::focusInEvent(e);
-    field()->focused = this;
+    field()->setFocused(this);
     SetDescription();
     changed = false;
 }
@@ -1360,7 +1366,7 @@ void
 TCellText::focusOutEvent(QFocusEvent* e)
 {
     QTextEdit::focusOutEvent(e);
-    field()->focused = 0;
+    field()->setFocused(0);
 
     if( changed )
         setValue();
