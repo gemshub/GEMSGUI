@@ -187,6 +187,12 @@
                     <height>170</height>
                 </rect>
             </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Plain</enum>
+            </property>
             <property name="text">
                 <string>&lt;p&gt;The Process Simulator module is a tool for automation of "batch" calculation of many equilibrium states, as well as sampling and plotting of results. This tool helps in modeling various irreversible (geo)chemical processes such as mixing, dissolution, titration, corrosion, or weathering .&lt;/p&gt;
 &lt;p&gt;The Process Simulator can be configured to perform in the most convenient way. To tell it what input data to modify and what output data to sample and plot,  you may have to type two scripts that control generation of the simulated points (P_expr) and data sampling (pgExpr), respectively.&lt;/p&gt;
@@ -558,25 +564,6 @@
             </widget>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>TextLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>100</y>
-                        <width>460</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of plots (columns in the yp table, from 0 to 20) to sample simulated data in the process script pgExpr for export or plotting; number of rows will be nPV</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
                     <cstring>TextLabel1_2_2</cstring>
                 </property>
                 <property name="geometry">
@@ -605,6 +592,25 @@
                 </property>
                 <property name="text">
                     <string>Number of columns (plots) in the xEp, yEp arrays for plotting experimental data</string>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>100</x>
+                        <y>100</y>
+                        <width>460</width>
+                        <height>40</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Number of plots (columns in the yp table, from 0 to 20) to sample simulated data in the process script pgExpr for export or plotting; number of rows will be nPV. Important: if this field is set to 1 or more, the pgExpr script editor field will also be created.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
         </widget>
@@ -647,25 +653,6 @@
             <property name="title">
                 <string>Optional modes of operation </string>
             </property>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>c_PsEqn</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>30</y>
-                        <width>540</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Use scripts (P_expr and pgExpr) in defining process simulation and sampling of results</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
             <widget class="QCheckBox">
                 <property name="name">
                     <cstring>pStepwise</cstring>
@@ -730,6 +717,25 @@
                     <string>Use time dependent calculations and plotting mode (for simple mass transport simulations)</string>
                 </property>
             </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>c_PsEqn</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>30</y>
+                        <width>540</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Use the Process script (P_expr) in defining process simulation (can be turned off in P or R simulator types)</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
         </widget>
         <widget class="QLabel">
             <property name="name">
@@ -744,9 +750,9 @@
                 </rect>
             </property>
             <property name="text">
-                <string>Math scripts are used in most cases except a few trivial ones (for instance, if temperature is changed using an iterator, but the bulk composition of the system remains constant). The scripts must be typed in before attempting to run the process simulation.&lt;br&gt;&lt;br&gt;
-Saving process-generated SysEq records will increase size of project database. Use it only if you plan to extract more data from generated systems e.g. using GtDemo samplers. Note that this flag has no effect on reciprocal and inverse titration sequences, where optimal SysEq records will be always saved.&lt;br&gt;&lt;br&gt;
-Other three flags can be changed by advanced users only.</string>
+                <string>The process math script must be used in most cases except trivial ones (for instance, if temperature is changed using an iterator, but the bulk composition of the system remains constant). The script must be typed into P_expr field before attempting to run the process simulation.&lt;br&gt;&lt;br&gt;
+Saving process-generated SysEq records will increase size of project database. Use it only if you plan to extract more data from generated systems e.g. using GtDemo samplers. Note that this flag has no effect on reciprocal and inverse titration sequences, where optimized SysEq records will be always saved.&lt;br&gt;&lt;br&gt;
+Other three flags should be changed by advanced users only.</string>
             </property>
             <property name="alignment">
                 <set>WordBreak|AlignVCenter</set>
@@ -825,25 +831,6 @@ Other three flags can be changed by advanced users only.</string>
             </property>
             <widget class="QLabel">
                 <property name="name">
-                    <cstring>textLabel14</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>120</y>
-                        <width>551</width>
-                        <height>60</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(3) Enter the full simulator name into the PEname field and (optionally) a comment into the PEnote line. If process scripts will be used then type the scripts on Pages 1 and 2 (use template scripts accessible through "Help" "Scripts" menu command).</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
                     <cstring>textLabel13</cstring>
                 </property>
                 <property name="geometry">
@@ -875,6 +862,25 @@ Other three flags can be changed by advanced users only.</string>
                 </property>
                 <property name="text">
                     <string>(2) In this window, you will have to set up the necessary iterators - three-cell columns that specify the start value, the end value, and the increment of certain control parameters. From an iterator with zero increment, only the first value will be used. The first 5 iterators are used for generation of new SysEq record keys, thus, at least one of them must have a non-zero increment.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel14</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>120</y>
+                        <width>551</width>
+                        <height>60</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>(3) Enter the full simulator name into the PEname field and (optionally) a comment into the PEnote line. If process or sampler scripts will be used then type the scripts on Pages 1 and 2, respectively. Use template scripts accessible through "Help" "Scripts" menu command.</string>
                 </property>
                 <property name="alignment">
                     <set>WordBreak|AlignVCenter</set>
