@@ -32,6 +32,7 @@ const char *GEMS_SFD_HTML = "setfilters";
 #include <qlistview.h>
 
 #include "visor_w.h"
+#include "v_dbm.h"
 
 
 SetFiltersDialog::SetFiltersDialog(QWidget* win,

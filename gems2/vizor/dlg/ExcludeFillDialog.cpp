@@ -29,8 +29,9 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
-//#include "visor.h"
+#include "v_user.h"
 #include "visor_w.h"
+
 
 const char* GEMS_FILL_HTML = "exclude_fill";
 

@@ -24,6 +24,8 @@
 #include "v_object.h"
 #include "dlg/GraphDialog.h"
 
+#include "gdatastream.h"
+
 //---------------------------------------------------------------------------
 // TPlot
 //---------------------------------------------------------------------------
@@ -350,6 +352,27 @@ GraphWindow::getGraphData() const
 {
  return &graph_dlg->gr_data;
 }
+
+
+
+void TPlotLine::read(GemDataStream& stream)
+{
+    stream >> type;
+    stream >> size;
+    stream >> line_size;
+    stream >> red >> green >> blue;
+    stream.readArray(name, 15);
+}
+
+void TPlotLine::write(GemDataStream& stream)
+{
+    stream << type;
+    stream << size;
+    stream << line_size;
+    stream << red << green << blue;
+    stream.writeArray(name, 15);
+}
+
 
 //--------------------- End of graph.cpp ---------------------------
 

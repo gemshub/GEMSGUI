@@ -25,7 +25,7 @@
 #include <qfont.h>
 
 #include "v_vals.h"
-#include "graph.h"
+//#include "graph.h"
 
 
 class TCModule;

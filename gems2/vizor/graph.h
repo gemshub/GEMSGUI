@@ -23,6 +23,8 @@
 #include  "array.h"
 #include  "v_module.h"
 
+class GemDataStream;
+
 const int maxPLOT = 20;
 
 struct TPlotLine
@@ -62,6 +64,9 @@ struct TPlotLine
         strncpy( name, p.name, 15);
         return *this;
     }
+    
+    void read(GemDataStream& stream);
+    void write(GemDataStream& stream);
 };
 
 

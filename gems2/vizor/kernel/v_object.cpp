@@ -24,6 +24,7 @@
 #include "v_vals_impl.h"
 #include "v_object.h"
 #include "m_param.h"
+#include "graph.h"
 
 #ifndef GEMS_RELEASE
 #include "config.h"
@@ -522,6 +523,9 @@ size_t  TObject::toDB( GemDataStream& f )
                 f.put('%');
             //	    size = 758;
         }
+	else	// all object with Keyword "**plt" considered PlotLine object !!!
+	if( strcmp(Keywd+2, "plt") == 0 )
+            ((TPlotLine*)GetPtr())->write(f);
         else
             pV->write( f, size );
 
@@ -715,6 +719,9 @@ size_t  TObject::ofDB( GemDataStream& f )
         f.seekg( off + f.tellg(), ios::beg );
         //ssize = 768;
     }
+    else	// all object with Keyword "**plt" considered PlotLine object !!!
+    if( strcmp(Keywd+2, "plt") == 0 )
+        ((TPlotLine*)GetPtr())->read(f);
     else
         pV->read( f, ssize );
 

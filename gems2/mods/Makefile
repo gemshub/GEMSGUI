@@ -92,7 +92,8 @@ m_param.o: submod/ms_mtparm.h submod/ms_system.h m_phase.h submod/ms_multi.h
 m_param.o: submod/datach.h submod/databr.h v_ipnc.h submod/ms_calc.h
 m_param.o: m_gtdemo.h ../vizor/graph.h m_syseq.h m_dcomp.h s_tpwork.h
 m_param.o: m_icomp.h m_compos.h m_reacdc.h m_proces.h m_duterm.h
-m_param.o: ../vizor/visor.h ../vizor/service.h filters_data.h
+m_param.o: ../vizor/visor.h ../vizor/service.h ../vizor/libs/gdatastream.h
+m_param.o: filters_data.h
 m_icomp.o: m_icomp.h v_mod.h ../vizor/kernel/v_vals.h ../vizor/libs/gstring.h
 m_icomp.o: ../vizor/libs/array.h ../vizor/kernel/v_module.h
 m_icomp.o: ../vizor/kernel/v_object.h ../vizor/kernel/v_user.h
