@@ -50,6 +50,7 @@ gems2/doc/units.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/vis_cn.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/vis_od.ini.txt svn_keywords=Author+Date+Id+Revision
 gems2/gems2.spec svn_keywords=Author+Date+Id+Revision
+gems2/gems200-w32-install.nsi svn_keywords=Author+Date+Id+Revision
 gems2/img/RunBCC.png -text
 gems2/img/RunIPM.png -text
 gems2/img/SetCompos.png -text
@@ -91,6 +92,7 @@ gems2/img/xpaint.png -text
 gems2/lib/Readme.txt svn_keywords=Author+Date+Id+Revision
 gems2/makecl.bat svn_keywords=Author+Date+Id+Revision
 gems2/makew.bat svn_keywords=Author+Date+Id+Revision
+gems2/makew_installer.bat svn_keywords=Author+Date+Id+Revision
 gems2/makew_noqt.bat svn_keywords=Author+Date+Id+Revision
 gems2/makew_r.bat svn_keywords=Author+Date+Id+Revision
 gems2/mods/.cvsignore svn_keywords=Author+Date+Id+Revision
