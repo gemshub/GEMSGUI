@@ -109,6 +109,8 @@ TPrintData::TPrintData(const char *sd_key,
     //Print formats
     for( int ii=0; ii<count; ii++ )
     {
+      if( ii == 239)
+       ii = ii;
        if( ifcond )
        {
          iir = ii;
@@ -465,8 +467,10 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                      if( aObj[dt.data].IsNull()  ||
                        aObj[dt.data].IsEmpty( ind, dt.index_j) )
                      {
+                       char oldtype = fmt.type;
                        fmt.type = 's';
                        sprintf( strbuf, fmt.FmtOut().c_str(), S_EMPTY );
+                       fmt.type = oldtype;
                      }
                      else sprintf( strbuf, fmt.FmtOut().c_str(),
                            aObj[dt.data].Get( ind, dt.index_j) );

@@ -48,7 +48,7 @@ struct PFormat
   gstring FmtOut()
   {
     gstring res = fmt;
-    if( long_ == 'l')
+    if( long_ == 'l' && type != 's')
       res += "l";
     res += gstring( 1, type);
     return res;
