@@ -182,7 +182,7 @@ void GraphDialog::Show()
     					gr_data.b_color[1], 
 					gr_data.b_color[2]) );
     else
-      plot->setBackgroundColor( backgroundColor().dark(110) );
+      plot->setBackgroundColor( Qt::white /*backgroundColor().dark(110)*/ );
 
     plot->setPlotBounds( FPoint(minX, minY),
                    FPoint(maxX, maxY));
