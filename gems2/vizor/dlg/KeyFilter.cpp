@@ -113,7 +113,7 @@ KeyFilter::CmHelp()
    gstring dbName = "dbm_";
 //   dbName += rt[iRt].GetKeywd();
    dbName += aMod[iRt].GetName();
-   pVisorImp->OpenHelp( GEMS_RKEY_HTML, dbName.c_str(), this, true );
+   pVisorImp->OpenHelp( GEMS_RKEY_HTML, dbName.c_str(), this/*, true*/ );
 }
 
 void

@@ -214,7 +214,7 @@ ExcludeFillDialog::~ExcludeFillDialog()
 void
 ExcludeFillDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_FILL_HTML, 0, this, true );
+    pVisorImp->OpenHelp( GEMS_FILL_HTML, 0, this/*, true*/ );
 }
 
 

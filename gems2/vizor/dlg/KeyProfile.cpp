@@ -86,7 +86,7 @@ KeyProfile::CmNew()
 void
 KeyProfile::CmHelp()
 {
-  pVisorImp->OpenHelp( GEMS_GP_HTML, 0, this, true );
+  pVisorImp->OpenHelp( GEMS_GP_HTML, 0, this/*,true*/ );
 }
 
 bool

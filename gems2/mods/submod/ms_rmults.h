@@ -132,8 +132,8 @@ public:
     void PHmake();
     void TestIComp();
     void LoadRmults( bool NewRec, bool changePhases );
-    gstring SelectAqPhase();
-    gstring SelectGasPhase();
+    gstring SelectAqPhase(const char * dfKey );
+    gstring SelectGasPhase(const char * dfKey );
     void SetAqGas( const char* AqKey, const char* GasKey );
 };
 

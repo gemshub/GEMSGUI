@@ -1,3 +1,4 @@
+#include "verror.h"
 
 const int MST =  6;
 const unsigned int

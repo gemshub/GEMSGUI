@@ -51,7 +51,7 @@ ChangeKeyDialog::getTemplTo()
 
 void ChangeKeyDialog::CmHelp()
 {
-   pVisorImp->OpenHelp( GEMS_TEMPL_HTML, 0, this, true );
+   pVisorImp->OpenHelp( GEMS_TEMPL_HTML, 0, this/*, true*/);
 }
 
 

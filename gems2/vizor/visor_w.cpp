@@ -325,7 +325,7 @@ TVisorImp::SetDialog(QWidget* centralDialog)
 	oldCentral->close(true);
 
     setUpdatesEnabled( FALSE );
-    
+
     setCentralWidget(centralDialog);
     QWidget* d = QApplication::desktop();
     QSize sz = (d->size() - centralDialog->size()) / 2;
@@ -482,14 +482,19 @@ TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent, bool mo
     }
     else
     {
-//	if( parent && parent!=pHelpWidget->parentWidget() )
-//	    pHelpWidget->reparent(parent, pHelpWidget->pos());
+    // added Sveta 17/06/04
+       /*if( pHelpWidget->parentWidget() != parent )
+       {
+         pHelpWidget->reparent(parent, QPoint(0,0) );
+	 pHelpWidget->show();
+        }
+        else*/
         pHelpWidget->raise();
         pHelpWidget->loadFile(path.c_str(), 0);
     }
 
 
-/* 
+/*
     // leave external browser code just in case
     // open external browser
     path = "file:" + path;

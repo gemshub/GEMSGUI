@@ -153,6 +153,7 @@ gems2/mods/m_syseq.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_syst2.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_fgl.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_fgl.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/s_fgl2.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_fglbred.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_formula.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_formula.h svn_keywords=Author+Date+Id+Revision

@@ -601,6 +601,7 @@ TCell::SetDescription()
 void
 TCell::CmHelp()
 {
+    QWidget* topw = pw->topLevelWidget();
     gstring item(rObj.GetKeywd());
     item += "_";
     vstr v(15);
@@ -620,7 +621,12 @@ TCell::CmHelp()
             vfMessage(pw, "Help",(item1+=": No such item in HTML files!").c_str(), vfErr);
         else
 // Changed to return file locator in item   DAK 05.01.01
-            pVisorImp->OpenHelp( item.c_str() );
+//16/06/04  Sveta          pVisorImp->OpenHelp( item.c_str() );
+    if( topw->inherits("QDialog") )
+        pVisorImp->OpenHelp( item.c_str(), rObj.GetKeywd(), topw/*, true*/ );
+    else
+        pVisorImp->OpenHelp( item.c_str() );
+// end changes Sveta
 //          pVisorImp->OpenHelp("objind.html", item.c_str() );
     }
     catch(...)

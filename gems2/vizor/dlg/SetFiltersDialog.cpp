@@ -92,7 +92,7 @@ SetFiltersDialog::~SetFiltersDialog()
 void
 SetFiltersDialog::CmHelp()
 {
-    pVisorImp->OpenHelp( GEMS_SFD_HTML, 0, this, true );
+    pVisorImp->OpenHelp( GEMS_SFD_HTML, 0, this/*, true*/ );
 }
 
 void

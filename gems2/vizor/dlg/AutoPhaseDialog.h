@@ -30,8 +30,7 @@ class AutoPhaseDialog : public AutoPhaseDialogData
 
 public:
     AutoPhaseDialog(
-         const char* pr_key, char acode, char gcode,
-              QWidget* parent = NULL);
+         const char* pr_key, char acode, char gcode, QWidget* parent = NULL);
     virtual ~AutoPhaseDialog();
 
     void set_apar( float apar[4] );

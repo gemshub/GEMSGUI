@@ -40,7 +40,7 @@ const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  GC_EoS          ";
 
 AutoPhaseDialog::AutoPhaseDialog (
     const char *pr_key, char acode, char gcode, QWidget* parent):
-        Inherited( parent, 0, true )
+         Inherited( parent, 0, true )
 {
     gstring str= "Setup of aqueous and gas phases in project:  ";
             str += pr_key;
@@ -50,7 +50,8 @@ AutoPhaseDialog::AutoPhaseDialog (
     switch( acode )
     {
       case '-': aselNo->setChecked( true ); break;
-      case 'U': aselU->setChecked( true ); break;
+      case 'U': aselU->setChecked( true );
+                 break;
       case 'H': aselH->setChecked( true ); break;
       case '3': asel3->setChecked( true ); break;
       case '2': asel2->setChecked( true ); break;
@@ -63,7 +64,8 @@ AutoPhaseDialog::AutoPhaseDialog (
     switch( gcode )
     {
       case '-': gselNo->setChecked( true ); break;
-      case 'U': gselU->setChecked( true ); break;
+      case 'U': gselU->setChecked( true );
+                break;
       case 'F': gselF->setChecked( true ); break;
       case 'I':
       default: gselI->setChecked( true ); break;
@@ -131,11 +133,11 @@ AutoPhaseDialog::get_akey( gstring& a_key )
 void
 AutoPhaseDialog::set_akey( gstring& a_key )
 {
-//  aqu_key = a_key;
+  aqu_key = a_key;
 
-  if( aselU->isChecked())
+/*  if( aselU->isChecked())
       aqu_key = "a:*:*:*:*:";
-  else if( aselD->isChecked())
+  else*/  if( aselD->isChecked())
         aqu_key = dfAqKeyD;
      else if( aselH->isChecked())
            aqu_key = dfAqKeyH;
@@ -204,11 +206,11 @@ AutoPhaseDialog::get_gkey( gstring& g_key )
 void
 AutoPhaseDialog::set_gkey( gstring& g_key )
 {
-//  gas_key = g_key;
+  gas_key = g_key;
 
-  if( gselU->isChecked())
+/*  if( gselU->isChecked())
       gas_key = "g:*:*:*:*:";
-      else if( gselI->isChecked())
+    else*/ if( gselI->isChecked())
             gas_key = dfGasKey;
          else if( gselF->isChecked())
                gas_key = dfFluKey;
@@ -236,7 +238,7 @@ AutoPhaseDialog::CmCheck()
 void
 AutoPhaseDialog::CmHelp()
 {
-  pVisorImp->OpenHelp( AUTOPHASE_HTML, 0, this, true );
+  pVisorImp->OpenHelp( AUTOPHASE_HTML, 0, this/*, true*/ );
 }
 
 //--------------------- End of ProcessDialog.cpp ---------------------------
