@@ -352,11 +352,23 @@ void
 TCPage::clearSelectedObjects()
 {
     QWidget* topw = topLevelWidget();
-    if( topw->inherits("QWidget") && !topw->inherits("QDialog") ) {
+    if( !topw->inherits("QDialog") ) {
 	for( int ii=0; ii<getFieldCnt(); ii++ )
     	    if( getField(ii) )
         	getField(ii)->setSelected(false);
     }
+}
+
+TField*
+TCPage::getSelectedObject()
+{
+    if( ! topLevelWidget()->inherits("QDialog") ) {
+	for( int ii=0; ii<getFieldCnt(); ii++ )
+    	    if( getField(ii) && getField(ii)->isSelected() )
+        	return getField(ii);
+    }
+    
+    return NULL;
 }
 
 //----------------------------------------------------------------
@@ -555,8 +567,13 @@ TField::Update()
         focused->setIfChanged();
 
     uint minM = min(GetObj().GetM(), rInfo.maxM);
-    for(uint ii=0; ii<aCtrl.GetCount(); ii++)
-        aCtrl[ii]->changeCellNM((ii/minM)+iN, (ii%minM)+iM);
+    for(uint ii=0; ii<aCtrl.GetCount(); ii++) {
+	const int n = (ii/minM)+iN;
+	const int m = (ii%minM)+iM;
+	bool cellSelected = (selected && n >= selectN1 && n < selectN2 
+					&& m >= selectM1 && m < selectM2);
+        aCtrl[ii]->changeCellNM(n, m, cellSelected);
+    }
 
     if( focused )
         focused->SetDescription();
@@ -635,7 +652,7 @@ TField::SetFirstCellFocus()
 void
 TField::setFocused(TCell* cell)
 {
-    if( !selected )
+    if( selected )
 	getPage()->clearSelectedObjects();
     focused = cell;
     if( focused )
@@ -646,29 +663,57 @@ void
 TField::setSelected(bool selected_)
 {
     if( selected_ != selected ) {
-        if( selected_ )
-            getPage()->clearSelectedObjects();
+//cerr << "TField::setSelected " << GetObj().GetKeywd() << " sel: " << selected_ << endl;
 
-        selected = selected_;
-        for(uint ii=0; ii<aCtrl.GetCount(); ii++)
-            aCtrl[ii]->setGroupSelected(selected);
+	if( selected_ ) {
+	    getPage()->clearSelectedObjects();
+	    selectN1 = 0;
+	    selectN2 = GetObj().GetN();
+	    selectM1 = 0;
+	    selectM2 = GetObj().GetM();
+	}
+
+    	selected = selected_;
+    	for(uint ii=0; ii<aCtrl.GetCount(); ii++)
+    	    aCtrl[ii]->setGroupSelected(selected);
     }
 }
 
+void 
+TField::setSelectedArea(int N1, int N2, int M1, int M2)
+{
+    getPage()->clearSelectedObjects();
+    selected = true;
+    selectN1 = N1;
+    selectN2 = N2;
+    selectM1 = M1;
+    selectM2 = M2;
+
+//cerr << "selectedArea " << N1 << " " << N2 << " " << M1 << " " << M2 << endl;
+
+    for(uint ii=0; ii<aCtrl.GetCount(); ii++)
+	if( aCtrl[ii]->GetN() >= selectN1 && aCtrl[ii]->GetN() < selectN2 
+		&&  aCtrl[ii]->GetM() >= selectM1 && aCtrl[ii]->GetM() < selectM2 )
+    	    aCtrl[ii]->setGroupSelected(selected);
+}
+
+
 QString
-TField::createString()
+TField::createString(int N1, int N2, int M1, int M2)
 {
     const TObject& object = GetObj();
     QString clipText;
 
-    for(int nn=0; nn<object.GetN(); nn++) {
-        for(int mm=0; mm<object.GetM(); mm++) {
+//cerr << "copy " << N1 << " " << N2 << " " << M1 << " " << M2 << endl;
+
+    for(int nn=N1; nn<N2; nn++) {
+        for(int mm=M1; mm<M2; mm++) {
             //        if( aCtrl[ii]->isSelected() )
             clipText += visualizeEmpty(object.GetString(nn, mm)).c_str();
-            if( mm < object.GetM() - 1 )
+            if( mm < M2 - 1 )
                 clipText += "\t";
         }
-        if( nn < object.GetN() - 1 )
+        if( nn < N2 - 1 )
             clipText += "\n";
     }
     
@@ -678,29 +723,30 @@ TField::createString()
 void
 TField::CmCopyToClipboard()
 {
-    QApplication::clipboard()->setText(createString(), QClipboard::Clipboard);
+    QString clipText = createString(selectN1, selectN2, selectM1, selectM2);
+    QApplication::clipboard()->setText(clipText, QClipboard::Clipboard);
 }
 
 void
-TField::setFromString(const QString& str) throw(TError)
+TField::setFromString(const QString& str, int N1, int N2, int M1, int M2) throw(TError)
 {
 	if( str.isEmpty() )
 	    return;
 
 	const QStringList rows = QStringList::split('\n', str, true);
 
-	int rowNum = 0;
+	int rowNum = N1;
 	QStringList::const_iterator it;
-	for( it = rows.begin(); it != rows.end() && rowNum < GetObj().GetN(); ++it, rowNum++) {
+	for( it = rows.begin(); it != rows.end() && rowNum < N2; ++it, rowNum++) {
 	    if( (*it).isEmpty() )
 		continue;
 	
 	    const QStringList cells = QStringList::split('\t', *it, true);
-	    int cellNum = 0;
 
+	    int cellNum = M1;
 	    QStringList::const_iterator cellIt;
 	    for( cellIt = cells.begin(); 
-			cellIt != cells.end() && cellNum < GetObj().GetM(); ++cellIt, cellNum++) {
+			cellIt != cells.end() && cellNum < M2; ++cellIt, cellNum++) {
 		QString value(*cellIt);
 
 		if( value.isEmpty() )
@@ -720,9 +766,17 @@ TField::setFromString(const QString& str) throw(TError)
 void
 TField::CmPasteFromClipboard()
 {
+    pasteIntoArea(selectN1, selectN2, selectM1, selectM2);
+}
+
+void 
+TField::pasteIntoArea(int N1, int N2, int M1, int M2)
+{
     QString clipboard = QApplication::clipboard()->text(QClipboard::Clipboard);
+
+//cerr << "pasteInto " << N1 << " " << N2 << " " << M1 << " " << M2 << endl;
     
-    int lastCR = clipboard.findRev('\n');
+    uint lastCR = clipboard.findRev('\n');
     if( lastCR == clipboard.length() - 1 )
 	clipboard.remove(lastCR, 1);
     
@@ -731,31 +785,23 @@ TField::CmPasteFromClipboard()
     bool largerN = false, largerM = false;
 
     try {
-	if( clipN > N ) {
-//	    vstr err(200);
-//	    sprintf(err, "Paste number of rows larger than object dimension N (%d > %d)!",
-//			    clipN, N);
-//	    throw TError("Object paste error", err.p);
+	if( clipN > (N2 - N1) ) {
 	    largerN = true;
 	}
     
 	const QStringList rows = QStringList::split('\n', clipboard, true);
-	int rowNum = 0;
+	int rowNum = N1;
 	
 	for(QStringList::const_iterator it = rows.begin(); it != rows.end(); ++it, rowNum++) {
 	    int clipM = (*it).contains('\t') + 1;
-	    if( clipM > M ) {
-//		vstr err(200);
-//		sprintf(err, "Paste number of cells bigger that object dimension M (%d > %d) for row %d!",
-//			    clipM, M, rowNum);
-//		throw TError("Object paste error", err.p);
+	    if( clipM > (M2 - M1) ) {
 		largerM = true;
 	    }
 	    
-	    const QStringList cells = QStringList::split('\t', *it, true);
-	    for(QStringList::const_iterator cellIt = cells.begin(); cellIt != cells.end(); ++cellIt) {
+///	    const QStringList cells = QStringList::split('\t', *it, true);
+///	    for(QStringList::const_iterator cellIt = cells.begin(); cellIt != cells.end(); ++cellIt) {
 		///checkCellValue();
-	    }
+///	    }
 	}
     
 	if( largerN || largerM ) {
@@ -765,9 +811,9 @@ TField::CmPasteFromClipboard()
 		return;
 	}
     
-	undoString = createString();
+	undoString = createString(N1, N2, M1, M2);
     
-	setFromString(clipboard);
+	setFromString(clipboard, N1, N2, M1, M2);
 	
 	objectChanged();
 	Update();
@@ -777,11 +823,10 @@ TField::CmPasteFromClipboard()
     catch(TError& ex) {
 	vfMessage(topLevelWidget(), "Object paste error", ex.mess , vfErr);
 	if( !undoString.isEmpty() )
-	    try { setFromString(undoString); } catch(...) {}
+	    try { setFromString(undoString, N1, N2, M1, M2); } catch(...) {}
 	    
     }
 }
-
 
 void
 TField::selectionChanged()
@@ -917,7 +962,13 @@ TCellInput::TCellInput(TField& rfield, int xx, int yy,
     }
 
     connect(this, SIGNAL(selectionChanged()), field(), SLOT(selectionChanged()));
-
+/*
+    QAccel* accel = new QAccel(this);
+    accel->connectItem( accel->insertItem(Key_L + CTRL), this, SLOT(CmSelectColumn()) );
+    accel->connectItem( accel->insertItem(Key_R + CTRL), this, SLOT(CmSelectRow()) );
+//    accel->connectItem( accel->insertItem(Key_ + CTRL), this, SLOT(CmSelectObject()) );
+//    accel->connectItem( accel->insertItem(Key_A + CTRL), this, SLOT(CmSelectObject()) );
+*/
     switch( fieldType )
     {
     case ftNumeric:
@@ -1010,8 +1061,10 @@ void
 TCellInput::focusOutEvent(QFocusEvent* e)
 {
     if( isModified() )
-        setValue();
-    field()->setFocused(NULL);
+    	setValue();
+	
+//    if( QFocusEvent::reason() != QFocusEvent::Popup )
+	field()->setFocused(NULL);
 
     QLineEdit::focusOutEvent(e);
 }
@@ -1019,6 +1072,27 @@ TCellInput::focusOutEvent(QFocusEvent* e)
 void
 TCellInput::keyPressEvent(QKeyEvent* e)
 {
+    if ( e->state() & ControlButton ) {
+	switch ( e->key() ) {
+	case Key_C:
+	    copy();
+	    return;
+	break;
+	case Key_A:
+	    CmSelectAll();
+	    return;
+	break;
+	case Key_R:
+	    CmSelectRow();
+	    return;
+	break;
+	case Key_L:
+	    CmSelectColumn();
+	    return;
+	break;
+	}
+    }
+
     switch( e->key() )
     {
     case Key_Enter:
@@ -1041,27 +1115,8 @@ TCellInput::keyPressEvent(QKeyEvent* e)
     case Key_F8:
         CmCalc();
         return;
-    case Key_F12:
-        CmSelectObject();
-        return;
     }
 
-    // not used any more - AR 2004.07.11
-/*
-        if( e->ascii()=='<' && !IsCharAllowed(rObj, e->ascii()) )
-        {
-    	setText("<empty>");
-    	setValue();
-        }
-        else
-            if( e->ascii()==0x08 ||
-                IsCharAllowed(rObj, e->ascii()) )
-    	{
-    	    if( text() == emptiness )
-    		clear();
-                QLineEdit::keyPressEvent(e);
-    	}
-*/
     QLineEdit::keyPressEvent(e);
 }
 
@@ -1088,23 +1143,32 @@ TCellInput::createPopupMenu()
     }
 
     menu->insertSeparator();
-    if( field()->isSelected() )
-        menu->insertItem( "&Unselect object\tF12", this, SLOT(CmSelectObject()), Key_F12 );
-    else
-        menu->insertItem( "&Select object\tF12", this, SLOT(CmSelectObject()), Key_F12 );
 
     if( field()->isSelected() ) {
+//        menu->insertItem( "&Unselect object\tF12", this, SLOT(CmSelectObject()), Key_F12 );
+
         const bool clipboardEmpty = QApplication::clipboard()->text(QClipboard::Clipboard).isEmpty();
         QPopupMenu* objectMenu = new QPopupMenu();
-        objectMenu->insertItem( "&Copy", field(), SLOT(CmCopyToClipboard()) );
+        objectMenu->insertItem( "&Copy\tCtrl+C", field(), SLOT(CmCopyToClipboard()) );
         objectMenu->setItemEnabled(
-            objectMenu->insertItem( "&Paste", field(),
+            objectMenu->insertItem( "&Paste\tCtrl+V", field(),
                               SLOT(CmPasteFromClipboard()) ), edit && !clipboardEmpty );
 
     //    menu->insertSeparator();
-        menu->insertItem( "&Object Edit", objectMenu );
+        menu->insertItem( "&Edit", objectMenu );
     }
     else {
+	if( rObj.GetN() > 1 || rObj.GetM() > 1 ) {
+    	    menu->insertItem( "&Select object\tCtrl+A", this, SLOT(CmSelectObject()), ALT + Key_S );
+    	    menu->setItemEnabled(
+		menu->insertItem( "Select co&lumn\tCtrl+L", this, SLOT(CmSelectColumn()), ALT + Key_L ),
+		    rObj.GetN() > 1 );
+    	    menu->setItemEnabled(
+    		menu->insertItem( "Select &row\tCtrl+R", this, SLOT(CmSelectRow()), ALT + Key_R ),
+		    rObj.GetM() > 1 );
+//        menu->insertItem( "&Select cell\tShift+F12", this, SLOT(CmSelectObject()), SHIFT + Key_F12 );
+	    menu->insertSeparator();
+	}
     //    menu->insertSeparator();
         menu->insertItem( "&Edit", QLineEdit::createPopupMenu() );
     }
@@ -1194,8 +1258,61 @@ TCellInput::CmDComp()
 void
 TCellInput::CmSelectObject()
 {
-    ((TCellInput*)pw)->deselect();
+    QLineEdit::deselect();
     field()->setSelected(!field()->isSelected());
+}
+
+void
+TCellInput::CmSelectColumn()
+{
+    QLineEdit::deselect();
+    field()->setSelectedArea(0, rObj.GetN(), M, M+1);
+}
+
+void
+TCellInput::CmSelectRow()
+{
+    QLineEdit::deselect();
+    field()->setSelectedArea(N, N+1, 0, rObj.GetM());
+}
+
+void
+TCellInput::CmSelectAll()
+{
+    if( rObj.GetN() > 1 || rObj.GetM() > 1 ) {
+	deselect();
+	field()->setSelected(true);
+    }
+    else
+	QLineEdit::selectAll();
+}
+
+void
+TCellInput::copy()
+{
+//cerr << "copy: field sel: " << field()->isSelected() << endl;
+//    TField* selectedField = field()->getPage()->getSelectedObject();
+    if( field()->isSelected() )
+	field()->CmCopyToClipboard();
+    else
+	QLineEdit::copy();
+}
+
+void
+TCellInput::paste()
+{
+//cerr << "paste: field sel: " << field()->isSelected() << endl;
+//    TField* selectedField = field()->getPage()->getSelectedObject();
+    if( field()->isSelected() )
+	field()->CmPasteFromClipboard();
+    else
+	if( QApplication::clipboard()->text().find('\t') != -1 || 
+		QApplication::clipboard()->text().find('\n') != -1 ) {
+	// clipboard contents seems to be table - try to paste from current cell
+	    field()->pasteIntoArea(N, rObj.GetN(), M, rObj.GetM());
+	} 
+	else
+	    QLineEdit::paste();
 }
 
 //==========================================

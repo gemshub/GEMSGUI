@@ -71,10 +71,15 @@ public:
     virtual void setIfChanged() {}
 
     void SetDescription();
-    void changeCellNM(int n, int m)
+    
+    int GetN() const { return N; }
+    int GetM() const { return M; }
+
+    void changeCellNM(int n, int m, bool cellSelected)
     {
         N = n; M = m;
         updateDisplay();
+	setGroupSelected(cellSelected);
         QToolTip::add(pw, (rObj.GetDescription(rObj.ndx(N,M))).c_str() );
     }
 
@@ -119,7 +124,13 @@ protected slots:
     void CmDComp();
     void CmCalc();
     void CmSelectObject();
+    void CmSelectColumn();
+    void CmSelectRow();
+//    void CmSelectCell();
     void CmHelp() { TCell::CmHelp(); }
+    void CmSelectAll();
+    void copy();
+    void paste();
 
 public:
     TCellInput(TField&, int x, int y, eFieldType ft, int npos, eShowType,
@@ -242,8 +253,8 @@ class TField:
     TCell* focused;
 
     bool selected;
-    int selectN1, selectN2;
-    int selectM1, selectM2;
+    int selectN1, selectN2;	// 1st included, 2nd excluded
+    int selectM1, selectM2;	// 1st included, 2nd excluded
 
     QString groupUndoContents;
 
@@ -258,8 +269,8 @@ class TField:
     void setYPos(int pos);
     void setXPos(int pos);
 
-    QString createString();
-    void setFromString(const QString& str) throw (TError);
+    QString createString(int N1, int N2, int M1, int M2);
+    void setFromString(const QString& str, int N1, int N2, int M1, int M2) throw (TError);
 
 protected slots:
     void EvVScroll(int);
@@ -296,8 +307,10 @@ public:
     void SetFirstCellFocus();
     void setFocused(TCell* cell);
 
-    void setSelected(bool selected);
     bool isSelected() const { return selected; }
+    void setSelected(bool selected);
+    void setSelectedArea(int N1, int N2, int M1, int M2);
+    void pasteIntoArea(int N1, int N2, int M1, int M2);
     
 public slots:
     void Update();
@@ -358,6 +371,7 @@ public:
 
     void SetFirstCellFocus();
     void clearSelectedObjects();
+    TField* getSelectedObject();
 
     const char* GetName() const
     {
