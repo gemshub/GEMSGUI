@@ -64,9 +64,9 @@ all:  $(TARGET)
 subdirs_mk:
       cd libs
 	$(MAKE) -f Makefile.w32 all
-	cd ..\kernel
-	$(MAKE) -f Makefile.w32 all
 	cd ..\dlg
+	$(MAKE) -f Makefile.w32 all
+ 	cd ..\kernel
 	$(MAKE) -f Makefile.w32 all
         cd ..
 
