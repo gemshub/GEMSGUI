@@ -188,7 +188,7 @@ protected:
     void RenameFN( const char * prfName, const char* prfTemplate );
     bool GetFN( const char * prfName );
     void SetFN();
-    bool SelectElementsFN( const char * prfName );
+    bool rCopyFilterProfile( const char * prfName );
 
     void OpenProfileMode(
         const char* key, bool changeAqGas, bool addFile );

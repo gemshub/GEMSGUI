@@ -94,6 +94,9 @@ void MLineEdit::getData()
 {
  if( it == 0 || col <= 2 )
    return;
+
+ gstring old_data = (const char*)it->text( col );
+
  gstring ss = (const char*)text();
  ss.strip();
  if( type == -1  ) // double
@@ -128,6 +131,17 @@ void MLineEdit::getData()
       it->setText( col, ss.c_str() );
    }
   }
+  if( col == 3 ) // + or -
+  {
+    QListViewItem* pp = it->firstChild();
+    while( pp )
+    {
+      if( ss[0] == '-' ||
+         ( ( ss[0] == '+' || ss[0] == '*' ) && old_data[0] == '-' ))
+      pp->setText( col, ss.c_str() );
+      pp = pp->nextSibling();
+    }
+  }
 }
 
 void
@@ -160,7 +174,8 @@ MLineEdit::SetIndex(int ii)
 
     gstring val(Vals, ii, 1);
     setText(val.c_str());
-    it->setText( col, val.c_str() );
+    getData();
+    //it->setText( col, val.c_str() );
 }
 
 

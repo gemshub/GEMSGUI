@@ -810,17 +810,6 @@ vfListFiles(QWidget* par, const char * prfName,
 BACK:
     if( !cw.exec() )
       return false;
-    // added Elements dialog
-    if( cw.isElementsDialog() )
-    {
-     TCStringArray rds;
-     ElementsDialog eldlg( par, prfName );
-     if( !eldlg.exec() )
-      goto BACK;
-     eldlg.allSelected( rds );
-     vfChoice(  par, rds, "Test selected elements" );
-     return false; //do not finished, only test
-    }
 
     switch( vfQuestion3(par, prfName,
        "Did you really completed  selection of \n"
@@ -839,15 +828,19 @@ BACK:
 
 bool
 vfElements(QWidget* par, const char * prfName,
-           TCStringArray& rds, bool& aAqueous, bool& aSorption)
+            TCStringArray& rds, TCStringArray& names,
+            bool& aAqueous, bool& aGaseous, bool& aSorption)
 {
      ElementsDialog eldlg( par, prfName );
      if( !eldlg.exec() )
       return false;
-     eldlg.allSelected( rds );
-     aAqueous =   eldlg.isAqueous();
-     aSorption =  eldlg.isSorption();
-     vfChoice(  par, rds, "Test selected elements" );
+
+    eldlg.allSelected( rds );
+    eldlg.openFiles( names );
+    aAqueous =   eldlg.isAqueous();
+    aGaseous =   eldlg.isGaseous();
+    aSorption =  eldlg.isSorption();
+   // vfChoice(  par, rds, "Test selected elements" );
     return true;
 }
 

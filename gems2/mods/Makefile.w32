@@ -49,7 +49,7 @@ subdirs_mk:
         $(MAKE) -f Makefile.w32 all
 	  cd ..
 
-$(TARGET): subdirs_mk   $(OBJECTS)
+$(TARGET): subdirs_mk	$(OBJECTS)
         -del $(TARGET)
 	$(LIB) $(TARGET) @&&|
       +m_const.obj +m_sdata.obj +m_integ.obj \
@@ -66,6 +66,9 @@ $(TARGET): subdirs_mk   $(OBJECTS)
 	+submod\ms_muload.obj +submod\ms_muleq.obj +submod\ms_mueqexp.obj \
 	+submod\ipm_sel_bc.obj +submod\ipm_gamma.obj +submod\ipm_fia_bc.obj
 |
+
+.cpp.obj:
+         $(CC) $(FLAGS) $(INCLUDES) -c $<
 
 clean:
      -del  *.obj

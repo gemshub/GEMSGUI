@@ -126,24 +126,30 @@ TIComp::CmHelp()
 }
 
 void
-TIComp::GetElements( TCStringArray& aIC, TCIntArray& aIndMT )
+TIComp::GetElements( bool isotopes, TCStringArray& names,
+                      TCStringArray& aIC, TCIntArray& aIndMT )
 {
 
  TCIntArray anR;
+ TCStringArray aIC1;
 
- db->OpenAllFiles(true);
- db->GetKeyList( "*:*:*:", aIC, anR );
+ //open selected files in kernel database
+ db->OpenOnlyFromList(names);
+ //db->OpenAllFiles(true);
+ db->GetKeyList( "*:*:*:", aIC1, anR );
 
- for( uint ii=0; ii<aIC.GetCount(); ii++ )
+ for( uint ii=0; ii<aIC1.GetCount(); ii++ )
  {
-    RecInput( aIC[ii].c_str() );
+    RecInput( aIC1[ii].c_str() );
     if( *db->FldKey( 1 ) == 'a' || *db->FldKey( 1 ) == 'v' ) // addition
       aIndMT.Add( -1 );
     else
-      if( *db->FldKey( 1 ) == 'z' )
-       aIndMT.Add( 0 );
-     else
-      aIndMT.Add( icp->num );
+      if( isotopes || *db->FldKey( 1 ) == 'e' || *db->FldKey( 1 ) == 'z' ||
+          *db->FldKey( 1 ) == 'h' || *db->FldKey( 1 ) == 'o' )
+        aIndMT.Add( icp->num );
+      else
+        continue;
+   aIC.Add(aIC1[ii]);
  }
 }
 
@@ -170,7 +176,7 @@ TIComp::RecordPrint( const char *key )
 void
 TIComp::CopyElements( const char * prfName, TCStringArray& aKeys )
 {
-    // added to profile file icomp.kernel.prfname
+    // added to profile file icomp.copy.prfname
     gstring Path = pVisor->userProfDir();
     Path += prfName;
     Path += "/";

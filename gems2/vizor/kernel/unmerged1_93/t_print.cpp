@@ -62,29 +62,38 @@ TPrintData::TPrintData(const char *sd_key,
             }
             else
               count = 1;
-          // insert condition  list <obj_name> ;<equation;> <COLUMNS>
+          }
+          else
+           {  gstring str_err = "Illegal command: \n";
+              str_err += input;
+              Error( key_format.c_str(), str_err.c_str() );
+            }
+    // insert condition  ## <math script>  ##
           skipSpace();
-          if( *input == ';' )
+          if( *input == '#' && *(input+1) == '#' )
           {
-            input++;
-            char* pose = strchr( input, ';');
+            input+=2;
+            char* pose = strchr( input, '#');
+            while( pose )
+            {
+               if( *(pose+1) == '#' )
+                 break;
+               pose = strchr( pose+1, '#');
+            }
             if( !pose )
             {  gstring str_err = "Illegal condition: \n";
                str_err += input;
                Error( key_format.c_str(), str_err.c_str() );
             }
-            cond = gstring( input, 0, pose-input+1 );
-            input = pose+1;
+            cond = gstring( input, 0, pose-input );
+            input = pose+2;
             ifcond = true;
             rpn.GetEquat( (char *)cond.c_str() );
           }
           // end insert
-          }
-           else
-           {  gstring str_err = "Illegal command: \n";
-              str_err += input;
-              Error( key_format.c_str(), str_err.c_str() );
-            }
+
+
+
      aFmts.Clear();  // list of formats
      aDts.Clear();     // list of datas
      //Read formats

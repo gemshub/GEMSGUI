@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'SettingsDialog.ui'
 **
-** Created: Пнд Гру 17 12:44:00 2001
+** Created: Di 18. Dez 12:46:08 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -15,6 +15,7 @@ class QVBoxLayout;
 class QHBoxLayout; 
 class QGridLayout; 
 class QButtonGroup;
+class QCheckBox;
 class QGroupBox;
 class QLabel;
 class QLineEdit;
@@ -30,10 +31,13 @@ public:
     SettingsDialogData( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~SettingsDialogData();
 
-    QLabel* pSysDBDir;
-    QLabel* TextLabel2;
-    QLabel* TextLabel2_2;
-    QLabel* pUserDBDir;
+    QPushButton* pButtonOK;
+    QPushButton* pButtonApply;
+    QPushButton* pButtonHelp;
+    QPushButton* pButtonCancel;
+    QLabel* TextLabel1_3;
+    QLineEdit* pFontRawName;
+    QPushButton* pButtonChFont;
     QButtonGroup* ButtonGroup1;
     QRadioButton* rbNewPrMode;
     QRadioButton* rbOldPrMode;
@@ -44,13 +48,11 @@ public:
     QSpinBox* pUpdateInterval;
     QSpinBox* pNumDigits;
     QLabel* TextLabel1_4;
-    QLabel* TextLabel1_3;
-    QLineEdit* pFontRawName;
-    QPushButton* pButtonChFont;
-    QPushButton* pButtonOK;
-    QPushButton* pButtonApply;
-    QPushButton* pButtonHelp;
-    QPushButton* pButtonCancel;
+    QCheckBox* pConfigAutosave;
+    QLabel* TextLabel2;
+    QLabel* pUserDBDir;
+    QLabel* pSysDBDir;
+    QLabel* TextLabel2_2;
 
 
 protected slots:
@@ -61,9 +63,9 @@ protected slots:
     virtual void CmHelp();
 
 protected:
-    QGridLayout* Layout4;
-    QHBoxLayout* Layout5;
     QHBoxLayout* Layout28;
+    QHBoxLayout* Layout5;
+    QGridLayout* Layout4;
 };
 
 #endif // SETTINGSDIALOGDATA_H

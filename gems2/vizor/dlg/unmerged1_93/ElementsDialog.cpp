@@ -38,34 +38,30 @@ ElementsDialog::ElementsDialog(QWidget* win, const char * /*prfName*/,
            const char* /*caption*/):
         Inherited( win, 0, true /* false = modeless */ )
 {
+    EmptyData();
+    rbKernel->setChecked( true );
+    rbUncertain->setChecked( true );
+    rbSpecific->setChecked( false );
+    cbIsotopes->setChecked( false );
+
     SetICompList();
+    SetAqueous();
 
     // signals and slots connections
     connect( bHelp, SIGNAL( clicked() ), this, SLOT( CmHelp() ) );
     connect( bNext, SIGNAL( clicked() ), this, SLOT( CmOk() ) );
-    connect( bReset, SIGNAL( clicked() ), this, SLOT( CmReset() ) );
-    connect( bPrevious, SIGNAL( clicked() ), this, SLOT( CmPrevious() ) );
-    connect( cbIsotopes, SIGNAL( toggled( bool on) ),
-                this, SLOT( SetIsotopes(bool on) ) );
-    connect( cbGaseous, SIGNAL( toggled( bool on) ),
-                this, SLOT( SetGaseous(bool on) ) );
-    connect( cbAqueous, SIGNAL( toggled( bool on) ),
-                this, SLOT( SetAqueous(bool on) ) );
-    connect( cbSorption, SIGNAL( toggled( bool on) ),
-                this, SLOT( SetSorption(bool on) ) );
-    connect( rbKernel, SIGNAL( toggled( bool on) ),
-                this, SLOT( SetKernel(bool on) ) );
-    connect( rbUncertain, SIGNAL( toggled( bool on) ),
-                this, SLOT( SetUncertain(bool on) ) );
-    connect( rbSpecific, SIGNAL( toggled( bool on) ),
-                this, SLOT( SetSpecific(bool on) ) );
-    cbAqueous->setChecked( true );
-    cbGaseous->setChecked( true );
-    cbSorption->setChecked( false );
-    cbIsotopes->setChecked( false );
-    rbKernel->setChecked( true );
-    rbUncertain->setChecked( true );
-    rbSpecific->setChecked( false );
+    connect( bReset, SIGNAL( clicked() ), this, SLOT( CmSetFilters() ) );
+//  connect( bReset, SIGNAL( clicked() ), this, SLOT( CmReset() ) );
+//  connect( bPrevious, SIGNAL( clicked() ), this, SLOT( CmPrevious() ) );
+
+    connect( cbAqueous, SIGNAL( clicked() ), this, SLOT( SetAqueous() ) );
+    connect( cbSorption, SIGNAL( clicked() ),this, SLOT( SetSorption() ) );
+    connect( cbGaseous, SIGNAL( clicked() ), this, SLOT( SetGaseous() ) );
+    connect( cbIsotopes, SIGNAL( clicked() ),this, SLOT( SetFiles() ) );
+
+    connect( rbKernel, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+    connect( rbUncertain, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
+    connect( rbSpecific, SIGNAL( clicked() ), this, SLOT( SetFiles() ) );
 
 }
 
@@ -80,22 +76,55 @@ ElementsDialog::CmHelp()
 }
 
 void
-ElementsDialog::CmReset()
+ElementsDialog::CmSetFilters()
 {
     ResetData();
     update();
+    // Here to call SetFiltersDialog !!
 }
 
-void
-ElementsDialog::CmPrevious()
-{
-   reject();
-}
+// void
+// ElementsDialog::CmPrevious()
+// {
+//   reject();
+// }
 
 void
 ElementsDialog::CmOk()
 {
    accept();
+}
+
+void ElementsDialog::EmptyData()
+{
+ int ii;
+ for( ii=0; ii<bgOther->count(); ii++ )
+ {     bgOther->find(ii)->setEnabled( false );
+       bgOther->find(ii)->setText( tr( "...") );
+ }
+ for( ii=0; ii<99/*bgElem->count()-1*/; ii++ )
+      bgElem->find(ii)->setEnabled( false );
+
+  cbSorption->setChecked( false );
+  cbAqueous->setChecked( true );
+  cbGaseous->setChecked( true );
+}
+
+
+void ElementsDialog::ResetData()
+{
+ int ii;
+ for( ii=0; ii<bgOther->count(); ii++ )
+  if( bgOther->find(ii)->isOn() )
+      bgOther->find(ii)->toggle();
+ for( ii=0; ii<99/*bgElem->count()-1*/; ii++ )
+  if( bgElem->find(ii)->isOn() )
+      bgElem->find(ii)->toggle();
+/*
+  cbSorption->setChecked( false );
+  cbAqueous->setChecked( true );
+  cbGaseous->setChecked( true );
+*/
 }
 
 
@@ -104,26 +133,13 @@ bool ElementsDialog::isAqueous() const
  return cbAqueous->isChecked();
 }
 
-void ElementsDialog::SetAqueous( bool on )
+void ElementsDialog::SetAqueous()
 {
- if( on )
+ if( cbAqueous->isChecked() )
  {
    pbE_0->setOn(true);
    pbE_1->setOn(true);
    pbE_8->setOn(true);
- }
-}
-
-bool ElementsDialog::isGaseous() const
-{
- return cbGaseous->isChecked();
-}
-
-void ElementsDialog::SetGaseous( bool on )
-{
- if( on )
- {
-  cbGaseous->setChecked( true );
  }
 }
 
@@ -132,83 +148,42 @@ bool ElementsDialog::isSorption() const
  return cbSorption->isChecked();
 }
 
-void ElementsDialog::SetSorption( bool on )
+void ElementsDialog::SetSorption()
 {
- if( on )
+ if( cbSorption->isChecked() )
  {
   cbAqueous->setChecked( true );
+  SetAqueous();
  }
 }
 
-bool ElementsDialog::isIsotopes() const
+bool ElementsDialog::isGaseous() const
 {
- return cbIsotopes->isChecked();
+ return cbGaseous->isChecked();
 }
 
-void ElementsDialog::SetIsotopes( bool on )
+void ElementsDialog::SetGaseous()
 {
- if( on )
- {
-  cbIsotopes->setChecked( true );
- }
 }
 
-bool ElementsDialog::isKernel() const
+void ElementsDialog::SetFiles()
 {
- return rbKernel->isChecked();
+  ResetData();
+  EmptyData();
+  SetICompList();
+  SetAqueous();
+
 }
 
-void ElementsDialog::SetKernel( bool on )
+void ElementsDialog::openFiles( TCStringArray& names )
 {
- if( on )
- {
-  rbKernel->setChecked( true );
- }
-}
-
-bool ElementsDialog::isUncertain() const
-{
- return rbUncertain->isChecked();
-}
-
-void ElementsDialog::SetUncertain( bool on )
-{
- if( on )
- {
-  rbUncertain->setChecked( true );
- }
-}
-
-bool ElementsDialog::isSpecific() const
-{
- return rbSpecific->isChecked();
-}
-
-void ElementsDialog::SetSpecific( bool on )
-{
- if( on )
- {
-  rbSpecific->setChecked( true );
- }
-}
-
-
-void ElementsDialog::ResetData()
-{
-  int ii;
-  for( ii=0; ii<bgOther->count(); ii++ )
-   if( bgOther->find(ii)->isOn() )
-       bgOther->find(ii)->toggle();
-  for( ii=0; ii<bgElem->count(); ii++ )
-   if( bgElem->find(ii)->isOn() )
-       bgElem->find(ii)->toggle();
-  cbSorption->setChecked( false );
-  cbAqueous->setChecked( true );
-  cbGaseous->setChecked( true );
-  cbIsotopes->setChecked( false );
-  rbKernel->setChecked( true );
-  rbUncertain->setChecked( true );
-  rbSpecific->setChecked( false );
+  names.Clear();
+  if(rbKernel->isChecked())
+   names.Add(".kernel.");
+  if(rbUncertain->isChecked())
+   names.Add(".uncertain.");
+  if(rbSpecific->isChecked())
+   names.Add(".specific.");
 }
 
 void
@@ -218,10 +193,13 @@ ElementsDialog::SetICompList()
     TCStringArray aIC;
     QButton* bb;
     int nmbOther=1;
+    TCStringArray names;
 
-   // select all IComp keys and indMT ( indMT-100 for additional )
+
+    openFiles( names );
+   // select all IComp keys and indMT (seted indMT to -1 for additional)
     TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
-    aICdata->GetElements( aIC, aIndMT );
+    aICdata->GetElements( cbIsotopes->isChecked(), names, aIC, aIndMT );
 
     for( uint ii=0; ii<aIC.GetCount(); ii++ )
      if( aIndMT[ii] == -1) // additional
@@ -241,6 +219,9 @@ ElementsDialog::SetICompList()
        }
        else  //Vol
        {
+         bb = bgOther->find(0);
+         bb->setText( tr( name.c_str() ) );
+         bb->setEnabled( true );
          aBtmId2.Add( 0 );
          aICkey2.Add( aIC[ii] );
        }
@@ -269,6 +250,9 @@ ElementsDialog::allSelected( TCStringArray& aICkeys )
 
     if( !result() )
         return;
+
+    SetSorption();
+    SetAqueous();
 
     for( ii=0; ii<aBtmId1.GetCount(); ii++ )
     {

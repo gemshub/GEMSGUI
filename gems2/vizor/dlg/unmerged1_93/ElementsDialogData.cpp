@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'ElementsDialog.ui'
 **
-** Created: Tue Nov 20 10:08:55 2001
+** Created: Sun Dec 9 17:39:53 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -102,7 +102,7 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     QPixmap image0( ( const char** ) image0_data );
     if ( !name )
 	setName( "ElementsDialog" );
-    resize( 642, 501 ); 
+    resize( 638, 501 ); 
     QPalette pal;
     QColorGroup cg;
     cg.setColor( QColorGroup::Foreground, black );
@@ -359,46 +359,6 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     pbA_1->setToggleButton( TRUE );
     pbA_1->setToggleButton( TRUE );
     bgOther->insert( pbA_1, 1 );
-
-    bHelp = new QPushButton( this, "bHelp" );
-    bHelp->setGeometry( QRect( 10, 442, 70, 50 ) ); 
-    QFont bHelp_font(  bHelp->font() );
-    bHelp_font.setFamily( "Lucida Sans Unicode" );
-    bHelp_font.setPointSize( 9 );
-    bHelp->setFont( bHelp_font ); 
-    bHelp->setText( tr( "&Help" ) );
-    bHelp->setAutoDefault( TRUE );
-
-    bPrevious = new QPushButton( this, "bPrevious" );
-    bPrevious->setGeometry( QRect( 380, 440, 70, 50 ) ); 
-    QFont bPrevious_font(  bPrevious->font() );
-    bPrevious_font.setFamily( "Lucida Sans Unicode" );
-    bPrevious_font.setPointSize( 9 );
-    bPrevious->setFont( bPrevious_font ); 
-    bPrevious->setText( tr( "&Back" ) );
-    bPrevious->setAutoDefault( TRUE );
-    QToolTip::add(  bPrevious, tr( "Back to default database file configuration" ) );
-
-    bReset = new QPushButton( this, "bReset" );
-    bReset->setGeometry( QRect( 460, 440, 70, 50 ) ); 
-    QFont bReset_font(  bReset->font() );
-    bReset_font.setFamily( "Lucida Sans Unicode" );
-    bReset_font.setPointSize( 9 );
-    bReset->setFont( bReset_font ); 
-    bReset->setText( tr( "&Reset" ) );
-    bReset->setAutoDefault( TRUE );
-    QToolTip::add(  bReset, tr( "Resets to initial selection of independent components" ) );
-
-    bNext = new QPushButton( this, "bNext" );
-    bNext->setGeometry( QRect( 540, 440, 90, 50 ) ); 
-    QFont bNext_font(  bNext->font() );
-    bNext_font.setFamily( "Lucida Sans Unicode" );
-    bNext_font.setPointSize( 9 );
-    bNext->setFont( bNext_font ); 
-    bNext->setText( tr( "&OK/Next" ) );
-    bNext->setAutoDefault( TRUE );
-    bNext->setDefault( TRUE );
-    QToolTip::add(  bNext, tr( "Proceed to create database files for this profile" ) );
 
     bgElem = new QButtonGroup( this, "bgElem" );
     bgElem->setGeometry( QRect( 10, 0, 540, 430 ) ); 
@@ -1187,60 +1147,6 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     pbE_34->setToggleButton( TRUE );
     pbE_34->setToggleButton( TRUE );
     bgElem->insert( pbE_34, 34 );
-
-    pbE_36 = new QPushButton( bgElem, "pbE_36" );
-    pbE_36->setEnabled( FALSE );
-    pbE_36->setGeometry( QRect( 380, 170, 50, 30 ) ); 
-    cg.setColor( QColorGroup::Foreground, black );
-    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Light, white );
-    cg.setColor( QColorGroup::Midlight, QColor( 223, 223, 223) );
-    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
-    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Text, black );
-    cg.setColor( QColorGroup::BrightText, white );
-    cg.setColor( QColorGroup::ButtonText, QColor( 0, 140, 0) );
-    cg.setColor( QColorGroup::Base, white );
-    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Shadow, black );
-    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
-    cg.setColor( QColorGroup::HighlightedText, white );
-    pal.setActive( cg );
-    cg.setColor( QColorGroup::Foreground, black );
-    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Light, white );
-    cg.setColor( QColorGroup::Midlight, QColor( 220, 220, 220) );
-    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
-    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Text, black );
-    cg.setColor( QColorGroup::BrightText, white );
-    cg.setColor( QColorGroup::ButtonText, QColor( 0, 140, 0) );
-    cg.setColor( QColorGroup::Base, white );
-    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Shadow, black );
-    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
-    cg.setColor( QColorGroup::HighlightedText, white );
-    pal.setInactive( cg );
-    cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Light, white );
-    cg.setColor( QColorGroup::Midlight, QColor( 220, 220, 220) );
-    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
-    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Text, black );
-    cg.setColor( QColorGroup::BrightText, white );
-    cg.setColor( QColorGroup::ButtonText, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Base, white );
-    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Shadow, black );
-    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
-    cg.setColor( QColorGroup::HighlightedText, white );
-    pal.setDisabled( cg );
-    pbE_36->setPalette( pal );
-    pbE_36->setText( tr( "   Kr" ) );
-    pbE_36->setToggleButton( TRUE );
-    pbE_36->setToggleButton( TRUE );
-    bgElem->insert( pbE_36, 36 );
 
     pbE_37 = new QPushButton( bgElem, "pbE_37" );
     pbE_37->setEnabled( FALSE );
@@ -4972,63 +4878,6 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     bgElem->insert( pbE_0, 0 );
     QToolTip::add(  pbE_0, tr( "Electric charge (needed for aquatic systems)" ) );
 
-    pbE_99 = new QPushButton( bgElem, "pbE_99" );
-    pbE_99->setEnabled( FALSE );
-    pbE_99->setGeometry( QRect( 230, 50, 50, 30 ) ); 
-    cg.setColor( QColorGroup::Foreground, black );
-    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Light, white );
-    cg.setColor( QColorGroup::Midlight, QColor( 223, 223, 223) );
-    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
-    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Text, black );
-    cg.setColor( QColorGroup::BrightText, white );
-    cg.setColor( QColorGroup::ButtonText, QColor( 117, 0, 176) );
-    cg.setColor( QColorGroup::Base, white );
-    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Shadow, black );
-    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
-    cg.setColor( QColorGroup::HighlightedText, white );
-    pal.setActive( cg );
-    cg.setColor( QColorGroup::Foreground, black );
-    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Light, white );
-    cg.setColor( QColorGroup::Midlight, QColor( 220, 220, 220) );
-    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
-    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Text, black );
-    cg.setColor( QColorGroup::BrightText, white );
-    cg.setColor( QColorGroup::ButtonText, QColor( 117, 0, 176) );
-    cg.setColor( QColorGroup::Base, white );
-    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Shadow, black );
-    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
-    cg.setColor( QColorGroup::HighlightedText, white );
-    pal.setInactive( cg );
-    cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Light, white );
-    cg.setColor( QColorGroup::Midlight, QColor( 220, 220, 220) );
-    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
-    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Text, black );
-    cg.setColor( QColorGroup::BrightText, white );
-    cg.setColor( QColorGroup::ButtonText, QColor( 128, 128, 128) );
-    cg.setColor( QColorGroup::Base, white );
-    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
-    cg.setColor( QColorGroup::Shadow, black );
-    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
-    cg.setColor( QColorGroup::HighlightedText, white );
-    pal.setDisabled( cg );
-    pbE_99->setPalette( pal );
-    pbE_99->setText( tr( "Nit" ) );
-    pbE_99->setToggleButton( TRUE );
-    pbE_99->setOn( FALSE );
-    pbE_99->setToggleButton( TRUE );
-    pbE_99->setOn( FALSE );
-    bgElem->insert( pbE_99, 99 );
-    QToolTip::add(  pbE_99, tr( "Atmospheric (non-reactive) nitrogen" ) );
-
     pImg1 = new QLabel( bgElem, "pImg1" );
     pImg1->setGeometry( QRect( 470, 30, 50, 50 ) ); 
     pImg1->setMinimumSize( QSize( 50, 50 ) );
@@ -5060,18 +4909,80 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     bgElem->insert( cbIsotopes, 300 );
     QToolTip::add(  cbIsotopes, tr( "Check to include isotopes if provided" ) );
 
-    rbKernel = new QRadioButton( this, "rbKernel" );
-    rbKernel->setGeometry( QRect( 90, 470, 80, 22 ) ); 
-    QFont rbKernel_font(  rbKernel->font() );
-    rbKernel_font.setFamily( "Lucida Sans Unicode" );
-    rbKernel_font.setPointSize( 9 );
-    rbKernel->setFont( rbKernel_font ); 
-    rbKernel->setText( tr( "Kernel  " ) );
-    rbKernel->setChecked( TRUE );
-    QToolTip::add(  rbKernel, tr( "Check to collect certain (kernel) thermodynamic data " ) );
+    pbE_36 = new QPushButton( bgElem, "pbE_36" );
+    pbE_36->setEnabled( FALSE );
+    pbE_36->setGeometry( QRect( 380, 170, 50, 30 ) ); 
+    cg.setColor( QColorGroup::Foreground, black );
+    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
+    cg.setColor( QColorGroup::Light, white );
+    cg.setColor( QColorGroup::Midlight, QColor( 223, 223, 223) );
+    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
+    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
+    cg.setColor( QColorGroup::Text, black );
+    cg.setColor( QColorGroup::BrightText, white );
+    cg.setColor( QColorGroup::ButtonText, QColor( 0, 140, 0) );
+    cg.setColor( QColorGroup::Base, white );
+    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
+    cg.setColor( QColorGroup::Shadow, black );
+    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
+    cg.setColor( QColorGroup::HighlightedText, white );
+    pal.setActive( cg );
+    cg.setColor( QColorGroup::Foreground, black );
+    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
+    cg.setColor( QColorGroup::Light, white );
+    cg.setColor( QColorGroup::Midlight, QColor( 220, 220, 220) );
+    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
+    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
+    cg.setColor( QColorGroup::Text, black );
+    cg.setColor( QColorGroup::BrightText, white );
+    cg.setColor( QColorGroup::ButtonText, QColor( 0, 140, 0) );
+    cg.setColor( QColorGroup::Base, white );
+    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
+    cg.setColor( QColorGroup::Shadow, black );
+    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
+    cg.setColor( QColorGroup::HighlightedText, white );
+    pal.setInactive( cg );
+    cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
+    cg.setColor( QColorGroup::Button, QColor( 192, 192, 192) );
+    cg.setColor( QColorGroup::Light, white );
+    cg.setColor( QColorGroup::Midlight, QColor( 220, 220, 220) );
+    cg.setColor( QColorGroup::Dark, QColor( 96, 96, 96) );
+    cg.setColor( QColorGroup::Mid, QColor( 128, 128, 128) );
+    cg.setColor( QColorGroup::Text, black );
+    cg.setColor( QColorGroup::BrightText, white );
+    cg.setColor( QColorGroup::ButtonText, QColor( 128, 128, 128) );
+    cg.setColor( QColorGroup::Base, white );
+    cg.setColor( QColorGroup::Background, QColor( 192, 192, 192) );
+    cg.setColor( QColorGroup::Shadow, black );
+    cg.setColor( QColorGroup::Highlight, QColor( 0, 128, 128) );
+    cg.setColor( QColorGroup::HighlightedText, white );
+    pal.setDisabled( cg );
+    pbE_36->setPalette( pal );
+    pbE_36->setText( tr( "   Kr" ) );
+    pbE_36->setToggleButton( TRUE );
+    pbE_36->setToggleButton( TRUE );
+    bgElem->insert( pbE_36, 36 );
 
-    rbUncertain = new QRadioButton( this, "rbUncertain" );
-    rbUncertain->setGeometry( QRect( 180, 470, 99, 22 ) ); 
+    QWidget* privateLayoutWidget = new QWidget( this, "Layout2" );
+    privateLayoutWidget->setGeometry( QRect( 10, 440, 620, 54 ) ); 
+    Layout2 = new QHBoxLayout( privateLayoutWidget ); 
+    Layout2->setSpacing( 6 );
+    Layout2->setMargin( 0 );
+
+    bHelp = new QPushButton( privateLayoutWidget, "bHelp" );
+    QFont bHelp_font(  bHelp->font() );
+    bHelp_font.setFamily( "Lucida Sans Unicode" );
+    bHelp_font.setPointSize( 9 );
+    bHelp->setFont( bHelp_font ); 
+    bHelp->setText( tr( "&Help" ) );
+    bHelp->setAutoDefault( TRUE );
+    Layout2->addWidget( bHelp );
+
+    Layout1 = new QGridLayout; 
+    Layout1->setSpacing( 6 );
+    Layout1->setMargin( 0 );
+
+    rbUncertain = new QRadioButton( privateLayoutWidget, "rbUncertain" );
     QFont rbUncertain_font(  rbUncertain->font() );
     rbUncertain_font.setFamily( "Lucida Sans Unicode" );
     rbUncertain_font.setPointSize( 9 );
@@ -5080,18 +4991,20 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     rbUncertain->setChecked( TRUE );
     QToolTip::add(  rbUncertain, tr( "Check to collect uncertain generic thermodynamic data " ) );
 
-    rbSpecific = new QRadioButton( this, "rbSpecific" );
-    rbSpecific->setGeometry( QRect( 280, 470, 92, 22 ) ); 
-    QFont rbSpecific_font(  rbSpecific->font() );
-    rbSpecific_font.setFamily( "Lucida Sans Unicode" );
-    rbSpecific_font.setPointSize( 9 );
-    rbSpecific->setFont( rbSpecific_font ); 
-    rbSpecific->setText( tr( "Specific   " ) );
-    rbSpecific->setChecked( FALSE );
-    QToolTip::add(  rbSpecific, tr( "Check to include system-specific thermodynamic data" ) );
+    Layout1->addWidget( rbUncertain, 1, 1 );
 
-    cbGaseous = new QCheckBox( this, "cbGaseous" );
-    cbGaseous->setGeometry( QRect( 90, 440, 91, 21 ) ); 
+    rbKernel = new QRadioButton( privateLayoutWidget, "rbKernel" );
+    QFont rbKernel_font(  rbKernel->font() );
+    rbKernel_font.setFamily( "Lucida Sans Unicode" );
+    rbKernel_font.setPointSize( 9 );
+    rbKernel->setFont( rbKernel_font ); 
+    rbKernel->setText( tr( "Kernel  " ) );
+    rbKernel->setChecked( TRUE );
+    QToolTip::add(  rbKernel, tr( "Check to collect certain (kernel) thermodynamic data " ) );
+
+    Layout1->addWidget( rbKernel, 1, 0 );
+
+    cbGaseous = new QCheckBox( privateLayoutWidget, "cbGaseous" );
     QFont cbGaseous_font(  cbGaseous->font() );
     cbGaseous_font.setFamily( "Lucida Sans Unicode" );
     cbGaseous_font.setPointSize( 9 );
@@ -5100,8 +5013,9 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     cbGaseous->setChecked( TRUE );
     QToolTip::add(  cbGaseous, tr( "Check to include gaseous aggregate state phases" ) );
 
-    cbAqueous = new QCheckBox( this, "cbAqueous" );
-    cbAqueous->setGeometry( QRect( 180, 440, 91, 21 ) ); 
+    Layout1->addWidget( cbGaseous, 0, 0 );
+
+    cbAqueous = new QCheckBox( privateLayoutWidget, "cbAqueous" );
     QFont cbAqueous_font(  cbAqueous->font() );
     cbAqueous_font.setFamily( "Lucida Sans Unicode" );
     cbAqueous_font.setPointSize( 9 );
@@ -5110,8 +5024,9 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     cbAqueous->setChecked( TRUE );
     QToolTip::add(  cbAqueous, tr( "Check to include aqueous electrolyte phase" ) );
 
-    cbSorption = new QCheckBox( this, "cbSorption" );
-    cbSorption->setGeometry( QRect( 280, 440, 91, 21 ) ); 
+    Layout1->addWidget( cbAqueous, 0, 1 );
+
+    cbSorption = new QCheckBox( privateLayoutWidget, "cbSorption" );
     QFont cbSorption_font(  cbSorption->font() );
     cbSorption_font.setFamily( "Lucida Sans Unicode" );
     cbSorption_font.setPointSize( 9 );
@@ -5119,9 +5034,43 @@ ElementsDialogData::ElementsDialogData( QWidget* parent,  const char* name, bool
     cbSorption->setText( tr( "Sorption" ) );
     QToolTip::add(  cbSorption, tr( "Check to include sorption phase(s)" ) );
 
+    Layout1->addWidget( cbSorption, 0, 2 );
+
+    rbSpecific = new QRadioButton( privateLayoutWidget, "rbSpecific" );
+    QFont rbSpecific_font(  rbSpecific->font() );
+    rbSpecific_font.setFamily( "Lucida Sans Unicode" );
+    rbSpecific_font.setPointSize( 9 );
+    rbSpecific->setFont( rbSpecific_font ); 
+    rbSpecific->setText( tr( "Specific   " ) );
+    rbSpecific->setChecked( FALSE );
+    QToolTip::add(  rbSpecific, tr( "Check to include system-specific thermodynamic data" ) );
+
+    Layout1->addWidget( rbSpecific, 1, 2 );
+    Layout2->addLayout( Layout1 );
+
+    bReset = new QPushButton( privateLayoutWidget, "bReset" );
+    QFont bReset_font(  bReset->font() );
+    bReset_font.setFamily( "Lucida Sans Unicode" );
+    bReset_font.setPointSize( 9 );
+    bReset->setFont( bReset_font ); 
+    bReset->setText( tr( "Set &Filters" ) );
+    bReset->setAutoDefault( TRUE );
+    QToolTip::add(  bReset, tr( "Customize filters for copying records from default database into new system profile" ) );
+    Layout2->addWidget( bReset );
+
+    bNext = new QPushButton( privateLayoutWidget, "bNext" );
+    QFont bNext_font(  bNext->font() );
+    bNext_font.setFamily( "Lucida Sans Unicode" );
+    bNext_font.setPointSize( 9 );
+    bNext->setFont( bNext_font ); 
+    bNext->setText( tr( "&OK/Next" ) );
+    bNext->setAutoDefault( TRUE );
+    bNext->setDefault( TRUE );
+    QToolTip::add(  bNext, tr( "Proceed to create database files for this profile" ) );
+    Layout2->addWidget( bNext );
+
     // signals and slots connections
     connect( bNext, SIGNAL( clicked() ), this, SLOT( accept() ) );
-    connect( bPrevious, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
 /*  
@@ -5143,22 +5092,6 @@ bool ElementsDialogData::event( QEvent* ev )
 	QFont bgOther_font(  bgOther->font() );
 	bgOther_font.setFamily( "Lucida Sans Unicode" );
 	bgOther->setFont( bgOther_font ); 
-	QFont bHelp_font(  bHelp->font() );
-	bHelp_font.setFamily( "Lucida Sans Unicode" );
-	bHelp_font.setPointSize( 9 );
-	bHelp->setFont( bHelp_font ); 
-	QFont bPrevious_font(  bPrevious->font() );
-	bPrevious_font.setFamily( "Lucida Sans Unicode" );
-	bPrevious_font.setPointSize( 9 );
-	bPrevious->setFont( bPrevious_font ); 
-	QFont bReset_font(  bReset->font() );
-	bReset_font.setFamily( "Lucida Sans Unicode" );
-	bReset_font.setPointSize( 9 );
-	bReset->setFont( bReset_font ); 
-	QFont bNext_font(  bNext->font() );
-	bNext_font.setFamily( "Lucida Sans Unicode" );
-	bNext_font.setPointSize( 9 );
-	bNext->setFont( bNext_font ); 
 	QFont bgElem_font(  bgElem->font() );
 	bgElem_font.setFamily( "Lucida Sans Unicode" );
 	bgElem->setFont( bgElem_font ); 
@@ -5196,18 +5129,18 @@ bool ElementsDialogData::event( QEvent* ev )
 	QFont cbIsotopes_font(  cbIsotopes->font() );
 	cbIsotopes_font.setPointSize( 9 );
 	cbIsotopes->setFont( cbIsotopes_font ); 
-	QFont rbKernel_font(  rbKernel->font() );
-	rbKernel_font.setFamily( "Lucida Sans Unicode" );
-	rbKernel_font.setPointSize( 9 );
-	rbKernel->setFont( rbKernel_font ); 
+	QFont bHelp_font(  bHelp->font() );
+	bHelp_font.setFamily( "Lucida Sans Unicode" );
+	bHelp_font.setPointSize( 9 );
+	bHelp->setFont( bHelp_font ); 
 	QFont rbUncertain_font(  rbUncertain->font() );
 	rbUncertain_font.setFamily( "Lucida Sans Unicode" );
 	rbUncertain_font.setPointSize( 9 );
 	rbUncertain->setFont( rbUncertain_font ); 
-	QFont rbSpecific_font(  rbSpecific->font() );
-	rbSpecific_font.setFamily( "Lucida Sans Unicode" );
-	rbSpecific_font.setPointSize( 9 );
-	rbSpecific->setFont( rbSpecific_font ); 
+	QFont rbKernel_font(  rbKernel->font() );
+	rbKernel_font.setFamily( "Lucida Sans Unicode" );
+	rbKernel_font.setPointSize( 9 );
+	rbKernel->setFont( rbKernel_font ); 
 	QFont cbGaseous_font(  cbGaseous->font() );
 	cbGaseous_font.setFamily( "Lucida Sans Unicode" );
 	cbGaseous_font.setPointSize( 9 );
@@ -5220,6 +5153,18 @@ bool ElementsDialogData::event( QEvent* ev )
 	cbSorption_font.setFamily( "Lucida Sans Unicode" );
 	cbSorption_font.setPointSize( 9 );
 	cbSorption->setFont( cbSorption_font ); 
+	QFont rbSpecific_font(  rbSpecific->font() );
+	rbSpecific_font.setFamily( "Lucida Sans Unicode" );
+	rbSpecific_font.setPointSize( 9 );
+	rbSpecific->setFont( rbSpecific_font ); 
+	QFont bReset_font(  bReset->font() );
+	bReset_font.setFamily( "Lucida Sans Unicode" );
+	bReset_font.setPointSize( 9 );
+	bReset->setFont( bReset_font ); 
+	QFont bNext_font(  bNext->font() );
+	bNext_font.setFamily( "Lucida Sans Unicode" );
+	bNext_font.setPointSize( 9 );
+	bNext->setFont( bNext_font ); 
     }
     return ret;
 }

@@ -69,7 +69,8 @@ vfListFiles(QWidget* par, const char * prfName,
                 TCStringArray& fls, TCIntArray& cnt );
 bool
 vfElements(QWidget* par, const char * prfName,
-                TCStringArray& rds, bool& aAqueous, bool& aSorption);
+            TCStringArray& rds, TCStringArray& names,
+            bool& aAqueous, bool& aGaseous, bool& aSorption);
 
 gstring
 vfKeyEdit(QWidget* par, const char* title, int iRt, const char* key=0);

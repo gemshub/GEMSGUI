@@ -34,21 +34,22 @@ class ElementsDialog : public ElementsDialogData
     TCIntArray aBtmId2;     // lists correspondanse betvin bgOther
     TCStringArray aICkey2;  // buttons and IComp records
 
+    void EmptyData();
     void ResetData();
     void SetICompList();
+
 
 protected slots:
     void CmHelp();
     void CmOk();
-    void CmReset();
-    void CmPrevious();
-    void SetIsotopes(bool on);
-    void SetSorption(bool on);
-    void SetAqueous(bool on);
-    void SetGaseous(bool on);
-    void SetKernel(bool on);
-    void SetUncertain(bool on);
-    void SetSpecific(bool on);
+//    void CmReset();
+//    void CmPrevious();
+    void CmSetFilters();
+
+    void SetSorption();
+    void SetAqueous();
+    void SetGaseous();
+    void SetFiles();
 
 public:
 
@@ -57,13 +58,10 @@ public:
     virtual ~ElementsDialog();
 
     void allSelected( TCStringArray& aICkeys );
-    bool isIsotopes() const ;
-    bool isGaseous() const ;
+    void openFiles( TCStringArray& names );
     bool isAqueous() const ;
+    bool isGaseous() const ;
     bool isSorption() const ;
-    bool isKernel() const ;
-    bool isUncertain() const ;
-    bool isSpecific() const ;
 };
 
 #endif // ElementsDialog_included

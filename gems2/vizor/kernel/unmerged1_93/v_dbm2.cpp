@@ -556,6 +556,18 @@ AGAIN:
     }
 }
 
+bool TDataBase::FindPart( const char *key_, int field )
+{
+
+    vstr key(KeyLen(), key_);
+    TDBKey dbKey(GetDBKey());
+    dbKey.SetKey(key);
+    dbKey.SetFldKey(field,"*");
+    gstring str_key( dbKey.UnpackKey(), 0, KeyLen() );
+    RecStatus iRet = Rtest( str_key.c_str(), 0 );
+    return ( iRet==MANY_ || iRet==ONEF_ );
+}
+
 // test work record key (equat)
 bool TDataBase::KeyTest( const char* key )
 {
@@ -720,7 +732,7 @@ int TDataBase::AddFileToList(TDBFile* file)
     if( rclose )
         file->Close();
     opfils();
-    return aFile.GetCount()-1;
+    return fls.Find( aFile.GetCount()-1 );
 }
 
 // delete a file from DBfile list

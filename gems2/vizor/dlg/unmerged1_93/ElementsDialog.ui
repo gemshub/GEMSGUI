@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>642</width>
+            <width>638</width>
             <height>501</height>
         </rect>
     </property>
@@ -1185,146 +1185,6 @@
                 <number>1</number>
             </property>
         </widget>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>bHelp</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>10</x>
-                <y>442</y>
-                <width>70</width>
-                <height>50</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Help</string>
-        </property>
-        <property stdset="1">
-            <name>autoDefault</name>
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>bPrevious</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>380</x>
-                <y>440</y>
-                <width>70</width>
-                <height>50</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Back</string>
-        </property>
-        <property stdset="1">
-            <name>autoDefault</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Back to default database file configuration</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>bReset</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>460</x>
-                <y>440</y>
-                <width>70</width>
-                <height>50</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;Reset</string>
-        </property>
-        <property stdset="1">
-            <name>autoDefault</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Resets to initial selection of independent components</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>bNext</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>540</x>
-                <y>440</y>
-                <width>90</width>
-                <height>50</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>&amp;OK/Next</string>
-        </property>
-        <property stdset="1">
-            <name>autoDefault</name>
-            <bool>true</bool>
-        </property>
-        <property stdset="1">
-            <name>default</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Proceed to create database files for this profile</string>
-        </property>
     </widget>
     <widget>
         <class>QButtonGroup</class>
@@ -5070,263 +4930,6 @@
             <property stdset="1">
                 <name>buttonGroupId</name>
                 <number>34</number>
-            </property>
-        </widget>
-        <widget>
-            <class>QPushButton</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>pbE_36</cstring>
-            </property>
-            <property stdset="1">
-                <name>enabled</name>
-                <bool>false</bool>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>380</x>
-                    <y>170</y>
-                    <width>50</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>palette</name>
-                <palette>
-                    <active>
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>192</red>
-                            <green>192</green>
-                            <blue>192</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>223</red>
-                            <green>223</green>
-                            <blue>223</blue>
-                        </color>
-                        <color>
-                            <red>96</red>
-                            <green>96</green>
-                            <blue>96</blue>
-                        </color>
-                        <color>
-                            <red>128</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>140</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>192</red>
-                            <green>192</green>
-                            <blue>192</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                    </active>
-                    <disabled>
-                        <color>
-                            <red>128</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                        </color>
-                        <color>
-                            <red>192</red>
-                            <green>192</green>
-                            <blue>192</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>220</red>
-                            <green>220</green>
-                            <blue>220</blue>
-                        </color>
-                        <color>
-                            <red>96</red>
-                            <green>96</green>
-                            <blue>96</blue>
-                        </color>
-                        <color>
-                            <red>128</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>128</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>192</red>
-                            <green>192</green>
-                            <blue>192</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                    </disabled>
-                    <inactive>
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>192</red>
-                            <green>192</green>
-                            <blue>192</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>220</red>
-                            <green>220</green>
-                            <blue>220</blue>
-                        </color>
-                        <color>
-                            <red>96</red>
-                            <green>96</green>
-                            <blue>96</blue>
-                        </color>
-                        <color>
-                            <red>128</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>140</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                        <color>
-                            <red>192</red>
-                            <green>192</green>
-                            <blue>192</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                        <color>
-                            <red>0</red>
-                            <green>128</green>
-                            <blue>128</blue>
-                        </color>
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>255</blue>
-                        </color>
-                    </inactive>
-                </palette>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>   Kr</string>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>toggleButton</name>
-                <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>36</number>
             </property>
         </widget>
         <widget>
@@ -23011,10 +22614,143 @@
             </property>
         </widget>
         <widget>
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>pImg1</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>470</x>
+                    <y>30</y>
+                    <width>50</width>
+                    <height>50</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>minimumSize</name>
+                <size>
+                    <width>50</width>
+                    <height>50</height>
+                </size>
+            </property>
+            <property stdset="1">
+                <name>maximumSize</name>
+                <size>
+                    <width>50</width>
+                    <height>50</height>
+                </size>
+            </property>
+            <property stdset="1">
+                <name>frameShape</name>
+                <enum>Panel</enum>
+            </property>
+            <property stdset="1">
+                <name>frameShadow</name>
+                <enum>Raised</enum>
+            </property>
+            <property stdset="1">
+                <name>pixmap</name>
+                <pixmap>image0</pixmap>
+            </property>
+            <property stdset="1">
+                <name>scaledContents</name>
+                <bool>false</bool>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignCenter</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+        </widget>
+        <widget>
+            <class>QLabel</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>tlGEMS</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>470</x>
+                    <y>80</y>
+                    <width>60</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <family>MS Sans Serif</family>
+                    <pointsize>8</pointsize>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>frameShape</name>
+                <enum>Panel</enum>
+            </property>
+            <property stdset="1">
+                <name>frameShadow</name>
+                <enum>Plain</enum>
+            </property>
+            <property stdset="1">
+                <name>lineWidth</name>
+                <number>0</number>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>v.2x-PSI</string>
+            </property>
+            <property stdset="1">
+                <name>alignment</name>
+                <set>AlignCenter</set>
+            </property>
+            <property>
+                <name>hAlign</name>
+            </property>
+        </widget>
+        <widget>
+            <class>QCheckBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>cbIsotopes</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>290</x>
+                    <y>330</y>
+                    <width>91</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>font</name>
+                <font>
+                    <pointsize>9</pointsize>
+                </font>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Isotopes</string>
+            </property>
+            <property stdset="1">
+                <name>buttonGroupId</name>
+                <number>300</number>
+            </property>
+            <property>
+                <name>toolTip</name>
+                <string>Check to include isotopes if provided</string>
+            </property>
+        </widget>
+        <widget>
             <class>QPushButton</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>pbE_99</cstring>
+                <cstring>pbE_36</cstring>
             </property>
             <property stdset="1">
                 <name>enabled</name>
@@ -23023,8 +22759,8 @@
             <property stdset="1">
                 <name>geometry</name>
                 <rect>
-                    <x>230</x>
-                    <y>50</y>
+                    <x>380</x>
+                    <y>170</y>
                     <width>50</width>
                     <height>30</height>
                 </rect>
@@ -23074,9 +22810,9 @@
                             <blue>255</blue>
                         </color>
                         <color>
-                            <red>117</red>
-                            <green>0</green>
-                            <blue>176</blue>
+                            <red>0</red>
+                            <green>140</green>
+                            <blue>0</blue>
                         </color>
                         <color>
                             <red>255</red>
@@ -23218,9 +22954,9 @@
                             <blue>255</blue>
                         </color>
                         <color>
-                            <red>117</red>
-                            <green>0</green>
-                            <blue>176</blue>
+                            <red>0</red>
+                            <green>140</green>
+                            <blue>0</blue>
                         </color>
                         <color>
                             <red>255</red>
@@ -23252,372 +22988,294 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Nit</string>
+                <string>   Kr</string>
             </property>
             <property stdset="1">
                 <name>toggleButton</name>
                 <bool>true</bool>
             </property>
             <property stdset="1">
-                <name>on</name>
-                <bool>false</bool>
-            </property>
-            <property stdset="1">
                 <name>toggleButton</name>
                 <bool>true</bool>
-            </property>
-            <property stdset="1">
-                <name>on</name>
-                <bool>false</bool>
             </property>
             <property stdset="1">
                 <name>buttonGroupId</name>
-                <number>99</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Atmospheric (non-reactive) nitrogen</string>
+                <number>36</number>
             </property>
         </widget>
-        <widget>
-            <class>QLabel</class>
+    </widget>
+    <widget>
+        <class>QLayoutWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Layout2</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>10</x>
+                <y>440</y>
+                <width>620</width>
+                <height>54</height>
+            </rect>
+        </property>
+        <hbox>
             <property stdset="1">
-                <name>name</name>
-                <cstring>pImg1</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>470</x>
-                    <y>30</y>
-                    <width>50</width>
-                    <height>50</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>minimumSize</name>
-                <size>
-                    <width>50</width>
-                    <height>50</height>
-                </size>
-            </property>
-            <property stdset="1">
-                <name>maximumSize</name>
-                <size>
-                    <width>50</width>
-                    <height>50</height>
-                </size>
-            </property>
-            <property stdset="1">
-                <name>frameShape</name>
-                <enum>Panel</enum>
-            </property>
-            <property stdset="1">
-                <name>frameShadow</name>
-                <enum>Raised</enum>
-            </property>
-            <property stdset="1">
-                <name>pixmap</name>
-                <pixmap>image0</pixmap>
-            </property>
-            <property stdset="1">
-                <name>scaledContents</name>
-                <bool>false</bool>
-            </property>
-            <property stdset="1">
-                <name>alignment</name>
-                <set>AlignCenter</set>
-            </property>
-            <property>
-                <name>hAlign</name>
-            </property>
-        </widget>
-        <widget>
-            <class>QLabel</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>tlGEMS</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>470</x>
-                    <y>80</y>
-                    <width>60</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <family>MS Sans Serif</family>
-                    <pointsize>8</pointsize>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>frameShape</name>
-                <enum>Panel</enum>
-            </property>
-            <property stdset="1">
-                <name>frameShadow</name>
-                <enum>Plain</enum>
-            </property>
-            <property stdset="1">
-                <name>lineWidth</name>
+                <name>margin</name>
                 <number>0</number>
             </property>
             <property stdset="1">
-                <name>text</name>
-                <string>v.2x-PSI</string>
+                <name>spacing</name>
+                <number>6</number>
             </property>
-            <property stdset="1">
-                <name>alignment</name>
-                <set>AlignCenter</set>
-            </property>
-            <property>
-                <name>hAlign</name>
-            </property>
-        </widget>
-        <widget>
-            <class>QCheckBox</class>
-            <property stdset="1">
-                <name>name</name>
-                <cstring>cbIsotopes</cstring>
-            </property>
-            <property stdset="1">
-                <name>geometry</name>
-                <rect>
-                    <x>290</x>
-                    <y>330</y>
-                    <width>91</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property stdset="1">
-                <name>font</name>
-                <font>
-                    <pointsize>9</pointsize>
-                </font>
-            </property>
-            <property stdset="1">
-                <name>text</name>
-                <string>Isotopes</string>
-            </property>
-            <property stdset="1">
-                <name>buttonGroupId</name>
-                <number>300</number>
-            </property>
-            <property>
-                <name>toolTip</name>
-                <string>Check to include isotopes if provided</string>
-            </property>
-        </widget>
-    </widget>
-    <widget>
-        <class>QRadioButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>rbKernel</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>90</x>
-                <y>470</y>
-                <width>80</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Kernel  </string>
-        </property>
-        <property stdset="1">
-            <name>checked</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Check to collect certain (kernel) thermodynamic data </string>
-        </property>
-    </widget>
-    <widget>
-        <class>QRadioButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>rbUncertain</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>180</x>
-                <y>470</y>
-                <width>99</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Uncertain  </string>
-        </property>
-        <property stdset="1">
-            <name>checked</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Check to collect uncertain generic thermodynamic data </string>
-        </property>
-    </widget>
-    <widget>
-        <class>QRadioButton</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>rbSpecific</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>280</x>
-                <y>470</y>
-                <width>92</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Specific   </string>
-        </property>
-        <property stdset="1">
-            <name>checked</name>
-            <bool>false</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Check to include system-specific thermodynamic data</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QCheckBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>cbGaseous</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>90</x>
-                <y>440</y>
-                <width>91</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Gaseous</string>
-        </property>
-        <property stdset="1">
-            <name>checked</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Check to include gaseous aggregate state phases</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QCheckBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>cbAqueous</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>180</x>
-                <y>440</y>
-                <width>91</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Aqueous</string>
-        </property>
-        <property stdset="1">
-            <name>checked</name>
-            <bool>true</bool>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Check to include aqueous electrolyte phase</string>
-        </property>
-    </widget>
-    <widget>
-        <class>QCheckBox</class>
-        <property stdset="1">
-            <name>name</name>
-            <cstring>cbSorption</cstring>
-        </property>
-        <property stdset="1">
-            <name>geometry</name>
-            <rect>
-                <x>280</x>
-                <y>440</y>
-                <width>91</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property stdset="1">
-            <name>font</name>
-            <font>
-                <family>Lucida Sans Unicode</family>
-                <pointsize>9</pointsize>
-            </font>
-        </property>
-        <property stdset="1">
-            <name>text</name>
-            <string>Sorption</string>
-        </property>
-        <property>
-            <name>toolTip</name>
-            <string>Check to include sorption phase(s)</string>
-        </property>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>bHelp</cstring>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <family>Lucida Sans Unicode</family>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;Help</string>
+                </property>
+                <property stdset="1">
+                    <name>autoDefault</name>
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget>
+                <class>QLayoutWidget</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>Layout1</cstring>
+                </property>
+                <grid>
+                    <property stdset="1">
+                        <name>margin</name>
+                        <number>0</number>
+                    </property>
+                    <property stdset="1">
+                        <name>spacing</name>
+                        <number>6</number>
+                    </property>
+                    <widget row="1"  column="1" >
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbUncertain</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>font</name>
+                            <font>
+                                <family>Lucida Sans Unicode</family>
+                                <pointsize>9</pointsize>
+                            </font>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Uncertain  </string>
+                        </property>
+                        <property stdset="1">
+                            <name>checked</name>
+                            <bool>true</bool>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string>Check to collect uncertain generic thermodynamic data </string>
+                        </property>
+                    </widget>
+                    <widget row="1"  column="0" >
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbKernel</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>font</name>
+                            <font>
+                                <family>Lucida Sans Unicode</family>
+                                <pointsize>9</pointsize>
+                            </font>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Kernel  </string>
+                        </property>
+                        <property stdset="1">
+                            <name>checked</name>
+                            <bool>true</bool>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string>Check to collect certain (kernel) thermodynamic data </string>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="0" >
+                        <class>QCheckBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>cbGaseous</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>font</name>
+                            <font>
+                                <family>Lucida Sans Unicode</family>
+                                <pointsize>9</pointsize>
+                            </font>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Gaseous</string>
+                        </property>
+                        <property stdset="1">
+                            <name>checked</name>
+                            <bool>true</bool>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string>Check to include gaseous aggregate state phases</string>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="1" >
+                        <class>QCheckBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>cbAqueous</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>font</name>
+                            <font>
+                                <family>Lucida Sans Unicode</family>
+                                <pointsize>9</pointsize>
+                            </font>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Aqueous</string>
+                        </property>
+                        <property stdset="1">
+                            <name>checked</name>
+                            <bool>true</bool>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string>Check to include aqueous electrolyte phase</string>
+                        </property>
+                    </widget>
+                    <widget row="0"  column="2" >
+                        <class>QCheckBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>cbSorption</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>font</name>
+                            <font>
+                                <family>Lucida Sans Unicode</family>
+                                <pointsize>9</pointsize>
+                            </font>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Sorption</string>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string>Check to include sorption phase(s)</string>
+                        </property>
+                    </widget>
+                    <widget row="1"  column="2" >
+                        <class>QRadioButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>rbSpecific</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>font</name>
+                            <font>
+                                <family>Lucida Sans Unicode</family>
+                                <pointsize>9</pointsize>
+                            </font>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Specific   </string>
+                        </property>
+                        <property stdset="1">
+                            <name>checked</name>
+                            <bool>false</bool>
+                        </property>
+                        <property>
+                            <name>toolTip</name>
+                            <string>Check to include system-specific thermodynamic data</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>bReset</cstring>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <family>Lucida Sans Unicode</family>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Set &amp;Filters</string>
+                </property>
+                <property stdset="1">
+                    <name>autoDefault</name>
+                    <bool>true</bool>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Customize filters for copying records from default database into new system profile</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QPushButton</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>bNext</cstring>
+                </property>
+                <property stdset="1">
+                    <name>font</name>
+                    <font>
+                        <family>Lucida Sans Unicode</family>
+                        <pointsize>9</pointsize>
+                    </font>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>&amp;OK/Next</string>
+                </property>
+                <property stdset="1">
+                    <name>autoDefault</name>
+                    <bool>true</bool>
+                </property>
+                <property stdset="1">
+                    <name>default</name>
+                    <bool>true</bool>
+                </property>
+                <property>
+                    <name>toolTip</name>
+                    <string>Proceed to create database files for this profile</string>
+                </property>
+            </widget>
+        </hbox>
     </widget>
 </widget>
 <images>
@@ -23632,12 +23290,6 @@
         <signal>clicked()</signal>
         <receiver>ElementsDialog</receiver>
         <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>bPrevious</sender>
-        <signal>clicked()</signal>
-        <receiver>ElementsDialog</receiver>
-        <slot>reject()</slot>
     </connection>
 </connections>
 </UI>

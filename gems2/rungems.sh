@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec ./program/gems -s /home/dima/GEMsetup/program -u /home/dima/GEMsetup 
+exec ./program/gems2 -c -s /home/dima/gems2test/program -u /home/dima/gems2test 

@@ -23,7 +23,6 @@
 #include "v_object.h"
 #include "service.h"
 #include "visor.h"
-#include "m_icomp.h"
 
 #ifdef Use_mt_mode
 #include "visor_w.h"
@@ -179,11 +178,29 @@ bool TProfil::NewProfileMode()
     bool elements_mode = false;
 
     gstring  templ_str;
+AGAIN:
     gstring  key_str = GetKeyofRecord( ALLKEY,
             "Please, enter a new profile key", KEY_NEW );
     if( key_str.empty() )
       return false; // cancel command
 
+    rt[RT_PARAM].SetKey( key_str.c_str() );
+    vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+    gstring fstKeyFld(_fstKeyFld);
+    StripLine(fstKeyFld);
+
+    //Test equal profile names
+    templ_str = fstKeyFld;
+    templ_str += ":*:";
+    TCStringArray aKey__;
+    TCIntArray anR__;
+
+    if(  db->GetKeyList( templ_str.c_str(), aKey__, anR__  ) >0 )
+    {
+      vfMessage(window(), fstKeyFld.c_str(),
+        "Illegal name of Profile.\nTry again...");
+      goto AGAIN;
+    }
 BACK:
    // new elements mode
    if( vfQuestion(window(), "Test", "Select elements mode") )
@@ -213,15 +230,16 @@ BACK:
        set_def(); // set default data or zero if necessary
     }
    }
-   pVisor->Message( 0, "Loading Profile",
-      "Opening data base files to Profile", 5  );
 
    RecBuild( key_str.c_str() );  // Edit flags
 
+   pVisor->Message( window(), "Loading Profile",
+      "Opening data base files to Profile", 5  );
+
    rt[RT_PARAM].SetKey( key_str.c_str() );
-     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-     gstring fstKeyFld(_fstKeyFld);
-     StripLine(fstKeyFld);
+//     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+//     gstring fstKeyFld(_fstKeyFld);
+//     StripLine(fstKeyFld);
 
      if( templ_key == false  )
         InitFN( fstKeyFld.c_str(), 0  ); // make Profile directory
@@ -237,8 +255,8 @@ BACK:
       }
       if( elements_mode )
       {
-        if( !SelectElementsFN( fstKeyFld.c_str() ) )
-         goto BACK;
+        if( !rCopyFilterProfile( fstKeyFld.c_str() ) )
+         ;//goto BACK;
       }
       // get opens files list
       if( !GetFN( fstKeyFld.c_str() ) )
@@ -715,29 +733,6 @@ void TProfil::SetFN()
         rt[aMod[i].rtNum()].SetNewOpenFileList( aFls );
     }
 }
-
-
-// Save file configuration to Profil structure
-bool TProfil::SelectElementsFN( const char * prfName )
-{
-
-    TCStringArray ICkeys;
-    bool aAqueous, aSorption;
-    if( ! vfElements(window(), prfName, ICkeys, aAqueous, aSorption ))
-      return false;
-    // added to profile file icomp.kernel.prfname
-    // and copy to it selected records
-    // add to last key field first symbol from prfname
-    // close all kernel files
-    TIComp* aICdata=(TIComp *)(&aMod[RT_ICOMP]);
-    aICdata->CopyElements( prfName, ICkeys );
-
-
-    return false;
-}
-
-
-
 
 //------------------ End of m_prfget.cpp --------------------------
 

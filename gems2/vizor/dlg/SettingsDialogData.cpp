@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'SettingsDialog.ui'
 **
-** Created: Пнд Гру 17 12:44:00 2001
+** Created: Di 18. Dez 12:46:37 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -10,6 +10,7 @@
 
 #include <qvariant.h>
 #include <qbuttongroup.h>
+#include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
@@ -40,36 +41,59 @@ SettingsDialogData::SettingsDialogData( QWidget* parent,  const char* name, bool
     setFont( f ); 
     setCaption( trUtf8( "Set GEM-Selektor preferences" ) );
 
-    QWidget* privateLayoutWidget = new QWidget( this, "Layout4" );
-    privateLayoutWidget->setGeometry( QRect( 10, 10, 550, 60 ) ); 
-    Layout4 = new QGridLayout( privateLayoutWidget, 1, 1, 0, 6, "Layout4"); 
+    QWidget* privateLayoutWidget = new QWidget( this, "Layout28" );
+    privateLayoutWidget->setGeometry( QRect( 10, 260, 560, 37 ) ); 
+    Layout28 = new QHBoxLayout( privateLayoutWidget, 0, 6, "Layout28"); 
 
-    pSysDBDir = new QLabel( privateLayoutWidget, "pSysDBDir" );
-    pSysDBDir->setFrameShape( QLabel::Box );
-    pSysDBDir->setFrameShadow( QLabel::Sunken );
-    pSysDBDir->setText( trUtf8( "TextLabel1" ) );
+    pButtonOK = new QPushButton( privateLayoutWidget, "pButtonOK" );
+    QFont pButtonOK_font(  pButtonOK->font() );
+    pButtonOK->setFont( pButtonOK_font ); 
+    pButtonOK->setText( trUtf8( "&Ok" ) );
+    pButtonOK->setDefault( TRUE );
+    Layout28->addWidget( pButtonOK );
 
-    Layout4->addWidget( pSysDBDir, 0, 1 );
+    pButtonApply = new QPushButton( privateLayoutWidget, "pButtonApply" );
+    QFont pButtonApply_font(  pButtonApply->font() );
+    pButtonApply_font.setPointSize( 10 );
+    pButtonApply->setFont( pButtonApply_font ); 
+    pButtonApply->setText( trUtf8( "&Apply" ) );
+    Layout28->addWidget( pButtonApply );
 
-    TextLabel2 = new QLabel( privateLayoutWidget, "TextLabel2" );
-    TextLabel2->setText( trUtf8( " Core database directory" ) );
+    pButtonHelp = new QPushButton( privateLayoutWidget, "pButtonHelp" );
+    QFont pButtonHelp_font(  pButtonHelp->font() );
+    pButtonHelp_font.setPointSize( 10 );
+    pButtonHelp->setFont( pButtonHelp_font ); 
+    pButtonHelp->setText( trUtf8( "&Help" ) );
+    Layout28->addWidget( pButtonHelp );
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    Layout28->addItem( spacer );
 
-    Layout4->addWidget( TextLabel2, 0, 0 );
+    pButtonCancel = new QPushButton( privateLayoutWidget, "pButtonCancel" );
+    QFont pButtonCancel_font(  pButtonCancel->font() );
+    pButtonCancel_font.setPointSize( 10 );
+    pButtonCancel->setFont( pButtonCancel_font ); 
+    pButtonCancel->setText( trUtf8( "&Cancel" ) );
+    Layout28->addWidget( pButtonCancel );
 
-    TextLabel2_2 = new QLabel( privateLayoutWidget, "TextLabel2_2" );
-    TextLabel2_2->setText( trUtf8( " User's profile directory" ) );
+    QWidget* privateLayoutWidget_2 = new QWidget( this, "Layout5" );
+    privateLayoutWidget_2->setGeometry( QRect( 10, 210, 560, 37 ) ); 
+    Layout5 = new QHBoxLayout( privateLayoutWidget_2, 0, 6, "Layout5"); 
 
-    Layout4->addWidget( TextLabel2_2, 1, 0 );
+    TextLabel1_3 = new QLabel( privateLayoutWidget_2, "TextLabel1_3" );
+    TextLabel1_3->setText( trUtf8( "Font" ) );
+    Layout5->addWidget( TextLabel1_3 );
 
-    pUserDBDir = new QLabel( privateLayoutWidget, "pUserDBDir" );
-    pUserDBDir->setFrameShape( QLabel::Box );
-    pUserDBDir->setFrameShadow( QLabel::Sunken );
-    pUserDBDir->setText( trUtf8( "TextLabel1" ) );
+    pFontRawName = new QLineEdit( privateLayoutWidget_2, "pFontRawName" );
+    QToolTip::add( pFontRawName, trUtf8( "Currently applied font for data screen forms" ) );
+    Layout5->addWidget( pFontRawName );
 
-    Layout4->addWidget( pUserDBDir, 1, 1 );
+    pButtonChFont = new QPushButton( privateLayoutWidget_2, "pButtonChFont" );
+    pButtonChFont->setText( trUtf8( "C&hange font..." ) );
+    QToolTip::add( pButtonChFont, trUtf8( "Here you can change font for the data screen forms" ) );
+    Layout5->addWidget( pButtonChFont );
 
     ButtonGroup1 = new QButtonGroup( this, "ButtonGroup1" );
-    ButtonGroup1->setGeometry( QRect( 10, 90, 310, 101 ) ); 
+    ButtonGroup1->setGeometry( QRect( 10, 100, 310, 101 ) ); 
     ButtonGroup1->setTitle( trUtf8( "Creating/Upgrading System Profiles" ) );
 
     rbNewPrMode = new QRadioButton( ButtonGroup1, "rbNewPrMode" );
@@ -84,7 +108,7 @@ SettingsDialogData::SettingsDialogData( QWidget* parent,  const char* name, bool
     QToolTip::add( rbOldPrMode, trUtf8( "Switch on to select files from default database and link them to form a new profile" ) );
 
     GroupBox1 = new QGroupBox( this, "GroupBox1" );
-    GroupBox1->setGeometry( QRect( 330, 90, 240, 101 ) ); 
+    GroupBox1->setGeometry( QRect( 330, 100, 240, 101 ) ); 
     GroupBox1->setTitle( trUtf8( "Displaying Data" ) );
 
     TextLabel1_2_2 = new QLabel( GroupBox1, "TextLabel1_2_2" );
@@ -117,56 +141,39 @@ SettingsDialogData::SettingsDialogData( QWidget* parent,  const char* name, bool
     TextLabel1_4->setGeometry( QRect( 131, 20, 100, 26 ) ); 
     TextLabel1_4->setText( trUtf8( "digits in 'real'" ) );
 
-    QWidget* privateLayoutWidget_2 = new QWidget( this, "Layout5" );
-    privateLayoutWidget_2->setGeometry( QRect( 10, 200, 560, 37 ) ); 
-    Layout5 = new QHBoxLayout( privateLayoutWidget_2, 0, 6, "Layout5"); 
+    QWidget* privateLayoutWidget_3 = new QWidget( this, "Layout4" );
+    privateLayoutWidget_3->setGeometry( QRect( 2, 9, 570, 77 ) ); 
+    Layout4 = new QGridLayout( privateLayoutWidget_3, 1, 1, 0, 6, "Layout4"); 
 
-    TextLabel1_3 = new QLabel( privateLayoutWidget_2, "TextLabel1_3" );
-    TextLabel1_3->setText( trUtf8( "Font" ) );
-    Layout5->addWidget( TextLabel1_3 );
+    pConfigAutosave = new QCheckBox( privateLayoutWidget_3, "pConfigAutosave" );
+    pConfigAutosave->setText( trUtf8( "Save configuration at exit" ) );
+    pConfigAutosave->setChecked( TRUE );
 
-    pFontRawName = new QLineEdit( privateLayoutWidget_2, "pFontRawName" );
-    QToolTip::add( pFontRawName, trUtf8( "Currently applied font for data screen forms" ) );
-    Layout5->addWidget( pFontRawName );
+    Layout4->addWidget( pConfigAutosave, 2, 0 );
 
-    pButtonChFont = new QPushButton( privateLayoutWidget_2, "pButtonChFont" );
-    pButtonChFont->setText( trUtf8( "C&hange font..." ) );
-    QToolTip::add( pButtonChFont, trUtf8( "Here you can change font for the data screen forms" ) );
-    Layout5->addWidget( pButtonChFont );
+    TextLabel2 = new QLabel( privateLayoutWidget_3, "TextLabel2" );
+    TextLabel2->setText( trUtf8( " Core database directory" ) );
 
-    QWidget* privateLayoutWidget_3 = new QWidget( this, "Layout28" );
-    privateLayoutWidget_3->setGeometry( QRect( 10, 250, 560, 37 ) ); 
-    Layout28 = new QHBoxLayout( privateLayoutWidget_3, 0, 6, "Layout28"); 
+    Layout4->addWidget( TextLabel2, 0, 0 );
 
-    pButtonOK = new QPushButton( privateLayoutWidget_3, "pButtonOK" );
-    QFont pButtonOK_font(  pButtonOK->font() );
-    pButtonOK->setFont( pButtonOK_font ); 
-    pButtonOK->setText( trUtf8( "&Ok" ) );
-    pButtonOK->setDefault( TRUE );
-    Layout28->addWidget( pButtonOK );
+    pUserDBDir = new QLabel( privateLayoutWidget_3, "pUserDBDir" );
+    pUserDBDir->setFrameShape( QLabel::Box );
+    pUserDBDir->setFrameShadow( QLabel::Sunken );
+    pUserDBDir->setText( trUtf8( "TextLabel1" ) );
 
-    pButtonApply = new QPushButton( privateLayoutWidget_3, "pButtonApply" );
-    QFont pButtonApply_font(  pButtonApply->font() );
-    pButtonApply_font.setPointSize( 10 );
-    pButtonApply->setFont( pButtonApply_font ); 
-    pButtonApply->setText( trUtf8( "&Apply" ) );
-    Layout28->addWidget( pButtonApply );
+    Layout4->addWidget( pUserDBDir, 1, 1 );
 
-    pButtonHelp = new QPushButton( privateLayoutWidget_3, "pButtonHelp" );
-    QFont pButtonHelp_font(  pButtonHelp->font() );
-    pButtonHelp_font.setPointSize( 10 );
-    pButtonHelp->setFont( pButtonHelp_font ); 
-    pButtonHelp->setText( trUtf8( "&Help" ) );
-    Layout28->addWidget( pButtonHelp );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    Layout28->addItem( spacer );
+    pSysDBDir = new QLabel( privateLayoutWidget_3, "pSysDBDir" );
+    pSysDBDir->setFrameShape( QLabel::Box );
+    pSysDBDir->setFrameShadow( QLabel::Sunken );
+    pSysDBDir->setText( trUtf8( "TextLabel1" ) );
 
-    pButtonCancel = new QPushButton( privateLayoutWidget_3, "pButtonCancel" );
-    QFont pButtonCancel_font(  pButtonCancel->font() );
-    pButtonCancel_font.setPointSize( 10 );
-    pButtonCancel->setFont( pButtonCancel_font ); 
-    pButtonCancel->setText( trUtf8( "&Cancel" ) );
-    Layout28->addWidget( pButtonCancel );
+    Layout4->addWidget( pSysDBDir, 0, 1 );
+
+    TextLabel2_2 = new QLabel( privateLayoutWidget_3, "TextLabel2_2" );
+    TextLabel2_2->setText( trUtf8( " User's profile directory" ) );
+
+    Layout4->addWidget( TextLabel2_2, 1, 0 );
 
     // signals and slots connections
     connect( pButtonOK, SIGNAL( clicked() ), this, SLOT( accept() ) );

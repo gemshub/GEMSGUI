@@ -81,7 +81,8 @@ public:
     //void RecBild( const char *key );
     //void RecCalc( const char *key );
 
-    void GetElements( TCStringArray& aIC, TCIntArray& aIndMT );
+    void GetElements( bool isotopes, TCStringArray& names,
+                      TCStringArray& aIC, TCIntArray& aIndMT );
     void CopyElements( const char * prfName, TCStringArray& aKeys );
 };
 

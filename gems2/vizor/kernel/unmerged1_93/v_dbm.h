@@ -471,6 +471,7 @@ public:
     void Get( int i);
     int Find( const char *key);
     RecStatus Rtest( const char *key, int mode = 1);
+    bool FindPart( const char *key_, int field );
     //  RecStatus TryRec( RecStatus rs, char *key, int mode = 1);
 
     //--- Manipulation list of records

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Form interface generated from reading ui file 'ElementsDialog.ui'
 **
-** Created: Tue Nov 20 10:08:27 2001
+** Created: Sun Dec 9 17:39:26 2001
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -42,10 +42,6 @@ public:
     QPushButton* pbA_12;
     QPushButton* pbA_0;
     QPushButton* pbA_1;
-    QPushButton* bHelp;
-    QPushButton* bPrevious;
-    QPushButton* bReset;
-    QPushButton* bNext;
     QButtonGroup* bgElem;
     QLabel* tlEg_2;
     QLabel* tlEg_3;
@@ -73,7 +69,6 @@ public:
     QPushButton* pbE_29;
     QPushButton* pbE_33;
     QPushButton* pbE_34;
-    QPushButton* pbE_36;
     QPushButton* pbE_37;
     QPushButton* pbE_39;
     QPushButton* pbE_40;
@@ -166,18 +161,23 @@ public:
     QPushButton* pbE_83;
     QPushButton* pbE_82;
     QPushButton* pbE_0;
-    QPushButton* pbE_99;
     QLabel* pImg1;
     QLabel* tlGEMS;
     QCheckBox* cbIsotopes;
-    QRadioButton* rbKernel;
+    QPushButton* pbE_36;
+    QPushButton* bHelp;
     QRadioButton* rbUncertain;
-    QRadioButton* rbSpecific;
+    QRadioButton* rbKernel;
     QCheckBox* cbGaseous;
     QCheckBox* cbAqueous;
     QCheckBox* cbSorption;
+    QRadioButton* rbSpecific;
+    QPushButton* bReset;
+    QPushButton* bNext;
 
 protected:
+    QHBoxLayout* Layout2;
+    QGridLayout* Layout1;
     bool event( QEvent* );
 };
 

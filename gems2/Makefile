@@ -9,7 +9,7 @@ rpmfiles	= lib doc vizor mods Makefile* *.spec
 OBJS		= ./lib/gemsel.o ./lib/gemviz.o
 		    
 
-TARGET		= gems
+TARGET		= gems2
 
 all:	subdirs_mk link
 

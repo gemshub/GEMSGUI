@@ -15,7 +15,7 @@ LIBS    = import32.lib cw32mti.lib qtmain.lib qtmt301.lib
 GEMS_L  = lib\gemviz.lib lib\gemsel.lib
 GEMS_L_DBG  = lib\gemsel.lib
 
-TARGET		= gems.exe
+TARGET		= gems2.exe
 
 MAKE	= make
 
