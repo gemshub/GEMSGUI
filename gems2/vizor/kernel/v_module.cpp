@@ -1003,7 +1003,7 @@ TCModule::RecordPrint( const char* key )
  if( sd_key.find_first_of("*?" ) != gstring::npos )
  {
      sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
-          sd_key.c_str(), "Select key of pscript format", KEY_OLD);
+          sd_key.c_str(), "Please, select a print script", KEY_OLD);
  }
 
  if( sd_key.empty() )
@@ -1012,7 +1012,7 @@ TCModule::RecordPrint( const char* key )
   ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
   char * text_fmt = (char *)aObj[o_sdabstr].GetPtr();
   if( !text_fmt )
-       Error( sd_key.c_str(), "No format text in this record.");
+       Error( sd_key.c_str(), "No print script in this record.");
 
   PrintSDref( sd_key.c_str(), text_fmt );
 }
@@ -1029,7 +1029,7 @@ TCModule::CmPrint()
         if( str.find_first_of("*?" ) != gstring::npos )
             Error( GetName(), "Current record is not defined!");*/
         RecordPrint();
-        SetString("Printing record finished OK");
+        SetString("Printing a record finished OK");
         pVisor->Update();
     }
     catch( TError& xcpt )
@@ -1048,13 +1048,13 @@ TCModule::CmScript()
         sd_key += db->GetKeywd();
         sd_key += ":";
       sd_key = ((TCModule *)&aMod[RT_SDATA])->GetKeyofRecord(
-          sd_key.c_str(), "Select an appropriate script record", KEY_OLD);
+          sd_key.c_str(), "Please, select an appropriate script", KEY_OLD);
       if( sd_key.empty() )
       return;
       ((TCModule *)&aMod[RT_SDATA])->RecInput( sd_key.c_str() );
        if( pImp )
            pVisorImp->OpenModule(pImp->topLevelWidget(), RT_SDATA);
-       else pVisorImp->OpenModule(0, RT_SDATA);  // KD: workaround for NewSystemDialog 
+       else pVisorImp->OpenModule(0, RT_SDATA);  // KD: workaround for NewSystemDialog
       ((TCModule *)&aMod[RT_SDATA])->Update();
 
     }
@@ -1077,7 +1077,7 @@ TCModule::CmRebildFile()
     try
     {
         MessageToSave();
-        pVisor->Message( window(), GetName(), "Compressing database file \n"
+        pVisor->Message( window(), GetName(), "Compressing database file(s) \n"
          "Please, wait...", 0, 100 );
 
         db->RebildFile(SelectFileList(closef|openf));
@@ -1103,7 +1103,7 @@ TCModule::CmAddFileToList()
 
         gstring filename;
         if( vfChooseFileSave(window(), filename,
-                             "Put new Data Base file name" ) == false )
+                             "Enter a new database file name" ) == false )
             return;
         // test Path Added Sveta 5/03/02
         // pdb extension, name must started db->GetKeywd()
