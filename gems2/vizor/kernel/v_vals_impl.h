@@ -74,9 +74,9 @@ struct TVal:
     */
     double Get(size_t ndx) const
     {
-        return (double)((T*)ptr)[ndx];
+       return (double)((T*)ptr)[ndx];
     }
-    
+
     /* converts double parameter and assigns it to the cell
     */
     void Put(double v, size_t i);
@@ -321,7 +321,7 @@ inline
 void
 TVal<T>::Put(double v, size_t ndx)
 {
-    ((T*)ptr)[ndx] = ( fabs(v) <= ANY() ) ? T(v/*+.5*/) : EMPTY();	// truncate
+   ((T*)ptr)[ndx] = ( fabs(v) <= ANY() ) ? T(v/*+.5*/) : EMPTY();	// truncate
 }
 
 // Put() for <double> need special handling for efficency

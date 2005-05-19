@@ -109,6 +109,10 @@ public:
 
     gstring getName( int ii);
     gstring getNames();
+    int getdX() const { return dX; }
+    int getObjX() const { return nObjX; }
+    int getObjY() const { return nObjY; }
+    bool getfoString() const { return foString; }
 };
 
 //----------------------------------------------------------------------------
@@ -121,6 +125,8 @@ struct GraphData
     TIArray<TPlotLine> lines; // descriptions of all lines
 
     int axisType;
+    int graphType;      // 05/2005 added Sveta
+                        // ( 0-line by line, 1- cumulative, 2 - isolines )
     gstring xName;
     gstring yName;
 
@@ -155,6 +161,10 @@ struct GraphData
     {
         return lines[ii].name;
     }
+
+   int getPointCol( int i,TIArray<FPoint>& pnts1  );
+
+
 };
 
 class GraphDialog;

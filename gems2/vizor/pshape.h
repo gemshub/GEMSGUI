@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include "v_user.h"
+#include "v_vals.h"
 #include "array.h"
 
 
@@ -56,6 +57,11 @@ struct FPoint
     bool operator==(const FPoint& p)
     {
         return (x == p.x && y == p.y);
+    }
+
+    bool IsEmpty()
+    {
+      return ( x == FLOAT_EMPTY || y == FLOAT_EMPTY );
     }
 };
 
@@ -105,6 +111,24 @@ public:
     virtual void paint(QPainter& dc);
 //    void ConvertCoordinates();
 };
+
+/*!
+    Class represents Polygon on the plot (added Sveta 05/2005 )
+*/
+class PPolygon:
+            public PShape
+{
+    FPoint fp1, fp2, fp3, fp4;
+
+public:
+    PPolygon(TPlotWin* par, QColor col,
+          const FPoint& pi1, const FPoint& pi2,
+          const FPoint& pi3, const FPoint& pi4 );
+
+    virtual void paint(QPainter& dc);
+
+};
+
 
 enum PlotPointType { // using point types
     P_POINT,        // point

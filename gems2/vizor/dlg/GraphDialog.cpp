@@ -110,6 +110,12 @@ SymbolLabel::drawContents(QPainter* dc)
 	dc->drawLine( rect.x(), center.y(), center.x()-size, center.y());
 	dc->drawLine( center.x()+size, center.y(), rect.width(), center.y());
     }
+        // column, not crossing the point mark
+    if( lineSize < 0 )
+    {
+        dc->setPen( QPen(color, 9) );
+        dc->drawLine( center.x(), center.y(), center.x(), height()-2);
+     }
 }
 
 
@@ -196,9 +202,16 @@ void GraphDialog::Show()
 // show plots
 void GraphDialog::ShowPlots()
 {
-    for(uint ii=0, nLn =0; ii<gr_data.plots.GetCount(); ii++)
-        for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); jj++, nLn++ )
-        {
+  gstring cap = "GEM-Selektor v.2.0-PSI Graphics Dialog";
+
+  switch( gr_data.graphType )
+  {
+   case 0:
+       cap+= " (symbol/line plots)";
+       setCaption( cap.c_str() );
+       for(uint ii=0, nLn =0; ii<gr_data.plots.GetCount(); ii++)
+         for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); jj++, nLn++ )
+         {
             TIArray<FPoint> pnts;
             gr_data.plots[ii].getPointLine( jj, pnts );
             for(uint i=0; i<pnts.GetCount(); i++)
@@ -206,16 +219,61 @@ void GraphDialog::ShowPlots()
                 /*      if( pnts[i].x >= minX && pnts[i].x<= maxX &&
                           pnts[i].y >= minY && pnts[i].y<= maxY )
                 */
+                if( pnts[i].IsEmpty() )
+                  continue;
 		plot->Add(new PPoint(plot, pnts[i],
             			gr_data.getType(nLn), gr_data.getSize(nLn), getColor(nLn)));
-		    
+
                 if( gr_data.getLineSize(nLn) > 0 && i != 0 )
                 { // insert line
+                   if( !pnts[i-1].IsEmpty())
                     plot->Add(new PLine(plot, pnts[i-1], pnts[i],
+                		    getColor(nLn), gr_data.getLineSize(nLn) ));
+                }
+                if( gr_data.getLineSize(nLn) < 0  )
+                { // insert line
+                    FPoint pp( pnts[i].x, gr_data.region[2] );
+                    plot->Add(new PLine(plot, pp, pnts[i],
                 		    getColor(nLn), gr_data.getLineSize(nLn) ));
                 }
             }
         }
+        break;
+   case 1:
+        {
+         cap+= " (cumulative plot)";
+         setCaption( cap.c_str() );
+         TIArray<FPoint> pnts0;
+         TIArray<FPoint> pnts1;
+//         if( gr_data.plots.GetCount() >1 )
+//           vfMessage( this, "Graph demo",
+//            "Tried  making the cumulative graphic with experimental data");
+
+         gr_data.getPointCol( 0, pnts1 );
+         for(int  ii=1; ii<gr_data.plots[0].getdX(); ii++ )
+         {
+           pnts0.Clear();
+           for(uint kk=0; kk<pnts1.GetCount(); kk++)
+             pnts0.Add( new FPoint(pnts1[kk]) );
+           gr_data.getPointCol( ii, pnts1 );
+
+           for(uint i=1; i<pnts1.GetCount(); i++)
+           {
+               if( pnts1[i].IsEmpty() ||
+                 (  pnts0[i-1].y - pnts0[i].y == 0 &&
+                    pnts1[i-1].y - pnts1[i].y == 0  ))
+                  continue;
+		plot->Add(new PPolygon(plot, getColor(i-1),
+                     pnts0[i-1],pnts0[i],pnts1[i],pnts1[i-1]));
+           }
+         }
+        }
+        break;
+   case 2:
+        cap+= " (level line diagram) ";
+        setCaption( cap.c_str() );
+    break;
+  }
 }
 
 void
@@ -281,6 +339,8 @@ void
 GraphDialog::AddPoint( int nPlot, int nPoint, bool no_mt )
 {
 
+  if( !gr_data.graphType )
+   return;
   qApp->lock();
   if( nPlot>=0 && nPoint>=0 )
   {
@@ -340,7 +400,7 @@ GraphDialog::CmSave()
 
     if( formatList.contains("PNG") )
 	filter.append("PNG Files (*.png)");
-    
+
     QStrListIterator it( formatList );
     for( ; it != 0; ++it ) {
 	QString str = *it;
@@ -525,6 +585,12 @@ void PlotTypeBtn::drawButtonLabel(QPainter* paint)
         paint->drawLine( rect.x(), center.y(), center.x()-size, center.y());
         paint->drawLine( center.x()+size, center.y(), rect.width(), center.y());
     }
+    // column, not crossing the point mark
+    if(plLine.line_size < 0 )
+    {
+        paint->setPen( QPen(color, 9) );
+        paint->drawLine( center.x(), center.y(), center.x(), height()-2);
+    }
 
     QPushButton::drawButtonLabel(paint);
 }
@@ -544,8 +610,8 @@ PlotTypeBtn::drawSymbol(QPainter *paint, const QPoint& center,
         paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size+1,size+1)) );
         break;
     case	 P_CROSSDIAG:    // X
-        paint->drawLine( center.x()-size, center.y()+size, center.x()+size, center.y()-size);
-        paint->drawLine( center.x()-size, center.y()-size, center.x()+size, center.y()+size);
+        paint->drawLine( center.x()-size, center.y()+size, center.x()+size+1, center.y()-size-1);
+        paint->drawLine( center.x()-size, center.y()-size, center.x()+size+1, center.y()+size+1);
         break;
     case	 P_SQUARE:       // square
         paint->drawRect(QRect(center-QPoint(size,size), center+QPoint(size,size)));
@@ -579,9 +645,11 @@ PlotTypeBtn::drawSymbol(QPainter *paint, const QPoint& center,
         paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size,size)) );
         break;
     case	 P_FILLCIRCLE:        // fill circle
-        paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size+1,size+1)) );
+        paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size,size)) );
+        //center+QPoint(size+1,size+1)) );
         paint->setBrush( color );
-        paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size+1,size+1)) );
+        paint->drawEllipse( QRect(center-QPoint(size,size), center+QPoint(size,size)) );
+        // center+QPoint(size+1,size+1)) );
         break;
     case  P_FILLRHOMBUS:      // fill rhombus
         size++;

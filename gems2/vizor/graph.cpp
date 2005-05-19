@@ -102,18 +102,34 @@ int TPlot::getPointLine( int j, TIArray<FPoint>& pnts )
         {
             if( nObjX < 0 )
                 x = j;
-            else x = aObj[nObjX].Get(ii,0);
-            y = aObj[nObjY].Get(ii,j);
+            else if( aObj[nObjX].IsEmpty(ii,0) )
+                   x = FLOAT_EMPTY;
+                 else
+                   x = aObj[nObjX].Get(ii,0);
+
+            if( aObj[nObjY].IsEmpty(ii,j) )
+              y = FLOAT_EMPTY;
+            else
+              y = aObj[nObjY].Get(ii,j);
         }
         else    /* put graph by gstring */
         {
+           if( aObj[nObjX].IsEmpty(0,ii) )
+             x = FLOAT_EMPTY;
+           else
             x = aObj[nObjX].Get(0,ii);
+
+           if( aObj[nObjY].IsEmpty(j,ii) )
+            y = FLOAT_EMPTY;
+           else
             y = aObj[nObjY].Get(j,ii);
         }
         pnts.Add( new FPoint(x, y));
     }
     return dX;
 }
+
+
 
 
 // get point to draw one line
@@ -174,7 +190,7 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
                float *sizeReg,  float * sizePart,
                TPlotLine* aLinesDesc, short *aAxisType,
                const char *aXName, const char *aYName ):
-        title(aTitle), axisType(aAxisType[0]),
+        title(aTitle), axisType(aAxisType[0]), graphType(aAxisType[4]),
         isBackgr_color(true)
 {
     uint ii;
@@ -215,7 +231,7 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
 GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
                const char *aXName, const char *aYName,
                TCStringArray line_names):
-        title(aTitle), axisType(5),
+        title(aTitle), axisType(5), graphType(0),
         isBackgr_color(false)
 {
     float min1, max1, min2, max2;
@@ -269,7 +285,7 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
 }
 
 GraphData::GraphData( GraphData& data ):
-        title(data.title), axisType(data.axisType),
+        title(data.title), axisType(data.axisType), graphType(data.graphType),
         xName(data.xName), yName(data.yName),
         isBackgr_color(data.isBackgr_color)
 {
@@ -299,6 +315,64 @@ GraphData::GraphData( GraphData& data ):
 
 GraphData::~GraphData()
 {}
+
+
+// get array of points to draw one columns
+// return number of points in column
+
+int GraphData::getPointCol( int i, TIArray<FPoint>& pnts1 )
+{
+    int  nObjX, nObjY, nLn = 0;
+    float x, y=0.;
+    pnts1.Clear();
+
+    for(uint ii=0; ii<1/*plots.GetCount()*/; ii++)
+    {
+       nObjX = plots[ii].getObjX();
+       nObjY = plots[ii].getObjY();
+
+       if( plots[ii].getfoString() == true )  /* put graph by column */
+       {
+          if( nObjX < 0 )
+             x = i;
+          else if( aObj[nObjX].IsEmpty(i,0) )
+                 x = FLOAT_EMPTY;
+               else
+                 x = aObj[nObjX].Get(i,0);
+       }
+       else    /* put graph by gstring */
+       {
+           if( aObj[nObjX].IsEmpty(0,i) )
+             x = FLOAT_EMPTY;
+           else
+            x = aObj[nObjX].Get(0,i);
+        }
+
+       pnts1.Add( new FPoint(x, y));
+       for( int jj=0; jj<plots[ii].getLinesNumber(); jj++, nLn++ )
+       {
+         if( plots[ii].getfoString() == true )  /* put graph by column */
+           {
+             if( aObj[nObjY].IsEmpty(i,jj) )
+               y += 0;//FLOAT_EMPTY;
+             else
+               y += aObj[nObjY].Get(i,jj);
+           }
+          else    /* put graph by gstring */
+          {
+            if( aObj[nObjY].IsEmpty(jj,i) )
+              y += 0; //FLOAT_EMPTY;
+            else
+              y += aObj[nObjY].Get(jj,i);
+          }
+         pnts1.Add( new FPoint(x, y));
+      }
+    }
+    return nLn;
+}
+
+
+
 
 //---------------------------------------------------------------------------
 

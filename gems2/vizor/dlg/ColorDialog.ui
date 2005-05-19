@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>402</width>
+            <width>409</width>
             <height>163</height>
         </rect>
     </property>
@@ -63,6 +63,12 @@
                         <widget class="QSpinBox">
                             <property name="name">
                                 <cstring>pLine</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>20</number>
+                            </property>
+                            <property name="minValue">
+                                <number>-20</number>
                             </property>
                         </widget>
                         <widget class="QLabel">

@@ -363,13 +363,13 @@ TRTParm::MakeQuery()
      //  return;   // cancel
 
     memcpy( &rpp->What, flgs, 10);
-    rpp->NP = size[0];
-    rpp->NT = size[1];
-    rpp->Mode = size[2];
-    rpp->Nsd = size[3];
-    rpp->dimEF[0] = size[4];
-    rpp->dimEF[1] = size[5];
-    rpp->dimXY[1] = size[6];
+    rpp->NP = (short)size[0];
+    rpp->NT = (short)size[1];
+    rpp->Mode = (short)size[2];
+    rpp->Nsd = (short)size[3];
+    rpp->dimEF[0] = (short)size[4];
+    rpp->dimEF[1] = (short)size[5];
+    rpp->dimXY[1] = (short)size[6];
 }
 
 //Rebuild record structure before calculation
@@ -695,6 +695,7 @@ TRTParm::SaveGraphData( GraphData *gr )
      if( gr != gd_gr->getGraphData() )
       return false;
     rpp->axisType[0] = (short)gr->axisType;
+    rpp->axisType[4] = (short)gr->graphType;
     rpp->axisType[1] = (short)gr->b_color[0];
     rpp->axisType[2] = (short)gr->b_color[1];
     rpp->axisType[3] = (short)gr->b_color[2];

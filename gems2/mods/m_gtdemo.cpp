@@ -726,6 +726,7 @@ TGtDemo::SaveGraphData( GraphData *gr )
      if( gr != gd_gr->getGraphData() )
       return false;
     gdp->axisType[0] = (short)gr->axisType;
+    gdp->axisType[4] = (short)gr->graphType;
     gdp->axisType[1] = (short)gr->b_color[0];
     gdp->axisType[2] = (short)gr->b_color[1];
     gdp->axisType[3] = (short)gr->b_color[2];

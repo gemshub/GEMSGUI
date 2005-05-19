@@ -1446,6 +1446,7 @@ TProcess::SaveGraphData( GraphData *gr )
      if( gr != gd_gr->getGraphData() )
       return false;
     pep->axisType[0] = (short)gr->axisType;
+    pep->axisType[4] = (short)gr->graphType;
     pep->axisType[1] = (short)gr->b_color[0];
     pep->axisType[2] = (short)gr->b_color[1];
     pep->axisType[3] = (short)gr->b_color[2];

@@ -57,12 +57,47 @@ PLine::paint(QPainter& dc)
     QPoint p1 = par->RealToVisible(fp1);
     QPoint p2 = par->RealToVisible(fp2);
 
-    QPen pen(color, line_size);
+    QPen pen(color, abs(line_size));
     dc.setPen( pen );
     dc.moveTo(p1);
     dc.lineTo(p2);
 }
 
+// ----------------------------------------------
+// PPolygon class    (added Sveta 05/2005 )
+
+PPolygon::PPolygon( TPlotWin* par, QColor col,
+                    const FPoint& pi1, const FPoint& pi2,
+                    const FPoint& pi3, const FPoint& pi4):
+        PShape( par, col ),
+        fp1(pi1), fp2(pi2), fp3(pi3), fp4(pi4)
+{}
+
+void
+PPolygon::paint(QPainter& dc)
+{
+    QPoint p1 = par->RealToVisible(fp1);
+    QPoint p2 = par->RealToVisible(fp2);
+    QPoint p3 = par->RealToVisible(fp3);
+    QPoint p4 = par->RealToVisible(fp4);
+    QPointArray  a(4);
+    a.setPoint(0, p1 );
+    a.setPoint(1, p2 );
+    a.setPoint(2, p3 );
+    a.setPoint(3, p4 );
+    QBrush brush( color, Qt::SolidPattern);
+    dc.setBrush( brush );
+    dc.setPen( Qt::NoPen );
+    dc.drawPolygon( a );
+
+    dc.setPen( Qt::SolidLine );
+    dc.pen().setWidth(2);
+    dc.moveTo(p2);
+    dc.lineTo(p3);
+    dc.moveTo(p1);
+    dc.lineTo(p4);
+
+}
 
 // ----------------------------------------------
 // PPoint class

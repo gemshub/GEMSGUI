@@ -23,6 +23,7 @@
 #include <qbrush.h>
 #include <qkeycode.h>
 #include <qcolordialog.h>
+#include <qcombobox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
@@ -52,6 +53,7 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
 
     setCaption( cap.c_str() );
     pAxis->setValue( graph->axisType );
+    comboBox1->setCurrentItem( graph->graphType );
 
     pXname->setText( graph->xName.c_str() );
     pYname->setText( graph->yName.c_str() );
@@ -83,14 +85,14 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
 
     QButtonGroup* B_2;
     B_2 = new QButtonGroup( this, "ButtonGroup_1" );
-    B_2->setGeometry( 10, 230, 380, 0 );
+    B_2->setGeometry( 10, 260, 380, 0 );
     B_2->setTitle( "Plots list" );
     connect( B_2, SIGNAL(clicked(int)), SLOT(SetLine(int)) );
 
     // Insert Lines
     QLineEdit*    pName1;
 
-    int y=250;
+    int y=280;
     for( uint ii=0, kk=0; ii<graph->plots.GetCount(); ii++, y+=10 )
     {
 
@@ -183,6 +185,7 @@ int LegendDialog::apply()
     }
 
     graph->axisType = pAxis->value();
+    graph->graphType = comboBox1->currentItem();
     graph->xName = gstring( pXname->text() );
     graph->yName = gstring( pYname->text() );
 

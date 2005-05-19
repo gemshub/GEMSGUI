@@ -967,6 +967,7 @@ TGEM2MT::SaveGraphData( GraphData *gr )
      if( gr != gd_gr->getGraphData() )
       return false;
     mtp->axisType[0] = (short)gr->axisType;
+    mtp->axisType[4] = (short)gr->graphType;
     mtp->axisType[1] = (short)gr->b_color[0];
     mtp->axisType[2] = (short)gr->b_color[1];
     mtp->axisType[3] = (short)gr->b_color[2];
