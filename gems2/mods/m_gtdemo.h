@@ -68,7 +68,7 @@ typedef struct
     res,              // reserved
     Nwc,              // Dimensions: array of constants gd_wc
     Nqp,              // array of work cells gOp
-    axisType[6],         // axis graph type, background(3) reserved(2)
+    axisType[6],     // axis graph type, background(3), graph type, reserved
     dimEF[2],    // Dimensions of array of empirical data yE, xE
     dimXY[2];    // Dimensions of data sampler tables: col.1 - N of records;
     //col.2 - N of lines

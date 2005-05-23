@@ -66,7 +66,7 @@ typedef struct
     res,              // reserved
     dimEF[2],    // Dimensions of array of empirical data
     dimXY[2],    // Dimensions of data sampler tables: col.1 - N of records;
-    axisType[6];         // axis graph type, background(3) reserved(2)
+    axisType[6];   // axis graph type, background(3), graph type, reserved
  float
     Pi[3], // Pressure, bar: P start,  P end,  increment of P
     Ti[3], // Temperature, deg.C: TC start, TC end, increment of TC

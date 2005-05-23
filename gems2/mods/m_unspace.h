@@ -120,7 +120,7 @@ typedef struct
     j,     // current index of dependent component  (<L)
     k,     // current index of phase ( 0 to Fi-1)  (<Fi)
     ka,    // current index of phase assemblage  (<nPhA)
-    axisType[6]; // axis graph type, background(3) reserved(2)
+    axisType[6];  // axis graph type, background(3), graph type, reserved
 
 // input
 float

@@ -93,7 +93,7 @@ typedef struct
 
     dimEF[2],    // Dimensions of array of empirical data
     dimXY[2],    // Dimensions of data sampler tables: col.1 - N of records;
-    axisType[6],         // axis graph type, background(3) reserved(2)
+    axisType[6],  // axis graph type, background(3), graph type, reserved
 
     *tm,    // Array of tm (SYSTEM CSD #) values [0:Ntm-1]
     *nv;    // Array of NV (MTPARM variant) values [0:NNV-1]

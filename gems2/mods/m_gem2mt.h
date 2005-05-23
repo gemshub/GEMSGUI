@@ -86,7 +86,7 @@ typedef struct
 // iterators for generating syseq record keys for initial system variants
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
    NVi[3],    // Restrictions variant #: start, end, step
-   axisType[6],  // axis graph type, background(3) reserved(2)
+   axisType[6],  // axis graph type, background(3), graph type, reserved
    *DiCp,   // array of indexes of initial system variants for
              // distributing to nodes [nC]
    (*FDLi)[2] //[nFD][2] Box indices in the flux definition list
