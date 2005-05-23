@@ -699,6 +699,7 @@ TVisor::Exit()
         toWinCFG();
         aObj[ o_dtnam_nr].SetPtr(0);
         aObj[ o_dtres].SetPtr(0);
+        aObj[ o_unpmr].SetPtr(0);
 
     }
     catch(TError & xcpt)

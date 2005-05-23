@@ -495,7 +495,7 @@ void TUnSpace::Un_criteria()
             if( usp->PvPOM == S_ON )
             {
              usp->pmr = usp->POM + t*usp->Q ;
-//             aObj[ o_unpmr].SetPtr( usp->pmr );
+             aObj[ o_unpmr].SetPtr( usp->pmr );
              usp->POM[ t*usp->Q+q ] = R;
             }
             if( usp->PvPOR == S_ON )

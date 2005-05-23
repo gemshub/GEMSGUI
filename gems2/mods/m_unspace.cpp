@@ -932,7 +932,7 @@ AGAIN:
 
 //Recalc record structure
 void
-TUnSpace::RecCalc( const char */*key*/ )
+TUnSpace::RecCalc( const char *key )
 {
     int nAdapt = 1;
 //    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
@@ -981,18 +981,19 @@ TUnSpace::RecCalc( const char */*key*/ )
       }
 
     }
-//    usp->Gstat = UNSP_GS_DONE;   // for Adapt mode need   buildTestedArrays
+    usp->Gstat = UNSP_GS_DONE;   // for Adapt mode need   buildTestedArrays
                                  // for each cicle
   usp->Astat = UNSP_AS_DONE;
 //  aMod[RT_UNSPACE].ModUpdate("GtDemo data sampling in progress...");
 
   pVisor->CloseMessage();
 
-//  TCModule::RecCalc(key);
   if( TProfil::pm->syp->Guns )
     memset( TProfil::pm->syp->Guns, 0, TProfil::pm->mup->L*sizeof(float) );
   if( TProfil::pm->syp->Vuns )
     memset( TProfil::pm->syp->Vuns, 0, TProfil::pm->mup->L*sizeof(float) );
+
+  TCModule::RecCalc(key);  
 }
 
 void
