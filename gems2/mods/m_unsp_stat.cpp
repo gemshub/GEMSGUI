@@ -522,12 +522,12 @@ double TUnSpace::ePO3( int i,int j )
    int k,z;
    for(k=0;k<usp->L;k++)
     for(z=0;z<usp->N;z++)
-      R+=*(A+k*usp->N+z)*(*(usp->vU+j*usp->N+z));
+      R+=usp->A[k*usp->N+z]*(*(usp->vU+j*usp->N+z));
    PM+=R;
    R=0;
    for(k=0;k<usp->L;k++)
     for(z=0;z<usp->N;z++)
-      R+=*(A+k*usp->N+z)*(*(usp->vU+i*usp->N+z));
+      R+=usp->A[k*usp->N+z]*(*(usp->vU+i*usp->N+z));
     PM-=R;
  return(PM);
 }

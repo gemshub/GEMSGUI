@@ -328,7 +328,7 @@ protected:
     double ePO1( int i,int j );
     double ePO2( int i, int j );
     double ePO3( int i,int j );
-    double ePO4 int i, int j );
+    double ePO4( int i, int j );
     double ePO5( int i,int j );
     double g_u( int j, double *U,float *A,
                       double lgGAM,double x,double Xw);
