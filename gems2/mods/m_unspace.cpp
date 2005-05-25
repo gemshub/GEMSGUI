@@ -786,7 +786,7 @@ void TUnSpace::set_def( int q)
    usp->Astat = UNSP_AS_INDEF;
    memcpy( &usp->PsUnInt, "%%AA+------+--", 14 );
    memcpy( &usp->Pa_f_pha, "------0B0-", 10 );
-   usp->Pa_Crit = UNSP_CRIT_LAPL_QAN;
+   usp->Pa_Crit = UNSP_CRIT_PA;
    memcpy( &usp->PvPOM, "-+------", 8 );
 
    memset( &usp->N, 0, 32*sizeof(int));

@@ -68,7 +68,7 @@ typedef struct
     Pa_f_pH,    //  (+ -)   flag of input for the filter on pH
     Pa_f_Eh,    //  (+ -)   flag of input for the filter on Eh
     Pa_Adapt,   //  code for adaptive loops for G(298): 0-no; >=1-yes (max number of loops)
-    Pa_OF,      //  (A or 0; B or 1; C D E F) code of function to construct the payoff matrix (A and B now)
+    Pa_OF,      //  (A or 0; B or 1; C or 2; D or 3; E or 4; F or 5) code of function to construct the payoff matrix
     Pa_Crit,    //  (0 1 2 3 4) OSP criterion: 0- PA frequency statistics, 1- Laplace(quantile),
                    //  2-Homenyuk(quantile) 3-Laplace (single point), 4-Homenuk (single point)
     Pa_Zcp,     // code for Laplace function calculation: + mean of abs.values; - abs. mean of values
@@ -80,7 +80,7 @@ typedef struct
     PvSs,      //  (+ -) allocation flag for S0-related vectors
     PvVs,      //  (+ -) allocation flag for V0-related vectors
     PvPgam,    //  (+ -) allocation flag for ParGamma-related vectors (reserved)
-    Pv07,      // reserved
+    PvSi,      //  (+ -) calculation payoff matrix with or without new index system (reserved)
     Pv08;      // reserved
 
 // Dimensionalities related to the UnSpace problem (Project/System indexation)
@@ -326,6 +326,10 @@ protected:
     int  WL(int i,int j,int QT);
     double ePO( int i, int j );
     double ePO1( int i,int j );
+    double ePO2( int i, int j );
+    double ePO3( int i,int j );
+    double ePO4 int i, int j );
+    double ePO5( int i,int j );
     double g_u( int j, double *U,float *A,
                       double lgGAM,double x,double Xw);
     double g_uw( int j, double *U, float *A,
