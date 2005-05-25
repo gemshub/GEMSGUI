@@ -396,7 +396,7 @@ typedef enum {
 
     UNSP_OF_A      = 'A',
     UNSP_OF_B      = 'B',
-    UNSP_OF_C      = 'c',
+    UNSP_OF_C      = 'C',
     UNSP_OF_D      = 'D',
     UNSP_OF_E      = 'E',
     UNSP_OF_F      = 'F',

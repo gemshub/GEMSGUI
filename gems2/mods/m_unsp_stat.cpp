@@ -254,7 +254,9 @@ return(Filtr);
 
 // calculate element pay-off matrix e(t,q) function (1)
 // i=t, j=q
-double TUnSpace::ePO( int i, int j )
+double TUnSpace::ePO
+
+( int i, int j )
 {
   double PM,rab,RG;
   int k,ii,z,GF=-1,WF=-1,i1,j1;
@@ -697,7 +699,7 @@ if( usp->nGB > 0)
 else
   R= fabs( usp->Zcp[0]);
    jj=0;
-  for( t=1; t<usp->Q; t++ )
+  for( t=0; t<usp->Q; t++ )
      if(fabs( usp->Zcp[t] ) < R )
       { jj = t;
         R = fabs(usp->Zcp[t]);
