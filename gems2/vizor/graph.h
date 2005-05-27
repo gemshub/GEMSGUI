@@ -106,6 +106,7 @@ public:
     int getPointLine( int ii, TIArray<FPoint>& pnts ); // get one line to paint
     FPoint getPoint( int line, int number ); // get point from one line to paint
     void getMaxMin( float& minX, float& maxX, float& minY, float& maxY );
+    void getMaxMinIso( float& minX, float& maxX, float& minY, float& maxY );
 
     gstring getName( int ii);
     gstring getNames();
@@ -115,12 +116,37 @@ public:
     bool getfoString() const { return foString; }
 };
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+
+struct GColor
+{
+    int red;    // parts of class QColor
+    int green;
+    int blue;
+
+    GColor( int aRed = 25, int aGreen = 0, int aBlue = 150 ):
+            red(aRed), green(aGreen), blue(aBlue)
+    {}
+    GColor( GColor& data ):
+            red(data.red), green(data.green), blue(data.blue)
+    {}
+
+};
+
+enum GRAPHTYPES {
+                 LINES_POINTS = 0,
+                 CUMULATIVE   = 1,
+                 ISOLINES     =  2
+                };
+
+
+//-------------------------------------------------------------------------
 struct GraphData
 {
 
     gstring title;
 
+    TIArray<GColor> scale;    // scale colors for isolines
     TIArray<TPlot> plots;     // objects to demo
     TIArray<TPlotLine> lines; // descriptions of all lines
 
@@ -141,7 +167,7 @@ struct GraphData
             const char *aXName = 0, const char *aYname = 0 );
     GraphData( TIArray<TPlot>& aPlots, const char * title,
             const char *aXName = 0, const char *aYname = 0,
-            TCStringArray line_names = 0 );
+            TCStringArray line_names = 0, int agraphType = LINES_POINTS );
     GraphData( GraphData& data );
     ~GraphData();
 
@@ -163,7 +189,10 @@ struct GraphData
     }
 
    int getPointCol( int i,TIArray<FPoint>& pnts1  );
-
+   void setColorList();
+   void getColorList();
+   int  getColorLine( int ii );
+   bool goodIsolineStructure( int aGraphType );
 
 };
 
@@ -183,7 +212,7 @@ public:
             const char *aXName = 0, const char *aYname = 0 );
   GraphWindow( TCModule *pmodule, TIArray<TPlot>& aPlots, const char * title,
             const char *aXName = 0, const char *aYname = 0,
-            TCStringArray line_names = 0 );
+            TCStringArray line_names = 0, int agraphType = LINES_POINTS );
   ~GraphWindow();
 
   void AddPoint( int nPlot, int nPoint, bool no_mt ); // Add new point to graph

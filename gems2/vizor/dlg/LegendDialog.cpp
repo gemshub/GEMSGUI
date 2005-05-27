@@ -53,7 +53,10 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
 
     setCaption( cap.c_str() );
     pAxis->setValue( graph->axisType );
+
+    oldGraphType = graph->graphType;
     comboBox1->setCurrentItem( graph->graphType );
+    connect( comboBox1, SIGNAL(activated/*highlighted*/(int)), SLOT(CmChangeGraphType(int)) );
 
     pXname->setText( graph->xName.c_str() );
     pYname->setText( graph->yName.c_str() );
@@ -83,40 +86,16 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
     pfYn->setValidator( new QDoubleValidator( pfYn ) );
     pfYn->setText( str.setNum (graph->part[3]) );
 
-    QButtonGroup* B_2;
     B_2 = new QButtonGroup( this, "ButtonGroup_1" );
     B_2->setGeometry( 10, 260, 380, 0 );
     B_2->setTitle( "Plots list" );
     connect( B_2, SIGNAL(clicked(int)), SLOT(SetLine(int)) );
 
-    // Insert Lines
-    QLineEdit*    pName1;
-
-    int y=280;
-    for( uint ii=0, kk=0; ii<graph->plots.GetCount(); ii++, y+=10 )
-    {
-
-        QLabel* qtarch_Label_7;
-        qtarch_Label_7 = new QLabel( this );
-        qtarch_Label_7->setGeometry( 30, y, 140, 20 );
-        qtarch_Label_7->setText( graph->plots[ii].getNames().c_str() );
-
-        for( int jj=0; jj<graph->plots[ii].getLinesNumber(); kk++, jj++, y+=20 )
-        {
-            pLines.Add(  new PlotTypeBtn( graph->lines[kk] , this ));
-            pLines[kk].setGeometry( 130, y, 40, 20 );
-            //connect( pLines[kk], SIGNAL(clicked()), SLOT(SetLine()) );
-            B_2->insert(&pLines[kk]);
-
-            pName1 = new QLineEdit( this );
-            pName1->setGeometry( 190, y, 150, 20 );
-            pName1->setText( graph->lines[kk].name );
-            pName1->setMaxLength( 15 );
-
-            pNames.Add(pName1);
-        }
-    }
-    B_2->resize(380, y-220);
+    // Insert Lines : labels in legend box
+    if( graph->graphType != ISOLINES )
+      ShowLines();
+    else
+      ShowIsoline();
 
 // offset itself to not close the hole plot
     QPoint center( parentWidget()->pos() );
@@ -140,6 +119,134 @@ void LegendDialog::closeEvent( QCloseEvent* e)
     QDialog::closeEvent(e);
 }
 */
+
+void  LegendDialog::CmChangeGraphType( int new_type )
+{
+  if( new_type == oldGraphType ||
+      ( new_type < ISOLINES && oldGraphType < ISOLINES ) )
+  {
+    oldGraphType = new_type;
+    return; //not need change legend
+  }
+  try
+    {
+       graph->goodIsolineStructure(new_type);
+       oldGraphType = new_type;
+      // delete old structure
+        pScale.Clear();
+        pLines.Clear();
+        pNames.Clear();
+        pLabels.Clear();
+      // Insert labels in legend box
+      if( oldGraphType/*graph->graphType*/ != ISOLINES )
+        ShowLines( true );
+      else
+        ShowIsoline( true );
+      update();  
+  }
+    catch( TError& xcpt )
+    {
+        vfMessage(this, xcpt.title, xcpt.mess);
+        comboBox1->setCurrentItem( oldGraphType );
+
+    }
+}
+
+void  LegendDialog::ShowLines( bool new_ )
+{
+    QLineEdit*    pName1;
+    int y=280;
+    for( uint ii=0, kk=0; ii<graph->plots.GetCount(); ii++, y+=10 )
+    {
+
+        QLabel* qtarch_Label_7;
+        qtarch_Label_7 = new QLabel( this );
+        qtarch_Label_7->setGeometry( 30, y, 140, 20 );
+        qtarch_Label_7->setText( graph->plots[ii].getNames().c_str() );
+        pLabels.Add( qtarch_Label_7 );
+
+        if( new_ )
+             qtarch_Label_7->show();
+
+        for( int jj=0; jj<graph->plots[ii].getLinesNumber(); kk++, jj++, y+=20 )
+        {
+            pLines.Add(  new PlotTypeBtn( graph->lines[kk] , this ));
+            pLines[kk].setGeometry( 130, y, 40, 20 );
+            //connect( pLines[kk], SIGNAL(clicked()), SLOT(SetLine()) );
+            B_2->insert(&pLines[kk]);
+            if( new_ )
+             pLines[kk].show();
+
+            pName1 = new QLineEdit( this );
+            pName1->setGeometry( 190, y, 150, 20 );
+            pName1->setText( graph->lines[kk].name );
+            pName1->setMaxLength( 15 );
+            if( new_ )
+             pName1->show();
+
+            pNames.Add(pName1);
+        }
+    }
+    B_2->resize(380, y-220);
+}
+
+
+void  LegendDialog::ShowIsoline( bool new_ )
+{
+    QLineEdit*    pName1;
+    int x = 30, y=290;
+
+    if( graph->scale.GetCount() < 1 )
+      graph->setColorList();
+
+    // show scale of Isolines
+    for( uint ii=0; ii<graph->scale.GetCount(); ii++, y+=20 )
+    {
+       TPlotLine pl( "Scale",  P_FILLSQUARE, 0, 0, graph->scale[ii].red,
+                     graph->scale[ii].green, graph->scale[ii].blue );
+       pScale.Add(  new PlotTypeBtn( pl , this ));
+       //QPushButton *btn = new  QPushButton( this );
+       //btn->setBackgroundColor(graph_dlg->getColorIsoline(ii));
+       //btn->setPaletteBackgroundColor(graph_dlg->getColorIsoline(ii));
+       pScale[ii].setGeometry( x, y, 20, 20 );
+       //pScale.Add( btn );
+       B_2->insert(&pScale[ii]);
+       if( new_ )
+          pScale[ii].show();
+
+       QLabel* qtarch_Label_7 = new QLabel( this );
+       qtarch_Label_7->setGeometry( x+20, y, 100, 20 );
+       qtarch_Label_7->setText( graph_dlg->getTextIsoline(ii).c_str() );
+       pLabels.Add( qtarch_Label_7 );
+       if( new_ )
+          qtarch_Label_7->show();
+
+
+    }
+
+    // show symbols
+    int y1 = 290;
+    x = 160;
+    for( uint kk=0; kk<graph->lines.GetCount(); kk++, y1+=20 )
+    {
+      pLines.Add(  new PlotTypeBtn( graph->lines[kk] , this ));
+      pLines[kk].setGeometry( x, y1, 40, 20 );
+      B_2->insert(&pLines[kk]);
+      if( new_ )
+          pLines[kk].show();
+
+      pName1 = new QLineEdit( this );
+      pName1->setGeometry( x+50, y1, 150, 20 );
+      pName1->setText( graph->lines[kk].name );
+      pName1->setMaxLength( 15 );
+      pNames.Add(pName1);
+      if( new_ )
+          pName1->show();
+    }
+    B_2->resize(380, max(y1,y)-220);
+}
+
+
 
 void LegendDialog::accept()
 {
@@ -199,6 +306,15 @@ int LegendDialog::apply()
     graph->part[2] = fy0;
     graph->part[3] = fyn;
 
+    // save scale
+    for(uint ii=0; ii<pScale.GetCount(); ii++ )
+    {
+       QColor cl = pScale[ii].getColor();
+       graph->scale[ii].red = cl.red();
+       graph->scale[ii].green = cl.green();
+       graph->scale[ii].blue = cl.blue();
+    }
+
     for(uint ii=0; ii<pLines.GetCount(); ii++ )
     {
         pLines[ii].setName( pNames[ii].text() );
@@ -215,11 +331,27 @@ int LegendDialog::apply()
 
 void LegendDialog::SetLine(int ii)
 {
-    PlotTypeBtn* b = &pLines[ii];//((PlotTypeBtn*)focusProxy());
+  uint nBut = ii;
 
-    b->setName( pNames[ii].text() );
-    ColorDialog cd( b->getData(), this);//, "Select color");
-    if( cd.exec() )
+  if( oldGraphType == ISOLINES )
+  {
+     if( nBut < pScale.GetCount() )
+     {
+      // select isoline color
+       QColor backColor = QColorDialog::getColor(
+                                 pScale[nBut].getColor(), this );
+       if( backColor.isValid() )
+          pScale[nBut].setColor( backColor );
+       return;
+     }
+     else nBut -= pScale.GetCount();
+   }
+
+  PlotTypeBtn* b = &pLines[nBut];//((PlotTypeBtn*)focusProxy());
+
+  b->setName( pNames[nBut].text() );
+  ColorDialog cd( b->getData(), this);//, "Select color");
+  if( cd.exec() )
         b->setData(  cd.GetPlotLine()) ;
 }
 

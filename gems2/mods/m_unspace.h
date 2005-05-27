@@ -2,7 +2,7 @@
 // $Id$
 // Under construction, to be included in version 3.0 (2004)
 // Declaration of TUnSpace class, config and calculation functions
-// (formerly TUnSpace class rewritten from C to C++ by S.Dmytriyeva   
+// (formerly TUnSpace class rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2004 K.Chudnenko, S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -36,8 +36,8 @@ typedef struct
     //  the same record key as in Proces
     name[MAXFORMULA],      // Full name of UnSpace task
     notes[MAXFORMULA],     // Comments
-    xNames[MAXAXISNAME], // Abscissa name
-    yNames[MAXAXISNAME], // Ordinate name
+/*?*/    xNames[MAXAXISNAME], // Abscissa name
+/*?*/    yNames[MAXAXISNAME], // Ordinate name
 
     PunE,          // Units of energy   { j;  J c C N reserved }
     PunV,          // Units of volume   { j;  c L a reserved }
@@ -58,7 +58,7 @@ typedef struct
     PsGen[7], // (+ 1 on; - 0 off ) int zond[6]; zond type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam
     PsSY,     // Save generated SysEq records to data base (+ -)
     PsEqn,    // Will math script be specified in this UnSpace definition (+ -)
-    Psres,    // reserved
+/*?*/    PsGraph,    // Will graphics be specified in this UnSpace definition (+ -)
 
 // Plags that control analysis of sampled results
     Pa_f_pha,   //  (+ -)   flag of input for the filter on phase association
@@ -80,7 +80,7 @@ typedef struct
     PvSs,      //  (+ -) allocation flag for S0-related vectors
     PvVs,      //  (+ -) allocation flag for V0-related vectors
     PvPgam,    //  (+ -) allocation flag for ParGamma-related vectors (reserved)
-    PvSi,      //  (+ -) calculation payoff matrix with or without new index system (reserved)
+/*?*/    PvSi,      //  (+ -) flag of mode of calculation of chemical potentials in payoff function
     Pv08;      // reserved
 
 // Dimensionalities related to the UnSpace problem (Project/System indexation)
@@ -108,10 +108,10 @@ typedef struct
     Hurw,  //  index of optimal sample point selected by the Hurtvitz criterion
     Wald,  //  index of optimal sample point selected by the Wald criterion
     Homen, //  index of optimal sample point selected by the Homenyuk criterion
-    nl,    //  number of sample points selected by the Laplace criterion (1 or int(quan_lev*float(Q)/100.) )
-    nh,    //  number of sample points selected by the Hurtvitz criterion
-    nw,    //  number of sample points selected by the Wald criterion
-    nHom,  //  number of sample points selected by the Homenyuk criterion
+    nl,    //  number of sample points with the same phase assemblage as that selected by the Laplace criterion
+    nh,    //  number of sample points with the same phase assemblage as that selected by the Hurtvitz criterion
+    nw,    //  number of sample points with the same phase assemblage as that selected by the Wald criterion
+    nHom,  //  number of sample points with the same phase assemblage as that selected by the Homenyuk criterion
     nPhA,  //  < Q  Number of different phase assemblages in all sampled points (variants)
     t,     // current index t of payoff matrix row (calculated sampled point) (<Q)
     q,     // current index q of payoff matrix column (input data variant) (<Q)
@@ -120,18 +120,21 @@ typedef struct
     j,     // current index of dependent component  (<L)
     k,     // current index of phase ( 0 to Fi-1)  (<Fi)
     ka,    // current index of phase assemblage  (<nPhA)
-    axisType[6];  // axis graph type, background(3), graph type, reserved
+
+/*?*/    dimEF[2],    // Dimensions of array of empirical data
+/*?*/    dimXY[2],    // Dimensions of data sampler tables: col.1 - N of records;
+/*?*/    axisType[6];  // axis graph type, background(3), graph type, reserved
 
 // input
 float
-    T,      //  Deterministic value of T (Celsius)
-    IntT,   //  0 or uncertainty half-interval for T (C)
+/*?*/    T[2],      //  Adapted/Initial Deterministic value of T (Celsius)
+/*?*/    IntT[2],   //  Adapted/Initial 0 or uncertainty half-interval for T (C)
     Tc,     //  Current value of T
-    P,      //  Deterministic value of P (bar)
-    IntP,   //  0 or uncertainty half-interval for P (bar)
+/*?*/   P[2],       //  Adapted/Initial Deterministic value of P (bar)
+/*?*/   IntP[2],   // Adapted/Initial 0 or uncertainty half-interval for P (bar)
     Pc,     //  Current value of P
-    V,      //  Deterministic value of V (in cm3? L?)
-    IntV,   //  0 or uncertainty half-interval for V (in cm3? L?)
+/*?*/    V[2],      //  Adapted/Initial Deterministic value of V (in cm3? L?)
+/*?*/    IntV[2],   //  Adapted/Initial 0 or uncertainty half-interval for V (in cm3? L?)
     Vc,     //  Current value of V
 // input intervals for filtering sampled GEM solution variants
     pH_lo,   // pH lower filter limit (default 0)
@@ -141,7 +144,8 @@ float
     IC_lo,   // Ionic strength lower limit (default 0)
     IC_up,   // Ionic strength lower limit (default 3)
 // Quantile level (size)
-    quan_lev; // quantile level (default 0.05)
+    quan_lev, // quantile level (default 0.05)
+/*?*/  size[2][4]; // Graph axis scale for region and fragment
 
 // calculated
 double
@@ -163,11 +167,11 @@ short
                     //  in ascending order
 float
 // input uncertainty half-intervals; 0 means deterministic DC or IC
-   *IntLg0, //  [L]  initial  uncertainty half-intervals for G variation (flag PsUnInt defines units)
-   *IntGam, //  [Ls] initial uncertainty half-intervals for gamma params (reserved)
-   *IntLs,  //  [L]  initial uncertainty half-intervals for S (reserved)
-   *IntLv,  //  [L]  initial uncertainty half-intervals for V variation (flag PsUnInt defines units)
-   *IntNb,  //  [N]  initial uncertainty half-intervals for b variation (flag PsUnInB defines units)
+/*?*/   (*IntLg)[2], //  [L][2]  adapted/initial  uncertainty half-intervals for G variation (flag PsUnInt defines units)
+/*?*/   (*IntGam)[2], //  [Ls][2]  adapted/initial uncertainty half-intervals for gamma params (reserved)
+/*?*/   (*IntLs)[2],  //  [L][2]  adapted/initial uncertainty half-intervals for S (reserved)
+/*?*/   (*IntLv)[2],  //  [L][2]  adapted/initial uncertainty half-intervals for V variation (flag PsUnInt defines units)
+/*?*/   (*IntNb)[2],  //  [N][2]  adapted/initial uncertainty half-intervals for b variation (flag PsUnInB defines units)
 // input filters for sampled solution variants
    *m_t_lo, //  [N]  total IC molality filter - lower limits (default 0/-20) (units defined in PsUnFltI flag)
    *m_t_up, //  [N]  total IC molality filter - upper limits (default 10/+1) (units defined in PsUnFltI flag)
@@ -175,36 +179,46 @@ float
    *fug_up, //  [Ls] fugacity/activity filter - upper limits (default 10/+1) (units defined in PsUnFltD flag)
 
 // Input II (will be done automatically)
-   *IntLg,  //  [L]  Corrected half-intervals for G uncertainty (in adaptive calculations)
-   *Gs,     //  [L]  copy of deterministic values of G298 for DCs
-   *Ss,     //  [L]  copy of deterministic values of S298 for DCs (reserved)
-   *Vs,     //  [L]  copy of deterministic values of V298 for DCs
-   *GAMs,   //  [Ls] copy of deterministic Par Gamma (reserved)
+/*?*/   (*Gs)[2],     //  [L][2]  adapted/initial  copy of deterministic values of G298 for DCs
+/*?*/   (*Ss)[2],     //  [L][2]  adapted/initial  copy of deterministic values of S298 for DCs (reserved)
+/*?*/   (*Vs)[2],     //  [L][2]  adapted/initial  copy of deterministic values of V298 for DCs
+/*?*/   (*GAMs)[2],   //  [Ls][2]  adapted/initial copy of deterministic Par Gamma (reserved)
    *ncp;    //  [Q][nG] table of normalised coordinates of points in uncertainty space (>= 0 <= 1)
 double
-   *Bs,     //  [N]  copy of deterministic values of bulk composition vector b
+/*?*/   (*Bs)[2],     //  [N][2]  adapted/initial  copy of deterministic values of bulk composition vector b
 
 // collected GEM sample calculation output for creation of the payoff matrix
    *vG,     //   [Q][L]  G0 values used in sample input data variants (indexes q j)
+/*?*/   *vB,     //   [Q][N]  B values used in sample input data variants (indexes q j)
+/*?*/   *vS,     //   [Q][L]  S values used in sample input data variants (indexes q j)
+/*?*/   *vmV,     //   [Q][L]  mV values used in sample input data variants (indexes q j)
+/*?*/   *vNidP,     //   [Q][Ls]  GAMs values used in sample input data variants (indexes q j)
+
    *vY,     //   [Q][L]  x (DC mole amounts) from sample GEM solution variants (indexes t j)
    *vYF,    //   [Q][FI] XF (phase mole amounts) from sample GEM solution variants (indexes t k)
    *vGam,   //   [Q][L]  lnGam values for DC from sample GEM solution variants (indexes t j)
    *vMol,   //   [Q][N]  m_t values of total IC molality from sample GEM solution variants (indexes t i)
                // for filtering/statistics
    *vU,     //   [Q][N]  u values of dual chemical potentials from sample GEM solution variants (indexes t i)
-   *vFug;   //   [Q][Ls] lga values of log10 fugacity/activity from sample GEM solution variants (indexes t j)
+   *vFug,   //   [Q][Ls] lga values of log10 fugacity/activity from sample GEM solution variants (indexes t j)
+/*?*/   *x0,   // Vector of abscissa dimXY[][1]
+/*?*/   *y0;  // Sampled data array dimXY[][]
 float
+/*?*/   *xE, *yE,         // Inputed scale data xS , yS
    *vT,     //   [Q]   TC vector of temperatures (C) from sample input data variants (index q)
    *vP,     //   [Q]   P vector of pressures (bar) from sample input data variants (index q)
+/*?*/   *vV,     //   [Q]   value of V (in cm3? L?) (index q)
    *vpH,    //   [Q]   pH vector of pH values from sample GEM solution variants (index t)
    *OVB,    //   [nGB+1]  pseudo-random numbers for Belov algorithm
    *OVR,    //   [nGR+1]  pseudo-random numbers by Monte Carlo with uniform distribution
-   *OVN;    //   [nGN+1]  pseudo-random numbers by Monte Carlo with normal distribution
+   *OVN,    //   [nGN+1]  pseudo-random numbers by Monte Carlo with normal distribution
+/*?*/  (*quanCv)[4]; // [qQ][4] indices of sample GEM variants taken into quantile Laplace,
+                     // Hurtvitz, Wald, Homenyuk (columns )
+
 short
-   *quanLap,  //   [qQ]   indices of sample GEM variants taken into quantile Laplace criterion
-   *quanHom;  //   [qQ]   indices of sample GEM variants taken into quantile Homenyuk criterion
-/*
-char
+/*?*/  (*quanCx)[4]; // [qQ][4] Values taken into quantile Laplace,
+                     // Hurtvitz, Wald, Homenyuk (columns )
+/*char
    *mq_Lap,  //   [Q]   (+ -) marks of sample GEM variants taken into quantile Laplace criterion
    *mq_Hom,  //   [Q]   (+ -) marks of sample GEM variants taken into quantile Homenyuk criterion
    *mf_pha,  //   [Q]   (+ -) marks of sample GEM variants that went trough phase filter
@@ -244,12 +258,17 @@ double
 char
     (*UnICn)[NAME_SIZE], //  Names of columns for output array UnIC
     (*UgDCn)[NAME_SIZE], //  Names of columns for output array UgDC & UaDc
+/*?*/    (*UaDCn)[NAME_SIZE], //  Names of columns for output array UgDC & UaDc
     (*UnDCAn)[NAME_SIZE], //  Names of columns for output array UnDCA
 
    (*PhAID)[8],   // [nPhA] list of phase assemblage ID names (def. 0001 0002 ... )
    (*PhAlst)[80], // [nPhA] list of phase assemblage titles (made of Phase names)
 
     *Expr,     // Text with math script equations (params for activity coeffs ??? reserved )
+/*?*/    *ExprGraph, // Text with math script equations (params for activity coeffs ??? reserved )
+/*?*/    (*lNam)[MAXGRNAME],   // List of ID of lines on Graph
+/*?*/    (*lNamE)[MAXGRNAME],   // List of ID of lines of empirical data
+
     (*SGp)[MAXPHNAME],    // List of UnSpace group names [kG]
     (*stl)[EQ_RKLEN],     // List of generated SysEq records [Q]
     (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources [Nsd]
@@ -261,8 +280,6 @@ char
 
     // work data
 float
-  size[2][4], // Graph axis scale for region and fragment
-
   *A;   // work stoichiometry matrix in project/system indexation
 
 }
@@ -280,6 +297,9 @@ class TUnSpace : public TCModule
 
 
 protected:
+
+    IPNCalc rpn[2];       // IPN of equats of process  -- Expr
+
 
     void keyTest( const char *key );
 
@@ -314,8 +334,8 @@ protected:
    // must be changed for new structure phase list (nPhA, Phndx ...)
       short kol_in_sol( int j );
       int kolgrup();
-      int kvant_parag( short *mas );
-      void kvant_index(float per,int N,double *mas,short *ind);
+      int kvant_parag( int type /*short *mas*/ );
+      void kvant_index(float per,int N,double *mas, short type /**ind*/);
       int sel_parg( short *sv );
 
     // calc part  ( inernal Kostya, not be changed )

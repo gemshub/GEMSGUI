@@ -83,9 +83,9 @@ bool TUnSpace::test_sizes( )
    usp->q = 0;
    usp->nPhA = 0;                                   // ????? nPhA test
 
-   usp->Tc = usp->T;
-   usp->Pc = usp->P;
-   usp->Vc = usp->V;
+   usp->Tc = usp->T[0];
+   usp->Pc = usp->P[0];
+   usp->Vc = usp->V[0];
 
    if( i==false )
         vfMessage(window(), GetName(),
@@ -103,18 +103,18 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
     for(int i=0; i<usp->L; i++ )
     {
        if(usp->PsGen[0] == S_ON )
-         usp->Gs[i] = TProfil::pm->tpp->G[i]+TProfil::pm->syp->GEX[i];
+         usp->Gs[i][0] = usp->Gs[i][1] = TProfil::pm->tpp->G[i]+TProfil::pm->syp->GEX[i];
 
        if(usp->PsGen[5] == S_ON )
-         usp->Vs[i] = TProfil::pm->tpp->Vm[i];
+         usp->Vs[i][0] = usp->Vs[i][1] = TProfil::pm->tpp->Vm[i];
 
        if(usp->PsGen[1] == S_ON && TProfil::pm->tpp->S )
-         usp->Ss[i] = TProfil::pm->tpp->S[i];
+         usp->Ss[i][0] = usp->Ss[i][1] = TProfil::pm->tpp->S[i];
      }
 
     if(usp->PsGen[2] == S_ON )
       for(int i=0; i<usp->N; i++ )
-         usp->Bs[i] = TProfil::pm->syp->B[i];
+         usp->Bs[i][0] = usp->Bs[i][1] = TProfil::pm->syp->B[i];
 
   if( mode  )
   {    //default data
@@ -140,7 +140,18 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
     strncpy( usp->UgDCn[8], "dual",  NAME_SIZE );
     strncpy( usp->UgDCn[9], "reserved",  NAME_SIZE );
 
-    strncpy( usp->UnDCAn[0], "G dat",  NAME_SIZE );
+     strncpy( usp->UaDCn[0], "group",  NAME_SIZE );
+    strncpy( usp->UaDCn[1], "2_sgm",  NAME_SIZE );
+    strncpy( usp->UaDCn[2], "determin",  NAME_SIZE );
+    strncpy( usp->UaDCn[3], "Laplace",  NAME_SIZE );
+    strncpy( usp->UaDCn[4], "Homenuk",  NAME_SIZE );
+    strncpy( usp->UaDCn[5], "mean",  NAME_SIZE );
+    strncpy( usp->UaDCn[6], "quan_Lap",  NAME_SIZE );
+    strncpy( usp->UaDCn[7], "quan_Hom",  NAME_SIZE );
+    strncpy( usp->UaDCn[8], "dual",  NAME_SIZE );
+    strncpy( usp->UaDCn[9], "reserved",  NAME_SIZE );
+
+   strncpy( usp->UnDCAn[0], "G dat",  NAME_SIZE );
     strncpy( usp->UnDCAn[1], "interval",  NAME_SIZE );
     strncpy( usp->UnDCAn[2], "min",  NAME_SIZE );
     strncpy( usp->UnDCAn[3], "max",  NAME_SIZE );
@@ -222,7 +233,7 @@ void TUnSpace::init_generation( )
 
   if( usp->PsGen[0]== S_ON )
     for( j=0; j<usp->L; j++)
-        usp->IntLg[j] = usp->IntLg0[j];
+        usp->IntLg[j][0] = usp->IntLg[j][1];
 
 }
 
@@ -539,38 +550,38 @@ void  TUnSpace::NexT(int J )
 
       if(usp->PsGen[0]== S_ON && usp->NgLg[j]==i)
       {
-        xx = 2*usp->IntLg[j]*R-usp->IntLg[j];
+        xx = 2*usp->IntLg[j][0]*R-usp->IntLg[j][0];
         TProfil::pm->syp->Guns[j] = xx;
       }
 /*      if(usp->PsGen[1]== S_ON&& usp->NgLs[j]==i)
-      {  xx = usp->Ss[j] - usp->IntLs[j]+2*usp->IntLs[j]*R;
+      {  xx = usp->Ss[j][0] - usp->IntLs[j][0]+2*usp->IntLs[j][0]*R;
 //         usp->R1[ii*17+3]= xx;
       }
 */
       if(usp->PsGen[5]== S_ON&& usp->NgLv[j]==i)
       {
-        xx = 2*usp->IntLv[j]*R-usp->IntLv[j];
+        xx = 2*usp->IntLv[j][0]*R-usp->IntLv[j][0];
         TProfil::pm->syp->Vuns[j] = xx;
       }
     }
     if( usp->PsGen[2]== S_ON )
      for(j=0; j<usp->N; j++)
      {  if( usp->NgNb[j] == i)
-        { xx = usp->Bs[j] - usp->IntNb[j] + 2*usp->IntNb[j]*R;
+        { xx = usp->Bs[j][0] - usp->IntNb[j][0] + 2*usp->IntNb[j][0]*R;
           if( xx < 0 )
             xx = 0.;
           TProfil::pm->syp->B[j]= xx;
         }
      }
     if( usp->PsGen[3]== S_ON && usp->NgT==i )
-     { xx = usp->T - usp->IntT + 2* usp->IntT*R;
+     { xx = usp->T[0] - usp->IntT[0] + 2* usp->IntT[0]*R;
        usp->Tc = xx;
        if(usp->Tc<0.)
           usp->Tc=0.;
      }
    if( usp->PsGen[4]== S_ON && usp->NgP==i )
      {
-       xx = usp->P- usp->IntP + 2*usp->IntP*R;
+       xx = usp->P[0]- usp->IntP[0] + 2*usp->IntP[0]*R;
        usp->Pc = xx;
        if(usp->Pc<0.) usp->Pc = 1e-5;
      }

@@ -773,7 +773,7 @@ TVisor::defaultCFG()
                  MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                        };
     rt.Add(new TDataBase(rt.GetCount(), "unspac", true, true,
-                         o_unname, 58, 0, 10, unspace_rkfrm));
+                         o_unname, 70, 0, 10, unspace_rkfrm));
 
 
     // RT_GTDEMO default

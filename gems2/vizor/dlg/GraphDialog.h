@@ -8,7 +8,7 @@
 //
 // This file is part of the GEM-Vizor library which uses the
 // Qt v.2.x GUI Toolkit (Troll Tech AS, http://www.trolltech.com)
-// according to the Qt Duo Commercial license  
+// according to the Qt Duo Commercial license
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -57,8 +57,14 @@ public:
         return plLine;
     }
 
-    static void drawSymbol(QPainter* painter, const QPoint& center, 
-			    int type, int size, const QColor& color, int width=1);
+    void setColor( QColor& );
+    QColor getColor() const
+    {
+        return QColor( plLine.red, plLine.green, plLine.blue);
+    }
+
+    static void drawSymbol(QPainter* painter, const QPoint& center,
+         int type, int size, const QColor& color, int width=1);
 };
 
 class SymbolLabel;
@@ -78,9 +84,20 @@ class GraphDialog:
     float maxX, maxY;
     TOArray<SymbolLabel*> aSymbolLabels;
     TOArray<DragLabel*> aLegendLabels;
+ //   TIArray<SymbolLabel> aSymbolLabels;
+ //   TIArray<DragLabel> aLegendLabels;
+
+    // for ISOLINE mode
+    // int oldGraphType;
 
     void Show();
     void ShowPlots();
+
+    bool isoline_put;
+    bool lines_put;
+
+    void ShowLegend();
+    void ShowIsolineLegend();
 
 
 protected slots:
@@ -110,6 +127,14 @@ public:
         return QColor( gr_data.lines[ii].red,
         	    gr_data.lines[ii].green, gr_data.lines[ii].blue);
     }
+
+    QColor getColorIsoline(int ii) const
+    {
+        return QColor( gr_data.scale[ii].red,
+        	    gr_data.scale[ii].green, gr_data.scale[ii].blue);
+    }
+
+    gstring getTextIsoline(int ii);
 
     QColor getBackgrColor();
     void setBackgrColor( QColor color );

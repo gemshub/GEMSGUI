@@ -692,24 +692,29 @@ enum gtdemo_objects {   // gtdemo
 //---------------------------------
 
 
-enum unspace_objects {                                                //105
+enum unspace_objects {                                                //119
     o_unsts = o_gwtprn+1, o_unpsflg, o_unpaflg, o_unpvflg, o_unsiz,
     o_unq, o_unres, o_unng,  o_unngtpv,  o_unpnt,
     o_unnmb, o_unnpha, o_un_t, o_un_q,  o_un_g,
-    o_un_i, o_un_j, o_un_k, o_un_ka, o_un_tc,
-    o_un_p, o_un_v, o_un_ph, o_un_eh, o_un_ic,
-    o_unquan, o_unname, o_unnotes, o_unpapv, o_unint,
-    o_unfloat, o_un_cr, o_unpbd,  o_unnglg, o_unnggam,
-    o_unngls,  o_unnglv, o_unngnb,  o_unf_pha, o_unintlgo,
-    o_unintgam, o_unintls, o_unintlv, o_unintnb, o_unm_t_lo,
-    o_unm_t_up, o_unfug_lo, o_unfug_up, o_unintlg, o_ungs,
-    o_unss,  o_unvs,  o_ungams,  o_unncp, o_unbs,
-    o_unvg, o_unvy,  o_unvyf,   o_unvgam,   o_unvmol,
-    o_unvu, o_unvfug, o_unvt,  o_unvp,   o_unvph,
-    o_unovb, o_unovr, o_unovn, o_unqulapl, o_unquhom,
-    o_ununicn, o_unugdcn, o_unundcan, o_unsgp, o_unexpr,
-    o_unstl, o_unsdref,  o_unsdval, o_unstkey,              //4
-    o_unxnames, o_unynames, o_unaxis, o_ucsize, o_unplline,
+    o_un_i, o_un_j, o_un_k, o_un_ka,  o_undimxy,
+    o_undimef, o_un_tc, o_un_p, o_un_v, o_un_ph,
+    o_un_eh, o_un_ic, o_unquan,
+// database  70
+    o_unname, o_unnotes, o_unpapv, o_unint, o_unfloat,
+    o_un_cr, o_unpbd,  o_unnglg, o_unnggam, o_unngls,
+    o_unnglv, o_unngnb,  o_unf_pha, o_unintlgo, o_unintgam,
+    o_unintls, o_unintlv, o_unintnb, o_unm_t_lo, o_unm_t_up,
+    o_unfug_lo, o_unfug_up, o_ungs,  o_unss,  o_unvs,
+    o_ungams,  o_unncp, o_unbs, o_unvg,  o_unbc,
+    o_unsc, o_unmvc, o_unnidp,  o_unvy,  o_unvyf,
+    o_unvgam,   o_unvmol, o_unvu, o_unvfug, o_unvt,
+    o_unvp, o_unvv,  o_unvph, o_unovb, o_unovr,
+    o_unovn, o_unqucx, o_unqucv,  o_ununicn, o_unugdcn,
+    o_unuadcn, o_unundcan, o_unsgp, o_unexpr, o_unstl,
+    o_unsdref,  o_unsdval, o_unstkey, o_unxnames, o_unynames,
+    o_unaxis, o_unsize,  o_unlnam,   o_unlname,  o_ungexpr,
+    o_unxa, o_unyc, o_unxs,  o_unys, o_unplline,
+// end database
     o_unphndx,  o_unsv,   o_unphnum, o_unphaid, o_unphalst,
     o_unafreg, o_unpmr,  o_unpom, o_unpor, o_una,
     o_unzcp, o_unzmin, o_unzmax, o_unzmaxabs, o_unhom,

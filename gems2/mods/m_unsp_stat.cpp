@@ -94,8 +94,8 @@ return(Kgr);  */
 }
 
 
-int TUnSpace::kvant_parag( short *mas )
-{   // sol[i] - kol-vo solutions c mas[i] naborom phases
+int TUnSpace::kvant_parag( int type /*short *mas*/ )
+{   // sol[i] - kol-vo solutions c usp->quanCx[i][type] naborom phases
     // return:  kol-vo solutions v quantile
 
   int i,j,I=0,S=0,sum,kvant;
@@ -107,7 +107,7 @@ int TUnSpace::kvant_parag( short *mas )
   sol= new  short[kvant];
 
   for( i=0; i<kvant; i++)
-   sol[i]= kol_in_sol( mas[i] );
+   sol[i]= kol_in_sol( usp->quanCx[i][type] );
   for( i=0; i<kvant; i++)
   { sum=0;
     for( j=0; j<kvant ; j++)
@@ -124,7 +124,7 @@ return(maxkol);
 
 
 // indexes into array <mas> po quantile
-void TUnSpace::kvant_index(float per,int N,double *mas,short *ind)
+void TUnSpace::kvant_index(float per,int N,double *mas, short type /**ind*/)
 {
   double A0=-1,A1=fabs(mas[0]);
   short i,j,kvant;
@@ -135,7 +135,9 @@ void TUnSpace::kvant_index(float per,int N,double *mas,short *ind)
   for(j=0; j<kvant; j++)
   { for(i=0 ;i<N; i++)
      if(fabs(mas[i])>A0 && fabs(mas[i])<=A1)
-     { A1=fabs(mas[i]);  ind[j]=i; }
+     { A1=fabs(mas[i]);
+       usp->quanCx[j][type]=i;   //ind[j]=i;
+     }
     A0=A1;
     for(i=0;i<N;i++)
      if(fabs(mas[i])>A1)
@@ -193,7 +195,7 @@ int TUnSpace::sel_parg( short *sv ) \
  }
  if( usp->Pa_Crit == UNSP_CRIT_LAPL_QAN )          // select Laplace_quantile
  {
-   J=kvant_parag( usp->quanLap );
+   J=kvant_parag( 0 /*usp->quanLap*/ );
    for(i=0; i<Ngr; i++)
    { I=0;
      for(j=0; j<usp->Q; j++ )
@@ -205,7 +207,7 @@ int TUnSpace::sel_parg( short *sv ) \
  }
  if( usp->Pa_Crit ==  UNSP_CRIT_HOME_QAN )       // select Homenuk_quantile
  {
-   J=kvant_parag( usp->quanHom );
+   J=kvant_parag( 3/*usp->quanHom*/ );
    for(i=0; i<Ngr; i++)
    { I=0;
      for(j=0; j<usp->Q; j++)
@@ -711,7 +713,7 @@ else
 
    for( t=0; t<usp->Q; t++)
     usp->Zcp[t]= fabs( usp->Zcp[t]);
-   kvant_index( usp->quan_lev, usp->Q, usp->Zcp, usp->quanLap );
+   kvant_index( usp->quan_lev, usp->Q, usp->Zcp, 0/*usp->quanLap*/ );
 
 // 2 prohod for Homenuk
 
@@ -748,7 +750,7 @@ else
    usp->Homen = jj;
    usp->CrHom = R;
    usp->nHom = kol_in_sol( jj );
-   kvant_index( usp->quan_lev, usp->Q, usp->Hom, usp->quanHom );
+   kvant_index( usp->quan_lev, usp->Q, usp->Hom, 3/*usp->quanHom*/ );
 
 }
 
@@ -857,7 +859,7 @@ void TUnSpace::out_QT( int Ngr  )
       usp->UgDC[l][1] = st1*sg1/sqrt(double(ca));
    else
       usp->UgDC[l][1] = 0.;
-   usp->UgDC[l][2] = usp->Gs[l]; //usp->vG[l];
+   usp->UgDC[l][2] = usp->Gs[l][0]; //usp->vG[l];
    usp->UgDC[l][3] = usp->vG[usp->Lapl*usp->L+l];
    usp->UgDC[l][4] = usp->vG[usp->Homen*usp->L+l];
 
@@ -959,8 +961,8 @@ void TUnSpace::out_QT( int Ngr  )
        }   */
        quanLapl=quanHom=0.;
        for(k=0;k<kvant;k++)
-        { quanLapl +=usp->vG[usp->quanLap[k]*usp->L+j];
-          quanHom  +=usp->vG[usp->quanHom[k]*usp->L+j];
+        { quanLapl +=usp->vG[usp->quanCx[k][0]*usp->L+j];
+          quanHom  +=usp->vG[usp->quanCx[k][3]*usp->L+j];
         }
           quanLapl/=kvant;
           quanHom/=kvant;
@@ -1033,26 +1035,26 @@ void TUnSpace::AdapG()
        quanLapl=quanHom=0.;
 
        for(k=0; k<kvant; k++)
-       { quanLapl += usp->vG[usp->quanLap[k]*usp->L+i];
-         quanHom += usp->vG[usp->quanHom[k]*usp->L+i];
+       { quanLapl += usp->vG[usp->quanCx[k][0]*usp->L+i];
+         quanHom += usp->vG[usp->quanCx[k][3]*usp->L+i];
        }
        quanLapl/=kvant;
        quanHom/=kvant;
 
    switch( usp->Pa_Crit )
    {
-    case UNSP_CRIT_PA:         usp->Gs[i] = sr;   break;
-    case UNSP_CRIT_LAPL_QAN:   usp->Gs[i] = quanLapl;   break;
-    case UNSP_CRIT_HOME_QAN:   usp->Gs[i] = quanHom;     break;
-    case UNSP_CRIT_LAPL_P:     usp->Gs[i] = usp->vG[usp->Lapl*usp->L+i];
+    case UNSP_CRIT_PA:         usp->Gs[i][0] = sr;   break;
+    case UNSP_CRIT_LAPL_QAN:   usp->Gs[i][0] = quanLapl;   break;
+    case UNSP_CRIT_HOME_QAN:   usp->Gs[i][0] = quanHom;     break;
+    case UNSP_CRIT_LAPL_P:     usp->Gs[i][0] = usp->vG[usp->Lapl*usp->L+i];
                                break;
-    case UNSP_CRIT_HOME_P:     usp->Gs[i] = usp->vG[usp->Homen*usp->L+i];
+    case UNSP_CRIT_HOME_P:     usp->Gs[i][0] = usp->vG[usp->Homen*usp->L+i];
     default:                   break;
    }
 
 
       usp->UnDCA[i][0] = usp->vG[i]; 
-      usp->UnDCA[i][1] = fabs(usp->IntLg[i]);
+      usp->UnDCA[i][1] = fabs(usp->IntLg[i][0]);
       usp->UnDCA[i][2] = min;
       usp->UnDCA[i][3] = max;
       usp->UnDCA[i][4] = sr;
@@ -1063,9 +1065,9 @@ void TUnSpace::AdapG()
 //   ??????????????????
 //   adatpter new data to BD
     if( usp->NgLg[i] > 0 )
-    {  usp->IntLg[i]=3.*sto/sqrt(double(usp->ob));
+    {  usp->IntLg[i][0]=3.*sto/sqrt(double(usp->ob));
        TProfil::pm->syp->GEX[i] =
-            usp->Gs[i]-TProfil::pm->tpp->G[i];
+            usp->Gs[i][0]-TProfil::pm->tpp->G[i];
     }
  }
 

@@ -36,13 +36,18 @@ class LegendDialog :
 {
     Q_OBJECT
 
+    int oldGraphType;
+
     GraphData * graph;
     GraphDialog * graph_dlg;
     QPushButton *BackGrountBut;
     QColor backgroundColor;
     QFont labelFont;
-    
+    QButtonGroup* B_2;
+
     int apply();
+    void ShowLines( bool new_ = false );
+    void ShowIsoline( bool new_ = false );
 
 public:
     LegendDialog( GraphDialog * aGraph );
@@ -54,8 +59,12 @@ protected slots:
     virtual void accept();
     virtual void CmBackground();
     virtual void CmChangeLabelFont();
+    virtual void CmChangeGraphType(int);
 
 protected:
+   // TIArray<QPushButton> pScale;
+    TIArray<PlotTypeBtn> pScale;
+    TIArray<QLabel>      pLabels;
     TIArray<PlotTypeBtn> pLines;
     TIArray<QLineEdit>   pNames;
 };

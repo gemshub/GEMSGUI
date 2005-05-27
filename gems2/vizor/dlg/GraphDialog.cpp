@@ -126,6 +126,7 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
         GraphDialogData(pmodule->window(), NULL, false /* true =modal */ ),
         pModule(pmodule),  isFragment(false), gr_data(data)
 {
+    //oldGraphType = gr_data.graphType;
     minX = gr_data.region[0];
     maxX = gr_data.region[1];
     minY = gr_data.region[2];
@@ -138,10 +139,28 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
 		    FPoint(minX, minY),
                     FPoint(maxX, maxY),
 			gr_data.title.c_str());
-			
+
     plot->setGridCount(gr_data.axisType);
     plot->setAxisTitles(gr_data.xName.c_str(), gr_data.yName.c_str());
 
+    // Insert labels in legend box
+    if( gr_data.graphType != ISOLINES )
+      ShowLegend();
+    else
+      ShowIsolineLegend();
+
+    Show();
+
+//    setCaption( gr_data.title.c_str() );
+}
+
+GraphDialog::~GraphDialog()
+{}
+
+
+// Insert labels in legend box
+void GraphDialog::ShowLegend()
+{
     // Insert labels in legend box
     int y = 20;
     for( uint ii=0, kk=0; ii<gr_data.plots.GetCount(); ii++, y+=10 )
@@ -158,14 +177,57 @@ GraphDialog::GraphDialog(TCModule *pmodule, GraphData& data):
             pLabel->setText( gr_data.lines[kk].name );
         }
     }
-
-    Show();
-
-//    setCaption( gr_data.title.c_str() );
 }
 
-GraphDialog::~GraphDialog()
-{}
+gstring GraphDialog::getTextIsoline(int ii)
+{
+    vstr buf(200);
+    int nObjY = gr_data.plots[1].getObjY();
+    memset( buf, 0, 150 );
+    sprintf(buf, " %.4g : %.4g",
+            aObj[nObjY].Get(ii,0), aObj[nObjY].Get(ii,1));
+    return gstring(buf.p);
+}
+
+
+// Insert labels in legend box (Isoline graph)
+void GraphDialog::ShowIsolineLegend()
+{
+    // Insert labels in legend box
+    int y = 20;
+
+    // Added scale lines
+    for(uint ii = 0; ii <gr_data.scale.GetCount(); ii++, y+= 17 )
+    {
+      TPlotLine pl( "Scale",  P_FILLSQUARE, 0, 0, gr_data.scale[ii].red,
+                     gr_data.scale[ii].green, gr_data.scale[ii].blue );
+      gstring str = getTextIsoline(ii);
+
+      SymbolLabel* pLabel1 = new SymbolLabel( pGrpLegend, pl );
+      aSymbolLabels.Add( pLabel1 );
+      pLabel1->setGeometry( 3, y, 32, 17 );
+
+      DragLabel* pLabel = new DragLabel( pGrpLegend );
+      aLegendLabels.Add( pLabel );
+      pLabel->setGeometry( 3 + 25, y, 100, 17 );
+      pLabel->setText( str.c_str() );
+    }
+
+    // added symbols of points
+/*  y+=20;
+    for( ii=0; ii<gr_data.lines.GetCount(); ii++, y+=20 )
+    {
+        SymbolLabel* pLabel1 = new SymbolLabel( pGrpLegend, gr_data.lines[ii]);
+        aSymbolLabels.Add( pLabel1 );
+        pLabel1->setGeometry( 3, y, 32, 17 );
+
+        DragLabel* pLabel = new DragLabel( pGrpLegend );
+        aLegendLabels.Add( pLabel );
+        pLabel->setGeometry( 3 + 35, y, 85, 17 );
+        pLabel->setText( gr_data.lines[ii].name );
+    }
+*/
+}
 
 
 /* if this is for adding points - we don't need Clear() and Show() - just add
@@ -185,7 +247,7 @@ void GraphDialog::Show()
 {
     if( gr_data.isBackgr_color )
       plot->setBackgroundColor( QColor( gr_data.b_color[0],
-    					gr_data.b_color[1], 
+    					gr_data.b_color[1],
 					gr_data.b_color[2]) );
     else
       plot->setBackgroundColor( Qt::white /*backgroundColor().dark(110)*/ );
@@ -206,7 +268,7 @@ void GraphDialog::ShowPlots()
 
   switch( gr_data.graphType )
   {
-   case 0:
+   case LINES_POINTS:
        cap+= " (symbol/line plots)";
        setCaption( cap.c_str() );
        for(uint ii=0, nLn =0; ii<gr_data.plots.GetCount(); ii++)
@@ -239,7 +301,7 @@ void GraphDialog::ShowPlots()
             }
         }
         break;
-   case 1:
+   case CUMULATIVE:
         {
          cap+= " (cumulative plot)";
          setCaption( cap.c_str() );
@@ -269,10 +331,32 @@ void GraphDialog::ShowPlots()
          }
         }
         break;
-   case 2:
-        cap+= " (level line diagram) ";
-        setCaption( cap.c_str() );
-    break;
+   case ISOLINES:
+        {
+         int nLn, nScale;
+         float x, y;
+         cap+= " (level line diagram) ";
+         setCaption( cap.c_str() );
+         for(int  ii=0; ii<gr_data.plots[0].getdX(); ii++ )
+         {
+           // get point
+           x = aObj[gr_data.plots[0].getObjY()].Get(ii,0);
+           y = aObj[gr_data.plots[0].getObjY()].Get(ii,1);
+           FPoint pnt(x,y);
+           // get symbol type
+           nLn = (int)aObj[gr_data.plots[0].getObjX()].Get(ii,0);
+           // get scale color
+           nScale = gr_data.getColorLine( ii );
+
+           if( pnt.IsEmpty() || nLn < 0 ||
+               (uint)nLn >= gr_data.lines.GetCount() ||
+               nScale < 0 )
+             continue;   // undefined point or point type
+           plot->Add(new PPoint(plot, pnt, gr_data.getType(nLn),
+             gr_data.getSize(nLn), getColorIsoline(nScale)));
+         }
+        }
+        break;
   }
 }
 
@@ -318,6 +402,27 @@ GraphDialog::Apply()
     if( maxX == minX ) maxX += 1.;
     if( maxY == minY ) maxY += 1.;
 
+//    aSymbolLabels.Clear();
+//    aLegendLabels.Clear();
+    for( uint ii=0; ii<aSymbolLabels.GetCount(); ii++)
+    {  aSymbolLabels[ii]->hide();
+    }
+    for( uint ii=0; ii<aLegendLabels.GetCount(); ii++)
+      aLegendLabels[ii]->close();
+    aSymbolLabels.Clear();
+    aLegendLabels.Clear();
+    // Insert labels in legend box
+    if( gr_data.graphType != ISOLINES )
+      ShowLegend();
+    else
+      ShowIsolineLegend();
+    for( uint ii=0; ii<aSymbolLabels.GetCount(); ii++)
+      aSymbolLabels[ii]->show();
+    for( uint ii=0; ii<aLegendLabels.GetCount(); ii++)
+      aLegendLabels[ii]->show();
+
+    //update();
+    /*
     for( uint ii=0, kk=0; ii<gr_data.plots.GetCount(); ii++ )
     {
         for( int jj=0; jj<gr_data.plots[ii].getLinesNumber(); kk++, jj++ )
@@ -325,13 +430,14 @@ GraphDialog::Apply()
 	    aSymbolLabels[kk]->setData( gr_data.lines[kk] );
 	    aLegendLabels[kk]->setText( gr_data.lines[kk].name );
         }
-    }
+    } */
     pGrpLegend->update();
 
     plot->setAxisTitles(gr_data.xName.c_str(), gr_data.yName.c_str());
     plot->Clear();
     Show();
     plot->update();
+
 }
 
 
@@ -349,7 +455,8 @@ GraphDialog::AddPoint( int nPlot, int nPoint, bool no_mt )
     for( int jj=0; jj<gr_data.plots[nPlot].getLinesNumber(); jj++, nLn++ )
     {
         FPoint pnt = gr_data.plots[nPlot].getPoint( jj, nPoint );
-        plot->Add(new PPoint(plot, pnt, gr_data.getType(nLn),
+        if( !pnt.IsEmpty() )
+            plot->Add(new PPoint(plot, pnt, gr_data.getType(nLn),
                        gr_data.getSize(nLn), getColor(nLn)));
     }
 
@@ -669,6 +776,15 @@ void PlotTypeBtn::setData( TPlotLine& ln)
     plLine = ln;
     update();
 }
+
+void PlotTypeBtn::setColor( QColor& cl)
+{
+   plLine.red = cl.red();
+   plLine.green = cl.green();
+   plLine.blue = cl.blue();
+   update();
+}
+
 
 void PlotTypeBtn::setName( const char* name)
 {

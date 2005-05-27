@@ -149,9 +149,11 @@ void TUnSpace::ods_link( int q)
    aObj[ o_un_j ].SetPtr( &usp->j );
    aObj[ o_un_k ].SetPtr( &usp->k );
    aObj[ o_un_ka ].SetPtr( &usp->ka );
-   aObj[ o_un_tc ].SetPtr( &usp->T );
-   aObj[ o_un_p ].SetPtr( &usp->P );
-   aObj[ o_un_v ].SetPtr( &usp->V );
+   aObj[ o_undimxy].SetPtr( usp->dimXY ); /*i 2*/
+   aObj[ o_undimef].SetPtr( usp->dimEF );  /*i 2*/
+   aObj[ o_un_tc ].SetPtr( usp->T );
+   aObj[ o_un_p ].SetPtr( usp->P );
+   aObj[ o_un_v ].SetPtr( usp->V );
    aObj[ o_un_ph ].SetPtr( &usp->pH_lo );
    aObj[ o_un_eh ].SetPtr( &usp->Eh_lo );
    aObj[ o_un_ic ].SetPtr( &usp->IC_lo );
@@ -159,8 +161,8 @@ void TUnSpace::ods_link( int q)
    aObj[ o_unname ].SetPtr( usp->name );
    aObj[ o_unnotes ].SetPtr( usp->notes );
    aObj[ o_unpapv ].SetPtr( &usp->PunE );   /* a 38 */
-   aObj[ o_unint ].SetPtr( &usp->N );       /* i 32 */
-   aObj[ o_unfloat ].SetPtr( &usp->T );     /* f 16 */
+   aObj[ o_unint ].SetPtr( &usp->N );       /* i 36 */
+   aObj[ o_unfloat ].SetPtr( usp->T );     /* f 22 */
    aObj[ o_un_cr ].SetPtr( &usp->CrL );     /* d 4 */
    aObj[ o_unstkey ].SetPtr( usp->stkey );                 //33
   // names of columns
@@ -168,6 +170,8 @@ void TUnSpace::ods_link( int q)
    aObj[ o_ununicn ].SetDim( 1, UNSP_SIZE1 );
    aObj[ o_unugdcn ].SetPtr( usp->UgDCn );
    aObj[ o_unugdcn ].SetDim( 1, UNSP_SIZE1 );
+   aObj[ o_unuadcn ].SetPtr( usp->UaDCn );
+   aObj[ o_unuadcn ].SetDim( 1, UNSP_SIZE1 );
    aObj[ o_unundcan ].SetPtr( usp->UnDCAn );
    aObj[ o_unundcan ].SetDim( 1, UNSP_SIZE2 );
 
@@ -186,16 +190,16 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unngnb].SetDim( usp->N, 1 );
     aObj[ o_unf_pha].SetPtr( usp->f_PhA );
     aObj[ o_unf_pha].SetDim( usp->N, 1 );
-    aObj[ o_unintlgo].SetPtr( usp->IntLg0 );
-    aObj[ o_unintlgo].SetDim( usp->L, 1 );
+    aObj[ o_unintlgo].SetPtr( usp->IntLg );
+    aObj[ o_unintlgo].SetDim( usp->L, 2 );
     aObj[ o_unintgam].SetPtr( usp->IntGam );
-    aObj[ o_unintgam].SetDim( usp->Ls, 1 );
+    aObj[ o_unintgam].SetDim( usp->Ls, 2 );
     aObj[ o_unintls].SetPtr( usp->IntLs );
-    aObj[ o_unintls].SetDim( usp->L, 1 );
+    aObj[ o_unintls].SetDim( usp->L, 2 );
     aObj[ o_unintlv].SetPtr( usp->IntLv );
-    aObj[ o_unintlv].SetDim( usp->L, 1 );
+    aObj[ o_unintlv].SetDim( usp->L, 2 );
     aObj[ o_unintnb].SetPtr( usp->IntNb );
-    aObj[ o_unintnb].SetDim( usp->N, 1 );
+    aObj[ o_unintnb].SetDim( usp->N, 2 );
     aObj[ o_unm_t_lo].SetPtr( usp->m_t_lo );
     aObj[ o_unm_t_lo].SetDim( usp->N, 1 );
     aObj[ o_unm_t_up].SetPtr( usp->m_t_up );
@@ -204,22 +208,30 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unfug_lo].SetDim( usp->Ls, 1 );
     aObj[ o_unfug_up].SetPtr( usp->fug_up );
     aObj[ o_unfug_up].SetDim( usp->Ls, 1 );
-    aObj[ o_unintlg].SetPtr( usp->IntLg );
-    aObj[ o_unintlg].SetDim( usp->L, 1 );
     aObj[ o_ungs].SetPtr( usp->Gs );
-    aObj[ o_ungs].SetDim( usp->L, 1 );
+    aObj[ o_ungs].SetDim( usp->L, 2 );
     aObj[ o_unss].SetPtr( usp->Ss );
-    aObj[ o_unss].SetDim( usp->L, 1 );
+    aObj[ o_unss].SetDim( usp->L, 2 );
     aObj[ o_unvs].SetPtr( usp->Vs );
-    aObj[ o_unvs].SetDim( usp->L, 1 );
+    aObj[ o_unvs].SetDim( usp->L, 2 );
     aObj[ o_ungams].SetPtr( usp->GAMs );
-    aObj[ o_ungams].SetDim( usp->Ls, 1 );
+    aObj[ o_ungams].SetDim( usp->Ls, 2 );
     aObj[ o_unncp].SetPtr( usp->ncp );
     aObj[ o_unncp].SetDim( usp->Q, usp->nG );
     aObj[ o_unbs].SetPtr( usp->Bs );
-    aObj[ o_unbs].SetDim( usp->N, 1 );
+    aObj[ o_unbs].SetDim( usp->N, 2 );
     aObj[ o_unvg].SetPtr( usp->vG );
     aObj[ o_unvg].SetDim( usp->Q, usp->L );
+// added 2005
+    aObj[ o_unbc].SetPtr( usp->vB );
+    aObj[ o_unbc].SetDim( usp->Q, usp->N );
+    aObj[ o_unsc].SetPtr( usp->vS );
+    aObj[ o_unsc].SetDim( usp->Q, usp->L );
+    aObj[ o_unmvc].SetPtr( usp->vmV );
+    aObj[ o_unmvc].SetDim( usp->Q, usp->L );
+    aObj[ o_unnidp].SetPtr( usp->vNidP );
+    aObj[ o_unnidp].SetDim( usp->Q, usp->Ls );
+
     aObj[ o_unvy].SetPtr( usp->vY );
     aObj[ o_unvy].SetDim( usp->Q, usp->L );
     aObj[ o_unvyf].SetPtr( usp->vYF );
@@ -236,6 +248,8 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unvt].SetDim( usp->Q, 1 );
     aObj[ o_unvp].SetPtr( usp->vP );
     aObj[ o_unvp].SetDim( usp->Q, 1 );
+    aObj[ o_unvv].SetPtr( usp->vV );
+    aObj[ o_unvv].SetDim( usp->Q, 1 );
     aObj[ o_unvph].SetPtr( usp->vpH );
     aObj[ o_unvph].SetDim( usp->Q, 1 );
     aObj[ o_unovb].SetPtr( usp->OVB );
@@ -244,10 +258,10 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unovr].SetDim( usp->nGR+1, 1 );
     aObj[ o_unovn].SetPtr( usp->OVN );
     aObj[ o_unovn].SetDim( usp->nGN+1, 1 );
-    aObj[ o_unqulapl].SetPtr( usp->quanLap );
-    aObj[ o_unqulapl].SetDim( usp->qQ, 1 );
-    aObj[ o_unquhom].SetPtr( usp->quanHom );
-    aObj[ o_unquhom].SetDim( usp->qQ, 1 );
+    aObj[ o_unqucx].SetPtr( usp->quanCx );
+    aObj[ o_unqucx].SetDim( usp->qQ, 4 );
+    aObj[ o_unqucv].SetPtr( usp->quanCv );
+    aObj[ o_unqucv].SetDim( usp->qQ, 4 );
     aObj[ o_unsgp].SetPtr( usp->SGp );
     aObj[ o_unsgp].SetDim( usp->nG, 1 );
 
@@ -310,9 +324,24 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unxnames].SetPtr(  usp->xNames );
     aObj[ o_unynames].SetPtr(  usp->yNames );
     aObj[ o_unaxis ].SetPtr(   usp->axisType );   /* i 6 */
-    aObj[ o_ucsize].SetPtr(    usp->size[0] );    /* f 8 */
-    aObj[ o_unplline].SetPtr( 0/*plot*/ );
-    aObj[ o_unplline].SetDim( 0, sizeof(TPlotLine));
+    aObj[ o_unsize].SetPtr(    usp->size[0] );    /* f 8 */
+
+    aObj[ o_unlnam].SetPtr( usp->lNam[0] );
+    aObj[ o_unlnam].SetDim( 1, usp->dimXY[1] );
+    aObj[ o_unlname].SetPtr( usp->lNamE[0] );
+    aObj[ o_unlname].SetDim( 1, usp->dimEF[1] );
+    aObj[o_ungexpr].SetPtr( usp->ExprGraph );
+        //aObj[o_ungexpr].SetDim(1,len(usp->ExprGraph));
+    aObj[o_unxa].SetPtr( usp->x0 );
+    aObj[o_unxa].SetDim(usp->dimXY[0], 1 );
+    aObj[o_unyc].SetPtr( usp->y0 );
+    aObj[o_unyc].SetDim(usp->dimXY[0], usp->dimXY[1] );
+    aObj[o_unxs].SetPtr( usp->xE );
+    aObj[o_unxs].SetDim( usp->dimEF[0],1 );
+    aObj[o_unys].SetPtr( usp->yE );
+    aObj[o_unys].SetDim(usp->dimEF[0], usp->dimEF[1] );
+    aObj[ o_unplline].SetPtr( plot );
+    aObj[ o_unplline].SetDim( usp->dimXY[1]+usp->dimEF[1], sizeof(TPlotLine));
 
 }
 
@@ -325,6 +354,7 @@ void TUnSpace::dyn_set(int q)
 
     usp->UnICn = (char (*)[NAME_SIZE])aObj[ o_ununicn ].GetPtr();
     usp->UgDCn = (char (*)[NAME_SIZE])aObj[ o_unugdcn ].GetPtr();
+    usp->UaDCn = (char (*)[NAME_SIZE])aObj[ o_unuadcn ].GetPtr();
     usp->UnDCAn = (char (*)[NAME_SIZE])aObj[ o_unundcan ].GetPtr();
    //dynamic arrays
     usp->PbD =  (short *)aObj[ o_unpbd].GetPtr();
@@ -334,23 +364,28 @@ void TUnSpace::dyn_set(int q)
     usp->NgLv = (short *)aObj[ o_unnglv].GetPtr();
     usp->NgNb = (short *)aObj[ o_unngnb].GetPtr();
     usp->f_PhA = (short *)aObj[ o_unf_pha].GetPtr();
-    usp->IntLg0 = (float *)aObj[ o_unintlgo].GetPtr();
-    usp->IntGam = (float *)aObj[ o_unintgam].GetPtr();
-    usp->IntLs = (float *)aObj[ o_unintls].GetPtr();
-    usp->IntLv = (float *)aObj[ o_unintlv].GetPtr();
-    usp->IntNb = (float *)aObj[ o_unintnb].GetPtr();
+    usp->IntLg = (float (*)[2])aObj[ o_unintlgo].GetPtr();
+    usp->IntGam = (float (*)[2])aObj[ o_unintgam].GetPtr();
+    usp->IntLs = (float (*)[2])aObj[ o_unintls].GetPtr();
+    usp->IntLv = (float (*)[2])aObj[ o_unintlv].GetPtr();
+    usp->IntNb = (float (*)[2])aObj[ o_unintnb].GetPtr();
     usp->m_t_lo = (float *)aObj[ o_unm_t_lo].GetPtr();
     usp->m_t_up = (float *)aObj[ o_unm_t_up].GetPtr();
     usp->fug_lo = (float *)aObj[ o_unfug_lo].GetPtr();
     usp->fug_up = (float *)aObj[ o_unfug_up].GetPtr();
-    usp->IntLg = (float *)aObj[ o_unintlg].GetPtr();
-    usp->Gs = (float *)aObj[ o_ungs].GetPtr();
-    usp->Ss = (float *)aObj[ o_unss].GetPtr();
-    usp->Vs = (float *)aObj[ o_unvs].GetPtr();
-    usp->GAMs = (float *)aObj[ o_ungams].GetPtr();
+    usp->Gs = (float (*)[2])aObj[ o_ungs].GetPtr();
+    usp->Ss = (float (*)[2])aObj[ o_unss].GetPtr();
+    usp->Vs = (float (*)[2])aObj[ o_unvs].GetPtr();
+    usp->GAMs = (float (*)[2])aObj[ o_ungams].GetPtr();
     usp->ncp = (float *)aObj[ o_unncp].GetPtr();
-    usp->Bs = (double *)aObj[ o_unbs].GetPtr();
+    usp->Bs = (double (*)[2])aObj[ o_unbs].GetPtr();
     usp->vG = (double *)aObj[ o_unvg].GetPtr();
+// added 2005
+    usp->vB = (double *)aObj[ o_unbc].GetPtr();
+    usp->vS = (double *)aObj[ o_unsc].GetPtr();
+    usp->vmV = (double *)aObj[ o_unmvc].GetPtr();
+    usp->vNidP = (double *)aObj[ o_unnidp].GetPtr();
+
     usp->vY = (double *)aObj[ o_unvy].GetPtr();
     usp->vYF = (double *)aObj[ o_unvyf].GetPtr();
     usp->vGam = (double *)aObj[ o_unvgam].GetPtr();
@@ -359,12 +394,13 @@ void TUnSpace::dyn_set(int q)
     usp->vFug = (double *)aObj[ o_unvfug].GetPtr();
     usp->vT = (float *)aObj[ o_unvt].GetPtr();
     usp->vP = (float *)aObj[ o_unvp].GetPtr();
+    usp->vV = (float *)aObj[ o_unvv].GetPtr();
     usp->vpH = (float *)aObj[ o_unvph].GetPtr();
     usp->OVB = (float *)aObj[ o_unovb].GetPtr();
     usp->OVR = (float *)aObj[ o_unovr].GetPtr();
     usp->OVN = (float *)aObj[ o_unovn].GetPtr();
-    usp->quanLap = (short *)aObj[ o_unqulapl].GetPtr();
-    usp->quanHom = (short *)aObj[ o_unquhom].GetPtr();
+    usp->quanCx = (short (*)[4])aObj[ o_unqucx].GetPtr();
+    usp->quanCv = (float (*)[4])aObj[ o_unqucv].GetPtr();
     usp->SGp = (char (*)[MAXPHNAME])aObj[ o_unsgp].GetPtr();
 
  //  internal
@@ -372,6 +408,14 @@ void TUnSpace::dyn_set(int q)
     usp->Expr = (char *)aObj[o_unexpr].GetPtr();
     usp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_unsdref].GetPtr();
     usp->sdval = (char (*)[V_SD_VALEN])aObj[ o_unsdval].GetPtr();
+// graphics
+    usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].GetPtr();
+    usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].GetPtr();
+    usp->ExprGraph = (char *)aObj[ o_ungexpr ].GetPtr();
+    usp->x0    = (double *)aObj[ o_unxa ].GetPtr();
+    usp->y0    = (double *)aObj[ o_unyc ].GetPtr();
+    usp->xE    = (float *)aObj[ o_unxs ].GetPtr();
+    usp->yE    = (float *)aObj[ o_unys ].GetPtr();
     plot  = (TPlotLine *)aObj[ o_unplline ].GetPtr();
     usp->tprn = (char *)aObj[ o_untprn].GetPtr();
 
@@ -414,6 +458,7 @@ void TUnSpace::dyn_kill(int q)
 
     usp->UnICn = (char (*)[NAME_SIZE])aObj[ o_ununicn ].Free();
     usp->UgDCn = (char (*)[NAME_SIZE])aObj[ o_unugdcn ].Free();
+    usp->UaDCn = (char (*)[NAME_SIZE])aObj[ o_unuadcn ].Free();
     usp->UnDCAn = (char (*)[NAME_SIZE])aObj[ o_unundcan ].Free();
   //dynamic arrays
     usp->PbD =  (short *)aObj[ o_unpbd].Free();
@@ -423,23 +468,28 @@ void TUnSpace::dyn_kill(int q)
     usp->NgLv = (short *)aObj[ o_unnglv].Free();
     usp->NgNb = (short *)aObj[ o_unngnb].Free();
     usp->f_PhA = (short *)aObj[ o_unf_pha].Free();
-    usp->IntLg0 = (float *)aObj[ o_unintlgo].Free();
-    usp->IntGam = (float *)aObj[ o_unintgam].Free();
-    usp->IntLs = (float *)aObj[ o_unintls].Free();
-    usp->IntLv = (float *)aObj[ o_unintlv].Free();
-    usp->IntNb = (float *)aObj[ o_unintnb].Free();
+    usp->IntLg = (float (*)[2])aObj[ o_unintlgo].Free();
+    usp->IntGam = (float (*)[2])aObj[ o_unintgam].Free();
+    usp->IntLs = (float (*)[2])aObj[ o_unintls].Free();
+    usp->IntLv = (float (*)[2])aObj[ o_unintlv].Free();
+    usp->IntNb = (float (*)[2])aObj[ o_unintnb].Free();
     usp->m_t_lo = (float *)aObj[ o_unm_t_lo].Free();
     usp->m_t_up = (float *)aObj[ o_unm_t_up].Free();
     usp->fug_lo = (float *)aObj[ o_unfug_lo].Free();
     usp->fug_up = (float *)aObj[ o_unfug_up].Free();
-    usp->IntLg = (float *)aObj[ o_unintlg].Free();
-    usp->Gs = (float *)aObj[ o_ungs].Free();
-    usp->Ss = (float *)aObj[ o_unss].Free();
-    usp->Vs = (float *)aObj[ o_unvs].Free();
-    usp->GAMs = (float *)aObj[ o_ungams].Free();
+    usp->Gs = (float (*)[2])aObj[ o_ungs].Free();
+    usp->Ss = (float (*)[2])aObj[ o_unss].Free();
+    usp->Vs = (float (*)[2])aObj[ o_unvs].Free();
+    usp->GAMs = (float (*)[2])aObj[ o_ungams].Free();
     usp->ncp = (float *)aObj[ o_unncp].Free();
-    usp->Bs = (double *)aObj[ o_unbs].Free();
+    usp->Bs = (double (*)[2])aObj[ o_unbs].Free();
     usp->vG = (double *)aObj[ o_unvg].Free();
+
+    usp->vB = (double *)aObj[ o_unbc].Free();
+    usp->vS = (double *)aObj[ o_unsc].Free();
+    usp->vmV = (double *)aObj[ o_unmvc].Free();
+    usp->vNidP = (double *)aObj[ o_unnidp].Free();
+
     usp->vY = (double *)aObj[ o_unvy].Free();
     usp->vYF = (double *)aObj[ o_unvyf].Free();
     usp->vGam = (double *)aObj[ o_unvgam].Free();
@@ -452,8 +502,8 @@ void TUnSpace::dyn_kill(int q)
     usp->OVB = (float *)aObj[ o_unovb].Free();
     usp->OVR = (float *)aObj[ o_unovr].Free();
     usp->OVN = (float *)aObj[ o_unovn].Free();
-    usp->quanLap = (short *)aObj[ o_unqulapl].Free();
-    usp->quanHom = (short *)aObj[ o_unquhom].Free();
+    usp->quanCx = (short (*)[4])aObj[ o_unqucx].Free();
+    usp->quanCv = (float (*)[4])aObj[ o_unqucv].Free();
     usp->SGp = (char (*)[MAXPHNAME])aObj[ o_unsgp].Free();
 
  //  internal
@@ -461,7 +511,16 @@ void TUnSpace::dyn_kill(int q)
     usp->Expr = (char *)aObj[o_unexpr].Free();
     usp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_unsdref].Free();
     usp->sdval = (char (*)[V_SD_VALEN])aObj[ o_unsdval].Free();
+// graphics
+    usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Free();
+    usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Free();
+    usp->ExprGraph = (char *)aObj[ o_ungexpr ].Free();
+    usp->x0    = (double *)aObj[ o_unxa ].Free();
+    usp->y0    = (double *)aObj[ o_unyc ].Free();
+    usp->xE    = (float *)aObj[ o_unxs ].Free();
+    usp->yE    = (float *)aObj[ o_unys ].Free();
     plot  = (TPlotLine *)aObj[ o_unplline ].Free();
+
     usp->tprn = (char *)aObj[ o_untprn].Free();
 
    if( q == 0)
@@ -608,16 +667,17 @@ void TUnSpace::dyn_new(int q)
        1, UNSP_SIZE1, NAME_SIZE );
     usp->UgDCn = (char (*)[NAME_SIZE])aObj[ o_unugdcn ].Alloc(
        1, UNSP_SIZE1, NAME_SIZE );
+    usp->UaDCn = (char (*)[NAME_SIZE])aObj[ o_unuadcn ].Alloc(
+       1, UNSP_SIZE1, NAME_SIZE );
     usp->UnDCAn = (char (*)[NAME_SIZE])aObj[ o_unundcan ].Alloc(
        1, UNSP_SIZE2, NAME_SIZE );
   // allocation memory for arrays
 
   if(usp->PsGen[0] == S_ON )
   {
-    usp->Gs = (float *)aObj[ o_ungs].Alloc( usp->L, 1, F_ );
+    usp->Gs = (float (*)[2])aObj[ o_ungs].Alloc( usp->L, 2, F_ );
     usp->NgLg = (short *)aObj[ o_unnglg].Alloc( usp->L, 1, I_ );
-    usp->IntLg = (float *)aObj[ o_unintlg].Alloc( usp->L, 1, F_ );
-    usp->IntLg0 = (float *)aObj[ o_unintlgo].Alloc( usp->L, 1, F_ );
+    usp->IntLg = (float (*)[2])aObj[ o_unintlgo].Alloc( usp->L, 2, F_ );
 
     usp->vG = (double *)aObj[ o_unvg].Alloc( usp->Q, usp->L, D_);
     usp->vY = (double *)aObj[ o_unvy].Alloc( usp->Q, usp->L, D_);
@@ -628,19 +688,19 @@ void TUnSpace::dyn_new(int q)
     usp->vpH = (float *)aObj[ o_unvph].Alloc(usp->Q, 1, F_);
     usp->vT = (float *)aObj[ o_unvt].Alloc(usp->Q, 1, F_);
     usp->vP = (float *)aObj[ o_unvp].Alloc(usp->Q, 1, F_);
+    usp->vV = (float *)aObj[ o_unvv].Alloc(usp->Q, 1, F_);
 
     usp->qQ = (short)(usp->quan_lev*usp->Q);
     if(usp->qQ<1)
         usp->qQ=1;
-    usp->quanLap = (short *)aObj[ o_unqulapl].Alloc( usp->qQ, 1, I_ );
-    usp->quanHom = (short *)aObj[ o_unquhom].Alloc( usp->qQ, 1, I_ );
+    usp->quanCx = (short (*)[4])aObj[ o_unqucx].Alloc( usp->qQ, 4, I_ );
+    usp->quanCv = (float (*)[4])aObj[ o_unqucv].Alloc( usp->qQ, 4, F_ );
   }
   else
   {
-       usp->Gs = (float *)aObj[ o_ungs].Free();
+       usp->Gs = (float (*)[2])aObj[ o_ungs].Free();
        usp->NgLg = (short *)aObj[ o_unnglg].Free();
-       usp->IntLg = (float *)aObj[ o_unintlg].Free();
-       usp->IntLg0 = (float *)aObj[ o_unintlgo].Free();
+       usp->IntLg = (float (*)[2])aObj[ o_unintlgo].Free();
 
        usp->vG = (double *)aObj[ o_unvg].Free();
        usp->vY = (double *)aObj[ o_unvy].Free();
@@ -651,8 +711,9 @@ void TUnSpace::dyn_new(int q)
        usp->vpH = (float *)aObj[ o_unvph].Free();
        usp->vT = (float *)aObj[ o_unvt].Free();
        usp->vP = (float *)aObj[ o_unvp].Free();
-       usp->quanLap = (short *)aObj[ o_unqulapl].Free();
-       usp->quanHom = (short *)aObj[ o_unquhom].Free();
+       usp->vV = (float *)aObj[ o_unvv].Free();
+       usp->quanCx = (short (*)[4])aObj[ o_unqucx].Free();
+       usp->quanCv = (float (*)[4])aObj[ o_unqucv].Free();
   }
 
 
@@ -683,50 +744,59 @@ void TUnSpace::dyn_new(int q)
 
   if(usp->PsGen[1]== S_ON)
   {
-    usp->Ss = (float *)aObj[ o_unss].Alloc( usp->L, 1, F_ );
+    usp->Ss = (float (*)[2])aObj[ o_unss].Alloc( usp->L, 2, F_ );
     usp->NgLs = (short *)aObj[ o_unngls].Alloc( usp->L, 1, I_);
-    usp->IntLs = (float *)aObj[ o_unintls].Alloc( usp->L, 1, F_);
+    usp->IntLs = (float (*)[2])aObj[ o_unintls].Alloc( usp->L, 2, F_);
+    usp->vS = (double *)aObj[ o_unsc].Alloc( usp->Q, usp->L, D_);
+
   }else
    {
-    usp->Ss = (float *)aObj[ o_unss].Free();
+    usp->Ss = (float (*)[2])aObj[ o_unss].Free();
     usp->NgLs = (short *)aObj[ o_unngls].Free();
-    usp->IntLs = (float *)aObj[ o_unintls].Free();
+    usp->IntLs = (float (*)[2])aObj[ o_unintls].Free();
+    usp->vS = (double *)aObj[ o_unsc].Free();
    }
 
   if(usp->PsGen[5]== S_ON)
   {
-    usp->Vs = (float *)aObj[ o_unvs].Alloc( usp->L, 1, F_ );
+    usp->Vs = (float (*)[2])aObj[ o_unvs].Alloc( usp->L, 2, F_ );
     usp->NgLv = (short *)aObj[ o_unnglv].Alloc(usp->L, 1, I_);
-    usp->IntLv = (float *)aObj[ o_unintlv].Alloc(usp->L, 1, F_);
+    usp->IntLv = (float (*)[2])aObj[ o_unintlv].Alloc(usp->L, 2, F_);
+    usp->vmV = (double *)aObj[ o_unmvc].Alloc( usp->Q, usp->L, D_);
   }else
     {
-      usp->Vs = (float *)aObj[ o_unvs].Free();
+      usp->Vs = (float (*)[2])aObj[ o_unvs].Free();
       usp->NgLv = (short *)aObj[ o_unnglv].Free();
-     usp->IntLv = (float *)aObj[ o_unintlv].Free();
+      usp->IntLv = (float (*)[2])aObj[ o_unintlv].Free();
+      usp->vmV = (double *)aObj[ o_unmvc].Free();
     }
 
   if(usp->PsGen[2]== S_ON)
   {
     usp->NgNb = (short *)aObj[ o_unngnb].Alloc(usp->N, 1, I_);
-    usp->IntNb = (float *)aObj[ o_unintnb].Alloc(usp->N, 1, F_);
-    usp->Bs = (double *)aObj[ o_unbs].Alloc(usp->N, 1, D_);
+    usp->IntNb = (float (*)[2])aObj[ o_unintnb].Alloc(usp->N, 2, F_);
+    usp->Bs = (double (*)[2])aObj[ o_unbs].Alloc(usp->N, 2, D_);
+    usp->vB = (double *)aObj[ o_unbc].Alloc( usp->Q, usp->N, D_);
   } else
     {
       usp->NgNb = (short *)aObj[ o_unngnb].Free();
-      usp->IntNb = (float *)aObj[ o_unintnb].Free();
-      usp->Bs = (double *)aObj[ o_unbs].Free();
+      usp->IntNb = (float (*)[2])aObj[ o_unintnb].Free();
+      usp->Bs = (double (*)[2])aObj[ o_unbs].Free();
+      usp->vB = (double *)aObj[ o_unbc].Free();
      }
 
   if(usp->PsGen[6]== S_ON)   // new by DK
   {
     usp->NgGam =(short *)aObj[ o_unnggam].Alloc(usp->Ls, 1, I_);
-    usp->IntGam = (float *)aObj[ o_unintgam].Alloc(usp->Ls, 1, F_);
-    usp->GAMs = (float *)aObj[ o_ungams].Alloc(usp->Ls, 1, F_);
+    usp->IntGam = (float (*)[2])aObj[ o_unintgam].Alloc(usp->Ls, 2, F_);
+    usp->GAMs = (float (*)[2])aObj[ o_ungams].Alloc(usp->Ls, 2, F_);
+    usp->vNidP = (double *)aObj[ o_unnidp].Alloc( usp->Q, usp->Ls, D_);
   } else
     {
     usp->NgGam =(short *)aObj[ o_unnggam].Free();
-    usp->IntGam = (float *)aObj[ o_unintgam].Free();
-    usp->GAMs = (float *)aObj[ o_ungams].Free();
+    usp->IntGam = (float (*)[2])aObj[ o_unintgam].Free();
+    usp->GAMs = (float (*)[2])aObj[ o_ungams].Free();
+    usp->vNidP = (double *)aObj[ o_unnidp].Free();
      }
 
   if(/*usp->PsGen[0??] == S_ON  &&*/ usp->Pa_f_pha == S_ON)
@@ -761,7 +831,36 @@ void TUnSpace::dyn_new(int q)
         usp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_unsdref].Free();
         usp->sdval = (char (*)[V_SD_VALEN])aObj[ o_unsdval].Free();
     }
-   plot  = (TPlotLine *)aObj[ o_unplline ].Free();
+
+// graphics
+   if( usp->PsGraph != S_OFF )
+    {
+      usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Alloc( 1,
+                 usp->dimXY[1], MAXGRNAME);
+      usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Alloc(1,
+                     usp->dimEF[1], MAXGRNAME);
+      usp->ExprGraph = (char *)aObj[ o_ungexpr ].Alloc( 1, 2048, S_);
+      usp->x0    = (double *)aObj[ o_unxa ].Alloc(usp->dimXY[0], 1, D_);
+      usp->y0    = (double *)aObj[ o_unyc ].Alloc(
+                      usp->dimXY[0], usp->dimXY[1], D_);
+      usp->xE    = (float *)aObj[ o_unxs ].Alloc(usp->dimEF[0], 1, F_);
+      usp->yE    = (float *)aObj[ o_unys ].Alloc(
+                  usp->dimEF[0],usp->dimEF[1], F_);
+      usp->tprn = (char *)aObj[ o_untprn].Alloc(1, 2048, S_ );
+    }
+    else
+    {
+       usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Free();
+       usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Free();
+       usp->ExprGraph = (char *)aObj[ o_ungexpr ].Free();
+       usp->x0    = (double *)aObj[ o_unxa ].Free();
+       usp->y0    = (double *)aObj[ o_unyc ].Free();
+       usp->xE    = (float *)aObj[ o_unxs ].Free();
+       usp->yE    = (float *)aObj[ o_unys ].Free();
+       plot  = (TPlotLine *)aObj[ o_unplline ].Free();
+       usp->dimXY[1] = 0;
+       usp->dimEF[1] = usp->dimEF[0] = 0;
+     }
 
    if( q == 0)
    {  work_dyn_new();
@@ -789,12 +888,13 @@ void TUnSpace::set_def( int q)
    usp->Pa_Crit = UNSP_CRIT_PA;
    memcpy( &usp->PvPOM, "-+------", 8 );
 
-   memset( &usp->N, 0, 32*sizeof(int));
-   memset( &usp->T, 0, 16*sizeof(float));
+   memset( &usp->N, 0, 36*sizeof(int));
+   memset( usp->T, 0, 22*sizeof(float));
    usp->quan_lev = 0.05;
 
     usp->UnICn = 0;
     usp->UgDCn = 0;
+    usp->UaDCn = 0;
     usp->UnDCAn = 0;
 // set up pointers
   //dynamic arrays
@@ -805,7 +905,7 @@ void TUnSpace::set_def( int q)
     usp->NgLv = 0;
     usp->NgNb = 0;
     usp->f_PhA = 0;
-    usp->IntLg0 = 0;
+    usp->IntLg = 0;
     usp->IntGam = 0;
     usp->IntLs = 0;
     usp->IntLv = 0;
@@ -814,7 +914,6 @@ void TUnSpace::set_def( int q)
     usp->m_t_up = 0;
     usp->fug_lo = 0;
     usp->fug_up = 0;
-    usp->IntLg = 0;
     usp->Gs = 0;
     usp->Ss = 0;
     usp->Vs = 0;
@@ -822,6 +921,11 @@ void TUnSpace::set_def( int q)
     usp->ncp = 0;
     usp->Bs = 0;
     usp->vG = 0;
+    usp->vB = 0;
+    usp->vS = 0;
+    usp->vmV = 0;
+    usp->vNidP = 0;
+
     usp->vY = 0;
     usp->vYF = 0;
     usp->vGam = 0;
@@ -830,12 +934,13 @@ void TUnSpace::set_def( int q)
     usp->vFug = 0;
     usp->vT = 0;
     usp->vP = 0;
+    usp->vV = 0;
     usp->vpH = 0;
     usp->OVB = 0;
     usp->OVR = 0;
     usp->OVN = 0;
-    usp->quanLap = 0;
-    usp->quanHom = 0;
+    usp->quanCx = 0;
+    usp->quanCv = 0;
     usp->SGp = 0;
 
  //  internal
@@ -845,8 +950,19 @@ void TUnSpace::set_def( int q)
     usp->sdval = 0;
     usp->tprn = 0;
     // graphics
-    strcpy( usp->xNames, "xp" );
-    strcpy( usp->yNames, "yp" );
+    strcpy( usp->xNames, "x" );
+    strcpy( usp->yNames, "y" );
+    usp->dimEF[1] = 5;
+    usp->dimEF[0] = 0;
+    usp->dimXY[1] = 3;
+    usp->dimXY[0] = 0;
+    usp->lNam = 0;
+    usp->lNamE = 0;
+    usp->ExprGraph = 0;
+    usp->x0    = 0;
+    usp->y0    = 0;
+    usp->xE    = 0;
+    usp->yE    = 0;
     plot  = 0;
 
 //  work (not in record)
@@ -981,6 +1097,7 @@ TUnSpace::RecCalc( const char *key )
       }
 
     }
+    usp->Pa_Adapt = '1';
     usp->Gstat = UNSP_GS_DONE;   // for Adapt mode need   buildTestedArrays
                                  // for each cicle
   usp->Astat = UNSP_AS_DONE;
@@ -1016,10 +1133,9 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
    // copy arrays
   if(usp->PsGen[0] == S_ON )
   {
-    memcpy( us[1].Gs, us[0].Gs, us[1].L*sizeof(float) );
+    memcpy( us[1].Gs, us[0].Gs, us[1].L*2*sizeof(float) );
     memcpy( us[1].NgLg, us[0].NgLg, us[1].L*sizeof(short) );
-    memcpy( us[1].IntLg, us[0].IntLg, us[1].L*sizeof(float) );
-    memcpy( us[1].IntLg0, us[0].IntLg0, us[1].L*sizeof(float) );
+    memcpy( us[1].IntLg, us[0].IntLg, us[1].L*2*sizeof(float) );
 
     memcpy( us[1].vG, us[0].vG, us[1].Q*us[1].L*sizeof(double) );
     memcpy( us[1].vY, us[0].vY, us[1].Q*us[1].L*sizeof(double) );
@@ -1046,30 +1162,34 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
 
   if(usp->PsGen[1]== S_ON)
   {
-    memcpy( us[1].Ss, us[0].Ss, us[1].L*sizeof(float) );
+    memcpy( us[1].Ss, us[0].Ss, us[1].L*2*sizeof(float) );
     memcpy( us[1].NgLs, us[0].NgLs, us[1].L*sizeof(short) );
-    memcpy( us[1].IntLs, us[0].IntLs, us[1].L*sizeof(float) );
+    memcpy( us[1].IntLs, us[0].IntLs, us[1].L*2*sizeof(float) );
+    memcpy( us[1].vS, us[0].vS, us[1].L*us[1].Q*sizeof(double) );
   }
 
   if(usp->PsGen[5]== S_ON)
   {
-    memcpy( us[1].Vs, us[0].Vs, us[1].L*sizeof(float) );
+    memcpy( us[1].Vs, us[0].Vs, us[1].L*2*sizeof(float) );
     memcpy( us[1].NgLv, us[0].NgLv, us[1].L*sizeof(short) );
-    memcpy( us[1].IntLv, us[0].IntLv, us[1].L*sizeof(float) );
+    memcpy( us[1].IntLv, us[0].IntLv, us[1].L*2*sizeof(float) );
+    memcpy( us[1].vmV, us[0].vmV, us[1].L*us[1].Q*sizeof(double) );
   }
 
   if(usp->PsGen[2]== S_ON)
   {
     memcpy( us[1].NgNb, us[0].NgNb, us[1].N*sizeof(short) );
-    memcpy( us[1].IntNb, us[0].IntNb, us[1].N*sizeof(float) );
-    memcpy( us[1].Bs, us[0].Bs, us[1].N*sizeof(double) );
+    memcpy( us[1].IntNb, us[0].IntNb, us[1].N*2*sizeof(float) );
+    memcpy( us[1].Bs, us[0].Bs, us[1].N*2*sizeof(double) );
+    memcpy( us[1].vB, us[0].vB, us[1].N*us[1].Q*sizeof(double) );
   }
 
   if(usp->PsGen[6]== S_ON)   // new by DK
   {
     memcpy( us[1].NgGam, us[0].NgGam, us[1].Ls*sizeof(short) );
-    memcpy( us[1].IntGam, us[0].IntGam, us[1].Ls*sizeof(float) );
-    memcpy( us[1].GAMs, us[0].GAMs, us[1].Ls*sizeof(float) );
+    memcpy( us[1].IntGam, us[0].IntGam, us[1].Ls*2*sizeof(float) );
+    memcpy( us[1].GAMs, us[0].GAMs, us[1].Ls*2*sizeof(float) );
+    memcpy( us[1].vNidP, us[0].vNidP, us[1].Ls*us[1].Q*sizeof(double) );
   }
 
 //  not for icomps, free array
@@ -1121,9 +1241,13 @@ if( aIComp.GetCount() < 1)
           }
           if(usp->PsGen[2]== S_ON)
           {
+             for( j =0; j<usp->Q; j++ )
+                usp->vB[j*usp->N+jj] = 0.;
              usp->NgNb[jj] = 0;
-             usp->IntNb[jj] = 0.;
-             usp->Bs[jj] = 0.;
+             usp->IntNb[jj][0] = 0.;
+             usp->IntNb[jj][1] = 0.;
+             usp->Bs[jj][0] = 0.;
+             usp->Bs[jj][1] = 0.;
           }
           jj++;
          }
@@ -1151,8 +1275,12 @@ if( aIComp.GetCount() < 1)
           if(usp->PsGen[2]== S_ON)
           {
              usp->NgNb[jj] = us[1].NgNb[ii];
-             usp->IntNb[jj] = us[1].IntNb[ii];
-             usp->Bs[jj] = us[1].Bs[ii];
+             usp->IntNb[jj][0] = us[1].IntNb[ii][0];
+             usp->IntNb[jj][1] = us[1].IntNb[ii][1];
+             usp->Bs[jj][0] = us[1].Bs[ii][0];
+             usp->Bs[jj][1] = us[1].Bs[ii][1];
+             for( j =0; j<usp->Q; j++ )
+                usp->vB[j*usp->N+jj] = us[1].vB[j*us[1].N+ii];
           }
           }
         jj++;
@@ -1180,22 +1308,31 @@ if( aDComp.GetCount() < 1)
                 usp->vY[j*usp->L+jj] = 0.;
                 usp->vGam[j*usp->L+jj] = 0.;
               }
-                usp->Gs[jj] = 0.;
+                usp->Gs[jj][0] = 0.;
+                usp->Gs[jj][1] = 0.;
                 usp->NgLg[jj] = 0;
-                usp->IntLg[jj] = 0.;
-                usp->IntLg0[jj] = 0.;
+                usp->IntLg[jj][0] = 0.;
+                usp->IntLg[jj][1] = 0.;
             }
             if(usp->PsGen[1]== S_ON)
             {
-                usp->Ss[jj] = 0.;
+                for( j =0; j<usp->Q; j++ )
+                     usp->vS[j*usp->L+jj] = 0.;
+                usp->Ss[jj][0] = 0.;
+                usp->Ss[jj][1] = 0.;
                 usp->NgLs[jj] = 0;
-                usp->IntLs[jj] = 0.;
+                usp->IntLs[jj][0] = 0.;
+                usp->IntLs[jj][1] = 0.;
             }
             if(usp->PsGen[5]== S_ON)
             {
-                usp->Vs[jj] = 0.;
+                for( j =0; j<usp->Q; j++ )
+                     usp->vmV[j*usp->L+jj] = 0.;
+                usp->Vs[jj][0] = 0.;
+                usp->Vs[jj][1] = 0.;
                 usp->NgLv[jj] = 0;
-                usp->IntLv[jj] = 0.;
+                usp->IntLv[jj][0] = 0.;
+                usp->IntLv[jj][1] = 0.;
             }
           jj++;
          }
@@ -1216,22 +1353,31 @@ if( aDComp.GetCount() < 1)
                 usp->vY[j*usp->L+jj] = us[1].vY[j*us[1].L+ii];
                 usp->vGam[j*usp->L+jj] = us[1].vGam[j*us[1].L+ii];
               }
-                usp->Gs[jj] = us[1].Gs[ii];
+                usp->Gs[jj][0] = us[1].Gs[ii][0];
+                usp->Gs[jj][1] = us[1].Gs[ii][1];
                 usp->NgLg[jj] = us[1].NgLg[ii];
-                usp->IntLg[jj] = us[1].IntLg[ii];
-                usp->IntLg0[jj] = us[1].IntLg0[ii];
+                usp->IntLg[jj][0] = us[1].IntLg[ii][0];
+                usp->IntLg[jj][1] = us[1].IntLg[ii][1];
             }
             if(usp->PsGen[1]== S_ON)
             {
-                usp->Ss[jj] = us[1].Ss[ii];
+                for( j =0; j<usp->Q; j++ )
+                    usp->vS[j*usp->L+jj] = us[1].vS[j*us[1].L+ii];
+                usp->Ss[jj][0] = us[1].Ss[ii][0];
+                usp->Ss[jj][1] = us[1].Ss[ii][1];
                 usp->NgLs[jj] = us[1].NgLs[ii];
-                usp->IntLs[jj] = us[1].IntLs[ii];
+                usp->IntLs[jj][0] = us[1].IntLs[ii][0];
+                usp->IntLs[jj][1] = us[1].IntLs[ii][1];
             }
             if(usp->PsGen[5]== S_ON)
             {
-                usp->Vs[jj] = us[1].Vs[ii];
+                for( j =0; j<usp->Q; j++ )
+                    usp->vmV[j*usp->L+jj] = us[1].vmV[j*us[1].L+ii];
+                usp->Vs[jj][0] = us[1].Vs[ii][0];
+                usp->Vs[jj][1] = us[1].Vs[ii][1];
                 usp->NgLv[jj] = us[1].NgLv[ii];
-                usp->IntLv[jj] = us[1].IntLv[ii];
+                usp->IntLv[jj][0] = us[1].IntLv[ii][0];
+                usp->IntLv[jj][1] = us[1].IntLv[ii][1];
             }
           }
         jj++;
@@ -1258,8 +1404,13 @@ if( aDComp.GetCount() < 1)
            if(usp->PsGen[6]== S_ON)   // new by DK
             {
                 usp->NgGam[jj] = 0;
-                usp->IntGam[jj] = 0.;
-                usp->GAMs[jj] = 0.;
+                usp->IntGam[jj][0] = 0.;
+                usp->IntGam[jj][1] = 0.;
+                usp->GAMs[jj][0] = 0.;
+                usp->GAMs[jj][1] = 0.;
+                for( j =0; j<usp->Q; j++ )
+                    usp->vNidP[j*usp->Ls+jj] = 0.;
+
              }
           jj++;
          }
@@ -1283,8 +1434,13 @@ if( aDComp.GetCount() < 1)
            if(usp->PsGen[6]== S_ON)   // new by DK
             {
                 usp->NgGam[jj] = us[1].NgGam[ii];
-                usp->IntGam[jj] = us[1].IntGam[ii];
-                usp->GAMs[jj] = us[1].GAMs[ii];
+                usp->IntGam[jj][0] = us[1].IntGam[ii][0];
+                usp->IntGam[jj][1] = us[1].IntGam[ii][1];
+                usp->GAMs[jj][0] = us[1].GAMs[ii][0];
+                usp->GAMs[jj][1] = us[1].GAMs[ii][1];
+                for( j =0; j<usp->Q; j++ )
+                    usp->vNidP[j*usp->Ls+jj] = us[1].vNidP[j*us[1].Ls+ii];
+
              }
           }
         jj++;
