@@ -1466,7 +1466,9 @@ TProcess::SaveGraphData( GraphData *gr )
         else
             strncpy(  pep->lNamE[ii-pep->dimXY[1]], plot[ii].name, MAXGRNAME );
     }
-    //    }
+
+    if( gr->graphType == ISOLINES )
+       gr->getColorList();
     pVisor->Update();
     contentsChanged = true;
     

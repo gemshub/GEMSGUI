@@ -987,6 +987,8 @@ TGEM2MT::SaveGraphData( GraphData *gr )
         else
             strncpy(  mtp->lNamE[ii-mtp->nYS], plot[ii].name, MAXGRNAME );
     }
+    if( gr->graphType == ISOLINES )
+       gr->getColorList();
 
     pVisor->Update();
     contentsChanged = true;

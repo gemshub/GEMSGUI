@@ -267,7 +267,7 @@ char
     *Expr,     // Text with math script equations (params for activity coeffs ??? reserved )
 /*?*/    *ExprGraph, // Text with math script equations (params for activity coeffs ??? reserved )
 /*?*/    (*lNam)[MAXGRNAME],   // List of ID of lines on Graph
-/*?*/    (*lNamE)[MAXGRNAME],   // List of ID of lines of empirical data
+/*?*/    (*lNamE)[MAXGRNAME],   //   reserved!!!!
 
     (*SGp)[MAXPHNAME],    // List of UnSpace group names [kG]
     (*stl)[EQ_RKLEN],     // List of generated SysEq records [Q]
@@ -358,6 +358,12 @@ protected:
     double ravrand(double *x);
     float PNTBEL(int J,int QT,int OV);
 
+    // graphics
+    void text_analyze( int nObj );
+    void calc_graph();
+
+
+
 
 public:
 
@@ -385,6 +391,8 @@ public:
     void RecInput( const char *key );
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
+    void RecordPlot( const char *key );
+    bool SaveGraphData( GraphData* graph );
     void CmHelp();
 
     //insert changes in profile  (must be in next version)

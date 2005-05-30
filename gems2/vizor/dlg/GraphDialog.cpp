@@ -43,6 +43,7 @@ QColor plotColor(int n)
     return QColor( (n*30)%256, (128+(n*33))%256, (256-(n*37))%256);
 }
 
+
 /*! Labels in the legend frame, that allows to drag the name to the plotting area
 */
 
@@ -344,7 +345,7 @@ void GraphDialog::ShowPlots()
            y = aObj[gr_data.plots[0].getObjY()].Get(ii,1);
            FPoint pnt(x,y);
            // get symbol type
-           nLn = (int)aObj[gr_data.plots[0].getObjX()].Get(ii,0);
+           nLn = (int)(aObj[gr_data.plots[0].getObjX()].Get(ii,0))-1;
            // get scale color
            nScale = gr_data.getColorLine( ii );
 

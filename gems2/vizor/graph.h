@@ -107,6 +107,8 @@ public:
     FPoint getPoint( int line, int number ); // get point from one line to paint
     void getMaxMin( float& minX, float& maxX, float& minY, float& maxY );
     void getMaxMinIso( float& minX, float& maxX, float& minY, float& maxY );
+    void getMaxMinIsoZ( float& minZ, float& maxZ );
+
 
     gstring getName( int ii);
     gstring getNames();
@@ -131,6 +133,7 @@ struct GColor
             red(data.red), green(data.green), blue(data.blue)
     {}
 
+    GColor( bool large, int i, int n);
 };
 
 enum GRAPHTYPES {
@@ -192,6 +195,7 @@ struct GraphData
    void setColorList();
    void getColorList();
    int  getColorLine( int ii );
+   void setScales();
    bool goodIsolineStructure( int aGraphType );
 
 };

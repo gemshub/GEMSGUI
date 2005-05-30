@@ -746,10 +746,13 @@ TGtDemo::SaveGraphData( GraphData *gr )
         else
             strncpy(  gdp->lNamE[ii-gdp->dimXY[1]], plot[ii].name, MAXGRNAME );
     }
-    //    }
+
+    if( gr->graphType == ISOLINES )
+       gr->getColorList();
+
     pVisor->Update();
     contentsChanged = true;
-    
+
     return true;
 }
 

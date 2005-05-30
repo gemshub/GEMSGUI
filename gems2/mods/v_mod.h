@@ -692,13 +692,13 @@ enum gtdemo_objects {   // gtdemo
 //---------------------------------
 
 
-enum unspace_objects {                                                //119
-    o_unsts = o_gwtprn+1, o_unpsflg, o_unpaflg, o_unpvflg, o_unsiz,
-    o_unq, o_unres, o_unng,  o_unngtpv,  o_unpnt,
-    o_unnmb, o_unnpha, o_un_t, o_un_q,  o_un_g,
-    o_un_i, o_un_j, o_un_k, o_un_ka,  o_undimxy,
-    o_undimef, o_un_tc, o_un_p, o_un_v, o_un_ph,
-    o_un_eh, o_un_ic, o_unquan,
+enum unspace_objects {                                                //120
+    o_unsts = o_gwtprn+1, o_unpsflg, o_unpaflg, o_unpaflg4, o_unpvflg,
+    o_unsiz, o_unq, o_unres, o_unng,  o_unngtpv,
+    o_unpnt, o_unnmb, o_unnpha, o_un_t, o_un_q,
+    o_un_g, o_un_i, o_un_j, o_un_k, o_un_ka,
+    o_undimxy, o_undimef, o_un_tc, o_un_p, o_un_v,
+    o_un_ph,  o_un_eh, o_un_ic, o_unquan,
 // database  70
     o_unname, o_unnotes, o_unpapv, o_unint, o_unfloat,
     o_un_cr, o_unpbd,  o_unnglg, o_unnggam, o_unngls,

@@ -715,6 +715,9 @@ TRTParm::SaveGraphData( GraphData *gr )
         else
             strncpy(  rpp->lNamE[ii-rpp->dimXY[1]], plot[ii].name, MAXGRNAME );
     }
+   if( gr->graphType == ISOLINES )
+       gr->getColorList();
+
     pVisor->Update();
     contentsChanged = true;
 

@@ -79,6 +79,23 @@ bool TUnSpace::test_sizes( )
       usp->nGB = usp->nG;
       usp->nGN = usp->nGR = 0;
    }
+  // graphic
+   if( usp->PsGraph != S_OFF )
+   {
+      usp->dimXY[0] = usp->Q;
+      if( usp->dimXY[1] <= 0 )
+      {
+        i = false;
+        usp->dimXY[1] = 3;
+      }
+      if( usp->dimEF[1] <= 0 || usp->dimEF[0] <= 0  )
+      {
+        i = false;
+        usp->dimEF[0] = 10;
+        usp->dimEF[1] = 5;
+      }
+   }
+
    usp->t = 0;
    usp->q = 0;
    usp->nPhA = 0;                                   // ????? nPhA test
@@ -116,8 +133,34 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
       for(int i=0; i<usp->N; i++ )
          usp->Bs[i][0] = usp->Bs[i][1] = TProfil::pm->syp->B[i];
 
-  if( mode  )
-  {    //default data
+  // GAMs ??????
+
+  if( mode  ) //default data
+  {
+    int ii;
+
+    if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+    {
+      for(ii=0; ii<usp->N; ii++ )
+        if( usp->PsUnFltI == UNSP_UN_LOG )
+        {   usp->m_t_lo[ii] = -20;
+            usp->m_t_up[ii] = 1;
+        }else
+         {   usp->m_t_lo[ii] = 0;
+             usp->m_t_up[ii] = 10;
+         }
+   }
+   if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+   {
+     for(ii=0; ii<usp->Ls; ii++ )
+       if( usp->PsUnFltD == UNSP_UN_LOG )
+        {   usp->fug_lo[ii] = -20;
+            usp->fug_up[ii] = 3;
+        }else
+         {   usp->fug_lo[ii] = 0;
+             usp->fug_up[ii] = 1000;
+         }
+    }
     strncpy( usp->UnICn[0], "group",  NAME_SIZE );
     strncpy( usp->UnICn[1], "2_sgm",  NAME_SIZE );
     strncpy( usp->UnICn[2], "total",  NAME_SIZE );
@@ -231,10 +274,37 @@ void TUnSpace::init_generation( )
   if( TProfil::pm->syp->Vuns )
     memset( TProfil::pm->syp->Vuns, 0, TProfil::pm->mup->L*sizeof(float) );
 
+// copy data from second column
+
   if( usp->PsGen[0]== S_ON )
     for( j=0; j<usp->L; j++)
-        usp->IntLg[j][0] = usp->IntLg[j][1];
+    {    usp->IntLg[j][0] = usp->IntLg[j][1];
+         usp->Gs[j][0] = usp->Gs[j][1];
+    }
 
+  if( usp->PsGen[1]== S_ON )
+    for( j=0; j<usp->L; j++)
+    {    usp->IntLs[j][0] = usp->IntLs[j][1];
+         usp->Ss[j][0] = usp->Ss[j][1];
+    }
+
+  if( usp->PsGen[5]== S_ON )
+    for( j=0; j<usp->L; j++)
+    {    usp->IntLv[j][0] = usp->IntLv[j][1];
+         usp->Vs[j][0] = usp->Vs[j][1];
+    }
+
+  if( usp->PsGen[2]== S_ON )
+    for( j=0; j<usp->N; j++)
+    {    usp->IntNb[j][0] = usp->IntNb[j][1];
+         usp->Bs[j][0] = usp->Bs[j][1];
+    }
+
+  if(usp->PsGen[6]== S_ON && usp->Ls )   // new by DK
+    for( j=0; j<usp->Ls; j++)
+    {    usp->IntGam[j][0] = usp->IntGam[j][1];
+         usp->GAMs[j][0] = usp->GAMs[j][1];
+    }
 }
 
 //realloc & setup data before analyse part
@@ -284,7 +354,8 @@ void TUnSpace::unsp_eqkey()
 
 // calc current SyStat
     TProfil::pm->CalcEqstat( false );
-    TSysEq::pm->CmSave();           // save results to DB
+    if( usp->PsSY != S_OFF )
+       TSysEq::pm->CmSave();           // save results to DB
     if( usp->stl )
        memcpy( usp->stl+usp->q, usp->stkey, EQ_RKLEN );
 }
@@ -368,7 +439,33 @@ void TUnSpace::buildTestedArrays()
 
     usp->vT[Ip]= TProfil::pm->pmp->TC;
     usp->vP[Ip]= TProfil::pm->pmp->P;
+    usp->vV[Ip]= TProfil::pm->pmp->VX_;
   }
+  // added for copy of input data
+//  if( usp->PsGen[1]== S_ON )
+//    for( i=0; i<usp->L; i++)
+//    {    usp->vS[j][0] = ???????;
+//    }
+
+  if( usp->PsGen[5]== S_ON )
+    for( i=0; i<usp->L; i++)
+    {
+      double xx = TProfil::pm->syp->Vuns[i];
+             xx += TProfil::pm->tpp->Vm[i];
+      usp->vmV[Ip*usp->L+i]= xx;
+    }
+
+  if( usp->PsGen[2]== S_ON )
+    for( i=0; i<usp->N; i++)
+    {    double xx = TProfil::pm->syp->B[i];
+         usp->vB[i] = xx;
+    }
+
+//  if(usp->PsGen[6]== S_ON && usp->Ls )   // new by DK
+//    for( i=0; i<usp->Ls; i++)
+//    {    usp->vNidP[i] = ?????;
+//    }
+ 
  }
 }
 
@@ -589,3 +686,134 @@ void  TUnSpace::NexT(int J )
 }
 
 //=================================================================
+// Graphics and math scripts
+
+// Translate, analyze and unpack equations of TUnSpace
+void TUnSpace::text_analyze( int nObj)
+{
+    try
+    {
+        TProfil* PRof = TProfil::pm;
+        int mupL=0, pmpL =0;
+
+        if( pVisor->ProfileMode == true )
+        {
+            mupL = PRof->mup->L;
+            pmpL = PRof->pmp->L;
+        }
+
+        switch(nObj)
+        {
+         case o_ungexpr:
+               PRof->ET_translate( o_untprn, o_ungexpr, 0, mupL, 0, pmpL );
+               rpn[1].GetEquat( (char *)aObj[o_untprn].GetPtr() );
+               break;
+         case o_unexpr:
+               PRof->ET_translate( o_untprn, o_unexpr, 0, mupL, 0, pmpL );
+               rpn[0].GetEquat( (char *)aObj[o_untprn].GetPtr() );
+               break;
+        }
+
+    }
+    catch( TError& xcpt )
+    {
+        char *erscan = (char *)aObj[nObj].GetPtr();
+        vfMessage(window(), xcpt.title, xcpt.mess);
+        /*bool   iRet = */
+        CheckEqText(  erscan,
+               "E91MSTran: Error in translation of TUnSpace math script: " );
+        /*  if( iRet )
+               goto AGAIN;  */
+        Error(  GetName() , xcpt.mess.c_str() );
+    }
+}
+
+// calculate equations of graphic data
+void TUnSpace::calc_graph()
+{
+//     if( usp->PsGraph == S_OFF )
+//      return;
+
+    // calc equations
+    for( usp->q = 0; usp->q < usp->dimXY[0]/*usp->Q*/; usp->q++ )
+        rpn[1].CalcEquat();
+}
+
+
+void
+TUnSpace::RecordPlot( const char* /*key*/ )
+{
+     if( usp->PsGraph == S_OFF )
+      return;
+
+    TIArray<TPlot> plt;
+
+    plt.Add( new TPlot(o_unxa, o_unyc ));
+    int  nLn = plt[ 0 ].getLinesNumber();
+    plt.Add( new TPlot(o_unxs, o_unys ));
+    nLn += plt[1].getLinesNumber();
+    if( plot )
+    {
+        int oldN = aObj[o_unplline].GetN();
+        TPlotLine defpl("", 4);
+
+        plot = (TPlotLine * )aObj[ o_unplline ].Alloc( nLn, sizeof(TPlotLine) );
+        for(int ii=0; ii<nLn; ii++ )
+        {
+            if( ii >= oldN )
+                plot[ii] = defpl;
+            strncpy( plot[ii].name, usp->lNam[ii], MAXGRNAME );
+            plot[ii].name[MAXGRNAME] = '\0';
+        }
+        gd_gr = new GraphWindow( this, plt, usp->name,
+               usp->size[0], usp->size[1], plot,
+               usp->axisType, usp->xNames, usp->yNames );
+    }
+    else
+    {
+      TCStringArray lnames;
+      for(int  ii=0; ii<usp->dimXY[1]+usp->dimEF[1]; ii++ )
+          lnames.Add( gstring(usp->lNam[ii], 0, MAXGRNAME ));
+      gd_gr = new GraphWindow( this, plt, usp->name,
+          usp->xNames, usp->yNames, lnames, ISOLINES );
+    }
+}
+
+
+bool
+TUnSpace::SaveGraphData( GraphData *gr )
+{
+// We can only have one Plot dialog (modal one) so condition should be omitted!!
+     if( !gd_gr )
+      return false;
+     if( gr != gd_gr->getGraphData() )
+      return false;
+    usp->axisType[0] = (short)gr->axisType;
+    usp->axisType[4] = (short)gr->graphType;
+    usp->axisType[1] = (short)gr->b_color[0];
+    usp->axisType[2] = (short)gr->b_color[1];
+    usp->axisType[3] = (short)gr->b_color[2];
+    strncpy( usp->xNames, gr->xName.c_str(), 9);
+    strncpy( usp->yNames, gr->yName.c_str(), 9);
+    memcpy( &usp->size[0], gr->region, 4*sizeof(float) );
+    memcpy( &usp->size[1], gr->part,  4*sizeof(float) );
+
+    plot = (TPlotLine *)
+           aObj[ o_unplline].Alloc( gr->lines.GetCount(), sizeof(TPlotLine));
+    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    {
+        plot[ii] = gr->lines[ii];
+        strncpy(  usp->lNam[ii], plot[ii].name, MAXGRNAME );
+    }
+
+    if( gr->graphType == ISOLINES )
+       gr->getColorList();
+
+    pVisor->Update();
+    contentsChanged = true;
+
+    return true;
+}
+
+
+//--------------------- End of m_unsp_gen.cpp ---------------------------

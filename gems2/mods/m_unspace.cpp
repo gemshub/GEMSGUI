@@ -133,6 +133,7 @@ void TUnSpace::ods_link( int q)
    aObj[ o_unsts ].SetPtr( &usp->PunE );       /* a6 */
    aObj[ o_unpsflg ].SetPtr( &usp->PsUnInt );  /* a14 */
    aObj[ o_unpaflg ].SetPtr( &usp->Pa_f_pha ); /* a10 */
+   aObj[ o_unpaflg4 ].SetPtr( &usp->Pa_Adapt ); /* a4 */
    aObj[ o_unpvflg ].SetPtr( &usp->PvPOM );    /* a8 */
    aObj[ o_unsiz ].SetPtr( &usp->N );           /* i6 */
    aObj[ o_unq ].SetPtr( &usp->Q );
@@ -327,9 +328,9 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unsize].SetPtr(    usp->size[0] );    /* f 8 */
 
     aObj[ o_unlnam].SetPtr( usp->lNam[0] );
-    aObj[ o_unlnam].SetDim( 1, usp->dimXY[1] );
+    aObj[ o_unlnam].SetDim( 1, usp->dimXY[1]+usp->dimEF[1] );
     aObj[ o_unlname].SetPtr( usp->lNamE[0] );
-    aObj[ o_unlname].SetDim( 1, usp->dimEF[1] );
+    aObj[ o_unlname].SetDim( 1, 0 );               // Reserved
     aObj[o_ungexpr].SetPtr( usp->ExprGraph );
         //aObj[o_ungexpr].SetDim(1,len(usp->ExprGraph));
     aObj[o_unxa].SetPtr( usp->x0 );
@@ -785,7 +786,7 @@ void TUnSpace::dyn_new(int q)
       usp->vB = (double *)aObj[ o_unbc].Free();
      }
 
-  if(usp->PsGen[6]== S_ON)   // new by DK
+  if(usp->PsGen[6]== S_ON && usp->Ls )   // new by DK
   {
     usp->NgGam =(short *)aObj[ o_unnggam].Alloc(usp->Ls, 1, I_);
     usp->IntGam = (float (*)[2])aObj[ o_unintgam].Alloc(usp->Ls, 2, F_);
@@ -836,9 +837,9 @@ void TUnSpace::dyn_new(int q)
    if( usp->PsGraph != S_OFF )
     {
       usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Alloc( 1,
-                 usp->dimXY[1], MAXGRNAME);
-      usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Alloc(1,
-                     usp->dimEF[1], MAXGRNAME);
+                 usp->dimXY[1]+usp->dimEF[1], MAXGRNAME);
+//      usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Alloc(1,
+//                     usp->dimEF[1], MAXGRNAME);
       usp->ExprGraph = (char *)aObj[ o_ungexpr ].Alloc( 1, 2048, S_);
       usp->x0    = (double *)aObj[ o_unxa ].Alloc(usp->dimXY[0], 1, D_);
       usp->y0    = (double *)aObj[ o_unyc ].Alloc(
@@ -851,15 +852,15 @@ void TUnSpace::dyn_new(int q)
     else
     {
        usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Free();
-       usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Free();
+//       usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Free();
        usp->ExprGraph = (char *)aObj[ o_ungexpr ].Free();
        usp->x0    = (double *)aObj[ o_unxa ].Free();
        usp->y0    = (double *)aObj[ o_unyc ].Free();
        usp->xE    = (float *)aObj[ o_unxs ].Free();
        usp->yE    = (float *)aObj[ o_unys ].Free();
        plot  = (TPlotLine *)aObj[ o_unplline ].Free();
-       usp->dimXY[1] = 0;
-       usp->dimEF[1] = usp->dimEF[0] = 0;
+       usp->dimXY[0] = 0;
+       usp->dimEF[0] = 0;
      }
 
    if( q == 0)
@@ -1075,6 +1076,8 @@ TUnSpace::RecCalc( const char *key )
           init_generation();
 
    init_analyse();
+   if( usp->PsGraph != S_OFF )
+       text_analyze( o_ungexpr );
 
 //   pVisor->Message( window(), GetName(),
 //             "Generation of EqStat records\n"
@@ -1092,13 +1095,18 @@ TUnSpace::RecCalc( const char *key )
       if( usp->PsGen[0] == S_ON )
       {
         analiseArrays();
+        if( usp->PsGraph != S_OFF )
+           calc_graph();
+
         if( usp->Pa_Adapt > '1')
            AdapG();                    // !!!! test Kostin beak ob =0 or ob>Q*0.95
       }
 
     }
+
+  if( usp->Pa_Adapt > '1')
     usp->Pa_Adapt = '1';
-    usp->Gstat = UNSP_GS_DONE;   // for Adapt mode need   buildTestedArrays
+  usp->Gstat = UNSP_GS_DONE;   // for Adapt mode need   buildTestedArrays
                                  // for each cicle
   usp->Astat = UNSP_AS_DONE;
 //  aMod[RT_UNSPACE].ModUpdate("GtDemo data sampling in progress...");
@@ -1110,7 +1118,7 @@ TUnSpace::RecCalc( const char *key )
   if( TProfil::pm->syp->Vuns )
     memset( TProfil::pm->syp->Vuns, 0, TProfil::pm->mup->L*sizeof(float) );
 
-  TCModule::RecCalc(key);  
+  TCModule::RecCalc(key);
 }
 
 void

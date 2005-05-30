@@ -27,6 +27,24 @@
 
 #include "gdatastream.h"
 
+
+GColor::GColor( bool large, int i, int n)
+{
+      if( i<= n/2 )
+      { red = (255-i*512/n)%256;
+        green = ((i*512/n))%256;
+        blue = 0;
+      }
+      else
+      { red = 0;
+        green = ((i*512/n))%256;
+        blue = (i*512/n-255)%256;
+      }
+
+
+}
+
+
 //---------------------------------------------------------------------------
 // TPlot
 //---------------------------------------------------------------------------
@@ -212,6 +230,19 @@ void TPlot::getMaxMinIso( float& minX, float& maxX, float& minY, float& maxY )
    }
 }
 
+void TPlot::getMaxMinIsoZ( float& minZ, float& maxZ )
+{
+    float z;
+
+    maxZ = minZ = aObj[nObjY].Get(0,2);
+    for( int ii =0; ii<dX; ii++)
+    {
+         z = aObj[nObjY].Get(ii,2);
+         if( minZ > z ) minZ = z;
+         if( maxZ < z ) maxZ = z;
+   }
+}
+
 
 //----------------------------------------------------------------------------
 
@@ -258,8 +289,9 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
     b_color[2] = aAxisType[3];
 
     if( graphType == ISOLINES )
-      setColorList();
-
+    {  setColorList();
+       setScales();
+     }
 }
 
 /*!
@@ -297,6 +329,7 @@ GraphData::GraphData( TIArray<TPlot>& aPlots, const char * aTitle,
     {
        setColorList();
        plots[0].getMaxMinIso(  minX, maxX, minY, maxY );
+       setScales();
     }
     else
     { // set default min-max region
@@ -445,7 +478,7 @@ bool GraphData::goodIsolineStructure( int aGraphType )
              str = "Must be two objects in graphic";
      Error( " ISOLINES graphic", str.c_str() );
     }
-  return true;  
+  return true;
 }
 
 // setup color scale for ISOLINE graphics
@@ -468,7 +501,7 @@ void GraphData::setColorList()
          cred < 0 || cgreen < 0 || cblue < 0 ||
          cred > 255 || cgreen > 255 || cblue > 255 )
 
-       scale.Add( new GColor( (ii*30)%256,(128+(ii*33))%256,(256-(ii*37))%256));
+       scale.Add( new GColor( true, ii, plots[1].getdX()) );
      else
        scale.Add( new GColor( cred, cgreen, cblue ));
   }
@@ -484,12 +517,38 @@ void GraphData::getColorList()
   int nObjY = plots[1].getObjY();
   for( int ii=0; ii< plots[1].getdX(); ii++ )
   {
-     if( ii >= scale.GetCount() )
+     if( ii >= (int)scale.GetCount() )
        break;
      aObj[nObjY].Put( scale[ii].red, ii, 2 );
      aObj[nObjY].Put( scale[ii].green, ii, 3 );
      aObj[nObjY].Put( scale[ii].blue,  ii, 4 );
   }
+
+}
+
+
+// put sizes scale for ISOLINE graphics to object plots[1]
+//  colums 0,1
+
+void GraphData::setScales()
+{
+  float minZ, maxZ;
+
+  plots[0].getMaxMinIsoZ(  minZ, maxZ );
+
+
+  int nObjY = plots[1].getObjY();
+  float delta = (maxZ - minZ ) / plots[1].getdX();
+
+  if( aObj[nObjY].Get(0,0) !=0 || aObj[nObjY].Get(0,1) != 0. )
+    return;
+
+  for( int ii=0; ii< plots[1].getdX(); ii++ )
+  {
+     aObj[nObjY].Put( maxZ-delta*(ii+1), ii, 0 );
+     aObj[nObjY].Put( maxZ-delta*ii, ii, 1 );
+  }
+  aObj[nObjY].Put( minZ, plots[1].getdX()-1, 0 );
 
 }
 
