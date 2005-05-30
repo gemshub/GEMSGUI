@@ -30,7 +30,23 @@
 
 GColor::GColor( bool large, int i, int n)
 {
-      if( i<= n/2 )
+      blue = 0;
+
+      if( i<= n/3 )
+      { red = 255;
+        green = (3*i*255/n)%256;
+      }
+      else
+         if( i <= 2*n/3 )
+         { red = (255 - (i*255/n))%256;
+           green = 255;
+         }
+         else
+         { red = 0;
+           green = (255 - (i*255/(n*2)))%256;
+         }
+
+/*      if( i<= n/2 )
       { red = (255-i*512/n)%256;
         green = ((i*512/n))%256;
         blue = 0;
@@ -40,8 +56,7 @@ GColor::GColor( bool large, int i, int n)
         green = ((i*512/n))%256;
         blue = (i*512/n-255)%256;
       }
-
-
+*/
 }
 
 

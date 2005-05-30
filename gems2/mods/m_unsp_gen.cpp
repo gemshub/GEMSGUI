@@ -133,6 +133,10 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
       for(int i=0; i<usp->N; i++ )
          usp->Bs[i][0] = usp->Bs[i][1] = TProfil::pm->syp->B[i];
 
+    usp->T[0] = usp->T[1]= TProfil::pm->tpp->T;
+    usp->P[0] = usp->P[1]= TProfil::pm->tpp->P;
+//      usp->V[0] = usp->V[1]= TProfil::pm->;
+
   // GAMs ??????
 
   if( mode  ) //default data
@@ -305,6 +309,11 @@ void TUnSpace::init_generation( )
     {    usp->IntGam[j][0] = usp->IntGam[j][1];
          usp->GAMs[j][0] = usp->GAMs[j][1];
     }
+
+  usp->T[0] = usp->T[1];
+  usp->P[0] = usp->P[1];
+  usp->V[0] = usp->V[1];
+
 }
 
 //realloc & setup data before analyse part
@@ -465,7 +474,7 @@ void TUnSpace::buildTestedArrays()
 //    for( i=0; i<usp->Ls; i++)
 //    {    usp->vNidP[i] = ?????;
 //    }
- 
+
  }
 }
 
