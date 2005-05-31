@@ -265,9 +265,7 @@ return(Filtr);
 
 // calculate element pay-off matrix e(t,q) function (1)
 // i=t, j=q
-double TUnSpace::ePO
-
-( int i, int j )
+double TUnSpace::ePO( int i, int j )
 {
   double PM,rab,RG;
   int k,ii,z,GF=-1,WF=-1,i1,j1;
@@ -287,51 +285,38 @@ double TUnSpace::ePO
          GF=0;
     else GF=1;
    }
-
    PM=0.;
    ii=0;
    for( z=0; z<usp->Fi; z++)
    {
      for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++)        
+      if (TProfil::pm->syp->Dcl[k]!=S_OFF ) 
        { if( z==WF )
          { if( k < (TProfil::pm->mup->Laq-1) &&
                usp->vYF[i*usp->Fi] >1e-19 &&
                usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1] >1e-19 &&
                usp->vY[i*usp->L+ k ] >1e-19 )
-           {
-             rab  = usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15));       
-             rab += log(55.51);
-             rab -= usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1]/
-                    usp->vYF[i*usp->Fi];
-             rab += log(usp->vY[i*usp->L+k]);
-             rab -= log(usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1]);
-             rab += 1. + usp->vGam[i*usp->L+k];
-             rab *= usp->vY[i*usp->L+k];
-             PM  += rab;
-           }
+           
+             PM += (usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log(55.51) - usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1]/
+                    usp->vYF[i*usp->Fi] + log(usp->vY[i*usp->L+k]) - log(usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1]) +
+                    1. + usp->vGam[i*usp->L+k]) * usp->vY[i*usp->L+k];
+           
            if( k == (TProfil::pm->mup->Laq-1) &&
                usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)] > 1e-19 &&
                usp->vYF[i*usp->Fi+z] > 1e-19 )
-            {
-              rab  = usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15));
-              rab += log( usp->vY[i*usp->L+k] );
-              rab -= log( usp->vYF[i*usp->Fi+z] );
-              rab -= ( usp->vY[i*usp->L+k] / usp->vYF[i*usp->Fi+z]);
-              rab -= ( usp->vYF[i*usp->Fi+z] / usp->vY[i*usp->L+k]);
-              rab += 2.+ usp->vGam[i*usp->L+k];
-              rab *= usp->vY[i*usp->L+k];
-              PM += rab;
-            }
+            
+              PM += (usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log( usp->vY[i*usp->L+k] ) - log( usp->vYF[i*usp->Fi+z] ) -
+                  ( usp->vY[i*usp->L+k] / usp->vYF[i*usp->Fi+z]) - ( usp->vYF[i*usp->Fi+z] / usp->vY[i*usp->L+k]) +
+                  2.+ usp->vGam[i*usp->L+k]) * usp->vY[i*usp->L+k];
+            
           continue;
          }
-        if( ( z==GF) && usp->vY[i*usp->L+k] > 1e-19 &&
-             usp->vYF[i*usp->Fi+z] >1e-19 )
-        {
+        if ( z==GF)
+        { if( usp->vY[i*usp->L+k] > 1e-19 &&  usp->vYF[i*usp->Fi+z] >1e-19 )
             PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15)) +
                     log(usp->vY[i*usp->L+k]) - log(usp->vYF[i*usp->Fi+z]) +
-                    usp->vGam[i*usp->L+k] + log(usp->vP[i]) ) *
-                  (usp->vY[i*usp->L+k]);
-        continue;
+                    usp->vGam[i*usp->L+k] + log(usp->vP[i]) ) * (usp->vY[i*usp->L+k]);
+         continue;
         }
         if( z>WF && z>GF &&
             usp->vY[i*usp->L+k] > 1e-19 &&
@@ -339,7 +324,7 @@ double TUnSpace::ePO
            PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15)) + log(usp->vY[i*usp->L+k])
                    - log(usp->vYF[i*usp->Fi+z])  + usp->vGam[i*usp->L+k] ) * (usp->vY[i*usp->L+k] );
        }
-      ii += TProfil::pm->syp->Ll[z];
+      ii += TProfil::pm->mup->Ll[z];
      }
 
      for( z=0; z<usp->N; z++)
@@ -373,58 +358,46 @@ double TUnSpace::ePO1( int i,int j )
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
-    for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++ )
+   for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++ )
+    if (TProfil::pm->syp->Dcl[k]!=S_OFF ) 
     {
       if( z==WF )
       {
          if( k < (TProfil::pm->mup->Laq-1) &&
                usp->vYF[i*usp->Fi] >1e-19 &&
                usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1] >1e-19 &&
-               usp->vY[i*usp->L+ k ] >1e-19 )
-           {
-             rab  = usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15));
-             rab += log(55.51);
-             rab -= usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)]/
-                    usp->vYF[i*usp->Fi];
-             rab += log(usp->vY[i*usp->L+k]);
-             rab -= log(usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)]);
-             rab += 1. + usp->vGam[i*usp->L+k];
-             PM  += rab;
-           }
-           if( k == (TProfil::pm->mup->Laq-1) &&
-               usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)] > 1e-19 &&
+               usp->vY[i*usp->L+ k ] >1e-19  )
+           
+             PM += usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log(55.51) - usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)]/
+                    usp->vYF[i*usp->Fi] + log(usp->vY[i*usp->L+k]) - log(usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)]) +
+                   1. + usp->vGam[i*usp->L+k];
+             
+           if( k == (TProfil::pm->mup->Laq-1) && usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)] > 1e-19 &&
                usp->vYF[i*usp->Fi+z] > 1e-19 )
-            {
-              rab  = usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15));
-              rab += log( usp->vY[i*usp->L+k] );
-              rab -= log( usp->vYF[i*usp->Fi+z] );
-              rab -= ( usp->vY[i*usp->L+k] / usp->vYF[i*usp->Fi+z]);
-              rab -= ( usp->vYF[i*usp->Fi+z] / usp->vY[i*usp->L+k]);
-              rab += 2.+ usp->vGam[i*usp->L+k];
-              PM += rab;
-            }
-          continue;
+            
+              PM += usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log( usp->vY[i*usp->L+k] ) - log( usp->vYF[i*usp->Fi+z] ) -
+                 ( usp->vY[i*usp->L+k] / usp->vYF[i*usp->Fi+z]) - ( usp->vYF[i*usp->Fi+z] / usp->vY[i*usp->L+k]) +
+                 2.+ usp->vGam[i*usp->L+k];
+              
+            continue;
          }
-        if( ( z==GF) && (usp->vY[i*usp->L+k] > 1e-19) &&
-             usp->vYF[i*usp->Fi+z] >1e-19 )
-        {
-            PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15)) +
-                    log(usp->vY[i*usp->L+k]) - log(usp->vYF[i*usp->Fi+z]) +
+        if ( z==GF)
+        { if( (usp->vY[i*usp->L+k] > 1e-19) && usp->vYF[i*usp->Fi+z] >1e-19 )
+            PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15)) + log(usp->vY[i*usp->L+k]) - log(usp->vYF[i*usp->Fi+z]) +
                     usp->vGam[i*usp->L+k] + log(usp->vP[i]) );
             continue;
         }
         if( z>WF && z>GF &&
-            usp->vY[i*usp->L+k] > 1e-19 &&
-            usp->vYF[i*usp->Fi+z] > 1e-19 )
+            usp->vY[i*usp->L+k] > 1e-19 &&  usp->vYF[i*usp->Fi+z] > 1e-19 )
            PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15)) + log(usp->vY[i*usp->L+k])
                    - log(usp->vYF[i*usp->Fi+z]) + usp->vGam[i*usp->L+k] );
         }
-      ii += TProfil::pm->syp->Ll[z];
+      ii += TProfil::pm->mup->Ll[z];
      }
 
      double R=0.;
      for( k=0; k< usp->L; k++)
-      if( usp->vY[i1*usp->L+k] > 1e-19 )
+      if (TProfil::pm->syp->Dcl[k]!=S_OFF && usp->vY[i1*usp->L+k] > 1e-19 )
         for( z=0; z<usp->N; z++)
            R += usp->A[k*usp->N+z]* (usp->vU[i1*usp->N+z]);
 
@@ -455,6 +428,7 @@ double TUnSpace::ePO2( int i,int j )
   for( z=0; z<usp->Fi; z++)
   {
     for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++ )
+     if (TProfil::pm->syp->Dcl[k]!=S_OFF ) 
     {
       if( z==WF )
       {
@@ -487,12 +461,13 @@ double TUnSpace::ePO2( int i,int j )
           PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15))+ log(usp->vY[i*usp->L+k])
                    - log(usp->vYF[i*usp->Fi+z]) + usp->vGam[i*usp->L+k] );
       }
-      ii += TProfil::pm->syp->Ll[z];
+      ii += TProfil::pm->mup->Ll[z];
      }
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
     for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++ )
+     if (TProfil::pm->syp->Dcl[k]!=S_OFF ) 
     {
       if( z==WF )
       {
@@ -525,7 +500,7 @@ double TUnSpace::ePO2( int i,int j )
           R += ( usp->vG[i1*usp->L+k] / (RG*(usp->vT[i1]+273.15))+ log(usp->vY[j*usp->L+k])
                    - log(usp->vYF[j*usp->Fi+z]) + usp->vGam[j*usp->L+k] );
       }
-      ii += TProfil::pm->syp->Ll[z];
+      ii += TProfil::pm->mup->Ll[z];
      }
   PM-=R;
   return(PM);
