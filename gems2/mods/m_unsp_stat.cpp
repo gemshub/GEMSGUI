@@ -137,6 +137,7 @@ void TUnSpace::kvant_index(float per,int N,double *mas, short type /**ind*/)
      if(fabs(mas[i])>A0 && fabs(mas[i])<=A1)
      { A1=fabs(mas[i]);
        usp->quanCx[j][type]=i;   //ind[j]=i;
+       usp->quanCv[j][type]=mas[i];
      }
     A0=A1;
     for(i=0;i<N;i++)
@@ -682,6 +683,8 @@ void TUnSpace::Un_criteria()
    usp->Wald = jj;
    usp->CrW = R;
    usp->nw = kol_in_sol(jj );          //?????????????? must be new algoritm
+   kvant_index( usp->quan_lev, usp->Q, usp->ZmaxAbs, 2 );
+  
 
 //  Hurwitz criteria (a=0.5)
     R = fabs( usp->Zmin[0] *.5 + usp->Zmax[0]* .5 );
@@ -694,6 +697,9 @@ void TUnSpace::Un_criteria()
    usp->Hurw = jj;
    usp->CrH = R;
    usp->nh = kol_in_sol( jj );
+   for( t=0; t<usp->Q; t++)
+    usp->Hom[t]= fabs( usp->Zmin[t]*.5 + usp->Zmax[t]*.5 ); // usp->Hom - working array
+   kvant_index( usp->quan_lev, usp->Q, usp->Hom, 1 );
 
 //  Laplace criteria
 if( usp->nGB > 0)
@@ -908,7 +914,7 @@ void TUnSpace::out_QT( int Ngr  )
 
 
 //=======================================================
-     double sr,srx,gu,srGAM,*srU,sRXjw=0.,srXF,/*sto,*/quanLapl,quanHom;
+     double sr,srx,gu,srGAM,*srU,sRXjw=0.,srXF,/*sto,*/quanLapl,quanHur,quanWald,quanHom;
      int kvant,z;
 
      kvant = usp->quan_lev*usp->Q;
@@ -959,12 +965,16 @@ void TUnSpace::out_QT( int Ngr  )
        { sto/=usp->ob;
          sto = sqrt(sto);
        }   */
-       quanLapl=quanHom=0.;
+       quanLapl=quanHur=quanWald=quanHom=0.;
        for(k=0;k<kvant;k++)
         { quanLapl +=usp->vG[usp->quanCx[k][0]*usp->L+j];
+          quanHur +=usp->vG[usp->quanCx[k][1]*usp->L+j];
+          quanWald +=usp->vG[usp->quanCx[k][2]*usp->L+j];
           quanHom  +=usp->vG[usp->quanCx[k][3]*usp->L+j];
         }
           quanLapl/=kvant;
+	  quanHur/=kvant;
+          quanWald/=kvant;
           quanHom/=kvant;
       if(srx)
        if(j<TProfil::pm->mup->Laq-1)
@@ -991,7 +1001,7 @@ void TUnSpace::out_QT( int Ngr  )
 void TUnSpace::AdapG()
 // Iter- iteration of adaptation
 {  int i,k, i1;
-   double quanLapl,quanHom;
+   double quanLapl,quanHur,quanWald,quanHom;
    int kvant;
    double sr,sto,min,max;
    int Ngr;
@@ -1032,15 +1042,19 @@ void TUnSpace::AdapG()
        kvant = usp->quan_lev*usp->Q;
        if(kvant<1)
            kvant=1;
-       quanLapl=quanHom=0.;
+       quanLapl=quanHur=quanWald=quanHom=0.;
 
        for(k=0; k<kvant; k++)
        { quanLapl += usp->vG[usp->quanCx[k][0]*usp->L+i];
+	 quanHur += usp->vG[usp->quanCx[k][1]*usp->L+i];
+	 quanWald += usp->vG[usp->quanCx[k][2]*usp->L+i];
          quanHom += usp->vG[usp->quanCx[k][3]*usp->L+i];
        }
-       quanLapl/=kvant;
-       quanHom/=kvant;
-
+        quanLapl/=kvant;
+	quanHur/=kvant;
+	quanWald/=kvant;
+        quanHom/=kvant;
+ 
    switch( usp->Pa_Crit )
    {
     case UNSP_CRIT_PA:         usp->Gs[i][0] = sr;   break;
