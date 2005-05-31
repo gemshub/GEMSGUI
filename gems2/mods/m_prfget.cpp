@@ -875,8 +875,8 @@ void TProfil::InitFN( const char * prfName, const char* prfTemplate )
                 if (gstring(aFiles[ii], 0, aFiles[ii].find("."))
                         == rt[jj].GetKeywd())
                 {
-                  gstring f_new = aFiles[ii].replace(
-                     prfTemplate, prfName);
+                  gstring f_new = aFiles[ii];//.replace(
+                  //   prfTemplate, prfName);
                   rt[jj].MakeInNewProfile( Path, prfName, f_new.c_str() );
                 }
         }

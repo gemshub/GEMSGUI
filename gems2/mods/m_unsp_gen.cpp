@@ -418,7 +418,7 @@ void TUnSpace::buildTestedArrays()
        usp->vU[Ip*usp->N+i] = 0.;
        usp->vMol[Ip*usp->N+i] = 0.;
     }
-    if(TProfil::pm->mup->Pg)
+    if(usp->Ls/*TProfil::pm->mup->Pg*/)
        for( i=0; i<usp->Ls; i++)
             usp->vFug[Ip*usp->Ls+i] = 0.;
 
@@ -453,7 +453,7 @@ void TUnSpace::buildTestedArrays()
                                                     TProfil::pm->pmp->IC_m[i];
     }
     usp->vpH[Ip] = TProfil::pm->pmp->pH;
-    if(TProfil::pm->mup->Pg)
+    if(usp->Ls/*TProfil::pm->mup->Pg*/)
        for( i=0; i<TProfil::pm->pmp->Ls; i++)
           usp->vFug[Ip*usp->Ls+(TProfil::pm->pmp->muj[i])] =
                 TProfil::pm->pmp->Y_la[i];

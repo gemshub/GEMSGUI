@@ -1118,6 +1118,15 @@ TUnSpace::RecCalc( const char *key )
   if( TProfil::pm->syp->Vuns )
     memset( TProfil::pm->syp->Vuns, 0, TProfil::pm->mup->L*sizeof(float) );
 
+// Get startup syseq record for fitting
+  //Get base SysEq key from UnSpace key
+  vstr pkey(MAXRKEYLEN+10);
+  rt[RT_SYSEQ].MakeKey( RT_UNSPACE, pkey, RT_UNSPACE, 0, RT_UNSPACE, 1,
+                           RT_UNSPACE, 2, RT_UNSPACE, 3, RT_UNSPACE, 4,
+                           RT_UNSPACE, 5, RT_UNSPACE, 6, RT_UNSPACE, 7, K_END);
+    // read SysEq record and unpack data
+  TProfil::pm->loadSystat( pkey );
+
   TCModule::RecCalc(key);
 }
 
