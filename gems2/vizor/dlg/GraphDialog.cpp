@@ -345,16 +345,20 @@ void GraphDialog::ShowPlots()
            y = aObj[gr_data.plots[0].getObjY()].Get(ii,1);
            FPoint pnt(x,y);
            // get symbol type
-           nLn = (int)(aObj[gr_data.plots[0].getObjX()].Get(ii,0))-1;
+           nLn = (int)aObj[gr_data.plots[0].getObjX()].Get(ii,0);
            // get scale color
            nScale = gr_data.getColorLine( ii );
 
-           if( pnt.IsEmpty() || nLn < 0 ||
-               (uint)nLn >= gr_data.lines.GetCount() ||
+           if( pnt.IsEmpty() || nLn == 0 ||
+               abs(nLn) > gr_data.lines.GetCount() ||
                nScale < 0 )
              continue;   // undefined point or point type
-           plot->Add(new PPoint(plot, pnt, gr_data.getType(nLn),
-             gr_data.getSize(nLn), getColorIsoline(nScale)));
+           plot->Add(new PPoint(plot, pnt, gr_data.getType(abs(nLn)-1),
+             gr_data.getSize(abs(nLn)-1), getColorIsoline(nScale)));
+           if( nLn > 0 )
+              plot->Add(new PPoint(plot, pnt, P_CROSSDIAG, 3, Qt::black));
+
+
          }
         }
         break;
@@ -446,7 +450,7 @@ void
 GraphDialog::AddPoint( int nPlot, int nPoint, bool no_mt )
 {
 
-  if( !gr_data.graphType )
+  if( gr_data.graphType )
    return;
   qApp->lock();
   if( nPlot>=0 && nPoint>=0 )

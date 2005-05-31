@@ -20,8 +20,16 @@ void TUnSpace::analiseArrays( )
 
 
      Ngr = sel_parg( usp->sv );
+     // set up filters
      for( k=0; k<usp->Q; k++ )
-        if( usp->sv[k] == Ngr && !filters( k ) )
+        if( filters( k ) )
+            usp->sv[k] *= -1;
+
+
+     for( k=0; k<usp->Q; k++ )
+        if(  usp->sv[k] == Ngr /*&& !filters( k ) */ )
+                // sv[i] < 0  if !filters
+                // Ngr > 0  aqlways
             usp->ob++;
      switch( usp->Pa_OF )
      {
@@ -40,7 +48,7 @@ short TUnSpace::kol_in_sol( int j )
 //  return: kol-vo solutions s naborom phases kak v j-solution
 {
 
-return usp->PhNum[usp->sv[j]-1];
+return usp->PhNum[ abs(usp->sv[j])-1];
 /*   short i,k,fl,Kgr=1;
    for( i=0; i<usp->Q; i++)
       { fl=0;
@@ -925,7 +933,7 @@ void TUnSpace::out_QT( int Ngr  )
      if(TProfil::pm->mup->Laq )
      {
         for(k=0; k<usp->Q; k++)
-          if( usp->sv[k] == Ngr && !filters( k ))
+          if( usp->sv[k] == Ngr  /* && !filters( k )*/)
            sRXjw += usp->vY[k*usp->L+TProfil::pm->mup->Laq-1];
         if( usp->ob)
          sRXjw/=usp->ob;
@@ -933,7 +941,7 @@ void TUnSpace::out_QT( int Ngr  )
      for(j=0; j<usp->N; j++)
      { srU[j]=0.;
        for(k=0;k<usp->Q;k++)
-        if( usp->sv[k] == Ngr && !filters( k ))
+        if( usp->sv[k] == Ngr /*&& !filters( k )*/)
           srU[j] += usp->vU[k*usp->N+j];
        if(usp->ob)
         srU[j] /= usp->ob;
@@ -943,7 +951,7 @@ void TUnSpace::out_QT( int Ngr  )
     for( z=0; z<usp->Fi; z++)
     { srXF=0.;
       for( k=0; k<usp->Q; k++)
-        if(usp->sv[k]==Ngr && !filters(k))
+        if(usp->sv[k]==Ngr /* && !filters( k )*/)
            srXF += usp->vYF[k*usp->Fi+z];
       if(usp->ob)
           srXF/=usp->ob;
@@ -951,7 +959,7 @@ void TUnSpace::out_QT( int Ngr  )
       {
         sr=srx=srGAM=0.;
        for(k=0; k<usp->Q; k++ )
-        if( usp->sv[k]==Ngr && !filters( k ))
+        if( usp->sv[k]==Ngr /*&& !filters( k )*/)
         {  sr += usp->vG[k*usp->L+j];
            srx+= usp->vY[k*usp->L+j];
            srGAM += usp->vGam[k*usp->L+j];
@@ -1011,8 +1019,13 @@ void TUnSpace::AdapG()
  // ob - chislo solutions c dannym naborom phases & udovl. filters
      usp->ob=0;
      Ngr = sel_parg( usp->sv );
-       for(k=0;k<usp->Q;k++)
-        if( usp->sv[k] == Ngr && !filters(k))
+    // set up filters
+     for( k=0; k<usp->Q; k++ )
+        if( filters( k ) )
+            usp->sv[k] *= -1;
+
+     for(k=0;k<usp->Q;k++)
+        if( usp->sv[k] == Ngr /*&& !filters(k)*/)
            usp->ob++;
 
     for(i=0;i<usp->L;i++)
@@ -1020,7 +1033,7 @@ void TUnSpace::AdapG()
       i1=0; sto=0.;
 
       for( k=0; k<usp->Q; k++)
-        if( usp->sv[k]==Ngr && !filters(k) )
+        if( usp->sv[k]==Ngr /*&& !filters(k) */)
           if(!i1)
            {  min = max = sr = usp->vG[k*usp->L+i]; i1++; }
           else
@@ -1033,7 +1046,7 @@ void TUnSpace::AdapG()
        if(usp->ob)
         sr/=usp->ob;
        for(k=0; k<usp->Q; k++)
-        if( usp->sv[k] == Ngr && !filters(k))
+        if( usp->sv[k] == Ngr /*&& !filters(k)*/)
            sto += (usp->vG[k*usp->L+i]-sr)*(usp->vG[k*usp->L+i]-sr);
        if(usp->ob > 1 && sto>0)
        { sto/=(usp->ob);
