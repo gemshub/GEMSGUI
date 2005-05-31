@@ -167,7 +167,7 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
    {
      for(ii=0; ii<usp->Ls; ii++ )
        if( usp->PsUnFltD == UNSP_UN_LOG )
-        {   usp->fug_lo[ii] = -20;
+        {   usp->fug_lo[ii] = -80;
             usp->fug_up[ii] = 3;
         }else
          {   usp->fug_lo[ii] = 0;
@@ -322,6 +322,9 @@ void TUnSpace::init_generation( )
   usp->T[0] = usp->T[1];
   usp->P[0] = usp->P[1];
   usp->V[0] = usp->V[1];
+  usp->Tc = usp->T[0];
+  usp->Pc = usp->P[0];
+  usp->Vc = usp->V[0];
 
 }
 
@@ -455,16 +458,16 @@ void TUnSpace::buildTestedArrays()
           usp->vFug[Ip*usp->Ls+(TProfil::pm->pmp->muj[i])] =
                 TProfil::pm->pmp->Y_la[i];
 
-    usp->vT[Ip]= TProfil::pm->pmp->TC;
-    usp->vP[Ip]= TProfil::pm->pmp->P;
-    usp->vV[Ip]= TProfil::pm->pmp->VX_;
+    usp->vT[Ip]= TProfil::pm->pmp->TCc;
+    usp->vP[Ip]= TProfil::pm->pmp->Pc;
+    usp->vV[Ip]= TProfil::pm->pmp->VXc;
   }
   // added for copy of input data
   if( usp->PsGen[1]== S_ON )
     for( i=0; i<usp->L; i++)
       if( TProfil::pm->tpp->S )
           usp->vS[i] = TProfil::pm->tpp->S[i];
-       
+
 
   if( usp->PsGen[5]== S_ON )
     for( i=0; i<usp->L; i++)
@@ -774,7 +777,7 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     if( plot )
     {
         int oldN = aObj[o_unplline].GetN();
-        TPlotLine defpl("", 6, 6, 0);
+        TPlotLine defpl("", 3, 6, 0);
 
         plot = (TPlotLine * )aObj[ o_unplline ].Alloc( nLn, sizeof(TPlotLine) );
         for(int ii=0; ii<nLn; ii++ )
