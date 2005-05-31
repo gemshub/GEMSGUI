@@ -139,6 +139,15 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
 
   // GAMs ??????
 
+   if( usp->PsGraph != S_OFF )
+    for(int j=0; j< usp->dimXY[1]+usp->dimEF[1]; j++ )
+    {
+        vstr tbuf(100);
+        sprintf( tbuf, "%d", j+1 );
+        if( !*usp->lNam[j]|| *usp->lNam[j] == ' ' )
+            strncpy( usp->lNam[j], tbuf, MAXGRNAME );
+    }
+
   if( mode  ) //default data
   {
     int ii;
@@ -451,10 +460,11 @@ void TUnSpace::buildTestedArrays()
     usp->vV[Ip]= TProfil::pm->pmp->VX_;
   }
   // added for copy of input data
-//  if( usp->PsGen[1]== S_ON )
-//    for( i=0; i<usp->L; i++)
-//    {    usp->vS[j][0] = ???????;
-//    }
+  if( usp->PsGen[1]== S_ON )
+    for( i=0; i<usp->L; i++)
+      if( TProfil::pm->tpp->S )
+          usp->vS[i] = TProfil::pm->tpp->S[i];
+       
 
   if( usp->PsGen[5]== S_ON )
     for( i=0; i<usp->L; i++)
@@ -764,7 +774,7 @@ TUnSpace::RecordPlot( const char* /*key*/ )
     if( plot )
     {
         int oldN = aObj[o_unplline].GetN();
-        TPlotLine defpl("", 4);
+        TPlotLine defpl("", 6, 6, 0);
 
         plot = (TPlotLine * )aObj[ o_unplline ].Alloc( nLn, sizeof(TPlotLine) );
         for(int ii=0; ii<nLn; ii++ )

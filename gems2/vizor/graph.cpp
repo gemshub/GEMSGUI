@@ -43,7 +43,7 @@ GColor::GColor( bool large, int i, int n)
          }
          else
          { red = 0;
-           green = (255 - (4*(i-3*n/4)*255/n))%256;
+           green = (255 - (4*(i-3*n/4)*255/(n+2)))%256;
          }
 
 
