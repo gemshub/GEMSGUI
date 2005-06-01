@@ -289,7 +289,7 @@ double TUnSpace::ePO( int i, int j )
    ii=0;
    for( z=0; z<usp->Fi; z++)
    {
-     for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++)        
+     for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++)        
       if (TProfil::pm->syp->Dcl[k]!=S_OFF ) 
        { if( z==WF )
          { if( k < (TProfil::pm->mup->Laq-1) &&
@@ -358,7 +358,7 @@ double TUnSpace::ePO1( int i,int j )
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
-   for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++ )
+   for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++ )
     if (TProfil::pm->syp->Dcl[k]!=S_OFF ) 
     {
       if( z==WF )
@@ -428,7 +428,7 @@ double TUnSpace::ePO2( int i,int j )
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
-    for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++ )
+    for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++ )
      if (TProfil::pm->syp->Dcl[k]!=S_OFF ) 
     {
       if( z==WF )
@@ -467,7 +467,7 @@ double TUnSpace::ePO2( int i,int j )
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
-    for( k=ii; k<ii+(TProfil::pm->syp->Ll[z]); k++ )
+    for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++ )
      if (TProfil::pm->syp->Dcl[k]!=S_OFF ) 
     {
       if( z==WF )
