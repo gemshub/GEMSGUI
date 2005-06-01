@@ -374,7 +374,7 @@ double TUnSpace::ePO1( int i,int j )
              
            if( k == (TProfil::pm->mup->Laq-1) && usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)] > 1e-19 &&
                usp->vYF[i*usp->Fi+z] > 1e-19 )
-            
+
               PM += usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log( usp->vY[i*usp->L+k] ) - log( usp->vYF[i*usp->Fi+z] ) -
                  ( usp->vY[i*usp->L+k] / usp->vYF[i*usp->Fi+z]) - ( usp->vYF[i*usp->Fi+z] / usp->vY[i*usp->L+k]) +
                  2.+ usp->vGam[i*usp->L+k];
@@ -404,6 +404,7 @@ double TUnSpace::ePO1( int i,int j )
   PM-=R;
   return(PM);
 }
+
 double TUnSpace::ePO2( int i,int j )
 {
   double PM,R,RG;
@@ -505,6 +506,7 @@ double TUnSpace::ePO2( int i,int j )
   PM-=R;
   return(PM);
 }
+
 double TUnSpace::ePO3( int i,int j )
 {  double R=0.,PM=0.;
    int k,z;
@@ -519,6 +521,7 @@ double TUnSpace::ePO3( int i,int j )
     PM-=R;
  return(PM);
 }
+
 double TUnSpace::ePO4( int i,int j )
 {  double PM=0.;
    int z;
@@ -526,6 +529,8 @@ double TUnSpace::ePO4( int i,int j )
      PM+= (usp->vU[j*usp->N+z]) - (usp->vU[i*usp->N+z]);
  return(PM);
 }
+
+
 double TUnSpace::ePO5( int i,int j )
 {  double PM=0.;
    int z;
@@ -665,9 +670,9 @@ void TUnSpace::Un_criteria()
     }
    usp->Wald = jj;
    usp->CrW = R;
-   usp->nw = kol_in_sol(jj );          //?????????????? must be new algoritm
+   usp->nw = kol_in_sol(jj );         
    kvant_index( usp->quan_lev, usp->Q, usp->ZmaxAbs, 2 );
-  
+
 
 //  Hurwitz criteria (a=0.5)
     R = fabs( usp->Zmin[0] *.5 + usp->Zmax[0]* .5 );

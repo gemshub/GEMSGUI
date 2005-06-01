@@ -186,8 +186,10 @@ void TProfil::OpenProfileMode( const char* key,
  catch( TError& xcpt )
  {
    pVisor->CloseMessage();
-   rt[RT_PARAM].Get( Rnum );
-   dyn_set();
+// Sveta 06/2005
+        rt[RT_PARAM].SetKey( "*" );
+//   rt[RT_PARAM].Get( Rnum );
+//   dyn_set();
    DeleteOldList();
 
         // delete auto-generated aq and gas phases if already created

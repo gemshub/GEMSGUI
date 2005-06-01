@@ -509,7 +509,7 @@ void GraphData::setColorList()
          cred < 0 || cgreen < 0 || cblue < 0 ||
          cred > 255 || cgreen > 255 || cblue > 255 )
 
-       scale.Add( new GColor( false, ii, plots[1].getdX()) );
+       scale.Add( new GColor( true, ii, plots[1].getdX()) );
      else
        scale.Add( new GColor( cred, cgreen, cblue ));
   }

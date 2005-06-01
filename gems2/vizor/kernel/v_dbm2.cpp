@@ -704,8 +704,9 @@ try
         aFile[fls[j]].Open( mode );
         //added Sveta 04/11/2002 to index files
         if( aFile[fls[j]].GetDhOver())
-         if( vfQuestion( 0, aFile[fls[j]].GetPath(),
-         "Stack of deleted records overflow.\nCompress?" ))
+// Sveta 06/2005
+//         if( vfQuestion( 0, aFile[fls[j]].GetPath(),
+//         "Stack of deleted records overflow.\nCompress?" ))
              comp.Add(fls[j]);
         // end added
         getndx( fls[j] );

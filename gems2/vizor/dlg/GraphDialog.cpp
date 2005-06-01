@@ -336,10 +336,10 @@ void GraphDialog::ShowPlots()
         {
          int nLn, nScale;
          float x, y;
-         bool put_points = false;
+//         bool put_points = false;
          cap+= " (level line diagram) ";
          setCaption( cap.c_str() );
-
+/*
          for(int  ii=0; ii<gr_data.plots[0].getdX(); ii++ )
          {
            nLn = (int)aObj[gr_data.plots[0].getObjX()].Get(ii,0);
@@ -349,7 +349,7 @@ void GraphDialog::ShowPlots()
              break;
            }
          }
-
+*/
          for(int  ii=0; ii<gr_data.plots[0].getdX(); ii++ )
          {
            // get point
@@ -369,8 +369,12 @@ void GraphDialog::ShowPlots()
            plot->Add(new PPoint(plot, pnt, gr_data.getType(abs(nLn)-1),
              gr_data.getSize(abs(nLn)-1), getColorIsoline(nScale)));
 
-           if( put_points && nLn > 0 ) // get points from filters
-              plot->Add(new PPoint(plot, pnt, P_CROSSDIAG, 3, Qt::black));
+           if( /*put_points &&*/ nLn > 0 ) // get points from filters
+           {
+             int size = gr_data.getSize(abs(nLn)-1) / 3;
+                 if( !size ) size = 1;
+             plot->Add(new PPoint(plot, pnt, P_CROSSDIAG, size, Qt::black));
+           }
 
 
          }
