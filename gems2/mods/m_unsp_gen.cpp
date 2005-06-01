@@ -758,7 +758,12 @@ void TUnSpace::calc_graph()
 
     // calc equations
     for( usp->q = 0; usp->q < usp->dimXY[0]/*usp->Q*/; usp->q++ )
+    {
+       pVisor->Message( window(), GetName(),
+             "Calculation graphic\n"
+                 "Please, wait...", usp->q, usp->Q);
         rpn[1].CalcEquat();
+    }
 }
 
 

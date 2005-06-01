@@ -28,11 +28,10 @@
 #include "gdatastream.h"
 
 
-GColor::GColor( bool large, int i, int n)
+GColor::GColor( bool is_green, int i, int n)
 {
-      blue = 0;
-
-      if( i<= n/2 )
+    blue = 0;
+    if( i<= n/2 )
       { red = 255;
         green = (2*i*255/n)%256;
       }
@@ -46,22 +45,11 @@ GColor::GColor( bool large, int i, int n)
            green = (255 - (4*(i-3*n/4)*255/(n+2)))%256;
          }
 
-
-
-/*      if( i<= n/3 )
-      { red = 255;
-        green = (3*i*255/n)%256;
-      }
-      else
-         if( i <= 2*n/3 )
-         { red = (255 - (3*(i-n/3)*255/n))%256;
-           green = 255;
-         }
-         else
-         { red = 0;
-           green = (255 - (3*(i-2*n/3)*255/n))%256;
-         }
-*/
+  if( !is_green )
+  {
+    blue = green;
+    green = 0;
+  }
 }
 
 
@@ -521,7 +509,7 @@ void GraphData::setColorList()
          cred < 0 || cgreen < 0 || cblue < 0 ||
          cred > 255 || cgreen > 255 || cblue > 255 )
 
-       scale.Add( new GColor( true, ii, plots[1].getdX()) );
+       scale.Add( new GColor( false, ii, plots[1].getdX()) );
      else
        scale.Add( new GColor( cred, cgreen, cblue ));
   }
