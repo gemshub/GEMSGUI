@@ -54,7 +54,6 @@ bool TUnSpace::test_sizes( )
    usp->L = TProfil::pm->mup->L;
    usp->Ls = TProfil::pm->mup->Ls;
    usp->Fi = TProfil::pm->mup->Fi;
-   usp->Fis = TProfil::pm->mup->Fis;
 
    if( usp->Q<=0 )
    {
@@ -228,6 +227,7 @@ void TUnSpace::init_generation( )
  usp->nGB = 0;
  usp->nGN = 0;
  usp->nGR = 0;
+ usp->nPG = 0;
 
  if(usp->PsGen[0]== S_ON)
       JJ++;
@@ -275,10 +275,12 @@ void TUnSpace::init_generation( )
            usp->nGN++;
   }
 
+  usp->nPG = calc_nPG();
+
   // realloc internal arrays
   nG_dyn_new();
 
-  BELOV( usp->Q, usp->nGB, usp->OVB);    
+  BELOV( usp->Q, usp->nGB, usp->OVB);
   UNIFORM0( 0 );
   UNIFORM0( 1 );
 
@@ -327,6 +329,88 @@ void TUnSpace::init_generation( )
   usp->Vc = usp->V[0];
 
 }
+
+
+//calculation number of unspace components
+int TUnSpace::calc_nPG()
+{
+  int j, count=0;
+
+  if( usp->PsGen[3]== S_ON &&  usp->NgT > 0 )
+       count++;
+  if( usp->PsGen[4]== S_ON &&  usp->NgP > 0 )
+       count++;
+  if( /*usp->PsGen[]== S_ON && */ usp->NgV > 0 )
+       count++;
+
+  if( usp->PsGen[2]== S_ON )
+     for( j=0; j<usp->N; j++)
+       if( usp->NgNb[j] > 0  )
+           count++;
+
+  if( usp->PsGen[0]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLg[j] > 0  )
+           count++;
+
+  if( usp->PsGen[1]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLs[j] > 0  )
+           count++;
+
+  if( usp->PsGen[5]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLv[j] > 0  )
+           count++;
+
+  if( usp->PsGen[6]== S_ON )
+     for( j=0; j<usp->Ls; j++)
+       if( usp->NgGam[j] > 0  )
+           count++;
+  return count;
+}
+
+
+//build list of unspace components
+void TUnSpace::build_nPG_list()
+{
+  int j, count=0;
+
+  if( usp->PsGen[3]== S_ON &&  usp->NgT > 0 )
+       count++;
+  if( usp->PsGen[4]== S_ON &&  usp->NgP > 0 )
+       count++;
+  if( /*usp->PsGen[]== S_ON && */ usp->NgV > 0 )
+       count++;
+
+  if( usp->PsGen[2]== S_ON )
+     for( j=0; j<usp->N; j++)
+       if( usp->NgNb[j] > 0  )
+           count++;
+
+  if( usp->PsGen[0]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLg[j] > 0  )
+           count++;
+
+  if( usp->PsGen[1]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLs[j] > 0  )
+           count++;
+
+  if( usp->PsGen[5]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLv[j] > 0  )
+           count++;
+
+  if( usp->PsGen[6]== S_ON )
+     for( j=0; j<usp->Ls; j++)
+       if( usp->NgGam[j] > 0  )
+           count++;
+ 
+}
+
+
 
 //realloc & setup data before analyse part
 void TUnSpace::init_analyse( )

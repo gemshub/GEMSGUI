@@ -304,11 +304,11 @@ void TUnSpace::ods_link( int q)
     aObj[ o_ununic].SetPtr( usp->UnIC );
     aObj[ o_ununic].SetDim( usp->N, UNSP_SIZE1 );
     aObj[ o_unugdc].SetPtr( usp->UgDC );
-    aObj[ o_unugdc].SetDim( usp->L, UNSP_SIZE1 );
+    aObj[ o_unugdc].SetDim( usp->nPG, UNSP_SIZE1 );
     aObj[ o_unuadc].SetPtr( usp->UaDC );
     aObj[ o_unuadc].SetDim( usp->L, UNSP_SIZE1 );
     aObj[ o_unundca].SetPtr( usp->UnDCA );
-    aObj[ o_unundca].SetDim( usp->L, UNSP_SIZE2 );
+    aObj[ o_unundca].SetDim( usp->nPG, UNSP_SIZE2 );
    }
    //  internal
     aObj[ o_unsdref].SetPtr(usp->sdref);
@@ -329,8 +329,8 @@ void TUnSpace::ods_link( int q)
 
     aObj[ o_unlnam].SetPtr( usp->lNam[0] );
     aObj[ o_unlnam].SetDim( 1, usp->dimXY[1]+usp->dimEF[1] );
-    aObj[ o_unlname].SetPtr( usp->lNamE[0] );
-    aObj[ o_unlname].SetDim( 1, 0 );               // Reserved
+    aObj[ o_unlname].SetPtr( usp->ParNames[0] );
+    aObj[ o_unlname].SetDim( 1, usp->nPG );               // Reserved
     aObj[o_ungexpr].SetPtr( usp->ExprGraph );
         //aObj[o_ungexpr].SetDim(1,len(usp->ExprGraph));
     aObj[o_unxa].SetPtr( usp->x0 );
@@ -343,6 +343,16 @@ void TUnSpace::ods_link( int q)
     aObj[o_unys].SetDim(usp->dimEF[0], usp->dimEF[1] );
     aObj[ o_unplline].SetPtr( plot );
     aObj[ o_unplline].SetDim( usp->dimXY[1]+usp->dimEF[1], sizeof(TPlotLine));
+
+    // components lines show
+    aObj[ o_musf22].SetPtr( TProfil::pm->mup->SF );
+    aObj[ o_musf22].SetDim( 1, TProfil::pm->mup->Fi);
+    aObj[ o_musm22].SetPtr(  TProfil::pm->mup->SM );
+    aObj[ o_musm22].SetDim( 1, TProfil::pm->mup->L );
+    aObj[ o_wmusm22ls].SetPtr(  TProfil::pm->mup->SM );
+    aObj[ o_wmusm22ls].SetDim( 1, TProfil::pm->mup->Ls );
+    aObj[ o_musb22].SetPtr( TProfil::pm->mup->SB );
+    aObj[ o_musb22].SetDim( 1, TProfil::pm->mup->N );
 
 }
 
@@ -411,7 +421,7 @@ void TUnSpace::dyn_set(int q)
     usp->sdval = (char (*)[V_SD_VALEN])aObj[ o_unsdval].GetPtr();
 // graphics
     usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].GetPtr();
-    usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].GetPtr();
+    usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].GetPtr();
     usp->ExprGraph = (char *)aObj[ o_ungexpr ].GetPtr();
     usp->x0    = (double *)aObj[ o_unxa ].GetPtr();
     usp->y0    = (double *)aObj[ o_unyc ].GetPtr();
@@ -419,6 +429,17 @@ void TUnSpace::dyn_set(int q)
     usp->yE    = (float *)aObj[ o_unys ].GetPtr();
     plot  = (TPlotLine *)aObj[ o_unplline ].GetPtr();
     usp->tprn = (char *)aObj[ o_untprn].GetPtr();
+
+// components lines show
+    aObj[ o_musf22].SetPtr( TProfil::pm->mup->SF );
+    aObj[ o_musf22].SetDim( 1, TProfil::pm->mup->Fi);
+    aObj[ o_musm22].SetPtr(  TProfil::pm->mup->SM );
+    aObj[ o_musm22].SetDim( 1, TProfil::pm->mup->L );
+    aObj[ o_musb22].SetPtr( TProfil::pm->mup->SB );
+    aObj[ o_musb22].SetDim( 1, TProfil::pm->mup->N );
+    aObj[ o_wmusm22ls].SetPtr(  TProfil::pm->mup->SM );
+    aObj[ o_wmusm22ls].SetDim( 1, TProfil::pm->mup->Ls );
+
 
 /*---------------------------------------------------------------------
 //  work (not in record)
@@ -514,7 +535,7 @@ void TUnSpace::dyn_kill(int q)
     usp->sdval = (char (*)[V_SD_VALEN])aObj[ o_unsdval].Free();
 // graphics
     usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Free();
-    usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Free();
+    usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].Free();
     usp->ExprGraph = (char *)aObj[ o_ungexpr ].Free();
     usp->x0    = (double *)aObj[ o_unxa ].Free();
     usp->y0    = (double *)aObj[ o_unyc ].Free();
@@ -523,6 +544,17 @@ void TUnSpace::dyn_kill(int q)
     plot  = (TPlotLine *)aObj[ o_unplline ].Free();
 
     usp->tprn = (char *)aObj[ o_untprn].Free();
+
+// components lines show
+    aObj[ o_musf22].SetPtr( 0 );
+    aObj[ o_musf22].SetDim( 1, 0);
+    aObj[ o_musm22].SetPtr(  0 );
+    aObj[ o_musm22].SetDim( 1, 0 );
+    aObj[ o_musb22].SetPtr( 0 );
+    aObj[ o_musb22].SetDim( 1, 0 );
+    aObj[ o_wmusm22ls].SetPtr( 0 );
+    aObj[ o_wmusm22ls].SetDim( 1, 0 );
+
 
    if( q == 0)
       work_dyn_kill();
@@ -619,11 +651,11 @@ void TUnSpace::work_dyn_new()
   usp->UnIC = (double (*)[UNSP_SIZE1])aObj[ o_ununic].Alloc(
                     usp->N, UNSP_SIZE1, D_ );
   usp->UgDC = (double (*)[UNSP_SIZE1])aObj[ o_unugdc].Alloc(
-                    usp->L, UNSP_SIZE1, D_ );
+                    usp->nPG, UNSP_SIZE1, D_ );
   usp->UaDC = (double (*)[UNSP_SIZE1])aObj[ o_unuadc].Alloc(
                     usp->Ls, UNSP_SIZE1, D_ );
   usp->UnDCA = (double (*)[UNSP_SIZE2])aObj[ o_unundca].Alloc(
-                    usp->L, UNSP_SIZE2, D_ );
+                    usp->nPG, UNSP_SIZE2, D_ );
 
 }
 
@@ -655,6 +687,16 @@ void TUnSpace::nG_dyn_new()
     usp->OVN = (float *)aObj[ o_unovn].Alloc( usp->nGN+1, 1, F_ );
   else
    usp->OVN = (float *)aObj[ o_unovn].Free();
+
+  if( usp->nPG )
+    usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].Alloc(1,
+                     usp->nPG, PARNAME_SIZE);
+  else
+    usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].Free();
+
+
+
+
 
 }
 
@@ -838,8 +880,6 @@ void TUnSpace::dyn_new(int q)
     {
       usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Alloc( 1,
                  usp->dimXY[1]+usp->dimEF[1], MAXGRNAME);
-//      usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Alloc(1,
-//                     usp->dimEF[1], MAXGRNAME);
       usp->ExprGraph = (char *)aObj[ o_ungexpr ].Alloc( 1, 2048, S_);
       usp->x0    = (double *)aObj[ o_unxa ].Alloc(usp->dimXY[0], 1, D_);
       usp->y0    = (double *)aObj[ o_unyc ].Alloc(
@@ -852,7 +892,6 @@ void TUnSpace::dyn_new(int q)
     else
     {
        usp->lNam = (char (*)[MAXGRNAME])aObj[ o_unlnam ].Free();
-//       usp->lNamE = (char (*)[MAXGRNAME])aObj[ o_unlname ].Free();
        usp->ExprGraph = (char *)aObj[ o_ungexpr ].Free();
        usp->x0    = (double *)aObj[ o_unxa ].Free();
        usp->y0    = (double *)aObj[ o_unyc ].Free();
@@ -958,7 +997,7 @@ void TUnSpace::set_def( int q)
     usp->dimXY[1] = 3;
     usp->dimXY[0] = 0;
     usp->lNam = 0;
-    usp->lNamE = 0;
+    usp->ParNames = 0;
     usp->ExprGraph = 0;
     usp->x0    = 0;
     usp->y0    = 0;
@@ -1221,7 +1260,6 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
    usp->N = TProfil::pm->mup->N;
    usp->L = TProfil::pm->mup->L;
    usp->Fi = TProfil::pm->mup->Fi;
-   usp->Fis = TProfil::pm->mup->Fis;
    usp->Ls = TProfil::pm->mup->Ls;
    dyn_new(0);
 

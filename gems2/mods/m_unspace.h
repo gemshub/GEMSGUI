@@ -27,7 +27,8 @@
 const int UNSP_RKLEN = 80,
           NAME_SIZE = 10,
           UNSP_SIZE1 = 10,
-          UNSP_SIZE2 = 8;
+          UNSP_SIZE2 = 8,
+          PARNAME_SIZE = 20;
 
 
 typedef struct
@@ -89,7 +90,7 @@ typedef struct
     L,         //   Number of dependent components     (from mup->L)
     Ls,        //   Total number of DC in multi-comp.phases (from mup->Ls)
     Fi,        //   Number of phases                   (from mup->Fi)
-    Fis,       //   Number of multi-component phases   (from mup->Fis)
+    nPG,       //   Total number of insertain input parameters (for all unspace groups)
     Nsd,       //   N of data source references (default 0)
 // input I
     Q,     //  0 < Q < 1001 input number of sample GEM calculations to be generated
@@ -250,9 +251,9 @@ double
    *Prob,    //  [Q]  array of probabilities for calculating Homenuk criterion
    // array for statistics output
    (*UnIC)  [UNSP_SIZE1], //  [N][UNSP_SIZE1] statistics over independent components
-   (*UgDC)  [UNSP_SIZE1], //  [L][UNSP_SIZE1] statistics set 1 over dependent components
+   (*UgDC)  [UNSP_SIZE1], //  [nPG][UNSP_SIZE1] statistics set 1 over dependent components
    (*UaDC)  [UNSP_SIZE1], //  [Ls][UNSP_SIZE1] statistics set 2 over dependent components
-   (*UnDCA) [UNSP_SIZE2]; // [L][UNSP_SIZE2] statistics set 1 over dependent components
+   (*UnDCA) [UNSP_SIZE2]; // [nPG][UNSP_SIZE2] statistics set 1 over dependent components
 
 // input GEMS
 char
@@ -267,7 +268,7 @@ char
     *Expr,     // Text with math script equations (params for activity coeffs ??? reserved )
 /*?*/    *ExprGraph, // Text with math script equations (params for activity coeffs ??? reserved )
 /*?*/    (*lNam)[MAXGRNAME],   // List of ID of lines on Graph
-/*?*/    (*lNamE)[MAXGRNAME],   //   reserved!!!!
+/*?*/    (*ParNames)[PARNAME_SIZE],   // [nPG]  List of insertain input parameters names
 
     (*SGp)[MAXPHNAME],    // List of UnSpace group names [kG]
     (*stl)[EQ_RKLEN],     // List of generated SysEq records [Q]
@@ -314,6 +315,8 @@ protected:
     bool test_sizes();
     void set_def_data_to_arrays( bool mode );   // must be changed with DK
     void init_generation();
+    int calc_nPG();
+    void build_nPG_list();
     void init_analyse();
 
 

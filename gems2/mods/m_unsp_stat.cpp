@@ -844,7 +844,7 @@ void TUnSpace::out_QT( int Ngr  )
  }
 
 
- for( l=0; l<usp->L; l++ )
+ for( l=0; l<usp->nPG; l++ )
  {
     gg1=0.; sg1=0.;
     for( i=0; i<usp->Q; i++ )

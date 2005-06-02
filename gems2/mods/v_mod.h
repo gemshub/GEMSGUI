@@ -692,7 +692,7 @@ enum gtdemo_objects {   // gtdemo
 //---------------------------------
 
 
-enum unspace_objects {                                                //120
+enum unspace_objects {                                                //124
     o_unsts = o_gwtprn+1, o_unpsflg, o_unpaflg, o_unpaflg4, o_unpvflg,
     o_unsiz, o_unq, o_unres, o_unng,  o_unngtpv,
     o_unpnt, o_unnmb, o_unnpha, o_un_t, o_un_q,
@@ -719,7 +719,7 @@ enum unspace_objects {                                                //120
     o_unafreg, o_unpmr,  o_unpom, o_unpor, o_una,
     o_unzcp, o_unzmin, o_unzmax, o_unzmaxabs, o_unhom,
     o_unprob, o_ununic, o_unugdc,  o_unuadc, o_unundca,
-    o_untprn,};
+    o_musf22, o_musm22, o_musb22,  o_wmusm22ls, o_untprn,};
 
 //---------------------------------
 // Duterm
