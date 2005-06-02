@@ -36,7 +36,7 @@ void TUnSpace::analiseArrays( )
        case UNSP_OF_A:
        case UNSP_OF_B:
        default:   Un_criteria( );     // biuld payoff matrix and analise
-                  out_QT( Ngr );  // put data for resalt arrays
+             //     out_QT( Ngr );  // put data for resalt arrays
                   break;
 
      }
@@ -956,8 +956,9 @@ void TUnSpace::out_QT( int Ngr  )
 
 
 //=======================================================
-     double sr,srx,gu,srGAM,*srU,sRXjw=0.,srXF,/*sto,*/quanLapl,quanHur,quanWald,quanHom;
-     int kvant,z;
+
+     double sr,srx,gu,srGAM,*srU,sRXjw=0.,srXF;//,/*sto,*/quanLapl,quanHur,quanWald,quanHom;
+     int /*kvant,*/z;
 
      kvant = usp->quan_lev*usp->Q;
      if(kvant<1)

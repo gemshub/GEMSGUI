@@ -327,10 +327,11 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unaxis ].SetPtr(   usp->axisType );   /* i 6 */
     aObj[ o_unsize].SetPtr(    usp->size[0] );    /* f 8 */
 
+    
     aObj[ o_unlnam].SetPtr( usp->lNam[0] );
     aObj[ o_unlnam].SetDim( 1, usp->dimXY[1]+usp->dimEF[1] );
     aObj[ o_unlname].SetPtr( usp->ParNames[0] );
-    aObj[ o_unlname].SetDim( 1, usp->nPG );               // Reserved
+    aObj[ o_unlname].SetDim( usp->nPG, 1 );              
     aObj[o_ungexpr].SetPtr( usp->ExprGraph );
         //aObj[o_ungexpr].SetDim(1,len(usp->ExprGraph));
     aObj[o_unxa].SetPtr( usp->x0 );
@@ -343,17 +344,6 @@ void TUnSpace::ods_link( int q)
     aObj[o_unys].SetDim(usp->dimEF[0], usp->dimEF[1] );
     aObj[ o_unplline].SetPtr( plot );
     aObj[ o_unplline].SetDim( usp->dimXY[1]+usp->dimEF[1], sizeof(TPlotLine));
-
-    // components lines show
-    aObj[ o_musf22].SetPtr( TProfil::pm->mup->SF );
-    aObj[ o_musf22].SetDim( 1, TProfil::pm->mup->Fi);
-    aObj[ o_musm22].SetPtr(  TProfil::pm->mup->SM );
-    aObj[ o_musm22].SetDim( 1, TProfil::pm->mup->L );
-    aObj[ o_wmusm22ls].SetPtr(  TProfil::pm->mup->SM );
-    aObj[ o_wmusm22ls].SetDim( 1, TProfil::pm->mup->Ls );
-    aObj[ o_musb22].SetPtr( TProfil::pm->mup->SB );
-    aObj[ o_musb22].SetDim( 1, TProfil::pm->mup->N );
-
 }
 
 
@@ -689,8 +679,8 @@ void TUnSpace::nG_dyn_new()
    usp->OVN = (float *)aObj[ o_unovn].Free();
 
   if( usp->nPG )
-    usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].Alloc(1,
-                     usp->nPG, PARNAME_SIZE);
+    usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].Alloc(
+                     usp->nPG, 1, PARNAME_SIZE);
   else
     usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].Free();
 
@@ -1137,8 +1127,8 @@ TUnSpace::RecCalc( const char *key )
         if( usp->PsGraph != S_OFF )
            calc_graph();
 
-        if( usp->Pa_Adapt > '1')
-           AdapG();                    // !!!! test Kostin beak ob =0 or ob>Q*0.95
+//        if( usp->Pa_Adapt > '1')
+//           AdapG();                    // !!!! test Kostin beak ob =0 or ob>Q*0.95
       }
 
     }

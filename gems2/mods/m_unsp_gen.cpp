@@ -280,6 +280,7 @@ void TUnSpace::init_generation( )
   // realloc internal arrays
   nG_dyn_new();
 
+  build_nPG_list();
   BELOV( usp->Q, usp->nGB, usp->OVB);
   UNIFORM0( 0 );
   UNIFORM0( 1 );
@@ -374,43 +375,86 @@ int TUnSpace::calc_nPG()
 //build list of unspace components
 void TUnSpace::build_nPG_list()
 {
+  vstr tbuf(100);
   int j, count=0;
 
+  if( !usp->ParNames )
+    return;
+
   if( usp->PsGen[3]== S_ON &&  usp->NgT > 0 )
-       count++;
+  {
+     sprintf( tbuf, "%02d T ", usp->NgT );
+     strncpy( usp->ParNames[count], tbuf, 5);
+     count++;
+  }
   if( usp->PsGen[4]== S_ON &&  usp->NgP > 0 )
-       count++;
+  {
+     sprintf( tbuf, "%02d P ", usp->NgP );
+     strncpy( usp->ParNames[count], tbuf, 5);
+     count++;
+  }
   if( /*usp->PsGen[]== S_ON && */ usp->NgV > 0 )
-       count++;
+  {
+     sprintf( tbuf, "%02d V ", usp->NgV );
+     strncpy( usp->ParNames[count], tbuf, 5);
+     count++;
+  }
 
   if( usp->PsGen[2]== S_ON )
      for( j=0; j<usp->N; j++)
        if( usp->NgNb[j] > 0  )
-           count++;
+       {
+          sprintf( tbuf, "%02d B ",  usp->NgNb[j] );
+          strncpy( usp->ParNames[count], tbuf, 5);
+          strncpy( usp->ParNames[count]+5,
+             TProfil::pm->mup->SB[count], MAXICNAME+MAXSYMB); //10
+          count++;
+       }
 
   if( usp->PsGen[0]== S_ON )
      for( j=0; j<usp->L; j++)
        if( usp->NgLg[j] > 0  )
-           count++;
+       {
+          sprintf( tbuf, "%02dG0 ",  usp->NgLg[j] );
+          strncpy( usp->ParNames[count], tbuf, 5);
+          strncpy( usp->ParNames[count]+5,
+             TProfil::pm->mup->SM[count]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
+          count++;
+       }
 
   if( usp->PsGen[1]== S_ON )
      for( j=0; j<usp->L; j++)
        if( usp->NgLs[j] > 0  )
-           count++;
+       {
+          sprintf( tbuf, "%02dS0 ",  usp->NgLs[j] );
+          strncpy( usp->ParNames[count], tbuf, 5);
+          strncpy( usp->ParNames[count]+5,
+             TProfil::pm->mup->SM[count]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
+          count++;
+       }
 
   if( usp->PsGen[5]== S_ON )
      for( j=0; j<usp->L; j++)
        if( usp->NgLv[j] > 0  )
-           count++;
+       {
+          sprintf( tbuf, "%02dV0 ",  usp->NgLv[j] );
+          strncpy( usp->ParNames[count], tbuf, 5);
+          strncpy( usp->ParNames[count]+5,
+             TProfil::pm->mup->SM[count]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
+          count++;
+       }
 
   if( usp->PsGen[6]== S_ON )
      for( j=0; j<usp->Ls; j++)
        if( usp->NgGam[j] > 0  )
-           count++;
- 
+       {
+          sprintf( tbuf, "%02dGa ",  usp->NgGam[j] );
+          strncpy( usp->ParNames[count], tbuf, 5);
+          strncpy( usp->ParNames[count]+5,
+             TProfil::pm->mup->SM[count]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
+          count++;
+       }
 }
-
-
 
 //realloc & setup data before analyse part
 void TUnSpace::init_analyse( )
