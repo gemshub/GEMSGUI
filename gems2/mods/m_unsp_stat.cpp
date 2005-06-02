@@ -756,9 +756,9 @@ else
 void TUnSpace::out_QT( int Ngr  )
 { int i,j;
 
-  double Ca,Ca1,sCa,sCa1,gg1,sg1,quanLapl,quanHur,quanWald,quanHom;
+  double Ca,Ca1,sCa,sCa1,gg,sg,gg1,sg1,quanLapl,quanHur,quanWald,quanHom;
   float st=2.,st1=2.; // coeff. Studenta
-  int k,ii,fl,l,ca=0;
+  int k,ii,fl,l,ca=0,kf;
   int kvant = usp->quan_lev*usp->Q;
 
  //  paragen( ); // put data to nPhA, PhAndx, PhAfreq ....
@@ -769,13 +769,18 @@ void TUnSpace::out_QT( int Ngr  )
   for( l=0; l<ii ; l++ )
   {
    Ca = sCa = Ca1 = sCa1= 0.;
+   kf=0;
    for( i=0; i<usp->Q; i++ )
-     Ca += usp->vMol[i*usp->N+l];
-   Ca /= usp->Q;
+    if(usp->sv[i]>=0)
+     { Ca += usp->vMol[i*usp->N+l];
+       kf++;
+     }
+   if(kf)
+    Ca /= kf;
    for( i=0; i<usp->Q; i++ )
    {
-
-     sCa += (usp->vMol[i*usp->N+l]-Ca) * (usp->vMol[i*usp->N+l]-Ca);
+     if(usp->sv[i]>=0)
+      sCa += (usp->vMol[i*usp->N+l]-Ca) * (usp->vMol[i*usp->N+l]-Ca);
      fl=0;
       for(k=0;k<usp->Fi; k++)                           //  ???????
           if(  usp->vYF[i*usp->Fi+k] && !usp->vYF[k] ||
@@ -786,7 +791,8 @@ void TUnSpace::out_QT( int Ngr  )
       if(!fl && !l)
             ca++;
    }
-    sCa /= (usp->Q-1);
+    if(kf>1)
+     sCa /= (kf-1);
     if(sCa>0)
        sCa = sqrt(sCa);
    if(ca)
@@ -832,9 +838,11 @@ void TUnSpace::out_QT( int Ngr  )
           quanHom/=kvant;  
    usp->UnIC[l][0] = usp->vMol[l];
    usp->UnIC[l][1] = Ca;
-   usp->UnIC[l][2] = st*sCa / sqrt(double(usp->Q));
+   if(kf>0)
+    usp->UnIC[l][2] = st*sCa / sqrt(double(kf));
    usp->UnIC[l][3] = Ca1;
-   usp->UnIC[l][4] = st1*sCa1 / sqrt(double(ca));
+   if(ca>0)
+    usp->UnIC[l][4] = st1*sCa1 / sqrt(double(ca));
    usp->UnIC[l][5] = quanLapl;
    usp->UnIC[l][6] = quanHur;
    usp->UnIC[l][7] = quanWald;
@@ -846,7 +854,7 @@ void TUnSpace::out_QT( int Ngr  )
 
  for( l=0; l<usp->nPG; l++ )
  {
-    gg1=0.; sg1=0.;
+    gg1=sg1=0.;
     for( i=0; i<usp->Q; i++ )
     { fl=0;
       for( k=0; k<usp->Fi; k++ )
@@ -884,9 +892,11 @@ void TUnSpace::out_QT( int Ngr  )
 
  for( l=0; l<usp->Ls; l++ )             // UaDC
  {
-    gg1=0.; sg1=0.;
+    gg=gg1=sg=sg1=0.;
     for( i=0; i<usp->Q; i++ )
     { fl=0;
+      if(usp->sv[i]>=0)
+       gg += usp->vFug[i*usp->Ls+l];
       for( k=0; k<usp->Fi; k++ )
           if(usp->vYF[i*usp->Fi+k] && !usp->vYF[k] ||
              !usp->vYF[i*usp->Fi+k] && usp->vYF[k]  )
@@ -894,9 +904,14 @@ void TUnSpace::out_QT( int Ngr  )
          if(!fl)
            gg1 += usp->vFug[i*usp->Ls+l];
       }
-   gg1 /= ca;
+   if(kf)
+    gg /= kf;
+   if(ca) 
+    gg1 /= ca;
    for(i=0; i<usp->Q; i++)
     { fl=0;
+      if(usp->sv[i]>=0) 
+       sg += (usp->vFug[i*usp->Ls+l]-gg)*(usp->vFug[i*usp->Ls+l]-gg);
       for(k=0;k<usp->Fi;k++)
           if( usp->vYF[i*usp->Fi+k] && !(usp->vYF[k])||
              !usp->vYF[i*usp->Fi+k] && usp->vYF[k] )
@@ -904,21 +919,37 @@ void TUnSpace::out_QT( int Ngr  )
          if(!fl)
             sg1 += (usp->vFug[i*usp->Ls+l]-gg1)*(usp->vFug[i*usp->Ls+l]-gg1);
       }
+  if(kf>1)
+     sg /= (kf-1);
+  if(sg>0)
+    sg=sqrt(sg);
   if(ca>1)
      sg1 /= (ca-1);
   if(sg1>0)
     sg1=sqrt(sg1);
+  quanLapl=quanHur=quanWald=quanHom=0.;
+       for(k=0;k<kvant;k++)
+        { quanLapl += usp->vFug[usp->quanCx[k][0]*usp->Ls+l];
+          quanHur +=  usp->vFug[usp->quanCx[k][1]*usp->Ls+l];
+          quanWald += usp->vFug[usp->quanCx[k][2]*usp->Ls+l];
+          quanHom  += usp->vFug[usp->quanCx[k][3]*usp->Ls+l];
+        }
+          quanLapl/=kvant;
+	  quanHur/=kvant;
+          quanWald/=kvant;
+          quanHom/=kvant;  
 
-   usp->UaDC[l][0] = gg1;
-   usp->UaDC[l][1] = st1*sg1/sqrt(double(ca));
-   usp->UaDC[l][2] = usp->vFug[l];
-   usp->UaDC[l][3] = usp->vFug[usp->Lapl*usp->Ls+l];
-   usp->UaDC[l][4] = usp->vFug[usp->Homen*usp->Ls+l];
-
-   usp->UaDC[l][5] = 0.;
-   usp->UaDC[l][6] = 0.;
-   usp->UaDC[l][7] = 0.;
-   usp->UaDC[l][8] = 0.;
+   usp->UaDC[l][0] = usp->vFug[l];
+   usp->UaDC[l][1] = gg;
+   if(kf)
+    usp->UaDC[l][2] = st1*sg/sqrt(double(kf));
+   usp->UaDC[l][3] = gg1;
+   if(ca)
+    usp->UaDC[l][4] = st1*sg1/sqrt(double(ca));
+   usp->UaDC[l][5] = quanLapl;
+   usp->UaDC[l][6] = quanHur;
+   usp->UaDC[l][7] = quanWald;
+   usp->UaDC[l][8] = quanHom;
    usp->UaDC[l][9] = 0.;
 
   }
