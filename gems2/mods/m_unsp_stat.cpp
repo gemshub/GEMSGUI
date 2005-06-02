@@ -756,10 +756,10 @@ else
 void TUnSpace::out_QT( int Ngr  )
 { int i,j;
 
-  double Ca,Ca1,sCa,sCa1,gg1,sg1;
+  double Ca,Ca1,sCa,sCa1,gg1,sg1,quanLapl,quanHur,quanWald,quanHom;
   float st=2.,st1=2.; // coeff. Studenta
   int k,ii,fl,l,ca=0;
-
+  int kvant = usp->quan_lev*usp->Q;
 
  //  paragen( ); // put data to nPhA, PhAndx, PhAfreq ....
 
@@ -807,7 +807,7 @@ void TUnSpace::out_QT( int Ngr  )
 
    j   = kol_in_sol(0);
 
-   usp->UnIC[l][0] = Ca1;
+/*   usp->UnIC[l][0] = Ca1;
    usp->UnIC[l][1] = st1*sCa1 / sqrt(double(ca));
    usp->UnIC[l][2] = Ca;
    usp->UnIC[l][3] = st*sCa / sqrt(double(usp->Q));
@@ -816,6 +816,29 @@ void TUnSpace::out_QT( int Ngr  )
    usp->UnIC[l][6] = usp->vMol[usp->Homen*usp->N+l];
    usp->UnIC[l][7] = (float)j/usp->Q*100.;
    usp->UnIC[l][8] = kolgrup();
+   usp->UnIC[l][9] = 0.;
+
+*/ 
+   quanLapl=quanHur=quanWald=quanHom=0.;
+       for(k=0;k<kvant;k++)
+        { quanLapl += usp->vMol[usp->quanCx[k][0]*usp->N+l];
+          quanHur +=  usp->vMol[usp->quanCx[k][1]*usp->N+l];
+          quanWald += usp->vMol[usp->quanCx[k][2]*usp->N+l];
+          quanHom  += usp->vMol[usp->quanCx[k][3]*usp->N+l];
+        }
+          quanLapl/=kvant;
+	  quanHur/=kvant;
+          quanWald/=kvant;
+          quanHom/=kvant;  
+   usp->UnIC[l][0] = usp->vMol[l];
+   usp->UnIC[l][1] = Ca;
+   usp->UnIC[l][2] = st*sCa / sqrt(double(usp->Q));
+   usp->UnIC[l][3] = Ca1;
+   usp->UnIC[l][4] = st1*sCa1 / sqrt(double(ca));
+   usp->UnIC[l][5] = quanLapl;
+   usp->UnIC[l][6] = quanHur;
+   usp->UnIC[l][7] = quanWald;
+   usp->UnIC[l][8] = quanHom;
    usp->UnIC[l][9] = 0.;
 
  }
