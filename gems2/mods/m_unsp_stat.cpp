@@ -858,7 +858,7 @@ for( int ii=0; ii<usp->nPG; ii++ )
    }
   }
    if( usp->qQ >1 )
-     usp->UgDC[ii][9] = var1/(usp->qQ-1);
+     usp->UgDC[ii][9] = st*sqrt(var1/(usp->qQ-1)) / sqrt(double(usp->qQ));
    else
      usp->UgDC[ii][9] = 0;
 }
