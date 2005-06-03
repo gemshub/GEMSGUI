@@ -149,6 +149,12 @@ int TUnSpace::filters( int k )
         ( usp->vMol[k*usp->N+i] < usp->m_t_lo[i] ||
           usp->vMol[k*usp->N+i] > usp->m_t_up[i]))
        Filtr=1;
+  // phases
+  if( usp->Pa_f_pha == S_ON )
+     for(i=0; i<usp->N; i++)
+      if(  usp->PhAndx[(abs(usp->sv[k])-1)*usp->N+i] != usp->f_PhA[i] )
+         Filtr=1;
+
 return(Filtr);
 }
 
