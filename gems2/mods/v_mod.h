@@ -112,7 +112,9 @@ enum param_objects {                  // work objects
     o_muphc, o_mudcc, /*o_mudcs,*/ o_muicc,  o_mudcf,
     o_muicf, o_muidcref, o_muval, o_mupl, o_mubc,
     o_muas, o_muav, o_musf2, o_musm2,
-o_musm3, o_mudcc3, // new !!!
+o_musm3, o_mudcc3,
+o_nlicv, o_nlich, o_nldcv, o_nldch,
+o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
     // MTPARM
     o_tpunits, o_tpsv, o_tpptv, o_tp_T,  o_tp_P,
     o_tp_RT,  o_tprow,  o_tpepsw, o_tpvisw, o_tp_L,
@@ -692,7 +694,7 @@ enum gtdemo_objects {   // gtdemo
 //---------------------------------
 
 
-enum unspace_objects {                                                //124
+enum unspace_objects {                                                //120
     o_unsts = o_gwtprn+1, o_unpsflg, o_unpaflg, o_unpaflg4, o_unpvflg,
     o_unsiz, o_unq, o_unres, o_unng,  o_unngtpv,
     o_unpnt, o_unnmb, o_unnpha, o_un_t, o_un_q,
@@ -719,7 +721,7 @@ enum unspace_objects {                                                //124
     o_unafreg, o_unpmr,  o_unpom, o_unpor, o_una,
     o_unzcp, o_unzmin, o_unzmax, o_unzmaxabs, o_unhom,
     o_unprob, o_ununic, o_unugdc,  o_unuadc, o_unundca,
-    o_musf22, o_musm22, o_musb22,  o_wmusm22ls, o_untprn,};
+    o_untprn,};
 
 //---------------------------------
 // Duterm

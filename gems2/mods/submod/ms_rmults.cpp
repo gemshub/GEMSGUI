@@ -67,7 +67,24 @@ void TRMults::ods_link( int /*q*/ )
     aObj[ o_musm2].SetDim( mu.Ls, 1 );
 aObj[ o_musm3].SetPtr(  mu.SM3 );
 aObj[ o_musm3].SetDim( mu.Lads, 1 );
-
+// Added  Sveta 03/06/05
+aObj[ o_nlicv].SetPtr(  mu.nlICv );
+aObj[ o_nlicv].SetDim( mu.N, 1 );
+aObj[ o_nlich].SetPtr(  mu.nlICv );
+aObj[ o_nlich].SetDim( 1, mu.N );
+aObj[ o_nldcv].SetPtr(  mu.nlDCv );
+aObj[ o_nldcv].SetDim( mu.L, 1 );
+aObj[ o_nldch].SetPtr(  mu.nlDCv );
+aObj[ o_nldch].SetDim( 1, mu.L );
+aObj[ o_nldcvs].SetPtr(  mu.nlDCv );
+aObj[ o_nldcvs].SetDim( mu.Ls, 1 );
+aObj[ o_nldchs].SetPtr(  mu.nlDCv );
+aObj[ o_nldchs].SetDim( 1, mu.Ls );
+aObj[ o_nlphv].SetPtr(  mu.nlPHv );
+aObj[ o_nlphv].SetDim( mu.Fi, 1 );
+aObj[ o_nlphh].SetPtr(  mu.nlPHv );
+aObj[ o_nlphh].SetDim( 1, mu.Fi );
+// end of add
     aObj[ o_muphc].SetPtr( mu.PHC );
     aObj[ o_muphc].SetDim( mu.Fi, 1 );
     aObj[ o_mudcc].SetPtr( mu.DCC );
@@ -103,6 +120,22 @@ void TRMults::dyn_set(int /*q*/)
     mu.SF2  = (char (*)[PH_RKLEN])aObj[ o_musf2 ].GetPtr();
     mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].GetPtr();
 mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].GetPtr();
+// Added  Sveta 03/06/05
+mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ].GetPtr();
+mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ].GetPtr();
+mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ].GetPtr();
+aObj[ o_nlich].SetPtr(  mu.nlICv );
+aObj[ o_nlich].SetDim( 1, mu.N );
+aObj[ o_nldch].SetPtr(  mu.nlDCv );
+aObj[ o_nldch].SetDim( 1, mu.L );
+aObj[ o_nldcvs].SetPtr(  mu.nlDCv );
+aObj[ o_nldcvs].SetDim( mu.Ls, 1 );
+aObj[ o_nldchs].SetPtr(  mu.nlDCv );
+aObj[ o_nldchs].SetDim( 1, mu.Ls );
+aObj[ o_nlphh].SetPtr(  mu.nlPHv );
+aObj[ o_nlphh].SetDim( 1, mu.Fi );
+// end of add
+
     mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].GetPtr();
     mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].GetPtr();
     mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].GetPtr();
@@ -130,6 +163,21 @@ void TRMults::dyn_kill(int /*q*/)
     mu.SF2  = (char (*)[PH_RKLEN])aObj[ o_musf2 ].Free();
     mu.SM2  = (char (*)[DC_RKLEN])aObj[ o_musm2 ].Free();
 mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].Free();
+// Added  Sveta 03/06/05
+mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ].Free();
+mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ].Free();
+mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ].Free();
+aObj[ o_nlich].SetPtr(  0 );
+aObj[ o_nlich].SetDim( 1, 0 );
+aObj[ o_nldch].SetPtr( 0 );
+aObj[ o_nldch].SetDim( 1, 0 );
+aObj[ o_nldcvs].SetPtr(  0 );
+aObj[ o_nldcvs].SetDim( 0, 1 );
+aObj[ o_nldchs].SetPtr(  0 );
+aObj[ o_nldchs].SetDim( 1, 0 );
+aObj[ o_nlphh].SetPtr(  0 );
+aObj[ o_nlphh].SetDim( 1, 0 );
+// end of add
     mu.SA  = (char (*)[BC_RKLEN])aObj[ o_musa ].Free();
     mu.SB  = (char (*)[IC_RKLEN])aObj[ o_musb ].Free();
     mu.FN  = (char (*)[MAX_FILENAME_LEN])aObj[ o_mufn ].Free();
@@ -159,6 +207,10 @@ void TRMults::dyn_new(int /*q*/)
         mu.ICC = (char *)aObj[ o_muicc].Alloc( mu.N, 1, A_ );
         mu.Val = (short *)aObj[ o_muval].Alloc( mu.N, 1, I_ );
         mu.BC = (float *)aObj[ o_mubc].Alloc( mu.N, 1, F_ );
+mu.nlICv  = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_nlicv ].Alloc(
+                         mu.N, 1, MAXICNAME+MAXSYMB );
+aObj[ o_nlich].SetPtr(  mu.nlICv );
+aObj[ o_nlich].SetDim( 1, mu.N );
     }
     else  Error( GetName(), "PmvIC != S_ON" );
 
@@ -191,6 +243,9 @@ void TRMults::dyn_new(int /*q*/)
         mu.SF2 = (char (*)[PH_RKLEN])aObj[ o_musf2].Alloc( mu.Fis, 1, PH_RKLEN );
         mu.Ll = (short *)aObj[ o_mul1].Alloc( mu.Fi, 1, I_ );
         mu.PHC = (char *)aObj[ o_muphc].Alloc( mu.Fi, 1, A_ );
+mu.nlPHv  = (char (*)[MAXPHNAME])aObj[ o_nlphv ].Alloc( mu.Fi, 1, MAXPHNAME );
+aObj[ o_nlphh].SetPtr(  mu.nlPHv );
+aObj[ o_nlphh].SetDim( 1, mu.Fi );
     }
     else Error( GetName(), "PmvPH != S_ON" );
 
@@ -212,6 +267,13 @@ else {
    mu.SM3  = (char (*)[DC_RKLEN])aObj[ o_musm3 ].Free();
    mu.DCC3 = (char *)aObj[ o_mudcc3 ].Free();
 }
+mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ].Alloc( mu.L, 1, MAXDCNAME);
+aObj[ o_nldch].SetPtr(  mu.nlDCv );
+aObj[ o_nldch].SetDim( 1, mu.L );
+aObj[ o_nldcvs].SetPtr(  mu.nlDCv );
+aObj[ o_nldcvs].SetDim( mu.Ls, 1 );
+aObj[ o_nldchs].SetPtr(  mu.nlDCv );
+aObj[ o_nldchs].SetDim( 1, mu.Ls );
     }
     else
     {
@@ -220,6 +282,13 @@ else {
         mu.DCC = (char *)aObj[ o_mudcc ].Free();
         mu.DCS = (char *)aObj[ o_mudcs ].Free();
         mu.Pl  = (short *)aObj[ o_mupl ].Free();
+mu.nlDCv  = (char (*)[MAXDCNAME])aObj[ o_nldcv ].Free();
+aObj[ o_nldch].SetPtr(  0 );
+aObj[ o_nldch].SetDim( 1, 0 );
+aObj[ o_nldcvs].SetPtr(  0 );
+aObj[ o_nldcvs].SetDim( 0, 1 );
+aObj[ o_nldchs].SetPtr(  0 );
+aObj[ o_nldchs].SetDim( 1, 0 );
     }
     if( mu.PmvDF == S_ON )
     {
@@ -254,6 +323,9 @@ mu.SM3  = 0;
     mu.PHC = 0;
     mu.DCC = 0;
 mu.DCC3 = 0;
+mu.nlICv  = 0;
+mu.nlDCv  = 0;
+mu.nlPHv  = 0;
     mu.DCS = 0;
     mu.Pl  = 0;
     mu.ICC = 0;
@@ -708,6 +780,17 @@ NEW_PHASE_AGAIN:
     memcpy( mu.SM3, mu.SM+mu.Ls-mu.Lads, mu.Lads*DC_RKLEN*sizeof(char));
     memcpy( mu.DCC3, mu.DCC+mu.Ls-mu.Lads, mu.Lads*sizeof(char));
  }
+// Added Sveta 03/06/05
+ if( mu.nlICv )
+  for( int ii=0; ii<mu.N; ii++ )
+    memcpy( mu.nlICv[ii], mu.SB[ii], MAXICNAME+MAXSYMB );
+ if( mu.nlDCv )
+  for( int ii=0; ii<mu.L; ii++ )
+    memcpy( mu.nlDCv[ii], mu.SM[ii]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+ if( mu.nlPHv )
+  for( int ii=0; ii<mu.Fi; ii++ )
+    memcpy( mu.nlPHv[ii], mu.SF[ii]+MAXSYMB+MAXPHSYMB, MAXPHNAME );
+
     // test data base ICOMP  before calc
     TestIComp();
 

@@ -700,10 +700,11 @@ TVisor::Exit()
         aObj[ o_dtnam_nr].SetPtr(0);
         aObj[ o_dtres].SetPtr(0);
         aObj[ o_unpmr].SetPtr(0);
-        aObj[ o_musf22].SetPtr(0);
-        aObj[ o_musm22].SetPtr(0);
-        aObj[ o_musb22].SetPtr(0);
-        aObj[ o_wmusm22ls].SetPtr(0);
+        aObj[ o_nlich].SetPtr(0);
+        aObj[ o_nldch].SetPtr(0);
+        aObj[ o_nldcvs].SetPtr(0);
+        aObj[ o_nldchs].SetPtr(0);
+        aObj[ o_nlphh].SetPtr(0);
 
     }
     catch(TError & xcpt)

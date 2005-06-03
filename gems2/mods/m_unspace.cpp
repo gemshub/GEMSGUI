@@ -420,17 +420,6 @@ void TUnSpace::dyn_set(int q)
     plot  = (TPlotLine *)aObj[ o_unplline ].GetPtr();
     usp->tprn = (char *)aObj[ o_untprn].GetPtr();
 
-// components lines show
-    aObj[ o_musf22].SetPtr( TProfil::pm->mup->SF );
-    aObj[ o_musf22].SetDim( 1, TProfil::pm->mup->Fi);
-    aObj[ o_musm22].SetPtr(  TProfil::pm->mup->SM );
-    aObj[ o_musm22].SetDim( 1, TProfil::pm->mup->L );
-    aObj[ o_musb22].SetPtr( TProfil::pm->mup->SB );
-    aObj[ o_musb22].SetDim( 1, TProfil::pm->mup->N );
-    aObj[ o_wmusm22ls].SetPtr(  TProfil::pm->mup->SM );
-    aObj[ o_wmusm22ls].SetDim( 1, TProfil::pm->mup->Ls );
-
-
 /*---------------------------------------------------------------------
 //  work (not in record)
     usp->PhAndx = (short *)aObj[ o_unphndx].GetPtr();
@@ -534,17 +523,6 @@ void TUnSpace::dyn_kill(int q)
     plot  = (TPlotLine *)aObj[ o_unplline ].Free();
 
     usp->tprn = (char *)aObj[ o_untprn].Free();
-
-// components lines show
-    aObj[ o_musf22].SetPtr( 0 );
-    aObj[ o_musf22].SetDim( 1, 0);
-    aObj[ o_musm22].SetPtr(  0 );
-    aObj[ o_musm22].SetDim( 1, 0 );
-    aObj[ o_musb22].SetPtr( 0 );
-    aObj[ o_musb22].SetDim( 1, 0 );
-    aObj[ o_wmusm22ls].SetPtr( 0 );
-    aObj[ o_wmusm22ls].SetDim( 1, 0 );
-
 
    if( q == 0)
       work_dyn_kill();
@@ -1239,8 +1217,7 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
   }
 
 //  not for icomps, free array
-//  if(//usp->PsGen[0??] == S_ON  &&
-//     usp->Pa_f_pha == S_ON)
+//  if(  usp->Pa_f_pha == S_ON)
 //    memcpy( us[1].f_PhA, us[0].f_PhA, us[1].N*sizeof(short) );
 
 //*********************************************************/
