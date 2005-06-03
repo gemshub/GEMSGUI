@@ -513,7 +513,7 @@ void TUnSpace::build_nPG_list()
           sprintf( tbuf, "%02d B ",  usp->NgNb[j] );
           strncpy( usp->ParNames[count], tbuf, 5);
           strncpy( usp->ParNames[count]+5,
-             TProfil::pm->mup->SB[count], MAXICNAME+MAXSYMB); //10
+             TProfil::pm->mup->SB[j], MAXICNAME+MAXSYMB); //10
           count++;
        }
 
@@ -524,7 +524,7 @@ void TUnSpace::build_nPG_list()
           sprintf( tbuf, "%02dG0 ",  usp->NgLg[j] );
           strncpy( usp->ParNames[count], tbuf, 5);
           strncpy( usp->ParNames[count]+5,
-             TProfil::pm->mup->SM[count]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
+             TProfil::pm->mup->SM[j]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
           count++;
        }
 
@@ -535,7 +535,7 @@ void TUnSpace::build_nPG_list()
           sprintf( tbuf, "%02dS0 ",  usp->NgLs[j] );
           strncpy( usp->ParNames[count], tbuf, 5);
           strncpy( usp->ParNames[count]+5,
-             TProfil::pm->mup->SM[count]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
+             TProfil::pm->mup->SM[j]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
           count++;
        }
 
@@ -546,7 +546,7 @@ void TUnSpace::build_nPG_list()
           sprintf( tbuf, "%02dV0 ",  usp->NgLv[j] );
           strncpy( usp->ParNames[count], tbuf, 5);
           strncpy( usp->ParNames[count]+5,
-             TProfil::pm->mup->SM[count]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
+             TProfil::pm->mup->SM[j]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
           count++;
        }
 
@@ -557,7 +557,7 @@ void TUnSpace::build_nPG_list()
           sprintf( tbuf, "%02dGa ",  usp->NgGam[j] );
           strncpy( usp->ParNames[count], tbuf, 5);
           strncpy( usp->ParNames[count]+5,
-             TProfil::pm->mup->SM[count]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
+             TProfil::pm->mup->SM[j]+MAXSYMB+MAXDRGROUP, PARNAME_SIZE-5);
           count++;
        }
 }
