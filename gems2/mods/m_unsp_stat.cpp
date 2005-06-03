@@ -896,7 +896,7 @@ for( int ii=0; ii<usp->nPG; ii++ )
       else
       {
         if( val < min ) min = val;
-        if( val < min ) min = val;
+        if( val > max ) max = val;
       }
     }
   }
