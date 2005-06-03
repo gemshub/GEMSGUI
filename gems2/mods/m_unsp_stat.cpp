@@ -892,7 +892,7 @@ for( int ii=0; ii<usp->nPG; ii++ )
       sr += val;
       sr_sz++;
       if(!i1)  // first
-        min = max = val;
+      {  min = max = val; i1++; }
       else
       {
         if( val < min ) min = val;
