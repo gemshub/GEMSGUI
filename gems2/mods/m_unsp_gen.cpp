@@ -170,15 +170,15 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
     strncpy( usp->UgDCn[8], "qHome<UIP>",  NAME_SIZE );
     strncpy( usp->UgDCn[9], "reserved",  NAME_SIZE );
 
-    strncpy( usp->UaDCn[0], "Det.(con)",  NAME_SIZE );
-    strncpy( usp->UaDCn[1], "Filt<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[0], "Det.(act)",  NAME_SIZE );
+    strncpy( usp->UaDCn[1], "Filt<act>",  NAME_SIZE );
     strncpy( usp->UaDCn[2], "2SigFilt",  NAME_SIZE );
-    strncpy( usp->UaDCn[3], "DomPA<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[3], "DomPA<act>",  NAME_SIZE );
     strncpy( usp->UaDCn[4], "2SigDomPA",  NAME_SIZE );
-    strncpy( usp->UaDCn[5], "qLapl<con>",  NAME_SIZE );
-    strncpy( usp->UaDCn[6], "qHurv<con>",  NAME_SIZE );
-    strncpy( usp->UaDCn[7], "qWald<con>",  NAME_SIZE );
-    strncpy( usp->UaDCn[8], "qHome<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[5], "qLapl<act>",  NAME_SIZE );
+    strncpy( usp->UaDCn[6], "qHurv<act>",  NAME_SIZE );
+    strncpy( usp->UaDCn[7], "qWald<act>",  NAME_SIZE );
+    strncpy( usp->UaDCn[8], "qHome<act>",  NAME_SIZE );
     strncpy( usp->UaDCn[9], "reserved",  NAME_SIZE );
 
     strncpy( usp->UnDCAn[0], "Adap(UIP)",  NAME_SIZE );
