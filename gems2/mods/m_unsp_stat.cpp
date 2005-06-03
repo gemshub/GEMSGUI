@@ -959,12 +959,12 @@ for( int ii=0; ii<usp->nPG; ii++ )
   }
 
    if( sz1>1 )
-     usp->UgDC[ii][2] = var1/(sz1-1);
+     usp->UgDC[ii][2] = sqrt(var1/(sz1-1));
    else
      usp->UgDC[ii][2] = 0;
 
    if( sz3>1 )
-     usp->UgDC[ii][4] = var3/(sz3-1);
+     usp->UgDC[ii][4] = sqrt(var3/(sz3-1));
    else
      usp->UgDC[ii][4] = 0;
 
