@@ -16,14 +16,7 @@ void TUnSpace::analiseArrays( )
      usp->ob=0;
 
      setPhaseAssemb();   // set up phase assemblages data
-
-
      Ngr = sel_parg( usp->sv );
-     // set up filters
-     for( k=0; k<usp->Q; k++ )
-        if( filters( k ) )
-            usp->sv[k] *= -1;
-
 
      for( k=0; k<usp->Q; k++ )
         if(  usp->sv[k] == Ngr /*&& !filters( k ) */ )
@@ -80,7 +73,7 @@ int TUnSpace::kvant_parag( int type /*short *mas*/ )
   }
 maxkol = sol[I];
 delete[] sol;
-return(maxkol);
+return(I); //return(maxkol);
 }
 
 
@@ -109,87 +102,32 @@ void TUnSpace::kvant_index(float per,int N,double *mas, short type /**ind*/)
 }
 
 
-int TUnSpace::sel_parg( short *sv ) \
-// ???????? must be changed using int TUnSpace::setPhaseAssemb() arrays
+int TUnSpace::sel_parg( short *sv ) 
 {
-  int i, j,k,fl,I,J, maxgr=1;
-
-  short Ngr=1;
-
-  for( i=0; i<usp->Q; i++ )
-    sv[i] = 0;
-
-   // sv - nomera of paragenesis
-   // Ngr - kol-vo paragenesis
-   // return:  nomer nabora phases po criteriju
-
-   for( i=0; i<usp->Q; i++)
-   {
-     if(!sv[i])
-     { sv[i] = Ngr;
-       for( j=i+1; j<usp->Q; j++)
-       { fl=0;
-         for( k=0; k<usp->Fi; k++ )
-          if( usp->vYF[i*usp->Fi+k] && !usp->vYF[j*usp->Fi+k]  ||
-             !usp->vYF[i*usp->Fi+k] && usp->vYF[j*usp->Fi+k]   )
-          { fl=1; break; }
-         if(!fl) sv[j]=Ngr;
-       }
-       Ngr++;
-     }
-   }
- Ngr--;
- // maxgr - max number of paragen. (size of  sv array)
+  int i, j,I,J, maxgr=1;
 
  if( usp->Pa_Crit == UNSP_CRIT_PA ) // select statistic
  {
   J = 0;
   for( j=0; j<usp->Q; j++)
-     if(sv[j]==1)
+     if(abs(sv[j])==1)
           J++;
-  for(i=1; i<Ngr; i++ )
+  for(i=1; i<kolgrup(); i++ )
   { I=0;
     for( j=0; j<usp->Q; j++ )
-     if(sv[j]==i+1)
+     if(abs(sv[j])==i+1)
         I++;
     if(I>J)
     { maxgr = i+1 ; J=I; }
   }
  }
- if( usp->Pa_Crit == UNSP_CRIT_LAPL_QAN )          // select Laplace_quantile
- {
-   J=kvant_parag( 0 /*usp->quanLap*/ );
-   for(i=0; i<Ngr; i++)
-   { I=0;
-     for(j=0; j<usp->Q; j++ )
-      if(sv[j]==i+1)
-        I++;
-     if(I==J)
-     { maxgr = i+1; break; }
-   }
- }
- if( usp->Pa_Crit ==  UNSP_CRIT_HOME_QAN )       // select Homenuk_quantile
- {
-   J=kvant_parag( 3/*usp->quanHom*/ );
-   for(i=0; i<Ngr; i++)
-   { I=0;
-     for(j=0; j<usp->Q; j++)
-      if(sv[j]==i+1)
-        I++;
-     if(I==J)
-     { maxgr= i+1; break; }
-   }
- }
- if( usp->Pa_Crit == UNSP_CRIT_LAPL_P )               // select Laplace
- {
-   maxgr=sv[usp->Lapl];
- }
- if( usp->Pa_Crit == UNSP_CRIT_HOME_P)               // select Homenuk
-  {
-    maxgr=sv[usp->Homen];
+ else
+  if(usp->Pa_Crit <= UNSP_CRIT_HOME_QAN)
+  { maxgr = kvant_parag( usp->Pa_Crit - UNSP_CRIT_LAPL_QAN );
+    maxgr++;
   }
-
 return(maxgr);
+
 }
 
 int TUnSpace::filters( int k )
@@ -612,7 +550,7 @@ void TUnSpace::Un_criteria()
     }
    usp->Wald = jj;
    usp->CrW = R;
-   usp->nw = kol_in_sol(jj );         
+   usp->nw = kol_in_sol(jj );
    kvant_index( usp->quan_lev, usp->Q, usp->ZmaxAbs, 2 );
 
 
@@ -899,16 +837,16 @@ for( int ii=0; ii<usp->nPG; ii++ )
   {
     switch( usp->Pa_Crit )
     {
-     case 1:
+     case UNSP_CRIT_LAPL_QAN:
         var1 += pow( usp->UgDC[ii][5]- value_nPG( ii, usp->quanCx[t][0] ), 2);
         break;
-     case 2:
+     case UNSP_CRIT_HUR_QAN:
         var1 += pow( usp->UgDC[ii][6]- value_nPG( ii, usp->quanCx[t][1] ), 2);
         break;
-     case 3:
+     case UNSP_CRIT_WALD_QAN:
         var1 += pow( usp->UgDC[ii][7]- value_nPG( ii, usp->quanCx[t][2] ), 2);
         break;
-     case 4:
+     case UNSP_CRIT_HOME_QAN:
         var1 += pow( usp->UgDC[ii][8]- value_nPG( ii, usp->quanCx[t][3] ), 2);
         break;
    }
@@ -918,8 +856,6 @@ for( int ii=0; ii<usp->nPG; ii++ )
    else
      usp->UgDC[ii][9] = 0;
 }
-
-
 //=================================================
 
 }
@@ -928,97 +864,81 @@ for( int ii=0; ii<usp->nPG; ii++ )
 //  correction values G298 and intervals
 void TUnSpace::AdapG()
 // Iter- iteration of adaptation
-{  int i,k, i1;
-   double quanLapl,quanHur,quanWald,quanHom;
-   int kvant;
-   double sr,sto,min,max;
-   int Ngr;
-
+{
+  int Ngr;
  // Ngr - number set phases from criteria
- // sv - numbers set phases in solutions
- // ob - chislo solutions c dannym naborom phases & udovl. filters
-     usp->ob=0;
-     Ngr = sel_parg( usp->sv );
-    // set up filters
-     for( k=0; k<usp->Q; k++ )
-        if( filters( k ) )
-            usp->sv[k] *= -1;
+ Ngr = sel_parg( usp->sv );
 
-     for(k=0;k<usp->Q;k++)
-        if( usp->sv[k] == Ngr /*&& !filters(k)*/)
-           usp->ob++;
 
-    for(i=0;i<usp->L;i++)
+//===============================================
+// UnDCA
+for( int ii=0; ii<usp->nPG; ii++ )
+{
+  double val, sg_val, sr=0, min=0, max=0, sg_sr=0;
+  int i1 = 0, sr_sz = 0;
+
+
+  for(int q=0; q<usp->Q; q++)
+  {
+    if( usp->sv[q] == Ngr )      // filters and phase selections
     {
-      i1=0; sto=0.;
+      val = value_nPG( ii, q );
+      sr += val;
+      sr_sz++;
+      if(!i1)  // first
+        min = max = val;
+      else
+      {
+        if( val < min ) min = val;
+        if( val < min ) min = val;
+      }
+    }
+  }
 
-      for( k=0; k<usp->Q; k++)
-        if( usp->sv[k]==Ngr /*&& !filters(k) */)
-          if(!i1)
-           {  min = max = sr = usp->vG[k*usp->L+i]; i1++; }
-          else
-           { if( usp->vG[k*usp->L+i] < min )
-              min = usp->vG[k*usp->L+i];
-             if( usp->vG[k*usp->L+i] > max )
-              max = usp->vG[k*usp->L+i];
-             sr += usp->vG[k*usp->L+i];
-           }
-       if(usp->ob)
-        sr/=usp->ob;
-       for(k=0; k<usp->Q; k++)
-        if( usp->sv[k] == Ngr /*&& !filters(k)*/)
-           sto += (usp->vG[k*usp->L+i]-sr)*(usp->vG[k*usp->L+i]-sr);
-       if(usp->ob > 1 && sto>0)
-       { sto/=(usp->ob);
-         sto=sqrt(sto);
-       }
-       kvant = usp->quan_lev*usp->Q;
-       if(kvant<1)
-           kvant=1;
-       quanLapl=quanHur=quanWald=quanHom=0.;
+  if( sr_sz )
+     sr = sr/sr_sz;
+  else
+     sr = 0;
 
-       for(k=0; k<kvant; k++)
-       { quanLapl += usp->vG[usp->quanCx[k][0]*usp->L+i];
-	 quanHur += usp->vG[usp->quanCx[k][1]*usp->L+i];
-	 quanWald += usp->vG[usp->quanCx[k][2]*usp->L+i];
-         quanHom += usp->vG[usp->quanCx[k][3]*usp->L+i];
-       }
-        quanLapl/=kvant;
-	quanHur/=kvant;
-	quanWald/=kvant;
-        quanHom/=kvant;
- 
-   switch( usp->Pa_Crit )
+  for(int q=0; q<usp->Q; q++)
+  {
+    if( usp->sv[q] == Ngr )
+     sg_sr += pow( sr - value_nPG( ii, q ), 2);
+  }
+
+  if( sr_sz >1 )
+     sg_sr = 3*sqrt(sg_sr/(sr_sz-1)) / sqrt(double(sr_sz));
+  else
+     sg_sr = 0;
+
+  switch( usp->Pa_Crit )
    {
-    case UNSP_CRIT_PA:         usp->Gs[i][0] = sr;   break;
-    case UNSP_CRIT_LAPL_QAN:   usp->Gs[i][0] = quanLapl;   break;
-    case UNSP_CRIT_HOME_QAN:   usp->Gs[i][0] = quanHom;     break;
-    case UNSP_CRIT_LAPL_P:     usp->Gs[i][0] = usp->vG[usp->Lapl*usp->L+i];
+    case UNSP_CRIT_PA:         val = sr;   sg_val = sg_sr;  break;
+    case UNSP_CRIT_LAPL_QAN:   val = usp->UgDC[ii][5];
+                               sg_val = usp->UgDC[ii][9];
                                break;
-    case UNSP_CRIT_HOME_P:     usp->Gs[i][0] = usp->vG[usp->Homen*usp->L+i];
+    case UNSP_CRIT_HUR_QAN:    val = usp->UgDC[ii][6];
+                               sg_val = usp->UgDC[ii][9];
+                               break;
+    case UNSP_CRIT_WALD_QAN:   val = usp->UgDC[ii][7];
+                               sg_val = usp->UgDC[ii][9];
+                               break;
+    case UNSP_CRIT_HOME_QAN:   val = usp->UgDC[ii][8];
+                               sg_val = usp->UgDC[ii][9];
     default:                   break;
    }
+   adapt_nPG( ii, val, sg_val );
 
-
-      usp->UnDCA[i][0] = usp->vG[i]; 
-      usp->UnDCA[i][1] = fabs(usp->IntLg[i][0]);
-      usp->UnDCA[i][2] = min;
-      usp->UnDCA[i][3] = max;
-      usp->UnDCA[i][4] = sr;
-      usp->UnDCA[i][5] = 3.*sto/sqrt(double(usp->ob));
-      usp->UnDCA[i][6] = 0.;
-      usp->UnDCA[i][7] = 0.;
-
-//   ??????????????????
-//   adatpter new data to BD
-    if( usp->NgLg[i] > 0 )
-    {  usp->IntLg[i][0]=3.*sto/sqrt(double(usp->ob));
-       TProfil::pm->syp->GEX[i] =
-            usp->Gs[i][0]-TProfil::pm->tpp->G[i];
-    }
+   usp->UnDCA[ii][0] = val;
+   usp->UnDCA[ii][1] = sg_val;
+   usp->UnDCA[ii][2] = min;
+   usp->UnDCA[ii][3] = max;
+   usp->UnDCA[ii][4] = sr;
+   usp->UnDCA[ii][5] = sg_sr;
+   usp->UnDCA[ii][6] = 0.;
+   usp->UnDCA[ii][7] = 0.;
  }
-
- }
+}
 
 // output table with set phases: numbers and %
 void TUnSpace::setPhaseAssemb( )
@@ -1082,6 +1002,13 @@ for(np=0; np<usp->nPhA; np++ )
      }
    usp->PhAfreq[np] = (float)usp->PhNum[np]/usp->Q*100;
   }
+
+// not from 0
+   for( k=0; k<usp->Q; k++ )
+   {   usp->sv[k]++;
+       if( filters( k ) )
+          usp->sv[k] *= -1;
+   }
 
 }
 //====================================================================

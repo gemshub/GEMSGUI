@@ -478,6 +478,104 @@ double TUnSpace::value_nPG( int line, int q )
   return 0;
 }
 
+
+//set up new data and inervals for  unspace components
+void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
+{
+  int j, count=0;
+
+  if( usp->PsGen[3]== S_ON &&  usp->NgT > 0 )
+  {   if( line == count )
+      {
+       usp->T[0] = new_val;
+       usp->IntT[0] = new_int;
+       return;
+      }
+      count++;
+  }
+  if( usp->PsGen[4]== S_ON &&  usp->NgP > 0 )
+  {   if( line == count )
+      {
+       usp->P[0] = new_val;
+       usp->IntP[0] = new_int;
+       return;
+      }
+      count++;
+  }
+  if( /*usp->PsGen[]== S_ON && */ usp->NgV > 0 )
+  {   if( line == count )
+      {
+       usp->V[0] = new_val;
+       usp->IntV[0] = new_int;
+       return;
+      }
+      count++;
+  }
+
+  if( usp->PsGen[2]== S_ON )
+     for( j=0; j<usp->N; j++)
+       if( usp->NgNb[j] > 0  )
+       {  if( line == count )
+          {
+            usp->Bs[j][0] = new_val;
+            usp->IntNb[j][0] = new_int;
+            return;
+          }
+         count++;
+     }
+
+  if( usp->PsGen[0]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLg[j] > 0  )
+       {   if( line == count )
+           {
+            usp->Gs[j][0] = new_val;
+            usp->IntLg[j][0] = new_int;
+            TProfil::pm->syp->GEX[j] =
+               usp->Gs[j][0]-TProfil::pm->tpp->G[j];
+            return;
+           }
+         count++;
+        }
+
+  if( usp->PsGen[1]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLs[j] > 0  )
+       {   if( line == count )
+           {
+             usp->Ss[j][0] = new_val;
+             usp->IntLs[j][0] = new_int;
+             return;
+           }
+         count++;
+        }
+
+  if( usp->PsGen[5]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLv[j] > 0  )
+       {   if( line == count )
+           {
+             usp->Vs[j][0] = new_val;
+             usp->IntLv[j][0] = new_int;
+             return;
+           }
+         count++;
+        }
+
+  if( usp->PsGen[6]== S_ON )
+     for( j=0; j<usp->Ls; j++)
+       if( usp->NgGam[j] > 0  )
+       {   if( line == count )
+           {
+             usp->GAMs[j][0] = new_val;
+             usp->IntGam[j][0] = new_int;
+             return;
+           }
+          count++;
+        }
+}
+
+
 //build list of unspace components
 void TUnSpace::build_nPG_list()
 {

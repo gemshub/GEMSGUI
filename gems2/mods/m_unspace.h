@@ -317,6 +317,7 @@ protected:
     void init_generation();
     int calc_nPG();
     double value_nPG( int line, int q );
+    void adapt_nPG( int line, double new_val, double new_int );
     void build_nPG_list();
     void init_analyse();
 
@@ -433,11 +434,11 @@ typedef enum {
     UNSP_OF_E      = 'E',
     UNSP_OF_F      = 'F',
 
-    UNSP_CRIT_PA       = '0',
+    UNSP_CRIT_PA       =  '0',
     UNSP_CRIT_LAPL_QAN  = '1',
-    UNSP_CRIT_HOME_QAN  = '2',
-    UNSP_CRIT_LAPL_P       = '3',
-    UNSP_CRIT_HOME_P       = '4'
+    UNSP_CRIT_HUR_QAN  =  '2',
+    UNSP_CRIT_WALD_QAN  = '3',
+    UNSP_CRIT_HOME_QAN  = '4'
 
   //
 

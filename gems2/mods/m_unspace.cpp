@@ -1127,8 +1127,8 @@ TUnSpace::RecCalc( const char *key )
         if( usp->PsGraph != S_OFF )
            calc_graph();
 
-//        if( usp->Pa_Adapt > '1')
-//           AdapG();                    // !!!! test Kostin beak ob =0 or ob>Q*0.95
+        if( usp->Pa_Adapt > '1')
+           AdapG();                    // !!!! test Kostin beak ob =0 or ob>Q*0.95
       }
 
     }
