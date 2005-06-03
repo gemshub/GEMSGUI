@@ -147,6 +147,49 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
             strncpy( usp->lNam[j], tbuf, MAXGRNAME );
     }
 
+//  Temporary!
+    strncpy( usp->UnICn[0], "Det.(m_t)",  NAME_SIZE );
+    strncpy( usp->UnICn[1], "Filt<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[2], "2SigFilt",  NAME_SIZE );
+    strncpy( usp->UnICn[3], "DomPA<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[4], "2SigDomPA",  NAME_SIZE );
+    strncpy( usp->UnICn[5], "qLapl<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[6], "qHurv<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[7], "qWald<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[8], "qHome<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[9], "reserved",  NAME_SIZE );
+
+    strncpy( usp->UgDCn[0], "Det.(UIP)",  NAME_SIZE );
+    strncpy( usp->UgDCn[1], "Filt<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[2], "2SigFilt",  NAME_SIZE );
+    strncpy( usp->UgDCn[3], "DomPA<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[4], "2SigDomPA",  NAME_SIZE );
+    strncpy( usp->UgDCn[5], "qLapl<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[6], "qHurv<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[7], "qWald<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[8], "qHome<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[9], "reserved",  NAME_SIZE );
+
+    strncpy( usp->UaDCn[0], "Det.(con)",  NAME_SIZE );
+    strncpy( usp->UaDCn[1], "Filt<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[2], "2SigFilt",  NAME_SIZE );
+    strncpy( usp->UaDCn[3], "DomPA<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[4], "2SigDomPA",  NAME_SIZE );
+    strncpy( usp->UaDCn[5], "qLapl<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[6], "qHurv<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[7], "qWald<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[8], "qHome<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[9], "reserved",  NAME_SIZE );
+
+    strncpy( usp->UnDCAn[0], "Adap(UIP)",  NAME_SIZE );
+    strncpy( usp->UnDCAn[1], "HintAdap",  NAME_SIZE );
+    strncpy( usp->UnDCAn[2], "min(UIP)",  NAME_SIZE );
+    strncpy( usp->UnDCAn[3], "max(UIP)",  NAME_SIZE );
+    strncpy( usp->UnDCAn[4], "AdapF<UIP>",  NAME_SIZE );
+    strncpy( usp->UnDCAn[5], "2SigAdapF",  NAME_SIZE );
+    strncpy( usp->UnDCAn[6], "reserved",  NAME_SIZE );
+    strncpy( usp->UnDCAn[7], "reserved",  NAME_SIZE );
+
   if( mode  ) //default data
   {
     int ii;
@@ -173,47 +216,47 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
              usp->fug_up[ii] = 1000;
          }
     }
-    strncpy( usp->UnICn[0], "group",  NAME_SIZE );
-    strncpy( usp->UnICn[1], "2_sgm",  NAME_SIZE );
-    strncpy( usp->UnICn[2], "total",  NAME_SIZE );
-    strncpy( usp->UnICn[3], "2_sgm",  NAME_SIZE );
-    strncpy( usp->UnICn[4], "determin",  NAME_SIZE );
-    strncpy( usp->UnICn[5], "Laplace",  NAME_SIZE );
-    strncpy( usp->UnICn[6], "Homenuk",  NAME_SIZE );
-    strncpy( usp->UnICn[7], "perc.deter.",  NAME_SIZE );
-    strncpy( usp->UnICn[8], "N phas.grup.",  NAME_SIZE );
+/*    strncpy( usp->UnICn[0], "Det.(m_t)",  NAME_SIZE );
+    strncpy( usp->UnICn[1], "Filt<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[2], "2SigFilt",  NAME_SIZE );
+    strncpy( usp->UnICn[3], "DomPA<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[4], "2SigDomPA",  NAME_SIZE );
+    strncpy( usp->UnICn[5], "qLapl<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[6], "qHurv<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[7], "qWald<m_t>",  NAME_SIZE );
+    strncpy( usp->UnICn[8], "qHome<m_t>",  NAME_SIZE );
     strncpy( usp->UnICn[9], "reserved",  NAME_SIZE );
 
-    strncpy( usp->UgDCn[0], "group",  NAME_SIZE );
-    strncpy( usp->UgDCn[1], "2_sgm",  NAME_SIZE );
-    strncpy( usp->UgDCn[2], "determin",  NAME_SIZE );
-    strncpy( usp->UgDCn[3], "Laplace",  NAME_SIZE );
-    strncpy( usp->UgDCn[4], "Homenuk",  NAME_SIZE );
-    strncpy( usp->UgDCn[5], "mean",  NAME_SIZE );
-    strncpy( usp->UgDCn[6], "quan_Lap",  NAME_SIZE );
-    strncpy( usp->UgDCn[7], "quan_Hom",  NAME_SIZE );
-    strncpy( usp->UgDCn[8], "dual",  NAME_SIZE );
+    strncpy( usp->UgDCn[0], "Det.(UIP)",  NAME_SIZE );
+    strncpy( usp->UgDCn[1], "Filt<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[2], "2SigFilt",  NAME_SIZE );
+    strncpy( usp->UgDCn[3], "DomPA<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[4], "2SigDomPA",  NAME_SIZE );
+    strncpy( usp->UgDCn[5], "qLapl<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[6], "qHurv<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[7], "qWald<UIP>",  NAME_SIZE );
+    strncpy( usp->UgDCn[8], "qHome<UIP>",  NAME_SIZE );
     strncpy( usp->UgDCn[9], "reserved",  NAME_SIZE );
 
-     strncpy( usp->UaDCn[0], "group",  NAME_SIZE );
-    strncpy( usp->UaDCn[1], "2_sgm",  NAME_SIZE );
-    strncpy( usp->UaDCn[2], "determin",  NAME_SIZE );
-    strncpy( usp->UaDCn[3], "Laplace",  NAME_SIZE );
-    strncpy( usp->UaDCn[4], "Homenuk",  NAME_SIZE );
-    strncpy( usp->UaDCn[5], "mean",  NAME_SIZE );
-    strncpy( usp->UaDCn[6], "quan_Lap",  NAME_SIZE );
-    strncpy( usp->UaDCn[7], "quan_Hom",  NAME_SIZE );
-    strncpy( usp->UaDCn[8], "dual",  NAME_SIZE );
+    strncpy( usp->UaDCn[0], "Det.(con)",  NAME_SIZE );
+    strncpy( usp->UaDCn[1], "Filt<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[2], "2SigFilt",  NAME_SIZE );
+    strncpy( usp->UaDCn[3], "DomPA<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[4], "2SigDomPA",  NAME_SIZE );
+    strncpy( usp->UaDCn[5], "qLapl<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[6], "qHurv<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[7], "qWald<con>",  NAME_SIZE );
+    strncpy( usp->UaDCn[8], "qHome<con>",  NAME_SIZE );
     strncpy( usp->UaDCn[9], "reserved",  NAME_SIZE );
 
-   strncpy( usp->UnDCAn[0], "G dat",  NAME_SIZE );
-    strncpy( usp->UnDCAn[1], "interval",  NAME_SIZE );
-    strncpy( usp->UnDCAn[2], "min",  NAME_SIZE );
-    strncpy( usp->UnDCAn[3], "max",  NAME_SIZE );
-    strncpy( usp->UnDCAn[4], "mean",  NAME_SIZE );
-    strncpy( usp->UnDCAn[5], "int.filters",  NAME_SIZE );
+    strncpy( usp->UnDCAn[0], "Adap(UIP)",  NAME_SIZE );
+    strncpy( usp->UnDCAn[1], "HintAdap",  NAME_SIZE );
+    strncpy( usp->UnDCAn[2], "min(UIP)",  NAME_SIZE );
+    strncpy( usp->UnDCAn[3], "max(UIP)",  NAME_SIZE );
+    strncpy( usp->UnDCAn[4], "AdapF<UIP>",  NAME_SIZE );
+    strncpy( usp->UnDCAn[5], "2SigAdapF",  NAME_SIZE );
     strncpy( usp->UnDCAn[6], "reserved",  NAME_SIZE );
-    strncpy( usp->UnDCAn[7], "reserved",  NAME_SIZE );
+    strncpy( usp->UnDCAn[7], "reserved",  NAME_SIZE );  */
   }
 }
 

@@ -44,13 +44,13 @@ TUnSpace::TUnSpace( int nrt ):
     aFldKeysHelp.Add("l<8  Temperature T, in Centigrade <float>  <-SysEq");
     aFldKeysHelp.Add("l<4  Variant number of thermodynamic PT-data <integer> <-SysEq");
     aFldKeysHelp.Add("l<18 Identifier of this unspace simulator definition");
-    aFldKeysHelp.Add("l<4  Batch simulator type code, a combination of {T, P, S, G, R}");
+    aFldKeysHelp.Add("l<4  Payoff matrix function type code, optional {A, B, C, D, E, F}");
 
     usp=&us[1];
     set_def(1);
     usp=&us[0];
     set_def();
-    start_title  = " Probing Uncertainty Space  ";
+    start_title  = " Uncertainty Space Sensitivity Analysis ";
 
 }
 
