@@ -673,7 +673,7 @@ void TUnSpace::out_QT( int Ngr  )
      if(usp->sv[i]>=0)
       sCa += (usp->vMol[i*usp->N+l]-Ca) * (usp->vMol[i*usp->N+l]-Ca);
      if( abs(usp->sv[i]) == Ngr )
-      sCa1 += (usp->vMol[i*usp->N+l]-Ca) * (usp->vMol[i*usp->N+l]-Ca);
+      sCa1 += (usp->vMol[i*usp->N+l]-Ca1) * (usp->vMol[i*usp->N+l]-Ca1);
    }
    if(kf>1)
      sCa /= (kf-1);
@@ -734,7 +734,7 @@ void TUnSpace::out_QT( int Ngr  )
      if(usp->sv[i]>=0)
       sCa += (pow( 10, usp->vFug[i*usp->Ls+l]-Ca)) * pow( 10, (usp->vFug[i*usp->Ls+l]-Ca));
      if( abs(usp->sv[i]) == Ngr )
-      sCa1 += pow( 10, (usp->vFug[i*usp->Ls+l]-Ca)) * pow( 10, (usp->vFug[i*usp->Ls+l]-Ca));
+      sCa1 += pow( 10, (usp->vFug[i*usp->Ls+l]-Ca1)) * pow( 10, (usp->vFug[i*usp->Ls+l]-Ca1));
    }
    if(kf>1)
      sCa /= (kf-1);
