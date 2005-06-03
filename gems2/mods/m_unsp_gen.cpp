@@ -371,6 +371,69 @@ int TUnSpace::calc_nPG()
   return count;
 }
 
+//calculation number of unspace components
+double TUnSpace::value_nPG( int line, int q )
+{
+  int j, count=0;
+
+  if( usp->PsGen[3]== S_ON &&  usp->NgT > 0 )
+  {   if( line == count )
+       return usp->vT[q];
+      count++;
+  }
+  if( usp->PsGen[4]== S_ON &&  usp->NgP > 0 )
+  {   if( line == count )
+       return usp->vP[q];
+      count++;
+  }
+  if( /*usp->PsGen[]== S_ON && */ usp->NgV > 0 )
+  {   if( line == count )
+       return usp->vV[q];
+      count++;
+  }
+
+  if( usp->PsGen[2]== S_ON )
+     for( j=0; j<usp->N; j++)
+       if( usp->NgNb[j] > 0  )
+       {   if( line == count )
+          return usp->vB[q*usp->N+j];
+         count++;
+        }
+
+  if( usp->PsGen[0]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLg[j] > 0  )
+       {   if( line == count )
+          return usp->vG[q*usp->L+j];
+         count++;
+        }
+
+  if( usp->PsGen[1]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLs[j] > 0  )
+       {   if( line == count )
+          return usp->vS[q*usp->L+j];
+         count++;
+        }
+
+  if( usp->PsGen[5]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLv[j] > 0  )
+       {   if( line == count )
+          return usp->vmV[q*usp->L+j];
+         count++;
+        }
+
+  if( usp->PsGen[6]== S_ON )
+     for( j=0; j<usp->Ls; j++)
+       if( usp->NgGam[j] > 0  )
+       {   if( line == count )
+          return usp->vNidP[q*usp->Ls+j];
+          count++;
+        }
+
+  return 0;
+}
 
 //build list of unspace components
 void TUnSpace::build_nPG_list()

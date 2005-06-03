@@ -4,7 +4,6 @@
 #include "m_unspace.h"
 #include "visor.h"
 
-
 //=========================================================================
 // Analyze part
 //=========================================================================
@@ -36,7 +35,7 @@ void TUnSpace::analiseArrays( )
        case UNSP_OF_A:
        case UNSP_OF_B:
        default:   Un_criteria( );     // biuld payoff matrix and analise
-             //     out_QT( Ngr );  // put data for resalt arrays
+                  out_QT( Ngr );  // put data for resalt arrays
                   break;
 
      }
@@ -760,7 +759,8 @@ void TUnSpace::out_QT( int Ngr  )
   float st=2.,st1=2.; // coeff. Studenta
   int k,ii,fl,l,ca=0,kf;
   int kvant = usp->quan_lev*usp->Q;
-
+  if(kvant<1)
+         kvant=1;
  //  paragen( ); // put data to nPhA, PhAndx, PhAfreq ....
 
   ii = usp->N;
@@ -824,7 +824,7 @@ void TUnSpace::out_QT( int Ngr  )
    usp->UnIC[l][8] = kolgrup();
    usp->UnIC[l][9] = 0.;
 
-*/ 
+*/
    quanLapl=quanHur=quanWald=quanHom=0.;
        for(k=0;k<kvant;k++)
         { quanLapl += usp->vMol[usp->quanCx[k][0]*usp->N+l];
@@ -851,46 +851,8 @@ void TUnSpace::out_QT( int Ngr  )
 
  }
 
-
- for( l=0; l<usp->nPG; l++ )
- {
-    gg1=sg1=0.;
-    for( i=0; i<usp->Q; i++ )
-    { fl=0;
-      for( k=0; k<usp->Fi; k++ )
-          if( usp->vYF[i*usp->Fi+k] && !usp->vYF[k] ||
-             !usp->vYF[i*usp->Fi+k] && usp->vYF[k]  )
-          { fl=1; break; }
-         if(!fl)
-           gg1 += usp->vG[i*usp->L+l];
-      }
-   gg1 /= ca;
-   for(i=0; i<usp->Q; i++)
-    { fl=0;
-      for(k=0;k<usp->Fi;k++)
-          if( usp->vYF[i*usp->Fi+k] && !(usp->vYF[k])||
-             !usp->vYF[i*usp->Fi+k] && usp->vYF[k] )
-          { fl=1; break; }
-         if(!fl)
-            sg1 += (usp->vG[i*usp->L+l]-gg1)*(usp->vG[i*usp->L+l]-gg1);
-      }
-  if(ca>1)
-     sg1 /= (ca-1);
-  if(sg1>0)
-    sg1=sqrt(sg1);
-
-   usp->UgDC[l][0] = gg1;
-   if( usp->NgLg[l] > 0 )
-      usp->UgDC[l][1] = st1*sg1/sqrt(double(ca));
-   else
-      usp->UgDC[l][1] = 0.;
-   usp->UgDC[l][2] = usp->Gs[l][0]; //usp->vG[l];
-   usp->UgDC[l][3] = usp->vG[usp->Lapl*usp->L+l];
-   usp->UgDC[l][4] = usp->vG[usp->Homen*usp->L+l];
-
-  }
-
- for( l=0; l<usp->Ls; l++ )             // UaDC
+// UaDC
+ for( l=0; l<usp->Ls; l++ )             
  {
     gg=gg1=sg=sg1=0.;
     for( i=0; i<usp->Q; i++ )
@@ -937,7 +899,7 @@ void TUnSpace::out_QT( int Ngr  )
           quanLapl/=kvant;
 	  quanHur/=kvant;
           quanWald/=kvant;
-          quanHom/=kvant;  
+          quanHom/=kvant;
 
    usp->UaDC[l][0] = usp->vFug[l];
    usp->UaDC[l][1] = gg;
@@ -953,22 +915,217 @@ void TUnSpace::out_QT( int Ngr  )
    usp->UaDC[l][9] = 0.;
 
   }
+// UgDC
+
+//==============================================
+// UgDC
+for( int ii=0; ii<usp->nPG; ii++ )
+{
+  double var1=0, var3=0, var_L=0, var_H=0, var_W=0, var_Hom=0;
+  int sz1 = 0, sz3 = 0;
+
+  usp->UgDC[ii][0] = value_nPG( ii, 0 );
+
+  for(int q=0; q<usp->Q; q++)
+  {
+    if( usp->sv[q] >0 )
+    { var1 += value_nPG( ii, q );
+      sz1++;
+    }
+    if( abs(usp->sv[q]) == Ngr )
+    { var3 += value_nPG( ii, q );
+      sz3++;
+    }
+  }
+
+   if( sz1)
+     usp->UgDC[ii][1] = var1/sz1;
+   else
+     usp->UgDC[ii][1] = 0;
+
+   if( sz3>0 )
+     usp->UgDC[ii][3] = var3/sz3;
+   else
+     usp->UgDC[ii][3] = 0;
+
+  var1 = 0;
+  var3 = 0;
+  for(int q=0; q<usp->Q; q++)
+  {
+    if( usp->sv[q] >0 )
+     var1 += pow( usp->UgDC[ii][1]- value_nPG( ii, q ), 2);
+    if( abs(usp->sv[q]) == Ngr )
+     var3 += pow( usp->UgDC[ii][3]- value_nPG( ii, q ), 2);
+  }
+
+   if( sz1>1 )
+     usp->UgDC[ii][2] = var1/(sz1-1);
+   else
+     usp->UgDC[ii][2] = 0;
+
+   if( sz3>1 )
+     usp->UgDC[ii][4] = var3/(sz3-1);
+   else
+     usp->UgDC[ii][4] = 0;
+
+  for(int t=0; t<usp->qQ; t++)
+  {
+    var_L += value_nPG( ii, usp->quanCx[t][0] );
+    var_H += value_nPG( ii, usp->quanCx[t][1] );
+    var_W += value_nPG( ii, usp->quanCx[t][2] );
+    var_Hom += value_nPG( ii, usp->quanCx[t][3] );
+    // calc statistics
+  }
+
+  usp->UgDC[ii][5] = var_L/usp->qQ;
+  usp->UgDC[ii][6] = var_H/usp->qQ;
+  usp->UgDC[ii][7] = var_W/usp->qQ;
+  usp->UgDC[ii][8] = var_Hom/usp->qQ;
+
+  var1 = 0;
+  for(int t=0; t<usp->qQ; t++)
+  {
+    switch( usp->Pa_Crit )
+    {
+     case 1:
+        var1 += pow( usp->UgDC[ii][5]- value_nPG( ii, usp->quanCx[t][0] ), 2);
+        break;
+     case 2:
+        var1 += pow( usp->UgDC[ii][6]- value_nPG( ii, usp->quanCx[t][1] ), 2);
+        break;
+     case 3:
+        var1 += pow( usp->UgDC[ii][7]- value_nPG( ii, usp->quanCx[t][2] ), 2);
+        break;
+     case 4:
+        var1 += pow( usp->UgDC[ii][8]- value_nPG( ii, usp->quanCx[t][3] ), 2);
+        break;
+   }
+  }
+   if( usp->qQ >1 )
+     usp->UgDC[ii][9] = var1/(usp->qQ-1);
+   else
+     usp->UgDC[ii][9] = 0;
+}
 
 
-//=======================================================
+//=================================================
 
-     double sr,srx,gu,srGAM,*srU,sRXjw=0.,srXF;//,/*sto,*/quanLapl,quanHur,quanWald,quanHom;
-     int /*kvant,*/z;
 
-     kvant = usp->quan_lev*usp->Q;
-     if(kvant<1)
-         kvant=1;
-     srU= new  double[usp->N];
+/*
+
+
+  double sr,srx,srGAM,/*gu,*srU,sRXjw=0.,srXF,sto,*quanLapl,quanHur,quanWald,quanHom;
+     int z;
+
+   l=0;
+   if( usp->PsGen[3]== S_ON &&  usp->NgT > 0 )
+     { usp->UgDC[l][0] = usp->vT[0];
+       sr=srx=0; z=0;
+       for(k=0; k<usp->Q; k++)
+         if(usp->sv[k]>0)
+           { sr += usp->vT[0]; z++;}
+	 if(z)
+          sr /=z;
+	usp->UgDC[l][1] = sr;
+       for(k=0; k<usp->Q; k++)
+        if(usp->sv[k]>=0)
+            srx += (usp->vT[k]-sr) * (usp->vT[k]-sr);
+       if(z>1)
+        srx /= (z-1);
+       usp->UgDC[l][2] = srx;
+// 3-4 propusk
+       quanLapl=quanHur=quanWald=quanHom=0.;
+       for(k=0;k<kvant;k++)
+        { quanLapl += usp->vT[usp->quanCx[k][0]];
+          quanHur +=  usp->vT[usp->quanCx[k][1]];
+          quanWald += usp->vT[usp->quanCx[k][2]];
+          quanHom  += usp->vT[usp->quanCx[k][3]];
+        }
+          quanLapl/=kvant;
+	  quanHur/=kvant;
+          quanWald/=kvant;
+          quanHom/=kvant;
+	usp->UgDC[l][5] = quanLapl;
+
+
+
+      l++;
+     }
+   if( usp->PsGen[4]== S_ON &&  usp->NgP > 0 )
+      usp->UgDC[l++][0] = usp->vP[0];
+   if( /*usp->PsGen[]== S_ON && * usp->NgV > 0 )
+      usp->UgDC[l++][0] = usp->vV[0];
+   if( usp->PsGen[2]== S_ON )
+     for( j=0; j<usp->N; j++)
+       if( usp->NgNb[j] > 0  )
+         usp->UgDC[l++][0] = usp->Bs[j][0];
+   if( usp->PsGen[0]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLg[j] > 0  )
+        usp->UgDC[l++][0] = usp->Gs[j][0];
+   if( usp->PsGen[1]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLs[j] > 0  )
+           usp->UgDC[l++][0] = usp->Ss[j][0];
+  if( usp->PsGen[5]== S_ON )
+     for( j=0; j<usp->L; j++)
+       if( usp->NgLv[j] > 0  )
+           usp->UgDC[l++][0] = usp->Vs[j][0];
+  if( usp->PsGen[6]== S_ON )
+     for( j=0; j<usp->Ls; j++)
+       if( usp->NgGam[j] > 0  )
+           usp->UgDC[l++][0] = usp->GAMs[j][0];
+
+
+
+// (usp->vG[j1*usp->L+k]
+
+
+ for( l=0; l<usp->nPG; l++ )
+ {
+    gg1=sg1=0.;
+    for( i=0; i<usp->Q; i++ )
+    { fl=0;
+      for( k=0; k<usp->Fi; k++ )
+          if( usp->vYF[i*usp->Fi+k] && !usp->vYF[k] ||
+             !usp->vYF[i*usp->Fi+k] && usp->vYF[k]  )
+          { fl=1; break; }
+         if(!fl)
+           gg1 += usp->vG[i*usp->L+l];
+      }
+   gg1 /= ca;
+   for(i=0; i<usp->Q; i++)
+    { fl=0;
+      for(k=0;k<usp->Fi;k++)
+          if( usp->vYF[i*usp->Fi+k] && !(usp->vYF[k])||
+             !usp->vYF[i*usp->Fi+k] && usp->vYF[k] )
+          { fl=1; break; }
+         if(!fl)
+            sg1 += (usp->vG[i*usp->L+l]-gg1)*(usp->vG[i*usp->L+l]-gg1);
+      }
+  if(ca>1)
+     sg1 /= (ca-1);
+  if(sg1>0)
+    sg1=sqrt(sg1);
+
+   usp->UgDC[l][0] = gg1;
+   if( usp->NgLg[l] > 0 )
+      usp->UgDC[l][1] = st1*sg1/sqrt(double(ca));
+   else
+      usp->UgDC[l][1] = 0.;
+   usp->UgDC[l][2] = usp->Gs[l][0]; //usp->vG[l];
+   usp->UgDC[l][3] = usp->vG[usp->Lapl*usp->L+l];
+   usp->UgDC[l][4] = usp->vG[usp->Homen*usp->L+l];
+
+  }
+
+
+/*     srU= new  double[usp->N];
 
      if(TProfil::pm->mup->Laq )
      {
         for(k=0; k<usp->Q; k++)
-          if( usp->sv[k] == Ngr  /* && !filters( k )*/)
+          if( usp->sv[k] == Ngr  /* && !filters( k )*)
            sRXjw += usp->vY[k*usp->L+TProfil::pm->mup->Laq-1];
         if( usp->ob)
          sRXjw/=usp->ob;
@@ -976,17 +1133,16 @@ void TUnSpace::out_QT( int Ngr  )
      for(j=0; j<usp->N; j++)
      { srU[j]=0.;
        for(k=0;k<usp->Q;k++)
-        if( usp->sv[k] == Ngr /*&& !filters( k )*/)
+        if( usp->sv[k] == Ngr /*&& !filters( k )*)
           srU[j] += usp->vU[k*usp->N+j];
        if(usp->ob)
         srU[j] /= usp->ob;
-     }
-
+     }*
     ii=0;
     for( z=0; z<usp->Fi; z++)
     { srXF=0.;
       for( k=0; k<usp->Q; k++)
-        if(usp->sv[k]==Ngr /* && !filters( k )*/)
+        if(usp->sv[k]==Ngr /* && !filters( k )*)
            srXF += usp->vYF[k*usp->Fi+z];
       if(usp->ob)
           srXF/=usp->ob;
@@ -994,7 +1150,7 @@ void TUnSpace::out_QT( int Ngr  )
       {
         sr=srx=srGAM=0.;
        for(k=0; k<usp->Q; k++ )
-        if( usp->sv[k]==Ngr /*&& !filters( k )*/)
+        if( usp->sv[k]==Ngr /*&& !filters( k )*)
         {  sr += usp->vG[k*usp->L+j];
            srx+= usp->vY[k*usp->L+j];
            srGAM += usp->vGam[k*usp->L+j];
@@ -1007,7 +1163,7 @@ void TUnSpace::out_QT( int Ngr  )
        if(usp->ob && sto>0)
        { sto/=usp->ob;
          sto = sqrt(sto);
-       }   */
+       }   *
        quanLapl=quanHur=quanWald=quanHom=0.;
        for(k=0;k<kvant;k++)
         { quanLapl +=usp->vG[usp->quanCx[k][0]*usp->L+j];
@@ -1019,24 +1175,24 @@ void TUnSpace::out_QT( int Ngr  )
 	  quanHur/=kvant;
           quanWald/=kvant;
           quanHom/=kvant;
-      if(srx)
-       if(j<TProfil::pm->mup->Laq-1)
-         gu=g_uw(j,srU,usp->A,srGAM,srx,sRXjw,srXF);
-       else
-         gu=g_u( j,srU,usp->A,srGAM,srx,srXF);
-      else
-       gu=0.;
+//      if(srx)
+//       if(j<TProfil::pm->mup->Laq-1)
+//         gu=g_uw(j,srU,usp->A,srGAM,srx,sRXjw,srXF);
+//       else
+//         gu=g_u( j,srU,usp->A,srGAM,srx,srXF);
+//      else
+//       gu=0.;
 
    usp->UgDC[j][5] = sr;
    usp->UgDC[j][6] = quanLapl;
    usp->UgDC[j][7] = quanHom;
-   usp->UgDC[j][8] = gu;
+   usp->UgDC[j][8] = ;
    usp->UgDC[j][9] = 0.;
       }
     ii += TProfil::pm->mup->Ll[z];
    }
 
-  delete[] srU;
+//  delete[] srU;  */
 }
 
 

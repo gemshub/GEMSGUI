@@ -316,6 +316,7 @@ protected:
     void set_def_data_to_arrays( bool mode );   // must be changed with DK
     void init_generation();
     int calc_nPG();
+    double value_nPG( int line, int q );
     void build_nPG_list();
     void init_analyse();
 
