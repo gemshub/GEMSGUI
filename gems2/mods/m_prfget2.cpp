@@ -377,7 +377,7 @@ void TProfil::TestChangeProfile()
        for(uint i=0; i< aList.GetCount(); i++)
        {
          aMT->RecInput( aList[i].c_str() );
-         aMT->InsertChanges( aPhase, aIComp  );
+         aMT->InsertChanges( aPhase, aIComp, aDComp  );
          aMT->RecSave( aList[i].c_str(), true );
        }
 

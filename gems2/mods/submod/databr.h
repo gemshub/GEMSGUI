@@ -68,7 +68,7 @@ typedef struct
     hDl,	// hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
     hDt,	// hydraulic transversal dispersivity, m**2/s			 	
     hDv,	// hydraulic vertical dispersivity, m**2/s
-    nPe;	// node Peclet number, dimensionless
+    nfo;	// fortuosity
    
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH 
@@ -98,6 +98,8 @@ typedef struct
     *dRes2;
 }
 DATABR;
+
+typedef DATABR*  DATABRPTR;
 
 typedef enum {  // NodeStatus codes GEMS
  NEED_GEM_AIA = 1,   //To calculate with simplex IA

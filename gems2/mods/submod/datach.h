@@ -60,7 +60,7 @@ typedef struct
 
 // DC - related values  
     *DCmm,   // DC molar mass, g/mole [nDC]
-
+    *DD,     // [nDC] diffusition koefficients for now constant
 // Thermodynamic data
 // Require Lagrange interpolation subroutine to extract data for given P,T
     *roW,    //density of water solvent [ nPp, nTp]

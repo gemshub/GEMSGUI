@@ -131,8 +131,10 @@ int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
          if(  (!nodeTypes && i==0) ||
               ( nodeTypes && (nodeTypes[ii] == i+1 )) )
                   {    TProfil::pm->multi->data_BR->NodeHandle = ii+1;
-                       TProfil::pm->multi->SaveNodeCopyToArray(ii);
-                       TProfil::pm->multi->GetNodeCopyFromArray(ii);
+                       TProfil::pm->multi->SaveNodeCopyToArray(ii, nNodes,
+                             TProfil::pm->multi->arr_BR);
+                       TProfil::pm->multi->GetNodeCopyFromArray(ii, nNodes,
+                             TProfil::pm->multi->arr_BR);
                    }
           i++;
      }
@@ -255,7 +257,8 @@ int  NodeCalcGEM( int  &readF, // negative means read only
 
 // Copying data for node iNode from node array into work DATABR structure
 if( onlyWork > 0)
-   TProfil::pm->multi->GetNodeCopyFromArray( iNode );
+   TProfil::pm->multi->GetNodeCopyFromArray( iNode, TProfil::pm->multi->nNodes,
+                             TProfil::pm->multi->arr_BR );
 
 if( readF > 0 )  // calculation mode: passing input GEM data changed on previous FMT iteration
 {                 //                   into work DATABR structure
@@ -304,7 +307,8 @@ if( readF < 0 )  // readonly mode: passing input GEM data to FMT
 
 // Copying data for node iNode back from work DATABR structure into the node array
 if( readF > 0 &&  onlyWork > 0)
-    TProfil::pm->multi->SaveNodeCopyToArray( iNode );
+    TProfil::pm->multi->SaveNodeCopyToArray( iNode, TProfil::pm->multi->nNodes,
+                             TProfil::pm->multi->arr_BR );
     return 0;
 }
     catch(TError& err)

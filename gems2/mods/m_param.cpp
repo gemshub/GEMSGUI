@@ -691,6 +691,23 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 }
 
 
+// GEM IPM calculation of equilibrium state in MULTI
+void TProfil::calcMulti()
+{
+    // MultiCalcInit( keyp.c_str() );
+    //    // realloc memory for  R and R1
+    pmp->R = new double[pmp->N*(pmp->N+1)];
+    pmp->R1 = new double[pmp->N*(pmp->N+1)];
+    memset( pmp->R, 0, pmp->N*(pmp->N+1)*sizeof(double));
+    memset( pmp->R1, 0, pmp->N*(pmp->N+1)*sizeof(double));
+
+    CompG0Load();
+    if( AutoInitialApprox() == false )
+        MultiCalcIterations();
+
+
+}
+
 // ------------------ End of m_param.cpp -----------------------
 
 

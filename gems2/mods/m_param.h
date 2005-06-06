@@ -406,6 +406,7 @@ public:
     //test
    void outMulti( GemDataStream& ff, gstring& path  );
    void readMulti( GemDataStream& ff );
+   void calcMulti();
 };
 
 /* Work codes of surface site type indices in pm->AtNdx vector */

@@ -566,6 +566,158 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 }
 
 
+// ===========================================================
+
+void  TGEM2MT::freeNodeArrays()
+{
+// free old arrays
+   if( arr_BR_size && old_BR)
+     for( int ii=0; ii<arr_BR_size; ii++ )
+        if( old_BR[ii] )
+        {
+          TProfil::pm->multi->databr_free(old_BR[ii]);
+          old_BR[ii] = 0;
+        }
+  delete[]  old_BR;
+  old_BR = 0;
+
+  if( arr_BR_size && arr_BR)
+     for( int ii=0; ii<arr_BR_size; ii++ )
+        if( arr_BR[ii] )
+        {
+          TProfil::pm->multi->databr_free(arr_BR[ii]);
+          arr_BR[ii] = 0;
+        }
+  delete[]  arr_BR;
+  arr_BR = 0;
+  arr_BR_size = 0;
+}
+
+
+void  TGEM2MT::allocNodeArrays()
+{
+ freeNodeArrays();
+// alloc memory for all pointers
+ arr_BR = new  DATABRPTR[mtp->nC];
+ old_BR = new  DATABRPTR[mtp->nC];
+ arr_BR_size = mtp->nC;
+ for( int ii=0; ii<mtp->nC; ii++ )
+ {       arr_BR[ii] = 0;
+         old_BR[ii] = 0;
+ }
+}
+
+void  TGEM2MT::copyNodeArrays()
+{
+ if( !arr_BR || !old_BR )
+  return;
+ for( int ii=0; ii<mtp->nC; ii++ )
+ {
+    TProfil::pm->multi->GetNodeCopyFromArray( ii, mtp->nC, arr_BR );
+    TProfil::pm->multi->SaveNodeCopyToArray( ii, mtp->nC, old_BR );
+ }
+}
+
+
+//-------------------------------------------------------------------
+// NewNodeArray()  make worked DATACH structure
+// Allocates a new FMT node array of DATABR structures and
+// reads in the data from MULTI (using nC, Bn and DiCp, DDc, HydP)
+//-------------------------------------------------------------------
+void  TGEM2MT::NewNodeArray()
+{
+  TMulti* mult = TProfil::pm->multi;
+
+// generate Tval&Pval arrays
+if( mtp->PsTPai != S_OFF )
+    gen_TPval();
+
+//make for dataCH
+// select lists   (all components )
+    TCIntArray aSelIC;
+    for(int ii=0; ii< mult->GetPM()->N; ii++ )
+       aSelIC.Add( ii );
+
+    TCIntArray aSelDC;
+    for(int ii=0; ii< mult->GetPM()->L; ii++ )
+       aSelDC.Add( ii );
+
+    TCIntArray aSelPH;
+    for(int ii=0; ii< mult->GetPM()->FI; ii++ )
+       aSelPH.Add( ii );
+
+// set default data and realloc arrays
+   mult->makeStartDataChBR( aSelIC, aSelDC, aSelPH,
+      mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3], mtp->Tval, mtp->Pval );
+
+// allocate memory for DATABR structures
+  allocNodeArrays();
+  data_CH = TProfil::pm->multi->data_CH;
+ // put DDc
+   for( int jj=0; jj<data_CH->nDC; jj ++)
+      data_CH->DD[jj] = mtp->DDc[jj];
+
+ for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
+ {
+   pVisor->Message( window(), GetName(),
+      "Generation of EqStat records\n"
+           "Please, wait...", mtp->kv, mtp->nIV);
+
+  // Make new Systat record & calculate it
+     gen_task();
+  // Save databr
+     mult->packDataBr();
+   //
+   for( int jj=0; jj<mtp->nC; jj ++)
+    if( mtp->DiCp[jj] == mtp->kv )
+     {    TProfil::pm->multi->data_BR->NodeHandle = (short)jj;
+          TProfil::pm->multi->SaveNodeCopyToArray( jj, mtp->nC, arr_BR );
+          TProfil::pm->multi->GetNodeCopyFromArray( jj, mtp->nC, arr_BR );
+     }
+    mt_next();      // Generate work values for the next EqStat rkey
+
+ } // mtp->kv
+
+ pVisor->CloseMessage();
+
+ for( int ii=0; ii<mtp->nC; ii++)
+      if( arr_BR[ii] == 0 )
+      Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
+
+ // put HydP
+ for( int jj=0; jj<mtp->nC; jj ++)
+   {   arr_BR[jj]->Vt = mtp->HydP[jj][0];
+       arr_BR[jj]->eps = mtp->HydP[jj][1];
+       arr_BR[jj]->Km = mtp->HydP[jj][2];
+       arr_BR[jj]->al = mtp->HydP[jj][3];
+       arr_BR[jj]->hDl = mtp->HydP[jj][4];
+       arr_BR[jj]->nfo = mtp->HydP[jj][5];
+   }
+
+}
+
+void TGEM2MT::calc_GEM_node( int node_ndx )
+{
+
+   TProfil::pm->multi->GetNodeCopyFromArray( node_ndx, mtp->nC, arr_BR  );
+// Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
+    TProfil::pm->multi->unpackDataBr();
+// GEM IPM calculation of equilibrium state in MULTI
+    TProfil::pm->calcMulti();
+// Extracting and packing GEM IPM results into work DATABR structure
+    TProfil::pm->multi->packDataBr();
+    TProfil::pm->multi->SaveNodeCopyToArray( node_ndx, mtp->nC, arr_BR  );
+}
+
+
+int TGEM2MT::Trans1D( char mode, int RefCode )
+{
+
+ for( int ii=0; ii<mtp->nC; ii++)
+   calc_GEM_node( ii );
+ return RefCode;
+}
+
 
 // --------------------- end of m_gem2mtc.cpp ---------------------------
 

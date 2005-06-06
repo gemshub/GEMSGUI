@@ -282,12 +282,12 @@ class TMulti :
     SYSTEM *syp;
     //MTPARM *tpp;
 
-    // transport
-    DATACH  *data_CH;
-    DATABR  *data_BR;
 
 public:
 
+    // transport
+    DATACH  *data_CH;
+    DATABR  *data_BR;
     TIArray<IPNCalc> qEp;
     TIArray<IPNCalc> qEd;
 
@@ -319,6 +319,10 @@ public:
     void unpackData();
 
     //mass transport
+    void GetNodeCopyFromArray( int ii, int nNodes, DATABRPTR* arr_BR );
+    void SaveNodeCopyToArray( int ii, int nNodes, DATABRPTR* arr_BR );
+    void CopyTo( DATABR *(*dBR) );
+
     void to_file( GemDataStream& ff, gstring& path  );
     void to_text_file( gstring& path );
     void from_file( GemDataStream& ff );
@@ -344,7 +348,7 @@ public:
     void datach_realloc();
     void datach_free();
     void databr_realloc();
-    void databr_free();
+    void databr_free( DATABR *data_BR_ =0 );
     void datach_to_text_file( fstream& ff );
     void datach_from_text_file( fstream& ff);
     void databr_to_text_file(fstream& ff );
@@ -371,19 +375,16 @@ class TMulti
 {
    MULTI pm;
 
-    // transport
-    int nNodes;
-//    DATACH  *data_CH;
-//    DATABR  *data_BR;
-    DATABR  *(*arr_BR);
-
    char PAalp_;
    char PSigm_;
 
 public:
 
+   // transport
+   int nNodes;
    DATABR  *data_BR;
    DATACH  *data_CH;
+   DATABR  *(*arr_BR);
    float EpsW_;
    float RoW_;
 
@@ -403,8 +404,8 @@ public:
         return "Multi";
     }
 
-    void GetNodeCopyFromArray( int ii );
-    void SaveNodeCopyToArray( int ii );
+    void GetNodeCopyFromArray( int ii, int nNodes, DATABRPTR* arr_BR );
+    void SaveNodeCopyToArray( int ii, int nNodes, DATABRPTR* arr_BR );
     void CopyTo( DATABR *(*dBR) );
     void GEM_input_from_MT(
        short p_NodeHandle,    // Node identification handle
@@ -492,7 +493,7 @@ public:
     void datach_realloc();
     void datach_free();
     void databr_realloc();
-    void databr_free();
+    void databr_free( DATABR *data_BR_ =0);
     void datach_to_text_file( fstream& ff );
     void datach_from_text_file( fstream& ff);
     void databr_to_text_file(fstream& ff );

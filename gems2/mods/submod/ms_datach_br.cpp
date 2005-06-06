@@ -92,6 +92,7 @@ void TMulti::makeStartDataChBR(
      data_CH->ICmm[i1] = pm.Awt[i1];
 
   memcpy( data_CH->DCmm, pm.MM , data_CH->nDC*sizeof(double));
+  memset( data_CH->DD, 0, data_CH->nDC*sizeof(double));
 
   if( data_CH->nAalp >0 )
       for( i1=0; i1< data_CH->nPH; i1++ )
@@ -206,8 +207,6 @@ void TMulti::getG0_V0_H0_Cp0_matrix()
 
 #else
 
-typedef DATABR*  DATABRPTR;
-
 TMulti::TMulti( int nNd  )
 {
 // alloc memory for data bidge structures
@@ -220,85 +219,6 @@ TMulti::TMulti( int nNd  )
         arr_BR[ii] = 0;
 }
 
-// Copying data for node iNode from node array into work DATABR structure
-void TMulti::GetNodeCopyFromArray( int ii )
-{
-  // from arr_BR[ii] to data_BR structure
-  if( ii < 0 || ii>= nNodes )
-    return;
-  // memory must be allocated before
-
-  memcpy( &data_BR->NodeHandle, &arr_BR[ii]->NodeHandle, 6*sizeof(short));
-  memcpy( &data_BR->T, &arr_BR[ii]->T, 36*sizeof(double));
-// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
-// exchange of values occurs through lists of indices, e.g. xDC, xPH
-  memcpy( data_BR->xDC, arr_BR[ii]->xDC, data_CH->nDCb*sizeof(double) );
-  memcpy( data_BR->gam, arr_BR[ii]->gam, data_CH->nDCb*sizeof(double) );
-  memcpy( data_BR->xPH, arr_BR[ii]->xPH, data_CH->nPHb*sizeof(double) );
-  memcpy( data_BR->vPS, arr_BR[ii]->vPS, data_CH->nPSb*sizeof(double) );
-  memcpy( data_BR->mPS, arr_BR[ii]->mPS, data_CH->nPSb*sizeof(double) );
-
-  memcpy( data_BR->bPS, arr_BR[ii]->bPS,
-                          data_CH->nPSb*data_CH->nICb*sizeof(double) );
-  memcpy( data_BR->xPA, arr_BR[ii]->xPA, data_CH->nPSb*sizeof(double) );
-  memcpy( data_BR->dul, arr_BR[ii]->dul, data_CH->nDCb*sizeof(double) );
-  memcpy( data_BR->dll, arr_BR[ii]->dll, data_CH->nDCb*sizeof(double) );
-  memcpy( data_BR->bIC, arr_BR[ii]->bIC, data_CH->nICb*sizeof(double) );
-  memcpy( data_BR->rMB, arr_BR[ii]->rMB, data_CH->nICb*sizeof(double) );
-  memcpy( data_BR->uIC, arr_BR[ii]->uIC, data_CH->nICb*sizeof(double) );
-  data_BR->dRes1 = 0;
-  data_BR->dRes2 = 0;
-}
-
-void TMulti::CopyTo( DATABR *(*dBR) )
-{
-// alloc new memory
- if( dBR )
-  if( *dBR )
-  {
-    databr_free();
-    delete[] *dBR;
-  }
-
-  *dBR = data_BR;
-  data_BR = new DATABR;
-  databr_realloc();
-
-  memcpy( &data_BR->NodeHandle, &(*dBR)->NodeHandle, 6*sizeof(short));
-  memcpy( &data_BR->T, &(*dBR)->T, 36*sizeof(double));
-// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
-// exchange of values occurs through lists of indices, e.g. xDC, xPH
-  memcpy( data_BR->xDC, (*dBR)->xDC, data_CH->nDCb*sizeof(double) );
-  memcpy( data_BR->gam, (*dBR)->gam, data_CH->nDCb*sizeof(double) );
-  memcpy( data_BR->xPH, (*dBR)->xPH, data_CH->nPHb*sizeof(double) );
-  memcpy( data_BR->vPS, (*dBR)->vPS, data_CH->nPSb*sizeof(double) );
-  memcpy( data_BR->mPS, (*dBR)->mPS, data_CH->nPSb*sizeof(double) );
-
-  memcpy( data_BR->bPS, (*dBR)->bPS,
-                          data_CH->nPSb*data_CH->nICb*sizeof(double) );
-  memcpy( data_BR->xPA, (*dBR)->xPA, data_CH->nPSb*sizeof(double) );
-  memcpy( data_BR->dul, (*dBR)->dul, data_CH->nDCb*sizeof(double) );
-  memcpy( data_BR->dll, (*dBR)->dll, data_CH->nDCb*sizeof(double) );
-  memcpy( data_BR->bIC, (*dBR)->bIC, data_CH->nICb*sizeof(double) );
-  memcpy( data_BR->rMB, (*dBR)->rMB, data_CH->nICb*sizeof(double) );
-  memcpy( data_BR->uIC, (*dBR)->uIC, data_CH->nICb*sizeof(double) );
-  data_BR->dRes1 = 0;
-  data_BR->dRes2 = 0;
-}
-
-
-// Copying data for node iNode back from work DATABR structure into the node array
-void TMulti::SaveNodeCopyToArray( int ii )
-{
-
-  if( ii < 0 || ii>= nNodes )
-    return;
-  if( arr_BR[ii] )  delete[] arr_BR[ii];
-  arr_BR[ii] = data_BR;
-// alloc new memory
-  data_BR = new DATABR;
-  databr_realloc();
-}
 
 // calculation mode: passing input GEM data changed on previous FMT iteration
 //                   into work DATABR structure
@@ -439,6 +359,88 @@ void TMulti::GEM_output_to_MT(
 
 
 #endif
+
+
+// Copying data for node iNode from node array into work DATABR structure
+void TMulti::GetNodeCopyFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
+{
+  // from arr_BR[ii] to data_BR structure
+  if( ii < 0 || ii>= nNodes )
+    return;
+  // memory must be allocated before
+
+  memcpy( &data_BR->NodeHandle, &arr_BR[ii]->NodeHandle, 6*sizeof(short));
+  memcpy( &data_BR->T, &arr_BR[ii]->T, 36*sizeof(double));
+// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
+// exchange of values occurs through lists of indices, e.g. xDC, xPH
+  memcpy( data_BR->xDC, arr_BR[ii]->xDC, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->gam, arr_BR[ii]->gam, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->xPH, arr_BR[ii]->xPH, data_CH->nPHb*sizeof(double) );
+  memcpy( data_BR->vPS, arr_BR[ii]->vPS, data_CH->nPSb*sizeof(double) );
+  memcpy( data_BR->mPS, arr_BR[ii]->mPS, data_CH->nPSb*sizeof(double) );
+
+  memcpy( data_BR->bPS, arr_BR[ii]->bPS,
+                          data_CH->nPSb*data_CH->nICb*sizeof(double) );
+  memcpy( data_BR->xPA, arr_BR[ii]->xPA, data_CH->nPSb*sizeof(double) );
+  memcpy( data_BR->dul, arr_BR[ii]->dul, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->dll, arr_BR[ii]->dll, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->bIC, arr_BR[ii]->bIC, data_CH->nICb*sizeof(double) );
+  memcpy( data_BR->rMB, arr_BR[ii]->rMB, data_CH->nICb*sizeof(double) );
+  memcpy( data_BR->uIC, arr_BR[ii]->uIC, data_CH->nICb*sizeof(double) );
+  data_BR->dRes1 = 0;
+  data_BR->dRes2 = 0;
+}
+
+void TMulti::CopyTo( DATABR *(*dBR) )
+{
+// alloc new memory
+ if( dBR )
+  if( *dBR )
+  {
+    databr_free();
+    delete[] *dBR;
+  }
+
+  *dBR = data_BR;
+  data_BR = new DATABR;
+  databr_realloc();
+
+  memcpy( &data_BR->NodeHandle, &(*dBR)->NodeHandle, 6*sizeof(short));
+  memcpy( &data_BR->T, &(*dBR)->T, 36*sizeof(double));
+// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
+// exchange of values occurs through lists of indices, e.g. xDC, xPH
+  memcpy( data_BR->xDC, (*dBR)->xDC, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->gam, (*dBR)->gam, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->xPH, (*dBR)->xPH, data_CH->nPHb*sizeof(double) );
+  memcpy( data_BR->vPS, (*dBR)->vPS, data_CH->nPSb*sizeof(double) );
+  memcpy( data_BR->mPS, (*dBR)->mPS, data_CH->nPSb*sizeof(double) );
+
+  memcpy( data_BR->bPS, (*dBR)->bPS,
+                          data_CH->nPSb*data_CH->nICb*sizeof(double) );
+  memcpy( data_BR->xPA, (*dBR)->xPA, data_CH->nPSb*sizeof(double) );
+  memcpy( data_BR->dul, (*dBR)->dul, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->dll, (*dBR)->dll, data_CH->nDCb*sizeof(double) );
+  memcpy( data_BR->bIC, (*dBR)->bIC, data_CH->nICb*sizeof(double) );
+  memcpy( data_BR->rMB, (*dBR)->rMB, data_CH->nICb*sizeof(double) );
+  memcpy( data_BR->uIC, (*dBR)->uIC, data_CH->nICb*sizeof(double) );
+  data_BR->dRes1 = 0;
+  data_BR->dRes2 = 0;
+}
+
+
+// Copying data for node iNode back from work DATABR structure into the node array
+void TMulti::SaveNodeCopyToArray( int ii, int nNodes, DATABRPTR* arr_BR )
+{
+
+  if( ii < 0 || ii>= nNodes )
+    return;
+  if( arr_BR[ii] )  delete[] arr_BR[ii];
+  arr_BR[ii] = data_BR;
+// alloc new memory
+  data_BR = new DATABR;
+  databr_realloc();
+}
+
 
 // Extracting and packing GEM IPM results into work DATABR structure
 void TMulti::packDataBr()
@@ -587,6 +589,7 @@ void TMulti::datach_to_file( GemDataStream& ff )
    ff.writeArray( data_CH->A, data_CH->nIC*data_CH->nDC );
    ff.writeArray( data_CH->ICmm, data_CH->nIC );
    ff.writeArray( data_CH->DCmm, data_CH->nDC );
+   ff.writeArray( data_CH->DD, data_CH->nDC );
 
    ff.writeArray( data_CH->Tval,  data_CH->nTp );
    ff.writeArray( data_CH->Pval,  data_CH->nPp );
@@ -632,6 +635,7 @@ void TMulti::datach_from_file( GemDataStream& ff )
    ff.readArray( data_CH->A, data_CH->nIC*data_CH->nDC );
    ff.readArray( data_CH->ICmm, data_CH->nIC );
    ff.readArray( data_CH->DCmm, data_CH->nDC );
+   ff.readArray( data_CH->DD, data_CH->nDC );
 
    ff.readArray( data_CH->Tval,  data_CH->nTp );
    ff.readArray( data_CH->Pval,  data_CH->nPp );
@@ -676,6 +680,7 @@ void TMulti::datach_to_text_file( fstream& ff )
    outArray( ff, "A", data_CH->A, data_CH->nDC*data_CH->nIC, data_CH->nIC );
    outArray( ff, "ICmm", data_CH->ICmm, data_CH->nIC);
    outArray( ff, "DCmm", data_CH->DCmm, data_CH->nDC);
+   outArray( ff, "DD", data_CH->DD, data_CH->nDC);
 
    outArray( ff, "Tval", data_CH->Tval, data_CH->nTp );
    outArray( ff, "Pval", data_CH->Pval, data_CH->nPp );
@@ -727,6 +732,7 @@ void TMulti::datach_from_text_file(fstream& ff)
    inArray( ff, "A", data_CH->A, data_CH->nDC*data_CH->nIC );
    inArray( ff, "ICmm", data_CH->ICmm, data_CH->nIC);
    inArray( ff, "DCmm", data_CH->DCmm, data_CH->nDC);
+   inArray( ff, "DD", data_CH->DD, data_CH->nDC);
 
    inArray( ff, "Tval", data_CH->Tval, data_CH->nTp );
    inArray( ff, "Pval", data_CH->Pval, data_CH->nPp );
@@ -771,6 +777,7 @@ void TMulti::datach_realloc()
   data_CH->A = new float[data_CH->nIC*data_CH->nDC];
   data_CH->ICmm = new double[data_CH->nIC];
   data_CH->DCmm = new double[data_CH->nDC];
+  data_CH->DD = new double[data_CH->nDC];
 
   data_CH->Tval = new float[data_CH->nTp];
   data_CH->Pval = new float[data_CH->nPp];
@@ -826,6 +833,10 @@ void TMulti::datach_free()
  if( data_CH->DCmm )
   { delete[] data_CH->DCmm;
     data_CH->DCmm = 0;
+  }
+ if( data_CH->DD )
+  { delete[] data_CH->DD;
+    data_CH->DD = 0;
   }
 
  if( data_CH->Tval )
@@ -1027,60 +1038,62 @@ void TMulti::databr_realloc()
 }
 
 // free dynamic memory
-void TMulti::databr_free()
+void TMulti::databr_free( DATABR *data_BR_ )
 {
 
-  memset( &data_BR->NodeHandle, 0, 6*sizeof(short));
-  memset( &data_BR->T, 0, 36*sizeof(double));
+  if( data_BR_ == 0)
+    data_BR_ = data_BR;
+  memset( &data_BR_->NodeHandle, 0, 6*sizeof(short));
+  memset( &data_BR_->T, 0, 36*sizeof(double));
 
- if( data_BR->xDC )
-  { delete[] data_BR->xDC;
-    data_BR->xDC = 0;
+ if( data_BR_->xDC )
+  { delete[] data_BR_->xDC;
+    data_BR_->xDC = 0;
   }
- if( data_BR->gam )
-  { delete[] data_BR->gam;
-    data_BR->gam = 0;
+ if( data_BR_->gam )
+  { delete[] data_BR_->gam;
+    data_BR_->gam = 0;
   }
- if( data_BR->xPH )
-  { delete[] data_BR->xPH;
-    data_BR->xPH = 0;
+ if( data_BR_->xPH )
+  { delete[] data_BR_->xPH;
+    data_BR_->xPH = 0;
   }
- if( data_BR->vPS )
-  { delete[] data_BR->vPS;
-    data_BR->vPS = 0;
+ if( data_BR_->vPS )
+  { delete[] data_BR_->vPS;
+    data_BR_->vPS = 0;
   }
- if( data_BR->mPS )
-  { delete[] data_BR->mPS;
-    data_BR->mPS = 0;
+ if( data_BR_->mPS )
+  { delete[] data_BR_->mPS;
+    data_BR_->mPS = 0;
   }
 
- if( data_BR->bPS )
-  { delete[] data_BR->bPS;
-    data_BR->bPS = 0;
+ if( data_BR_->bPS )
+  { delete[] data_BR_->bPS;
+    data_BR_->bPS = 0;
   }
- if( data_BR->xPA )
-  { delete[] data_BR->xPA;
-    data_BR->xPA = 0;
+ if( data_BR_->xPA )
+  { delete[] data_BR_->xPA;
+    data_BR_->xPA = 0;
   }
- if( data_BR->dul )
-  { delete[] data_BR->dul;
-    data_BR->dul = 0;
+ if( data_BR_->dul )
+  { delete[] data_BR_->dul;
+    data_BR_->dul = 0;
   }
- if( data_BR->dll )
-  { delete[] data_BR->dll;
-    data_BR->dll = 0;
+ if( data_BR_->dll )
+  { delete[] data_BR_->dll;
+    data_BR_->dll = 0;
   }
- if( data_BR->bIC )
-  { delete[] data_BR->bIC;
-    data_BR->bIC = 0;
+ if( data_BR_->bIC )
+  { delete[] data_BR_->bIC;
+    data_BR_->bIC = 0;
   }
- if( data_BR->rMB )
-  { delete[] data_BR->rMB;
-    data_BR->rMB = 0;
+ if( data_BR_->rMB )
+  { delete[] data_BR_->rMB;
+    data_BR_->rMB = 0;
   }
- if( data_BR->uIC )
-  { delete[] data_BR->uIC;
-    data_BR->uIC = 0;
+ if( data_BR_->uIC )
+  { delete[] data_BR_->uIC;
+    data_BR_->uIC = 0;
   }
 
 }

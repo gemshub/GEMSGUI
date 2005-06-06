@@ -51,6 +51,10 @@ TGEM2MT::TGEM2MT( int nrt ):
     set_def();
     start_title =
        " Definition of a GEM2MT (Coupled model)";
+    data_CH = 0;
+    arr_BR =0;
+    old_BR =0;
+    arr_BR_size = 0;
 }
 
 // get key of record
@@ -124,7 +128,7 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtpvfl].SetPtr( &mtp->PvICi );  /* a8 */
     aObj[o_mtpsfl].SetPtr( &mtp->PsMode ); /* a8 */
     aObj[o_mtcipf].SetPtr( &mtp->nC );     /* i4 */
-    aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i7 */
+    aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i8 */
     aObj[o_mtnsne].SetPtr( &mtp->nS );   /* i4 */
     aObj[o_mtptai].SetPtr( &mtp->nPai );  /* i2 */
     aObj[o_mttmi].SetPtr( mtp->tmi );     /* i3 */
@@ -163,7 +167,7 @@ void TGEM2MT::ods_link(int q)
     aObj[ o_mtname].SetPtr(  mtp->name );
     aObj[ o_mtnotes].SetPtr(   mtp->notes );
     aObj[o_mtflag].SetPtr( &mtp->PunE );    /* a20 */
-    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i29 */
+    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i30 */
     aObj[o_mtdoudl].SetPtr( &mtp->Msysb );    /* d9 */
     aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f19 */
     aObj[ o_mtxnames].SetPtr(  mtp->xNames );
@@ -198,6 +202,10 @@ void TGEM2MT::ods_link(int q)
     aObj[ o_mtyet].SetDim( mtp->nE, mtp->nYE );
     aObj[ o_mtbn].SetPtr( mtp->Bn);
     aObj[ o_mtbn].SetDim( mtp->nIV, mtp->Nb );
+aObj[ o_mtddc].SetPtr( mtp->DDc);
+aObj[ o_mtddc].SetDim( mtp->Lb, 1 );
+aObj[ o_mthydp].SetPtr( mtp->HydP);
+aObj[ o_mthydp].SetDim( mtp->nC, 6 );
     aObj[ o_mtqpi].SetPtr( mtp->qpi);
     aObj[ o_mtqpi].SetDim( mtp->Nqpt, 1 );
     aObj[ o_mtqpc].SetPtr( mtp->qpc);
@@ -274,6 +282,8 @@ void TGEM2MT::dyn_set(int q)
     mtp->xEt = (float *)aObj[ o_mtxet].GetPtr();
     mtp->yEt = (float *)aObj[ o_mtyet].GetPtr();
     mtp->Bn = (double *)aObj[ o_mtbn].GetPtr();
+mtp->DDc = (double *)aObj[ o_mtddc].GetPtr();
+mtp->HydP = (double (*)[6])aObj[ o_mthydp].GetPtr();
     mtp->qpi = (double *)aObj[ o_mtqpi].GetPtr();
     mtp->qpc = (double *)aObj[ o_mtqpc].GetPtr();
     mtp->xt = (double *)aObj[ o_mtxt].GetPtr();
@@ -322,6 +332,8 @@ void TGEM2MT::dyn_kill(int q)
     mtp->xEt = (float *)aObj[ o_mtxet].Free();
     mtp->yEt = (float *)aObj[ o_mtyet].Free();
     mtp->Bn = (double *)aObj[ o_mtbn].Free();
+mtp->DDc = (double *)aObj[ o_mtddc].Free();
+mtp->HydP = (double (*)[6])aObj[ o_mthydp].Free();
     mtp->qpi = (double *)aObj[ o_mtqpi].Free();
     mtp->qpc = (double *)aObj[ o_mtqpc].Free();
     mtp->xt = (double *)aObj[ o_mtxt].Free();
@@ -369,6 +381,18 @@ void TGEM2MT::dyn_new(int q)
  mtp->Bn = (double *)aObj[ o_mtbn].Alloc( mtp->nIV, mtp->Nb, D_);
  mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Alloc(
              1, mtp->Nb, MAXICNAME+MAXSYMB);
+
+   if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' )
+    {
+        mtp->DDc = (double *)aObj[ o_mtddc].Alloc( mtp->Lb, 1, D_);
+        mtp->HydP = (double (*)[6])aObj[ o_mthydp].Alloc( mtp->nC, 6, D_);
+    }
+    else
+    {
+      mtp->DDc = (double *)aObj[ o_mtddc].Free();
+      mtp->HydP = (double (*)[6])aObj[ o_mthydp].Free();
+    }
+
 
  if( mtp->PvICi == S_OFF )
     {
@@ -529,7 +553,7 @@ void TGEM2MT::set_def(int q)
     strcpy( mtp->notes, "`" );
     strcpy( mtp->xNames, "X" );
     strcpy( mtp->yNames, "Y" );
-    memset( &mtp->nC, 0, sizeof(short)*17 );
+    memset( &mtp->nC, 0, sizeof(short)*18 );
     memset( &mtp->Msysb, 0, sizeof(double)*9 );
     memset( mtp->size[0], 0, sizeof(float)*8 );
     memset( mtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
@@ -571,6 +595,8 @@ void TGEM2MT::set_def(int q)
     mtp->xEt = 0;
     mtp->yEt = 0;
     mtp->Bn = 0;
+mtp->DDc = 0;
+mtp->HydP = 0;
     mtp->qpi = 0;
     mtp->qpc = 0;
     mtp->xt = 0;
@@ -614,6 +640,7 @@ TGEM2MT::test_sizes( )
 
   mtp->Nb = TProfil::pm->mup->N;
   mtp->FIb = TProfil::pm->mup->Fi;
+  mtp->Lb = TProfil::pm->mup->L;
 
 
   if( mtp->nC<=0 || mtp->nIV <= 0)
@@ -710,12 +737,18 @@ TGEM2MT::RecCalc( const char * key )
     Expr_analyze( o_mtgexpr );
 
    mt_reset();
+   Bn_Calc();
 
    if( mtp->PsMode == 'S' )
    {   // calculate start data
-     Bn_Calc();
      outMulti();
    }
+   if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' )
+   {   // calculate start data
+     NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
+     Trans1D( mtp->PsMode, 1 );
+   }
+
    TCModule::RecCalc( key );
 }
 
@@ -727,11 +760,12 @@ TGEM2MT::CmHelp()
 }
 
 // insert changes in Project to GEM2MT
-void TGEM2MT::InsertChanges( TIArray<CompItem>& aPhase,TIArray<CompItem>& aIComp )
+void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
+      TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
 {
 
     // insert changes to IComp
-    if(aIComp.GetCount()<1 && aPhase.GetCount()<1 )
+    if(aIComp.GetCount()<1 && aPhase.GetCount()<1 && aDComp.GetCount()<1)
        return;
 
    // alloc memory & copy data from db
@@ -740,9 +774,15 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aPhase,TIArray<CompItem>& aIComp
     uint i;
     int Nold = mtp->Nb;
     int FIold = mtp->FIb;
+    int Lsold = mtp->Lb;
 
     double *p_Bn = new double[mtp->nIV*mtp->Nb];
     memcpy( p_Bn, mtp->Bn, mtp->nIV*mtp->Nb*sizeof(double));
+
+    double *p_DDc = new double[mtp->Lb];
+    if( mtp->DDc )
+       memcpy( p_DDc, mtp->DDc, mtp->Lb*sizeof(double));
+
 
     char  *p_CIclb;
     float *p_CIb;
@@ -768,6 +808,7 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aPhase,TIArray<CompItem>& aIComp
     // alloc new memory
      mtp->Nb = TProfil::pm->mup->N;
      mtp->FIb = TProfil::pm->mup->Fi;
+     mtp->Lb = TProfil::pm->mup->L;
      dyn_new();
 
 //***************************************************
@@ -850,9 +891,42 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aPhase,TIArray<CompItem>& aIComp
  }
 
 //*************************************************************
+// DCOMP
+ if( mtp->DDc )
+ {
+    i=0; jj = 0; ii = 0;
+    while( jj < mtp->Lb )
+    {
+      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      {
+        if( aDComp[i].delta == 1 )
+        { // add line
+          mtp->DDc[jj] = 0.;
+          jj++;
+        }
+        else
+        { // delete line
+          ii++;
+        }
+        i++;
+      }
+      else
+      {  // copy line
+         if( ii < Lsold )
+         {
+             mtp->DDc[jj] = p_DDc[ii];
+          }
+        jj++;
+        ii++;
+      }
+    }
+ }
+
+//*************************************************************
 
 // free memory
    delete[] p_Bn;
+   delete[] p_DDc;
    if( mtp->PvICi != S_OFF )
    {
      delete[] p_CIclb;

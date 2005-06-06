@@ -74,7 +74,8 @@ typedef struct
    Nqpt, // Number of elements in the script work array qpi for transport
    Nqpg, // Number of elements in the script work array qpc for graphics
    Nb,   // N - number of independent components (set automatically from Multi)
-   FIb,   // N - number of independent components (set automatically from Multi)
+   FIb,   // N - number of phases (set automatically from Multi)
+   Lb,   // N - number of dependent components in multycomponent phases (set automatically from Multi)
    bTau, // Time point for the simulation break (Tau[0] at start)
    nS,   // Total number of points to sample the results in xt, yt
    nYS,  // number of plots (columns in the yt array)
@@ -120,7 +121,10 @@ typedef struct
    *qpi,   //  [Nqpi] Work array for initial systems math script
    *qpc,    //  [Nqpc] Work array for mass transport math script,
    *xt,    //  Abscissa for sampled data [nS]
-   *yt     //  Ordinates for sampled data [nS][nYS]
+   *yt,     //  Ordinates for sampled data [nS][nYS]
+
+   *DDc,  //  [Ls] diffusion coefficients for DC
+   (*HydP)[6] // [nC][6] hydraulte parametres
    //
 //   *Bc,    // table of bulk compositions of reactive part of nodes
 //  More to be added here for seq reactors?
@@ -212,6 +216,11 @@ class TGEM2MT : public TCModule
     TPlotLine *plot;
     gstring titler;
 
+    DATABR  *(*arr_BR);
+    DATABR  *(*old_BR);
+    int arr_BR_size;
+    DATACH  *data_CH;
+
 protected:
 
     void keyTest( const char *key );
@@ -227,6 +236,13 @@ protected:
     void make_A( int siz_, char (*for_)[MAXFORMUNITDT] );
     void Bn_Calc();
     void gen_TPval();
+
+    void freeNodeArrays();
+    void allocNodeArrays();
+    void copyNodeArrays();
+    void  NewNodeArray();
+    int Trans1D( char mode, int RefCode );
+    void calc_GEM_node( int node_ndx );
 
 public:
 
@@ -258,7 +274,9 @@ public:
 
     void CmHelp();
 
-   void InsertChanges( TIArray<CompItem>& aPhase,TIArray<CompItem>& aIComp );
+   void InsertChanges( TIArray<CompItem>& aIComp,
+          TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
+
 };
 
 
