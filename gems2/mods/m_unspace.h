@@ -82,7 +82,8 @@ typedef struct
     PvVs,      //  (+ -) allocation flag for V0-related vectors
     PvPgam,    //  (+ -) allocation flag for ParGamma-related vectors (reserved)
 /*?*/    PvSi,      //  (+ -) flag of mode of calculation of chemical potentials in payoff function
-    Pv08;      // reserved
+    Pa_f_IC;    //  (+ -)   flag of input for the filter on IC
+
 
 // Dimensionalities related to the UnSpace problem (Project/System indexation)
     short
@@ -209,7 +210,7 @@ float
    *vT,     //   [Q]   TC vector of temperatures (C) from sample input data variants (index q)
    *vP,     //   [Q]   P vector of pressures (bar) from sample input data variants (index q)
 /*?*/   *vV,     //   [Q]   value of V (in cm3? L?) (index q)
-   *vpH,    //   [Q]   pH vector of pH values from sample GEM solution variants (index t)
+   (*vpH)[3],    //   [Q][3]   vector of pH, Eh, IC  values from sample GEM solution variants (index t)
    *OVB,    //   [nGB+1]  pseudo-random numbers for Belov algorithm
    *OVR,    //   [nGR+1]  pseudo-random numbers by Monte Carlo with uniform distribution
    *OVN,    //   [nGN+1]  pseudo-random numbers by Monte Carlo with normal distribution

@@ -134,8 +134,14 @@ int TUnSpace::filters( int k )
 // return: 1-not, 0-yes (propuskaet)
 {
   int Filtr=0,i;
-  if( usp->Pa_f_pH == S_ON &&  ( usp->vpH[k] < usp->pH_lo ||
-                         usp->vpH[k] > usp->pH_up ))
+  if( usp->Pa_f_pH == S_ON &&  ( usp->vpH[k][0] < usp->pH_lo ||
+                         usp->vpH[k][0] > usp->pH_up ))
+    Filtr=1;
+  if( usp->Pa_f_Eh == S_ON &&  ( usp->vpH[k][1] < usp->Eh_lo ||
+                         usp->vpH[k][1] > usp->Eh_up ))
+    Filtr=1;
+  if( usp->Pa_f_IC == S_ON &&  ( usp->vpH[k][2] < usp->IC_lo ||
+                         usp->vpH[k][2] > usp->IC_up ))
     Filtr=1;
   if( usp->Pa_f_fug == S_ON )
      for(i=0; i<usp->Ls; i++)

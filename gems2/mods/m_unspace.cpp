@@ -252,7 +252,7 @@ void TUnSpace::ods_link( int q)
     aObj[ o_unvv].SetPtr( usp->vV );
     aObj[ o_unvv].SetDim( usp->Q, 1 );
     aObj[ o_unvph].SetPtr( usp->vpH );
-    aObj[ o_unvph].SetDim( usp->Q, 1 );
+    aObj[ o_unvph].SetDim( usp->Q, 3 );
     aObj[ o_unovb].SetPtr( usp->OVB );
     aObj[ o_unovb].SetDim( usp->nGB+1, 1 );
     aObj[ o_unovr].SetPtr( usp->OVR );
@@ -396,7 +396,7 @@ void TUnSpace::dyn_set(int q)
     usp->vT = (float *)aObj[ o_unvt].GetPtr();
     usp->vP = (float *)aObj[ o_unvp].GetPtr();
     usp->vV = (float *)aObj[ o_unvv].GetPtr();
-    usp->vpH = (float *)aObj[ o_unvph].GetPtr();
+    usp->vpH = (float (*)[3])aObj[ o_unvph].GetPtr();
     usp->OVB = (float *)aObj[ o_unovb].GetPtr();
     usp->OVR = (float *)aObj[ o_unovr].GetPtr();
     usp->OVN = (float *)aObj[ o_unovn].GetPtr();
@@ -499,7 +499,7 @@ void TUnSpace::dyn_kill(int q)
     usp->vFug = (double *)aObj[ o_unvfug].Free();
     usp->vT = (float *)aObj[ o_unvt].Free();
     usp->vP = (float *)aObj[ o_unvp].Free();
-    usp->vpH = (float *)aObj[ o_unvph].Free();
+    usp->vpH = (float (*)[3])aObj[ o_unvph].Free();
     usp->OVB = (float *)aObj[ o_unovb].Free();
     usp->OVR = (float *)aObj[ o_unovr].Free();
     usp->OVN = (float *)aObj[ o_unovn].Free();
@@ -696,7 +696,7 @@ void TUnSpace::dyn_new(int q)
     usp->vGam = (double *)aObj[ o_unvgam].Alloc( usp->Q, usp->L, D_);
     usp->vMol = (double *)aObj[ o_unvmol].Alloc( usp->Q, usp->N, D_);
     usp->vU = (double *)aObj[ o_unvu].Alloc( usp->Q, usp->N, D_);
-    usp->vpH = (float *)aObj[ o_unvph].Alloc(usp->Q, 1, F_);
+    usp->vpH = (float (*)[3])aObj[ o_unvph].Alloc(usp->Q, 3, F_);
     usp->vT = (float *)aObj[ o_unvt].Alloc(usp->Q, 1, F_);
     usp->vP = (float *)aObj[ o_unvp].Alloc(usp->Q, 1, F_);
     usp->vV = (float *)aObj[ o_unvv].Alloc(usp->Q, 1, F_);
@@ -719,7 +719,7 @@ void TUnSpace::dyn_new(int q)
        usp->vGam = (double *)aObj[ o_unvgam].Free();
        usp->vMol = (double *)aObj[ o_unvmol].Free();
        usp->vU = (double *)aObj[ o_unvu].Free();
-       usp->vpH = (float *)aObj[ o_unvph].Free();
+       usp->vpH = (float (*)[3])aObj[ o_unvph].Free();
        usp->vT = (float *)aObj[ o_unvt].Free();
        usp->vP = (float *)aObj[ o_unvp].Free();
        usp->vV = (float *)aObj[ o_unvv].Free();
