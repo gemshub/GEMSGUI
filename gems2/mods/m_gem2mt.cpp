@@ -747,6 +747,10 @@ TGEM2MT::RecCalc( const char * key )
    {   // calculate start data
      NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
      Trans1D( mtp->PsMode, 1 );
+     freeNodeArrays(); // free worked memory
+     TProfil::pm->multi->datach_free();
+     TProfil::pm->multi->databr_free();
+
    }
 
    TCModule::RecCalc( key );
