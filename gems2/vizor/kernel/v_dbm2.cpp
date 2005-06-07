@@ -317,7 +317,8 @@ long TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     //   f.read( (char *)&rh, sizeof(RecHead) );
     rh.read (f);
     if( strncmp( rh.bgm, MARKRECHEAD, 2 ) ||
-            strncmp( rh.endm, MARKRECHEAD, 2 ) || rh.Nobj != nOD )
+            strncmp( rh.endm, MARKRECHEAD, 2 ) ||
+            (rh.Nobj != nOD && (nOD+frstOD-1) != o_tpstr  ) )
         Error( GetKeywd(),"Record header format error");
     f.getline( key, KeyLen()+KeyNumFlds(), MARKRKEY);
     ErrorIf( f.gcount()>=(KeyLen()+KeyNumFlds()), GetKeywd(),
@@ -327,6 +328,9 @@ long TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
     bool flag_spppar = false;
     for( j=0; j<nOD; j++ )   // get objects from file
     {
+        if ( j+frstOD == o_tpstr )
+          if( StillLen < 28 )
+             continue;
         StillLen -= aObj[j+frstOD].ofDB(f);
         if (j+frstOD == o_spppar )
             flag_spppar = true;
