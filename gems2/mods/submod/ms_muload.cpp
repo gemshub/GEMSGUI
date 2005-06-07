@@ -1202,6 +1202,7 @@ void TProfil::CompG0Load()
         pmp->T = pmp->Tc = tpp->T + C_to_K;
         pmp->TC = pmp->TCc = tpp->T;
         pmp->P = pmp->Pc = tpp->P;
+pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD 
         pmp->denW = tpp->RoW;
         pmp->denWg = tpp->RoV;
         pmp->epsW = tpp->EpsW;

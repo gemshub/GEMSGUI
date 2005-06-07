@@ -488,7 +488,7 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
                aPa->pa.aqPar[0] = b_gamma_TP( TK, P, tp.EpsW, gfun, 4 );
                break;
          }
-         if( aPa->pa.aqPar[0] < 0.0 || aPa->pa.aqPar[0] > 1.0 )
+         if( aPa->pa.aqPar[0] < -1.0 || aPa->pa.aqPar[0] > 1.0 )
            aPa->pa.aqPar[0] = b_gamma; // error - restoring old constant value
          aWp.init = false;
       }

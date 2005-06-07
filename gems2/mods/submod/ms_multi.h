@@ -108,7 +108,7 @@ sitNan   // SIT: number of anions
     Eh,     // Eh of aqueous solution, V
     DHBM,   // Adjusted balance precision criterion (IPM-2 )
     DSM,    // min value phase DS (IPM-2)
-    GWAT,   // reserved
+    GWAT,   // used in ipm_gamma()
     YMET,   // reserved
     denW,denWg,  // Density of H2O(l) and steam for Tc,Pc
     epsW,epsWg,  // Diel. constant of H2O(l) and steam for Tc,Pc
@@ -124,7 +124,7 @@ sitNan   // SIT: number of anions
     logXw,     /*log(1e-16)*/
     logYFk,    /*log(1e-9)*/
     YFk,       // Current number of moles in a multicomponent phase
-    FitVar[5]; // internal
+    FitVar[5]; // internal; FitVar[0] is T,P-dependent b_gamma parameter
 
     short
     *L1,    // l_a vector - number of DC included into each phase [Fi]

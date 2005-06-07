@@ -2004,7 +2004,8 @@ TProfil::DebyeHueckel3Hel( int jb, int je, int jpb, int /*jdb*/, int /* k */ )
     T = pmp->Tc;
     A = pmp->PMc[jpb+0];
     B = pmp->PMc[jpb+1];
-    bg = pmp->PMc[jpb+5];
+    bg = pmp->FitVar[0];   // Changed 07.06.05 for T,P-dep. b_gamma in DHH
+//    bg = pmp->PMc[jpb+5];
     a0c = pmp->PMc[jpb+6];
     nPolicy = pmp->PMc[jpb+7];
 
@@ -2076,7 +2077,8 @@ TProfil::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
     T = pmp->Tc;
     A = pmp->PMc[jpb+0];
     B = pmp->PMc[jpb+1];
-    bg = pmp->PMc[jpb+5];
+    bg = pmp->FitVar[0];   // Changed 07.06.05 for T,P-dep. b_gamma in DHH
+//    bg = pmp->PMc[jpb+5];
 //    a0c = pmp->PMc[jpb+6];
     nPolicy = pmp->PMc[jpb+7];
 
@@ -2197,7 +2199,8 @@ void TProfil::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
     T = pmp->Tc;
     A = pmp->PMc[jpb+0];
     B = pmp->PMc[jpb+1];
-    bg = pmp->PMc[jpb+5];
+    bg = pmp->FitVar[0];   // Changed 07.06.05 for T,P-dep. b_gamma in DHH 
+//    bg = pmp->PMc[jpb+5];
 //    a0c = pmp->PMc[jpb+6];
     nPolicy = pmp->PMc[jpb+7];
 
