@@ -41,8 +41,8 @@ typedef struct
     PunT,          // Units of temperature  { C; K F reserved }
     PeosW,   // Account for EOS H2O { + - }
     P_HKF,   // Link to HKF EOS functions { + - }
-    Pbg,    // Link to FGL functions { + - }? (reserved)
-    Pres1,   // Include vector of quality for TP dependencies of DC { +*- }
+    Pbg,     // flag for constant (0) or variable b_gamma in DH eq (1-NaCl, 2-KCl, 3-NaOH, 4-KOH)
+    Pres1,   // Include vector of quality for TP dependencies of DC { + * - }
 
     // indicators for states of project arrays (Flags for the result data vectors)
     PtvG, PtvdG,   /* G, delG, + - * (if * recalc) */
@@ -103,6 +103,9 @@ typedef struct
 }
 MTPARM;
 
+enum {
+   BG_CONST='0', BG_TP_NACL='1', BG_TP_KCL='2', BG_TP_NAOH='3', BG_TP_KOH='4'
+};
 
 // Data of MTPARM
 class TMTparm :
@@ -137,6 +140,7 @@ public:
     void set_def( int i=0);
 
     void LoadMtparm( float cT, float cP );
+    float b_gamma_TP( double tk, double pb, double eps, double gsf, int mode );
     void MTparmAlloc();
 
 };

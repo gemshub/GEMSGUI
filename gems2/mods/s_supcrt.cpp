@@ -876,7 +876,7 @@ void TSupcrt::JN91(double T, double D, double beta, double *alpha, double *daldT
 }
 
 //--------------------------------------------------------------------//
-/* epsBrn - calc broun functions Z, Q, Y, and X from their eps, dedP, dedT
+/* epsBrn - calc Brown functions Z, Q, Y, and X from their eps, dedP, dedT
    and d2edT2 counterparts.           */
 void TSupcrt::epsBrn(double *eps, double dedP, double dedT,double d2edT2,
                      double *Z, double *Q, double *Y, double *X)

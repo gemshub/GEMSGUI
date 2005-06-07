@@ -817,6 +817,7 @@ void TDComp::calc_thkf( AQSREF& arf, double P, double T, double Dw, double betaw
       aW.twp->Bet =
       aW.twp->Alp =
     */
+    aW.twp->gfun = g;  // solvent g-function - passed for b_gamma=f(T,P) 07.06.05  
 }
 
 //--------------------------------------------------------------------//

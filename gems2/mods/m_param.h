@@ -93,7 +93,7 @@ struct BASE_PARAM
 struct SPP_SETTING
 {   // Base Parametres of SP
     char ver[TDBVERSION]; // Version & Copyright 64
-    BASE_PARAM p; // Настройки режимов счета (задаются пользователем))
+    BASE_PARAM p; // Flags and thresholds for numeric modules
     char           // default codes of values
     DCpct[7],      // Default DCOMP flags and codes
     DCpdc[10],     // Default DCOMP class and units
@@ -134,7 +134,7 @@ struct SPP_SETTING
     lowPosNum, // MULTI Cutoff moles of DC (Ls set) { 1e-19 };
     logXw,     // log(1e-16)
     logYFk,    // log(1e-9)
-    aqPar[4],  // b_g, a0, NeutPolicy, I_max for auto aq phase model
+    aqPar[4],  // b_gamma, a0, NeutPolicy, I_max for auto aq phase model
     ResFloat   // one parameter for auto gas/fluid phase
     ;
 

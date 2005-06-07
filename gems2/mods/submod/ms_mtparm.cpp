@@ -302,6 +302,7 @@ void TMTparm::LoadMtparm( float cT, float cP )
     aDC->ods_link(0);
     TReacDC* aRC=(TReacDC *)(&aMod[RT_REACDC]);
     aRC->ods_link(0);
+TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
 
     if( tp.L != mup->L ||  tp.Ls != mup->Ls ||
             tp.Lg != mup->Pg ||  tp.La != mup->Laq )
@@ -367,7 +368,7 @@ void TMTparm::LoadMtparm( float cT, float cP )
         }
         /* load work structure to MTPARM */
         if( tp.PtvG != S_OFF )    tp.G[j] = aW.twp->G;
-        if( tp.PtvdG!= S_OFF )    tp.devG[j] = aW.twp->devG;
+        if( tp.PtvdG != S_OFF )    tp.devG[j] = aW.twp->devG;
         if( tp.PtvH != S_OFF )    tp.H[j] = aW.twp->H;
         if( tp.PtvdH != S_OFF )   tp.devH[j] = aW.twp->devH;
         if( tp.PtvS != S_OFF )    tp.S[j] = aW.twp->S;
@@ -453,20 +454,45 @@ void TMTparm::LoadMtparm( float cT, float cP )
                         aW.twp->P > aRC->rcp->Pint[nPp-1] )
                     tp.mark[j] = CP_NOT_VALID;
             }
-        }
+       }
+       if( aWp.init== true )
+       { /* load water properties from HGK/HKF*/
+         float b_gamma;
+         double gfun;
+         tp.RoW  = aSta.Dens[aSpc.isat]; /* Density of liquid water */
+         tp.EpsW = aWp.Dielw[aSpc.isat]; /* Dielectric constant of liquid water */
+         tp.VisW = aWp.Viscw[aSpc.isat]; /* Dynamic viscosity of liquid water */
+         tp.RoV  = aSta.Dens[!aSpc.isat]; /* Density of water vapor */
+         tp.EpsV = aWp.Dielw[!aSpc.isat]; /* Dielectric constant of water vapor */
+         tp.VisV = aWp.Viscw[!aSpc.isat]; /* Dynamic viscosity of liquid water */
+         tp.PeosW = S_ON;
+         tp.P_HKF = S_ON;
+// Added 07.06.05 for b_gamma=f(T,P) calculations
+         gfun = aW.twp->gfun;
+         b_gamma = aPa->pa.aqPar[0];
+         switch( tp.Pbg )
+         {
+           default:
+           case BG_CONST:  // constant b_gamma as specified in the dialog
+               break;
+           case BG_TP_NACL:
+               aPa->pa.aqPar[0] = b_gamma_TP( TK, P, tp.EpsW, gfun, 1 );
+               break;
+           case BG_TP_KCL:
+               aPa->pa.aqPar[0] = b_gamma_TP( TK, P, tp.EpsW, gfun, 2 );
+               break;
+           case BG_TP_NAOH:
+               aPa->pa.aqPar[0] = b_gamma_TP( TK, P, tp.EpsW, gfun, 3 );
+               break;
+           case BG_TP_KOH:
+               aPa->pa.aqPar[0] = b_gamma_TP( TK, P, tp.EpsW, gfun, 4 );
+               break;
+         }
+         if( aPa->pa.aqPar[0] < 0.0 || aPa->pa.aqPar[0] > 1.0 )
+           aPa->pa.aqPar[0] = b_gamma; // error - restoring old constant value
+         aWp.init = false;
+      }
     } /*j*/
-    if( aWp.init== true )
-    { /* load water properties */
-        tp.RoW  = aSta.Dens[aSpc.isat]; /* Плотность воды г/см3 */
-        tp.EpsW = aWp.Dielw[aSpc.isat]; /* Диелектрическая постоянная */
-        tp.VisW = aWp.Viscw[aSpc.isat]; /* Вязкоcть (динамическая), кг/м*сек */
-        tp.RoV  = aSta.Dens[!aSpc.isat]; /* Плотность воды г/см3 */
-        tp.EpsV = aWp.Dielw[!aSpc.isat]; /* Диелектрическая постоянная */
-        tp.VisV = aWp.Viscw[!aSpc.isat]; /* Вязкоcть (динамическая), кг/м*сек */
-        tp.PeosW = S_ON;
-        tp.P_HKF = S_ON;
-    }
-
     if( tp.PtvG == S_REM )  tp.PtvG = S_ON;
     if( tp.PtvdG== S_REM )  tp.PtvdG = S_ON;
     if( tp.PtvH == S_REM )  tp.PtvH = S_ON;
@@ -490,7 +516,6 @@ void TMTparm::LoadMtparm( float cT, float cP )
 
     if( tp.mark && tp.G )
         polmod_test();
-    aWp.init = false;
 }
 
 // test polimorf modifications
@@ -525,6 +550,65 @@ void TMTparm::polmod_test()
                 tp.mark[k] = PM_NOT_EXIST;
         i=j;
     }
+}
+
+/* Subroutine provided by D.Dolejs and Th.Wagner in May 2005
+external conditions:
+tk - temperature (K)
+pb - pressure (bar)
+eps - dielectric constant
+gsf(pb,tc,dh2o) is the g-function of solvent at p(bar), t(C) and water density,
+obtained from HKF-EOS
+returns b_gamma value or -1 in the case of error */
+float
+TMTparm::b_gamma_TP( double tk, double pb, double eps, double gsf, int mode )
+{
+   float bgm_result;
+   double ni, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, rc, ra;
+   double omgpt, nbg;
+/* bgamma coefficient for electrolytes at P & T */
+/* ni = stoichiometric number of moles of ions in one mole of electrolyte */
+/* rc, ra - radius of cation and anion, respectively at 298 K/1 bar */
+/* units are cal, kg, K, mol, bar */
+/* parameters for NaCl (ni,a1-a5,c1-c2,omg,bg,bs,rc,ra)
+2,0.030056,-202.55,-2.9092,20302,-0.206,-1.50,53330,178650,
+-174.623,2.164,0.97,1.81 */
+
+   switch( mode )
+   {
+      case 1:  // NaCl
+              ni=2.; a1=0.030056; a2=-202.55; a3=-2.9092; a4=20302;
+              a5=-0.206; c1=-1.50; c2=53330.; omg=178650;
+              bg=-174.623; bs=2.164; rc=0.97; ra=1.81;
+              break;
+      case 2:  // KCl  :change values!
+              ni=2.; a1=0.030056; a2=-202.55; a3=-2.9092; a4=20302;
+              a5=-0.206; c1=-1.50; c2=53330.; omg=178650;
+              bg=-174.623; bs=2.164; rc=0.97; ra=1.81;
+              break;
+      case 3: // NaOH  :change values!
+              ni=2.; a1=0.030056; a2=-202.55; a3=-2.9092; a4=20302;
+              a5=-0.206; c1=-1.50; c2=53330.; omg=178650;
+              bg=-174.623; bs=2.164; rc=0.97; ra=1.81;
+              break;
+      case 4: // KOH   :change values!
+              ni=2.; a1=0.030056; a2=-202.55; a3=-2.9092; a4=20302;
+              a5=-0.206; c1=-1.50; c2=53330.; omg=178650;
+              bg=-174.623; bs=2.164; rc=0.97; ra=1.81;
+              break;
+      default: // wrong mode
+              return -1.;
+   }
+   // calculation part 
+   omgpt=1.66027e5*(1./(0.94+rc+gsf)+1./(ra+gsf));
+   nbg=-ni*bg/2.+ni*bs*(tk-298.15)/2.-c1*(tk*log(tk/298.15)-tk+298.15)
+      +a1*(pb-1.)+a2*log((2600.+pb)/(2600.+1.))
+      -c2*((1./(tk-228.)-1./(298.15-228.))*(228.-tk)/228.-tk/(228.*228.)
+      *log((298.15*(tk-228.))/(tk*(298.15-228.))))
+      +1./(tk-228.)*(a3*(pb-1.)+a4*log((2600.+pb)/(2600.+1.)))
+      +a5*(omgpt*(1./eps-1.)-omg*(1./78.24513-1.)-5.80e-5*omg*(tk-298.15));
+   bgm_result=nbg/(2.*log(10.)*1.98721*tk);
+   return bgm_result;
 }
 //--------------------- End of ms_mtparm.cpp ---------------------------
 
