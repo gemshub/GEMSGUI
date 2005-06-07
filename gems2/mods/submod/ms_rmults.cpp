@@ -647,6 +647,9 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     float aparam[4], gparam[4];
 
 TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
+    if( aPa->tpp->Pbg < '0' || aPa->tpp->Pbg > '4' )
+       aPa->tpp->Pbg = '0';
+    int resp = aPa->tpp->Pbg-'0';
     // Copying stored params for automatic aq models
     aparam[0] = aPa->pa.aqPar[0];
     aparam[1] = aPa->pa.aqPar[1];
@@ -713,7 +716,7 @@ NEW_PHASE_AGAIN:
 */
 // Calling the wizard to set generated aq and gas phases
        if( !vfAutoPhaseSet( window(), prfName.c_str(), AqKey, GasKey,
-              amod, gmod, aparam, gparam ) )
+              amod, gmod, aparam, gparam, resp ) )
        {
           if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
             "Are you really sure?\n Repeat phase setup (Yes) or\nCancel creating the project (No)?" ))
@@ -722,6 +725,7 @@ NEW_PHASE_AGAIN:
             Error( GetName(), "Project creation aborted by the user - bailing out..." );
        }
 
+       aPa->tpp->Pbg = resp+'0';
        if( amod == '-' )
        {
 //       TProfil::pm->useAqPhase = false;

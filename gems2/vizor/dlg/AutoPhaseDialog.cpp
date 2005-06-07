@@ -28,6 +28,7 @@ const char * dfGasKey =  "g   GASMXID gas_gen         gm  Ideal           ";
 const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  GC_EoS          ";
 
 #include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
 #include <qlineedit.h>
@@ -74,6 +75,18 @@ AutoPhaseDialog::AutoPhaseDialog (
 
 AutoPhaseDialog::~AutoPhaseDialog()
 {}
+
+int
+AutoPhaseDialog::get_resp()
+{
+  return pBG_T->currentItem();
+}
+
+void
+AutoPhaseDialog::set_resp( int resp_t )
+{
+  pBG_T->setCurrentItem( resp_t );
+}
 
 void
 AutoPhaseDialog::get_apar ( float par[4] )

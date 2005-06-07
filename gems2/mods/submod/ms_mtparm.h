@@ -41,7 +41,7 @@ typedef struct
     PunT,          // Units of temperature  { C; K F reserved }
     PeosW,   // Account for EOS H2O { + - }
     P_HKF,   // Link to HKF EOS functions { + - }
-    Pfgl,    // Link to FGL functions { + - }? (reserved)
+    Pbg,    // Link to FGL functions { + - }? (reserved)
     Pres1,   // Include vector of quality for TP dependencies of DC { +*- }
 
     // indicators for states of project arrays (Flags for the result data vectors)

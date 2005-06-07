@@ -107,7 +107,7 @@ vfPhaseSet(QWidget* par, const char * p_key,
 
 bool
  vfAutoPhaseSet(QWidget* par, const char* pr_key, gstring& a_key, gstring& g_key,
-        char& acode, char& gcode, float apar[4], float gpar[4] );
+        char& acode, char& gcode, float apar[4], float gpar[4], int& resp_T  );
 
 gstring
 vfKeyEdit(QWidget* par, const char* title, int iRt, const char* key=0);

@@ -37,11 +37,13 @@ public:
     virtual ~AutoPhaseDialog();
 
     void set_apar( float apar[4] );
+    void set_resp( int );
     void set_gpar( float gpar[4] );
     void set_akey( gstring& a_key );
     void set_gkey( gstring& g_key );
 
     void get_apar( float apar[4] );
+    int get_resp();
     void get_gpar( float gpar[4] );
     void get_akey( gstring& a_key );
     void get_gkey( gstring& g_key );
