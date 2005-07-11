@@ -250,7 +250,7 @@ void TProfil::MultiRemake( const char *key )
     pmp->js = 0;
     pmp->next  = 0;
     pmp->IC =  syp->Mbel;
-
+pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
     pmp->denW = tpp->RoW;
     pmp->denWg = tpp->RoV;
     pmp->epsW = tpp->EpsW;
