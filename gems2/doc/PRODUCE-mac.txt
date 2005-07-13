@@ -4,7 +4,7 @@ Needs Tres Thoenen's G4 Mac running
 
 1. Open a SSH terminal: 
 
-  ssh guest@129.129.204.77   (password: Gems Selektor)
+  ssh guest@129.129.204.77   (password: GEM-Selektor)
 
 Check QTDIR (if Qt is istalled):
 

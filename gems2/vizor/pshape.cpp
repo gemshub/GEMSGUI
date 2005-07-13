@@ -89,14 +89,13 @@ PPolygon::paint(QPainter& dc)
     dc.setBrush( brush );
     dc.setPen( Qt::NoPen );
     dc.drawPolygon( a );
-
-    dc.setPen( Qt::SolidLine );
-    dc.pen().setWidth(2);
+QPen pen(color, 2);    
+    dc.setPen( pen ); // dc.setPen( Qt::SolidLine );
+//    dc.pen().setWidth(2);
     dc.moveTo(p2);
     dc.lineTo(p3);
     dc.moveTo(p1);
     dc.lineTo(p4);
-
 }
 
 // ----------------------------------------------
