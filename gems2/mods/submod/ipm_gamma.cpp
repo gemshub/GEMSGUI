@@ -1723,6 +1723,8 @@ void TProfil::GammaCalc( int LinkMode  )
 pmpXFk = 0.;  // Added 07.01.05 by KD
 for( j = jb; j < je; j++ )
    pmpXFk += pmp->X[j];
+if( pmp->XF[k] < pmp->DSM ) // Bugfix by KD 09.08.2005 (bug report Th.Matschei)
+   pmp->XF[k] = pmpXFk;
         jpb = jpe;
         jpe += pmp->LsMod[k];
         jdb = jde;
