@@ -1,0 +1,3212 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+  <meta name="GENERATOR"
+ content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+  <title>GEM-Selektor Data Object Index v.2.1</title>
+</head>
+<body>
+<>This is&nbsp; OBJNDX.HTML&nbsp; file used internally by GEM-Selektor
+runtime help system. <br>
+Entries in this file redirect the help system to display help pages
+prepared in various HTML files. <br>
+</>
+<p><br>
+</p>
+<p>Rules for setting up DOD keywords and links to html files<br>
+</p>
+<p>Example:&nbsp;&nbsp; &lt;a
+href="gm_dcomp.html#TCint_0"&gt;TCint[0]&lt;/a&gt; Comment <br>
+</p>
+The entry must contain a HTML code like this: <br>
+&nbsp; &nbsp; &nbsp; <br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;a
+href="html_file_namel#label"&gt;keyword&lt;/a&gt; <br>
+<p></p>
+Here:&nbsp;
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+html_file_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; is
+the name of html file where to jump;<br>
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+label
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+position label (anchor) in this&nbsp; file
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+keyword
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+GEM data object label, optionally with indexes.<br>
+<br>
+- if dimension N&nbsp; in the DOD exceeds 1 and dimension M in the DOD
+exceeds 1:
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+keyword[indexN][indexM]&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; locates a
+reference to the help page only for this cell&nbsp;
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+keyword[][indexM] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; locates a reference to the help page for any cell in
+the column indexM
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+keyword[indexN] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp;&nbsp; locates a reference to the help page for any cell
+in the row indexN
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+locates a&nbsp; reference to the same help page for any cell&nbsp;
+<p></p>
+-&nbsp; if only one dimension (N or M)&nbsp; in DOD exceeds 1 :
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+keyword[index] &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; locates a reference to the help page only
+for a cell with this index&nbsp;
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+locates a&nbsp; reference to the same help page for any cell <br>
+<p></p>
+- if both dimensions N and M are set to 1, or the DOD refers to text:<br>
+<p></p>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+locates a&nbsp; reference to the help page&nbsp; <br>
+<br>
+All links for the same keyword must be located together in this file
+(i.e. the search stops when <br>
+another keyword is found).<br>
+<br>
+<ul>
+  <h4> <a href="gm_sdref.html#SDauth">SDauth</a> Author(s), complete</h4>
+  <h4> <a href="gm_sdref.html#SDtitl">SDtitl</a> Title</h4>
+  <h4> <a href="gm_sdref.html#SDedit">SDedit</a> Edition (journal),
+editors, city,...</h4>
+  <h4> <a href="gm_sdref.html#SDvoly">SDvoly</a> Year, volume, issue</h4>
+  <h4> <a href="gm_sdref.html#SDpage">SDpage</a> Pages, other data</h4>
+  <h4> <a href="gm_sdref.html#SDabst">SDabst</a> Abstract</h4>
+  <h4> <a href="gm_sdref.html#SDrefs">SDrefs</a> Next record key of
+Data Source</h4>
+  <h4> <a href="gm_sdref.html#SDnote">SDnote</a> Comments</h4>
+  <h4> <a href="gm_sdref.html#SD_kwd">SD_kwd</a> List of keywords
+[0:Nkwd] (reserved)</h4>
+  <h4> <a href="gm_sdref.html#SDnRef">SDnRef</a> Refs in Advice
+database</h4>
+  <h4> <a href="gems_ipm.html#Pa_PC">Pa_PC</a> Mode of Selekt2()
+subroutine operation</h4>
+  <h4> <a href="gems_ipm.html#Pa_PRD_0">Pa_PRD[0]</a> Mode of DHH():
+0-invoke,1-at FIA only, 2-last IPM it. 3-every IPM it.</h4>
+  <h4> <a href="gems_ipm.html#Pa_PRD_1">Pa_PRD[1]</a> Mode
+GammaCalc(): 0-inactive, 1-FIA only, 2-SELEKT2 only, 3-every IPM
+iteration</h4>
+  <h4> <a href="gems_ipm.html#Pa_PRD_2">Pa_PRD[2]</a> Mode of setting
+FIA Gamma in phases: 0-off; 1 - set activ.coeff. GAN</h4>
+  <h4> <a href="gems_ipm.html#Pa_DPV_0">Pa_DPV[0]</a> Max number of
+iterations at EnterFeasibleDomain()</h4>
+  <h4> <a href="gems_ipm.html#Pa_DPV_1">Pa_DPV[1]</a> Flag to save
+MULTI data structure to PDB record { 0-no 1-wrk 2-act }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DPV_2">Pa_DPV[2]</a> IPM view debug
+time on EQCALC screen from (sec) or 0</h4>
+  <h4> <a href="gems_ipm.html#Pa_LLG">Pa_LLG</a> IT # at OFIA { 0 1 }
+(temporary)</h4>
+  <h4> <a href="gems_ipm.html#Pa_PE">Pa_PE</a> Include
+electroneutrality condition? { 0 1 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_IIM">Pa_IIM</a> Maximum number of
+iterations in IPM task { 400 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DG">Pa_DG</a><a name="Pa_DG"></a>Precision
+of LEM IPM solver (Jordan) { 1e-12 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DHB">Pa_DHB</a> Precision of mass
+balance deviations at EFD { 1e-6 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DS">Pa_DS</a> Cutoff number of moles
+of a phase { 1e-8 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DK">Pa_DK</a> Threshold of Dikin
+criterion of IPM convergence { 1e-4 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DF_0">Pa_DF[0]</a> Threshold of
+Karpov' criteria for phase stability { 0.01 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DF_1">Pa_DF[1]</a> Threshold for
+Karpov' criteria for insertion of phases { -0.1 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DFY_0">Pa_DFY[0]</a> N of moles of
+H2O-solvent for phase insertion { 2e-5 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DFY_1">Pa_DFY[1]</a> N of moles of
+aqueous DC for phase insertion { 1e-7 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DFY_2">Pa_DFY[2]</a> N of moles of DC
+in ideal solution for phase insertion { 1e-6 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DFY_3">Pa_DFY[3]</a> Cutoff moles of
+major DC in non-ideal solution { 1e-5 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DFY_4">Pa_DFY[4]</a> Cutoff moles of
+junior DC in non-ideal solution { 1e-8 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DFY_5">Pa_DFY[5]</a> N of moles for
+insertion of single-component phase { 1e-6 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DFY_6">Pa_DFY[6]</a> Moles of DC to
+boost phases-solutions (SELEKT2) { 1e-12 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DB">Pa_DB</a> Cutoff number of moles
+of IC in the system 1e-9</h4>
+  <h4> <a href="gems_ipm.html#Pa_AG">Pa_AG</a> Smoothing parameter for
+free energy increments on iterations { 0.7 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DGC">Pa_DGC</a> Power to raise Pa_AG
+on steps of tinkle-supressor { 0.1 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_GAN_0">Pa_GAN[0]</a> Initial activity
+coefficient of major DC in a phase (FIA) { 1 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_GAN_1">Pa_GAN[1]</a> Initial activity
+coefficient of minor DC in phase (FIA) { 1000 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_GAN_2">Pa_GAN[2]</a> reserved</h4>
+  <h4> <a href="gems_ipm.html#Pa_DNS">Pa_DNS</a> Default reference
+surface site density { 12.1 1/nm2 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_XMI_0">Pa_XMI[0]</a> Cutoff N of
+moles of water in aqueous phase { 1e-5 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_XMI_1">Pa_XMI[1]</a> Cutoff N of
+moles of main DC in solid carrier for sorption { 1e-7 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_XMI_2">Pa_XMI[2]</a> Cutoff N of
+moles of solute (sorbate) { 1e-16 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_XMI_3">Pa_XMI[3]</a> Cutoff N of
+moles of a phase { 1e-10 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_XMI_4">Pa_XMI[4]</a> Cutoff value of
+ionic strength to run DH equation { 1e-5 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_EPS_0">Pa_EPS[0]</a> Precision of FIA
+by SIMPLEX-method { 1e-6 to 1e-9 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_EPS_1">Pa_EPS[1]</a> Accuracy of
+cutoff limits
+1+eps for surface activity terms { 1e-8 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DKI">Pa_DKI</a> Range of lower to
+upper kinetic restrictions for DC { 0.001 }</h4>
+  <h4> <a href="g_miscel.html#PaTprn">PaTprn</a> internal</h4>
+  <h4> <a href="g_miscel.html#Pa_SPP">Pa_SPP</a> Version &amp;
+Copyright</h4>
+  <h4> <a href="g_miscel.html#pDCpct">pDCpct</a> Default DComp flags
+and codes</h4>
+  <h4> <a href="g_miscel.html#pDCpdc">pDCpdc</a> Default Dcomp class
+and units</h4>
+  <h4> <a href="g_miscel.html#pBCpc">pBCpc</a> Default Compos
+configuration</h4>
+  <h4> <a href="g_miscel.html#pREpct">pREpct</a> Default ReacDC flags
+and codes</h4>
+  <h4> <a href="g_miscel.html#pREpdc">pREpdc</a> Default ReacDC class
+and units</h4>
+  <h4> <a href="g_miscel.html#pREpvc">pREpvc</a>Default ReacDC
+configuration</h4>
+  <h4> <a href="g_miscel.html#pRPpdc">pRPpdc</a> Default RTParm flags
+and codes</h4>
+  <h4> <a href="g_miscel.html#pRPpvc">pRPpvc</a> Default RTParm
+configuration</h4>
+  <h4> <a href="g_miscel.html#pPHsol">pPHsol</a> Default Phase model
+codes</h4>
+  <h4> <a href="g_miscel.html#pPHpvc">pPHpvc</a> Default Phase
+configuration</h4>
+  <h4> <a href="g_miscel.html#pMUpmv">pMUpmv</a> Default Profile
+configuration</h4>
+  <h4> <a href="g_miscel.html#pTPpdc">pTPpdc</a> Default class and
+units for MTParm (I)</h4>
+  <h4> <a href="g_miscel.html#pTPpd2">pTPpd2</a> Default class and
+units for MTParm (II)</h4>
+  <h4> <a href="g_miscel.html#pTPpvc">pTPpvc</a>D efault MTParm
+configuration</h4>
+  <h4> <a href="g_miscel.html#pSYppc">pSYppc</a> Default class and
+flags for SysEq</h4>
+  <h4> <a href="g_miscel.html#pSYpvc">pSYpvc</a> Default SysEq
+confifuration</h4>
+  <h4> <a href="g_miscel.html#pUTppc">pUTppc</a> Default DUTerm class
+and flags</h4>
+  <h4> <a href="g_miscel.html#pPEpsc">pPEpsc</a> Default Process class
+and flags</h4>
+  <h4> <a href="g_miscel.html#pPEpvc">pPEpvc</a> Default Process
+configuration</h4>
+  <h4> <a href="g_miscel.html#pGDcod">pGDcod</a> Default names of
+screen and graphs in GtDemo</h4>
+  <h4> <a href="g_miscel.html#pGDpsc">pGDpsc</a> Default names of
+lines in GtDemo graphs</h4>
+  <h4> <a href="g_miscel.html#pGDpcc">pGDpcc</a> Default axis names
+for GtDemo</h4>
+  <h4> <a href="g_miscel.html#pGDptc">pGDptc</a> Default GtDemo
+configuration</h4>
+  <h4> <a href="g_miscel.html#pGDpgw">pGDpgw</a> Default setup of
+graphs in GtDemo</h4>
+  <h4> <a href="g_miscel.html#pRPnpv_0">pRPnpv[0]</a> Default N of
+points (RTParm): P </h4>
+  <h4> <a href="g_miscel.html#pRPnpv_1">pRPnpv[1]</a> T</h4>
+  <h4> <a href="g_miscel.html#pRPnpv_2">pRPnpv[2]</a> reserved</h4>
+  <h4> <a href="g_miscel.html#pRPmod">pRPmod</a> Default indexation
+mode in RTParm</h4>
+  <h4> <a href="g_miscel.html#pRP_Pi">pRP_Pi</a> Default interval for
+pressure in RTParm</h4>
+  <h4> <a href="g_miscel.html#pRP_Ti">pRP_Ti</a> Default interval for
+temperature, C in RTParm</h4>
+  <h4> <a href="g_miscel.html#pRP_Vi">pRP_Vi</a> Default interval for
+volume, cm3</h4>
+  <h4> <a href="g_miscel.html#pDRptr">pDRptr</a> Default Pr, Tr for
+DComp &amp; ReacDC</h4>
+  <h4> <a href="g_miscel.html#pPMnum_0">pPMnum[0]</a> Cutoff moles of
+DC (Ls set) { 1e-19 };</h4>
+  <h4> <a href="g_miscel.html#pPMnum_1">pPMnum[1]</a> log(1e-16);</h4>
+  <h4> <a href="g_miscel.html#pPMnum_2">pPMnum[2]</a> log(1e-9)</h4>
+  <h4> <a href="gm_project.html#LtpD_0">LtpD[0]</a> Numbers: L of DC</h4>
+  <h4> <a href="gm_project.html#LtpD_1">LtpD[1]</a> Ls of DC in
+multi-component phases</h4>
+  <h4> <a href="gm_project.html#LtpD_2">LtpD[2]</a> PG of DC in gas
+phase</h4>
+  <h4> <a href="gm_project.html#LtpD_3">LtpD[3]</a> Lx of surface
+species</h4>
+  <h4> <a href="gm_project.html#mPHC">mPHC</a> Classifier of phases {
+a g p m s l x d h }</h4>
+  <h4> <a href="gm_project.html#mDCC">mDCC</a> DC classes { T E S W G
+V C H N I J M&nbsp;<digit>X Y Z A B P Q R O }</digit></h4>
+  <h4> <a href="gm_project.html#mICC">mICC</a> Classifier of IC { e o
+h a z v i&nbsp;<integer>}</integer></h4>
+  <h4> <a href="gm_project.html#For_DC">For_DC</a> List of DC chemical
+formulae (comma separated)</h4>
+  <h4> <a href="gm_project.html#For_IC">For_IC</a> List of IC chemical
+formulae (comma separated)</h4>
+  <h4> <a href="gm_project.html#ICDCv">ICDCv</a> List of IC-to-DC
+references</h4>
+  <h4> <a href="gm_project.html#Vale_">Vale_</a> Vector of default
+valencies of IC</h4>
+  <h4> <a href="gm_project.html#PLs">PLs</a> internal</h4>
+  <h4> <a href="gm_project.html#M0ic">M0ic</a> Vector of IC atomic
+(molar) masses, g/mole</h4>
+  <h4> <a href="gm_project.html#S0ic">S0ic</a> Vector of IC atomic
+entropies, J/mole/K</h4>
+  <h4> <a href="gm_project.html#V0ic">V0ic</a> Vector of IC molar
+volumes, cm3/mole</h4>
+  <h4> <a href="gm_project.html#Ph_v2">Ph_v2</a> List of
+multicomponent PHASE definition keys</h4>
+  <h4> <a href="gm_project.html#DC_v2">DC_v2</a> Work list of DC
+definition keys (DComp, ReacDC)for multicomponent phases</h4>
+  <h4> <a href="gm_project.html#DC_v3">DC_v3</a> Work list of DC
+definition keys (DComp, ReacDC)for sorption phases</h4>
+  <h4> <a href="gm_project.html#mDCC3">mDCC3</a> Work vector of DC
+class codes for sorption phases }</h4>
+  <h4> <a href="gems_bcc.html#TPun_0">TPun[0]</a> Units of energy { j;
+J c C N reserved }</h4>
+  <h4> <a href="gems_bcc.html#TPun_1">TPun[1]</a> Units of volume { j;
+c L a reserved }</h4>
+  <h4> <a href="gems_bcc.html#TPun_2">TPun[2]</a> Units of pressure {
+b; B p P A reserved }</h4>
+  <h4> <a href="gems_bcc.html#TPun_3">TPun[3]</a> Units of temperature
+{ C; K F reserved }</h4>
+  <h4> <a href="gm_project.html#TPsv_0">TPsv[0]</a> Account for EOS
+H2O { + - }?</h4>
+  <h4> <a href="gm_project.html#TPsv_1">TPsv[1]</a> Link to HKF EOS
+functions { + - }?</h4>
+  <h4> <a href="gm_project.html#TPsv_2">TPsv[2]</a> Link to FGL
+functions { + - }? (reserved)</h4>
+  <h4> <a href="gm_project.html#TPsv_3">TPsv[3]</a> Include vector of
+quality for TP dependencies of DC { + * - }?</h4>
+  <h4> <a href="gm_project.html#TPptv_0">TPptv[0]</a> Flags for the
+result data vectors: gTP? { + * }</h4>
+  <h4> <a href="gm_project.html#TPptv_1">TPptv[1]</a> delG? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_2">TPptv[2]</a> hTP? { + * - }</h4>
+  <h4> <a href="gm_project.html#TPptv_3">TPptv[3]</a>delH? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_4">TPptv[4]</a> STP? { + * - }</h4>
+  <h4> <a href="gm_project.html#TPptv_5">TPptv[5]</a> delS? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_6">TPptv[6]</a> CpTP? { + * - }</h4>
+  <h4> <a href="gm_project.html#TPptv_7">TPptv[7]</a> delCp? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_8">TPptv[8]</a> VTP? { + * }</h4>
+  <h4> <a href="gm_project.html#TPptv_9">TPptv[9]</a> delVm? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_10">TPptv[10]</a> F? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_11">TPptv[11]</a> U? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_12">TPptv[12]</a> Cv? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_13">TPptv[13]</a> Alp? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_14">TPptv[14]</a> Bet? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_15">TPptv[15]</a> Wborn? { + * -
+}
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_16">TPptv[16]</a> Wrad? { + * -
+}
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_17">TPptv[17]</a> Fugg? { + * -
+}
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_18">TPptv[18]</a> dVg? { + * - }
+(reserved)</h4>
+  <h4> <a href="gm_project.html#TPptv_19">TPptv[19]</a> reserved</h4>
+  <h4> <a href="gems_bcc.html#T">T</a> Temperature T, C</h4>
+  <h4> <a href="gems_bcc.html#P">P</a> Pressure P, bar</h4>
+  <h4> <a href="gems_bcc.html#RTf">RTf</a> RT factor (R=8.3144
+J/mole/K)</h4>
+  <h4> <a href="gems_bcc.html#RoW">RoW</a> Density of H2O g/cm3
+(liquid; vapour)</h4>
+  <h4> <a href="gems_bcc.html#EpsW">EpsW</a> Dielectric constant of
+H2O (liquid; vapour)</h4>
+  <h4> <a href="gems_bcc.html#VisW">VisW</a> Viscosity of H2O
+(dynamic), kg/m*sec (water; steam)</h4>
+  <h4> <a href="gems_bcc.html#TPmark">TPmark</a> vector of quality for
+TP dependencies of DC { + - e }</h4>
+  <h4> <a href="gems_bcc.html#gTP">gTP</a> Partial molar(molal) Gibbs
+energy g(TP) (always), J/mole</h4>
+  <h4> <a href="gems_bcc.html#gTPuns">gTPuns</a> Uncertainty of g(TP)</h4>
+  <h4> <a href="gems_bcc.html#hTP">hTP</a> Partial molar(molal)
+enthalpy h(TP), J/mole</h4>
+  <h4> <a href="gems_bcc.html#hTPuns">hTPuns</a> Uncertainty of h(TP)</h4>
+  <h4> <a href="gems_bcc.html#STP">STP</a> Partial molar(molal)
+entropy s(TP), J/mole/K</h4>
+  <h4> <a href="gems_bcc.html#STPuns">STPuns</a> Uncertainty of s(TP)</h4>
+  <h4> <a href="gems_bcc.html#CpTP">CpTP</a> Partial molar(molal) heat
+capacity Cp(T), J/mole/K</h4>
+  <h4> <a href="gems_bcc.html#CTPuns">CTPuns</a> Uncertainty Cp (Cv)</h4>
+  <h4> <a href="gems_bcc.html#VTP">VTP</a> Partial molar(molal) volume
+Vm(TP) (always), J/bar</h4>
+  <h4> <a href="gems_bcc.html#VTPuns">VTPuns</a> Uncertainty of Vm(TP)</h4>
+  <h4> <a href="gems_bcc.html#F">F</a> Helmholtz energy F(T) (reserved)</h4>
+  <h4> <a href="gems_bcc.html#U">U</a> Internal energy U(T) (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Cv">Cv</a> Heat capacity Cv(T) (reserved)</h4>
+  <h4> <a href="gems_bcc.html#alpha">alpha</a> Compressibility
+(reserved)</h4>
+  <h4> <a href="gems_bcc.html#beta">beta</a> Expandability (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Wborn">Wborn</a> Born factor relative
+for aq &amp; sorb (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Wrad">Wrad</a> Eff solvation radius
+(HKF) (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Fug">Fug</a> Fugacity (FGL), reserved</h4>
+  <h4> <a href="gems_bcc.html#dVg">dVg</a> Increment of Vm0 from TrPr
+to TP (FGL) (reserved)</h4>
+  <h4> <a href="gems_bcc.html#SyPhEQ">SyPhEQ</a> Key of EQSTATe record
+to supply phases for b vector calculation</h4>
+  <h4> <a href="gems_bcc.html#SYname">SYname</a> Full name of this CSD
+definition</h4>
+  <h4> <a href="gems_bcc.html#SYnote">SYnote</a> Comments</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_0">SyPmod[0]</a> Flags for:
+electroneutrality constraint PE { + - }</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_1">SyPmod[1]</a> volume
+constraint PV { + - }</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_2">SyPmod[2]</a>P state variable
+{ + - }</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_3">SyPmod[3]</a>V state variable
+{ + - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_4">SyPmod[4]</a>T state variable
+{ + - }</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_5">SyPmod[5]</a>S state variable
+{ + - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_6">SyPmod[6]</a>H state variable
+{ + - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_7">SyPmod[7]</a>U state variable
+{ + - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_8">SyPmod[8]</a>Maximize or
+minimize G(X) { - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#SyPmod_9">SyPmod[9]</a>Account for
+electrostatic sorption models (DDLM,CCM,TLM) { + - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_0">SyPvec[0]</a>Flags of arrays
+to be included into CSD: bi_ via IC quantities { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_1">SyPvec[1]</a>xd_ via DC
+quantities { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_2">SyPvec[2]</a>xa_ via COMPOS
+quantities { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_3">SyPvec[3]</a>xp_ via
+quantities of phases
+from EQSTATe pointed by rkey in SyPhEQ { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_4">SyPvec[4]</a>dll_ lower DC
+restrictions for x_j { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_5">SyPvec[5]</a>pll_ lower
+restrictions for X_a (phases) { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_6">SyPvec[6]</a>dul_ upper DC
+restrictions for x_j { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_7">SyPvec[7]</a>pul_ upper
+restrictions for X_a (phases) { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_8">SyPvec[8]</a>Interprete pll_
+as kinetically fixed quantities of phases? { + - } reserved</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_9">SyPvec[9]</a>PSATT_ to
+classify SAT calculation
+methods &amp; allocation for sur DC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_10">SyPvec[10]</a>gEx_ excess
+free energies for (metastable) DC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_11">SyPvec[11]</a>Yof_
+metastability parameter for phases { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_12">SyPvec[12]</a>MaSdj_ Flag for
+surface and site parameters table { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_13">SyPvec[13]</a>lnGmf_ Initial
+activity coefficients of DC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_14">SyPvec[14]</a>Aalp_ specific
+surface areas for phases { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_15">SyPvec[15]</a>Sigm_ specific
+surface energy for solid phase-aqueous(gas) interface { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_16">SyPvec[16]</a>Xr0h0_
+parameters r0 and h0 of particles (pores) { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_17">SyPvec[17]</a>XepsC_
+diel.const &amp;
+el.conductivity of phase carriers? { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_18">SyPvec[18]</a>Nfsp_,SCMT_:
+fractions and SCM codes for surface types? { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_19">SyPvec[19]</a>MaSdt_ maximum
+reacted site density for surface types (SAT) { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_20">SyPvec[20]</a>PXcapF
+Capacitances of Ba layer (FLM SAT) { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_21">SyPvec[21]</a> XcapA_
+capacitance of A
+(0) EDL layer (TLM,CCM) for surface types { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_22">SyPvec[22]</a> XcapB_
+capacitance of B
+EDL layers (TLM,SGM) for surface types { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_23">SyPvec[23]</a> XfIEC_
+constant-charge surface density or IEC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_24">SyPvec[24]</a> Pparc_ partial
+pressures for DC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_25">SyPvec[25]</a> delB_
+uncertainties of
+bulk composition (vector b) elements { + * - }</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_26">SyPvec[26]</a> Xlam_ EDL
+discretness parameter
+for surface types, &gt;0, &lt;1, reserved</h4>
+  <h4> <a href="gems_bcc.html#SyPvec_27">SyPvec[27]</a> sSDref,
+sSDval references to data sources { + * - }</h4>
+  <h4> <a href="gems_bcc.html#N_">N_</a> N of IC selected into system
+&lt;=mu.N</h4>
+  <h4> <a href="gems_bcc.html#L__0">L_[0]</a>N of DC selected into
+system &lt;= mu.L</h4>
+  <h4> <a href="gems_bcc.html#L__1">L_[1]</a>Ls - final N of DC in all
+multicomponent phases</h4>
+  <h4> <a href="gems_bcc.html#L__2">L_[2]</a>Lw - final N of
+aqueous+solvent species</h4>
+  <h4> <a href="gems_bcc.html#L__3">L_[3]</a>Lsor - final N of DC in
+sorption phases</h4>
+  <h4> <a href="gems_bcc.html#L__4">L_[4]</a>Lg - final N of DC in
+gaseous phase</h4>
+  <h4> <a href="gems_bcc.html#L__5">L_[5]</a>Lhc - final N of DC in
+liquid hydrocarbon
+phase (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Fi__0">Fi_[0]</a>N of phases selected
+into system Fi</h4>
+  <h4> <a href="gems_bcc.html#Fi__1">Fi_[1]</a>Fis - final N of
+multi-component phases</h4>
+  <h4> <a href="gems_bcc.html#Fi__2">Fi_[2]</a>Fib - N of phases used
+in calculation of bulk composition</h4>
+  <h4> <a href="gems_bcc.html#Fi__3">Fi_[3]</a>Fik - N of phases with
+kinetic restrictions to X_a (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Lbc__0">Lbc_[0]</a>La - final N of
+PCOs used in calculation of b vector</h4>
+  <h4> <a href="gems_bcc.html#Lbc__1">Lbc_[1]</a>Lb - final N of DC
+formulae used in calculation of b vector</h4>
+  <h4> <a href="gems_bcc.html#Lbc__2">Lbc_[2]</a>Lk - N of DC with
+kinetic restrictions to x_j (dll_ or dul_) reserved</h4>
+  <h4> <a href="gems_bcc.html#Lbc__3">Lbc_[3]</a>Na - N of IC non-zero
+quantities used for calculation of vector b</h4>
+  <h4> <a href="gems_bcc.html#LO__0">LO_[0]</a>L0 - H2O-solvent index
+in RMULTS DC list</h4>
+  <h4> <a href="gems_bcc.html#LO__1">LO_[1]</a>Nsd - N of Data Source
+SDref keys</h4>
+  <h4> <a href="gems_bcc.html#LO__2">LO_[2]</a>NsTm - max N of surface
+types { 6 }</h4>
+  <h4> <a href="gems_bcc.html#LO__3">LO_[3]</a>Le - Number of DC to
+set up Gex or activ.coeff.</h4>
+  <h4> <a href="gems_bcc.html#LO__4">LO_[4]</a>Fie - Number of phases
+to set up YOF etc.</h4>
+  <h4> <a href="gems_bcc.html#LO__5">LO_[5]</a>Fia- Number of
+adsorption phases ON</h4>
+  <h4> <a href="gems_bcc.html#LO__6">LO_[6]</a>reserved</h4>
+  <h4> <a href="gems_bcc.html#Pmm">Pmm</a>Pmin,Pmax for parametric
+problems (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Tmm">Tmm</a>Tmin,Tmax for parametric
+problems (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Vmm">Vmm</a>Vmin,Vmax for parametric
+problems (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Hmm">Hmm</a>Hmin,Hmax for parametric
+problems (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Masses_0">Masses[0]</a>Molality of
+reference electrolyte Mbel (FIA of ionic strength)</h4>
+  <h4> <a href="gems_bcc.html#Masses_1">Masses[1]</a>Mwat -
+anticipated mass (kg)
+of water-solvent for calculation of molalities</h4>
+  <h4> <a href="gems_bcc.html#Masses_2">Masses[2]</a>Msys -
+anticipated total
+mass of the system (kg) for mass % calculation</h4>
+  <h4> <a href="gems_bcc.html#Masses_3">Masses[3]</a>Maq - anticipated
+mass of aqueous phase (kg) for calculation of ppm etc.</h4>
+  <h4> <a href="gems_bcc.html#Masses_4">Masses[4]</a>MBX - final total
+mass of the system (kg) calculated from b vector</h4>
+  <h4> <a href="gems_bcc.html#Masses_5">Masses[5]</a>NMS - total
+number of IC
+moles in the system (for mole %% calculations)</h4>
+  <h4> <a href="gems_bcc.html#Volums_0">Volums[0]</a>Vsys -
+anticipated volume
+of the system (L), for volume concentrations</h4>
+  <h4> <a href="gems_bcc.html#Volums_1">Volums[1]</a>Vaq - anticipated
+volume of aqueous phase (L) for calculation of molarities</h4>
+  <h4> <a href="gems_bcc.html#Procs_0">Procs[0]</a>Tau - physical time
+(for PROCESS) reserved</h4>
+  <h4> <a href="gems_bcc.html#Procs_1">Procs[1]</a>Xi - current value
+of process extent variable (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Procs_2">Procs[2]</a>Nu - current value
+of process extent variable (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Procs_3">Procs[3]</a>reserved</h4>
+  <h4> <a href="gems_bcc.html#L1_">L1_</a>N of DC selected within each
+phase</h4>
+  <h4> <a href="gems_bcc.html#RLC_">RLC_</a>Classifier of DC
+restriction types { O L U B } reserved</h4>
+  <h4> <a href="gems_bcc.html#RSC_">RSC_</a>Classifier of DC
+restriction scales { M G n v m L w C A D E }</h4>
+  <h4> <a href="gems_bcc.html#RFLC_">RFLC_</a>Classifier of phase
+restriction types { O L U B } reserved</h4>
+  <h4> <a href="gems_bcc.html#RFSC_">RFSC_</a>Classifier of phase
+restriction scales { M G n v w s S }</h4>
+  <h4> <a href="gems_bcc.html#IC_on">IC_on</a>IC selection switches {
++ * - }</h4>
+  <h4> <a href="gems_bcc.html#DC_on">DC_on</a>DC selection switches {
++ * - }</h4>
+  <h4> <a href="gems_bcc.html#PC_on">PC_on</a>PHASE selection switches
+{ + * - }</h4>
+  <h4> <a href="gems_bcc.html#AC_on">AC_on</a>COMPOS selection
+switches { + * - }</h4>
+  <h4> <a href="gems_bcc.html#BCun_">BCun_</a>Scales of IC
+quantity/concentration (bi_)</h4>
+  <h4> <a href="gems_bcc.html#XDun_">XDun_</a>Scales of DC
+quantity/concentration (xd_, dll_)</h4>
+  <h4> <a href="gems_bcc.html#XAun_">XAun_</a>Scales of COMPOS
+quantity/concentration (xa_)</h4>
+  <h4> <a href="gems_bcc.html#XPun_">XPun_</a>Scales of phase
+quantity/concentration ( xp_, pll_</h4>
+  <h4> <a href="gems_bcc.html#B_">B_</a>Vector b of bulk chemical
+composition of the system, moles</h4>
+  <h4> <a href="gems_bcc.html#delB_">delB_</a>Uncertainties of bulk
+composition vector b elements, in BCun_ units</h4>
+  <h4> <a href="gems_bcc.html#bi_">bi_</a>IC quantity/concentration to
+calculate b vector</h4>
+  <h4> <a href="gems_bcc.html#xa_">xa_</a>COMPOS quanity/concentration
+to calculate b vector</h4>
+  <h4> <a href="gems_bcc.html#xd_">xd_</a>DC quantity/concentration to
+calculate b vector</h4>
+  <h4> <a href="gems_bcc.html#xp_">xp_</a>PHASE(equilibrium)
+quantity/concentration to calculate b vector</h4>
+  <h4> <a href="gems_scm.html#SATC__0">SATC_[][0]</a> Surface species:
+method codes of SACT calculation { C N S I } </h4>
+  <h4> <a href="gems_scm.html#SATC__1">SATC_[][1]</a> Allocation of
+surface species to the sorbent (end-members) { I V 0 ... 5 } </h4>
+  <h4> <a href="gems_scm.html#SATC__2">SATC_[][2]</a> Allocation of
+surface species to surface type { 0 ... 6 } </h4>
+  <h4> <a href="gems_scm.html#SATC__3">SATC_[][3]</a> Allocation of
+surface complexes to EDL plane { 0 b c d } </h4>
+  <h4> <a href="gems_scm.html#SATC__4">SATC_[][4]</a> Allocation of
+surface species to site type within surface type { 0 ... 6} </h4>
+  <h4> <a href="gems_scm.html#SATC__5">SATC_[][5]</a> Units in which
+max. surface density is given in MaSDj { n m M g } (reserved) </h4>
+  <h4> <a href="gems_bcc.html#Pp_">Pp_</a>DC partial pressures, bar</h4>
+  <h4> <a href="gems_bcc.html#dul_">dul_</a>Vector of upper DC
+restrictions to x_j at eqstate (reserved)</h4>
+  <h4> <a href="gems_bcc.html#dll_">dll_</a>Vector of lower DC
+restrictions to x_j at eqstate</h4>
+  <h4> <a href="gems_bcc.html#gEx_">gEx_</a>Excess free energy
+increment for DC, J/mole</h4>
+  <h4> <a href="gems_bcc.html#pul_">pul_</a>Vector of upper
+restrictions to phases X_a at eqstate (reserved)</h4>
+  <h4> <a href="gems_bcc.html#pll_">pll_</a>Vector of lower
+restrictions to phases X_a at eqstate (reserved)</h4>
+  <h4> <a href="gems_bcc.html#Yof_">Yof_</a>Phase metastability
+parameter, J/g</h4>
+  <h4> <a href="gems_bcc.html#lnGmf_">lnGmf_</a>ln of initial DC
+activity coefficients</h4>
+  <h4> <a href="gems_scm.html#Aalp_">Aalp_</a>Specific surface area of
+dispersed phases, m2/g</h4>
+  <h4> <a href="gems_scm.html#MaSdj_0">MaSdj[][0]</a> Parameters for
+surface activity
+correction terms: Maximal surface density (1/nm2) </h4>
+  <h4> <a href="gems_scm.html#MaSdj_1">MaSdj[][1]</a> Surface species
+charge assigned to 0 surface EDL plane </h4>
+  <h4> <a href="gems_scm.html#MaSdj_2">MaSdj[][2]</a> Surface species
+charge assigned to beta surface EDL plane </h4>
+  <h4> <a href="gems_scm.html#MaSdj_3">MaSdj[][3]</a> Isotherm parameter
+1 (energy term in Frumkin) </h4>
+  <h4> <a href="gems_scm.html#MaSdj_4">MaSdj[][4]</a> Isotherm parameter
+2 (CN in Frumkin or dentateness in QCA) </h4>
+  <h4> <a href="gems_scm.html#MaSdj_5">MaSdj[][5]</a> Isotherm parameter
+3 (reserved) </h4>
+  <h4> <a href="gems_scm.html#Sigm_">Sigm_</a>Specific surface energy
+of solid-aqueous (gas) interface, J/m2</h4>
+  <h4> <a href="gems_scm.html#Xr0h0_">Xr0h0_</a>Parameters r0 and h0
+of particles (pores at r0&lt;0), nm reserved</h4>
+  <h4> <a href="gems_scm.html#Xeps_">Xeps_</a>Dielectric constant
+&amp; conductivity of phase carrier, reserved</h4>
+  <h4> <a href="gems_scm.html#Nfsp_">Nfsp_</a>Fraction of surface
+types relative to carrier components</h4>
+  <h4> <a href="gems_scm.html#MaSdt_">MaSdt_</a>SAT: Maximum reacted
+site density for surface types, 1/nm2</h4>
+  <h4> <a href="gems_scm.html#XcapA_">XcapA_</a>Inner-layer
+capacitance density (TLM,CCM) for surface types, F/m2</h4>
+  <h4> <a href="gems_scm.html#XcapB_">XcapB_</a>Outer-layer
+capacitance sensity (TLM) for surface types, F/m2</h4>
+  <h4> <a href="gems_scm.html#XfIEC_">XfIEC_</a>Constant-charge
+surface density or IEC, mkeq/g</h4>
+  <h4> <a href="gems_scm.html#XcapF_">XcapF_</a>Factor of discretnes
+IDL 0 &lt; 1 - in PHASE</h4>
+  <h4> <a href="gems_scm.html#Xlam_">Xlam_</a>EDL discretness
+parameter for surface types, &gt;0, &lt;1, reserved</h4>
+  <h4> <a href="gems_scm.html#SCMT_">SCMT_</a>Classifier of EDL models
+for surface types { C T D M E X I S N }</h4>
+  <h4> <a href="gems_sys.html#_pun_0">_pun[0]</a> Units of energy { j;
+J c C N reserved }</h4>
+  <h4> <a href="gems_sys.html#_pun_1">_pun[1]</a> Units of volume { j;
+c L a reserved }</h4>
+  <h4> <a href="gems_sys.html#_pun_2">_pun[2]</a> Units of pressure {
+b; B p P A reserved }</h4>
+  <h4> <a href="gems_sys.html#_pun_3">_pun[3]</a> Units of temperature
+{ C; K F reserved }</h4>
+  <h4> <a href="gems_sys.html#_nnr_0">_nnr[0]</a> N - number of IC in
+the IPM problem</h4>
+  <h4> <a href="gems_sys.html#_nnr_1">_nnr[1]</a> NR - dimensions of R
+matrix</h4>
+  <h4> <a href="gems_sys.html#L_0">L[0]</a> L - number of DC in IPM
+problem</h4>
+  <h4> <a href="gems_sys.html#L_1">L[1]</a> Ls - total number of DC in
+multi-component phases</h4>
+  <h4> <a href="gems_sys.html#L_2">L[2]</a> LO - index of
+water-solvent in IPM DC list</h4>
+  <h4> <a href="gems_sys.html#L_3">L[3]</a> PG - number of DC in gas
+phase</h4>
+  <h4> <a href="gems_sys.html#L_4">L[4]</a> PSOL - number of DC in
+liquid hydrocarbon phase</h4>
+  <h4> <a href="gems_sys.html#L_5">L[5]</a> Lads - number of DC in
+sorption phases</h4>
+  <h4> <a href="gems_sys.html#Fi_0">Fi[0]</a> FI - number of phases in
+IPM problem</h4>
+  <h4> <a href="gems_sys.html#Fi_1">Fi[1]</a> FIs - number of
+multicomponent phases</h4>
+  <h4> <a href="gems_sys.html#Fi_2">Fi[2]</a> FIa - number of sorption
+phases</h4>
+  <h4> <a href="gems_sys.html#FI_0">FI[0]</a> FI1 - number of phases
+present in eqstate</h4>
+  <h4> <a href="gems_sys.html#FI_1">FI[1]</a> FI1s - number of
+multicomponent phases present in eqstate</h4>
+  <h4> <a href="gems_sys.html#FI_2">FI[2]</a> FI1a - number of
+sorption phases present in eqstate</h4>
+  <h4> <a href="gems_sys.html#It">It</a> It - number of completed IPM
+iterations</h4>
+  <h4> <a href="gems_sys.html#pm_Mod_0">pm_Mod[0]</a> PE - flag of
+electroneutrality constraint { 0 1 }</h4>
+  <h4> <a href="gems_sys.html#pm_Mod_1">pm_Mod[1]</a> PD - mode of
+calling GammaCalc() { 0 1 2 3 4 }</h4>
+  <h4> <a href="gems_sys.html#pm_Mod_2">pm_Mod[2]</a> PV - flag of
+system volume constraint { 0 1 }</h4>
+  <h4> <a href="gems_sys.html#pm_Mod_3">pm_Mod[3]</a> PU - flag of
+activation of DC/phase restrictions { 0 1 }</h4>
+  <h4> <a href="gems_sys.html#pmIpar_0">pmIpar[0]</a> GammaCalc()
+return code: 0 (OK) or 1 (error)</h4>
+  <h4> <a href="gems_sys.html#pmIpar_1">pmIpar[1]</a> Number of
+Selekt2() loops</h4>
+  <h4> <a href="gems_sys.html#pmIpar_2">pmIpar[2]</a> Indicator of the
+same second assignment in Selekt2()</h4>
+  <h4> <a href="gems_sys.html#pmIpar_3">pmIpar[3]</a> Mode of FIA
+selection: 0-auto-SIMPLEX, 1-old eqstate, -1-user's choice</h4>
+  <h4> <a href="gems_sys.html#pmIpar_4">pmIpar[4]</a> Unpack old
+eqstate from EQSTAT record? 0-no 1-yes</h4>
+  <h4> <a href="gems_sys.html#pmIpar_5">pmIpar[5]</a> State of
+IPN-arrays: 0-create; 1-available; -1 remake</h4>
+  <h4> <a href="gems_sys.html#pmIpar_6">pmIpar[6]</a> State of
+reloading CSD: 1- BAL only; 0-whole CSD</h4>
+  <h4> <a href="gems_sys.html#pmIpar_7">pmIpar[7]</a> State of initial
+lnGam load: 0-no, 1-on Mbel, 2 - lnGmf, -1 - SurEta</h4>
+  <h4> <a href="gems_sys.html#pmIpar_8">pmIpar[8]</a> State of
+reloading thermod data: 0- all 1 - G0 only 2 - no</h4>
+  <h4> <a href="gems_sys.html#pmIpar_9">pmIpar[9]</a> internal</h4>
+  <h4> <a href="gems_sys.html#pmIpar_10">pmIpar[10]</a> internal</h4>
+  <h4> <a href="gems_sys.html#pmIpar_11">pmIpar[11]</a> max. number of
+surface site types</h4>
+  <h4> <a href="gems_sys.html#pmIpar_12">pmIpar[12]</a> IPM return
+code: 0 - continue; 1 - converged</h4>
+  <h4> <a href="gems_sys.html#pmIpar_13">pmIpar[13]</a> internal DHH()
+indicator</h4>
+  <h4> <a href="gems_sys.html#pmIpar_14">pmIpar[14]</a> is - index of
+IC for IPN equations ( GammaCalc() )</h4>
+  <h4> <a href="gems_sys.html#pmIpar_15">pmIpar[15]</a> js - index of
+DC for IPN equations ( GammaCalc() )</h4>
+  <h4> <a href="gems_sys.html#pmIpar_16">pmIpar[16]</a> Next -
+continue variable for IPN equations ( GammaCalc() )</h4>
+  <h4> <a href="gems_sys.html#TC">TC</a> Temperature T, min.-max.
+(0,2000 C)</h4>
+  <h4> <a href="gems_sys.html#TK">TK</a> T, min.-max. K</h4>
+  <h4> <a href="gems_sys.html#PG">PG</a> General pressure P,
+min.-max.(0,10000 bar)</h4>
+  <h4> <a href="gems_sys.html#Vx">Vx</a> V(X) - volume of the system,
+min.-max., cm3</h4>
+  <h4> <a href="gems_sys.html#Gx">Gx</a> Gibbs potential of the system
+G(X),min.-max.(J)</h4>
+  <h4> <a href="gems_sys.html#Fx">Fx</a> Helmholtz potential of the
+system F(X), reserved</h4>
+  <h4> <a href="gems_sys.html#Ux">Ux</a> Internal energy of the system
+U(X),reserved</h4>
+  <h4> <a href="gems_sys.html#Hx">Hx</a> Total enthalpy of the system
+H(X), reserved</h4>
+  <h4> <a href="gems_sys.html#Sx">Sx</a> Total entropy of the system
+S(X),reserved</h4>
+  <h4> <a href="gems_sys.html#Cpx">Cpx</a> reserved</h4>
+  <h4> <a href="gems_sys.html#Cvx">Cvx</a> reserved</h4>
+  <h4> <a href="gems_sys.html#T0">T0</a> reserved</h4>
+  <h4> <a href="gems_sys.html#Vexpl">Vexpl</a> reserved</h4>
+  <h4> <a href="gems_sys.html#Mbx">Mbx</a> Total mass of the system, kg</h4>
+  <h4> <a href="gems_sys.html#GX">GX</a> Current Gibbs potential of
+the system in IPM, moles</h4>
+  <h4> <a href="gems_sys.html#IS">IS</a> Effective molal ionic
+strength of aqueous electrolyte</h4>
+  <h4> <a href="gems_sys.html#pH">pH</a> pH of aqueous solution</h4>
+  <h4> <a href="gems_sys.html#pe">pe</a> pe of aqueous solution</h4>
+  <h4> <a href="gems_sys.html#Eh">Eh</a> Eh of aqueous solution, V</h4>
+  <h4> <a href="gems_sys.html#bMol">bMol</a> reserved</h4>
+  <h4> <a href="gems_sys.html#wMol">wMol</a> reserved</h4>
+  <h4> <a href="gems_sys.html#yMet">yMet</a> reserved</h4>
+  <h4> <a href="gems_sys.html#denW">denW</a> Density of H2O(l) and
+steam for Tc,Pc</h4>
+  <h4> <a href="gems_sys.html#epsW">epsW</a> Diel. constant of H2O(l)
+and steam for Tc,Pc</h4>
+  <h4> <a href="gems_sys.html#Psi_DK_0">Psi_DK[0]</a> Current value of
+Dikin criterion of IPM convergence DK &gt;= DX</h4>
+  <h4> <a href="gems_sys.html#Psi_DK_1">Psi_DK[1]</a> IPM convergence
+criterion threshold DX (1e-5)</h4>
+  <h4> <a href="gems_sys.html#lnP">lnP</a> log P_total</h4>
+  <h4> <a href="gems_sys.html#RT">RT</a> RT: 8.31441*T (J/mole/K)</h4>
+  <h4> <a href="gems_sys.html#F_RT">F_RT</a> F/RT, F - Faraday
+constant = 96485 C/mole</h4>
+  <h4> <a href="gems_sys.html#Xw">Xw</a> Current number of moles of
+solvent in aqueous phase</h4>
+  <h4> <a href="gems_sys.html#pmCnst_0">pmCnst[0]</a> ln(55.508373) =
+4.0165339</h4>
+  <h4> <a href="gems_sys.html#pmCnst_1">pmCnst[1]</a> v_j asymmetry
+correction factor for aqueous species</h4>
+  <h4> <a href="gems_sys.html#pmCnst_2">pmCnst[2]</a> Minimum DC
+quantity defining Ls set (1e-19)</h4>
+  <h4> <a href="gems_sys.html#pmCnst_3">pmCnst[3]</a> log(1e-16)</h4>
+  <h4> <a href="gems_sys.html#pmCnst_4">pmCnst[4]</a> log(1e-9)</h4>
+  <h4> <a href="gems_sys.html#pmCnst_5">pmCnst[5]</a> Current number
+of moles in a multicomponent phase</h4>
+  <h4> <a href="gems_sys.html#pmFitv">pmFitv</a> internal</h4>
+  <h4> <a href="gems_sys.html#sitN">sitN</a> Numbers of cations (rows)
+and anions (columns) in the SIT coefficients table (optional) </h4>
+  <h4> <a href="gems_sys.html#L1">L1</a> l_a vector - number of DC
+included into each phase</h4>
+  <h4> <a href="gems_sys.html#Lsmod">Lsmod</a> Number of non-ideality
+coeffs per multicomponent phase</h4>
+  <h4> <a href="gems_sys.html#Lsmdc">Lsmdc</a> Number of non-ideality
+coeffs per one DC in multicomponent phase</h4>
+  <h4> <a href="gems_sys.html#mui">mui</a> IC indices in System
+Profile IC list</h4>
+  <h4> <a href="gems_sys.html#muk">muk</a> Phase indices in System
+Profile phase list</h4>
+  <h4> <a href="gems_sys.html#muj">muj</a> DC indices in RMULTS DC list</h4>
+  <h4> <a href="gems_scm.html#sati_0">sati[0]</a> Link indexes of
+surface species to: sorbent end-member { 0 ... 5 -1 -2 } </h4>
+  <h4> <a href="gems_scm.html#sati_1">sati[][1]</a> Link index to
+surface type { 0 ... 5 } </h4>
+  <h4> <a href="gems_scm.html#sati_2">sati[][2]</a> Link index to
+surface plane { 0 b c d } </h4>
+  <h4> <a href="gems_scm.html#sati_3">sati[][3]</a> Link index to
+surface site on surface type { 0,...,5 } </h4>
+  <h4> <a href="gems_sys.html#dul">dul</a> Vector of upper
+restrictions to x_j (reserved)</h4>
+  <h4> <a href="gems_sys.html#dll">dll</a> Vector of lower
+restrictions to x_j, moles</h4>
+  <h4> <a href="gems_sys.html#gEx">gEx</a> Excess free energy of
+(metastable) DC, moles</h4>
+  <h4> <a href="gems_sys.html#pul">pul</a> Vector of upper
+restrictions to X_a (reserved)</h4>
+  <h4> <a href="gems_sys.html#pll">pll</a> Vector of lower
+restrictions to X_a (reserved)</h4>
+  <h4> <a href="gems_sys.html#Yof">Yof</a> Phase metastability
+parameter</h4>
+  <h4> <a href="gems_sys.html#pmc">pmc</a> Non-ideality coefficients
+f(TP) -&gt; LsMod</h4>
+  <h4> <a href="gems_sys.html#dmc">dmc</a> Non-ideality coefficients
+f(TPX) for DC -&gt; LsMdc</h4>
+  <h4> <a href="gems_sys.html#vol">vol</a> DC partial molal/molar
+volumes, cm3/mole</h4>
+  <h4> <a href="gems_sys.html#hym">hym</a> reserved</h4>
+  <h4> <a href="gems_sys.html#LnWx">LnWx</a> ln of mole fraction</h4>
+  <h4> <a href="gems_sys.html#mmDC">mmDC</a> DC molar masses, g/mole</h4>
+  <h4> <a href="gems_sys.html#h0">h0</a> DC p-molar enthalpies,
+reserved</h4>
+  <h4> <a href="gems_sys.html#f0%22">f0</a> DC p-molar Helmholtz
+energies, reserved</h4>
+  <h4> <a href="gems_sys.html#u0">u0</a> DC p-molar internal energies,
+reserved</h4>
+  <h4> <a href="gems_sys.html#s0">s0</a> DC p-molar entropies, reserved</h4>
+  <h4> <a href="gems_sys.html#cp0">cp0</a> DC p-molar Cp, reserved</h4>
+  <h4> <a href="gems_sys.html#cv0">cv0</a> DC p-molar Cv, reserved</h4>
+  <h4> <a href="gems_sys.html#Pparc">Pparc</a> DC partial pressures,
+bar (Pc by default)</h4>
+  <h4> <a href="gems_sys.html#my">my</a> Molalities of aqueous species
+and sorbates</h4>
+  <h4> <a href="gems_sys.html#lga">lga</a> log activity of DC in
+multi-component phases</h4>
+  <h4> <a href="gems_sys.html#wy">wy</a> Mass concentrations of DC in
+multi-component phases, %(ppm)</h4>
+  <h4> <a href="gems_sys.html#gamma">gamma</a> DC activity coefficients</h4>
+  <h4> <a href="gems_sys.html#lngmf">lngmf</a> ln of initial DC
+activity coefficients</h4>
+  <h4> <a href="gems_sys.html#lngmm">lngmm</a> ln of DC metastability
+coefficients (reserved)</h4>
+  <h4> <a href="gems_sys.html#ez">ez</a> Formula charge of DC in
+multi-component phases</h4>
+  <h4> <a href="gems_sys.html#wB">wB</a> Relative Born factors (HKF,
+reserved)</h4>
+  <h4> <a href="gems_sys.html#wAbs">wAbs</a> Absolute Born factors
+(HKF, reserved)</h4>
+  <h4> <a href="gems_sys.html#rIon">rIon</a> Ionic or solvation radii,
+A (reserved)</h4>
+  <h4> <a href="gems_scm.html#Aalp">Aalp</a> Specific surface area of
+dispersed phases, m2/g</h4>
+  <h4> <a href="gems_scm.html#Sigw">Sigw</a> Surface energy of solid
+phase-aqueous interface J/m2</h4>
+  <h4> <a href="gems_scm.html#Sigg">Sigg</a> Surface energy of
+condensed phase-gas interface (reserved)</h4>
+  <h4> <a href="gems_scm.html#nfsp">nfsp</a> Fractions of surface
+types relative to amount of carrier</h4>
+  <h4> <a href="gems_scm.html#masdt">masdt</a> SAT: Maximum reacted
+species surface density, mkmol/g</h4>
+  <h4> <a href="gems_sys.html#phVol">phVol</a> Volume of phases, cm3</h4>
+  <h4> <a href="gems_sys.html#phM">phM</a> Mass of phases, g</h4>
+  <h4> <a href="gems_scm.html#capA">capA</a> Capacitance density of A
+(0) EDL layer, F/m2</h4>
+  <h4> <a href="gems_scm.html#capB">capB</a> Capacitance density of B
+EDL layer, F/m2</h4>
+  <h4> <a href="gems_scm.html#capD">capD</a> Capacitance density of D
+EDL layer, F/m2 (reserved)</h4>
+  <h4> <a href="gems_scm.html#capF">capF</a> Capacitance density of Ba
+EDL layer in FLM, F/m2 (reserved)</h4>
+  <h4> <a href="gems_scm.html#dlhA">dlhA</a> Eff.thickness of A (0)
+EDL layer, nm</h4>
+  <h4> <a href="gems_scm.html#dlhB">dlhB</a> Eff.thickness of B EDL
+layer, nm</h4>
+  <h4> <a href="gems_scm.html#dlhD">dlhD</a> Eff.thickness of D EDL
+layer, nm</h4>
+  <h4> <a href="gems_scm.html#psiA">psiA</a> Relative Galvani
+potential on A (0) layer, V</h4>
+  <h4> <a href="gems_scm.html#psiB">psiB</a> Relative Galvani
+potential on B EDL layer, V</h4>
+  <h4> <a href="gems_scm.html#psiD">psiD</a> reserved</h4>
+  <h4> <a href="gems_scm.html#r0h0">r0h0</a> r0 and h0 parameters for
+phase particles (pores) (reserved)</h4>
+  <h4> <a href="gems_scm.html#lamA">lamA</a> Discretness factors for A
+EDL layer (reserved)</h4>
+  <h4> <a href="gems_scm.html#etaF">etaF</a> Fixed charge density at
+surface type, C/m2</h4>
+  <h4> <a href="gems_scm.html#Cond">Cond</a> Electrical conductivity
+of phase carrier, reserved</h4>
+  <h4> <a href="gems_scm.html#Eps">Eps</a> Dielectric constant of
+phase carrier, reserved</h4>
+  <h4> <a href="gems_sys.html#icM">icM</a> IC atomic (molar) mass,
+g/mole</h4>
+  <h4> <a href="gems_sys.html#A">A</a> DC stoichiometry matrix A
+composed of a_ji</h4>
+  <h4> <a href="gems_sys.html#XFs">XFs</a> Current quantities of
+phases X_a at IPM iterations</h4>
+  <h4> <a href="gems_sys.html#Fas">Fas</a> Current Karpov criteria of
+phase stability F_a</h4>
+  <h4> <a href="gems_sys.html#Gfug">Gfug</a> Partial fugacities of
+gases</h4>
+  <h4> <a href="gems_sys.html#lgFug">lgFug</a> log partial fugacities
+of gases</h4>
+  <h4> <a href="gems_sys.html#lgPpG">lgPpG</a> log partial pressures
+of gases</h4>
+  <h4> <a href="gems_scm.html#masdj_0">masdj[][0]</a> Parameters of
+surface species for
+calculation of activity correction terms: Max. density (umol/g) </h4>
+  <h4> <a href="gems_scm.html#masdj_1">masdj[][1]</a> Species charge
+assigned to 0 EDL surface plane </h4>
+  <h4> <a href="gems_scm.html#masdj_2">masdj[][2]</a> Species charge
+assigned to beta EDL surface plane </h4>
+  <h4> <a href="gems_scm.html#masdj_3">masdj[][3]</a> Isotherm parameter
+1 (Frumkin energy) </h4>
+  <h4> <a href="gems_scm.html#masdj_4">masdj[][4]</a> Isotherm parameter
+2 (Frumkin CN or dentateness ) </h4>
+  <h4> <a href="gems_scm.html#masdj_5">masdj[][5]</a> Isotherm parameter
+3 (reserved ) </h4>
+  <h4> <a href="gems_sys.html#c">c</a> Normalized DC energy function
+c(j), mole/mole</h4>
+  <h4> <a href="gems_sys.html#g0">g0</a> Input normalized g0_j(T,P)
+for DC at unified reference scale</h4>
+  <h4> <a href="gems_sys.html#lnGam">lnGam</a> ln of DC activity
+coefficients</h4>
+  <h4> <a href="gems_sys.html#lnGmo">lnGmo</a> Copy of lnGam from
+previous IPM iteration (reserved)</h4>
+  <h4> <a href="gems_scm.html#lnSAT">lnSAT</a> SAT: ln of surface DC
+activity terms</h4>
+  <h4> <a href="gems_sys.html#b">b</a> Input bulk chemical composition
+of the system - b vector, moles of IC</h4>
+  <h4> <a href="gems_sys.html#u">u</a> IC chemical potentials u_i
+(mole/mole) - dual IPM solution</h4>
+  <h4> <a href="gems_sys.html#ue">ue</a> IC chemical potentials u_i
+(J/mole)</h4>
+  <h4> <a href="gems_sys.html#Cb">Cb</a> Calculated IC mass-balance
+deviations (moles)</h4>
+  <h4> <a href="gems_sys.html#m_t">m_t</a> Total IC molalities in
+aqueous phase (excl.solvent)</h4>
+  <h4> <a href="gems_sys.html#lgm_t">lgm_t</a> log total IC molalities
+in aqueous phase</h4>
+  <h4> <a href="gems_sys.html#w_t">w_t</a> Total dissolved IC
+concentrations in g/kg_soln</h4>
+  <h4> <a href="gems_sys.html#bXa">bXa</a> Output bulk compositions of
+multicomponent phases bf_ai</h4>
+  <h4> <a href="gems_sys.html#Xa">Xa</a> Output total number of moles
+of phases Xa</h4>
+  <h4> <a href="gems_sys.html#Xao">Xao</a> Copy of X_a from previous
+IPM iteration</h4>
+  <h4> <a href="gems_sys.html#Xwa">Xwa</a> Quantity of carrier in
+asymmetric phases Xwa, moles</h4>
+  <h4> <a href="gems_sys.html#Xwao">Xwao</a> Copy of Xwa from previous
+IPM iteration</h4>
+  <h4> <a href="gems_sys.html#Fa">Fa</a> Karpov phase stability
+criteria F_a</h4>
+  <h4> <a href="gems_scm.html#etaA">etaA</a> Total EDL charge on A EDL
+phase surface, moles</h4>
+  <h4> <a href="gems_scm.html#etaB">etaB</a> Total charge of surface
+species on B EDL layer, moles</h4>
+  <h4> <a href="gems_scm.html#Xfts">Xfts</a> Total number of moles of
+surface DC at surtype</h4>
+  <h4> <a href="gems_sys.html#x">x</a> DC quantities at eqstate x_j,
+moles - prime IPM solution</h4>
+  <h4> <a href="gems_sys.html#y">y</a> Copy of x_j from previous IPM
+iteration</h4>
+  <h4> <a href="gems_sys.html#xy">xy</a> Copy of x_j from previous
+loop of Selekt2()</h4>
+  <h4> <a href="gems_sys.html#qp">qp</a> Work IIPN variables related
+to non-ideal phases FIs*(20)</h4>
+  <h4> <a href="gems_sys.html#qd">qd</a> Work IIPN variables related
+to DC in non-ideal phases (20)</h4>
+  <h4> <a href="gems_sys.html#mu">mu</a> mu_j values of differences
+between dual DC chem.potentials</h4>
+  <h4> <a href="gems_sys.html#emu">emu</a> Exponents of DC increment
+to F_a criterion for phase</h4>
+  <h4> <a href="gems_sys.html#nmu">nmu</a> DC increments to F_a
+criterion for phase</h4>
+  <h4> <a href="gems_sys.html#W">W</a> Weight multipliers for DC (incl
+restrictions) in IPM</h4>
+  <h4> <a href="gems_sys.html#fx">fx</a> Dual DC chemical potentials
+defined via u_i and a_ji</h4>
+  <h4> <a href="gems_sys.html#Wxx">Wxx</a> Mole fractions Wx of DC in
+multi-component phases</h4>
+  <h4> <a href="gems_sys.html#v">v</a> Prime DC chemical potentials
+defined via g0_j, Wx_j and lnGam_j</h4>
+  <h4> <a href="gems_sys.html#vEx">vEx</a> Excess Gibbs energies for
+(metastable) DC, mole/mole</h4>
+  <h4> <a href="gems_sys.html#Dres">Dres</a> Reserved</h4>
+  <h4> <a href="gems_sys.html#smod">smod</a> Codes of models of
+multicomponent phases</h4>
+  <h4> <a href="gems_sys.html#ICnam">ICnam</a> List of IC names in the
+system</h4>
+  <h4> <a href="gems_sys.html#DCnam">DCnam</a> List of DC names in the
+system</h4>
+  <h4> <a href="gems_sys.html#PHnam">PHnam</a> List of phase names in
+the system</h4>
+  <h4> <a href="gems_sys.html#PHnam_">PHnam_</a> List of phase
+currently present in non-zero quantities</h4>
+  <h4> <a href="gems_sys.html#DCnam2">DCnam2</a> List of
+multicomponent DC names in the system</h4>
+  <h4> <a href="gems_sys.html#PHnam2">PHnam2</a> List of
+multicomponent phase names in the system</h4>
+  <h4> <a href="gems_sys.html#EQbuf">EQbuf</a> Text buffer for EQSTATe
+table printout</h4>
+  <h4> <a href="gems_sys.html#RLC">RLC</a> Classifier of restriction
+types for x_j</h4>
+  <h4> <a href="gems_sys.html#RSC">RSC</a> Classifier of restriction
+scales for x_j</h4>
+  <h4> <a href="gems_sys.html#RFLC">RFLC</a> Classifier of restriction
+types for XF_a</h4>
+  <h4> <a href="gems_sys.html#RFSC">RFSC</a> Classifier of restriction
+scales for XF_a</h4>
+  <h4> <a href="gems_sys.html#ICC">ICC</a> Classifier of IC { e o h a
+z v i [int]}</h4>
+  <h4> <a href="gems_sys.html#DCC">DCC</a> Classifier of DC { T E S W
+G V C H N I J M D R A B 0 1 2 3 X Y Z P Q O }</h4>
+  <h4> <a href="gems_sys.html#PHC">PHC</a> Classifier of phases { a g
+p m l x d h }</h4>
+  <h4> <a href="gems_scm.html#SCM">SCM</a> Classifier of EDL models
+for phase surface types { D C T M I N }</h4>
+  <h4> <a href="gems_scm.html#SATT">SATT</a> Classifier of methods of
+SAT calculation { C N S I }</h4>
+  <h4> <a href="gems_sys.html#DCCW">DCCW</a> reserved</h4>
+  <h4> <a href="gems_sys.html#R">R</a> R matrix of IPM linear equations</h4>
+  <h4> <a href="gems_sys.html#R1">R1</a> Copy of R for Jordan()</h4>
+  <h4> <a href="gems_sys.html#sitXct">sitXct</a> SIT: indices of
+cations </h4>
+  <h4> <a href="gems_sys.html#sitXan">sitXan</a> SIT: indices of
+anions </h4>
+  <h4> <a href="gems_sys.html#sitE">sitE</a> Table of SIT coefficients
+  </h4>
+  <h4> <a href="gems_sys.html#ICnam_">ICnam_</a> List of IC symbols</h4>
+  <h4> <a href="gems_sys.html#Gases">Gases</a> List of names of gases</h4>
+  <h4> <a href="gems_sys.html#EqTxt">EqTxt</a> Text for compilation of
+IPN equations</h4>
+  <h4> <a href="gm_phase.html#Ps_mod">Ps_mod</a> !</h4>
+  <h4> <a href="gm_phase.html#T_C">T_C</a> ! To be used in Phase math
+scripts</h4>
+  <h4> <a href="gm_phase.html#T_K">T_K</a> !</h4>
+  <h4> <a href="gm_phase.html#P_">P_</a> !</h4>
+  <h4> <a href="gm_phase.html#IS_">IS_</a> !</h4>
+  <h4> <a href="gm_phase.html#is">is</a> !</h4>
+  <h4> <a href="gm_phase.html#js">js</a> !</h4>
+  <h4> <a href="gm_phase.html#nexta">nexta</a> !</h4>
+  <h4> <a href="gm_phase.html#Ncp">Ncp</a> !</h4>
+  <h4> <a href="gm_phase.html#Ncd">Ncd</a> !</h4>
+  <h4> <a href="gm_phase.html#Ndc">Ndc</a> !</h4>
+  <h4> <a href="gm_phase.html#PhVol">PhVol</a> !</h4>
+  <h4> <a href="gm_phase.html#RT_">RT_</a> !</h4>
+  <h4> <a href="gm_phase.html#FRT_">FRT_</a> !</h4>
+  <h4> <a href="gm_phase.html#Ez">Ez</a> !</h4>
+  <h4> <a href="gm_phase.html#pCv">pCv</a> !</h4>
+  <h4> <a href="gm_phase.html#dCm">dCm</a> !</h4>
+  <h4> <a href="gm_phase.html#mVol">mVol</a> !</h4>
+  <h4> <a href="gm_phase.html#lnWx">lnWx</a> !</h4>
+  <h4> <a href="gm_phase.html#gTn">gTn</a> !</h4>
+  <h4> <a href="gm_phase.html#gam">gam</a> !</h4>
+  <h4> <a href="gm_phase.html#ln_gam">ln_gam</a> !</h4>
+  <h4> <a href="gm_phase.html#Un">Un</a> !</h4>
+  <h4> <a href="gm_phase.html#As">As</a> !</h4>
+  <h4> <a href="gm_phase.html#Xalp">Xalp</a> !</h4>
+  <h4> <a href="gm_phase.html#XalpV">XalpV</a> !</h4>
+  <h4> <a href="gm_phase.html#XalpS">XalpS</a> !</h4>
+  <h4> <a href="gm_phase.html#XecR">XecR</a> !</h4>
+  <h4> <a href="gm_phase.html#Xx">Xx</a> !</h4>
+  <h4> <a href="gm_phase.html#Wx">Wx</a> !</h4>
+  <h4> <a href="gm_phase.html#fMu">fMu</a> !</h4>
+  <h4> <a href="gm_phase.html#Qp">Qp</a> !</h4>
+  <h4> <a href="gm_phase.html#Qd">Qd</a> !</h4>
+  <h4> <a href="gm_phase.html#wEqTxt">wEqTxt</a> !</h4>
+  <h4> <a href="gm_project.html#MSpmv_0">MSpmv[0]</a> List of Compos:
++ include - exclude * rebuild</h4>
+  <h4> <a href="gm_project.html#MSpmv_1">MSpmv[1]</a> List of Phase: {
++ * }?</h4>
+  <h4> <a href="gm_project.html#MSpmv_2">MSpmv[2]</a> List of
+Dcomp/ReacDC: { + * }?</h4>
+  <h4> <a href="gm_project.html#MSpmv_3">MSpmv[3]</a> List of Icomp: {
++ * }?</h4>
+  <h4> <a href="gm_project.html#MSpmv_4">MSpmv[4]</a> List of
+IC-&gt;DC references { + * - }? (reserved)</h4>
+  <h4> <a href="gm_project.html#MSpmv_5">MSpmv[5]</a> Arrays of IC
+properties { + * }?</h4>
+  <h4> <a href="gm_project.html#MSpmv_6">MSpmv[6]</a> List of IC
+formulae { + * - }? (reserved)</h4>
+  <h4> <a href="gm_project.html#MSpmv_7">MSpmv[7]</a> List of DC
+formulae (for stoichiometry matrix A) { + * }?</h4>
+  <h4> <a href="gm_project.html#MSpmv_8">MSpmv[8]</a> Default aqueous
+phase { + - }</h4>
+  <h4> <a href="gm_project.html#MSpmv_9">MSpmv[9]</a> Default gaseous
+phase { + - }</h4>
+  <h4> <a href="gm_project.html#MSname">MSname</a> Full name of the
+project system </h4>
+  <h4> <a href="gm_project.html#MSnote">MSnote</a> Comments</h4>
+  <h4> <a href="gm_project.html#MSdim_0">MSdim[0]</a> N of IC, incl.
+Zz (charge) and Vol (volume)</h4>
+  <h4> <a href="gm_project.html#MSdim_1">MSdim[1]</a> L - of DC -
+total for all phases</h4>
+  <h4> <a href="gm_project.html#MSdim_2">MSdim[2]</a> LO - of DC in
+aqueous phase</h4>
+  <h4> <a href="gm_project.html#MSdim_3">MSdim[3]</a> PG - of DC in
+gaseous phase</h4>
+  <h4> <a href="gm_project.html#MSdim_4">MSdim[4]</a> LH - of DC in
+mixture of liquid hydrocarbons (reserved)</h4>
+  <h4> <a href="gm_project.html#MSdim_5">MSdim[5]</a> FI - total
+number of phases</h4>
+  <h4> <a href="gm_project.html#MSdim_6">MSdim[6]</a> FIs - total
+number of multi-component phases</h4>
+  <h4> <a href="gm_project.html#MSdim_7">MSdim[7]</a> La - of
+references to Compos records</h4>
+  <h4> <a href="gm_project.html#MSdim_8">MSdim[8]</a> Ls - total
+number of DC in multi-component phases</h4>
+  <h4> <a href="gm_project.html#MSdim_9">MSdim[9]</a> Lx - total
+number of surface species</h4>
+  <h4> <a href="gm_project.html#MSdim_10">MSdim[10]</a> FIe - number
+of phases with sorption (and EDL)</h4>
+  <h4> <a href="gm_project.html#MSdim_11">MSdim[11]</a> NfT - Total
+number of linked files sigma(Nfl)</h4>
+  <h4> <a href="gm_project.html#MSdim_12">MSdim[12]</a> Index to
+select aqueous phase</h4>
+  <h4> <a href="gm_project.html#MSdim_13">MSdim[13]</a> Index to
+select gaseous phase</h4>
+  <h4> <a href="gm_project.html#MSNfT">MSNfT</a> Number of open files
+for each module</h4>
+  <h4> <a href="gm_project.html#L1vp">L1vp</a> L1 vector, shows a
+number of DC included to each phase</h4>
+  <h4> <a href="gm_project.html#PHvp">PHvp</a> List of Phase
+definition keys</h4>
+  <h4> <a href="gm_project.html#DCvp">DCvp</a> List of DC definition
+keys (Dcomp, ReacDC)</h4>
+  <h4> <a href="gm_project.html#CCvp">CCvp</a> List of Compos
+definition keys</h4>
+  <h4> <a href="gm_project.html#ICvp">ICvp</a> List of Icomp record
+keys (stoichiometry basis)</h4>
+  <h4> <a href="gm_project.html#MSfls">MSfls</a> List of file names
+for each module</h4>
+  <h4> <a href="gm_project.html#DCSvp">DCSvp</a> Code of data source
+for DC: d-Dcomp r-ReacDC { d r }</h4>
+  <h4> <a href="gm_icomp.html#M0i">M0i</a>&nbsp;&nbsp;&nbsp; Atomic
+(molar) mass of IC</h4>
+  <h4> <a href="gm_icomp.html#S0i">S0i</a>&nbsp;&nbsp;&nbsp;
+Standard-state absolute entropy per g/atom S0</h4>
+  <h4> <a href="gm_icomp.html#Cp0i">Cp0i</a>&nbsp;&nbsp;&nbsp;
+Standard state heat capacity per g/atom Cp0</h4>
+  <h4> <a href="gm_icomp.html#V0i">V0i</a>&nbsp;&nbsp;&nbsp; Standard
+state volume V0 per g/atom</h4>
+  <h4> <a href="gm_icomp.html#Ri">Ri</a>&nbsp;&nbsp;&nbsp; Ionic
+radius (reserved)</h4>
+  <h4> <a href="gm_icomp.html#IXi">IXi</a>Relative isotope abundance
+(1 for chemical elements)</h4>
+  <h4> <a href="gm_icomp.html#Valen">Valen</a>Default valence (formula
+charge) of IC in compounds</h4>
+  <h4> <a href="gm_icomp.html#indMT">indMT</a>Index in Periodical
+(Mendeleev's) table</h4>
+  <h4> <a href="gm_icomp.html#Zi">Zi</a>Default coordination number
+(reserved)</h4>
+  <h4> <a href="gm_icomp.html#StdSt">StdSt</a>Code of standard
+aggregate state ( s l g )</h4>
+  <h4> <a href="gm_icomp.html#ICname">ICname</a>Name of this
+Independent Component</h4>
+  <h4> <a href="gm_icomp.html#ICform">ICform</a>Chemical Formula of
+this Independent Component</h4>
+  <h4> <a href="gm_icomp.html#IC_DC">IC_DC</a>Reference DComp record
+key (reserved)</h4>
+  <h4> <a href="gm_dcomp.html#TPcMod_0">TPcMod[0]</a>Mode of
+calculation of thermodynamic properties { C H K S I X }</h4>
+  <h4> <a href="gm_dcomp.html#TPcMod_1">TPcMod[1]</a>Mode of
+T-dependency { S H B K W A L X 1 2 3 Z R E G D C }</h4>
+  <h4> <a href="gm_dcomp.html#TPcMod_2">TPcMod[2]</a>Mode of
+P-dependency { N 0 C K V B E G F A Z }</h4>
+  <h4> <a href="gm_dcomp.html#TPcMod_3">TPcMod[3]</a>EOS ID (reserved)</h4>
+  <h4> <a href="gm_dcomp.html#DCset_0">DCset[0]</a>DC class code { T E
+S W G V
+C H N I J M&nbsp;<digit>X Y Z A B P Q R O }</digit></h4>
+  <h4> <a href="gm_dcomp.html#DCset_1">DCset[1]</a>Units of energy {
+j;
+J c C N reserved }</h4>
+  <h4> <a href="gm_dcomp.html#DCset_2">DCset[2]</a>Units of volume {
+j;
+c L a reserved }</h4>
+  <h4> <a href="gm_dcomp.html#DCset_3">DCset[3]</a>Units of pressure
+Pr
+{ b; B p P A reserved }</h4>
+  <h4> <a href="gm_dcomp.html#DCset_4">DCset[4]</a> Units of
+temperature Tr { C; K F reserved }</h4>
+  <h4> <a href="gm_dcomp.html#DCset_5">DCset[5]</a> Flag of Cp=f(T)
+coefficient array { + * - }</h4>
+  <h4> <a href="gm_dcomp.html#DCset_6">DCset[6]</a> Are there phase
+transitions? { + * - }</h4>
+  <h4> <a href="gm_dcomp.html#DCset_7">DCset[7]</a> Flag of vector of
+HKF EOS coefficients { + * - }</h4>
+  <h4> <a href="gm_dcomp.html#DCset_8">DCset[8]</a> Flag of Vm=f(P,T)
+coefficient vector { + * - }</h4>
+  <h4> <a href="gm_dcomp.html#Cdate">Cdate</a> Date when this DC
+definition was created</h4>
+  <h4> <a href="gm_dcomp.html#Zz">Zz</a> DC formula charge</h4>
+  <h4> <a href="gm_dcomp.html#M0">M0</a> Molecular mass, g/mol</h4>
+  <h4> <a href="gm_dcomp.html#V0d_0">V0d[0]</a> Molar volume of DC at
+standard state (J/bar)</h4>
+  <h4> <a href="gm_dcomp.html#V0d_1">V0d[1]</a> Uncertainty of DC
+molar
+volume (J/bar)</h4>
+  <h4> <a href="gm_dcomp.html#G0d_0">G0d[0]</a> Standard-state Gibbs
+energy of DC formation from IC (J/mol)</h4>
+  <h4> <a href="gm_dcomp.html#G0d_1">G0d[1]</a> Uncertainty of DC
+Gibbs
+energy of formation (J/mol)</h4>
+  <h4> <a href="gm_dcomp.html#H0d_0">H0d[0]</a> Apparent enthalpy of
+DC
+formation from IC at standard state (J/mole)</h4>
+  <h4> <a href="gm_dcomp.html#H0d_1">H0d[1]</a> Uncertainty of DC
+enthalpy of formation (J/mole)</h4>
+  <h4> <a href="gm_dcomp.html#S0d_0">S0d[0]</a> Absolute entropy of DC
+at standard state (J/mole/K)</h4>
+  <h4> <a href="gm_dcomp.html#S0d_1">S0d[1]</a> Uncertainty of DC
+entropy (J/mole/K)</h4>
+  <h4> <a href="gm_dcomp.html#Cp0d_0">Cp0d[0]</a> Heat capacity Cp of
+DC at standard state (J/mole/K)</h4>
+  <h4> <a href="gm_dcomp.html#Cp0d_1">Cp0d[1]</a> Uncertainty of Cp
+(J/mole/K)</h4>
+  <h4> <a href="gm_dcomp.html#PrTr_0">PrTr[0]</a> Reference pressure
+Pr
+(bar)</h4>
+  <h4> <a href="gm_dcomp.html#PrTr_1">PrTr[1]</a> Reference
+temperature
+Tr (C)</h4>
+  <h4> <a href="gm_dcomp.html#LamST_0">LamST[0]</a> Entropy of lambda
+transition (J/mole/K)</h4>
+  <h4> <a href="gm_dcomp.html#LamST_1">LamST[1]</a> Temperature of
+lambda transition (C)</h4>
+  <h4> <a href="gm_dcomp.html#BetAlp_0">BetAlp[0]</a> Coefficient of
+isothermal compressibility</h4>
+  <h4> <a href="gm_dcomp.html#BetAlp_1">BetAlp[1]</a> Coefficient of
+isobaric expandability</h4>
+  <h4> <a href="gm_dcomp.html#ab_0">ab[0]</a> Ion-size parameter a0, A
+(Debye-Huckel aq species)</h4>
+  <h4> <a href="gm_dcomp.html#ab_1">ab[1]</a> Indiv.par. b (for III
+Debye-Huckel aq species)</h4>
+  <h4> <a href="gm_dcomp.html#DCname">DCname</a> Full name of DC</h4>
+  <h4> <a href="gm_dcomp.html#DCform">DCform</a> Chemical formula of DC</h4>
+  <h4> <a href="gm_dcomp.html#DC_cnt_0">DC_cnt[0]</a> Numbers: of
+Cp(T)
+equations;</h4>
+  <h4> <a href="gm_dcomp.html#DC_cnt_1">DC_cnt[1]</a> phase
+transitions;</h4>
+  <h4> <a href="gm_dcomp.html#DC_cnt_2">DC_cnt[2]</a> SD references;</h4>
+  <h4> <a href="gm_dcomp.html#DC_cnt_3">DC_cnt[3]</a> EOS coefficients</h4>
+  <h4> <a href="gm_dcomp.html#TCint_0">TCint[0]</a> Lower T limits
+for Cp=f(T) equation [NeCp][2]</h4>
+  <h4> <a href="gm_dcomp.html#TCint_1">TCint[1]</a> Upper T limits
+for Cp=f(T) equation [NeCp][2]</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_0">aiCpT[0]</a> Coeffs of Cp=f(T)
+(J,mole,K),
+one column per equation: a0</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_1">aiCpT[1]</a> a1 *T</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_2">aiCpT[2]</a> a2 /T^2</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_3">aiCpT[3]</a> a3 /T^0.5</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_4">aiCpT[4]</a> a4 *T^2</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_5">aiCpT[5]</a> a5 *T^3</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_6">aiCpT[6]</a> a6 *T^4</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_7">aiCpT[7]</a> a7 /T^3</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_8">aiCpT[8]</a> a8 /T</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_9">aiCpT[9]</a> a9 *T^0.5</h4>
+  <h4> <a href="gm_dcomp.html#aiCpT_10">aiCpT[10]</a> a10 *lnT</h4>
+  <h4> <a href="gm_dcomp.html#aiCpFS">aiCpFS</a> reserved</h4>
+  <h4> <a href="gm_dcomp.html#aiHKF_0">aiHKF[0]</a> Empirical
+coefficients of HKF EOS: a1 cal/bar/mole</h4>
+  <h4> <a href="gm_dcomp.html#aiHKF_1">aiHKF[1]</a> a2 cal/mole</h4>
+  <h4> <a href="gm_dcomp.html#aiHKF_2">aiHKF[2]</a> a3 cal*K/bar/mole</h4>
+  <h4> <a href="gm_dcomp.html#aiHKF_3">aiHKF[3]</a> a4 cal*K/mole</h4>
+  <h4> <a href="gm_dcomp.html#aiHKF_4">aiHKF[4]</a> c1 cal/K/mole</h4>
+  <h4> <a href="gm_dcomp.html#aiHKF_5">aiHKF[5]</a> c2 cal*K/mole</h4>
+  <h4> <a href="gm_dcomp.html#aiHKF_6">aiHKF[6]</a> wB Born parameter
+cal/mole</h4>
+  <h4> <a href="gm_dcomp.html#aiHKF_7">aiHKF[7]</a> rAB solvation
+radius (angstrom), reserved</h4>
+  <h4> <a href="gm_dcomp.html#ai_Vtp_0">ai_Vtp[0]</a> Coefficients of
+mV=f(T,P): a0(T)</h4>
+  <h4> <a href="gm_dcomp.html#ai_Vtp_1">ai_Vtp[1]</a> a1(T)</h4>
+  <h4> <a href="gm_dcomp.html#ai_Vtp_2">ai_Vtp[2]</a> a2(T)</h4>
+  <h4> <a href="gm_dcomp.html#ai_Vtp_3">ai_Vtp[3]</a> b0(P)</h4>
+  <h4> <a href="gm_dcomp.html#ai_Vtp_4">ai_Vtp[4]</a> b1(P)</h4>
+  <h4> <a href="gm_dcomp.html#CritPg_0">CritPg[0]</a> Critical
+parameters (for FGL): Pcr,</h4>
+  <h4> <a href="gm_dcomp.html#CritPg_1">CritPg[1]</a> Vcr,</h4>
+  <h4> <a href="gm_dcomp.html#CritPg_2">CritPg[2]</a> Tcr,</h4>
+  <h4> <a href="gm_dcomp.html#CritPg_3">CritPg[3]</a> Zcr,</h4>
+  <h4> <a href="gm_dcomp.html#CritPg_4">CritPg[4]</a> Af (Pitzer)</h4>
+  <h4> <a href="gm_dcomp.html#CritPg_5">CritPg[5]</a> reserved</h4>
+  <h4> <a href="gm_dcomp.html#CritPg_6">CritPg[6]</a> reserved</h4>
+  <h4> <a href="gm_dcomp.html#ai_ODc">ai_ODc</a> Disordering eq coeffs
+Berman (1988), reserved</h4>
+  <h4> <a href="gm_dcomp.html#FT_p">FT_p</a> Column: TCf- at Pr;
+DltS,DltH,DltV; dV of phase transitions</h4>
+  <h4> <a href="gm_dcomp.html#FT_pb">FT_pb</a> Properties of phase
+transition (Berman): Tr; Tft; tilt; l1,l2 (reserved)</h4>
+  <h4> <a href="gm_dcomp.html#Cemp_s">Cemp_s</a> Array of empirical
+EOS coefficients (reserved)</h4>
+  <h4> <a href="gm_dcomp.html#FT_typ">FT_typ</a> List of phase
+transition type codes (reserved)</h4>
+  <h4> <a href="gm_dcomp.html#dSDref">dSDref</a> List of SDref keys to
+data sources</h4>
+  <h4> <a href="gm_dcomp.html#dSDval">dSDval</a> List of comments to
+data sources</h4>
+  <h4> <a href="gm_dcomp.html#DCtprn">DCtprn</a> internal</h4>
+  <h4> <a href="gm_compos.html#BC_set_0">BC_set[0]</a> Use IC
+quantities for GCO definition? { + * - }</h4>
+  <h4> <a href="gm_compos.html#BC_set_1">BC_set[1]</a> Use DC
+quantities for GCO definition? { + * - }</h4>
+  <h4> <a href="gm_compos.html#BC_set_2">BC_set[2]</a> Create formula
+units for GCO definition? { + * - }</h4>
+  <h4> <a href="gm_compos.html#BC_set_3">BC_set[3]</a> Create large
+formula text for GCO definition? { + * - }</h4>
+  <h4> <a href="gm_compos.html#BC_set_4">BC_set[4]</a> Create delC
+vector of uncertainties for GCO definition? {+ * - }</h4>
+  <h4> <a href="gm_compos.html#BC_set_5">BC_set[5]</a> Reserved</h4>
+  <h4> <a href="gm_compos.html#BCname">BCname</a> Full name of
+geochemical composition object</h4>
+  <h4> <a href="gm_compos.html#BCnote">BCnote</a> Comments</h4>
+  <h4> <a href="gm_compos.html#BC_dim_0">BC_dim[0]</a> Numbers: of IC
+to define GCO</h4>
+  <h4> <a href="gm_compos.html#BC_dim_1">BC_dim[1]</a> N of DC
+(DCOMP+REACDC) stoichiometies to define GCO</h4>
+  <h4> <a href="gm_compos.html#BC_dim_2">BC_dim[2]</a> N of formula
+units created in this GCO definition</h4>
+  <h4> <a href="gm_compos.html#BC_dim_3">BC_dim[3]</a> N of references
+to data sources</h4>
+  <h4> <a href="gm_compos.html#BC_dim_4">BC_dim[4]</a> Nmax total
+current number of IC in ICOMP chain</h4>
+  <h4> <a href="gm_compos.html#BC_dim_5">BC_dim[5]</a> Nc final number
+of IC in GCO definition</h4>
+  <h4> <a href="gm_compos.html#MasVol_0">MasVol[0]</a> Masses (kg) and
+volumes (L) for GCO: Ms (total mass, normalize)</h4>
+  <h4> <a href="gm_compos.html#MasVol_1">MasVol[1]</a> Vs (total
+volume of the object, for volume concentrations)</h4>
+  <h4> <a href="gm_compos.html#MasVol_2">MasVol[2]</a> M(H2O) (mass of
+water-solvent for molalities)</h4>
+  <h4> <a href="gm_compos.html#MasVol_3">MasVol[3]</a> Maq (mass of
+aqueous solution for ppm etc.)</h4>
+  <h4> <a href="gm_compos.html#MasVol_4">MasVol[4]</a> Vaq (volume of
+aqueous solution for molarities)</h4>
+  <h4> <a href="gm_compos.html#MasVol_5">MasVol[5]</a> Pg (pressure in
+gas, for partial pressures)</h4>
+  <h4> <a href="gm_compos.html#MasVol_6">MasVol[6]</a> total number of
+IC moles in GCO, normalization</h4>
+  <h4> <a href="gm_compos.html#MasVol_7">MasVol[7]</a> mas % of matter
+specified by Ctext, relative to the whole GCO mass</h4>
+  <h4> <a href="gm_compos.html#PCO">PCO</a> Resulting PCO bulk:
+numbers of moles of IC</h4>
+  <h4> <a href="gm_compos.html#unPCO">delCm</a> Uncertainty of Cm
+elements in moles</h4>
+  <h4> <a href="gm_compos.html#Ctext">Ctext</a> Text-formula of GCO
+increment</h4>
+  <h4> <a href="gm_compos.html#symIC">symIC</a> List of IC symbols</h4>
+  <h4> <a href="gm_compos.html#formU">formU</a> List of formula units</h4>
+  <h4> <a href="gm_compos.html#symDC">symDC</a> List of DC record keys</h4>
+  <h4> <a href="gm_compos.html#CIcl">CIcl</a> Units of IC
+quantity/concentration</h4>
+  <h4> <a href="gm_compos.html#CDcl">CDcl</a> Units of DC
+quantity/concentration</h4>
+  <h4> <a href="gm_compos.html#AUcl">AUcl</a> Units of formulae
+quantity/concentration</h4>
+  <h4> <a href="gm_compos.html#CmDCS">CmDCS</a> Source of DC data:
+d-DCOMP r-REACDC { d r }</h4>
+  <h4> <a href="gm_compos.html#CI">CI</a> Quantity/concentration of IC
+C(IC)</h4>
+  <h4> <a href="gm_compos.html#CD">CD</a> Quantity/concentration of DC
+C(DC)</h4>
+  <h4> <a href="gm_compos.html#CA">CA</a> Quantity/concentration of
+formulae C(AC)</h4>
+  <h4> <a href="gm_compos.html#bSDref">bSDref</a> List of SDref keys
+to data sources</h4>
+  <h4> <a href="gm_compos.html#bSDval">bSDval</a> List of comments to
+data sources</h4>
+  <h4> <a href="gm_compos.html#bsICm">bsICm</a> Complete work list of
+IC keys in ICOMP chain</h4>
+  <h4> <a href="gm_compos.html#ICmm">ICmm</a> IC atomic (molar) masses</h4>
+  <h4> <a href="gm_compos.html#BCtprn">BCtprn</a> internal</h4>
+  <h4> <a href="gm_reacdc.html#REcMod_0">REcMod[0]</a> Mode of
+calculation of thermodynamic properties { C H K S I X }</h4>
+  <h4> <a href="gm_reacdc.html#REcMod_1">REcMod[1]</a> Mode of
+T-dependency { S H B K W A L X 1 2 3 Z R E G D C }</h4>
+  <h4> <a href="gm_reacdc.html#REcMod_2">REcMod[2]</a> Mode of
+P-dependency { N 0 C K V B E G F A Z }</h4>
+  <h4> <a href="gm_reacdc.html#REcMod_3">REcMod[3]</a> reserved</h4>
+  <h4> <a href="gm_reacdc.html#RE_set_0">RE_set[0]</a> DC class code {
+T E S W G V C H N I J M&nbsp;<digit>X Y Z A B P Q R O }</digit></h4>
+  <h4> <a href="gm_reacdc.html#RE_set_1">RE_set[1]</a> Units of energy
+{ j; J c C N reserved }</h4>
+  <h4> <a href="gm_reacdc.html#RE_set_2">RE_set[2]</a> Units of volume
+{ j; c L a reserved }</h4>
+  <h4> <a href="gm_reacdc.html#RE_set_3">RE_set[3]</a> Units of
+pressure Pr { b; B p P A reserved }</h4>
+  <h4> <a href="gm_reacdc.html#RE_set_4">RE_set[4]</a> Units of
+temperature Tr { C; K F reserved }</h4>
+  <h4> <a href="gm_reacdc.html#RE_set_5">RE_set[5]</a> reserved</h4>
+  <h4> <a href="gm_reacdc.html#RE_arr_0">RE_arr[0]</a> Flag for
+lgK=f(T) coefficients { + * - }</h4>
+  <h4> <a href="gm_reacdc.html#RE_arr_1">RE_arr[1]</a> Flag for
+lgK(Tf,Pf)
+array
+for lgK interpolation { + * - }</h4>
+  <h4> <a href="gm_reacdc.html#RE_arr_2">RE_arr[2]</a> Flag for
+coefficieents of
+electrostatic models { + * - } (reserved)</h4>
+  <h4> <a href="gm_reacdc.html#RE_arr_3">RE_arr[3]</a> Flag for
+dVr=f(P,T) coefficients { + * - }</h4>
+  <h4> <a href="gm_reacdc.html#RE_arr_4">RE_arr[4]</a> Flag for
+dCpr=f(T) coefficients { + * - }</h4>
+  <h4> <a href="gm_reacdc.html#RE_arr_5">RE_arr[5]</a> Will TP vary
+along SVC curve only? { + - } (reserved)</h4>
+  <h4> <a href="gm_reacdc.html#RE_arr_6">RE_arr[6]</a> Flag for
+coefficients of HKF EOS { + - } (reserved)</h4>
+  <h4> <a href="gm_reacdc.html#RE_arr_7">RE_arr[7]</a> Is
+reaction-defined DC an isotope form? { + - }</h4>
+  <h4> <a href="gm_reacdc.html#rCdat">rCdat</a> Date when this REACDC
+definition was created</h4>
+  <h4> <a href="gm_reacdc.html#Zz_">Zz_</a> Reaction-defined DC
+formula charge</h4>
+  <h4> <a href="gm_reacdc.html#M0_">M0_</a> Molecular mass of
+reaction-defined DC, g/mole</h4>
+  <h4> <a href="gm_reacdc.html#logKr_0">logKr[0]</a> K (stability
+constant) of reaction at Tr, Pr (isotopic: alpha)</h4>
+  <h4> <a href="gm_reacdc.html#logKr_1">logKr[1]</a> log K of reaction
+at Tr,Pr (isotopic: 1000ln(alpha))</h4>
+  <h4> <a href="gm_reacdc.html#logKr_2">logKr[2]</a> Uncertainty of
+logK</h4>
+  <h4> <a href="gm_reacdc.html#G0r_0">G0r[0]</a> dG of reaction at Tr,
+Pr (J/mole)</h4>
+  <h4> <a href="gm_reacdc.html#G0r_1">G0r[1]</a> Apparent standard
+free
+energy of reacdef-DC formation from IC g0 (J/mole)</h4>
+  <h4> <a href="gm_reacdc.html#G0r_2">G0r[2]</a> Uncertainty of g0
+dev(g0) (J/mole)</h4>
+  <h4> <a href="gm_reacdc.html#H0r_0">H0r[0]</a> dH of reaction at Tr,
+Pr (J/mole)</h4>
+  <h4> <a href="gm_reacdc.html#H0r_1">H0r[1]</a> Apparent standard
+enthalpy of
+reacdef-DC formation from IC h0 (J/mole)</h4>
+  <h4> <a href="gm_reacdc.html#H0r_2">H0r[2]</a> Uncertainty of h0
+dev(h0) (J/mole)</h4>
+  <h4> <a href="gm_reacdc.html#S0r_0">S0r[0]</a> dS of reaction at Tr,
+Pr (J/mole/K)</h4>
+  <h4> <a href="gm_reacdc.html#S0r_1">S0r[1]</a> Absolute entropy of
+reacdef-DC at standard state S0 (J/mole/K)</h4>
+  <h4> <a href="gm_reacdc.html#S0r_2">S0r[2]</a> Uncertainty of S0
+dev(S0) (J/mole/K)</h4>
+  <h4> <a href="gm_reacdc.html#Cp0r_0">Cp0r[0]</a> dCp of reaction at
+Tr, Pr (J/mole/K)</h4>
+  <h4> <a href="gm_reacdc.html#Cp0r_1">Cp0r[1]</a> Heat capacity of
+reacdef-DC at standard state Cp0 (J/mole/K)</h4>
+  <h4> <a href="gm_reacdc.html#Cp0r_2">Cp0r[2]</a> Uncertainty of Cp0
+dev(Cp0) (J/mole/K)</h4>
+  <h4> <a href="gm_reacdc.html#V0r_0">V0r[0]</a> dV of reaction at Tr,
+Pr (J/bar)</h4>
+  <h4> <a href="gm_reacdc.html#V0r_1">V0r[1]</a> Molar volume of
+reacdef-DC at standard state Vm0 (J/bar)</h4>
+  <h4> <a href="gm_reacdc.html#V_m_2">V0r[2]</a> Uncertainty of Vm0
+dev(Vm0) (J/bar)</h4>
+  <h4> <a href="gm_reacdc.html#NisoX_0">NisoX[0]</a> Mole fraction of
+counter-isotope in natural mixture (element)</h4>
+  <h4> <a href="gm_reacdc.html#NisoX_1">NisoX[1]</a> reserved</h4>
+  <h4> <a href="gm_reacdc.html#NisoX_2">NisoX[2]</a> reserved</h4>
+  <h4> <a href="gm_reacdc.html#PrTr__0">PrTr_[0]</a> Reference
+pressure
+Pr (bar)</h4>
+  <h4> <a href="gm_reacdc.html#PrTr__1">PrTr_[1]</a> Reference
+temperature Tr (&#8216;C)</h4>
+  <h4> <a href="gm_reacdc.html#BetAl__0">BetAl_[0]</a> Coefficient of
+isothermal compressibility of reacdef DC</h4>
+  <h4> <a href="gm_reacdc.html#BetAl__1">BetAl_[1]</a> Coefficient of
+isobaric expandability of reacdef DC</h4>
+  <h4> <a href="gm_reacdc.html#ab__0">ab_[0]</a> Ion-size par.a0,A
+(Debye-Huckel aq species); &#402;max, 1/nm2 (sorbates)</h4>
+  <h4> <a href="gm_reacdc.html#ab__1">ab__[1]</a> Indiv.par. b (for
+III
+Debye-Huckel aq species)</h4>
+  <h4> <a href="gm_reacdc.html#RDname">RDname</a> Full name of
+reaction and reaction-defined DC</h4>
+  <h4> <a href="gm_reacdc.html#RDform">RDform</a> Chemical formula of
+reaction-defined DC</h4>
+  <h4> <a href="gm_reacdc.html#REsDC">REsDC</a> List of DC keys
+(names) involved in reaction [0:nDC-1]</h4>
+  <h4> <a href="gm_reacdc.html#REmDC">REmDC</a> DC codes: n-new
+r-REACDC d-DCOMP f-fictive</h4>
+  <h4> <a href="gm_reacdc.html#RE_dim_0">RE_dim[0]</a> N of DC in
+reaction, reaction-defined DC is the last one</h4>
+  <h4> <a href="gm_reacdc.html#RE_dim_1">RE_dim[1]</a> N of nonzero
+coeffs of logK = f(T) equation</h4>
+  <h4> <a href="gm_reacdc.html#RE_dim_2">RE_dim[2]</a> N of nonzero
+coeffs of dVr = f(P,T) equation</h4>
+  <h4> <a href="gm_reacdc.html#RE_dim_3">RE_dim[3]</a> N of nonzero
+coeffs of electrostatic equations (reserved)</h4>
+  <h4> <a href="gm_reacdc.html#RE_dim_4">RE_dim[4]</a> N of nonzero
+coeffs of dCpr = f(T) equation</h4>
+  <h4> <a href="gm_reacdc.html#RE_dim_5">RE_dim[5]</a> N of
+interpolation points along T</h4>
+  <h4> <a href="gm_reacdc.html#RE_dim_6">RE_dim[6]</a> N of
+interpolation points along P</h4>
+  <h4> <a href="gm_reacdc.html#RE_dim_7">RE_dim[7]</a> N of references
+to Data Sources</h4>
+  <h4> <a href="gm_reacdc.html#SC_DC">SC_DC</a> Stoichiometry
+coefficients of DC in reaction (reagents &lt; 0)</h4>
+  <h4> <a href="gm_reacdc.html#TCint_">TCint_</a> Vector or interval
+of temperature T</h4>
+  <h4> <a href="gm_reacdc.html#P_int">P_int</a> Vector or interval of
+pressure P</h4>
+  <h4> <a href="gm_reacdc.html#a_dCT">a_dCT</a> Coefficients of dCpr =
+f(T) equation (reserved)</h4>
+  <h4> <a href="gm_reacdc.html#a_dHKF">a_dHKF</a> Coeffs a1-a4, c1,c2,
+w, rAB for HKF EOS of reaction (reserved)</h4>
+  <h4> <a href="gm_reacdc.html#a_dVp">a_dVp</a> Coeffs for dVr =
+f(P,T) equation (reserved)</h4>
+  <h4> <a href="gm_reacdc.html#a_dST">a_dST</a> Coeffs for
+electrostatic model equations (reserved)</h4>
+  <h4> <a href="gm_reacdc.html#aiLgKr_0">aiLgKr[0]</a> Coefficients of
+logK = f(T) or 1000ln(alpha) = f(T) equation: a0</h4>
+  <h4> <a href="gm_reacdc.html#aiLgKr_1">aiLgKr[1]</a> a1 *T
+(isotopic:
+a1/T)</h4>
+  <h4> <a href="gm_reacdc.html#aiLgKr_2">aiLgKr[2]</a> a2 /T
+(isotopic:
+a2/T^2)</h4>
+  <h4> <a href="gm_reacdc.html#aiLgKr_3">aiLgKr[3]</a> a3 *lnT
+(isotopic: a3/T^3)</h4>
+  <h4> <a href="gm_reacdc.html#aiLgKr_4">aiLgKr[4]</a> a4 /T^2
+(isotopic: a4/T^4)</h4>
+  <h4> <a href="gm_reacdc.html#aiLgKr_5">aiLgKr[5]</a> a5 *T^2</h4>
+  <h4> <a href="gm_reacdc.html#aiLgKr_6">aiLgKr[6]</a> a6 /T^0.5</h4>
+  <h4> <a href="gm_reacdc.html#lgK_T">lgK_T</a> Array of logK(T,P)
+values for interpolation</h4>
+  <h4> <a href="gm_reacdc.html#rSDref">rSDref</a> List of Data Source
+SDref keys</h4>
+  <h4> <a href="gm_reacdc.html#rSDval">rSDval</a> Comments to Data
+Source references</h4>
+  <h4> <a href="gm_reacdc.html#Par_DC">Par_DC</a> Gs, Hs, Ss, Cps, Vs
+values for DC in reaction (columns)</h4>
+  <h4> <a href="gm_reacdc.html#REtprn">REtprn</a> internal</h4>
+  <h4> <a href="gm_rtparm.html#RTname">RTname</a> Name of this RTparm
+data sampler definition</h4>
+  <h4> <a href="gm_rtparm.html#RTcom">RTcom</a> Comment to this RTparm
+data sampler name</h4>
+  <h4> <a href="gm_rtparm.html#rpUn_0">rpUn[0]</a> Source of input
+data for RTPARM-task { r d }, r: REACDC, d: DCOMP</h4>
+  <h4> <a href="gm_rtparm.html#rpUn_1">rpUn[1]</a> Units of energy {
+j; J c C N reserved }</h4>
+  <h4> <a href="gm_rtparm.html#rpUn_2">rpUn[2]</a> Units of volume {
+j; c L a reserved }</h4>
+  <h4> <a href="gm_rtparm.html#rpUn_3">rpUn[3]</a> Units of pressure P
+{ b; B p P A reserved }</h4>
+  <h4> <a href="gm_rtparm.html#rpUn_4">rpUn[4]</a> Units of
+temperature T { C; K F reserved }</h4>
+  <h4> <a href="gm_rtparm.html#rpUn_5">rpUn[5]</a> Flag of plotting
+empirical data { + - }</h4>
+  <h4> <a href="gm_rtparm.html#rpUn_6">rpUn[6]</a> P or T for abscissa
+{ P T } default T </h4>
+  <h4> <a href="gm_rtparm.html#rpUn_7">rpUn[7]</a> Units of T in
+abscissa { K C } default K </h4>
+  <h4> <a href="gm_rtparm.html#rpUn_8">rpUn[8]</a> reserved </h4>
+  <h4> <a href="gm_rtparm.html#rpUn_9">rpUn[9]</a> reserved </h4>
+  <h4> <a href="gm_rtparm.html#rpNpT_0">rpNpT[0]</a> N of tabulation
+points along P</h4>
+  <h4> <a href="gm_rtparm.html#rpNpT_1">rpNpT[1]</a> N of tabulation
+points along TC</h4>
+  <h4> <a href="gm_rtparm.html#rpNpT_2">rpNpT[2]</a> Total N of
+tabulation points</h4>
+  <h4> <a href="gm_rtparm.html#rpMode">rpMode</a> Mode of indexation
+of T,P vectors </h4>
+  <h4> <a href="gm_rtparm.html#rpSize_0">rpSize[0]</a> Number of
+references to data sources (SDref)</h4>
+  <h4> <a href="gm_rtparm.html#rpSize_1">rpSize[1]</a> reserved </h4>
+  <h4> <a href="gm_rtparm.html#rDimXY_0">rDimXY[0]</a> Dimensions of
+xT, xP, yF : number of lines (records) </h4>
+  <h4> <a href="gm_rtparm.html#rDimXY_1">rDimXY[1]</a> Dimensions of
+yF table: number of columns </h4>
+  <h4> <a href="gm_rtparm.html#rDimEf_0">rDimEf[0]</a> Dimensions of
+empirical data TE, PE, ytE: number of points </h4>
+  <h4> <a href="gm_rtparm.html#rDimEf_1">rDimEf[1]</a> Dimensions of
+ytE table: number of columns </h4>
+  <h4> <a href="gm_rtparm.html#rpPi_0">rpPi[0]</a> Pressure, bar: P
+start</h4>
+  <h4> <a href="gm_rtparm.html#rpPi_1">rpPi[1]</a> P end</h4>
+  <h4> <a href="gm_rtparm.html#rpPi_2">rpPi[2]</a> increment of P</h4>
+  <h4> <a href="gm_rtparm.html#rpTi_0">rpTi[0]</a> Temperature, deg.C:
+TC start</h4>
+  <h4> <a href="gm_rtparm.html#rpTi_1">rpTi[1]</a> TC end</h4>
+  <h4> <a href="gm_rtparm.html#rpTi_2">rpTi[2]</a> increment of TC</h4>
+  <h4> <a href="gm_rtparm.html#rtAxis_0">rtAxis[0]</a> Axis Type (plot
+setup), background color, internal </h4>
+  <h4> <a href="gm_rtparm.html#rtSize_0">rtSize[0]</a> Axis scales
+(plot setup), internal </h4>
+  <h4> <a href="gm_rtparm.html#tXName">tXName</a> Abscissa name for
+plot legends </h4>
+  <h4> <a href="gm_rtparm.html#tYName">tYName</a> Ordinate name for
+plot legends </h4>
+  <h4> <a href="gm_rtparm.html#tLnam">tLnam[0]</a> Names of columns in
+yF array (plot lines) </h4>
+  <h4> <a href="gm_rtparm.html#tLnamE">tLnamE[0]</a> Names of columns
+in ytE array (plotted empirical data ) </h4>
+  <h4> <a href="gm_rtparm.html#tExpr">tExpr</a> Math script
+expressions for data collection </h4>
+  <h4> <a href="gm_rtparm.html#tExprE">tExprE</a> Math script
+expressions for empirical data (optional) </h4>
+  <h4> <a href="gm_rtparm.html#rtSDrf">rtSDrf</a> List of SDref keys
+to data sources </h4>
+  <h4> <a href="gm_rtparm.html#rtSDvl">rtSDvl</a> Comments to data
+source references </h4>
+  <h4> <a href="gm_rtparm.html#xT">xT</a> Grid vector of temperatures
+TC </h4>
+  <h4> <a href="gm_rtparm.html#xP">xP</a> Grid vector of pressures P </h4>
+  <h4> <a href="gm_rtparm.html#yF">yF</a> Table of sampled
+thermodynamic data </h4>
+  <h4> <a href="gm_rtparm.html#xTE">xTE</a> Grid of input empirical
+temperatures TC </h4>
+  <h4> <a href="gm_rtparm.html#xPE">xPE</a> Grid of input empirical
+pressures P, bar </h4>
+  <h4> <a href="gm_rtparm.html#ytE">ytE</a> Table of input empirical
+data </h4>
+  <h4> <a href="gm_rtparm.html#jTP">jTP</a> Index of currently sampled
+T,P </h4>
+  <h4> <a href="gm_rtparm.html#tiE">tiE</a> iE index </h4>
+  <h4> <a href="gm_rtparm.html#tjE">tjE</a> jE index </h4>
+  <h4> <a href="gm_rtparm.html#rtTxt">rtTxt</a> internal </h4>
+  <h4> <a href="gm_rtparm.html#DRkey">DRkey</a>Dcomp or ReacDC record
+key with source data at reference T,P </h4>
+  <h4> <a href="gm_rtparm.html#twUn_0">twUn[0]</a> Data origin { d n i
+f r }</h4>
+  <h4> <a href="gm_rtparm.html#twUn_1">twUn[1]</a>Terminal state for n
+i r : { + - * }</h4>
+  <h4> <a href="gm_rtparm.html#twUn_2">twUn[2]</a>Units of energy { j
+c J C n N }</h4>
+  <h4> <a href="gm_rtparm.html#twUn_3">twUn[3]</a>Units of volume { c
+C j L m }</h4>
+  <h4> <a href="gm_rtparm.html#twP">twP</a>P - current pressure, bar
+(10^5 Pa)</h4>
+  <h4> <a href="gm_rtparm.html#twPr">twPr</a>Pr - reference pressure,
+bar </h4>
+  <h4> <a href="gm_rtparm.html#twTC">twTC</a>TC - current temperature,
+C</h4>
+  <h4> <a href="gm_rtparm.html#twTCr">twTCr</a>TCr - reference
+temperature, C</h4>
+  <h4> <a href="gm_rtparm.html#twTK">twTK</a>T - current temperature, K</h4>
+  <h4> <a href="gm_rtparm.html#twTKr">twTKr</a>Tr - reference
+temperature, K </h4>
+  <h4> <a href="gm_rtparm.html#tdSr">tdSr</a> dSr of reaction at TP </h4>
+  <h4> <a href="gm_rtparm.html#twS">twS</a>S0 for DComp or ReacDC
+species </h4>
+  <h4> <a href="gm_rtparm.html#tdevS">tdevS</a> devS - uncertainty of
+S0 at TP </h4>
+  <h4> <a href="gm_rtparm.html#tdGr">tdGr</a>dGr of reaction at TP</h4>
+  <h4> <a href="gm_rtparm.html#twG">twG</a> g0 partial molar(molal)
+Gibbs energy of a species (DC) at TP</h4>
+  <h4> <a href="gm_rtparm.html#tdevG">tdevG</a>uncertainty of g0 at TP</h4>
+  <h4> <a href="gm_rtparm.html#twK">twK</a>K - equilibrium constant of
+reaction at TP</h4>
+  <h4> <a href="gm_rtparm.html#tlogK">tlogK</a>logK of reaction at TP</h4>
+  <h4> <a href="gm_rtparm.html#tdlogK">tdlogK</a>uncertainty of logK
+at TP</h4>
+  <h4> <a href="gm_rtparm.html#tdHr">tdHr</a>dHr of reaction at TP</h4>
+  <h4> <a href="gm_rtparm.html#twH">twH</a>h0 partial molal(molar)
+enthalpy of a species (DC) at TP</h4>
+  <h4> <a href="gm_rtparm.html#tdevH">tdevH</a>Uncertainty of h0 at TP</h4>
+  <h4> <a href="gm_rtparm.html#tdCpr">tdCpr</a>dCpr of reaction at TP</h4>
+  <h4> <a href="gm_rtparm.html#twCp">twCp</a>Cp0 partial molar(molal)
+heat capacity of a species (DC) at TP</h4>
+  <h4> <a href="gm_rtparm.html#tdevCp">tdevCp</a>Uncertainty of Cp0 at
+TP</h4>
+  <h4> <a href="gm_rtparm.html#tdVr">tdVr</a>dVr of reaction at TP</h4>
+  <h4> <a href="gm_rtparm.html#twV">twV</a>Vm0 partial molar(molal)
+volume of a species (DC) at TP</h4>
+  <h4> <a href="gm_rtparm.html#tdevV">tdevV</a>Uncertainty of Vm0 at TP</h4>
+  <h4> <a href="gm_rtparm.html#ab_TP_0">ab_TP[0]</a>Compressibility
+(reserved)</h4>
+  <h4> <a href="gm_rtparm.html#ab_TP_1">ab_TP[1]</a>Expandability
+(reserved)</h4>
+  <h4> <a href="gm_rtparm.html#twRT">twRT</a>RT factor at current T</h4>
+  <h4> <a href="gm_rtparm.html#twRow">twRow</a>Density of H2O fluid at
+TP</h4>
+  <h4> <a href="gm_rtparm.html#twEw">twEw</a>Dielectric constant of
+H2O fluid at TP</h4>
+  <h4> <a href="gm_rtparm.html#tw">tw</a>Work cells for RTparam math
+scripts </h4>
+  <h4> <a href="gm_phase.html#p_solt_0">p_solt[0]</a> Phase type { I R
+V 1 2 3 H P E A U } or { N }</h4>
+  <h4> <a href="gm_phase.html#p_solt_1">p_solt[1]</a> Mode of
+calculation of DC non-ideality parameters { N T X }</h4>
+  <h4> <a href="gm_phase.html#p_solt_2">p_solt[2]</a> Mode of
+calculation of phase non-ideality parameters { N T X }</h4>
+  <h4> <a href="gm_phase.html#p_solt_3">p_solt[3]</a> Mode of
+calculation of DC activity coefficients { N S I }</h4>
+  <h4> <a href="gm_phase.html#p_solt_4">p_solt[4]</a> One group of
+equations for all DC { U }, one group per DC { P }, no { N }</h4>
+  <h4> <a href="gm_phase.html#p_solt_5">p_solt[5]</a> Default type of
+adsorption/ion exchange model { N C L D T E }</h4>
+  <h4> <a href="gm_phase.html#Ph_Ps_0">Ph_Ps[0]</a> Default class of
+phase in the system { a g p m l s x d h }</h4>
+  <h4> <a href="gm_phase.html#Ph_Ps_1">Ph_Ps[1]</a> Flag for 'ph_cf'
+array for phase-related input parameters { + * - }</h4>
+  <h4> <a href="gm_phase.html#Ph_Ps_2">Ph_Ps[2]</a> Flag for 'dc_cf'
+array for DC-related parameters { + * - }</h4>
+  <h4> <a href="gm_phase.html#Ph_Ps_3">Ph_Ps[3]</a> Flag for text
+field for phase-related equations 'PhEq' { + * - }</h4>
+  <h4> <a href="gm_phase.html#Ph_Ps_4">Ph_Ps[4]</a> Flag for text
+field for DC-related equations 'DcEq' { + * - }</h4>
+  <h4> <a href="gm_phase.html#Ph_Ps_5">Ph_Ps[5]</a> Flag for vector of
+surface type fractions 'PFsiT'? { + * - }</h4>
+  <h4> <a href="gm_phase.html#Ph_Nc_0">Ph_Nc[0]</a> N of DC in phase
+definition</h4>
+  <h4> <a href="gm_phase.html#Ph_Nc_1">Ph_Nc[1]</a> N of references to
+Data Sources</h4>
+  <h4> <a href="gm_phase.html#Ph_ncp">Ph_ncp</a> Dimensions of 'ph_cf'
+array (to set up on remake)</h4>
+  <h4> <a href="gm_phase.html#Ph_nsc">Ph_nsc</a> Dimensions of 'dc_cf'
+array (to set up on remake)</h4>
+  <h4> <a href="gm_phase.html#Ph_nsi_0">Ph_nsi[0]</a> N of surface
+site
+types (to set up on remake)</h4>
+  <h4> <a href="gm_phase.html#Ph_nsi_1">Ph_nsi[1]</a> reserved</h4>
+  <h4> <a href="gm_phase.html#PhName">PhName</a> Full name of phase</h4>
+  <h4> <a href="gm_phase.html#PhNote">PhNote</a> Comments</h4>
+  <h4> <a href="gm_phase.html#DisPar_0">DisPar[0]</a> Specific surface
+area of major component (carrier), m2/g</h4>
+  <h4> <a href="gm_phase.html#DisPar_1">DisPar[1]</a> Standard mean
+surface energy of solid-aqueous interface, J/m2</h4>
+  <h4> <a href="gm_phase.html#DisPar_2">DisPar[2]</a> Standard mean
+surface energy of gas-aqueous interface, J/m2</h4>
+  <h4> <a href="gm_phase.html#DisPar_3">DisPar[3]</a> Mean radius r0
+for (spherical or cylindrical) particles, nm (reserved)</h4>
+  <h4> <a href="gm_phase.html#DisPar_4">DisPar[4]</a> Mean thickness
+h0
+for cylindrical or 0 for spherical particles, nm (reserved)</h4>
+  <h4> <a href="gm_phase.html#DisPar_5">DisPar[5]</a> Dielectric
+constant for solid carrier at Tr (reserved)</h4>
+  <h4> <a href="gm_phase.html#DisPar_6">DisPar[6]</a> Specific
+conductivity at Tr, Sm/m/cm2 (reserved)</h4>
+  <h4> <a href="gm_phase.html#DisPar_7">DisPar[7]</a> Default maximum
+surface density, in 1/nm2</h4>
+  <h4> <a href="gm_phase.html#SCM_C">SCM_C</a> Classifier of EDL
+models for surface types { C T D M E X I S N }</h4>
+  <h4> <a href="gm_phase.html#XfIEC">XfIEC</a> Constant surface charge
+density or IEC, mkeq/g</h4>
+  <h4> <a href="gm_phase.html#MsDt_0">MsDt[0]</a> SAT: Maximum density
+of reacted species, 1/nm2</h4>
+  <h4> <a href="gm_phase.html#MsDt_1">MsDt[1]</a> SAT: minimum density
+of reacted species, 1/nm2</h4>
+  <h4> <a href="gm_phase.html#Cap_t_0">Cap_t[0]</a> Inner EDL
+capacitance density, F/m2 (TLM, CCM)</h4>
+  <h4> <a href="gm_phase.html#Cap_t_1">Cap_t[1]</a> Outer EDL
+capacitance density, F/m2 (TLM)</h4>
+  <h4> <a href="gm_phase.html#SAT_C_0">SAT_C[][0]</a> Surface species:
+method codes of SACT calculation { C N S I } </h4>
+  <h4> <a href="gm_phase.html#SAT_C_1">SAT_C[][1]</a> Allocation of
+surface species to the sorbent (end-members) { I V 0 ... 5 } </h4>
+  <h4> <a href="gm_phase.html#SAT_C_2">SAT_C[][2]</a> Allocation of
+surface species to surface type { 0 ... 6 } </h4>
+  <h4> <a href="gm_phase.html#SAT_C_3">SAT_C[][3]</a> Allocation of
+surface complexes to EDL plane { 0 b c d } </h4>
+  <h4> <a href="gm_phase.html#SAT_C_4">SAT_C[][4]</a> Allocation of
+surface species to site type within surface type { 0 ... 6} </h4>
+  <h4> <a href="gm_phase.html#SAT_C_5">SAT_C[][5]</a> Units in which
+max.
+surface density is given in MaSDj { n m M g } (reserved) </h4>
+  <h4> <a href="gm_phase.html#MaSDj_0">MaSDj[][0]</a> Parameters for
+surface activity correction terms: Maximal surface density (1/nm2) </h4>
+  <h4> <a href="gm_phase.html#MaSDj_1">MaSDj[][1]</a> Surface species
+charge assigned to 0 surface EDL plane </h4>
+  <h4> <a href="gm_phase.html#MaSDj_2">MaSDj[][2]</a> Surface species
+charge assigned to beta surface EDL plane </h4>
+  <h4> <a href="gm_phase.html#MaSDj_3">MaSDj[][3]</a> Isotherm parameter
+1 (energy term in Frumkin) </h4>
+  <h4> <a href="gm_phase.html#MaSDj_4">MaSDj[][4]</a> Isotherm parameter
+2 (CN in Frumkin or dentateness in QCA) </h4>
+  <h4> <a href="gm_phase.html#MaSDj_5">MaSDj[][5]</a> Isotherm parameter
+3 (reserved) </h4>
+  <h4> <a href="gm_phase.html#PhXres">PhXres</a> Reserved</h4>
+  <h4> <a href="gm_phase.html#FSI_t">FSI_t</a> Fraction of surface
+type relative to carrier (components)</h4>
+  <h4> <a href="gm_phase.html#ph_cf">ph_cf</a> Array of phase-related
+coefficients of non-ideality model</h4>
+  <h4> <a href="gm_phase.html#dc_cf">dc_cf</a> Array of DC-related
+coefficients of non-ideality model</h4>
+  <h4> <a href="gm_phase.html#pDC_v_">pDC_v_</a> List of DC record
+keys included into phase</h4>
+  <h4> <a href="gm_phase.html#PhDCC">PhDCC</a> DC classes { T E S W G
+V C H N I J M&nbsp;<digit>X Y Z A B P Q R O }</digit></h4>
+  <h4> <a href="gm_phase.html#PhDCS">PhDCS</a> Source of input data
+for DC { r d }</h4>
+  <h4> <a href="gm_phase.html#PhEq">PhEq</a> Text of IPN equations
+related to the whole phase (IIPN syntax)</h4>
+  <h4> <a href="gm_phase.html#DcEq">DcEq</a> Text of IPN equations
+related to phase components (IIPN syntax)</h4>
+  <h4> <a href="gm_phase.html#pSDref">pSDref</a> List of Data Sources
+SDref keys</h4>
+  <h4> <a href="gm_phase.html#pSDval">pSDval</a> Comments to Data
+Sources</h4>
+  <h4> <a href="gm_phase.html#plsCat">plsCat</a> List of cation names
+for SIT activity model coefficients</h4>
+  <h4> <a href="gm_phase.html#plsAn">plsAn</a> List of anion names for
+SIT activity model coefficients</h4>
+  <h4> <a href="gm_phase.html#pnxCat">pnxCat</a> Cation indices for
+SIT activity model coefficients</h4>
+  <h4> <a href="gm_phase.html#pnxAn">pnxAn</a> Anion indices for SIT
+activity model coefficients</h4>
+  <h4> <a href="gm_phase.html#PHtprn">PHtprn</a> internal</h4>
+  <h4> <a href="gems_bcc.html#tPhEQ">tPhEQ</a> Key of EQSTATe record
+to supply phases for b vector calculation</h4>
+  <h4> <a href="gems_bcc.html#tname">tname</a> Full name of this
+system CSD definition</h4>
+  <h4> <a href="gems_bcc.html#tnote">tnote</a> Comments</h4>
+  <h4> <a href="gems_bcc.html#tSwch_0">tSwch[0]</a> SYSTEM switches
+line: electroneutrality constraint PE { + - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_1">tSwch[1]</a> volume constraint
+PV { + - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_2">tSwch[2]</a> P state variable {
++ - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_3">tSwch[3]</a> V state variable {
++ - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#tSwch_4">tSwch[4]</a> T state variable {
++ - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_5">tSwch[5]</a> S state variable {
++ - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#tSwch_6">tSwch[6]</a> H state variable {
++ - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#tSwch_7">tSwch[7]</a> U state variable {
++ - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#tSwch_8">tSwch[8]</a> Maximize or
+minimize G(X) { - } (reserved)</h4>
+  <h4> <a href="gems_bcc.html#tSwch_9">tSwch[9]</a> Account for
+electrostatic sorption models (DDLM,CCM,TLM) { + - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_10">tSwch[10]</a> Flags of arrays
+to be included into CSD: bi_ via IC quantities { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_11">tSwch[11]</a> xd_ via DC
+quantities { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_12">tSwch[12]</a> xa_ via COMPOS
+quantities { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_13">tSwch[13]</a> xp_ via
+quantities of phases
+from EQSTATe pointed by rkey in SyPhEQ { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_14">tSwch[14]</a> dll_ lower DC
+restrictions for x_j { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_15">tSwch[15]</a> pll_ lower
+restrictions for X_a (phases) { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#tSwch_16">tSwch[16]</a> dul_ upper DC
+restrictions for x_j { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#tSwch_17">tSwch[17]</a> pul_ upper
+restrictions for X_a (phases) { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#tSwch_18">tSwch[18]</a> Interprete pll_
+as kinetically fixed quantities of phases? { + - } reserved</h4>
+  <h4> <a href="gems_bcc.html#tSwch_19">tSwch[19]</a> PSATT_ to
+classify SAT calculation
+methods &amp; allocation for sur DC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_20">tSwch[20]</a> gEx_ excess free
+energies for (metastable) DC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_21">tSwch[21]</a> Yof_
+metastability parameter for phases { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_22">tSwch[22]</a> MaSdj_ maximum
+reacted surface DC density for surtypes (SAT) { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_23">tSwch[23]</a> lnGmf_ Initial
+activity coefficients of DC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_24">tSwch[24]</a> Aalp_ specific
+surface areas for phases { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_25">tSwch[25]</a> Sigm_ specific
+surface energy
+for solid phase-aqueous(gas) interface { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_26">tSwch[26]</a> Xr0h0_
+parameters r0 and
+h0 of particles (pores) { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#tSwch_27">tSwch[27]</a> XepsC_
+diel.const &amp;
+el.conductivity of phase carriers? { + * - } reserved</h4>
+  <h4> <a href="gems_bcc.html#tSwch_28">tSwch[28]</a> Nfsp_,SCMT_:
+fractions and
+SCM codes for surface types? { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_29">tSwch[29]</a> MaSdt_ maximum
+reacted site
+density for surface types (SAT) { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_30">tSwch[30]</a> PXcapF
+Capacitances of Ba layer (FLM SAT) { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_31">tSwch[31]</a> XcapA_
+capacitance of A
+(0) EDL layer (TLM,CCM) for surface types { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_32">tSwch[32]</a> XcapB_
+capacitance of B
+EDL layers (TLM,SGM) for surface types { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_33">tSwch[33]</a> XfIEC_
+constant-charge surface density or IEC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_34">tSwch[34]</a> Pparc_ partial
+pressures for DC { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_35">tSwch[35]</a> delB_
+uncertainties of bulk
+composition (vector b) elements { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_36">tSwch[36]</a> Xlam_ EDL
+discretness parameter
+for surface types, &gt;0, &lt;1, reserved</h4>
+  <h4> <a href="gems_bcc.html#tSwch_37">tSwch[37]</a> sSDref, sSDval
+references to data sources { + * - }</h4>
+  <h4> <a href="gems_bcc.html#tSwch_38">tSwch[38]</a> (reserved)</h4>
+  <h4> <a href="gems_bcc.html#tSwch_39">tSwch[39]</a> (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPx">tPx</a> Switches of profile index
+vectors</h4>
+  <h4> <a href="gems_bcc.html#tDM_0">tDM[0]</a> N of IC selected into
+system &lt;= mu.N</h4>
+  <h4> <a href="gems_bcc.html#tDM_1">tDM[1]</a> N of DC selected into
+system &lt;= mu.L</h4>
+  <h4> <a href="gems_bcc.html#tDM_2">tDM[2]</a> Ls - final N of DC in
+all multicomponent phases</h4>
+  <h4> <a href="gems_bcc.html#tDM_3">tDM[3]</a> Lw - final N of
+aqueous+solvent species</h4>
+  <h4> <a href="gems_bcc.html#tDM_4">tDM[4]</a> Lsor - final N of DC
+in sorption phases</h4>
+  <h4> <a href="gems_bcc.html#tDM_5">tDM[5]</a> Lg - final N of DC in
+gaseous phase</h4>
+  <h4> <a href="gems_bcc.html#tDM_6">tDM[6]</a> Lhc - final N of DC in
+liquid hydrocarbon phase (reserved)</h4>
+  <h4> <a href="gems_bcc.html#tDM_7">tDM[7]</a> N of phases selected
+into system Fi</h4>
+  <h4> <a href="gems_bcc.html#tDM_8">tDM[8]</a> Fis - final N of
+multi-component phases</h4>
+  <h4> <a href="gems_bcc.html#tDM_9">tDM[9]</a> Fib - N of phases used
+in calculation of bulk composition</h4>
+  <h4> <a href="gems_bcc.html#tDM_10">tDM[10]</a> Fik - N of phases
+with kinetic restrictions to X_a (reserved)</h4>
+  <h4> <a href="gems_bcc.html#tDM_11">tDM[11]</a> La - final N of
+COMPOSes used in calculation of b vector</h4>
+  <h4> <a href="gems_bcc.html#tDM_12">tDM[12]</a> Lb - final N of DC
+formulae used in calculation of b vector</h4>
+  <h4> <a href="gems_bcc.html#tDM_13">tDM[13]</a> Lk - N of DC with
+kinetic restrictions to x_j (dll_ or dul_) reserved</h4>
+  <h4> <a href="gems_bcc.html#tDM_14">tDM[14]</a> Na - N of IC
+non-zero quantities used for calculation of vector b</h4>
+  <h4> <a href="gems_bcc.html#tDM_15">tDM[15]</a> L0 - H2O-solvent
+index in RMULTS DC list</h4>
+  <h4> <a href="gems_bcc.html#tDM_16">tDM[16]</a> Nsd - N of Data
+Source SDref keys</h4>
+  <h4> <a href="gems_bcc.html#tDM_17">tDM[17]</a> NsTm - max N of
+surface types { 6 }</h4>
+  <h4> <a href="gems_bcc.html#tDM_18">tDM[18]</a> Le - Number of DC to
+set up Gex or activ.coeff.</h4>
+  <h4> <a href="gems_bcc.html#tDM_19">tDM[19]</a> Fie - Number of
+phases to set up YOF etc.</h4>
+  <h4> <a href="gems_bcc.html#tDM_20">tDM[20]</a> Fia- Number of
+adsorption phases ON</h4>
+  <h4> <a href="gems_bcc.html#tDM_21">tDM[21]</a> reserved</h4>
+  <h4> <a href="gm_syseq.html#tDM_22">tDM[22]</a> mu.FI-ss.FI</h4>
+  <h4> <a href="gm_syseq.html#tDM_23">tDM[23]</a> mu.L-ss.L</h4>
+  <h4> <a href="gm_syseq.html#tPom_0">tPom[0]</a> Pmin for parametric
+problems (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_1">tPom[1]</a> Pmax for parametric
+problems (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_2">tPom[2]</a> Tmin for parametric
+problems (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_3">tPom[3]</a> Tmax for parametric
+problems (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_4">tPom[4]</a> Vmin for parametric
+problems (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_5">tPom[5]</a> Vmax for parametric
+problems (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_6">tPom[6]</a> Hmin for parametric
+problems (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_7">tPom[7]</a> Hmax for parametric
+problems (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_8">tPom[8]</a> Molality of
+reference electrolyte Mbel (FIA of ionic strength)</h4>
+  <h4> <a href="gm_syseq.html#tPom_9">tPom[9]</a> Mwat - anticipated
+mass (kg) of water-solvent for calculation of molalities</h4>
+  <h4> <a href="gm_syseq.html#tPom_10">tPom[10]</a> Msys - anticipated
+total mass of the system (kg) for mass % calculation</h4>
+  <h4> <a href="gm_syseq.html#tPom_11">tPom[11]</a> Maq - anticipated
+mass of aqueous phase (kg) for calculation of ppm etc.</h4>
+  <h4> <a href="gm_syseq.html#tPom_12">tPom[12]</a> MBX - final total
+mass of the system (kg) calculated from b vector</h4>
+  <h4> <a href="gm_syseq.html#tPom_13">tPom[13]</a> NMS - total number
+of IC moles in the system (for mole %% calculations)</h4>
+  <h4> <a href="gm_syseq.html#tPom_14">tPom[14]</a> Vsys - anticipated
+volume of the system (L), for volume concentration</h4>
+  <h4> <a href="gm_syseq.html#tPom_15">tPom[15]</a> Vaq - anticipated
+volume of aqueous phase (L) for calculation of molarities</h4>
+  <h4> <a href="gm_syseq.html#tPom_16">tPom[16]</a> Tau - physical
+time (for PROCES) reserved</h4>
+  <h4> <a href="gm_syseq.html#tPom_17">tPom[17]</a> Xi - current value
+of process extent variable (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_18">tPom[18]</a> Nu - current value
+of process extent variable (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tPom_19">tPom[19]</a> reserved</h4>
+  <h4> <a href="gm_syseq.html#tnnc">tnnc</a> IC on in BI[] [sy.Na]</h4>
+  <h4> <a href="gm_syseq.html#tllc">tllc</a> COMPOS on in XeA[] [sy.La]</h4>
+  <h4> <a href="gm_syseq.html#tphc">tphc</a> PHASE on in Phm[] [sy.Fib]</h4>
+  <h4> <a href="gm_syseq.html#tdcc">tdcc</a> DC on in XeD[] [sy.Lb]</h4>
+  <h4> <a href="gm_syseq.html#tnnf">tnnf</a> IC ON in B[], system
+[sy.N]</h4>
+  <h4> <a href="gm_syseq.html#tphf">tphf</a> PHASE OFF in system
+[mu.FI-sy.Fi]</h4>
+  <h4> <a href="gm_syseq.html#tdcf">tdcf</a> DC OFF in system
+[mu.L-sy.L]</h4>
+  <h4> <a href="gm_syseq.html#tpha">tpha</a> PHASE ON adsorption EDL
+data [sy.Fia]</h4>
+  <h4> <a href="gm_syseq.html#tdca">tdca</a> DC ON adsorption SAT data
+[sy.Lsor</h4>
+  <h4> <a href="gm_syseq.html#tphk">tphk</a> PHASE ON in PUL[]/PLL[]
+[sy.Fik]</h4>
+  <h4> <a href="gm_syseq.html#tdck">tdck</a> DC ON in DUL[]/DLL[]
+[sy.Lk]</h4>
+  <h4> <a href="gm_syseq.html#tdce">tdce</a> DC ON in GEX[], lnGmf[]
+[sy.Le]</h4>
+  <h4> <a href="gm_syseq.html#tphe">tphe</a> PHASE ON in YOF[], Aalp[]
+[sy.Fie]</h4>
+  <h4> <a href="gm_syseq.html#tACL">tACL</a> COMPOS selection switches
+{ + * - }</h4>
+  <h4> <a href="gm_syseq.html#tBCu_">tBCu_</a> Scales of IC
+quantity/concentration (bi_)</h4>
+  <h4> <a href="gm_syseq.html#tXDu_">tXDu_</a> Scales of DC
+quantity/concentration (xd_, dll_)</h4>
+  <h4> <a href="gm_syseq.html#tXAu_">tXAu_</a> Scales of COMPOS
+quantity/concentration (xa_)</h4>
+  <h4> <a href="gm_syseq.html#tXPu_">tXPu_</a> Scales of phase
+quantity/concentration ( xp_, pll_</h4>
+  <h4> <a href="gm_syseq.html#tbi_">tbi_</a> IC quantity/concentration
+to calculate b vector</h4>
+  <h4> <a href="gm_syseq.html#txa_">txa_</a> COMPOS
+quanity/concentration to calculate b vector</h4>
+  <h4> <a href="gm_syseq.html#txd_">txd_</a> DC quantity/concentration
+to calculate b vector</h4>
+  <h4> <a href="gm_syseq.html#txp_">txp_</a> PHASE(equilibrium)
+quantity/concentration to calculate b vector</h4>
+  <h4> <a href="gm_syseq.html#tB_">tB_</a> Vector b of bulk chemical
+composition of the system, moles</h4>
+  <h4> <a href="gm_syseq.html#tdelB">tdelB</a> Uncertainties of bulk
+composition vector b elements, in BCun_ units</h4>
+  <h4> <a href="gm_syseq.html#tPp_">tPp_</a> DC partial pressures, bar</h4>
+  <h4> <a href="gm_syseq.html#tgEx_">tgEx_</a> Excess free energy
+increment for DC, J/mole</h4>
+  <h4> <a href="gm_syseq.html#tlnG_">tlnG_</a> ln of initial DC
+activity coefficients</h4>
+  <h4> <a href="gm_syseq.html#tAalp">tAalp</a> Specific surface area
+of dispersed phases, m2/g</h4>
+  <h4> <a href="gm_syseq.html#tYof_">tYof_</a> Phase metastability
+parameter, J/g</h4>
+  <h4> <a href="gm_syseq.html#tSig">tSig</a> Specific surface energy
+of solid-aqueous (gas) interface, J/m2</h4>
+  <h4> <a href="gm_syseq.html#tXrh">tXrh</a> Parameters r0 and h0 of
+particles (pores at r0&lt;0), nm reserved</h4>
+  <h4> <a href="gm_syseq.html#tXeps">tXeps</a> Dielectric constant
+&amp; conductivity of phase carrier, reserved</h4>
+  <h4> <a href="gm_syseq.html#tRLC">tRLC</a> Classifier of DC
+restriction types { O L U B } reserved</h4>
+  <h4> <a href="gm_syseq.html#tRSC">tRSC</a> Classifier of DC
+restriction scales { M G n v m L w C A D E }</h4>
+  <h4> <a href="gm_syseq.html#tRFLC">tRFLC</a> Classifier of phase
+restriction types { O L U B } reserved</h4>
+  <h4> <a href="gm_syseq.html#tRFSC">tRFSC</a> Classifier of phase
+restriction scales { M G n v w s S }</h4>
+  <h4> <a href="gm_syseq.html#tdul_">tdul_</a> Vector of upper DC
+restrictions to x_j at eqstate (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tdll_">tdll_</a> Vector of lower DC
+restrictions to x_j at eqstate</h4>
+  <h4> <a href="gm_syseq.html#tpul_">tpul_</a> Vector of upper
+restrictions to phases X_a at eqstate (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tpll_">tpll_</a> Vector of lower
+restrictions to phases X_a at eqstate (reserved)</h4>
+  <h4> <a href="gm_syseq.html#tSATC__0">tSATC_[][0]</a> Surface species:
+method codes of SACT calculation { C N S I } </h4>
+  <h4> <a href="gm_syseq.html#tSATC__1">tSATC_[][1]</a> Allocation of
+surface species to the sorbent (end-members) { I V 0 ... 5 } </h4>
+  <h4> <a href="gm_syseq.html#tSATC__2">tSATC_[][2]</a> Allocation of
+surface species to surface type { 0 ... 6 } </h4>
+  <h4> <a href="gm_syseq.html#tSATC__3">tSATC_[][3]</a> Allocation of
+surface complexes to EDL plane { 0 b c d } </h4>
+  <h4> <a href="gm_syseq.html#tSATC__4">tSATC_[][4]</a> Allocation of
+surface species to site type within surface type { 0 ... 6} </h4>
+  <h4> <a href="gm_syseq.html#tSATC__5">tSATC_[][5]</a> Units in which
+max. surface density is given in MaSDj { n m M g } (reserved) </h4>
+  <h4> <a href="gm_syseq.html#tMaSd_0">tMaSd[][0]</a> Parameters for
+surface activity
+correction terms: Maximal surface density (1/nm2) </h4>
+  <h4> <a href="gm_syseq.html#tMaSd_1">tMaSd[][1]</a> Surface species
+charge assigned to 0 surface EDL plane </h4>
+  <h4> <a href="gm_syseq.html#tMaSd_2">tMaSd[][2]</a> Surface species
+charge assigned to beta surface EDL plane </h4>
+  <h4> <a href="gm_syseq.html#tMaSd_3">tMaSd[][3]</a> Isotherm parameter
+1 (energy term in Frumkin) </h4>
+  <h4> <a href="gm_syseq.html#tMaSd_4">tMaSd[][4]</a> Isotherm parameter
+2 (CN in Frumkin or dentateness in QCA) </h4>
+  <h4> <a href="gm_syseq.html#tMaSd_5">tMaSd[][5]</a> Isotherm parameter
+3 (reserved) </h4>
+  <h4> <a href="gm_syseq.html#tSCMT">tSCMT</a> Classifier of EDL
+models for surface types { C T D M E X I S N }</h4>
+  <h4> <a href="gm_syseq.html#tNfsp">tNfsp</a> Fraction of surface
+types relative to carrier components</h4>
+  <h4> <a href="gm_syseq.html#tMaSdt">tMaSdt</a> SAT: Maximum site
+density for surface types, 1/nm2</h4>
+  <h4> <a href="gm_syseq.html#tXcapA">tXcapA</a> Inner-layer
+capacitance density (TLM,CCM) for surface types, F/m2</h4>
+  <h4> <a href="gm_syseq.html#tXcapB">tXcapB</a> Outer-layer
+capacitance sensity (TLM) for surface types, F/m2</h4>
+  <h4> <a href="gm_syseq.html#tXcapF">tXcapF</a> Factor of discretnes
+IDL 0 &lt; 1 - in PHASE</h4>
+  <h4> <a href="gm_syseq.html#tXfIEC">tXfIEC</a> Constant-charge
+surface density or IEC, mkeq/g</h4>
+  <h4> <a href="gm_syseq.html#tXlam">tXlam</a> EDL discretness
+parameter for surface types, &gt;0, &lt;1, reserved</h4>
+  <h4> <a href="gems_bcc.html#tSDref">tSDref</a> List of SDref keys to
+sources of data</h4>
+  <h4> <a href="gems_bcc.html#tSDval">tSDval</a> Comments to data
+sources</h4>
+  <h4> <a href="gm_syseq.html#St_int">St_int</a> internal</h4>
+  <h4> <a href="gm_syseq.html#St_flt">St_flt</a> internal</h4>
+  <h4> <a href="gm_syseq.html#nIC_v">nIC_v</a> RMULTS-indices of IC</h4>
+  <h4> <a href="gm_syseq.html#nDC_v">nDC_v</a> RMULTS-indices of DC</h4>
+  <h4> <a href="gm_syseq.html#nPH_v">nPH_v</a> PROFILE indices of
+multicomp. phases in eqstate [Fis]</h4>
+  <h4> <a href="gm_syseq.html#B_c">B_c</a> b vector of bulk chemical
+composition, moles (packed)</h4>
+  <h4> <a href="gm_syseq.html#U_c">U_c</a> Dual solution u for IC
+(mole/mole), packed</h4>
+  <h4> <a href="gm_syseq.html#Y_c">Y_c</a> Primal solution x for DC
+(moles), packed</h4>
+  <h4> <a href="gm_syseq.html#lnGam_">lnGam_</a> ln of DC activity
+coefficients, packed</h4>
+  <h4> <a href="gm_syseq.html#Ba_">Ba_</a> Bulk compos. of multicomp.
+phases</h4>
+  <h4> <a href="gm_syseq.html#VM__0">VM_[0]</a> Va Volumes of
+multicomp. phases cm3</h4>
+  <h4> <a href="gm_syseq.html#VM__1">VM_[1]</a> Ma Masses of
+multicomp. phases, g</h4>
+  <h4> <a href="gm_syseq.html#VM__2">VM_[2]</a> MaC Mass of carriers
+of multicomp.ph.,g</h4>
+  <h4> <a href="gm_syseq.html#VM__3">VM_[3]</a> Cpa Heat capacity of
+multicomp.ph. J/K/g</h4>
+  <h4> <a href="gm_syseq.html#VM__4">VM_[4]</a> Enthalpy of multicomp.
+phases J/g</h4>
+  <h4> <a href="gm_syseq.html#DIC_">DIC_</a> Diffusion coeffs. of IC
+in aq fluid (1) and in gas phase(2)</h4>
+  <h4> <a href="gm_syseq.html#StDim_0">StDim[0]</a> N of IC at
+equilibrium state</h4>
+  <h4> <a href="gm_syseq.html#StDim_1">StDim[1]</a> N of DC at
+equilibrium state</h4>
+  <h4> <a href="gm_syseq.html#StDim_2">StDim[2]</a> N of phases at
+equilibrium state</h4>
+  <h4> <a href="gm_syseq.html#StDim_3">StDim[3]</a> N of
+multi-component phases at equilibrium state</h4>
+  <h4> <a href="gm_syseq.html#StItr_0">StItr[0]</a> N of IPM
+iterations performed</h4>
+  <h4> <a href="gm_syseq.html#StItr_1">StItr[1]</a> N of parametric
+problem iterations (reserved)</h4>
+  <h4> <a href="gm_syseq.html#StItr_2">StItr[2]</a> Switch of MTRAN
+data (0 off, 1 on)</h4>
+  <h4> <a href="gm_syseq.html#StItr_3">StItr[3]</a> Reserved</h4>
+  <h4> <a href="gm_syseq.html#StTdp_0">StTdp[0]</a> Values of system
+state variables: P (pressure), bar</h4>
+  <h4> <a href="gm_syseq.html#StTdp_1">StTdp[1]</a> T (temperature), K</h4>
+  <h4> <a href="gm_syseq.html#StTdp_2">StTdp[2]</a> V (volume), cm3</h4>
+  <h4> <a href="gm_syseq.html#StTdp_3">StTdp[3]</a> S (entropy), J/K
+(reserved)</h4>
+  <h4> <a href="gm_syseq.html#StTdp_4">StTdp[4]</a> H (enthalpy), J
+(reserved)</h4>
+  <h4> <a href="gm_syseq.html#StTdp_5">StTdp[5]</a> G (Gibbs energy),
+J/RT</h4>
+  <h4> <a href="gm_syseq.html#StCrt_0">StCrt[0]</a> Value of Dikin's
+criterion upon convergence of IPM</h4>
+  <h4> <a href="gm_syseq.html#StCrt_1">StCrt[1]</a> Ionic strength in
+aqueous phase, molal</h4>
+  <h4> <a href="gm_syseq.html#StCrt_2">StCrt[2]</a> Scale factor for B
+and V </h4>
+  <h4> <a href="gm_syseq.html#StCrt_3">StCrt[3]</a> reserved</h4>
+  <h4> <a href="gm_syseq.html#StSBP">StSBP</a> List of IC names, packed</h4>
+  <h4> <a href="gm_syseq.html#StSMP">StSMP</a> List of DC names, packed</h4>
+  <h4> <a href="gm_syseq.html#StSFP">StSFP</a> Compressed list of
+phase names</h4>
+  <h4> <a href="gm_proces.html#PePsts_0">PePsts[0]</a> PROCES status:
+0-indefinite; 1-start; 2-run; 4-end</h4>
+  <h4> <a href="gm_proces.html#PePsts_1">PePsts[1]</a> Is TPV of
+system changing in the process (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_2">PePsts[2]</a> Is there system
+bulk composition changed in the process (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_3">PePsts[3]</a> Is this a time
+dependent run/plotting mode (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_4">PePsts[4]</a> Save changed
+SysEq records to database (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_5">PePsts[5]</a> Is this a
+Sequential Reactor process simulation (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_6">PePsts[6]</a> Is
+sampling/plotting to be used while running the process (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_7">PePsts[7]</a> Does Process
+depend on output equilibrium parameters (pH, Eh etc.) (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_8">PePsts[8]</a> Is this an
+inverse titration problem (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_9">PePsts[9]</a> Is this a
+problem with kinetically-restricted DC (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_10">PePsts[10]</a> Are there
+Math Script expressions in this process simulator (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePsts_11">PePsts[11]</a> Is this a
+sequence of inverse titration points (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePvv_0">PePvv[0]</a> Flags for
+optional arrays of values: CSD tm (+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_1">PePvv[1]</a> MTPARM NV (+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_2">PePvv[2]</a> pressure P (+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_3">PePvv[3]</a> temperature TC (+
+- *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_4">PePvv[4]</a> volume V (+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_5">PePvv[5]</a> time Tau (+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_6">PePvv[6]</a> process extent
+pXi (+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_7">PePvv[7]</a> process extent Nu
+(+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_8">PePvv[8]</a> kinetic
+parameters vKin (+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_9">PePvv[9]</a> empirical
+parameters modC (+ - *)</h4>
+  <h4> <a href="gm_proces.html#PePvv_10">PePvv[10]</a> Use previous
+SysEq result (+) or Simplex initial approximation (+ -)?</h4>
+  <h4> <a href="gm_proces.html#PePvv_11">PePvv[11]</a> Reserved</h4>
+  <h4> <a href="gm_proces.html#Ntxi_0">Ntxi[0]</a> Number of
+mass-transport (time) integration points</h4>
+  <h4> <a href="gm_proces.html#Ntxi_1">Ntxi[1]</a> Total number of
+points to be generated (must always be specified)</h4>
+  <h4> <a href="gm_proces.html#Npvt_0">Npvt[0]</a> N of points along P</h4>
+  <h4> <a href="gm_proces.html#Npvt_1">Npvt[1]</a> N of points along T</h4>
+  <h4> <a href="gm_proces.html#Npvt_2">Npvt[2]</a> N of points along V</h4>
+  <h4> <a href="gm_proces.html#Nphe_0">Nphe[0]</a> N of inverse
+titration points: along pH;</h4>
+  <h4> <a href="gm_proces.html#Nphe_1">Nphe[1]</a> N of inverse
+titration points along pe(Eh);</h4>
+  <h4> <a href="gm_proces.html#Nphe_2">Nphe[2]</a> reserved</h4>
+  <h4> <a href="gm_proces.html#PeMode">PeMode</a> Mode of points
+indexation { 0 - 8 }</h4>
+  <h4> <a href="gm_proces.html#PeDim1_0">PeDim1[0]</a> Number of
+generated/used SysEq records</h4>
+  <h4> <a href="gm_proces.html#PeDim1_1">PeDim1[1]</a> Number of
+columns in modC array (process model coefficients)</h4>
+  <h4> <a href="gm_proces.html#PeDim1_2">PeDim1[2]</a> Number of
+explicit (kinetically-dependent) reactions (for vKin, reserved)</h4>
+  <h4> <a href="gm_proces.html#PeDim1_3">PeDim1[3]</a> Number of
+kinetic reaction parameters (for vKin, reserved)</h4>
+  <h4> <a href="gm_proces.html#PeDim1_4">PeDim1[4]</a> Number of
+references to data sources (SDref)</h4>
+  <h4> <a href="gm_proces.html#PeDim2_0">PeDim2[0]</a> Dimensions of
+optional arrays: vTm,</h4>
+  <h4> <a href="gm_proces.html#PeDim2_1">PeDim2[1]</a> vNV,</h4>
+  <h4> <a href="gm_proces.html#PeDim2_2">PeDim2[2]</a> vP,</h4>
+  <h4> <a href="gm_proces.html#PeDim2_3">PeDim2[3]</a> vV,</h4>
+  <h4> <a href="gm_proces.html#PeDim2_4">PeDim2[4]</a> vT,</h4>
+  <h4> <a href="gm_proces.html#PeDim2_5">PeDim2[5]</a> vTau,</h4>
+  <h4> <a href="gm_proces.html#PeDim2_6">PeDim2[6]</a> vpXi,</h4>
+  <h4> <a href="gm_proces.html#PeDim2_7">PeDim2[7]</a> vNu</h4>
+  <h4> <a href="gm_proces.html#iTm_0">iTm[0]</a> System CSD definition
+variant: start,</h4>
+  <h4> <a href="gm_proces.html#iTm_1">iTm[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#iTm_2">iTm[2]</a> step (initial)</h4>
+  <h4> <a href="gm_proces.html#iNv_0">iNv[0]</a> Thermodata variant #:
+start,</h4>
+  <h4> <a href="gm_proces.html#iNv_1">iNv[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#iNv_2">iNv[2]</a> step</h4>
+  <h4> <a href="gm_proces.html#iP_0">iP[0]</a> Pressure P, bar: start,</h4>
+  <h4> <a href="gm_proces.html#iP_1">iP[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#iP_2">iP[2]</a> increment</h4>
+  <h4> <a href="gm_proces.html#iTC_0">iTC[0]</a> Temperature T, C:
+start,</h4>
+  <h4> <a href="gm_proces.html#iTC_1">iTC[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#iTC_2">iTC[2]</a> increment</h4>
+  <h4> <a href="gm_proces.html#iV_0">iV[0]</a> Volume of the system
+(L): start,</h4>
+  <h4> <a href="gm_proces.html#iV_1">iV[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#iV_2">iV[2]</a> increment</h4>
+  <h4> <a href="gm_proces.html#iTau_0">iTau[0]</a> Time (tau),
+arbitrary units: start,</h4>
+  <h4> <a href="gm_proces.html#iTau_1">iTau[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#iTau_2">iTau[2]</a> increment</h4>
+  <h4> <a href="gm_proces.html#ipXi_0">ipXi[0]</a> Process extent pXi
+= -log(Xi): start,</h4>
+  <h4> <a href="gm_proces.html#ipXi_1">ipXi[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#ipXi_2">ipXi[2]</a> increment</h4>
+  <h4> <a href="gm_proces.html#iNu_0">iNu[0]</a> Linear factor of
+extent Nu: start,</h4>
+  <h4> <a href="gm_proces.html#iNu_1">iNu[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#iNu_2">iNu[2]</a> increment (precision
+for inverse titrations)</h4>
+  <h4> <a href="gm_proces.html#ipH_0">ipH[0]</a> pH values for inverse
+titration: start,</h4>
+  <h4> <a href="gm_proces.html#ipH_1">ipH[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#ipH_2">ipH[2]</a> increment</h4>
+  <h4> <a href="gm_proces.html#ipe_0">ipe[0]</a> pe values for inverse
+titrations: start,</h4>
+  <h4> <a href="gm_proces.html#ipe_1">ipe[1]</a> end,</h4>
+  <h4> <a href="gm_proces.html#ipe_2">ipe[2]</a> increment</h4>
+  <h4> <a href="gm_proces.html#NeIt_0">NeIt[0]</a> Max. N of
+iterations allowed for inverse titration</h4>
+  <h4> <a href="gm_proces.html#NeIt_1">NeIt[1]</a> N of completed
+SysEq computatitons</h4>
+  <h4> <a href="gm_proces.html#Next">Next</a> Switch to continue (1)
+or finish (0) Process Simulator iterations</h4>
+  <h4> <a href="gm_proces.html#I">I</a> I index</h4>
+  <h4> <a href="gm_proces.html#J">J</a> J index</h4>
+  <h4> <a href="gm_proces.html#Jp">Jp</a> Current index (Jp) of SysEq
+in the record key list</h4>
+  <h4> <a href="gm_proces.html#cTm">cTm</a> Current Tm - SysEq CSD
+variant number</h4>
+  <h4> <a href="gm_proces.html#cNV">cNV</a> Current Nv - MTPARM
+variant number</h4>
+  <h4> <a href="gm_proces.html#cP">cP</a> Current P</h4>
+  <h4> <a href="gm_proces.html#cV">cV</a> Current V</h4>
+  <h4> <a href="gm_proces.html#cT">cT</a> Current T</h4>
+  <h4> <a href="gm_proces.html#cTC">cTC</a> Current TC</h4>
+  <h4> <a href="gm_proces.html#cTau">cTau</a> Current Tau</h4>
+  <h4> <a href="gm_proces.html#cpXi">cpXi</a> Current pXi</h4>
+  <h4> <a href="gm_proces.html#cXi">cXi</a> Current Xi</h4>
+  <h4> <a href="gm_proces.html#cNu">cNu</a> Current Nu</h4>
+  <h4> <a href="gm_proces.html#cpH">cpH</a> Current pH</h4>
+  <h4> <a href="gm_proces.html#cpe">cpe</a> Current pe</h4>
+  <h4> <a href="gm_proces.html#cEh">cEh</a> Current Eh</h4>
+  <h4> <a href="gm_proces.html#PeName">PeName</a> Name of Process
+Simulator definition</h4>
+  <h4> <a href="gm_proces.html#PeNote">PeNote</a> Notes</h4>
+  <h4> <a href="gm_proces.html#vTm">vTm</a> Array of tm (SysEq CSD
+variant) values</h4>
+  <h4> <a href="gm_proces.html#vNV">vNV</a> Array of NV (MTPARM
+variant) values</h4>
+  <h4> <a href="gm_proces.html#vP">vP</a> Array of P values</h4>
+  <h4> <a href="gm_proces.html#vV">vV</a> Array of V values</h4>
+  <h4> <a href="gm_proces.html#vT">vT</a> Array of TC values</h4>
+  <h4> <a href="gm_proces.html#vTau">vTau</a> Array of Tau (physical
+time) values</h4>
+  <h4> <a href="gm_proces.html#vpXi">vpXi</a> Array of pXi (-log
+process extent) values</h4>
+  <h4> <a href="gm_proces.html#vNu">vNu</a> Array of Nu values</h4>
+  <h4> <a href="gm_proces.html#vKin">vKin</a> Array of (reaction)
+kinetic parameters</h4>
+  <h4> <a href="gm_proces.html#modC">modC</a> Array of empirical
+parameters</h4>
+  <h4> <a href="gm_proces.html#P_expr">P_expr</a> Math script with
+process simulator expressions</h4>
+  <h4> <a href="gm_proces.html#PeStl">PeStl</a> List of SysEq record
+keys</h4>
+  <h4> <a href="gm_proces.html#PSDref">PSDref</a> List of SDref keys
+to data sources</h4>
+  <h4> <a href="gm_proces.html#PSDval">PSDval</a> Comments on data
+sources</h4>
+  <h4> <a href="gm_proces.html#pGDkey">pGDkey</a> internal</h4>
+  <h4> <a href="gm_proces.html#pSTkey">pSTkey</a> internal</h4>
+  <h4> <a href="gm_proces.html#pSLkey">pSLkey</a> internal</h4>
+  <h4> <a href="gm_proces.html#PeTprn">PeTprn</a> internal</h4>
+  <h4> <a href="gm_proces.html#pX_Nam">pX_Nam</a> Abscissa name (plot)</h4>
+  <h4> <a href="gm_proces.html#pY_Nam">pY_Nam</a> Ordinate name (plot)</h4>
+  <h4> <a href="gm_proces.html#pDimXY_0">pDimXY[0]</a> Dimensions of
+data sampler tables:
+number of rows in xp, yp arrays (points to sample)</h4>
+  <h4> <a href="gm_proces.html#pDimXY_1">pDimXY[1]</a> Dimensions of
+data sampler tables: number of columns (parameters) </h4>
+  <h4> <a href="gm_proces.html#pDimEf_0">pDimEf[0]</a> Dimensions of
+array of empirical data: number of points (rows in yEp, xEp arrays) </h4>
+  <h4> <a href="gm_proces.html#pDimEf_1">pDimEf[1]</a> Dimensions of
+array of empirical
+data yEp, xEp: number of parameters (columns in yEp array) </h4>
+  <h4> <a href="gm_proces.html#pLnam">pLnam</a> Names of columns in
+the yp array (curve names in the plot legend)</h4>
+  <h4> <a href="gm_proces.html#pLnamE">pLnamE</a> Names of columns in
+the yEp array (empirical data)</h4>
+  <h4> <a href="gm_proces.html#pgExpr">pgExpr</a> Math script
+expressions for data sampling </h4>
+  <h4> <a href="gm_proces.html#xp">xp</a> Vector-column for abscissa x
+  </h4>
+  <h4> <a href="gm_proces.html#yp">yp</a> Sampled ordinate data table
+y, each column plotted as a separate curve </h4>
+  <h4> <a href="gm_proces.html#xEp">xEp</a> Vector-column for abscissa
+of input empirical data </h4>
+  <h4> <a href="gm_proces.html#yEp">yEp</a> Vector or table for
+ordinate(s) of input empirical data </h4>
+  <h4> <a href="gm_gtdemo.html#GDps_0">GDps[0]</a> Flag for using the
+empirical data (create xE, yE arrays) { + - }</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_1">GDps[1]</a> Sample data from
+PDB chain: IComp { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_2">GDps[2]</a> Compos { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_3">GDps[3]</a> DComp { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_4">GDps[4]</a> ReacDC { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_5">GDps[5]</a> RTParm { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_6">GDps[6]</a> Phase { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_7">GDps[7]</a> SysEq { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_8">GDps[8]</a> Process { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_9">GDps[9]</a> Probe { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_10">GDps[10]</a> DUterm { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_11">GDps[11]</a> reserved { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_12">GDps[12]</a> reserved { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_13">GDps[13]</a> reserved { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_14">GDps[14]</a> reserved { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDps_15">GDps[15]</a> reserved { + -)?</h4>
+  <h4> <a href="gm_gtdemo.html#GDnlrk_0">GDnlrk[0]</a> N of records;</h4>
+  <h4> <a href="gm_gtdemo.html#GDnlrk_1">GDnlrk[1]</a> chain index;</h4>
+  <h4> <a href="gm_gtdemo.html#GDnwcq_0">GDnwcq[0]</a> Dimensions:
+array of constants gd_wc</h4>
+  <h4> <a href="gm_gtdemo.html#GDnwcq_1">GDnwcq[1]</a> array of work
+cells gOp</h4>
+  <h4> <a href="gm_gtdemo.html#gDimXY">gDimXY</a> Dimensions of data
+sampler tables: col.1 - N of records; col.2 - N of lines</h4>
+  <h4> <a href="gm_gtdemo.html#gDimEf">gDimEf</a> Dimensions of array
+of empirical data yE, xE</h4>
+  <h4> <a href="gm_gtdemo.html#GDname">GDname</a> Full name of GtDemo
+sampler definition</h4>
+  <h4> <a href="gm_gtdemo.html#GDcom">GDcom</a> Comment to name</h4>
+  <h4> <a href="gm_gtdemo.html#gX_Nam">gX_Nam</a> Abscissa name: Graph</h4>
+  <h4> <a href="gm_gtdemo.html#gY_Nam">gY_Nam</a> Ordinate name: Graph</h4>
+  <h4> <a href="gm_gtdemo.html#GDaxis">GDaxis</a> Axis and grid type
+(graph)</h4>
+  <h4> <a href="gm_gtdemo.html#gLnam">gLnam</a> List of ID of lines on
+Graph</h4>
+  <h4> <a href="gm_gtdemo.html#gLnamE">gLnamE</a> List of ID of lines
+of empirical data</h4>
+  <h4> <a href="gm_gtdemo.html#gExpr">gExpr</a> Text with
+IPN-expressions for data sampler</h4>
+  <h4> <a href="gm_gtdemo.html#gExprE">gExprE</a> Text with
+IPN-expressions for empirical data (optional)</h4>
+  <h4> <a href="gm_gtdemo.html#GDwkb">GDwkb</a> SDref key with sample
+math scripts</h4>
+  <h4> <a href="gm_gtdemo.html#GDproc">GDproc</a> Process or Probe
+record key</h4>
+  <h4> <a href="gm_gtdemo.html#GD_rkl">GD_rkl</a> List of record keys
+of sampled PDB records</h4>
+  <h4> <a href="gm_gtdemo.html#gdSize">gdSize</a> Graph axis scale</h4>
+  <h4> <a href="gm_gtdemo.html#x0">x0</a> Vector of abscissa X0</h4>
+  <h4> <a href="gm_gtdemo.html#y0">y0</a> Sampled data array Y0</h4>
+  <h4> <a href="gm_gtdemo.html#xE">xE</a> Abscissa of input empirical
+data XE</h4>
+  <h4> <a href="gm_gtdemo.html#yE">yE</a> Empirical input data array YE</h4>
+  <h4> <a href="gm_gtdemo.html#gd_wc">gd_wc</a> Array of constants
+(optional)</h4>
+  <h4> <a href="gm_gtdemo.html#gQp">gQp</a> Array of work cells
+(optional)</h4>
+  <h4> <a href="gm_gtdemo.html#jR">jR</a> Index of currently sampled
+PDB record</h4>
+  <h4> <a href="gm_gtdemo.html#next">next</a> Flag to continue (1) or
+finish (0) sampling iterations</h4>
+  <h4> <a href="gm_gtdemo.html#GDwkey">GDwkey</a> Current key of
+sampled PDB record</h4>
+  <h4> <a href="gm_gtdemo.html#i0">i0</a> i0 index</h4>
+  <h4> <a href="gm_gtdemo.html#iE">iE</a> iE index</h4>
+  <h4> <a href="gm_gtdemo.html#j0">j0</a> j0 index</h4>
+  <h4> <a href="gm_gtdemo.html#jE">jE</a> jE index</h4>
+  <h4> <a href="gm_gtdemo.html#gwTxt">gwTxt</a> internal</h4>
+  <h4> <a href="gm_gtdemo.html#gwTab">gwTab</a> internal</h4>
+  <h4> <a href="gm_gtdemo.html#GDtprn">GDtprn</a> internal</h4>
+  <h4> <a href="gm_unspace.html#unStat_0">unStat[0]</a> Units of
+energy { j; J c C N reserved }</h4>
+  <h4> <a href="gm_unspace.html#unStat_1">unStat[1]</a> Units of
+volume { j; c L a reserved }</h4>
+  <h4> <a href="gm_unspace.html#unStat_2">unStat[2]</a> Units of
+pressure { b; B p P A reserved }</h4>
+  <h4> <a href="gm_unspace.html#unStat_3">unStat[3]</a> Units of
+temperature { C; K F reserved }</h4>
+  <h4> <a href="gm_unspace.html#unStat_4">unStat[4]</a> UnSpace
+generation status:
+0 -indefinite; 1 on-going generation run; 2 - done generation run;
+3 - generation run error ()</h4>
+  <h4> <a href="gm_unspace.html#unStat_5">unStat[5]</a> UnSpace
+analysis status: 0 - indefinite; 1 ready for analysis; 2 - analysis
+run; 3 - analysis done; ()</h4>
+  <h4> <a href="gm_unspace.html#unPsfl_0">unPsfl[0]</a> Scale of
+uncertainty intervals for G S V: % or 0 - in %; A or 1- absolute </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_1">unPsfl[1]</a> Scale for
+uncertainty intervals
+of B (% or 0 - in %; A or 1 - abs; L or 2 - log10) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_2">unPsfl[2]</a> Scale for IC
+molality interval filters (A absolute, L log scale) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_3">unPsfl[3]</a> Scale for DC
+activity/fugacity
+interval filters (A absolute, L log scale C mol fraction) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_4">unPsfl[4]</a> Probing
+UnSpace over G0 coordinate(s) (+ 1 on; - 0 off ) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_5">unPsfl[5]</a> Probing
+UnSpace over S0 coordinate(s) (+ 1 on; - 0 off ) (reserved) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_6">unPsfl[6]</a> Probing
+UnSpace over b
+coordinate(s) (+ 1 on; - 0 off ) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_7">unPsfl[7]</a> Probing
+UnSpace over T
+coordinate (+ 1 on; - 0 off ) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_8">unPsfl[8]</a> Probing
+UnSpace over P
+coordinate (+ 1 on; - 0 off ) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_9">unPsfl[9]</a> Probing
+UnSpace over V
+coordinate (+ 1 on; - 0 off ) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_10">unPsfl[10]</a> Probing
+UnSpace over pGam
+coordinate(s) (+ 1 on; - 0 off ) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_11">unPsfl[11]</a> Save
+generated SysEq records to data base (+ -) </h4>
+  <h4><a href="gm_unspace.html#unPsfl_12">unPsfl[12]</a> Will math
+script be used in this UnSpace definition? (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_13">unPsfl[13]</a> Will graphics be specified in this UnSpace definition? (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_0">unPafl[0]</a> Flag of input
+for the filter on phase association (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_1">unPafl[1]</a> Flag of input
+for filters on total IC molality (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_2">unPafl[2]</a> Flag of input
+for filters on fugacity/activity (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_3">unPafl[3]</a> Flag of input
+for filters on mole fraction (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_4">unPafl[4]</a> Flag of input
+for filters on pH (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_5">unPafl[5]</a> Flag of input
+for filters on Eh (+ -) </h4>
+  <h4><a href="gm_unspace.html#unPafl_6">unPafl[6]</a> Control code for
+adaptive loops for G(298): 0-no; &gt;=1-yes (max number of loops) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_7">unPafl[7]</a> Control code
+of a function to construct the payoff matrix (A and B now) (A; B; C D E
+F) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_8">unPafl[8]</a> OSP criterion
+flag: 0- PA frequency statistics, 1- Laplace(quant), 2-Homenyuk(quant)
+3-Laplace(point), 4-Homenuk (point) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_9">unPafl[9]</a> Control code
+for the Laplace
+function calculation: + mean of abs.values; - abs. mean of values </h4>
+  <h4><a href="gm_unspace.html#unPafl_6">unWrk[0]</a> Control code for
+adaptive loops for G(298): 0-no; &gt;=1-yes (max number of loops) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_7">unWrk[1]</a> Control code
+of a function to construct the payoff matrix (A and B now) (A; B; C D E
+F) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_8">unWrk[2]</a> OSP criterion
+flag: 0- PA frequency statistics, 1- Laplace(quant), 2-Homenyuk(quant)
+3-Laplace(point), 4-Homenuk (point) </h4>
+  <h4> <a href="gm_unspace.html#unPafl_9">unWrk[3]</a> Control code
+for the Laplace
+function calculation: + mean of abs.values; - abs. mean of values </h4>
+  <h4> <a href="gm_unspace.html#unPvfl_0">unPvfl[0]</a> Allocation
+flag for payoff matrix (if Q &lt;= 1001) (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPvfl_1">unPvfl[1]</a> Allocation
+flag for payoff matrix row (if Q &gt; 1001) (- +) </h4>
+  <h4> <a href="gm_unspace.html#unPvfl_2">unPvfl[2]</a> Allocation
+flag for G0-related vectors (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPvfl_3">unPvfl[3]</a> Allocation
+flag for S0-related vectors (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPvfl_4">unPvfl[4]</a> Allocation
+flag for V0-related vectors (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPvfl_5">unPvfl[5]</a> Allocation
+flag for ParGamma-related vectors (reserved) </h4>
+  <h4> <a href="gm_unspace.html#unPvfl_6">unPvfl[6]</a> reserved </h4>
+  <h4> <a href="gm_unspace.html#unPvfl_7">unPvfl[7]</a> reserved </h4>
+  <h4> <a href="gm_unspace.html#unSiz_0">unSiz[0]</a> Number of
+independent components (from mup-&gt;N) </h4>
+  <h4> <a href="gm_unspace.html#unSiz_1">unSiz[1]</a> Number of
+dependent components (from mup-&gt;L) </h4>
+  <h4> <a href="gm_unspace.html#unSiz_2">unSiz[2]</a> Total number of
+DC in multi-component phases (from mup-&gt;Ls) </h4>
+  <h4> <a href="gm_unspace.html#unSiz_3">unSiz[3]</a> Number of phases
+(from mup-&gt;Fi) </h4>
+  <h4> <a href="gm_unspace.html#unSiz_4">unSiz[4]</a> Number of multi-
+component phases (from mup-&gt;Fis) </h4>
+  <h4> <a href="gm_unspace.html#unSiz_5">unSiz[5]</a> Number of data
+source references (default 0) </h4>
+  <h4> <a href="gm_unspace.html#nQ_0">nQ[0]</a> 0 &lt; Q &lt; 1001
+input number of sample GEM calculations to be generated </h4>
+  <h4> <a href="gm_unspace.html#nQ_1">nQ[1]</a>number of sample points
+in the quantile part </h4>
+  <h4> <a href="gm_unspace.html#uOB">uOB</a> number of solutions (as
+optimal) that went through superposition of all filters </h4>
+  <h4> <a href="gm_unspace.html#unG_0">unG[0]</a> Total number of
+UnSpace groups (coordinates, nGB + nGN + nGR, calc. automatically) </h4>
+  <h4> <a href="gm_unspace.html#unG_1">unG[1]</a> Number of UnSpace
+groups used in generation by Belov algorithm </h4>
+  <h4> <a href="gm_unspace.html#unG_2">unG[2]</a> Number of UnSpace
+groups used in Monte Carlo with normal distribution </h4>
+  <h4> <a href="gm_unspace.html#unG_3">unG[3]</a> Number of UnSpace
+groups used in Monte Carlo with uniform distribution </h4>
+  <h4> <a href="gm_unspace.html#UnTPV_0">UnTPV[0]</a> Unspace group
+index for uncertain temperature T; 0- T is not uncertain </h4>
+  <h4> <a href="gm_unspace.html#UnTPV_1">UnTPV[1]</a> Unspace group
+index for uncertain pressure P; 0- P not uncertain </h4>
+  <h4> <a href="gm_unspace.html#UnTPV_2">UnTPV[2]</a> Unspace group
+index for uncertain volume constraint V, 0 - V not uncertain (reserved)
+  </h4>
+  <h4> <a href="gm_unspace.html#UnOV_0">UnOV[0]</a> Index of optimal
+sampled variant selected by the Laplace criterion (within 0 to Q-1) </h4>
+  <h4> <a href="gm_unspace.html#UnOV_1">UnOV[1]</a> Index of optimal
+sampled variant selected by the Hurtvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#UnOV_2">UnOV[2]</a> Index of optimal
+sampled variant selected by the Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#UnOV_3">UnOV[3]</a> Index of optimal
+sampled variant selected by the Homenyuk criterion </h4>
+  <h4> <a href="gm_unspace.html#unNSV_0">unNSV[0]</a> Number of
+sampled variants selected by the Laplace criterion (1 or quantiled) </h4>
+  <h4> <a href="gm_unspace.html#unNSV_1">unNSV[1]</a> Number of
+sampled variants selected by the Hurtvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#unNSV_2">unNSV[2]</a> Number of
+sampled variants selected by the Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#unNSV_3">unNSV[3]</a> Number of
+sampled variants selected by the Homenyuk criterion </h4>
+  <h4> <a href="gm_unspace.html#unPhA">unPhA</a> Number of different
+phase assemblages in all sampled variants </h4>
+  <h4> <a href="gm_unspace.html#tu">tu</a> Current index t of payoff
+matrix row (calculated sampled point) &lt; nQ </h4>
+  <h4> <a href="gm_unspace.html#qu">qu</a> Current index q of
+payoff matrix column (input data variant) &lt; nQ </h4>
+  <h4> <a href="gm_unspace.html#gu">gu</a> Current index g of unspace
+group (&lt; nG) </h4>
+  <h4> <a href="gm_unspace.html#iu">iu</a> Current index i of
+independent component ( &lt; N ) </h4>
+  <h4> <a href="gm_unspace.html#ju">ju</a> Current index j of
+dependent component ( &lt; L )</h4>
+  <h4> <a href="gm_unspace.html#ku">ku</a> Current index k of phase (
+&lt; Fi ) </h4>
+ <h4> <a href="gm_unspace.html#kau">kau</a> Current index ka of phase
+assemblage ( &lt; nPhA )</h4>
+ <h4> <a href="gm_unspace.html#uDimXY_0">uDimXY[0]</a>Number of rows 
+in xA, yC arrays (sample variants) </h4>
+ <h4> <a href="gm_unspace.html#uDimXY_1">uDimXY[1]</a>Number of columns 
+in the yC table (plot coordinate x, y, z values) (&gt;=3) </h4>
+ <h4> <a href="gm_unspace.html#uDimSc_0">uDimSc[0]</a>Number of intervals of 
+z-scale (rows in xS and yS arrays) </h4>
+ <h4> <a href="gm_unspace.html#uDimSc_1">uDimSc[1]</a>Number of parameters 
+of scale (columns in the yS array) (&gt;=5) </h4>
+
+<h4> <a href="gm_unspace.html#Tu_0">Tu[0]</a> Adapted value of
+T (Celsius) </h4>
+<h4> <a href="gm_unspace.html#Tu_1">Tu[1]</a> Initial (deterministic) value of
+T (Celsius) </h4>
+<h4> <a href="gm_unspace.html#Tu_2">Tu[2]</a> 0 or adapted uncertainty
+half-interval for T (C) </h4>
+<h4> <a href="gm_unspace.html#Tu_3">Tu[3]</a> 0 or initial uncertainty
+half-interval for T (C) </h4>
+<h4> <a href="gm_unspace.html#Tu_4">Tu[4]</a> Current value of T </h4>
+
+<h4> <a href="gm_unspace.html#Pu_0">Pu[0]</a> Adapted value of
+P (bar) </h4>
+<h4> <a href="gm_unspace.html#Pu_1">Pu[1]</a> Initial (deterministic) value of
+P (bar) </h4>
+<h4> <a href="gm_unspace.html#Pu_2">Pu[2]</a> 0 or adapted uncertainty
+half-interval for P (bar) </h4>
+<h4> <a href="gm_unspace.html#Pu_3">Pu[3]</a> 0 or initial uncertainty
+half-interval for P (bar) </h4>
+<h4> <a href="gm_unspace.html#Pu_4">Pu[4]</a> Current value of P </h4>
+
+<h4> <a href="gm_unspace.html#Vu_0">Vu[0]</a> Adapted value of
+constrained system volume V (in cm3) </h4>
+<h4> <a href="gm_unspace.html#Vu_1">Vu[1]</a> Initial (deterministic) value of
+system volume V (in cm3) </h4>
+<h4> <a href="gm_unspace.html#Vu_2">Vu[2]</a> 0 or adapted uncertainty
+half-interval for system volume V (in cm3) </h4>
+<h4> <a href="gm_unspace.html#Vu_3">Vu[3]</a> 0 or initial uncertainty
+half-interval for V (in cm3) </h4>
+<h4> <a href="gm_unspace.html#Vu_4">Vu[4]</a> Current value of constrained system volume V </h4>
+
+  <h4> <a href="gm_unspace.html#pHf_0">pHf[0]</a> pH lower filter
+limit (default 0) </h4>
+  <h4> <a href="gm_unspace.html#pHf_1">pHf[1]</a> pH upper filter
+limit (default 14) </h4>
+  <h4> <a href="gm_unspace.html#Ehf_0">Ehf[0]</a> Eh lower filter
+limit (default -1) </h4>
+  <h4> <a href="gm_unspace.html#Ehf_1">Ehf[1]</a> Eh upper filter
+limit (default 1) </h4>
+  <h4> <a href="gm_unspace.html#ICf_0">ICf[0]</a> Ionic strength lower
+filter limit (default 0) </h4>
+  <h4> <a href="gm_unspace.html#ICf_1">ICf[1]</a> Ionic strength upper
+filter limit (default 3) </h4>
+  <h4> <a href="gm_unspace.html#qLev">qLev</a> Quantile level (default
+0.05) </h4>
+  <h4> <a href="gm_unspace.html#unName">unName</a> Full name of the
+UnSpace task </h4>
+  <h4> <a href="gm_unspace.html#unNote">unNote</a> Comment line for
+optional enhancement of the unName line </h4>
+  <h4> <a href="gm_unspace.html#un_CrV_0">un_CrV[0]</a> Laplace single
+criterion value (from analysing payoff matrix) </h4>
+  <h4> <a href="gm_unspace.html#un_CrV_1">un_CrV[1]</a> Hurtvitz
+single criterion value (from analysing payoff matrix) </h4>
+  <h4> <a href="gm_unspace.html#un_CrV_2">un_CrV[2]</a> Wald single
+criterion value (from analysing payoff matrix) </h4>
+  <h4> <a href="gm_unspace.html#un_CrV_3">un_CrV[3]</a> Homenuk single
+criterion value (from analysing payoff matrix) </h4>
+  <h4> <a href="gm_unspace.html#unGCv">unGCv</a> [nG] generation codes
+for unspace groups: 0- Belov; 1-uniform; 2-normal </h4>
+  <h4> <a href="gm_unspace.html#unGvG">unGvG</a> [L] 0-deterministic
+DC; value &gt;0 is index
+of a group of varying G to which this DC is assigned </h4>
+  <h4> <a href="gm_unspace.html#unGvP">unGvP</a> [Ls] 0-deterministic
+DC; value &gt;0 is
+index of a group varying gamma params (reserved) </h4>
+  <h4> <a href="gm_unspace.html#unGvS">unGvS</a> [L] 0-deterministic
+DC; value &gt;0 is index of a group varying S </h4>
+  <h4> <a href="gm_unspace.html#unGvV">unGvV</a> [L] 0-deterministic
+DC; value &gt;0 is index of a group varying V </h4>
+  <h4> <a href="gm_unspace.html#unGvB">unGvB</a> [N] 0-deterministic
+DC; value &gt;0 is index
+of a group varying b to which this IC is assigned </h4>
+  <h4> <a href="gm_unspace.html#PhAf">PhAf</a> [N] Input phase indexes
+of known equilibrium
+phase association for a primary filter (Pa_f_pha) </h4>
+  <h4> <a href="gm_unspace.html#intG0_0">intG0[0]</a> Adapted uncertainty
+half-intervals for G0 variation (flag PsUnInt defines units) </h4>
+  <h4> <a href="gm_unspace.html#intG0_1">intG0[1]</a> Initial uncertainty
+half-intervals for G0 variation (flag PsUnInt defines units) </h4>
+  <h4> <a href="gm_unspace.html#intGam_0">intGam[0]</a> Adapted uncertainty
+half-intervals for gamma params (reserved) </h4>
+  <h4> <a href="gm_unspace.html#intGam_1">intGam[1]</a> Initial uncertainty
+half-intervals for gamma params (reserved) </h4>
+  <h4> <a href="gm_unspace.html#intS_0">intS[0]</a> Adapted uncertainty
+half-intervals for S (reserved) </h4>
+  <h4> <a href="gm_unspace.html#intS_1">intS[1]</a> Initial uncertainty
+half-intervals for S (reserved) </h4>
+  <h4> <a href="gm_unspace.html#intV_0">intV[0]</a> Adapted uncertainty
+half-intervals for V variation (flag PsUnInt defines units) </h4>
+  <h4> <a href="gm_unspace.html#intV_1">intV[1]</a> Initial uncertainty
+half-intervals for V variation (flag PsUnInt defines units) </h4>
+  <h4> <a href="gm_unspace.html#intB_0">intB[0]</a> Adapted uncertainty
+half-intervals for b variation (flag PsUnInB defines units) </h4>
+  <h4> <a href="gm_unspace.html#intB_1">intB[1]</a> Initial uncertainty
+half-intervals for b variation (0- deterministic, flag PsUnInB defines units) </h4>
+  <h4> <a href="gm_unspace.html#m_t_lo">m_t_lo</a> Total IC molality
+filter - lower limits
+(default 0/-20) (units defined in PsUnFltI flag) </h4>
+  <h4> <a href="gm_unspace.html#m_t_up">m_t_up</a> Total IC molality
+filter - upper limits
+(default 10/+1) (units defined in PsUnFltI flag) </h4>
+  <h4> <a href="gm_unspace.html#fug_lo">fug_lo</a> Fugacity/activity
+filter - lower limits
+(default 0/-20) (units defined in PsUnFltD flag) </h4>
+  <h4> <a href="gm_unspace.html#fug_up">fug_up</a> Fugacity/activity
+filter - upper limits
+(default 10/+1) (units defined in PsUnFltD flag) </h4>
+  <h4> <a href="gm_unspace.html#un_Gs_0">un_Gs[0]</a> Adapted values of G298 for DCs </h4>
+  <h4> <a href="gm_unspace.html#un_Gs_1">un_Gs[1]</a> Input (deterministic)
+values of G298 for DCs </h4>
+  <h4> <a href="gm_unspace.html#un_Ss_0">un_Ss[0]</a> Adapted values of S298 for DCs (reserved) </h4>
+  <h4> <a href="gm_unspace.html#un_Ss_1">un_Ss[1]</a> Input (deterministic)
+values of S298 for DCs (reserved) </h4>
+  <h4> <a href="gm_unspace.html#un_Vs_0">un_Vs[0]</a> Adapted values of V298 for DCs </h4>
+  <h4> <a href="gm_unspace.html#un_Vs_1">un_Vs[1]</a> Input (deterministic)
+values of V298 for DCs </h4>
+  <h4> <a href="gm_unspace.html#unGAMs_0">unGAMs[0]</a> Adapted Gamma parameters (reserved) </h4>
+  <h4> <a href="gm_unspace.html#unGAMs_1">unGAMs[1]</a> Input (deterministic) 
+Gamma parameters (reserved) </h4>
+  <h4> <a href="gm_unspace.html#uncp">uncp</a> [Q][nG] table of
+normalized coordinates of points in uncertainty space (&gt;= 0 &lt;= 1) </h4>
+  <h4> <a href="gm_unspace.html#un_Bs_0">un_Bs[0]</a> Adapted amounts in 
+bulk composition vector b </h4>
+  <h4> <a href="gm_unspace.html#un_Bs_1">un_Bs[1]</a> Input (deterministic)
+amounts in bulk composition vector b </h4>
+  <h4> <a href="gm_unspace.html#uGc">uGc</a> G0 values used in sample
+input data variants (indexes q j) </h4>
+  <h4> <a href="gm_unspace.html#uBc">uBc</a> bulk compositions used in sample
+input data variants (indexes q i) </h4>
+  <h4> <a href="gm_unspace.html#uSc">uSc</a> S0 values used in sample
+input data variants (indexes q j) </h4>
+  <h4> <a href="gm_unspace.html#umVc">umVc</a> V0 values used in sample
+input data variants (indexes q j) </h4>
+  <h4> <a href="gm_unspace.html#uNidP">uGc</a> Gamma parameters used in sample
+input data variants (indexes q j) </h4>
+  <h4> <a href="gm_unspace.html#uYc">uYc</a> X (DC mole amounts) from
+sample GEM solution variants (indexes t j) </h4>
+  <h4> <a href="gm_unspace.html#uYFc">uYFc</a> XF (phase mole amounts)
+from sample GEM solution variants (indexes t k) </h4>
+  <h4> <a href="gm_unspace.html#uGamc">uGamc</a> lnGam values for DC
+from sample GEM solution variants (indexes t j) </h4>
+  <h4> <a href="gm_unspace.html#um_tc">um_tc</a> m_t values of total
+IC molality from sample GEM solution variants (indexes t i) </h4>
+  <h4> <a href="gm_unspace.html#uUc">uUc</a> u values of dual chemical
+potentials from sample GEM solution variants (indexes t i) </h4>
+  <h4> <a href="gm_unspace.html#uFugc">uFugc</a> lga values of log10
+fugacity/activity from sample GEM solution variants (indexes t j) </h4>
+  <h4> <a href="gm_unspace.html#uTc">uTc</a> TC vector of temperatures
+(C) from sample input data variants (index q) </h4>
+  <h4> <a href="gm_unspace.html#uPc">uPc</a> P vector of pressures
+(bar) from sample input data variants (index q) </h4>
+  <h4> <a href="gm_unspace.html#uVc">uVc</a> V vector of system volumes
+(cm3) from sample input data variants (index q) </h4>
+  <h4> <a href="gm_unspace.html#upHc">upHc</a> pH vector of pH values
+from sample GEM solution variants (index t) </h4>
+  <h4> <a href="gm_unspace.html#OVB">OVB</a> pseudo-random numbers for
+Belov algorithm </h4>
+  <h4> <a href="gm_unspace.html#OVR">OVR</a> pseudo-random numbers by
+Monte Carlo with uniform distribution </h4>
+  <h4> <a href="gm_unspace.html#OVN">OVN</a> pseudo-random numbers by
+Monte Carlo with normal distribution </h4>
+  <h4> <a href="gm_unspace.html#quOV_0">quOV[0]</a> indices of sample GEM
+variants taken into quantile Laplace criterion </h4>
+  <h4> <a href="gm_unspace.html#quOV_1">quOV[1]</a> indices of sample GEM
+variants taken into quantile Hurvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#quOV_2">quOV[2]</a> indices of sample GEM
+variants taken into quantile Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#quOV_3">quOV[3]</a> indices of sample GEM
+variants taken into quantile Homeniuk criterion </h4>
+  <h4> <a href="gm_unspace.html#quCrV_0>quCrV[0]</a> values of 
+the quantile Laplace criterion </h4>
+  <h4> <a href="gm_unspace.html#quCrV_1>quCrV[1]</a> values of 
+the quantile Hurvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#quCrV_2>quCrV[2]</a> values of 
+the quantile Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#quCrV_3>quCrV[3]</a> values of 
+the quantile Homeniuk criterion </h4>
+  <h4> <a href="gm_unspace.html#UnICn">UnICn</a> Names of columns for
+the output array UnIC </h4>
+  <h4> <a href="gm_unspace.html#UgDCn">UgDCn</a> Names of columns for
+the output array UgDC </h4>
+  <h4> <a href="gm_unspace.html#UaDCn">UaDCn</a> Names of columns for
+the output array UaDc </h4>
+  <h4> <a href="gm_unspace.html#UnDCAn">UnDCAn</a> Names of columns
+for the output array UnDCA </h4>
+  <h4> <a href="gm_unspace.html#unSGp">unSGp</a> List of UnSpace group
+names </h4>
+  <h4> <a href="gm_unspace.html#U_expr">U_expr</a> Text with math
+script equations (params for activity coeffs ??? reserved ) </h4>
+  <h4> <a href="gm_unspace.html#UnStl">UnStl</a> List of generated
+SysEq record keys </h4>
+  <h4> <a href="gm_unspace.html#unSDrf">unSDrf</a> List of SDref keys
+to data sources </h4>
+  <h4> <a href="gm_unspace.html#unSDvl">unSDvl</a> List of short
+comments to SDref keys in the PSDref list </h4>
+  <h4> <a href="gm_unspace.html#uEQkey">uEQkey</a> Current SysEq
+record key </h4>
+  <h4> <a href="gm_unspace.html#uX_Nam">uX_Nam</a> Abscissa name (for
+the graph) </h4>
+  <h4> <a href="gm_unspace.html#uY_Nam">uY_Nam</a> Ordinate name (for
+the graph) </h4>
+  <h4> <a href="gm_unspace.html#uDaxis">uDaxis</a> Axis Type (plot
+setup), background color, internal </h4>
+  <h4> <a href="gm_unspace.html#upSize">upSize</a> Plot axis scale,
+internal </h4>
+  <h4> <a href="gm_unspace.html#uLnam">uLnam</a> List of names of 
+columns in the yC table </h4>
+  <h4> <a href="gm_unspace.html#uPName">uPName</a> List of names of 
+uncertain input parameters </h4>
+  <h4> <a href="gm_unspace.html#xA">xA</a> Classification vector 
+(contains phase assemblage indexes) </h4>
+  <h4> <a href="gm_unspace.html#yC_0">yC[0]</a> Data table column 
+(contains x coordinate values) </h4>
+  <h4> <a href="gm_unspace.html#yC_1">yC[1]</a> Data table column 
+(contains y coordinate values) </h4>
+  <h4> <a href="gm_unspace.html#yC_2">yC[2]</a> Data table column 
+(contains z coordinate values) </h4>
+  <h4> <a href="gm_unspace.html#xS">xS</a> Abscissa vector for z-scale 
+data (reserved for future versions) </h4>
+  <h4> <a href="gm_unspace.html#yS_0">yS[0]</a> Lower boundaries for 
+z-scale intervals </h4>
+  <h4> <a href="gm_unspace.html#yS_1">yS[1]</a> Upper boundaries for 
+z-scale intervals </h4>
+  <h4> <a href="gm_unspace.html#yS_2">yS[2]</a> Amount of red (RGB) 
+color (0-255) for z-scale intervals </h4>
+  <h4> <a href="gm_unspace.html#yS_3">yS[3]</a> Amount of green 
+(RGB) color (0-255) for z-scale intervals </h4>
+  <h4> <a href="gm_unspace.html#yS_4">yS[4]</a> Amount of blue 
+(RGB) color (0-255) for z-scale intervals </h4>
+  <h4> <a href="gm_unspace.html#PhAndx">PhAndx</a> Table of system
+indices of phases to identify Phase Assemblages </h4>
+  <h4> <a href="gm_unspace.html#uPhsv">uPhsv</a> Indices of Phase
+Assemblage ids in sampled variants (PhAndx) </h4>
+  <h4> <a href="gm_unspace.html#PAnum">PAnum</a> Vector of number of
+sample GEM solution variants containing a phase association </h4>
+  <h4> <a href="gm_unspace.html#PhAID">PhAID</a> List of phase
+assemblage ID names (def. 0001 0002 ... ) </h4>
+  <h4> <a href="gm_unspace.html#PhAlst">PhAlst</a> List of phase
+assemblage titles (made of Phase names) </h4>
+  <h4> <a href="gm_unspace.html#PAfreg">PAfreg</a> Frequency of sample
+GEM solution variants
+containing a phase association (PhNum*100/Q) </h4>
+  <h4> <a href="gm_unspace.html#pmr">pmr</a> Pointer to the beginning
+of current line in payoff matrix ( PvROM/PvPOR ) </h4>
+  <h4> <a href="gm_unspace.html#POM">POM</a> Payoff matrix optional
+(see PvPOM flag) </h4>
+  <h4> <a href="gm_unspace.html#POR">POR</a> payoff matrix row
+optional (see PvPOR flag) </h4>
+  <h4> <a href="gm_unspace.html#unA">unA</a> Work stoichiometry matrix
+in project/system indexation </h4>
+  <h4> <a href="gm_unspace.html#Zcp">Zcp</a> Mean over rows of pay-off
+matrix for Laplace criterion </h4>
+  <h4> <a href="gm_unspace.html#Zmin">Zmin</a> Minima in rows of
+pay-off matrix for Hurwitz criterion </h4>
+  <h4> <a href="gm_unspace.html#Zmax">Zmax</a> Maxima in rows row
+pay-off matrix for Hurwitz criterion </h4>
+  <h4> <a href="gm_unspace.html#ZmaxAb">ZmaxAb</a> abs(max)values in
+rows of pay-off matrix for Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#Hom">Hom</a> Array of calculated
+values for Homenyuk criterion </h4>
+  <h4> <a href="gm_unspace.html#Prob">Prob</a> Array of probabilities
+for calculating Homenuk criterion </h4>
+  <h4> <a href="gm_unspace.html#UnIC_0">UnIC[0]</a> Total dissolved IC 
+molalities m_i for the deterministic variant </h4>
+  <h4> <a href="gm_unspace.html#UnIC_1">UnIC[1]</a> m_i averages for all 
+sample variants that have passed through filters </h4>
+  <h4> <a href="gm_unspace.html#UnIC_2">UnIC[2]</a> 2-sigma deviations 
+for the averages in (previous) column 1 </h4>
+  <h4> <a href="gm_unspace.html#UnIC_3">UnIC[3]</a> m_i averages for sample 
+variants with dominant phase assemblage </h4>
+  <h4> <a href="gm_unspace.html#UnIC_4">UnIC[4]</a> 2-sigma deviations for 
+the averages in (previous) column 3 </h4>
+  <h4> <a href="gm_unspace.html#UnIC_5">UnIC[5]</a> m_i averages over sample 
+variants selected by quantile Laplace criterion </h4>
+  <h4> <a href="gm_unspace.html#UnIC_6">UnIC[6]</a> m_i averages over sample 
+variants selected by quantile Hurvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#UnIC_7">UnIC[7]</a> m_i averages over sample 
+variants selected by quantile Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#UnIC_8">UnIC[8]</a> m_i averages over sample 
+variants selected by quantile Homeniuk criterion</h4>
+  <h4> <a href="gm_unspace.html#UnIC_9">UnIC[9]</a> reserved column </h4>
+  <h4> <a href="gm_unspace.html#UgDC_0">UgDC[0]</a> Uncertain input parameter 
+(UIP) values for the deterministic variant </h4>
+  <h4> <a href="gm_unspace.html#UgDC_1">UgDC[1]</a> Average UIP values over all 
+sample variants that have passed through filter(s) </h4>
+  <h4> <a href="gm_unspace.html#UgDC_2">UgDC[2]</a> 2-sigma deviations for the 
+averages in (previous) column 1 </h4>
+  <h4> <a href="gm_unspace.html#UgDC_3">UgDC[3]</a> Average UIP values over all 
+sample variants with the dominant phase assemblage </h4>
+  <h4> <a href="gm_unspace.html#UgDC_4">UgDC[4]</a> 2-sigma deviations for the averages 
+in (previous) column 3 </h4>
+  <h4> <a href="gm_unspace.html#UgDC_5">UgDC[5]</a> Average UIP values over sample 
+variants selected by quantile Laplace criterion </h4>
+  <h4> <a href="gm_unspace.html#UgDC_6">UgDC[6]</a> Average UIP values over sample 
+variants selected by quantile Hurvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#UgDC_7">UgDC[7]</a> Average UIP values over sample 
+variants selected by quantile Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#UgDC_8">UgDC[8]</a> Average UIP values over sample 
+variants selected by quantile Homeniuk criterion </h4>
+  <h4> <a href="gm_unspace.html#UgDC_9">UgDC[9]</a> 2-sigma deviations for the 
+averages related to the criterion used in adaptive loops (see unPafl[8]) </h4>
+  <h4> <a href="gm_unspace.html#UaDC_0">UaDC[0]</a> DC activities (fugacities for gases) 
+for the deterministic variant </h4>
+  <h4> <a href="gm_unspace.html#UaDC_1">UaDC[1]</a> average DC activities for all 
+sample variants that have passed through filters </h4>  
+  <h4> <a href="gm_unspace.html#UaDC_2">UaDC[2]</a> 2-sigma deviations for the averages 
+in (previous) column 1 </h4>
+  <h4> <a href="gm_unspace.html#UaDC_3">UaDC[3]</a> average DC activities for sample 
+variants with dominant phase assemblage </h4>
+  <h4> <a href="gm_unspace.html#UaDC_4">UaDC[4]</a> 2-sigma deviations for the averages 
+in (previous) column 3 </h4>
+  <h4> <a href="gm_unspace.html#UaDC_5">UaDC[5]</a> average DC activities over 
+sample variants selected by quantile Laplace criterion </h4>
+  <h4> <a href="gm_unspace.html#UaDC_6">UaDC[6]</a> average DC activities over 
+sample variants selected by quantile Hurvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#UaDC_7">UaDC[7]</a> average DC activities over 
+sample variants selected by quantile Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#UaDC_8">UaDC[8]</a> average DC activities over 
+sample variants selected by quantile Homeniuk criterion </h4>
+  <h4> <a href="gm_unspace.html#UaDC_9">UaDC[9]</a> reserved column </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_0">UnDCA[0]</a> Adaptively optimized UIP values </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_1">UnDCA[1]</a> Adaptively optimized uncertainty 
+half-intervals for the optimized UIP values </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_2">UnDCA[2]</a> Minimum observed UIP values 
+after adaptive loops </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_3">UnDCA[3]</a> Maximum observed UIP values 
+after adaptive loops </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_4">UnDCA[4]</a> Average for UIP values over sample 
+variants that have passed through filters at the last adaptive loop </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_5">UnDCA[5]</a> Uncertainty half-intervals (2-sigma) 
+for the averages in (previous) column 5 </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_6">UnDCA[6]</a> reserved </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_7">UnDCA[7]</a> reserved </h4>
+  <h4> <a href="gm_unspace.html#uTprn">uTprn</a> internal </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_0">dtPvfl[0]</a> Units of energy
+{ j; J c C N reserved } </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_1">dtPvfl[1]</a> Units of volume
+{ j; c L a reserved } </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_2">dtPvfl[2]</a> Units of
+pressure { b; B p P A reserved } </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_3">dtPvfl[3]</a> Units of
+temperature { C; K F reserved } </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_4">dtPvfl[4]</a> Use coulombic
+factors for non-basis DCs { + - } </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_5">dtPvfl[5]</a> Use IC
+quantities for basis sub-system compositions? { + * - } </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_6">dtPvfl[6]</a> Use IC
+quantities for non-basis sub-system compositions? { + * - } </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_7">dtPvfl[7]</a> Use formula
+(UDF) for basis and non-basis sub-system compositions? { + * - } </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_8">dtPvfl[8]</a> Include
+references to data sources { + - }? </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_9">dtPvfl[9]</a> Use math script
+for mole fractions of non-basis DCs { + - }? </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_10">dtPvfl[10]</a> Use math
+script for activity coeffs of non-basis DCs { + - }? </h4>
+  <h4> <a href="gm_dualth.html#dtPvfl_11">dtPvfl[11]</a> Use vectors
+for T, P and IS for experiments { + - }? </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_0">dtPsFl[0]</a> DualTh mode of
+operation { M G A X } </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_1">dtPsFl[1]</a> State of
+non-basis part saturation { E P S } </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_2">dtPsFl[2]</a> DualTh
+generation status: 0 -indef.; 1 on-going gen.; 2 - done gen. run; 3 -
+gen. run error </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_3">dtPsFl[3]</a> DualTh analysis
+status: 0 - indef.; 1 ready for; 2 - run; 3 - done </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_4">dtPsFl[4]</a> Save generated
+SysEq records to data base? { + - } </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_5">dtPsFl[5]</a> Reserved </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_6">dtPsFl[6]</a> Reserved </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_7">dtPsFl[7]</a> Reserved </h4>
+  <h4> <a href="gm_dualth.html#dtSize_0">dtSize[0]</a> Input number of
+experiments (equilibria) in basis sub-system </h4>
+  <h4> <a href="gm_dualth.html#dtSize_1">dtSize[1]</a> Input number of
+formula units to set compositions in basis sub-system </h4>
+  <h4> <a href="gm_dualth.html#dtSize_2">dtSize[2]</a> Input number of
+DC (end-member) candidates in non-basis sub-system </h4>
+  <h4> <a href="gm_dualth.html#dtSize_3">dtSize[3]</a> Input number of
+references to data sources </h4>
+  <h4> <a href="gm_dualth.html#dtSize_4">dtSize[4]</a> Input number of
+elements in the math script work arrays qpn per non-basis DC </h4>
+  <h4> <a href="gm_dualth.html#dtSize_5">dtSize[5]</a> Input number of
+elements in the math script work arrays qpg per non-basis DC </h4>
+  <h4> <a href="gm_dualth.html#dtSize_6">dtSize[6]</a> Number of
+independent components (in basis sub-system, taken from project system)
+  </h4>
+  <h4> <a href="gm_dualth.html#dtSize_7">dtSize[7]</a> Reserved </h4>
+  <h4> <a href="gm_dualth.html#dtTm_0">dtTm[0]</a> SysEq CSD variant
+number: start value </h4>
+  <h4> <a href="gm_dualth.html#dtTm_1">dtTm[1]</a> SysEq CSD variant
+number: end value </h4>
+  <h4> <a href="gm_dualth.html#dtTm_2">dtTm[2]</a> SysEq CSD variant
+number: step value </h4>
+  <h4> <a href="gm_dualth.html#dtNv_0">dtNv[0]</a> Restrictions
+variant number: start value </h4>
+  <h4> <a href="gm_dualth.html#dtNv_1">dtNv[1]</a> Restrictions
+variant number: end value </h4>
+  <h4> <a href="gm_dualth.html#dtNv_2">dtNv[2]</a> Restrictions
+variant number: step value </h4>
+  <h4> <a href="gm_dualth.html#Pd_0">Pd[0]</a> Pressure P, bar: start
+(real) value </h4>
+  <h4> <a href="gm_dualth.html#Pd_1">Pd[1]</a> Pressure P, bar: end
+value </h4>
+  <h4> <a href="gm_dualth.html#Pd_2">Pd[2]</a> Pressure P, bar: step
+value </h4>
+  <h4> <a href="gm_dualth.html#Td_0">Td[0]</a> Temperature T, C: start
+value </h4>
+  <h4> <a href="gm_dualth.html#Td_1">Td[1]</a> Temperature T, C: end
+value </h4>
+  <h4> <a href="gm_dualth.html#Td_2">Td[2]</a> Temperature T, C: step
+value </h4>
+  <h4> <a href="gm_dualth.html#Vd_0">Vd[0]</a> Volume of the system
+(L): start value </h4>
+  <h4> <a href="gm_dualth.html#Vd_1">Vd[1]</a> Volume of the system
+(L): end value </h4>
+  <h4> <a href="gm_dualth.html#Vd_2">Vd[2]</a> Volume of the system
+(L): increment </h4>
+  <h4> <a href="gm_dualth.html#dtComp_0">dtComp[0]</a> Masses (kg) and
+volumes (L) for compositions: Ms (total mass, normalization) </h4>
+  <h4> <a href="gm_dualth.html#dtComp_1">dtComp[1]</a> Vs (total
+volume of the object, for volume concentrations) </h4>
+  <h4> <a href="gm_dualth.html#dtComp_2">dtComp[2]</a> M(H2O) (mass of
+water-solvent for molalities) </h4>
+  <h4> <a href="gm_dualth.html#dtComp_3">dtComp[3]</a> Maq (mass of
+aqueous solution for ppm etc.) </h4>
+  <h4> <a href="gm_dualth.html#dtComp_4">dtComp[4]</a> Vaq (volume of
+aqueous solution for molarities) </h4>
+  <h4> <a href="gm_dualth.html#dtComp_5">dtComp[5]</a> Pg (pressure in
+gas, for partial pressures) </h4>
+  <h4> <a href="gm_dualth.html#dtComp_6">dtComp[6]</a> MOL total mole
+amount for basis sub-system composition calculations </h4>
+  <h4> <a href="gm_dualth.html#dtComp_7">dtComp[7]</a> Mole fraction
+of the carrier DC (e.g. sorbent or H2O solvent) </h4>
+  <h4> <a href="gm_dualth.html#dtComp_8">dtComp[8]</a> A_sur (specific
+surface area of the sorbent), for surface species </h4>
+  <h4> <a href="gm_dualth.html#dtTc">dtTc</a> Current state parameter
+T, centigrade </h4>
+  <h4> <a href="gm_dualth.html#dtPc">dtPc</a> Current state parameter
+P, bar </h4>
+  <h4> <a href="gm_dualth.html#dtVc">dtVc</a> Current state parameter
+V, litres </h4>
+  <h4> <a href="gm_dualth.html#for_nr">for_nr</a> Formulae of DC
+(end-member) stoichiometry candidates, input </h4>
+  <h4> <a href="gm_dualth.html#qt">qt</a> Current index of experiment </h4>
+  <h4> <a href="gm_dualth.html#it">it</a> Current index of IC </h4>
+  <h4> <a href="gm_dualth.html#jm">jm</a> Current index of DC in
+non-basis sub-system </h4>
+  <h4> <a href="gm_dualth.html#ctm">ctm</a> Current Tm - SYSTEM CSD
+number </h4>
+  <h4> <a href="gm_dualth.html#cNV_">cNV_</a> Current Nv - MTPARM
+variant number </h4>
+  <h4> <a href="gm_dualth.html#nam_nr">nam_nr</a> Id names of DC
+(end-member) stoichiometry candidates, input </h4>
+  <h4> <a href="gm_dualth.html#dtName">dtName</a> Comment line for the
+full name of this DualTh task </h4>
+  <h4> <a href="gm_dualth.html#dtNote">dtNote</a> Comment line for
+optional enhancement of the dtName line </h4>
+  <h4> <a href="gm_dualth.html#Bb">Bb</a> Table of bulk compositions
+of basis sub-systems, moles </h4>
+  <h4> <a href="gm_dualth.html#Bn">Bn</a> Table of bulk compositions
+of non-basis sub-systems, moles </h4>
+  <h4> <a href="gm_dualth.html#Ub">Ub</a> Table of dual solution
+values for basis sub-systems, J/mol </h4>
+  <h4> <a href="gm_dualth.html#chi">chi</a> Table of mole fractions of
+DC (end-member) candidates </h4>
+  <h4> <a href="gm_dualth.html#mu_n">mu_n</a> Table of DualTh chemical
+potentials of non-basis DC (end-members), J/mol </h4>
+  <h4> <a href="gm_dualth.html#Coul">Coul</a> Table of excess Gibbs
+energies of mixture for candidates (calculated) (or input Coulombic
+terms for surface complexes) </h4>
+  <h4> <a href="gm_dualth.html#gam_n">gam_n</a> Table of activity
+coefficients for non-basis DC candidates </h4>
+  <h4> <a href="gm_dualth.html#avg_g">avg_g</a> Means over gam_n
+columns (experiments) for DC candidates </h4>
+  <h4> <a href="gm_dualth.html#sd_g">sd_g</a> St.deviations over gam_n
+columns (experiments) for DC candidates </h4>
+  <h4> <a href="gm_dualth.html#muo_n">muo_n</a> Table of standard
+Gibbs energies for DC candidates, J/mol </h4>
+  <h4> <a href="gm_dualth.html#avg_m">avg_m</a> Means over muo_n
+columns (experiments) for DC candidates </h4>
+  <h4> <a href="gm_dualth.html#sd_m">sd_m</a> St.deviations over muo_n
+columns (experiments) for DC candidates </h4>
+  <h4> <a href="gm_dualth.html#qpn">qpn</a> Work array for chi
+calculation math script </h4>
+  <h4> <a href="gm_dualth.html#qpg">qpg</a> Work array for gamma
+calculation math script </h4>
+  <h4> <a href="gm_dualth.html#CIb">CIb</a> Input table of quantity/
+concentration of IC in basis sub-systems </h4>
+  <h4> <a href="gm_dualth.html#CIn">CIn</a> Input table of quantity/
+concentration of IC in non-basis sub-systems </h4>
+  <h4> <a href="gm_dualth.html#CAb">CAb</a> Input table of quantity/
+concentration of UDF formulae for basis sub-systems </h4>
+  <h4> <a href="gm_dualth.html#CAn">CAn</a> Input table of quantity/
+concentration of DC formulae for non-basis sub-systems </h4>
+  <h4> <a href="gm_dualth.html#cExpr">cExpr</a> Math script text field
+for calculation of mole fractions of DC in non-basis sub-system </h4>
+  <h4> <a href="gm_dualth.html#dgExpr">dgExpr</a> Math script text
+field for calculation of activity coeffs of DC in non-basis sub-system </h4>
+  <h4> <a href="gm_dualth.html#dtSDrf">dtSDrf</a> List of
+bibliographic references to data sources </h4>
+  <h4> <a href="gm_dualth.html#dtSDvl">dtSDvl</a> Parameters taken
+from the respective data sources </h4>
+  <h4> <a href="gm_dualth.html#nam_b">nam_b</a> Id names of
+experiments, input </h4>
+  <h4> <a href="gm_dualth.html#nam_n">nam_n</a> Id names of DC
+(end-member) stoichiometry candidates, input </h4>
+  <h4> <a href="gm_dualth.html#for_n">for_n</a> Formulae of DC
+(end-member) stoichiometry candidates, input </h4>
+  <h4> <a href="gm_dualth.html#for_b">for_b</a> Formulae for setting
+basis and non-basis system compositions, input </h4>
+  <h4> <a href="gm_dualth.html#stld">stld</a> List of generated SysEq
+record keys </h4>
+  <h4> <a href="gm_dualth.html#typ_n">typ_n</a> Type code of DC
+stoichiometry candidates {O M J I S ... }, input </h4>
+  <h4> <a href="gm_dualth.html#CIclb">CIclb</a> Units of IC
+quantity/concentration for basis compositions, input </h4>
+  <h4> <a href="gm_dualth.html#CIcln">CIcln</a> Units of IC
+quantity/concentration for non-basis compositions, input </h4>
+  <h4> <a href="gm_dualth.html#AUclb">AUclb</a> Units of setting
+quantities of formula units for basis system compositions, input </h4>
+  <h4> <a href="gm_dualth.html#AUcln">AUcln</a> Units of setting
+quantities of DC formulae for non-basis system compositions, input </h4>
+  <h4> <a href="gm_dualth.html#SBM">SBM</a> Keys (names) of IC, taken
+from the project definition automatically </h4>
+  <h4> <a href="gm_dualth.html#muo_i">muo_i</a> Input st.state chem.
+potentials for candidates (or EMPTY if unknown), J/mol </h4>
+  <h4> <a href="gm_dualth.html#act_n">act_n</a> Table of DualTh-
+calculated activities </h4>
+  <h4> <a href="gm_dualth.html#Tdq">Tdq</a> Temperatures of
+experiments (optional input), centigrade C </h4>
+  <h4> <a href="gm_dualth.html#Pdq">Pdq</a> Pressures of experiments
+(optional input), bar </h4>
+  <h4> <a href="gm_dualth.html#ISq">ISq</a> Effective ionic strength
+in aqueous solutions (auto-collected) </h4>
+  <h4> <a href="gm_dualth.html#An">An</a> Stoichiometry matrix for DC
+(end-member) stoichiometry candidates </h4>
+  <h4> <a href="gm_dualth.html#dSTkey">dSTkey</a> Key of the currently
+processed SysEq record </h4>
+  <h4> <a href="gm_dualth.html#dtTprn">dtTprn</a> Internal </h4>
+  <h4> <a href="gm_integ.html#I_allx">I_allx</a> Array of intermediate
+argument values during calculations</h4>
+  <h4> <a href="gm_integ.html#I_ally">I_ally</a> Array of intermediate
+function values during calculations</h4>
+  <h4> <a href="gm_integ.html#Iallst">Iallst</a> Array of intermediate
+step (increment) values during calculations</h4>
+  <h4> <a href="gm_integ.html#Iallpr">Iallpr</a> Array of intermediate
+order values during calculations</h4>
+  <h4> <a href="gm_integ.html#IPstr">IPstr</a> ! String buffer </h4>
+  <h4> <a href="gm_integ.html#IGexpr">IGexpr</a> Number of (diff)
+equations in the system</h4>
+  <h4> <a href="gm_integ.html#IGdoub">IGdoub</a> internal </h4>
+  <h4> <a href="gm_integ.html#p">p</a> Parameter values</h4>
+  <h4> <a href="gm_integ.html#IGy_bg">IGy_bg</a> Initial values
+of&nbsp; y0 = f(x0)</h4>
+  <h4> <a href="gm_integ.html#IG_Txt">IG_Txt</a> Math script of
+differential equations of the Cochy problem</h4>
+  <h4> <a href="gm_integ.html#IGkey">IGkey</a> Integ record key
+in the database</h4>
+  <h4> <a href="gm_integ.html#IGName">IGName</a> Full name of
+the integration problem</h4>
+  <h4> <a href="gm_integ.html#IGbgen">IGbgen</a> Integration interval
+[x0:x]</h4>
+  <h4> <a href="gm_integ.html#IGeps">IGeps</a> Required maximal
+deviation of calculations</h4>
+  <h4> <a href="gm_integ.html#IGstep">IGstep</a> Required maximal
+step value of integration</h4>
+  <h4> <a href="gm_integ.html#xval">xval</a> Initial argument value</h4>
+  <h4> <a href="gm_integ.html#IGmaxi">IGmaxi</a> Maximal allowed
+number of iterations</h4>
+  <h4> <a href="gm_integ.html#IGnstp_0">IGnstp 0</a> Number
+of function evaluations</h4>
+  <h4> <a href="gm_integ.html#IGnstp_1">IGnstp 1</a> Number
+of calculation steps</h4>
+  <h4> <a href="gm_integ.html#IGnstp_2">IGnstp 2</a> Number
+of accepted steps</h4>
+  <h4> <a href="gm_integ.html#IGnstp_3">IGnstp 3</a> Number
+of rejected steps</h4>
+  <h4> <a href="gm_integ.html#yval">yval</a> Current function values</h4>
+  <h4> <a href="gm_integ.html#dy">dy</a> Current values of function
+differentials</h4>
+  <h4> <a href="g_miscel.html#H_page">H_page</a> Record # in Advice
+database</h4>
+  <h4> <a href="g_miscel.html#H_key">H_key</a> Record key in Advice
+database</h4>
+  <h4> <a href="g_miscel.html#Briefp">Briefp</a> Page Title</h4>
+  <h4> <a href="g_miscel.html#H_text">H_text</a> Advice Page</h4>
+  <h4> <a href="g_miscel.html#Contxt">Contxt</a> Context Reference
+line</h4>
+  <h4> <a href="g_miscel.html#ConLab">ConLab</a> Label of array
+of constants</h4>
+  <h4> <a href="g_miscel.html#ConDim">ConDim</a> Dimension of
+array K, I, J; type (I_ F_ D_)</h4>
+  <h4> <a href="g_miscel.html#Const">Const</a> Array of constants</h4>
+  <h4> <a href="g_miscel.html#DSitem">DSitem</a> Specify Data
+Record key</h4>
+  <h4> <a href="g_miscel.html#k_">k_</a> Work param fo calculate ipnc</h4>
+  <h4> <a href="g_miscel.html#RTkey">RTkey</a> Key of currently
+loaded record from PDB</h4>
+  <h4> <a href="g_miscel.html#RTtime">RTtime</a> Date and time
+of last modification of record in PDB chain</h4>
+</ul>
+</body>
+</html>

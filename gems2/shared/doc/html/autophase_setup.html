@@ -1,0 +1,81 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+               
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+               
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+  <title>Autophase Setup Wizard</title>
+                           
+  <meta name="author" content="GEMS-PSI Development Team">
+               
+  <meta name="description" content="Small help page for AutoPhaseDialog">
+</head>
+  <body>
+       
+<h1><img src="gems1.png" height="48" width="48" align="left">
+   GEM-Selektor version 2-PSI</h1>
+       
+<h2>Automatic Setup of Aqueous and Gas/Fluid Phases</h2>
+       
+<hr style="width: 100%; height: 2px;">    
+<h2> </h2>
+       
+<p>This dialog facilitates setup of definitions of the aqueous electrolyte
+phase and the gas/fluid mixture phase that will be automatically assembled
+when opening (or creating) a GEMS modelling project. For the underlying models
+and equations, see the <a href="theorgem.html"><b>theorgem.html</b></a> manual
+and <b>pdf</b> manual files linked to it. <br>
+</p>
+<p>The first tab "Select Aqueous Electrolyte Model" lets you define a built-in
+function for calculating activity coefficients of individual aqueous species.
+These can be selected by clicking on radio-buttons on the left side, or pressing&nbsp;
+<b><tt>Alt-D, Alt-H, Alt-3</tt></b>, ... key combinations. Two last choices
+should be used when none of the built-in functions is applicable, or no aqueous
+phase should be included into the chemical system definition. In the "Parameters"
+frame, you can change some default parameters used in some of the built-in
+aqueous activity functions.&nbsp;</p>
+<p>Clicking on the "Check" button displays a record key of the <a
+ href="gm_phase.html">Phase record</a> to be automatically generated; &nbsp;the
+chosen model and its parameters will be identified in the <a
+ href="gm_phase.html#PhName"><b><tt>PhName</tt></b></a> and <a
+ href="gm_phase.html#PhNote"><b><tt>PhNote</tt></b></a> fields. You can check
+them later when you open the "Phase" page of the "System" window from the
+"Single Thermodynamic System" dialog, mark the phase record key and press
+<b><tt>F7</tt></b>. Note that, when the same modelling project is opened
+next time, this Phase definition record will be automatically deleted and
+generated again without displaying this setup dialog. <br>
+</p>
+<p>The second tab "Select Gas/Fluid Mixture Model" defines the automatically
+generated Phase record for gas or fluid mixture. It functions in a way similar
+to that for the aqueous phase. Note that no Parameters for the gas/fluid
+mixture (on the right side) are used in this version of GEM Selektor. <br>
+</p>
+<p>The setup of automatically generated Phase records for aqueous and gas
+phases can be changed any time upon opening this modelling project. To do
+this, unclick the "Retain setup of aqueous (and gas) phases" in the <a
+ href="gp_howto.html">"Modelling Projects" dialog</a> before selecting in
+the list an exitsting project to be opened. <br>
+</p>
+      
+<hr style="width: 100%; height: 2px;"><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+  <a href="gm_project.html">To Project Module Manual</a></span><a
+ href="gm_phase.html"><span
+ style="font-family: helvetica,arial,sans-serif;"><br>
+    To Phase Module Manual</span></a><br>
+    <tt><a href="index.html"><br>
+    To Contents</a> &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;<a
+ href="g_about.html">About GEM-Selektor</a> </tt><br>
+    <tt><br>
+    end of file</tt>    
+<p>&nbsp;<br>
+    &nbsp; </p>
+    <br>
+   <br>
+  <br>
+ <br>
+</body>
+</html>

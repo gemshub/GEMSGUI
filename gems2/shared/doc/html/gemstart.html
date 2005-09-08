@@ -1,0 +1,2450 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+                                                                        
+                                           
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+                                                                        
+                                           
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+  <title>GEMS Getting Started Manual</title>
+                                                                        
+                                                                        
+                                                
+  <meta name="description" content="Version 2.0.0-PSI">
+                                           
+  <meta name="author" content="GEMS-PSI Development and Support Team">
+</head>
+  <body>
+                                                         
+<h1><img src="gems1.png" height="48" width="48">
+                            <b><font color="#000099"><font size="+2"> </font></font></b><font
+ color="#000066">GEM-Selektor version 2-PSI</font><b><font
+ color="#000099"><font size="+2">&nbsp;</font></font></b></h1>
+                                                         
+<h2><font face="Helvetica, Arial, sans-serif"> Getting Started Manual (for 
+    Beginners)</font></h2>
+                                            <font
+ face="Helvetica, Arial, sans-serif">Those who prefer a modern style<big><small> 
+    of learning software "by doing" may switch to a Screenshot Gallery Tutorial 
+  on GEMS-PSI home page (<font color="#6600cc">http://les.web.psi.ch/Software/GEMS-PSI/screenshots/</font>). 
+  <br>
+     <br>
+     A more detailed introduction in setting up modelling projects and calculating 
+  equilibria can be found in  <a href="#GSM_CALC_EQSTAT">Section 2 below</a>.</small>&nbsp; 
+   </big></font><br>
+                 
+<p><b><small><font face="Helvetica, Arial, sans-serif"><big><a
+ href="#GSM_CALC_EQSTAT"><font color="#993300">Kick-Off         Start (make 
+  your first system)</font></a></big></font></small></b>      </p>
+                 
+<hr width="100%" size="2">                        
+<h3><font face="Helvetica, Arial, sans-serif">Contents</font> &nbsp; &nbsp; 
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;     </h3>
+                                                     
+<p><big> </big></p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#GSM-INTRO"> 1. 
+             Introduction</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_WORKSESSION"> 1.1.&nbsp; Starting and Quitting the Work Session</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a href="#GSM_HELP_BIBLIO"> 1.2.&nbsp;
+ Runtime Help and Bibliography System</a></font></li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_SCRIPT_LIBS">1.2.1.&nbsp; Script Libraries</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_BIBLIO_REF"> 1.2.2.&nbsp; Bibliographic References and your Comments</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#GSM_TOOLTIPS">1.2.3.&nbsp; 
+             Tool Tips and Status Line Help Messages</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_HELP_RUNTIME"> 1.2.4. Access to HTML Runtime and Online Documentation</a></font></p>
+                             </li>
+                                                                        
+    
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a href="#GSM_GEMS_GUI">1.3. Graphical
+ User's Interface (GUI)</a></font></li>
+                              <li>                         
+    <p><a href="#GSM_CALC_EQSTAT"><font
+ face="Helvetica, Arial, sans-serif">2.&nbsp; Calculating Equilibria with 
+             GEM-Selektor</font></a>&nbsp;</p>
+                              </li>
+                                 <li>                                   
+                                                                        
+                               
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_MOD_PROJECTS">2.1. &nbsp;Modelling Projects and GEMS Database</a></font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_OPEN_PROJECT">2.1.1. Opening Existing Projects&nbsp;</a></font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_CREATE_PROJECT">2.1.2. Creating a New Project</a></font></p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a href="#GSM_CREATE_SYSTEM_1">2.1.3.
+ Creating your First Chemical System Definition  (CSD)</a>              
+     </font><br>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_SINGLE_EQSTAT">3.&nbsp; Calculating a Single Equilibrium State</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<p>  </p>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#GSM_SET_BCC"> 3.1.
+Setting up the Bulk Composition of Chemical System</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_RUN_GEMIPM"> 3.2.&nbsp; Running GEM IPM to Calculate an Equilibrium 
+             State</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_VIEW_RESULTS"> 3.3.&nbsp; Examining Results: Equilibrium Speciation</a></font></p>
+                      </li>
+                      <li><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_VIEW_IPM_INPUT">3.4. Examining Results: Input System Definition
+          and Thermodynamic Data</a></font> <br>
+                      </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a href="#GSM_PRINT_RESULTS">3.5. Printing
+ GEM Results and Chemical System            Definition</a></font></li>
+                                                       
+</ul>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a href="#GSM_CLONE_SYSEQ">3.6. Modifying
+     </a></font><a href="#GSM_CLONE_SYSEQ"><font
+ face="Helvetica, Arial, sans-serif">and "Cloning"</font></a><font
+ face="Helvetica, Arial, sans-serif"><a href="#GSM_CLONE_SYSEQ"> Chemical
+        System Definitions</a>&nbsp;</font></li>
+                  <li>                                                  
+                                                                        
+                   
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="file:///C:/GEMS2test/program/doc/html/gemstart.html#GSM_MOD_SYSTEM_STOI">3.6.1.&nbsp;
+        Modifying System Stoichiometry</a></font>&nbsp;</p>
+                  </li>
+                  <li>                                                  
+                             
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_CLONE_SYSEQ_REC">3.6.2. "Cloning" SysEq Records in Project Database 
+             (Also for Other P, T)</a></font>                            
+                      </p>
+                             </li>
+                                              
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_SELECT_PHASES_SPECIES">3.6.3. &nbsp;(De)Selecting Phases and Species</a><br>
+                               </font>   </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_SET_META_CONSTR">3.6.4. Setting Additional Metastability Constraints</a><br>
+                               </font>     </p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a href="#GSM_SET_CORR_G0">3.6.5. Setting
+ Corrections to Input Thermodynamic             Data </a><br>
+                               </font>   </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_SYSTEM_FROM_SCRATCH"> 3.7. Creating a New System Definition  
+         (as an Alternative)</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a href="#GSM_MORE_EQUILIBRIA">3.8.
+More About Calculations of Single Equilibria</a></font><br>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_IRREVER_PROCESS"> 4.&nbsp; Simulation of Irreversible
+      Processes</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_PARENT_SYSEQ">4.1. Creating Parent System Definition</a><br>
+                               </font>   </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_SET_PROCESS_SIM"> 4.2.&nbsp; Setting up a Process
+      Simulator</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_PROSIM_MATH_SCRIPT">4.3. Writing Process Simulation
+      Math Script            </a><br>
+                               </font>   </li>
+                                                                        
+           
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>     
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_SET_PROSIM_SAMPLING">4.4. Setting a Process with
+      Data Sampling</a>            <br>
+                               </font>     </p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_PROSAMPLE_MATH_SCRIPT">4.4.1. Writing a Process
+Data Sampling        Math Script</a><br>
+                               </font>   </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_RUN_PROSAMPLE">4.4.2. Running Process Simulation
+      with Data Sampling</a><br>
+                               </font>     </p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_PLOT_PROSAMPLE">4.4.3. Examining, Plotting and Printing 
+  Sampled        Results</a><br>
+                               </font>   </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_PROFIT_RUN">4.4.4. Running Process Simulation in
+      Graphic Fitting        Mode</a><br>
+                               </font>     </p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_PROSIM_RESULTS">4.5. Examining Process Simulation
+      Results</a><br>
+                               </font>   </li>
+   <li>                                                                 
+                                                                        
+ 
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_INVERSE_TITR">4.6. Process Simulator to Perform
+   an Inverse Titration Sequence</a><br>
+                               </font>     </p>
+                              </li>
+   <li><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_PROCESS_MORE">4.7. More About Process Simulators
+          </a></font><br>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_GTDEMO_SAMPLER"> 5. Using Graphic/Tabulation Data
+      Samplers (GtDemo)</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_CREATE_GTDEMO">5.1. Creating a GtDemo Sampler   
+ </a><br>
+                               </font>   </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_GTDEMO_MATH_SCRIPT">5.2. Writing a GtDemo Math  
+ Script</a><br>
+                               </font>     </p>
+                              </li>
+                              <li>                                      
+                                                                        
+                                 
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_RUN_GTDEMO"> 5.3. Sampling Process Results and  
+ Plotting Graphs</a></font></p>
+                               </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_ADD_EMPIRICAL">5.4. Adding and Plotting Empirical
+      Data</a><br>
+                               </font>   </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html#GSM_GTDEMO_PRINT"> 5.5. Printing Sampled Results using
+      Print Scripts</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_EXTEND_PROJECT"> 6. Extending Modelling Project
+Database</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_DATA_OVERRIDE"> 6.1. Overriding Database Records
+      for Species and Phases</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_SPECIES"> 6.2. Adding New Dependent Components
+      (Species)</a></font></p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_DCOMP">6.2.1. Adding DComp Records</a></font></li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_SET_BIBLIOREF">6.2.2. Setting Up a Bibliography
+Reference</a><br>
+                               </font>     </p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_REACDC">6.2.3. Adding ReacDC Records&nbsp;</a></font></p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_RUN_RTPARM">6.2.4. Tabulating T,P Corrections for
+      Thermodynamic        Data (RTParm Records)</a>&nbsp;</font></li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_RTPARM_PRINT_SCRIPT">6.2.5. Modifying a RTParm Print
+      Script</a><br>
+                               </font>     </p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_PHASE">6.3. Adding New Phase Definitions</a></font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_SINGLE">6.3.1. Creating a Single-Component Phase
+      Record</a></font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_IDEAL">6.3.2. Creating an Ideal Solution Phase
+      Record</a></font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_NONIDEAL">6.3.3. Creating a Non-Ideal Solution
+      Phase Record</a></font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_PHASE_MATH_SCRIPT">6.3.4. Writing Math Script for
+      a Non-Ideal        Mixing Model</a></font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_SORPTION">6.3.5. Creating a Sorption Phase Record</a><br>
+                               </font>     </p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ADD_COMPOS">6.4. Adding New PCO (Compos) Records</a></font></p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_GEMS_DB_MORE">6.5. More About Management of GEMS
+      Databases</a><br>
+                               </font>   </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_PROJECT_EXTEND">7. &nbsp;Extending the Modelling
+      Project</a></font></p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_ELEMENTS_DIALOG">7.1. ElementsDialog Options</a></font></li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_PROJECT_COPY">7.2. Copying Records from GEMS Kernel
+      Database</a><br>
+                               </font>     </p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<ul>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_EQSTAT_RERUN"> 7.3. Re-running already calculated
+      equilibria</a><br>
+                               </font>     </p>
+                              </li>
+                              <li><font
+ face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_PROJECTS_MORE">7.4. More About Modelling Projects</a></font></li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstdbm.html#GSM_MOD_SORPTION">8. Modelling Systems with Sorption
+      Phases</a></font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif">8.1.&nbsp;</font></p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif">8.2. <br>
+                               </font>     </p>
+                              </li>
+                              <li>                                      
+                                                                        
+                            
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#GSM_HOWTO_PROCEED">9. </a><a
+ href="gemstdbm.html#GSM_HOWTO_PROCEED">How to Proceed&nbsp;</a></font></p>
+                              </li>
+                                                       
+</ul>
+                                                       
+<p>  </p>
+                                                       
+<p> </p>
+                                                          
+<h2> &nbsp;</h2>
+                                               
+<hr width="100%" size="2">                                  
+<h2> <a name="GSM-INTRO"></a><font face="Helvetica, Arial, sans-serif">1. 
+  Introduction</font></h2>
+                                                          
+<p><font face="Helvetica, Arial, sans-serif">If you are new to <a
+ href="glossary.html#DT_thermo_modelling">thermodynamic           modeling</a> 
+  and have just installed the GEM-Selektor  code on your     PC   then,  
+within  several hours,&nbsp; this chapter will lead you step    by step 
+ through    a typical modeling session, without going too much into   terminology 
+  or technical   details (but providing necessary links). <br>
+                            &nbsp;<br>
+                          You'll learn how to make a <a
+ href="glossary.html#DT_project">modelling      project</a>, define and "clone"
+       <a href="glossary.html#DT_system">chemical      systems</a>, calculate
+    <a href="glossary.html#DT_equilibrium">equilibrium      states</a>,&nbsp;
+    explore   and print the results, set up a <a
+ href="glossary.html#DT_process_sim">process   simulator</a>, sample and
+plot       results of calculation of a series of  (local/partial) equilibria.
+Next,     you  will learn how to add new <a
+ href="glossary.html#DT_species">chemical     species</a>  and <a
+ href="glossary.html#DT_phase_thermodynamic">phases</a>     to your modelling
+    project database and then extend the project lists while    updating
+the    already  calculated systems. We hope that, eventually, you'll    get
+a feeling   of easiness  and efficiency of GEM thermodynamic modelling, 
+  and decide   to use it and learn  more. <br>
+     </font>                     </p>
+                                                       
+<p><font face="Helvetica, Arial, sans-serif">  If you already know how to 
+  operate the GEM-Selektor <a href="glossary.html#DT_GUI">GUI</a>, then skip 
+  the introductory sections           below and proceed right away to <a
+ href="#GSM_CALC_EQSTAT">Chapter 2  -  how   to calculate chemical equilibria</a>. 
+   </font><br>
+                            &nbsp; <br>
+                            &nbsp; </p>
+                                                       
+<h3> <a name="GSM_WORKSESSION"></a><font
+ face="Helvetica, Arial, sans-serif">1.1. Starting and Quitting the Work Session</font></h3>
+                                                               
+<p><font face="Helvetica, Arial, sans-serif">It is assumed here that you have
+installed GEM-Selektor properly on your           Win32 or Linux PC (if not
+yet done, please consult <a href="gemsetup.html">Installation  and Setup</a>).
+Start the program by clicking on its icon (or execute&nbsp; </font><big><tt>Rungems.bat</tt></big><font
+ face="Helvetica, Arial, sans-serif"> &nbsp;from the command line, if appropriate). 
+  <br>
+                            &nbsp;<br>
+                          Upon the normal startup, you should see a GEM-Selektor
+    Main   Dialog,     with the   "Get Started" and&nbsp; "About"&nbsp; 
+   buttons  in   the  bottom  right corner. A left mouse click on the "Get
+    Started"  button    will  show the beginning of this Manual in the Helpviewer 
+   browser;  by clicking   on the "About" button and   following  hyperlinks 
+    there,  you can also  learn more about the program   and its developers. 
+   The  normal  way of quitting GEMS work session is to   go back to the Main
+    Dialog  and press the "Exit"&nbsp; button  (this will also save the current
+   program configuration).    </font><br>
+                          </p>
+                                                       
+<p> &nbsp; </p>
+                                                       
+<h3> <a name="GSM_HELP_BIBLIO"></a><font
+ face="Helvetica, Arial, sans-serif">1.2. Runtime Help and Bibliography System</font></h3>
+                                                          
+<p><font face="Helvetica, Arial, sans-serif">In GEM-Selektor, you always have
+a direct access to the script- and bibliography database  (<a
+ href="gm_sdref.html">SDref module</a>), which contains default <a
+ href="#GSM_SCRIPT_LIBS">libraries</a> of print/export, import, and template 
+            math scripts, and also helps in keeping track of the source  of
+  any    input      data or comments to your own modelling work. Moreover, 
+ GEM-Selektor    dialogs      and module window pages show <a
+ href="#GSM_TOOLTIPS">tooltips</a>    and  provide    full <a
+ href="#GSM_HELP_RUNTIME">runtime access</a> to HTML   documentation.<br>
+     </font>                    <br>
+                          </p>
+                                                   
+<p> </p>
+                                                                     
+<h4><a name="GSM_SCRIPT_LIBS"></a><font
+ face="Helvetica, Arial, sans-serif">1.2.1.&nbsp; Script Libraries</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">GEM-Selektor comes with a collection 
+  of <a href="gm_sdref.html">SDref </a>records containing <a
+ href="pe_script.html">print/export, import</a>,  and template <a
+ href="gmscript.html">math           scripts</a> - the <a
+ href="gm_sdref.html#DEF_SCRIPT_LIB">default  script       library</a>  - 
+  that should &nbsp;help you in performing data  import/export       and writing
+   math scripts.  <br>
+     </font>                      </p>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">A&nbsp;print script can be selected 
+   when the "Print" icon is clicked or the "Record" "Print..." menu command 
+  activated on any module window. In a similar way, export and import scripts 
+  can be executed using "Record List"           "Export..." or "Record List" 
+  "Import..." menu commands. Template  math     scripts    cannot be executed 
+  immediately; but they can help in writing   your  own <a
+ href="gmscript.html">math scripts</a>.</font><br>
+                         <br>
+                          </p>
+                                                             
+<p>  </p>
+                                                                   
+<h4><a name="GSM_BIBLIO_REF"></a><font
+ face="Helvetica, Arial, sans-serif">1.2.2.&nbsp; Bibliographic References 
+  and           your Comments</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">  It is important for scientific 
+  applications to keep track of bibliographic             sources of input 
+ data. The GEM-Selektor code can provide access   to   one    or  more records 
+ with bibliographic references and comments to  them   (stored    in&nbsp; 
+  <a href="gm_sdref.html">SDref database</a> module)   from  <a
+ href="gm_dcomp.html">DComp</a>, <a href="gm_reacdc.html">ReacDC</a>,   <a
+ href="gm_rtparm.html">RTParm</a>, <a href="gm_compos.html">Compos</a>,  
+<a href="gm_phase.html">Phase</a>, <a href="gems_bcc.html">SysEq</a>, <a
+ href="gm_proces.html">Process</a> and  <a href="gm_gtdemo.html">GtDemo</a>
+            module windows. References to bibliography  (<a
+ href="gdb_rkey.html#dbm_SDref">SDref record keys</a>) are stored in the
+respective database records together with numerical input data.</font></p>
+                                                 
+<p><font face="Helvetica, Arial, sans-serif">On those module windows, you 
+  can find an</font>&nbsp; <big><tt>xSDref</tt></big>&nbsp; (            <tt><font
+ size="+1">x</font></tt>&nbsp; <font face="Helvetica, Arial, sans-serif">stands
+  for any letter like</font>     <big><tt>d,       r, p</tt> ...</big>)&nbsp;
+  <font face="Helvetica, Arial, sans-serif">list with lines referring to
+record(s)       in the SDref       database. Lines in the</font> <tt><big>xSDval</big> 
+  </tt><font face="Helvetica, Arial, sans-serif">list, located  to   the right,
+  usually    contain comments on what has been taken from the referenced 
+  data  source.<br>
+     &nbsp;<br>
+     </font> </p>
+                                                                        
+<p>  </p>
+                                                             
+<h4><a name="GSM_TOOLTIPS"></a><font face="Helvetica, Arial, sans-serif">1.2.3.&nbsp; 
+  Tool Tips and Status Line Help            Messages</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">Tooltips are very short messages 
+  (on yellow background) explaining in brief the meaning of a button or a 
+data  field that you see. Just keep  the mouse pointer 1-2 sec on a data field
+or button to get the tooltip. In GEM-Selektor           module window pages,
+ the content of tooltips will also be shown in   the    lowermost   left
+corner  (status line) if the data object field is  left-mouse    clicked.&nbsp;</font></p>
+                                                   
+<p><br>
+                           </p>
+                                                         
+<p>  </p>
+                                                             
+<h4><a name="GSM_HELP_RUNTIME"></a><font
+ face="Helvetica, Arial, sans-serif">1.2.4. Access to HTML Runtime and Online 
+             Documentation</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">If tool tips are  not sufficient, 
+  or if you wish to learn more systematically           about the program, 
+ then HTML documentation files can  be opened in   a  context-sensitive  
+   way in the built-in "Helpviewer" browser window    of  GEM-Selektor. <br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">You can read more about using 
+  the GEMS Helpviewer in the <a href="gems_gui.html#HELP_RUNTIME">gems_gui.html</a> 
+  manual. <br>
+     </font>                    <br>
+                          </p>
+                                                                        
+         
+<p>  </p>
+                                                     
+<h3><a name="GSM_GEMS_GUI"></a> <font
+ face="Helvetica, Arial, sans-serif">1.3. Graphical User's Interface (GUI)</font></h3>
+                                                                        
+                                                         
+<p><font face="Helvetica, Arial, sans-serif">The GEM-Selektor GUI consists 
+  of dialogs,           (sub)module windows, and the Helpviewer browser.</font> 
+  <font face="Helvetica, Arial, sans-serif">Dialogs control the program operation 
+  (together with toolbars and menus) and display some results in graphical 
+ form (e.g. Graph Dialog, System Dialog).&nbsp;</font> <br>
+                         <font face="Helvetica, Arial, sans-serif">Module 
+windows   provide access for the           user to view and edit input and 
+output data.</font><font face="Helvetica, Arial, sans-serif"> Data Object 
+Descriptors (DOD) form a backbone           of data manipulation in the GEM-Selektor 
+GUI and database.  <br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">You can read more about the GEMS
+user's interface operation in the <a href="gems_gui.html#GEMS_GUI_INTRO">gems_gui.html</a>
+manual. The database functionality is described in <a
+ href="gems_gdb.html">gems_gdb.html</a>,           and formats of record
+keys - in <a href="gdb_rkey.html">gdb_rkey.html</a>           manuals. </font><br>
+                          </p>
+                                                   
+<p><br>
+                           </p>
+                                                     
+<p> </p>
+                                               
+<hr width="100%" size="2">                        
+<p> </p>
+                                                       
+<h2> <a name="GSM_CALC_EQSTAT"></a><font
+ face="Helvetica, Arial, sans-serif">2. Calculating Equilibria using GEM-Selektor</font></h2>
+                                                          
+<p><br>
+     <font face="Helvetica, Arial, sans-serif">                       GEMS
+ program  has two main modes of operation:&nbsp;  "<a
+ href="#GSM_MOD_PROJECTS">Computation  of Equilibria</a>"&nbsp; and&nbsp;
+    "<a href="#GSM_EXTEND_PROJECT">Thermodynamic  Database</a>", &nbsp; accessible
+          through the respective buttons on the Main Dialog that appears
+after      the    program starts. Computing chemical equilibria is actually
+the main     job of   GEM-Selektor, organized in form of the <a
+ href="#GSM_MOD_PROJECTS">modelling    projects</a> (or simply projects),
+ i.e. user-controlled parts of GEMS database    that accumulate all the input-
+ and calculated data related to a certain modelling application. <br>
+     </font>                   </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">The GEMS database can be viewed 
+  as consisting of two parts: a&nbsp; <u>thermodynamic          database</u> 
+  &nbsp;where the input data for the <a
+ href="glossary.html#DT_independent_component">independent components</a>,
+            <a href="glossary.html#DT_dependent_component">dependent components</a>,
+           <a href="glossary.html#DT_phase_thermodynamic">phases</a>, and
+<a href="glossary.html#DT_PCO">compositions</a> are stored and maintained,
+and a&nbsp; <u>systems databas</u><u>e</u> &nbsp;where definitions of  <a
+ href="glossary.html#DT_system">chemical systems</a> and processes with the
+            results of model calculations are  accumulated.&nbsp;</font></p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">Part of the thermodynamic database 
+  is supplied together with the GEM-Selektor          code. It is called a
+ "Default" database and consists of three parts: "Kernel", "Complementary" 
+ and "Specific". <br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">The kernel database part contains 
+  a consistent         collection of species stoichiometries and standard 
+molar  thermodynamic      properties imported from Nagra-PSI chemical thermodynamic
+   database    [<a href="g_litref.html#2002HUMBER">2002HUM/BER</a>] as </font><font
+ face="Helvetica, Arial, sans-serif">described in [<a
+ href="g_litref.html#2003THO/KUL">2003THO/KUL</a>]</font><font
+ face="Helvetica, Arial, sans-serif">. The complementary         database 
+  part has been imported from the Slop98.dat file [<a
+ href="g_litref.html#1997SHOSAS">1997SHO/SAS</a>]. The specific part of the 
+  database (at present under construction) will contain extensions relevant 
+  for e.g. waste disposal applications. <br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">The Default database        
+ also contains a minimal set of <a href="gm_phase.html">Phase</a> definition 
+          records (to assemble modeling projects), and <a
+ href="gm_sdref.html">SDref</a>      records with bibliographic data and template
+script libraries. For details, consult the <a href="kernel_db.html">GEMS
+default database manual</a>. <br>
+     </font>                   </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">The user can add new database 
+  records of any type and thus extend the thermodynamic database or "override" 
+  some default thermodynamic values with her/his own data. This is normally 
+  possible only within the modelling project database files because default 
+  database files are write-protected to ensure compatibility between different 
+  modelling applications. Thus, the files located in a user's project directory 
+  comprise a user's extension part of the GEMS database.&nbsp; <br>
+     </font>                   </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">When a new project is created, 
+  a directory (having the same name as the          project) with empty database 
+  files of all types will be created first.  Then,      a  subset of default 
+  database records covering a selected list  of independent        components 
+  will be copied into these project files, after  that the kernel   database 
+      files will be disconnected from the project.  Further on, the   user 
+ can add    records with thermodynamic data, compositions,  references,  
+scripts, phase    definitions, develop and accumulate records  with equilibria, 
+  process simulators    etc., but nothing will be changed  in the kernel database.&nbsp;
+   &nbsp; <br>
+     </font>                   </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif"> Thermodynamic database records 
+  (of <a href="gm_icomp.html">IComp</a>,          <a
+ href="gm_dcomp.html">DComp</a>,   <a href="gm_reacdc.html">ReacDC</a>,  
+     <a href="gm_compos.html">Compos</a>,   <a href="gm_phase.html">Phase</a> 
+    types)     cannot be modified, created   or deleted even in the user's 
+project     files   during  the program operation   in the "Computation of 
+Equilibria"    mode. To   modify these records, you   should first go back 
+to Main Dialog   and then to   "Thermodynamic  Database"   mode where all 
+<a href="gems_gdb.html">database   management functionality</a>    for all 
+record    types and database files is  provided.&nbsp; </font></p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">In the following steps, we will 
+  consider as an example some equilibria between aqueous   solution (with- 
+ or without the atmosphere), oxide and carbonate mineral phases in the heterogeneous 
+  multiphase Ca-Mn-Fe-C-Na-Cl-N-O-H aquatic system. This numerical example 
+ stems (in a very simplified form) from a paper [<a
+ href="g_litref.html#2000KULKER">2000KUL/KER</a>] and demonstrates a typical
+            process of creating a new modelling project, setting up system
+ definitions           and process simulators, calculating and examining
+equilibrium  states,       and    plotting some simple but useful diagrams.
+<br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">We will &nbsp;proceed   with 
+    extending    the project database (by adding some new species and  phases), 
+    updating the   project and calculating some SSAS (solid solution  - aqueous 
+    solution) equilibria   at different redox conditions to show some powerful 
+    features of the GEM modelling   approach [<a
+ href="g_litref.html#1997KARCHU">1997KAR/CHU</a>,  <a href="2001KARCHU">2001KAR/CHU</a>]
+        on which the GEM-Selektor code is based.    <br>
+     </font>                   </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">After completing these exercises, 
+  you should be able to create easily your own projects and calculate chemical 
+  equilibria, as well as present the results and extend the project thermodynamic 
+  database. Then you may proceed with reading detailed&nbsp; <a
+ href="gems_toc.html">manuals</a>&nbsp; on how the GEM-Selektor   works, how
+consistency of thermodynamic data is maintained,          and, in parallel, 
+    work through more tests and modelling examples   that     will be provided 
+  in the <a href="g_tests.html">test problem suite</a>   and  <a
+ href="g_tutor.html">tutorial</a> files. <br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">Some examples follow those  
+from  the PHREEQC2 User's   Guide <a href="g_litref.html#1999PARAPP">[1999PAR/APP]</a>
+            which should  help you to compare the results obtained by using
+  the    alternative      Law-of-Mass  Action (LMA) and Gibbs Energy Minimization
+     (GEM) techniques     and to better understand  their common features
+and    differences.<br>
+     </font>       <br>
+            <br>
+             </p>
+                                                       
+<p> </p>
+                                                                        
+                  
+<h3><a name="GSM_MOD_PROJECTS"></a><font
+ face="Helvetica, Arial, sans-serif">2.1. &nbsp;Modelling Projects and &nbsp;GEMS 
+             Database</font></h3>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">A modelling project is actually 
+  a directory containing a set of GEMS database          files that &nbsp;keep 
+  a "template" definition of the chemical system,      all    the necessary 
+  input thermodynamic and composition data records,   as   well  as  (input 
+  and calculated) data for many particular equilibrium   systems   with  
+optional  Process Simulator and Graphic/tabulated Data Sampler   records. 
+  GEM   calculations  of thermodynamic equilibria can only be performed  
+in the  context   of a modelling project. To access projects, press the "Computation
+    of Equilibria"    button on the Main Dialog. <br>
+     <br>
+     </font>                                         </p>
+                                                     
+<h4><font face="Helvetica, Arial, sans-serif"><a name="GSM_OPEN_PROJECT"></a>2.1.1. 
+  Opening an Existing Project </font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">After selecting the "Computation 
+  of Equilibria" button on the Main Dialog,          you will see a "Modelling 
+  projects" dialog. All existing projects  are    listed    in the upper part
+  of the dialog window; below, some important    switches   and   buttons 
+are  located (see the &nbsp;<a href="gp_howto.html">gp_howto.html</a>    
+    &nbsp;file for details).&nbsp;<br>
+     </font>                   </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">To open an existing project, 
+  just select its <a href="gdb_rkey.html#dbm_Project">record key</a> in the 
+  list (for example,          </font><big><tt>"TryNPTDB:TestNagraPsiGEMS:"</tt></big><font
+ face="Helvetica, Arial, sans-serif">) and double-click on it or press the
+   "Open      Project"    button.  This (after a few seconds) will get you
+ in  a Project      &lt;name&gt;    "Gibbs Energy Minimization Modelling
+Project"    dialog,  where    &lt;name&gt;   of the project (in this case,
+</font><big><tt>"TryNPTDB"</tt></big><font
+ face="Helvetica, Arial, sans-serif">) is taken  from  the  first field  of
+the Project record key. The same name is given  to the  project  directory 
+   </font><big><tt>.../projects/TryNPTDB</tt></big> &nbsp;<font
+ face="Helvetica, Arial, sans-serif">and is part  of any  file name  in that 
+  directory.  From this dialog, you can proceed to GEM modelling  in  a single 
+  chemical system  or to simulation of irreversible   chemical transfer  
+ processes as sequences  of local/partial equilibrium   states. <br>
+     <br>
+     </font>                                         </p>
+                                                     
+<h4><font face="Helvetica, Arial, sans-serif"><a
+ name="GSM_CREATE_PROJECT"></a>2.1.2. Creating a New Project</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">When you begin a new modelling 
+  application, you have to create a new project          first. From the Main
+  Dialog, press the "Computation of Equilibria"   button       to open the
+ "Modelling projects" dialog. There, click the "New   Project"     button; 
+  it will bring you into a small dialog shown below. </font><br>
+                        </p>
+                                               
+<p><img src="SetProjectKey.png" alt="EnterProjectKey image" width="339"
+ height="237">
+                        <br>
+                        </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">For now, you could just leave 
+  the default project name "MyWork" and press          "Ok". This is not a
+ very good idea, however, because if you will try    to   create  another 
+project later on and do the same again, the program    will  produce an error 
+message because it cannot handle two projects with    the identical    names. 
+So, let us change the project name immediately,  for  instance, to  "Carbonat" 
+    (you can put any other name, of course), also to refer to this  name in
+  the   following text. Holding the mouse pointer   on a field will produce 
+   a tooltip   that tells its meaning. &nbsp;Click  on the "Help" button to
+  see   a help page   about this record key format and length of the key fields
+  (do  not forget  to close the Helpviewer browser    to get back to the
+Enter   Key dialog). Press  "Ok" to proceed. <br>
+     </font>                   </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">This will bring you to a large 
+  Elements Dialog that looks like the Periodic          (Mendeleev) Table 
+of  chemical elements. Each element (<a
+ href="glossary.html#DT_independent_component">Independent Component</a>
+in GEM terminology) is represented by a button, clickable if data for this
+element and its compounds are present in the available part of default thermodynamic
+            database. Clicked buttons (with lighter background) mean that
+the    respective        elements (with species and phases involved) will
+be selected    into this     modelling   project to form stoichiometry basis
+ for your chemical    systems.     Another click   de-selects the element
+("toggle" buttons).  Make  sure that     the following elements  are be selected:
+Ca,Mn,Fe,C,Na,Cl,O,H     and e(Zz)   -  charge. Select also "Nit"  (in the
+upper right corner) to  use  the decoupled     nitrogen to form the model
+ atmosphere. &nbsp;The dialog should now look like this: <br>
+<br>
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><img
+ src="selectElements.png" alt="ElementsDialog" width="676" height="575">
+</font></p>
+<p><font face="Helvetica, Arial, sans-serif"><br>
+Press "Ok"  when  finished. If GEMS     will ask you about the</font>&nbsp; 
+<big><tt>DiscardedRecords.txt</tt></big>    &nbsp;<font
+ face="Helvetica, Arial, sans-serif">file, reply with "Overwrite"    - this
+ diagnostic file is not important now.   <br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">Next, a dialog shown  below
+  will appear: </font><br>
+                        </p>
+                                               
+<p><img src="WhichAqModel.png" alt="WhichAqModel image" width="702"
+ height="435">
+                        <br>
+                        </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif">As seen from this self-explanatory
+dialog, GEMS is about to let you define   the aqueous and gaseous models
+to be included into chemical  systems in the newly-created project. After
+the aqueous electrolyte model (on the first tab) and the gas mixture model
+(the second tab) have been selected, the    program will assemble   the aqueous
+and the gas phase definitions automatically, by collecting        all aqueous
+(gaseous) species  from the default database that conform with the project 
+    system    stoichiometry  basis (in our case Ca, Mn, Fe, C, Na, Cl, Nit, 
+ O,   H, e ).  <br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">Differences between the alternative
+aqueous models may be of importance for experienced modellers, as there is
+no perfect way of computing activity coefficients of aqueous ions and complexes,
+and each model has its pros and cons and covers a certain range of total
+dissolved salt concentration. For now, it is sufficient to take the default
+choice (Ion association model with Davies equation). Likewise, for ambient
+conditions, it is sufficient to take the default gas mixture model (see below).
+<br>
+     </font></p>
+         <br>
+                                               
+<p><img src="WhichGasModel.png" alt="WhichGasPhase image" width="702"
+ height="435">
+                        <br>
+                        </p>
+                                               
+<p><font face="Helvetica, Arial, sans-serif"><br>
+Press the "Ok" button   to assemble the aqueous and gas phase definitions.
+After a few seconds, you should see   the    "Gibbs  Energy Minimization 
+ Modelling Project" dialog, the same as   if you    would just  open an existing
+  project. This means that our new project   "Carbonat"     has been succesfully
+  created; it can be closed and opened  as any other  existing   project.
+<br>
+     </font></p>
+         
+<p><font face="Helvetica, Arial, sans-serif">To close, press the "Back" button 
+  to get  back to the GEM-Selektor   Main Dialog. Now you can simpy open the
+  project "Carbonat",   <a href="#GSM_OPEN_PROJECT">as it has already been 
+described</a>.   <br>
+     </font>                 </p>
+                                           
+<p><font face="Helvetica, Arial, sans-serif">If you are curious&nbsp;what 
+  the program has actually done while creating         the new project, read 
+  a <a href="gp_howto.html#NEW_PROJECT_SIDEBAR">sidebar in the "GEMS Project 
+  HowTo Manual"</a>; otherwise, proceed  to <a
+ href="#GSM_CREATE_SYSTEM_1">creating  your first CSD</a> (Chemical System 
+         Definition) in the new modelling&nbsp; project.</font>&nbsp;  <br>
+                      </p>
+                                           
+<blockquote>                                                   </blockquote>
+         
+<blockquote><font face="Helvetica, Arial, sans-serif"><br>
+       </font></blockquote>
+                                                                        
+                       
+<h4><font face="Helvetica, Arial, sans-serif"><a
+ name="GSM_CREATE_SYSTEM_1"></a>2.1.3. Creating your First Chemical      
+     System Definition (CSD) </font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">Now, after you have created a
+new project "Carbonat", it is time to create         your first CSD, that 
+  is, set bulk composition of the system, temperature        and pressure 
+for  calculation of the equilibrium state. Go into the "Gibbs        Energy 
+Minimization  Modelling Project" dialog and press the button "Single-System 
+      Equilibria  (SysEq)". The program will show the&nbsp;"Single  Thermodynamic 
+System" dialog  (you can read a sidebar below); if it detects  that there 
+are no <a href="gm_syseq.html">SysEq</a> records in the project  directory, 
+it will  automatically start creating a new record and you will  see an <a
+ href="#GSM_ENKEY_DIALOG">"Enter new key" dialog</a>.<br>
+     </font>  </p>
+        <font face="Helvetica, Arial, sans-serif">              You will
+see   a "Single Thermodynamic System" dialog.  This is,  in  fact,    a 
+fully-featured   GUI window (with menus, toolbar icons, two  pages  and the
+  status  line)   that you will see most of the time when calculating chemical
+  equilibria.   The status (lowermost) line of the  window  shows&nbsp; 
+ the key  of currently   loaded SysEq record and some general parameters
+of  equilibrium  state (T,   P, V, pH, pe and IS - ionic strength). Now,
+the status  line indicates  </font><big><tt>"Carbonat:*:*:*:*:*:*:*:"</tt></big>
+ <font face="Helvetica, Arial, sans-serif">and zero temperature, pressure
+and volume,  which means that no system definition is loaded. There are three
+ possibilities  to continue: &nbsp;</font><br>
+         
+<blockquote>          </blockquote>
+       
+<ol>
+                       <li>                                             
+                                                                 
+    <p><font face="Helvetica, Arial, sans-serif">To create a new SysEq record
+  (by executing the "Record"-&gt;"Create"  menu        command and entering 
+  a new record key); </font></p>
+                       </li>
+                       <li>                                             
+                                                                 
+    <p><font face="Helvetica, Arial, sans-serif">To load an existing SysEq 
+  record (by pressing the "Display" &nbsp;<img src="fileopen.png"
+ alt="LoadRecord button" width="20" height="20">
+       &nbsp;        toolbar button and selecting one record key from the 
+appearing  list);&nbsp;</font></p>
+                       </li>
+                       <li>                                             
+                                                                 
+    <p><font face="Helvetica, Arial, sans-serif">To "clone" the currently 
+  active record (by executing the "Record"-&gt;"New(Clone)"  menu command,
+  entering a new SysEq record key, and modifying some input parameters).&nbsp;</font></p>
+                       </li>
+                                               
+</ol>
+      <font face="Helvetica, Arial, sans-serif">  Note that in all three
+cases,   the changes will be recorded in the project         database only
+after the  eqilibrium state is computed (<a href="#GSM_RUN_GEMIPM">see below</a>). 
+As  there is no system definition (SysEq record) in this project yet, we must
+ proceed with creating one. Select the "Record" "Create" menu command and
+examine the appearing dialog.</font><br>
+               
+<p>              </p>
+                                                                    
+<h4><font face="Helvetica, Arial, sans-serif"><a name="GSM_ENKEY_DIALOG"></a> 
+  Enter New Key dialog:</font></h4>
+             
+<p>              <img src="SetSystemKey.png" alt="Set System Key image"
+ width="328" height="242">
+                      <br>
+                     </p>
+                                         
+<p><font face="Helvetica, Arial, sans-serif">This dialog shows tooltips that
+  explain the meaning of eight         fields of (disassembled) <a
+ href="gdb_rkey.html#dbm_SysEq">SysEq record       key</a>.<br>
+                     The first and second fields should be left just as they
+  are.   The   third    field  contains the name of chemical system (default
+  - "MySystem",     we recommend changing it to a more reasonable name).
+The   fourth field    is usually    changed  when the bulk composition (CSD)
+of   the system will be changed;   put there    "1" for  now - this is your
+first   bulk composition.  The fifth   field should    normally  be left
+"0", except   some rare special  cases of  "indefinite" equilibrium.    The
+sixth field   contains pressure (in bar) under  which the equilibrium has
+  to be calculated   (1 bar by default);  the seventh  field must contain
+temperature     (in  centigrade) for the equulibrium   (25  <sup>o</sup>C
+by default). The last     field should be changed if some  metastability
+ constraints or corrections    to thermodynamic data will be  imposed. <br>
+     </font>  </p>
+             
+<p><font face="Helvetica, Arial, sans-serif">              Now, it is time 
+  to think &nbsp;what system and at which conditions     we  want  to model. 
+  Let us begin with a simple hypothetical system at 1  bar  25  <sup>o</sup>C 
+   consisting of 0.3 kg H<sub>2</sub>O and large excess   of  (dry)  atmosphere 
+  (say, 300 kg). To this "open pot with water", we will   add  0.03  moles 
+ NaCl, 1 g CaCO<sub>3</sub>, 1 g MnCO<sub>3</sub>   and 1 g  FeCO<sub>3</sub> 
+   and wait until this system equilibrates completely,   to  follow what will
+  be  the final composition and speciation of the aqueous    phase, and which
+  mineral  phases will precipitate. Let us call this system    "CaFeMnOpen"
+  (put this name  in the third field of the appearing dialog),    and call
+ the above "recipe" variant 1 (put 1 in the fourth field). Press   "Ok" to
+ proceed. &nbsp;</font><br>
+                     </p>
+                                         
+<p><font face="Helvetica, Arial, sans-serif">A "SysEq: Remake parameters" 
+  dialog appears; it is possible to do various         re-configurations of
+ the data structure of the system definition there. Now, simply       press
+ "Ok". This will bring you in the "System" submodule window, "Compos"   
+   page, where the bulk composition of the system can be specified. Two comment
+      lines in the upper part help to identify the CSD when this SysEq record
+     will be printed or displayed later. Enter there something  like </font><br>
+                     </p>
+                                         
+<p><big><tt>"Open system water with added Ca,Fe,Mn carbonate"<br>
+                      "Exercise 1 from Getting Started Manual"&nbsp;  <br>
+                     </tt></big></p>
+                                         
+<p><br>
+                     </p>
+                       
+<hr width="100%" size="2">                                           
+<h2> <a name="GSM_SINGLE_EQSTAT"></a><font
+ face="Helvetica, Arial, sans-serif">3. Calculating a Single Equilibrium 
+          State</font></h2>
+                                                          
+<p><font face="Helvetica, Arial, sans-serif">Now, you are about to put the
+  ingredients together into the "pot" in order        to  calculate equilibrium
+  in the aquatic system open to the atmosphere.      If  you  are interested
+  to learn about philosophy of defining chemical   systems     for  GEM calculation
+  of equilibria,&nbsp; then <a href="ge_howto.html#EQ_HOWTO_INTRO">click
+here   to read a sidebar</a>.</font><br>
+                     &nbsp; <br>
+                     </p>
+                                         
+<blockquote>                                                   </blockquote>
+       
+<p><br>
+                           </p>
+                                                     
+<h3><a name="GSM_SET_BCC"></a><font face="Helvetica, Arial, sans-serif">3.1.
+  Setting up the Bulk Composition of Chemical            System<br>
+    </font>                       </h3>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">On the "Compos" page of "System"
+  window, you will see a </font><tt>&nbsp;<big><a
+ href="gems_bcc.html#CCvp">CCvp</a></big></tt> <font
+ face="Helvetica, Arial, sans-serif">&nbsp;list of <a
+ href="glossary.html#DT_PCO">PCO</a> names from <a href="gm_compos.html">Compos</a> 
+          records connected to the project. These PCO can be viewed as the 
+ ingredients         that we put in the pot at certain quantities according 
+ to the recipe    of   what  has to be cooked. GEM-Selektor offers a lot of
+ flexibility in   representing     quantities of stoichiometries to be combined
+ in the <a href="glossary.html#DT_bulk_compos">bulk chemical composition (BCC)
+ of the         system</a>.&nbsp;</font><br>
+                     </p>
+                                         
+<p><font face="Helvetica, Arial, sans-serif"> To the right of the</font>
+<big><tt>CCvp</tt></big> <font face="Helvetica, Arial, sans-serif">list,
+a column (</font><big><a href="gems_bcc.html#XAun_"><tt>XAun_</tt></a></big>)
+<font face="Helvetica, Arial, sans-serif">of single </font><big><tt>"g"</tt></big>
+  <font face="Helvetica, Arial, sans-serif">letters         is seen; next,
+ a</font> &nbsp;<big><a href="gems_bcc.html#xa_"><tt>xa_</tt></a></big> 
+ <font face="Helvetica, Arial, sans-serif">vector      (filled with zeros)
+is visible, where you can enter the necessary   (positive      or negative)
+PCO quantities to be added to BCC.In the respective   cells   (to   the left)
+in the</font> <big><a href="gems_bcc.html#XAun_"><tt>XAun_</tt></a></big>
+    <font face="Helvetica, Arial, sans-serif">column,     you can define
+<a href="g_useref.html#QUANCONCUNITS">units of   measurement     of quantities/concentrations</a>
+  in which the PCO quantity    is given, separately     for each PCO. The
+default  unit is grams&nbsp; </font><big><tt>"g"</tt></big>.&nbsp;    <br>
+                     </p>
+                                         
+<p><font face="Helvetica, Arial, sans-serif">Now put in the</font> <big><a
+ href="gems_bcc.html#xa_"><tt>xa_</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector 300         against </font><big><tt>"Aqua"</tt></big>,
+  <font face="Helvetica, Arial, sans-serif">300000 against</font> <big><tt>"AtmAirNit"</tt></big>,
+  <font face="Helvetica, Arial, sans-serif">1 against       </font><big><tt>"CaCO3"</tt>,
+   <tt>"MnCO3"</tt>,</big> <font face="Helvetica, Arial, sans-serif">and</font>
+  <big><tt>"FeCO3"</tt></big><font face="Helvetica, Arial, sans-serif">,
+and   0.03 against</font>      <big><tt>"NaCl"</tt></big>. <font
+ face="Helvetica, Arial, sans-serif">For the last entry, do not forget to
+  change</font> <big><tt> "g"</tt></big>      <font
+ face="Helvetica, Arial, sans-serif">(grams) to </font><big><tt>"M"</tt></big>
+  <font face="Helvetica, Arial, sans-serif">(moles) in the</font> <big><a
+ href="gems_bcc.html#XAun_"><tt>XAun_</tt></a></big>      <font
+ face="Helvetica, Arial, sans-serif">cell to the left. If you are curious
+  what is taken, for instance, under the</font>     <big><tt>"AtmAirNit"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> PCO, then mark this name in the list
+  and press </font><big><tt>F7</tt></big>.     <font
+ face="Helvetica, Arial, sans-serif">You will see the "Compos" window where
+  you can view contents of this Compos     record. Note that editing or deleting
+  records in this viewing mode is not    allowed (this can be done in "Thermodynamic
+  Database" management mode only).    Close the "Compos" window to continue.&nbsp;
+  <br>
+    </font>                 </p>
+                                         
+<p><font face="Helvetica, Arial, sans-serif">The actual calculation of the
+  system bulk composition occurs when you switch back to the "Single Thermodynamic
+  System" dialog and click on a "Calculate         BCC" &nbsp;<img
+ src="RunBCC.png" alt="Calculate BCC button" width="20" height="20">
+                    &nbsp; button (alternatively, "Calc"&nbsp; "BCC" menu 
+command).      If  you   entered  everything correctly, no messages will appear
+and you    can immediately   proceed  to <a href="#GSM_RUN_GEMIPM">GEM IPM
+calculation</a>      of the equilibrium   state (next section).  <br>
+    </font>                </p>
+                                       
+<p><font face="Helvetica, Arial, sans-serif">If you are curious first to
+see the   input bulk composition of the system, then         click on the
+"Bulk Composition"&nbsp;<img src="SetCompos.png"
+ alt="Bulk Compos button" width="24" height="25">
+                     &nbsp;toolbar button (or "Data" "Bulk Composition" menu
+  command)     to  get   back to the "System" window, and select there an
+"IComp"  page.    There  you  will see an</font>&nbsp; <big><a
+ href="gems_bcc.html#ICvp"><tt>ICvp</tt></a></big>&nbsp;       <font
+ face="Helvetica, Arial, sans-serif">list  of IComp record keys for Independent
+  Components (stoichiometry  basis     of the  project system) and to the
+right,  a</font> <big><tt><a href="gems_bcc.html#B_">B_</a></tt></big>  <font
+ face="Helvetica, Arial, sans-serif">vector. Numbers now visible in this
+      vector are total moles of Independent  Components, just calculated
+from     PCO  quantities entered in the "Compos" window.  As an alternative,
+these     mole  quantities could have been directly entered  in a</font><big>
+<a href="gems_bcc.html#bi_"><tt>b<u>i_</u></tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector to the right (they  would   
+   be just copied during the BCC calculation). But then you would have  to
+    perform  all necessary conversions and multiplications yourself.</font>
+  <br>
+                     </p>
+                                         
+<p><br>
+                           </p>
+                                                     
+<h3><a name="GSM_RUN_GEMIPM"></a><font
+ face="Helvetica, Arial, sans-serif">3.2.&nbsp; Running GEM IPM to Calculate 
+             an Equilibrium State</font></h3>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">Having the bulk composition
+of the system specified, it is quite easy to run the GEM IPM calculation.
+Just close the "System" window and press the "Calculate IPM"&nbsp;<img
+ src="RunIPM.png" alt="Run IPM button" width="20" height="20">
+                     button on the toolbar (or execute the "Calc" "IPM" menu
+  command).      An  "IPM  Minimization Progress" dialog will pop up  with
+ some basic properties      of the system, updated ca. once per 1 or 2 seconds.
+  <br>
+    </font></p>
+       
+<p><font face="Helvetica, Arial, sans-serif">The calculation  is   finished
+    when &nbsp;a word "Converged" appears on the title of the  Progress 
+ Dialog.    To save the input data and results into a <a
+ href="gm_syseq.html">SysEq</a>    record (with a key appearing to the right
+of toolbar buttons in the&nbsp; "Single Thermodynamic   System" dialog),
+press the "Accept"  button.&nbsp;  The Progress Dialog disappears,    and
+you will see the large&nbsp;"Single    Thermodynamic System" dialog again,
+   this time - its second page, &nbsp;entitled    "Results: Equilibrium State".&nbsp;
+   </font><br>
+                    </p>
+                                       
+<p><br>
+                           </p>
+                                                     
+<h3><a name="GSM_VIEW_RESULTS"></a><font
+ face="Helvetica, Arial, sans-serif">3.3.&nbsp; Examining the Results: Equilibrium 
+             Speciation</font></h3>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">The "Results: Equilibrium State"
+  page of the "Single Thermodynamic System"        dialog displays the most
+  important parameters for the whole system,  phases,     and their species
+  in a hierarchical list view form. What you see (in the    first column)
+is  a list of phases included in the GEM IPM problem. The second   column
+"L"  shows how many species have been included into each phase; the   next
+column  "Type" shows the <a href="g_useref.html#PHASESTATECODES">phase  
+aggregate  state code</a>. The    next column "x (moles)" displays mole quantities
+  of phases at equilibrium;    unstable phases are zeroed off. You should
+see  now five phases present  in  non-zero quantities:</font> <big><tt>"aq_gen",
+  "gas_gen", "Calcite", "Hematite" </tt></big><font
+ face="Helvetica, Arial, sans-serif">and</font><tt>    <big>"Pyrolusite"</big></tt>.&nbsp;
+  <br>
+                    </p>
+                                       
+<p><font face="Helvetica, Arial, sans-serif">A mouse click on the small "+"
+  to the left of a phase name will expand        it and display data for
+all   species of this phase; another click on  the    same  place will "close"
+ the species list. Expand the </font><big><tt>"aq_gen"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> phase  to view    the calculated aqueous
+  speciation in a list below the </font><big><tt>"aq_gen"</tt></big>  <font
+ face="Helvetica, Arial, sans-serif">phase row.    You can drag separators
+  between the column names to shrink or expand each    column (for instance,
+  to see full names of aqueous species).  The "Type"  column  how contains
+ the</font> <font face="Helvetica, Arial, sans-serif"><a
+ href="g_useref.html#DCCLASSCODES">species class  code</a>;   the "x (moles)"
+   column displays mole quantities of species at  equilibrium   or zeros
+for    the dependent component eliminated in the IPM-2  calculation.   The
+next   "log(activity)" column contains decimal logarithms  of activity for
+ all  species, including eliminated ones, expressed in the  respective standard
+  concentration scale (molal for aqueous and surface species,  mole fraction
+  for gaseous, liquid or solid condensed species). The "Concentration"  
+column   shows concentrations (in the respective scale for each phase, i.e.
+  molal  for aqueous species). The last, "ln(gamma)" column, shows natural
+logarithms     of species activity coefficients (again in the respective
+concentration   scale   for each phase).</font>&nbsp;<br>
+                  </p>
+                                   
+<p><font face="Helvetica, Arial, sans-serif">Some general parameters of the
+  aqueous solution are shown in the status        line of the "Single Thermodynamic
+  System" dialog. In this example, pH   =&nbsp;    8.321; pe = 12.288; and
+ effective ionic strength IS = 0.1024  (all  in molal    scale). More detailed
+ information can be viewed in the "EqDemo"  submodule    window pages. This
+ window can be opened by pressing the "Dual  Solution"  &nbsp;<img
+ src="ordertool.png" alt="Dual Solution icon" width="21" height="21">
+                   &nbsp;toolbar button or selecting the "View" "Dual Solution
+   etc..."     menu   command. The "EqDemo" submodule window has five pages:
+   "EqIC" with     data objects  containing equilibrium properties of Independent
+   Components;     "EqPh" with data for phases; "EqDC" with results for Dependent
+   Components     (species);&nbsp;   "EqSurf" with results for sorption phases
+   and surface    patches on them; and   "EqGen" page that shows the state
+ variables  and some   generic output parameters   for the whole equilibrium
+ state. On  the last  page you can see, for instance,   the calculated values
+ of pH, pe, Eh, ionic  strength, and fugacities of gases.   In this example,&nbsp;
+  the latter correspond  to atmospheric values because   of an excess of
+the   gas phase, set by a large    addition (300 kg) of the "dry   atmospheric
+ air" PCO to the bulk system  composition.  <br>
+    </font>              </p>
+                                   
+<p><font face="Helvetica, Arial, sans-serif">Now, switch back to the "Results:
+  Equilibrium State" page of the "Single        Thermodynamic System" dialog
+  and open the</font> <big><tt>"gas_gen"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">phase. Indeed, there      is almost
+10400 moles of gas at this equilibrium state, including ca.  3.76    moles
+CO<sub>2</sub>. Numbers in the "log(activity)" column correspond now to 
+fugacities    of gases at the actual pressure (1 bar). Concentrations  are
+ mole fractions    - now equal to partial pressures because the mixture 
+is  ideal (all activity     coefficients equal 1). Note extremely low fugacities
+  of CH<sub>4</sub> and H<sub>2</sub> gases    at these oxidizing conditions
+dictated by 0.21 bar   partial pressure of oxygen    gas O<sub>2</sub>.</font><br>
+                  </p>
+                                   
+<p><font face="Helvetica, Arial, sans-serif">Close the </font><big><tt>"gas_gen"</tt></big>
+  <font face="Helvetica, Arial, sans-serif">phase and open the </font><big><tt>"Calcite"</tt></big>
+  <font face="Helvetica, Arial, sans-serif">phase.As expected for a single-component
+         mineral, its mole fraction is 1 and log(activity) is very close
+to   0  (in    fact, it is a small number due to limited numerical precision);&nbsp;
+    calcite    is stable in this equilibrium, present in 0.009747 moles quantity.
+    Now,  close  the </font><big><tt>"Calcite"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> and open the </font><big><tt>"Portlandite"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> phase. This time, the phase   is unstable
+     (zero moles), and log(activity) is ca. -9.69 indicating that   the aqueous
+    phase is 9.7 orders of magnitude undersaturated with portlandite.   
+Thus,   in  case of single-component condensed phases in the aquatic system,
+   the&nbsp;log(activity)      column shows, in fact, the logarithm of saturation
+   index. Note that  positive     values may appear in this place only if
+the    mole quantity  of the solid  is   constrained from above by the&nbsp;</font><big>
+<a href="gems_sys.html#dul"><tt>dul</tt></a>    </big><font
+ face="Helvetica, Arial, sans-serif">&nbsp;metastability limit. Otherwise, 
+  positive numbers for a single-component    mineral (especially in zero mole
+  quantity) may point to a serious inconsistency    in the input thermodynamic 
+  data, error in stoichiometry of this mineral,   or incorrect formulation 
+ of the problem (e.g. inadequate bulk chemical composition).    Now, open 
+the</font><big><tt> </tt><tt>"Graphite"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> phase to see a large number (-71.86) 
+in the "log(activity)"       column - it shows how unstable are reducing minerals
+at oxidizing conditions.&nbsp;</font></p>
+                                   
+<p><font face="Helvetica, Arial, sans-serif">A very important part of GEM
+  IPM equilibrium calculation results cannot        be displayed as hierarchical
+  list view. It can be seen only in the "EqIC"       page of the&nbsp;"EqDemo"
+  submodule window (click the&nbsp;"Dual Solution"       &nbsp;<img
+ src="ordertool.png" alt="Dual Solution icon" width="21" height="21">
+                    &nbsp;toolbar button). This part of GEM IPM-2 results 
+consists     of  the   so-called dual solution vector</font><a
+ href="gems_sys.html#u"><tt> <big>u</big>  </tt></a><font
+ face="Helvetica, Arial, sans-serif">of    chemical potentials of independent
+  components at equilibrium   state, - and    the mass balance residuals
+vector</font>   <big><a href="gems_sys.html#Cb"><tt>Cb</tt></a></big>   
+<font face="Helvetica, Arial, sans-serif">that shows the quality of the numerical
+    solution.</font> <br>
+   </p>
+     
+<p><font face="Helvetica, Arial, sans-serif">If the aqueous phase is present 
+    in the system then vectors</font> <big><a href="gems_sys.html#lgm_t"><tt>lgm_t</tt></a></big> 
+    <font face="Helvetica, Arial, sans-serif">and/or</font> <big><a
+ href="gems_sys.html#m_t"><tt>m_t</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">display total molality    concentrations
+    of dissolved elements (excluding H<sub>2</sub>O solvent)  (</font><big><tt>lgm_t</tt></big> 
+  <font face="Helvetica, Arial, sans-serif">in decimal   logarithms). For 
+convenience, the &nbsp;input bulk composition    of the  system - vector</font> 
+<big><a href="gems_sys.html#b"><tt>b</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">- is also    displayed  next to the list
+of IC symbols (</font><big><tt>ICnam</tt></big><font
+ face="Helvetica, Arial, sans-serif">). In the present example,    absolute
+   values of mass balance residuals should all be less than 1e-11  moles.
+ Check  that chemical potential of Ca, u(Ca) = -287.7013 mol/mol and  log
+m(Ca)  = -3.0896. Note that chemical potential of electrical charge  u(Zz)
+has  a quite large positive value 28.2942 or 70.141 kJ/mol - reflecting 
+a strongly  oxidizing redox state of the system. The total molalities of
+Fe  and Mn are  extremely low - log m(Fe) = -13.45 and log m(Mn) = -15.856
+because  the most  stable oxide phases of these metals - goethite FeOOH and
+pyrolusite  MnO<sub>2</sub>  - are  present at the equilibrium state.</font><br>
+                 </p>
+                                 
+<p><font face="Helvetica, Arial, sans-serif">The next page "EqPh" of the "EqDemo"
+window shows the list of included        phases and their main equilibrium 
+ state parameters. The</font> <big><tt><a href="gems_sys.html#Xa">Xa</a></tt></big> 
+ <font face="Helvetica, Arial, sans-serif">vector shows total number of moles 
+ of        all species in each phase;</font> <big><tt><a
+ href="gems_sys.html#phVol">phVol</a></tt></big>        &nbsp;<font
+ face="Helvetica, Arial, sans-serif">displays volumes and</font>&nbsp; <big><tt><a
+ href="gems_sys.html#phM">phM</a></tt></big>        <font
+ face="Helvetica, Arial, sans-serif">vector - masses of phases. The</font> 
+ <big><tt><a href="gems_sys.html#Fa">Fa</a></tt></big>        &nbsp;<font
+ face="Helvetica, Arial, sans-serif">vector shows values of Karpov phase stability
+criterion for phases       present at the equilibrium state;  if absolute
+value of this criterion    is   close to zero  (less than 0.01) then the
+phase can be considered stable.&nbsp;</font><br>
+                 </p>
+                                 
+<p><font face="Helvetica, Arial, sans-serif">The "EqDc" page of "EqDemo" window
+displays calculated parameters of Dependent        Components. The</font> 
+ <big><a href="gems_sys.html#x"><tt>x</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector (mole    quantities    of DC) 
+ represents the prime solution of the GEM problem; the</font>   <big><a
+ href="gems_sys.html#lga"><tt>lga</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector contains log(activity)    values 
+ (in the case of single component phase DC, log(saturation index)).    The</font> 
+ <big><a href="gems_sys.html#gamma"><tt>gamma</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector contains activity    coefficients; 
+ and the</font> <big><a href="gems_sys.html#my"><tt>my</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector  -  molality concentrations (for 
+ aqueous, surface species, and solids). More   data become visible if this 
+ window page is scrolled down (by dragging the   scroller at the right window 
+ border), for instance, the</font> <big><a href="gems_sys.html#Wxx"><tt>Wxx</tt></a></big> 
+ <font face="Helvetica, Arial, sans-serif">vector containing mole fractions 
+    for all Dependent Components.</font><br>
+                 </p>
+                                 
+<p><font face="Helvetica, Arial, sans-serif">On the left side, a list of species
+is located (scrollable together with        numerical data vectors). You
+may want to see an input data record from     thermodynamic   database for
+a given species, e.g.</font> <big><tt>Ca(OH)+</tt></big> <font
+ face="Helvetica, Arial, sans-serif">aqueous complex.     Just mouse-click 
+   the species name in the</font>&nbsp; <big><a
+ href="gems_sys.html#DCnam"><tt>DCnam</tt></a></big>   <font
+ face="Helvetica, Arial, sans-serif">list and   press</font> <big><tt>F7</tt></big> 
+      <font face="Helvetica, Arial, sans-serif">to view (but not edit) a DComp
+ record behind   it.&nbsp;&nbsp; In the  same    way, you can view data for
+ independent components   or phases and  phases   on the respective pages.
+ As usual,</font><tt> <big>F1</big></tt>  <font
+ face="Helvetica, Arial, sans-serif">key  on  any (clicked)  data   entry 
+ will bring you  a HTML help page in the Helpviewer   browser  window.   The
+ "Close"&nbsp; button will get you back to the "Single    Thermodynamic 
+     System" dialog.</font> <br>
+                            &nbsp;&nbsp;</p>
+                                       
+<h3><a name="GSM_VIEW_IPM_INPUT"></a><font
+ face="Helvetica, Arial, sans-serif">3.4. Examining Results: Input System
+          Definition and Thermodynamic Data </font></h3>
+                                           
+<p><font face="Helvetica, Arial, sans-serif">You just have seen how extensive 
+ output information can be viewed after        a single GEM IPM calculation. 
+ Of course, you may want to view the input      data  and setup of this chemical 
+ system definition (CSD). There are several      ways  to see this input information
+ from the  "Single Thermodynamic System"      dialog.  The easiest way is
+to switch to the "Input System Definition"   page   by clicking  on the respective
+ tab. You can switch between the two   "list  view" pages of  the dialog
+by  a mouse click whenewer you need. <br>
+   </font>                 </p>
+                                       
+<p><font face="Helvetica, Arial, sans-serif">On the "Input System Definition" 
+ page, you will also see a list of phase        names, numbers of included 
+ species in each phase, and the aggregate  state      code in the "Type" column,
+ similar to the "Results: Equilibrium  State"   page.   But the rest of columns
+ are different - they can be used  for switching   some   phases (or species)
+ in and out of the CSD, install  metastability constraints,     corrections
+ to input thermodynamic data etc.  In other words, some data  in   this page
+ can be edited, <a href="#GSM_SELECT_PHASES_SPECIES">as described     below</a>.&nbsp;</font></p>
+                                 
+<p><font face="Helvetica, Arial, sans-serif">Clicking on the "+" near the 
+ phase name will expand the list to give access        to all species in this
+ phase. The most important is the "On/Off" column:       a given chemical 
+species will be taken in calculation of equilibrium state if  it   is  marked 
+with "+".&nbsp; If marked with "-", the species will be excluded     from 
+ the GEM problem (and will not appear in the EqDemo window lists or   in&nbsp; 
+  the "Results: Equilibrium State" page). Use right-mouse click  to  edit 
+these  selector switches. The same on-off switches apply to phases  (if  a
+phase is  switched off, all its species will also be turned off). <a
+ href="#GSM_SET_META_CONSTR">See below</a> for more information about CSD 
+        setup with help of the&nbsp;  "Input System Definition" page. </font><br>
+                 </p>
+                                 
+<p><font face="Helvetica, Arial, sans-serif">Alternatively, the input data 
+ can be accessed from the "Data"        menu of the "Single Thermodynamic 
+System" dialog. To see the input thermodynamic     data   for species, execute 
+the "Data" "Thermodynamic Data" menu command. This    will  open a "MTparm" 
+submodule window with two pages. On "Page 1"&nbsp;    you should  see the</font> 
+<big><a href="gems_bcc.html#DCvp"><tt>DCvp</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">list  of  all <a
+ href="gm_dcomp.html">DComp</a> and <a href="gm_reacdc.html">ReacDC</a> 
+   record  keys linked to the project system; click on a species name and 
+  press</font>   <big><tt>F7</tt></big>  <font
+ face="Helvetica, Arial, sans-serif">to view record contents. The</font> <big><a
+ href="gems_bcc.html#DCSvp"><tt>DCSvp</tt></a></big>     <font
+ face="Helvetica, Arial, sans-serif">column to the right shows   whether the
+data for a species will be taken  from   a DComp ("d") or ReacDC   ("r") record.
+Next, the</font> <big><a href="gems_bcc.html#DC_on"><tt>DC_on</tt></a></big> 
+  <font face="Helvetica, Arial, sans-serif">column (with pluses and minuses) 
+     shows which species will be included  or not into the GEM calculation 
+ of   this  CSD. The</font> <big><a href="gems_bcc.html#gTP"><tt>gTP</tt></a></big> 
+ <font face="Helvetica, Arial, sans-serif">column contains   the  input standard 
+  molar/molal Gibbs energies of species, corrected to <i>P</i>  &nbsp;and 
+<i>T</i> &nbsp;of interest (shown in two fields</font> <big><tt><a
+ href="gems_bcc.html#P">P</a></tt></big>     <font
+ face="Helvetica, Arial, sans-serif">and</font> <big><a
+ href="gems_bcc.html#T"><tt>T</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">above). In the next,</font> <big><a
+ href="gems_bcc.html#gEx_"><tt>gEx_</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">column, you can enter a positive    
+  or negative correction to any respective value in the</font> <font
+ face="Helvetica, Arial, sans-serif"><a href="gems_bcc.html#gTP">gTP</a></font> 
+ <font face="Helvetica, Arial, sans-serif">column; this correction applies 
+       only in this CSD for calculation of equilibrium state. Note that for 
+  any    species switched off, the correction does not apply either. The</font> 
+ <big><a href="gems_bcc.html#vTP"><tt>vTP</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">column shows (partial) molar volumes 
+       of species (in J/bar), to be used in computing volumes of phases and 
+ the whole system at the equilibrium state.</font>&nbsp; &nbsp;  <br>
+                 </p>
+                                 
+<p><font face="Helvetica, Arial, sans-serif">Now, close the "MTparm" window 
+ and click on the "Bulk Composition" toolbar       button (or execute the 
+"Data" "Bulk Composition" menu command).&nbsp; This   will    open the (already 
+familiar) "System" window, "Compos" page where  you have    specified the 
+system bulk composition in the </font><big><a href="gems_bcc.html#xa"><tt>xa_</tt></a></big> 
+   <font face="Helvetica, Arial, sans-serif">column. Click the "DComp" button
+      on top of the window to view the "DComp"   page. There you should see
+  the</font>    <big><a href="gems_bcc.html#DCvp"><tt>DCvp</tt></a></big>
+  <font face="Helvetica, Arial, sans-serif">list of record keys and   to
+the left of it, the</font> <big><a href="gems_bcc.html#DC_on"><tt>DC_on</tt></a></big>
+   <font face="Helvetica, Arial, sans-serif">switches   (the same as in the 
+   "MTparm" window) that can be used to re-configure   the  CSD (<a
+ href="#GSM_SELECT_PHASES_SPECIES">see below</a>). To the right   of</font> 
+  <big><tt>DCvp</tt></big> <font face="Helvetica, Arial, sans-serif">list, 
+   a column (filled with "M") allows to set units of quantities/ concentrations
+        for the respective element of the</font> <big><tt>xd_</tt></big>
+<font face="Helvetica, Arial, sans-serif">vector. A non-zero number in the</font> 
+    <big><a href="gems_bcc.html#xd_"><tt>xd_</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">column will add a certain quantity  
+    of this species elemental stoichiometry to the bulk system composition 
+    -  as an alternative to the</font> <big><a href="gems_bcc.html#xa_"><tt>xa_</tt></a></big>
+    <font face="Helvetica, Arial, sans-serif">vector   on the "Compos" page.</font>&nbsp;</p>
+                               
+<p><font face="Helvetica, Arial, sans-serif">Switch to the "Phase" page now. 
+ There you will see a</font> <big><tt>PHvp</tt></big><font
+ face="Helvetica, Arial, sans-serif"> list of Phase record       keys linked 
+ to the project system, with switches on the left side that    let   you to
+ turn some phases on ("+") and off ("-"). The</font> <big><tt>Yof_, Aalp_</tt></big>
+  <font face="Helvetica, Arial, sans-serif">and</font>    <big><tt>Sigm_</tt></big> 
+   <font face="Helvetica, Arial, sans-serif">columns to the right (now all 
+ zeros) may serve for specifying surface    properties   of phases (see <a
+ href="gems_scm.html">gems_scm.html</a>    manual).&nbsp;</font></p>
+                               
+<p><font face="Helvetica, Arial, sans-serif">The next, "IComp" page, displays 
+ the</font> <big><a href="gems_bcc.html#ICvp"><tt>ICvp</tt></a></big>    
+  l<font face="Helvetica, Arial, sans-serif">ist of Independent Components 
+ forming the stoichiometry basis of the project system,     with  switches 
+ (to the left) defining which of IC must be taken into this     CSD and  calculation
+ of equilibrium state. To the right, you should see   the</font>  <big><a
+ href="gems_bcc.html#B_"><tt>B_</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector containing the total   bulk  
+ composition of the present system (in moles). Next to the right,  two columns 
+    for (optional) modification of the</font> <big><tt>B_</tt></big> <font
+ face="Helvetica, Arial, sans-serif">vector are seen:</font> <big><a
+ href="gems_bcc.html#BCun_"><tt>BCun_</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">column (filled with "M") allows     
+ to set units of quantities/concentrations for the respective element  of 
+   the</font>  <big><tt>bi_</tt></big> <font
+ face="Helvetica, Arial, sans-serif">vector, and the</font> <big><tt>bi_</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">column itself. A non-zero number
+  in the</font>  <big><a href="gems_bcc.html#bi_"><tt>bi_</tt></a></big>
+<font face="Helvetica, Arial, sans-serif">column will add certain quantity
+      of Independent Component to the bulk system composition - as an alternative 
+       (or in extension) to the</font> <big><a href="gems_bcc.html#xa_"><tt>xa_</tt></a></big> 
+   <font face="Helvetica, Arial, sans-serif">vector    on the "Compos" page.&nbsp;</font><br>
+                </p>
+                               
+<p><font face="Helvetica, Arial, sans-serif">You may ask - why there are several
+places for entering data to calculate       the system bulk chemical composition
+(</font><big><tt><a href="gems_bcc.html#xa_">xa_</a>,     <a
+ href="gems_bcc.html#xd_">xd_</a>,   <a href="gems_bcc.html#xp_">xp_</a> 
+  </tt></big><font face="Helvetica, Arial, sans-serif">and</font> <tt><big><a
+ href="gems_bcc.html#bi">bi_</a></big> </tt><font
+ face="Helvetica, Arial, sans-serif">vectors)? Doesn't it   seem too complicated?
+    &nbsp;Wouldn't it be simpler to enter just moles  of  Independent Components,
+    as in other modelling codes? &nbsp;The answer  is: the GEMS code gives
+ you  an unmatched flexibility &nbsp;and power in formulating  bulk compositions
+    of chemical systems. We hope that you will appreciate it  in the following
+    numerical examples. You can close now the "EqDemo", "System"  and "MTparm"
+    windows, if not yet done, to come back to the "Single Thermodynamic 
+System"     dialog. </font><br>
+                <br>
+                           </p>
+                                                     
+<h3><a name="GSM_PRINT_RESULTS"></a><font
+ face="Helvetica, Arial, sans-serif">3.5. Printing GEM Results and Chemical 
+             System Definition</font></h3>
+                                                        
+<p>  </p>
+                                                          
+<p>  </p>
+                                                          
+<p>  </p>
+                                                        
+<p><font face="Helvetica, Arial, sans-serif">Sometimes, you may want to have 
+ a tabulated printout of GEM calculation       results and input CSD. There 
+ are several possibilities. The sandard way    of  printing the equilibrium 
+ speciation, prime/dual IPM solutions, and phase    assemblage is to click 
+ on the "Print" &nbsp;<img src="fileprint.png" alt="Print icon"
+ width="20" height="20">
+                 &nbsp; toolbar button (or execute the "Print" "GEM results" 
+ menu command).      This  will open first a dialog "SDref: Please, select 
+ a print script"  with    suitable  script records from the <a
+ href="pe_script.html">print script  library</a>.   Select there a </font><big><tt>"pscript-eqst-aquat:0000:multi:"</tt></big>
+  <font face="Helvetica, Arial, sans-serif">item  and press "Ok"  to proceed. 
+ Now, a standard "Save As" dialog appears, where  you have to select  a directory 
+ and type in a (new) text file name where the results will be printed. Enter, 
+ for instance, </font><big><tt>"Carbonat1eq.txt"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">and press  "Save". That's it - you should 
+ see now again the "Single Thermodynamic System"  dialog. Use your file manager 
+ to find the</font> <big><tt>Carbonat1eq.txt</tt></big> <font
+ face="Helvetica, Arial, sans-serif">file and  open it in the simple ASCII 
+ text editor. You can edit the output, print it  or import into a spreadsheet 
+ program. <br>
+   </font></p>
+     
+<p><font face="Helvetica, Arial, sans-serif">If you are not satisfied with 
+ the printout   or want to print different output data, you can use the</font>
+  <big><tt>"pscript-eqst-aquat:0000:multi:"</tt></big>    <font
+ face="Helvetica, Arial, sans-serif">SDref record as a template for creating 
+ and editing your own print script    (call it</font> <big><tt>"pscript-my-best:1000:multi:"</tt></big>
+  <font face="Helvetica, Arial, sans-serif">and save in your project   sdref 
+ database file), as described in detail in the <a href="pe_script.html">Print/Export 
+     Scripts Manual</a>. </font><br>
+                </p>
+                               
+<p><font face="Helvetica, Arial, sans-serif">In a similar way, you can obtain 
+ a simpler (less official) printout only       of data shown in the "Results: 
+ Equilibrium State" list view page. Just    select   the "Print" "Results: 
+ Equilibrium State Tree..." menu command and   enter the  file name. The&nbsp;"Print" 
+ "Input: System Definition Tree..."    menu command  will print into a text 
+ file the contents of the "Input System    Definition"   list view page. </font><br>
+                </p>
+                               
+<p><font face="Helvetica, Arial, sans-serif">A more elegant way to print out
+the input the CSD data consists in using print       scripts and the "Print"&nbsp;
+"System Definition" menu command. Again,    you   will have to select a suitable
+printing script first and then select    a directory   and enter a file name.
+Take first a</font> <big><tt>"pscript-full:0002:system:"</tt></big><font
+ face="Helvetica, Arial, sans-serif">      script record and enter </font><big><tt>"Carbonat1csd.txt"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">file name. In this file, you  
+ will  see full lists of Dependent Components and Phases, with nothing really 
+    changed   against default values. This printout can be made much more 
+compact    if you   will select a</font> <big><tt>"pscript-normal:0000:system:"</tt></big>
+  <font face="Helvetica, Arial, sans-serif">script record    next time. 
+In  the produced ASCII file, you will see a reasonably condensed    list
+of Compos   (PCO) - only those that have been used for specifying the   
+bulk composition   of the system. The lists of&nbsp; Dependent Components
+  and Phases will  not  appear at all because nothing has been specified
+there.   <br>
+   </font>             </p>
+                               
+<p><font face="Helvetica, Arial, sans-serif">Finally, the input thermodynamic 
+ data for <i>P,T</i> &nbsp;of interest can be printed       by selecting the
+ "Print" "Thermodynamic Data..." menu command. In the   appearing    list,
+ take a</font> <big><tt>"pscript-g-gx-v:0000:mtparm:"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">script record  and enter    a</font> 
+ <big><tt>"Carbonat1-25.txt"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">file name. In this file, you will see 
+ a  nice table  with  all the data that you have seen in the "MTparm" window. 
+  If you wish  to have  a printout in kJ/mol &nbsp;or in kcal/mol, or molar 
+  volumes in cm3/mol,  then  you will have to create and use your own (modified) 
+  print script. <br>
+   </font>                 </p>
+                                       
+<p><font face="Helvetica, Arial, sans-serif"><i>A practical remark:</i> &nbsp;Full 
+ printouts of CSD and GEM results described above       are good when you 
+create and check a few "initial" systems in your modelling       project. 
+However, if you then will generate a series of equilibria, consider      creating
+and using data samplers (in <a href="gm_gtdemo.html">GtDemo</a>     or <a
+ href="gm_proces.html">Process</a></font> <font
+ face="Helvetica, Arial, sans-serif">records) which will save you a  lot 
+ of time in collecting m plotting and printing only relevant input and  output
+   data.</font><br>
+             <br>
+                    </p>
+                                       
+<hr width="100%" size="2">                                         
+<h3><a name="GSM_CLONE_SYSEQ"></a>  <font
+ face="Helvetica, Arial, sans-serif">3.6. Modifying and "Cloning" Chemical
+        System      Definitions </font></h3>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">So far, you have composed your 
+ first CSD, calculated equilibrium, viewed       and printed results. Now, 
+ it is time to think what these results mean,    then,   if necessary, modify 
+ the CSD to make the model more adequate to  reality.    GEM-Selektor makes 
+ this task easy and convenient. <br>
+   </font>            </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">It would be a good exercise to
+close all windows and shut down the GEM-Selektor       program first, then
+start it again, go to "Calculations of Equilibria"    mode,   and from the
+"Single Thermodynamic System" dialog, find and open   your previously   calculated
+equilibrium</font> <big><tt>"Carbonat:G:CaFeMnOpen:1:0:1:25:0:"</tt></big>. 
+    <font face="Helvetica, Arial, sans-serif">If you  get stuck somewhere 
+on the way, this means that you have to read   some parts  of Section 3.1 
+again. <br>
+   </font>            </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Now, you have two options: (1) 
+ to modify CSD, re-calculate equilibrium, and       save results under the 
+ same record key (good for tuning); and (2) to "clone"       this CSD by saving
+ it under a different SysEq record key, then modify   CSD    and re-calculate 
+ the equilibrium state.&nbsp;  <br>
+   </font>            <br>
+                                                </p>
+                               
+<h4><a name="GSM_MOD_SYSTEM_STOI"></a><font
+ face="Helvetica, Arial, sans-serif">3.6.1.&nbsp; Modifying the System Stoichiometry</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">The simplest (and most frequent) 
+ CSD modification is a change in the system       bulk composition. In the 
+ previously calculated equilibrium, we obtained     ionic  strength about 
+0.1 (set by an addition of NaCl) and pH about 8.3   (set  by alkalinity created 
+ by dissolution of calcite at atmospheric CO<sub>2</sub>  partial  pressure). 
+ Let us learn how to control the effect of these two factors  onto  aqueous 
+ equilibria in our system.&nbsp;</font><br>
+               </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Press the&nbsp; "Bulk Composition" 
+ <img src="SetCompos.png" alt="Bulk Composition icon" width="21"
+ height="22">
+               &nbsp; toolbar button and find a</font> <big><tt>"NaCl"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">entry in the PCO list on  the 
+ "Compos"    page (extend the window, if necessary). 0.03 moles NaCl  should 
+   have been   set there that produced the 0.1 m ionic strength at equilibrium.
+    Let us increase   this amount 6-7 times (approximately, to get the ionic
+   strength of seawater).   Type in 0.2 instead of 0.03, press Enter, close
+  the "System" window, and  press the "Calculate IPM" <img
+ src="RunIPM.png" alt="Calculate IPM icon" width="20" height="20">
+               &nbsp; toolbar button. Press "Accept" on the Progress Dialog,
+  when   IPM   calculation  is finished. In the status line of the "Single
+ Thermodynamic     System" dialog,  you should see pH = 8.316 and IS = 0.67.
+ </font><br>
+               </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Now you can compare the calculated 
+ aqueous speciation and total dissolved       concentrations to the previous 
+ run (at 0.1 m ionic strength) that you   should    have printed into the</font> 
+ <big><tt>"Carbonat1eq.txt"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">file. pH has slightly   decreased   
+(by 0.005 units). At the same time, total dissolved calcium  molality increased 
+    from log m(Ca) = -3.093 to -2.987 (hint: open the "EqDemo"  window to 
+see   this number). Examination of aqueous speciation of Ca (e.g.  in "EqDC" 
+page   of "EqDemo" window) in comparison to your previous printout  shows 
+that molalities    of all calcium aqueous species have increased in  spite 
+of the fact that  their  activities decreased. The reason lies in sensibly 
+  lower values of activity  coefficients for charged aqueous species due to
+  elevated ionic strength. <br>
+   </font>            </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Let us proceed with checking 
+ the pH of aqueous solution. There is no way       to set pH as input variable 
+ in GEM calculations; the only way to control      it is to add acid or base 
+ to the system bulk composition. Let us revert    to  the "System" window 
+"Compos" page and add some acid there (0.01 moles)    in  the form of HCl. 
+Compute the equilibrium and view the results. Calculated      pH = 7.7 is 
+now significantly lower, and ionic strength higher (0.717  molal).    <br>
+   </font></p>
+     
+<p><font face="Helvetica, Arial, sans-serif">A look at the "Results: Equilibrium 
+ State" page tells us that almost  a half    of the previously present calcite 
+ phase has dissolved. Indeed, a look into    the "EqDemo" window shows log 
+ m(Ca) = -1.77 , or 1.2 orders of magnitude   (20 times) greater than in the
+ previous run without addition of HCl. If you  have got different pH and
+log  m(Ca) numbers than listed here,   then you most  probably forgot to
+change  the quantity/concentration units   from grams ("g")  to moles ("M")
+for HCl  in the "Compos" page of "System"   window. Ok, that seems to be
+sufficient  to give you a feeling how to modify   CSD and check what happens
+at equilibrium;  remove now the HCl addition and   change the NaCl addition
+back to 0.03 moles,  then recalculate and save the   equilibrium to restore
+the original system.  </font><br>
+             <br>
+                           </p>
+                                                                        
+        
+<h4><a name="GSM_CLONE_SYSEQ_REC"></a><font
+ face="Helvetica, Arial, sans-serif">3.6.2. "Cloning" SysEq Records in Project 
+             Database (Also for Other P, T)</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif"> The just performed exercise 
+ has a drawback that, once we have changed       something in CSD and calculated 
+ equilibrium, the previously calculated    results   are lost (at least if 
+ they were not printed out). This can easily    be avoided   by "cloning" 
+SysEq records, i.e. creating new records using   previously active   one as
+a template. <br>
+   </font>            </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Let us investigate first the 
+ impact of temperature and pressure onto our       system. In the "Single 
+Thermodynamic System" dialog, select the "Record"      "New(Clone)" menu command.
+In the appearing "SysEq: Please, enter a new    key"  dialog, change temperature
+(7-th field) to 5 instead of 25 C and press   "Ok".  You will see the "System"
+window; just close it and calculate the  equilibrium  state (press "Accept"
+when finished). In the field next to the toolbar, you  should see now a new
+record key</font> <big><tt>"Carbonat:G:CaFeMnOpen:1:0:1:5:0:"</tt>  </big><font
+ face="Helvetica, Arial, sans-serif"> and in the status bar - the new temperature
+T = 278.15 K. To compare with the first equilibrium,  you can simply use
+the "Previous" &nbsp;<img src="arrow_left1.png" alt="Previous icon"
+ width="11" height="11">
+                &nbsp;and "Next" &nbsp;<img src="arrow_right1.png"
+ alt="Next icon" width="11" height="11">
+                &nbsp;toolbar buttons (watch the SysEq record keys!), or
+select  necessary     records   from the list using the "Display" <img
+ src="fileopen.png" alt="Display icon" width="20" height="20">
+               &nbsp; button. <br>
+   </font></p>
+     
+<p><font face="Helvetica, Arial, sans-serif">We notice now that pH and IS 
+ (ionic strength) have slightly increased.     Open   the "EqDemo" window, 
+ drag it to the opposite corner of your desktop,     and (by   toggling "Previous" 
+ and "Next" toolbar buttons) watch how the   total  dissolved   molalities 
+ of carbon, oxygen and nitrogen change. As expected,    they all get  larger 
+ at 5 C because of a well known fact that solubility   of atmospheric   gases 
+ in water increases with decreasing temperature. You   can also see  how the
+ input thermodynamic data change with temperature   after you close the "EqDemo"
+ window and open the "MTparm" window (through   "Data" menu). In the same
+way you can study the effect of pressure (put zero  in place of pressure
+  in SysEq record key if temperature is set greater  or equal to 100 C -
+this   will define a "saturated vapor pressure" <i>P</i><sub>sat</sub> &nbsp;as
+ a function of temperature).&nbsp;   <br>
+   </font>            </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Now, let us produce a new system 
+ &nbsp;by changing seriously its bulk composition.So far, we considered aqueous 
+ solution with some minerals (added as metal carbonates) as "open" to the 
+atmosphere, simulated with a very large addition of "Dry atmospheric air". 
+Let us see what will be the effect of "closing" the aqueous part + initial 
+"carbonates", i.e. removing almost all atmosphere. We will also learn how 
+to calculate aqueous speciation in molarities because experimental data are 
+often reported in moles per litre of aqueous solution. </font><br>
+               </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Open the&nbsp;</font> <big><tt>"Carbonat:G:CaFeMnOpen:1:0:1:25:0:"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">system and       "clone" it under 
+ a new record key</font>&nbsp;<big><tt>"Carbonat:G:CaFeMnClos:1:0:1:25:0:"</tt></big>. 
+       <font face="Helvetica, Arial, sans-serif">Then, open the "System" "Compos"
+ page. Change there the addition of water</font>      <big><tt>"Aqua"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">to 1000 g, NaCl to 0.1 mole, and 
+ the addition of air</font> <big><tt>"AtmAirNit"</tt></big>     <font
+ face="Helvetica, Arial, sans-serif">- to 0.1 g. Close the "System" window, 
+ calculate  and accept the new equilibrium     state. <br>
+   </font></p>
+     
+<p><font face="Helvetica, Arial, sans-serif">Already a first glance to the 
+ status  line is enough to see that  the   new recipe has fundametally changed 
+ the  equilibrium.</font> <font face="Helvetica, Arial, sans-serif">pe = -4.396
+ is  now negative  (mildly reducing conditions), pH dropped to 7.288 (without
+ any addition of  HCl), and the stable phase assemblage has totally changed.
+ Instead of Pyrolusite  (Mn(IV) oxide), Rhodochrosite  (MnCO<sub>3</sub>) 
+appears; two more iron phases - Siderite  and Goethite - appear in addition 
+to hematite; Calcite is still there but  about 2/3 of initial addition has 
+dissolved; and only 2 mmol of gas phase is  present. Examination of the gas 
+phase (if you open it in the "Results: Equilibrium  State" page) shows that 
+this gas is now mainly nitrogen with some 150 times  higher partial pressure 
+ of CO<sub>2</sub> than atmospheric, plus traces of hydrogen.  Fugacity of 
+oxygen (log(activity)=   -71.55 for O<sub>2</sub>) is now extremely low.</font> 
+<br>
+   </p>
+     
+<p><font face="Helvetica, Arial, sans-serif">Furthermore, the aqueous speciation
+    has drastically changed too. You can see it in the expanded</font> <big><tt>"aq_gen"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">phase:   dissolved iron is now 
+dominated by Fe<sup>+2</sup> and its complexes, and concentrations   of Mn<sup>+2</sup> 
+ ion and its complexes are almost 10 orders of magnitude higher. A  look at
+ total dissolved molalities (in the "EqDemo" window) shows that log  m(Fe) 
+ = -4.9 is almost 9 orders and log m(Mn) = - 5.09 is 10.8 orders of  magnitude 
+ greater than that in the "open" system. Chemical potential of charge,  u(Zz) 
+ = -10.12, is now also negative (it was +28 in the open  system).&nbsp;&nbsp;</font></p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">What about molarities of aqueous 
+ species? Change to the "EqPh" page and       check there the calculated volume
+ of aqueous phase (1004.6 cm<sup>3</sup>). One   can    expect that if one
+ takes about 4.6 g less water addition in the bulk  composition    of the
+system, the volume will be almost 1 L and then moles  of aqueous species
+  in the&nbsp;</font> <big><tt>x</tt></big> &nbsp;<font
+ face="Helvetica, Arial, sans-serif">vector (primal solution) will be numerically 
+equal to molarities. Let   us try it: close the "EqDemo" window, open the 
+"System"  window and in the "EqDC"   page, find water</font> <big><tt>"H2O@"</tt></big> 
+<font face="Helvetica, Arial, sans-serif">in the species  list. To the right 
+of this   record key, change "M" (moles) to "g" (grams)  and in the respective</font> 
+ <big><a href="gems_bcc.html#xd_"><tt>xd_</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">column  cell, enter -4.6 (negative  
+additions are allowed as long as they do not  produce negative values in the
+ bulk composition of the system). Alternatively,  instead of using</font> 
+ <big><tt>xd_</tt></big> <font face="Helvetica, Arial, sans-serif">vector, 
+  you could change the water addition on the "Compos" page (</font><big><a
+ href="gems_bcc.html#xa_"><tt>xa_</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector) to 995.4 grams. Close    the 
+ "System" window and re-calculate equilibrium. <br>
+   </font></p>
+     
+<p><font face="Helvetica, Arial, sans-serif">The numbers seen in the    status 
+ line have changed slightly, of course. But inspection of the aqueous    phase
+ volume (999.99 cm<sup>3</sup>) tells us that the aqueous speciation   seen
+ in  the</font>  <big><a href="gems_sys.html#x"><tt>x</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">vector on "EqDC" page  (or in  the 
+expanded aqueous phase on "Results: Equilibrium State" page)  can be taken
+ now safely as molarities (you still see molalities in the "Concentration" 
+    column). A conversion factor from the molal (in which log(activity), pH
+  and pe are given) to the molar concentration scale for this system can be
+found simply by dividing    any molarity by molality. For example, take the
+Ca<sup>+2</sup> ion: Factor = 0.0025544    / 0.0025664 = 0.995324, log(Factor) 
+= -0.002035, or only 0.002 pH, pe or log(activity)   units, which can, in 
+principle, be neglected. &nbsp;Please, note that such a calculation of molarities 
+is only as good as the partial molal volumes of aqueous species and water 
+available in the thermodynamic database.&nbsp;</font>              </p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Interestingly, what will happen 
+ if even less "air" will be added to the       system bulk composition? To 
+ explore this, let us "clone" a new SysEq  record&nbsp;</font><big><tt>"Carbonat:G:CaFeMnClos:2:0:1:25:0:"</tt></big> 
+     &nbsp;<font face="Helvetica, Arial, sans-serif">by changing  to 2 the 
+ fourth field (CSD variant) of the record key.    In the appearing  "Compos" 
+ page, change addition of</font> <big><tt>"AtmAirNit"</tt></big>  <font
+ face="Helvetica, Arial, sans-serif">from   0.1 g to 0.0001  g, close the 
+ window and perform the GEM IPM calculation.</font><font
+ face="Helvetica, Arial, sans-serif"> The equilibrium   state  has changed 
+ again! The "Graphite" phase appears now,  the gas phase has disappeared. 
+Inspection of &nbsp;gas   fugacities (log(activity)   in</font> <big><tt>"gas_gen"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">phase) shows that (except   nitrogen), 
+ the dominating   gas would be CO<sub>2</sub>, followed by methane CH<sub>4</sub>, 
+ and then H<sub>2</sub>.  Fugacity of oxygen is astronomically  small ( -70.77 
+ in log scale).&nbsp;</font></p>
+     
+<p><font face="Helvetica, Arial, sans-serif"></font></p>
+                             
+<p><font face="Helvetica, Arial, sans-serif">Let us try how the program will 
+ react if we totally remove addition of       </font><big><tt>"AtmAirNit"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">from the bulk system composition. 
+ "Clone" a new  SysEq     record</font>&nbsp; <big><tt>"Carbonat:G:CaFeMnTest:2:0:1:25:0:"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">(you can delete     it later). 
+In the "Compos" page, zero off the air addition and press the    "Calculate 
+BCC" button. Now you get something new - a "Missing  IC Warning"    dialog, 
+showing that no moles are going to be specified for  the</font> <big><tt>"Nit"</tt></big> 
+    <font face="Helvetica, Arial, sans-serif">Independent Component. The program
+ does not know whether   this is a mistake    or the user did it deliberately
+ (as we did), so it gives  the user an opportunity    to think again. If
+checkbox(es)  for the missing  elements will be checked   than the fill-out
+value(s) will  be inserted into  the</font> <big><tt>bi_</tt></big> <font
+ face="Helvetica, Arial, sans-serif">vector and bulk  composition recalculated. 
+ Otherwise, the program   will switch this(these) element(s) off together 
+with all their species and   &nbsp;single-component phases. Let us press the
+"Check/Ok" button and then   investigate the "IComp" page. Indeed, the</font> 
+<big><tt>"Nit"</tt></big><font face="Helvetica, Arial, sans-serif"> independent 
+component   is now turned off. On the "Input System Definition" page of the 
+"Single Thermodynamic  System" dialog, expand the </font><big><tt>"gas_gen"</tt></big> 
+<font face="Helvetica, Arial, sans-serif">phase to see that</font> <big><tt>"N2-atm"</tt></big>
+   <font face="Helvetica, Arial, sans-serif">gas is turned off, as well as 
+ (in the</font> <big><tt>"aq_gen"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">phase) the</font> <big><tt>"Nit2@"</tt></big>
+   <font face="Helvetica, Arial, sans-serif">dissolved gas. All right, press 
+ now the "Calculate BCC" and then "Calculate  IPM" buttons to compute equilibrium</font>. 
+ <font face="Helvetica, Arial, sans-serif">The results should be pretty  
+  similar to the "almost closed" variant (with 0.0001 g addition of air),
+  except    that the gas phase is absent from stable phase assemblage, and
+ you will  not  see the </font><big><tt>Nit</tt></big> <font
+ face="Helvetica, Arial, sans-serif">species at all in the output lists.&nbsp;</font><br>
+               &nbsp;</p>
+                               
+<h4><a name="GSM_SELECT_PHASES_SPECIES"></a><font
+ face="Helvetica, Arial, sans-serif">3.6.3. &nbsp;(De)Selecting Phases   
+         and Species</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">   In the previous section, we
+have learned that GEM-Selektor is capable to exclude automatically all species
+of Independent Component(s) assigned zero quantity(ies) in the system bulk
+composition. This functionality is frequently used when a new system definition
+has to be created "from scratch"      (i.e. without "cloning" from the previous
+CSD) and the bulk composition    covers  &nbsp;only part of IC forming stoichiometry
+basis of the project   system. However, in many cases you will need turning
+some components and  phases on or off to refine your CSD or to switch back
+an Independent Component  with its species and phases. <br>
+   </font>           </p>
+                           
+<p><font face="Helvetica, Arial, sans-serif">Let us first check how to turn 
+ off some phases and what impact it will      have on the equilibrium state. 
+ In the&nbsp; "Single Thermodynamic System"      dialog, press the "Display" 
+ <img src="fileopen.png" alt="Display icon" width="20" height="20">
+              &nbsp; toolbar button (alternatively, press </font><big><tt>F6</tt></big><font
+ face="Helvetica, Arial, sans-serif"> or select   the   "Record"   "Display" 
+ menu command). In the appearing "SysEq: Existing   CSD   and equilibria 
+records in project database" list, select the&nbsp;   record    </font><big><tt>"Carbonat:G:CaFeMnOpen:1:0:1:25:0:"</tt></big>. 
+  <font face="Helvetica, Arial, sans-serif">This calculation   results  were 
+ discussed in detail (<a href="#GSM_VIEW_RESULTS">see above</a>),   although 
+   that model is not realistic  for the low-temperature aquatic systems  because
+   neither hematite nor pyrolusite  control dissolved Fe and Mn in  Earth
+surface-   and groundwater at low temperatures.  Indeed, the calculated 
+total dissolved   Fe (ca. 1e-14 molal) and Mn ( less  than 1e-15 molal) are
+ far below the values  typically reported for surface  ocean waters (ca. 1e-9
+ and 1e-10 molal, respectively).Therefore,  we can try  to switch off Goethite
+ and Pyrolusite  (the most stable oxides)  and see what  happens.</font> <br>
+              </p>
+                           
+<p><font face="Helvetica, Arial, sans-serif">As our GEM problem is going to
+become smaller (two phases and two species      are to be excluded), it has
+to be "cloned" under a different CSD name  (third    field of SysEq record 
+ key). Execute the "Record" "Clone" menu command  and change</font>    <big><tt>"CaFeMnOpen"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">to</font> <big><tt>"CaFeMnHypO"</tt></big><font
+ face="Helvetica, Arial, sans-serif">; in the appearing  "System"    "Compos" 
+ page, modify the first comment line by adding</font> <tt>"(metastable)"</tt>.&nbsp;
+       <font face="Helvetica, Arial, sans-serif">The easiest way to switch 
+ off two phases is to close the "System" window     and click on the "Input 
+ System Definition" tab. There, with double right-mouse      clicks, change 
+ in the "On/Off" column "+" to "-" for      &nbsp;</font><big><tt>"Goethite","Hematite"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">and</font> <big><tt>"Pyrolusite"</tt></big>. 
+ <font face="Helvetica, Arial, sans-serif">You can expand entries for  these 
+    phases to see that the the respecitve Dependent Components were also turned
+    off. To update the CSD, click now the "Calculate BCC"&nbsp;<img
+ src="RunBCC.png" alt="Calculate BCC icon" width="20" height="20">
+               toolbar button, then calculate and accept the new equilibrium
+  state.    </font><br>
+              </p>
+                           
+<p><font face="Helvetica, Arial, sans-serif">As seen on the "Results: Equilibrium 
+ State" page, new phases appear at      this (metastable) equilibrium -&nbsp; 
+  "Ferrihydrite-mc" and "Manganite".   Check   total dissolved Fe and Mn (hint:
+ use the "Detailed Results" <img src="ordertool.png"
+ alt="Dual Solution icon" width="21" height="21">
+              &nbsp;toolbar button); now, log m(Fe) = -9.45 and log m(Mn) 
+=  -11.29.     It  is known (Gramm-Osipov, 1996) that instead of manganite 
+MnOOH,  hausmannite      Mn<sub>3</sub>O<sub>4</sub> appears to be controlling 
+dissolved  Mn in the oxic seawater. Let   us   see how does it work - "clone" 
+another  test SysEq (with name</font> <big><tt>"CaFeMnTes2"</tt></big>). 
+    <font face="Helvetica, Arial, sans-serif">Try an alternative way to switch
+off  a phase: go to the "Phase" page of   "System"  window, find</font> <big><tt>"Manganite"</tt></big><font
+ face="Helvetica, Arial, sans-serif">, change "+" to "-" to the left, and
+ change   to "DComp"  page. There you can check what happened to "manganite"
+ species:   as pyrolusite,  it is now also switched off. Close the "System"
+ window, press&nbsp;  "Calculate  BCC"&nbsp;<img src="RunBCC.png"
+ alt="Calculate BCC icon" width="20" height="20">
+                toolbar button, then calculate and accept the equilibrium 
+state.</font><font face="Helvetica, Arial, sans-serif"> Indeed,    now 0.0029 
+mol</font> <big><tt>"Hausmannite"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> appear at this (even more   metastable) 
+    equilibrium state. Total dissolved Mn is now log m(Mn) = -9.415  - a quite
+    realistic value for sea- or stream water. </font><br>
+   </p>
+     
+<p>           <font face="Helvetica, Arial, sans-serif">In a similar way, 
+ you can switch some components and phases back  into   the  GEM problem. 
+Note, however, that unlike turning off, this process   is   not fully automated 
+ in GEM-Selektor. The correct order   is:   first, turn on Independent Component 
+ (if any) in the "System" "IComp"   page   and &nbsp;change  the system bulk 
+ composition to cover this IC; second,   switch  on some phases  (in the "Input
+ System definition" page); &nbsp;expand   phases  and check the  species to
+ be turned on (especially aqueous phase).   Finally,  press the "Calculate 
+  BCC"&nbsp;<img src="RunBCC.png" alt="Calculate BCC icon" width="20"
+ height="20">
+                 toolbar button and then check again phases and species that
+  you   have   switched on, as well as the bulk composition of the system
+(vector</font>    <big><tt>B_</tt></big><font
+ face="Helvetica, Arial, sans-serif">).   Now, you can calculate and save
+your new equilibrium. Exercise   this sequence   to restore the</font> <big><tt>"Nit"</tt></big><font
+ face="Helvetica, Arial, sans-serif"> independent component and its species 
+  in the</font>&nbsp;     <big><tt>"CaFeMntTest"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">SysEq record.</font><br>
+              <br>
+               </p>
+                                                     
+<h4><a name="GSM_SET_META_CONSTR"></a><font
+ face="Helvetica, Arial, sans-serif">3.6.4. Setting Additional Metastability 
+             Constraints</font></h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">Metastability is quite common 
+ in low-temperature geochemical systems. For instance, river waters are often 
+ and normative seawater is always oversaturated      to dolomite, calcite 
+and aragonite, nevertheless, these minerals (especially      dolomite) do 
+not precipitate or do it very slowly, except at some special      conditions 
+(evaporation, bilolgical growth). This kind of kinetic controls      can be
+simulated in GEM-Selektor using one- or two-sided metastability   constraints 
+  on the sought-for molar quantities of species in the prime  GEM solution 
+(more  in <a href="theorgem.html">theorgem.html</a> manual).  </font><br>
+              </p>
+                           
+<p><font face="Helvetica, Arial, sans-serif">Display the </font><big><tt>"Carbonat:G:CaFeMnHypO:1:0:1:25:0:"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">SysEq record created in our <a
+ href="#GSM_SELECT_PHASES_SPECIES">previous exercise</a>. Concentration of 
+ total dissolved calcium in seawater is about 10.65    millimol/kg,   and 
+in the calculated equilibrium it is less than 1 millimol/kg    due to presence 
+   of 9.75 millimoles of stable calcite phase (CaCO<sub>3</sub>) at  the atmospheric
+  fugacity   of CO<sub>2</sub> gas. Assuming that precipitation of calcite
+  is strongly inhibited, let us restrict the amount of calcite  formed in
+ the partial equilibrium to 0.1 millimol.  </font><br>
+   </p>
+     
+<p><font face="Helvetica, Arial, sans-serif">To do so, first "clone" a new 
+ system </font><big><tt>"Carbonat:G:CaFeMnHypO:1:0:1:25:1:"</tt></big><font
+ face="Helvetica, Arial, sans-serif">, &nbsp;i.e.      change the last field 
+ of SysEq record key; edit the comment lines by writing     there something 
+ about partial equilibrium to calcite, and&nbsp; change  the   total addition 
+ of CaCO<sub>3</sub> to the system bulk composition from 1 g to 0.3 g.   In
+ the "Input System Definition" page, expand the "Calcite" phase and find 
+ the "Lower_KC", "Upper_KC" and "KC_type" columns (extend the window,   if
+ necessary).  For all species in the usual, "complete equilibrium" systems, 
+   these columns  contain trivial codes and values.</font> <big><big><tt>"B"</tt></big></big> 
+ &nbsp;<font face="Helvetica, Arial, sans-serif">in "KC_type" means  "both-side 
+  constraints", from 0 moles ( lower) to 1e6 moles (upper) restriction  values. 
+  Right-click on&nbsp; "1e+06" &nbsp;in the "Upper_KC", edit  it to  0.0001 
+ and press </font><big><tt>Enter</tt></big><font
+ face="Helvetica, Arial, sans-serif">. Suppress also the Aragonite phase by
+expanding it and entering 111111 (J/mol) in the "G0_corr." column, to prevent
+that Aragonite precipitates instead of Calcite. Now, calculate BCC and then
+compute  the equilibrium state.</font><br>
+              </p>
+                                                
+<p><font face="Helvetica, Arial, sans-serif"> Our metastability constraint 
+ for calcite caused a quite vivid effect:      calculated pH = 9.15 is 0.8 
+ units greater than before, and ionic strength      is 1.2 times greater. 
+Calcite phase is present, but in the prescribed  quantity    0.0001 mol; expand
+this phase to see log(activity) = 2.58 - pointing to  a  large oversaturation 
+of aqueous phase with respect to calcite. Check  total    dissolved calcium: 
+ log m(Ca) = -2.015, or m(Ca) = 9.67 millimolal  - close    to calcium concentration 
+ in seawater. Switch to the "PhEq" page  and find   there the value of Karpov 
+ criterion (Fa) for calcite: 380. As this criterion   for all stable phases 
+ must be almost zero, we can conclude that the kinetic   constraint to calcite 
+ indeed greatly increases "metastability"  of the model   system and turns 
+ it, in fact, into a "partial equilibrium"  because the rest   of species 
+were not constrained and have equilibrated at higher total alkalinity   created 
+ by extra dissolved calcium. Obviously, if precipitation kinetics  of calcite 
+ is known, one could model the whole process as function of time  - until 
+the complete equilibrium will be achieved. <br>
+   </font>           </p>
+                           
+<p><font face="Helvetica, Arial, sans-serif">In the same way, the dissolution 
+ kinetics can be modeled. The only difference      is that instead of the 
+upper, the non-trivial <b>lower</b> constraint  to   the amount of species 
+has to be specified, to prevent disappearance of the   unstable solid phase. 
+Alternatively to the&nbsp;"Input System Definition"     page, metastability 
+constraints can be set in the "System" "DComp" page   (scroll  the whole page
+down to see the</font> <big><a href="gems_bcc.html#dll_"><tt>dll_</tt></a></big>
+      <font face="Helvetica, Arial, sans-serif">and</font>&nbsp; <big><a
+ href="gems_bcc.html#dul_"><tt>dul_</tt></a></big> <font
+ face="Helvetica, Arial, sans-serif">columns).</font> &nbsp;     &nbsp; &nbsp; 
+ &nbsp; <br>
+              <br>
+                           </p>
+                                                     
+<h4>     <a name="GSM_SET_CORR_G0"></a><font
+ face="Helvetica, Arial, sans-serif">3.6.5. Setting Corrections to Input 
+           Thermodynamic Data</font>&nbsp;</h4>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">After we created a CSD where 
+ "Hematite" and "Goethite" phases were excluded, we found that      the solubility 
+ of inorganic Fe in the open system calculated in presence     of microcrystalline 
+ "Ferrihydrite-mc" phase became ca. 2-3 times below that  usually    reported 
+ (about 1 nM). We can suspect that the input <i>G<sup>o</sup></i> value  of
+ microcrystalline ferrihydrite    is a bit too negative. Whatever could be
+ the reason, the question  is: how this   input value should be corrected 
+in order to obtain the expected  dissolved iron concentration? <br>
+   </font>           </p>
+                           
+<p><font face="Helvetica, Arial, sans-serif">Display the earlier </font><big><tt>"Carbonat:G:CaFeMnHypO:1:0:1:25:0:"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">system and expand the</font> <big><tt>"Ferrihydrite-mc"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">phase to see that  it   refers 
+to a</font> <big><tt>"Fe(OH)3(mic)"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">Dependent Component. Using the "Data" 
+     menu, open the "MTparm" (input thermodynamic data) window, find there 
+ a  DC</font>  <big><tt>"Fe(OH)3(mic)"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">in the list, click on it and (using </font><big><tt>F7</tt></big>
+<font face="Helvetica, Arial, sans-serif">key) open the source   ReacDC record.<br>
+   </font>           </p>
+                                                
+<p><font face="Helvetica, Arial, sans-serif">We can now correct the G<sup>o</sup> 
+ value of the </font><big><tt>"Fe(OH)3(mic)"</tt>      </big><font
+ face="Helvetica, Arial, sans-serif">species only for this calculation of 
+ equilibrium state, without changing    its  ReacDC database record. "Clone" 
+ the presently     displayed system under a</font>  <big><tt>"Carbonat:G:CaFeMnHypO:1:0:1:25:2:"</tt></big>
+    <font face="Helvetica, Arial, sans-serif">SysEq   record key (change
+only  the last field).&nbsp;  Mark in the comment   lines   something like</font> 
+ <tt>"corr. G0 HFO"</tt> <font face="Helvetica, Arial, sans-serif">and switch 
+ back to the "MTparm" window, and find there a cell in the </font><big><tt>gEx_</tt></big> 
+ column against &nbsp;the <big><tt>"Fe(OH)3(mic)"</tt><font
+ face="Helvetica, Arial, sans-serif"><small> species. </small></font></big><font
+ face="Helvetica, Arial, sans-serif">Which value to put there instead of zero?
+We expect to increase total   dissolved  Fe molality in ca. 3 times (0.5
+orders of magnitude). For a reaction involving   one Fe(OH)3,solid this will
+be 0.5 * 2.303RT &nbsp;= 0.5*5708     = 2854 J/mol. So, type this positive 
+ correction to G<sup>o</sup> value of </font><big><tt>"Fe(OH)3(mic)"</tt></big><font
+ face="Helvetica, Arial, sans-serif">      into the respective</font> <a
+ href="gems_bcc.html#gEx_"><big><tt>gEx_</tt></big></a> <font
+ face="Helvetica, Arial, sans-serif">vector cell; press "Enter" and calculate 
+ the equilibrium state. Alternatively,    the same  correction could have 
+been done directly in the "Single Thermodynamic System" dialog in the </font><font
+ face="Helvetica, Arial, sans-serif"> in the "G0_corr." column</font><font
+ face="Helvetica, Arial, sans-serif"> (after expanding the phase)</font>.<font
+ face="Helvetica, Arial, sans-serif"> Check now the total dissolved Fe: log 
+ m(Fe) =&nbsp; -8.95 - a quite realistic value. The </font><big><tt>gEx_</tt></big> 
+  <font face="Helvetica, Arial, sans-serif">corrections can also be used for
+ "kicking off" a species  from equilibrium  by inserting a large positive 
+addition to G<sup>o</sup>, as done with Aragonite in the previous section.</font><br>
+              </p>
+                           
+<p><font face="Helvetica, Arial, sans-serif">To finalize "fine tuning" of 
+ thermodynamic data in our aquatic system,      recall that at more reducing 
+ conditions in absence of sulfur, dissolved    iron  in groundwater or sediment 
+ porewater may be controlled by "hydromagnetite"      - a colloidal phase 
+that has composition close to magnetite but it has   large   specific surface 
+area and is 2 to 3 orders of magnitude more soluble.   We  can also put now 
+a positive G<sup>o</sup> correction (+5708 J/mol, as one mole of  Fe<sub>3</sub>O<sub>4</sub> 
+  releases 3 moles Fe into aqueous solution) to "magnetite" species  in the 
+ "Magnetite" phase in order to simulate hydromagnetite. <br>
+   </font></p>
+     
+<p><font face="Helvetica, Arial, sans-serif">You can check  how this correction 
+ works by "cloning" the system (under </font><big><tt>"Carbonat:G:CaFeMnHypC:1:0:1:25:2:"</tt></big><font
+ face="Helvetica, Arial, sans-serif">)      and making it "almost closed" 
+ as described <a href="#GSM_CLONE_SYSEQ_REC">above</a>.; check also taht the
+ "Goethite" phase is disabled.&nbsp;  Use the following recipe: 1000 g H<sub>2</sub>O,
+ 0.1 g air, 0.1 mole NaCl, 1 g CaCO<sub>3</sub>, 1 g &nbsp;MnCO<sub>3</sub> 
+ and 1 g FeCO<sub>3</sub>. After calculation of equilibrium, you should get 
+ the following stable phase  assemblage:</font> <big><tt>"aq_gen" + "gas_gen" 
+ + "Calcite" + "Siderite" + "Magnetite" + "Rhodochrosite"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">&nbsp;at pH = 7.08, pe = -1.77, log f(CO<sub>2</sub>)
+= -1.56, log f(O<sub>2</sub>) = -61.9, log m(Ca) = -2.47, log m(Mn) = -4.98
+and log m(Fe) = -4.78.&nbsp;</font></p>
+     
+<p>          <br>
+              </p>
+                                                     
+<h3><a name="GSM_SYSTEM_FROM_SCRATCH"></a><font
+ face="Helvetica, Arial, sans-serif">3.7. Creating a New System Definition
+              (as an Alternative)</font></h3>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">Any time when working within 
+ your modelling project, you can start a new     line of model calculations 
+ by creating a new SysEq record "from scratch",     instead of "cloning" a
+ previously displayed one. In this case, it is wise     to invent a completely 
+ new CSD name (third field of <a href="gdb_rkey.html#dbm_SysEq">SysEq record 
+ key</a>). Let us create now a &nbsp;"parent" system for plotting calcite 
+and ferrihydrite solubility diagrams described in the <a
+ href="#GSM_INVERSE_TITR">next chapter</a>.&nbsp;<br>
+   </font>         </p>
+                           
+<p><font face="Helvetica, Arial, sans-serif">Re-start GEMS, open the "Carbonat" 
+ project, go into the "Single Thermodynamic System" dialog, select "Record" 
+ "Create"     menu command and enter a new record key</font> <big><tt>"Carbonat:G:CaFeSpecO:1:0:1:25:2:"</tt></big><font
+ face="Helvetica, Arial, sans-serif">.     In the appearing "SysEq: Remake 
+ parameters" dialog, find the</font>&nbsp; <big><tt>tname</tt></big>     &nbsp;<font
+ face="Helvetica, Arial, sans-serif">and</font> &nbsp;<tt><big>tnote</big> 
+ </tt><font face="Helvetica, Arial, sans-serif">comment lines, type there</font> 
+ <br>
+            </p>
+                       
+<blockquote><tt><big>  "Parent system for Ca and Fe speciation diagrams"<br>
+            "Example 2 for GEMS getting-started tutorial"</big><br>
+              </tt></blockquote>
+                       
+<p><font face="Helvetica, Arial, sans-serif">and press "Ok" to proceed. Now, 
+ set the bulk composition according to the following recipe: 1000g of</font> 
+ <big><tt>"Aqua"</tt></big><font face="Helvetica, Arial, sans-serif">, 300
+ kg of</font> <big><tt>"AtmAirNit"</tt></big><font
+ face="Helvetica, Arial, sans-serif">, 0.2 mol of CaCO<sub>3</sub>, 0.2 mol 
+ of FeOOH, 0.1 mol of NaCl, 1e-6 mol HCl and 1e-6 mol of NaOH. Also turn off
+ the</font> <big><tt>"Goethite"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">and</font> <big><tt>"Hematite"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">phases and set a&nbsp; 2.854 kJ/mol
+ correction to G0 of </font>"<big><tt>Fe(OH)3(mic)"</tt></big> <font
+ face="Helvetica, Arial, sans-serif">species in the </font><big><tt>"Ferrihydrite-mc"</tt></big> 
+ <font face="Helvetica, Arial, sans-serif">phase. When ready, press the "Calculate 
+ BCC" button. You should see a "Missing IC warning" dialog; as we indeed do
+ not want to consider Mn in this modelling series, simply press "Check/Ok" 
+ and then again &nbsp;calculate BCC. This time, nothing should happen; &nbsp;all 
+ solid phases of Mn appear turned off (as well as the aqueous Mn species). 
+ Now, calculate the equilibrium state and check total dissolved Ca and Fe.&nbsp; 
+ You should get log m(Ca) = -3.09, log m(Fe) = -9.15 at pH = 8.322 and 0.103 
+ molal effective ionic strength.</font>         </p>
+     
+<p><br>
+                           </p>
+                                                        
+<p>  </p>
+                                                          
+<p>  </p>
+                                                     
+<h3><a name="GSM_MORE_EQUILIBRIA"></a>  <font
+ face="Helvetica, Arial, sans-serif">3.8. More About Calculations of     
+      Single Equilibria</font></h3>
+                                                     
+<p><font face="Helvetica, Arial, sans-serif">There are some special cases 
+ of GEM equilibria calculations, such as <a
+ href="glossary.html#DT_sequential_reactors">sequential reactors</a>, or
+sorption systems. You can learn more about that in the <a
+ href="ge_howto.html">ge_howto.html</a> and <a href="gems_scm.html">gems_scm.html</a>
+specialized manuals. More detailed      description of the GEM IPM-2 module,
+its numerical controls, error messages,      and troubleshooting (in "stepwise"
+calculation mode) is available in the     <a href="gems_ipm.html">gems_ipm.html</a>
+manual.</font><br>
+             <br>
+                           </p>
+                                                     
+<p></p>
+                       
+<hr width="100%" size="2">                             
+<p> </p>
+                                                       
+<p><a name="END_GEMSTART"></a><font face="Helvetica, Arial, sans-serif"><a
+ href="gemstar2.html">CONTINUE to the next part (gemstar2.html)</a></font> 
+ </p>
+                                                       
+<p><font face="Helvetica, Arial, sans-serif"><a href="gemstart.html">Table
+ of Contents</a></font> </p>
+                                                       
+<p><tt>end of file</tt> <br>
+                            &nbsp; </p>
+                            <br>
+                             <br>
+                          <br>
+                         <br>
+                        <br>
+                       <br>
+                      <br>
+                      <br>
+                   <br>
+                  <br>
+                 <br>
+                <br>
+               <br>
+              <br>
+             <br>
+            <br>
+           <br>
+          <br>
+         <br>
+        <br>
+       <br>
+      <br>
+     <br>
+    <br>
+   <br>
+  <br>
+ <br>
+</body>
+</html>

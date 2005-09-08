@@ -1,0 +1,219 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+                    
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+                    
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+  <title>GEMS-PSI ElementsDialog</title>
+                    
+  <meta name="description" content="Version 2.0.0-PSI">
+</head>
+  <body>
+       
+<h1> <img src="gems1.png" height="48" width="48" align="left">
+    <font color="#000066"><big><font size="+2"><big>GEM-Selektor version
+2-PSI</big></font></big></font></h1>
+         
+<h2><font face="Helvetica, Arial, sans-serif">System Stoichiometry Configuration 
+ (ElementsDialog)</font><br>
+   </h2>
+     
+<hr width="100%" size="2">   
+<p>&lt;under revision&gt;<br>
+ </p>
+ 
+<p>To be completed in Version 2.1<br>
+ <br>
+ </p>
+ 
+<p>The &nbsp;ElementsDialog appears when &nbsp;an independent modelling project
+ is created or extended. The aim of this dialog is to facilitate collection
+ of necessary data from GEMS default database and copying it&nbsp; into the
+ user's project database, when and where appropriate. The main basis for
+the data selection is the system stoichiometry, i.e. the list of selected
+chemical elements  (and additional independent components).&nbsp;<br>
+   </p>
+     
+<p>The ElementsDialog consists of a "Periodic Table" composed of buttons with
+chemical element symbols. The program automatically checks all IComp records
+accessible at the moment of opening of the dialog, and makes the buttons
+of all available elements clickable and their symbols dark. The same happens
+with additional Independent Components, which (if present) will be shown
+on buttons in the "Other" column on the right side.<br>
+   </p>
+     
+<p>Before clicking on the elements buttons to select them into the stoichiometry 
+ basis of the project system, it may be necessary to change some of the "filter" 
+ settings at the bottom of the ElementsDialog. The "Set Filters" button opens 
+ a separate <a href="setfilters.html">SetFiltersDialog</a>. <br>
+</p>
+<p>To the right of "Set Filters" button, a series of checkboxes in the upper
+row called "Phases:" configures which types of phases will be selected into
+the project system:<br>
+   </p>
+     
+<table cellpadding="2" cellspacing="2" border="1" width="100%">
+     <tbody>
+       <tr>
+         <td valign="top">Checkbox name<br>
+         </td>
+         <td valign="top">Default value<br>
+         </td>
+         <td valign="top">Explanation<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top"><font face="Helvetica, Arial, sans-serif">Gas 
+      <br>
+         </font></td>
+         <td valign="top">On<br>
+         </td>
+         <td valign="top">Defines whether gaseous phase will be present in
+the project database.<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top"><font face="Helvetica, Arial, sans-serif">Aqueous<br>
+         </font></td>
+         <td valign="top">On<br>
+         </td>
+         <td valign="top">Defines whether aqueous electrolyte phase will
+be  present in the project database         </td>
+       </tr>
+       <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Solids<br>
+      </font></td>
+      <td valign="top">On<br>
+      </td>
+      <td valign="top">Defines whether single-component solid (or liquid)
+phases will be copied into the project database <br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Helvetica, Arial, sans-serif">Solutions<br>
+      </font></td>
+      <td valign="top">Off<br>
+      </td>
+      <td valign="top">Defines whether non-electrolyte liquid- or solid-solution
+phases will be copied into the project database<br>
+      </td>
+    </tr>
+    <tr>
+         <td valign="top"><font face="Helvetica, Arial, sans-serif">Sorption<br>
+         </font></td>
+         <td valign="top">Off<br>
+         </td>
+         <td valign="top">Defines whether sorption phases will be copied
+into the project database<br>
+         </td>
+       </tr>
+           
+  </tbody>   
+</table>
+     
+<p>If some of single-component solid phases are not needed in the project,
+they can be deleted  later (in "Thermodynamic Database" mode).</p>
+     
+<p>A&nbsp;"data selection" row of checkboxes (called "Data:") defines in
+which parts of the default database the program should look for the available
+data to build the modelling project.<br>
+   </p>
+     
+<table cellpadding="2" cellspacing="2" border="1" width="100%">
+     <tbody>
+       <tr>
+         <td valign="top">Checkbox name<br>
+         </td>
+         <td valign="top">Default value<br>
+         </td>
+         <td valign="top">Explanation<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top"><font face="Helvetica, Arial, sans-serif">Kernel
+(Nagra/PSI)<br>
+         </font></td>
+         <td valign="top">On<br>
+         </td>
+         <td valign="top">If on, all files containing a keyword <tt>"kernel"</tt> 
+ as an element of the file name will be linked in; if off, all such files 
+will be unlinked (i.e. will become "invisible" for setting up the project). 
+      In In this version of GEMS package, the kernel part of Default database
+contains data imported from Nagra/PSI data base, version 01/01.<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top"><font face="Helvetica, Arial, sans-serif">Complem.
+(Slop98)<br>
+         </font></td>
+         <td valign="top">Off<br>
+         </td>
+         <td valign="top">If on, all files containing a keyword <tt>"complem"</tt> 
+ in the file name will be linked in; otherwise, they all will be unlinked.
+In this version of GEMS package, the complementary part of Default database
+contains data imported from Slop98.dat. <br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top"><font face="Helvetica, Arial, sans-serif">Organic<br>
+         </font></td>
+         <td valign="top">Off<br>
+         </td>
+         <td valign="top">If on, all files containing a keyword <tt>"organic"</tt> 
+ in the file name will be linked in; otherwise, they all will be unlinked.<br>
+         </td>
+       </tr>
+       <tr>
+         <td valign="top"><font face="Helvetica, Arial, sans-serif">Specific<br>
+         </font></td>
+         <td valign="top">Off<br>
+         </td>
+         <td valign="top">If on, all files containing a keyword <tt>"specific"</tt> 
+ in the file name will be linked in; otherwise, they all will be unlinked.<br>
+         </td>
+       </tr>
+           
+  </tbody>   
+</table>
+     
+<p>This is a simple but efficient way of maintaining a "layered" structure 
+ of the default thermodynamic database.&nbsp; Contents of the respective layers
+will be described in the <a href="gemstdbm.html">database documentation</a>; 
+see also a "thermodata" section of GEMS-PSI home page (<a
+ href="http://les.web.psi.ch/Software/GEMS-PSI/thermodata">http://les.web.psi.ch/Software/GEMS-PSI/thermodata.html</a>). 
+ <br>
+   </p>
+     
+<blockquote>         
+  <p><font face="Helvetica, Arial, sans-serif"><font color="#990000"><b>Important!</b></font> 
+ If any of checkboxes in the "Data:" group were changed or the "Set Filters" 
+ dialog was accessed, then selection of buttons for chemical elements and 
+additional IC will be reset. For this reason, first (if necessary) change 
+filtering settings, and only then select Independent Components to be taken 
+into the project system.&nbsp; </font><br>
+     </p>
+   </blockquote>
+     
+<p>After clicking toggle buttons for all necessary elements, press "Ok" to 
+ proceed. The process of construction of the project definition structure 
+(and copying records from the default into the project database) will start 
+immediately. <br>
+   </p>
+       
+<hr width="100%" size="2">   
+<p> </p>
+       
+<p>    <tt><a href="index.html">To Contents</a> &nbsp; &nbsp;  &nbsp; &nbsp;
+&nbsp;<a href="g_about.html">About GEM-Selektor</a>&nbsp;</tt></p>
+<p><tt>end of file</tt> <br>
+    &nbsp; </p>
+    <br>
+    <br>
+   <br>
+  <br>
+ <br>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+                    
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+                    
+  <meta name="GENERATOR"
+ content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
+  <title>GEMS Default Database Manual</title>
+                           
+  <meta name="description" content="Version 2.0.0-PSI">
+</head>
+  <body>
+         
+<h1><img src="gems1.png" height="48" width="48" align="left">
+    <big><b><font size="+2"><big>GEM-Selektor version 2-PSI</big></font></b></big></h1>
+       
+<h2>Default (Kernel) Database Manual</h2>
+ 
+<hr width="100%" size="2">      
+<h3>Contents &nbsp;</h3>
+ 
+<ul>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#DDB_INTRO">1.
+GEMS default chemical thermodynamic database</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#DDB_KERNEL">1.1.
+Kernel part</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#DDB_COMPLEM">1.2.
+Complementary part</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#DDB_SPECIFIC">1.3.
+Specific part</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DDB_PROTECTION">1.4. Protection of the default database</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#DDB_GROUP">1.5.
+The LES PSI Thermodynamics Group</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DDB_THIRD_PARTY">1.6. Third-party databases for use with GEMS code</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#DDB_FILES">2.
+List of files in the default thermodynamic database</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DDB_KERNEL_FILES">2.1. Kernel part files</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DDB_COMPLEM_FILES">2.2. Complementary part files</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a
+ href="#DDB_SPECIFIC_FILES">2.3. Specific part files</a></font></p>
+  </li>
+  <li>
+    <p><font face="Helvetica, Arial, sans-serif"><a href="#DDB_REFS">3. References</a></font></p>
+  </li>
+</ul>
+<br>
+&lt;under construction&gt;<br>
+           
+<hr width="100%" size="2"> 
+<h2><a name="DDB_INTRO"></a><font face="Helvetica, Arial, sans-serif">1.
+GEMS Default Chemical Thermodynamic Database</font></h2>
+<p><font face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>The 
+GEM-Selektor v.2-PSI package is distributed with a default     chemical thermodynamic
+  database that consists of three parts: (i) "kernel"; (ii) "complementary"; 
+and (iii) "specific", selectable upon creation of modelling projects via
+GEMS <a href="elements.html">"Elements" dialog</a>.<br>
+</small></font></small></font></p>
+<p><font face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>
+&nbsp;<br>
+</small></font></small></font></p>
+<h3><font face="Helvetica, Arial, sans-serif"><small><font size="+1"><small><a
+ name="DDB_KERNEL"></a></small></font></small>1.1. Kernel part </font><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small><br>
+ </small></font></small></font></h3>
+ 
+<p><font face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>"Kernel"
+part of GEMS default database has been imported by T.Thoenen from Nagra/PSI
+  chemical thermodynamic data base  01/01 (</small></font></small><font
+ color="#000099">http://les.web.psi.ch/TDBbook/index.htm</font></font><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>) using
+the PMATCHC   code</small></font></small><small><font size="+1"><small> (</small></font></small><font
+ color="#000099">http://les.web.psi.ch/Software/PMATCHC/index.htm</font></font><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>). This
+well reviewed and documented database is officially   applicable to ambient
+conditions only (P=0.1 MPa, T=298.15 K). Selections   of chemical elements,
+aqueous &nbsp;species, and minerals in the&nbsp; Nagra-PSI   data base reflect
+the (rather specific) main purpose of its compilation -  support of geochemical 
+modelling related to nuclear waste disposal. In order to make the "kernel"
+database also usable at elevated temperatures and pressures, we have merged
+it with a subset of the SLOP98.DAT file&nbsp;</small></font></small></font><big><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>(<font
+ color="#000099">http://epsc.wustl.edu/geopig</font>), as described in the
+unpublished technical report PSI TM-44-03-04 (</small></font></small></font></big><font
+ face="Helvetica, Arial, sans-serif" color="#000099">http://les.web.psi.ch/Software/GEMS-PSI/doc/pdf/TM-44-03-04-web.pdf</font><big><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>).&nbsp;</small></font></small></font></big><big><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>The "kernel"
+GEMS version   of Nagra-PSI data base can be used in many cases for reliable
+calculation of aquatic equilibria up to 150 - 200 <sup>o</sup>C at saturated
+vapor pressures.</small></font></small></font></big><br>
+</p>
+<p><small><big><font face="Helvetica, Arial, sans-serif"><br>
+</font></big></small></p>
+<h3><small><big><font face="Helvetica, Arial, sans-serif"><a
+ name="DDB_COMPLEM"></a></font></big></small><font
+ face="Helvetica, Arial, sans-serif">1.2. Complementary part</font></h3>
+<h3><small> </small></h3>
+ 
+<p><big><font face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>"Complementary"
+part of GEMS default database consists of </small></font></small></font></big><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>SLOP98.DAT 
+data, </small></font></small></font><big><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>directly 
+imported </small></font></small></font></big><big><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>into <a
+ href="file:///C:/DataDK/GEMS2-www/Software/GEMS-PSI/doc/html/gm_dcomp.html">DComp</a>
+record format of GEMS. The goal was to extend the audience of GEM-Selektor
+users by making it readily possible to calculate aqueous equilibria at temperatures
+up to 1000 <sup>o</sup>C and pressures up to 5 kbar for a much wider range 
+of species and chemical elements than it is possible with the Nagra/PSI database
+alone. Note that developers of GEMS package did not review this "complementary"
+data and, hence, cannot assume any responsibility for its quality, even though
+the popular set of  standard-state thermodynamic data SLOP98.DAT, related
+to the <a
+ href="file:///C:/DataDK/GEMS2-www/Software/GEMS-PSI/thermodata/index.html#JOH92">SUPCRT92 
+code</a> and the <a
+ href="file:///C:/DataDK/GEMS2-www/Software/GEMS-PSI/thermodata/index.html#SHO97">revised
+HKF EoS</a> (<a
+ href="file:///C:/DataDK/GEMS2-www/Software/GEMS-PSI/thermodata/index.html#HEL81">Helgeson- 
+Kirkham- Flowers</a> &nbsp;equation of state), is at present a <i>de facto</i>
+standard, supplied in many thermodynamic modelling computer codes (e.g. ChemGeo,
+EQ3/6, GIBBS/Hch, Selektor-C/W). The HKF EoS subroutines for temperature/pressure
+corrections of partial molal thermodynamic properties of aqueous species
+are also incorporated into the GEM-Selektor code.&nbsp;</small><br>
+ </font></small></font></big></p>
+ 
+<p><font face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>At 
+present, the "complementary" part of default GEMS database  can be used in
+creating modelling project databases only together with the "kernel" part.
+In this case, DComp and Phase records from both parts will be copied into
+the project database files, but records from the "kernel" part will be preferentially
+taken into calculation of chemical equilibria. This is ho harm because the
+differences are almost everywhere (except Eu species) quite small. However,
+the users who want to calculate equilibria only using SLOP98 data, can do
+that after deleting in the project database all records that are not marked
+"s98_" in the last record key field. In future versions, it will be possible 
+to create projects using the "complementary" data alone. <br>
+ </small></font></small></font></p>
+ 
+<p><small><font face="Helvetica, Arial, sans-serif"><small><font
+ size="+1"><small><small> </small></small></font></small></font></small></p>
+ 
+<p><small><br>
+</small></p>
+<h3><small><big><font face="Helvetica, Arial, sans-serif"><a
+ name="DDB_SPECIFIC"></a></font></big></small><font
+ face="Helvetica, Arial, sans-serif">1.3. Specific part </font></h3>
+<p><font face="Helvetica, Arial, sans-serif">(iii) "Specific" part of the 
+default database will contain thermodynamic data for specific applications
+related e.g. to nuclear waste management, which extend the "kernel" and/or
+"complementary" parts for minerals, solid solution end-members, surface complexes
+and so on. In the current version of GEMS-PSI, this part of default database
+is still under construction.<br>
+<br>
+&lt;to be extended&gt;<br>
+ </font></p>
+  
+<p><font face="Helvetica, Arial, sans-serif"><br>
+</font></p>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="DDB_PROTECTION"></a></font><font
+ face="Helvetica, Arial, sans-serif">1.4. Protection of the Default database</font></h3>
+<p></p>
+<p><small><font face="Helvetica, Arial, sans-serif"><small><font
+ size="+1"><small><small><big>Please, note that files of the default GEMS
+database (located in the </big></small></small></font></small></font><font
+ size="+1"><small><b><tt>/program/DB.default</tt></b> <font
+ face="Helvetica, Arial, sans-serif">directory) are&nbsp; write-protected,
+so that only developers can modify any data records there. This is done to
+ensure a backward compatibility   between different modelling projects. A
+modelling application produced using GEMS is actually a directory of database
+files,   which, taken together, comprise a "modelling project". &nbsp;All
+changes,   input data, and results of modelling calculations will be stored
+in the project  database files, which can be modified by the user who created 
+it.</font> </small></font></small><font
+ face="Helvetica, Arial, sans-serif"><small><font size="+1"><small>A project
+ directory can be packed and shared with other users or con</small></font></small><small><font
+ size="+1"><small>tributed to this site  as a test example.</small></font></small></font></p>
+ 
+<p><font face="Helvetica, Arial, sans-serif"><small><font size="+1"><small><small>
+<big>The user can create any number of projects, but typically, such a project
+  is created for a separate geochemical modelling study in a system of known
+elemental   stoichiometry.&nbsp; Only part of the default database (i.e.
+species and phases defined by a selection of stoichiometry units) will be
+copied into the project database. The latter can be extended or modified
+any time at the user's discretion, but none of these changes will&nbsp; affect
+ the default GEMS database (unless the user will find and report a bug in
+a record from the default database). &nbsp;</big> </small></small></font></small></font></p>
+ 
+<p><big><font face="Helvetica, Arial, sans-serif"><small><font size="+1">
+</font></small></font></big></p>
+  
+<p><small><font face="Helvetica, Arial, sans-serif"><big><br>
+</big></font></small></p>
+<h3><small><font face="Helvetica, Arial, sans-serif"><big><a
+ name="DDB_GROUP"></a></big></font></small><font
+ face="Helvetica, Arial, sans-serif">1.5. The LES PSI Thermodynamics Group</font></h3>
+<p><small><font face="Helvetica, Arial, sans-serif"><big>The LES PSI Thermodynamics
+Group (see </big></font></small><font
+ face="Helvetica, Arial, sans-serif" color="#000099">http://les.web.psi.ch/groups</font><small><font
+ face="Helvetica, Arial, sans-serif"><big>) maintains the Nagra-PSI database
+provided as the default dataset with GEMS-PSI code and oriented mainly to
+nuclear waste management applications at low temperatures and pressures.</big>
+</font></small></p>
+ <br>
+<h3><font face="Helvetica, Arial, sans-serif"><a name="DDB_THIRD_PARTY"></a></font><font
+ face="Helvetica, Arial, sans-serif">1.6. Third-party databases for use with
+GEMS code</font></h3>
+ <small><font face="Helvetica, Arial, sans-serif"><big>The GEM-Selektor code
+itself is not application- or database-specific, so the main limitation of
+its usage is the lack of internally consistent input thermodynamic data. These
+can be compiled by other people, converted into GEM-Selektor format, and
+distributed as third-party chemical thermodynamic databases (for instance,
+for hydrothermal, metamorphic, igneous, metallurgical systems, and so on).
+&nbsp;Participation and collaboration in this field is particularly welcome
+(see "Third-Party Contributions" file on <font color="#000099">http://les.web.psi.ch</font></big></font></small><font
+ face="Helvetica, Arial, sans-serif" color="#000099">/Software/GEMS-PSI/contribs/index.html</font><small><font
+ face="Helvetica, Arial, sans-serif"><big>)</big> </font></small><br>
+<br>
+<br>
+ 
+<hr width="100%" size="2"> 
+<h3><font face="Helvetica, Arial, sans-serif"></font></h3>
+<h2><a name="DDB_FILES"></a><font face="Helvetica, Arial, sans-serif">2.
+List of files in the default thermodynamic        database</font></h2>
+       
+<p><font face="Helvetica, Arial, sans-serif">GEM-Selektor looks for the default
+database files in the following directory:</font><a
+ href="http://les.web.psi.ch/Software/GEMS-PSI/index.html"><br>
+ </a></p>
+ 
+<p><big><tt>/program/DB.default</tt></big><br>
+ </p>
+ 
+<p><font face="Helvetica, Arial, sans-serif">(assuming that the executable
+file </font><big><tt>gems2</tt></big> &nbsp;is located in the <big><tt>/program</tt></big>
+<font face="Helvetica, Arial, sans-serif">directory).</font><br>
+ <font face="Helvetica, Arial, sans-serif">Each database file in GEMS, e.g.</font>
+<big><tt>rtparm.nagra-psi.pdb</tt></big>, <font
+ face="Helvetica, Arial, sans-serif">comes with an (automatically created)
+index counterpart, e.g.</font> <big><tt>rtparm.nagra-psi.ndx. </tt><small><font
+ face="Helvetica, Arial, sans-serif">This index file is used by the program
+to speed-up reading of database files and linking them into database chains.
+For brevity, the</font> *<big><tt>.ndx</tt></big> <font
+ face="Helvetica, Arial, sans-serif">files are not shown in the lists below</font>.</small></big><br>
+<br>
+ </p>
+ 
+<h3><big><font face="Helvetica, Arial, sans-serif"><small
+ style="font-weight: bold;"><a name="DDB_KERNEL_FILES"></a></small></font></big><big><font
+ face="Helvetica, Arial, sans-serif"><small style="font-weight: bold;">2.1.
+"Kernel" part files</small> </font></big></h3>
+  
+<p><b><big><tt>icomp.kernel.nagra_psi.pdb</tt></big></b></p>
+ 
+<p><b><big><tt> </tt></big></b><b><big><tt>compos.kernel.nagra-psi.pdb</tt></big></b></p>
+ 
+<p><b><big><tt>dcomp.kernel.nagra_psi.gases.pdb<br>
+ dcomp.kernel.nagra_psi.ions.pdb<br>
+ dcomp.kernel.nagra_psi.prods.pdb<br>
+ dcomp.kernel.nagra_psi.secms.pdb<br>
+ dcomp.kernel.nagra_psi.solids.pdb</tt></big></b></p>
+ 
+<p><b><big><tt>reacdc.kernel.nagra_psi.prods.pdb<br>
+ reacdc.kernel.nagra_psi.solids.pdb<br>
+ reacdc.kernel.sorption.pdb &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</tt></big></b><big><tt><small>(under 
+construction)</small></tt></big></p>
+ 
+<p><b><big><tt>phase.kernel.nagra-psi.pdb<br>
+ phase.kernel.nagra-psi.solutions.pdb &nbsp;</tt></big></b><big><tt><small>(under 
+construction)</small></tt></big><br>
+ <b><big><tt>phase.kernel.sorption.pdb &nbsp; </tt></big></b><big><tt><small>&nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; (under construction)</small></tt></big><br>
+ <br>
+ <font face="Helvetica, Arial, sans-serif">The following files are not used
+when records are copied into a new project directory</font>: <br>
+ <b><big><tt><br>
+ sdref.nagra-psi.pdb &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; </tt></big></b><big><tt><small>(Bibliographic 
+references to kernel data base)</small><br>
+ </tt></big><b><big><tt> reacdc.nagra_psi.pronsprep.pdb &nbsp; </tt></big></b><big><tt><small>(Auxiliary 
+reactions for PRONSPREP estimates)</small></tt></big><br>
+ <b><big><tt>rtparm.nagra-psi.pdb</tt></big></b> &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+<big><tt><small>(Examples of T,P corrections - under construction)</small></tt></big><b><big><tt><br>
+ </tt></big></b></p>
+ 
+<p><br>
+ </p>
+<h3><font face="Helvetica, Arial, sans-serif"><a
+ name="DDB_COMPLEM_FILES"></a>2.2. "Complementary" part files</font><font
+ face="Helvetica, Arial, sans-serif"> </font></h3>
+  
+<p><b><big><tt>icomp.complem.slop98.pdb</tt></big></b></p>
+ 
+<p><b><big><tt> </tt></big></b><b><big><tt>compos.complem.slop98.pdb</tt></big></b></p>
+ 
+<p><b><big><tt> dcomp.complem.slop98.aq-inorg.pdb<br>
+ dcomp.complem.slop98.gases.pdb<br>
+ dcomp.complem.slop98.solids.pdb</tt></big></b></p>
+ 
+<p><b><big><tt>phase.complem.slop98.pdb</tt></big></b></p>
+ 
+<p><b><big><tt> dcomp.complem.slop98.organic.pdb &nbsp;</tt></big></b><big><tt><small>(Organic 
+aqueous species - will be provided soon)</small></tt></big><br>
+ </p>
+ 
+<p><b><big><tt>sdref.complem.pdb </tt></big></b><big><tt><small>&nbsp;(Bibliographic 
+references to complementary data base)</small></tt></big></p>
+ 
+<p><font face="Helvetica, Arial, sans-serif"><br>
+ </font></p>
+<h3><font face="Helvetica, Arial, sans-serif"><a
+ name="DDB_SPECIFIC_FILES"></a>2.3. "Specific" part &nbsp;files will be provided
+starting from version 2.1.</font><font
+ face="Helvetica, Arial, sans-serif"><small style="font-weight: bold;"> </small></font></h3>
+<font face="Helvetica, Arial, sans-serif"> </font>  
+<p><font face="Helvetica, Arial, sans-serif"><br>
+ <big><small style="font-weight: bold;">These files from Default GEMS database
+will be automatically linked to all new modelling projects:</small> </big><br>
+ </font></p>
+ 
+<p><b><big><tt>sdref.template.scripts.pdb &nbsp;</tt></big></b><big><tt><small>(Template 
+math, print/export and import script library)</small></tt></big><br>
+ <b><big><tt>const.v_cnst0.pdb</tt></big></b><br>
+ </p>
+ <span style="font-family: helvetica,arial,sans-serif;"><br>
+<br>
+&lt;To be extended&gt;</span><br>
+<br>
+<br>
+<hr width="100%" size="2">
+<h3><font face="Helvetica, Arial, sans-serif"><a name="DDB_REFS"></a>3. References</font></h3>
+  
+<p><big><a name="HEL81"></a><small><font
+ face="Helvetica, Arial, sans-serif">Helgeson H.C., Kirkham D.H. and Flowers
+G.C. (1981): <i>Amer. J. Sci.</i> v. 281, p. 1249-1516.</font></small></big></p>
+  
+<p><small><font face="Helvetica, Arial, sans-serif"><big><a name="JOH92"></a> 
+Johnson J.W., Oelkers E.H. and Helgeson H.C. (1992): <i>Comput. Geosci.</i> 
+v. 18, p. 899-947.</big></font></small></p>
+  
+<p><small><font face="Helvetica, Arial, sans-serif"><big><a name="SHO97"></a> 
+Shock E.L., Sassani D.C., Willis M. and Sverjensky D.A. (1997): <i>Geoch. 
+Cosmoch. Acta</i> v. 61, p. 907-950 (and references therein).&nbsp;</big></font>
+</small></p>
+  
+<hr width="100%" size="2"> 
+<p><tt><a href="file:///C:/gems2html/program/doc/html/index.html">To Contents</a>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a
+ href="file:///C:/gems2html/program/doc/html/g_about.html">About GEM-Selektor</a>
+</tt>   &nbsp; </p>
+       
+<p><tt>end of file</tt> <br>
+    &nbsp; </p>
+    <br>
+    <br>
+   <br>
+  <br>
+ <br>
+</body>
+</html>
