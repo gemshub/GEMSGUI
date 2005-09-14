@@ -14,7 +14,7 @@ DEBUG_FLAGS	= -ggdb
 PROF_FLAGS	= 
 
 LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
-LDFLAGS		=
+LDFLAGS		= -m elf_i386
 
 ifeq ($(RELEASE), YES)
 QTLIBS		= $(QTDIR)/lib/libqt-mt.a
@@ -38,7 +38,7 @@ SHARED_SRC_DIR	= shared
 endif
 
 # commands
-CC		= c++
+CC		= c++ -m32 -Wl,-melf_i386
 LD		= ld
 
 ifeq ($(RELEASE),YES)

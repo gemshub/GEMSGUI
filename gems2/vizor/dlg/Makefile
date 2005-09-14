@@ -147,7 +147,7 @@ all:   $(TARGET)
 # putting $(DATASRC) in front to create all *Data.h files first for others to compile
 # and putting $(DATAOBJ) in the back, because they don't have any errors (thus less important)
 $(TARGET):  $(DATASRC) $(OBJECTS) $(DATAOBJ) $(OBJMOC) Makefile
-	$(LD) -r $(OBJECTS) $(DATAOBJ) $(OBJMOC) -o $@
+	$(LD) $(LDFLAGS) $(OBJECTS) $(DATAOBJ) $(OBJMOC) -o $@
 
 clean:
 	$(CLEAN_CMD)

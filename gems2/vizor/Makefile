@@ -45,7 +45,7 @@ all:	subdirs_mk $(TARGET)
 
 
 $(TARGET):	$(OBJECTS) $(METAOBJ) $(OBJ_SUB)
-	$(LD) -r $(OBJECTS) $(METAOBJ) $(OBJ_SUB) -o $@
+	$(LD) $(LDFLAGS) $(OBJECTS) $(METAOBJ) $(OBJ_SUB) -o $@
 
 subdirs_mk:	
 	@for i in $(subdirs); do \

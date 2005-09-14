@@ -19,11 +19,11 @@ DEBUG_FLAGS	=
 PROF_FLAGS	= 
 WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
-CCFLAGS		= -Wall -D__unix -pipe -DIPMGEMPLUGIN=1 -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
+CCFLAGS		= -m32 -Wall -D__unix -pipe -DIPMGEMPLUGIN=1 -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
 
 INC_GLOBAL	= -I$(QTDIR)/include 
-LDFLAGS		=
+LDFLAGS		= -m elf_i386
 #LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
 #LIBS		= -lqt-mt -lX11 -lXext -lm -lstdc++
 #-lefence 

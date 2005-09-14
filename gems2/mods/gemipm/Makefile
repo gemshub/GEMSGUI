@@ -38,14 +38,13 @@ TARGET = gemipm2k
 all:		$(TARGET)
 
 $(TARGET):   $(OBJECTS)
-	g++ $(OBJECTS) -o $@
+	$(LD) $(LDFLAGS) $(OBJECTS) -o $@
 
 clean:
 	$(CLEAN_CMD)
 
 dep:
 	$(MAKEDEP_CMD) $(INC_LOCAL) $(SOURCES)
-
 
 ms_mueqexp.o:		../submod/ms_mueqexp.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c  $<
@@ -67,7 +66,6 @@ s_fgl.o:	../s_fgl.cpp
 
 ms_datach_br.o:	../submod/ms_datach_br.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c  $<
-
 
 %.o:	%.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@

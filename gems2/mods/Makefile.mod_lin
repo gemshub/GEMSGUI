@@ -22,10 +22,10 @@ DEBUG_FLAGS	= -ggdb
 PROF_FLAGS	= 
 WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
-CCFLAGS		= -Wall -DQT_THREAD_SUPPORT -D__unix -pipe -DUse_mt_mode
+CCFLAGS		= -m32 -Wall -DQT_THREAD_SUPPORT -D__unix -pipe -DUse_mt_mode
 
 INC_GLOBAL	= -I$(QTDIR)/include 
-LDFLAGS		=
+LDFLAGS		= -m elf_i386 -r
 #LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
 #LIBS		= -lqt-mt -lX11 -lXext -lm -lstdc++
 #-lefence 
@@ -38,19 +38,19 @@ ifeq ($(RELEASE),YES)
 
 # flags for making release version of GEMS
 FLAGS		= $(CCFLAGS) $(OPT_FLAGS) $(RELEASE_FLAGS)
-LINK_CMD	= $(CC)
+LINK_CMD	= $(CC) $(LDFLAGS)
 else
 ifeq ($(PROFILE),YES)
 
 #flag for making profile version of GEMS
 FLAGS		= $(CCFLAGS) $(DEBUG_FLAGS) $(PROF_FLAGS)
-LINK_CMD	= $(CC) $(PROF_FLAGS)
+LINK_CMD	= $(CC) $(LDFLAGS) $(PROF_FLAGS)
 else
 
 #flags for making usual debug version
 FLAGS		= $(CCFLAGS) $(DEBUG_FLAGS)
 # $(WARN_ALL)
-LINK_CMD	= $(CC)
+LINK_CMD	= $(CC) $(LDFLAGS)
 endif
 endif
 

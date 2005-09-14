@@ -25,7 +25,7 @@ TARGET	= kernel.o
 all:		$(TARGET)
 
 $(TARGET):      $(OBJECTS) Makefile
-	$(LD) -r $(OBJECTS) -o $@
+	$(LD) $(LDFLAGS) $(OBJECTS) -o $@
 
 clean:
 	$(CLEAN_CMD)

@@ -23,11 +23,11 @@ DEBUG_FLAGS	= -ggdb
 PROF_FLAGS	= 
 WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
-CCFLAGS		= -Wall -DQT_THREAD_SUPPORT -D__unix -pipe -DUse_mt_mode
+CCFLAGS		= -m32 -Wall -DQT_THREAD_SUPPORT -D__unix -pipe -DUse_mt_mode
 
 INC_GLOBAL	= -I$(QTDIR)/include 
 LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
-LDFLAGS		=
+LDFLAGS		= -m elf_i386 -r
 LIBS		= -lqt -lX11 -lXext -lm -lstdc++
 #-lefence 
 

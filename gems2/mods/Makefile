@@ -54,7 +54,7 @@ subdirs_mk:
 
 
 $(TARGET):    $(OBJECTS) $(OBJ_SUB)
-	$(LD) -r $(OBJECTS) $(OBJ_SUB) -o $@
+	$(LD) $(LDFLAGS) $(OBJECTS) $(OBJ_SUB) -o $@
 
 
 link:	$(TARGET)

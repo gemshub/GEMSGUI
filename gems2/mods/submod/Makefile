@@ -28,7 +28,7 @@ TARGET = submods.o
 all:		$(TARGET)
 
 $(TARGET):   $(OBJECTS)
-	 $(LD)  -r $(OBJECTS) -o  $@
+	 $(LD) $(LDFLAGS) $(OBJECTS) -o  $@
 
 clean:
 	$(CLEAN_CMD)

@@ -75,7 +75,7 @@ int  NodeCalcGEM( int  &readF, // negative means read only
 //-------------------------------------------------------------------
 
 extern "C"
-int __stdcall MAIF_START( int &sizeN, int &sizeM, int &sizeK,
+int /* __stdcall */ MAIF_START( int &sizeN, int &sizeM, int &sizeK,
   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes )
 {
 
@@ -107,7 +107,7 @@ int __stdcall MAIF_START( int &sizeN, int &sizeM, int &sizeK,
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 extern "C"
-int __stdcall MAIF_CALC( int  readF, // negative means read only
+int /* __stdcall */  MAIF_CALC( int  readF, // negative means read only
    int indN,  // fortran index; 0 working only with work structure
    int indM,  // fortran index; 0 working only with work structure
    int indK,  // fortran index; 0 working only with work structure
