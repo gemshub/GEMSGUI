@@ -215,11 +215,12 @@ sitNan   // SIT: number of anions
     *XFA,   // Quantity of carrier in asymmetric phases Xwa, moles [FIs]
     *YFA,   // Copy of Xwa from previous IPM iteration [0:FIs-1]
     *Falp,  // Karpov phase stability criteria F_a [0:FI-1]
-    (*XetaA)[MST], // Total EDL charge on A EDL phase surface, moles [FIs][FIat]
-    (*XetaB)[MST], // Total charge of surface species on B EDL layer, moles[FIs][FIat]
-    (*XpsiA)[MST], /* Galvani potential at A(0) EDL plane,V [FIs][FIat] */
-    (*XpsiB)[MST], /* Galvani potential at B EDL plane,V    [FIs][FIat] */
-    (*XpsiD)[MST], /* Galvani potential at diffuse plane,V  [FIs][FIat] */
+    (*XetaA)[MST], // Total EDL charge on A (0) EDL plane, moles [FIs][FIat]
+    (*XetaB)[MST], // Total charge of surface species on B (1) EDL plane, moles[FIs][FIat]
+(*XetaD)[MST], // Total charge of surface species on D (2) EDL plane, moles[FIs][FIat]
+    (*XpsiA)[MST], /* Galvani potential at A (0) EDL plane,V [FIs][FIat] */
+    (*XpsiB)[MST], /* Galvani potential at B (1) EDL plane,V [FIs][FIat] */
+    (*XpsiD)[MST], /* Galvani potential at D (2) plane,V [FIs][FIat] */
     (*XFTS)[MST],  // Total number of moles of surface DC at surtype [FIs][FIat]
     *X,  // DC quantities at eqstate x_j, moles - prime IPM solution [L]
     *Y,  // Copy of x_j from previous IPM iteration [0:L-1]

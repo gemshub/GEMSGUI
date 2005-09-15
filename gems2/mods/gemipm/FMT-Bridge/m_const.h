@@ -166,7 +166,7 @@ enum sorption_control {
     /* EDL interface models - separate for site types in v. 3.1 */
     SC_DDLM = 'D',  SC_CCM = 'C',     SC_TLM = 'T',   SC_MTL = 'M',
     SC_MXC = 'E',   SC_NNE = 'X',     SC_IEV  = 'I',  SC_BSM = 'S',
-    SC_NOT_USED = 'N',
+SC_3LM = '3',   SC_NOT_USED = 'N',
     /* Methods of Surface Activity Terms calculation */
     SAT_COMP = 'C', SAT_NCOMP = 'N', SAT_SOLV = 'S', SAT_INDEF = 'I',
 /* New methods for surface activity coefficient terms (2004) */

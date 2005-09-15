@@ -246,6 +246,8 @@ void TMulti::ods_link( int /*q*/)
     aObj[ o_w_xetaa].SetDim(pm.FIs,pm.FIat);
     aObj[ o_w_xetab].SetPtr( pm.XetaB );
     aObj[ o_w_xetab].SetDim(pm.FIs,pm.FIat);
+aObj[ o_w_xetad].SetPtr( pm.XetaD );    // Added 12.09.05 KD
+aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
     aObj[ o_w_x].SetPtr( pm.X );
     aObj[ o_w_x ].SetDim( pm.L, 1 );
     aObj[ o_wo_y].SetPtr( pm.Y );
@@ -444,6 +446,7 @@ pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat ].GetPtr();
     pm.Falp  = (double *)aObj[ o_wo_falp ].GetPtr();
     pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa ].GetPtr();
     pm.XetaB = (double (*)[MST])aObj[ o_w_xetab ].GetPtr();
+pm.XetaD = (double (*)[MST])aObj[ o_w_xetad ].GetPtr(); // added 12.09.05 KD
     pm.X     = (double *)aObj[ o_w_x ].GetPtr();
     pm.Y     = (double *)aObj[ o_wo_y ].GetPtr();
     pm.XY    = (double *)aObj[ o_w_xy ].GetPtr();
@@ -580,6 +583,7 @@ pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat ].Free();
     pm.Falp  = (double *)aObj[ o_wo_falp ].Free();
     pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa ].Free();
     pm.XetaB = (double (*)[MST])aObj[ o_w_xetab ].Free();
+pm.XetaD = (double (*)[MST])aObj[ o_w_xetad ].Free();
     pm.X     = (double *)aObj[ o_w_x ].Free();
     pm.Y     = (double *)aObj[ o_wo_y ].Free();
     pm.XY    = (double *)aObj[ o_w_xy ].Free();
@@ -837,6 +841,7 @@ pm.SATX = (short (*)[4])aObj[ o_wi_satndx].Alloc( pm.Lads, 4, I_ );
         pm.Xetaf = (float (*)[MST])aObj[ o_wi_xetaf].Alloc( pm.FIs, pm.FIat, F_ );
         pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XetaB = (double (*)[MST])aObj[ o_w_xetab].Alloc( pm.FIs, pm.FIat, D_ );
+pm.XetaD = (double (*)[MST])aObj[ o_w_xetad].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XFTS = (double (*)[MST])aObj[ o_w_xfts].Alloc( pm.FIs, pm.FIat, D_ );
 pm.SATT = (char *)aObj[ o_wi_satt].Alloc( pm.Lads, 1, A_ );
 pm.MASDJ = (float (*)[DFCN])aObj[ o_wo_masdj].Alloc( pm.Lads, DFCN, F_ );
@@ -867,6 +872,7 @@ pm.DCC3 = (char *)aObj[ o_wi_dcc3].Alloc( pm.Lads, 1, A_ );
         pm.XFTS  = (double (*)[MST])aObj[ o_w_xfts ].Free();
         pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa ].Free();
         pm.XetaB = (double (*)[MST])aObj[ o_w_xetab ].Free();
+pm.XetaD = (double (*)[MST])aObj[ o_w_xetad ].Free();  // added 12.09.05  KD
         pm.SATT  = (char *)aObj[ o_wi_satt ].Free();
         pm.MASDJ = (float (*)[DFCN])aObj[ o_wo_masdj ].Free();
 pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat ].Free();
@@ -1007,6 +1013,7 @@ void TMulti::set_def( int /*q*/)
         pm.Falp  = 0;
         pm.XetaA = 0;
         pm.XetaB = 0;
+pm.XetaD = 0;         // added 12.09.05  KD
         pm.X     = 0;
         pm.Y     = 0;
         pm.XY    = 0;

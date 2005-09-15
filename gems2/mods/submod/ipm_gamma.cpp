@@ -497,6 +497,7 @@ void TProfil::IS_EtaCalc()
             {
                 pmp->XetaA[k][ist] = 0.0;
                 pmp->XetaB[k][ist] = 0.0;
+                pmp->XetaD[k][ist] = 0.0;     // added 12.09.05  KD
             }
 
         if( pmp->XF[k] <= pmp->DSM ||
@@ -506,7 +507,7 @@ void TProfil::IS_EtaCalc()
 
         switch( pmp->PHC[k] )
         {  /* initialization according to phase class */
-        case PH_AQUEL:  /* aqueous solution - sum charch */
+        case PH_AQUEL:  /* aqueous solution - sum charge */
             pmp->Yw = pmp->XFA[k];
             XetaW = 0.0;
             break;
@@ -556,44 +557,40 @@ void TProfil::IS_EtaCalc()
             case DC_SUR_IPAIR:
             case DC_IESC_A:
             case DC_IEWC_B: // Get ist - index of surface type
-                            // and isp - index of surface plane
-                ist = pmp->SATX[ja][XL_ST] / MSPN;
-                isp = pmp->SATX[ja][XL_ST] % MSPN;
+                            // and  isp - index of surface plane
+                ist = pmp->SATX[ja][XL_ST]; // / MSPN;
+                isp = pmp->SATX[ja][XL_ST]; // % MSPN;
+                            // isp  index of outer surf.charge allocation  (new)
                             // Get charge distribution information
-// From now on, the mp(j,PI_DEN) macro replaces pmp->MASDJ[j]
                 CD0 = pmp->MASDJ[ja][PI_CD0];  // species charge that goes into 0 plane
-                CDb = pmp->MASDJ[ja][PI_CDB];  // species charge that goes into B plane
-                ObS = pmp->MASDJ[ja][PI_DEN];  // obsolete - the sign for outer-sphere charge
-                if( ObS >= 0.0 )
-                   ObS = 1.0;
-                else ObS = -1.0;
-                Ez = pmp->EZ[j];
-
+                CDb = pmp->MASDJ[ja][PI_CDB];  // species charge that goes into 1, 2 or 3 plane
+                                               // according to the isp value
+// ObS = pmp->MASDJ[ja][PI_DEN];  obsolete - the sign for outer-sphere charge
+// if( ObS >= 0.0 )
+//    ObS = 1.0;
+// else ObS = -1.0;  is this needed?
+                Ez = pmp->EZ[j];  // take formula charge as default
                 if( !isp )
-                { // This is the 0 (A) plane
-                    if( fabs( CD0 ) > 1e-20 )  // Doubtful...
+                { // This is the 0 (A) plane only - no charge distribution!
+                    if( fabs( CD0 ) > 1e-20 )  // Only if 0-plane charge is given in the table
                        Ez = CD0;
                     pmp->XetaA[k][ist] += pmp->X[j]*Ez;
                 }
                 else
-                { /* This is the B plane */
-//                    Ez = pmp->EZ[j];
+                { // The charge distribution (CD) is specified
                     if( pmp->SCM[k][ist] == SC_MTL )
-                    { /* Modified TL: Robertson, 1997; also XTLM Kulik 2002 */
-                        if( fabs( CDb ) > 1e-20 )  // Doubtful...
-                           Ez = CDb;
-                        pmp->XetaB[k][ist] += pmp->X[j]*Ez;
+                    {   /* Modified TL: Robertson, 1997; also XTLM Kulik 2002 */
+//                        if( fabs( CDb ) > 1e-20 )  // Doubtful...
+//                           Ez = CDb;
+                        pmp->XetaB[k][ist] += pmp->X[j]*CDb;
                     }
                     else if( pmp->SCM[k][ist] == SC_TLM )
                     {
-// New CD version of TLM  added 25.10.2004
-                        if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
-                        {
-                           pmp->XetaB[k][ist] += pmp->X[j] * CDb;
-                           pmp->XetaA[k][ist] += pmp->X[j] * CD0;
-                        }
-// Old version:  TLM Hayes & Leckie, 1987 uses the sign indicator at density
-                        else {
+// New CD version of TLM Hayes & Leckie, 1987  added 25.10.2004
+                        pmp->XetaB[k][ist] += pmp->X[j] * CDb;
+                        pmp->XetaA[k][ist] += pmp->X[j] * CD0;
+// Old version: TLM uses the sign indicator at species maximum density
+/* not usable anymore!  else {
                           if( ObS < 0.0 )
                           {
                             Ez -= 1.0;
@@ -606,63 +603,35 @@ void TProfil::IS_EtaCalc()
                             pmp->XetaB[k][ist] += pmp->X[j] * Ez;
                             pmp->XetaA[k][ist] -= pmp->X[j];
                           }
-                        }
+                        } */
+                    }
+                    else if( pmp->SCM[k][ist] == SC_3LM )
+                    {
+// CD 3-layer model (Hiemstra e.a. 1996) added 12.09.2005 by KD
+                        if( isp == 1 )
+                            pmp->XetaB[k][ist] += pmp->X[j] * CDb;
+                        if( isp == 2 )
+                            pmp->XetaD[k][ist] += pmp->X[j] * CDb;
+                        pmp->XetaA[k][ist] += pmp->X[j] * CD0;
                     }
                     else if( pmp->SCM[k][ist] == SC_BSM )
                     { // Basic Stern model Christl & Kretzschmar, 1999
 // New CD version of BSM  added 25.10.2004
-                        if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
-                        {
-                           pmp->XetaB[k][ist] += pmp->X[j] * CDb;
-                           pmp->XetaA[k][ist] += pmp->X[j] * CD0;
-                        }
-// Old version: uses the sign indicator at density
-                        else {
-                          if( ObS < 0.0 )
-                          {
-                            Ez -= 1.0;
-                            pmp->XetaB[k][ist] += pmp->X[j] * Ez;
-                            pmp->XetaA[k][ist] += pmp->X[j];
-                          }
-                          else
-                          {
-                            Ez += 1.0;
-                            pmp->XetaB[k][ist] += pmp->X[j] * Ez;
-                            pmp->XetaA[k][ist] -= pmp->X[j];
-                          }
-                        }
+                        pmp->XetaB[k][ist] += pmp->X[j] * CDb;
+                        pmp->XetaA[k][ist] += pmp->X[j] * CD0;
                     }
                     else if( pmp->SCM[k][ist] == SC_MXC )
                     { /* BSM for ion exchange on perm.charge surface */
                         if( fabs( CDb ) > 1e-20 )  // Doubtful...
                            Ez = CDb;
                         pmp->XetaB[k][ist] += pmp->X[j]*Ez;
-                        if( fabs( CD0 ) > 1e-20 )
-                            pmp->XetaA[k][ist] += pmp->X[j]*CD0;  // experimental
+                        pmp->XetaA[k][ist] += pmp->X[j]*CD0;  // experimental
                     }
                     else if( pmp->SCM[k][ist] == SC_CCM )
                     { // Added 25.07.03 to implement the extended CCM Nilsson ea 1996
 // New CD version of BSM  added 25.10.2004
-                        if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
-                        {
                            pmp->XetaB[k][ist] += pmp->X[j] * CDb;
                            pmp->XetaA[k][ist] += pmp->X[j] * CD0;
-                        }
-// Old version: uses the sign indicator at density
-                        else {
-                          if( ObS < 0.0 )
-                          {
-                            Ez -= 1.0;
-                            pmp->XetaB[k][ist] += pmp->X[j] * Ez;
-                            pmp->XetaA[k][ist] += pmp->X[j];
-                          }
-                          else
-                          {
-                            Ez += 1.0;
-                            pmp->XetaB[k][ist] += pmp->X[j] * Ez;
-                            pmp->XetaA[k][ist] -= pmp->X[j];
-                          }
-                        }
                     }
                  /*    case DC_SUR_DL_ION:  XetaS += pmp->X[j]*pmp->EZ[j];  */
                 }
@@ -697,8 +666,8 @@ NEXT_PHASE:
 void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 {
     int ist;
-    double SigA=0., SigD=0., SigB=0., XetaA[MST], XetaB[MST], f1, f3;
-    double A/*=1e-9*/, Sig, F2RT, I, Cap;
+    double SigA=0., SigD=0., SigB=0., SigDDL=0.,
+      XetaA[MST], XetaB[MST], XetaD[MST], f1, f3, A/*=1e-9*/, Sig, F2RT, I, Cap;
     /* Del, F=F_CONSTANT, Cap0; */
     if( pmp->XF[k] < pa.p.ScMin )
         return; /* no sorbent */
@@ -723,6 +692,10 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
             XetaB[ist] = pmp->XetaB[k][ist] *F_CONSTANT/pmp->YFk/pmp->Aalp[k]
                          /pmp->Nfsp[k][ist]; /* C/m2 */
         else XetaB[ist] = 0.0;
+ if( fabs( pmp->XetaD[k][ist]) > pmp->lowPosNum*100. )/* moles */
+     XetaD[ist] = pmp->XetaD[k][ist] *F_CONSTANT/pmp->YFk/pmp->Aalp[k]
+                  /pmp->Nfsp[k][ist]; /* C/m2 */
+ else XetaD[ist] = 0.0;
         /* Limit charge densities to 0.7 C/m2 */
         if( fabs(XetaA[ist]) > 1.4 )
         {
@@ -736,41 +709,63 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 //        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
             XetaB[ist] = XetaB[ist] < 0.0 ? -2.0: 2.0;
         }
-        if( fabs( XetaA[ist] ) < pmp->lowPosNum*1e6 )
+        if( fabs(XetaD[ist]) > 1.4 )
+        {
+// cout << "EDL charge density D " << XetaD[ist] << " truncated to +- 0.7 C/m2" <<
+//        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+            XetaD[ist] = XetaD[ist] < 0.0 ? -1.4: 1.4;
+        }
+        if( fabs( XetaA[ist] ) < pmp->lowPosNum*1e6 &&
+               fabs( XetaB[ist] ) < pmp->lowPosNum*1e6 &&
+               fabs( XetaD[ist] ) < pmp->lowPosNum*1e6 )
             goto GEMU_CALC;  /* skipping at near-zero charge */
 
+        SigD = 0.;
         /* calculating charge density at diffuse layer */
         switch( pmp->SCM[k][ist] )
         {
         case SC_CCM:  /* Constant-Capacitance Model Schindler ext. Nilsson */
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
 //            SigD = -SigA;
-            SigD = -SigA - XetaB[ist];
+            SigDDL = -SigA - XetaB[ist];
             SigB = XetaB[ist];
             break;
         case SC_DDLM: /* Diff. Double Layer Model Dzombak and Morel, 1990 */
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
-            SigD = -SigA;
+            SigDDL = -SigA;
+            SigB = 0.0;
             break;
         case SC_TLM:  /* Triple-Layer Model Hayes and Leckie, 1987 */
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
-            SigD = -SigA - XetaB[ist];
+            SigB = XetaB[ist];
+            SigDDL = -SigA - XetaB[ist];
             break;
         case SC_MTL:  /* Modified Triple-Layer Model Robertson, 1997 */
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
-            SigD = -SigA - XetaB[ist];
+            SigB = XetaB[ist];
+            SigDDL = -SigA - XetaB[ist];
             break;
         case SC_BSM: /* Basic Stern model: Christl and Kretzschmar, 1999 */
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
-            SigD = -SigA - XetaB[ist];
+            SigB = XetaB[ist];
+            SigDDL = -SigA - XetaB[ist];
             break;
+ case SC_3LM: /* Three-layer model: Hiemstra ea 1996; Tadanier & Eick 2002 */
+      SigA = pmp->Xetaf[k][ist] + XetaA[ist];
+      SigB = XetaB[ist];
+      SigD = XetaD[ist];
+      SigDDL = -SigA - SigB -SigD;
+      break;
         case SC_MXC:  /* BSM for Ion-Exchange on perm.charge surface */
             SigA = pmp->Xetaf[k][ist] + XetaA[ist];
-            SigD = -SigA - XetaB[ist];
+            SigB = XetaB[ist];
+            SigDDL = -SigA - XetaB[ist];
             break;
         case SC_NNE:  /* Non-Electrostatic Sorption */
             SigA = 0;
+            SigB = 0;
             SigD = 0;
+            SigDDL = 0;
             break;
         default:
             continue;
@@ -785,7 +780,7 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
         /* params of diffuse layer using Damaskin, 1987,p.192-195 */
         A = 1e-9;
         F2RT = pmp->FRT / 2.;
-        Sig = SigD;
+        Sig = SigDDL;
         I=pmp->IC;
         if( I > 1e-7 )
             /* Aq solution density Ro included acc. to Machesky ea., 1999 */
@@ -860,7 +855,7 @@ GEMU_CALC:
             break;
         case SC_MTL:  /* Modified Triple Layer Model for X- Robertson | Kulik */
 // PsiD = 0.0; // test
-            PsiB = PsiD - SigD / pmp->XcapB[k][ist];
+            PsiB = PsiD - SigDDL / pmp->XcapB[k][ist];
             if( fabs( PsiB ) > 0.6)  /* Cutoff potential */
             {
 // cout << "EDL (MTL) PsiB = " << PsiB << " truncated to +- 0.3 V" <<
@@ -878,7 +873,7 @@ GEMU_CALC:
             pmp->XpsiB[k][ist] = PsiB;
             break;
         case SC_TLM:  /* Triple-Layer Model   Hayes 1987 */
-            PsiB = PsiD - SigD / pmp->XcapB[k][ist];
+            PsiB = PsiD - SigDDL / pmp->XcapB[k][ist];
             if( fabs( PsiB ) > 0.6 )  /* Cutoff potential */
             {
 // cout << "EDL (TLM) PsiB = " << PsiB << " truncated to +- 0.3 V" <<
@@ -889,6 +884,29 @@ GEMU_CALC:
             if( fabs( PsiA ) > 1.1 )
             {
 // cout << "EDL (TLM) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiA = PsiA<0? -1.1: 1.1;
+            }
+            pmp->XpsiA[k][ist] = PsiA;
+            pmp->XpsiB[k][ist] = PsiB;
+            break;
+        case SC_3LM:  // Three-Layer Model Hiemstra & van Riemsdijk 1996
+            PsiB = PsiD + SigD / pmp->XcapB[k][ist];
+// cout << "EDL (3LM) PsiB(D) = " << PsiB << "  IT= " << pmp->IT << " k= "
+// << k << " ist= " << ist << endl;
+            PsiB = PsiD + ( SigA + SigB ) / pmp->XcapB[k][ist];  // Compare!
+// cout << "EDL (3LM) PsiB(AB) = " << PsiB << "  IT= " << pmp->IT << " k= "
+// << k << " ist= " << ist << endl;
+            if( fabs( PsiB ) > 0.6 )  /* Cutoff potential */
+            {
+// cout << "EDL (3LM) PsiB = " << PsiB << " truncated to +- 0.3 V" <<
+//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+                PsiB = PsiB<0? -0.6: 0.6;
+            }
+            PsiA = PsiB + SigA / pmp->XcapA[k][ist];
+            if( fabs( PsiA ) > 1.1 )
+            {
+// cout << "EDL (3LM) PsiA = " << PsiA << " truncated to +- 0.7 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiA = PsiA<0? -1.1: 1.1;
             }

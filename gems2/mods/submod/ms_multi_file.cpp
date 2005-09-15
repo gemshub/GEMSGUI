@@ -292,6 +292,7 @@ void TMulti::to_text_file( gstring& path )
       outArray( ff, "Xetaf", &pm.Xetaf[0][0], pm.FIs*pm.FIat);
       outArray( ff, "XetaA", &pm.XetaA[0][0],  pm.FIs*pm.FIat);
       outArray( ff, "XetaB", &pm.XetaB[0][0],  pm.FIs*pm.FIat);
+ outArray( ff, "XetaD", &pm.XetaD[0][0],  pm.FIs*pm.FIat);   // added 12.09.05 KD
       outArray( ff, "XFTS", &pm.XFTS[0][0],  pm.FIs*pm.FIat);
 
       outArray( ff, "SATX", &pm.SATX[0][0], pm.Lads*4);
@@ -517,6 +518,7 @@ void TMulti::to_file( GemDataStream& ff, gstring& path  )
       ff.writeArray((float*)pm.Xetaf, pm.FIs*pm.FIat);
       ff.writeArray((double*)pm.XetaA, pm.FIs*pm.FIat);
       ff.writeArray((double*)pm.XetaB, pm.FIs*pm.FIat);
+ff.writeArray((double*)pm.XetaD, pm.FIs*pm.FIat);     // added 12.09.05   KD
       ff.writeArray((double*)pm.XFTS, pm.FIs*pm.FIat);
 
 ff.writeArray((short*)pm.SATX, pm.Lads*4);
@@ -741,6 +743,7 @@ void TMulti::from_file( GemDataStream& ff )
       ff.readArray((float*)pm.Xetaf, pm.FIs*pm.FIat);
       ff.readArray((double*)pm.XetaA, pm.FIs*pm.FIat);
       ff.readArray((double*)pm.XetaB, pm.FIs*pm.FIat);
+ff.readArray((double*)pm.XetaD, pm.FIs*pm.FIat);    // added 12.09.05  by KD
       ff.readArray((double*)pm.XFTS, pm.FIs*pm.FIat);
 
 ff.readArray((short*)pm.SATX, pm.Lads*4);
@@ -978,6 +981,7 @@ pm.SATX = new short[pm.Lads][4];
     pm.Xetaf = new float[pm.FIs][MST];
     pm.XetaA = new double[pm.FIs][MST];
     pm.XetaB = new double[pm.FIs][MST];
+pm.XetaD = new double[pm.FIs][MST];
 pm.MASDJ = new float[pm.Lads][DFCN];
 //    pm.MASDJ = new float[pm.Ls];
 pm.XFTS = new double[pm.FIs][MST];
@@ -1006,6 +1010,7 @@ else
     pm.Xetaf = 0;
     pm.XetaA = 0;
     pm.XetaB = 0;
+pm.XetaD = 0;
     pm.MASDJ = 0;
     pm.XFTS = 0;
 pm.lnSAC = 0;
@@ -1185,6 +1190,7 @@ if( pm.SATX ) delete[] pm.SATX;
    if( pm.Xetaf ) delete[] pm.Xetaf;
    if( pm.XetaA ) delete[] pm.XetaA;
    if( pm.XetaB ) delete[] pm.XetaB;
+if( pm.XetaD ) delete[] pm.XetaD;
 if( pm.MASDJ ) delete[] pm.MASDJ;
    if( pm.XFTS ) delete[] pm.XFTS;
 if( pm.lnSAC ) delete[] pm.lnSAC;

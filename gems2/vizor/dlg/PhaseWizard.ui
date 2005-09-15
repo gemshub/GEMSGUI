@@ -158,59 +158,6 @@
             <widget class="QComboBox">
                 <item>
                     <property name="text">
-                        <string>N   Surface complexation models are not specified (default)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>I    NEM (non-electrostatic), ignores any Coulomb's corrections</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>D   DLM  (diffuse double layer model), Gouy-Chapman only </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>C   CCM (constant capacitance model)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>S   BSM (basic Stern model) as TLM but only with C1 and CD </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>T   TLM (triple layer model) with C1, C2 </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>M   modified TLM for permanent-charge surfaces </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>E   extended BSM for permanent-charge surfaces</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>SCM_code</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>270</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
                         <string>N   No DcEq script will be provided (built-in or ideal model) (default)</string>
                     </property>
                 </item>
@@ -408,6 +355,64 @@
                     <rect>
                         <x>10</x>
                         <y>20</y>
+                        <width>350</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <item>
+                    <property name="text">
+                        <string>N   Surface complexation models are not specified (default)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>I    NEM (non-electrostatic), ignores any Coulomb's corrections</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>D   DLM  (diffuse double layer model), Gouy-Chapman only </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>C   CCM (constant capacitance model)</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>S   BSM (basic Stern model) as TLM but only with C1 and CD </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>T   TLM (triple layer model) with C1, C2 </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>M   modified TLM for permanent-charge surfaces </string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>E   extended BSM for permanent-charge surfaces</string>
+                    </property>
+                </item>
+                <item>
+                    <property name="text">
+                        <string>3   3-layer CD (MUSIC) model with C1,C2</string>
+                    </property>
+                </item>
+                <property name="name">
+                    <cstring>SCM_code</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>270</y>
                         <width>350</width>
                         <height>31</height>
                     </rect>

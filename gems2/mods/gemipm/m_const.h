@@ -163,7 +163,7 @@ enum sorption_control {
     /* EDL interface models - separate for site types in v. 3.1 */
     SC_DDLM = 'D',  SC_CCM = 'C',     SC_TLM = 'T',   SC_MTL = 'M',
     SC_MXC = 'E',   SC_NNE = 'X',     SC_IEV  = 'I',  SC_BSM = 'S',
-    SC_NOT_USED = 'N',
+SC_3LM = '3', SC_NOT_USED = 'N',
     /* Methods of Surface Activity Terms calculation */
     SAT_COMP = 'C', SAT_NCOMP = 'N', SAT_SOLV = 'S', SAT_INDEF = 'I',
 /* New methods for surface activity coefficient terms (2004) */
@@ -173,7 +173,8 @@ enum sorption_control {
  SAT_FRUM_NCOMP = 'F', SAT_FRUM_COMP = 'R', SAT_PIVO_NCOMP = 'P',
     /* Assignment of surtype to carrier (end-member) */
     CCA_VOL = 'V', CCA_0 = '0', CCA_1, CCA_2, CCA_3, CCA_4, CCA_5,
-    CCA_6, CCA_7, CCA_8, CCA_9, SPL_0='0', SPL_B, SPL_C, SPL_D,
+    CCA_6, CCA_7, CCA_8, CCA_9, SPL_0='0', SPL_1, SPL_2, SPL_3,
+    SPL_B = 'b', SPL_D = 'd', SPL_C = 'c',
     SDU_N = 'n', SDU_m = 'm', SDU_M = 'M', SDU_g = 'g',
     CST_0 = '0', CST_1, CST_2, CST_3, CST_4, CST_5, // surface type index
     CSI_0 = '0', CSI_1, CSI_2, CSI_3, CSI_4, CSI_5, // surface site index

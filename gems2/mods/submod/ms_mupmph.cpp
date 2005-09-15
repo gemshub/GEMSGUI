@@ -609,22 +609,25 @@ CH_FOUND:
                 pmp->SATX[ja][XL_SI] = 5;
                 break;
             }
-            /* Loading allocation to surface planes */
+            /* Loading charge allocation to surface planes */
             switch( syp->SATC[jja][SA_PLAX] )
             {
               default:
-              case SPL_0:   // 0 plane
-                pmp->SATX[ja][XL_SP] = 0;
-                break;
-              case SPL_B:   // beta plane
-                pmp->SATX[ja][XL_SP] = 1;
-                break;
-              case SPL_C:   // beta plane for anions (4-layer model)
-                pmp->SATX[ja][XL_SP] = 2;
-                break;
-              case SPL_D:   // diffuse layer
-                pmp->SATX[ja][XL_SP] = 3;
-                break;
+              case SPL_0:   // only to 0 plane (sorbent surface plane)
+                   pmp->SATX[ja][XL_SP] = 0;
+                   break;
+              case SPL_1:
+              case SPL_B:   // to beta plane or plane 1 in CD 3-layer
+                   pmp->SATX[ja][XL_SP] = 1;
+                   break;
+              case SPL_2:
+              case SPL_D:   // to DL plane or plane 2 in CD 3-layer
+                   pmp->SATX[ja][XL_SP] = 2;
+                   break;
+              case SPL_3:
+              case SPL_C:   // to OS anion beta plane (4-layer model, reserved)
+                   pmp->SATX[ja][XL_SP] = 3;
+                   break;
             }
         }
     }
