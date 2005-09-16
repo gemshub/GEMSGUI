@@ -155,7 +155,7 @@ TGtDemo::_pr_tab( const char *key )
     prTab.PutEnd();
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     gdp->prtab = (char *)aObj[ o_gwprtab ].Alloc( 1, tblen, S_ );
     memcpy( gdp->prtab, tab, tblen );
 
@@ -224,7 +224,7 @@ TGtDemo::_line_tab( const char *key )
     }
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     gdp->prtab = (char *)aObj[ o_gwprtab ].Alloc( 1, tblen, S_ );
     memcpy( gdp->prtab, tab, tblen );
 
@@ -444,7 +444,7 @@ TDComp::RecordPrint( const char */*key*/ )
     // Put results to object
     prTab.PutEnd();
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     dcp->tprn = (char *)aObj[ o_dctprn ].Alloc( 1, tblen, S_ );
     memcpy( dcp->tprn, tab, tblen );
 
@@ -546,7 +546,7 @@ TProcess::_pr_tab( const char *key )
     prTab.PutString( pbuf );
     prTab.PutString("|========|============|============|============|\n" );
 
-    /* Equations of Process  */
+    /* Equations of Process */
     if( aObj[o_peexpr].GetPtr()!= 0 )
     {
         prTab.PutString( "\n Sampling equations:\n----------------------------\n" );
@@ -582,7 +582,7 @@ TProcess::_pr_tab( const char *key )
         }
         prTab.NextLine();
     }
-    /* ARRAY  Kin */
+    /* ARRAY Kin */
     if( pep->PvKin != S_OFF )
     {
         prTab.PutString( "Array of (reaction) kinetic parameters" );
@@ -672,7 +672,7 @@ TProcess::_pr_tab( const char *key )
 
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     pep->tprn = (char *)aObj[ o_petprn ].Alloc( 1, tblen, S_ );
     memcpy( pep->tprn, tab, tblen );
     vfObjToFile(window(), &aObj[o_petprn]);
@@ -813,7 +813,7 @@ TRTParm::_pr_tab()
     prTab.PutEnd();
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     rpp->tprn = (char *)aObj[ o_rptprn ].Alloc( 1, tblen, S_ );
     memcpy( rpp->tprn, tab, tblen );
 
@@ -861,7 +861,7 @@ TRTParm::_pr_line()
     prTab.PutEnd();
     // Put results to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     rpp->tprn = (char *)aObj[ o_rptprn ].Alloc( 1, tblen, S_ );
     memcpy( rpp->tprn, tab, tblen );
 
@@ -1247,7 +1247,7 @@ TMTparm::_pr_tab( const char *key )
     prTab.PutEnd();
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     aPa->pa.p.tprn= (char *)aObj[o_patprn].Alloc( 1, tblen, S_ );
     memcpy( aPa->pa.p.tprn, tab, tblen );
@@ -1291,7 +1291,7 @@ TMTparm::_pr_line( const char *key )
     prTab.PutEnd();
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     aPa->pa.p.tprn= (char *)aObj[o_patprn].Alloc( 1, tblen, S_ );
     memcpy( aPa->pa.p.tprn, tab, tblen );
@@ -1643,7 +1643,7 @@ void TMulti::print_PH( TPrintTable &prTab )
             sprintf( pbuf, tc_tab_18, pm.SF[k]+MAXSYMB, pm.PHC[k], pm.XF[k],
                      pm.Falp[k], pm.FWGT[k]/pm.MBX/10.,
                      pm.YOF[k]*pm.RT, pm.XFA[k] );
-        else  /* one component phase  */
+        else  /* one component phase */
             sprintf( pbuf, tc_tab_18, pm.SF[k]+MAXSYMB, pm.PHC[k],
                      pm.XF[k], pm.Falp[k], pm.FWGT[k]/pm.MBX/10.,
                      pm.GEX[jb]*pm.RT, 0.0 );
@@ -1687,7 +1687,7 @@ TMulti::RecordPrint( const char *key )
     prTab.PutEnd();
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     pm.pbuf = (char *)aObj[ o_wd_txtb ].Alloc( 1, tblen, S_ );
     memcpy( pm.pbuf, tab, tblen );
 
@@ -1753,7 +1753,7 @@ TSyst::syIC_pr_tab( const char *key  )
     prTab.PutEnd();
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     aPa->pa.p.tprn= (char *)aObj[o_patprn].Alloc( 1, tblen, S_ );
     memcpy( aPa->pa.p.tprn, tab, tblen );
@@ -1849,7 +1849,7 @@ TSyst::syDC_pr_tab( const char *key  )
     prTab.PutEnd();
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     aPa->pa.p.tprn= (char *)aObj[o_patprn].Alloc( 1, tblen, S_ );
     memcpy( aPa->pa.p.tprn, tab, tblen );
@@ -1875,7 +1875,7 @@ TSyst::syPh_pr_tab( const char *key  )
     /*Table heard */
     TPrintTable prTab( "Comparison of System record", GetName(), key );
     prTab.PutString(
-        "                                                         Table  4\n\n"
+        "                                                         Table 4\n\n"
         "          PARAMETERS OF PHASES        " );
     // Table head
     prTab.PutString( "|=|================================|===|=|===", 45, false);
@@ -1949,7 +1949,7 @@ TSyst::syPh_pr_tab( const char *key  )
     prTab.PutEnd();
     // Put resalts to object
     const char *tab= prTab.GetTable();
-    tblen = strlen(tab)+1; /* Get size of text buf  */
+    tblen = strlen(tab)+1; /* Get size of text buf */
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     aPa->pa.p.tprn= (char *)aObj[o_patprn].Alloc( 1, tblen, S_ );
     memcpy( aPa->pa.p.tprn, tab, tblen );
@@ -2984,4 +2984,230 @@ void TMulti::dyn__test(MULTI& tes)
 //  cout << "Test sequence end: " << endl;
 }
 
+//
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Obsolete calculation of surface activity terms (Kulik, 1998, 2000, 2002)
+* Revised by DAK on 03.Jan.2000 in Mainz ( cf. Kulik, 1999a,b )
+*  to improve on IPM convergence at high SAT values.
+* SAT are now placed into pmp->lnGam[j], as any activity coeffs
+*  pmp->lnSAT vector is now used to keep original DUL[j] to restore
+*  them after IPM-2 refinements for surface complexes.
+*/
+void TProfil::SurfaceActivityTerm( int jb, int je, int k )
+{
+    int i, j, ist, Cj, iSite[6];
+    double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, ISAT, SAT,
+           / OSAT, * SATst, xjn, q1, q2;
+
+    if( pmp->XFA[k] < pmp->DSM ) // No sorbent retained by the IPM 
+        return;
+    if( pmp->XF[k]-pmp->XFA[k] < pmp->lowPosNum /* *10. * )
+        return;  /* No surface species *
+
+    for(i=0; i<6; i++)
+        iSite[i] = -1;
+
+    /* Extraction of site indices for neutral >OH groups *
+    for( j=jb; j<je; j++ )
+    {
+        if( pmp->SATT[j] != SAT_SITE )
+//        {
+//            if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_MINAL ||
+//                    pmp->DCC[j] == DC_SUR_CARRIER ) continue;
+//          ist = pmp->SATNdx[j][0] / MSPN; // MSPN = 2 - number of EDL planes
+            continue;
+//        }
+        ist = pmp->SATNdx[j][0] / MSPN;
+        iSite[ist] = j;
+    }
+
+    for( j=jb; j<je; j++ )
+    { /* Loop for DC *
+        if( pmp->X[j] <= pmp->lowPosNum /* *10. * )
+            continue;  /* This surface DC has been killed by IPM *
+//        OSAT = pmp->lnGmo[j]; // added 6.07.01 by KDA
+        rIEPS = pa.p.IEPS;   // between 1e-8 and 1e-10 default 1e-9
+        switch( pmp->DCC[j] )  /* code of species class *
+        {
+        default: /* pmp->lnGam[j] = 0.0; *
+            continue;
+        case DC_SSC_A0:
+        case DC_SSC_A1:
+        case DC_SSC_A2:
+        case DC_SSC_A3:
+        case DC_SSC_A4:
+        case DC_WSC_A0:
+        case DC_WSC_A1:
+        case DC_WSC_A2:
+        case DC_WSC_A3:
+        case DC_WSC_A4:
+        case DC_SUR_GROUP:
+        case DC_IEWC_B:
+        case DC_SUR_COMPLEX:
+        case DC_SUR_IPAIR:
+        case DC_IESC_A:
+            /* Calculate ist - index of surface type *
+            ist = pmp->SATNdx[j][0] / MSPN;
+            /* Cj - index of carrier DC *
+            Cj = pmp->SATNdx[j][1];
+            if( Cj < 0 )
+            {  /* Assigned to the whole sorbent *
+                XVk = pmp->XFA[k];
+                Mm = pmp->FWGT[k] / XVk;
+            }
+            else
+            { /* Assigned to one of the sorbent end-members *
+                XVk = pmp->X[Cj];
+                if( XVk < pmp->DSM/10.0 )
+                    continue; /* This end-member is zeroed off by IPM *
+                Mm = pmp->MM[Cj] * XVk/pmp->XFA[k];  // mol.mass
+            }
+            XSk = pmp->XFTS[k][ist]; /* Tot.moles of sorbates on surf.type *
+            xj = pmp->X[j];  /* Current moles of this surf.species *
+//          a=1.0;    Frumkin factor - reserved for extension to FFG isotherm
+            switch( pmp->SATT[j] )
+            {
+            case SAT_COMP: // Competitive surface species on a surface type
+                /* a = fabs(pmp->MASDJ[j]); *
+// rIEPS = pa.p.IEPS * 0.8;
+                if( iSite[ist] < 0 )
+                    xjn = 0.0;
+                else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
+                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; // expected total in moles
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * XS0;  // relative IEPS
+                XSkC = XSk - xjn - xj; // occupied by the competing species;
+	                             // this sorbate cannot compete to itself
+                if( XSkC < 0.0 )
+                    XSkC = 0.0;
+                if( XSkC >= XS0 )  // Limits
+                    XSkC = XS0 - 2.0 * rIEPS;
+                xj0 = XS0 - XSkC;    // expected moles of this sorbate
+                if(xj >= xj0)
+                       xj = xj0 - rIEPS; // limits: 2 * rIEPS to XS0 - rIEPS
+                if( xj * 2 <= xj0 )
+                    ISAT = 0.0;      // ideal case
+                else
+                {
+                   q1 = xj0 - xj;
+                   q2 = rIEPS * XS0;
+                   if( pa.p.PC == 2 && !pmp->W1 || pa.p.PC != 2 )
+                   {
+                      if( q1 > q2 )
+                        q2 = q1;
+                   }
+                   else {
+                      q2 = q1;
+                      if( q2 <= 1e-33 )
+                         q2 = 1e-33;
+                   }
+                   ISAT = log( xj ) - log( q2 );
+                }
+                // Test and compare with OSAT
+/*                if( pmp->IT > 0 &&
+                   ( ISAT < 0 || ISAT > 0-log(rIEPS) || fabs(ISAT-OSAT) > 3 ))
+                {
+cout << "IT=" << pmp->IT << ": Compt SAT for j= " << j << " old lnSAT= " << OSAT << " new lnSAT= " << ISAT << endl;
+cout << "     x[j]= " << pmp->X[j] << " xj= " << xj << " xj0= " << xj0 << " XSkC= " << XSkC << " XSk= " << XSk << endl;
+// ISAT = OSAT + 1;           // experiment
+                }
+*              pmp->lnGam[j] = ISAT;
+                break;
+            case SAT_NCOMP: /* Non-competitive surface species *
+// rIEPS = pa.p.IEPS * 2;
+                xj0 = fabs(pmp->MASDJ[j][PI_DEN]) * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; /* in moles *
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * xj0;  // relative IEPS
+                if(xj >= xj0)
+                     xj = xj0 - rIEPS;  // upper limit
+                if( xj * 2.0 <= xj0 )  // Linear adsorption - to improve !
+                    ISAT = 0.0;
+                else
+                {
+                    q1 = xj0 - xj;  // limits: rIEPS to 0.5*xj0
+                    q2 = xj0 * rIEPS;
+                    if( pa.p.PC == 2 && pmp->W1 )
+                       ISAT = log( xj ) - log( q1 );
+                    else {
+                       if( q1 > q2 )
+                          ISAT = log( xj ) - log( q1 );
+                       else
+                          ISAT = log( xj ) - log( q2 );
+                    }
+                 }
+//                    if( pa.p.PC == 2 && !pmp->W1 || pa.p.PC != 2 )
+/*                  if( pa.p.PC == 2 && pmp->W1 )
+                    {
+                         q2 = q1;
+                    }
+                    else {
+                       if( q1 > q2 )
+                           q2 = q1;
+                    }
+                    if( q2 <= 1e-33 )
+                        q2 = 1e-33;
+                    ISAT = log( xj ) - log( q2 );
+                }
+*/                // Test and compare with OSAT
+/*                if( pmp->IT > 0 &&
+                  ( ISAT < 0 || ISAT > 0-log(rIEPS) || fabs(ISAT-OSAT) > 3 ))
+                {
+cout << "IT=" << pmp->IT << ": Ncomp SAT for j= " << j << " old lnSAT= " << OSAT << " new lnSAT= " << ISAT << endl;
+cout << "     x[j]= " << pmp->X[j] << " xj= " << xj << " xj0= " << xj0 << " XSk= " << XSk << endl;
+// ISAT = OSAT + 1;           // experiment
+                }
+*              pmp->lnGam[j] = ISAT;
+                break;
+            case SAT_SITE:  /* Neutral surface site (e.g. >O0.5H@ group) *
+// rIEPS = pa.p.IEPS;
+                XS0 = pmp->MASDT[k][ist] * XVk * Mm / 1e6
+                      * pmp->Nfsp[k][ist]; /* in moles *
+                if( pa.p.PC == 1 )
+                    rIEPS = pa.p.IEPS * XS0;  // relative IEPS
+                XSkC = XSk - xj;
+                if( XSkC < 0.0 ) // potentially a serious error !
+                    XSkC = 0.0;
+//                if( XSkC >= XS0 )  // Limits
+//                    XSkC = XS0 - 2.0 * rIEPS;
+                if( pmp->MASDJ[j][PI_DEN] <= 0.0 )
+                    SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/
+                            pmp->MASDT[k][ist];
+                else SATst = pa.p.DNS*1.66054*pmp->Aalp[k]/pmp->MASDJ[j][PI_DEN];
+//                                 pmp->MASDJ[j];
+                if( fabs(XS0-XSkC) > XS0*rIEPS )
+                {
+                    if( XSkC > XS0 )  // case 1
+                        SAT = 1.0;
+                    else
+                    {
+                        SAT = xj/(XS0-XSkC);      // case 2
+                        if( XSk > XS0 )
+                            SAT *= XSk/(XS0-XSkC);    // case 3
+                    }
+                }
+                else SAT = xj * XS0*rIEPS;     // boost ?????
+/*                if( pmp->IT > 0 &&
+                  ( SAT < 1e-2 || SAT > 1.0/rIEPS || fabs(log(SAT)+log(SATst)-OSAT) > 3 ) )
+                {
+cout << "IT=" << pmp->IT << ": NSite SAT for j= " << j << " old lnSAT= " << OSAT << " new lnSAT= " << ISAT << endl;
+cout << "     x[jn]= " << pmp->X[j] << " XSk= " << XSk << " XSkC=" << XSkC << " XS0=" << XS0 << " SATst=" << SATst << endl;
+//  ISAT = OSAT + 1;           // experiment
+                }
+*              if( SAT < 1e-2 )  // limits
+                    SAT = 1e-2;  // to limit boosting
+                if( SAT > 1.0/rIEPS )
+                    SAT = 1.0/rIEPS;  // to limit from above
+                pmp->lnGam[j] = log( SAT );
+                pmp->lnGam[j] += log( SATst );
+                break;
+            case SAT_INDEF: /* No SAT calculation *
+            default:        /* pmp->lnGam[j] = 0.0; *
+                break;
+            }
+        }
+    }  /* j *
+}  
 
