@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>653</width>
-            <height>497</height>
+            <width>683</width>
+            <height>500</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,433 +22,376 @@
         <attribute name="title">
             <string>Step 1 - Defining the reaction new component type and the calculation method codes</string>
         </attribute>
-        <widget class="QButtonGroup">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>buttonGroup6</cstring>
+                <cstring>layout214</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>0</x>
-                    <y>20</y>
-                    <width>630</width>
-                    <height>90</height>
+                    <y>10</y>
+                    <width>660</width>
+                    <height>380</height>
                 </rect>
             </property>
-            <property name="title">
-                <string>Select here to which class the new reaction-defined component belongs</string>
-            </property>
-            <widget class="QLabel">
+            <vbox>
                 <property name="name">
-                    <cstring>ModelCodeLabel</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>410</x>
-                        <y>10</y>
-                        <width>210</width>
-                        <height>70</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>This class code will be copied into the Phase definition and can be changed there, if necessary</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>O   Dependent Component of a single-component condensed phase</string>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>buttonGroup6</cstring>
                     </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>T    Hydrogen ion H+</string>
+                    <property name="title">
+                        <string>Select here to which class the new reaction-defined component belongs</string>
                     </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>S    Other aqueous species (ions complexes and ion pairs)</string>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>ModelCodeLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>This class code will be copied into the Phase definition and can be changed there, if necessary:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>O   Dependent Component of a single-component condensed phase</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>T    Hydrogen ion H+</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>S    Other aqueous species (ions complexes and ion pairs)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>W   Water H2O (solvent in aqueous phase)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>L     Liquid solvent component of the aqueous phase</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>G    Gas (ideal component)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>I     Ideal end-member (ideal mixing, Raoult's law)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>J    Junior end-member (solute, non-ideal mixing)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>M   Major end-member (solvent, non-ideal mixing)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>X    Neutral surface OH functional group</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Y    Inner-sphere surface complex</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Z    Outer-sphere surface complex </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>0    Inner-sphere complex on surface type 0 </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2    Inner-sphere complex on surface type 1 </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>4    Inner-sphere complex on surface type 2</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>6    Inner-sphere complex on surface type 3 </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>8    Inner-sphere complex on surface type 4</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1    Outer-sphere complex on surface  type 0</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>3    Outer-sphere complex on surface type 1</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>5    Outer-sphere complex on surface type 2</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>7    Outer-sphere complex on surface type 3</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>9    Outer-sphere complex on surtype type 4</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Q   Sorbent; major end-member of the sorbent solid solution</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>P    Other (minor) end-member of the sorbent solid solutio</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPreC</cstring>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_4</cstring>
                     </property>
-                </item>
-                <item>
                     <property name="text">
-                        <string>W   Water H2O (solvent in aqueous phase)</string>
+                        <string>By setting the codes below, you will configure the ReacDC record data objects and tell the program how the temperature and pressure corrections for the reaction and its new dependent component should be calculated.</string>
                     </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>L     Liquid solvent component of the aqueous phase</string>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
                     </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>G    Gas (ideal component)</string>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>MixingModelGroup</cstring>
                     </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>I     Ideal end-member (ideal mixing, Raoult's law)</string>
+                    <property name="title">
+                        <string>Select here the methods for temperature and pressure corrections for reaction-defined DC</string>
                     </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>J    Junior end-member (solute, non-ideal mixing)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>M   Major end-member (solvent, non-ideal mixing)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>X    Neutral surface OH functional group</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Y    Inner-sphere surface complex</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Z    Outer-sphere surface complex </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>0    Inner-sphere complex on surface type 0 </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>2    Inner-sphere complex on surface type 1 </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>4    Inner-sphere complex on surface type 2</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>6    Inner-sphere complex on surface type 3 </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>8    Inner-sphere complex on surface type 4</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>1    Outer-sphere complex on surface  type 0</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>3    Outer-sphere complex on surface type 1</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>5    Outer-sphere complex on surface type 2</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>7    Outer-sphere complex on surface type 3</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>9    Outer-sphere complex on surtype type 4</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Q   Sorbent; major end-member of the sorbent solid solution</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>P    Other (minor) end-member of the sorbent solid solutio</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>pPreC</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>30</y>
-                        <width>380</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>20</x>
-                    <y>120</y>
-                    <width>580</width>
-                    <height>80</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;By setting the codes below, you will configure the ReacDC record data objects and tell the program how the temperature and pressure corrections for the reaction and its new dependent component should be calculated.&lt;/b&gt;</string>
-            </property>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>MixingModelGroup</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>210</y>
-                    <width>630</width>
-                    <height>200</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>Select here the methods for temperature and pressure corrections for reaction-defined DC</string>
-            </property>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>3   Three-term extrapolation of logK (T ) at dCpr(T) = const </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>2   Two-term extrapolation of logK (T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>1   One-term extrapolation of logK (T )  assuming dGr (T ) = dGr (Tr ) = const,</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>0   One-term extrapolation of logK (T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>X   Calculation of logKT   for reactions from the empirical coefficients</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>S   Calculation of g0T , h0T, S0T  from standard entropy integration</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>K   Calculation using HKF EoS coefficients (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>W  Calculation of properties of H2O liquid and vapor (reserved) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>L    Calculation of logKT  for reactions (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>G   Calculation of standard Gibbs energy function g0T  </string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>p_pct_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>90</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>AC_modeLabel</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>380</x>
-                        <y>20</y>
-                        <width>240</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Plain</enum>
-                </property>
-                <property name="text">
-                    <string>General method code for temperature corrections of molar thermodynamic properties</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>DcEqModeLabel</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>380</x>
-                        <y>80</y>
-                        <width>240</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Plain</enum>
-                </property>
-                <property name="text">
-                    <string>Method variant code for temperature EoS corrections of molar thermodynamic properties</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>PhEqModeLabel</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>380</x>
-                        <y>141</y>
-                        <width>230</width>
-                        <height>50</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Method code for pressure corrections of molar thermodynamic properties</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>K   Calculation through the logK of reaction TP dependencies</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>H   Calculation on the basis of revised HKF EoS (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>C   Calculation on the basis of standard S0  and Cp0  integration</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>I    Calculation of thermodynamic properties for isotopic forms of compounds</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>p_pct_1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>30</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>C   Molar volume of new DC from constant dVr  of reaction</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>N   No pressure correction to be done</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>B   Molar volume corrected using Birch-Murnaghan EoS coefficients</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>0   Account for pressure dependence is inherent</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>K   Molar volume is calculated from 5 empirical coefficients</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>E   Molar volume V (T,P )  increment to V0 (reserved)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>P   Application of built-in PRONSPREP97  (for aqueous dissociation reactions)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>F   Pressure corrections for the properties of H2O liquid (reserved)</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>p_pct_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>150</y>
-                        <width>350</width>
-                        <height>31</height>
-                    </rect>
-                </property>
-            </widget>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>AC_modeLabel</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>General method code for temperature corrections of molar thermodynamic properties:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>K   Calculation through the logK of reaction TP dependencies</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>H   Calculation on the basis of revised HKF EoS (reserved)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>C   Calculation on the basis of standard S0  and Cp0  integration</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>I    Calculation of thermodynamic properties for isotopic forms of compounds</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_pct_1</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>DcEqModeLabel</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Method variant code for temperature EoS corrections of molar thermodynamic properties:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>3   Three-term extrapolation of logK (T ) at dCpr(T) = const </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2   Two-term extrapolation of logK (T ) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>1   One-term extrapolation of logK (T )  assuming dGr (T ) = dGr (Tr ) = const,</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>0   One-term extrapolation of logK (T ) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>X   Calculation of logKT   for reactions from the empirical coefficients</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>S   Calculation of g0T , h0T, S0T  from standard entropy integration</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>K   Calculation using HKF EoS coefficients (reserved)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>W  Calculation of properties of H2O liquid and vapor (reserved) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>L    Calculation of logKT  for reactions (reserved)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>G   Calculation of standard Gibbs energy function g0T  </string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_pct_2</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>PhEqModeLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Method code for pressure corrections of molar thermodynamic properties:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignBottom</set>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>C   Molar volume of new DC from constant dVr  of reaction</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>N   No pressure correction to be done</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>B   Molar volume corrected using Birch-Murnaghan EoS coefficients</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>0   Account for pressure dependence is inherent</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>K   Molar volume is calculated from 5 empirical coefficients</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>E   Molar volume V (T,P )  increment to V0 (reserved)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>P   Application of built-in PRONSPREP97  (for aqueous dissociation reactions)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>F   Pressure corrections for the properties of H2O liquid (reserved)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>p_pct_3</cstring>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </vbox>
         </widget>
     </widget>
     <widget class="QWidget">
@@ -460,313 +403,84 @@
         </attribute>
         <widget class="QButtonGroup">
             <property name="name">
-                <cstring>ButtonGroup1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>210</y>
-                    <width>620</width>
-                    <height>200</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>No need to change in this version of GEMS-PSI </string>
-            </property>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>j     J/mol(/K) </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>c    cal/mol(/K)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>J     kJ/mol(/K)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>C    kcal/mol(/K)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>N   Normalized</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>pPunE</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>40</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>j    J/bar  = 0.1 cm3/mol</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>a   cal/bar</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>m   cm3/mol</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>pPunV</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>80</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>C   Celsius  </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>K   Kelvin</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>F   Fahrenheit</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>pPunT</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>160</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>b    bar  = 10^5 Pa</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>B    kbar (kilobar)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>p    Pa  (Pascal)</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>P    MPa  = 10^6 Pa  </string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>A    atm (=1.013 bar)</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>pPunP</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>120</y>
-                        <width>140</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_3_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>180</x>
-                        <y>160</y>
-                        <width>370</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Plain</enum>
-                </property>
-                <property name="text">
-                    <string>Units of measurement of temperature in this ReacDC record (default: C)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_3_2_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>180</x>
-                        <y>120</y>
-                        <width>370</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Units of measurement of pressure in this ReacDC record (default: b)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_3_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>180</x>
-                        <y>80</y>
-                        <width>370</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Units of measurement of volume in this ReacDC record (default:  j)</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>180</x>
-                        <y>40</y>
-                        <width>370</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Units of measurement of energy in this ReacDC record (default: j)</string>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
                 <cstring>buttonGroup4</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>90</y>
-                    <width>620</width>
-                    <height>100</height>
+                    <y>110</y>
+                    <width>640</width>
+                    <height>85</height>
                 </rect>
             </property>
             <property name="title">
                 <string>Dimensions to set only for the logK array for T,P corrections by interpolation (KZZ method codes)   </string>
             </property>
-            <widget class="QSpinBox">
+            <grid>
                 <property name="name">
-                    <cstring>pnTp</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>30</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>pnPp</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>60</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>30</y>
-                        <width>480</width>
-                        <height>30</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of interpolation points along T (more than 2, less than 20)</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>100</x>
-                        <y>60</y>
-                        <width>480</width>
-                        <height>28</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Number of interpolation points along P (more than one, less than 10)</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Number of interpolation points along T (more than 2, less than 20)</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>pnPp</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>pnTp</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Number of interpolation points along P (more than one, less than 10)</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+            </grid>
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
@@ -776,8 +490,8 @@
                 <rect>
                     <x>10</x>
                     <y>10</y>
-                    <width>620</width>
-                    <height>70</height>
+                    <width>640</width>
+                    <height>80</height>
                 </rect>
             </property>
             <property name="title">
@@ -804,8 +518,8 @@
                     <rect>
                         <x>100</x>
                         <y>30</y>
-                        <width>500</width>
-                        <height>28</height>
+                        <width>520</width>
+                        <height>30</height>
                     </rect>
                 </property>
                 <property name="text">
@@ -815,6 +529,197 @@
                     <set>WordBreak|AlignVCenter</set>
                 </property>
             </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>ButtonGroup1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>210</y>
+                    <width>652</width>
+                    <height>145</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>No need to change in this version of GEMS-PSI </string>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout217</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>j     J/mol(/K) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>c    cal/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>J     kJ/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>C    kcal/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>N   Normalized</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunE</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>j    J/bar  = 0.1 cm3/mol</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>a   cal/bar</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>m   cm3/mol</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunV</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>b    bar  = 10^5 Pa</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>B    kbar (kilobar)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>p    Pa  (Pascal)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>P    MPa  = 10^6 Pa  </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>A    atm (=1.013 bar)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunP</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>C   Celsius  </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>K   Kelvin</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>F   Fahrenheit</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunT</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout216</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of energy in this ReacDC record (default: j)</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2_3_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of volume in this ReacDC record (default:  j)</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2_3_2_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of pressure in this ReacDC record (default: b)</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2_3_2_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of temperature in this ReacDC record (default: C)</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
         </widget>
     </widget>
     <widget class="QWidget">
@@ -826,134 +731,123 @@
         </attribute>
         <widget class="QButtonGroup">
             <property name="name">
+                <cstring>buttonGroup11</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>78</y>
+                    <width>640</width>
+                    <height>331</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>What will happen after you click "Finish"</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>(1) The program will display a list of available ReacDC records, asking you to mark those you need to get involved in the reaction and click "Ok". Then the program will display a list of available DComp records, asking you to mark those you need to get involved in the reaction and click "Ok". In total, minimum one species (DComp or ReacDC) must be selected if the reaction defines a new dependent component, or at least two records must be selected if the properties of the reaction shall be calculated from only the molar properties of existing components.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel7</cstring>
+                    </property>
+                    <property name="text">
+                        <string>(2) When Page 1 of the "ReacDC" window appears on the desktop, enter the full name of the new reaction-defined component into the RDname field and the formula of that component the RDform field. Next, enter the reaction stoichiometry coefficients into the SC_DC column (positive for products, negative for reactants). Then enter the available dVr, logK or dGr, dHr or dSr, dCpr values. If some parameters of the reaction are unknown (e.g. dHr), enter "empty" value "---" in the respective cell.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel8</cstring>
+                    </property>
+                    <property name="text">
+                        <string>(3) Click on the "Calculate" toolbar button - the missing values for the reaction and its newly defined component (always the last one) will be calculated and will appear on Page 1. Save the ReacDC record to database. You may test the temperature-pressure corrections for properties of the reaction or its new DC by creating a RTParm tabulation record later on.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
                 <cstring>buttonGroup10</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>10</x>
                     <y>10</y>
-                    <width>620</width>
+                    <width>640</width>
                     <height>60</height>
                 </rect>
             </property>
             <property name="title">
                 <string>Optional</string>
             </property>
-            <widget class="QLabel">
+            <hbox>
                 <property name="name">
-                    <cstring>textLabel5</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>80</x>
-                        <y>20</y>
-                        <width>521</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&lt;b&gt;Set here the number of links to SDref bibliography records (default 0)&lt;/b&gt;</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>spinBoxSDrefLnk</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>20</y>
-                        <width>51</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup11</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>90</y>
-                    <width>620</width>
-                    <height>300</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>What will happen after you click "Finish"</string>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel6</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>20</y>
-                        <width>580</width>
-                        <height>100</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(1) The program will display a list of available ReacDC records, asking you to mark those you need to get involved in the reaction and click "Ok". Then the program will display a list of available DComp records, asking you to mark those you need to get involved in the reaction and click "Ok". In total, minimum one species (DComp or ReacDC) must be selected if the reaction defines a new dependent component, or at least two records must be selected if the properties of the reaction shall be calculated from only the molar properties of existing components.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel8</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>210</y>
-                        <width>580</width>
-                        <height>80</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(3) Click on the "Calculate" toolbar button - the missing values for the reaction and its newly defined component (always the last one) will be calculated and will appear on Page 1. Save the ReacDC record to database. You may test the temperature-pressure corrections for properties of the reaction or its new DC by creating a RTParm tabulation record later on.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel7</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>120</y>
-                        <width>580</width>
-                        <height>90</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>(2) When Page 1 of the "ReacDC" window appears on the desktop, enter the full name of the new reaction-defined component into the RDname field and the formula of that component the RDform field. Next, enter the reaction stoichiometry coefficients into the SC_DC column (positive for products, negative for reactants). Then enter the available dVr, logK or dGr, dHr or dSr, dCpr values. If some parameters of the reaction are unknown (e.g. dHr), enter "empty" value "---" in the respective cell.</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>spinBoxSDrefLnk</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Set here the number of links to SDref bibliography records (default 0)</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
     </widget>
 </widget>
 <tabstops>
+    <tabstop>pPreC</tabstop>
     <tabstop>p_pct_1</tabstop>
     <tabstop>p_pct_2</tabstop>
     <tabstop>p_pct_3</tabstop>
-    <tabstop>pPreC</tabstop>
+    <tabstop>pnDC</tabstop>
     <tabstop>pnTp</tabstop>
     <tabstop>pnPp</tabstop>
+    <tabstop>pPunE</tabstop>
+    <tabstop>pPunV</tabstop>
+    <tabstop>pPunP</tabstop>
+    <tabstop>pPunT</tabstop>
     <tabstop>spinBoxSDrefLnk</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>

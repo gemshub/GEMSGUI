@@ -87,7 +87,7 @@ LegendDialog::LegendDialog( GraphDialog * aGraph ):
     pfYn->setText( str.setNum (graph->part[3]) );
 
     B_2 = new QButtonGroup( this, "ButtonGroup_1" );
-    B_2->setGeometry( 10, 260, 380, 0 );
+    B_2->setGeometry( 10, 270, 380, 0 );
     B_2->setTitle( "Plots list" );
     connect( B_2, SIGNAL(clicked(int)), SLOT(SetLine(int)) );
 
@@ -155,7 +155,7 @@ void  LegendDialog::CmChangeGraphType( int new_type )
 void  LegendDialog::ShowLines( bool new_ )
 {
     QLineEdit*    pName1;
-    int y=280;
+    int y=290;
     for( uint ii=0, kk=0; ii<graph->plots.GetCount(); ii++, y+=10 )
     {
 
