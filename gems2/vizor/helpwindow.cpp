@@ -127,15 +127,17 @@ cerr << "finished" << endl;
 QString 
 HttpMimeSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const
 {
-	if( abs_or_rel_name.startsWith("http://") /*&& !context.startsWith("http://")*/ ) {
-	cerr<< "makeAbsolute " << abs_or_rel_name << endl;
-	if( !context.isEmpty() )
-	    cerr << " context " << context << endl;
-	    return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, "");
+	if( abs_or_rel_name.startsWith("http://") /*&& !context.startsWith("http://")*/ )
+        {
+	 cerr<< "makeAbsolute " << abs_or_rel_name << endl;
+	 if( !context.isEmpty() )
+	     cerr << " context " << context << endl;
+         return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, "");
 //	    return abs_or_rel_name;
 	}
 	else
-	    if( !context.isEmpty() && context.startsWith("http://") ) {
+	  if( !context.isEmpty() && context.startsWith("http://") )
+          {
 		cerr<< "makeAbsolute " << abs_or_rel_name << endl;
 		if( !context.isEmpty() )
 		    cerr << " context " << context << endl;
@@ -146,7 +148,9 @@ HttpMimeSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QSt
 		else
 		    contextBase = context.left( context.findRev("/")+1 );
 
-		return contextBase + abs_or_rel_name;
+                contextBase += abs_or_rel_name;
+		return QMimeSourceFactory::makeAbsolute( contextBase, "" );
+//		return contextBase + abs_or_rel_name;  SD oct 2005
 	    }
 	    else
 		return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, context);
