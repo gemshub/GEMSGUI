@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>686</width>
-            <height>535</height>
+            <height>505</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,28 +22,6 @@
         <attribute name="title">
             <string>Step 1 - Defining the dependent component type and the calculation method codes</string>
         </attribute>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>30</x>
-                    <y>150</y>
-                    <width>590</width>
-                    <height>70</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.</string>
-            </property>
-            <property name="scaledContents">
-                <bool>false</bool>
-            </property>
-            <property name="alignment">
-                <set>WordBreak|AlignVCenter</set>
-            </property>
-        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>buttonGroup6</cstring>
@@ -223,6 +201,28 @@
                 </widget>
             </vbox>
         </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>130</y>
+                    <width>590</width>
+                    <height>70</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>By setting the codes below, you will configure the DComp record data objects and tell the program how the temperature and pressure corrections for the molar properties of this dependent component should be calculated.</string>
+            </property>
+            <property name="scaledContents">
+                <bool>false</bool>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignVCenter</set>
+            </property>
+        </widget>
         <widget class="QButtonGroup">
             <property name="name">
                 <cstring>MixingModelGroup</cstring>
@@ -230,7 +230,7 @@
             <property name="geometry">
                 <rect>
                     <x>20</x>
-                    <y>230</y>
+                    <y>200</y>
                     <width>610</width>
                     <height>197</height>
                 </rect>
@@ -411,23 +411,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer64</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>16</height>
-                        </size>
-                    </property>
-                </spacer>
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>layout116</cstring>
@@ -687,23 +670,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer65</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>16</height>
-                        </size>
-                    </property>
-                </spacer>
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>layout111</cstring>
@@ -850,6 +816,54 @@
         </attribute>
         <widget class="QButtonGroup">
             <property name="name">
+                <cstring>buttonGroup10</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>10</y>
+                    <width>620</width>
+                    <height>60</height>
+                </rect>
+            </property>
+            <property name="title">
+                <string>Optional</string>
+            </property>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>spinBoxSDrefLnk</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>20</x>
+                        <y>20</y>
+                        <width>51</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel5</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>80</x>
+                        <y>20</y>
+                        <width>521</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Set here the number of links to SDref bibliography records (default 0)</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
                 <cstring>buttonGroup11</cstring>
             </property>
             <property name="geometry">
@@ -912,54 +926,6 @@
                     </property>
                 </widget>
             </vbox>
-        </widget>
-        <widget class="QButtonGroup">
-            <property name="name">
-                <cstring>buttonGroup10</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>10</y>
-                    <width>620</width>
-                    <height>60</height>
-                </rect>
-            </property>
-            <property name="title">
-                <string>Optional</string>
-            </property>
-            <widget class="QSpinBox">
-                <property name="name">
-                    <cstring>spinBoxSDrefLnk</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>20</x>
-                        <y>20</y>
-                        <width>51</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel5</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>80</x>
-                        <y>20</y>
-                        <width>521</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Set here the number of links to SDref bibliography records (default 0)</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
-                </property>
-            </widget>
         </widget>
     </widget>
 </widget>

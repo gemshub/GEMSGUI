@@ -461,9 +461,9 @@ TVisorImp::MakePlot(TCModule *md, TIArray<TPlot>& plts,
 
 /*!
    Opens html <file> positioned on anchor <item> (as in "file:/myfile.html#item")
-   
+
    NOTE: we should not specify parent parameter for modeless dialog
-   because otherwise even that it allows work with parent window it will 
+   because otherwise even that it allows work with parent window it will
    be always overlapping it. For modal windows (and thus modal help) we need parent
 */
 
@@ -484,9 +484,11 @@ TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent, bool mo
         path += item;
     }
 
+    QString path_str = path.c_str();
     if( !pHelpWidget )
     {
-	pHelpWidget = new HelpWindow(path.c_str(), parent, modal); //0);
+
+	pHelpWidget = new HelpWindow(path_str, parent, modal); //0);
 	connect( pHelpWidget, SIGNAL( destroyed() ), SLOT( evHelpClosed() ) );
 	//pHelpWidget->show();
         //pHelpWidget->loadFile(path.c_str(), 0);
@@ -501,7 +503,7 @@ TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent, bool mo
         }
         else*/
         pHelpWidget->raise();
-        pHelpWidget->loadFile(path.c_str(), 0);
+        pHelpWidget->loadFile(path_str, 0);
     }
 
 
