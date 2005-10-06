@@ -36,12 +36,13 @@ class HttpMimeSourceFactory:
     QString pathName;
     bool ready;
 
+    
  public:
     HttpMimeSourceFactory():
 	ready(false) {
 	qInitNetworkProtocols();
     }
-    virtual const QMimeSource * data ( const QString & abs_name ) const;
+    const QMimeSource * data ( const QString & abs_name ) const;
     QString makeAbsolute ( const QString & abs_or_rel_name, const QString & context ) const;
     
  protected slots:

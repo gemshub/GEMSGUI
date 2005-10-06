@@ -46,6 +46,7 @@
 
 bool opReady = false;
 static QByteArray allData;
+QString contextBase;
 
 const QMimeSource * 
 HttpMimeSourceFactory::data ( const QString & abs_name_ ) const
@@ -60,8 +61,9 @@ HttpMimeSourceFactory::data ( const QString & abs_name_ ) const
 	return QMimeSourceFactory::data(abs_name);
     else {
 
-cerr << "request for http data: " << abs_name << endl;
-    
+cerr << "request for http data: " << abs_name.ascii() << endl;
+
+
 	QUrlOperator oper(abs_name);
 	connect(&oper, SIGNAL(finished(QNetworkOperation*)), 
 	    this, SLOT(finishedSlot(QNetworkOperation*)));
@@ -69,7 +71,7 @@ cerr << "request for http data: " << abs_name << endl;
 	    this, SLOT(dataSlot(const QByteArray&, QNetworkOperation*)));
 
 	oper.get();
-	
+
 	opReady = false;
 	while( !opReady ) {
 	    qApp->processEvents();
@@ -98,11 +100,14 @@ cerr << "bail out" << endl;
 void 
 HttpMimeSourceFactory::dataSlot(const QByteArray & data, QNetworkOperation * op)
 {
+cerr << "dataSlot" <<  "  " << allData.size() << endl;
     if( data.size() == 0 )
 	return;
 	
     size_t newSize = allData.size() + data.size();
     char* newArray = new char[newSize];
+
+cerr << "dataSlot" << newSize << "  " << allData.size() << endl;
 
     if( allData.size() > 0 )
 	memcpy(newArray, allData.data(), allData.size());
@@ -130,7 +135,7 @@ HttpMimeSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QSt
 	if( abs_or_rel_name.startsWith("http://") /*&& !context.startsWith("http://")*/ )
         {
 	 cerr<< "makeAbsolute " << abs_or_rel_name << endl;
-	 if( !context.isEmpty() )
+       if( !context.isEmpty() )
 	     cerr << " context " << context << endl;
          return QMimeSourceFactory::makeAbsolute(abs_or_rel_name, "");
 //	    return abs_or_rel_name;
@@ -148,8 +153,9 @@ HttpMimeSourceFactory::makeAbsolute ( const QString & abs_or_rel_name, const QSt
 		else
 		    contextBase = context.left( context.findRev("/")+1 );
 
-                contextBase += abs_or_rel_name;
-		return QMimeSourceFactory::makeAbsolute( contextBase, "" );
+               contextBase += abs_or_rel_name;
+   	       return QMimeSourceFactory::makeAbsolute( contextBase, context );
+//		return QMimeSourceFactory::makeAbsolute( abs_or_rel_name, contextBase );
 //		return contextBase + abs_or_rel_name;  SD oct 2005
 	    }
 	    else

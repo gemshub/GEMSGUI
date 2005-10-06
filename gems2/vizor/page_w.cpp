@@ -977,8 +977,8 @@ TCell::CmHelp()
     try
     {
         gstring item1 = item;
-        gstring docDir = pVisor->sysGEMDir();
-        docDir += "doc/html/";
+        gstring docDir = pVisor->docDir();/*pVisor->sysGEMDir();
+        docDir += "doc/html/"; oct 2005 SD */
         Helper hlp(docDir);
         // Get file URL to DOD item description
         hlp.checkForRef( GEMS_OBJNDX_HTML, item );
