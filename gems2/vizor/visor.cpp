@@ -179,6 +179,7 @@ TVisor::TVisor(int c, char *v[]):
 
     LocalDocDir = SysGEMDir + "doc/html/";
 #ifdef __unix
+#ifndef GEMS_RELEASE
 // added SD oct 2005
      if( LocalDocDir[0] == '.' && LocalDocDir[1] == '/' )
      {
@@ -188,6 +189,7 @@ TVisor::TVisor(int c, char *v[]):
 	getcwd(cur_dir, PATH_MAX);
 	LocalDocDir = gstring(cur_dir) + gstring(LocalDocDir,1);
      }
+#endif
 #endif
 }
 
