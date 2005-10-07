@@ -292,7 +292,7 @@ enum DC_CNTRL_CODES {
                       (Nordstrom&Munoz,1988) - REACDC only; */
     CTM_EK0 = '0', /* one-term extrapolation at dHr = 0 and logK = const added 15.07.03*/
     CTM_EK1 = '1', /* one-term extrapolation (Gu et al.,1994), dGr(T)= const */
-    CTM_EK2 = '2', /* two-term extrapolation Vant Hoff) - REACDC only;а */
+    CTM_EK2 = '2', /* two-term extrapolation Vant Hoff) - REACDC only; */
     CTM_EK3 = '3',  /*three-term extrapolation (dCpr = const)- REACDC only;*/
     CTM_IKZ = 'Z',/* calculation using Lagrange polynomial interpolation over the
                     array of lgK for several fixed T (P) points (REACDC only). */
@@ -303,7 +303,7 @@ enum DC_CNTRL_CODES {
     /*CTM_DKE = 'E',  * the same using electrostatic model of Ryzhenko-Bryzgalin
                       (reserved); */
     // (S) CTPM_EOS
-    CTM_CPG = 'C',  /* reserved (FGL) */ //(S)С - reserved
+    CTM_CPG = 'C',  /* reserved (FGL) */ //(S) - reserved
     // (I) CTPM_ISO
     CTM_IFG = 'G',  /* calculation of G0 for isotopic forms from equations (Grichuk,
                       1988) - REACDC only. */
@@ -331,7 +331,7 @@ enum DC_CNTRL_CODES {
                       sibility and isobaric expandability (Holland&Powell,1990); */
     CPM_GAS  = 'G', /*calculation of fugacities of gases from their critical para-
                       meters and corresponding state theory (FGL-Karpov ea.1995)
-                      (reserved);а */
+                      (reserved); */
     // 3. Codes used together with calculations by modified HKF EOS:
     // CTPM_HKF
     CPM_HKF  = 'F',/*account for pressure up to 5 kbar by HKF (Tanger,Helgeson,1988)*/
@@ -424,11 +424,11 @@ typedef enum { // Units of measurement of quontities and concentrations
     // aqueous species
     CON_AQGPL = 'd', CON_AQMGPL = 'e', CON_AQMKGPL = 'b',//VOLUME CONCENTRATION
 
-    /* поверхностных величин */
-    SUR_AREAM = 's',  SUR_AREAN = 'S', /* Уд.поверхность м2/г, м2/мол */
-    SUR_CONA  = 'A', /* Поверхн. избыток мол/м2 */
-    SUR_CONM  = 'D', /* Поверхн. избыток мол/г */
-    SUR_CONN  = 'E', /* Поверхн. избыток мол/мол */
+    /* я┐╜я┐╜я┐╜ чин */
+    SUR_AREAM = 's',  SUR_AREAN = 'S', /* .я┐╜я┐╜я┐╜2/, 2/ */
+    SUR_CONA  = 'A', /* я┐╜. я┐╜ /2 */
+    SUR_CONM  = 'D', /* я┐╜. я┐╜ / */
+    SUR_CONN  = 'E', /* я┐╜. я┐╜ / */
 
     //Units of measurement of pressure Pr, P  { b B p P A }'
     PVT_BAR =  'b', // bar - default, 1 bar = 1e5 Pa
@@ -505,17 +505,17 @@ typedef enum {  /* Classifications of DC */
     /* Single-component phases:*/
     DC_SCP_CONDEN  = 'O',   // DC forming a single-component phase
 
-    /* Дополнительные коды для печати результатов расчета равновесий */
-    DC_AQA_CATION   = 'c',  /* Катион */
-    DC_AQA_ANION    = 'n',  /* Анион */
-    DC_AQA_LIGAND   = 'l',  /* Органический лиганд */
-    DC_AQA_COMPLEX  = 'x',  /* Комплекс в водном растворе */
-    DC_AQA_IONPAIR  = 'p',  /* Ионная пара */
-    DC_AQA_GAS      = 'g',  /* Растворенный газ (нейтральн.) */
-    DC_AQA_ACID     = 'a',  /* Кислота */
-    DC_AQA_BASE     = 'b',  /* Щелочь */
-    DC_AQA_SALT     = 's',  /* Соль (недиссоц. электролит) */
-    DC_AQA_HYDROX   = 'o'   /* Ион гидроксила */
+    /* теля┐╜ я┐╜я┐╜я┐╜ резя┐╜я┐╜ я┐╜я┐╜ равсий */
+    DC_AQA_CATION   = 'c',  /* тио */
+    DC_AQA_ANION    = 'n',  /*  */
+    DC_AQA_LIGAND   = 'l',  /* ргая┐╜  */
+    DC_AQA_COMPLEX  = 'x',  /* я┐╜  я┐╜твоя┐╜*/
+    DC_AQA_IONPAIR  = 'p',  /* я┐╜я┐╜*/
+    DC_AQA_GAS      = 'g',  /* я┐╜реня┐╜ (я┐╜я┐╜) */
+    DC_AQA_ACID     = 'a',  /* слоя┐╜*/
+    DC_AQA_BASE     = 'b',  /* я┐╜ */
+    DC_AQA_SALT     = 's',  /* я┐╜(я┐╜я┐╜ элея┐╜я┐╜ */
+    DC_AQA_HYDROX   = 'o'   /*  роксил */
 
 } DC_CLASSES;
 
@@ -637,7 +637,7 @@ enum proces_objects {   // PROCES
     o_pec_p,  o_pec_v,    o_pec_t,    o_pec_tc,    o_pec_tau,    o_pec_pxi,
     o_pec_xi, o_pec_nu,    o_pec_ph,    o_pec_pe,    o_pec_eh,
     // Record 26
-    o_pestr, /*reservedа*/    o_pename,    o_penotes,
+    o_pestr, /*reserved*/    o_pename,    o_penotes,
     o_pepspv, /*a 24*/    o_peint1, /*i 29*/    o_pefloat,/*f 24*/
     o_petmv, /*i dyn*/    o_penvv, /*i dyn*/    o_pepv,  /*f dyn*/
     o_pevv,  /*f dyn*/    o_petv,  /*f dyn*/    o_petauv,/*f dyn*/
@@ -655,7 +655,7 @@ enum proces_objects {   // PROCES
     /* end new */
     };
 
-enum statcode {  /* Code status of processа */
+enum statcode {  /* Code status of process */
     P_UNDEF='0', P_STARTED, P_EXECUTE, P_INTERRUPT, P_FINISHED,
     P_MT_MODE, P_MT_STARTED, P_MT_EXECUTE, P_MT_INTERRUPT, P_MT_FINISHED };
 
@@ -732,18 +732,23 @@ enum dualth_objects {
 o_dtpvfl= o_untprn+1, o_dtpsflg, o_dtdim, o_dttmd, o_dtnvd,
 o_dtpd,   o_dttd,   o_dtvd, o_dtmsysb, o_dtt,
 o_dtp,   o_dtv, o_dtres,  o_dtq, o_dkp, o_dti,
-o_dtjm,  o_dtc_tm, o_dtc_nv, o_dtnam_nr, o_dtan, 
-o_dtname, o_dtnotes,
-o_dtpspv, o_dtshort, o_dtfloat, o_dtbb, o_dtbn,
-o_dtub, o_dtchi, o_dtmu_n, o_dtcoul, o_dtgam_n,
-o_dtavg_g, o_dtsd_g, o_dtmuo_n, o_dtavg_m, o_dtsd_m ,
-o_dtqpn, o_dtqpg, o_dtcib, o_dtcin, o_dtcab,
-o_dtcan,  o_dtcexpr, o_dtgexpr, o_dtsdref, o_dtsdval,
-o_dtnam_b, o_dtnam_n, o_dtfor_n, o_dtfor_b, o_dtstl,
-o_dttyp_n, o_dtciclb, o_dtcicln, o_dtauclb,  o_dtaucln,
-o_dtsbm, o_dtmuo_i, o_dtact_n, o_dttdq, o_dtpdq,
-o_dtisq, o_mia,  o_gmx_n, o_gxt_n, o_gxi_n,
-o_gxe_n, o_alp, o_dtstkey, o_dttprn,
+o_dtjm,  o_dtc_tm, o_dtc_nv, o_dtnam_nr, 
+// Added SD oct 2005
+o_lmft_s, o_lxi2, o_dttdat, o_dtydat, o_dtpar,
+o_dtsdpar,
+// Data Base
+  o_dtname, o_dtnotes,  o_dtpspv, o_dtshort, o_dtfloat, 
+  o_dtan, o_dtbb, o_dtbn, o_dtub, o_dtchi, 
+// changed SD oct 2005 43
+  o_dteta_b, o_dtact_n, o_dtgam_n, o_dtcoul, o_dtmu_n, 
+  o_dtmu_o, o_dtavsd_o, o_dtmu_a, o_dtavsd_a, o_gmx_n,
+  o_dtwa, o_dtavsd_w, o_dtqpn, o_dtqpg, o_dtcib, 
+  o_dtcin, o_dtcab, o_dtcan,  o_dtcexpr, o_dtgexpr, 
+  o_dtsdref, o_dtsdval, o_dtnam_b, o_dtnam_n, o_dtpar_n, 
+  o_dtfor_n, o_dtfor_b, o_dtstl, o_dttyp_n, o_dtciclb, 
+  o_dtcicln, o_dtauclb,  o_dtaucln, o_dtsbm, o_dttdq, 
+  o_dtpdq, o_dtisq, o_mia,  o_dtwdat, o_dtwpar,
+  o_dtwa_ap, o_dtstkey, o_dttprn,
 };
 
 typedef enum {

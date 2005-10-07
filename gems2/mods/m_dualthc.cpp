@@ -48,7 +48,7 @@ void TDualTh::Init_Analyse()
    // put data to Bn
    Bn_Calc();
    // for_n
-   make_A( dtp->nK, dtp->for_n );
+   make_A( dtp->nM, dtp->for_n );
    build_mu_n();  // calculate new mu_n matrix
 }
 
@@ -85,10 +85,10 @@ bool TDualTh::test_sizes( )
       i = false;
       dtp->nQ = 1;
    }
-   if( dtp->nK <=0 )
+   if( dtp->nM <=0 )
    {
       i = false;
-      dtp->nK = 1;
+      dtp->nM = 1;
    }
    if( dtp->PvSd == S_ON && dtp->Nsd <=0 )
      dtp->Nsd = 1;
@@ -150,7 +150,7 @@ void TDualTh::dt_initiate( bool mode )
      strncpy( dtp->nam_b[ii], tbuf, MAXIDNAME );
     }
 
-    for( ii=0; ii<dtp->nK; ii++)
+    for( ii=0; ii<dtp->nM; ii++)
     {
      dtp->typ_n[ii] = 'I';
 //     dtp->AUcln[ii] = 'M';
@@ -159,8 +159,8 @@ void TDualTh::dt_initiate( bool mode )
      strncpy( dtp->nam_n[ii], tbuf, MAXIDNAME );
      for( i=0; i<dtp->nQ; i++)
      {
-        dtp->gam_n[i*dtp->nK+ii] = 1.;  // default for gamma 1.0
-        dtp->chi[i*dtp->nK+ii] = 1.;  // default for chi 1.0
+        dtp->gam_n[i*dtp->nM+ii] = 1.;  // default for gamma 1.0
+        dtp->chi[i*dtp->nM+ii] = 1.;  // default for chi 1.0
      }
     }
 
@@ -304,15 +304,15 @@ void TDualTh::build_mu_n()
  {
    dtp->q = ii;
   // zero off a cell in mu_n
-    for( j=0; j<dtp->nK; j++)
+    for( j=0; j<dtp->nM; j++)
     {
        dtp->jm = j;
- //       dtp->mu_n[dtp->q*dtp->nK+j] = 0.;
-//   calculate mu_n from Ub
+ //       dtp->mu_b[dtp->q*dtp->nM+j] = 0.;
+//   calculate mu_b from Ub
        mu_sum = 0.0;
        for( i=0; i<dtp->Nb; i++)
          mu_sum += dtp->Ub[ii*dtp->Nb +i] * double(dtp->An[j*dtp->Nb +i]);
-       dtp->mu_n[ii*dtp->nK+j] = mu_sum;
+       dtp->mu_b[ii*dtp->nM+j] = mu_sum;
     }
   }
 }
@@ -692,10 +692,10 @@ TDualTh::Calc_muo_n( char eState )
        P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
     }
 
-    for( j=0; j<dtp->nK; j++)
+    for( j=0; j<dtp->nM; j++)
     {
        dtp->jm = j;
-       gam = dtp->gam_n[ii*dtp->nK+j];
+       gam = dtp->gam_n[ii*dtp->nM+j];
        if( dtp->PsMode == DT_MODE_A)
            gam = 1.0;
        if( eState == DT_STATE_S )
@@ -703,45 +703,45 @@ TDualTh::Calc_muo_n( char eState )
         {
           default:
           case DC_SCP_CONDEN:
-              muo = dtp->mu_n[ii*dtp->nK+j];
+              muo = dtp->mu_b[ii*dtp->nM+j];
               break;
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR: // Check this calculation !!!!
-              muo = dtp->mu_n[ii*dtp->nK+j]
-                  - RT*(gam + log(dtp->chi[ii*dtp->nK+j]));
+              muo = dtp->mu_b[ii*dtp->nM+j]
+                  - RT*(gam + log(dtp->chi[ii*dtp->nM+j]));
               break;
         }
        else  // Equilibrium
         switch(dtp->typ_n[j])
         {
           case DC_SCP_CONDEN:
-              muo = dtp->mu_n[ii*dtp->nK+j];
+              muo = dtp->mu_b[ii*dtp->nM+j];
               break;
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR:
-              muo = dtp->mu_n[ii*dtp->nK+j]
-                    - RT*(gam + log(dtp->chi[ii*dtp->nK+j]));
+              muo = dtp->mu_b[ii*dtp->nM+j]
+                    - RT*(gam + log(dtp->chi[ii*dtp->nM+j]));
               break;
           case DC_AQ_ELECTRON:
           case DC_AQ_PROTON:
           case DC_AQ_SPECIES:
-              muo = dtp->mu_n[ii*dtp->nK+j] + RT * ( Dsur + lnFmol - gam
-                    - log(dtp->chi[ii*dtp->nK+j]));
+              muo = dtp->mu_b[ii*dtp->nM+j] + RT * ( Dsur + lnFmol - gam
+                    - log(dtp->chi[ii*dtp->nM+j]));
               break;
           case DC_AQ_SOLVENT:
           case DC_AQ_SOLVCOM:
-              muo = dtp->mu_n[ii*dtp->nK+j] + RT * ( Dsur - 1. + 1. / ( 1.+Dsur ) - gam
-                    - log(dtp->chi[ii*dtp->nK+j]));
+              muo = dtp->mu_b[ii*dtp->nM+j] + RT * ( Dsur - 1. + 1. / ( 1.+Dsur ) - gam
+                    - log(dtp->chi[ii*dtp->nM+j]));
               break;
           case DC_GAS_COMP:
           case DC_GAS_H2O:
           case DC_GAS_CO2:   /* gases */
           case DC_GAS_H2:
           case DC_GAS_N2:
-              muo = dtp->mu_n[ii*dtp->nK+j]
-                    - RT*(gam + log(dtp->chi[ii*dtp->nK+j])
+              muo = dtp->mu_b[ii*dtp->nM+j]
+                    - RT*(gam + log(dtp->chi[ii*dtp->nM+j])
                     - log(P) );
               break;
 /*
@@ -759,7 +759,7 @@ TDualTh::Calc_muo_n( char eState )
         case DC_WSC_A1:
         case DC_WSC_A2:
         case DC_WSC_A3:
-        case DC_WSC_A4:  /* case DC_SUR_GROUP: *
+        case DC_WSC_A4:  // case DC_SUR_GROUP:
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:
         case DC_IESC_A:
@@ -770,7 +770,7 @@ TDualTh::Calc_muo_n( char eState )
             break; // Coulombic term to be considered !!!!!!!!!!
         case DC_PEL_CARRIER:
         case DC_SUR_MINAL:
-        case DC_SUR_CARRIER: /* sorbent *
+        case DC_SUR_CARRIER: // sorbent 
             DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                            + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
@@ -779,7 +779,7 @@ TDualTh::Calc_muo_n( char eState )
          default:
             break; /* error in DC class code */
         }
-       dtp->muo_n[ii*dtp->nK+j] = muo;
+       dtp->mu_o[ii*dtp->nM+j] = muo;
     }
   }
   Calc_muo_n_stat( eState );
@@ -832,25 +832,25 @@ TDualTh::Calc_muo_n_stat( char /*eState*/ )
 {
    short k;
 
-   for( k=0; k< dtp->nK; k++ )
+   for( k=0; k< dtp->nM; k++ )
    {
-      dtp->avg_m[k] = ColumnAverage( dtp->muo_n, dtp->nQ, dtp->nK, k  );
-      dtp->sd_m[k] = ColumnStdev( dtp->muo_n, dtp->avg_m[k], dtp->nQ,
-                     dtp->nK, k  );
+//      dtp->avg_m[k] = ColumnAverage( dtp->mu_o, dtp->nQ, dtp->nM, k  );
+//      dtp->sd_m[k] = ColumnStdev( dtp->mu_o, dtp->avg_m[k], dtp->nQ,
+//                     dtp->nM, k  );
    }
 }
 
 // Calculation of statistics over Wg (gamma interaction parameters)
 void
-TDualTh::Calc_gam_n_stat( char /*eState*/ )
+TDualTh::Calc_alp_n_stat( char /*eState*/ )
 {
    short k;
 
-   for( k=0; k< dtp->nK; k++ )
+   for( k=0; k< dtp->nM; k++ )
    {
-      dtp->avg_g[k] = ColumnAverage( dtp->gam_n, dtp->nQ, dtp->nK, k  );
-      dtp->sd_g[k] = ColumnStdev( dtp->gam_n, dtp->avg_g[k], dtp->nQ,
-                     dtp->nK, k  );
+//      dtp->avg_g[k] = ColumnAverage( dtp->gam_n, dtp->nQ, dtp->nM, k  );
+//      dtp->sd_g[k] = ColumnStdev( dtp->gam_n, dtp->avg_g[k], dtp->nQ,
+//                     dtp->nM, k  );
    }
 }
 
@@ -884,29 +884,29 @@ TDualTh::Calc_gam_n( char eState )
     if( eState == DT_STATE_S )
     {  // Stoichiometric saturation - applies to SS end-members only!
       Gmix = Gmech = Gid = 0.0; chiPr = 1.;
-      for( j=0; j<dtp->nK; j++)
+      for( j=0; j<dtp->nM; j++)
       {  // Calculation of Gmix for q-th experiment
-         chi = dtp->chi[ii*dtp->nK+j];
+         chi = dtp->chi[ii*dtp->nM+j];
          if(chi <= 1e-9) chi = 1e-9;
-         Gmix += dtp->mu_n[ii*dtp->nK+j] * chi;
-         Gmech += dtp->muo_i[ii*dtp->nK+j] * chi;
+         Gmix += dtp->mu_b[ii*dtp->nM+j] * chi;
+//SD         Gmech += dtp->muo_i[ii*dtp->nM+j] * chi;
          Gid += RT * chi * log( chi );
          chiPr *= chi;
       }
       //    Calculation of Gex for q-th experiment
       Gex = Gmix - Gid - Gmech;
 // putting values provisionally in 1st column of Coul cells!
-//      dtp->gex_n[ii*dtp->nK] = Gex;   // molar excess Gibbs energy of mixing
-//      dtp->gm_n[ii*dtp->nK] = Gmix;      // Temporarily!
-      dtp->gmx_n[ii*dtp->nK] = Gmix-Gmech;     // Temporarily!
+//      dtp->gex_n[ii*dtp->nM] = Gex;   // molar excess Gibbs energy of mixing
+//      dtp->gm_n[ii*dtp->nM] = Gmix;      // Temporarily!
+      dtp->gmx_n[0][ii] = Gmix-Gmech;     // Temporarily!
 // Interaction parameter (regular binary only)!
       Wg = Gex / chiPr;
 // putting values provisionally in 2nd column of Coul cells!
       if(dtp->Coul)
-         dtp->Coul[ii*dtp->nK+1] = Wg;
+         dtp->Coul[ii*dtp->nM+1] = Wg;
 // calculating activity coeffs of regular binary model
-      gam0 = Wg/RT * dtp->chi[ii*dtp->nK+1] * dtp->chi[ii*dtp->nK+1];
-      gam1 = Wg/RT * dtp->chi[ii*dtp->nK] * dtp->chi[ii*dtp->nK];
+      gam0 = Wg/RT * dtp->chi[ii*dtp->nM+1] * dtp->chi[ii*dtp->nM+1];
+      gam1 = Wg/RT * dtp->chi[ii*dtp->nM] * dtp->chi[ii*dtp->nM];
 // putting it provisionally in gam_n cells as activity coeffs
       if( gam0 < -10. )
           gam0 = -10;
@@ -916,44 +916,44 @@ TDualTh::Calc_gam_n( char eState )
           gam0 = 10;
       if( gam1 > 10. )
           gam1 = 10;
-      dtp->gam_n[ii*dtp->nK] = exp( gam0 );
-      dtp->gam_n[ii*dtp->nK+1] = exp( gam1 );
+      dtp->gam_n[ii*dtp->nM] = exp( gam0 );
+      dtp->gam_n[ii*dtp->nM+1] = exp( gam1 );
 // To be re-arranged and converted to script calculations!
     }
     else { // Equilibrium
-      for( j=0; j<dtp->nK; j++)
+      for( j=0; j<dtp->nM; j++)
       {
         dtp->jm = j;
-        muoi = dtp->muo_i[ii*dtp->nK+j];
+//SD        muoi = dtp->muo_i[ii*dtp->nM+j];
         switch(dtp->typ_n[j])
         {
           case DC_SCP_CONDEN:
-              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT);
+              gam = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT);
               break;
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR:
-              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
-                   - log(dtp->chi[ii*dtp->nK+j]));
+              gam = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
+                   - log(dtp->chi[ii*dtp->nM+j]));
               break;
           case DC_AQ_ELECTRON:
           case DC_AQ_PROTON:
           case DC_AQ_SPECIES:
-              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT + Dsur + lnFmol
-                   - log(dtp->chi[ii*dtp->nK+j]));
+              gam = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT + Dsur + lnFmol
+                   - log(dtp->chi[ii*dtp->nM+j]));
               break;
           case DC_AQ_SOLVENT:
           case DC_AQ_SOLVCOM:
-              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT + Dsur - 1.
-                    + 1. / ( 1.+Dsur ) - log(dtp->chi[ii*dtp->nK+j]));
+              gam = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT + Dsur - 1.
+                    + 1. / ( 1.+Dsur ) - log(dtp->chi[ii*dtp->nM+j]));
               break;
           case DC_GAS_COMP:
           case DC_GAS_H2O:
           case DC_GAS_CO2:   /* gases */
           case DC_GAS_H2:
           case DC_GAS_N2:
-              gam = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
-                   - log(dtp->chi[ii*dtp->nK+j]) + log(P));
+              gam = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
+                   - log(dtp->chi[ii*dtp->nM+j]) + log(P));
               break;
 /*
 // adsorption:
@@ -970,7 +970,7 @@ TDualTh::Calc_gam_n( char eState )
         case DC_WSC_A1:
         case DC_WSC_A2:
         case DC_WSC_A3:
-        case DC_WSC_A4:  /* case DC_SUR_GROUP: *
+        case DC_WSC_A4:  // case DC_SUR_GROUP: 
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:
         case DC_IESC_A:
@@ -981,7 +981,7 @@ TDualTh::Calc_gam_n( char eState )
             break; // Coulombic term to be considered !!!!!!!!!!
         case DC_PEL_CARRIER:
         case DC_SUR_MINAL:
-        case DC_SUR_CARRIER: /* sorbent *
+        case DC_SUR_CARRIER: // sorbent 
             DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                            + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
@@ -990,12 +990,12 @@ TDualTh::Calc_gam_n( char eState )
          default:
             break; /* error in DC class code */
         }
-        dtp->gam_n[ii*dtp->nK+j] = gam;
+        dtp->gam_n[ii*dtp->nM+j] = gam;
       } // j
     } // else
   } //  ii
 
-  Calc_gam_n_stat( eState );
+  Calc_alp_n_stat( eState );
 }
 
 
@@ -1025,32 +1025,32 @@ TDualTh::Calc_act_n( char eState )
        P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
     }
   // zero off a cell in mu_n
-    for( j=0; j<dtp->nK; j++)
+    for( j=0; j<dtp->nM; j++)
     {
        dtp->jm = j;
-       muoi = dtp->muo_i[ii*dtp->nK+j];
+//SD       muoi = dtp->muo_i[ii*dtp->nM+j];
        if( eState == DT_STATE_S )
         switch(dtp->typ_n[j])  // Stoich. saturation - to be written !
         {          // for now, the same calculation as at equilibrium
           default:
           case DC_SCP_CONDEN:
-                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
+                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT );
                     break;
                case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
-                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
                             + Dsur + lnFmol);
                     break;
                case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
-                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
                             + Dsur - 1. + 1. / ( 1.+Dsur ) );
                     break;
                case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:
                case DC_GAS_H2: case DC_GAS_N2:
-                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT )
+                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT )
                             * P; // This makes partial fugacity (in activity scale)
                     break;
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
-                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
+                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT );
                     break;
         } // case
        else
@@ -1058,23 +1058,23 @@ TDualTh::Calc_act_n( char eState )
         {
           default:
           case DC_SCP_CONDEN: // actually, this is the saturation index
-                    activ = exp( (dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
+                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT );
                     break;
                case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
-                    activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                    activ = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
                             + Dsur + lnFmol);
                     break;
                case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
-                    activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT
+                    activ = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
                             + Dsur - 1. + 1. / ( 1.+Dsur ) );
                     break;
                case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:
                case DC_GAS_H2: case DC_GAS_N2:
-                    activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT )
+                    activ = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT )
                             * P; // Converts to activity scale
                     break;
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
-                    activ = exp((dtp->mu_n[ii*dtp->nK+j] - muoi)/RT );
+                    activ = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT );
                     break;
 /*               case DC_SUR_GROUP:
                     DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
@@ -1089,14 +1089,14 @@ TDualTh::Calc_act_n( char eState )
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
                     break; // Coulombic term to be considered !!!!!!!!!!
-               case DC_PEL_CARRIER: case DC_SUR_MINAL: case DC_SUR_CARRIER: /* sorbent *
+               case DC_PEL_CARRIER: case DC_SUR_MINAL: case DC_SUR_CARRIER: // sorbent 
                     DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                        + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
                     break;
 */       } // case
 
-         dtp->act_n[ii*dtp->nK+j] = activ;
+         dtp->act_n[ii*dtp->nM+j] = activ;
       } // j
    }  // ii
 }

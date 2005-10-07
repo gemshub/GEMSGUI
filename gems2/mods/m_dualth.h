@@ -1,10 +1,10 @@
 //-------------------------------------------------------------------
 // $Id$
-// To be finalized in Version 2.1 (2004)
+// To be finalized in Version 2.1 (2005)
 // Declaration of TDualTh class, config and calculation functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2004 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1995-2005 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -27,7 +27,8 @@
 const int DT_RKLEN = 80;
 
 typedef struct
-{ // Description of DualTh data structure (revised in July 2004)
+{ // Description of DualTh data structure (revised in October 2005 to bring in
+//   accordance with paper: Kulik, 2005, Chem.Geol. in press)
   // Record key format: the same as Proces
   char
    PunE,          // Units of energy   { j;  J c C N reserved }
@@ -47,36 +48,36 @@ typedef struct
 
      // Controls on operation
    PsMode,  // DualTh mode of operation { M G A X }
-   PsSt,    // State of non-basis part saturation { E P S }
+   PsSt,    // State of non-basis part saturation { E P S } equil, prim., stoich. sat.
 
-//  Status and control flags (+-)
+//  Status and control flags ( + - )
    gStat,  // DualTh generation status: 0 -indefinite; 1 on-going generation run;
         //  2 - done generation run; 3 - generation run error (+ 5: the same in stepwise mode)
    aStat,  // DualTh analysis status:  0 - indefinite; 1 ready for analysis;
         //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
-   PsSYd,  // Save generated SysEq records to data base (+ -)
+   PsSYd,  // Save generated SysEq records to data base ( + - )
 PsIPf,    // interaction parameter formalism code (R T M V O)
 PsIPu,    // interaction parameter units code (J N O)
-   PsRes1,    // reserved
-
+PsLSF, //   PsRes1,  Control flag for least-square param. fitting  { N C B }
+       // to be extended !
    name[MAXFORMULA],  //  "Name of DualTh task"
    notes[MAXFORMULA] //  "Comments"
     ;
   short
 // input I
-   nQ,   // Q - number of experiments (equilibria) in basis sub-system
+   nQ,   // n(Q) - number of experiments (equilibria) in basis sub-system
    La_b, // Lb - number of formula units to set compositions in basis sub-system
-   nK,   // K - number of DC (end-member) candidates in non-basis sub-system (variants, default 2)
+nM,   // n(M) - number of DC (end-member) candidates in non-basis sub-system (default 2)
    Nsd,  // N of references to data sources
    Nqpn, // Number of elements in the math script work arrays qpn per non-basis DC
    Nqpg, // Number of elements in the math script work arrays qpg per non-basis DC
    Nb,    // N - number of independent components (in basis sub-system, taken
         // from project system dimensions automatically)
-nM,    //number of interaction parameters in the non-basis mixture (default 1 - regular)
+nP,  // Number of interaction parameters in the non-basis mixture (default 1 - regular)
 // for generating syseq record keys
    tmd[3],  // SYSTEM CSD definition #: start, end, step (initial)
    NVd[3],  // Restrictions variant #: start, end, step
-*mia  // [K] reserved (only one mixture per DualTh record is assumed)
+*wa_cp  //  [nP] mixing model parameter classifier (for Bayesian LSF)
    ;
   float
    Pd[3],    // Pressure P, bar: start, end, increment
@@ -97,27 +98,33 @@ nM,    //number of interaction parameters in the non-basis mixture (default 1 - 
    cP,
    cV  // State factors T,P,V
     ;
- double
-   *Bb,    //  [Q][N] Table of bulk compositions of basis sub-systems
-   *Bn,    //  [Q][N] Table of bulk compositions of non-basis sub-systems
-   *Ub,    //  [Q][N] Table of dual solution values for basis sub-systems
-   *chi,   //  [Q][K] Table of mole fractions of DC (end-member) candidates
-   *mu_n,  //  [Q][K] Table of DualTh chemical potentials of K DC (end-member)
-           // candidates in Q experiments
-   *Coul,  //  [Q][K] Coulombic terms for surface complexes (optional)
-   *gam_n, //  [Q][K] Table of activity coefficients for DC candidates
-   *avg_g, //  [K] mean over gam_n columns (experiments) for DC candidates
-   *sd_g,  //  [K] st.deviation over gam_n columns (experiments) for DC candidates
-   *muo_n, //  [Q][K] Table of standard Gibbs energies for DC candidates
-   *avg_m, //  [K] mean over muo_n columns (experiments) for DC candidates
-   *sd_m,  //  [K] st.deviation over muo_n columns (experiments) for DC candidates
-   *muo_i, // [Q][K] input st.state chem. potentials for candidates (or EMPTY if unknown)
-   *act_n, // [Q][K] table of DualTh-calculated activities
-*gmx_n,   // [Q] integral Gibbs energy of mixture for Q experiments (j/mol)
-*gxt_n,   // [Q] total Gibbs energy of mixing for Q experiments (col. 1)
-*gxi_n,   // [Q] Gibbs energy of ideal mixing for Q experiments (col. 2)
-*gxe_n,   // [Q] excess Gibbs energy of mixing for Q experiments (col. 3)
-*alp,      // [Q][M] interaction parameters for the mixing model (Redlich-Kister)
+ double        // in n(Q) experiments:
+   *Bb,    //  [Q][N] Table of bulk compositions of basis sub-systems  B(BS)
+   *Bn,    //  [Q][N] Table of bulk compositions of non-basis sub-systems B(NS)
+   *Ub,    //  [Q][N] Table of dual solution values for basis sub-systems U(BS)
+
+   *chi,   //  [Q][M] Table of mole fractions of DC (end-member) candidates X(BS)
+*eta_b, //  [Q][M] Table of DualTh chemical potentials of n(M) end-members, d-less H(BS)
+*act_n, //  [Q][M] table of DualTh-calculated activities
+*gam_n, //  [Q][M] Table of activity coefficients for DC candidates
+*Coul,  //  [Q][M] Input Coulombic terms for surface complexes (optional)
+
+*mu_b,   // [Q][M] Table of DualTh chemical potentials of M end-members (J/mol) M(BS)
+
+*mu_o,   // [Q][M]  st.state chem. potentials for candidates (or EMPTY if unknown) GoNS
+*avsd_o, // [2][M] mean and st.dev. over mu_o columns (experiments) for DC candidates
+*mu_a,   // [Q][M] Table of estimated st. Gibbs energy function for trace DC candidates G*NS
+*avsd_a, // [2][M] mean and st.dev. over mu_a cols (experiments) for DC candidates
+
+(*gmx_n)[4],  // [Q][4] integral Gibbs energy of mixture for Q experiments (j/mol) col 0 G-SS-BS
+         //        total Gibbs energy of mixing for Q experiments (col. 1)    G-MIX
+         //        Gibbs energy of ideal mixing for Q experiments (col. 2)    G-ID
+         //        Excess Gibbs energy of mixing for Q experiments (col. 3)   G-Ex
+
+*Wa,     // [Q][P] interaction parameters for the mixing model
+*avsd_w, // [2][P] mean and st.dev. over Wa cols (experiments) for DC candidates
+// *chisq,  // [P] chisquare values from LSM fits ( to be extended )
+
    *qpn,   //  [Nqpn] Array for chi calculation math script (ionic fractions?)
    *qpg    //  [Nqpg] Array for gamma calculation math script (interaction params?)
     ;
@@ -126,7 +133,10 @@ nM,    //number of interaction parameters in the non-basis mixture (default 1 - 
    *CIn,  // [Q][N] Table of quantity/concentration of IC in non-basis sub-systems
    *CAb,  // [Q][Lb] Table of quantity/concentration of formulae for basis sub-systems
    *CAn,  // [Q][Lb] Table of quantity/concentration of DC formulae for non-basis sub-systems
-  *Tdq,   //  [Q]  Temperatures of experiment
+
+*An,  // [M][N] stoich matrix for DC (end-member) stoichiometry candidates
+
+  *Tdq,   //  [Q]  Temperatures of experiment (allocation depends on PsTPI)
   *Pdq,   //  [Q]  Pressures of experiment
   *ISq    //  [Q]  Effective ionic strength in experimental aq solutions
     ;
@@ -135,8 +145,9 @@ nM,    //number of interaction parameters in the non-basis mixture (default 1 - 
    *gExpr,  // Math script text for calculation of activity coeffs of DC in non-basis
    (*sdref)[V_SD_RKLEN], // "List of bibl. refs to data sources" [0:Nsd-1]
    (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
-   (*nam_b)[MAXIDNAME], // [Q][16] id names of experiments
-   (*nam_n)[MAXIDNAME], // [K][16] id names of DC (end-member) stoichiometry candidates
+   (*nam_b)[MAXIDNAME], // [Q][12] id names of experiments
+   (*nam_n)[MAXIDNAME], // [K][12] id names of DC (end-member) stoichiometry candidates
+(*par_n)[MAXIDNAME], // [P][12] id names of non-ideal parameters
    (*for_n)[MAXFORMUNITDT], // [K][40] formulae of DC (end-member) stoichiometry candidates
    (*for_b)[MAXFORMUNITDT], // [Lb][40] formulae for setting basis and non-basis system compositions
    (*stld)[EQ_RKLEN], // List of SysEq record keys [Q]
@@ -149,11 +160,7 @@ nM,    //number of interaction parameters in the non-basis mixture (default 1 - 
 //
    (*SBM)[MAXICNAME+MAXSYMB] // Keys (names) of IC
    ;
-/* Work arrays */
- float
-   *An;  // [K][N] stoich matrix for DC (end-member) stoichiometry candidates
-   char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
-   *tprn;              // internal
+
 //work data
  short
    q,      // index of experiment
@@ -162,7 +169,25 @@ nM,    //number of interaction parameters in the non-basis mixture (default 1 - 
 kp,    // index of the interaction parameter
    c_tm,         // Current Tm - SYSTEM CSD number
    c_NV,         // Current Nv - MTPARM variant number
-Asiz;      // Current number of rows in the An matrix
+Asiz,      // Current number of rows in the An matrix
+// LM fitter data
+   n_par,  // number of parameters to fit  (<-nP)
+   m_dat,  // number of data points to use in fitting (<-nQ)
+   tm_d,   // number of arguments in tdat array per one data point  (<-nM(-1))
+   resILM; // reserved
+/* Work arrays */
+ double
+   *tdat,  //  to LM fitter: array of data arguments [nQ][nM]
+   *ydat,  //  to LM fitter: array of data functions [nQ]
+   *wdat,  // array of weight factors for data  [nQ], optional
+   *par,   // [nP] to LM fitter: guess parameters; from LM fitter - fitted parameters
+   *wpar,  // [nP] to LM fitter: weight factors for parameters (optional)
+   *sdpar, // [nP] from LM fitter: errors of fitted parameter values (optional)
+   *Wa_ap, // [nP] a prior parametres valuies
+   xi2,  // final value of chi2 (quality of fit)
+   resLM; // reserved
+   char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
+   *tprn;              // internal
    char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
 }
 DUALTH;
@@ -220,6 +245,7 @@ protected:
 
     void keyTest( const char *key );
     // internal
+    void lmfit_new();
     bool test_sizes();
     void dt_initiate( bool mode = true );   // must be changed with DK
     void dt_next();
@@ -231,19 +257,51 @@ protected:
     void Bn_Calc();
 
     // last level
-    void Init_Generation();
-    void build_Ub();         // generate systems and calculate new Ub
-    void build_mu_n();       // calculate mu_n matrix
-    void Init_Analyse();     // init analyse the results (change DK)
-    void Analyse();          // analyse the results (change DK)
+    void Init_Generation(); // Start generation of BS SysEq records
+    void build_Ub();        // generate systems and calculate new Ub
+    void build_mu_n();      // calculate mu_n matrix
+    void Init_Analyse();    // init analyse the results (change DK)
+    void Analyse();         // analyse the results (change DK)
+    int CalcMoleFractNS();  // built-in calculation of mole fractions in NS
+    void CalcActivCoeffNS( char ModP, char ModIPu ); // built-in calculation of
+                            // activity coeffs in NS end-members
+    void Calc_gmix_n( char ModE, char StP ); // calculation of mixing energies
     void Calc_muo_n( char eState ); // calculate mu_o DualTh
     void Calc_gam_n( char eState ); // calculate gamma DualTh
     void Calc_act_n( char eState ); // calculate activity DualTh
+    int Calc_alp_n( char IpfCode, char ModIPu ); // retrieve interaction parameters DualTh
     void Calc_muo_n_stat( char eState ); // statistics for EM candidates
-    void Calc_gam_n_stat( char eState ); // statistics for Wg/gamma calc.
+    void Calc_alp_n_stat( char eState ); // statistics for interaction params 
     double ColumnAverage( double *DataTable, short N, short M, short ColInd  );
     double ColumnStdev( double *DataTable, double ColAvg,
                   short N, short M, short ColInd  ); //
+
+     // forward calculation of j-th activity coefficient in various models
+    double Guggenheim( double chi[], double alp[], short j, short nK, short nM,
+                       double cFactor );
+    double TWMargules( double chi[], double alp[], short j, short nK, short nM,
+                       double cFactor  );
+    double MargulesO( double chi[], double alp[], short j, short nK, short nM,
+                     double cFactor  );
+    double VanLaar( double chi[], double alp[], short j, short nK, short nM,
+                    double cFactor  );
+    double BalePelton( double chi[], double alp[], short j, short nK, short nM,
+                       double cFactor, bool solvent );
+
+       // retrieval from excess Gibbs energy of mixing for nQ points
+    int GuggenheimR( double gex[], double alp[], short nQ, short nK, short nM,
+                    char ModIPu );
+    int TWMargulesR( double gex[], double alp[], short nQ, short nK, short nM,
+                    char ModIPu );
+    int MargulesOR( double gex[], double alp[], short nQ, short nK, short nM,
+                    char ModIPu );
+    int VanLaarR( double gex[], double alp[], short nQ, short nK, short nM,
+                    char ModIPu );
+    int BalePeltonR( double gex[], double alp[], short nQ, short nK, short nM,
+                    char ModIPu, short solventNdx );
+
+    // LSM regression subroutine
+    int RegressionLSM();
 
 public:
 
@@ -293,6 +351,7 @@ enum dualth_inernal {
               DT_IPF_T = 'T',   // Thompson-Waldbaum
               DT_IPF_M = 'M',   // Margules
               DT_IPF_V = 'V',   // Van Laar
+              DT_IPF_B = 'B',   // Bale-Pelton dilute formalism
               DT_IPF_O = 'O',   // Other
                                 // interaction parameter units of measurement
               DT_IPU_J = 'J',   // J/mol

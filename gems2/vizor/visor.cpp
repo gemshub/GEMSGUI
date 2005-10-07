@@ -804,7 +804,7 @@ TVisor::defaultCFG()
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                   };
     rt.Add(new TDataBase(rt.GetCount(), "dualth", true, true,
-                         o_dtname, 51, 0, 10, dualth_rkfrm));
+                         o_dtname, 53, 0, 10, dualth_rkfrm));
 
     // RT_GEM2MT default
     unsigned char gem2mt_rkfrm[10] = { MAXMUNAME, MAXTDPCODE, MAXSYSNAME,
