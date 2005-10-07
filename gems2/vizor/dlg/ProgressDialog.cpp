@@ -146,7 +146,7 @@ void
 ProgressDialog::CmStep()
 {
     QString str;
-    MULTI* pData = TProfil::pm->pmp;
+//    MULTI* pData = TProfil::pm->pmp;
 
     try
     {

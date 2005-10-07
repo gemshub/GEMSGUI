@@ -36,7 +36,7 @@ short Prime[]=
 short TUnSpace::near_prime_number( short num )
 {
   int i;
-  for( i=0; i<sizeof(Prime)/sizeof(short)-1; i++)
+  for( i=0; i<(int)(sizeof(Prime)/sizeof(short))-1; i++)
    if( Prime[i] >= num )
            break;
 

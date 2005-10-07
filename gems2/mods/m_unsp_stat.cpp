@@ -56,7 +56,7 @@ int TUnSpace::kvant_parag( int type /*short *mas*/ )
   int i,j,I=0,S=0,sum,kvant;
   short maxkol,*sol;
 
-  kvant = usp->quan_lev*usp->Q;
+  kvant = (int)(usp->quan_lev*usp->Q);
   if(kvant<1)
        kvant=1;
   sol= new  short[kvant];
@@ -84,7 +84,7 @@ void TUnSpace::kvant_index(float per,int N,double *mas, short type /**ind*/)
   double A0=-1,A1=fabs(mas[0]);
   short i,j,kvant;
 
-  kvant=per*N;
+  kvant=(int)(per*N);
   if(kvant<1)
       kvant=1;
   for(j=0; j<kvant; j++)
@@ -171,7 +171,7 @@ return(Filtr);
 // i=t, j=q
 double TUnSpace::ePO( int i, int j )
 {
-  double PM,rab,RG;
+  double PM,/*rab,*/RG;
   int k,ii,z,GF=-1,WF=-1,i1,j1;
 
   RG = R_CONSTANT;
@@ -241,7 +241,7 @@ double TUnSpace::ePO( int i, int j )
 // i=t, j=q
 double TUnSpace::ePO1( int i,int j )
 {
-  double PM,rab,RG;
+  double PM/*,rab*/,RG;
   int k,ii,z,GF=-1,WF=-1,i1,j1;
 
   RG = R_CONSTANT;
@@ -649,7 +649,7 @@ void TUnSpace::out_QT( int Ngr  )
 {
   double Ca,Ca1,sCa,sCa1, quanLapl,quanHur,quanWald,quanHom;
   float st=2.,st1=2.; // coeff. Studenta
-  int i, k,ii,l,ca=0,kf, kf1;
+  int i, k,ii,l,/*ca=0,*/kf, kf1;
 
  //  paragen( ); // put data to nPhA, PhAndx, PhAfreq ....
 

@@ -82,7 +82,7 @@ void TProfil::SolModLoad( )
         kd = kde;
         kde += pmp->LsMdc[k]*pmp->L1[k];
         if( pmp->L1[k] == 1 )
-            continue;  /* one component left in multicomponent phase  */
+            continue;  /* one component left in multicomponent phase */
         aPH->TryRecInp( mup->SF[kk], crt, 0 ); /*read information from phase */
         /* select type of model*/
         /*  modT = pmp->sMod[k]; */
@@ -224,7 +224,7 @@ LOAD_NIDMCOEF:
         // Check if coeffs are properly compressed into MULTI !!!!!!!!!!!!!!!
         if( pmp->LsMod[k] )
         { // coefficients for all phases
-            if( kc+pmp->LsMod[k] > sizeof( pmp->PMc )/sizeof(float))
+            if( kc+pmp->LsMod[k] > (int)(sizeof( pmp->PMc )/sizeof(float)))
                 pmp->PMc = (float *) aObj[ o_wi_pmc ].Alloc( (kc+pmp->LsMod[k]), 1, F_ );
             if( aPH->php->pnc )
             {
@@ -245,7 +245,7 @@ LOAD_NIDMCOEF:
         }
         if( pmp->LsMdc[k] )
         { /* coefficients for components */
-            if( kd+pmp->LsMdc[k]*pmp->L1[k] > sizeof( pmp->DMc )/sizeof(float))
+            if( kd+pmp->LsMdc[k]*pmp->L1[k] > (int)(sizeof( pmp->DMc )/sizeof(float)))
                 /*        pmp->DMc = (float *)realloc( (void *)pmp->DMc,
                            (kd+pmp->LsMdc[k]*pmp->L1[k])*sizeof(float));
                 */        pmp->DMc = (float *) aObj[ o_wi_dmc ].Alloc(
@@ -522,7 +522,7 @@ int TProfil::find_icnum( char *name, int LNmode )
             goto MOVEDIGIT;
     }
     else if( islower( name[0] ))
-    { /* this is letter  - type of IC, ­ e.g. f Sio, a Hum */
+    { /* this is letter - type of IC,  e.g. f Sio, a Hum */
         ICs[MAXICNAME] = *nbg;
         nbg++;
     }
@@ -622,7 +622,7 @@ int TProfil::find_phnum( char *name, int LNmode )
     }
     if( ii == 1 )
         return( kf[0] );
-    /* more then one useful index  */
+    /* more then one useful index */
     vstr pbuf(164);
     sprintf( pbuf, "%d of Phase indices found for the phase name %s (->%d) \n"
              "Take the first one and continue (Y) or cancel (N)?", ii, name, LNmode );
@@ -667,7 +667,7 @@ int TProfil::find_acnum( char *name, int LNmode )
 // or equivalent: <objName>[{CaSO4@}+5] to <objName>[45+5]
 //  Default:  \j  (DC in MULTI)
 //  Data object nOpex contains initial text of equations;
-//         nOet  ­ resulting (pre-processed) text.
+//         nOet  resulting (pre-processed) text.
 //  jb - je range of DC in  MULTI,  JB - JE  - that in RMULTS.
 // Modified by KD 30.03.01 to ignore \J ... switches and instead
 // obtain indexation codes from data object name and DOD.
@@ -805,7 +805,7 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
         if( *next == A_delim_IPM && !cc )
         {   // An old-style switch found
             next++;
-            cur++; /* change state of scanner  */
+            cur++; /* change state of scanner */
             next++;  // Skip indexation code  KD 30.03.01
             cur++;
             continue;
@@ -979,7 +979,7 @@ void TProfil::MultiCalcInit( const char *key )
     if( pmp->pBAL < 2 )
         MultiRemake( key );
 
-    // unpack SysEq record
+    // unpackSysEq record
 
     if( pmp->pESU /*== 1*/ && pmp->pNP )     // problematic statement !!!!!!!!!
     {
@@ -1133,7 +1133,7 @@ void TProfil::EqstatExpand( const char *key )
             pmp->W[j]= ((pmp->Y[j]-pmp->DLL[j])<(pmp->DUL[j]-pmp->Y[j]))?
                        (pmp->Y[j]-pmp->DLL[j]): (pmp->DUL[j]-pmp->Y[j]);
             break;
-        default: /* greatest error  */ ; //break;
+        default: /* greatest error */ ; //break;
             Error( "Internal error", "Wrong IPM weight factor type!" );
         }
         if( pmp->W[j] < 0. ) pmp->W[j]=0.;    /* !! know-how of Mr.Chudnenko !! */
@@ -1196,7 +1196,7 @@ void TProfil::CompG0Load()
     int j, jj, k, jb, je=0;
     float Gg = 0., Vv = 0.;
 
-    /* pTPD state of reload t/d data 0-all, 1 G0, 2 ­do not*/
+    /* pTPD state of reload t/d data 0-all, 1 G0, 2 do not*/
     if( pmp->pTPD < 1 )
     {
         pmp->T = pmp->Tc = tpp->T + C_to_K;
@@ -1246,7 +1246,7 @@ pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
                 case VOL_UNDEF:
                     if( syp->Vuns )
                        Vv = syp->Vuns[jj];
-                    pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;  /* ?åäèíèöû? */
+                    pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;  /* ?ï¿½ï¿½ï¿½? */
                     break;
                 }
             else pmp->Vol[j] = 0.0;

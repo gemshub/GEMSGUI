@@ -517,7 +517,6 @@ void TProfil::MultiCalcIterations()
 {
     pll=0;
     FXold=0.0;
-    int pp;
  /*   do
     { // cycle of iterations Selekt
         // Stop calculations here Sveta
@@ -747,10 +746,10 @@ double TProfil::DualChemPot( double U[], float AL[], int N )
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* Расчет валовой стехиометрии фазы - раствора              17.03.96
-*  N - к-во независимых, M - зависимых компонентов.
-*  X - вектор мольных кол-в зависимых компонентов.
-*  BF - валовой состав фазы.
+/* я┐╜я┐╜ я┐╜хиоя┐╜ фазя┐╜- я┐╜твоя┐╜             17.03.96
+*  N - - симя┐╜, M - симя┐╜ тов.
+*  X - я┐╜ я┐╜я┐╜- симя┐╜ тов.
+*  BF -  я┐╜тав фазя┐╜
 */
 void TProfil::phase_bcs( int N, int M, float *A, double X[], double BF[] )
 {
@@ -1321,7 +1320,7 @@ double TProfil::Cj_init_calc( double g0, int j, int k )
     G = g0/pmp->RT;
     /*  if( k < pmp->FIs )  */
     YOF = pmp->YOF[k];
-    /* єўхёЄ№ хфшэшЎ√ шчьхЁхэш !!!!! */
+    /* я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜!!!!! */
     switch( pmp->DCC[j] )
     { /* Aqueous electrolyte */
     case DC_AQ_PROTON:

@@ -112,7 +112,7 @@ gstring curDateSmol()
 
     vstr tstr(11);
 
-    strftime(tstr, 11,
+    strftime(tstr, 9,
              "%d/%m/%y",
              time_now);
 
@@ -248,7 +248,8 @@ void
     }
 
     ii=0;
-    int k=0, pos_to;
+    int k=0;
+    uint pos_to;
     while( ii<data_str.length() && ii<from_templ.length() )
     {
       if( from_templ[ii] == '*'  )

@@ -137,8 +137,8 @@ TFile::makeKeyword()
     Keywd[MAX_FILENAME_LEN]='\0';
 */
     key = gstring(name, 0, 2);
-    int npos = 0;
-    int npos2 = name.find(".", npos);
+    uint npos = 0;
+    uint npos2 = name.find(".", npos);
     while( npos2 != gstring::npos )
     {   npos = npos2+1;
         key += gstring(name, npos, 2);

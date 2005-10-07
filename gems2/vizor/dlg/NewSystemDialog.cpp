@@ -1339,7 +1339,7 @@ MLineEdit::mousePressEvent(QMouseEvent *e)
 void
 MLineEdit::SetIndex(int ii)
 {
-    if( ii>=Vals.length() )
+    if( ii>=(int)Vals.length() )
         return;
 
     gstring val(Vals, ii, 1);

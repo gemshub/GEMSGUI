@@ -439,33 +439,33 @@ AGAIN_SETUP:
           case SM_AQDAV:  // Aqueous Davies
                           php->ncpN = php->ncpM = 0;
                           php->nscN = php->nscM = 0;
-                          php->PphC == PH_AQUEL;
+                          php->PphC = PH_AQUEL;
                           break;
           case SM_AQDH1:  // Aqueous DH LL
                           php->ncpN = php->ncpM = 0;
                           php->nscN = php->nscM = 0;
-                          php->PphC == PH_AQUEL;
+                          php->PphC = PH_AQUEL;
                           break;
           case SM_AQDH2:  // DH Kielland, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
                           php->nscN = php->nscM = 1;
-                          php->PphC == PH_AQUEL;
+                          php->PphC = PH_AQUEL;
                           break;
           case SM_AQDH3:  // EDH Kielland, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
                           php->nscN = php->nscM = 1;
-                          php->PphC == PH_AQUEL;
+                          php->PphC = PH_AQUEL;
                           break;
           case SM_AQDHH:  // EDH Helgeson, common a0, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
                           php->nscN = php->nscM = 0;
-                          php->PphC == PH_AQUEL;
+                          php->PphC = PH_AQUEL;
                           break;
           case SM_AQSIT:  // SIT model in NEA variant
                           php->ncpN = max( (short)3, php->ncpN );
                           php->ncpM = max( (short)2, php->ncpM );
                           php->nscN = php->nscM = 1;
-                          php->PphC == PH_AQUEL;
+                          php->PphC = PH_AQUEL;
                           break;
           default:  // other models
              break;
@@ -619,7 +619,7 @@ AGAINRC:
         qsort( php->SM[0], (size_t)php->nDC, DC_RKLEN, rkeycmp );
     for( i=0; i<php->nDC; i++ )
     {
-        php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* cod istochnic  */
+        php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* cod istochnic */
         php->SM[i][DC_RKLEN-1] = ' ';
         if( !php->DCC[i] || php->DCC[i] == '`' )
             php->DCC[i] = 'I'/*'`'*/;
@@ -1285,7 +1285,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
 
     for( i=0; i<php->nDC; i++ )
     {
-        php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* source code  */
+        php->DCS[i] = php->SM[i][DC_RKLEN-1]; /* source code */
         php->SM[i][DC_RKLEN-1] = ' ';
         php->DCC[i] = '`';
     }

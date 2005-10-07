@@ -154,7 +154,7 @@ void TMulti::makeStartDataChBR(
 void TMulti::getG0_V0_H0_Cp0_matrix()
 {
 
-  double cT, cP, cDC;
+  double cT, cP/*, cDC*/;
   double *G0, *V0, *H0, *Cp0, roW, epsW;
 
   G0 =  new double[TProfil::pm->mup->L];
