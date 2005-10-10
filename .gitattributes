@@ -485,6 +485,7 @@ gems2/vizor/dlg/DBDialog.ui svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/DCompWizard.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/DCompWizard.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/DCompWizard.ui svn_keywords=Author+Date+Id+Revision
+gems2/vizor/dlg/DualThWizard.ui -text
 gems2/vizor/dlg/EQDialog.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/EQDialog.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/EQDialog.ui svn_keywords=Author+Date+Id+Revision

@@ -4,7 +4,7 @@
 // Implementation of TDualTh class, config and calculation functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
+// Copyright (C) 2000-2005 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization

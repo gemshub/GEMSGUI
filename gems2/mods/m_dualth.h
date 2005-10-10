@@ -38,13 +38,13 @@ typedef struct
 
 // Allocation flags
    PvCoul,   // Use coulombic factors for non-basis DCs (+ -)
-   PvICb,    // Use IC quantities for basis sub-system compositions? { + * - }
-   PvICn,    // Use IC quantities for non-basis sub-system compositions? { + * - }
+   PvICb,    // Use IC amounts for defining basis sub-system compositions? { + * - }
+   PvICn,    // Use IC amounts for defining non-basis sub-system compositions? { + * - }
    PvAUb,    // Use formula units for basis and non-basis sub-system compositions? { + * - }
    PvSd,     // Include references to data sources (+ -)?
    PvChi,    // Use math script for mole fractions of non-basis DCs (+ -)?
-   PvGam,    // Use math script for activity coeffs of non-basis DCs (+ -)?
-   PvTPI,     // Use vectors for T, P and IS of experiments (+ -)?
+   PvGam,    // Use math script for Gex or activity coeffs in non-basis (DCs) (+ -)?
+   PvTPI,    // Use vectors for T, P and IS of nQ experiments (+ -)?
 
      // Controls on operation
    PsMode,  // DualTh mode of operation { M G A X }
