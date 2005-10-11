@@ -44,8 +44,8 @@ TDualTh::TDualTh( int nrt ):
     aFldKeysHelp.Add("l<8  Pressure P, bar <float> or 0 (Psat H2O) <-SysEq");
     aFldKeysHelp.Add("l<8  Temperature T, in Centigrade <float>  <-SysEq");
     aFldKeysHelp.Add("l<4  Variant number of thermodynamic PT-data <integer> <-SysEq");
-    aFldKeysHelp.Add("l<18 Identifier of this dualth simulator definition");
-    aFldKeysHelp.Add("l<4  Batch simulator type code, a combination of {T, P, S, G, R}");
+    aFldKeysHelp.Add("l<18 Identifier of this DualTh calculation task");
+    aFldKeysHelp.Add("l<4  DualTh task code - one of { E P S } and one of { M G A X } ");
 
     dtp=&dt[0];
     set_def();
