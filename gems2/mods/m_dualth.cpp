@@ -537,9 +537,16 @@ void TDualTh::dyn_new(int q)
 
     dtp->mu_a = (double *)aObj[ o_dtmu_a ].Alloc( dtp->nQ, dtp->nM, D_ );
     dtp->act_n = (double *)aObj[ o_dtact_n ].Alloc( dtp->nQ, dtp->nM, D_ );
-    dtp->Tdq = (float *)aObj[ o_dttdq ].Alloc( dtp->nQ, 1, F_ );
-    dtp->Pdq = (float *)aObj[ o_dtpdq ].Alloc( dtp->nQ, 1, F_ );
-    dtp->ISq = (float *)aObj[ o_dtisq ].Alloc( dtp->nQ, 1, F_ );
+   if( dtp->PvTPI == S_ON )
+   { dtp->Tdq = (float *)aObj[ o_dttdq ].Alloc( dtp->nQ, 1, F_ );
+     dtp->Pdq = (float *)aObj[ o_dtpdq ].Alloc( dtp->nQ, 1, F_ );
+     dtp->ISq = (float *)aObj[ o_dtisq ].Alloc( dtp->nQ, 1, F_ );
+   }
+   else
+   { dtp->Tdq = (float *)aObj[ o_dttdq ].Free();
+     dtp->Pdq = (float *)aObj[ o_dtpdq ].Free();
+     dtp->ISq = (float *)aObj[ o_dtisq ].Free();
+   }
 
 //Added  new objects
     dtp->wa_cp = (short *)aObj[ o_mia ].Alloc( dtp->nP, 1, I_ );
