@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>642</width>
-            <height>574</height>
+            <height>579</height>
         </rect>
     </property>
     <property name="caption">
@@ -34,7 +34,7 @@
                     <x>10</x>
                     <y>10</y>
                     <width>500</width>
-                    <height>474</height>
+                    <height>440</height>
                 </rect>
             </property>
             <vbox>
@@ -53,8 +53,7 @@
                     </property>
                     <property name="text">
                         <string>&lt;p&gt;The DualTh module is a tool facilitating the retrieval of thermodynamic parameters for multi-component phases (solutions) and their end members from the user-provided element partitioning data called "experiments". &lt;/p&gt;
-&lt;p&gt;The DualTh module and record can be configured to perform this task in a convenient way. To tell the program which parameters of the "non-basis sub-system" are given at input and which must be evaluated, you have to select an appropriate DualTh operation mode below.&lt;/p&gt;
-&lt;p&gt;You will also have to select the kind of saturation state for the "non-basis sub system"; this defines which DualTh formula shall be used in calculations.&lt;/p&gt;</string>
+&lt;p&gt;The DualTh module and record can be configured to perform this task in a convenient way. To tell the program which parameters of the "non-basis sub-system" are given at input and which must be evaluated, you have to select an appropriate DualTh operation mode below.&lt;/p&gt;</string>
                     </property>
                 </widget>
                 <widget class="QButtonGroup">
@@ -354,10 +353,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>In spin-boxes below, at least the dimensions nQ, nM and nP must be properly set up.
-In this DualTh task, nQ equilibria in the basis sub-system will be compted first. 
-Then, for each of nQ "experiments", chemical potentials of nM end members will be determined and the excess Gibbs energy of mixing (Gex) will calculated. 
-Finally, if possible, the nP non-ideal interaction parameters will be evaluated from nQ values of Gex, if necessary, using least-squares fitting.</string>
+                        <string>In spin-boxes below, at least the dimensions nQ, nM and nP must be properly set up. In this DualTh task, nQ equilibria in the basis sub-system will be computed first. Then, for each of nQ "experiments", chemical potentials of nM end members will be determined and the excess Gibbs energy of mixing (Gex) will calculated. Finally, if possible, the nP non-ideal interaction parameters will be evaluated from nQ values of Gex, if necessary, using least-squares fitting.</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignVCenter</set>
@@ -572,8 +568,7 @@ Finally, if possible, the nP non-ideal interaction parameters will be evaluated 
                     </property>
                     <property name="text">
                         <string>For each of nQ "experiments",  a bulk composition of the "basis sub-system" (usually aqueous electrolyte) must be provided, together with the corresponding bulk composition of the "non-basis sub-system" (solution phase of interest).
-Both bulk compositions can be set up later in amounts of IC (independent components). 
-This can be done even easier easier with help of additional Lb user-defined formula units.</string>
+Both bulk compositions can be set up later in amounts of IC (independent components). This can be done even easier easier with help of additional Lb user-defined formula units.</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignVCenter</set>
@@ -760,7 +755,7 @@ This can be done even easier easier with help of additional Lb user-defined form
                 <rect>
                     <x>10</x>
                     <y>11</y>
-                    <width>570</width>
+                    <width>540</width>
                     <height>470</height>
                 </rect>
             </property>
@@ -774,10 +769,11 @@ This can be done even easier easier with help of additional Lb user-defined form
                     </property>
                     <property name="text">
                         <string>On this page, some modes of operation can be changed in specific cases.
-
 Deactivate the first and/or the second checkbox if you do not intend to use independent components in setting up bulk compositions of nQ sub-systems.
-
-Deactivate the third checkbox of you do not provide formula units (e.g. NaHCO3, SiO2, ...) to express bulk compositions of nQ sub-systems.</string>
+Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, SiO2, ...) to express bulk compositions of nQ sub-systems.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
                     </property>
                 </widget>
                 <widget class="QButtonGroup">
@@ -873,7 +869,7 @@ Deactivate the third checkbox of you do not provide formula units (e.g. NaHCO3, 
                                 <string>Save generated SysEq records to data base</string>
                             </property>
                             <property name="checked">
-                                <bool>false</bool>
+                                <bool>true</bool>
                             </property>
                         </widget>
                     </vbox>
@@ -884,9 +880,8 @@ Deactivate the third checkbox of you do not provide formula units (e.g. NaHCO3, 
                     </property>
                     <property name="text">
                         <string>&lt;p&gt;The last three flags should be changed by advanced users only.&lt;/p&gt;
-&lt;p&gt;For expressing mole fractions of end-members from the bulk elemental composition of non-basis sub-system, a math script can be provided in non-trivial cases, e.g. for a reciprocal solution.&lt;/p&gt;
-&lt;p&gt;Another math script can be set up for computing activity coefficients of end members and/or Gex value of the solution in the case of a non-ideal mixing model which is not provided as a built-in function.&lt;/p&gt;
-&lt;p&gt;A group of expressions in each math script will be executed nQ times (for each experiment). &lt;/p&gt;</string>
+For expressing mole fractions of end-members from the bulk elemental composition of non-basis sub-system, a math script can be provided in non-trivial cases, e.g. for a reciprocal solution.
+Another math script can be set up for computing activity coefficients of end members and/or Gex value of the solution in the case of a non-ideal mixing model which is not provided as a built-in function. A group of expressions in each math script will be executed nQ times (for each experiment).</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignVCenter</set>
@@ -964,11 +959,11 @@ Deactivate the third checkbox of you do not provide formula units (e.g. NaHCO3, 
                     </property>
                     <property name="text">
                         <string>&lt;p&gt;(1) The necessary arrays will be allocated and Page 1 of the DualTh module window will appear.&lt;/p&gt;
-&lt;p&gt;(2) In this window, you will have to set up the necessary iterators - three-cell columns that specify the start value, the end value, and the increment of control parameters that control generation of nQ SysEq records with equilibria in the basis sub-system. From an iterator with zero increment, only the first value will be used.&lt;/p&gt;
+&lt;p&gt;(2) On the last page of DualTh this window, you will have to check/set up the necessary iterators - three-cell columns that specify the start value, the end value, and the increment of control parameters that control generation of nQ SysEq records with equilibria in the basis sub-system. From an iterator with zero increment, only the first value will be used.&lt;/p&gt;
 &lt;p&gt;(3) Enter the full DualTh task name into the DTname field and (optionally) a comment into the DTnote line. If math scripts will be used then type them on Pages 2 and 3. Use template scripts accessible through "Help" "Scripts" menu command.&lt;/p&gt;
 &lt;p&gt;(4) Enter the compositions of basis and non-basis sub-systems for all nQ "experiments"; take care about units of measurements and relevant total quantities (e.g. mass of the system).&lt;/p&gt;
 &lt;p&gt;(5) Click on the "Calculate" toolbar button to start calculation of basis sub-system equilibria. When this is done, you should see tables with chemical potentials of elements filled. &lt;/p&gt;
-&lt;p&gt;(6) Click "Calculate" again to perform DualTh estimation of non-basis solution parameters. This step can be repeated after changing e.g. the mixing model parameters or Go values of end-members. To repeat the whole DualTh task, first remake this DualTh record.</string>
+&lt;p&gt;(6) Click the "Calculate" button again to perform DualTh estimation of non-basis solution parameters. This step can be repeated after changing e.g. the mixing model parameters or Go values of end-members. To repeat the whole DualTh task, first remake this DualTh record.</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignVCenter</set>
