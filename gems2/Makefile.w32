@@ -64,6 +64,7 @@ vizor\dlg\GtDemoWizard.obj vizor\dlg\GtDemoWizardData.obj  \
 vizor\dlg\RTparmWizard.obj vizor\dlg\RTparmWizardData.obj  \
 vizor\dlg\ReacDCWizard.obj vizor\dlg\ReacDCWizardData.obj  \
 vizor\dlg\DCompWizard.obj vizor\dlg\DCompWizardData.obj  \
+vizor\dlg\DualThWizard.obj vizor\dlg\DualThWizardData.obj  \
 vizor\dlg\ComposWizard.obj vizor\dlg\ComposWizardData.obj vizor\dlg\PhaseWizard.obj \
 vizor\dlg\PhaseWizardData.obj vizor\dlg\EQDialog.obj vizor\dlg\EQDialogData.obj \
 vizor\dlg\NewSystemDialog.obj vizor\dlg\NewSystemDialogData.obj \
@@ -81,6 +82,7 @@ vizor\dlg\AutoPhaseDialogData.obj vizor\dlg\LoadMessage.obj vizor\tmp\moc_MainDi
 vizor\tmp\moc_MainDialogData.obj vizor\tmp\moc_DBDialog.obj \
 vizor\tmp\moc_DBDialogData.obj vizor\tmp\moc_ProcessWizard.obj vizor\tmp\moc_ProcessWizardData.obj \
 vizor\tmp\moc_ComposWizard.obj vizor\tmp\moc_ComposWizardData.obj \
+vizor\tmp\moc_DualThWizard.obj vizor\tmp\moc_DualThWizardData.obj \
 vizor\tmp\moc_DCompWizard.obj vizor\tmp\moc_DCompWizardData.obj \
 vizor\tmp\moc_ReacDCWizard.obj vizor\tmp\moc_ReacDCWizardData.obj \
 vizor\tmp\moc_RTparmWizard.obj vizor\tmp\moc_RTparmWizardData.obj \

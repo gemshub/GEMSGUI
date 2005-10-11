@@ -682,6 +682,36 @@ void TDualTh::RecInput( const char *key )
 }
 
 //Rebuild record structure before calc
+/* opens window with 'Remake record' parameters
+*/
+void
+TDualTh::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[20];
+    int size[8];
+
+    p_key  = db->PackKey();
+    memcpy( flgs, &dtp->PunE, 20);
+    size[0] = dtp->nQ;
+    size[1] = dtp->La_b;
+    size[2] = dtp->nM;
+    size[3] = dtp->Nsd;
+    size[7] = dtp->nP;
+
+    if( !vfDualThSet( window(), p_key, flgs, size ))
+         Error( p_key, "DualTh record configuration cancelled by the user!" );
+     //  return;   // cancel
+
+    memcpy( &dtp->PunE, flgs, 20);
+    dtp->nQ = (short)size[0];
+    dtp->La_b = (short)size[1];
+    dtp->nM = (short)size[2];
+    dtp->Nsd = (short)size[3];
+    dtp->nP = (short)size[7];
+}
+
 int
 TDualTh::RecBuild( const char *key, int mode  )
 {

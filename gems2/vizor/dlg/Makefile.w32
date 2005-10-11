@@ -23,6 +23,7 @@ DATASRC =	MainDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessWizardData.cpp \
 		ComposWizardData.cpp \
+		DualThWizardData.cpp \
 		DCompWizardData.cpp \
 		ReacDCWizardData.cpp \
 		RTparmWizardData.cpp \
@@ -51,6 +52,7 @@ DATAOBJ =       MainDialogData.obj \
 		ProgressDialogData.obj \
 		ProcessWizardData.obj \
 		ComposWizardData.obj \
+		DualThWizardData.obj \
 		DCompWizardData.obj \
 		ReacDCWizardData.obj \
 		RTparmWizardData.obj \
@@ -80,6 +82,7 @@ SOURCES =	MainDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessWizard.cpp \
 		ComposWizard.cpp \
+		DualThWizard.cpp \
 		DCompWizard.cpp \
 		ReacDCWizard.cpp \
 		RTparmWizard.cpp \
@@ -111,6 +114,7 @@ OBJECTS =	MainDialog.obj \
 		ProgressDialog.obj \
 		ProcessWizard.obj \
 		ComposWizard.obj \
+		DualThWizard.obj \
 		DCompWizard.obj \
 		ReacDCWizard.obj \
 		RTparmWizard.obj \
@@ -149,6 +153,8 @@ OBJMOC =	..\tmp\moc_MainDialog.obj \
 		..\tmp\moc_ProcessWizardData.obj \
 		..\tmp\moc_ComposWizard.obj \
 		..\tmp\moc_ComposWizardData.obj \
+		..\tmp\moc_DualThWizard.obj \
+		..\tmp\moc_DualThWizardData.obj \
 		..\tmp\moc_DCompWizard.obj \
 		..\tmp\moc_DCompWizardData.obj \
 		..\tmp\moc_ReacDCWizard.obj \
@@ -305,6 +311,19 @@ clean:
 
         $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_ComposWizardData.cpp
 	-del moc_ComposWizardData.cpp
+
+..\tmp\moc_DualThWizard.obj: DualThWizard.h
+      	$(MOC) DualThWizard.h -o moc_DualThWizard.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_DualThWizard.cpp
+	-del moc_DualThWizard.cpp
+
+
+..\tmp\moc_DualThWizardData.obj: DualThWizardData.h
+      	$(MOC) DualThWizardData.h -o moc_DualThWizardData.cpp
+
+        $(CC) $(FLAGS) $(INCLUDES) -o$@ -c moc_DualThWizardData.cpp
+	-del moc_DualThWizardData.cpp
 
 ..\tmp\moc_DCompWizard.obj: DCompWizard.h
       	$(MOC) DCompWizard.h -o moc_DCompWizard.cpp
@@ -602,6 +621,10 @@ ProcessWizardData.cpp: ProcessWizard.ui
         $(UIC) $? -impl $(*).h -o $@
 
 ComposWizardData.cpp: ComposWizard.ui
+        $(UIC) $? -o $(*).h
+        $(UIC) $? -impl $(*).h -o $@
+
+DualThWizardData.cpp: DualThWizard.ui
         $(UIC) $? -o $(*).h
         $(UIC) $? -impl $(*).h -o $@
 

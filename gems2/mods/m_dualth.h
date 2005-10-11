@@ -56,8 +56,8 @@ typedef struct
    aStat,  // DualTh analysis status:  0 - indefinite; 1 ready for analysis;
         //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
    PsSYd,  // Save generated SysEq records to data base ( + - )
-PsIPf,    // interaction parameter formalism code (R T M V O)
-PsIPu,    // interaction parameter units code (J N O)
+PsIPf,    // interaction parameter formalism code (I G R T M V B O)
+PsIPu,    // interaction parameter units code (J K N)
 PsLSF, //   PsRes1,  Control flag for least-square param. fitting  { N C B }
        // to be extended !
    name[MAXFORMULA],  //  "Name of DualTh task"
@@ -326,6 +326,7 @@ public:
                               int keyType );
 
     void RecInput( const char *key );
+    void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void CmHelp();
@@ -346,6 +347,7 @@ enum dualth_inernal {
               DT_STATE_S = 'S',  // stoichiometric saturation
 
                                 // interaction parameter codes
+              DT_IPF_I = 'I',   // Ideal Raoult 
               DT_IPF_R = 'R',   // Redlich-Kister
               DT_IPF_G = 'G',   // Guggenheim
               DT_IPF_T = 'T',   // Thompson-Waldbaum

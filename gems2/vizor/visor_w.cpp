@@ -58,6 +58,7 @@ using namespace std;
 #include "dlg/ReacDCWizard.h"
 #include "dlg/RTparmWizard.h"
 #include "dlg/PhaseWizard.h"
+#include "dlg/DualThWizard.h"
 #include "dlg/NewSystemDialog.h"
 #include "dlg/ListFilesDialog.h"
 #include "dlg/ElementsDialog.h"
@@ -949,6 +950,18 @@ vfPhaseSet(QWidget* par, const char * p_key,
     return true;
 }
 
+bool
+vfDualThSet(QWidget* par, const char * p_key,
+            char flgs[20], int size[8]  )
+{
+     DualThWizard cdlg( p_key, flgs, size, par );
+     if( !cdlg.exec() )
+       return false;
+    cdlg.getFlags( flgs );
+    cdlg.getSizes( size );
+
+    return true;
+}
 
 // call to AutoPhaseDialog  added 18.07.03
 bool

@@ -1,15 +1,15 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>ProcessWizardData</class>
+<class>DualThWizardData</class>
 <widget class="QWizard">
     <property name="name">
-        <cstring>ProcessWizardData</cstring>
+        <cstring>DualThWizardData</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>653</width>
-            <height>619</height>
+            <width>642</width>
+            <height>574</height>
         </rect>
     </property>
     <property name="caption">
@@ -107,7 +107,7 @@
                                 </property>
                             </item>
                             <property name="name">
-                                <cstring>p_pct_1_2</cstring>
+                                <cstring>p_Mode</cstring>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -144,7 +144,7 @@
                                 </property>
                             </item>
                             <property name="name">
-                                <cstring>p_pct_2_2</cstring>
+                                <cstring>p_St</cstring>
                             </property>
                         </widget>
                     </vbox>
@@ -250,7 +250,7 @@
                                 </property>
                             </item>
                             <property name="name">
-                                <cstring>p_pct_1</cstring>
+                                <cstring>p_IPf</cstring>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -287,7 +287,7 @@
                                 </property>
                             </item>
                             <property name="name">
-                                <cstring>p_pct_2</cstring>
+                                <cstring>p_IPu</cstring>
                             </property>
                         </widget>
                         <widget class="QLabel">
@@ -318,7 +318,7 @@
                                 </property>
                             </item>
                             <property name="name">
-                                <cstring>p_pct_3</cstring>
+                                <cstring>p_LSF</cstring>
                             </property>
                         </widget>
                     </vbox>
@@ -335,14 +335,14 @@
         </attribute>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout8</cstring>
+                <cstring>layout24</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>1</x>
-                    <y>2</y>
-                    <width>530</width>
-                    <height>520</height>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>610</width>
+                    <height>470</height>
                 </rect>
             </property>
             <vbox>
@@ -354,10 +354,10 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;p&gt;In spin-boxes below, at least the dimensions nQ, nM and nP must be properly set up.&lt;/p&gt;
-&lt;p&gt;In this DualTh task, nQ equilibria in the basis sub-system will be compted first. &lt;/p&gt;
-&lt;p&gt;Then, for each of nQ "experiments", chemical potentials of nM end members will be determined and the excess Gibbs energy of mixing (Gex) will calculated. &lt;/p&gt;
-&lt;p&gt;Finally, if possible, the nP non-ideal interaction parameters will be evaluated from nQ values of Gex, if necessary, using least-squares fitting.&lt;/p&gt;</string>
+                        <string>In spin-boxes below, at least the dimensions nQ, nM and nP must be properly set up.
+In this DualTh task, nQ equilibria in the basis sub-system will be compted first. 
+Then, for each of nQ "experiments", chemical potentials of nM end members will be determined and the excess Gibbs energy of mixing (Gex) will calculated. 
+Finally, if possible, the nP non-ideal interaction parameters will be evaluated from nQ values of Gex, if necessary, using least-squares fitting.</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignVCenter</set>
@@ -384,7 +384,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pPoints</cstring>
+                                        <cstring>pnQ</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -430,7 +430,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pMods</cstring>
+                                        <cstring>pnM</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -479,7 +479,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pGraph</cstring>
+                                        <cstring>pnP</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -528,7 +528,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pELine</cstring>
+                                        <cstring>pLb</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -571,13 +571,176 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;p&gt;For each of nQ "experiments",  a bulk composition of the "basis sub-system" (usually aqueous electrolyte) must be provided, together with the corresponding bulk composition of the "non-basis sub-system" (solution phase of interest).&lt;/p&gt;
-&lt;p&gt;Both bulk compositions can be set up later in amounts of IC (independent components).&lt;/p&gt; 
-&lt;p&gt;This can be done even easier easier with help of additional Lb user-defined formula units.&lt;/p&gt;</string>
+                        <string>For each of nQ "experiments",  a bulk composition of the "basis sub-system" (usually aqueous electrolyte) must be provided, together with the corresponding bulk composition of the "non-basis sub-system" (solution phase of interest).
+Both bulk compositions can be set up later in amounts of IC (independent components). 
+This can be done even easier easier with help of additional Lb user-defined formula units.</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignVCenter</set>
                     </property>
+                </widget>
+                <widget class="QButtonGroup">
+                    <property name="name">
+                        <cstring>ButtonGroup1</cstring>
+                    </property>
+                    <property name="title">
+                        <string>No need to change in this version of GEMS-PSI </string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="2" column="1">
+                            <property name="name">
+                                <cstring>textLabel1_2_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of volume in this RTparm record (default:  j)</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="3" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>b    bar  = 10^5 Pa</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>B    kbar (kilobar)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>p    Pa  (Pascal)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>P    MPa  = 10^6 Pa  </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>A    atm (=1.013 bar)</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunP</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="1">
+                            <property name="name">
+                                <cstring>textLabel1_2_3_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of pressure in this RTparm record (default: b)</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="1">
+                            <property name="name">
+                                <cstring>textLabel1_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of energy in this RTparm record (default: j)</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="4" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>C   Celsius  </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>K   Kelvin</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>F   Fahrenheit</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunT</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="4" column="1">
+                            <property name="name">
+                                <cstring>textLabel1_2_3_2_2</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>Units of measurement of temperature in this RTparm record (default: C)</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="2" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>j    J/bar  = 0.1 cm3/mol</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>a   cal/bar</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>m   cm3/mol</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunV</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="0">
+                            <item>
+                                <property name="text">
+                                    <string>j     J/mol(/K) </string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>c    cal/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>J     kJ/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>C    kcal/mol(/K)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>N   Normalized</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>pPunE</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </grid>
                 </widget>
             </vbox>
         </widget>
@@ -596,9 +759,9 @@
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>10</y>
-                    <width>520</width>
-                    <height>480</height>
+                    <y>11</y>
+                    <width>570</width>
+                    <height>470</height>
                 </rect>
             </property>
             <vbox>
@@ -610,9 +773,11 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;p&gt;On this page, some modes of operation can be changed in specific cases.&lt;/p&gt;
-&lt;p&gt;Deactivate the first and/or the second checkbox if you do not intend to use independent components in setting up bulk compositions of nQ sub-systems.&lt;/p&gt;
-&lt;p&gt;Deactivate the third checkbox of you do not provide formula units (e.g. NaHCO3, SiO2, ...) to express bulk compositions of nQ sub-systems.</string>
+                        <string>On this page, some modes of operation can be changed in specific cases.
+
+Deactivate the first and/or the second checkbox if you do not intend to use independent components in setting up bulk compositions of nQ sub-systems.
+
+Deactivate the third checkbox of you do not provide formula units (e.g. NaHCO3, SiO2, ...) to express bulk compositions of nQ sub-systems.</string>
                     </property>
                 </widget>
                 <widget class="QButtonGroup">
@@ -628,7 +793,7 @@
                         </property>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PsSY</cstring>
+                                <cstring>c_ICb</cstring>
                             </property>
                             <property name="text">
                                 <string>Use IC amounts for defining basis sub-system compositions</string>
@@ -639,7 +804,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PsRT</cstring>
+                                <cstring>c_ICn</cstring>
                             </property>
                             <property name="text">
                                 <string>Use IC amounts for defining non-basis sub-system compositions</string>
@@ -650,7 +815,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>pStepwise</cstring>
+                                <cstring>c_AUb</cstring>
                             </property>
                             <property name="text">
                                 <string>Use formula units for basis and non-basis sub-system compositions</string>
@@ -661,7 +826,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PvR1</cstring>
+                                <cstring>c_TPI</cstring>
                             </property>
                             <property name="text">
                                 <string>Use vectors for T, P and IS of nQ experiments (optional)</string>
@@ -669,7 +834,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PsEqn</cstring>
+                                <cstring>c_Chi</cstring>
                             </property>
                             <property name="text">
                                 <string>Use math script for mole fractions of non-basis DCs (optional)</string>
@@ -680,10 +845,32 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PsEqn_2</cstring>
+                                <cstring>c_Gam</cstring>
                             </property>
                             <property name="text">
                                 <string>Use math script for Gex or activity coefficients of non-basis DCs (optional)</string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>c_Coul</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Use coulombic factors for non-basis DCs</string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>c_SYd</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Save generated SysEq records to data base</string>
                             </property>
                             <property name="checked">
                                 <bool>false</bool>
@@ -736,7 +923,7 @@
                 </property>
                 <widget class="QSpinBox" row="0" column="0">
                     <property name="name">
-                        <cstring>spinBox18</cstring>
+                        <cstring>p_Nsd</cstring>
                     </property>
                     <property name="maxValue">
                         <number>4</number>
@@ -792,16 +979,16 @@
     </widget>
 </widget>
 <tabstops>
-    <tabstop>pPoints</tabstop>
-    <tabstop>pMods</tabstop>
-    <tabstop>pGraph</tabstop>
-    <tabstop>pELine</tabstop>
-    <tabstop>c_PsEqn</tabstop>
-    <tabstop>c_PsSY</tabstop>
-    <tabstop>c_PsRT</tabstop>
-    <tabstop>c_PvR1</tabstop>
-    <tabstop>pStepwise</tabstop>
-    <tabstop>spinBox18</tabstop>
+    <tabstop>pnQ</tabstop>
+    <tabstop>pnM</tabstop>
+    <tabstop>pnP</tabstop>
+    <tabstop>pLb</tabstop>
+    <tabstop>c_Chi</tabstop>
+    <tabstop>c_ICb</tabstop>
+    <tabstop>c_ICn</tabstop>
+    <tabstop>c_TPI</tabstop>
+    <tabstop>c_AUb</tabstop>
+    <tabstop>p_Nsd</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -22,6 +22,7 @@ DATASRC =	MainDialogData.cpp \
 		ProgressDialogData.cpp \
 		ProcessWizardData.cpp \
 		ComposWizardData.cpp \
+		DualThWizardData.cpp \
 		DCompWizardData.cpp \
 		ReacDCWizardData.cpp \
 		RTparmWizardData.cpp \
@@ -52,6 +53,7 @@ SOURCES =	MainDialog.cpp \
 		ProgressDialog.cpp \
 		ProcessWizard.cpp \
 		ComposWizard.cpp \
+		DualThWizard.cpp \
 		DCompWizard.cpp \
 		ReacDCWizard.cpp \
 		RTparmWizard.cpp \
@@ -92,6 +94,8 @@ OBJMOC	=	moc_MainDialogData.o \
 		moc_ProcessWizardData.o \
 		moc_ComposWizard.o \
 		moc_ComposWizardData.o \
+		moc_DualThWizard.o \
+		moc_DualThWizardData.o \
 		moc_DCompWizard.o \
 		moc_DCompWizardData.o \
 		moc_ReacDCWizard.o \
