@@ -26,8 +26,8 @@
 const int MAXPHSYMB =      8,
                 MAXPHGROUP =     16,
                            MAXPNCOEF =      1024,
-                                      QPSIZE = 40, // earlier 20
-                                               QDSIZE = 40;
+                                      QPSIZE = 60, // earlier 20, 40 SD oct 2005
+                                               QDSIZE = 60;
 
 typedef struct
 {// Description  PHASE

@@ -286,8 +286,8 @@ enum SolDCodes {
 };
 
 enum QpQdSizes {   // see m_phase.h 
-   QPSIZE = 40,    // This enum is for GEMIPM2K only!
-   QDSIZE = 40 
+   QPSIZE = 60,    // This enum is for GEMIPM2K only!
+   QDSIZE = 60
 };   
 
 #endif  // _m_param_h

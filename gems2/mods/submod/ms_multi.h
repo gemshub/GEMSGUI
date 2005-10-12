@@ -225,8 +225,8 @@ sitNan   // SIT: number of anions
     *X,  // DC quantities at eqstate x_j, moles - prime IPM solution [L]
     *Y,  // Copy of x_j from previous IPM iteration [0:L-1]
     *XY, // Copy of x_j from previous loop of Selekt2() [0:L-1]
-    *Qp, // Work IIPN variables related to non-ideal phases FIs*(QPSIZE=40)
-    *Qd, // Work IIPN variables related to DC in non-ideal phases FIs*(QDSIZE=40)
+    *Qp, // Work IIPN variables related to non-ideal phases FIs*(QPSIZE=60)
+    *Qd, // Work IIPN variables related to DC in non-ideal phases FIs*(QDSIZE=60)
     *MU, // mu_j values of differences between dual DC chem.potentials[L]
     *EMU, // Exponents of DC increment to F_a criterion for phase [0:L-1]
     *NMU, // DC increments to F_a criterion for phase [0:L-1]
