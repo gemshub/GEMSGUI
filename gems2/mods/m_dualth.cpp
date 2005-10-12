@@ -580,7 +580,7 @@ void TDualTh::set_def( int q)
 
     memcpy( &dtp->PunE, aPa->pa.TPpdc, 4 );
     memcpy( &dtp->PvCoul, aPa->pa.UTppc, 10 );
-    memcpy( &dtp->gStat, "00+---", 6 );
+    memcpy( &dtp->gStat, "00+IJN", 6 );
     strcpy( dtp->name, "`" );
     strcpy( dtp->notes, "`" );
 
@@ -717,6 +717,13 @@ TDualTh::MakeQuery()
     dtp->nM = (short)size[2];
     dtp->Nsd = (short)size[3];
     dtp->nP = (short)size[7];
+    dtp->Nqpn = 20;
+    dtp->Nqpg = 20;
+    if( dtp->PvAUb != S_ON )
+    {
+       dtp->PvICb = S_ON;
+       dtp->PvICn = S_ON;
+    }
 }
 
 int

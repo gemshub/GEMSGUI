@@ -584,7 +584,7 @@ TField::Update()
         focused->SetDescription();
 }
 
-void 
+void
 TField::getVisibleArea(int& n1, int& n2, int& m1, int& m2)
 {
     if( pSV )
@@ -592,7 +592,7 @@ TField::getVisibleArea(int& n1, int& n2, int& m1, int& m2)
     else
 	n1 = 0;
     n2 = n1 + (largeN ? rInfo.maxN : N) - 1;
-    
+
     if( pSH )
         m1 = pSH->value();
     else
@@ -625,9 +625,9 @@ TField::scrollHorizontally(int shift)
 void
 TField::setYPos(int pos)
 {
-    iN = pos;
-    Update();
-    if( pSV )
+  iN = pos;
+  Update();
+  if( pSV )
         pSV->setValue(iN);
 }
 
@@ -652,6 +652,7 @@ TField::EvVScroll(int n)
     for(TField* t = pTied; t && t!=this; t=t->pTied)
         t->setYPos( n );
 }
+
 
 void
 TField::EvHScroll(int m)

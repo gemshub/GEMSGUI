@@ -225,6 +225,7 @@ void TProfil::OpenProfileMode( const char* key,
 bool TProfil::NewProfileMode(
    bool remakeRec, gstring& key_templ__ )
 {
+ gstring new_project_dir_name = "";
  try
  {
     bool templ_key = false;
@@ -240,6 +241,7 @@ AGAIN:
     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
     gstring fstKeyFld(_fstKeyFld);
     StripLine(fstKeyFld);
+    new_project_dir_name = fstKeyFld;
 
     //Test equal project names
     templ_str = fstKeyFld;
@@ -363,12 +365,13 @@ AGAIN:
      pVisor->CloseMessage();
       contentsChanged = false;
       //delete projct directory, if Project record create error
-      gstring fstKeyFld =
-                gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
-      StripLine(fstKeyFld);
+// SD oct 2005
+//      gstring fstKeyFld =
+//                gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+//      StripLine(fstKeyFld);
 
       gstring Path = pVisor->userProfDir();
-      Path += fstKeyFld;
+      Path += new_project_dir_name; // fstKeyFld;
       pVisor->deleteDBDir(Path.c_str());
       throw;
     }
@@ -379,6 +382,7 @@ AGAIN:
 bool TProfil::NewProfileModeElements(
    bool remakeRec, gstring& key_templ )
 {
+ gstring new_project_dir_name = "";
  try
  {
     bool templ_key = false;
@@ -394,6 +398,7 @@ AGAIN:
     vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
     gstring fstKeyFld(_fstKeyFld);
     StripLine(fstKeyFld);
+    new_project_dir_name = fstKeyFld;
 
     //Test equal project names
     templ_str = fstKeyFld;
@@ -521,12 +526,13 @@ AGAIN:
      pVisor->CloseMessage();
       contentsChanged = false;
       //delete project directory, if Project record create error
-      gstring fstKeyFld =
-                gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
-      StripLine(fstKeyFld);
+//SD oct 2005
+//      gstring fstKeyFld =
+//                gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
+//      StripLine(fstKeyFld);
 
       gstring Path = pVisor->userProfDir();
-      Path += fstKeyFld;
+      Path +=   new_project_dir_name; // fstKeyFld;
       pVisor->deleteDBDir(Path.c_str());
       throw;
     }

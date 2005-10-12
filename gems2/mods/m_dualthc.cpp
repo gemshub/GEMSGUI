@@ -88,12 +88,12 @@ bool TDualTh::test_sizes( )
    if( dtp->nM <=0 )
    {
       i = false;
-      dtp->nM = 1;
+      dtp->nM = 2;
    }
    if( dtp->PvSd == S_ON && dtp->Nsd <=0 )
      dtp->Nsd = 1;
 
-   if( dtp->La_b <=0 )
+   if( dtp->PvAUb == S_ON && dtp->La_b <=0  )
    { i= false;
      dtp->La_b = TProfil::pm->mup->N;
    }
