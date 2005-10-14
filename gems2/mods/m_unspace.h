@@ -419,6 +419,16 @@ typedef enum {
     UNSP_UN_LOG    = 'L',
     UNSP_UN_CMOL   = 'C',
 
+/*  GS_INDEF   = '0',
+    GS_GOING    = '1',
+    GS_DONE    = '2',
+    GS_ERR     = '3',
+    AS_INDEF   = '0',
+    AS_READY   = '1',
+    AS_RUN     = '2',
+    AS_DONE    = '3',
+*/
+
     UNSP_OF_A      = 'A',
     UNSP_OF_B      = 'B',
     UNSP_OF_C      = 'C',

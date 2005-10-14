@@ -50,6 +50,8 @@ void TDualTh::Init_Analyse()
    // for_n
    make_A( dtp->nM, dtp->for_n );
    build_mu_n();  // calculate new mu_n matrix
+//   CalcMoleFractNS();
+   // calculate mole fractions of end members here
 }
 
 // analyse calculated equlibria
@@ -67,6 +69,9 @@ void TDualTh::Analyse( )
   {
      Calc_gam_n( dtp->PsSt );
      Calc_act_n( dtp->PsSt );
+     // here call regression part, if necessary
+
+     //
   }
   if( dtp->PsMode == DT_MODE_X )
      Calc_act_n( dtp->PsSt );
