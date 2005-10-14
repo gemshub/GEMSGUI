@@ -717,8 +717,14 @@ TDualTh::MakeQuery()
     dtp->nM = (short)size[2];
     dtp->Nsd = (short)size[3];
     dtp->nP = (short)size[7];
-    dtp->Nqpn = 20;
-    dtp->Nqpg = 20;
+    if( dtp->PvChi != S_OFF )
+      dtp->Nqpn = 20;
+    else
+      dtp->Nqpn = 0;
+    if( dtp->PvGam != S_OFF )
+       dtp->Nqpg = 20;
+    else
+       dtp->Nqpg = 0;
     if( dtp->PvAUb != S_ON )
     {
        dtp->PvICb = S_ON;
@@ -751,7 +757,7 @@ AGAIN:
    dyn_new();
 
    dt_initiate( set_def );
-   // dtp->gStat = UNSP_GS_INDEF;
+   dtp->gStat = GS_INDEF;
      // set data to SBM
    for(int ii=0; ii< dtp->Nb; ii++ )
         memcpy( dtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME  );
@@ -773,18 +779,18 @@ TDualTh::RecCalc( const char *key )
 //                 "Please, wait...", 0, usp->nQ);
 
 // generate part
-   if( dtp->gStat != UNSP_GS_DONE )
+   if( dtp->gStat != GS_DONE )
    {
-    dtp->gStat = UNSP_GS_GOIN;
+    dtp->gStat = GS_GOING;
     Init_Generation();
     build_Ub();
-    dtp->gStat = UNSP_GS_DONE;
+    dtp->gStat = GS_DONE;
    }
 
 //analyse part
   Init_Analyse();
   Analyse();
-  dtp->aStat = UNSP_AS_DONE;
+  dtp->aStat = AS_DONE;
 
   pVisor->CloseMessage();
   TCModule::RecCalc(key);

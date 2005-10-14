@@ -108,7 +108,7 @@ bool TDualTh::test_sizes( )
 // set begin initalization
 void TDualTh::dt_initiate( bool mode )
 {
-  dtp->aStat = UNSP_AS_INDEF;
+  dtp->aStat = AS_INDEF;
 
   dtp->cT = dtp->Td[START_];
   dtp->cP = dtp->Pd[START_];
@@ -130,7 +130,7 @@ void TDualTh::dt_initiate( bool mode )
     int ii,i;
     vstr tbuf(100);
 
-    dtp->gStat = UNSP_GS_INDEF;
+    dtp->gStat = GS_INDEF;
 
     dtp->Msysb = 0.;
     dtp->Vsysb = 0.;

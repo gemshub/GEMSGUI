@@ -414,15 +414,6 @@ typedef enum {
     UNSP_DL_UNIFORM  = 'u',     /* uniform */
     UNSP_DL_NORMAL   = 'n',      /* normal */
 
-/*    UNSP_GS_INDEF   = '0',
-    UNSP_GS_GOIN    = '1',
-    UNSP_GS_DONE    = '2',
-    UNSP_GS_ERR     = '3',
-    UNSP_AS_INDEF   = '0',
-    UNSP_AS_READY   = '1',
-    UNSP_AS_RUN     = '2',
-    UNSP_AS_DONE    = '3',
-*/
     UNSP_UN_PRS    = '%',
     UNSP_UN_ABS    = 'A',
     UNSP_UN_LOG    = 'L',

@@ -753,15 +753,15 @@ o_dtsdpar,
 
 typedef enum {
 
-    UNSP_GS_INDEF   = '0',
-    UNSP_GS_GOIN    = '1',
-    UNSP_GS_DONE    = '2',
-    UNSP_GS_ERR     = '3',
+    GS_INDEF   = '0',
+    GS_GOING    = '1',
+    GS_DONE    = '2',
+    GS_ERR     = '3',
 
-    UNSP_AS_INDEF   = '0',
-    UNSP_AS_READY   = '1',
-    UNSP_AS_RUN     = '2',
-    UNSP_AS_DONE    = '3',
+    AS_INDEF   = '0',
+    AS_READY   = '1',
+    AS_RUN     = '2',
+    AS_DONE    = '3',
 
 
 } GS_AS_CLASSES;

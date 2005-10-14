@@ -889,8 +889,8 @@ void TUnSpace::set_def( int q)
     strcpy( usp->notes, "`" );
     memset( usp->stkey, 0, sizeof(char)*(EQ_RKLEN+10) );
    memcpy( &usp->PunE, aPa->pa.TPpdc, 4 );
-   usp->Gstat = UNSP_GS_INDEF;
-   usp->Astat = UNSP_AS_INDEF;
+   usp->Gstat = GS_INDEF;
+   usp->Astat = AS_INDEF;
    memcpy( &usp->PsUnInt, "%%AA+------+--", 14 );
    memcpy( &usp->Pa_f_pha, "------0B0-", 10 );
    usp->Pa_Crit = UNSP_CRIT_PA;
@@ -1043,8 +1043,8 @@ AGAIN:
     {  mode = VF_REMAKE;    // first make change not remember: set_def_data_to_arrays();
        goto AGAIN;
     }
-   usp->Gstat = UNSP_GS_INDEF;
-   usp->Astat = UNSP_AS_INDEF;
+   usp->Gstat = GS_INDEF;
+   usp->Astat = AS_INDEF;
 
    dyn_new();
 
@@ -1075,11 +1075,11 @@ TUnSpace::RecCalc( const char *key )
 
     if( usp->Pa_Adapt > '1')
     {  nAdapt = (int)(usp->Pa_Adapt-'0');
-       usp->Gstat = UNSP_GS_INDEF; // for Adapt mode need   buildTestedArrays
+       usp->Gstat = GS_INDEF; // for Adapt mode need   buildTestedArrays
                                    // for each cicle
     }
 
-    if( usp->Gstat != UNSP_GS_DONE )
+    if( usp->Gstat != GS_DONE )
           init_generation();
 
    init_analyse();
@@ -1092,10 +1092,10 @@ TUnSpace::RecCalc( const char *key )
 
     for( int ii=0; ii<nAdapt; ii++ )
     {
-      if( usp->Gstat != UNSP_GS_DONE )
+      if( usp->Gstat != GS_DONE )
       {
-          usp->Gstat = UNSP_GS_GOIN;
-          usp->Astat = UNSP_AS_INDEF;
+          usp->Gstat = GS_GOING;
+          usp->Astat = AS_INDEF;
           buildTestedArrays();
       }
       aMod[RT_UNSPACE].ModUpdate("UnSpace data analysing in progress...");
@@ -1113,9 +1113,9 @@ TUnSpace::RecCalc( const char *key )
 
   if( usp->Pa_Adapt > '1')
     usp->Pa_Adapt = '1';
-  usp->Gstat = UNSP_GS_DONE;   // for Adapt mode need   buildTestedArrays
+  usp->Gstat = GS_DONE;   // for Adapt mode need   buildTestedArrays
                                  // for each cicle
-  usp->Astat = UNSP_AS_DONE;
+  usp->Astat = AS_DONE;
 //  aMod[RT_UNSPACE].ModUpdate("GtDemo data sampling in progress...");
 
   pVisor->CloseMessage();
@@ -1231,8 +1231,8 @@ void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
    dyn_new(0);
 
    // recorb must be remaked and recalculated
-   usp->Gstat = UNSP_GS_INDEF;
-   usp->Astat = UNSP_AS_INDEF;
+   usp->Gstat = GS_INDEF;
+   usp->Astat = AS_INDEF;
 
 // pack and copy data from 1 to 0 (using deleting lists)
 //***************************************************
