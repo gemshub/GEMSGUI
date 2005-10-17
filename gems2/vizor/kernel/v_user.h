@@ -58,10 +58,11 @@ typedef unsigned int uint;
 
 
 inline
-int ROUND(double x)
+int ROUND(double x )
 {
     return int((x)+.5);
 }
+
 
 inline
 bool

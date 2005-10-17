@@ -20,6 +20,7 @@ SOURCES 	= m_const.cpp m_sdata.cpp m_gem2mt.cpp  m_gem2mtc.cpp \
     s_formula.cpp m_dcomp.cpp m_dcomp2.cpp \
     s_tpwork.cpp s_supcrt.cpp s_supcrt2.cpp \
     m_compos.cpp s_fgl.cpp s_fgl2.cpp s_fglbred.cpp \
+    s_lsm_fun.cpp s_lsm_lm.cpp  s_lsm_svd.cpp  \
     m_reacdc.cpp  m_phase.cpp \
     m_proces.cpp m_reac2.cpp  \
     m_prfget.cpp m_prfget2.cpp m_syseq.cpp \

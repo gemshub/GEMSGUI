@@ -928,5 +928,114 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
    delete[] p_An;
 }
 
+//set sizes of arrays
+bool TDualTh::test_sizes( )
+{
+    bool i=true;
+
+   // the same sizes
+   dtp->Nb = TProfil::pm->mup->N;
+
+   if( dtp->nQ <=0 )
+   {
+      i = false;
+      dtp->nQ = 1;
+   }
+   if( dtp->nM <=0 )
+   {
+      i = false;
+      dtp->nM = 2;
+   }
+   if( dtp->PvSd == S_ON && dtp->Nsd <=0 )
+     dtp->Nsd = 1;
+
+   if( dtp->PvAUb == S_ON && dtp->La_b <=0  )
+   { i= false;
+     dtp->La_b = TProfil::pm->mup->N;
+   }
+
+   if( i==false )
+        vfMessage(window(), GetName(),
+   "E00DTrem: Invalid dimensions in DualTh data structure!", vfErr);
+
+    return i;
+}
+
+// set begin initalization
+void TDualTh::dt_initiate( bool mode )
+{
+  dtp->aStat = AS_INDEF;
+
+  dtp->cT = dtp->Td[START_];
+  dtp->cP = dtp->Pd[START_];
+  dtp->cV = dtp->Vd[START_];
+  dtp->c_tm = dtp->tmd[START_];
+  dtp->c_NV = dtp->NVd[START_];
+
+  if( (dtp->PvTPI == S_ON) && dtp->Tdq && dtp->Pdq )
+  {       // Take T and P from lists
+     dtp->cT = dtp->Tdq[0];
+     dtp->cP = dtp->Pdq[0];
+  }
+  dtp->q = 0;
+  dtp->i = 0;
+  dtp->jm = 0;
+
+  if( mode )
+  {
+    int ii,i;
+    vstr tbuf(100);
+
+    dtp->gStat = GS_INDEF;
+
+    dtp->Msysb = 0.;
+    dtp->Vsysb = 0.;
+    dtp->Mwatb = 1.;
+    dtp->Maqb = 1.;
+    dtp->Vaqb = 1.;
+
+    for( ii=0; ii<dtp->Nb; ii++)
+    {
+     dtp->CIclb[ii] = 'g';
+     dtp->CIcln[ii] = 'g';
+    }
+
+    for( ii=0; ii<dtp->nQ; ii++)
+    {
+     sprintf( tbuf, "Experiment%d", ii );
+     strncpy( dtp->nam_b[ii], tbuf, MAXIDNAME );
+    }
+
+    for( ii=0; ii<dtp->nM; ii++)
+    {
+     dtp->typ_n[ii] = 'I';
+//     dtp->AUcln[ii] = 'M';
+//     strncpy( dtp->for_n[ii], "H2O", 4 );
+     sprintf( tbuf, "Endmember%d", ii );
+     strncpy( dtp->nam_n[ii], tbuf, MAXIDNAME );
+     for( i=0; i<dtp->nQ; i++)
+     {
+        dtp->gam_n[i*dtp->nM+ii] = 1.;  // default for gamma 1.0
+        dtp->chi[i*dtp->nM+ii] = DOUBLE_EMPTY;  // default for chi 
+     }
+     dtp->wdat[ii] = 1.;
+    }
+
+    for( ii=0; ii<dtp->La_b; ii++)
+    {
+     dtp->AUclb[ii] = 'g';
+     strncpy( dtp->for_b[ii], "H2O", 4 );
+     dtp->AUcln[ii] = 'M';
+     strncpy( dtp->for_n[ii], "H2O", 4 );
+    }
+
+    for( ii=0; ii<dtp->nP; ii++)
+    {
+      dtp->wpar[ii] = 1.;
+    }
+
+
+  }
+}
 
 // ------------------- End of m_dualth.cpp --------------------------

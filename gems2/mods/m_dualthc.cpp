@@ -31,6 +31,7 @@
 //#include "v_object.h"
 #include "service.h"
 #include "visor.h"
+#include "s_lsm.h"
 
 
 // setup data before calculate EqStates
@@ -38,6 +39,8 @@ void TDualTh::Init_Generation()
 {
    // put data to Bb
     Bb_Calc();
+   // put data to Bn
+   Bn_Calc();
 }
 
 
@@ -45,12 +48,11 @@ void TDualTh::Init_Generation()
 void TDualTh::Init_Analyse()
 {
    dt_text_analyze();
-   // put data to Bn
-   Bn_Calc();
    // for_n
    make_A( dtp->nM, dtp->for_n );
    build_mu_n();  // calculate new mu_n matrix
-//   CalcMoleFractNS();
+   CalcMoleFractNS();
+
    // calculate mole fractions of end members here
 }
 
@@ -80,108 +82,7 @@ void TDualTh::Analyse( )
      Calc_act_n( dtp->PsSt );
 }
 
-//set sizes of arrays
-bool TDualTh::test_sizes( )
-{
-    bool i=true;
-
-   // the same sizes
-   dtp->Nb = TProfil::pm->mup->N;
-
-   if( dtp->nQ <=0 )
-   {
-      i = false;
-      dtp->nQ = 1;
-   }
-   if( dtp->nM <=0 )
-   {
-      i = false;
-      dtp->nM = 2;
-   }
-   if( dtp->PvSd == S_ON && dtp->Nsd <=0 )
-     dtp->Nsd = 1;
-
-   if( dtp->PvAUb == S_ON && dtp->La_b <=0  )
-   { i= false;
-     dtp->La_b = TProfil::pm->mup->N;
-   }
-
-   if( i==false )
-        vfMessage(window(), GetName(),
-   "E00DTrem: Invalid dimensions in DualTh data structure!", vfErr);
-
-    return i;
-}
-
-// set begin initalization
-void TDualTh::dt_initiate( bool mode )
-{
-  dtp->aStat = AS_INDEF;
-
-  dtp->cT = dtp->Td[START_];
-  dtp->cP = dtp->Pd[START_];
-  dtp->cV = dtp->Vd[START_];
-  dtp->c_tm = dtp->tmd[START_];
-  dtp->c_NV = dtp->NVd[START_];
-
-  if( (dtp->PvTPI == S_ON) && dtp->Tdq && dtp->Pdq )
-  {       // Take T and P from lists
-     dtp->cT = dtp->Tdq[0];
-     dtp->cP = dtp->Pdq[0];
-  }
-  dtp->q = 0;
-  dtp->i = 0;
-  dtp->jm = 0;
-
-  if( mode )
-  {
-    int ii,i;
-    vstr tbuf(100);
-
-    dtp->gStat = GS_INDEF;
-
-    dtp->Msysb = 0.;
-    dtp->Vsysb = 0.;
-    dtp->Mwatb = 1.;
-    dtp->Maqb = 1.;
-    dtp->Vaqb = 1.;
-
-    for( ii=0; ii<dtp->Nb; ii++)
-    {
-     dtp->CIclb[ii] = 'g';
-     dtp->CIcln[ii] = 'g';
-    }
-
-    for( ii=0; ii<dtp->nQ; ii++)
-    {
-     sprintf( tbuf, "Experiment%d", ii );
-     strncpy( dtp->nam_b[ii], tbuf, MAXIDNAME );
-    }
-
-    for( ii=0; ii<dtp->nM; ii++)
-    {
-     dtp->typ_n[ii] = 'I';
-//     dtp->AUcln[ii] = 'M';
-//     strncpy( dtp->for_n[ii], "H2O", 4 );
-     sprintf( tbuf, "Endmember%d", ii );
-     strncpy( dtp->nam_n[ii], tbuf, MAXIDNAME );
-     for( i=0; i<dtp->nQ; i++)
-     {
-        dtp->gam_n[i*dtp->nM+ii] = 1.;  // default for gamma 1.0
-        dtp->chi[i*dtp->nM+ii] = 1.;  // default for chi 1.0
-     }
-    }
-
-    for( ii=0; ii<dtp->La_b; ii++)
-    {
-     dtp->AUclb[ii] = 'g';
-     strncpy( dtp->for_b[ii], "H2O", 4 );
-     dtp->AUcln[ii] = 'M';
-     strncpy( dtp->for_n[ii], "H2O", 4 );
-    }
-  }
-}
-
+//-------------------------------------------------------------------------------
 // recalc working parametres
 void TDualTh::dt_next()
 {
@@ -675,6 +576,42 @@ TDualTh::Bn_Calc()
 
 }
 
+int
+TDualTh::CalcMoleFractNS()
+{
+ if( aObj[o_dtchi].IsEmpty( 0, 0 ))
+ {
+  short ii, jj;
+  double *bb = new double[dtp->Nb];
+  for( ii=0; ii< dtp->nQ; ii++ )
+  {
+     TSVDcalc task_Axb( dtp->Nb, dtp->nM,
+       dtp->An, dtp->Bn+(ii*dtp->Nb), dtp->chi+(ii*dtp->nM) );
+     task_Axb.CalcSVD( true );
+    // calculate new bn
+       task_Axb.CalcB( true, bb );
+     if( dtp->CIn )
+       for( jj=0; jj<dtp->Nb; jj++ )
+        dtp->CIn[ ii*dtp->Nb+jj ] =
+            ROUND_EXP( bb[jj] - dtp->Bn[ ii*dtp->Nb+jj ], 6 );
+    // normalise
+     double cnt=0.;
+     for( jj=0; jj<dtp->nM; jj++ )
+        cnt += dtp->chi[ii*dtp->nM+jj];
+     for( jj=0; jj<dtp->nM; jj++ )
+        dtp->chi[ii*dtp->nM+jj] /= cnt;
+
+     for( jj=0; jj<dtp->nM; jj++ )
+        dtp->chi[ii*dtp->nM+jj] = ROUND_EXP(dtp->chi[ii*dtp->nM+jj], 6 );
+  }
+  delete[] bb;
+ }
+ return 1;
+ 
+}
+
+
+//----------------------------------------------------------------------------
 void
 TDualTh::Calc_muo_n( char eState )
 { // calculate muo_n DualTh

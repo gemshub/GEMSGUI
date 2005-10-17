@@ -18,6 +18,7 @@ SOURCES = m_const.cpp m_sdata.cpp m_gem2mt.cpp m_gem2mtc.cpp \
     s_formula.cpp m_dcomp.cpp m_dcomp2.cpp \
     s_tpwork.cpp s_supcrt.cpp s_supcrt2.cpp \
     m_compos.cpp s_fgl.cpp s_fgl2.cpp s_fglbred.cpp \
+    s_lsm_fun.cpp s_lsm_lm.cpp  s_lsm_svd.cpp \
     m_reacdc.cpp  m_phase.cpp \
     m_proces.cpp m_reac2.cpp  \
     m_prfget.cpp m_prfget2.cpp m_syseq.cpp \
@@ -29,6 +30,7 @@ OBJECTS = m_const.obj m_sdata.obj m_gem2mt.obj  m_gem2mtc.obj \
      m_param.obj m_icomp.obj v_ipnc.obj\
      s_formula.obj s_tpwork.obj m_dcomp.obj m_dcomp2.obj \
      s_supcrt.obj s_supcrt2.obj m_compos.obj s_fgl.obj s_fgl2.obj s_fglbred.obj \
+     s_lsm_fun.obj s_lsm_lm.obj  s_lsm_svd.obj \
      m_reacdc.obj m_phase.obj \
      m_proces.obj m_reac2.obj \
      m_prfget.obj m_prfget2.obj m_syseq.obj \
@@ -57,6 +59,7 @@ $(TARGET): subdirs_mk	$(OBJECTS)
 	+s_formula.obj +s_tpwork.obj +m_dcomp.obj +m_dcomp2.obj \
 	+s_supcrt.obj +s_supcrt2.obj +m_compos.obj \
         +s_fgl.obj +s_fgl2.obj +s_fglbred.obj \
+        +s_lsm_fun.obj +s_lsm_lm.obj  +s_lsm_svd.obj \
 	+m_reacdc.obj +m_phase.obj +m_proces.obj +m_reac2.obj \
 	+m_prfget.obj +m_prfget2.obj +m_syseq.obj \
 	+m_syst2.obj  +m_unspace.obj +m_unsp_stat.obj  +m_unsp_gen.obj \
