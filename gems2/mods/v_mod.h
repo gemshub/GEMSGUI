@@ -747,7 +747,7 @@ o_dtsdpar,
   o_dtsdref, o_dtsdval, o_dtnam_b, o_dtnam_n, o_dtpar_n, 
   o_dtfor_n, o_dtfor_b, o_dtstl, o_dttyp_n, o_dtciclb, 
   o_dtcicln, o_dtauclb,  o_dtaucln, o_dtsbm, o_dttdq, 
-  o_dtpdq, o_dtisq, o_mia,  o_dtwdat, o_dtwpar,
+  o_dtpdq, o_dtisq, o_dtwacp, o_dtwdat, o_dtwpar,
   o_dtwa_ap, o_dtstkey, o_dttprn,
 };
 

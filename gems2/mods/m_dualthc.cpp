@@ -41,7 +41,7 @@ void TDualTh::Init_Generation()
 }
 
 
-// setup data before analyse
+// setup of the data before DualTh calculations
 void TDualTh::Init_Analyse()
 {
    dt_text_analyze();
@@ -57,18 +57,21 @@ void TDualTh::Init_Analyse()
 // analyse calculated equlibria
 void TDualTh::Analyse( )
 {
- // only as example
+ // only as an example by now
   if( dtp->PvChi == S_ON )
-   CalcEquat( A_CHI );
+     CalcEquat( A_CHI );
   if( dtp->PvGam == S_ON )
-   CalcEquat( A_GAM );
+     CalcEquat( A_GAM );
   // Calculation of DualThermo results
+  Calc_gmix_n( dtp->PsMode, dtp->PsSt );   // Retrieving table with mixing energies
   if( dtp->PsMode == DT_MODE_M || dtp->PsMode == DT_MODE_A )
-     Calc_muo_n( dtp->PsSt );
+  {
+     Calc_muo_n( dtp->PsSt );  // Estimation of standard Gibbs energies
+  }
   if( dtp->PsMode == DT_MODE_G )
   {
-     Calc_gam_n( dtp->PsSt );
-     Calc_act_n( dtp->PsSt );
+     Calc_gam_n( dtp->PsSt );  // Estimation of int. parameters and activity coeffs
+     Calc_act_n( dtp->PsSt );  // Calculation of activities
      // here call regression part, if necessary
 
      //
@@ -836,13 +839,73 @@ void
 TDualTh::Calc_muo_n_stat( char /*eState*/ )
 {
    short k;
-
    for( k=0; k< dtp->nM; k++ )
    {
-//      dtp->avg_m[k] = ColumnAverage( dtp->mu_o, dtp->nQ, dtp->nM, k  );
-//      dtp->sd_m[k] = ColumnStdev( dtp->mu_o, dtp->avg_m[k], dtp->nQ,
-//                     dtp->nM, k  );
+      dtp->avsd_o[k] = ColumnAverage( dtp->mu_o, dtp->nQ, dtp->nM, k  );
+      dtp->avsd_o[k+dtp->nM] = ColumnStdev( dtp->mu_o, dtp->avsd_o[k], dtp->nQ,
+                     dtp->nM, k  );
    }
+}
+
+// Calculation of mixing energies (not partial)
+void
+TDualTh::Calc_gmix_n( char ModE, char StP ) // calculation of mixing energies
+{
+  double Gmixt, Gmix, Gmech, Gid, Gex, chi, RT; /* P */
+  short j, ii;
+
+  if( !( ModE == DT_MODE_G || ModE == DT_MODE_M || ModE == DT_MODE_A ) )
+     return;
+  for( ii=0; ii<dtp->nQ; ii++)
+  {
+    dtp->q = ii;
+    if( dtp->PvTPI == S_ON && dtp->Tdq )
+    {
+       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
+//       P = dtp->Pdq[ii];
+    }
+    else
+    {
+       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
+//       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
+    }
+
+    Gmix = Gmixt = Gmech = Gid = 0.0;
+    if( ModE == DT_MODE_G )
+    {
+       for( j=0; j<dtp->nM; j++)
+       {  // Calculation of Gmix for q-th experiment
+          chi = dtp->chi[ii*dtp->nM+j];  // mole fraction
+          if(chi <= 1e-9) chi = 1e-9;
+          Gmixt += dtp->mu_b[ii*dtp->nM+j] * chi;   // incr Gibbs energy of mixture
+          Gmech += dtp->mu_o[ii*dtp->nM+j] * chi;   // incr Gibbs energy of mechanic mixture
+          Gid += RT * chi * log( chi );             // incr Gibbs energy of Raoult ideal mixing
+       }
+       //  Calculation of Gmix and Gex for q-th experiment
+       Gmix = Gmixt - Gmech; // total Gibbs energy of mixing
+       Gex = Gmix - Gid;     // excess Gibbs energy of mixing
+    }
+    else if( ModE == DT_MODE_M || ModE == DT_MODE_A )
+    {
+       for( j=0; j<dtp->nM; j++)
+       {  // Calculation of Gmix for q-th experiment
+          chi = dtp->chi[ii*dtp->nM+j];  // mole fraction
+          if(chi <= 1e-9) chi = 1e-9;
+          Gmixt += dtp->mu_b[ii*dtp->nM+j] * chi;   // incr Gibbs energy of mixture
+          Gid += RT * chi * log( chi );             // incr Gibbs energy of Raoult ideal mixing
+          Gex += RT * chi * log( dtp->gam_n[ii*dtp->nM+j] ); // incr excess Gibbs energy
+       }
+       //  Calculation of Gmix and Gmech for q-th experiment
+       Gmix = Gex + Gid; // Gibbs energy of mixing
+       Gmech = Gmixt - Gmix; // Gibbs energy of mechanical mixture
+    }
+    // putting results into gmx_n[nQ][5] table
+    dtp->gmx_n[ii][0] = Gex;      // excess Gibbs energy of mixing
+    dtp->gmx_n[ii][1] = Gid;      // Gibbs energy of Raoult ideal mixing
+    dtp->gmx_n[ii][2] = Gmix;     // total Gibbs energy of mixing
+    dtp->gmx_n[ii][3] = Gmech;    // Gibbs energy of mechanical mixture
+    dtp->gmx_n[ii][4] = Gmixt;    // integral Gibbs energy of the mixture
+  }  // end ii
 }
 
 // Calculation of statistics over Wg (gamma interaction parameters)
@@ -851,20 +914,21 @@ TDualTh::Calc_alp_n_stat( char /*eState*/ )
 {
    short k;
 
-   for( k=0; k< dtp->nM; k++ )
+   for( k=0; k< dtp->nP; k++ )
    {
-//      dtp->avg_g[k] = ColumnAverage( dtp->gam_n, dtp->nQ, dtp->nM, k  );
-//      dtp->sd_g[k] = ColumnStdev( dtp->gam_n, dtp->avg_g[k], dtp->nQ,
-//                     dtp->nM, k  );
+      dtp->avsd_w[k] = ColumnAverage( dtp->Wa, dtp->nQ, dtp->nP, k  );
+      dtp->avsd_w[dtp->nP+k] = ColumnStdev( dtp->Wa, dtp->avsd_w[k], dtp->nQ,
+                     dtp->nP, k  );
    }
 }
 
 void
 TDualTh::Calc_gam_n( char eState )
-{  // calculate gamma DualTh
+{  // calculate gamma and interaction parameters using DualTh methods
  short ii, j;
- double muoi, gam=1., Dsur, RT /*= 2479.*/, P/*=1.*/, lnFmol=4.016535;
- double Gex, Gmix, Gmech, Gid, chi, chiPr, Wg, gam0, gam1;
+ double muoi, gam=1., Dsur, RT, P, lnFmol=4.016535;
+ double Gex, Gmix, Gmech, Gid, Gmixt, chi, chiPr, Wg, lnGam1, lnGam2,
+        alp0, alp1, chi1, chi2, Gex_, W12, W21;
 
 // dt_initiate( false );
    Dsur = dtp->WmCb - 1.;
@@ -888,48 +952,63 @@ TDualTh::Calc_gam_n( char eState )
   // Calculation of activity coefficients
     if( eState == DT_STATE_S )
     {  // Stoichiometric saturation - applies to SS end-members only!
-      Gmix = Gmech = Gid = 0.0; chiPr = 1.;
+      chiPr = 1.;
       for( j=0; j<dtp->nM; j++)
-      {  // Calculation of Gmix for q-th experiment
-         chi = dtp->chi[ii*dtp->nM+j];
-         if(chi <= 1e-9) chi = 1e-9;
-         Gmix += dtp->mu_b[ii*dtp->nM+j] * chi;
-//SD         Gmech += dtp->muo_i[ii*dtp->nM+j] * chi;
-         Gid += RT * chi * log( chi );
-         chiPr *= chi;
-      }
-      //    Calculation of Gex for q-th experiment
-      Gex = Gmix - Gid - Gmech;
-// putting values provisionally in 1st column of Coul cells!
-//      dtp->gex_n[ii*dtp->nM] = Gex;   // molar excess Gibbs energy of mixing
-//      dtp->gm_n[ii*dtp->nM] = Gmix;      // Temporarily!
-      dtp->gmx_n[0][ii] = Gmix-Gmech;     // Temporarily!
-// Interaction parameter (regular binary only)!
-      Wg = Gex / chiPr;
-// putting values provisionally in 2nd column of Coul cells!
-      if(dtp->Coul)
-         dtp->Coul[ii*dtp->nM+1] = Wg;
-// calculating activity coeffs of regular binary model
-      gam0 = Wg/RT * dtp->chi[ii*dtp->nM+1] * dtp->chi[ii*dtp->nM+1];
-      gam1 = Wg/RT * dtp->chi[ii*dtp->nM] * dtp->chi[ii*dtp->nM];
+         chiPr *= dtp->chi[ii*dtp->nM+j];  // mole fraction product
+//  Retrieval of Gmix and Gex for q-th experiment
+//      Gmixt = dtp->gmx_n[ii][4];   //  Gibbs energy of mixture
+//      Gmech = dtp->gmx_n[ii][3];   //  Gibbs energy of mechanic mixture
+//      Gmix = dtp->gmx_n[ii][2];    //  total Gibbs energy of mixing
+//      Gid = dtp->gmx_n[ii][1];     //  Gibbs energy of Raoult ideal mixing
+      Gex = dtp->gmx_n[ii][0];     // excess Gibbs energy of mixing
+
+// Interaction parameter (regular binary Guggenheim only)!
+      if( dtp->nM == 2 && dtp->nP )
+      {
+          Wg = Gex / chiPr;
+          alp0 = Wg/RT;
+          switch( dtp->PsIPf ) // put it into Wa column
+          {
+             case DT_IPF_R:  // Redlich-Kister
+                            if(dtp->PsIPu == DT_IPU_N )
+                            {
+                               dtp->Wa[ii*dtp->nP] = alp0;
+                               break;
+                            }
+             case DT_IPF_G:  // Guggenheim
+             case DT_IPF_T:  // Thompson-Waldbaum
+                            if(dtp->PsIPu == DT_IPU_J )
+                               dtp->Wa[ii*dtp->nP] = Wg;
+                            else if( dtp->PsIPu == DT_IPU_K )
+                               dtp->Wa[ii*dtp->nP] = Wg*0.001;
+                            else if( dtp->PsIPu == DT_IPU_N )
+                               dtp->Wa[ii*dtp->nP] = alp0;
+             default: break;
+          }
+
+// calculate activity coeffs of regular binary Guggenheim model
+          lnGam1 = Wg/RT * dtp->chi[ii*dtp->nM+1] * dtp->chi[ii*dtp->nM+1];
+          lnGam2 = Wg/RT * dtp->chi[ii*dtp->nM] * dtp->chi[ii*dtp->nM];
+
+// truncating (for numerics) - error messages to be added
+          if( lnGam1 < -15. )
+              lnGam1 = -15;
+          if( lnGam2 < -15. )
+              lnGam2 = -15;
+          if( lnGam1 > 15. )
+              lnGam1 = 15;
+          if( lnGam2 > 15. )
+              lnGam2 = 15;
 // putting it provisionally in gam_n cells as activity coeffs
-      if( gam0 < -10. )
-          gam0 = -10;
-      if( gam1 < -10. )
-          gam1 = -10;
-      if( gam0 > 10. )
-          gam0 = 10;
-      if( gam1 > 10. )
-          gam1 = 10;
-      dtp->gam_n[ii*dtp->nM] = exp( gam0 );
-      dtp->gam_n[ii*dtp->nM+1] = exp( gam1 );
-// To be re-arranged and converted to script calculations!
+          dtp->gam_n[ii*dtp->nM] = exp( lnGam1 );
+          dtp->gam_n[ii*dtp->nM+1] = exp( lnGam2 );
+      }
     }
-    else { // Equilibrium
+    else { // Equilibrium - direct estimation of activity coefficients possible
       for( j=0; j<dtp->nM; j++)
       {
         dtp->jm = j;
-//SD        muoi = dtp->muo_i[ii*dtp->nM+j];
+        muoi = dtp->mu_o[ii*dtp->nM+j];
         switch(dtp->typ_n[j])
         {
           case DC_SCP_CONDEN:
@@ -975,7 +1054,7 @@ TDualTh::Calc_gam_n( char eState )
         case DC_WSC_A1:
         case DC_WSC_A2:
         case DC_WSC_A3:
-        case DC_WSC_A4:  // case DC_SUR_GROUP: 
+        case DC_WSC_A4:  // case DC_SUR_GROUP:
         case DC_SUR_COMPLEX:
         case DC_SUR_IPAIR:
         case DC_IESC_A:
@@ -986,7 +1065,7 @@ TDualTh::Calc_gam_n( char eState )
             break; // Coulombic term to be considered !!!!!!!!!!
         case DC_PEL_CARRIER:
         case DC_SUR_MINAL:
-        case DC_SUR_CARRIER: // sorbent 
+        case DC_SUR_CARRIER: // sorbent
             DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                            + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
@@ -997,19 +1076,117 @@ TDualTh::Calc_gam_n( char eState )
         }
         dtp->gam_n[ii*dtp->nM+j] = gam;
       } // j
-    } // else
-  } //  ii
 
-  Calc_alp_n_stat( eState );
+      // Estimation of interaction parameters from activity coefficients
+      Gex = 0.;
+      chiPr = 1.;
+      for( j=0; j<dtp->nM; j++)
+      {
+         chi = dtp->chi[ii*dtp->nM+j];
+         chiPr *= chi;  // mole fraction product
+         Gex += chi * RT * log( dtp->gam_n[ii*dtp->nM+j] ); // excess Gibbs energy
+      }
+      Gex_ = dtp->gmx_n[ii][0];  // excess Gibbs energy for comparison/debugging
+// Direct calculation of interaction parameter (binary solution only)!
+      if( dtp->nM == 2 )
+      {
+        if( dtp->nP == 1 )
+        {  //  Regular Guggenheim/Margules model
+           Wg = Gex / chiPr;    // single parameter
+           alp0 = Wg/RT;
+           switch( dtp->PsIPf ) // put it into Wa column
+           {
+             case DT_IPF_R:  // Redlich-Kister
+                            if(dtp->PsIPu == DT_IPU_N )
+                            {
+                               dtp->Wa[ii] = alp0;
+                               break;
+                            }
+             case DT_IPF_G:  // Guggenheim
+             case DT_IPF_T:  // Thompson-Waldbaum
+                            if(dtp->PsIPu == DT_IPU_J )
+                               dtp->Wa[ii] = Wg;
+                            else if( dtp->PsIPu == DT_IPU_K )
+                               dtp->Wa[ii] = Wg*0.001;
+                            else if( dtp->PsIPu == DT_IPU_N )
+                               dtp->Wa[ii] = alp0;
+             default: break;
+           }
+        }
+        else if( dtp->nP == 2 )
+        {  // Subregular Guggenheim parameters directly from activity coeffs
+           lnGam1 = dtp->gam_n[ii*dtp->nM];
+           lnGam2 = dtp->gam_n[ii*dtp->nM+1];
+           chi1 = dtp->chi[ii*dtp->nM];
+           chi2 = dtp->chi[ii*dtp->nM+1];
+           alp0 = 0.5*( lnGam1/chi2/chi2 * (3.*chi2-chi1)
+                      + lnGam2/chi1/chi1 * (3.*chi1-chi2));
+           alp1 = 0.5*( lnGam1/chi2/chi2 * lnGam2/chi1/chi1 );
+           W12 = RT*(alp0-alp1);
+           W21 = RT*(alp0+alp1);
+
+           switch( dtp->PsIPf ) // put results into Wa columns
+           {
+             case DT_IPF_R:  // Redlich-Kister
+                            if(dtp->PsIPu == DT_IPU_N )
+                            {
+                               dtp->Wa[ii] = alp0;
+                               dtp->Wa[ii+1] = alp1;
+                               break;
+                            }
+             case DT_IPF_G:  // Guggenheim
+                            if(dtp->PsIPu == DT_IPU_J )
+                            {
+                               dtp->Wa[ii] = alp0*RT;
+                               dtp->Wa[ii+1] = alp1*RT;
+                            }
+                            else if( dtp->PsIPu == DT_IPU_K )
+                            {
+                               dtp->Wa[ii] = alp0*RT*0.001;
+                               dtp->Wa[ii+1] = alp0*RT*0.001;
+                            }
+                            else if( dtp->PsIPu == DT_IPU_N )
+                            {
+                               dtp->Wa[ii] = alp0;
+                               dtp->Wa[ii+1] = alp1;
+                            }
+                            break;
+             case DT_IPF_T:  // Thompson-Waldbaum
+                            if(dtp->PsIPu == DT_IPU_J )
+                            {
+                               dtp->Wa[ii] = W12;
+                               dtp->Wa[ii+1] = W21;
+                            }
+                            else if( dtp->PsIPu == DT_IPU_K )
+                            {
+                               dtp->Wa[ii] = W12*0.001;
+                               dtp->Wa[ii+1] = W21*0.001;
+                            }
+                            else if( dtp->PsIPu == DT_IPU_N )
+                            {
+                               dtp->Wa[ii] = W12/RT;
+                               dtp->Wa[ii+1] = W21/RT;
+                            }
+             default: break;
+          }  
+        }
+      }
+    } // end else
+  } //  end for ii
+
+  Calc_alp_n_stat( eState ); // statistics over interaction parameters
+  // Do we need LS regression for interaction parameters here?
+
+  //
 }
 
 
 void
 TDualTh::Calc_act_n( char eState )
-{ // calculate activity DualTh
+{ // calculate activity in DualTh variant
 
  short ii, j;
- double muoi, activ = 1., Dsur, RT/* = 2479.*/, P/*=1.*/, lnFmol=4.016535;
+ double muoi, activ = 1., Dsur, RT, P, lnFmol=4.016535;
 
 // dt_initiate( false );
   Dsur = dtp->WmCb - 1.;
@@ -1033,7 +1210,7 @@ TDualTh::Calc_act_n( char eState )
     for( j=0; j<dtp->nM; j++)
     {
        dtp->jm = j;
-//SD       muoi = dtp->muo_i[ii*dtp->nM+j];
+       muoi = dtp->mu_o[ii*dtp->nM+j];
        if( eState == DT_STATE_S )
         switch(dtp->typ_n[j])  // Stoich. saturation - to be written !
         {          // for now, the same calculation as at equilibrium

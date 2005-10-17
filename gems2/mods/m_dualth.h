@@ -111,16 +111,17 @@ nP,  // Number of interaction parameters in the non-basis mixture (default 1 - r
 
 *mu_b,   // [Q][M] Table of DualTh chemical potentials of M end-members (J/mol) M(BS)
 
-*mu_o,   // [Q][M]  st.state chem. potentials for candidates (or EMPTY if unknown) GoNS
+*mu_o,   // [Q][M]  st. state chem. potentials for candidates (or EMPTY if unknown) GoNS
 *avsd_o, // [2][M] mean and st.dev. over mu_o columns (experiments) for DC candidates
 *mu_a,   // [Q][M] Table of estimated st. Gibbs energy function for trace DC candidates G*NS
 *avsd_a, // [2][M] mean and st.dev. over mu_a cols (experiments) for DC candidates
 
-(*gmx_n)[4],  // [Q][4] integral Gibbs energy of mixture for Q experiments (j/mol) col 0 G-SS-BS
-         //        total Gibbs energy of mixing for Q experiments (col. 1)    G-MIX
-         //        Gibbs energy of ideal mixing for Q experiments (col. 2)    G-ID
-         //        Excess Gibbs energy of mixing for Q experiments (col. 3)   G-Ex
-
+(*gmx_n)[5],  // [Q][5] in J/mol
+         //        Excess Gibbs energy of mixing for Q experiments (col. 0)   G-Ex
+         //        Gibbs energy of ideal mixing for Q experiments (col. 1)    G-ID
+         //        total Gibbs energy of mixing for Q experiments (col. 2)    G-MIX
+         //   Gibbs energy of mechanical mixture for Q experiments ( col. 3)  G-SS-0
+         //   integral Gibbs energy of mixture for Q experiments ( col. 4) 0  G-SS-BS
 *Wa,     // [Q][P] interaction parameters for the mixing model
 *avsd_w, // [2][P] mean and st.dev. over Wa cols (experiments) for DC candidates
 // *chisq,  // [P] chisquare values from LSM fits ( to be extended )
@@ -265,7 +266,7 @@ protected:
     int CalcMoleFractNS();  // built-in calculation of mole fractions in NS
     void CalcActivCoeffNS( char ModP, char ModIPu ); // built-in calculation of
                             // activity coeffs in NS end-members
-    void Calc_gmix_n( char ModE, char StP ); // calculation of mixing energies
+    void Calc_gmix_n( char Mod, char eState ); // calculation of mixing energies
     void Calc_muo_n( char eState ); // calculate mu_o DualTh
     void Calc_gam_n( char eState ); // calculate gamma DualTh
     void Calc_act_n( char eState ); // calculate activity DualTh
