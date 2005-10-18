@@ -308,12 +308,22 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>C   Conventional fitting using LM algorithm</string>
+                                    <string>L   Conventional fitting using LM algorithm</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>B    Bayesian parameter estimation</string>
+                                    <string>S   Conventional fitting using SVD algorithm</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>B   SVD with Bayesian parameter estimation</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>C   Levenberg constrained</string>
                                 </property>
                             </item>
                             <property name="name">

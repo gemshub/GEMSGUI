@@ -319,14 +319,14 @@ void TDualTh::dyn_set(int q)
     dtp->An = (float *)aObj[ o_dtan ].GetPtr();
     dtp->tprn = (char *)aObj[ o_dttprn ].GetPtr();
 
-// Added for lmfit SD oct 2005
-    dtp->tdat = (double *)aObj[ o_dttdat ].GetPtr();
-    dtp->ydat = (double *)aObj[ o_dtydat ].GetPtr();
     dtp->wdat = (double *)aObj[ o_dtwdat ].GetPtr();
-    dtp->par  = (double *)aObj[ o_dtpar  ].GetPtr();
     dtp->wpar = (double *)aObj[ o_dtwpar ].GetPtr();
-    dtp->sdpar = (double *)aObj[ o_dtsdpar ].GetPtr();
     dtp->Wa_ap = (double *)aObj[ o_dtwa_ap ].GetPtr();
+// Added for lmfit SD oct 2005
+    dtp->tdat = (double *)aObj[ o_dttdat ].Free();
+    dtp->ydat = (double *)aObj[ o_dtydat ].Free();
+    dtp->par  = (double *)aObj[ o_dtpar  ].Free();
+    dtp->sdpar = (double *)aObj[ o_dtsdpar ].Free();
 }
 
 // free dynamic memory in objects and values

@@ -75,8 +75,8 @@ void TDualTh::Analyse( )
      Calc_gam_n( dtp->PsSt );  // Estimation of int. parameters and activity coeffs
      Calc_act_n( dtp->PsSt );  // Calculation of activities
      // here call regression part, if necessary
-     if( dtp->PsLSF == 'C'|| dtp->PsLSF == 'B' )
-      RegressionLSM( 0 ); // LM minimization ; not 0 for SVD minimization
+     if( dtp->PsLSF != DT_LSF_N )
+      RegressionLSM( 0 );
      //  SD 0ct 2005
   }
   if( dtp->PsMode == DT_MODE_X )
@@ -84,6 +84,23 @@ void TDualTh::Analyse( )
 }
 
 //-------------------------------------------------------------------------------
+
+void TDualTh::get_RT_P( int ii, double& RT, double& P)
+{
+    if( dtp->PvTPI == S_ON && dtp->Tdq )
+    {
+       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
+       P = dtp->Pdq[ii];
+    }
+    else
+    {
+       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
+       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
+    }
+}
+
+
+
 // recalc working parametres
 void TDualTh::dt_next()
 {
@@ -649,18 +666,11 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
 
  // for internal constants
  double *cons_y = new double[dtp->nQ];
- double RT;
+ double RT, P;
  for( ii=0; ii<dtp->nQ; ii++ )
   if(  dtp->PsIPf == DT_IPF_R  )
   {
-    if( dtp->PvTPI == S_ON && dtp->Tdq )
-    {
-       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
-    }
-    else
-    {
-       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
-    }
+    get_RT_P( ii, RT, P);
     cons_y[ii] = RT;
   }
   else cons_y[ii] = 1;
@@ -670,13 +680,18 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
                        dtp->nQ, dtp->nM, dtp->nP, dtp->tdat,
                        dtp->ydat, cons_y, dtp->wdat, dtp->wpar );
  // calculate minimization
- if( Mode == 0 )
+ if( dtp->PsLSF == DT_LSF_L || dtp->PsLSF == DT_LSF_C )
  {
      TLMmin task( dtp->par, &data);
      task.Calc( dtp->sdpar );   // sdpar ocenki!!
  }
- else
- {     TSVDcalc task_svd( dtp->par, &data);
+
+ if( dtp->PsLSF == DT_LSF_S || dtp->PsLSF == DT_LSF_B )
+ {
+    //for( ii=0; ii<dtp->nP; ii++ )
+    //  dtp->wpar[ii] = 1;  // mean data
+
+     TSVDcalc task_svd( dtp->par, &data);
      task_svd.CalcMin( dtp->sdpar ); // sdpar ocenki!!
  }
 
@@ -705,16 +720,7 @@ TDualTh::Calc_muo_n( char eState )
  for( ii=0; ii < dtp->nQ; ii++)
  {
     dtp->q = ii;
-    if( dtp->PvTPI == S_ON && dtp->Tdq )
-    {
-       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
-       P = dtp->Pdq[ii];
-    }
-    else
-    {
-       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
-       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
-    }
+    get_RT_P( ii, RT, P );
 
     for( j=0; j<dtp->nM; j++)
     {
@@ -867,7 +873,7 @@ TDualTh::Calc_muo_n_stat( char /*eState*/ )
 void
 TDualTh::Calc_gmix_n( char ModE, char StP ) // calculation of mixing energies
 {
-  double Gmixt, Gmix, Gmech, Gid, Gex, chi, RT; /* P */
+  double Gmixt, Gmix, Gmech, Gid, Gex, chi, RT, P;
   short j, ii;
 
   if( !( ModE == DT_MODE_G || ModE == DT_MODE_M || ModE == DT_MODE_A ) )
@@ -875,16 +881,7 @@ TDualTh::Calc_gmix_n( char ModE, char StP ) // calculation of mixing energies
   for( ii=0; ii<dtp->nQ; ii++)
   {
     dtp->q = ii;
-    if( dtp->PvTPI == S_ON && dtp->Tdq )
-    {
-       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
-//       P = dtp->Pdq[ii];
-    }
-    else
-    {
-       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
-//       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
-    }
+    get_RT_P( ii, RT, P );
 
     Gmix = Gmixt = Gmech = Gid = 0.0;
     if( ModE == DT_MODE_G )
@@ -954,16 +951,7 @@ TDualTh::Calc_gam_n( char eState )
  for( ii=0; ii<dtp->nQ; ii++)
  {
     dtp->q = ii;
-    if( dtp->PvTPI == S_ON && dtp->Tdq )
-    {
-       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
-       P = dtp->Pdq[ii];
-    }
-    else
-    {
-       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
-       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
-    }
+    get_RT_P( ii, RT, P );
 
   // Calculation of activity coefficients
     if( eState == DT_STATE_S )
@@ -1212,16 +1200,7 @@ TDualTh::Calc_act_n( char eState )
  for( ii=0; ii<dtp->nQ; ii++)
  {
     dtp->q = ii;
-    if( dtp->PvTPI == S_ON && dtp->Tdq )
-    {
-       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
-       P = dtp->Pdq[ii];
-    }
-    else
-    {
-       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
-       P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
-    }
+    get_RT_P( ii, RT, P );
   // zero off a cell in mu_n
     for( j=0; j<dtp->nM; j++)
     {

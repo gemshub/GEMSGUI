@@ -58,7 +58,7 @@ typedef struct
    PsSYd,  // Save generated SysEq records to data base ( + - )
 PsIPf,    // interaction parameter formalism code (I G R T M V B O)
 PsIPu,    // interaction parameter units code (J K N)
-PsLSF, //   PsRes1,  Control flag for least-square param. fitting  { N C B }
+PsLSF, //   Control flag for least-square param. fitting  { ( N L S B C )}
        // to be extended !
    name[MAXFORMULA],  //  "Name of DualTh task"
    notes[MAXFORMULA] //  "Comments"
@@ -246,6 +246,7 @@ protected:
 
     void keyTest( const char *key );
     // internal
+    void get_RT_P( int ii, double& RT, double& P);
     void lmfit_new();
     bool test_sizes();
     void dt_initiate( bool mode = true );   // must be changed with DK
@@ -346,6 +347,12 @@ enum dualth_inernal {
               DT_STATE_E = 'E',  // equilibrium
               DT_STATE_P = 'P',  // primary saturation
               DT_STATE_S = 'S',  // stoichiometric saturation
+
+              DT_LSF_N = 'N',  // not use
+              DT_LSF_L = 'L',  // Levenberg usual
+              DT_LSF_S = 'S',  // SVD usual
+              DT_LSF_B = 'B',  // SVD Bayesian
+              DT_LSF_C = 'C',  // Levenberg constrained
 
                                 // interaction parameter codes
               DT_IPF_I = 'I',   // Ideal Raoult 
