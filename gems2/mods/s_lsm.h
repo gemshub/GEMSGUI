@@ -226,6 +226,8 @@ typedef double fd_type;
 #define cvm(i,j) (CVM[(i)*n+(j)])
 
 #define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
+#define TOL 1.0e-6    // Default value for single precision and variables
+                      // scaled to order unity.
 
 class TSVDcalc
 {
@@ -252,6 +254,8 @@ protected:
 void alloc_arrays();
 void free_arrays();
 
+void svdGetXmore0( int ii, fd_type *V, fd_type x[]);
+
 // compact high-level interface:
 void svdGetX(fd_type *U, fd_type w[], fd_type *V, fd_type b[], fd_type x[]);
 fd_type pyt_hag(fd_type a, fd_type b);
@@ -268,7 +272,7 @@ public:
    ~TSVDcalc();
 
    void CalcMin( char*sdpar ); // return statistics
-   void CalcSVD( bool tranp=false );
+   int CalcSVD( bool tranp=false );
    void CalcB( bool transp, fd_type *bb );
 };
 

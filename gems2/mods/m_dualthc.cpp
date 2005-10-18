@@ -585,29 +585,45 @@ TDualTh::CalcMoleFractNS()
   double *bb = new double[dtp->Nb];
   for( ii=0; ii< dtp->nQ; ii++ )
   {
+     bool if_resid = false;
      TSVDcalc task_Axb( dtp->Nb, dtp->nM,
        dtp->An, dtp->Bn+(ii*dtp->Nb), dtp->chi+(ii*dtp->nM) );
-     task_Axb.CalcSVD( true );
+     if( task_Axb.CalcSVD( true ) > 0 )
+     {
+            gstring str = "Task for the experiment : ";
+            str +=  dtp->nam_b[ii];
+            str += "\n has more than one solution.";
+            vfMessage( 0,  "D01FPrun: CalcMoleFractNS", str.c_str() );
+     }
     // calculate new bn
-       task_Axb.CalcB( true, bb );
-     if( dtp->CIn )
-       for( jj=0; jj<dtp->Nb; jj++ )
-        dtp->CIn[ ii*dtp->Nb+jj ] =
-            ROUND_EXP( bb[jj] - dtp->Bn[ ii*dtp->Nb+jj ], 6 );
+     task_Axb.CalcB( true, bb );
+     for( jj=0; jj<dtp->Nb; jj++ )
+     {
+       double b_ = bb[jj] - dtp->Bn[ ii*dtp->Nb+jj ];
+       if( fabs(b_) > TOL )
+          if_resid = true;
+       if( dtp->CIn )
+          dtp->CIn[ ii*dtp->Nb+jj ] +=  ROUND_EXP( b_, 6 );
+     }
+     if( if_resid ) // residual
+     {
+            gstring str = "Task for the experiment : ";
+            str +=  dtp->nam_b[ii];
+            str += " has no solution.\n";
+            str += "The residuals will be added to vector CIn";
+            vfMessage( 0,  "D02FPrun: CalcMoleFractNS", str.c_str() );
+     }
     // normalise
      double cnt=0.;
      for( jj=0; jj<dtp->nM; jj++ )
         cnt += dtp->chi[ii*dtp->nM+jj];
      for( jj=0; jj<dtp->nM; jj++ )
-        dtp->chi[ii*dtp->nM+jj] /= cnt;
-
-     for( jj=0; jj<dtp->nM; jj++ )
-        dtp->chi[ii*dtp->nM+jj] = ROUND_EXP(dtp->chi[ii*dtp->nM+jj], 6 );
+        dtp->chi[ii*dtp->nM+jj] = ROUND_EXP( dtp->chi[ii*dtp->nM+jj] /cnt, 6);
   }
   delete[] bb;
  }
  return 1;
- 
+
 }
 
 

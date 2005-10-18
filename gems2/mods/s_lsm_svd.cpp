@@ -2,8 +2,6 @@
 #include "s_lsm.h"
 
 // new servise part
-#define TOL 1.0e-5    // Default value for single precision and variables
-                      // scaled to order unity.
 static fd_type maxarg1, maxarg2;
 #define FMAX(a,b)(maxarg1=(a),maxarg2=(b),(maxarg1) > (maxarg2) ? (maxarg1) : (maxarg2))
 //static fd_type minarg1, minarg2;
@@ -68,13 +66,13 @@ void TSVDcalc::CalcMin( char *sdpar )
 
 
 // *** main function.
-void TSVDcalc::CalcSVD(  bool transp )
+int TSVDcalc::CalcSVD(  bool transp )
 {
  int i, j;
 
  fstream f_out("svd.out", ios::out  );
  if( !f_out.good() )
-   return;
+   return -1;
 
   alloc_arrays();
 
@@ -91,7 +89,7 @@ void TSVDcalc::CalcSVD(  bool transp )
  }
 
  if( svdGetUWV(U,w,V) < 0 )
-     return ; // SVD of the square matrix a.
+     return -1; // SVD of the square matrix a.
 
  // output u, v, w to file
  f_out << "u = " << endl;
@@ -111,6 +109,7 @@ void TSVDcalc::CalcSVD(  bool transp )
    f_out << endl;
  }
 
+  int wj_zero = 0;
   double wmin, wmax=0.0; // Will be the maximum singular value obtained.
   for(j=0;j<n;j++)
      if (w[j] > wmax) wmax=w[j];
@@ -120,10 +119,13 @@ void TSVDcalc::CalcSVD(  bool transp )
   wmin=wmax*1.0e-6;
   for(j=0;j<n;j++)
     if (w[j] < wmin)
+      {  wj_zero = (j+1);
          w[j]=0.0;
+      }
+  svdGetX(U,w,V,b,par); // Now we can backsubstitute.
 
-   svdGetX(U,w,V,b,par); // Now we can backsubstitute.
-
+  if( wj_zero && transp )
+    svdGetXmore0( wj_zero, V, par ); // Now we get x with elements >=0
 // output vectors w, x
  f_out << "w = " << endl;
  for( j=0; j<n; j++ )
@@ -135,6 +137,7 @@ void TSVDcalc::CalcSVD(  bool transp )
  f_out << endl;
 
  free_arrays();
+ return wj_zero;
 }
 
 
@@ -186,6 +189,45 @@ void TSVDcalc::free_arrays( )
   if( CVM)
     { delete[] CVM; CVM = 0; }
  }
+
+
+void TSVDcalc::svdGetXmore0( int ii, fd_type *V, fd_type x[])
+{
+ int j, jmin=0, jmax=0;
+ fd_type a1, max=0, min=0;
+
+ for (j=0;j<n;j++)
+   if( x[j] < 0 )
+      break;
+ if( j == n ) // all elements x more 0
+   return;
+
+ for (j=0;j<n;j++)   //Select intervals
+ {
+   if( v(ii,j) > 0 )
+   {
+     a1 = (-x[j])/v(ii,j);
+     if( !jmin || a1 < min )
+     {
+       min = a1; jmin = j+1;
+     }
+   }
+   if( v(ii,j) < 0 )
+   {
+     a1 = (-x[j])/v(ii,j);
+     if( !jmax || a1 > max )
+     {
+       max = a1; jmax = j+1;
+     }
+   }
+ }
+ if( min > max ) // no solutions in system
+   return;
+
+ a1 = (min+max)/2;
+ for (j=0;j<n;j++)  // X multiply by a*V to get answer.
+    x[j]  += v(ii,j)*a1;
+}
 
 
 void TSVDcalc::svdGetX(fd_type *U, fd_type w[], fd_type *V,
