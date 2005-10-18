@@ -125,7 +125,7 @@ int TSVDcalc::CalcSVD(  bool transp )
   svdGetX(U,w,V,b,par); // Now we can backsubstitute.
 
   if( wj_zero && transp )
-    svdGetXmore0( wj_zero, V, par ); // Now we get x with elements >=0
+    svdGetXmore0( wj_zero-1, V, par ); // Now we get x with elements >=0
 // output vectors w, x
  f_out << "w = " << endl;
  for( j=0; j<n; j++ )
