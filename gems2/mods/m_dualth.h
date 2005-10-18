@@ -302,7 +302,7 @@ protected:
                     char ModIPu, short solventNdx );
 
     // LSM regression subroutine
-    int RegressionLSM();
+    int RegressionLSM( int );
 
 public:
 

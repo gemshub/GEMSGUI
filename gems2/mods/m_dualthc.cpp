@@ -577,7 +577,7 @@ TDualTh::Bn_Calc()
 }
 
 int
-TDualTh::CalcMoleFractNS()
+TDualTh::CalcMoleFractNS()  // Use SVD method
 {
  if( aObj[o_dtchi].IsEmpty( 0, 0 ))
  {
@@ -626,6 +626,17 @@ TDualTh::CalcMoleFractNS()
 
 }
 
+
+int
+TDualTh::RegressionLSM( int Mode )  // task or minimization
+{
+
+
+
+
+
+
+}
 
 //----------------------------------------------------------------------------
 void

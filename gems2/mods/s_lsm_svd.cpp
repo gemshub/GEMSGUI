@@ -204,18 +204,18 @@ void TSVDcalc::svdGetXmore0( int ii, fd_type *V, fd_type x[])
 
  for (j=0;j<n;j++)   //Select intervals
  {
-   if( v(ii,j) > 0 )
+   if( v(j,ii) > 0 )
    {
-     a1 = (-x[j])/v(ii,j);
-     if( !jmin || a1 < min )
+     a1 = (-x[j])/v(j,ii);
+     if( !jmin || a1 > min )
      {
        min = a1; jmin = j+1;
      }
    }
-   if( v(ii,j) < 0 )
+   if( v(j, ii) < 0 )
    {
-     a1 = (-x[j])/v(ii,j);
-     if( !jmax || a1 > max )
+     a1 = (-x[j])/v( j, ii);
+     if( !jmax || a1 < max )
      {
        max = a1; jmax = j+1;
      }
@@ -226,7 +226,7 @@ void TSVDcalc::svdGetXmore0( int ii, fd_type *V, fd_type x[])
 
  a1 = (min+max)/2;
  for (j=0;j<n;j++)  // X multiply by a*V to get answer.
-    x[j]  += v(ii,j)*a1;
+    x[j]  += v(j, ii)*a1;
 }
 
 
