@@ -43,7 +43,7 @@ TSVDcalc::~TSVDcalc()
 }
 
 // *** main function.
-void TSVDcalc::CalcMin( char *sdpar )
+void TSVDcalc::CalcMin( double *sdpar )
 {
 // int i, j;
 

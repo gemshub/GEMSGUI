@@ -71,7 +71,7 @@ TLMmin::~TLMmin()
 }
 
 // *** main function.
-void TLMmin::Calc( char *sdpar )
+void TLMmin::Calc( double *sdpar )
 {
     lm_minimize( par );
 }

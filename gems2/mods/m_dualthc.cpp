@@ -75,8 +75,9 @@ void TDualTh::Analyse( )
      Calc_gam_n( dtp->PsSt );  // Estimation of int. parameters and activity coeffs
      Calc_act_n( dtp->PsSt );  // Calculation of activities
      // here call regression part, if necessary
-
-     //
+     if( dtp->PsLSF == 'C'|| dtp->PsLSF == 'B' )
+      RegressionLSM( 0 ); // LM minimization ; not 0 for SVD minimization
+     //  SD 0ct 2005
   }
   if( dtp->PsMode == DT_MODE_X )
      Calc_act_n( dtp->PsSt );
@@ -631,11 +632,62 @@ int
 TDualTh::RegressionLSM( int Mode )  // task or minimization
 {
 
+ int ii, jj;
 
+ lmfit_new();
+ // setup started data t, y, p
+ // wpar, wdat must be inputed
+ for( ii=0; ii<dtp->nQ; ii++ )
+  for( jj=0; jj<dtp->nM; jj++ )
+   dtp->tdat[ii*dtp->nM+jj] = dtp->chi[ii*dtp->nM+jj];
 
+ for( ii=0; ii<dtp->nQ; ii++ )
+   dtp->ydat[ii] = dtp->gmx_n[ii][0];
 
+ for( ii=0; ii<dtp->nP; ii++ )
+   dtp->par[ii] = dtp->avsd_w[ii];  // mean data
 
+ // for internal constants
+ double *cons_y = new double[dtp->nQ];
+ double RT;
+ for( ii=0; ii<dtp->nQ; ii++ )
+  if(  dtp->PsIPf == DT_IPF_R  )
+  {
+    if( dtp->PvTPI == S_ON && dtp->Tdq )
+    {
+       RT = R_CONSTANT * (dtp->Tdq[ii] + 273.15);
+    }
+    else
+    {
+       RT = R_CONSTANT * (dtp->Td[START_] + ii*dtp->Td[STEP_] + 273.15);
+    }
+    cons_y[ii] = RT;
+  }
+  else cons_y[ii] = 1;
 
+ //  setup internal structure for calc
+     TLMDataType data( dtp->PsIPf, TEST_EVL, // may be changed for flags
+                       dtp->nQ, dtp->nM, dtp->nP, dtp->tdat,
+                       dtp->ydat, cons_y, dtp->wdat, dtp->wpar );
+ // calculate minimization
+ if( Mode == 0 )
+ {
+     TLMmin task( dtp->par, &data);
+     task.Calc( dtp->sdpar );   // sdpar ocenki!!
+ }
+ else
+ {     TSVDcalc task_svd( dtp->par, &data);
+     task_svd.CalcMin( dtp->sdpar ); // sdpar ocenki!!
+ }
+
+ // putting the resalts
+ for( ii=0; ii<dtp->nP; ii++ )
+ {  dtp->avsd_w[ii] = dtp->par[ii];  // mean data
+    dtp->avsd_w[ii+dtp->nP] = dtp->sdpar[ii];  // mean data
+ }
+
+ delete[] cons_y;
+ return 1;
 }
 
 //----------------------------------------------------------------------------

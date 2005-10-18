@@ -215,7 +215,7 @@ public:
     TLMmin( double *par, TLMDataType *aData);
    ~TLMmin();
 
-   void Calc( char *sdpar);
+   void Calc( double *sdpar);
 };
 
 typedef double fd_type;
@@ -271,7 +271,7 @@ public:
     TSVDcalc( short M, short N, float *aA, double *ab, double *aX );
    ~TSVDcalc();
 
-   void CalcMin( char*sdpar ); // return statistics
+   void CalcMin( double *sdpar ); // return statistics
    int CalcSVD( bool tranp=false );
    void CalcB( bool transp, fd_type *bb );
 };
