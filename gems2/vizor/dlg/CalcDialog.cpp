@@ -107,8 +107,13 @@ CalcDialog::fun(double val)
 FOUND:
     double val2;
     if( ii <= 5 )
-        val2 = QString( pValue->text() ).toDouble();  /// check for error
-
+    {  // SD oct 2005
+      QString str = pValue->text();
+      if( str == "---" || str[0] == '`' )
+         val2 = DOUBLE_EMPTY;
+      else
+         val2 = str.toDouble();  /// check for error
+    }
     switch( ii )
     {
     case 0:
