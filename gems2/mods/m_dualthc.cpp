@@ -608,10 +608,11 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
        dtp->An, dtp->Bn+(ii*dtp->Nb), dtp->chi+(ii*dtp->nM) );
      if( task_Axb.CalcSVD( true ) > 0 )
      {
-            gstring str = "Task for the experiment : ";
+            gstring str = "Mole fractions calculation routine ";
+            str += " finds more than one solution for experiment ";
             str +=  dtp->nam_b[ii];
-            str += "\n has more than one solution.";
-            vfMessage( 0,  "D01FPrun: CalcMoleFractNS", str.c_str() );
+            str += "\n Please, check its non-basis bulk composition.";
+            vfMessage( 0,  "W01SLrun: CalcMoleFractNS", str.c_str() );
      }
     // calculate new bn
      task_Axb.CalcB( true, bb );
@@ -625,11 +626,12 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
      }
      if( if_resid ) // residual
      {
-            gstring str = "Task for the experiment : ";
+            gstring str = "Mole fractions calculation routine ";
+            str += " finds no exact solution for experiment ";
             str +=  dtp->nam_b[ii];
-            str += " has no solution.\n";
-            str += "The residuals will be added to vector CIn";
-            vfMessage( 0,  "D02FPrun: CalcMoleFractNS", str.c_str() );
+            str += ".\nLeast-squares solution Residuals ";
+            str += "will be incremented in the CIn table.";
+            vfMessage( 0,  "W02SLrun: CalcMoleFractNS", str.c_str() );
      }
     // normalise
      double cnt=0.;
@@ -648,21 +650,9 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
 int
 TDualTh::RegressionLSM( int Mode )  // task or minimization
 {
-
  int ii, jj;
 
  lmfit_new();
- // setup started data t, y, p
- // wpar, wdat must be inputed
- for( ii=0; ii<dtp->nQ; ii++ )
-  for( jj=0; jj<dtp->nM; jj++ )
-   dtp->tdat[ii*dtp->nM+jj] = dtp->chi[ii*dtp->nM+jj];
-
- for( ii=0; ii<dtp->nQ; ii++ )
-   dtp->ydat[ii] = dtp->gmx_n[ii][0];
-
- for( ii=0; ii<dtp->nP; ii++ )
-   dtp->par[ii] = dtp->avsd_w[ii];  // mean data
 
  // for internal constants
  double *cons_y = new double[dtp->nQ];
@@ -675,7 +665,37 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
   }
   else cons_y[ii] = 1;
 
- //  setup internal structure for calc
+ // setup start data t, y, p
+ // wpar, wdat must be given as input
+ for( ii=0; ii<dtp->nQ; ii++ )
+    for( jj=0; jj<dtp->nM; jj++ )
+      dtp->tdat[ii*dtp->nM+jj] = dtp->chi[ii*dtp->nM+jj];
+
+ for( ii=0; ii<dtp->nQ; ii++ )  // normalizing if necessary
+ {
+    switch( dtp->PsIPu )
+    {
+      default:
+      case DT_IPU_J:  // J/mol
+                     dtp->ydat[ii] = dtp->gmx_n[ii][0];
+                     break;
+      case DT_IPU_K:   // kJ/mol
+                     dtp->ydat[ii] = dtp->gmx_n[ii][0]*0.001;
+                     break;
+      case DT_IPU_N:   // normalized
+                     if( dtp->PsIPf != DT_IPF_R )
+                        dtp->ydat[ii] = dtp->gmx_n[ii][0]/cons_y[ii];
+                     else
+                        dtp->ydat[ii] = dtp->gmx_n[ii][0];
+                     break;
+    }                 
+ }
+
+ for( ii=0; ii<dtp->nP; ii++ )
+   // dtp->par[ii] = dtp->avsd_w[ii];  // initial parameter values
+   dtp->par[ii] = dtp->Wa_ap[ii];
+
+  //  setup internal structure for calc
      TLMDataType data( dtp->PsIPf, TEST_EVL, // may be changed for flags
                        dtp->nQ, dtp->nM, dtp->nP, dtp->tdat,
                        dtp->ydat, cons_y, dtp->wdat, dtp->wpar );
