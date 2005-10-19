@@ -547,7 +547,7 @@ void TSVDcalc::svdMin(  fd_type a[],
    for (i=0;i<m;i++)  // Accumulate coefficients of the fitting matrix
    {
        data->par_funct( i, data->getX(i),afunc );
-       tmp= data->getWpar(i); // 1.0/sig[i];
+       tmp= data->getWdat(i); // 1.0/sig[i];
        for (j=0;j<n;j++)
          u(i,j) = afunc[j]*tmp;
        b[i] = data->getY(i) * tmp;
@@ -570,9 +570,10 @@ void TSVDcalc::svdMin(  fd_type a[],
        data->par_funct( i, data->getX(i),afunc );
        for (sum=0.0,j=0;j<n;j++)
          sum += a[j]*afunc[j];
-       tmp=(data->getY(i)-sum)*data->getWpar(i);
+       tmp=(data->getY(i)-sum)*data->getWdat(i);
        chisq += (tmp,tmp*tmp);
    }
+   chisq = sqrt(chisq);
 
    delete[] afunc;
    delete[] b;

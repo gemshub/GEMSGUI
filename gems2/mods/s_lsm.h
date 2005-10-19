@@ -102,6 +102,8 @@ public:
       { return ydat[i];  }
     double getWpar(i) const
       { return wpar[i];  }
+    double getWdat(i) const
+      { return wdat[i];  }
 
    int   evaluate( double* par, double* fvec );
    double function( int i, double* t, double* p );
@@ -148,11 +150,11 @@ struct lm_control_type{
      lm_control_type()
     {
       maxcall = 100;
-      epsilon = 1.e-14;
+      epsilon = 1.e-14; //14
       stepbound = 100.;
-      ftol = 1.e-14;
-      xtol = 1.e-14;
-      gtol = 1.e-14; 
+      ftol = 1.e-14; //14
+      xtol = 1.e-14; //14
+      gtol = 1.e-14; //14
       info = 0;
       nfev = 0;
    }
@@ -226,7 +228,7 @@ typedef double fd_type;
 #define cvm(i,j) (CVM[(i)*n+(j)])
 
 #define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
-#define TOL 1.0e-6    // Default value for single precision and variables
+#define TOL 1.0e-12    // Default value for single precision and variables
                       // scaled to order unity.
 
 class TSVDcalc

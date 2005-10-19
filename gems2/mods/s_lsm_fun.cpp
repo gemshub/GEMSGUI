@@ -284,11 +284,14 @@ void TLMDataType::lm_print_default( double* par, double* fvec,
             f_out <<  y << " fit = " << f << " residue =  " << (y-f) << endl;
         }
 
+    f_out << endl;
     f_out << " status: " << lm_shortmsg[iter];
-    f_out  << " after " << nfev << " evaluations" << endl;
-    }
-
-}
+    f_out  << " after " << nfev << " iterations" << endl;
+    f_out << endl;
+    f_out << endl;
+   }
+   
+ }
 
 //--------------------- End of s_lmeval.cpp ---------------------------
 

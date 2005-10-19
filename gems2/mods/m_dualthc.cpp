@@ -618,7 +618,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
      for( jj=0; jj<dtp->Nb; jj++ )
      {
        double b_ = bb[jj] - dtp->Bn[ ii*dtp->Nb+jj ];
-       if( fabs(b_) > TOL )
+       if( fabs(b_) > 1e-6 )
           if_resid = true;
        if( dtp->CIn )
           dtp->CIn[ ii*dtp->Nb+jj ] +=  ROUND_EXP( b_, 6 );
