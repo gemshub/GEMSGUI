@@ -40,7 +40,7 @@ void TDualTh::Init_Generation()
    // put data to Bb
     Bb_Calc();
    // put data to Bn
-   Bn_Calc();
+    Bn_Calc();
 }
 
 
@@ -51,19 +51,18 @@ void TDualTh::Init_Analyse()
    // for_n
    make_A( dtp->nM, dtp->for_n );
    build_mu_n();  // calculate new mu_n matrix
-   CalcMoleFractNS();
-
-   // calculate mole fractions of end members here
+   CalcMoleFractNS();  // calculate mole fractions of end members here
 }
 
 // analyse calculated equlibria
 void TDualTh::Analyse( )
 {
- // only as an example by now
+/* // only as an example by now
   if( dtp->PvChi == S_ON )
      CalcEquat( A_CHI );
-  if( dtp->PvGam == S_ON )
+*/  if( dtp->PvGam == S_ON )
      CalcEquat( A_GAM );
+
   // Calculation of DualThermo results
   Calc_gmix_n( dtp->PsMode, dtp->PsSt );   // Retrieving table with mixing energies
   if( dtp->PsMode == DT_MODE_M || dtp->PsMode == DT_MODE_A )
@@ -98,8 +97,6 @@ void TDualTh::get_RT_P( int ii, double& RT, double& P)
        P = dtp->Pd[START_] + ii*dtp->Pd[STEP_];
     }
 }
-
-
 
 // recalc working parametres
 void TDualTh::dt_next()
@@ -248,7 +245,7 @@ void TDualTh::build_mu_n()
 void TDualTh::dt_text_analyze()
 {
   TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
-  try
+/*  try
     {
       if( dtp->PvChi != S_OFF )
       {
@@ -266,7 +263,7 @@ void TDualTh::dt_text_analyze()
   "            for mole fractions of non-basis DCs: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
-
+*/
     try
     {
       if( dtp->PvGam != S_OFF )
@@ -297,9 +294,9 @@ TDualTh::CalcEquat( int type_ )
     {
        switch( type_ )
        {
-         case A_CHI:  rpn[0].CalcEquat();
+/*         case A_CHI:  rpn[0].CalcEquat();
                       break;
-         case A_GAM:  rpn[1].CalcEquat();
+*/         case A_GAM:  rpn[1].CalcEquat();
          default:     break;
        }
     }
@@ -655,15 +652,14 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
  lmfit_new();
 
  // for internal constants
- double *cons_y = new double[dtp->nQ];
  double RT, P;
  for( ii=0; ii<dtp->nQ; ii++ )
   if(  dtp->PsIPf == DT_IPF_R  )
   {
     get_RT_P( ii, RT, P);
-    cons_y[ii] = RT;
+    dtp->yconst[ii] = RT;
   }
-  else cons_y[ii] = 1;
+  else dtp->yconst[ii] = 1;
 
  // setup start data t, y, p
  // wpar, wdat must be given as input
@@ -684,11 +680,11 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
                      break;
       case DT_IPU_N:   // normalized
                      if( dtp->PsIPf != DT_IPF_R )
-                        dtp->ydat[ii] = dtp->gmx_n[ii][0]/cons_y[ii];
+                        dtp->ydat[ii] = dtp->gmx_n[ii][0]/dtp->yconst[ii];
                      else
                         dtp->ydat[ii] = dtp->gmx_n[ii][0];
                      break;
-    }                 
+    }
  }
 
  for( ii=0; ii<dtp->nP; ii++ )
@@ -696,9 +692,21 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
    dtp->par[ii] = dtp->Wa_ap[ii];
 
   //  setup internal structure for calc
-     TLMDataType data( dtp->PsIPf, TEST_EVL, // may be changed for flags
+ char afType  = dtp->PsIPf;
+ char *arpn = 0;
+ //  setup internal structure for calc
+ if( dtp->PvChi != S_OFF )
+ {
+   afType  = MATHSCRIPT_FIT;
+   TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
+
+   PRof->ET_translate( o_dttprn, o_dtcexpr,
+                 0, PRof->mup->L, 0, PRof->pmp->L );
+   arpn = (char *)aObj[o_dttprn].GetPtr() ;
+ }
+ TLMDataType data( afType, TEST_EVL, // may be changed for flags
                        dtp->nQ, dtp->nM, dtp->nP, dtp->tdat,
-                       dtp->ydat, cons_y, dtp->wdat, dtp->wpar );
+                       dtp->ydat, dtp->yconst, dtp->wdat, dtp->wpar, arpn );
  // calculate minimization
  if( dtp->PsLSF == DT_LSF_L || dtp->PsLSF == DT_LSF_C )
  {
@@ -708,20 +716,17 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
 
  if( dtp->PsLSF == DT_LSF_S || dtp->PsLSF == DT_LSF_B )
  {
-    //for( ii=0; ii<dtp->nP; ii++ )
-    //  dtp->wpar[ii] = 1;  // mean data
-
      TSVDcalc task_svd( dtp->par, &data);
      task_svd.CalcMin( dtp->sdpar ); // sdpar ocenki!!
  }
 
  // putting the resalts
+ dtp->xi2 = data.getXi2();
  for( ii=0; ii<dtp->nP; ii++ )
  {  dtp->avsd_w[ii] = dtp->par[ii];  // mean data
     dtp->avsd_w[ii+dtp->nP] = dtp->sdpar[ii];  // mean data
  }
 
- delete[] cons_y;
  return 1;
 }
 

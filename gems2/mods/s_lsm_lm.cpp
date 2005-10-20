@@ -73,6 +73,10 @@ TLMmin::~TLMmin()
 // *** main function.
 void TLMmin::Calc( double *sdpar )
 {
+#ifdef IPMGEMPLUGIN
+    if( data->getInfo() == -1 ) //test_sizes
+      return;
+#endif
     lm_minimize( par );
 }
 
@@ -147,10 +151,11 @@ void TLMmin::lm_minimize( double* apar )
               &(control.nfev), fjac, ipvt, qtf, wa1, wa2, wa3, wa4 );
 
 // output resalts
-    control.fnorm = lm_enorm( m_dat, fvec);
+       data->xi2 = control.fnorm = lm_enorm( m_dat, fvec);
     if (control.info < 0 ) control.info = 10;
     data->lm_print_default( par, fvec, -1,
          control.info, control.nfev, control.fnorm );
+
 
 // *** clean up.
   free_arrays();
@@ -384,9 +389,12 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
     if ( (n <= 0) || (m < n) || (ftol < 0.)
 	|| (xtol < 0.) || (gtol < 0.) || (maxfev <= 0) || (factor <= 0.) )
     {
+#ifndef IPMGEMPLUGIN
         Error( lm_shortmsg[0], lm_infmsg[0]);
-       // *info = 0; // invalid parameter
-       // return;
+#else
+        *info = 0; // invalid parameter
+        return;
+#endif
     }
     if ( mode == 2 )  /* scaling by diag[] */
     {
@@ -394,9 +402,12 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
         {
             if ( diag[j] <= 0.0 )
             {
+#ifndef IPMGEMPLUGIN
               Error( lm_shortmsg[0], lm_infmsg[0]);
-             //   *info = 0; // invalid parameter
-              //  return;
+#else
+                *info = 0; // invalid parameter
+                return;
+#endif
             }
         }
     }
@@ -508,8 +519,11 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
         if ( gnorm <= gtol )
         {
            *info = 4;
-           Error( lm_shortmsg[*info], lm_infmsg[*info ]);
-// SD oct 2005           return;
+#ifndef IPMGEMPLUGIN
+         Error( lm_shortmsg[*info], lm_infmsg[*info ]);
+#else    // SD oct 2005
+          return;
+#endif
         }
 
 // O** rescale if necessary.
@@ -645,8 +659,11 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
             if (gnorm <= LM_MACHEP)
                 *info = 8;
             if ( *info != 0)
-//                return;
+#ifdef IPMGEMPLUGIN
+                return;
+#else
                Error( lm_shortmsg[*info], lm_infmsg[*info ]);
+#endif
 // OI* end of the inner loop. repeat if iteration unsuccessful.
 
         } while (ratio < p0001);

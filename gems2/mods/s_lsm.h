@@ -32,11 +32,13 @@
 #ifndef _s_lmmin_h_
 #define _s_lmmin_h_
 
-//#include <stdio.h>
-//#include <fstream.h>
-//using namespace std;
-#include "v_ipnc.h"
-
+#ifdef IPMGEMPLUGIN
+  #include <stdio.h>
+  #include <fstream.h>
+  using namespace std;
+#else
+ #include "v_ipnc.h"
+#endif
 
 class TLMDataType  // data for the task
 // fitting data, function and evaluete function
@@ -57,17 +59,24 @@ class TLMDataType  // data for the task
    double *wpar;  // [nP] to LM fitter: weight factors for parameters (optional)
    double *cnst_y;// [nQ] internal constants for yi calculatuion
 
- double  xi2;  // final value of chi2 (quality of fit)
- short *current_jm; // for math script object
+ char * text_function;
 
 protected:
 
-  IPNCalc rpn[2];      // IPN of fit and evaluate functions
+#ifndef IPMGEMPLUGIN
+  IPNCalc rpn;      // IPN of fit and evaluate functions
+
+  void rpn_evaluate( double* par, double* fvec );
+  void rpn_par_function( int i, double* p  );
+  double rpn_function( int i, double* p );
+
+
+#endif
 
   void test_sizes();
 // evaluate functions
- void   lm_evaluate_default( double* par, double* fvec );
- 
+  void  lm_evaluate_default( double* par, double* fvec );
+
 // fit functions
  double my_fit_function( double t, double* p );
  double Guggenheim( double *t, double* p );
@@ -81,14 +90,15 @@ protected:
 
 public:
 
+ double  xi2;  // final value of chi2 (quality of fit)
 
     TLMDataType(   char afType, char aeType,
                    short am_dat,short atm_d, short an_par,
                    double *atdat, double *aydat,
                    double *acnst_y, double *awdat = 0, // not nessassary data
                    double *awpar =0,
-                   short *a_t=0);          // for math script object
-   ~TLMDataType(){}
+                   char *arpn = 0);          // for math script text
+   ~TLMDataType();
 
     short getM_dat() const
       { return m_dat;  }
@@ -104,6 +114,8 @@ public:
       { return wpar[i];  }
     double getWdat(i) const
       { return wdat[i];  }
+    double getXi2() const
+      { return xi2;  }
 
    int   evaluate( double* par, double* fvec );
    double function( int i, double* t, double* p );

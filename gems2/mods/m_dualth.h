@@ -69,7 +69,7 @@ PsLSF, //   Control flag for least-square param. fitting  { ( N L S B C )}
    La_b, // Lb - number of formula units to set compositions in basis sub-system
 nM,   // n(M) - number of DC (end-member) candidates in non-basis sub-system (default 2)
    Nsd,  // N of references to data sources
-   Nqpn, // Number of elements in the math script work arrays qpn per non-basis DC
+   Nqpn, // reserved
    Nqpg, // Number of elements in the math script work arrays qpg per non-basis DC
    Nb,    // N - number of independent components (in basis sub-system, taken
         // from project system dimensions automatically)
@@ -126,7 +126,7 @@ nP,  // Number of interaction parameters in the non-basis mixture (default 1 - r
 *avsd_w, // [2][P] mean and st.dev. over Wa cols (experiments) for DC candidates
 // *chisq,  // [P] chisquare values from LSM fits ( to be extended )
 
-   *qpn,   //  [Nqpn] Array for chi calculation math script (ionic fractions?)
+   *yconst,   //  [Q] Array for constant for LM&SVD regression
    *qpg    //  [Nqpg] Array for gamma calculation math script (interaction params?)
     ;
  float

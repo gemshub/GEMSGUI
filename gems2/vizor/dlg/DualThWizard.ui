@@ -764,7 +764,7 @@ Both bulk compositions can be set up later in amounts of IC (independent compone
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>11</y>
+                    <y>10</y>
                     <width>540</width>
                     <height>470</height>
                 </rect>
@@ -843,7 +843,7 @@ Deactivate the third checkbox if you do not provide formula units (e.g. NaHCO3, 
                                 <cstring>c_Chi</cstring>
                             </property>
                             <property name="text">
-                                <string>Use math script for mole fractions of non-basis DCs (optional)</string>
+                                <string>Use math script for LM SVD equations insert</string>
                             </property>
                             <property name="checked">
                                 <bool>false</bool>

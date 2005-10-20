@@ -47,6 +47,11 @@ void TSVDcalc::CalcMin( double *sdpar )
 {
 // int i, j;
 
+#ifdef IPMGEMPLUGIN
+    if( data->getInfo() == -1 ) //test_sizes
+      return;
+#endif
+
   alloc_arrays();
   svdMin( par, U, V, w, chisq );
 
@@ -574,6 +579,7 @@ void TSVDcalc::svdMin(  fd_type a[],
        chisq += (tmp,tmp*tmp);
    }
    chisq = sqrt(chisq);
+   data->xi2 = chisq;
 
    delete[] afunc;
    delete[] b;

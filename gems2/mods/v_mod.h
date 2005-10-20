@@ -78,7 +78,11 @@ enum std_object{
     o_constlab, o_constdim, o_const, o_sdnref, o_sdauth, o_sdyear,
     o_sdclass,  o_sdauthr, o_sdtitle, o_sdedit,   o_sdvoly,
     o_sdpage, o_sdabstr, o_sdrefs, o_sdnote, o_sdbkwd,
-    o_reckey, o_k_, o_ii_, o_prn_, o_rtkey, o_rttime
+    o_reckey, o_k_, o_ii_, o_prn_, o_rtkey, o_rttime,
+    // SD 0ct 2005
+    o_lms_jp, o_lms_kp, o_lms_itx, o_lms_delta, o_lms_yexp,
+    o_lms_yfit, o_lms_tx, o_lms_para, o_lms_wpa, o_lms_wexp,
+    o_lms_paf
 };
 
 //---------------------------------
@@ -93,7 +97,7 @@ MAXPARAMKEY =    24,
                             DFCN = 6; // number of columns in MASDJ table
 
 enum param_objects {                  // work objects
-    o_paver = o_rttime+1,
+    o_paver = o_lms_paf+1, //o_rttime+1,
     // BASE_PARAM
     o_papc, o_paprd,  /*i 3*/  o_padpwt, /*i 3*/
     o_papllg, o_pape, o_paiim, o_padg, o_padhb, o_pads, o_padk,
@@ -742,7 +746,7 @@ o_dtsdpar,
 // changed SD oct 2005 43
   o_dteta_b, o_dtact_n, o_dtgam_n, o_dtcoul, o_dtmu_n, 
   o_dtmu_o, o_dtavsd_o, o_dtmu_a, o_dtavsd_a, o_gmx_n,
-  o_dtwa, o_dtavsd_w, o_dtqpn, o_dtqpg, o_dtcib, 
+  o_dtwa, o_dtavsd_w, o_dtyconst, o_dtqpg, o_dtcib, 
   o_dtcin, o_dtcab, o_dtcan,  o_dtcexpr, o_dtgexpr, 
   o_dtsdref, o_dtsdval, o_dtnam_b, o_dtnam_n, o_dtpar_n, 
   o_dtfor_n, o_dtfor_b, o_dtstl, o_dttyp_n, o_dtciclb, 

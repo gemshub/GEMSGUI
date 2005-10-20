@@ -28,6 +28,10 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+#ifndef IPMGEMPLUGIN
+  #include "v_object.h"
+  #include "v_mod.h"
+#endif
 
 #include "s_lsm.h"
 
@@ -35,17 +39,48 @@
                    short am_dat,short atm_d, short an_par,
                    double *atdat, double *aydat,
                    double *acnst_y, double *awdat, // not nessassary data
-                   double *awpar,
-                   short *a_t):          // for math script object
+                   double *awpar, char *arpn ): // for math script
    fType(afType), eType(aeType),
    m_dat(am_dat), tm_d(atm_d),  n_par(an_par),
    tdat(atdat),   ydat(aydat), cnst_y(acnst_y),
-   wdat(awdat),   wpar(awpar), current_jm(a_t)
+   wdat(awdat),   wpar(awpar), text_function(arpn)
 {
     info=0;
     xi2=0.0;
     test_sizes();
 }
+
+
+
+TLMDataType::~TLMDataType()
+{
+#ifndef IPMGEMPLUGIN
+
+  if( fType == MATHSCRIPT_FIT || eType == MATHSCRIPT_EVL )
+  {
+    // setup  internal objects  for 0
+    aObj[ o_lms_yexp ].SetPtr( NULL );
+    aObj[ o_lms_yexp ].SetDim( 0, 1 );
+    aObj[ o_lms_tx ].SetPtr( NULL );
+    aObj[ o_lms_tx ].SetDim( 0, tm_d );
+    aObj[ o_lms_wexp ].SetPtr( NULL );
+    aObj[ o_lms_wexp ].SetDim( 0, 1 );
+    aObj[ o_lms_wpa ].SetPtr( NULL );
+    aObj[ o_lms_wpa ].SetDim( 0, 1 );
+    aObj[ o_lms_para ].SetPtr( NULL );
+    aObj[ o_lms_para ].SetDim( 0, 1 );
+   // free internal arrays
+//     aObj[ o_lms_delta ].Free();
+//    aObj[ o_lms_yfit  ].Free();
+//    aObj[ o_lms_paf ].Free();
+   //     o_lms_jp, o_lms_kp, o_lms_itx
+  }
+
+#endif
+}
+
+
+
 
 int   TLMDataType::evaluate( double* par, double* fvec )
 {
@@ -53,7 +88,11 @@ int   TLMDataType::evaluate( double* par, double* fvec )
   {
      case TEST_EVL: lm_evaluate_default( par, fvec );
                     break;
+#ifndef IPMGEMPLUGIN
      case MATHSCRIPT_EVL:   // using mathscript
+                    rpn_evaluate( par, fvec );
+                    break;
+#endif
      default:
                    break;
  }
@@ -67,28 +106,77 @@ void TLMDataType::test_sizes()
      case TEST_FIT:
      case TEST_FIT_SVD:
             if( tm_d != 1 &&  n_par != 3 )
+            {
+               info = -1;
+#ifndef IPMGEMPLUGIN
        Error( "Test",
           "Built in function is for 1 end members and 3 parameters only." );
-                    break;
+#else
+       printf( "Built in function is for 1 end members and 3 parameters only." );
+#endif;
+             }
+             break;
+
      case FUN_IPF_R:
      case FUN_IPF_G:
-                      if( tm_d != 2 && ( n_par > 6 || n_par <=0 ))
+            if( tm_d != 2 && ( n_par > 6 || n_par <=0 ))
+            {
+               info = -1;
+#ifndef IPMGEMPLUGIN
        Error( "Redlich-Kister_or_Guggenheim",
        "Built in function is for 2 end members only and upto 6 parameters." );
+#else
+       printf( "Built in function is for 2 end members only and upto 6 parameters." );
+#endif;
+          }
                        break;
      case FUN_IPF_T:
             if( tm_d != 2 &&  n_par != 2 )
+          {
+            info = -1;
+#ifndef IPMGEMPLUGIN
        Error( "Thompson-Waldbaum",
        "Built in function is for 2 end members and 2 parameters only." );
-                       break;
+#else
+       printf( "Built in function is for 2 end members and 2 parameters only."  );
+#endif;
+           }
+                     break;
+     case MATHSCRIPT_FIT:   // using mathscript
+#ifdef IPMGEMPLUGIN
+           info = -1;
+#endif
+                    break;
      case FUN_IPF_M:   // Margules
      case FUN_IPF_V:   // Van Laar
      case FUN_IPF_B:   // Bale-Pelton dilute formalism
 
-     case MATHSCRIPT_FIT:   // using mathscript
      default:
                    break;
  }
+#ifndef IPMGEMPLUGIN
+  if( fType == MATHSCRIPT_FIT || eType == MATHSCRIPT_EVL )
+  {
+    // setup  internal objects
+    aObj[ o_lms_yexp ].SetPtr( ydat );
+    aObj[ o_lms_yexp ].SetDim( m_dat, 1 );
+    aObj[ o_lms_tx ].SetPtr( tdat );
+    aObj[ o_lms_tx ].SetDim( m_dat, tm_d );
+    aObj[ o_lms_wexp ].SetPtr( wdat );
+    aObj[ o_lms_wexp ].SetDim( m_dat, 1 );
+    aObj[ o_lms_wpa ].SetPtr( wpar );
+    aObj[ o_lms_wpa ].SetDim( n_par, 1 );
+    aObj[ o_lms_para ].SetPtr( wpar );
+    aObj[ o_lms_para ].SetDim( n_par, 1 );
+   // allocate internal arrays
+    aObj[ o_lms_delta ].Alloc( m_dat, 1, D_ );
+    aObj[ o_lms_yfit  ].Alloc( m_dat, 1, D_ );
+    aObj[ o_lms_paf  ].Alloc( n_par, 1, D_ );
+   //     o_lms_jp, o_lms_kp, o_lms_itx, o_lms_para
+   // translate equation after setup sizes
+   rpn.GetEquat( text_function );
+   }
+#endif
 }
 
 double TLMDataType::function( int i, double* t, double* p )
@@ -108,11 +196,15 @@ double TLMDataType::function( int i, double* t, double* p )
      case FUN_IPF_T:   // Thompson-Waldbaum
                        r = ThompsonWaldbaum( t, p );
                        break;
+#ifndef IPMGEMPLUGIN
+     case MATHSCRIPT_FIT:   // using mathscript
+                      r = rpn_function( i, p );
+                      break;
+#endif
      case FUN_IPF_M:   // Margules
      case FUN_IPF_V:   // Van Laar
      case FUN_IPF_B:   // Bale-Pelton dilute formalism
 
-     case MATHSCRIPT_FIT:   // using mathscript
      default:
                    break;
  }
@@ -142,11 +234,14 @@ void TLMDataType::par_funct( int i, double* t, double* coef_p )
      case FUN_IPF_T:   // Thompson-Waldbaum
                        parThompsonWaldbaum( t, coef_p );
                        break;
+#ifndef IPMGEMPLUGIN
+     case MATHSCRIPT_FIT:   // using mathscript
+                       rpn_par_function( i, coef_p  );
+                       break;
+#endif
      case FUN_IPF_M:   // Margules
      case FUN_IPF_V:   // Van Laar
      case FUN_IPF_B:   // Bale-Pelton dilute formalism
-
-     case MATHSCRIPT_FIT:   // using mathscript
      default:
                    break;
  }
@@ -171,7 +266,7 @@ void TLMDataType::lm_evaluate_default( double* par, double* fvec )
  */
 {
     for (short i=0; i<m_dat; i++)
-            fvec[i] = ydat[i] - function(i, getX(i), par);
+            fvec[i] = (ydat[i] - function(i, getX(i), par))*sqrt(wdat[i]);
     /* if <parameters drifted away> { info = -1; } */
 }
 
@@ -232,6 +327,53 @@ void TLMDataType::parThompsonWaldbaum( double *t, double* p )
   p[0] = t[0]*t[1]*t[1];
   p[1] = t[0]*t[1]*t[0];
 }
+
+
+#ifndef IPMGEMPLUGIN
+
+
+//------------------------------------------------------------------
+// Working with mathscripts
+
+double TLMDataType::rpn_function( int i, double* p )
+{
+    short ii=(short)i;
+//     o_lms_jp, o_lms_kp, o_lms_itx, o_lms_para
+    aObj[ o_lms_para ].SetPtr( p );
+    aObj[ o_lms_jp ].SetPtr( &ii );
+    rpn.CalcEquat();
+    double ret = aObj[ o_lms_yfit ].Get( ii, 0 );
+    return ret;
+}
+
+//get parametres coefficient functions
+void
+ TLMDataType::rpn_par_function( int i, double* p  )
+{
+    short ii = (short)i;
+    aObj[ o_lms_jp ].SetPtr( &ii );  // current line in x
+    rpn.CalcEquat();
+    for( int j=0; j<n_par; j++)
+     p[j] = aObj[ o_lms_paf ].Get( j, 0);
+}
+
+
+void TLMDataType::rpn_evaluate( double* par, double* fvec )
+{
+    short ii;
+    aObj[ o_lms_para ].SetPtr( par );
+    aObj[ o_lms_jp ].SetPtr( &ii );  // current line in x
+
+    for ( ii=0; ii<m_dat; ii++)
+    {
+         rpn.CalcEquat();
+         fvec[ii] = aObj[ o_lms_delta ].Get(ii, 0);
+    }     
+}
+
+
+#endif
+
 
 //------------------------------------------------------------------
 // for comparing only

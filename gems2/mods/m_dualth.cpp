@@ -174,8 +174,8 @@ void TDualTh::ods_link( int q)
     aObj[ o_dtavsd_a ].SetDim( 2, dtp->nM );
     aObj[ o_dtavsd_o ].SetPtr( dtp->avsd_o );
     aObj[ o_dtavsd_o ].SetDim( 2, dtp->nM );
-    aObj[ o_dtqpn ].SetPtr( dtp->qpn );
-    aObj[ o_dtqpn ].SetDim( dtp->nM, dtp->Nqpn );
+    aObj[ o_dtyconst ].SetPtr( dtp->yconst );
+    aObj[ o_dtyconst ].SetDim( dtp->nQ, 1 );
     aObj[ o_dtqpg ].SetPtr( dtp->qpg );
     aObj[ o_dtqpg ].SetDim( dtp->nM, dtp->Nqpg );
     aObj[ o_dtcib ].SetPtr( dtp->CIb );
@@ -281,7 +281,7 @@ void TDualTh::dyn_set(int q)
 
     dtp->avsd_a = (double *)aObj[ o_dtavsd_a ].GetPtr();
     dtp->avsd_o = (double *)aObj[ o_dtavsd_o ].GetPtr();
-    dtp->qpn = (double *)aObj[ o_dtqpn ].GetPtr();
+    dtp->yconst = (double *)aObj[ o_dtyconst ].GetPtr();
     dtp->qpg = (double *)aObj[ o_dtqpg ].GetPtr();
     dtp->CIb = (float *)aObj[ o_dtcib ].GetPtr();
     dtp->CIn = (float *)aObj[ o_dtcin ].GetPtr();
@@ -327,6 +327,11 @@ void TDualTh::dyn_set(int q)
     dtp->ydat = (double *)aObj[ o_dtydat ].Free();
     dtp->par  = (double *)aObj[ o_dtpar  ].Free();
     dtp->sdpar = (double *)aObj[ o_dtsdpar ].Free();
+    // free internal arrays
+    aObj[ o_lms_delta ].Free();
+    aObj[ o_lms_yfit  ].Free();
+    aObj[ o_lms_paf ].Free();
+
 }
 
 // free dynamic memory in objects and values
@@ -348,7 +353,7 @@ void TDualTh::dyn_kill(int q)
 
     dtp->avsd_a = (double *)aObj[ o_dtavsd_a ].Free();
     dtp->avsd_o = (double *)aObj[ o_dtavsd_o ].Free();
-    dtp->qpn = (double *)aObj[ o_dtqpn ].Free();
+    dtp->yconst = (double *)aObj[ o_dtyconst ].Free();
     dtp->qpg = (double *)aObj[ o_dtqpg ].Free();
     dtp->CIb = (float *)aObj[ o_dtcib ].Free();
     dtp->CIn = (float *)aObj[ o_dtcin ].Free();
@@ -397,6 +402,10 @@ void TDualTh::dyn_kill(int q)
     dtp->wpar = (double *)aObj[ o_dtwpar ].Free();
     dtp->sdpar = (double *)aObj[ o_dtsdpar ].Free();
     dtp->Wa_ap = (double *)aObj[ o_dtwa_ap ].Free();
+   // free internal arrays
+    aObj[ o_lms_delta ].Free();
+    aObj[ o_lms_yfit  ].Free();
+    aObj[ o_lms_paf ].Free();
 }
 
 void TDualTh::lmfit_new()
@@ -412,6 +421,10 @@ void TDualTh::lmfit_new()
     dtp->ydat = (double *)aObj[ o_dtydat ].Alloc( dtp->nQ, 1, D_ );
     dtp->par = (double *)aObj[ o_dtpar ].Alloc( 1, dtp->nP, D_ );
     dtp->sdpar = (double *)aObj[ o_dtsdpar ].Alloc( 1, dtp->nP, D_ );
+   // free internal arrays
+    aObj[ o_lms_delta ].Free();
+    aObj[ o_lms_yfit  ].Free();
+    aObj[ o_lms_paf ].Free();
 }
 
 
@@ -440,10 +453,7 @@ void TDualTh::dyn_new(int q)
     dtp->avsd_a = (double *)aObj[ o_dtavsd_a ].Alloc( 2, dtp->nM, D_ );
     dtp->avsd_o = (double *)aObj[ o_dtavsd_o ].Alloc( 2, dtp->nM, D_ );
 
-    if( dtp->Nqpn>0 )
-      dtp->qpn = (double *)aObj[ o_dtqpn ].Alloc( dtp->nM, dtp->Nqpn,  D_ );
-    else
-      dtp->qpn = (double *)aObj[ o_dtqpn ].Free();
+  dtp->yconst = (double *)aObj[ o_dtyconst ].Alloc( dtp->nQ, 1,  D_ );
     if( dtp->Nqpg>0 )
       dtp->qpg = (double *)aObj[ o_dtqpg ].Alloc( dtp->nM, dtp->Nqpg, D_ );
     else
@@ -618,7 +628,7 @@ void TDualTh::set_def( int q)
     dtp->mu_o = 0;
     dtp->avsd_a = 0;
     dtp->avsd_o = 0;
-    dtp->qpn = 0;
+    dtp->yconst = 0;
     dtp->qpg = 0;
     dtp->CIb = 0;
     dtp->CIn = 0;
@@ -717,10 +727,7 @@ TDualTh::MakeQuery()
     dtp->nM = (short)size[2];
     dtp->Nsd = (short)size[3];
     dtp->nP = (short)size[7];
-    if( dtp->PvChi != S_OFF )
-      dtp->Nqpn = 20;
-    else
-      dtp->Nqpn = 0;
+    dtp->Nqpn = 0;            //reserved
     if( dtp->PvGam != S_OFF )
        dtp->Nqpg = 20;
     else
