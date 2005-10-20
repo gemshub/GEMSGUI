@@ -461,9 +461,13 @@ int TSVDcalc::svdGetUWV(fd_type *A, fd_type w[], fd_type *V)
              }
             break;
           }
-//         if (its == 30)
-//            return -1; //nrerror("no convergence in 30 svdcmp iterations");
+#ifdef IPMGEMPLUGIN
+         if (its == 30)
+            return -1; //nrerror("no convergence in 30 svdcmp iterations");
+#else
          ErrorIf (its == 30, "GetUWV","no convergence in 30 iterations" );
+
+#endif
          x=w[l]; // Shift from bottom 2-by-2 minor.
          nm=k-1;
          if(nm >= 0 ) //SD

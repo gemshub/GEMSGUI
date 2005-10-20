@@ -21,6 +21,7 @@ gems2/doc/INFORMAL svn_keywords=Author+Date+Id+Revision
 gems2/doc/INSTALL svn_keywords=Author+Date+Id+Revision
 gems2/doc/INSTALL-linux.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/INSTALL-mac.txt svn_keywords=Author+Date+Id+Revision
+gems2/doc/LM_SVD_objects.txt -text
 gems2/doc/MKPATCH svn_keywords=Author+Date+Id+Revision
 gems2/doc/MakeGEMS-HOWTO svn_keywords=Author+Date+Id+Revision
 gems2/doc/PRODUCE-linux.txt svn_keywords=Author+Date+Id+Revision

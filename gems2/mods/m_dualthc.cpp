@@ -57,12 +57,6 @@ void TDualTh::Init_Analyse()
 // analyse calculated equlibria
 void TDualTh::Analyse( )
 {
-/* // only as an example by now
-  if( dtp->PvChi == S_ON )
-     CalcEquat( A_CHI );
-*/  if( dtp->PvGam == S_ON )
-     CalcEquat( A_GAM );
-
   // Calculation of DualThermo results
   Calc_gmix_n( dtp->PsMode, dtp->PsSt );   // Retrieving table with mixing energies
   if( dtp->PsMode == DT_MODE_M || dtp->PsMode == DT_MODE_A )
@@ -77,6 +71,8 @@ void TDualTh::Analyse( )
      if( dtp->PsLSF != DT_LSF_N )
       RegressionLSM( 0 );
      //  SD 0ct 2005
+    if( dtp->PvGam == S_ON )
+     CalcEquat();
   }
   if( dtp->PsMode == DT_MODE_X )
      Calc_act_n( dtp->PsSt );
@@ -288,25 +284,10 @@ void TDualTh::dt_text_analyze()
 
 //Recalc rpn structure
 void
-TDualTh::CalcEquat( int type_ )
+TDualTh::CalcEquat()
 {
-    try
-    {
-       switch( type_ )
-       {
-/*         case A_CHI:  rpn[0].CalcEquat();
-                      break;
-*/         case A_GAM:  rpn[1].CalcEquat();
-         default:     break;
-       }
-    }
-    catch( TError& xcpt)
-    {
-        gstring str = xcpt.mess;
-        str += "\n Cancel DualTh?";
-        if( vfQuestion(  window(), xcpt.title, str))
-            Error( GetName(), "E00PEexec: Calculations stopped by the user");
-    }
+     for( dtp->q=0; dtp->q<dtp->nQ; dtp->q++ )
+       rpn[1].CalcEquat();
 }
 
 

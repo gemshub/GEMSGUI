@@ -254,7 +254,7 @@ protected:
     void make_A( int siz_, char (*for_)[MAXFORMUNITDT] );
     void calc_eqstat();
     void dt_text_analyze();                 // translate &
-    void CalcEquat( int type_ );            // calculate RPN
+    void CalcEquat();            // calculate RPN
     void Bb_Calc();
     void Bn_Calc();
 

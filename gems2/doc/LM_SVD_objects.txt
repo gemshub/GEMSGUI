@@ -1,0 +1,35 @@
+# SD internal objects for least-squares LM or SVD fitting
+o_lms_jp   jp      I_ 1  1  N "LS fitter object: Index of observation (experiment)"
+o_lms_kp   pk      I_ 1  1  N "LS fitter object: Index of parameter (reserved)"
+o_lms_itx  itx     I_ 1  1  N "LS fitter object: Index of argument (reserved)"
+o_lms_delta  delta  D_  -3 1  N "LS fitter object: Vector of differences between observed and calculated function of parameters and arguments"
+o_lms_yexp   yexp   D_  -3 1  N "LS fitter object: Vector of values of observations (experiments)"
+o_lms_yfit   yfit   D_  -3 1  N "LS fitter object: Vector of predicted (from parameters and arguments) values of observations"
+o_lms_tx     tx     D_  -3 1  N "LS fitter object: Array of values of arguments"
+o_lms_para   para   D_  -3 1  N "LS fitter object: Internal parameter values"
+o_lms_wpa    wpa    D_  -3 1  N "LS fitter object: Vector of weight multipliers for parameters (reserved)"
+o_lms_wexp   wexp   D_  -3 1  N "LS fitter object: Vector of weight multipliers for observations (experiments)"
+o_lms_paf    paf    D_  -3 1  N "LS fitter object (SVD): array of function multipliers at parameters"
+
+
+!!!  Not use this objects not in LM-SVD calculations,
+     The objects may be pointed for illegal address in memory
+
+
+# SD internal objects for least-squares LM or SVD fitting
+# correspond to Dualth objects
+
+jp     // internal
+pk     // not used
+itx    // not used
+delta  delta
+yexp   ydat
+yfit   yfit
+tx     tdat
+para   // internal (in mathscript for Lm only para shuld used )
+wpa    wpar
+wexp   wdat
+paf    paf
+
+
+!!!  delta, yfit, paf must be free if realloc or read record commands
