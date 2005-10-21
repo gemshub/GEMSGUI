@@ -74,12 +74,16 @@ TLMmin::~TLMmin()
 }
 
 // *** main function.
-void TLMmin::Calc( double *sdpar )
+void TLMmin::Calc( double *sdpar, double *apar_ap,
+                   double*ad_par, short *ad_type )
 {
 #ifdef IPMGEMPLUGIN
     if( data->getInfo() == -1 ) //test_sizes
       return;
 #endif
+    par_ap = apar_ap;
+    d_par = ad_par;
+    d_type = ad_type;
     lm_minimize( sdpar );
 }
 
@@ -135,8 +139,34 @@ void TLMmin::free_arrays( )
     { delete[] CVM; CVM = 0; }
  }
 
+void TLMmin::CheckLimits( double *p )
+{
+  int ii;
+  double tmp;
+  for( ii=0; ii<n_par; ii++ )
+  {
+    switch( d_type[ii] )
+    {
+      case 1:  /* lower bounds only */
+              tmp = par_ap[ii] -  fabs(d_par[ii]);
+              if( p[ii] < tmp )
+                p[ii] =  tmp;
+              break;
+      case 3:
+              tmp = par_ap[ii] -  fabs(d_par[ii]);
+              if( p[ii] < tmp )
+                p[ii] =  tmp;
+      case 2:  /* upper bounds only */
+              tmp = par_ap[ii] +  fabs(d_par[ii]);
+              if( p[ii] > tmp )
+                p[ii] =  tmp;
+              break;
+      case 0:
+      default: break;
+   }
+  }
 
-
+}
 /* *********************** high-level interface **************************** */
 
 
@@ -393,6 +423,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
     delta = 0; // just to prevent a warning (initialization within if-clause)
     xnorm = 0; // dito
 
+    CheckLimits( x );   // Srart array test
     temp = MAX(epsfcn,LM_MACHEP);
     eps = sqrt(temp); // used in calculating the Jacobian by forward differences
 
@@ -556,7 +587,17 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 
 // OI* store the direction p and x + p. calculate the norm of p.
 
+//SD insert check limits
+
+           for ( j=0; j<n; j++ )
+                wa2[j] = x[j] - wa1[j];
+            CheckLimits( wa2 );
             for ( j=0; j<n; j++ )
+                wa1[j] = x[j] - wa2[j];
+
+// end check limits
+
+           for ( j=0; j<n; j++ )
             {
                 wa1[j] = -wa1[j];
                 wa2[j] = x[j] + wa1[j];

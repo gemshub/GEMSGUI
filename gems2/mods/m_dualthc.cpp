@@ -692,13 +692,13 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
  if( dtp->PsLSF == DT_LSF_L || dtp->PsLSF == DT_LSF_C )
  {
      TLMmin task( dtp->par, &data);
-     task.Calc( dtp->sdpar );   // sdpar ocenki!!
+     task.Calc( dtp->sdpar, dtp->Wa_ap, dtp->wpar, dtp->wa_cp );
  }
 
  if( dtp->PsLSF == DT_LSF_S || dtp->PsLSF == DT_LSF_B )
  {
      TSVDcalc task_svd( dtp->par, &data);
-     task_svd.CalcMin( dtp->sdpar ); // sdpar ocenki!!
+     task_svd.CalcMin( dtp->sdpar ); 
  }
 
  // putting the resalts

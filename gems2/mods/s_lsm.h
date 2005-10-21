@@ -141,6 +141,10 @@ enum evl_func_types {
               MATHSCRIPT_EVL = '1',   // using mathscript
                     };
 
+enum limits_types {
+    /* type of lmits */
+    LM_NO_LIM = 0, LM_LOWER_LIM =1, LM_UPPER_LIM = 2, LM_BOTH_LIM =3,
+                    };
 
 // parameters for calling the high-level interface lmfit
 //   ( lmfit.c provides lm_initialize_control which sets default values ):
@@ -184,6 +188,11 @@ class TLMmin
   short n_par;  // number of parameters to fit  (<-nP)
   double  *par;   // [nP] to LM fitter: guess parameters; from LM fitter - fitted parameters
 
+// limits of par
+  double *par_ap;   // sentral point
+  double *d_par;  // delta from sentral
+  short  *d_type; // type of limits 0-No, 1 -Lower, 2 upper, 3 both
+
 // internal arrays
     double *fvec;
     double *diag;
@@ -222,13 +231,15 @@ void lm_lmpar( int n, double* r, int ldr, int* ipvt, double* diag, double* qtb,
                double delta, double* par, double* x, double* sdiag,
                double* wa1, double* wa2);
 int lm_COVAR(double *J, double *C, double sumsq, int m, int n);
+void CheckLimits( double *p );
+
 
 public:
 
     TLMmin( double *par, TLMDataType *aData);
    ~TLMmin();
 
-   void Calc( double *sdpar);
+   void Calc( double *sdpar, double *par_ap, double*d_par, short *d_type );
 };
 
 typedef double fd_type;

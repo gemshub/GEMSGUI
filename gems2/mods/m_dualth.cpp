@@ -1023,7 +1023,7 @@ void TDualTh::dt_initiate( bool mode )
      for( i=0; i<dtp->nQ; i++)
      {
         dtp->gam_n[i*dtp->nM+ii] = 1.;  // default for gamma 1.0
-        dtp->chi[i*dtp->nM+ii] = DOUBLE_EMPTY;  // default for chi 
+        dtp->chi[i*dtp->nM+ii] = DOUBLE_EMPTY;  // default for chi
      }
      dtp->wdat[ii] = 1.;
     }
@@ -1038,7 +1038,9 @@ void TDualTh::dt_initiate( bool mode )
 
     for( ii=0; ii<dtp->nP; ii++)
     {
+      dtp->Wa_ap[ii] = 1.;
       dtp->wpar[ii] = 0.;
+      dtp->wa_cp[ii] = 0;
     }
 
 
