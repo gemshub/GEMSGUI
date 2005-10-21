@@ -39,11 +39,11 @@
                    short am_dat,short atm_d, short an_par,
                    double *atdat, double *aydat,
                    double *acnst_y, double *awdat, // not nessassary data
-                   double *awpar, char *arpn ): // for math script
+                   char *arpn ): // for math script
    fType(afType), eType(aeType),
    m_dat(am_dat), tm_d(atm_d),  n_par(an_par),
    tdat(atdat),   ydat(aydat), cnst_y(acnst_y),
-   wdat(awdat),   wpar(awpar), text_function(arpn)
+   wdat(awdat),   text_function(arpn)
 {
     info=0;
     xi2=0.0;
@@ -65,8 +65,6 @@ TLMDataType::~TLMDataType()
     aObj[ o_lms_tx ].SetDim( 0, tm_d );
     aObj[ o_lms_wexp ].SetPtr( NULL );
     aObj[ o_lms_wexp ].SetDim( 0, 1 );
-    aObj[ o_lms_wpa ].SetPtr( NULL );
-    aObj[ o_lms_wpa ].SetDim( 0, 1 );
     aObj[ o_lms_para ].SetPtr( NULL );
     aObj[ o_lms_para ].SetDim( 0, 1 );
    // free internal arrays
@@ -164,9 +162,7 @@ void TLMDataType::test_sizes()
     aObj[ o_lms_tx ].SetDim( m_dat, tm_d );
     aObj[ o_lms_wexp ].SetPtr( wdat );
     aObj[ o_lms_wexp ].SetDim( m_dat, 1 );
-    aObj[ o_lms_wpa ].SetPtr( wpar );
-    aObj[ o_lms_wpa ].SetDim( n_par, 1 );
-    aObj[ o_lms_para ].SetPtr( wpar );
+    aObj[ o_lms_para ].SetPtr( 0 );
     aObj[ o_lms_para ].SetDim( n_par, 1 );
    // allocate internal arrays
     aObj[ o_lms_delta ].Alloc( m_dat, 1, D_ );
@@ -378,7 +374,7 @@ void TLMDataType::rpn_evaluate( double* par, double* fvec )
 //------------------------------------------------------------------
 // for comparing only
 
-void TLMDataType::lm_print_default( double* par, double* fvec,
+void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
                       int iflag, int iter, int nfev, double norm  )
 /*
  *       data  : for soft control of printout behaviour, add control
@@ -389,7 +385,7 @@ void TLMDataType::lm_print_default( double* par, double* fvec,
  */
 {
     double f, y, *t;
-    int i;
+    int i, j;
 
  fstream f_out("fit_func.out", ios::app  );
  if( !f_out.good() )
@@ -430,9 +426,16 @@ void TLMDataType::lm_print_default( double* par, double* fvec,
     f_out << " status: " << lm_shortmsg[iter];
     f_out  << " after " << nfev << " iterations" << endl;
     f_out << endl;
+    f_out << "cvm = " << endl;
+    for( i=0; i<n_par; i++ )
+    {  for( j=0; j<n_par; j++ )
+       f_out << CVM[i*n_par+j] << " ";
+      f_out << endl;
+    }
     f_out << endl;
-   }
-   
+    f_out << endl;
+  }
+
  }
 
 //--------------------- End of s_lmeval.cpp ---------------------------

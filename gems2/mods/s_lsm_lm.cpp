@@ -63,6 +63,9 @@ TLMmin::TLMmin( double *aPar, TLMDataType *aData ):
     wa3 = 0;
     wa4 = 0;
     ipvt = 0;
+    CVM = 0;
+    chisq = 0.0;
+
 }
 
 TLMmin::~TLMmin()
@@ -77,7 +80,7 @@ void TLMmin::Calc( double *sdpar )
     if( data->getInfo() == -1 ) //test_sizes
       return;
 #endif
-    lm_minimize( par );
+    lm_minimize( sdpar );
 }
 
 
@@ -98,9 +101,10 @@ void TLMmin::alloc_arrays( )
     wa3 = new double[n];
     wa4 = new double[m];
     ipvt = new int[n];
+    CVM = new double[n*n];
 
     if (!fvec || !diag || !qtf || !fjac||
-        !wa1 || !wa2 || !wa3 || !wa4 || !ipvt)
+        !wa1 || !wa2 || !wa3 || !wa4 || !ipvt || !CVM )
             control.info = 9;
 
 }
@@ -127,6 +131,8 @@ void TLMmin::free_arrays( )
     { delete[] wa4; wa4 = 0; }
   if( ipvt)
     { delete[] ipvt; ipvt = 0; }
+  if( CVM)
+    { delete[] CVM; CVM = 0; }
  }
 
 
@@ -135,7 +141,7 @@ void TLMmin::free_arrays( )
 
 
 
-void TLMmin::lm_minimize( double* apar )
+void TLMmin::lm_minimize( double* sdpar )
 {
 
   alloc_arrays();
@@ -145,17 +151,23 @@ void TLMmin::lm_minimize( double* apar )
   control.nfev = 0;
 
     // this goes through the modified legacy interface:
-   lm_lmdif( m_dat, n_par, apar, fvec, control.ftol, control.xtol, control.gtol,
+   lm_lmdif( m_dat, n_par, par, fvec, control.ftol, control.xtol, control.gtol,
               control.maxcall*(n_par+1), control.epsilon, diag, 1,
               control.stepbound, &(control.info),
               &(control.nfev), fjac, ipvt, qtf, wa1, wa2, wa3, wa4 );
 
-// output resalts
-       data->xi2 = control.fnorm = lm_enorm( m_dat, fvec);
-    if (control.info < 0 ) control.info = 10;
-    data->lm_print_default( par, fvec, -1,
-         control.info, control.nfev, control.fnorm );
+// calc statistic
+   control.fnorm = lm_enorm( m_dat, fvec);
+   data->xi2     = control.fnorm * control.fnorm;
+   data->xi2     /= (m_dat-n_par);
+   lm_COVAR(fjac, CVM, data->xi2, n_par, m_dat);
+   for(int ii=0; ii<n_par; ii++ )
+    sdpar[ii] = CVM[ii*n_par+ii];
 
+// output resalts
+    if (control.info < 0 ) control.info = 10;
+    data->lm_print_default( par, fvec, CVM, -1,
+         control.info, control.nfev, data->xi2 );
 
 // *** clean up.
   free_arrays();
@@ -420,7 +432,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 
 // SD oct 2005
     *info = data->evaluate( x, fvec );
-    data->lm_print_default( x, fvec, 0, 0, ++(*nfev), lm_enorm(m,fvec) );
+    data->lm_print_default( x, fvec, 0, 0, 0, ++(*nfev), lm_enorm(m,fvec) );
 //    if ( *info < 0 ) return; must be exeption if error
     fnorm = lm_enorm(m,fvec);
 
@@ -441,7 +453,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 //            (*printout)( n, x, m, wa4, data, 1, iter, ++(*nfev) );
 // SD oct 2005
     *info = data->evaluate( x, wa4 );
-    data->lm_print_default( x, wa4, 1, iter, ++(*nfev) , lm_enorm(m,wa4));
+    data->lm_print_default( x, wa4, 0, 1, iter, ++(*nfev) , lm_enorm(m,wa4));
 //            if ( *info < 0 ) return;  // user requested break must be exeption
             x[j] = temp;
             for ( i=0; i<m; i++ )
@@ -564,7 +576,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 //            (*printout)( n, x, m, wa4, data, 2, iter, ++(*nfev) );
 // SD oct 2005
     *info = data->evaluate( wa2, wa4 );
-    data->lm_print_default( x, wa4, 2, iter, ++(*nfev), lm_enorm(m,wa4) );
+    data->lm_print_default( x, wa4, 0, 2, iter, ++(*nfev), lm_enorm(m,wa4) );
 //            if ( *info < 0 ) return;  // user requested break exeption
 
             fnorm1 = lm_enorm(m,wa4);
@@ -1317,4 +1329,172 @@ double TLMmin::lm_enorm( int n, double *x )
 
     return x3max*sqrt(s3);
 }
+
+//=================================================================
+
+/*
+ * This function computes in C the covariance matrix corresponding to a least
+ * squares fit. JtJ is the approximate Hessian at the solution (i.e. J^T*J, where
+ * J is the jacobian at the solution), sumsq is the sum of squared residuals
+ * (i.e. goodnes of fit) at the solution, m is the number of parameters (variables)
+ * and n the number of observations. JtJ can coincide with C.
+ *
+ * if JtJ is of full rank, C is computed as sumsq/(n-m)*(JtJ)^-1
+ * otherwise and if LAPACK is available, C=sumsq/(n-r)*(JtJ)^+
+ * where r is JtJ's rank and ^+ denotes the pseudoinverse
+ * The diagonal of C is made up from the estimates of the variances
+ * of the estimated regression coefficients.
+ * See the documentation of routine E04YCF from the NAG fortran lib
+ *
+ * The function returns the rank of JtJ if successful, 0 on error
+ *
+ * A and C are mxm
+ *
+ */
+
+int
+  TLMmin::lm_COVAR(double *J, double *C, double sumsq, int m, int n)
+{
+  int i, j, k, l;
+  int *idx, maxi=-1;
+  double *a, *x, *work, max, sum, tmp;
+
+
+ // allocate internal memory
+ idx = new int[m];
+ a = new double[m*m];
+ x = new double[m];
+ work = new double[m];
+
+ //   compute A = JtJ
+ for( i=0; i<m; i++)
+    for( j=i; j<m; j++)
+    {
+       tmp = 0;
+       for( k=0; k<n; k++ )
+        tmp += J[k*m+i] * J[k*m+j];
+       a[i*m+j] = a[j*m+i] = tmp;
+    }
+
+ //  computes the inverse of A in C. A and B can coincide
+
+ // compute the LU decomposition of a row permutation of matrix a;
+ // the permutation itself is saved in idx[]
+ for(i=0; i<m; ++i)
+ {
+   max=0.0;
+   for(j=0; j<m; ++j)
+     if((tmp=fabs(a[i*m+j]))>max)
+        max=tmp;
+   if(max==0.0)
+   {
+     delete[] idx;
+     delete[] a;
+     delete[] x;
+     delete[] work;
+
+#ifdef IPMGEMPLUGIN
+        fprintf(stderr, "Singular matrix A in lm_COVAR()!\n");
+        return 0;
+#else
+       Error( "lm_COVAR", "Singular matrix A."  );
+#endif
+    }
+      work[i]=1.0/max;
+ }
+
+ for(j=0; j<m; ++j)
+ {
+     for(i=0; i<j; ++i)
+     {
+        sum=a[i*m+j];
+	for(k=0; k<i; ++k)
+           sum-=a[i*m+k]*a[k*m+j];
+        a[i*m+j]=sum;
+     }
+     max=0.0;
+     for(i=j; i<m; ++i)
+     {
+     	sum=a[i*m+j];
+     	for(k=0; k<j; ++k)
+          sum-=a[i*m+k]*a[k*m+j];
+       	a[i*m+j]=sum;
+        if((tmp=work[i]*fabs(sum))>=max)
+        {
+	   max=tmp;
+	   maxi=i;
+        }
+     }
+     if(j!=maxi)
+     {
+      for(k=0; k<m; ++k)
+      {
+      	tmp=a[maxi*m+k];
+      	a[maxi*m+k]=a[j*m+k];
+      	a[j*m+k]=tmp;
+      }
+      work[maxi]=work[j];
+     }
+     idx[j]=maxi;
+     if(a[j*m+j]==0.0)
+       a[j*m+j]=DBL_EPSILON;
+     if(j!=m-1)
+     {
+        tmp=1.0/(a[j*m+j]);
+        for(i=j+1; i<m; ++i)
+          a[i*m+j]*=tmp;
+     }
+ }
+
+ // The decomposition has now replaced a. Solve the m linear systems using
+ // forward and back substitution
+
+  for(l=0; l<m; ++l)
+  {
+    for(i=0; i<m; ++i)
+       x[i]=0.0;
+    x[l]=1.0;
+
+    for(i=k=0; i<m; ++i)
+    {
+       j=idx[i];
+       sum=x[j];
+       x[j]=x[i];
+       if(k!=0)
+         for(j=k-1; j<i; ++j)
+             sum-=a[i*m+j]*x[j];
+       else
+        if(sum!=0.0)
+           k=i+1;
+       x[i]=sum;
+    }
+    for(i=m-1; i>=0; --i)
+    {
+      sum=x[i];
+      for(j=i+1; j<m; ++j)
+        sum-=a[i*m+j]*x[j];
+      x[i]=sum/a[i*m+i];
+    }
+
+    for(i=0; i<m; ++i)
+      C[i*m+l]=x[i];
+  }
+
+// free memory
+     delete[] idx;
+     delete[] a;
+     delete[] x;
+     delete[] work;
+
+//
+
+  int rnk = m; /* assume full rank */
+
+  // double fact = sumsq/(double)(n-rnk);
+  for(i=0; i<m*m; i++)
+  {  C[i] *= sumsq;
+  }
+  return rnk;
+}
+
 

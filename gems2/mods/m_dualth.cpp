@@ -1038,7 +1038,7 @@ void TDualTh::dt_initiate( bool mode )
 
     for( ii=0; ii<dtp->nP; ii++)
     {
-      dtp->wpar[ii] = 1.;
+      dtp->wpar[ii] = 0.;
     }
 
 

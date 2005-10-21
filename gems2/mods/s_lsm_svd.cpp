@@ -45,7 +45,7 @@ TSVDcalc::~TSVDcalc()
 // *** main function.
 void TSVDcalc::CalcMin( double *sdpar )
 {
-// int i, j;
+   int i, j;
 
 #ifdef IPMGEMPLUGIN
     if( data->getInfo() == -1 ) //test_sizes
@@ -54,19 +54,31 @@ void TSVDcalc::CalcMin( double *sdpar )
 
   alloc_arrays();
   svdMin( par, U, V, w, chisq );
+  data->xi2     /= (m-n);
 
-  data->lm_print_default( par, 0, -1, 0,0,chisq );
+ fstream f_out("fit_func.out", ios::app  );
+ if( !f_out.good() )
+   return;
+ f_out << "V = " << endl;
+    for( i=0; i<n; i++ )
+    {  for( j=0; j<n; j++ )
+       f_out << V[i*n+j] << " ";
+      f_out << endl;
+    }
+ f_out << "W = " << endl;
+    for( i=0; i<n; i++ )
+       f_out << w[i] << " ";
+      f_out << endl;
 
   svdStat( V, w, CVM);
 
-// f_out << "cvm = " << endl;
-// for( i=0; i<n; i++ )
-// {  for( j=0; j<n; j++ )
-//    f_out << cvm(i,j) << " ";
-//   f_out << endl;
-// }
+  // calc statistic
+   for(int ii=0; ii<n; ii++ )
+    sdpar[ii] = CVM[ii*n+ii];
 
- free_arrays();
+  data->lm_print_default( par, 0, CVM, -1, 0,0,data->xi2 );
+
+  free_arrays();
 }
 
 
@@ -461,13 +473,19 @@ int TSVDcalc::svdGetUWV(fd_type *A, fd_type w[], fd_type *V)
              }
             break;
           }
+
+    if (its == 30)
+    {  delete[] rv1; //free_vector(rv1,1,n);
+       delete[] aa; //free_vector(rv1,1,n);
+
 #ifdef IPMGEMPLUGIN
-         if (its == 30)
+//         if (its == 30)
             return -1; //nrerror("no convergence in 30 svdcmp iterations");
 #else
-         ErrorIf (its == 30, "GetUWV","no convergence in 30 iterations" );
+         Error( "GetUWV","no convergence in 30 iterations" );
 
 #endif
+     }
          x=w[l]; // Shift from bottom 2-by-2 minor.
          nm=k-1;
          if(nm >= 0 ) //SD
@@ -582,7 +600,7 @@ void TSVDcalc::svdMin(  fd_type a[],
        tmp=(data->getY(i)-sum)*data->getWdat(i);
        chisq += (tmp,tmp*tmp);
    }
-   chisq = sqrt(chisq);
+   //chisq = sqrt(chisq);
    data->xi2 = chisq;
 
    delete[] afunc;
@@ -596,7 +614,7 @@ void TSVDcalc::svdStat(fd_type *V, fd_type w[], fd_type *CVM)
 // as returned from svdfit.
 {
    int k,j,i;
-   fd_type sum,*wti;
+   fd_type sum,tmp, *wti;
 
    wti = new fd_type[n]; // vector(1,ma);
    for(i=0;i<n;i++)
@@ -610,7 +628,8 @@ void TSVDcalc::svdStat(fd_type *V, fd_type w[], fd_type *CVM)
      {
        for (sum=0.0,k=0;k<n;k++)
           sum += v(i,k)*v(j,k)*wti[k];
-       cvm(j,i) = cvm(i,j) = sum;
+       tmp = sqrt(fabs(sum));
+       cvm(j,i) = cvm(i,j) = SIGN(tmp, sum);
      }
 
    delete[] wti; //  free_vector(wti,1,ma);

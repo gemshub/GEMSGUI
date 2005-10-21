@@ -81,7 +81,7 @@ enum std_object{
     o_reckey, o_k_, o_ii_, o_prn_, o_rtkey, o_rttime,
     // SD 0ct 2005
     o_lms_jp, o_lms_kp, o_lms_itx, o_lms_delta, o_lms_yexp,
-    o_lms_yfit, o_lms_tx, o_lms_para, o_lms_wpa, o_lms_wexp,
+    o_lms_yfit, o_lms_tx, o_lms_para, o_lms_wexp,
     o_lms_paf
 };
 

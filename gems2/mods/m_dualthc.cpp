@@ -687,7 +687,7 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
  }
  TLMDataType data( afType, TEST_EVL, // may be changed for flags
                        dtp->nQ, dtp->nM, dtp->nP, dtp->tdat,
-                       dtp->ydat, dtp->yconst, dtp->wdat, dtp->wpar, arpn );
+                       dtp->ydat, dtp->yconst, dtp->wdat, arpn );
  // calculate minimization
  if( dtp->PsLSF == DT_LSF_L || dtp->PsLSF == DT_LSF_C )
  {

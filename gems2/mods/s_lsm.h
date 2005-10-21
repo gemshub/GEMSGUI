@@ -56,7 +56,6 @@ class TLMDataType  // data for the task
 
    double *wdat;  // array of weight factors for data  [nQ], optional
   //  *par,       // [nP] to LM fitter: guess parameters; from LM fitter - fitted parameters
-   double *wpar;  // [nP] to LM fitter: weight factors for parameters (optional)
    double *cnst_y;// [nQ] internal constants for yi calculatuion
 
  char * text_function;
@@ -96,7 +95,6 @@ public:
                    short am_dat,short atm_d, short an_par,
                    double *atdat, double *aydat,
                    double *acnst_y, double *awdat = 0, // not nessassary data
-                   double *awpar =0,
                    char *arpn = 0);          // for math script text
    ~TLMDataType();
 
@@ -110,8 +108,6 @@ public:
       { return tdat+(i*tm_d);  }
     double getY(i) const
       { return ydat[i];  }
-    double getWpar(i) const
-      { return wpar[i];  }
     double getWdat(i) const
       { return wdat[i];  }
     double getXi2() const
@@ -121,7 +117,7 @@ public:
    double function( int i, double* t, double* p );
    void par_funct(  int i, double* t, double* coef_p );
 
-   void lm_print_default( double* par, double* fvec,
+   void lm_print_default( double* par, double* fvec, double *CVM,
                       int iflag, int iter, int nfev, double norm );
 
 };
@@ -198,6 +194,8 @@ class TLMmin
     double *wa3;
     double *wa4;
     int *ipvt;
+    double *CVM;
+    double chisq;
 
 
 protected:
@@ -223,6 +221,7 @@ void lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
 void lm_lmpar( int n, double* r, int ldr, int* ipvt, double* diag, double* qtb,
                double delta, double* par, double* x, double* sdiag,
                double* wa1, double* wa2);
+int lm_COVAR(double *J, double *C, double sumsq, int m, int n);
 
 public:
 
