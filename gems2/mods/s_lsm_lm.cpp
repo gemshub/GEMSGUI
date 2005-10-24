@@ -143,6 +143,9 @@ void TLMmin::CheckLimits( double *p )
 {
   int ii;
   double tmp;
+
+  if( !d_type || !par_ap || !d_par )
+   return;
   for( ii=0; ii<n_par; ii++ )
   {
     switch( d_type[ii] )
@@ -167,6 +170,25 @@ void TLMmin::CheckLimits( double *p )
   }
 
 }
+
+
+void TLMmin::ChTol( double& fTol, double& xTol )
+{
+  int ii;
+
+  if( !d_type  )
+   return;
+  for( ii=0; ii<n_par; ii++ )
+    if( d_type[ii] > 0 && d_type[ii]< 4 )
+      break;
+  if( ii < n_par)
+  {
+    fTol = 1e-10;
+    xTol = 1e-10;
+  }
+}
+
+
 /* *********************** high-level interface **************************** */
 
 
@@ -190,7 +212,7 @@ void TLMmin::lm_minimize( double* sdpar )
    control.fnorm = lm_enorm( m_dat, fvec);
    data->xi2     = control.fnorm * control.fnorm;
    data->xi2     /= (m_dat-n_par);
-   lm_COVAR(fjac, CVM, data->xi2, n_par, m_dat);
+   lm_COVAR( CVM, data->xi2, n_par, m_dat);
    for(int ii=0; ii<n_par; ii++ )
     sdpar[ii] = CVM[ii*n_par+ii];
 
@@ -423,6 +445,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
     delta = 0; // just to prevent a warning (initialization within if-clause)
     xnorm = 0; // dito
 
+    ChTol( ftol, xtol );
     CheckLimits( x );   // Srart array test
     temp = MAX(epsfcn,LM_MACHEP);
     eps = sqrt(temp); // used in calculating the Jacobian by forward differences
@@ -492,9 +515,27 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
         }
 
 // O** compute the qr factorization of the jacobian.
+         //   compute A = JtJ
+        for(int  ii=0; ii<n; ii++)
+        for(int jj=ii; jj<n; jj++)
+        {
+          double tmp = 0;
+          for(int kk=0; kk<m; kk++ )
+          tmp += fjac[kk*n+ii] * fjac[kk*n+jj];
+          CVM[ii*n+jj] = CVM[jj*n+ii] = tmp;
+        }
 
         lm_qrfac( m, n, fjac, 1, ipvt, wa1, wa2, wa3);
-
+/*         //   compute A = JtJ
+        for(int  ii=0; ii<n; ii++)
+        for(int jj=ii; jj<n; jj++)
+        {
+          double tmp = 0;
+          for(int kk=0; kk<m; kk++ )
+          tmp += fjac[kk*n+ii] * fjac[kk*n+jj];
+          CVM[ii*n+jj] = CVM[jj*n+ii] = tmp;
+        }
+*/
 // O** on the first iteration ...
 
         if (iter == 1)
@@ -1394,7 +1435,7 @@ double TLMmin::lm_enorm( int n, double *x )
  */
 
 int
-  TLMmin::lm_COVAR(double *J, double *C, double sumsq, int m, int n)
+  TLMmin::lm_COVAR( double *C, double sumsq, int m, int n)
 {
   int i, j, k, l;
   int *idx, maxi=-1;
@@ -1408,7 +1449,7 @@ int
  work = new double[m];
 
  //   compute A = JtJ
- for( i=0; i<m; i++)
+ /*for( i=0; i<m; i++)
     for( j=i; j<m; j++)
     {
        tmp = 0;
@@ -1416,6 +1457,10 @@ int
         tmp += J[k*m+i] * J[k*m+j];
        a[i*m+j] = a[j*m+i] = tmp;
     }
+  */
+ //   computed before CVM as JtJ
+ for( i=0; i<m*m; i++)
+       a[i] = C[i];
 
  //  computes the inverse of A in C. A and B can coincide
 
@@ -1533,7 +1578,9 @@ int
 
   // double fact = sumsq/(double)(n-rnk);
   for(i=0; i<m*m; i++)
-  {  C[i] *= sumsq;
+  {  // C[i] *= sumsq;
+     tmp = sqrt(fabs(C[i]));
+     C[i] = SIGN(tmp, C[i]);
   }
   return rnk;
 }

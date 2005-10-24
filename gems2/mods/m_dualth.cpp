@@ -1003,8 +1003,8 @@ void TDualTh::dt_initiate( bool mode )
 
     for( ii=0; ii<dtp->Nb; ii++)
     {
-     dtp->CIclb[ii] = 'g';
-     dtp->CIcln[ii] = 'g';
+     dtp->CIclb[ii] = 'M';
+     dtp->CIcln[ii] = 'M';
     }
 
     for( ii=0; ii<dtp->nQ; ii++)
@@ -1016,8 +1016,6 @@ void TDualTh::dt_initiate( bool mode )
     for( ii=0; ii<dtp->nM; ii++)
     {
      dtp->typ_n[ii] = 'I';
-//     dtp->AUcln[ii] = 'M';
-//     strncpy( dtp->for_n[ii], "H2O", 4 );
      sprintf( tbuf, "Endmember%d", ii );
      strncpy( dtp->nam_n[ii], tbuf, MAXIDNAME );
      for( i=0; i<dtp->nQ; i++)
@@ -1030,7 +1028,7 @@ void TDualTh::dt_initiate( bool mode )
 
     for( ii=0; ii<dtp->La_b; ii++)
     {
-     dtp->AUclb[ii] = 'g';
+     dtp->AUclb[ii] = 'M';
      strncpy( dtp->for_b[ii], "H2O", 4 );
      dtp->AUcln[ii] = 'M';
      strncpy( dtp->for_n[ii], "H2O", 4 );

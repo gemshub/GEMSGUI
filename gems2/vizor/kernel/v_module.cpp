@@ -677,6 +677,7 @@ TCModule::CmCalc()
         // dyn_set(); must be done before
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
         check_input( str.c_str() );
+        SetString("Calculation... ");
         RecCalc( str.c_str() );
         SetString("Calculation finished OK. ");
         pVisor->Update();

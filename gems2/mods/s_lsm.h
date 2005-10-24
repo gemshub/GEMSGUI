@@ -230,8 +230,9 @@ void lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
 void lm_lmpar( int n, double* r, int ldr, int* ipvt, double* diag, double* qtb,
                double delta, double* par, double* x, double* sdiag,
                double* wa1, double* wa2);
-int lm_COVAR(double *J, double *C, double sumsq, int m, int n);
+int lm_COVAR(double *C, double sumsq, int m, int n);
 void CheckLimits( double *p );
+void ChTol( double& fTol, double& xTol );
 
 
 public:
@@ -239,7 +240,7 @@ public:
     TLMmin( double *par, TLMDataType *aData);
    ~TLMmin();
 
-   void Calc( double *sdpar, double *par_ap, double*d_par, short *d_type );
+   void Calc( double *sdpar, double *par_ap=0, double*d_par=0, short *d_type=0 );
 };
 
 typedef double fd_type;
