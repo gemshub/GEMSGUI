@@ -193,52 +193,11 @@ Asiz,      // Current number of rows in the An matrix
 }
 DUALTH;
 
-/* Work objects for DualTh scripts - to add??? */
-typedef struct   // not used yet
-{
-    double RT,
-    F,
-    Nu,
-    Mu,
-    G0,
-    lnAx,
-    Ax,
-    dGex,
-    Gdis,
-    Asig,
-    Asur,
-    Amw,
-    Gid,
-    lnCx,
-    Cx,
-    Mx,
-    lnMx,
-    lnWx,
-    Wx,
-    Gcas,
-    Gsas,
-    Gsm,
-    Gsd,
-    Tetp,
-    Nx,
-    Agmx,
-    Agx,
-    Gex,
-    Gamma,
-    lnGam,
-    Gpsi,
-    Ze,
-    Psi,
-    lnPg;
-    /* 32 double */
-}
-DualThSet;
-
 // Current DualTh
 class TDualTh : public TCModule
 {
     DUALTH dt[1];
-    DualThSet dts;
+//    DualThSet dts;
 
     IPNCalc rpn[2];      // IPN of DualTh
 
@@ -273,35 +232,26 @@ protected:
     void Calc_act_n( char eState ); // calculate activity DualTh
     int Calc_alp_n( char IpfCode, char ModIPu ); // retrieve interaction parameters DualTh
     void Calc_muo_n_stat( char eState ); // statistics for EM candidates
-    void Calc_alp_n_stat( char eState ); // statistics for interaction params 
+    void Calc_mua_n_stat( char eState ); // statistics for EM candidates
+    void Calc_alp_n_stat( char eState ); // statistics for interaction params
     double ColumnAverage( double *DataTable, short N, short M, short ColInd  );
     double ColumnStdev( double *DataTable, double ColAvg,
                   short N, short M, short ColInd  ); //
 
      // forward calculation of j-th activity coefficient in various models
-    double Guggenheim( double chi[], double alp[], short j, short nK, short nM,
-                       double cFactor );
-    double TWMargules( double chi[], double alp[], short j, short nK, short nM,
-                       double cFactor  );
-    double MargulesO( double chi[], double alp[], short j, short nK, short nM,
-                     double cFactor  );
-    double VanLaar( double chi[], double alp[], short j, short nK, short nM,
-                    double cFactor  );
-    double BalePelton( double chi[], double alp[], short j, short nK, short nM,
-                       double cFactor, bool solvent );
-
-       // retrieval from excess Gibbs energy of mixing for nQ points
-    int GuggenheimR( double gex[], double alp[], short nQ, short nK, short nM,
-                    char ModIPu );
-    int TWMargulesR( double gex[], double alp[], short nQ, short nK, short nM,
-                    char ModIPu );
-    int MargulesOR( double gex[], double alp[], short nQ, short nK, short nM,
-                    char ModIPu );
-    int VanLaarR( double gex[], double alp[], short nQ, short nK, short nM,
-                    char ModIPu );
-    int BalePeltonR( double gex[], double alp[], short nQ, short nK, short nM,
-                    char ModIPu, short solventNdx );
-
+    void Calc_gam_forward( char PvGam, char PsIPf, char PsMode );
+    short Guggenheim( double Gam[], const double x[], const double alp[],
+         const short nM, const short nP, const double scaleF );
+    short TWMargules( double Gam[], const double x[], const double W[],
+         const short nM, const short nP, const double scaleF );
+    short MargulesO( double Gam[], const double x[], const double W[],
+         const short nM, const short nP, const double scaleF );
+    short VanLaar( double Gam[], const double x[], const double alp[],
+         const short nM, const short nP, const double scaleF );
+    short BalePelton( double Gam[], const double x[], const double eps[],
+      const short nM, const short nP, const double scaleF, const short SolvX );
+    short DarkenQuad( double Gam[], const double x[], const double W[],
+      const short nM, const short nP, const double scaleF, const short SolvX );
     // LSM regression subroutine
     int RegressionLSM( int );
 
@@ -348,25 +298,26 @@ enum dualth_inernal {
               DT_STATE_P = 'P',  // primary saturation
               DT_STATE_S = 'S',  // stoichiometric saturation
 
-              DT_LSF_N = 'N',  // not use
-              DT_LSF_L = 'L',  // Levenberg usual
-              DT_LSF_S = 'S',  // SVD usual
-              DT_LSF_B = 'B',  // SVD Bayesian
+              DT_LSF_N = 'N',  // LS fitting not used
+              DT_LSF_L = 'L',  // Levenberg-Marquardt
+              DT_LSF_S = 'S',  // SVD (Singular Value Decomposition)
+              DT_LSF_B = 'B',  // SVD Bayesian (reserved)
               DT_LSF_C = 'C',  // Levenberg constrained
 
                                 // interaction parameter codes
-              DT_IPF_I = 'I',   // Ideal Raoult 
+              DT_IPF_I = 'I',   // Ideal Raoult (gamma = 1)
               DT_IPF_R = 'R',   // Redlich-Kister
               DT_IPF_G = 'G',   // Guggenheim
               DT_IPF_T = 'T',   // Thompson-Waldbaum
               DT_IPF_M = 'M',   // Margules
               DT_IPF_V = 'V',   // Van Laar
               DT_IPF_B = 'B',   // Bale-Pelton dilute formalism
-              DT_IPF_O = 'O',   // Other
+            DT_IPF_D = 'D',   // Darken's quadratic formalism
+              DT_IPF_O = 'O',   // Other models (expressed in the script)
                                 // interaction parameter units of measurement
               DT_IPU_J = 'J',   // J/mol
               DT_IPU_K = 'K',   // kJ/mol
-              DT_IPU_N = 'N',   // normalized
-                    };
+              DT_IPU_N = 'N',   // normalized (dimensionless) 
+           };
 
 #endif //_m_dualth_h_

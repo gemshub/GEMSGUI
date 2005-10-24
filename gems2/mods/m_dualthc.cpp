@@ -61,21 +61,21 @@ void TDualTh::Analyse( )
   Calc_gmix_n( dtp->PsMode, dtp->PsSt );   // Retrieving table with mixing energies
   if( dtp->PsMode == DT_MODE_M || dtp->PsMode == DT_MODE_A )
   {
+     // Activity coefficients were calculated from Calc_gmix_n !!
      Calc_muo_n( dtp->PsSt );  // Estimation of standard Gibbs energies
   }
   if( dtp->PsMode == DT_MODE_G )
   {
      Calc_gam_n( dtp->PsSt );  // Estimation of int. parameters and activity coeffs
-     Calc_act_n( dtp->PsSt );  // Calculation of activities
+//     Calc_act_n( dtp->PsSt );  // Calculation of activities
      // here call regression part, if necessary
      if( dtp->PsLSF != DT_LSF_N )
-      RegressionLSM( 0 );
-     //  SD 0ct 2005
-    if( dtp->PvGam == S_ON )
-     CalcEquat();
+        RegressionLSM( 0 );
+   // Built-in forward calculations of activity coefficients
+     Calc_gam_forward( dtp->PvGam, dtp->PsIPf, 'F' ); // take fitted params
   }
-  if( dtp->PsMode == DT_MODE_X )
-     Calc_act_n( dtp->PsSt );
+//  if( dtp->PsMode == DT_MODE_X ) // Only calculation of activities
+  Calc_act_n( dtp->PsSt );
 }
 
 //-------------------------------------------------------------------------------
@@ -237,7 +237,7 @@ void TDualTh::build_mu_n()
   }
 }
 
-// Translate, analyze and unpack dual-thermo math script for mole fractions
+// Translate, analyze and unpack dual-thermo math script for activity coeffs
 void TDualTh::dt_text_analyze()
 {
   TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
@@ -276,13 +276,13 @@ void TDualTh::dt_text_analyze()
         vfMessage(window(), xcpt.title, xcpt.mess);
         TDualTh::pm->CheckEqText(  erscan,
   "E94MSTran: Error in translation of math script \n"
-  "           for activity coeffs of non-basis DCs: " );
+  "           for activity coefficients of non-basis DCs: " );
         Error(  GetName() , xcpt.mess.c_str() );
     }
 }
 
 
-//Recalc rpn structure
+//Recalc rpn structure of script for calculation of activity coefficients
 void
 TDualTh::CalcEquat()
 {
@@ -624,7 +624,6 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
 
 }
 
-
 int
 TDualTh::RegressionLSM( int Mode )  // task or minimization
 {
@@ -701,7 +700,7 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
      task_svd.CalcMin( dtp->sdpar ); 
  }
 
- // putting the resalts
+ // storing the results
  dtp->xi2 = data.getXi2();
  for( ii=0; ii<dtp->nP; ii++ )
  {  dtp->avsd_w[ii] = dtp->par[ii];  // mean data
@@ -716,7 +715,7 @@ void
 TDualTh::Calc_muo_n( char eState )
 { // calculate muo_n DualTh
  short ii, j;
- double muo, gam/*=1.*/, Dsur, RT/* = 2479.*/, P/*=1.*/, lnFmol=4.016535;
+ double muo, mua, lnGam/*=1.*/, Dsur, RT/* = 2479.*/, P/*=1.*/, lnFmol=4.016535;
 
 // dt_initiate( false );
   Dsur = dtp->WmCb - 1.;
@@ -731,10 +730,11 @@ TDualTh::Calc_muo_n( char eState )
     for( j=0; j<dtp->nM; j++)
     {
        dtp->jm = j;
-       gam = dtp->gam_n[ii*dtp->nM+j];
+       lnGam = log( dtp->gam_n[ii*dtp->nM+j] );
        if( dtp->PsMode == DT_MODE_A)
-           gam = 1.0;
+           lnGam = 0;
        if( eState == DT_STATE_S )
+       {
         switch(dtp->typ_n[j])  // Stoich. saturation
         {
           default:
@@ -743,33 +743,39 @@ TDualTh::Calc_muo_n( char eState )
               break;
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
-          case DC_SOL_MAJOR: // Check this calculation !!!!
-              muo = dtp->mu_b[ii*dtp->nM+j]
-                  - RT*(gam + log(dtp->chi[ii*dtp->nM+j]));
+          case DC_SOL_MAJOR: // Check this calculation !!!!  Fixed 23.10.05 KD
+              muo = dtp->gmx_n[ii][4] -dtp->gmx_n[ii][2]
+                   -dtp->gmx_n[ii][4] +dtp->mu_o[ii*dtp->nM+j];
+              muo /= dtp->chi[ii*dtp->nM+j];
               break;
         }
+        mua = muo + RT * lnGam;  // to be improved
+       }
        else  // Equilibrium
         switch(dtp->typ_n[j])
         {
           case DC_SCP_CONDEN:
-              muo = dtp->mu_b[ii*dtp->nM+j];
+              muo = mua = dtp->mu_b[ii*dtp->nM+j];
               break;
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR:
               muo = dtp->mu_b[ii*dtp->nM+j]
-                    - RT*(gam + log(dtp->chi[ii*dtp->nM+j]));
+                    - RT*( lnGam + log(dtp->chi[ii*dtp->nM+j]));
+              mua = muo + RT*lnGam;
               break;
           case DC_AQ_ELECTRON:
           case DC_AQ_PROTON:
           case DC_AQ_SPECIES:
-              muo = dtp->mu_b[ii*dtp->nM+j] + RT * ( Dsur + lnFmol - gam
+              muo = dtp->mu_b[ii*dtp->nM+j] + RT * ( Dsur + lnFmol - lnGam
                     - log(dtp->chi[ii*dtp->nM+j]));
+              mua = muo + RT*lnGam;
               break;
           case DC_AQ_SOLVENT:
           case DC_AQ_SOLVCOM:
-              muo = dtp->mu_b[ii*dtp->nM+j] + RT * ( Dsur - 1. + 1. / ( 1.+Dsur ) - gam
-                    - log(dtp->chi[ii*dtp->nM+j]));
+              muo = dtp->mu_b[ii*dtp->nM+j] + RT * ( Dsur - 1. + 1. / ( 1.+Dsur )
+                    - lnGam - log(dtp->chi[ii*dtp->nM+j]));
+              mua = muo;
               break;
           case DC_GAS_COMP:
           case DC_GAS_H2O:
@@ -777,8 +783,8 @@ TDualTh::Calc_muo_n( char eState )
           case DC_GAS_H2:
           case DC_GAS_N2:
               muo = dtp->mu_b[ii*dtp->nM+j]
-                    - RT*(gam + log(dtp->chi[ii*dtp->nM+j])
-                    - log(P) );
+                    - RT*(lnGam + log(dtp->chi[ii*dtp->nM+j])  - log(P) );
+              mua = muo + RT*lnGam;
               break;
 /*
 // adsorption:
@@ -806,7 +812,7 @@ TDualTh::Calc_muo_n( char eState )
             break; // Coulombic term to be considered !!!!!!!!!!
         case DC_PEL_CARRIER:
         case DC_SUR_MINAL:
-        case DC_SUR_CARRIER: // sorbent 
+        case DC_SUR_CARRIER: // sorbent
             DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                            + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
@@ -815,9 +821,11 @@ TDualTh::Calc_muo_n( char eState )
          default:
             break; /* error in DC class code */
         }
+       dtp->mu_a[ii*dtp->nM+j] = mua;    // dtp->mu_o[ii*dtp->nM+j] = muo;
        dtp->mu_o[ii*dtp->nM+j] = muo;
     }
   }
+  Calc_mua_n_stat( eState );
   Calc_muo_n_stat( eState );
 }
 
@@ -875,6 +883,19 @@ TDualTh::Calc_muo_n_stat( char /*eState*/ )
    }
 }
 
+// Calculation of statistics over mua_n columns
+void
+TDualTh::Calc_mua_n_stat( char /*eState*/ )
+{
+   short k;
+   for( k=0; k< dtp->nM; k++ )
+   {
+      dtp->avsd_a[k] = ColumnAverage( dtp->mu_a, dtp->nQ, dtp->nM, k  );
+      dtp->avsd_a[k+dtp->nM] = ColumnStdev( dtp->mu_a, dtp->avsd_a[k], dtp->nQ,
+                     dtp->nM, k  );
+   }
+}
+
 // Calculation of mixing energies (not partial)
 void
 TDualTh::Calc_gmix_n( char ModE, char StP ) // calculation of mixing energies
@@ -884,6 +905,17 @@ TDualTh::Calc_gmix_n( char ModE, char StP ) // calculation of mixing energies
 
   if( !( ModE == DT_MODE_G || ModE == DT_MODE_M || ModE == DT_MODE_A ) )
      return;
+
+  if( ModE == DT_MODE_M )
+  {                    //  Forward calculation of activity coefficients
+     Calc_gam_forward( dtp->PvGam, dtp->PsIPf, 'A' );  // take apriori params
+  }
+  else if( ModE == DT_MODE_A )
+  {                   //  Clearing gamma values?
+     for(ii=0; ii<dtp->nQ; ii++)
+       for( j=0; j<dtp->nM; j++)
+          dtp->gam_n[ii*dtp->nM+j] = 1.0;
+  }
   for( ii=0; ii<dtp->nQ; ii++)
   {
     dtp->q = ii;
@@ -905,7 +937,7 @@ TDualTh::Calc_gmix_n( char ModE, char StP ) // calculation of mixing energies
        Gex = Gmix - Gid;     // excess Gibbs energy of mixing
     }
     else if( ModE == DT_MODE_M || ModE == DT_MODE_A )
-    {
+    {  // Calculation of g0 or g* values
        for( j=0; j<dtp->nM; j++)
        {  // Calculation of Gmix for q-th experiment
           chi = dtp->chi[ii*dtp->nM+j];  // mole fraction
@@ -919,9 +951,9 @@ TDualTh::Calc_gmix_n( char ModE, char StP ) // calculation of mixing energies
        Gmech = Gmixt - Gmix; // Gibbs energy of mechanical mixture
     }
     // putting results into gmx_n[nQ][5] table
-    dtp->gmx_n[ii][0] = Gex;      // excess Gibbs energy of mixing
-    dtp->gmx_n[ii][1] = Gid;      // Gibbs energy of Raoult ideal mixing
-    dtp->gmx_n[ii][2] = Gmix;     // total Gibbs energy of mixing
+    dtp->gmx_n[ii][0] = fabs(Gex)<1e-6? 0.: Gex;   // excess Gibbs energy of mixing
+    dtp->gmx_n[ii][1] = fabs(Gid)<1e-6? 0.: Gid;   // Gibbs energy of Raoult ideal mixing
+    dtp->gmx_n[ii][2] = fabs(Gmix)<1e-6?0.: Gmix; // total Gibbs energy of mixing
     dtp->gmx_n[ii][3] = Gmech;    // Gibbs energy of mechanical mixture
     dtp->gmx_n[ii][4] = Gmixt;    // integral Gibbs energy of the mixture
   }  // end ii
@@ -1190,13 +1222,12 @@ TDualTh::Calc_gam_n( char eState )
   //
 }
 
-
 void
 TDualTh::Calc_act_n( char eState )
-{ // calculate activity in DualTh variant
+{ // calculate DualTh activities
 
  short ii, j;
- double muoi, activ = 1., Dsur, RT, P, lnFmol=4.016535;
+ double muoi, lna = 1., Dsur, RT, P, lnP, lnFmol=4.016535;
 
 // dt_initiate( false );
   Dsur = dtp->WmCb - 1.;
@@ -1207,33 +1238,36 @@ TDualTh::Calc_act_n( char eState )
  {
     dtp->q = ii;
     get_RT_P( ii, RT, P );
+    lnP = log( P );
   // zero off a cell in mu_n
     for( j=0; j<dtp->nM; j++)
     {
        dtp->jm = j;
        muoi = dtp->mu_o[ii*dtp->nM+j];
        if( eState == DT_STATE_S )
-        switch(dtp->typ_n[j])  // Stoich. saturation - to be written !
+        switch(dtp->typ_n[j])  // Stoich. saturation - to be written
         {          // for now, the same calculation as at equilibrium
           default:
           case DC_SCP_CONDEN:
-                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT );
+                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT;
                     break;
                case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
-                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
-                            + Dsur + lnFmol);
+                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
+                            + Dsur + lnFmol;
                     break;
                case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
-                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
-                            + Dsur - 1. + 1. / ( 1.+Dsur ) );
+                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
+                            + Dsur - 1. + 1. / ( 1.+Dsur );
                     break;
                case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:
                case DC_GAS_H2: case DC_GAS_N2:
-                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT )
-                            * P; // This makes partial fugacity (in activity scale)
+                    lna = ( dtp->mu_b[ii*dtp->nM+j] - muoi )/RT
+                            + lnP; // This makes partial fugacity (in activity scale)
                     break;
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
-                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT );
+//                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT;
+               // Only direct calculation is possible in this case
+                    lna = log( dtp->chi[ii*dtp->nM+j] * dtp->gam_n[ii*dtp->nM+j] );
                     break;
         } // case
        else
@@ -1241,23 +1275,23 @@ TDualTh::Calc_act_n( char eState )
         {
           default:
           case DC_SCP_CONDEN: // actually, this is the saturation index
-                    activ = exp( (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT );
+                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT;
                     break;
                case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
-                    activ = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
-                            + Dsur + lnFmol);
+                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
+                            + Dsur + lnFmol;
                     break;
                case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
-                    activ = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
-                            + Dsur - 1. + 1. / ( 1.+Dsur ) );
+                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
+                            + Dsur - 1. + 1. / ( 1.+Dsur );
                     break;
                case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:
                case DC_GAS_H2: case DC_GAS_N2:
-                    activ = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT )
-                            * P; // Converts to activity scale
+                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT
+                            + lnP; // Converts to activity scale
                     break;
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
-                    activ = exp((dtp->mu_b[ii*dtp->nM+j] - muoi)/RT );
+                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT;
                     break;
 /*               case DC_SUR_GROUP:
                     DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
@@ -1272,16 +1306,254 @@ TDualTh::Calc_act_n( char eState )
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
                     break; // Coulombic term to be considered !!!!!!!!!!
-               case DC_PEL_CARRIER: case DC_SUR_MINAL: case DC_SUR_CARRIER: // sorbent 
+               case DC_PEL_CARRIER: case DC_SUR_MINAL: case DC_SUR_CARRIER: // sorbent
                     DsurT = MMC * pmp->Aalp[k] * pa.p.DNS*1.66054e-6;
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]
                        + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
                     break;
 */       } // case
 
-         dtp->act_n[ii*dtp->nM+j] = activ;
+         dtp->act_n[ii*dtp->nM+j] = exp( lna );
+         if( dtp->PsMode == DT_MODE_G )
+         {  // Computing g* values
+            dtp->mu_a[ii*dtp->nM+j] = dtp->mu_o[ii*dtp->nM+j]
+               + RT * log( dtp->gam_n[ii*dtp->nM+j] );
+         }
       } // j
    }  // ii
+   if( dtp->PsMode == DT_MODE_G )
+     Calc_mua_n_stat( eState );   // Adding statistics 
+}
+
+
+// --------------------------------------------------------------------------
+
+// Forward calculation of activity coefficients of end members
+void
+TDualTh::Calc_gam_forward( char PvGam, char PsIPf, char WhereIPar )
+{
+   double alp[40], chi[20], gam[20], ScaleF = 1., RT, P;
+   short q, j, k, RetC;
+
+   if( PvGam != S_OFF )
+   {  // Equations set in the script
+      CalcEquat();
+      return;
+   }
+   for( k=0; k<dtp->nP; k++ )
+   {                             // Getting parameters (re-scaling, if needed)
+       if( WhereIPar == 'F' )    // Fitted parameters
+           alp[k] = dtp->Wa[k];
+       else alp[k] = dtp->Wa_ap[k]; // A priori parameters
+   }
+
+   for( q=0; q<dtp->nQ; q++ )
+   {
+     if(PsIPf != DT_IPF_I)
+     {
+       get_RT_P( q, RT, P );  // Getting value of RT
+       ScaleF = 1.;
+       switch( dtp->PsIPu )  // Analyzing units and setting up the the scale factor
+       {                     // such that parameters are dimensionless
+          case DT_IPU_K:   ScaleF *= 1000.;
+          case DT_IPU_J:   ScaleF /= RT;
+          case DT_IPU_N:
+          default:         break;
+       }
+
+       for( j=0; j<dtp->nM; j++ )  // Getting mole fractions
+         chi[j] = dtp->chi[dtp->nM*q+j];
+
+       switch(PsIPf)
+       {
+         case DT_IPF_R:  // Redlich-Kister
+             RetC = Guggenheim( gam, chi, alp, dtp->nM, dtp->nP, ScaleF );
+                          break;
+         case DT_IPF_G:  // Guggenheim
+             RetC = Guggenheim( gam, chi, alp, dtp->nM, dtp->nP, ScaleF );
+                          break;
+         case DT_IPF_T:  // Thompson-Waldbaum
+             RetC = TWMargules( gam, chi, alp, dtp->nM, dtp->nP, ScaleF );
+                          break;
+         case DT_IPF_M:  // Margules original
+             RetC = MargulesO( gam, chi, alp, dtp->nM, dtp->nP, ScaleF );
+                          break;
+         case DT_IPF_V:  // Van Laar
+             RetC = VanLaar( gam, chi, alp, dtp->nM, dtp->nP, ScaleF );
+                          break;
+         case DT_IPF_B:  // Bale-Pelton: Solvent has index 0
+             RetC = BalePelton( gam, chi, alp, dtp->nM, dtp->nP, ScaleF, 0 );
+                          break;
+         case DT_IPF_D:  // Darken's Quadratic
+             RetC = DarkenQuad( gam, chi, alp, dtp->nM, dtp->nP, ScaleF, 0 );
+                          break;
+         default:        break; // Other
+       }
+       if( RetC )
+       {  // Error messages
+         ;
+       }
+       for( j=0; j<dtp->nM; j++ )  // Getting back activity coeffs
+          dtp->gam_n[dtp->nM*q+j] = ROUND_EXP( gam[j], 5 );
+     }
+     else  // ideal Raoult model
+     {
+       for( j=0; j<dtp->nM; j++ )  // Setting unity activity coeffs 
+          dtp->gam_n[dtp->nM*q+j] = 1.0;
+     }
+   } // end q
+   return;
+}
+
+// Forward calculation of end-member activity coefficients in various models
+// Uses mole fractions x[] and interaction coefficients alp. The latter must be
+// ordered corresponding to mole fractions x[], and will be first converted to
+// dimensionless scale using cFactor. Then Gam is calculated whenever possible.
+// Returns 0 if success and non-zero error code if error has occurred).
+
+// Guggenheim (scaleF = 1/RT) and Redlich-Kister ( scaleF = 1) models
+short
+TDualTh::Guggenheim( double Gam[], const double x[], const double alp[],
+         const short nM, const short nP, const double scaleF )
+{
+    double a0, a1, a2;
+    double gam0, gam1, lnGam0, lnGam1;
+    short i;
+
+    if( nM != 2 || nP > 3 ) // Binary only and up to 3 parameters
+       return -1;  // wrong dimensions
+
+    a0 = alp[0]*scaleF;
+    a1 = alp[1]*scaleF;
+    a2 = alp[2]*scaleF;
+
+    lnGam0 = x[1]*x[1]*(a0+a1*(3.*x[0]-x[1])+a2*(x[0]-x[1])*(5.*x[0]-x[1]));
+    lnGam1 = x[0]*x[0]*(a0-a1*(3.*x[1]-x[0])+a2*(x[1]-x[0])*(5.*x[1]-x[0]));
+
+    lnGam0 = (a0+3.*a1+5.*a2)*x[1]*x[1] - 4.*(a1+4.*a2)*x[1]*x[1]*x[1]
+                   + 12.*a2*x[1]*x[1]*x[1]*x[1];
+    lnGam1 = (a0-3.*a1+5.*a2)*x[0]*x[0] + 4.*(a1-4.*a2)*x[0]*x[0]*x[0]
+                   + 12.*a2*x[0]*x[0]*x[0]*x[0];
+
+    gam0 = exp( lnGam0 );
+    gam1 = exp( lnGam1 );
+    Gam[0] = gam0;
+    Gam[1] = gam1;
+    return 0;
+}
+
+// Margules - scaleF must normalize interaction parameters
+short
+TDualTh::TWMargules( double Gam[], const double x[], const double W[],
+         const short nM, const short nP, const double scaleF )
+{
+    double w[10];
+    double gam[4], lnGam[4];
+    short i, j;
+
+    if( nM > 4 || nP > 10 ) // up to ternary regular
+       return -1;  // wrong dimensions
+    // symmetric for multicomponent; asymmetric for binary
+
+    // Binary symmetric or asymmetric case
+    if( nM == 2 && nP == 2 )
+    {
+       for( i=0; i<2; i++ ) // cleanup and coeff conversion
+         w[i] = i<nP? W[i]*scaleF: 0.0;
+       lnGam[0] = (w[0] + 2.*(w[1]-w[0])*x[0])*x[1]*x[1];
+       lnGam[1] = (w[1] + 2.*(w[0]-w[1])*x[1])*x[0]*x[0];
+       Gam[0] = exp( lnGam[0] );
+       Gam[1] = exp( lnGam[1] );
+       return 0;
+    }
+
+    // Symmetric up to quaternary, only with binary IP
+    for( i=0; i<10; i++ ) // cleanup and coeff conversion
+       w[i] = i<nP? W[i]*scaleF: 0.0;
+
+    if( nM == 3 && nP >= 3 )  // Anderson&Crerar93 p.395
+    {              // w12 = w[0]; w23 = w[1]; w13 = w[2]
+       lnGam[0] = w[0]*x[1]*x[1]+ w[2]*x[2]*x[2]+ (w[0]+w[2]-w[1])*x[1]*x[2];
+       lnGam[1] = w[1]*x[2]*x[2]+ w[0]*x[0]*x[0]+ (w[0]+w[1]-w[2])*x[2]*x[0];
+       lnGam[2] = w[1]*x[1]*x[1]+ w[2]*x[0]*x[0]+ (w[1]+w[2]-w[0])*x[0]*x[1];
+       Gam[0] = exp( lnGam[0] );
+       Gam[1] = exp( lnGam[1] );
+       Gam[2] = exp( lnGam[2] );
+    }
+
+    if( nM == 4 && nP >= 6 )  // Anderson&Crerar93 p.395
+    {  // w12 = ac[0]; w13 = ac[1]; w14 = ac[2]; w23 = ac[3]; w24 = ac[4]; w34 = ac[5]
+        lnGam[0] = w[0]*x[1]*x[1] + w[1]*x[2]*x[2] + w[2]*x[3]*x[3] +
+           (w[0]+w[1]-w[3])*x[1]*x[2] + (w[0]+w[2]-w[4])*x[1]*x[3]
+              + (w[1]+w[2]-w[5])*x[2]*x[3];
+        lnGam[1] = w[3]*x[2]*x[2] + w[4]*x[3]*x[3] + w[0]*x[0]*x[0] +
+           (w[0]+w[1]-w[3])*x[1]*x[2] + (w[0]+w[2]-w[4])*x[1]*x[3]
+              + (w[1]+w[2]-w[5])*x[2]*x[3];
+        lnGam[2] = w[0]*x[1]*x[1] + w[1]*x[2]*x[2] + w[2]*x[3]*x[3] +
+           (w[0]+w[1]-w[3])*x[1]*x[2] + (w[0]+w[2]-w[4])*x[1]*x[3]
+              + (w[1]+w[2]-w[5])*x[2]*x[3];
+        lnGam[3] = w[0]*x[1]*x[1] + w[1]*x[2]*x[2] + w[2]*x[3]*x[3] +
+           (w[0]+w[1]-w[3])*x[1]*x[2] + (w[0]+w[2]-w[4])*x[1]*x[3]
+              + (w[1]+w[2]-w[5])*x[2]*x[3];
+ // check permutation
+       Gam[0] = exp( lnGam[0] );
+       Gam[1] = exp( lnGam[1] );
+       Gam[2] = exp( lnGam[2] );
+       Gam[3] = exp( lnGam[3] );
+    }
+    return 0;
+}
+
+// Original Margules binary model - to be implemented 
+short
+TDualTh::MargulesO( double Gam[], const double x[], const double W[],
+         const short nM, const short nP, const double scaleF )
+{
+    short j;
+    // binary only - yet to be written
+    for( j=0; j=nM; j++ )
+      Gam[j] = 1.;
+
+    return 1;
+}
+
+// Van Laar multicomponent formalism - to be implemented
+short
+TDualTh::VanLaar( double Gam[], const double x[], const double alp[],
+         const short nM, const short nP, const double scaleF )
+{
+    short j;
+    // binary only - yet to be written
+    for( j=0; j=nM; j++ )
+      Gam[j] = 1.;
+
+    return 1;
+}
+
+// Bale & Pelton 1990 Dilute SS Formalism - to be implemented
+short
+TDualTh::BalePelton( double Gam[], const double x[], const double eps[],
+         const short nM, const short nP, const double scaleF, const short SolvX )
+{
+    short j;
+    // binary ???  multicomp. with e' only
+    for( j=0; j=nM; j++ )
+      Gam[j] = 1.;
+
+    return 1;
+}
+
+// Darken's quadratic formalism - to be implemented
+short
+TDualTh::DarkenQuad( double Gam[], const double x[], const double eps[],
+         const short nM, const short nP, const double scaleF, const short SolvX )
+{
+    short j;
+    // binary ???  only
+    for( j=0; j=nM; j++ )
+      Gam[j] = 1.;
+
+    return 1;
 }
 
 // ------------------- End of m_dualthc.cpp --------------------------
