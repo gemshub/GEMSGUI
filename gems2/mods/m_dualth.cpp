@@ -877,9 +877,9 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
               dtp->CIn[j*dtp->Nb+jj] = 0.;
           }
           if( dtp->PvICb == S_ON )
-              dtp->CIclb[jj] = QUAN_GRAM;
+              dtp->CIclb[jj] = QUAN_MOL;
           if( dtp->PvICn == S_ON )
-              dtp->CIcln[jj] = QUAN_GRAM;
+              dtp->CIcln[jj] = QUAN_MOL;
 
           for( j =0; j<dtp->nM; j++ )
             dtp->An[j*dtp->Nb+jj] = 0.;
@@ -1003,8 +1003,8 @@ void TDualTh::dt_initiate( bool mode )
 
     for( ii=0; ii<dtp->Nb; ii++)
     {
-     dtp->CIclb[ii] = 'M';
-     dtp->CIcln[ii] = 'M';
+     dtp->CIclb[ii] = QUAN_MOL;
+     dtp->CIcln[ii] = QUAN_MOL;
     }
 
     for( ii=0; ii<dtp->nQ; ii++)
@@ -1028,9 +1028,9 @@ void TDualTh::dt_initiate( bool mode )
 
     for( ii=0; ii<dtp->La_b; ii++)
     {
-     dtp->AUclb[ii] = 'M';
+     dtp->AUclb[ii] = QUAN_MOL;
      strncpy( dtp->for_b[ii], "H2O", 4 );
-     dtp->AUcln[ii] = 'M';
+     dtp->AUcln[ii] = QUAN_MOL;
      strncpy( dtp->for_n[ii], "H2O", 4 );
     }
 
