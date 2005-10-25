@@ -854,6 +854,8 @@ void TDualTh::InsertChanges( TIArray<CompItem>& aIComp )
     // alloc new memory
      dtp->Nb = TProfil::pm->mup->N;
      dyn_new();
+     dtp->gStat = GS_INDEF;
+     dtp->aStat = AS_INDEF;
 
 //***************************************************
     for( ii=0; ii< dtp->Nb; ii++ )
