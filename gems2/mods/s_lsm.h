@@ -34,8 +34,9 @@
 
 #ifdef IPMGEMPLUGIN
   #include <stdio.h>
-  #include <fstream.h>
+  #include <fstream>
   using namespace std;
+  #include <math.h>
 #else
  #include "v_ipnc.h"
 #endif
@@ -104,11 +105,11 @@ public:
       { return n_par;  }
     short getInfo() const
       { return info;  }
-    double* getX(i) const
+    double* getX(int i) const
       { return tdat+(i*tm_d);  }
-    double getY(i) const
+    double getY(int i) const
       { return ydat[i];  }
-    double getWdat(i) const
+    double getWdat(int i) const
       { return wdat[i];  }
     double getXi2() const
       { return xi2;  }
@@ -129,11 +130,11 @@ enum fit_func_types {
               MATHSCRIPT_FIT = '1',   // using mathscript
 // for Dualth mode
               FUN_IPF_R = 'R',   // Redlich-Kister
-              FUN_IPF_G = 'G',   // Guggenheim
-              FUN_IPF_T = 'T',   // Thompson-Waldbaum
-              FUN_IPF_M = 'M',   // Margules
-              FUN_IPF_V = 'V',   // Van Laar
-              FUN_IPF_B = 'B',   // Bale-Pelton dilute formalism
+              FUN_IPF_G = 'G',   // Guggenheim
+              FUN_IPF_T = 'T',   // Thompson-Waldbaum
+              FUN_IPF_M = 'M',   // Margules
+              FUN_IPF_V = 'V',   // Van Laar
+              FUN_IPF_B = 'B',   // Bale-Pelton dilute formalism
                     };
 
 enum evl_func_types {
@@ -143,8 +144,8 @@ enum evl_func_types {
 
 enum limits_types {
     /* type of lmits */
-    LM_NO_LIM = 0, LM_LOWER_LIM =1, LM_UPPER_LIM = 2, LM_BOTH_LIM =3,
-                    };
+    LM_NO_LIM = 0, LM_LOWER_LIM =1, LM_UPPER_LIM = 2, LM_BOTH_LIM =3,
+                    };
 
 // parameters for calling the high-level interface lmfit
 //   ( lmfit.c provides lm_initialize_control which sets default values ):
@@ -249,12 +250,12 @@ typedef double fd_type;
 #define u(i,j) (U[(i)*n+(j)])
 #define v(i,j) (V[(i)*n+(j)])
 #define cvm(i,j) (CVM[(i)*n+(j)])
-
-#define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
-#define TOL 1.0e-12    // Default value for single precision and variables
-                      // scaled to order unity.
-
-class TSVDcalc
+
+#define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
+#define TOL 1.0e-12    // Default value for single precision and variables
+                      // scaled to order unity.
+
+class TSVDcalc
 {
 
   TLMDataType *data;
@@ -285,13 +286,11 @@ void svdGetXmore0( int ii, fd_type *V, fd_type x[]);
 void svdGetX(fd_type *U, fd_type w[], fd_type *V, fd_type b[], fd_type x[]);
 fd_type pyt_hag(fd_type a, fd_type b);
 int svdGetUWV(fd_type *A, fd_type w[], fd_type *V);
-void svdMin(  fd_type a[],
-     fd_type *U, fd_type *V,  fd_type w[],  fd_type& chisq );
+void svdMin(  fd_type a1[], fd_type *U1, fd_type *V1,  fd_type w1[],  fd_type& chisq1 );
 void svdStat(fd_type *V, fd_type w[], fd_type *CVM);
 
 
 public:
-
     TSVDcalc( double *par, TLMDataType *aData);
     TSVDcalc( short M, short N, float *aA, double *ab, double *aX );
    ~TSVDcalc();
@@ -302,10 +301,6 @@ public:
 };
 
 inline
-double ROUND_EXP(double x, double ex )
-{
-    double dd = pow( 10, ex);
-    return double( int( (x)*dd+.5 ) ) / dd;
-}
+double ROUND_EXP(double x, int ex ){    double dd = pow( 10, ex);    return double( int( (x)*dd+.5 ) ) / dd;}
 
 #endif //_s_lmmin_h_

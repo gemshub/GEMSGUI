@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id:$
+// $ Id: $
 //
 // Implamentation of TLMDataType class
 //
@@ -28,14 +28,17 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 #ifndef IPMGEMPLUGIN
-  #include "v_object.h"
-  #include "v_mod.h"
+ #include "v_object.h"
+ #include "v_mod.h"
 #endif
 
+#include <math.h>
 #include "s_lsm.h"
 
-    TLMDataType::TLMDataType(   char afType, char aeType,
+
+TLMDataType::TLMDataType(   char afType, char aeType,
                    short am_dat,short atm_d, short an_par,
                    double *atdat, double *aydat,
                    double *acnst_y, double *awdat, // not nessassary data
@@ -68,9 +71,9 @@ TLMDataType::~TLMDataType()
     aObj[ o_lms_para ].SetPtr( NULL );
     aObj[ o_lms_para ].SetDim( 0, 1 );
    // free internal arrays
-//     aObj[ o_lms_delta ].Free();
-//    aObj[ o_lms_yfit  ].Free();
-//    aObj[ o_lms_paf ].Free();
+   //     aObj[ o_lms_delta ].Free();
+   //    aObj[ o_lms_yfit  ].Free();
+   //    aObj[ o_lms_paf ].Free();
    //     o_lms_jp, o_lms_kp, o_lms_itx
   }
 
@@ -127,7 +130,7 @@ void TLMDataType::test_sizes()
        printf( "Built in function is for 2 end members only and upto 6 parameters." );
 #endif;
           }
-                       break;
+            break;
      case FUN_IPF_T:
             if( tm_d != 2 &&  n_par != 2 )
           {
@@ -139,7 +142,7 @@ void TLMDataType::test_sizes()
        printf( "Built in function is for 2 end members and 2 parameters only."  );
 #endif;
            }
-                     break;
+            break;
      case MATHSCRIPT_FIT:   // using mathscript
 #ifdef IPMGEMPLUGIN
            info = -1;
@@ -149,9 +152,11 @@ void TLMDataType::test_sizes()
      case FUN_IPF_V:   // Van Laar
      case FUN_IPF_B:   // Bale-Pelton dilute formalism
 
+
      default:
                    break;
- }
+     }
+
 #ifndef IPMGEMPLUGIN
   if( fType == MATHSCRIPT_FIT || eType == MATHSCRIPT_EVL )
   {
@@ -201,6 +206,7 @@ double TLMDataType::function( int i, double* t, double* p )
      case FUN_IPF_V:   // Van Laar
      case FUN_IPF_B:   // Bale-Pelton dilute formalism
 
+
      default:
                    break;
  }
@@ -242,7 +248,6 @@ void TLMDataType::par_funct( int i, double* t, double* coef_p )
                    break;
  }
 }
-
 //--------------------------------------------------------
 //  evaluate functions
 /*
@@ -262,8 +267,8 @@ void TLMDataType::lm_evaluate_default( double* par, double* fvec )
  */
 {
     for (short i=0; i<m_dat; i++)
-            fvec[i] = (ydat[i] - function(i, getX(i), par))*sqrt(wdat[i]);
-    /* if <parameters drifted away> { info = -1; } */
+            fvec[i] = (ydat[i] - function(i, getX(i), par))*sqrt(wdat[i]);   
+ /* if <parameters drifted away> { info = -1; } */
 }
 
 //--------------------------------------------------------
@@ -284,7 +289,9 @@ double TLMDataType::Guggenheim( double *t, double* p )
   // test tm_d = 2
   double rez = 0;
   for( int r=0; r<n_par; r++)
-    rez += p[r] * pow( (t[0]-t[1]), r);
+  {  
+	  rez += p[r] * pow( (t[0]-t[1]), r);
+  }
   rez *= t[0]*t[1];
   return rez;
 }
@@ -313,7 +320,7 @@ void TLMDataType::parGuggenheim( double *t, double* p )
 {
   // test tm_d = 2
   for( int r=0; r<n_par; r++)
-    p[r]  = t[0]* t[1] * pow( (t[0]-t[1]), r);
+    p[r]  = t[0]* t[1] * pow( (t[0]-t[1]), (double)r);
 }
 
 // Thompson-Waldbaum
@@ -323,7 +330,6 @@ void TLMDataType::parThompsonWaldbaum( double *t, double* p )
   p[0] = t[0]*t[1]*t[1];
   p[1] = t[0]*t[1]*t[0];
 }
-
 
 #ifndef IPMGEMPLUGIN
 
@@ -350,15 +356,16 @@ void
     aObj[ o_lms_jp ].SetPtr( &ii );  // current line in x
     rpn.CalcEquat();
     for( int j=0; j<n_par; j++)
-     p[j] = aObj[ o_lms_paf ].Get( j, 0);
-}
+     p[j] = aObj[ o_lms_paf ].Get( j, 0);}
 
 
 void TLMDataType::rpn_evaluate( double* par, double* fvec )
-{
-    short ii;
+{    
+  short ii;
+
     aObj[ o_lms_para ].SetPtr( par );
-    aObj[ o_lms_jp ].SetPtr( &ii );  // current line in x
+    aObj[ o_lms_jp ].SetPtr( &ii );  // current line in X
+
 
     for ( ii=0; ii<m_dat; ii++)
     {
@@ -369,7 +376,6 @@ void TLMDataType::rpn_evaluate( double* par, double* fvec )
 
 
 #endif
-
 
 //------------------------------------------------------------------
 // for comparing only
@@ -387,7 +393,7 @@ void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
     double f, y, *t;
     int i, j;
 
- fstream f_out("fit_func.out", ios::app  );
+	fstream f_out("fit_func.out", ios::out|ios::app  );
  if( !f_out.good() )
    return;
 
@@ -428,7 +434,7 @@ void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
     f_out << endl;
     f_out << "cvm = " << endl;
     for( i=0; i<n_par; i++ )
-    {  for( j=0; j<n_par; j++ )
+    {  for( j=0; j<n_par; j++ )       
        f_out << CVM[i*n_par+j] << " ";
       f_out << endl;
     }
@@ -438,5 +444,5 @@ void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
 
  }
 
-//--------------------- End of s_lmeval.cpp ---------------------------
+//--------------------- End of s_lmeval.cpp --------------------------
 

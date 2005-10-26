@@ -1,6 +1,5 @@
 #include <math.h>
 #include "s_lsm.h"
-
 // new servise part
 static fd_type maxarg1, maxarg2;
 #define FMAX(a,b)(maxarg1=(a),maxarg2=(b),(maxarg1) > (maxarg2) ? (maxarg1) : (maxarg2))
@@ -13,6 +12,7 @@ static fd_type sqrarg;
 static int iminarg1,iminarg2;
 #define IMIN(a,b) (iminarg1=(a),iminarg2=(b),(iminarg1) < (iminarg2) ?\
 (iminarg1) : (iminarg2))
+
 
 TSVDcalc::TSVDcalc( double *aPar, TLMDataType *aData ):
    data(aData), par(aPar), A(0), b(0)
@@ -30,7 +30,7 @@ TSVDcalc::TSVDcalc( short M, short N, float *aA, double *ab, double *aX ):
    m(M), n(N), data(0), par(aX), A(aA), b(ab)
 {
     U = 0;
-    w = 0;
+    w = 0;    
     V = 0;
     CVM = 0;
     chisq = 0.0;
@@ -56,7 +56,7 @@ void TSVDcalc::CalcMin( double *sdpar )
   svdMin( par, U, V, w, chisq );
   data->xi2     /= (m-n);
 
- fstream f_out("fit_func.out", ios::app  );
+  fstream f_out("fit_func.out", ios::out|ios::app  );
  if( !f_out.good() )
    return;
  f_out << "V = " << endl;
@@ -91,7 +91,7 @@ int TSVDcalc::CalcSVD(  bool transp )
  if( !f_out.good() )
    return -1;
 
-  alloc_arrays();
+ alloc_arrays();
 
  if( transp )     // transpose input matrix  A
  {
@@ -178,7 +178,6 @@ void TSVDcalc::CalcB( bool transp, fd_type *bb )
 }
 
 
-
 // internal functions
 //--------------------------------------------------------------------------
 // *** allocate work space.
@@ -188,11 +187,10 @@ void TSVDcalc::alloc_arrays( )
     w = new fd_type[n];
     V = new fd_type[n*n];
     CVM = new fd_type[n*n];
-
     if (!U || !w || !V || !CVM )
             control.info = 9;
-
 }
+
 
 // *** free work space.
 void TSVDcalc::free_arrays( )
@@ -213,9 +211,10 @@ void TSVDcalc::svdGetXmore0( int ii, fd_type *V, fd_type x[])
  int j, jmin=0, jmax=0;
  fd_type a1, max=0, min=0;
 
- for (j=0;j<n;j++)
-   if( x[j] < 0 )
-      break;
+ for (j=0;j<n;j++)   
+   if( x[j] < 0 )      
+   break;
+
  if( j == n ) // all elements x more 0
    return;
 
@@ -261,8 +260,7 @@ void TSVDcalc::svdGetX(fd_type *U, fd_type w[], fd_type *V,
   tmp = new fd_type[n]; // vector(1,n);
 
  for (j=0;j<n;j++)   // Calculate UTB.
- {
-    s=0.0;
+ {    s=0.0;
     if (w[j])  // Nonzero result only if wj is nonzero.
     {  for (i=0;i<m;i++)
          s += u(i,j)*b[i];
@@ -305,6 +303,7 @@ int TSVDcalc::svdGetUWV(fd_type *A, fd_type w[], fd_type *V)
   rv1= new fd_type[n]; //vector(1,n);
   aa = new fd_type[m]; //vector(1,n);
   g=scale=anorm=0.0; // Householder reduction to bidiagonal form.
+
   for (i=0;i<n;i++)
   {
      l=i+1;
@@ -459,8 +458,7 @@ int TSVDcalc::svdGetUWV(fd_type *A, fd_type w[], fd_type *V)
                  a(j,nm)=y*c+z*s;
                 else aa[j]= y*c+z*s;  //SD
                a(j,i)=z*c-y*s;
-             }
-            }
+             }            }
           }
           z=w[k];
           if (l == k)   // Convergence.
@@ -551,6 +549,7 @@ int TSVDcalc::svdGetUWV(fd_type *A, fd_type w[], fd_type *V)
 
 // Chapter 15.676
 
+
 void TSVDcalc::svdMin(  fd_type a[],
      fd_type *U, fd_type *V,  fd_type w[],  fd_type& chisq )
 // Given a set of data points x[1..ndata],y[1..ndata] with individual coeff
@@ -607,6 +606,8 @@ void TSVDcalc::svdMin(  fd_type a[],
    delete[] b;
 }
 
+
+
 void TSVDcalc::svdStat(fd_type *V, fd_type w[], fd_type *CVM)
 // To evaluate the covariance matrix cvm[1..ma][1..ma]
 // of the fit for ma parameters obtained  by svdfit,
@@ -634,7 +635,6 @@ void TSVDcalc::svdStat(fd_type *V, fd_type w[], fd_type *CVM)
 
    delete[] wti; //  free_vector(wti,1,ma);
 }
-
 
 
 

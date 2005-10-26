@@ -126,7 +126,7 @@ uint AllowedPos(TObject& obj)
     case X_: 		//<unsigned long>
         return	10+1;
     case F_: 		//<float>
-        return	13+1;
+        return	13+1+2;  //SD 0ct 2005
     case D_: 		//<double>
         return	32+1;      // 32 chars for 'double'???
     case A_: 		//<char>

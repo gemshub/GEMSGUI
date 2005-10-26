@@ -15,6 +15,7 @@
 
 
 #include <stdlib.h>
+#include <limits.h>
 #include <math.h>
 #include "s_lsm.h"
 
@@ -1523,7 +1524,7 @@ int
      }
      idx[j]=maxi;
      if(a[j*m+j]==0.0)
-       a[j*m+j]=DBL_EPSILON;
+       a[j*m+j]=2.22 *1e-16; // DBL_EPSILON;
      if(j!=m-1)
      {
         tmp=1.0/(a[j*m+j]);
@@ -1580,7 +1581,7 @@ int
   for(i=0; i<m*m; i++)
   {  // C[i] *= sumsq;
      tmp = sqrt(fabs(C[i]));
-     C[i] = SIGN(tmp, C[i]);
+     C[i] = SIGN(tmp, C[i]);
   }
   return rnk;
 }

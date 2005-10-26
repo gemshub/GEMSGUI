@@ -75,7 +75,7 @@ void TDualTh::Analyse( )
      Calc_gam_forward( dtp->PvGam, dtp->PsIPf, 'F' ); // take fitted params
   }
 //  if( dtp->PsMode == DT_MODE_X ) // Only calculation of activities
-  Calc_act_n( dtp->PsSt );
+//  Calc_act_n( dtp->PsSt );
 }
 
 //-------------------------------------------------------------------------------

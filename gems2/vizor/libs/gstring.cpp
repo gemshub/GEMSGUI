@@ -255,7 +255,7 @@ gstring::substr(size_t pos, size_t len) const
 gstring
 gstring::replace(const char* old_part, const char* new_part)
 {
-    size_t pos = rfind( old_part );
+    size_t pos = find( old_part ); //rfind( old_part );
     if( pos == npos )
       return *this;
 
