@@ -838,16 +838,20 @@ NewSystemDialog::CmScript()
 
 void NewSystemDialog::loadList2()
 {
+//   MULTI* pData = TProfil::pm->pmp;
 
    ListView2->clear();
    item2 = new QListViewItem( ListView2, tr( "Equilibrium" ) );
    QListViewItem * phase;
    QListViewItem * elem;
-   short *l1_    = (short *)aObj[ o_wi_l1 ].GetPtr();
-   vstr buf(20);
+   short *l1_     = (short *)aObj[ o_wi_l1 ].GetPtr();
+   double *Y_la_  = (double *)aObj[ o_wd_yla ].GetPtr();
+   double *lnGam_ = (double *)aObj[ o_wo_lngam ].GetPtr();
+   double *Wx_ = (double *)aObj[ o_wo_wx ].GetPtr();
+   double *Ym_ = (double *)aObj[o_wd_ym ].GetPtr();
+   vstr buf(30), buf1(30), buf2(30);
    int jj, je;
     jj = je = aObj[o_wd_sm].GetN()-1;
-
 
    for( int ii=aObj[o_wd_sf].GetN()-1; ii>=0 ; ii--)
    {
@@ -859,16 +863,26 @@ void NewSystemDialog::loadList2()
      aObj[o_wi_phc].GetStringEmpty(ii).c_str(),
      aObj[o_w_xf].GetStringEmpty(ii).c_str() );
     je = je - l1_[ii];
-        for( ; jj>je ; jj--)
+       for( ; jj>je ; jj--)
+       {
+         sprintf( buf, " %g ", 0. );
+         if( Y_la_ )
+           if( Y_la_[jj] > -150. && Y_la_[jj] < 150. )
+             sprintf( buf, " %g ", exp( Y_la_[jj]/0.434294481 ) );
+         sprintf( buf1, " %g ", 0. );
+         if( lnGam_ )
+           if( lnGam_[jj] > -200. && lnGam_[jj] < 200. )
+              sprintf( buf1, " %g ", exp( lnGam_[jj]) );
+         sprintf( buf2, " %g ", 0. );
          switch( aObj[o_wi_dcc].GetStringEmpty(jj)[0])
          {
            case DC_SCP_CONDEN:
-           case DC_AQ_SOLVENT: /* mol fractions in solvent */
+           case DC_AQ_SOLVENT:  /* mol fractions in solvent */
            case DC_AQ_SOLVCOM:
            case DC_GAS_COMP:
            case DC_GAS_H2O:
-           case DC_GAS_CO2:   /* gases */
-           case DC_GAS_H2:    /* volume */
+           case DC_GAS_CO2:     /* gases */
+           case DC_GAS_H2:      /* volume */
            case DC_GAS_N2:
            case DC_SOL_IDEAL:
            case DC_SOL_MINOR:   /* volume */
@@ -876,24 +890,26 @@ void NewSystemDialog::loadList2()
            case DC_PEL_CARRIER:
            case DC_SUR_MINAL:
            case DC_SUR_CARRIER: /* sorbent */
-             elem = new QListViewItem( phase,
-                aObj[o_wd_sm].GetStringEmpty(jj).c_str()," ",
-                aObj[o_wi_dcc].GetStringEmpty(jj).c_str(),
-                aObj[o_w_x].GetStringEmpty(jj).c_str(),
-                aObj[o_wd_yla].GetStringEmpty(jj).c_str(),
-                aObj[o_wo_wx].GetStringEmpty(jj).c_str(),
-                aObj[o_wo_lngam].GetStringEmpty(jj).c_str() );
-            break;
-        default:
-             elem = new QListViewItem( phase,
-                aObj[o_wd_sm].GetStringEmpty(jj).c_str()," ",
-                aObj[o_wi_dcc].GetStringEmpty(jj).c_str(),
-                aObj[o_w_x].GetStringEmpty(jj).c_str(),
-                aObj[o_wd_yla].GetStringEmpty(jj).c_str(),
-                aObj[o_wd_ym].GetStringEmpty(jj).c_str(),
-                aObj[o_wo_lngam].GetStringEmpty(jj).c_str() );
-            break; /* error in DC class code */
+                if( Wx_ )
+                   sprintf( buf2, " %g ", Wx_[jj] );  // mole fraction
+                break;
+        default: // molality
+                if( Ym_ )
+                   sprintf( buf2, " %g ", Ym_[jj] );
+                break; /* error in DC class code */
         }
+        elem = new QListViewItem( phase,
+            aObj[o_wd_sm].GetStringEmpty(jj).c_str()," ",
+            aObj[o_wi_dcc].GetStringEmpty(jj).c_str(),
+            aObj[o_w_x].GetStringEmpty(jj).c_str(),
+            buf.p,
+//                aObj[o_wd_yla].GetStringEmpty(jj).c_str(),
+            buf2.p,
+//             aObj[o_wo_wx].GetStringEmpty(jj).c_str(),
+            buf1.p );
+//                aObj[o_wo_lngam].GetStringEmpty(jj).c_str() );
+
+      }
     }
     item2->setOpen(true);
     ListView2->update();

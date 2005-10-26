@@ -348,7 +348,7 @@
                         </column>
                         <column>
                             <property name="text">
-                                <string>x  (moles)</string>
+                                <string>Amount x (mol)</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -359,7 +359,7 @@
                         </column>
                         <column>
                             <property name="text">
-                                <string>log(activity)</string>
+                                <string>Activity (DualTh)</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -381,7 +381,7 @@
                         </column>
                         <column>
                             <property name="text">
-                                <string>ln(gamma)</string>
+                                <string>Activity coeff.</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>

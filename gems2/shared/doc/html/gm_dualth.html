@@ -36,7 +36,7 @@ Warnings and error messages</a></font></p>
   <dl>
     <dt><br>
     </dt>
-    <dt> <a name="" dtpvfl_0=""></a><big><b><big><tt>dtPvfl[0]</tt></big></b></big>
+    <dt> <big><b><big><tt><a name="dtPvfl_0"></a>dtPvfl[0]</tt></big></b></big>
 Units of
 energy
 { j; J c C N reserved }</dt>
@@ -182,21 +182,21 @@ SysEq records to data base? { + - }</dt>
     <dd><br>
     </dd>
     <dt> <a name="dtPsFl_5"></a><big><b><big><tt>dtPsFl[5]</tt></big></b></big>
-Reserved</dt>
+Interaction parameter formalism code (I G R T M V B O)</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
     <dd><br>
     </dd>
     <dt> <a name="dtPsFl_6"></a><big><b><big><tt>dtPsFl[6]</tt></big></b></big>
-Reserved</dt>
+Interaction parameter units code (J K N )</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
     <dd><br>
     </dd>
     <dt> <a name="dtPsFl_7"></a><big><b><big><tt>dtPsFl[7]</tt></big></b></big>
-Reserved</dt>
+Control flag for least-square param. fitting ( N L S B C )</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
@@ -239,9 +239,7 @@ references to data sources</dt>
     <dd><br>
     </dd>
     <dt> <a name="dtSize_4"></a><big><b><big><tt>dtSize[4]</tt></big></b></big>
-Input
-number of
-elements in the math script work arrays qpn per non-basis DC</dt>
+Reserved</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
@@ -266,7 +264,8 @@ independent components (in basis sub-system, taken from project system)
     <dd><br>
     </dd>
     <dt> <a name="dtSize_7"></a><big><b><big><tt>dtSize[7]</tt></big></b></big>
-Reserved</dt>
+Number of interaction parameters in the non-basis mixture (default 1 -
+regular)</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
@@ -557,8 +556,98 @@ variant number</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
+    <dd>&nbsp;</dd>
+    <dt>&nbsp;</dt>
+    <dt> <a name="lmft_s_0"></a><big><b><big><tt>lmft_s[0]</tt></big></b></big>Number
+of parameters to fit (nP)</dt>
     <dd><br>
     </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="lmft_s_1"></a><big><b><big><tt>lmft_s[1]</tt></big></b></big>
+Number of data points to use in fitting (nQ)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="lmft_s_2"></a><big><b><big><tt>lmft_s[2]</tt></big></b></big>
+Number of arguments in the tdat array per one data point (nM)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="lmft_s_3"></a><big><b><big><tt>lmft_s[3]</tt></big></b></big>
+Reserved</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="Xi2_0"></a><big><b><big><tt>Xi2[0]</tt></big></b></big>
+Final SOS/DF value (quality of LS fit)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="Xi2_1"></a><big><b><big><tt>Xi2[1]</tt></big></b></big>
+Reserved</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="tdat"></a><big><b><big><tt>tdat</tt></big></b></big>&nbsp;&nbsp;
+DualTh least-squares fitter: Array of observations (experimental data)
+arguments</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="ydat"></a><big><b><big><tt>ydat</tt></big></b></big>&nbsp;&nbsp;
+DualTh least-squares fitter: Array of observations (experimental data)
+values</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dt> <br>
+    </dt>
+    <dd><br>
+    </dd>
+    <dt> <a name="par"></a><big><b><big><tt>par</tt></big></b></big>&nbsp;&nbsp;
+Least-squares fitter: Guess parameters (input); Fitted parameters
+(output)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="sdpar"></a><big><b><big><tt>sdpar</tt></big></b></big>
+Least-squares fitter: Standard deviations for fitted parameter values
+(output,optional)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dt> <br>
+    </dt>
     <dt> <a name="nam_nr"></a><big><b><big><tt>nam_nr</tt></big></b></big>
 Id names of DC
 (end-member) stoichiometry candidates, input</dt>
@@ -619,7 +708,7 @@ DC (end-member) candidates</dt>
     <dd>description</dd>
     <dd><br>
     </dd>
-    <dt> <a name="mu_n"></a><big><b><big><tt>mu_n</tt></big></b></big>
+    <dt> <a name="mu_b"></a><big><b><big><tt>mu_b</tt></big></b></big>
 Table of DualTh
 chemical
 potentials of non-basis DC (end-members), J/mol</dt>
@@ -628,8 +717,21 @@ potentials of non-basis DC (end-members), J/mol</dt>
     <dd>description</dd>
     <dd><br>
     </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="eta_b"></a><big><b><big><tt>eta_b</tt></big></b></big>
+Table of DualTh
+chemical
+potentials of non-basis DC (end-members), normalized</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd>&nbsp;<br>
+    </dd>
+  </dl>
+  <dl>
     <dt> <a name="Coul"></a><big><b><big><tt>Coul</tt></big></b></big>
-Table of excess Gibbs energies of mixture for candidates (calculated) 
+Table of excess Gibbs energies of mixture for candidates (calculated)
 (or input Coulombic terms for surface complexes)</dt>
     <dd><br>
     </dd>
@@ -638,60 +740,127 @@ Table of excess Gibbs energies of mixture for candidates (calculated)
     </dd>
     <dt> <a name="gam_n"></a><big><b><big><tt>gam_n</tt></big></b></big>
 Table of activity
-coefficients for non-basis DC candidates</dt>
+coefficients for non-basis DC (end-members)</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
     <dd><br>
     </dd>
-    <dt> <a name="avg_g"></a><big><b><big><tt>avg_g</tt></big></b></big>
-Means over gam_n
-columns (experiments) for DC candidates</dt>
-    <dd><br>
+    <dd>&nbsp; <br>
     </dd>
-    <dd>description</dd>
-    <dd><br>
-    </dd>
-    <dt> <a name="sd_g"></a><big><b><big><tt>sd_g</tt></big></b></big>
-St.deviations over
-gam_n
-columns (experiments) for DC candidates</dt>
-    <dd><br>
-    </dd>
-    <dd>description</dd>
-    <dd><br>
-    </dd>
-    <dt> <a name="muo_n"></a><big><b><big><tt>muo_n</tt></big></b></big>
+    <dt> <a name="mu_o"></a><big><b><big><tt>mu_o</tt></big></b></big>
 Table of standard
-Gibbs energies for DC candidates, J/mol</dt>
+chemical potential (Gibbs energies) for non-basis end members, J/mol</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
     <dd><br>
     </dd>
-    <dt> <a name="avg_m"></a><big><b><big><tt>avg_m</tt></big></b></big>
-Means over muo_n
-columns (experiments) for DC candidates</dt>
+    <dt> <a name="avsd_o"></a><big><b><big><tt>avsd_o</tt></big></b></big>
+Mean and st.dev. over mu_o columns (experiments) for non-basis DC
+(end-members)</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
     <dd><br>
     </dd>
-    <dt> <a name="sd_m"></a><big><b><big><tt>sd_m</tt></big></b></big>
-St.deviations over
-muo_n
-columns (experiments) for DC candidates</dt>
+    <dt> <a name="mu_a"></a><big><b><big><tt>mu_a</tt></big></b></big>
+Table of apparent standard Gibbs energy function G* for minor/trace
+non-basis end members<br>
+    </dt>
     <dd><br>
     </dd>
     <dd>description</dd>
     <dd><br>
     </dd>
-    <dt> <a name="qpn"></a><big><b><big><tt>qpn</tt></big></b></big>
-Work array for chi
-calculation math script</dt>
+    <dt> <a name="avsd_a"></a><big><b><big><tt>avsd_a</tt></big></b></big>
+Mean and st.dev. over mu_a columns (experiments) for non-basis DC
+(end-members)</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="gmx_n_0"></a><big><b><big><tt>gmx_n[0]</tt></big></b></big>
+in J/mol for nQ experiments : Excess Gibbs energy of mixing (col. 0)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="gmx_n_1"></a><big><b><big><tt>gmx_n[1]</tt></big></b></big>Gibbs
+energy of ideal mixing (col. 1)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd>&nbsp;</dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="gmx_n_2"></a><big><b><big><tt>gmx_n[2]</tt></big></b></big>
+Total Gibbs energy of mixing (col. 2)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="gmx_n_3"></a><big><b><big><tt>gmx_n[3]</tt></big></b></big>
+Gibbs energy of the mechanical mixture of pure end members (col. 3)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="gmx_n_4"></a><big><b><big><tt>gmx_n[4]</tt></big></b></big>
+Integral Gibbs energy of the mixture phase in non-basis sub-system
+(col. 4)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="Wa"></a><big><b><big><tt>Wa</tt></big></b></big>
+Interaction parameters for the mixing model estimated directly for each
+experiment </dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd>&nbsp;&nbsp;<br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="avsd_w"></a><big><b><big><tt>avsd_w</tt></big></b></big>
+estimated interaction parameters with st.deviations, averaged from Wa
+or
+regressed from gmx_n[0] column<br>
+    </dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd>&nbsp; </dd>
     <dd><br>
     </dd>
     <dt> <a name="qpg"></a><big><b><big><tt>qpg</tt></big></b></big>
@@ -739,9 +908,8 @@ concentration of DC formulae for non-basis sub-systems</dt>
     <dd><br>
     </dd>
     <dt> <a name="cExpr"></a><big><b><big><tt>cExpr</tt></big></b></big>
-Math script text
-field
-for calculation of mole fractions of DC in non-basis sub-system</dt>
+Math script text for calculation of Gex for LS fitting of interaction
+parameters</dt>
     <dd><br>
     </dd>
     <dd>description</dd>
@@ -776,7 +944,8 @@ Id names of
 experiments, input</dt>
     <dd><br>
     </dd>
-    <dd>description</dd>
+    <dd>description<br>
+    </dd>
     <dd><br>
     </dd>
     <dt> <a name="nam_n"></a><big><b><big><tt>nam_n</tt></big></b></big>
@@ -785,6 +954,18 @@ Id names of DC
     <dd><br>
     </dd>
     <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="par_n"></a><big><b><big><tt>par_n</tt></big></b></big>
+Id names of interaction parameters, input</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd>&nbsp;&nbsp;&nbsp; </dd>
     <dd><br>
     </dd>
     <dt> <a name="for_n"></a><big><b><big><tt>for_n</tt></big></b></big>
@@ -913,6 +1094,58 @@ DC
     </dd>
     <dd>description</dd>
     <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="wa_cp"></a><big><b><big><tt>wa_cp</tt></big></b></big>
+Input code for constrained LS interaction parameter fitting (LM method
+only): 0 - no constraints; 1 - upper; 2 - lower; 3 - two-side</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="wdat"></a><big><b><big><tt>wdat</tt></big></b></big>
+Input for least-squares (LS) fitter: array of weight factors for data,
+(default 1)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="wpar"></a><big><b><big><tt>wpar</tt></big></b></big>
+Input for least-squares (LS) fitter: uncertainty half-interval for a
+priori constrained parameters (optional)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="Wa_ap"></a><big><b><big><tt>Wa_ap</tt></big></b></big>
+Input: a priori interaction parameter values (calculation of activity
+coefficients, LS fitting)</dt>
+    <dd><br>
+    </dd>
+    <dd>description</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dd>&nbsp; <br>
     </dd>
     <dt> <a name="dSTkey"></a><big><b><big><tt>dSTkey</tt></big></b></big>
 Key of the

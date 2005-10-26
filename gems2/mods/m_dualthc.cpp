@@ -1157,15 +1157,20 @@ TDualTh::Calc_gam_n( char eState )
         }
         else if( dtp->nP == 2 )
         {  // Subregular Guggenheim parameters directly from activity coeffs
-           lnGam1 = dtp->gam_n[ii*dtp->nM];
-           lnGam2 = dtp->gam_n[ii*dtp->nM+1];
+           double w12, w21, a0, a1;
+           lnGam1 = log( dtp->gam_n[ii*dtp->nM] );
+           lnGam2 = log( dtp->gam_n[ii*dtp->nM+1] );
            chi1 = dtp->chi[ii*dtp->nM];
            chi2 = dtp->chi[ii*dtp->nM+1];
            alp0 = 0.5*( lnGam1/chi2/chi2 * (3.*chi2-chi1)
                       + lnGam2/chi1/chi1 * (3.*chi1-chi2));
-           alp1 = 0.5*( lnGam1/chi2/chi2 * lnGam2/chi1/chi1 );
+           alp1 = 0.5*( lnGam1/chi2/chi2 - lnGam2/chi1/chi1 );
+           w12 = 2.*lnGam2/chi1 +lnGam1/chi2/chi2 *(chi2-chi1);
+           w21 = 2.*lnGam1/chi2 +lnGam2/chi1/chi1 *(chi1-chi2);
            W12 = RT*(alp0-alp1);
            W21 = RT*(alp0+alp1);
+           a0 = 0.5*(w12+w21);
+           a1 = 0.5*(w12-w21);
 
            switch( dtp->PsIPf ) // put results into Wa columns
            {
@@ -1217,9 +1222,6 @@ TDualTh::Calc_gam_n( char eState )
   } //  end for ii
 
   Calc_alp_n_stat( eState ); // statistics over interaction parameters
-  // Do we need LS regression for interaction parameters here?
-
-  //
 }
 
 void
@@ -1267,7 +1269,8 @@ TDualTh::Calc_act_n( char eState )
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
 //                    lna = (dtp->mu_b[ii*dtp->nM+j] - muoi)/RT;
                // Only direct calculation is possible in this case
-                    lna = log( dtp->chi[ii*dtp->nM+j] * dtp->gam_n[ii*dtp->nM+j] );
+                    lna = log( dtp->chi[ii*dtp->nM+j] ) +
+                          log( dtp->gam_n[ii*dtp->nM+j] );
                     break;
         } // case
        else
@@ -1335,6 +1338,10 @@ TDualTh::Calc_gam_forward( char PvGam, char PsIPf, char WhereIPar )
    double alp[40], chi[20], gam[20], ScaleF = 1., RT, P;
    short q, j, k, RetC;
 
+   memset( alp, 0, sizeof(double)*40 );
+   memset( chi, 0, sizeof(double)*20 );
+   memset( gam, 0, sizeof(double)*20 );
+
    if( PvGam != S_OFF )
    {  // Equations set in the script
       CalcEquat();
@@ -1346,7 +1353,6 @@ TDualTh::Calc_gam_forward( char PvGam, char PsIPf, char WhereIPar )
            alp[k] = dtp->Wa[k];
        else alp[k] = dtp->Wa_ap[k]; // A priori parameters
    }
-
    for( q=0; q<dtp->nQ; q++ )
    {
      if(PsIPf != DT_IPF_I)
@@ -1394,7 +1400,7 @@ TDualTh::Calc_gam_forward( char PvGam, char PsIPf, char WhereIPar )
          ;
        }
        for( j=0; j<dtp->nM; j++ )  // Getting back activity coeffs
-          dtp->gam_n[dtp->nM*q+j] = ROUND_EXP( gam[j], 5 );
+          dtp->gam_n[dtp->nM*q+j]; // = ROUND_EXP( gam[j], 5 );
      }
      else  // ideal Raoult model
      {
@@ -1417,7 +1423,7 @@ TDualTh::Guggenheim( double Gam[], const double x[], const double alp[],
          const short nM, const short nP, const double scaleF )
 {
     double a0, a1, a2;
-    double gam0, gam1, lnGam0, lnGam1;
+    double gam0=1., gam1=1., lnGam0=0., lnGam1=0.;
     short i;
 
     if( nM != 2 || nP > 3 ) // Binary only and up to 3 parameters
@@ -1426,15 +1432,18 @@ TDualTh::Guggenheim( double Gam[], const double x[], const double alp[],
     a0 = alp[0]*scaleF;
     a1 = alp[1]*scaleF;
     a2 = alp[2]*scaleF;
+    if( a0 > 15. ) a0 = 15.;  if( a0 < -15. ) a0 = -15.;
+    if( a1 > 15. ) a1 = 15.;  if( a1 < -15. ) a1 = -15.;
+    if( a2 > 15. ) a2 = 15.;  if( a2 < -15. ) a2 = -15.;
 
     lnGam0 = x[1]*x[1]*(a0+a1*(3.*x[0]-x[1])+a2*(x[0]-x[1])*(5.*x[0]-x[1]));
     lnGam1 = x[0]*x[0]*(a0-a1*(3.*x[1]-x[0])+a2*(x[1]-x[0])*(5.*x[1]-x[0]));
-
+/*
     lnGam0 = (a0+3.*a1+5.*a2)*x[1]*x[1] - 4.*(a1+4.*a2)*x[1]*x[1]*x[1]
                    + 12.*a2*x[1]*x[1]*x[1]*x[1];
     lnGam1 = (a0-3.*a1+5.*a2)*x[0]*x[0] + 4.*(a1-4.*a2)*x[0]*x[0]*x[0]
                    + 12.*a2*x[0]*x[0]*x[0]*x[0];
-
+*/
     gam0 = exp( lnGam0 );
     gam1 = exp( lnGam1 );
     Gam[0] = gam0;

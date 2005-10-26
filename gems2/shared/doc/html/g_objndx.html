@@ -8,11 +8,11 @@
   <title>GEM-Selektor Data Object Index v.2.1</title>
 </head>
 <body>
-<>This is&nbsp; OBJNDX.HTML&nbsp; file used internally by GEM-Selektor
+&lt;&gt;This is&nbsp; OBJNDX.HTML&nbsp; file used internally by
+GEM-Selektor
 runtime help system. <br>
 Entries in this file redirect the help system to display help pages
 prepared in various HTML files. <br>
-</>
 <p><br>
 </p>
 <p>Rules for setting up DOD keywords and links to html files<br>
@@ -24,18 +24,14 @@ The entry must contain a HTML code like this: <br>
 &nbsp; &nbsp; &nbsp; <br>
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;a
 href="html_file_namel#label"&gt;keyword&lt;/a&gt; <br>
-<p></p>
 Here:&nbsp;
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 html_file_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; is
 the name of html file where to jump;<br>
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 label
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 position label (anchor) in this&nbsp; file
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 keyword
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -43,38 +39,29 @@ GEM data object label, optionally with indexes.<br>
 <br>
 - if dimension N&nbsp; in the DOD exceeds 1 and dimension M in the DOD
 exceeds 1:
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 keyword[indexN][indexM]&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; locates a
 reference to the help page only for this cell&nbsp;
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 keyword[][indexM] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp;&nbsp;&nbsp; locates a reference to the help page for any cell in
 the column indexM
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
 keyword[indexN] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp;&nbsp; locates a reference to the help page for any cell
 in the row indexN
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
 keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 locates a&nbsp; reference to the same help page for any cell&nbsp;
-<p></p>
 -&nbsp; if only one dimension (N or M)&nbsp; in DOD exceeds 1 :
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 keyword[index] &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; locates a reference to the help page only
 for a cell with this index&nbsp;
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
 keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 locates a&nbsp; reference to the same help page for any cell <br>
-<p></p>
 - if both dimensions N and M are set to 1, or the DOD refers to text:<br>
-<p></p>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 locates a&nbsp; reference to the help page&nbsp; <br>
@@ -120,7 +107,7 @@ electroneutrality condition? { 0 1 }</h4>
   <h4> <a href="gems_ipm.html#Pa_IIM">Pa_IIM</a> Maximum number of
 iterations in IPM task { 400 }</h4>
   <h4> <a href="gems_ipm.html#Pa_DG">Pa_DG</a><a name="Pa_DG"></a>Precision
-of LEM IPM solver (Jordan) { 1e-12 }</h4>
+of GEM IPM solver (Jordan) { 1e-12 }</h4>
   <h4> <a href="gems_ipm.html#Pa_DHB">Pa_DHB</a> Precision of mass
 balance deviations at EFD { 1e-6 }</h4>
   <h4> <a href="gems_ipm.html#Pa_DS">Pa_DS</a> Cutoff number of moles
@@ -615,11 +602,14 @@ correction terms: Maximal surface density (1/nm2) </h4>
 charge assigned to 0 surface EDL plane </h4>
   <h4> <a href="gems_scm.html#MaSdj_2">MaSdj[][2]</a> Surface species
 charge assigned to beta surface EDL plane </h4>
-  <h4> <a href="gems_scm.html#MaSdj_3">MaSdj[][3]</a> Isotherm parameter
+  <h4> <a href="gems_scm.html#MaSdj_3">MaSdj[][3]</a> Isotherm
+parameter
 1 (energy term in Frumkin) </h4>
-  <h4> <a href="gems_scm.html#MaSdj_4">MaSdj[][4]</a> Isotherm parameter
+  <h4> <a href="gems_scm.html#MaSdj_4">MaSdj[][4]</a> Isotherm
+parameter
 2 (CN in Frumkin or dentateness in QCA) </h4>
-  <h4> <a href="gems_scm.html#MaSdj_5">MaSdj[][5]</a> Isotherm parameter
+  <h4> <a href="gems_scm.html#MaSdj_5">MaSdj[][5]</a> Isotherm
+parameter
 3 (reserved) </h4>
   <h4> <a href="gems_scm.html#Sigm_">Sigm_</a>Specific surface energy
 of solid-aqueous (gas) interface, J/m2</h4>
@@ -912,11 +902,14 @@ calculation of activity correction terms: Max. density (umol/g) </h4>
 assigned to 0 EDL surface plane </h4>
   <h4> <a href="gems_scm.html#masdj_2">masdj[][2]</a> Species charge
 assigned to beta EDL surface plane </h4>
-  <h4> <a href="gems_scm.html#masdj_3">masdj[][3]</a> Isotherm parameter
+  <h4> <a href="gems_scm.html#masdj_3">masdj[][3]</a> Isotherm
+parameter
 1 (Frumkin energy) </h4>
-  <h4> <a href="gems_scm.html#masdj_4">masdj[][4]</a> Isotherm parameter
+  <h4> <a href="gems_scm.html#masdj_4">masdj[][4]</a> Isotherm
+parameter
 2 (Frumkin CN or dentateness ) </h4>
-  <h4> <a href="gems_scm.html#masdj_5">masdj[][5]</a> Isotherm parameter
+  <h4> <a href="gems_scm.html#masdj_5">masdj[][5]</a> Isotherm
+parameter
 3 (reserved ) </h4>
   <h4> <a href="gems_sys.html#c">c</a> Normalized DC energy function
 c(j), mole/mole</h4>
@@ -1766,11 +1759,14 @@ surface activity correction terms: Maximal surface density (1/nm2) </h4>
 charge assigned to 0 surface EDL plane </h4>
   <h4> <a href="gm_phase.html#MaSDj_2">MaSDj[][2]</a> Surface species
 charge assigned to beta surface EDL plane </h4>
-  <h4> <a href="gm_phase.html#MaSDj_3">MaSDj[][3]</a> Isotherm parameter
+  <h4> <a href="gm_phase.html#MaSDj_3">MaSDj[][3]</a> Isotherm
+parameter
 1 (energy term in Frumkin) </h4>
-  <h4> <a href="gm_phase.html#MaSDj_4">MaSDj[][4]</a> Isotherm parameter
+  <h4> <a href="gm_phase.html#MaSDj_4">MaSDj[][4]</a> Isotherm
+parameter
 2 (CN in Frumkin or dentateness in QCA) </h4>
-  <h4> <a href="gm_phase.html#MaSDj_5">MaSDj[][5]</a> Isotherm parameter
+  <h4> <a href="gm_phase.html#MaSDj_5">MaSDj[][5]</a> Isotherm
+parameter
 3 (reserved) </h4>
   <h4> <a href="gm_phase.html#PhXres">PhXres</a> Reserved</h4>
   <h4> <a href="gm_phase.html#FSI_t">FSI_t</a> Fraction of surface
@@ -2057,7 +2053,8 @@ restrictions to x_j at eqstate</h4>
 restrictions to phases X_a at eqstate (reserved)</h4>
   <h4> <a href="gm_syseq.html#tpll_">tpll_</a> Vector of lower
 restrictions to phases X_a at eqstate (reserved)</h4>
-  <h4> <a href="gm_syseq.html#tSATC__0">tSATC_[][0]</a> Surface species:
+  <h4> <a href="gm_syseq.html#tSATC__0">tSATC_[][0]</a> Surface
+species:
 method codes of SACT calculation { C N S I } </h4>
   <h4> <a href="gm_syseq.html#tSATC__1">tSATC_[][1]</a> Allocation of
 surface species to the sorbent (end-members) { I V 0 ... 5 } </h4>
@@ -2076,11 +2073,14 @@ correction terms: Maximal surface density (1/nm2) </h4>
 charge assigned to 0 surface EDL plane </h4>
   <h4> <a href="gm_syseq.html#tMaSd_2">tMaSd[][2]</a> Surface species
 charge assigned to beta surface EDL plane </h4>
-  <h4> <a href="gm_syseq.html#tMaSd_3">tMaSd[][3]</a> Isotherm parameter
+  <h4> <a href="gm_syseq.html#tMaSd_3">tMaSd[][3]</a> Isotherm
+parameter
 1 (energy term in Frumkin) </h4>
-  <h4> <a href="gm_syseq.html#tMaSd_4">tMaSd[][4]</a> Isotherm parameter
+  <h4> <a href="gm_syseq.html#tMaSd_4">tMaSd[][4]</a> Isotherm
+parameter
 2 (CN in Frumkin or dentateness in QCA) </h4>
-  <h4> <a href="gm_syseq.html#tMaSd_5">tMaSd[][5]</a> Isotherm parameter
+  <h4> <a href="gm_syseq.html#tMaSd_5">tMaSd[][5]</a> Isotherm
+parameter
 3 (reserved) </h4>
   <h4> <a href="gm_syseq.html#tSCMT">tSCMT</a> Classifier of EDL
 models for surface types { C T D M E X I S N }</h4>
@@ -2484,7 +2484,8 @@ coordinate(s) (+ 1 on; - 0 off ) </h4>
 generated SysEq records to data base (+ -) </h4>
   <h4><a href="gm_unspace.html#unPsfl_12">unPsfl[12]</a> Will math
 script be used in this UnSpace definition? (+ -) </h4>
-  <h4> <a href="gm_unspace.html#unPsfl_13">unPsfl[13]</a> Will graphics be specified in this UnSpace definition? (+ -) </h4>
+  <h4> <a href="gm_unspace.html#unPsfl_13">unPsfl[13]</a> Will
+graphics be specified in this UnSpace definition? (+ -) </h4>
   <h4> <a href="gm_unspace.html#unPafl_0">unPafl[0]</a> Flag of input
 for the filter on phase association (+ -) </h4>
   <h4> <a href="gm_unspace.html#unPafl_1">unPafl[1]</a> Flag of input
@@ -2596,47 +2597,53 @@ independent component ( &lt; N ) </h4>
 dependent component ( &lt; L )</h4>
   <h4> <a href="gm_unspace.html#ku">ku</a> Current index k of phase (
 &lt; Fi ) </h4>
- <h4> <a href="gm_unspace.html#kau">kau</a> Current index ka of phase
+  <h4> <a href="gm_unspace.html#kau">kau</a> Current index ka of phase
 assemblage ( &lt; nPhA )</h4>
- <h4> <a href="gm_unspace.html#uDimXY_0">uDimXY[0]</a>Number of rows 
+  <h4> <a href="gm_unspace.html#uDimXY_0">uDimXY[0]</a>Number of rows
 in xA, yC arrays (sample variants) </h4>
- <h4> <a href="gm_unspace.html#uDimXY_1">uDimXY[1]</a>Number of columns 
-in the yC table (plot coordinate x, y, z values) (&gt;=3) </h4>
- <h4> <a href="gm_unspace.html#uDimSc_0">uDimSc[0]</a>Number of intervals of 
-z-scale (rows in xS and yS arrays) </h4>
- <h4> <a href="gm_unspace.html#uDimSc_1">uDimSc[1]</a>Number of parameters 
-of scale (columns in the yS array) (&gt;=5) </h4>
-
-<h4> <a href="gm_unspace.html#Tu_0">Tu[0]</a> Adapted value of
+  <h4> <a href="gm_unspace.html#uDimXY_1">uDimXY[1]</a>Number of
+columns in the yC table (plot coordinate x, y, z values) (&gt;=3) </h4>
+  <h4> <a href="gm_unspace.html#uDimSc_0">uDimSc[0]</a>Number of
+intervals of z-scale (rows in xS and yS arrays) </h4>
+  <h4> <a href="gm_unspace.html#uDimSc_1">uDimSc[1]</a>Number of
+parameters of scale (columns in the yS array) (&gt;=5) </h4>
+  <h4> <a href="gm_unspace.html#Tu_0">Tu[0]</a> Adapted value of
 T (Celsius) </h4>
-<h4> <a href="gm_unspace.html#Tu_1">Tu[1]</a> Initial (deterministic) value of
+  <h4> <a href="gm_unspace.html#Tu_1">Tu[1]</a> Initial
+(deterministic) value of
 T (Celsius) </h4>
-<h4> <a href="gm_unspace.html#Tu_2">Tu[2]</a> 0 or adapted uncertainty
+  <h4> <a href="gm_unspace.html#Tu_2">Tu[2]</a> 0 or adapted
+uncertainty
 half-interval for T (C) </h4>
-<h4> <a href="gm_unspace.html#Tu_3">Tu[3]</a> 0 or initial uncertainty
+  <h4> <a href="gm_unspace.html#Tu_3">Tu[3]</a> 0 or initial
+uncertainty
 half-interval for T (C) </h4>
-<h4> <a href="gm_unspace.html#Tu_4">Tu[4]</a> Current value of T </h4>
-
-<h4> <a href="gm_unspace.html#Pu_0">Pu[0]</a> Adapted value of
+  <h4> <a href="gm_unspace.html#Tu_4">Tu[4]</a> Current value of T </h4>
+  <h4> <a href="gm_unspace.html#Pu_0">Pu[0]</a> Adapted value of
 P (bar) </h4>
-<h4> <a href="gm_unspace.html#Pu_1">Pu[1]</a> Initial (deterministic) value of
+  <h4> <a href="gm_unspace.html#Pu_1">Pu[1]</a> Initial
+(deterministic) value of
 P (bar) </h4>
-<h4> <a href="gm_unspace.html#Pu_2">Pu[2]</a> 0 or adapted uncertainty
+  <h4> <a href="gm_unspace.html#Pu_2">Pu[2]</a> 0 or adapted
+uncertainty
 half-interval for P (bar) </h4>
-<h4> <a href="gm_unspace.html#Pu_3">Pu[3]</a> 0 or initial uncertainty
+  <h4> <a href="gm_unspace.html#Pu_3">Pu[3]</a> 0 or initial
+uncertainty
 half-interval for P (bar) </h4>
-<h4> <a href="gm_unspace.html#Pu_4">Pu[4]</a> Current value of P </h4>
-
-<h4> <a href="gm_unspace.html#Vu_0">Vu[0]</a> Adapted value of
+  <h4> <a href="gm_unspace.html#Pu_4">Pu[4]</a> Current value of P </h4>
+  <h4> <a href="gm_unspace.html#Vu_0">Vu[0]</a> Adapted value of
 constrained system volume V (in cm3) </h4>
-<h4> <a href="gm_unspace.html#Vu_1">Vu[1]</a> Initial (deterministic) value of
+  <h4> <a href="gm_unspace.html#Vu_1">Vu[1]</a> Initial
+(deterministic) value of
 system volume V (in cm3) </h4>
-<h4> <a href="gm_unspace.html#Vu_2">Vu[2]</a> 0 or adapted uncertainty
+  <h4> <a href="gm_unspace.html#Vu_2">Vu[2]</a> 0 or adapted
+uncertainty
 half-interval for system volume V (in cm3) </h4>
-<h4> <a href="gm_unspace.html#Vu_3">Vu[3]</a> 0 or initial uncertainty
+  <h4> <a href="gm_unspace.html#Vu_3">Vu[3]</a> 0 or initial
+uncertainty
 half-interval for V (in cm3) </h4>
-<h4> <a href="gm_unspace.html#Vu_4">Vu[4]</a> Current value of constrained system volume V </h4>
-
+  <h4> <a href="gm_unspace.html#Vu_4">Vu[4]</a> Current value of
+constrained system volume V </h4>
   <h4> <a href="gm_unspace.html#pHf_0">pHf[0]</a> pH lower filter
 limit (default 0) </h4>
   <h4> <a href="gm_unspace.html#pHf_1">pHf[1]</a> pH upper filter
@@ -2681,26 +2688,37 @@ of a group varying b to which this IC is assigned </h4>
   <h4> <a href="gm_unspace.html#PhAf">PhAf</a> [N] Input phase indexes
 of known equilibrium
 phase association for a primary filter (Pa_f_pha) </h4>
-  <h4> <a href="gm_unspace.html#intG0_0">intG0[0]</a> Adapted uncertainty
+  <h4> <a href="gm_unspace.html#intG0_0">intG0[0]</a> Adapted
+uncertainty
 half-intervals for G0 variation (flag PsUnInt defines units) </h4>
-  <h4> <a href="gm_unspace.html#intG0_1">intG0[1]</a> Initial uncertainty
+  <h4> <a href="gm_unspace.html#intG0_1">intG0[1]</a> Initial
+uncertainty
 half-intervals for G0 variation (flag PsUnInt defines units) </h4>
-  <h4> <a href="gm_unspace.html#intGam_0">intGam[0]</a> Adapted uncertainty
+  <h4> <a href="gm_unspace.html#intGam_0">intGam[0]</a> Adapted
+uncertainty
 half-intervals for gamma params (reserved) </h4>
-  <h4> <a href="gm_unspace.html#intGam_1">intGam[1]</a> Initial uncertainty
+  <h4> <a href="gm_unspace.html#intGam_1">intGam[1]</a> Initial
+uncertainty
 half-intervals for gamma params (reserved) </h4>
-  <h4> <a href="gm_unspace.html#intS_0">intS[0]</a> Adapted uncertainty
+  <h4> <a href="gm_unspace.html#intS_0">intS[0]</a> Adapted
+uncertainty
 half-intervals for S (reserved) </h4>
-  <h4> <a href="gm_unspace.html#intS_1">intS[1]</a> Initial uncertainty
+  <h4> <a href="gm_unspace.html#intS_1">intS[1]</a> Initial
+uncertainty
 half-intervals for S (reserved) </h4>
-  <h4> <a href="gm_unspace.html#intV_0">intV[0]</a> Adapted uncertainty
+  <h4> <a href="gm_unspace.html#intV_0">intV[0]</a> Adapted
+uncertainty
 half-intervals for V variation (flag PsUnInt defines units) </h4>
-  <h4> <a href="gm_unspace.html#intV_1">intV[1]</a> Initial uncertainty
+  <h4> <a href="gm_unspace.html#intV_1">intV[1]</a> Initial
+uncertainty
 half-intervals for V variation (flag PsUnInt defines units) </h4>
-  <h4> <a href="gm_unspace.html#intB_0">intB[0]</a> Adapted uncertainty
+  <h4> <a href="gm_unspace.html#intB_0">intB[0]</a> Adapted
+uncertainty
 half-intervals for b variation (flag PsUnInB defines units) </h4>
-  <h4> <a href="gm_unspace.html#intB_1">intB[1]</a> Initial uncertainty
-half-intervals for b variation (0- deterministic, flag PsUnInB defines units) </h4>
+  <h4> <a href="gm_unspace.html#intB_1">intB[1]</a> Initial
+uncertainty
+half-intervals for b variation (0- deterministic, flag PsUnInB defines
+units) </h4>
   <h4> <a href="gm_unspace.html#m_t_lo">m_t_lo</a> Total IC molality
 filter - lower limits
 (default 0/-20) (units defined in PsUnFltI flag) </h4>
@@ -2713,33 +2731,45 @@ filter - lower limits
   <h4> <a href="gm_unspace.html#fug_up">fug_up</a> Fugacity/activity
 filter - upper limits
 (default 10/+1) (units defined in PsUnFltD flag) </h4>
-  <h4> <a href="gm_unspace.html#un_Gs_0">un_Gs[0]</a> Adapted values of G298 for DCs </h4>
-  <h4> <a href="gm_unspace.html#un_Gs_1">un_Gs[1]</a> Input (deterministic)
+  <h4> <a href="gm_unspace.html#un_Gs_0">un_Gs[0]</a> Adapted values
+of G298 for DCs </h4>
+  <h4> <a href="gm_unspace.html#un_Gs_1">un_Gs[1]</a> Input
+(deterministic)
 values of G298 for DCs </h4>
-  <h4> <a href="gm_unspace.html#un_Ss_0">un_Ss[0]</a> Adapted values of S298 for DCs (reserved) </h4>
-  <h4> <a href="gm_unspace.html#un_Ss_1">un_Ss[1]</a> Input (deterministic)
+  <h4> <a href="gm_unspace.html#un_Ss_0">un_Ss[0]</a> Adapted values
+of S298 for DCs (reserved) </h4>
+  <h4> <a href="gm_unspace.html#un_Ss_1">un_Ss[1]</a> Input
+(deterministic)
 values of S298 for DCs (reserved) </h4>
-  <h4> <a href="gm_unspace.html#un_Vs_0">un_Vs[0]</a> Adapted values of V298 for DCs </h4>
-  <h4> <a href="gm_unspace.html#un_Vs_1">un_Vs[1]</a> Input (deterministic)
+  <h4> <a href="gm_unspace.html#un_Vs_0">un_Vs[0]</a> Adapted values
+of V298 for DCs </h4>
+  <h4> <a href="gm_unspace.html#un_Vs_1">un_Vs[1]</a> Input
+(deterministic)
 values of V298 for DCs </h4>
-  <h4> <a href="gm_unspace.html#unGAMs_0">unGAMs[0]</a> Adapted Gamma parameters (reserved) </h4>
-  <h4> <a href="gm_unspace.html#unGAMs_1">unGAMs[1]</a> Input (deterministic) 
-Gamma parameters (reserved) </h4>
+  <h4> <a href="gm_unspace.html#unGAMs_0">unGAMs[0]</a> Adapted Gamma
+parameters (reserved) </h4>
+  <h4> <a href="gm_unspace.html#unGAMs_1">unGAMs[1]</a> Input
+(deterministic) Gamma parameters (reserved) </h4>
   <h4> <a href="gm_unspace.html#uncp">uncp</a> [Q][nG] table of
-normalized coordinates of points in uncertainty space (&gt;= 0 &lt;= 1) </h4>
-  <h4> <a href="gm_unspace.html#un_Bs_0">un_Bs[0]</a> Adapted amounts in 
-bulk composition vector b </h4>
-  <h4> <a href="gm_unspace.html#un_Bs_1">un_Bs[1]</a> Input (deterministic)
+normalized coordinates of points in uncertainty space (&gt;= 0 &lt;= 1)
+  </h4>
+  <h4> <a href="gm_unspace.html#un_Bs_0">un_Bs[0]</a> Adapted amounts
+in bulk composition vector b </h4>
+  <h4> <a href="gm_unspace.html#un_Bs_1">un_Bs[1]</a> Input
+(deterministic)
 amounts in bulk composition vector b </h4>
   <h4> <a href="gm_unspace.html#uGc">uGc</a> G0 values used in sample
 input data variants (indexes q j) </h4>
-  <h4> <a href="gm_unspace.html#uBc">uBc</a> bulk compositions used in sample
+  <h4> <a href="gm_unspace.html#uBc">uBc</a> bulk compositions used in
+sample
 input data variants (indexes q i) </h4>
   <h4> <a href="gm_unspace.html#uSc">uSc</a> S0 values used in sample
 input data variants (indexes q j) </h4>
-  <h4> <a href="gm_unspace.html#umVc">umVc</a> V0 values used in sample
+  <h4> <a href="gm_unspace.html#umVc">umVc</a> V0 values used in
+sample
 input data variants (indexes q j) </h4>
-  <h4> <a href="gm_unspace.html#uNidP">uGc</a> Gamma parameters used in sample
+  <h4> <a href="gm_unspace.html#uNidP">uGc</a> Gamma parameters used
+in sample
 input data variants (indexes q j) </h4>
   <h4> <a href="gm_unspace.html#uYc">uYc</a> X (DC mole amounts) from
 sample GEM solution variants (indexes t j) </h4>
@@ -2757,7 +2787,8 @@ fugacity/activity from sample GEM solution variants (indexes t j) </h4>
 (C) from sample input data variants (index q) </h4>
   <h4> <a href="gm_unspace.html#uPc">uPc</a> P vector of pressures
 (bar) from sample input data variants (index q) </h4>
-  <h4> <a href="gm_unspace.html#uVc">uVc</a> V vector of system volumes
+  <h4> <a href="gm_unspace.html#uVc">uVc</a> V vector of system
+volumes
 (cm3) from sample input data variants (index q) </h4>
   <h4> <a href="gm_unspace.html#upHc">upHc</a> pH vector of pH values
 from sample GEM solution variants (index t) </h4>
@@ -2767,22 +2798,26 @@ Belov algorithm </h4>
 Monte Carlo with uniform distribution </h4>
   <h4> <a href="gm_unspace.html#OVN">OVN</a> pseudo-random numbers by
 Monte Carlo with normal distribution </h4>
-  <h4> <a href="gm_unspace.html#quOV_0">quOV[0]</a> indices of sample GEM
+  <h4> <a href="gm_unspace.html#quOV_0">quOV[0]</a> indices of sample
+GEM
 variants taken into quantile Laplace criterion </h4>
-  <h4> <a href="gm_unspace.html#quOV_1">quOV[1]</a> indices of sample GEM
+  <h4> <a href="gm_unspace.html#quOV_1">quOV[1]</a> indices of sample
+GEM
 variants taken into quantile Hurvitz criterion </h4>
-  <h4> <a href="gm_unspace.html#quOV_2">quOV[2]</a> indices of sample GEM
+  <h4> <a href="gm_unspace.html#quOV_2">quOV[2]</a> indices of sample
+GEM
 variants taken into quantile Wald criterion </h4>
-  <h4> <a href="gm_unspace.html#quOV_3">quOV[3]</a> indices of sample GEM
+  <h4> <a href="gm_unspace.html#quOV_3">quOV[3]</a> indices of sample
+GEM
 variants taken into quantile Homeniuk criterion </h4>
-  <h4> <a href="gm_unspace.html#quCrV_0>quCrV[0]</a> values of 
-the quantile Laplace criterion </h4>
-  <h4> <a href="gm_unspace.html#quCrV_1>quCrV[1]</a> values of 
-the quantile Hurvitz criterion </h4>
-  <h4> <a href="gm_unspace.html#quCrV_2>quCrV[2]</a> values of 
-the quantile Wald criterion </h4>
-  <h4> <a href="gm_unspace.html#quCrV_3>quCrV[3]</a> values of 
-the quantile Homeniuk criterion </h4>
+  <h4> <a
+ href="gm_unspace.html#quCrV_0%3EquCrV%5B0%5D%3C/a%3E%20values%20of%20%0Athe%20quantile%20Laplace%20criterion%20%3C/h4%3E%0A%20%20%3Ch4%3E%20%3Ca%20href="
+ gm_unspace.html#qucrv_1="">quCrV[1]</a> values of the quantile Hurvitz
+criterion </h4>
+  <h4> <a
+ href="gm_unspace.html#quCrV_2%3EquCrV%5B2%5D%3C/a%3E%20values%20of%20%0Athe%20quantile%20Wald%20criterion%20%3C/h4%3E%0A%20%20%3Ch4%3E%20%3Ca%20href="
+ gm_unspace.html#qucrv_3="">quCrV[3]</a> values of the quantile
+Homeniuk criterion </h4>
   <h4> <a href="gm_unspace.html#UnICn">UnICn</a> Names of columns for
 the output array UnIC </h4>
   <h4> <a href="gm_unspace.html#UgDCn">UgDCn</a> Names of columns for
@@ -2811,30 +2846,30 @@ the graph) </h4>
 setup), background color, internal </h4>
   <h4> <a href="gm_unspace.html#upSize">upSize</a> Plot axis scale,
 internal </h4>
-  <h4> <a href="gm_unspace.html#uLnam">uLnam</a> List of names of 
+  <h4> <a href="gm_unspace.html#uLnam">uLnam</a> List of names of
 columns in the yC table </h4>
-  <h4> <a href="gm_unspace.html#uPName">uPName</a> List of names of 
+  <h4> <a href="gm_unspace.html#uPName">uPName</a> List of names of
 uncertain input parameters </h4>
-  <h4> <a href="gm_unspace.html#xA">xA</a> Classification vector 
+  <h4> <a href="gm_unspace.html#xA">xA</a> Classification vector
 (contains phase assemblage indexes) </h4>
-  <h4> <a href="gm_unspace.html#yC_0">yC[0]</a> Data table column 
+  <h4> <a href="gm_unspace.html#yC_0">yC[0]</a> Data table column
 (contains x coordinate values) </h4>
-  <h4> <a href="gm_unspace.html#yC_1">yC[1]</a> Data table column 
+  <h4> <a href="gm_unspace.html#yC_1">yC[1]</a> Data table column
 (contains y coordinate values) </h4>
-  <h4> <a href="gm_unspace.html#yC_2">yC[2]</a> Data table column 
+  <h4> <a href="gm_unspace.html#yC_2">yC[2]</a> Data table column
 (contains z coordinate values) </h4>
-  <h4> <a href="gm_unspace.html#xS">xS</a> Abscissa vector for z-scale 
+  <h4> <a href="gm_unspace.html#xS">xS</a> Abscissa vector for z-scale
 data (reserved for future versions) </h4>
-  <h4> <a href="gm_unspace.html#yS_0">yS[0]</a> Lower boundaries for 
+  <h4> <a href="gm_unspace.html#yS_0">yS[0]</a> Lower boundaries for
 z-scale intervals </h4>
-  <h4> <a href="gm_unspace.html#yS_1">yS[1]</a> Upper boundaries for 
+  <h4> <a href="gm_unspace.html#yS_1">yS[1]</a> Upper boundaries for
 z-scale intervals </h4>
-  <h4> <a href="gm_unspace.html#yS_2">yS[2]</a> Amount of red (RGB) 
+  <h4> <a href="gm_unspace.html#yS_2">yS[2]</a> Amount of red (RGB)
 color (0-255) for z-scale intervals </h4>
-  <h4> <a href="gm_unspace.html#yS_3">yS[3]</a> Amount of green 
-(RGB) color (0-255) for z-scale intervals </h4>
-  <h4> <a href="gm_unspace.html#yS_4">yS[4]</a> Amount of blue 
-(RGB) color (0-255) for z-scale intervals </h4>
+  <h4> <a href="gm_unspace.html#yS_3">yS[3]</a> Amount of green (RGB)
+color (0-255) for z-scale intervals </h4>
+  <h4> <a href="gm_unspace.html#yS_4">yS[4]</a> Amount of blue (RGB)
+color (0-255) for z-scale intervals </h4>
   <h4> <a href="gm_unspace.html#PhAndx">PhAndx</a> Table of system
 indices of phases to identify Phase Assemblages </h4>
   <h4> <a href="gm_unspace.html#uPhsv">uPhsv</a> Indices of Phase
@@ -2868,75 +2903,79 @@ rows of pay-off matrix for Wald criterion </h4>
 values for Homenyuk criterion </h4>
   <h4> <a href="gm_unspace.html#Prob">Prob</a> Array of probabilities
 for calculating Homenuk criterion </h4>
-  <h4> <a href="gm_unspace.html#UnIC_0">UnIC[0]</a> Total dissolved IC 
+  <h4> <a href="gm_unspace.html#UnIC_0">UnIC[0]</a> Total dissolved IC
 molalities m_i for the deterministic variant </h4>
-  <h4> <a href="gm_unspace.html#UnIC_1">UnIC[1]</a> m_i averages for all 
-sample variants that have passed through filters </h4>
-  <h4> <a href="gm_unspace.html#UnIC_2">UnIC[2]</a> 2-sigma deviations 
+  <h4> <a href="gm_unspace.html#UnIC_1">UnIC[1]</a> m_i averages for
+all sample variants that have passed through filters </h4>
+  <h4> <a href="gm_unspace.html#UnIC_2">UnIC[2]</a> 2-sigma deviations
 for the averages in (previous) column 1 </h4>
-  <h4> <a href="gm_unspace.html#UnIC_3">UnIC[3]</a> m_i averages for sample 
-variants with dominant phase assemblage </h4>
-  <h4> <a href="gm_unspace.html#UnIC_4">UnIC[4]</a> 2-sigma deviations for 
-the averages in (previous) column 3 </h4>
-  <h4> <a href="gm_unspace.html#UnIC_5">UnIC[5]</a> m_i averages over sample 
-variants selected by quantile Laplace criterion </h4>
-  <h4> <a href="gm_unspace.html#UnIC_6">UnIC[6]</a> m_i averages over sample 
-variants selected by quantile Hurvitz criterion </h4>
-  <h4> <a href="gm_unspace.html#UnIC_7">UnIC[7]</a> m_i averages over sample 
-variants selected by quantile Wald criterion </h4>
-  <h4> <a href="gm_unspace.html#UnIC_8">UnIC[8]</a> m_i averages over sample 
-variants selected by quantile Homeniuk criterion</h4>
-  <h4> <a href="gm_unspace.html#UnIC_9">UnIC[9]</a> reserved column </h4>
-  <h4> <a href="gm_unspace.html#UgDC_0">UgDC[0]</a> Uncertain input parameter 
-(UIP) values for the deterministic variant </h4>
-  <h4> <a href="gm_unspace.html#UgDC_1">UgDC[1]</a> Average UIP values over all 
-sample variants that have passed through filter(s) </h4>
-  <h4> <a href="gm_unspace.html#UgDC_2">UgDC[2]</a> 2-sigma deviations for the 
-averages in (previous) column 1 </h4>
-  <h4> <a href="gm_unspace.html#UgDC_3">UgDC[3]</a> Average UIP values over all 
-sample variants with the dominant phase assemblage </h4>
-  <h4> <a href="gm_unspace.html#UgDC_4">UgDC[4]</a> 2-sigma deviations for the averages 
-in (previous) column 3 </h4>
-  <h4> <a href="gm_unspace.html#UgDC_5">UgDC[5]</a> Average UIP values over sample 
-variants selected by quantile Laplace criterion </h4>
-  <h4> <a href="gm_unspace.html#UgDC_6">UgDC[6]</a> Average UIP values over sample 
-variants selected by quantile Hurvitz criterion </h4>
-  <h4> <a href="gm_unspace.html#UgDC_7">UgDC[7]</a> Average UIP values over sample 
-variants selected by quantile Wald criterion </h4>
-  <h4> <a href="gm_unspace.html#UgDC_8">UgDC[8]</a> Average UIP values over sample 
-variants selected by quantile Homeniuk criterion </h4>
-  <h4> <a href="gm_unspace.html#UgDC_9">UgDC[9]</a> 2-sigma deviations for the 
-averages related to the criterion used in adaptive loops (see unPafl[8]) </h4>
-  <h4> <a href="gm_unspace.html#UaDC_0">UaDC[0]</a> DC activities (fugacities for gases) 
-for the deterministic variant </h4>
-  <h4> <a href="gm_unspace.html#UaDC_1">UaDC[1]</a> average DC activities for all 
-sample variants that have passed through filters </h4>  
-  <h4> <a href="gm_unspace.html#UaDC_2">UaDC[2]</a> 2-sigma deviations for the averages 
-in (previous) column 1 </h4>
-  <h4> <a href="gm_unspace.html#UaDC_3">UaDC[3]</a> average DC activities for sample 
-variants with dominant phase assemblage </h4>
-  <h4> <a href="gm_unspace.html#UaDC_4">UaDC[4]</a> 2-sigma deviations for the averages 
-in (previous) column 3 </h4>
-  <h4> <a href="gm_unspace.html#UaDC_5">UaDC[5]</a> average DC activities over 
+  <h4> <a href="gm_unspace.html#UnIC_3">UnIC[3]</a> m_i averages for
+sample variants with dominant phase assemblage </h4>
+  <h4> <a href="gm_unspace.html#UnIC_4">UnIC[4]</a> 2-sigma deviations
+for the averages in (previous) column 3 </h4>
+  <h4> <a href="gm_unspace.html#UnIC_5">UnIC[5]</a> m_i averages over
 sample variants selected by quantile Laplace criterion </h4>
-  <h4> <a href="gm_unspace.html#UaDC_6">UaDC[6]</a> average DC activities over 
+  <h4> <a href="gm_unspace.html#UnIC_6">UnIC[6]</a> m_i averages over
 sample variants selected by quantile Hurvitz criterion </h4>
-  <h4> <a href="gm_unspace.html#UaDC_7">UaDC[7]</a> average DC activities over 
+  <h4> <a href="gm_unspace.html#UnIC_7">UnIC[7]</a> m_i averages over
 sample variants selected by quantile Wald criterion </h4>
-  <h4> <a href="gm_unspace.html#UaDC_8">UaDC[8]</a> average DC activities over 
-sample variants selected by quantile Homeniuk criterion </h4>
+  <h4> <a href="gm_unspace.html#UnIC_8">UnIC[8]</a> m_i averages over
+sample variants selected by quantile Homeniuk criterion</h4>
+  <h4> <a href="gm_unspace.html#UnIC_9">UnIC[9]</a> reserved column </h4>
+  <h4> <a href="gm_unspace.html#UgDC_0">UgDC[0]</a> Uncertain input
+parameter (UIP) values for the deterministic variant </h4>
+  <h4> <a href="gm_unspace.html#UgDC_1">UgDC[1]</a> Average UIP values
+over all sample variants that have passed through filter(s) </h4>
+  <h4> <a href="gm_unspace.html#UgDC_2">UgDC[2]</a> 2-sigma deviations
+for the averages in (previous) column 1 </h4>
+  <h4> <a href="gm_unspace.html#UgDC_3">UgDC[3]</a> Average UIP values
+over all sample variants with the dominant phase assemblage </h4>
+  <h4> <a href="gm_unspace.html#UgDC_4">UgDC[4]</a> 2-sigma deviations
+for the averages in (previous) column 3 </h4>
+  <h4> <a href="gm_unspace.html#UgDC_5">UgDC[5]</a> Average UIP values
+over sample variants selected by quantile Laplace criterion </h4>
+  <h4> <a href="gm_unspace.html#UgDC_6">UgDC[6]</a> Average UIP values
+over sample variants selected by quantile Hurvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#UgDC_7">UgDC[7]</a> Average UIP values
+over sample variants selected by quantile Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#UgDC_8">UgDC[8]</a> Average UIP values
+over sample variants selected by quantile Homeniuk criterion </h4>
+  <h4> <a href="gm_unspace.html#UgDC_9">UgDC[9]</a> 2-sigma deviations
+for the averages related to the criterion used in adaptive loops (see
+unPafl[8]) </h4>
+  <h4> <a href="gm_unspace.html#UaDC_0">UaDC[0]</a> DC activities
+(fugacities for gases) for the deterministic variant </h4>
+  <h4> <a href="gm_unspace.html#UaDC_1">UaDC[1]</a> average DC
+activities for all sample variants that have passed through filters </h4>
+  <h4> <a href="gm_unspace.html#UaDC_2">UaDC[2]</a> 2-sigma deviations
+for the averages in (previous) column 1 </h4>
+  <h4> <a href="gm_unspace.html#UaDC_3">UaDC[3]</a> average DC
+activities for sample variants with dominant phase assemblage </h4>
+  <h4> <a href="gm_unspace.html#UaDC_4">UaDC[4]</a> 2-sigma deviations
+for the averages in (previous) column 3 </h4>
+  <h4> <a href="gm_unspace.html#UaDC_5">UaDC[5]</a> average DC
+activities over sample variants selected by quantile Laplace criterion </h4>
+  <h4> <a href="gm_unspace.html#UaDC_6">UaDC[6]</a> average DC
+activities over sample variants selected by quantile Hurvitz criterion </h4>
+  <h4> <a href="gm_unspace.html#UaDC_7">UaDC[7]</a> average DC
+activities over sample variants selected by quantile Wald criterion </h4>
+  <h4> <a href="gm_unspace.html#UaDC_8">UaDC[8]</a> average DC
+activities over sample variants selected by quantile Homeniuk criterion
+  </h4>
   <h4> <a href="gm_unspace.html#UaDC_9">UaDC[9]</a> reserved column </h4>
-  <h4> <a href="gm_unspace.html#UnDCA_0">UnDCA[0]</a> Adaptively optimized UIP values </h4>
-  <h4> <a href="gm_unspace.html#UnDCA_1">UnDCA[1]</a> Adaptively optimized uncertainty 
-half-intervals for the optimized UIP values </h4>
-  <h4> <a href="gm_unspace.html#UnDCA_2">UnDCA[2]</a> Minimum observed UIP values 
-after adaptive loops </h4>
-  <h4> <a href="gm_unspace.html#UnDCA_3">UnDCA[3]</a> Maximum observed UIP values 
-after adaptive loops </h4>
-  <h4> <a href="gm_unspace.html#UnDCA_4">UnDCA[4]</a> Average for UIP values over sample 
-variants that have passed through filters at the last adaptive loop </h4>
-  <h4> <a href="gm_unspace.html#UnDCA_5">UnDCA[5]</a> Uncertainty half-intervals (2-sigma) 
-for the averages in (previous) column 5 </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_0">UnDCA[0]</a> Adaptively
+optimized UIP values </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_1">UnDCA[1]</a> Adaptively
+optimized uncertainty half-intervals for the optimized UIP values </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_2">UnDCA[2]</a> Minimum observed
+UIP values after adaptive loops </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_3">UnDCA[3]</a> Maximum observed
+UIP values after adaptive loops </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_4">UnDCA[4]</a> Average for UIP
+values over sample variants that have passed through filters at the
+last adaptive loop </h4>
+  <h4> <a href="gm_unspace.html#UnDCA_5">UnDCA[5]</a> Uncertainty
+half-intervals (2-sigma) for the averages in (previous) column 5 </h4>
   <h4> <a href="gm_unspace.html#UnDCA_6">UnDCA[6]</a> reserved </h4>
   <h4> <a href="gm_unspace.html#UnDCA_7">UnDCA[7]</a> reserved </h4>
   <h4> <a href="gm_unspace.html#uTprn">uTprn</a> internal </h4>
@@ -2955,7 +2994,7 @@ quantities for basis sub-system compositions? { + * - } </h4>
   <h4> <a href="gm_dualth.html#dtPvfl_6">dtPvfl[6]</a> Use IC
 quantities for non-basis sub-system compositions? { + * - } </h4>
   <h4> <a href="gm_dualth.html#dtPvfl_7">dtPvfl[7]</a> Use formula
-(UDF) for basis and non-basis sub-system compositions? { + * - } </h4>
+units for basis and non-basis sub-system compositions? { + * - } </h4>
   <h4> <a href="gm_dualth.html#dtPvfl_8">dtPvfl[8]</a> Include
 references to data sources { + - }? </h4>
   <h4> <a href="gm_dualth.html#dtPvfl_9">dtPvfl[9]</a> Use math script
@@ -2975,9 +3014,12 @@ gen. run error </h4>
 status: 0 - indef.; 1 ready for; 2 - run; 3 - done </h4>
   <h4> <a href="gm_dualth.html#dtPsFl_4">dtPsFl[4]</a> Save generated
 SysEq records to data base? { + - } </h4>
-  <h4> <a href="gm_dualth.html#dtPsFl_5">dtPsFl[5]</a> Reserved </h4>
-  <h4> <a href="gm_dualth.html#dtPsFl_6">dtPsFl[6]</a> Reserved </h4>
-  <h4> <a href="gm_dualth.html#dtPsFl_7">dtPsFl[7]</a> Reserved </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_5">dtPsFl[5]</a> Interaction
+parameter formalism code (I G R T M V B O) </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_6">dtPsFl[6]</a> Interaction
+parameter units code (J K N ) </h4>
+  <h4> <a href="gm_dualth.html#dtPsFl_7">dtPsFl[7]</a> Control flag
+for least-square param. fitting ( N L S B C ) </h4>
   <h4> <a href="gm_dualth.html#dtSize_0">dtSize[0]</a> Input number of
 experiments (equilibria) in basis sub-system </h4>
   <h4> <a href="gm_dualth.html#dtSize_1">dtSize[1]</a> Input number of
@@ -2986,14 +3028,14 @@ formula units to set compositions in basis sub-system </h4>
 DC (end-member) candidates in non-basis sub-system </h4>
   <h4> <a href="gm_dualth.html#dtSize_3">dtSize[3]</a> Input number of
 references to data sources </h4>
-  <h4> <a href="gm_dualth.html#dtSize_4">dtSize[4]</a> Input number of
-elements in the math script work arrays qpn per non-basis DC </h4>
+  <h4> <a href="gm_dualth.html#dtSize_4">dtSize[4]</a> Reserved </h4>
   <h4> <a href="gm_dualth.html#dtSize_5">dtSize[5]</a> Input number of
 elements in the math script work arrays qpg per non-basis DC </h4>
   <h4> <a href="gm_dualth.html#dtSize_6">dtSize[6]</a> Number of
 independent components (in basis sub-system, taken from project system)
   </h4>
-  <h4> <a href="gm_dualth.html#dtSize_7">dtSize[7]</a> Reserved </h4>
+  <h4> <a href="gm_dualth.html#dtSize_7">dtSize[7]</a> Number of
+interaction parameters in the non-basis mixture (default 1 - regular) </h4>
   <h4> <a href="gm_dualth.html#dtTm_0">dtTm[0]</a> SysEq CSD variant
 number: start value </h4>
   <h4> <a href="gm_dualth.html#dtTm_1">dtTm[1]</a> SysEq CSD variant
@@ -3058,12 +3100,32 @@ non-basis sub-system </h4>
 number </h4>
   <h4> <a href="gm_dualth.html#cNV_">cNV_</a> Current Nv - MTPARM
 variant number </h4>
+  <h4> <a href="gm_dualth.html#lmft_s_0">lmft_s[0]</a> Number of
+parameters to fit (nP) </h4>
+  <h4> <a href="gm_dualth.html#lmft_s_1">lmft_s[1]</a> Number of data
+points to use in fitting (nQ) </h4>
+  <h4> <a href="gm_dualth.html#lmft_s_2">lmft_s[2]</a> Number of
+arguments in tdat array per one data point (nM) </h4>
+  <h4> <a href="gm_dualth.html#lmft_s_3">lmft_s[3]</a> Reserved </h4>
+  <h4> <a href="gm_dualth.html#Xi2_0">Xi2[0]</a> Final SOS/DF value
+(quality of LS fit) </h4>
+  <h4> <a href="gm_dualth.html#Xi2_1">Xi2[1]</a> Reserved </h4>
+  <h4> <a href="gm_dualth.html#tdat">tdat</a> DualTh least-squares
+fitter: Array of observations (experimental data) arguments </h4>
+  <h4> <a href="gm_dualth.html#ydat">ydat</a> DualTh least-squares
+fitter: Array of observations (experimental data) values </h4>
+  <h4> <a href="gm_dualth.html#par">par</a> Least-squaressd_m fitter:
+Guess parameters (input); Fitted parameters (output) </h4>
+  <h4> <a href="gm_dualth.html#sdpar">sdpar</a> Least-squares fitter:
+Standard deviations for fitted parameter values (output,optional) </h4>
   <h4> <a href="gm_dualth.html#nam_nr">nam_nr</a> Id names of DC
 (end-member) stoichiometry candidates, input </h4>
   <h4> <a href="gm_dualth.html#dtName">dtName</a> Comment line for the
 full name of this DualTh task </h4>
   <h4> <a href="gm_dualth.html#dtNote">dtNote</a> Comment line for
 optional enhancement of the dtName line </h4>
+  <h4> <a href="gm_dualth.html#An">An</a> Stoichiometry matrix for DC
+(end-member) stoichiometry candidates </h4>
   <h4> <a href="gm_dualth.html#Bb">Bb</a> Table of bulk compositions
 of basis sub-systems, moles </h4>
   <h4> <a href="gm_dualth.html#Bn">Bn</a> Table of bulk compositions
@@ -3072,25 +3134,39 @@ of non-basis sub-systems, moles </h4>
 values for basis sub-systems, J/mol </h4>
   <h4> <a href="gm_dualth.html#chi">chi</a> Table of mole fractions of
 DC (end-member) candidates </h4>
-  <h4> <a href="gm_dualth.html#mu_n">mu_n</a> Table of DualTh chemical
-potentials of non-basis DC (end-members), J/mol </h4>
-  <h4> <a href="gm_dualth.html#Coul">Coul</a> Table of excess Gibbs
-energies of mixture for candidates (calculated) (or input Coulombic
-terms for surface complexes) </h4>
+  <h4> <a href="gm_dualth.html#eta_b">eta_b</a> Table of DualTh
+chemical potentials of n(M) end-members, normalized </h4>
+  <h4> <a href="gm_dualth.html#act_n">act_n</a> Table of
+DualTh-calculated activities </h4>
+  <h4> <a href="gm_dualth.html#Coul">Coul</a> Table of input Coulombic
+terms for surface complexes (J/mol) </h4>
   <h4> <a href="gm_dualth.html#gam_n">gam_n</a> Table of activity
-coefficients for non-basis DC candidates </h4>
-  <h4> <a href="gm_dualth.html#avg_g">avg_g</a> Means over gam_n
-columns (experiments) for DC candidates </h4>
-  <h4> <a href="gm_dualth.html#sd_g">sd_g</a> St.deviations over gam_n
-columns (experiments) for DC candidates </h4>
-  <h4> <a href="gm_dualth.html#muo_n">muo_n</a> Table of standard
+coefficients for non-basis DC (end-members)</h4>
+  <h4> <a href="gm_dualth.html#mu_b">mu_b</a> [Q][M]Table of DualTh
+chemical potentials of non-basis DC (end-members), J/mol</h4>
+  <h4> <a href="gm_dualth.html#mu_o">mu_o</a> [Q][M] Table of standard
 Gibbs energies for DC candidates, J/mol </h4>
-  <h4> <a href="gm_dualth.html#avg_m">avg_m</a> Means over muo_n
-columns (experiments) for DC candidates </h4>
-  <h4> <a href="gm_dualth.html#sd_m">sd_m</a> St.deviations over muo_n
-columns (experiments) for DC candidates </h4>
-  <h4> <a href="gm_dualth.html#qpn">qpn</a> Work array for chi
-calculation math script </h4>
+  <h4> <a href="gm_dualth.html#avsd_o">avsd_o</a>[2][M] mean and
+st.dev. over mu_o columns (experiments) for DC candidates</h4>
+  <h4> <a href="gm_dualth.html#mu_a">mu_a</a>[Q][M] Table of estimated
+st. Gibbs energy function for trace DC candidates G*NS </h4>
+  <h4> <a href="gm_dualth.html#avsd_a">avsd_a</a>[2][M] mean and
+st.dev. over mu_a columns (experiments) for DC candidates</h4>
+  <h4> <a href="gm_dualth.html#gmx_n_0">gmx_n[][0]</a> in J/mol for Q
+experiments : Excess Gibbs energy of mixing (col. 0) </h4>
+  <h4> <a href="gm_dualth.html#gmx_n_1">gmx_n[][1]</a> Gibbs energy of
+ideal mixing (col. 1) </h4>
+  <h4> <a href="gm_dualth.html#gmx_n_2">gmx_n[][2]</a> Total Gibbs
+energy of mixing (col. 2) </h4>
+  <h4> <a href="gm_dualth.html#gmx_n_3">gmx_n[][3]</a> Gibbs energy of
+the mechanical mixture of pure end members (col. 3) </h4>
+  <h4> <a href="gm_dualth.html#gmx_n_4">gmx_n[][4]</a> Integral Gibbs
+energy of the mixture phase (col. 4) </h4>
+  <h4> <a href="gm_dualth.html#Wa">Wa</a> [Q][P] interaction
+parameters for the mixing model estimated directly for each experiment </h4>
+  <h4> <a href="gm_dualth.html#avsd_w">avsd_w</a>[2][P] estimated
+interaction parameters with st.deviations, averaged from Wa or
+regressed from gmx_n</h4>
   <h4> <a href="gm_dualth.html#qpg">qpg</a> Work array for gamma
 calculation math script </h4>
   <h4> <a href="gm_dualth.html#CIb">CIb</a> Input table of quantity/
@@ -3101,10 +3177,10 @@ concentration of IC in non-basis sub-systems </h4>
 concentration of UDF formulae for basis sub-systems </h4>
   <h4> <a href="gm_dualth.html#CAn">CAn</a> Input table of quantity/
 concentration of DC formulae for non-basis sub-systems </h4>
-  <h4> <a href="gm_dualth.html#cExpr">cExpr</a> Math script text field
-for calculation of mole fractions of DC in non-basis sub-system </h4>
-  <h4> <a href="gm_dualth.html#dgExpr">dgExpr</a> Math script text
-field for calculation of activity coeffs of DC in non-basis sub-system </h4>
+  <h4> <a href="gm_dualth.html#cExpr">cExpr</a> Math script text for
+calculation of Gex for LS fitting of interaction parameters </h4>
+  <h4> <a href="gm_dualth.html#dgExpr">dgExpr</a> Math script text for
+calculation of activity coeffs of DC in non-basis sub-system </h4>
   <h4> <a href="gm_dualth.html#dtSDrf">dtSDrf</a> List of
 bibliographic references to data sources </h4>
   <h4> <a href="gm_dualth.html#dtSDvl">dtSDvl</a> Parameters taken
@@ -3113,6 +3189,8 @@ from the respective data sources </h4>
 experiments, input </h4>
   <h4> <a href="gm_dualth.html#nam_n">nam_n</a> Id names of DC
 (end-member) stoichiometry candidates, input </h4>
+  <h4> <a href="gm_dualth.html#par_n">par_n</a> Id names of
+interaction parameters, input </h4>
   <h4> <a href="gm_dualth.html#for_n">for_n</a> Formulae of DC
 (end-member) stoichiometry candidates, input </h4>
   <h4> <a href="gm_dualth.html#for_b">for_b</a> Formulae for setting
@@ -3131,18 +3209,23 @@ quantities of formula units for basis system compositions, input </h4>
 quantities of DC formulae for non-basis system compositions, input </h4>
   <h4> <a href="gm_dualth.html#SBM">SBM</a> Keys (names) of IC, taken
 from the project definition automatically </h4>
-  <h4> <a href="gm_dualth.html#muo_i">muo_i</a> Input st.state chem.
-potentials for candidates (or EMPTY if unknown), J/mol </h4>
-  <h4> <a href="gm_dualth.html#act_n">act_n</a> Table of DualTh-
-calculated activities </h4>
   <h4> <a href="gm_dualth.html#Tdq">Tdq</a> Temperatures of
 experiments (optional input), centigrade C </h4>
   <h4> <a href="gm_dualth.html#Pdq">Pdq</a> Pressures of experiments
 (optional input), bar </h4>
   <h4> <a href="gm_dualth.html#ISq">ISq</a> Effective ionic strength
 in aqueous solutions (auto-collected) </h4>
-  <h4> <a href="gm_dualth.html#An">An</a> Stoichiometry matrix for DC
-(end-member) stoichiometry candidates </h4>
+  <h4> <a href="gm_dualth.html#wa_cp">wa_cp</a> Input code for
+constrained LS interaction parameter fitting (LM method only): 0 - no
+constraints; 1 - upper; 2 - lower; 3 - two-side </h4>
+  <h4> <a href="gm_dualth.html#wdat">wdat</a> Input for least-squares
+(LS) fitter: array of weight factors for data, (default 1) </h4>
+  <h4> <a href="gm_dualth.html#wpar">wpar</a> Input for least-squares
+(LS) fitter: uncertainty half-interval for a priori constrained
+parameters (optional) </h4>
+  <h4> <a href="gm_dualth.html#Wa_ap">Wa_ap</a> Input: a priori
+interaction parameter values (calculation of activity coefficients, LS
+fitting) </h4>
   <h4> <a href="gm_dualth.html#dSTkey">dSTkey</a> Key of the currently
 processed SysEq record </h4>
   <h4> <a href="gm_dualth.html#dtTprn">dtTprn</a> Internal </h4>
