@@ -1208,7 +1208,7 @@ AGAIN:
                 mod = ios::out;
                 break;
             case VF3_1:
-                mod = ios::app;
+                mod = ios::out|ios::app;
                 break;
             case VF3_3:
                 goto AGAIN;

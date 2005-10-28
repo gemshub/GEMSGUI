@@ -668,7 +668,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
                 mod = ios::out;
                 break;
             case VF3_1:
-                mod = ios::app;
+                mod = ios::out|ios::app;
                 break;
             case VF3_3:
                 return true;

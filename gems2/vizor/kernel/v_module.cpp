@@ -1035,7 +1035,7 @@ TCModule::PrintSDref( const char* sd_key, char* text_fmt )
                 mod = ios::out;
                 break;
             case VF3_1:
-                mod = ios::app;
+                mod = ios::out|ios::app;
                 break;
             case VF3_3:
                 return;
@@ -1666,7 +1666,7 @@ TCModule::RecExport( const char *pattern )
                 mod = ios::out;
                 break;
       case VF3_1:
-                mod = ios::app;
+                mod = ios::out|ios::app;
                 break;
       case VF3_3:
                 return;

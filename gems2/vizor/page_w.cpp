@@ -832,10 +832,19 @@ TField::setFromString(const QString& str, int N1, int N2, int M1, int M2, bool t
 void
 TField::clear()
 {
+  // Sveta oct 2005
+ TObject& object = GetObj();
+ for(int nn=selectN1; nn<selectN2; nn++)
+            for(int mm=selectM1; mm<selectM2; mm++ )
+               object.SetString(S_EMPTY, nn, mm);
+ objectChanged();
+ Update();
+/*
     for(uint ii=0; ii<aCtrl.GetCount(); ii++)
-	if( aCtrl[ii]->GetN() >= selectN1 && aCtrl[ii]->GetN() < selectN2 
+	if( aCtrl[ii]->GetN() >= selectN1 && aCtrl[ii]->GetN() < selectN2
 		&&  aCtrl[ii]->GetM() >= selectM1 && aCtrl[ii]->GetM() < selectM2 )
     	    ((TCellInput*)aCtrl[ii])->clear();
+*/
 }
 
 void

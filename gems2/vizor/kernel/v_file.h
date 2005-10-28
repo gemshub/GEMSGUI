@@ -35,8 +35,8 @@ static const FileStatus  NOT_OPEN = FileStatus(0),    // no file  opend
     WRITE_B =  ios::out|ios::binary,                //0x82,
     UPDATE_T = ios::in|ios::out,                    //0x03,
     UPDATE_B = ios::in|ios::out|ios::binary,        //0x83,
-    APPEND_T = /*ios::in|ios::out|*/ios::app,           //0x09, !
-    APPEND_B = /*ios::in|ios::out|*/ios::app|ios::binary, //0x84,
+    APPEND_T = /*ios::in|*/ios::out|ios::app,           //0x09, !
+    APPEND_B = /*ios::in|*/ios::out|ios::app|ios::binary, //0x84,
     RDONLY_DBV = ios::in/*|ios::nocreate*/|ios::binary, //0x05, !
     UPDATE_DBV = ios::in|ios::out|ios::binary;       // 0x83 !
 

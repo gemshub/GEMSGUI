@@ -1328,7 +1328,7 @@ TProcess::internalCalc()
 
                 // export script
                 if( text_fmt )
-                { fstream f( filename.c_str(), ios::app );
+                { fstream f( filename.c_str(), ios::out|ios::app );
                   ErrorIf( !f.good() , filename.c_str(), "Fileopen error");
                    // scan and print format
                   TPrintData dat( sd_key.c_str(), nRT, f, text_fmt );

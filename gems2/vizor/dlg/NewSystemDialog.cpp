@@ -43,11 +43,14 @@ const char *GEMS_HOWTO_HTML = "gems_howto";
 
 #define Inherited NewSystemDialogData
 
+static bool noCommit;
+
 NewSystemDialog* NewSystemDialog::pDia = 0;
 
 NewSystemDialog::NewSystemDialog(QWidget* parent, const char* name):
         Inherited( parent, name, true )
 {
+    noCommit = false;
     gstring titl = pVisorImp->getGEMTitle();
             titl+= " : Single Thermodynamic System in Project  ";
             titl+= gstring(rt[RT_PARAM].FldKey(0), 0, rt[RT_PARAM].FldLen(0));
@@ -89,6 +92,7 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* name):
 // 07/08/2002 Sveta   Create, if no syseq is present in the project
     if( rt[RT_SYSEQ].RecCount() <= 0)
         CmCreate();
+
 }
 
 void
@@ -295,6 +299,12 @@ NewSystemDialog::Update()
        }
     }
     statusBar()->message( msg );
+
+    //    last_update = time(0);
+    update();
+    // this really updates window when CPU is heavyly loaded
+    qApp->processEvents();
+
 }
 
 void
@@ -451,14 +461,17 @@ NewSystemDialog::CmCreate()
 {
  try
  {
+   noCommit = true;
    TProfil::pm->newSystat( VF_CLEARALL );
       // Create...
     loadList1();
     loadList2();
     Update();
+  noCommit = false;
  }
     catch( TError& xcpt )
     {
+      noCommit = false;
       vfMessage(this, xcpt.title, xcpt.mess);
     }
 }
@@ -580,7 +593,9 @@ void
 NewSystemDialog::CmCommit()
 {
   try
-  {    // added Sveta 13/11/2002
+  {   if(  noCommit )
+         return;
+      // added Sveta 13/11/2002
        gstring str=rt[RT_SYSEQ].UnpackKey();
        if( !(str.find_first_of("*?" ) != gstring::npos) )
           saveList1();
