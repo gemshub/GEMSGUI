@@ -364,7 +364,7 @@ TObject::SetString(const char *vbuf, int aN, int aM)
     if( !pV->SetString(vbuf, ndx(aN,aM)) )
         return false;
 
-    if( Type == S_ )
+    if( Type == S_ && IsDynamic() )  // oct 2005
         M = GetCellSize();
 
     return true;
@@ -457,7 +457,7 @@ TObject::lenDB() const
 
     if( pV )
     {
-        if( Type != S_ )
+        if( Type != S_  )
         {
             size = (size_t)csize*(size_t)N*(size_t)M;
             Odim_N = N;
@@ -465,12 +465,21 @@ TObject::lenDB() const
         }
         else
         {
+          if( IsDynamic() )
+          {
             if( pV && pV->GetPtr() )
                 size = strlen( (char *)pV->GetPtr() )+1;
             else
                 size = 0;
             Odim_N = size? 1: 0;
             Odim_M = M;
+          }
+          else                      // oct 2005 Sveta
+          {
+            size = (size_t)csize;
+            Odim_N = N;
+            Odim_M = M;
+          }
         }
     }
     else  size = Odim_N = Odim_M = 0;
@@ -497,7 +506,7 @@ size_t  TObject::toDB( GemDataStream& f )
 
     if( pV )
     {
-        if( Type != S_ )
+        if( Type != S_  )
         {
             size = (size_t)csize * (size_t)N * (size_t)M;
             Odim_N = N;
@@ -505,24 +514,33 @@ size_t  TObject::toDB( GemDataStream& f )
         }
         else
         {
+          if( IsDynamic() )
+          {
             if( pV && pV->GetPtr() )
                 size = strlen( (char *)pV->GetPtr() ) + 1;
             else
                 size = 0;
             Odim_N = size ? 1 : 0;
             Odim_M = M;
+         }
+         else                   // oct 2005 Sveta
+          {
+            size = (size_t)csize;
+            Odim_N = N;
+            Odim_M = M;
+          }
         }
     }
     else
 	size = Odim_N = Odim_M = 0;
-	
+
     Lbegin[0] = TOKENOLABEL;
     Lbegin[1] = TOKENOLABEL;
     Obegin[0] = TOKENOBJBEGIN;
     Obegin[1] = TOKENOBJBEGIN;
 
 
-    if( Type == S_ )  Odim_M = size;
+    if( Type == S_ && IsDynamic() )  Odim_M = size;
     f.writeArray( Lbegin, sizeof Lbegin );
     f << (signed char)Type;
     f << csize;
@@ -563,6 +581,7 @@ size_t  TObject::toDB( GemDataStream& f )
 size_t  TObject::ofDB( GemDataStream& f )
 {
     size_t ssize;
+    bool error_S_ = false;
     int cmp;
 
     char Lbegin[2];
@@ -589,10 +608,10 @@ size_t  TObject::ofDB( GemDataStream& f )
     size_t psize;
 
     psize = GetSize();
-    if( Otype != S_ )
+    if( Otype != S_  )
         ssize = (size_t)(csize) * Odim_N * Odim_M;
     else
-        ssize = Odim_M;
+        ssize = Odim_M; // csize
 
     if( !ssize )
         cmp = 2;
@@ -624,8 +643,13 @@ size_t  TObject::ofDB( GemDataStream& f )
             check();
         }
         else
+        {
+           if( Otype == S_ && cmp == -1 )
+            error_S_ = true;
+          else
             ErrorIf( cmp!=1, GetKeywd(),
                      "TObject:E07 Invalid type/size on getting static data object");
+        }
         break;
     case  2: //size of new object is 0
         if( IsDynamic() )
@@ -634,7 +658,7 @@ size_t  TObject::ofDB( GemDataStream& f )
     case 0: // old size = new size
         break;
     }
-    
+
     if( !ssize )
     {
         if( GetPtr() != NULL && Type == S_ )
@@ -687,7 +711,15 @@ size_t  TObject::ofDB( GemDataStream& f )
     	    ((TPlotLine*)GetPtr() + ii)->read(f);
     }
     else
-        pV->read( f, ssize );
+       if( error_S_ )
+       {
+         pV->read( f, psize );
+         char ch;
+         for( int ii=psize; ii<ssize; ii++)
+             f.get( ch );
+
+       }  else
+           pV->read( f, ssize );
 
 //cerr << "ofDB: end" << endl;
 
@@ -707,7 +739,7 @@ void TObject::toTXT( fstream& to )
         if( IsNull() )
             dimM = 0;
         else
-            if( Type == S_ )
+            if( Type == S_  )
                 dimM = strlen((char*)GetPtr())+2;
         to << "^^" << N << " " << dimM << " " << (int)Type << "~~\n";
         if( N==0 || dimM==0 )

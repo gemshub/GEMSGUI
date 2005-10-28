@@ -283,7 +283,8 @@ void TCModule::CmSaveM()
   try{
         gstring str=db->PackKey();
        if( str.find_first_of("*?" ) != gstring::npos
-            || ( db->GetStatus() == UNDF_  && db->RecCount() ) )   // 09/11/2004 Sveta
+            || ( db->GetStatus() == UNDF_  && db->RecCount() &&  // 09/11/2004 Sveta
+              nRT != RT_SDATA ) )   // oct 2005  Sveta
         Error( GetName(), "E1 Cannot save under record key template, or record contents are not yet loaded!");
         CmSave();
      }
@@ -624,7 +625,7 @@ TCModule::CmDerive()
         gstring str = gstring( db->UnpackKey(), 0, db->KeyLen() );
                     //db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
-            || ( db->GetStatus() == UNDF_ ) )   // 09/11/2004 Sveta
+            || ( db->GetStatus() == UNDF_ && nRT != RT_SDATA) )   // 09/11/2004 Sveta
             Error( GetName(), "E2 Cannot save under record key template, or record contents are not yet loaded!");
 
         //check_input( db->UnpackKey() );
@@ -668,7 +669,8 @@ TCModule::CmCalc()
 
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
-               || ( db->GetStatus()== UNDF_ && db->RecCount() ))  // 09/11/2004 Sveta
+               || ( db->GetStatus()== UNDF_ && db->RecCount()
+                 && nRT != RT_SDATA ))  // 09/11/2004 Sveta
             Error( GetName(), "E3 Cannot save under record key template, or record contents are not yet loaded!");
         //int  Rnum = db->Find( str.c_str() );
         //ErrorIf( Rnum<0, GetKeywd(),
@@ -999,7 +1001,8 @@ TCModule::CmPlot()
 
         gstring str=db->PackKey();
         if( str.find_first_of("*?" ) != gstring::npos
-        || ( db->GetStatus()== UNDF_ && db->RecCount() ))  // 09/11/2004 Sveta
+        || ( db->GetStatus()== UNDF_ && db->RecCount() &&
+           nRT != RT_SDATA ))  // 09/11/2004 Sveta
             Error( GetName(), "E4 Cannot save under record key template, or record contents are not yet loaded!");
         //int  Rnum = db->Find( str.c_str() );
         //ErrorIf( Rnum<0, GetName(), "Record to demonstrate not found!");
