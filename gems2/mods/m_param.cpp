@@ -658,8 +658,8 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     {  // List of Phases or Compos with some species discarded
         ios::openmode mod = ios::out;
         const char *filename = "DiscardedRecords.txt";
-
-        if( !(::access( filename, 0 )) ) //file exists
+// This question is not needed anymore  DK 27.10.2005
+/*      if( !(::access( filename, 0 )) ) //file exists
             switch( vfQuestion3( window(), filename,
                                  "This file exists! What to do?",
                                  "&Append", "&Overwrite", "&Cancel") )
@@ -673,23 +673,23 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
             case VF3_3:
                 return true;
             }
+*/
         fstream f( filename, mod );
         ErrorIf( !f.good() , filename, "Fileopen error");
-        f <<   "Phases\n";
+        f <<   "Discarded Phase records\n";
         for( ii=0; ii<aPHnoused.GetCount(); ii++ )
              f << aPHnoused[ii].c_str() <<  "\n";
-        f <<   "\n\nComposes\n";
+        f <<   "\n\nDiscarded Compos records\n";
         for( ii=0; ii<aCMnoused.GetCount(); ii++ )
              f << aCMnoused[ii].c_str() <<  "\n";
-       f <<   "\n";
+        f <<   "\n";
         ErrorIf( !f.good() , filename, "Writefile error");
-    }
+   }
 
     useAqPhase = elm_data.flags[cbAqueous_];
     useGasPhase = elm_data.flags[cbGaseous_];
     return true;
 }
-
 
 // GEM IPM calculation of equilibrium state in MULTI
 void TProfil::calcMulti()

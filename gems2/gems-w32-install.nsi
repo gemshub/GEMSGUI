@@ -28,7 +28,7 @@ LicenseData "C:\GEMS2inst\program\doc\txt\TermsOfUse.txt"
 ; The text to prompt the user to enter a directory
 ComponentText "The GEM-Selektor v.2-PSI package is about to be installed on your PC. (De)select optional components that you want to install, and hit 'Next' to continue."
 ; The text to prompt the user to enter a directory
-DirText "At best, choose something like D:\MyGEMS2 to make finding your \projects easier; or simply hit 'Install' to proceed (with an upgrade)"
+DirText "At best, choose something like D:\MyGEMS2 to make finding your \projects easier. Attention: opening GEMS projects with this version will make them unreadable by earlier installations of GEMS-PSI package! Hit 'Install' only after backup of your earlier GEMS installation directory."
 
 ; The stuff to install
 Section "GEMS2 (required)"
@@ -96,8 +96,8 @@ SectionEnd
 Section "Start Menu Shortcuts"
   CreateDirectory "$SMPROGRAMS\GEM-Selektor v2-PSI"
   CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Uninstall GEMS2.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Run GEMS2.lnk" "$INSTDIR\program\gems2.exe" '-c -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
-;  CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Run GEMS2 1st time.lnk" "$INSTDIR\program\gems2.exe" '-d -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
+  CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Run GEMS2.lnk" "$INSTDIR\program\gems2.exe" '-s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
+  CreateShortCut "$SMPROGRAMS\GEM-Selektor v2-PSI\Run GEMS2 with new projects.lnk" "$INSTDIR\program\gems2.exe" '-d -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
   CreateShortCut "$DESKTOP\Run GEMS2.lnk" "$INSTDIR\program\gems2.exe" '-c -s "$INSTDIR\program" -u "$INSTDIR"' "$INSTDIR\program\gems2.ico" 0
 SectionEnd
 
@@ -115,8 +115,16 @@ ConfSkip:
   SetOutPath $INSTDIR\projects\TryNPTDB
     File "C:\GEMS2inst\projects\TryNPTDB\*.pdb"
     File "C:\GEMS2inst\projects\TryNPTDB\*.ndx"
+  CreateDirectory "$INSTDIR\projects\TS-Case1"
+  SetOutPath $INSTDIR\projects\TS-Case1
+    File "C:\GEMS2inst\projects\TS-Case1\*.pdb"
+    File "C:\GEMS2inst\projects\TS-Case1\*.ndx"
+  CreateDirectory "$INSTDIR\projects\TS-Case2"
+  SetOutPath $INSTDIR\projects\TS-Case2
+    File "C:\GEMS2inst\projects\TS-Case2\*.pdb"
+    File "C:\GEMS2inst\projects\TS-Case2\*.ndx"
 ; More test projects to come here!  
-MessageBox MB_YESNO "Is it the first installation of GEMS in this directory on your PC? If so then it is recommended to answer YES to check whether the GEMS program can start Ok and re-fresh its configuration files" IDNO ExecSkipped 
+MessageBox MB_YESNO "Please, click YES to check if GEMS can start Ok and refresh its configuration files. This is especially recommended if you install GEMS in this directory for the first time." IDNO ExecSkipped 
   Exec '"$INSTDIR\program\gems2.exe" -d -s "$INSTDIR\program" -u "$INSTDIR"'
 ExecSkipped:
 ;
@@ -124,7 +132,7 @@ ExecSkipped:
 SectionEnd
 
 ; uninstall stuff
-UninstallText "This will uninstall the GEM-Selektor v.2-PSI package. Your modelling project subdirectories will not be removed. Hit 'Uninstall' to continue."
+UninstallText "This will uninstall the GEM-Selektor v.2-PSI package. Your own modelling project subdirectories will not be removed. Hit 'Uninstall' to continue."
 
 ; special uninstall section.
 Section "Uninstall"
@@ -143,7 +151,9 @@ Section "Uninstall"
   Delete "$INSTDIR\program\doc\pdf\*.*"
 ;
   Delete "$INSTDIR\projects\*.*" 
-;  Delete "$INSTDIR\projects\TryNPTDB\*.*" 
+  Delete "$INSTDIR\projects\TryNPTDB\*.*" 
+  Delete "$INSTDIR\projects\TS-Case1\*.*" 
+  Delete "$INSTDIR\projects\TS-Case2\*.*" 
 ;
 ; MUST REMOVE UNINSTALLER, too
   Delete $INSTDIR\uninstall.exe
@@ -163,6 +173,8 @@ Section "Uninstall"
   RMDir "$INSTDIR\program" 
 ;
   RMDir "$INSTDIR\projects\TryNPTDB" 
+  RMDir "$INSTDIR\projects\TS-Case1" 
+  RMDir "$INSTDIR\projects\TS-Case2" 
 ;  RMDir "$INSTDIR\projects"
 ;
 ;  RMDir "$INSTDIR"
