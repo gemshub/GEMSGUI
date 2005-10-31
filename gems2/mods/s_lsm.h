@@ -130,11 +130,11 @@ enum fit_func_types {
               MATHSCRIPT_FIT = '1',   // using mathscript
 // for Dualth mode
               FUN_IPF_R = 'R',   // Redlich-Kister
-              FUN_IPF_G = 'G',   // Guggenheim
-              FUN_IPF_T = 'T',   // Thompson-Waldbaum
-              FUN_IPF_M = 'M',   // Margules
-              FUN_IPF_V = 'V',   // Van Laar
-              FUN_IPF_B = 'B',   // Bale-Pelton dilute formalism
+              FUN_IPF_G = 'G',   // Guggenheim
+              FUN_IPF_T = 'T',   // Thompson-Waldbaum
+              FUN_IPF_M = 'M',   // Margules
+              FUN_IPF_V = 'V',   // Van Laar
+              FUN_IPF_B = 'B',   // Bale-Pelton dilute formalism
                     };
 
 enum evl_func_types {
@@ -144,8 +144,8 @@ enum evl_func_types {
 
 enum limits_types {
     /* type of lmits */
-    LM_NO_LIM = 0, LM_LOWER_LIM =1, LM_UPPER_LIM = 2, LM_BOTH_LIM =3,
-                    };
+    LM_NO_LIM = 0, LM_LOWER_LIM =1, LM_UPPER_LIM = 2, LM_BOTH_LIM =3,
+                    };
 
 // parameters for calling the high-level interface lmfit
 //   ( lmfit.c provides lm_initialize_control which sets default values ):
@@ -250,12 +250,12 @@ typedef double fd_type;
 #define u(i,j) (U[(i)*n+(j)])
 #define v(i,j) (V[(i)*n+(j)])
 #define cvm(i,j) (CVM[(i)*n+(j)])
-
-#define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
-#define TOL 1.0e-12    // Default value for single precision and variables
-                      // scaled to order unity.
-
-class TSVDcalc
+
+#define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
+#define TOL 1.0e-12    // Default value for single precision and variables
+                      // scaled to order unity.
+
+class TSVDcalc
 {
 
   TLMDataType *data;
@@ -301,6 +301,9 @@ public:
 };
 
 inline
-double ROUND_EXP(double x, int ex ){    double dd = pow( 10, ex);    return double( int( (x)*dd+.5 ) ) / dd;}
+double ROUND_EXP(double x, int ex )
+{    double dd = pow( 10., double(ex) );    
+     return double( int( (x)*dd+.5 ) ) / dd;
+}
 
 #endif //_s_lmmin_h_

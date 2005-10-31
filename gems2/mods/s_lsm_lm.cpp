@@ -1581,7 +1581,7 @@ int
   for(i=0; i<m*m; i++)
   {  // C[i] *= sumsq;
      tmp = sqrt(fabs(C[i]));
-     C[i] = SIGN(tmp, C[i]);
+     C[i] = SIGN(tmp, C[i]);
   }
   return rnk;
 }

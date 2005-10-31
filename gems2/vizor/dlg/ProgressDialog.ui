@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>310</width>
-            <height>464</height>
+            <height>468</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -35,28 +35,6 @@
         </property>
         <property name="text">
             <string>IPM Minimization Progress</string>
-        </property>
-    </widget>
-    <widget class="QProgressBar">
-        <property name="name">
-            <cstring>pProgress</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>30</y>
-                <width>290</width>
-                <height>31</height>
-            </rect>
-        </property>
-        <property name="totalSteps">
-            <number>7</number>
-        </property>
-        <property name="progress">
-            <number>1</number>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Shows how far the GEM IPM proceeded from FIA to G(x) minimum</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -98,28 +76,6 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>Key of the currently processed SysEq database record</string>
-        </property>
-    </widget>
-    <widget class="Line">
-        <property name="name">
-            <cstring>Line1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>390</y>
-                <width>290</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>HLine</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
         </property>
     </widget>
     <widget class="QLayoutWidget">
@@ -254,6 +210,72 @@
                 </property>
             </widget>
         </hbox>
+    </widget>
+    <widget class="QProgressBar">
+        <property name="name">
+            <cstring>pProgress</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>30</y>
+                <width>290</width>
+                <height>31</height>
+            </rect>
+        </property>
+        <property name="totalSteps">
+            <number>7</number>
+        </property>
+        <property name="progress">
+            <number>1</number>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Shows how far the GEM IPM proceeded from FIA to G(x) minimum</string>
+        </property>
+    </widget>
+    <widget class="QFrame">
+        <property name="name">
+            <cstring>pBottle</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>130</y>
+                <width>80</width>
+                <height>260</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Raised</enum>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Shows current mass ratio of gas (white), liquid (blue) and solid (black) phases </string>
+        </property>
+    </widget>
+    <widget class="Line">
+        <property name="name">
+            <cstring>Line1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>390</y>
+                <width>290</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>HLine</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -504,28 +526,6 @@
                 </property>
             </widget>
         </grid>
-    </widget>
-    <widget class="QFrame">
-        <property name="name">
-            <cstring>pBottle</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>130</y>
-                <width>80</width>
-                <height>260</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Raised</enum>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Shows current mass ratio of gas (white), liquid (blue) and solid (black) phases </string>
-        </property>
     </widget>
 </widget>
 <connections>
