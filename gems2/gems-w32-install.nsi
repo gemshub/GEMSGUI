@@ -44,7 +44,7 @@ Section "GEMS2 (required)"
     File "C:\GEMS2inst\program\gems2.exe"
     File "C:\GEMS2inst\program\gems2.ico"
  ; Set the right version of qt*.dll below
-    File "C:\GEMS2inst\program\qtmt335.dll"
+    File "C:\GEMS2inst\program\qtmt334.dll"
     File "C:\GEMS2inst\program\cc3250mt.dll"
  ;   File "C:\GEMS2inst\program\imm32.dll"
     File "C:\GEMS2inst\program\readme.txt"
