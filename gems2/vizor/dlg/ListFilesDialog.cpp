@@ -16,7 +16,7 @@
 // See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-const char *GEMS_LF_HTML = "lf_howto";
+const char *GEMS_LF_HTML = "g_miscel";
 
 #define Inherited ListFilesDialogData
 

@@ -18,7 +18,7 @@
 //-------------------------------------------------------------------
 
 const char *GEMS_MISC_HTML = "g_miscel";
-const char *GEMS_FORM_HTML = "g_formats";
+const char *GEMS_FORM_HTML = "g_miscel";
 
 #include <qlabel.h>
 

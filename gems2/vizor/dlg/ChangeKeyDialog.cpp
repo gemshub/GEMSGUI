@@ -17,7 +17,7 @@
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-const char *GEMS_TEMPL_HTML = "templ_key";
+const char *GEMS_TEMPL_HTML = "g_miscel";
 
 #include <qcombobox.h>
 #include "visor_w.h"

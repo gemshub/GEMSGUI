@@ -44,7 +44,7 @@ Section "GEMS2 (required)"
     File "C:\GEMS2inst\program\gems2.exe"
     File "C:\GEMS2inst\program\gems2.ico"
  ; Set the right version of qt*.dll below
-    File "C:\GEMS2inst\program\qtmt334.dll"
+    File "C:\GEMS2inst\program\qtmt335.dll"
     File "C:\GEMS2inst\program\cc3250mt.dll"
  ;   File "C:\GEMS2inst\program\imm32.dll"
     File "C:\GEMS2inst\program\readme.txt"
@@ -115,14 +115,14 @@ ConfSkip:
   SetOutPath $INSTDIR\projects\TryNPTDB
     File "C:\GEMS2inst\projects\TryNPTDB\*.pdb"
     File "C:\GEMS2inst\projects\TryNPTDB\*.ndx"
-  CreateDirectory "$INSTDIR\projects\TS-Case1"
-  SetOutPath $INSTDIR\projects\TS-Case1
-    File "C:\GEMS2inst\projects\TS-Case1\*.pdb"
-    File "C:\GEMS2inst\projects\TS-Case1\*.ndx"
-  CreateDirectory "$INSTDIR\projects\TS-Case2"
-  SetOutPath $INSTDIR\projects\TS-Case2
-    File "C:\GEMS2inst\projects\TS-Case2\*.pdb"
-    File "C:\GEMS2inst\projects\TS-Case2\*.ndx"
+;  CreateDirectory "$INSTDIR\projects\TS-Case1"
+;  SetOutPath $INSTDIR\projects\TS-Case1
+;    File "C:\GEMS2inst\projects\TS-Case1\*.pdb"
+;    File "C:\GEMS2inst\projects\TS-Case1\*.ndx"
+;  CreateDirectory "$INSTDIR\projects\TS-Case2"
+;  SetOutPath $INSTDIR\projects\TS-Case2
+;    File "C:\GEMS2inst\projects\TS-Case2\*.pdb"
+;    File "C:\GEMS2inst\projects\TS-Case2\*.ndx"
 ; More test projects to come here!  
 MessageBox MB_YESNO "Please, click YES to check if GEMS can start Ok and refresh its configuration files. This is especially recommended if you install GEMS in this directory for the first time." IDNO ExecSkipped 
   Exec '"$INSTDIR\program\gems2.exe" -d -s "$INSTDIR\program" -u "$INSTDIR"'
@@ -152,8 +152,8 @@ Section "Uninstall"
 ;
   Delete "$INSTDIR\projects\*.*" 
   Delete "$INSTDIR\projects\TryNPTDB\*.*" 
-  Delete "$INSTDIR\projects\TS-Case1\*.*" 
-  Delete "$INSTDIR\projects\TS-Case2\*.*" 
+;  Delete "$INSTDIR\projects\TS-Case1\*.*" 
+;  Delete "$INSTDIR\projects\TS-Case2\*.*" 
 ;
 ; MUST REMOVE UNINSTALLER, too
   Delete $INSTDIR\uninstall.exe
@@ -173,8 +173,8 @@ Section "Uninstall"
   RMDir "$INSTDIR\program" 
 ;
   RMDir "$INSTDIR\projects\TryNPTDB" 
-  RMDir "$INSTDIR\projects\TS-Case1" 
-  RMDir "$INSTDIR\projects\TS-Case2" 
+;  RMDir "$INSTDIR\projects\TS-Case1" 
+;  RMDir "$INSTDIR\projects\TS-Case2" 
 ;  RMDir "$INSTDIR\projects"
 ;
 ;  RMDir "$INSTDIR"

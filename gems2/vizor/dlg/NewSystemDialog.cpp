@@ -19,7 +19,7 @@
 const char *GEMS_SYS_HTML = "gems_sys";
 const char *GEMS_BCC_HTML = "gems_bcc";
 const char *GEMS_IPM_HTML = "gems_ipm";
-const char *GEMS_HOWTO_HTML = "gems_howto";
+const char *GEMS_HOWTO_HTML = "ge_howto";
 
 #include <qtoolbar.h>
 #include <qpixmap.h>

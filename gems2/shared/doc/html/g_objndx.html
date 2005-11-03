@@ -15,56 +15,70 @@ Entries in this file redirect the help system to display help pages
 prepared in various HTML files. <br>
 <p><br>
 </p>
-<p>Rules for setting up DOD keywords and links to html files<br>
+<p style="font-family: monospace;">Rules for setting up DOD keywords
+and links to html files<br>
 </p>
-<p>Example:&nbsp;&nbsp; &lt;a
+<p style="font-family: monospace;">Example:&nbsp;&nbsp; &lt;a
 href="gm_dcomp.html#TCint_0"&gt;TCint[0]&lt;/a&gt; Comment <br>
 </p>
-The entry must contain a HTML code like this: <br>
-&nbsp; &nbsp; &nbsp; <br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;a
-href="html_file_namel#label"&gt;keyword&lt;/a&gt; <br>
-Here:&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span style="font-family: monospace;">The entry must contain a HTML
+code like this: </span><br style="font-family: monospace;">
+<span style="font-family: monospace;">&nbsp; &nbsp; &nbsp; </span><br
+ style="font-family: monospace;">
+<span style="font-family: monospace;">&nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &lt;a
+href="html_file_namel#label"&gt;keyword&lt;/a&gt; </span><br
+ style="font-family: monospace;">
+<span style="font-family: monospace;">Here:&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 html_file_name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; is
-the name of html file where to jump;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+the name of html file where to jump;</span><br
+ style="font-family: monospace;">
+<span style="font-family: monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 label
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 position label (anchor) in this&nbsp; file
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 keyword
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-GEM data object label, optionally with indexes.<br>
-<br>
-- if dimension N&nbsp; in the DOD exceeds 1 and dimension M in the DOD
+GEM data object label, optionally with indexes.</span><br
+ style="font-family: monospace;">
+<br style="font-family: monospace;">
+<span style="font-family: monospace;">- if dimension N&nbsp; in the DOD
+exceeds 1 and dimension M in the DOD
 exceeds 1:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 keyword[indexN][indexM]&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; locates a
 reference to the help page only for this cell&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-keyword[][indexM] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; keyword[][indexM] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp;
 &nbsp;&nbsp;&nbsp; locates a reference to the help page for any cell in
 the column indexM
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+<br>
 keyword[indexN] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp;&nbsp; locates a reference to the help page for any cell
 in the row indexN
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
+<br>
 keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 locates a&nbsp; reference to the same help page for any cell&nbsp;
 -&nbsp; if only one dimension (N or M)&nbsp; in DOD exceeds 1 :
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<br>
 keyword[index] &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; locates a reference to the help page only
 for a cell with this index&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+<br>
 keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-locates a&nbsp; reference to the same help page for any cell <br>
-- if both dimensions N and M are set to 1, or the DOD refers to text:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-locates a&nbsp; reference to the help page&nbsp; <br>
+locates a&nbsp; reference to the same help page for any cell </span><br
+ style="font-family: monospace;">
+<span style="font-family: monospace;">- if both dimensions N and M are
+set to 1, or the DOD refers to text:</span><br
+ style="font-family: monospace;">
+<span style="font-family: monospace;">keyword&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+locates a&nbsp; reference to the help page&nbsp; </span><br>
 <br>
 All links for the same keyword must be located together in this file
 (i.e. the search stops when <br>

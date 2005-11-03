@@ -16,7 +16,7 @@
 // See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
 // E-mail gems2.support@psi.ch
 //-------------------------------------------------------------------
-const char *GEMS_SFD_HTML = "setfilters";
+const char *GEMS_SFD_HTML = "elements";
 
 #define Inherited SetFiltersDialogData
 
