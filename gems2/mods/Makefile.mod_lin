@@ -9,7 +9,7 @@
 # compile variables
 
 ifeq ("x$(QTDIR)","x")
-#QTDIR		= /usr/local/qt
+# QTDIR		= /usr/local/qt
 QTDIR		= /usr/lib/qt3
 endif
 
@@ -22,10 +22,21 @@ DEBUG_FLAGS	= -ggdb
 PROF_FLAGS	= 
 WARN_ALL	= -W -Weffc++ -Woverloaded-virtual -Wsynth -Wshadow -Wpointer-arith \
 		    -Wunreachable-code
+
+ifeq ("$(shell uname)", "Linux")
 CCFLAGS		= -m32 -Wall -DQT_THREAD_SUPPORT -D__unix -pipe -DUse_mt_mode
+else
+CCFLAGS		= -Wall -DQT_THREAD_SUPPORT -D__unix -pipe -DUse_mt_mode
+endif
 
 INC_GLOBAL	= -I$(QTDIR)/include 
+
+ifeq ("$(shell uname)", "Linux")
 LDFLAGS		= -m elf_i386 -r
+else
+LDFLAGS		= -r
+endif
+
 #LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
 #LIBS		= -lqt-mt -lX11 -lXext -lm -lstdc++
 #-lefence 
@@ -53,7 +64,6 @@ FLAGS		= $(CCFLAGS) $(DEBUG_FLAGS)
 LINK_CMD	= $(CC) $(LDFLAGS)
 endif
 endif
-
 
 MAKEDEP_CMD	= makedepend -m -Y 
 CLEAN_CMD	= rm -f *.o *.bak *~ *.moc.cpp *.log *.out *.orig *.rej *.rpo

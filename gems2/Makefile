@@ -6,7 +6,6 @@ NAME		= gems
 VERSION		= 2.1.0
 
 ifeq ("x$(QTDIR)","x")
-# QTDIR           = /home/gems/qt3
 QTDIR		= /usr/lib/qt3
 # QTDIR		= /usr/local/qt
 endif
@@ -15,7 +14,12 @@ DEBUG_FLAGS	= -ggdb
 PROF_FLAGS	= 
 
 LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
+
+ifeq ("$(shell uname)", "Darwin")
+LDFLAGS		= 
+else
 LDFLAGS		= -m elf_i386
+endif
 
 ifeq ($(RELEASE), YES)
 QTLIBS		= $(QTDIR)/lib/libqt-mt.a
@@ -39,7 +43,12 @@ SHARED_SRC_DIR	= shared
 endif
 
 # commands
+ifeq ("$(shell uname)", "Darwin")
+CC		= c++
+else
 CC		= c++ -m32 -Wl,-melf_i386
+endif
+
 LD		= ld
 
 ifeq ($(RELEASE),YES)
