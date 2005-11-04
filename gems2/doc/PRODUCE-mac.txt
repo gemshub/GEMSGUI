@@ -24,8 +24,9 @@ Check QTDIR (if Qt is istalled):
 This will create a release version of GEMS-PSI 
 in ~/work/gems2.app/Contents/MacOS
 
-4. Check that actual distribution directories 
-are located in ~/work/gems2/gems2.app/Contents/Resources.
+4. Check that actual distribution directories stored 
+in ~/work/gems2/shared/ are copied into
+~/work/gems2/gems2.app/Contents/Resources.
 It should look like this:
   ./gems2.app/
               Contents/
@@ -36,6 +37,12 @@ It should look like this:
 		                 data/
                                  projects/
                 ...
+
+If necessary, use "cp -R" command to copy the five
+directories listed above from ./shared/.
+
+
+Execute 
 
   make copy_data
 
