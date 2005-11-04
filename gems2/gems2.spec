@@ -1,13 +1,12 @@
-%define	name	gems2
-%define	version	2.1
-%define	release	1rc9
+%define	name	gems
+%define	version	2.1.0
+%define	release	rc0
 %define install_dir /usr
 %define shared_dir %{install_dir}/share
 %define shared_src_dir shared
 
 #%define libname_orig %mklibname %{name}
 #%define libname %{libname_orig}0
-
 
 Name:		%{name}
 Summary: 	Chemistry, geochemistry, Gibbs energy minimization
@@ -49,8 +48,12 @@ install -d -m 775 -o 0 -g gems_admin %{shared_dir}/gems2/projects
 install -m 664 -o 0 -g gems_admin %{shared_src_dir}/projects/*.* %{shared_dir}/gems2/projects 
 install -d -m 775 -o 0 -g gems_admin %{shared_dir}/gems2/projects/TryNPTDB
 install -m 664 -o 0 -g gems_admin %{shared_src_dir}/projects/TryNPTDB/* %{shared_dir}/gems2/projects/TryNPTDB
+# Other test/tutorial projects to be added here 
+#
 install -d -m 775 -o 0 %{shared_dir}/gems2/visor.data
 install -m 664 -o 0 %{shared_src_dir}/visor.data/* %{shared_dir}/gems2/visor.data
+install -d -m 775 -o 0 %{shared_dir}/gems2/data
+install -m 664 -o 0 %{shared_src_dir}/data/* %{shared_dir}/gems2/data
 install -d -m 775 -o 0 %{shared_dir}/gems2/doc/html
 install -m 664 -o 0 %{shared_src_dir}/doc/html/* %{shared_dir}/gems2/doc/html
 install -d -m 775 -o 0 %{shared_dir}/gems2/doc/pdf

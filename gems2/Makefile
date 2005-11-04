@@ -2,12 +2,13 @@
 # SHELL=/bin/sh
 # compile variables
 
-NAME		= gems2
-VERSION		= 2.1
+NAME		= gems
+VERSION		= 2.1.0
 
 ifeq ("x$(QTDIR)","x")
+# QTDIR           = /home/gems/qt3
 QTDIR		= /usr/lib/qt3
-#QTDIR		= /usr/local/qt
+# QTDIR		= /usr/local/qt
 endif
 
 DEBUG_FLAGS	= -ggdb
@@ -153,6 +154,7 @@ zip:
 check_shared:
 	if [ -d $(SHARED_SRC_DIR)/DB.default ]; then /bin/true; else /bin/false; fi
 	if [ -d $(SHARED_SRC_DIR)/projects/TryNPTDB ]; then /bin/true; else /bin/false; fi
+	if [ -d $(SHARED_SRC_DIR)/data ]; then /bin/true; else /bin/false; fi
 	if [ -d $(SHARED_SRC_DIR)/visor.data ]; then /bin/true; else /bin/false; fi
 	if [ -d $(SHARED_SRC_DIR)/doc/html ]; then /bin/true; else /bin/false; fi
 	if [ -d $(SHARED_SRC_DIR)/doc/pdf ]; then /bin/true; else /bin/false; fi
