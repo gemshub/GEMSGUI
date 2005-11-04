@@ -22,10 +22,10 @@ Check QTDIR (if Qt is istalled):
   make RELEASE=YES
 
 This will create a release version of GEMS-PSI 
-in ./gems2.app/Contents/MacOS
+in ~/work/gems2.app/Contents/MacOS
 
 4. Check that actual distribution directories 
-are located in work/gems2/gems2.app/Contents/Resources.
+are located in ~/work/gems2/gems2.app/Contents/Resources.
 It should look like this:
   ./gems2.app/
               Contents/
@@ -52,7 +52,7 @@ start KDE virtual desktop client for
 After getting Mac desktop window, open a 
 terminal there and (if not done before):
 
-  cd work/gems2
+  cd ~/work/gems2
   setenv CVS_RSH ssh
   cvs update <password> 
   make RELEASE=YES 
@@ -60,11 +60,12 @@ terminal there and (if not done before):
 
 when done, re-read configuration files: 
 
-  ./gems2 ./rungems.sh -d 
+  cd ~/work/gems2 
+  ./rungems.sh -d 
 
 and then exit GEMS. 
 
-6. In terminal, execute 
+6. In terminal, get in ~/work/gems2/ and execute 
 
    make zip
 
