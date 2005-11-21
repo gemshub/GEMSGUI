@@ -428,12 +428,6 @@ typedef enum { // Units of measurement of quontities and concentrations
     // aqueous species
     CON_AQGPL = 'd', CON_AQMGPL = 'e', CON_AQMKGPL = 'b',//VOLUME CONCENTRATION
 
-    /* ��� 稭 */
-    SUR_AREAM = 's',  SUR_AREAN = 'S', /* .���2/, 2/ */
-    SUR_CONA  = 'A', /* �. � /2 */
-    SUR_CONM  = 'D', /* �. � / */
-    SUR_CONN  = 'E', /* �. � / */
-
     //Units of measurement of pressure Pr, P  { b B p P A }'
     PVT_BAR =  'b', // bar - default, 1 bar = 1e5 Pa
     PVT_KBAR = 'B', // kbar, 1 kbar = 1000 bar
@@ -508,18 +502,6 @@ typedef enum {  /* Classifications of DC */
 
     /* Single-component phases:*/
     DC_SCP_CONDEN  = 'O',   // DC forming a single-component phase
-
-    /* ⥫� ��� १�� �� ࠢᨩ */
-    DC_AQA_CATION   = 'c',  /* ⨮ */
-    DC_AQA_ANION    = 'n',  /*  */
-    DC_AQA_LIGAND   = 'l',  /* ࣠�  */
-    DC_AQA_COMPLEX  = 'x',  /* �  �⢮�*/
-    DC_AQA_IONPAIR  = 'p',  /* ��*/
-    DC_AQA_GAS      = 'g',  /* �७� (��) */
-    DC_AQA_ACID     = 'a',  /* ᫮�*/
-    DC_AQA_BASE     = 'b',  /* � */
-    DC_AQA_SALT     = 's',  /* �(�� ����� */
-    DC_AQA_HYDROX   = 'o'   /*  பᨫ */
 
 } DC_CLASSES;
 

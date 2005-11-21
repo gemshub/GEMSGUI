@@ -106,18 +106,6 @@ typedef enum {  /* Classifications of DC */
     /* Single-component phases:*/
     DC_SCP_CONDEN  = 'O',   // DC forming a single-component phase
 
-    /* Дополнительные коды для печати результатов расчета равновесий */
-    DC_AQA_CATION   = 'c',  /* Катион */
-    DC_AQA_ANION    = 'n',  /* Анион */
-    DC_AQA_LIGAND   = 'l',  /* Органический лиганд */
-    DC_AQA_COMPLEX  = 'x',  /* Комплекс в водном растворе */
-    DC_AQA_IONPAIR  = 'p',  /* Ионная пара */
-    DC_AQA_GAS      = 'g',  /* Растворенный газ (нейтральн.) */
-    DC_AQA_ACID     = 'a',  /* Кислота */
-    DC_AQA_BASE     = 'b',  /* Щелочь */
-    DC_AQA_SALT     = 's',  /* Соль (недиссоц. электролит) */
-    DC_AQA_HYDROX   = 'o'   /* Ион гидроксила */
-
 } DC_CLASSES;
 
 
@@ -199,12 +187,6 @@ typedef enum { // Units of measurement of quantities and concentrations
     CON_AQWFR = 'C', CON_AQWPROC = 'c', CON_AQPPM =  'a', // CONCENTRATION
     // aqueous species
     CON_AQGPL = 'd', CON_AQMGPL = 'e', CON_AQMKGPL = 'b',//VOLUME CONCENTRATION
-
-    /* поверхностных величин */
-    SUR_AREAM = 's',  SUR_AREAN = 'S', /* Уд.поверхность м2/г, м2/мол */
-    SUR_CONA  = 'A', /* Поверхн. избыток мол/м2 */
-    SUR_CONM  = 'D', /* Поверхн. избыток мол/г */
-    SUR_CONN  = 'E', /* Поверхн. избыток мол/мол */
 
     //Units of measurement of pressure Pr, P  { b B p P A }'
     PVT_BAR =  'b', // bar - default, 1 bar = 1e5 Pa
