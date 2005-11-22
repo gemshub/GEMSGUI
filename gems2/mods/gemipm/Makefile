@@ -19,14 +19,14 @@ SOURCES         = ../../vizor/libs/gstring.cpp ../../vizor/libs/gdatastream.cpp 
 	../submod/ms_mueqexp.cpp \
 	../submod/ipm_sel_bc.cpp ../submod/ipm_gamma.cpp \
 	../submod/ipm_fia_bc.cpp ../submod/ms_multi_file.cpp \
-	../s_fgl.cpp ../submod/ms_datach_br.cpp
+	../s_fgl.cpp ../submod/tnodearray.cpp
 
 OBJECTS         = ../../vizor/libs/gstring.o ../../vizor/libs/gdatastream.o \
 	main.o mainfromf.o nodearray.o ms_param.o \
 	ms_mueqexp.o \
 	ipm_sel_bc.o ipm_gamma.o \
 	ipm_fia_bc.o ms_multi_file.o \
-	s_fgl.o ms_datach_br.o
+	s_fgl.o tnodearray.o
 
 #OBJECTS = $(subst .cpp,.o,$(SOURCES))
 
@@ -64,7 +64,7 @@ ms_multi_file.o:	../submod/ms_multi_file.cpp
 s_fgl.o:	../s_fgl.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c  $<
 
-ms_datach_br.o:	../submod/ms_datach_br.cpp
+tnodearray.o:	../submod/tnodearray.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c  $<
 
 %.o:	%.cpp

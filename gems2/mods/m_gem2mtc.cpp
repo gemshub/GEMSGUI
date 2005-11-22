@@ -452,7 +452,7 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
     mult->to_file( ff, path );
 
 // set default data and realloc arrays
-   mult->makeStartDataChBR( aSelIC, aSelDC, aSelPH,
+   wrkArr->makeStartDataChBR( aSelIC, aSelDC, aSelPH,
       mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3], mtp->Tval, mtp->Pval );
 
 // out dataCH to binary file
@@ -463,7 +463,7 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 //          "Please, enter DataCH binary file name", "*.dch" )  )
 //   {
        GemDataStream  f_ch1(Path_, ios::out|ios::binary);
-       mult->datach_to_file(f_ch1);
+       wrkArr->datach_to_file(f_ch1);
        f_ch1.close();
 //   }
    }
@@ -477,7 +477,7 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 //          "Please, enter DataCH text file name", "*.dat" )  )
 //   {
       fstream  f_ch2(Path_.c_str(), ios::out);
-      mult->datach_to_text_file(f_ch2);
+      wrkArr->datach_to_text_file(f_ch2);
       f_ch2.close();
 //   }
    }
@@ -521,7 +521,7 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 
   // Save databr
     if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
-       mult->packDataBr();
+       wrkArr->packDataBr();
    // dataBR files - binary
     if( mtp->PsSbin != S_OFF )
     {
@@ -532,7 +532,7 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 //          "Please, enter DataBR binary file name", "*.dbr" )  )
 //   {
         GemDataStream  f_br1(Path_, ios::out|ios::binary);
-        mult->databr_to_file(f_br1);
+        wrkArr->databr_to_file(f_br1);
         f_br1.close();
 //   }
         fout << ", " << newname.c_str() << ".dbr\"";
@@ -547,7 +547,7 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 //          "Please, enter DataBR text file name", "*.dat" )  )
 //   {
         fstream  f_br2(Path_.c_str(), ios::out);
-        mult->databr_to_text_file(f_br2);
+        wrkArr->databr_to_text_file(f_br2);
         f_br2.close();
 //   }
         fout_d << ", " << newname.c_str() << ".dat\"";
@@ -559,10 +559,10 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
 
   pVisor->CloseMessage();
 
-  if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
-  {   mult->datach_free();
-      mult->databr_free();
-  }
+//  if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
+//  {   mult->datach_free();
+//      mult->databr_free();
+//  }
 }
 
 
@@ -575,7 +575,7 @@ void  TGEM2MT::freeNodeArrays()
      for( int ii=0; ii<arr_BR_size; ii++ )
         if( old_BR[ii] )
         {
-          TProfil::pm->multi->databr_free(old_BR[ii]);
+          wrkArr->databr_free(old_BR[ii]);
           old_BR[ii] = 0;
         }
   delete[]  old_BR;
@@ -585,7 +585,7 @@ void  TGEM2MT::freeNodeArrays()
      for( int ii=0; ii<arr_BR_size; ii++ )
         if( arr_BR[ii] )
         {
-          TProfil::pm->multi->databr_free(arr_BR[ii]);
+          wrkArr->databr_free(arr_BR[ii]);
           arr_BR[ii] = 0;
         }
   delete[]  arr_BR;
@@ -613,8 +613,8 @@ void  TGEM2MT::copyNodeArrays()
   return;
  for( int ii=0; ii<mtp->nC; ii++ )
  {
-    TProfil::pm->multi->GetNodeCopyFromArray( ii, mtp->nC, arr_BR );
-    TProfil::pm->multi->SaveNodeCopyToArray( ii, mtp->nC, old_BR );
+    wrkArr->GetNodeCopyFromArray( ii, mtp->nC, arr_BR );
+    wrkArr->SaveNodeCopyToArray( ii, mtp->nC, old_BR );
  }
 }
 
@@ -647,12 +647,12 @@ if( mtp->PsTPai != S_OFF )
        aSelPH.Add( ii );
 
 // set default data and realloc arrays
-   mult->makeStartDataChBR( aSelIC, aSelDC, aSelPH,
+   wrkArr->makeStartDataChBR( aSelIC, aSelDC, aSelPH,
       mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3], mtp->Tval, mtp->Pval );
 
 // allocate memory for DATABR structures
   allocNodeArrays();
-  data_CH = TProfil::pm->multi->data_CH;
+  data_CH = wrkArr->data_CH;
  // put DDc
    for( int jj=0; jj<data_CH->nDC; jj ++)
       data_CH->DD[jj] = mtp->DDc[jj];
@@ -666,13 +666,13 @@ if( mtp->PsTPai != S_OFF )
   // Make new Systat record & calculate it
      gen_task();
   // Save databr
-     mult->packDataBr();
+     wrkArr->packDataBr();
    //
    for( int jj=0; jj<mtp->nC; jj ++)
     if( mtp->DiCp[jj] == mtp->kv )
-     {    TProfil::pm->multi->data_BR->NodeHandle = (short)jj;
-          TProfil::pm->multi->SaveNodeCopyToArray( jj, mtp->nC, arr_BR );
-          TProfil::pm->multi->GetNodeCopyFromArray( jj, mtp->nC, arr_BR );
+     {    wrkArr->data_BR->NodeHandle = (short)jj;
+          wrkArr->SaveNodeCopyToArray( jj, mtp->nC, arr_BR );
+          wrkArr->GetNodeCopyFromArray( jj, mtp->nC, arr_BR );
      }
     mt_next();      // Generate work values for the next EqStat rkey
 
@@ -699,14 +699,14 @@ if( mtp->PsTPai != S_OFF )
 void TGEM2MT::calc_GEM_node( int node_ndx )
 {
 
-   TProfil::pm->multi->GetNodeCopyFromArray( node_ndx, mtp->nC, arr_BR  );
+   wrkArr->GetNodeCopyFromArray( node_ndx, mtp->nC, arr_BR  );
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
-    TProfil::pm->multi->unpackDataBr();
+    wrkArr->unpackDataBr();
 // GEM IPM calculation of equilibrium state in MULTI
     TProfil::pm->calcMulti();
 // Extracting and packing GEM IPM results into work DATABR structure
-    TProfil::pm->multi->packDataBr();
-    TProfil::pm->multi->SaveNodeCopyToArray( node_ndx, mtp->nC, arr_BR  );
+    wrkArr->packDataBr();
+    wrkArr->SaveNodeCopyToArray( node_ndx, mtp->nC, arr_BR  );
 }
 
 

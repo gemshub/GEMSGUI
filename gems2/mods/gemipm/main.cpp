@@ -6,6 +6,7 @@
 #include "m_param.h"
 #include "verror.h"
 #include "gdatastream.h"
+#include "tnodearray.h"
 
 extern "C" int /* __stdcall */ MAIF_START( int &sizeN, int &sizeM, int &sizeK,
    int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
@@ -136,8 +137,8 @@ main( int argc, char* argv[] )
   int nIC=0, nDC=0, nPH=0, nPS=0, ndXf=-1;
   short *xDC, *xIC, *xPH;
 
-   DATACH  *dCH = TProfil::pm->multi->data_CH;
-   DATABR  *dBR = TProfil::pm->multi->data_BR;
+   DATACH  *dCH = TProfil::pm->wrkArr->data_CH;
+   DATABR  *dBR = TProfil::pm->wrkArr->data_BR;
 
   if( !dCH || !dBR )
       return 1;

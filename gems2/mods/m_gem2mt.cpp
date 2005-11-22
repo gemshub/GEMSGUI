@@ -55,6 +55,7 @@ TGEM2MT::TGEM2MT( int nrt ):
     arr_BR =0;
     old_BR =0;
     arr_BR_size = 0;
+    wrkArr = 0;
 }
 
 // get key of record
@@ -733,6 +734,10 @@ TGEM2MT::RecCalc( const char * key )
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
 
+   wrkArr = new TNodeArray( TProfil::pm->multi->GetPM() );
+
+
+
    if( mtp->PvMSg != S_OFF )
     Expr_analyze( o_mtgexpr );
 
@@ -748,11 +753,11 @@ TGEM2MT::RecCalc( const char * key )
      NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
      Trans1D( mtp->PsMode, 1 );
      freeNodeArrays(); // free worked memory
-     TProfil::pm->multi->datach_free();
-     TProfil::pm->multi->databr_free();
-
+//     wrkArr.datach_free();
+//     wrkArr.databr_free();
    }
 
+   delete wrkArr;
    TCModule::RecCalc( key );
 }
 

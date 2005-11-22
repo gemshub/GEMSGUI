@@ -96,12 +96,12 @@ int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
      gstring dat_ch = datachbr_file;
       if( binary_f )
       {  GemDataStream f_ch(dat_ch, ios::in|ios::binary);
-         TProfil::pm->multi->datach_from_file(f_ch);
+         TProfil::pm->wrkArr->datach_from_file(f_ch);
        }
       else
       { fstream f_ch(dat_ch.c_str(), ios::in );
          ErrorIf( !f_ch.good() , dat_ch.c_str(), "DataCH Fileopen error");
-         TProfil::pm->multi->datach_from_text_file(f_ch);
+         TProfil::pm->wrkArr->datach_from_text_file(f_ch);
       }
 
      i = 0;
@@ -113,13 +113,13 @@ int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
          if( binary_f )
          {
              GemDataStream in_br(datachbr_file, ios::in|ios::binary);
-             TProfil::pm->multi->databr_from_file(in_br);
+             TProfil::pm->wrkArr->databr_from_file(in_br);
           }
          else
           {   fstream in_br(datachbr_file.c_str(), ios::in );
 		 ErrorIf( !in_br.good() , datachbr_file.c_str(),
                     "DataBR Fileopen error");
-               TProfil::pm->multi->databr_from_text_file(in_br);
+               TProfil::pm->wrkArr->databr_from_text_file(in_br);
           }
 
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
@@ -130,11 +130,11 @@ int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
      for( int ii=0; ii<nNodes; ii++)
          if(  (!nodeTypes && i==0) ||
               ( nodeTypes && (nodeTypes[ii] == i+1 )) )
-                  {    TProfil::pm->multi->data_BR->NodeHandle = ii+1;
-                       TProfil::pm->multi->SaveNodeCopyToArray(ii, nNodes,
-                             TProfil::pm->multi->arr_BR);
-                       TProfil::pm->multi->GetNodeCopyFromArray(ii, nNodes,
-                             TProfil::pm->multi->arr_BR);
+                  {    TProfil::pm->wrkArr->data_BR->NodeHandle = ii+1;
+                       TProfil::pm->wrkArr->SaveNodeCopyToArray(ii, nNodes,
+                             TProfil::pm->wrkArr->arr_BR);
+                       TProfil::pm->wrkArr->GetNodeCopyFromArray(ii, nNodes,
+                             TProfil::pm->wrkArr->arr_BR);
                    }
           i++;
      }
@@ -257,26 +257,26 @@ int  NodeCalcGEM( int  &readF, // negative means read only
 
 // Copying data for node iNode from node array into work DATABR structure
 if( onlyWork > 0)
-   TProfil::pm->multi->GetNodeCopyFromArray( iNode, TProfil::pm->multi->nNodes,
-                             TProfil::pm->multi->arr_BR );
+   TProfil::pm->wrkArr->GetNodeCopyFromArray( iNode, TProfil::pm->wrkArr->nNodes,
+                             TProfil::pm->wrkArr->arr_BR );
 
 if( readF > 0 )  // calculation mode: passing input GEM data changed on previous FMT iteration
 {                 //                   into work DATABR structure
-   TProfil::pm->multi->GEM_input_from_MT(  p_NodeHandle,  p_NodeStatusCH,
+   TProfil::pm->wrkArr->GEM_input_from_MT(  p_NodeHandle,  p_NodeStatusCH,
       p_T, p_P, p_Ms, p_dt, p_dt1,  p_dul, p_dll, p_bIC );   // test simplex
 }
 
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
-    TProfil::pm->multi->unpackDataBr();
+    TProfil::pm->wrkArr->unpackDataBr();
 
 // GEM IPM calculation of equilibrium state in MULTI
     TProfil::pm->calcMulti();
 
 // Extracting and packing GEM IPM results into work DATABR structure
-    TProfil::pm->multi->packDataBr();
+    TProfil::pm->wrkArr->packDataBr();
 
 // Copying results that must be returned into the FMT part into MAIF_CALC parameters
-   TProfil::pm->multi->GEM_output_to_MT(
+   TProfil::pm->wrkArr->GEM_output_to_MT(
         p_NodeHandle, p_NodeStatusCH, p_IterDone,
         p_Vs, p_Gs, p_Hs, p_IC, p_pH, p_pe, p_Eh, p_denW,
         p_denWg, p_epsW, p_epsWg,
@@ -284,7 +284,7 @@ if( readF > 0 )  // calculation mode: passing input GEM data changed on previous
         p_xPA, p_dul, p_dll, p_bIC, p_rMB, p_uIC );
 
 if( readF < 0 )  // readonly mode: passing input GEM data to FMT
-   TProfil::pm->multi->GEM_input_back_to_MT(p_NodeHandle,  p_NodeStatusCH,
+   TProfil::pm->wrkArr->GEM_input_back_to_MT(p_NodeHandle,  p_NodeStatusCH,
       p_T, p_P, p_Ms, p_dt, p_dt1, p_dul, p_dll, p_bIC);
 
 
@@ -293,12 +293,12 @@ if( readF < 0 )  // readonly mode: passing input GEM data to FMT
     gstring strr= "calculated.dbr";
 // binary DATABR
     GemDataStream out_br(strr, ios::out|ios::binary);
-    TProfil::pm->multi->databr_to_file(out_br);
+    TProfil::pm->wrkArr->databr_to_file(out_br);
 // text DATABR
     fstream out_br_t("calculated_dbr.dat", ios::out );
     ErrorIf( !out_br_t.good() , "calculated_dbr.dat",
                 "DataBR text file open error");
-    TProfil::pm->multi->databr_to_text_file(out_br_t);
+    TProfil::pm->wrkArr->databr_to_text_file(out_br_t);
 // output multy
     strr = "calc_multi.ipm";
     GemDataStream o_m( strr, ios::out|ios::binary);
@@ -307,8 +307,8 @@ if( readF < 0 )  // readonly mode: passing input GEM data to FMT
 
 // Copying data for node iNode back from work DATABR structure into the node array
 if( readF > 0 &&  onlyWork > 0)
-    TProfil::pm->multi->SaveNodeCopyToArray( iNode, TProfil::pm->multi->nNodes,
-                             TProfil::pm->multi->arr_BR );
+    TProfil::pm->wrkArr->SaveNodeCopyToArray( iNode, TProfil::pm->wrkArr->nNodes,
+                             TProfil::pm->wrkArr->arr_BR );
     return 0;
 }
     catch(TError& err)

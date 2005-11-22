@@ -17,7 +17,7 @@ INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 SOURCES 	= ms_rmults.cpp ms_mtparm.cpp ms_multi.cpp ms_system.cpp \
          ms_sysbc.cpp ms_mupmph.cpp ms_muload.cpp ms_muleq.cpp ms_mueqexp.cpp \
          ipm_sel_bc.cpp ipm_gamma.cpp ipm_fia_bc.cpp ms_multi_file.cpp \
-	ms_datach_br.cpp
+	tnodearray.cpp
 
 OBJECTS = $(subst .cpp,.o,$(SOURCES))
 

@@ -39,6 +39,7 @@ const char *GEMS_SP_HTML = "gm_project";
 #include "v_mod.h"
 #include "service.h"
 #include "gdatastream.h"
+#include "tnodearray.h"
 
 TProfil* TProfil::pm;
 
@@ -331,6 +332,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    gstring dir;
    gstring name;
    gstring newname;
+   TNodeArray wrkArr( TProfil::pm->multi->GetPM() );
 
    u_splitpath( path, dir, name, newname );
 
@@ -361,7 +363,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    Pai[0] = Pai[1] = 1.;
    Tai[2] = Pai[2] = 0.;
 
-   multi->makeStartDataChBR( aSelIC, aSelDC, aSelPH, 1, 1, 1., 1.,Tai, Pai );
+   wrkArr.makeStartDataChBR( aSelIC, aSelDC, aSelPH, 1, 1, 1., 1.,Tai, Pai );
 
 // out dataCH&DataBR files
    Path_ = u_makepath( dir, name, "dch" );
@@ -370,7 +372,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 //          "Please, enter DataCH binary file name", "*.dch" )  )
 //   {
      GemDataStream  f_ch1(Path_, ios::out|ios::binary);
-      multi->datach_to_file(f_ch1);
+      wrkArr.datach_to_file(f_ch1);
       f_ch1.close();
 //   }
 
@@ -381,7 +383,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 //          "Please, enter DataCH text file name", "*.dat" )  )
 //   {
       fstream  f_ch2(Path_.c_str(), ios::out);
-      multi->datach_to_text_file(f_ch2);
+      wrkArr.datach_to_text_file(f_ch2);
       f_ch2.close();
 //   }
 
@@ -394,7 +396,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 //          "Please, enter DataBR binary file name", "*.dbr" )  )
 //   {
      GemDataStream  f_br1(Path_, ios::out|ios::binary);
-     multi->databr_to_file(f_br1);
+     wrkArr.databr_to_file(f_br1);
      f_br1.close();
 //   }
 
@@ -415,7 +417,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 //          "Please, enter DataBR text file name", "*.dat" )  )
 //   {
      fstream  f_br2(Path_.c_str(), ios::out);
-     multi->databr_to_text_file(f_br2);
+     wrkArr.databr_to_text_file(f_br2);
      f_br2.close();
 //   }
 
@@ -426,8 +428,8 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    fout << newname.c_str() << ".dat\"\n";
    fout.close();
 
-   multi->datach_free();
-   multi->databr_free();
+//   multi->datach_free();
+//   multi->databr_free();
 
 // put data to IPMRUN.BAT file
    Path_ = u_makepath( dir, "IPMRUN", "BAT" );

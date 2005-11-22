@@ -26,12 +26,12 @@ SOURCES         = ..\..\vizor\libs\gstring.cpp \
 	..\submod\ms_mueqexp.cpp ms_param.cpp \
      	..\submod\ipm_sel_bc.cpp ..\submod\ipm_gamma.cpp \
 	..\submod\ipm_fia_bc.cpp ..\submod\ms_multi_file.cpp \
-        ..\s_fgl.cpp ..\submod\ms_datach_br.cpp
+        ..\s_fgl.cpp ..\submod\tnodearray.cpp
 
 OBJECTS =  ..\..\vizor\libs\gstring.obj ..\..\vizor\libs\gdatastream.obj \
       main.obj mainfromf.obj nodearray.obj ms_mueqexp.obj ms_param.obj\
      ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj \
-     ms_multi_file.obj s_fgl.obj ms_datach_br.obj
+     ms_multi_file.obj s_fgl.obj tnodearray.obj
 
 
 TARGET		= gemipm2k.exe
@@ -62,7 +62,7 @@ ms_multi_file.obj:	../submod/ms_multi_file.cpp
 s_fgl.obj:	../s_fgl.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c  $**
 
-ms_datach_br.obj:	../submod/ms_datach_br.cpp
+tnodearray.obj:	../submod/tnodearray.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c  $**
 
 

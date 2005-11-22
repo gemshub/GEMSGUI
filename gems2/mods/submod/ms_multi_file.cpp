@@ -6,7 +6,7 @@
 #include "gdatastream.h"
 
 
-void TMulti::inArray( fstream& ff, char *name, short* arr, int size )
+void inArray( fstream& ff, char *name, short* arr, int size )
 {
  char buf[200];
  ff >> buf;
@@ -18,7 +18,7 @@ void TMulti::inArray( fstream& ff, char *name, short* arr, int size )
  }
 }
 
-void TMulti::inArray( fstream& ff, char *name, float* arr, int size )
+void inArray( fstream& ff, char *name, float* arr, int size )
 {
  char buf[200];
  ff >> buf;
@@ -30,7 +30,7 @@ void TMulti::inArray( fstream& ff, char *name, float* arr, int size )
  }
 }
 
-void TMulti::inArray( fstream& ff, char *name, double* arr, int size )
+void inArray( fstream& ff, char *name, double* arr, int size )
 {
  char buf[200];
  ff >> buf;
@@ -43,7 +43,7 @@ void TMulti::inArray( fstream& ff, char *name, double* arr, int size )
 }
 
 
-void TMulti::inArray( fstream& ff, char *name, char* arr,
+void inArray( fstream& ff, char *name, char* arr,
                               int size, int el_size )
 {
  char ch;
@@ -66,7 +66,7 @@ void TMulti::inArray( fstream& ff, char *name, char* arr,
 
 //---------------------------------------------------------//
 // for test out data
-void TMulti::outArray( fstream& ff, char *name, char* arr,
+void outArray( fstream& ff, char *name, char* arr,
                               int size, int arr_siz )
 {
  ff << endl << "\'" << name << "\'" << endl;
@@ -82,7 +82,7 @@ void TMulti::outArray( fstream& ff, char *name, char* arr,
 
 
 
-void TMulti::outArray( fstream& ff, char *name, short* arr, int size )
+void outArray( fstream& ff, char *name, short* arr, int size )
 {
  ff << endl << "\'" << name << "\'" << endl;
  for( int ii=0, jj=0; ii<size; ii++, jj++  )
@@ -93,7 +93,7 @@ void TMulti::outArray( fstream& ff, char *name, short* arr, int size )
  }
 }
 
-void TMulti::outArray( fstream& ff, char *name,  float* arr,
+void outArray( fstream& ff, char *name,  float* arr,
             int size, int l_size )
 {
  int sz = 10;
@@ -109,7 +109,7 @@ void TMulti::outArray( fstream& ff, char *name,  float* arr,
  }
 }
 
-void TMulti::outArray( fstream& ff, char *name,  double* arr,
+void outArray( fstream& ff, char *name,  double* arr,
             int size, int l_size )
 {
  int sz = 10;

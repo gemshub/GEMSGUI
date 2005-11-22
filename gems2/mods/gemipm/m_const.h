@@ -61,6 +61,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
 };
 
 #ifndef _chbr_classes_h_
+#define _chbr_classes_h_
 
 typedef enum {  /* Classifications of DC */
     /* Type of input data for */

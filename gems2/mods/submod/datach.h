@@ -99,6 +99,7 @@ enum SolDCLcodes {
 
 #ifdef IPMGEMPLUGIN
 
+#ifndef _chbr_classes_h_
 #define _chbr_classes_h_
 
 typedef enum {  /* classes of IC*/
@@ -158,9 +159,9 @@ typedef enum {  /* Classifications of DC */
     DC_SCP_CONDEN  = 'O',   // DC forming a single-component phase
 
     /* Here add some special classes for diffusion etc. */
-    DCaquoCATION   = 'c', 
-    DCaquoANION    = 'n', 
-    DCaquoLIGAND   = 'l', 
+    DCaquoCATION   = 'c',
+    DCaquoANION    = 'n',
+    DCaquoLIGAND   = 'l',
     DCaquoCOMPLEX  = 'x',
     DCaquoIONPAIR  = 'p',
     DCaquoGAS      = 'g',
@@ -176,6 +177,8 @@ typedef enum {  /* Possible values */
     PH_SINCOND  = 's',  // condenced solid phase, also multicomponent
     PH_SINDIS   = 'd',  // dispersed solid phase, also multicomponent
 } PHL_CLASSES;
+
+#endif
 
 #endif
 

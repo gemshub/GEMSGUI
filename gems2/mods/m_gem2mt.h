@@ -23,6 +23,7 @@
 #include "v_ipnc.h"
 #include "graph.h"
 #include "v_module.h"
+#include "tnodearray.h"
 
 const int MT_RKLEN = 80;
 
@@ -220,6 +221,7 @@ class TGEM2MT : public TCModule
     DATABR  *(*old_BR);
     int arr_BR_size;
     DATACH  *data_CH;
+    TNodeArray *wrkArr;
 
 protected:
 

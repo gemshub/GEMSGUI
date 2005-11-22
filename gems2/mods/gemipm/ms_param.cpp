@@ -67,8 +67,9 @@ TProfil::TProfil( int szN, int szM, int szK ):
 {
     pa= pa_;
     int nNd = nNodes();
-    multi = new TMulti( nNd );
+    multi = new TMulti();
     pmp = multi->GetPM();
+    wrkArr = new TNodeArray( nNd, pmp );
 }
 
 /*-----------------------------------------------------------------*/
@@ -157,8 +158,8 @@ void TProfil::CompG0Load()
   double Gg, Vv;
   float TC, P;
 
-  DATACH  *dCH = multi->data_CH;
-  DATABR  *dBR = multi->data_BR;
+  DATACH  *dCH = wrkArr->data_CH;
+  DATABR  *dBR = wrkArr->data_BR;
 
   if( dCH->nTp <=1 && dCH->nPp <=1 )
     return;

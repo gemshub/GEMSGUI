@@ -8,6 +8,7 @@
 #include "gdatastream.h"
 #include "ms_multi.h"
 #include "verror.h"
+#include "tnodearray.h"
 
 
 // Physical constants - see m_param.cpp
@@ -231,6 +232,7 @@ public:
 
     static TProfil* pm;
     TMulti* multi;
+    TNodeArray *wrkArr;
     MULTI *pmp;
 
     SPP_SETTING pa;
