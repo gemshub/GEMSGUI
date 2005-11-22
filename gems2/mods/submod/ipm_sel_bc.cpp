@@ -167,7 +167,7 @@ int TProfil::SquareRoots( int N, double *R, double *X, double *B )
             P+=N-J-1;
 //!!            f_log << "G = " << G << " F = " << F << " P=" << P << endl;
         }
-        if( F < DBL_EPSILON )
+        if( F <=  2.22E-16 /*DBL_EPSILON*/ )
         {
             iRet=1;
             goto KN;

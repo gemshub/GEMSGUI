@@ -205,10 +205,10 @@ main( int argc, char* argv[] )
      }
 
 // Printouts here
-
-// cout << endl << "Read: " << m_NodeHandle << " " <<  m_NodeTypeHY << " "
-//     << m_NodeTypeMT << " " << m_NodeStatusFMT << " " << m_NodeStatusCH
-//     << " " << m_IterDone << endl;
+   fstream cout( "log1.out", ios::out );
+ cout << endl << "Read: " << m_NodeHandle << " " <<  m_NodeTypeHY << " "
+     << m_NodeTypeMT << " " << m_NodeStatusFMT << " " << m_NodeStatusCH
+     << " " << m_IterDone << endl;
 
 // Something else?
 
