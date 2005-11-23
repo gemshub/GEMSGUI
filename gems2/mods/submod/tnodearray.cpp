@@ -21,6 +21,8 @@
 #include "gdatastream.h"
 #include <math.h>
 
+
+TNodeArray* TNodeArray::na;
 //---------------------------------------------------------//
 
 #ifndef IPMGEMPLUGIN
@@ -221,25 +223,32 @@ TNodeArray::~TNodeArray()
 
 #else
 
-TNodeArray::TNodeArray( int anN, MULTI *apm  )
+TNodeArray::TNodeArray( int asizeN, int asizeM, int asizeK  ):
+ sizeN(asizeN), sizeM(asizeM), sizeK(asizeK)
 {
-    pmm = apm;
 // alloc memory for data bidge structures
-    nNodes = anN;
+    anNodes = nNodes();
     data_CH = new DATACH;
     data_BR = new DATABR;
+
 // alloc memory for all pointers
-    arr_BR = new  DATABRPTR[nNodes];
-    for( int ii=0; ii<nNodes; ii++ )
+    arr_BR = new  DATABRPTR[anNodes];
+    for( int ii=0; ii<anNodes; ii++ )
         arr_BR[ii] = 0;
+
+// internal structures
+    multi = new TMulti();
+    pmm = multi->GetPM();
+    profil = new TProfil( multi );
+    TProfil::pm = profil;
 }
 
 TNodeArray::~TNodeArray()
 {
    datach_free();
    databr_free();
-   if( nNodes && arr_BR)
-     for( int ii=0; ii<nNodes; ii++ )
+   if( anNodes && arr_BR)
+     for( int ii=0; ii<anNodes; ii++ )
         if( arr_BR[ii] )
         {
           databr_free(arr_BR[ii]);

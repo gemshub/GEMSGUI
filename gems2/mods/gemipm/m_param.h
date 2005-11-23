@@ -8,7 +8,6 @@
 #include "gdatastream.h"
 #include "ms_multi.h"
 #include "verror.h"
-#include "tnodearray.h"
 
 
 // Physical constants - see m_param.cpp
@@ -232,23 +231,16 @@ public:
 
     static TProfil* pm;
     TMulti* multi;
-    TNodeArray *wrkArr;
     MULTI *pmp;
 
     SPP_SETTING pa;
 
-    TProfil( int, int, int );
+    TProfil( TMulti* amulti );
 
     const char* GetName() const
     {
         return "Project";
     }
-
-    int sizeN;
-    int sizeM;
-    int sizeK;
-    int nNodes()
-      { return sizeN*sizeM*sizeK; }
 
     // Multi make functions
     void PMtest( const char *key );

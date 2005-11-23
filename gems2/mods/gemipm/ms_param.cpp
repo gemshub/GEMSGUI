@@ -6,6 +6,7 @@
 #include <math.h>
 #include "m_param.h"
 #include "gdatastream.h"
+#include "tnodearray.h"
 
 TProfil* TProfil::pm;
 
@@ -62,14 +63,11 @@ SPP_SETTING::write(ostream& oss)
 }
 
 
-TProfil::TProfil( int szN, int szM, int szK ):
- sizeN(szN), sizeM(szM), sizeK(szK)
+TProfil::TProfil( TMulti* amulti )
 {
     pa= pa_;
-    int nNd = nNodes();
-    multi = new TMulti();
+    multi = amulti;
     pmp = multi->GetPM();
-    wrkArr = new TNodeArray( nNd, pmp );
 }
 
 /*-----------------------------------------------------------------*/
@@ -158,8 +156,8 @@ void TProfil::CompG0Load()
   double Gg, Vv;
   float TC, P;
 
-  DATACH  *dCH = wrkArr->data_CH;
-  DATABR  *dBR = wrkArr->data_BR;
+  DATACH  *dCH = TNodeArray::na->data_CH;
+  DATABR  *dBR = TNodeArray::na->data_BR;
 
   if( dCH->nTp <=1 && dCH->nPp <=1 )
     return;

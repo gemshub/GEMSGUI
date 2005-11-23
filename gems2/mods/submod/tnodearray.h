@@ -21,19 +21,21 @@
 #ifndef _tnodearray_h_
 #define _tnodearray_h_
 
+#include "m_param.h"
 #include "datach.h"
 #include "databr.h"
 
 #ifndef IPMGEMPLUGIN
 
-#include "m_param.h"
+//#include "m_param.h"
 //#include "v_ipnc.h"
 
 #else
 
-class GemDataStream;
-#include "ms_multi.h"
-#include "m_const.h"
+//class GemDataStream;
+//#include "ms_multi.h"
+//#include "m_const.h"
+//#include "m_param.h"
 
 #endif
 
@@ -42,10 +44,20 @@ class TNodeArray
 {
     MULTI *pmm;
 
+#ifdef IPMGEMPLUGIN
+
+   TMulti* multi;
+   TProfil *profil;
+
+#endif
+
 public:
+
+   static TNodeArray* na;
 
    DATABR  *data_BR;
    DATACH  *data_CH;
+
 
 #ifndef IPMGEMPLUGIN
 
@@ -53,10 +65,16 @@ public:
 
 #else
 
-   int nNodes;
+    int sizeN;
+    int sizeM;
+    int sizeK;
+    int anNodes;
+    int nNodes()
+      { return sizeN*sizeM*sizeK; }
+
    DATABR  *(*arr_BR);
 
-   TNodeArray( int anN, MULTI *apm );
+   TNodeArray( int asizeN, int asizeM, int asizeK );
 
 #endif
 
