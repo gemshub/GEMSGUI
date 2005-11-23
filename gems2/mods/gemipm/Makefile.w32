@@ -22,14 +22,14 @@ INCLUDES        = $(INC_LOCAL)
 FLAGS   = $(CCFLAGS) $(DEBUG_FLAGS)
 
 SOURCES         = ..\..\vizor\libs\gstring.cpp \
-        ..\..\vizor\libs\gdatastream.cpp main.cpp mainfromf.cpp nodearray.cpp\
+        ..\..\vizor\libs\gdatastream.cpp main_old.cpp mainfromf.cpp nodearray.cpp\
 	..\submod\ms_mueqexp.cpp ms_param.cpp \
      	..\submod\ipm_sel_bc.cpp ..\submod\ipm_gamma.cpp \
 	..\submod\ipm_fia_bc.cpp ..\submod\ms_multi_file.cpp \
         ..\s_fgl.cpp ..\submod\tnodearray.cpp
 
 OBJECTS =  ..\..\vizor\libs\gstring.obj ..\..\vizor\libs\gdatastream.obj \
-      main.obj mainfromf.obj nodearray.obj ms_mueqexp.obj ms_param.obj\
+      main_old.obj mainfromf.obj nodearray.obj ms_mueqexp.obj ms_param.obj\
      ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj \
      ms_multi_file.obj s_fgl.obj tnodearray.obj
 

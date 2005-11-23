@@ -278,6 +278,72 @@ void TProfil::readMulti( GemDataStream& ff )
       multi->from_file( ff );
 }
 
+//-------------------------------------------------------------------------
+// internal functions
+
+
+// read string as: "<characters>",
+istream&
+f_getline(istream& is, gstring& str, char delim)
+{
+    char ch;
+    is.get(ch);
+    str="";
+
+    while( is.good() && ( ch==' ' || ch=='\n' || ch== '\t') )
+        is.get(ch);
+    if(ch == '\"')
+        is.get(ch);
+    while( is.good() &&  ch!=delim && ch!= '\"' )
+    {
+        str += ch;
+        is.get(ch);
+    }
+    while( is.good() &&  ch!=delim )
+            is.get(ch);
+
+   return is;
+}
+
+gstring
+u_makepath(const gstring& dir,
+           const gstring& name, const gstring& ext)
+{
+    gstring Path(dir);
+    if( dir != "")
+      Path += "/";
+    Path += name;
+    Path += ".";
+    Path += ext;
+
+    return Path;
+}
+
+
+void
+u_splitpath(const gstring& Path, gstring& dir,
+            gstring& name, gstring& ext)
+{
+    size_t pos = Path.rfind("/");
+    if( pos != npos )
+        dir = Path.substr(0, pos), pos++;
+    else
+        dir = "",    pos = 0;
+
+    size_t pose = Path.rfind(".");
+    if( pose != npos )
+    {
+        ext = Path.substr( pose+1, npos );
+        name = Path.substr(pos, pose-pos);
+    }
+    else
+    {
+        ext = "";
+        name = Path.substr(pos, npos);
+    }
+}
+
+
 
 // ------------------ End of ms_param.cpp -----------------------
 

@@ -133,9 +133,9 @@ int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
               ( nodeTypes && (nodeTypes[ii] == i+1 )) )
                   {    TNodeArray::na->data_BR->NodeHandle = ii+1;
                        TNodeArray::na->SaveNodeCopyToArray(ii, nNodes,
-                             TNodeArray::na->arr_BR);
+                             TNodeArray::na->arrBR_0);
                        TNodeArray::na->GetNodeCopyFromArray(ii, nNodes,
-                             TNodeArray::na->arr_BR);
+                             TNodeArray::na->arrBR_0);
                    }
           i++;
      }
@@ -259,7 +259,7 @@ int  NodeCalcGEM( int  &readF, // negative means read only
 // Copying data for node iNode from node array into work DATABR structure
 if( onlyWork > 0)
    TNodeArray::na->GetNodeCopyFromArray( iNode, TNodeArray::na->anNodes,
-                             TNodeArray::na->arr_BR );
+                             TNodeArray::na->arrBR_0 );
 
 if( readF > 0 )  // calculation mode: passing input GEM data changed on previous FMT iteration
 {                 //                   into work DATABR structure
@@ -309,7 +309,7 @@ if( readF < 0 )  // readonly mode: passing input GEM data to FMT
 // Copying data for node iNode back from work DATABR structure into the node array
 if( readF > 0 &&  onlyWork > 0)
     TNodeArray::na->SaveNodeCopyToArray( iNode, TNodeArray::na->anNodes,
-                             TNodeArray::na->arr_BR );
+                             TNodeArray::na->arrBR_0 );
     return 0;
 }
     catch(TError& err)
@@ -323,71 +323,6 @@ if( readF > 0 &&  onlyWork > 0)
     return 1;
 }
 
-
-//-------------------------------------------------------------------------
-// internal functions
-
-
-// read string as: "<characters>",
-istream&
-f_getline(istream& is, gstring& str, char delim)
-{
-    char ch;
-    is.get(ch);
-    str="";
-
-    while( is.good() && ( ch==' ' || ch=='\n' || ch== '\t') )
-        is.get(ch);
-    if(ch == '\"')
-        is.get(ch);
-    while( is.good() &&  ch!=delim && ch!= '\"' )
-    {
-        str += ch;
-        is.get(ch);
-    }
-    while( is.good() &&  ch!=delim )
-            is.get(ch);
-
-   return is;
-}
-
-gstring
-u_makepath(const gstring& dir,
-           const gstring& name, const gstring& ext)
-{
-    gstring Path(dir);
-    if( dir != "")
-      Path += "/";
-    Path += name;
-    Path += ".";
-    Path += ext;
-
-    return Path;
-}
-
-
-void
-u_splitpath(const gstring& Path, gstring& dir,
-            gstring& name, gstring& ext)
-{
-    size_t pos = Path.rfind("/");
-    if( pos != npos )
-        dir = Path.substr(0, pos), pos++;
-    else
-        dir = "",    pos = 0;
-
-    size_t pose = Path.rfind(".");
-    if( pose != npos )
-    {
-        ext = Path.substr( pose+1, npos );
-        name = Path.substr(pos, pose-pos);
-    }
-    else
-    {
-        ext = "";
-        name = Path.substr(pos, npos);
-    }
-}
 
 // ------------------ End of nodearray.cpp -----------------------
 

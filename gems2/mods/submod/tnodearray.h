@@ -51,39 +51,54 @@ class TNodeArray
 
 #endif
 
+ void allocMemory();
+ void freeMemory();
+
 public:
 
    static TNodeArray* na;
 
    DATABR  *data_BR;
    DATACH  *data_CH;
+   DATABRPTR* arrBR_0;  // nodes at current time point
+   DATABRPTR* arrBR_1;  // nodes at previous time point
+   int anNodes;
 
 
 #ifndef IPMGEMPLUGIN
 
-   TNodeArray( MULTI *apm );
+   TNodeArray( int nNodes, MULTI *apm );
 
 #else
 
     int sizeN;
     int sizeM;
     int sizeK;
-    int anNodes;
-    int nNodes()
-      { return sizeN*sizeM*sizeK; }
 
-   DATABR  *(*arr_BR);
-
+//   DATABR  *(*arr_BR);
+   TNodeArray( int nNod );
    TNodeArray( int asizeN, int asizeM, int asizeK );
+   int iNode( int indN, int indM, int indK ) // make one index from three
+     { return  ( indK * sizeM + indM  ) * sizeN + indN;  }
+   int  RunGEM( int indN, int indM, int indK, int Mode )
+     { return RunGEM( iNode( indN, indM, indK ), Mode); }
+
 
 #endif
 
     ~TNodeArray();
 
+    int nNodes()
+      { return anNodes; }
+
+
+    int  RunGEM( int  ndx, int Mode );
+
     // working with array
     void GetNodeCopyFromArray( int ii, int nNodes, DATABRPTR* arr_BR );
     void SaveNodeCopyToArray( int ii, int nNodes, DATABRPTR* arr_BR );
-    void CopyTo( DATABR *(*dBR) );
+//    void CopyTo( DATABR *(*dBR) );
+    void CopyNodesFromTo( int nNodes, DATABRPTR* arr_From, DATABRPTR* arr_To );
 
     // datach & databr
     void datach_to_file( GemDataStream& ff );
@@ -111,6 +126,8 @@ public:
     void getG0_V0_H0_Cp0_matrix();
 
 #else
+    int  NewNodeArray( const char*  MULTI_filename,
+                   const char *ipmfiles_lst_name, int *nodeTypes );
 
     void GEM_input_from_MT(
        short p_NodeHandle,    // Node identification handle

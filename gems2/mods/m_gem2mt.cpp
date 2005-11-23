@@ -734,7 +734,7 @@ TGEM2MT::RecCalc( const char * key )
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
 
-   wrkArr = new TNodeArray( TProfil::pm->multi->GetPM() );
+   wrkArr = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
 
 
 

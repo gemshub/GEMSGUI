@@ -20,10 +20,74 @@
 #include "tnodearray.h"
 #include "gdatastream.h"
 #include <math.h>
+istream& f_getline(istream& is, gstring& str, char delim);
 
 
 TNodeArray* TNodeArray::na;
 //---------------------------------------------------------//
+
+
+void TNodeArray::allocMemory()
+{
+  int ii;
+// alloc memory for data bidge structures
+    data_CH = new DATACH;
+    data_BR = new DATABR;
+
+// alloc memory for all nodes at current time point
+    arrBR_0 = new  DATABRPTR[anNodes];
+    for(  ii=0; ii<anNodes; ii++ )
+        arrBR_0[ii] = 0;
+
+// alloc memory for all nodes at previous time point
+    arrBR_1 = new  DATABRPTR[anNodes];
+    for(  ii=0; ii<anNodes; ii++ )
+        arrBR_1[ii] = 0;
+
+#ifdef IPMGEMPLUGIN
+// internal structures
+    multi = new TMulti();
+    pmm = multi->GetPM();
+    profil = new TProfil( multi );
+    TProfil::pm = profil;
+#endif
+}
+
+void TNodeArray::freeMemory()
+{
+   int ii;
+   datach_free();
+   databr_free();
+
+   if( anNodes )
+   { if( arrBR_0 )
+       for(  ii=0; ii<anNodes; ii++ )
+        if( arrBR_0[ii] )
+        {
+          databr_free(arrBR_0[ii]);
+          arrBR_0[ii] = 0;
+        }
+     delete[]  arrBR_0;
+     arrBR_0 = 0;
+     if( arrBR_1 )
+       for(  ii=0; ii<anNodes; ii++ )
+        if( arrBR_1[ii] )
+        {
+          databr_free(arrBR_1[ii]);
+          arrBR_1[ii] = 0;
+        }
+     delete[]  arrBR_1;
+     arrBR_1 = 0;
+   }
+
+#ifdef IPMGEMPLUGIN
+  delete[] multi;
+  delete[] profil;
+#endif
+
+}
+
+
 
 #ifndef IPMGEMPLUGIN
 
@@ -207,56 +271,35 @@ void TNodeArray::getG0_V0_H0_Cp0_matrix()
    delete[] Cp0;
 }
 
-TNodeArray::TNodeArray( MULTI *apm  )
+TNodeArray::TNodeArray( int nNod, MULTI *apm  )
 {
     pmm = apm;
+    anNodes = nNod;
     data_CH = 0;
     data_BR = 0;
-}
+    arrBR_0 = 0;  // nodes at current time point
+    arrBR_1 = 0;  // nodes at previous time point
 
-TNodeArray::~TNodeArray()
-{
-   datach_free();
-   databr_free();
 }
-
 
 #else
 
-TNodeArray::TNodeArray( int asizeN, int asizeM, int asizeK  ):
- sizeN(asizeN), sizeM(asizeM), sizeK(asizeK)
+TNodeArray::TNodeArray( int nNod  ):
+ anNodes(nNod)
 {
-// alloc memory for data bidge structures
-    anNodes = nNodes();
-    data_CH = new DATACH;
-    data_BR = new DATABR;
+  sizeN = anNodes;
+  sizeM = sizeK =1;
+  allocMemory();
 
-// alloc memory for all pointers
-    arr_BR = new  DATABRPTR[anNodes];
-    for( int ii=0; ii<anNodes; ii++ )
-        arr_BR[ii] = 0;
-
-// internal structures
-    multi = new TMulti();
-    pmm = multi->GetPM();
-    profil = new TProfil( multi );
-    TProfil::pm = profil;
 }
 
-TNodeArray::~TNodeArray()
+TNodeArray::TNodeArray( int asizeN, int asizeM, int asizeK ):
+sizeN(asizeN), sizeM(asizeM), sizeK(asizeK)
 {
-   datach_free();
-   databr_free();
-   if( anNodes && arr_BR)
-     for( int ii=0; ii<anNodes; ii++ )
-        if( arr_BR[ii] )
-        {
-          databr_free(arr_BR[ii]);
-          arr_BR[ii] = 0;
-        }
-   delete[]  arr_BR;
-   arr_BR = 0;
+  anNodes = asizeN*asizeM*asizeK;
+  allocMemory();
 }
+
 
 // calculation mode: passing input GEM data changed on previous FMT iteration
 //                   into work DATABR structure
@@ -399,6 +442,202 @@ void TNodeArray::GEM_output_to_MT(
 #endif
 
 
+TNodeArray::~TNodeArray()
+{
+  freeMemory();
+}
+
+#ifdef IPMGEMPLUGIN
+
+//-------------------------------------------------------------------
+// NewNodeArray()
+// reads in the data from MULTI, DATACH, DATABR files prepared
+// using the GEMS-PSI RMT module
+//  Parameters:
+//  MULTI_filename    - name of binary file with the MULTI structure
+//  ipmfiles_lst_name - name of a text file that contains:
+//    " -t/-b <dataCH file name>, <dataBR file name1>, ... <dataBR file nameN> "
+//    These files (one dataCH file, at least one dataBR file) must exist in
+//    the current directory; the dataBR files in the above list are indexed
+//    as 1, 2, ... N (node types) and must contain valid initial chemical
+//    systems (of the same structure described in the dataCH file) to set up
+//    the initial state of the FMT node array. If -t flag is specified
+//    then dataCH and dataBR files must be in text (ASCII) format;
+//    if -b or nothing is specified then dataCH and dataBR files are
+//    assumed to be binary (little-endian) files.
+//  nodeTypes[nNodes] - array of node type (fortran) indexes of dataBR files in
+//    the ipmfiles_lst_name list. This array, for each FMT node, specifies
+//    from which dataBR file the initial chemical system should be taken.
+//  Function returns:
+//   0: OK; 1: GEMIPM read file error; -1: System error (e.g. memory allocation)
+//
+//-------------------------------------------------------------------
+int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
+                   const char *ipmfiles_lst_name, int *nodeTypes )
+{
+  int i;
+  fstream f_log("ipmlog.txt", ios::out||ios::app );
+  try
+    {
+      bool binary_f = true;
+      gstring multu_in = MULTI_filename;
+      gstring chbr_in = ipmfiles_lst_name;
+
+// Reading structure MULTI (GEM IPM work structure)
+      GemDataStream f_m(multu_in, ios::in|ios::binary);
+      profil->readMulti(f_m);
+
+// output multy
+//      gstring strr = "out_multi.ipm";
+//      GemDataStream o_m( strr, ios::out|ios::binary);
+//      profil->outMulti(o_m, strr );
+
+// Reading name of dataCH file and names of dataBR files
+//  -t/-b  "<dataCH file name>" ,"<dataBR file1 name>", ..., "<dataBR fileN name>"
+      fstream f_chbr(chbr_in.c_str(), ios::in );
+      ErrorIf( !f_chbr.good() , chbr_in.c_str(), "Fileopen error");
+
+      gstring datachbr_file;
+      f_getline( f_chbr, datachbr_file, ' ');
+
+//Testing flag "-t" or "-b" (by default "-b")   // use bynary or text files as input
+      size_t pos = datachbr_file.find( '-');
+      if( pos != /*gstring::*/npos )
+      {
+         if( datachbr_file[pos+1] == 't' )
+            binary_f = false;
+         f_getline( f_chbr, datachbr_file, ',');
+      }
+
+// Reading dataCH structure from file
+     gstring dat_ch = datachbr_file;
+      if( binary_f )
+      {  GemDataStream f_ch(dat_ch, ios::in|ios::binary);
+         datach_from_file(f_ch);
+       }
+      else
+      { fstream f_ch(dat_ch.c_str(), ios::in );
+         ErrorIf( !f_ch.good() , dat_ch.c_str(), "DataCH Fileopen error");
+         datach_from_text_file(f_ch);
+      }
+
+     i = 0;
+     while( !f_chbr.eof() )  // For all dataBR files listed
+     {
+// Reading work dataBR structure from file
+         f_getline( f_chbr, datachbr_file, ',');
+
+         if( binary_f )
+         {
+             GemDataStream in_br(datachbr_file, ios::in|ios::binary);
+             databr_from_file(in_br);
+          }
+         else
+          {   fstream in_br(datachbr_file.c_str(), ios::in );
+		 ErrorIf( !in_br.good() , datachbr_file.c_str(),
+                    "DataBR Fileopen error");
+               databr_from_text_file(in_br);
+          }
+
+// Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
+//    unpackDataBr();
+
+// Copying data from work DATABR structure into the node array
+// (as specified in nodeTypes array)
+     for( int ii=0; ii<anNodes; ii++)
+         if(  (!nodeTypes && i==0) ||
+              ( nodeTypes && (nodeTypes[ii] == i+1 )) )
+                  {    data_BR->NodeHandle = ii+1;
+                       SaveNodeCopyToArray(ii, anNodes, arrBR_0);
+                       GetNodeCopyFromArray(ii, anNodes,arrBR_0);
+                       SaveNodeCopyToArray(ii, anNodes, arrBR_1);
+                       GetNodeCopyFromArray(ii, anNodes,arrBR_1);
+                   }
+          i++;
+     }
+
+    ErrorIf( i==0, datachbr_file.c_str(), "NewNodeArray() error: No dataBR files read!" );
+    if(nodeTypes)
+      for( int ii=0; ii<anNodes; ii++)
+      if(   nodeTypes[ii]<=0 || nodeTypes[ii] >= i+1 )
+           Error( datachbr_file.c_str(),
+              "NewNodeArray() error: Undefined boundary condition!" );
+
+    return 0;
+
+    }
+    catch(TError& err)
+    {
+      f_log << err.title.c_str() << "  : " << err.mess.c_str();
+    }
+    catch(...)
+    {
+        return -1;
+    }
+    return 1;
+}
+
+#endif
+
+//-------------------------------------------------------------------------
+// RunGEM()
+// GEM IPM calculation of equilibrium state for the iNode node
+// from array arrBR_0. Mode - mode of GEMS calculation
+//
+//  Function returns:
+//   0: OK; 1: GEMIPM2K calculation error; 1: system error
+//
+//-------------------------------------------------------------------
+
+int  TNodeArray::RunGEM( int  iNode, int Mode )
+{
+  fstream f_log("ipmlog.txt", ios::out||ios::app );
+  try
+  {
+// f_log << " MAIF_CALC begin Mode= " << p_NodeStatusCH << " iNode= " << iNode << endl;
+//---------------------------------------------
+
+   GetNodeCopyFromArray( iNode, anNodes, arrBR_0 );
+// Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
+    unpackDataBr();
+// GEM IPM calculation of equilibrium state in MULTI
+    TProfil::pm->calcMulti();
+// Extracting and packing GEM IPM results into work DATABR structure
+    packDataBr();
+
+//**************************************************************
+// only for testing output results for files
+    gstring strr= "calculated.dbr";
+// binary DATABR
+    GemDataStream out_br(strr, ios::out|ios::binary);
+    databr_to_file(out_br);
+// text DATABR
+    fstream out_br_t("calculated_dbr.dat", ios::out );
+    ErrorIf( !out_br_t.good() , "calculated_dbr.dat",
+                "DataBR text file open error");
+    databr_to_text_file(out_br_t);
+// output multy
+    strr = "calc_multi.ipm";
+    GemDataStream o_m( strr, ios::out|ios::binary);
+    TProfil::pm->outMulti(o_m, strr );
+//********************************************************* */
+
+// Copying data for node iNode back from work DATABR structure into the node array
+   SaveNodeCopyToArray( iNode, anNodes, arrBR_0 );
+    return 0;
+}
+    catch(TError& err)
+    {
+      f_log << err.title.c_str() << "  : " << err.mess.c_str();
+    }
+    catch(...)
+    {
+        return -1;
+    }
+    return 1;
+}
+
+
 // Copying data for node iNode from node array into work DATABR structure
 void TNodeArray::GetNodeCopyFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
 {
@@ -428,7 +667,7 @@ void TNodeArray::GetNodeCopyFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
   data_BR->dRes1 = 0;
   data_BR->dRes2 = 0;
 }
-
+/*
 void TNodeArray::CopyTo( DATABR *(*dBR) )
 {
 // alloc new memory
@@ -464,7 +703,7 @@ void TNodeArray::CopyTo( DATABR *(*dBR) )
   data_BR->dRes1 = 0;
   data_BR->dRes2 = 0;
 }
-
+*/
 
 // Copying data for node iNode back from work DATABR structure into the node array
 void TNodeArray::SaveNodeCopyToArray( int ii, int nNodes, DATABRPTR* arr_BR )
@@ -479,6 +718,18 @@ void TNodeArray::SaveNodeCopyToArray( int ii, int nNodes, DATABRPTR* arr_BR )
   databr_realloc();
 }
 
+void TNodeArray::CopyNodesFromTo( int nNod,
+                       DATABRPTR* arr_From, DATABRPTR* arr_To )
+{
+
+  if( !arr_From || !arr_To )
+      return;
+  for( int ii=0; ii<nNod; ii++ )
+  {
+    GetNodeCopyFromArray( ii, nNod, arr_From );
+    SaveNodeCopyToArray( ii,  nNod, arr_To );
+  }
+}
 
 // Extracting and packing GEM IPM results into work DATABR structure
 void TNodeArray::packDataBr()

@@ -332,7 +332,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    gstring dir;
    gstring name;
    gstring newname;
-   TNodeArray wrkArr( TProfil::pm->multi->GetPM() );
+   TNodeArray wrkArr( 1, TProfil::pm->multi->GetPM() );
 
    u_splitpath( path, dir, name, newname );
 
