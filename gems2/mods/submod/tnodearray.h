@@ -1,11 +1,11 @@
 //-------------------------------------------------------------------
-// $Id: ms_multi.h 581 2005-10-12 11:19:27Z gems $
+// $Id: tnodearray.h 684 2005-11-23 11:19:27Z gems $
 //
 // C/C++ interface between GEM IPM and FMT node array
 // Working whith DATACH and DATABR structures
 //
 // Written by S.Dmytriyeva
-// Copyright (C) 2004-2005 S.Dmytriyeva, D.Kulik
+// Copyright (C) 2005 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
