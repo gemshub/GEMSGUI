@@ -298,7 +298,7 @@ sizeN(asizeN), sizeM(asizeM), sizeK(asizeK)
 
 TNodeArray::~TNodeArray()
 {
-  freeMemory();
+   freeMemory();
 }
 
 #ifdef IPMGEMPLUGIN
@@ -327,10 +327,10 @@ TNodeArray::~TNodeArray()
 //
 //-------------------------------------------------------------------
 int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
-                   const char *ipmfiles_lst_name, int *nodeTypes )
+                   const char* ipmfiles_lst_name, int* nodeTypes )
 {
   int i;
-  fstream f_log("ipmlog.txt", ios::out||ios::app );
+  fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
     {
       bool binary_f = true;
@@ -401,7 +401,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
      for( int ii=0; ii<anNodes; ii++)
          if(  (!nodeTypes && i==0) ||
               ( nodeTypes && (nodeTypes[ii] == i+1 )) )
-                  {    CNode->NodeHandle = ii+1;
+                  {    CNode->NodeHandle = i+1;
                        MoveWorkNodeToArray(ii, anNodes, NodT0);
                        CopyWorkNodeFromArray(ii, anNodes,NodT0);
                        MoveWorkNodeToArray(ii, anNodes, NodT1);
@@ -422,7 +422,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
     }
     catch(TError& err)
     {
-      f_log << err.title.c_str() << "  : " << err.mess.c_str();
+      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
     }
     catch(...)
     {
@@ -445,7 +445,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
 
 int  TNodeArray::RunGEM( int  iNode, int Mode )
 {
-  fstream f_log("ipmlog.txt", ios::out||ios::app );
+  fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {
 // f_log << " MAIF_CALC begin Mode= " << p_NodeStatusCH << " iNode= " << iNode << endl;
@@ -461,7 +461,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 // Extracting and packing GEM IPM results into work DATABR structure
     packDataBr();
 
-//**************************************************************
+/**************************************************************
 // only for testing output results for files
     gstring strr= "calculated.dbr";
 // binary DATABR
@@ -484,7 +484,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 }
     catch(TError& err)
     {
-      f_log << err.title.c_str() << "  : " << err.mess.c_str();
+      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
     }
     catch(...)
     {
@@ -530,7 +530,10 @@ void TNodeArray::MoveWorkNodeToArray( int ii, int nNodes, DATABRPTR* arr_BR )
   if( ii < 0 || ii>= nNodes )
     return;
   if( arr_BR[ii] )
-       delete[] arr_BR[ii];
+  {
+       arr_BR[ii] = databr_free( arr_BR[ii]);
+       // delete[] arr_BR[ii];
+  }
   arr_BR[ii] = CNode;
 // alloc new memory
   CNode = new DATABR;
@@ -1010,7 +1013,7 @@ void TNodeArray::datach_free()
   { delete[] CSD->ccPH;
     CSD->ccPH = 0;
   }
- delete[] CSD; 
+ // delete[] CSD; 
 }
 
 

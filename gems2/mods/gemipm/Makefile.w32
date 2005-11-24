@@ -22,14 +22,14 @@ INCLUDES        = $(INC_LOCAL)
 FLAGS   = $(CCFLAGS) $(DEBUG_FLAGS)
 
 SOURCES         = ..\..\vizor\libs\gstring.cpp \
-        ..\..\vizor\libs\gdatastream.cpp main_old.cpp mainfromf.cpp nodearray.cpp\
+        ..\..\vizor\libs\gdatastream.cpp main.cpp \
 	..\submod\ms_mueqexp.cpp ms_param.cpp \
      	..\submod\ipm_sel_bc.cpp ..\submod\ipm_gamma.cpp \
 	..\submod\ipm_fia_bc.cpp ..\submod\ms_multi_file.cpp \
         ..\s_fgl.cpp ..\submod\tnodearray.cpp
 
-OBJECTS =  ..\..\vizor\libs\gstring.obj ..\..\vizor\libs\gdatastream.obj \
-      main_old.obj mainfromf.obj nodearray.obj ms_mueqexp.obj ms_param.obj\
+OBJECTS =  gstring.obj gdatastream.obj \
+      main.obj ms_mueqexp.obj ms_param.obj\
      ipm_sel_bc.obj ipm_gamma.obj ipm_fia_bc.obj \
      ms_multi_file.obj s_fgl.obj tnodearray.obj
 
@@ -43,6 +43,12 @@ link:
                  , $(TARGET),  , $(NOQTLIBS)
 
 
+
+gstring.obj:		..\..\vizor\libs\gstring.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $**
+
+gdatastream.obj:	  ..\..\vizor\libs\gdatastream.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $**
 
 ms_mueqexp.obj:		../submod/ms_mueqexp.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c  $**

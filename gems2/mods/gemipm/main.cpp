@@ -1,25 +1,23 @@
 //---------------------------------------------------------------------------
 
-#include <vcl.h>
-#pragma hdrstop
+#include "tnodearray.h"
+//#include <stdio.h>
+int MassTransAdvec( double L,    // length of system [L]
+               double v,    // constant fluid velocity [L/T]
+               double tf,   // time step reduce control factor
+               double bC,   // initial background solute concentration [M/L**3]
+               double iCx,  // inital concentration @ node # x
+               int    nx,   // number of nodes
+               int    mts,  // maximal time steps
+               int    inx  // initial node index
+              );
 
-#include "main.h"
-#include <stdio.h>
+int
+ main( int argc, char* argv[] )
+ {
 
+     fstream cout( "log1.out", ios::out|ios::app );
 
-//---------------------------------------------------------------------------
-#pragma package(smart_init)
-#pragma resource "*.dfm"
-
-TForm1 *Form1;
-//---------------------------------------------------------------------------
-__fastcall TForm1::TForm1(TComponent* Owner)
-        : TForm(Owner)
-{
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::Button1Click(TObject *Sender)
-{
      double L,    // length of system [L]
             v,    // constant fluid velocity [L/T]
             tf,   // time step reduce control factor
@@ -29,13 +27,72 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
             dt,   // iterative time increment
             at;   // actual time step
 
-     double **C;  // concentrations data arrays
-//   TNodeArray
-
      int    nx,   // number of nodes
             mts,  // maximal time steps
-            t,    // actual time iterator
             inx;  // initial node index
+
+
+     L = 1.;      // length in m
+     v = 1e-8;    // fluid velocity constant m/sec
+     tf = 1.;     // time step reduce factor
+     bC = 1e-9;   // initial background concentration over all nodes  0
+     iCx = 1.;     // initial concentration M/m3
+
+     nx = 100;    // number of nodes (default 1500)
+     mts = 100; // max number of time steps   10000
+     inx = 1;     // in the node index inx
+
+     gstring multu_in1 = "MgWBoundC.ipm";
+     gstring chbr_in1   = "ipmfiles-dat.lst";
+
+// from argv
+      if (argc >= 2 )
+        multu_in1 = argv[1];
+      if (argc >= 3 )
+        chbr_in1 = argv[2];
+
+// The NodeArray must be allocated here
+    TNodeArray::na = new TNodeArray( nx+1 );
+
+// Prepare the array for initial conditions allocation
+     int* nodeType = new int[nx+1];
+     for(int ii =0; ii<nx+1; ii++ )
+       nodeType[ii] = 1;
+     nodeType[0] = 2;
+     nodeType[1] = 2;
+
+ // Here we read MULTI structure, DATACH and DATABR files prepared from GEMS
+    if( TNodeArray::na->NewNodeArray(
+             multu_in1.c_str(), chbr_in1.c_str(), nodeType ) )
+      return 0;  // error reading files
+
+    MassTransAdvec( L, v, tf, bC, iCx, nx, mts, inx );
+
+   delete[] nodeType;
+   delete TNodeArray::na;
+
+   return 0;
+}
+
+//---------------------------------------------------------------------------
+int MassTransAdvec( double L,    // length of system [L]
+               double v,    // constant fluid velocity [L/T]
+               double tf,   // time step reduce control factor
+               double bC,   // initial background solute concentration [M/L**3]
+               double iCx,  // inital concentration @ node # x
+               int    nx,   // number of nodes
+               int    mts,  // maximal time steps
+               int    inx  // initial node index
+              )
+{
+     double dx,   // node distance [L]
+            dt,   // iterative time increment
+            at;   // actual time step
+
+     double **C;  // concentrations data arrays      // compare
+
+     int   t,    // actual time iterator
+           ic;
 
      double c0,
             c1,
@@ -46,9 +103,17 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
             sM0,
             sM1,
      dc,    // increment to concentration/amount
+     el0,
+     el1,
+     diff,
             cr;      // some help variables
 
-            FILE *stream;
+     FILE *stream;                                        // compare
+
+     // test output file
+     fstream log1( "Ca-profile.dat", ios::out );
+     fstream log2( "Mg-profile.dat", ios::out );
+//
 
      // read settings from formular ...
 /*
@@ -61,47 +126,26 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
      iCx = StrToFloat(Edit7->Text);
      inx = StrToInt(Edit8->Text);
 */
-     L = 1.;      // length in m
-     nx = 100;    // number of nodes (default 1500)
-     v = 1e-8;    // fluid velocity constant m/sec
-     tf = 1.;     // time step reduce factor
-     mts = 10000; // max number of time steps
-     bC = 1e-9;   // initial background concentration over all nodes  0
-     iCx = 1.;     // initial concentration M/m3
-     inx = 1;     // in the node index inx
 // to define constant injection mode
 
-     PB->Max=mts;
-
-     C = new double*[nx*2];
+     C = new double*[nx*2];                              // compare
      for (int i=0;i<=nx+1;i++)  {
           C[i] = new double[1];
           C[i] = new double[2];
      }
 
-     stream=fopen("test.dat","w+");
+     stream=fopen("test.dat","w+");                      // compare
 
-     // init concentration arrays
+     // init concentration arrays                        // compare
      for (int i=0;i<=nx+1;i++) {
          C[i][0]=bC;
          C[i][1]=bC;
      }
 
-// The NodeArray must be allocated here
-    TNodeArray::na = new TNodeArray( nx+1 );
+     C[inx][0]=iCx;  // Initial condition for Dirak input // compare
+     C[inx][1]=iCx;
 
-// Prepare the array for initial conditions allocation
-     int* nodeType = new int(nx);
-     for( ii =0; ii<nx+1; ii++ )
-       nodeType[ii] = 1;
-     nodeType[0] = 2;
-
-//     C[inx][0]=iCx;   Initial condition for Dirak input
-//     C[inx][1]=iCx;
-
- // Here we read MULTI structure, DATACH and DATABR files prepared from GEMS
-TNodeArray::na->NewNodeArray( "MgWBoundC.ipm", "ipmfiles-dat.lst",
-                   nodeType );
+// The NodeArray must be allocated before, set up work pointers
 
      DATACH* CH = TNodeArray::na->pCSD();
      DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at current time point
@@ -115,18 +159,30 @@ TNodeArray::na->NewNodeArray( "MgWBoundC.ipm", "ipmfiles-dat.lst",
      at = 0;
      t = 0;
 
+// Data collection for monitoring - to extend here
+log1 << endl << (at/(365*86400)) << "   ";
+log2 << endl << (at/(365*86400)) << "   ";
+         for (int i=0; i<nx+1; i++)    // node iteration
+         {
+             c0  = C0[i]->bPS[0*CH->nICb + 1];  // total dissolved Ca
+             c1  = C0[i]->bPS[0*CH->nICb + 4];  // total dissolved Mg
+             log1 << c0 << " ";
+             log2 << c1 << " ";
+         }
+log1 << endl;
+log2 << endl;
+
      do {         // time iteration
 
         t+=1;
         at=at+dt;
         cr=v*dt/dx;
 
-        PB->Position=t;
-
-        for (int i=2;i<=nx;i++) {   // node iteration
+        for (int i=2;i<nx;i++) {   // node iteration
 
 // Concentrations in these nodes are fixed
-           if (CB->State==cbChecked) {
+           if ( true ) {                             // compare
+//           if (CB->State==cbChecked) {
               for (int j=0;j<=inx;j++) {
               C[j][0]=iCx;   // replace with copying these DataBR structures from line C1 to line C0
               C[j][1]=iCx;   // leave for comparison as "conventional tracer"
@@ -169,20 +225,20 @@ TNodeArray::na->NewNodeArray( "MgWBoundC.ipm", "ipmfiles-dat.lst",
 //       parallelization affects this loop
          for (int i=1; i<nx; i++)    // node iteration
          {
-           int Mode = NEED_GEM_FIA, RetCode;
-           bool NeedGEM = false;
+           int Mode = NEED_GEM_PIA, RetCode;
+           bool NeedGEM = true;     // debugging
 
            // Here we compare this node for current time and for previous time
            for( ic=0; ic < CH->nICb; ic++)
            {                   // It has to be checked on minimal allowed c0 value
               el0 = C0[i]->bIC[ic];
-              if( el0 <= 1e-16 )
+              if( el0 <= 1e-12 )
               { // to stay on safe side
-                el0 = 1e-16;
+                el0 = 1e-12;
                 C0[i]->bIC[ic] = el0;
               }
               el1 = C1[i]->bIC[ic];
-              diff = fabs( el0 - el1 )/el1;
+              diff = fabs( el0 - el1 )/el0;
               if( diff > 1e-6 )
                   NeedGEM = true;  // we need to recalculate equilibrium
               if( diff > 1e-4 )
@@ -192,7 +248,6 @@ TNodeArray::na->NewNodeArray( "MgWBoundC.ipm", "ipmfiles-dat.lst",
            {
               RetCode = TNodeArray::na->RunGEM( i, Mode );
               // check RetCode
-
            }
          }
 
@@ -206,6 +261,15 @@ TNodeArray::na->NewNodeArray( "MgWBoundC.ipm", "ipmfiles-dat.lst",
            TNodeArray::na->CopyNodeFromTo( i, nx, C0, C1 );
 
 // Data collection for monitoring - to extend here
+log1 << endl << (at/(365*86400)) << "   ";
+log2 << endl << (at/(365*86400)) << "   ";
+         for (int i=0; i<nx+1; i++)    // node iteration
+         {
+             c0  = C0[i]->bPS[0*CH->nICb + 1];  // total dissolved Ca
+             c1  = C0[i]->bPS[0*CH->nICb + 4];  // total dissolved Mg
+             log1 << c0 << " ";
+             log2 << c1 << " ";
+         }
 
          sM0=0;sM1=0;
          for (int i=0;i<=nx;i++) {
@@ -213,25 +277,25 @@ TNodeArray::na->NewNodeArray( "MgWBoundC.ipm", "ipmfiles-dat.lst",
              sM1+=C[i][1];
          }
 
-         SL1->Caption="Status ... time step " + IntToStr(t) + " time: " + FloatToStr(at/(365*86400));
-         SL2->Caption="Status ... mass 1: " + FloatToStr(sM0);
-         SL3->Caption="Status ... conc last node: " + FloatToStr(C[nx-1][0]);
+//cout << endl;
+//cout << "Status ... time step " << t << " time: " << (at/(365*86400)) << endl;
+//cout << "Status ... mass 1: " << sM0 << endl;
+//cout << "Status ... conc last node: " << C[nx-1][0] << endl;
 
 
          //fprintf(stream, "%d  %E  %E  %E \n", t, at, sM0, sM1);
          fprintf(stream, "%d  %E\n", t, at);
-
-         Update();
 
      } while  ((t<mts) & (C[nx][0]<iCx*(1-1e-9)) & (sM0>1e-9)) ;
 
 
      fclose(stream);
 
-      for (int i=0;i<=nx+1; i++)
+    for (int i=0;i<=nx+1; i++)
           delete[] C[i];
-      delete[] C;
+     delete[] C;
 
+   return 0;
 }
 //---------------------------------------------------------------------------
 

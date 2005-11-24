@@ -15,16 +15,14 @@ INCLUDES	= $(INC_LOCAL) $(INC_GLOBAL)
 
 
 SOURCES         = ../../vizor/libs/gstring.cpp ../../vizor/libs/gdatastream.cpp \
-	main.cpp mainfromf.cpp nodearray.cpp ms_param.cpp \
-	../submod/ms_mueqexp.cpp \
-	../submod/ipm_sel_bc.cpp ../submod/ipm_gamma.cpp \
+	main.cpp ms_param.cpp \
+	../submod/ms_mueqexp.cpp ../submod/ipm_sel_bc.cpp ../submod/ipm_gamma.cpp \
 	../submod/ipm_fia_bc.cpp ../submod/ms_multi_file.cpp \
 	../s_fgl.cpp ../submod/tnodearray.cpp
 
-OBJECTS         = ../../vizor/libs/gstring.o ../../vizor/libs/gdatastream.o \
-	main.o mainfromf.o nodearray.o ms_param.o \
-	ms_mueqexp.o \
-	ipm_sel_bc.o ipm_gamma.o \
+OBJECTS         = gstring.o gdatastream.o \
+	main.o ms_param.o \
+	ms_mueqexp.o ipm_sel_bc.o ipm_gamma.o \
 	ipm_fia_bc.o ms_multi_file.o \
 	s_fgl.o tnodearray.o
 
@@ -45,6 +43,12 @@ clean:
 
 dep:
 	$(MAKEDEP_CMD) $(INC_LOCAL) $(SOURCES)
+
+gstring.o:		../../vizor/libs/gstring.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
+
+gdatastream.o:	../../vizor/libs/gdatastream.cpp
+	$(CC) $(FLAGS) $(INCLUDES) -c  $<
 
 ms_mueqexp.o:		../submod/ms_mueqexp.cpp
 	$(CC) $(FLAGS) $(INCLUDES) -c  $<

@@ -473,7 +473,8 @@ STEP_POINT("PhaseSelect");
         //   buf += "Continue?";
         //  if( !vfQuestion(window(), "IPM : warning", buf.c_str() ))
         //      break;
-          std::cout<< buf.c_str()<< endl;
+          fstream f_log("ipmlog.txt", ios::out|ios::app );
+          f_log<< buf.c_str()<< endl;
           goto ITDTEST;
        }
 
