@@ -558,11 +558,6 @@ if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
  } // mtp->kv
 
   pVisor->CloseMessage();
-
-//  if( mtp->PsSdat != S_OFF || mtp->PsSbin != S_OFF )
-//  {   mult->datach_free();
-//      mult->databr_free();
-//  }
 }
 
 
@@ -574,20 +569,14 @@ void  TGEM2MT::freeNodeArrays()
    if( arr_BR_size && old_BR)
      for( int ii=0; ii<arr_BR_size; ii++ )
         if( old_BR[ii] )
-        {
-          wrkArr->databr_free(old_BR[ii]);
-          old_BR[ii] = 0;
-        }
+          old_BR[ii] = wrkArr->databr_free(old_BR[ii]);
   delete[]  old_BR;
   old_BR = 0;
 
   if( arr_BR_size && arr_BR)
      for( int ii=0; ii<arr_BR_size; ii++ )
         if( arr_BR[ii] )
-        {
-          wrkArr->databr_free(arr_BR[ii]);
-          arr_BR[ii] = 0;
-        }
+          arr_BR[ii] = wrkArr->databr_free(arr_BR[ii]);
   delete[]  arr_BR;
   arr_BR = 0;
   arr_BR_size = 0;
@@ -613,8 +602,8 @@ void  TGEM2MT::copyNodeArrays()
   return;
  for( int ii=0; ii<mtp->nC; ii++ )
  {
-    wrkArr->GetNodeCopyFromArray( ii, mtp->nC, arr_BR );
-    wrkArr->SaveNodeCopyToArray( ii, mtp->nC, old_BR );
+    wrkArr->CopyWorkNodeFromArray( ii, mtp->nC, arr_BR );
+    wrkArr->MoveWorkNodeToArray( ii, mtp->nC, old_BR );
  }
 }
 
@@ -652,7 +641,7 @@ if( mtp->PsTPai != S_OFF )
 
 // allocate memory for DATABR structures
   allocNodeArrays();
-  data_CH = wrkArr->data_CH;
+  data_CH = wrkArr->pCSD();
  // put DDc
    for( int jj=0; jj<data_CH->nDC; jj ++)
       data_CH->DD[jj] = mtp->DDc[jj];
@@ -670,9 +659,9 @@ if( mtp->PsTPai != S_OFF )
    //
    for( int jj=0; jj<mtp->nC; jj ++)
     if( mtp->DiCp[jj] == mtp->kv )
-     {    wrkArr->data_BR->NodeHandle = (short)jj;
-          wrkArr->SaveNodeCopyToArray( jj, mtp->nC, arr_BR );
-          wrkArr->GetNodeCopyFromArray( jj, mtp->nC, arr_BR );
+     {    wrkArr->setNodeHandle( jj );
+          wrkArr->MoveWorkNodeToArray( jj, mtp->nC, arr_BR );
+          wrkArr->CopyWorkNodeFromArray( jj, mtp->nC, arr_BR );
      }
     mt_next();      // Generate work values for the next EqStat rkey
 
@@ -699,14 +688,14 @@ if( mtp->PsTPai != S_OFF )
 void TGEM2MT::calc_GEM_node( int node_ndx )
 {
 
-   wrkArr->GetNodeCopyFromArray( node_ndx, mtp->nC, arr_BR  );
+   wrkArr->CopyWorkNodeFromArray( node_ndx, mtp->nC, arr_BR  );
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
     wrkArr->unpackDataBr();
 // GEM IPM calculation of equilibrium state in MULTI
     TProfil::pm->calcMulti();
 // Extracting and packing GEM IPM results into work DATABR structure
     wrkArr->packDataBr();
-    wrkArr->SaveNodeCopyToArray( node_ndx, mtp->nC, arr_BR  );
+    wrkArr->MoveWorkNodeToArray( node_ndx, mtp->nC, arr_BR  );
 }
 
 

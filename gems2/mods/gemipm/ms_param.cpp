@@ -156,14 +156,14 @@ void TProfil::CompG0Load()
   double Gg, Vv;
   float TC, P;
 
-  DATACH  *dCH = TNodeArray::na->data_CH;
-  DATABR  *dBR = TNodeArray::na->data_BR;
+  DATACH  *dCH = TNodeArray::na->pCSD();
+//  DATABR  *dBR = TNodeArray::na->pCNode();
 
   if( dCH->nTp <=1 && dCH->nPp <=1 )
     return;
 
-  TC = dBR->T-C_to_K;
-  P = dBR->P;
+  TC = TNodeArray::na->cT()-C_to_K;
+  P = TNodeArray::na->cP();
   for( jj=0; jj<dCH->nTp; jj++)
     if( fabs( TC - dCH->Tval[jj] ) < dCH->Ttol )
     {

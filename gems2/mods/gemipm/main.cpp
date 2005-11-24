@@ -1,234 +1,237 @@
-//masstransport
-//-------------------------------------------------------------------
-// Test run GEMIPM2k
-//#include <iostream>
+//---------------------------------------------------------------------------
 
-#include "tnodearray.h"
-//#include "m_param.h"
-#include "verror.h"
-#include "gdatastream.h"
+#include <vcl.h>
+#pragma hdrstop
 
-extern "C" int /* __stdcall */ MAIF_START( int &sizeN, int &sizeM, int &sizeK,
-   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
+#include "main.h"
+#include <stdio.h>
 
-// extern "C" int MAIF_START( int &sizeN, int &sizeM, int &sizeK,
-//   int  c_to_i1[30], int c_to_i2[30], int *nodeTypes );
 
-extern "C" int /* __stdcall */ MAIF_CALC( int  readF, // negative means read only
-   int indN,  // fortran index; 0 working only with work structure
-   int indM,  // fortran index; 0 working only with work structure
-   int indK,  // fortran index; 0 working only with work structure
-// extern "C" int MAIF_CALC( int  readF, // negative means read only
-   short &p_NodeHandle,    // Node identification handle
-   short &p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
-   short &p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
-   short &p_NodeStatusFMT, // Node status code FMT; see typedef NODECODEFMT
-   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-   short &p_IterDone,      // Number of iterations performed by IPM (if not need GEM)
-// Chemical scalar variables
-   double &p_T,     // Temperature T, K                        +      +      -     -
-   double &p_P,     // Pressure P, bar                         +      +      -     -
-   double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
-   double &p_Vi,    // Volume of inert subsystem  ?            +      -      -     +
-   double &p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
-   double &p_Mi,    // Mass of inert part, kg    ?             +      -      -     +
-   double &p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
-   double &p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
-   double &p_Hi,    // Enthalpy of inert subsystem (J) ?       +      -      -     +
-   double &p_IC,    // Effective molal aq ionic strength           -      -      +     +
-   double &p_pH,    // pH of aqueous solution                      -      -      +     +
-   double &p_pe,    // pe of aqueous solution                      -      -      +     +
-   double &p_Eh,    // Eh of aqueous solution, V                   -      -      +     +
-   double &p_denW,
-   double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
-   double &p_epsW,
-   double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
-//  FMT variables (units need dimensionsless form)
-   double &p_Tm,    // actual total simulation time
-   double &p_dt,    // actual time step
-   double &p_dt1,   // priveous time step
-   double &p_ot,    // output time control for postprocessing
-   double &p_Vt,    // total volume of node (voxel) = dx*dy*dz, m**3
-   double &p_eps,   // effective (actual) porosity normalized to 1
-   double &p_Km,    // actual permeability, m**2
-   double &p_Kf,    // actual DARCY`s constant, m**2/s
-   double &p_S,	    // specific storage coefficient, dimensionless
-   double &p_Tr,    // transmissivity m**2/s
-   double &p_h,	    // actual hydraulic head (hydraulic potential), m
-   double &p_rho,   // actual carrier density for density driven flow, g/cm**3
-   double &p_al,    // specific longitudinal dispersivity of porous media, m
-   double &p_at,    // specific transversal dispersivity of porous media, m
-   double &p_av,    // specific vertical dispersivity of porous media, m
-   double &p_hDl,   // hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
-   double &p_hDt,   // hydraulic transversal dispersivity, m**2/s
-   double &p_hDv,   // hydraulic vertical dispersivity, m**2/s
-   double &p_nPe,   // node Peclet number, dimensionless
-// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
-// exchange of values occurs through lists of indices, e.g. xDC, xPH
-   double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
-   double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
-   double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
-   double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
-   double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
-   double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
-   double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
-   double  *p_dul,  // upper kinetic restrictions [nDCb]           +      +      -     -
-   double  *p_dll,  // lower kinetic restrictions [nDCb]           +      +      -     -
-   double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
-   double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
-   double  *p_uIC,  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
-  // What else?
-   double  *p_dRes1,
-   double  *p_dRes2
-);
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
 
-//      DATABR  *dBR;
-//      DATABR  *(*dBR1);
-
-int
-main( int argc, char* argv[] )
+TForm1 *Form1;
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+        : TForm(Owner)
 {
-     int nNods = 2;
-     int nodeType[8];
-     gstring multu_in1 = "";
-     gstring chbr_in1   = "";
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+     double L,    // length of system [L]
+            v,    // constant fluid velocity [L/T]
+            tf,   // time step reduce control factor
+            bC,   // initial background solute concentration [M/L**3]
+            iCx,  // inital concentration @ node # x
+            dx,   // node distance [L]
+            dt,   // iterative time increment
+            at;   // actual time step
 
-// from argv
-      if (argc >= 2 )
-        multu_in1 = argv[1];
-      if (argc >= 3 )
-        chbr_in1 = argv[2];
+     double **C;  // concentrations data arrays
+//   TNodeArray
 
-     const char *  multu_in = multu_in1.c_str();
-     const char *  chbr_in = chbr_in1.c_str();
-      int  c_to_i1[30];
-      int  c_to_i2[30];
-      for( int i=0; i<30; i++ )
-      {
-        c_to_i1[i]=multu_in[i];
-        c_to_i2[i]=chbr_in[i];
-      }
+     int    nx,   // number of nodes
+            mts,  // maximal time steps
+            t,    // actual time iterator
+            inx;  // initial node index
 
-// Initial reading of arrays
-      nodeType[1] = 1;
-      nodeType[2] = 1;
-      nodeType[3] = 1;
-      nodeType[4] = 1;
-      nodeType[5] = 1;
-      nodeType[5] = 1;
-      nodeType[6] = 1;
-      nodeType[7] = 1;
-      nodeType[0] = 2;
-      MAIF_START( nNods, nNods, nNods, c_to_i1, c_to_i2, nodeType );
+     double c0,
+            c1,
+            cm1,
+            cm2,
+            c12,
+            cm12,
+            sM0,
+            sM1,
+     dc,    // increment to concentration/amount
+            cr;      // some help variables
 
+            FILE *stream;
 
-  short m_NodeHandle=0, m_NodeTypeHY=0, m_NodeTypeMT=0,
-        m_NodeStatusFMT=0, m_NodeStatusCH=0,  m_IterDone=0;
-  double m_T=0., m_P=0., m_Vs=0., m_Vi=0., m_Ms=0., m_Mi=0.,
-        m_Gs=0., m_Hs=0., m_Hi=0., m_IC=0., m_pH=0., m_pe=0.,
-        m_Eh=0., m_denW=0., m_denWg=0., m_epsW=0., m_epsWg=0., m_Tm=0.,
-        m_dt=0., m_dt1=0., m_ot=0., m_Vt=0., m_eps=0., m_Km=0.,
-        m_Kf=0., m_S=0., m_Tr=0., m_h=0., m_rho=0., m_al=0.,
-        m_at=0., m_av=0., m_hDl=0., m_hDt=0., m_hDv=0., m_nPe=0.;
-  double *m_xDC, *m_gam, *m_xPH, *m_vPS, *m_mPS,
-        *m_bPS, *m_xPA, *m_dul, *m_dll, *m_bIC, *m_rMB, *m_uIC;
-  double m_dRes1[4], m_dRes2[6];
+     // read settings from formular ...
+/*
+     L = StrToFloat(Edit1->Text);
+     nx = StrToInt(Edit2->Text);
+     v = StrToFloat(Edit5->Text);
+     tf = StrToFloat(Edit4->Text);
+     mts = StrToInt(Edit3->Text);
+     bC = StrToInt(Edit6->Text);
+     iCx = StrToFloat(Edit7->Text);
+     inx = StrToInt(Edit8->Text);
+*/
+     L = 1.;      // length in m
+     nx = 100;    // number of nodes (default 1500)
+     v = 1e-8;    // fluid velocity constant m/sec
+     tf = 1.;     // time step reduce factor
+     mts = 10000; // max number of time steps
+     bC = 1e-9;   // initial background concentration over all nodes  0
+     iCx = 1.;     // initial concentration M/m3
+     inx = 1;     // in the node index inx
+// to define constant injection mode
 
-  int nIC=0, nDC=0, nPH=0, nPS=0, ndXf=-1;
-  short *xDC, *xIC, *xPH;
+     PB->Max=mts;
 
-   DATACH  *dCH = TNodeArray::na->data_CH;
-   DATABR  *dBR = TNodeArray::na->data_BR;
-
-  if( !dCH || !dBR )
-      return 1;
-
-   // Extracting data bridge dimensionalities
-   nIC = dCH->nICb;
-   nDC = dCH->nDCb;
-   nPH = dCH->nPHb;
-   nPS = dCH->nPSb;
-
-    m_xDC = (double*)malloc( nDC*sizeof(double) );
-    m_gam = (double*)malloc( nDC*sizeof(double) );
-    m_xPH = (double*)malloc( nPH*sizeof(double) );
-    m_vPS = (double*)malloc( nPS*sizeof(double) );
-    m_mPS = (double*)malloc( nPS*sizeof(double) );
-    m_bPS = (double*)malloc( nDC*nPS*sizeof(double) );
-    m_xPA = (double*)malloc( nPS*sizeof(double) );
-    m_dul = (double*)malloc( nDC*sizeof(double) );
-    m_dll = (double*)malloc( nDC*sizeof(double) );
-    m_bIC = (double*)malloc( nIC*sizeof(double) );
-    m_rMB = (double*)malloc( nIC*sizeof(double) );
-    m_uIC = (double*)malloc( nIC*sizeof(double) );
-
- for(int kk=1; kk<=nNods; kk++ )
-    for( int ii=1; ii<=nNods; ii++)
-    {
-       MAIF_CALC( -1, ii, 1, kk,
-        m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
-        m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
-        m_T, m_P, m_Vs, m_Vi, m_Ms, m_Mi,
-        m_Gs, m_Hs, m_Hi, m_IC, m_pH, m_pe,
-        m_Eh, m_denW, m_denWg, m_epsW, m_epsWg, m_Tm,
-        m_dt, m_dt1, m_ot, m_Vt, m_eps, m_Km,
-        m_Kf, m_S, m_Tr, m_h, m_rho, m_al,
-        m_at, m_av, m_hDl, m_hDt, m_hDv, m_nPe,
-        m_xDC, m_gam, m_xPH, m_vPS, m_mPS,
-        m_bPS, m_xPA, m_dul, m_dll, m_bIC, m_rMB, m_uIC,
-        m_dRes1, m_dRes2 );
-
-       m_NodeStatusCH = NEED_GEM_AIA; //NEED_GEM_PIA
-
-  //       m_bIC[2] += 1e-6*kk;
- //        m_bIC[3] += 1e-6*kk;
- //      m_bIC[4] += 1e-7;
-       if(kk>1) m_T += 25;
-        else m_T += 15;
-       if(ii>1)
-        m_P +=5;
-
-       MAIF_CALC( 1, ii, 0, kk,
-        m_NodeHandle, m_NodeTypeHY, m_NodeTypeMT,
-        m_NodeStatusFMT, m_NodeStatusCH, m_IterDone,
-        m_T, m_P, m_Vs, m_Vi, m_Ms, m_Mi,
-        m_Gs, m_Hs, m_Hi, m_IC, m_pH, m_pe,
-        m_Eh, m_denW, m_denWg, m_epsW, m_epsWg, m_Tm,
-        m_dt, m_dt1, m_ot, m_Vt, m_eps, m_Km,
-        m_Kf, m_S, m_Tr, m_h, m_rho, m_al,
-        m_at, m_av, m_hDl, m_hDt, m_hDv, m_nPe,
-        m_xDC, m_gam, m_xPH, m_vPS, m_mPS,
-        m_bPS, m_xPA, m_dul, m_dll,  m_bIC, m_rMB, m_uIC,
-        m_dRes1, m_dRes2 );
-
-
+     C = new double*[nx*2];
+     for (int i=0;i<=nx+1;i++)  {
+          C[i] = new double[1];
+          C[i] = new double[2];
      }
 
-// Printouts here
-   fstream cout( "log1.out", ios::out );
- cout << endl << "Read: " << m_NodeHandle << " " <<  m_NodeTypeHY << " "
-     << m_NodeTypeMT << " " << m_NodeStatusFMT << " " << m_NodeStatusCH
-     << " " << m_IterDone << endl;
+     stream=fopen("test.dat","w+");
 
-// Something else?
+     // init concentration arrays
+     for (int i=0;i<=nx+1;i++) {
+         C[i][0]=bC;
+         C[i][1]=bC;
+     }
 
-// Finished!
+// The NodeArray must be allocated here
+    TNodeArray::na = new TNodeArray( nx+1 );
 
-    free( m_xDC );
-    free( m_gam );
-    free( m_xPH );
-    free( m_vPS );
-    free( m_mPS );
-    free( m_bPS );
-    free( m_xPA );
-    free( m_dul );
-    free( m_dll );
-    free( m_bIC );
-    free( m_rMB );
-    free( m_uIC );
+// Prepare the array for initial conditions allocation
+     int* nodeType = new int(nx);
+     for( ii =0; ii<nx+1; ii++ )
+       nodeType[ii] = 1;
+     nodeType[0] = 2;
 
-    return 0;
+//     C[inx][0]=iCx;   Initial condition for Dirak input
+//     C[inx][1]=iCx;
+
+ // Here we read MULTI structure, DATACH and DATABR files prepared from GEMS
+TNodeArray::na->NewNodeArray( "MgWBoundC.ipm", "ipmfiles-dat.lst",
+                   nodeType );
+
+     DATACH* CH = TNodeArray::na->pCSD();
+     DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at current time point
+     DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
+
+     // start time iteration loop
+
+     dx = L/nx;
+     dt = 0.5*(dx/v)*1/tf;
+
+     at = 0;
+     t = 0;
+
+     do {         // time iteration
+
+        t+=1;
+        at=at+dt;
+        cr=v*dt/dx;
+
+        PB->Position=t;
+
+        for (int i=2;i<=nx;i++) {   // node iteration
+
+// Concentrations in these nodes are fixed
+           if (CB->State==cbChecked) {
+              for (int j=0;j<=inx;j++) {
+              C[j][0]=iCx;   // replace with copying these DataBR structures from line C1 to line C0
+              C[j][1]=iCx;   // leave for comparison as "conventional tracer"
+           }
+           }
+
+           for( ic=0; ic < CH->nICb; ic++)
+           {
+              // It has to be checked on minimal allowed c0 value
+              c0  = C0[i]->bPS[0*CH->nICb + ic];    // Volume of aq solution in i-th node
+              c1  = C0[i+1]->bPS[0*CH->nICb + ic];
+              cm1 = C0[i-1]->bPS[0*CH->nICb + ic];
+              cm2 = C0[i-2]->bPS[0*CH->nICb + ic];
+
+              if (i==nx) c1=c0;    // that means: right boundary is open ....
+
+              c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
+              cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
+              dc = cr*(c12-cm12);
+// Here we move not just volume but also the bulk composition of aq phase
+
+              C0[i]->bPS[0*CH->nICb + ic] = c0-dc;  // Correct for FD numerical scheme
+              C0[i]->bIC[ic] -= dc; // correct for GEM calcuation
+           }
+// This part is left for comparison
+           c0=C[i][0];
+           c1=C[i+1][0];
+           cm1=C[i-1][0];
+           cm2=C[i-2][0];
+           if (i==nx) c1=c0;    // that means: right boundary is open ....
+
+           c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
+           cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
+
+           C[i][0]=c0-cr*(c12-cm12);
+           C[i][1]=c0-cr*(c0-c1);  // left for comparison
+         } // end of loop over nodes
+
+//       Here we call a loop on GEM calculations over nodes
+//       parallelization affects this loop
+         for (int i=1; i<nx; i++)    // node iteration
+         {
+           int Mode = NEED_GEM_FIA, RetCode;
+           bool NeedGEM = false;
+
+           // Here we compare this node for current time and for previous time
+           for( ic=0; ic < CH->nICb; ic++)
+           {                   // It has to be checked on minimal allowed c0 value
+              el0 = C0[i]->bIC[ic];
+              if( el0 <= 1e-16 )
+              { // to stay on safe side
+                el0 = 1e-16;
+                C0[i]->bIC[ic] = el0;
+              }
+              el1 = C1[i]->bIC[ic];
+              diff = fabs( el0 - el1 )/el1;
+              if( diff > 1e-6 )
+                  NeedGEM = true;  // we need to recalculate equilibrium
+              if( diff > 1e-4 )
+                  Mode = NEED_GEM_AIA;  // we even need to do it in auto Simplex mode
+           }
+           if( NeedGEM )
+           {
+              RetCode = TNodeArray::na->RunGEM( i, Mode );
+              // check RetCode
+
+           }
+         }
+
+         // Here one has to compare old and new equilibrium phase assemblage
+         // and pH/pe in all nodes and decide if the time step was Ok or it
+         // should be decreased. If so then the nodes from C1 should be
+         // copied to C0
+
+         // Copying nodes from C0 to C1
+         for (int i=1; i<nx; i++)    // node iteration
+           TNodeArray::na->CopyNodeFromTo( i, nx, C0, C1 );
+
+// Data collection for monitoring - to extend here
+
+         sM0=0;sM1=0;
+         for (int i=0;i<=nx;i++) {
+             sM0+=C[i][0];
+             sM1+=C[i][1];
+         }
+
+         SL1->Caption="Status ... time step " + IntToStr(t) + " time: " + FloatToStr(at/(365*86400));
+         SL2->Caption="Status ... mass 1: " + FloatToStr(sM0);
+         SL3->Caption="Status ... conc last node: " + FloatToStr(C[nx-1][0]);
+
+
+         //fprintf(stream, "%d  %E  %E  %E \n", t, at, sM0, sM1);
+         fprintf(stream, "%d  %E\n", t, at);
+
+         Update();
+
+     } while  ((t<mts) & (C[nx][0]<iCx*(1-1e-9)) & (sM0>1e-9)) ;
+
+
+     fclose(stream);
+
+      for (int i=0;i<=nx+1; i++)
+          delete[] C[i];
+      delete[] C;
+
 }
-
-//--------------------- End of main.cpp ---------------------------
+//---------------------------------------------------------------------------
 

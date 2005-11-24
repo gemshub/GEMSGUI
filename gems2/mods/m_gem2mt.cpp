@@ -753,8 +753,6 @@ TGEM2MT::RecCalc( const char * key )
      NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
      Trans1D( mtp->PsMode, 1 );
      freeNodeArrays(); // free worked memory
-//     wrkArr.datach_free();
-//     wrkArr.databr_free();
    }
 
    delete wrkArr;

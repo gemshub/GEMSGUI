@@ -428,9 +428,6 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    fout << newname.c_str() << ".dat\"\n";
    fout.close();
 
-//   multi->datach_free();
-//   multi->databr_free();
-
 // put data to IPMRUN.BAT file
    Path_ = u_makepath( dir, "IPMRUN", "BAT" );
    fout.open(Path_.c_str(), ios::out);

@@ -131,11 +131,11 @@ int  NewNodeArray( int &sizeN, int &sizeM, int &sizeK,
      for( int ii=0; ii<nNodes; ii++)
          if(  (!nodeTypes && i==0) ||
               ( nodeTypes && (nodeTypes[ii] == i+1 )) )
-                  {    TNodeArray::na->data_BR->NodeHandle = ii+1;
-                       TNodeArray::na->SaveNodeCopyToArray(ii, nNodes,
-                             TNodeArray::na->arrBR_0);
-                       TNodeArray::na->GetNodeCopyFromArray(ii, nNodes,
-                             TNodeArray::na->arrBR_0);
+                  {    TNodeArray::na->setNodeHandle( ii+1 ); 
+                       TNodeArray::na->MoveWorkNodeToArray(ii, nNodes,
+                             TNodeArray::na->pNodT0());
+                       TNodeArray::na->CopyWorkNodeFromArray(ii, nNodes,
+                             TNodeArray::na->pNodT0());
                    }
           i++;
      }
@@ -258,8 +258,8 @@ int  NodeCalcGEM( int  &readF, // negative means read only
 
 // Copying data for node iNode from node array into work DATABR structure
 if( onlyWork > 0)
-   TNodeArray::na->GetNodeCopyFromArray( iNode, TNodeArray::na->anNodes,
-                             TNodeArray::na->arrBR_0 );
+   TNodeArray::na->CopyWorkNodeFromArray( iNode, TNodeArray::na->nNodes(),
+                             TNodeArray::na->pNodT0() );
 
 if( readF > 0 )  // calculation mode: passing input GEM data changed on previous FMT iteration
 {                 //                   into work DATABR structure
@@ -308,8 +308,8 @@ if( readF < 0 )  // readonly mode: passing input GEM data to FMT
 
 // Copying data for node iNode back from work DATABR structure into the node array
 if( readF > 0 &&  onlyWork > 0)
-    TNodeArray::na->SaveNodeCopyToArray( iNode, TNodeArray::na->anNodes,
-                             TNodeArray::na->arrBR_0 );
+    TNodeArray::na->MoveWorkNodeToArray( iNode, TNodeArray::na->nNodes(),
+                             TNodeArray::na->pNodT0() );
     return 0;
 }
     catch(TError& err)

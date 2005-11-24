@@ -190,9 +190,9 @@ int /* __stdcall */  MAIF_CALC( int  readF, // negative means read only
   int ii;
   int nIC, nDC, nPH;
  // Extracting data bridge dimensionalities
-   nIC = TProfil::pm->multi->data_CH->nICb;
-   nDC = TProfil::pm->multi->data_CH->nDCb;
-   nPH = TProfil::pm->multi->data_CH->nPHb;
+   nIC = TProfil::pm->multi->CSD->nICb;
+   nDC = TProfil::pm->multi->CSD->nDCb;
+   nPH = TProfil::pm->multi->CSD->nPHb;
 
   fstream f_log("MAIF_CALC.txt", ios::out|ios::app );
 
