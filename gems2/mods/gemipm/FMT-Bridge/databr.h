@@ -11,8 +11,8 @@
 
 typedef struct
 {  // DATABR - template for node data bridge instances
-   int 
-     NodeHandle,    // Node identification handle 
+   short
+     NodeHandle,    // Node identification handle
      NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
      NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
      NodeStatusFMT, // Node status code FMT; see typedef NODECODEFMT 
@@ -28,29 +28,29 @@ typedef struct
 */
 
 //      Usage of this variable:                          MT-DB DB-GEM GEM-DB DB-MT       
-   double 
+   double
 // Chemical scalar variables
     T,   	// Temperature T, K                        +      +      -     -
     P,   	// Pressure P, bar                         +      +      -     -
     Vs,         // Volume V of reactive subsystem, cm3     -      -      +     +
     Vi,         // Volume of inert subsystem  ?            +      -      -     +
     Ms,         // Mass of reactive subsystem, kg          +      +      -     -
-    Mi,         // Mass of inert part, kg    ?             +      -      -     +  
+    Mi,         // Mass of inert part, kg    ?             +      -      -     +
 
     Gs,         // Gibbs energy of reactive subsystem (J)  -      -      +     +
     Hs, 	// Enthalpy of reactive subsystem (J)      -      -      +     +
     Hi,         // Enthalpy of inert subsystem (J) ?       +      -      -     +
- 
+
     IC,     // Effective molal aq ionic strength           -      -      +     +
     pH,     // pH of aqueous solution                      -      -      +     +
     pe,     // pe of aqueous solution                      -      -      +     +
     Eh,     // Eh of aqueous solution, V                   -      -      +     +
     denW,denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
-    epsW,epsWg; // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
+    epsW,epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
 
 //  FMT variables (units need dimensionsless form)
 
-    T,          // actual total simulation time
+    Tm,          // actual total simulation time
     dt,         // actual time step
     dt1,        // priveous time step
     ot,		// output time control for postprocessing
@@ -68,7 +68,7 @@ typedef struct
     hDl,	// hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
     hDt,	// hydraulic transversal dispersivity, m**2/s			 	
     hDv,	// hydraulic vertical dispersivity, m**2/s
-    nfo;	// node Peclet number, dimensionless
+    nfo;	// fortuosity
    
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH 
@@ -76,13 +76,13 @@ typedef struct
    double
    // DC (species) in reactive subsystem
     *xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
-    *gam,    // activity coeffs of DC [nDCb]               -      -      +     +   
+    *gam,    // activity coeffs of DC [nDCb]               -      -      +     +
 
    // Phases in reactive subsystem
-    *xPH,  // total mole amounts of phases [nPHb]          -      -      +     +  
+    *xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
 
     *vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
-    *mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +  
+    *mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
     *bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
     *xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
 
@@ -99,16 +99,18 @@ typedef struct
 }
 DATABR;
 
+typedef DATABR*  DATABRPTR;
+
 typedef enum {  // NodeStatus codes GEMS
- NEED_GEM_AIA = 1, 
- OK_GEM_AIA   = 2,
- BAD_GEM_AIA  = 3,
- ERR_GEM_AIA  = 4,
- NEED_GEM_PIA = 5, 
- OK_GEM_PIA   = 6,
- BAD_GEM_PIA  = 7, 
- ERR_GEM_PIA  = 8,
- TERROR_GEM   = 9 
+ NEED_GEM_AIA = 1,   //To calculate with simplex IA
+ OK_GEM_AIA   = 2,   // OK calculated from simplex IA
+ BAD_GEM_AIA  = 3,   // Bad result from simplex IA
+ ERR_GEM_AIA  = 4,   // Failed to calculated from simplex IA
+ NEED_GEM_PIA = 5,   //To calculate without simplex from previous solution
+ OK_GEM_PIA   = 6,   // OK calculated without simplex from previous solution
+ BAD_GEM_PIA  = 7,   // Bad result without simplex from previous solution
+ ERR_GEM_PIA  = 8,   // Failed to calculated without simplex
+ TERROR_GEM   = 9    // Terminal error GemIPM
 } NODECODECH;
 
 

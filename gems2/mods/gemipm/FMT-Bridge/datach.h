@@ -1,25 +1,32 @@
 //-------------------------------------------------------------------
-Data Bridge Chemistry structure  (draft variant 2)
+// Data Chemistry structure  (draft variant 2)
 //-------------------------------------------------------------------
 //
 #ifndef _DataCh_H_
 #define _DataCh_H_
 
+
+const unsigned int
+    MaxICN =      10,
+    MaxDCN =      16,
+    MaxPHN =      20;
+
+
 typedef struct
 {  // Structure DataCH
    // Dimensionalities
-  unsigned short 
+  short
    // these dimensionalities should be the same as in MULTI (GEM IPM)
-    nIC,        // total number of stoichiometry units in reactive part 
+    nIC,        // total number of stoichiometry units in reactive part
     nDC,      	// total number of DC (chemical species) in reactive part
     nPH,       	// total number of phases included into the IPM problem
     nPS,        // number of multicomponent phases <= nPH
     nTp,        // Number of temperature points in TD arrays
     nPp,        // Number of pressure points in TD arrays
-    uRes1,
+    nAalp,      // presence of surface areas in datach
     uRes2,
 
-  // These dimensionalities define sizes of dynamic data in DATABT structure!!!
+  // These dimensionalities define sizes of dynamic data in DATABR structure!!!
   // Needed to reduce on storage demand for data bridge instances (nodes)!
   // Connection occurs through xIC, xPH and xDC lists!
     nICb,       // number of stoichiometry units (<= nIC) used in the data bridge  
@@ -38,11 +45,13 @@ typedef struct
     *xPH;   // PHNL indices in DATABR phase vectors [nPHb]
 
   float 
+    *Tval,   // discrete values of T [nTp]
+    *Pval,   // discrete values of P [nPp]
     *A;     // DC stoichiometry matrix A composed of a_ij [nIC][nDC]
             // float reduces storage demand here 
   double 
-    Tmin, Tmax, Tstep, Ttol, // Temperature T, K, min.,-max., step, tolerance
-    Pmin, Pmax, Pstep, Ptol, // Pressure P, bar, min.,-max., step, tolerance
+    Ttol, // Temperature T, K, tolerance
+    Ptol, // Pressure P, bar, tolerance
     dRes1, dRes,
 
 // Data vectors
@@ -51,10 +60,14 @@ typedef struct
 
 // DC - related values  
     *DCmm,   // DC molar mass, g/mole [nDC]
+    *DD,     // [nDC] diffusition koefficients for now constant
 // Thermodynamic data
-// Require Lagrange extrapolation subroutine to extract data for given P,T    
+// Require Lagrange interpolation subroutine to extract data for given P,T
+    *roW,    //density of water solvent [ nPp, nTp]
+    *epsW,    // dielectric  constant of water solvent [ nPp, nTp]
     *G0,    // standard molar Gibbs energy [nDC, nPp, nTp]
     *V0,    // standard molar volume [nDC, nPp, nTp]
+//  *S0,    // standard molar entropy [nDC, nPp, nTp]
     *H0,    // standard molar enthalpy, reserved [nDC, nPp, nTp]
     *Cp0,   // st. molar heat capacity, reserved [nDC, nPp, nTp]
 
@@ -75,10 +88,6 @@ typedef struct
 }
 DATACH;
 
-const unsigned int
-    MaxICN =      6,
-    MaxDCN =      16,
-    MaxPHN =      16;
 
 /* Work DC classifier codes  ccDCW ??? */
 enum SolDCLcodes {
@@ -88,6 +97,10 @@ enum SolDCLcodes {
     DCl_ASYM_CARRIER = 'W'  /*This is carrier(solvent) DC in asymmetric phase*/
 };
 
+#ifdef IPMGEMPLUGIN
+
+#ifndef _chbr_classes_h_
+#define _chbr_classes_h_
 
 typedef enum {  /* classes of IC*/
     IC_ELEMENT  =  'e',  // chemical element (except oxygen and hydrogen)
@@ -138,7 +151,7 @@ typedef enum {  /* Classifications of DC */
     DC_IEWC_B  = 'B', /* Weak exchange ion const-charge plane */
 
     /* Aliaces for 1-site model */
-    DC_SUR_GROUP    = 'X',  /* Surface site A plane -> '0' */
+    DC_SUR_GROUP    = 'X',  /* Surface group on A plane -> '0' */
     DC_SUR_COMPLEX = 'Y',  /* Strong sur. complex A plane -> '0' */
     DC_SUR_IPAIR   = 'Z',  /* Weak sur complex B plane -> '1' */
 
@@ -146,9 +159,9 @@ typedef enum {  /* Classifications of DC */
     DC_SCP_CONDEN  = 'O',   // DC forming a single-component phase
 
     /* Here add some special classes for diffusion etc. */
-    DCaquoCATION   = 'c', 
-    DCaquoANION    = 'n', 
-    DCaquoLIGAND   = 'l', 
+    DCaquoCATION   = 'c',
+    DCaquoANION    = 'n',
+    DCaquoLIGAND   = 'l',
     DCaquoCOMPLEX  = 'x',
     DCaquoIONPAIR  = 'p',
     DCaquoGAS      = 'g',
@@ -160,10 +173,14 @@ typedef enum {  /* Possible values */
     PH_FLUID    = 'f',  // fluid phase
     PH_LIQUID   = 'l',  // non-electrolyte liquid (melt)
     PH_SORPTION = 'x',  // dilspersed solid with adsorption (ion exchange) in aqueous
-    PH_POLYEL = 'y',    // colloidal poly- (oligo)electrolyte
+    PH_POLYEL   = 'y',    // colloidal poly- (oligo)electrolyte
     PH_SINCOND  = 's',  // condenced solid phase, also multicomponent
     PH_SINDIS   = 'd',  // dispersed solid phase, also multicomponent
 } PHL_CLASSES;
+
+#endif
+
+#endif
 
 #endif   //_DataCH_H
 

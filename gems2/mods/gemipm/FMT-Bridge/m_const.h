@@ -1,6 +1,20 @@
+#ifndef _m_const_h
+#define _m_const_h
+
+// #include <iostream>
+#include <ctype.h>
+#include <fstream>
+
+//#ifndef IPMGEMPLUGIN
+// #define IPMGEMPLUGIN
+//#endif
+
+using namespace std;
+#include "verror.h"
+#include "v_user.h"
 
 const int MST =  6,
-          DFCN = 6;
+          DFCN = 6; // number of columns in MASDJ table
 
 const unsigned int
     MAXICNAME =      6,
@@ -13,44 +27,8 @@ const int
     MAXPHNAME =      16,
     EQ_RKLEN = 58;
 
-#include <ctype.h>
-#include <fstream>
-using namespace std;
 
-// dynamically allocated temporary 'char*'
-// for simple string manipulations
-// (used instead of stack char[] allocation to avoid stack problems)
-struct vstr
-{
-    char* p;
-    vstr(int ln): p(new char[ln+1])
-    { }
-
-    vstr(int ln, const char* s): p(new char[ln+1])
-    {
-        strncpy(p, s, ln);
-        p[ln]='\0';
-    }
-
-    vstr(const char* s): p(new char[strlen(s)+1])
-    {
-       strcpy(p, s);
-    }
-
-    ~vstr()
-    {
-        delete[] p;
-    }
-
-    operator char* ()
-    {
-        return p;
-    }
-
-private:    vstr (const vstr&);
-    const vstr& operator= (const vstr&);
-
-};enum solmod_switches { /* indexes of keys of model solution*/
+enum solmod_switches { /* indexes of keys of model solution*/
     SPHAS_TYP, DCOMP_DEP, SPHAS_DEP, SGM_MODE, DCE_LINK, SCM_TYPE,
     /* link state */
     LINK_UX_MODE, LINK_TP_MODE, LINK_FIA_MODE,
@@ -81,6 +59,9 @@ private:    vstr (const vstr&);
     SM_USERDEF = 'U', // user-defined mixing model (in Phase record)
     SM_OTHER = 'O'   //  other models of non-ideal solutions (reserved)
 };
+
+#ifndef _chbr_classes_h_
+#define _chbr_classes_h_
 
 typedef enum {  /* Classifications of DC */
     /* Type of input data for */
@@ -128,6 +109,7 @@ typedef enum {  /* Classifications of DC */
 
 } DC_CLASSES;
 
+
 //    This code defines standard state and reference scale of concentra-
 // tions for components of this phase. It is used by many subroutines
 // during calculations of equilibrium states
@@ -145,12 +127,26 @@ enum PH_CLASSES{  /* Possible values */
     PH_HCARBL   = 'h'   // mixture of condensed hydrocarbons
 };
 
+#else
+
+//    This code defines standard state and reference scale of concentra-
+// tions for components of this phase. It is used by many subroutines
+// during calculations of equilibrium states
+enum PH_CLASSES2{  /* Possible values */
+    PH_PLASMA   = 'p',  // plasma
+    PH_SIMELT   = 'm',  // silicate (magmatic) melt or non-aqueous electrolyte
+    PH_HCARBL   = 'h'   // mixture of condensed hydrocarbons
+};
+
+#endif
+
 typedef enum {  /* Limits on DC and phases */
     /* type of lmits */
     NO_LIM = 'O', LOWER_LIM ='L', UPPER_LIM = 'U', BOTH_LIM ='B',
     /* mode recalc of limits Set_DC_Limits() */
     DC_LIM_INIT = 0, DC_LIM_CURRENT = 1
 } DC_LIMITS;
+
 
 enum sorption_control {
     /* EDL interface models - separate for site types in v. 3.1 */
@@ -228,3 +224,4 @@ const char S_OFF = '-',
                           S_REM = '*',
                                   A_NUL ='?';
 
+#endif
