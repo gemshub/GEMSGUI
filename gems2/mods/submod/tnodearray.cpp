@@ -707,7 +707,6 @@ void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
 // Copying data for node iNode back from work DATABR structure into the node array
 void TNodeArray::MoveWorkNodeToArray( int ii, int nNodes, DATABRPTR* arr_BR )
 {
-
   if( ii < 0 || ii>= nNodes )
     return;
   if( arr_BR[ii] )
