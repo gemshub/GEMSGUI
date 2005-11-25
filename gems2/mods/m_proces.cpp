@@ -707,7 +707,7 @@ void TProcess::pe_next()
     pep->c_pe += pep->pei[STEP_];
 }
 
-// Input necessary data and links objects
+// Input necessary data and link data objects
 void TProcess::RecInput( const char *key )
 {
     TCModule::RecInput( key );
@@ -820,7 +820,7 @@ TProcess::pe_qekey()
     gcvt( pep->c_V, 6, pep->Bnamep );
 }
 
-// save current values in process iterstions to arrays
+// save current values in process iterations to arrays
 void
 TProcess::pe_test()
 {

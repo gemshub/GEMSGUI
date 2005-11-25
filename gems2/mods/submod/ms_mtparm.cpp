@@ -360,7 +360,7 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
             aDC->DCthermo( 0, 0 );
         else aRC->RCthermo( 0, 0 );
 
-        if( aWp.init && P_old < 1e-6 && P < 1e-6 )
+        if( aWp.init && P_old < 1e-6 && P < 1e-6 )      //  Doubtful ??
         {  /* insert precision‚ calculated by KNP */
             P = tp.P = aW.twp->P;
             tp.PeosW = S_ON;
@@ -467,7 +467,9 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
          tp.VisV = aWp.Viscw[!aSpc.isat]; /* Dynamic viscosity of liquid water */
          tp.PeosW = S_ON;
          tp.P_HKF = S_ON;
-// Added 07.06.05 for b_gamma=f(T,P) calculations
+         if( tp.P < 1e-6 )     // added 25.11.05
+             tp.P = aW.twp->P;
+       // Added 07.06.05 for b_gamma=f(T,P) calculations
          gfun = aW.twp->gfun;
          b_gamma = aPa->pa.aqPar[0];
          switch( tp.Pbg )

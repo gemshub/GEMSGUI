@@ -673,19 +673,19 @@ TDComp::DCthermo( int q, int p )
     {// HKF calculations or determination of P_sat if P=0
 
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
-                ( aW.twp->P > 1e-4 && fabs( aW.twp->P - aSta.Pres ) > 0.001 ))
-        { // ЁрёўшЄ√трхь ёт-тр ЁрёЄтюЁшЄхы -тюф√ яю HGF
+                ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ))    // corrected by KD 25.11.05
+        { // re-calculation of properties of H2O using HGF/HGK
             aSta.Temp = aW.twp->TC;
             if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
                 aSta.Temp = 0.01;
             aSta.Pres =  aW.twp->P;
 
-            TSupcrt sapCrt;
-            sapCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
+            TSupcrt supCrt;
+            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
             aW.twp->P = aSta.Pres;
-            aW.twp->wRo  = aSta.Dens[aSpc.isat]; /* Плотность воды г/см3 */
-            aW.twp->wEps = aWp.Dielw[aSpc.isat]; /* Диелектрическая постоянная */
-//            aW.twp->wVis = aWp.Viscw[aSpc.isat]; /* Вязкоcть (динамическая), кг/м*сек */
+            aW.twp->wRo  = aSta.Dens[aSpc.isat]; // density of water g/cm3
+            aW.twp->wEps = aWp.Dielw[aSpc.isat]; // dielectric constant of water
+//            aW.twp->wVis = aWp.Viscw[aSpc.isat]; // dynamic viscosity of water
         }
         else
         { // calculated before

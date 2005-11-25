@@ -1201,7 +1201,9 @@ void TProfil::CompG0Load()
     {
         pmp->T = pmp->Tc = tpp->T + C_to_K;
         pmp->TC = pmp->TCc = tpp->T;
-        pmp->P = pmp->Pc = tpp->P;
+        if( tpp->P > 1e-9 )
+            pmp->P = pmp->Pc = tpp->P;
+        else pmp->P = pmp->Pc = 1e-9;
 pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD 
         pmp->denW = tpp->RoW;
         pmp->denWg = tpp->RoV;
@@ -1209,9 +1211,7 @@ pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
         pmp->epsWg = tpp->EpsV;
         pmp->RT = tpp->RT; // R_CONSTANT * pm->Tc
         pmp->FRT = F_CONSTANT/pmp->RT;
-        pmp->lnP = 0.;
-        if( tpp->P != 1. ) /* ??????? */
-            pmp->lnP = log( tpp->P );
+        pmp->lnP = log( pmp->P );
     }
     if( pmp->pTPD <= 1 )
     {
