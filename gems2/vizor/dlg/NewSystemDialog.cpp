@@ -312,7 +312,7 @@ NewSystemDialog::CmOutMulti()
 {
     try
     {
-      gstring filename =
+/*      gstring filename =
          gstring( rt[RT_SYSEQ].FldKey(2), 0, rt[RT_SYSEQ].FldLen(2));;
       filename.strip();
       filename += ".ipm";
@@ -321,8 +321,8 @@ NewSystemDialog::CmOutMulti()
           "Please, enter IPM work structure file name", "*.ipm" ) == false )
                return;
       GemDataStream  f(filename, ios::out|ios::binary);
-
-      TProfil::pm->outMulti( f, filename );
+*/
+      TProfil::pm->outMulti();
     }
     catch( TError& xcpt )
     {

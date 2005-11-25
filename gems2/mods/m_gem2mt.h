@@ -213,15 +213,11 @@ class TGEM2MT : public TCModule
 
     IPNCalc rpn[2];      // IPN
 
-    GraphWindow *gd_gr;
-    TPlotLine *plot;
+    GraphWindow* gd_gr;
+    TPlotLine* plot;
     gstring titler;
 
-    DATABR  *(*arr_BR);
-    DATABR  *(*old_BR);
-    int arr_BR_size;
-    DATACH  *data_CH;
-    TNodeArray *wrkArr;
+   TNodeArray* wrkArr;
 
 protected:
 
@@ -239,12 +235,9 @@ protected:
     void Bn_Calc();
     void gen_TPval();
 
-    void freeNodeArrays();
-    void allocNodeArrays();
     void copyNodeArrays();
     void  NewNodeArray();
     int Trans1D( char mode, int RefCode );
-    void calc_GEM_node( int node_ndx );
 
 public:
 

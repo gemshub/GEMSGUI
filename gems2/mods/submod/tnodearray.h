@@ -25,6 +25,10 @@
 #include "datach.h"
 #include "databr.h"
 
+#ifndef IPMGEMPLUGIN
+class QWidget;
+#endif
+
 class TNodeArray
 {
     MULTI* pmm;   // Pointer to GEMIPM work data structure (TMULTI in ms_multi.h)
@@ -44,19 +48,45 @@ class TNodeArray
 
 #endif
 
- void allocMemory();
- void freeMemory();
+    void allocMemory();
+    void freeMemory();
+
+    // datach & databr
+    void datach_to_file( GemDataStream& ff );   // writes CSD (DATACH structure) to binary file
+    void datach_from_file( GemDataStream& ff ); // reads CSD (DATACH structure) from binary file
+    void databr_to_file( GemDataStream& ff );   // writes work node (DATABR structure) to binary file
+    void databr_from_file( GemDataStream& ff ); // reads work node (DATABR structure) from binary file
+    void datach_realloc();
+    void datach_free();
+    void databr_realloc();
+    DATABR* databr_free( DATABR* data_BR_ =0);  // deletes fields of DATABR structure indicated by data_BR_
+                                                // and sets the pointer data_BR_ to NULL
+    void datach_to_text_file( fstream& ff );    // writes CSD (DATACH structure) to text file
+    void datach_from_text_file( fstream& ff);   // reads CSD (DATACH structure) from text file
+    void databr_to_text_file(fstream& ff );     // writes work node (DATABR structure) to text file
+    void databr_from_text_file(fstream& ff );   // reads work node (DATABR structure) from text file
+
+
+#ifndef IPMGEMPLUGIN
+
+    // Integration in GEMS - prepares DATACH and DATABR files for
+    void makeStartDataChBR(
+         TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
+         short nTp_, short nPp_, float Ttol_, float Ptol_,
+         float *Tai, float *Pai );
+    void getG0_V0_H0_Cp0_matrix();  // creates arrays of thermodynamic data for interpolation
+                                    // which are written into DATACH file
+#endif
 
 public:
-
-   static TNodeArray* na;   // static pointer to this class
-
 
 #ifndef IPMGEMPLUGIN
 
    TNodeArray( int nNodes, MULTI *apm );   // constructor for integration in GEMS
 
 #else
+
+   static TNodeArray* na;   // static pointer to this class
                    // for isolated GEMIPM2K module
     int sizeN;
     int sizeM;
@@ -123,33 +153,19 @@ public:
     // data afterwards
     void CopyNodeFromTo( int ndx, int nNodes, DATABRPTR* arr_From, DATABRPTR* arr_To );
 
-    // datach & databr
-    void datach_to_file( GemDataStream& ff );   // writes CSD (DATACH structure) to binary file
-    void datach_from_file( GemDataStream& ff ); // reads CSD (DATACH structure) from binary file
-    void databr_to_file( GemDataStream& ff );   // writes work node (DATABR structure) to binary file
-    void databr_from_file( GemDataStream& ff ); // reads work node (DATABR structure) from binary file
-    void datach_realloc();
-    void datach_free();
-    void databr_realloc();
-    DATABR* databr_free( DATABR* data_BR_ =0);  // deletes fields of DATABR structure indicated by data_BR_
-                                                // and sets the pointer data_BR_ to NULL
-    void datach_to_text_file( fstream& ff );    // writes CSD (DATACH structure) to text file
-    void datach_from_text_file( fstream& ff);   // reads CSD (DATACH structure) from text file
-    void databr_to_text_file(fstream& ff );     // writes work node (DATABR structure) to text file
-    void databr_from_text_file(fstream& ff );   // reads work node (DATABR structure) from text file
-
     void packDataBr();      //  packs GEMIPM output into work node data bridge structure
     void unpackDataBr();    //  unpacks work node data bridge structure into GEMIPM data structure
 
 #ifndef IPMGEMPLUGIN
-    // Integration in GEMS - prepares DATACH and DATABR files for
-    void makeStartDataChBR(
-         TCIntArray& selIC, TCIntArray& selDC, TCIntArray& selPH,
-         short nTp_, short nPp_, float Ttol_, float Ptol_,
-         float *Tai, float *Pai );
-    void getG0_V0_H0_Cp0_matrix();  // creates arrays of thermodynamic data for interpolation
-                                    // which are written into DATACH file
+
+   // Make start DATACH and DATABR data using GEMS internal data (MULTI and other)
+   void MakeNodeStructures( QWidget* par, bool select_all,
+    float *Tai, float *Pai,
+    short nTp_ = 1 , short nPp_ = 1 , float Ttol_ = 1., float Ptol_ =1. );
+   void PutGEM2MTFiles(QWidget* par, int nIV, bool textmode, bool binmode );
+
 #else
+
     // For separate coupled FMT-GEM programs that use GEMIPM2K module
     // Reads in the MULTI, DATACH and DATABR files prepared from GEMS
     // and fills out nodes in node arrays according to distribution vector
@@ -173,6 +189,7 @@ public:
        double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
        double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
    );
+
    void GEM_input_back_to_MT(    // GEM_input_copy_to_MCOTAC
        short &p_NodeHandle,    // Node identification handle
        short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
@@ -185,6 +202,7 @@ public:
        double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
        double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
    );
+
    void GEM_output_to_MT(      // GEM_output_to_MCOTAC
        short &p_NodeHandle,    // Node identification handle
        short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH

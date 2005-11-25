@@ -404,7 +404,7 @@ public:
    class UserCancelException {};
 
     //test
-   void outMulti( GemDataStream& ff, gstring& path  );
+   void outMulti();
    void readMulti( GemDataStream& ff );
    void calcMulti();
 };

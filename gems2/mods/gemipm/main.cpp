@@ -48,7 +48,7 @@ int
      bC = 1e-9;   // initial background concentration over all nodes  0
      iCx = 1.;     // initial concentration M/m3
 
-     nx = 100;    // number of nodes (default 1500)
+     nx = 10;    // number of nodes (default 1500)
      mts = 100; // max number of time steps   10000
      inx = 1;     // in the node index inx
 

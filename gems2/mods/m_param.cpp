@@ -318,44 +318,9 @@ TProfil::CmHelp()
     pVisor->OpenHelp( GEMS_SP_HTML );  //  05.01.01
 }
 
-void TProfil::outMulti( GemDataStream& ff, gstring& path  )
+void TProfil::outMulti( )
 {
-    TCStringArray aList;
-    fstream fout;
-//    gstring filename;
-
-//    ff.writeArray( &pa.p.PC, 10 );
-//    ff.writeArray( &pa.p.DG, 28 );
-//    multi->to_file( ff, path );
-
-   gstring Path_;
-   gstring dir;
-   gstring name;
-   gstring newname;
-   TNodeArray wrkArr( 1, TProfil::pm->multi->GetPM() );
-
-   u_splitpath( path, dir, name, newname );
-
-// added for dataCH and DataBr structures
-
-// select lists
-    aList.Clear();
-    for(int ii=0; ii<multi->GetPM()->N; ii++ )
-       aList.Add( gstring( multi->GetPM()->SB[ii], 0, MAXICNAME+MAXSYMB));
-    TCIntArray aSelIC = vfMultiChoice(window(), aList,
-         "Please, mark independent components for selection into DataBridge");
-
-    aList.Clear();
-    for(int ii=0; ii<multi->GetPM()->L; ii++ )
-       aList.Add( gstring( multi->GetPM()->SM[ii], 0, MAXDCNAME));
-    TCIntArray aSelDC = vfMultiChoice(window(), aList,
-         "Please, mark dependent components for selection into DataBridge");
-
-    aList.Clear();
-    for(int ii=0; ii<multi->GetPM()->FI; ii++ )
-       aList.Add( gstring( multi->GetPM()->SF[ii], 0, MAXPHNAME+MAXSYMB));
-    TCIntArray aSelPH = vfMultiChoice(window(), aList,
-         "Please, mark phases for selection into DataBridge");
+   TNodeArray* wrkArr = new TNodeArray( 1, TProfil::pm->multi->GetPM() );
 
 // set default data and realloc arrays
    float Tai[3], Pai[3];
@@ -363,86 +328,15 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
    Pai[0] = Pai[1] = 1.;
    Tai[2] = Pai[2] = 0.;
 
-   wrkArr.makeStartDataChBR( aSelIC, aSelDC, aSelPH, 1, 1, 1., 1.,Tai, Pai );
+// realloc and setup data for dataCH and DataBr structures
+   wrkArr->MakeNodeStructures( window(), false, Tai, Pai );
 
-// out dataCH&DataBR files
-   Path_ = u_makepath( dir, name, "dch" );
-//   filename = "GEMSystem.dch";
-//   if( vfChooseFileSave(window(), filename,
-//          "Please, enter DataCH binary file name", "*.dch" )  )
-//   {
-     GemDataStream  f_ch1(Path_, ios::out|ios::binary);
-      wrkArr.datach_to_file(f_ch1);
-      f_ch1.close();
-//   }
-
-   newname = name+"-dch";
-   Path_ = u_makepath( dir, newname, "dat" );
-//   filename = "GEMSystem.dat";
-//   if( vfChooseFileSave(window(), filename,
-//          "Please, enter DataCH text file name", "*.dat" )  )
-//   {
-      fstream  f_ch2(Path_.c_str(), ios::out);
-      wrkArr.datach_to_text_file(f_ch2);
-      f_ch2.close();
-//   }
-
-   newname = gstring( rt[RT_SYSEQ].FldKey(3), 0, rt[RT_SYSEQ].FldLen(3));
-   newname.strip();
-   newname = name+"-"+newname;
-   Path_ = u_makepath( dir, newname, "dbr" );
-//   filename = "GEMNode.dbr";
-//   if( vfChooseFileSave(window(), filename,
-//          "Please, enter DataBR binary file name", "*.dbr" )  )
-//   {
-     GemDataStream  f_br1(Path_, ios::out|ios::binary);
-     wrkArr.databr_to_file(f_br1);
-     f_br1.close();
-//   }
-
-
-// put data to pmfiles-bin.lst file
-   Path_ = u_makepath( dir, "ipmfiles-bin", "lst" );
-   fout.open(Path_.c_str(), ios::out);
-   fout << "-b \"" << name.c_str() << ".dch\", \"";
-   fout << newname.c_str() << ".dbr\"\n";
-   fout.close();
-
-   newname = gstring( rt[RT_SYSEQ].FldKey(3), 0, rt[RT_SYSEQ].FldLen(3));
-   newname.strip();
-   newname = name+"-dbr-"+newname;
-   Path_ = u_makepath( dir, newname, "dat" );
-//   filename = "GEMNode.dat";
-//   if( vfChooseFileSave(window(), filename,
-//          "Please, enter DataBR text file name", "*.dat" )  )
-//   {
-     fstream  f_br2(Path_.c_str(), ios::out);
-     wrkArr.databr_to_text_file(f_br2);
-     f_br2.close();
-//   }
-
-// put data to pmfiles-dat.lst file
-   Path_ = u_makepath( dir, "ipmfiles-dat", "lst" );
-   fout.open(Path_.c_str(), ios::out);
-   fout << "-t \"" << name.c_str() << "-dch.dat\", \"";
-   fout << newname.c_str() << ".dat\"\n";
-   fout.close();
-
-// put data to IPMRUN.BAT file
-   Path_ = u_makepath( dir, "IPMRUN", "BAT" );
-   fout.open(Path_.c_str(), ios::out);
-   fout << "echo off\n";
-   fout << "rem Normal runs\n";
-   fout << "gemipm2k.exe " << name.c_str() <<
-        ".ipm ipmfiles-dat.lst\n";
-   fout << "rem gemipm2k.exe " << name.c_str() <<
-       ".ipm ipmfiles-bin.lst\n";
-   fout.close();
-    ff.writeArray( &pa.p.PC, 10 );
-    ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff, path );
-
-
+// setup dataBR and NodeT0 data
+   wrkArr->packDataBr();
+   wrkArr->MoveWorkNodeToArray( 0, 1, wrkArr->pNodT0() );
+// make  all files
+   wrkArr->PutGEM2MTFiles( window(), 1, true, true );
+   delete wrkArr;
 }
 
 // Reading structure MULTI (GEM IPM work structure)

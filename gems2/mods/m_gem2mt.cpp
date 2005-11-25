@@ -51,10 +51,7 @@ TGEM2MT::TGEM2MT( int nrt ):
     set_def();
     start_title =
        " Definition of a GEM2MT (Coupled model)";
-    data_CH = 0;
-    arr_BR =0;
-    old_BR =0;
-    arr_BR_size = 0;
+
     wrkArr = 0;
 }
 
@@ -736,8 +733,6 @@ TGEM2MT::RecCalc( const char * key )
 
    wrkArr = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
 
-
-
    if( mtp->PvMSg != S_OFF )
     Expr_analyze( o_mtgexpr );
 
@@ -748,14 +743,16 @@ TGEM2MT::RecCalc( const char * key )
    {   // calculate start data
      outMulti();
    }
+
    if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' )
    {   // calculate start data
      NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
      Trans1D( mtp->PsMode, 1 );
-     freeNodeArrays(); // free worked memory
    }
 
    delete wrkArr;
+   wrkArr = 0;
+
    TCModule::RecCalc( key );
 }
 

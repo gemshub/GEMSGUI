@@ -22,8 +22,13 @@
 #include <math.h>
 istream& f_getline(istream& is, gstring& str, char delim);
 
+#ifndef IPMGEMPLUGIN
+  #include "service.h"
+#else
+  TNodeArray* TNodeArray::na;
+#endif
 
-TNodeArray* TNodeArray::na;
+
 //---------------------------------------------------------//
 
 void TNodeArray::allocMemory()
@@ -83,6 +88,178 @@ void TNodeArray::freeMemory()
 
 
 #ifndef IPMGEMPLUGIN
+
+// Make start DATACH and DATABR data from GEMS internal data (MULTI and other)
+void TNodeArray::MakeNodeStructures( QWidget* par, bool select_all,
+    float *Tai, float *Pai,
+    short nTp_, short nPp_, float Ttol_, float Ptol_  )
+{
+
+  TMulti* mult = TProfil::pm->multi;
+  TCStringArray aList;
+  TCIntArray aSelIC;
+  TCIntArray aSelDC;
+  TCIntArray aSelPH;
+
+// select lists
+
+
+    aList.Clear();
+    for(int ii=0; ii< mult->GetPM()->N; ii++ )
+    {  if( select_all )
+         aSelIC.Add( ii );
+       else
+         aList.Add( gstring( mult->GetPM()->SB[ii], 0, MAXICNAME+MAXSYMB));
+    }
+    if( !select_all  )
+      aSelIC = vfMultiChoice(par, aList,
+          "Please, mark independent components for selection into DataBridge");
+
+    aList.Clear();
+    for(int ii=0; ii< mult->GetPM()->L; ii++ )
+    {  if( select_all )
+         aSelDC.Add( ii );
+       else
+       aList.Add( gstring( mult->GetPM()->SM[ii], 0, MAXDCNAME));
+    }
+    if( !select_all  )
+       aSelDC = vfMultiChoice(par, aList,
+         "Please, mark dependent components for selection into DataBridge");
+
+    aList.Clear();
+    for(int ii=0; ii< mult->GetPM()->FI; ii++ )
+    {  if( select_all )
+         aSelPH.Add( ii );
+       else
+       aList.Add( gstring( mult->GetPM()->SF[ii], 0, MAXPHNAME+MAXSYMB));
+    }
+    if( !select_all  )
+       aSelPH = vfMultiChoice(par, aList,
+         "Please, mark phases for selection into DataBridge");
+
+
+// set default data and realloc arrays
+   makeStartDataChBR( aSelIC, aSelDC, aSelPH,
+                      nTp_, nPp_, Ttol_, Ptol_, Tai, Pai );
+}
+
+
+// Writing dataCH, dataBR structure to binary/text files
+// and other nessassary GEM2MT files
+void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binmode )
+{
+  if( !textmode && !binmode )
+    return;
+
+  // MakeNodeStructures must be called and setuped data to NodT0 array before
+
+  TMulti* mult = TProfil::pm->multi;
+  fstream fout;
+  fstream fout_d;
+  gstring Path_;
+  gstring dir;
+  gstring name;
+  gstring newname;
+  gstring path;
+  char buf[20];
+
+  // Get name of filenames structure
+   path = gstring( rt[RT_SYSEQ].FldKey(2), 0, rt[RT_SYSEQ].FldLen(2));;
+   path.strip();
+   path += ".ipm";
+      // open file to output
+   if( vfChooseFileSave(par, path,
+          "Please, enter IPM work structure file name", "*.ipm" ) == false )
+               return;
+
+   u_splitpath( path, dir, name, newname );
+
+//  putting MULTI to binary file
+    GemDataStream  ff(path, ios::out|ios::binary);
+    ff.writeArray( &TProfil::pm->pa.p.PC, 10 );
+    ff.writeArray( &TProfil::pm->pa.p.DG, 28 );
+    mult->to_file( ff, path );
+
+// out dataCH to binary file
+   if( binmode )
+   {  Path_ = u_makepath( dir, name, "dch" );
+      GemDataStream  f_ch1(Path_, ios::out|ios::binary);
+      datach_to_file(f_ch1);
+      f_ch1.close();
+   }
+
+// out dataCH to text file
+   if( textmode )
+   {  newname = name+"-dch";
+      Path_ = u_makepath( dir, newname, "dat" );
+      fstream  f_ch2(Path_.c_str(), ios::out);
+      datach_to_text_file(f_ch2);
+      f_ch2.close();
+   }
+
+// making special files
+// put data to IPMRUN.BAT file
+   Path_ = u_makepath( dir, "IPMRUN", "BAT" );
+   fout.open(Path_.c_str(), ios::out);
+   fout << "echo off\n";
+   fout << "rem Normal runs\n";
+   if( textmode )
+      fout << "gemipm2k.exe " << name.c_str() <<
+            ".ipm ipmfiles-dat.lst\n";
+   if( binmode )
+       fout << "rem gemipm2k.exe " << name.c_str() <<
+             ".ipm ipmfiles-bin.lst\n";
+   fout.close();
+
+// put data to pmfiles-bin.lst file
+   if( binmode )
+   {   Path_ = u_makepath( dir, "ipmfiles-bin", "lst" );
+       fout.open(Path_.c_str(), ios::out);
+       fout << "-b \"" << name.c_str() << ".dch\" \"";
+   }
+// put data to pmfiles-dat.lst file
+   if( textmode )
+   {   Path_ = u_makepath( dir, "ipmfiles-dat", "lst" );
+       fout_d.open(Path_.c_str(), ios::out);
+       fout_d << "-t \"" << name.c_str() << "-dch.dat\" \"";
+   }
+
+ nIV = min( nIV, nNodes() );
+ for( int ii = 0; ii < nIV; ii++ )
+ {
+   if( !NodT0[ii] )
+      continue;
+
+//   pVisor->Message( par, GetName(),
+//      "Generation of databr files for initial states\n"
+//           "Please, wait...", ii, nIV );
+   // Save databr
+    CopyWorkNodeFromArray( ii, anNodes, NodT0 );
+
+   sprintf( buf, "%d", ii );
+   // dataBR files - binary
+    if( binmode )
+    {
+       newname =  name + "-" + buf;
+       Path_ = u_makepath( dir, newname, "dbr" );
+       GemDataStream  f_br1(Path_, ios::out|ios::binary);
+       databr_to_file(f_br1);
+       f_br1.close();
+       fout << ", " << newname.c_str() << ".dbr\"";
+     }
+
+      if( textmode )
+      {
+        newname = name + "-dbr-" + buf;
+        Path_ = u_makepath( dir, newname, "dat" );
+        fstream  f_br2(Path_.c_str(), ios::out);
+        databr_to_text_file(f_br2);
+        f_br2.close();
+        fout_d << ", " << newname.c_str() << ".dat\"";
+     }
+ } // ii
+// pVisor->CloseMessage();
+}
 
 // Writing dataCH structure to binary file
 void TNodeArray::makeStartDataChBR(
@@ -273,6 +450,8 @@ TNodeArray::TNodeArray( int nNod, MULTI *apm  )
     NodT0 = 0;  // nodes at current time point
     NodT1 = 0;  // nodes at previous time point
 
+    allocMemory();
+
 }
 
 #else
@@ -455,7 +634,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
    unpackDataBr();
 // set up Mode
-   CNode->NodeStatusCH = Mode;
+   CNode->NodeStatusCH = (short)Mode;
 // GEM IPM calculation of equilibrium state in MULTI
     TProfil::pm->calcMulti();
 // Extracting and packing GEM IPM results into work DATABR structure
@@ -475,7 +654,9 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 // output multy
     strr = "calc_multi.ipm";
     GemDataStream o_m( strr, ios::out|ios::binary);
-    TProfil::pm->outMulti(o_m, strr );
+    o_m.writeArray( &pa.p.PC, 10 );
+    o_m.writeArray( &pa.p.DG, 28 );
+    multi->to_file( o_m, strr );
 //********************************************************* */
 
 // Copying data for node iNode back from work DATABR structure into the node array
