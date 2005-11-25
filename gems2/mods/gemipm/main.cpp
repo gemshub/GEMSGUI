@@ -48,8 +48,8 @@ int
      bC = 1e-9;   // initial background concentration over all nodes  0
      iCx = 1.;     // initial concentration M/m3
 
-     nx = 10;    // number of nodes (default 1500)
-     mts = 100; // max number of time steps   10000
+     nx = 100;    // number of nodes (default 1500)
+     mts = 10; // max number of time steps   10000
      inx = 1;     // in the node index inx
 
      gstring multu_in1 = "MgWBoundC.ipm";
@@ -151,6 +151,7 @@ if( !logfile)
      {
        int Mode = NEED_GEM_AIA; // debugging
        C0[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off
+       RetCode = TNodeArray::na->RunGEM( 0, Mode );
        RetCode = TNodeArray::na->RunGEM( i, Mode );
      }  // end of node iteration loop
 

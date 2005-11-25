@@ -976,7 +976,7 @@ void TProfil::MultiCalcInit( const char *key )
     //   }
 
     // Bulk composition and/or dimensions changed ?
-    if( pmp->pBAL < 2 )
+    if( pmp->pBAL < 2 || pmp->pTPD < 2)
         MultiRemake( key );
 
     // unpackSysEq record
