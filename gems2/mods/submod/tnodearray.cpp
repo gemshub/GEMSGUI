@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: ms_datach_br.cpp 573 2005-10-07 13:17:15Z gems $
+// $Id: tnodearray.cpp 684 2005-11-23 13:17:15Z gems $
 //
 // C/C++ interface between GEM IPM and FMT node array
 // Working whith DATACH and DATABR structures
