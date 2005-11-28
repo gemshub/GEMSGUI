@@ -47,12 +47,12 @@ int
 
      L = 1.;      // length in m
      v = 1e-8;    // fluid velocity constant m/sec
-     tf = 1.;     // time step reduce factor
+     tf = 10.;     // time step reduce factor
      bC = 1e-9;   // initial background concentration over all nodes  0
      iCx = 1.;     // initial concentration M/m3
 
 nx = 100;    // number of nodes (default 1500)
-mts = 200; // max number of time steps   10000
+mts = 1000; // max number of time steps   10000
      inx = 1;     // in the node index inx
 
      gstring multu_in1 = "MgWBoundC.ipm";
@@ -287,7 +287,7 @@ if( fabs( dc ) > min( 1e-5, C0[i]->bIC[ic] * 1e-2 ))
            }
          }  // end of node iteration loop
 
-logDiffs( diffile, t, at, nx, 10 );  // logging differences after the MT iteration loop
+logDiffs( diffile, t, at, nx, 50 );  // logging differences after the MT iteration loop
 
 //         if( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA )
 //         {
@@ -311,7 +311,7 @@ if( fabs( dc ) > min( 1e-7, (C0[i]->bIC[ic] * 1e-3)))
            }
 
 // Data collection for monitoring: Current state
-logProfile( logfile, t, at, nx, 10 );
+logProfile( logfile, t, at, nx, 50 );
 
      } while ( t < mts );
      // && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
