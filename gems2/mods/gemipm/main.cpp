@@ -197,6 +197,10 @@ diffile = fopen( "Differences.dat", "w+" );
 if( !logfile)
   return -1;
 
+// time testing
+  clock_t t_start, t_end, t_out, t_out2;
+  clock_t outp_time = 0.;
+
 // constant injection mode
 //     C[inx][0]=iCx;  Initial condition for Dirak input
 //     C[inx][1]=iCx;
@@ -206,7 +210,9 @@ if( !logfile)
      DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at current time point
      DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
 
+// time( NULL);
 // starting the time iteration loop
+     t_start = clock();
 
      dx = L/nx;
      dt = 0.5*(dx/v)*1/tf;
@@ -222,8 +228,11 @@ if( !logfile)
        RetCode = TNodeArray::na->RunGEM( i, Mode );
      }  // end of node iteration loop
 // Data collection for monitoring: Initial state (at t=0)
+t_out = clock();
 logProfile( logfile, t, at, nx, 1 );
 logDiffs( diffile, t, at, nx, 1 );
+t_out2 = clock();
+outp_time += ( t_out2 - t_out);
 
      do {   // time iteration step
 
@@ -287,7 +296,10 @@ if( fabs( dc ) > min( 1e-5, C0[i]->bIC[ic] * 1e-2 ))
            }
          }  // end of node iteration loop
 
+t_out = clock();
 logDiffs( diffile, t, at, nx, 50 );  // logging differences after the MT iteration loop
+t_out2 = clock();
+outp_time += ( t_out2 -  t_out);
 
 //         if( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA )
 //         {
@@ -311,11 +323,21 @@ if( fabs( dc ) > min( 1e-7, (C0[i]->bIC[ic] * 1e-3)))
            }
 
 // Data collection for monitoring: Current state
+t_out = clock();
 logProfile( logfile, t, at, nx, 50 );
+t_out2 = clock();
+outp_time += ( t_out2 - t_out);
+
 
      } while ( t < mts );
      // && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
       // Other criteria to stop need to be implemented
+
+t_end = clock();
+double dtime = ( t_end- t_start );
+fprintf( diffile,
+  "\nFull time of calculation %lg, Time of printing %lg, Full time %lg\n",
+    (dtime-outp_time)/CLK_TCK,  outp_time/CLK_TCK, dtime/CLK_TCK );
 
 fclose( logfile );
 fclose( diffile );
