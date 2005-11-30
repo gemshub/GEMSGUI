@@ -25,7 +25,6 @@ int MassTransAdvec( double L,    // length of system [L]
               );
 
 void logProfile( FILE* logfile, int t, double at, int nx, int every );
-void logDiffs( FILE* diffile, int t, double at, int nx, int every );
 
 int
  main( int argc, char* argv[] )
@@ -119,34 +118,6 @@ void logProfile( FILE* logfile, int t, double at, int nx, int every_t )
    fprintf( logfile, "\n" );
 }
 
-// Data collection for monitoring differences
-// Prints difference increments in a all nodes (cells) for time point t / at
-void logDiffs( FILE* diffile, int t, double at, int nx, int every_t )
-{
-  double dc;
-  int i, ie;
-  DATACH* CH = TNodeArray::na->pCSD();       // access to DataCH structure
-  DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at current time point
-  DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
-
-  if( t % every_t )
-    return;
-
-  fprintf( diffile, "\nStep= %-8d  Time= %-12.4g\nNode#   ", t, at/(365*86400) );
-  for( ie=0; ie < int(CH->nICb); ie++ )
-    fprintf( diffile, "%-12.4s ", CH->ICNL[ie] );
-  for (i=0; i<nx+1; i++)    // node iteration
-  {
-     fprintf( diffile, "\n%5d   ", i );
-     for( ie=0; ie < int(CH->nICb); ie++ )
-     {
-        dc = C1[i]->bIC[ie] - C0[i]->bIC[ie];
-        fprintf( diffile, "%-12.4g ", dc );
-     }
-  }
-  fprintf( diffile, "\n" );
-}
-
 //---------------------------------------------------------------------------
 // Test of 1D advection (finite difference method provided by Dr. F.Enzmann,
 // Uni Mainz) coupled with GEMIPM2K kernel (PSI) using the TNodeArray class.
@@ -230,7 +201,7 @@ if( !logfile)
 // Data collection for monitoring: Initial state (at t=0)
 t_out = clock();
 logProfile( logfile, t, at, nx, 1 );
-logDiffs( diffile, t, at, nx, 1 );
+TNodeArray::na->logDiffs( diffile, t, at/(365*86400), nx, 1 );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
 
@@ -297,7 +268,8 @@ if( fabs( dc ) > min( 1e-5, C0[i]->bIC[ic] * 1e-2 ))
          }  // end of node iteration loop
 
 t_out = clock();
-logDiffs( diffile, t, at, nx, 20 );  // logging differences after the MT iteration loop
+TNodeArray::na->logDiffs( diffile, t, at/(365*86400), nx, 20 );
+    // logging differences after the MT iteration loop
 t_out2 = clock();
 outp_time += ( t_out2 -  t_out);
 

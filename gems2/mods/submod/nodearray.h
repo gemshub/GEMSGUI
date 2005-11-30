@@ -92,11 +92,12 @@ public:
     int sizeM;
     int sizeK;
 
-//   DATABR  *(*arr_BR);
    TNodeArray( int nNod );   // constructors for 1D arrangement of nodes
    TNodeArray( int asizeN, int asizeM, int asizeK ); // uses 3D specification
+
    int iNode( int indN, int indM, int indK ) // make one index from three
      { return  ( indK * sizeM + indM  ) * sizeN + indN;  }
+
    int  RunGEM( int indN, int indM, int indK, int Mode )   // Call GEM for one node
      { return RunGEM( iNode( indN, indM, indK ), Mode); }
 
@@ -104,35 +105,35 @@ public:
 
     ~TNodeArray();      // destructor
 
-    int nNodes()  const      // get number of nodes in node arrays
+    int nNodes()  const   // get number of nodes in node arrays
       { return anNodes; }
 
-    DATACH* pCSD() const
+    DATACH* pCSD() const  // get pointer to chemical system data structure
     {
         return CSD;
     }
 
-    double cT() const
+    double cT() const     // get current Temperature T, K
     {
         return CNode->T;
     }
 
-    double cP() const
+    double cP() const     // get current Pressure P, bar
     {
         return CNode->P;
     }
 
-    void setNodeHandle( int jj )
+    void setNodeHandle( int jj )   // setup Node identification handle
     {
       CNode->NodeHandle = (short)jj;
     }
 
-    DATABRPTR* pNodT0() const
+    DATABRPTR* pNodT0() const   // get pointer to array of nodes for current time point
     {
         return NodT0;
     }
 
-    DATABRPTR* pNodT1() const
+    DATABRPTR* pNodT1() const  // get pointer to array of nodes for previous time point
     {
         return NodT1;
     }
@@ -156,8 +157,13 @@ public:
     void packDataBr();      //  packs GEMIPM output into work node data bridge structure
     void unpackDataBr();    //  unpacks work node data bridge structure into GEMIPM data structure
 
+    // If corresponding file name not null, printing current
+    // multi and/or batabr to files with name 
     void  printfGEM( const char* multi_file,const char* databr_text,
                              const char* databr_bin );
+    // Data collection for monitoring differences
+    // Prints difference increments in a all nodes (cells) for time point t / at
+    void logDiffs( FILE* diffile, int t, double at, int nx, int every_t );
 
 
 #ifndef IPMGEMPLUGIN

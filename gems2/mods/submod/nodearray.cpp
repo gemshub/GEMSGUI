@@ -624,7 +624,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
 
 int  TNodeArray::RunGEM( int  iNode, int Mode )
 {
-  fstream f_log("ipmlog.txt", ios::out|ios::app );
+//  fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {
 // f_log << " MAIF_CALC begin Mode= " << p_NodeStatusCH << " iNode= " << iNode << endl;
@@ -651,7 +651,8 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 }
     catch(TError& err)
     {
-      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
+     fstream f_log("ipmlog.txt", ios::out|ios::app );
+     f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
     }
     catch(...)
     {
@@ -692,10 +693,36 @@ void  TNodeArray::printfGEM( const char* multi_file,
 #else
        TProfil::pm->outMulti(o_m, strr );
 #endif
-    }   
+    }
 //********************************************************* */
 
 }
+
+// Data collection for monitoring differences
+// Prints difference increments in a all nodes (cells) for time point t / at
+void TNodeArray::logDiffs( FILE* diffile, int t, double at, int nx, int every_t )
+{
+  double dc;
+  int i, ie;
+
+  if( t % every_t )
+    return;
+
+  fprintf( diffile, "\nStep= %-8d  Time= %-12.4g\nNode#   ", t, at );
+  for( ie=0; ie < int(CSD->nICb); ie++ )
+    fprintf( diffile, "%-12.4s ", CSD->ICNL[ie] );
+  for (i=0; i<nx+1; i++)    // node iteration
+  {
+     fprintf( diffile, "\n%5d   ", i );
+     for( ie=0; ie < int(CSD->nICb); ie++ )
+     {
+        dc = NodT1[i]->bIC[ie] - NodT0[i]->bIC[ie];
+        fprintf( diffile, "%-12.4g ", dc );
+     }
+  }
+  fprintf( diffile, "\n" );
+}
+
 
 // Copying data for node ii from node array into work DATABR structure
 void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
@@ -877,7 +904,6 @@ pmm->FitVar[3] = CNode->Eh;
 
 }
 
-
 //---------------------------------------------------------------
 
 // new structures i/o
@@ -970,7 +996,6 @@ void TNodeArray::datach_from_file( GemDataStream& ff )
    ff.readArray( CSD->ccPH, CSD->nPH );
 
 }
-
 
 void TNodeArray::datach_to_text_file( fstream& ff )
 {
@@ -1065,9 +1090,7 @@ void TNodeArray::datach_from_text_file(fstream& ff)
    inArray( ff, "ccDC", CSD->ccDC, CSD->nDC, 1 );
    inArray( ff, "ccDCW", CSD->ccDCW, CSD->nDC, 1 );
    inArray( ff, "ccPH", CSD->ccPH, CSD->nPH, 1 );
-
 }
-
 
 // allocate DataCH structure
 void TNodeArray::datach_realloc()
@@ -1216,9 +1239,8 @@ void TNodeArray::datach_free()
   { delete[] CSD->ccPH;
     CSD->ccPH = 0;
   }
- // delete[] CSD; 
+ // delete[] CSD;
 }
-
 
 // writing DataBR to binary file
 void TNodeArray::databr_to_file( GemDataStream& ff )
@@ -1315,7 +1337,6 @@ void TNodeArray::databr_from_text_file( fstream& ff )
   inArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
   inArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
   inArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
-
 
   inArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
   inArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
