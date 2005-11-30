@@ -47,12 +47,12 @@ int
 
      L = 1.;      // length in m
      v = 1e-8;    // fluid velocity constant m/sec
-     tf = 10.;     // time step reduce factor
+     tf = 5.;     // time step reduce factor
      bC = 1e-9;   // initial background concentration over all nodes  0
      iCx = 1.;     // initial concentration M/m3
 
 nx = 100;    // number of nodes (default 1500)
-mts = 1000; // max number of time steps   10000
+mts = 500; // max number of time steps   10000
      inx = 1;     // in the node index inx
 
      gstring multu_in1 = "MgWBoundC.ipm";
@@ -297,7 +297,7 @@ if( fabs( dc ) > min( 1e-5, C0[i]->bIC[ic] * 1e-2 ))
          }  // end of node iteration loop
 
 t_out = clock();
-logDiffs( diffile, t, at, nx, 50 );  // logging differences after the MT iteration loop
+logDiffs( diffile, t, at, nx, 20 );  // logging differences after the MT iteration loop
 t_out2 = clock();
 outp_time += ( t_out2 -  t_out);
 
@@ -324,7 +324,7 @@ if( fabs( dc ) > min( 1e-7, (C0[i]->bIC[ic] * 1e-3)))
 
 // Data collection for monitoring: Current state
 t_out = clock();
-logProfile( logfile, t, at, nx, 50 );
+logProfile( logfile, t, at, nx, 20 );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
 

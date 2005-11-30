@@ -1026,8 +1026,8 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
     for( k=0; k<pmp->FI; k++ )
     { /* cycle by phase */
         i=j+pmp->L1[k];
-        if( YF[k] <= pmp->lowPosNum*100. ||
-                pmp->PHC[k] == PH_AQUEL && Y[pmp->LO] <= pa.p.XwMin )
+        if( YF[k] <= pmp->lowPosNum*100. || ( pmp->PHC[k] == PH_AQUEL &&
+        ( YF[k] <= pa.p.XwMin || Y[pmp->LO] <= pmp->lowPosNum*1e3 )))
             goto NEXT_PHASE;
 
         pmp->YFk = 0.0;
@@ -1073,7 +1073,7 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
 NEXT_PHASE:
         j = i;
     }  /* k */
-    if( pmp->Yw > pa.p.XwMin )
+    if( pmp->Yw > pmp->lowPosNum*1e3 )
         pmp->logXw = log(pmp->Yw);
 }
 
@@ -1247,7 +1247,7 @@ double TProfil::GX( double LM  )
         /*   */
         XF = pmp->XF[k];
         if( XF <= pmp->lowPosNum*1000. ||
-                (pmp->PHC[k] == PH_AQUEL && XFw <= pa.p.XwMin )
+                (pmp->PHC[k] == PH_AQUEL && (XF <= pmp->DHBM || XFw <= pa.p.XwMin) )
                 || ( pmp->PHC[k] == PH_SORPTION && XFw <= pa.p.ScMin ))
             goto NEXT_PHASE;
         pmp->logYFk = log( XF );
@@ -1290,7 +1290,7 @@ double TProfil::pb_GX( double *Gxx  )
         /* calc new quantitys of phase  */
         XF = pmp->XF[k];
         if( XF <= pmp->lowPosNum*1000. ||
-                (pmp->PHC[k] == PH_AQUEL && XFw <= pa.p.XwMin )
+           (pmp->PHC[k] == PH_AQUEL && (XF <= pmp->DHBM || XFw <= pa.p.XwMin) )
                 || ( pmp->PHC[k] == PH_SORPTION && XFw <= pa.p.ScMin ))
             goto NEXT_PHASE;
         pmp->logYFk = log( XF );

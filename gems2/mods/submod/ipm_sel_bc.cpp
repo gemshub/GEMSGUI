@@ -994,7 +994,8 @@ IN6:
         if( pmp->PD==3 )
             GammaCalc( LINK_UX_MODE );
 
-        if( pmp->PHC[0] == PH_AQUEL && pmp->X[pmp->LO] < pa.p.XwMin )
+        if( pmp->PHC[0] == PH_AQUEL && pmp->XF[0] <= pa.p.XwMin &&
+             pmp->X[pmp->LO] <= pmp->lowPosNum*1e3 )    // bugfix 29.11.05 KD
         {
             pmp->XF[0]=0.;  // elimination of aqueous phase
             pmp->XFA[0] = 0.;

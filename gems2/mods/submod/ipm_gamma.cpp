@@ -96,7 +96,7 @@ double TProfil::pH_via_hydroxyl( double x[], double Factor, int j)
 * chemical functions.
 */
 void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
-                         double Factor, double MMC, double Dsur, int jb, int je, int k)
+              double Factor, double MMC, double Dsur, int jb, int je, int k)
 {
     int j, ii;
     double Muj, DsurT, SPmol, lnFmol=4.016535;
@@ -114,8 +114,8 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
 
         if( X[j] <= pmp->lowPosNum )
         { /* zeroing off */
-            pmp->Wx[j] = 0.0;
-            pmp->VL[j] = 0.0;
+            pmp->Wx[j] = pmp->lowPosNum; // 0.0;  debugging 29.11.05
+            pmp->VL[j] = log( pmp->lowPosNum );
             pmp->Y_w[j] = 0.0;
             pmp->lnGam[j] = 0.0;
             if( pmp->PHC[0] == PH_AQUEL )
@@ -169,6 +169,7 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
         pmp->Wx[j] = X[j]/XF[k];
         if( pmp->Wx[j] > pmp->lowPosNum )
             pmp->VL[j] = log( pmp->Wx[j] );
+        else pmp->VL[j] = log( pmp->lowPosNum );   // debugging 29.11.05 KD 
         pmp->Y_la[j] = 0.0;
         switch( pmp->DCC[j] ) /* choice of expressions */
         {
@@ -358,7 +359,7 @@ void TProfil::ConCalc( double X[], double XF[], double XFA[])
             }
 
         if( XF[k] <= pmp->DSM ||
-                (pmp->PHC[k] == PH_AQUEL && XFA[k] <= pa.p.XwMin )
+     (pmp->PHC[k] == PH_AQUEL && ( XFA[k] <= pmp->lowPosNum*1e3 || XF[k] <= pa.p.XwMin ) )
                 || ( pmp->PHC[k] == PH_SORPTION && XFA[k] <= pa.p.ScMin ))
         {
             memset( pmp->BF+k*pmp->N, 0, sizeof(double)*pmp->N );
@@ -459,7 +460,7 @@ void TProfil::ConCalc( double X[], double XF[], double XFA[])
 
 NEXT_PHASE:
         pmp->VXc += pmp->FVOL[k];
-        if( pmp->PHC[k] == PH_AQUEL && XFA[k] > pa.p.XwMin )
+        if( pmp->PHC[k] == PH_AQUEL && XF[k] > pa.p.XwMin && XFA[k] > pmp->lowPosNum*1e3 )
             for( ii=0; ii<pmp->NR; ii++ )
             {
                if( pmp->LO  ) // Sveta 30/08/01
@@ -501,8 +502,9 @@ void TProfil::IS_EtaCalc()
             }
 
         if( pmp->XF[k] <= pmp->DSM ||
-                pmp->PHC[k] == PH_AQUEL && pmp->X[pmp->LO] <= pa.p.XwMin
-                || pmp->PHC[k] == PH_SORPTION && pmp->XF[k] <= pa.p.ScMin )
+                (pmp->PHC[k] == PH_AQUEL && ( pmp->X[pmp->LO] <= pa.p.XwMin
+                 || pmp->XF[k] <= pmp->DHBM ) )
+             || (pmp->PHC[k] == PH_SORPTION && pmp->XF[k] <= pa.p.ScMin) )
             goto NEXT_PHASE;
 
         switch( pmp->PHC[k] )
@@ -1752,8 +1754,8 @@ if( pmp->XF[k] < pmp->DSM ) // Bugfix by KD 09.08.2005 (bug report Th.Matschei)
         switch( pmp->PHC[k] )
         {   /* calculate activity coefficients using built-in functions */
           case PH_AQUEL:   /*calc by DH III appr. HKF */
-             if( sMod[SGM_MODE] == SM_STNGAM && /* pmp->XF[k] */ pmpXFk > pa.p.XwMin
-                  && pmp->IC > pa.p.ICmin )
+             if( sMod[SGM_MODE] == SM_STNGAM && ( pmpXFk > pa.p.XwMin &&
+                 pmp->X[pmp->LO] > pmp->lowPosNum*1e3 ) && pmp->IC > pa.p.ICmin )
              {
                 switch( sMod[SPHAS_TYP] )
                 {
@@ -1828,7 +1830,7 @@ if( pmp->XF[k] < pmp->DSM ) // Bugfix by KD 09.08.2005 (bug report Th.Matschei)
         case PH_POLYEL:  /* PoissonBoltzmann( q, jb, je, k ) break; */
         case PH_SORPTION: /* calc elstatic potenials from Gouy-Chapman eqn */
             if( pmp->PHC[0] == PH_AQUEL && /* pmp->XF[k] */ pmpXFk > pmp->DSM
-                   && pmp->XF[0] > pa.p.XwMin )
+                   && (pmp->XFA[0] > pmp->lowPosNum && pmp->XF[0] > pa.p.XwMin ))
             {
 //              ConCalc( pmp->X, pmp->XF, pmp->XFA  );  Debugging
                 if( LinkMode == LINK_UX_MODE )
@@ -1856,12 +1858,12 @@ if( pmp->XF[k] < pmp->DSM ) // Bugfix by KD 09.08.2005 (bug report Th.Matschei)
                 goto END_LOOP;
         }
         if( pmp->XF[k]<=pmp->DSM && LinkMode == LINK_UX_MODE )
-            goto END_LOOP; /* phase is zeroed off */
-        if( pmp->LO && pmp->XF[0] <= pa.p.XwMin && LinkMode == LINK_UX_MODE )
-            goto END_LOOP; /* aqueous phase is disappearing */
+            goto END_LOOP; // phase is zeroed off
+        if( pmp->PHC[k] == PH_AQUEL && (pmp->XFA[k] <= pmp->lowPosNum*1e3 || // bugfix 29.11.05 KD
+   pmp->XF[k] <= pa.p.XwMin ) && LinkMode == LINK_UX_MODE ) goto END_LOOP; // aqueous phase is about to disappear
         if(pmp->PHC[k] == PH_AQUEL && (( pmp->IC < pa.p.ICmin))
                 && LinkMode == LINK_UX_MODE )
-            goto END_LOOP; /* Ionic strength is too low for aqueous solution */
+            goto END_LOOP; // Ionic strength is too low for aqueous solution
         else ICold = pmp->IC;
 //Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
@@ -1928,7 +1930,7 @@ END_LOOP: /* if( LinkMode == LINK_TP_MODE ) */
             pmp->F0[j] = Ej_init_calc( 0.0, j, k );
             pmp->G[j] = pmp->G0[j] + pmp->F0[j];
         }
-    }  /* k */
+    }  // k - end loop over phases
     //  if( wn[W_EQCALC].status )
     //  aSubMod[MD_EQCALC]->ModUpdate("PM_ipms   EqCalc() converged");
 }
