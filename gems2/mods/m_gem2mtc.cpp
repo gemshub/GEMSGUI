@@ -398,7 +398,7 @@ void TGEM2MT::outMulti()
   if( mtp->PsTPai != S_OFF )
      gen_TPval();
 
-   wrkArr->MakeNodeStructures( window(), false, mtp->Tval, mtp->Pval,
+   na->MakeNodeStructures( window(), false, mtp->Tval, mtp->Pval,
                         mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
 
    for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
@@ -411,14 +411,14 @@ void TGEM2MT::outMulti()
      gen_task();
 
      // Save databr
-     wrkArr->packDataBr();
-     wrkArr->MoveWorkNodeToArray( mtp->kv, mtp->nC, wrkArr->pNodT0() );
+     na->packDataBr();
+     na->MoveWorkNodeToArray( mtp->kv, mtp->nC, na->pNodT0() );
 
      mt_next();      // Generate work values for the next EqStat rkey
 
  } // mtp->kv
 
-  wrkArr->PutGEM2MTFiles( window(),
+  na->PutGEM2MTFiles( window(),
        mtp->nIV, mtp->PsSdat!=S_OFF, mtp->PsSbin!=S_OFF );
 
   pVisor->CloseMessage();
@@ -431,7 +431,7 @@ void  TGEM2MT::copyNodeArrays()
 {
  for( int ii=0; ii<mtp->nC; ii++ )
  {
-    wrkArr->CopyNodeFromTo( ii, mtp->nC, wrkArr->pNodT0(), wrkArr->pNodT1() );
+    na->CopyNodeFromTo( ii, mtp->nC, na->pNodT0(), na->pNodT1() );
  }
 }
 
@@ -447,9 +447,9 @@ void  TGEM2MT::NewNodeArray()
  if( mtp->PsTPai != S_OFF )
     gen_TPval();
 
- wrkArr->MakeNodeStructures( window(), true, mtp->Tval, mtp->Pval,
+ na->MakeNodeStructures( window(), true, mtp->Tval, mtp->Pval,
                         mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
- DATACH* data_CH = wrkArr->pCSD();
+ DATACH* data_CH = na->pCSD();
 
  // put DDc
  for( int jj=0; jj<data_CH->nDC; jj ++)
@@ -464,13 +464,13 @@ void  TGEM2MT::NewNodeArray()
   // Make new Systat record & calculate it
      gen_task();
   // Save databr
-     wrkArr->packDataBr();
+     na->packDataBr();
   //
    for( int jj=0; jj<mtp->nC; jj ++)
     if( mtp->DiCp[jj] == mtp->kv )
-     {    wrkArr->setNodeHandle( jj );
-          wrkArr->MoveWorkNodeToArray( jj, mtp->nC,  wrkArr->pNodT0());
-          wrkArr->CopyWorkNodeFromArray( jj, mtp->nC,  wrkArr->pNodT0() );
+     {    na->setNodeHandle( jj );
+          na->MoveWorkNodeToArray( jj, mtp->nC,  na->pNodT0());
+          na->CopyWorkNodeFromArray( jj, mtp->nC,  na->pNodT0() );
      }
     mt_next();      // Generate work values for the next EqStat rkey
 
@@ -479,17 +479,17 @@ void  TGEM2MT::NewNodeArray()
  pVisor->CloseMessage();
 
  for( int ii=0; ii<mtp->nC; ii++)
-      if(  wrkArr->pNodT0() == 0 )
+      if(  na->pNodT0() == 0 )
       Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
 
  // put HydP
  for( int jj=0; jj<mtp->nC; jj ++)
-   {    wrkArr->pNodT0()[jj]->Vt = mtp->HydP[jj][0];
-        wrkArr->pNodT0()[jj]->eps = mtp->HydP[jj][1];
-        wrkArr->pNodT0()[jj]->Km = mtp->HydP[jj][2];
-        wrkArr->pNodT0()[jj]->al = mtp->HydP[jj][3];
-        wrkArr->pNodT0()[jj]->hDl = mtp->HydP[jj][4];
-        wrkArr->pNodT0()[jj]->nfo = mtp->HydP[jj][5];
+   {    na->pNodT0()[jj]->Vt = mtp->HydP[jj][0];
+        na->pNodT0()[jj]->eps = mtp->HydP[jj][1];
+        na->pNodT0()[jj]->Km = mtp->HydP[jj][2];
+        na->pNodT0()[jj]->al = mtp->HydP[jj][3];
+        na->pNodT0()[jj]->hDl = mtp->HydP[jj][4];
+        na->pNodT0()[jj]->nfo = mtp->HydP[jj][5];
    }
 
 }
@@ -499,7 +499,7 @@ int TGEM2MT::Trans1D( char mode, int RefCode )
 {
 
  for( int ii=0; ii<mtp->nC; ii++)
-   wrkArr->RunGEM( ii, NEED_GEM_AIA );;
+   na->RunGEM( ii, NEED_GEM_AIA );;
  return RefCode;
 }
 

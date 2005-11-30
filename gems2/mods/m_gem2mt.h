@@ -45,7 +45,7 @@ typedef struct
    PvEF,      // Use empirical data for graphics  (+ -)?
    PvPGD,    // Use phase groups definitions (+ -)?
    PvFDL,    // Use flux definition list (+ -)
-   PvSd,     // reserved?
+PvSFL,    // Use source fluxes and elemental stoichiometries for them? (+ -)
 
      // Controls on operation
    PsMode,  // Code of GEM2MT mode of operation { S F A D T }
@@ -69,7 +69,8 @@ typedef struct
 // xC, yC, zC  numbers of nodes along x, y, z coordinates
    nIV,  // number of initial variants of the chemical system, nIV <= nC
    nPG,  // number of mobile phase groups (0 or >1)
-   nFD,  // number of flux definitions    (0 or >1)
+   nFD,  // number of MPG flux definitions (0 or >1)
+nSFD,   // number of source flux definitions (0 or < nFD )
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
@@ -84,14 +85,18 @@ typedef struct
    nYE,  // number of experimental parameters (columns in the yEt array)
    nPai,  // Number of P points in MTP interpolation array in DataCH ( 1 to 10 )
    nTai,  // Number of T points in MTP interpolation array in DataCH ( 1 to 20 )
+sRes,   // reserved
 
 // iterators for generating syseq record keys for initial system variants
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
    NVi[3],    // Restrictions variant #: start, end, step
    axisType[6],  // axis graph type, background(3), graph type, reserved
-   *DiCp,   // array of indexes of initial system variants for
-             // distributing to nodes [nC]
-   (*FDLi)[2] //[nFD][2] Box indices in the flux definition list
+   *DiCp,     // array of indexes of initial system variants for
+              // distributing to nodes [nC]
+   (*FDLi)[2] //[nFD][2] Indexes of nodes where this flux begins and ends
+              // negative value means one-side flux (source or sink)
+         // for source fluxes, -2 means "source flux stoichiometry with index 1
+         // line in the BSF table", and so on
    ;
   float        // input
    *Pi,    // Pressure P, bar for initial systems (values within Pai range) [nIV]
@@ -125,18 +130,20 @@ typedef struct
    *yt,     //  Ordinates for sampled data [nS][nYS]
 
    *DDc,  //  [Ls] diffusion coefficients for DC
-   (*HydP)[6] // [nC][6] hydraulte parametres
+   (*HydP)[6] // [nC][6] hydraulic parameters for mass transport model
    //
-//   *Bc,    // table of bulk compositions of reactive part of nodes
+*BSF,    // [nSFD][N] table of bulk compositions of source fluxes
 //  More to be added here for seq reactors?
+*MB,  // [nC]  column of current masses of boxes (in kg)
+*dMB // [nC][Nb]  Table of current derivatives dM for elements in reservoirs
     ;
  float
-   *Tval,   // discrete values of T [nTai]
+   *Tval,   // discrete values of T [nTai] in grid arrays in DataCH
    *Pval,   // discrete values of P [nPai]
 
    *CIb, // [nIV][N] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
-   (*FDLf)[2], // [nFD][2] Part of the flux defnition list (MPG quantities)
+(*FDLf)[4], // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
    *PGT  // Quantities of phases in MPG [Fi][nPG]
     ;
  char
@@ -151,10 +158,10 @@ typedef struct
    *CIclb, // [N] Units of IC quantity/concentration for initial systems compositions
    *AUcln, // [Lbi] Units of setting UDF quantities for initial system compositions
    (*FDLid)[MAXSYMB], // [nFD] ID of fluxes
-   (*FDLop)[MAXSYMB], // [nFD] Operation codes (letters)
-   (*FDLmp)[MAXSYMB], // [nPG] ID of MPG to move in this flux
+   (*FDLop)[MAXSYMB], // [nFD] Operation codes (letters) flux type codes
+(*FDLmp)[MAXSYMB], // [nFD] ID of MPG to move in this flux  !!!!!!!!!!!!!!!! dim changed!
    (*MPGid)[MAXSYMB], // [nPG] ID list of mobile phase groups
-   *UMPG,  // [nFi] units for setting phase quantities in MPG (see PGT ),
+   *UMPG,  // [nFi] units for setting phase quantities in MPG (see PGT )
 //
    (*SBM)[MAXICNAME+MAXSYMB],  // Keys (names) of IC
 //  graphics
@@ -166,7 +173,11 @@ typedef struct
 
 /* Work arrays */
  float
-   *An;  // [K][N] stoich matrix for DC (end-member) stoichiometry candidates
+   *An  // [K][N] stoich matrix for DC (end-member) stoichiometry candidates
+   ;
+ double
+*gc  // [nC][nPG][Nb] Array of element partition coefficients for MPG and its source reservoir
+   ;
    char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
    *etext,              // internal
    *tprn;              // internal
@@ -215,9 +226,9 @@ class TGEM2MT : public TCModule
 
     GraphWindow* gd_gr;
     TPlotLine* plot;
-    gstring titler;
+gstring title;           // changed titler to title
 
-   TNodeArray* wrkArr;
+   TNodeArray* na;       // pointer to nodearray class instance
 
 protected:
 

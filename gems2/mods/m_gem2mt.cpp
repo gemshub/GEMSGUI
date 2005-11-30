@@ -52,7 +52,7 @@ TGEM2MT::TGEM2MT( int nrt ):
     start_title =
        " Definition of a GEM2MT (Coupled model)";
 
-    wrkArr = 0;
+    na = 0;
 }
 
 // get key of record
@@ -731,7 +731,7 @@ TGEM2MT::RecCalc( const char * key )
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
 
-   wrkArr = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
+   na = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
 
    if( mtp->PvMSg != S_OFF )
     Expr_analyze( o_mtgexpr );
@@ -750,8 +750,8 @@ TGEM2MT::RecCalc( const char * key )
      Trans1D( mtp->PsMode, 1 );
    }
 
-   delete wrkArr;
-   wrkArr = 0;
+   delete na;
+   na = 0;
 
    TCModule::RecCalc( key );
 }

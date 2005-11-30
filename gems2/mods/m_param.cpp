@@ -320,7 +320,7 @@ TProfil::CmHelp()
 
 void TProfil::outMulti( )
 {
-   TNodeArray* wrkArr = new TNodeArray( 1, TProfil::pm->multi->GetPM() );
+   TNodeArray* na = new TNodeArray( 1, TProfil::pm->multi->GetPM() );
 
 // set default data and realloc arrays
    float Tai[3], Pai[3];
@@ -329,14 +329,14 @@ void TProfil::outMulti( )
    Tai[2] = Pai[2] = 0.;
 
 // realloc and setup data for dataCH and DataBr structures
-   wrkArr->MakeNodeStructures( window(), false, Tai, Pai );
+   na->MakeNodeStructures( window(), false, Tai, Pai );
 
 // setup dataBR and NodeT0 data
-   wrkArr->packDataBr();
-   wrkArr->MoveWorkNodeToArray( 0, 1, wrkArr->pNodT0() );
+   na->packDataBr();
+   na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
 // make  all files
-   wrkArr->PutGEM2MTFiles( window(), 1, true, true );
-   delete wrkArr;
+   na->PutGEM2MTFiles( window(), 1, true, true );
+   delete na;
 }
 
 // Reading structure MULTI (GEM IPM work structure)
