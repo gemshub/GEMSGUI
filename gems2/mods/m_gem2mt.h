@@ -130,7 +130,7 @@ sRes,   // reserved
    *yt,     //  Ordinates for sampled data [nS][nYS]
 
    *DDc,  //  [Ls] diffusion coefficients for DC
-   (*HydP)[6] // [nC][6] hydraulic parameters for mass transport model
+   (*HydP)[6], // [nC][6] hydraulic parameters for mass transport model
    //
 *BSF,    // [nSFD][N] table of bulk compositions of source fluxes
 //  More to be added here for seq reactors?

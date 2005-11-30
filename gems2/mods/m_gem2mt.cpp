@@ -125,10 +125,10 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtpufl].SetPtr( &mtp->PunE );   /* a4 */
     aObj[o_mtpvfl].SetPtr( &mtp->PvICi );  /* a8 */
     aObj[o_mtpsfl].SetPtr( &mtp->PsMode ); /* a8 */
-    aObj[o_mtcipf].SetPtr( &mtp->nC );     /* i4 */
+    aObj[o_mtcipf].SetPtr( &mtp->nC );     /* i5 */
     aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i8 */
     aObj[o_mtnsne].SetPtr( &mtp->nS );   /* i4 */
-    aObj[o_mtptai].SetPtr( &mtp->nPai );  /* i2 */
+    aObj[o_mtptai].SetPtr( &mtp->nPai );  /* i3 */
     aObj[o_mttmi].SetPtr( mtp->tmi );     /* i3 */
     aObj[o_mtnvi].SetPtr( mtp->NVi );     /* i3 */
     aObj[o_mtaxis].SetPtr( mtp->axisType ); /* i6 */
@@ -165,7 +165,7 @@ void TGEM2MT::ods_link(int q)
     aObj[ o_mtname].SetPtr(  mtp->name );
     aObj[ o_mtnotes].SetPtr(   mtp->notes );
     aObj[o_mtflag].SetPtr( &mtp->PunE );    /* a20 */
-    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i30 */
+    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i32 */
     aObj[o_mtdoudl].SetPtr( &mtp->Msysb );    /* d9 */
     aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f19 */
     aObj[ o_mtxnames].SetPtr(  mtp->xNames );
@@ -217,7 +217,7 @@ aObj[ o_mthydp].SetDim( mtp->nC, 6 );
     aObj[ o_mtcab].SetPtr( mtp->CAb);
     aObj[ o_mtcab].SetDim( mtp->nIV, mtp->Lbi );
     aObj[ o_mtfdlf].SetPtr( mtp->FDLf);
-    aObj[ o_mtfdlf].SetDim( mtp->nFD, 2 );
+    aObj[ o_mtfdlf].SetDim( mtp->nFD, 4 );
     aObj[ o_mtpgt].SetPtr( mtp->PGT);
     aObj[ o_mtpgt].SetDim( mtp->FIb, mtp->nPG );
     aObj[ o_mttval].SetPtr( mtp->Tval);
@@ -239,7 +239,7 @@ aObj[ o_mthydp].SetDim( mtp->nC, 6 );
     aObj[ o_mtfdlop].SetPtr( mtp->FDLop );
     aObj[ o_mtfdlop].SetDim(  mtp->nFD, 1 );
     aObj[ o_mtfdlmp].SetPtr( mtp->FDLmp );
-    aObj[ o_mtfdlmp].SetDim(  mtp->nPG, 1 );
+    aObj[ o_mtfdlmp].SetDim(  mtp->nFD, 1 );
     aObj[ o_mtmpgid].SetPtr( mtp->MPGid );
     aObj[ o_mtmpgid].SetDim(  mtp->nPG, 1 );
     aObj[ o_mtumpg].SetPtr( mtp->UMPG );
@@ -248,10 +248,19 @@ aObj[ o_mthydp].SetDim( mtp->nC, 6 );
     aObj[ o_mtbm].SetDim(  1, mtp->Nb );
     aObj[ o_mtplline].SetPtr( plot );
     aObj[ o_mtplline].SetDim( mtp->nYS+mtp->nYE,  sizeof(TPlotLine));
+//added 30/11/2005
+aObj[ o_mtbsf].SetPtr( mtp->BSF);
+aObj[ o_mtbsf].SetDim( mtp->nSFD, mtp->Nb );
+aObj[ o_mtmb].SetPtr( mtp->MB);
+aObj[ o_mtmb].SetDim( mtp->nC, 1 );
+aObj[ o_mtdmb].SetPtr( mtp->dMB);
+aObj[ o_mtdmb].SetDim( mtp->nC, mtp->Nb  );
 // work
     aObj[ o_mtan].SetPtr(mtp->An);
 //    aObj[ o_mtan].SetDim( dtp->nK, dtp->Nb );
     aObj[ o_mtan].SetDim( mtp->Lbi, mtp->Nb );
+    aObj[ o_mtgc].SetPtr(mtp->gc);
+    aObj[ o_mtgc].SetDim( mtp->nC*mtp->nPG, mtp->Nb );
 
     aObj[ o_mwetext].SetPtr( mtp->etext );
     // aObj[ o_mwetext].SetDim(1, 0 );
@@ -288,7 +297,7 @@ mtp->HydP = (double (*)[6])aObj[ o_mthydp].GetPtr();
     mtp->yt = (double *)aObj[ o_mtyt].GetPtr();
     mtp->CIb = (float *)aObj[ o_mtcib].GetPtr();
     mtp->CAb = (float *)aObj[ o_mtcab].GetPtr();
-    mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].GetPtr();
+    mtp->FDLf = (float (*)[4])aObj[ o_mtfdlf].GetPtr();
     mtp->PGT = (float *)aObj[ o_mtpgt].GetPtr();
     mtp->Tval = (float *)aObj[ o_mttval].GetPtr();
     mtp->Pval = (float *)aObj[ o_mtpval].GetPtr();
@@ -304,8 +313,13 @@ mtp->HydP = (double (*)[6])aObj[ o_mthydp].GetPtr();
     mtp->UMPG = (char *)aObj[ o_mtumpg].GetPtr();
     mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].GetPtr();
     plot = (TPlotLine *)aObj[ o_mtplline].GetPtr();
+//added 30/11/2005
+mtp->BSF = (double *)aObj[ o_mtbsf].GetPtr();
+mtp->MB = (double *)aObj[ o_mtmb].GetPtr();
+mtp->dMB = (double *)aObj[ o_mtdmb].GetPtr();
 // work
     mtp->An = (float *)aObj[ o_mtan].GetPtr();
+    mtp->gc = (double *)aObj[ o_mtgc].GetPtr();
     mtp->etext = (char *)aObj[ o_mwetext].GetPtr();
     mtp->tprn = (char *)aObj[ o_mwtprn].GetPtr();
 }
@@ -338,7 +352,7 @@ mtp->HydP = (double (*)[6])aObj[ o_mthydp].Free();
     mtp->yt = (double *)aObj[ o_mtyt].Free();
     mtp->CIb = (float *)aObj[ o_mtcib].Free();
     mtp->CAb = (float *)aObj[ o_mtcab].Free();
-    mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].Free();
+    mtp->FDLf = (float (*)[4])aObj[ o_mtfdlf].Free();
     mtp->PGT = (float *)aObj[ o_mtpgt].Free();
     mtp->Tval = (float *)aObj[ o_mttval].Free();
     mtp->Pval = (float *)aObj[ o_mtpval].Free();
@@ -354,8 +368,13 @@ mtp->HydP = (double (*)[6])aObj[ o_mthydp].Free();
     mtp->UMPG = (char *)aObj[ o_mtumpg].Free();
     mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Free();
     plot = (TPlotLine *)aObj[ o_mtplline].Free();
+//added 30/11/2005
+mtp->BSF = (double *)aObj[ o_mtbsf].Free();
+mtp->MB = (double *)aObj[ o_mtmb].Free();
+mtp->dMB = (double *)aObj[ o_mtdmb].Free();
 // work
     mtp->An = (float *)aObj[ o_mtan].Free();
+    mtp->gc = (double *)aObj[ o_mtgc].Free();
     mtp->etext = (char *)aObj[ o_mwetext].Free();
     mtp->tprn = (char *)aObj[ o_mwtprn].Free();
 }
@@ -423,23 +442,25 @@ void TGEM2MT::dyn_new(int q)
    if( mtp->PvFDL == S_OFF )
    {
      mtp->FDLi = (short (*)[2])aObj[ o_mtfdli].Free();
-     mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf].Free();
+     mtp->FDLf = (float (*)[4])aObj[ o_mtfdlf].Free();
      mtp->FDLid = (char (*)[MAXSYMB])aObj[ o_mtfdlid].Free();
      mtp->FDLop = (char (*)[MAXSYMB])aObj[ o_mtfdlop].Free();
+     mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp].Free();
      mtp->nFD = 0;
    }
    else
    {
       mtp->FDLi = (short (*)[2])aObj[ o_mtfdli ].Alloc( mtp->nFD, 2, I_);
-      mtp->FDLf = (float (*)[2])aObj[ o_mtfdlf ].Alloc( mtp->nFD, 2, F_);
-     mtp->FDLid=(char (*)[MAXSYMB])aObj[o_mtfdlid].Alloc( mtp->nFD, 1, MAXSYMB);
-     mtp->FDLop=(char (*)[MAXSYMB])aObj[o_mtfdlop].Alloc( mtp->nFD, 1, MAXSYMB);
+      mtp->FDLf = (float (*)[4])aObj[ o_mtfdlf ].Alloc( mtp->nFD, 4, F_);
+      mtp->FDLid=(char (*)[MAXSYMB])aObj[o_mtfdlid].Alloc( mtp->nFD, 1, MAXSYMB);
+      mtp->FDLop=(char (*)[MAXSYMB])aObj[o_mtfdlop].Alloc( mtp->nFD, 1, MAXSYMB);
+      mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp ].Alloc(
+                    1, mtp->nFD, MAXSYMB);
    }
 
    if( mtp->PvPGD == S_OFF )
    {
      mtp->PGT = (float *)aObj[ o_mtpgt].Free();
-     mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp].Free();
      mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid].Free();
      mtp->UMPG = (char *)aObj[ o_mtumpg].Free();
      mtp->nPG = 0;
@@ -447,13 +468,29 @@ void TGEM2MT::dyn_new(int q)
    else
    {
       mtp->PGT  = (float *)aObj[ o_mtpgt ].Alloc( mtp->FIb, mtp->nPG, F_);
-      mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp ].Alloc(
-                    1, mtp->nPG, MAXSYMB);
       mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid ].Alloc(
                     1, mtp->nPG, MAXSYMB);
       mtp->UMPG = (char *)aObj[ o_mtumpg].Alloc( mtp->FIb, 1, A_);
    }
 
+   if( mtp->PvSFL == S_OFF )
+     mtp->BSF = (double *)aObj[ o_mtbsf].Free();
+   else
+     mtp->BSF = (double *)aObj[ o_mtbsf].Alloc( mtp->nSFD, mtp->Nb, D_);
+
+
+   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+   {
+      mtp->MB = (double *)aObj[ o_mtmb].Alloc( mtp->nC, 1, D_);
+      mtp->dMB = (double *)aObj[ o_mtdmb].Alloc( mtp->nC, mtp->Nb, D_);
+   }
+   else
+   {
+      mtp->MB = (double *)aObj[ o_mtmb].Free();
+      mtp->dMB = (double *)aObj[ o_mtdmb].Free();
+   }
+
+//----------------------------------------------------------------
    if( mtp->Nqpt > 0  )
     mtp->qpi   = (double *)aObj[ o_mtqpi ].Alloc(mtp->Nqpt, 1, D_);
    else
@@ -551,7 +588,7 @@ void TGEM2MT::set_def(int q)
     strcpy( mtp->notes, "`" );
     strcpy( mtp->xNames, "X" );
     strcpy( mtp->yNames, "Y" );
-    memset( &mtp->nC, 0, sizeof(short)*18 );
+    memset( &mtp->nC, 0, sizeof(short)*20 );
     memset( &mtp->Msysb, 0, sizeof(double)*9 );
     memset( mtp->size[0], 0, sizeof(float)*8 );
     memset( mtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
@@ -617,8 +654,13 @@ mtp->HydP = 0;
     mtp->UMPG = 0;
     mtp->SBM = 0;
     plot = 0;
+//added 30/11/2005
+mtp->BSF = 0;
+mtp->MB = 0;
+mtp->dMB = 0;
 // work
     mtp->An = 0;
+    mtp->gc = 0;
     mtp->etext = 0;
     mtp->tprn = 0;
 }
@@ -792,6 +834,8 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
     float *p_CIb;
     float *p_PGT;
     char  *p_UMPG;
+    double* p_BSF;
+    double* p_dMB;
 
     if( mtp->PvICi != S_OFF )
     {
@@ -808,6 +852,18 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
       p_PGT = new float[mtp->nIV*mtp->Nb];
       memcpy( p_PGT, mtp->PGT, mtp->nPG*mtp->FIb*sizeof(float));
     }
+
+   if( mtp->PvSFL != S_OFF )
+   {
+     p_BSF = new double[mtp->nSFD*mtp->Nb];
+     memcpy( p_BSF, mtp->BSF, mtp->nSFD*mtp->Nb*sizeof(double));
+   }
+
+   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+   {
+      p_dMB = new double[mtp->nC*mtp->Nb];
+      memcpy( p_dMB, mtp->dMB, mtp->nC*mtp->Nb*sizeof(double));
+   }
 
     // alloc new memory
      mtp->Nb = TProfil::pm->mup->N;
@@ -834,6 +890,12 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
           }
           if( mtp->PvICi != S_OFF )
               mtp->CIclb[jj] = QUAN_GRAM;
+          if( mtp->PvSFL != S_OFF )
+             for( j=0; j<mtp->nSFD; j++ )
+               mtp->BSF[j*mtp->Nb+jj] = 0.;
+          if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+             for( j=0; j<mtp->nC; j++ )
+               mtp->dMB[j*mtp->Nb+jj] = 0.;
           jj++;
        }
        else
@@ -852,8 +914,14 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
                if( mtp->PvICi != S_OFF )
                  mtp->CIb[j*mtp->Nb+jj] = p_CIb[j*Nold+ii];
              }
-               if( mtp->PvICi != S_OFF )
+             if( mtp->PvICi != S_OFF )
                  mtp->CIclb[jj] = p_CIclb[ii];
+             if( mtp->PvSFL != S_OFF )
+               for( j=0; j<mtp->nSFD; j++ )
+                 mtp->BSF[j*mtp->Nb+jj] = p_BSF[j*Nold+ii];
+             if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+               for( j=0; j<mtp->nC; j++ )
+                 mtp->dMB[j*mtp->Nb+jj] = p_dMB[j*Nold+ii];
           }
         jj++;
         ii++;
@@ -941,6 +1009,10 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
      delete[] p_PGT;
      delete[] p_UMPG;
     }
+   if( mtp->PvSFL != S_OFF )
+    delete[] p_BSF;
+   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+    delete[] p_dMB;
 }
 
 // working with scripts --------------------------------------------
