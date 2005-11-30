@@ -6,13 +6,13 @@
 // supplied by F.Enzmann (Uni Mainz) with GEMIPM2K
 // module for calculation of chemical equilibria
 //
-// uses tnodearray class
+// uses TNodeArray class
 //
 // Copyright (C) 2005 S.Dmytriyeva, F.Enzmann, D.Kulik
 //
 //-------------------------------------------------------------------
 
-#include "tnodearray.h"
+#include "nodearray.h"
 //#include <stdio.h>
 int MassTransAdvec( double L,    // length of system [L]
                double v,    // constant fluid velocity [L/T]
@@ -149,7 +149,7 @@ void logDiffs( FILE* diffile, int t, double at, int nx, int every_t )
 
 //---------------------------------------------------------------------------
 // Test of 1D advection (finite difference method provided by Dr. F.Enzmann,
-// Uni Mainz) coupled with GEMIPM2K kernel (PSI) using the tnodearray class.
+// Uni Mainz) coupled with GEMIPM2K kernel (PSI) using the TNodeArray class.
 // Finite difference calculations split over independent components
 // (through bulk composition of aqueous phase).
 // Experiments with smoothing terms on assigning differences to bulk composition

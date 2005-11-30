@@ -113,7 +113,7 @@ gems2/mods/filters_data.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/databr.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/datach.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/m_const.h svn_keywords=Author+Date+Id+Revision
-gems2/mods/gemipm/FMT-Bridge/tnodearray.h -text
+gems2/mods/gemipm/FMT-Bridge/nodearray.h -text
 gems2/mods/gemipm/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_lin svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_w32 svn_keywords=Author+Date+Id+Revision
@@ -202,9 +202,9 @@ gems2/mods/submod/ms_rmults.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_sysbc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_system.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_system.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/submod/nodearray.cpp -text
+gems2/mods/submod/nodearray.h -text
 gems2/mods/submod/stepwise.h svn_keywords=Author+Date+Id+Revision
-gems2/mods/submod/tnodearray.cpp -text
-gems2/mods/submod/tnodearray.h -text
 gems2/mods/submod/v_smodhand.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_ipnc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_ipnc.h svn_keywords=Author+Date+Id+Revision

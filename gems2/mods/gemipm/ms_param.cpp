@@ -6,7 +6,7 @@
 #include <math.h>
 #include "m_param.h"
 #include "gdatastream.h"
-#include "tnodearray.h"
+#include "nodearray.h"
 
 TProfil* TProfil::pm;
 

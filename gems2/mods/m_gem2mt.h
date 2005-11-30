@@ -23,7 +23,7 @@
 #include "v_ipnc.h"
 #include "graph.h"
 #include "v_module.h"
-#include "tnodearray.h"
+#include "nodearray.h"
 
 const int MT_RKLEN = 80;
 

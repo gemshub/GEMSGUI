@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: tnodearray.cpp 684 2005-11-23 13:17:15Z gems $
+// $Id: nodearray.cpp 684 2005-11-23 13:17:15Z gems $
 //
 // C/C++ interface between GEM IPM and FMT node array
 // Working whith DATACH and DATABR structures
@@ -17,7 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include "tnodearray.h"
+#include "nodearray.h"
 #include "gdatastream.h"
 #include <math.h>
 istream& f_getline(istream& is, gstring& str, char delim);
@@ -215,13 +215,13 @@ void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binm
    if( binmode )
    {   Path_ = u_makepath( dir, "ipmfiles-bin", "lst" );
        fout.open(Path_.c_str(), ios::out);
-       fout << "-b \"" << name.c_str() << ".dch\" \"";
+       fout << "-b \"" << name.c_str() << ".dch\" ";
    }
 // put data to pmfiles-dat.lst file
    if( textmode )
    {   Path_ = u_makepath( dir, "ipmfiles-dat", "lst" );
        fout_d.open(Path_.c_str(), ios::out);
-       fout_d << "-t \"" << name.c_str() << "-dch.dat\" \"";
+       fout_d << "-t \"" << name.c_str() << "-dch.dat\" ";
    }
 
  nIV = min( nIV, nNodes() );
@@ -245,7 +245,7 @@ void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binm
        GemDataStream  f_br1(Path_, ios::out|ios::binary);
        databr_to_file(f_br1);
        f_br1.close();
-       fout << ", " << newname.c_str() << ".dbr\"";
+       fout << ", \"" << newname.c_str() << ".dbr\"";
      }
 
       if( textmode )
@@ -255,7 +255,7 @@ void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binm
         fstream  f_br2(Path_.c_str(), ios::out);
         databr_to_text_file(f_br2);
         f_br2.close();
-        fout_d << ", " << newname.c_str() << ".dat\"";
+        fout_d << ", \"" << newname.c_str() << ".dat\"";
      }
  } // ii
 // pVisor->CloseMessage();
@@ -642,21 +642,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 
 /**************************************************************
 // only for testing output results for files
-    gstring strr= "calculated.dbr";
-// binary DATABR
-    GemDataStream out_br(strr, ios::out|ios::binary);
-    databr_to_file(out_br);
-// text DATABR
-    fstream out_br_t("calculated_dbr.dat", ios::out );
-    ErrorIf( !out_br_t.good() , "calculated_dbr.dat",
-                "DataBR text file open error");
-    databr_to_text_file(out_br_t);
-// output multy
-    strr = "calc_multi.ipm";
-    GemDataStream o_m( strr, ios::out|ios::binary);
-    o_m.writeArray( &pa.p.PC, 10 );
-    o_m.writeArray( &pa.p.DG, 28 );
-    multi->to_file( o_m, strr );
+    printfGEM( "calc_multi.ipm", "calculated_dbr.dat", "calculated.dbr" );
 //********************************************************* */
 
 // Copying data for node iNode back from work DATABR structure into the node array
@@ -672,6 +658,43 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
         return -1;
     }
     return 1;
+}
+
+
+void  TNodeArray::printfGEM( const char* multi_file,
+                             const char* databr_text,
+                             const char* databr_bin )
+{
+//**************************************************************
+// only for testing output results for files
+// binary DATABR
+    gstring strr;
+   if( databr_bin )
+   {  strr = databr_bin;
+      GemDataStream out_br(strr, ios::out|ios::binary);
+      databr_to_file(out_br);
+   }
+// text DATABR
+   if( databr_text )
+   {  fstream out_br_t(databr_text, ios::out );
+      ErrorIf( !out_br_t.good() , databr_text,
+                "DataBR text file open error");
+      databr_to_text_file(out_br_t);
+   }
+// output multy
+    if( multi_file )
+   {  strr = databr_bin;
+      GemDataStream o_m( strr, ios::out|ios::binary);
+#ifndef IPMGEMPLUGIN
+       o_m.writeArray( &(TProfil::pm->pa.p.PC), 10 );
+       o_m.writeArray( &TProfil::pm->pa.p.DG, 28 );
+       TProfil::pm->multi->to_file( o_m, strr );
+#else
+       TProfil::pm->outMulti(o_m, strr );
+#endif
+    }   
+//********************************************************* */
+
 }
 
 // Copying data for node ii from node array into work DATABR structure

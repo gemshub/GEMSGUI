@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: tnodearray.h 684 2005-11-23 11:19:27Z gems $
+// $Id: nodearray.h 684 2005-11-23 11:19:27Z gems $
 //
 // C/C++ interface between GEM IPM and FMT node array
 // Working whith DATACH and DATABR structures
@@ -18,8 +18,8 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#ifndef _tnodearray_h_
-#define _tnodearray_h_
+#ifndef _nodearray_h_
+#define _nodearray_h_
 
 #include "m_param.h"
 #include "datach.h"
@@ -156,6 +156,10 @@ public:
     void packDataBr();      //  packs GEMIPM output into work node data bridge structure
     void unpackDataBr();    //  unpacks work node data bridge structure into GEMIPM data structure
 
+    void  printfGEM( const char* multi_file,const char* databr_text,
+                             const char* databr_bin );
+
+
 #ifndef IPMGEMPLUGIN
 
    // Make start DATACH and DATABR data using GEMS internal data (MULTI and other)
@@ -240,5 +244,5 @@ public:
 };
 
 
-#endif   // _tnodearray_h_
+#endif   // _nodearray_h_
 
