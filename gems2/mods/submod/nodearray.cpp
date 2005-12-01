@@ -768,6 +768,7 @@ void TNodeArray::MoveWorkNodeToArray( int ii, int nNodes, DATABRPTR* arr_BR )
 // alloc new memory
   CNode = new DATABR;
   databr_realloc();
+  memset( &CNode->T, 0, 36*sizeof(double));
 }
 
 void TNodeArray::CopyNodeFromTo( int ndx, int nNod,
@@ -783,13 +784,31 @@ void TNodeArray::CopyNodeFromTo( int ndx, int nNod,
 void TNodeArray::packDataBr()
 {
  short ii;
-// numbers
+
+// set default data to DataBr
+#ifndef IPMGEMPLUGIN
+   CNode->NodeHandle = 0;
+   CNode->NodeTypeHY = initital;
+   CNode->NodeTypeMT = normal;
+   CNode->NodeStatusFMT = Initial_RUN;
+   //   CNode->NodeStatusCH = NEED_GEM_AIA;
+   if( pmm->pNP == 0 )
+    CNode->NodeStatusCH = NEED_GEM_AIA;
+  else
+     CNode->NodeStatusCH = NEED_GEM_PIA;
+#else
+
+ // numbers
   if( pmm->pNP == 0 )
     CNode->NodeStatusCH = OK_GEM_AIA;
   else
     CNode->NodeStatusCH = OK_GEM_PIA;
 
-  CNode->IterDone = pmm->IT;
+#endif
+
+   CNode->T = pmm->Tc; //25
+   CNode->P = pmm->Pc; //1
+   CNode->IterDone = pmm->IT;
 
 // values
   CNode->Vs = pmm->VXc;
@@ -799,15 +818,14 @@ void TNodeArray::packDataBr()
   CNode->pH = pmm->pH;
   CNode->pe = pmm->pe;
 //  CNode->Eh = pmm->Eh;
-CNode->Eh = pmm->FitVar[3];
+  CNode->Eh = pmm->FitVar[3];
   CNode->denW = pmm->denW;
   CNode->denWg = pmm->denWg;
   CNode->epsW = pmm->epsW;
   CNode->epsWg = pmm->epsWg;
-
-  // added
   CNode->Ms = pmm->MBX;
-// arrays
+
+  // arrays
    for( ii=0; ii<CSD->nDCb; ii++ )
     CNode->xDC[ii] = pmm->X[ CSD->xDC[ii] ];
    for( ii=0; ii<CSD->nDCb; ii++ )
