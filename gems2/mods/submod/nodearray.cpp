@@ -175,9 +175,18 @@ AGAIN:
                return;
    u_splitpath( path, dir, name, newname );
    if( !(::access(path.c_str(), 0 )) ) //file exists
-     if( vfQuestion( par, name.c_str(), "This file exists! Rename?" ) )
-         goto AGAIN;
-
+     switch( vfQuestion3( par, name.c_str(),
+        "This set of files exists!",
+             "&Overwrite", "&Rename", "&Cancel") )
+            {
+            case VF3_2:
+                goto AGAIN;
+                break;
+            case VF3_1:
+                break;
+            case VF3_3:
+                return;
+            }
 
 //  putting MULTI to binary file
     GemDataStream  ff(path, ios::out|ios::binary);

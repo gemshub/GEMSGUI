@@ -1036,10 +1036,9 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
             pmp->YFk = YFA[k];
         if( Yf >= 1e6 )
         {                 // error - will result in zerodivide!
-           char pbuf[80];
-           sprintf( pbuf, "%20s", pmp->SF[k] ); pbuf[20] = 0;
+           gstring pbuf(pmp->SF[k],0,20);
 //cout << "Error in IPM PrimeChemicalPotentials(): IT = " << pmp->IT << endl;
-//cout << "  Phase " << pbuf << " k= " << k << " Yf= " << Yf;
+//cout << "  Phase " << pbuf.c_str() << " k= " << k << " Yf= " << Yf;
 //cout << " YFa= " << pmp->YFk << " Yf fixed to " << pmp->YFk << endl;
 //           for( ; j<i; j++ )
 //           {
