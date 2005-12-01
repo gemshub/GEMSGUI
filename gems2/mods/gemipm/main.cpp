@@ -17,11 +17,12 @@
 int MassTransAdvec( double L,    // length of system [L]
                double v,    // constant fluid velocity [L/T]
                double tf,   // time step reduce control factor
-               double bC,   // initial background solute concentration [M/L**3]
-               double iCx,  // inital concentration in the node inx
+               double cdv,  // cutoff value of differences to be applied to bulk compositions
+               double cez,  // minimal allowed amount of element (except charge) in bulk composition
                int    nx,   // number of nodes
                int    mts,  // maximal time steps
-               int    inx  // initial node index
+               int    evrt, // output on every evrt time step (step 0 always) 
+               int    inx   // initial node index
               );
 
 void logProfile( FILE* logfile, int t, double at, int nx, int every );
@@ -34,24 +35,27 @@ int
             v,    // constant fluid velocity [L/T]
             tf,   // time step reduce control factor
             bC,   // initial background solute concentration [M/L**3]
-            iCx,  // inital concentration @ node # x
+            minel,  // minimal allowed amount of element (except charge) in bulk composition
             dx,   // node distance [L]
             dt,   // iterative time increment
-            at;   // actual time step
+            at,   // actual time step
+            cutoff;  // cutoff value for applied differences    
 
      int    nx,   // number of nodes
             mts,  // maximal time steps
+            every,// output every time step (e.g. every 10-th step)
             inx,  // initial node index
             RetC = 0;
 
      L = 1.;      // length in m
-     v = 1e-8;    // fluid velocity constant m/sec
-     tf = 5.;     // time step reduce factor
-     bC = 1e-9;   // initial background concentration over all nodes  0
-     iCx = 1.;     // initial concentration M/m3
-
+     v = 3e-9;    // fluid velocity constant m/sec
+     tf = 1.;     // time step reduce factor
+     cutoff = 1e-7;   // cutoff value for differences (to use for correcting bulk compositions)
+     minel = 1e-10;   // minimal allowed amount of element (except charge) in bulk composition
+      
 nx = 100;    // number of nodes (default 1500)
-mts = 500; // max number of time steps   10000
+mts = 500;   // max number of time steps   10000
+every = 20;  // output on every 20-th time step
      inx = 1;     // in the node index inx
 
      gstring multu_in1 = "MgWBoundC.ipm";
@@ -69,9 +73,9 @@ mts = 500; // max number of time steps   10000
 // Prepare the array for initial conditions allocation
      int* nodeType = new int[nx+1];
      for(int ii =0; ii<nx+1; ii++ )
-       nodeType[ii] = 1;
-     nodeType[0] = 2;
-     nodeType[1] = 2;
+       nodeType[ii] = 2;
+     nodeType[0] = 1;
+     nodeType[1] = 1;
 // This is constant injection mode - both nodes 0 and 1 should be set the same!
 
  // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
@@ -80,7 +84,7 @@ mts = 500; // max number of time steps   10000
       return 1;  // error reading files
 
 // here we call the mass-transport finite-difference coupled routine
-    RetC = MassTransAdvec( L, v, tf, bC, iCx, nx, mts, inx );
+    RetC = MassTransAdvec( L, v, tf, cutoff, minel, nx, mts, every, inx );
 
    delete[] nodeType;
    delete TNodeArray::na;
@@ -100,15 +104,15 @@ void logProfile( FILE* logfile, int t, double at, int nx, int every_t )
 //  DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
   if( t % every_t )
     return;
-  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g\n", t, at/(365*86400) );
-  fprintf(logfile, "%s","Node#   Calcite     Dolomite     ");
+  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Dissolved total concentrations, M\n", t, at/(365*86400) );
+  fprintf(logfile, "%s","Node#    Calcite     Dolomite     ");
   for( ie=0; ie<min( 14,int(CH->nICb) ); ie++ )
     fprintf( logfile, "%-12.4s ", CH->ICNL[ie] );
   for (i=0; i<nx+1; i++)    // node iteration
   {
      fprintf( logfile, "\n%5d   ", i );
-     pm[0]  = C0[i]->xPH[2];   // amount of calcite
-     pm[1]  = C0[i]->xPH[3];   // amount of dolomite
+     pm[0]  = C0[i]->xPH[3];   // amount of calcite
+     pm[1]  = C0[i]->xPH[4];   // amount of dolomite
      for( ie=0; ie < min( 14, int(CH->nICb) ); ie++ )
        pm[ie+2]  = C0[i]->bPS[0*CH->nICb + ie]/C0[i]->vPS[0]*1000.;
                  // total dissolved element molarity
@@ -126,13 +130,14 @@ void logProfile( FILE* logfile, int t, double at, int nx, int every_t )
 // Experiments with smoothing terms on assigning differences to bulk composition
 // of nodes
 int MassTransAdvec( double L,    // length of system [L]
-               double v,    // constant fluid velocity [L/T]
-               double tf,   // time step reduce control factor
-               double bC,   // initial background solute concentration [M/L**3]
-               double iCx,  // inital concentration @ node # x
-               int    nx,   // number of nodes
-               int    mts,  // maximal time steps
-               int    inx  // initial node index
+               double v,     // constant fluid velocity [L/T]
+               double tf,    // time step reduce control factor
+               double cdv,   // cutoff value of differences to be applied to bulk compositions
+               double cez,   // minimal allowed amount of element (except charge) in bulk composition
+               int    nx,    // number of nodes
+               int    mts,   // maximal time steps
+               int    evrt,  // output calls on every evrt time step
+               int    inx    // initial node index
               )
 {
      double dx,   // node distance [L]
@@ -227,9 +232,9 @@ outp_time += ( t_out2 - t_out);
               dc = cr*(c12-cm12);
 
 // Checking the difference to assign
-// if( fabs(dc) > min( 1e-7, C0[i]->bIC[ic] * 1e-4 ))
+// if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-4 ))
               C0[i]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
-if( fabs(dc) > min( 1e-7, C0[i]->bIC[ic] * 1e-3 ))
+if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-3 ))
               C0[i]->bIC[ic] -= dc; // correction for GEM calcuation
            }
          } // end of loop over nodes
@@ -246,14 +251,14 @@ C0[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
            // Here we compare this node for current time and for previous time
            for( ic=0; ic < CH->nICb-1; ic++)    // we do not check charge here!
            {     // It has to be checked on minimal allowed c0 value
-              if( C0[i]->bIC[ic] < 1e-12 )
+              if( C0[i]->bIC[ic] < cez )
               { // to stay on safe side
-                 C0[i]->bIC[ic] = 1e-12;
+                 C0[i]->bIC[ic] = cez;
               }
               dc = C1[i]->bIC[ic] - C0[i]->bIC[ic];
-if( fabs( dc ) > min( 1e-7, (C0[i]->bIC[ic] * 1e-3 )))
+if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
                   NeedGEM = true;  // we need to recalculate equilibrium in this node
-if( fabs( dc ) > min( 1e-5, C0[i]->bIC[ic] * 1e-2 ))
+// if( fabs( dc ) > min( cdv*100., C0[i]->bIC[ic] * 1e-2 ))
                   Mode = NEED_GEM_AIA;  // we even need to do it in auto Simplex mode
 // this has to be done in an intelligent way as a separate subroutine
            }
@@ -268,7 +273,7 @@ if( fabs( dc ) > min( 1e-5, C0[i]->bIC[ic] * 1e-2 ))
          }  // end of node iteration loop
 
 t_out = clock();
-TNodeArray::na->logDiffs( diffile, t, at/(365*86400), nx, 20 );
+TNodeArray::na->logDiffs( diffile, t, at/(365*86400), nx, evrt );
     // logging differences after the MT iteration loop
 t_out2 = clock();
 outp_time += ( t_out2 -  t_out);
@@ -287,7 +292,7 @@ outp_time += ( t_out2 -  t_out);
              for( ic=0; ic < CH->nICb-1; ic++) // do not check charge
              {
                 dc = C1[i]->bIC[ic] - C0[i]->bIC[ic];
-if( fabs( dc ) > min( 1e-7, (C0[i]->bIC[ic] * 1e-3)))
+if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3)))
                   NeedCopy = true;
              }
              if( NeedCopy )
@@ -296,7 +301,7 @@ if( fabs( dc ) > min( 1e-7, (C0[i]->bIC[ic] * 1e-3)))
 
 // Data collection for monitoring: Current state
 t_out = clock();
-logProfile( logfile, t, at, nx, 20 );
+logProfile( logfile, t, at, nx, evrt );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
 
@@ -308,7 +313,7 @@ outp_time += ( t_out2 - t_out);
 t_end = clock();
 double dtime = ( t_end- t_start );
 fprintf( diffile,
-  "\nFull time of calculation %lg, Time of printing %lg, Full time %lg\n",
+  "\nTotal time of calculation %lg, Time of output %lg, Whole run time %lg\n",
     (dtime-outp_time)/CLK_TCK,  outp_time/CLK_TCK, dtime/CLK_TCK );
 
 fclose( logfile );
