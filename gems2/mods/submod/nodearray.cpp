@@ -167,12 +167,17 @@ void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binm
    path = gstring( rt[RT_SYSEQ].FldKey(2), 0, rt[RT_SYSEQ].FldLen(2));;
    path.strip();
    path += ".ipm";
+
+AGAIN:
       // open file to output
    if( vfChooseFileSave(par, path,
           "Please, enter IPM work structure file name", "*.ipm" ) == false )
                return;
-
    u_splitpath( path, dir, name, newname );
+   if( !(::access(path.c_str(), 0 )) ) //file exists
+     if( vfQuestion( par, name.c_str(), "This file exists! Rename?" ) )
+         goto AGAIN;
+
 
 //  putting MULTI to binary file
     GemDataStream  ff(path, ios::out|ios::binary);
@@ -181,8 +186,9 @@ void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binm
     mult->to_file( ff, path );
 
 // out dataCH to binary file
+   newname = name+"-dch";
    if( binmode )
-   {  Path_ = u_makepath( dir, name, "dch" );
+   {  Path_ = u_makepath( dir, newname, "bin" );
       GemDataStream  f_ch1(Path_, ios::out|ios::binary);
       datach_to_file(f_ch1);
       f_ch1.close();
@@ -190,7 +196,7 @@ void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binm
 
 // out dataCH to text file
    if( textmode )
-   {  newname = name+"-dch";
+   {  //newname = name+"-dch";
       Path_ = u_makepath( dir, newname, "dat" );
       fstream  f_ch2(Path_.c_str(), ios::out);
       datach_to_text_file(f_ch2);
@@ -199,29 +205,31 @@ void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binm
 
 // making special files
 // put data to IPMRUN.BAT file
-   Path_ = u_makepath( dir, "IPMRUN", "BAT" );
+   Path_ = u_makepath( dir, name/*"IPMRUN"*/, "BAT" );
    fout.open(Path_.c_str(), ios::out);
    fout << "echo off\n";
    fout << "rem Normal runs\n";
    if( textmode )
       fout << "gemipm2k.exe " << name.c_str() <<
-            ".ipm ipmfiles-dat.lst\n";
+            ".ipm " << name.c_str() << "-dat.lst\n";
    if( binmode )
        fout << "rem gemipm2k.exe " << name.c_str() <<
-             ".ipm ipmfiles-bin.lst\n";
+             ".ipm " << name.c_str() << "-bin.lst\n";
    fout.close();
 
 // put data to pmfiles-bin.lst file
    if( binmode )
-   {   Path_ = u_makepath( dir, "ipmfiles-bin", "lst" );
+   {   newname = name+"-bin";
+       Path_ = u_makepath( dir, newname/*"ipmfiles-bin"*/, "lst" );
        fout.open(Path_.c_str(), ios::out);
-       fout << "-b \"" << name.c_str() << ".dch\" ";
+       fout << "-b \"" << name.c_str() << "-dch.bin\"";
    }
 // put data to pmfiles-dat.lst file
    if( textmode )
-   {   Path_ = u_makepath( dir, "ipmfiles-dat", "lst" );
+   {   newname = name+"-dat";
+       Path_ = u_makepath( dir, newname/*"ipmfiles-dat"*/, "lst" );
        fout_d.open(Path_.c_str(), ios::out);
-       fout_d << "-t \"" << name.c_str() << "-dch.dat\" ";
+       fout_d << "-t \"" << name.c_str() << "-dch.dat\"";
    }
 
  nIV = min( nIV, nNodes() );
@@ -240,12 +248,12 @@ void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binm
    // dataBR files - binary
     if( binmode )
     {
-       newname =  name + "-" + buf;
-       Path_ = u_makepath( dir, newname, "dbr" );
+       newname =  name + + "-dbr-"  + buf;
+       Path_ = u_makepath( dir, newname, "bin" );
        GemDataStream  f_br1(Path_, ios::out|ios::binary);
        databr_to_file(f_br1);
        f_br1.close();
-       fout << ", \"" << newname.c_str() << ".dbr\"";
+       fout << ", \"" << newname.c_str() << ".bin\"";
      }
 
       if( textmode )

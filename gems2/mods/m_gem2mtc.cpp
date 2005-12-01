@@ -418,10 +418,11 @@ void TGEM2MT::outMulti()
 
  } // mtp->kv
 
+  pVisor->CloseMessage();
+
   na->PutGEM2MTFiles( window(),
        mtp->nIV, mtp->PsSdat!=S_OFF, mtp->PsSbin!=S_OFF );
 
-  pVisor->CloseMessage();
 }
 
 
