@@ -703,6 +703,14 @@ TGEM2MT::test_sizes( )
        mtp->nFD = 1;
      }
 
+  if( mtp->PvSFL != S_OFF )
+    if( mtp->nSFD <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the source fluxes\n"
+" and elemental stoichiometries for them! \n Please, do it!";
+       mtp->nSFD = 1;
+     }
+
   if( mtp->PvPGD != S_OFF )
     if( mtp->nPG <= 0 )
     {  err_str +=

@@ -382,7 +382,7 @@ void TGEM2MT::gen_task()
      calc_eqstat();
 
 //calculate graphics
-   if( mtp->PvMSg )
+   if( mtp->PvMSg  != S_OFF )
    {
       mtp->jt = min( mtp->kv, (short)(mtp->nS-1));
       rpn[1].CalcEquat();
