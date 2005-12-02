@@ -290,12 +290,12 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
                case  TERROR_GEM:  err_msg =  "Terminal error GemIPM";
               }
               fprintf(diffile, "\n           %s", err_msg.c_str() );
-              break;
+//SD              break;
             }
          }
       }  // end of node iteration loop
 
-     if( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA )
+//SD     if( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA )
      {
 t_out = clock();
 TNodeArray::na->logDiffs( diffile, t, at/(365*86400), nx, evrt );
@@ -330,7 +330,7 @@ outp_time += ( t_out2 - t_out);
 
   }
 
-     } while ( t < mts  && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
+     } while ( t < mts );//SD && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
       // Other criteria to stop need to be implemented
 
 t_end = clock();

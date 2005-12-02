@@ -14,9 +14,11 @@ MAKE = make -f Makefile.w32
 # compile variables
 
 # INC_GLOBAL      = 
-RELEASE_FLAGS   = -DGEMS_RELEASE
+#RELEASE_FLAGS   = -DGEMS_RELEASE
 DEBUG_FLAGS     = -v -y
+DEBUG_FLAGS     = 
 PROF_FLAGS      =
+#CFLAGS	=	-tWR -w -w-hid -tWM -v -vi -y- -tWC  -DIPMGEMPLUGIN 
 CCFLAGS         =  -tWC -tWM -Od -Hu -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -D__bcc -DIPMGEMPLUGIN
 #CCFLAGS         = -w -D__bcc -DIPMGEMPLUGIN
 LDFLAGS         =
@@ -25,8 +27,8 @@ LDFLAGS         =
 # commands
 
 CC              = bcc32.exe
-LD              = tlib.exe
-LIB_PRG         = tlib.exe
+#LD              = tlib.exe
+#LIB_PRG         = tlib.exe
 
 CLEAN_CMD       = del *.obj
 
