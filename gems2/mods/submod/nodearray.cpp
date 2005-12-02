@@ -628,7 +628,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
 }
 
 #endif
-
+#include <stdexcept>
 //-------------------------------------------------------------------------
 // RunGEM()
 // GEM IPM calculation of equilibrium state for the iNode node
@@ -664,18 +664,45 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 
 // Copying data for node iNode back from work DATABR structure into the node array
    MoveWorkNodeToArray( iNode, anNodes, NodT0 );
-    return 0;
+   if( CNode->NodeStatusCH  == NEED_GEM_AIA )
+         CNode->NodeStatusCH = OK_GEM_AIA;
+   else
+         CNode->NodeStatusCH = OK_GEM_PIA;
+
+//    return 0;
 }
     catch(TError& err)
     {
      fstream f_log("ipmlog.txt", ios::out|ios::app );
      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
+     if( CNode->NodeStatusCH  == NEED_GEM_AIA )
+       CNode->NodeStatusCH = BAD_GEM_AIA;
+     else
+       CNode->NodeStatusCH = BAD_GEM_PIA;
+
+    }
+    catch( const exception & e )
+    {
+     fstream f_log("ipmlog.txt", ios::out|ios::app );
+     f_log << "Get an exeption: " << e.what() << endl;
+       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
+         CNode->NodeStatusCH = ERR_GEM_AIA;
+       else
+         CNode->NodeStatusCH = ERR_GEM_PIA;
+//       return -1;
     }
     catch(...)
     {
-        return -1;
+     fstream f_log("ipmlog.txt", ios::out|ios::app );
+     f_log << "gems2: Unknown exception: program aborted" << endl;
+       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
+         CNode->NodeStatusCH = ERR_GEM_AIA;
+       else
+         CNode->NodeStatusCH = ERR_GEM_PIA;
+//       return -1;
     }
-    return 1;
+//    return 1;
+   return CNode->NodeStatusCH;
 }
 
 

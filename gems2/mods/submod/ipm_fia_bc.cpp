@@ -161,6 +161,7 @@ void TProfil::SimplexInitialApproximation( )
         if( NMB) delete[]NMB;
         Error( xcpt.title.c_str(), xcpt.mess.c_str());
     }
+
 }
 
 // Generic simplex method with two sided constraints

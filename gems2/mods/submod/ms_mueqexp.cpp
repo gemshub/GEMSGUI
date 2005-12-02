@@ -315,6 +315,7 @@ bool TProfil::MultiCalcMain( int& /*pll*/, double& /*FXold*/ )
 
     /* test insert in valid area */
     mEFD:
+
      if(pmp->PZ && pmp->W1)
      { for( i=0; i<pmp->L; i++ )
         pmp->Y[i]=pmp->X[i];
@@ -337,7 +338,6 @@ STEP_POINT("After FIA");
 
    /* minimization  IPM */
     eRet = InteriorPointsMethod( );
-
 
 // STEPWISE (3)  - stop point to examine output from IPM()
 #ifndef IPMGEMPLUGIN

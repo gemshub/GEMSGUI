@@ -267,19 +267,42 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
            {
               RetCode = TNodeArray::na->RunGEM( i, Mode );
               // check RetCode
-//             if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
-//                 break;
-           }
-         }  // end of node iteration loop
+              if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
+              {
+                gstring err_msg;
 
+               fprintf( diffile, "\nError in GEMipm calculation part :" );
+               fprintf( diffile, " Node= %-8d  Step= %-8d", i, t );
+               switch( RetCode )
+               {
+                 case BAD_GEM_AIA:
+                      err_msg = "Bad result from simplex IA";
+                      break;
+                case  ERR_GEM_AIA:
+                      err_msg = "Failed to calculated from simplex IA";
+                      break;
+                case  BAD_GEM_PIA:
+                      err_msg = "Bad result without simplex from previous solution";
+                      break;
+                case  ERR_GEM_PIA:
+                      err_msg = "Failed to calculated without simplex";
+                      break;
+               case  TERROR_GEM:  err_msg =  "Terminal error GemIPM";
+              }
+              fprintf(diffile, "\n           %s", err_msg.c_str() );
+              break;
+            }
+         }
+      }  // end of node iteration loop
+
+     if( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA )
+     {
 t_out = clock();
 TNodeArray::na->logDiffs( diffile, t, at/(365*86400), nx, evrt );
     // logging differences after the MT iteration loop
 t_out2 = clock();
 outp_time += ( t_out2 -  t_out);
 
-//         if( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA )
-//         {
           // Here one has to compare old and new equilibrium phase assemblage
           // and pH/pe in all nodes and decide if the time step was Ok or it
           // should be decreased. If so then the nodes from C1 should be
@@ -305,9 +328,9 @@ logProfile( logfile, t, at, nx, evrt );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
 
+  }
 
-     } while ( t < mts );
-     // && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
+     } while ( t < mts  && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
       // Other criteria to stop need to be implemented
 
 t_end = clock();
