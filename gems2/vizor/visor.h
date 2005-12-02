@@ -39,6 +39,8 @@ class TVisor
     gstring UserGEMDir;
     gstring UserProfDir;
 
+    gstring LocalDir;
+
     gstring LocalDocDir;
     gstring RemoteDocURL;
     bool LocalDoc;
@@ -101,7 +103,11 @@ public:
     gstring imgDir() {
         return SysGEMDir + ImgDir;
     }
-    
+
+    const gstring& localDir() const {
+        return LocalDir;
+    }
+
     gstring docDir() const {
 	return (LocalDoc) ? LocalDocDir : RemoteDocURL;
 //        return SysGEMDir + DocDir;
@@ -117,6 +123,10 @@ public:
 
     const bool localDoc() const {
         return LocalDoc;
+    }
+
+    void setLocalDir(const gstring& localDir) {
+        LocalDir = localDir;
     }
 
     void setLocalDocDir(const gstring& localDir) {

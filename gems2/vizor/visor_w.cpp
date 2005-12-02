@@ -1141,17 +1141,17 @@ vfChooseFileOpen(QWidget* par, gstring& path, const char* title)
 // @param title - dialog title
 
 bool
-vfChooseFileSave(QWidget* par, gstring& path,
+vfChooseFileSave(QWidget* par, gstring& path_,
        const char* title, const char *filter)
 {
     //    QString d=QFileDialog::getSaveFileName( ".", filter.c_str(), par, title );
 
-    gstring dir;
-      if( path.find('/') == gstring::npos )
-      {      dir = pVisor->userGEMDir();
-             dir+= path;
+      gstring path;
+      if( path_.find('/') == gstring::npos )
+      {      path = pVisor->localDir();//userGEMDir();
+             path+= path_;
       }
-      else   dir = path;
+      else   path = path_;
 
     gstring filt = "*;";
     if( filter )
@@ -1170,11 +1170,17 @@ vfChooseFileSave(QWidget* par, gstring& path,
 
     //if( file_dlg.exec() )
     QString fn = QFileDialog::getSaveFileName(
-          dir.c_str(), filt.c_str(), par, 0, title );
+          path.c_str(), filt.c_str(), par, 0, title );
     if ( !fn.isEmpty() )
     {
         const char* fl = fn;
-        path = fl;
+        path_ = fl;
+        gstring dir;
+        gstring name;
+        gstring newname;
+        u_splitpath( path_, dir, name, newname );
+        dir  += +"/";
+        pVisor->setLocalDir( dir );
         return true;
     }
     else
