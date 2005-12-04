@@ -744,7 +744,7 @@ void  TNodeArray::printfGEM( const char* multi_file,
 
 // Data collection for monitoring differences
 // Prints difference increments in a all nodes (cells) for time point t / at
-void TNodeArray::logDiffs( FILE* diffile, int t, double at, int nx, int every_t )
+void TNodeArray::logDiffsIC( FILE* diffile, int t, double at, int nx, int every_t )
 {
   double dc;
   int i, ie;
@@ -755,7 +755,7 @@ void TNodeArray::logDiffs( FILE* diffile, int t, double at, int nx, int every_t 
   fprintf( diffile, "\nStep= %-8d  Time= %-12.4g\nNode#   ", t, at );
   for( ie=0; ie < int(CSD->nICb); ie++ )
     fprintf( diffile, "%-12.4s ", CSD->ICNL[ie] );
-  for (i=0; i<nx+1; i++)    // node iteration
+  for (i=0; i<nx; i++)    // node iteration
   {
      fprintf( diffile, "\n%5d   ", i );
      for( ie=0; ie < int(CSD->nICb); ie++ )
@@ -767,6 +767,101 @@ void TNodeArray::logDiffs( FILE* diffile, int t, double at, int nx, int every_t 
   fprintf( diffile, "\n" );
 }
 
+// Data collection for monitoring 1D profiles in debugging FMT models
+// Prints dissolved elemental molarities in all cells for time point t / at
+void TNodeArray::logProfileAqIC( FILE* logfile, int t, double at, int nx, int every_t )
+{
+  double pm;
+  int i, ie;
+  if( t % every_t )
+    return;
+  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Dissolved IC total concentrations, M\n", t, at/(365*86400) );
+  fprintf(logfile, "%s","Node#   ");
+  for( ie=0; ie < int(CSD->nICb); ie++ )
+    fprintf( logfile, "%-12.4s ", CSD->ICNL[ie] );
+  for (i=0; i<nx; i++)    // node iteration
+  {
+     fprintf( logfile, "\n%5d   ", i );
+     for( ie=0; ie < int(CSD->nICb); ie++ )
+     {
+       pm = NodT0[i]->bPS[ie]/NodT0[i]->vPS[0]*1000.;  // Assumes there is aq phase!
+                 // total dissolved element molarity
+       fprintf( logfile, "%-12.4g ", pm );
+     }
+  }
+  fprintf( logfile, "\n" );
+}
+
+// Data collection for monitoring 1D profiles
+// Prints total elemental amounts in all cells for time point t / at
+void TNodeArray::logProfileTotIC( FILE* logfile, int t, double at, int nx, int every_t )
+{
+  double pm;
+  int i, ie;
+  if( t % every_t )
+    return;
+  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Bulk IC amounts, moles\n", t, at/(365*86400) );
+  fprintf(logfile, "%s","Node#   ");
+  for( ie=0; ie < int(CSD->nICb); ie++ )
+    fprintf( logfile, "%-12.4s ", CSD->ICNL[ie] );
+  for (i=0; i<nx; i++)    // node iteration
+  {
+     fprintf( logfile, "\n%5d   ", i );
+     for( ie=0; ie < int(CSD->nICb); ie++ )
+     {
+       pm = NodT0[i]->bIC[ie];
+       fprintf( logfile, "%-12.4g ", pm );
+     }
+  }
+  fprintf( logfile, "\n" );
+}
+
+// Prints amounts of reactive phases in all cells for time point t / at
+void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int every_t )
+{
+  double pm;
+  int i, ip;
+  if( t % every_t )
+    return;
+  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Amounts of reactive phases, moles\n", t, at/(365*86400) );
+  fprintf(logfile, "%s","Node#   ");
+  for( ip=0; ip < int(CSD->nPHb); ip++ )
+    fprintf( logfile, "%-12.12s ", CSD->PHNL[ip]+4 );
+  for (i=0; i<nx; i++)    // node iteration
+  {
+     fprintf( logfile, "\n%5d   ", i );
+     for( ip=0; ip < int(CSD->nPHb); ip++ )
+     {
+       pm = NodT0[i]->xPH[ip];
+       fprintf( logfile, "%-12.4g ", pm );
+     }
+  }
+  fprintf( logfile, "\n" );
+}
+
+// Prints dissolved species molarities in all cells for time point t / at
+void TNodeArray::logProfileAqDC( FILE* logfile, int t, double at, int nx, int every_t )
+{
+  double pm;
+  int i, is;
+  if( t % every_t )
+    return;
+  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Dissolved species concentrations, M\n", t, at/(365*86400) );
+  fprintf(logfile, "%s","Node#   ");
+  for( is=0; is < int(CSD->nDCb); is++ )
+    fprintf( logfile, "%-12.4s ", CSD->DCNL[is] );
+  for (i=0; i<nx; i++)    // node iteration
+  {
+     fprintf( logfile, "\n%5d   ", i );
+     for( is=0; is < int(CSD->nDCinPH[0]); is++ )
+     {
+       pm = NodT0[i]->xDC[is]/NodT0[i]->vPS[0]*1000.;  // Assumes there is aq phase!
+                 // dissolved species molarity
+       fprintf( logfile, "%-12.4g ", pm );
+     }
+  }
+  fprintf( logfile, "\n" );
+}
 
 // Copying data for node ii from node array into work DATABR structure
 void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )

@@ -1,12 +1,11 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Debugging version of coupled finite-difference
-// 1D advection-diffusion mass transport model
-// supplied by F.Enzmann (Uni Mainz) with GEMIPM2K
-// module for calculation of chemical equilibria
+// Debugging version of a finite-difference 1D advection-diffusion
+// mass transport model supplied by Dr. Frieder Enzmann (Uni Mainz)
+// coupled with GEMIPM2K module for calculation of chemical equilibria
 //
-// uses TNodeArray class
+// Direct access to the TNodeArray class for storing all data for nodes
 //
 // Copyright (C) 2005 S.Dmytriyeva, F.Enzmann, D.Kulik
 //
@@ -21,11 +20,9 @@ int MassTransAdvec( double L,    // length of system [L]
                double cez,  // minimal allowed amount of element (except charge) in bulk composition
                int    nx,   // number of nodes
                int    mts,  // maximal time steps
-               int    evrt, // output on every evrt time step (step 0 always) 
+               int    evrt, // output on every evrt time step (step 0 always)
                int    inx   // initial node index
               );
-
-void logProfile( FILE* logfile, int t, double at, int nx, int every );
 
 int
  main( int argc, char* argv[] )
@@ -34,28 +31,24 @@ int
      double L,    // length of system [L]
             v,    // constant fluid velocity [L/T]
             tf,   // time step reduce control factor
-            bC,   // initial background solute concentration [M/L**3]
             minel,  // minimal allowed amount of element (except charge) in bulk composition
-            dx,   // node distance [L]
-            dt,   // iterative time increment
-            at,   // actual time step
-            cutoff;  // cutoff value for applied differences    
+            cutoff;  // cutoff value for applied differences
 
      int    nx,   // number of nodes
             mts,  // maximal time steps
             every,// output every time step (e.g. every 10-th step)
-            inx,  // initial node index
+            inx,  // initial node index ????
             RetC = 0;
 
      L = 1.;      // length in m
-     v = 3e-9;    // fluid velocity constant m/sec
+     v = 1e-9;    // fluid velocity constant m/sec
      tf = 1.;     // time step reduce factor
-     cutoff = 1e-7;   // cutoff value for differences (to use for correcting bulk compositions)
-     minel = 1e-10;   // minimal allowed amount of element (except charge) in bulk composition
-      
+     cutoff = 1e-7;   // cutoff value for delta_T corrections for bulk compositions)
+     minel = 1e-12;   // minimal allowed amount of element (except charge) in bulk composition
+
 nx = 100;    // number of nodes (default 1500)
-mts = 500;   // max number of time steps   10000
-every = 20;  // output on every 20-th time step
+mts = 300;   // max number of time steps   10000
+every = 10;  // output on every 20-th time step
      inx = 1;     // in the node index inx
 
      gstring multu_in1 = "MgWBoundC.ipm";
@@ -92,36 +85,6 @@ every = 20;  // output on every 20-th time step
    return RetC;
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Data collection for monitoring 1D profiles - to extend here, if needed
-// Prints phases and element concentrations in all cells for time point t / at
-void logProfile( FILE* logfile, int t, double at, int nx, int every_t )
-{
-  double pm[16];
-  int i, ie, ip;
-  DATACH* CH = TNodeArray::na->pCSD();       // access to DataCH structure
-  DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at current time point
-//  DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
-  if( t % every_t )
-    return;
-  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Dissolved total concentrations, M\n", t, at/(365*86400) );
-  fprintf(logfile, "%s","Node#    Calcite     Dolomite     ");
-  for( ie=0; ie<min( 14,int(CH->nICb) ); ie++ )
-    fprintf( logfile, "%-12.4s ", CH->ICNL[ie] );
-  for (i=0; i<nx+1; i++)    // node iteration
-  {
-     fprintf( logfile, "\n%5d   ", i );
-     pm[0]  = C0[i]->xPH[3];   // amount of calcite
-     pm[1]  = C0[i]->xPH[4];   // amount of dolomite
-     for( ie=0; ie < min( 14, int(CH->nICb) ); ie++ )
-       pm[ie+2]  = C0[i]->bPS[0*CH->nICb + ie]/C0[i]->vPS[0]*1000.;
-                 // total dissolved element molarity
-     for( ip = 0; ip < min( 16, 2+int(CH->nICb) ); ip++ )
-        fprintf( logfile, "%-12.4g ", pm[ip] );
-   }
-   fprintf( logfile, "\n" );
-}
-
 //---------------------------------------------------------------------------
 // Test of 1D advection (finite difference method provided by Dr. F.Enzmann,
 // Uni Mainz) coupled with GEMIPM2K kernel (PSI) using the TNodeArray class.
@@ -147,9 +110,7 @@ int MassTransAdvec( double L,    // length of system [L]
      int   t,    // actual time iterator
            ic,
            RetCode = OK_GEM_AIA,
-           i,
-           ie,
-           ip;
+           i;
 
      double c0,
             c1,
@@ -157,21 +118,27 @@ int MassTransAdvec( double L,    // length of system [L]
             cm2,
             c12,
             cm12,
-            sM0,
-            sM1,
             dc,    // difference (decrement) to concentration/amount
-            cr,      // some help variables
-     pm[16];  // up to 16 variables for plotting/monitoring
+            cr;      // some help variables
 
-     // test output files
+// Preparations: opening output files for monitoring 1D profiles
 FILE* logfile;
+logfile = fopen( "ICaq-log.dat", "w+" );    // Total dissolved element molarities
+if( !logfile)
+  return -1;
+FILE* ph_file;
+ph_file = fopen( "Ph-log.dat", "w+" );   // Mole amounts of phases
+if( !logfile)
+  return -1;
 FILE* diffile;
-logfile = fopen( "Profiles.dat", "w+" );
+diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
 if( !logfile)
   return -1;
-diffile = fopen( "Differences.dat", "w+" );
-if( !logfile)
-  return -1;
+
+//  Getting direct access to TNodeArray class data
+DATACH* CH = TNodeArray::na->pCSD();       // DataCH structure
+DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at current time point
+DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
 
 // time testing
   clock_t t_start, t_end, t_out, t_out2;
@@ -181,11 +148,6 @@ if( !logfile)
 //     C[inx][0]=iCx;  Initial condition for Dirak input
 //     C[inx][1]=iCx;
 // The NodeArray must have been allocated before, setting up work pointers
-
-     DATACH* CH = TNodeArray::na->pCSD();       // access to DataCH structure
-     DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at current time point
-     DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
-
 // time( NULL);
 // starting the time iteration loop
      t_start = clock();
@@ -203,13 +165,15 @@ if( !logfile)
 //       RetCode = TNodeArray::na->RunGEM( 0, Mode );
        RetCode = TNodeArray::na->RunGEM( i, Mode );
      }  // end of node iteration loop
+
 // Data collection for monitoring: Initial state (at t=0)
 t_out = clock();
-logProfile( logfile, t, at, nx, 1 );
-TNodeArray::na->logDiffs( diffile, t, at/(365*86400), nx, 1 );
+TNodeArray::na->logDiffsIC( diffile, t, at/(365*86400), nx+1, 1 );
+TNodeArray::na->logProfileAqIC( logfile, t, at/(365*86400), nx+1, 1 );
+TNodeArray::na->logProfilePhMol( ph_file, t, at/(365*86400), nx+1, 1 );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
-
+//  This loop contains the mass transport iteration time step
      do {   // time iteration step
 
         t+=1;
@@ -219,6 +183,7 @@ outp_time += ( t_out2 - t_out);
         for( i=2;i<nx;i++ ) {   // node iteration
            for( ic=0; ic < CH->nICb-1; ic++)  // splitting for independent components
            {                          // Charge (Zz) is not checked here!
+                         // Chemical compositions may become inconsistent with time
               // It has to be checked on minimal allowed c0 value
               c0  = C0[i]->bPS[0*CH->nICb + ic];
               c1  = C0[i+1]->bPS[0*CH->nICb + ic];
@@ -238,9 +203,10 @@ if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-3 ))
               C0[i]->bIC[ic] -= dc; // correction for GEM calcuation
            }
          } // end of loop over nodes
+// end of the mass transport iteration time step
 
-//       Here we call a loop on GEM calculations over nodes
-//       parallelization will affect this loop
+//   Here we call a loop on GEM calculations over nodes
+//   parallelization should affect this loop only
          for (i=1; i<nx; i++)    // node iteration
          {
            int Mode = NEED_GEM_PIA;  // debugging
@@ -256,6 +222,7 @@ C0[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
                  C0[i]->bIC[ic] = cez;
               }
               dc = C1[i]->bIC[ic] - C0[i]->bIC[ic];
+
 if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
                   NeedGEM = true;  // we need to recalculate equilibrium in this node
 // if( fabs( dc ) > min( cdv*100., C0[i]->bIC[ic] * 1e-2 ))
@@ -266,7 +233,7 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
            if( NeedGEM )
            {
               RetCode = TNodeArray::na->RunGEM( i, Mode );
-              // check RetCode
+              // check RetCode from GEM IPM calculation
               if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
               {
                 gstring err_msg;
@@ -276,29 +243,29 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
                switch( RetCode )
                {
                  case BAD_GEM_AIA:
-                      err_msg = "Bad result from simplex IA";
+                      err_msg = "Bad GEM result using simplex IA";
                       break;
                 case  ERR_GEM_AIA:
-                      err_msg = "Failed to calculated from simplex IA";
+                      err_msg = "GEM calculation error using simplex IA";
                       break;
                 case  BAD_GEM_PIA:
-                      err_msg = "Bad result without simplex from previous solution";
+                      err_msg = "Bad GEM result using previous solution IA";
                       break;
                 case  ERR_GEM_PIA:
-                      err_msg = "Failed to calculated without simplex";
+                      err_msg = "GEM calculation error using previous solution IA";
                       break;
-               case  TERROR_GEM:  err_msg =  "Terminal error GemIPM";
+               case  TERROR_GEM:  err_msg =  "Terminal error in GEMIPM2 module";
               }
               fprintf(diffile, "\n           %s", err_msg.c_str() );
 //SD              break;
             }
          }
-      }  // end of node iteration loop
+      }  // i   end of node iteration loop
 
 //SD     if( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA )
-     {
+//     {
 t_out = clock();
-TNodeArray::na->logDiffs( diffile, t, at/(365*86400), nx, evrt );
+TNodeArray::na->logDiffsIC( diffile, t, at/(365*86400), nx+1, evrt );
     // logging differences after the MT iteration loop
 t_out2 = clock();
 outp_time += ( t_out2 -  t_out);
@@ -320,15 +287,15 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3)))
              }
              if( NeedCopy )
                  TNodeArray::na->CopyNodeFromTo( i, nx, C0, C1 );
-           }
+          }  // i    end of node iteration loop
 
 // Data collection for monitoring: Current state
 t_out = clock();
-logProfile( logfile, t, at, nx, evrt );
+TNodeArray::na->logProfileAqIC( logfile, t, at/(365*86400), nx+1, evrt );
+TNodeArray::na->logProfilePhMol( ph_file, t, at/(365*86400), nx+1, evrt );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
-
-  }
+//   }
 
      } while ( t < mts );//SD && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
       // Other criteria to stop need to be implemented
@@ -336,10 +303,11 @@ outp_time += ( t_out2 - t_out);
 t_end = clock();
 double dtime = ( t_end- t_start );
 fprintf( diffile,
-  "\nTotal time of calculation %lg, Time of output %lg, Whole run time %lg\n",
+  "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s\n",
     (dtime-outp_time)/CLK_TCK,  outp_time/CLK_TCK, dtime/CLK_TCK );
 
 fclose( logfile );
+fclose( ph_file );
 fclose( diffile );
 
    return RetCode;

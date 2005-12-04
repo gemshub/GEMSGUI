@@ -168,8 +168,15 @@ public:
 
     // Data collection for monitoring differences
     // Prints difference increments in a all nodes (cells) for step t (time point at)
-    void logDiffs( FILE* diffile, int t, double at, int nx, int every_t );
-
+    void logDiffsIC( FILE* diffile, int t, double at, int nx, int every_t );
+    // Prints dissolved elemental molarities in all cells for time point t / at
+    void logProfileAqIC( FILE* logfile, int t, double at, int nx, int every_t );
+    // Prints total elemental amounts in all cells for time point t / at
+    void logProfileTotIC( FILE* logfile, int t, double at, int nx, int every_t );
+    // Prints amounts of phases in all cells for time point t / at
+    void logProfilePhMol( FILE* logfile, int t, double at, int nx, int every_t );
+    // Prints dissolved species molarities in all cells for time point t / at
+    void logProfileAqDC( FILE* logfile, int t, double at, int nx, int every_t );
 
 #ifndef IPMGEMPLUGIN
 
