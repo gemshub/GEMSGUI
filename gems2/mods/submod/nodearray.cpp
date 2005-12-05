@@ -674,14 +674,14 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
     catch(TError& err)
     {
      fstream f_log("ipmlog.txt", ios::out|ios::app );
-     f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
+     f_log << err.title.c_str() << ": " << err.mess.c_str() << endl;
      if( CNode->NodeStatusCH  == NEED_GEM_AIA )
        CNode->NodeStatusCH = BAD_GEM_AIA;
      else
        CNode->NodeStatusCH = BAD_GEM_PIA;
 
     }
-    catch( const exception & e )
+/*    catch( const exception & e )
     {
      fstream f_log("ipmlog.txt", ios::out|ios::app );
      f_log << "Get an exeption: " << e.what() << endl;
@@ -691,7 +691,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
          CNode->NodeStatusCH = ERR_GEM_PIA;
 //       return -1;
     }
-    catch(...)
+*/    catch(...)
     {
      fstream f_log("ipmlog.txt", ios::out|ios::app );
      f_log << "gems2: Unknown exception: program aborted" << endl;
@@ -728,7 +728,7 @@ void  TNodeArray::printfGEM( const char* multi_file,
    }
 // output multy
     if( multi_file )
-   {  strr = databr_bin;
+   {  strr = multi_file;
       GemDataStream o_m( strr, ios::out|ios::binary);
 #ifndef IPMGEMPLUGIN
        o_m.writeArray( &(TProfil::pm->pa.p.PC), 10 );

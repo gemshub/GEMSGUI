@@ -34,6 +34,15 @@
 
 #endif
 
+/*double log( double x )
+{
+  if( x <= 0)
+  { std::cout << " log X error " << x << endl;
+    x = 0;
+  }
+  return log(x);
+}
+*/
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Advanced solver of a system of linear equations
 // using Jordan method
@@ -630,6 +639,8 @@ STEP_POINT("FIA Iteration");
         if( LM < 1E-5 )
         { // Too small step size - too slow convergence !
             pmp->Ec=1;
+            Error( "IPM_StepSizeError",
+                 "Too small step size - too slow convergence");
             goto KN;
         }
 
@@ -797,7 +808,12 @@ int TProfil::InteriorPointsIteration( )
     // Solving matrix R of linear equations
     sRet = SquareRoots( N, R, pmp->U, R1 );
     if( sRet == 1 )
-        goto TRY_GORDAN;
+    {
+        pmp->Ec=1;
+        return 1;
+    }
+// 05/12/2005
+//        goto TRY_GORDAN;
     Cpoint = "SquareRoots(): U vector";
     goto SOLVED;
 TRY_GORDAN:

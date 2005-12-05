@@ -797,7 +797,7 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 
         /* Sveta: workaround because of problems with log argument */
         f3 =  sqrt( 1.+Sig*Sig/(4.*A*A) ) - Sig/(2.*A);
-//cout<< f1 << ' '<< f2 << ' ' << f3 << endl;
+std::cout<< f1  << ' ' << f3 << endl;
         if( f3 < 1 )
         {
             f1 = exp( -3. * F2RT );

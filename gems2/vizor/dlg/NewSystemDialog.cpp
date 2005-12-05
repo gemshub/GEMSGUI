@@ -337,8 +337,11 @@ NewSystemDialog::CmReadMulti()
     {
       // open file to output
       gstring filename;
-      if( vfChooseFileOpen(this, filename,
+
+     if( vfChooseFileSave(this, filename,
           "Get file name for reading" ) == false )
+//        if( vfChooseFileOpen(this, filename,
+//          "Get file name for reading" ) == false )
                return;
       GemDataStream f(filename, ios::in|ios::binary);
       TProfil::pm->readMulti(f);

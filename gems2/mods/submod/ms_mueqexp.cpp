@@ -32,7 +32,6 @@
 
 #endif
 
-
 // -----------------------------------------------------------------
 //const double tc_ISdelta = 1e-5;
 //const double LOWESTDC_ = 1e-6;
@@ -363,8 +362,12 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #else
           std::cout << "For a given IPM convergence criterion, vector b is not balanced,\n"
            << "or DC standard-state thermodynamic data inconsistent. \n"
-           <<  "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?"
+//           <<  "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?"
            << endl;
+
+// Sveta 05/12/2005
+          Error("IPM error: " ,
+           "For a given IPM convergence criterion, vector b is not balanced.");
 
 #endif
 
@@ -388,7 +391,7 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if( !vfQuestion(window(),  "Invalid initial approximation for IPM:",
                              "Proceed with automatic SIMPLEX approximation ?" ))
 #endif
-            Error("IPM error: ", "Invalid initial approximation for IPM.");
+            Error("IPM error ", "Invalid initial approximation for IPM.");
         }
 
       /*  else
@@ -474,8 +477,13 @@ STEP_POINT("PhaseSelect");
         //  if( !vfQuestion(window(), "IPM : warning", buf.c_str() ))
         //      break;
           fstream f_log("ipmlog.txt", ios::out|ios::app );
-          f_log<< buf.c_str()<< endl;
-          goto ITDTEST;
+          f_log << buf.c_str()<< endl;
+          f_log.close();
+// Sveta 05/12/2005
+          Error("IPM error: " ,
+                      "Prescribed balance precision cannot be reached.");
+//
+//          goto ITDTEST;
        }
 
 ITDTEST: /* test flag modes */
@@ -1056,7 +1064,9 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
             pmp->aqsTail = 1.- pmp->YFk / Yf;
         }
         if( pmp->L1[k] > 1 )
+        {  
             pmp->logYFk = log( Yf );
+        }
         if( pmp->PHC[k] == PH_AQUEL)
             /* ln moles of solvent in aqueous phase */
             pmp->Yw = pmp->YFk;

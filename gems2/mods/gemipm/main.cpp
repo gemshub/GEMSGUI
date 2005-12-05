@@ -211,14 +211,14 @@ outp_time += ( t_out2 - t_out);
 // Checking the difference to assign
 // if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-4 ))
               C0[i]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
-if( dc >= C0[i]->bIC[ic] )
+/*if( dc >= C0[i]->bIC[ic] )
  {
     fprintf( diffile, "\nError in Mass Transport calculation part :" );
     fprintf( diffile, " Node= %-8d  Step= %-8d  IC= %s ", i, t, CH->ICNL[ic] );
     fprintf(diffile, "\n Attempt to set new amount to %lg (old: %lg  Diff: = %lg ) ",
          C0[i]->bIC[ic]-dc, C0[i]->bIC[ic], dc);
     BC_error = true;
- }
+ } */
 if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-3 ))
               C0[i]->bIC[ic] -= dc; // correction for GEM calcuation
            } // loop over IC
@@ -254,10 +254,6 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
 
            if( NeedGEM )
            {
-              if( i==9 && t==61)
-              {
-                Mode = NEED_GEM_AIA;
-              }
               RetCode = TNodeArray::na->RunGEM( i, Mode );
               // check RetCode from GEM IPM calculation
               if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
@@ -283,6 +279,14 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
                case  TERROR_GEM:  err_msg =  "Terminal error in GEMIPM2 module";
               }
               fprintf(diffile, "\n           %s", err_msg.c_str() );
+              // output multi with error
+              char buf[100];
+              gstring mul_name = "multi_";
+              gstring br_name = "db_";
+              sprintf( buf, "%d_%d.err", i, t);
+              mul_name+=buf;
+              br_name+=buf;
+              TNodeArray::na->printfGEM( mul_name.c_str(), br_name.c_str(),0 );
 //SD              break;
             }
          }
