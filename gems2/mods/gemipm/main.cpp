@@ -39,7 +39,17 @@ int
             every,// output every time step (e.g. every 10-th step)
             inx,  // initial node index ????
             RetC = 0;
-
+     L = 1.;      // length in m
+     v = 3e-9;    // fluid velocity constant m/sec
+     tf = 1.;     // time step reduce factor
+     cutoff = 1e-7;   // cutoff value for differences (to use for correcting bulk compositions)
+     minel = 1e-10;   // minimal allowed amount of element (except charge) in bulk composition
+      
+nx = 100;    // number of nodes (default 1500)
+mts = 500;   // max number of time steps   10000
+every = 20;  // output on every 20-th time step
+     inx = 1;     // in the node index inx
+/*
      L = 1.;      // length in m
      v = 1e-9;    // fluid velocity constant m/sec
      tf = 1.;     // time step reduce factor
@@ -50,7 +60,7 @@ nx = 100;    // number of nodes (default 1500)
 mts = 300;   // max number of time steps   10000
 every = 10;  // output on every 20-th time step
      inx = 1;     // in the node index inx
-
+*/
      gstring multu_in1 = "MgWBoundC.ipm";
      gstring chbr_in1 = "ipmfiles-dat.lst";
 
@@ -120,6 +130,8 @@ int MassTransAdvec( double L,    // length of system [L]
             cm12,
             dc,    // difference (decrement) to concentration/amount
             cr;      // some help variables
+
+     bool BC_error = false;
 
 // Preparations: opening output files for monitoring 1D profiles
 FILE* logfile;
@@ -199,9 +211,19 @@ outp_time += ( t_out2 - t_out);
 // Checking the difference to assign
 // if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-4 ))
               C0[i]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
+if( dc >= C0[i]->bIC[ic] )
+ {
+    fprintf( diffile, "\nError in Mass Transport calculation part :" );
+    fprintf( diffile, " Node= %-8d  Step= %-8d  IC= %s ", i, t, CH->ICNL[ic] );
+    fprintf(diffile, "\n Attempt to set new amount to %lg (old: %lg  Diff: = %lg ) ",
+         C0[i]->bIC[ic]-dc, C0[i]->bIC[ic], dc);
+    BC_error = true;
+ }
 if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-3 ))
               C0[i]->bIC[ic] -= dc; // correction for GEM calcuation
-           }
+           } // loop over IC
+//if( BC_error )
+//   goto FINAL_POINT;
          } // end of loop over nodes
 // end of the mass transport iteration time step
 
@@ -232,6 +254,10 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
 
            if( NeedGEM )
            {
+              if( i==9 && t==61)
+              {
+                Mode = NEED_GEM_AIA;
+              }
               RetCode = TNodeArray::na->RunGEM( i, Mode );
               // check RetCode from GEM IPM calculation
               if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
@@ -300,11 +326,14 @@ outp_time += ( t_out2 - t_out);
      } while ( t < mts );//SD && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
       // Other criteria to stop need to be implemented
 
+FINAL_POINT:
 t_end = clock();
 double dtime = ( t_end- t_start );
+//double clc_sec = CLK_TCK;
+double clc_sec = CLOCKS_PER_SEC;
 fprintf( diffile,
   "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s\n",
-    (dtime-outp_time)/CLK_TCK,  outp_time/CLK_TCK, dtime/CLK_TCK );
+    (dtime-outp_time)/clc_sec,  outp_time/clc_sec, dtime/clc_sec );
 
 fclose( logfile );
 fclose( ph_file );
