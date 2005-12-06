@@ -421,7 +421,7 @@ void TGEM2MT::outMulti()
   pVisor->CloseMessage();
 
   na->PutGEM2MTFiles( window(),
-       mtp->nIV, mtp->PsSdat!=S_OFF, mtp->PsSbin!=S_OFF );
+       mtp->nIV, mtp->PsSdat!=S_OFF, mtp->PsSdat!=S_OFF );   ////// !!!!! to check!
 
 }
 

@@ -45,7 +45,7 @@ typedef struct
    PvEF,      // Use empirical data for graphics  (+ -)?
    PvPGD,    // Use phase groups definitions (+ -)?
    PvFDL,    // Use flux definition list (+ -)
-PvSFL,    // Use source fluxes and elemental stoichiometries for them? (+ -)
+   PvSFL,    // Use source fluxes and elemental stoichiometries for them? (+ -)
 
      // Controls on operation
    PsMode,  // Code of GEM2MT mode of operation { S F A D T }
@@ -55,9 +55,9 @@ PvSFL,    // Use source fluxes and elemental stoichiometries for them? (+ -)
    iStat,  // GEM2MT iteration status:  0 - indefinite; 1 ready for analysis;
         //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
    PsSYd,  // Save generated SysEq records to data base (+ -)
-   PsSdat,  //  Save Multi, DataCH and inital DataBR files as text files
-   PsSbin,  //  Save Multi, DataCH and inital DataBR files as binary files
-   PsNbin,  //  Save also the nodes DataBR array as a binary file
+PsSdat, //  Save DataCH and inital DataBR files as text files (+) or binary (-)
+PsDDc,  //  Use diffusion coefficients for DC - DDc vector (+ -)
+PsDIc,  //  Use diffusion coefficients for DC - DDc vector (+ -)
    PsTPai,  //  Create T,P values in Tval, Pval using iterator(+) or enter(-)
 
    name[MAXFORMULA],  //  Name of GEM2MT task
@@ -70,7 +70,10 @@ PvSFL,    // Use source fluxes and elemental stoichiometries for them? (+ -)
    nIV,  // number of initial variants of the chemical system, nIV <= nC
    nPG,  // number of mobile phase groups (0 or >1)
    nFD,  // number of MPG flux definitions (0 or >1)
-nSFD,   // number of source flux definitions (0 or < nFD )
+   nSFD,   // number of source flux definitions (0 or < nFD )
+nEl, // number of electrolytes for setting up electrolyte diffusion coefficients in mDEl vector
+nRs1,  // reserved
+nRs2,  // reserved
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
@@ -85,7 +88,7 @@ nSFD,   // number of source flux definitions (0 or < nFD )
    nYE,  // number of experimental parameters (columns in the yEt array)
    nPai,  // Number of P points in MTP interpolation array in DataCH ( 1 to 10 )
    nTai,  // Number of T points in MTP interpolation array in DataCH ( 1 to 20 )
-sRes,   // reserved
+   sRes,   // reserved
 
 // iterators for generating syseq record keys for initial system variants
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
@@ -112,7 +115,20 @@ sRes,   // reserved
    Pgb,   // Pg (pressure in gas, for partial pressures)
    Tmolb, // MOL total mole amount for basis sub-system composition calculations
    WmCb,  // mole fraction of the carrier DC (e.g. sorbent or solvent)
-   Asur;  // Specific surface area of the sorbent (for adsorbed species)
+   Asur,  // Specific surface area of the sorbent (for adsorbed species)
+// "ADpar" data object (11 doubles)
+fVel,   // Advection/diffusion mass transport:fluid advection velocity (m/sec)
+cLen,   // column length (m)
+tf,     // time step reduction factor
+cdv,    // cutoff factor for differences
+cez,    // cutoff factor for minimal amounts of IC in node bulk compositions
+ADrs1,  // reserved
+ADrs2,
+ADrs3,
+ADrs4,
+ADrs5,
+ADrs6
+  ;
   float
 // Iterators for MTP interpolation array in DataCH
    Pai[4],  // Pressure P, bar: start, end, increment for MTP array in DataCH , Ptol
@@ -121,21 +137,23 @@ sRes,   // reserved
 // graphics
    size[2][4], // Graph axis scale for the region and the fragment
    *xEt,    // Abscissa for experimental points [nXE]
-   *yEt;    // Ordinates for experimental points to plot [nXE, nYE]
+   *yEt,       // Ordinates for experimental points to plot [nXE, nYE]
+*DDc,  //  [Ls] diffusion coefficients for DC
+*DIc,  //  [N] diffusion coefficients for IC
+*DEl   //  [nE] diffusion coefficients for electrolyte salts
+    ;
  double
    *Bn,    //  [nIV][N] Table of bulk compositions of initial systems
    *qpi,   //  [Nqpi] Work array for initial systems math script
    *qpc,    //  [Nqpc] Work array for mass transport math script,
    *xt,    //  Abscissa for sampled data [nS]
    *yt,     //  Ordinates for sampled data [nS][nYS]
-
-   *DDc,  //  [Ls] diffusion coefficients for DC
-   (*HydP)[6], // [nC][6] hydraulic parameters for mass transport model
-   //
-*BSF,    // [nSFD][N] table of bulk compositions of source fluxes
-//  More to be added here for seq reactors?
-*MB,  // [nC]  column of current masses of boxes (in kg)
-*dMB // [nC][Nb]  Table of current derivatives dM for elements in reservoirs
+   (*HydP)[6], // [nC][6] hydraulic parameters for nodes in mass transport model
+   //  value order to be described
+   *BSF,    // [nSFD][N] table of bulk compositions of source fluxes
+            //  More to be added here for seq reactors?
+   *MB,  // [nC]  column of current masses of boxes (in kg)
+   *dMB // [nC][Nb]  Table of current derivatives dM for elements in reservoirs
     ;
  float
    *Tval,   // discrete values of T [nTai] in grid arrays in DataCH
@@ -143,7 +161,7 @@ sRes,   // reserved
 
    *CIb, // [nIV][N] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
-(*FDLf)[4], // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
+  (*FDLf)[4], // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
    *PGT  // Quantities of phases in MPG [Fi][nPG]
     ;
  char
@@ -153,13 +171,14 @@ sRes,   // reserved
    (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
    (*nam_i)[MAXIDNAME], // [nIV][12] id names of initial systems
    (*for_i)[MAXFORMUNITDT], // [Lbi][40] formulae for setting initial system compositions
+(*for_e)[MAXFORMUNITDT], // [nE][40] formulae for diffusing dissolved electrolytes
    (*stld)[EQ_RKLEN], // List of SysEq record keys for initial systems [nIV]
 //
    *CIclb, // [N] Units of IC quantity/concentration for initial systems compositions
    *AUcln, // [Lbi] Units of setting UDF quantities for initial system compositions
    (*FDLid)[MAXSYMB], // [nFD] ID of fluxes
    (*FDLop)[MAXSYMB], // [nFD] Operation codes (letters) flux type codes
-(*FDLmp)[MAXSYMB], // [nFD] ID of MPG to move in this flux  !!!!!!!!!!!!!!!! dim changed!
+   (*FDLmp)[MAXSYMB], // [nFD] ID of MPG to move in this flux  dim changed!
    (*MPGid)[MAXSYMB], // [nPG] ID list of mobile phase groups
    *UMPG,  // [nFi] units for setting phase quantities in MPG (see PGT )
 //
@@ -173,10 +192,11 @@ sRes,   // reserved
 
 /* Work arrays */
  float
-   *An  // [K][N] stoich matrix for DC (end-member) stoichiometry candidates
+*An,  // [Lbi][N] stoich matrix for formula units from the for_i list
+*Ae  // [nE][N] stoich matrix for for diffusing electrolytes
    ;
  double
-*gc  // [nC][nPG][Nb] Array of element partition coefficients for MPG and its source reservoir
+   *gc  // [nC][nPG][Nb] Array of element partition coefficients for MPG and its source reservoir
    ;
    char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
    *etext,              // internal
@@ -189,10 +209,10 @@ sRes,   // reserved
    kv,     // current index of the initial system variant (1 to nIV )
    jqc,    // script c-style index (= qc-1) for transport
    jqs,    // script c-style index (= qc-1) for graphics
-   jt,      // index of sampled point (for sampling scripts)
-   rei1,
-   rei2,
-   rei3,
+   jt,     // current index of sampled point (for sampling scripts)
+jdd,   // current index of diffusing DC
+jdi,   // current index of diffusing IC
+ide,   // current index of diffusing electrolyte
    rei4,
    rei5
    ;
