@@ -38,6 +38,9 @@
 
 // Finding automatic initial approximation for the IPM algorithm
 // using modified simplex method with two-side constraints
+// Return code:
+// false - OK for IPM
+// true  - OK solved
 //
 bool TProfil::AutoInitialApprox( )
 {
@@ -75,9 +78,7 @@ bool TProfil::AutoInitialApprox( )
    pVisor->Update(false);
 #endif
     // Analyzing if Simplex approximation is needed
-    if( !pmp->pNP  )  //  || ( pmp->pNP == -1 &&
-                      //  !vfQuestion(window(),  "IPM (initial approximation):",
-                      //  "Previous minimization result (Y)\n Automatic SIMPLEX approximation (N)? " )))
+    if( !pmp->pNP  )
     {   // Preparing to call Simplex method
         pmp->FitVar[4] = pa.p.AG;  // smoothing parameter init
         pmp->pRR1 = 0;
@@ -92,31 +93,23 @@ bool TProfil::AutoInitialApprox( )
         pmp->K2 = 0;
         pmp->PCI = 0;
 
-/*
-if( pa.p.PRD >= 7 )
-{                      // Dima 18/05/2002 test init load before simplex
-  if( multi->flCopy == true )
-  {
-//    std::cout << " P. 7 with simplex: ";
-//    multi->dyn__test( multi->GetPMcopy1() );
-  }
-  multi->dyn_new_test( multi->GetPMcopy1() );
-}
-*/
   // simplex method is called here
         SimplexInitialApproximation( );
+
 //  STEPWISE (0) - stop point for examining results from simplex IA
 #ifndef IPMGEMPLUGIN
 STEP_POINT( "End Simplex" );
 #endif
+
         // no multi-component phases?
         if( !pmp->FIs )
             return true; // goto OVER; // solved !
+
         for( i=0; i<pmp->L; i++ )
         {
 //            if( pmp->Y[i] <= /* LOWESTDC_ */ pmp->lowPosNum )
-                //	       pmp->Y[i] = LOWESTDC_ / 10.;
-                //         pmp->Y[i] = pa.p.DFYaq;
+//	       pmp->Y[i] = LOWESTDC_ / 10.;
+//            pmp->Y[i] = pa.p.DFYaq;
 //            if( pmp->Y[i] < pa.p.DFYc * sfactor ) // 24.02.03
 //            {
                 // Trace DC quantity into zeros!
@@ -171,16 +164,7 @@ STEP_POINT( "End Simplex" );
         double LnGam, FitVar3;
         /*    pmp->IT *= pa.p.PLLG; */
 
-/*if( pa.p.PRD >= 8 )
-{                      // Dima 18/05/2002 test init load before simplex
-  if( multi->flCopy == true )
-  {
-//    std::cout << " Point 8: ";
-    multi->dyn__test( multi->GetPMcopy1() );
-  }
-  multi->dyn_new_test( multi->GetPMcopy1() );
-}
-*/        FitVar3 = pmp->FitVar[3];
+        FitVar3 = pmp->FitVar[3];
         pmp->FitVar[3] = 1.0;
         TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
         for( j=0; j< pmp->L; j++ )
@@ -260,33 +244,13 @@ STEP_POINT( "End Simplex" );
               } // i
 //           }
         }
-/*if( pa.p.PRD >= 7 )
-{                      // Dima 18/05/2002 test init load before simplex
-  if( multi->flCopy == true )
-  {
-//    std::cout << " P.7  no simplex: ";
-    multi->dyn__test( multi->GetPMcopy1() );
-  }
-  multi->dyn_new_test( multi->GetPMcopy1() );
-}
-*/    }
+    }  // else
     pmp->MK = 1;
-    // Sveta 18/01/1999 test init load
-    /*   if( ((TMulti *)aSubMod[MD_MULTI])->flCopy == true )
-         ((TMulti *)aSubMod[MD_MULTI])->dyn__test(
-                ((TMulti *)aSubMod[MD_MULTI])->copy1);
-      ((TMulti *)aSubMod[MD_MULTI])->dyn_new_test(
-                ((TMulti *)aSubMod[MD_MULTI])->copy1);
-    */
 // STEPWISE (1) - stop point to see IA from old solution or raised simplex
 #ifndef IPMGEMPLUGIN
 STEP_POINT("Before FIA");
 #endif
     return false;
-    //   OVER: /* calc finished */
-    //   if( wn[W_EQCALC].status )
-    //     aSubMod[MD_EQCALC]->ModUpdate("EQ_done  EQilibrium STATe: computed OK");
-    //   return true;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -297,23 +261,16 @@ STEP_POINT("Before FIA");
 //          false  if good result could not be obtained
 //
 
-bool TProfil::MultiCalcMain( int& /*pll*/, double& /*FXold*/ )
+void TProfil::MultiCalcMain( int& /*pll*/, double& /*FXold*/ )
 {
     int i, j, RepeatSel=0, eRet;
     pmp->W1=0;
 
     if( pmp->pULR && pmp->PLIM )
-        if( Set_DC_limits( DC_LIM_INIT ))
-#ifndef IPMGEMPLUGIN
-            if( !vfQuestion(window(), "IPM: ",
-                            "Inconsistent metastability restrictions to DC or phases.\n"
-                            "Continue calculation (take those restrictions as trivial)?" ))
-#endif
-                Error("IPM error: " ,
-                      "Inconsistent metastability restrictions to DC or phases.");
+        Set_DC_limits( DC_LIM_INIT );
 
     /* test insert in valid area */
-    mEFD:
+mEFD:
 
      if(pmp->PZ && pmp->W1)
      { for( i=0; i<pmp->L; i++ )
@@ -322,86 +279,75 @@ bool TProfil::MultiCalcMain( int& /*pll*/, double& /*FXold*/ )
      }
 
     eRet = EnterFeasibleDomain( );
-    if( eRet )
-        goto ERET_THINK;
+    // if( eRet ) goto ERET_THINK;
+
+    switch( eRet )
+    {
+     case 0:  // OK
+              break;
+     case 2:  // max iteration exceeded in EnterFeasibleDomain
+                 Error("EFD error: " ,
+     "Prescribed precision of mass balance could not be reached because vector b or\n"
+     "DC stoichiometries or standard-state thermodynamic data are inconsistent.\n");
+              break;
+     case 1: // degeneration in R matrix  for EnterFeasibleDomain
+           if( pmp->DHBM<1e-5 )
+            {
+               pmp->DHBM *= 10.;
+               goto mEFD;
+            }
+           else
+                 Error("EFD error: " ,
+          "Degeneration in R matrix (fault in the linearized system solver).\n"
+          "Invalid initial approximation - further IPM calculations are not possible");
+           break;
+    }
 
 // STEPWISE (2)  - stop point to examine output from EFD()
 #ifndef IPMGEMPLUGIN
-#ifdef Use_mt_mode
-
 STEP_POINT("After FIA");
-
-#endif
 #endif
 
-
-   /* minimization  IPM */
-    eRet = InteriorPointsMethod( );
+   // call of main minimization IPM
+       eRet = InteriorPointsMethod( );
 
 // STEPWISE (3)  - stop point to examine output from IPM()
 #ifndef IPMGEMPLUGIN
 STEP_POINT("After IPM");
 #endif
-ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if( eRet )
-    {   if(eRet==2 )
-        { if( pmp->DX<1e-3 )
-            {
-               pmp->DX *= 10.;
-               goto mEFD;
-            }
-          else
-#ifndef IPMGEMPLUGIN
-          if( vfQuestion(window(), "IPM:",
-            "For a given IPM convergence criterion, vector b is not balanced,\n"
-            "or DC standard-state thermodynamic data inconsistent. \n"
-            "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?" ))
-            {  pVisor->Update( true );
-                return true;
-            }
-#else
-          std::cout << "For a given IPM convergence criterion, vector b is not balanced,\n"
-           << "or DC standard-state thermodynamic data inconsistent. \n"
-//           <<  "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?"
-           << endl;
 
-// Sveta 05/12/2005
-          Error("IPM error: " ,
-           "For a given IPM convergence criterion, vector b is not balanced.");
-
-#endif
-
-        }
-     /*   if( !pmp->MK  )
-            return true; //goto OVER;
-        if( pmp->pNP > 0 ) // error of initial approximation
-        {
-            pmp->pNP = 0;
-            pmp->PD = pa.p.PD;
-            goto AGAIN;
-        }  */
-        else
-        { if( pmp->DHBM<1e-5 )
+// ERET_THINK:  // Diagnostics of IPM results
+   switch( eRet )
+   {
+     case 0:  // OK
+              break;
+     case 2:  // max iteration exceeded in InteriorPointsMethod
+               if( pmp->DX<1e-3 )
+               {
+                   pmp->DX *= 10.;
+                   goto mEFD;
+                }
+               else
+                 Error("IPM error: " ,
+     "Given IPM convergence criterion could not be reached;\n Perhaps, vector b is not balanced,\n"
+     "or DC stoichiometries or standard-state thermodynamic data are inconsistent. \n");
+     case 1: // degeneration in R matrix  for InteriorPointsMethod
+           if( pmp->DHBM<1e-5 )
             {
                pmp->DHBM *= 10.;
                goto mEFD;
             }
-          else
-#ifndef IPMGEMPLUGIN
-            if( !vfQuestion(window(),  "Invalid initial approximation for IPM:",
-                             "Proceed with automatic SIMPLEX approximation ?" ))
-#endif
-            Error("IPM error ", "Invalid initial approximation for IPM.");
-        }
+           else
+               Error("IPM error ",
+        "Degeneration in R matrix (fault in the linearized system solver).\n"
+        "No valid IPM solution could be obtained. Probably, vector b is not balanced,\n"
+        "or DC stoichiometries or standard-state thermodynamic data are inconsistent,\n"
+        "or some relevant phases or DC are missing, or some kinetic constraints are too stiff.\n"
+        );
+          break;
+   }
 
-      /*  else
-        {
-            pmp->DX *= 10.;
-            pmp->pNP = 0;
-            pmp->PD = pa.p.PD;
-            goto AGAIN;
-        }  */
-    }
+//
     pmp->FI1 = 0;
     pmp->FI1s = 0;
     for( i=0; i<pmp->FI; i++ )
@@ -411,14 +357,15 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if( i < pmp->FIs )
                 pmp->FI1s++;
         }
-    if( !pa.p.PC )    //  ???
+
+    if( !pa.p.PC )    //
         if( pmp->PD < 2 )
-            return true; //break;
+            return; // true; //break;
         else
         {
-           // pmp->MK = 1;
             goto ITDTEST;
         }
+
     /* call Selekt2() */
    PhaseSelect();
    if( pa.p.PC == 2 )
@@ -430,25 +377,24 @@ ERET_THINK:  // Diagnostics of IPM results !!!!!!!!!!!!!!!!!!!!!!!!!!!!
          goto mEFD;
        }
      else
-         std::cout<< "Warning PhaseSelect: Insertion of phases was incomplete!"<< endl;
+       Error( "Warning PhaseSelect:"," Insertion of phases was incomplete!");
     //   if( !vfQuestion(window(), "PhaseSelect : warning",
     //        "Insert phase cannot be reached. Continue?" ))
     //         return false;
 
    MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
+
 // STEPWISE (4) Stop point after PhaseSelect()
 #ifndef IPMGEMPLUGIN
-#ifdef Use_mt_mode
-
 STEP_POINT("PhaseSelect");
+pVisor->Update( false );
+#endif
 
-#endif
-   pVisor->Update( false );
-#endif
    if(pmp->PZ && !pmp->W1)
     { pmp->W1++;           // IPM-2 precision algorithm - 1st run
       goto mEFD;
     }
+
    if(pmp->PZ && pmp->W1 && pmp->W1 <  pa.p.DW )
     for(i=0;i<pmp->N-pmp->E;i++)
      if( fabs(pmp->C[i]) > pmp->DHBM // * pa.p.GAS
@@ -462,63 +408,32 @@ STEP_POINT("PhaseSelect");
        { gstring  buf,buf1;
          vstr pl(5);
          int jj=0;
-          for( j=0; j<pmp->N-pmp->E; j++ )
+         for( j=0; j<pmp->N-pmp->E; j++ )
           //  if( fabs(pmp->C[j]) > pmp->DHBM  || fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
             if( fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
             { sprintf( pl, " %-2.2s  ", pmp->SB[j] );
               buf1 +=pl;
               jj=1;
             }
-           if(!jj)
-               goto ITDTEST;
+         if( jj )
+         {
            buf = "Prescribed balance precision cannot be reached\n for independent components: ";
            buf += buf1;
-        //   buf += "Continue?";
-        //  if( !vfQuestion(window(), "IPM : warning", buf.c_str() ))
-        //      break;
-          fstream f_log("ipmlog.txt", ios::out|ios::app );
-          f_log << buf.c_str()<< endl;
-          f_log.close();
-// Sveta 05/12/2005
-          Error("IPM error: " ,
-                      "Prescribed balance precision cannot be reached.");
-//
-//          goto ITDTEST;
-       }
+//           fstream f_log("ipmlog.txt", ios::out|ios::app );
+//           f_log << buf.c_str()<< endl;
+//           f_log.close();
+           Error("IPM error: ", buf.c_str() );
+          }
+          else
+            Error("IPM error: " , "Good result could not be obtained" );
 
-ITDTEST: /* test flag modes */
-//   if( pa.p.PC == 2 )
-//       XmaxSAT_IPM2_Reset();  // Reset upper limits for surface species
- /*   if( !pmp->MK )
-    {  // insert or deleted phase
-        FXold = pmp->FX;
-        goto RESET_GT;
-    }
-    if( pa.p.DK != pmp->DX && !pll )
-    { // bad convergence - how to improve ?  ???????????????????????
-        if( pmp->PD <= 1 )
-        {
-            pmp->MK = 0;
-            pll=1;
-            FXold = pmp->FX;
-            goto RESET_GT;
         }
-    }
-    if( pmp->PD == 2 )  // test of total G(X) value
-        if( fabs( FXold - pmp->FX ) > tc_ISdelta )
-        {
-            pmp->MK=0;
-            FXold = pmp->FX;
-            goto RESET_GT;
-        }  */
-    /* if( pmp->PD == 3 ) */
-    /* pmp->MK = 0 */;
-// RESET_GT:  ??????????????????????????????????
-    memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
-    return false;
 
-// AGAIN: Call simplex if necessary
-//   return AutoInitialApprox();
+ITDTEST:
+    memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
+//    Error("IPM error: " , "Good result could not be obtained" );
+    // return false;
+
 }
 
 //Calc equstat method IPM (iterations)
@@ -526,14 +441,7 @@ void TProfil::MultiCalcIterations()
 {
     pll=0;
     FXold=0.0;
- /*   do
-    { // cycle of iterations Selekt
-        // Stop calculations here Sveta
-        if( MultiCalcMain( pll, FXold ) == true )
-            break;
-        if( fStopCalc == true )	// 'Cancel' button
-            return;	// should we do some cleanup?
-    } while( !pmp->MK );  */
+
     MultiCalcMain( pll, FXold );
 
     //calc demo data
@@ -542,8 +450,6 @@ void TProfil::MultiCalcIterations()
     GasParcP();
 
     /* calc finished */
-    //   if( wn[W_EQCALC].status )
-    //  aMod[MD_EQCALC]->ModUpdate("EQ_done  EQilibrium STATe: computed OK");
 }
 
 // End of file ms_muload.cpp
@@ -755,10 +661,7 @@ double TProfil::DualChemPot( double U[], float AL[], int N )
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* �� �娮� 䠧�- �⢮�             17.03.96
-*  N - - ᨬ�, M - ᨬ� ⮢.
-*  X - � ��- ᨬ� ⮢.
-*  BF -  �⠢ 䠧�
+/* calculate bulk stoichiometry of a multicomponent phase 
 */
 void TProfil::phase_bcs( int N, int M, float *A, double X[], double BF[] )
 {
@@ -783,14 +686,14 @@ void TProfil::phase_bcs( int N, int M, float *A, double X[], double BF[] )
 //  concentration units
 //  Needs much more work and elaboration!
 //
-int TProfil::Set_DC_limits( int Mode )
+void TProfil::Set_DC_limits( int Mode )
 {
     double XFL, XFU, XFS=0., XFM, MWXW, MXV, XL, XU;
-    int jb, je, j,k,JJ,KK, MpL, iRet=0;
+    int jb, je, j,k, MpL;
     vstr tbuf(80);
 
     if( !pmp->PLIM )
-        return iRet;  /* no limits */
+        return;  /* no limits */
 // ???????????????????????????????????????
     ConCalc( pmp->X, pmp->XF, pmp->XFA );
 
@@ -904,32 +807,21 @@ int TProfil::Set_DC_limits( int Mode )
             if( XL > 1e6 ) XL = 1e6;
             if( XU > XFU )
             {
-                iRet = 1;
-                JJ = j;
-                KK = k;
+ //               JJ = j;
+//                KK = k;
                 sprintf( tbuf, "Inconsistent upper limits j=%d k=%d XU=%g XFU=%g",
-                         JJ, KK, XU, XFU );
-#ifndef IPMGEMPLUGIN
-                vfMessage(window(), "Set_DC_limits",tbuf.p );
-#else
-                cout << tbuf.p << endl;
-#endif
-
-                XU = XFU; // - pmp->lowPosNum;
+                         j, k, XU, XFU );
+                Error( "Set_DC_limits",tbuf.p );
+//                XU = XFU; // - pmp->lowPosNum;
             }
             if( XL < XFL )
             {
-                iRet = 1;
-                JJ = j;
-                KK = k;
+//                JJ = j;
+//                KK = k;
                 sprintf( tbuf, "Inconsistent lower limits j=%d k=%d XL=%g XFL=%g",
-                         JJ, KK, XL, XFL );
-#ifndef IPMGEMPLUGIN
-                vfMessage(window(), "Set_DC_limits",tbuf.p );
-#else
-                cout << tbuf.p << endl;
-#endif
-                XL = XFL; // - pmp->lowPosNum;
+                         j, k, XL, XFL );
+                Error( "Set_DC_limits",tbuf.p );
+//                XL = XFL; // - pmp->lowPosNum;
             }
             pmp->DUL[j]=XU;
             pmp->DLL[j]=XL;
@@ -938,7 +830,6 @@ NEXT_PHASE:
         jb = je;
 
     }  /* k */
-    return iRet;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1045,18 +936,10 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
         if( Yf >= 1e6 )
         {                 // error - will result in zerodivide!
            gstring pbuf(pmp->SF[k],0,20);
-//cout << "Error in IPM PrimeChemicalPotentials(): IT = " << pmp->IT << endl;
-//cout << "  Phase " << pbuf.c_str() << " k= " << k << " Yf= " << Yf;
-//cout << " YFa= " << pmp->YFk << " Yf fixed to " << pmp->YFk << endl;
-//           for( ; j<i; j++ )
-//           {
-//             if( Y[j] > pmp->YFk )
-//             {
-//               sprintf( pbuf, "%16s", pmp->SM[j] ); pbuf[MAXDCNAME] = 0;
-// cout << "    j= " << j << " " << pbuf << "  Y= " << Y[j] << endl;
-//             }
-//           }
-           Yf = pmp->YFk;
+           char buf[200];
+           sprintf( buf, "Phase %s  Yf= ", pbuf.c_str(), Yf );
+           Error( "Error in IPM PrimeChemicalPotentials():", buf);
+//           Yf = pmp->YFk;
         }
         if( pmp->YFk > pmp->lowPosNum*10. )
         {

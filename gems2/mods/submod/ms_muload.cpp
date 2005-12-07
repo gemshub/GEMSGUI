@@ -1033,14 +1033,7 @@ void TProfil::MultiCalcInit( const char *key )
 
     // recalc restrictions for DC quantities
     if( pmp->pULR && pmp->PLIM )
-        if( Set_DC_limits(  DC_LIM_INIT ))
-        {
-            if( !vfQuestion(window(), GetName(),
-                            "Inconsistent metastability restrictions to DC or phases.\n"
-                            "Continue calculation (take those restrictions as trivial)?" ) )
-                Error("IPM error: ",
-                      "Inconsistent metastability restrictions to DC or phases.");
-        }
+         Set_DC_limits(  DC_LIM_INIT );
 
     // realloc memory for  R and R1
     pmp->R = (double *)aObj[o_w_r].Alloc( pmp->N, pmp->N+1, D_ );
@@ -1059,14 +1052,6 @@ void TProfil::MultiCalcInit( const char *key )
         pmp->Falps[k] = pmp->Falp[k];
         memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
     }
-
-   // Dima 18/05/2002 test init load before simplex
-//   if( multi->flCopy == true )
-//   {
-//     cout << " Point 6: ";
-//     multi->dyn__test( multi->GetPMcopy1() );
-//   }
-//   multi->dyn_new_test( multi->GetPMcopy1() );
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -1101,13 +1086,8 @@ void TProfil::EqstatExpand( const char *key )
     }
     /* recalc kinetic restrictions for DC */
     if( pmp->pULR && pmp->PLIM )
-        if( Set_DC_limits( DC_LIM_INIT ))
-#ifndef IPMGEMPLUGIN
-            if( !vfQuestion(window(), "IPM:",
-                            "Inconsistent metastability restrictions to DC or phases.\n"
-                            "Continue calculation (take those restrictions as trivial)?") )
-#endif
-                Error( "IPM","Inconsistent metastability restrictions." );
+         Set_DC_limits( DC_LIM_INIT );
+
     TotalPhases( pmp->X, pmp->XF, pmp->XFA );
     for( j=0; j<pmp->L; j++ )
         pmp->Y[j] = pmp->X[j];

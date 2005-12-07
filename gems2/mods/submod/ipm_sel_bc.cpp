@@ -143,7 +143,7 @@ int TProfil::SquareRoots( int N, double *R, double *X, double *B )
     int I,J,K,P,Q,N1, iRet=0;
     double F,G/*, E*/;
     N1 = N + 1;
-    // ErrorIf( !B, "SquareRoots", "Error param B." );
+    ErrorIf( !B, "SquareRoots", "Error param B." );
     memset( B, 0, N*N1*sizeof(double));
     Q=-1;
 
@@ -399,6 +399,7 @@ S4: // No phases to insert or no distortions
 //
 // Returns: 0 - OK,
 //          1 - no convergence at specified precision DHB
+//          2  - used more than pa.p.DP iterations
 //
 #define  r(i,j) (*(R+(j)+(i)*N1))
 #define  a(j,i) (*(pmp->A+(i)+(j)*pmp->N))
@@ -425,25 +426,8 @@ int TProfil::EnterFeasibleDomain( )
     // calculation of total moles of phases
     TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
 
-    // if( wn[W_EQCALC].status )
-    // {
-    // load demo vector phases
-    //    PhaseListPress();
-    //    aSubMod[MD_EQCALC]->ModUpdate("Feasible Approx: iterations");
-    //    new_time = time( &old_time );
-    // }
-
     if( pmp->PLIM )
-        if( Set_DC_limits(  DC_LIM_INIT ) )
-        {
-#ifndef IPMGEMPLUGIN
-            if( !vfQuestion(window(), "EnterFeasibleDomain()",
-                            "Inconsistent DC limits. Continue?" ))
-                goto SINGULAR;
-#else
-        std::cout<< "EnterFeasibleDomain: Inconsistent DC limits"<< endl;
-#endif
-        }
+        Set_DC_limits(  DC_LIM_INIT );
 
     for(J=0;J<pmp->L;J++)
     {
@@ -465,6 +449,7 @@ int TProfil::EnterFeasibleDomain( )
             break;
         }
     }
+//----------------------------------------------------------------------------
 // BEGIN:
     for( IT1=0; IT1 < pa.p.DP; IT1++, pmp->IT++ )
     {  /* main cycle */
@@ -477,36 +462,37 @@ int TProfil::EnterFeasibleDomain( )
         N=pmp->NR;
         N1=N+1;
 
-  MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C);
+       MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C);
 
 #ifndef IPMGEMPLUGIN
   pVisor->Update( false );
 #endif
-  Z=pmp->N - pmp->E;
-  if(!pmp->W1)
-   for(I=0;I<Z;I++)
-   {
-     if(fabs(pmp->C[I])>DHB)
-     goto NEXT;
-   }
-   else
-   for(I=0;I<Z;I++)
-     if(fabs(pmp->C[I]) > DHB // * pa.p.GAS
-        || fabs(pmp->C[I]) > pmp->B[I] * pa.p.GAS)
-        goto NEXT;
-     pmp->IT -= IT1;
-//        for(I=0;I<pmp->NR;I++)
-//            if(fabs(pmp->C[I]) > DHB )
-//                goto NEXT;
-        goto DONE;
-NEXT:
-        R=pmp->R;
-        R1=pmp->R1;
-        ErrorIf(  !R || !R1, "EnterFeasibleDomain()", "Error alloc R or R1" );
-        memset( R, 0, N*N1*sizeof(double));
 
-        for(J=0;J<pmp->L;J++)
-        {
+       Z = pmp->N - pmp->E;
+       if(!pmp->W1)
+          for(I=0;I<Z;I++)
+          {  if(fabs(pmp->C[I])>DHB)
+               break;
+          }
+       else
+         for(I=0;I<Z;I++)
+           if(fabs(pmp->C[I]) > DHB // * pa.p.GAS
+               || fabs(pmp->C[I]) > pmp->B[I] * pa.p.GAS)
+                break;
+
+       if( I == Z ) // OK
+       {
+         pmp->IT -= IT1;
+         return iRet;       // OK
+       }
+
+       R=pmp->R;
+       R1=pmp->R1;
+       ErrorIf(  !R || !R1, "EnterFeasibleDomain()", "Error alloc R or R1" );
+       memset( R, 0, N*N1*sizeof(double));
+
+       for(J=0;J<pmp->L;J++)
+       {
             switch( pmp->RLC[J] )
             { // Calculation of weight multipliers
             case NO_LIM:
@@ -522,8 +508,9 @@ NEXT:
                      ? (pmp->Y[J]-pmp->DLL[J])*(pmp->Y[J]-pmp->DLL[J]):
                      (pmp->DUL[J]-pmp->Y[J])*(pmp->DUL[J]-pmp->Y[J]);
             }
-        }
-        for(Z=0;Z<N;Z++) // Assembling system of linear equations
+       }
+
+       for(Z=0;Z<N;Z++) // Assembling system of linear equations
             for(I=0;I<N;I++)
             {
                 r(Z,I) = 0.;
@@ -531,26 +518,32 @@ NEXT:
                     if( pmp->Y[J]>pmp->lowPosNum /*1E-19 */ )
                         r(Z,I) += a(J,I) * a(J,Z) * W[J];
             }
-        for(I=0;I<N;I++)
+
+       for(I=0;I<N;I++)
             r(I,N) = pmp->C[I];
 
         /* Solving system of linear equations */
-        sRet = SquareRoots( N, R, pmp->U, R1 );
+       sRet = SquareRoots( N, R, pmp->U, R1 );
 
-        if( sRet == 1 )
-            goto TRY_GORDAN;
-        goto SOLVED;
-TRY_GORDAN:
-        R1=pmp->R1;
-        ErrorIf(  !R1, "EnterFeasibleDomain()", "Lost allocation of R1" );
-        memcpy( R1, R, sizeof( double )*N*N1 );
-        sRet = Gordan( N, pa.p.DG, R1, pmp->U );
-        if( sRet == 1 )
-            //       goto TRY_RISLUR;
-            //   goto SOLVED;
-            // TRY_RISLUR:       Removed 12.10.00 KVC & DAK
-            goto SINGULAR;
-SOLVED:  // solution of linear matrix obtained
+       if( sRet == 1 )
+       {  R1=pmp->R1;
+          memcpy( R1, R, sizeof( double )*N*N1 );
+          sRet = Gordan( N, pa.p.DG, R1, pmp->U );
+        }
+        if( sRet == 1 )  // error no solution
+          break;
+/*        {
+#ifndef IPMGEMPLUGIN
+#ifndef Use_mt_mode
+    pVisor->Update(false);  // "Feasible Approx: error"
+#endif
+#endif
+         pmp->Ec=1;
+         iRet = 1;
+         return iRet;   // no solution
+       }
+*/
+// SOLVED: solution of linear matrix obtained
         PCI=0.;  // calc of MU values and Dikin criterion
         for(J=0;J<pmp->L;J++)
         {
@@ -576,7 +569,7 @@ SOLVED:  // solution of linear matrix obtained
                 {
                     Z=J;
                     LM=(-1)*(pmp->Y[Z]-pmp->DLL[Z])/MU[Z];
-                    goto BB6;
+                    break; //goto BB6;
                 }
             }
             if( pmp->RLC[J]==UPPER_LIM || pmp->RLC[J]==BOTH_LIM )
@@ -585,13 +578,17 @@ SOLVED:  // solution of linear matrix obtained
                 {
                     Z=J;
                     LM=(pmp->DUL[Z]-pmp->Y[Z])/MU[Z];
-                    goto BB6;
+                    break;  //goto BB6;
                 }
             }
         }
-        LM=PCI;
-        goto BB7;
-BB6:
+
+      if( J == pmp->L )
+      {
+          LM=PCI;   //goto BB7;
+      }
+      else       //BB6:
+      {
         for(J=Z+1;J<pmp->L;J++)
         {
             if( pmp->RLC[J]==NO_LIM ||
@@ -615,71 +612,50 @@ BB6:
             }
         }
         LM *= .95;     // Smoothing of final lambda ????
-BB7:
+      }
+// BB7:
         if( LM > 1)
             LM = 1;
-        //
+
         // calculation of new prime solution approximation
-        for(J=0;J<pmp->L;J++)
+      for(J=0;J<pmp->L;J++)
             pmp->Y[J] += LM * MU[J];
+
 // STEPWISE (5) Stop point at end of iteration of FIA()
 #ifndef IPMGEMPLUGIN
 STEP_POINT("FIA Iteration");
 #endif
+
         // calculation of new total moles of phases
         // added by DAK in 1995
         // TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
         // if( pmp->PLIM )
-        //   if( Set_DC_limits(  DC_LIM_INIT ) )
-        //   {
-        //     if( !vfQuestion(window(), "EnterFeasibleDomain():",
-        //        " Inconsistent DC limits. Continue?"  ))
-        //       goto SINGULAR;
-        //   }
+        //   Set_DC_limits(  DC_LIM_INIT );
+
         if( LM < 1E-5 )
         { // Too small step size - too slow convergence !
             pmp->Ec=1;
             Error( "IPM_StepSizeError",
                  "Too small step size - too slow convergence");
-            goto KN;
         }
 
-        //   if( wn[W_EQCALC].status )
-        //   if( time( &new_time ) - old_time > 1L )
-        //   {
-        //  load demo vector phases
-        //  PhaseListPress();
-        //  aSubMod[MD_EQCALC]->ModUpdate("Feasible Approx: iterations");
-        //  time( &old_time );
-        //   }
-        //
-        //   if( pmp->pNP && IT1 >= pa.p.DP ) break;  // is this necessary ?
-        //
+//   if( pmp->pNP && IT1 >= pa.p.DP ) break;  // is this necessary ?
+
     }  /* End loop on IT1 */
+
+//----------------------------------------------------------------------------
     //  Prescribed mass balance precision cannot be reached
     //  Take a look at vector b or values of DHB and DS
 
-SINGULAR:
-    // wn[W_EQCALC].status = 1;
 #ifndef IPMGEMPLUGIN
-#ifndef Use_mt_mode
     pVisor->Update(false);  // "Feasible Approx: error"
 #endif
-#endif
-    pmp->Ec=1;
-    iRet = 1;
-    goto DONE;
-
-KN:  /* if(pmp->DHBM<1e-6)
-      {
-        pmp->DHBM *= 10;
-        pmp->Ec=iRet=0;
-        goto BEGIN;
-      }
-      Error("EnterFeasibleDomain error: ",
-            "Prescribed mass balance precision cannot be reached.");  */
-DONE:
-    return iRet;
+         pmp->Ec=1;
+         if( IT1 == pa.p.DP )
+            iRet = 2;
+         else
+            iRet = 1;
+         return iRet;   // no solution
 }
 #undef a
 #undef r
@@ -748,7 +724,6 @@ int TProfil::InteriorPointsIteration( )
 {
     int N, N1, i,j, z, sRet;
     double *F,*W,*R, *R1,  Mu;
-    gstring Cpoint;
 
     N = pmp->NR;
     N1=N+1;
@@ -756,8 +731,6 @@ int TProfil::InteriorPointsIteration( )
     R1=pmp->R1;
     F=pmp->F;
     W=pmp->W;
-    // ErrorIf( !R || !R1 || !F || !W, "InteriorPointsIteration",
-    //  "Error alloc R or R1 or F or W" );
     memset( F, 0, pmp->L*sizeof(double));
     memset( W, 0, pmp->L*sizeof(double));
 
@@ -780,15 +753,13 @@ int TProfil::InteriorPointsIteration( )
                   (pmp->Y[j]-pmp->DLL[j]): (pmp->DUL[j]-pmp->Y[j]);
             break;    // added to bugfix by DAK 22.08.01 PSI
         default: // big error
-            Error( "InteriorPointsIteration", "Error in code pmp->RLC[j]!!!!" );
+            Error( "InteriorPointsIteration", "Error in code pmp->RLC[j]" );
         }
         if( W[j] < 0. ) W[j]=0.;  // Weight multipliers cannot be negative
     }
 
     // making R matrix of IPM linear equations
-
     memset( R, 0, N*N1*sizeof(double));
-
     for( z=0; z<N; z++)
         for( i=0; i<N; i++ )
         { // r(z,i) = 0.;
@@ -802,29 +773,19 @@ int TProfil::InteriorPointsIteration( )
             if( pmp->Y[j] > pmp->lowPosNum /* 1E-19 */ )
                 r(i,N) += F[j] * a(j,i) * W[j];
     }
-    // if( wn[W_WORK1].status )
-    // pVisor->Update(false); "InPoint: R matrix"  ???????
 
     // Solving matrix R of linear equations
     sRet = SquareRoots( N, R, pmp->U, R1 );
-    if( sRet == 1 )
+
+//TRY_GORDAN:
+/*    if( sRet == 1 )
     {
-        pmp->Ec=1;
-        return 1;
+        R1 = pmp->R1;
+        memcpy( R1, R, sizeof(double)*N*N1 );
+        sRet = Gordan( N, pa.p.DG, R1, pmp->U );
     }
-// 05/12/2005
-//        goto TRY_GORDAN;
-    Cpoint = "SquareRoots(): U vector";
-    goto SOLVED;
-TRY_GORDAN:
-    R1 = pmp->R1;
-    ErrorIf( !R1 , "InteriorPointsIteration","Error alloc R1." );
-    memcpy( R1, R, sizeof(double)*N*N1 );
+*/  // 05/12/2005 DK
 
-    // if( wn[W_WORK1].status )
-    //  pVisor->Update(false);  "Jordan(): U vector"
-
-    sRet = Gordan( N, pa.p.DG, R1, pmp->U );
     if( sRet == 1 )
     {
 #ifndef IPMGEMPLUGIN
@@ -833,9 +794,8 @@ TRY_GORDAN:
         pmp->Ec=1;
         return 1;
     }
-    Cpoint = "Jordan(): U vector";
 
-SOLVED:  // got U vector - calculating criteria Karpov and Dikin
+//SOLVED:  // got U vector - calculating criteria Karpov and Dikin
     f_alpha( );
     // calculation of vector MU - direction of descent
     pmp->PCI=0.;
@@ -857,28 +817,26 @@ SOLVED:  // got U vector - calculating criteria Karpov and Dikin
 //  Method algorithm (see Karpov et al., 1997, p. 785-786)
 //  GEM IPM
 // Returns: 0, if converged;
-//          1, in case of degeneration, divergence or
+//          1, in case of degeneration
+//          2, (more than max iteration)  divergence or
 //             user interruption
 //
 int TProfil::InteriorPointsMethod( )
 {
     int /*INO,*/IT1,I,J,JJ,Z,iRet;
     double LM=0.,LM1,FX1;
-//    time_t old_time, new_time;
 
     if( pmp->FIs )
         for( J=0; J<pmp->Ls; J++ )
             pmp->lnGmo[J] = pmp->lnGam[J];
-
-   //  pmp->W1=0;  pmp->IC=0.; INO=0;
 
     for(J=0;J<pmp->N;J++)
     {
         pmp->U[J]=0.;
         pmp->C[J]=0.;
     }
-    pmp->Ec=0;
 
+    pmp->Ec=0;
     pmp->FX=GX( LM  );  // calculation of G(x)
 
 //    for(Z=0; Z<pmp->FI; Z++)
@@ -886,21 +844,10 @@ int TProfil::InteriorPointsMethod( )
     if( pmp->FIs ) // multicomponent phases present
         for(Z=0; Z<pmp->FIs; Z++)
             pmp->YFA[Z]=pmp->XFA[Z];
-
-    //  if( wn[W_EQCALC].status )
-    //  {
-    //     aSubMod[MD_EQCALC]->ModUpdate("Entering IPM EqCalc()");
-    //     new_time = time( &old_time );
-    // IFTshow( IFV_HELPMSG,
-    // "Start of iterations of Gibbs energy minimization by IPM algorithm" );
-    //  }
-
+//----------------------------------------------------------------------------
+//  main cycle of IPM iterations
     for( IT1 = 0; IT1 < pa.p.IIM; IT1++, pmp->IT++ )
-    {  /* main cycle of IPM iterations */
-       // if(pmp->W1)
-  //  if( IT1 > 22 )
-  //   multi->to_text_file();  //test for calck 17/06/02
-
+    {
         pmp->NR=pmp->N;
         if( pmp->LO ) // water-solvent is present
         {
@@ -922,7 +869,7 @@ int TProfil::InteriorPointsMethod( )
                 {
                     Z=J;
                     LM=(-1)*(pmp->Y[Z]-pmp->DLL[Z])/pmp->MU[Z];
-                    goto IN5;
+                     break; //goto IN5;
                 }
             }
             if( pmp->RLC[J]==UPPER_LIM || pmp->RLC[J]==BOTH_LIM )
@@ -931,16 +878,18 @@ int TProfil::InteriorPointsMethod( )
                 {
                     Z=J;
                     LM=(pmp->DUL[Z]-pmp->Y[Z])/pmp->MU[Z];
-                    goto IN5;
+                    break; //goto IN5;
                 }
             }
         }
-        LM=1./sqrt(pmp->PCI);
-        goto IN6;
-
-IN5:
-        for(J=Z+1;J<pmp->L;J++)
+       if( J == pmp->L )
+       {
+         LM=1./sqrt(pmp->PCI); // goto IN6;
+       }
+       else  //IN5:
         {
+          for(J=Z+1;J<pmp->L;J++)
+          {
             if( pmp->RLC[J]==NO_LIM ||
                     pmp->RLC[J]==LOWER_LIM || pmp->RLC[J]==BOTH_LIM )
             {
@@ -960,21 +909,16 @@ IN5:
                         LM=LM1;
                 }
             }
+         }
         }
-IN6:
+//IN6:
         LM1=LMD( LM ); // Finding optimal value of descent step
         FX1=GX( LM1 ); // New G(X) after the descent step
         pmp->PCI=sqrt(pmp->PCI); // Dikin criterion
 
         //  recalc min and max restrictions to DC */
         //  if( pmp->PLIM )
-        //    if( Set_DC_limits(  DC_LIM_CURRENT ))
-        //    {
-        //      if( !vfQuestion(window(), "IPM:",
-        //      " Inconsistent metastability restrictions to DC or phases.\n"
-        //      "Continue calculation (take those restrictions as trivial)?" ))
-        //        goto FAIL_EQ;
-        //    }
+        //    Set_DC_limits(  DC_LIM_CURRENT );
 
         if( IT1 > 3 && FX1 - pmp->FX > 10  && ( IT1 > pa.p.IIM/2 ||
                                                 pmp->PD==3 ) )  // ????????
@@ -985,23 +929,11 @@ IN6:
         }
         MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C );
 
-        //    if( wn[W_EQCALC].status )
-        //    {
 #ifndef IPMGEMPLUGIN
-
 #ifndef Use_mt_mode
     pVisor->Update(false);
 #endif
-
 #endif
-        //      if( time( &new_time ) - old_time >= (long)pa.p.DT )
-        //      {
-        /* load demo vector phases */
-        //    PhaseListPress();
-        //    aSubMod[MD_EQCALC]->ModUpdate("PM_ipmi   Iteration of IPM EqCalc()");
-        //    time( &old_time );
-        //      }
-        //    }
         pmp->FX=FX1;
 
         // main iteration done 
@@ -1031,7 +963,8 @@ IN6:
                     pmp->lnGam[I] = 0.;
                 }
             }
-            else            {
+            else
+            {
                 pmp->YF[Z]=pmp->XF[Z];
                 if( pmp->FIs && Z<pmp->FIs )
                     pmp->YFA[Z]=pmp->XFA[Z];
@@ -1039,29 +972,24 @@ IN6:
                     pmp->Y[I]=pmp->X[I];
             }
             JJ+=pmp->L1[Z];
-        };
+        }
+
 // STEPWISE (6)  Stop point at IPM() main iteration
 #ifndef IPMGEMPLUGIN
 STEP_POINT( "IPM Iteration" );
 #endif
         if( pmp->PCI < pmp->DX )  // Dikin criterion satisfied
-            goto IN7;
+            break; //goto IN7;
     } // end of main IPM cycle
-// FAIL_EQ:
-/*    if( vfQuestion(window(), "IPM:",
-        "For a given IPM convergence criterion, vector b is not balanced,\n"
-        "or DC standard-state thermodynamic data inconsistent. \n"
-        "Browse debug data screen forms (Y) Skip to abnormal exit from IPM (N)?" ))
-    {
-        //    wn[W_EQCALC].status = 1;
-        ///   aSubMod[MD_EQCALC]->Show("Imprecise result");
-        pVisor->Update( true );
-    }  */
 
-    return 2; // IT>500
+//----------------------------------------------------------------------------
 
-IN7: // PhaseListPress();
-    // Final calculation of activity coefficients
+  if( IT1 >= pa.p.IIM)
+   return 2; // IT>500
+
+//IN7: // PhaseListPress();
+
+ // Final calculation of activity coefficients
  //   for( I=0; I<pmp->L; I++ )
  //       pmp->X[I]=pmp->Y[I];
      TotalPhases( pmp->X, pmp->XF, pmp->XFA );
@@ -1069,19 +997,20 @@ IN7: // PhaseListPress();
  //           GammaCalc( LINK_UX_MODE );
     if(pmp->PZ && pmp->W1)
       Mol_u( pmp->Y, pmp->X, pmp->XF, pmp->XFA );
-//    for( I=0; I<pmp->L; I++ )  calculated but not used! KD 27.10.2004
-//       pmp->D[I]=pmp->Y[I]-pmp->X[I];
+ //    for( I=0; I<pmp->L; I++ )  calculated but not used! KD 27.10.2004
+ //       pmp->D[I]=pmp->Y[I]-pmp->X[I];
     if( pmp->PD==1 || pmp->PD == 2  /*|| pmp->PD == 3*/  )
         GammaCalc( LINK_UX_MODE);
-    else ConCalc( pmp->X, pmp->XF, pmp->XFA );
+     else
+        ConCalc( pmp->X, pmp->XF, pmp->XFA );
     MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
-    //  if( wn[W_EQCALC].status )
-    //    aSubMod[MD_EQCALC]->ModUpdate("PM_ipms   EqCalc() converged");
-#ifndef IPMGEMPLUGIN
+
+ #ifndef IPMGEMPLUGIN
  #ifndef Use_mt_mode
     pVisor->Update( false );
  #endif
 #endif
+
     return 0;
 }
 

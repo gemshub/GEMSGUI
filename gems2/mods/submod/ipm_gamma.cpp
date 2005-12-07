@@ -169,7 +169,7 @@ void TProfil::ConCalcDC( double X[], double XF[], double XFA[],
         pmp->Wx[j] = X[j]/XF[k];
         if( pmp->Wx[j] > pmp->lowPosNum )
             pmp->VL[j] = log( pmp->Wx[j] );
-        else pmp->VL[j] = log( pmp->lowPosNum );   // debugging 29.11.05 KD 
+        else pmp->VL[j] = log( pmp->lowPosNum );   // debugging 29.11.05 KD
         pmp->Y_la[j] = 0.0;
         switch( pmp->DCC[j] ) /* choice of expressions */
         {
@@ -797,7 +797,7 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
 
         /* Sveta: workaround because of problems with log argument */
         f3 =  sqrt( 1.+Sig*Sig/(4.*A*A) ) - Sig/(2.*A);
-std::cout<< f1  << ' ' << f3 << endl;
+        //std::cout<< f1  << ' ' << f3 << endl;
         if( f3 < 1 )
         {
             f1 = exp( -3. * F2RT );
@@ -2034,7 +2034,6 @@ TProfil::DebyeHueckel3Hel( int jb, int je, int jpb, int /*jdb*/, int /* k */ )
 //    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
     sqI = sqrt( I );
 
-//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
     if( fabs(A) < 1e-9 )
     {
@@ -2107,7 +2106,6 @@ TProfil::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
     molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
     sqI = sqrt( I );
 
-//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
     if( fabs(A) < 1e-9 )
     {
@@ -2178,7 +2176,6 @@ TProfil::DebyeHueckel1LL( int jb, int je, /* int jpb, int jdb, */ int /* k */ )
 //    A = pmp->PMc[jpb+0];
     sqI = sqrt( I );
 
-//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
 //    if( fabs(A) < 1e-9 )
         A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
@@ -2229,7 +2226,6 @@ void TProfil::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
     molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
     sqI = sqrt( I );
 
-//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
     if( fabs(A) < 1e-9 )
     {
@@ -2310,7 +2306,6 @@ void TProfil::Davies03temp( int jb, int je, /* int jpb, int jdb, */ int /* k */ 
     T=pmp->Tc;
     sqI = sqrt( I );
 //    if( fabs(A) < 1e-9 )
-//Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
     A = 1.82483e6 * sqrt( tpp->RoW ) / pow( T*tpp->EpsW, 1.5 );
 #else
@@ -2352,8 +2347,10 @@ TProfil::ChurakovFluid( int jb, int je, int /* jpb */, int jdb, int k )
         pmp->Pc, pmp->Tc );
     if (ro <= 0. )
     {
-//       cout << "\nCGFluid() error: ro= " << ro << endl;  // error message!
-       return;
+      free( FugCoefs );
+      char buf[150];
+      sprintf(buf, "CGFluid() error: ro= %lg", ro);
+      Error( "IPM error ",  buf );
     }
     // Phase volume of the fluid in cm3
     pmp->FVOL[k] = pmp->FWGT[k] / ro;

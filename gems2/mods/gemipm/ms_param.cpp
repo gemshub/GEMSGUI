@@ -244,19 +244,90 @@ void TProfil::CompG0Load()
  }
 }
 
+// GEM IPM calculation of equilibrium state in MULTI
+void
+TProfil::MultiCalcInit( const char *key )
+{
+  short j,k;
+
+    pmp->Ec = pmp->K2 = pmp->MK = 0;
+    pmp->PZ = pa.p.DW; // IPM-2 default
+    pmp->W1 = 0;
+    pmp->is = 0;
+    pmp->js = 0;
+    pmp->next  = 0;
+    pmp->ln5551 = 4.0165339;
+    pmp->lowPosNum = pa.p.DcMin;
+    pmp->logXw = -16.;
+    pmp->logYFk = -9.;
+    pmp->FitVar[4] = pa.p.AG;
+    pmp->pRR1 = 0;      //IPM smoothing factor and level
+    pmp->DX = pa.p.DK;
+
+
+    pmp->T0 = 273.15;    // not used anywhere
+    pmp->FX = 7777777.;
+    pmp->YMET = 0;
+    pmp->PCI = 0.0;
+
+//    if( pmp->pESU  && pmp->pNP )     // problematic statement !!!!!!!!!
+    {
+//        multi->unpackData(); // loading data from EqstatUnpack( key );
+        pmp->IC = 0.;
+        for( j=0; j< pmp->L; j++ )
+            pmp->X[j] = pmp->Y[j];
+        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+    }
+//    else
+//        for( j=0; j<pmp->L; j++ )
+//            pmp->Y[j] = 0.0;
+
+
+    CompG0Load();
+
+    for( j=0; j< pmp->L; j++ )
+        pmp->G[j] = pmp->G0[j];
+    // test phases - solutions and load models
+    if( pmp->FIs )
+    {
+        for( j=0; j< pmp->Ls; j++ )
+        {
+            pmp->lnGmo[j] = pmp->lnGam[j];
+            pmp->Gamma[j] = 1.0;
+        }
+    }
+
+    if( pmp->FIs )
+    {
+        pmp->PD = pa.p.PD;
+//        SolModLoad();
+        GammaCalc( LINK_TP_MODE);
+
+    }
+    // recalc restrictions for DC quantities
+    if( pmp->pULR && pmp->PLIM )
+         Set_DC_limits(  DC_LIM_INIT );
+
+   // dynamic arrays - begin load
+    for( k=0; k<pmp->FI; k++ )
+    {
+        pmp->XFs[k] = pmp->YF[k];
+        pmp->Falps[k] = pmp->Falp[k];
+    }
+
+ //    // realloc memory for  R and R1
+    pmp->R = new double[pmp->N*(pmp->N+1)];
+    pmp->R1 = new double[pmp->N*(pmp->N+1)];
+    memset( pmp->R, 0, pmp->N*(pmp->N+1)*sizeof(double));
+    memset( pmp->R1, 0, pmp->N*(pmp->N+1)*sizeof(double));
+}
+
 
 // GEM IPM calculation of equilibrium state in MULTI
 void
 TProfil::calcMulti()
 {
-    // MultiCalcInit( keyp.c_str() );
-    //    // realloc memory for  R and R1
-    pmp->R = new double[pmp->N*(pmp->N+1)];
-    pmp->R1 = new double[pmp->N*(pmp->N+1)];
-    memset( pmp->R, 0, pmp->N*(pmp->N+1)*sizeof(double));
-    memset( pmp->R1, 0, pmp->N*(pmp->N+1)*sizeof(double));
-
-    CompG0Load();
+    MultiCalcInit( 0 );
     if( AutoInitialApprox() == false )
         MultiCalcIterations();
 

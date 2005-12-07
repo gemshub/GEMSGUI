@@ -83,13 +83,8 @@ void TProfil::SimplexInitialApproximation( )
                 if(fabs(*(pmp->A+i*pmp->N+j))>1E-19)
                     T++;
         if( pmp->PLIM ) // Setting constraints on x elements
-            if( Set_DC_limits(  DC_LIM_INIT ) )
-            {
-#ifndef IPMGEMPLUGIN
-                if( !vfQuestion(window(), "SimplexInitialApproximation", "Inconsistent DC limits. Continue?"))
-#endif
-                    Error( "SimplexInitialApproximation", "Inconsistent DC limits.");
-            }
+            Set_DC_limits(  DC_LIM_INIT );
+
         for(i=0;i<Q;i++)
         {
             DN[i]=pmp->DLL[i];
@@ -524,13 +519,8 @@ void TProfil::Simplex(int M, int N, int T, double GZ, double EPS,
         }
         if( EPS > 1.0e-6 )
         {
-#ifndef IPMGEMPLUGIN
-           vfMessage( window(), "E01IPM: ",
-             "Simplex solution cannot be obtained with sufficient precision.", vfInfo);
-#else
-         cout<< "E01IPM: Simplex solution cannot be obtained with sufficient precision."
-         << endl;
-#endif
+         Error( "E01IPM: ",
+             "Simplex solution cannot be obtained with sufficient precision." );
         }
 FINISH: FIN( EPS, M, N, STR, NMB, BASE, UND, UP, U, AA, A, Q, &ITER);
         delete[] A;

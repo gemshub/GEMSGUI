@@ -125,7 +125,7 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtpufl].SetPtr( &mtp->PunE );   /* a4 */
     aObj[o_mtpvfl].SetPtr( &mtp->PvICi );  /* a8 */
     aObj[o_mtpsfl].SetPtr( &mtp->PsMode ); /* a8 */
-    aObj[o_mtcipf].SetPtr( &mtp->nC );     /* i5 */
+    aObj[o_mtcipf].SetPtr( &mtp->nC );     /* i8 */
     aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i8 */
     aObj[o_mtnsne].SetPtr( &mtp->nS );   /* i4 */
     aObj[o_mtptai].SetPtr( &mtp->nPai );  /* i3 */
@@ -145,9 +145,9 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtjqc].SetPtr( &mtp->jqc );
     aObj[o_mtjqs].SetPtr( &mtp->jqs );
     aObj[o_mtjt].SetPtr( &mtp->jt );
-//    aObj[o_mtrei1].SetPtr( &mtp->rei1 );
-//    aObj[o_mtrei2].SetPtr( &mtp->rei2 );
-//    aObj[o_mtrei3].SetPtr( &mtp->rei3 );
+aObj[o_mtjdd].SetPtr( &mtp->jdd );
+aObj[o_mtjdi].SetPtr( &mtp->jdi );
+aObj[o_mtide].SetPtr( &mtp->ide );
     aObj[o_mtrei4].SetPtr( &mtp->rei4 );
     aObj[o_mtrei5].SetPtr( &mtp->rei5 );
     aObj[o_mtct].SetPtr( &mtp->cT );
@@ -161,12 +161,13 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtref3].SetPtr( &mtp->ref3 );
     aObj[o_mtref4].SetPtr( &mtp->ref4 );
 
-// DBase 46
+// DBase 50
     aObj[ o_mtname].SetPtr(  mtp->name );
     aObj[ o_mtnotes].SetPtr(   mtp->notes );
     aObj[o_mtflag].SetPtr( &mtp->PunE );    /* a20 */
-    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i32 */
+    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i35 */
     aObj[o_mtdoudl].SetPtr( &mtp->Msysb );    /* d9 */
+    aObj[o_mtadpar].SetPtr( &mtp->fVel );    /* d11 */
     aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f19 */
     aObj[ o_mtxnames].SetPtr(  mtp->xNames );
     aObj[ o_mtynames].SetPtr(  mtp->yNames );
@@ -200,10 +201,8 @@ void TGEM2MT::ods_link(int q)
     aObj[ o_mtyet].SetDim( mtp->nE, mtp->nYE );
     aObj[ o_mtbn].SetPtr( mtp->Bn);
     aObj[ o_mtbn].SetDim( mtp->nIV, mtp->Nb );
-aObj[ o_mtddc].SetPtr( mtp->DDc);
-aObj[ o_mtddc].SetDim( mtp->Lb, 1 );
-aObj[ o_mthydp].SetPtr( mtp->HydP);
-aObj[ o_mthydp].SetDim( mtp->nC, 6 );
+    aObj[ o_mthydp].SetPtr( mtp->HydP);
+    aObj[ o_mthydp].SetDim( mtp->nC, 6 );
     aObj[ o_mtqpi].SetPtr( mtp->qpi);
     aObj[ o_mtqpi].SetDim( mtp->Nqpt, 1 );
     aObj[ o_mtqpc].SetPtr( mtp->qpc);
@@ -255,10 +254,22 @@ aObj[ o_mtmb].SetPtr( mtp->MB);
 aObj[ o_mtmb].SetDim( mtp->nC, 1 );
 aObj[ o_mtdmb].SetPtr( mtp->dMB);
 aObj[ o_mtdmb].SetDim( mtp->nC, mtp->Nb  );
+//added 07/12/2005
+aObj[ o_mtddc].SetPtr( mtp->DDc);
+aObj[ o_mtddc].SetDim( mtp->Lb, 1 );
+aObj[ o_mtdic].SetPtr( mtp->DIc);
+aObj[ o_mtdic].SetDim( mtp->Nb, 1 );
+aObj[ o_mtdel].SetPtr( mtp->DEl);
+aObj[ o_mtdel].SetDim( mtp->nEl, 1 );
+aObj[ o_mtfor_e].SetPtr( mtp->for_e);
+aObj[ o_mtfor_e].SetDim( mtp->nEl, 1 );
 // work
     aObj[ o_mtan].SetPtr(mtp->An);
 //    aObj[ o_mtan].SetDim( dtp->nK, dtp->Nb );
     aObj[ o_mtan].SetDim( mtp->Lbi, mtp->Nb );
+aObj[ o_mtae].SetPtr(mtp->Ae);
+aObj[ o_mtae].SetDim( mtp->nEl, mtp->Nb );
+
     aObj[ o_mtgc].SetPtr(mtp->gc);
     aObj[ o_mtgc].SetDim( mtp->nC*mtp->nPG, mtp->Nb );
 
@@ -289,8 +300,7 @@ void TGEM2MT::dyn_set(int q)
     mtp->xEt = (float *)aObj[ o_mtxet].GetPtr();
     mtp->yEt = (float *)aObj[ o_mtyet].GetPtr();
     mtp->Bn = (double *)aObj[ o_mtbn].GetPtr();
-mtp->DDc = (float *)aObj[ o_mtddc].GetPtr();
-mtp->HydP = (double (*)[6])aObj[ o_mthydp].GetPtr();
+    mtp->HydP = (double (*)[6])aObj[ o_mthydp].GetPtr();
     mtp->qpi = (double *)aObj[ o_mtqpi].GetPtr();
     mtp->qpc = (double *)aObj[ o_mtqpc].GetPtr();
     mtp->xt = (double *)aObj[ o_mtxt].GetPtr();
@@ -317,8 +327,14 @@ mtp->HydP = (double (*)[6])aObj[ o_mthydp].GetPtr();
 mtp->BSF = (double *)aObj[ o_mtbsf].GetPtr();
 mtp->MB = (double *)aObj[ o_mtmb].GetPtr();
 mtp->dMB = (double *)aObj[ o_mtdmb].GetPtr();
+//added 07/12/2005
+mtp->DDc = (float*)aObj[ o_mtddc].GetPtr();
+mtp->DIc = (float*)aObj[ o_mtdic].GetPtr();
+mtp->DEl = (float*)aObj[ o_mtdel].GetPtr();
+mtp->for_e = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_e].GetPtr();
 // work
     mtp->An = (float *)aObj[ o_mtan].GetPtr();
+mtp->Ae = (float *)aObj[ o_mtae].GetPtr();
     mtp->gc = (double *)aObj[ o_mtgc].GetPtr();
     mtp->etext = (char *)aObj[ o_mwetext].GetPtr();
     mtp->tprn = (char *)aObj[ o_mwtprn].GetPtr();
@@ -344,8 +360,7 @@ void TGEM2MT::dyn_kill(int q)
     mtp->xEt = (float *)aObj[ o_mtxet].Free();
     mtp->yEt = (float *)aObj[ o_mtyet].Free();
     mtp->Bn = (double *)aObj[ o_mtbn].Free();
-mtp->DDc = (float *)aObj[ o_mtddc].Free();
-mtp->HydP = (double (*)[6])aObj[ o_mthydp].Free();
+    mtp->HydP = (double (*)[6])aObj[ o_mthydp].Free();
     mtp->qpi = (double *)aObj[ o_mtqpi].Free();
     mtp->qpc = (double *)aObj[ o_mtqpc].Free();
     mtp->xt = (double *)aObj[ o_mtxt].Free();
@@ -372,8 +387,14 @@ mtp->HydP = (double (*)[6])aObj[ o_mthydp].Free();
 mtp->BSF = (double *)aObj[ o_mtbsf].Free();
 mtp->MB = (double *)aObj[ o_mtmb].Free();
 mtp->dMB = (double *)aObj[ o_mtdmb].Free();
+//added 07/12/2005
+mtp->DDc = (float*)aObj[ o_mtddc].Free();
+mtp->DIc = (float*)aObj[ o_mtdic].Free();
+mtp->DEl = (float*)aObj[ o_mtdel].Free();
+mtp->for_e = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_e].Free();
 // work
     mtp->An = (float *)aObj[ o_mtan].Free();
+mtp->Ae = (float *)aObj[ o_mtae].Free();
     mtp->gc = (double *)aObj[ o_mtgc].Free();
     mtp->etext = (char *)aObj[ o_mwetext].Free();
     mtp->tprn = (char *)aObj[ o_mwtprn].Free();
@@ -401,12 +422,10 @@ void TGEM2MT::dyn_new(int q)
 
    if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' )
     {
-        mtp->DDc = (float *)aObj[ o_mtddc].Alloc( mtp->Lb, 1, D_);
-        mtp->HydP = (double (*)[6])aObj[ o_mthydp].Alloc( mtp->nC, 6, D_);
+     mtp->HydP = (double (*)[6])aObj[ o_mthydp].Alloc( mtp->nC, 6, D_);
     }
     else
     {
-      mtp->DDc = (float *)aObj[ o_mtddc].Free();
       mtp->HydP = (double (*)[6])aObj[ o_mthydp].Free();
     }
 
@@ -489,6 +508,33 @@ void TGEM2MT::dyn_new(int q)
       mtp->MB = (double *)aObj[ o_mtmb].Free();
       mtp->dMB = (double *)aObj[ o_mtdmb].Free();
    }
+
+//added 07/12/2005
+   if( mtp->PsDDc == S_OFF )
+     mtp->DDc = (float*)aObj[ o_mtddc].Free();
+   else
+     mtp->DDc = (float*)aObj[ o_mtddc].Alloc( mtp->Lb, 1, F_);
+
+   if( mtp->PsDIc == S_OFF )
+     mtp->DIc = (float*)aObj[ o_mtdic].Free();
+   else
+     mtp->DIc = (float*)aObj[ o_mtdic].Alloc( mtp->Nb, 1, F_);
+
+   if( mtp->nEl <= 0  )
+   {
+     mtp->DEl = (float*)aObj[ o_mtdel].Free();
+     mtp->for_e = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_e].Free();
+     mtp->Ae = (float*)aObj[ o_mtae].Free();
+     mtp->nEl = 0;
+   }
+   else
+   {
+     mtp->DEl = (float*)aObj[ o_mtdel].Alloc( mtp->nEl, 1, F_);
+     mtp->for_e = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_e].Alloc(
+           mtp->nEl, 1, MAXFORMUNITDT);
+     mtp->Ae = (float*)aObj[ o_mtae].Alloc( mtp->nEl, mtp->Nb, F_);
+   }
+
 
 //----------------------------------------------------------------
    if( mtp->Nqpt > 0  )
@@ -630,8 +676,7 @@ void TGEM2MT::set_def(int q)
     mtp->xEt = 0;
     mtp->yEt = 0;
     mtp->Bn = 0;
-mtp->DDc = 0;
-mtp->HydP = 0;
+    mtp->HydP = 0;
     mtp->qpi = 0;
     mtp->qpc = 0;
     mtp->xt = 0;
@@ -658,8 +703,14 @@ mtp->HydP = 0;
 mtp->BSF = 0;
 mtp->MB = 0;
 mtp->dMB = 0;
+//added 07/12/2005
+mtp->DDc = 0;
+mtp->DIc = 0;
+mtp->DEl = 0;
+mtp->for_e = 0;
 // work
     mtp->An = 0;
+mtp->Ae = 0;
     mtp->gc = 0;
     mtp->etext = 0;
     mtp->tprn = 0;
@@ -767,7 +818,7 @@ AGAIN:
 
     dyn_new();
 
-   init_arrays( setdef ); //clear all
+    init_arrays( setdef ); //clear all
 
     SetString("Record build OK");
     pVisor->Update();
@@ -833,17 +884,14 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
     double *p_Bn = new double[mtp->nIV*mtp->Nb];
     memcpy( p_Bn, mtp->Bn, mtp->nIV*mtp->Nb*sizeof(double));
 
-    double *p_DDc = new double[mtp->Lb];
-    if( mtp->DDc )
-       memcpy( p_DDc, mtp->DDc, mtp->Lb*sizeof(double));
-
-
     char  *p_CIclb;
     float *p_CIb;
     float *p_PGT;
     char  *p_UMPG;
     double* p_BSF;
     double* p_dMB;
+    float *p_DDc;
+    float *p_DIc;
 
     if( mtp->PvICi != S_OFF )
     {
@@ -871,6 +919,17 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
    {
       p_dMB = new double[mtp->nC*mtp->Nb];
       memcpy( p_dMB, mtp->dMB, mtp->nC*mtp->Nb*sizeof(double));
+   }
+
+   if( mtp->PsDDc != S_OFF )
+   {
+      p_DDc = new float[mtp->Lb];
+      memcpy( p_DDc, mtp->DDc, mtp->Lb*sizeof(float));
+   }
+   if( mtp->PsDIc != S_OFF )
+   {
+      p_DIc = new float[mtp->Nb];
+      memcpy( p_DIc, mtp->DIc, mtp->Nb*sizeof(float));
    }
 
     // alloc new memory
@@ -904,6 +963,8 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
           if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
              for( j=0; j<mtp->nC; j++ )
                mtp->dMB[j*mtp->Nb+jj] = 0.;
+          if( mtp->PsDIc != S_OFF )
+              mtp->DIc[jj] = 0.;
           jj++;
        }
        else
@@ -930,6 +991,8 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
              if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
                for( j=0; j<mtp->nC; j++ )
                  mtp->dMB[j*mtp->Nb+jj] = p_dMB[j*Nold+ii];
+             if( mtp->PsDIc != S_OFF )
+               mtp->DIc[jj] =  p_DIc[ii];
           }
         jj++;
         ii++;
@@ -972,7 +1035,7 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
 
 //*************************************************************
 // DCOMP
- if( mtp->DDc )
+ if( mtp->PsDDc != S_OFF )
  {
     i=0; jj = 0; ii = 0;
     while( jj < mtp->Lb )
@@ -1006,7 +1069,6 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
 
 // free memory
    delete[] p_Bn;
-   delete[] p_DDc;
    if( mtp->PvICi != S_OFF )
    {
      delete[] p_CIclb;
@@ -1021,6 +1083,12 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
     delete[] p_BSF;
    if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
     delete[] p_dMB;
+
+   if( mtp->PsDDc != S_OFF )
+     delete[] p_DDc;
+   if( mtp->PsDIc != S_OFF )
+     delete[] p_DIc;
+
 }
 
 // working with scripts --------------------------------------------

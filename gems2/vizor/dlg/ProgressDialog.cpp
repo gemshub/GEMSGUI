@@ -280,6 +280,7 @@ ProgressDialog::Run()
     {
         vfMessage(this, err.title, err.mess);
 	timer->stop();
+        close();
     }
 }
 

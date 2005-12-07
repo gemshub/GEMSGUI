@@ -236,7 +236,7 @@ float *PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA );
     int find_acnum( char *name, int LNmode );
     //   void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je );
     void CompG0Load();
-    int Set_DC_limits( int Mode );
+    void Set_DC_limits( int Mode );
     void ConCalc( double X[], double XF[], double XFA[]);
     void Mol_u( double Y[], double X[], double XF[], double XFA[] );
     double DualChemPot( double U[], float AL[], int N );
@@ -385,7 +385,7 @@ public:
     void MultiCalcInit( const char *key );
     bool AutoInitialApprox();
     void MultiCalcIterations();
-    bool MultiCalcMain( int &pll, double &FXold );
+    void MultiCalcMain( int &pll, double &FXold );
     // MultiCalc debug
     void DebagCalcEqstatInit();
     bool DebagCalcEqstatStep();

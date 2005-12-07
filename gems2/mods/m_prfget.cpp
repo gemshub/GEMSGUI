@@ -794,9 +794,9 @@ void TProfil::DebagCalcEqstatInit()
 //Calculated multy with debug
 bool TProfil::DebagCalcEqstatStep()
 {
-    bool ret = (MultiCalcMain( pll, FXold ) == true || !pmp->MK);
+    MultiCalcMain( pll, FXold );
     //   pVisor->Update();
-    return ret;
+    return !pmp->MK;
     // What do if break; ?
 }
 
