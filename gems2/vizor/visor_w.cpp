@@ -431,7 +431,8 @@ TVisorImp::ProcessProgress( QWidget* parent )
 
         ProcessProgressDialog* dlg =
              new ProcessProgressDialog( parent );
-	dlg->show();
+   dlg->exec();
+   //	dlg->show();
 }
 
 /*

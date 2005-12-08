@@ -1,0 +1,440 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>LegendDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>LegendDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>562</width>
+            <height>412</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Legend and Configuration for: </string>
+    </property>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout3</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>430</x>
+                <y>20</y>
+                <width>123</width>
+                <height>180</height>
+            </rect>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBtnOk</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;OK</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Apply changes to the graph and close this dialog</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBtnApply</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Apply</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Apply changes to the graph and do not close this dialog</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBthCancel</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Discard  changes and close this dialog</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pBtnBackgr</cstring>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>&amp;Background...</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Set background color of the graph area</string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>410</width>
+                <height>205</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Axis Setup</string>
+        </property>
+        <grid>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>11</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton" row="5" column="2" rowspan="1" colspan="2">
+                <property name="name">
+                    <cstring>pBtnChangeFont</cstring>
+                </property>
+                <property name="text">
+                    <string>...</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="1" column="0" rowspan="1" colspan="3">
+                <property name="name">
+                    <cstring>TextLabel1_2</cstring>
+                </property>
+                <property name="text">
+                    <string>Graph</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="2" column="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>y:</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="1" column="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>x:</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="4" column="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_2_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>y:</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="3" column="0" rowspan="1" colspan="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_3</cstring>
+                </property>
+                <property name="text">
+                    <string>Fragment</string>
+                </property>
+            </widget>
+            <widget class="QSpinBox" row="0" column="1" rowspan="1" colspan="3">
+                <property name="name">
+                    <cstring>pAxis</cstring>
+                </property>
+                <property name="maxValue">
+                    <number>20</number>
+                </property>
+            </widget>
+            <widget class="QLabel" row="0" column="0">
+                <property name="name">
+                    <cstring>TextLabel1</cstring>
+                </property>
+                <property name="text">
+                    <string>Axis type</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="3" column="3">
+                <property name="name">
+                    <cstring>TextLabel1_2_2_3</cstring>
+                </property>
+                <property name="text">
+                    <string>x:</string>
+                </property>
+            </widget>
+            <widget class="QLabel" row="5" column="0" rowspan="1" colspan="2">
+                <property name="name">
+                    <cstring>textLabel2</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>1</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="text">
+                    <string>Label font:</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget" row="0" column="4" rowspan="6" colspan="1">
+                <property name="name">
+                    <cstring>layout10</cstring>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout7</cstring>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLineEdit" row="0" column="0">
+                                <property name="name">
+                                    <cstring>pXname</cstring>
+                                </property>
+                                <property name="maxLength">
+                                    <number>9</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Name of  x  axis</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="0">
+                                <property name="name">
+                                    <cstring>pX0</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Minimum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="3" column="1">
+                                <property name="name">
+                                    <cstring>pfXn</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Maximum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="4" column="1">
+                                <property name="name">
+                                    <cstring>pfYn</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Maximum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>pXn</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Maximum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="4" column="0">
+                                <property name="name">
+                                    <cstring>pfY0</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Minimum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="2" column="0">
+                                <property name="name">
+                                    <cstring>pY0</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Minimum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="0" column="1">
+                                <property name="name">
+                                    <cstring>pYname</cstring>
+                                </property>
+                                <property name="maxLength">
+                                    <number>9</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Name of  y  axis</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="3" column="0">
+                                <property name="name">
+                                    <cstring>pfX0</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Minimum</string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit" row="2" column="1">
+                                <property name="name">
+                                    <cstring>pYn</cstring>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Maximum</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QLineEdit">
+                        <property name="name">
+                            <cstring>pLabelFont</cstring>
+                        </property>
+                        <property name="readOnly">
+                            <bool>true</bool>
+                        </property>
+                        <property name="toolTip" stdset="0">
+                            <string>This label font is common for all graphs</string>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
+        </grid>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>buttonGroup1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>220</y>
+                <width>410</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Graph Type</string>
+        </property>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string>0 - Lines/Symbols</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>1 - Cumulative</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>2 - Isolines</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>comboBox1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>110</x>
+                    <y>20</y>
+                    <width>150</width>
+                    <height>20</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>pBtnApply</sender>
+        <signal>clicked()</signal>
+        <receiver>LegendDialogData</receiver>
+        <slot>CmApply()</slot>
+    </connection>
+    <connection>
+        <sender>pBtnOk</sender>
+        <signal>clicked()</signal>
+        <receiver>LegendDialogData</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>pBthCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>LegendDialogData</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>pBtnBackgr</sender>
+        <signal>clicked()</signal>
+        <receiver>LegendDialogData</receiver>
+        <slot>CmBackground()</slot>
+    </connection>
+    <connection>
+        <sender>pBtnChangeFont</sender>
+        <signal>clicked()</signal>
+        <receiver>LegendDialogData</receiver>
+        <slot>CmChangeLabelFont()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>pAxis</tabstop>
+    <tabstop>pXname</tabstop>
+    <tabstop>pYname</tabstop>
+    <tabstop>pX0</tabstop>
+    <tabstop>pXn</tabstop>
+    <tabstop>pY0</tabstop>
+    <tabstop>pYn</tabstop>
+    <tabstop>pfX0</tabstop>
+    <tabstop>pfXn</tabstop>
+    <tabstop>pfY0</tabstop>
+    <tabstop>pfYn</tabstop>
+    <tabstop>pBtnOk</tabstop>
+    <tabstop>pBtnApply</tabstop>
+    <tabstop>pBthCancel</tabstop>
+    <tabstop>pBtnBackgr</tabstop>
+</tabstops>
+<slots>
+    <slot>CmApply()</slot>
+    <slot>CmBackground()</slot>
+    <slot access="protected">CmChangeLabelFont()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
