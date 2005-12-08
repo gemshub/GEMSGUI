@@ -178,7 +178,7 @@ sMod = pmp->sMod[k];
             aObj[o_nmju].SetN( pmp->L1[k]);
             break;
         default: /* error code of model */
-            Error( "SolModLoad", "Error code of model." );
+            Error( "SolModLoad", "Error code of non-ideality model." );
         }
         /* translate equations of model  */
         if( !aPH->php->pEq && !aPH->php->dEq )

@@ -288,7 +288,7 @@ mEFD:
      case 0:  // OK
               break;
      case 2:  // max iteration exceeded in EnterFeasibleDomain
-                 Error("EFD error: " ,
+                 Error("E04IPM EFD(): " ,
      "Prescribed precision of mass balance could not be reached because vector b or\n"
      "DC stoichiometries or standard-state thermodynamic data are inconsistent.\n");
               break;
@@ -299,7 +299,7 @@ mEFD:
                goto mEFD;
             }
            else
-                 Error("EFD error: " ,
+                 Error("E05IPM EFD(): " ,
           "Degeneration in R matrix (fault in the linearized system solver).\n"
           "Invalid initial approximation - further IPM calculations are not possible");
            break;
@@ -330,7 +330,7 @@ STEP_POINT("After IPM");
                    goto mEFD;
                 }
                else
-                 Error("IPM error: " ,
+                 Error("E06IPM IPM-main(): " ,
      "Given IPM convergence criterion could not be reached;\n Perhaps, vector b is not balanced,\n"
      "or DC stoichiometries or standard-state thermodynamic data are inconsistent. \n");
      case 1: // degeneration in R matrix  for InteriorPointsMethod
@@ -340,7 +340,7 @@ STEP_POINT("After IPM");
                goto mEFD;
             }
            else
-               Error("IPM error ",
+               Error("E07IPM IPM-main(): ",
         "Degeneration in R matrix (fault in the linearized system solver).\n"
         "No valid IPM solution could be obtained. Probably, vector b is not balanced,\n"
         "or DC stoichiometries or standard-state thermodynamic data are inconsistent,\n"
@@ -379,7 +379,7 @@ STEP_POINT("After IPM");
          goto mEFD;
        }
      else
-       Error( "Warning PhaseSelect:"," Insertion of phases was incomplete!");
+       Error( "E08IPM PhaseSelect(): "," Insertion of phases was incomplete!");
     //   if( !vfQuestion(window(), "PhaseSelect : warning",
     //        "Insert phase cannot be reached. Continue?" ))
     //         return false;
@@ -400,44 +400,48 @@ pVisor->Update( false );
     }
 
    if(pmp->PZ && pmp->W1 && pmp->W1 <  pa.p.DW )
+   {
     for(i=0;i<pmp->N-pmp->E;i++)
-     if( fabs(pmp->C[i]) > pmp->DHBM // * pa.p.GAS
+    {
+      if( fabs(pmp->C[i]) > pmp->DHBM // * pa.p.GAS
          || fabs(pmp->C[i]) > pmp->B[i] * pa.p.GAS )
-      if(pmp->W1 < pa.p.DW-1)
+      {
+        if(pmp->W1 < pa.p.DW-1)
         {
             pmp->W1++;          // IPM-2 precision algorithm - 2nd run
             goto mEFD;
         }
-       else
-       { gstring  buf,buf1;
-         vstr pl(5);
-         int jj=0;
-         for( j=0; j<pmp->N-pmp->E; j++ )
+        else
+        {
+           gstring  buf,buf1;
+           vstr pl(5);
+           int jj=0;
+           for( j=0; j<pmp->N-pmp->E; j++ )
           //  if( fabs(pmp->C[j]) > pmp->DHBM  || fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
-            if( fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
-            { sprintf( pl, " %-2.2s  ", pmp->SB[j] );
-              buf1 +=pl;
-              jj=1;
-            }
-         if( jj )
-         {
-           buf = "Prescribed balance precision cannot be reached\n for independent components: ";
-           buf += buf1;
+             if( fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
+             { sprintf( pl, " %-2.2s  ", pmp->SB[j] );
+               buf1 +=pl;
+               jj=1;
+             }
+           if( jj )
+           {
+             buf = "Prescribed balance precision cannot be reached\n for some trace independent components: ";
+             buf += buf1;
 //           fstream f_log("ipmlog.txt", ios::out|ios::app );
 //           f_log << buf.c_str()<< endl;
 //           f_log.close();
-           Error("IPM error: ", buf.c_str() );
-          }
-          else
-            Error("IPM error: " , "Good result could not be obtained" );
-
-        }
-
+             Error("E09IPM IPM-main(): ", buf.c_str() );
+           }
+           else
+             Error("E10IPM IPM-main(): " , "Inconsistent GEM solution: imprecise mass balance\n for some major independent components: " );
+         }
+       }
+     } // end of i loop
+   }
 ITDTEST:
     memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
 //    Error("IPM error: " , "Good result could not be obtained" );
-    // return false;
-
+   // appears to be normal return after successfull improvement of mass balance precision 
 }
 
 //Calc equstat method IPM (iterations)
@@ -813,18 +817,18 @@ void TProfil::Set_DC_limits( int Mode )
             {
  //               JJ = j;
 //                KK = k;
-                sprintf( tbuf, "Inconsistent upper limits j=%d k=%d XU=%g XFU=%g",
+                sprintf( tbuf, "Inconsistent upper metastability limits j=%d k=%d XU=%g XFU=%g",
                          j, k, XU, XFU );
-                Error( "Set_DC_limits",tbuf.p );
+                Error( "E11IPM Set_DC_limits(): ",tbuf.p );
 //                XU = XFU; // - pmp->lowPosNum;
             }
             if( XL < XFL )
             {
 //                JJ = j;
 //                KK = k;
-                sprintf( tbuf, "Inconsistent lower limits j=%d k=%d XL=%g XFL=%g",
+                sprintf( tbuf, "Inconsistent lower metastability limits j=%d k=%d XL=%g XFL=%g",
                          j, k, XL, XFL );
-                Error( "Set_DC_limits",tbuf.p );
+                Error( "E12IPM Set_DC_limits(): ",tbuf.p );
 //                XL = XFL; // - pmp->lowPosNum;
             }
             pmp->DUL[j]=XU;
@@ -941,8 +945,8 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
         {                 // error - will result in zerodivide!
            gstring pbuf(pmp->SF[k],0,20);
            char buf[200];
-           sprintf( buf, "Phase %s  Yf= ", pbuf.c_str(), Yf );
-           Error( "Error in IPM PrimeChemicalPotentials():", buf);
+           sprintf( buf, "Broken IPM solution: Phase %s  Yf= ", pbuf.c_str(), Yf );
+           Error( "E13IPM PrimeChemicalPotentials():", buf);
 //           Yf = pmp->YFk;
         }
         if( pmp->YFk > pmp->lowPosNum*10. )

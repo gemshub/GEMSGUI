@@ -218,7 +218,7 @@ void TProfil::START( int T,int *ITER,int M,int N,int NMB[],
             if( fabs(UP[J])<EPS)
                 UP[J]=EPS;
             else if( UP[J]<0.)
-                Error("Simplex", "At START UP[J]<0. ");
+                Error("E00IPM: Simplex", "Negative UP[J] value(s) in START() ");
         }
         SPOS(Q, STR, NMB, J, M, AA);
         for( I=0;I<M;I++)
@@ -519,8 +519,8 @@ void TProfil::Simplex(int M, int N, int T, double GZ, double EPS,
         }
         if( EPS > 1.0e-6 )
         {
-         Error( "E01IPM: ",
-             "Simplex solution cannot be obtained with sufficient precision." );
+         Error( "E01IPM: Simplex",
+             "LP solution cannot be obtained with sufficient precision" );
         }
 FINISH: FIN( EPS, M, N, STR, NMB, BASE, UND, UP, U, AA, A, Q, &ITER);
         delete[] A;

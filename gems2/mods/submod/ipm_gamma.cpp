@@ -2349,8 +2349,8 @@ TProfil::ChurakovFluid( int jb, int je, int /* jpb */, int jdb, int k )
     {
       free( FugCoefs );
       char buf[150];
-      sprintf(buf, "CGFluid() error: ro= %lg", ro);
-      Error( "IPM error ",  buf );
+      sprintf(buf, "CGFluid(): bad calculation of density ro= %lg", ro);
+      Error( "E71IPM IPMgamma: ",  buf );
     }
     // Phase volume of the fluid in cm3
     pmp->FVOL[k] = pmp->FWGT[k] / ro;

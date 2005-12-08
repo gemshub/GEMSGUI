@@ -639,7 +639,7 @@ STEP_POINT("FIA Iteration");
         if( LM < 1E-5 )
         { // Too small step size - too slow convergence !
             pmp->Ec=1;
-            Error( "IPM_StepSizeError",
+            Error( "E03IPM FIA-iteration:",
                  "Too small step size - too slow convergence");
         }
 
@@ -759,7 +759,8 @@ int TProfil::InteriorPointsIteration( )
                   (pmp->Y[j]-pmp->DLL[j]): (pmp->DUL[j]-pmp->Y[j]);
             break;    // added to bugfix by DAK 22.08.01 PSI
         default: // big error
-            Error( "InteriorPointsIteration", "Error in code pmp->RLC[j]" );
+            Error( "E04IPM IPM-Iteration:",
+                 "Error in codes of metastability constraints" );
         }
         if( W[j] < 0. ) W[j]=0.;  // Weight multipliers cannot be negative
     }
