@@ -21,6 +21,7 @@ const char *GEMS_BCC_HTML = "gems_bcc";
 const char *GEMS_IPM_HTML = "gems_ipm";
 const char *GEMS_HOWTO_HTML = "ge_howto";
 
+#include <math.h>
 #include <qtoolbar.h>
 #include <qpixmap.h>
 #include <qtoolbutton.h>
@@ -264,9 +265,9 @@ NewSystemDialog::Update()
             msg += QString("  V = %1 L;").arg(pData->VXc/1000., 9, 'g', 4);
     if( pData->PHC )
     {
-       if( pData->PHC[0] == PH_AQUEL )
+       if( pData->PHC[0] == (char)PH_AQUEL )
        {
-          char *sMod;
+          char* sMod;
           msg += QString("  Aqueous:");
           sMod = pData->sMod[0];
           switch( sMod[0 /*SPHAS_TYP*/ ] )
@@ -860,8 +861,8 @@ void NewSystemDialog::loadList2()
 
    ListView2->clear();
    item2 = new QListViewItem( ListView2, tr( "Equilibrium" ) );
-   QListViewItem * phase;
-   QListViewItem * elem;
+   QListViewItem* phase;
+   QListViewItem* elem;
    short *l1_     = (short *)aObj[ o_wi_l1 ].GetPtr();
    double *Y_la_  = (double *)aObj[ o_wd_yla ].GetPtr();
    double *lnGam_ = (double *)aObj[ o_wo_lngam ].GetPtr();
@@ -886,7 +887,7 @@ void NewSystemDialog::loadList2()
          sprintf( buf, " %g ", 0. );
          if( Y_la_ )
            if( Y_la_[jj] > -150. && Y_la_[jj] < 150. )
-             sprintf( buf, " %g ", exp( Y_la_[jj]/0.434294481 ) );
+             sprintf( buf, " %lg ", exp( Y_la_[jj]/0.434294481 ) );
          sprintf( buf1, " %g ", 0. );
          if( lnGam_ )
            if( lnGam_[jj] > -200. && lnGam_[jj] < 200. )

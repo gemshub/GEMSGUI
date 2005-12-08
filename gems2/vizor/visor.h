@@ -169,6 +169,6 @@ public:
 };
 
 extern TVisor* pVisor;
-extern TVisorImp* pVisorImp;
+//extern TVisorImp* pVisorImp;
 
 #endif   // _visor_h

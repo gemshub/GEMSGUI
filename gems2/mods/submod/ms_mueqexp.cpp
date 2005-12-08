@@ -75,7 +75,9 @@ bool TProfil::AutoInitialApprox( )
    pmp->DSM = pa.p.DS;  // Shall we add  * sfactor ?
 
 #ifndef IPMGEMPLUGIN
+#ifndef Use_mt_mode
    pVisor->Update(false);
+#endif
 #endif
     // Analyzing if Simplex approximation is needed
     if( !pmp->pNP  )
@@ -387,7 +389,9 @@ STEP_POINT("After IPM");
 // STEPWISE (4) Stop point after PhaseSelect()
 #ifndef IPMGEMPLUGIN
 STEP_POINT("PhaseSelect");
+#ifndef Use_mt_mode
 pVisor->Update( false );
+#endif
 #endif
 
    if(pmp->PZ && !pmp->W1)

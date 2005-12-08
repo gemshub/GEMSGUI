@@ -361,7 +361,9 @@ void TProfil::PhaseSelect()
         }
         //  if( wn[W_WORK1].status )
 #ifndef IPMGEMPLUGIN
+#ifndef Use_mt_mode
         pVisor->Update(false);  // "PhaseSelection"
+#endif
 #endif
         if( pmp->K2>1 )
         { // more then first step - solution is not improved
@@ -465,7 +467,9 @@ int TProfil::EnterFeasibleDomain( )
        MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C);
 
 #ifndef IPMGEMPLUGIN
+#ifndef Use_mt_mode
   pVisor->Update( false );
+#endif
 #endif
 
        Z = pmp->N - pmp->E;
@@ -648,7 +652,9 @@ STEP_POINT("FIA Iteration");
     //  Take a look at vector b or values of DHB and DS
 
 #ifndef IPMGEMPLUGIN
+#ifndef Use_mt_mode
     pVisor->Update(false);  // "Feasible Approx: error"
+#endif
 #endif
          pmp->Ec=1;
          if( IT1 == pa.p.DP )
@@ -789,7 +795,9 @@ int TProfil::InteriorPointsIteration( )
     if( sRet == 1 )
     {
 #ifndef IPMGEMPLUGIN
+#ifndef Use_mt_mode
         pVisor->Update(false); // "Degeneration in InPoint()"
+#endif
 #endif
         pmp->Ec=1;
         return 1;
@@ -1005,10 +1013,10 @@ STEP_POINT( "IPM Iteration" );
         ConCalc( pmp->X, pmp->XF, pmp->XFA );
     MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
 
- #ifndef IPMGEMPLUGIN
- #ifndef Use_mt_mode
+#ifndef IPMGEMPLUGIN
+#ifndef Use_mt_mode
     pVisor->Update( false );
- #endif
+#endif
 #endif
 
     return 0;

@@ -279,6 +279,7 @@ ProgressDialog::Run()
     catch( TError& err)
     {
         vfMessage(this, err.title, err.mess);
+	pVisorImp->Update(true);
 	timer->stop();
         close();
     }
