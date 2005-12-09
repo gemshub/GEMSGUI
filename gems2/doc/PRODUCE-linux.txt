@@ -40,7 +40,8 @@ It should look like this:
            projects/
       ...
 
-  make copy_data
+  make copy_data 
+  SD change for ( make -f Makefile.lin copy_data )
 
 This will refresh configuration files.
 
@@ -59,6 +60,7 @@ files are now re-created.
 5. To produce a distribution rpm of GEMS-PSI release:
 
    make rpm
+  SD change for ( make -f Makefile.lin rpm )
 
 then you will be prompted to enter the root password. 
 

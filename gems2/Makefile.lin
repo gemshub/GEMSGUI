@@ -10,115 +10,22 @@ QTDIR		= /usr/lib/qt3
 # QTDIR		= /usr/local/qt
 endif
 
-DEBUG_FLAGS	= -ggdb
-PROF_FLAGS	= 
-
-LIBDIRS		= -L$(QTDIR)/lib -L/usr/X11R6/lib
-
-ifeq ("$(shell uname)", "Darwin")
-LDFLAGS		= 
-else
-LDFLAGS		= -m elf_i386
-endif
-
-ifeq ($(RELEASE), YES)
-QTLIBS		= $(QTDIR)/lib/libqt-mt.a
-else
-QTLIBS		= -lqt-mt
-endif
-
-ifeq ("$(shell uname)", "Darwin")
-LIBS		= $(QTLIBS) -lz -framework Carbon
-else
-LIBS		= $(QTLIBS) -lz -lX11 -lXext -lXt -lm -lstdc++ -lpthread 
-ifeq ($(RELEASE), YES)
-LIBS		+= -lXft -lXcursor -lXinerama -lXrandr
-endif
-endif
-
-ifeq ("$(shell uname)", "Darwin")
-SHARED_SRC_DIR	= gems2.app/Contents/Resources
-else
-SHARED_SRC_DIR	= shared
-endif
-
-# commands
-ifeq ("$(shell uname)", "Darwin")
-CC		= c++
-else
-CC		= c++ -m32 -Wl,-melf_i386
-endif
-
-LD		= ld
-
-ifeq ($(RELEASE),YES)
- LINK_CMD	= $(CC)
-else
-ifeq ($(PROFILE),YES)
- #flag for making profile version of GEMS
- LINK_CMD	= $(CC) $(DEBUG_FLAGS) $(PROF_FLAGS)
-else
- #flags for making usual debug version
- LINK_CMD	= $(CC) $(DEBUG_FLAGS)
-endif
-endif
-
-
 subdirs		= mods vizor
 backupfiles	= doc data vizor mods  Makefile* *.spec
-rpmfiles	= lib doc vizor mods shared img projects Makefile* *.spec
+rpmfiles	= lib doc vizor mods shared img projects  *.spec *.pro
+
+ifeq ("$(shell uname)", "Darwin")
+SHARED_SRC_DIR = /gems2.app/Contents/Resources
+else
+SHARED_SRC_DIR = shared
+endif	
+
 
 ifeq ("$(shell ls /usr/src/packages -d)", "/usr/src/packages")
 RPMDIR=/usr/src/packages
 else
 RPMDIR=/usr/src/RPM
 endif
-
-
-
-OBJS		= ./lib/gemsel.o ./lib/gemviz.o
-		    
-ifeq ("$(shell uname)", "Darwin")
-TARGET		= gems2.app/Contents/MacOS/gems2
-else
-TARGET		= gems2
-endif
-
-all:	subdirs_mk $(TARGET)
-
-
-subdirs_mk:
-	@for i in $(subdirs); do \
-          echo Making all in $$i ; \
-	  $(MAKE) -C $$i all RELEASE=$(RELEASE) || exit 1; \
-        done
-
-$(TARGET):	$(OBJS)
-	@if [ "`uname`" == "Darwin" ]; then \
-	  install -d gems2.app/Contents/MacOS; \
-	fi
-	$(LINK_CMD) $(OBJS) $(LIBS) $(LIBDIRS) -o $(TARGET) 
-
-
-link:	$(TARGET)
-
-
-dep:
-	@for i in $(subdirs); do \
-	  $(MAKE) -C $$i dep || exit 1;\
-        done
-
-
-clean:
-	@for i in $(subdirs); do \
-	  $(MAKE) -C $$i clean || exit 1;\
-        done
-	- rm $(TARGET)
-
-
-install:	release
-	
-
 
 EXCLUDE_LIST=--exclude *Data.* --exclude .* --exclude @* --exclude *.o --exclude *.bak --exclude *~ --exclude *.out \
 --exclude *.rpo  --exclude tmp.moc.cpp --exclude CVS
@@ -136,7 +43,7 @@ rpm:	check_shared
 	tar c --exclude-from doc/tar_backup.exclude $(rpmfiles) | tar -xC /tmp/$(NAME)-$(VERSION)
 #	cp -fr /usr/share/gems2 /tmp/$(NAME)-$(VERSION)/shared
 	tar Ccv /tmp --remove-files $(NAME)-$(VERSION) | bzip2 > /tmp/$(NAME)-$(VERSION).tar.bz2
-	cp gems2.spec /tmp
+	cp gems2.spec   /tmp
 #	rm -fr ./program
 #	rm -fr /tmp/gems-2.0
 	su -c "	mv /tmp/$(NAME)-$(VERSION).tar.bz2 $(RPMDIR)/SOURCES; \

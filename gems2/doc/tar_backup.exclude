@@ -7,7 +7,8 @@ out
 *.moc.cpp
 *.orig
 *.rej
-*Data.*
+*Data.cpp
+*Data.h
 .*
 *.rpo
 tmp.moc.cpp

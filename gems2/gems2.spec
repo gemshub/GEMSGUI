@@ -31,8 +31,10 @@ and helps preparing consistent thermodynamic databases
 %setup
 
 %build
-make clean
-make RELEASE=YES
+#make clean
+qmake gems_release.pro
+make
+#make RELEASE=YES
 
 %install
 
