@@ -726,13 +726,13 @@ o_dtsdpar,
   o_dtname, o_dtnotes,  o_dtpspv, o_dtshort, o_dtfloat, 
   o_dtan, o_dtbb, o_dtbn, o_dtub, o_dtchi, 
 // changed SD oct 2005 43
-  o_dteta_b, o_dtact_n, o_dtgam_n, o_dtcoul, o_dtmu_n, 
+  o_dteta_b, o_dtact_n, o_dtgam_n, o_dtcoul, o_dtmu_n,
   o_dtmu_o, o_dtavsd_o, o_dtmu_a, o_dtavsd_a, o_gmx_n,
   o_dtwa, o_dtavsd_w, o_dtyconst, o_dtqpg, o_dtcib, 
   o_dtcin, o_dtcab, o_dtcan,  o_dtcexpr, o_dtgexpr, 
   o_dtsdref, o_dtsdval, o_dtnam_b, o_dtnam_n, o_dtpar_n, 
   o_dtfor_n, o_dtfor_b, o_dtstl, o_dttyp_n, o_dtciclb, 
-  o_dtcicln, o_dtauclb,  o_dtaucln, o_dtsbm, o_dttdq, 
+  o_dtcicln, o_dtauclb,  o_dtaucln, o_dtsbm, o_dttdq,
   o_dtpdq, o_dtisq, o_dtwacp, o_dtwdat, o_dtwpar,
   o_dtwa_ap, o_dtstkey, o_dttprn,
 };
@@ -758,7 +758,6 @@ const   int MAXFORMUNITDT=     40;
 //---------------------------------
 // GEM2MT
 //---------------------------------
-
 
 enum gem2mt_objects {
   o_mtpufl = o_dttprn+1, o_mtpvfl, o_mtpsfl, o_mtcipf, o_mtszt,
@@ -786,6 +785,19 @@ enum gem2mt_objects {
   o_mtct, o_mtcp, o_mtcv,  o_mtctau, o_mtdtau,
   o_mtotau, o_mtref1, o_mtref2, o_mtref3, o_mtref4
 };
+
+enum CHstruct_objects {  // data objects from DataCH structure for GEM2MT scripts
+  o_ch_nicb = o_mtref4+1, o_ch_ndcb, o_ch_nphb, o_ch_npsb, o_ch_xic,
+  o_ch_xdc, o_ch_xph, o_ch_a, o_ch_icmm, o_ch_dcmm, o_ch_dd, o_ch_aalp
+};  // 12 DODs
+
+enum FMTnode_objects {
+  o_n0_ct = o_ch_aalp+1, o_n1_ct, o_n0_cs, o_n1_cs, o_n0_ts, o_n1_ts,
+  o_n0_xdc, o_n1_xdc, o_n0_gam, o_n1_gam, o_n0_xph, o_n1_xph, o_n0_vps,
+  o_n1_vps, o_n0_mps, o_n1_mps, o_n0_bps, o_n1_bps, o_n0_xpa, o_n1_xpa,
+  o_n0_dul, o_n1_dul, o_n0_dll, o_n1_dll, o_n0_bic, o_n1_bic, o_n0_rmb,
+  o_n1_rmb, o_n0_uic, o_n1_uic, o_n0_dr1, o_n1_dr1, o_n0_dr2, o_n1_dr2
+};  // 34 DODs
 
 #endif // _v_mod_h
 

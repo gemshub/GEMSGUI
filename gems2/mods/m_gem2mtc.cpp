@@ -490,7 +490,7 @@ void  TGEM2MT::NewNodeArray()
         na->pNodT0()[jj]->Km = mtp->HydP[jj][2];
         na->pNodT0()[jj]->al = mtp->HydP[jj][3];
         na->pNodT0()[jj]->hDl = mtp->HydP[jj][4];
-        na->pNodT0()[jj]->nfo = mtp->HydP[jj][5];
+        na->pNodT0()[jj]->nto = mtp->HydP[jj][5];
    }
 
 }

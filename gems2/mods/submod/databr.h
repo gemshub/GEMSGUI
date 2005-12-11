@@ -68,7 +68,7 @@ typedef struct
     hDl,	// hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
     hDt,	// hydraulic transversal dispersivity, m**2/s			 	
     hDv,	// hydraulic vertical dispersivity, m**2/s
-    nfo;	// fortuosity
+    nto;	// tortuosity
    
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH 
