@@ -10,8 +10,11 @@ DEFINES         += GEMS_RELEASE
 
 CONFIG		-= debug
 CONFIG		+= qt thread warn_off release
-LIBS            -= -lqt-mt 
-LIBS            += $(QTDIR)/lib/libqt-mt.a 
+
+!win32 {
+  LIBS            -= -lqt-mt 
+  LIBS            += $(QTDIR)/lib/libqt-mt.a 
+}
 #CONFIG		+= qmake_cache 
 
 

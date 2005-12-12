@@ -268,6 +268,9 @@ protected:
 
     void copyNodeArrays();
     void  NewNodeArray();
+    void  LinkNode0(  int nNode );
+    void  LinkNode1(  int nNode );
+    void  LinkCSD(  int nNode );
     int Trans1D( char mode, int RefCode );
 
 public:
