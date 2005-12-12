@@ -1,4 +1,4 @@
- ; gems201rc8-w32-install.nsi
+; gems211rc1-w32-install.nsi
 ; requires NullSoft NSIS v.1.98 or later to be installed on your PC!
 ;
 ; This script will install GEM-Selektor program package 
@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems210rc0-w32-install.exe"
+OutFile "gems211rc1-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS2
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS2
 InstallDirRegKey HKLM SOFTWARE\GEMS2 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 2.1.0-PSI rc0 $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 2.1.1-PSI rc1 $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS2inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory
@@ -44,7 +44,7 @@ Section "GEMS2 (required)"
     File "C:\GEMS2inst\program\gems2.exe"
     File "C:\GEMS2inst\program\gems2.ico"
  ; Set the right version of qt*.dll below
-    File "C:\GEMS2inst\program\qtmt335.dll"
+    File "C:\GEMS2inst\program\qtmt334.dll"
     File "C:\GEMS2inst\program\cc3250mt.dll"
  ;   File "C:\GEMS2inst\program\imm32.dll"
     File "C:\GEMS2inst\program\readme.txt"

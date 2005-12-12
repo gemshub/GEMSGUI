@@ -39,17 +39,7 @@ int
             every,// output every time step (e.g. every 10-th step)
             inx,  // initial node index ????
             RetC = 0;
-     L = 1.;      // length in m
-     v = 3e-9;    // fluid velocity constant m/sec
-     tf = 1.;     // time step reduce factor
-     cutoff = 1e-7;   // cutoff value for differences (to use for correcting bulk compositions)
-     minel = 1e-10;   // minimal allowed amount of element (except charge) in bulk composition
-      
-nx = 100;    // number of nodes (default 1500)
-mts = 500;   // max number of time steps   10000
-every = 20;  // output on every 20-th time step
-     inx = 1;     // in the node index inx
-/*
+
      L = 1.;      // length in m
      v = 1e-9;    // fluid velocity constant m/sec
      tf = 1.;     // time step reduce factor
@@ -60,7 +50,7 @@ nx = 100;    // number of nodes (default 1500)
 mts = 300;   // max number of time steps   10000
 every = 10;  // output on every 20-th time step
      inx = 1;     // in the node index inx
-*/
+
      gstring multu_in1 = "MgWBoundC.ipm";
      gstring chbr_in1 = "ipmfiles-dat.lst";
 
