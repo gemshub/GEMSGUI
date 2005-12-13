@@ -55,9 +55,9 @@ typedef struct
    iStat,  // GEM2MT iteration status:  0 - indefinite; 1 ready for analysis;
         //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
    PsSYd,  // Save generated SysEq records to data base (+ -)
-PsSdat, //  Save DataCH and inital DataBR files as text files (+) or binary (-)
-PsDDc,  //  Use diffusion coefficients for DC - DDc vector (+ -)
-PsDIc,  //  Use diffusion coefficients for DC - DDc vector (+ -)
+   PsSdat, //  Save DataCH and inital DataBR files as text files (+) or binary (-)
+   PsDDc,  //  Use diffusion coefficients for DC - DDc vector (+ -)
+   PsDIc,  //  Use diffusion coefficients for IC - DIc vector (+ -)
    PsTPai,  //  Create T,P values in Tval, Pval using iterator(+) or enter(-)
 
    name[MAXFORMULA],  //  Name of GEM2MT task
@@ -71,9 +71,9 @@ PsDIc,  //  Use diffusion coefficients for DC - DDc vector (+ -)
    nPG,  // number of mobile phase groups (0 or >1)
    nFD,  // number of MPG flux definitions (0 or >1)
    nSFD,   // number of source flux definitions (0 or < nFD )
-nEl, // number of electrolytes for setting up electrolyte diffusion coefficients in mDEl vector
-nRs1,  // reserved
-nRs2,  // reserved
+   nEl, // number of electrolytes for setting up electrolyte diffusion coefficients in mDEl vector
+   nRs1,  // reserved
+   nRs2,  // reserved
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
@@ -82,7 +82,7 @@ nRs2,  // reserved
    FIb,   // N - number of phases (set automatically from Multi)
    Lb,   // N - number of dependent components in multycomponent phases (set automatically from Multi)
    bTau, // Time point for the simulation break (Tau[0] at start)
-   nS,   // Total number of points to sample the results in xt, yt
+ntM, // Maximum allowed number of time iteration steps (default 1000)
    nYS,  // number of plots (columns in the yt array)
    nE,   // Total number of experiments points (in xEt, yEt) to plot over
    nYE,  // number of experimental parameters (columns in the yEt array)
@@ -329,5 +329,14 @@ public:
 
 };
 
+enum gem2mt_inernal {
+//              A_CHI = 1,  A_GAM =2,
+  GMT_MODE_S = 'S',   // Preparation of initial DataCH and DataBR files for external coupled RMT modeling using GEMIPM2K
+  GMT_MODE_F = 'F',   // F Flux-box RMT scoping model (MPG fluxes, sequential reactors etc.)
+  GMT_MODE_A = 'A',   // A 1D advection (numerical) coupled RMT scoping model
+  GMT_MODE_D = 'D',   // D 1D diffusion (numerical) coupled RMT scoping model
+  GMT_MODE_T = 'T'    // T 1D advection-diffusion coupled RMT scoping model
+
+};
 
 #endif //_m_gem2mt_h_

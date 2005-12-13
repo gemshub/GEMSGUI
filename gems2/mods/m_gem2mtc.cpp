@@ -78,10 +78,10 @@ TGEM2MT::test_sizes( )
      }
 
   if( mtp->PvMSg != S_OFF )
-    if( mtp->nS <= 0 || mtp->nYS <= 0 )
+    if( mtp->nC <= 0 || mtp->nYS <= 0 )
     {  err_str +=
-"W02PErem: You forgot to specify the number of points or plots! \n Please, do it!";
-      if( mtp->nS <= 0 ) mtp->nS = 1;
+"W02PErem: You forgot to specify the number of nodes or plots! \n Please, do it!";
+      if( mtp->nC <= 0 ) mtp->nC = 1;
       if( mtp->nYS <= 0 ) mtp->nYS = 1;
      }
 
@@ -587,7 +587,7 @@ void TGEM2MT::CalcGraph()
 // LinkCSD(0);
  for( int ii=0; ii<mtp->nC; ii++)
  {
-   mtp->jt = min( ii, (mtp->nS-1));
+   mtp->jt = min( ii, (mtp->nC-1));
    mtp->qc = ii;
    LinkNode0(ii);
    LinkNode1(ii);
@@ -668,7 +668,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
 void
 TGEM2MT::CalcPoint( int nPoint )
 {
-    if( mtp->PvMSg == S_OFF || nPoint >= mtp->nS )
+    if( mtp->PvMSg == S_OFF || nPoint >= mtp->nC )
      return;
     // Add point to graph screen
     if( gd_gr )

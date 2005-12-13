@@ -127,7 +127,7 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtpsfl].SetPtr( &mtp->PsMode ); /* a8 */
     aObj[o_mtcipf].SetPtr( &mtp->nC );     /* i8 */
     aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i8 */
-    aObj[o_mtnsne].SetPtr( &mtp->nS );   /* i4 */
+    aObj[o_mtnsne].SetPtr( &mtp->ntM );   /* i4 */
     aObj[o_mtptai].SetPtr( &mtp->nPai );  /* i3 */
     aObj[o_mtchbr].SetPtr( &mtp->nICb );  /* i5 */
     aObj[o_mttmi].SetPtr( mtp->tmi );     /* i3 */
@@ -211,9 +211,9 @@ aObj[o_mtide].SetPtr( &mtp->ide );
     aObj[ o_mtqpc].SetPtr( mtp->qpc);
     aObj[ o_mtqpc].SetDim( mtp->Nqpg, 1 );
     aObj[ o_mtxt].SetPtr( mtp->xt);
-    aObj[ o_mtxt].SetDim( mtp->nS, 1 );
+    aObj[ o_mtxt].SetDim( mtp->nC, 1 );
     aObj[ o_mtyt].SetPtr( mtp->yt);
-    aObj[ o_mtyt].SetDim( mtp->nS, mtp->nYS );
+    aObj[ o_mtyt].SetDim( mtp->nC, mtp->nYS );
     aObj[ o_mtcib].SetPtr( mtp->CIb);
     aObj[ o_mtcib].SetDim( mtp->nIV, mtp->Nb );
     aObj[ o_mtcab].SetPtr( mtp->CAb);
@@ -582,15 +582,15 @@ void TGEM2MT::dyn_new(int q)
       mtp->xt = (double *)aObj[ o_mtxt].Free();
       mtp->yt = (double *)aObj[ o_mtyt].Free();
       plot = (TPlotLine *)aObj[ o_mtplline].Free();
-      mtp->nS = mtp->nYS = 0;
+/*      mtp->nS =  */  mtp->nYS = 0;
     }
     else
     {
       mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam ].Alloc(
                     1, mtp->nYS, MAXGRNAME);
       mtp->gExpr = (char *)aObj[ o_mtgexpr ].Alloc(1, 2048, S_);
-      mtp->xt   = (double *)aObj[ o_mtxt ].Alloc(mtp->nS, 1, D_);
-      mtp->yt   = (double *)aObj[ o_mtyt ].Alloc(mtp->nS, mtp->nYS, D_);
+      mtp->xt   = (double *)aObj[ o_mtxt ].Alloc(mtp->nC, 1, D_);
+      mtp->yt   = (double *)aObj[ o_mtyt ].Alloc(mtp->nC, mtp->nYS, D_);
     }
 
     if( mtp->PvEF == S_OFF )
