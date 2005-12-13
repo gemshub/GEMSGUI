@@ -154,7 +154,7 @@ struct CompItem
 };
 
 // the subroutine for ET_translate
-typedef int (* tget_ndx)( int nI, int nO );
+typedef int (tget_ndx)( int nI, int nO );
 
 // Module TParam (RMULTS+MTPARM+SYSTEM+MULTY see SubModules)
 class TProfil : public TCModule
@@ -399,7 +399,8 @@ public:
 
     // Proces make functions
     void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
-     int ( *get_ndx)(int, int) );
+     tget_ndx *get_ndx = 0 );
+//     int ( get_ndx)(int, int) = 0 );
     //  void  SetSyPhmKey( const char * key)
     //      {   memcpy( syp->PhmKey, key, EQ_RKLEN ); }
     // to Probe

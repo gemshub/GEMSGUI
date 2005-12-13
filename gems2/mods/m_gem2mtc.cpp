@@ -606,6 +606,14 @@ void TGEM2MT::CalcGraph()
 // Translate, analyze and unpack equations (o_mttexpr or o_mtgexpr)
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+int tttt_( int i, int nO )
+{
+  int jj=i;
+
+  return jj;
+}
 
 int TGEM2MT::ssss_( int i, int nO )
 {
@@ -631,7 +639,7 @@ void TGEM2MT::Expr_analyze( int obj_num )
             mupL = PRof->mup->L;
             pmpL = PRof->pmp->L;
         }
-        PRof->ET_translate( o_mwetext, obj_num, 0, mupL, 0, pmpL, ssss_ );
+        PRof->ET_translate( (int)o_mwetext, (int)obj_num, 0, (int)mupL, 0, (int)pmpL, &(TGEM2MT::ssss_) );
         if( obj_num == o_mttexpr )
           rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
         else

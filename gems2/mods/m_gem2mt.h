@@ -267,7 +267,6 @@ protected:
 
     void keyTest( const char *key );
     void Expr_analyze( int obj_num );
-    int ssss_( int i, int nO );
     void CalcPoint( int nPoint );
     bool test_sizes();
     void SelectNodeStructures( bool select_all );
@@ -326,6 +325,7 @@ public:
 
    void InsertChanges( TIArray<CompItem>& aIComp,
           TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
+   static int ssss_( int i, int nO );
 
 };
 
