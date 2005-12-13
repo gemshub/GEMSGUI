@@ -89,6 +89,14 @@ nRs2,  // reserved
    nPai,  // Number of P points in MTP interpolation array in DataCH ( 1 to 10 )
    nTai,  // Number of T points in MTP interpolation array in DataCH ( 1 to 20 )
    sRes,   // reserved
+  // These dimensionalities define sizes of dynamic data in DATABR structure!!!
+  // Needed to reduce on storage demand for data bridge instances (nodes)!
+  // Connection occurs through xIC, xPH and xDC lists!
+    nICb,       // number of stoichiometry units (<= nIC) used in the data bridge
+    nDCb,      	// number of DC (chemical species, <= nDC) used in the data bridge
+    nPHb,     	// number of phases (<= nPH) used in the data bridge
+    nPSb,       // number of multicomponent phases (<= nPS) used in the data bridge
+    uRes3,
 
 // iterators for generating syseq record keys for initial system variants
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
@@ -96,6 +104,11 @@ nRs2,  // reserved
    axisType[6],  // axis graph type, background(3), graph type, reserved
    *DiCp,     // array of indexes of initial system variants for
               // distributing to nodes [nC]
+// These lists of indices connect the DATABR arrays with this structure
+    *xIC,   // ICNL indices in DATABR IC vectors [nICb]
+    *xDC,   // DCNL indices in DATABR DC list [nDCb]
+    *xPH,   // PHNL indices in DATABR phase vectors [nPHb]
+
    (*FDLi)[2] //[nFD][2] Indexes of nodes where this flux begins and ends
               // negative value means one-side flux (source or sink)
          // for source fluxes, -2 means "source flux stoichiometry with index 1
@@ -213,7 +226,7 @@ ADrs6
 jdd,   // current index of diffusing DC
 jdi,   // current index of diffusing IC
 ide,   // current index of diffusing electrolyte
-   rei4,
+   ct,  // actual time iterator
    rei5
    ;
 
@@ -224,7 +237,7 @@ ide,   // current index of diffusing electrolyte
    cTau, // current physical time
    dTau, // current time step value
    oTau, // old time step value
-   ref1,
+   dx,   // node distance [L/nC]
    ref2,
    ref3,
    ref4
@@ -254,8 +267,10 @@ protected:
 
     void keyTest( const char *key );
     void Expr_analyze( int obj_num );
+    int ssss_( int i, int nO );
     void CalcPoint( int nPoint );
     bool test_sizes();
+    void SelectNodeStructures( bool select_all );
     void init_arrays( bool mode );
     void calc_eqstat();
     void outMulti();
@@ -266,12 +281,18 @@ protected:
     void Bn_Calc();
     void gen_TPval();
 
-    void copyNodeArrays();
+    void  copyNodeArrays();
     void  NewNodeArray();
     void  LinkNode0(  int nNode );
     void  LinkNode1(  int nNode );
     void  LinkCSD(  int nNode );
-    int Trans1D( char mode, int RefCode );
+    void  CalcGraph();
+    bool  CalcIPM( char mode, int start_node = 0, int end_node = 1000 );
+    void  MassTransAdvecStart();
+    void  MassTransAdvecStep();
+
+
+    void Trans1D( char mode  );
 
 public:
 

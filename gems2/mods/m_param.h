@@ -153,6 +153,9 @@ struct CompItem
 
 };
 
+// the subroutine for ET_translate
+typedef int (* tget_ndx)( int nI, int nO );
+
 // Module TParam (RMULTS+MTPARM+SYSTEM+MULTY see SubModules)
 class TProfil : public TCModule
 {
@@ -395,7 +398,8 @@ public:
     void ShowDBWindow( const char *objName, int nLine=0 );
 
     // Proces make functions
-    void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je );
+    void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
+     int ( *get_ndx)(int, int) );
     //  void  SetSyPhmKey( const char * key)
     //      {   memcpy( syp->PhmKey, key, EQ_RKLEN ); }
     // to Probe

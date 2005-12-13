@@ -184,6 +184,10 @@ public:
    void MakeNodeStructures( QWidget* par, bool select_all,
     float *Tai, float *Pai,
     short nTp_ = 1 , short nPp_ = 1 , float Ttol_ = 1., float Ptol_ =1. );
+    void MakeNodeStructures(  short anICb, short anDCb,  short anPHb,
+    short* axIC, short* axDC,  short* axPH,
+    float* Tai, float* Pai,
+    short nTp_, short nPp_, float Ttol_, float Ptol_  );
    void PutGEM2MTFiles(QWidget* par, int nIV, bool textmode, bool binmode );
 
 #else

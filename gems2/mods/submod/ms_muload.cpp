@@ -674,10 +674,11 @@ int TProfil::find_acnum( char *name, int LNmode )
 //
 char* MSDELIM = " +-*/^:[]();=$&|!<>?#\n\t";
 //
-void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
+void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
+         int ( *get_ndx)(int, int) )
 {
     size_t eLen, ls, lb;
-    int i, ii, pj, LNplace=1, Xplace=0;
+    int i, ii, pj, LNplace=1, Xplace=0, nO=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
       *prev, *last, iCode/*=A_NOx*/, odlab[MAXKEYWD+2]; // added KD 30.03.01
     vstr name(64), nbuf(64);
@@ -755,6 +756,7 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
                 err += " is not known.";
                 Error( "E00MSPrep: ", err.c_str() );
             }
+            nO = ii;
             iCode = aObj[ii].GetIndexationCode();
             // Getting new indexation code  KD 30.03.01
                 switch( iCode )
@@ -884,7 +886,10 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je)
                   i = find_icnum( name, LNplace );
                 break;
             }
-            pj=i;
+            if( !get_ndx )
+              pj=i;
+            else
+              pj = get_ndx( i, nO );
             switch( cstate )
             { /*change name in the text */
             case A_icx:

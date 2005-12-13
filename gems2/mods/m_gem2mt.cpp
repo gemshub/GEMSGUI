@@ -129,6 +129,7 @@ void TGEM2MT::ods_link(int q)
     aObj[o_mtszt].SetPtr( &mtp->Lbi );     /* i8 */
     aObj[o_mtnsne].SetPtr( &mtp->nS );   /* i4 */
     aObj[o_mtptai].SetPtr( &mtp->nPai );  /* i3 */
+    aObj[o_mtchbr].SetPtr( &mtp->nICb );  /* i5 */
     aObj[o_mttmi].SetPtr( mtp->tmi );     /* i3 */
     aObj[o_mtnvi].SetPtr( mtp->NVi );     /* i3 */
     aObj[o_mtaxis].SetPtr( mtp->axisType ); /* i6 */
@@ -148,7 +149,7 @@ void TGEM2MT::ods_link(int q)
 aObj[o_mtjdd].SetPtr( &mtp->jdd );
 aObj[o_mtjdi].SetPtr( &mtp->jdi );
 aObj[o_mtide].SetPtr( &mtp->ide );
-    aObj[o_mtrei4].SetPtr( &mtp->rei4 );
+    aObj[o_mtct_].SetPtr( &mtp->ct );
     aObj[o_mtrei5].SetPtr( &mtp->rei5 );
     aObj[o_mtct].SetPtr( &mtp->cT );
     aObj[o_mtcp].SetPtr( &mtp->cP );
@@ -156,16 +157,18 @@ aObj[o_mtide].SetPtr( &mtp->ide );
     aObj[o_mtctau].SetPtr( &mtp->cTau );
     aObj[o_mtdtau].SetPtr( &mtp->dTau );
     aObj[o_mtotau].SetPtr( &mtp->oTau );
-    aObj[o_mtref1].SetPtr( &mtp->ref1 );
+    aObj[o_mtdx].SetPtr( &mtp->dx );
     aObj[o_mtref2].SetPtr( &mtp->ref2 );
     aObj[o_mtref3].SetPtr( &mtp->ref3 );
     aObj[o_mtref4].SetPtr( &mtp->ref4 );
 
-// DBase 50
-    aObj[ o_mtname].SetPtr(  mtp->name );
-    aObj[ o_mtnotes].SetPtr(   mtp->notes );
+// DBase  58
+    aObj[o_mtname].SetPtr(  mtp->name );
+    aObj[o_mtnotes].SetPtr(   mtp->notes );
     aObj[o_mtflag].SetPtr( &mtp->PunE );    /* a20 */
-    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i35 */
+    aObj[o_mtshort].SetPtr( &mtp->nC );     /* i40 */
+    aObj[o_mtworks].SetPtr( &mtp->ctm );     /* i12 */
+    aObj[o_mtworkf].SetPtr( &mtp->cT );     /* f10 */
     aObj[o_mtdoudl].SetPtr( &mtp->Msysb );    /* d9 */
     aObj[o_mtadpar].SetPtr( &mtp->fVel );    /* d11 */
     aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f19 */
@@ -263,6 +266,13 @@ aObj[ o_mtdel].SetPtr( mtp->DEl);
 aObj[ o_mtdel].SetDim( mtp->nEl, 1 );
 aObj[ o_mtfor_e].SetPtr( mtp->for_e);
 aObj[ o_mtfor_e].SetDim( mtp->nEl, 1 );
+//added 13/12/2005
+aObj[o_mt_xic].SetPtr( mtp->xIC );
+aObj[o_mt_xic].SetDim( mtp->nICb, 1 );
+aObj[o_mt_xdc].SetPtr( mtp->xDC );
+aObj[o_mt_xdc].SetDim( mtp->nDCb, 1 );
+aObj[o_mt_xph].SetPtr( mtp->xPH );
+aObj[o_mt_xph].SetDim( mtp->nPHb, 1 );
 // work
     aObj[ o_mtan].SetPtr(mtp->An);
 //    aObj[ o_mtan].SetDim( dtp->nK, dtp->Nb );
@@ -332,6 +342,10 @@ mtp->DDc = (float*)aObj[ o_mtddc].GetPtr();
 mtp->DIc = (float*)aObj[ o_mtdic].GetPtr();
 mtp->DEl = (float*)aObj[ o_mtdel].GetPtr();
 mtp->for_e = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_e].GetPtr();
+//added 13/12/2005
+mtp->xIC = (short *)aObj[o_mt_xic].GetPtr();
+mtp->xDC = (short *)aObj[o_mt_xdc].GetPtr();
+mtp->xPH = (short *)aObj[o_mt_xph].GetPtr();
 // work
     mtp->An = (float *)aObj[ o_mtan].GetPtr();
 mtp->Ae = (float *)aObj[ o_mtae].GetPtr();
@@ -392,6 +406,10 @@ mtp->DDc = (float*)aObj[ o_mtddc].Free();
 mtp->DIc = (float*)aObj[ o_mtdic].Free();
 mtp->DEl = (float*)aObj[ o_mtdel].Free();
 mtp->for_e = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_e].Free();
+//added 13/12/2005
+mtp->xIC = (short *)aObj[o_mt_xic].Free();
+mtp->xDC = (short *)aObj[o_mt_xdc].Free();
+mtp->xPH = (short *)aObj[o_mt_xph].Free();
 // work
     mtp->An = (float *)aObj[ o_mtan].Free();
 mtp->Ae = (float *)aObj[ o_mtae].Free();
@@ -407,6 +425,11 @@ void TGEM2MT::dyn_new(int q)
       "E04DTrem: Illegal access to mt in dyn_new.");
 
  mtp->DiCp = (short *)aObj[ o_mtdicp].Alloc( mtp->nC, 1, I_);
+//added 13/12/2005
+ mtp->xIC = (short *)aObj[o_mt_xic].Alloc( mtp->nICb, 1, I_);
+ mtp->xDC = (short *)aObj[o_mt_xdc].Alloc( mtp->nDCb, 1, I_);
+ mtp->xPH = (short *)aObj[o_mt_xph].Alloc( mtp->nPHb, 1, I_);
+
  mtp->nam_i=(char (*)[MAXIDNAME])aObj[o_mtnam_i].Alloc( mtp->nIV, 1, MAXIDNAME);
  mtp->Pi = (float *)aObj[ o_mtpi].Alloc( mtp->nIV, 1, F_);
  mtp->Ti = (float *)aObj[ o_mtti].Alloc( mtp->nIV, 1, F_);
@@ -634,8 +657,8 @@ void TGEM2MT::set_def(int q)
     strcpy( mtp->notes, "`" );
     strcpy( mtp->xNames, "X" );
     strcpy( mtp->yNames, "Y" );
-    memset( &mtp->nC, 0, sizeof(short)*20 );
-    memset( &mtp->Msysb, 0, sizeof(double)*9 );
+    memset( &mtp->nC, 0, sizeof(short)*28 );
+    memset( &mtp->Msysb, 0, sizeof(double)*20 );
     memset( mtp->size[0], 0, sizeof(float)*8 );
     memset( mtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
     mtp->nC =1;
@@ -708,6 +731,10 @@ mtp->DDc = 0;
 mtp->DIc = 0;
 mtp->DEl = 0;
 mtp->for_e = 0;
+//added 13/12/2005
+mtp->xIC = 0;
+mtp->xDC = 0;
+mtp->xPH = 0;
 // work
     mtp->An = 0;
 mtp->Ae = 0;
@@ -722,77 +749,6 @@ void TGEM2MT::RecInput( const char *key )
     //  strncpy( keywd, key, 24 );
     TCModule::RecInput( key );
 }
-
-bool
-TGEM2MT::test_sizes( )
-{
-  gstring err_str;
-
-
-  mtp->Nb = TProfil::pm->mup->N;
-  mtp->FIb = TProfil::pm->mup->Fi;
-  mtp->Lb = TProfil::pm->mup->L;
-
-
-  if( mtp->nC<=0 || mtp->nIV <= 0)
-  {  err_str +=
-"W02PErem: You forgot to specify the number of inital variants! \n Please, do it!";
-    mtp->nC = mtp->nIV = 1;
-  }
-
-  if( mtp->PvAUi != S_OFF )
-    if( mtp->Lbi <= 0 )
-    {  err_str +=
-"W02PErem: You forgot to specify the number of formula units! \n Please, do it!";
-       mtp->Lbi = 1;
-     }
-
-  if( mtp->PvFDL != S_OFF )
-    if( mtp->nFD <= 0 )
-    {  err_str +=
-"W02PErem: You forgot to specify the number of flux definitions! \n Please, do it!";
-       mtp->nFD = 1;
-     }
-
-  if( mtp->PvSFL != S_OFF )
-    if( mtp->nSFD <= 0 )
-    {  err_str +=
-"W02PErem: You forgot to specify the source fluxes\n"
-" and elemental stoichiometries for them! \n Please, do it!";
-       mtp->nSFD = 1;
-     }
-
-  if( mtp->PvPGD != S_OFF )
-    if( mtp->nPG <= 0 )
-    {  err_str +=
-"W02PErem: You forgot to specify the number of mobile phase groups! \n Please, do it!";
-       mtp->nPG = 1;
-     }
-
-  if( mtp->PvMSg != S_OFF )
-    if( mtp->nS <= 0 || mtp->nYS <= 0 )
-    {  err_str +=
-"W02PErem: You forgot to specify the number of points or plots! \n Please, do it!";
-      if( mtp->nS <= 0 ) mtp->nS = 1;
-      if( mtp->nYS <= 0 ) mtp->nYS = 1;
-     }
-
-  if( mtp->PvEF != S_OFF )
-    if( mtp->nE <= 0 || mtp->nYE <= 0 )
-    {  err_str +=
-"W02PErem: You forgot to specify the number of experimental points! \n Please, do it!";
-      if( mtp->nE <= 0 ) mtp->nE = 1;
-      if( mtp->nYE <= 0 ) mtp->nYE = 1;
-     }
-
-   if( !err_str.empty() )
-    {
-        vfMessage(window(), GetName(), err_str.c_str(), vfErr);
-        return false;
-    }
-    return true;
-}
-
 
 //Rebild record structure before calc
 int
@@ -816,7 +772,8 @@ AGAIN:
       goto AGAIN;
     }
 
-    dyn_new();
+    SelectNodeStructures( false );
+    //dyn_new() in function SelectNodeStructures
 
     init_arrays( setdef ); //clear all
 
@@ -831,11 +788,12 @@ TGEM2MT::RecCalc( const char * key )
 {
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
+   if( mtp->nICb == 0 && mtp->nDCb == 0 &&
+       mtp->nPHb == 0 && mtp->nPSb == 0 )
+       Error( GetName(), "Added/deleted components to Profile.\n"
+                         "Please, remake the record." );
 
    na = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
-
-   if( mtp->PvMSg != S_OFF )
-    Expr_analyze( o_mtgexpr );
 
    mt_reset();
    Bn_Calc();
@@ -848,7 +806,9 @@ TGEM2MT::RecCalc( const char * key )
    if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' )
    {   // calculate start data
      NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
-     Trans1D( mtp->PsMode, 1 );
+     if( mtp->PvMSg != S_OFF )
+         Expr_analyze( o_mtgexpr );
+     Trans1D( NEED_GEM_AIA );
    }
 
    delete na;
@@ -936,6 +896,10 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
      mtp->Nb = TProfil::pm->mup->N;
      mtp->FIb = TProfil::pm->mup->Fi;
      mtp->Lb = TProfil::pm->mup->L;
+     mtp->nICb = 0;   // number of stoichiometry units (<= nIC) used in the data bridge
+     mtp->nDCb = 0;   // number of DC (chemical species, <= nDC) used in the data bridge
+     mtp->nPHb = 0;   // number of phases (<= nPH) used in the data bridge
+     mtp->nPSb = 0;  // number of multicomponent phases (<= nPS) used in the data bridge
      dyn_new();
 
 //***************************************************
@@ -1090,140 +1054,6 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
      delete[] p_DIc;
 
 }
-
-// working with scripts --------------------------------------------
-// Translate, analyze and unpack equations (o_mttexpr or o_mtgexpr)
-void TGEM2MT::Expr_analyze( int obj_num )
-{
-    try
-    {
-        TProfil* PRof = TProfil::pm;
-        int mupL=0, pmpL =0;
-
-        if( pVisor->ProfileMode == true )
-        {
-            mupL = PRof->mup->L;
-            pmpL = PRof->pmp->L;
-        }
-        PRof->ET_translate( o_mwetext, obj_num, 0, mupL, 0, pmpL );
-        if( obj_num == o_mttexpr )
-          rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
-        else
-          rpn[1].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
-    }
-    catch( TError& xcpt )
-    {
-        char *erscan = (char *)aObj[obj_num].GetPtr();
-        vfMessage(window(), xcpt.title, xcpt.mess);
-        CheckEqText(  erscan,
-               "E91MSTran: Error in translation of GtDemo math script: " );
-        Error(  GetName() , xcpt.mess.c_str() );
-    }
-}
-
-// plotting the record -------------------------------------------------
-//Added one point to graph
-void
-TGEM2MT::CalcPoint( int nPoint )
-{
-    if( mtp->PvMSg == S_OFF || nPoint >= mtp->nS )
-     return;
-    // Add point to graph screen
-    if( gd_gr )
-        gd_gr->AddPoint( 0, nPoint, true );
-}
-
-// Plotting record
-void
-TGEM2MT::RecordPlot( const char* /*key*/ )
-{
-    if( mtp->PvMSg == S_OFF )
-      return;
-
-    TIArray<TPlot> plt;
-
-    plt.Add( new TPlot(o_mtxt, o_mtyt ));
-    int  nLn = plt[ 0 ].getLinesNumber();
-    if( mtp->PvEF != S_OFF )
-    {
-        plt.Add( new TPlot(o_mtxet, o_mtyet ));
-        nLn += plt[1].getLinesNumber();
-    }
-    if( plot )
-    {
-        int oldN = aObj[o_mtplline].GetN();
-        TPlotLine defpl("", 4);
-
-        plot = (TPlotLine * )aObj[ o_mtplline ].Alloc( nLn, sizeof(TPlotLine) );
-        for(int ii=0; ii<nLn; ii++ )
-        {
-            if( ii >= oldN )
-                plot[ii] = defpl;
-            if(ii < mtp->nYS )
-                strncpy( plot[ii].name, mtp->lNam[ii], MAXGRNAME );
-            else
-                strncpy( plot[ii].name, mtp->lNamE[ii-mtp->nYS], MAXGRNAME );
-            plot[ii].name[MAXGRNAME] = '\0';
-        }
-        gd_gr = new GraphWindow( this, plt, mtp->name,
-              mtp->size[0], mtp->size[1], plot,
-              mtp->axisType, mtp->xNames, mtp->yNames);
-    }
-    else
-    {
-      TCStringArray lnames;
-      int ii;
-      for( ii=0; ii<mtp->nYS; ii++ )
-          lnames.Add( gstring(mtp->lNam[ii], 0, MAXGRNAME ));
-      for( ii=0; ii<mtp->nYE; ii++ )
-          lnames.Add( gstring( mtp->lNamE[ii], 0, MAXGRNAME ));
-      gd_gr = new GraphWindow( this, plt, mtp->name,
-          mtp->xNames, mtp->yNames, lnames );
-    }
-}
-
-
-// Save changes was done in Plotting dialog
-bool
-TGEM2MT::SaveGraphData( GraphData *gr )
-{
-// We can only have one Plot dialog (modal one) so condition should be omitted!!
-     if( !gd_gr )
-      return false;
-     if( gr != gd_gr->getGraphData() )
-      return false;
-    mtp->axisType[0] = (short)gr->axisType;
-    mtp->axisType[4] = (short)gr->graphType;
-    mtp->axisType[1] = (short)gr->b_color[0];
-    mtp->axisType[2] = (short)gr->b_color[1];
-    mtp->axisType[3] = (short)gr->b_color[2];
-    strncpy( mtp->xNames, gr->xName.c_str(), 9);
-    strncpy( mtp->yNames, gr->yName.c_str(), 9);
-    memcpy( &mtp->size[0], gr->region, 4*sizeof(float) );
-    memcpy( &mtp->size[1], gr->part,  4*sizeof(float) );
-
-    plot = (TPlotLine *) aObj[ o_mtplline].Alloc(
-       gr->lines.GetCount(), sizeof(TPlotLine));
-    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
-    {
-        plot[ii] = gr->lines[ii];
-        //  lNam0 and lNamE back
-        if( ii < mtp->nYS )
-            strncpy(  mtp->lNam[ii], plot[ii].name, MAXGRNAME );
-        else
-            strncpy(  mtp->lNamE[ii-mtp->nYS], plot[ii].name, MAXGRNAME );
-    }
-    if( gr->graphType == ISOLINES )
-       gr->getColorList();
-
-    pVisor->Update();
-    contentsChanged = true;
-
-    return true;
-}
-
-
-
 
 // --------------------- end of m_gem2mt.cpp ---------------------------
 

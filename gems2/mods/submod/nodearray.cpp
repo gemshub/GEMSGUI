@@ -90,6 +90,35 @@ void TNodeArray::freeMemory()
 #ifndef IPMGEMPLUGIN
 
 // Make start DATACH and DATABR data from GEMS internal data (MULTI and other)
+void TNodeArray::MakeNodeStructures(
+    short anICb,       // number of stoichiometry units (<= nIC) used in the data bridge
+    short anDCb,      	// number of DC (chemical species, <= nDC) used in the data bridge
+    short anPHb,     	// number of phases (<= nPH) used in the data bridge
+    short* axIC,   // ICNL indices in DATABR IC vectors [nICb]
+    short* axDC,   // DCNL indices in DATABR DC list [nDCb]
+    short* axPH,   // PHNL indices in DATABR phase vectors [nPHb]
+    float* Tai, float* Pai,
+    short nTp_, short nPp_, float Ttol_, float Ptol_  )
+{
+  short ii;
+  TCIntArray aSelIC;
+  TCIntArray aSelDC;
+  TCIntArray aSelPH;
+
+// make lists
+  for( ii=0; ii<anICb; ii++)
+     aSelIC.Add( axIC[ii] );
+  for( ii=0; ii<anDCb; ii++)
+     aSelDC.Add( axDC[ii] );
+  for( ii=0; ii<anPHb; ii++)
+     aSelPH.Add( axPH[ii] );
+
+// set default data and realloc arrays
+   makeStartDataChBR( aSelIC, aSelDC, aSelPH,
+                      nTp_, nPp_, Ttol_, Ptol_, Tai, Pai );
+}
+
+// Make start DATACH and DATABR data from GEMS internal data (MULTI and other)
 void TNodeArray::MakeNodeStructures( QWidget* par, bool select_all,
     float *Tai, float *Pai,
     short nTp_, short nPp_, float Ttol_, float Ptol_  )
@@ -142,7 +171,6 @@ void TNodeArray::MakeNodeStructures( QWidget* par, bool select_all,
    makeStartDataChBR( aSelIC, aSelDC, aSelPH,
                       nTp_, nPp_, Ttol_, Ptol_, Tai, Pai );
 }
-
 
 // Writing dataCH, dataBR structure to binary/text files
 // and other nessassary GEM2MT files

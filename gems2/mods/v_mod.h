@@ -761,29 +761,28 @@ const   int MAXFORMUNITDT=     40;
 
 enum gem2mt_objects {
   o_mtpufl = o_dttprn+1, o_mtpvfl, o_mtpsfl, o_mtcipf, o_mtszt,
-  o_mtnsne, o_mtptai, o_mttmi,  o_mtnvi, o_mtaxis,
+  o_mtnsne, o_mtptai, o_mtchbr, o_mttmi,  o_mtnvi, o_mtaxis,
   o_mtpai,  o_mttai,  o_mttau,  o_mtsize,
-// DBase 53
-  o_mtname, o_mtnotes, o_mtflag, o_mtshort, o_mtdoudl,
-  o_mtadpar,
-  o_mtfloat, o_mtxnames, o_mtynames, o_mtlnam, o_mtlname,
-  o_mttexpr, o_mtgexpr, o_mtsdref, o_mtsdval, o_mtdicp,
-  o_mtfdli,  o_mtpi,   o_mtti,   o_mtvi, o_mtxet,
-  o_mtyet, o_mtddc, o_mtdic, o_mtdel,
-  o_mtbn, o_mthydp,
-  o_mtbsf, o_mtmb, o_mtdmb,
-  o_mtqpi,  o_mtqpc, o_mtxt,
-  o_mtyt,   o_mtcib,   o_mtcab, o_mtfdlf, o_mtpgt,
-  o_mttval, o_mtpval, o_mtnam_i, o_mtfor_i, o_mtfor_e, o_mtstld,
-  o_mtciclb, o_mtaucln, o_mtfdlid, o_mtfdlop, o_mtfdlmp,
-  o_mtmpgid, o_mtumpg,  o_mtbm,  o_mtplline,
+// DBase 58
+  o_mtname, o_mtnotes, o_mtflag, o_mtshort, o_mtworks,
+  o_mtworkf, o_mtdoudl, o_mtadpar, o_mtfloat, o_mtxnames,
+  o_mtynames, o_mtlnam, o_mtlname, o_mttexpr, o_mtgexpr,
+  o_mtsdref, o_mtsdval, o_mtdicp, o_mt_xic,  o_mt_xdc,
+  o_mt_xph,  o_mtfdli,  o_mtpi,   o_mtti,   o_mtvi,
+  o_mtxet,  o_mtyet, o_mtddc, o_mtdic, o_mtdel,
+  o_mtbn, o_mthydp, o_mtbsf, o_mtmb, o_mtdmb,
+  o_mtqpi,  o_mtqpc, o_mtxt, o_mtyt,   o_mtcib,
+  o_mtcab, o_mtfdlf, o_mtpgt, o_mttval, o_mtpval,
+  o_mtnam_i, o_mtfor_i, o_mtfor_e, o_mtstld, o_mtciclb,
+  o_mtaucln, o_mtfdlid, o_mtfdlop, o_mtfdlmp, o_mtmpgid,
+  o_mtumpg,  o_mtbm,  o_mtplline,
 //work
   o_mtsykey, o_mtan, o_mtae,
   o_mtgc, o_mwetext, o_mwtprn, o_mtctm,  o_mtcnv,
   o_mtqc, o_mtkv, o_mtjqc, o_mtjqs,  o_mtjt,
-  o_mtjdd, o_mtjdi, o_mtide, o_mtrei4, o_mtrei5,
+  o_mtjdd, o_mtjdi, o_mtide, o_mtct_, o_mtrei5,
   o_mtct, o_mtcp, o_mtcv,  o_mtctau, o_mtdtau,
-  o_mtotau, o_mtref1, o_mtref2, o_mtref3, o_mtref4
+  o_mtotau, o_mtdx, o_mtref2, o_mtref3, o_mtref4
 };
 
 enum CHstruct_objects {  // data objects from DataCH structure for GEM2MT scripts

@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $ Id:$
+// $Id$
 //
 // Implementation of TGEM2MT class, calculation functions
 //
@@ -29,6 +29,156 @@
 #include "s_formula.h"
 #include "m_icomp.h"
 #include "m_compos.h"
+
+
+bool
+TGEM2MT::test_sizes( )
+{
+  gstring err_str;
+
+
+  mtp->Nb = TProfil::pm->mup->N;
+  mtp->FIb = TProfil::pm->mup->Fi;
+  mtp->Lb = TProfil::pm->mup->L;
+
+
+  if( mtp->nC<=0 || mtp->nIV <= 0)
+  {  err_str +=
+"W02PErem: You forgot to specify the number of inital variants! \n Please, do it!";
+    mtp->nC = mtp->nIV = 1;
+  }
+
+  if( mtp->PvAUi != S_OFF )
+    if( mtp->Lbi <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of formula units! \n Please, do it!";
+       mtp->Lbi = 1;
+     }
+
+  if( mtp->PvFDL != S_OFF )
+    if( mtp->nFD <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of flux definitions! \n Please, do it!";
+       mtp->nFD = 1;
+     }
+
+  if( mtp->PvSFL != S_OFF )
+    if( mtp->nSFD <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the source fluxes\n"
+" and elemental stoichiometries for them! \n Please, do it!";
+       mtp->nSFD = 1;
+     }
+
+  if( mtp->PvPGD != S_OFF )
+    if( mtp->nPG <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of mobile phase groups! \n Please, do it!";
+       mtp->nPG = 1;
+     }
+
+  if( mtp->PvMSg != S_OFF )
+    if( mtp->nS <= 0 || mtp->nYS <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of points or plots! \n Please, do it!";
+      if( mtp->nS <= 0 ) mtp->nS = 1;
+      if( mtp->nYS <= 0 ) mtp->nYS = 1;
+     }
+
+  if( mtp->PvEF != S_OFF )
+    if( mtp->nE <= 0 || mtp->nYE <= 0 )
+    {  err_str +=
+"W02PErem: You forgot to specify the number of experimental points! \n Please, do it!";
+      if( mtp->nE <= 0 ) mtp->nE = 1;
+      if( mtp->nYE <= 0 ) mtp->nYE = 1;
+     }
+
+   if( !err_str.empty() )
+    {
+        vfMessage(window(), GetName(), err_str.c_str(), vfErr);
+        return false;
+    }
+    return true;
+}
+
+// Make start IComp, Dcomp, PHase selections to DATACH
+void TGEM2MT::SelectNodeStructures( bool select_all )
+{
+  TMulti* mult = TProfil::pm->multi;
+  TCStringArray aList;
+  TCIntArray aSelIC;
+  TCIntArray aSelDC;
+  TCIntArray aSelPH;
+  int ii;
+
+  if( !select_all ) // use old selections
+  {
+     for( ii=0; ii<mtp->nICb; ii++)
+       aSelIC.Add( mtp->xIC[ii] );
+     for( ii=0; ii<mtp->nDCb; ii++)
+       aSelDC.Add( mtp->xDC[ii] );
+     for( ii=0; ii<mtp->nPHb; ii++)
+       aSelPH.Add( mtp->xPH[ii] );
+  }
+
+// select lists
+    aList.Clear();
+    for( ii=0; ii< mult->GetPM()->N; ii++ )
+    {  if( select_all )
+         aSelIC.Add( ii );
+       else
+         aList.Add( gstring( mult->GetPM()->SB[ii], 0, MAXICNAME+MAXSYMB));
+    }
+    if( !select_all  )
+      aSelIC = vfMultiChoiceSet(window(), aList,
+          "Please, mark independent components for selection into DataBridge",
+          aSelIC);
+
+    aList.Clear();
+    for( ii=0; ii< mult->GetPM()->L; ii++ )
+    {  if( select_all )
+         aSelDC.Add( ii );
+       else
+       aList.Add( gstring( mult->GetPM()->SM[ii], 0, MAXDCNAME));
+    }
+    if( !select_all  )
+       aSelDC = vfMultiChoiceSet(window(), aList,
+         "Please, mark dependent components for selection into DataBridge",
+         aSelDC );
+
+    aList.Clear();
+    for( ii=0; ii< mult->GetPM()->FI; ii++ )
+    {  if( select_all )
+         aSelPH.Add( ii );
+       else
+       aList.Add( gstring( mult->GetPM()->SF[ii], 0, MAXPHNAME+MAXSYMB));
+    }
+    if( !select_all  )
+       aSelPH = vfMultiChoiceSet(window(), aList,
+         "Please, mark phases for selection into DataBridge",
+         aSelPH);
+
+// These dimensionalities define sizes of dynamic data in DATABT structure
+  mtp->nICb = (short)aSelIC.GetCount();
+  mtp->nDCb = (short)aSelDC.GetCount();
+  mtp->nPHb = (short)aSelPH.GetCount();
+  mtp->nPSb = 0;
+  for( ii=0; ii< aSelPH.GetCount(); ii++, mtp->nPSb++ )
+   if( aSelPH[ii] >= TProfil::pm->pmp->FIs )
+       break;
+
+// realloc memory
+  dyn_new();
+
+// set dynamic data
+  for( ii=0; ii< aSelIC.GetCount(); ii++ )
+    mtp->xIC[ii] = (short)aSelIC[ii];
+  for( ii=0; ii< aSelDC.GetCount(); ii++ )
+    mtp->xDC[ii] = (short)aSelDC[ii];
+  for( ii=0; ii< aSelPH.GetCount(); ii++ )
+    mtp->xPH[ii] = (short)aSelPH[ii];
+}
+
 
 
 // reset mt counters
@@ -150,7 +300,6 @@ void TGEM2MT::mt_next()
 {
 //     mtp->cT += mtp->Tai[STEP_];
 //     mtp->cP += mtp->Pai[STEP_];
-     mtp->cTau += mtp->Tau[STEP_];
 //     mtp->cV += 0;
      mtp->ctm += mtp->tmi[STEP_];
      mtp->cnv += mtp->NVi[STEP_];
@@ -381,13 +530,7 @@ void TGEM2MT::gen_task()
    //  TProfil::pm->pmp->pTPD = 0;
      calc_eqstat();
 
-//calculate graphics
-   if( mtp->PvMSg  != S_OFF )
-   {
-      mtp->jt = min( mtp->kv, (short)(mtp->nS-1));
-      rpn[1].CalcEquat();
-   }
-   aMod[RT_GEM2MT].ModUpdate("GEM2MT data sampling in progress...");
+  aMod[RT_GEM2MT].ModUpdate("GEM2MT data sampling in progress...");
 
 }
 
@@ -398,8 +541,10 @@ void TGEM2MT::outMulti()
   if( mtp->PsTPai != S_OFF )
      gen_TPval();
 
-   na->MakeNodeStructures( window(), false, mtp->Tval, mtp->Pval,
-                        mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
+   na->MakeNodeStructures( mtp->nICb, mtp->nDCb,  mtp->nPHb,
+     mtp->xIC, mtp->xDC, mtp->xPH,
+     mtp->Tval, mtp->Pval,
+     mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
 
    for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
    {
@@ -428,80 +573,187 @@ void TGEM2MT::outMulti()
 
 // ===========================================================
 
-void  TGEM2MT::copyNodeArrays()
+
+// Show graphic lines for all nodes
+void TGEM2MT::CalcGraph()
 {
- for( int ii=0; ii<mtp->nC; ii++ )
+  if( mtp->PvMSg  == S_OFF )
+    return;
+
+ // refresh graphic if it showed
+  if( gd_gr )
+    gd_gr->Show();
+
+// LinkCSD(0);
+ for( int ii=0; ii<mtp->nC; ii++)
  {
-    na->CopyNodeFromTo( ii, mtp->nC, na->pNodT0(), na->pNodT1() );
+   mtp->jt = min( ii, (mtp->nS-1));
+   mtp->qc = ii;
+   LinkNode0(ii);
+   LinkNode1(ii);
+   rpn[1].CalcEquat();
+   CalcPoint( ii );
  }
+ // show graphic
+ // use refresh if need
+
+ // reset system
+   LinkNode0(-1);
+   LinkNode1(-1);
+}
+
+// working with scripts --------------------------------------------
+// Translate, analyze and unpack equations (o_mttexpr or o_mtgexpr)
+#include <stdio.h>
+#include <stdlib.h>
+
+int TGEM2MT::ssss_( int i, int nO )
+{
+  int jj=i;
+
+  return jj;
+}
+
+void TGEM2MT::Expr_analyze( int obj_num )
+{
+    try
+    {
+        TProfil* PRof = TProfil::pm;
+        int mupL=0, pmpL =0;
+
+         // setup sizes
+         LinkCSD(0);
+         LinkNode0(0);
+         LinkNode1(0);
+
+        if( pVisor->ProfileMode == true )
+        {
+            mupL = PRof->mup->L;
+            pmpL = PRof->pmp->L;
+        }
+        PRof->ET_translate( o_mwetext, obj_num, 0, mupL, 0, pmpL, ssss_ );
+        if( obj_num == o_mttexpr )
+          rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
+        else
+          rpn[1].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
+
+         // reset system
+        LinkNode0(-1);
+        LinkNode1(-1);
+    }
+    catch( TError& xcpt )
+    {
+         // reset system
+        LinkNode0(-1);
+        LinkNode1(-1);
+
+        char *erscan = (char *)aObj[obj_num].GetPtr();
+        vfMessage(window(), xcpt.title, xcpt.mess);
+        CheckEqText(  erscan,
+               "E91MSTran: Error in translation of GtDemo math script: " );
+        Error(  GetName() , xcpt.mess.c_str() );
+    }
+}
+
+// plotting the record -------------------------------------------------
+//Added one point to graph
+void
+TGEM2MT::CalcPoint( int nPoint )
+{
+    if( mtp->PvMSg == S_OFF || nPoint >= mtp->nS )
+     return;
+    // Add point to graph screen
+    if( gd_gr )
+        gd_gr->AddPoint( 0, nPoint, true );
+}
+
+// Plotting record
+void
+TGEM2MT::RecordPlot( const char* /*key*/ )
+{
+    if( mtp->PvMSg == S_OFF )
+      return;
+
+    TIArray<TPlot> plt;
+
+    plt.Add( new TPlot(o_mtxt, o_mtyt ));
+    int  nLn = plt[ 0 ].getLinesNumber();
+    if( mtp->PvEF != S_OFF )
+    {
+        plt.Add( new TPlot(o_mtxet, o_mtyet ));
+        nLn += plt[1].getLinesNumber();
+    }
+    if( plot )
+    {
+        int oldN = aObj[o_mtplline].GetN();
+        TPlotLine defpl("", 4);
+
+        plot = (TPlotLine * )aObj[ o_mtplline ].Alloc( nLn, sizeof(TPlotLine) );
+        for(int ii=0; ii<nLn; ii++ )
+        {
+            if( ii >= oldN )
+                plot[ii] = defpl;
+            if(ii < mtp->nYS )
+                strncpy( plot[ii].name, mtp->lNam[ii], MAXGRNAME );
+            else
+                strncpy( plot[ii].name, mtp->lNamE[ii-mtp->nYS], MAXGRNAME );
+            plot[ii].name[MAXGRNAME] = '\0';
+        }
+        gd_gr = new GraphWindow( this, plt, mtp->name,
+              mtp->size[0], mtp->size[1], plot,
+              mtp->axisType, mtp->xNames, mtp->yNames);
+    }
+    else
+    {
+      TCStringArray lnames;
+      int ii;
+      for( ii=0; ii<mtp->nYS; ii++ )
+          lnames.Add( gstring(mtp->lNam[ii], 0, MAXGRNAME ));
+      for( ii=0; ii<mtp->nYE; ii++ )
+          lnames.Add( gstring( mtp->lNamE[ii], 0, MAXGRNAME ));
+      gd_gr = new GraphWindow( this, plt, mtp->name,
+          mtp->xNames, mtp->yNames, lnames );
+    }
 }
 
 
-//-------------------------------------------------------------------
-// NewNodeArray()  make worked DATACH structure
-// Allocates a new FMT node array of DATABR structures and
-// reads in the data from MULTI (using nC, Bn and DiCp, DDc, HydP)
-//-------------------------------------------------------------------
-void  TGEM2MT::NewNodeArray()
+// Save changes was done in Plotting dialog
+bool
+TGEM2MT::SaveGraphData( GraphData *gr )
 {
- // generate Tval&Pval arrays
- if( mtp->PsTPai != S_OFF )
-    gen_TPval();
+// We can only have one Plot dialog (modal one) so condition should be omitted!!
+     if( !gd_gr )
+      return false;
+     if( gr != gd_gr->getGraphData() )
+      return false;
+    mtp->axisType[0] = (short)gr->axisType;
+    mtp->axisType[4] = (short)gr->graphType;
+    mtp->axisType[1] = (short)gr->b_color[0];
+    mtp->axisType[2] = (short)gr->b_color[1];
+    mtp->axisType[3] = (short)gr->b_color[2];
+    strncpy( mtp->xNames, gr->xName.c_str(), 9);
+    strncpy( mtp->yNames, gr->yName.c_str(), 9);
+    memcpy( &mtp->size[0], gr->region, 4*sizeof(float) );
+    memcpy( &mtp->size[1], gr->part,  4*sizeof(float) );
 
- na->MakeNodeStructures( window(), true, mtp->Tval, mtp->Pval,
-                        mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
- DATACH* data_CH = na->pCSD();
+    plot = (TPlotLine *) aObj[ o_mtplline].Alloc(
+       gr->lines.GetCount(), sizeof(TPlotLine));
+    for(int ii=0; ii<(int)gr->lines.GetCount(); ii++ )
+    {
+        plot[ii] = gr->lines[ii];
+        //  lNam0 and lNamE back
+        if( ii < mtp->nYS )
+            strncpy(  mtp->lNam[ii], plot[ii].name, MAXGRNAME );
+        else
+            strncpy(  mtp->lNamE[ii-mtp->nYS], plot[ii].name, MAXGRNAME );
+    }
+    if( gr->graphType == ISOLINES )
+       gr->getColorList();
 
- // put DDc
- for( int jj=0; jj<data_CH->nDC; jj ++)
-      data_CH->DD[jj] = mtp->DDc[jj];
+    pVisor->Update();
+    contentsChanged = true;
 
- for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
- {
-   pVisor->Message( window(), GetName(),
-      "Generation of EqStat records\n"
-           "Please, wait...", mtp->kv, mtp->nIV);
-
-  // Make new Systat record & calculate it
-     gen_task();
-  // Save databr
-     na->packDataBr();
-  //
-   for( int jj=0; jj<mtp->nC; jj ++)
-    if( mtp->DiCp[jj] == mtp->kv )
-     {    na->setNodeHandle( jj );
-          na->MoveWorkNodeToArray( jj, mtp->nC,  na->pNodT0());
-          na->CopyWorkNodeFromArray( jj, mtp->nC,  na->pNodT0() );
-     }
-    mt_next();      // Generate work values for the next EqStat rkey
-
- } // mtp->kv
-
- pVisor->CloseMessage();
-
- for( int ii=0; ii<mtp->nC; ii++)
-      if(  na->pNodT0() == 0 )
-      Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
-
- // put HydP
- for( int jj=0; jj<mtp->nC; jj ++)
-   {    na->pNodT0()[jj]->Vt = mtp->HydP[jj][0];
-        na->pNodT0()[jj]->eps = mtp->HydP[jj][1];
-        na->pNodT0()[jj]->Km = mtp->HydP[jj][2];
-        na->pNodT0()[jj]->al = mtp->HydP[jj][3];
-        na->pNodT0()[jj]->hDl = mtp->HydP[jj][4];
-        na->pNodT0()[jj]->nto = mtp->HydP[jj][5];
-   }
-
-}
-
-
-int TGEM2MT::Trans1D( char mode, int RefCode )
-{
-
- for( int ii=0; ii<mtp->nC; ii++)
-   na->RunGEM( ii, NEED_GEM_AIA );;
- return RefCode;
+    return true;
 }
 
 // Link na->pNodT0()[nNode] for internal object list

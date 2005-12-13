@@ -29,6 +29,7 @@
                      $$MODS_CPP/m_sdata.cpp \
                      $$MODS_CPP/m_gem2mt.cpp \
                      $$MODS_CPP/m_gem2mtc.cpp \
+                     $$MODS_CPP/m_gem2mtt.cpp \
                      $$MODS_CPP/m_param.cpp \
                      $$MODS_CPP/m_icomp.cpp \
                      $$MODS_CPP/v_ipnc.cpp \
