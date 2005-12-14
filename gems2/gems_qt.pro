@@ -9,7 +9,9 @@ DEFINES         += Use_mt_mode
 CONFIG		+= qt thread warn_on debug 
 #CONFIG		+= qmake_cache 
 
-
+!win32-borland {
+  DEFINES += __unix
+}
 
 win32-borland {
 	# Keep the size of the .tds file for the Qt library smaller than

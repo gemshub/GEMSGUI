@@ -14,6 +14,7 @@ CONFIG		+= qt thread warn_off release
 !win32 {
   LIBS            -= -lqt-mt 
   LIBS            += $(QTDIR)/lib/libqt-mt.a 
+  DEFINES         += __unix
 }
 #CONFIG		+= qmake_cache 
 
