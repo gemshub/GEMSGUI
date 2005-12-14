@@ -19,6 +19,7 @@
 
 #include "LoadMessage.h"
 #include <iostream>
+#include "m_gem2mt.h"
 
 LoadMessage* LoadMessage::pDia = 0;
 
@@ -55,6 +56,7 @@ void LoadMessage::Update( const char* mess, int prog, int total )
 void LoadMessage::closeEvent(QCloseEvent* ev)
 {
       pDia = 0;
+      TGEM2MT::pm->setStop( true );
       QProgressDialog::closeEvent(ev);
 }
 

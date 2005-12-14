@@ -25,7 +25,7 @@ using namespace std;
 #ifdef __unix
 #include <unistd.h>
 #else
-#include <io.h>
+//#include <io.h>
 #endif
 
 #include "v_file.h"

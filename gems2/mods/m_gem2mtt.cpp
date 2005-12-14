@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: $
+// $Id: m_gem2mtt.cpp 663 2005-12-13 16:27:14Z gems $
 //
 // Implementation of TGEM2MT class, mass transport functions
 //
@@ -69,7 +69,8 @@ void  TGEM2MT::NewNodeArray()
  DATACH* data_CH = na->pCSD();
 
  // put DDc
- for( int jj=0; jj<data_CH->nDC; jj ++)
+ if( data_CH->DD && mtp->DDc )
+  for( int jj=0; jj<data_CH->nDC; jj ++)
       data_CH->DD[jj] = mtp->DDc[jj];
 
  for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
@@ -95,19 +96,25 @@ void  TGEM2MT::NewNodeArray()
 
  pVisor->CloseMessage();
 
+ DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
  for( int ii=0; ii<mtp->nC; ii++)
-      if(  na->pNodT0() == 0 )
+      if(  C0[ii] == 0 )
       Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
 
  // put HydP
  for( int jj=0; jj<mtp->nC; jj ++)
-   {    na->pNodT0()[jj]->Vt = mtp->HydP[jj][0];
-        na->pNodT0()[jj]->eps = mtp->HydP[jj][1];
-        na->pNodT0()[jj]->Km = mtp->HydP[jj][2];
-        na->pNodT0()[jj]->al = mtp->HydP[jj][3];
-        na->pNodT0()[jj]->hDl = mtp->HydP[jj][4];
-        na->pNodT0()[jj]->nto = mtp->HydP[jj][5];
+   {    C0[jj]->Vt = mtp->HydP[jj][0];
+        C0[jj]->eps = mtp->HydP[jj][1];
+        C0[jj]->Km = mtp->HydP[jj][2];
+        C0[jj]->al = mtp->HydP[jj][3];
+        C0[jj]->hDl = mtp->HydP[jj][4];
+        C0[jj]->nto = mtp->HydP[jj][5];
    }
+
+  for (int ii=0; ii<mtp->nC; ii++)    // node iteration
+   {
+       na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
+   }  // ii    end of node iteration loop
 
 }
 
@@ -163,7 +170,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node )
           gstring err_msg;
           iRet = false;
 
-          printf( buf, " Node= %-8d  Step= %-8d\n", ii, mtp->ctm );
+          sprintf( buf, " Node= %-8d  Step= %-8d\n", ii, mtp->ct );
           err_msg = buf;
           switch( RetCode )
           {
@@ -285,11 +292,13 @@ clock_t t_start, t_end, t_out, t_out2;
 clock_t outp_time = 0.;
 t_start = clock();
 
+
      switch( mtp->PsMode )
      {
-      case 'A': MassTransAdvecStart();
+      case GMT_MODE_A: MassTransAdvecStart();
                 break;
-      default:  break;
+      default: // more mass transport models here
+               break;
      }
 
     CalcIPM( mode, 1, mtp->nC-1 );
@@ -303,16 +312,33 @@ na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 1 );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
 
+        if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
+             GetName(), "Use graphic window?") )
+        {
+            RecordPlot( 0 );
+        }
+
+       pVisor->Message( window(), GetName(),
+                 "Calculating transport; \n"
+                 "Please, wait...", mtp->ct, mtp->ntM);
+       setStop( false );
+
+
 //  This loop contains the mass transport iteration time step
      do {   // time iteration step
 
         //  the mass transport iteration time step
          switch( mtp->PsMode )
          {
-          case 'A': MassTransAdvecStep();
+          case GMT_MODE_A: MassTransAdvecStep();
                   break;
-          default:  break;
+          default: // more mass transport models here
+                  break;
         }
+
+       pVisor->Message( window(), GetName(),
+                 "Calculating transport; \n"
+                 "Please, wait...", mtp->ct, mtp->ntM);
 
        //   Here we call a loop on GEM calculations over nodes
        //   parallelization should affect this loop only
@@ -330,6 +356,7 @@ outp_time += ( t_out2 -  t_out);
           // copied to C0 (to be implemented)
 
           // time step accepted - Copying nodes from C0 to C1 row
+          CalcGraph();
           copyNodeArrays();
 
 
@@ -339,8 +366,13 @@ na->logProfileAqIC( logfile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
 na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
+         // if( mtp->rei5 )
+          // break;
 
-     } while ( mtp->cTau < mtp->Tau[STOP_] );
+
+     } while ( mtp->cTau < mtp->Tau[STOP_] || mtp->ct < mtp->ntM );
+
+pVisor->CloseMessage();
 
 t_end = clock();
 double dtime = ( t_end- t_start );

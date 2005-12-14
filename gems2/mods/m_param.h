@@ -154,7 +154,7 @@ struct CompItem
 };
 
 // the subroutine for ET_translate
-typedef int (tget_ndx)( int nI, int nO );
+typedef int (tget_ndx)( int nI, int nO, int Xplace );
 
 // Module TParam (RMULTS+MTPARM+SYSTEM+MULTY see SubModules)
 class TProfil : public TCModule

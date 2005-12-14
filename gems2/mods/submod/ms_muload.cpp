@@ -675,7 +675,7 @@ int TProfil::find_acnum( char *name, int LNmode )
 char* MSDELIM = " +-*/^:[]();=$&|!<>?#\n\t";
 //
 void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
-         int ( *get_ndx)(int, int) )
+        tget_ndx *get_ndx )
 {
     size_t eLen, ls, lb;
     int i, ii, pj, LNplace=1, Xplace=0, nO=0;
@@ -889,7 +889,7 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             if( !get_ndx )
               pj=i;
             else
-              pj = get_ndx( i, nO );
+              pj = get_ndx( i, nO, Xplace );
             switch( cstate )
             { /*change name in the text */
             case A_icx:

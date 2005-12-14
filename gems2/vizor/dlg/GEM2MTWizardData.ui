@@ -31,8 +31,8 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>11</x>
-                    <y>11</y>
+                    <x>10</x>
+                    <y>10</y>
                     <width>530</width>
                     <height>490</height>
                 </rect>
@@ -291,7 +291,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pPoints</cstring>
+                                        <cstring>pnC</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -308,7 +308,7 @@
                                         </size>
                                     </property>
                                     <property name="maxValue">
-                                        <number>999</number>
+                                        <number>1001</number>
                                     </property>
                                     <property name="minValue">
                                         <number>1</number>
@@ -320,6 +320,12 @@
                                 <widget class="QLabel">
                                     <property name="name">
                                         <cstring>TextLabel1</cstring>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>NoFrame</enum>
+                                    </property>
+                                    <property name="frameShadow">
+                                        <enum>Plain</enum>
                                     </property>
                                     <property name="text">
                                         <string>&lt;b&gt;nC&lt;/b&gt;  - Number of local equilibrium cells (nodes, boxes) in the transport model</string>
@@ -337,7 +343,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pPoints_2</cstring>
+                                        <cstring>pnIV</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -383,7 +389,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pPoints_2_2</cstring>
+                                        <cstring>pntM</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -446,7 +452,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pMods_2</cstring>
+                                        <cstring>pnPG</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -469,7 +475,7 @@
                                         <number>0</number>
                                     </property>
                                     <property name="value">
-                                        <number>1</number>
+                                        <number>0</number>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -495,7 +501,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pMods</cstring>
+                                        <cstring>pnFD</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -518,7 +524,7 @@
                                         <number>0</number>
                                     </property>
                                     <property name="value">
-                                        <number>1</number>
+                                        <number>0</number>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -544,7 +550,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pMods_3</cstring>
+                                        <cstring>pnSFD</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -567,7 +573,7 @@
                                         <number>0</number>
                                     </property>
                                     <property name="value">
-                                        <number>1</number>
+                                        <number>0</number>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -610,7 +616,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pGraph</cstring>
+                                        <cstring>pnYS</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -633,7 +639,7 @@
                                         <number>0</number>
                                     </property>
                                     <property name="value">
-                                        <number>1</number>
+                                        <number>0</number>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -676,7 +682,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pELine</cstring>
+                                        <cstring>pnE</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -722,7 +728,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pECol</cstring>
+                                        <cstring>pYE</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -838,7 +844,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pECol_2_3</cstring>
+                                        <cstring>pLb</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -866,7 +872,7 @@
                                 </widget>
                                 <widget class="QLabel">
                                     <property name="name">
-                                        <cstring>TextLabel1_2_2_2_2_3</cstring>
+                                        <cstring>TextLabel1_2_</cstring>
                                     </property>
                                     <property name="text">
                                         <string>&lt;b&gt;Lb&lt;/b&gt;   Number of user-defined formula units for setting compositions in initial systems</string>
@@ -887,7 +893,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pECol_2_2_2</cstring>
+                                        <cstring>pnEl</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -933,7 +939,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pECol_2_2_3_2</cstring>
+                                        <cstring>pqpc</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -996,7 +1002,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pECol_2_2_3</cstring>
+                                        <cstring>pPai</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -1045,7 +1051,7 @@
                                 </property>
                                 <widget class="QSpinBox">
                                     <property name="name">
-                                        <cstring>pECol_2_2_3_3</cstring>
+                                        <cstring>pTai</cstring>
                                     </property>
                                     <property name="sizePolicy">
                                         <sizepolicy>
@@ -1116,7 +1122,7 @@
                         </property>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PsEqn</cstring>
+                                <cstring>c_PvICi</cstring>
                             </property>
                             <property name="text">
                                 <string>Use IC quantities for initial system compositions</string>
@@ -1127,7 +1133,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PsSY</cstring>
+                                <cstring>c_PsSYd</cstring>
                             </property>
                             <property name="text">
                                 <string>Save generated SysEq records to the project data base (initial state systems)</string>
@@ -1135,7 +1141,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PsRT</cstring>
+                                <cstring>c_PsSdat</cstring>
                             </property>
                             <property name="text">
                                 <string>Save CSD and node files in text format (if unchecked, save as  binary files)</string>
@@ -1146,7 +1152,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>c_PvR1</cstring>
+                                <cstring>c_PsDDc</cstring>
                             </property>
                             <property name="text">
                                 <string>Use diffusion coefficients for DC/species (set them in DDc vector), D and T modes only</string>
@@ -1154,7 +1160,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>pStepwise</cstring>
+                                <cstring>c_PsDIc</cstring>
                             </property>
                             <property name="text">
                                 <string>Use diffusion coefficients for elements (set them in DIc vector), D and T modes only</string>
@@ -1162,7 +1168,7 @@
                         </widget>
                         <widget class="QCheckBox">
                             <property name="name">
-                                <cstring>pStepwise_2</cstring>
+                                <cstring>c_PvTPai</cstring>
                             </property>
                             <property name="text">
                                 <string>Create T,P values in Tval, Pval vectors using iterators ( enter, if unchecked)</string>
@@ -1190,7 +1196,7 @@
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>0</y>
+                    <y>10</y>
                     <width>553</width>
                     <height>490</height>
                 </rect>
@@ -1206,22 +1212,6 @@
                     <property name="title">
                         <string>Optional</string>
                     </property>
-                    <widget class="QSpinBox">
-                        <property name="name">
-                            <cstring>spinBox18</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>10</x>
-                                <y>20</y>
-                                <width>60</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="maxValue">
-                            <number>4</number>
-                        </property>
-                    </widget>
                     <widget class="QLabel">
                         <property name="name">
                             <cstring>textLabel11</cstring>
@@ -1236,6 +1226,22 @@
                         </property>
                         <property name="text">
                             <string>Set here the number of links to SDref bibliography records (default 0)</string>
+                        </property>
+                    </widget>
+                    <widget class="QSpinBox">
+                        <property name="name">
+                            <cstring>spinBox18</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>10</x>
+                                <y>20</y>
+                                <width>60</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="maxValue">
+                            <number>4</number>
                         </property>
                     </widget>
                 </widget>
@@ -1398,16 +1404,16 @@
 </widget>
 <tabstops>
     <tabstop>pselS</tabstop>
-    <tabstop>pPoints</tabstop>
-    <tabstop>pMods</tabstop>
-    <tabstop>pGraph</tabstop>
-    <tabstop>pELine</tabstop>
-    <tabstop>pECol</tabstop>
-    <tabstop>c_PsEqn</tabstop>
-    <tabstop>c_PsSY</tabstop>
-    <tabstop>c_PsRT</tabstop>
-    <tabstop>c_PvR1</tabstop>
-    <tabstop>pStepwise</tabstop>
+    <tabstop>pnC</tabstop>
+    <tabstop>pnFD</tabstop>
+    <tabstop>pnYS</tabstop>
+    <tabstop>pnE</tabstop>
+    <tabstop>pYE</tabstop>
+    <tabstop>c_PvICi</tabstop>
+    <tabstop>c_PsSYd</tabstop>
+    <tabstop>c_PsSdat</tabstop>
+    <tabstop>c_PsDDc</tabstop>
+    <tabstop>c_PsDIc</tabstop>
     <tabstop>spinBox18</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>

@@ -52,6 +52,7 @@ using namespace std;
 #include "dlg/ExcludeFillDialog.h"
 #include "dlg/ProgressDialog.h"
 #include "dlg/ProcessWizard.h"
+#include "dlg/GEM2MTWizard.h"
 #include "dlg/GtDemoWizard.h"
 #include "dlg/ComposWizard.h"
 #include "dlg/DCompWizard.h"
@@ -861,6 +862,20 @@ vfProcessSet(QWidget* par, const char * p_key,
               char flgs[24], int size[6] )
 {
      ProcessWizard pdlg( p_key, flgs, size, par );
+     if( !pdlg.exec() )
+      return false;
+
+    pdlg.getFlags( flgs );
+    pdlg.getSizes( size );
+
+    return true;
+}
+
+bool
+vfGEM2MTSet(QWidget* par, const char * p_key,
+              char flgs[20], int size[15] )
+{
+     GEM2MTWizard pdlg( p_key, flgs, size, par );
      if( !pdlg.exec() )
       return false;
 

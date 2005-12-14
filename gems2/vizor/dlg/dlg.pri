@@ -5,6 +5,7 @@
 		  $$DLG_H/NewSystemDialog.h \
 		  $$DLG_H/ProgressDialog.h \
 		  $$DLG_H/ProcessWizard.h \
+		  $$DLG_H/GEM2MTWizard.h \
 		  $$DLG_H/ComposWizard.h \
 		  $$DLG_H/DualThWizard.h \
 		  $$DLG_H/DCompWizard.h \
@@ -37,6 +38,7 @@
 		  $$DLG_CPP/NewSystemDialog.cpp \
 		  $$DLG_CPP/ProgressDialog.cpp \
 		  $$DLG_CPP/ProcessWizard.cpp \
+		  $$DLG_CPP/GEM2MTWizard.cpp \
 		  $$DLG_CPP/ComposWizard.cpp \
 		  $$DLG_CPP/DualThWizard.cpp \
 		  $$DLG_CPP/DCompWizard.cpp \
@@ -71,6 +73,7 @@
 		$$DLG_CPP/NewSystemDialogData.ui \
 		$$DLG_CPP/ProgressDialogData.ui \
 		$$DLG_CPP/ProcessWizardData.ui \
+		$$DLG_CPP/GEM2MTWizardData.ui \
 		$$DLG_CPP/ComposWizardData.ui \
 		$$DLG_CPP/DualThWizardData.ui \
 		$$DLG_CPP/DCompWizardData.ui \

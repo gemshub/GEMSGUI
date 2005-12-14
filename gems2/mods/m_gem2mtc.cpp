@@ -184,9 +184,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
 // reset mt counters
 void TGEM2MT::mt_reset()
 {
-// setup flags and counters
-  mtp->gStat = '0';
-  mtp->iStat = '0';
+// setup  counters
 //  mtp->cT = mtp->Tai[START_];
 //  mtp->cP = mtp->Pai[START_];
   mtp->cV = 0.;
@@ -211,7 +209,9 @@ void TGEM2MT::init_arrays( bool mode )
         memcpy( mtp->SBM[ii], TProfil::pm->mup->SB[ii], MAXICNAME/*+MAXSYMB*/  );
 
 // setup flags and counters
-   mt_reset();
+  mtp->gStat = GS_INDEF;
+  mtp->iStat = GS_INDEF;
+  mt_reset();
 
   if( mode )
   {
@@ -577,12 +577,12 @@ void TGEM2MT::outMulti()
 // Show graphic lines for all nodes
 void TGEM2MT::CalcGraph()
 {
-  if( mtp->PvMSg  == S_OFF )
+  if( mtp->PvMSg  == S_OFF  )
     return;
 
  // refresh graphic if it showed
-  if( gd_gr )
-    gd_gr->Show();
+//  if( gd_gr )
+//    gd_gr->Show();
 
 // LinkCSD(0);
  for( int ii=0; ii<mtp->nC; ii++)
@@ -592,32 +592,84 @@ void TGEM2MT::CalcGraph()
    LinkNode0(ii);
    LinkNode1(ii);
    rpn[1].CalcEquat();
-   CalcPoint( ii );
+//   CalcPoint( ii );
  }
  // show graphic
  // use refresh if need
+  if( gd_gr )
+    gd_gr->Show();
 
  // reset system
-   LinkNode0(-1);
-   LinkNode1(-1);
+ //  LinkNode0(-1);
+ //  LinkNode1(-1);
 }
 
 // working with scripts --------------------------------------------
 // Translate, analyze and unpack equations (o_mttexpr or o_mtgexpr)
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-int tttt_( int i, int nO )
+int get_ndx_( int i, int nO, int Xplace )
 {
-  int jj=i;
+  int ii, jj=i;
 
-  return jj;
-}
+  if( nO ==o_n0_bps || nO == o_n1_bps )
+   if( Xplace )
+      nO = o_n0_bic;
 
-int TGEM2MT::ssss_( int i, int nO )
-{
-  int jj=i;
+  int N, type = 0;
+  short *arr;
+
+  switch( nO )
+  {
+    case o_n0_xdc:  // CH->nDCb
+    case o_n0_gam:
+    case o_n0_dul:
+    case o_n0_dll:
+    case o_n1_xdc:  // CH->nDCb
+    case o_n1_gam:
+    case o_n1_dul:
+    case o_n1_dll: N = aObj[o_mt_xdc].GetN();
+                   arr = (short *)aObj[o_mt_xdc].GetPtr();
+                   type = 2;
+                   break;
+     case o_n1_xph:
+     case o_n0_xph: //CH->nPHb
+                    N = aObj[o_mt_xph].GetN();
+                    arr = (short *)aObj[o_mt_xph].GetPtr();
+                    type = 3;
+                    break;
+    case  o_n0_vps:  // CH->nPSb
+    case  o_n0_mps:
+    case  o_n0_xpa:
+    case  o_n0_bps:
+    case  o_n1_vps:  // CH->nPSb
+    case  o_n1_mps:
+    case  o_n1_xpa:
+    case  o_n1_bps:
+                    N = aObj[o_mtchbr].Get(3);
+                    arr = (short *)aObj[o_mt_xph].GetPtr();
+                    type = 4;
+                    break;
+     case o_n0_bic:  //CH->nICb
+     case o_n0_rmb:
+     case o_n0_uic:
+     case o_n1_bic:  //CH->nICb
+     case o_n1_rmb:
+     case o_n1_uic:
+                    N = aObj[o_mt_xic].GetN();
+                    arr = (short *)aObj[o_mt_xic].GetPtr();
+                    type = 1;
+                    break;
+  }
+  if( type > 0 )
+  {  for( ii=0; ii<N; ii++)
+        if( arr[ii] == jj )
+         {
+              jj = ii;
+              break;
+         }
+     ErrorIf( ii == N, "Illegal component name for DataBr",
+           "E91MSTran: Error in translation of GtDemo math script ");
+   }
 
   return jj;
 }
@@ -639,7 +691,8 @@ void TGEM2MT::Expr_analyze( int obj_num )
             mupL = PRof->mup->L;
             pmpL = PRof->pmp->L;
         }
-        PRof->ET_translate( (int)o_mwetext, (int)obj_num, 0, (int)mupL, 0, (int)pmpL, &(TGEM2MT::ssss_) );
+        PRof->ET_translate( (int)o_mwetext, (int)obj_num, 0,
+             (int)mupL, 0, (int)pmpL, get_ndx_ );
         if( obj_num == o_mttexpr )
           rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
         else
@@ -652,10 +705,11 @@ void TGEM2MT::Expr_analyze( int obj_num )
     catch( TError& xcpt )
     {
          // reset system
+        LinkCSD(-1);
         LinkNode0(-1);
         LinkNode1(-1);
 
-        char *erscan = (char *)aObj[obj_num].GetPtr();
+        char *erscan = (char *)aObj[o_mwetext/*obj_num*/].GetPtr();
         vfMessage(window(), xcpt.title, xcpt.mess);
         CheckEqText(  erscan,
                "E91MSTran: Error in translation of GtDemo math script: " );

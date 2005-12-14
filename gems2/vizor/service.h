@@ -84,6 +84,9 @@ bool
 vfProcessSet(QWidget* par, const char * p_key,
               char flds[24], int size[6] );
 bool
+vfGEM2MTSet(QWidget* par, const char * p_key,
+              char flds[20], int size[15] );
+bool
 vfGtDemoSet(QWidget* par, const char * p_key, int size[7], gstring& prkey );
 
 bool

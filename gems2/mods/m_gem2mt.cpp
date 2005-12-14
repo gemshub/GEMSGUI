@@ -652,7 +652,7 @@ void TGEM2MT::set_def(int q)
 
 //    TProfil *aPa= TProfil::pm;
     memcpy( &mtp->PunE, "jjbC", 4 );
-    memcpy( &mtp->PvICi, "+-------S00+-+-+", 16 );
+    memcpy( &mtp->PvICi, "++------S00-+--+", 16 );
     strcpy( mtp->name,  "`" );
     strcpy( mtp->notes, "`" );
     strcpy( mtp->xNames, "X" );
@@ -661,9 +661,10 @@ void TGEM2MT::set_def(int q)
     memset( &mtp->Msysb, 0, sizeof(double)*20 );
     memset( mtp->size[0], 0, sizeof(float)*8 );
     memset( mtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
-    mtp->nC =1;
-    mtp->nIV =1;
-    mtp->nYS =1;
+    mtp->nC =2;
+    mtp->nIV =2;
+    mtp->ntM =1000;
+    mtp->nYS =0;
     mtp->nYE =1;
     mtp->nPai =1;
     mtp->nTai =1;
@@ -722,16 +723,13 @@ void TGEM2MT::set_def(int q)
     mtp->UMPG = 0;
     mtp->SBM = 0;
     plot = 0;
-//added 30/11/2005
 mtp->BSF = 0;
 mtp->MB = 0;
 mtp->dMB = 0;
-//added 07/12/2005
 mtp->DDc = 0;
 mtp->DIc = 0;
 mtp->DEl = 0;
 mtp->for_e = 0;
-//added 13/12/2005
 mtp->xIC = 0;
 mtp->xDC = 0;
 mtp->xPH = 0;
@@ -748,6 +746,57 @@ void TGEM2MT::RecInput( const char *key )
 {
     //  strncpy( keywd, key, 24 );
     TCModule::RecInput( key );
+}
+
+/* opens window with 'Remake record' parameters
+*/
+void
+TGEM2MT::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[20];
+    int size[15];
+
+    p_key  = db->PackKey();
+    memcpy( flgs, &mtp->PunE, 20);
+    size[0] = mtp->nC;
+    size[1] = mtp->nIV;
+    size[2] = mtp->ntM;
+    size[3] = mtp->nPG;
+    size[4] = mtp->nFD;
+    size[5] = mtp->nSFD;
+    size[6] = mtp->nYS;
+    size[7] = mtp->nE;
+    size[8] = mtp->nYE;
+    size[9] = mtp->Lbi;
+    size[10] = mtp->nEl;
+    size[11] = mtp->Nqpg;
+    size[12] = mtp->nPai;
+    size[13] = mtp->nTai;
+    size[14] = mtp->Nsd;
+
+    if( !vfGEM2MTSet( window(), p_key, flgs, size ))
+         Error( p_key, "GEM2MT record configuration cancelled by the user!" );
+     //  return;   // cancel
+
+    memcpy( &mtp->PunE, flgs, 20);
+    mtp->nC = (short)size[0];
+    mtp->nIV = (short)size[1];
+    mtp->ntM = (short)size[2];
+    mtp->nPG = (short)size[3];
+    mtp->nFD = (short)size[4];
+    mtp->nSFD = (short)size[5];
+    mtp->nYS = (short)size[6];
+    mtp->nE = (short)size[7];
+    mtp->nYE = (short)size[8];
+    mtp->Lbi = (short)size[9];
+    mtp->nEl = (short)size[10];
+    mtp->Nqpg = (short)size[11];
+    mtp->nPai = (short)size[12];
+    mtp->nTai = (short)size[13];
+    mtp->Nsd = (short)size[14];
+
 }
 
 //Rebild record structure before calc
@@ -786,6 +835,8 @@ AGAIN:
 void
 TGEM2MT::RecCalc( const char * key )
 {
+ try
+ {
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
    if( mtp->nICb == 0 && mtp->nDCb == 0 &&
@@ -793,28 +844,54 @@ TGEM2MT::RecCalc( const char * key )
        Error( GetName(), "Added/deleted components to Profile.\n"
                          "Please, remake the record." );
 
+   setStop( false );
    na = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
 
-   mt_reset();
-   Bn_Calc();
-
-   if( mtp->PsMode == 'S' )
-   {   // calculate start data
-     outMulti();
+   if( mtp->iStat != AS_RUN  )
+   {
+     mtp->gStat = GS_GOING;
+     mt_reset();
+     Bn_Calc();
+     mtp->gStat = GS_DONE;
    }
 
-   if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' )
+   if( mtp->PsMode == GMT_MODE_S )
    {   // calculate start data
+     mtp->iStat = AS_RUN;
+     outMulti();
+     mtp->iStat = AS_DONE;
+   }
+   else
+   // if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' )
+   {   // calculate start data
+     mtp->iStat = AS_READY;
      NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
      if( mtp->PvMSg != S_OFF )
          Expr_analyze( o_mtgexpr );
+     mtp->iStat = AS_RUN;
      Trans1D( NEED_GEM_AIA );
+     mtp->iStat = AS_DONE;
    }
 
    delete na;
    na = 0;
+   LinkNode0(-1);
+   LinkNode1(-1);
+   LinkCSD(-1);
 
    TCModule::RecCalc( key );
+  }
+  catch( TError& xcpt )
+  {
+     delete na;
+     na = 0;
+     LinkNode0(-1);
+     LinkNode1(-1);
+     LinkCSD(-1);
+     mtp->gStat = GS_ERR;
+     mtp->iStat = AS_INDEF;
+     Error(  xcpt.title.c_str(), xcpt.mess.c_str() );
+  }
 }
 
 

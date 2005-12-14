@@ -786,8 +786,9 @@ enum gem2mt_objects {
 };
 
 enum CHstruct_objects {  // data objects from DataCH structure for GEM2MT scripts
-  o_ch_nicb = o_mtref4+1, o_ch_ndcb, o_ch_nphb, o_ch_npsb, o_ch_xic,
-  o_ch_xdc, o_ch_xph, o_ch_a, o_ch_icmm, o_ch_dcmm, o_ch_dd, o_ch_aalp
+  o_ch_nicb = o_mtref4+1, o_ch_ndcb, o_ch_nphb, o_ch_npsb,
+  o_ch_xic, o_ch_xdc, o_ch_xph, o_ch_a,
+  o_ch_icmm, o_ch_dcmm, o_ch_dd, o_ch_aalp
 };  // 12 DODs
 
 enum FMTnode_objects {
