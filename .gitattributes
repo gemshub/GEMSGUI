@@ -497,6 +497,8 @@ gems2/vizor/dlg/ElementsDialog.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/ElementsDialogData.ui -text
 gems2/vizor/dlg/ExcludeFillDialog.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/ExcludeFillDialog.h svn_keywords=Author+Date+Id+Revision
+gems2/vizor/dlg/GEM2MTWizard.cpp -text
+gems2/vizor/dlg/GEM2MTWizard.h -text
 gems2/vizor/dlg/GEM2MTWizardData.ui -text
 gems2/vizor/dlg/GraphDialog.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/GraphDialog.h svn_keywords=Author+Date+Id+Revision
