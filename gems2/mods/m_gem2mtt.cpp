@@ -189,14 +189,15 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
                case  TERROR_GEM:  err_msg +=  "Terminal error in GEMIPM2 module";
           }
           if( mtp->PvMO != S_OFF )
-          {  fprintf( diffile, "\nError in GEMipm calculation part\n%s\n",
+          {  fprintf( diffile, "\nError reported from GEMIPM2 module\n%s\n",
                     err_msg.c_str() );
           }
           else
           {  err_msg += "\n Continue?";
              if( !vfQuestion( window(),
-                 "Error in GEMipm calculation part",err_msg.c_str() ))
-                     Error("Error in GEMipm calculation part", "Process stoped");
+                 "Error reported from GEMIPM2 module",err_msg.c_str() ))
+                     Error("Error reported from GEMIPM2 module",
+                     "Process stopped by the user");
           }
 // output multi with error
 //              gstring mul_name = "multi_";
@@ -327,7 +328,7 @@ t_out2 = clock();
 outp_time += ( t_out2 - t_out);
 }
         if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
-             GetName(), "Use graphic window?") )
+             GetName(), "Use graphic monitoring?") )
         {
             RecordPlot( 0 );
         }
@@ -336,10 +337,9 @@ outp_time += ( t_out2 - t_out);
 //  This loop contains the mass transport iteration time step
      do {   // time iteration step
 
-
        iRet = pVisor->Message( window(), GetName(),
-                 "Calculating transport; \n"
-                 "Please, wait...", mtp->ct, mtp->ntM);
+           "Calculating Reactive Mass Transport (RMT)\n"
+           "Please, wait (may take long)...", mtp->ct, mtp->ntM );
 
        if( iRet )
          break;

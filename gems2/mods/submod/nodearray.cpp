@@ -280,13 +280,13 @@ AGAIN:
    if( !NodT0[ii] )
       continue;
 
-   pVisor->Message( par, "NodeArray",
-      "Generation of databr files for initial/stop states\n"
+   pVisor->Message( par, "GEM2MT node array",
+      "Writing to disk a set of node array files from interrupted RMT task.\n"
            "Please, wait...", ii, nIV );
    // Save databr
    CopyWorkNodeFromArray( ii, anNodes, NodT0 );
 
-   sprintf( buf, "%4d", ii );
+   sprintf( buf, "%4.4d", ii );
    // dataBR files - binary
    if( binmode )
     {
@@ -652,8 +652,8 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
      {
 
 #ifndef IPMGEMPLUGIN
-   pVisor->Message( 0, "NodeArray",
-      "Generation of databr files for initial/stop states\n"
+   pVisor->Message( 0, "GEM2MT node array",
+      "Reading from disk a set of node array files to resume an interrupted RMT task.\n"
            "Please, wait...", i, anNodes );
 #endif
 

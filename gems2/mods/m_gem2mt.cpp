@@ -841,15 +841,16 @@ TGEM2MT::RecCalc( const char * key )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
    if( mtp->nICb == 0 && mtp->nDCb == 0 &&
        mtp->nPHb == 0 && mtp->nPSb == 0 )
-       Error( GetName(), "Added/deleted components to Profile.\n"
+       Error( GetName(), "Added/deleted components in the project system.\n"
                          "Please, remake the record." );
 
    na = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
 
    if( mtp->iStat == AS_RUN )
      if( !vfQuestion( window(), key,
-        "Calculation of this task was canceled\n"
-        " Resume (Y) or start from begin (N)?"))
+        "This RMT task has been interrupted by the user.\n"
+        "Read node array from disk files and resume calculations (Yes),\n"
+        " or start from the beginning (No)?"))
     mtp->iStat =  GS_INDEF;
 
    if( mtp->iStat != AS_RUN  )
@@ -867,7 +868,7 @@ TGEM2MT::RecCalc( const char * key )
      // open file to read
      else
        if( vfChooseFileSave(window(), f_name,
-          "Please, enter IPM work structure file name", "*.ipm" ) == false )
+          "Please, enter the IPM work structure file name", "*.ipm" ) == false )
       {        delete na;
                return;
       }
@@ -899,8 +900,10 @@ TGEM2MT::RecCalc( const char * key )
          Expr_analyze( o_mtgexpr );
      if( Trans1D( NEED_GEM_AIA ) )
      { // canceled calculations
-        if( vfQuestion( window(), "GEMipm calculation part",
-           "Calculation canceled by user. Save point to files?" ) )
+        if( vfQuestion( window(), "GEM2MT task interrupt",
+           "RMT calculations have been stopped by the user.\n"
+           "Save node array into a set of disk files to resume the task later (Yes),\n"
+           " or cancel the RMT task (No)?" ) )
         {
           gstring path = na->PutGEM2MTFiles( window(), mtp->nC,
             mtp->PsSdat!=S_OFF, mtp->PsSdat==S_OFF, true ); // with Nod0 and Nod1
