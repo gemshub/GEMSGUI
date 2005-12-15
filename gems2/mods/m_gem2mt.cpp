@@ -846,6 +846,12 @@ TGEM2MT::RecCalc( const char * key )
 
    na = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
 
+   if( mtp->iStat == AS_RUN )
+     if( !vfQuestion( window(), key,
+        "Calculation of this task was canceled\n"
+        " Resume (Y) or start from begin (N)?"))
+    mtp->iStat =  GS_INDEF;
+
    if( mtp->iStat != AS_RUN  )
    {
      mtp->gStat = GS_GOING;
@@ -856,12 +862,15 @@ TGEM2MT::RecCalc( const char * key )
    else
    {
      gstring f_name;
+     if( mtp->notes[0] == '@' )
+        f_name = gstring( mtp->notes, 1, MAXFORMULA-1 );
      // open file to read
-     if( vfChooseFileSave(window(), f_name,
+     else
+       if( vfChooseFileSave(window(), f_name,
           "Please, enter IPM work structure file name", "*.ipm" ) == false )
-     {        delete na;
+      {        delete na;
                return;
-     }
+      }
      gstring ipmfiles_lst_name;
      gstring dir;
      gstring ext;
@@ -893,8 +902,10 @@ TGEM2MT::RecCalc( const char * key )
         if( vfQuestion( window(), "GEMipm calculation part",
            "Calculation canceled by user. Save point to files?" ) )
         {
-          na->PutGEM2MTFiles( window(), mtp->nC,
+          gstring path = na->PutGEM2MTFiles( window(), mtp->nC,
             mtp->PsSdat!=S_OFF, mtp->PsSdat==S_OFF, true ); // with Nod0 and Nod1
+          mtp->notes[0] = '@';
+          strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
           // save GEM2MT recort
           gstring key_str = db->PackKey();
           RecSave( key_str.c_str() );

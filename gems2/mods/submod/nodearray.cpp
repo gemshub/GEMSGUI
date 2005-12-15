@@ -23,6 +23,7 @@
 
 #ifndef IPMGEMPLUGIN
   #include "service.h"
+  #include "visor.h"
 #else
 //  istream& f_getline(istream& is, gstring& str, char delim);
   TNodeArray* TNodeArray::na;
@@ -177,11 +178,11 @@ void TNodeArray::MakeNodeStructures( QWidget* par, bool select_all,
 
 // Writing dataCH, dataBR structure to binary/text files
 // and other nessassary GEM2MT files
-void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV,
+gstring TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV,
       bool textmode, bool binmode, bool putNodT1  )
 {
   if( !textmode && !binmode )
-    return;
+    return "";
 
   // MakeNodeStructures must be called and setuped data to NodT0 array before
 
@@ -204,7 +205,7 @@ AGAIN:
       // open file to output
    if( vfChooseFileSave(par, path,
           "Please, enter IPM work structure file name", "*.ipm" ) == false )
-               return;
+               return "";
    u_splitpath( path, dir, name, newname );
    if( !(::access(path.c_str(), 0 )) ) //file exists
      switch( vfQuestion3( par, name.c_str(),
@@ -217,7 +218,7 @@ AGAIN:
             case VF3_1:
                 break;
             case VF3_3:
-                return;
+                return path;
             }
 
 //  putting MULTI to binary file
@@ -279,13 +280,13 @@ AGAIN:
    if( !NodT0[ii] )
       continue;
 
-//   pVisor->Message( par, GetName(),
-//      "Generation of databr files for initial states\n"
-//           "Please, wait...", ii, nIV );
+   pVisor->Message( par, "NodeArray",
+      "Generation of databr files for initial/stop states\n"
+           "Please, wait...", ii, nIV );
    // Save databr
    CopyWorkNodeFromArray( ii, anNodes, NodT0 );
 
-   sprintf( buf, "%d", ii );
+   sprintf( buf, "%4d", ii );
    // dataBR files - binary
    if( binmode )
     {
@@ -321,7 +322,7 @@ AGAIN:
          GemDataStream  f_br1(Path_, ios::out|ios::binary);
          databr_to_file(f_br1);
          f_br1.close();
-         fout << ", \"" << newname.c_str() << ".bin\"";
+//         fout << ", \"" << newname.c_str() << ".bin\"";
       }
 
       if( textmode )
@@ -331,11 +332,12 @@ AGAIN:
          fstream  f_br2(Path_.c_str(), ios::out);
          databr_to_text_file(f_br2);
          f_br2.close();
-         fout_d << ", \"" << newname.c_str() << ".dat\"";
+//         fout_d << ", \"" << newname.c_str() << ".dat\"";
       }
    }
  } // ii
-// pVisor->CloseMessage();
+ pVisor->CloseMessage();
+ return path;
 }
 
 // Writing dataCH structure to binary file
@@ -648,6 +650,13 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
      i = 0;
      while( !f_chbr.eof() )  // For all dataBR files listed
      {
+
+#ifndef IPMGEMPLUGIN
+   pVisor->Message( 0, "NodeArray",
+      "Generation of databr files for initial/stop states\n"
+           "Please, wait...", i, anNodes );
+#endif
+
 // Reading work dataBR structure from file
          f_getline( f_chbr, datachbr_file, ',');
 
@@ -700,6 +709,9 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
         }
           i++;
      }
+#ifndef IPMGEMPLUGIN
+   pVisor->CloseMessage();
+#endif
 
     ErrorIf( i==0, datachbr_file.c_str(), "NewNodeArray() error: No dataBR files read!" );
     if(nodeTypes)
