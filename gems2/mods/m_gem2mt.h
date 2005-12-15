@@ -291,7 +291,7 @@ protected:
     void  MassTransAdvecStep();
 
 
-    void Trans1D( char mode  );
+    bool Trans1D( char mode  );  // return true if canceled
 
 public:
 
@@ -326,10 +326,6 @@ public:
 
    void InsertChanges( TIArray<CompItem>& aIComp,
           TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
-   void setStop( bool st )
-   {
-     mtp->rei5 = st;
-   }
 
 };
 

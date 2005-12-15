@@ -174,7 +174,8 @@ void TNodeArray::MakeNodeStructures( QWidget* par, bool select_all,
 
 // Writing dataCH, dataBR structure to binary/text files
 // and other nessassary GEM2MT files
-void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binmode )
+void TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV,
+      bool textmode, bool binmode, bool putNodT1  )
 {
   if( !textmode && !binmode )
     return;
@@ -279,11 +280,11 @@ AGAIN:
 //      "Generation of databr files for initial states\n"
 //           "Please, wait...", ii, nIV );
    // Save databr
-    CopyWorkNodeFromArray( ii, anNodes, NodT0 );
+   CopyWorkNodeFromArray( ii, anNodes, NodT0 );
 
    sprintf( buf, "%d", ii );
    // dataBR files - binary
-    if( binmode )
+   if( binmode )
     {
        newname =  name + + "-dbr-"  + buf;
        Path_ = u_makepath( dir, newname, "bin" );
@@ -293,7 +294,7 @@ AGAIN:
        fout << ", \"" << newname.c_str() << ".bin\"";
      }
 
-      if( textmode )
+   if( textmode )
       {
         newname = name + "-dbr-" + buf;
         Path_ = u_makepath( dir, newname, "dat" );
@@ -302,6 +303,34 @@ AGAIN:
         f_br2.close();
         fout_d << ", \"" << newname.c_str() << ".dat\"";
      }
+
+   if( putNodT1 && NodT1[ii]) // put NodT1[ii] data
+   {
+
+       // Save databr
+      CopyWorkNodeFromArray( ii, anNodes, NodT1 );
+
+      // dataBR files - binary
+      if( binmode )
+      {
+         newname =  name + + "-dbr-1-"  + buf;
+         Path_ = u_makepath( dir, newname, "bin" );
+         GemDataStream  f_br1(Path_, ios::out|ios::binary);
+         databr_to_file(f_br1);
+         f_br1.close();
+         fout << ", \"" << newname.c_str() << ".bin\"";
+      }
+
+      if( textmode )
+      {
+         newname = name + "-dbr-1-" + buf;
+         Path_ = u_makepath( dir, newname, "dat" );
+         fstream  f_br2(Path_.c_str(), ios::out);
+         databr_to_text_file(f_br2);
+         f_br2.close();
+         fout_d << ", \"" << newname.c_str() << ".dat\"";
+      }
+   }
  } // ii
 // pVisor->CloseMessage();
 }

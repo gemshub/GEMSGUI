@@ -267,24 +267,25 @@ void TGEM2MT::MassTransAdvecStep()
   } // end of loop over nodes
 }
 
-
-void TGEM2MT::Trans1D( char mode )
+// return true if canceled
+bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;
+  bool iRet = false;
 
 // Preparations: opening output files for monitoring 1D profiles
 FILE* logfile;
 logfile = fopen( "ICaq-log.dat", "w+" );    // Total dissolved element molarities
 if( !logfile)
-  return;
+  return iRet;
 FILE* ph_file;
 ph_file = fopen( "Ph-log.dat", "w+" );   // Mole amounts of phases
 if( !logfile)
-  return;
+  return iRet;
 FILE* diffile;
 diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
 if( !logfile)
-  return;
+  return iRet;
 
 
 // time testing
@@ -318,14 +319,17 @@ outp_time += ( t_out2 - t_out);
             RecordPlot( 0 );
         }
 
-       pVisor->Message( window(), GetName(),
-                 "Calculating transport; \n"
-                 "Please, wait...", mtp->ct, mtp->ntM);
-       setStop( false );
-
 
 //  This loop contains the mass transport iteration time step
      do {   // time iteration step
+
+
+       iRet = pVisor->Message( window(), GetName(),
+                 "Calculating transport; \n"
+                 "Please, wait...", mtp->ct, mtp->ntM);
+
+       if( iRet )
+         break;
 
         //  the mass transport iteration time step
          switch( mtp->PsMode )
@@ -336,9 +340,6 @@ outp_time += ( t_out2 - t_out);
                   break;
         }
 
-       pVisor->Message( window(), GetName(),
-                 "Calculating transport; \n"
-                 "Please, wait...", mtp->ct, mtp->ntM);
 
        //   Here we call a loop on GEM calculations over nodes
        //   parallelization should affect this loop only
@@ -356,6 +357,7 @@ outp_time += ( t_out2 -  t_out);
           // copied to C0 (to be implemented)
 
           // time step accepted - Copying nodes from C0 to C1 row
+          pVisor->Update();
           CalcGraph();
           copyNodeArrays();
 
@@ -366,8 +368,6 @@ na->logProfileAqIC( logfile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
 na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
-         // if( mtp->rei5 )
-          // break;
 
 
      } while ( mtp->cTau < mtp->Tau[STOP_] || mtp->ct < mtp->ntM );
@@ -385,6 +385,7 @@ fclose( logfile );
 fclose( ph_file );
 fclose( diffile );
 
+  return iRet;
 }
 
 

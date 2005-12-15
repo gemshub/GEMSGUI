@@ -408,14 +408,19 @@ TVisorImp::CloseProgress()
        ProgressDialog::pDia->CmClose();
 }
 
-void
+bool
 TVisorImp::Message( QWidget* parent, const char* name,
              const char* msg, int prog, int total)
 {
     if( LoadMessage::pDia )
+     {  if( LoadMessage::pDia->wasCanceled() )
+          return true;
         LoadMessage::pDia->Update(msg, prog, total);
+     }
     else
         (new LoadMessage( parent, name, msg, prog, total))->show();
+
+   return false;
 }
 
 void

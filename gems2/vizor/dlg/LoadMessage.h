@@ -45,7 +45,6 @@ public:
 
 
     void Update( const char* mess, int prog, int total = -1 );
-
 };
 
 #ifdef Use_mt_mode

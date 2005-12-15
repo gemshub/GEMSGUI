@@ -188,7 +188,8 @@ public:
     short* axIC, short* axDC,  short* axPH,
     float* Tai, float* Pai,
     short nTp_, short nPp_, float Ttol_, float Ptol_  );
-   void PutGEM2MTFiles(QWidget* par, int nIV, bool textmode, bool binmode );
+    void PutGEM2MTFiles( QWidget* par, int nIV,
+      bool textmode, bool binmode, bool putNodT1 = false );
 
 #else
 

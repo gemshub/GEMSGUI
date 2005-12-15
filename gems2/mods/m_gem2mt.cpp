@@ -844,7 +844,6 @@ TGEM2MT::RecCalc( const char * key )
        Error( GetName(), "Added/deleted components to Profile.\n"
                          "Please, remake the record." );
 
-   setStop( false );
    na = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
 
    if( mtp->iStat != AS_RUN  )

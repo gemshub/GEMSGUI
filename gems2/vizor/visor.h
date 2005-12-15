@@ -151,7 +151,7 @@ public:
     void OpenModule(QWidget* parent, int i, int page=0, bool viewmode=false);
     void OpenProgress(bool step=false);
     void CloseProgress();
-    void Message( QWidget* parent, const char* name,
+    bool Message( QWidget* parent, const char* name,
              const char* msg, int prog =0, int total=-1);
     void ProcessProgress( QWidget* parent );
     void CloseMessage();

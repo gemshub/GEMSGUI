@@ -56,9 +56,9 @@ void LoadMessage::Update( const char* mess, int prog, int total )
 void LoadMessage::closeEvent(QCloseEvent* ev)
 {
       pDia = 0;
-      TGEM2MT::pm->setStop( true );
       QProgressDialog::closeEvent(ev);
 }
+
 
 #ifdef Use_mt_mode
 

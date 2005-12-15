@@ -154,7 +154,7 @@ public:
     void OpenHelp(const char* file, const char* item=0, QWidget* parent=0, bool modal=false);
     void OpenProgress(bool step=false);
     void CloseProgress();
-    void Message( QWidget* parent, const char* name,
+    bool Message( QWidget* parent, const char* name,
              const char* msg, int prog, int total);
     void CloseMessage();
     void ProcessProgress( QWidget* parent );
