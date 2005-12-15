@@ -570,10 +570,10 @@ void TGEM2MT::dyn_new(int q)
    else
     mtp->qpc = (double *)aObj[ o_mtqpc].Free();
 
-   if( mtp->PvMSt == S_OFF )
+//   if( mtp->PvMSt == S_OFF )
       mtp->tExpr = (char *)aObj[o_mttexpr].Free();
-   else
-      mtp->tExpr = (char *)aObj[ o_mttexpr ].Alloc(1, 4096, S_);
+//   else
+//      mtp->tExpr = (char *)aObj[ o_mttexpr ].Alloc(1, 4096, S_);
 
     if( mtp->PvMSg == S_OFF )
     {
@@ -853,23 +853,56 @@ TGEM2MT::RecCalc( const char * key )
      Bn_Calc();
      mtp->gStat = GS_DONE;
    }
+   else
+   {
+     gstring f_name;
+     // open file to read
+     if( vfChooseFileSave(window(), f_name,
+          "Please, enter IPM work structure file name", "*.ipm" ) == false )
+     {        delete na;
+               return;
+     }
+     gstring ipmfiles_lst_name;
+     gstring dir;
+     gstring ext;
+     u_splitpath( f_name, dir, ipmfiles_lst_name, ext );
+     if( mtp->PsSdat!=S_OFF )
+       ipmfiles_lst_name += "-dat.lst";
+     else
+       ipmfiles_lst_name += "-bin.lst";
+
+     na->NewNodeArray( f_name.c_str(), ipmfiles_lst_name.c_str(), 0, true );
+   }
 
    if( mtp->PsMode == GMT_MODE_S )
    {   // calculate start data
-     mtp->iStat = AS_RUN;
+     mtp->iStat = AS_READY;
      outMulti();
      mtp->iStat = AS_DONE;
    }
    else
    // if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T' )
    {   // calculate start data
-     mtp->iStat = AS_READY;
-     NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
+
+     if( mtp->iStat != AS_RUN  )
+         NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
      if( mtp->PvMSg != S_OFF )
          Expr_analyze( o_mtgexpr );
-     mtp->iStat = AS_RUN;
-     Trans1D( NEED_GEM_AIA );
-     mtp->iStat = AS_DONE;
+     if( Trans1D( NEED_GEM_AIA ) )
+     { // canceled calculations
+        if( vfQuestion( window(), "GEMipm calculation part",
+           "Calculation canceled by user. Save point to files?" ) )
+        {
+          na->PutGEM2MTFiles( window(), mtp->nC,
+            mtp->PsSdat!=S_OFF, mtp->PsSdat==S_OFF, true ); // with Nod0 and Nod1
+          // save GEM2MT recort
+          gstring key_str = db->PackKey();
+          RecSave( key_str.c_str() );
+          mtp->iStat = AS_RUN;
+        }
+     }
+     else
+        mtp->iStat = AS_DONE;
    }
 
    delete na;

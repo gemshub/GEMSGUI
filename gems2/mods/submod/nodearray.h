@@ -178,6 +178,14 @@ public:
     // Prints dissolved species molarities in all cells for time point t / at
     void logProfileAqDC( FILE* logfile, int t, double at, int nx, int every_t );
 
+
+    // For separate coupled FMT-GEM programs that use GEMIPM2K module
+    // Reads in the MULTI, DATACH and DATABR files prepared from GEMS
+    // and fills out nodes in node arrays according to distribution vector
+    // nodeTypes
+    int  NewNodeArray( const char*  MULTI_filename,
+       const char *ipmfiles_lst_name, int *nodeTypes, bool getNodT1 = false);
+
 #ifndef IPMGEMPLUGIN
 
    // Makes start DATACH and DATABR data using GEMS internal data (MULTI and other)
@@ -192,13 +200,6 @@ public:
       bool textmode, bool binmode, bool putNodT1 = false );
 
 #else
-
-    // For separate coupled FMT-GEM programs that use GEMIPM2K module
-    // Reads in the MULTI, DATACH and DATABR files prepared from GEMS
-    // and fills out nodes in node arrays according to distribution vector
-    // nodeTypes
-    int  NewNodeArray( const char*  MULTI_filename,
-                   const char *ipmfiles_lst_name, int *nodeTypes );
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  Specific coupling issues

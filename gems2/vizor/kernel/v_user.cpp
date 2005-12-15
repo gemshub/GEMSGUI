@@ -82,6 +82,29 @@ u_getline(istream& is, gstring& str, char delim)
     return is;
 }
 
+// read string as: "<characters>",
+istream&
+f_getline(istream& is, gstring& str, char delim)
+{
+    char ch;
+    is.get(ch);
+    str="";
+
+    while( is.good() && ( ch==' ' || ch=='\n' || ch== '\t') )
+        is.get(ch);
+    if(ch == '\"')
+        is.get(ch);
+    while( is.good() &&  ch!=delim && ch!= '\"' )
+    {
+        str += ch;
+        is.get(ch);
+    }
+    while( is.good() &&  ch!=delim )
+            is.get(ch);
+
+   return is;
+}
+
 
 gstring curDate()
 {

@@ -95,6 +95,7 @@ gstring curDateTime()
 
 // read line to gstring class from istream with delimiter
 istream& u_getline(istream& instream, gstring& dst_string, char delimit = '\n');
+istream& f_getline(istream& is, gstring& str, char delim);
 
 /*! return pointer after spaces in gstring 's'*/
 /*

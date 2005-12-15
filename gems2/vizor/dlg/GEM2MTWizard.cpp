@@ -90,6 +90,9 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[20],
     if( flgs[19] != '-' )
       c_PvTPai->setChecked( true );
     else c_PvTPai->setChecked( false );
+    if( flgs[6] != '-' )
+      c_PsMO->setChecked( true );
+    else c_PsMO->setChecked( false );
 
 //Page4
     spinBox18->setValue(size[14]);
@@ -158,6 +161,9 @@ void   GEM2MTWizard::getFlags( char flgs[20] )
    if( c_PvTPai->isChecked() )
        flgs[19] = '+';
     else flgs[19] = '-';
+   if( c_PsMO->isChecked() )
+       flgs[6] = '+';
+    else flgs[6] = '-';
 //Putting flags, using sizes  is out of function
 // 5,7,8,9, 10, 11
   if( pLb->value() > 0  )
@@ -180,7 +186,7 @@ void   GEM2MTWizard::getFlags( char flgs[20] )
        flgs[11] = '+';
   else flgs[11] = '-';
 
-// flags 0,1,2,3,6, 13, 14 not used or internal
+// flags 0,1,2,3, 13, 14 not used or internal
 }
 
 void

@@ -20,11 +20,11 @@
 #include "nodearray.h"
 #include "gdatastream.h"
 #include <math.h>
-istream& f_getline(istream& is, gstring& str, char delim);
 
 #ifndef IPMGEMPLUGIN
   #include "service.h"
 #else
+//  istream& f_getline(istream& is, gstring& str, char delim);
   TNodeArray* TNodeArray::na;
 #endif
 
@@ -37,6 +37,9 @@ void TNodeArray::allocMemory()
 // alloc memory for data bidge structures
     CSD = new DATACH;
     CNode = new DATABR;
+
+    memset( CSD, 0, sizeof(DATACH) );
+    memset( CNode, 0, sizeof(DATABR) );
 
 // alloc memory for all nodes at current time point
     NodT0 = new  DATABRPTR[anNodes];
@@ -286,7 +289,7 @@ AGAIN:
    // dataBR files - binary
    if( binmode )
     {
-       newname =  name + + "-dbr-"  + buf;
+       newname =  name + + "-dbr-0-"  + buf;
        Path_ = u_makepath( dir, newname, "bin" );
        GemDataStream  f_br1(Path_, ios::out|ios::binary);
        databr_to_file(f_br1);
@@ -296,7 +299,7 @@ AGAIN:
 
    if( textmode )
       {
-        newname = name + "-dbr-" + buf;
+        newname = name + "-dbr-0-" + buf;
         Path_ = u_makepath( dir, newname, "dat" );
         fstream  f_br2(Path_.c_str(), ios::out);
         databr_to_text_file(f_br2);
@@ -554,7 +557,7 @@ TNodeArray::~TNodeArray()
    freeMemory();
 }
 
-#ifdef IPMGEMPLUGIN
+//#ifdef IPMGEMPLUGIN
 
 //-------------------------------------------------------------------
 // NewNodeArray()
@@ -580,19 +583,33 @@ TNodeArray::~TNodeArray()
 //
 //-------------------------------------------------------------------
 int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
-                   const char* ipmfiles_lst_name, int* nodeTypes )
+                   const char* ipmfiles_lst_name, int* nodeTypes, bool getNodT1)
 {
   int i;
+#ifdef IPMGEMPLUGIN
   fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
     {
+#else
+      size_t npos = gstring::npos;
+#endif
       bool binary_f = true;
       gstring multu_in = MULTI_filename;
-      gstring chbr_in = ipmfiles_lst_name;
+
+// get path
+      size_t pos = multu_in.rfind("/");
+      gstring Path = "";
+      if( pos < npos )
+       Path = multu_in.substr(0, pos+1);
+      gstring chbr_in = Path + ipmfiles_lst_name;
 
 // Reading structure MULTI (GEM IPM work structure)
       GemDataStream f_m(multu_in, ios::in|ios::binary);
+#ifdef IPMGEMPLUGIN
       profil->readMulti(f_m);
+#else
+      TProfil::pm->readMulti(f_m);
+#endif
 
 // output multy
 //      gstring strr = "out_multi.ipm";
@@ -608,7 +625,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
       f_getline( f_chbr, datachbr_file, ' ');
 
 //Testing flag "-t" or "-b" (by default "-b")   // use bynary or text files as input
-      size_t pos = datachbr_file.find( '-');
+      pos = datachbr_file.find( '-');
       if( pos != /*gstring::*/npos )
       {
          if( datachbr_file[pos+1] == 't' )
@@ -617,7 +634,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
       }
 
 // Reading dataCH structure from file
-     gstring dat_ch = datachbr_file;
+     gstring dat_ch = Path + datachbr_file;
       if( binary_f )
       {  GemDataStream f_ch(dat_ch, ios::in|ios::binary);
          datach_from_file(f_ch);
@@ -634,13 +651,14 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
 // Reading work dataBR structure from file
          f_getline( f_chbr, datachbr_file, ',');
 
+         gstring dbr_file = Path + datachbr_file;
          if( binary_f )
          {
-             GemDataStream in_br(datachbr_file, ios::in|ios::binary);
+             GemDataStream in_br(dbr_file, ios::in|ios::binary);
              databr_from_file(in_br);
           }
          else
-          {   fstream in_br(datachbr_file.c_str(), ios::in );
+          {   fstream in_br(dbr_file.c_str(), ios::in );
 		 ErrorIf( !in_br.good() , datachbr_file.c_str(),
                     "DataBR Fileopen error");
                databr_from_text_file(in_br);
@@ -649,10 +667,29 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
 //    unpackDataBr();
 
+        if( getNodT1 )
+        {
+          MoveWorkNodeToArray(i, anNodes, NodT0);
+          dbr_file = dbr_file.replace("dbr-0-","dbr-1-");
+          if( binary_f )
+          {
+             GemDataStream in_br(dbr_file, ios::in|ios::binary);
+             databr_from_file(in_br);
+          }
+          else
+          {   fstream in_br(dbr_file.c_str(), ios::in );
+		 ErrorIf( !in_br.good() , dbr_file.c_str(),
+                    "DataBR Fileopen error");
+               databr_from_text_file(in_br);
+          }
+          MoveWorkNodeToArray(i, anNodes, NodT1);
+        }
+        else
+        {
 // Copying data from work DATABR structure into the node array
 // (as specified in nodeTypes array)
-     for( int ii=0; ii<anNodes; ii++)
-         if(  (!nodeTypes && i==0) ||
+         for( int ii=0; ii<anNodes; ii++)
+            if(  (!nodeTypes && i==0) ||
               ( nodeTypes && (nodeTypes[ii] == i+1 )) )
                   {    CNode->NodeHandle = i+1;
                        MoveWorkNodeToArray(ii, anNodes, NodT0);
@@ -660,6 +697,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
                        MoveWorkNodeToArray(ii, anNodes, NodT1);
                        CopyWorkNodeFromArray(ii, anNodes,NodT1);
                    }
+        }
           i++;
      }
 
@@ -672,6 +710,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
 
     return 0;
 
+#ifdef IPMGEMPLUGIN
     }
     catch(TError& err)
     {
@@ -682,10 +721,11 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
         return -1;
     }
     return 1;
+#endif
 }
 
-#endif
-#include <stdexcept>
+//#endif
+//#include <stdexcept>
 //-------------------------------------------------------------------------
 // RunGEM()
 // GEM IPM calculation of equilibrium state for the iNode node

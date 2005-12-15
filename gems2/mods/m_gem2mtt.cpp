@@ -123,7 +123,7 @@ void  TGEM2MT::NewNodeArray()
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
-bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node )
+bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
 {
    int Mode, ic, RetCode=OK_GEM_AIA;
    bool NeedGEM;
@@ -187,11 +187,17 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node )
                       err_msg += "GEM calculation error using previous solution IA";
                       break;
                case  TERROR_GEM:  err_msg +=  "Terminal error in GEMIPM2 module";
-              }
-              err_msg += "\n Continue?";
-              if( !vfQuestion( window(),
+          }
+          if( mtp->PvMO != S_OFF )
+          {  fprintf( diffile, "\nError in GEMipm calculation part\n%s\n",
+                    err_msg.c_str() );
+          }
+          else
+          {  err_msg += "\n Continue?";
+             if( !vfQuestion( window(),
                  "Error in GEMipm calculation part",err_msg.c_str() ))
-                 Error("Error in GEMipm calculation part", "Process stoped");
+                     Error("Error in GEMipm calculation part", "Process stoped");
+          }
 // output multi with error
 //              gstring mul_name = "multi_";
 //              gstring br_name = "db_";
@@ -273,28 +279,31 @@ bool TGEM2MT::Trans1D( char mode )
   int evrt =10;
   bool iRet = false;
 
-// Preparations: opening output files for monitoring 1D profiles
 FILE* logfile;
+FILE* ph_file;
+FILE* diffile = NULL;
+
+if( mtp->PvMO != S_OFF )
+{
+// Preparations: opening output files for monitoring 1D profiles
 logfile = fopen( "ICaq-log.dat", "w+" );    // Total dissolved element molarities
 if( !logfile)
   return iRet;
-FILE* ph_file;
 ph_file = fopen( "Ph-log.dat", "w+" );   // Mole amounts of phases
 if( !logfile)
   return iRet;
-FILE* diffile;
 diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
 if( !logfile)
   return iRet;
-
+}
 
 // time testing
 clock_t t_start, t_end, t_out, t_out2;
 clock_t outp_time = 0.;
 t_start = clock();
 
-
-     switch( mtp->PsMode )
+   if( mtp->iStat != AS_RUN  )
+   {  switch( mtp->PsMode )
      {
       case GMT_MODE_A: MassTransAdvecStart();
                 break;
@@ -302,9 +311,13 @@ t_start = clock();
                break;
      }
 
-    CalcIPM( mode, 1, mtp->nC-1 );
+    CalcIPM( mode, 1, mtp->nC-1, diffile );
+   }
+   mtp->iStat = AS_READY;
 
 
+if( mtp->PvMO != S_OFF )
+{
 // Data collection for monitoring: Initial state (at t=0)
 t_out = clock();
 na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 1 );
@@ -312,7 +325,7 @@ na->logProfileAqIC( logfile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 1 );
 na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 1 );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
-
+}
         if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic window?") )
         {
@@ -343,14 +356,16 @@ outp_time += ( t_out2 - t_out);
 
        //   Here we call a loop on GEM calculations over nodes
        //   parallelization should affect this loop only
-       CalcIPM( mode, 1, mtp->nC-1 );
+       CalcIPM( mode, 1, mtp->nC-1, diffile );
 
+if( mtp->PvMO != S_OFF )
+{
 t_out = clock();
 na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
     // logging differences after the MT iteration loop
 t_out2 = clock();
 outp_time += ( t_out2 -  t_out);
-
+}
           // Here one has to compare old and new equilibrium phase assemblage
           // and pH/pe in all nodes and decide if the time step was Ok or it
           // should be decreased. If so then the nodes from C1 should be
@@ -362,13 +377,15 @@ outp_time += ( t_out2 -  t_out);
           copyNodeArrays();
 
 
+if( mtp->PvMO != S_OFF )
+{
 // Data collection for monitoring: Current state
 t_out = clock();
 na->logProfileAqIC( logfile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
 na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau/(365*86400), mtp->nC, evrt );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
-
+}
 
      } while ( mtp->cTau < mtp->Tau[STOP_] || mtp->ct < mtp->ntM );
 
@@ -377,14 +394,16 @@ pVisor->CloseMessage();
 t_end = clock();
 double dtime = ( t_end- t_start );
 double clc_sec = CLOCKS_PER_SEC;
+
+if( mtp->PvMO != S_OFF )
+{
 fprintf( diffile,
   "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s\n",
     (dtime-outp_time)/clc_sec,  outp_time/clc_sec, dtime/clc_sec );
-
 fclose( logfile );
 fclose( ph_file );
 fclose( diffile );
-
+}
   return iRet;
 }
 

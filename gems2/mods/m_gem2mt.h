@@ -40,7 +40,7 @@ typedef struct
 // Allocation flags
    PvICi,    // Use IC quantities for initial system compositions? { + * - }
    PvAUi,    // Use formula units for initial sub-system compositions? { + * - }
-   PvMSt,    // Use math script for running the mass transport (+ -)?
+   PvMO,     // Use non stop debug output for nodes (+ -)?
    PvMSg,    // Use math script for graphic presentation (+ -)?
    PvEF,      // Use empirical data for graphics  (+ -)?
    PvPGD,    // Use phase groups definitions (+ -)?
@@ -286,7 +286,8 @@ protected:
     void  LinkNode1(  int nNode );
     void  LinkCSD(  int nNode );
     void  CalcGraph();
-    bool  CalcIPM( char mode, int start_node = 0, int end_node = 1000 );
+    bool  CalcIPM( char mode, int start_node = 0,
+         int end_node = 1000, FILE* diffile = NULL );
     void  MassTransAdvecStart();
     void  MassTransAdvecStep();
 
