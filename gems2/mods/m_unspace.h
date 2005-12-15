@@ -56,12 +56,12 @@ typedef struct
     PsUnInB,  //  ( % A L) scale for uncertainty intervals for B (% or 0 - in %; A or 1 - abs; L or 2 - log10)
     PsUnFltI, // ( A L ) scale for IC molality interval filters (A absolute, L log scale)
     PsUnFltD, // ( A L C) scale for DC activity/fugacity interval filters (A absolute, L log scale C mol fraction)
-    PsGen[7], // (+ 1 on; - 0 off ) int zond[6]; zond type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam
+    PsGen[7], // (+ 1 on; - 0 off ) int zond[6]; probe type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam
     PsSY,     // Save generated SysEq records to data base (+ -)
     PsEqn,    // Will math script be specified in this UnSpace definition (+ -)
-/*?*/    PsGraph,    // Will graphics be specified in this UnSpace definition (+ -)
+    PsGraph,    // Will graphics be specified in this UnSpace definition (+ -)
 
-// Plags that control analysis of sampled results
+// Plags that control input of criteria and analysis of sampled results
     Pa_f_pha,   //  (+ -)   flag of input for the filter on phase association
     Pa_f_mol,   //  (+ -)   flag of input for filters on total IC molality
     Pa_f_fug,   //  (+ -)   flag of input for the filters on fugacity/activity
@@ -69,10 +69,10 @@ typedef struct
     Pa_f_pH,    //  (+ -)   flag of input for the filter on pH
     Pa_f_Eh,    //  (+ -)   flag of input for the filter on Eh
     Pa_Adapt,   //  code for adaptive loops for G(298): 0-no; >=1-yes (max number of loops)
-    Pa_OF,      //  (A or 0; B or 1; C or 2; D or 3; E or 4; F or 5) code of function to construct the payoff matrix
+    Pa_OF,      //  code of function to construct the payoff matrix (A or 0; B or 1; C or 2; D or 3; E or 4; F or 5)
     Pa_Crit,    //  (0 1 2 3 4) OSP criterion: 0- PA frequency statistics, 1- Laplace(quantile),
-                   //  2-Homenyuk(quantile) 3-Laplace (single point), 4-Homenuk (single point)
-    Pa_Zcp,     // code for Laplace function calculation: + mean of abs.values; - abs. mean of values
+                   //  2-Homeniuk(quantile) 3-Laplace (single point), 4-Homeniuk (single point)
+    Pa_Zcp,     // mode of Laplace function calculation: + mean of abs.values; - abs. mean of values
 
 // Allocation flags
     PvPOM,     //  (+ -) allocation flag for payoff matrix (if Q <= 1001)    + - + -
@@ -81,8 +81,8 @@ typedef struct
     PvSs,      //  (+ -) allocation flag for S0-related vectors
     PvVs,      //  (+ -) allocation flag for V0-related vectors
     PvPgam,    //  (+ -) allocation flag for ParGamma-related vectors (reserved)
-/*?*/    PvSi,      //  (+ -) flag of mode of calculation of chemical potentials in payoff function
-    Pa_f_IC;    //  (+ -)   flag of input for the filter on IC
+    PvSi,      //  (+ -) flag of mode of calculation of chemical potentials in payoff function
+    Pa_f_IC;    //  (+ -)   flag of input for the filter on Independent Components
 
 
 // Dimensionalities related to the UnSpace problem (Project/System indexation)
@@ -91,21 +91,22 @@ typedef struct
     L,         //   Number of dependent components     (from mup->L)
     Ls,        //   Total number of DC in multi-comp.phases (from mup->Ls)
     Fi,        //   Number of phases                   (from mup->Fi)
-    nPG,       //   Total number of insertain input parameters (for all unspace groups)
+    nPG,       //   Total number of uncertain input parameters (for all unspace groups)
     Nsd,       //   N of data source references (default 0)
 // input I
     Q,     //  0 < Q < 1001 input number of sample GEM calculations to be generated
-    qQ,    //  number point in quantile
-    ob,    //  number solutions ( as optimal )that went trough superposition of all filters
+    qQ,    //  number of points in quantile
+    ob,    //  number of solutions ( as optimal) that went trough superposition of all filters
 // input II
     nG,    //  total number of UnSpace groups (coordinates, nGB + nGN + nGR, calc. automatically)
-    nGB,   //  number of UnSpace groups used in generation by Belov algorithm
+    nGB,   //  number of UnSpace parameter groups for sampling by Belov's grid
     nGN,   //  number of UnSpace groups used in Monte Carlo with normal distribution
     nGR,   //  number of UnSpace groups used in Monte Carlo with uniform distribution
     NgT,   //  Unspace group index for uncertain temperature T; 0- T is not uncertain
     NgP,   //  Unspace group index for uncertain pressure P; 0- P not uncertain
     NgV,   //  Unspace group index for uncertain volume constraint V, 0 - V not uncertain (reserved)
-// output
+
+    // output
     Lapl,  //  index of optimal sample point selected by the Laplace criterion (within 0 to Q-1)
     Hurw,  //  index of optimal sample point selected by the Hurtvitz criterion
     Wald,  //  index of optimal sample point selected by the Wald criterion
@@ -125,6 +126,7 @@ typedef struct
 
 /*?*/    dimEF[2],    // Dimensions of array of empirical data
 /*?*/    dimXY[2],    // Dimensions of data sampler tables: col.1 - N of records;
+
 /*?*/    axisType[6];  // axis graph type, background(3), graph type, reserved
 
 // input
@@ -203,10 +205,10 @@ double
                // for filtering/statistics
    *vU,     //   [Q][N]  u values of dual chemical potentials from sample GEM solution variants (indexes t i)
    *vFug,   //   [Q][Ls] lga values of log10 fugacity/activity from sample GEM solution variants (indexes t j)
-/*?*/   *x0,   // Vector of abscissa dimXY[][1]
-/*?*/   *y0;  // Sampled data array dimXY[][]
+/*?*/   *x0,   // Vector of abscissa dimXY[1]
+/*?*/   *y0;  // Sampled data array [Q] [dimXY[1]]
 float
-/*?*/   *xE, *yE,         // Inputed scale data xS , yS
+/*?*/   *xE, *yE,         // Input scale data xS , yS
    *vT,     //   [Q]   TC vector of temperatures (C) from sample input data variants (index q)
    *vP,     //   [Q]   P vector of pressures (bar) from sample input data variants (index q)
 /*?*/   *vV,     //   [Q]   value of V (in cm3? L?) (index q)
