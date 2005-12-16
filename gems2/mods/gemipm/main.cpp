@@ -269,14 +269,17 @@ if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
                case  TERROR_GEM:  err_msg =  "Terminal error in GEMIPM2 module";
               }
               fprintf(diffile, "\n           %s", err_msg.c_str() );
-              // output multi with error
-              char buf[100];
-              gstring mul_name = "multi_";
-              gstring br_name = "db_";
-              sprintf( buf, "%d_%d.err", i, t);
-              mul_name+=buf;
-              br_name+=buf;
-              TNodeArray::na->printfGEM( mul_name.c_str(), br_name.c_str(),0 );
+  // dump of ipm and node files for debugging - comment out if not necessary
+/* {
+   char buf[100];
+  gstring mul_name = "multi_";
+  gstring br_name = "db_";
+  sprintf( buf, "%d_%d.err", i, t);
+  mul_name+=buf;
+  br_name+=buf;
+  TNodeArray::na->printfGEM( mul_name.c_str(), br_name.c_str(),0 );
+ } */
+
 //SD              break;
             }
          }
