@@ -1137,8 +1137,8 @@ TProcess::RecCalc( const char *key )
                 text_fmt = 0;
            }
          }
-
-        if(  pep->PsGR != S_OFF && vfQuestion(window(),
+        // no Graphic reprasentation in  Thread mode
+        if(  pep->Istat < P_MT_MODE && pep->PsGR != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic window?") )
         {
             RecordPlot( key );
@@ -1186,7 +1186,8 @@ TProcess::RecCalc( const char *key )
 //    }
     pe_text_analyze();  //translate equations of process
 
-    ModUpdate("Pe_calc    Process simulation");
+//    ModUpdate("Pe_calc    Process simulation");
+    ModUpdate("Working...");
 
 #ifdef Use_mt_mode
      if( pep->Istat >= P_MT_MODE )
@@ -1214,33 +1215,31 @@ void
 TProcess::internalCalc()
 {
     int nRec;
+    bool iRet = false;
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
     calcFinished = false;
-
-    ModUpdate("Working...");
-
 
     while( pep->Loop ) // main cycle of process
     {
 #ifdef Use_mt_mode
     if( pep->Istat >= P_MT_MODE )
-    {     STEP_POINT2();  }
+    {     STEP_POINT2();
+    }
     else
      if( pointShow==-1 )
-       pVisor->Message( window(), GetName(),
+       iRet = pVisor->Message( window(), GetName(),
                  "Calculating process; \n"
                  "Please, wait...", pep->c_nrk, pep->NR1);
 
 #else
      if( pointShow==-1 )
-       pVisor->Message( window(), GetName(),
+       iRet = pVisor->Message( window(), GetName(),
                  "Calculating process; \n"
                  "Please, wait...", pep->c_nrk, pep->NR1);
 #endif
-    //  if(  vfQuestion(window(), GetName(),
-    //    "E01PErem: test" ))
-    //      break;
-   
+         if( iRet )
+           break;   //cancel process
+
         // calc equations of process
         if( pep->PsPro == S_OFF )
         {

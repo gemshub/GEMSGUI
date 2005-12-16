@@ -1432,7 +1432,7 @@ TCellInput::CmSDRef()
 void
 TCellInput::CmCalc()
 {
-    if( !edit || fieldType != ftFloat )
+    if( !edit || ( fieldType != ftFloat && fieldType != ftNumeric) )
         return;
 
     // check selection

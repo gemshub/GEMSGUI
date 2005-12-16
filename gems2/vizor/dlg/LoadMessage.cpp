@@ -78,7 +78,7 @@ void LoadMessage::closeEvent(QCloseEvent* ev)
 ProcessProgressDialog* ProcessProgressDialog::pDia = 0;
 
 ProcessProgressDialog::ProcessProgressDialog( QWidget* parent ):
-               QDialog(parent, 0, false)
+               QDialog(parent, 0, true/*false*/)
 {
     pDia = this;
     TProfil::pm->userCancel = false;
@@ -142,12 +142,12 @@ ProcessProgressDialog::CmStep()
 {
     try
     {
-           ThreadControl::wakeOne();	// let's calc
+         ThreadControl::wakeOne();	// let's calc
 	    if( !(calcThread->error.title == "") )
 		throw calcThread->error;
 
           Update();
-         pVisorImp->Update(true);
+          pVisorImp->Update(true);
 
 	if( TProcess::pm->calcFinished ) {
 	    CalcFinished();
@@ -224,7 +224,7 @@ ProcessProgressDialog::Run()
         vfMessage(this, err.title, err.mess);
  	pVisorImp->Update(true);
 	timer->stop();
-        close(); 
+        close();
     }
 }
 
