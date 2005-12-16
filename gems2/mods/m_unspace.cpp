@@ -661,11 +661,6 @@ void TUnSpace::nG_dyn_new()
                      usp->nPG, 1, PARNAME_SIZE);
   else
     usp->ParNames = (char (*)[PARNAME_SIZE])aObj[ o_unlname ].Free();
-
-
-
-
-
 }
 
 // realloc dynamic memory
@@ -891,15 +886,17 @@ void TUnSpace::set_def( int q)
    memcpy( &usp->PunE, aPa->pa.TPpdc, 4 );
    usp->Gstat = GS_INDEF;
    usp->Astat = AS_INDEF;
-   memcpy( &usp->PsUnInt, "%%AA+------+--", 14 );
-   memcpy( &usp->Pa_f_pha, "------0B0-", 10 );
+   memcpy( &usp->PsUnInt, "%%AA+-------++", 14 );
+   memcpy( &usp->Pa_f_pha, "------0A1+", 10 );
    usp->Pa_Crit = UNSP_CRIT_PA;
-   memcpy( &usp->PvPOM, "-+----+-", 8 );
+   memcpy( &usp->PvPOM, "+-+---+-", 8 );
 
    memset( &usp->N, 0, 36*sizeof(int));
    memset( usp->T, 0, 22*sizeof(float));
    usp->quan_lev = 0.05;
 
+    usp->Q = 111;
+    usp->nGB = 1;
     usp->UnICn = 0;
     usp->UgDCn = 0;
     usp->UaDCn = 0;
@@ -1020,6 +1017,44 @@ bool TUnSpace::check_input( const char */*key*/, int /*Level*/ )
 void TUnSpace::RecInput( const char *key )
 {
     TCModule::RecInput( key );
+}
+
+/* opens window with 'Remake record' parameters
+*/
+void
+TUnSpace::MakeQuery()
+{
+//    pImp->MakeQuery();
+    const char * p_key;
+    char flgs[38];
+    int size[10];
+
+    p_key  = db->PackKey();
+    memcpy( flgs, &usp->PunE, 38);
+    size[0] = usp->Q;
+    size[1] = (int)(usp->quan_lev*100);
+    size[2] = usp->nGB;
+    size[3] = usp->nGN;
+    size[4] = usp->nGR;
+    size[5] = usp->Nsd;
+    size[6] = usp->dimXY[1]; // must be 3
+    size[7] = usp->dimEF[0];
+    size[8] = usp->dimEF[1]; // must be 5
+    if( !vfUnSpaceSet( window(), p_key, flgs, size ))
+         Error( p_key, "UnSpace record configuration cancelled by the user!" );
+     //  return;   // cancel
+
+    memcpy( &usp->PunE, flgs, 38);
+
+    usp->Q = (short)size[0];
+    usp->quan_lev = (float)size[1]/100.;
+    usp->nGB = (short)size[2];
+    usp->nGN = (short)size[3];
+    usp->nGR = (short)size[4];
+    usp->Nsd = (short)size[5];
+    usp->dimXY[1] = (short)size[6]; // must be 3
+    usp->dimEF[0] = (short)size[7];
+    usp->dimEF[1] = (short)size[8]; // must be 5
 }
 
 //Rebild record structure before calc

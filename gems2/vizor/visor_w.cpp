@@ -53,6 +53,7 @@ using namespace std;
 #include "dlg/ProgressDialog.h"
 #include "dlg/ProcessWizard.h"
 #include "dlg/GEM2MTWizard.h"
+#include "dlg/UnSpaceWizard.h"
 #include "dlg/GtDemoWizard.h"
 #include "dlg/ComposWizard.h"
 #include "dlg/DCompWizard.h"
@@ -889,6 +890,22 @@ vfGEM2MTSet(QWidget* par, const char * p_key,
 
     return true;
 }
+
+
+bool
+vfUnSpaceSet(QWidget* par, const char * p_key,
+              char flgs[38], int size[10] )
+{
+     UnSpaceWizard pdlg( p_key, flgs, size, par );
+     if( !pdlg.exec() )
+      return false;
+
+    pdlg.getFlags( flgs );
+    pdlg.getSizes( size );
+
+    return true;
+}
+
 
 bool
 vfGtDemoSet(QWidget* par, const char * p_key, int size[7], gstring& prkey )

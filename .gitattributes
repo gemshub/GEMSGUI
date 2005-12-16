@@ -558,6 +558,8 @@ gems2/vizor/dlg/SetFiltersDialogData.ui -text
 gems2/vizor/dlg/SettingsDialog.cpp svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/SettingsDialog.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/SettingsDialogData.ui -text
+gems2/vizor/dlg/UnSpaceWizard.cpp -text
+gems2/vizor/dlg/UnSpaceWizard.h -text
 gems2/vizor/dlg/UnSpaceWizardData.ui -text
 gems2/vizor/dlg/dlg.pri -text
 gems2/vizor/graph.cpp svn_keywords=Author+Date+Id+Revision

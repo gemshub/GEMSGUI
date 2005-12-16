@@ -87,6 +87,9 @@ bool
 vfGEM2MTSet(QWidget* par, const char * p_key,
               char flds[20], int size[15] );
 bool
+vfUnSpaceSet(QWidget* par, const char * p_key,
+              char flds[38], int size[10] );
+bool
 vfGtDemoSet(QWidget* par, const char * p_key, int size[7], gstring& prkey );
 
 bool

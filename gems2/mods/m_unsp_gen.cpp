@@ -65,18 +65,16 @@ bool TUnSpace::test_sizes( )
    if(usp->qQ<1)
         usp->qQ=1;
 
-   if( usp->nG<=0 )
+   if( usp->nGB+usp->nGN+usp->nGR<=0 )
    {
       i = false;
       usp->nG = 2;
       usp->nGB =2;
    }
 
-   if( usp->nGB+usp->nGN+usp->nGR != usp->nG )  // ???? must be changed
+   if( usp->nGB+usp->nGN+usp->nGR != usp->nG )  // must be changed
    {
-      i = false;
-      usp->nGB = usp->nG;
-      usp->nGN = usp->nGR = 0;
+      usp->nG = usp->nGB+usp->nGN+usp->nGR;
    }
   // graphic
    if( usp->PsGraph != S_OFF )

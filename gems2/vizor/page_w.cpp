@@ -1324,7 +1324,7 @@ TCellInput::createPopupMenu()
     //        menu->insertItem( "&SDRef-Script\tF3", this, SLOT(CmScript()), Key_F3 );
     if( fieldType == ftRecord )
         menu->insertItem( "&Show record\tF7", this, SLOT(CmDComp()), Key_F7 );
-    if( fieldType == ftFloat )
+    if( fieldType == ftFloat || fieldType == ftNumeric )
     {
         menu->insertSeparator();
         menu->setItemEnabled(
