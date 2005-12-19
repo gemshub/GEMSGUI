@@ -19,6 +19,10 @@
 
 const char *GEMS_TOC_HTML = "gems_toc";
 
+#ifndef __unix
+#include <io.h>
+#endif
+
 #include "v_file.h"
 #include "v_dbfile.h"
 #include "v_module.h"
@@ -790,7 +794,7 @@ TCModule::TryRecInp( const char *_key, time_t& time_s, int q )
 
     if( ! MessageToSave() )
 	return;
-	
+
     RecStatus iRet = db->Rtest( key, 1 );
     gstring msg;
 
@@ -875,7 +879,7 @@ void TCModule::RecordLoadinProfile( const char *key )
     // get record
     if( str.empty() )
             return;
-	    
+
     RecInput( str.c_str() );
     if( check_input( str.c_str(), 0 ) ) // read and unpack base SyStat
         vfMessage(window(), GetName(),
@@ -1029,7 +1033,7 @@ TCModule::PrintSDref( const char* sd_key, char* text_fmt )
     {
         ios::openmode mod = ios::out;
 
-        if( !(::access(filename.c_str(), 0 )) ) //file exists
+        if( !access(filename.c_str(), 0 ) ) //file exists
             switch( vfQuestion3( window(), filename.c_str(),
                              "This file exists! What to do?",
                                  "&Append", "&Overwrite", "&Cancel") )
@@ -1151,7 +1155,7 @@ TCModule::CmRebildFile()
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         pVisor->Message( window(), GetName(), "Compressing database file(s) \n"
          "Please, wait...", 0, 100 );
 
@@ -1319,7 +1323,7 @@ TCModule::CmCopyList( )
     {
         if( ! MessageToSave() )
 	    return;
-	    
+
         CopyRecordsList( Filter.c_str(), false );
 
         dyn_set();
@@ -1736,7 +1740,7 @@ TCModule::RecImport()
                 if( fnum == -2 )
                   break;
              }
-        s = keyp;     
+        s = keyp;
         do
          {
             f.get(ch);

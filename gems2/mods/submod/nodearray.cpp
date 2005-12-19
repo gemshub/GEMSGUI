@@ -21,6 +21,10 @@
 #include "gdatastream.h"
 #include <math.h>
 
+#ifndef __unix
+#include <io.h>
+#endif
+
 #ifndef IPMGEMPLUGIN
   #include "service.h"
   #include "visor.h"
@@ -207,7 +211,7 @@ AGAIN:
           "Please, enter IPM work structure file name", "*.ipm" ) == false )
                return "";
    u_splitpath( path, dir, name, newname );
-   if( !(::access(path.c_str(), 0 )) ) //file exists
+   if( !access(path.c_str(), 0 ) ) //file exists
      switch( vfQuestion3( par, name.c_str(),
         "This set of files exists!",
              "&Overwrite", "&Rename", "&Cancel") )

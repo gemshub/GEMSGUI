@@ -22,7 +22,7 @@
 #define __v_dbm_h_
 
 #include <iostream>
-
+#include <time.h>
 #include "gstring.h"
 #include "array.h"
 #include "v_object.h"
@@ -40,7 +40,7 @@ const int	MAXRKFRMSTR = 20,  // max fields in key
     		IND_PLUS = 112;    // augment of index key buf
 
 enum keyctrl {   // codes key bild
-    K_END = -5, K_EMP, K_ANY, K_IMM, K_ACT 
+    K_END = -5, K_EMP, K_ANY, K_IMM, K_ACT
 };
 
 extern const char* ALLKEY;

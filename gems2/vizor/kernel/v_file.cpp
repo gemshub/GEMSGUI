@@ -25,7 +25,7 @@ using namespace std;
 #ifdef __unix
 #include <unistd.h>
 #else
-//#include <io.h>
+#include <io.h>
 #endif
 
 #include "v_file.h"
@@ -213,7 +213,7 @@ if( mode== UPDATE_DBV && access( Path.c_str(), 02 ) != 0)
     /*   if( mode == WRITE_T  || mode == WRITE_B )
           if( !vfQuestion( "Question", "Write over previous file (Y) or skip (N)?" ) )
                  Error( GetKeywd(),"Cansel of open file.");
-    */   
+    */
 // it seems like latest libstdc++ specs does not enforce
 // state and pointer reset :(
 // we have to do it on our own

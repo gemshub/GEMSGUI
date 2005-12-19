@@ -19,9 +19,12 @@
 #include <stdio.h>
 #include <errno.h>
 #include <iostream>
+
 using namespace std;
 #ifdef __unix
 #include <unistd.h>
+#else
+#include <io.h>
 #endif
 
 #include <qdialog.h>
@@ -117,8 +120,8 @@ TVisorImp::TVisorImp(int c, char** v):
 	QFont dialogFont = font();
 	dialogFont.setPixelSize(12);
 	setFont(dialogFont);
-    }   
-#endif 
+    }
+#endif
 
     pVisor = new TVisor(argc, argv);
     pVisor->Setup();
@@ -246,7 +249,7 @@ TVisorImp::CalcFinished()
 
 bool
 TVisorImp::SetProfileMode()
-{   
+{
     try
     {
         pVisor->ProfileMode = true;
@@ -314,7 +317,7 @@ TVisorImp::CalcMulti()
     }
 #else
     TProfil::pm->fStopCalc = false;
-    
+
     try
     {
         TProfil::pm->CalcEqstat();
@@ -1244,7 +1247,7 @@ AGAIN:
     {
         ios::openmode mod = ios::out;
 
-        if( !(::access(filename.c_str(), 0 )) ) //file exists
+        if( !access(filename.c_str(), 0 ) ) //file exists
             switch( vfQuestion3( par, filename.c_str(), "This file exists! What to do?",
                                  "&Append", "&Overwrite", "&Cancel") )
             {
