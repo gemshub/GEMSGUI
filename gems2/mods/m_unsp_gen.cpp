@@ -117,7 +117,7 @@ void TUnSpace::set_def_data_to_arrays( bool mode )
     for(int i=0; i<usp->L; i++ )
     {
        if(usp->PsGen[0] == S_ON )
-         usp->Gs[i][0] = usp->Gs[i][1] = TProfil::pm->tpp->G[i]+TProfil::pm->syp->GEX[i];
+         usp->Gs[i][0] = usp->Gs[i][1] = float(TProfil::pm->tpp->G[i])+TProfil::pm->syp->GEX[i];
 
        if(usp->PsGen[5] == S_ON )
          usp->Vs[i][0] = usp->Vs[i][1] = TProfil::pm->tpp->Vm[i];
@@ -527,10 +527,10 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
        if( usp->NgLg[j] > 0  )
        {   if( line == count )
            {
-            usp->Gs[j][0] = new_val;
+            usp->Gs[j][0] = (float)new_val;
             usp->IntLg[j][0] = new_int;
             TProfil::pm->syp->GEX[j] =
-               usp->Gs[j][0]-TProfil::pm->tpp->G[j];
+               usp->Gs[j][0]-float(TProfil::pm->tpp->G[j]);
             return;
            }
          count++;
@@ -766,8 +766,8 @@ void TUnSpace::buildTestedArrays()
 
     for( i=0; i<usp->L; i++)
     {
-      double xx = TProfil::pm->syp->Guns[i];
-             xx += TProfil::pm->syp->GEX[i];
+      double xx = (float)(TProfil::pm->syp->Guns[i]);
+             xx += (float)(TProfil::pm->syp->GEX[i]);
              xx += TProfil::pm->tpp->G[i];
       usp->vG[Ip*usp->L+i]= xx;
      }
@@ -917,7 +917,7 @@ void TUnSpace::BELOV(int QT, int NG, float *OVB)
 
 int TUnSpace::WL(int i,int j,int QT)
 { int W;
-  W=i*j-floor(float(i*j)/float(QT))*QT;  //  ?????????? 
+  W=i*j-floor(float(i*j)/float(QT))*QT;  //  ??????????
   if( QT-W < W )
       W=QT-W;
   return(W);

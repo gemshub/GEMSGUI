@@ -27,6 +27,46 @@
 #include "graph.h"
 #include "config.h"
 
+// Workaround for ilink unresolved external errors in BCBuilderX
+#ifndef __unix
+extern template<> const short TVal<short>::EMPTY();
+extern template<> const short TVal<short>::ANY();
+extern template<> const char* TVal<short>::PATTERN_GET();
+extern template<> const char* TVal<short>::PATTERN_SET();
+extern template<> const unsigned short TVal<unsigned short>::EMPTY();
+extern template<> const unsigned short TVal<unsigned short>::ANY();
+extern template<> const char* TVal<unsigned short>::PATTERN_GET();
+extern template<> const char* TVal<unsigned short>::PATTERN_SET();
+extern template<> const long TVal<long>::EMPTY();
+extern template<> const long TVal<long>::ANY();
+extern template<> const char* TVal<long>::PATTERN_GET();
+extern template<> const char* TVal<long>::PATTERN_SET();
+extern template<> const unsigned long TVal<unsigned long>::EMPTY();
+extern template<> const unsigned long TVal<unsigned long>::ANY();
+extern template<> const char* TVal<unsigned long>::PATTERN_GET();
+extern template<> const char* TVal<unsigned long>::PATTERN_SET();
+extern template<> const float TVal<float>::EMPTY();
+extern template<> const float TVal<float>::ANY();
+extern template<> const char* TVal<float>::PATTERN_GET();
+extern template<> const char* TVal<float>::PATTERN_SET();
+extern template<> const double TVal<double>::EMPTY();
+extern template<> const double TVal<double>::ANY();
+extern template<> const char* TVal<double>::PATTERN_GET();
+extern template<> const char* TVal<double>::PATTERN_SET();
+extern template<> const unsigned char TVal<unsigned char>::EMPTY();
+extern template<> const unsigned char TVal<unsigned char>::ANY();
+extern template<> const char* TVal<unsigned char>::PATTERN_GET();
+extern template<> const char* TVal<unsigned char>::PATTERN_SET();
+extern template<> const signed char TVal<signed char>::EMPTY();
+extern template<> const signed char TVal<signed char>::ANY();
+extern template<> const char* TVal<signed char>::PATTERN_GET();
+extern template<> const char* TVal<signed char>::PATTERN_SET();
+extern template<> const char TVal<char>::EMPTY();
+extern template<> const char TVal<char>::ANY();
+extern template<> const char* TVal<char>::PATTERN_GET();
+extern template<> const char* TVal<char>::PATTERN_SET();
+#endif
+
 // Global array of Objects
 
 TObjList aObj;
@@ -164,7 +204,7 @@ TObject::GetSize() const
     return GetCellSize()*N*M;
 }
 
-// Reallocation of object data
+// Reallocation of object data types
 TValBase*
 TObject::BuildVal(ObjType type, int m)
 {
@@ -391,7 +431,7 @@ TObject::Put(double Value, int n, int m)
 // Get label of object. Return size of object.
 size_t  TObject::olab_new( OLABEL& self )
 {  size_t size;
- 
+
    self.csize = (unsigned char)GetCellSize();
    if( pV )
    {  if( Type != S_ )
@@ -415,7 +455,7 @@ size_t  TObject::olab_new( OLABEL& self )
     self.Obegin[1] = TOKENOBJBEGIN;
     return size;
 }
- 
+
 // Compares label and object.
 // Return 0, if unification;
 //       -1, size of object < size in label;
@@ -424,7 +464,7 @@ size_t  TObject::olab_new( OLABEL& self )
 //        2, size = 0 in label.
 int TObject::olab_comp( OLABEL& self, size_t& ssize )
 {  size_t psize;
- 
+
    psize = GetSize();
    if( self.Otype != S_ )
       ssize = (size_t)(self.csize)*self.Odim_N*self.Odim_M;
@@ -1018,7 +1058,7 @@ TConfig cnf(f_obj,' ');
                 throw TFatalError(astr[0].c_str(),
                                   "TObject:E17 Unknown object type in ini-file");
         }
-	
+
         if( Find(astr[0].c_str()) >0 )
         {
            const char* label = astr[0].c_str();
