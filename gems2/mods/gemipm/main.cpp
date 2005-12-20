@@ -11,6 +11,8 @@
 //
 //-------------------------------------------------------------------
 
+#include <time.h>
+#include <math.h>
 #include "nodearray.h"
 //#include <stdio.h>
 int MassTransAdvec( double L,    // length of system [L]
@@ -336,7 +338,7 @@ fclose( logfile );
 fclose( ph_file );
 fclose( diffile );
 
-   return RetCode;
+   return 0; // RetCode
 }
 
 //---------------------------------------------------------------------------

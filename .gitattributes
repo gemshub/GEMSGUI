@@ -120,6 +120,7 @@ gems2/mods/gemipm/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_lin svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_w32 svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.w32 svn_keywords=Author+Date+Id+Revision
+gems2/mods/gemipm/gemipm2k-sep.pro -text
 gems2/mods/gemipm/gemipm2k.pro -text
 gems2/mods/gemipm/m_const.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/m_param.h svn_keywords=Author+Date+Id+Revision
