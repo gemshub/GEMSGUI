@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>642</width>
-            <height>604</height>
+            <width>680</width>
+            <height>684</height>
         </rect>
     </property>
     <property name="caption">
@@ -27,14 +27,14 @@
         </attribute>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout15</cstring>
+                <cstring>layout13</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>10</x>
-                    <y>0</y>
-                    <width>570</width>
-                    <height>500</height>
+                    <x>11</x>
+                    <y>1</y>
+                    <width>560</width>
+                    <height>480</height>
                 </rect>
             </property>
             <vbox>
@@ -53,7 +53,7 @@
                     </property>
                     <property name="text">
                         <string>&lt;p&gt;The UnSpace module is a tool for sensitivity studies of a GEM chemical thermodynamic model relative to uncertainty of its  input data. This data can be T, P, elements of Go vector, elements of bulk composition vector b and so on. &lt;/p&gt;
-&lt;p&gt;The UnSpace module and record can be configured to a particular task needs. To tell the program which input parameters of the system are considered uncertain, which additional experimental data can be used as "filters", and which statistical criteria should be applied, you have to select appropriate operation modes below.&lt;/p&gt;</string>
+&lt;p&gt;To tell the program which input parameters of the system are considered uncertain, which additional experimental data can be used as "filters", and which statistical criteria should be applied, select appropriate operation modes below.&lt;/p&gt;</string>
                     </property>
                 </widget>
                 <spacer>
@@ -69,7 +69,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>18</height>
+                            <height>30</height>
                         </size>
                     </property>
                 </spacer>
@@ -206,7 +206,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>18</height>
+                            <height>30</height>
                         </size>
                     </property>
                 </spacer>
@@ -215,7 +215,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>In spin-boxes below, some dimensions important for memory allocation must be properly set up. The sum of nGB, nGN and nGR dimensions will define internally the total number of UnSpace coordinates. The qlp level defines the number of sample points selected by the quantile.</string>
+                        <string>The sum of nGB, nGN and nGR dimensions (to be set below) will define internally the total number of UnSpace coordinates. The qlp level defines the number of sample points selected by the quantile.</string>
                     </property>
                     <property name="alignment">
                         <set>WordBreak|AlignVCenter</set>
@@ -259,7 +259,7 @@
                                         </size>
                                     </property>
                                     <property name="maxValue">
-                                        <number>1001</number>
+                                        <number>10001</number>
                                     </property>
                                     <property name="minValue">
                                         <number>1</number>
@@ -497,6 +497,23 @@
                                 </widget>
                             </hbox>
                         </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer16_3_2_2_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
                     </vbox>
                 </widget>
             </vbox>
@@ -517,7 +534,7 @@
                 <rect>
                     <x>10</x>
                     <y>20</y>
-                    <width>480</width>
+                    <width>520</width>
                     <height>470</height>
                 </rect>
             </property>
@@ -899,7 +916,7 @@
                 <rect>
                     <x>20</x>
                     <y>10</y>
-                    <width>478</width>
+                    <width>520</width>
                     <height>461</height>
                 </rect>
             </property>
@@ -1179,7 +1196,7 @@
                 <rect>
                     <x>10</x>
                     <y>10</y>
-                    <width>496</width>
+                    <width>530</width>
                     <height>481</height>
                 </rect>
             </property>
@@ -1571,7 +1588,5 @@
         </widget>
     </widget>
 </widget>
-<tabstops>
-</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
