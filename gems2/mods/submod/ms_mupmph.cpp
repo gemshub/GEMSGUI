@@ -415,8 +415,8 @@ void TProfil::multi_sys_dc()
             vfMessage(  window(), "Multi make error: L != pmp->L", "Please, press BCC!" );
 
     }
-    /*if( pmp->pBAL < 2 || pmp->pTPD < 2 )
-      {  Reload parametres of components */
+/*    if( pmp->pBAL < 2 || pmp->pTPD < 2 )
+    {  Reload parametres of components */
     if( pmp->E )
     { /*index of charge */
         for(  ii=0; ii<pmp->N; ii++ )
@@ -631,8 +631,9 @@ CH_FOUND:
             }
         }
     }
-    pmp->pTPD = 2; /* it has been =1, don`t load more! */
-    /*  } */
+    // pmp->pTPD = 2; // Sveta 23/12/2005
+    /* it has been =1, don`t load more! */
+   /* } */
 }
 
 //Load data on phases and solution models to structure MULTI
@@ -915,7 +916,7 @@ PARLOAD: if( k < syp->Fis )
         }
 
     }  /* k */
-    pmp->pTPD = 2;
+    // pmp->pTPD = 2; // Sveta 23/12/2005
 }
 
 // Loading surface type parameters
