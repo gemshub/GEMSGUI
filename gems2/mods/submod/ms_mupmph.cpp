@@ -220,7 +220,7 @@ void TProfil::MultiRemake( const char *key )
     pmp->T = pmp->Tc = tpp->T + C_to_K;
     pmp->TC = pmp->TCc = tpp->T;
     pmp->P = pmp->Pc = tpp->P;
-    pmp->T0 = 273.15;    // not used anywhere 
+    pmp->T0 = 273.15;    // not used anywhere
     pmp->MBX = syp->MBX;
     pmp->FX = 7777777.;
     pmp->pH = pmp->Eh = pmp->pe = 0.0;
@@ -328,7 +328,7 @@ pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
     //   ErrorIf( N != pmp->N, "Multi", "Multi make error: N != pmp->N" );
     if( N != pmp->N )
         vfMessage( window(),
-                   "Multi make error: N != pmp->N", 
+                   "Multi make error: N != pmp->N",
 		   "Please, press the BCC button first!" );
 NEXT2:
     // load data for dependent components
@@ -762,76 +762,76 @@ PARLOAD: if( k < syp->Fis )
             case DC_SUR_MINAL:
                 car_l[car_c++]=j;  pmp->Lads++; ja++;
                 break;
-                /*   Remapping DC codes to indices in pm->SATX */
-                /* even - strong surface complex on site type 0,1,2,3,4 - A plane */
+  /* Remapping DC codes to indices in pm->SATX - compat with old-style SCMs *
+   * even - inner-sphere complex on surface type 0,1,2,3,4 - A plane */
             case DC_SSC_A0:
-                pmp->SATX[ja][XL_ST] = AT_SA0;
+//                pmp->SATX[ja][XL_ST] = AT_SA0;
                 pmp->Lads++; ja++;
                 break;
             case DC_SSC_A1:
-                pmp->SATX[ja][XL_ST] = AT_SA1;
+//                pmp->SATX[ja][XL_ST] = AT_SA1;
                 pmp->Lads++; ja++;
                 break;
             case DC_SSC_A2:
-                pmp->SATX[ja][XL_ST] = AT_SA2;
+//                pmp->SATX[ja][XL_ST] = AT_SA2;
                 pmp->Lads++; ja++;
                 break;
             case DC_SSC_A3:
-                pmp->SATX[ja][XL_ST] = AT_SA3;
+//                pmp->SATX[ja][XL_ST] = AT_SA3;
                 pmp->Lads++; ja++;
                 break;
             case DC_SSC_A4:
-                pmp->SATX[ja][XL_ST] = AT_SA4;
+//                pmp->SATX[ja][XL_ST] = AT_SA4;
                 pmp->Lads++; ja++;
                 break;
-                /* odd - weak surface complex on site type 0,1,2,3,4 - B plane */
+  /* odd - outer-sphere complex on surface type 0,1,2,3,4 - beta plane */
             case DC_WSC_A0:
-                pmp->SATX[ja][XL_ST] = AT_SB0;
+//                pmp->SATX[ja][XL_ST] = AT_SB0;
                 pmp->Lads++; ja++;
                 break;
             case DC_WSC_A1:
-                pmp->SATX[ja][XL_ST] = AT_SB1;
+//                pmp->SATX[ja][XL_ST] = AT_SB1;
                 pmp->Lads++; ja++;
                 break;
             case DC_WSC_A2:
-                pmp->SATX[ja][XL_ST] = AT_SB2;
+//                pmp->SATX[ja][XL_ST] = AT_SB2;
                 pmp->Lads++; ja++;
                 break;
             case DC_WSC_A3:
-                pmp->SATX[ja][XL_ST] = AT_SB3;
+//                pmp->SATX[ja][XL_ST] = AT_SB3;
                 pmp->Lads++; ja++;
                 break;
             case DC_WSC_A4:
-                pmp->SATX[ja][XL_ST] = AT_SB4;
+//                pmp->SATX[ja][XL_ST] = AT_SB4;
                 pmp->Lads++; ja++;
                 break;
-                /* Strong exchange ion at const-charge plane */
+  /* Inner-sphere exchange ion at const-charge plane */
             case DC_IESC_A:
-                pmp->SATX[ja][XL_ST] = AT_SA5;
+//                pmp->SATX[ja][XL_ST] = AT_SA5;
                 pmp->Lads++; ja++;
                 break;
-                /* Weak exchange ion at const-charge plane */
+  /* Outer-sphere exchange ion at const-charge plane */
             case DC_IEWC_B:
-                pmp->SATX[ja][XL_ST] = AT_SB5;
+//                pmp->SATX[ja][XL_ST] = AT_SB5;
                 pmp->Lads++; ja++;
                 break;
-                /* Aliaces for 1-site model */
-                /* Surface site A plane -> '0' */
+  /* Aliaces for single-site model *
+        * Surface site A plane -> '0' */
             case DC_SUR_GROUP:
-                pmp->SATX[ja][XL_ST] = AT_SA0;
+//                pmp->SATX[ja][XL_ST] = AT_SA0;
                 pmp->Lads++; ja++;
                 break;
-                /* Strong sur. complex A plane -> '0' */
+        /* Strong sur. complex A plane -> '0' */
             case DC_SUR_COMPLEX:
-                pmp->SATX[ja][XL_ST] = AT_SA0;
+//                pmp->SATX[ja][XL_ST] = AT_SA0;
                 pmp->Lads++; ja++;
                 break;
-                /* Weak sur complex B plane -> '1' */
+       /* Weak sur complex B plane -> '1' */
             case DC_SUR_IPAIR:
-                pmp->SATX[ja][XL_ST] = AT_SB0;
+//                pmp->SATX[ja][XL_ST] = AT_SB0;
                 pmp->Lads++; ja++;
                 break;
-                /* End extension */
+/* End extension */
             case DC_SOL_MAJOR:
                 Cjs = j;
             case DC_SOL_MINOR:
@@ -851,7 +851,7 @@ PARLOAD: if( k < syp->Fis )
 
         if( syp->PYOF != S_OFF )
             switch( pmp->PHC[k] )
-            { /* recalc free energi metastable of phase from ed./g to ed./mol */
+            { /* recalc free energy of metastable phase from units/g to units/mol */
             case PH_POLYEL:
             case PH_SORPTION:
                 if( Cjs >= 0 )
@@ -1001,7 +1001,7 @@ void TProfil::ph_surtype_assign( int k, int kk, int jb, int je,
                 || pmp->DCC[j] == DC_SUR_MINAL )
             continue;
         ja = j - ( pmp->Ls - pmp->Lads );
-        ist = pmp->SATX[ja][XL_ST] / MSPN;   // index of surtype
+ist = pmp->SATX[ja][XL_ST]; // / MSPN;   index of surface type
 isi = pmp->SATX[ja][XL_SI];                 // index of site on this surface type
 pmp->D[ist][isi] = 0.0;                    // cleanining the totals for sites
         jcl = pmp->SATX[ja][XL_EM];

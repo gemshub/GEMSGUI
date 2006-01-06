@@ -441,7 +441,7 @@ pVisor->Update( false );
 ITDTEST:
     memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
 //    Error("IPM error: " , "Good result could not be obtained" );
-   // appears to be normal return after successfull improvement of mass balance precision 
+   // appears to be normal return after successfull improvement of mass balance precision
 }
 
 //Calc equstat method IPM (iterations)
@@ -467,7 +467,7 @@ void TProfil::MultiCalcIterations()
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of max.moles of surface species for SAT stabilization
 *  to improve IPM-2 convergence at high SAT values  KD 08.03.02
-*  xj0 values are placed as upper kunetic constraints
+*  xj0 values are placed as upper kinetic constraints
 */
 void TProfil::XmaxSAT_IPM2( void )
 {
@@ -475,7 +475,7 @@ void TProfil::XmaxSAT_IPM2( void )
     double XS0/*=0.*/, xj0/*=0.*/, XVk, XSk/*=0.*/, XSkC/*=0.*/, xj,
            Mm, rIEPS, /*oDUL,*/ xjn/*=0.*/;
 
-  if(!pmp->DUL )   // not possible to install upper kinetic constraint!
+  if(!pmp->DUL )   // not possible to install upper kinetic constraints!
       return;
 
   for( k=0; k<pmp->FIs; k++ )
@@ -501,10 +501,10 @@ void TProfil::XmaxSAT_IPM2( void )
         {
             if( pmp->DCC[j] == DC_PEL_CARRIER || pmp->DCC[j] == DC_SUR_MINAL ||
                     pmp->DCC[j] == DC_SUR_CARRIER ) continue;
-            ist = pmp->SATX[ja][XL_ST] / MSPN; // MSPN = 2 - number of EDL planes
+/*!!!!!!*/  ist = pmp->SATX[ja][XL_ST]; // / MSPN; MSPN = 2 - number of EDL planes
             continue;
         }
-        ist = pmp->SATX[ja][XL_ST] / MSPN;
+/*!!!!!!*/  ist = pmp->SATX[ja][XL_ST]; //  / MSPN;
         iSite[ist] = j;     // To be checked !!!
     }
 
@@ -536,7 +536,7 @@ void TProfil::XmaxSAT_IPM2( void )
         case DC_SUR_IPAIR:
         case DC_IESC_A:
             /* Calculate ist - index of surface type */
-            ist = pmp->SATX[ja][XL_ST] / MSPN;
+/*!!!!!!*/  ist = pmp->SATX[ja][XL_ST]; // / MSPN;
             /* Cj - index of carrier DC */
             Cj = pmp->SATX[ja][XL_EM];
             if( Cj < 0 )
@@ -669,7 +669,7 @@ double TProfil::DualChemPot( double U[], float AL[], int N )
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* calculate bulk stoichiometry of a multicomponent phase 
+/* calculate bulk stoichiometry of a multicomponent phase
 */
 void TProfil::phase_bcs( int N, int M, float *A, double X[], double BF[] )
 {
@@ -884,7 +884,7 @@ void TProfil::TotalPhases( double X[], double XF[], double XFA[] )
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of prime chemical potential F (returned)
-* from moles of DC Y[], total moles of phase YF[] and standard 
+* from moles of DC Y[], total moles of phase YF[] and standard
 * Gibbs energy gT (obtained from pmp->G[])
 * On error returns +7777777.
 */
@@ -955,7 +955,7 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
             pmp->aqsTail = 1.- pmp->YFk / Yf;
         }
         if( pmp->L1[k] > 1 )
-        {  
+        {
             pmp->logYFk = log( Yf );
         }
         if( pmp->PHC[k] == PH_AQUEL)
@@ -1109,9 +1109,9 @@ double TProfil::FreeEnergyIncr(
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of the total Gibbs energy of the system G(X).
-*  Parameter LM is IPM step size for calculation of new 
-*  quantities of all species (vector X[]) using direction 
-*  of descent (MU[] vector). If LM==0, this function 
+*  Parameter LM is IPM step size for calculation of new
+*  quantities of all species (vector X[]) using direction
+*  of descent (MU[] vector). If LM==0, this function
 *  just copies vector Y[] into X[].
 *  Returns value of G(X) in moles.
 */

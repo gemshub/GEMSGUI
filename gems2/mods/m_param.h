@@ -414,12 +414,12 @@ public:
    void calcMulti();
 };
 
-/* Work codes of surface site type indices in pm->AtNdx vector */
+/* Work codes of surface site types in pm->AtNdx vector (compatibility with old-style SCMs *
 enum SurTypeNdx {
-    AT_SA0 = 0, AT_SB0, AT_SA1, AT_SB1, AT_SA2, AT_SB2, AT_SA3, AT_SB3,
-    AT_SA4, AT_SB4, AT_SA5, AT_SB5, MSPN = 2
-                    /* Max number of EDL planes considered */
-};
+    AT_SA0=0, AT_SB0=0, AT_SA1=1, AT_SB1=1, AT_SA2=2, AT_SB2=2, AT_SA3=3,
+    AT_SB3=3, AT_SA4=4, AT_SB4=4, AT_SA5=5, AT_SB5=5,
+    MSPN = 2   * Max number of EDL planes considered in old-style SCMs *
+}; */
 
 /* Work DC classifier codes  pm->DCCW */
 enum SolDCodes {

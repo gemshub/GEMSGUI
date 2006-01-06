@@ -1111,14 +1111,15 @@ void TProfil::Mol_u( double Y[], double X[], double XF[], double XFA[] )
                ja = j - ( pmp->Ls - pmp->Lads );
                Ez = pmp->EZ[j];
                /* Get ist - index of surface type */
-               ist = pmp->SATX[ja][XL_ST] / MSPN;
+/* !!!!! */    ist = pmp->SATX[ja][XL_ST]; // / MSPN;
                /* and isp - index of surface plane  */
-               isp = pmp->SATX[ja][XL_ST] % MSPN;
+//               isp = pmp->SATX[ja][XL_ST] % MSPN;
+               isp = pmp->SATX[ja][XL_SP];
                if( !isp )
                    /* This is A (0) plane */
                    Psi = pmp->XpsiA[k][ist];
-               else /* This is B plane */
-                  Psi = pmp->XpsiB[k][ist];
+               else /* This is B or another plane */
+                   Psi = pmp->XpsiB[k][ist];
                XU[j] += Dsur + DsurT/( 1.0 + DsurT ) + log(XFA[k])+
                log( DsurT * pmp->Nfsp[k][ist] ) - pmp->FRT * Ez * Psi;
              }

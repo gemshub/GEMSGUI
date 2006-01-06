@@ -440,7 +440,7 @@ void TProfil::ConCalc( double X[], double XF[], double XFA[])
                 }
                 else
                 {
-                    ist = pmp->SATX[jja][0] / MSPN;
+/*!!!!!*/           ist = pmp->SATX[jja][XL_ST]; //  / MSPN;
                     pmp->XFTS[k][ist] += X[jj];
                 }
             }
@@ -560,8 +560,8 @@ void TProfil::IS_EtaCalc()
             case DC_IESC_A:
             case DC_IEWC_B: // Get ist - index of surface type
                             // and  isp - index of surface plane
-                ist = pmp->SATX[ja][XL_ST]; // / MSPN;
-                isp = pmp->SATX[ja][XL_ST]; // % MSPN;
+/*!!!!!*/       ist = pmp->SATX[ja][XL_ST]; // / MSPN;
+/*!!!!!*/       isp = pmp->SATX[ja][XL_SP]; // % MSPN;
                             // isp  index of outer surf.charge allocation  (new)
                             // Get charge distribution information
                 CD0 = pmp->MASDJ[ja][PI_CD0];  // species charge that goes into 0 plane
@@ -995,7 +995,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int /*jpb*/, int /*jdb*/, in
         ja = j - ( pmp->Ls - pmp->Lads );
         if( pmp->SATT[ja] == SAT_SOLV )
         {
-           ist = pmp->SATX[ja][XL_ST] / MSPN;
+/*!!!!!*/  ist = pmp->SATX[ja][XL_ST]; // / MSPN;
            iSite[ist] = j;
         }
         // Counting current sites totals
@@ -1005,7 +1005,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int /*jpb*/, int /*jdb*/, in
             pmp->SATT[ja] == SAT_SOLV )
             continue;
         // Calculate ist - index of surface type
-        ist = pmp->SATX[ja][XL_ST] / MSPN;
+/*!!!!!*/  ist = pmp->SATX[ja][XL_ST];  // / MSPN;
         if( ist < 0 || ist >= MST )
             ist = 0;  // default: zero surface type
         // Calculate iss - index of site on surf.type
@@ -1043,7 +1043,7 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int /*jpb*/, int /*jdb*/, in
         case DC_SUR_IPAIR:
         case DC_IESC_A:
             /* Calculate ist - index of surface type */
-            ist = pmp->SATX[ja][XL_ST] / MSPN;
+/*!!!!!*/   ist = pmp->SATX[ja][XL_ST]; // / MSPN;
             /* Calculate iss - index of site on surf.type */
             iss = pmp->SATX[ja][XL_SI];
             if( iss < 0 || iss >= MST )
@@ -1434,8 +1434,8 @@ double TProfil::Ej_init_calc( double, int j, int k)
     case DC_IEWC_B:
         F0 = pmp->lnGmM[j]; /* + pmp->lnGam[j]; */
         /* get ist - index of surface type and isp - index of surface plane  */
-        ist = pmp->SATX[ja][0] / MSPN;
-        isp = pmp->SATX[ja][0] % MSPN;
+/*!!!!!*/  ist = pmp->SATX[ja][XL_ST];  // / MSPN;
+/*!!!!!*/  isp = pmp->SATX[ja][XL_SP]; // % MSPN;
         CD0 = pmp->MASDJ[ja][PI_CD0];  // species charge that goes into 0 plane
         CDb = pmp->MASDJ[ja][PI_CDB];  // species charge that goes into B plane
         ObS = pmp->MASDJ[ja][PI_DEN];  // obsolete - the sign for outer-sphere charge
@@ -2218,7 +2218,7 @@ void TProfil::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
     T = pmp->Tc;
     A = pmp->PMc[jpb+0];
     B = pmp->PMc[jpb+1];
-    bg = pmp->FitVar[0];   // Changed 07.06.05 for T,P-dep. b_gamma in DHH 
+    bg = pmp->FitVar[0];   // Changed 07.06.05 for T,P-dep. b_gamma in DHH
 //    bg = pmp->PMc[jpb+5];
 //    a0c = pmp->PMc[jpb+6];
     nPolicy = pmp->PMc[jpb+7];
