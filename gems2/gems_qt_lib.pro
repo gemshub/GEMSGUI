@@ -3,11 +3,11 @@
 TEMPLATE	= lib
 LANGUAGE        = C++
 TARGET		= ./lib/gems_qt
-VERSION         = 2.1.0
+VERSION         = 2.1.1
 
 DEFINES         += Use_mt_mode
-CONFIG		+= qt thread warn_on release 
-#CONFIG		+= qmake_cache 
+CONFIG		+= qt thread warn_on release
+#CONFIG		+= qmake_cache
 
 
 VIZOR_CPP      =  ./vizor
@@ -18,16 +18,16 @@ MODS_CPP       =  ./mods
 SUBMOD_CPP     =  ./mods/submod
 
 VIZOR_H      =  $$VIZOR_CPP
-KERNEL_H     =  $$KERNEL_CPP  
-LIBS_H       =  $$LIBS_CPP 
-DLG_H        =  $$DLG_CPP 
-MODS_H       =  $$MODS_CPP 
-SUBMOD_H     =  $$SUBMOD_CPP  
+KERNEL_H     =  $$KERNEL_CPP
+LIBS_H       =  $$LIBS_CPP
+DLG_H        =  $$DLG_CPP
+MODS_H       =  $$MODS_CPP
+SUBMOD_H     =  $$SUBMOD_CPP
 
 
-DEPENDPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H 
-INCLUDEPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H 
-INCLUDEPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H 
+DEPENDPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H
+INCLUDEPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H
+INCLUDEPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H
 
 MOC_DIR = tmp
 UI_DIR  = $$MOC_DIR

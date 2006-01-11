@@ -3,11 +3,11 @@
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems2
-VERSION         = 2.1.0
+VERSION         = 2.1.1
 
 DEFINES         += Use_mt_mode
-CONFIG		+= qt thread warn_on debug 
-#CONFIG		+= qmake_cache 
+CONFIG		+= qt thread warn_on debug
+#CONFIG		+= qmake_cache
 
 !win32-borland {
   DEFINES += __unix
@@ -16,8 +16,8 @@ CONFIG		+= qt thread warn_on debug
 win32-borland {
 	# Keep the size of the .tds file for the Qt library smaller than
 	# 34 Mbytes to avoid linking problems
-	QMAKE_CFLAGS_DEBUG += -vi -y-
-	QMAKE_CXXFLAGS_DEBUG += -vi -y-
+	# QMAKE_CFLAGS_DEBUG += -vi -y-
+	# QMAKE_CXXFLAGS_DEBUG += -vi -y-
 }
 
 VIZOR_CPP      =  ./vizor
@@ -28,15 +28,15 @@ MODS_CPP       =  ./mods
 SUBMOD_CPP     =  ./mods/submod
 
 VIZOR_H      =  $$VIZOR_CPP
-KERNEL_H     =  $$KERNEL_CPP  
-LIBS_H       =  $$LIBS_CPP 
-DLG_H        =  $$DLG_CPP 
-MODS_H       =  $$MODS_CPP 
-SUBMOD_H     =  $$SUBMOD_CPP  
+KERNEL_H     =  $$KERNEL_CPP
+LIBS_H       =  $$LIBS_CPP
+DLG_H        =  $$DLG_CPP
+MODS_H       =  $$MODS_CPP
+SUBMOD_H     =  $$SUBMOD_CPP
 
 
-DEPENDPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H 
-INCLUDEPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H 
+DEPENDPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H
+INCLUDEPATH   += ;$$VIZOR_H;$$KERNEL_H;$$LIBS_H;$$DLG_H;$$MODS_H;$$SUBMOD_H
 
 MOC_DIR = tmp
 UI_DIR  = $$MOC_DIR
