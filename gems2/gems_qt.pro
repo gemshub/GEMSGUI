@@ -18,6 +18,8 @@ win32-borland {
 	# 34 Mbytes to avoid linking problems
 	# QMAKE_CFLAGS_DEBUG += -vi -y-
 	# QMAKE_CXXFLAGS_DEBUG += -vi -y-
+        QMAKE_CFLAGS += -x -xd -xp -VM -RT
+        QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
 }
 
 VIZOR_CPP      =  ./vizor

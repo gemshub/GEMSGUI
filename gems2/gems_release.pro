@@ -17,7 +17,10 @@ CONFIG		+= qt thread warn_off release
   DEFINES         += __unix
 }
 #CONFIG		+= qmake_cache
-
+win32-borland {
+        QMAKE_CFLAGS += -x -xd -xp -VM -RT
+        QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
+}
 
 VIZOR_CPP      =  ./vizor
 KERNEL_CPP     =  ./vizor/kernel
