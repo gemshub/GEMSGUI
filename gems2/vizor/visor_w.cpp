@@ -1220,7 +1220,7 @@ vfChooseFileSave(QWidget* par, gstring& path_,
         gstring name;
         gstring newname;
         u_splitpath( path_, dir, name, newname );
-        dir  += +"/";
+        dir  += "/";
         pVisor->setLocalDir( dir );
         return true;
     }

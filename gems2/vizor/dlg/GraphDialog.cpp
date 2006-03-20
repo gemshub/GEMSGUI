@@ -34,6 +34,7 @@
 #include "LegendDialog.h"
 #include "visor_w.h"
 #include "v_object.h"
+#include "visor.h"
 
 /*! Empric function to select new color for every new plotting line
 */
@@ -82,7 +83,7 @@ class SymbolLabel:
 	}
 */
 	void drawContents(QPainter* dc);
-	
+
     public:
 	SymbolLabel(QWidget* parent, const TPlotLine& line):
 	    QLabel(parent) {
@@ -98,7 +99,7 @@ class SymbolLabel:
 	}
 };
 
-void 
+void
 SymbolLabel::drawContents(QPainter* dc)
 {
     const int size = 4;
@@ -545,8 +546,10 @@ GraphDialog::CmSave()
     }
 
     QString selectedFilter;
+    gstring path = pVisor->localDir();
+
     QString fn = QFileDialog::getSaveFileName(
-          ".", filter, this, "savedlg", "Saving Plotting Image", &selectedFilter );
+          path.c_str()/*"."*/, filter, this, "savedlg", "Saving Plotting Image", &selectedFilter );
     if ( !fn.isEmpty() )
     {
 	QString format( selectedFilter.left(3) );
@@ -556,6 +559,16 @@ GraphDialog::CmSave()
 	    fn.append(format.lower());
 	}
 	QPixmap::grabWidget(plot).save(fn, format);
+
+        const char* fl = fn;
+        path = fl;
+        gstring dir;
+        gstring name;
+        gstring newname;
+        u_splitpath( path, dir, name, newname );
+        dir  += "/";
+        pVisor->setLocalDir( dir );
+
     }
 }
 
@@ -727,8 +740,8 @@ void PlotTypeBtn::drawButtonLabel(QPainter* paint)
 
 
 // static
-void 
-PlotTypeBtn::drawSymbol(QPainter *paint, const QPoint& center, 
+void
+PlotTypeBtn::drawSymbol(QPainter *paint, const QPoint& center,
 			    int type, int size, const QColor& color, int width)
 {
     //paint->setBrush( QBrush::NoBrush );
