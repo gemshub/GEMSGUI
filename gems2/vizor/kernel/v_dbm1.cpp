@@ -197,7 +197,7 @@ TDBFile::clrh()
 //Set header of PDB file
 void
 TDBFile::vdbh_new( const char *VerP,
-     const char *passwd,	int nRT, bool ifDel )
+     const char *passwd, int nRT, bool ifDel )
 {
     if( dh==0 )
         dh = new VDBhead;
@@ -418,7 +418,7 @@ NoBlock:
 
 //get information from dh
 void
-TDBFile::GetDh( long& fPos, long& fLen, int& nRT, bool& isDel )
+TDBFile::GetDh( int& fPos, int& fLen, int& nRT, bool& isDel )
 {
     check_dh();
     fPos = dh->FPosTRT;
@@ -437,7 +437,7 @@ TDBFile::GetDhOver()
 // sets information into compressed PDB file header
 // Fixed 07.09.04
 void
-TDBFile::SetDh( long fLen, int nRec, int nRT, bool isDel )
+TDBFile::SetDh( int fLen, int nRec, int nRT, bool isDel )
 {
     if( dh==0 )
         dh = new VDBhead;
@@ -852,14 +852,14 @@ TDBKeyList::TDBKeyList(fstream& f):
     init();
 }
 
-void 
+void
 TDBKeyList::check_ndx()
 {
     ErrorIf( ndx==0 || re==0 ,"TDBMKeyList",
              "No memory for list of indexes.");
 }
 
-void 
+void
 TDBKeyList::check_i(int i)
 {
     if( i<0||i>recInDB )
@@ -937,7 +937,7 @@ TDBKeyList::keycom( int i )
 
 //Add new key of record in list. Realloc memory if nessasery.
 int
-TDBKeyList::addndx( int nF, long len, const char *key )
+TDBKeyList::addndx( int nF, int len, const char *key )
 {
     int i, l, j;
     //unsigned j;

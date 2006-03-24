@@ -216,7 +216,7 @@ public:
     void CmPrint();
     void CmScript();
 
-    virtual bool check_input( const char *key, int level=1 )
+    virtual bool check_input( const char* /*key*/, int level=1 )
     {
         return false;
     }        // test input data (nessasary recalck)
@@ -268,7 +268,7 @@ public:
     }
     //-- for graphic data set
 
-    virtual bool SaveGraphData( GraphData *graph )
+    virtual bool SaveGraphData( GraphData* /*graph*/ )
     { return false; }
 
     const char *getFilter()

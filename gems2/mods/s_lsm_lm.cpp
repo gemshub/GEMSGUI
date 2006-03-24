@@ -50,6 +50,24 @@ char *lm_infmsg[] = {
 };
 
 
+TLMmin::TLMmin():
+   data(0), par(0)
+{
+    m_dat = 0;
+    n_par = 0;
+    fvec = 0;
+    diag = 0;
+    fjac = 0;
+    qtf = 0;
+    wa1 = 0;
+    wa2 = 0;
+    wa3 = 0;
+    wa4 = 0;
+    ipvt = 0;
+    CVM = 0;
+    chisq = 0.0;
+
+}
 TLMmin::TLMmin( double *aPar, TLMDataType *aData ):
    data(aData), par(aPar)
 {
@@ -78,6 +96,8 @@ TLMmin::~TLMmin()
 void TLMmin::Calc( double *sdpar, double *apar_ap,
                    double*ad_par, short *ad_type )
 {
+  if( !data )
+    return;
 #ifdef IPMGEMPLUGIN
     if( data->getInfo() == -1 ) //test_sizes
       return;
@@ -410,7 +430,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *        {
  *           // for ( i=0; i<m_dat; ++i )
  *           //     calculate fvec[i] for given parameters par;
- *           // to stop the minimization, 
+ *           // to stop the minimization,
  *           //     set *info to a negative integer.
  *        }
  *
@@ -419,7 +439,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
  *        alternatively, printout can be provided by a user calling program.
  *        it should be written as follows:
  *
- *        void printout ( int n_par, double* par, int m_dat, double* fvec, 
+ *        void printout ( int n_par, double* par, int m_dat, double* fvec,
  *                       void *data, int iflag, int iter, int nfev )
  *        {
  *           // iflag : 0 (init) 1 (outer loop) 2(inner loop) -1(terminated)
@@ -442,7 +462,7 @@ void TLMmin::lm_lmdif( int m, int n, double* x, double* fvec, double ftol, doubl
 
     *nfev = 0; // function evaluation counter
     iter = 1;  // outer loop counter
-    par = 0;   // levenberg-marquardt parameter 
+    par = 0;   // levenberg-marquardt parameter
     delta = 0; // just to prevent a warning (initialization within if-clause)
     xnorm = 0; // dito
 
@@ -986,7 +1006,7 @@ void TLMmin::lm_lmpar(int n, double* r, int ldr, int* ipvt, double* diag, double
             parl = MAX(parl, *par);
         else if (fp < 0)
             paru = MIN(paru, *par);
-        // the case fp==0 is precluded by the break condition 
+        // the case fp==0 is precluded by the break condition
 
 // *** compute an improved estimate for par.
 
@@ -1282,7 +1302,7 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
 
             for ( i=k+1; i<n; i++ )
             {
-                temp = cos*r[k*ldr+i] + sin*sdiag[i]; 
+                temp = cos*r[k*ldr+i] + sin*sdiag[i];
                 sdiag[i] = -sin*r[k*ldr+i] + cos*sdiag[i];
                 r[k*ldr+i] = temp;
             }
@@ -1348,6 +1368,8 @@ double TLMmin::lm_enorm( int n, double *x )
     int i;
     double agiant, s1, s2, s3, xabs, x1max, x3max, temp;
 
+    if( n <= 0 )
+      return 0.0;
     s1 = 0;
     s2 = 0;
     s3 = 0;
@@ -1388,7 +1410,7 @@ double TLMmin::lm_enorm( int n, double *x )
             s3 = 1 + s3*SQR(temp);
             x3max = xabs;
 	}
-        else	
+        else
 	{
             if (xabs != 0.)
             {

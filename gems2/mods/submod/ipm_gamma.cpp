@@ -88,7 +88,7 @@ double TProfil::pH_via_hydroxyl( double x[], double Factor, int j)
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-#define  a(j,i) (*(pmp->A+(i)+(j)*pmp->N))
+#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*pmp->N)))
 /* Calculation of dual chemical potentials and concentrations
 * for species (indexed jb to je) in a k-th phase.
 * Input arrays X, XF, XFA,  input factors: Factor, MMC

@@ -8,7 +8,7 @@
 //
 // This file is part of the GEM-Vizor library which uses the
 // Qt v.2.x GUI Toolkit (Troll Tech AS, http://www.trolltech.com)
-// according to the Qt Duo Commercial license     
+// according to the Qt Duo Commercial license
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -49,7 +49,7 @@ bool TDataBase::dbChangeAllowed( int /*nf*/, bool /*ifRep*/ )
 
 #else
 
-bool TDataBase::dbChangeAllowed( int nf, bool ifRep )
+bool TDataBase::dbChangeAllowed( int nf, bool /*ifRep*/ )
 {
     return ( pVisor->isDBChangeMode() /*&&  ifRep==true*/ )
 	    || ( nf >= specialFilesNum );
@@ -229,19 +229,19 @@ void TDataBase::getndx( int nF )
 }
 
 // get record length in the PDB file
-long TDataBase::reclen( )
+int TDataBase::reclen( )
 {
-    long Olen=0;
+    int Olen=0;
     for(int j=0; j<nOD; j++ )
         Olen += aObj[j+frstOD].lenDB();
     return Olen;
 }
 
 // put record in DB file
-long TDataBase::putrec( RecEntry& rep, GemDataStream& f )
+int TDataBase::putrec( RecEntry& rep, GemDataStream& f )
 {
     int j, len;
-    long StillLen;
+    int StillLen;
     RecHead rh;
     char *pack_key = (char*)ind.PackKey();
 
@@ -271,10 +271,10 @@ long TDataBase::putrec( RecEntry& rep, GemDataStream& f )
 }
 
 // put record in DB file
-long TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
+int TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
 {
     int j, len;
-    long StillLen;
+    int StillLen;
     RecHead rh;
     char *pack_key = (char*)ind.PackKey();
 
@@ -305,10 +305,10 @@ long TDataBase::putrec( RecEntry& rep, GemDataStream& f, RecHead& rhh  )
 
 
 // Gets a record from PDB file
-long TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
+int TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
 {
     int j;
-    long StillLen;
+    int StillLen;
     // RecHead rh;
     char *key = (char*)ind.PackKey();
 
@@ -347,7 +347,7 @@ long TDataBase::getrec( RecEntry& rep, GemDataStream& f, RecHead& rh )
 */
 int TDataBase::AddRecordToFile( const char *pkey, int file )
 {
-    long len, oldlen;
+    int len, oldlen;
     unsigned char nF;
     // test and open file
     fNum = file;
@@ -372,7 +372,7 @@ int TDataBase::AddRecordToFile( const char *pkey, int file )
     rh->len = len - RecHead::data_size();
 
     oldlen = aFile[nF].FLen();
-    long iRet =putrec( *rh, aFile[nF].f );
+    int iRet =putrec( *rh, aFile[nF].f );
     if( iRet!=0 )
     {
         if( aFile[nF].FLen() != oldlen )
@@ -391,7 +391,7 @@ int TDataBase::AddRecordToFile( const char *pkey, int file )
 void TDataBase::Rep(int i)
 {
     unsigned char nF;
-    long oldlen, iRet;
+    int oldlen, iRet;
     RecEntry* rh = ind.RecPosit(i);
 
     ind.check_i(i);
@@ -940,13 +940,13 @@ int TDataBase::GetKeyList( const char *keypat,TCStringArray& aKey, TCIntArray& a
 
 
 // Scan database file
-int TDataBase::scanfile( int nF, long& fPos, long& fLen,
+int TDataBase::scanfile( int nF, int& fPos, int& fLen,
 		GemDataStream& inStream, GemDataStream& outStream)
 {
     RecEntry recordEntry;
     RecHead recordHead;
     //RecEntry& rep = ind.RecPosit(0);
-    long len, fEnd = fPos;
+    int len, fEnd = fPos;
     int ni, nRec=0;
 
     recordEntry.nFile = (unsigned char)nF;             //warning
@@ -1016,7 +1016,7 @@ void TDataBase::RebildFile(const TCIntArray& nff)
     for(uint j=0; j<nff.GetCount(); j++)
     {
 	int  nRec, nRT; bool isDel;
-	long fPos, fLen;
+	int fPos, fLen;
         unsigned char nF = (unsigned char)nff[j];
         // test and open file
         check_file( nF );

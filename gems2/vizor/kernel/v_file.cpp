@@ -122,23 +122,9 @@ TFile::makeKeyword()
     if( name.empty() )
         return;
 
-/*    key = gstring(name, 0, 2);
-    int npos = name.find(".")+1;
-    key += gstring(name, npos, 2);
-    int npos2 = name.find(".", npos);
-    if( npos2 == gstring::npos )
-        npos2 = npos+2;
-    else
-        npos2++;
-
-    key += gstring(name, npos2, 6);
-
-    strncpy( Keywd, key.c_str(), MAX_FILENAME_LEN);
-    Keywd[MAX_FILENAME_LEN]='\0';
-*/
     key = gstring(name, 0, 2);
-    uint npos = 0;
-    uint npos2 = name.find(".", npos);
+    size_t npos = 0;
+    size_t npos2 = name.find(".", npos);
     while( npos2 != gstring::npos )
     {   npos = npos2+1;
         key += gstring(name, npos, 2);

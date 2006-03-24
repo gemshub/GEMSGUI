@@ -145,7 +145,7 @@ public:
     {
         return nI;
     }
-    long RecCount() const
+    int RecCount() const
     {
         return recInDB;
     }
@@ -167,7 +167,7 @@ public:
     }
 
     //--- Manipulation records
-    int  addndx( int nF, long len, const char *key );
+    int  addndx( int nF, int len, const char *key );
     void delndx(int i);
     int  findx( const char *key );
     int  xlist( const char *pattern );
@@ -196,8 +196,10 @@ struct RecHead
 {  // head the record in DB file
     char bgm[2];
     unsigned char nRT, Nobj;
-    long rlen;    // full len the record in file
-    time_t crt;
+// Sveta 64   long rlen;    // full len the record in file
+    int rlen;    // full len the record in file
+// Sveta 64    time_t crt;
+    int crt;
     char endm[2];
 
     void read(GemDataStream& is);
@@ -206,7 +208,8 @@ struct RecHead
     static size_t data_size()
     {
         return sizeof(char[2]) + sizeof(char)*2
-               + sizeof(long) + sizeof(time_t) + sizeof(char[2]);
+// Sveta 64               + sizeof(long) + sizeof(time_t) + sizeof(char[2]);
+               + sizeof(int) + sizeof(int) + sizeof(char[2]);
     }
 };
 
@@ -233,12 +236,12 @@ class TDataBase
 protected:
     void putndx( int nF );
     void getndx( int nF );
-    long reclen( );
-    long putrec( RecEntry& re, GemDataStream& f );
-    long putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
-    long getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
+    int reclen( );
+    int putrec( RecEntry& re, GemDataStream& f );
+    int putrec( RecEntry& re, GemDataStream& f, RecHead& rhh );
+    int getrec( RecEntry& re, GemDataStream& f, RecHead& rh );
     void opfils();
-    int scanfile( int nF, long& fPos, long& fLen,
+    int scanfile( int nF, int& fPos, int& fLen,
 	    GemDataStream& inStream, GemDataStream& outStream);
     void fromCFG(fstream& f);
     bool dbChangeAllowed( int nf, bool ifRep=false );
@@ -331,7 +334,7 @@ public:
     }
 
     void MakeKey( unsigned char nRtwrk, char *pkey, ...);
-    long RecCount() const
+    int RecCount() const
     {
         return ind.RecCount();
     }

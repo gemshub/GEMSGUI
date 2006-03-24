@@ -233,7 +233,7 @@ void
     gstring  from_templ = from_templ1;
     gstring  to_templ = to_templ1;
     bool inv_case = false;
-    uint ii;
+    size_t ii;
     data_str.strip();
     gstring old_str = data_str;
 
@@ -255,7 +255,7 @@ void
       data_str.substr(0, len_);
       if( data_str == old_str )
       {
-       int ii = data_str.length()-1;
+       size_t ii = data_str.length()-1;
        if( data_str[ii] == '9' )
         data_str[ii] = '_';
        else
@@ -271,8 +271,8 @@ void
     }
 
     ii=0;
-    int k=0;
-    uint pos_to;
+    size_t k=0;
+    size_t pos_to;
     while( ii<data_str.length() && ii<from_templ.length() )
     {
       if( from_templ[ii] == '*'  )
@@ -308,7 +308,7 @@ void
       to_templ = "";
    }
 
-   int jj, ik;
+   size_t jj, ik;
     jj = from_templ.length()-1;
     ik = data_str.length()-1;
     k =  data_str.length();

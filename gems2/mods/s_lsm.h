@@ -239,9 +239,12 @@ void ChTol( double& fTol, double& xTol );
 public:
 
     TLMmin( double *par, TLMDataType *aData);
+    TLMmin();
    ~TLMmin();
 
    void Calc( double *sdpar, double *par_ap=0, double*d_par=0, short *d_type=0 );
+   double Enorm( int n, double* x)
+   {  return lm_enorm( n, x ); }
 };
 
 typedef double fd_type;
@@ -302,7 +305,7 @@ public:
 
 inline
 double ROUND_EXP(double x, int ex )
-{    double dd = pow( 10., double(ex) );    
+{    double dd = pow( 10., double(ex) );
      return double( int( (x)*dd+.5 ) ) / dd;
 }
 

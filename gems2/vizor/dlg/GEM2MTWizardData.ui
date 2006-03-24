@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>643</width>
-            <height>607</height>
+            <width>694</width>
+            <height>654</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,16 +25,41 @@
         <attribute name="title">
             <string>Step 1 - Process Simulator configuration</string>
         </attribute>
+        <spacer>
+            <property name="name">
+                <cstring>spacer23</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>260</x>
+                    <y>330</y>
+                    <width>20</width>
+                    <height>16</height>
+                </rect>
+            </property>
+        </spacer>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout45</cstring>
+                <cstring>layout24</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>10</y>
-                    <width>530</width>
-                    <height>490</height>
+                    <y>12</y>
+                    <width>607</width>
+                    <height>550</height>
                 </rect>
             </property>
             <vbox>
@@ -59,7 +84,7 @@
                 </widget>
                 <spacer>
                     <property name="name">
-                        <cstring>spacer23</cstring>
+                        <cstring>spacer19</cstring>
                     </property>
                     <property name="orientation">
                         <enum>Vertical</enum>
@@ -70,7 +95,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>20</height>
+                            <height>40</height>
                         </size>
                     </property>
                 </spacer>
@@ -90,7 +115,7 @@
                                 <cstring>pselS</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;S    Preparation of CSD and node files for  coupled RMT modeling using GEMIPM2K  (default)</string>
+                                <string>&amp;S    Preparation of CSD and node files for  coupled RMT modeling using GEMIPM2K</string>
                             </property>
                             <property name="accel">
                                 <string>Alt+S</string>
@@ -228,13 +253,13 @@
         </attribute>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout44</cstring>
+                <cstring>layout20</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>10</x>
-                    <y>20</y>
-                    <width>540</width>
+                    <x>13</x>
+                    <y>13</y>
+                    <width>640</width>
                     <height>470</height>
                 </rect>
             </property>
@@ -266,7 +291,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>21</height>
+                            <height>16</height>
                         </size>
                     </property>
                 </spacer>
@@ -277,157 +302,150 @@
                     <property name="title">
                         <string>Dimensions and graphics</string>
                     </property>
-                    <vbox>
+                    <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="QLayoutWidget">
+                        <widget class="QSpinBox" row="5" column="0">
                             <property name="name">
-                                <cstring>layout208</cstring>
+                                <cstring>pnFD</cstring>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pnC</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>1001</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>2</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel1</cstring>
-                                    </property>
-                                    <property name="frameShape">
-                                        <enum>NoFrame</enum>
-                                    </property>
-                                    <property name="frameShadow">
-                                        <enum>Plain</enum>
-                                    </property>
-                                    <property name="text">
-                                        <string>&lt;b&gt;nC&lt;/b&gt;  - Number of local equilibrium cells (nodes, boxes) in the transport model</string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout208_2</cstring>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pnIV</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>999</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>2</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel1_3</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&lt;b&gt;nIV&lt;/b&gt; -  Number of initial variants of the chemical system, must not exceed nC</string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout208_2_2</cstring>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pntM</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>32767</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>1000</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel1_3_2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&lt;b&gt;ntM&lt;/b&gt; - Maximum allowed number of time iteration steps (default 1000, negative-unlimited)</string>
-                                    </property>
-                                </widget>
-                            </hbox>
+                            <property name="maxValue">
+                                <number>100</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="value">
+                                <number>0</number>
+                            </property>
                         </widget>
-                        <spacer>
+                        <widget class="QSpinBox" row="6" column="0">
                             <property name="name">
-                                <cstring>spacer16_5</cstring>
+                                <cstring>pnSFD</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>20</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="value">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="8" column="0">
+                            <property name="name">
+                                <cstring>pnYS</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>20</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="value">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="9" column="0">
+                            <property name="name">
+                                <cstring>pnE</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>100</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="10" column="0">
+                            <property name="name">
+                                <cstring>pYE</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>10</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="value">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <spacer row="7" column="2">
+                            <property name="name">
+                                <cstring>spacer24_2</cstring>
                             </property>
                             <property name="orientation">
                                 <enum>Vertical</enum>
@@ -438,160 +456,193 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>20</width>
-                                    <height>20</height>
+                                    <height>16</height>
                                 </size>
                             </property>
                         </spacer>
-                        <widget class="QLayoutWidget">
+                        <widget class="QLabel" row="6" column="1" rowspan="1" colspan="2">
                             <property name="name">
-                                <cstring>layout207_2</cstring>
+                                <cstring>TextLabel2_3</cstring>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pnPG</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>20</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>0</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel2_2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&lt;b&gt;nPG&lt;/b&gt;  -  Number of mobile phase groups (0 in S, A,D,T modes;  more than 1 in F mode).</string>
-                                    </property>
-                                    <property name="alignment">
-                                        <set>WordBreak|AlignVCenter</set>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout207</cstring>
+                            <property name="text">
+                                <string>&lt;b&gt;nSFD&lt;/b&gt;  Number of source flux definitions (0 or less than nFD in F mode only )</string>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pnFD</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>100</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>0</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&lt;b&gt;nFD&lt;/b&gt;  -  Number of MPG flux definitions (0 in S,A,D,T modes; more than 1 in F mode).</string>
-                                    </property>
-                                    <property name="alignment">
-                                        <set>WordBreak|AlignVCenter</set>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout207_3</cstring>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pnSFD</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>20</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>0</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel2_3</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>&lt;b&gt;nSFD&lt;/b&gt;  Number of source flux definitions (0 or less than nFD in F mode only )</string>
-                                    </property>
-                                    <property name="alignment">
-                                        <set>WordBreak|AlignVCenter</set>
-                                    </property>
-                                </widget>
-                            </hbox>
                         </widget>
-                        <spacer>
+                        <widget class="QLabel" row="8" column="1" rowspan="1" colspan="2">
                             <property name="name">
-                                <cstring>spacer15</cstring>
+                                <cstring>TextLabel1_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Number of plots (columns in the yt table, from 0 to 20) to sample data from nodes for exporting / plotting; number of rows will be nC. If this field is set to 1 or more, the mgExpr script editor field will  be created.</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="9" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>TextLabel1_2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Number of rows (points) in the xEt, yEt arrays for plotting experimental data (optional)</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="10" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>TextLabel1_2_2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Number of columns (plots) in the  yEt array for plotting experimental data</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="5" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>TextLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;b&gt;nFD&lt;/b&gt;  -  Number of MPG flux definitions (0 in S,A,D,T modes; more than 1 in F mode).</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="4" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>TextLabel2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;b&gt;nPG&lt;/b&gt;  -  Number of mobile phase groups (0 in S, A,D,T modes;  more than 1 in F mode).</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>TextLabel1</cstring>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Plain</enum>
+                            </property>
+                            <property name="text">
+                                <string>&lt;b&gt;nC&lt;/b&gt;  - Number of local equilibrium cells (nodes, boxes) in the transport model</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="0" column="0">
+                            <property name="name">
+                                <cstring>pnC</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>1001</number>
+                            </property>
+                            <property name="minValue">
+                                <number>1</number>
+                            </property>
+                            <property name="value">
+                                <number>2</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>pnIV</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>999</number>
+                            </property>
+                            <property name="minValue">
+                                <number>1</number>
+                            </property>
+                            <property name="value">
+                                <number>2</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>TextLabel1_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;b&gt;nIV&lt;/b&gt; -  Number of initial variants of the chemical system, must not exceed nC</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="2" column="0">
+                            <property name="name">
+                                <cstring>pntM</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>32767</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="value">
+                                <number>1000</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="1" rowspan="1" colspan="2">
+                            <property name="name">
+                                <cstring>TextLabel1_3_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;b&gt;ntM&lt;/b&gt; - Maximum allowed number of time iteration steps (default 1000, negative-unlimited)</string>
+                            </property>
+                        </widget>
+                        <spacer row="3" column="1">
+                            <property name="name">
+                                <cstring>spacer23_2</cstring>
                             </property>
                             <property name="orientation">
                                 <enum>Vertical</enum>
@@ -601,173 +652,40 @@
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>20</width>
+                                    <width>16</width>
                                     <height>20</height>
                                 </size>
                             </property>
                         </spacer>
-                        <widget class="QLayoutWidget">
+                        <widget class="QSpinBox" row="4" column="0">
                             <property name="name">
-                                <cstring>layout206</cstring>
+                                <cstring>pnPG</cstring>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pnYS</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>20</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>0</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel1_2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Number of plots (columns in the yt table, from 0 to 20) to sample data from nodes for exporting / plotting; number of rows will be nC. If this field is set to 1 or more, the mgExpr script editor field will  be created.</string>
-                                    </property>
-                                    <property name="alignment">
-                                        <set>WordBreak|AlignVCenter</set>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer14</cstring>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
                             </property>
-                            <property name="orientation">
-                                <enum>Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
+                            <property name="minimumSize">
                                 <size>
-                                    <width>20</width>
-                                    <height>20</height>
+                                    <width>50</width>
+                                    <height>0</height>
                                 </size>
                             </property>
-                        </spacer>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout205</cstring>
+                            <property name="maxValue">
+                                <number>20</number>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pnE</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>100</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel1_2_2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Number of rows (points) in the xEt, yEt arrays for plotting experimental data (optional)</string>
-                                    </property>
-                                    <property name="alignment">
-                                        <set>WordBreak|AlignVCenter</set>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout204</cstring>
+                            <property name="minValue">
+                                <number>0</number>
                             </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QSpinBox">
-                                    <property name="name">
-                                        <cstring>pYE</cstring>
-                                    </property>
-                                    <property name="sizePolicy">
-                                        <sizepolicy>
-                                            <hsizetype>0</hsizetype>
-                                            <vsizetype>0</vsizetype>
-                                            <horstretch>0</horstretch>
-                                            <verstretch>0</verstretch>
-                                        </sizepolicy>
-                                    </property>
-                                    <property name="minimumSize">
-                                        <size>
-                                            <width>50</width>
-                                            <height>0</height>
-                                        </size>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>10</number>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>1</number>
-                                    </property>
-                                </widget>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>TextLabel1_2_2_2</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Number of columns (plots) in the  yEt array for plotting experimental data</string>
-                                    </property>
-                                    <property name="alignment">
-                                        <set>WordBreak|AlignVCenter</set>
-                                    </property>
-                                </widget>
-                            </hbox>
+                            <property name="value">
+                                <number>0</number>
+                            </property>
                         </widget>
-                    </vbox>
+                    </grid>
                 </widget>
             </vbox>
         </widget>
@@ -779,41 +697,16 @@
         <attribute name="title">
             <string>Step 3 - Additional settings</string>
         </attribute>
-        <spacer>
-            <property name="name">
-                <cstring>spacer20</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>18</height>
-                </size>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>260</x>
-                    <y>59</y>
-                    <width>20</width>
-                    <height>18</height>
-                </rect>
-            </property>
-        </spacer>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout20</cstring>
+                <cstring>layout22</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>12</y>
-                    <width>590</width>
-                    <height>470</height>
+                    <y>14</y>
+                    <width>600</width>
+                    <height>540</height>
                 </rect>
             </property>
             <vbox>
@@ -831,6 +724,23 @@
                         <set>WordBreak|AlignVCenter</set>
                     </property>
                 </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer20</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>18</height>
+                        </size>
+                    </property>
+                </spacer>
                 <widget class="QButtonGroup">
                     <property name="name">
                         <cstring>buttonGroup18_2</cstring>
@@ -1113,7 +1023,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>17</height>
+                            <height>16</height>
                         </size>
                     </property>
                 </spacer>
@@ -1210,14 +1120,14 @@
         </attribute>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout46</cstring>
+                <cstring>layout27</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>10</x>
-                    <y>10</y>
-                    <width>553</width>
-                    <height>490</height>
+                    <x>12</x>
+                    <y>12</y>
+                    <width>610</width>
+                    <height>580</height>
                 </rect>
             </property>
             <vbox>
@@ -1231,22 +1141,6 @@
                     <property name="title">
                         <string>Optional</string>
                     </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel11</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>90</x>
-                                <y>20</y>
-                                <width>451</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="text">
-                            <string>Set here the number of links to SDref bibliography records (default 0)</string>
-                        </property>
-                    </widget>
                     <widget class="QSpinBox">
                         <property name="name">
                             <cstring>spinBox18</cstring>
@@ -1263,6 +1157,22 @@
                             <number>4</number>
                         </property>
                     </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel11</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>90</x>
+                                <y>20</y>
+                                <width>451</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="text">
+                            <string>Set here the number of links to SDref bibliography records (default 0)</string>
+                        </property>
+                    </widget>
                 </widget>
                 <spacer>
                     <property name="name">
@@ -1277,7 +1187,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>20</height>
+                            <height>16</height>
                         </size>
                     </property>
                 </spacer>

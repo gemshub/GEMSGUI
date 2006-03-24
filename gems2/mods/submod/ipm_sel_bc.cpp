@@ -123,6 +123,8 @@ KN:
 }
 #undef a
 
+#include "s_lsm.h"
+#undef a
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Solver of a system of linear equations using method of square roots
 // N - dimension of the matrix R (number of equations)
@@ -138,10 +140,13 @@ KN:
 int TProfil::SquareRoots( int N, double *R, double *X, double *B )
 {
 
-//!!  fstream f_log("SquareRoots.txt", ios::out|ios::app );
+   TLMmin task;  // Added Sveta 23/03/06 for calc euclidian norm without 
+                 // overflow and underflow in calculations
+//   fstream f_log("SquareRoots.txt", ios::out|ios::app );
 
     int I,J,K,P,Q,N1, iRet=0;
-    double F,G/*, E*/;
+    double F,G, E;
+    double *gg;
     N1 = N + 1;
     ErrorIf( !B, "SquareRoots", "Error param B." );
     memset( B, 0, N*N1*sizeof(double));
@@ -157,35 +162,40 @@ int TProfil::SquareRoots( int N, double *R, double *X, double *B )
     for(I=0;I<N;I++)
         X[I]=  r(I,N);      /*       *(R+I*N1+N); */
 
+    gg = new double[N];
     Q=0;
+
     for(I=0;I<N;I++)
     {
-//!!    f_log << I << endl;
+//f_log << I << endl;
         F=B[Q];
         P=I;
-//!!    f_log << "F = " << F << " P = " << P << endl;
+//f_log << "F = " << F << " P = " << P << endl;
         for(J=0;J<=I-1;J++)
         {
             G=B[P];
-            F-=G*G;
-//            E = sqrt(F);
-//            F = (E+G)*(E-G);
-//
+            gg[J] = G;
+//            F-=G*G;
+
             for(K=1;K<N-I;K++)
                 B[Q+K]-=G*B[P+K];
             P+=N-J-1;
-//!!            f_log << "G = " << G << " F = " << F << " P=" << P << endl;
+//f_log << "G = " << G << " F = " << F << " P=" << P << endl;
         }
-        if( F <=  2.22E-16 /*DBL_EPSILON*/ )
+        E = task.Enorm( J, gg );
+        F = ( F - (E*E));
+        if( F <=  pmp->lowPosNum /* 2.22E-16 DBL_EPSILON*/ )
         {
             iRet=1;
             goto KN;
         }
+	
+//f_log  << " F = (F-E*E) " << F << " E=" << E << endl;
        F=1./sqrt(F);
-//        F=pow(F, -0.5);
-//        F=exp(-0.5*log(F));
-        B[Q]=F;
-//!!    f_log << " F = " << F << endl;
+        
+       B[Q]=F;
+//f_log << " F = " << F << " E = " << E << endl;
+
        for(K=1;K<N-I;K++)
             B[Q+K]*=F;
         Q+=N-I;
@@ -242,7 +252,7 @@ KN:
 // Returns 0, if new IPM loop is needed;
 //         1, if the solution is final.
 //
-#define  a(j,i) (*(pm[q].A+(i)+(j)*pm[q].N))
+#define  a(j,i) ((double *)(*(pm[q].A+(i)+(j)*pm[q].N)))
 //
 void TProfil::PhaseSelect()
 {
@@ -404,7 +414,7 @@ S4: // No phases to insert or no distortions
 //          2  - used more than pa.p.DP iterations
 //
 #define  r(i,j) (*(R+(j)+(i)*N1))
-#define  a(j,i) (*(pmp->A+(i)+(j)*pmp->N))
+#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*pmp->N)))
 //
 int TProfil::EnterFeasibleDomain( )
 {
@@ -525,6 +535,7 @@ int TProfil::EnterFeasibleDomain( )
 
        for(I=0;I<N;I++)
             r(I,N) = pmp->C[I];
+
 
         /* Solving system of linear equations */
        sRet = SquareRoots( N, R, pmp->U, R1 );
@@ -719,7 +730,7 @@ OCT:
 /* access to element of R matrix */
 #define  r(i,j) (*(R+(j)+(i)*N1))
 /* access to element of A matrix */
-#define  a(j,i) (*(pmp->A+(i)+(j)*pmp->N))
+#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*pmp->N)))
 
 // One iteration of Interior Points Method algorithm
 // (see Karpov et al., 1997, p. 785-786 )

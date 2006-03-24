@@ -47,7 +47,8 @@ struct VDBhead
     int nRec;                // number records in file
     int  stacOver,FPosTRT;
     char isDel;
-    long MinDrLen, MaxDrLen; // min and max size of deleted block
+// Sveta 64   long MinDrLen, MaxDrLen; // min and max size of deleted block
+    int MinDrLen, MaxDrLen; // min and max size of deleted block
     int curDr;               // number of deleted blocks
 
     void read(GemDataStream& is);
@@ -58,27 +59,31 @@ struct VDBhead
         return sizeof(char[8])*2
                + sizeof(char[11]) + sizeof(char[5])
                + sizeof(int)*4
-               + sizeof(char) + sizeof(long)*2
+// Sveta 64    + sizeof(char) + sizeof(long)*2
+               + sizeof(char) + sizeof(int)*2
                + sizeof(int);
     }
 };
 
 struct DBentry
 {   // position and size of deleted block
-    long pos, len;
+// Sveta 64    long pos, len;
+    int pos, len;
 
     void read(GemDataStream& is);
     void write(GemDataStream& is);
 
     static size_t data_size()
     {
-        return sizeof(long)*2;
+// Sveta 64  return sizeof(long)*2;
+     return sizeof(int)*2;
     }
 };
 
 struct RecEntry
 {   //position, size and file number of record
-    long pos, len;
+// Sveta 64    long pos, len;
+    int     pos, len;
     unsigned char nFile;
 
     void read(GemDataStream& is);
@@ -90,7 +95,8 @@ struct RecEntry
 class TDBFile:
             public TFile
 {
-    long FPosFree;  // len of file
+// Sveta 64    long FPosFree;  // len of file
+    int     FPosFree;  // len of file
     VDBhead *dh;    // header of file
     DBentry *sfe;   // stack of deleted record
 
@@ -118,13 +124,13 @@ public:
     {
         return dh;
     }    // header of file
-    
-    long FLen() const
+
+    int FLen() const
     {
         return FPosFree;
     }
 
-    void FNewLen( long dlt )
+    void FNewLen( int dlt )
     {
         FPosFree -= dlt;
     }
@@ -132,9 +138,9 @@ public:
     {
         check_dh(), dh->nRec = n;
     }
-    void GetDh( long& fPos, long& fLen, int& nRT, bool& isDel );
+    void GetDh( int& fPos, int& fLen, int& nRT, bool& isDel );
     bool GetDhOver();
-    void SetDh( long fLen, int nRec, int nRT, bool isDel );
+    void SetDh( int fLen, int nRec, int nRT, bool isDel );
 
     //---  Manipulation files ---
     void Create( unsigned char nRT, bool isDel );

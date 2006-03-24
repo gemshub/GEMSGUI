@@ -41,7 +41,8 @@ class TConfig
     int sec_beg;
     int ssec_beg;
 
-    ifstream ini;
+    fstream ini;
+//    ifstream ini;
     int nLine;
     gstring line;
     unsigned valPos;
