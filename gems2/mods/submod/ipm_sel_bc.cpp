@@ -123,8 +123,10 @@ KN:
 }
 #undef a
 
+#ifndef IPMGEMPLUGIN
 #include "s_lsm.h"
 #undef a
+#endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Solver of a system of linear equations using method of square roots
 // N - dimension of the matrix R (number of equations)
@@ -140,8 +142,10 @@ KN:
 int TProfil::SquareRoots( int N, double *R, double *X, double *B )
 {
 
-   TLMmin task;  // Added Sveta 23/03/06 for calc euclidian norm without 
+#ifndef IPMGEMPLUGIN
+   TLMmin task;  // Added Sveta 23/03/06 for calc euclidian norm without
                  // overflow and underflow in calculations
+#endif
 //   fstream f_log("SquareRoots.txt", ios::out|ios::app );
 
     int I,J,K,P,Q,N1, iRet=0;
@@ -162,7 +166,9 @@ int TProfil::SquareRoots( int N, double *R, double *X, double *B )
     for(I=0;I<N;I++)
         X[I]=  r(I,N);      /*       *(R+I*N1+N); */
 
+#ifndef IPMGEMPLUGIN
     gg = new double[N];
+#endif
     Q=0;
 
     for(I=0;I<N;I++)
@@ -174,25 +180,29 @@ int TProfil::SquareRoots( int N, double *R, double *X, double *B )
         for(J=0;J<=I-1;J++)
         {
             G=B[P];
+#ifndef IPMGEMPLUGIN
             gg[J] = G;
-//            F-=G*G;
-
+#else
+            F-=G*G;
+#endif
             for(K=1;K<N-I;K++)
                 B[Q+K]-=G*B[P+K];
             P+=N-J-1;
 //f_log << "G = " << G << " F = " << F << " P=" << P << endl;
         }
+#ifndef IPMGEMPLUGIN
         E = task.Enorm( J, gg );
         F = ( F - (E*E));
+#endif
         if( F <=  pmp->lowPosNum /* 2.22E-16 DBL_EPSILON*/ )
         {
             iRet=1;
             goto KN;
         }
-	
+
 //f_log  << " F = (F-E*E) " << F << " E=" << E << endl;
        F=1./sqrt(F);
-        
+
        B[Q]=F;
 //f_log << " F = " << F << " E = " << E << endl;
 
