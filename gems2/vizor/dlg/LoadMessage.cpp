@@ -83,7 +83,7 @@ ProcessProgressDialog::ProcessProgressDialog( QWidget* parent ):
     pDia = this;
     TProfil::pm->userCancel = false;
     TProfil::pm->stepWise = false;
-    TProcess::pm->stepWise = false;
+    TProcess::pm->stepWise = true;
     TProcess::pm->userCancel = false;
 
     setGeometry( QRect( 20, 20, 350, 110 ) );
@@ -294,6 +294,7 @@ ProcessProgressDialog::CmBreak()
 void
 ProcessProgressDialog::closeEvent(QCloseEvent* ev)
 {
+    timer->stop();
     pDia = 0;
     QDialog::closeEvent(ev);
 }

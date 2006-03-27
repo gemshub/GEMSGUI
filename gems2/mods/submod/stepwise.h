@@ -29,7 +29,7 @@ class ThreadControl {
 
 #define STEP_POINT2() { \
 	if( stepWise ) { \
-    	    ThreadControl::wait(); \
+           ThreadControl::wakeOne(); \
 	} \
         if( userCancel ) \
             throw UserCancelException(); \

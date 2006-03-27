@@ -1208,6 +1208,22 @@ TProcess::RecCalc( const char *key )
       internalCalc();
 #endif
 
+if( pep->Istat >=P_MT_MODE )
+  pep->Istat = P_MT_FINISHED;
+else
+  pep->Istat = P_FINISHED;
+
+// Get startup syseq record for fitting
+rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
+         RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
+                        RT_PROCES, 6, RT_PROCES, 7, K_END );
+nRec = rt[RT_SYSEQ].Find(pep->stkey);
+if( nRec >= 0)
+   PRof->loadSystat( pep->stkey );   // read SysEq record and unpack data
+
+ModUpdate("Pe_calc    Finished OK");
+
+
 }
 
 //internal calc record structure
@@ -1223,7 +1239,9 @@ TProcess::internalCalc()
     {
 #ifdef Use_mt_mode
     if( pep->Istat >= P_MT_MODE )
-    {     STEP_POINT2();
+    {
+       pointShow=-1;
+       STEP_POINT2();
     }
     else
      if( pointShow==-1 )
@@ -1297,6 +1315,7 @@ TProcess::internalCalc()
             PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
 //	    pVisorImp->CalcMulti();
 
+    if( pep->Istat < P_MT_MODE )
            if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
                  TSysEq::pm->CmSave();  // save results
 //        }
@@ -1360,21 +1379,6 @@ TProcess::internalCalc()
        pVisor->CloseMessage();
 #endif
 
-    if( pep->Istat >=P_MT_MODE )
-      pep->Istat = P_MT_FINISHED;
-    else
-      pep->Istat = P_FINISHED;
-
-// Get startup syseq record for fitting
-    rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
-             RT_PROCES, 2,  RT_PROCES, 3, RT_PROCES, 4, RT_PROCES, 5,
-                            RT_PROCES, 6, RT_PROCES, 7, K_END );
-    nRec = rt[RT_SYSEQ].Find(pep->stkey);
-    if( nRec >= 0)
-       PRof->loadSystat( pep->stkey );   // read SysEq record and unpack data
-
-    ModUpdate("Pe_calc    Finished OK");
-
 }
 
 
@@ -1382,7 +1386,7 @@ TProcess::internalCalc()
 void
 TProcess::CalcPoint( int nPoint )
 {
-    if( nPoint >= pep->dimXY[0] )
+    if( nPoint >= pep->dimXY[0]  || nPoint == -1 )
      return;
     // Add point to graph screen
     if( gd_gr )
@@ -1470,7 +1474,7 @@ TProcess::SaveGraphData( GraphData *gr )
        gr->getColorList();
     pVisor->Update();
     contentsChanged = true;
-    
+
     return true;
 }
 
