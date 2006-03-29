@@ -85,7 +85,7 @@ vfProcessSet(QWidget* par, const char * p_key,
               char flds[24], int size[6] );
 bool
 vfGEM2MTSet(QWidget* par, const char * p_key,
-              char flds[20], int size[15] );
+              char flds[22], int size[17] );
 bool
 vfUnSpaceSet(QWidget* par, const char * p_key,
               char flds[38], int size[10] );

@@ -23,10 +23,10 @@
 #include "v_ipnc.h"
 #include "graph.h"
 #include "v_module.h"
-#include "nodearray.h"
+#include "particlearray.h"
 
 const int MT_RKLEN = 80;
-
+#define SIZE_HYDP 7
 
 typedef struct
 { // Description of GEM2MT data structure (prototype of 21 Feb. 2005)
@@ -46,6 +46,8 @@ typedef struct
    PvPGD,    // Use phase groups definitions (+ -)?
    PvFDL,    // Use flux definition list (+ -)
    PvSFL,    // Use source fluxes and elemental stoichiometries for them? (+ -)
+PvGrid,    // Use array of grid point locations? (+ -)
+PvRes,    // reserved (+ -)
 
      // Controls on operation
    PsMode,  // Code of GEM2MT mode of operation { S F A D T }
@@ -72,8 +74,8 @@ typedef struct
    nFD,  // number of MPG flux definitions (0 or >1)
    nSFD,   // number of source flux definitions (0 or < nFD )
    nEl, // number of electrolytes for setting up electrolyte diffusion coefficients in mDEl vector
-   nRs1,  // reserved
-   nRs2,  // reserved
+nPTypes,     // res Number of allocated particle types (< 20 ? )
+nProps,      // res Number of particle statistic properties (for monitoring) >= anPTypes
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
@@ -82,7 +84,7 @@ typedef struct
    FIb,   // N - number of phases (set automatically from Multi)
    Lb,   // N - number of dependent components in multycomponent phases (set automatically from Multi)
    bTau, // Time point for the simulation break (Tau[0] at start)
-ntM, // Maximum allowed number of time iteration steps (default 1000)
+   ntM, // Maximum allowed number of time iteration steps (default 1000)
    nYS,  // number of plots (columns in the yt array)
    nE,   // Total number of experiments points (in xEt, yEt) to plot over
    nYE,  // number of experimental parameters (columns in the yEt array)
@@ -108,6 +110,10 @@ ntM, // Maximum allowed number of time iteration steps (default 1000)
     *xIC,   // ICNL indices in DATABR IC vectors [nICb]
     *xDC,   // DCNL indices in DATABR DC list [nDCb]
     *xPH,   // PHNL indices in DATABR phase vectors [nPHb]
+*NPmean,       // array of initial mean particle type numbers per node ( size: nPTypes )
+*nPmin,        // minimum average total number of particles of each type per one node nPTypes
+*nPmax,        // maximum average total number of particles of each type per one node nPTypes
+(*ParTD)[6], // array of particle type definitions at t0 or after interruption nPTypes
 
    (*FDLi)[2] //[nFD][2] Indexes of nodes where this flux begins and ends
               // negative value means one-side flux (source or sink)
@@ -130,17 +136,17 @@ ntM, // Maximum allowed number of time iteration steps (default 1000)
    WmCb,  // mole fraction of the carrier DC (e.g. sorbent or solvent)
    Asur,  // Specific surface area of the sorbent (for adsorbed species)
 // "ADpar" data object (11 doubles)
-fVel,   // Advection/diffusion mass transport:fluid advection velocity (m/sec)
-cLen,   // column length (m)
-tf,     // time step reduction factor
-cdv,    // cutoff factor for differences
-cez,    // cutoff factor for minimal amounts of IC in node bulk compositions
-ADrs1,  // reserved
-ADrs2,
-ADrs3,
-ADrs4,
-ADrs5,
-ADrs6
+   fVel,   // Advection/diffusion mass transport:fluid advection velocity (m/sec)
+   cLen,   // column length (m)
+   tf,     // time step reduction factor
+   cdv,    // cutoff factor for differences
+   cez,    // cutoff factor for minimal amounts of IC in node bulk compositions
+   ADrs1,  // reserved
+   ADrs2,
+   ADrs3,
+   ADrs4,
+   ADrs5,
+   ADrs6
   ;
   float
 // Iterators for MTP interpolation array in DataCH
@@ -149,11 +155,14 @@ ADrs6
    Tau[3],  // Physical time iterator
 // graphics
    size[2][4], // Graph axis scale for the region and the fragment
+sizeLc[3],   // spatial dimensions of the medium defines topology of nodes
+(*grid)[3],      // Array of grid point locations, size is nC
+
    *xEt,    // Abscissa for experimental points [nXE]
    *yEt,       // Ordinates for experimental points to plot [nXE, nYE]
-*DDc,  //  [Ls] diffusion coefficients for DC
-*DIc,  //  [N] diffusion coefficients for IC
-*DEl   //  [nE] diffusion coefficients for electrolyte salts
+   *DDc,  //  [Ls] diffusion coefficients for DC
+   *DIc,  //  [N] diffusion coefficients for IC
+   *DEl   //  [nE] diffusion coefficients for electrolyte salts
     ;
  double
    *Bn,    //  [nIV][N] Table of bulk compositions of initial systems
@@ -161,7 +170,7 @@ ADrs6
    *qpc,    //  [Nqpc] Work array for mass transport math script,
    *xt,    //  Abscissa for sampled data [nS]
    *yt,     //  Ordinates for sampled data [nS][nYS]
-   (*HydP)[6], // [nC][6] hydraulic parameters for nodes in mass transport model
+   (*HydP)[SIZE_HYDP], // [nC][6] hydraulic parameters for nodes in mass transport model
    //  value order to be described
    *BSF,    // [nSFD][N] table of bulk compositions of source fluxes
             //  More to be added here for seq reactors?
@@ -174,7 +183,7 @@ ADrs6
 
    *CIb, // [nIV][N] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
-  (*FDLf)[4], // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
+   (*FDLf)[4], // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
    *PGT  // Quantities of phases in MPG [Fi][nPG]
     ;
  char
@@ -184,7 +193,7 @@ ADrs6
    (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
    (*nam_i)[MAXIDNAME], // [nIV][12] id names of initial systems
    (*for_i)[MAXFORMUNITDT], // [Lbi][40] formulae for setting initial system compositions
-(*for_e)[MAXFORMUNITDT], // [nE][40] formulae for diffusing dissolved electrolytes
+   (*for_e)[MAXFORMUNITDT], // [nE][40] formulae for diffusing dissolved electrolytes
    (*stld)[EQ_RKLEN], // List of SysEq record keys for initial systems [nIV]
 //
    *CIclb, // [N] Units of IC quantity/concentration for initial systems compositions
@@ -205,8 +214,8 @@ ADrs6
 
 /* Work arrays */
  float
-*An,  // [Lbi][N] stoich matrix for formula units from the for_i list
-*Ae  // [nE][N] stoich matrix for for diffusing electrolytes
+   *An,  // [Lbi][N] stoich matrix for formula units from the for_i list
+    *Ae  // [nE][N] stoich matrix for for diffusing electrolytes
    ;
  double
    *gc  // [nC][nPG][Nb] Array of element partition coefficients for MPG and its source reservoir
@@ -223,9 +232,9 @@ ADrs6
    jqc,    // script c-style index (= qc-1) for transport
    jqs,    // script c-style index (= qc-1) for graphics
    jt,     // current index of sampled point (for sampling scripts)
-jdd,   // current index of diffusing DC
-jdi,   // current index of diffusing IC
-ide,   // current index of diffusing electrolyte
+   jdd,   // current index of diffusing DC
+   jdi,   // current index of diffusing IC
+   ide,   // current index of diffusing electrolyte
    ct,  // actual time iterator
    rei5
    ;
@@ -259,9 +268,10 @@ class TGEM2MT : public TCModule
 
     GraphWindow* gd_gr;
     TPlotLine* plot;
-gstring title;           // changed titler to title
+    gstring title;           // changed titler to title
 
-   TNodeArray* na;       // pointer to nodearray class instance
+  TNodeArray* na;       // pointer to nodearray class instance
+  TParticleArray* pa;       // pointer to TParticleArray class instance
 
 protected:
 
@@ -290,6 +300,8 @@ protected:
          int end_node = 1000, FILE* diffile = NULL );
     void  MassTransAdvecStart();
     void  MassTransAdvecStep();
+    void  MassTransParticleStart();
+    void  MassTransParticleStep();
 
 
     bool Trans1D( char mode  );  // return true if canceled
@@ -336,7 +348,9 @@ enum gem2mt_inernal {
   GMT_MODE_F = 'F',   // F Flux-box RMT scoping model (MPG fluxes, sequential reactors etc.)
   GMT_MODE_A = 'A',   // A 1D advection (numerical) coupled RMT scoping model
   GMT_MODE_D = 'D',   // D 1D diffusion (numerical) coupled RMT scoping model
-  GMT_MODE_T = 'T'    // T 1D advection-diffusion coupled RMT scoping model
+  GMT_MODE_T = 'T',    // T 1D advection-diffusion coupled RMT scoping model
+  GMT_MODE_W = 'W',    // W random-walk advection-diffusion coupled RMT scoping model
+  GMT_MODE_V = 'V'    // V const volume coupled RMT scoping model
 
 };
 

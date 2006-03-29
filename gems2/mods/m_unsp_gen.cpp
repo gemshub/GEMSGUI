@@ -953,7 +953,7 @@ double TUnSpace::norrand(double *x)
 { double R1=0.;
   int j;
   for(j=0;j<101;j++)
-    R1+=ravrand(&*x);
+    R1+=ravrand(x);
       R1=(R1-101./2.)/pow(101./12.,0.5);
            R1=1./6.*(R1-(-3.0));
            if(R1<0.) R1=0.;

@@ -27,13 +27,13 @@ class GEM2MTWizard : public GEM2MTWizardData
 
 public:
 
-    GEM2MTWizard( const char* pkey, char flgs[20], int sizes[15],
+    GEM2MTWizard( const char* pkey, char flgs[22], int sizes[17],
                    QWidget* parent = NULL);
     virtual ~GEM2MTWizard();
 
 
-    void   getSizes( int size[15] );
-    void   getFlags( char flgs[20] );
+    void   getSizes( int size[17] );
+    void   getFlags( char flgs[22] );
 //    double   getR2();
 
 protected slots:

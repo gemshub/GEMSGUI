@@ -87,6 +87,11 @@ void TNodeArray::freeMemory()
      NodT1 = 0;
    }
 
+  if( grid )
+     delete[] grid;
+  if( tNode)
+     delete[] tNode;
+
 #ifdef IPMGEMPLUGIN
   delete[] multi;
   delete[] profil;
@@ -218,7 +223,6 @@ AGAIN:
             {
             case VF3_2:
                 goto AGAIN;
-                break;
             case VF3_1:
                 break;
             case VF3_3:
@@ -528,14 +532,31 @@ TNodeArray::TNodeArray( int nNod, MULTI *apm  )
 {
     pmm = apm;
     anNodes = nNod;
+    sizeN = anNodes;
+    sizeM = sizeK =1;
     CSD = 0;
     CNode = 0;
     NodT0 = 0;  // nodes at current time point
     NodT1 = 0;  // nodes at previous time point
-
+    grid  = 0;   // Array of grid point locations, size is anNodes+1
+    tNode = 0;     // Node type codes (see DataBR.h) size anNodes+1
     allocMemory();
-
 }
+
+TNodeArray::TNodeArray( int asizeN, int asizeM, int asizeK, MULTI *apm  ):
+sizeN(asizeN), sizeM(asizeM), sizeK(asizeK)
+{
+  anNodes = asizeN*asizeM*asizeK;
+  pmm = apm;
+  CSD = 0;
+  CNode = 0;
+  NodT0 = 0;  // nodes at current time point
+  NodT1 = 0;  // nodes at previous time point
+  grid  = 0;   // Array of grid point locations, size is anNodes+1
+  tNode = 0;     // Node type codes (see DataBR.h) size anNodes+1
+  allocMemory();
+}
+
 
 #else
 
@@ -704,7 +725,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
          for( int ii=0; ii<anNodes; ii++)
             if(  (!nodeTypes && i==0) ||
               ( nodeTypes && (nodeTypes[ii] == i+1 )) )
-                  {    CNode->NodeHandle = i+1;
+                  {    CNode->NodeHandle = (short)(i+1);
                        MoveWorkNodeToArray(ii, anNodes, NodT0);
                        CopyWorkNodeFromArray(ii, anNodes,NodT0);
                        MoveWorkNodeToArray(ii, anNodes, NodT1);
@@ -853,127 +874,6 @@ void  TNodeArray::printfGEM( const char* multi_file,
     }
 //********************************************************* */
 
-}
-
-// Data collection for monitoring differences
-// Prints difference increments in a all nodes (cells) for time point t / at
-void TNodeArray::logDiffsIC( FILE* diffile, int t, double at, int nx, int every_t )
-{
-  double dc;
-  int i, ie;
-
-  if( t % every_t )
-    return;
-
-  fprintf( diffile, "\nStep= %-8d  Time= %-12.4g\nNode#   ", t, at );
-  for( ie=0; ie < int(CSD->nICb); ie++ )
-    fprintf( diffile, "%-12.4s ", CSD->ICNL[ie] );
-  for (i=0; i<nx; i++)    // node iteration
-  {
-     fprintf( diffile, "\n%5d   ", i );
-     for( ie=0; ie < int(CSD->nICb); ie++ )
-     {
-        dc = NodT1[i]->bIC[ie] - NodT0[i]->bIC[ie];
-        fprintf( diffile, "%-12.4g ", dc );
-     }
-  }
-  fprintf( diffile, "\n" );
-}
-
-// Data collection for monitoring 1D profiles in debugging FMT models
-// Prints dissolved elemental molarities in all cells for time point t / at
-void TNodeArray::logProfileAqIC( FILE* logfile, int t, double at, int nx, int every_t )
-{
-  double pm;
-  int i, ie;
-  if( t % every_t )
-    return;
-  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Dissolved IC total concentrations, M\n", t, at/(365*86400) );
-  fprintf(logfile, "%s","Node#   ");
-  for( ie=0; ie < int(CSD->nICb); ie++ )
-    fprintf( logfile, "%-12.4s ", CSD->ICNL[ie] );
-  for (i=0; i<nx; i++)    // node iteration
-  {
-     fprintf( logfile, "\n%5d   ", i );
-     for( ie=0; ie < int(CSD->nICb); ie++ )
-     {
-       pm = NodT0[i]->bPS[ie]/NodT0[i]->vPS[0]*1000.;  // Assumes there is aq phase!
-                 // total dissolved element molarity
-       fprintf( logfile, "%-12.4g ", pm );
-     }
-  }
-  fprintf( logfile, "\n" );
-}
-
-// Data collection for monitoring 1D profiles
-// Prints total elemental amounts in all cells for time point t / at
-void TNodeArray::logProfileTotIC( FILE* logfile, int t, double at, int nx, int every_t )
-{
-  double pm;
-  int i, ie;
-  if( t % every_t )
-    return;
-  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Bulk IC amounts, moles\n", t, at/(365*86400) );
-  fprintf(logfile, "%s","Node#   ");
-  for( ie=0; ie < int(CSD->nICb); ie++ )
-    fprintf( logfile, "%-12.4s ", CSD->ICNL[ie] );
-  for (i=0; i<nx; i++)    // node iteration
-  {
-     fprintf( logfile, "\n%5d   ", i );
-     for( ie=0; ie < int(CSD->nICb); ie++ )
-     {
-       pm = NodT0[i]->bIC[ie];
-       fprintf( logfile, "%-12.4g ", pm );
-     }
-  }
-  fprintf( logfile, "\n" );
-}
-
-// Prints amounts of reactive phases in all cells for time point t / at
-void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int every_t )
-{
-  double pm;
-  int i, ip;
-  if( t % every_t )
-    return;
-  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Amounts of reactive phases, moles\n", t, at/(365*86400) );
-  fprintf(logfile, "%s","Node#   ");
-  for( ip=0; ip < int(CSD->nPHb); ip++ )
-    fprintf( logfile, "%-12.12s ", CSD->PHNL[ip]+4 );
-  for (i=0; i<nx; i++)    // node iteration
-  {
-     fprintf( logfile, "\n%5d   ", i );
-     for( ip=0; ip < int(CSD->nPHb); ip++ )
-     {
-       pm = NodT0[i]->xPH[ip];
-       fprintf( logfile, "%-12.4g ", pm );
-     }
-  }
-  fprintf( logfile, "\n" );
-}
-
-// Prints dissolved species molarities in all cells for time point t / at
-void TNodeArray::logProfileAqDC( FILE* logfile, int t, double at, int nx, int every_t )
-{
-  double pm;
-  int i, is;
-  if( t % every_t )
-    return;
-  fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Dissolved species concentrations, M\n", t, at/(365*86400) );
-  fprintf(logfile, "%s","Node#   ");
-  for( is=0; is < int(CSD->nDCb); is++ )
-    fprintf( logfile, "%-12.4s ", CSD->DCNL[is] );
-  for (i=0; i<nx; i++)    // node iteration
-  {
-     fprintf( logfile, "\n%5d   ", i );
-     for( is=0; is < int(CSD->nDCinPH[0]); is++ )
-     {
-       pm = NodT0[i]->xDC[is]/NodT0[i]->vPS[0]*1000.;  // Assumes there is aq phase!
-                 // dissolved species molarity
-       fprintf( logfile, "%-12.4g ", pm );
-     }
-  }
-  fprintf( logfile, "\n" );
 }
 
 // Copying data for node ii from node array into work DATABR structure
@@ -1174,674 +1074,225 @@ pmm->FitVar[3] = CNode->Eh;
 
 }
 
-//---------------------------------------------------------------
+//---------------------------------------------------------
+// working with grid
 
-// new structures i/o
-
-// Writting DataCH to binary file
-void TNodeArray::datach_to_file( GemDataStream& ff )
+// Set grid coordinate array use predefined array aGrid
+// or set up regular scale
+void TNodeArray::SetGrid( float aSize[3], float (*aGrid)[3] )
 {
-// const data
-   ff.writeArray( &CSD->nIC, 14 );
-   ff.writeArray( &CSD->Ttol, 4 );
+  int i, j, k, ndx;
+  size.x =  aSize[0];
+  size.y =  aSize[1];
+  size.z =  aSize[2];
 
-//dynamic data
-   ff.writeArray( CSD->nDCinPH, CSD->nPH );
-//   if( CSD->nICb >0 )
-   ff.writeArray( CSD->xIC, CSD->nICb );
-   ff.writeArray( CSD->xDC, CSD->nDCb );
-   ff.writeArray( CSD->xPH, CSD->nPHb );
+  LOCATION delta( size.x/sizeN, size.y/sizeM, size.z/sizeK );
+  if( !grid )
+      grid = new LOCATION[ anNodes ];
 
-   ff.writeArray( CSD->A, CSD->nIC*CSD->nDC );
-   ff.writeArray( CSD->ICmm, CSD->nIC );
-   ff.writeArray( CSD->DCmm, CSD->nDC );
-   ff.writeArray( CSD->DD, CSD->nDC );
-
-   ff.writeArray( CSD->Tval,  CSD->nTp );
-   ff.writeArray( CSD->Pval,  CSD->nPp );
-
-   ff.writeArray( CSD->roW,  CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->epsW, CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->G0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
-
-   if( CSD->nAalp >0 )
-     ff.writeArray( CSD->Aalp, CSD->nPH );
-
-   ff.writeArray( (char *)CSD->ICNL, MaxICN*CSD->nIC );
-   ff.writeArray( (char *)CSD->DCNL, MaxDCN*CSD->nDC );
-   ff.writeArray( (char *)CSD->PHNL, MaxPHN*CSD->nPH );
-
-   ff.writeArray( CSD->ccIC, CSD->nIC );
-   ff.writeArray( CSD->ccDC, CSD->nDC );
-   ff.writeArray( CSD->ccDCW, CSD->nDC );
-   ff.writeArray( CSD->ccPH, CSD->nPH );
-
+  for( i = 0; i < sizeN; i++ )
+    for( j = 0; j < sizeM; j++ )
+      for( k = 0; k < sizeK; k++ )
+      {
+         ndx = iNode( i, j, k );
+         if( aGrid )
+         {
+           grid[ndx].x = aGrid[ndx][0];
+           grid[ndx].y = aGrid[ndx][1];
+           grid[ndx].z = aGrid[ndx][2];
+         }
+         else
+         {
+           grid[ndx].x =delta.x*i;
+           grid[ndx].y =delta.y*j;
+           grid[ndx].z =delta.z*k;
+         }
+      }
+   // outside limits settted in size
 }
 
-// Reading dataCH structure from binary file
-void TNodeArray::datach_from_file( GemDataStream& ff )
+// test location in node
+bool TNodeArray::isLocationInNode( int ii, int jj, int kk, LOCATION cxyz ) const
 {
-// const data
-   ff.readArray( &CSD->nIC, 14 );
-   ff.readArray( &CSD->Ttol, 4 );
+  LOCATION maxl;
 
-  datach_realloc();
-  databr_realloc();
+  if( ii<0 || ii>= sizeN || jj<0 ||
+      jj >= sizeM || kk <0 || kk >= sizeK )
+    return false;
 
-//dynamic data
-   ff.readArray( CSD->nDCinPH, CSD->nPH );
-//   if( CSD->nICb >0 )
-   ff.readArray( CSD->xIC, CSD->nICb );
-   ff.readArray( CSD->xDC, CSD->nDCb );
-   ff.readArray( CSD->xPH, CSD->nPHb );
+  int ndx = iNode( ii, jj, kk );
+  maxl = getGrid( ii+1, jj+1, kk+1 ); // only for rectangular
+  // must be changed
+  //  x = const, find new y,z srez i
+  // analiz pryamougol`nika pri y1 == const, poisk z21 i z22
+  // analiz otrezka po z2
+  if( grid[ndx].x <= cxyz.x &&  cxyz.x <= maxl.x &&
+      grid[ndx].y <= cxyz.y &&  cxyz.y <= maxl.y &&
+      grid[ndx].z <= cxyz.z &&  cxyz.z <= maxl.z )
+           return true;
 
-   ff.readArray( CSD->A, CSD->nIC*CSD->nDC );
-   ff.readArray( CSD->ICmm, CSD->nIC );
-   ff.readArray( CSD->DCmm, CSD->nDC );
-   ff.readArray( CSD->DD, CSD->nDC );
-
-   ff.readArray( CSD->Tval,  CSD->nTp );
-   ff.readArray( CSD->Pval,  CSD->nPp );
-
-   ff.readArray( CSD->roW,  CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->epsW, CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->G0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
-
-   if( CSD->nAalp >0 )
-     ff.readArray( CSD->Aalp, CSD->nPH );
-
-   ff.readArray( (char *)CSD->ICNL, MaxICN*CSD->nIC );
-   ff.readArray( (char *)CSD->DCNL, MaxDCN*CSD->nDC );
-   ff.readArray( (char *)CSD->PHNL, MaxPHN*CSD->nPH );
-
-   ff.readArray( CSD->ccIC, CSD->nIC );
-   ff.readArray( CSD->ccDC, CSD->nDC );
-   ff.readArray( CSD->ccDCW, CSD->nDC );
-   ff.readArray( CSD->ccPH, CSD->nPH );
-
+   return false; // location behind the node
 }
 
-void TNodeArray::datach_to_text_file( fstream& ff )
+// Finds a node absolute index for the current
+// point location (uses grid coordinate array grid[])
+// performance-important functions to be used e.g. in particle tracking methods
+int TNodeArray::FindNodeFromLocation( LOCATION cxyz, int old_node ) const
 {
-// fstream ff("DataCH.out", ios::out );
-// ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
+  LOCATION maxl;
+  int i, j, k, ndx;
 
-  outArray( ff, "sCon",  &CSD->nIC, 14 );
-  outArray( ff, "dCon",  &CSD->Ttol, 4 );
+ if( old_node == -1 )
+ { // check all nodes
+   for( i = 0; i < sizeN; i++ )
+    for( j = 0; j < sizeM; j++ )
+      for( k = 0; k < sizeK; k++ )
+      {
+        if(  isLocationInNode( i, j, k, cxyz ) )
+         return iNode( i, j, k );
+      }
+ }
+ else // check only nearest nodes
+ {
+   int i1, j1, k1;
+   i1 = indN( old_node );
+   j1 = indM( old_node );
+   k1 = indK( old_node );
 
-//dynamic data
-   outArray( ff, "nDCinPH", CSD->nDCinPH, CSD->nPH);
-//   if( CSD->nICb >0 )
-   outArray( ff, "xIC", CSD->xIC, CSD->nICb);
-   outArray( ff, "xDC", CSD->xDC, CSD->nDCb);
-   outArray( ff, "xPH", CSD->xPH, CSD->nPHb);
-
-   outArray( ff, "A", CSD->A, CSD->nDC*CSD->nIC, CSD->nIC );
-   outArray( ff, "ICmm", CSD->ICmm, CSD->nIC);
-   outArray( ff, "DCmm", CSD->DCmm, CSD->nDC);
-   outArray( ff, "DD", CSD->DD, CSD->nDC);
-
-   outArray( ff, "Tval", CSD->Tval, CSD->nTp );
-   outArray( ff, "Pval", CSD->Pval, CSD->nPp );
-
-   outArray( ff, "roW", CSD->roW, CSD->nPp*CSD->nTp );
-   outArray( ff, "epsW", CSD->epsW,  CSD->nPp*CSD->nTp );
-   outArray( ff, "G0", CSD->G0, CSD->nDC*CSD->nPp*CSD->nTp,
-                                    CSD->nPp*CSD->nTp );
-   outArray( ff, "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp,
-                                    CSD->nPp*CSD->nTp );
-   outArray( ff, "H0", CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp,
-                                     CSD->nPp*CSD->nTp );
-   outArray( ff, "Cp0", CSD->Cp0,CSD->nDC*CSD->nPp*CSD->nTp,
-                                     CSD->nPp*CSD->nTp  );
-
-   if( CSD->nAalp >0 )
-      outArray( ff, "Aalp", CSD->Aalp, CSD->nPH);
-
-   outArray( ff, "ICNL", CSD->ICNL[0], CSD->nIC, MaxICN );
-   outArray( ff, "DCNL", CSD->DCNL[0], CSD->nDC, MaxDCN );
-   outArray( ff, "PHNL", CSD->PHNL[0], CSD->nPH, MaxPHN );
-
-   outArray( ff, "ccIC", CSD->ccIC, CSD->nIC, 1 );
-   outArray( ff, "ccDC", CSD->ccDC, CSD->nDC, 1 );
-   outArray( ff, "ccDCW", CSD->ccDCW, CSD->nDC, 1 );
-   outArray( ff, "ccPH", CSD->ccPH, CSD->nPH, 1 );
-
+   for( i = i1-1; i < i1+1; i++ )
+     for( j = j1-1; j < j1+1; j++ )
+       for( k = k1-1; k < k1+1; k++ )
+       {
+          if(  isLocationInNode( i, j, k, cxyz ) )
+              return iNode( i, j, k );
+       }
+ }
+ return -1; // behind region
 }
 
-// Reading dataCH structure from text file
-void TNodeArray::datach_from_text_file(fstream& ff)
+// get current node location
+// if iN, jN or kN more then corresponding sizeN, sizeM, sizeK
+// return size of system
+LOCATION TNodeArray::getGrid( int iN, int jN, int kN ) const
 {
-// fstream ff("DataCH.out", ios::in );
-// ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
+  LOCATION loc;
+  int i1, j1, k1;
 
-  inArray( ff, "sCon",  &CSD->nIC, 14 );
-  inArray( ff, "dCon",  &CSD->Ttol, 4 );
+// only for test
+  if( iN < 0 || iN > sizeN ||
+      jN < 0 || jN > sizeM ||
+      kN < 0 || kN > sizeK  )
+   Error( "", "getGrid - programm error");
 
-  datach_realloc();
-  databr_realloc();
+  if( iN == sizeN )  i1 = iN-1;
+      else i1 = iN;
+  if( jN == sizeM )  j1 = jN-1;
+       else j1 = jN;
+  if( kN == sizeK )  k1 = kN-1;
+        else k1 = kN;
 
-//dynamic data
-   inArray( ff, "nDCinPH", CSD->nDCinPH, CSD->nPH);
-//   if( CSD->nICb >0 )
-   inArray( ff, "xIC", CSD->xIC, CSD->nICb);
-   inArray( ff, "xDC", CSD->xDC, CSD->nDCb);
-   inArray( ff, "xPH", CSD->xPH, CSD->nPHb);
+  loc = grid[ iNode( i1, j1, k1)];
+  if( i1 != iN ) loc.x = size.x;
+  if( j1 != jN ) loc.y = size.y;
+  if( k1 != kN ) loc.z = size.z;
 
-   inArray( ff, "A", CSD->A, CSD->nDC*CSD->nIC );
-   inArray( ff, "ICmm", CSD->ICmm, CSD->nIC);
-   inArray( ff, "DCmm", CSD->DCmm, CSD->nDC);
-   inArray( ff, "DD", CSD->DD, CSD->nDC);
-
-   inArray( ff, "Tval", CSD->Tval, CSD->nTp );
-   inArray( ff, "Pval", CSD->Pval, CSD->nPp );
-
-   inArray( ff, "roW", CSD->roW,   CSD->nPp*CSD->nTp);
-   inArray( ff, "epsW", CSD->epsW, CSD->nPp*CSD->nTp);
-   inArray( ff, "G0", CSD->G0,  CSD->nDC*CSD->nPp*CSD->nTp);
-   inArray( ff, "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp);
-   inArray( ff, "H0", CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp);
-   inArray( ff, "Cp0", CSD->Cp0,CSD->nDC*CSD->nPp*CSD->nTp);
-
-   if( CSD->nAalp >0 )
-      inArray( ff, "Aalp", CSD->Aalp, CSD->nPH);
-
-   inArray( ff, "ICNL", CSD->ICNL[0], CSD->nIC, MaxICN );
-   inArray( ff, "DCNL", CSD->DCNL[0], CSD->nDC, MaxDCN );
-   inArray( ff, "PHNL", CSD->PHNL[0], CSD->nPH, MaxPHN );
-
-   inArray( ff, "ccIC", CSD->ccIC, CSD->nIC, 1 );
-   inArray( ff, "ccDC", CSD->ccDC, CSD->nDC, 1 );
-   inArray( ff, "ccDCW", CSD->ccDCW, CSD->nDC, 1 );
-   inArray( ff, "ccPH", CSD->ccPH, CSD->nPH, 1 );
+  return loc;
 }
 
-// allocate DataCH structure
-void TNodeArray::datach_realloc()
+// get 3D sizes for node (  from cxyz[0] - to cxyz[1] )
+// only for rectangular -  must be changed
+// for any must be LOCATION cxyz[8]
+void TNodeArray::GetNodeSizes( int ndx, LOCATION cxyz[2] )
 {
- CSD->nDCinPH = new short[CSD->nPH];
+  LOCATION maxl;
+  int i, j, k;
 
- if( CSD->nICb >0 )
-   CSD->xIC = new short[CSD->nICb];
- else  CSD->xIC = 0;
- if( CSD->nDCb >0 )
-   CSD->xDC = new short[CSD->nDCb];
- else  CSD->xDC = 0;
- if( CSD->nPHb >0 )
-   CSD->xPH = new short[CSD->nPHb];
- else  CSD->xPH = 0;
+  i = indN( ndx );
+  j = indM( ndx );
+  k = indK( ndx );
 
-  CSD->A = new float[CSD->nIC*CSD->nDC];
-  CSD->ICmm = new double[CSD->nIC];
-  CSD->DCmm = new double[CSD->nDC];
-  CSD->DD = new double[CSD->nDC];
-
-  CSD->Tval = new float[CSD->nTp];
-  CSD->Pval = new float[CSD->nPp];
-
-  CSD->roW = new double[ CSD->nPp*CSD->nTp];
-  CSD->epsW = new double[ CSD->nPp*CSD->nTp];
-  CSD->G0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  CSD->V0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  CSD->H0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  CSD->Cp0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-
-  if( CSD->nAalp >0 )
-     CSD->Aalp = new double[CSD->nPH];
-  else CSD->Aalp = 0;
-
-  CSD->ICNL = new char[CSD->nIC][MaxICN];
-  CSD->DCNL = new char[CSD->nDC][MaxDCN];
-  CSD->PHNL = new char[CSD->nPH][MaxPHN];
-
-  CSD->ccIC = new char[CSD->nIC];
-  CSD->ccDC = new char[CSD->nDC];
-  CSD->ccDCW = new char[CSD->nDC];
-  CSD->ccPH = new char[CSD->nPH];
+  cxyz[0] = grid[ndx];
+  cxyz[1] = getGrid( i+1, j+1, k+1 );
+  /*
+  cxyz[1] = getGrid( i, j, k+1 );
+  cxyz[2] = getGrid( i, j+1, k );
+  cxyz[3] = getGrid( i, j+1, k+1 );
+  cxyz[4] = getGrid( i+1, j, k );
+  cxyz[5] = getGrid( i+1, j, k+1 );
+  cxyz[6] = getGrid( i+1, j+1, k );
+  cxyz[7] = getGrid( i+1, j+1, k+1 );
+  */
 }
 
-// free dynamic memory
-void TNodeArray::datach_free()
+// get full mass of all particles type ptype in node ndx
+// ndx    -  (absolute) index of the node
+// ptype  -  particle type index ( 1 to 255 )
+// tcode  -  particle transport mechanism code (see enum PTCODE)
+// ips   - DataBr index of phase or species to which this particle is connected
+double TNodeArray::GetNodeMass( int ndx,
+       char /*ptype*/, char tcode, unsigned char ips )
 {
- if( CSD->nDCinPH )
-  { delete[] CSD->nDCinPH;
-    CSD->nDCinPH = 0;
-  }
- if( CSD->xIC )
-  { delete[] CSD->xIC;
-    CSD->xIC = 0;
-  }
- if( CSD->xDC )
-  { delete[] CSD->xDC;
-    CSD->xDC = 0;
-  }
- if( CSD->xPH )
-  { delete[] CSD->xPH;
-    CSD->xPH = 0;
-  }
- if( CSD->A )
-  { delete[] CSD->A;
-    CSD->A = 0;
-  }
- if( CSD->ICmm )
-  { delete[] CSD->ICmm;
-    CSD->ICmm = 0;
-  }
- if( CSD->DCmm )
-  { delete[] CSD->DCmm;
-    CSD->DCmm = 0;
-  }
- if( CSD->DD )
-  { delete[] CSD->DD;
-    CSD->DD = 0;
-  }
+   double mass = 0.;
+   DATABR* dbr = NodT0[ndx];
 
- if( CSD->Tval )
-  { delete[] CSD->Tval;
-    CSD->Tval = 0;
-  }
- if( CSD->Pval )
-  { delete[] CSD->Pval;
-    CSD->Pval = 0;
-  }
-
- if( CSD->roW )
-  { delete[] CSD->roW;
-    CSD->roW = 0;
-  }
- if( CSD->epsW )
-  { delete[] CSD->epsW;
-    CSD->epsW = 0;
-  }
- if( CSD->G0 )
-  { delete[] CSD->G0;
-    CSD->G0 = 0;
-  }
- if( CSD->V0 )
-  { delete[] CSD->V0;
-    CSD->V0 = 0;
-  }
- if( CSD->H0 )
-  { delete[] CSD->H0;
-    CSD->H0 = 0;
-  }
- if( CSD->Cp0 )
-  { delete[] CSD->Cp0;
-    CSD->Cp0 = 0;
-  }
- if( CSD->Aalp )
-  { delete[] CSD->Aalp;
-    CSD->Aalp = 0;
-  }
-
- if( CSD->ICNL )
-  { delete[] CSD->ICNL;
-    CSD->ICNL = 0;
-  }
- if( CSD->DCNL )
-  { delete[] CSD->DCNL;
-    CSD->DCNL = 0;
-  }
- if( CSD->PHNL )
-  { delete[] CSD->PHNL;
-    CSD->PHNL = 0;
-  }
-
- if( CSD->ccIC )
-  { delete[] CSD->ccIC;
-    CSD->ccIC = 0;
-  }
- if( CSD->ccDC )
-  { delete[] CSD->ccDC;
-    CSD->ccDC = 0;
-  }
- if( CSD->ccDCW )
-  { delete[] CSD->ccDCW;
-    CSD->ccDCW = 0;
-  }
- if( CSD->ccPH )
-  { delete[] CSD->ccPH;
-    CSD->ccPH = 0;
-  }
- // delete[] CSD;
+     switch( tcode )
+     {
+        case ADVECTIVE:
+        case COLLOID: // mass = 0.;
+                      // for(short ie=0; ie < CSD->nICb; ie++ )
+                      //   mass += dbr->bPS[ips*CSD->nICb+ie]*CSD->ICmm[ie];
+                      mass = dbr->mPS[ips];
+                        break;
+        case DIFFUSIVE:
+                      mass = dbr->xDC[ips]*CSD->DCmm[ips];
+                        break;
+     }
+   return mass;
 }
 
-// writing DataBR to binary file
-void TNodeArray::databr_to_file( GemDataStream& ff )
+// move mass m_v from node ndx_from to node ind_to, one particle move
+// ndx_from    -  (absolute) index of the old node
+// ndx_to     -  (absolute) index of the new  node
+// ptype  -  particle type index ( 1 to 255 )
+// tcode  -  particle transport mechanism code (see enum PTCODE)
+// ips   - DataBr index of phase or species to which this particle is connected
+// m_v -  mass or volume of the particle (depending on ptype and mmode)
+void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
+       char /*type*/, char tcode, unsigned char ips, double m_v )
 {
-// const data
-   ff.writeArray( &CNode->NodeHandle, 6 );
-   ff.writeArray( &CNode->T, 36 );
+   double mass = 0., coeff, mol;
+   DATABR* dbr = NodT0[ndx_from];
 
-//dynamic data
-   ff.writeArray( CNode->xDC, CSD->nDCb );
-   ff.writeArray( CNode->gam, CSD->nDCb );
-   ff.writeArray( CNode->xPH, CSD->nPHb );
-   ff.writeArray( CNode->vPS, CSD->nPSb );
-   ff.writeArray( CNode->mPS, CSD->nPSb );
-
-   ff.writeArray( CNode->bPS, CSD->nPSb*CSD->nICb );
-   ff.writeArray( CNode->xPA, CSD->nPSb );
-   ff.writeArray( CNode->dul, CSD->nDCb );
-   ff.writeArray( CNode->dll, CSD->nDCb );
-   ff.writeArray( CNode->bIC, CSD->nICb );
-   ff.writeArray( CNode->rMB, CSD->nICb );
-   ff.writeArray( CNode->uIC, CSD->nICb );
-
-   CNode->dRes1 = 0;
-   CNode->dRes2 = 0;
-
-//   datach_to_text_file();
-//   databr_to_text_file();
-}
-
-// Reading work dataBR structure from binary file
-void TNodeArray::databr_from_file( GemDataStream& ff )
-{
-// const data
-   ff.readArray( &CNode->NodeHandle, 6 );
-   ff.readArray( &CNode->T, 36 );
-
-//dynamic data
-   ff.readArray( CNode->xDC, CSD->nDCb );
-   ff.readArray( CNode->gam, CSD->nDCb );
-   ff.readArray( CNode->xPH, CSD->nPHb );
-   ff.readArray( CNode->vPS, CSD->nPSb );
-   ff.readArray( CNode->mPS, CSD->nPSb );
-
-   ff.readArray( CNode->bPS, CSD->nPSb*CSD->nICb );
-   ff.readArray( CNode->xPA, CSD->nPSb );
-   ff.readArray( CNode->dul, CSD->nDCb );
-   ff.readArray( CNode->dll, CSD->nDCb );
-   ff.readArray( CNode->bIC, CSD->nICb );
-   ff.readArray( CNode->rMB, CSD->nICb );
-   ff.readArray( CNode->uIC, CSD->nICb );
-
-   CNode->dRes1 = 0;
-   CNode->dRes2 = 0;
-}
-
-
-void TNodeArray::databr_to_text_file( fstream& ff )
-{
-// fstream ff("DataBR.out", ios::out );
-// ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
-
-  outArray( ff, "sCon",  &CNode->NodeHandle, 6 );
-  outArray( ff, "dCon",  &CNode->T, 36 );
-
-  outArray( ff, "xDC",  CNode->xDC, CSD->nDCb );
-  outArray( ff, "gam",  CNode->gam, CSD->nDCb );
-  outArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
-  outArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
-  outArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
-
-
-  outArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
-  outArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
-  outArray( ff, "dul",  CNode->dul, CSD->nDCb );
-  outArray( ff, "dll",  CNode->dll, CSD->nDCb );
-  outArray( ff, "bIC",  CNode->bIC, CSD->nICb );
-  outArray( ff, "rMB",  CNode->rMB, CSD->nICb );
-  outArray( ff, "uIC",  CNode->uIC, CSD->nICb );
-
-}
-
-// Reading work dataBR structure from text file
-void TNodeArray::databr_from_text_file( fstream& ff )
-{
-// fstream ff("DataBR.out", ios::out );
-// ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
-
-  inArray( ff, "sCon",  &CNode->NodeHandle, 6 );
-  inArray( ff, "dCon",  &CNode->T, 36 );
-
-  inArray( ff, "xDC",  CNode->xDC, CSD->nDCb );
-  inArray( ff, "gam",  CNode->gam, CSD->nDCb );
-  inArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
-  inArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
-  inArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
-
-  inArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
-  inArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
-  inArray( ff, "dul",  CNode->dul, CSD->nDCb );
-  inArray( ff, "dll",  CNode->dll, CSD->nDCb );
-  inArray( ff, "bIC",  CNode->bIC, CSD->nICb );
-  inArray( ff, "rMB",  CNode->rMB, CSD->nICb );
-  inArray( ff, "uIC",  CNode->uIC, CSD->nICb );
-}
-
-
-// allocate DataBR structure
-void TNodeArray::databr_realloc()
-{
- CNode->xDC = new double[CSD->nDCb];
- CNode->gam = new double[CSD->nDCb];
- CNode->xPH = new double[CSD->nPHb];
- CNode->vPS = new double[CSD->nPSb];
- CNode->mPS = new double[CSD->nPSb];
-
- CNode->bPS = new double[CSD->nPSb*CSD->nICb];
- CNode->xPA = new double[CSD->nPSb];
- CNode->dul = new double[CSD->nDCb];
- CNode->dll = new double[CSD->nDCb];
- CNode->bIC = new double[CSD->nICb];
- CNode->rMB = new double[CSD->nICb];
- CNode->uIC = new double[CSD->nICb];
-
- CNode->dRes1 = 0;
- CNode->dRes2 = 0;
-}
-
-// free dynamic memory
-DATABR * TNodeArray::databr_free( DATABR *CNode_ )
-{
-
-  if( CNode_ == 0)
-    CNode_ = CNode;
-  memset( &CNode_->NodeHandle, 0, 6*sizeof(short));
-  memset( &CNode_->T, 0, 36*sizeof(double));
-
- if( CNode_->xDC )
-  { delete[] CNode_->xDC;
-    CNode_->xDC = 0;
-  }
- if( CNode_->gam )
-  { delete[] CNode_->gam;
-    CNode_->gam = 0;
-  }
- if( CNode_->xPH )
-  { delete[] CNode_->xPH;
-    CNode_->xPH = 0;
-  }
- if( CNode_->vPS )
-  { delete[] CNode_->vPS;
-    CNode_->vPS = 0;
-  }
- if( CNode_->mPS )
-  { delete[] CNode_->mPS;
-    CNode_->mPS = 0;
-  }
-
- if( CNode_->bPS )
-  { delete[] CNode_->bPS;
-    CNode_->bPS = 0;
-  }
- if( CNode_->xPA )
-  { delete[] CNode_->xPA;
-    CNode_->xPA = 0;
-  }
- if( CNode_->dul )
-  { delete[] CNode_->dul;
-    CNode_->dul = 0;
-  }
- if( CNode_->dll )
-  { delete[] CNode_->dll;
-    CNode_->dll = 0;
-  }
- if( CNode_->bIC )
-  { delete[] CNode_->bIC;
-    CNode_->bIC = 0;
-  }
- if( CNode_->rMB )
-  { delete[] CNode_->rMB;
-    CNode_->rMB = 0;
-  }
- if( CNode_->uIC )
-  { delete[] CNode_->uIC;
-    CNode_->uIC = 0;
-  }
-
- delete[] CNode_;
- return NULL;
-}
-
-#ifdef IPMGEMPLUGIN
-
-// calculation mode: passing input GEM data changed on previous FMT iteration
-//                   into work DATABR structure
-void TNodeArray::GEM_input_from_MT(
-   short p_NodeHandle,    // Node identification handle
-   short p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-   double p_T,     // Temperature T, K                        +      +      -     -
-   double p_P,     // Pressure P, bar                         +      +      -     -
-   double p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
-   double p_dt,    // actual time step
-   double p_dt1,   // priveous time step
-   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
-   )
-{
-  int ii;
-  bool useSimplex = false;
-
-  CNode->NodeHandle = p_NodeHandle;
-  CNode->NodeStatusCH = p_NodeStatusCH;
-  CNode->T = p_T;
-  CNode->P = p_P;
-  CNode->Ms = p_Ms;
-  CNode->dt = p_dt;
-  CNode->dt1 = p_dt1;
-// Checking if no-simplex IA is Ok
-   for( ii=0; ii<CSD->nICb; ii++ )
-   {  //  Sveta 11/02/05 for test
-      //if( fabs(CNode->bIC[ii] - p_bIC[ii] ) > CNode->bIC[ii]*1e-4 ) // bugfix KD 21.11.04
-       //     useSimplex = true;
-     CNode->bIC[ii] = p_bIC[ii];
-   }
-   for( ii=0; ii<CSD->nDCb; ii++ )
+   switch( tcode )
    {
-     CNode->dul[ii] = p_dul[ii];
-     CNode->dll[ii] = p_dll[ii];
-   }
-   if( useSimplex && CNode->NodeStatusCH == NEED_GEM_PIA )
-     CNode->NodeStatusCH = NEED_GEM_AIA;
-   // Switch only if PIA is ordered, leave if simplex is ordered (KD)
-}
+    case ADVECTIVE:
+    case COLLOID: // mass = 0.;
+                  // for(short ie=0; ie < CSD->nICb; ie++ )
+                  //   mass += dbr->bPS[ips*CSD->nICb+ie]*CSD->ICmm[ie];
+                  mass = dbr->mPS[ips];
+                  break;
+    case DIFFUSIVE:
+                  mass = dbr->xDC[ips]*CSD->DCmm[ips];
+                   break;
+    }
+   coeff = m_v/mass;
 
-// readonly mode: passing input GEM data to FMT
-void TNodeArray::GEM_input_back_to_MT(
-   short &p_NodeHandle,    // Node identification handle
-   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-   double &p_T,     // Temperature T, K                        +      +      -     -
-   double &p_P,     // Pressure P, bar                         +      +      -     -
-   double &p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
-   double &p_dt,    // actual time step
-   double &p_dt1,   // priveous time step
-   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
-   )
-{
- int ii;
-  p_NodeHandle = CNode->NodeHandle;
-  p_NodeStatusCH = CNode->NodeStatusCH;
-  p_T = CNode->T;
-  p_P = CNode->P;
-  p_Ms = CNode->Ms;
-  p_dt = CNode->dt;
-  p_dt1 = CNode->dt1;
-// Checking if no-simplex IA is Ok
-   for( ii=0; ii<CSD->nICb; ii++ )
-     p_bIC[ii] = CNode->bIC[ii];
-   for( ii=0; ii<CSD->nDCb; ii++ )
-   {  p_dul[ii] = CNode->dul[ii];
-      p_dll[ii] = CNode->dll[ii];
+   for(short ie=0; ie < CSD->nICb; ie++ )
+   {
+     mol = 0.;
+     switch( tcode )
+     {
+        case ADVECTIVE:
+        case COLLOID:   mol = dbr->bPS[ips*CSD->nICb+ie]*coeff;
+                        break;
+        case DIFFUSIVE: mol = dbr->xDC[ips]*CSD->A[ips*CSD->nICb+ie]*coeff;
+                        break;
+     }
+     dbr->bIC[ie] -= mol;
+     if( ndx_to > 0 && ndx_to < anNodes )
+         NodT0[ndx_to]->bIC[ie] += mol;
    }
 }
-
-// Copying results that must be returned into the FMT part into MAIF_CALC parameters
-void TNodeArray::GEM_output_to_MT(
-   short &p_NodeHandle,    // Node identification handle
-   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-   short &p_IterDone,      // Number of iterations performed by IPM (if not need GEM)
-// Chemical scalar variables
-   double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
-   double &p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
-   double &p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
-   double &p_IC,    // Effective molal aq ionic strength           -      -      +     +
-   double &p_pH,    // pH of aqueous solution                      -      -      +     +
-   double &p_pe,    // pe of aqueous solution                      -      -      +     +
-   double &p_Eh,    // Eh of aqueous solution, V                   -      -      +     +
-   double &p_denW,
-   double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
-   double &p_epsW,
-   double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
-// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
-// exchange of values occurs through lists of indices, e.g. xDC, xPH
-   double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
-   double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
-   double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
-   double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
-   double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
-   double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
-   double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
-   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
-   double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
-   double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
-   )
-{
-
-   p_NodeHandle = CNode->NodeHandle;
-   p_NodeStatusCH = CNode->NodeStatusCH;
-   p_IterDone = CNode->IterDone;
-
-   p_Vs = CNode->Vs;
-   p_Gs = CNode->Gs;
-   p_Hs = CNode->Hs;
-   p_IC = CNode->IC;
-   p_pH = CNode->pH;
-   p_pe = CNode->pe;
-   p_Eh = CNode->Eh;
-   p_denW = CNode->denW;
-   p_denWg = CNode->denWg;
-   p_epsW = CNode->epsW;
-   p_epsWg = CNode->epsWg;
-
-  memcpy( p_xDC, CNode->xDC, CSD->nDCb*sizeof(double) );
-  memcpy( p_gam, CNode->gam, CSD->nDCb*sizeof(double) );
-  memcpy( p_xPH, CNode->xPH, CSD->nPHb*sizeof(double) );
-  memcpy( p_vPS, CNode->vPS, CSD->nPSb*sizeof(double) );
-  memcpy( p_mPS, CNode->mPS, CSD->nPSb*sizeof(double) );
-  memcpy( p_bPS, CNode->bPS, CSD->nPSb*CSD->nICb*sizeof(double) );
-  memcpy( p_xPA, CNode->xPA, CSD->nPSb*sizeof(double) );
-  memcpy( p_dul, CNode->dul, CSD->nDCb*sizeof(double) );
-  memcpy( p_dll, CNode->dll, CSD->nDCb*sizeof(double) );
-  memcpy( p_bIC, CNode->bIC, CSD->nICb*sizeof(double) );
-  memcpy( p_rMB, CNode->rMB, CSD->nICb*sizeof(double) );
-  memcpy( p_uIC, CNode->uIC, CSD->nICb*sizeof(double) );
-}
-
-#endif
 
 //-----------------------End of tnodearray.cpp--------------------------
 

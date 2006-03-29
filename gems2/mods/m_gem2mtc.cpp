@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include "m_gem2mt.h"
+#include "nodearray.h"
 #include "m_syseq.h"
 #include "m_param.h"
 #include "service.h"
@@ -93,6 +94,13 @@ TGEM2MT::test_sizes( )
       if( mtp->nYE <= 0 ) mtp->nYE = 1;
      }
 
+ if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+  if( mtp->nPTypes <= 0 )
+  {  err_str +=
+"W02PErem: You forgot to specify the number of particles types ! \n Please, do it!";
+      mtp->nPTypes = 10;
+   }
+
    if( !err_str.empty() )
     {
         vfMessage(window(), GetName(), err_str.c_str(), vfErr);
@@ -110,6 +118,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
   TCIntArray aSelDC;
   TCIntArray aSelPH;
   int ii;
+  uint jj;
 
   if( !select_all ) // use old selections
   {
@@ -163,20 +172,20 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
   mtp->nDCb = (short)aSelDC.GetCount();
   mtp->nPHb = (short)aSelPH.GetCount();
   mtp->nPSb = 0;
-  for( ii=0; ii< aSelPH.GetCount(); ii++, mtp->nPSb++ )
-   if( aSelPH[ii] >= TProfil::pm->pmp->FIs )
+  for( jj=0; jj< aSelPH.GetCount(); jj++, mtp->nPSb++ )
+   if( aSelPH[jj] >= TProfil::pm->pmp->FIs )
        break;
 
 // realloc memory
   dyn_new();
 
 // set dynamic data
-  for( ii=0; ii< aSelIC.GetCount(); ii++ )
-    mtp->xIC[ii] = (short)aSelIC[ii];
-  for( ii=0; ii< aSelDC.GetCount(); ii++ )
-    mtp->xDC[ii] = (short)aSelDC[ii];
-  for( ii=0; ii< aSelPH.GetCount(); ii++ )
-    mtp->xPH[ii] = (short)aSelPH[ii];
+  for( jj=0; jj< aSelIC.GetCount(); jj++ )
+    mtp->xIC[jj] = (short)aSelIC[jj];
+  for( jj=0; jj< aSelDC.GetCount(); jj++ )
+    mtp->xDC[jj] = (short)aSelDC[jj];
+  for( jj=0; jj< aSelPH.GetCount(); jj++ )
+    mtp->xPH[jj] = (short)aSelPH[jj];
 }
 
 
@@ -255,6 +264,21 @@ void TGEM2MT::init_arrays( bool mode )
     if( mtp->UMPG)
       for( ii=0; ii<TProfil::pm->pmp->FI; ii++)
          mtp->UMPG[ii] = QUAN_GRAM;
+
+// set up defaults for particles
+    if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+     for( ii=0; ii< mtp->nPTypes; ii++ )
+     {
+        mtp->NPmean[ii] = 500;
+        mtp->nPmin[ii] = 100;
+        mtp->nPmax[ii] = 1000;
+        mtp->ParTD[ii][0] = (short)ii;
+        mtp->ParTD[ii][1] = IMMOBILE_C_VOLUME;
+        mtp->ParTD[ii][2] = ADVECTIVE;
+        mtp->ParTD[ii][3] = 0;
+        mtp->ParTD[ii][4] = 0;
+        mtp->ParTD[ii][5] = 0;
+     }
 
 // setup default graphiks lines
    if( mtp->PvEF != S_OFF  )
@@ -587,8 +611,8 @@ void TGEM2MT::CalcGraph()
 // LinkCSD(0);
  for( int ii=0; ii<mtp->nC; ii++)
  {
-   mtp->jt = min( ii, (mtp->nC-1));
-   mtp->qc = ii;
+   mtp->jt = (short)min( ii, (mtp->nC-1));
+   mtp->qc = (short)ii;
    LinkNode0(ii);
    LinkNode1(ii);
    rpn[1].CalcEquat();
@@ -688,11 +712,11 @@ void TGEM2MT::Expr_analyze( int obj_num )
 
         if( pVisor->ProfileMode == true )
         {
-            mupL = PRof->mup->L;
-            pmpL = PRof->pmp->L;
+            mupL = (int)PRof->mup->L;
+            pmpL = (int)PRof->pmp->L;
         }
         PRof->ET_translate( (int)o_mwetext, (int)obj_num, 0,
-             (int)mupL, 0, (int)pmpL, get_ndx_ );
+             mupL, 0, pmpL, get_ndx_ );
         if( obj_num == o_mttexpr )
           rpn[0].GetEquat( (char *)aObj[o_mwetext].GetPtr() );
         else

@@ -718,20 +718,20 @@ enum dualth_objects {
 o_dtpvfl= o_untprn+1, o_dtpsflg, o_dtdim, o_dttmd, o_dtnvd,
 o_dtpd,   o_dttd,   o_dtvd, o_dtmsysb, o_dtt,
 o_dtp,   o_dtv, o_dtres,  o_dtq, o_dkp, o_dti,
-o_dtjm,  o_dtc_tm, o_dtc_nv, o_dtnam_nr, 
+o_dtjm,  o_dtc_tm, o_dtc_nv, o_dtnam_nr,
 // Added SD oct 2005
 o_lmft_s, o_lxi2, o_dttdat, o_dtydat, o_dtpar,
 o_dtsdpar,
 // Data Base
-  o_dtname, o_dtnotes,  o_dtpspv, o_dtshort, o_dtfloat, 
-  o_dtan, o_dtbb, o_dtbn, o_dtub, o_dtchi, 
+  o_dtname, o_dtnotes,  o_dtpspv, o_dtshort, o_dtfloat,
+  o_dtan, o_dtbb, o_dtbn, o_dtub, o_dtchi,
 // changed SD oct 2005 43
   o_dteta_b, o_dtact_n, o_dtgam_n, o_dtcoul, o_dtmu_n,
   o_dtmu_o, o_dtavsd_o, o_dtmu_a, o_dtavsd_a, o_gmx_n,
-  o_dtwa, o_dtavsd_w, o_dtyconst, o_dtqpg, o_dtcib, 
-  o_dtcin, o_dtcab, o_dtcan,  o_dtcexpr, o_dtgexpr, 
-  o_dtsdref, o_dtsdval, o_dtnam_b, o_dtnam_n, o_dtpar_n, 
-  o_dtfor_n, o_dtfor_b, o_dtstl, o_dttyp_n, o_dtciclb, 
+  o_dtwa, o_dtavsd_w, o_dtyconst, o_dtqpg, o_dtcib,
+  o_dtcin, o_dtcab, o_dtcan,  o_dtcexpr, o_dtgexpr,
+  o_dtsdref, o_dtsdval, o_dtnam_b, o_dtnam_n, o_dtpar_n,
+  o_dtfor_n, o_dtfor_b, o_dtstl, o_dttyp_n, o_dtciclb,
   o_dtcicln, o_dtauclb,  o_dtaucln, o_dtsbm, o_dttdq,
   o_dtpdq, o_dtisq, o_dtwacp, o_dtwdat, o_dtwpar,
   o_dtwa_ap, o_dtstkey, o_dttprn,
@@ -762,8 +762,8 @@ const   int MAXFORMUNITDT=     40;
 enum gem2mt_objects {
   o_mtpufl = o_dttprn+1, o_mtpvfl, o_mtpsfl, o_mtcipf, o_mtszt,
   o_mtnsne, o_mtptai, o_mtchbr, o_mttmi,  o_mtnvi, o_mtaxis,
-  o_mtpai,  o_mttai,  o_mttau,  o_mtsize,
-// DBase 58
+  o_mtpai,  o_mttai,  o_mttau,  o_mtsize, o_mtsizelc,
+// DBase 58+5=63
   o_mtname, o_mtnotes, o_mtflag, o_mtshort, o_mtworks,
   o_mtworkf, o_mtdoudl, o_mtadpar, o_mtfloat, o_mtxnames,
   o_mtynames, o_mtlnam, o_mtlname, o_mttexpr, o_mtgexpr,
@@ -775,7 +775,9 @@ enum gem2mt_objects {
   o_mtcab, o_mtfdlf, o_mtpgt, o_mttval, o_mtpval,
   o_mtnam_i, o_mtfor_i, o_mtfor_e, o_mtstld, o_mtciclb,
   o_mtaucln, o_mtfdlid, o_mtfdlop, o_mtfdlmp, o_mtmpgid,
-  o_mtumpg,  o_mtbm,  o_mtplline,
+  o_mtumpg,  o_mtbm,
+o_mtgrid, o_mtnpmean, o_mtnpmin, o_mtnpmax, o_mtpartd,
+  o_mtplline,
 //work
   o_mtsykey, o_mtan, o_mtae,
   o_mtgc, o_mwetext, o_mwtprn, o_mtctm,  o_mtcnv,

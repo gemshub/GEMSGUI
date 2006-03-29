@@ -18,6 +18,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+
 #ifndef _nodearray_h_
 #define _nodearray_h_
 
@@ -29,17 +30,60 @@
 class QWidget;
 #endif
 
+enum  PTCODE // Codes of particle type
+{
+   ADVECTIVE = 21,
+   DIFFUSIVE = 22,
+   COLLOID = 23
+
+};
+
+struct  LOCATION // Location (coordinates) of a point in space
+{
+  float x,
+        y,
+        z;
+
+  LOCATION():
+   x(0.), y (0.), z(0.) {}
+
+  LOCATION( float ax, float ay=0., float az=0. ):
+     x(ax), y (ay), z(az) {}
+
+  LOCATION( const LOCATION& loc ):
+        x(loc.x), y (loc.y), z(loc.z) {}
+
+//   const LOCATION& operator= (const LOCATION& loc);
+//   {
+//      x = loc.x;
+//      y = loc.y;
+//      z = loc.z;
+//    }
+};
+
+
 class TNodeArray
 {
     MULTI* pmm;   // Pointer to GEMIPM work data structure (TMULTI in ms_multi.h)
 
-    DATACH* CSD;     // Pointer to chemical system data structure CSD
+    DATACH* CSD;       // Pointer to chemical system data structure CSD
 
     DATABR* CNode;     // Pointer to a work node data bridge structure   CNode
-                        // used for sending input data to and receiving results from GEM IPM
+                       // used for sending input data to and receiving results from GEM IPM
     DATABR* (*NodT0);  // array of nodes for current time point   DATABR* (*NodT0)
     DATABR* (*NodT1);  // array of nodes for previous time point  DATABR* (*NodT1)
-    int anNodes;         // Number of allocated nodes
+
+    int anNodes;       // Number of allocated nodes
+    int sizeN;
+    int sizeM;
+    int sizeK;
+
+    LOCATION size;     // spatial dimensions of the medium ( x, 0, 0 - 1D; x,y,0 - 2D; x,0,z - 2D; x,y,z - 3D )
+                       // defines topology of nodes (N of grid points per node): 1D- 2; 2D- 4; 3D- 8 )
+                       // relative to coordinate origin (0,0,0) units
+    LOCATION* grid;   // Array of grid point locations, size is anNodes
+
+    char* tNode;     // Node type codes (see DataBR.h) size anNodes
 
 #ifdef IPMGEMPLUGIN
                   // This is used in isolated GEMIPM2K module for coupled codes
@@ -50,6 +94,9 @@ class TNodeArray
 
     void allocMemory();
     void freeMemory();
+
+    LOCATION getGrid( int iN, int jN, int kN ) const;
+    bool isLocationInNode( int ii, int jj, int kk, LOCATION cxyz ) const;
 
     // datach & databr
     void datach_to_file( GemDataStream& ff );   // writes CSD (DATACH structure) to binary file
@@ -83,30 +130,56 @@ public:
 #ifndef IPMGEMPLUGIN
 
    TNodeArray( int nNodes, MULTI *apm );   // constructor for integration in GEMS
+   TNodeArray( int asizeN, int asizeM, int asizeK,MULTI *apm ); // uses 3D specification
 
 #else
 
    static TNodeArray* na;   // static pointer to this class
                             // for the isolated GEMIPM2K module
-    int sizeN;
-    int sizeM;
-    int sizeK;
+  TNodeArray( int nNod );   // constructors for 1D arrangement of nodes
+  TNodeArray( int asizeN, int asizeM, int asizeK ); // uses 3D specification
 
-   TNodeArray( int nNod );   // constructors for 1D arrangement of nodes
-   TNodeArray( int asizeN, int asizeM, int asizeK ); // uses 3D specification
+#endif
 
-   int iNode( int indN, int indM, int indK ) // make one node index from three
-     { return  ( indK * sizeM + indM  ) * sizeN + indN;  }
+ inline
+  int iNode( int indN, int indM, int indK ) const // make one node index from three
+     { return  (( indK * sizeM + indM  ) * sizeN + indN);  }
+
+   int indN( int ndx ) const // get i index from full
+   { return  (ndx % sizeN);  }
+
+   int indM( int ndx ) const // get j index from full
+   {
+    int j = (ndx - ndx % sizeN);
+        j /=  sizeN;
+    return  (j % sizeM);
+   }
+
+    int indK( int ndx ) const // get K index from full
+    {
+      int k = ndx - ndx % sizeN;
+          k /= sizeN;
+          k = k - k % sizeM;
+      return  k/sizeM;
+   }
+
 
    int  RunGEM( int indN, int indM, int indK, int Mode ) // Call GEM for one node
      { return RunGEM( iNode( indN, indM, indK ), Mode); }
-
-#endif
 
     ~TNodeArray();      // destructor
 
     int nNodes()  const   // get number of nodes in node arrays
       { return anNodes; }
+
+    int SizeN()  const
+    { return sizeN; }
+
+    int SizeM()  const
+    { return sizeM; }
+
+    int SizeK()  const
+    { return sizeK; }
 
     DATACH* pCSD() const  // get pointer to chemical system data structure
     {
@@ -185,6 +258,28 @@ public:
     // nodeTypes
     int  NewNodeArray( const char*  MULTI_filename,
        const char *ipmfiles_lst_name, int *nodeTypes, bool getNodT1 = false);
+
+    //---------------------------------------------------------
+    // working with grid
+
+    // Set grid coordinate array use predefined array aGrid
+    // or set up regular scale
+     void SetGrid( float aSize[3], float (*aGrid)[3] = 0 );
+     // Finds a node absolute index for the current
+     // point location (uses grid coordinate array grid[])
+     // performance-important functions to be used e.g. in particle tracking methods
+     int FindNodeFromLocation( LOCATION cxyz, int old_node = -1 ) const;
+     // get 3D sizes for node (  from cxyz[0] - to cxyz[1] )
+     void GetNodeSizes( int ndx, LOCATION cxyz[2] );
+     // get 3D location for node (  from cxyz[0] - to cxyz[1] )
+     LOCATION& GetNodeLocation( int ndx )
+     { return grid[ndx]; }
+     // get full mass particle type in node ndx
+     double GetNodeMass( int ndx, char type, char tcode, unsigned char ips );
+     // move mass m_v from node ndx_from to node ind_to, particle type
+     void MoveParticleMass( int ndx_from, int ind_to,
+            char type, char tcode, unsigned char ips, double m_v );
+
 
 #ifndef IPMGEMPLUGIN
 
@@ -266,7 +361,6 @@ public:
 #endif
 
 };
-
 
 #endif   // _nodearray_h_
 

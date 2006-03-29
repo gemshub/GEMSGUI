@@ -31,8 +31,8 @@ const char *GEM2MT_HTML = "gm_gem2mt";
 
 #define Inherited GEM2MTWizardData
 
-GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[20],
-                              int size[15], QWidget* parent):
+GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[22],
+                              int size[17], QWidget* parent):
         Inherited( parent, 0, true )
 {
     gstring str1= "GEM-Selektor GEM2MT Setup:  ";
@@ -42,16 +42,20 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[20],
     setFinishEnabled( WizardPage2, true);
 
 //Page1
-   if( flgs[12] == 'S' )
+   if( flgs[14] == 'S' )
        pselS->setChecked( true );
-   else  if( flgs[12] == 'F' )
-            pselG->setChecked( true );
-          else  if( flgs[12] == 'A' )
-                  pselT->setChecked( true );
-                else if( flgs[12] == 'D' )
-                       pselR->setChecked( true );
-                     else
-                       pselP->setChecked( true );
+   else  if( flgs[14] == 'F' )
+         pselG->setChecked( true );
+     else  if( flgs[14] == 'A' )
+         pselT->setChecked( true );
+       else if( flgs[14] == 'D' )
+          pselR->setChecked( true );
+         else if( flgs[14] == 'W' )
+           pselW->setChecked( true );
+             else if( flgs[14] == 'V' )
+               pselV->setChecked( true );
+                else
+                   pselP->setChecked( true );
 //Page2
 
     pnC->setValue(size[0]);
@@ -63,6 +67,8 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[20],
     pnYS->setValue(size[6]);
     pnE->setValue(size[7]);
     pYE->setValue(size[8]);
+    pnPTypes->setValue(size[15]);
+    pnProps->setValue(size[16]);
 
 //Page 3
 
@@ -75,25 +81,28 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[20],
     if( flgs[4] != '-' )
       c_PvICi->setChecked( true );
     else c_PvICi->setChecked( false );
-    if( flgs[15] != '-' )
+    if( flgs[17] != '-' )
       c_PsSYd->setChecked( true );
     else c_PsSYd->setChecked( false );
-    if( flgs[16] != '-' )
+    if( flgs[18] != '-' )
       c_PsSdat->setChecked( true );
     else c_PsSdat->setChecked( false );
-    if( flgs[17] != '-' )
+    if( flgs[19] != '-' )
       c_PsDDc->setChecked( true );
     else c_PsDDc->setChecked( false );
-    if( flgs[18] != '-' )
+    if( flgs[20] != '-' )
       c_PsDIc->setChecked( true );
     else c_PsDIc->setChecked( false );
-    if( flgs[19] != '-' )
+    if( flgs[21] != '-' )
       c_PvTPai->setChecked( true );
     else c_PvTPai->setChecked( false );
     if( flgs[6] != '-' )
       c_PsMO->setChecked( true );
     else c_PsMO->setChecked( false );
 
+   if( flgs[12] != '-' )
+     c_PvGrid->setChecked( true );
+   else c_PvGrid->setChecked( false );
 //Page4
     spinBox18->setValue(size[14]);
 
@@ -103,7 +112,7 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[20],
 GEM2MTWizard::~GEM2MTWizard()
 {}
 
-void   GEM2MTWizard::getSizes( int size[15] )
+void   GEM2MTWizard::getSizes( int size[17] )
 {
 
 //Page2
@@ -116,6 +125,9 @@ void   GEM2MTWizard::getSizes( int size[15] )
     size[6]= pnYS->value();
     size[7]= pnE->value();
     size[8]= pYE->value();
+    size[15]= pnPTypes->value();
+    size[16]= pnProps->value();
+
 //Page 3
     size[9]= pLb->value();
     size[10]= pnEl->value();
@@ -126,41 +138,45 @@ void   GEM2MTWizard::getSizes( int size[15] )
 }
 
 
-void   GEM2MTWizard::getFlags( char flgs[20] )
+void   GEM2MTWizard::getFlags( char flgs[22] )
 {
   char type='S';
 
   if( pselS->isChecked())
    type='S';
   else if( pselG->isChecked())
-           type='F';
-       else if( pselT->isChecked())
-                type='A';
-          else if( pselR->isChecked())
-                  type='D';
-                else  if( pselP->isChecked())
-                           type='T';
+       type='F';
+   else if( pselT->isChecked())
+           type='A';
+     else if( pselR->isChecked())
+             type='D';
+       else  if( pselP->isChecked())
+               type='T';
+          else  if( pselW->isChecked())
+                 type='W';
+            else  if( pselV->isChecked())
+                  type='V';
 
-   flgs[12] = type;
+   flgs[14] = type;
    // Putting other flags
    if( c_PvICi->isChecked() )
        flgs[4] = '+';
     else flgs[4] = '-';
    if( c_PsSYd->isChecked() )
-       flgs[15] = '+';
-    else flgs[15] = '-';
-   if( c_PsSdat->isChecked() )
-       flgs[16] = '+';
-    else flgs[16] = '-';
-   if( c_PsDDc->isChecked() )
        flgs[17] = '+';
     else flgs[17] = '-';
-   if( c_PsDIc->isChecked() )
+   if( c_PsSdat->isChecked() )
        flgs[18] = '+';
     else flgs[18] = '-';
-   if( c_PvTPai->isChecked() )
+   if( c_PsDDc->isChecked() )
        flgs[19] = '+';
     else flgs[19] = '-';
+   if( c_PsDIc->isChecked() )
+       flgs[20] = '+';
+    else flgs[20] = '-';
+   if( c_PvTPai->isChecked() )
+       flgs[21] = '+';
+    else flgs[21] = '-';
    if( c_PsMO->isChecked() )
        flgs[6] = '+';
     else flgs[6] = '-';
@@ -186,7 +202,10 @@ void   GEM2MTWizard::getFlags( char flgs[20] )
        flgs[11] = '+';
   else flgs[11] = '-';
 
-// flags 0,1,2,3, 13, 14 not used or internal
+  if( c_PvGrid->isChecked() )
+     flgs[12] = '+';
+  else flgs[12] = '-';
+// flags 0,1,2,3, 13, 15, 16 not used or internal
 }
 
 void

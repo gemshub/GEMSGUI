@@ -882,7 +882,7 @@ vfProcessSet(QWidget* par, const char * p_key,
 
 bool
 vfGEM2MTSet(QWidget* par, const char * p_key,
-              char flgs[20], int size[15] )
+              char flgs[22], int size[17] )
 {
      GEM2MTWizard pdlg( p_key, flgs, size, par );
      if( !pdlg.exec() )

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>694</width>
-            <height>654</height>
+            <height>700</height>
         </rect>
     </property>
     <property name="caption">
@@ -52,14 +52,14 @@
         </spacer>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout24</cstring>
+                <cstring>layout10</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>10</x>
-                    <y>12</y>
-                    <width>607</width>
-                    <height>550</height>
+                    <x>9</x>
+                    <y>10</y>
+                    <width>670</width>
+                    <height>590</height>
                 </rect>
             </property>
             <vbox>
@@ -94,8 +94,8 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>20</width>
-                            <height>40</height>
+                            <width>30</width>
+                            <height>30</height>
                         </size>
                     </property>
                 </spacer>
@@ -137,7 +137,7 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>20</width>
-                                    <height>20</height>
+                                    <height>16</height>
                                 </size>
                             </property>
                         </spacer>
@@ -165,7 +165,7 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>20</width>
-                                    <height>20</height>
+                                    <height>16</height>
                                 </size>
                             </property>
                         </spacer>
@@ -196,7 +196,7 @@
                             <property name="sizeHint">
                                 <size>
                                     <width>20</width>
-                                    <height>20</height>
+                                    <height>16</height>
                                 </size>
                             </property>
                         </spacer>
@@ -239,6 +239,62 @@
                                 <string>Alt+T</string>
                             </property>
                         </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer16_4_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>pselW</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;W random-walk advection-diffusion coupled RMT scoping model</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+W</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer16_4_2_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>pselV</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;V const volume coupled RMT scoping model</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+V</string>
+                            </property>
+                        </widget>
                     </vbox>
                 </widget>
             </vbox>
@@ -253,14 +309,14 @@
         </attribute>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout20</cstring>
+                <cstring>layout10</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>13</x>
-                    <y>13</y>
-                    <width>640</width>
-                    <height>470</height>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>660</width>
+                    <height>540</height>
                 </rect>
             </property>
             <vbox>
@@ -291,7 +347,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>16</height>
+                            <height>30</height>
                         </size>
                     </property>
                 </spacer>
@@ -415,52 +471,7 @@
                                 <number>0</number>
                             </property>
                         </widget>
-                        <widget class="QSpinBox" row="10" column="0">
-                            <property name="name">
-                                <cstring>pYE</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                            <property name="maxValue">
-                                <number>10</number>
-                            </property>
-                            <property name="minValue">
-                                <number>0</number>
-                            </property>
-                            <property name="value">
-                                <number>1</number>
-                            </property>
-                        </widget>
-                        <spacer row="7" column="2">
-                            <property name="name">
-                                <cstring>spacer24_2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>16</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QLabel" row="6" column="1" rowspan="1" colspan="2">
+                        <widget class="QLabel" row="6" column="1" rowspan="1" colspan="3">
                             <property name="name">
                                 <cstring>TextLabel2_3</cstring>
                             </property>
@@ -471,7 +482,7 @@
                                 <set>WordBreak|AlignVCenter</set>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="8" column="1" rowspan="1" colspan="2">
+                        <widget class="QLabel" row="8" column="1" rowspan="1" colspan="3">
                             <property name="name">
                                 <cstring>TextLabel1_2</cstring>
                             </property>
@@ -482,7 +493,7 @@
                                 <set>WordBreak|AlignVCenter</set>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="9" column="1" rowspan="1" colspan="2">
+                        <widget class="QLabel" row="9" column="1" rowspan="1" colspan="3">
                             <property name="name">
                                 <cstring>TextLabel1_2_2</cstring>
                             </property>
@@ -493,18 +504,7 @@
                                 <set>WordBreak|AlignVCenter</set>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="10" column="1" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>TextLabel1_2_2_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Number of columns (plots) in the  yEt array for plotting experimental data</string>
-                            </property>
-                            <property name="alignment">
-                                <set>WordBreak|AlignVCenter</set>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="5" column="1" rowspan="1" colspan="2">
+                        <widget class="QLabel" row="5" column="1" rowspan="1" colspan="3">
                             <property name="name">
                                 <cstring>TextLabel2</cstring>
                             </property>
@@ -515,7 +515,7 @@
                                 <set>WordBreak|AlignVCenter</set>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="4" column="1" rowspan="1" colspan="2">
+                        <widget class="QLabel" row="4" column="1" rowspan="1" colspan="3">
                             <property name="name">
                                 <cstring>TextLabel2_2</cstring>
                             </property>
@@ -526,7 +526,7 @@
                                 <set>WordBreak|AlignVCenter</set>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="0" column="1" rowspan="1" colspan="2">
+                        <widget class="QLabel" row="0" column="1" rowspan="1" colspan="3">
                             <property name="name">
                                 <cstring>TextLabel1</cstring>
                             </property>
@@ -596,7 +596,7 @@
                                 <number>2</number>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="1" column="1" rowspan="1" colspan="2">
+                        <widget class="QLabel" row="1" column="1" rowspan="1" colspan="3">
                             <property name="name">
                                 <cstring>TextLabel1_3</cstring>
                             </property>
@@ -632,7 +632,7 @@
                                 <number>1000</number>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="2" column="1" rowspan="1" colspan="2">
+                        <widget class="QLabel" row="2" column="1" rowspan="1" colspan="3">
                             <property name="name">
                                 <cstring>TextLabel1_3_2</cstring>
                             </property>
@@ -685,6 +685,157 @@
                                 <number>0</number>
                             </property>
                         </widget>
+                        <spacer row="7" column="3">
+                            <property name="name">
+                                <cstring>spacer24_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>16</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <spacer row="11" column="2">
+                            <property name="name">
+                                <cstring>spacer24_2_2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>16</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QSpinBox" row="10" column="0">
+                            <property name="name">
+                                <cstring>pYE</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>10</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="value">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="10" column="1" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>TextLabel1_2_2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Number of columns (plots) in the  yEt array for plotting experimental data</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="12" column="1" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>TextLabel1_2_2_2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Number of allocated particle types</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="13" column="1" rowspan="1" colspan="3">
+                            <property name="name">
+                                <cstring>TextLabel1_2_2_2_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Number of particle statistic properties (for monitoring)</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="13" column="0">
+                            <property name="name">
+                                <cstring>pnProps</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>10</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="value">
+                                <number>1</number>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="12" column="0">
+                            <property name="name">
+                                <cstring>pnPTypes</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maxValue">
+                                <number>20</number>
+                            </property>
+                            <property name="minValue">
+                                <number>0</number>
+                            </property>
+                            <property name="value">
+                                <number>1</number>
+                            </property>
+                        </widget>
                     </grid>
                 </widget>
             </vbox>
@@ -699,13 +850,13 @@
         </attribute>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout22</cstring>
+                <cstring>layout10</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>10</x>
-                    <y>14</y>
-                    <width>600</width>
+                    <y>15</y>
+                    <width>660</width>
                     <height>540</height>
                 </rect>
             </property>
@@ -737,7 +888,7 @@
                     <property name="sizeHint">
                         <size>
                             <width>20</width>
-                            <height>18</height>
+                            <height>47</height>
                         </size>
                     </property>
                 </spacer>
@@ -1101,6 +1252,17 @@
                             </property>
                             <property name="text">
                                 <string>Use non stop debug output for nodes</string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>c_PvGrid</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Use array of grid point locations</string>
                             </property>
                             <property name="checked">
                                 <bool>false</bool>

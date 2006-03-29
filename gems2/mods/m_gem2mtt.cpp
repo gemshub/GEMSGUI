@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include "m_gem2mt.h"
+#include "nodearray.h"
 #include "service.h"
 #include "visor.h"
 
@@ -102,13 +103,15 @@ void  TGEM2MT::NewNodeArray()
       Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
 
  // put HydP
- for( int jj=0; jj<mtp->nC; jj ++)
+ if( mtp->HydP )
+  for( int jj=0; jj<mtp->nC; jj ++)
    {    C0[jj]->Vt = mtp->HydP[jj][0];
-        C0[jj]->eps = mtp->HydP[jj][1];
-        C0[jj]->Km = mtp->HydP[jj][2];
-        C0[jj]->al = mtp->HydP[jj][3];
-        C0[jj]->hDl = mtp->HydP[jj][4];
-        C0[jj]->nto = mtp->HydP[jj][5];
+        C0[jj]->vp = mtp->HydP[jj][1];
+        C0[jj]->eps = mtp->HydP[jj][2];
+        C0[jj]->Km = mtp->HydP[jj][3];
+        C0[jj]->al = mtp->HydP[jj][4];
+        C0[jj]->hDl = mtp->HydP[jj][5];
+        C0[jj]->nto = mtp->HydP[jj][6];
    }
 
   for (int ii=0; ii<mtp->nC; ii++)    // node iteration
@@ -224,6 +227,26 @@ void TGEM2MT::MassTransAdvecStart()
     mtp->ct = 0;
 }
 
+// The mass transport iteration time step
+void TGEM2MT::MassTransParticleStart()
+{
+    mtp->dx = mtp->cLen/mtp->nC;
+    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1/mtp->tf;
+    mtp->oTau = 0;
+    mtp->cTau = mtp->Tau[START_];
+    // mtp->cTau = 0;
+    mtp->ct = 0;
+}
+
+
+// The mass transport iteration time step
+void TGEM2MT::MassTransParticleStep()
+{
+   mtp->ct += 1;
+   mtp->oTau = mtp->cTau;
+   mtp->cTau += mtp->dTau;
+   pa->GEMCOTAC( mtp->PsMode, mtp->oTau, mtp->cTau );
+}
 
 // The mass transport iteration time step
 void TGEM2MT::MassTransAdvecStep()
@@ -274,6 +297,7 @@ void TGEM2MT::MassTransAdvecStep()
   } // end of loop over nodes
 }
 
+
 // return true if canceled
 bool TGEM2MT::Trans1D( char mode )
 {
@@ -306,8 +330,11 @@ t_start = clock();
    if( mtp->iStat != AS_RUN  )
    {  switch( mtp->PsMode )
      {
-      case GMT_MODE_A: MassTransAdvecStart();
-                break;
+       case GMT_MODE_A: MassTransAdvecStart();
+                 break;
+       case GMT_MODE_V:
+       case GMT_MODE_W: MassTransParticleStart();
+                           break;
       default: // more mass transport models here
                break;
      }
@@ -349,6 +376,9 @@ outp_time += ( t_out2 - t_out);
          {
           case GMT_MODE_A: MassTransAdvecStep();
                   break;
+          case GMT_MODE_V:
+          case GMT_MODE_W: MassTransParticleStep();
+                                      break;
           default: // more mass transport models here
                   break;
         }
@@ -374,7 +404,9 @@ outp_time += ( t_out2 -  t_out);
           // time step accepted - Copying nodes from C0 to C1 row
           pVisor->Update();
           CalcGraph();
+          // copy node array for T0 into node array for T1
           copyNodeArrays();
+          // copy particle array ?
 
 
 if( mtp->PvMO != S_OFF )

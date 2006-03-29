@@ -81,7 +81,7 @@ TVisor::TVisor(int c, char *v[]):
 #ifdef __APPLE__
 	char work_path[PATH_MAX];
 	char cur_dir[PATH_MAX];
-	
+
 	// let's try to find resources by path of the executable
 	getcwd(cur_dir, PATH_MAX);
 	strcpy(work_path, argv[0]);
@@ -89,12 +89,12 @@ TVisor::TVisor(int c, char *v[]):
 	if( rest != NULL ) {
 		strcpy(rest, "/Resources/");
 
-		if( work_path[0] == '.' && work_path[1] == '/' ) 
+		if( work_path[0] == '.' && work_path[1] == '/' )
 			SysGEMDir = gstring(cur_dir) + (work_path+1);
 		else
 		if( work_path[0] != '/' )
 			SysGEMDir = (gstring(cur_dir) + "/") + work_path;
-		else 
+		else
 			SysGEMDir = work_path;
 	}
 	else {
@@ -185,7 +185,7 @@ TVisor::TVisor(int c, char *v[]):
      if( LocalDocDir[0] == '.' && LocalDocDir[1] == '/' )
      {
 	char cur_dir[PATH_MAX];
-	
+
 	// let's try to find resources by path of the executable
 	getcwd(cur_dir, PATH_MAX);
 	LocalDocDir = gstring(cur_dir) + gstring(LocalDocDir,1);
@@ -215,26 +215,26 @@ TVisor::Setup()
     {
         if (strcmp(argv[ii], "-d") == 0
                 || strcmp(argv[ii], "--from-ini-files") == 0 )
-        {   
+        {
            option_d = true;
            pVisorImp->setConfigAutosave( true );
         }
         else
 	if (strcmp(argv[ii], "-f") == 0
-                || strcmp(argv[ii], "--allow-db-change") == 0 ) 
+                || strcmp(argv[ii], "--allow-db-change") == 0 )
 	{
             option_f = true;
 	}
-        else 
+        else
 	if (strcmp(argv[ii], "-c") == 0
-                || strcmp(argv[ii], "--with-default-config") == 0 ) 
+                || strcmp(argv[ii], "--with-default-config") == 0 )
 	{
             default_config = true;
             pVisorImp->setConfigAutosave( true );
         }
-        else 
+        else
 	if (strcmp(argv[ii], "-v") == 0
-                || strcmp(argv[ii], "--with-default-settings") == 0 ) 
+                || strcmp(argv[ii], "--with-default-settings") == 0 )
 	{
             default_settings = true;
             pVisorImp->setConfigAutosave( true );
@@ -578,7 +578,7 @@ TVisor::fromWinCFG()
             	else if( name == "local_doc" ) {
 				setLocalDoc(visor_conf.getcInt());
 			}
-			
+
         name = visor_conf.getNext();
     }
 
@@ -818,7 +818,7 @@ TVisor::defaultCFG()
        MAXTIME, MAXPTN, MAXPTN, MAXPTN, MAXNV, MAXPENAME, MAXPECODE
                                   };
     rt.Add(new TDataBase(rt.GetCount(), "gem2mt", true, true,
-                         o_mtname, 58, 0, 10, gem2mt_rkfrm));
+                         o_mtname, 63, 0, 10, gem2mt_rkfrm));
 
     // read default database
     TCStringArray aDBFiles = readPDBDir(pVisor->sysDBDir().c_str(), "*.pdb");

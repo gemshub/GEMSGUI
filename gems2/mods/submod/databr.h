@@ -15,19 +15,19 @@ typedef struct
      NodeHandle,    // Node identification handle
      NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
      NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
-     NodeStatusFMT, // Node status code FMT; see typedef NODECODEFMT 
+     NodeStatusFMT, // Node status code FMT; see typedef NODECODEFMT
      NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
      IterDone;      // Number of iterations performed by IPM (if not need GEM)
-     
+
 /*  see DATACH structure
    unsigned short
-    nICb,       // number of stoichiometry units (<= nIC) used in the data bridge  
+    nICb,       // number of stoichiometry units (<= nIC) used in the data bridge
     nDCb,      	// number of DC (chemical species, <= nDC) used in the data bridge
     nPHb,     	// number of phases (<= nPH) used in the data bridge
     nPSb;       // number of multicomponent phases (<= nPS) used in the data bridge
 */
 
-//      Usage of this variable:                          MT-DB DB-GEM GEM-DB DB-MT       
+//      Usage of this variable:                          MT-DB DB-GEM GEM-DB DB-MT
    double
 // Chemical scalar variables
     T,   	// Temperature T, K                        +      +      -     -
@@ -52,9 +52,11 @@ typedef struct
 
     Tm,          // actual total simulation time
     dt,         // actual time step
-    dt1,        // priveous time step
-    ot,		// output time control for postprocessing
+    dt1,        // previous time step
+
     Vt,		// total volume of node (voxel) = dx*dy*dz, m**3
+
+    vp,		// advection velocity (in pores) in this node
     eps,	// effective (actual) porosity normalized to 1
     Km,		// actual permeability, m**2
     Kf,		// actual DARCY`s constant, m**2/s
@@ -62,17 +64,18 @@ typedef struct
     Tr,         // transmissivity m**2/s
     h,		// actual hydraulic head (hydraulic potential), m
     rho,	// actual carrier density for density driven flow, g/cm**3
+
     al,		// specific longitudinal dispersivity of porous media, m
     at,		// specific transversal dispersivity of porous media, m
     av,		// specific vertical dispersivity of porous media, m
     hDl,	// hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
-    hDt,	// hydraulic transversal dispersivity, m**2/s			 	
+    hDt,	// hydraulic transversal dispersivity, m**2/s
     hDv,	// hydraulic vertical dispersivity, m**2/s
     nto;	// tortuosity
-   
+
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
-// exchange of values occurs through lists of indices, e.g. xDC, xPH 
-    
+// exchange of values occurs through lists of indices, e.g. xDC, xPH
+
    double
    // DC (species) in reactive subsystem
     *xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
@@ -93,7 +96,7 @@ typedef struct
     *rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
     *uIC,  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
 
-  // What else? 
+  // What else?
     *dRes1,
     *dRes2;
 }
@@ -115,7 +118,7 @@ typedef enum {  // NodeStatus codes GEMS
 
 
 typedef enum {  // NodeStatus codes FluidMassTransport
- 
+
  Initial_RUN   = 1,
  OK_Hydraulic  = 2,
  BAD_Hydraulic = 3,  // unsufficient convergence
@@ -127,7 +130,7 @@ typedef enum {  // NodeStatus codes FluidMassTransport
  Bad_Recalc    = 9,
  OK_Time       = 10
 } NODECODEFMT;
- 
+
 
 typedef enum {  // NodeType codes Hydraulic/masstransport
  normal       = 0, // normal node
