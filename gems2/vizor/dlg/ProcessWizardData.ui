@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1"> 
 <class>ProcessWizardData</class>
 <widget class="QWizard">
     <property name="name">
@@ -320,7 +320,7 @@
                                         </size>
                                     </property>
                                     <property name="maxValue">
-                                        <number>20</number>
+                                        <number>40</number>
                                     </property>
                                     <property name="minValue">
                                         <number>0</number>
@@ -334,7 +334,7 @@
                                         <cstring>TextLabel2</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Number of columns in modC array (from 1 to 20, 0 - not used) to store data used in process scritps; number of rows will be nPV.</string>
+                                        <string>Number of columns in modC array (from 1 to 40, 0 - not used) to store data used in process scritps; number of rows will be nPV.</string>
                                     </property>
                                     <property name="alignment">
                                         <set>WordBreak|AlignVCenter</set>

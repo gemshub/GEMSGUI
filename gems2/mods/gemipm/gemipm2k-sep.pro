@@ -1,4 +1,4 @@
-#qmake -spec win32-borland gemsipm2k-sep.pro > a
+#qmake -spec win32-borland gemsipm2k-sep.pro > a 
 #qmake -spec win32-msvc.net gemsipm2k-sep.pro > a
 #qmake -spec win32-msvc gemsipm2k-sep.pro > a
 
@@ -12,6 +12,15 @@ CONFIG		+=  warn_on debug windows
 CONFIG		+= console 
 
 DEFINES         += IPMGEMPLUGIN
+
+!win32-borland {  
+DEFINES += __unix 
+}
+
+win32-borland {	
+        QMAKE_CFLAGS += -x -xd -xp -VM -RT
+        QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
+} 
 
 #LIBS_CPP       =  ../../vizor/libs
 #KERNEL_CPP     =  ../../vizor/kernel

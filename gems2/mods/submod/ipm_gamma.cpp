@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id$
+// $Id$ 
 //
 // Copyright (C) 1992-2000  D.Kulik, S.Dmitrieva, K.Chudnenko, I.Karpov
 //
@@ -651,6 +651,7 @@ NEXT_PHASE:
         {
             pmp->XetaA[k][0] = XetaW;
             pmp->XetaB[k][0] = XetaW;
+            pmp->XetaD[k][0] = XetaW;
         }
         if( (pmp->PHC[k] == PH_PLASMA || pmp->PHC[k] == PH_SIMELT)
                 && pmp->FIat)
@@ -670,7 +671,7 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
     int ist;
     double SigA=0., SigD=0., SigB=0., SigDDL=0.,
       XetaA[MST], XetaB[MST], XetaD[MST], f1, f3, A/*=1e-9*/, Sig, F2RT, I, Cap;
-    /* Del, F=F_CONSTANT, Cap0; */
+    /* Del, F=F_CONSTANT, Cap0; */ double XetaW[MST];
     if( pmp->XF[k] < pa.p.ScMin )
         return; /* no sorbent */
 
@@ -698,6 +699,12 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
      XetaD[ist] = pmp->XetaD[k][ist] *F_CONSTANT/pmp->YFk/pmp->Aalp[k]
                   /pmp->Nfsp[k][ist]; /* C/m2 */
  else XetaD[ist] = 0.0;
+// Trial variant
+// if( fabs( pmp->XetaD[0][ist]) > pmp->lowPosNum*100. )/* moles */
+//     XetaW[ist] = pmp->XetaD[0][ist] *F_CONSTANT/pmp->YFk/pmp->Aalp[k]
+//                  /pmp->Nfsp[k][ist]; /* C/m2 */
+// else XetaW[ist] = 0.0;
+//
         /* Limit charge densities to 0.7 C/m2 */
         if( fabs(XetaA[ist]) > 1.4 )
         {
@@ -782,7 +789,7 @@ void TProfil::GouyChapman(  int /*jb*/, int /*je*/, int k )
         /* params of diffuse layer using Damaskin, 1987,p.192-195 */
         A = 1e-9;
         F2RT = pmp->FRT / 2.;
-        Sig = SigDDL;
+        Sig = SigDDL; //  - XetaW[ist] ;
         I=pmp->IC;
         if( I > 1e-7 )
             /* Aq solution density Ro included acc. to Machesky ea., 1999 */
@@ -978,10 +985,10 @@ void TProfil::SurfaceActivityCoeff( int jb, int je, int /*jpb*/, int /*jdb*/, in
              rIEPS, ISAT, /*SAT,*/ XSs/*=0.*/,
              /*bet,*/ SATst/*=1.0*/, xjn/*=0.*/, q1, q2, aF/*=0.*/, cN/*=1.*/, eF/*=0.*/;
 
-    if( pmp->XFA[k] <= pmp->DSM ) /* No sorbent retained by the IPM */
+    if( pmp->XF[k] <= pmp->DSM ) /* No sorbent retained by the IPM */
         return;
-    if( pmp->XF[k]-pmp->XFA[k] < pmp->lowPosNum /* *10. */ )
-        return;  /* No surface species */
+    if( pmp->XFA[k] <= pa.p.ScMin )  // fixed 26.11.2006 by KD - elimination of sorption phase
+        return;  /* No surface species left */
 
     for(i=0; i<MST; i++)
     {

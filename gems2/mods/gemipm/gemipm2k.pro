@@ -1,10 +1,10 @@
-#qmake -spec win32-borland gemsipm2k.pro > a
+#qmake -spec win32-borland gemsipm2k.pro > a 
 #qmake -spec win32-msvc.net gemsipm2k.pro > a
 
 TEMPLATE	= app
 LANGUAGE        = C++
 TARGET		= gemipm2k
-VERSION         = 2.1.0
+VERSION         = 2.1.1
 
 CONFIG		-= qt 
 CONFIG		+=  warn_on debug windows
@@ -12,12 +12,14 @@ CONFIG		+= console
 
 DEFINES         += IPMGEMPLUGIN
 
+!win32-borland {  
+DEFINES += __unix 
+}
 
-win32-borland {
-	# Keep the size of the .tds file for the Qt library smaller than
-	# 34 Mbytes to avoid linking problems
-	QMAKE_CFLAGS_DEBUG += -vi -y-
-	QMAKE_CXXFLAGS_DEBUG += -vi -y-
+win32-borland {	
+#  Debug, RTTI, exceptions, Visual C - compatible
+        QMAKE_CFLAGS += -x -xd -xp -VM -RT
+        QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
 }
 
 LIBS_CPP       =  ../../vizor/libs

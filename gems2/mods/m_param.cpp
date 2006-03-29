@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id$
+// $Id$ 
 //
 // Implementation of config and basic methods of TProfile class
 //
@@ -62,14 +62,14 @@ SPP_SETTING pa_ = {
         0, /* was -2 DT */  0,     /* PLLG */   1,   /* PE */
         500,   /* IIM */
         1e-30, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
-        1e-5,  /* DK */  0.01,  /* DF */  1e-12,  /* DFM */
+        1e-5,  /* DK */  0.01,  /* DF */  1e-9,  /* DFM */
         1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
         1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
         1e-12, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
         0.07,   /* DGC */   1.0,   /* GAR */  1000., /* GAH */
-        0.001, /* GAS */  12.05,  /* DNS */  1e-5,  /* XwMin, */
-        1e-7,  /* ScMin, */    1e-20, /* DcMin, */   1e-10, /* PhMin, */
-        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-15,  /* IEPS */
+        0.01, /* GAS */  12.05,  /* DNS */  1e-8,  /* XwMin, */
+        1e-8,  /* ScMin, */  1e-20, /* DcMin, */   1e-10, /* PhMin, */
+        3e-5,  /* ICmin */   1e-7,  /* EPS */   1e-3,  /* IEPS */
         1e-4,  /* DKIN  */ 0,  /* tprn */
     },
     "CSC   ",   /* DCpct[6] */  "OjjbC+---",    /* DCpdc[9] */
