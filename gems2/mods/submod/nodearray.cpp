@@ -433,7 +433,7 @@ void TNodeArray::makeStartDataChBR(
 // set default data to DataBr
 
    CNode->NodeHandle = 0;
-   CNode->NodeTypeHY = initital;
+   CNode->NodeTypeHY = normal;
    CNode->NodeTypeMT = normal;
    CNode->NodeStatusFMT = Initial_RUN;
 //   CNode->NodeStatusCH = NEED_GEM_AIA;
@@ -766,7 +766,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
 //-------------------------------------------------------------------------
 // RunGEM()
 // GEM IPM calculation of equilibrium state for the iNode node
-// from array NodT0. Mode - mode of GEMS calculation
+// from array NodT1. Mode - mode of GEMS calculation
 //
 //  Function returns:
 //   0: OK; 1: GEMIPM2K calculation error; 1: system error
@@ -781,7 +781,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 // f_log << " MAIF_CALC begin Mode= " << p_NodeStatusCH << " iNode= " << iNode << endl;
 //---------------------------------------------
 
-   CopyWorkNodeFromArray( iNode, anNodes, NodT0 );
+   CopyWorkNodeFromArray( iNode, anNodes, NodT1 );
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
    unpackDataBr();
 // set up Mode
@@ -797,7 +797,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
 //********************************************************* */
 
 // Copying data for node iNode back from work DATABR structure into the node array
-   MoveWorkNodeToArray( iNode, anNodes, NodT0 );
+   MoveWorkNodeToArray( iNode, anNodes, NodT1 );
    if( CNode->NodeStatusCH  == NEED_GEM_AIA )
          CNode->NodeStatusCH = OK_GEM_AIA;
    else
@@ -940,7 +940,7 @@ void TNodeArray::packDataBr()
 // set default data to DataBr
 #ifndef IPMGEMPLUGIN
    CNode->NodeHandle = 0;
-   CNode->NodeTypeHY = initital;
+//   CNode->NodeTypeHY = normal;
    CNode->NodeTypeMT = normal;
    CNode->NodeStatusFMT = Initial_RUN;
    //   CNode->NodeStatusCH = NEED_GEM_AIA;
@@ -1159,9 +1159,9 @@ int TNodeArray::FindNodeFromLocation( LOCATION cxyz, int old_node ) const
    j1 = indM( old_node );
    k1 = indK( old_node );
 
-   for( i = i1-1; i < i1+1; i++ )
-     for( j = j1-1; j < j1+1; j++ )
-       for( k = k1-1; k < k1+1; k++ )
+   for( i = i1-1; i <= i1+1; i++ )
+     for( j = j1-1; j <= j1+1; j++ )
+       for( k = k1-1; k <= k1+1; k++ )
        {
           if(  isLocationInNode( i, j, k, cxyz ) )
               return iNode( i, j, k );
@@ -1233,18 +1233,18 @@ double TNodeArray::GetNodeMass( int ndx,
        char /*ptype*/, char tcode, unsigned char ips )
 {
    double mass = 0.;
-   DATABR* dbr = NodT0[ndx];
+   DATABR* dbr = NodT1[ndx];
 
      switch( tcode )
      {
         case ADVECTIVE:
         case COLLOID: // mass = 0.;
                       // for(short ie=0; ie < CSD->nICb; ie++ )
-                      //   mass += dbr->bPS[ips*CSD->nICb+ie]*CSD->ICmm[ie];
-                      mass = dbr->mPS[ips];
+                      //   mass += dbr->bPS[ips*CSD->nICb+ie]*CSD->ICmm[CSD->xIC[ie]];
+                       mass = dbr->mPS[ips];
                         break;
         case DIFFUSIVE:
-                      mass = dbr->xDC[ips]*CSD->DCmm[ips];
+                      mass = dbr->xDC[ips]*CSD->DCmm[CSD->xDC[ips]];
                         break;
      }
    return mass;
@@ -1261,18 +1261,18 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
        char /*type*/, char tcode, unsigned char ips, double m_v )
 {
    double mass = 0., coeff, mol;
-   DATABR* dbr = NodT0[ndx_from];
+   DATABR* dbr = NodT1[ndx_from];
 
    switch( tcode )
    {
     case ADVECTIVE:
     case COLLOID: // mass = 0.;
                   // for(short ie=0; ie < CSD->nICb; ie++ )
-                  //   mass += dbr->bPS[ips*CSD->nICb+ie]*CSD->ICmm[ie];
-                  mass = dbr->mPS[ips];
+                  //   mass += dbr->bPS[ips*CSD->nICb+ie]*CSD->ICmm[CSD->xIC[ie]];
+                   mass = dbr->mPS[ips];
                   break;
     case DIFFUSIVE:
-                  mass = dbr->xDC[ips]*CSD->DCmm[ips];
+                  mass = dbr->xDC[ips]*CSD->DCmm[CSD->xDC[ips]];
                    break;
     }
    coeff = m_v/mass;
@@ -1285,12 +1285,21 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
         case ADVECTIVE:
         case COLLOID:   mol = dbr->bPS[ips*CSD->nICb+ie]*coeff;
                         break;
-        case DIFFUSIVE: mol = dbr->xDC[ips]*CSD->A[ips*CSD->nICb+ie]*coeff;
+        case DIFFUSIVE: mol =  dbr->xDC[ips]*CSD->A[CSD->xPH[ips]*CSD->nIC+CSD->xIC[ie]]*coeff;
                         break;
      }
-     dbr->bIC[ie] -= mol;
-     if( ndx_to > 0 && ndx_to < anNodes )
-         NodT0[ndx_to]->bIC[ie] += mol;
+     if( dbr->NodeTypeHY != NBC3source )
+       dbr->bIC[ie] -= mol;
+
+      if( ndx_to > 0 && ndx_to < anNodes )
+      {
+         if( NodT1[ndx_to]->NodeTypeHY != NBC3source )
+           NodT1[ndx_to]->bIC[ie] += mol;
+      }
+      else
+         if(dbr->NodeTypeHY != NBC3sink )
+           Error( "W002MTRW", "Warning: Particle jumped outside the domain" );
+
    }
 }
 

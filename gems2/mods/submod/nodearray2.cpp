@@ -77,7 +77,7 @@ void TNodeArray::logProfileAqIC( FILE* logfile, int t, double at, int nx, int ev
      fprintf( logfile, "\n%5d   ", i );
      for( ie=0; ie < int(CSD->nICb); ie++ )
      {
-       pm = NodT0[i]->bPS[ie]/NodT0[i]->vPS[0]*1000.;  // Assumes there is aq phase!
+       pm = NodT1[i]->bPS[ie]/NodT1[i]->vPS[0]*1000.;  // Assumes there is aq phase!
                  // total dissolved element molarity
        fprintf( logfile, "%-12.4g ", pm );
      }
@@ -102,7 +102,7 @@ void TNodeArray::logProfileTotIC( FILE* logfile, int t, double at, int nx, int e
      fprintf( logfile, "\n%5d   ", i );
      for( ie=0; ie < int(CSD->nICb); ie++ )
      {
-       pm = NodT0[i]->bIC[ie];
+       pm = NodT1[i]->bIC[ie];
        fprintf( logfile, "%-12.4g ", pm );
      }
   }
@@ -125,7 +125,7 @@ void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int e
      fprintf( logfile, "\n%5d   ", i );
      for( ip=0; ip < int(CSD->nPHb); ip++ )
      {
-       pm = NodT0[i]->xPH[ip];
+       pm = NodT1[i]->xPH[ip];
        fprintf( logfile, "%-12.4g ", pm );
      }
   }
@@ -148,7 +148,7 @@ void TNodeArray::logProfileAqDC( FILE* logfile, int t, double at, int nx, int ev
      fprintf( logfile, "\n%5d   ", i );
      for( is=0; is < int(CSD->nDCinPH[0]); is++ )
      {
-       pm = NodT0[i]->xDC[is]/NodT0[i]->vPS[0]*1000.;  // Assumes there is aq phase!
+       pm = NodT1[i]->xDC[is]/NodT1[i]->vPS[0]*1000.;  // Assumes there is aq phase!
                  // dissolved species molarity
        fprintf( logfile, "%-12.4g ", pm );
      }

@@ -104,7 +104,7 @@ nProps,      // res Number of particle statistic properties (for monitoring) >= 
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
    NVi[3],    // Restrictions variant #: start, end, step
    axisType[6],  // axis graph type, background(3), graph type, reserved
-   *DiCp,     // array of indexes of initial system variants for
+   (*DiCp)[2],     // array of indexes of initial system variants for
               // distributing to nodes [nC]
 // These lists of indices connect the DATABR arrays with this structure
     *xIC,   // ICNL indices in DATABR IC vectors [nICb]

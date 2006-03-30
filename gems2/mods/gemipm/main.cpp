@@ -141,8 +141,8 @@ if( !logfile)
 
 //  Getting direct access to TNodeArray class data
 DATACH* CH = TNodeArray::na->pCSD();       // DataCH structure
-DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at current time point
-DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
+DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at current time point
+DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at previous time point
 
 // time testing
   clock_t t_start, t_end, t_out, t_out2;
@@ -165,7 +165,7 @@ DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at previous time point
      for (i=1; i<nx; i++)    // node iteration
      {
        int Mode = NEED_GEM_AIA; // debugging
-       C0[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off
+       C1[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off
 //       RetCode = TNodeArray::na->RunGEM( 0, Mode );
        RetCode = TNodeArray::na->RunGEM( i, Mode );
      }  // end of node iteration loop
@@ -189,10 +189,10 @@ outp_time += ( t_out2 - t_out);
            {                          // Charge (Zz) is not checked here!
                          // Chemical compositions may become inconsistent with time
               // It has to be checked on minimal allowed c0 value
-              c0  = C0[i]->bPS[0*CH->nICb + ic];
-              c1  = C0[i+1]->bPS[0*CH->nICb + ic];
-              cm1 = C0[i-1]->bPS[0*CH->nICb + ic];
-              cm2 = C0[i-2]->bPS[0*CH->nICb + ic];
+              c0  = C1[i]->bPS[0*CH->nICb + ic];
+              c1  = C1[i+1]->bPS[0*CH->nICb + ic];
+              cm1 = C1[i-1]->bPS[0*CH->nICb + ic];
+              cm2 = C1[i-2]->bPS[0*CH->nICb + ic];
 
               if (i==nx) c1=c0;    // the right boundary is open ....
 
@@ -201,18 +201,18 @@ outp_time += ( t_out2 - t_out);
               dc = cr*(c12-cm12);
 
 // Checking the difference to assign
-// if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-4 ))
-              C0[i]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
-/*if( dc >= C0[i]->bIC[ic] )
+// if( fabs(dc) > min( cdv, C1[i]->bIC[ic] * 1e-4 ))
+              C1[i]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
+/*if( dc >= C1[i]->bIC[ic] )
  {
     fprintf( diffile, "\nError in Mass Transport calculation part :" );
     fprintf( diffile, " Node= %-8d  Step= %-8d  IC= %s ", i, t, CH->ICNL[ic] );
     fprintf(diffile, "\n Attempt to set new amount to %lg (old: %lg  Diff: = %lg ) ",
-         C0[i]->bIC[ic]-dc, C0[i]->bIC[ic], dc);
+         C1[i]->bIC[ic]-dc, C1[i]->bIC[ic], dc);
     BC_error = true;
  } */
-if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-3 ))
-              C0[i]->bIC[ic] -= dc; // correction for GEM calcuation
+if( fabs(dc) > min( cdv, C1[i]->bIC[ic] * 1e-3 ))
+              C1[i]->bIC[ic] -= dc; // correction for GEM calcuation
            } // loop over IC
 //if( BC_error )
 //   goto FINAL_POINT;
@@ -226,20 +226,20 @@ if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-3 ))
            int Mode = NEED_GEM_PIA;  // debugging
            bool NeedGEM = false;     // debugging
 
-C0[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
+C1[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
 
            // Here we compare this node for current time and for previous time
            for( ic=0; ic < CH->nICb-1; ic++)    // we do not check charge here!
            {     // It has to be checked on minimal allowed c0 value
-              if( C0[i]->bIC[ic] < cez )
+              if( C1[i]->bIC[ic] < cez )
               { // to stay on safe side
-                 C0[i]->bIC[ic] = cez;
+                 C1[i]->bIC[ic] = cez;
               }
-              dc = C1[i]->bIC[ic] - C0[i]->bIC[ic];
+              dc = C0[i]->bIC[ic] - C1[i]->bIC[ic];
 
-if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3 )))
+if( fabs( dc ) > min( cdv, (C1[i]->bIC[ic] * 1e-3 )))
                   NeedGEM = true;  // we need to recalculate equilibrium in this node
-// if( fabs( dc ) > min( cdv*100., C0[i]->bIC[ic] * 1e-2 ))
+// if( fabs( dc ) > min( cdv*100., C1[i]->bIC[ic] * 1e-2 ))
                   Mode = NEED_GEM_AIA;  // we even need to do it in auto Simplex mode
 // this has to be done in an intelligent way as a separate subroutine
            }
@@ -297,21 +297,21 @@ outp_time += ( t_out2 -  t_out);
 
           // Here one has to compare old and new equilibrium phase assemblage
           // and pH/pe in all nodes and decide if the time step was Ok or it
-          // should be decreased. If so then the nodes from C1 should be
-          // copied to C0 (to be implemented)
+          // should be decreased. If so then the nodes from C0 should be
+          // copied to C1 (to be implemented)
 
-          // time step accepted - Copying nodes from C0 to C1 row
+          // time step accepted - Copying nodes from C1 to C0 row
           for (int i=1; i<nx; i++)    // node iteration
           {
              bool NeedCopy = false;
              for( ic=0; ic < CH->nICb-1; ic++) // do not check charge
              {
-                dc = C1[i]->bIC[ic] - C0[i]->bIC[ic];
-if( fabs( dc ) > min( cdv, (C0[i]->bIC[ic] * 1e-3)))
+                dc = C0[i]->bIC[ic] - C1[i]->bIC[ic];
+if( fabs( dc ) > min( cdv, (C1[i]->bIC[ic] * 1e-3)))
                   NeedCopy = true;
              }
              if( NeedCopy )
-                 TNodeArray::na->CopyNodeFromTo( i, nx, C0, C1 );
+                 TNodeArray::na->CopyNodeFromTo( i, nx, C1, C0 );
           }  // i    end of node iteration loop
 
 // Data collection for monitoring: Current state

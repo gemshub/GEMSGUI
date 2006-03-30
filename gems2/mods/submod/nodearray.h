@@ -274,6 +274,9 @@ public:
      // get 3D location for node (  from cxyz[0] - to cxyz[1] )
      LOCATION& GetNodeLocation( int ndx )
      { return grid[ndx]; }
+     // get 3D size of region
+     LOCATION& GetSize()
+     { return size; }
      // get full mass particle type in node ndx
      double GetNodeMass( int ndx, char type, char tcode, unsigned char ips );
      // move mass m_v from node ndx_from to node ind_to, particle type

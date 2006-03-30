@@ -76,6 +76,9 @@ class TParticleArray
     int nNodes;       // Total number of allocated nodes (for convenience, to be copied from nodearray class)
     short* NPnum;       // array of particle numbers in nodes ( size: nNodes * (anPTypes))
 
+   // internal setup variables
+    int  ndxCsource; // Cauchy source index
+
     // Current step data for particle statistics
     int cpTypes;      // current number of particle types >= 1 and <= anPTypes;
 
@@ -167,6 +170,8 @@ public:
    void SetPartLocationT1( int px, LOCATION& cxyz )  // sets particle px location at time T1
   {    ParT1[px].xyz = cxyz;  }
 
+  void  setUpCounters();
+  void CopyfromT1toT0();  // Copy resalts of ParT1 step to ParT0
   void ParticleArrayInit();  // Particle array initialization
    // stub call for coupled mass transport calculation
   int GEMCOTAC( int Mode, double t0, double t1 );

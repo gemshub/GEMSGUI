@@ -89,13 +89,15 @@ void TParticleArray::ParticleArrayInit()
   LOCATION nodeSize[2];
 
   cpx = 0;
+  ndxCsource = 0;
   for( iNode=0; iNode < nNodes; iNode++ )
   {
     nodes->GetNodeSizes( iNode, nodeSize );
     for( iType=0; iType < anPTypes; iType++ )
     {
       NPnum[iNode*anPTypes+iType] = NPmean[iType];
-      for( k=0; k < NPmean[iType]; k++ )
+      double dd = (nodeSize[1].x-nodeSize[0].x)/NPnum[iNode*anPTypes+iType];
+     for( k=0; k < NPmean[iType]; k++ )
       {
         ParT0[cpx].ptype = (char)iType;
         ParT0[cpx].mmode = ParTD[iType].mmode;
@@ -103,13 +105,46 @@ void TParticleArray::ParticleArrayInit()
         ParT0[cpx].ips = ParTD[iType].ips;
         ParT0[cpx].m_v = 0.;
         ParT0[cpx].node = iNode;
-        ParT0[cpx].xyz = setPointInNode(nodeSize);
+        ParT0[cpx].xyz.x = nodeSize[0].x+k*dd;
+//        ParT0[cpx].xyz = setPointInNode(nodeSize);
         ParT1[cpx] = ParT0[cpx];
         cpx++;
       }
     }
   }
 }
+
+// Particle array initialization
+void TParticleArray::setUpCounters()
+{
+  int iNode;
+  ndxCsource = 0;
+  for( iNode=0; iNode < nNodes; iNode++ )
+  {
+    // set up Cauchy source index
+    if( nodes->pNodT1()[iNode]->NodeTypeHY == NBC3source )
+     ndxCsource = iNode;
+  }
+}
+
+void TParticleArray::CopyfromT1toT0()  // Copy resalts of ParT1 step to ParT0
+{
+/*  fstream f_out("nods_particl.out", ios::out|ios::app  );
+  for(int iNode=0; iNode < nNodes; iNode++ )
+  {
+    for(int iType=0; iType < anPTypes; iType++ )
+       f_out << NPnum[iNode*anPTypes+iType] << " ";
+    f_out << " || ";
+  }
+ f_out << endl;
+
+*/
+  for(int k=0; k < anParts; k++ )
+  {
+    ParT0[k] = ParT1[k];
+  }
+}
+
 
 
 LOCATION TParticleArray::setPointInNode( LOCATION nodeSize[2] )
@@ -142,7 +177,7 @@ LOCATION TParticleArray::setPointInNode( LOCATION nodeSize[2] )
 */
   if( nodes->SizeN() > 1 )
   {
-    loc.x = ran2( idum ); //  ran3( idum ); // value from 0. to 1.
+    loc.x = ran3( idum ); //  ran2( idum ); // value from 0. to 1.
     loc.x = (loc.x*(nodeSize[1].x-nodeSize[0].x)+nodeSize[0].x);
   }
   else loc.x = 0;
@@ -168,21 +203,28 @@ LOCATION TParticleArray::setPointInNode( LOCATION nodeSize[2] )
 int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
 {
   DATACH* ch = nodes->pCSD();       // DataCH structure
-  DATABR* dbr = nodes->pNodT0()[ParT0[px].node];  // nodes at current time point
+  int nodInd = ParT1[px].node;
+  double ds = 0.;
 
-  switch( ParT0[px].mmode )
+  ErrorIf( nodInd < 0 , "DisplaceParticle", "Error index" );
+  DATABR* dbr = nodes->pNodT1()[nodInd];  // nodes at current time point
+
+
+  switch( ParT1[px].mmode )
   {
    case IMMOBILE_C_VOLUME:
    case MOBILE_C_VOLUME:
    case MOBILE_VIRTUAL:
    case IMMOBILE_C_MASS:
+   default:
+                         break;
+
    case MOBILE_C_MASS:
+         if( dbr->hDl > 0)
+            ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*dbr->hDl*dbr->vp*dt);
+         ParT1[px].xyz.x += dbr->vp*dt + ds;
                         break;
-  }
-
-  ParT0[px].xyz.x += dbr->vp*dt;
-   ParT0[px].xyz.x += 2.*(ran2( idum )-0.5)*sqrt( 6.*dbr->hDl*dbr->vp*dt);
-
+   }
 
   return 0;
 }
@@ -192,13 +234,16 @@ int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
 // or an index of another node the particle enters
 int TParticleArray::MoveParticleBetweenNodes( int px, double t0, double t1 )
 {
-  int old_node = ParT0[px].node;
-  int new_node = nodes->FindNodeFromLocation( ParT0[px].xyz, old_node );
-  char type_ = ParT0[px].ptype;
+  int old_node = ParT1[px].node;
+  int new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, old_node );
+  char type_ = ParT1[px].ptype;
+  short nodeType = nodes->pNodT1()[old_node]->NodeTypeHY;
 
   if( new_node == -1 )     // location behind region
   {
-     new_node = nodes->FindNodeFromLocation( ParT0[px].xyz  ); // all list
+    if( old_node != 200  )
+     new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, old_node  ); // all list
+   // new_node = nodes->FindNodeFromLocation( ParT1[px].xyz  ); // all list
      // may be reflection (otrazhenie)
      // change xyz
      // may be discuss: sources, links, reflections . . .
@@ -209,15 +254,28 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double t0, double t1 )
 
   // move mass of old_node to new_node (if new_node==-1 mass be lost)
   nodes->MoveParticleMass( old_node, new_node, type_,
-            ParT0[px].tcode, ParT0[px].ips, ParT0[px].m_v );
+            ParT1[px].tcode, ParT1[px].ips, ParT1[px].m_v );
 
   // check minimum/maximum particle number in node
+
+  switch( nodeType )
+  {
+    case normal:
+    case NBC3source:
+                break;
+    case NBC3sink:
+                new_node = ndxCsource;
+//                ParT1[px].xyz = nodes->GetNodeLocation(new_node);
+                ParT1[px].xyz.x -= nodes->GetSize().x;
+                break;
+  }
+
   if( new_node == -1 ||
       NPnum[old_node*anPTypes+type_] < nPmin[type_] ||
       NPnum[new_node*anPTypes+type_] >  nPmax[type_]  )
   {
-    ParT0[px].m_v = 0.;  // left particle in old node
-    ParT0[px].xyz = nodes->GetNodeLocation(old_node);
+    ParT1[px].m_v = 0.;  // left particle in old node
+    ParT1[px].xyz = nodes->GetNodeLocation(old_node);
     // or  alternative
     //  return -2;   ParticleArrayInit - reset all particles
   }
@@ -225,7 +283,7 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double t0, double t1 )
   {
     NPnum[new_node*anPTypes+type_]++;
     NPnum[old_node*anPTypes+type_]--;
-    ParT0[px].node = new_node;
+    ParT1[px].node = new_node;
     // may be statistic
   }
 
@@ -251,7 +309,7 @@ int TParticleArray::RandomWalkIteration( int Mode, double t0, double t1 )
        mass[iNode*anPTypes+iType] = m_/ NPnum[iNode*anPTypes+iType];
     }
   for( cpx=0; cpx < anParts; cpx++ )
-    ParT0[cpx].m_v = mass[ParT0[cpx].node*anPTypes+ParT0[cpx].ptype];
+    ParT1[cpx].m_v = mass[ParT1[cpx].node*anPTypes+ParT1[cpx].ptype];
   delete[] mass;
 
 // new  particle position xyz
@@ -284,9 +342,9 @@ int TParticleArray::GEMCOTAC( int Mode, double t0_, double t1_ )
 {
   int iRet;
 
-  dt = (t1-t0);
   t0 = t0_;
   t1 = t1_;
+  dt = (t1-t0);
   switch( Mode )
   {
    case 'W':  iRet = RandomWalkIteration( Mode, t0, t1 );

@@ -28,7 +28,7 @@
 
 // ===========================================================
 
-// Copying nodes from C0 to C1 row
+// Copying nodes from C1 to C0 row
 void  TGEM2MT::copyNodeArrays()
 {
   //  Getting direct access to TNodeArray class data
@@ -42,12 +42,12 @@ void  TGEM2MT::copyNodeArrays()
      bool NeedCopy = false;
      for(int ic=0; ic < CH->nICb-1; ic++) // do not check charge
      {
-        dc = C1[ii]->bIC[ic] - C0[ii]->bIC[ic];
-        if( fabs( dc ) > min( mtp->cdv, (C0[ii]->bIC[ic] * 1e-3)))
+        dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
+        if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3)))
                   NeedCopy = true;
      }
      if( NeedCopy )
-       na->CopyNodeFromTo( ii, mtp->nC, C0, C1 );
+       na->CopyNodeFromTo( ii, mtp->nC, C1, C0 );
    }  // ii    end of node iteration loop
 }
 
@@ -86,7 +86,7 @@ void  TGEM2MT::NewNodeArray()
      na->packDataBr();
   //
    for( int jj=0; jj<mtp->nC; jj ++)
-    if( mtp->DiCp[jj] == mtp->kv )
+    if( mtp->DiCp[jj][0] == mtp->kv )
      {    na->setNodeHandle( jj );
           na->MoveWorkNodeToArray( jj, mtp->nC,  na->pNodT0());
           na->CopyWorkNodeFromArray( jj, mtp->nC,  na->pNodT0() );
@@ -103,15 +103,18 @@ void  TGEM2MT::NewNodeArray()
       Error( "NewNodeArray() error:" ," Undefined boundary condition!" );
 
  // put HydP
- if( mtp->HydP )
   for( int jj=0; jj<mtp->nC; jj ++)
-   {    C0[jj]->Vt = mtp->HydP[jj][0];
+   {
+        C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
+      if( mtp->HydP )
+      { C0[jj]->Vt = mtp->HydP[jj][0];
         C0[jj]->vp = mtp->HydP[jj][1];
         C0[jj]->eps = mtp->HydP[jj][2];
         C0[jj]->Km = mtp->HydP[jj][3];
         C0[jj]->al = mtp->HydP[jj][4];
         C0[jj]->hDl = mtp->HydP[jj][5];
         C0[jj]->nto = mtp->HydP[jj][6];
+      }
    }
 
   for (int ii=0; ii<mtp->nC; ii++)    // node iteration
@@ -145,20 +148,20 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
      Mode = mode;  // debugging  NEED_GEM_PIA;
      NeedGEM = false;     // debugging
 
-     C0[ii]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
+     C1[ii]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
 
      // Here we compare this node for current time and for previous time
       for( ic=0; ic < CH->nICb-1; ic++)    // we do not check charge here!
        {     // It has to be checked on minimal allowed c0 value
-         if( C0[ii]->bIC[ic] < mtp->cez )
+         if( C1[ii]->bIC[ic] < mtp->cez )
          { // to stay on safe side
-            C0[ii]->bIC[ic] = mtp->cez;
+            C1[ii]->bIC[ic] = mtp->cez;
          }
-         dc = C1[ii]->bIC[ic] - C0[ii]->bIC[ic];
+         dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
 
-        if( fabs( dc ) > min( mtp->cdv, (C0[ii]->bIC[ic] * 1e-3 )))
+        if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3 )))
             NeedGEM = true;  // we need to recalculate equilibrium in this node
-        if( fabs( dc ) > min( mtp->cdv*100., C0[ii]->bIC[ic] * 1e-2 ))
+        if( fabs( dc ) > min( mtp->cdv*100., C1[ii]->bIC[ic] * 1e-2 ))
                   Mode = NEED_GEM_AIA;  // we even need to do it in auto Simplex mode
 // this has to be done in an intelligent way as a separate subroutine
        }
@@ -231,11 +234,12 @@ void TGEM2MT::MassTransAdvecStart()
 void TGEM2MT::MassTransParticleStart()
 {
     mtp->dx = mtp->cLen/mtp->nC;
-    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1/mtp->tf;
+    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1./mtp->tf;
     mtp->oTau = 0;
     mtp->cTau = mtp->Tau[START_];
     // mtp->cTau = 0;
     mtp->ct = 0;
+    pa->setUpCounters();
 }
 
 
@@ -257,7 +261,7 @@ void TGEM2MT::MassTransAdvecStep()
 
  //  Getting direct access to TNodeArray class data
  DATACH* CH = na->pCSD();       // DataCH structure
- DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
+ // DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
  DATABRPTR* C1 = na->pNodT1();  // nodes at previous time point
 
    mtp->ct += 1;
@@ -271,28 +275,28 @@ void TGEM2MT::MassTransAdvecStep()
      {                          // Charge (Zz) is not checked here!
        // Chemical compositions may become inconsistent with time
        // It has to be checked on minimal allowed c0 value
-        c0  = C0[ii]->bPS[0*CH->nICb + ic];
-        c1  = C0[ii+1]->bPS[0*CH->nICb + ic];
-        cm1 = C0[ii-1]->bPS[0*CH->nICb + ic];
-        cm2 = C0[ii-2]->bPS[0*CH->nICb + ic];
+        c0  = C1[ii]->bPS[0*CH->nICb + ic];
+        c1  = C1[ii+1]->bPS[0*CH->nICb + ic];
+        cm1 = C1[ii-1]->bPS[0*CH->nICb + ic];
+        cm2 = C1[ii-2]->bPS[0*CH->nICb + ic];
 
         c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
         cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
         dc = cr*(c12-cm12);
 
 // Checking the difference to assign
-// if( fabs(dc) > min( cdv, C0[i]->bIC[ic] * 1e-4 ))
-       C0[ii]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
-/*if( dc >= C0[i]->bIC[ic] )
+// if( fabs(dc) > min( cdv, C1[i]->bIC[ic] * 1e-4 ))
+       C1[ii]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
+/*if( dc >= C1[i]->bIC[ic] )
  {
     fprintf( diffile, "\nError in Mass Transport calculation part :" );
     fprintf( diffile, " Node= %-8d  Step= %-8d  IC= %s ", i, t, CH->ICNL[ic] );
     fprintf(diffile, "\n Attempt to set new amount to %lg (old: %lg  Diff: = %lg ) ",
-         C0[i]->bIC[ic]-dc, C0[i]->bIC[ic], dc);
+         C1[i]->bIC[ic]-dc, C1[i]->bIC[ic], dc);
     BC_error = true;
  } */
-       if( fabs(dc) > min( mtp->cdv, C0[ii]->bIC[ic] * 1e-3 ))
-              C0[ii]->bIC[ic] -= dc; // correction for GEM calcuation
+       if( fabs(dc) > min( mtp->cdv, C1[ii]->bIC[ic] * 1e-3 ))
+              C1[ii]->bIC[ic] -= dc; // correction for GEM calcuation
    } // loop over IC
   } // end of loop over nodes
 }
@@ -303,6 +307,7 @@ bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;
   bool iRet = false;
+  int nStart = 0, nEnd = mtp->nC;
 
 FILE* logfile;
 FILE* ph_file;
@@ -331,6 +336,7 @@ t_start = clock();
    {  switch( mtp->PsMode )
      {
        case GMT_MODE_A: MassTransAdvecStart();
+                        nStart = 1; nEnd = mtp->nC-1;
                  break;
        case GMT_MODE_V:
        case GMT_MODE_W: MassTransParticleStart();
@@ -339,7 +345,7 @@ t_start = clock();
                break;
      }
 
-    CalcIPM( mode, 1, mtp->nC-1, diffile );
+    CalcIPM( mode, nStart, nEnd, diffile );
    }
    mtp->iStat = AS_READY;
 
@@ -386,7 +392,7 @@ outp_time += ( t_out2 - t_out);
 
        //   Here we call a loop on GEM calculations over nodes
        //   parallelization should affect this loop only
-       CalcIPM( mode, 1, mtp->nC-1, diffile );
+       CalcIPM( mode,nStart, nEnd, diffile );
 
 if( mtp->PvMO != S_OFF )
 {
@@ -398,16 +404,18 @@ outp_time += ( t_out2 -  t_out);
 }
           // Here one has to compare old and new equilibrium phase assemblage
           // and pH/pe in all nodes and decide if the time step was Ok or it
-          // should be decreased. If so then the nodes from C1 should be
-          // copied to C0 (to be implemented)
+          // should be decreased. If so then the nodes from C0 should be
+          // copied to C1 (to be implemented)
 
-          // time step accepted - Copying nodes from C0 to C1 row
+          // time step accepted - Copying nodes from C1 to C0 row
           pVisor->Update();
           CalcGraph();
           // copy node array for T0 into node array for T1
           copyNodeArrays();
           // copy particle array ?
-
+          if( mtp->PsMode == GMT_MODE_V ||
+                mtp->PsMode == GMT_MODE_W )
+            pa->CopyfromT1toT0();
 
 if( mtp->PvMO != S_OFF )
 {

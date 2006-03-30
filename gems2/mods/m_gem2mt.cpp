@@ -192,7 +192,7 @@ aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f22 */
     aObj[ o_mtsdval].SetPtr( mtp->sdval);
     aObj[ o_mtsdval].SetDim( mtp->Nsd, 1 );
     aObj[ o_mtdicp].SetPtr( mtp->DiCp);
-    aObj[ o_mtdicp].SetDim( mtp->nC, 1 );
+    aObj[ o_mtdicp].SetDim( mtp->nC, 2 );
     aObj[ o_mtfdli].SetPtr( mtp->FDLi);
     aObj[ o_mtfdli].SetDim( mtp->nFD, 2 );
     aObj[ o_mtpi].SetPtr( mtp->Pi);
@@ -317,7 +317,7 @@ void TGEM2MT::dyn_set(int q)
     mtp->gExpr = (char *)aObj[o_mtgexpr].GetPtr();
     mtp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].GetPtr();
     mtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_mtsdval].GetPtr();
-    mtp->DiCp = (short *)aObj[ o_mtdicp].GetPtr();
+    mtp->DiCp = (short (*)[2])aObj[ o_mtdicp].GetPtr();
     mtp->FDLi = (short (*)[2])aObj[ o_mtfdli].GetPtr();
     mtp->Pi = (float *)aObj[ o_mtpi].GetPtr();
     mtp->Ti = (float *)aObj[ o_mtti].GetPtr();
@@ -388,7 +388,7 @@ void TGEM2MT::dyn_kill(int q)
     mtp->gExpr = (char *)aObj[o_mtgexpr].Free();
     mtp->sdref = (char (*)[V_SD_RKLEN])aObj[ o_mtsdref].Free();
     mtp->sdval = (char (*)[V_SD_VALEN])aObj[ o_mtsdval].Free();
-    mtp->DiCp = (short *)aObj[ o_mtdicp].Free();
+    mtp->DiCp = (short (*)[2])aObj[ o_mtdicp].Free();
     mtp->FDLi = (short (*)[2])aObj[ o_mtfdli].Free();
     mtp->Pi = (float *)aObj[ o_mtpi].Free();
     mtp->Ti = (float *)aObj[ o_mtti].Free();
@@ -453,7 +453,7 @@ void TGEM2MT::dyn_new(int q)
   ErrorIf( mtp!=&mt[q], GetName(),
       "E04DTrem: Illegal access to mt in dyn_new.");
 
- mtp->DiCp = (short *)aObj[ o_mtdicp].Alloc( mtp->nC, 1, I_);
+ mtp->DiCp = (short (*)[2])aObj[ o_mtdicp].Alloc( mtp->nC, 2, I_);
 //added 13/12/2005
  mtp->xIC = (short *)aObj[o_mt_xic].Alloc( mtp->nICb, 1, I_);
  mtp->xDC = (short *)aObj[o_mt_xdc].Alloc( mtp->nDCb, 1, I_);

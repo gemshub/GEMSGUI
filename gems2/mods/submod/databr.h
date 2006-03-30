@@ -134,10 +134,14 @@ typedef enum {  // NodeStatus codes FluidMassTransport
 
 typedef enum {  // NodeType codes Hydraulic/masstransport
  normal       = 0, // normal node
- border1      = 1, // 1st order node boundary condition (NBC)
- border2      = 2, // second order NBC
- border3      = 3, // third order NBC
- initital     = 4  // initial conditions (e.g. input time depended functions)
+// node boundary conditions
+  NBC1source   = 1, // Diriclet source ( constant concentration)
+  NBC1sink    = -1, // Diriclet sink
+  NBC2source   = 2, // Neumann source ( constant gradient )
+  NBC2sink    = -2, // Neumann sink
+  NBC3source   = 3, // Cauchy source ( constant flux)
+  NBC3sink    = -3, // Cauchy sink
+  INIT_FUNK     = 4  // initial conditions (e.g. input time depended functions)
 } NODETYPE;
 
 
