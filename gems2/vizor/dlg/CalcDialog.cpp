@@ -37,16 +37,17 @@ CalcDialog::CalcDialog(QWidget* parent, TObject& obj,
 {
     pObjectBox->setTitle(obj.GetKeywd());
 
-    // set selection
+   pN1->setRange( 0, obj.GetN()-1 );
+   pN2->setRange( 0, obj.GetN()-1 );
+   pM1->setRange( 0, obj.GetM()-1 );
+   pM2->setRange( 0, obj.GetM()-1 );
+
+   // set selection
     pN1->setValue( selection.N1 );
     pN2->setValue( selection.N2 );
     pM1->setValue( selection.M1 );
     pM2->setValue( selection.M2 );
 
-    pN1->setRange( 0, obj.GetN()-1 );
-    pN2->setRange( 0, obj.GetN()-1 );
-    pM1->setRange( 0, obj.GetM()-1 );
-    pM2->setRange( 0, obj.GetM()-1 );
 }
 
 
