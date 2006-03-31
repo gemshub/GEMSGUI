@@ -96,7 +96,7 @@ void TParticleArray::ParticleArrayInit()
     for( iType=0; iType < anPTypes; iType++ )
     {
       NPnum[iNode*anPTypes+iType] = NPmean[iType];
-      double dd = (nodeSize[1].x-nodeSize[0].x)/NPnum[iNode*anPTypes+iType];
+//      double dd = (nodeSize[1].x-nodeSize[0].x)/NPnum[iNode*anPTypes+iType];
      for( k=0; k < NPmean[iType]; k++ )
       {
         ParT0[cpx].ptype = (char)iType;
@@ -105,8 +105,8 @@ void TParticleArray::ParticleArrayInit()
         ParT0[cpx].ips = ParTD[iType].ips;
         ParT0[cpx].m_v = 0.;
         ParT0[cpx].node = iNode;
-        ParT0[cpx].xyz.x = nodeSize[0].x+k*dd;
-//        ParT0[cpx].xyz = setPointInNode(nodeSize);
+//        ParT0[cpx].xyz.x = nodeSize[0].x+k*dd;
+        ParT0[cpx].xyz = setPointInNode(nodeSize);
         ParT1[cpx] = ParT0[cpx];
         cpx++;
       }
@@ -274,6 +274,13 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double t0, double t1 )
       NPnum[old_node*anPTypes+type_] < nPmin[type_] ||
       NPnum[new_node*anPTypes+type_] >  nPmax[type_]  )
   {
+    vstr buff(300);
+    
+    sprintf( buff, " pxOld=%d npOld=%d npMin=%d \npxNew=%d npNew=%d npMax=%d",
+      old_node, NPnum[old_node*anPTypes+type_], nPmin[type_],
+      new_node, NPnum[new_node*anPTypes+type_],  nPmax[type_]
+      );
+    Error("W003RWM",buff.p);
     ParT1[px].m_v = 0.;  // left particle in old node
     ParT1[px].xyz = nodes->GetNodeLocation(old_node);
     // or  alternative

@@ -3,7 +3,7 @@
 # compile variables
 
 NAME		= gems
-VERSION		= 2.1.0
+VERSION		= 2.1.1
 
 ifeq ("x$(QTDIR)","x")
 QTDIR		= /usr/lib/qt3
@@ -49,7 +49,8 @@ rpm:	check_shared
 	su -c "	mv /tmp/$(NAME)-$(VERSION).tar.bz2 $(RPMDIR)/SOURCES; \
 		mv /tmp/gems2.spec $(RPMDIR)/SPECS; \
 		cd $(RPMDIR)/SPECS; \
-		rpmbuild -bb gems2.spec"
+		rpmbuild -bb  gems2.spec"
+#		rpmbuild -bb --target i386 gems2.spec"
 	
 ifeq ("$(shell uname)", "Darwin")
 

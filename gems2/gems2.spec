@@ -1,6 +1,6 @@
 %define	name	gems
-%define	version	2.1.0
-%define	release	rc0
+%define	version	2.1.1
+%define	release	rc1
 %define install_dir /usr
 %define shared_dir %{install_dir}/share
 %define shared_src_dir shared
