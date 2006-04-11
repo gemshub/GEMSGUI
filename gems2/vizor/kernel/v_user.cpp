@@ -171,7 +171,7 @@ StripLine(gstring& line)
     //    line.erase(0,ii);
         if( ii>=line.length() )//line.empty() )
           return;
-        int jj = line.length()-1;  
+        int jj = line.length()-1;
         for( ; jj>=0 && IsSpace(line[jj]); jj--);
         line = line.substr(ii, jj-ii+1);
     */
@@ -285,7 +285,7 @@ void
           k++;
       }
       else
-       Error( from_templ.c_str(), "Illegal simbol in template ");
+       Error( from_templ.c_str(), "Error (1): Invalid character in template ");
      ii++;
    }
    data_str = gstring( data_str, k );
@@ -307,8 +307,8 @@ void
    {  inv_case = true;
       to_templ = "";
    }
-
-   size_t jj, ik;
+//   size_t jj, ik;
+   int jj, ik;      // Bugfix 11.04.2006
     jj = from_templ.length()-1;
     ik = data_str.length()-1;
     k =  data_str.length();
@@ -324,7 +324,7 @@ void
           k--;
       }
       else
-       Error( from_templ.c_str(), "Illegal simbol in template ");
+       Error( from_templ.c_str(), "Error (2): Invalid character in template ");
      ik--;
      jj--;
    }
