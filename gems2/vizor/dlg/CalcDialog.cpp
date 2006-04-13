@@ -100,7 +100,8 @@ CalcDialog::fun(double val)
     int ii;
     for( ii=1; ii<15; ii++ )
     {
-        QPushButton* p = dynamic_cast<QPushButton*>(pButtonBox->find(ii));
+//      QPushButton* p = dynamic_cast<QPushButton*>(pButtonBox->find(ii));
+      QPushButton* p = (QPushButton*)(pButtonBox->find(ii));
         if( p->isOn() )
             goto FOUND;
     }

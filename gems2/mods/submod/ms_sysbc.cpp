@@ -3,7 +3,7 @@
 //
 // Implementation of TSyst class, calck  bulk chemical composition functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva 
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -389,7 +389,7 @@ void TSyst::make_syst_sizes()
             if( sy.Acl[i] == S_ON ) N++;
         sy.La = N;
         if( sy.PbPH == S_OFF ) // Debugging 22.11.99
-        if( !N )   // Doubtful 
+        if( !N )   // Doubtful
            ErrorIf( !N, GetName(), "Error in quantity of Compos." );
     }
 
@@ -469,13 +469,13 @@ void TSyst::systbc_calc( int mode )
     { //  calc bulk chemical composition from IComp *
         for( i=0; i<mup->N; i++ )
         {
-            if( sy.Icl[i] == S_OFF || !sy.BI[i] || IsFloatEmpty(sy.BI[i] ))
+            if( sy.Icl[i] == S_OFF || !sy.BI[i] || IsDoubleEmpty(sy.BI[i] ))
                 continue;
             float ICmv = mup->BC[i];
             Xincr = aCMP->Reduce_Conc( sy.BIun[i], sy.BI[i], ICmv, 1.0, sy.R1,
                                        sy.Msys, sy.Mwat, sy.Vaq, sy.Maq, sy.Vsys );
             sy.B[i] += Xincr;
-            MsysC += Xincr*mup->BC[i];
+            MsysC += Xincr*(double)(mup->BC[i]);
             R1C += Xincr;
         } // cycle i *
         sy.PbIC = S_ON;
@@ -508,7 +508,7 @@ void TSyst::systbc_calc( int mode )
                         if( sy.Icl[i] == S_OFF )  //we have switch off IC in formule DC
                             goto NEXT_DC;
                         A[i] += aFo.GetSC(ii);
-                        DCmw += A[i]*mup->BC[i];
+                        DCmw += (double)(A[i]*mup->BC[i]);
                         break;
                     }
             } // ii
@@ -519,8 +519,8 @@ void TSyst::systbc_calc( int mode )
             for( i=0; i<mup->N; i++ )
                 if( A[i] )
                 {
-                    sy.B[i] += Xincr*A[i];
-                    R1C += Xincr*A[i];
+                    sy.B[i] += Xincr*(double)(A[i]);
+                    R1C += Xincr*(double)(A[i]);
                 }
             MsysC += Xincr*DCmw;
 NEXT_DC:
@@ -553,8 +553,8 @@ NEXT_DC:
                             //Incomplete++;
                             break;
                         }
-                        A[i] = aCMP->bcp->C[ii];
-                        ACmw += A[i]*mup->BC[i];
+                        A[i] = (float)aCMP->bcp->C[ii];
+                        ACmw += (double)(A[i]*mup->BC[i]);
                         break;
                     }
             } // ii
@@ -564,8 +564,8 @@ NEXT_DC:
             for( i=0; i<mup->N; i++ )
                 if( A[i] )
                 {
-                    sy.B[i] += Xincr*A[i];
-                    R1C += Xincr*A[i];
+                    sy.B[i] += Xincr*(double)(A[i]);
+                    R1C += Xincr*(double)(A[i]);
                 }
             MsysC += Xincr*ACmw;
         } //  j
@@ -637,7 +637,7 @@ NEXT_DC:
     {
         if( sy.Icl[i] == S_OFF )
             continue;
-        sy.MBX += sy.B[i] *  mup->BC[i];
+        sy.MBX += (float)sy.B[i] * mup->BC[i];
     }
     sy.MBX /= 1000.;
     /*  if( Incomplete *&& !( pe && (pe[0].Istat == P_EXECUTE ||
@@ -782,6 +782,7 @@ NEXT:
             *MsysC += Xincr*Mass;
         if( sy.Maq > 1e-7 )
             *MaqC += Xincr*Mass;
+      for( i=0; i<mup->N; i++ ) // added Sveta 13/04/2006
         if( sy.R1 > 1e-7 )
             *R1C += Xincr*B[i];
 
@@ -798,14 +799,14 @@ void TSyst::stbal( int N, int L, float *Smatr, double *DCstc,
     double DCv;
 
     ErrorIf( !Smatr||!DCstc||!ICm, GetName(), "No memo in Smatr, DCstc orICm" );
-    memset( ICm, 0, N*sizeof( float ));
+    memset( ICm, 0, N*sizeof( double )); // changed Sveta 13/04/2006
     for( j=0; j<L; j++ )
     {
         DCv = DCstc[j];
         if( fabs( DCv ) < 1e-19 )
             continue;
         for( i=0; i<N; i++ )
-            ICm[i] += *(Smatr+i+N*j) * DCv;
+            ICm[i] += (double)(*(Smatr+i+N*j)) * DCv;
     }
 }
 
@@ -818,7 +819,7 @@ double TSyst::MolWeight( int N, float *ICaw, float *Smline )
 
     for( i=0; i<N; i++ )
         if( ICaw[i] && Smline[i] )
-            MW += ICaw[i] * Smline[i];
+            MW += (double)(ICaw[i]) * (double)(Smline[i]);
 
     return( MW );
 }
