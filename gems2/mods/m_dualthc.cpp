@@ -575,8 +575,8 @@ TDualTh::Bn_Calc()
 int
 TDualTh::CalcMoleFractNS()  // Use SVD method
 {
- if( aObj[o_dtchi].IsEmpty( 0, 0 ))
- {
+// if( aObj[o_dtchi].IsEmpty( 0, 0 ))   Disabled by KD 16.04.2006 
+// {
   short ii, jj;
   double *bb = new double[dtp->Nb];
   for( ii=0; ii< dtp->nQ; ii++ )
@@ -619,7 +619,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
         dtp->chi[ii*dtp->nM+jj] = ROUND_EXP( dtp->chi[ii*dtp->nM+jj] /cnt, 6);
   }
   delete[] bb;
- }
+// }
  return 1;
 
 }
@@ -697,7 +697,7 @@ TDualTh::RegressionLSM( int Mode )  // task or minimization
  if( dtp->PsLSF == DT_LSF_S || dtp->PsLSF == DT_LSF_B )
  {
      TSVDcalc task_svd( dtp->par, &data);
-     task_svd.CalcMin( dtp->sdpar ); 
+     task_svd.CalcMin( dtp->sdpar );
  }
 
  // storing the results
@@ -716,7 +716,7 @@ TDualTh::Calc_muo_n( char eState )
 { // calculate muo_n DualTh
  short ii, j;
  double muo, mua, lnGam/*=1.*/, Dsur, RT/* = 2479.*/, P/*=1.*/, lnFmol=4.016535;
-
+ double Chi, lnChi;
 // dt_initiate( false );
   Dsur = dtp->WmCb - 1.;
   if( Dsur < 0. )
@@ -732,7 +732,26 @@ TDualTh::Calc_muo_n( char eState )
        dtp->jm = j;
        lnGam = log( dtp->gam_n[ii*dtp->nM+j] );
        if( dtp->PsMode == DT_MODE_A)
-           lnGam = 0;
+           lnGam = 0.0;
+
+       Chi = dtp->chi[ii*dtp->nM+j];  // Check of mole fraction and lnChi
+       if( Chi < 1e-20 )
+       {
+          lnChi = log( 1e-20 );
+          Chi = 1e-20;
+          gstring str = "Zero or negative mole fraction chi";
+            str += " encountered in the experiment ";
+            str +=  dtp->nam_b[ii];
+            str += ".\n Mole fraction is set to chi=1e-20 in ";
+            str += "calculation of mu0 for the end member ";
+            str += dtp->nam_n[j];
+            str += ".\n Please, check end-member stoichiometries.";
+            str += ".\n Click Ok to continue...";
+            vfMessage( 0,  "W04SLrun: CalcMuoNS", str.c_str() );
+        }
+       else
+          lnChi = log(dtp->chi[ii*dtp->nM+j]);
+
        if( eState == DT_STATE_S )
        {
         switch(dtp->typ_n[j])  // Stoich. saturation
@@ -746,12 +765,13 @@ TDualTh::Calc_muo_n( char eState )
           case DC_SOL_MAJOR: // Check this calculation !!!!  Fixed 23.10.05 KD
               muo = dtp->gmx_n[ii][4] -dtp->gmx_n[ii][2]
                    -dtp->gmx_n[ii][4] +dtp->mu_o[ii*dtp->nM+j];
-              muo /= dtp->chi[ii*dtp->nM+j];
+              muo /= Chi;
               break;
         }
         mua = muo + RT * lnGam;  // to be improved
        }
-       else  // Equilibrium
+       else
+       {     // Equilibrium
         switch(dtp->typ_n[j])
         {
           case DC_SCP_CONDEN:
@@ -760,21 +780,19 @@ TDualTh::Calc_muo_n( char eState )
           case DC_SOL_IDEAL:
           case DC_SOL_MINOR:
           case DC_SOL_MAJOR:
-              muo = dtp->mu_b[ii*dtp->nM+j]
-                    - RT*( lnGam + log(dtp->chi[ii*dtp->nM+j]));
+              muo = dtp->mu_b[ii*dtp->nM+j] - RT*( lnGam + lnChi );
               mua = muo + RT*lnGam;
               break;
           case DC_AQ_ELECTRON:
           case DC_AQ_PROTON:
           case DC_AQ_SPECIES:
-              muo = dtp->mu_b[ii*dtp->nM+j] + RT * ( Dsur + lnFmol - lnGam
-                    - log(dtp->chi[ii*dtp->nM+j]));
+              muo = dtp->mu_b[ii*dtp->nM+j] + RT*( Dsur + lnFmol - lnGam - lnChi );
               mua = muo + RT*lnGam;
               break;
           case DC_AQ_SOLVENT:
           case DC_AQ_SOLVCOM:
               muo = dtp->mu_b[ii*dtp->nM+j] + RT * ( Dsur - 1. + 1. / ( 1.+Dsur )
-                    - lnGam - log(dtp->chi[ii*dtp->nM+j]));
+                    - lnGam - lnChi);
               mua = muo;
               break;
           case DC_GAS_COMP:
@@ -782,8 +800,7 @@ TDualTh::Calc_muo_n( char eState )
           case DC_GAS_CO2:   /* gases */
           case DC_GAS_H2:
           case DC_GAS_N2:
-              muo = dtp->mu_b[ii*dtp->nM+j]
-                    - RT*(lnGam + log(dtp->chi[ii*dtp->nM+j])  - log(P) );
+              muo = dtp->mu_b[ii*dtp->nM+j] - RT*(lnGam + lnChi - log(P) );
               mua = muo + RT*lnGam;
               break;
 /*
@@ -821,6 +838,7 @@ TDualTh::Calc_muo_n( char eState )
          default:
             break; /* error in DC class code */
         }
+       }
        dtp->mu_a[ii*dtp->nM+j] = mua;    // dtp->mu_o[ii*dtp->nM+j] = muo;
        dtp->mu_o[ii*dtp->nM+j] = muo;
     }
