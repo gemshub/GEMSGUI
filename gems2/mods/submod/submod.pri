@@ -5,6 +5,7 @@
                      $$SUBMOD_H/datach.h  \
                      $$SUBMOD_H/nodearray.h  \
                      $$SUBMOD_H/particlearray.h  \
+                     $$SUBMOD_H/num_methods.h  \
                      $$SUBMOD_H/ms_calc.h \
                      $$SUBMOD_H/ms_mtparm.h \
 		     $$SUBMOD_H/ms_multi.h \
@@ -28,4 +29,5 @@
                       $$SUBMOD_CPP/ms_multi_file.cpp  \
                       $$SUBMOD_CPP/nodearray.cpp  \
                       $$SUBMOD_CPP/nodearray2.cpp \
+                      $$SUBMOD_CPP/num_methods.cpp  \
                       $$SUBMOD_CPP/particlearray.cpp

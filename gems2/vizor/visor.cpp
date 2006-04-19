@@ -323,7 +323,7 @@ TVisor::load()
 #endif
 
     for (uint ii = 0; ii < aMod.GetCount(); ii++)
-        aWinInfo.Add(new CWinInfo(aMod[ii], cnf));
+     aWinInfo.Add(new CWinInfo(aMod[ii], cnf));
 
     toDAT();
 

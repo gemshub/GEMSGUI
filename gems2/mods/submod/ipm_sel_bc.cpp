@@ -34,15 +34,6 @@
 
 #endif
 
-/*double log( double x )
-{
-  if( x <= 0)
-  { std::cout << " log X error " << x << endl;
-    x = 0;
-  }
-  return log(x);
-}
-*/
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Advanced solver of a system of linear equations
 // using Jordan method
@@ -124,7 +115,7 @@ KN:
 #undef a
 
 #ifndef IPMGEMPLUGIN
-#include "s_lsm.h"
+#include "num_methods.h"
 #undef a
 #endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -134,7 +125,7 @@ KN:
 // R - input matrix of coeffs N(N+1);
 //     Last column is a vector of independent variables.
 // X - solution vector (N).
-// B - work matrix of  N(N+1)/2 dimensions
+// B - work matrix of  N(N+1) dimensions
 // Return values: 0  - solved OK;
 //                1  - no solution, degenerated or inconsistent system;
 #define  r(i,j) (*(R+(j)+(i)*N1))
@@ -142,10 +133,6 @@ KN:
 int TProfil::SquareRoots( int N, double *R, double *X, double *B )
 {
 
-#ifndef IPMGEMPLUGIN
-   TLMmin task;  // Added Sveta 23/03/06 for calc euclidian norm without
-                 // overflow and underflow in calculations
-#endif
 //   fstream f_log("SquareRoots.txt", ios::out|ios::app );
 
     int I,J,K,P,Q,N1, iRet=0;
@@ -191,7 +178,7 @@ int TProfil::SquareRoots( int N, double *R, double *X, double *B )
 //f_log << "G = " << G << " F = " << F << " P=" << P << endl;
         }
 #ifndef IPMGEMPLUGIN
-        E = task.Enorm( J, gg );
+        E = enorm( J, gg );
         F = ( F - (E*E));
 #endif
         if( F <=  pmp->lowPosNum /* 2.22E-16 DBL_EPSILON*/ )
@@ -548,12 +535,14 @@ int TProfil::EnterFeasibleDomain( )
 
 
         /* Solving system of linear equations */
-       sRet = SquareRoots( N, R, pmp->U, R1 );
+      // sRet = SquareRoots( N, R, pmp->U, R1 );
+      sRet = CholeskyDecomposition( N, R, pmp->U, R1 );
 
        if( sRet == 1 )
        {  R1=pmp->R1;
           memcpy( R1, R, sizeof( double )*N*N1 );
-          sRet = Gordan( N, pa.p.DG, R1, pmp->U );
+//          sRet = Gordan( N, pa.p.DG, R1, pmp->U );
+          sRet = LUDecomposition( N, R1, pmp->U );
         }
         if( sRet == 1 )  // error no solution
           break;
@@ -803,7 +792,8 @@ int TProfil::InteriorPointsIteration( )
     }
 
     // Solving matrix R of linear equations
-    sRet = SquareRoots( N, R, pmp->U, R1 );
+    // sRet = SquareRoots( N, R, pmp->U, R1 );
+    sRet = CholeskyDecomposition( N, R, pmp->U, R1 );
 
 //TRY_GORDAN:
 /*    if( sRet == 1 )
@@ -811,6 +801,7 @@ int TProfil::InteriorPointsIteration( )
         R1 = pmp->R1;
         memcpy( R1, R, sizeof(double)*N*N1 );
         sRet = Gordan( N, pa.p.DG, R1, pmp->U );
+        sRet = LUDecomposition( N, R1, pmp->U );
     }
 */  // 05/12/2005 DK
 

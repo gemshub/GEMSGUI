@@ -209,6 +209,8 @@ gems2/mods/submod/ms_system.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/nodearray.cpp -text
 gems2/mods/submod/nodearray.h -text
 gems2/mods/submod/nodearray2.cpp -text
+gems2/mods/submod/num_methods.cpp -text
+gems2/mods/submod/num_methods.h -text
 gems2/mods/submod/particlearray.cpp -text
 gems2/mods/submod/particlearray.h -text
 gems2/mods/submod/stepwise.h svn_keywords=Author+Date+Id+Revision

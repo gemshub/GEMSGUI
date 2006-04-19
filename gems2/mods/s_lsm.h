@@ -41,6 +41,8 @@
  #include "v_ipnc.h"
 #endif
 
+#include "num_methods.h"
+
 class TLMDataType  // data for the task
 // fitting data, function and evaluete function
 {
@@ -215,7 +217,9 @@ void free_arrays();
 
 // compact high-level interface:
 void lm_minimize ( double* par );
-double lm_enorm( int, double* );
+double lm_enorm( int n, double* x)
+{  return enorm( n, x ); }
+
 
 // low-level interface for full control:
 void lm_lmdif( int m, int n, double* x, double* fvec, double ftol, double xtol,
@@ -243,8 +247,8 @@ public:
    ~TLMmin();
 
    void Calc( double *sdpar, double *par_ap=0, double*d_par=0, short *d_type=0 );
-   double Enorm( int n, double* x)
-   {  return lm_enorm( n, x ); }
+//   double Enorm( int n, double* x)
+//   {  return lm_enorm( n, x ); }
 };
 
 typedef double fd_type;

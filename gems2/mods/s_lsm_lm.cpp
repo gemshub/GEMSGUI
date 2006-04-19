@@ -256,6 +256,7 @@ void TLMmin::lm_minimize( double* sdpar )
 // #define LM_MACHEP 1.2e-16
 // #define LM_DWARF 1.0e-38
 
+/*
 // the squares of the following constants shall not under/overflow:
 // these values seem good for an x86:
 #define LM_SQRT_DWARF 1.e-160
@@ -263,7 +264,7 @@ void TLMmin::lm_minimize( double* sdpar )
 // the following values should work on any machine:
 // #define LM_SQRT_DWARF 3.834e-20
 // #define LM_SQRT_GIANT 1.304e19
-
+*/
 #define MIN(a,b) (((a)<=(b)) ? (a) : (b))
 #define MAX(a,b) (((a)>=(b)) ? (a) : (b))
 #define SQR(x)   (x)*(x)
@@ -1342,10 +1343,10 @@ void TLMmin::lm_qrsolv(int n, double* r, int ldr, int* ipvt, double* diag,
 	x[ ipvt[j] ] = wa[j];
 }
 
-
+/*
 double TLMmin::lm_enorm( int n, double *x )
 {
-/*     given an n-vector x, this function calculates the
+*     given an n-vector x, this function calculates the
  *     euclidean norm of x.
  *
  *     the euclidean norm is computed by accumulating the sum of
@@ -1364,7 +1365,7 @@ double TLMmin::lm_enorm( int n, double *x )
  *	n is a positive integer input variable.
  *
  *	x is an input array of length n.
- */
+ *
     int i;
     double agiant, s1, s2, s3, xabs, x1max, x3max, temp;
 
@@ -1434,7 +1435,7 @@ double TLMmin::lm_enorm( int n, double *x )
 
     return x3max*sqrt(s3);
 }
-
+*/
 //=================================================================
 
 /*
