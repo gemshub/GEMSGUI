@@ -89,7 +89,7 @@ PPolygon::paint(QPainter& dc)
     dc.setBrush( brush );
     dc.setPen( Qt::NoPen );
     dc.drawPolygon( a );
-QPen pen(color, 2);
+QPen pen(color, 2);    
     dc.setPen( pen ); // dc.setPen( Qt::SolidLine );
 //    dc.pen().setWidth(2);
     dc.moveTo(p2);
@@ -103,8 +103,8 @@ QPen pen(color, 2);
 
 PPoint::PPoint(TPlotWin* par, FPoint pi, int tp, int sz, QColor col):
         PShape(par, col),
-        fp(pi),
-	type(tp),
+        fp(pi), 
+	type(tp), 
 	size(sz)
 {}
 
@@ -143,7 +143,7 @@ PText::paint(QPainter& dc)
     dc.setFont(font);
 
     dc.drawText( screenPoint, txt );
-
+    
     // if after PText there are some objects painted
     // we have to (may) need to reset bold font
     // font.setBold(false);
@@ -160,7 +160,7 @@ PText::contains(QPoint pt)
     return rect.contains(pt);
 }
 
-void
+void 
 PText::setPosition(QPoint screenPoint)
 {
     point = par->VisibleToReal(screenPoint);
@@ -182,7 +182,7 @@ TPlotWin::TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title_):
     setAcceptDrops(TRUE);
 //    QSizePolicy mySize( QSizePolicy::Expanding, QSizePolicy::Expanding );
 //    setSizePolicy(mySize);
-
+    
     setPlotBounds(pt1, pt2);
 
     show();
@@ -219,13 +219,13 @@ TPlotWin::setPlotBounds(FPoint pt1, FPoint pt2)
     by = /*ROUND(y1*ay)*/0 - topGap; // we shift here only on top gap - not bottom
 }
 
-void
+void 
 TPlotWin::setGridCount(int numGrids)
 {
-    gridCount = numGrids;
+    gridCount = numGrids;    
 }
 
-void
+void 
 TPlotWin::setAxisTitles(const char* xTitle_, const char* yTitle_)
 {
     xTitle = xTitle_;
@@ -286,7 +286,7 @@ TPlotWin::paintGrid(QPainter& dc)
 
     QRect canvas = geometry(); //this->getCanvasRect();
     QPoint offset(leftGap, topGap);
-
+    
     QPen pen( Qt::black, 1 );
     pen.setStyle( QPen::DotLine );
     dc.setPen( pen );
@@ -303,7 +303,7 @@ TPlotWin::paintGrid(QPainter& dc)
     dc.setFont(font);
     dc.drawText( (width() - fm.width(xTitle))/2, height() - 7, xTitle);
     dc.rotate(-90);
-    dc.drawText( -(width() - fm.width(yTitle))/2, 10, yTitle);
+    dc.drawText( -(width() - fm.width(yTitle))/2, 10, yTitle);    
 //    dc.drawText( dc.xForm(QPoint(7, (height() - fm.width(yTitle))/2)), yTitle);
     dc.rotate(90);
     font.setBold(false);
@@ -361,7 +361,7 @@ void
 TPlotWin::dragEnterEvent(QDragEnterEvent* event)
 {
     event->accept(
-        QTextDrag::canDecode(event)
+        QTextDrag::canDecode(event) 
 //       || QImageDrag::canDecode(event)
     );
 }
@@ -375,13 +375,12 @@ TPlotWin::dropEvent(QDropEvent* event)
 //    if ( QImageDrag::decode(event, image) ) {
       //insertImageAt(image, event->pos());
 //    }
-//    else
+//    else 
     if ( QTextDrag::decode(event, text) ) {
 
 	int ii;
         for(ii=shapes.GetCount()-1; ii>=0; ii--) {
-//          PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
-          PText* txtLabel = (PText*)(&shapes[ii]);
+	    PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
 	    if( txtLabel != 0 && txtLabel->text() == text ) {
 		txtLabel->setPosition(event->pos());
 	    }
@@ -392,13 +391,12 @@ TPlotWin::dropEvent(QDropEvent* event)
     }
 }
 
-void
+void 
 TPlotWin::mousePressEvent( QMouseEvent *e ) {
 //QWidget::mousePressEvent( e );
 
     for(int ii=shapes.GetCount()-1; ii>=0; ii--) {
-//	PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
-        PText* txtLabel = (PText*)(&shapes[ii]);
+	PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
 	if( txtLabel != 0 && txtLabel->contains(e->pos()) ) {
 
 	    QFontMetrics fm = QPainter(this).fontMetrics();
@@ -447,7 +445,7 @@ PGrid::paint(QPainter& dc)
     QRect canvas = par->getCanvasRect();
 //    QPoint zero;
 //    par->RealToVisible( FPoint(0,0), zero );
-
+    
     QPen pen( color, 1 );
     pen.setStyle( QPen::DotLine );
 
