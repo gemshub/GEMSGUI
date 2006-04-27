@@ -13,79 +13,11 @@
 
 #include <time.h>
 #include <math.h>
-#include "nodearray.h"
-//#include <stdio.h>
-int MassTransAdvec( double L,    // length of system [L]
-               double v,    // constant fluid velocity [L/T]
-               double tf,   // time step reduce control factor
-               double cdv,  // cutoff value of differences to be applied to bulk compositions
-               double cez,  // minimal allowed amount of element (except charge) in bulk composition
-               int    nx,   // number of nodes
-               int    mts,  // maximal time steps
-               int    evrt, // output on every evrt time step (step 0 always)
-               int    inx   // initial node index
-              );
+#include "ms_gem2mt.h"
+#include "gstring.h"
 
-int
- main( int argc, char* argv[] )
- {
-
-     double L,    // length of system [L]
-            v,    // constant fluid velocity [L/T]
-            tf,   // time step reduce control factor
-            minel,  // minimal allowed amount of element (except charge) in bulk composition
-            cutoff;  // cutoff value for applied differences
-
-     int    nx,   // number of nodes
-            mts,  // maximal time steps
-            every,// output every time step (e.g. every 10-th step)
-            inx,  // initial node index ????
-            RetC = 0;
-
-     L = 1.;      // length in m
-     v = 1e-9;    // fluid velocity constant m/sec
-     tf = 1.;     // time step reduce factor
-     cutoff = 1e-7;   // cutoff value for delta_T corrections for bulk compositions)
-     minel = 1e-12;   // minimal allowed amount of element (except charge) in bulk composition
-
-nx = 100;    // number of nodes (default 1500)
-mts = 300;   // max number of time steps   10000
-every = 10;  // output on every 20-th time step
-     inx = 1;     // in the node index inx
-
-     gstring multu_in1 = "MgWBoundC.ipm";
-     gstring chbr_in1 = "ipmfiles-dat.lst";
-
-// from argv
-      if (argc >= 2 )
-        multu_in1 = argv[1];
-      if (argc >= 3 )
-        chbr_in1 = argv[2];
-
-// The NodeArray must be allocated here
-    TNodeArray::na = new TNodeArray( nx+1 );
-
-// Prepare the array for initial conditions allocation
-     int* nodeType = new int[nx+1];
-     for(int ii =0; ii<nx+1; ii++ )
-       nodeType[ii] = 2;
-     nodeType[0] = 1;
-     nodeType[1] = 1;
-// This is constant injection mode - both nodes 0 and 1 should be set the same!
-
- // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
-    if( TNodeArray::na->NewNodeArray(
-             multu_in1.c_str(), chbr_in1.c_str(), nodeType ) )
-      return 1;  // error reading files
-
-// here we call the mass-transport finite-difference coupled routine
-    RetC = MassTransAdvec( L, v, tf, cutoff, minel, nx, mts, every, inx );
-
-   delete[] nodeType;
-   delete TNodeArray::na;
-
-   return RetC;
-}
+istream&
+f_getline(istream& is, gstring& str, char delim);
 
 //---------------------------------------------------------------------------
 // Test of 1D advection (finite difference method provided by Dr. F.Enzmann,
@@ -94,251 +26,355 @@ every = 10;  // output on every 20-th time step
 // (through bulk composition of aqueous phase).
 // Experiments with smoothing terms on assigning differences to bulk composition
 // of nodes
-int MassTransAdvec( double L,    // length of system [L]
-               double v,     // constant fluid velocity [L/T]
-               double tf,    // time step reduce control factor
-               double cdv,   // cutoff value of differences to be applied to bulk compositions
-               double cez,   // minimal allowed amount of element (except charge) in bulk composition
-               int    nx,    // number of nodes
-               int    mts,   // maximal time steps
-               int    evrt,  // output calls on every evrt time step
-               int    inx    // initial node index
-              )
-{
-     double dx,   // node distance [L]
-            dt,   // iterative time increment
-            at;   // actual time step
 
-     int   t,    // actual time iterator
-           ic,
-           RetCode = OK_GEM_AIA,
-           i;
 
-     double c0,
-            c1,
-            cm1,
-            cm2,
-            c12,
-            cm12,
-            dc,    // difference (decrement) to concentration/amount
-            cr;      // some help variables
-
-     bool BC_error = false;
-
-// Preparations: opening output files for monitoring 1D profiles
-FILE* logfile;
-logfile = fopen( "ICaq-log.dat", "w+" );    // Total dissolved element molarities
-if( !logfile)
-  return -1;
-FILE* ph_file;
-ph_file = fopen( "Ph-log.dat", "w+" );   // Mole amounts of phases
-if( !logfile)
-  return -1;
-FILE* diffile;
-diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
-if( !logfile)
-  return -1;
-
-//  Getting direct access to TNodeArray class data
-DATACH* CH = TNodeArray::na->pCSD();       // DataCH structure
-DATABRPTR* C1 = TNodeArray::na->pNodT1();  // nodes at current time point
-DATABRPTR* C0 = TNodeArray::na->pNodT0();  // nodes at previous time point
-
-// time testing
-  clock_t t_start, t_end, t_out, t_out2;
-  clock_t outp_time = 0.;
-
-// constant injection mode
-//     C[inx][0]=iCx;  Initial condition for Dirak input
-//     C[inx][1]=iCx;
-// The NodeArray must have been allocated before, setting up work pointers
-// time( NULL);
-// starting the time iteration loop
-     t_start = clock();
-
-     dx = L/nx;
-     dt = 0.5*(dx/v)*1/tf;
-
-     at = 0;
-     t = 0;
-
-     for (i=1; i<nx; i++)    // node iteration
-     {
-       int Mode = NEED_GEM_AIA; // debugging
-       C1[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off
-//       RetCode = TNodeArray::na->RunGEM( 0, Mode );
-       RetCode = TNodeArray::na->RunGEM( i, Mode );
-     }  // end of node iteration loop
-
-// Data collection for monitoring: Initial state (at t=0)
-t_out = clock();
-TNodeArray::na->logDiffsIC( diffile, t, at/(365*86400), nx+1, 1 );
-TNodeArray::na->logProfileAqIC( logfile, t, at/(365*86400), nx+1, 1 );
-TNodeArray::na->logProfilePhMol( ph_file, t, at/(365*86400), nx+1, 1 );
-t_out2 = clock();
-outp_time += ( t_out2 - t_out);
-//  This loop contains the mass transport iteration time step
-     do {   // time iteration step
-
-        t+=1;
-        at=at+dt;
-        cr=v*dt/dx;
-
-        for( i=2;i<nx;i++ ) {   // node iteration
-           for( ic=0; ic < CH->nICb-1; ic++)  // splitting for independent components
-           {                          // Charge (Zz) is not checked here!
-                         // Chemical compositions may become inconsistent with time
-              // It has to be checked on minimal allowed c0 value
-              c0  = C1[i]->bPS[0*CH->nICb + ic];
-              c1  = C1[i+1]->bPS[0*CH->nICb + ic];
-              cm1 = C1[i-1]->bPS[0*CH->nICb + ic];
-              cm2 = C1[i-2]->bPS[0*CH->nICb + ic];
-
-              if (i==nx) c1=c0;    // the right boundary is open ....
-
-              c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
-              cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
-              dc = cr*(c12-cm12);
-
-// Checking the difference to assign
-// if( fabs(dc) > min( cdv, C1[i]->bIC[ic] * 1e-4 ))
-              C1[i]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
-/*if( dc >= C1[i]->bIC[ic] )
+int
+ main( int argc, char* argv[] )
  {
-    fprintf( diffile, "\nError in Mass Transport calculation part :" );
-    fprintf( diffile, " Node= %-8d  Step= %-8d  IC= %s ", i, t, CH->ICNL[ic] );
-    fprintf(diffile, "\n Attempt to set new amount to %lg (old: %lg  Diff: = %lg ) ",
-         C1[i]->bIC[ic]-dc, C1[i]->bIC[ic], dc);
-    BC_error = true;
- } */
-if( fabs(dc) > min( cdv, C1[i]->bIC[ic] * 1e-3 ))
-              C1[i]->bIC[ic] -= dc; // correction for GEM calcuation
-           } // loop over IC
-//if( BC_error )
-//   goto FINAL_POINT;
-         } // end of loop over nodes
-// end of the mass transport iteration time step
 
-//   Here we call a loop on GEM calculations over nodes
-//   parallelization should affect this loop only
-         for (i=1; i<nx; i++)    // node iteration
-         {
-           int Mode = NEED_GEM_PIA;  // debugging
-           bool NeedGEM = false;     // debugging
+     int       RetC = 0;
+     gstring gem2mt_in1 = "gem2mt_init.txt";
+     gstring multu_in1 = "MgWBoundC.ipm";
+     gstring chbr_in1 = "ipmfiles-dat.lst";
 
-C1[i]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
+// from argv
+      if (argc >= 2 )
+        multu_in1 = argv[1];
+      if (argc >= 3 )
+       chbr_in1 = argv[2];
+      if (argc >= 4 )
+        gem2mt_in1 = argv[3];
 
-           // Here we compare this node for current time and for previous time
-           for( ic=0; ic < CH->nICb-1; ic++)    // we do not check charge here!
-           {     // It has to be checked on minimal allowed c0 value
-              if( C1[i]->bIC[ic] < cez )
-              { // to stay on safe side
-                 C1[i]->bIC[ic] = cez;
-              }
-              dc = C0[i]->bIC[ic] - C1[i]->bIC[ic];
+// The NodeArray must be allocated here
+    TGEM2MT::pm = new TGEM2MT();
 
-if( fabs( dc ) > min( cdv, (C1[i]->bIC[ic] * 1e-3 )))
-                  NeedGEM = true;  // we need to recalculate equilibrium in this node
-// if( fabs( dc ) > min( cdv*100., C1[i]->bIC[ic] * 1e-2 ))
-                  Mode = NEED_GEM_AIA;  // we even need to do it in auto Simplex mode
-// this has to be done in an intelligent way as a separate subroutine
-           }
+// Here we read the GEM2MT structure, prepared from GEMS or by hand
+   if( TGEM2MT::pm->MassTransSetUp( gem2mt_in1.c_str() ))
+     return 1;  // error reading files
 
-           if( NeedGEM )
-           {
-              RetCode = TNodeArray::na->RunGEM( i, Mode );
-              // check RetCode from GEM IPM calculation
-              if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
-              {
-                gstring err_msg;
+ // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
+    if( TGEM2MT::pm->MassTransInit( multu_in1.c_str(), chbr_in1.c_str() ) )
+      return 1;  // error reading files
 
-               fprintf( diffile, "\nError in GEMipm calculation part :" );
-               fprintf( diffile, " Node= %-8d  Step= %-8d", i, t );
-               switch( RetCode )
-               {
-                 case BAD_GEM_AIA:
-                      err_msg = "Bad GEM result using simplex IA";
-                      break;
-                case  ERR_GEM_AIA:
-                      err_msg = "GEM calculation error using simplex IA";
-                      break;
-                case  BAD_GEM_PIA:
-                      err_msg = "Bad GEM result using previous solution IA";
-                      break;
-                case  ERR_GEM_PIA:
-                      err_msg = "GEM calculation error using previous solution IA";
-                      break;
-               case  TERROR_GEM:  err_msg =  "Terminal error in GEMIPM2 module";
-              }
-              fprintf(diffile, "\n           %s", err_msg.c_str() );
-  // dump of ipm and node files for debugging - comment out if not necessary
-/* {
-   char buf[100];
-  gstring mul_name = "multi_";
-  gstring br_name = "db_";
-  sprintf( buf, "%d_%d.err", i, t);
-  mul_name+=buf;
-  br_name+=buf;
-  TNodeArray::na->printfGEM( mul_name.c_str(), br_name.c_str(),0 );
- } */
+// here we call the mass-transport finite-difference coupled routine
+   RetC = TGEM2MT::pm->Trans1D( NEED_GEM_AIA );
 
-//SD              break;
-            }
-         }
-      }  // i   end of node iteration loop
+   return RetC;
+}
 
-//SD     if( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA )
-//     {
-t_out = clock();
-TNodeArray::na->logDiffsIC( diffile, t, at/(365*86400), nx+1, evrt );
-    // logging differences after the MT iteration loop
-t_out2 = clock();
-outp_time += ( t_out2 -  t_out);
+TGEM2MT* TGEM2MT::pm;
 
-          // Here one has to compare old and new equilibrium phase assemblage
-          // and pH/pe in all nodes and decide if the time step was Ok or it
-          // should be decreased. If so then the nodes from C0 should be
-          // copied to C1 (to be implemented)
+TGEM2MT::TGEM2MT()
+{
+    mtp=&mt[0];
 
-          // time step accepted - Copying nodes from C1 to C0 row
-          for (int i=1; i<nx; i++)    // node iteration
+    // default data
+    memset(mtp, 0, sizeof(GEM2MT) );
+    mtp->PvMO =   S_ON;
+    mtp->iStat =  AS_READY;
+
+    na = 0;
+    pa = 0;
+}
+
+TGEM2MT::~TGEM2MT()
+{
+  Free();
+  if( na )
+   delete na;
+  if( pa )
+    delete pa;
+}
+
+// The mass transport start constant
+int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
+{
+/*
+  mtp->PsMode = GMT_MODE_A;
+  mtp->nC = 101;    // number of nodes (default 1500)
+  mtp->ntM = 300;   // max number of time steps   10000
+
+  mtp->cLen = 1.;      // length in m
+  mtp->fVel = 1e-9;    // fluid velocity constant m/sec
+  mtp->tf = 1.;     // time step reduce factor
+  mtp->cdv = 1e-7;   // cutoff value for delta_T corrections for bulk compositions)
+  mtp->cez = 1e-12;   // minimal allowed amount of element (except charge) in bulk composition
+
+  mtp->Tau[START_] = 0.;
+  mtp->Tau[STOP_] = 0.;
+  mtp->Tau[STEP_] = 0.;
+*/
+ // read GEM2MT structure from file
+
+  fstream f_log("ipmlog.txt", ios::out|ios::app );
+  try
+  {
+      bool binary_f = true;
+
+      fstream ff(gem2mt_in1, ios::in );
+      ErrorIf( !ff.good() , gem2mt_in1, "Fileopen error");
+      gstring buf_str;
+      gstring name_toc;
+      size_t pos;
+      int ii = 0, jj;
+
+// read constants
+//     line %s "GEM-Selektor v.2-PSI: Definition of a GEM2MT",  %12s date, %6s time
+//     line %s rkey
+//     line %s #mtName
+     do
+     {
+        f_getline( ff, buf_str, '\n');
+        pos = buf_str.rfind("=");
+        if( pos == npos )
+        {// line %s  "EndConst"
+          if( buf_str.find("EndConst") != npos )
+           break;
+          else
+            continue;
+        }
+        name_toc = buf_str.substr(0 , pos);
+        name_toc.strip();
+        buf_str = buf_str.substr( pos+1 );
+        buf_str.strip();
+       //   line %s "Mode = ", %s #mtPsfl[0,0]
+        if( name_toc == "Mode" )
+        {
+           sscanf( buf_str.c_str(), "%c", &mtp->PsMode);
+           ii++;
+           continue;
+        }
+       //   line %s "Size= " , %s #mtCIPF[0,0], %s "1",  %s "1"
+       if( name_toc == "Size" )
+       {
+          sscanf( buf_str.c_str(), "%d %d %d", &mtp->xC, &mtp->yC, &mtp->zC);
+          mtp->nC = mtp->xC*mtp->yC*mtp->zC;
+          ii++;
+          continue;
+       }
+      //  line %s "MaxSteps = ", %s #mtnSnE[0]
+      if( name_toc == "MaxSteps" )
+      {
+         sscanf( buf_str.c_str(), "%d", &mtp->ntM);
+         ii++;
+         continue;
+      }
+// line %s "Tau =", %g #mtTau[0,0], %g #mtTau[1,0], %g #mtTau[2,0]
+      if( name_toc == "Tau" )
+      {
+         sscanf( buf_str.c_str(), "%g %g %g",
+            &mtp->Tau[0], &mtp->Tau[1], &mtp->Tau[2]);
+         ii++;
+         continue;
+      }
+//line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "Grid = ",%s #mtPvfl[0,8]
+     if( name_toc == "Grid" )
+     {
+      sscanf( buf_str.c_str(), "%c", &mtp->PvGrid);
+      ii++;
+      continue;
+     }
+//line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "Types=", %s #mtCIPF[0,6]
+     if( name_toc == "Types" )
           {
-             bool NeedCopy = false;
-             for( ic=0; ic < CH->nICb-1; ic++) // do not check charge
-             {
-                dc = C0[i]->bIC[ic] - C1[i]->bIC[ic];
-if( fabs( dc ) > min( cdv, (C1[i]->bIC[ic] * 1e-3)))
-                  NeedCopy = true;
-             }
-             if( NeedCopy )
-                 TNodeArray::na->CopyNodeFromTo( i, nx, C1, C0 );
-          }  // i    end of node iteration loop
+           sscanf( buf_str.c_str(), "%d", &mtp->nPTypes);
+           ii++;
+           continue;
+          }
+//line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "Props= ",%s #mtCIPF[0,7]
+     if( name_toc == "Props" )
+     {
+       sscanf( buf_str.c_str(), "%d", &mtp->nProps);
+       ii++;
+       continue;
+     }
+// line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "LSize = ", %g all #mtSzLc
+    if( name_toc == "LSize" )
+    {
+      sscanf( buf_str.c_str(), "%g %g %g",
+        &mtp->sizeLc[0], &mtp->sizeLc[1], &mtp->sizeLc[2]);
+      ii++;
+      continue;
+    }
+     // line %s "fVel=", %g #ADpar[0]
+      if( name_toc == "fVel" )
+      {
+         sscanf( buf_str.c_str(), "%lg", &mtp->fVel);
+         ii++;
+         continue;
+      }
+      // line %s "cLen=", %g #ADpar[1]
+       if( name_toc == "cLen" )
+       {
+          sscanf( buf_str.c_str(), "%lg", &mtp->cLen);
+          ii++;
+          continue;
+       }
+       // line %s "tf=", %g #ADpar[2]
+        if( name_toc == "tf" )
+        {
+           sscanf( buf_str.c_str(), "%lg", &mtp->tf);
+           ii++;
+           continue;
+        }
+        // line %s "cdv=", %g #ADpar[3]
+         if( name_toc == "cdv" )
+         {
+            sscanf( buf_str.c_str(), "%lg", &mtp->cdv);
+            ii++;
+            continue;
+         }
+         // line %s "cez=", %g #ADpar[4]
+          if( name_toc == "cez" )
+          {
+             sscanf( buf_str.c_str(), "%lg", &mtp->cez);
+             ii++;
+             continue;
+          }
+      } while(  !ff.eof()  );
 
-// Data collection for monitoring: Current state
-t_out = clock();
-TNodeArray::na->logProfileAqIC( logfile, t, at/(365*86400), nx+1, evrt );
-TNodeArray::na->logProfilePhMol( ph_file, t, at/(365*86400), nx+1, evrt );
-t_out2 = clock();
-outp_time += ( t_out2 - t_out);
-//   }
+// realloc memory
+    Alloc();
+// read arrays
+int indx;
 
-     } while ( t < mts );//SD && ( RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ) ) ;
-      // Other criteria to stop need to be implemented
+// line %5s "#", %6s "Init", %6s "Type",
+//   %12s "Vt-m**3", %12s "vp-m/sec", %12s "porosity", %12s "Km-m**2",
+//   %12s "al-m", %12s "hDl-m**2/s", %12s "nto"
+// list #DiCp %5g index, %6g all #DiCp, %12.6g all #HydP
+   // read header
+   f_getline( ff, buf_str, '\n');
+   while( buf_str.empty() )
+     f_getline( ff, buf_str, '\n');
+   for( ii=0; ii<mtp->nC; ii++ )
+   {
+      ff >> indx >> mtp->DiCp[ii][0] >> mtp->DiCp[ii][1];
+      for( jj=0; jj< SIZE_HYDP; jj++)
+      ff >> mtp->HydP[ii][jj];
+   }
 
-FINAL_POINT:
-t_end = clock();
-double dtime = ( t_end- t_start );
-//double clc_sec = CLK_TCK;
-double clc_sec = CLOCKS_PER_SEC;
-fprintf( diffile,
-  "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s\n",
-    (dtime-outp_time)/clc_sec,  outp_time/clc_sec, dtime/clc_sec );
+ if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+ {
+/*
+ line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##
+    %5s "#", %6s "Mean", %6s "Min", %6s "Max",
+    %6s "ptype", %6s "mmode", %6s "tcode", %6s "ips", %6s "res", %6s "res"
+ list #NPmean %5g index, %6g #NPmean, %6g #nPmin ,%6g #nPmax ,
+    %6g all #ParTD
+ line %s ""
+*/
+   // read header
+   f_getline( ff, buf_str, '\n');
+   while( buf_str.empty() )
+      f_getline( ff, buf_str, '\n');
+   for( ii=0; ii<mtp->nPTypes; ii++ )
+   {
+     ff >> indx >> mtp->NPmean[ii] >> mtp->nPmin[ii] >> mtp->nPmax[ii];
+     for( jj=0; jj< 6; jj++)
+       ff >> mtp->ParTD[ii][jj];
+    }
+   if( mtp->PvGrid != S_OFF )
+   {
+//     line ## prn=:mtPvfl[8] <> "-"; ##  %s "Grid"
+//     list #mGrid  %12.6g all #mGrid
+    // read header
+    f_getline( ff, buf_str, '\n');
+    while( buf_str.empty() )
+        f_getline( ff, buf_str, '\n');
+    for( ii=0; ii<mtp->nPTypes; ii++ )
+      ff >> mtp->grid[ii][0]  >> mtp->grid[ii][1] >> mtp->grid[ii][2];
+    }
+ }
+    return 0;
 
-fclose( logfile );
-fclose( ph_file );
-fclose( diffile );
+    }
+    catch(TError& err)
+    {
+      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
+    }
+    return 1;
+}
 
-   return 0; // RetCode
+void TGEM2MT::Alloc()
+{
+  mtp->DiCp = new short[mtp->nC][2];
+  mtp->HydP = new double[mtp->nC][SIZE_HYDP];
+  if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+  {
+    mtp->NPmean = new short[ mtp->nPTypes ];
+    mtp->nPmin =  new short[ mtp->nPTypes ];
+    mtp->nPmax =  new short[ mtp->nPTypes ];
+    mtp->ParTD = new short[ mtp->nPTypes][6];
+    if( mtp->PvGrid != S_OFF )
+      mtp->grid = new float[mtp->nC][3];
+  }
+}
+
+void TGEM2MT::Free()
+{
+  if( mtp->DiCp  )
+    delete[] mtp->DiCp;
+  if( mtp->HydP  )
+     delete[] mtp->HydP;
+  if( mtp->NPmean  )
+    delete[] mtp->NPmean;
+  if( mtp->nPmin  )
+    delete[] mtp->nPmin;
+  if( mtp->nPmax  )
+    delete[] mtp->nPmax;
+  if( mtp->ParTD  )
+    delete[] mtp->ParTD;
+  if( mtp->grid  )
+    delete[] mtp->grid;
+}
+
+// Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
+// Set up NodeArray and ParticleArray classes
+int TGEM2MT::MassTransInit( const char *multu_in1, const char *chbr_in1 )
+{
+  // The NodeArray must be allocated here
+  TNodeArray::na = na = new TNodeArray( mtp->xC,mtp->yC,mtp->zC/*mtp->nC*/ );
+
+ // Prepare the array for initial conditions allocation
+  int* nodeType = new int[mtp->nC];
+  for(int ii =0; ii<mtp->nC; ii++ )
+         nodeType[ii] = mtp->DiCp[ii][0];
+
+  // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
+  if( na->NewNodeArray( multu_in1, chbr_in1, nodeType ) )
+        return 1;  // error reading files
+
+  // put HydP
+  DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
+  for( int jj=0; jj<mtp->nC; jj ++)
+  {
+     C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
+     if( mtp->HydP )
+     { C0[jj]->Vt = mtp->HydP[jj][0];
+       C0[jj]->vp = mtp->HydP[jj][1];
+       C0[jj]->eps = mtp->HydP[jj][2];
+       C0[jj]->Km = mtp->HydP[jj][3];
+       C0[jj]->al = mtp->HydP[jj][4];
+       C0[jj]->hDl = mtp->HydP[jj][5];
+       C0[jj]->nto = mtp->HydP[jj][6];
+     }
+  }
+
+ for (int ii=0; ii<mtp->nC; ii++)    // node iteration
+  {
+      na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
+  }  // ii    end of node iteration loop
+
+  // use particles
+  if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+  {
+   na->SetGrid( mtp->sizeLc, mtp->grid );   // set up grid structure
+   pa = new TParticleArray( mtp->nPTypes, mtp->nProps,
+         mtp->NPmean, mtp->ParTD, mtp->nPmin, mtp->nPmax, na );
+  }
+
+  delete[] nodeType;
+  return 0;
 }
 
 //---------------------------------------------------------------------------

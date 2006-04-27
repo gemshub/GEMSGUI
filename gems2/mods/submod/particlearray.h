@@ -115,12 +115,8 @@ class TParticleArray
 // internal servise
 
    void freeMemory();
-   double randuni(double& x); // uniform point
-   double randnorm(double& x); // normal point
-   float ran2(long& idum);
-   float ran3(long& idum);
    LOCATION setPointInNode( LOCATION nodeSize[2] );
-
+   void InterpolationVp_hDl_1D( int px, double& vp, double& hDl );
 
   // Impotant for masstransport step
   // Calculation of new particle locations

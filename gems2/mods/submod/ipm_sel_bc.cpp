@@ -24,11 +24,11 @@
 #include <iostream>
 
 #include "m_param.h"
+#include "num_methods.h"
 
 #ifndef IPMGEMPLUGIN
 
 #include "visor.h"
-//#include "visor_w.h"
 #include "service.h"
 #include "stepwise.h"
 
@@ -115,8 +115,6 @@ KN:
 #undef a
 
 #ifndef IPMGEMPLUGIN
-#include "num_methods.h"
-#undef a
 #endif
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Solver of a system of linear equations using method of square roots

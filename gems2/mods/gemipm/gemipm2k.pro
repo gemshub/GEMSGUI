@@ -38,8 +38,9 @@ MODS_H       =  $$MODS_CPP
 SUBMOD_H     =  $$SUBMOD_CPP  
 
 
-DEPENDPATH   += ;$$KERNEL_H;$$LIBS_H;$$MODS_H;$$SUBMOD_H 
-INCLUDEPATH   += ;$$KERNEL_H;$$LIBS_H;$$MODS_H;$$SUBMOD_H 
+
+DEPENDPATH   += ;$$KERNEL_H;$$LIBS_H;$$MODS_H;$$SUBMOD_H
+INCLUDEPATH   += ;$$KERNEL_H;$$LIBS_H;$$MODS_H;$$SUBMOD_H
 
 OBJECTS_DIR       = obj
 
@@ -52,7 +53,10 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_H/databr.h \
                     $$SUBMOD_H/datach.h \
                     $$SUBMOD_H/nodearray.h \
+                    $$SUBMOD_H/particlearray.h \
+                    $$SUBMOD_H/num_methods.h \
                     $$SUBMOD_H/ms_multi.h \
+		    ms_gem2mt.h \
 		    m_const.h \
 		    m_param.h 
 		   
@@ -60,6 +64,10 @@ OBJECTS_DIR       = obj
                     $$LIBS_CPP/gdatastream.cpp  \
                     $$MODS_CPP/s_fgl.cpp \
                     $$SUBMOD_CPP/nodearray.cpp \
+                    $$SUBMOD_CPP/nodearray2.cpp \
+                    $$SUBMOD_CPP/particlearray.cpp \
+                    $$SUBMOD_CPP/num_methods.cpp \
+                    $$MODS_CPP/m_gem2mtt.cpp \
                     $$SUBMOD_CPP/ipm_fia_bc.cpp \
                     $$SUBMOD_CPP/ipm_gamma.cpp \
                     $$SUBMOD_CPP/ipm_sel_bc.cpp \

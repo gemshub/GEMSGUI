@@ -20,11 +20,20 @@
 #include <math.h>
 #include <stdio.h>
 
+#ifndef IPMGEMPLUGIN
+
 #include "m_gem2mt.h"
 #include "nodearray.h"
 #include "service.h"
 #include "visor.h"
 
+#else
+
+#include <time.h>
+#include "ms_gem2mt.h"
+#include "nodearray.h"
+
+#endif
 
 // ===========================================================
 
@@ -51,6 +60,7 @@ void  TGEM2MT::copyNodeArrays()
    }  // ii    end of node iteration loop
 }
 
+#ifndef IPMGEMPLUGIN
 
 //-------------------------------------------------------------------
 // NewNodeArray()  make worked DATACH structure
@@ -123,6 +133,8 @@ void  TGEM2MT::NewNodeArray()
    }  // ii    end of node iteration loop
 
 }
+
+#endif
 
 //   Here we call a loop on GEM calculations over nodes
 //   parallelization should affect this loop only
@@ -198,6 +210,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
           {  fprintf( diffile, "\nError reported from GEMIPM2 module\n%s\n",
                     err_msg.c_str() );
           }
+#ifndef IPMGEMPLUGIN
           else
           {  err_msg += "\n Continue?";
              if( !vfQuestion( window(),
@@ -205,6 +218,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
                      Error("Error reported from GEMIPM2 module",
                      "Process stopped by the user");
           }
+#endif
 // output multi with error
 //              gstring mul_name = "multi_";
 //              gstring br_name = "db_";
@@ -360,20 +374,24 @@ na->logProfilePhMol( ph_file, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 1 );
 t_out2 = clock();
 outp_time += ( t_out2 - t_out);
 }
-        if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
+
+#ifndef IPMGEMPLUGIN
+
+      if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic monitoring?") )
         {
             RecordPlot( 0 );
         }
 
-
+#endif
 //  This loop contains the mass transport iteration time step
      do {   // time iteration step
 
+#ifndef IPMGEMPLUGIN
        iRet = pVisor->Message( window(), GetName(),
            "Calculating Reactive Mass Transport (RMT)\n"
            "Please, wait (may take long)...", mtp->ct, mtp->ntM );
-
+#endif
        if( iRet )
          break;
 
@@ -407,9 +425,11 @@ outp_time += ( t_out2 -  t_out);
           // should be decreased. If so then the nodes from C0 should be
           // copied to C1 (to be implemented)
 
+#ifndef IPMGEMPLUGIN
           // time step accepted - Copying nodes from C1 to C0 row
           pVisor->Update();
           CalcGraph();
+#endif
           // copy node array for T0 into node array for T1
           copyNodeArrays();
           // copy particle array ?
@@ -429,7 +449,9 @@ outp_time += ( t_out2 - t_out);
 
      } while ( mtp->cTau < mtp->Tau[STOP_] || mtp->ct < mtp->ntM );
 
+#ifndef IPMGEMPLUGIN
 pVisor->CloseMessage();
+#endif
 
 t_end = clock();
 double dtime = ( t_end- t_start );

@@ -565,6 +565,12 @@ TNodeArray::TNodeArray( int nNod  ):
 {
   sizeN = anNodes;
   sizeM = sizeK =1;
+  CSD = 0;
+  CNode = 0;
+  NodT0 = 0;  // nodes at current time point
+  NodT1 = 0;  // nodes at previous time point
+  grid  = 0;   // Array of grid point locations, size is anNodes+1
+  tNode = 0;     // Node type codes (see DataBR.h) size anNodes+1
   allocMemory();
 
 }
@@ -573,6 +579,12 @@ TNodeArray::TNodeArray( int asizeN, int asizeM, int asizeK ):
 sizeN(asizeN), sizeM(asizeM), sizeK(asizeK)
 {
   anNodes = asizeN*asizeM*asizeK;
+  CSD = 0;
+  CNode = 0;
+  NodT0 = 0;  // nodes at current time point
+  NodT1 = 0;  // nodes at previous time point
+  grid  = 0;   // Array of grid point locations, size is anNodes+1
+  tNode = 0;     // Node type codes (see DataBR.h) size anNodes+1
   allocMemory();
 }
 
@@ -724,8 +736,8 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
 // (as specified in nodeTypes array)
          for( int ii=0; ii<anNodes; ii++)
             if(  (!nodeTypes && i==0) ||
-              ( nodeTypes && (nodeTypes[ii] == i+1 )) )
-                  {    CNode->NodeHandle = (short)(i+1);
+              ( nodeTypes && (nodeTypes[ii] == i/*i+1*/ )) )
+                  {    CNode->NodeHandle = (short)i/*(i+1)*/;
                        MoveWorkNodeToArray(ii, anNodes, NodT0);
                        CopyWorkNodeFromArray(ii, anNodes,NodT0);
                        MoveWorkNodeToArray(ii, anNodes, NodT1);
@@ -741,7 +753,7 @@ int  TNodeArray::NewNodeArray( const char*  MULTI_filename,
     ErrorIf( i==0, datachbr_file.c_str(), "NewNodeArray() error: No dataBR files read!" );
     if(nodeTypes)
       for( int ii=0; ii<anNodes; ii++)
-      if(   nodeTypes[ii]<=0 || nodeTypes[ii] >= i+1 )
+      if(   nodeTypes[ii]<0 || nodeTypes[ii] >= i )
            Error( datachbr_file.c_str(),
               "NewNodeArray() error: Undefined boundary condition!" );
 
