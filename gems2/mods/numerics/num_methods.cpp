@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id:  $
 //
-// C/C++ Some functions from NUMERICAL RECIPES IN C
+// C/C++ Some functions from TNT-JAMA
 //
 // Copyright (C) 2006 S.Dmytriyeva, D.Kulik
 //
@@ -16,8 +16,13 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+#include <fstream.h>
 #include "num_methods.h"
 #include "verror.h"
+#include "jama_cholesky.h"
+#include "jama_lu.h"
+using namespace TNT;
+using namespace JAMA;
 
 // the squares of the following constants shall not under/overflow:
 // these values seem good for an x86:
@@ -125,23 +130,53 @@ int N1;
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Solver of a system of linear equations using method of
 // Cholesky Decomposition ( square roots N R in C 2.9
-// if a square matrix A happens to be symmetric and positive defined)
+// if a square matrix R happens to be symmetric and positive defined)
 // N - dimension of the matrix R (number of equations)
 // R - input matrix of coeffs N*(N+1);
 //     Last column is a vector of independent variables.
 // X - solution vector (N).
-// A - work matrix of  N(N+1) dimensions (internal copy of R )
 // Return values: 0  - solved OK;
 //                1  - no solution, degenerated or inconsistent system;
 #define  r(i,j) (*(R+(j)+(i)*N1))
-#define  a(i,j) (*(A+(j)+(i)*N1))
+//#define  a(i,j) (*(A+(j)+(i)*N1))
 //
+int CholeskyDecomposition( int N, double* R, double* X, double *R1 )
+{
+
+  int ii, jj;
+  N1 = N+1;
+  Array2D<double> A(N,N);
+  Array1D<double> B(N);
+
+  // insert init values
+  for( ii=0; ii<N; ii++ )
+  {
+   B[ii] = r(ii, N);
+   for( jj=0; jj<N; jj++ )
+     A[ii][jj] = r(ii, jj);
+   }
+
+// this routine constructs its Cholesky decomposition, A = L · LT .
+  Cholesky<double>  chol(A);
+
+  if( !chol.is_spd() )  // no solution, is not positive definite A.
+    return 1;
+
+  B = chol.solve( B );
+  for( ii=0; ii<N; ii++ )
+   X[ii] = B[ii];
+
+  return 0;
+
+}
+/*
 int CholeskyDecomposition( int N, double* R, double* X, double* A  )
 {
   bool freeA = false;
   int ii, jj, kk;
   N1 = N + 1;
   double sum;
+  double *A = 0;
 
   if( !A )
   {   A = new double[N*N1];
@@ -152,7 +187,7 @@ int CholeskyDecomposition( int N, double* R, double* X, double* A  )
   memset( A, 0, N*N1*sizeof(double));
   for( ii=0; ii<N; ii++)
    for( jj =0 ; jj<N; jj++ )
-     a(ii,jj)= r(ii,jj);      /*       *(R+I*N1+J); */
+     a(ii,jj)= r(ii,jj);      //       *(R+I*N1+J);
 
   // Given a positive-definite symmetric matrix A[0..N][0..N],
   // this routine constructs its Cholesky decomposition, A = L · LT .
@@ -196,13 +231,11 @@ int CholeskyDecomposition( int N, double* R, double* X, double* A  )
  }
  if( freeA ) delete[] A;
  return 0;
-}
+}*/
+//#undef a
 
-#undef a
-#undef r
-
-void LUdcmp( int N, double* A, int* indx, double& d);
-void LUbksb( int N, double* A, int *indx, double* B);
+//void LUdcmp( int N, double* A, int* indx, double& d);
+//void LUbksb( int N, double* A, int *indx, double* B);
 
 //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Solver of a system of linear set of equations using method of
@@ -220,6 +253,42 @@ void LUbksb( int N, double* A, int *indx, double* B);
 #define  a(i,j) (*(A+(j)+(i)*N1))
 #define TINY 1.0e-20  // A small number.
 //
+int LUDecomposition( int N, double* R, double* X )
+{
+  fstream f_log("SquareRoots.txt", ios::out|ios::app );
+
+  int ii, jj;
+  N1 = N+1;
+  Array2D<double> A(N,N);
+  Array1D<double> B(N);
+
+  // insert init values
+  for( ii=0; ii<N; ii++ )
+  {
+   B[ii] = r(ii, N);
+   for( jj=0; jj<N; jj++ )
+     A[ii][jj] = r(ii, jj);
+  }
+
+   // The LU decompostion with pivoting always exists, even if the matrix is
+   //singular, so the constructor will never fail.
+
+   LU<double>  lu(A);
+
+   // The primary use of the LU decomposition is in the solution
+   // of square systems of simultaneous linear equations.
+   // This will fail if isNonsingular() returns false.
+   if( !lu.isNonsingular() )
+    return 1; // Singular matrix
+
+  B = lu.solve( B );
+  for( ii=0; ii<N; ii++ )
+   X[ii] = B[ii];
+
+  return 0;
+
+}
+/*
 int LUDecomposition( int N, double* A, double* X  )
 {
   double d;
@@ -229,7 +298,7 @@ int LUDecomposition( int N, double* A, double* X  )
   // set up start data
   indx = new int[N];
   for( ii=0; ii<N; ii++)
-    X[ii]=  a(ii,N);            /*       *(A+I*N1+N); */
+    X[ii]=  a(ii,N);            //       *(A+I*N1+N);
 
   // given LU decomposition
   LUdcmp( N, A, indx, d);
@@ -410,8 +479,9 @@ double DeterminantofMatrix( int N, double* A )
   delete[] indx;
   return d;
 }
-
-#undef a
+*/
+//#undef a
+#undef r
 
 // Random numbers ==========================================================
 

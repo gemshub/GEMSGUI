@@ -171,6 +171,16 @@ gems2/mods/m_unsp_stat.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_unspace.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_unspace.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/mods.pri -text
+gems2/mods/numerics/jama_cholesky.h -text
+gems2/mods/numerics/jama_lu.h -text
+gems2/mods/numerics/jama_svd.h -text
+gems2/mods/numerics/num_methods.cpp -text
+gems2/mods/numerics/num_methods.h -text
+gems2/mods/numerics/numerics.pri -text
+gems2/mods/numerics/tnt.h -text
+gems2/mods/numerics/tnt_array1d.h -text
+gems2/mods/numerics/tnt_array2d.h -text
+gems2/mods/numerics/tnt_i_refvec.h -text
 gems2/mods/s_fgl.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_fgl.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_fgl2.cpp svn_keywords=Author+Date+Id+Revision
@@ -210,8 +220,6 @@ gems2/mods/submod/ms_system.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/nodearray.cpp -text
 gems2/mods/submod/nodearray.h -text
 gems2/mods/submod/nodearray2.cpp -text
-gems2/mods/submod/num_methods.cpp -text
-gems2/mods/submod/num_methods.h -text
 gems2/mods/submod/particlearray.cpp -text
 gems2/mods/submod/particlearray.h -text
 gems2/mods/submod/stepwise.h svn_keywords=Author+Date+Id+Revision

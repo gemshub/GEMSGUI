@@ -380,7 +380,8 @@ TPlotWin::dropEvent(QDropEvent* event)
 
 	int ii;
         for(ii=shapes.GetCount()-1; ii>=0; ii--) {
-	    PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
+          PText* txtLabel = dynamic_cast<PText*>((PText*)(&shapes[ii]));
+//          PText* txtLabel = (PText*)(&shapes[ii]);
 	    if( txtLabel != 0 && txtLabel->text() == text ) {
 		txtLabel->setPosition(event->pos());
 	    }
@@ -396,7 +397,8 @@ TPlotWin::mousePressEvent( QMouseEvent *e ) {
 //QWidget::mousePressEvent( e );
 
     for(int ii=shapes.GetCount()-1; ii>=0; ii--) {
-	PText* txtLabel = dynamic_cast<PText*>(&shapes[ii]);
+      	PText* txtLabel = dynamic_cast<PText*>((PText*)(&shapes[ii]));
+      //  PText* txtLabel = (PText*)(&shapes[ii]);
 	if( txtLabel != 0 && txtLabel->contains(e->pos()) ) {
 
 	    QFontMetrics fm = QPainter(this).fontMetrics();

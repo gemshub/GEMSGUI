@@ -91,6 +91,10 @@ public:
         color = col;
     }
 //    virtual void ConvertCoordinates()=0;
+    virtual QString text() {
+    return "";
+   }
+
 };
 
 
@@ -199,7 +203,7 @@ protected:
     virtual void paintEvent(QPaintEvent* qpev);
     virtual void resizeEvent(QResizeEvent* qpev);
     virtual void mousePressEvent( QMouseEvent *e );
-    
+
 public:
     TPlotWin(QWidget* p, FPoint pt1, FPoint pt2, const char* title);
     ~TPlotWin();

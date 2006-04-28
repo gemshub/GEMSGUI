@@ -520,20 +520,22 @@ int TProfil::EnterFeasibleDomain( )
        }
 
        for(Z=0;Z<N;Z++) // Assembling system of linear equations
-            for(I=0;I<N;I++)
+       {
+         for(I=0;I<N;I++)
             {
                 r(Z,I) = 0.;
                 for(J=0;J<pmp->L;J++)
                     if( pmp->Y[J]>pmp->lowPosNum /*1E-19 */ )
                         r(Z,I) += a(J,I) * a(J,Z) * W[J];
-            }
 
+            }
+       }
        for(I=0;I<N;I++)
             r(I,N) = pmp->C[I];
 
 
         /* Solving system of linear equations */
-      // sRet = SquareRoots( N, R, pmp->U, R1 );
+       //sRet = SquareRoots( N, R, pmp->U, R1 );
       sRet = CholeskyDecomposition( N, R, pmp->U, R1 );
 
        if( sRet == 1 )
@@ -790,18 +792,17 @@ int TProfil::InteriorPointsIteration( )
     }
 
     // Solving matrix R of linear equations
-    // sRet = SquareRoots( N, R, pmp->U, R1 );
+     //sRet = SquareRoots( N, R, pmp->U, R1 );
     sRet = CholeskyDecomposition( N, R, pmp->U, R1 );
 
 //TRY_GORDAN:
-/*    if( sRet == 1 )
+    if( sRet == 1 )
     {
         R1 = pmp->R1;
         memcpy( R1, R, sizeof(double)*N*N1 );
-        sRet = Gordan( N, pa.p.DG, R1, pmp->U );
+//        sRet = Gordan( N, pa.p.DG, R1, pmp->U );
         sRet = LUDecomposition( N, R1, pmp->U );
     }
-*/  // 05/12/2005 DK
 
     if( sRet == 1 )
     {

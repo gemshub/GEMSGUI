@@ -22,10 +22,10 @@
 #include <math.h>
 
 double enorm( int n, double *x );
-int CholeskyDecomposition( int N, double* R, double* X, double* A  );
+int CholeskyDecomposition( int N, double* R, double* X, double* R1  );
 int LUDecomposition( int N, double* A, double* X  );
-void InverseofMatrix( int N, double* A, double* Y );
-double DeterminantofMatrix( int N, double* A );
+//void InverseofMatrix( int N, double* A, double* Y );
+//double DeterminantofMatrix( int N, double* A );
 
 // Random numbers ==========================================================
 double randuni(double& x); // uniform point
