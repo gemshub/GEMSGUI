@@ -2,7 +2,7 @@
 #define JAMA_LU_H
 
 #include "tnt.h"
-#include <algorithm.h>
+#include <algorithm>
 //for min(), max() below
 
 using namespace TNT;

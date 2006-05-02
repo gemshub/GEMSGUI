@@ -463,7 +463,7 @@ pe[q].PvR1 = '-';    // simplex on   KD: temporary for process create
     memset( pe[q].tpkey, 0, sizeof(char)*TP_RKLEN );
     memset( &pe[q].NeMax, 0, sizeof(short)*8 );
     memset( &pe[q].c_P, 0, sizeof(double)*11 );
-    pe[q].NeMax =400; // fixed by DAK - was only 100
+    pe[q].NeMax =1000; // fixed by DAK - was only 100 then 200 then 400
     pe[q].Nxi = 21;
     pe[q].Nmc = 1;
 
@@ -555,14 +555,15 @@ bool TProcess::check_input( const char * /*key*/, int /*Level*/ )
 bool TProcess::pe_dimValid()
 {
     bool i=true;
+    pep->NeMax =1000;   // added by KD on 21.04.2006
     // test data size
-    ErrorIf( pep->Nxi<=0 || pep->Nxi > 1000, GetName(),
-       "W02PErem: You forgot to specify the number of points! \n Please, do it!");
-    if( pep->NeMax <= pep->Nxi )
+    ErrorIf( pep->Nxi<=0 || pep->Nxi > pep->NeMax, GetName(),
+       "W02PErem: You forgot to specify a feasible number of simulation steps! \n Please, do it!");
+    if(  pep->Nxi > pep->NeMax )
     {
         i=false;
-        pep->NeMax =400;
-    }  // fixed by DAK - was 200
+//        pep->NeMax =1000;
+    }  // fixed by DAK - was 200 then 400
     pep->Ntm = pep->Nxi;
     pep->dNNV = pep->Nxi;
     pep->dNP = pep->Nxi;
