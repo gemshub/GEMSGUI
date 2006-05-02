@@ -112,13 +112,13 @@ class TParticleArray
 
 // Methods
 
-// internal servise
+// internal methods
 
    void freeMemory();
    LOCATION setPointInNode( LOCATION nodeSize[2] );
    void InterpolationVp_hDl_1D( int px, double& vp, double& hDl );
 
-  // Impotant for masstransport step
+  // Important for masstransport step
   // Calculation of new particle locations
   int DisplaceParticle( int px, double t0, double t1 );
   // Walk (transport step) for particle px between nodes

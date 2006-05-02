@@ -197,7 +197,7 @@ LOCATION TParticleArray::setPointInNode( LOCATION nodeSize[2] )
   return loc;
 }
 
-// Implamentationg interpolation for particle advection velocities and
+// Implementation of interpolation for particle advection velocities and
 // dispersivities between nodes ( in 1D case)
 // px index of particle
 void TParticleArray::InterpolationVp_hDl_1D( int px, double& vp, double& hDl )
@@ -206,8 +206,8 @@ void TParticleArray::InterpolationVp_hDl_1D( int px, double& vp, double& hDl )
      Error( "InterpolationVp_hDl_1D", "Error mode of interpolation." );
 
   DATABR *dbr1, *dbr2;    // nodes for interpolation
-  int nodInd1, nodInd2;  // number nodes for interpolation
-  double x1m, x2m;       // middle points-coordinate in node
+  int nodInd1, nodInd2;  // number of nodes for interpolation
+  double x1m, x2m;       // middle-point coordinates in the nodes
   LOCATION nodeSize[2];
 
 // set up location
@@ -240,10 +240,10 @@ void TParticleArray::InterpolationVp_hDl_1D( int px, double& vp, double& hDl )
   }
 }
 
-// Impotant for masstransport step
+// Important for the mass-transport step
 // Calculation of new particle locations
-// Advective step, Brounian step, Dispersive step, Diffusion step
-// px index of particle
+// Advective step, Brownian step, Dispersive step, Diffusion step
+// px: index of particle
 int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
 {
 //  DATACH* ch = nodes->pCSD();       // DataCH structure
@@ -253,7 +253,6 @@ int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
 
   ErrorIf( nodInd < 0 , "DisplaceParticle", "Error index" );
 //  DATABR* dbr = nodes->pNodT1()[nodInd];  // nodes at current time point
-
 
   switch( ParT1[px].mmode )
   {
@@ -265,7 +264,9 @@ int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
                          break;
 
    case MOBILE_C_MASS:
-         InterpolationVp_hDl_1D( px, vp, hDl );
+        InterpolationVp_hDl_1D( px, vp, hDl );
+// vp = dbr->vp;     // testing without interpolation
+// hDl = dbr->hDl;   // testing without interpolation
          if( hDl > 0)
             ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
          ParT1[px].xyz.x += vp*dt + ds;
