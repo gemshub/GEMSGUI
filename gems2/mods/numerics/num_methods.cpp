@@ -489,6 +489,16 @@ double DeterminantofMatrix( int N, double* A )
 double randuni(double& x)
 { double m35=34359738368., m36=68719476736., m37=137438953472.;
   float a=0.,b=1.;
+  if( x < 0 ) // Initialize. process
+  {
+    int j;
+    double R;
+    j=rand();
+    R = ceil(24359738368.*j/RAND_MAX + 10000000000.);
+    if( !fmod(R,2) )
+      R=R+1.;
+    x = R;
+  }
   x=x*5.;
   if(x>=m37) x=x-m37;
   if(x>=m36) x=x-m36;

@@ -21,6 +21,7 @@
 #include "num_methods.h"
 
 static long idum = -10000l;
+static double Rand = -1;
 
 TParticleArray::TParticleArray( short nPTypes, short nProps,
            short *aNPmean,
@@ -90,6 +91,7 @@ void TParticleArray::ParticleArrayInit()
 
   cpx = 0;
   ndxCsource = 0;
+  Rand = -1.;
   for( iNode=0; iNode < nNodes; iNode++ )
   {
     nodes->GetNodeSizes( iNode, nodeSize );
@@ -152,45 +154,24 @@ void TParticleArray::CopyfromT1toT0()  // Copy resalts of ParT1 step to ParT0
 LOCATION TParticleArray::setPointInNode( LOCATION nodeSize[2] )
 {
   LOCATION loc;
-/*
-  int j;
-  double R;
-  // point x
-  j=rand();
-  R=ceil(24359738368.*j/RAND_MAX + 10000000000.);
-  if( !fmod(R,2) )
-     R=R+1.;
-  loc.x = (float)randnorm( R ); //  randuni( R ); // value from 0. to 1.
-
-  // point y
-  j=rand();
-  R=ceil(24359738368.*j/RAND_MAX + 10000000000.);
-  if( !fmod(R,2) )
-    R=R+1.;
-  loc.y = (float)randnorm( R ); //  randuni( R ); // value from 0. to 1.
-
-  // point z
-  j=rand();
-  R=ceil(24359738368.*j/RAND_MAX + 10000000000.);
-  if( !fmod(R,2) )
-    R=R+1.;
-  loc.z = (float)randnorm( R ); //  randuni( R ); // value from 0. to 1.
-*/
   if( nodes->SizeN() > 1 )
   {
-    loc.x = ran3( idum ); //  ran2( idum ); // value from 0. to 1.
+    loc.x = (float)randuni( Rand ); //  randnorm(Rand); // value from 0. to 1.
+//    loc.x = ran3( idum ); //  ran2( idum ); // value from 0. to 1.
     loc.x = (loc.x*(nodeSize[1].x-nodeSize[0].x)+nodeSize[0].x);
   }
   else loc.x = 0;
   if( nodes->SizeM() > 1 )
   {
-    loc.y = ran2( idum ); //  ran3( idum ); // value from 0. to 1.
+    loc.y = (float)randnorm(Rand ); //  randuni( Rand); // value from 0. to 1.
+//    loc.y = ran2( idum ); //  ran3( idum ); // value from 0. to 1.
     loc.y = (loc.y*(nodeSize[1].y-nodeSize[0].y)+nodeSize[0].y);
   }
   else loc.y = 0;
   if( nodes->SizeK() > 1 )
   {
-    loc.z = ran2( idum ); //  ran3( idum ); // value from 0. to 1.
+    loc.z = (float)randnorm(Rand ); //  randuni( Rand); // value from 0. to 1.
+//    loc.z = ran2( idum ); //  ran3( idum ); // value from 0. to 1.
     loc.z = (loc.z*(nodeSize[1].z-nodeSize[0].z)+nodeSize[0].z);
   }
   else loc.z = 0;
@@ -268,7 +249,8 @@ int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
 // vp = dbr->vp;     // testing without interpolation
 // hDl = dbr->hDl;   // testing without interpolation
          if( hDl > 0)
-            ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
+         ds = 2.*(randuni( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
+//         ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
          ParT1[px].xyz.x += vp*dt + ds;
                         break;
    }
