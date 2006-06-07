@@ -76,13 +76,6 @@ TProfil::initCalcMode()
         syst->set_def();
         syst->dyn_new();
         syst->setDefData();
-/*
-    // Read and set def SysEq if it exist
-        vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
-        gstring fstKeyFld(_fstKeyFld);
-        StripLine(fstKeyFld);
-        Set_z_sp_config( fstKeyFld.c_str() );
-*/
 
     // Get first  SYSEQ
         vstr pkey(81);
@@ -572,7 +565,7 @@ void TProfil::loadSystat( const char *key )
     gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
     PMtest( keyp.c_str() );
     //  if( pmp->pBAL < 2 )  // rebuild multi
-    MultiRemake( keyp.c_str() );
+    multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -582,7 +575,7 @@ void TProfil::loadSystat( const char *key )
     }
 
     if( pmp->pFAG == 0 || pmp->pFAG == 1 )
-        EqstatExpand( keyp.c_str() );
+        multi->EqstatExpand( keyp.c_str() );
     pVisor->Update();
 }
 
@@ -606,7 +599,7 @@ void TProfil::deriveSystat()
     pmp->pESU = 0;  //Sveta 17/02/2005
     PMtest( keyp.c_str() );
     //    if( pmp->pBAL < 2 )  // rebuild multi
-    MultiRemake( keyp.c_str() );
+    multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -615,7 +608,7 @@ void TProfil::deriveSystat()
         pmp->pFAG =1;
     }
     if( pmp->pFAG == 0 || pmp->pFAG == 1 )
-        EqstatExpand( keyp.c_str() );
+        multi->EqstatExpand( keyp.c_str() );
 
     pVisor->Update();
 //    pVisor->OpenModule(window(), MD_SYSTEM);
@@ -657,7 +650,7 @@ void TProfil::newSystat( int mode )
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     PMtest( keyp.c_str() );
     //    if( pmp->pBAL < 2 )  // rebuild multi
-    MultiRemake( keyp.c_str() );
+    multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
@@ -666,7 +659,7 @@ void TProfil::newSystat( int mode )
         pmp->pFAG =1;
     }
     if( /* pmp->pFAG == 0 || */ pmp->pFAG == 1 ) // !!!!!!!!! 20.06.01
-        EqstatExpand( keyp.c_str() );
+        multi->EqstatExpand( keyp.c_str() );
 
     pVisor->OpenModule(window(), MD_SYSTEM);
     pVisor->Update();
@@ -740,10 +733,10 @@ void TProfil::CalcEqstat( bool /*prg*/)
 //    vfMessage(window(),"Test1", "Point1");
 //   multi->to_text_file( "Multi0.txt" );
 
-    MultiCalcInit( keyp.c_str() );
+    multi->MultiCalcInit( keyp.c_str() );
 //    vfMessage(window(),"Test1", "Point2");
-    if( AutoInitialApprox() == false )
-        MultiCalcIterations();
+    if( multi->AutoInitialApprox() == false )
+        multi->MultiCalcIterations();
     else //Show results   //if( wn[W_EQCALC].status )
         aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
 //    vfMessage(window(),"Test1", "Point2");
@@ -755,12 +748,12 @@ void TProfil::CalcEqstat( bool /*prg*/)
        for( pp=0; pp < abs(pa.p.PRD); pp++ )
        {
          pmp->IT = 0;
-         if( AutoInitialApprox() == false )
-             MultiCalcIterations();
+         if( multi->AutoInitialApprox() == false )
+             multi->MultiCalcIterations();
          TotIT += pmp->IT;
        }
        pmp->pNP = 0;
-       pmp->IT = TotIT;
+       pmp->IT = (short)TotIT;
     }
     calcFinished = true;
 
@@ -769,45 +762,6 @@ void TProfil::CalcEqstat( bool /*prg*/)
     STat->setCalcFlag( true );
     STat->CellChanged();
 }
-
-//Calculated multy with debug
-void TProfil::DebagCalcEqstatInit()
-{
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
-    STat->ods_link(0);
-    syst->SyTest();
-    gstring keyp = rt[RT_SYSEQ].UnpackKey();
-    PMtest( keyp.c_str() );
-    // stop
-    MultiCalcInit( keyp.c_str() );
-    // stop
-    STat->setCalcFlag( true );
-    STat->CellChanged();
-    pll=0;
-    FXold=0.0;
-    bool  stat = AutoInitialApprox();
-    if( stat==true )
-        vfMessage(window(), GetName(), "No iterations");
-    pVisor->OpenProgress(!stat);
-}
-
-//Calculated multy with debug
-bool TProfil::DebagCalcEqstatStep()
-{
-    MultiCalcMain( pll, FXold );
-    //   pVisor->Update();
-    return !pmp->MK;
-    // What do if break; ?
-}
-
-//Calculated multy with debug
-//void TProfil::DebagCalcEqstatEnd()
-//{
-// aMod[MD_EQCALC].ModUpdate("EQ_done  EQilibrium STATe: computed by OK");
-// change <Step> to <End>
-//}
-
-
 
 //add new Project structure
 // Save file configuration to Project structure

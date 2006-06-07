@@ -112,7 +112,7 @@ TGEM2MT::test_sizes( )
 // Make start IComp, Dcomp, PHase selections to DATACH
 void TGEM2MT::SelectNodeStructures( bool select_all )
 {
-  TMulti* mult = TProfil::pm->multi;
+  MULTI *mult = TProfil::pm->pmp;
   TCStringArray aList;
   TCIntArray aSelIC;
   TCIntArray aSelDC;
@@ -132,11 +132,11 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
 
 // select lists
     aList.Clear();
-    for( ii=0; ii< mult->GetPM()->N; ii++ )
+    for( ii=0; ii< mult->N; ii++ )
     {  if( select_all )
          aSelIC.Add( ii );
        else
-         aList.Add( gstring( mult->GetPM()->SB[ii], 0, MAXICNAME+MAXSYMB));
+         aList.Add( gstring( mult->SB[ii], 0, MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
       aSelIC = vfMultiChoiceSet(window(), aList,
@@ -144,11 +144,11 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
           aSelIC);
 
     aList.Clear();
-    for( ii=0; ii< mult->GetPM()->L; ii++ )
+    for( ii=0; ii< mult->L; ii++ )
     {  if( select_all )
          aSelDC.Add( ii );
        else
-       aList.Add( gstring( mult->GetPM()->SM[ii], 0, MAXDCNAME));
+       aList.Add( gstring( mult->SM[ii], 0, MAXDCNAME));
     }
     if( !select_all  )
        aSelDC = vfMultiChoiceSet(window(), aList,
@@ -156,11 +156,11 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
          aSelDC );
 
     aList.Clear();
-    for( ii=0; ii< mult->GetPM()->FI; ii++ )
+    for( ii=0; ii< mult->FI; ii++ )
     {  if( select_all )
          aSelPH.Add( ii );
        else
-       aList.Add( gstring( mult->GetPM()->SF[ii], 0, MAXPHNAME+MAXSYMB));
+       aList.Add( gstring( mult->SF[ii], 0, MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
        aSelPH = vfMultiChoiceSet(window(), aList,
@@ -173,7 +173,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
   mtp->nPHb = (short)aSelPH.GetCount();
   mtp->nPSb = 0;
   for( jj=0; jj< aSelPH.GetCount(); jj++, mtp->nPSb++ )
-   if( aSelPH[jj] >= TProfil::pm->pmp->FIs )
+   if( aSelPH[jj] >= mult->FIs )
        break;
 
 // realloc memory

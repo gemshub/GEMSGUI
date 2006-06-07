@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id$ 
+// $Id$
 //
 // Implementation of config and basic methods of TProfile class
 //
@@ -23,6 +23,7 @@ const char *GEMS_SP_HTML = "gm_project";
 #include <unistd.h>
 #endif
 
+#include <math.h>
 #include "m_unspace.h"
 #include "m_gtdemo.h"
 #include "m_syseq.h"
@@ -189,7 +190,7 @@ void TProfil::InitSubModules()
         aMod.Add( syst = new TSyst( MD_SYSTEM, mup ) );
         syst->ods_link();
         syp = syst->GetSY();
-        aMod.Add( multi = new TMulti( MD_MULTI, syp ) );
+        aMod.Add( multi = new TMulti( MD_MULTI, syp, tpp, mup ) );
         multi->ods_link();
         pmp = multi->GetPM();
         aMod.Add( new TEQCalc( MD_EQCALC ) );
@@ -319,9 +320,16 @@ TProfil::CmHelp()
     pVisor->OpenHelp( GEMS_SP_HTML );  //  05.01.01
 }
 
+void TProfil::outMulti( GemDataStream& ff, gstring& path  )
+{
+    ff.writeArray( &pa.p.PC, 10 );
+    ff.writeArray( &pa.p.DG, 28 );
+    multi->to_file( ff, path );
+}
+
 void TProfil::outMulti( )
 {
-   TNodeArray* na = new TNodeArray( 1, TProfil::pm->multi->GetPM() );
+   TNodeArray* na = new TNodeArray( 1, TProfil::pm->pmp/*multi->GetPM()*/ );
 
 // set default data and realloc arrays
    float Tai[3], Pai[3];
@@ -589,17 +597,150 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 void TProfil::calcMulti()
 {
     // MultiCalcInit( keyp.c_str() );
-    //    // realloc memory for  R and R1
-    pmp->R = new double[pmp->N*(pmp->N+1)];
-    pmp->R1 = new double[pmp->N*(pmp->N+1)];
-    memset( pmp->R, 0, pmp->N*(pmp->N+1)*sizeof(double));
-    memset( pmp->R1, 0, pmp->N*(pmp->N+1)*sizeof(double));
-
-    CompG0Load();
-    if( AutoInitialApprox() == false )
-        MultiCalcIterations();
+    multi->CompG0Load();
+    if( multi->AutoInitialApprox() == false )
+        multi->MultiCalcIterations();
 
 
+}
+
+
+
+
+// Setup of flags for MULTY remake
+// pNP,  //Mode of FIA selection: 0-auto-SIMPLEX,1-old eqstate,-1-user's choice
+// pESU, // Unpack old eqstate from EQSTAT record?  0-no 1-yes
+// pIPN, // State of IPN-arrays:  0-create; 1-available; -1 remake
+// pBAL, // State of reloading CSD:  1- BAL only; 0-whole CSD
+// pFAG, //State of initial lnGam load: 0-no, 1-on Mbel, 2-lnGmf, -1-SurEta
+// pTPD, // State of reloading thermod data: 0- all    2 - no
+// pULR, // reserved
+void TProfil::PMtest( const char *key )
+{
+    float T, P;
+    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+    TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
+//    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
+
+    ///  pmp->pNP = -1;
+    if( STat->ifCalcFlag())
+    { if( !pmp->pESU )
+          pmp->pESU = 1;
+    }
+    else pmp->pESU = 0;
+
+    if( pmp->pESU == 0 ) // no old solution
+        pmp->pNP = 0;
+
+    if( Proc->pep->Istat == P_EXECUTE ||
+        Proc->pep->Istat == P_MT_EXECUTE )
+    {
+        if(Proc->pep->PvR1 == S_OFF )
+            pmp->pNP = 0;
+        else
+            pmp->pNP = 1;
+    }
+/*    if( Prob->usp->pbcalc == P_EXECUTE )    ???????
+    {
+        if(Prob->usp->zond[11] == S_OFF )
+            pmp->pNP = 0;
+        else
+            pmp->pNP = 1;
+    }
+*/    pmp->pBAL =  BAL_compare();
+    if( !pmp->pBAL )
+        pmp->pIPN = 0;
+//    if( qEp.GetCount()<1 || qEd.GetCount()<1 )  Caution!
+    if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE )
+        pmp->pIPN = 0;
+    // Get P and T from key
+    gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
+    P = atof(s.c_str());
+    s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
+    T = atof(s.c_str());
+
+    if( fabs( tpp->curT - T ) > 1.e-10 ||
+            fabs( tpp->curP - P ) > 1.e-10 )
+    { // load new MTPARM on T or P
+        mtparm->LoadMtparm( T, P );
+        pmp->pTPD = 0;
+    }
+}
+
+void TProfil::LoadFromMtparm(double T, double P,double *G0,
+        double *V0, double *H0, double *Cp0, double &roW, double &epsW )
+{
+    if( fabs( tpp->curT - T ) > 1.e-10 ||
+            fabs( tpp->curP - P ) > 1.e-10 )
+    { // load new MTPARM on T or P
+        mtparm->LoadMtparm( T, P );
+        pmp->pTPD = 0;
+    }
+
+    roW = tpp->RoW;
+    epsW = tpp->EpsW;
+    for( int jj=0; jj<mup->L; jj++ )
+    {
+      G0[jj] =  tpp->G[jj];
+      V0[jj] =  tpp->Vm[jj];
+      if( H0 && tpp->H )
+        H0[jj] =  tpp->H[jj];
+      if( Cp0 && tpp->Cp )
+        Cp0[jj] =  tpp->Cp[jj];
+    }
+}
+
+// -------------------------------------------------------------------
+// Compare changes in the modified system relative to MULTI
+// if some vectors were allocated or some dimensions changed - return 0;
+// else if bulk composition or some constraints has changed - return 1;
+// else if nothing has changed - return 2.
+short TProfil::BAL_compare()
+{
+    int i,j,k;
+    /* test sizes */
+    if( pmp->N != syp->N || pmp->L != syp->L || pmp->Ls != syp->Ls
+            || pmp->LO != syp->Lw || pmp->PG != syp->Lg
+            || pmp->PSOL != syp->Lhc || pmp->Lads != syp->Lsor
+            || pmp->FI != syp->Fi || pmp->FIs != syp->Fis )
+        return 0;
+    if(( syp->DLLim == S_ON || syp->DULim == S_ON ) && pmp->PLIM != 1 )
+        return 0;
+    else if( syp->DLLim == S_OFF && syp->DULim == S_OFF && pmp->PLIM == 1 )
+        return 0;
+
+    /* test selectors */
+    for( i=0; i<pmp->N; i++ )
+        if( syp->Icl[pmp->mui[i]] == S_OFF )
+            return 0;
+    for( j=0; j<pmp->L; j++ )
+        if( syp->Dcl[pmp->muj[j]] == S_OFF )
+            return 0;
+    for( k=0; k<pmp->FI; k++ )
+        if( syp->Pcl[pmp->muk[k]] == S_OFF )
+            return 0;
+    /* lists of components didn't change */
+    /* test B */
+    for( i=0; i<pmp->N; i++ )
+        if( fabs( syp->B[pmp->mui[i]] - pmp->B[i] ) >= pa.p.DB )
+            return 1;
+    /* test other restrictions */
+    for( j=0; j<pmp->L; j++ )
+    {
+        if( syp->PGEX != S_OFF )
+            if( fabs( syp->GEX[pmp->muj[j]] - pmp->GEX[j]*pmp->RT ) >= 0.001 )
+                return 1;
+        if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
+            if( fabs( syp->DLL[pmp->muj[j]] - pmp->DLL[j] ) >= 1e-19 )
+                return 1;
+        if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
+            if( fabs( syp->DUL[pmp->muj[j]] - pmp->DUL[j] ) >= 1e-19 )
+                return 1;
+//      Adsorption models - to be completed !!!!!
+        ;
+    }
+    // bulk chem. compos. and constraints unchanged
+    return 2;
 }
 
 // ------------------ End of m_param.cpp -----------------------

@@ -330,11 +330,11 @@ void TMulti::to_text_file( gstring& path )
    if( pm.sitNan )
       outArray( ff, "sitXan", pm.sitXan, pm.sitNan );
 
-   if(pm.R)
+/*   if(pm.R)
    outArray( ff, "R", pm.R,  pm.N*(pm.N+1), pm.N+1);
    if(pm.R1)
    outArray( ff, "R1", pm.R1,  pm.N*(pm.N+1), pm.N+1);
-
+*/
 }
 
 //---------------------------------------------------------//
@@ -1067,8 +1067,8 @@ else
     else
        pm.sitXan = 0;
 
-  pm.R = 0;
-  pm.R1 = 0;
+//  pm.R = 0;
+//  pm.R1 = 0;
 
 }
 

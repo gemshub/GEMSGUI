@@ -502,12 +502,6 @@ ProgressDialog::CmStep()
 {
     try
     {
-        //     if( TProfil::pm->DebagCalcEqstatStep()==true )
-        //     {
-        //        vfMessage(this, "!!!!", "End calc ");
-        //     	pStep->setEnabled( false );
-        //     }
-        //     pVisor->Update();
         pVisorImp->SaveSystem();
         close();
     }

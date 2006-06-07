@@ -21,13 +21,7 @@
 #ifndef _m_param_h_
 #define _m_param_h_
 
-#ifndef IPMGEMPLUGIN
-
-//#define IPMGEMPLUGIN
-
-#endif
-
-
+#include <math.h>
 #include "v_mod.h"
 #include "submod/ms_rmults.h"
 #include "submod/ms_mtparm.h"
@@ -153,27 +147,17 @@ struct CompItem
 
 };
 
-// the subroutine for ET_translate
-typedef int (tget_ndx)( int nI, int nO, int Xplace );
-
 // Module TParam (RMULTS+MTPARM+SYSTEM+MULTY see SubModules)
 class TProfil : public TCModule
 {
     TRMults* rmults;
-    //  RMULTS* mup;
-
-    //  TMTparm* mtparm;
-    //  MTPARM *tpp;
-
+    TMTparm* mtparm;
     TSyst* syst;
-    //  SYSTEM *syp;
-
-    //TMulti* multi;
-    //  MULTI *pmp;
+    TMulti* multi;
 
     bool newRecord;
-    int pll;
-    double FXold;
+//    int pll;
+//    double FXold;
 
     // to compare with old Project
     bool comp_change_all;
@@ -218,113 +202,13 @@ protected:
     void COMPcompare( TIArray<CompItem>& aCompos);
     void DCcompare( TIArray<CompItem>& aList, int& i,int& j, int nI, int nJ);
     void PHcompare( TIArray<CompItem>& aPhase, TIArray<CompItem>& aDComp);
+
     // multi load
     short BAL_compare();
-
-
-    void multi_sys_dc();
-    void multi_sys_ph();
-    void ph_sur_param( int k, int kk );
-    void ph_surtype_assign( int k, int kk, int jb, int je,
-                            short car_l[], int car_c, short Cjs );
-    void ConvertDCC();
-    double Cj_init_calc( double g0, int j, int k );
-float *PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA );
-    void sm_text_analyze( int nph, int Type, int JB, int JE, int jb, int je );
-    gstring PressSolMod( int nP );
-    char *ExtractEG( char *Etext, int jp, int *EGlen, int Nes );
-    int find_icnum( char *name, int LNmode );
-    int find_dcnum( char *name, int jb, int je, int LNmode );
-    int find_phnum( char *name, int LNmode );
-    int find_acnum( char *name, int LNmode );
-    //   void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je );
-    void CompG0Load();
-    void Set_DC_limits( int Mode );
-    void ConCalc( double X[], double XF[], double XFA[]);
-    void Mol_u( double Y[], double X[], double XF[], double XFA[] );
-    double DualChemPot( double U[], float AL[], int N );
-    void phase_bcs( int N, int M, float *A, double X[], double BF[] );
-    void ConCalcDC( double X[], double XF[], double XFA[],
-                    double Factor, double MMC, double Dsur, int jb, int je, int k );
-    double pH_via_hydroxyl( double x[], double Factor, int j);
-    void TotalPhases( double X[], double XF[], double XFA[] );
-    //   void eDmb( int N, int L, float *A, double *Y, double *B, double *C );
-    void GasParcP();
-
-    // ipm_gamma
-    double Ej_init_calc( double YOF, int j, int k);
-    void PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA[] );
-    double  PrimeChemPot(  double G,  double logY,  double logYF,
-                           double asTail,  double logYw,  char DCCW );
-    void f_alpha();
-    double KarpovCriterionDC( double *dNuG, double logYF, double asTail,
-                              double logYw, double Wx,  char DCCW );
-    double FreeEnergyIncr(   double G,  double x,  double logXF,
-                             double logXw,  char DCCW );
-    double GX( double LM  );
-    void pm_GC_ods_link( int k, int jb, int jpb, int jdb );
-    double TinkleSupressFactor( double ag, int ir);
-
-// Built-in functions for activity coefficients
-// surface complexation
-    void IS_EtaCalc();
-    void GouyChapman(  int jb, int je, int k );
-    void SurfaceActivityTerm( int jb, int je, int k );  // Obsolete
-    void SurfaceActivityCoeff( int jb, int je, int jpb, int jdb, int k );
-//  aqueous electrolyte
-    void DebyeHueckel3Hel( int jb, int je, int jpb, int jdb, int k );
-    void DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k );
-    void DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k );
-    void DebyeHueckel1LL( int jb, int je, /* int jpb, int jdb, */ int k );
-    void Davies03temp( int jb, int je, /* int jpb, int jdb, */ int k );
-void SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k );
-// fluid mixtures
-    void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
-// condensed mixtures
-    void RedlichKister( int jb, int je, int jpb, int jdb, int k );
-    void MargulesBinary( int jb, int je, int jpb, int jdb, int k );
-    void MargulesTernary( int jb, int je, int jpb, int jdb, int k );
-// Main entry for non-ideality corrections
-    void GammaCalc( int LinkMode );
-
-    // ipm_fia_bc
-    void MassBalanceDeviations( int N, int L, float *A, double *Y, double *B, double *C );
-    void SimplexInitialApproximation( );
-    void Simplex(int M, int N, int T, double GZ, double EPS,
-                 double *UND, double *UP, double *B, double *U,
-                 double *AA, int *STR, int *NMB );
-    void SPOS( double *P, int STR[],int NMB[],int J,int M,double AA[]);
-    void START( int T,int *ITER,int M,int N,int NMB[],
-                double GZ,double EPS,int STR[],int *BASE,
-                double B[],double UND[],double UP[],double AA[],double *A,
-                double *Q );
-    void NEW(int *OPT,int N,int M,double EPS,double *LEVEL,int *J0,
-             int *Z,int STR[], int NMB[], double UP[],
-             double AA[], double *A);
-    void WORK(double GZ,double EPS,int *I0, int *J0,int *Z,int *ITER,
-              int M, int STR[],int NMB[],double AA[],
-              int BASE[],int *UNO,double UP[],double *A,double Q[]);
-    void FIN(double EPS,int M,int N,int STR[],int NMB[],
-             int BASE[],double UND[],double UP[],double U[],
-             double AA[],double *A,double Q[],int *ITER);
-    // ipm_sel_bc
-    int Gordan( int N, double DG, double *A, double *X );
-    int SquareRoots( int N, double *R, double *X, double *B );
-    // int RISLUR( int N, double Eps, double *A, double *X, double *F );
-    // void NBM( int N, int L, float *A, double *Y, double *B, double *C);
-    void PhaseSelect( );
-    int EnterFeasibleDomain( );
-    //   void PhaseListPress( );
-    double LMD( double LM );
-    int InteriorPointsIteration( );
-    int InteriorPointsMethod( );
-    void Set_z_sp_config( const char *profil );
-    void CopyF( const char * fName, const char* fTempl );
 
 public:
 
     static TProfil* pm;
-    TMulti* multi;
 
    bool userCancel;
    bool stepWise;
@@ -338,12 +222,8 @@ public:
     bool fStopCalc;
 
     RMULTS* mup;
-
-    TMTparm* mtparm;
     MTPARM *tpp;
-
     SYSTEM *syp;
-
     MULTI *pmp;
 
     SPP_SETTING pa;
@@ -378,37 +258,20 @@ public:
     void PMtest( const char *key );
     void LoadFromMtparm(double T, double P,double *G0,
         double *V0, double *H0, double *Cp0, double &roW, double &epsW );
-    void SolModLoad();
-    void XmaxSAT_IPM2();
-    void XmaxSAT_IPM2_reset();
-    void MultiRemake( const char *key );
-    void EqstatExpand( const char *key );
     void CalcBcc(); // Calc bulk composition
-    // MultiCalc
-    void MultiCalcInit( const char *key );
-    bool AutoInitialApprox();
-    void MultiCalcIterations();
-    void MultiCalcMain( int &pll, double &FXold );
-    // MultiCalc debug
-    void DebagCalcEqstatInit();
-    bool DebagCalcEqstatStep();
-    // void DebagCalcEqstatEnd();
     void ShowPhaseWindow();
     void ShowEqPhaseWindow();
     void ShowDBWindow( const char *objName, int nLine=0 );
 
     // Proces make functions
     void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
-     tget_ndx *get_ndx = 0 );
-//     int ( get_ndx)(int, int) = 0 );
-    //  void  SetSyPhmKey( const char * key)
-    //      {   memcpy( syp->PhmKey, key, EQ_RKLEN ); }
-    // to Probe
-    double pb_GX( double *Gxx  );
+     tget_ndx *get_ndx = 0 )
+     { multi->ET_translate( nOet, nOpex, JB, JE, jb, je, get_ndx); }
+    double MolWeight( int N, float *ICaw, float *Smline )
+     { return syst->MolWeight( N, ICaw, Smline ); }
 
-   class UserCancelException {};
-
-    //test
+   //test
+   void outMulti( GemDataStream& ff, gstring& path  );
    void outMulti();
    void readMulti( GemDataStream& ff );
    void calcMulti();

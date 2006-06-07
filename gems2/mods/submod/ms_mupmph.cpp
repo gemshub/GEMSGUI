@@ -22,149 +22,10 @@
 #include <math.h>
 
 #include "m_param.h"
-#include "m_proces.h"
-#include "m_unspace.h"
 #include "s_formula.h"
-#include "m_syseq.h"
 #include "service.h"
-#include "visor.h"
+//#include "visor.h"
 
-
-// Setup of flags for MULTY remake
-// pNP,  //Mode of FIA selection: 0-auto-SIMPLEX,1-old eqstate,-1-user's choice
-// pESU, // Unpack old eqstate from EQSTAT record?  0-no 1-yes
-// pIPN, // State of IPN-arrays:  0-create; 1-available; -1 remake
-// pBAL, // State of reloading CSD:  1- BAL only; 0-whole CSD
-// pFAG, //State of initial lnGam load: 0-no, 1-on Mbel, 2-lnGmf, -1-SurEta
-// pTPD, // State of reloading thermod data: 0- all    2 - no
-// pULR, // reserved
-void TProfil::PMtest( const char *key )
-{
-    float T, P;
-    TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
-    TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
-//    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
-
-    ///  pmp->pNP = -1;
-    if( STat->ifCalcFlag())
-    { if( !pmp->pESU )
-          pmp->pESU = 1;
-    }
-    else pmp->pESU = 0;
-
-    if( pmp->pESU == 0 ) // no old solution
-        pmp->pNP = 0;
-
-    if( Proc->pep->Istat == P_EXECUTE ||
-        Proc->pep->Istat == P_MT_EXECUTE )
-    {
-        if(Proc->pep->PvR1 == S_OFF )
-            pmp->pNP = 0;
-        else
-            pmp->pNP = 1;
-    }
-/*    if( Prob->usp->pbcalc == P_EXECUTE )    ???????
-    {
-        if(Prob->usp->zond[11] == S_OFF )
-            pmp->pNP = 0;
-        else
-            pmp->pNP = 1;
-    }
-*/    pmp->pBAL =  BAL_compare();
-    if( !pmp->pBAL )
-        pmp->pIPN = 0;
-//    if( multi->qEp.GetCount()<1 || multi->qEd.GetCount()<1 )  Caution!
-    if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE )
-        pmp->pIPN = 0;
-    // Get P and T from key
-    gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
-    P = atof(s.c_str());
-    s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN+MAXPTN,MAXPTN);
-    T = atof(s.c_str());
-
-    if( fabs( tpp->curT - T ) > 1.e-10 ||
-            fabs( tpp->curP - P ) > 1.e-10 )
-    { // load new MTPARM on T or P
-        mtparm->LoadMtparm( T, P );
-        pmp->pTPD = 0;
-    }
-}
-
-void TProfil::LoadFromMtparm(double T, double P,double *G0,
-        double *V0, double *H0, double *Cp0, double &roW, double &epsW )
-{
-    if( fabs( tpp->curT - T ) > 1.e-10 ||
-            fabs( tpp->curP - P ) > 1.e-10 )
-    { // load new MTPARM on T or P
-        mtparm->LoadMtparm( T, P );
-        pmp->pTPD = 0;
-    }
-
-    roW = tpp->RoW;
-    epsW = tpp->EpsW;
-    for( int jj=0; jj<mup->L; jj++ )
-    {
-      G0[jj] =  tpp->G[jj];
-      V0[jj] =  tpp->Vm[jj];
-      if( H0 && tpp->H )
-        H0[jj] =  tpp->H[jj];
-      if( Cp0 && tpp->Cp )
-        Cp0[jj] =  tpp->Cp[jj];
-    }
-}
-
-// -------------------------------------------------------------------
-// Compare changes in the modified system relative to MULTI
-// if some vectors were allocated or some dimensions changed - return 0;
-// else if bulk composition or some constraints has changed - return 1;
-// else if nothing has changed - return 2.
-short TProfil::BAL_compare()
-{
-    int i,j,k;
-    /* test sizes */
-    if( pmp->N != syp->N || pmp->L != syp->L || pmp->Ls != syp->Ls
-            || pmp->LO != syp->Lw || pmp->PG != syp->Lg
-            || pmp->PSOL != syp->Lhc || pmp->Lads != syp->Lsor
-            || pmp->FI != syp->Fi || pmp->FIs != syp->Fis )
-        return 0;
-    if(( syp->DLLim == S_ON || syp->DULim == S_ON ) && pmp->PLIM != 1 )
-        return 0;
-    else if( syp->DLLim == S_OFF && syp->DULim == S_OFF && pmp->PLIM == 1 )
-        return 0;
-
-    /* test selectors */
-    for( i=0; i<pmp->N; i++ )
-        if( syp->Icl[pmp->mui[i]] == S_OFF )
-            return 0;
-    for( j=0; j<pmp->L; j++ )
-        if( syp->Dcl[pmp->muj[j]] == S_OFF )
-            return 0;
-    for( k=0; k<pmp->FI; k++ )
-        if( syp->Pcl[pmp->muk[k]] == S_OFF )
-            return 0;
-    /* lists of components didn't change */
-    /* test B */
-    for( i=0; i<pmp->N; i++ )
-        if( fabs( syp->B[pmp->mui[i]] - pmp->B[i] ) >= pa.p.DB )
-            return 1;
-    /* test other restrictions */
-    for( j=0; j<pmp->L; j++ )
-    {
-        if( syp->PGEX != S_OFF )
-            if( fabs( syp->GEX[pmp->muj[j]] - pmp->GEX[j]*pmp->RT ) >= 0.001 )
-                return 1;
-        if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
-            if( fabs( syp->DLL[pmp->muj[j]] - pmp->DLL[j] ) >= 1e-19 )
-                return 1;
-        if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
-            if( fabs( syp->DUL[pmp->muj[j]] - pmp->DUL[j] ) >= 1e-19 )
-                return 1;
-//      Adsorption models - to be completed !!!!!
-        ;
-    }
-    // bulk chem. compos. and constraints unchanged
-    return 2;
-}
 
 // Make base structure to calculate equilibrium state
 //    Scheme of work
@@ -177,12 +38,13 @@ short TProfil::BAL_compare()
 // 9} test possibilities to take old solution as first
 //    prime solution  and unpack it
 //
-void TProfil::MultiRemake( const char *key )
+void TMulti::MultiRemake( const char *key )
 {
     int i, N;
     short ii;
     vstr pkey(MAXRKEYLEN);
     double VS;
+    SPP_SETTING *pa = &TProfil::pm->pa;
 
     memcpy( pmp->stkey, key, EQ_RKLEN );
     pmp->stkey[EQ_RKLEN] = '\0';
@@ -215,7 +77,7 @@ void TProfil::MultiRemake( const char *key )
     if( syp->NsTm > 0 && syp->PNfsp != S_OFF )
         pmp->FIat = MST;
     else pmp->FIat = 0;
-    pmp->PD = pa.p.PD;
+    pmp->PD = pa->p.PD;
 
     pmp->T = pmp->Tc = tpp->T + C_to_K;
     pmp->TC = pmp->TCc = tpp->T;
@@ -244,13 +106,13 @@ void TProfil::MultiRemake( const char *key )
     }
 
     pmp->Ec = pmp->K2 = pmp->MK = 0;
-    pmp->PZ = pa.p.DW; // IPM-2 default
+    pmp->PZ = pa->p.DW; // IPM-2 default
     pmp->W1 = 0;
     pmp->is = 0;
     pmp->js = 0;
     pmp->next  = 0;
     pmp->IC =  syp->Mbel;
-pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
+pmp->FitVar[0] = pa->aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
     pmp->denW = tpp->RoW;
     pmp->denWg = tpp->RoV;
     pmp->epsW = tpp->EpsW;
@@ -261,20 +123,20 @@ pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
     pmp->FRT = F_CONSTANT/pmp->RT;
 
     pmp->ln5551 = 4.0165339;
-    pmp->lowPosNum = pa.p.DcMin;
+    pmp->lowPosNum = pa->p.DcMin;
     pmp->logXw = -16.;
     pmp->logYFk = -9.;
     pmp->lnP = 0.;
     if( tpp->P != 1. )  // Non-reference Pressure
         pmp->lnP = log( tpp->P );
-    pmp->DX = pa.p.DK;
+    pmp->DX = pa->p.DK;
 
-    pmp->FitVar[4] = pa.p.AG;
+    pmp->FitVar[4] = pa->p.AG;
     pmp->pRR1 = 0;      //IPM smoothing factor and level
 
     // realloc memory if necessary
     if( !pmp->pBAL )
-        multi->dyn_new();
+        dyn_new();
     if( pmp->pBAL == 2 )
         /*N=pmp->N;*/  goto NEXT2;
     // load parameters for independent components
@@ -348,7 +210,7 @@ NEXT2:
 //#define mp(i,j) pmp->MASDJ[(j)+(i)*D_F_CD_NP]
 //Load data for DC from Modelling Project definition to structure MULTI
 //
-void TProfil::multi_sys_dc()
+void TMulti::multi_sys_dc()
 {
     int j, ii, L, iZ=0;
     short jj, jja/*=0*/, ja/*=0*/, kk;
@@ -496,7 +358,7 @@ CH_FOUND:
         if( jj < mup->Ls && syp->PlnGf != S_OFF )
         {
             pmp->lnGmf[j] = syp->lnGmf[jj];
-            if( !pa.p.PSM )  // Constant activity coefficients
+            if( !TProfil::pm->pa.p.PSM )  // Constant activity coefficients
                 pmp->lnGmM[j] = syp->lnGmf[jj];
         }
         else pmp->lnGmf[j] = 0.0;
@@ -638,7 +500,7 @@ CH_FOUND:
 
 //Load data on phases and solution models to structure MULTI
 //
-void TProfil::multi_sys_ph()
+void TMulti::multi_sys_ph()
 {
     int k, i;
     short kk, j, je, jb, ja=0;
@@ -920,7 +782,7 @@ PARLOAD: if( k < syp->Fis )
 }
 
 // Loading surface type parameters
-void TProfil::ph_sur_param( int k, int kk )
+void TMulti::ph_sur_param( int k, int kk )
 {
     int i;
 
@@ -945,7 +807,7 @@ void TProfil::ph_sur_param( int k, int kk )
         /* (1e18/m2 m2/g)/(6.022e23 1/mol)=1.66054 mkmol/g */
 
         if( !syp->MaSdt || syp->MaSdt[kk][i] < 1e-9 )
-            pmp->MASDT[k][i] = pa.p.DNS * 1.66054 * syp->Aalp[kk];
+            pmp->MASDT[k][i] = TProfil::pm->pa.p.DNS * 1.66054 * syp->Aalp[kk];
         /* default, mkmol/g */
         else pmp->MASDT[k][i] = syp->MaSdt[kk][i]*syp->Aalp[kk]*1.66054;
         /* max. in mkmol/g */
@@ -989,7 +851,7 @@ void TProfil::ph_sur_param( int k, int kk )
 
 // Assigning surface types to carrier (DC) - added 5/13/97 DAK
 // Extended for CD-MUSIC by KD 31.10.2004
-void TProfil::ph_surtype_assign( int k, int kk, int jb, int je,
+void TMulti::ph_surtype_assign( int k, int kk, int jb, int je,
                                  short car_l[], int car_c, short Cjs )
 {
     int j, jcl, ist/*=0*/, isi/*=0*/, ja/*=0*/;
@@ -1036,7 +898,7 @@ pmp->D[ist][isi] = 0.0;                    // cleanining the totals for sites
 }
 
 // Convert class codes of DC into general codes of IPM
-void TProfil::ConvertDCC()
+void TMulti::ConvertDCC()
 {
     int i, j, k, iRet=0;
     char DCCW;

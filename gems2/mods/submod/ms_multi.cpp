@@ -3,7 +3,7 @@
 //
 // Implementation of TMulti class, config functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -22,10 +22,11 @@
 #include "visor.h"
 
 
-TMulti::TMulti( int nrt, SYSTEM* sy_ ):
-        TSubModule( nrt ), syp(sy_)
+TMulti::TMulti( int nrt, SYSTEM* sy_, MTPARM *tp_, RMULTS *mu_ ):
+        TSubModule( nrt ), syp(sy_), tpp(tp_), mup(mu_)
 {
     set_def();
+    pmp = &pm;
 }
 
 
@@ -224,7 +225,7 @@ void TMulti::ods_link( int /*q*/)
     // part 3
     aObj[ o_w_xfts].SetPtr( pm.XFTS );
     aObj[ o_w_xfts ].SetDim(pm.FIs,pm.FIat);
-//  Changed 27.10.2004 for CD MUSIC 
+//  Changed 27.10.2004 for CD MUSIC
     aObj[ o_wo_masdj].SetPtr( pm.MASDJ );
     aObj[ o_wo_masdj ].SetDim( pm.Lads, DFCN );
 //    aObj[ o_wo_masdj ].SetDim( pm.Ls, 1 );
@@ -275,10 +276,10 @@ aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
     aObj[ o_w_d ].SetDim( MST, MST );
 //    aObj[ o_w_d].SetPtr( pm.D );
 //    aObj[ o_w_d ].SetDim( pm.L, 1 );
-    aObj[ o_w_r].SetPtr( pm.R );
-    aObj[ o_w_r ].SetDim( pm.NR, pm.NR+1 );
-    aObj[ o_w_r1].SetPtr( pm.R1 );
-    aObj[ o_w_r1 ].SetDim( pm.NR, pm.NR+1 );
+//    aObj[ o_w_r].SetPtr( pm.R );
+//    aObj[ o_w_r ].SetDim( pm.NR, pm.NR+1 );
+//    aObj[ o_w_r1].SetPtr( pm.R1 );
+//    aObj[ o_w_r1 ].SetDim( pm.NR, pm.NR+1 );
     aObj[ o_wi_smod ].SetPtr( pm.sMod );
     aObj[ o_wi_smod ].SetDim( pm.FIs, 1 );
     aObj[ o_wd_sb ].SetPtr( pm.SB );
@@ -459,8 +460,8 @@ pm.XetaD = (double (*)[MST])aObj[ o_w_xetad ].GetPtr(); // added 12.09.05 KD
     pm.F     = (double *)aObj[ o_wo_f ].GetPtr();
     pm.F0    = (double *)aObj[ o_w_f0 ].GetPtr();
 pm.D     = (double (*)[MST])aObj[ o_w_d ].GetPtr();
-    pm.R     = (double *)aObj[ o_w_r ].GetPtr();
-    pm.R1    = (double *)aObj[ o_w_r1 ].GetPtr();
+//    pm.R     = (double *)aObj[ o_w_r ].GetPtr();
+//    pm.R1    = (double *)aObj[ o_w_r1 ].GetPtr();
     pm.sMod  = (char (*)[6])aObj[ o_wi_smod ].GetPtr();
     pm.SB    = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_wd_sb ].GetPtr();
     pm.SB1    = (char (*)[MAXICNAME])aObj[ o_w_sbh ].GetPtr();
@@ -596,8 +597,8 @@ pm.XetaD = (double (*)[MST])aObj[ o_w_xetad ].Free();
     pm.F     = (double *)aObj[ o_wo_f ].Free();
     pm.F0    = (double *)aObj[ o_w_f0 ].Free();
 pm.D     = (double (*)[MST])aObj[ o_w_d ].Free();
-    pm.R     = (double *)aObj[ o_w_r ].Free();
-    pm.R1    = (double *)aObj[ o_w_r1 ].Free();
+//    pm.R     = (double *)aObj[ o_w_r ].Free();
+//    pm.R1    = (double *)aObj[ o_w_r1 ].Free();
     pm.sMod  = (char (*)[6])aObj[ o_wi_smod ].Free();
     pm.SB    = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_wd_sb ].Free();
     pm.SB1   = (char (*)[MAXICNAME])aObj[ o_w_sbh ].Free();
@@ -1026,8 +1027,8 @@ pm.XetaD = 0;         // added 12.09.05  KD
         pm.F     = 0;
         pm.F0    = 0;
         pm.D     = 0;
-        pm.R     = 0;
-        pm.R1    = 0;
+     //   pm.R     = 0;
+     //   pm.R1    = 0;
         pm.sMod  = 0;
         pm.SB    = 0;
         pm.SB1    = 0; // added Sveta 6/07/2001

@@ -21,11 +21,16 @@
                       $$SUBMOD_CPP/ms_mupmph.cpp \
                       $$SUBMOD_CPP/ms_muload.cpp \
                       $$SUBMOD_CPP/ms_muleq.cpp   \
-                      $$SUBMOD_CPP/ms_mueqexp.cpp \
-                      $$SUBMOD_CPP/ipm_sel_bc.cpp \
-                      $$SUBMOD_CPP/ipm_gamma.cpp  \
-                      $$SUBMOD_CPP/ipm_fia_bc.cpp \
-                      $$SUBMOD_CPP/ms_multi_file.cpp  \
+#                    $$SUBMOD_CPP/ipm_fia_bc.cpp \
+#                    $$SUBMOD_CPP/ipm_gamma.cpp \
+#                    $$SUBMOD_CPP/ipm_sel_bc.cpp \
+#                    $$SUBMOD_CPP/ms_mueqexp.cpp \
+                    $$SUBMOD_CPP/ms_multi_file.cpp \
+                    $$SUBMOD_CPP/ipm_chemical.cpp \
+                    $$SUBMOD_CPP/ipm_chemical2.cpp \
+                    $$SUBMOD_CPP/ipm_chemical3.cpp \
+                    $$SUBMOD_CPP/ipm_main.cpp \
+                    $$SUBMOD_CPP/ipm_main2.cpp \
                       $$SUBMOD_CPP/nodearray.cpp  \
                       $$SUBMOD_CPP/nodearray2.cpp \
                       $$SUBMOD_CPP/particlearray.cpp

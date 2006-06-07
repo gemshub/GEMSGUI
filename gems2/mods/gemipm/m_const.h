@@ -1,13 +1,8 @@
 #ifndef _m_const_h
 #define _m_const_h
 
-// #include <iostream>
 #include <ctype.h>
 #include <fstream>
-
-//#ifndef IPMGEMPLUGIN
-// #define IPMGEMPLUGIN
-//#endif
 
 using namespace std;
 #include "verror.h"
@@ -21,12 +16,10 @@ const unsigned int
     MAXSYMB =        4,
     TDBVERSION =     64;
 
-
 const int
     MAXDCNAME =      16,
     MAXPHNAME =      16,
     EQ_RKLEN = 58;
-
 
 enum solmod_switches { /* indexes of keys of model solution*/
     SPHAS_TYP, DCOMP_DEP, SPHAS_DEP, SGM_MODE, DCE_LINK, SCM_TYPE,

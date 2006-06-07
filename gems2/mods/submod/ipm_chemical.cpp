@@ -1,10 +1,13 @@
 //-------------------------------------------------------------------
-// $Id$
+// $Id: ipm_gamma.cpp 690 2006-03-29 07:10:23Z gems $
 //
 // Copyright (C) 1992-2000  D.Kulik, S.Dmitrieva, K.Chudnenko, I.Karpov
 //
-// Implementation of chemistry-specific functions
-// for convex programming Gibbs energy minimization
+// Implementation of chemistry-specific functions (concentrations,
+// activity coefficients, adsorption models etc.)
+// for convex programming Gibbs energy minimization, described in:
+// (Karpov, Chudnenko, Kulik (1997): American Journal of Science
+//  v.297 p. 767-806); Kulik (2000), Geoch.Cosmoch.Acta 64,3161-3179
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry
@@ -18,458 +21,14 @@
 //-------------------------------------------------------------------
 //
 #include <math.h>
-//#include <stdio.h>
-#include <iostream>
-
 #include "m_param.h"
 
-#ifndef IPMGEMPLUGIN
-
-#include "service.h"
-#include "visor.h"
-//#include "visor_w.h"
-#include "stepwise.h"
-
-#endif
-
-// -----------------------------------------------------------------
-//const double tc_ISdelta = 1e-5;
-//const double LOWESTDC_ = 1e-6;
-
-// Finding automatic initial approximation for the IPM algorithm
-// using modified simplex method with two-side constraints
-// Return code:
-// false - OK for IPM
-// true  - OK solved
-//
-bool TProfil::AutoInitialApprox( )
-{
-    int i, j, k, NN;
-    double minB/*=0.0*/, molB=0.0, sfactor/*=1.0*/;
-
-// Kostya correct DK & DHB as automatic
-    NN = pmp->N - pmp->E;
-    minB=pmp->B[0];
-    for(i=0;i<NN;i++)
-    {
-      if( pmp->B[i] < minB )
-          minB = pmp->B[i];
-      molB += pmp->B[i];
-    }
-    if( minB < pa.p.DB )  // KD - foolproof
-       minB = pa.p.DB;
-
-//  check Ymin (cutoff)
-   if(pmp->lowPosNum>minB*0.01)
-      pmp->lowPosNum=minB*0.01;
-
-   sfactor = pow( molB, 0.4 )/7.7;
-   pmp->DHBM = sfactor * pa.p.DHB;  // 2.5 root
-   pmp->DHBM *= (0.097+0.95/(1+exp(-(log10(minB)+11)/0.4)));
-
-   pmp->DX = pa.p.DK;
-   pmp->DX *= sfactor;
-   pmp->DX *= (0.097+0.95/(1+exp(-(log10(minB)+6.1)/0.54)));
-   if( pmp->DX < 0.01 * pa.p.DK )
-       pmp->DX = 0.01 * pa.p.DK;
-   pmp->DSM = pa.p.DS;  // Shall we add  * sfactor ?
-
-#ifndef IPMGEMPLUGIN
-#ifndef Use_mt_mode
-   pVisor->Update(false);
-#endif
-#endif
-    // Analyzing if Simplex approximation is needed
-    if( !pmp->pNP  )
-    {   // Preparing to call Simplex method
-        pmp->FitVar[4] = pa.p.AG;  // smoothing parameter init
-        pmp->pRR1 = 0;
-        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-//      pmp->IC = 0.0;  Important - for reproducibility of simplex FIA
-        if( pa.p.PSM && pmp->FIs )
-            GammaCalc(LINK_FIA_MODE);
-        if( pa.p.PC == 2 )
-           XmaxSAT_IPM2_reset();  // Reset upper limits for surface species
-        pmp->IT = 0;
-        pmp->pNP = 0;
-        pmp->K2 = 0;
-        pmp->PCI = 0;
-
-  // simplex method is called here
-        SimplexInitialApproximation( );
-
-//  STEPWISE (0) - stop point for examining results from simplex IA
-#ifndef IPMGEMPLUGIN
-STEP_POINT( "End Simplex" );
-#endif
-
-        // no multi-component phases?
-        if( !pmp->FIs )
-            return true; // goto OVER; // solved !
-
-        for( i=0; i<pmp->L; i++ )
-        {
-//            if( pmp->Y[i] <= /* LOWESTDC_ */ pmp->lowPosNum )
-//	       pmp->Y[i] = LOWESTDC_ / 10.;
-//            pmp->Y[i] = pa.p.DFYaq;
-//            if( pmp->Y[i] < pa.p.DFYc * sfactor ) // 24.02.03
-//            {
-                // Trace DC quantity into zeros!
-                switch( pmp->DCC[i] )
-                {
-                case DC_AQ_PROTON:
-                case DC_AQ_ELECTRON:
-                case DC_AQ_SPECIES:
-                    if( pmp->Y[i] < pa.p.DFYaq * sfactor /*= pmp->lowPosNum */ )
-                       pmp->Y[i] =  pa.p.DFYaq * sfactor;
-                    break;
-                case DC_AQ_SOLVCOM:
-                case DC_AQ_SOLVENT:
-                    if( pmp->Y[i] < pa.p.DFYw * sfactor )
-                       pmp->Y[i] =  pa.p.DFYw * sfactor;
-                    break;
-                case DC_GAS_H2O:
-                case DC_GAS_CO2:
-                case DC_GAS_H2:
-                case DC_GAS_N2:
-                case DC_GAS_COMP:
-                case DC_SOL_IDEAL:
-                    if( pmp->Y[i] < /* = pmp->lowPosNum */ pa.p.DFYid*sfactor )
-                       pmp->Y[i] = pa.p.DFYid * sfactor;
-                    break;
-                case DC_SOL_MINOR:
-                    if( pmp->Y[i] < /* = pmp->lowPosNum */ pa.p.DFYh*sfactor )
-                       pmp->Y[i] = pa.p.DFYh * sfactor;
-                    break;
-                case DC_SOL_MAJOR:
-                    if( pmp->Y[i] < pa.p.DFYr * sfactor )
-                        pmp->Y[i] =  pa.p.DFYr * sfactor;
-                    break;
-
-                case DC_SCP_CONDEN:
-                    if( pmp->Y[i] < /* pmp->lowPosNum */ pa.p.DFYc * sfactor )
-                        pmp->Y[i] =  pa.p.DFYc * sfactor;
-                    break;
-                    // implementation for adsorption?
-                default:
-                    if( pmp->Y[i] < pa.p.DFYaq *sfactor /* pmp->lowPosNum */ )
-                        pmp->Y[i] =  pa.p.DFYaq * sfactor;
-                    break;
-                }
-//              pmp->Y[i] *= sfactor;  // 2.5 root
-//             }
-           } // i
-    }
-    else  // Taking previous result as initial approximation
-    {
-        int jb, je=0, jpb, jpe=0, jdb, jde=0;
-        double LnGam, FitVar3;
-        /*    pmp->IT *= pa.p.PLLG; */
-
-        FitVar3 = pmp->FitVar[3];
-        pmp->FitVar[3] = 1.0;
-        TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
-        for( j=0; j< pmp->L; j++ )
-            pmp->X[j] = pmp->Y[j];
-        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-        ConCalc( pmp->X, pmp->XF, pmp->XFA );
-        if( pmp->E && pmp->LO )
-            IS_EtaCalc();
-        /*    if( pa.p.PSM )  corr. 13.4.96 */
-        for( k=0; k<pmp->FI; k++ )
-        {
-            jb = je;
-            je += pmp->L1[k];
-            jpb = jpe;
-            jpe += pmp->LsMod[k];
-            jdb = jde;
-            jde += pmp->LsMdc[k]*pmp->L1[k];
-            if( pmp->PHC[k] == PH_SORPTION || pmp->PHC[k] == PH_POLYEL )
-            {
-               if( pmp->E && pmp->LO )
-                   GouyChapman( jb, je, k );
-//               SurfaceActivityTerm( jb, je, k );
-                 SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
-            }
-            for( j=jb; j<je; j++ )
-            {
-                LnGam = pmp->lnGam[j];
-                if( fabs( LnGam ) > 1e-9 )
-                    pmp->Gamma[j] = exp( LnGam );
-                else pmp->Gamma[j] = 1.0;
-                pmp->F0[j] = Ej_init_calc( 0.0, j, k  );
-                pmp->G[j] = pmp->G0[j] + pmp->F0[j];
-                pmp->lnGmo[j] = LnGam;
-            }  // j
-        } // k
-        pmp->FitVar[3] = FitVar3; // Restore smoothing parameter
-
-        if( pmp->pNP <= -1 )
-        {  // With raising zeroed species and phases
-           for( i=0; i<pmp->L; i++ )
-           {
-//            if( pmp->Y[i] <= pmp->lowPosNum )
-//              { // Put trace DC quantity instead of zeros!
-                 switch( pmp->DCC[i] )
-                 {
-                   case DC_AQ_PROTON:
-                   case DC_AQ_ELECTRON:
-                   case DC_AQ_SPECIES:
-                      if( pmp->Y[i] <= pmp->lowPosNum )
-                           pmp->Y[i] = pa.p.DFYaq/1000.;
-                      break;
-                   case DC_AQ_SOLVCOM:
-                   case DC_AQ_SOLVENT:
-                        if( pmp->Y[i] < pa.p.DFYw )
-                           pmp->Y[i] = pa.p.DFYw;
-                      break;
-                   case DC_GAS_H2O: case DC_GAS_CO2: case DC_GAS_H2:
-                   case DC_GAS_N2: case DC_GAS_COMP:
-                   case DC_SOL_IDEAL:
-                        if( pmp->Y[i] <= pmp->lowPosNum )
-                          pmp->Y[i] = pa.p.DFYid/1000.;
-                      break;
-                   case DC_SOL_MINOR:
-                        if( pmp->Y[i] <= pmp->lowPosNum )
-                          pmp->Y[i] = pa.p.DFYh/1000.; break;
-                   case DC_SOL_MAJOR:
-                        if( pmp->Y[i] < pa.p.DFYr )
-                          pmp->Y[i] = pa.p.DFYr; break;
-                   case DC_SCP_CONDEN:
-                        if( pmp->Y[i] < pa.p.DFYc )
-                        pmp->Y[i] = pa.p.DFYc; break;
-                   // implementation for adsorption?
-                   default:
-                        if( pmp->Y[i] <= pmp->lowPosNum )
-                        pmp->Y[i] = pa.p.DFYaq/1000.; break;
-                 }
-              } // i
-//           }
-        }
-    }  // else
-    pmp->MK = 1;
-// STEPWISE (1) - stop point to see IA from old solution or raised simplex
-#ifndef IPMGEMPLUGIN
-STEP_POINT("Before FIA");
-#endif
-    return false;
-}
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Main sequence of IPM calculations
-//  Main place for implementation of diagnostics and setup
-//  of IPM precision and convergence
-//  Returns true   if IPM result is OK
-//          false  if good result could not be obtained
-//
-
-void TProfil::MultiCalcMain( int& /*pll*/, double& /*FXold*/ )
-{
-    int i, j, RepeatSel=0, eRet;
-    pmp->W1=0;
-
-    if( pmp->pULR && pmp->PLIM )
-        Set_DC_limits( DC_LIM_INIT );
-
-    /* test insert in valid area */
-mEFD:
-
-     if(pmp->PZ && pmp->W1)
-     { for( i=0; i<pmp->L; i++ )
-        pmp->Y[i]=pmp->X[i];
-      TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
-     }
-
-    eRet = EnterFeasibleDomain( );
-    // if( eRet ) goto ERET_THINK;
-
-    switch( eRet )
-    {
-     case 0:  // OK
-              break;
-     case 2:  // max iteration exceeded in EnterFeasibleDomain
-                 Error("E04IPM EFD(): " ,
-     "Prescribed precision of mass balance could not be reached because vector b or\n"
-     "DC stoichiometries or standard-state thermodynamic data are inconsistent.\n");
-              break;
-     case 1: // degeneration in R matrix  for EnterFeasibleDomain
-           if( pmp->DHBM<1e-5 )
-            {
-               pmp->DHBM *= 10.;
-               goto mEFD;
-            }
-           else
-                 Error("E05IPM EFD(): " ,
-          "Degeneration in R matrix (fault in the linearized system solver).\n"
-          "Invalid initial approximation - further IPM calculations are not possible");
-           break;
-    }
-
-// STEPWISE (2)  - stop point to examine output from EFD()
-#ifndef IPMGEMPLUGIN
-STEP_POINT("After FIA");
-#endif
-
-   // call of main minimization IPM
-       eRet = InteriorPointsMethod( );
-
-// STEPWISE (3)  - stop point to examine output from IPM()
-#ifndef IPMGEMPLUGIN
-STEP_POINT("After IPM");
-#endif
-
-// ERET_THINK:  // Diagnostics of IPM results
-   switch( eRet )
-   {
-     case 0:  // OK
-              break;
-     case 2:  // max iteration exceeded in InteriorPointsMethod
-               if( pmp->DX<1e-3 )
-               {
-                   pmp->DX *= 10.;
-                   goto mEFD;
-                }
-               else
-                 Error("E06IPM IPM-main(): " ,
-     "Given IPM convergence criterion could not be reached;\n Perhaps, vector b is not balanced,\n"
-     "or DC stoichiometries or standard-state thermodynamic data are inconsistent. \n");
-     case 1: // degeneration in R matrix  for InteriorPointsMethod
-           if( pmp->DHBM<1e-5 )
-            {
-               pmp->DHBM *= 10.;
-               goto mEFD;
-            }
-           else
-               Error("E07IPM IPM-main(): ",
-        "Degeneration in R matrix (fault in the linearized system solver).\n"
-        "No valid IPM solution could be obtained. Probably, vector b is not balanced,\n"
-        "or DC stoichiometries or standard-state thermodynamic data are inconsistent,\n"
-        "or some relevant phases or DC are missing, or some kinetic constraints are too stiff.\n"
-        );
-          break;
-   }
-
-//
-    pmp->FI1 = 0;
-    pmp->FI1s = 0;
-    for( i=0; i<pmp->FI; i++ )
-        if( pmp->YF[i] > 1e-18 )
-        {
-            pmp->FI1++;
-            if( i < pmp->FIs )
-                pmp->FI1s++;
-        }
-
-    if( !pa.p.PC )    //
-        if( pmp->PD < 2 )
-            return; // true; //break;
-        else
-        {
-            goto ITDTEST;
-        }
-
-    /* call Selekt2() */
-   PhaseSelect();
-   if( pa.p.PC == 2 )
-       XmaxSAT_IPM2();  // Install upper limits to xj of surface species
-
-   if( !pmp->MK )
-     if( RepeatSel<3 )
-       { RepeatSel++;
-         goto mEFD;
-       }
-     else
-       Error( "E08IPM PhaseSelect(): "," Insertion of phases was incomplete!");
-    //   if( !vfQuestion(window(), "PhaseSelect : warning",
-    //        "Insert phase cannot be reached. Continue?" ))
-    //         return false;
-
-   MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
-
-// STEPWISE (4) Stop point after PhaseSelect()
-#ifndef IPMGEMPLUGIN
-STEP_POINT("PhaseSelect");
-#ifndef Use_mt_mode
-pVisor->Update( false );
-#endif
-#endif
-
-   if(pmp->PZ && !pmp->W1)
-    { pmp->W1++;           // IPM-2 precision algorithm - 1st run
-      goto mEFD;
-    }
-
-   if(pmp->PZ && pmp->W1 && pmp->W1 <  pa.p.DW )
-   {
-    for(i=0;i<pmp->N-pmp->E;i++)
-    {
-      if( fabs(pmp->C[i]) > pmp->DHBM // * pa.p.GAS
-         || fabs(pmp->C[i]) > pmp->B[i] * pa.p.GAS )
-      {
-        if(pmp->W1 < pa.p.DW-1)
-        {
-            pmp->W1++;          // IPM-2 precision algorithm - 2nd run
-            goto mEFD;
-        }
-        else
-        {
-           gstring  buf,buf1;
-           vstr pl(5);
-           int jj=0;
-           for( j=0; j<pmp->N-pmp->E; j++ )
-          //  if( fabs(pmp->C[j]) > pmp->DHBM  || fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
-             if( fabs(pmp->C[j]) > pmp->B[j] * pa.p.GAS )
-             { sprintf( pl, " %-2.2s  ", pmp->SB[j] );
-               buf1 +=pl;
-               jj=1;
-             }
-           if( jj )
-           {
-             buf = "Prescribed balance precision cannot be reached\n for some trace independent components: ";
-             buf += buf1;
-//           fstream f_log("ipmlog.txt", ios::out|ios::app );
-//           f_log << buf.c_str()<< endl;
-//           f_log.close();
-             Error("E09IPM IPM-main(): ", buf.c_str() );
-           }
-           else
-             Error("E10IPM IPM-main(): " , "Inconsistent GEM solution: imprecise mass balance\n for some major independent components: " );
-         }
-       }
-     } // end of i loop
-   }
-ITDTEST:
-    memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
-//    Error("IPM error: " , "Good result could not be obtained" );
-   // appears to be normal return after successfull improvement of mass balance precision
-}
-
-//Calc equstat method IPM (iterations)
-void TProfil::MultiCalcIterations()
-{
-    pll=0;
-    FXold=0.0;
-
-    MultiCalcMain( pll, FXold );
-
-    //calc demo data
-    for( int ii=0; ii<pmp->N; ii++ )
-        pmp->U_r[ii] = pmp->U[ii]*pmp->RT;
-    GasParcP();
-
-    /* calc finished */
-}
-
-// End of file ms_muload.cpp
-// ----------------------------------------------------------------
-
-//#define mp(i,j) pmp->MASDJ[(j)+(i)*D_F_CD_NP]
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of max.moles of surface species for SAT stabilization
 *  to improve IPM-2 convergence at high SAT values  KD 08.03.02
 *  xj0 values are placed as upper kinetic constraints
 */
-void TProfil::XmaxSAT_IPM2( void )
+void TMulti::XmaxSAT_IPM2()
 {
     int i, j, ja/*=0*/, k, jb, je=0, ist=0, Cj/*=0*/, iSite[6];
     double XS0/*=0.*/, xj0/*=0.*/, XVk, XSk/*=0.*/, XSkC/*=0.*/, xj,
@@ -512,7 +71,7 @@ void TProfil::XmaxSAT_IPM2( void )
     { /* Loop for DC */
         if( pmp->X[j] <= pmp->lowPosNum /* *10. */ )
             continue;  /* This surface DC has been killed by IPM */
-        rIEPS = pa.p.IEPS;
+        rIEPS = TProfil::pm->pa.p.IEPS;
 //        oDUL = pmp->DUL[j];
         ja = j - ( pmp->Ls - pmp->Lads );
 
@@ -558,13 +117,13 @@ void TProfil::XmaxSAT_IPM2( void )
             {
             case SAT_COMP: /* Competitive surface species on a surface type */
                 /* a = fabs(pmp->MASDJ[j]); */
-// rIEPS = pa.p.IEPS * 0.1;
+// rIEPS = TProfil::pm->pa.p.IEPS * 0.1;
                 if( iSite[ist] < 0 )
                     xjn = 0.0;
                 else xjn = pmp->X[iSite[ist]]; // neutral site does not compete!
                 XS0 = max(pmp->MASDT[k][ist], pmp->MASDJ[ja][PI_DEN]);
                 XS0 = XS0 * XVk * Mm / 1e6 * pmp->Nfsp[k][ist]; /* expected total in moles */
-// Experimental  rIEPS = pa.p.IEPS * XS0;
+// Experimental  rIEPS = TProfil::pm->pa.p.IEPS * XS0;
                 XSkC = XSk - xjn - xj; /* occupied by the competing species */
                 if( XSkC < 0.0 )
                     XSkC = rIEPS; // 0.0;   ??????????
@@ -575,7 +134,7 @@ void TProfil::XmaxSAT_IPM2( void )
                     xj0 = pmp->lnSAC[ja][3];
                 if( xj0 < rIEPS )
                    xj0 = rIEPS;  /* ensuring that it will not zero off */
-                pmp->DUL[j] = xj0; // XS0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+                pmp->DUL[j] = xj0; // XS0*(1.0-TProfil::pm->pa.p.IEPS);  //pa.p.IEPS;
 // pmp->DUL[j] = XS0 - rIEPS;
                 // Compare with old DUL from previous iteration!
 /*                if( pmp->W1 != 1 && pmp->IT > 0 && fabs( (pmp->DUL[j] - oDUL)/pmp->DUL[j] ) > 0.1 )
@@ -595,15 +154,15 @@ cout << "XmaxSAT_IPM2 Comp. IT= " << pmp->IT << " j= " << j << " oDUL=" << oDUL 
             case SAT_PIVO_NCOMP:
             case SAT_VIR_NCOMP:
             case SAT_NCOMP: /* Non-competitive surface species */
-// rIEPS = pa.p.IEPS * 2;
+// rIEPS = TProfil::pm->pa.p.IEPS * 2;
 //                xj0 = fabs(pmp->MASDJ[j]) * XVk * Mm / 1e6
 //                      * pmp->Nfsp[k][ist];  in moles
-                 xj0 = fabs( pmp->MASDJ[ja][PI_DEN] ) * XVk * Mm / 1e6
-                      * pmp->Nfsp[k][ist]; /* in moles */
+                 xj0 = fabs( (double)pmp->MASDJ[ja][PI_DEN] ) * XVk * Mm / 1e6
+                      * (double)pmp->Nfsp[k][ist]; /* in moles */
                  pmp->DUL[j] = xj0 - rIEPS;
-// Experimental  rIEPS = pa.p.IEPS * xj0;
+// Experimental  rIEPS = TProfil::pm->pa.p.IEPS * xj0;
 //                 if( xj0 > 2.0*rIEPS )
-//                   pmp->DUL[j] = xj0 - rIEPS; // xj0*(1.0-pa.p.IEPS); //pa.p.IEPS;
+//                   pmp->DUL[j] = xj0 - rIEPS; // xj0*(1.0-TProfil::pm->pa.p.IEPS); //pa.p.IEPS;
 //                 else pmp->DUL[j] = rIEPS;
 // Compare with old DUL from previous iteration!
 /*                if( pmp->W1 != 1 && pmp->IT > 0 && fabs( (pmp->DUL[j] - oDUL)/pmp->DUL[j] ) > 0.1 )
@@ -613,12 +172,12 @@ cout << "XmaxSAT_IPM2 Ncomp IT= " << pmp->IT << " j= " << j << " oDUL=" << oDUL 
 */                break;
 
             case SAT_SOLV:  /* Neutral surface site (e.g. >O0.5H@ group) */
-rIEPS = pa.p.IEPS;
-                XS0 = max( pmp->MASDT[k][ist], pmp->MASDJ[ja][PI_DEN] );
-                XS0 = XS0 * XVk * Mm / 1e6 * pmp->Nfsp[k][ist]; /* in moles */
+rIEPS = TProfil::pm->pa.p.IEPS;
+                XS0 = (double)(max( pmp->MASDT[k][ist], pmp->MASDJ[ja][PI_DEN] ));
+                XS0 = XS0 * XVk * Mm / 1e6 * (double)pmp->Nfsp[k][ist]; /* in moles */
 
-// Experimental   rIEPS = pa.p.IEPS * XS0;
-                pmp->DUL[j] =  XS0 - rIEPS; // xj0*(1.0-pa.p.IEPS);  //pa.p.IEPS;
+// Experimental   rIEPS = TProfil::pm->pa.p.IEPS * XS0;
+                pmp->DUL[j] =  XS0 - rIEPS; // xj0*(1.0-TProfil::pm->pa.p.IEPS);  //pa.p.IEPS;
                 if( pmp->DUL[j] <= rIEPS )
                    pmp->DUL[j] = rIEPS;
                 break;
@@ -633,7 +192,7 @@ rIEPS = pa.p.IEPS;
 }
 
 // clearing pmp->DUL constraints!
-void TProfil::XmaxSAT_IPM2_reset( void )
+void TMulti::XmaxSAT_IPM2_reset()
 {
     int j, ja/*=0*/, k, jb, je=0;
 
@@ -655,38 +214,15 @@ void TProfil::XmaxSAT_IPM2_reset( void )
     }  /* j */
   } /* k */
 }
-//----------------------------------------------------------------------------
-
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // calc value of dual chemical potencial
-double TProfil::DualChemPot( double U[], float AL[], int N )
+double TMulti::DualChemPot( double U[], float AL[], int N )
 {
     double Nu = 0.0;
     for(int i=0; i<N; i++ )
-        Nu += AL[i]? U[i]*AL[i]: 0.0;
+        Nu += AL[i]? U[i]*(double)(AL[i]): 0.0;
     return Nu;
-}
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-/* calculate bulk stoichiometry of a multicomponent phase
-*/
-void TProfil::phase_bcs( int N, int M, float *A, double X[], double BF[] )
-{
-    int i, j;
-    double Xx;
-
-    if( !A || !X || !BF )
-        return;
-    memset( BF, 0, N*sizeof( double ));
-    for( j=0; j<M; j++ )
-    {
-        Xx = X[j];
-        if( fabs( Xx ) < 1e-12 )
-            continue;
-        for( i=0; i<N; i++ )
-            BF[i] += A[i+j*N] * Xx;
-    }
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -694,7 +230,7 @@ void TProfil::phase_bcs( int N, int M, float *A, double X[], double BF[] )
 //  concentration units
 //  Needs much more work and elaboration!
 //
-void TProfil::Set_DC_limits( int Mode )
+void TMulti::Set_DC_limits( int Mode )
 {
     double XFL, XFU, XFS=0., XFM, MWXW, MXV, XL, XU;
     int jb, je, j,k, MpL;
@@ -795,9 +331,9 @@ void TProfil::Set_DC_limits( int Mode )
 //Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
                     XU = pmp->DUL[j]*XFU*MWXW /
-                         syst->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );
+         TProfil::pm->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );
                     XL = pmp->DLL[j]*XFL*MWXW /
-                         syst->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );
+         TProfil::pm->MolWeight(pmp->N, pmp->Awt, pmp->A+j*pmp->N );
 
 #endif
                     break;
@@ -842,7 +378,7 @@ NEXT_PHASE:
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // Calc sum count of phases
-void TProfil::TotalPhases( double X[], double XF[], double XFA[] )
+void TMulti::TotalPhases( double X[], double XF[], double XFA[] )
 {
     int jj, j, i, k;
     double XFw, XFs, x;
@@ -867,20 +403,166 @@ void TProfil::TotalPhases( double X[], double XF[], double XFA[] )
     }
 }
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-// Calculate mass-balance deviations (moles)
-// void TProfil::eDmb( int N, int L, float *A, double *Y, double *B, double *C )
-// {
-//  short I,J;
-//  for(J=0;J<N;J++)
-//  {
-//    C[J]=B[J];
-//    for(I=0;I<L;I++)
-//       if( Y[I] && *(A+I*N+J) )
-//           C[J]-= *(A+I*N+J) *Y[I];
-//  }
-// }
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* Corrections to prime chemical potentials F0[j]
+*  of j-th species in k-th phase among IPM main iterations
+*  Returns double - value of corrected chem. potential.
+*  If error, returns +7777777 J/mole.
+*  Last modif. 05 Jan 2000 by DAK to include BSM EDL model.
+*/
+double TMulti::Ej_init_calc( double, int j, int k)
+{
+    int ja=0, ist/*=0*/, isp/*=0*/, jc=-1;
+    double F0=0.0, Fold, dF0, Mk=0.0, Ez, psiA, psiB, CD0, CDb, ObS;
+    SPP_SETTING *pa = &TProfil::pm->pa;
 
+    Fold = pmp->F0[j];
+    if( pmp->FIat > 0 && j < pmp->Ls && j >= pmp->Ls - pmp->Lads )
+    {
+        ja = j - ( pmp->Ls - pmp->Lads );
+        jc = pmp->SATX[ja][XL_EM];
+    }
+    if( k < pmp->FIs && pmp->XFA[k] > 1e-12)
+    {
+           if( jc < 0 ) /* phase (carrier) molar mass g/mkmol */
+              Mk = pmp->FWGT[k]/pmp->XFA[k]*1e-6;
+           else Mk = pmp->MM[jc]*(pmp->X[jc]/pmp->XFA[k])*1e-6;
+        /* DC carrier molar mass g/mkmol */
+    }
+    switch( pmp->DCC[j] )
+    { /* analyse species class code */
+    case DC_SCP_CONDEN:
+    case DC_AQ_PROTON:
+    case DC_AQ_ELECTRON:
+    case DC_AQ_SPECIES:
+    case DC_GAS_COMP:
+    case DC_GAS_H2O:
+    case DC_GAS_CO2:
+    case DC_GAS_H2:
+    case DC_GAS_N2:
+    case DC_AQ_SOLVENT:
+    case DC_AQ_SOLVCOM:
+    case DC_SOL_IDEAL:
+    case DC_SOL_MINOR:
+    case DC_SOL_MAJOR:
+        F0 = pmp->lnGmM[j];
+        break;
+        /*adsorption */
+    case DC_SSC_A0:
+    case DC_SSC_A1:
+    case DC_SSC_A2:
+    case DC_SSC_A3:
+    case DC_SSC_A4:
+    case DC_WSC_A0:
+    case DC_WSC_A1:
+    case DC_WSC_A2:
+    case DC_WSC_A3:
+    case DC_WSC_A4:
+    case DC_SUR_GROUP:
+    case DC_SUR_COMPLEX:
+    case DC_SUR_IPAIR:
+    case DC_IESC_A:
+    case DC_IEWC_B:
+        F0 = pmp->lnGmM[j]; /* + pmp->lnGam[j]; */
+        /* get ist - index of surface type and isp - index of surface plane  */
+/*!!!!!*/  ist = pmp->SATX[ja][XL_ST];  // / MSPN;
+/*!!!!!*/  isp = pmp->SATX[ja][XL_SP]; // % MSPN;
+        CD0 = (double)pmp->MASDJ[ja][PI_CD0];  // species charge that goes into 0 plane
+        CDb = (double)pmp->MASDJ[ja][PI_CDB];  // species charge that goes into B plane
+        ObS = (double)pmp->MASDJ[ja][PI_DEN];  // obsolete - the sign for outer-sphere charge
+        if( ObS >= 0.0 )
+            ObS = 1.0;
+        else ObS = -1.0;
+        psiA = pmp->XpsiA[k][ist];
+        psiB = pmp->XpsiB[k][ist];
+        Ez = double(pmp->EZ[j]);
+        if( !isp )  // This is the 0 (A) plane species
+        {
+            if( fabs( CD0 ) > 1e-20 )  // Doubtful...
+                Ez = CD0;
+            F0 += psiA * Ez * pmp->FRT;
+        }
+        else  /* This is B plane */
+        {
+            if( pmp->SCM[k][ist] == SC_MTL || pmp->SCM[k][ist] == SC_MXC )
+            { /* Modified TL: Robertson, 1997; also XTLM Kulik 2002 */
+                  if( fabs( CDb ) > 1e-20 )  // Doubtful...
+                      Ez = CDb;
+                  F0 += psiB * Ez * pmp->FRT;
+            }
+            if( pmp->SCM[k][ist] == SC_TLM )
+            {
+// New CD version of TLM  added 25.10.2004
+               if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
+                  F0 += ( psiA*CD0 + psiB*CDb )* pmp->FRT;
+// see also Table 4 in Zachara & Westall, 1999
+// Old version:  TLM Hayes & Leckie, 1987 uses the sign indicator at density
+                else {
+                  if( ObS < 0 )
+                  {
+                      Ez -= 1.0;
+                      F0 += ( psiA + Ez * psiB )* pmp->FRT;
+                  }
+                  else
+                  {
+                      Ez += 1.0;
+                      F0 += ( Ez * psiB - psiA )* pmp->FRT;
+                  }
+               }
+            }
+            else if( pmp->SCM[k][ist] == SC_BSM || pmp->SCM[k][ist] == SC_CCM )
+            { /* Basic Stern model Christl & Kretzschmar, 1999 */
+// New CD version of TLM  added 25.10.2004
+               if( fabs( CD0 ) > 1e-20 && fabs( CDb ) > 1e-20 )
+                  F0 += ( psiA*CD0 + psiB*CDb )* pmp->FRT;
+                else {
+                  if( ObS < 0 )
+                  {
+                      Ez -= 1.0;
+                      F0 += ( psiA + Ez * psiB )* pmp->FRT;
+                  }
+                  else
+                  {
+                      Ez += 1.0;
+                      F0 += ( Ez * psiB - psiA )* pmp->FRT;
+                  }
+               }
+            }
+        }
+        if( Mk > 1e-9 )
+        {
+            if( pmp->SCM[k][ist] == SC_MXC || pmp->SCM[k][ist] == SC_NNE ||
+                    pmp->SCM[k][ist] == SC_IEV )
+                F0 -= log( Mk * (double)(pmp->Nfsp[k][ist]) *
+                   (double)(pmp->Aalp[k]) * pa->p.DNS*1.66054 );
+            else F0 -= log( Mk * (double)(pmp->Nfsp[k][ist]) *
+                  (double)(pmp->Aalp[k]) * pa->p.DNS*1.66054 );
+            F0 -= (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 /
+                  ( 1.0 + (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 );
+        }
+        break;
+    case DC_PEL_CARRIER:
+    case DC_SUR_MINAL:  // const charge of carrier - not yet done !!!!!!!!!!
+    case DC_SUR_CARRIER:
+        F0 -= (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 /
+              ( 1.0 + (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 );
+        F0 += (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054;
+        break;
+    }
+    F0 += pmp->lnGam[j];
+
+    if( k >= pmp->FIs )   //Sveta ?????????????
+        return F0;
+    // Smoothing procedure for highly non-ideal phases
+    if( pmp->sMod[k][SGM_MODE] != SM_IDEAL
+            || pmp->sMod[k][SCM_TYPE] != SC_NNE )
+    {
+        dF0 = F0 - Fold;
+        if( pmp->X[j]>pmp->lowPosNum && fabs( dF0 ) >= 1e-5 ) /* to be checked !!! */
+            F0 = Fold + dF0 * pmp->FitVar[3];
+    }  // FitVar[3] = TinkleSuppressFactor(); see GammaCalc()
+    return F0;
+}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of prime chemical potential F (returned)
@@ -888,7 +570,7 @@ void TProfil::TotalPhases( double X[], double XF[], double XFA[] )
 * Gibbs energy gT (obtained from pmp->G[])
 * On error returns +7777777.
 */
-double TProfil::PrimeChemPot(
+double TMulti::PrimeChemPot(
     double G,      /* gT0+gEx */
     double logY,   /* ln x */
     double logYF,  /* ln Xa */
@@ -924,7 +606,7 @@ double TProfil::PrimeChemPot(
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // VJ - Update of prime chemical potentials
-void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA[] )
+void TMulti::PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA[] )
 {
     int i,j,k;
     double v, Yf; // v is debug variable
@@ -934,7 +616,7 @@ void TProfil::PrimeChemicalPotentials( double F[], double Y[], double YF[], doub
     { /* cycle by phase */
         i=j+pmp->L1[k];
         if( YF[k] <= pmp->lowPosNum*100. || ( pmp->PHC[k] == PH_AQUEL &&
-        ( YF[k] <= pa.p.XwMin || Y[pmp->LO] <= pmp->lowPosNum*1e3 )))
+        ( YF[k] <= TProfil::pm->pa.p.XwMin || Y[pmp->LO] <= pmp->lowPosNum*1e3 )))
             goto NEXT_PHASE;
 
         pmp->YFk = 0.0;
@@ -979,7 +661,7 @@ NEXT_PHASE:
 
 /*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Calculation of Karpov stability criteria for a DC*/
-double TProfil::KarpovCriterionDC(
+double TMulti::KarpovCriterionDC(
     double *dNuG,  /* Nu[j]-c[j] difference - is modified here */
     double logYF,  /* ln Xa */
     double asTail, /* asymmetry correction (0 for symmetric phases) */
@@ -1014,7 +696,7 @@ double TProfil::KarpovCriterionDC(
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // calculation of Karpov stability criteria for all phases
-void TProfil::f_alpha()
+void TMulti::f_alpha()
 {
     short k;
     int j, ii;
@@ -1079,7 +761,7 @@ void TProfil::f_alpha()
 /* Calculation of a species increment to total Gibbs energy G(X)
 *  of the system (returned). On error returns +7777777.
 */
-double TProfil::FreeEnergyIncr(
+double TMulti::FreeEnergyIncr(
     double G,      /* gT0+gEx */
     double x,      /* x - moles of species */
     double logXF,  /* ln Xa - moles of phase */
@@ -1115,7 +797,7 @@ double TProfil::FreeEnergyIncr(
 *  just copies vector Y[] into X[].
 *  Returns value of G(X) in moles.
 */
-double TProfil::GX( double LM  )
+double TMulti::GX( double LM  )
 {
     int i, j, k;
     double x, XF, XFw, FX, Gi /* debug variable */;
@@ -1147,8 +829,9 @@ double TProfil::GX( double LM  )
         /*   */
         XF = pmp->XF[k];
         if( XF <= pmp->lowPosNum*1000. ||
-                (pmp->PHC[k] == PH_AQUEL && (XF <= pmp->DHBM || XFw <= pa.p.XwMin) )
-                || ( pmp->PHC[k] == PH_SORPTION && XFw <= pa.p.ScMin ))
+                (pmp->PHC[k] == PH_AQUEL && (XF <= pmp->DHBM
+                || XFw <= TProfil::pm->pa.p.XwMin) )
+                || ( pmp->PHC[k] == PH_SORPTION && XFw <= TProfil::pm->pa.p.ScMin ))
             goto NEXT_PHASE;
         pmp->logYFk = log( XF );
 
@@ -1170,7 +853,8 @@ NEXT_PHASE:
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // GX for ProbeUncert in statistic
-double TProfil::pb_GX( double *Gxx  )
+// not use !! SD
+double TMulti::pb_GX( double *Gxx  )
 {
     int i, j;
     short k;
@@ -1190,8 +874,9 @@ double TProfil::pb_GX( double *Gxx  )
         /* calc new quantitys of phase  */
         XF = pmp->XF[k];
         if( XF <= pmp->lowPosNum*1000. ||
-           (pmp->PHC[k] == PH_AQUEL && (XF <= pmp->DHBM || XFw <= pa.p.XwMin) )
-                || ( pmp->PHC[k] == PH_SORPTION && XFw <= pa.p.ScMin ))
+           (pmp->PHC[k] == PH_AQUEL && (XF <= pmp->DHBM
+                || XFw <= TProfil::pm->pa.p.XwMin) )
+                || ( pmp->PHC[k] == PH_SORPTION && XFw <= TProfil::pm->pa.p.ScMin ))
             goto NEXT_PHASE;
         pmp->logYFk = log( XF );
 
@@ -1214,7 +899,7 @@ NEXT_PHASE:
 // Calc value cj (G0) by type of DC and standart value g(T,P)
 // k - index of phase, j - index DC in phase
 // if error code return 777777777.
-double TProfil::Cj_init_calc( double g0, int j, int k )
+double TMulti::Cj_init_calc( double g0, int j, int k )
 {
     double G, YOF;
 
@@ -1281,5 +966,155 @@ double TProfil::Cj_init_calc( double g0, int j, int k )
     return G += pmp->GEX[j];
 }
 
-//--------------------- End of ms_muexp.cpp ---------------------------
+//----------------------------------------------------------------
+// Kostya: debug of calculation X(j) from Au
 
+#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*pmp->N)))
+void TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
+{
+    int i,j,ja/*=0*/,jj,ii,jb,je,k;
+    int isp/*=0*/, ist/*=0*/;
+    double Ez, Psi;   // added  KD 23.11.01
+//    double SPmol,SPmol1;
+    double  Dsur, DsurT, MMC, *XU;
+    XU = new double[pmp->L];
+    ErrorIf( !XU, "Simplex", "Memory alloc error ");
+    memset(XU, 0, sizeof(double)*(pmp->L) );
+
+ //   ofstream ofs("c:/gems_b/x_u.txt",ios::out | ios::app);
+
+  jb=0;
+  for( k=0; k<pmp->FI; k++ )
+  { /* cycle by phases */
+      je=jb+pmp->L1[k];
+      Dsur=0.0; DsurT=0.0;
+      if( pmp->PHC[k] == PH_AQUEL && XF[k] > pmp->lowPosNum )
+        Dsur = XFA[k]/XF[k] - 1.0; // Asymm.corr.
+      if( (pmp->PHC[k] == PH_SORPTION || pmp->PHC[k] == PH_POLYEL)
+            && XFA[k] > pmp->lowPosNum )
+      {
+         MMC = 0.0; // calculation of molar mass of the sorbent
+         for( jj=jb; jj<je; jj++ )
+         {
+            if( pmp->DCC[jj] == DC_SUR_CARRIER ||
+                pmp->DCC[jj] == DC_SUR_MINAL ||
+                pmp->DCC[jj] == DC_PEL_CARRIER )
+                    MMC += pmp->MM[jj]*X[jj]/XFA[k];
+         }
+         Dsur = XFA[k]/XF[k] - 1.0;
+         DsurT = MMC * (double)(pmp->Aalp[k]) * TProfil::pm->pa.p.DNS*1.66054e-6;
+      }
+
+    for(j=jb;j<je;j++)
+    {
+      if( XF[k] >= pmp->DSM ) // pmp->lowPosNum ) fixed by KD 23.11.01
+      {
+         XU[j] = -pmp->G0[j] -pmp->lnGam[j]
+                 + DualChemPot( pmp->U, pmp->A+j*pmp->N, pmp->NR );
+         if( pmp->PHC[k] == PH_AQUEL ) // pmp->LO && k==0)
+         {
+            if(j == pmp->LO)
+                ;     //     disabled by KD 23.11.01
+//                XU[j] += Dsur - 1. + 1. / ( 1.+ Dsur ) + log(XF[k]);
+            else
+                XU[j] += Dsur + log(XFA[k]);
+         }
+         else if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )
+         {
+            if( pmp->DCC[j] == DC_PEL_CARRIER ||
+                 pmp->DCC[j] == DC_SUR_CARRIER ||
+                 pmp->DCC[j] == DC_SUR_MINAL )
+                ;    //     disabled by KD 23.11.01
+//                XU[j] += Dsur - 1.0 + 1.0 / ( 1.0 + Dsur )
+//                      - DsurT + DsurT / ( 1.0 + DsurT ) + log(XF[k]);
+            else  {    // rewritten by KD  23.11.01
+               // Psi = 0.0;
+               ja = j - ( pmp->Ls - pmp->Lads );
+               Ez = pmp->EZ[j];
+               /* Get ist - index of surface type */
+/* !!!!! */    ist = pmp->SATX[ja][XL_ST]; // / MSPN;
+               /* and isp - index of surface plane  */
+//               isp = pmp->SATX[ja][XL_ST] % MSPN;
+               isp = pmp->SATX[ja][XL_SP];
+               if( !isp )
+                   /* This is A (0) plane */
+                   Psi = pmp->XpsiA[k][ist];
+               else /* This is B or another plane */
+                   Psi = pmp->XpsiB[k][ist];
+               XU[j] += Dsur + DsurT/( 1.0 + DsurT ) + log(XFA[k])+
+               log( DsurT * (double)(pmp->Nfsp[k][ist]) ) - pmp->FRT * Ez * Psi;
+             }
+         }
+         else
+           XU[j] += log(XF[k]);
+
+         if( XU[j] > -42. && XU[j] < 42. )
+             XU[j] = exp( XU[j] );
+         else
+             XU[j] = /* F_EMPTY*/ 0.0;
+         if( XU[j] <= pmp->lowPosNum )
+             XU[j]=0.;
+      }
+      else
+          XU[j]=0.;
+    }
+    jb = je;
+  }  /* k */
+ /*   if(pmp->LO&& k==0)
+     for( j=jb; j<je; j++ )
+    {
+            if(j==pmp->LO)
+                   continue;
+            SPmol = X[j]*Factor;  // molality
+            SPmol1 = XU[j]*Factor;
+
+            for( ii=0; ii<pmp->N; ii++ )
+            {
+                pmp->IC_m[ii] += SPmol* a(j,ii);
+                MU[ii] += SPmol1* a(j,ii);
+            }
+     }
+  */
+
+ /*   ofs<<"---------------------"<<endl;
+     ofs<<pmp->stkey<<endl;
+    char elemb[20];
+   if(pmp->LO)
+    for( ii=0; ii<pmp->N; ii++ )
+    {
+        strncpy(elemb, pmp->SB[ii], 4);
+        elemb[4]=0;
+        ofs << elemb << pmp->IC_m[ii];
+        ofs << "\t  "<< MU[ii];
+        if(pmp->IC_m[ii]>0) ofs<<" \t "<<log10(pmp->IC_m[ii]);
+        if(MU[ii]>0)  ofs<<" \t "<< log10(MU[ii])<<endl;
+    }
+    ofs<<endl;
+    for( j=0; j<pmp->L; j++ )
+    {   strncpy(elemb, pmp->SM[j], 16);
+        elemb[16]=0;
+        ofs << elemb  <<" \t"<<X[j]<<" \t "<< XU[j]<<endl;
+    }
+   }    */
+    for( j=0; j<pmp->L; j++ )
+    { ii=0;
+      if(TProfil::pm->pa.p.PLLG)
+      { for( i=0; i<pmp->N-pmp->E; i++ )
+        if(a(i,j) && pmp->B[i] < pmp->DHBM*pow(10.,TProfil::pm->pa.p.DT))
+        { ii=1; break; }
+      }
+      else
+        if(Y[j]<pmp->DHBM*pow(10.,TProfil::pm->pa.p.DT))
+          ii=1;
+      if (ii)
+        X[j]=XU[j];
+      else
+        X[j]=Y[j];
+    }
+    TotalPhases( X, XF, XFA );
+
+    delete[] XU;
+//   ofs.close();
+}
+
+//--------------------- End of ipm_chemical.cpp ---------------------------

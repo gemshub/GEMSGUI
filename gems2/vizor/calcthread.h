@@ -37,10 +37,10 @@ public:
 	catch( TError& err ) {
 	    error = err;
 	}
-	catch( TProfil::UserCancelException& ex ) {
+	catch( TMulti::UserCancelException& ex ) {
 	}
     }
-    
+
     // put the code here to clean up after
     // calculations have been cancelled (or finished)
     void clean_up() {

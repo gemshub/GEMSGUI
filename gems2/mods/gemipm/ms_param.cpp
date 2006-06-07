@@ -1,5 +1,24 @@
-
-#ifdef __unix__ 
+//-------------------------------------------------------------------
+// $Id$
+//
+// Copyright (C) 1992-2000 K.Chudnenko, I.Karpov, D.Kulik, S.Dmitrieva
+//
+// Implementation of parts of the Interior Points Method (IPM) module
+// for convex programming Gibbs energy minimization, described in:
+// (Karpov, Chudnenko, Kulik (1997): American Journal of Science
+//  v.297 p. 767-806)
+//
+// This file is part of a GEM-Selektor (GEMS) v.2.x.x program
+// environment for thermodynamic modeling in geochemistry
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// E-mail: gems2.support@psi.ch
+//-------------------------------------------------------------------
+//
+#ifdef __unix__
 #include <unistd.h>
 #endif
 
@@ -24,7 +43,7 @@ const double R_CONSTANT = 8.31451,
 enum volume_code {  /* Codes of volume parameter ??? */
     VOL_UNDEF, VOL_CALC, VOL_CONSTR
 };
-                            
+
 SPP_SETTING pa_ = {
     "GEM-Selektor v2-PSI: Controls and defaults for numeric modules",
     {
@@ -46,28 +65,47 @@ SPP_SETTING pa_ = {
 }; /* SPP_SETTING */
 
 
-void
-BASE_PARAM::write(ostream& oss)
+void BASE_PARAM::write(ostream& oss)
 {
     oss.write( (char*)&PC, 10*sizeof(short) );
     oss.write( (char*)&DG, 28*sizeof(double) );
     oss.write( (char*)&tprn, sizeof(char*) );
 }
 
-
-void
-SPP_SETTING::write(ostream& oss)
+void SPP_SETTING::write(ostream& oss)
 {
     oss.write( ver, TDBVERSION );
     p.write( oss );
 }
-
 
 TProfil::TProfil( TMulti* amulti )
 {
     pa= pa_;
     multi = amulti;
     pmp = multi->GetPM();
+}
+
+// GEM IPM calculation of equilibrium state in MULTI
+void TProfil::calcMulti()
+{
+    multi->MultiCalcInit( 0 );
+    if( multi->AutoInitialApprox() == false )
+        multi->MultiCalcIterations();
+}
+
+void TProfil::outMulti( GemDataStream& ff, gstring& path  )
+{
+    ff.writeArray( &pa.p.PC, 10 );
+    ff.writeArray( &pa.p.DG, 28 );
+    multi->to_file( ff, path );
+}
+
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::readMulti( GemDataStream& ff )
+{
+      ff.readArray( &pa.p.PC, 10 );
+      ff.readArray( &pa.p.DG, 28 );
+      multi->from_file( ff );
 }
 
 /*-----------------------------------------------------------------*/
@@ -84,7 +122,7 @@ TProfil::TProfil( TMulti* amulti )
 //  Function returns an interpolated value of d(yoi,xoi) or 0 if
 //  yoi or xoi are out of range
 //
-double TProfil::LagranInterp(float *y, float *x, double *d, float yoi,
+double TMulti::LagranInterp(float *y, float *x, double *d, float yoi,
                     float xoi, int M, int N)
 {
     double s=0,z,s1[21];
@@ -148,9 +186,8 @@ m:
     return(s);
 }
 
-
 // Load Thermodynamic Data from MTPARM to MULTI using LagranInterp
-void TProfil::CompG0Load()
+void TMulti::CompG0Load()
 {
   int j, jj, k, jb, je=0;
   double Gg, Vv;
@@ -245,25 +282,24 @@ void TProfil::CompG0Load()
 }
 
 // GEM IPM calculation of equilibrium state in MULTI
-void
-TProfil::MultiCalcInit( const char *key )
+void TMulti::MultiCalcInit( const char *key )
 {
   short j,k;
+  SPP_SETTING *pa = &TProfil::pm->pa;
 
     pmp->Ec = pmp->K2 = pmp->MK = 0;
-    pmp->PZ = pa.p.DW; // IPM-2 default
+    pmp->PZ = pa->p.DW; // IPM-2 default
     pmp->W1 = 0;
     pmp->is = 0;
     pmp->js = 0;
     pmp->next  = 0;
     pmp->ln5551 = 4.0165339;
-    pmp->lowPosNum = pa.p.DcMin;
+    pmp->lowPosNum = pa->p.DcMin;
     pmp->logXw = -16.;
     pmp->logYFk = -9.;
-    pmp->FitVar[4] = pa.p.AG;
+    pmp->FitVar[4] = pa->p.AG;
     pmp->pRR1 = 0;      //IPM smoothing factor and level
-    pmp->DX = pa.p.DK;
-
+    pmp->DX = pa->p.DK;
 
     pmp->T0 = 273.15;    // not used anywhere
     pmp->FX = 7777777.;
@@ -272,7 +308,7 @@ TProfil::MultiCalcInit( const char *key )
 
 //    if( pmp->pESU  && pmp->pNP )     // problematic statement !!!!!!!!!
     {
-//        multi->unpackData(); // loading data from EqstatUnpack( key );
+//      unpackData(); // loading data from EqstatUnpack( key );
         pmp->IC = 0.;
         for( j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
@@ -282,9 +318,7 @@ TProfil::MultiCalcInit( const char *key )
 //        for( j=0; j<pmp->L; j++ )
 //            pmp->Y[j] = 0.0;
 
-
     CompG0Load();
-
     for( j=0; j< pmp->L; j++ )
         pmp->G[j] = pmp->G0[j];
     // test phases - solutions and load models
@@ -295,14 +329,9 @@ TProfil::MultiCalcInit( const char *key )
             pmp->lnGmo[j] = pmp->lnGam[j];
             pmp->Gamma[j] = 1.0;
         }
-    }
-
-    if( pmp->FIs )
-    {
-        pmp->PD = pa.p.PD;
+        pmp->PD = pa->p.PD;
 //        SolModLoad();
         GammaCalc( LINK_TP_MODE);
-
     }
     // recalc restrictions for DC quantities
     if( pmp->pULR && pmp->PLIM )
@@ -314,48 +343,13 @@ TProfil::MultiCalcInit( const char *key )
         pmp->XFs[k] = pmp->YF[k];
         pmp->Falps[k] = pmp->Falp[k];
     }
-
- //    // realloc memory for  R and R1
-    pmp->R = new double[pmp->N*(pmp->N+1)];
-    pmp->R1 = new double[pmp->N*(pmp->N+1)];
-    memset( pmp->R, 0, pmp->N*(pmp->N+1)*sizeof(double));
-    memset( pmp->R1, 0, pmp->N*(pmp->N+1)*sizeof(double));
-}
-
-
-// GEM IPM calculation of equilibrium state in MULTI
-void
-TProfil::calcMulti()
-{
-    MultiCalcInit( 0 );
-    if( AutoInitialApprox() == false )
-        MultiCalcIterations();
-
-
-}
-
-void TProfil::outMulti( GemDataStream& ff, gstring& path  )
-{
-    ff.writeArray( &pa.p.PC, 10 );
-    ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff, path );
-}
-
-// Reading structure MULTI (GEM IPM work structure)
-void TProfil::readMulti( GemDataStream& ff )
-{
-      ff.readArray( &pa.p.PC, 10 );
-      ff.readArray( &pa.p.DG, 28 );
-      multi->from_file( ff );
 }
 
 //-------------------------------------------------------------------------
 // internal functions
 
-
 // read string as: "<characters>",
-istream&
-f_getline(istream& is, gstring& str, char delim)
+istream& f_getline(istream& is, gstring& str, char delim)
 {
     char ch;
     is.get(ch);
@@ -376,8 +370,7 @@ f_getline(istream& is, gstring& str, char delim)
    return is;
 }
 
-gstring
-u_makepath(const gstring& dir,
+gstring u_makepath(const gstring& dir,
            const gstring& name, const gstring& ext)
 {
     gstring Path(dir);
@@ -390,9 +383,7 @@ u_makepath(const gstring& dir,
     return Path;
 }
 
-
-void
-u_splitpath(const gstring& Path, gstring& dir,
+void u_splitpath(const gstring& Path, gstring& dir,
             gstring& name, gstring& ext)
 {
     size_t pos = Path.rfind("/");
@@ -413,8 +404,6 @@ u_splitpath(const gstring& Path, gstring& dir,
         name = Path.substr(pos, npos);
     }
 }
-
-
 
 // ------------------ End of ms_param.cpp -----------------------
 

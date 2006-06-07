@@ -27,11 +27,8 @@ f_getline(istream& is, gstring& str, char delim);
 // Experiments with smoothing terms on assigning differences to bulk composition
 // of nodes
 
-
-int
- main( int argc, char* argv[] )
+int main( int argc, char* argv[] )
  {
-
      int       RetC = 0;
      gstring gem2mt_in1 = "gem2mt_init.txt";
      gstring multu_in1 = "MgWBoundC.ipm";
@@ -52,7 +49,7 @@ int
    if( TGEM2MT::pm->MassTransSetUp( gem2mt_in1.c_str() ))
      return 1;  // error reading files
 
- // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
+// Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
     if( TGEM2MT::pm->MassTransInit( multu_in1.c_str(), chbr_in1.c_str() ) )
       return 1;  // error reading files
 
@@ -105,7 +102,6 @@ int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
   mtp->Tau[STEP_] = 0.;
 */
  // read GEM2MT structure from file
-
   fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {

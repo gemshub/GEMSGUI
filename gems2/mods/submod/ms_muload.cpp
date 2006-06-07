@@ -24,9 +24,12 @@
 #include <string.h>
 
 #include "m_param.h"
+#include "m_proces.h"
+#include "m_syseq.h"
+#include "m_unspace.h"
 #include "s_formula.h"
 #include "service.h"
-#include "visor.h"
+//#include "visor.h"
 //#include "visor_w.h"
 #include "stepwise.h"
 
@@ -49,7 +52,7 @@ enum translat_codes { /* codes for translations of equations */
 // phases - solutions into structure for calculations of equlibria
 // Uses IPN stack calculation module (C) S.Dmytrieva 1991-1996
 //
-void TProfil::SolModLoad( )
+void TMulti::SolModLoad( )
 {
     int kk, k, j, jj, jp, jkd,
     JB, JE=0, jb, je=0, kc, kd, kce=0, kde=0, Type;
@@ -65,8 +68,8 @@ void TProfil::SolModLoad( )
     /* realloc arrays for script calculations */
     if( pmp->pIPN <= 0 )
     {
-        multi->qEp.Clear();
-        multi->qEd.Clear();
+        qEp.Clear();
+        qEd.Clear();
     }
     for( kk=0, k=-1; kk<mup->Fis; kk++ )
     {
@@ -88,7 +91,7 @@ void TProfil::SolModLoad( )
         /*  modT = pmp->sMod[k]; */
         memcpy( modT, aPH->php->sol_t, MAXKEYWD );
         memcpy( pmp->sMod[k], modT, MAXKEYWD );
-sMod = pmp->sMod[k];
+        sMod = pmp->sMod[k];
         switch( modT[DCE_LINK] )
         {
         case SM_UNDEF:  /* no equations */
@@ -282,7 +285,7 @@ LOAD_NIDMCOEF:
 // definition record; returns a pointer to packed coeffs. table
 // Essential: aqueous phase must have index k = 0
 float *
-TProfil::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
+TMulti::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
 {
    int iCat=0, iAn=0, nCat/*=0*/, nAn/*=0*/, pos/*=0*/, icat=0, ian=0, nan/*=0*/;
    short j, js, *nxCAT, *nxAN; //, *nxcat, *nxan;
@@ -292,7 +295,7 @@ TProfil::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
    if( k )   // not an aqueous phase!
      return 0;
    // allocating dyn memory
-   multi->sit_dyn_new();
+   sit_dyn_new();
 
    nxCAT = (short *)malloc( (JE-JB)*sizeof(short) );
    nxAN = (short *)malloc( (JE-JB)*sizeof(short) );
@@ -347,7 +350,7 @@ nan = pmp->sitNan;
       {
          if( syp->Dcl[nxAN[iAn]] == S_OFF )
             continue;   // this anion (column) is switched off
-         // Temperature dependence ??    
+         // Temperature dependence ??
          pmp->sitE[ icat*nan + ian ] = aPH->php->pnc[ iCat*nAn + iAn ];
          ian++;
       }
@@ -370,7 +373,7 @@ nan = pmp->sitNan;
 //  jb, je - indexes of DC in structure MULTI
 //  (C) S.Dmytrieva 1991-1996
 //
-void TProfil::sm_text_analyze( int nph, int Type,
+void TMulti::sm_text_analyze( int nph, int Type,
                                int JB, int JE, int jb, int je )
 {
     char *erscan = 0;
@@ -388,13 +391,13 @@ void TProfil::sm_text_analyze( int nph, int Type,
         ET_translate( o_nwtext, o_neqtxt, JB, JE, jb, je );
         if( Type )
         {
-            multi->qEd.AddAt( new IPNCalc(), nph );
-            multi->qEd[nph].GetEquat( (char *)aObj[o_nwtext].GetPtr() );
+            qEd.AddAt( new IPNCalc(), nph );
+            qEd[nph].GetEquat( (char *)aObj[o_nwtext].GetPtr() );
         }
         else
         {
-            multi->qEp.AddAt( new IPNCalc(), nph );
-            multi->qEp[nph].GetEquat( (char *)aObj[o_nwtext].GetPtr() );
+            qEp.AddAt( new IPNCalc(), nph );
+            qEp[nph].GetEquat( (char *)aObj[o_nwtext].GetPtr() );
         }
     }
     catch( TError& xcpt )
@@ -407,15 +410,15 @@ void TProfil::sm_text_analyze( int nph, int Type,
         Error(  "SolModLoad", xcpt.mess.c_str() );
     }
     /* if( Type ) // print results to rpn_log.txt
-        multi->qEd[nph].PrintEquat( (char *)aObj[o_neqtxt].GetPtr(), fstream& f);
+        qEd[nph].PrintEquat( (char *)aObj[o_neqtxt].GetPtr(), fstream& f);
        else
-        multi->qEp[nph].PrintEquat( (char *)aObj[o_neqtxt].GetPtr(), fstream& f);
+        qEp[nph].PrintEquat( (char *)aObj[o_neqtxt].GetPtr(), fstream& f);
      */
 }
 
 //--------------------------------------------------------------------
 // Pack script of PRIVATE type of solution phase
-gstring TProfil::PressSolMod( int nP )
+gstring TMulti::PressSolMod( int nP )
 {
     int j, jp, k, ks, jb, je=0, /*jse=0,*/ EGlen;
     char *EGb;
@@ -455,7 +458,7 @@ gstring TProfil::PressSolMod( int nP )
 //------------------------------------------------------------------
 //Get groop of equations number jp from Etext
 // Returns *EGlen=0 if there is no equations for the group jp
-char *TProfil::ExtractEG( char *Etext, int jp, int *EGlen, int Nes )
+char *TMulti::ExtractEG( char *Etext, int jp, int *EGlen, int Nes )
 {
     int j;
     char *begin, *end;
@@ -503,7 +506,7 @@ AgainE:
 //	          LNmode=1: by lists MULTI;   pmp->
 //  Return index >=0 or exception if no match
 //
-int TProfil::find_icnum( char *name, int LNmode )
+int TMulti::find_icnum( char *name, int LNmode )
 {
     int i;
     vstr ICs(IC_RKLEN+10);
@@ -560,7 +563,7 @@ int TProfil::find_icnum( char *name, int LNmode )
 //  jb and je - range to search
 //  Return index >=0 or exeption if no match
 //
-int TProfil::find_dcnum( char *name, int jb, int je, int LNmode )
+int TMulti::find_dcnum( char *name, int jb, int je, int LNmode )
 {
     int j, jf[8], ii=0, len;
 
@@ -599,7 +602,7 @@ int TProfil::find_dcnum( char *name, int jb, int je, int LNmode )
 //	       LNmode=1: in lists MULTI;  pmp->
 //  Return index >=0 or exception if no match
 //
-int TProfil::find_phnum( char *name, int LNmode )
+int TMulti::find_phnum( char *name, int LNmode )
 {
     int k, kf[8], ii=0, len;
 
@@ -637,7 +640,7 @@ int TProfil::find_phnum( char *name, int LNmode )
 //	       LNmode=1: in lists MULTI;  pmp->
 //  Return index >=0 or exception if no match
 //
-int TProfil::find_acnum( char *name, int LNmode )
+int TMulti::find_acnum( char *name, int LNmode )
 {
     int j, jf[8], ii=0, len;
 
@@ -674,7 +677,7 @@ int TProfil::find_acnum( char *name, int LNmode )
 //
 char* MSDELIM = " +-*/^:[]();=$&|!<>?#\n\t";
 //
-void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
+void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
         tget_ndx *get_ndx )
 {
     size_t eLen, ls, lb;
@@ -931,317 +934,6 @@ void TProfil::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     } /* end while */
     *ecur = 0;
 }
-
-
-//Calculation by IPM (preparing for calculation, unpack data)
-// key contains SysEq record key
-//
-void TProfil::MultiCalcInit( const char *key )
-{
-    int j, k;
-
-    // 15/01/1999 Sveta test set zero
-    /*    for( j=0; j<pmp->N; j++ )
-        {       pmp->U[j] =0.;
-                pmp->C[j] =0.;
-        }
-        for( j=0; j<pmp->FI; j++ )
-        {      pmp->FVOL[j] =0.;
-               pmp->FWGT[j] =0.;
-               pmp->Falp[j] =0.;
-               pmp->YF[j] =0.;
-        }
-       for( j=0; j<pmp->L; j++ )
-       {
-         pmp->Y[j] = 0.0;
-         pmp->W[j] = 0.0;
-         pmp->F[j] = 0.0;
-
-         pmp->lnGam[j] = 0.0;
-         pmp->MU[j] =0.;
-         pmp->EMU[j] =0.;
-         pmp->NMU[j] =0.;
-       }
-       pmp->VXc =0.;
-       pmp->PCI =0.;
-       pmp->Yw =0.;
-       pmp->FX =0.;
-       pmp->pH = pmp->Eh = pmp->pe = 0.0;
-    */
-
-    //   if( !pmp->pNP) // Sveta 12/05/99
-    //   {    pmp->IC = syp->Mbel;
-    //        pmp->logYFk = -9.;
-    //	pmp->logXw = -16.;
-
-    //        for( j=0; j<pmp->L; j++ )
-    //         pmp->X[j] = pmp->Y[j] =  pmp->lnGam[j] = 0.0;
-    //        for( j=0; j<pmp->N; j++ )
-    //          pmp->U[j] = 0.0;
-    //   }
-
-    // Bulk composition and/or dimensions changed ?
-    if( pmp->pBAL < 2 || pmp->pTPD < 2)
-        MultiRemake( key );
-
-    // unpackSysEq record
-
-    if( pmp->pESU /*== 1*/ && pmp->pNP )     // problematic statement !!!!!!!!!
-    {
-        multi->unpackData(); // loading data from EqstatUnpack( key );
-        pmp->IC = 0.;
-        for( j=0; j< pmp->L; j++ )
-            pmp->X[j] = pmp->Y[j];
-        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-    }
-    else
-        for( j=0; j<pmp->L; j++ )
-            pmp->Y[j] = 0.0;
-
-    //  if( wn[W_EQCALC].status )
-    //    aSubMod[MD_EQCALC]->ModUpdate("PM_asm4   Assembling IPM arrays (4)");
-
-    // loading thermodynamic data, if neccessary
-    if( pmp->pTPD < 2 )
-        CompG0Load( );
-
-    for( j=0; j< pmp->L; j++ )
-    {
-        /* pmp->Y[j] = pmp->X[j]; */
-        pmp->G[j] = pmp->G0[j]; /* pmp->GEX[j]; */
-    }
-    // test phases - solutions and load models
-    if( pmp->FIs )
-    {
-        for( j=0; j< pmp->Ls; j++ )
-        {
-            pmp->lnGmo[j] = pmp->lnGam[j];
-            pmp->Gamma[j] = 1.0;
-        }
-    }
-
-    if( pmp->FIs && pmp->pIPN <=0 )
-    { // not done if already present in MULTI !
-        pmp->PD = pa.p.PD;
-        SolModLoad();
-        /*   pmp->pIPN = 1; */
-        GammaCalc( LINK_TP_MODE);
-    }
-    else
-    {
-        if( !pmp->FIs )
-        { /* no multi-component phases */
-            pmp->PD = 0;
-            pmp->pIPN = 1;
-        }
-    }
-
-    // recalc restrictions for DC quantities
-    if( pmp->pULR && pmp->PLIM )
-         Set_DC_limits(  DC_LIM_INIT );
-
-    // realloc memory for  R and R1
-    pmp->R = (double *)aObj[o_w_r].Alloc( pmp->N, pmp->N+1, D_ );
-    pmp->R1 = (double *)aObj[o_w_r1].Alloc( pmp->N, pmp->N+1 /* /2 */, D_ );
-    memset( pmp->R, 0, pmp->N*(pmp->N+1)*sizeof(double));
-    memset( pmp->R1, 0, pmp->N*(pmp->N+1)*sizeof(double));
-    //   aObj[o_w_sbh].SetPtr( pmp->SB[0]  ); aObj[ o_w_sbh].SetDim( 1, pmp->N );
-    if( !pmp->SFs )
-        pmp->SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
-                       pmp->FI, 1, MAXPHNAME+MAXSYMB );
-
-    // dynamic arrays - begin load
-    for( k=0; k<pmp->FI; k++ )
-    {
-        pmp->XFs[k] = pmp->YF[k];
-        pmp->Falps[k] = pmp->Falp[k];
-        memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
-    }
-}
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-// Calculation of full structure MULTI by expanding
-// SysEq main vectors read from the database
-//
-void TProfil::EqstatExpand( const char *key )
-{
-    int i, j, k, jb, je/*=0*/, jpb, jpe=0, jdb, jde=0;
-    double FitVar3;
-
-//    if( !pmp->NR )       Sveta 30/08/01
-        pmp->NR = pmp->N;
-
-    /* Load thermodynamic data for DC, if necessary */
-    if( pmp->pTPD < 2 )
-    {
-        CompG0Load();
-        memcpy( pmp->stkey, key, EQ_RKLEN );
-        pmp->stkey[EQ_RKLEN]='\0';
-    }
-    /* Load activity coeffs for phases-solutions */
-    if( pmp->FIs )
-    {
-        for( j=0; j< pmp->Ls; j++ )
-        {
-            pmp->lnGmo[j] = pmp->lnGam[j];
-            if( fabs( pmp->lnGam[j] ) <= 84. )
-                pmp->Gamma[j] = exp( pmp->lnGam[j] );
-            else pmp->Gamma[j] = 1;
-        }
-    }
-    /* recalc kinetic restrictions for DC */
-    if( pmp->pULR && pmp->PLIM )
-         Set_DC_limits( DC_LIM_INIT );
-
-    TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-    for( j=0; j<pmp->L; j++ )
-        pmp->Y[j] = pmp->X[j];
-    for( k=0; k<pmp->FI; k++ )
-    {
-        pmp->YF[k] = pmp->XF[k];
-        if( k<pmp->FIs )
-            pmp->YFA[k] = pmp->XFA[k];
-    }
-    /* set IPM weight multipliers for DC*/
-    for(j=0;j<pmp->L;j++)
-    {
-        switch( pmp->RLC[j] )
-        {
-        case NO_LIM:
-        case LOWER_LIM:
-            pmp->W[j] = pmp->Y[j]-pmp->DLL[j];
-            break;
-        case UPPER_LIM:
-            pmp->W[j] = pmp->DUL[j]-pmp->Y[j];
-            break;
-        case BOTH_LIM:
-            pmp->W[j]= ((pmp->Y[j]-pmp->DLL[j])<(pmp->DUL[j]-pmp->Y[j]))?
-                       (pmp->Y[j]-pmp->DLL[j]): (pmp->DUL[j]-pmp->Y[j]);
-            break;
-        default: /* greatest error */ ; //break;
-            Error( "Internal error", "Wrong IPM weight factor type!" );
-        }
-        if( pmp->W[j] < 0. ) pmp->W[j]=0.;    /* !! know-how of Mr.Chudnenko !! */
-    }
-    /* Calculate elemental chemical potentials in J/mole */
-    for( i=0; i<pmp->N; i++ )
-        pmp->U_r[i] = pmp->U[i]*pmp->RT;
-
-    ConCalc( pmp->X, pmp->XF, pmp->XFA);
-    /* Calculate mass-balance deviations (moles) */
-    MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C );
-    /* Calc Eh, pe, pH,and other stuff */
-    if( pmp->E && pmp->LO )
-        IS_EtaCalc();
-
-    FitVar3 = pmp->FitVar[3];   /* Switch off smoothing factor */
-    pmp->FitVar[3] = 1.0;
-    /* Scan phases to retrieve concentrations and activities */
-    je = 0;
-    for( k=0; k<pmp->FIs; k++ )
-    {
-        jb = je;
-        je = jb+pmp->L1[k];
-        jpb = jpe;
-        jpe += pmp->LsMod[k];
-        jdb = jde;
-        jde += pmp->LsMdc[k]*pmp->L1[k];
-
-        if( pmp->PHC[k] == PH_SORPTION )
-        {
-            if( pmp->E && pmp->LO )
-                GouyChapman( jb, je, k );
-            /* calculation of surface activity terms */
-            SurfaceActivityCoeff( jb, je, jpb, jdb, k );
-//            SurfaceActivityTerm(  jb, je, k );
-        }
-        for( j=jb; j<je; j++ )
-        {
-            /* calc Excess Gibbs energies F0 and values c_j */
-            pmp->F0[j] = Ej_init_calc( 0, j, k );
-            pmp->G[j] = pmp->G0[j] + pmp->F0[j];
-            /* pmp->Gamma[j] = exp( pmp->lnGam[j] ); */
-        }
-    }
-    pmp->FitVar[3]=FitVar3;
-    pmp->GX_ = pmp->FX * pmp->RT;
-    /* calc Prime DC chemical potentials defined via g0_j, Wx_j and lnGam_j */
-    PrimeChemicalPotentials( pmp->F, pmp->X, pmp->XF, pmp->XFA );
-    /*calc Karpov phase criteria */
-    f_alpha();
-    /*calc gas partial pressures  -- obsolete? */
-    GasParcP();
-    pmp->pFAG = 2;
-}
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-// Load Thermodynamic Data from MTPARM to MULTI
-void TProfil::CompG0Load()
-{
-    int j, jj, k, jb, je=0;
-    float Gg = 0., Vv = 0.;
-
-    /* pTPD state of reload t/d data 0-all, 1 G0, 2 do not*/
-    if( pmp->pTPD < 1 )
-    {
-        pmp->T = pmp->Tc = tpp->T + C_to_K;
-        pmp->TC = pmp->TCc = tpp->T;
-        if( tpp->P > 1e-9 )
-            pmp->P = pmp->Pc = tpp->P;
-        else pmp->P = pmp->Pc = 1e-9;
-pmp->FitVar[0] = pa.aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD 
-        pmp->denW = tpp->RoW;
-        pmp->denWg = tpp->RoV;
-        pmp->epsW = tpp->EpsW;
-        pmp->epsWg = tpp->EpsV;
-        pmp->RT = tpp->RT; // R_CONSTANT * pm->Tc
-        pmp->FRT = F_CONSTANT/pmp->RT;
-        pmp->lnP = log( pmp->P );
-    }
-    if( pmp->pTPD <= 1 )
-    {
-        for( k=0; k<pmp->FI; k++ )
-        {
-            jb = je;
-            je += pmp->L1[k];
-            /*load t/d data from DC */
-            for( j=jb; j<je; j++ )
-            {
-                jj = pmp->muj[j];
-                if( syp->Guns )
-                    Gg = syp->Guns[jj];
-                pmp->G0[j] = Cj_init_calc( tpp->G[jj]+Gg, j, k );
-            }
-        }
-    }
-    if( !pmp->pTPD )
-    {
-        for( j=0; j<pmp->L; j++ )
-        {
-            jj = pmp->muj[j];
-
-            if( tpp->PtvVm == S_ON )
-                switch( pmp->PV )
-                { /* make mol volumes of components */
-                case VOL_CONSTR:
-                    if( syp->Vuns )
-                       Vv = syp->Vuns[jj];
-                    pmp->A[j*pmp->N] = tpp->Vm[jj]+Vv;
-                case VOL_CALC:
-                case VOL_UNDEF:
-                    if( syp->Vuns )
-                       Vv = syp->Vuns[jj];
-                    pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;  /* ?���? */
-                    break;
-                }
-            else pmp->Vol[j] = 0.0;
-
-            /* load ather t/d parametres - do it! */
-        }
-    }
-    pmp->pTPD = 2;
-}
-
 
 //--------------------- End of muload.cpp ---------------------------
 

@@ -54,8 +54,6 @@ typedef enum {
 
 } GS_AS_CLASSES;
 
-
-
 #define SIZE_HYDP 7
 
 typedef struct

@@ -137,7 +137,7 @@ void TNodeArray::MakeNodeStructures( QWidget* par, bool select_all,
     short nTp_, short nPp_, float Ttol_, float Ptol_  )
 {
 
-  TMulti* mult = TProfil::pm->multi;
+  //MULTI *mult = TProfil::pm->pmp;
   TCStringArray aList;
   TCIntArray aSelIC;
   TCIntArray aSelDC;
@@ -147,33 +147,33 @@ void TNodeArray::MakeNodeStructures( QWidget* par, bool select_all,
 
 
     aList.Clear();
-    for(int ii=0; ii< mult->GetPM()->N; ii++ )
+    for(int ii=0; ii< pmm->N; ii++ )
     {  if( select_all )
          aSelIC.Add( ii );
        else
-         aList.Add( gstring( mult->GetPM()->SB[ii], 0, MAXICNAME+MAXSYMB));
+         aList.Add( gstring( pmm->SB[ii], 0, MAXICNAME+MAXSYMB));
     }
     if( !select_all  )
       aSelIC = vfMultiChoice(par, aList,
           "Please, mark independent components for selection into DataBridge");
 
     aList.Clear();
-    for(int ii=0; ii< mult->GetPM()->L; ii++ )
+    for(int ii=0; ii< pmm->L; ii++ )
     {  if( select_all )
          aSelDC.Add( ii );
        else
-       aList.Add( gstring( mult->GetPM()->SM[ii], 0, MAXDCNAME));
+       aList.Add( gstring( pmm->SM[ii], 0, MAXDCNAME));
     }
     if( !select_all  )
        aSelDC = vfMultiChoice(par, aList,
          "Please, mark dependent components for selection into DataBridge");
 
     aList.Clear();
-    for(int ii=0; ii< mult->GetPM()->FI; ii++ )
+    for(int ii=0; ii< pmm->FI; ii++ )
     {  if( select_all )
          aSelPH.Add( ii );
        else
-       aList.Add( gstring( mult->GetPM()->SF[ii], 0, MAXPHNAME+MAXSYMB));
+       aList.Add( gstring( pmm->SF[ii], 0, MAXPHNAME+MAXSYMB));
     }
     if( !select_all  )
        aSelPH = vfMultiChoice(par, aList,
@@ -195,7 +195,7 @@ gstring TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV,
 
   // MakeNodeStructures must be called and setuped data to NodT0 array before
 
-  TMulti* mult = TProfil::pm->multi;
+  //TMulti* mult = TProfil::pm->multi;
   fstream fout;
   fstream fout_d;
   gstring Path_;
@@ -231,9 +231,7 @@ AGAIN:
 
 //  putting MULTI to binary file
     GemDataStream  ff(path, ios::out|ios::binary);
-    ff.writeArray( &TProfil::pm->pa.p.PC, 10 );
-    ff.writeArray( &TProfil::pm->pa.p.DG, 28 );
-    mult->to_file( ff, path );
+    TProfil::pm->outMulti( ff, path  );
 
 // out dataCH to binary file
    newname = name+"-dch";
@@ -876,13 +874,13 @@ void  TNodeArray::printfGEM( const char* multi_file,
     if( multi_file )
    {  strr = multi_file;
       GemDataStream o_m( strr, ios::out|ios::binary);
-#ifndef IPMGEMPLUGIN
-       o_m.writeArray( &(TProfil::pm->pa.p.PC), 10 );
-       o_m.writeArray( &TProfil::pm->pa.p.DG, 28 );
-       TProfil::pm->multi->to_file( o_m, strr );
-#else
+//#ifndef IPMGEMPLUGIN
+//     o_m.writeArray( &(TProfil::pm->pa.p.PC), 10 );
+//       o_m.writeArray( &TProfil::pm->pa.p.DG, 28 );
+//       TProfil::pm->multi->to_file( o_m, strr );
+//#else
        TProfil::pm->outMulti(o_m, strr );
-#endif
+//#endif
     }
 //********************************************************* */
 

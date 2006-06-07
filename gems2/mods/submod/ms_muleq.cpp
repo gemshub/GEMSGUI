@@ -23,8 +23,7 @@
 #include "m_param.h"
 #include "m_syseq.h"
 #include "service.h"
-#include "visor.h"
-
+//#include "visor.h"
 
 // set size of packed multi arrays
 void TMulti::setSizes()
@@ -227,6 +226,256 @@ void TMulti::loadData( bool newRec )
     if( newRec == false )
         unpackData();
 }
+
+// =================================================================
+// FROM MS_MULOAD
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// Load Thermodynamic Data from MTPARM to MULTI
+void TMulti::CompG0Load()
+{
+    int j, jj, k, jb, je=0;
+    float Gg = 0., Vv = 0.;
+
+    /* pTPD state of reload t/d data 0-all, 1 G0, 2 do not*/
+    if( pmp->pTPD < 1 )
+    {
+        pmp->T = pmp->Tc = tpp->T + C_to_K;
+        pmp->TC = pmp->TCc = tpp->T;
+        if( tpp->P > 1e-9 )
+            pmp->P = pmp->Pc = tpp->P;
+        else pmp->P = pmp->Pc = 1e-9;
+// Added 07.06.05 for T,P dependent b_gamma   KD
+        pmp->FitVar[0] = TProfil::pm->pa.aqPar[0];
+        pmp->denW = tpp->RoW;
+        pmp->denWg = tpp->RoV;
+        pmp->epsW = tpp->EpsW;
+        pmp->epsWg = tpp->EpsV;
+        pmp->RT = tpp->RT; // R_CONSTANT * pm->Tc
+        pmp->FRT = F_CONSTANT/pmp->RT;
+        pmp->lnP = log( pmp->P );
+    }
+    if( pmp->pTPD <= 1 )
+    {
+        for( k=0; k<pmp->FI; k++ )
+        {
+            jb = je;
+            je += pmp->L1[k];
+            /*load t/d data from DC */
+            for( j=jb; j<je; j++ )
+            {
+                jj = pmp->muj[j];
+                if( syp->Guns )
+                    Gg = syp->Guns[jj];
+                pmp->G0[j] = Cj_init_calc( tpp->G[jj]+Gg, j, k );
+            }
+        }
+    }
+    if( !pmp->pTPD )
+    {
+        for( j=0; j<pmp->L; j++ )
+        {
+            jj = pmp->muj[j];
+
+            if( tpp->PtvVm == S_ON )
+                switch( pmp->PV )
+                { /* make mol volumes of components */
+                case VOL_CONSTR:
+                    if( syp->Vuns )
+                       Vv = syp->Vuns[jj];
+                    pmp->A[j*pmp->N] = tpp->Vm[jj]+Vv;
+                case VOL_CALC:
+                case VOL_UNDEF:
+                    if( syp->Vuns )
+                       Vv = syp->Vuns[jj];
+                    pmp->Vol[j] = (tpp->Vm[jj]+Vv ) * 10.;
+                    break;
+                }
+            else pmp->Vol[j] = 0.0;
+
+            /* load ather t/d parametres - do it! */
+        }
+    }
+    pmp->pTPD = 2;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// Calculation of full structure MULTI by expanding
+// SysEq main vectors read from the database
+//
+void TMulti::EqstatExpand( const char *key )
+{
+    int i, j, k, jb, je/*=0*/, jpb, jpe=0, jdb, jde=0;
+    double FitVar3;
+
+//    if( !pmp->NR )       Sveta 30/08/01
+        pmp->NR = pmp->N;
+
+    /* Load thermodynamic data for DC, if necessary */
+    if( pmp->pTPD < 2 )
+    {
+        CompG0Load();
+        memcpy( pmp->stkey, key, EQ_RKLEN );
+        pmp->stkey[EQ_RKLEN]='\0';
+    }
+    /* Load activity coeffs for phases-solutions */
+    if( pmp->FIs )
+    {
+        for( j=0; j< pmp->Ls; j++ )
+        {
+            pmp->lnGmo[j] = pmp->lnGam[j];
+            if( fabs( pmp->lnGam[j] ) <= 84. )
+                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+            else pmp->Gamma[j] = 1;
+        }
+    }
+    /* recalc kinetic restrictions for DC */
+    if( pmp->pULR && pmp->PLIM )
+         Set_DC_limits( DC_LIM_INIT );
+
+    TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+    for( j=0; j<pmp->L; j++ )
+        pmp->Y[j] = pmp->X[j];
+
+    for( k=0; k<pmp->FI; k++ )
+    {
+        pmp->YF[k] = pmp->XF[k];
+        if( k<pmp->FIs )
+            pmp->YFA[k] = pmp->XFA[k];
+    }
+    /* set IPM weight multipliers for DC*/
+    WeightMultipliers( false );
+
+    /* Calculate elemental chemical potentials in J/mole */
+    for( i=0; i<pmp->N; i++ )
+        pmp->U_r[i] = pmp->U[i]*pmp->RT;
+
+    ConCalc( pmp->X, pmp->XF, pmp->XFA);
+    /* Calculate mass-balance deviations (moles) */
+    MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C );
+    /* Calc Eh, pe, pH,and other stuff */
+    if( pmp->E && pmp->LO )
+        IS_EtaCalc();
+
+    FitVar3 = pmp->FitVar[3];   /* Switch off smoothing factor */
+    pmp->FitVar[3] = 1.0;
+    /* Scan phases to retrieve concentrations and activities */
+    je = 0;
+    for( k=0; k<pmp->FIs; k++ )
+    {
+        jb = je;
+        je = jb+pmp->L1[k];
+        jpb = jpe;
+        jpe += pmp->LsMod[k];
+        jdb = jde;
+        jde += pmp->LsMdc[k]*pmp->L1[k];
+
+        if( pmp->PHC[k] == PH_SORPTION )
+        {
+            if( pmp->E && pmp->LO )
+                GouyChapman( jb, je, k );
+            /* calculation of surface activity terms */
+            SurfaceActivityCoeff( jb, je, jpb, jdb, k );
+//            SurfaceActivityTerm(  jb, je, k );
+        }
+        for( j=jb; j<je; j++ )
+        {
+            /* calc Excess Gibbs energies F0 and values c_j */
+            pmp->F0[j] = Ej_init_calc( 0, j, k );
+            pmp->G[j] = pmp->G0[j] + pmp->F0[j];
+            /* pmp->Gamma[j] = exp( pmp->lnGam[j] ); */
+        }
+    }
+    pmp->FitVar[3]=FitVar3;
+    pmp->GX_ = pmp->FX * pmp->RT;
+    /* calc Prime DC chemical potentials defined via g0_j, Wx_j and lnGam_j */
+    PrimeChemicalPotentials( pmp->F, pmp->X, pmp->XF, pmp->XFA );
+    /*calc Karpov phase criteria */
+    f_alpha();
+    /*calc gas partial pressures  -- obsolete? */
+    GasParcP();
+    pmp->pFAG = 2;
+}
+
+//Calculation by IPM (preparing for calculation, unpack data)
+// key contains SysEq record key
+//
+void TMulti::MultiCalcInit( const char *key )
+{
+    int j, k;
+
+   // Bulk composition and/or dimensions changed ?
+    if( pmp->pBAL < 2 || pmp->pTPD < 2)
+        MultiRemake( key );
+
+    // unpackSysEq record
+    if( pmp->pESU /*== 1*/ && pmp->pNP )     // problematic statement !!!!!!!!!
+    {
+        unpackData(); // loading data from EqstatUnpack( key );
+        pmp->IC = 0.;
+        for( j=0; j< pmp->L; j++ )
+            pmp->X[j] = pmp->Y[j];
+        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+    }
+    else
+        for( j=0; j<pmp->L; j++ )
+            pmp->Y[j] = 0.0;
+
+    //  if( wn[W_EQCALC].status )
+    //    aSubMod[MD_EQCALC]->ModUpdate("PM_asm4   Assembling IPM arrays (4)");
+
+    // loading thermodynamic data, if neccessary
+    if( pmp->pTPD < 2 )
+        CompG0Load( );
+
+    for( j=0; j< pmp->L; j++ )
+    {
+        /* pmp->Y[j] = pmp->X[j]; */
+        pmp->G[j] = pmp->G0[j]; /* pmp->GEX[j]; */
+    }
+    // test phases - solutions and load models
+    if( pmp->FIs )
+    {
+        for( j=0; j< pmp->Ls; j++ )
+        {
+            pmp->lnGmo[j] = pmp->lnGam[j];
+            pmp->Gamma[j] = 1.0;
+        }
+    }
+    if( pmp->FIs && pmp->pIPN <=0 )
+    { // not done if already present in MULTI !
+        pmp->PD = TProfil::pm->pa.p.PD;
+        SolModLoad();
+        /*   pmp->pIPN = 1; */
+        GammaCalc( LINK_TP_MODE);
+    }
+    else
+    {
+        if( !pmp->FIs )
+        { /* no multi-component phases */
+            pmp->PD = 0;
+            pmp->pIPN = 1;
+        }
+    }
+    // recalc restrictions for DC quantities
+    if( pmp->pULR && pmp->PLIM )
+         Set_DC_limits(  DC_LIM_INIT );
+
+    //   aObj[o_w_sbh].SetPtr( pmp->SB[0]  ); aObj[ o_w_sbh].SetDim( 1, pmp->N );
+    if( !pmp->SFs )
+        pmp->SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
+                       pmp->FI, 1, MAXPHNAME+MAXSYMB );
+
+    // dynamic arrays - begin load
+    for( k=0; k<pmp->FI; k++ )
+    {
+        pmp->XFs[k] = pmp->YF[k];
+        pmp->Falps[k] = pmp->Falp[k];
+        memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
+    }
+}
+
+
 
 //--------------------- End of ms_muleq.cpp ---------------------------
 

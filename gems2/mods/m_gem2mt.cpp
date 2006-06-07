@@ -908,7 +908,7 @@ TGEM2MT::RecCalc( const char * key )
        Error( GetName(), "Added/deleted components in the project system.\n"
                          "Please, remake the record." );
 
-   na = new TNodeArray( mtp->nC, TProfil::pm->multi->GetPM() );
+   na = new TNodeArray( mtp->nC, TProfil::pm->pmp/*multi->GetPM()*/ );
 
    // use particles
    if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
