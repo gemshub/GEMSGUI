@@ -42,7 +42,7 @@ protected slots:
     void CmHelp();
 
 public:
-    ExcludeFillDialog::ExcludeFillDialog(QWidget* win, const char* caption,
+    ExcludeFillDialog(QWidget* win, const char* caption,
       TCStringArray& aICkeys, double fill_data );
    ~ExcludeFillDialog();
 

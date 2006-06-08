@@ -249,8 +249,8 @@ int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
 // vp = dbr->vp;     // testing without interpolation
 // hDl = dbr->hDl;   // testing without interpolation
          if( hDl > 0)
-         ds = 2.*(randuni( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
-//         ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
+//         ds = 2.*(randuni( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
+         ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
          ParT1[px].xyz.x += vp*dt + ds;
                         break;
    }
