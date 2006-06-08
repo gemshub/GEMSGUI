@@ -1,18 +1,35 @@
-/*
- * lmfit
- *
- * Solves or minimizes the sum of squares of m nonlinear
- * functions of n variables.
- *
- * From public domain Fortran version
- * of Argonne National Laboratories MINPACK
- *     argonne national laboratory. minpack project. march 1980.
- *     burton s. garbow, kenneth e. hillstrom, jorge j. more
- * C translation by Steve Moshier
- * Joachim Wuttke converted the source into C++ compatible ANSI style
- * and provided a simplified interface
- */
-
+//-------------------------------------------------------------------
+// $Id: s_lsm_lm.cpp 700 2006-04-18 06:52:07Z gems $
+//
+// Implementation of  TLMmin classe
+//
+// Solves or minimizes the sum of squares of m nonlinear
+// functions of n variables.
+//
+// Use algorithm lmfit
+//
+// From public domain Fortran version
+// of Argonne National Laboratories MINPACK
+//     argonne national laboratory. minpack project. march 1980.
+//     burton s. garbow, kenneth e. hillstrom, jorge j. more
+// C translation by Steve Moshier
+// Joachim Wuttke converted the source into C++ compatible ANSI style
+// and provided a simplified interface
+//
+// Adapted by S.Dmytriyeva
+// Copyright (C) 2005-2006  D.Kulik, S.Dmytriyeva
+//
+// This file is part of a GEM-Selektor library for thermodynamic
+// modelling by Gibbs energy minimization
+// Uses: GEM-Vizor GUI DBMS library, gems/lib/gemvizor.lib
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// E-mail: gems2.support@psi.ch
+//-------------------------------------------------------------------
+//
 
 #include <stdlib.h>
 #include <limits.h>
@@ -107,7 +124,6 @@ void TLMmin::Calc( double *sdpar, double *apar_ap,
     d_type = ad_type;
     lm_minimize( sdpar );
 }
-
 
 // inmternakl functions
 
@@ -211,9 +227,6 @@ void TLMmin::ChTol( double& fTol, double& xTol )
 
 
 /* *********************** high-level interface **************************** */
-
-
-
 void TLMmin::lm_minimize( double* sdpar )
 {
 
@@ -247,8 +260,6 @@ void TLMmin::lm_minimize( double* sdpar )
 }
 
 /* ************************** implementation ******************************* */
-
-
 // the following values seem good for an x86:
 #define LM_MACHEP .555e-16 /* resolution of arithmetic */
 #define LM_DWARF  9.9e-324 /* smallest nonzero number */
@@ -1609,4 +1620,5 @@ int
   return rnk;
 }
 
+//--------------------- End of s_lsm_lm.cpp --------------------------
 

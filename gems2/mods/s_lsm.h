@@ -1,12 +1,12 @@
 //-------------------------------------------------------------------
-// $Id:$
+// $Id: s_lsm.h 700 2006-04-18 06:52:07Z gems $
 //
-// Declaration of TLMDataType, TLMCalc classes
+// Declaration of TLMDataType, TSVDcalc, TLMmin classes
 //
 // Solves or minimizes the sum of squares of m nonlinear
 // functions of n variables.
 //
-// From public domain Fortran version
+// TLMmin - From public domain Fortran version
 // of Argonne National Laboratories MINPACK
 //     argonne national laboratory. minpack project. march 1980.
 //     burton s. garbow, kenneth e. hillstrom, jorge j. more
@@ -15,7 +15,7 @@
 // and provided a simplified interface
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2005  D.Kulik, S.Dmytriyeva
+// Copyright (C) 2005-2006  D.Kulik, S.Dmytriyeva
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -41,6 +41,8 @@
  #include "v_ipnc.h"
 #endif
 
+#include <jama_svd.h>
+using namespace JAMA;
 #include "num_methods.h"
 
 class TLMDataType  // data for the task
@@ -72,7 +74,6 @@ protected:
   void rpn_par_function( int i, double* p  );
   double rpn_function( int i, double* p );
 
-
 #endif
 
   void test_sizes();
@@ -88,7 +89,6 @@ protected:
  void my_par_funct( double t, double* p );
  void parGuggenheim( double *t, double* p );
  void parThompsonWaldbaum( double *t, double* p );
-
 
 public:
 
@@ -252,12 +252,7 @@ public:
 };
 
 typedef double fd_type;
-
 #define a(i,j) (A[(i)*n+(j)])
-#define u(i,j) (U[(i)*n+(j)])
-#define v(i,j) (V[(i)*n+(j)])
-#define cvm(i,j) (CVM[(i)*n+(j)])
-
 #define SIGN(a,b) ((b) >= 0.0 ? fabs(a) : -fabs(a))
 #define TOL 1.0e-12    // Default value for single precision and variables
                       // scaled to order unity.
@@ -274,27 +269,24 @@ class TSVDcalc
                   // or x from line arrays task
   float  *A;    // [m,n] matrix A
   double  *b;    //  [n] vector b
+  Array2D<double> AA; // m*n
 
 // internal arrays
-    double *U;
-    double *w;
-    double *V;
-    double *CVM;
-    double chisq;
+  Array2D<double> U; // m * min( m+1, n )
+  Array2D<double> V; // n*n
+  Array1D<double> w; // min(m+1,n)
+  Array2D<double> CVM;
+  double chisq;
 
 protected:
 
-void alloc_arrays();
-void free_arrays();
-
-void svdGetXmore0( int ii, fd_type *V, fd_type x[]);
+   void svdGetXmore0( int ii, fd_type x[] );
 
 // compact high-level interface:
-void svdGetX(fd_type *U, fd_type w[], fd_type *V, fd_type b[], fd_type x[]);
-fd_type pyt_hag(fd_type a, fd_type b);
-int svdGetUWV(fd_type *A, fd_type w[], fd_type *V);
-void svdMin(  fd_type a1[], fd_type *U1, fd_type *V1,  fd_type w1[],  fd_type& chisq1 );
-void svdStat(fd_type *V, fd_type w[], fd_type *CVM);
+   void svdGetX( fd_type b[], fd_type x[] );
+   void svdGetUWV( const Array2D<double> &Arg );
+   void svdMin( fd_type a[] );
+   void svdStat();
 
 
 public:

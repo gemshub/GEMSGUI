@@ -1,21 +1,12 @@
 //-------------------------------------------------------------------
-// $ Id: $
+// $Id: s_lsm_fun.cpp 700 2006-04-18 06:52:07Z gems $
 //
 // Implamentation of TLMDataType class
 //
-// Solves or minimizes the sum of squares of m nonlinear
-// functions of n variables.
+// Define Built in functions for task of minimization
 //
-// From public domain Fortran version
-// of Argonne National Laboratories MINPACK
-//     argonne national laboratory. minpack project. march 1980.
-//     burton s. garbow, kenneth e. hillstrom, jorge j. more
-// C translation by Steve Moshier
-// Joachim Wuttke converted the source into C++ compatible ANSI style
-// and provided a simplified interface
-//
-// Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2005  D.Kulik, S.Dmytriyeva
+// Written by S.Dmytriyeva
+// Copyright (C) 2005-2006  D.Kulik, S.Dmytriyeva
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -37,7 +28,6 @@
 #include <math.h>
 #include "s_lsm.h"
 
-
 TLMDataType::TLMDataType(   char afType, char aeType,
                    short am_dat,short atm_d, short an_par,
                    double *atdat, double *aydat,
@@ -52,8 +42,6 @@ TLMDataType::TLMDataType(   char afType, char aeType,
     xi2=0.0;
     test_sizes();
 }
-
-
 
 TLMDataType::~TLMDataType()
 {
@@ -76,12 +64,8 @@ TLMDataType::~TLMDataType()
    //    aObj[ o_lms_paf ].Free();
    //     o_lms_jp, o_lms_kp, o_lms_itx
   }
-
 #endif
 }
-
-
-
 
 int   TLMDataType::evaluate( double* par, double* fvec )
 {
@@ -151,8 +135,6 @@ void TLMDataType::test_sizes()
      case FUN_IPF_M:   // Margules
      case FUN_IPF_V:   // Van Laar
      case FUN_IPF_B:   // Bale-Pelton dilute formalism
-
-
      default:
                    break;
      }
@@ -213,7 +195,6 @@ double TLMDataType::function( int i, double* t, double* p )
  return r;
 }
 
-
 /*
  Calculate the coefficients of parametres
  returns the n_par basis function evaluated at t.
@@ -267,7 +248,7 @@ void TLMDataType::lm_evaluate_default( double* par, double* fvec )
  */
 {
     for (short i=0; i<m_dat; i++)
-            fvec[i] = (ydat[i] - function(i, getX(i), par))*sqrt(wdat[i]);   
+            fvec[i] = (ydat[i] - function(i, getX(i), par))*sqrt(wdat[i]);
  /* if <parameters drifted away> { info = -1; } */
 }
 
@@ -289,7 +270,7 @@ double TLMDataType::Guggenheim( double *t, double* p )
   // test tm_d = 2
   double rez = 0;
   for( int r=0; r<n_par; r++)
-  {  
+  {
 	  rez += p[r] * pow( (t[0]-t[1]), r);
   }
   rez *= t[0]*t[1];
@@ -360,7 +341,7 @@ void
 
 
 void TLMDataType::rpn_evaluate( double* par, double* fvec )
-{    
+{
   short ii;
 
     aObj[ o_lms_para ].SetPtr( par );
@@ -371,7 +352,7 @@ void TLMDataType::rpn_evaluate( double* par, double* fvec )
     {
          rpn.CalcEquat();
          fvec[ii] = aObj[ o_lms_delta ].Get(ii, 0);
-    }     
+    }
 }
 
 
@@ -434,7 +415,7 @@ void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
     f_out << endl;
     f_out << "cvm = " << endl;
     for( i=0; i<n_par; i++ )
-    {  for( j=0; j<n_par; j++ )       
+    {  for( j=0; j<n_par; j++ )
        f_out << CVM[i*n_par+j] << " ";
       f_out << endl;
     }
@@ -444,5 +425,5 @@ void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
 
  }
 
-//--------------------- End of s_lmeval.cpp --------------------------
+//--------------------- End of s_lsm_fun.cpp --------------------------
 
