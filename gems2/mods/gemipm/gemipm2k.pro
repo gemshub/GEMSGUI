@@ -68,18 +68,23 @@ OBJECTS_DIR       = obj
                      $$NUMERICS_H/jama_lu.h \
                      $$NUMERICS_H/num_methods.h
 
-        SOURCES	  +=  $$NUMERICS_CPP/num_methods.cpp \
-		   $$LIBS_CPP/gstring.cpp  \
-                    $$LIBS_CPP/gdatastream.cpp  \
+        SOURCES	  +=  $$LIBS_CPP/gstring.cpp  \
+                      $$LIBS_CPP/gdatastream.cpp  \
+                  $$NUMERICS_CPP/num_methods.cpp \
                     $$MODS_CPP/s_fgl.cpp \
                     $$SUBMOD_CPP/nodearray.cpp \
                     $$SUBMOD_CPP/nodearray2.cpp \
                     $$SUBMOD_CPP/particlearray.cpp \
                     $$MODS_CPP/m_gem2mtt.cpp \
-                    $$SUBMOD_CPP/ipm_fia_bc.cpp \
-                    $$SUBMOD_CPP/ipm_gamma.cpp \
-                    $$SUBMOD_CPP/ipm_sel_bc.cpp \
-                    $$SUBMOD_CPP/ms_mueqexp.cpp \
+#                    $$SUBMOD_CPP/ipm_fia_bc.cpp \
+#                    $$SUBMOD_CPP/ipm_gamma.cpp \
+#                    $$SUBMOD_CPP/ipm_sel_bc.cpp \
+#                    $$SUBMOD_CPP/ms_mueqexp.cpp \
                     $$SUBMOD_CPP/ms_multi_file.cpp \
+                    $$SUBMOD_CPP/ipm_chemical.cpp \
+                    $$SUBMOD_CPP/ipm_chemical2.cpp \
+                    $$SUBMOD_CPP/ipm_chemical3.cpp \
+                    $$SUBMOD_CPP/ipm_main.cpp \
+                    $$SUBMOD_CPP/ipm_main2.cpp \
 		    main.cpp \
 		    ms_param.cpp

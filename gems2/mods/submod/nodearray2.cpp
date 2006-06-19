@@ -29,8 +29,8 @@
   #include "service.h"
   #include "visor.h"
 #else
-  istream& f_getline(istream& is, gstring& str, char delim);
-  TNodeArray* TNodeArray::na;
+//  istream& f_getline(istream& is, gstring& str, char delim);
+//  TNodeArray* TNodeArray::na;
 #endif
 
 
