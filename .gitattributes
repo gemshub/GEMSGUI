@@ -207,8 +207,8 @@ gems2/mods/submod/ipm_chemical.cpp -text
 gems2/mods/submod/ipm_chemical2.cpp -text
 gems2/mods/submod/ipm_chemical3.cpp -text
 gems2/mods/submod/ipm_main.cpp -text
-gems2/mods/submod/ipm_main2.cpp -text
 gems2/mods/submod/ipm_old.cpp -text
+gems2/mods/submod/ipm_simplex.cpp -text
 gems2/mods/submod/ms_calc.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_mtparm.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_mtparm.h svn_keywords=Author+Date+Id+Revision
@@ -223,9 +223,10 @@ gems2/mods/submod/ms_rmults.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_sysbc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_system.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/ms_system.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/submod/node.cpp -text
+gems2/mods/submod/node.h -text
 gems2/mods/submod/nodearray.cpp -text
 gems2/mods/submod/nodearray.h -text
-gems2/mods/submod/nodearray2.cpp -text
 gems2/mods/submod/particlearray.cpp -text
 gems2/mods/submod/particlearray.h -text
 gems2/mods/submod/stepwise.h svn_keywords=Author+Date+Id+Revision

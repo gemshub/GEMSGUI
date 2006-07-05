@@ -55,6 +55,7 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_H/databr.h \
                     $$SUBMOD_H/datach.h \
                     $$SUBMOD_H/nodearray.h \
+                    $$SUBMOD_H/node.h \
                     $$SUBMOD_H/particlearray.h \
                     $$SUBMOD_H/ms_multi.h \
 		    ms_gem2mt.h \
@@ -73,7 +74,7 @@ OBJECTS_DIR       = obj
                   $$NUMERICS_CPP/num_methods.cpp \
                     $$MODS_CPP/s_fgl.cpp \
                     $$SUBMOD_CPP/nodearray.cpp \
-                    $$SUBMOD_CPP/nodearray2.cpp \
+                    $$SUBMOD_CPP/node.cpp \
                     $$SUBMOD_CPP/particlearray.cpp \
                     $$MODS_CPP/m_gem2mtt.cpp \
 #                    $$SUBMOD_CPP/ipm_fia_bc.cpp \
@@ -85,6 +86,6 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_CPP/ipm_chemical2.cpp \
                     $$SUBMOD_CPP/ipm_chemical3.cpp \
                     $$SUBMOD_CPP/ipm_main.cpp \
-                    $$SUBMOD_CPP/ipm_main2.cpp \
+                    $$SUBMOD_CPP/ipm_simplex.cpp \
 		    main.cpp \
 		    ms_param.cpp
