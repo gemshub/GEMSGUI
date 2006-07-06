@@ -755,7 +755,7 @@ size_t  TObject::ofDB( GemDataStream& f )
        {
          pV->read( f, psize );
          char ch;
-         for( int ii=psize; ii<ssize; ii++)
+         for( size_t ii=psize; ii<ssize; ii++)
              f.get( ch );
 
        }  else
@@ -811,7 +811,7 @@ void TObject::toTXT( fstream& to )
                         sbuf[1] = 0;
                         break;
                     case ' ':
-                        sbuf[0] = 'þ';
+                        sbuf[0] = 'ï¿½';
                         sbuf[1] = 0;
                         break;
                     default:
@@ -929,7 +929,7 @@ void TObject::ofTXT( fstream& of )
                     case '`':
                         sbuf[0] = '0';
                         break;
-                    case 'þ':
+                    case 'ï¿½':
                         sbuf[0] = ' ';
                         sbuf[1] = 0;
                         break;

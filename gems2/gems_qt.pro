@@ -7,6 +7,7 @@ VERSION         = 2.1.1
 
 DEFINES         += Use_mt_mode
 CONFIG		+= qt thread warn_on debug
+CONFIG		+= debug
 #CONFIG		+= qmake_cache
 
 !win32-borland {

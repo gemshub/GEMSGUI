@@ -24,9 +24,9 @@
 
 #include "node.h"
 
-// These structures are needed for implementation of Random Walk and 
+// These structures are needed for implementation of Random Walk and
 // similar particle-based transport algorithms
-enum  PTCODE // Codes of particle type 
+enum  PTCODE // Codes of particle type
 {
    ADVECTIVE = 21,
    DIFFUSIVE = 22,
@@ -64,9 +64,9 @@ class TNodeArray : public TNode
     DATABR* (*NodT1);  // array of nodes for previous time point  DATABR* (*NodT1)
 
     int anNodes;       // Number of allocated nodes
-    int sizeN;			 // Number of nodes along x direction 
-    int sizeM;           // Number of nodes along y direction 
-    int sizeK;           // Number of nodes along z direction     
+    int sizeN;			 // Number of nodes along x direction
+    int sizeM;           // Number of nodes along y direction
+    int sizeK;           // Number of nodes along z direction
 
     LOCATION size;     // spatial dimensions of the medium ( x, 0, 0 - 1D; x,y,0 - 2D; x,0,z - 2D; x,y,z - 3D )
                        // defines topology of nodes (N of grid points per node): 1D- 2; 2D- 4; 3D- 8 )
@@ -79,28 +79,39 @@ class TNodeArray : public TNode
     void allocMemory();
     void freeMemory();
 
-// Prototypes of functions to manage location of particles within nodes relative to 
-	// the whole grid of the node walls 
-	LOCATION getGrid( int iN, int jN, int kN ) const;  
-    // ????????????????????
-	bool isLocationInNode( int ii, int jj, int kk, LOCATION cxyz ) const;
+   // Prototypes of functions to manage location of particles
+   // within nodes relative to the whole grid of the node walls
+   LOCATION getGrid( int iN, int jN, int kN ) const;
+
+   // ???????????
+   // test location cxyz point into node( ii,jj,kk )
+   bool isLocationInNode( int ii, int jj, int kk, LOCATION cxyz ) const;
 
 public:
 
 #ifndef IPMGEMPLUGIN
+// These calls are used only inside GEMS-PSI GEM2MT module
 
    TNodeArray( int nNodes, MULTI *apm );   // constructor for integration in GEM2MT module of GEMS-PSI
 
    TNodeArray( int asizeN, int asizeM, int asizeK,MULTI *apm ); // constructor that uses 3D node arrangement
 
-   // ??????????????????
-   gstring PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binmode, bool putNodT1 = false );
+  // ???????????
+  // Print MULTI, DATACH and DATABR files structure prepared from GEMS
+  // for separate coupled FMT-GEM programs that use GEMIPM2K module
+  // or if putNodT1 == true  as stop point for masstransport module calculation
+  gstring PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binmode, bool putNodT1 = false );
 
-   // ?????????????????
+   // ???????????
+   // Read DATABR files prepared from GEMS
+   // as stop point for masstransport module calculation
+   // Copying data from work DATABR structure into the node array NodT0
+   // and read DATABR structure into the node array NodT1 from file dbr_file
    void  setNodeArray( gstring& dbr_file, int ndx, bool binary_f );
 
 #else
-// Used in GEMIPM2 
+// Used in GEMIPM2
+
    static TNodeArray* na;   // static pointer to this class for the isolated GEMIPM2K module
    TNodeArray( int nNod );   // constructors for 1D arrangement of nodes
    TNodeArray( int asizeN, int asizeM, int asizeK ); // constructir that uses 3D node arrangement
@@ -111,7 +122,7 @@ public:
    int iNode( int indN, int indM, int indK ) const // makes one absolute node index from three coordinate indexes
      { return  (( indK * sizeM + indM  ) * sizeN + indN);  }
 
-    int indN( int ndx ) const // get i index along N (x axis) from the absolute index ndx 
+    int indN( int ndx ) const // get i index along N (x axis) from the absolute index ndx
     { return  (ndx % sizeN);  }
 
     int indM( int ndx ) const // get j index along M (y axis) from the absolute index ndx
@@ -131,10 +142,10 @@ public:
 
     ~TNodeArray();      // destructor
 
-    int nNodes()  const   // get total number of nodes in the node array 
+    int nNodes()  const   // get total number of nodes in the node array
     { return anNodes; }
 
-    int SizeN()  const		// get number of nodes in N direction (along x coordinate)		
+    int SizeN()  const	 // get number of nodes in N direction (along x coordinate)
     { return sizeN; }
 
     int SizeM()  const     // get number of nodes in M direction (along y coordinate)
@@ -151,16 +162,17 @@ public:
 
     int  RunGEM( int ndx, int Mode );   // calls GEM IPM calculation for a node with absolute index ndx
 
-	int  RunGEM( int indN, int indM, int indK, int Mode ) // Alternative call - 
-                         // calls GEM IPM for one node with three indexes (along x,y,z)
+    int  RunGEM( int indN, int indM, int indK, int Mode ) // Alternative call -
+                 // calls GEM IPM for one node with three indexes (along x,y,z)
     { return RunGEM( iNode( indN, indM, indK ), Mode); }
-                                        // (both calls clean the work node DATABR structure)
+    // (both calls clean the work node DATABR structure)
 
-   // Copying data from the work DATABR structure into the node ndx in the node array
-   // (as specified in nodeTypes array)  ????????? which array - NodT0 or NodT1? 
-   void  setNodeArray( int ndx, int* nodeTypes  );
+    // Copying data from the work DATABR structure into the node ndx in
+    // the node arrays NodT0 and NodT1  (as specified in nodeTypes array)
+    void  setNodeArray( int ndx, int* nodeTypes  );
 
    // ????????????????????????
+   // test setup boundary condition for all nodes in the task
    void  checkNodeArray(int i, int* nodeTypes, const char*  datachbr_file );
 
    //---------------------------------------------------------

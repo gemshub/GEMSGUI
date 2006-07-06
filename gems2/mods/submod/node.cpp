@@ -93,7 +93,7 @@ int  TNode::RunGEM(  int Mode )
 }
 
 //-------------------------------------------------------------------
-// NewNodeArray()
+// NewNodeStructure()
 // reads in the data from MULTI, DATACH, DATABR files prepared
 // using the GEMS-PSI RMT module
 //  Parameters:
@@ -116,7 +116,7 @@ int  TNode::RunGEM(  int Mode )
 //
 //-------------------------------------------------------------------
 
-int  TNode::NewNodeArray( const char*  MULTI_filename,
+int  TNode::NewNodeStructure( const char*  MULTI_filename,
                const char* ipmfiles_lst_name, int* nodeTypes, bool getNodT1)
 {
   int i;
@@ -226,7 +226,7 @@ int  TNode::NewNodeArray( const char*  MULTI_filename,
    pVisor->CloseMessage();
 #endif
 
-    ErrorIf( i==0, datachbr_file.c_str(), "NewNodeArray() error: No dataBR files read!" );
+    ErrorIf( i==0, datachbr_file.c_str(), "NewNodeStructure() error: No dataBR files read!" );
     checkNodeArray( i, nodeTypes, datachbr_file.c_str()  );
 
     return 0;

@@ -80,11 +80,11 @@ public:
     }
     virtual void SetTitle()
     {}
-    
+
     // this function is called when active page of submodule is changed
     virtual void EvPageChanged(int /*nPage*/)
     {}
-    
+
     // used by TCell derivatives to mark changes in the module
     virtual void CellChanged()
     {
@@ -216,7 +216,7 @@ public:
     void CmPrint();
     void CmScript();
 
-    virtual bool check_input( const char* /*key*/, int level=1 )
+    virtual bool check_input( const char* /*key*/, int /*level*/=1 )
     {
         return false;
     }        // test input data (nessasary recalck)

@@ -669,7 +669,7 @@ int get_ndx_( int i, int nO, int Xplace )
     case  o_n1_mps:
     case  o_n1_xpa:
     case  o_n1_bps:
-                    N = aObj[o_mtchbr].Get(3);
+                    N = (int)aObj[o_mtchbr].Get(3);
                     arr = (short *)aObj[o_mt_xph].GetPtr();
                     type = 4;
                     break;

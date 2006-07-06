@@ -66,7 +66,7 @@ void  TNodeArray::checkNodeArray(
    for( int ii=0; ii<anNodes; ii++)
      if(   nodeTypes[ii]<0 || nodeTypes[ii] >= i )
         Error( datachbr_file,
-          "NewNodeArray() error: Undefined boundary condition!" );
+          "NewNodeStructure() error: Undefined boundary condition!" );
 }
 
 //-------------------------------------------------------------------

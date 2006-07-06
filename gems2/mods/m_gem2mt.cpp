@@ -953,7 +953,7 @@ TGEM2MT::RecCalc( const char * key )
      else
        ipmfiles_lst_name += "-bin.lst";
 
-     na->NewNodeArray( f_name.c_str(), ipmfiles_lst_name.c_str(), 0, true );
+     na->NewNodeStructure( f_name.c_str(), ipmfiles_lst_name.c_str(), 0, true );
      // use particles
      //   if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
      //   pa->ParticleArrayInit();

@@ -38,19 +38,19 @@ public:
         return "Calc";
     }
 
-    void ods_link( int i=0)
+    void ods_link( int /*i*/=0)
     {}
 
-    void dyn_set( int i=0)
+    void dyn_set( int /*i*/=0)
     {}
 
-    void dyn_kill( int i=0)
+    void dyn_kill( int /*i*/=0)
     {}
 
-    void dyn_new( int i=0)
+    void dyn_new( int /*i*/=0)
     {}
 
-    void set_def( int i=0)
+    void set_def( int /*i*/=0)
     {}
 
 
@@ -74,19 +74,19 @@ public:
         return "EqDemo";
     }
 
-    void ods_link( int i=0)
+    void ods_link( int /*i*/=0)
     {}
 
-    void dyn_set( int i=0)
+    void dyn_set( int /*i*/=0)
     {}
 
-    void dyn_kill( int i=0)
+    void dyn_kill( int /*i*/=0)
     {}
 
-    void dyn_new( int i=0)
+    void dyn_new( int /*i*/=0)
     {}
 
-    void set_def( int i=0)
+    void set_def( int /*i*/=0)
     {}
 
     const gstring& GetString()
