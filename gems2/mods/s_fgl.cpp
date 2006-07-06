@@ -15,7 +15,7 @@
 // See http://les.web.psi.ch/Software/GEMS-PSI for more information
 // E-mail: gems2.support@psi.ch; chud@igc.irk.ru
 //-------------------------------------------------------------------
-     
+
 #include <math.h>
 #include <stdio.h>
 
@@ -212,7 +212,7 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
         double &Volume, double &DeltaH, double &DeltaS, double P, double T )
 {
       int iRet; double ro;
-      double X[1]={1};
+      double X[1]={1.};
       double FugPure[1];
 
       switch (int(EoSparam[4]))
@@ -240,10 +240,10 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
         return 1;// Error: Wrong type of equation
       };
  // returns density!
-      iRet = CGActivCoefPT( X, EoSparPT, FugPure, 1, P, T );
-      if( iRet < 0.  )
+      ro = CGActivCoefPT( X, EoSparPT, FugPure, 1, P, T );
+      if( ro < 0.  )
       {
-          return iRet;
+          return (int)ro;
       };
       Fugacity= FugPure[0];
       ro = DENSITY( X, EoSparPT, 1, P, T );

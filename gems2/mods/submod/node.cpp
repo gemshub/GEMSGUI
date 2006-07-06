@@ -34,7 +34,7 @@
 #endif
 
 //-------------------------------------------------------------------------
-// RunGEM()
+// GEM_run()
 // GEM IPM calculation of equilibrium state for the current node.
 // Mode - mode of GEMS calculation
 //
@@ -42,7 +42,7 @@
 //   ( OK; GEMIPM2K calculation error; system error )
 //
 //-------------------------------------------------------------------
-int  TNode::RunGEM(  int Mode )
+int  TNode::GEM_run(  int Mode )
 {
 //  fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
@@ -61,7 +61,7 @@ int  TNode::RunGEM(  int Mode )
 
 /**************************************************************
 // only for testing output results for files
-    printfGEM( "calc_multi.ipm", "calculated_dbr.dat", "calculated.dbr" );
+    GEM_printf( "calc_multi.ipm", "calculated_dbr.dat", "calculated.dbr" );
 ********************************************************* */
 
    if( CNode->NodeStatusCH  == NEED_GEM_AIA )
@@ -93,7 +93,7 @@ int  TNode::RunGEM(  int Mode )
 }
 
 //-------------------------------------------------------------------
-// NewNodeStructure()
+// GEM_init()
 // reads in the data from MULTI, DATACH, DATABR files prepared
 // using the GEMS-PSI RMT module
 //  Parameters:
@@ -116,7 +116,7 @@ int  TNode::RunGEM(  int Mode )
 //
 //-------------------------------------------------------------------
 
-int  TNode::NewNodeStructure( const char*  MULTI_filename,
+int  TNode::GEM_init( const char*  MULTI_filename,
                const char* ipmfiles_lst_name, int* nodeTypes, bool getNodT1)
 {
   int i;
@@ -226,7 +226,7 @@ int  TNode::NewNodeStructure( const char*  MULTI_filename,
    pVisor->CloseMessage();
 #endif
 
-    ErrorIf( i==0, datachbr_file.c_str(), "NewNodeStructure() error: No dataBR files read!" );
+    ErrorIf( i==0, datachbr_file.c_str(), "GEM_init() error: No dataBR files read!" );
     checkNodeArray( i, nodeTypes, datachbr_file.c_str()  );
 
     return 0;
@@ -387,7 +387,7 @@ void TNode::makeStartDataChBR(
     CSD->nAalp = 1;
   else
     CSD->nAalp = 0;
-  CSD->uRes2 = 0;
+  CSD->uRes1 = 0;
 
 // These dimensionalities define sizes of dynamic data in DATABT structure!!!
 
@@ -398,10 +398,10 @@ void TNode::makeStartDataChBR(
   for( ii=0; ii< selPH.GetCount(); ii++, CSD->nPSb++ )
    if( selPH[ii] >= pmm->FIs )
        break;
+  CSD->uRes2 = 0;
   CSD->uRes3 = 0;
-  CSD->uRes4 = 0;
   CSD->dRes1 = 0.;
-  CSD->dRes = 0.;
+  CSD->dRes2 = 0.;
 
   CSD->Ttol = Ttol_;
   CSD->Ptol = Ptol_;
@@ -707,7 +707,7 @@ pmm->FitVar[3] = CNode->Eh;
 
 }
 
-void  TNode::printfGEM( const char* multi_file,
+void  TNode::GEM_printf( const char* multi_file,
                              const char* databr_text,
                              const char* databr_bin )
 {
@@ -1269,18 +1269,20 @@ DATABR * TNode::databr_free( DATABR *CNode_ )
 
 // calculation mode: passing input GEM data changed on previous FMT iteration
 //                   into work DATABR structure
-void TNode::GEM_input_from_MT(
-   short p_NodeHandle,    // Node identification handle
-   short p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-   double p_T,     // Temperature T, K                        +      +      -     -
-   double p_P,     // Pressure P, bar                         +      +      -     -
-   double p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
-   double p_dt,    // actual time step
-   double p_dt1,   // priveous time step
-   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
-   )
+void TNode::GEM_from_MT(
+   short  p_NodeHandle,   // Node identification handle
+   short  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+                    //                                     GEM input output  FMT control
+   double p_T,      // Temperature T, K                        +       -      -
+   double p_P,      // Pressure P, bar                         +       -      -
+   double p_Vs,     // Volume V of reactive subsystem, cm3     -       -      +
+   double p_Ms,     // Mass of reactive subsystem, kg          -       -      +
+   //       double p_dt,     // actual time step	         			  +
+   //       double p_dt1,    // previous time step                                   +
+   double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
+   double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
+   double *p_bIC    // bulk mole amounts of IC [nICb]          +       -      -
+)
 {
   int ii;
   bool useSimplex = false;
@@ -1289,9 +1291,10 @@ void TNode::GEM_input_from_MT(
   CNode->NodeStatusCH = p_NodeStatusCH;
   CNode->T = p_T;
   CNode->P = p_P;
+  CNode->Vs = p_Vs;
   CNode->Ms = p_Ms;
-  CNode->dt = p_dt;
-  CNode->dt1 = p_dt1;
+//  CNode->dt = p_dt;
+//  CNode->dt1 = p_dt1;
 // Checking if no-simplex IA is Ok
    for( ii=0; ii<CSD->nICb; ii++ )
    {  //  Sveta 11/02/05 for test
@@ -1310,17 +1313,19 @@ void TNode::GEM_input_from_MT(
 }
 
 // readonly mode: passing input GEM data to FMT
-void TNode::GEM_input_back_to_MT(
-   short &p_NodeHandle,    // Node identification handle
-   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-   double &p_T,     // Temperature T, K                        +      +      -     -
-   double &p_P,     // Pressure P, bar                         +      +      -     -
-   double &p_Ms,    // Mass of reactive subsystem, kg          +      +      -     -
-   double &p_dt,    // actual time step
-   double &p_dt1,   // priveous time step
-   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_bIC  // bulk mole amounts of IC[nICb]                +      +      -     -
+void TNode::GEM_restore_MT(
+   short  &p_NodeHandle,   // Node identification handle
+   short  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+                    //                                     GEM input output  FMT control
+   double &p_T,      // Temperature T, K                        +       -      -
+   double &p_P,      // Pressure P, bar                         +       -      -
+   double &p_Vs,     // Volume V of reactive subsystem, cm3     -       -      +
+   double &p_Ms,     // Mass of reactive subsystem, kg          -       -      +
+   //       double p_dt,     // actual time step	         			  +
+   //       double p_dt1,    // previous time step                                   +
+   double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
+   double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
+   double *p_bIC    // bulk mole amounts of IC [nICb]          +       -      -
    )
 {
  int ii;
@@ -1328,9 +1333,10 @@ void TNode::GEM_input_back_to_MT(
   p_NodeStatusCH = CNode->NodeStatusCH;
   p_T = CNode->T;
   p_P = CNode->P;
+  p_Vs = CNode->Vs;
   p_Ms = CNode->Ms;
-  p_dt = CNode->dt;
-  p_dt1 = CNode->dt1;
+//  p_dt = CNode->dt;
+//  p_dt1 = CNode->dt1;
 // Checking if no-simplex IA is Ok
    for( ii=0; ii<CSD->nICb; ii++ )
      p_bIC[ii] = CNode->bIC[ii];
@@ -1341,37 +1347,36 @@ void TNode::GEM_input_back_to_MT(
 }
 
 // Copying results that must be returned into the FMT part into MAIF_CALC parameters
-void TNode::GEM_output_to_MT(
-   short &p_NodeHandle,    // Node identification handle
-   short &p_NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-   short &p_IterDone,      // Number of iterations performed by IPM (if not need GEM)
-// Chemical scalar variables
-   double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
-   double &p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
-   double &p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
-   double &p_IC,    // Effective molal aq ionic strength           -      -      +     +
-   double &p_pH,    // pH of aqueous solution                      -      -      +     +
-   double &p_pe,    // pe of aqueous solution                      -      -      +     +
-   double &p_Eh,    // Eh of aqueous solution, V                   -      -      +     +
-   double &p_denW,
-   double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
-   double &p_epsW,
-   double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
-// Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
-// exchange of values occurs through lists of indices, e.g. xDC, xPH
-   double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
-   double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
-   double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
-   double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
-   double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
-   double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
-   double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
-   double  *p_dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
-   double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
-   double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
-   double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
-   )
+void TNode::GEM_to_MT(
+       short &p_NodeHandle,    // Node identification handle
+       short &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
+       short &p_IterDone,      // Number of iterations performed by GEM IPM
+                         //                                     GEM input output  FMT control
+       // Chemical scalar variables
+       double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
+       double &p_Ms,    // Mass of reactive subsystem, kg          -      -      +     +
+       double &p_Gs,    // Gibbs energy of reactive subsystem (J)  -      -      +     +
+       double &p_Hs,    // Enthalpy of reactive subsystem (J)      -      -      +     +
+       double &p_IC,    // Effective molal aq ionic strength       -      -      +     +
+       double &p_pH,    // pH of aqueous solution                  -      -      +     +
+       double &p_pe,    // pe of aqueous solution                  -      -      +     +
+       double &p_Eh,    // Eh of aqueous solution, V               -      -      +     +
+       double &p_denW,
+       double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
+       double &p_epsW,
+       double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
+       // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
+       // exchange of values occurs through lists of indices, e.g. xDC, xPH
+       double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
+       double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
+       double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
+       double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
+       double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
+       double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
+       double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+       double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
+       double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
+)
 {
 
    p_NodeHandle = CNode->NodeHandle;
@@ -1379,6 +1384,7 @@ void TNode::GEM_output_to_MT(
    p_IterDone = CNode->IterDone;
 
    p_Vs = CNode->Vs;
+   p_Ms = CNode->Ms;
    p_Gs = CNode->Gs;
    p_Hs = CNode->Hs;
    p_IC = CNode->IC;
@@ -1397,9 +1403,6 @@ void TNode::GEM_output_to_MT(
   memcpy( p_mPS, CNode->mPS, CSD->nPSb*sizeof(double) );
   memcpy( p_bPS, CNode->bPS, CSD->nPSb*CSD->nICb*sizeof(double) );
   memcpy( p_xPA, CNode->xPA, CSD->nPSb*sizeof(double) );
-  memcpy( p_dul, CNode->dul, CSD->nDCb*sizeof(double) );
-  memcpy( p_dll, CNode->dll, CSD->nDCb*sizeof(double) );
-  memcpy( p_bIC, CNode->bIC, CSD->nICb*sizeof(double) );
   memcpy( p_rMB, CNode->rMB, CSD->nICb*sizeof(double) );
   memcpy( p_uIC, CNode->uIC, CSD->nICb*sizeof(double) );
 }

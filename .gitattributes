@@ -232,6 +232,8 @@ gems2/mods/submod/particlearray.h -text
 gems2/mods/submod/stepwise.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/submod.pri -text
 gems2/mods/submod/v_smodhand.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/tnode/gem_node.pro -text
+gems2/mods/tnode/main.cpp -text
 gems2/mods/v_ipnc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_ipnc.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_mod.h svn_keywords=Author+Date+Id+Revision

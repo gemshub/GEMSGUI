@@ -16,7 +16,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-#include <fstream.h>
+//#include <fstream.h>
 #include "num_methods.h"
 #include "verror.h"
 
@@ -174,7 +174,7 @@ double randnorm(double& x)
 #define EPS 1.2e-7
 #define RNMX (1.0-EPS)
 
-// Long period (> 2 × 1018) random number generator of L’Ecuyer with Bays-Durham shuffle
+// Long period (> 2 ï¿½ 1018) random number generator of Lï¿½Ecuyer with Bays-Durham shuffle
 // and added safeguards. Returns a uniform random deviate between 0.0 and 1.0 (exclusive of
 // the endpoint values). Call with idum a negative integer to initialize; thereafter, do not alter
 // idum between successive deviates in a sequence. RNMX should approximate the largest floating
@@ -207,7 +207,7 @@ float ran2(long& idum)
   }
    k = idum/IQ1;       //    Start here when not initializing.
    idum = IA1 * (idum-k*IQ1) - k*IR1;  //Compute idum=(IA1*idum) % IM1 without
-                                       // overflows by Schrage’s  method.
+                                       // overflows by Schrageï¿½s  method.
    if ( idum < 0 )
       idum += IM1;
    k = idum2/IQ2;
@@ -220,7 +220,7 @@ float ran2(long& idum)
    if (iy < 1)
       iy += IMM1;
    if ( ( temp=AM*iy) > RNMX)
-       return RNMX;                //  Because users don’t expect endpoint values.
+       return RNMX;                //  Because users donï¿½t expect endpoint values.
    return temp;
 }
 
@@ -255,7 +255,7 @@ float ran3(long& idum)
           mk += MBIG;
         mj=ma[ii];
       }
-      for (k=1;k<=4;k++)    // We randomize them by “warming upthe generator.”
+      for (k=1;k<=4;k++)    // We randomize them by ï¿½warming upthe generator.ï¿½
         for(i=1;i<=55;i++)
         {
          ma[i] -= ma[1+(i+30) % 55];

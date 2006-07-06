@@ -337,7 +337,7 @@ int TGEM2MT::MassTransInit( const char *multu_in1, const char *chbr_in1 )
          nodeType[ii] = mtp->DiCp[ii][0];
 
   // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
-  if( na->NewNodeStructure( multu_in1, chbr_in1, nodeType ) )
+  if( na->GEM_init( multu_in1, chbr_in1, nodeType ) )
         return 1;  // error reading files
 
   // put HydP

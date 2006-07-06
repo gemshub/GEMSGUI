@@ -29,7 +29,7 @@
 /* TVal template is defining implementation
     of TValBase interface for manipulation of
     calculation values
-    
+
     All cleanups and pointer checking
     are performed by TObject class
     for better performance
@@ -98,7 +98,7 @@ struct TVal:
             return true;
         return false;
     }
-    
+
     /* returns string representation of the cell value
     */
     gstring GetString(size_t ndx) const;
@@ -233,7 +233,7 @@ struct TValString:
     {
         return (strcmp((char*)ptr,S_EMPTY)==0);
     }
-    gstring GetString(size_t ndx) const
+    gstring GetString(size_t /*ndx*/) const
     {
         return (!*(char*)ptr) ? S_EMPTY: (char*)ptr;
     }
@@ -340,7 +340,7 @@ template<class T>
 extern
 bool
 TVal<unsigned char>::SetString(const char* s, size_t ndx);
- 
+
 template<class T>
 extern
 bool
@@ -362,10 +362,10 @@ TVal<T>::VerifyString(const char* s, T& v)
   vstr sv(strlen(s)+1);
   gstring PAT = PATTERN;
   PAT += "%s";
- 
+
   if( sscanf(ss.c_str(), PAT.c_str(), &v, sv.p ) != 1 )
     return false;
- 
+
   return true;
 }
 */

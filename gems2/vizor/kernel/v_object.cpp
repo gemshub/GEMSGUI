@@ -811,7 +811,7 @@ void TObject::toTXT( fstream& to )
                         sbuf[1] = 0;
                         break;
                     case ' ':
-                        sbuf[0] = '�';
+                        sbuf[0] = ' '/*'�'*/;
                         sbuf[1] = 0;
                         break;
                     default:
@@ -929,7 +929,8 @@ void TObject::ofTXT( fstream& of )
                     case '`':
                         sbuf[0] = '0';
                         break;
-                    case '�':
+//                        case '�':
+                        case ' ':
                         sbuf[0] = ' ';
                         sbuf[1] = 0;
                         break;

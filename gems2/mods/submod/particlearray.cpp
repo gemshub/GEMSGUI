@@ -225,7 +225,7 @@ void TParticleArray::InterpolationVp_hDl_1D( int px, double& vp, double& hDl )
 // Calculation of new particle locations
 // Advective step, Brownian step, Dispersive step, Diffusion step
 // px: index of particle
-int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
+int TParticleArray::DisplaceParticle( int px, double /*t0*/, double /*t1*/ )
 {
 //  DATACH* ch = nodes->pCSD();       // DataCH structure
   int nodInd = ParT1[px].node;
@@ -261,7 +261,7 @@ int TParticleArray::DisplaceParticle( int px, double t0, double t1 )
 // Walk (transport step) for particle px between nodes
 // returns -1 if particle stays in the same node
 // or an index of another node the particle enters
-int TParticleArray::MoveParticleBetweenNodes( int px, double t0, double t1 )
+int TParticleArray::MoveParticleBetweenNodes( int px, double /*t0*/, double /*t1*/ )
 {
   int old_node = ParT1[px].node;
   int new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, old_node );
@@ -327,7 +327,7 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double t0, double t1 )
 // call to the whole Random Walk method time step over all particles and nodes
 // returns 0 if time step is accepted; not 0 if rejected (another dt is needed)
 // GEM was called before this function
-int TParticleArray::RandomWalkIteration( int Mode, double t0, double t1 )
+int TParticleArray::RandomWalkIteration( int /*Mode*/, double t0, double t1 )
 {
 
   int iNode, iType, iRet=0, cpx;
@@ -366,7 +366,7 @@ int TParticleArray::RandomWalkIteration( int Mode, double t0, double t1 )
 
 // call to the whole FiniteCell Walk method time step over all particles and nodes
 // returns 0 if time step is accepted; not 0 if rejected (another dt is needed)
-int TParticleArray::FCellWalkIteration( int Mode, double t0, double t1 )
+int TParticleArray::FCellWalkIteration( int /*Mode*/, double /*t0*/, double /*t1*/ )
 {
   return 0;
 }

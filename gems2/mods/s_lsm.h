@@ -59,11 +59,11 @@ class TLMDataType  // data for the task
    double *tdat;  //  array of data arguments [nQ][nM]
    double *ydat;  //  array of data functions [nQ]
 
-   double *wdat;  // array of weight factors for data  [nQ], optional
-  //  *par,       // [nP] to LM fitter: guess parameters; from LM fitter - fitted parameters
+   //  *par,       // [nP] to LM fitter: guess parameters; from LM fitter - fitted parameters
    double *cnst_y;// [nQ] internal constants for yi calculatuion
+   double *wdat;  // array of weight factors for data  [nQ], optional
 
- char * text_function;
+   char * text_function;
 
 protected:
 

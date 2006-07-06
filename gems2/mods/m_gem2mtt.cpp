@@ -225,7 +225,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
 //              sprintf( buf, "%d_%d.err", i, t);
 //              mul_name+=buf;
 //              br_name+=buf;
-//              na->printfGEM( mul_name.c_str(), br_name.c_str(),0 );
+//              na->GEM_printf( mul_name.c_str(), br_name.c_str(),0 );
         }
      }
    }  // ii   end of node iteration loop
@@ -343,7 +343,7 @@ if( !logfile)
 
 // time testing
 clock_t t_start, t_end, t_out, t_out2;
-clock_t outp_time = 0.;
+clock_t outp_time = (clock_t)0;
 t_start = clock();
 
    if( mtp->iStat != AS_RUN  )

@@ -627,7 +627,7 @@ void TMulti::PrimeChemicalPotentials( double F[], double Y[], double YF[], doubl
         {                 // error - will result in zerodivide!
            gstring pbuf(pmp->SF[k],0,20);
            char buf[200];
-           sprintf( buf, "Broken IPM solution: Phase %s  Yf= ", pbuf.c_str(), Yf );
+           sprintf( buf, "Broken IPM solution: Phase %s  Yf= %lg", pbuf.c_str(), Yf );
            Error( "E13IPM PrimeChemicalPotentials():", buf);
 //           Yf = pmp->YFk;
         }

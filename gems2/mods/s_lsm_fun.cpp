@@ -98,7 +98,7 @@ void TLMDataType::test_sizes()
           "Built in function is for 1 end members and 3 parameters only." );
 #else
        printf( "Built in function is for 1 end members and 3 parameters only." );
-#endif;
+#endif
              }
              break;
 
@@ -112,7 +112,7 @@ void TLMDataType::test_sizes()
        "Built in function is for 2 end members only and upto 6 parameters." );
 #else
        printf( "Built in function is for 2 end members only and upto 6 parameters." );
-#endif;
+#endif
           }
             break;
      case FUN_IPF_T:
@@ -124,7 +124,7 @@ void TLMDataType::test_sizes()
        "Built in function is for 2 end members and 2 parameters only." );
 #else
        printf( "Built in function is for 2 end members and 2 parameters only."  );
-#endif;
+#endif
            }
             break;
      case MATHSCRIPT_FIT:   // using mathscript
@@ -391,7 +391,7 @@ void TLMDataType::lm_print_default( double* par, double* fvec, double *CVM,
     printf( "  par: " );
     for( i=0; i<n_par; ++i )
         printf( " %12g", par[i] );
-    printf ( " => norm: %12g\n", norm /*lm_enorm( m_dat, fvec )* );
+    printf ( " => norm: %12g\n", norm *lm_enorm( m_dat, fvec )* );
  */
  if ( iflag == -1 ) {
 

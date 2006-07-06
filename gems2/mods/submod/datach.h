@@ -1,22 +1,22 @@
 //-------------------------------------------------------------------
-// DATACHEM - contains chemical system definitions common to all 
+// DATACHEM - contains chemical system definitions common to all
 // nodes for exchange between the coupled GEM IPM and FMT code parts.
-// Contains dimensions and index lists for ICs, DCs, phases in DATABR.H 
-// Used in Tnode and Tnodearray classes 
+// Contains dimensions and index lists for ICs, DCs, phases in DATABR.H
+// Used in Tnode and Tnodearray classes
 //
 //      CH: chemical structure in GEM IPM
 //      FMT: fluid mass transport
 //
 // Written by D.Kulik, W.Pfingsten, F.Enzmann and S.Dmytriyeva
-// Copyright (C) 2003-2006 
+// Copyright (C) 2003-2006
 //
-// This file is part of GEMIPM2K and GEMS-PSI codes for 
+// This file is part of GEMIPM2K and GEMS-PSI codes for
 // thermodynamic modelling by Gibbs energy minimization
 // developed in the Laboratory for Waste Management, Paul Scherrer Institute
 // This file may be distributed together with GEMIPM2K source code
 // under the licence terms defined in GEMIPM2K.QAL
 //
-// See also http://les.web.psi.ch/Software/GEMS-PSI 
+// See also http://les.web.psi.ch/Software/GEMS-PSI
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
@@ -37,19 +37,19 @@ typedef struct
     nDC,      	// total number of DC (chemical species) in reactive part
     nPH,       	// total number of phases included into the GEM IPM problem
     nPS,        // number of multicomponent phases, nPS <= nPH
-    nTp,        // Number of temperature points in grid arrays 
+    nTp,        // Number of temperature points in grid arrays
 	            // for the interpolation of thermodynamic data
     nPp,        // Number of pressure points in grid arrays
 	            // for the interpolation of thermodynamic data
-    nAalp,      // Flag for considering surface areas of phases 
+    nAalp,      // Flag for considering surface areas of phases
     uRes1,      // reserved
 
-  // These dimensionalities define sizes of packed arrays 
+  // These dimensionalities define sizes of packed arrays
   // in DATABR structures describing nodes
   // Tey are needed to reduce on storage demand for nodes
-  // Connection between any node and DATACH occurs through the 
+  // Connection between any node and DATACH occurs through the
   // xIC, xPH and xDC lists (see below)
-    nICb,       // number of stoichiometry units (<= nIC) used in nodes  
+    nICb,       // number of stoichiometry units (<= nIC) used in nodes
     nDCb,      	// number of DC (chemical species, <= nDC) used in nodes
     nPHb,     	// number of phases (<= nPH) used in nodes
     nPSb,       // number of multicomponent phases (<= nPS) used in nodes
@@ -59,27 +59,27 @@ typedef struct
 // Lists, vectors and matrices
     *nDCinPH,  // number of DC included into each phase, [nPH] elements
 
-// Indices connecting the lists used in nodes (DATABR structure), see 
+// Indices connecting the lists used in nodes (DATABR structure), see
 // databr.h, with the lists in this (DATACH) structure
     *xIC,   // ICNL indices in DATABR IC vectors, [nICb] elements
     *xDC,   // DCNL indices in DATABR DC vectors, [nDCb] elements
     *xPH;   // PHNL indices in DATABR phase vectors, [nPHb] elements
 // see below definitions of the ICNL, DCNL and PHNL lists
 
-  float 
-    *Tval,   // discrete values of Temperature (K), [nTp] elements, 
+  float
+    *Tval,   // discrete values of Temperature (K), [nTp] elements,
 	  // that correspond to grid arrays for the interpolation of thermodynamic data
     *Pval,   // discrete values of Pressure (bar), [nPp] elements,
       // that correspond to grid arrays for the interpolation of thermodynamic data
     *A;      // Stoichiometry matrix A containing elemental stoichiometries of DCs,
-	  // [nIC][nDC] elements, float reduces storage demand here 
-  double 
+	  // [nIC][nDC] elements, float reduces storage demand here
+  double
     Ttol,    // Temperature tolerance (K) for interpolation of thermodynamic data
     Ptol,    // Pressure tolerance (bar) for interpolation of thermodynamic data
     dRes1,   // reserved
-	dRes2,   // reserved
+    dRes2,   // reserved
 
-// Data vectors - must be loaded before calling GEMIPM2K 
+// Data vectors - must be loaded before calling GEMIPM2K
 
 // Values for IC (independent components)
     *ICmm,   // IC atomic (molar) mass, g/mol, [nIC] elements
@@ -89,7 +89,7 @@ typedef struct
     *DD,     // Diffusition coefficients, [nDC] elements, for now constant
 
 // Grid arrays of thermodynamic data
-// Require a Lagrange interpolation subroutine to extract data 
+// Require a Lagrange interpolation subroutine to extract data
 // for a given P,T point (new interpolation is done when P or T differs
 // from the previous P,T by more than Ptol, Ttol)
     *roW,   // density of water-solvent, g/cm3, [ nPp][nTp] elements
@@ -118,13 +118,13 @@ typedef struct
 DATACH;
 
 
-// Codes allowed in Generic DC code list ccDCW  
+// Codes allowed in Generic DC code list ccDCW
 enum SolDCLcodes {
-    DCl_SINGLE = 'U',        // This DC is a single-component (pure) phase 
-    DCl_SYMMETRIC = 'I',     // This DC is symmetric component (end member) 
+    DCl_SINGLE = 'U',        // This DC is a single-component (pure) phase
+    DCl_SYMMETRIC = 'I',     // This DC is symmetric component (end member)
 	                           // of a solution phase or a gas mixture
-	DCl_ASYM_SPECIES = 'S',  // This DC is asymmetric component (solute, sorbate species) 
-	                           // in a solution or sorption phase 
+	DCl_ASYM_SPECIES = 'S',  // This DC is asymmetric component (solute, sorbate species)
+	                           // in a solution or sorption phase
     DCl_ASYM_CARRIER = 'W'   // This is a solvent or carrier in a solution (sorption) phase
 };
 
@@ -137,9 +137,9 @@ typedef enum {  // classes of independent components IC, used in ccIC code list
     IC_ELEMENT  =  'e',  // chemical element (except oxygen and hydrogen)
     IC_OXYGEN   =  'o',  // oxygen
     IC_HYDROGEN =  'h',  // hydrogen (natural mixture of isotopes) H
-    IC_PROTIUM   = 'p',  // protium Hp (reserved) 
+    IC_PROTIUM   = 'p',  // protium Hp (reserved)
     IC_DEYTERIUM = 'd',  // deuterium D (reserved)
-    IC_TRITIUM  =  't',  // tritium T (reserved) 
+    IC_TRITIUM  =  't',  // tritium T (reserved)
     IC_FORMULA  =  'f',  // formula unit (eg. for Sio - a symbol of SiO2)
     IC_METALION =  'm',  // metal ion (cation), reserved
     IC_LIGAND   =  'l',  // ligand (anion), reserved
@@ -152,14 +152,14 @@ typedef enum {  // classes of independent components IC, used in ccIC code list
 	IC_SITE     =  's'   // sorption site for site balance constraint (reserved)
 } ICL_CLASSES;
 
-typedef enum {  // Classes of dependent components DC, used in ccDC code list 
-    
+typedef enum {  // Classes of dependent components DC, used in ccDC code list
+
 	// Single-component (pure) condensed phases:
     DC_SCP_CONDEN  = 'O',       // DC forming a single-component phase
 
 	// Solid/liquid non-electrolyte multicomponent phases:
     DC_SOL_IDEAL   = 'I',   // ideal end-member component (Raoult)
-	DC_SOL_MINOR   = 'J',   // junior (minor) component (Henry) 
+	DC_SOL_MINOR   = 'J',   // junior (minor) component (Henry)
     DC_SOL_MAJOR   = 'M',   // major component (Raoult)
 
 	// Aqueous electrolyte phase:
@@ -168,16 +168,16 @@ typedef enum {  // Classes of dependent components DC, used in ccDC code list
     DC_AQ_SPECIES  = 'S',      // other aqueous species (ions, complexes and ion pairs)
     DC_AQ_SOLVENT  = 'W',      // water H2O (major solvent)
     DC_AQ_SOLVCOM  = 'L',      // other components of a solvent (eg. alcohol)
-    
+
 	// Gas phase ( G code can be used for all gases; V,C,H,N codes are reserved
-    // for future use in the built-in equations of state): 
+    // for future use in the built-in equations of state):
     DC_GAS_COMP    = 'G',      // other gases
     DC_GAS_H2O     = 'V',      // H2O steam
     DC_GAS_CO2     = 'C',      // CO2 (carbon dioxide)
     DC_GAS_H2      = 'H',      // H2 hydrogen
     DC_GAS_N2      = 'N',      // N2 nitrogen
-    
-	// Sorption phases and poly(oligo)electrolytes 
+
+	// Sorption phases and poly(oligo)electrolytes
     DC_SUR_CARRIER = 'Q',   // Principal end-member of solid carrier (sorbent)
     DC_SUR_MINAL   = 'P',   // Minor end-member of solid carrier (sorbent)
     DC_PEL_CARRIER = 'R',   // Carrier of poly(oligo)electrolyte (for future use)
@@ -188,15 +188,15 @@ typedef enum {  // Classes of dependent components DC, used in ccDC code list
     DC_SUR_IPAIR   = 'Z',   // Outer-sphere (weak) surface complex, surface ion pair,
 	                          // exchange ion (the same as '1')
 
-	// Obsolete codes for old GEM SCMs - usage in newly created models is not recommended 
+	// Obsolete codes for old GEM SCMs - usage in newly created models is not recommended
     DC_SSC_A0 = '0', DC_SSC_A1 = '2', DC_SSC_A2 = '4', DC_SSC_A3 = '6',
-    DC_SSC_A4 = '8',        // Strong surface complex on site type 0,1,2,3,4 - A plane 
+    DC_SSC_A4 = '8',        // Strong surface complex on site type 0,1,2,3,4 - A plane
     DC_WSC_A0 = '1', DC_WSC_A1 = '3', DC_WSC_A2 = '5', DC_WSC_A3 = '7',
-    DC_WSC_A4 = '9',        // Weak surface complex on site type 0,1,2,3,4 - B plane 
-    DC_IESC_A  = 'A',       // Strong exchange ion const-charge plane 
-    DC_IEWC_B  = 'B',       // Weak exchange ion const-charge plane 
+    DC_WSC_A4 = '9',        // Weak surface complex on site type 0,1,2,3,4 - B plane
+    DC_IESC_A  = 'A',       // Strong exchange ion const-charge plane
+    DC_IEWC_B  = 'B',       // Weak exchange ion const-charge plane
 
-    // Special class codes for diffusing species etc. (reserved) 
+    // Special class codes for diffusing species etc. (reserved)
     DCaquoCATION   = 'c',
     DCaquoANION    = 'n',
     DCaquoLIGAND   = 'l',
@@ -206,10 +206,10 @@ typedef enum {  // Classes of dependent components DC, used in ccDC code list
 
 } DCL_CLASSES;
 
-typedef enum {  // Classes of phases, used in ccPH code list 
+typedef enum {  // Classes of phases, used in ccPH code list
     PH_AQUEL    = 'a',  // aqueous electrolyte (also with HKF EoS)
     PH_GASMIX   = 'g',  // mixture of gases (also corresponding states theory)
-    PH_FLUID    = 'f',  // supercritical fluid phase with special EoS 
+    PH_FLUID    = 'f',  // supercritical fluid phase with special EoS
     PH_LIQUID   = 'l',  // non-electrolyte liquid (melt)
     PH_SORPTION = 'x',  // dispersed solid with adsorption (ion exchange) in aqueous system
     PH_POLYEL   = 'y',  // colloidal poly- (oligo)electrolyte (reserved)
@@ -219,9 +219,9 @@ typedef enum {  // Classes of phases, used in ccPH code list
 
 #endif
 #endif
-#endif   
+#endif
 
 //_DataCH_H
-// End of datach.h 
+// End of datach.h
 
 

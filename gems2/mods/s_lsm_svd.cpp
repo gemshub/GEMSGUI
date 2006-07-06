@@ -39,7 +39,7 @@ TSVDcalc::TSVDcalc( double *aPar, TLMDataType *aData ):
 }
 
 TSVDcalc::TSVDcalc( short M, short N, float *aA, double *ab, double *aX ):
-   m(M), n(N), data(0), par(aX), A(aA), b(ab)
+   data(0), m(M), n(N), par(aX), A(aA), b(ab)
 {
     chisq = 0.0;
 }
@@ -50,7 +50,7 @@ TSVDcalc::~TSVDcalc()
 // *** main function.
 void TSVDcalc::CalcMin( double *sdpar )
 {
-   int i, j;
+ //  int i, j;
 
 #ifdef IPMGEMPLUGIN
     if( data->getInfo() == -1 ) //test_sizes
@@ -223,7 +223,7 @@ void TSVDcalc::svdGetXmore0( int ii, fd_type x[] )
 
 
 void TSVDcalc::svdGetX( fd_type b[], fd_type x[] )
-// Solves A·x = b for a vector x, where A is specified by the arrays
+// Solves Aï¿½x = b for a vector x, where A is specified by the arrays
 // U, w, V as returned by svdGetUWV.
 //  b is the input right-hand side.
 //  x is the output solution vector.
@@ -287,7 +287,7 @@ rank can be computed from this decomposition.
 
 void TSVDcalc::svdMin(  fd_type a[] )
 // Given a set of data points x[1..m],y[1..m] with individual coeff
-// wpar[1..ndata], use ƒÔ2 minimization to determine the coefficients a[1..ma]
+// wpar[1..ndata], use ï¿½ï¿½2 minimization to determine the coefficients a[1..ma]
 // of the fitting  function y = Sumi (ai*afunci(x)).
 // Here we solve the fitting equations.
 // Arrays u[1..m][1..n], v[1..n][1..n],
@@ -332,7 +332,7 @@ void TSVDcalc::svdMin(  fd_type a[] )
        for (sum=0.0,j=0;j<n;j++)
          sum += a[j]*afunc[j];
        tmp=(data->getY(i)-sum)*data->getWdat(i);
-       chisq += (tmp,tmp*tmp);
+       chisq += tmp*tmp;
    }
    //chisq = sqrt(chisq);
    data->xi2 = chisq;

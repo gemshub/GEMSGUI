@@ -32,7 +32,7 @@
 
 ACONST  ac_ = { /* wm, gascon, tz, aa, uref, sref*/
     0.1801520000e2, 0.46152200e0, 0.647073e3, 0.1e1,
-    -0.4328455039e4, 0.76180802e1};
+    -0.4328455039e4, 0.76180802e1,  0., 0., 0.};
 
 NCONST  nc_ ={ /* g(40), ii(40), jj(40), nc */
     {-0.53062968529023e3, 0.22744901424408e4, 0.78779333020687e3,
@@ -58,7 +58,7 @@ NCONST  nc_ ={ /* g(40), ii(40), jj(40), nc */
     36};                                           /*  nc    */
 
 ELLCON  el_ = { /* g1, g2, gf */
-    0.11e2, 0.44333333333333e2, 0.35e1};
+    0.11e2, 0.44333333333333e2, 0.35e1, 0., 0., 0., 0., 0., 0.};
 
 BCONST  bc_ = { /* bp(10), bq(10) */
     {0.7478629e0,-0.3540782e0,  0.0e0, 0.0, 0.7159876e-2,
@@ -592,7 +592,7 @@ void TSupcrt::crtreg(int isat, int iopt, int it, double *T, double *P,
     PTmins= co->x[9];
     PTmaxs= co->x[10];
 
-    *T = TdegK(it, *T);     /* âà ­áä®à¬¨àã¥¬ T ¢ degK */
+    *T = TdegK(it, *T);     /* ï¿½à ­ï¿½ï¿½à¬¨ï¿½ã¥¬ T ï¿½ degK */
 
     if (isat == 0)
     {
@@ -668,7 +668,7 @@ void TSupcrt::crtreg(int isat, int iopt, int it, double *T, double *P,
 }
 
 //--------------------------------------------------------------------//
-// T - íàñûùåíèÿ
+// T - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 double TSupcrt::TsLVS(int isat, double Pres)
 {
     double TsLVS2, TsLVS, Dn, Pnext, dT;
@@ -1085,7 +1085,7 @@ void TSupcrt::dimLVS(int isat, int itripl, double theta, double T, double *Pbars
 //--------------------------------------------------------------------//
 //cpswap - load critical parametres A, G, U, H, S, Vs, Di,ZB
 //from wpliq to wprops and aprocsimaze values - Cv, Cp, alpha, beta, visc,
-//tcond, Prndtl, tdiff, visck, YB, QB, XB, daldT, st ¨§ wprops ¢ wpliq.
+//tcond, Prndtl, tdiff, visck, YB, QB, XB, daldT, st ï¿½ï¿½ wprops ï¿½ wpliq.
 void TSupcrt::cpswap()
 {
     wr.Aw     = wl.Aw;
@@ -1270,7 +1270,7 @@ void TSupcrt::HGKeqn(int isat, int iopt, int itripl, double Temp,
     }
     else
     {
-        memcpy(&wl, &wr, sizeof(WPROPS));             /* Žáâ®à®¦­® !!!!! */
+        memcpy(&wl, &wr, sizeof(WPROPS));             /* ï¿½ï¿½ï¿½à®¦ï¿½ï¿½ !!!!! */
         dimHGK(2, itripl, Temp, Pres, &aSta.Dens[1], epseqn);
     }
 }

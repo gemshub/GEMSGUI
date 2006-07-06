@@ -575,7 +575,7 @@ TDualTh::Bn_Calc()
 int
 TDualTh::CalcMoleFractNS()  // Use SVD method
 {
-// if( aObj[o_dtchi].IsEmpty( 0, 0 ))   Disabled by KD 16.04.2006 
+// if( aObj[o_dtchi].IsEmpty( 0, 0 ))   Disabled by KD 16.04.2006
 // {
   short ii, jj;
   double *bb = new double[dtp->Nb];
@@ -625,7 +625,7 @@ TDualTh::CalcMoleFractNS()  // Use SVD method
 }
 
 int
-TDualTh::RegressionLSM( int Mode )  // task or minimization
+TDualTh::RegressionLSM( int /*Mode*/ )  // task or minimization
 {
  int ii, jj;
 
@@ -916,7 +916,7 @@ TDualTh::Calc_mua_n_stat( char /*eState*/ )
 
 // Calculation of mixing energies (not partial)
 void
-TDualTh::Calc_gmix_n( char ModE, char StP ) // calculation of mixing energies
+TDualTh::Calc_gmix_n( char ModE, char /*StP*/ ) // calculation of mixing energies
 {
   double Gmixt, Gmix, Gmech, Gid, Gex, chi, RT, P;
   short j, ii;
@@ -996,7 +996,7 @@ TDualTh::Calc_gam_n( char eState )
 {  // calculate gamma and interaction parameters using DualTh methods
  short ii, j;
  double muoi, gam=1., Dsur, RT, P, lnFmol=4.016535;
- double Gex, Gmix, Gmech, Gid, Gmixt, chi, chiPr, Wg, lnGam1, lnGam2,
+ double Gex, /*Gmix,Gmech,Gid,Gmixt,*/ chi, chiPr, Wg, lnGam1, lnGam2,
         alp0, alp1, chi1, chi2, Gex_, W12, W21;
 
 // dt_initiate( false );
@@ -1233,7 +1233,7 @@ TDualTh::Calc_gam_n( char eState )
                                dtp->Wa[ii+1] = W21/RT;
                             }
              default: break;
-          }  
+          }
         }
       }
     } // end else
@@ -1343,7 +1343,7 @@ TDualTh::Calc_act_n( char eState )
       } // j
    }  // ii
    if( dtp->PsMode == DT_MODE_G )
-     Calc_mua_n_stat( eState );   // Adding statistics 
+     Calc_mua_n_stat( eState );   // Adding statistics
 }
 
 
@@ -1418,11 +1418,11 @@ TDualTh::Calc_gam_forward( char PvGam, char PsIPf, char WhereIPar )
          ;
        }
        for( j=0; j<dtp->nM; j++ )  // Getting back activity coeffs
-          dtp->gam_n[dtp->nM*q+j]; // = ROUND_EXP( gam[j], 5 );
+          dtp->gam_n[dtp->nM*q+j] = ROUND_EXP( gam[j], 5 );
      }
      else  // ideal Raoult model
      {
-       for( j=0; j<dtp->nM; j++ )  // Setting unity activity coeffs 
+       for( j=0; j<dtp->nM; j++ )  // Setting unity activity coeffs
           dtp->gam_n[dtp->nM*q+j] = 1.0;
      }
    } // end q
@@ -1442,7 +1442,7 @@ TDualTh::Guggenheim( double Gam[], const double x[], const double alp[],
 {
     double a0, a1, a2;
     double gam0=1., gam1=1., lnGam0=0., lnGam1=0.;
-    short i;
+    //short i;
 
     if( nM != 2 || nP > 3 ) // Binary only and up to 3 parameters
        return -1;  // wrong dimensions
@@ -1475,8 +1475,8 @@ TDualTh::TWMargules( double Gam[], const double x[], const double W[],
          const short nM, const short nP, const double scaleF )
 {
     double w[10];
-    double gam[4], lnGam[4];
-    short i, j;
+    double /*gam[4],*/ lnGam[4];
+    short i/*, j*/;
 
     if( nM > 4 || nP > 10 ) // up to ternary regular
        return -1;  // wrong dimensions
@@ -1531,14 +1531,14 @@ TDualTh::TWMargules( double Gam[], const double x[], const double W[],
     return 0;
 }
 
-// Original Margules binary model - to be implemented 
+// Original Margules binary model - to be implemented
 short
 TDualTh::MargulesO( double Gam[], const double x[], const double W[],
          const short nM, const short nP, const double scaleF )
 {
     short j;
     // binary only - yet to be written
-    for( j=0; j=nM; j++ )
+    for( j=0; j<nM; j++ )
       Gam[j] = 1.;
 
     return 1;

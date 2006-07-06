@@ -359,7 +359,7 @@ TVisorImp::SetDialog(QWidget* centralDialog)
 }
 
 void
-TVisorImp::PrintText( const char* title, char* text)
+TVisorImp::PrintText( const char* /*title*/, char* /*text*/)
 {}
 
 
@@ -550,7 +550,7 @@ TVisorImp::OpenHelp(const char* file, const char* item, QWidget* parent, bool mo
 
 //TCModuleImp*
 void
-TVisorImp::OpenModule(QWidget* par, int irt, int page, bool viewmode)
+TVisorImp::OpenModule(QWidget* /*par*/, int irt, int page, bool viewmode)
 {
     try
     {

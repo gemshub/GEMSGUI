@@ -49,7 +49,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
    CopyWorkNodeFromArray( iNode, anNodes, NodT1 );
 
 // GEM IPM calculation of equilibrium state in MULTI
-   int retCod = TNode::RunGEM( Mode );
+   int retCod = TNode::GEM_run( Mode );
 
 // Copying data for node iNode back from work DATABR structure into the node array
 //   if( retCod == OK_GEM_AIA ||
@@ -66,7 +66,7 @@ void  TNodeArray::checkNodeArray(
    for( int ii=0; ii<anNodes; ii++)
      if(   nodeTypes[ii]<0 || nodeTypes[ii] >= i )
         Error( datachbr_file,
-          "NewNodeStructure() error: Undefined boundary condition!" );
+          "GEM_init() error: Undefined boundary condition!" );
 }
 
 //-------------------------------------------------------------------
