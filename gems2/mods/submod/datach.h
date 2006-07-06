@@ -1,16 +1,32 @@
 //-------------------------------------------------------------------
-// Data Chemistry structure  (draft variant 2)
+// DATACHEM - contains chemical system definitions common to all 
+// nodes for exchange between the coupled GEM IPM and FMT code parts.
+// Contains dimensions and index lists for ICs, DCs, phases in DATABR.H 
+// Used in Tnode and Tnodearray classes 
+//
+//      CH: chemical structure in GEM IPM
+//      FMT: fluid mass transport
+//
+// Written by D.Kulik, W.Pfingsten, F.Enzmann and S.Dmytriyeva
+// Copyright (C) 2003-2006 
+//
+// This file is part of GEMIPM2K and GEMS-PSI codes for 
+// thermodynamic modelling by Gibbs energy minimization
+// developed in the Laboratory for Waste Management, Paul Scherrer Institute
+// This file may be distributed together with GEMIPM2K source code
+// under the licence terms defined in GEMIPM2K.QAL
+//
+// See also http://les.web.psi.ch/Software/GEMS-PSI 
+// E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
 #ifndef _DataCh_H_
 #define _DataCh_H_
 
-
 const unsigned int
     MaxICN =      10,
     MaxDCN =      16,
     MaxPHN =      20;
-
 
 typedef struct
 {  // Structure DataCH
