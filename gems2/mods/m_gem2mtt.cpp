@@ -180,7 +180,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
 
      if( NeedGEM )
      {
-        RetCode = na->RunGEM( ii, Mode );
+        RetCode = na->RunGEM( ii );
         // check RetCode from GEM IPM calculation
         if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
         {

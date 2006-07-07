@@ -20,6 +20,7 @@
 #include "node.h"
 #include "gdatastream.h"
 #include <math.h>
+#include <algorithm>
 
 #ifndef __unix
 #include <io.h>
@@ -42,7 +43,7 @@
 //   ( OK; GEMIPM2K calculation error; system error )
 //
 //-------------------------------------------------------------------
-int  TNode::GEM_run(  int Mode )
+int  TNode::GEM_run()
 {
 //  fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
@@ -53,7 +54,7 @@ int  TNode::GEM_run(  int Mode )
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
    unpackDataBr();
 // set up Mode
-   CNode->NodeStatusCH = (short)Mode;
+//   CNode->NodeStatusCH = (short)Mode;
 // GEM IPM calculation of equilibrium state in MULTI
     TProfil::pm->calcMulti();
 // Extracting and packing GEM IPM results into work DATABR structure
@@ -116,8 +117,8 @@ int  TNode::GEM_run(  int Mode )
 //
 //-------------------------------------------------------------------
 
-int  TNode::GEM_init( const char*  MULTI_filename,
-               const char* ipmfiles_lst_name, int* nodeTypes, bool getNodT1)
+int  TNode::GEM_init( const char* ipmfiles_lst_name,
+                          int* nodeTypes, bool getNodT1)
 {
   int i;
 #ifdef IPMGEMPLUGIN
@@ -128,22 +129,42 @@ int  TNode::GEM_init( const char*  MULTI_filename,
       size_t npos = gstring::npos;
 #endif
       bool binary_f = true;
-      gstring multu_in = MULTI_filename;
+      gstring chbr_in = ipmfiles_lst_name;
 
-// get path
-      size_t pos = multu_in.rfind("/");
+// Get path
+      size_t pos = chbr_in.rfind("/");
       gstring Path = "";
       if( pos < npos )
-       Path = multu_in.substr(0, pos+1);
-      gstring chbr_in = Path + ipmfiles_lst_name;
+       Path = chbr_in.substr(0, pos+1);
 
-// Reading structure MULTI (GEM IPM work structure)
-      GemDataStream f_m(multu_in, ios::in|ios::binary);
+//  open file stream and reading name of MULTI file
+//  -t/-b  "<MULTI file name>"
+      fstream f_chbr(chbr_in.c_str(), ios::in );
+      ErrorIf( !f_chbr.good() , chbr_in.c_str(), "Fileopen error");
+
+      gstring datachbr_file;
+      f_getline( f_chbr, datachbr_file, ' ');
+
+//Testing flag "-t" or "-b" (by default "-b")   // use bynary or text files for Multi
+      pos = datachbr_file.find( '-');
+      if( pos != /*gstring::*/npos )
+      {
+         if( datachbr_file[pos+1] == 't' )
+            binary_f = false;
+         f_getline( f_chbr, datachbr_file, ' ');
+      }
+
+    // Reading structure MULTI (GEM IPM work structure)
+    gstring multu_in = Path + datachbr_file;
+    if( true /*binary_f*/ )
+     {
+       GemDataStream f_m(multu_in, ios::in|ios::binary);
 #ifdef IPMGEMPLUGIN
-      profil->readMulti(f_m);
+        profil->readMulti(f_m);
 #else
-      TProfil::pm->readMulti(f_m);
+        TProfil::pm->readMulti(f_m);
 #endif
+      }
 
 // output multy
 //      gstring strr = "out_multi.ipm";
@@ -152,13 +173,10 @@ int  TNode::GEM_init( const char*  MULTI_filename,
 
 // Reading name of dataCH file and names of dataBR files
 //  -t/-b  "<dataCH file name>" ,"<dataBR file1 name>", ..., "<dataBR fileN name>"
-      fstream f_chbr(chbr_in.c_str(), ios::in );
-      ErrorIf( !f_chbr.good() , chbr_in.c_str(), "Fileopen error");
-
-      gstring datachbr_file;
       f_getline( f_chbr, datachbr_file, ' ');
 
 //Testing flag "-t" or "-b" (by default "-b")   // use bynary or text files as input
+      binary_f = true;
       pos = datachbr_file.find( '-');
       if( pos != /*gstring::*/npos )
       {
@@ -243,6 +261,69 @@ int  TNode::GEM_init( const char*  MULTI_filename,
     }
     return 1;
 #endif
+}
+
+//-----------------------------------------------------------------
+// work with lists
+
+// Return DCH index of IC by Name or -1 if illegal name
+int TNode::IC_name_to_x( const char *Name )
+{
+  uint len = strlen( Name );
+
+  for(int ii = 0; ii<CSD->nIC; ii++ )
+       if(!memcmp(Name, CSD->ICNL[ii], min(len,MaxICN)))
+         return ii;
+  return -1;
+}
+
+// Return DCH index of DC by Name or -1 if illegal name
+int TNode::DC_name_to_x( const char *Name )
+{
+  uint len = strlen( Name );
+
+  for(int ii = 0; ii<CSD->nDC; ii++ )
+       if(!memcmp(Name, CSD->DCNL[ii], min(len,MaxDCN)))
+         return ii;
+  return -1;
+}
+
+// Return DCH index of Ph by Name or -1 if illegal name
+int TNode::Ph_name_to_x( const char *Name )
+{
+  uint len = strlen( Name );
+
+  for(int ii = 0; ii<CSD->nPH; ii++ )
+       if(!memcmp(Name, CSD->PHNL[ii], min(len,MaxPHN)))
+         return ii;
+  return -1;
+}
+
+// Return for IComp DBR index from DCH index or -1 if not used in the data bridge
+int TNode::IC_xCH_to_xDB( const int xCH )
+{
+  for(int ii = 0; ii<CSD->nICb; ii++ )
+       if( CSD->xIC[ii] == xCH )
+         return ii;
+  return -1;
+}
+
+// Return for DComp DBR index from DCH index or -1 if not used in the data bridge
+int TNode::DC_xCH_to_xDB( const int xCH )
+{
+  for(int ii = 0; ii<CSD->nDCb; ii++ )
+       if( CSD->xDC[ii] == xCH )
+         return ii;
+  return -1;
+}
+
+// Return for Ph DBR index from DCH index or -1 if not used in the data bridge
+int TNode::Ph_xCH_to_xDB( const int xCH )
+{
+  for(int ii = 0; ii<CSD->nPHb; ii++ )
+       if( CSD->xPH[ii] == xCH )
+         return ii;
+  return -1;
 }
 
 //---------------------------------------------------------//

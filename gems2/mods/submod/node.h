@@ -111,7 +111,7 @@ public:
     // Reads in the MULTI, DATACH and DATABR files prepared from GEMS
     // and fills out nodes in node arrays according to distribution vector
     // nodeTypes ( only for TNodeArray )
-    int  GEM_init( const char*  MULTI_filename, const char *ipmfiles_lst_name,
+    int  GEM_init( const char *ipmfiles_lst_name,
                    int *nodeTypes = 0, bool getNodT1 = false);
 
 #ifdef IPMGEMPLUGIN
@@ -154,7 +154,7 @@ public:
 #endif
 
    // Main call for GEM IPM calculation
-   int  GEM_run( int Mode );   // calls GEM for a work node
+   int  GEM_run();   // calls GEM for a work node
 
    // For examining GEM calculation results:
    // Prints current multi and/or work node structures to files with
@@ -203,8 +203,7 @@ public:
 #endif
 
     DATACH* pCSD() const  // get pointer to chemical system data structure
-    {     return CSD;
-    }
+    {     return CSD;   }
 
     DATABR* pCNode() const  // get pointer to work node data structure
     {        return CNode;
@@ -212,16 +211,50 @@ public:
 
     // These methods get contents of fields in the work node structure
     double cT() const     // get current Temperature T, K
-    {        return CNode->T;
-    }
+    {        return CNode->T;   }
 
     double cP() const     // get current Pressure P, bar
-    {        return CNode->P;
-    }
+    {        return CNode->P;   }
 
     void setNodeHandle( int jj )   // setup Node identification handle
-    {      CNode->NodeHandle = (short)jj;
-    }
+    {      CNode->NodeHandle = (short)jj;  }
+
+   // Return DCH index of IC by Name or -1 if illegal name
+   int IC_name_to_x( const char *Name );
+   // Return DCH index of DC by Name or -1 if illegal name
+   int DC_name_to_x( const char *Name );
+   // Return DCH index of Ph by Name or -1 if illegal name
+   int Ph_name_to_x( const char *Name );
+
+   // Return DBR index of IC by Name or -1 if illegal name
+   int IC_name_to_xDB( const char *Name )
+   { return IC_xCH_to_xDB( IC_name_to_x( Name ) ); }
+   // Return DBR index of DC by Name or -1 if illegal name
+   int DC_name_to_xDB( const char *Name )
+   { return DC_xCH_to_xDB( DC_name_to_x( Name ) ); }
+   // Return DBR index of Ph by Name or -1 if illegal name
+   int Ph_name_to_xDB( const char *Name )
+   { return Ph_xCH_to_xDB( Ph_name_to_x( Name ) ); }
+
+   // Return for IComp DBR index from DCH index
+   // or -1 if not used in the data bridge
+   int IC_xCH_to_xDB( const int xCH );
+   // Return for DComp DBR index from DCH index
+   // or -1 if not used in the data bridge
+   int DC_xCH_to_xDB( const int xCH );
+   // Return for Phase DBR index from DCH index
+   // or -1 if not used in the data bridge
+   int Ph_xCH_to_xDB( const int xCH );
+
+   // Return for IComp DCH index from DBR index
+   int IC_xBR_to_xCH( const int xBR )
+   { return CSD->xIC[xBR]; }
+   // Return for DComp DCH index from DBR index
+   int DC_xBR_to_xCH( const int xBR )
+   { return CSD->xDC[xBR]; }
+   // Return for Phase DCH index from DBR index
+   int Ph_xBR_to_xCH( const int xBR )
+   { return CSD->xPH[xBR]; }
 
     // Data exchange methods between GEMIPM and work node DATABR structure
     void packDataBr();      //  packs GEMIPM calculation results into work node structure

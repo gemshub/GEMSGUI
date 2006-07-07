@@ -133,6 +133,7 @@ inline char* gcvt(double num, int digit, char* buf)
 #else
 
 #define max( a, b )  ( (a) >( b) ? (a) : (b) )
+#define min( a, b )  ( (a) <( b) ? (a) : (b) )
 
 
 #endif    // IPMGEMPLUGIN

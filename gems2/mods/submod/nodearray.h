@@ -100,7 +100,8 @@ public:
   // Print MULTI, DATACH and DATABR files structure prepared from GEMS
   // for separate coupled FMT-GEM programs that use GEMIPM2K module
   // or if putNodT1 == true  as stop point for masstransport module calculation
-  gstring PutGEM2MTFiles( QWidget* par, int nIV, bool textmode, bool binmode, bool putNodT1 = false );
+  gstring PutGEM2MTFiles(  QWidget* par, int nIV,
+      bool multi_bin_mode, bool bin_mode, bool putNodT1=false );
 
    // ???????????
    // Read DATABR files prepared from GEMS
@@ -160,11 +161,11 @@ public:
     DATABRPTR* pNodT1() const  // get pointer to array of nodes for the previous time point
     { return NodT1; }
 
-    int  RunGEM( int ndx, int Mode );   // calls GEM IPM calculation for a node with absolute index ndx
+    int  RunGEM( int ndx );   // calls GEM IPM calculation for a node with absolute index ndx
 
-    int  RunGEM( int indN, int indM, int indK, int Mode ) // Alternative call -
+    int  RunGEM( int indN, int indM, int indK ) // Alternative call -
                  // calls GEM IPM for one node with three indexes (along x,y,z)
-    { return RunGEM( iNode( indN, indM, indK ), Mode); }
+    { return RunGEM( iNode( indN, indM, indK )); }
     // (both calls clean the work node DATABR structure)
 
     // Copying data from the work DATABR structure into the node ndx in

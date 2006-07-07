@@ -941,19 +941,10 @@ TGEM2MT::RecCalc( const char * key )
      else
        if( vfChooseFileSave(window(), f_name,
           "Please, enter the IPM work structure file name", "*.ipm" ) == false )
-      {        delete na;
+       {        delete na;
                return;
-      }
-     gstring ipmfiles_lst_name;
-     gstring dir;
-     gstring ext;
-     u_splitpath( f_name, dir, ipmfiles_lst_name, ext );
-     if( mtp->PsSdat!=S_OFF )
-       ipmfiles_lst_name += "-dat.lst";
-     else
-       ipmfiles_lst_name += "-bin.lst";
-
-     na->GEM_init( f_name.c_str(), ipmfiles_lst_name.c_str(), 0, true );
+       }
+     na->GEM_init( f_name.c_str(), 0, true );
      // use particles
      //   if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
      //   pa->ParticleArrayInit();
@@ -981,7 +972,7 @@ TGEM2MT::RecCalc( const char * key )
            " or cancel the RMT task (No)?" ) )
         {
           gstring path = na->PutGEM2MTFiles( window(), mtp->nC,
-            mtp->PsSdat!=S_OFF, mtp->PsSdat==S_OFF, true ); // with Nod0 and Nod1
+            true, mtp->PsSdat==S_OFF, true ); // with Nod0 and Nod1
           mtp->notes[0] = '@';
           strncpy( mtp->notes+1, path.c_str(), MAXFORMULA-1 );
           // save GEM2MT recort

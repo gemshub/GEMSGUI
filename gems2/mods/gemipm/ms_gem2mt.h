@@ -312,7 +312,7 @@ protected:
 public:
 
    int MassTransSetUp( const char *gem2mt_in1 );
-   int MassTransInit( const char *multu_in1, const char *chbr_in1 );
+   int MassTransInit( const char *chbr_in1 );
    bool Trans1D( char mode  );  // return true if canceled
 
     static TGEM2MT* pm;

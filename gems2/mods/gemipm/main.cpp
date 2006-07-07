@@ -31,16 +31,16 @@ int main( int argc, char* argv[] )
  {
      int       RetC = 0;
      gstring gem2mt_in1 = "gem2mt_init.txt";
-     gstring multu_in1 = "MgWBoundC.ipm";
+     //gstring multu_in1 = "MgWBoundC.ipm";
      gstring chbr_in1 = "ipmfiles-dat.lst";
 
 // from argv
+      //if (argc >= 2 )
+      //  multu_in1 = argv[1];
       if (argc >= 2 )
-        multu_in1 = argv[1];
+       chbr_in1 = argv[1];
       if (argc >= 3 )
-       chbr_in1 = argv[2];
-      if (argc >= 4 )
-        gem2mt_in1 = argv[3];
+        gem2mt_in1 = argv[2];
 
 // The NodeArray must be allocated here
     TGEM2MT::pm = new TGEM2MT();
@@ -50,7 +50,7 @@ int main( int argc, char* argv[] )
      return 1;  // error reading files
 
 // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
-    if( TGEM2MT::pm->MassTransInit( multu_in1.c_str(), chbr_in1.c_str() ) )
+    if( TGEM2MT::pm->MassTransInit( chbr_in1.c_str() ) )
       return 1;  // error reading files
 
 // here we call the mass-transport finite-difference coupled routine
@@ -326,7 +326,7 @@ void TGEM2MT::Free()
 
 // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
 // Set up NodeArray and ParticleArray classes
-int TGEM2MT::MassTransInit( const char *multu_in1, const char *chbr_in1 )
+int TGEM2MT::MassTransInit( const char *chbr_in1 )
 {
   // The NodeArray must be allocated here
   TNodeArray::na = na = new TNodeArray( mtp->xC,mtp->yC,mtp->zC/*mtp->nC*/ );
@@ -337,7 +337,7 @@ int TGEM2MT::MassTransInit( const char *multu_in1, const char *chbr_in1 )
          nodeType[ii] = mtp->DiCp[ii][0];
 
   // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
-  if( na->GEM_init( multu_in1, chbr_in1, nodeType ) )
+  if( na->GEM_init( chbr_in1, nodeType ) )
         return 1;  // error reading files
 
   // put HydP

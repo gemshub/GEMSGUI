@@ -43,13 +43,13 @@
 //
 //-------------------------------------------------------------------
 
-int  TNodeArray::RunGEM( int  iNode, int Mode )
+int  TNodeArray::RunGEM( int  iNode )
 {
 // Copy data from the iNode node from array NodT1 to work DATABR structure
    CopyWorkNodeFromArray( iNode, anNodes, NodT1 );
 
 // GEM IPM calculation of equilibrium state in MULTI
-   int retCod = TNode::GEM_run( Mode );
+   int retCod = TNode::GEM_run();
 
 // Copying data for node iNode back from work DATABR structure into the node array
 //   if( retCod == OK_GEM_AIA ||
@@ -120,13 +120,9 @@ void  TNodeArray::setNodeArray( gstring& dbr_file, int ndx, bool binary_f )
 // Writing dataCH, dataBR structure to binary/text files
 // and other necessary GEM2MT files
 gstring TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV,
-      bool textmode, bool binmode, bool putNodT1  )
+      bool multi_bin_mode, bool bin_mode, bool putNodT1  )
 {
-  if( !textmode && !binmode )
-    return "";
-
   fstream fout;
-  fstream fout_d;
   gstring Path_;
   gstring dir;
   gstring name;
@@ -137,12 +133,15 @@ gstring TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV,
   // Get name of filenames structure
    path = gstring( rt[RT_SYSEQ].FldKey(2), 0, rt[RT_SYSEQ].FldLen(2));;
    path.strip();
-   path += ".ipm";
+   if( bin_mode )
+     path += "-bin.lst";
+   else
+     path += "-dat.lst";
 
 AGAIN:
       // open file to output
    if( vfChooseFileSave(par, path,
-          "Please, enter IPM work structure file name", "*.ipm" ) == false )
+          "Please, enter IPM work structure file name", "*.lst" ) == false )
                return "";
    u_splitpath( path, dir, name, newname );
    if( !access(path.c_str(), 0 ) ) //file exists
@@ -158,55 +157,46 @@ AGAIN:
                 return path;
             }
 
+// get name
+   size_t pos = name.rfind("-");
+   if( pos != gstring::npos )
+      name = name.substr(0, pos);
+
+// making special files
+// put data to pmfiles-bin.lst file
+   if( bin_mode )
+   {
+       fout.open(path.c_str(), ios::out);
+       fout << "-b \"" << name.c_str() << ".ipm\" ";
+       fout << "-b \"" << name.c_str() << "-dch.bin\"";
+   }
+// put data to pmfiles-dat.lst file
+   else
+   {   fout.open(path.c_str(), ios::out);
+       fout << "-b \"" << name.c_str() << ".ipm\" ";
+       fout << "-t \"" << name.c_str() << "-dch.dat\"";
+   }
+
 //  putting MULTI to binary file
-    GemDataStream  ff(path, ios::out|ios::binary);
-    TProfil::pm->outMulti( ff, path  );
+    Path_ = u_makepath( dir, name, "ipm" );
+    GemDataStream  ff(Path_, ios::out|ios::binary);
+    TProfil::pm->outMulti( ff, Path_  );
 
 // out dataCH to binary file
    newname = name+"-dch";
-   if( binmode )
+   if( bin_mode )
    {  Path_ = u_makepath( dir, newname, "bin" );
       GemDataStream  f_ch1(Path_, ios::out|ios::binary);
       datach_to_file(f_ch1);
       f_ch1.close();
    }
-
 // out dataCH to text file
-   if( textmode )
+   else
    {  //newname = name+"-dch";
       Path_ = u_makepath( dir, newname, "dat" );
       fstream  f_ch2(Path_.c_str(), ios::out);
       datach_to_text_file(f_ch2);
       f_ch2.close();
-   }
-
-// making special files
-// put data to IPMRUN.BAT file
-   Path_ = u_makepath( dir, name/*"IPMRUN"*/, "BAT" );
-   fout.open(Path_.c_str(), ios::out);
-   fout << "echo off\n";
-   fout << "rem Normal runs\n";
-   if( textmode )
-      fout << "gemipm2k.exe " << name.c_str() <<
-            ".ipm " << name.c_str() << "-dat.lst\n";
-   if( binmode )
-       fout << "rem gemipm2k.exe " << name.c_str() <<
-             ".ipm " << name.c_str() << "-bin.lst\n";
-   fout.close();
-
-// put data to pmfiles-bin.lst file
-   if( binmode )
-   {   newname = name+"-bin";
-       Path_ = u_makepath( dir, newname/*"ipmfiles-bin"*/, "lst" );
-       fout.open(Path_.c_str(), ios::out);
-       fout << "-b \"" << name.c_str() << "-dch.bin\"";
-   }
-// put data to pmfiles-dat.lst file
-   if( textmode )
-   {   newname = name+"-dat";
-       Path_ = u_makepath( dir, newname/*"ipmfiles-dat"*/, "lst" );
-       fout_d.open(Path_.c_str(), ios::out);
-       fout_d << "-t \"" << name.c_str() << "-dch.dat\"";
    }
 
  nIV = min( nIV, nNodes() );
@@ -223,7 +213,7 @@ AGAIN:
 
    sprintf( buf, "%4.4d", ii );
    // dataBR files - binary
-   if( binmode )
+   if( bin_mode )
     {
        newname =  name + + "-dbr-0-"  + buf;
        Path_ = u_makepath( dir, newname, "bin" );
@@ -232,15 +222,14 @@ AGAIN:
        f_br1.close();
        fout << ", \"" << newname.c_str() << ".bin\"";
      }
-
-   if( textmode )
-      {
+     else
+     {
         newname = name + "-dbr-0-" + buf;
         Path_ = u_makepath( dir, newname, "dat" );
         fstream  f_br2(Path_.c_str(), ios::out);
         databr_to_text_file(f_br2);
         f_br2.close();
-        fout_d << ", \"" << newname.c_str() << ".dat\"";
+        fout << ", \"" << newname.c_str() << ".dat\"";
      }
 
    if( putNodT1 && NodT1[ii]) // put NodT1[ii] data
@@ -250,7 +239,7 @@ AGAIN:
       CopyWorkNodeFromArray( ii, anNodes, NodT1 );
 
       // dataBR files - binary
-      if( binmode )
+      if( bin_mode )
       {
          newname =  name + + "-dbr-1-"  + buf;
          Path_ = u_makepath( dir, newname, "bin" );
@@ -259,15 +248,14 @@ AGAIN:
          f_br1.close();
 //         fout << ", \"" << newname.c_str() << ".bin\"";
       }
-
-      if( textmode )
+     else
       {
          newname = name + "-dbr-1-" + buf;
          Path_ = u_makepath( dir, newname, "dat" );
          fstream  f_br2(Path_.c_str(), ios::out);
          databr_to_text_file(f_br2);
          f_br2.close();
-//         fout_d << ", \"" << newname.c_str() << ".dat\"";
+//         fout << ", \"" << newname.c_str() << ".dat\"";
       }
    }
  } // ii
