@@ -294,7 +294,7 @@ int TNode::Ph_name_to_x( const char *Name )
   uint len = strlen( Name );
 
   for(int ii = 0; ii<CSD->nPH; ii++ )
-       if(!memcmp(Name, CSD->PHNL[ii], min(len,MaxPHN)))
+       if(!memcmp(Name, CSD->PHNL[ii]+4, min(len,MaxPHN-4)))
          return ii;
   return -1;
 }
