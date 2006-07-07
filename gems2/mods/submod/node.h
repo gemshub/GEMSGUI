@@ -44,7 +44,7 @@ protected:
 
     DATACH* CSD;     // Pointer to chemical system data structure CSD
 
-    DATABR* CNode;   // Pointer to a work node data bridge structure   CNode
+    DATABR* CNode;   // Pointer to a work node data bridge structure  CNode
                      // used for sending input data to and receiving results from GEM IPM
 
     void allocMemory();
@@ -106,16 +106,16 @@ public:
 
 // call sequence ----------------------------------------------
 
-
     // For separate coupled FMT-GEM programs that use GEMIPM2K module
     // Reads in the MULTI, DATACH and DATABR files prepared from GEMS
     // and fills out nodes in node arrays according to distribution vector
-    // nodeTypes ( only for TNodeArray )
+    // nodeTypes ( only for TNodeArray ). If TnodeArray is not used then
+    // nodeTypes = 0 must be set
     int  GEM_init( const char *ipmfiles_lst_name,
                    int *nodeTypes = 0, bool getNodT1 = false);
 
 #ifdef IPMGEMPLUGIN
-//  Wrapper calls for direct coupling of an FMT code with GEMIPM2K
+//  Calls for direct coupling of an FMT code with GEMIPM2K
 
    // Loads GEM input data from FMT part provided in parameters
    // into the DATABR work structure for the subsequent GEM calculation
@@ -146,9 +146,9 @@ public:
    double &p_Ms,     // Mass of reactive subsystem, kg          -       -      +
 //       double p_dt,     // actual time step	         			  +
 //       double p_dt1,    // previous time step                                   +
-   double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
-   double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
-   double *p_bIC    // bulk mole amounts of IC [nICb]          +       -      -
+   double *p_dul,    // upper kinetic restrictions [nDCb]       +       -      -
+   double *p_dll,    // lower kinetic restrictions [nDCb]       +       -      -
+   double *p_bIC     // bulk mole amounts of IC [nICb]          +       -      -
    );
 
 #endif
@@ -164,11 +164,11 @@ public:
                          const char* databr_bin );
 
 #ifdef IPMGEMPLUGIN
-//  Wrapper calls for direct coupling of an FMT code with GEMIPM2K
+//  Calls for direct coupling of an FMT code with GEMIPM2K
 
    // Copies GEM calculation results into parameters provided by the
    // FMT part (dimensions and order of elements in arrays must correspond
-   // to the DATACH structure )
+   // to those in currently existing DATACH structure )
    void GEM_to_MT(
        short &p_NodeHandle,    // Node identification handle
        short &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
@@ -187,8 +187,7 @@ public:
        double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
        double &p_epsW,
        double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
-       // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
-       // exchange of values occurs through lists of indices, e.g. xDC, xPH
+       // Dynamic data - dimensions see in DATACH.H structure
        double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
        double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
        double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
@@ -197,7 +196,7 @@ public:
        double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
        double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
        double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
-       double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
+       double  *p_uIC   // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
    );
 
 #endif
@@ -207,7 +206,7 @@ public:
 
     DATABR* pCNode() const  // get pointer to work node data structure
     {        return CNode;
-    }  // usage on the level of nodearray is not recommended !
+    }  // usage on the level of Tnodearray is not recommended !
 
     // These methods get contents of fields in the work node structure
     double cT() const     // get current Temperature T, K
@@ -216,44 +215,63 @@ public:
     double cP() const     // get current Pressure P, bar
     {        return CNode->P;   }
 
-    void setNodeHandle( int jj )   // setup Node identification handle
+    // Setting node identification handle
+    void setNodeHandle( int jj )
     {      CNode->NodeHandle = (short)jj;  }
 
-   // Return DCH index of IC by Name or -1 if illegal name
+// Useful methods facilitating the access between DataCH (or FMT)
+// and DataBR (or node) data structures for components and phases
+// (i.e. between the chemical system definition and the node)
+
+   // Returns DCH index of IC given the IC Name string (null-terminated)
+   // or -1 if no such name was found in the DATACH IC name list
    int IC_name_to_x( const char *Name );
-   // Return DCH index of DC by Name or -1 if illegal name
+
+   // Returns DCH index of DC given the DC Name string
+   // or -1 if no such name was found in the DATACH DC name list
    int DC_name_to_x( const char *Name );
-   // Return DCH index of Ph by Name or -1 if illegal name
+
+   // Returns DCH index of Phase given the Phase Name string
+   // or -1 if no such name was found in the DATACH Phase name list
    int Ph_name_to_x( const char *Name );
 
-   // Return DBR index of IC by Name or -1 if illegal name
-   int IC_name_to_xDB( const char *Name )
+   // Returns DBR index of IC given the IC Name string
+   // or -1 if no such name was found in the DATACH IC name list
+   inline int IC_name_to_xDB( const char *Name )
    { return IC_xCH_to_xDB( IC_name_to_x( Name ) ); }
-   // Return DBR index of DC by Name or -1 if illegal name
-   int DC_name_to_xDB( const char *Name )
+
+   // Returns DBR index of DC given the DC Name string
+   // or -1 if no such name was found in the DATACH DC name list
+   inline int DC_name_to_xDB( const char *Name )
    { return DC_xCH_to_xDB( DC_name_to_x( Name ) ); }
-   // Return DBR index of Ph by Name or -1 if illegal name
-   int Ph_name_to_xDB( const char *Name )
+
+   // Returns DBR index of Phase given the Phase Name string
+   // or -1 if no such name was found in the DATACH Phase name list
+   inline int Ph_name_to_xDB( const char *Name )
    { return Ph_xCH_to_xDB( Ph_name_to_x( Name ) ); }
 
-   // Return for IComp DBR index from DCH index
-   // or -1 if not used in the data bridge
+   // Converts the IC DCH index into the IC DBR index
+   // or -1 if this IC is not used in the data bridge
    int IC_xCH_to_xDB( const int xCH );
-   // Return for DComp DBR index from DCH index
-   // or -1 if not used in the data bridge
+
+   // Converts the DC DCH index into the DC DBR index
+   // or -1 if this DC is not used in the data bridge
    int DC_xCH_to_xDB( const int xCH );
-   // Return for Phase DBR index from DCH index
-   // or -1 if not used in the data bridge
+
+   // Converts the Phase DCH index into the Phase DBR index
+   // or -1 if this Phase is not used in the data bridge
    int Ph_xCH_to_xDB( const int xCH );
 
-   // Return for IComp DCH index from DBR index
-   int IC_xBR_to_xCH( const int xBR )
+   // Converts the IC DBR index into the IC DCH index
+   inline int IC_xBR_to_xCH( const int xBR )
    { return CSD->xIC[xBR]; }
-   // Return for DComp DCH index from DBR index
-   int DC_xBR_to_xCH( const int xBR )
+
+   // Converts the DC DBR index into the DC DCH index
+   inline int DC_xBR_to_xCH( const int xBR )
    { return CSD->xDC[xBR]; }
-   // Return for Phase DCH index from DBR index
-   int Ph_xBR_to_xCH( const int xBR )
+
+   // Converts the Phase DBR index into the Phase DCH index
+   inline int Ph_xBR_to_xCH( const int xBR )
    { return CSD->xPH[xBR]; }
 
     // Data exchange methods between GEMIPM and work node DATABR structure
