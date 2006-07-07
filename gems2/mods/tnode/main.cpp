@@ -35,14 +35,14 @@ int main( int argc, char* argv[] )
  {
    // Analyzing command line arguments
      // Default arguments
-     char[256] ipm_input_file_list_name = "chemsys.lst";
-     char[256] fmt_input_file_name = "fmtparam.dat";
+     char ipm_input_file_list_name[256] = "chemsys.lst";
+     char fmt_input_file_name[256] = "fmtparam.dat";
 
      if (argc >= 2 )
-       strcpy( ipm_input_file_list_name, argv[1]);
+       strncpy( ipm_input_file_list_name, argv[1], 256);
          // list of files needed as input for initializing GEMIPM2K
      if (argc >= 3 )
-       strcpy( fmt_input_file_name, argv[2]);
+       strncpy( fmt_input_file_name, argv[2], 256);
          // your optional file with FMT input parameters
 
    // Creating TNode structure accessible trough node pointer
@@ -74,7 +74,6 @@ int main( int argc, char* argv[] )
    int nIC, nDC, nPH, nPS;
    int i,   j,   k,   ks;    // indices for direct access to components
                              // and phases data in the DataCH framework
-//   short *xDC, *xIC, *xPH; // see "datach.h"
 
    // Getting direct access to DataCH structure in GEMIPM2K memory
    DATACH* dCH = node->pCSD();
@@ -130,8 +129,8 @@ int main( int argc, char* argv[] )
      dBR->NodeStatusCH = NEED_GEM_AIA; // direct access to node DATABR structure
 
      // re-calculating equilibrium by calling GEMIPM
-     m_NodeStatusCH = node->GEM_run( );
-     if( !( m_NodeStatusCH == OK_GEM_AIA || m_NodeStatusCH == OK_GEM_PIA ) )
+     m_NodeStatusCH[in] = node->GEM_run( );
+     if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_PIA ) )
         return 5;
      // Extracting chemical data into FMT part
      node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_T[in],
@@ -162,7 +161,8 @@ int main( int argc, char* argv[] )
      {
        ; // add here some operators as function of tc and dt
        // in this example, simply adding Mg and 2Cl to m_bIC vector
-        //   m_bIC[] += .0001;
+       m_bIC[in*nDC+node->IC_name_to_xDB("Mg")] += .0001;
+       m_bIC[in*nDC+node->IC_name_to_xDB("Cl")] += .0002;
      }
 
      cout << " FMT loop ends: ";
@@ -183,14 +183,9 @@ int main( int argc, char* argv[] )
              m_dul+in*nDC, m_dll+in*nDC, m_bIC+in*nIC );
 
         // Calling GEMIPM calculation
-        m_NodeStatusCH = node->GEM_run( );
-        if( !( m_NodeStatusCH == OK_GEM_AIA || m_NodeStatusCH == OK_GEM_PIA ) )
+        m_NodeStatusCH[in] = node->GEM_run( );
+        if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_PIA ) )
             return 5;
-
-        // Extracting chemical data into FMT part
-        node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in],
-          m_T[in],m_P[in], m_Vs[in], m_Ms[in],
-          m_dul+in*nDC, m_dll+in*nDC, m_bIC+in*nIC );
 
         // Extracting GEMIPM output data to FMT part
         node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
