@@ -1,115 +1,238 @@
 //-------------------------------------------------------------------
 // $Id: main.cpp 717 2006-07-06 08:06:21Z gems $
 //
-// Debugging version of a finite-difference 1D advection-diffusion
-// mass transport model supplied by Dr. Frieder Enzmann (Uni Mainz)
-// coupled with GEMIPM2K module for calculation of chemical equilibria
+// Demo test of usage of the TNode class for implementing a simple
+// direct coupling scheme between FMT and GEM in a single-GEM-call
+// fashion, assuming that the chemical speciation and all dynamic
+// parameter data are kept in the FMT part, which calls GEMIPM
+// calculation once per node.
+
+// TNode class implements a  simple C/C++ interface between GEM IPM
+// and FMT codes. Works with DATACH and work DATABR structures
+// without using the TNodearray class
 //
-// Direct access to the TNodeArray class for storing all data for nodes
+// Copyright (C) 2006 S.Dmytriyeva, D.Kulik
 //
-// Copyright (C) 2005 S.Dmytriyeva, F.Enzmann, D.Kulik
+// This file is part of GEMIPM2K code for thermodynamic modelling
+// by Gibbs energy minimization
+
+// This file may be distributed under the licence terms defined
+// in GEMIPM2K.QAL
 //
+// See also http://les.web.psi.ch/Software/GEMS-PSI
+// mailto://gems2.support@psi.ch
 //-------------------------------------------------------------------
 
 #include <time.h>
 #include <math.h>
-#include "node.h"
-#include "gstring.h"
+#include <string.h>
 
-istream&
-f_getline(istream& is, gstring& str, char delim);
+#include "node.h"
+
+int nNodes = 1; // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {
+   // Analyzing command line arguments
+     // Default arguments
+     char[256] ipm_input_file_list_name = "chemsys.lst";
+     char[256] fmt_input_file_name = "fmtparam.dat";
 
-     gstring multu_in = "MgWBoundC.ipm";
-     gstring chbr_in = "ipmfiles-dat.lst";
+     if (argc >= 2 )
+       strcpy( ipm_input_file_list_name, argv[1]);
+         // list of files needed as input for initializing GEMIPM2K
+     if (argc >= 3 )
+       strcpy( fmt_input_file_name, argv[2]);
+         // your optional file with FMT input parameters
 
-   // from argv
-      if (argc >= 2 )
-        multu_in = argv[1];
-      if (argc >= 3 )
-       chbr_in = argv[2];
-
-  // The Node structure must be allocated here
+   // Creating TNode structure accessible trough node pointer
    TNode* node = TNode::na = new TNode();
 
-  // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
-  if( node->GEM_init( multu_in.c_str(), chbr_in.c_str() ) )
-      return 1;  // error reading files
+   // Here we read the files needed as input for initializing GEMIPM2K
+   // The easiest way to prepare them is to use GEMS-PSI code (GEM2MT module)
+   if( node->GEM_init( ipm_input_file_list_name ) )
+       return 1;  // error occured during reading the files
 
+// int nNodes = 1;     // number of local equilibrium nodes, 1 or more
+   int nTimes = 100;   // Maximum number of time iteration steps
+   double t_start = 0., t_end = 10000., dt = 100., tc = 0.;
 
-   // Allocate work memory for test
+   cout << "Start Tnode test: " << ipm_input_file_list_name
+         << fmt_input_file_name << endl;
+   cout << " nNodes = " << nNodes << "  nTimes = " << nTimes
+         << "  t_start = " << t_start << " t_end = " << t_end
+         << "  dt = " << dt << "  tc = " << tc << endl;
 
-   int nNodes = 1; // number of local equilibrium compartments (nodes)
-   int ntM = 100;  // Maximum allowed number of time iteration steps
+   // allocations and defaults for other FMT parameters can be added here
 
-   short m_NodeHandle, m_NodeStatusCH,  m_IterDone;
-   double m_T, m_P, m_Vs, m_Ms,m_Gs, m_Hs, m_IC, m_pH, m_pe,
-          m_Eh, m_denW, m_denWg, m_epsW, m_epsWg;
-   double *m_xDC, *m_gam, *m_xPH, *m_vPS, *m_mPS,*m_bPS,
-         *m_xPA, *m_dul, *m_dll, *m_bIC, *m_rMB, *m_uIC;
+   // Here you can read your file with some FMT parameters and initial data
+   // if( my_fmt_input(fmt_input_file_name) )
+   //   return 2;
 
+   // Number of ICs, DCs, Phases and Phases-solutions kept in the node
+   // DATABR structure for exchange with GEMIPM - for your convenience
    int nIC, nDC, nPH, nPS;
-   short *xDC, *xIC, *xPH;
-   DATACH  *dCH = node->pCSD();
+   int i,   j,   k,   ks;    // indices for direct access to components
+                             // and phases data in the DataCH framework
+//   short *xDC, *xIC, *xPH; // see "datach.h"
 
+   // Getting direct access to DataCH structure in GEMIPM2K memory
+   DATACH* dCH = node->pCSD();
    if( !dCH  )
-       return 1;
+       return 3;
 
-   // Extracting data bridge dimensionalities
+   // Getting direct access to work node DATABR structure which
+   // exchanges data between GEMIPM and FMT parts
+   DATABR* dBR = node->pCNode();
+   if( !dBR  )
+       return 4;
+
+   // Extracting data bridge array sizes
    nIC = dCH->nICb;
    nDC = dCH->nDCb;
    nPH = dCH->nPHb;
    nPS = dCH->nPSb;
 
-   m_xDC = (double*)malloc( nDC*sizeof(double) );
-   m_gam = (double*)malloc( nDC*sizeof(double) );
-   m_xPH = (double*)malloc( nPH*sizeof(double) );
-   m_vPS = (double*)malloc( nPS*sizeof(double) );
-   m_mPS = (double*)malloc( nPS*sizeof(double) );
-   m_bPS = (double*)malloc( nIC*nPS*sizeof(double) );
-   m_xPA = (double*)malloc( nPS*sizeof(double) );
-   m_dul = (double*)malloc( nDC*sizeof(double) );
-   m_dll = (double*)malloc( nDC*sizeof(double) );
-   m_bIC = (double*)malloc( nIC*sizeof(double) );
-   m_rMB = (double*)malloc( nIC*sizeof(double) );
-   m_uIC = (double*)malloc( nIC*sizeof(double) );
+   // Allocating work memory for FMT part (here only chemical variables)
+   // for one node only (real FMT problems consider many nodes)
+   // Names are consistent with the DataBridge structure (see "databr.h")
 
-  // set up start value for test arrays
-   node->GEM_restore_MT( m_NodeHandle,m_NodeStatusCH,
-          m_T,m_P, m_Vs, m_Ms, m_dul, m_dll, m_bIC );
+   short m_NodeHandle[nNodes], m_NodeStatusCH[nNodes], m_IterDone[nNodes];
 
-  // work cycle
-  for( int it=0; it<ntM; it++ )
-  {
+   double m_T[nNodes], m_P[nNodes], m_Vs[nNodes], m_Ms[nNodes],
+          m_Gs[nNodes], m_Hs[nNodes], m_IC[nNodes], m_pH[nNodes], m_pe[nNodes],
+          m_Eh[nNodes], m_denW[nNodes], m_denWg[nNodes],
+          m_epsW[nNodes], m_epsWg[nNodes];
 
-    for( int in=0; in<nNodes; in++ )
-    {
-      m_NodeHandle = in;
-      m_NodeStatusCH = NEED_GEM_AIA; //NEED_GEM_PIA
+   double *m_xDC, *m_gam, *m_xPH, *m_vPS, *m_mPS,*m_bPS,
+         *m_xPA, *m_dul, *m_dll, *m_bIC, *m_rMB, *m_uIC;
 
-      node->GEM_from_MT( m_NodeHandle,m_NodeStatusCH,
-             m_T,m_P, m_Vs, m_Ms, m_dul, m_dll, m_bIC );
+   m_xDC = (double*)malloc( nNodes*nDC*sizeof(double) );
+   m_gam = (double*)malloc( nNodes*nDC*sizeof(double) );
+   m_xPH = (double*)malloc( nNodes*nPH*sizeof(double) );
+   m_vPS = (double*)malloc( nNodes*nPS*sizeof(double) );
+   m_mPS = (double*)malloc( nNodes*nPS*sizeof(double) );
+   m_bPS = (double*)malloc( nNodes*nIC*nPS*sizeof(double) );
+   m_xPA = (double*)malloc( nNodes*nPS*sizeof(double) );
+   m_dul = (double*)malloc( nNodes*nDC*sizeof(double) );
+   m_dll = (double*)malloc( nNodes*nDC*sizeof(double) );
+   m_bIC = (double*)malloc( nNodes*nIC*sizeof(double) );
+   m_rMB = (double*)malloc( nNodes*nIC*sizeof(double) );
+   m_uIC = (double*)malloc( nNodes*nIC*sizeof(double) );
 
-      node->GEM_run( m_NodeStatusCH );
+   // (1) ---------------------------------------------
+   // Initialization of GEMIPM and chemical data kept in the FMT part
+   // Can be done in a loop over nodes if there are many nodes
+   cout << "Begin Initialiation part" << endl;
 
-      node->GEM_to_MT( m_NodeHandle, m_NodeStatusCH,m_IterDone,
-                       m_Vs, m_Ms, m_Gs, m_Hs, m_IC, m_pH,
-                       m_pe, m_Eh, m_denW,m_denWg,m_epsW, m_epsWg,
-                       m_xDC, m_gam, m_xPH, m_vPS, m_mPS, m_bPS,
-                       m_xPA, m_rMB, m_uIC );
+   for( int in=0; in<nNodes; in++ )
+   {
+     dBR->NodeStatusCH = NEED_GEM_AIA; // direct access to node DATABR structure
+
+     // re-calculating equilibrium by calling GEMIPM
+     m_NodeStatusCH = node->GEM_run( );
+     if( !( m_NodeStatusCH == OK_GEM_AIA || m_NodeStatusCH == OK_GEM_PIA ) )
+        return 5;
+     // Extracting chemical data into FMT part
+     node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_T[in],
+       m_P[in], m_Vs[in], m_Ms[in], m_dul+in*nDC, m_dll+in*nDC, m_bIC+in*nIC );
+        // Extracting GEMIPM output data to FMT part
+     node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
+       m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
+       m_Eh[in],m_denW[in], m_denWg[in], m_epsW[in], m_epsWg[in],
+       m_xDC+in*nDC, m_gam+in*nDC, m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
+       m_bPS+in*nPS, m_xPA+in*nPS, m_rMB+in*nIC, m_uIC+in*nIC );
+
+     // Here the file output for the initial conditions can be implemented
+   }
+
+   cout << "End Initialiation part" << endl;
+
+   // (2) ----------------------------------------------
+   // Work loop for the coupled FMT-GEM modelling
+
+   cout << "Begin Coupled Modelling part" << endl;
+
+   for( int it=0; it<nTimes; it++ )  // iterations over time
+   {
+     cout << " FMT loop begins: " << endl;
+
+     // Loop over nodes for calculating the mass transport step
+     for( int in=0; in<nNodes; in++ )
+     {
+       ; // add here some operators as function of tc and dt
+       // in this example, simply adding Mg and 2Cl to m_bIC vector
+        //   m_bIC[] += .0001;
+     }
+
+     cout << " FMT loop ends: ";
+     cout << " it = " << it << "  dt = " << dt << "  tc = " << tc << endl;
+
+     cout << " Chemical loop begins: " << endl;
+     // Loop over nodes for calculating the chemical equilibration step
+     for( int in=0; in<nNodes; in++ )
+     {
+        cout << " in = " << in << endl;
+
+        m_NodeHandle[in] = in;
+        m_NodeStatusCH[in] = NEED_GEM_AIA; // or NEED_GEM_PIA
+
+        // Setting input data for GEMIPM
+        node->GEM_from_MT( m_NodeHandle[in], m_NodeStatusCH[in],
+             m_T[in], m_P[in], m_Vs[in], m_Ms[in],
+             m_dul+in*nDC, m_dll+in*nDC, m_bIC+in*nIC );
+
+        // Calling GEMIPM calculation
+        m_NodeStatusCH = node->GEM_run( );
+        if( !( m_NodeStatusCH == OK_GEM_AIA || m_NodeStatusCH == OK_GEM_PIA ) )
+            return 5;
+
+        // Extracting chemical data into FMT part
+        node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in],
+          m_T[in],m_P[in], m_Vs[in], m_Ms[in],
+          m_dul+in*nDC, m_dll+in*nDC, m_bIC+in*nIC );
+
+        // Extracting GEMIPM output data to FMT part
+        node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
+          m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
+          m_Eh[in],m_denW[in], m_denWg[in], m_epsW[in], m_epsWg[in],
+          m_xDC+in*nDC, m_gam+in*nDC, m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
+          m_bPS+in*nPS, m_xPA+in*nPS, m_rMB+in*nIC, m_uIC+in*nIC );
+
+        // Here the debug print for each node in can be implemented
     }
-    m_T += 1;
-    cout << "T = "<< m_T << " NodeStatuis = " << m_NodeStatusCH << endl;
-//   m_bIC[] += .0001;
+    cout << " Chemical loop ends: " << endl;
 
+    // Here the output for the current state at tc can be implemented
 
+    tc += dt;
   }
+  cout << " End Coupled Modelling part" << endl;
 
+  // (3) ----------------------------------------------
+  // Calculations finished - t_end reached
+
+  // freeing dynamic arrays
+  free( m_xDC );
+  free( m_gam );
+  free( m_xPH );
+  free( m_vPS );
+  free( m_mPS );
+  free( m_bPS );
+  free( m_xPA );
+  free( m_dul );
+  free( m_dll );
+  free( m_bIC );
+  free( m_rMB );
+  free( m_uIC );
+
+  // deleting GEMIPM and data exchange memory structures
   delete node;
+
+  cout << endl << "Finished Ok" << endl;
+
   return 0;
 }
 
 //---------------------------------------------------------------------------
-
+// end of main.cpp for node class usage example
