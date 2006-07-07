@@ -98,10 +98,10 @@ int  TNode::GEM_run()
 // reads in the data from MULTI, DATACH, DATABR files prepared
 // using the GEMS-PSI RMT module
 //  Parameters:
-//  MULTI_filename    - name of binary file with the MULTI structure
 //  ipmfiles_lst_name - name of a text file that contains:
-//    " -t/-b <dataCH file name>, <dataBR file name1>, ... <dataBR file nameN> "
-//    These files (one dataCH file, at least one dataBR file) must exist in
+//    " -t/-b <MULTI file name> -t/-b <dataCH file name>,
+//    <dataBR file name1>, ...  <dataBR file nameN> "
+//    These files (one MULTI & dataCH file, at least one dataBR file) must exist in
 //    the current directory; the dataBR files in the above list are indexed
 //    as 1, 2, ... N (node types) and must contain valid initial chemical
 //    systems (of the same structure described in the dataCH file) to set up
