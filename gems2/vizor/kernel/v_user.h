@@ -20,6 +20,7 @@
 #ifndef _v_user_h_
 #define _v_user_h_
 
+#include <algorithm>
 #include <iostream>
 
 using namespace std;
@@ -43,19 +44,12 @@ using namespace std;
 const int MAXKEYWD = 6+1;
 typedef TArrayF<gstring> TCStringArray;
 
-#ifndef IPMGEMPLUGIN
 
-#ifdef __unix
-
-#include <algorithm>
-
-#else
-
-#include <algorith.h>
-typedef unsigned int uint;
-
+#ifndef __unix
+  typedef unsigned int uint;
 #endif // __unix
 
+#ifndef IPMGEMPLUGIN
 
 inline
 int ROUND(double x )

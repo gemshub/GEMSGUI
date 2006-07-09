@@ -29,7 +29,7 @@
 
 #include "node.h"
 
-int nNodes = 1; // set here how many nodes you need
+#define nNodes  1 // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {
@@ -129,7 +129,7 @@ int main( int argc, char* argv[] )
      dBR->NodeStatusCH = NEED_GEM_AIA; // direct access to node DATABR structure
 
      // re-calculating equilibrium by calling GEMIPM
-     m_NodeStatusCH[in] = node->GEM_run( );
+     m_NodeStatusCH[in] = node->GEM_run();
      if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_PIA ) )
         return 5;
      // Extracting chemical data into FMT part
@@ -163,10 +163,11 @@ int main( int argc, char* argv[] )
 
    for( int it=0; it<nTimes; it++ )  // iterations over time
    {
+     int in;
  //   cout << " FMT loop begins: " << endl;
 
      // Loop over nodes for calculating the mass transport step
-     for( int in=0; in<nNodes; in++ )
+     for(  in=0; in<nNodes; in++ )
      {
        ; // add here some operators as function of tc and dt
        // in this example, simply adding MgCl2 to m_bIC vector
@@ -180,7 +181,7 @@ int main( int argc, char* argv[] )
 
 //     cout << " Chemical loop begins: " << endl;
      // Loop over nodes for calculating the chemical equilibration step
-     for( int in=0; in<nNodes; in++ )
+     for( in=0; in<nNodes; in++ )
      {
         cout << "  in = " << in;
 

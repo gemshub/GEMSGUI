@@ -407,7 +407,7 @@ void TMulti::WORK(double GZ,double EPS,int *I0, int *J0,int *Z,int *ITER,
 //
 void TMulti::FIN(double EPS,int M,int N,int STR[],int NMB[],
                   int BASE[],double UND[],double UP[],double U[],
-                  double AA[],double *A,double Q[],int */*ITER*/)
+                  double AA[],double *A,double Q[],int * /*ITER*/)
 {
     int /* K,*/I,J;
     double *P;

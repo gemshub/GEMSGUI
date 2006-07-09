@@ -66,12 +66,10 @@ OBJECTS_DIR       = obj
                     $$NUMERICS_H/tnt_array2d.h \
                     $$NUMERICS_H/tnt.h \
                     $$NUMERICS_H/jama_cholesky.h \
-                    $$NUMERICS_H/jama_lu.h \
-                    $$NUMERICS_H/num_methods.h
+                    $$NUMERICS_H/jama_lu.h
 
         SOURCES	  +=  $$LIBS_CPP/gstring.cpp  \
                       $$LIBS_CPP/gdatastream.cpp  \
-                    $$NUMERICS_CPP/num_methods.cpp \
                     $$MODS_CPP/s_fgl.cpp \
                     $$SUBMOD_CPP/node.cpp \
                     $$SUBMOD_CPP/ms_multi_file.cpp \

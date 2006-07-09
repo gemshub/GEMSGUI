@@ -58,8 +58,8 @@ void TMulti::GasParcP()
                 else  pmp->Fug[jj] = /* F_EMPTY*/ 0.0;
                 /* Partial pressure ! */
                 pmp->Ppg_l[jj] = pmp->Fug_l[jj] - (float)pmp->lnGam[j]/* + log(pmp->Pc)*/;
-                pmp->Fug_l[jj] *= .43429448;
-                pmp->Ppg_l[jj] *= .43429448;
+                pmp->Fug_l[jj] *= (float).43429448;
+                pmp->Ppg_l[jj] *= (float).43429448;
             }
             break;
         }

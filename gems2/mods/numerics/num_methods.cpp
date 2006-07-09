@@ -171,8 +171,8 @@ double randnorm(double& x)
 #define IR2 3791
 #define NTAB 32
 #define NDIV (1+IMM1/NTAB)
-#define EPS 1.2e-7
-#define RNMX (1.0-EPS)
+#define EPS  1.2e-7
+#define RNMX  (1.0-EPS)
 
 // Long period (> 2 � 1018) random number generator of L�Ecuyer with Bays-Durham shuffle
 // and added safeguards. Returns a uniform random deviate between 0.0 and 1.0 (exclusive of
@@ -220,7 +220,7 @@ float ran2(long& idum)
    if (iy < 1)
       iy += IMM1;
    if ( ( temp=AM*iy) > RNMX)
-       return RNMX;                //  Because users don�t expect endpoint values.
+       return (float)RNMX;                //  Because users don�t expect endpoint values.
    return temp;
 }
 

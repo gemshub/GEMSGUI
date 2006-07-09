@@ -228,10 +228,13 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
 //              na->GEM_printf( mul_name.c_str(), br_name.c_str(),0 );
         }
      }
+     else { // GEM calculation for this node not needed
+       C0[ii]->IterDone = 0;
+       C1[ii]->IterDone = 0; // number of GEMIPM iterations is set to 0
+     }
    }  // ii   end of node iteration loop
    return iRet;
 }
-
 
 // The mass transport iteration time step
 void TGEM2MT::MassTransAdvecStart()

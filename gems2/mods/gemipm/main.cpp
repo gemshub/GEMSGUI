@@ -328,12 +328,13 @@ void TGEM2MT::Free()
 // Set up NodeArray and ParticleArray classes
 int TGEM2MT::MassTransInit( const char *chbr_in1 )
 {
+  int ii;
   // The NodeArray must be allocated here
   TNodeArray::na = na = new TNodeArray( mtp->xC,mtp->yC,mtp->zC/*mtp->nC*/ );
 
  // Prepare the array for initial conditions allocation
   int* nodeType = new int[mtp->nC];
-  for(int ii =0; ii<mtp->nC; ii++ )
+  for( ii =0; ii<mtp->nC; ii++ )
          nodeType[ii] = mtp->DiCp[ii][0];
 
   // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
@@ -356,7 +357,7 @@ int TGEM2MT::MassTransInit( const char *chbr_in1 )
      }
   }
 
- for (int ii=0; ii<mtp->nC; ii++)    // node iteration
+ for ( ii=0; ii<mtp->nC; ii++)    // node iteration
   {
       na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
   }  // ii    end of node iteration loop

@@ -20,12 +20,11 @@
 //-------------------------------------------------------------------
 //
 
-#include <math.h>
-#include "jama_cholesky.h"
+#include "m_param.h"
 #include "jama_lu.h"
+#include "jama_cholesky.h"
 using namespace TNT;
 using namespace JAMA;
-#include "m_param.h"
 
 #ifndef IPMGEMPLUGIN
 

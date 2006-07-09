@@ -224,16 +224,16 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
         EoSparPT[3]=EoSparam[3];
        break;
        case 1:  // H2O type
-        EoSparPT[0]=EoSparam[0]+EoSparam[5]/(T+EoSparam[6]);
-        EoSparPT[1]=EoSparam[1]+EoSparam[7]/(T+EoSparam[8]);
-        EoSparPT[2]=EoSparam[2]+EoSparam[9]/(T+EoSparam[10]);
-        EoSparPT[3]=EoSparam[3]+EoSparam[11]/(T+EoSparam[12]);
+        EoSparPT[0]=EoSparam[0]+EoSparam[5]/((float)T+EoSparam[6]);
+        EoSparPT[1]=EoSparam[1]+EoSparam[7]/((float)T+EoSparam[8]);
+        EoSparPT[2]=EoSparam[2]+EoSparam[9]/((float)T+EoSparam[10]);
+        EoSparPT[3]=EoSparam[3]+EoSparam[11]/((float)T+EoSparam[12]);
         break;
        case 2:  // CO2 type
-        EoSparPT[0]=EoSparam[0]+EoSparam[5]*exp(T*EoSparam[6]);
-        EoSparPT[1]=EoSparam[1]+EoSparam[7]*exp(T*EoSparam[8]);
-        EoSparPT[2]=EoSparam[2]+EoSparam[9]*exp(T*EoSparam[10]);
-        EoSparPT[3]=EoSparam[3]+EoSparam[11]*exp(T*EoSparam[12]);
+        EoSparPT[0]=EoSparam[0]+EoSparam[5]*(float)exp(T*EoSparam[6]);
+        EoSparPT[1]=EoSparam[1]+EoSparam[7]*(float)exp(T*EoSparam[8]);
+        EoSparPT[2]=EoSparam[2]+EoSparam[9]*(float)exp(T*EoSparam[10]);
+        EoSparPT[3]=EoSparam[3]+EoSparam[11]*(float)exp(T*EoSparam[12]);
         break;
         default:
 

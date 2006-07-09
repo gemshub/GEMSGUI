@@ -79,10 +79,11 @@ class LU
 
 	{
 
+      int i;
    // Use a "left-looking", dot-product, Crout/Doolittle algorithm.
 
 
-      for (int i = 0; i < m; i++) {
+      for ( i = 0; i < m; i++) {
          piv[i] = i;
       }
       pivsign = 1;
@@ -93,15 +94,16 @@ class LU
 
       for (int j = 0; j < n; j++) {
 
+         int i;
          // Make a copy of the j-th column to localize references.
 
-         for (int i = 0; i < m; i++) {
+         for ( i = 0; i < m; i++) {
             LUcolj[i] = LU_[i][j];
          }
 
          // Apply previous transformations.
 
-         for (int i = 0; i < m; i++) {
+         for ( i = 0; i < m; i++) {
             LUrowi = LU_[i];
 
             // Most of the time is spent in the following dot product.
@@ -118,7 +120,7 @@ class LU
          // Find pivot and exchange if necessary.
 
          int p = j;
-         for (int i = j+1; i < m; i++) {
+         for ( i = j+1; i < m; i++) {
             if (fabs(LUcolj[i]) > fabs(LUcolj[p])) {
                p = i;
             }
@@ -280,7 +282,7 @@ class LU
 
    Array1D<Real> solve (const Array1D<Real> &b)
    {
-
+     int k;
 	  /* Dimensions: A is mxn, X is nxk, B is mxk */
 
       if (b.dim1() != m) {
@@ -294,14 +296,14 @@ class LU
 	  Array1D<Real> x = permute_copy(b, piv);
 
       // Solve L*Y = B(piv)
-      for (int k = 0; k < n; k++) {
+      for ( k = 0; k < n; k++) {
          for (int i = k+1; i < n; i++) {
                x[i] -= x[k]*LU_[i][k];
             }
          }
 
 	  // Solve U*X = Y;
-      for (int k = n-1; k >= 0; k--) {
+      for ( k = n-1; k >= 0; k--) {
             x[k] /= LU_[k][k];
       		for (int i = 0; i < k; i++)
             	x[i] -= x[k]*LU_[i][k];
