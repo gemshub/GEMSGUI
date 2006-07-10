@@ -627,6 +627,7 @@ TNode::TNode( MULTI *apm  )
     CSD = 0;
     CNode = 0;
     allocMemory();
+    na = this;
 }
 
 #else
@@ -636,6 +637,7 @@ TNode::TNode()
   CSD = 0;
   CNode = 0;
   allocMemory();
+  na = this;
 }
 
 #endif

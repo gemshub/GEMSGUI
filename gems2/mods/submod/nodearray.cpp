@@ -43,13 +43,14 @@
 //
 //-------------------------------------------------------------------
 
-int  TNodeArray::RunGEM( int  iNode )
+int  TNodeArray::RunGEM( int  iNode, int Mode )
 {
 // Copy data from the iNode node from array NodT1 to work DATABR structure
    CopyWorkNodeFromArray( iNode, anNodes, NodT1 );
 
 // GEM IPM calculation of equilibrium state in MULTI
-   int retCod = TNode::GEM_run();
+  pCNode()->NodeStatusCH = Mode;
+  int retCod = GEM_run();
 
 // Copying data for node iNode back from work DATABR structure into the node array
 //   if( retCod == OK_GEM_AIA ||
@@ -65,8 +66,11 @@ void  TNodeArray::checkNodeArray(
  if(nodeTypes)
    for( int ii=0; ii<anNodes; ii++)
      if(   nodeTypes[ii]<0 || nodeTypes[ii] >= i )
-        Error( datachbr_file,
+        {
+	  cout << anNodes << " " << nodeTypes[ii] << " i = " << i<< endl;
+	Error( datachbr_file,
           "GEM_init() error: Undefined boundary condition!" );
+	}
 }
 
 //-------------------------------------------------------------------
@@ -81,7 +85,7 @@ void  TNodeArray::setNodeArray( int ndx, int* nodeTypes  )
    for( int ii=0; ii<anNodes; ii++)
             if(  (!nodeTypes && ndx==0) ||
               ( nodeTypes && (nodeTypes[ii] == ndx/*i+1*/ )) )
-                  {    CNode->NodeHandle = (short)ndx/*(i+1)*/;
+                  {    pCNode()->NodeHandle = (short)ndx/*(i+1)*/;
                        MoveWorkNodeToArray(ii, anNodes, NodT0);
                        CopyWorkNodeFromArray(ii, anNodes,NodT0);
                        MoveWorkNodeToArray(ii, anNodes, NodT1);
@@ -373,31 +377,31 @@ TNodeArray::~TNodeArray()
 // Copying data for node ii from node array into work DATABR structure
 void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
 {
-  // from arr_BR[ii] to CNode structure
+  // from arr_BR[ii] to pCNode() structure
   if( ii < 0 || ii>= nNodes )
     return;
   // memory must be allocated before
 
-  memcpy( &CNode->NodeHandle, &arr_BR[ii]->NodeHandle, 6*sizeof(short));
-  memcpy( &CNode->T, &arr_BR[ii]->T, 36*sizeof(double));
+  memcpy( &pCNode()->NodeHandle, &arr_BR[ii]->NodeHandle, 6*sizeof(short));
+  memcpy( &pCNode()->T, &arr_BR[ii]->T, 36*sizeof(double));
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH
-  memcpy( CNode->xDC, arr_BR[ii]->xDC, CSD->nDCb*sizeof(double) );
-  memcpy( CNode->gam, arr_BR[ii]->gam, CSD->nDCb*sizeof(double) );
-  memcpy( CNode->xPH, arr_BR[ii]->xPH, CSD->nPHb*sizeof(double) );
-  memcpy( CNode->vPS, arr_BR[ii]->vPS, CSD->nPSb*sizeof(double) );
-  memcpy( CNode->mPS, arr_BR[ii]->mPS, CSD->nPSb*sizeof(double) );
+  memcpy( pCNode()->xDC, arr_BR[ii]->xDC, pCSD()->nDCb*sizeof(double) );
+  memcpy( pCNode()->gam, arr_BR[ii]->gam, pCSD()->nDCb*sizeof(double) );
+  memcpy( pCNode()->xPH, arr_BR[ii]->xPH, pCSD()->nPHb*sizeof(double) );
+  memcpy( pCNode()->vPS, arr_BR[ii]->vPS, pCSD()->nPSb*sizeof(double) );
+  memcpy( pCNode()->mPS, arr_BR[ii]->mPS, pCSD()->nPSb*sizeof(double) );
 
-  memcpy( CNode->bPS, arr_BR[ii]->bPS,
-                          CSD->nPSb*CSD->nICb*sizeof(double) );
-  memcpy( CNode->xPA, arr_BR[ii]->xPA, CSD->nPSb*sizeof(double) );
-  memcpy( CNode->dul, arr_BR[ii]->dul, CSD->nDCb*sizeof(double) );
-  memcpy( CNode->dll, arr_BR[ii]->dll, CSD->nDCb*sizeof(double) );
-  memcpy( CNode->bIC, arr_BR[ii]->bIC, CSD->nICb*sizeof(double) );
-  memcpy( CNode->rMB, arr_BR[ii]->rMB, CSD->nICb*sizeof(double) );
-  memcpy( CNode->uIC, arr_BR[ii]->uIC, CSD->nICb*sizeof(double) );
-  CNode->dRes1 = 0;
-  CNode->dRes2 = 0;
+  memcpy( pCNode()->bPS, arr_BR[ii]->bPS,
+                          pCSD()->nPSb*pCSD()->nICb*sizeof(double) );
+  memcpy( pCNode()->xPA, arr_BR[ii]->xPA, pCSD()->nPSb*sizeof(double) );
+  memcpy( pCNode()->dul, arr_BR[ii]->dul, pCSD()->nDCb*sizeof(double) );
+  memcpy( pCNode()->dll, arr_BR[ii]->dll, pCSD()->nDCb*sizeof(double) );
+  memcpy( pCNode()->bIC, arr_BR[ii]->bIC, pCSD()->nICb*sizeof(double) );
+  memcpy( pCNode()->rMB, arr_BR[ii]->rMB, pCSD()->nICb*sizeof(double) );
+  memcpy( pCNode()->uIC, arr_BR[ii]->uIC, pCSD()->nICb*sizeof(double) );
+  pCNode()->dRes1 = 0;
+  pCNode()->dRes2 = 0;
 }
 
 // Copying data for node iNode back from work DATABR structure into the node array
@@ -410,11 +414,11 @@ void TNodeArray::MoveWorkNodeToArray( int ii, int nNodes, DATABRPTR* arr_BR )
        arr_BR[ii] = databr_free( arr_BR[ii]);
        // delete[] arr_BR[ii];
   }
-  arr_BR[ii] = CNode;
+  arr_BR[ii] = pCNode();
 // alloc new memory
-  CNode = new DATABR;
+  TNode::CNode = new DATABR;
   databr_realloc();
-  memset( &CNode->T, 0, 36*sizeof(double));
+  memset( &pCNode()->T, 0, 36*sizeof(double));
 }
 
 void TNodeArray::CopyNodeFromTo( int ndx, int nNod,
@@ -591,12 +595,12 @@ double TNodeArray::GetNodeMass( int ndx,
      {
         case ADVECTIVE:
         case COLLOID: // mass = 0.;
-                      // for(short ie=0; ie < CSD->nICb; ie++ )
-                      //   mass += dbr->bPS[ips*CSD->nICb+ie]*CSD->ICmm[CSD->xIC[ie]];
+                      // for(short ie=0; ie < pCSD()->nICb; ie++ )
+                      //   mass += dbr->bPS[ips*pCSD()->nICb+ie]*pCSD()->ICmm[pCSD()->xIC[ie]];
                        mass = dbr->mPS[ips];
                         break;
         case DIFFUSIVE:
-                      mass = dbr->xDC[ips]*CSD->DCmm[CSD->xDC[ips]];
+                      mass = dbr->xDC[ips]*pCSD()->DCmm[pCSD()->xDC[ips]];
                         break;
      }
    return mass;
@@ -619,25 +623,25 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
    {
     case ADVECTIVE:
     case COLLOID: // mass = 0.;
-                  // for(short ie=0; ie < CSD->nICb; ie++ )
-                  //   mass += dbr->bPS[ips*CSD->nICb+ie]*CSD->ICmm[CSD->xIC[ie]];
+                  // for(short ie=0; ie < pCSD()->nICb; ie++ )
+                  //   mass += dbr->bPS[ips*pCSD()->nICb+ie]*pCSD()->ICmm[pCSD()->xIC[ie]];
                    mass = dbr->mPS[ips];
                   break;
     case DIFFUSIVE:
-                  mass = dbr->xDC[ips]*CSD->DCmm[CSD->xDC[ips]];
+                  mass = dbr->xDC[ips]*pCSD()->DCmm[pCSD()->xDC[ips]];
                    break;
     }
    coeff = m_v/mass;
 
-   for(short ie=0; ie < CSD->nICb; ie++ )
+   for(short ie=0; ie < pCSD()->nICb; ie++ )
    {
      mol = 0.;
      switch( tcode )
      {
         case ADVECTIVE:
-        case COLLOID:   mol = dbr->bPS[ips*CSD->nICb+ie]*coeff;
+        case COLLOID:   mol = dbr->bPS[ips*pCSD()->nICb+ie]*coeff;
                         break;
-        case DIFFUSIVE: mol =  dbr->xDC[ips]*CSD->A[CSD->xPH[ips]*CSD->nIC+CSD->xIC[ie]]*coeff;
+        case DIFFUSIVE: mol =  dbr->xDC[ips]*pCSD()->A[pCSD()->xPH[ips]*pCSD()->nIC+pCSD()->xIC[ie]]*coeff;
                         break;
      }
      if( dbr->NodeTypeHY != NBC3source )
@@ -668,12 +672,12 @@ void TNodeArray::logDiffsIC( FILE* diffile, int t, double at, int nx, int every_
     return;
 
   fprintf( diffile, "\nStep= %-8d  Time= %-12.4g\nNode#   ", t, at );
-  for( ie=0; ie < int(CSD->nICb); ie++ )
-    fprintf( diffile, "%-12.4s ", CSD->ICNL[ie] );
+  for( ie=0; ie < int(pCSD()->nICb); ie++ )
+    fprintf( diffile, "%-12.4s ", pCSD()->ICNL[ie] );
   for (i=0; i<nx; i++)    // node iteration
   {
      fprintf( diffile, "\n%5d   ", i );
-     for( ie=0; ie < int(CSD->nICb); ie++ )
+     for( ie=0; ie < int(pCSD()->nICb); ie++ )
      {
         dc = NodT1[i]->bIC[ie] - NodT0[i]->bIC[ie];
         fprintf( diffile, "%-12.4g ", dc );
@@ -692,12 +696,12 @@ void TNodeArray::logProfileAqIC( FILE* logfile, int t, double at, int nx, int ev
     return;
   fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Dissolved IC total concentrations, M\n", t, at/(365*86400) );
   fprintf(logfile, "%s","Node#   ");
-  for( ie=0; ie < int(CSD->nICb); ie++ )
-    fprintf( logfile, "%-12.4s ", CSD->ICNL[ie] );
+  for( ie=0; ie < int(pCSD()->nICb); ie++ )
+    fprintf( logfile, "%-12.4s ", pCSD()->ICNL[ie] );
   for (i=0; i<nx; i++)    // node iteration
   {
      fprintf( logfile, "\n%5d   ", i );
-     for( ie=0; ie < int(CSD->nICb); ie++ )
+     for( ie=0; ie < int(pCSD()->nICb); ie++ )
      {
        pm = NodT1[i]->bPS[ie]/NodT1[i]->vPS[0]*1000.;  // Assumes there is aq phase!
                  // total dissolved element molarity
@@ -717,12 +721,12 @@ void TNodeArray::logProfileTotIC( FILE* logfile, int t, double at, int nx, int e
     return;
   fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Bulk IC amounts, moles\n", t, at/(365*86400) );
   fprintf(logfile, "%s","Node#   ");
-  for( ie=0; ie < int(CSD->nICb); ie++ )
-    fprintf( logfile, "%-12.4s ", CSD->ICNL[ie] );
+  for( ie=0; ie < int(pCSD()->nICb); ie++ )
+    fprintf( logfile, "%-12.4s ", pCSD()->ICNL[ie] );
   for (i=0; i<nx; i++)    // node iteration
   {
      fprintf( logfile, "\n%5d   ", i );
-     for( ie=0; ie < int(CSD->nICb); ie++ )
+     for( ie=0; ie < int(pCSD()->nICb); ie++ )
      {
        pm = NodT1[i]->bIC[ie];
        fprintf( logfile, "%-12.4g ", pm );
@@ -740,12 +744,12 @@ void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int e
     return;
   fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Amounts of reactive phases, moles\n", t, at/(365*86400) );
   fprintf(logfile, "%s","Node#   ");
-  for( ip=0; ip < int(CSD->nPHb); ip++ )
-    fprintf( logfile, "%-12.12s ", CSD->PHNL[ip]+4 );
+  for( ip=0; ip < int(pCSD()->nPHb); ip++ )
+    fprintf( logfile, "%-12.12s ", pCSD()->PHNL[ip]+4 );
   for (i=0; i<nx; i++)    // node iteration
   {
      fprintf( logfile, "\n%5d   ", i );
-     for( ip=0; ip < int(CSD->nPHb); ip++ )
+     for( ip=0; ip < int(pCSD()->nPHb); ip++ )
      {
        pm = NodT1[i]->xPH[ip];
        fprintf( logfile, "%-12.4g ", pm );
@@ -764,12 +768,12 @@ void TNodeArray::logProfileAqDC( FILE* logfile, int t, double at, int nx, int ev
   fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Dissolved species concentrations, M\n",
         t, at/(365*86400) );
   fprintf(logfile, "%s","Node#   ");
-  for( is=0; is < int(CSD->nDCb); is++ )
-    fprintf( logfile, "%-12.4s ", CSD->DCNL[is] );
+  for( is=0; is < int(pCSD()->nDCb); is++ )
+    fprintf( logfile, "%-12.4s ", pCSD()->DCNL[is] );
   for (i=0; i<nx; i++)    // node iteration
   {
      fprintf( logfile, "\n%5d   ", i );
-     for( is=0; is < int(CSD->nDCinPH[0]); is++ )
+     for( is=0; is < int(pCSD()->nDCinPH[0]); is++ )
      {
        pm = NodT1[i]->xDC[is]/NodT1[i]->vPS[0]*1000.;  // Assumes there is aq phase!
                  // dissolved species molarity

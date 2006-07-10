@@ -161,11 +161,11 @@ public:
     DATABRPTR* pNodT1() const  // get pointer to array of nodes for the previous time point
     { return NodT1; }
 
-    int  RunGEM( int ndx );   // calls GEM IPM calculation for a node with absolute index ndx
+    int  RunGEM( int ndx, int Mode );   // calls GEM IPM calculation for a node with absolute index ndx
 
-    int  RunGEM( int indN, int indM, int indK ) // Alternative call -
+    int  RunGEM( int indN, int indM, int indK, int Mode ) // Alternative call -
                  // calls GEM IPM for one node with three indexes (along x,y,z)
-    { return RunGEM( iNode( indN, indM, indK )); }
+    { return RunGEM( iNode( indN, indM, indK ), Mode); }
     // (both calls clean the work node DATABR structure)
 
     // Copying data from the work DATABR structure into the node ndx in

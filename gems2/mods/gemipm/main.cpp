@@ -362,6 +362,7 @@ int TGEM2MT::MassTransInit( const char *chbr_in1 )
       na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
   }  // ii    end of node iteration loop
 
+
   // use particles
   if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
   {

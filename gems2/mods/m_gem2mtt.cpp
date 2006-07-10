@@ -148,6 +148,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
    bool iRet = true;
    double dc; // difference (decrement) to concentration/amount
    //  Getting direct access to TNodeArray class data
+
    DATACH* CH = na->pCSD();       // DataCH structure
    DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
    DATABRPTR* C1 = na->pNodT1();  // nodes at previous time point
@@ -180,10 +181,13 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
 
      if( NeedGEM )
      {
-        RetCode = na->RunGEM( ii );
+
+        RetCode = na->RunGEM( ii, Mode );
+
         // check RetCode from GEM IPM calculation
         if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
         {
+          cout << "CalcIPM4 " << RetCode << endl;
           char buf[200];
           gstring err_msg;
           iRet = false;
