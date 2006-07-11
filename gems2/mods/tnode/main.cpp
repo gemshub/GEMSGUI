@@ -134,13 +134,14 @@ int main( int argc, char* argv[] )
         return 5;
      // Extracting chemical data into FMT part
      node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_T[in],
-       m_P[in], m_Vs[in], m_Ms[in], m_dul+in*nDC, m_dll+in*nDC, m_bIC+in*nIC );
+       m_P[in], m_Vs[in], m_Ms[in], m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC );
         // Extracting GEMIPM output data to FMT part
      node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
        m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
        m_Eh[in],m_denW[in], m_denWg[in], m_epsW[in], m_epsWg[in],
-       m_xDC+in*nDC, m_gam+in*nDC, m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
-       m_bPS+in*nIC*nPS, m_xPA+in*nPS, m_rMB+in*nIC, m_uIC+in*nIC );
+       m_rMB+in*nIC, m_uIC+in*nIC, m_xDC+in*nDC, m_gam+in*nDC,
+       m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
+       m_bPS+in*nIC*nPS, m_xPA+in*nPS );
 
      // Here the file output for the initial conditions can be implemented
    }
@@ -191,7 +192,7 @@ int main( int argc, char* argv[] )
         // Setting input data for GEMIPM
         node->GEM_from_MT( m_NodeHandle[in], m_NodeStatusCH[in],
              m_T[in], m_P[in], m_Vs[in], m_Ms[in],
-             m_dul+in*nDC, m_dll+in*nDC, m_bIC+in*nIC );
+             m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC );
 
         // Calling GEMIPM calculation
         m_NodeStatusCH[in] = node->GEM_run( );
@@ -203,8 +204,9 @@ int main( int argc, char* argv[] )
         node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
           m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
           m_Eh[in],m_denW[in], m_denWg[in], m_epsW[in], m_epsWg[in],
-          m_xDC+in*nDC, m_gam+in*nDC, m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
-          m_bPS+in*nIC*nPS, m_xPA+in*nPS, m_rMB+in*nIC, m_uIC+in*nIC );
+          m_rMB+in*nIC, m_uIC+in*nIC, m_xDC+in*nDC, m_gam+in*nDC,
+          m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
+          m_bPS+in*nIC*nPS, m_xPA+in*nPS  );
 
         // Here the debug print for each node in can be implemented
 //        cout << " Gem run ends: ";

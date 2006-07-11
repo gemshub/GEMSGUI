@@ -327,6 +327,12 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
     multi->to_file( ff, path );
 }
 
+// outpu MULTI to txt format
+void TProfil::outMulti( gstring& path  )
+{
+    multi->to_text_file_gemipm( path.c_str() );
+}
+
 void TProfil::outMulti( )
 {
    TNodeArray* na = new TNodeArray( 1, TProfil::pm->pmp/*multi->GetPM()*/ );

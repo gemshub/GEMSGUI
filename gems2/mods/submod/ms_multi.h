@@ -443,6 +443,8 @@ public:
     void to_file( GemDataStream& ff, gstring& path  );
     void to_text_file( gstring& path );
     void from_file( GemDataStream& ff );
+    void to_text_file_gemipm( const char *path );
+
 
     // EXTERN FUNCTIONS
     // MultiCalc

@@ -185,6 +185,10 @@ AGAIN:
     Path_ = u_makepath( dir, name, "ipm" );
     GemDataStream  ff(Path_, ios::out|ios::binary);
     TProfil::pm->outMulti( ff, Path_  );
+// output MULTI to txt file
+    newname = name+"-dat";
+    Path_ = u_makepath( dir, newname, "ipm" );
+    TProfil::pm->outMulti( Path_  );
 
 // out dataCH to binary file
    newname = name+"-dch";

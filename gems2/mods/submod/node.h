@@ -93,12 +93,13 @@ protected:
 
 public:
 
+static TNode* na;   // static pointer to this class
+                    // for the isolated GEMIPM2K module
+
 #ifndef IPMGEMPLUGIN
    TNode( MULTI *apm );   // constructor for integration in GEMS
 #else
 
-  static TNode* na;   // static pointer to this class
-                      // for the isolated GEMIPM2K module
   TNode();      // constructor for GEMIPM2K
 #endif
 
@@ -129,9 +130,9 @@ public:
        double p_Ms,     // Mass of reactive subsystem, kg          -       -      +
 //       double p_dt,     // actual time step	         			  +
 //       double p_dt1,    // previous time step                                   +
+       double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
        double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
-       double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
-       double *p_bIC    // bulk mole amounts of IC [nICb]          +       -      -
+       double *p_dll   // lower kinetic restrictions [nDCb]       +       -      -
    );
 
    // Copies GEM input data from already loaded DATABR work structure
@@ -146,9 +147,9 @@ public:
    double &p_Ms,     // Mass of reactive subsystem, kg          -       -      +
 //       double p_dt,     // actual time step	         			  +
 //       double p_dt1,    // previous time step                                   +
+   double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
    double *p_dul,    // upper kinetic restrictions [nDCb]       +       -      -
-   double *p_dll,    // lower kinetic restrictions [nDCb]       +       -      -
-   double *p_bIC     // bulk mole amounts of IC [nICb]          +       -      -
+   double *p_dll     // lower kinetic restrictions [nDCb]       +       -      -
    );
 
 #endif
@@ -156,7 +157,10 @@ public:
    // Main call for GEM IPM calculation
    int  GEM_run();   // calls GEM for a work node
 
-   // For examining GEM calculation results:
+   // reads work node (DATABR structure) from a file
+   int  GEM_read_dbr( bool binary_f, char *fname );
+
+    // For examining GEM calculation results:
    // Prints current multi and/or work node structures to files with
    // names given in the parameter list (if any parameter is NULL
    // then writing the respective file is skipped)
@@ -188,15 +192,15 @@ public:
        double &p_epsW,
        double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
        // Dynamic data - dimensions see in DATACH.H structure
+       double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
+       double  *p_uIC,   // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
        double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
        double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
        double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
        double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
        double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
        double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
-       double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
-       double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
-       double  *p_uIC   // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
+       double  *p_xPA  // amount of carrier in phases  [nPSb] ??       -      -      +     +
    );
 
 #endif

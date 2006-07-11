@@ -31,8 +31,9 @@
   #include "visor.h"
 #else
   istream& f_getline(istream& is, gstring& str, char delim);
-  TNode* TNode::na;
 #endif
+
+TNode* TNode::na;
 
 //-------------------------------------------------------------------------
 // GEM_run()
@@ -92,6 +93,37 @@ int  TNode::GEM_run()
     }
    return CNode->NodeStatusCH;
 }
+
+ // reads work node (DATABR structure) from a  file
+int  TNode::GEM_read_dbr( bool binary_f, char *fname )
+{
+  try
+  {
+    if( binary_f )
+	{
+       gstring str_file = fname;
+	   GemDataStream in_br(str_file, ios::in|ios::binary);
+       databr_from_file(in_br);
+	}
+   else
+   {   fstream in_br(fname, ios::in );
+       ErrorIf( !in_br.good() , fname, "DataBR Fileopen error");
+       databr_from_text_file(in_br);
+   }
+  } catch(TError& err)
+    {
+      return 1;
+    }
+    catch(...)
+    {
+      return -1;
+    }
+  return 0;
+}
+
+
+
+
 
 //-------------------------------------------------------------------
 // GEM_init()
@@ -627,7 +659,7 @@ TNode::TNode( MULTI *apm  )
     CSD = 0;
     CNode = 0;
     allocMemory();
-//    na = this;
+    na = this;
 }
 
 #else
@@ -1166,19 +1198,20 @@ void TNode::databr_to_file( GemDataStream& ff )
    ff.writeArray( &CNode->T, 36 );
 
 //dynamic data
-   ff.writeArray( CNode->xDC, CSD->nDCb );
-   ff.writeArray( CNode->gam, CSD->nDCb );
-   ff.writeArray( CNode->xPH, CSD->nPHb );
-   ff.writeArray( CNode->vPS, CSD->nPSb );
-   ff.writeArray( CNode->mPS, CSD->nPSb );
-
-   ff.writeArray( CNode->bPS, CSD->nPSb*CSD->nICb );
-   ff.writeArray( CNode->xPA, CSD->nPSb );
-   ff.writeArray( CNode->dul, CSD->nDCb );
-   ff.writeArray( CNode->dll, CSD->nDCb );
    ff.writeArray( CNode->bIC, CSD->nICb );
    ff.writeArray( CNode->rMB, CSD->nICb );
    ff.writeArray( CNode->uIC, CSD->nICb );
+
+   ff.writeArray( CNode->xDC, CSD->nDCb );
+   ff.writeArray( CNode->gam, CSD->nDCb );
+   ff.writeArray( CNode->dul, CSD->nDCb );
+   ff.writeArray( CNode->dll, CSD->nDCb );
+
+   ff.writeArray( CNode->xPH, CSD->nPHb );
+   ff.writeArray( CNode->vPS, CSD->nPSb );
+   ff.writeArray( CNode->mPS, CSD->nPSb );
+   ff.writeArray( CNode->bPS, CSD->nPSb*CSD->nICb );
+   ff.writeArray( CNode->xPA, CSD->nPSb );
 
    CNode->dRes1 = 0;
    CNode->dRes2 = 0;
@@ -1195,19 +1228,20 @@ void TNode::databr_from_file( GemDataStream& ff )
    ff.readArray( &CNode->T, 36 );
 
 //dynamic data
-   ff.readArray( CNode->xDC, CSD->nDCb );
-   ff.readArray( CNode->gam, CSD->nDCb );
-   ff.readArray( CNode->xPH, CSD->nPHb );
-   ff.readArray( CNode->vPS, CSD->nPSb );
-   ff.readArray( CNode->mPS, CSD->nPSb );
-
-   ff.readArray( CNode->bPS, CSD->nPSb*CSD->nICb );
-   ff.readArray( CNode->xPA, CSD->nPSb );
-   ff.readArray( CNode->dul, CSD->nDCb );
-   ff.readArray( CNode->dll, CSD->nDCb );
    ff.readArray( CNode->bIC, CSD->nICb );
    ff.readArray( CNode->rMB, CSD->nICb );
    ff.readArray( CNode->uIC, CSD->nICb );
+
+   ff.readArray( CNode->xDC, CSD->nDCb );
+   ff.readArray( CNode->gam, CSD->nDCb );
+   ff.readArray( CNode->dul, CSD->nDCb );
+   ff.readArray( CNode->dll, CSD->nDCb );
+
+   ff.readArray( CNode->xPH, CSD->nPHb );
+   ff.readArray( CNode->vPS, CSD->nPSb );
+   ff.readArray( CNode->mPS, CSD->nPSb );
+   ff.readArray( CNode->bPS, CSD->nPSb*CSD->nICb );
+   ff.readArray( CNode->xPA, CSD->nPSb );
 
    CNode->dRes1 = 0;
    CNode->dRes2 = 0;
@@ -1222,21 +1256,20 @@ void TNode::databr_to_text_file( fstream& ff )
   outArray( ff, "sCon",  &CNode->NodeHandle, 6 );
   outArray( ff, "dCon",  &CNode->T, 36 );
 
-  outArray( ff, "xDC",  CNode->xDC, CSD->nDCb );
-  outArray( ff, "gam",  CNode->gam, CSD->nDCb );
-  outArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
-  outArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
-  outArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
-
-
-  outArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
-  outArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
-  outArray( ff, "dul",  CNode->dul, CSD->nDCb );
-  outArray( ff, "dll",  CNode->dll, CSD->nDCb );
   outArray( ff, "bIC",  CNode->bIC, CSD->nICb );
   outArray( ff, "rMB",  CNode->rMB, CSD->nICb );
   outArray( ff, "uIC",  CNode->uIC, CSD->nICb );
 
+  outArray( ff, "xDC",  CNode->xDC, CSD->nDCb );
+  outArray( ff, "gam",  CNode->gam, CSD->nDCb );
+  outArray( ff, "dul",  CNode->dul, CSD->nDCb );
+  outArray( ff, "dll",  CNode->dll, CSD->nDCb );
+
+  outArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
+  outArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
+  outArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
+  outArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
+  outArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
 }
 
 // Reading work dataBR structure from text file
@@ -1248,38 +1281,40 @@ void TNode::databr_from_text_file( fstream& ff )
   inArray( ff, "sCon",  &CNode->NodeHandle, 6 );
   inArray( ff, "dCon",  &CNode->T, 36 );
 
-  inArray( ff, "xDC",  CNode->xDC, CSD->nDCb );
-  inArray( ff, "gam",  CNode->gam, CSD->nDCb );
-  inArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
-  inArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
-  inArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
-
-  inArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
-  inArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
-  inArray( ff, "dul",  CNode->dul, CSD->nDCb );
-  inArray( ff, "dll",  CNode->dll, CSD->nDCb );
   inArray( ff, "bIC",  CNode->bIC, CSD->nICb );
   inArray( ff, "rMB",  CNode->rMB, CSD->nICb );
   inArray( ff, "uIC",  CNode->uIC, CSD->nICb );
+
+  inArray( ff, "xDC",  CNode->xDC, CSD->nDCb );
+  inArray( ff, "gam",  CNode->gam, CSD->nDCb );
+  inArray( ff, "dul",  CNode->dul, CSD->nDCb );
+  inArray( ff, "dll",  CNode->dll, CSD->nDCb );
+
+  inArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
+  inArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
+  inArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
+  inArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
+  inArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
 }
 
 
 // allocate DataBR structure
 void TNode::databr_realloc()
 {
+  CNode->bIC = new double[CSD->nICb];
+  CNode->rMB = new double[CSD->nICb];
+  CNode->uIC = new double[CSD->nICb];
+
  CNode->xDC = new double[CSD->nDCb];
  CNode->gam = new double[CSD->nDCb];
+ CNode->dul = new double[CSD->nDCb];
+ CNode->dll = new double[CSD->nDCb];
+
  CNode->xPH = new double[CSD->nPHb];
  CNode->vPS = new double[CSD->nPSb];
  CNode->mPS = new double[CSD->nPSb];
-
  CNode->bPS = new double[CSD->nPSb*CSD->nICb];
  CNode->xPA = new double[CSD->nPSb];
- CNode->dul = new double[CSD->nDCb];
- CNode->dll = new double[CSD->nDCb];
- CNode->bIC = new double[CSD->nICb];
- CNode->rMB = new double[CSD->nICb];
- CNode->uIC = new double[CSD->nICb];
 
  CNode->dRes1 = 0;
  CNode->dRes2 = 0;
@@ -1288,11 +1323,23 @@ void TNode::databr_realloc()
 // free dynamic memory
 DATABR * TNode::databr_free( DATABR *CNode_ )
 {
-
   if( CNode_ == 0)
     CNode_ = CNode;
   memset( &CNode_->NodeHandle, 0, 6*sizeof(short));
   memset( &CNode_->T, 0, 36*sizeof(double));
+
+ if( CNode_->bIC )
+ { delete[] CNode_->bIC;
+   CNode_->bIC = 0;
+ }
+ if( CNode_->rMB )
+ { delete[] CNode_->rMB;
+   CNode_->rMB = 0;
+ }
+ if( CNode_->uIC )
+ { delete[] CNode_->uIC;
+   CNode_->uIC = 0;
+ }
 
  if( CNode_->xDC )
   { delete[] CNode_->xDC;
@@ -1302,6 +1349,15 @@ DATABR * TNode::databr_free( DATABR *CNode_ )
   { delete[] CNode_->gam;
     CNode_->gam = 0;
   }
+ if( CNode_->dul )
+   { delete[] CNode_->dul;
+     CNode_->dul = 0;
+   }
+ if( CNode_->dll )
+   { delete[] CNode_->dll;
+     CNode_->dll = 0;
+   }
+
  if( CNode_->xPH )
   { delete[] CNode_->xPH;
     CNode_->xPH = 0;
@@ -1314,7 +1370,6 @@ DATABR * TNode::databr_free( DATABR *CNode_ )
   { delete[] CNode_->mPS;
     CNode_->mPS = 0;
   }
-
  if( CNode_->bPS )
   { delete[] CNode_->bPS;
     CNode_->bPS = 0;
@@ -1322,26 +1377,6 @@ DATABR * TNode::databr_free( DATABR *CNode_ )
  if( CNode_->xPA )
   { delete[] CNode_->xPA;
     CNode_->xPA = 0;
-  }
- if( CNode_->dul )
-  { delete[] CNode_->dul;
-    CNode_->dul = 0;
-  }
- if( CNode_->dll )
-  { delete[] CNode_->dll;
-    CNode_->dll = 0;
-  }
- if( CNode_->bIC )
-  { delete[] CNode_->bIC;
-    CNode_->bIC = 0;
-  }
- if( CNode_->rMB )
-  { delete[] CNode_->rMB;
-    CNode_->rMB = 0;
-  }
- if( CNode_->uIC )
-  { delete[] CNode_->uIC;
-    CNode_->uIC = 0;
   }
 
  delete[] CNode_;
@@ -1362,9 +1397,9 @@ void TNode::GEM_from_MT(
    double p_Ms,     // Mass of reactive subsystem, kg          -       -      +
    //       double p_dt,     // actual time step	         			  +
    //       double p_dt1,    // previous time step                                   +
+   double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
    double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
-   double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
-   double *p_bIC    // bulk mole amounts of IC [nICb]          +       -      -
+   double *p_dll   // lower kinetic restrictions [nDCb]       +       -      -
 )
 {
   int ii;
@@ -1406,9 +1441,9 @@ void TNode::GEM_restore_MT(
    double &p_Ms,     // Mass of reactive subsystem, kg          -       -      +
    //       double p_dt,     // actual time step	         			  +
    //       double p_dt1,    // previous time step                                   +
+   double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
    double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
-   double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
-   double *p_bIC    // bulk mole amounts of IC [nICb]          +       -      -
+   double *p_dll   // lower kinetic restrictions [nDCb]       +       -      -
    )
 {
  int ii;
@@ -1450,15 +1485,15 @@ void TNode::GEM_to_MT(
        double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
        // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
        // exchange of values occurs through lists of indices, e.g. xDC, xPH
+       double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
+       double  *p_uIC,  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
        double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
        double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
        double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
        double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
        double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
        double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
-       double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
-       double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
-       double  *p_uIC  // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
+       double  *p_xPA  // amount of carrier in phases  [nPSb] ??       -      -      +     +
 )
 {
 

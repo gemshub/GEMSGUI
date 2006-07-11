@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "m_param.h"
+#include "node.h"
 #include "gdatastream.h"
 
 
@@ -126,14 +127,15 @@ void outArray( fstream& ff, char *name,  double* arr,
 }
 
 
-void TMulti::to_text_file( gstring& path )
+void TMulti::to_text_file_gemipm( const char *path )
 {
-    //static values
+  SPP_SETTING *pa = &TProfil::pm->pa;
+
+   //static values
    char PAalp;
    char PSigm;
    float EpsW;
    float RoW;
-
 
 #ifndef IPMGEMPLUGIN
    PAalp = syp->PAalp;
@@ -146,195 +148,140 @@ void TMulti::to_text_file( gstring& path )
    EpsW = EpsW_;
    RoW = RoW_;
 #endif
+  fstream ff( path, ios::out );
+  ErrorIf( !ff.good() , path, "Fileopen error");
 
-   gstring Path_ = path;
-   gstring dir;
-   gstring name;
-   gstring ext;
+   ff << "\"" << pmp->stkey << "\"" << endl;
+// short from pa
+   ff << left << setw(12) << "\'pa_DP\' " << right << setw(8) << pa->p.DP << endl;
+   ff << left << setw(12) << "\'pa_DW\' " << right << setw(8) << pa->p.DW  << endl;
+   ff << left << setw(12) << "\'pa_DT\' " << right << setw(8) << pa->p.DT  << endl;
+   ff << left << setw(12) << "\'pa_IIM\' " << right << setw(8) <<  pa->p.IIM << endl;
+   ff << left << setw(12) << "\'pa_DG\' " <<  right << setw(8) << pa->p.DG << endl;
+   ff << left << setw(12) << "\'pa_DHB\' " << right << setw(8) <<  pa->p.DHB << endl;
+   ff << left << setw(12) << "\'pa_DS\' " << right << setw(8) <<  pa->p.DS << endl;
+   ff << left << setw(12) << "\'pa_DK\' " <<  right << setw(8) << pa->p.DK << endl;
+   ff << left << setw(12) << "\'pa_DF\' " <<  right << setw(8) << pa->p.DF << endl;
+   ff << left << setw(12) << "\'pa_DB\' " <<  right << setw(8) << pa->p.DB << endl;
+   ff << left << setw(12) << "\'pa_GAS\' " << right << setw(8) <<  pa->p.GAS << endl;
+   ff << left << setw(12) << "\'pa_EPS\' " <<  right << setw(8) << pa->p.EPS << endl;
+   ff << left << setw(12) << "\'pa_PC\' " <<  right << setw(8) << pa->p.PC << endl;
+   ff << left << setw(12) << "\'pa_DFM\' " <<  right << setw(8) << pa->p.DFM << endl;
+   ff << left << setw(12) << "\'pa_DFYw\' " <<  right << setw(8) << pa->p.DFYw << endl;
+   ff << left << setw(12) << "\'pa_DFYaq\' " <<  right << setw(8) << pa->p.DFYaq << endl;
+   ff << left << setw(12) << "\'pa_DFYid\' " <<  right << setw(8) << pa->p.DFYid << endl;
+   ff << left << setw(12) << "\'pa_DFYr\' " <<  right << setw(8) << pa->p.DFYr << endl;
+   ff << left << setw(12) << "\'pa_DFYh\' " <<  right << setw(8) << pa->p.DFYh << endl;
+   ff << left << setw(12) << "\'pa_DFYc\' " <<  right << setw(8) << pa->p.DFYc << endl;
+   ff << left << setw(12) << "\'pa_DFYs\' " << right << setw(8) <<  pa->p.DFYs << endl;
+   ff << left << setw(12) << "\'pa_XwMin\' " <<  right << setw(8) << pa->p.XwMin << endl;
+   ff << left << setw(12) << "\'pa_ScMin\' " <<  right << setw(8) << pa->p.ScMin << endl;
+   ff << left << setw(12) << "\'pa_DcMin\' " <<  right << setw(8) << pa->p.DcMin << endl;
+   ff << left << setw(12) << "\'pa_PhMin\' " <<  right << setw(8) << pa->p.PhMin << endl;
+   ff << left << setw(12) << "\'pa_ICmin\' " <<  right << setw(8) << pa->p.ICmin << endl;
+   ff << left << setw(12) << "\'pa_PD\' " <<  right << setw(8) << pa->p.PD << endl;
+   ff << left << setw(12) << "\'pa_PRD\' " <<  right << setw(8) << pa->p.PRD << endl;
+   ff << left << setw(12) << "\'pa_PSM\' " <<  right << setw(8) << pa->p.PSM << endl;
+   ff << left << setw(12) << "\'pa_AG\' " <<  right << setw(8) << pa->p.AG << endl;
+   ff << left << setw(12) << "\'pa_DGC\' " <<  right << setw(8) << pa->p.DGC << endl;
+   ff << left << setw(12) << "\'pa_GAR\' " <<  right << setw(8) << pa->p.GAR << endl;
+   ff << left << setw(12) << "\'pa_GAH\' " <<  right << setw(8) << pa->p.GAH << endl;
+   ff << left << setw(12) << "\'pa_IEPS\' " <<  right << setw(8) << pa->p.IEPS << endl;
+   ff << left << setw(12) << "\'pa_DKIN\' " <<  right << setw(8) << pa->p.DKIN << endl;
+   ff << left << setw(12) << "\'pa_PLLG\' " <<  right << setw(8) << pa->p.PLLG << endl;
+   ff << left << setw(12) << "\'pa_PE\' " <<  right << setw(8) << pa->p.PE << endl;
+   ff << left << setw(12) << "\'pa_DNS\' " <<  right << setw(8) << pa->p.DNS << endl;
 
-   u_splitpath( Path_, dir, name, ext );
-   Path_ = u_makepath( dir, name, "txt" );
+// const from multi
+   ff << left << setw(12) << "\'PAalp\' " <<  right << setw(8) << PAalp << endl;
+   ff << left << setw(12) << "\'PSigm\' " <<  right << setw(8) << PSigm << endl;
+   ff << left << setw(12) << "\'Lads\' " <<  right << setw(8) << pmp->Lads << endl;
+   ff << left << setw(12) << "\'FIa\' " <<  right << setw(8) << pmp->FIa << endl;
+   ff << left << setw(12) << "\'FIat\' " <<  right << setw(8) << pmp->FIat << endl;
+   ff << left << setw(12) << "\'sitNc\' " <<  right << setw(8) << pmp->sitNcat << endl;
+   ff << left << setw(12) << "\'sitNa\' " <<  right << setw(8) << pmp->sitNan << endl;
+   ff << left << setw(12) << "\'E\' " <<  right << setw(8) << pmp->E << endl;
+   ff << left << setw(12) << "\'PV\' " <<  right << setw(8) << pmp->PV << endl;
+   ff << left << setw(12) << "\'pKin\' " <<  right << setw(8) << pmp->PLIM << endl;
+   ff << left << setw(12) << "\'Ls\' " <<  right << setw(8) << pmp->Ls << endl;
+   ff << left << setw(12) << "\'LO\' " <<  right << setw(8) << pmp->LO << endl;
+   ff << left << setw(12) << "\'PG\' " <<  right << setw(8) << pmp->PG << endl;
+   ff << left << setw(12) << "\'PSOL\' " <<  right << setw(8) << pmp->PSOL << endl;
+// double from Multi
+   ff << left << setw(12) << "\'GWAT\' " <<  right << setw(8) << pmp->GWAT << endl;
+   ff << left << setw(12) << "\'EpsW\' " <<  right << setw(8) << EpsW << endl;
+   ff << left << setw(12) << "\'RoW\'  " <<  right << setw(8) << RoW << endl;
+   // outArray( ff << left << setw(12), "FitVar",  pmp->FitVar, 5 );
 
-  fstream ff(Path_.c_str(), ios::out );
-  ErrorIf( !ff.good() , Path_.c_str(), "Fileopen error");
-
- ff << pm.stkey << endl;
-
-   outArray( ff, "Short_Const",  &pm.N, 38 );
-   outArray( ff, "Double_Const",  &pm.TC, 55 );
-   outArray( ff, "EpsW", &EpsW, 1);
-   outArray( ff, "RoW", &RoW, 1);
-
-   //dynamic values
-
+//dynamic values
     // Part 1
-
     /* need  always to alloc vectors */
-   outArray( ff, "L1", pm.L1,  pm.FI);
-   outArray( ff, "muk", pm.muk, pm.FI);
-   outArray( ff, "mui", pm.mui, pm.N);
-   outArray( ff, "muj", pm.muj,  pm.L);
-   outArray( ff, "DUL", pm.DUL,  pm.L);
-   outArray( ff, "DLL", pm.DLL,  pm.L);
-   outArray( ff, "Vol", pm.Vol,  pm.L);
-   outArray( ff, "Pparc", pm.Pparc,  pm.L);
-   outArray( ff, "MM", pm.MM,  pm.L);
-   outArray( ff, "Awt", pm.Awt, pm.N);
-   outArray( ff, "A", pm.A,  pm.N*pm.L);
-   outArray( ff, "XFs", pm.XFs, pm.FI);
-   outArray( ff, "Falps", pm.Falps,  pm.FI);
-   outArray( ff, "G", pm.G,  pm.L);
-   outArray( ff, "G0", pm.G0,  pm.L);
-   outArray( ff, "lnGam", pm.lnGam,  pm.L);
-   outArray( ff, "lnGmo", pm.lnGmo,  pm.L);
-   outArray( ff, "B", pm.B,  pm.N);
-   outArray( ff, "U", pm.U,  pm.N);
-   outArray( ff, "U_r", pm.U_r,  pm.N);
-   outArray( ff, "C", pm.C,  pm.N);
-   outArray( ff, "XF", pm.XF,  pm.FI);
-   outArray( ff, "YF", pm.YF,  pm.FI);
-   outArray( ff, "Falp", pm.Falp,  pm.FI);
-   outArray( ff, "X", pm.X,  pm.L);
-   outArray( ff, "Y", pm.Y,  pm.L);
-   outArray( ff, "XY", pm.XY,  pm.L);
-   outArray( ff, "MU", pm.MU,  pm.L);
-   outArray( ff, "EMU", pm.EMU,  pm.L);
-   outArray( ff, "NMU", pm.NMU,  pm.L);
-   outArray( ff, "W", pm.W,  pm.L);
-   outArray( ff, "F", pm.F,  pm.L);
-   outArray( ff, "F0", pm.F0,  pm.L);
-   outArray( ff, "YOF", pm.YOF,  pm.FI);
-
-
-   outArray( ff, "lnGmM", pm.lnGmM,  pm.L);
-   outArray( ff, "GEX", pm.GEX,  pm.L);
-   outArray( ff, "FVOL", pm.FVOL,  pm.FI);
-   outArray( ff, "FWGT", pm.FWGT,  pm.FI);
-
-    if( pm.L > 0 )
-    {
-      outArray( ff, "Y_la", pm.Y_la,  pm.L);
-      outArray( ff, "Y_w", pm.Y_w,  pm.L);
-      outArray( ff, "Fx", pm.Fx,  pm.L);
-      outArray( ff, "Wx", pm.Wx,  pm.L);
-      outArray( ff, "VL", pm.VL, pm.L);
-      outArray( ff, "Gamma", pm.Gamma,  pm.L);
-      outArray( ff, "lnGmf", pm.lnGmf,  pm.L);
-//      outArray( ff, "D", pm.D,  pm.L);
-    }
+   outArray( ff, "Pparc", pmp->Pparc,  pmp->L);
+   outArray( ff, "G", pmp->G,  pmp->L);
+   outArray( ff, "GEX", pmp->GEX,  pmp->L);
+   outArray( ff, "lnGmf", pmp->lnGmf,  pmp->L);
+   outArray( ff, "YOF", pmp->YOF,  pmp->FI);
 
    // Part 2  not always required arrays
-    if( pm.FIs > 0 && pm.Ls > 0 )
+    if( pmp->FIs > 0 && pmp->Ls > 0 )
     {
-      outArray( ff, "BF", pm.BF,  pm.FIs*pm.N);
-      outArray( ff, "XFA", pm.XFA,  pm.FIs);
-      outArray( ff, "YFA", pm.YFA,  pm.FIs);
-      outArray( ff, "LsMod", pm.LsMod, pm.FIs);
-      outArray( ff, "LsMdc", pm.LsMdc, pm.FIs);
+      outArray( ff, "LsMod", pmp->LsMod, pmp->FIs);
+      outArray( ff, "LsMdc", pmp->LsMdc, pmp->FIs);
       int LsModSum = 0;
       int LsMdcSum = 0;
-      for(int i=0; i<pm.FIs; i++)
+      for(int i=0; i<pmp->FIs; i++)
       {
-        LsModSum += pm.LsMod[i];
-        LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
+        LsModSum += pmp->LsMod[i];
+        LsMdcSum += (pmp->LsMdc[i]*pmp->L1[i]);
       }
-      outArray( ff, "PMc", pm.PMc,  LsModSum);
-      outArray( ff, "DMc", pm.DMc,  LsMdcSum);
-
-      outArray( ff, "PUL", pm.PUL,  pm.FIs);
-      outArray( ff, "PLL", pm.PLL,  pm.FIs);
-
-    }
-
-    if( pm.LO > 1 )
-    {
-      outArray( ff, "Y_m", pm.Y_m,  pm.L);
-      outArray( ff, "IC_m", pm.IC_m,  pm.N);
-      outArray( ff, "IC_lm", pm.IC_lm,  pm.N);
-      outArray( ff, "IC_wm", pm.IC_wm,  pm.N);
+      outArray( ff, "PMc", pmp->PMc,  LsModSum);
+      outArray( ff, "DMc", pmp->DMc,  LsMdcSum);
     }
 
     /* dispersed and sorption phases */
-    if( PAalp != S_OFF )
-    {
-      outArray( ff, "Aalp", pm.Aalp, pm.FI);
-      outArray( ff, "Xr0h0", &pm.Xr0h0[0][0],  pm.FI*2);
-    }
-
-   if( PSigm != S_OFF )
-      outArray( ff, "Sigw", pm.Sigw,  pm.FI);
-
     if( PSigm != S_OFF )
-      outArray( ff, "Sigg", pm.Sigg,  pm.FI);
-
-    if( pm.E )
     {
-      outArray( ff, "EZ", pm.EZ,  pm.L);
-      outArray( ff, "Xcond", pm.Xcond,  pm.FI);
-      outArray( ff, "Xeps", pm.Xeps,  pm.FI);
+      outArray( ff, "Sigw", pmp->Sigw,  pmp->FI);
+      outArray( ff, "Sigg", pmp->Sigg,  pmp->FI);
     }
+    if( pmp->E )
+      outArray( ff, "EZ", pmp->EZ,  pmp->L);
 
     if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
     { /* ADSORPTION AND ION EXCHANGE */
-      outArray( ff, "Nfsp", &pm.Nfsp[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "MASDT", &pm.MASDT[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XcapA", &pm.XcapA[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XcapB", &pm.XcapB[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XcapD", &pm.XcapD[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XcapF", &pm.XcapF[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XdlA", &pm.XdlA[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XdlB", &pm.XdlB[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XdlD", &pm.XdlD[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XpsiA", &pm.XpsiA[0][0],  pm.FIs*pm.FIat);
-      outArray( ff, "XpsiB", &pm.XpsiB[0][0],  pm.FIs*pm.FIat);
-      outArray( ff, "XpsiD", &pm.XpsiD[0][0],  pm.FIs*pm.FIat);
-      outArray( ff, "XlamA", &pm.XlamA[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "Xetaf", &pm.Xetaf[0][0], pm.FIs*pm.FIat);
-      outArray( ff, "XetaA", &pm.XetaA[0][0],  pm.FIs*pm.FIat);
-      outArray( ff, "XetaB", &pm.XetaB[0][0],  pm.FIs*pm.FIat);
- outArray( ff, "XetaD", &pm.XetaD[0][0],  pm.FIs*pm.FIat);   // added 12.09.05 KD
-      outArray( ff, "XFTS", &pm.XFTS[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "Nfsp", &pmp->Nfsp[0][0], pmp->FIs*pmp->FIat);
+      outArray( ff, "MASDT", &pmp->MASDT[0][0], pmp->FIs*pmp->FIat);
+      outArray( ff, "c1", &pmp->XcapA[0][0], pmp->FIs*pmp->FIat);
+      outArray( ff, "c2", &pmp->XcapB[0][0], pmp->FIs*pmp->FIat);
+      outArray( ff, "c3", &pmp->XcapF[0][0], pmp->FIs*pmp->FIat);
+      outArray( ff, "pCh", &pmp->Xetaf[0][0], pmp->FIs*pmp->FIat);
 
-      outArray( ff, "SATX", &pm.SATX[0][0], pm.Lads*4);
+      outArray( ff, "SATX", &pmp->SATX[0][0], pmp->Lads*4);
 //      outArray( ff, "MASDJ", pm.MASDJ, pm.Ls);
-      outArray( ff, "MASDJ", &pm.MASDJ[0][0], pm.Lads*DFCN);
-      outArray( ff, "lnSAC", &pm.lnSAC[0][0],  pm.Lads*4);
-      outArray( ff, "D", &pm.D[0][0], MST*MST);
+      outArray( ff, "MASDJ", &pmp->MASDJ[0][0], pmp->Lads*DFCN);
     }
 
-    if( pm.PG > 0 )
-    {
-      outArray( ff, "Fug", pm.Fug, pm.PG);
-      outArray( ff, "Fug_l", pm.Fug_l, pm.PG);
-      outArray( ff, "Ppg_l", pm.Ppg_l, pm.PG);
-    }
+ // Part 3
 
-    // Part 3
-
-    if( pm.Ls > 1 && pm.FIs > 0 )
-    {
-      outArray( ff, "Wb", pm.Wb, pm.Ls);
-      outArray( ff, "Wabs", pm.Wabs, pm.Ls);
-      outArray( ff, "Rion", pm.Rion, pm.Ls);
-
-      outArray( ff, "Qp", pm.Qp,  pm.FIs*QPSIZE);
-      outArray( ff, "Qd", pm.Qd,  pm.FIs*QDSIZE);
-
-    }
-
-//  Added 16.11.2004 by Sveta
    if( pm.sitNcat*pm.sitNcat )
-     outArray( ff, "sitE", pm.sitE, pm.sitNcat*pm.sitNan );
+     outArray( ff, "sitE", pmp->sitE, pmp->sitNcat*pmp->sitNan );
    if( pm.sitNcat )
-     outArray( ff, "sitXcat", pm.sitXcat, pm.sitNcat );
+     outArray( ff, "sitXc", pmp->sitXcat, pmp->sitNcat );
    if( pm.sitNan )
-      outArray( ff, "sitXan", pm.sitXan, pm.sitNan );
+      outArray( ff, "sitXa", pmp->sitXan, pmp->sitNan );
 
-/*   if(pm.R)
-   outArray( ff, "R", pm.R,  pm.N*(pm.N+1), pm.N+1);
-   if(pm.R1)
-   outArray( ff, "R1", pm.R1,  pm.N*(pm.N+1), pm.N+1);
-*/
+// character
+
+ outArray( ff, "RLC", pmp->RLC, pmp->L, 1 );
+ outArray( ff, "RSC", pmp->RSC, pmp->L, 1 );
+ if( pm.FIs > 0 && pm.Ls > 0 )
+   outArray( ff, "sMod", pmp->sMod[0], pmp->FIs, 6 );
+ if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
+ {
+   outArray( ff, "SCM", pmp->SCM[0], pmp->FIs, pmp->FIat );
+   outArray( ff, "SACT", pmp->SATT, pmp->Lads, 1 );
+   outArray( ff, "DCads", pmp->DCC3, pmp->Lads, 1 );
+ }
 }
 
 //---------------------------------------------------------//
@@ -1217,6 +1164,218 @@ if( pm.D ) delete[] pm.D;
     if( pm.sitXan )    delete[] pm.sitXan;
 }
 
-
 #endif
+
+void TMulti::to_text_file( gstring& path )
+{
+    //static values
+   char PAalp;
+   char PSigm;
+   float EpsW;
+   float RoW;
+
+
+#ifndef IPMGEMPLUGIN
+   PAalp = syp->PAalp;
+   PSigm = syp->PSigm;
+   EpsW = TProfil::pm->tpp->EpsW;
+   RoW = TProfil::pm->tpp->RoW;
+#else
+   PAalp = PAalp_;
+   PSigm = PSigm_;
+   EpsW = EpsW_;
+   RoW = RoW_;
+#endif
+
+   gstring Path_ = path;
+   gstring dir;
+   gstring name;
+   gstring ext;
+
+   u_splitpath( Path_, dir, name, ext );
+   Path_ = u_makepath( dir, name, "txt" );
+
+  fstream ff(Path_.c_str(), ios::out );
+  ErrorIf( !ff.good() , Path_.c_str(), "Fileopen error");
+
+ ff << pm.stkey << endl;
+
+   outArray( ff, "Short_Const",  &pm.N, 38 );
+   outArray( ff, "Double_Const",  &pm.TC, 55 );
+   outArray( ff, "EpsW", &EpsW, 1);
+   outArray( ff, "RoW", &RoW, 1);
+
+   //dynamic values
+
+    // Part 1
+
+    /* need  always to alloc vectors */
+   outArray( ff, "L1", pm.L1,  pm.FI);
+   outArray( ff, "muk", pm.muk, pm.FI);
+   outArray( ff, "mui", pm.mui, pm.N);
+   outArray( ff, "muj", pm.muj,  pm.L);
+   outArray( ff, "DUL", pm.DUL,  pm.L);
+   outArray( ff, "DLL", pm.DLL,  pm.L);
+   outArray( ff, "Vol", pm.Vol,  pm.L);
+   outArray( ff, "Pparc", pm.Pparc,  pm.L);
+   outArray( ff, "MM", pm.MM,  pm.L);
+   outArray( ff, "Awt", pm.Awt, pm.N);
+   outArray( ff, "A", pm.A,  pm.N*pm.L);
+   outArray( ff, "XFs", pm.XFs, pm.FI);
+   outArray( ff, "Falps", pm.Falps,  pm.FI);
+   outArray( ff, "G", pm.G,  pm.L);
+   outArray( ff, "G0", pm.G0,  pm.L);
+   outArray( ff, "lnGam", pm.lnGam,  pm.L);
+   outArray( ff, "lnGmo", pm.lnGmo,  pm.L);
+   outArray( ff, "B", pm.B,  pm.N);
+   outArray( ff, "U", pm.U,  pm.N);
+   outArray( ff, "U_r", pm.U_r,  pm.N);
+   outArray( ff, "C", pm.C,  pm.N);
+   outArray( ff, "XF", pm.XF,  pm.FI);
+   outArray( ff, "YF", pm.YF,  pm.FI);
+   outArray( ff, "Falp", pm.Falp,  pm.FI);
+   outArray( ff, "X", pm.X,  pm.L);
+   outArray( ff, "Y", pm.Y,  pm.L);
+   outArray( ff, "XY", pm.XY,  pm.L);
+   outArray( ff, "MU", pm.MU,  pm.L);
+   outArray( ff, "EMU", pm.EMU,  pm.L);
+   outArray( ff, "NMU", pm.NMU,  pm.L);
+   outArray( ff, "W", pm.W,  pm.L);
+   outArray( ff, "F", pm.F,  pm.L);
+   outArray( ff, "F0", pm.F0,  pm.L);
+   outArray( ff, "YOF", pm.YOF,  pm.FI);
+
+
+   outArray( ff, "lnGmM", pm.lnGmM,  pm.L);
+   outArray( ff, "GEX", pm.GEX,  pm.L);
+   outArray( ff, "FVOL", pm.FVOL,  pm.FI);
+   outArray( ff, "FWGT", pm.FWGT,  pm.FI);
+
+    if( pm.L > 0 )
+    {
+      outArray( ff, "Y_la", pm.Y_la,  pm.L);
+      outArray( ff, "Y_w", pm.Y_w,  pm.L);
+      outArray( ff, "Fx", pm.Fx,  pm.L);
+      outArray( ff, "Wx", pm.Wx,  pm.L);
+      outArray( ff, "VL", pm.VL, pm.L);
+      outArray( ff, "Gamma", pm.Gamma,  pm.L);
+      outArray( ff, "lnGmf", pm.lnGmf,  pm.L);
+//      outArray( ff, "D", pm.D,  pm.L);
+    }
+
+   // Part 2  not always required arrays
+    if( pm.FIs > 0 && pm.Ls > 0 )
+    {
+      outArray( ff, "BF", pm.BF,  pm.FIs*pm.N);
+      outArray( ff, "XFA", pm.XFA,  pm.FIs);
+      outArray( ff, "YFA", pm.YFA,  pm.FIs);
+      outArray( ff, "LsMod", pm.LsMod, pm.FIs);
+      outArray( ff, "LsMdc", pm.LsMdc, pm.FIs);
+      int LsModSum = 0;
+      int LsMdcSum = 0;
+      for(int i=0; i<pm.FIs; i++)
+      {
+        LsModSum += pm.LsMod[i];
+        LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
+      }
+      outArray( ff, "PMc", pm.PMc,  LsModSum);
+      outArray( ff, "DMc", pm.DMc,  LsMdcSum);
+
+      outArray( ff, "PUL", pm.PUL,  pm.FIs);
+      outArray( ff, "PLL", pm.PLL,  pm.FIs);
+
+    }
+
+    if( pm.LO > 1 )
+    {
+      outArray( ff, "Y_m", pm.Y_m,  pm.L);
+      outArray( ff, "IC_m", pm.IC_m,  pm.N);
+      outArray( ff, "IC_lm", pm.IC_lm,  pm.N);
+      outArray( ff, "IC_wm", pm.IC_wm,  pm.N);
+    }
+
+    /* dispersed and sorption phases */
+    if( PAalp != S_OFF )
+    {
+      outArray( ff, "Aalp", pm.Aalp, pm.FI);
+      outArray( ff, "Xr0h0", &pm.Xr0h0[0][0],  pm.FI*2);
+    }
+
+   if( PSigm != S_OFF )
+      outArray( ff, "Sigw", pm.Sigw,  pm.FI);
+
+    if( PSigm != S_OFF )
+      outArray( ff, "Sigg", pm.Sigg,  pm.FI);
+
+    if( pm.E )
+    {
+      outArray( ff, "EZ", pm.EZ,  pm.L);
+      outArray( ff, "Xcond", pm.Xcond,  pm.FI);
+      outArray( ff, "Xeps", pm.Xeps,  pm.FI);
+    }
+
+    if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
+    { /* ADSORPTION AND ION EXCHANGE */
+      outArray( ff, "Nfsp", &pm.Nfsp[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "MASDT", &pm.MASDT[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XcapA", &pm.XcapA[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XcapB", &pm.XcapB[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XcapD", &pm.XcapD[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XcapF", &pm.XcapF[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XdlA", &pm.XdlA[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XdlB", &pm.XdlB[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XdlD", &pm.XdlD[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XpsiA", &pm.XpsiA[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XpsiB", &pm.XpsiB[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XpsiD", &pm.XpsiD[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XlamA", &pm.XlamA[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "Xetaf", &pm.Xetaf[0][0], pm.FIs*pm.FIat);
+      outArray( ff, "XetaA", &pm.XetaA[0][0],  pm.FIs*pm.FIat);
+      outArray( ff, "XetaB", &pm.XetaB[0][0],  pm.FIs*pm.FIat);
+ outArray( ff, "XetaD", &pm.XetaD[0][0],  pm.FIs*pm.FIat);   // added 12.09.05 KD
+      outArray( ff, "XFTS", &pm.XFTS[0][0],  pm.FIs*pm.FIat);
+
+      outArray( ff, "SATX", &pm.SATX[0][0], pm.Lads*4);
+//      outArray( ff, "MASDJ", pm.MASDJ, pm.Ls);
+      outArray( ff, "MASDJ", &pm.MASDJ[0][0], pm.Lads*DFCN);
+      outArray( ff, "lnSAC", &pm.lnSAC[0][0],  pm.Lads*4);
+      outArray( ff, "D", &pm.D[0][0], MST*MST);
+    }
+
+    if( pm.PG > 0 )
+    {
+      outArray( ff, "Fug", pm.Fug, pm.PG);
+      outArray( ff, "Fug_l", pm.Fug_l, pm.PG);
+      outArray( ff, "Ppg_l", pm.Ppg_l, pm.PG);
+    }
+
+    // Part 3
+
+    if( pm.Ls > 1 && pm.FIs > 0 )
+    {
+      outArray( ff, "Wb", pm.Wb, pm.Ls);
+      outArray( ff, "Wabs", pm.Wabs, pm.Ls);
+      outArray( ff, "Rion", pm.Rion, pm.Ls);
+
+      outArray( ff, "Qp", pm.Qp,  pm.FIs*QPSIZE);
+      outArray( ff, "Qd", pm.Qd,  pm.FIs*QDSIZE);
+
+    }
+
+//  Added 16.11.2004 by Sveta
+   if( pm.sitNcat*pm.sitNcat )
+     outArray( ff, "sitE", pm.sitE, pm.sitNcat*pm.sitNan );
+   if( pm.sitNcat )
+     outArray( ff, "sitXcat", pm.sitXcat, pm.sitNcat );
+   if( pm.sitNan )
+      outArray( ff, "sitXan", pm.sitXan, pm.sitNan );
+
+/*   if(pm.R)
+   outArray( ff, "R", pm.R,  pm.N*(pm.N+1), pm.N+1);
+   if(pm.R1)
+   outArray( ff, "R1", pm.R1,  pm.N*(pm.N+1), pm.N+1);
+*/
+}
+
+
 

@@ -25,7 +25,7 @@
 #include <math.h>
 #include "m_param.h"
 #include "gdatastream.h"
-#include "nodearray.h"
+#include "node.h"
 
 TProfil* TProfil::pm;
 
