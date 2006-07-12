@@ -1,4 +1,4 @@
-#qmake -spec win32-borland  gemsipm2k.pro > a
+#qmake -spec  win32-borland gemsipm2k.pro > a
 #qmake -spec win32-msvc.net gemsipm2k.pro > a
 
 TEMPLATE	= app
