@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: node.cpp 684 2005-11-23 13:17:15Z gems $
 //
-// C/C++ interface between GEM IPM and FMT node array
+// C/C++  interface between GEM IPM and FMT node array
 // Working whith DATACH and DATABR structures
 //
 // Copyright (C) 2004-2005 S.Dmytriyeva, D.Kulik

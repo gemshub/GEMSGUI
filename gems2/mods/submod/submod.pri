@@ -1,5 +1,5 @@
 
-#        CONFIG    -=qt
+#         CONFIG    -=qt
 
         HEADERS	  += $$SUBMOD_H/databr.h \
                      $$SUBMOD_H/datach.h  \

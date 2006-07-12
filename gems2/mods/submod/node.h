@@ -4,7 +4,7 @@
 // Works with DATACH and work DATABR structures
 // without using the nodearray class
 //
-// Written by S.Dmytriyeva, D.Kulik
+// Written by S.Dmytriyeva,  D.Kulik
 // Copyright (C) 2006 S.Dmytriyeva, D.Kulik
 //
 // This file is part of GEMIPM2K and GEMS-PSI codes for
