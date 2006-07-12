@@ -160,8 +160,9 @@ int  TNode::GEM_init( const char* ipmfiles_lst_name,
 #else
       size_t npos = gstring::npos;
 #endif
-      bool binary_f = true;
-      gstring chbr_in = ipmfiles_lst_name;
+     bool binary_mult = true;
+     bool binary_f = true;
+     gstring chbr_in = ipmfiles_lst_name;
 
 // Get path
       size_t pos = chbr_in.rfind("/");
@@ -182,33 +183,18 @@ int  TNode::GEM_init( const char* ipmfiles_lst_name,
       if( pos != /*gstring::*/npos )
       {
          if( datachbr_file[pos+1] == 't' )
-            binary_f = false;
+            binary_mult = false;
          f_getline( f_chbr, datachbr_file, ' ');
       }
 
     // Reading structure MULTI (GEM IPM work structure)
     gstring multu_in = Path + datachbr_file;
-    if( true /*binary_f*/ )
-     {
-       GemDataStream f_m(multu_in, ios::in|ios::binary);
-#ifdef IPMGEMPLUGIN
-        profil->readMulti(f_m);
-#else
-        TProfil::pm->readMulti(f_m);
-#endif
-      }
-
-// output multy
-//      gstring strr = "out_multi.ipm";
-//      GemDataStream o_m( strr, ios::out|ios::binary);
-//      profil->outMulti(o_m, strr );
 
 // Reading name of dataCH file and names of dataBR files
 //  -t/-b  "<dataCH file name>" ,"<dataBR file1 name>", ..., "<dataBR fileN name>"
       f_getline( f_chbr, datachbr_file, ' ');
 
 //Testing flag "-t" or "-b" (by default "-b")   // use bynary or text files as input
-      binary_f = true;
       pos = datachbr_file.find( '-');
       if( pos != /*gstring::*/npos )
       {
@@ -278,6 +264,31 @@ int  TNode::GEM_init( const char* ipmfiles_lst_name,
 
     ErrorIf( i==0, datachbr_file.c_str(), "GEM_init() error: No dataBR files read!" );
     checkNodeArray( i, nodeTypes, datachbr_file.c_str()  );
+
+// Reading structure MULTI (GEM IPM work structure)
+if( binary_mult )
+ {
+   GemDataStream f_m(multu_in, ios::in|ios::binary);
+#ifdef IPMGEMPLUGIN
+    profil->readMulti(f_m);
+#else
+    TProfil::pm->readMulti(f_m);
+#endif
+  }
+  else
+  {
+#ifdef IPMGEMPLUGIN
+        profil->readMulti(multu_in.c_str());
+#endif
+  }
+// output multy
+      gstring strr = "out_multi.ipm";
+      GemDataStream o_m( strr, ios::out|ios::binary);
+#ifdef IPMGEMPLUGIN
+          profil->outMulti(o_m, strr );
+#else
+          TProfil::pm->outMulti(o_m, strr );
+#endif
 
     return 0;
 
@@ -945,101 +956,6 @@ void TNode::datach_from_file( GemDataStream& ff )
 
 }
 
-void TNode::datach_to_text_file( fstream& ff )
-{
-// fstream ff("DataCH.out", ios::out );
-// ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
-
-  outArray( ff, "sCon",  &CSD->nIC, 14 );
-  outArray( ff, "dCon",  &CSD->Ttol, 4 );
-
-//dynamic data
-   outArray( ff, "nDCinPH", CSD->nDCinPH, CSD->nPH);
-//   if( CSD->nICb >0 )
-   outArray( ff, "xIC", CSD->xIC, CSD->nICb);
-   outArray( ff, "xDC", CSD->xDC, CSD->nDCb);
-   outArray( ff, "xPH", CSD->xPH, CSD->nPHb);
-
-   outArray( ff, "A", CSD->A, CSD->nDC*CSD->nIC, CSD->nIC );
-   outArray( ff, "ICmm", CSD->ICmm, CSD->nIC);
-   outArray( ff, "DCmm", CSD->DCmm, CSD->nDC);
-   outArray( ff, "DD", CSD->DD, CSD->nDC);
-
-   outArray( ff, "Tval", CSD->Tval, CSD->nTp );
-   outArray( ff, "Pval", CSD->Pval, CSD->nPp );
-
-   outArray( ff, "roW", CSD->roW, CSD->nPp*CSD->nTp );
-   outArray( ff, "epsW", CSD->epsW,  CSD->nPp*CSD->nTp );
-   outArray( ff, "G0", CSD->G0, CSD->nDC*CSD->nPp*CSD->nTp,
-                                    CSD->nPp*CSD->nTp );
-   outArray( ff, "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp,
-                                    CSD->nPp*CSD->nTp );
-   outArray( ff, "H0", CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp,
-                                     CSD->nPp*CSD->nTp );
-   outArray( ff, "Cp0", CSD->Cp0,CSD->nDC*CSD->nPp*CSD->nTp,
-                                     CSD->nPp*CSD->nTp  );
-
-   if( CSD->nAalp >0 )
-      outArray( ff, "Aalp", CSD->Aalp, CSD->nPH);
-
-   outArray( ff, "ICNL", CSD->ICNL[0], CSD->nIC, MaxICN );
-   outArray( ff, "DCNL", CSD->DCNL[0], CSD->nDC, MaxDCN );
-   outArray( ff, "PHNL", CSD->PHNL[0], CSD->nPH, MaxPHN );
-
-   outArray( ff, "ccIC", CSD->ccIC, CSD->nIC, 1 );
-   outArray( ff, "ccDC", CSD->ccDC, CSD->nDC, 1 );
-   outArray( ff, "ccDCW", CSD->ccDCW, CSD->nDC, 1 );
-   outArray( ff, "ccPH", CSD->ccPH, CSD->nPH, 1 );
-
-}
-
-// Reading dataCH structure from text file
-void TNode::datach_from_text_file(fstream& ff)
-{
-// fstream ff("DataCH.out", ios::in );
-// ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
-
-  inArray( ff, "sCon",  &CSD->nIC, 14 );
-  inArray( ff, "dCon",  &CSD->Ttol, 4 );
-
-  datach_realloc();
-  databr_realloc();
-
-//dynamic data
-   inArray( ff, "nDCinPH", CSD->nDCinPH, CSD->nPH);
-//   if( CSD->nICb >0 )
-   inArray( ff, "xIC", CSD->xIC, CSD->nICb);
-   inArray( ff, "xDC", CSD->xDC, CSD->nDCb);
-   inArray( ff, "xPH", CSD->xPH, CSD->nPHb);
-
-   inArray( ff, "A", CSD->A, CSD->nDC*CSD->nIC );
-   inArray( ff, "ICmm", CSD->ICmm, CSD->nIC);
-   inArray( ff, "DCmm", CSD->DCmm, CSD->nDC);
-   inArray( ff, "DD", CSD->DD, CSD->nDC);
-
-   inArray( ff, "Tval", CSD->Tval, CSD->nTp );
-   inArray( ff, "Pval", CSD->Pval, CSD->nPp );
-
-   inArray( ff, "roW", CSD->roW,   CSD->nPp*CSD->nTp);
-   inArray( ff, "epsW", CSD->epsW, CSD->nPp*CSD->nTp);
-   inArray( ff, "G0", CSD->G0,  CSD->nDC*CSD->nPp*CSD->nTp);
-   inArray( ff, "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp);
-   inArray( ff, "H0", CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp);
-   inArray( ff, "Cp0", CSD->Cp0,CSD->nDC*CSD->nPp*CSD->nTp);
-
-   if( CSD->nAalp >0 )
-      inArray( ff, "Aalp", CSD->Aalp, CSD->nPH);
-
-   inArray( ff, "ICNL", CSD->ICNL[0], CSD->nIC, MaxICN );
-   inArray( ff, "DCNL", CSD->DCNL[0], CSD->nDC, MaxDCN );
-   inArray( ff, "PHNL", CSD->PHNL[0], CSD->nPH, MaxPHN );
-
-   inArray( ff, "ccIC", CSD->ccIC, CSD->nIC, 1 );
-   inArray( ff, "ccDC", CSD->ccDC, CSD->nDC, 1 );
-   inArray( ff, "ccDCW", CSD->ccDCW, CSD->nDC, 1 );
-   inArray( ff, "ccPH", CSD->ccPH, CSD->nPH, 1 );
-}
-
 // allocate DataCH structure
 void TNode::datach_realloc()
 {
@@ -1246,57 +1162,6 @@ void TNode::databr_from_file( GemDataStream& ff )
    CNode->dRes1 = 0;
    CNode->dRes2 = 0;
 }
-
-
-void TNode::databr_to_text_file( fstream& ff )
-{
-// fstream ff("DataBR.out", ios::out );
-// ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
-
-  outArray( ff, "sCon",  &CNode->NodeHandle, 6 );
-  outArray( ff, "dCon",  &CNode->T, 36 );
-
-  outArray( ff, "bIC",  CNode->bIC, CSD->nICb );
-  outArray( ff, "rMB",  CNode->rMB, CSD->nICb );
-  outArray( ff, "uIC",  CNode->uIC, CSD->nICb );
-
-  outArray( ff, "xDC",  CNode->xDC, CSD->nDCb );
-  outArray( ff, "gam",  CNode->gam, CSD->nDCb );
-  outArray( ff, "dul",  CNode->dul, CSD->nDCb );
-  outArray( ff, "dll",  CNode->dll, CSD->nDCb );
-
-  outArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
-  outArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
-  outArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
-  outArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
-  outArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
-}
-
-// Reading work dataBR structure from text file
-void TNode::databr_from_text_file( fstream& ff )
-{
-// fstream ff("DataBR.out", ios::out );
-// ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
-
-  inArray( ff, "sCon",  &CNode->NodeHandle, 6 );
-  inArray( ff, "dCon",  &CNode->T, 36 );
-
-  inArray( ff, "bIC",  CNode->bIC, CSD->nICb );
-  inArray( ff, "rMB",  CNode->rMB, CSD->nICb );
-  inArray( ff, "uIC",  CNode->uIC, CSD->nICb );
-
-  inArray( ff, "xDC",  CNode->xDC, CSD->nDCb );
-  inArray( ff, "gam",  CNode->gam, CSD->nDCb );
-  inArray( ff, "dul",  CNode->dul, CSD->nDCb );
-  inArray( ff, "dll",  CNode->dll, CSD->nDCb );
-
-  inArray( ff, "xPH",  CNode->xPH, CSD->nPHb );
-  inArray( ff, "vPS",  CNode->vPS, CSD->nPSb );
-  inArray( ff, "mPS",  CNode->mPS, CSD->nPSb );
-  inArray( ff, "bPS",  CNode->bPS, CSD->nPSb*CSD->nICb );
-  inArray( ff, "xPA",  CNode->xPA, CSD->nPSb );
-}
-
 
 // allocate DataBR structure
 void TNode::databr_realloc()

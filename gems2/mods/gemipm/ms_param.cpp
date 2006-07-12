@@ -108,6 +108,12 @@ void TProfil::readMulti( GemDataStream& ff )
       multi->from_file( ff );
 }
 
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::readMulti( const char* path )
+{
+      multi->from_text_file_gemipm( path);
+}
+
 /*-----------------------------------------------------------------*/
 // Interpolation over tabulated values (array y) using the Lagrange method
 // for extracting thermodynamic data in gemipm2k or in gem2mt

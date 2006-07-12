@@ -67,17 +67,19 @@ OBJECTS_DIR       = obj
                      $$NUMERICS_H/tnt.h \
                      $$NUMERICS_H/jama_cholesky.h \
                      $$NUMERICS_H/jama_lu.h \
-                     $$NUMERICS_H/num_methods.h 
+                     $$NUMERICS_H/num_methods.h
 
         SOURCES	  +=  $$LIBS_CPP/gstring.cpp  \
                       $$LIBS_CPP/gdatastream.cpp  \
-                    $$NUMERICS_CPP/num_methods.cpp \ 
+                    $$NUMERICS_CPP/num_methods.cpp \
                     $$MODS_CPP/s_fgl.cpp \
                     $$MODS_CPP/m_gem2mtt.cpp \
                     $$SUBMOD_CPP/nodearray.cpp \
                     $$SUBMOD_CPP/node.cpp \
+                    $$SUBMOD_CPP/node_format.cpp \
                     $$SUBMOD_CPP/particlearray.cpp \
                     $$SUBMOD_CPP/ms_multi_file.cpp \
+                    $$SUBMOD_CPP/ms_multi_format.cpp \
                     $$SUBMOD_CPP/ipm_chemical.cpp \
                     $$SUBMOD_CPP/ipm_chemical2.cpp \
                     $$SUBMOD_CPP/ipm_chemical3.cpp \

@@ -91,6 +91,7 @@ public:
 
    void outMulti( GemDataStream& ff, gstring& path  );
    void readMulti( GemDataStream& ff );
+   void readMulti( const char* path );
    void calcMulti();
 
 };

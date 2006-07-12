@@ -76,8 +76,10 @@ OBJECTS_DIR       = obj
                     $$MODS_CPP/m_gem2mtt.cpp \
                     $$SUBMOD_CPP/nodearray.cpp \
                     $$SUBMOD_CPP/node.cpp \
+                    $$SUBMOD_CPP/node_format.cpp \
                     $$SUBMOD_CPP/particlearray.cpp \
                     $$SUBMOD_CPP/ms_multi_file.cpp \
+                    $$SUBMOD_CPP/ms_multi_format.cpp \
                     $$SUBMOD_CPP/ipm_chemical.cpp \
                     $$SUBMOD_CPP/ipm_chemical2.cpp \
                     $$SUBMOD_CPP/ipm_chemical3.cpp \
