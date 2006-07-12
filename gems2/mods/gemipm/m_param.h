@@ -66,7 +66,7 @@ struct BASE_PARAM
 struct SPP_SETTING
 {   // Base Parametres of SP
     char ver[TDBVERSION]; // Version & Copyright 64
-    BASE_PARAM p; // Настройки режимов счета (задаются пользователем))
+    BASE_PARAM p; // 
     void write(ostream& oss);
 };
 
