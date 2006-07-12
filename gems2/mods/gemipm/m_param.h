@@ -99,6 +99,7 @@ public:
 
 /* Work DC classifier codes  pm->DCCW */
 enum SolDCodes {
+    
     DC_SINGLE = 'U',        /* This DC is a single-component phase */
     DC_SYMMETRIC = 'I',     /* This DC is in symmetric solution phase */
     DC_ASYM_SPECIES = 'S', /*This is DC-solute(sorbate) in asymmetric phase */
