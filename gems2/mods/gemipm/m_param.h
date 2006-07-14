@@ -18,17 +18,18 @@ extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
 //
 
 struct BASE_PARAM
-{ // Flags and thersholds for numeric modules
+{ // Flags and thresholds for numeric modules
     short PC,    // "Mode of Selekt2() subroutine operation"
     PD,// Mode of DHH():0-invoke,1-at FIA only,2-last IPM it. 3-every IPM it.
-    PRD,//Mode GammaCalc(): 0-inactive, 1-FIA only, 2-SELEKT2 only 3-every IPM it.
+    PRD,//Positive: mode GammaCalc(): 0-inactive, 1-FIA only, 2-SELEKT2 only 3-every IPM iteration
+         // Negative: number of additional EFD-IPM improvement loops (-1 to -30 )
     PSM,//  Mode of setting FIA Gamma in phases: 0-off; 1 - set activ.coeff. GAN
-    DP, //  Max number of EnterFeasibleDomain() iterations { 100 }
-    DW, // IPM-2 precision mode: 0- disable 1-enable
-    DT, // Restore x from dual solution {0 1}( temporary instead FGL )
+    DP, //  Max number of EnterFeasibleDomain() iterations { default 144 }
+    DW, // IPM-2 precision mode: 0- disable >=1  - enable (number of loops, default 15)
+    DT, // Exponent for restoring x_j from dual solution {-5 to +2, default -3}
     PLLG, // IPM view debug time on Progress Dialog screen from (sec) or 0
     PE, // Include electroneutrality condition? { 0 1 }
-    IIM // Maximum number of iterations in main IPM { 200 }
+    IIM // Maximum number of iterations in the main IPM algorithm { 500 }
     ;
     double DG,   // Precision of LEM IPM solver (Jordan) { 1e-15 }
     DHB, // Precision of mass balance deviations at EFD { 1e-8 }
@@ -37,15 +38,15 @@ struct BASE_PARAM
     DF,   // Threshold of Karpov' criteria for phase stability { 0.01 }
     DFM,  // Threshold for Karpov' criteria for insertion of phases { -0.1 }
     DFYw, // N of moles of H2O-solvent for phase insertion { 2e-5 }
-    DFYaq,// N of moles of aqueous DC for phase insertion { 1e-7 }
+    DFYaq,// N of moles of aqueous DC for phase insertion { 1e-6 }
     DFYid,// N of moles of DC in ideal solution for phase insertion { 1e-6 }
-    DFYr, // Cutoff moles of major DC in non-ideal solution { 1e-5 }
-    DFYh, // Cutoff moles of junior DC in non-ideal solution { 1e-8 }
+    DFYr, // Cutoff moles of major DC in non-ideal solution { 1e-6 }
+    DFYh, // Cutoff moles of junior DC in non-ideal solution { 1e-6 }
     DFYc, // N of moles for insertion of single-component phase { 1e-6 }
-    DFYs, // Moles of DC to boost phases-solutions (SELEKT2) { 1e-12 }
+    DFYs, // Moles of DC to boost phases-solutions (SELEKT2) { 1e-6 }
     DB,   // Cutoff number of moles of IC in the system 1e-9
     AG,   //Smoothing parameter for free energy increments on iterations {0.7}
-    DGC,  // Power to raise Pa_AG on steps of tinkle-supressor { 0.07 }
+    DGC,  // Power to raise Pa_AG on steps of smoothing { 0.07 }
     GAR,  // Initial activity coefficient of major DC in a phase (FIA) { 1 }
     GAH,  // Initial activity coefficient of minor DC in phase (FIA) { 1000 }
     GAS,  // IPM-2 precision factor (DHB[i] / b[i]) { 1e-3 }
