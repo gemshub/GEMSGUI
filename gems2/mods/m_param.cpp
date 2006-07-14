@@ -350,7 +350,8 @@ void TProfil::outMulti( )
    na->packDataBr();
    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
 // make  all files
-   na->PutGEM2MTFiles( window(), 1, true, true );
+//   na->PutGEM2MTFiles( window(), 1, true, true );
+na->PutGEM2MTFiles( window(), 1, true, false );
    delete na;
 }
 
