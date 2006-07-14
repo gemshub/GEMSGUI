@@ -582,6 +582,7 @@ void TGEM2MT::outMulti()
      // Save databr
      na->packDataBr();
      na->MoveWorkNodeToArray( mtp->kv, mtp->nC, na->pNodT0() );
+     na->pNodT0()[mtp->kv]->NodeTypeHY = mtp->DiCp[mtp->kv][1];
 
      mt_next();      // Generate work values for the next EqStat rkey
 
@@ -882,8 +883,8 @@ void  TGEM2MT::LinkNode0(  int nNode )
      aObj[o_n0_uic].SetDim( CH->nICb, 1 );
      aObj[o_n0_dr1].SetPtr( BR->dRes1 );
      aObj[o_n0_dr1].SetDim( 0, 1 );
-     aObj[o_n0_dr2].SetPtr( BR->dRes2 );
-     aObj[o_n0_dr2].SetDim( 0, 1 );
+     aObj[o_n0_dr2].SetPtr( BR->aPH );
+     aObj[o_n0_dr2].SetDim( CH->nPHb, 1 );
   }
   else
   {
@@ -964,8 +965,8 @@ void  TGEM2MT::LinkNode1(  int nNode )
      aObj[o_n1_uic].SetDim( CH->nICb, 1 );
      aObj[o_n1_dr1].SetPtr( BR->dRes1 );
      aObj[o_n1_dr1].SetDim( 0, 1 );
-     aObj[o_n1_dr2].SetPtr( BR->dRes2 );
-     aObj[o_n1_dr2].SetDim( 0, 1 );
+     aObj[o_n1_dr2].SetPtr( BR->aPH );
+     aObj[o_n1_dr2].SetDim( CH->nPHb, 1 );
   }
   else
   {
@@ -1031,9 +1032,9 @@ void  TGEM2MT::LinkCSD(  int nNode )
      aObj[o_ch_dcmm].SetPtr( CH->DCmm );
      aObj[o_ch_dcmm].SetDim( CH->nDC, 1 );
      aObj[o_ch_dd].SetPtr( CH->DD );
-     aObj[o_ch_dd].SetDim( CH->nDC, 1 );
-     aObj[o_ch_aalp].SetPtr( CH->Aalp );
-     aObj[o_ch_aalp].SetDim( CH->nPH, 1 );
+     aObj[o_ch_dd].SetDim( CH->nDCs, 1 );
+//     aObj[o_ch_aalp].SetPtr( CH->Aalp );
+//     aObj[o_ch_aalp].SetDim( CH->nPH, 1 );
   }
   else
   {

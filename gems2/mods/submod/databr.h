@@ -1,22 +1,22 @@
 //-------------------------------------------------------------------
-// DATABRIDGE - defines the structure of node-dependent data for 
+// DATABRIDGE - defines the structure of node-dependent data for
 // exchange between the coupled GEM IPM and FMT code parts.
-// Requires DATACH.H 
-// Used in Tnode and Tnodearray classes 
+// Requires DATACH.H
+// Used in Tnode and Tnodearray classes
 //
 //      CH: chemical structure in GEM IPM
 //      FMT: fluid mass transport
 //
 // Written by D.Kulik, W.Pfingsten, F.Enzmann and S.Dmytriyeva
-// Copyright (C) 2003-2006 
+// Copyright (C) 2003-2006
 //
-// This file is part of GEMIPM2K and GEMS-PSI codes for 
+// This file is part of GEMIPM2K and GEMS-PSI codes for
 // thermodynamic modelling by Gibbs energy minimization
 // developed by the Laboratory of Waste Management, Paul Scherrer Institute
 // This file may be distributed together with GEMIPM2K source code
 // under the licence terms defined in GEMIPM2K.QAL
 //
-// See also http://les.web.psi.ch/Software/GEMS-PSI 
+// See also http://les.web.psi.ch/Software/GEMS-PSI
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
@@ -25,14 +25,14 @@
 #define _DataBr_H_
 
 typedef struct
-{  // DATABR - template node data bridge structure 
+{  // DATABR - template node data bridge structure
    short
      NodeHandle,    // Node identification handle
      NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
      NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
      NodeStatusFMT, // Node status code FMT; see typedef NODECODEFMT
      NodeStatusCH,  // Node status code CH;  see typedef NODECODECH
-     IterDone;      // Number of iterations performed by IPM 
+     IterDone;      // Number of iterations performed by IPM
 
 /*  these important dimensions are provided in the DATACH structure
    unsigned short
@@ -61,11 +61,7 @@ typedef struct
     pe,     // pe of aqueous solution                      -      -      +     +
     Eh,     // Eh of aqueous solution, V                   -      -      +     +
 
-// is this really necessary ? KD
-denW,denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
-epsW,epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
-
-//  FMT variables (units need dimensionsless form) - to be used for storing them 
+//  FMT variables (units need dimensionsless form) - to be used for storing them
 //  at the nodearray level, normally not used in the single-node FMT-GEM coupling
     Tm,         // actual total simulation time, s
     dt,         // actual time step
@@ -103,6 +99,7 @@ epsW,epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
     *dul,  // upper kinetic restrictions [nDCb]            +      +      -     -
     *dll,  // lower kinetic restrictions [nDCb]            +      +      -     -
 // Phases in reactive subsystem
+*aPH,  // Specific surface areas of phases (m2/g)          +      +      -     -
     *xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
     *vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
     *mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
@@ -110,8 +107,7 @@ epsW,epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
     *xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
 
   // What else?
-    *dRes1,
-    *dRes2;
+    *dRes1;
 }
 DATABR;
 
@@ -122,7 +118,7 @@ typedef enum {  // NodeStatus codes with respect to GEMIPM calculations
  OK_GEM_AIA   = 2,   // OK after GEM calculation with simplex IA
  BAD_GEM_AIA  = 3,   // Bad result after GEM calculation with simplex IA
  ERR_GEM_AIA  = 4,   // Failure in GEM calculation with simplex IA
- NEED_GEM_PIA = 5,   // GEM calculation starts without simplex using IA from previous solution 
+ NEED_GEM_PIA = 5,   // GEM calculation starts without simplex using IA from previous solution
  OK_GEM_PIA   = 6,   // OK after GEM calculation without simplex IA
  BAD_GEM_PIA  = 7,   // Bad result after GEM calculation without simplex IA
  ERR_GEM_PIA  = 8,   // Failure in after GEM calculation without simplex IA

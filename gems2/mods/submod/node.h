@@ -132,7 +132,8 @@ static TNode* na;   // static pointer to this class
 //       double p_dt1,    // previous time step                                   +
        double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
        double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
-       double *p_dll   // lower kinetic restrictions [nDCb]       +       -      -
+       double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
+       double *p_aPH  // Specific surface areas of phases (m2/g)      +       -     -
    );
 
    // Copies GEM input data from already loaded DATABR work structure
@@ -149,7 +150,8 @@ static TNode* na;   // static pointer to this class
 //       double p_dt1,    // previous time step                                   +
    double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
    double *p_dul,    // upper kinetic restrictions [nDCb]       +       -      -
-   double *p_dll     // lower kinetic restrictions [nDCb]       +       -      -
+   double *p_dll,     // lower kinetic restrictions [nDCb]       +       -      -
+   double *p_aPH  // Specific surface areas of phases (m2/g)      +       -     -
    );
 
 #endif
@@ -187,10 +189,6 @@ static TNode* na;   // static pointer to this class
        double &p_pH,    // pH of aqueous solution                  -      -      +     +
        double &p_pe,    // pe of aqueous solution                  -      -      +     +
        double &p_Eh,    // Eh of aqueous solution, V               -      -      +     +
-       double &p_denW,
-       double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
-       double &p_epsW,
-       double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
        // Dynamic data - dimensions see in DATACH.H structure
        double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
        double  *p_uIC,   // IC chemical potentials (mol/mol)[nICb]       -      -      +     +

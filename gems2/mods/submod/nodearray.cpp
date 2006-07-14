@@ -49,7 +49,7 @@ int  TNodeArray::RunGEM( int  iNode, int Mode )
    CopyWorkNodeFromArray( iNode, anNodes, NodT1 );
 
 // GEM IPM calculation of equilibrium state in MULTI
-  pCNode()->NodeStatusCH = Mode;
+  pCNode()->NodeStatusCH = (short)Mode;
   int retCod = GEM_run();
 
 // Copying data for node iNode back from work DATABR structure into the node array
@@ -387,11 +387,14 @@ void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
   // memory must be allocated before
 
   memcpy( &pCNode()->NodeHandle, &arr_BR[ii]->NodeHandle, 6*sizeof(short));
-  memcpy( &pCNode()->T, &arr_BR[ii]->T, 36*sizeof(double));
+  memcpy( &pCNode()->T, &arr_BR[ii]->T, 32*sizeof(double));
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH
   memcpy( pCNode()->xDC, arr_BR[ii]->xDC, pCSD()->nDCb*sizeof(double) );
   memcpy( pCNode()->gam, arr_BR[ii]->gam, pCSD()->nDCb*sizeof(double) );
+  if( CSD->nAalp >0 )
+    memcpy( pCNode()->aPH, arr_BR[ii]->aPH, pCSD()->nPHb*sizeof(double) );
+  else  pCNode()->aPH = 0;
   memcpy( pCNode()->xPH, arr_BR[ii]->xPH, pCSD()->nPHb*sizeof(double) );
   memcpy( pCNode()->vPS, arr_BR[ii]->vPS, pCSD()->nPSb*sizeof(double) );
   memcpy( pCNode()->mPS, arr_BR[ii]->mPS, pCSD()->nPSb*sizeof(double) );
@@ -405,7 +408,6 @@ void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
   memcpy( pCNode()->rMB, arr_BR[ii]->rMB, pCSD()->nICb*sizeof(double) );
   memcpy( pCNode()->uIC, arr_BR[ii]->uIC, pCSD()->nICb*sizeof(double) );
   pCNode()->dRes1 = 0;
-  pCNode()->dRes2 = 0;
 }
 
 // Copying data for node iNode back from work DATABR structure into the node array
@@ -422,7 +424,7 @@ void TNodeArray::MoveWorkNodeToArray( int ii, int nNodes, DATABRPTR* arr_BR )
 // alloc new memory
   TNode::CNode = new DATABR;
   databr_realloc();
-  memset( &pCNode()->T, 0, 36*sizeof(double));
+  memset( &pCNode()->T, 0, 32*sizeof(double));
 }
 
 void TNodeArray::CopyNodeFromTo( int ndx, int nNod,

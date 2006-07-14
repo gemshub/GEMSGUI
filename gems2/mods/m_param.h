@@ -257,7 +257,7 @@ public:
     // Multi make functions
     void PMtest( const char *key );
     void LoadFromMtparm(double T, double P,double *G0,
-        double *V0, double *H0, double *Cp0, double &roW, double &epsW );
+        double *V0, double *H0, double *S0, double *Cp0, double &roW, double &epsW );
     void CalcBcc(); // Calc bulk composition
     void ShowPhaseWindow();
     void ShowEqPhaseWindow();

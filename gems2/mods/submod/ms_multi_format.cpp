@@ -332,6 +332,10 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    ff << "\n\n# Initial data for DCs - see DATACH file for dimensions nDC, nDCs" << endl;
    ff << "# Partial pressures (fugacities) of dependent components (for setting constant chemical potentials)";
    outArray( ff, "Pparc", pmp->Pparc,  pmp->L);
+   ff << "# generic DC classes (asymmetric, solvent, ideal, single)";
+   outArray( ff, "DCCW", pmp->DCCW,  pmp->L, 1);
+   ff << "# Specific surface areas of phases (whole list)";
+   outArray( ff, "Aalp", pmp->Aalp,  pmp->FI);
    ff << "\n\n# This is not necessary - can be calculated from G0 ???????????";
    outArray( ff, "G", pmp->G,  pmp->L);
    ff << "\n\n# DC G0 increments for adjustments";
@@ -502,18 +506,25 @@ void TMulti::from_text_file_gemipm( const char *path )
   memcpy( pmp->A, dCH->A, dCH->nIC*dCH->nDC*sizeof(float));
   for( ii=0; ii< dCH->nIC; ii++ )
    pmp->Awt[ii]  = dCH->ICmm[ii];
-  if( dCH->nAalp >0 )
-    for( ii=0; ii< dCH->nPH; ii++ )
-      pmp->Aalp[ii] = dCH->Aalp[ii];
   memcpy( pmp->MM, dCH->DCmm, dCH->nDC*sizeof(double));
 
-  memcpy( pmp->SB, dCH->ICNL, MaxICN*dCH->nIC*sizeof(char));
+  memset( pmp->SB, ' ', MaxICN*dCH->nIC*sizeof(char));
+  for( ii=0; ii< dCH->nIC; ii++ )
+  {   memcpy( pmp->SB[ii], dCH->ICNL[ii], MaxICN*sizeof(char) );
+      pmp->SB[ii][MaxICN] = dCH->ccIC[ii];
+  }
+
   memcpy( pmp->SM, dCH->DCNL, MaxDCN*dCH->nDC*sizeof(char));
-  memcpy( pmp->SF, dCH->PHNL, MaxPHN*dCH->nPH*sizeof(char));
+
+  memset( pmp->SF, ' ', MaxPHN*dCH->nPH*sizeof(char) );
+  for( ii=0; ii< dCH->nPH; ii++ )
+  {  memcpy( pmp->SF[ii]+4, dCH->PHNL[ii], MaxPHN*sizeof(char));
+     pmp->SF[ii][0] = dCH->ccPH[ii];
+  }
 
   memcpy( pmp->ICC, dCH->ccIC, dCH->nIC*sizeof(char));
   memcpy( pmp->DCC, dCH->ccDC, dCH->nDC*sizeof(char));
-  memcpy( pmp->DCCW, dCH->ccDCW, dCH->nDC*sizeof(char));
+// !!!!  memcpy( pmp->DCCW, dCH->ccDCW, dCH->nDC*sizeof(char));
   memcpy( pmp->PHC, dCH->ccPH, dCH->nPH*sizeof(char));
 
 //read dynamic values from txt file
@@ -533,9 +544,11 @@ if( pm.FIs > 0 && pm.Ls > 0 )
       inArray( ff, "PMc", pmp->PMc,  LsModSum);
    if(LsMdcSum )
      inArray( ff, "DMc", pmp->DMc,  LsMdcSum);
-}
+   }
    inArray( ff, "B", pmp->B,  pmp->N);
    inArray( ff, "Pparc", pmp->Pparc,  pmp->L);
+   inArray( ff, "DCCW", pmp->DCCW,  pmp->L, 1);
+   inArray( ff, "Aalp", pmp->Aalp,  pmp->FI);
    inArray( ff, "G", pmp->G,  pmp->L);
    inArray( ff, "GEX", pmp->GEX,  pmp->L);
    inArray( ff, "lnGmf", pmp->lnGmf,  pmp->L);

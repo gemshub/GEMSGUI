@@ -53,6 +53,7 @@ int main( int argc, char* argv[] )
    if( node->GEM_init( ipm_input_file_list_name ) )
        return 1;  // error occured during reading the files
 
+    return 0;
 // int nNodes = 1;     // number of local equilibrium nodes, 1 or more
    int nTimes = 100;   // Maximum number of time iteration steps
    double t_start = 0., t_end = 10000., dt = 100., tc = 1.;
@@ -100,24 +101,24 @@ int main( int argc, char* argv[] )
 
    double m_T[nNodes], m_P[nNodes], m_Vs[nNodes], m_Ms[nNodes],
           m_Gs[nNodes], m_Hs[nNodes], m_IC[nNodes], m_pH[nNodes], m_pe[nNodes],
-          m_Eh[nNodes], m_denW[nNodes], m_denWg[nNodes],
-          m_epsW[nNodes], m_epsWg[nNodes];
+          m_Eh[nNodes];
 
-   double *m_xDC, *m_gam, *m_xPH, *m_vPS, *m_mPS,*m_bPS,
+   double *m_xDC, *m_gam, *m_xPH, *m_aPH, *m_vPS, *m_mPS,*m_bPS,
          *m_xPA, *m_dul, *m_dll, *m_bIC, *m_rMB, *m_uIC;
 
+   m_bIC = (double*)malloc( nNodes*nIC*sizeof(double) );
+   m_rMB = (double*)malloc( nNodes*nIC*sizeof(double) );
+   m_uIC = (double*)malloc( nNodes*nIC*sizeof(double) );
    m_xDC = (double*)malloc( nNodes*nDC*sizeof(double) );
    m_gam = (double*)malloc( nNodes*nDC*sizeof(double) );
+   m_dul = (double*)malloc( nNodes*nDC*sizeof(double) );
+   m_dll = (double*)malloc( nNodes*nDC*sizeof(double) );
+   m_aPH = (double*)malloc( nNodes*nPH*sizeof(double) );
    m_xPH = (double*)malloc( nNodes*nPH*sizeof(double) );
    m_vPS = (double*)malloc( nNodes*nPS*sizeof(double) );
    m_mPS = (double*)malloc( nNodes*nPS*sizeof(double) );
    m_bPS = (double*)malloc( nNodes*nIC*nPS*sizeof(double) );
    m_xPA = (double*)malloc( nNodes*nPS*sizeof(double) );
-   m_dul = (double*)malloc( nNodes*nDC*sizeof(double) );
-   m_dll = (double*)malloc( nNodes*nDC*sizeof(double) );
-   m_bIC = (double*)malloc( nNodes*nIC*sizeof(double) );
-   m_rMB = (double*)malloc( nNodes*nIC*sizeof(double) );
-   m_uIC = (double*)malloc( nNodes*nIC*sizeof(double) );
 
    // (1) ---------------------------------------------
    // Initialization of GEMIPM and chemical data kept in the FMT part
@@ -134,12 +135,12 @@ int main( int argc, char* argv[] )
         return 5;
      // Extracting chemical data into FMT part
      node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_T[in],
-       m_P[in], m_Vs[in], m_Ms[in], m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC );
+       m_P[in], m_Vs[in], m_Ms[in],
+       m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH );
         // Extracting GEMIPM output data to FMT part
      node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
        m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
-       m_Eh[in],m_denW[in], m_denWg[in], m_epsW[in], m_epsWg[in],
-       m_rMB+in*nIC, m_uIC+in*nIC, m_xDC+in*nDC, m_gam+in*nDC,
+       m_Eh[in], m_rMB+in*nIC, m_uIC+in*nIC, m_xDC+in*nDC, m_gam+in*nDC,
        m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
        m_bPS+in*nIC*nPS, m_xPA+in*nPS );
 
@@ -192,7 +193,7 @@ int main( int argc, char* argv[] )
         // Setting input data for GEMIPM
         node->GEM_from_MT( m_NodeHandle[in], m_NodeStatusCH[in],
              m_T[in], m_P[in], m_Vs[in], m_Ms[in],
-             m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC );
+             m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH );
 
         // Calling GEMIPM calculation
         m_NodeStatusCH[in] = node->GEM_run( );
@@ -203,8 +204,7 @@ int main( int argc, char* argv[] )
         // Extracting GEMIPM output data to FMT part
         node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
           m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
-          m_Eh[in],m_denW[in], m_denWg[in], m_epsW[in], m_epsWg[in],
-          m_rMB+in*nIC, m_uIC+in*nIC, m_xDC+in*nDC, m_gam+in*nDC,
+          m_Eh[in],m_rMB+in*nIC, m_uIC+in*nIC, m_xDC+in*nDC, m_gam+in*nDC,
           m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
           m_bPS+in*nIC*nPS, m_xPA+in*nPS  );
 

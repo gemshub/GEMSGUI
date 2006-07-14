@@ -24,9 +24,9 @@
 #define _DataCh_H_
 
 const unsigned int
-    MaxICN =      10,
+    MaxICN =      6,
     MaxDCN =      16,
-    MaxPHN =      20;
+    MaxPHN =      16;
 
 typedef struct
 {  // Structure DataCH
@@ -37,12 +37,14 @@ typedef struct
     nDC,      	// total number of DC (chemical species) in reactive part
     nPH,       	// total number of phases included into the GEM IPM problem
     nPS,        // number of multicomponent phases, nPS <= nPH
+    nDCs,      // Number of DCs in phases-solutions
     nTp,        // Number of temperature points in grid arrays
 	            // for the interpolation of thermodynamic data
     nPp,        // Number of pressure points in grid arrays
 	            // for the interpolation of thermodynamic data
     nAalp,      // Flag for considering surface areas of phases
-    uRes1,      // reserved
+    iGrd,       // flag for DC array setup: 0 - only V0 and G0; 1 - plus H0; 2 - plus S0; 3 - plus Cp0;
+                //  4 - plus A0 (Helmholtz)
 
   // These dimensionalities define sizes of packed arrays
   // in DATABR structures describing nodes
@@ -54,7 +56,6 @@ typedef struct
     nPHb,     	// number of phases (<= nPH) used in nodes
     nPSb,       // number of multicomponent phases (<= nPS) used in nodes
     uRes2,      // reserved
-    uRes3,      // reserved
 
 // Lists, vectors and matrices
     *nDCinPH,  // number of DC included into each phase, [nPH] elements
@@ -96,12 +97,9 @@ typedef struct
     *epsW,  // dielectric  constant of water-solvent, [nPp][nTp] elements
     *G0,    // G0 standard molar Gibbs energy of DC, ???????, [nDC][nPp][nTp] elements
     *V0,    // V0 standard molar volume of DC, J/bar, [nDC][nPp][nTp] elements
-//  *S0,    // S0 standard molar entropy of DC, J/K/mol, [nDC][nPp][nTp] elements
+    *S0,    // S0 standard molar entropy of DC, J/K/mol, [nDC][nPp][nTp] elements
     *H0,    // H0 standard molar enthalpy of DC, reserved ?????? [nDC][nPp][nTp] elements
-    *Cp0,   // Cp0 molar heat capacity of DC, J/K/mol, [nDC][nPp][nTp] elements
-
-// Phase-related data
-    *Aalp;  // specific surface areas of phases in m2/g, [nPH] elements
+    *Cp0;   // Cp0 molar heat capacity of DC, J/K/mol, [nDC][nPp][nTp] elements
 
 // Name lists
  char
@@ -112,7 +110,6 @@ typedef struct
 // Class code lists
     *ccIC,   // Class codes of IC, see  enum ICL_CLASSES  ([nIC] elements)
     *ccDC,   // Class codes of DC, see  enum DCL_CLASSES  ([nDC] elements)
-    *ccDCW,  // Generic codes of DC, see enum SolDCLcodes ([nDC] elements)
     *ccPH;   // Class codes of phases, see enum PHL_CLASSES ([nPH] elements)
 }
 DATACH;
@@ -123,7 +120,7 @@ enum SolDCLcodes {
     DCl_SINGLE = 'U',        // This DC is a single-component (pure) phase
     DCl_SYMMETRIC = 'I',     // This DC is symmetric component (end member)
 	                           // of a solution phase or a gas mixture
-	DCl_ASYM_SPECIES = 'S',  // This DC is asymmetric component (solute, sorbate species)
+    DCl_ASYM_SPECIES = 'S',  // This DC is asymmetric component (solute, sorbate species)
 	                           // in a solution or sorption phase
     DCl_ASYM_CARRIER = 'W'   // This is a solvent or carrier in a solution (sorption) phase
 };

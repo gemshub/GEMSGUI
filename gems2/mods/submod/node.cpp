@@ -337,7 +337,7 @@ int TNode::Ph_name_to_x( const char *Name )
   uint len = strlen( Name );
 
   for(int ii = 0; ii<CSD->nPH; ii++ )
-       if(!memcmp(Name, CSD->PHNL[ii]+4, min(len,MaxPHN-4)))
+       if(!memcmp(Name, CSD->PHNL[ii], min(len,MaxPHN)))
          return ii;
   return -1;
 }
@@ -503,6 +503,7 @@ void TNode::makeStartDataChBR(
 
   CSD->nIC = pmm->N;
   CSD->nDC = pmm->L;
+  CSD->nDCs = pmm->Ls;
   CSD->nPH = pmm->FI;
   CSD->nPS = pmm->FIs;
   CSD->nTp = nTp_;
@@ -511,7 +512,13 @@ void TNode::makeStartDataChBR(
     CSD->nAalp = 1;
   else
     CSD->nAalp = 0;
-  CSD->uRes1 = 0;
+  CSD->iGrd = 0;
+  if ( pmm->H0 )
+    CSD->iGrd = 1;
+  if ( pmm->S0 )
+    CSD->iGrd = 2;
+  if ( pmm->Cp0 )
+    CSD->iGrd = 3;
 
 // These dimensionalities define sizes of dynamic data in DATABT structure!!!
 
@@ -523,7 +530,6 @@ void TNode::makeStartDataChBR(
    if( selPH[ii] >= pmm->FIs )
        break;
   CSD->uRes2 = 0;
-  CSD->uRes3 = 0;
   CSD->dRes1 = 0.;
   CSD->dRes2 = 0.;
 
@@ -551,19 +557,17 @@ void TNode::makeStartDataChBR(
      CSD->ICmm[i1] = pmm->Awt[i1];
 
   memcpy( CSD->DCmm, pmm->MM , CSD->nDC*sizeof(double));
-  memset( CSD->DD, 0, CSD->nDC*sizeof(double));
+  memset( CSD->DD, 0, CSD->nDCs*sizeof(double));
 
-  if( CSD->nAalp >0 )
-      for( i1=0; i1< CSD->nPH; i1++ )
-         CSD->Aalp[i1] = pmm->Aalp[i1];
-
-  memcpy( CSD->ICNL, pmm->SB , MaxICN*CSD->nIC*sizeof(char));
+  for( ii=0; ii<CSD->nIC; ii++ )
+     memcpy( CSD->ICNL[ii], pmm->SB[ii] , MaxICN*sizeof(char));
   memcpy( CSD->DCNL, pmm->SM , MaxDCN*CSD->nDC*sizeof(char));
-  memcpy( CSD->PHNL, pmm->SF , MaxPHN*CSD->nPH*sizeof(char));
+  for( ii=0; ii< CSD->nPH; ii++ )
+    memcpy( CSD->PHNL[ii], pmm->SF[ii]+4 , MaxPHN*sizeof(char));
+
 
   memcpy( CSD->ccIC, pmm->ICC , CSD->nIC*sizeof(char));
   memcpy( CSD->ccDC, pmm->DCC , CSD->nDC*sizeof(char));
-  memcpy( CSD->ccDCW, pmm->DCCW , CSD->nDC*sizeof(char));
   memcpy( CSD->ccPH, pmm->PHC , CSD->nPH*sizeof(char));
 
 // set default data to DataBr
@@ -580,7 +584,7 @@ void TNode::makeStartDataChBR(
 
    CNode->IterDone = 0;
 
-   memset( &CNode->T, 0, 36*sizeof(double));
+   memset( &CNode->T, 0, 32*sizeof(double));
    CNode->T = pmm->Tc; //25
    CNode->P = pmm->Pc; //1
    CNode->Ms = pmm->MBX;
@@ -594,6 +598,10 @@ void TNode::makeStartDataChBR(
      CNode->dul[i1] = pmm->DUL[ CSD->xDC[i1] ];
      CNode->dll[i1] = pmm->DLL[ CSD->xDC[i1] ];
     }
+
+   if( CSD->nAalp >0 )
+      for( i1=0; i1< CSD->nPHb; i1++ )
+        CNode->aPH[i1] = pmm->Aalp[CSD->xPH[i1]];
 
 // set calculated&dynamic data to DataBR
 
@@ -614,18 +622,22 @@ void TNode::getG0_V0_H0_Cp0_matrix()
 {
 
   double cT, cP/*, cDC*/;
-  double *G0, *V0, *H0, *Cp0, roW, epsW;
+  double *G0, *V0, *H0, *Cp0, *S0, roW, epsW;
 
   G0 =  new double[TProfil::pm->mup->L];
   V0 =  new double[TProfil::pm->mup->L];
-  if ( pmm->H0 )
+  if ( tpp->H )
     H0 =  new double[TProfil::pm->mup->L];
   else
     H0 = 0;
-  if ( pmm->Cp0 )
+  if ( tpp->Cp )
     Cp0 = new double[TProfil::pm->mup->L];
   else
     Cp0 = 0;
+  if ( tpp->S )
+      S0 = new double[TProfil::pm->mup->L];
+  else
+      S0 = 0;
 
   for( int ii=0; ii<CSD->nTp; ii++)
   {
@@ -633,8 +645,8 @@ void TNode::getG0_V0_H0_Cp0_matrix()
     for( int jj=0; jj<CSD->nPp; jj++)
     {
       cP = CSD->Pval[jj];
-     // calc new G0, V0, H0, Cp0
-     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, Cp0, roW, epsW );
+     // calc new G0, V0, H0, Cp0, S0
+     TProfil::pm->LoadFromMtparm( cT, cP, G0, V0, H0, S0, Cp0, roW, epsW );
      CSD->roW[ jj * CSD->nTp + ii] = roW;
      CSD->epsW[ jj * CSD->nTp + ii] = epsW;
      // copy to arrays
@@ -643,18 +655,28 @@ void TNode::getG0_V0_H0_Cp0_matrix()
          int ll = ( kk * CSD->nPp + jj) * CSD->nTp + ii;
          CSD->G0[ll] =  G0[pmm->muj[kk]]; //
          CSD->V0[ll] =  V0[pmm->muj[kk]];
-         if ( H0 )
-           CSD->H0[ll] = H0[pmm->muj[kk]];
-         else
-           CSD->H0[ll] = 0.;
-         if ( Cp0 )
-           CSD->Cp0[ll] = Cp0[pmm->muj[kk]];
-         else
-           CSD->Cp0[ll] = 0.;
-       }
+         if(  CSD->iGrd > 0 )
+         {  if ( H0 )
+              CSD->H0[ll] = H0[pmm->muj[kk]];
+            else
+              CSD->H0[ll] = 0.;
+         }
+         if(  CSD->iGrd > 2 )
+         { if ( Cp0 )
+             CSD->Cp0[ll] = Cp0[pmm->muj[kk]];
+           else
+             CSD->Cp0[ll] = 0.;
+         }
+         if(  CSD->iGrd > 1 )
+         {
+            if ( S0 )
+               CSD->S0[ll] = S0[pmm->muj[kk]];
+            else
+             CSD->S0[ll] = 0.;
+         }
      }
+    }
   }
-
   // free memory
   delete[] G0;
   delete[] V0;
@@ -662,6 +684,8 @@ void TNode::getG0_V0_H0_Cp0_matrix()
    delete[] H0;
   if( Cp0 )
    delete[] Cp0;
+  if( S0 )
+   delete[] S0;
 }
 
 TNode::TNode( MULTI *apm  )
@@ -728,48 +752,38 @@ void TNode::packDataBr()
   CNode->IC = pmm->IC;
   CNode->pH = pmm->pH;
   CNode->pe = pmm->pe;
-//  CNode->Eh = pmm->Eh;
   CNode->Eh = pmm->FitVar[3];
-  CNode->denW = pmm->denW;
-  CNode->denWg = pmm->denWg;
-  CNode->epsW = pmm->epsW;
-  CNode->epsWg = pmm->epsWg;
   CNode->Ms = pmm->MBX;
 
   // arrays
-   for( ii=0; ii<CSD->nDCb; ii++ )
-    CNode->xDC[ii] = pmm->X[ CSD->xDC[ii] ];
-   for( ii=0; ii<CSD->nDCb; ii++ )
-    CNode->gam[ii] = pmm->Gamma[ CSD->xDC[ii] ];
-
    for( ii=0; ii<CSD->nPHb; ii++ )
-    CNode->xPH[ii] = pmm->XF[ CSD->xPH[ii] ];
+   {  CNode->xPH[ii] = pmm->XF[ CSD->xPH[ii] ];
+      if( CSD->nAalp >0 )
+       CNode->aPH[ii] = pmm->Aalp[ CSD->xPH[ii] ];//??? only insert
+   }
    for( ii=0; ii<CSD->nPSb; ii++ )
-    CNode->vPS[ii] = pmm->FVOL[ CSD->xPH[ii] ];
-   for( ii=0; ii<CSD->nPSb; ii++ )
-    CNode->mPS[ii] = pmm->FWGT[ CSD->xPH[ii] ];
-
+   {   CNode->vPS[ii] = pmm->FVOL[ CSD->xPH[ii] ];
+       CNode->mPS[ii] = pmm->FWGT[ CSD->xPH[ii] ];
+       CNode->xPA[ii] = pmm->XFA[ CSD->xPH[ii] ];
+   }
    for( ii=0; ii<CSD->nPSb; ii++ )
    for(short jj=0; jj<CSD->nICb; jj++ )
    { int   new_ndx= (ii*CSD->nICb)+jj,
            mul_ndx = ( CSD->xPH[ii]*CSD->nIC )+ CSD->xIC[jj];
      CNode->bPS[new_ndx] = pmm->BF[ mul_ndx ];
    }
-   for( ii=0; ii<CSD->nPSb; ii++ )
-    CNode->xPA[ii] = pmm->XFA[ CSD->xPH[ii] ];
-
-   for( ii=0; ii<CSD->nDCb; ii++ )          //??? only insert
+   for( ii=0; ii<CSD->nDCb; ii++ )
    {
-    CNode->dul[ii] = pmm->DUL[ CSD->xDC[ii] ];
-    CNode->dll[ii] = pmm->DLL[ CSD->xDC[ii] ];
+      CNode->xDC[ii] = pmm->X[ CSD->xDC[ii] ];
+      CNode->gam[ii] = pmm->Gamma[ CSD->xDC[ii] ];
+      CNode->dul[ii] = pmm->DUL[ CSD->xDC[ii] ];//??? only insert
+      CNode->dll[ii] = pmm->DLL[ CSD->xDC[ii] ];//??? only insert
    }
-   for( ii=0; ii<CSD->nICb; ii++ )          //??? only insert
-    CNode->bIC[ii] = pmm->B[ CSD->xIC[ii] ];
    for( ii=0; ii<CSD->nICb; ii++ )
-    CNode->rMB[ii] = pmm->C[ CSD->xIC[ii] ];
-   for( ii=0; ii<CSD->nICb; ii++ )
-    CNode->uIC[ii] = pmm->U[ CSD->xIC[ii] ];
-
+   {  CNode->bIC[ii] = pmm->B[ CSD->xIC[ii] ];//??? only insert
+      CNode->rMB[ii] = pmm->C[ CSD->xIC[ii] ];
+      CNode->uIC[ii] = pmm->U[ CSD->xIC[ii] ];
+   }
 }
 
 // Unpacking work DATABR structure into MULTI
@@ -791,7 +805,7 @@ void TNode::unpackDataBr()
   pmm->Pc  = CNode->P;
   pmm->MBX = CNode->Ms;
   pmm->IC = CNode->IC;
-pmm->FitVar[3] = CNode->Eh;
+  pmm->FitVar[3] = CNode->Eh;
 // arrays
    for( ii=0; ii<CSD->nDCb; ii++ )
    {
@@ -811,7 +825,11 @@ pmm->FitVar[3] = CNode->Eh;
       pmm->lnGmo[ CSD->xDC[ii] ] = pmm->lnGam[ CSD->xDC[ii] ] = log(Gamm);
    }
    for( ii=0; ii<CSD->nPHb; ii++ )
-    pmm->XF[ CSD->xPH[ii] ] = pmm->YF[ CSD->xPH[ii] ] = CNode->xPH[ii];
+   {
+     pmm->XF[ CSD->xPH[ii] ] = pmm->YF[ CSD->xPH[ii] ] = CNode->xPH[ii];
+     if( CSD->nAalp >0 )
+          pmm->Aalp[ CSD->xPH[ii] ] = CNode->aPH[ii];
+   }
    for( ii=0; ii<CSD->nPSb; ii++ )
     pmm->FVOL[ CSD->xPH[ii] ] = CNode->vPS[ii];
    for( ii=0; ii<CSD->nPSb; ii++ )
@@ -863,391 +881,6 @@ void  TNode::GEM_printf( const char* multi_file,
 
 }
 
-//---------------------------------------------------------------
-
-// new structures i/o
-
-// Writting DataCH to binary file
-void TNode::datach_to_file( GemDataStream& ff )
-{
-// const data
-   ff.writeArray( &CSD->nIC, 14 );
-   ff.writeArray( &CSD->Ttol, 4 );
-
-//dynamic data
-   ff.writeArray( CSD->nDCinPH, CSD->nPH );
-//   if( CSD->nICb >0 )
-   ff.writeArray( CSD->xIC, CSD->nICb );
-   ff.writeArray( CSD->xDC, CSD->nDCb );
-   ff.writeArray( CSD->xPH, CSD->nPHb );
-
-   ff.writeArray( CSD->A, CSD->nIC*CSD->nDC );
-   ff.writeArray( CSD->ICmm, CSD->nIC );
-   ff.writeArray( CSD->DCmm, CSD->nDC );
-   ff.writeArray( CSD->DD, CSD->nDC );
-
-   ff.writeArray( CSD->Tval,  CSD->nTp );
-   ff.writeArray( CSD->Pval,  CSD->nPp );
-
-   ff.writeArray( CSD->roW,  CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->epsW, CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->G0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.writeArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
-
-   if( CSD->nAalp >0 )
-     ff.writeArray( CSD->Aalp, CSD->nPH );
-
-   ff.writeArray( (char *)CSD->ICNL, MaxICN*CSD->nIC );
-   ff.writeArray( (char *)CSD->DCNL, MaxDCN*CSD->nDC );
-   ff.writeArray( (char *)CSD->PHNL, MaxPHN*CSD->nPH );
-
-   ff.writeArray( CSD->ccIC, CSD->nIC );
-   ff.writeArray( CSD->ccDC, CSD->nDC );
-   ff.writeArray( CSD->ccDCW, CSD->nDC );
-   ff.writeArray( CSD->ccPH, CSD->nPH );
-
-}
-
-// Reading dataCH structure from binary file
-void TNode::datach_from_file( GemDataStream& ff )
-{
-// const data
-   ff.readArray( &CSD->nIC, 14 );
-   ff.readArray( &CSD->Ttol, 4 );
-
-  datach_realloc();
-  databr_realloc();
-
-//dynamic data
-   ff.readArray( CSD->nDCinPH, CSD->nPH );
-//   if( CSD->nICb >0 )
-   ff.readArray( CSD->xIC, CSD->nICb );
-   ff.readArray( CSD->xDC, CSD->nDCb );
-   ff.readArray( CSD->xPH, CSD->nPHb );
-
-   ff.readArray( CSD->A, CSD->nIC*CSD->nDC );
-   ff.readArray( CSD->ICmm, CSD->nIC );
-   ff.readArray( CSD->DCmm, CSD->nDC );
-   ff.readArray( CSD->DD, CSD->nDC );
-
-   ff.readArray( CSD->Tval,  CSD->nTp );
-   ff.readArray( CSD->Pval,  CSD->nPp );
-
-   ff.readArray( CSD->roW,  CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->epsW, CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->G0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp );
-   ff.readArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
-
-   if( CSD->nAalp >0 )
-     ff.readArray( CSD->Aalp, CSD->nPH );
-
-   ff.readArray( (char *)CSD->ICNL, MaxICN*CSD->nIC );
-   ff.readArray( (char *)CSD->DCNL, MaxDCN*CSD->nDC );
-   ff.readArray( (char *)CSD->PHNL, MaxPHN*CSD->nPH );
-
-   ff.readArray( CSD->ccIC, CSD->nIC );
-   ff.readArray( CSD->ccDC, CSD->nDC );
-   ff.readArray( CSD->ccDCW, CSD->nDC );
-   ff.readArray( CSD->ccPH, CSD->nPH );
-
-}
-
-// allocate DataCH structure
-void TNode::datach_realloc()
-{
- CSD->nDCinPH = new short[CSD->nPH];
-
- if( CSD->nICb >0 )
-   CSD->xIC = new short[CSD->nICb];
- else  CSD->xIC = 0;
- if( CSD->nDCb >0 )
-   CSD->xDC = new short[CSD->nDCb];
- else  CSD->xDC = 0;
- if( CSD->nPHb >0 )
-   CSD->xPH = new short[CSD->nPHb];
- else  CSD->xPH = 0;
-
-  CSD->A = new float[CSD->nIC*CSD->nDC];
-  CSD->ICmm = new double[CSD->nIC];
-  CSD->DCmm = new double[CSD->nDC];
-  CSD->DD = new double[CSD->nDC];
-
-  CSD->Tval = new float[CSD->nTp];
-  CSD->Pval = new float[CSD->nPp];
-
-  CSD->roW = new double[ CSD->nPp*CSD->nTp];
-  CSD->epsW = new double[ CSD->nPp*CSD->nTp];
-  CSD->G0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  CSD->V0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  CSD->H0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-  CSD->Cp0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
-
-  if( CSD->nAalp >0 )
-     CSD->Aalp = new double[CSD->nPH];
-  else CSD->Aalp = 0;
-
-  CSD->ICNL = new char[CSD->nIC][MaxICN];
-  CSD->DCNL = new char[CSD->nDC][MaxDCN];
-  CSD->PHNL = new char[CSD->nPH][MaxPHN];
-
-  CSD->ccIC = new char[CSD->nIC];
-  CSD->ccDC = new char[CSD->nDC];
-  CSD->ccDCW = new char[CSD->nDC];
-  CSD->ccPH = new char[CSD->nPH];
-}
-
-// free dynamic memory
-void TNode::datach_free()
-{
- if( CSD->nDCinPH )
-  { delete[] CSD->nDCinPH;
-    CSD->nDCinPH = 0;
-  }
- if( CSD->xIC )
-  { delete[] CSD->xIC;
-    CSD->xIC = 0;
-  }
- if( CSD->xDC )
-  { delete[] CSD->xDC;
-    CSD->xDC = 0;
-  }
- if( CSD->xPH )
-  { delete[] CSD->xPH;
-    CSD->xPH = 0;
-  }
- if( CSD->A )
-  { delete[] CSD->A;
-    CSD->A = 0;
-  }
- if( CSD->ICmm )
-  { delete[] CSD->ICmm;
-    CSD->ICmm = 0;
-  }
- if( CSD->DCmm )
-  { delete[] CSD->DCmm;
-    CSD->DCmm = 0;
-  }
- if( CSD->DD )
-  { delete[] CSD->DD;
-    CSD->DD = 0;
-  }
-
- if( CSD->Tval )
-  { delete[] CSD->Tval;
-    CSD->Tval = 0;
-  }
- if( CSD->Pval )
-  { delete[] CSD->Pval;
-    CSD->Pval = 0;
-  }
-
- if( CSD->roW )
-  { delete[] CSD->roW;
-    CSD->roW = 0;
-  }
- if( CSD->epsW )
-  { delete[] CSD->epsW;
-    CSD->epsW = 0;
-  }
- if( CSD->G0 )
-  { delete[] CSD->G0;
-    CSD->G0 = 0;
-  }
- if( CSD->V0 )
-  { delete[] CSD->V0;
-    CSD->V0 = 0;
-  }
- if( CSD->H0 )
-  { delete[] CSD->H0;
-    CSD->H0 = 0;
-  }
- if( CSD->Cp0 )
-  { delete[] CSD->Cp0;
-    CSD->Cp0 = 0;
-  }
- if( CSD->Aalp )
-  { delete[] CSD->Aalp;
-    CSD->Aalp = 0;
-  }
-
- if( CSD->ICNL )
-  { delete[] CSD->ICNL;
-    CSD->ICNL = 0;
-  }
- if( CSD->DCNL )
-  { delete[] CSD->DCNL;
-    CSD->DCNL = 0;
-  }
- if( CSD->PHNL )
-  { delete[] CSD->PHNL;
-    CSD->PHNL = 0;
-  }
-
- if( CSD->ccIC )
-  { delete[] CSD->ccIC;
-    CSD->ccIC = 0;
-  }
- if( CSD->ccDC )
-  { delete[] CSD->ccDC;
-    CSD->ccDC = 0;
-  }
- if( CSD->ccDCW )
-  { delete[] CSD->ccDCW;
-    CSD->ccDCW = 0;
-  }
- if( CSD->ccPH )
-  { delete[] CSD->ccPH;
-    CSD->ccPH = 0;
-  }
- // delete[] CSD;
-}
-
-// writing DataBR to binary file
-void TNode::databr_to_file( GemDataStream& ff )
-{
-// const data
-   ff.writeArray( &CNode->NodeHandle, 6 );
-   ff.writeArray( &CNode->T, 36 );
-
-//dynamic data
-   ff.writeArray( CNode->bIC, CSD->nICb );
-   ff.writeArray( CNode->rMB, CSD->nICb );
-   ff.writeArray( CNode->uIC, CSD->nICb );
-
-   ff.writeArray( CNode->xDC, CSD->nDCb );
-   ff.writeArray( CNode->gam, CSD->nDCb );
-   ff.writeArray( CNode->dul, CSD->nDCb );
-   ff.writeArray( CNode->dll, CSD->nDCb );
-
-   ff.writeArray( CNode->xPH, CSD->nPHb );
-   ff.writeArray( CNode->vPS, CSD->nPSb );
-   ff.writeArray( CNode->mPS, CSD->nPSb );
-   ff.writeArray( CNode->bPS, CSD->nPSb*CSD->nICb );
-   ff.writeArray( CNode->xPA, CSD->nPSb );
-
-   CNode->dRes1 = 0;
-   CNode->dRes2 = 0;
-
-//   datach_to_text_file();
-//   databr_to_text_file();
-}
-
-// Reading work dataBR structure from binary file
-void TNode::databr_from_file( GemDataStream& ff )
-{
-// const data
-   ff.readArray( &CNode->NodeHandle, 6 );
-   ff.readArray( &CNode->T, 36 );
-
-//dynamic data
-   ff.readArray( CNode->bIC, CSD->nICb );
-   ff.readArray( CNode->rMB, CSD->nICb );
-   ff.readArray( CNode->uIC, CSD->nICb );
-
-   ff.readArray( CNode->xDC, CSD->nDCb );
-   ff.readArray( CNode->gam, CSD->nDCb );
-   ff.readArray( CNode->dul, CSD->nDCb );
-   ff.readArray( CNode->dll, CSD->nDCb );
-
-   ff.readArray( CNode->xPH, CSD->nPHb );
-   ff.readArray( CNode->vPS, CSD->nPSb );
-   ff.readArray( CNode->mPS, CSD->nPSb );
-   ff.readArray( CNode->bPS, CSD->nPSb*CSD->nICb );
-   ff.readArray( CNode->xPA, CSD->nPSb );
-
-   CNode->dRes1 = 0;
-   CNode->dRes2 = 0;
-}
-
-// allocate DataBR structure
-void TNode::databr_realloc()
-{
-  CNode->bIC = new double[CSD->nICb];
-  CNode->rMB = new double[CSD->nICb];
-  CNode->uIC = new double[CSD->nICb];
-
- CNode->xDC = new double[CSD->nDCb];
- CNode->gam = new double[CSD->nDCb];
- CNode->dul = new double[CSD->nDCb];
- CNode->dll = new double[CSD->nDCb];
-
- CNode->xPH = new double[CSD->nPHb];
- CNode->vPS = new double[CSD->nPSb];
- CNode->mPS = new double[CSD->nPSb];
- CNode->bPS = new double[CSD->nPSb*CSD->nICb];
- CNode->xPA = new double[CSD->nPSb];
-
- CNode->dRes1 = 0;
- CNode->dRes2 = 0;
-}
-
-// free dynamic memory
-DATABR * TNode::databr_free( DATABR *CNode_ )
-{
-  if( CNode_ == 0)
-    CNode_ = CNode;
-  memset( &CNode_->NodeHandle, 0, 6*sizeof(short));
-  memset( &CNode_->T, 0, 36*sizeof(double));
-
- if( CNode_->bIC )
- { delete[] CNode_->bIC;
-   CNode_->bIC = 0;
- }
- if( CNode_->rMB )
- { delete[] CNode_->rMB;
-   CNode_->rMB = 0;
- }
- if( CNode_->uIC )
- { delete[] CNode_->uIC;
-   CNode_->uIC = 0;
- }
-
- if( CNode_->xDC )
-  { delete[] CNode_->xDC;
-    CNode_->xDC = 0;
-  }
- if( CNode_->gam )
-  { delete[] CNode_->gam;
-    CNode_->gam = 0;
-  }
- if( CNode_->dul )
-   { delete[] CNode_->dul;
-     CNode_->dul = 0;
-   }
- if( CNode_->dll )
-   { delete[] CNode_->dll;
-     CNode_->dll = 0;
-   }
-
- if( CNode_->xPH )
-  { delete[] CNode_->xPH;
-    CNode_->xPH = 0;
-  }
- if( CNode_->vPS )
-  { delete[] CNode_->vPS;
-    CNode_->vPS = 0;
-  }
- if( CNode_->mPS )
-  { delete[] CNode_->mPS;
-    CNode_->mPS = 0;
-  }
- if( CNode_->bPS )
-  { delete[] CNode_->bPS;
-    CNode_->bPS = 0;
-  }
- if( CNode_->xPA )
-  { delete[] CNode_->xPA;
-    CNode_->xPA = 0;
-  }
-
- delete[] CNode_;
- return NULL;
-}
-
 #ifdef IPMGEMPLUGIN
 
 // calculation mode: passing input GEM data changed on previous FMT iteration
@@ -1263,8 +896,10 @@ void TNode::GEM_from_MT(
    //       double p_dt,     // actual time step	         			  +
    //       double p_dt1,    // previous time step                                   +
    double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
-   double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
-   double *p_dll   // lower kinetic restrictions [nDCb]       +       -      -
+   double *p_dul,   // upper kinetic restrictions [nDCb]        +       -      -
+   double *p_dll,   // lower kinetic restrictions [nDCb]        +       -      -
+   double *p_aPH  // Specific surface areas of phases (m2/g)      +       -     -
+
 )
 {
   int ii;
@@ -1290,6 +925,9 @@ void TNode::GEM_from_MT(
      CNode->dul[ii] = p_dul[ii];
      CNode->dll[ii] = p_dll[ii];
    }
+    if( CSD->nAalp >0 )
+     for( ii=0; ii<CSD->nPHb; ii++ )
+         CNode->aPH[ii] = p_aPH[ii];
    if( useSimplex && CNode->NodeStatusCH == NEED_GEM_PIA )
      CNode->NodeStatusCH = NEED_GEM_AIA;
    // Switch only if PIA is ordered, leave if simplex is ordered (KD)
@@ -1308,7 +946,8 @@ void TNode::GEM_restore_MT(
    //       double p_dt1,    // previous time step                                   +
    double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
    double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
-   double *p_dll   // lower kinetic restrictions [nDCb]       +       -      -
+   double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
+   double *p_aPH  // Specific surface areas of phases (m2/g)      +       -     -
    )
 {
  int ii;
@@ -1327,6 +966,9 @@ void TNode::GEM_restore_MT(
    {  p_dul[ii] = CNode->dul[ii];
       p_dll[ii] = CNode->dll[ii];
    }
+   if( CSD->nAalp >0 )
+     for( ii=0; ii<CSD->nPHb; ii++ )
+        p_aPH[ii] = CNode->aPH[ii];
 }
 
 // Copying results that must be returned into the FMT part into MAIF_CALC parameters
@@ -1344,10 +986,6 @@ void TNode::GEM_to_MT(
        double &p_pH,    // pH of aqueous solution                  -      -      +     +
        double &p_pe,    // pe of aqueous solution                  -      -      +     +
        double &p_Eh,    // Eh of aqueous solution, V               -      -      +     +
-       double &p_denW,
-       double &p_denWg, // Density of H2O(l) and steam at T,P      -      -      +     +
-       double &p_epsW,
-       double &p_epsWg, // Diel.const. of H2O(l) and steam at T,P  -      -      +     +
        // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
        // exchange of values occurs through lists of indices, e.g. xDC, xPH
        double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
@@ -1374,10 +1012,6 @@ void TNode::GEM_to_MT(
    p_pH = CNode->pH;
    p_pe = CNode->pe;
    p_Eh = CNode->Eh;
-   p_denW = CNode->denW;
-   p_denWg = CNode->denWg;
-   p_epsW = CNode->epsW;
-   p_epsWg = CNode->epsWg;
 
   memcpy( p_xDC, CNode->xDC, CSD->nDCb*sizeof(double) );
   memcpy( p_gam, CNode->gam, CSD->nDCb*sizeof(double) );

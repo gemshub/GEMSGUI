@@ -234,12 +234,20 @@ void TMulti::CompG0Load()
  pmp->T = pmp->Tc = TC + C_to_K;
  pmp->TC = pmp->TCc = TC;
  pmp->P = pmp->Pc = P;
- pmp->denW = LagranInterp( dCH->Pval, dCH->Tval, dCH->roW,
+ if( dCH->ccPH[0] == PH_AQUEL )
+ {
+   pmp->denW = LagranInterp( dCH->Pval, dCH->Tval, dCH->roW,
                           P, TC, dCH->nTp, dCH->nPp );
- //       pmp->denWg = tpp->RoV;
- pmp->epsW = LagranInterp( dCH->Pval, dCH->Tval, dCH->epsW,
+   //       pmp->denWg = tpp->RoV;
+   pmp->epsW = LagranInterp( dCH->Pval, dCH->Tval, dCH->epsW,
                           P, TC, dCH->nTp, dCH->nPp );
- //       pmp->epsWg = tpp->EpsV;
+   //       pmp->epsWg = tpp->EpsV;
+ }
+ else
+ {
+   pmp->denW = 1.;
+   pmp->epsW = 1.;
+ }
 
 //Test outpur ***********************************
 //  f_log << "roW = " <<  pmp->denW << "  epsW =  " << pmp->epsW << endl;

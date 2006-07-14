@@ -674,7 +674,7 @@ void TProfil::PMtest( const char *key )
 }
 
 void TProfil::LoadFromMtparm(double T, double P,double *G0,
-        double *V0, double *H0, double *Cp0, double &roW, double &epsW )
+        double *V0, double *H0, double *S0, double *Cp0, double &roW, double &epsW )
 {
     if( fabs( tpp->curT - T ) > 1.e-10 ||
             fabs( tpp->curP - P ) > 1.e-10 )
@@ -691,8 +691,10 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,
       V0[jj] =  tpp->Vm[jj];
       if( H0 && tpp->H )
         H0[jj] =  tpp->H[jj];
+      if( S0 && tpp->S )
+        S0[jj] =  tpp->S[jj];
       if( Cp0 && tpp->Cp )
-        Cp0[jj] =  tpp->Cp[jj];
+         Cp0[jj] =  tpp->Cp[jj];
     }
 }
 

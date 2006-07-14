@@ -81,7 +81,7 @@ void  TGEM2MT::NewNodeArray()
 
  // put DDc
  if( data_CH->DD && mtp->DDc )
-  for( int jj=0; jj<data_CH->nDC; jj ++)
+  for( int jj=0; jj<data_CH->nDCs; jj ++)
       data_CH->DD[jj] = mtp->DDc[jj];
 
  for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
@@ -157,7 +157,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
 
    for( int ii = start_node; ii< end_node; ii++) // node iteration
    {
-     mtp->qc = ii;
+     mtp->qc = (short)ii;
      Mode = mode;  // debugging  NEED_GEM_PIA;
      NeedGEM = false;     // debugging
 
@@ -291,7 +291,7 @@ void TGEM2MT::MassTransAdvecStep()
 
    for( ii = 2; ii< mtp->nC-1; ii++) // node iteration, -1 the right boundary is open ....
    {
-     mtp->qc = ii;
+     mtp->qc = (short)ii;
      for( ic=0; ic < CH->nICb-1; ic++)  // splitting for independent components
      {                          // Charge (Zz) is not checked here!
        // Chemical compositions may become inconsistent with time
