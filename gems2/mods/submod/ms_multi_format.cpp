@@ -326,16 +326,16 @@ if( pm.FIs > 0 && pm.Ls > 0 )
      outArray( ff, "DMc", pmp->DMc,  LsMdcSum);
    }
 }
-   ff << "\n\n## (4) Some data arrays which are not provided in DATACH and DATABR files\n" << endl;
+   ff << "\n\n## (4) Some data arrays which are not provided in DATACH and DATABR files" << endl;
    ff << "# Full total bulk composition of the initial system (vector b) - see DATACH file for dimension nIC";
    outArray( ff, "B", pmp->B,  pmp->N);
    ff << "\n\n# Initial data for DCs - see DATACH file for dimensions nDC, nDCs" << endl;
-   ff << "\n\n# generic DC classes (asymmetric, solvent, ideal, single)";
+   ff << "\n# generic DC classes (asymmetric, solvent, ideal, single)";
    outArray( ff, "DCCW", pmp->DCCW,  pmp->L, 1);
-   ff << "# Partial pressures (fugacities) of dependent components (for setting constant chemical potentials)";
+   ff << "\n\n# Partial pressures (fugacities) of dependent components (for setting constant chemical potentials)";
    outArray( ff, "Pparc", pmp->Pparc,  pmp->L);
-   ff << "\n\n# This is not necessary - can be calculated from G0 ???????????";
-   outArray( ff, "G0", pmp->G0,  pmp->L);
+ //  ff << "\n\n# This is not necessary - can be calculated from G0 ???????????";
+ //  outArray( ff, "G0", pmp->G0,  pmp->L);
    ff << "\n\n# DC G0 increments for adjustments";
    outArray( ff, "GEX", pmp->GEX,  pmp->L);
    ff << "\n\n# DC Fixed (start) activity coefficients";
@@ -354,10 +354,10 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    ff << "\n\n# Full vector of upper metastability constraints on DC amounts in the system";
    outArray( ff, "DUL", pmp->DUL,  pmp->L);
    ff << "\n\n# (6) Initial data for phases" << endl;
-   ff << "\n\n# Specific surface areas of phases (whole list)";
+   ff << "\n# Specific surface areas of phases (whole list)";
    outArray( ff, "Aalp", pmp->Aalp,  pmp->FI);
    if( PSigm != S_OFF )
-   {  ff << "# Specific surface free energy for phase-water interface";
+   {  ff << "\n\n# Specific surface free energy for phase-water interface";
       outArray( ff, "Sigw", pmp->Sigw,  pmp->FI);
       ff << "\n\n# Specific surface free energy for phase-gas interface";
       outArray( ff, "Sigg", pmp->Sigg,  pmp->FI);
@@ -567,7 +567,7 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    inArray( ff, "B", pmp->B,  pmp->N);
    inArray( ff, "DCCW", pmp->DCCW,  pmp->L, 1);
    inArray( ff, "Pparc", pmp->Pparc,  pmp->L);
-   inArray( ff, "G0", pmp->G0,  pmp->L);
+//   inArray( ff, "G0", pmp->G0,  pmp->L);
    inArray( ff, "GEX", pmp->GEX,  pmp->L);
    inArray( ff, "lnGmf", pmp->lnGmf,  pmp->L);
    if( pmp->E )
