@@ -209,7 +209,7 @@ void TNode::datach_to_text_file( fstream& ff )
      ff << "\n# Template for the dch-dat text input file for DATACH data " << endl;
      ff << "# (should be read first, before the IPM-DAT file and DATABR files)" << endl;
      ff << "\n## (1) Dimensions for memory allocation" << endl;
-     ff << "# Number of ICs";
+     ff << "# Number of ICs"<< endl;
   }
   ff << left << setw(7) << "<nIC> " <<  CSD->nIC << endl;
   if( _comment )
@@ -259,7 +259,7 @@ void TNode::datach_to_text_file( fstream& ff )
 
 // dynamic arrays
   if( _comment )
-  {   ff << "\n## (4) Databridge configuration section (for memory allocation)" << endl;
+  {   ff << "\n## (4) Databridge configuration section (for memory allocation)";
       ff << "\n# number of ICs to be kept in DATABR structure";
   }
   outArray( ff, "xIC", CSD->xIC, CSD->nICb);
@@ -305,10 +305,10 @@ void TNode::datach_to_text_file( fstream& ff )
   }
   outArray( ff, "A", CSD->A, CSD->nDC*CSD->nIC, CSD->nIC );
   if( _comment )
-    ff << "\n# Molar masses of DCs ";
+    ff << "\n\n# Molar masses of DCs ";
   outArray( ff, "DCmm", CSD->DCmm, CSD->nDC);
   if( _comment )
-    ff << "\n# Diffusion coefficients for DCs";
+    ff << "\n\n# Diffusion coefficients for DCs";
   outArray( ff, "DD", CSD->DD, CSD->nDCs);
 
   if( _comment )
@@ -317,13 +317,13 @@ void TNode::datach_to_text_file( fstream& ff )
   }
   ff << left << setw(7) << "<Ttol> " <<  CSD->Ttol << endl;
   if( _comment )
-    ff << "\n# Temperatures for the grid";
+    ff << "# Temperatures for the grid";
   outArray( ff, "Tval", CSD->Tval, CSD->nTp );
   if( _comment )
-    ff << "\n# Tolerance for the interpolation over pressure (K)" << endl;
+    ff << "\n\n# Tolerance for the interpolation over pressure (K)" << endl;
   ff << left << setw(7) << "<Ptol> " <<  CSD->Ptol << endl;
   if( _comment )
-      ff << "\n# Pressures for the grid";
+      ff << "# Pressures for the grid";
   outArray( ff, "Pval", CSD->Pval, CSD->nPp );
 
   if( CSD->ccPH[0] == PH_AQUEL )
@@ -339,33 +339,33 @@ void TNode::datach_to_text_file( fstream& ff )
   outArray( ff, "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp,
                                        CSD->nPp*CSD->nTp );
   if( _comment )
-     ff << "\n\n  # Grid array for DC molar Gibbs energy function (J/mol)";
+     ff << "\n\n# Grid array for DC molar Gibbs energy function (J/mol)";
   outArray( ff, "G0", CSD->G0, CSD->nDC*CSD->nPp*CSD->nTp,
                                  CSD->nPp*CSD->nTp );
 
   if( CSD->iGrd > 0 )
   {
     if( _comment )
-      ff << "\n# Grid array for DC molar enthalpy function (J/mol)";
+      ff << "\n\n# Grid array for DC molar enthalpy function (J/mol)";
     outArray( ff, "H0", CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp,
                                         CSD->nPp*CSD->nTp );
   }
   if( CSD->iGrd > 1 )
   {
     if( _comment )
-      ff << "\n# Grid array for DC absolute entropy function (J/mol)";
+      ff << "\n\n# Grid array for DC absolute entropy function (J/mol)";
     outArray( ff, "S0", CSD->S0,CSD->nDC*CSD->nPp*CSD->nTp,
                                         CSD->nPp*CSD->nTp  );
   }
   if( CSD->iGrd > 1 )
   {
      if( _comment )
-      ff << "\n# Grid array for DC heat capacity function (J/mol)";
+      ff << "\n\n# Grid array for DC heat capacity function (J/mol)";
      outArray( ff, "Cp0", CSD->Cp0,CSD->nDC*CSD->nPp*CSD->nTp,
                                         CSD->nPp*CSD->nTp  );
   }
   if( _comment )
-      ff << "\n# End of file";
+      ff << "\n\n# End of file";
 }
 
 // Reading dataCH structure from text file
@@ -552,14 +552,8 @@ void TNode::datach_realloc()
   CSD->Tval = new float[CSD->nTp];
   CSD->Pval = new float[CSD->nPp];
 
-  if( CSD->ccPH[0] == PH_AQUEL )
-  {  CSD->roW = new double[ CSD->nPp*CSD->nTp];
-     CSD->epsW = new double[ CSD->nPp*CSD->nTp];
-  }
-  else
-  {  CSD->roW = 0;
-     CSD->epsW = 0;
-  }
+  CSD->roW = new double[ CSD->nPp*CSD->nTp];
+  CSD->epsW = new double[ CSD->nPp*CSD->nTp];
 
   CSD->G0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];
   CSD->V0 = new double[CSD->nDC*CSD->nPp*CSD->nTp];

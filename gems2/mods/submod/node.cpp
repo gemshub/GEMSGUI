@@ -626,15 +626,15 @@ void TNode::getG0_V0_H0_Cp0_matrix()
 
   G0 =  new double[TProfil::pm->mup->L];
   V0 =  new double[TProfil::pm->mup->L];
-  if ( tpp->H )
+  if ( pmm->H0 )
     H0 =  new double[TProfil::pm->mup->L];
   else
     H0 = 0;
-  if ( tpp->Cp )
+  if ( pmm->Cp0 )
     Cp0 = new double[TProfil::pm->mup->L];
   else
     Cp0 = 0;
-  if ( tpp->S )
+  if ( pmm->S0 )
       S0 = new double[TProfil::pm->mup->L];
   else
       S0 = 0;

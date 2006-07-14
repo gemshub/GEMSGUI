@@ -178,7 +178,7 @@ void TMulti::to_text_file_gemipm( const char *path )
 
    ff << "# GEMIPM2K v. 0.725" << endl;
    ff << "# Prototype 12.07.2006" << endl;
-   ff << "# Comments marked with # $ ;" << endl << endl;
+   ff << "# Comments marked with #" << endl << endl;
    ff << "# Template for the ipm-dat text input file for the internal MULTI data" << endl;
    ff << "# (should be read after the DATACH file and before DATABR files)" << endl << endl;
    ff << "# ID key of the initial chemical system definition" << endl;
@@ -332,9 +332,9 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    ff << "\n\n# Initial data for DCs - see DATACH file for dimensions nDC, nDCs" << endl;
    ff << "# Partial pressures (fugacities) of dependent components (for setting constant chemical potentials)";
    outArray( ff, "Pparc", pmp->Pparc,  pmp->L);
-   ff << "# generic DC classes (asymmetric, solvent, ideal, single)";
+   ff << "\n\n# generic DC classes (asymmetric, solvent, ideal, single)";
    outArray( ff, "DCCW", pmp->DCCW,  pmp->L, 1);
-   ff << "# Specific surface areas of phases (whole list)";
+   ff << "\n\n# Specific surface areas of phases (whole list)";
    outArray( ff, "Aalp", pmp->Aalp,  pmp->FI);
    ff << "\n\n# This is not necessary - can be calculated from G0 ???????????";
    outArray( ff, "G", pmp->G,  pmp->L);
