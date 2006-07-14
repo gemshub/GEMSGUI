@@ -33,6 +33,7 @@ using namespace JAMA;
 
 #endif
 
+#include "node.h"
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Main sequence of IPM calculations
 //  Main place for implementation of diagnostics and setup
@@ -361,6 +362,7 @@ STEP_POINT( "End Simplex" );
 #ifndef IPMGEMPLUGIN
 STEP_POINT("Before FIA");
 #endif
+
     return false;
 }
 

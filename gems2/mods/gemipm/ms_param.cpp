@@ -90,7 +90,10 @@ void TProfil::calcMulti()
 {
     multi->MultiCalcInit( 0 );
     if( multi->AutoInitialApprox() == false )
+    {
+       //       TNode::na->GEM_printf( "calc_multi_test.ipm", 0, 0 );
         multi->MultiCalcIterations();
+    }
 }
 
 void TProfil::outMulti( GemDataStream& ff, gstring& path  )
@@ -134,15 +137,18 @@ double TMulti::LagranInterp(float *y, float *x, double *d, float yoi,
     double s=0,z,s1[21];
     int py, px, i=0, j, j1, k, jy, jy1;
 
-//    if (yoi < y[0])
-//        Error( GetName(), "E34RErun: yoi < y[0] (minimal row argument value)");
-//    if(xoi < x[0])
-//        Error( GetName(), "E35RErun: xoi < x[0] (minimal column argument value)");
     py = N-1;
     px = M-1;
 
-    if(yoi < y[0] || xoi < x[0] || yoi > y[py] || xoi > x[px] )
-       return s;  // one of arguments outside the range
+   if (yoi < y[0] || yoi > y[py] )
+        Error( GetName(), "E34RErun: yoi < y[0] (minimal row argument value)");
+   if(xoi < x[0] || xoi > x[px] )
+        Error( GetName(), "E35RErun: xoi < x[0] (minimal column argument value)");
+
+//    if(yoi < y[0] || xoi < x[0] || yoi > y[py] || xoi > x[px] )
+//       return s;  // one of arguments outside the range
+   if( N==1 && M==1 )
+      return d[0];
 
     for(j1=0;j1<N;j1++)
         if (yoi >= y[j1] && yoi <= y[j1+1])
@@ -202,11 +208,13 @@ void TMulti::CompG0Load()
   DATACH  *dCH = TNode::na->pCSD();
 //  DATABR  *dBR = TNodeArray::na->pCNode();
 
-  if( dCH->nTp <=1 && dCH->nPp <=1 )
-    return;
-
   TC = TNode::na->cT()-C_to_K;
   P = TNode::na->cP();
+
+// if( dCH->nTp <=1 && dCH->nPp <=1 )
+if( dCH->nTp <1 && dCH->nPp <1 )
+   return;
+
   for( jj=0; jj<dCH->nTp; jj++)
     if( fabs( TC - dCH->Tval[jj] ) < dCH->Ttol )
     {
@@ -246,7 +254,7 @@ void TMulti::CompG0Load()
  else
  {
    pmp->denW = 1.;
-   pmp->epsW = 1.;
+   pmp->epsW = 78.;
  }
 
 //Test outpur ***********************************

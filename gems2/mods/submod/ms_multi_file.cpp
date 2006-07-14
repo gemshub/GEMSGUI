@@ -516,6 +516,7 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
     pm.DCCW = new char[pm.L];
 
  pm.lnGmM = new double[pm.L];
+ memset(pm.lnGmM, 0, pm.L*sizeof(double));
  pm.GEX = new double[pm.L];
  pm.FVOL = new double[pm.FI];
  pm.FWGT = new double[pm.FI];

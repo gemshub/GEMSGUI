@@ -330,14 +330,12 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    ff << "# Full total bulk composition of the initial system (vector b) - see DATACH file for dimension nIC";
    outArray( ff, "B", pmp->B,  pmp->N);
    ff << "\n\n# Initial data for DCs - see DATACH file for dimensions nDC, nDCs" << endl;
-   ff << "# Partial pressures (fugacities) of dependent components (for setting constant chemical potentials)";
-   outArray( ff, "Pparc", pmp->Pparc,  pmp->L);
    ff << "\n\n# generic DC classes (asymmetric, solvent, ideal, single)";
    outArray( ff, "DCCW", pmp->DCCW,  pmp->L, 1);
-   ff << "\n\n# Specific surface areas of phases (whole list)";
-   outArray( ff, "Aalp", pmp->Aalp,  pmp->FI);
+   ff << "# Partial pressures (fugacities) of dependent components (for setting constant chemical potentials)";
+   outArray( ff, "Pparc", pmp->Pparc,  pmp->L);
    ff << "\n\n# This is not necessary - can be calculated from G0 ???????????";
-   outArray( ff, "G", pmp->G,  pmp->L);
+   outArray( ff, "G0", pmp->G0,  pmp->L);
    ff << "\n\n# DC G0 increments for adjustments";
    outArray( ff, "GEX", pmp->GEX,  pmp->L);
    ff << "\n\n# DC Fixed (start) activity coefficients";
@@ -356,6 +354,8 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    ff << "\n\n# Full vector of upper metastability constraints on DC amounts in the system";
    outArray( ff, "DUL", pmp->DUL,  pmp->L);
    ff << "\n\n# (6) Initial data for phases" << endl;
+   ff << "\n\n# Specific surface areas of phases (whole list)";
+   outArray( ff, "Aalp", pmp->Aalp,  pmp->FI);
    if( PSigm != S_OFF )
    {  ff << "# Specific surface free energy for phase-water interface";
       outArray( ff, "Sigw", pmp->Sigw,  pmp->FI);
@@ -380,6 +380,13 @@ if( pm.FIs > 0 && pm.Ls > 0 )
       outArray( ff, "SACT", pmp->SATT, pmp->Lads, 1 );
       outArray( ff, "DCads", pmp->DCC3, pmp->Lads, 1 );
     }
+//outArray( ff, "Vol", pmp->Vol,  pmp->L);
+//outArray( ff, "G0", pmp->G0,  pmp->L);
+//outArray( ff, "PUL", pmp->PUL,  pmp->L);
+//outArray( ff, "PLL", pmp->PLL,  pmp->L);
+//outArray( ff, "lnGam", pmp->lnGam,  pmp->L);
+//outArray( ff, "F0", pmp->F0,  pmp->L);
+
 /*
    if( pm.sitNcat*pm.sitNcat )
      outArray( ff, "sitE", pmp->sitE, pmp->sitNcat*pmp->sitNan );
@@ -405,6 +412,7 @@ void TMulti::from_text_file_gemipm( const char *path )
    float RoW;
 
   // get sizes from DATACH
+  pmp->TC = pmp->P = 0;
   pmp->N = pmp->NR = dCH->nIC;
   pmp->L = dCH->nDC;
   pmp->FI = dCH->nPH;
@@ -485,6 +493,17 @@ void TMulti::from_text_file_gemipm( const char *path )
 //   inArray( ff,"sitNc" , &pmp->sitNcat, 1);
 //   inArray( ff,"sitNa" , &pmp->sitNan, 1);
 
+//   if( dCH->ccPH[0] == PH_AQUEL )
+//   {
+//     RoW = dCH->roW[0];
+//     EpsW = dCH->epsW[0];
+//   }
+//   else
+//  {
+    RoW = 0.99706137180;
+    EpsW = 78.245147705;
+//  }
+
 #ifndef IPMGEMPLUGIN
 //   syp->PAalp = PAalp;
 //   syp->PSigm = PSigm;
@@ -546,10 +565,9 @@ if( pm.FIs > 0 && pm.Ls > 0 )
      inArray( ff, "DMc", pmp->DMc,  LsMdcSum);
    }
    inArray( ff, "B", pmp->B,  pmp->N);
-   inArray( ff, "Pparc", pmp->Pparc,  pmp->L);
    inArray( ff, "DCCW", pmp->DCCW,  pmp->L, 1);
-   inArray( ff, "Aalp", pmp->Aalp,  pmp->FI);
-   inArray( ff, "G", pmp->G,  pmp->L);
+   inArray( ff, "Pparc", pmp->Pparc,  pmp->L);
+   inArray( ff, "G0", pmp->G0,  pmp->L);
    inArray( ff, "GEX", pmp->GEX,  pmp->L);
    inArray( ff, "lnGmf", pmp->lnGmf,  pmp->L);
    if( pmp->E )
@@ -558,6 +576,7 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    inArray( ff, "RSC", pmp->RSC, pmp->L, 1 );
    inArray( ff, "DLL", pmp->DLL,  pmp->L);
    inArray( ff, "DUL", pmp->DUL,  pmp->L);
+   inArray( ff, "Aalp", pmp->Aalp,  pmp->FI);
    if( PSigm != S_OFF )
    {
       inArray( ff, "Sigw", pmp->Sigw,  pmp->FI);
@@ -579,6 +598,13 @@ if( pm.FIs > 0 && pm.Ls > 0 )
       inArray( ff, "SACT", pmp->SATT, pmp->Lads, 1 );
       inArray( ff, "DCads", pmp->DCC3, pmp->Lads, 1 );
     }
+//    inArray( ff, "Vol", pmp->Vol,  pmp->L);
+//    inArray( ff, "G0", pmp->G0,  pmp->L);
+//    inArray( ff, "PUL", pmp->PUL,  pmp->L);
+//    inArray( ff, "PLL", pmp->PLL,  pmp->L);
+//    inArray( ff, "lnGam", pmp->lnGam,  pmp->L);
+//    inArray( ff, "F0", pmp->F0,  pmp->L);
+
 /*
    if( pm.sitNcat*pm.sitNcat )
      inArray( ff, "sitE", pmp->sitE, pmp->sitNcat*pmp->sitNan );

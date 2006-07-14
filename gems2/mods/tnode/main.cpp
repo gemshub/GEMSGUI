@@ -53,7 +53,6 @@ int main( int argc, char* argv[] )
    if( node->GEM_init( ipm_input_file_list_name ) )
        return 1;  // error occured during reading the files
 
-    return 0;
 // int nNodes = 1;     // number of local equilibrium nodes, 1 or more
    int nTimes = 100;   // Maximum number of time iteration steps
    double t_start = 0., t_end = 10000., dt = 100., tc = 1.;
@@ -131,6 +130,7 @@ int main( int argc, char* argv[] )
 
      // re-calculating equilibrium by calling GEMIPM
      m_NodeStatusCH[in] = node->GEM_run();
+
      if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_PIA ) )
         return 5;
      // Extracting chemical data into FMT part
