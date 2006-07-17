@@ -315,15 +315,15 @@ void TNode::datach_to_text_file( fstream& ff )
   {  ff << "\n\n## (8) Thermodynamic data section";
      ff << "\n# Tolerance for the interpolation over temperature (K)" << endl;
   }
-  ff << left << setw(7) << "<Ttol> " <<  CSD->Ttol << endl;
+  ff << left << setw(7) << "<Ttol> " <<  CSD->Ttol;
   if( _comment )
-    ff << "# Temperatures for the grid";
+    ff << "\n# Temperatures for the grid";
   outArray( ff, "Tval", CSD->Tval, CSD->nTp );
   if( _comment )
     ff << "\n\n# Tolerance for the interpolation over pressure (K)" << endl;
-  ff << left << setw(7) << "<Ptol> " <<  CSD->Ptol << endl;
+  ff << left << setw(7) << "<Ptol> " <<  CSD->Ptol;
   if( _comment )
-      ff << "# Pressures for the grid";
+      ff << "\n# Pressures for the grid";
   outArray( ff, "Pval", CSD->Pval, CSD->nPp );
 
   if( CSD->ccPH[0] == PH_AQUEL )

@@ -466,70 +466,127 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
     // Part 1
      // need  always to alloc vectors
  pm.L1 = new short[pm.FI];
+ memset(pm.L1, 0, pm.FI*sizeof(short));
  pm.muk = new short[pm.FI];
+ memset(pm.muk, 0, pm.FI*sizeof(short));
  pm.mui = new short[pm.N];
+ memset(pm.mui, 0, pm.N*sizeof(short));
  pm.muj = new short[pm.L];
+ memset(pm.muj, 0, pm.L*sizeof(short));
 
  pm.DUL = new double[pm.L];
+ memset(pm.DUL, 0, pm.L*sizeof(double));
  pm.DLL = new double[pm.L];
+ memset(pm.DLL, 0, pm.L*sizeof(double));
  pm.Vol = new double[pm.L];
+ memset(pm.Vol, 0, pm.L*sizeof(double));
  pm.Pparc = new double[pm.L];
+ memset(pm.Pparc, 0, pm.L*sizeof(double));
  pm.MM = new double[pm.L];
+ memset(pm.MM, 0, pm.L*sizeof(double));
  pm.Awt = new float[pm.N];
+ memset(pm.Awt, 0, pm.N*sizeof(float));
  pm.A = new float[pm.N*pm.L];
+ memset(pm.A, 0, pm.N*pm.L*sizeof(float));
  pm.XFs = new float[pm.FI];
+ memset(pm.XFs, 0, pm.FI*sizeof(float));
  pm.Falps = new float[pm.FI];
+ memset(pm.Falps, 0, pm.FI*sizeof(float));
  pm.G = new double[pm.L];
+ memset(pm.G, 0, pm.L*sizeof(double));
  pm.G0 = new double[pm.L];
+ memset(pm.G0, 0, pm.L*sizeof(double));
  pm.lnGam = new double[pm.L];
+ memset(pm.lnGam, 0, pm.L*sizeof(double));
  pm.lnGmo = new double[pm.L];
+ memset(pm.lnGmo, 0, pm.L*sizeof(double));
  pm.B = new double[pm.N];
+ memset(pm.B, 0, pm.N*sizeof(double));
  pm.U = new double[pm.N];
+ memset(pm.U, 0, pm.N*sizeof(double));
  pm.U_r = new double[pm.N];
+ memset(pm.U_r, 0, pm.N*sizeof(double));
  pm.C = new double[pm.N];
+ memset(pm.C, 0, pm.N*sizeof(double));
  pm.XF = new double[pm.FI];
+ memset(pm.XF, 0, pm.FI*sizeof(double));
  pm.YF = new double[pm.FI];
+ memset(pm.YF, 0, pm.FI*sizeof(double));
  pm.Falp = new double[pm.FI];
+ memset(pm.Falp, 0, pm.FI*sizeof(double));
  pm.X = new double[pm.L];
+ memset(pm.X, 0, pm.L*sizeof(double));
  pm.Y = new double[pm.L];
+ memset(pm.Y, 0, pm.L*sizeof(double));
  pm.XY = new double[pm.L];
+ memset(pm.XY, 0, pm.L*sizeof(double));
  pm.MU = new double[pm.L];
+ memset(pm.MU, 0, pm.L*sizeof(double));
  pm.EMU = new double[pm.L];
+ memset(pm.EMU, 0, pm.L*sizeof(double));
  pm.NMU = new double[pm.L];
+ memset(pm.NMU, 0, pm.L*sizeof(double));
  pm.W = new double[pm.L];
+ memset(pm.W, 0, pm.L*sizeof(double));
  pm.F = new double[pm.L];
+ memset(pm.F, 0, pm.L*sizeof(double));
  pm.F0 = new double[pm.L];
+ memset(pm.F0, 0, pm.L*sizeof(double));
  pm.YOF = new double[pm.FI];
+ memset(pm.YOF, 0, pm.FI*sizeof(double));
 
     pm.SB = new char[pm.N][MAXICNAME+MAXSYMB];
+    memset(pm.SB, 0, pm.N*(MAXICNAME+MAXSYMB)*sizeof(char));
     pm.SB1 = new char[pm.N][MAXICNAME];
+    memset(pm.SB1, 0, pm.N*(MAXICNAME)*sizeof(char));
     pm.SFs = new char[pm.FI][MAXPHNAME+MAXSYMB];
+    memset(pm.SFs, 0, pm.FI*(MAXPHNAME+MAXSYMB)*sizeof(char));
     pm.SM = new char[pm.L][MAXDCNAME];
+    memset(pm.SM, 0, pm.L*(MAXDCNAME)*sizeof(char));
     pm.SF = new char[pm.FI][MAXPHNAME+MAXSYMB];
+    memset(pm.SF, 0, pm.FI*(MAXPHNAME+MAXSYMB)*sizeof(char));
     pm.SM2 = new char[pm.Ls][MAXDCNAME];
+    memset(pm.SM2, 0, pm.Ls*(MAXDCNAME)*sizeof(char));
     pm.SF2 = new char[pm.FIs][MAXPHNAME+MAXSYMB];
+    memset(pm.SF2, 0, pm.FIs*(MAXPHNAME+MAXSYMB)*sizeof(char));
     pm.RLC = new char[pm.L];
+    memset(pm.RLC, 0, pm.L*sizeof(char));
     pm.RSC = new char[pm.L];
+    memset(pm.RSC, 0, pm.L*sizeof(char));
     pm.ICC = new char[pm.N];
+    memset(pm.ICC, 0, pm.N*sizeof(char));
     pm.DCC = new char[pm.L];
+    memset(pm.DCC, 0, pm.L*sizeof(char));
     pm.PHC = new char[pm.FI];
+    memset(pm.PHC, 0, pm.FI*sizeof(char));
     pm.DCCW = new char[pm.L];
+    memset(pm.DCCW, 0, pm.L*sizeof(char));
 
  pm.lnGmM = new double[pm.L];
  memset(pm.lnGmM, 0, pm.L*sizeof(double));
  pm.GEX = new double[pm.L];
+ memset(pm.GEX, 0, pm.L*sizeof(double));
  pm.FVOL = new double[pm.FI];
+ memset(pm.FVOL, 0, pm.FI*sizeof(double));
  pm.FWGT = new double[pm.FI];
+ memset(pm.FWGT, 0, pm.FI*sizeof(double));
 
  if( pm.L > 0 )
  {
    pm.Y_la = new double[pm.L];
+   memset(pm.Y_la, 0, pm.L*sizeof(double));
    pm.Y_w = new double[pm.L];
+   memset(pm.Y_w, 0, pm.L*sizeof(double));
    pm.Fx = new double[pm.L];
+   memset(pm.Fx, 0, pm.L*sizeof(double));
    pm.Wx = new double[pm.L];
+   memset(pm.Wx, 0, pm.L*sizeof(double));
    pm.VL = new float[pm.L];
+   memset(pm.VL, 0, pm.L*sizeof(float));
    pm.Gamma = new double[pm.L];
+   memset(pm.Gamma, 0, pm.L*sizeof(double));
    pm.lnGmf = new double[pm.L];
+   memset(pm.lnGmf, 0, pm.L*sizeof(double));
 //   pm.D = new double[pm.L];
  }
  else
@@ -549,20 +606,31 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  if( pm.FIs > 0 && pm.Ls > 0 )
  {
    pm.BF = new double[pm.FIs*pm.N];
+   memset(pm.BF, 0, pm.FIs*pm.N*sizeof(double));
    pm.XFA = new double[pm.FIs];
+   memset(pm.XFA, 0, pm.FIs*sizeof(double));
    pm.YFA = new double[pm.FIs];
+   memset(pm.YFA, 0, pm.FIs*sizeof(double));
    pm.LsMod = new short[pm.FIs];
+   memset(pm.LsMod, 0, pm.FIs*sizeof(short));
    pm.LsMdc = new short[pm.FIs];
+   memset(pm.LsMdc, 0, pm.FIs*sizeof(short));
      pm.PMc = 0;
      pm.DMc = 0;
 //   pm.PMc = new float[pm.FIs];
 //   pm.DMc = new float[pm.Ls];
    pm.PUL = new double[pm.FIs];
+   memset(pm.PUL, 0, pm.FIs*sizeof(double));
    pm.PLL = new double[pm.FIs];
+   memset(pm.PLL, 0, pm.FIs*sizeof(double));
 
    pm.sMod = new char[pm.FIs][6];
+   memset(pm.sMod, 0, pm.FIs*6*sizeof(char));
    pm.RFLC = new char[pm.FIs];
+   memset(pm.RFLC, 0, pm.FIs*sizeof(char));
    pm.RFSC = new char[pm.FIs];
+   memset(pm.RFSC, 0, pm.FIs*sizeof(char));
+
  }
  else
  {
@@ -584,9 +652,13 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  if( pm.LO > 1 )
  {
    pm.Y_m = new double[pm.L];
+   memset(pm.Y_m, 0, pm.L*sizeof(double));
    pm.IC_m = new double[pm.N];
+   memset(pm.IC_m, 0, pm.N*sizeof(double));
    pm.IC_lm = new double[pm.N];
+   memset(pm.IC_lm, 0, pm.N*sizeof(double));
    pm.IC_wm = new double[pm.N];
+   memset(pm.IC_wm, 0, pm.N*sizeof(double));
  }
  else
  {
@@ -600,7 +672,9 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  if( PAalp != S_OFF )
  {
    pm.Aalp = new float[pm.FI];
+   memset(pm.Aalp, 0, pm.FI*sizeof(float));
    pm.Xr0h0 = new float[pm.FI][2];
+   memset(pm.Xr0h0, 0, pm.FI*2*sizeof(float));
  }
  else
  {
@@ -609,8 +683,10 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  }
 
  if( PSigm != S_OFF )
- {    pm.Sigw = new float[pm.FI];
+ {   pm.Sigw = new float[pm.FI];
      pm.Sigg = new float[pm.FI];
+     memset(pm.Sigw, 0, pm.FI*sizeof(float));
+     memset(pm.Sigg, 0, pm.FI*sizeof(float));
  }
  else
  {   pm.Sigw = 0;
@@ -622,6 +698,9 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
     pm.EZ = new double[pm.L];
     pm.Xcond = new float[pm.FI];
     pm.Xeps = new float[pm.FI];
+    memset(pm.EZ, 0, pm.L*sizeof(double));
+    memset(pm.Xcond, 0, pm.FI*sizeof(float));
+    memset(pm.Xeps, 0, pm.FI*sizeof(float));
  }
  else
  {
@@ -632,34 +711,61 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
 
  if( pm.FIat > 0 /*&& pm.Lads > 0*/ && pm.FIs > 0 )
  { // ADSORBTION AND ION IXCHANDG
-pm.SATX = new short[pm.Lads][4];
+   pm.SATX = new short[pm.Lads][4];
+   memset(pm.SATX, 0, pm.Lads*4*sizeof(short));
    pm.SCM  = new char[pm.FIs][MST];
+   memset(pm.SCM, 0, pm.FIs*MST*sizeof(char));
 
     pm.Nfsp = new float[pm.FIs][MST];
+    memset(pm.Nfsp, 0, pm.FIs*MST*sizeof(float));
     pm.MASDT = new float[pm.FIs][MST];
+    memset(pm.MASDT, 0, pm.FIs*MST*sizeof(float));
     pm.XcapA = new float[pm.FIs][MST];
+    memset(pm.XcapA, 0, pm.FIs*MST*sizeof(float));
     pm.XcapB = new float[pm.FIs][MST];
+    memset(pm.XcapB, 0, pm.FIs*MST*sizeof(float));
     pm.XcapD = new float[pm.FIs][MST];
+    memset(pm.XcapD, 0, pm.FIs*MST*sizeof(float));
     pm.XcapF = new float[pm.FIs][MST];
+    memset(pm.XcapF, 0, pm.FIs*MST*sizeof(float));
     pm.XdlA = new float[pm.FIs][MST];
+    memset(pm.XdlA, 0, pm.FIs*MST*sizeof(float));
     pm.XdlB = new float[pm.FIs][MST];
+    memset(pm.XdlB, 0, pm.FIs*MST*sizeof(float));
     pm.XdlD = new float[pm.FIs][MST];
+    memset(pm.XdlD, 0, pm.FIs*MST*sizeof(float));
     pm.XpsiA = new double[pm.FIs][MST];
+    memset(pm.XpsiA, 0, pm.FIs*MST*sizeof(double));
     pm.XpsiB = new double[pm.FIs][MST];
+    memset(pm.XpsiB, 0, pm.FIs*MST*sizeof(double));
     pm.XpsiD = new double[pm.FIs][MST];
+    memset(pm.XpsiD, 0, pm.FIs*MST*sizeof(double));
     pm.XlamA = new float[pm.FIs][MST];
+    memset(pm.XlamA, 0, pm.FIs*MST*sizeof(float));
     pm.Xetaf = new float[pm.FIs][MST];
+    memset(pm.Xetaf, 0, pm.FIs*MST*sizeof(float));
     pm.XetaA = new double[pm.FIs][MST];
+    memset(pm.XetaA, 0, pm.FIs*MST*sizeof(double));
     pm.XetaB = new double[pm.FIs][MST];
-pm.XetaD = new double[pm.FIs][MST];
-pm.MASDJ = new float[pm.Lads][DFCN];
+    memset(pm.XetaB, 0, pm.FIs*MST*sizeof(double));
+    pm.XetaD = new double[pm.FIs][MST];
+    memset(pm.XetaD, 0, pm.FIs*MST*sizeof(double));
+    pm.MASDJ = new float[pm.Lads][DFCN];
+    memset(pm.MASDJ, 0, pm.Lads*DFCN*sizeof(float));
+
 //    pm.MASDJ = new float[pm.Ls];
 pm.XFTS = new double[pm.FIs][MST];
+memset(pm.XFTS, 0, pm.FIs*MST*sizeof(double));
 pm.lnSAC = new double[pm.Lads][4];
+memset(pm.lnSAC, 0, pm.Lads*4*sizeof(double));
 pm.SATT = new char[pm.Lads];
+memset(pm.SATT, 0, pm.Lads*sizeof(char));
 pm.SM3 = new char[pm.Lads][MAXDCNAME];
+memset(pm.SM3, 0, pm.Lads*MAXDCNAME*sizeof(char));
 pm.DCC3 = new char[pm.Lads];
+memset(pm.DCC3, 0, pm.Lads*sizeof(char));
 pm.D = new double[MST][MST];
+memset(pm.D, 0, MST*MST*sizeof(double));
  }
 else
  { // ADSORPTION AND ION EXCHANGE
@@ -680,21 +786,24 @@ else
     pm.Xetaf = 0;
     pm.XetaA = 0;
     pm.XetaB = 0;
-pm.XetaD = 0;
+    pm.XetaD = 0;
     pm.MASDJ = 0;
     pm.XFTS = 0;
-pm.lnSAC = 0;
-pm.SATT = 0;
-pm.SM3 = 0;
-pm.DCC3 = 0;
-pm.D = 0;
+    pm.lnSAC = 0;
+    pm.SATT = 0;
+    pm.SM3 = 0;
+    pm.DCC3 = 0;
+    pm.D = 0;
  }
 
  if( pm.PG > 0 )
  {
   pm.Fug = new float[pm.PG];
+  memset(pm.Fug, 0, pm.PG*sizeof(float));
   pm.Fug_l = new float[pm.PG];
+  memset(pm.Fug_l, 0, pm.PG*sizeof(float));
   pm.Ppg_l = new float[pm.PG];
+  memset(pm.Ppg_l, 0, pm.PG*sizeof(float));
  }
 else
  {
@@ -704,15 +813,18 @@ else
  }
 
    // Part 3
-
  if( pm.Ls > 1 && pm.FIs > 0 )
  {
     pm.Wb = new float[pm.Ls];
+    memset(pm.Wb, 0, pm.Ls*sizeof(float));
     pm.Wabs = new float[pm.Ls];
+    memset(pm.Wabs, 0, pm.Ls*sizeof(float));
     pm.Rion = new float[pm.Ls];
+    memset(pm.Rion, 0, pm.Ls*sizeof(float));
     pm.Qp = new double[pm.FIs*QPSIZE];
+    memset(pm.Qp, 0, pm.FIs*QPSIZE*sizeof(double));
     pm.Qd = new double[pm.FIs*QDSIZE];
-
+    memset(pm.Qd, 0, pm.FIs*QPSIZE*sizeof(double));
  }
  else
  {
@@ -725,20 +837,24 @@ else
  }
 //  Added 16.11.2004 by Sveta
     if( pm.sitNcat*pm.sitNcat )
-       pm.sitE = new float[pm.sitNcat*pm.sitNan];
+    { pm.sitE = new float[pm.sitNcat*pm.sitNan];
+      memset(pm.sitE, 0, pm.sitNcat*pm.sitNan*sizeof(float));
+    }
     else
        pm.sitE = 0;
     if( pm.sitNcat )
-       pm.sitXcat = new short[pm.sitNcat];
+    {  pm.sitXcat = new short[pm.sitNcat];
+       memset(pm.sitXcat, 0, pm.sitNcat*sizeof(float));
+     }
     else
        pm.sitXcat = 0;
     if( pm.sitNan )
-       pm.sitXan = new short[pm.sitNan];
+    {   pm.sitXan = new short[pm.sitNan];
+        memset(pm.sitXan, 0, pm.sitNan*sizeof(float));
+    }
     else
        pm.sitXan = 0;
 
-//  pm.R = 0;
-//  pm.R1 = 0;
 
 }
 
@@ -1092,12 +1208,6 @@ void TMulti::to_text_file( gstring& path )
      outArray( ff, "sitXcat", pm.sitXcat, pm.sitNcat );
    if( pm.sitNan )
       outArray( ff, "sitXan", pm.sitXan, pm.sitNan );
-
-/*   if(pm.R)
-   outArray( ff, "R", pm.R,  pm.N*(pm.N+1), pm.N+1);
-   if(pm.R1)
-   outArray( ff, "R1", pm.R1,  pm.N*(pm.N+1), pm.N+1);
-*/
 }
 
 
