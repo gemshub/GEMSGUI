@@ -22,7 +22,7 @@
 #include "node.h"
 #include "gdatastream.h"
 
-bool _comment = true;
+extern bool _comment;
 
 void TNode::databr_to_text_file( fstream& ff )
 {
