@@ -751,7 +751,7 @@ void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int e
   fprintf( logfile, "\nStep= %-8d  Time= %-12.4g     Amounts of reactive phases, moles\n", t, at/(365*86400) );
   fprintf(logfile, "%s","Node#   ");
   for( ip=0; ip < int(pCSD()->nPHb); ip++ )
-    fprintf( logfile, "%-12.12s ", pCSD()->PHNL[ip]+4 );
+    fprintf( logfile, "%-12.12s ", pCSD()->PHNL[ip] );
   for (i=0; i<nx; i++)    // node iteration
   {
      fprintf( logfile, "\n%5d   ", i );

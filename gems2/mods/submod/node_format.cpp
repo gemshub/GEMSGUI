@@ -37,49 +37,125 @@ void TNode::databr_to_text_file( fstream& ff )
       ff << "# (should be read only after the DATACH and the IPM-DAT files)" << endl << endl;
       ff << "#'sCon' Node handle and status code" << endl;
    }
+   if( _comment )
+      ff << "# Node identification handle" << endl;
    ff << left << setw(17) << "<NodeHandle> " <<  CNode->NodeHandle << endl;
+   if( _comment )
+      ff << "# Node type (hydraulic); see typedef NODETYPE" << endl;
    ff << left << setw(17) << "<NodeTypeHY> " <<  CNode->NodeTypeHY << endl;
+   if( _comment )
+      ff << "# Node type (mass transport); see typedef NODETYPE" << endl;
    ff << left << setw(17) << "<NodeTypeMT> " <<  CNode->NodeTypeMT << endl;
+   if( _comment )
+      ff << "# Node status code FMT; see typedef NODECODEFMT" << endl;
    ff << left << setw(17) << "<NodeStatusFMT> " <<  CNode->NodeStatusFMT << endl;
+   if( _comment )
+      ff << "# Node status code CH;  see typedef NODECODECH" << endl;
    ff << left << setw(17) << "<NodeStatusCH> " <<  CNode->NodeStatusCH << endl;
+   if( _comment )
+      ff << "# Number of iterations performed by IPM" << endl;
    ff << left << setw(17) << "<IterDone> " <<  CNode->IterDone << endl;
    ff << endl;
    if( _comment )
       ff << "##'dCon' Chemical scalar variables" << endl;
+   if( _comment )
+         ff << "# Temperature T, K" << endl;
    ff << left << setw(7) << "<T> " <<  CNode->T << endl;
+   if( _comment )
+         ff << "# Pressure P, bar" << endl;
    ff << left << setw(7) << "<P> " <<  CNode->P << endl;
+   if( _comment )
+         ff << "# Volume V of reactive subsystem, cm3" << endl;
    ff << left << setw(7) << "<Vs> " << CNode->Vs << endl;
+   if( _comment )
+         ff << "# Volume of inert subsystem, cm3" << endl;
    ff << left << setw(7) << "<Vi> " <<  CNode->Vi << endl;
+   if( _comment )
+         ff << "# Mass of reactive subsystem,  g " << endl;
    ff << left << setw(7) << "<Ms> " <<  CNode->Ms << endl;
+   if( _comment )
+         ff << "# Mass of inert subsystem, g" << endl;
    ff << left << setw(7) << "<Mi> " <<  CNode->Mi << endl;
+   if( _comment )
+         ff << "# Gibbs energy of reactive subsystem, J" << endl;
    ff << left << setw(7) << "<Gs> " <<  CNode->Gs << endl;
+   if( _comment )
+         ff << "# Enthalpy of reactive subsystem, J " << endl;
    ff << left << setw(7) << "<Hs> " <<  CNode->Hs << endl;
+   if( _comment )
+         ff << "# Enthalpy of inert subsystem, J  " << endl;
    ff << left << setw(7) << "<Hi> " <<  CNode->Hi << endl;
+   if( _comment )
+         ff << "# Effective aqueous ionic strength, molal" << endl;
    ff << left << setw(7) << "<IC> " <<  CNode->IC << endl;
+   if( _comment )
+         ff << "# pH of aqueous solution " << endl;
    ff << left << setw(7) << "<pH> " <<  CNode->pH << endl;
+   if( _comment )
+         ff << "# pe of aqueous solution" << endl;
    ff << left << setw(7) << "<pe> " <<  CNode->pe << endl;
+   if( _comment )
+         ff << "# Eh of aqueous solution, V" << endl;
    ff << left << setw(7) << "<Eh> " <<  CNode->Eh << endl;
    ff << endl;
    if( _comment )
        ff << "## FMT scalar variables (used only on the level of NodeArray)" << endl;
+   if( _comment )
+       ff << "# actual total simulation time, s" << endl;
    ff << left << setw(7) << "<Tm> " <<  CNode->Tm << endl;
+   if( _comment )
+       ff << "# actual time step" << endl;
    ff << left << setw(7) << "<dt> " <<  CNode->dt << endl;
+   if( _comment )
+       ff << "# previous time step" << endl;
    ff << left << setw(7) << "<dt1> " <<  CNode->dt1 << endl;
+   if( _comment )
+       ff << "# total volume of the node (voxel), m3" << endl;
    ff << left << setw(7) << "<Vt> " <<  CNode->Vt << endl;
+   if( _comment )
+       ff << "# advection velocity (in pores) in this node" << endl;
    ff << left << setw(7) << "<vp> " <<  CNode->vp << endl;
+   if( _comment )
+       ff << "#  effective (actual) porosity normalized to 1" << endl;
    ff << left << setw(7) << "<eps> " <<  CNode->eps << endl;
+   if( _comment )
+       ff << "# actual permeability, m2" << endl;
    ff << left << setw(7) << "<Km> " <<  CNode->Km << endl;
+   if( _comment )
+       ff << "# actual DARCY`s constant, m2/s" << endl;
    ff << left << setw(7) << "<Kf> " <<  CNode->Kf << endl;
+   if( _comment )
+       ff << "# specific storage coefficient, dimensionless" << endl;
    ff << left << setw(7) << "<S> " <<  CNode->S << endl;
+   if( _comment )
+       ff << "# transmissivity m2/s" << endl;
    ff << left << setw(7) << "<Tr> " <<  CNode->Tr << endl;
+   if( _comment )
+       ff << "# actual hydraulic head (hydraulic potential), m" << endl;
    ff << left << setw(7) << "<h> " <<  CNode->h << endl;
+   if( _comment )
+       ff << "# actual carrier density for density-driven flow, g/cm3" << endl;
    ff << left << setw(7) << "<rho> " <<  CNode->rho << endl;
+   if( _comment )
+       ff << "# specific longitudinal dispersivity of porous media, m" << endl;;
    ff << left << setw(7) << "<al> " <<  CNode->al << endl;
+   if( _comment )
+       ff << "# specific transversal dispersivity of porous media, m" << endl;;
    ff << left << setw(7) << "<at> " <<  CNode->at << endl;
+   if( _comment )
+       ff << "# specific vertical dispersivity of porous media, m" << endl;;
    ff << left << setw(7) << "<av> " <<  CNode->av << endl;
+   if( _comment )
+       ff << "# hydraulic longitudinal dispersivity, m2/s, diffusities from chemical database" << endl;;
    ff << left << setw(7) << "<hDl> " <<  CNode->hDl << endl;
+   if( _comment )
+       ff << "# hydraulic transversal dispersivity, m2/s" << endl;;
    ff << left << setw(7) << "<hDt> " <<  CNode->hDt << endl;
+   if( _comment )
+       ff << "# hydraulic vertical dispersivity, m2/s" << endl;;
    ff << left << setw(7) << "<hDv> " <<  CNode->hDv << endl;
+   if( _comment )
+       ff << "# tortuosity factor" << endl;;
    ff << left << setw(7) << "<nto> " <<  CNode->nto << endl;
    ff << endl;
    if( _comment )
