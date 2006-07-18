@@ -136,13 +136,13 @@ nProps,      // res Number of particle statistic properties (for monitoring) >= 
    WmCb,  // mole fraction of the carrier DC (e.g. sorbent or solvent)
    Asur,  // Specific surface area of the sorbent (for adsorbed species)
 // "ADpar" data object (11 doubles)
-   fVel,   // Advection/diffusion mass transport:fluid advection velocity (m/sec)
+   fVel,   // Advection/diffusion mass transport: initial fluid advection velocity (m/sec)
    cLen,   // column length (m)
    tf,     // time step reduction factor
    cdv,    // cutoff factor for differences
    cez,    // cutoff factor for minimal amounts of IC in node bulk compositions
-   ADrs1,  // reserved
-   ADrs2,
+   al_in,  // initial value of longitudinal dispersivity (m), usually 1e-3
+   Dif_in, // initial general diffusivity (m2/sec), usually 1e-9
    ADrs3,
    ADrs4,
    ADrs5,

@@ -255,8 +255,12 @@ void TGEM2MT::MassTransAdvecStart()
 // The mass transport iteration time step
 void TGEM2MT::MassTransParticleStart()
 {
+    double dt_adv, dt_dif;
     mtp->dx = mtp->cLen/mtp->nC;
-    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1./mtp->tf;
+    dt_adv = (mtp->dx / mtp->fVel);    // Courant - Neumann criteria
+    dt_dif = (mtp->dx*mtp->dx)/2./(mtp->al_in*mtp->fVel + mtp->Dif_in);
+    mtp->dTau = min(dt_adv, dt_dif) / mtp->tf;
+//    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1./mtp->tf;  // Courant criterion
     mtp->oTau = 0;
     mtp->cTau = mtp->Tau[START_];
     // mtp->cTau = 0;

@@ -655,7 +655,7 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
      if( dbr->NodeTypeHY != NBC3source )
        dbr->bIC[ie] -= mol;
 
-      if( ndx_to > 0 && ndx_to < anNodes )
+      if( ndx_to >= 0 && ndx_to < anNodes )
       {
          if( NodT1[ndx_to]->NodeTypeHY != NBC3source )
            NodT1[ndx_to]->bIC[ie] += mol;
@@ -761,15 +761,15 @@ void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int e
      {
        pm = NodT1[i]->xPH[ip];
        fprintf( logfile, "%-12.4g ", pm );
-       if( TParticleArray::pa )
-       {       // printing number of particles in nodes
-         TParticleArray * ppa = TParticleArray::pa;
-         int npa;
-         for( int jp=0; jp < ppa->nPTypes(); jp++ )
-         {
+     }
+     if( TParticleArray::pa )
+     {       // printing number of particles in nodes
+       TParticleArray * ppa = TParticleArray::pa;
+       int npa;
+       for( int jp=0; jp < ppa->nPTypes(); jp++ )
+       {
             npa = ppa->getNPnum( i, jp);   // number of particles in the node
             fprintf( logfile, "%-8d ", npa );
-         }
        }
      }
   }
