@@ -23,6 +23,9 @@
 static long idum = -10000l;
 static double Rand = -1;
 
+TParticleArray* TParticleArray::pa;
+
+
 TParticleArray::TParticleArray( short nPTypes, short nProps,
            short *aNPmean,
            short (*aParTD)[6],
@@ -64,6 +67,7 @@ TParticleArray::TParticleArray( short nPTypes, short nProps,
   cParts = 0;
   NPlist = 0;
   NPstat = 0;
+  pa = this;
 }
 
 void TParticleArray::freeMemory()

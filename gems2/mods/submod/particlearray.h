@@ -172,11 +172,11 @@ public:
    // stub call for coupled mass transport calculation
   int GEMCOTAC( int Mode, double t0, double t1 );
 
-#ifdef IPMGEMPLUGIN
+//#ifdef IPMGEMPLUGIN
 
   static TParticleArray* pa;
 
-#endif
+//#endif
 
 };
 
