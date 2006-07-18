@@ -116,7 +116,7 @@ class TParticleArray
 
    void freeMemory();
    LOCATION setPointInNode( LOCATION nodeSize[2] );
-   void InterpolationVp_hDl_1D( int px, double& vp, double& hDl );
+   double InterpolationVp_hDl_1D( int px,double& vp, double& al, double& Dif );
 
   // Important for masstransport step
   // Calculation of new particle locations
@@ -178,6 +178,10 @@ public:
 
 //#endif
 
+  int nPTypes() const
+   { return anPTypes; }    // Number of allocated particle types (< 20 ? )
+  short getNPnum( int iNode, int iType ) const // particle numbers in node
+   { return NPnum[iType + iNode*anPTypes];   }
 };
 
 #endif   // _particlearray_h_

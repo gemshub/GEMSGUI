@@ -893,8 +893,6 @@ void TNode::GEM_from_MT(
    double p_P,      // Pressure P, bar                         +       -      -
    double p_Vs,     // Volume V of reactive subsystem, cm3     -       -      +
    double p_Ms,     // Mass of reactive subsystem, kg          -       -      +
-   //       double p_dt,     // actual time step	         			  +
-   //       double p_dt1,    // previous time step                                   +
    double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
    double *p_dul,   // upper kinetic restrictions [nDCb]        +       -      -
    double *p_dll,   // lower kinetic restrictions [nDCb]        +       -      -
@@ -911,8 +909,6 @@ void TNode::GEM_from_MT(
   CNode->P = p_P;
   CNode->Vs = p_Vs;
   CNode->Ms = p_Ms;
-//  CNode->dt = p_dt;
-//  CNode->dt1 = p_dt1;
 // Checking if no-simplex IA is Ok
    for( ii=0; ii<CSD->nICb; ii++ )
    {  //  Sveta 11/02/05 for test
@@ -942,8 +938,6 @@ void TNode::GEM_restore_MT(
    double &p_P,      // Pressure P, bar                         +       -      -
    double &p_Vs,     // Volume V of reactive subsystem, cm3     -       -      +
    double &p_Ms,     // Mass of reactive subsystem, kg          -       -      +
-   //       double p_dt,     // actual time step	         			  +
-   //       double p_dt1,    // previous time step                                   +
    double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
    double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
    double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
@@ -957,8 +951,6 @@ void TNode::GEM_restore_MT(
   p_P = CNode->P;
   p_Vs = CNode->Vs;
   p_Ms = CNode->Ms;
-//  p_dt = CNode->dt;
-//  p_dt1 = CNode->dt1;
 // Checking if no-simplex IA is Ok
    for( ii=0; ii<CSD->nICb; ii++ )
      p_bIC[ii] = CNode->bIC[ii];

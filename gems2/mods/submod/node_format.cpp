@@ -107,8 +107,8 @@ void TNode::databr_to_text_file( fstream& ff )
        ff << "# actual time step" << endl;
    ff << left << setw(7) << "<dt> " <<  CNode->dt << endl;
    if( _comment )
-       ff << "# previous time step" << endl;
-   ff << left << setw(7) << "<dt1> " <<  CNode->dt1 << endl;
+       ff << "# General diffusivity of disolved matter in the mode" << endl;
+   ff << left << setw(7) << "<Dif> " <<  CNode->Dif << endl;
    if( _comment )
        ff << "# total volume of the node (voxel), m3" << endl;
    ff << left << setw(7) << "<Vt> " <<  CNode->Vt << endl;
@@ -237,7 +237,7 @@ void TNode::databr_from_text_file( fstream& ff )
   inArray( ff, "Eh",  &CNode->Eh, 1);
   inArray( ff, "Tm",  &CNode->Tm, 1);
   inArray( ff, "dt",  &CNode->dt, 1);
-  inArray( ff, "dt1",  &CNode->dt1, 1);
+  inArray( ff, "Dif",  &CNode->Dif, 1);
   inArray( ff, "Vt",  &CNode->Vt, 1);
   inArray( ff, "vp",  &CNode->vp, 1);
   inArray( ff, "eps",  &CNode->eps, 1);

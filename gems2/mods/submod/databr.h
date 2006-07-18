@@ -65,7 +65,7 @@ typedef struct
 //  at the nodearray level, normally not used in the single-node FMT-GEM coupling
     Tm,         // actual total simulation time, s
     dt,         // actual time step
-    dt1,        // previous time step
+    Dif,        // General diffusivity of disolved matter in the mode
     Vt,		// total volume of the node (voxel), m3
     vp,		// advection velocity (in pores) in this node
     eps,	// effective (actual) porosity normalized to 1

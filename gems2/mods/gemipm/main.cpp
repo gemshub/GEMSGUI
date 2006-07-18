@@ -352,7 +352,8 @@ int TGEM2MT::MassTransInit( const char *chbr_in1 )
        C0[jj]->eps = mtp->HydP[jj][2];
        C0[jj]->Km = mtp->HydP[jj][3];
        C0[jj]->al = mtp->HydP[jj][4];
-       C0[jj]->hDl = mtp->HydP[jj][5];
+       C0[jj]->Dif = mtp->HydP[jj][5];
+       C0[jj]->hDl = C0[jj]->al*C0[jj]->vp+C0[jj]->Dif;
        C0[jj]->nto = mtp->HydP[jj][6];
      }
   }

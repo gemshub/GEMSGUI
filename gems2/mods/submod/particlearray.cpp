@@ -185,14 +185,15 @@ LOCATION TParticleArray::setPointInNode( LOCATION nodeSize[2] )
 // Implementation of interpolation for particle advection velocities and
 // dispersivities between nodes ( in 1D case)
 // px index of particle
-void TParticleArray::InterpolationVp_hDl_1D( int px, double& vp, double& hDl )
+double TParticleArray::InterpolationVp_hDl_1D( int px,
+   double& vp, double& al, double& Dif )
 {
   if( nodes->SizeM() > 1 ||  nodes->SizeK() > 1 )
      Error( "InterpolationVp_hDl_1D", "Error mode of interpolation." );
 
   DATABR *dbr1, *dbr2;    // nodes for interpolation
   int nodInd1, nodInd2;  // number of nodes for interpolation
-  double x1m, x2m;       // middle-point coordinates in the nodes
+  double hDl, x1m, x2m;       // middle-point coordinates in the nodes
   LOCATION nodeSize[2];
 
 // set up location
@@ -210,6 +211,8 @@ void TParticleArray::InterpolationVp_hDl_1D( int px, double& vp, double& hDl )
   {
     vp = dbr1->vp;
     hDl = dbr1->hDl;
+    al = dbr1->al;
+    Dif = dbr1->Dif;
   }
   else
   {
@@ -220,9 +223,13 @@ void TParticleArray::InterpolationVp_hDl_1D( int px, double& vp, double& hDl )
     double d = (ParT1[px].xyz.x-x1m)/(x2m-x1m);
     vp = dbr1->vp;
     vp -= (dbr2->vp - dbr1->vp )*d;
-    hDl = dbr1->hDl;
-    hDl -= (dbr2->hDl - dbr1->hDl )*d;
+    al = dbr1->al;
+    al -= (dbr2->al - dbr1->al )*d;
+    Dif = dbr1->Dif;
+    Dif -= (dbr2->Dif - dbr1->Dif )*d;
+    hDl = al*vp+Dif;
   }
+  return hDl;
 }
 
 // Important for the mass-transport step
@@ -234,7 +241,7 @@ int TParticleArray::DisplaceParticle( int px, double /*t0*/, double /*t1*/ )
 //  DATACH* ch = nodes->pCSD();       // DataCH structure
   int nodInd = ParT1[px].node;
   double ds = 0.;
-  double vp, hDl;
+  double vp, hDl, al, Dif;
 
   ErrorIf( nodInd < 0 , "DisplaceParticle", "Error index" );
 //  DATABR* dbr = nodes->pNodT1()[nodInd];  // nodes at current time point
@@ -249,12 +256,12 @@ int TParticleArray::DisplaceParticle( int px, double /*t0*/, double /*t1*/ )
                          break;
 
    case MOBILE_C_MASS:
-        InterpolationVp_hDl_1D( px, vp, hDl );
+        hDl = InterpolationVp_hDl_1D( px, vp, al, Dif );
 // vp = dbr->vp;     // testing without interpolation
 // hDl = dbr->hDl;   // testing without interpolation
          if( hDl > 0)
 //         ds = 2.*(randuni( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
-         ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*hDl*vp*dt);
+         ds = 2.*(ran3( idum )-0.5)*sqrt( 6.*hDl*dt);
          ParT1[px].xyz.x += vp*dt + ds;
                         break;
    }
@@ -291,13 +298,18 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double /*t0*/, double /*t1
   switch( nodeType )
   {
     case normal:
+              break;
     case NBC3source:
-                break;
     case NBC3sink:
-                new_node = ndxCsource;
-//                ParT1[px].xyz = nodes->GetNodeLocation(new_node);
+             if( new_node == -1 )
+             {   LOCATION nodeSize[2];
+                 new_node = ndxCsource;
+                 ParT1[px].m_v = 0.;  // set particle in ndxCsource node
+                 nodes->GetNodeSizes( new_node, nodeSize );
+                 ParT1[px].xyz = setPointInNode(nodeSize);
 // Only for 1D calculation !!! check for 2D and 3D
-                ParT1[px].xyz.x -= nodes->GetSize().x;
+//                ParT1[px].xyz.x -= nodes->GetSize().x;
+             }
                 break;
   }
 

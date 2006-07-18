@@ -279,6 +279,7 @@ AGAIN:
 void TNodeArray::allocMemory()
 {
   int ii;
+  TParticleArray::pa = 0;
 
 // alloc memory for data bidge structures
 // did in constructor TNode::allocMemory();
@@ -638,11 +639,11 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
                   mass = dbr->xDC[ips]*pCSD()->DCmm[pCSD()->xDC[ips]];
                    break;
     }
-   coeff = m_v/mass;
+   coeff = m_v/mass; // mass of particle/msass of phase
 
    for(short ie=0; ie < pCSD()->nICb; ie++ )
    {
-     mol = 0.;
+     mol = 0.; // moles if IC in the particle
      switch( tcode )
      {
         case ADVECTIVE:
@@ -660,7 +661,7 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
            NodT1[ndx_to]->bIC[ie] += mol;
       }
       else
-         if(dbr->NodeTypeHY != NBC3sink )
+         if(dbr->NodeTypeHY != NBC3sink  && dbr->NodeTypeHY != NBC3source)
            Error( "W002MTRW", "Warning: Particle jumped outside the domain" );
 
    }
@@ -764,9 +765,9 @@ void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int e
        {       // printing number of particles in nodes
          TParticleArray * ppa = TParticleArray::pa;
          int npa;
-         for( int jp=0; jp < ppa->anPTypes; jp++ )
+         for( int jp=0; jp < ppa->nPTypes(); jp++ )
          {
-            npa = ppa->NPnum[jp + i*ppa->anPTypes];   // number of particles in the node
+            npa = ppa->getNPnum( i, jp);   // number of particles in the node
             fprintf( logfile, "%-8d ", npa );
          }
        }
