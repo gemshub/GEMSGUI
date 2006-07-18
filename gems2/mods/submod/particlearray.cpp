@@ -102,7 +102,7 @@ void TParticleArray::ParticleArrayInit()
     for( iType=0; iType < anPTypes; iType++ )
     {
       NPnum[iNode*anPTypes+iType] = NPmean[iType];
-//      double dd = (nodeSize[1].x-nodeSize[0].x)/NPnum[iNode*anPTypes+iType];
+      double dd = (nodeSize[1].x-nodeSize[0].x)/NPnum[iNode*anPTypes+iType];
      for( k=0; k < NPmean[iType]; k++ )
       {
         ParT0[cpx].ptype = (char)iType;
@@ -111,8 +111,8 @@ void TParticleArray::ParticleArrayInit()
         ParT0[cpx].ips = ParTD[iType].ips;
         ParT0[cpx].m_v = 0.;
         ParT0[cpx].node = iNode;
-//        ParT0[cpx].xyz.x = nodeSize[0].x+k*dd;
-        ParT0[cpx].xyz = setPointInNode(nodeSize);
+        ParT0[cpx].xyz.x = nodeSize[0].x+k*dd;
+//        ParT0[cpx].xyz = setPointInNode(nodeSize);
         ParT1[cpx] = ParT0[cpx];
         cpx++;
       }
@@ -281,8 +281,8 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double /*t0*/, double /*t1
 
   if( new_node == -1 )     // location behind region
   {
-   if( old_node != 0 && old_node != nodes->nNodes()-1 )
-    new_node = nodes->FindNodeFromLocation( ParT1[px].xyz  ); // all list
+   //if( old_node != 0 && old_node != nodes->nNodes()-1 )
+   // new_node = nodes->FindNodeFromLocation( ParT1[px].xyz  ); // all list
    // may be reflection (otrazhenie)
    // change xyz
   // may be discuss: sources, links, reflections . . .
@@ -302,21 +302,31 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double /*t0*/, double /*t1
               break;
     case NBC3source:
     case NBC3sink:
-             if( new_node == -1 )
-             {   LOCATION nodeSize[2];
-                 new_node = ndxCsource;
-//                 ParT1[px].m_v = 0.;  // set particle in ndxCsource node
-                 nodes->GetNodeSizes( new_node, nodeSize );
-//                 ParT1[px].xyz = setPointInNode(nodeSize);
+        if( new_node == -1 )
+        {
 // Only for 1D calculation !!! check for 2D and 3D
-                double new_x = ParT1[px].xyz.x;
-                if( new_x >= nodes->GetSize().x )
-                   new_x -= nodes->GetSize().x+nodeSize[0].x;
-                else // new_x < 0
-                   new_x  += nodeSize[1].x;
-                ParT1[px].xyz.x = new_x;
-             }
-                break;
+            double new_x = ParT1[px].xyz.x;
+            if( new_x >= nodes->GetSize().x )
+                new_x -= nodes->GetSize().x;
+            else // new_x < 0
+                new_x  += nodes->GetSize().x;
+            ParT1[px].xyz.x = new_x;
+            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz );
+        }
+/*    if( new_node == -1 )
+    {   LOCATION nodeSize[2];
+        new_node = ndxCsource;
+        nodes->GetNodeSizes( new_node, nodeSize );
+// Only for 1D calculation !!! check for 2D and 3D
+       double new_x = ParT1[px].xyz.x;
+       if( new_x >= nodes->GetSize().x )
+          new_x -= nodes->GetSize().x+nodeSize[0].x;
+       else // new_x < 0
+          new_x  += nodeSize[1].x;
+       ParT1[px].xyz.x = new_x;
+    }
+*/
+             break;
   }
 
   if( new_node == -1 /*||

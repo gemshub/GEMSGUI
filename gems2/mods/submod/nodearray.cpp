@@ -503,7 +503,7 @@ bool TNodeArray::isLocationInNode( int ii, int jj, int kk, LOCATION cxyz ) const
 // performance-important functions to be used e.g. in particle tracking methods
 int TNodeArray::FindNodeFromLocation( LOCATION cxyz, int old_node ) const
 {
-  LOCATION maxl;
+//  LOCATION maxl;
   int i, j, k/*, ndx*/;
 
  if( old_node == -1 )
@@ -548,15 +548,19 @@ LOCATION TNodeArray::getGrid( int iN, int jN, int kN ) const
       kN < 0 || kN > sizeK  )
    Error( "", "getGrid - programm error");
 
-  if( iN == sizeN )  i1 = iN-1;
-      else i1 = iN;
-  if( jN == sizeM )  j1 = jN-1;
-       else j1 = jN;
-  if( kN == sizeK )  k1 = kN-1;
-        else k1 = kN;
+  if( iN == sizeN )
+    i1 = iN-1;
+  else i1 = iN;
+  if( jN == sizeM )
+     j1 = jN-1;
+  else j1 = jN;
+  if( kN == sizeK )
+   k1 = kN-1;
+   else k1 = kN;
 
   loc = grid[ iNode( i1, j1, k1)];
-  if( i1 != iN ) loc.x = size.x;
+  if( i1 != iN )
+    loc.x = size.x;
   if( j1 != jN ) loc.y = size.y;
   if( k1 != kN ) loc.z = size.z;
 
