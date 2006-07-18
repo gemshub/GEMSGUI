@@ -17,6 +17,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+#include "particlearray.h"
 #include "nodearray.h"
 #include "gdatastream.h"
 #include <math.h>
@@ -759,6 +760,16 @@ void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int e
      {
        pm = NodT1[i]->xPH[ip];
        fprintf( logfile, "%-12.4g ", pm );
+       if( TParticleArray::pa )
+       {       // printing number of particles in nodes
+         TParticleArray * ppa = TParticleArray::pa;
+         int npa;
+         for( int jp=0; jp < ppa->anPTypes; jp++ )
+         {
+            npa = ppa->NPnum[jp + i*ppa->anPTypes];   // number of particles in the node
+            fprintf( logfile, "%-8d ", npa );
+         }
+       }
      }
   }
   fprintf( logfile, "\n" );
