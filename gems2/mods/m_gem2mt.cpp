@@ -734,7 +734,7 @@ void TGEM2MT::set_def(int q)
     mtp->Tai[START_] = 25.;
     mtp->Tai[STOP_] = 25.;
     mtp->Tai[STEP_] = 0.;
-    mtp->Tai[0] = 1.;     //Ttol
+    mtp->Tai[3] = 1.;     //Ttol
     mtp->Tau[START_] = 0.;
     mtp->Tau[STOP_] = 0.;
     mtp->Tau[STEP_] = 0.;
