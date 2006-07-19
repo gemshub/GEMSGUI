@@ -169,8 +169,8 @@ nProps,      // res Number of particle statistic properties (for monitoring) >= 
    tf,     // time step reduction factor
    cdv,    // cutoff factor for differences
    cez,    // cutoff factor for minimal amounts of IC in node bulk compositions
-   ADrs1,  // reserved
-   ADrs2,
+   al_in,  // initial value of longitudinal dispersivity (m), usually 1e-3
+   Dif_in, // initial general diffusivity (m2/sec), usually 1e-9
    ADrs3,
    ADrs4,
    ADrs5,

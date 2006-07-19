@@ -188,7 +188,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
         // check RetCode from GEM IPM calculation
         if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
         {
-          cout << "CalcIPM4 " << RetCode << endl;
+//          cout << "CalcIPM4 " << RetCode << endl;
           char buf[200];
           gstring err_msg;
           iRet = false;

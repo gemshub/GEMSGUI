@@ -49,6 +49,7 @@ gems2/doc/out/out_all.cpp svn_keywords=Author+Date+Id+Revision
 gems2/doc/out/system_script.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/out/v_print.cpp svn_keywords=Author+Date+Id+Revision
 gems2/doc/out/v_print.h svn_keywords=Author+Date+Id+Revision
+gems2/doc/pscript_gem2mt.txt -text
 gems2/doc/psformat_d.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/readme.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/run_with_log.bat svn_keywords=Author+Date+Id+Revision

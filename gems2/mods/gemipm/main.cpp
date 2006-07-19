@@ -227,6 +227,20 @@ int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
              ii++;
              continue;
           }
+          // line %s "al_in=", %g #ADpar[5]
+           if( name_toc == "al_in" )
+           {
+              sscanf( buf_str.c_str(), "%lg", &mtp->al_in);
+              ii++;
+              continue;
+           }
+           // line %s "Dif_in=", %g #ADpar[6]
+            if( name_toc == "Dif_in" )
+            {
+               sscanf( buf_str.c_str(), "%lg", &mtp->Dif_in);
+               ii++;
+               continue;
+            }
       } while(  !ff.eof()  );
 
 // realloc memory
