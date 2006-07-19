@@ -476,6 +476,16 @@ void TNodeArray::SetGrid( float aSize[3], float (*aGrid)[3] )
 }
 
 // test location in node
+bool TNodeArray::isLocationInNode( int iNode, LOCATION cxyz ) const
+{
+  int i1, j1, k1;
+  i1 = indN( iNode );
+  j1 = indM( iNode );
+  k1 = indK( iNode );
+  return isLocationInNode( i1,j1, k1, cxyz ) ;
+}
+
+// test location in node
 bool TNodeArray::isLocationInNode( int ii, int jj, int kk, LOCATION cxyz ) const
 {
   LOCATION maxl;
@@ -490,7 +500,8 @@ bool TNodeArray::isLocationInNode( int ii, int jj, int kk, LOCATION cxyz ) const
   //  x = const, find new y,z srez i
   // analiz pryamougol`nika pri y1 == const, poisk z21 i z22
   // analiz otrezka po z2
-  if( grid[ndx].x <= cxyz.x &&  cxyz.x < maxl.x &&
+  if( grid[ndx].x <= cxyz.x &&
+     ( cxyz.x < maxl.x || ( cxyz.x <= maxl.x && size.x == maxl.x ) )&&
       grid[ndx].y <= cxyz.y &&  cxyz.y <= maxl.y &&
       grid[ndx].z <= cxyz.z &&  cxyz.z <= maxl.z )
            return true;

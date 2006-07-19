@@ -459,11 +459,8 @@ t_out2 = clock();
 outp_time += ( t_out2 - t_out);
 }
 
-     } while ( mtp->cTau < mtp->Tau[STOP_] || mtp->ct < mtp->ntM );
+     } while ( mtp->cTau < mtp->Tau[STOP_] && mtp->ct < mtp->ntM );
 
-#ifndef IPMGEMPLUGIN
-pVisor->CloseMessage();
-#endif
 
 t_end = clock();
 double dtime = ( t_end- t_start );
@@ -478,6 +475,11 @@ fclose( logfile );
 fclose( ph_file );
 fclose( diffile );
 }
+
+#ifndef IPMGEMPLUGIN
+pVisor->CloseMessage();
+#endif
+
   return iRet;
 }
 

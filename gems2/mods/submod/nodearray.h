@@ -86,6 +86,7 @@ class TNodeArray : public TNode
    // ???????????
    // test location cxyz point into node( ii,jj,kk )
    bool isLocationInNode( int ii, int jj, int kk, LOCATION cxyz ) const;
+   bool isLocationInNode( int iNode, LOCATION cxyz ) const;
 
 public:
 

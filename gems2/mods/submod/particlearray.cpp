@@ -102,7 +102,7 @@ void TParticleArray::ParticleArrayInit()
     for( iType=0; iType < anPTypes; iType++ )
     {
       NPnum[iNode*anPTypes+iType] = NPmean[iType];
-      double dd = (nodeSize[1].x-nodeSize[0].x)/NPnum[iNode*anPTypes+iType];
+//      double dd = (nodeSize[1].x-nodeSize[0].x)/NPnum[iNode*anPTypes+iType];
      for( k=0; k < NPmean[iType]; k++ )
       {
         ParT0[cpx].ptype = (char)iType;
@@ -111,8 +111,8 @@ void TParticleArray::ParticleArrayInit()
         ParT0[cpx].ips = ParTD[iType].ips;
         ParT0[cpx].m_v = 0.;
         ParT0[cpx].node = iNode;
-        ParT0[cpx].xyz.x = nodeSize[0].x+k*dd;
-//        ParT0[cpx].xyz = setPointInNode(nodeSize);
+//        ParT0[cpx].xyz.x = nodeSize[0].x+k*dd;
+        ParT0[cpx].xyz = setPointInNode(nodeSize);
         ParT1[cpx] = ParT0[cpx];
         cpx++;
       }
@@ -307,11 +307,15 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double /*t0*/, double /*t1
 // Only for 1D calculation !!! check for 2D and 3D
             double new_x = ParT1[px].xyz.x;
             if( new_x >= nodes->GetSize().x )
-                new_x -= nodes->GetSize().x;
+            {    new_x -= nodes->GetSize().x;
+                 new_node = 0;
+            }
             else // new_x < 0
-                new_x  += nodes->GetSize().x;
+            {    new_x  += nodes->GetSize().x;
+                 new_node = nodes->nNodes()-1;
+            }
             ParT1[px].xyz.x = new_x;
-            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz );
+//            new_node = nodes->FindNodeFromLocation( ParT1[px].xyz, -1 );
         }
 /*    if( new_node == -1 )
     {   LOCATION nodeSize[2];
@@ -329,21 +333,11 @@ int TParticleArray::MoveParticleBetweenNodes( int px, double /*t0*/, double /*t1
              break;
   }
 
-  if( new_node == -1 /*||
-      NPnum[old_node*anPTypes+type_] < nPmin[type_] ||
-      NPnum[new_node*anPTypes+type_] >  nPmax[type_] */ )
+  if( new_node == -1 )
   {
     vstr buff(300);
-
-    sprintf( buff, " pxOld=%d npOld=%d npMin=%d \npxNew=%d npNew=%d npMax=%d",
-      old_node, NPnum[old_node*anPTypes+type_], nPmin[type_],
-      new_node, NPnum[new_node*anPTypes+type_],  nPmax[type_]
-      );
+    sprintf( buff, " pxOld=%d npxNew=%d",  old_node, new_node  );
     Error("W003RWM",buff.p);
-    /*ParT1[px].m_v = 0.;  // left particle in old node
-    ParT1[px].xyz = nodes->GetNodeLocation(old_node);*/
-    // or  alternative
-    //  return -2;   ParticleArrayInit - reset all particles
   }
   else
   {
@@ -382,14 +376,26 @@ int TParticleArray::RandomWalkIteration( int /*Mode*/, double t0, double t1 )
   for( cpx=0; cpx < anParts; cpx++ )
      iRet = DisplaceParticle( cpx, t0, t1 );
 
-  bool reset = false;
 
  // Walk (transport step) for particles between nodes
   for( cpx=0; cpx < anParts; cpx++ )
-  {   iRet = MoveParticleBetweenNodes( cpx, t0, t1 );
-      if( iRet == -2 )
-        reset = true;
-  }
+     iRet = MoveParticleBetweenNodes( cpx, t0, t1 );
+
+  bool reset = false;
+  for( iNode=0; iNode < nNodes; iNode++ )
+    for( iType=0; iType < anPTypes; iType++ )
+    {
+      if( NPnum[iNode*anPTypes+iType] < nPmin[iType] )
+      {
+        vstr buff(300);
+
+        sprintf( buff, " Node=%d npNum=%d npMin=%d ",
+        iNode, NPnum[iNode*anPTypes+iType], nPmin[iType] );
+        Error("W005RWM",buff.p);
+      // or  alternative
+      // reset = true;   ParticleArrayInit - reset all particles
+     }
+    }
   if( reset )  // reset all particles as start point
     ParticleArrayInit();
 
