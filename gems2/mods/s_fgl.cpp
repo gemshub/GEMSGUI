@@ -1574,7 +1574,7 @@ TPRSVcalc::FugacityMix( double amix, double bmix,
 }
 
 int
-TPRSVcalc::FugacitySpec( float *params )
+TPRSVcalc::FugacitySpec( float *params, double *fugpure )
 {
     // calculates fugacity and activity of species
     int i, j, iRet=0;
@@ -1583,9 +1583,11 @@ TPRSVcalc::FugacitySpec( float *params )
 
     // Reload params to Pureparm
     for( j=0; j<NComp; j++ )
+    {
+      Fugpure[j][0] = fugpure[j]/P;
       for( i=0; i<4; i++ )
         Pureparm[j][i] = params[j*4+i];
-
+    }
 	// retrieve properties of the mixture
 	iRet = MixParam( amix, bmix);
 	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix);
@@ -1787,14 +1789,14 @@ TPRSVcalc::PRFugacityPT( double Tk, double P, float *EoSparam, double *Eos2parPT
  // Called from IPM-Gamma() where activity coefficients are computed
 int
 TPRSVcalc::PRActivCoefPT( int NComp, double Pbar, double Tk, double *X,
-         float *param, double *act, double &PhaseVol )
+        double *fugpure, float *param, double *act, double &PhaseVol )
 {
 
    int iRet;
 
     GetMoleFract( X );
 
-    iRet = FugacitySpec( param );
+    iRet = FugacitySpec( param, fugpure );
 
     PhaseVol = ObtainResults( act );
 

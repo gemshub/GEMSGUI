@@ -397,7 +397,7 @@ class TPRSVcalc // Peng-Robinson-Styjek-Vera EOS calculations
 
    // Called from IPM-Gamma() where activity coefficients are computed
    int PRActivCoefPT( int NComp, double Pbar, double Tk, double *X,
-         float *param, double *act, double &PhaseVol );
+        double *fugpure, float *param, double *act, double &PhaseVol );
 
    int CalcFugPure( void );
    // Calc. fugacity for 1 species at X=1
@@ -414,7 +414,7 @@ int Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3)
 int MixParam( double &amix, double &bmix);
 int FugacityMix( double amix, double bmix,
      double &fugmix, double &zmix, double &vmix);
-int FugacitySpec( float *params );
+int FugacitySpec( float *params, double *fugpure );
 
 int GetEosParam( float *params ); // Loads EoS parameters for NComp species
 int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species

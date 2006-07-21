@@ -1064,7 +1064,7 @@ TMulti::ChurakovFluid( int jb, int je, int /* jpb */, int jdb, int k )
 void
 TMulti::PRSVFluid( int jb, int je, int /* jpb */, int jdb, int k )
 {
-    double *ActCoefs, PhVol;
+    double *ActCoefs, PhVol, *FugPure;
     float *EoSparam;
     int j, jj, iRet, NComp;
 
@@ -1075,8 +1075,9 @@ TMulti::PRSVFluid( int jb, int je, int /* jpb */, int jdb, int k )
 
     ActCoefs = (double*)malloc( NComp*sizeof(double) );
     EoSparam = pmp->DMc+jdb;
+    FugPure = pmp->Pparc+jb;
 
-    iRet = aPRSV.PRActivCoefPT( NComp, pmp->Pc, pmp->Tc, pmp->Wx+jb,
+    iRet = aPRSV.PRActivCoefPT( NComp, pmp->Pc, pmp->Tc, pmp->Wx+jb, FugPure,
          EoSparam, ActCoefs, PhVol );
 
     if ( iRet )
