@@ -1062,10 +1062,10 @@ TMulti::ChurakovFluid( int jb, int je, int /* jpb */, int jdb, int k )
 // Entry to Peng-Robinson model for activity coefficients
 // Added by Th.Wagner and D.Kulik on 19.07.2006
 void
-TMulti::PRSVFluid( int jb, int je, int /* jpb */, int jdb, int k )
+TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k )
 {
     double *ActCoefs, PhVol, *FugPure;
-    float *EoSparam;
+    float *EoSparam, *BinPar;
     int j, jj, iRet, NComp;
 
     NComp = pmp->L1[k];
@@ -1076,9 +1076,10 @@ TMulti::PRSVFluid( int jb, int je, int /* jpb */, int jdb, int k )
     ActCoefs = (double*)malloc( NComp*sizeof(double) );
     EoSparam = pmp->DMc+jdb;
     FugPure = pmp->Pparc+jb;
+    BinPar = pmp->PMc+jpb;
 
     iRet = aPRSV.PRActivCoefPT( NComp, pmp->Pc, pmp->Tc, pmp->Wx+jb, FugPure,
-         EoSparam, ActCoefs, PhVol );
+     BinPar, EoSparam, ActCoefs, PhVol );
 
     if ( iRet )
     {

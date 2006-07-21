@@ -1498,9 +1498,8 @@ TPRSVcalc::MixParam( double &amix, double &bmix)
 	{
 		for (j=0; j<NComp; j++)
 		{
-			KK0ij[i][j] = 0.;
-			KK1ij[i][j] = 0.;
-			K = KK0ij[i][j] + KK1ij[i][j]*Tk;
+			// K = KK0ij[i][j] + KK1ij[i][j]*Tk;
+                        K = KK0ij[i][j];
 			AAij[i][j] = sqrt(Pureparm[i][0]*Pureparm[j][0])*(1.-K);
 		}
 	}
@@ -1569,12 +1568,12 @@ TPRSVcalc::FugacityMix( double amix, double bmix,
 		zmix = zmix; vmix = vmix; lnf = lnf;
 	}
 	fugmix = exp(lnf);
-        PhVol = vmix; 
+        PhVol = vmix;
 	return 0;
 }
 
 int
-TPRSVcalc::FugacitySpec( float *params, double *fugpure )
+TPRSVcalc::FugacitySpec( double *fugpure, float *binpar, float *params  )
 {
     // calculates fugacity and activity of species
     int i, j, iRet=0;
@@ -1586,8 +1585,13 @@ TPRSVcalc::FugacitySpec( float *params, double *fugpure )
     {
       Fugpure[j][0] = fugpure[j]/P;
       for( i=0; i<4; i++ )
-        Pureparm[j][i] = params[j*4+i];
+        Pureparm[j][i] = (double)params[j*4+i];
     }
+
+    for( j=0; j<NComp; j++ )
+      for( i=0; i<NComp; i++ )
+        KK0ij[j][i] = (double)binpar[j*NComp+i];
+
 	// retrieve properties of the mixture
 	iRet = MixParam( amix, bmix);
 	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix);
@@ -1789,14 +1793,14 @@ TPRSVcalc::PRFugacityPT( double Tk, double P, float *EoSparam, double *Eos2parPT
  // Called from IPM-Gamma() where activity coefficients are computed
 int
 TPRSVcalc::PRActivCoefPT( int NComp, double Pbar, double Tk, double *X,
-        double *fugpure, float *param, double *act, double &PhaseVol )
+        double *fugpure, float *binpar, float *param, double *act, double &PhaseVol )
 {
 
    int iRet;
 
     GetMoleFract( X );
 
-    iRet = FugacitySpec( param, fugpure );
+    iRet = FugacitySpec( fugpure, binpar, param );
 
     PhaseVol = ObtainResults( act );
 

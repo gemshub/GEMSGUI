@@ -438,7 +438,7 @@ AGAIN_SETUP:
                           break;
 // Added 20.07.2006
           case SM_PRFLUID:  // Peng-Robinson EoS - provisional
-                          php->ncpN = max( (short)3, php->ncpN );
+                          php->ncpN = max( (short)2, php->ncpN );
                           php->ncpM = max( (short)2, php->ncpM );
                           php->nscN = 1; php->nscM = 4;
                           break;
@@ -1018,7 +1018,7 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
                     mcex = min( aDC->dcp->Nemp, nsc );
                     for( kx=0; kx< nsc; kx++ )
                     {
-                      if( kx < mcex ) // Copying only what is possible  
+                      if( kx < mcex ) // Copying only what is possible
                         s(i,kx) = aDC->dcp->Cemp[kx];
                       else
                         s(i,kx) = 0.;
@@ -1313,7 +1313,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
         }
 
         for( i=0; i<php->nDC; i++ )
-        {   // Restoring defaults if zeros or null-character 
+        {   // Restoring defaults if zeros or null-character
             if( !php->SATC[i][SA_MCA] || php->SATC[i][SA_MCA] ==A_NUL )
                 php->SATC[i][SA_MCA] = SAT_INDEF;
             if( !php->SATC[i][SA_EMX] || php->SATC[i][SA_EMX] ==A_NUL )
@@ -1436,7 +1436,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
          php->sol_t[0] != 'N' && php->sol_t[0] !='I'  )
        continue;
 
-// Test existence of DComp/ReacDC records  
+// Test existence of DComp/ReacDC records
      for( i=0, cnt=0; i<php->nDC; i++ )
      {
         // test to exist of DCOMP or REACDC record later
