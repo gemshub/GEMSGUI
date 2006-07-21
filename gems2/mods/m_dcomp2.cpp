@@ -103,10 +103,10 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
 	    ac[i] = 0.0;
         else ac[i] = (double)a1;
      }
-     aW.twp->Cp = ( ac[0] + ac[1]*T + ac[2]/T2 + ac[3]/T05 + ac[4]*T2 
+     aW.twp->Cp = ( ac[0] + ac[1]*T + ac[2]/T2 + ac[3]/T05 + ac[4]*T2
            + ac[5]*T3 + ac[6]*T4 + ac[7]/T3 + ac[8]/T + ac[9]*T05 /*+ ac[10]*log(T)*/);
-// cout << " T=" << T <<  " T^2=" << T2 << " T^3=" << T3 << " T^4=" << T4 << " T^0.5=" << T05 << endl 
-//     << "     ac: " << ac[0] << ' ' << ac[1] << ' ' << ac[2] << ' ' << ac[3] << ' ' << ac[4] << ' ' << ac[5] 
+// cout << " T=" << T <<  " T^2=" << T2 << " T^3=" << T3 << " T^4=" << T4 << " T^0.5=" << T05 << endl
+//     << "     ac: " << ac[0] << ' ' << ac[1] << ' ' << ac[2] << ' ' << ac[3] << ' ' << ac[4] << ' ' << ac[5]
 //     << " Cp(T)=" << aW.twp->Cp << " k= " << k << endl;
 
     if( fabs( T - Tst ) > TEMPER_PREC )
@@ -163,7 +163,7 @@ TDComp::calc_tpcv( int q, int p, int CE, int CV )
 		  + ac[7] * ( Tst3 - 3.* T2 * Tst + 2.*T3 ) / 6./ T2 / Tst3 + ac[8] * ( TT - 1. - log( TT ))
 		  + ac[9] * 2.* ( 2.* T * T05 - 3.* T * Tst05 + Tst * Tst05 ) / 3. );
 
-	    aW.twp->H += ( ac[0] * T_Tst + a * ( T2 - Tst2 ) / 2. + ac[2] * ( 1./Tst - 1./T )
+	    aW.twp->H += ( ac[0] * T_Tst + ac[1] * ( T2 - Tst2 ) / 2. + ac[2] * ( 1./Tst - 1./T )
 	          + ac[3] * 2. * ( T05 - Tst05 ) + ac[4] * ( T3 - Tst3 ) / 3.
 		  + ac[5] * ( T4 - Tst4 ) / 4. + ac[6] * ( T4 * T - Tst4 * Tst ) / 5
 		  + ac[7] * ( 1./ Tst2 - 1./ T2 ) / 2. + ac[8] * log( TT )
@@ -198,8 +198,8 @@ NEXT:
             }
             else
                Tcr = Tcr0 + Vmax/Smax * p;
-            Tcr += dT; 
-            Tcr0 += dT;  //  dT is a constant equal 273.15 
+            Tcr += dT;
+            Tcr0 += dT;  //  dT is a constant equal 273.15
             Q298 = pow( 1.- Tst/Tcr0, 0.25 );
             if( T<Tcr )
                Qq = pow( 1.- T/Tcr, 0.25 );
@@ -357,7 +357,7 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
         aW.twp->V = Vst;                 // added by KD 22.11.04
         if( fabs( P_Pst ) > PRESSURE_PREC || fabs( T_Tst ) > TEMPER_PREC )
         { /* can be calculated */
-            VP = Vst * P;
+            VP = Vst * P_Pst;
             VT = Vst * T_Tst;
             aW.twp->G += VP;
             aW.twp->H += VP;
@@ -387,13 +387,13 @@ TDComp::calc_voldp( int q, int /*p*/, int /*CE*/, int CV )
                     break;
                 case 3:
                     aW.twp->V += a * VP;
-                    aW.twp->G += a * VP * P / 2.;
-                    aW.twp->H += a * VP * P / 2.;
+                    aW.twp->G += a * VP * P_Pst / 2.;
+                    aW.twp->H += a * VP * P_Pst / 2.;
                     break;
                 case 4:
-                    aW.twp->V += a * VP * P;
-                    aW.twp->G += a * VP * ( P*P ) / 3.;
-                    aW.twp->H += a * VP * ( P*P ) / 3.;
+                    aW.twp->V += a * VP * P_Pst;
+                    aW.twp->G += a * VP * ( P_Pst*P_Pst ) / 3.;
+                    aW.twp->H += a * VP * ( P_Pst*P_Pst ) / 3.;
                     break;
                 }
             }
@@ -577,7 +577,7 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
 //
 //--------------------------------------------------------------------
 // Begin section converted from SUPCRT92
-// 
+//
 void
 TDComp::calc_tpH2O( int pst )
 {
@@ -817,7 +817,7 @@ void TDComp::calc_thkf( AQSREF& arf, double P, double T, double Dw, double betaw
       aW.twp->Bet =
       aW.twp->Alp =
     */
-    aW.twp->gfun = g;  // solvent g-function - passed for b_gamma=f(T,P) 07.06.05  
+    aW.twp->gfun = g;  // solvent g-function - passed for b_gamma=f(T,P) 07.06.05
 }
 
 //--------------------------------------------------------------------//

@@ -29,20 +29,24 @@
 
 #include "node.h"
 
-#define nNodes  1 // set here how many nodes you need
+#define nNodes  11 // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {
    // Analyzing command line arguments
      // Default arguments
      char ipm_input_file_list_name[256] = "chemsys.lst";
+     char dbr_input_file_name[256] = "chemsys-dbr.dat";
      char fmt_input_file_name[256] = "fmtparam.dat";
 
      if (argc >= 2 )
        strncpy( ipm_input_file_list_name, argv[1], 256);
          // list of files needed as input for initializing GEMIPM2K
      if (argc >= 3 )
-       strncpy( fmt_input_file_name, argv[2], 256);
+           strncpy( dbr_input_file_name, argv[2], 256);
+             // input file for boundary conditions
+     if (argc >= 4 )
+       strncpy( fmt_input_file_name, argv[3], 256);
          // your optional file with FMT input parameters
 
    // Creating TNode structure accessible trough node pointer
@@ -58,7 +62,7 @@ int main( int argc, char* argv[] )
    double t_start = 0., t_end = 10000., dt = 100., tc = 1.;
 
    cout << "Start Tnode test: " << ipm_input_file_list_name << " "
-         << fmt_input_file_name << endl;
+         << dbr_input_file_name << endl;
    cout << " nNodes = " << nNodes << "  nTimes = " << nTimes
          << "  t_start = " << t_start << " t_end = " << t_end
          << "  dt = " << dt << "  tc = " << tc << endl;
@@ -123,8 +127,8 @@ int main( int argc, char* argv[] )
    // Initialization of GEMIPM and chemical data kept in the FMT part
    // Can be done in a loop over nodes if there are many nodes
 //   cout << "Begin Initialiation part" << endl;
-
-   for( int in=0; in<nNodes; in++ )
+   int in;
+   for(  in=1; in<nNodes; in++ )
    {
      dBR->NodeStatusCH = NEED_GEM_AIA; // direct access to node DATABR structure
 
@@ -146,6 +150,36 @@ int main( int argc, char* argv[] )
 
      // Here the file output for the initial conditions can be implemented
    }
+
+  // Initialization of GEMIPM and chemical data kept in the FMT part
+  // Can be done in a loop over boundary nodes
+  //   cout << "Begin Initialiation part" << endl;
+
+  // Read DATABR structure from text file (read boundary condition)
+      TNode::na->GEM_read_dbr( false, dbr_input_file_name );
+
+  for(  in=0; in<1; in++ )
+  {
+   dBR->NodeStatusCH = NEED_GEM_AIA; // direct access to node DATABR structure
+
+  // re-calculating equilibrium by calling GEMIPM
+   m_NodeStatusCH[in] = node->GEM_run();
+
+  if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_PIA ) )
+     return 5;
+  // Extracting chemical data into FMT part
+   node->GEM_restore_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_T[in],
+    m_P[in], m_Vs[in], m_Ms[in],
+    m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH );
+     // Extracting GEMIPM output data to FMT part
+   node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
+    m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
+    m_Eh[in], m_rMB+in*nIC, m_uIC+in*nIC, m_xDC+in*nDC, m_gam+in*nDC,
+    m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
+    m_bPS+in*nIC*nPS, m_xPA+in*nPS );
+
+  // Here the file output for the initial conditions can be implemented
+ }
 
    cout << "End Initialiation part" << endl;
 

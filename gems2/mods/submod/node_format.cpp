@@ -87,7 +87,7 @@ void TNode::databr_to_text_file( fstream& ff )
    ff << left << setw(7) << "<Hi> " <<  CNode->Hi << endl;
    if( _comment )
          ff << "# Effective aqueous ionic strength, molal" << endl;
-   ff << left << setw(7) << "<IC> " <<  CNode->IC << endl;
+   ff << left << setw(7) << "<IS> " <<  CNode->IC << endl;
    if( _comment )
          ff << "# pH of aqueous solution " << endl;
    ff << left << setw(7) << "<pH> " <<  CNode->pH << endl;
@@ -231,7 +231,7 @@ void TNode::databr_from_text_file( fstream& ff )
   inArray( ff, "Gs",  &CNode->Gs, 1);
   inArray( ff, "Hs",  &CNode->Hs, 1);
   inArray( ff, "Hi",  &CNode->Hi, 1);
-  inArray( ff, "IC",  &CNode->IC, 1);
+  inArray( ff, "IS",  &CNode->IC, 1);
   inArray( ff, "pH",  &CNode->pH, 1);
   inArray( ff, "pe",  &CNode->pe, 1);
   inArray( ff, "Eh",  &CNode->Eh, 1);

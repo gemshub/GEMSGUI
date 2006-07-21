@@ -178,7 +178,8 @@ AGAIN:
 // put data to pmfiles-dat.lst file
    else
    {   fout.open(path.c_str(), ios::out);
-       fout << "-b \"" << name.c_str() << ".ipm\" ";
+//       fout << "-b \"" << name.c_str() << ".ipm\" ";
+       fout << "-t \"" << name.c_str() << "-ipm.dat\" ";
        fout << "-t \"" << name.c_str() << "-dch.dat\"";
    }
 
