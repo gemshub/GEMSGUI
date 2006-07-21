@@ -13,11 +13,17 @@ DEFINES         += Use_mt_mode
 LIBS	        += -L./lib -lgems_qt -lqtmt335 -lqtmain
 
 
+!win32-borland {
+  DEFINES += __unix
+}
+
 win32-borland {
 	# Keep the size of the .tds file for the Qt library smaller than
 	# 34 Mbytes to avoid linking problems
 	# QMAKE_CFLAGS_DEBUG += -vi -y-
 	# QMAKE_CXXFLAGS_DEBUG += -vi -y-
+        QMAKE_CFLAGS += -x -xd -xp -VM -RT
+        QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
 }
 
 VIZOR_CPP      =  ./vizor
