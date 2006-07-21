@@ -264,7 +264,19 @@ LOAD_NIDMCOEF:
                 memcpy( pmp->DMc+kd+jkd, aPH->php->scoef+jp*pmp->LsMdc[k],
                         pmp->LsMdc[k]*sizeof(float));
                // Correction of CG fluid EoS coeffs
-               if( (aPH->php->PphC == PH_FLUID) && (sMod[SPHAS_TYP] == SM_FLUID) )
+               if( (aPH->php->PphC == PH_FLUID) && (sMod[SPHAS_TYP] == SM_CGFLUID) )
+               {
+                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
+                 {
+                    memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
+                       pmp->LsMdc[k]*sizeof(float));
+                    pmp->Pparc[jj] = tpp->Fug[j-JB];
+//                   pmp->Pparc[jp] = tpp->Fug[j-JB];
+                 }
+               }
+               // Correction of PRSV fluid EoS coeffs
+               if( (aPH->php->PphC == PH_FLUID || aPH->php->PphC == PH_GASMIX )
+                    && (sMod[SPHAS_TYP] == SM_PRFLUID) )
                {
                  if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
                  {

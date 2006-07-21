@@ -125,7 +125,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>C   CORK fluid model (under construction)</string>
+                            <string>P   Peng-Robinson-Stryjek-Vera (PRSV) EOS fluid model (under construction)</string>
                         </property>
                     </item>
                     <item>

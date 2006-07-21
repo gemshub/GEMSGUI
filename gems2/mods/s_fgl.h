@@ -367,4 +367,61 @@ public:
 };
 
 
+// Added 19 July 2006 by Th.Wagner and D.Kulik
+// Definition of a class for PRSV EOS calculations for fluids
+// Incorporates a C++ program written by Thomas Wagner (Univ. Tuebingen)
+
+class TPRSVcalc // Peng-Robinson-Styjek-Vera EOS calculations
+{
+  private:
+     double R_CONSTANT;
+     int NComp; // number of species;
+//     int i;
+     double P, Tk, PhVol;   // bar, T Kelvin, phase volume in cm3
+     // main work arrays
+     double *Wx;         // mole fractions of species
+     double **Eosparm;   // EoS parameters
+     double **Pureparm;  // Parameters a and b for cubic EoS
+     double **Fugpure;   // Fugacity parameters of pure gas species
+     double **Fugci;     // Fugacity parameters of species in the mixture
+
+     double **KK0ij;    //  Constant term of the binary interaction parameter
+     double **KK1ij;    //  T-dependent term
+     double **AAij;     //  binary a terms in the mixture
+
+    public:
+
+    TPRSVcalc( int NCmp, double Pp, double Tkp );
+
+    ~TPRSVcalc();
+
+   // Called from IPM-Gamma() where activity coefficients are computed
+   int PRActivCoefPT( int NComp, double Pbar, double Tk, double *X,
+         float *param, double *act, double &PhaseVol );
+
+   int CalcFugPure( void );
+   // Calc. fugacity for 1 species at X=1
+   int PRFugacityPT( double Tk, double P, float *EoSparam, double *Eos2parPT,
+        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
+
+protected:
+
+int PureParam( double *params ); // calculates a and b arrays
+double A(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit);
+double B(double Tcrit, double Pcrit);
+int FugacityPure( void ); // Calculates the fugacity of pure species
+int Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3);
+int MixParam( double &amix, double &bmix);
+int FugacityMix( double amix, double bmix,
+     double &fugmix, double &zmix, double &vmix);
+int FugacitySpec( float *params );
+
+int GetEosParam( float *params ); // Loads EoS parameters for NComp species
+int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
+double ObtainResults( double *ActCoef ); // returns activity coeffs and phase volume
+
+};
+
+
+
 #endif  // _v_fgl_h

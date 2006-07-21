@@ -464,8 +464,10 @@ if( pmp->XF[k] < pmp->DSM ) // Bugfix by KD 09.08.2005 (bug report Th.Matschei)
             {
                 if( /* pmp->XF[k] */ pmpXFk > pmp->DSM )
                 {
-                    if( sMod[SPHAS_TYP] == SM_FLUID && pmp->XF[k] > pa->p.PhMin )
+                    if( sMod[SPHAS_TYP] == SM_CGFLUID && pmp->XF[k] > pa->p.PhMin )
                        ChurakovFluid( jb, je, jpb, jdb, k );
+if( sMod[SPHAS_TYP] == SM_PRFLUID && pmp->XF[k] > pa->p.PhMin )
+           PRSVFluid( jb, je, jpb, jdb, k );     // Added by Th.Wagner and DK on 20.07.06
                 }
                 goto END_LOOP; /* break; */
             }
@@ -1054,6 +1056,48 @@ TMulti::ChurakovFluid( int jb, int je, int /* jpb */, int jdb, int k )
     } /* j */
     free( FugCoefs );
 
+}
+
+// ---------------------------------------------------------------------
+// Entry to Peng-Robinson model for activity coefficients
+// Added by Th.Wagner and D.Kulik on 19.07.2006
+void
+TMulti::PRSVFluid( int jb, int je, int /* jpb */, int jdb, int k )
+{
+    double *ActCoefs, PhVol;
+    float *EoSparam;
+    int j, jj, iRet, NComp;
+
+    NComp = pmp->L1[k];
+
+    TPRSVcalc aPRSV( NComp, pmp->Pc, pmp->Tc );
+    // Add a call to the constructor ??
+
+    ActCoefs = (double*)malloc( NComp*sizeof(double) );
+    EoSparam = pmp->DMc+jdb;
+
+    iRet = aPRSV.PRActivCoefPT( NComp, pmp->Pc, pmp->Tc, pmp->Wx+jb,
+         EoSparam, ActCoefs, PhVol );
+
+    if ( iRet )
+    {
+      free( ActCoefs );
+      char buf[150];
+      sprintf(buf, "PRSVFluid(): bad calculation");
+      Error( "E71IPM IPMgamma: ",  buf );
+    }
+    // Phase volume of the fluid in cm3
+    pmp->FVOL[k] = PhVol * 10.;;
+
+    for( jj=0, j=jb; j<je; j++, jj++ )
+    {
+        if( ActCoefs[jj] > 1e-23 /* && pmp->Pparc[j] > 1e-23 */ )
+             pmp->lnGam[j] = log(ActCoefs[ jj ]);
+        else
+             pmp->lnGam[j] = 0;
+    } /* j */
+    free( ActCoefs );
+//  Call destructor?
 }
 
 // ------------------ condensed mixtures --------------------------

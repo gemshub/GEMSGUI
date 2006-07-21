@@ -27,6 +27,50 @@
 
 //--------------------------------------------------------------------//
 //
+int TPRSVcalc::CalcFugPure( void )
+{
+    double T, P, Fugcoeff = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
+    float *Coeff;
+    double Eos2parPT[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 } ;
+    int retCode = 0;
+
+    ErrorIf( !aW.twp, "PRSV EoS", "Undefined twp");
+
+    P = aW.twp->P;    /* P in 10^5 Pa  */
+    T = aW.twp->TC+273.15;   /* T in K */
+
+    Coeff = aW.twp->CPg;     /* pointer to coeffs of CG EOS */
+
+// Calling PRSV EoS functions here
+
+    if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1. && P < 1e5 )
+       retCode = PRFugacityPT( P, T, Coeff, Eos2parPT, Fugcoeff, Volume,
+            DeltaH, DeltaS );
+    else {
+            Fugcoeff = 1.;
+            Volume = 8.31451*T/P;
+            aW.twp->V = Volume;
+            aW.twp->Fug = Fugcoeff*P;
+            return retCode;
+          }
+
+    aW.twp->G += 8.31451 * T * log( Fugcoeff );   // from fugacity coeff
+    /* add enthalpy and enthropy increments */
+    aW.twp->H +=  DeltaH;   // in J/mol - to be completed
+    aW.twp->S +=  DeltaS;   // to be completed
+    aW.twp->V = Volume /* /10.  in J/bar */;
+    aW.twp->Fug = Fugcoeff * P;   /* fugacity at P */
+
+//  passing corrected EoS coeffs to calculation of fluid mixtures
+    aW.twp->wtW[6] = Eos2parPT[0];      // a
+    aW.twp->wtW[7] = Eos2parPT[1];      // b
+// three more to add !!!
+    return retCode;
+}
+
+
+//--------------------------------------------------------------------//
+//
 int TCGFcalc::CGcalcFug( void )
 {
     double T, P, Fugacity = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;

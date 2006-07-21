@@ -93,7 +93,7 @@ void TMTparm::ods_link( int /*q*/)
     aObj[ o_tpfug].SetPtr( tp.Fug );
     aObj[ o_tpfug].SetDim( tp.Lg, 1 );
     aObj[ o_tpdvg].SetPtr( tp.dVg );
-    aObj[ o_tpdvg].SetDim( tp.Lg, 1 );
+    aObj[ o_tpdvg].SetDim( tp.Lg, 4 );
 }
 
 // set dynamic Objects ptr to values
@@ -227,7 +227,7 @@ void TMTparm::dyn_new(int /*q*/)
     else tp.Fug =  (float *)aObj[ o_tpfug ].Free();
 
     if( tp.PtvdVg != S_OFF )
-        tp.dVg = (float *)aObj[ o_tpdvg].Alloc( tp.Lg, 4, F_ );
+        tp.dVg = (float *)aObj[ o_tpdvg].Alloc( tp.Lg, 4, F_ ); // 5 for PRSV  4 for CG EoS
     else tp.dVg =  (float *)aObj[ o_tpdvg ].Free();
 }
 
@@ -285,7 +285,7 @@ void TMTparm::MTparmAlloc( )
         tp.PtvVm = S_REM;  /* default array */
   if( tp.Lg )  // Added on 13.06.03 by KD
   {
-     tp.PtvdVg = S_REM; // Arrays used by CG-EoS for fluids !
+     tp.PtvdVg = S_REM; // Arrays used by CG-EoS and PRSV-EoS for fluids !
      tp.PtvFg = S_REM;
   }
     dyn_new();
@@ -385,6 +385,9 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
 //        if( tp.PtvWb != S_OFF && j< tp.Ls )   tp.Wbor[j] = aW.twp->Wbor;
 //        if( tp.PtvWr != S_OFF && j< tp.Ls )   tp.Wrad[j] = aW.twp->Wrad;
         jf = j - tp.La; // gas/fluid phase(s) must immediately follow aqueous phase
+
+//if( jf < 0 ) jf = j;  // provisional fix! DK 20.07.2006
+
         if( jf >= 0 && jf < tp.Lg )
         {
 // TP corrected fugacity and EoS coeffs for gases/fluids
@@ -397,7 +400,7 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
             tp.dVg[jf*4+1] = aW.twp->wtW[7];
             tp.dVg[jf*4+2] = aW.twp->wtW[8];
             tp.dVg[jf*4+3] = aW.twp->wtW[9];
-//          tp.dVg[jf*5+4] = aW.twp->wtW[9];
+//   tp.dVg[jf*5+4] = aW.twp->wtW[10];
           }
         }
         /* set scales - not done yet !

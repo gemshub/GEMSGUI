@@ -69,13 +69,16 @@ TProfil::initCalcMode()
         "Loading thermodynamic data", 80 );
 
     // Test MTparm
+
         mtparm->MTparmAlloc();
         mtparm->LoadMtparm( 25., 1. );
+
 
     // Start settins of SYSTEM
         syst->set_def();
         syst->dyn_new();
         syst->setDefData();
+
 
     // Get first  SYSEQ
         vstr pkey(81);

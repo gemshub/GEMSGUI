@@ -91,12 +91,12 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>V    H2O (vapour)  gas/fluid component (CORK EoS)</string>
+                            <string>V    H2O (vapour)  gas/fluid component (reserved)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>C    CO2 (carbon dioxide) gas/fluid component (CORK EoS)</string>
+                            <string>C    CO2 (carbon dioxide) gas/fluid component (reserved)</string>
                         </property>
                     </item>
                     <item>
@@ -375,7 +375,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>R   Pressure corrections using CORK EoS with corresponding states calculations</string>
+                            <string>R   Pressure corrections using critical parameters and PRSV EoS </string>
                         </property>
                     </item>
                     <property name="name">

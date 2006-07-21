@@ -547,6 +547,7 @@ void TRMults::PHmake()
     mu.FiE = 0;
     mu.Pg = 0;
     mu.Lhc = 0;
+    mu.Laq =  0;
     if( mu.PmvDF == S_ON )
     {
         mu.DCF[0] = 0;

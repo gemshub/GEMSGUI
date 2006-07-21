@@ -51,7 +51,7 @@ gfun,             // g function from HKF (added 07.06.05 by KD )
     float *CPg,   // Input critical parameters (for FGL)
     *Cemp,        // Array of empirical EOS coefficients (CG EOS)
     mwt,          // molar mass of DC
-    TClow;        // Lowest TC for CG EoS
+    TClow;        // Lowest TC for CG or PRSV EoS
     char PdcC,    // DC code
     cre1, cre2, cre3;
     TPWORK()

@@ -343,8 +343,8 @@ enum DC_CNTRL_CODES {
           EOS (Akinfiev, 1995) - reserved; */
     CPM_PCR  = 'P',  /* PARCOR estimation of HKF EOS params 19.05.98 */
 // Added 5.03.2005 by KD for CORK EoS (D.Dolejs, Th.Wagner)
-CPM_CORK = 'R', /* CORK EoS calculation acc.to Holland&Powell,1998 */
-      /* Selection of routines for H2O, CO2 and others done using DC Class code*/
+CPM_PRSV = 'R', /* Peng-Robinson EoS calculation added by Th.Wagner in July 2006 */
+    /* Selection of routines for H2O, CO2 and others done using DC Class code*/
     // CTPM_REA
     CPM_INK  = 'Z', /* calculation using Lagrange polinomial interpolation over
                      the array  of lgK(T,P). */

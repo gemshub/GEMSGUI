@@ -45,7 +45,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
                      // (with 3 coeffs)
     SM_MARGB = 'M',  // built-in binary Margules SS (subreg. w. 3 coeff U,P,T )
     SM_MARGT = 'T',  // built-in ternary Margules SS (reg. w. 3 coeff U,P,T )
-    SM_FLUID = 'F',  // built-in multicomp. EOS fluid Churakov&Gottschalk 2003
+    SM_CGFLUID = 'F',  // built-in multicomp. EOS fluid Churakov&Gottschalk 2003
     SM_RECIP = 'R',  // reciprocal solution (to be done), formerly regular solution
     SM_AQDAV = 'D',  // built-in Davies equation (with 0.3) added KD 25.01.02
     SM_AQDH1 = '1',  // built-in limiting Debye-Hueckel law for aqueous species
@@ -53,7 +53,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_AQDH3 = '3',  // built-in 3-d approximation of Debye-Hueckel
     SM_AQDHH = 'H',  // built-in 3-d approximation of Debye-Hueckel (Helgeson)
     SM_AQSIT = 'S',  // built-in SIT model for aq activity coeffs (reserved)
-    SM_AQPITZ = 'P', // Pitzer's model for aqueous brines (reserved)
+    SM_PRFLUID = 'P', // Peng-Robinson-Stryjek-Vera EOS fluid model (Added by Th.Wagner)
     SM_IONEX = 'E',  // ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A', // models of surface complexation at solid-aqueous interface
     SM_USERDEF = 'U', // user-defined mixing model (in Phase record)

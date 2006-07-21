@@ -354,6 +354,7 @@ class TMulti
     void SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k );
 // fluid mixtures
     void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
+    void PRSVFluid( int jb, int je, int jpb, int jdb, int k );
 // condensed mixtures
     void RedlichKister( int jb, int je, int jpb, int jdb, int k );
     void MargulesBinary( int jb, int je, int jpb, int jdb, int k );

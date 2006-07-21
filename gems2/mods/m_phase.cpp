@@ -432,10 +432,17 @@ AGAIN_SETUP:
                           php->ncpN = 4; php->ncpM = 3;
                           break;
 //          case SM_RECIP:
-          case SM_FLUID:  // Churakov-Gottschalk EoS
+          case SM_CGFLUID:  // Churakov-Gottschalk EoS
                           php->ncpN = php->ncpM =0;
                           php->nscN = 1; php->nscM = 4;
                           break;
+// Added 20.07.2006
+          case SM_PRFLUID:  // Peng-Robinson EoS - provisional
+                          php->ncpN = max( (short)3, php->ncpN );
+                          php->ncpM = max( (short)2, php->ncpM );
+                          php->nscN = 1; php->nscM = 4;
+                          break;
+
           case SM_AQDAV:  // Aqueous Davies
                           php->ncpN = php->ncpM = 0;
                           php->nscN = php->nscM = 0;

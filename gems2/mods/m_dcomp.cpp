@@ -265,7 +265,7 @@ void TDComp::dyn_new(int q)
     else
         dc[q].Vt = (float *)aObj[ o_dcvt].Alloc(MAXVTCOEF, 1, F_ );
 
-    if( CV == CPM_GAS /* || CV == CPM_EMP */  )
+    if( CV == CPM_GAS  || CV == CPM_PRSV  )
         dc[q].CPg = (float *)aObj[ o_dccritpg].Alloc(MAXCRITPARAM, 1, F_ );
     else
         dc[q].CPg = (float *)aObj[ o_dccritpg ].Free();
@@ -717,6 +717,16 @@ TDComp::DCthermo( int q, int p )
             aCGF.CGcalcFug( );
             aW.twp->Cemp = NULL;
         }
+else if( CV == CPM_PRSV )  // Calculation of fugacity at X=1 using PRSV EoS
+{                         // Added by Th.Wagner in July 2006
+  TPRSVcalc aPRSV( 1, aW.twp->P, aW.twp->TC+273.15 );
+// aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
+  aW.twp->CPg = dcp->CPg;
+  aW.twp->TClow = dcp->TCint[0];
+  aPRSV.CalcFugPure( );
+// aPRSV.~TPRSVcalc();
+  aW.twp->CPg = NULL; // ????
+}
         break;
     case CTPM_HKF:
         {
@@ -762,9 +772,7 @@ TDComp::DCthermo( int q, int p )
             Error( GetName(), msg.c_str() );
         //  else  RecBuild( key );  // !!!!!! Recalc new record?
     }
-
 }
-
 
 /* ---------------------------------------------------------------*/
 /* PARCOR algorithm (Shock 1988) translated from FORTAN code
