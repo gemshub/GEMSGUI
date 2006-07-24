@@ -763,13 +763,13 @@ short TProfil::BAL_compare()
       int kk = pmp->muk[k];
       if( syp->PSigm != S_OFF )
       {
-         if( pmp->Sigw[k] != syp->Sigm[kk][0])
+         if( fabs( pmp->Sigw[k] - syp->Sigm[kk][0]) > 1e-19 )
            break;
-         if( pmp->Sigg[k] != syp->Sigm[kk][1])
+         if( fabs( pmp->Sigg[k] - syp->Sigm[kk][1]) > 1e-19 )
            break;
       }
       if( syp->PAalp != S_OFF )
-        if( fabs( pmp->Aalp[k] - syp->Aalp[kk]) )
+        if( fabs( pmp->Aalp[k] - syp->Aalp[kk]) > 1e-19 )
          break;
     }
 
