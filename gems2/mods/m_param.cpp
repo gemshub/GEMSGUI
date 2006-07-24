@@ -758,7 +758,7 @@ short TProfil::BAL_compare()
     if( pmp->FIat > 0 )  //      Adsorption models - always
        return 1;
 
-    for( k=0; k<pmp->FI; j++ )
+    for( k=0; k<pmp->FI; k++ )
     {
       int kk = pmp->muk[k];
       if( syp->PSigm != S_OFF )
