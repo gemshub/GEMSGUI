@@ -738,16 +738,44 @@ short TProfil::BAL_compare()
     {
         if( syp->PGEX != S_OFF )
             if( fabs( syp->GEX[pmp->muj[j]] - pmp->GEX[j]*pmp->RT ) >= 0.001 )
-                return 1;
+                break;
         if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
             if( fabs( syp->DLL[pmp->muj[j]] - pmp->DLL[j] ) >= 1e-19 )
-                return 1;
+                break;
         if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
             if( fabs( syp->DUL[pmp->muj[j]] - pmp->DUL[j] ) >= 1e-19 )
-                return 1;
-//      Adsorption models - to be completed !!!!!
-        ;
+              break;
+        if( syp->DULim != S_OFF || syp->DLLim != S_OFF )
+        {  if( pmp->RLC[j] != syp->RLC[pmp->muj[j]] )
+             break;
+           if( pmp->RSC[j] != syp->RSC[pmp->muj[j]] )
+             break;
+        }
     }
+    if( j < pmp->L )
+      return 1;
+
+    if( pmp->FIat > 0 )  //      Adsorption models - always
+       return 1;
+
+    for( k=0; k<pmp->FI; j++ )
+    {
+      int kk = pmp->muk[k];
+      if( syp->PSigm != S_OFF )
+      {
+         if( pmp->Sigw[k] != syp->Sigm[kk][0])
+           break;
+         if( pmp->Sigg[k] != syp->Sigm[kk][1])
+           break;
+      }
+      if( syp->PAalp != S_OFF )
+        if( fabs( pmp->Aalp[k] - syp->Aalp[kk]) )
+         break;
+    }
+
+    if( k < pmp->FI )
+        return 1;
+
     // bulk chem. compos. and constraints unchanged
     return 2;
 }

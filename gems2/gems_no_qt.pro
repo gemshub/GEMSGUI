@@ -10,7 +10,7 @@ CONFIG		+= thread warn_on debug windows
 #CONFIG		+= qmake_cache
 
 DEFINES         += Use_mt_mode
-LIBS	        += -L./lib -lgems_qt -lqtmt335 -lqtmain
+LIBS	        += -L./lib -lgems_qt -lqtmt336 -lqtmain
 
 
 !win32-borland {
