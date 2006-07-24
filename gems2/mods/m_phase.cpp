@@ -403,7 +403,8 @@ AGAIN_SETUP:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL  &&!( !php->PphC || php->PphC == ' '))
         return ret;
-    if( ret == VF3_1 )
+    memcpy( php->pst, rt[nRT].UnpackKey(), PH_RKLEN );
+     if( ret == VF3_1 )
     {
         strncpy( php->name, db->FldKey(2), db->FldLen(2));
         php->name[db->FldLen(2)] = '\0';

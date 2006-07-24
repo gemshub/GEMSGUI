@@ -1097,7 +1097,7 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k )
     for( jj=0, j=jb; j<je; j++, jj++ )
     {
         if( ActCoefs[jj] > 1e-23 /* && pmp->Pparc[j] > 1e-23 */ )
-             pmp->lnGam[j] = log(ActCoefs[ jj ]);
+             pmp->lnGam[j] = log( ActCoefs[ jj ]);
         else
              pmp->lnGam[j] = 0;
     } /* j */
