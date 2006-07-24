@@ -1078,6 +1078,9 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k )
     FugPure = pmp->Pparc+jb;
     BinPar = pmp->PMc+jpb;
 
+    for( j=jb; j<je; j++)
+     pmp->Wx[j] = pmp->X[j]/pmp->XF[k];
+
     iRet = aPRSV.PRActivCoefPT( NComp, pmp->Pc, pmp->Tc, pmp->Wx+jb, FugPure,
      BinPar, EoSparam, ActCoefs, PhVol );
 
