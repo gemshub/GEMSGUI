@@ -231,6 +231,8 @@ void TMulti::ods_link( int /*q*/)
 //    aObj[ o_wo_masdj ].SetDim( pm.Ls, 1 );
     aObj[ o_wo_bf].SetPtr( pm.BF );
     aObj[ o_wo_bf ].SetDim( pm.FIs, pm.N );
+aObj[ o_wo_bfc].SetPtr( pm.BFC );
+aObj[ o_wo_bfc ].SetDim( 1, pm.N );
     aObj[ o_w_xf].SetPtr( pm.XF );
     aObj[ o_w_xf ].SetDim( pm.FI, 1 );
     aObj[ o_wo_yf].SetPtr( pm.YF );
@@ -438,6 +440,7 @@ pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat ].GetPtr();
     pm.IC_lm = (double *)aObj[ o_wd_iclcm ].GetPtr();
     pm.IC_wm = (double *)aObj[ o_wd_icwm ].GetPtr();
     pm.BF    = (double *)aObj[ o_wo_bf ].GetPtr();
+pm.BFC    = (double *)aObj[ o_wo_bfc ].GetPtr();
     pm.XF    = (double *)aObj[ o_w_xf ].GetPtr();
     pm.YF    = (double *)aObj[ o_wo_yf ].GetPtr();
     pm.XFA   = (double *)aObj[ o_ww_xfa ].GetPtr();
@@ -575,6 +578,7 @@ pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat ].Free();
     pm.IC_lm = (double *)aObj[ o_wd_iclcm ].Free();
     pm.IC_wm = (double *)aObj[ o_wd_icwm ].Free();
     pm.BF    = (double *)aObj[ o_wo_bf ].Free();
+pm.BFC    = (double *)aObj[ o_wo_bfc ].Free();
     pm.XF    = (double *)aObj[ o_w_xf ].Free();
     pm.YF    = (double *)aObj[ o_wo_yf ].Free();
     pm.XFA   = (double *)aObj[ o_ww_xfa ].Free();
@@ -739,7 +743,8 @@ void TMulti::dyn_new(int /*q*/)
    // Part 2  not always required arrays
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
-        pm.BF = (double *)aObj[ o_wo_bf].Alloc( pm.FIs, pm.N, D_ );
+       pm.BF = (double *)aObj[ o_wo_bf].Alloc( pm.FIs, pm.N, D_ );
+pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );
         pm.XFA = (double *)aObj[ o_ww_xfa].Alloc( pm.FIs, 1, D_ );
         pm.YFA = (double *)aObj[ o_ww_yfa].Alloc( pm.FIs, 1, D_ );
         pm.LsMod = (short *)aObj[ o_wi_lsmod].Alloc( pm.FIs, 1, I_ );
@@ -757,6 +762,7 @@ void TMulti::dyn_new(int /*q*/)
     else
     {
         pm.BF    = (double *)aObj[ o_wo_bf ].Free();
+  pm.BFC    = (double *)aObj[ o_wo_bfc ].Free();
         pm.XFA   = (double *)aObj[ o_ww_xfa ].Free();
         pm.YFA   = (double *)aObj[ o_ww_yfa ].Free();
         pm.LsMod = (short *)aObj[ o_wi_lsmod ].Free();
@@ -1005,6 +1011,7 @@ void TMulti::set_def( int /*q*/)
         pm.IC_lm = 0;
         pm.IC_wm = 0;
         pm.BF    = 0;
+pm.BFC    = 0;
         pm.XF    = 0;
         pm.YF    = 0;
         pm.XFA   = 0;

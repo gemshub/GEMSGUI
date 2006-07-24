@@ -206,6 +206,7 @@ typedef struct
     *IC_lm,	// log total IC molalities in aqueous phase [0:N-1]
     *IC_wm,	// Total dissolved IC concentrations in g/kg_soln [0:N-1]
     *BF, //Output bulk compositions of multicomponent phases bf_ai[FIs][N]
+*BFC, //Total output bulk compositions of solid phases[1][N]
     *XF,    // Output total number of moles of phases Xa[0:FI-1]
     *YF,    // Copy of X_a from previous IPM iteration [0:FI-1]
     *XFA,   // Quantity of carrier in asymmetric phases Xwa, moles [FIs]
@@ -332,6 +333,7 @@ class TMulti
 // ipm_chemical2.cpp
     void GasParcP();
     void phase_bcs( int N, int M, float *A, double X[], double BF[] );
+    void phase_bfc( int k, int jj );
     double pH_via_hydroxyl( double x[], double Factor, int j);
     void ConCalcDC( double X[], double XF[], double XFA[],
                     double Factor, double MMC, double Dsur, int jb, int je, int k );

@@ -607,6 +607,8 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  {
    pm.BF = new double[pm.FIs*pm.N];
    memset(pm.BF, 0, pm.FIs*pm.N*sizeof(double));
+   pm.BFC = new double[pm.N];
+   memset(pm.BFC, 0, pm.N*sizeof(double));
    pm.XFA = new double[pm.FIs];
    memset(pm.XFA, 0, pm.FIs*sizeof(double));
    pm.YFA = new double[pm.FIs];
@@ -635,6 +637,7 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  else
  {
    pm.BF = 0;
+   pm.BFC = 0;
    pm.XFA = 0;
    pm.YFA = 0;
    pm.LsMod = 0;
@@ -930,6 +933,7 @@ void TMulti::multi_free()
    // Part 2  not requited arrays
 
    if( pm.BF ) delete[] pm.BF;
+if( pm.BFC ) delete[] pm.BFC;
    if( pm.XFA ) delete[] pm.XFA;
    if( pm.YFA ) delete[] pm.YFA;
    if( pm.LsMod ) delete[] pm.LsMod;
@@ -1106,6 +1110,7 @@ void TMulti::to_text_file( gstring& path )
     if( pm.FIs > 0 && pm.Ls > 0 )
     {
       outArray( ff, "BF", pm.BF,  pm.FIs*pm.N);
+      outArray( ff, "BFC", pm.BFC, pm.N);
       outArray( ff, "XFA", pm.XFA,  pm.FIs);
       outArray( ff, "YFA", pm.YFA,  pm.FIs);
       outArray( ff, "LsMod", pm.LsMod, pm.FIs);

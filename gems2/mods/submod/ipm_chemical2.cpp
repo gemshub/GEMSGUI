@@ -103,6 +103,27 @@ void TMulti::phase_bcs( int N, int M, float *A, double X[], double BF[] )
     }
 }
 
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/* calculate total bulk stoichiometry of  solid phases
+*/
+void TMulti::phase_bfc( int k, int jj )
+{
+    int i, j;
+    double Xx;
+
+    if( pmp->PHC[k] == PH_AQUEL  || pmp->PHC[k] == PH_GASMIX ||
+        pmp->PHC[k] == PH_FLUID  || pmp->PHC[k] == PH_PLASMA )
+        return;
+    for( j=0; j<pmp->L1[k]; j++ )
+    {
+        Xx = pmp->X[j+jj];
+        if( fabs( Xx ) < 1e-12 )
+            continue;
+        for( i=0; i<pmp->N; i++ )
+           pmp->BFC[i] += (double)pmp->A[i+(jj+j)*pmp->N] * Xx;
+    }
+}
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 #define  a(j,i) ((double)(*(pmp->A+(i)+(j)*pmp->N)))
 /* Calculation of dual chemical potentials and concentrations
@@ -328,6 +349,7 @@ void TMulti::ConCalc( double X[], double XF[], double XFA[])
       if( pmp->Ls < 2 || !pmp->FIs )
         return;
 
+    memset( pmp->BFC, 0, sizeof(double)*pmp->N );
 
     for( j=0; j<pmp->Ls; j++ )
     {
@@ -342,6 +364,10 @@ void TMulti::ConCalc( double X[], double XF[], double XFA[])
         pmp->FWGT[k] = 0.0;
         pmp->FVOL[k] = 0.0;
         //   Dsur = 0.0;
+
+      if( XF[k] > pmp->DSM &&
+        !( pmp->PHC[k] == PH_SORPTION && XFA[k] <= pa->p.ScMin ))
+       phase_bfc( k, j );
 
         if( k >= pmp->FIs || pmp->L1[k] == 1 )
         { /* this is a single- component phase */
