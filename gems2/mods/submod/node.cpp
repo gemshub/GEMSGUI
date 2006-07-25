@@ -369,6 +369,19 @@ int TNode::Ph_xCH_to_xDB( const int xCH )
   return -1;
 }
 
+// Converts the Phase DCH index into the DC DCH index
+ int  TNode::Phx_to_DCx( const int Phx )
+ {
+   int k, DCx = 0;
+   for( k=0; k<CSD->nPHb; k++ )
+   {
+     if( k == Phx )
+      break;
+     DCx += CSD->nDCinPH[ k];
+   }
+   return DCx;
+ }
+
 //---------------------------------------------------------//
 
 void TNode::allocMemory()

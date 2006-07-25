@@ -305,9 +305,6 @@ class TMulti
    float EpsW_;
    float RoW_;
 
-  double LagranInterp(float *y, float *x, double *d, float yoi,
-                    float xoi, int M, int N);
-
 #endif
 
 // ipm_chemical.cpp
@@ -434,6 +431,9 @@ public:
 
     void multi_realloc( char PAalp, char PSigm );
     void multi_free();
+    double LagranInterp(float *y, float *x, double *d, float yoi,
+                      float xoi, int M, int N);
+
 #endif
 
     MULTI* GetPM()

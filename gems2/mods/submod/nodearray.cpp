@@ -445,6 +445,78 @@ void TNodeArray::CopyNodeFromTo( int ndx, int nNod,
 }
 
 //---------------------------------------------------------
+// Methods for working with node arrays (access to data from DBR)
+
+// Calculate phase (carrier) mass, g  of single component phase
+double TNodeArray::get_mPH( int ia, int nodex, int PHx )
+{
+  int DCx = Phx_to_DCx( Ph_xBR_to_xCH(PHx) );
+  double val=0.;
+
+  if( DCx >= pCSD()->nDCs && DCx < pCSD()->nDC )
+  {
+    val = pCSD()->DCmm[DCx];
+    if( ia == 0)
+     val *= pNodT0()[nodex]->xDC[DC_xCH_to_xDB(DCx)];
+    else
+     val *= pNodT1()[nodex]->xDC[DC_xCH_to_xDB(DCx)];
+  }
+
+  return val;
+}
+
+// Calculate phase volume, cm3/mol  of single component phase
+double TNodeArray::get_vPH( int ia, int nodex, int PHx )
+{
+  int DCx = Phx_to_DCx( Ph_xBR_to_xCH(PHx) );
+  double val=0.;
+
+  if( DCx >= pCSD()->nDCs && DCx < pCSD()->nDC )
+  {
+#ifndef IPMGEMPLUGIN
+     val = pmm->G[DCx];
+#else
+     double T, P;
+     if( ia == 0 )
+     {
+      T = pNodT0()[(nodex)]->T;
+      P = pNodT0()[(nodex)]->P;
+     }
+     else
+     {
+      T = pNodT1()[(nodex)]->T;
+      P = pNodT1()[(nodex)]->P;
+     }
+     DCx  *=  pCSD()->nPp * pCSD()->nTp;
+     val = multi->LagranInterp( pCSD()->Pval, pCSD()->Tval, pCSD()->V0+DCx,
+                       P, T, pCSD()->nTp, pCSD()->nPp )*10.;
+
+#endif
+
+  }
+  return val;
+}
+
+
+// Calculate bulk compositions  of single component phase
+double TNodeArray::get_bPH( int ia, int nodex, int PHx, int ICx )
+{
+  int DCx = Phx_to_DCx( Ph_xBR_to_xCH(PHx) );
+  double val=0.;
+
+  if( DCx >= pCSD()->nDCs && DCx < pCSD()->nDC )
+  {
+    val = pCSD()->A[ pCSD()->xIC[ICx] + DCx * pCSD()->nIC];
+    if( ia == 0)
+     val *= pNodT0()[nodex]->xDC[DC_xCH_to_xDB(DCx)];
+    else
+     val *= pNodT1()[nodex]->xDC[DC_xCH_to_xDB(DCx)];
+  }
+
+  return val;
+}
+
+//---------------------------------------------------------
 // working with grid
 
 // Set grid coordinate array use predefined array aGrid

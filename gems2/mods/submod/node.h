@@ -31,16 +31,17 @@ class QWidget;
 
 class TNode
 {
-    MULTI* pmm;   // Pointer to GEMIPM work data structure (TMULTI in ms_multi.h)
 
-#ifdef IPMGEMPLUGIN
+protected:
+
+   MULTI* pmm;   // Pointer to GEMIPM work data structure (TMULTI in ms_multi.h)
+
+   #ifdef IPMGEMPLUGIN
                   // This is used in isolated GEMIPM2K module for coupled codes
     TMulti* multi;
     TProfil* profil;
 
-#endif
-
-protected:
+   #endif
 
     DATACH* CSD;     // Pointer to chemical system data structure CSD
 
@@ -274,6 +275,9 @@ static TNode* na;   // static pointer to this class
    // Converts the Phase DBR index into the Phase DCH index
    inline int Ph_xBR_to_xCH( const int xBR )
    { return CSD->xPH[xBR]; }
+
+   // Converts the Phase DCH index into the DC DCH index
+    int Phx_to_DCx( const int Phx );
 
     // Data exchange methods between GEMIPM and work node DATABR structure
     void packDataBr();      //  packs GEMIPM calculation results into work node structure

@@ -180,6 +180,16 @@ public:
     void  checkNodeArray(int i, int* nodeTypes, const char*  datachbr_file );
 
    //---------------------------------------------------------
+   // Methods for working with node arrays (access to data from DBR)
+   // Calculate phase (carrier) mass, g  of single component phase
+   double get_mPH( int ia, int nodex, int PHx );
+   // Calculate phase volume, cm3/mol  of single component phase
+   double get_vPH( int ia, int nodex, int PHx );
+   // Calculate bulk compositions  of single component phase
+   double get_bPH( int ia, int nodex, int PHx, int IC );
+
+
+   //---------------------------------------------------------
    // Methods for working with node arrays
 
     //  Copies data for a node ndx from the array of nodes anyNodeArray that
@@ -282,7 +292,7 @@ public:
   // amount of phase with index PHx from T0 node with index nodex
 #define node0_xPH( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->xPH[(PHx)])
   // amount of phase with index PHx from T1 node with index nodex
-#define node1_xPH( nodex, PHx ) (TNodeArray::na->pNodT1()[(nodex)]->xPH[(PHx)])
+#define node1_xPH( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->xPH[(PHx)])
 
   // volume of multicomponent phase with index PHx from T0 node with index nodex
 #define node0_vPS( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->vPS[(PHx)])
@@ -290,9 +300,9 @@ public:
 #define node1_vPS( nodex, PHx ) (TNodeArray::na->pNodT1()[(nodex)]->vPS[(PHx)])
 
   // volume of single-component phase with index PHx from T0 node with index nodex
-#define node0_vPH( nodex, PHx )       (TNodeArray::na->pNodT0()[(nodex)]->vPS[(PHx)])
+#define node0_vPH( nodex, PHx ) (TNodeArray::na->get_vPH( 0, (nodex), (PHx)))
   // volume of single-component phase with index PHx from T1 node with index nodex
-#define node1_vPH( nodex, PHx )       (TNodeArray::na->pNodT1()[(nodex)]->vPS[(PHx)])
+#define node1_vPH( nodex, PHx ) (TNodeArray::na->get_vPH( 1, (nodex), (PHx)))
 
   // mass of multicomponent phase with index PHx from T0 node with index nodex
 #define node0_mPS( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->mPS[(PHx)])
@@ -300,9 +310,9 @@ public:
 #define node1_mPS( nodex, PHx ) (TNodeArray::na->pNodT1()[(nodex)]->mPS[(PHx)])
 
   // mass of single-component phase with index PHx from T0 node with index nodex
-#define node0_mPH( nodex, PHx )       (TNodeArray::na->pNodT0()[(nodex)]->xPH[(PHx)]
+#define node0_mPH( nodex, PHx )  (TNodeArray::na->get_mPH( 0, (nodex), (PHx)))
   // mass of single-component phase with index PHx from T1 node with index nodex
-#define node1_mPH( nodex, PHx )       (TNodeArray::na->pNodT1()[(nodex)]->vPS[(PHx)])
+#define node1_mPH( nodex, PHx )  (TNodeArray::na->get_mPH( 1, (nodex), (PHx)))
 
   // amount of solvent/sorbent in phase with index PHx from T0 node with index nodex
 #define node0_xPA( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->xPA[(PHx)])
@@ -318,9 +328,9 @@ public:
                                        (PHx)*TNodeArray::na->pCSD()->nICb+(ICx)])
 
 // amount of independent component ICx in single-component phase PHx in T0 node nodex
-#define node0_bPH( nodex, PHx, ICx )  ()
+#define node0_bPH( nodex, PHx, ICx )  (TNodeArray::na->get_vPH( 0, (nodex), (PHx), (ICx)))
 // amount of independent component ICx in single-component phase PHx in T0 node nodex
-#define node1_bPH( nodex, PHx, ICx )  ()
+#define node1_bPH( nodex, PHx, ICx )  (TNodeArray::na->get_vPH( 0, (nodex), (PHx), (ICx)))
 
 #endif   // _nodearray_h_
 
