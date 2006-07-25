@@ -830,12 +830,12 @@ void TSyst::phase_data_load()
         case PH_SORPTION:
             sorption_data_load( aPH, k );
         case PH_SINDIS:
-            if( sy.PAalp != S_OFF )
+/*            if( sy.PAalp != S_OFF )
                 sy.Aalp[k] = aPH->php->Asur;
             if( sy.PSigm != S_OFF )
             {
                 sy.Sigm[k][0] = aPH->php->Sigma0;
-                sy.Sigm[k][1] = aPH->php->h0p;
+                sy.Sigm[k][1] = aPH->php->SigmaG;
             }
             if( sy.PXr0h0 != S_OFF )
             {
@@ -846,10 +846,28 @@ void TSyst::phase_data_load()
             {
                 sy.XEpsC[k][0] = aPH->php->Eps;
                 sy.XEpsC[k][1] = aPH->php->Cond;
-            }
+            } */
             break;
         default:
             ; /* Error ! */
+        }
+        // Moved by DK on 25.07.2006
+        if( sy.PAalp != S_OFF )
+            sy.Aalp[k] = aPH->php->Asur;
+        if( sy.PSigm != S_OFF )
+        {
+            sy.Sigm[k][0] = aPH->php->Sigma0;
+            sy.Sigm[k][1] = aPH->php->SigmaG;
+        }
+        if( sy.PXr0h0 != S_OFF )
+        {
+            sy.Xr0h0[k][0] = aPH->php->R0p;
+            sy.Xr0h0[k][1] = aPH->php->h0p;
+        }
+        if( sy.PXepsC != S_OFF )
+        {
+            sy.XEpsC[k][0] = aPH->php->Eps;
+            sy.XEpsC[k][1] = aPH->php->Cond;
         }
     }  /* k */
 }

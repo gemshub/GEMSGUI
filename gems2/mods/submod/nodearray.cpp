@@ -654,13 +654,13 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
     case COLLOID: // mass = 0.;
                   // for(short ie=0; ie < pCSD()->nICb; ie++ )
                   //   mass += dbr->bPS[ips*pCSD()->nICb+ie]*pCSD()->ICmm[pCSD()->xIC[ie]];
-                   mass = dbr->mPS[ips];
+                   mass = dbr->mPS[ips];  // gets mass of moving phase
                   break;
-    case DIFFUSIVE:
+    case DIFFUSIVE: // gets the mass of diffusing species in the phase
                   mass = dbr->xDC[ips]*pCSD()->DCmm[pCSD()->xDC[ips]];
                    break;
     }
-   coeff = m_v/mass; // mass of particle/msass of phase
+   coeff = m_v/mass; // mass of particle/mass of phase
 
    for(short ie=0; ie < pCSD()->nICb; ie++ )
    {

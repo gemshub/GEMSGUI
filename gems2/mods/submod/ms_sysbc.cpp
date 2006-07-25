@@ -401,7 +401,8 @@ void TSyst::make_syst()
     short i, k;
 
     make_syst_sizes();
-    /* Calck delta of free energe of phases by dispersnost */
+    // Calculation of free energy increment for phase-aqueous interfaces
+    // due to specific surface area and energy
     if( sy.PYOF != S_OFF )
     {
         double SSA = 0.1, STEN = 0.5;
@@ -411,7 +412,12 @@ void TSyst::make_syst()
                 continue;
             switch( mup->PHC[k] )
             {
+            case PH_FLUID:    // cases extended by DK on 25.07.2006
+            case PH_GASMIX:
             case PH_LIQUID:
+            case PH_SIMELT:
+            case PH_HCARBL:
+            case PH_SINCOND:
             case PH_SINDIS:
             case PH_SORPTION:
                 if( sy.PAalp !=S_OFF )
@@ -424,7 +430,7 @@ void TSyst::make_syst()
                     STEN = sy.Sigm[k][0];
                     sy.PSigm = S_ON;
                 }
-                /* Переделать с учетом радиуса и высоты частиц!!!! */
+                // Calculating J/g in Thomson-Kelvin equation
                 sy.YOF[k] = 2./3.*STEN*SSA;
                 /*  */
                 break;

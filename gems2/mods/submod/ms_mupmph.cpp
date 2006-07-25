@@ -564,7 +564,8 @@ PARLOAD: if( k < syp->Fis )
         case PH_GASMIX:
         case PH_PLASMA:
         case PH_FLUID:
-            pmp->PG = pmp->L1[k];
+//            pmp->PG = pmp->L1[k];
+              pmp->PG += pmp->L1[k];
             break;
         case PH_HCARBL:
             pmp->PSOL = pmp->L1[k];
@@ -581,7 +582,7 @@ PARLOAD: if( k < syp->Fis )
                 car_l[i]=-1;
             car_c=0; // cQ=0;
         case PH_SINDIS:
-            if( syp->PAalp != S_OFF )
+ /*           if( syp->PAalp != S_OFF )
                 pmp->Aalp[k] = syp->Aalp[kk];
             if( syp->PSigm != S_OFF )
             {
@@ -597,12 +598,29 @@ PARLOAD: if( k < syp->Fis )
             {
                 pmp->Xr0h0[k][0] = syp->Xr0h0[kk][0];
                 pmp->Xr0h0[k][1] = syp->Xr0h0[kk][1];
-            }
+            }     */
             break;
         default:
             ; /* error! */
         }
-
+        // Moved by DK on 25.07.2006
+        if( syp->PAalp != S_OFF )
+           pmp->Aalp[k] = syp->Aalp[kk];
+        if( syp->PSigm != S_OFF )
+        {
+           pmp->Sigw[k] = syp->Sigm[kk][0];
+           pmp->Sigg[k] = syp->Sigm[kk][1];
+        }
+        if( syp->PXepsC != S_OFF )
+        {
+           pmp->Xcond[k] = syp->XEpsC[kk][1];
+           pmp->Xeps[k] = syp->XEpsC[kk][0];
+        }
+        if( syp->PXr0h0 != S_OFF )
+        {
+           pmp->Xr0h0[k][0] = syp->Xr0h0[kk][0];
+           pmp->Xr0h0[k][1] = syp->Xr0h0[kk][1];
+        }
         PMM = 0.0;
         Cjs = -1;
         // cycle by DC in phase, calc of it mean mol. mass
@@ -713,7 +731,7 @@ PARLOAD: if( k < syp->Fis )
 
         if( syp->PYOF != S_OFF )
             switch( pmp->PHC[k] )
-            { /* recalc free energy of metastable phase from units/g to units/mol */
+            { // convert free energy of metastable phase from J/g to J/mol */
             case PH_POLYEL:
             case PH_SORPTION:
                 if( Cjs >= 0 )
@@ -726,7 +744,7 @@ PARLOAD: if( k < syp->Fis )
                 pmp->YOF[k] = syp->YOF[kk] * PMM / pmp->RT;
                 break;
             default:
-                if( Cjs >=0 ) /* if have MAJOR-component of solution  */
+                if( Cjs >=0 ) // if there is a MAJOR component in the solution 
                     PMM = pmp->MM[Cjs];
                 pmp->YOF[k] = syp->YOF[kk] * PMM / pmp->RT;
                 break;

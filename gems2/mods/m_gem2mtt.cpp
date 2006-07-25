@@ -328,8 +328,8 @@ void TGEM2MT::MassTransAdvecStep()
   } // end of loop over nodes
 }
 
-
-// return true if canceled
+// Main call for the mass transport iterations
+// returns true if canceled
 bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;

@@ -906,7 +906,7 @@ double TMulti::Cj_init_calc( double g0, int j, int k )
     G = g0/pmp->RT;
     /*  if( k < pmp->FIs )  */
     YOF = pmp->YOF[k];
-    /* ��� ��� ����!!!!! */
+    /* Calculation of concentration scaling increments */
     switch( pmp->DCC[j] )
     { /* Aqueous electrolyte */
     case DC_AQ_PROTON:
