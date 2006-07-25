@@ -665,30 +665,33 @@ AGAINRC:
         php->PphC = '?';
     }
 
-    if( php->NsiT > 0 && php->PFsiT == S_REM )
+    if( php->NsiT > 0 && (php->PFsiT == S_REM || php->PFsiT == S_ON  ))
     {  /* Setup of default values */
+        php->PphC == PH_SORPTION;
         for( i=0; i<php->NsiT; i++ )
         { /* if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) */
-            php->SCMC[i] = SC_TLM;  /* Default! fix by DAK 23.10.99  */
+            php->SCMC[i] = php->sol_t[SCM_TYPE];  // fix by DK 24.07.2006
+            if( !php->FsiT )
+                php->FsiT[i] = 1./php->NsiT;
             if( !php->MSDT[i][0] )
                 php->MSDT[i][0] = aPa->pa.p.DNS;
             if( !php->MSDT[i][1] )
-                php->MSDT[i][1] = 0.6022; /* 1/nm2; = 1 mkmol/m2 */
+                php->MSDT[i][1] = 4.0; // Third-layer capacitance (reserved)  
             if( !php->CapT[i][0] )
-                php->CapT[i][0] = 1.0; /* A plane */
+                php->CapT[i][0] = 1.0; // C1 inner capacitance
             if( !php->CapT[i][1] )
-                php->CapT[i][1] = 0.2; /* B plane */
+                php->CapT[i][1] = 0.2; // C2 outer capacitance
+            if( !php->XfIEC )
+                php->XfIEC[i] = 0;
         }
         for( i=0; i<php->nDC; i++ )
         {
-            /* if( !php->SATC[i][0] || php->SATC[i][0] ==A_NUL ) */
-            php->SATC[i][SA_MCA] = SAT_L_COMP;
-            /* if( !php->SATC[i][1] || php->SATC[i][1] ==A_NUL ) */
-            php->SATC[i][SA_EMX] = CCA_VOL;  /* Default! */
-            php->SATC[i][SA_STX] = CST_0;
-            php->SATC[i][SA_EMX] = SPL_0;  /* Default! */
-            php->SATC[i][SA_MCA] = CSI_0;
-            php->SATC[i][SA_EMX] = SDU_N;  /* Default! */
+            php->SATC[i][SA_MCA] = SAT_L_COMP;  // default Langmuir comp.
+            php->SATC[i][SA_EMX] = CCA_VOL;  // default per whole sorbent
+            php->SATC[i][SA_STX] = CST_0;    // default - 0 surface type
+            php->SATC[i][SA_PLAX] = SPL_0;   // default - zero EDL plane
+            php->SATC[i][SA_SITX] = CSI_0;   // default - 0 site type
+            php->SATC[i][SA_UNIT] = SDU_N;   // default - 'n'
         }
         php->PFsiT = S_ON;
     }
@@ -920,8 +923,8 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
                 if( Z > 0.99 ) s(i,0) = 3.84;
                 /* do it by HKF ! */    //  3.72 !
             }
-        } // i
-    }
+        }
+    }  // i
 
     if( php->PphC == PH_SORPTION || php->PphC == PH_POLYEL )
     {
@@ -956,42 +959,38 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
         }
         if( getDCC==true || php->DCC[i] == A_NUL || php->DCC[i] == '`')
             php->DCC[i] = Ctype;
-// this block is now obsolete !
-//      if( php->scoef )
-//      {
-//          Z = fabs(Z);
-//          if( fabs( a0 ) < 1e-20 )
-//            a0 = 1.0;
-//          s(i,0) = a0;    // Frumkin isotherm parameter cN
-//          if( fabs( bp ) < 1e-20 )
-//            bp = 0.0;
-//          if( nsc > 1 )
-//            s(i,1) = bp;  // Frumkin isotherm parameter Fi
-//      }
+
 // Transferring data into MaSdj array   KD 25.10.2004
 // Now a0 and b0 contain CD (charge distribution) for 0 and beta planes, resp.
         if( php->NR1 == DFCN && php->MaSdj )
         {
            if( fabs( cN ) < 1e-20 )
               cN = 0.0;
-           php->MaSdj[i][PI_P2] = cN;    // Frumkin isotherm parameter cN
+           php->MaSdj[i][PI_P2] = cN;  // Dentateness or Frumkin isotherm parameter cN
            if( fabs( Fi ) < 1e-20 )
               Fi = 0.0;
-           php->MaSdj[i][PI_P1] = Fi;  // Frumkin isotherm parameter Fi
+           php->MaSdj[i][PI_P1] = Fi;  // Frumkin isotherm parameter Alpha-Fi
 // EDL CD parameters
-           if( fabs( a0 ) < 1e-20 && fabs( bp ) < 1e-20 )
-              if( !(php->DCC[i] == DC_WSC_A0 || php->DCC[i] == DC_WSC_A1 ||
-                 php->DCC[i] == DC_WSC_A2 || php->DCC[i] == DC_WSC_A3 ||
-                 php->DCC[i] == DC_WSC_A4 || php->DCC[i] == DC_IEWC_B ||
-                 php->DCC[i] == DC_SUR_IPAIR ) )
-              {  // this is inner-sphere species
-                a0 = Z; bp = 0;
-              }
-              else { // this is outer-sphere species (charge on beta-plane only)
-                a0 = 0; bp = Z;
-              }
-           php->MaSdj[i][PI_CD0] = a0;
-           php->MaSdj[i][PI_CDB] = bp;
+           if( fabs( a0 ) < 1e-20 )
+               a0 = Z;
+           if( fabs( bp ) < 1e-20 )
+               bp = 0;
+           if( !(php->DCC[i] == DC_SUR_CARRIER ||
+                 php->DCC[i] == DC_SUR_MINAL ||
+                 php->DCC[i] == DC_PEL_CARRIER) )
+           {
+              php->MaSdj[i][PI_CD0] = a0;
+              php->MaSdj[i][PI_CDB] = bp;
+              php->MaSdj[i][PI_P1] = Fi;
+              php->MaSdj[i][PI_P2] = cN;
+           }
+           else
+           { //  Sorbent has no data for surface charges
+              php->MaSdj[i][PI_CD0] = 0;
+              php->MaSdj[i][PI_CDB] = 0;
+              php->MaSdj[i][PI_P1] = 0;
+              php->MaSdj[i][PI_P2] = 0;
+           }
         }
       } // i
     }
