@@ -343,8 +343,7 @@ static int rkeycmp(const void *e1, const void *e2)
     return RCmp;
 }
 
-/* opens window with 'Remake record' parameters
-*/
+// opens window with 'Remake record' parameters
 void
 TPhase::MakeQuery()
 {

@@ -130,10 +130,10 @@ static TNode* na;   // static pointer to this class
        double p_Ms,     // Mass of reactive subsystem, kg          -       -      +
 //       double p_dt,     // actual time step	         			  +
 //       double p_dt1,    // previous time step                                   +
-       double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
+       double *p_bIC,    // bulk mole amounts of IC [nICb]         +       -      -
        double *p_dul,   // upper kinetic restrictions [nDCb]       +       -      -
        double *p_dll,   // lower kinetic restrictions [nDCb]       +       -      -
-       double *p_aPH  // Specific surface areas of phases (m2/g)      +       -     -
+       double *p_aPH  // Specific surface areas of phases (m2/g)   +       -      -
    );
 
    // Copies GEM input data from already loaded DATABR work structure
@@ -150,8 +150,8 @@ static TNode* na;   // static pointer to this class
 //       double p_dt1,    // previous time step                                   +
    double *p_bIC,    // bulk mole amounts of IC [nICb]          +       -      -
    double *p_dul,    // upper kinetic restrictions [nDCb]       +       -      -
-   double *p_dll,     // lower kinetic restrictions [nDCb]       +       -      -
-   double *p_aPH  // Specific surface areas of phases (m2/g)      +       -     -
+   double *p_dll,     // lower kinetic restrictions [nDCb]      +       -      -
+   double *p_aPH  // Specific surface areas of phases (m2/g)    +       -      -
    );
 
 #endif
@@ -190,15 +190,15 @@ static TNode* na;   // static pointer to this class
        double &p_pe,    // pe of aqueous solution                  -      -      +     +
        double &p_Eh,    // Eh of aqueous solution, V               -      -      +     +
        // Dynamic data - dimensions see in DATACH.H structure
-       double  *p_rMB,  // MB Residuals from GEM IPM [nICb]             -      -      +     +
-       double  *p_uIC,   // IC chemical potentials (mol/mol)[nICb]       -      -      +     +
-       double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]      -      -      +     +
-       double  *p_gam,    // activity coeffs of DC [nDCb]               -      -      +     +
-       double  *p_xPH,  // total mole amounts of phases [nPHb]          -      -      +     +
-       double  *p_vPS,  // phase volume, cm3/mol        [nPSb]          -      -      +     +
-       double  *p_mPS,  // phase (carrier) mass, g      [nPSb]          -      -      +     +
-       double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]    -      -      +     +
-       double  *p_xPA  // amount of carrier in phases  [nPSb] ??       -      -      +     +
+       double  *p_rMB,  // MB Residuals from GEM IPM [nICb]         -      -       +     +
+       double  *p_uIC,   // IC chemical potentials (mol/mol)[nICb]  -      -       +     +
+       double  *p_xDC,    // DC mole amounts at equilibrium [nDCb]  -      -       +     +
+       double  *p_gam,    // activity coeffs of DC [nDCb]           -      -       +     +
+       double  *p_xPH,  // total mole amounts of phases [nPHb]      -      -       +     +
+       double  *p_vPS,  // phase volume, cm3/mol        [nPSb]      -      -       +     +
+       double  *p_mPS,  // phase (carrier) mass, g      [nPSb]      -      -       +     +
+       double  *p_bPS,  // bulk compositions of phases  [nPSb][nICb]   -      -    +     +
+       double  *p_xPA  // amount of carrier in phases  [nPSb] ??       -      -    +     +
    );
 
 #endif
@@ -306,20 +306,28 @@ static TNode* na;   // static pointer to this class
 
 };
 
+// Data access macroses
+
+// molar mass of independent component with node index ICx
 #define nodeCH_ICmm( ICx )  (  TNode::na->pCSD()->ICmm[ \
                                TNode::na->pCSD()->xIC[(ICx)]] )
 
+// molar mass of dependent component with node index DCx
 #define nodeCH_DCmm( DCx )  (  TNode::na->pCSD()->DCmm[ \
                                TNode::na->pCSD()->xDC[(DCx)]] )
 
+// diffusion coefficient of dependent component with node index ICx
 #define nodeCH_DD( DCx )    ( TNode::na->pCSD()->DD[ \
                               TNode::na->pCSD()->xDC[(DCx)]] )
 
+// stoichiometry coefficient A[j][i] of IC with node index ICx
+// in the formula of DC with node index DCx
 #define nodeCH_A( DCx, ICx )  ( (double)(TNode::na->pCSD()->A[ \
                                  (TNode::na->pCSD()->xIC[(ICx)])+ \
                                  (TNode::na->pCSD()->xDC[(DCx)]) * \
                                   TNode::na->pCSD()->nIC]) )
 
+// more will be added soon!
 
 #endif   // _node_h_
 
