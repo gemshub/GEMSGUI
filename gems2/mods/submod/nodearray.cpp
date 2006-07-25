@@ -681,28 +681,39 @@ void TNodeArray::GetNodeSizes( int ndx, LOCATION cxyz[2] )
   */
 }
 
-// get full mass of all particles type ptype in node ndx
+// get full mass of all particles of the type ptype in node ndx
 // ndx    -  (absolute) index of the node
 // ptype  -  particle type index ( 1 to 255 )
 // tcode  -  particle transport mechanism code (see enum PTCODE)
 // ips   - DataBr index of phase or species to which this particle is connected
 double TNodeArray::GetNodeMass( int ndx,
-       char /*ptype*/, char tcode, unsigned char ips )
+       char /*ptype*/, char tcode, unsigned char iips )
 {
    double mass = 0.;
-   DATABR* dbr = NodT1[ndx];
+//   DATABR* dbr = NodT1[ndx];
+   DATACH* dch = CSD;
+   int xWatCH, ips = (int)iips;
 
      switch( tcode )
      {
-        case ADVECTIVE:
-        case COLLOID: // mass = 0.;
-                      // for(short ie=0; ie < pCSD()->nICb; ie++ )
-                      //   mass += dbr->bPS[ips*pCSD()->nICb+ie]*pCSD()->ICmm[pCSD()->xIC[ie]];
-                       mass = dbr->mPS[ips];
+        case DISSOLVED: // mass of dissolved matter in aqueous solution
+                    xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
+                        mass = node1_mPS(ndx,ips) - node1_xPA(ndx,ips) *
+                               dch->DCmm[xWatCH];
                         break;
-        case DIFFUSIVE:
-                      mass = dbr->xDC[ips]*pCSD()->DCmm[pCSD()->xDC[ips]];
+        case ADVECTIVE: // mass of aq solution
+                        mass = node1_mPS( ndx, ips );
                         break;
+        case COLLOID:  // mass of phase - solid solution, sorption or pure solid
+                        if( ips < dch->nPSb )
+                            mass = node1_mPS( ndx, ips );
+                        else
+                            mass = node1_mPH( ndx, ips );
+                        break;
+        case DIFFUSIVE: // mass of the diffusing species
+                        mass = nodeCH_DCmm( ips ) * node1_xDC( ndx, ips );
+                        break;
+        default: break;
      }
    return mass;
 }
@@ -715,34 +726,58 @@ double TNodeArray::GetNodeMass( int ndx,
 // ips   - DataBr index of phase or species to which this particle is connected
 // m_v -  mass or volume of the particle (depending on ptype and mmode)
 void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
-       char /*type*/, char tcode, unsigned char ips, double m_v )
+       char /*type*/, char tcode, unsigned char iips, double m_v )
 {
    double mass = 0., coeff, mol;
    DATABR* dbr = NodT1[ndx_from];
+   DATACH* dch = CSD;
+   int xWatCH, ips = (int)iips;
 
    switch( tcode )
    {
-    case ADVECTIVE:
-    case COLLOID: // mass = 0.;
-                  // for(short ie=0; ie < pCSD()->nICb; ie++ )
-                  //   mass += dbr->bPS[ips*pCSD()->nICb+ie]*pCSD()->ICmm[pCSD()->xIC[ie]];
-                   mass = dbr->mPS[ips];  // gets mass of moving phase
-                  break;
+    case DISSOLVED: // mass of dissolved matter in aqueous solution
+                    xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
+                        mass = node1_mPS(ndx_from,ips) -
+                             node1_xPA(ndx_from,ips) * dch->DCmm[xWatCH];
+                   break;
+    case ADVECTIVE: // full liquid advection
+                   mass = node1_mPS( ndx_from, ips );
+                   break;
+    case COLLOID:  // colloid particles
+                   if( ips < dch->nPSb )
+                       mass = node1_mPS( ndx_from, ips );
+                   else
+                       mass = node1_mPH( ndx_from, ips );
+                   break;
     case DIFFUSIVE: // gets the mass of diffusing species in the phase
-                  mass = dbr->xDC[ips]*pCSD()->DCmm[pCSD()->xDC[ips]];
+                   mass = nodeCH_DCmm( ips ) * node1_xDC( ndx_from, ips );
                    break;
     }
    coeff = m_v/mass; // mass of particle/mass of phase
 
-   for(short ie=0; ie < pCSD()->nICb; ie++ )
+   for(short ie=0; ie < CSD->nICb; ie++ )
    {
      mol = 0.; // moles if IC in the particle
      switch( tcode )
      {
-        case ADVECTIVE:
-        case COLLOID:   mol = dbr->bPS[ips*pCSD()->nICb+ie]*coeff;
+        case DISSOLVED: // moving only dissolved IC (-H2 or -O)
+                        xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
+                        mol = (node1_bPS( ndx_from, ips, ie )
+                              - nodeCH_A( xWatCH, ie)
+                              * node1_xPA(ndx_from,ips)) * coeff;
                         break;
-        case DIFFUSIVE: mol =  dbr->xDC[ips]*pCSD()->A[pCSD()->xPH[ips]*pCSD()->nIC+pCSD()->xIC[ie]]*coeff;
+        case ADVECTIVE: // moving IC of the whole aq phase
+                        mol = node1_bPS( ndx_from, ips, ie ) * coeff;
+                        break;
+        case COLLOID:   // moving IC of solid particle
+                        if( ips < dch->nPSb )
+                             mol = node1_bPS( ndx_from, ips, ie ) * coeff;
+                        else
+                             mol = node1_bPH( ndx_from, ips, ie ) * coeff;
+                        break;
+        case DIFFUSIVE: // moving IC of diffusing species
+                        mol = node1_xDC( ndx_from, ips ) * nodeCH_A( ips, ie )
+                                * coeff;
                         break;
      }
      if( dbr->NodeTypeHY != NBC3source )

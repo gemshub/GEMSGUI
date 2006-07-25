@@ -28,10 +28,10 @@
 // similar particle-based transport algorithms
 enum  PTCODE // Codes of particle type
 {
+   DISSOLVED = 20,
    ADVECTIVE = 21,
    DIFFUSIVE = 22,
    COLLOID = 23
-
 };
 
 struct  LOCATION // Location (coordinates) of a point in space
@@ -328,9 +328,9 @@ public:
                                        (PHx)*TNodeArray::na->pCSD()->nICb+(ICx)])
 
 // amount of independent component ICx in single-component phase PHx in T0 node nodex
-#define node0_bPH( nodex, PHx, ICx )  (TNodeArray::na->get_vPH( 0, (nodex), (PHx), (ICx)))
+#define node0_bPH( nodex, PHx, ICx )  (TNodeArray::na->get_bPH( 0, (nodex), (PHx), (ICx)))
 // amount of independent component ICx in single-component phase PHx in T0 node nodex
-#define node1_bPH( nodex, PHx, ICx )  (TNodeArray::na->get_vPH( 0, (nodex), (PHx), (ICx)))
+#define node1_bPH( nodex, PHx, ICx )  (TNodeArray::na->get_bPH( 0, (nodex), (PHx), (ICx)))
 
 #endif   // _nodearray_h_
 
