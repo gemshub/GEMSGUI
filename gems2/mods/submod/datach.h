@@ -114,7 +114,6 @@ typedef struct
 }
 DATACH;
 
-
 // Codes allowed in Generic DC code list ccDCW
 enum SolDCLcodes {
     DCl_SINGLE = 'U',        // This DC is a single-component (pure) phase

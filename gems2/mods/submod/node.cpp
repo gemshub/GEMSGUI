@@ -713,6 +713,7 @@ TNode::TNode()
 TNode::~TNode()
 {
    freeMemory();
+   na = 0;
 }
 
 // Extracting and packing GEM IPM results into work DATABR structure

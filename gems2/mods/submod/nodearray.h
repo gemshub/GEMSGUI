@@ -90,6 +90,8 @@ class TNodeArray : public TNode
 
 public:
 
+  static TNodeArray* na;   // static pointer to this class
+
 #ifndef IPMGEMPLUGIN
 // These calls are used only inside GEMS-PSI GEM2MT module
 
@@ -114,33 +116,32 @@ public:
 #else
 // Used in GEMIPM2
 
-   static TNodeArray* na;   // static pointer to this class for the isolated GEMIPM2K module
    TNodeArray( int nNod );   // constructors for 1D arrangement of nodes
    TNodeArray( int asizeN, int asizeM, int asizeK ); // constructir that uses 3D node arrangement
 
 #endif
 
-   inline
-   int iNode( int indN, int indM, int indK ) const // makes one absolute node index from three coordinate indexes
+   // makes one absolute node index from three coordinate indexes
+   inline int iNode( int indN, int indM, int indK ) const
      { return  (( indK * sizeM + indM  ) * sizeN + indN);  }
 
-    int indN( int ndx ) const // get i index along N (x axis) from the absolute index ndx
+   inline int indN( int ndx ) const // get i index along N (x axis) from the absolute index ndx
     { return  (ndx % sizeN);  }
 
-    int indM( int ndx ) const // get j index along M (y axis) from the absolute index ndx
+   inline int indM( int ndx ) const // get j index along M (y axis) from the absolute index ndx
     {
      int j = (ndx - ndx % sizeN);
          j /=  sizeN;
      return  (j % sizeM);
     }
 
-    int indK( int ndx ) const // get k index along K (z axis) from the absolute index ndx
+   inline int indK( int ndx ) const // get k index along K (z axis) from the absolute index ndx
     {
       int k = ndx - ndx % sizeN;
           k /= sizeN;
           k = k - k % sizeM;
       return  k/sizeM;
-   }
+    }
 
     ~TNodeArray();      // destructor
 
@@ -175,7 +176,7 @@ public:
 
    // ????????????????????????
    // test setup boundary condition for all nodes in the task
-   void  checkNodeArray(int i, int* nodeTypes, const char*  datachbr_file );
+    void  checkNodeArray(int i, int* nodeTypes, const char*  datachbr_file );
 
    //---------------------------------------------------------
    // Methods for working with node arrays
@@ -244,6 +245,37 @@ public:
             char type, char tcode, unsigned char ips, double m_v );
 
 };
+
+//IC
+#define node0_bIC( nodex, ICx ) (TNodeArray::na->pNodT0()[(nodex)]->bIC[(ICx)])
+#define node1_bIC( nodex, ICx ) (TNodeArray::na->pNodT1()[(nodex)]->bIC[(ICx)])
+#define node0_rMB( nodex, ICx ) (TNodeArray::na->pNodT0()[(nodex)]->rMB[(ICx)])
+#define node1_rMB( nodex, ICx ) (TNodeArray::na->pNodT1()[(nodex)]->rMB[(ICx)])
+#define node0_uIC( nodex, ICx ) (TNodeArray::na->pNodT0()[(nodex)]->uIC[(ICx)])
+#define node1_uIC( nodex, ICx ) (TNodeArray::na->pNodT1()[(nodex)]->uIC[(ICx)])
+//DC
+#define node0_xDC( nodex, DCx ) (TNodeArray::na->pNodT0()[(nodex)]->xDC[(DCx)])
+#define node1_xDC( nodex, DCx ) (TNodeArray::na->pNodT1()[(nodex)]->xDC[(DCx)])
+#define node0_gam( nodex, DCx ) (TNodeArray::na->pNodT0()[(nodex)]->gam[(DCx)])
+#define node1_gam( nodex, DCx ) (TNodeArray::na->pNodT1()[(nodex)]->gam[(DCx)])
+#define node0_dul( nodex, DCx ) (TNodeArray::na->pNodT0()[(nodex)]->dul[(DCx)])
+#define node1_dul( nodex, DCx ) (TNodeArray::na->pNodT1()[(nodex)]->dul[(DCx)])
+#define node0_dll( nodex, DCx ) (TNodeArray::na->pNodT0()[(nodex)]->dll[(DCx)])
+#define node1_dll( nodex, DCx ) (TNodeArray::na->pNodT1()[(nodex)]->dll[(DCx)])
+//PH
+#define node0_xPH( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->xPH[(PHx)])
+#define node1_xPH( nodex, PHx ) (TNodeArray::na->pNodT1()[(nodex)]->xPH[(PHx)])
+#define node0_vPS( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->vPS[(PHx)])
+#define node1_vPS( nodex, PHx ) (TNodeArray::na->pNodT1()[(nodex)]->vPS[(PHx)])
+#define node0_mPS( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->mPS[(PHx)])
+#define node1_mPS( nodex, PHx ) (TNodeArray::na->pNodT1()[(nodex)]->mPS[(PHx)])
+#define node0_xPA( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->xPA[(PHx)])
+#define node1_xPA( nodex, PHx ) (TNodeArray::na->pNodT1()[(nodex)]->xPA[(PHx)])
+
+#define node0_bPS( nodex, PHx, ICx ) ( TNodeArray::na->pNodT0()[(nodex)]->bPS[ \
+                                       (PHx)*TNodeArray::na->pCSD()->nICb+(ICx)])
+#define node1_bPS( nodex, PHx, ICx ) ( TNodeArray::na->pNodT1()[(nodex)]->bPS[ \
+                                       (PHx)*TNodeArray::na->pCSD()->nICb+(ICx)])
 
 #endif   // _nodearray_h_
 

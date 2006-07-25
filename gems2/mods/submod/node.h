@@ -94,7 +94,6 @@ protected:
 public:
 
 static TNode* na;   // static pointer to this class
-                    // for the isolated GEMIPM2K module
 
 #ifndef IPMGEMPLUGIN
    TNode( MULTI *apm );   // constructor for integration in GEMS
@@ -302,6 +301,21 @@ static TNode* na;   // static pointer to this class
 #endif
 
 };
+
+#define nodeCH_ICmm( ICx )  (  TNode::na->pCSD()->ICmm[ \
+                               TNode::na->pCSD()->xIC[(ICx)]] )
+
+#define nodeCH_DCmm( DCx )  (  TNode::na->pCSD()->DCmm[ \
+                               TNode::na->pCSD()->xDC[(DCx)]] )
+
+#define nodeCH_DD( DCx )    ( TNode::na->pCSD()->DD[ \
+                              TNode::na->pCSD()->xDC[(DCx)]] )
+
+#define nodeCH_A( DCx, ICx )  ( (double)(TNode::na->pCSD()->A[ \
+                                 (TNode::na->pCSD()->xIC[(ICx)])+ \
+                                 (TNode::na->pCSD()->xDC[(DCx)]) * \
+                                  TNode::na->pCSD()->nIC]) )
+
 
 #endif   // _node_h_
 

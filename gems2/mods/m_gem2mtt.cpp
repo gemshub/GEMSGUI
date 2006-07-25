@@ -301,10 +301,10 @@ void TGEM2MT::MassTransAdvecStep()
      {                          // Charge (Zz) is not checked here!
        // Chemical compositions may become inconsistent with time
        // It has to be checked on minimal allowed c0 value
-        c0  = C1[ii]->bPS[0*CH->nICb + ic];
-        c1  = C1[ii+1]->bPS[0*CH->nICb + ic];
-        cm1 = C1[ii-1]->bPS[0*CH->nICb + ic];
-        cm2 = C1[ii-2]->bPS[0*CH->nICb + ic];
+        c0  = node1_bPS( ii, 0, ic );//C1[ii]->bPS[0*CH->nICb + ic];
+        c1  = node1_bPS( ii+1, 0, ic );//C1[ii+1]->bPS[0*CH->nICb + ic];
+        cm1 = node1_bPS( ii-1, 0, ic );//C1[ii-1]->bPS[0*CH->nICb + ic];
+        cm2 = node1_bPS( ii-2, 0, ic );//C1[ii-2]->bPS[0*CH->nICb + ic];
 
         c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
         cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
@@ -312,7 +312,8 @@ void TGEM2MT::MassTransAdvecStep()
 
 // Checking the difference to assign
 // if( fabs(dc) > min( cdv, C1[i]->bIC[ic] * 1e-4 ))
-       C1[ii]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
+    node1_bPS( ii, 0, ic ) = c0-dc;
+//    C1[ii]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
 /*if( dc >= C1[i]->bIC[ic] )
  {
     fprintf( diffile, "\nError in Mass Transport calculation part :" );
@@ -321,8 +322,8 @@ void TGEM2MT::MassTransAdvecStep()
          C1[i]->bIC[ic]-dc, C1[i]->bIC[ic], dc);
     BC_error = true;
  } */
-       if( fabs(dc) > min( mtp->cdv, C1[ii]->bIC[ic] * 1e-3 ))
-              C1[ii]->bIC[ic] -= dc; // correction for GEM calcuation
+       if( fabs(dc) > min( mtp->cdv, node1_bIC(ii, ic)/*C1[ii]->bIC[ic]*/ * 1e-3 ))
+         node1_bIC(ii, ic)/*C1[ii]->bIC[ic]*/ -= dc; // correction for GEM calcuation
    } // loop over IC
   } // end of loop over nodes
 }

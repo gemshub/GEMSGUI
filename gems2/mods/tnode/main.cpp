@@ -50,7 +50,7 @@ int main( int argc, char* argv[] )
          // your optional file with FMT input parameters
 
    // Creating TNode structure accessible trough node pointer
-   TNode* node = TNode::na = new TNode();
+   TNode* node  = new TNode();
 
    // Here we read the files needed as input for initializing GEMIPM2K
    // The easiest way to prepare them is to use GEMS-PSI code (GEM2MT module)
@@ -249,8 +249,7 @@ int main( int argc, char* argv[] )
         cout << " [Ca]= " << m_bPS[in*nIC*nPS+xCa] <<
                 " [Mg]= " << m_bPS[in*nIC*nPS+xMg] <<
                 " pH= " << m_pH[in] << endl;
-
-    }
+   }
 //    cout << " Chemical loop ends: " << endl;
     // Here the output for the current state at tc can be implemented
 

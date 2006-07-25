@@ -31,8 +31,9 @@
   #include "visor.h"
 #else
   istream& f_getline(istream& is, gstring& str, char delim);
-  TNodeArray* TNodeArray::na;
 #endif
+
+TNodeArray* TNodeArray::na;
 
 //-------------------------------------------------------------------------
 // RunGEM()
@@ -333,6 +334,7 @@ TNodeArray::TNodeArray( int nNod, MULTI *apm  ):TNode( apm )
     grid  = 0;   // Array of grid point locations, size is anNodes+1
     tNode = 0;     // Node type codes (see DataBR.h) size anNodes+1
     allocMemory();
+    na = this;
 }
 
 TNodeArray::TNodeArray( int asizeN, int asizeM, int asizeK, MULTI *apm  ):
@@ -344,6 +346,7 @@ TNode( apm ), sizeN(asizeN), sizeM(asizeM), sizeK(asizeK)
   grid  = 0;   // Array of grid point locations, size is anNodes+1
   tNode = 0;     // Node type codes (see DataBR.h) size anNodes+1
   allocMemory();
+  na = this;
 }
 
 
@@ -359,6 +362,7 @@ TNodeArray::TNodeArray( int nNod  ):
   grid  = 0;   // Array of grid point locations, size is anNodes+1
   tNode = 0;     // Node type codes (see DataBR.h) size anNodes+1
   allocMemory();
+  na = this;
 }
 
 TNodeArray::TNodeArray( int asizeN, int asizeM, int asizeK ):
@@ -370,6 +374,7 @@ sizeN(asizeN), sizeM(asizeM), sizeK(asizeK)
   grid  = 0;   // Array of grid point locations, size is anNodes+1
   tNode = 0;     // Node type codes (see DataBR.h) size anNodes+1
   allocMemory();
+  na = this;
 }
 
 #endif
