@@ -92,7 +92,8 @@ struct SPP_SETTING
     DCpct[7],      // Default DCOMP flags and codes
     DCpdc[10],     // Default DCOMP class and units
     BCpc[7],       // Default COMPOS configuration
-    REpct[7],      // Default REACDC flags and codes 
+    REpct[7],      // Default REACDC flags and codes
+
     REpdc[7],      // Default REACDC class and units
     REpvc[9],      // Default REACDC configuration
     RPpdc[11],      // Default RTPARM flags and codes
