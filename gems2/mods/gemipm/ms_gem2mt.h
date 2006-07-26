@@ -214,7 +214,7 @@ typedef struct
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
    *PGT  // Quantities of phases in MPG [Fi][nPG]
     ;
- float  (*FDLf)[4], // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
+ float  (*FDLf)[4]; // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
  char
    *tExpr,  // Math script text for calculation of mass transport
    *gExpr,  // Math script text for calculation of data sampling and plotting
