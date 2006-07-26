@@ -240,6 +240,7 @@ gems2/mods/tnode/main.cpp -text
 gems2/mods/v_ipnc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_ipnc.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_mod.h svn_keywords=Author+Date+Id+Revision
+gems2/obj/Readme.txt -text
 gems2/qmake_no_qt.bat -text
 gems2/qmake_qt.bat -text
 gems2/qmake_qt_lib.bat -text
@@ -483,6 +484,7 @@ gems2/shared/projects/visor.conf -text
 gems2/shared/projects/windows.conf -text
 gems2/shared/visor.data/visobj.dat -text
 gems2/shared/visor.data/visor.dat -text
+gems2/tmp/readme.txt -text
 gems2/vizor/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/vizor/calcthread.h svn_keywords=Author+Date+Id+Revision
 gems2/vizor/dlg/.cvsignore svn_keywords=Author+Date+Id+Revision
