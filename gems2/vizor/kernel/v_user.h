@@ -45,9 +45,12 @@ const int MAXKEYWD = 6+1;
 typedef TArrayF<gstring> TCStringArray;
 
 
-#ifndef __unix
-  typedef unsigned int uint;
-#endif // __unix
+#ifndef  __win32_borland
+
+typedef unsigned int uint;
+
+#endif //  __noborl 
+
 
 #ifndef IPMGEMPLUGIN
 

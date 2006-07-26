@@ -63,7 +63,7 @@ protected:
     char *xblanc( char *cur );
     int ictcomp( int ii, const char *ick, short val );
     void icadd(  const char *icn,
-                 const char *iso, short val, double csto );
+                 const char *iso, short val, float csto );
     int bterm();
     int rterm();
     int isotop();
@@ -75,14 +75,14 @@ protected:
     void iso_get( gstring& isotop );
     void symb_get( gstring& ic );
     void val_get( short& val );
-    void stoc_get( double& bstoc );
+    void stoc_get( float& bstoc );
 
 public:
 
     Formuan( const char * formula );
     ~Formuan();
 
-    double scan_formulae( TIArray<ICTERM>& tt );
+    float scan_formulae( TIArray<ICTERM>& tt );
 };
 
 class TFormula  // description of disassembled formula token

@@ -142,8 +142,8 @@ bool vfChooseFileOpen(QWidget* par, gstring& path, const char* title=0);
 bool vfChooseFileSave(QWidget* par, gstring& path,
   const char* title=0 , const char* filter=0);
 
-class TObject;
-void vfObjToFile(QWidget* par, TObject* obj);
+//class TObject;
+//void vfObjToFile(QWidget* par, TObject* obj);
 
 #endif // _service_h
 

@@ -12,12 +12,15 @@ CONFIG		+= console
 
 DEFINES         += IPMGEMPLUGIN
 
-!win32-borland {
-DEFINES += __unix
+
+!win32 {
+  DEFINES += __unix
 }
 
+
 win32-borland {
-#  Debug, RTTI, exceptions, Visual C - compatible
+    	DEFINES += __win32_borland
+        #  Debug, RTTI, exceptions, Visual C - compatible
         QMAKE_CFLAGS += -x -xd -xp -VM -RT
         QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
 }
@@ -41,8 +44,8 @@ SUBMOD_H     =  $$SUBMOD_CPP
 NUMERICS_H     =  $$NUMERICS_CPP
 
 
-DEPENDPATH   += ;$$KERNEL_H;$$LIBS_H;$$MODS_H;$$SUBMOD_H;$$NUMERICS_H
-INCLUDEPATH   += ;$$KERNEL_H;$$LIBS_H;$$MODS_H;$$SUBMOD_H;$$NUMERICS_H
+DEPENDPATH   += ;.;$$KERNEL_H;$$LIBS_H;$$MODS_H;$$SUBMOD_H;$$NUMERICS_H
+INCLUDEPATH   +=;.;$$KERNEL_H;$$LIBS_H;$$MODS_H;$$SUBMOD_H;$$NUMERICS_H
 
 OBJECTS_DIR       = obj
 

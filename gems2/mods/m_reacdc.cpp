@@ -743,7 +743,7 @@ TReacDC::RCthermo( int q, int p )
             aW.twp->pTM = S_REM;
             isotop = 0;
             goto CALCULATE_DELTA_R;
-        case SRC_NEWISO: /* new isotopic form  */
+        case SRC_NEWISO: /* new isotopic form?*/
             aW.twp->pSD = SRC_NEWISO;
             aW.twp->pTM = S_REM;
             isotop = 1;
@@ -821,7 +821,7 @@ CALCULATE_DELTA_R:
         calc_exion_r( q, p );
         break;
     default:
-        {  /* Illegal code method of calculation  */
+        {  /* Illegal code method of calculation?*/
             gstring msg = "W14RErun: Invalid CM method flag!";
             msg += dckey;
             msg += "'.\n Change the record?";
@@ -1208,13 +1208,13 @@ void TReacDC::PronsPrep( const char *key )
 
     /* Putting the results into REACDC fields */
     rcp->Hs[0] += rcp->Hs[1] - H * cal_to_J;
-    rcp->Ss[0] += rcp->Ss[1] - S * cal_to_J;
-    rcp->Cps[0] += rcp->Cps[1] - CP * cal_to_J;
-    rcp->Vs[0]  += rcp->Vs[1] - V / 10.0;
+    rcp->Ss[0] += rcp->Ss[1] - (float)(S * cal_to_J);
+    rcp->Cps[0] += rcp->Cps[1] - (float)(CP * cal_to_J);
+    rcp->Vs[0]  += rcp->Vs[1] - (float)(V / 10.0);
     rcp->Hs[1] = H * cal_to_J;
-    rcp->Ss[1] = S * cal_to_J;
-    rcp->Cps[1] = CP * cal_to_J;
-    rcp->Vs[1] = V/10.0;
+    rcp->Ss[1] = (float)(S * cal_to_J);
+    rcp->Cps[1] = (float)(CP * cal_to_J);
+    rcp->Vs[1] = (float)(V/10.0);
 
     aMod[RT_REACDC].ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
 

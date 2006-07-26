@@ -12,12 +12,15 @@ CONFIG		+= console
 
 DEFINES         += IPMGEMPLUGIN
 
+
 !win32 {
-DEFINES += __unix
+  DEFINES += __unix
 }
 
+
 win32-borland {
-#  Debug, RTTI, exceptions, Visual C - compatible
+      	DEFINES += __win32_borland
+        #  Debug, RTTI, exceptions, Visual C - compatible
         QMAKE_CFLAGS += -x -xd -xp -VM -RT
         QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
 }

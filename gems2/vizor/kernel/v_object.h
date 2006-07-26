@@ -22,7 +22,7 @@
 
 #include <fstream>
 #include "gstring.h"
-//using namespace std;
+using namespace std;
 
 #include "array.h"
 #include "v_user.h"

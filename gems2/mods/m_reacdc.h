@@ -27,7 +27,7 @@ const int RE_RKLEN = 32;
 
 typedef struct
 { // Description  REACDC
-    char pstate[MAXSYMB],// Aggregate state of reaction-defined DC at Tr,Pr
+  char pstate[MAXSYMB],// Aggregate state of reaction-defined DC at Tr,Pr
     psymb[MAXDRGROUP],   // Identifier of REACDC group
     dcn[MAXDCNAME],      // Name of reaction-defined DC
     atyp[MAXSYMB],       // Code of thermodynamic dataset
@@ -54,9 +54,10 @@ typedef struct
     rmtm[MAXRMTM],     // Date when this REACDC definition was created
     name[MAXFORMULA],  // Full name of reaction and reaction-defined DC
     form[MAXFORMULA],  // Chemical formula of reaction-defined DC
-    (*DCk)[DC_RKLEN],// List of DC keys (names) involved in reaction [0:nDC-1]
     *rDC;   // DC codes: n-new r-REACDC d-DCOMP f-fictive
-    short nDC,     // N of DC in reaction, reaction-defined DC is the last one
+  char (*DCk)[DC_RKLEN];// List of DC keys (names) involved in reaction [0:nDC-1]
+  
+  short nDC,     // N of DC in reaction, reaction-defined DC is the last one
     NcKt,     // N of nonzero coeffs of logK = f(T) equation
     NcKp,     // N of nonzero coeffs of dVr = f(P,T) equation
     NcSt,     //N of nonzero coeffs of electrostatic equations (reserved)
@@ -64,9 +65,11 @@ typedef struct
     nTp,      // N of interpolation points along T
     nPp,      // N of interpolation points along P
     Nsd;      // N of references to Data Sources
-    float Zz,      // Reaction-defined DC formula charge
+
+  float Zz,      // Reaction-defined DC formula charge
     mwt;     // Molecular mass of reaction-defined DC, g/mole
-    double Ks[3],  //K (stability constant) of reaction at Tr,Pr(isotopic:alpha)
+
+  double Ks[3],  //K (stability constant) of reaction at Tr,Pr(isotopic:alpha)
     //log K of reaction at Tr,Pr (isotopic: 1000ln(alpha))
     // Uncertainty of logK
     Gs[3],   // dG of reaction at Tr, Pr  (J/mole)
@@ -75,7 +78,8 @@ typedef struct
     Hs[3];   // dH of reaction at Tr, Pr (J/mole)
     //Apparent standard enthalpy of reacdef-DC formation from IC h0 (J/mole)
     // Uncertainty of h0  dev(h0) (J/mole)
-    float  Ss[3],//dS of reaction at Tr, Pr (J/mole/K)
+
+  float  Ss[3],//dS of reaction at Tr, Pr (J/mole/K)
     //Absolute entropy of reacdef-DC at standard state S0 (J/mole/K)
     //Uncertainty of S0  dev(S0) (J/mole/K)
     Cps[3],// dCp of reaction at Tr, Pr (J/mole/K)
@@ -87,13 +91,15 @@ typedef struct
     Nix[3],//Mole fraction of counter-isotope in natural mixture (element)
     //  reserved; reserved
     Pst,     // Reference pressure Pr (bar)
-    TCst,    // Reference temperature Tr (‘)
+    TCst,    // Reference temperature Tr (?
     Comp,    // Coefficient of isothermal compressibility of reacdef DC
     Expa,    // Coefficient of isobaric expandability of reacdef DC
     Der,// Ion-size par.a0,A(Debye-Hueckel aq species);ƒmax,1/nm2(sorbates)
     DerB;    // Indiv.par. b (for III Debye-Hueckel aq species)
-    double *scDC; // Stoichiometry coefficients of DC in reaction (reagents < 0)
-    float *TCint, // Vector or interval of temperature T  [0:nTp-1 > 1]
+
+  double *scDC; // Stoichiometry coefficients of DC in reaction (reagents < 0)
+
+  float *TCint, // Vector or interval of temperature T  [0:nTp-1 > 1]
     *Pint,  // Vector or interval of pressure P  [0:nPp-1 > 1]
     *DCp,   // Coefficients of dCpr = f(T) equation (reserved) [MAXCPCOEF]
     *HKFc,  // Coeffs a1-a4, c1,c2, w, rAB for HKF EOS of reaction (reserved)
@@ -109,11 +115,11 @@ typedef struct
     // a6 /T^0.5            [MAXCPCOEF]
     *logK // Array of logK(T,P) values for interpolation[0:nTp-1][0:nPp-1]
     ;
-    char (*sdref)[V_SD_RKLEN], // List of Data Source SDref keys
-    (*sdval)[V_SD_VALEN]; // Comments to Data Source references 0:Nsd-1
+  char (*sdref)[V_SD_RKLEN]; // List of Data Source SDref keys
+  char (*sdval)[V_SD_VALEN]; // Comments to Data Source references 0:Nsd-1
     // work arrays
-    double (*ParDC)[6]; // Gs, Hs, Ss, Cps, Vs values for DC in reaction (columns)
-    char *tprn;               // internal
+  double (*ParDC)[6]; // Gs, Hs, Ss, Cps, Vs values for DC in reaction (columns)
+  char *tprn;               // internal
 }
 
 REACDC;
@@ -188,7 +194,7 @@ public:
 
 };
 
-enum pardc_ndx {  /* indexes of work arrays  */
+enum pardc_ndx {  /* indexes of work arrays?*/
     _Gs_,  /* Gs comp.reactions */
     _Hs_,  /* Hs  */
     _Ss_,  /* Ss  */

@@ -418,7 +418,7 @@ NoBlock:
 
 //get information from dh
 void
-TDBFile::GetDh( int& fPos, int& fLen, int& nRT, bool& isDel )
+TDBFile::GetDh( int& fPos, int& fLen, int& nRT, int& isDel )
 {
     check_dh();
     fPos = dh->FPosTRT;
@@ -437,7 +437,7 @@ TDBFile::GetDhOver()
 // sets information into compressed PDB file header
 // Fixed 07.09.04
 void
-TDBFile::SetDh( int fLen, int nRec, int nRT, bool isDel )
+TDBFile::SetDh( int fLen, int nRec, int nRT, int isDel )
 {
     if( dh==0 )
         dh = new VDBhead;
@@ -514,24 +514,26 @@ TDBKey::TDBKey( unsigned char nRkflds, const unsigned char* rkfrm ):
 TDBKey::TDBKey(fstream& in_stream)
 {
 //    f.read( (char*)&rkFlds, sizeof(unsigned char) );
-    unsigned short tmp;
-in_stream >> tmp;
-rkFlds = tmp;
+    int ii;
+	unsigned char tmp;
+
+    in_stream >> tmp;
+    rkFlds = tmp;
     ErrorIf( rkFlds<=0 || rkFlds>MAXRKFRMSTR,
              "TDBKey", "Illegan number fields in key.");
     rkLen = new unsigned char[rkFlds];
     rkInd = new unsigned char[rkFlds];
 //    f.read( (char*)rkLen, rkFlds*sizeof(unsigned char) );
-for(int ii=0; ii<rkFlds; ii++) {
-    in_stream >> tmp;
-    rkLen[ii] = tmp;
-}
+   for( ii=0; ii<rkFlds; ii++) 
+   {
+     in_stream >> tmp;
+     rkLen[ii] = tmp;
+   }
 
-    ErrorIf( !in_stream.good(), "TDBKey",
+   ErrorIf( !in_stream.good(), "TDBKey",
              "Error reading TDBKey from configurator.");
-    int ii;
-    for( fullLen=0, ii=0; ii<rkFlds; ii++)
-    {
+   for( fullLen=0, ii=0; ii<rkFlds; ii++)
+   {
         if( ii == 0 )
             rkInd[ii] = 0;
         else

@@ -541,7 +541,7 @@ NEXT:
     if( ( dcp->pstate[0] == CP_GAS || dcp->pstate[0] == CP_GASI ||
           dcp->pstate[0] == CP_FLUID )
         &&  dcp->mVs[0] < 1. )// test molar volume
-        dcp->mVs[0] = GAS_MV_STND;
+        dcp->mVs[0] = (float)GAS_MV_STND;
     // test values T, P, Gst, Hst, Sst
     st = IsFloatEmpty( dcp->TCst );
     st1 = IsFloatEmpty( dcp->Pst );

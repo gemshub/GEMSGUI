@@ -28,7 +28,7 @@
 #include "config.h"
 
 // Workaround for ilink unresolved external errors in BCBuilderX
-#ifndef __unix
+#ifdef __win32_borland
 extern template<> const short TVal<short>::EMPTY();
 extern template<> const short TVal<short>::ANY();
 extern template<> const char* TVal<short>::PATTERN_GET();

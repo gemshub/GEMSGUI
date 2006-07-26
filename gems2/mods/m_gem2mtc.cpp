@@ -307,13 +307,13 @@ void TGEM2MT::gen_TPval()
 
   for( ii=0; ii<mtp->nTai; ii++ )
   {
-    mtp->Tval[ii] = mtp->cT;
+    mtp->Tval[ii] = (float)mtp->cT;
     mtp->cT += mtp->Tai[STEP_];
   }
 
   for( ii=0; ii<mtp->nPai; ii++ )
   {
-    mtp->Pval[ii] = mtp->cP;
+    mtp->Pval[ii] = (float)mtp->cP;
     mtp->cP += mtp->Pai[STEP_];
   }
 }

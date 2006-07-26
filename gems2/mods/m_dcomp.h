@@ -95,15 +95,15 @@ typedef struct
     *CpFS,  // reserved [MAXCPFSCOEF][NeCp]
     *HKFc,  // Empirical coefficients of HKF EOS [MAXHKFCOEF]
     *Vt,    // Coefficients of mV=f(T,P) [MAXVTCOEF]
-    *CPg,   // Critical parameters (for FGL)  [MAXCRITPARAM]
+    *CPg,   // Critical parameters (for FGL)?[MAXCRITPARAM]
     *ODc,   // Coeffs of V(T,P) Birch-Murnaghan 1947 Gottschalk [MAXODCOEF]
     *FtP,   // Column: TCf- at Pr; DltS,DltH,DltV; dV of phase transitions
     *FtBer, // Properties of phase transition (Berman): Tr; Tft; tilt; l1,l2 (reserved)
     // MAXCPFSCOEF
     *Cemp;  // Array of empirical EOS coefficients (CG EOS: MAXCGPARAM = 13)
-    char (*FtTyp)[MAXSYMB], // List of phase transition type codes (reserved)
-    (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources
-    (*sdval)[V_SD_VALEN]; // List of comments to data sources
+    char (*FtTyp)[MAXSYMB]; // List of phase transition type codes (reserved)
+    char (*sdref)[V_SD_RKLEN]; // List of SDref keys to data sources
+    char (*sdval)[V_SD_VALEN]; // List of comments to data sources
     char *tprn;               // text buf
 }
 

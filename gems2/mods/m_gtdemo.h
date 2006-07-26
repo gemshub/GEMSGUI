@@ -31,7 +31,7 @@ MAXGTDNAME =    16,
 
 typedef struct
 { // Description  GTDEMO
-    char
+  char
     PtAEF,    // Use empirical data (xE, yE ) { + - }
 
     // Sample data from PDB chain
@@ -55,14 +55,12 @@ typedef struct
     name[MAXGSNAME+1],    // Full name of GTDEMO sampler definition (title)
     comment[MAXGSNAME+1], // comment
     xNames[MAXAXISNAME], // Abscissa name
-    yNames[MAXAXISNAME], // Ordinate name
-    (*lNam0)[MAXGRNAME],   // List of ID of lines on Graph
-    (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
-    float
+    yNames[MAXAXISNAME]; // Ordinate name
+  float
     size[2][4];          // Graph axis scale for region and fragment
 
     /*  data for calc*/
-    short Nlrk,           // N of records
+  short Nlrk,           // N of records
     nRT,              // chain index
     Nsd,              // N of data source references
     res,              // reserved
@@ -72,25 +70,26 @@ typedef struct
     dimEF[2],    // Dimensions of array of empirical data yE, xE
     dimXY[2];    // Dimensions of data sampler tables: col.1 - N of records;
     //col.2 - N of lines
-    char
+  char
     wcrk[MAXRKEYLEN],  // reserved
-
     prKey[MAXRKEYLEN], // PROCES or PROBE record key
-    (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources
-    (*sdval)[V_SD_VALEN], // Comments on data sources
-
     *rkey,         // List of record keys of sampled PDB records [0:Nlrk-1]
-
     *expr,     // Text with IPN-expressions for data sampler
     *exprE;    // Text with IPN-expressions for empirical data (optional)
-    double
+    
+  char (*sdref)[V_SD_RKLEN]; // List of SDref keys to data sources
+  char (*sdval)[V_SD_VALEN]; // Comments on data sources
+  char (*lNam0)[MAXGRNAME];   // List of ID of lines on Graph
+  char (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
+
+  double
     *x0,   // Vector of abscissa dimXY[][1]
     *y0,  // Sampled data array dimXY[][]
     *xE, *yE,         // Input empirical data XE, YE
     *wc,              // Array of constants (optional)
     *qp;              // Array of work cells (optional)
     /* work parameters */
-    short
+  short
     rtLen,   // len of cuurent record  no object
     Next,   // Flag to continue (1) or finish (0) sampling iterations
     jR,     // Index of currently sampled PDB record jRl[x][0]<jR<jRl[x][1]*/
@@ -98,7 +97,8 @@ typedef struct
     j0,jE     //j0, j1, j2, j3, jE indexes 0<j<dimXY[2][1]
     ;
 
-    char Wkb[MAXRKEYLEN],   // Current key of sampled PDB record
+  char 
+	Wkb[MAXRKEYLEN],   // Current key of sampled PDB record
     SYS_key[EQ_RKLEN],    // key of last read record SYSTEM
     *etext,        // internal
     *prtab,        // internal
@@ -108,11 +108,11 @@ typedef struct
 GTDEMO;
 
 typedef struct
-{         /* GTDEMO statistic by Probe  */
+{         /* GTDEMO statistic by Probe?*/
     short nI,       /* current index in iopt*/
     *iopt ;   /* optimal balls for Systat calc dimXY[][0]*/
     double
-    *opt,  /* matr of criterial  */
+    *opt,  /* matr of criterial?*/
     *G,
     *b;
 }

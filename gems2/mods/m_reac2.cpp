@@ -319,7 +319,7 @@ void TReacDC::Recalc( int q, const char *key  )
     Update();
 
     switch( rc[q].pstate[0] )
-    { /* test phase state  */
+    { /* test phase state?*/
     case CP_SOLID:
     case CP_GAS:
     case CP_UNIV:
@@ -499,7 +499,7 @@ STAGE1:
     if( stG && !stK && !stLK )
     {
         rcp->Ks[1] = -rcp->Gs[0] / lg_to_ln / R_T;
-        rcp->Ks[0] = pow( 10, rcp->Ks[1] );
+        rcp->Ks[0] = pow( 10., rcp->Ks[1] );
         stK = 1;
         stLK = 1;
         goto STAGE2;
@@ -507,7 +507,7 @@ STAGE1:
     if( !stG && !stK && stLK )
     {
         rcp->Gs[0] = -rcp->Ks[1] * lg_to_ln * R_T;
-        rcp->Ks[0] = pow( 10, rcp->Ks[1] );
+        rcp->Ks[0] = pow( 10., rcp->Ks[1] );
         stK = 1;
         stG = 1;
         goto STAGE2;
@@ -559,7 +559,7 @@ STAGE2:
     else
         Error( GetName(),"W29RErun: One of values dGr, dHr, or dSr is missing.");
 
-    /* calc Cp and V for vedushiy component  */
+    /* calc Cp and V for vedushiy component?*/
     if( IsFloatEmpty( rcp->Cps[0] ))
         rcp->Cps[0] = 0.0;
     if( IsFloatEmpty( rcp->Vs[0] ))
@@ -615,7 +615,7 @@ void TReacDC::Recalc_rDCD( )
         rcp->Ks[1] = lgK;
     rcp->Ks[2] = lgK - rcp->Ks[1]; /* !0 if insert lgK */
     rcp->Ks[1] = lgK;
-    rcp->Ks[0] = pow( 10, lgK );
+    rcp->Ks[0] = pow( 10., lgK );
 }
 
 /*-----------------------------------------------------------------*/
@@ -833,7 +833,7 @@ void TReacDC::Calc_rDCD( int q, int p )
         /* RR = R_CONSTANT;  !!!!! */
         R_T = aW.WW(p).T * RR;
         aW.WW(p).lgK = -aW.WW(p).dG / lg_to_ln / R_T;
-        aW.WW(p).K = pow( 10, aW.WW(p).lgK );
+        aW.WW(p).K = pow( 10., aW.WW(p).lgK );
     }
     return;
 }

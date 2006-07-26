@@ -69,4 +69,6 @@ void ErrorIf(bool error, const gstring& title, const gstring& message)
         throw TError(title, message);
 }
 
+
 #endif    // _verror_h
+

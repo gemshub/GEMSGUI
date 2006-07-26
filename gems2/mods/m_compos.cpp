@@ -384,7 +384,7 @@ TCompos::MakeQuery()
     memcpy( &bcp->PcIC, flgs, 6);
     bcp->La = (short)size[0];
     bcp->Nsd = (short)size[1];
-    bcp->R2 = r2;
+    bcp->R2 = (float)r2;
 
 }
 
@@ -617,7 +617,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             goto FINISH;
         case CON_pMOLFR: /*'f'*/
             if( Xe > -1. && Xe < 15 )
-                Xincr = pow(10, -Xe )* R1;
+                Xincr = pow(10., -Xe )* R1;
             goto FINISH;
         }
     if( fabs( Vsys ) > 1e-12 && Vm > 1e-12 )
@@ -631,7 +631,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             goto FINISH;
         case CON_pVOLFR: /*'u'*/
             if( Xe > -1. && Xe < 15 )
-                Xincr = pow( 10, -Xe ) * Vsys / Vm;
+                Xincr = pow( 10., -Xe ) * Vsys / Vm;
             goto FINISH;
         }
     if( fabs( Msys ) > 1e-12 && DCmw > 1e-12 )
@@ -658,7 +658,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             goto FINISH;
         case CON_pMOLAL: /*'p'*/
             if( Xe > -1. && Xe < 15 )
-                Xincr = pow( 10, -Xe ) * Mwat;
+                Xincr = pow( 10., -Xe ) * Mwat;
             goto FINISH;
         }
     if( fabs( Vaq ) > 1e-12 )
@@ -672,7 +672,7 @@ double TCompos::Reduce_Conc( char UNITP, double Xe, double DCmw, double Vm,
             goto FINISH;
         case CON_pMOLAR: /*'q'*/
             if( Xe > -1. && Xe < 15 )
-                Xincr = pow( 10, -Xe ) * Vaq;
+                Xincr = pow( 10., -Xe ) * Vaq;
             goto FINISH;
             /* g/l, mg/l, mkg/l */
         case CON_AQGPL: /*'d'*/

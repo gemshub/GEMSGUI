@@ -293,7 +293,7 @@ void TMTparm::MTparmAlloc( )
 }
 
 // realoc memory to MTPARM structure and load data to arrays
-void TMTparm::LoadMtparm( float cT, float cP )
+void TMTparm::LoadMtparm( double cT, double cP )
 {
     int j, jf;
     double P_old, TC, TK, P;
@@ -361,7 +361,7 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
         else aRC->RCthermo( 0, 0 );
 
         if( aWp.init && P_old < 1e-6 && P < 1e-6 )      //  Doubtful ??
-        {  /* insert precision‚ calculated by KNP */
+        {  /* insert precision?calculated by KNP */
             P = tp.P = aW.twp->P;
             tp.PeosW = S_ON;
             tp.P_HKF = S_ON;
@@ -403,7 +403,7 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
 //   tp.dVg[jf*5+4] = aW.twp->wtW[10];
           }
         }
-        /* set scales - not done yet !
+        /* set scales - not done yet?
         switch( tp.PunT )
     {
           case PVT_CELS:   tp.T = TC; tp.RT = ; break;

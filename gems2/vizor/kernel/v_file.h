@@ -24,9 +24,12 @@
 
 #include "gstring.h"
 #include "v_user.h"
-#include "v_dbm.h"
 
 class GemDataStream;
+
+typedef ios::openmode FileStatus;
+
+const int 	MAX_FILENAME_LEN = 20;
 
 static const FileStatus  NOT_OPEN = FileStatus(0),    // no file  opend
     RDONLY_T = ios::in/*|ios::nocreate*/,               //0x01, !

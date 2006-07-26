@@ -97,8 +97,8 @@ SPP_SETTING pa_ = {
     {0., 0., 0.},   /* Vi[3] */
     1., 25.,      /* Pr, Tr */
     /* MULTI */
-    1e-19, /* lowPosNum, */  1e-16, /* logXw, */   1e-9,  /* logYFk */
-    { 0.064, 3.72, 0., 0.5 }, 0.   // Reserv
+    (float)1e-19, /* lowPosNum, */  (float)1e-16, /* logXw, */   (float)1e-9,  /* logYFk */
+    { (float)0.064, (float)3.72, 0., 0.5 }, 0.   // Reserv
 }; /* SPP_SETTING */
 
 
@@ -624,7 +624,7 @@ void TProfil::calcMulti()
 // pULR, // reserved
 void TProfil::PMtest( const char *key )
 {
-    float T, P;
+    double T, P;
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
 //    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);

@@ -16,8 +16,11 @@ CONFIG		+= qt thread warn_off release
   LIBS            += $(QTDIR)/lib/libqt-mt.a
   DEFINES         += __unix
 }
+
 #CONFIG		+= qmake_cache
+
 win32-borland {
+       	DEFINES += __win32_borland
         QMAKE_CFLAGS += -x -xd -xp -VM -RT
         QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
 }

@@ -46,8 +46,8 @@ typedef struct
    PvPGD,    // Use phase groups definitions (+ -)?
    PvFDL,    // Use flux definition list (+ -)
    PvSFL,    // Use source fluxes and elemental stoichiometries for them? (+ -)
-PvGrid,    // Use array of grid point locations? (+ -)
-PvRes,    // reserved (+ -)
+   PvGrid,    // Use array of grid point locations? (+ -)
+   PvRes,    // reserved (+ -)
 
      // Controls on operation
    PsMode,  // Code of GEM2MT mode of operation { S F A D T }
@@ -74,8 +74,8 @@ PvRes,    // reserved (+ -)
    nFD,  // number of MPG flux definitions (0 or >1)
    nSFD,   // number of source flux definitions (0 or < nFD )
    nEl, // number of electrolytes for setting up electrolyte diffusion coefficients in mDEl vector
-nPTypes,     // res Number of allocated particle types (< 20 ? )
-nProps,      // res Number of particle statistic properties (for monitoring) >= anPTypes
+   nPTypes,     // res Number of allocated particle types (< 20 ? )
+   nProps,      // res Number of particle statistic properties (for monitoring) >= anPTypes
    Lbi,  // Lb - number of formula units to set compositions in initial variants
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
@@ -104,22 +104,21 @@ nProps,      // res Number of particle statistic properties (for monitoring) >= 
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
    NVi[3],    // Restrictions variant #: start, end, step
    axisType[6],  // axis graph type, background(3), graph type, reserved
-   (*DiCp)[2],     // array of indexes of initial system variants for
-              // distributing to nodes [nC]
 // These lists of indices connect the DATABR arrays with this structure
     *xIC,   // ICNL indices in DATABR IC vectors [nICb]
     *xDC,   // DCNL indices in DATABR DC list [nDCb]
     *xPH,   // PHNL indices in DATABR phase vectors [nPHb]
-*NPmean,       // array of initial mean particle type numbers per node ( size: nPTypes )
-*nPmin,        // minimum average total number of particles of each type per one node nPTypes
-*nPmax,        // maximum average total number of particles of each type per one node nPTypes
-(*ParTD)[6], // array of particle type definitions at t0 or after interruption nPTypes
+    *NPmean,       // array of initial mean particle type numbers per node ( size: nPTypes )
+    *nPmin,        // minimum average total number of particles of each type per one node nPTypes
+    *nPmax;        // maximum average total number of particles of each type per one node nPTypes
+ short (*DiCp)[2];     // array of indexes of initial system variants for
+                       // distributing to nodes [nC]
+ short (*ParTD)[6]; // array of particle type definitions at t0 or after interruption nPTypes
 
-   (*FDLi)[2] //[nFD][2] Indexes of nodes where this flux begins and ends
+ short (*FDLi)[2]; //[nFD][2] Indexes of nodes where this flux begins and ends
               // negative value means one-side flux (source or sink)
          // for source fluxes, -2 means "source flux stoichiometry with index 1
          // line in the BSF table", and so on
-   ;
   float        // input
    *Pi,    // Pressure P, bar for initial systems (values within Pai range) [nIV]
    *Ti,    // Temperature T, C for initial systems (values within Pai range) [nIV]
@@ -155,61 +154,62 @@ nProps,      // res Number of particle statistic properties (for monitoring) >= 
    Tau[3],  // Physical time iterator
 // graphics
    size[2][4], // Graph axis scale for the region and the fragment
-sizeLc[3],   // spatial dimensions of the medium defines topology of nodes
-(*grid)[3],      // Array of grid point locations, size is nC
-
+   sizeLc[3],   // spatial dimensions of the medium defines topology of nodes
    *xEt,    // Abscissa for experimental points [nXE]
    *yEt,       // Ordinates for experimental points to plot [nXE, nYE]
    *DDc,  //  [Ls] diffusion coefficients for DC
    *DIc,  //  [N] diffusion coefficients for IC
    *DEl   //  [nE] diffusion coefficients for electrolyte salts
     ;
+float (*grid)[3];      // Array of grid point locations, size is nC
+
  double
    *Bn,    //  [nIV][N] Table of bulk compositions of initial systems
    *qpi,   //  [Nqpi] Work array for initial systems math script
    *qpc,    //  [Nqpc] Work array for mass transport math script,
    *xt,    //  Abscissa for sampled data [nS]
    *yt,     //  Ordinates for sampled data [nS][nYS]
-   (*HydP)[SIZE_HYDP], // [nC][6] hydraulic parameters for nodes in mass transport model
-   //  value order to be described
    *BSF,    // [nSFD][N] table of bulk compositions of source fluxes
             //  More to be added here for seq reactors?
    *MB,  // [nC]  column of current masses of boxes (in kg)
    *dMB // [nC][Nb]  Table of current derivatives dM for elements in reservoirs
     ;
+ double  (*HydP)[SIZE_HYDP]; // [nC][6] hydraulic parameters for nodes in mass transport model
+   //  value order to be described
  float
    *Tval,   // discrete values of T [nTai] in grid arrays in DataCH
    *Pval,   // discrete values of P [nPai]
 
    *CIb, // [nIV][N] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
-   (*FDLf)[4], // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
    *PGT  // Quantities of phases in MPG [Fi][nPG]
     ;
+ float  (*FDLf)[4]; // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
  char
    *tExpr,  // Math script text for calculation of mass transport
    *gExpr,  // Math script text for calculation of data sampling and plotting
-   (*sdref)[V_SD_RKLEN], // "List of bibl. refs to data sources" [0:Nsd-1]
-   (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
-   (*nam_i)[MAXIDNAME], // [nIV][12] id names of initial systems
-   (*for_i)[MAXFORMUNITDT], // [Lbi][40] formulae for setting initial system compositions
-   (*for_e)[MAXFORMUNITDT], // [nE][40] formulae for diffusing dissolved electrolytes
-   (*stld)[EQ_RKLEN], // List of SysEq record keys for initial systems [nIV]
 //
    *CIclb, // [N] Units of IC quantity/concentration for initial systems compositions
    *AUcln, // [Lbi] Units of setting UDF quantities for initial system compositions
-   (*FDLid)[MAXSYMB], // [nFD] ID of fluxes
-   (*FDLop)[MAXSYMB], // [nFD] Operation codes (letters) flux type codes
-   (*FDLmp)[MAXSYMB], // [nFD] ID of MPG to move in this flux  dim changed!
-   (*MPGid)[MAXSYMB], // [nPG] ID list of mobile phase groups
-   *UMPG,  // [nFi] units for setting phase quantities in MPG (see PGT )
+   *UMPG;  // [nFi] units for setting phase quantities in MPG (see PGT )
+
+  char (*sdref)[V_SD_RKLEN]; // "List of bibl. refs to data sources" [0:Nsd-1]
+  char (*sdval)[V_SD_VALEN];  // "Parameters taken from the respective data sources"[0:Nsd-1]
+  char (*nam_i)[MAXIDNAME]; // [nIV][12] id names of initial systems
+  char (*for_i)[MAXFORMUNITDT]; // [Lbi][40] formulae for setting initial system compositions
+  char (*for_e)[MAXFORMUNITDT]; // [nE][40] formulae for diffusing dissolved electrolytes
+  char (*stld)[EQ_RKLEN]; // List of SysEq record keys for initial systems [nIV]
+  char (*FDLid)[MAXSYMB]; // [nFD] ID of fluxes
+  char (*FDLop)[MAXSYMB]; // [nFD] Operation codes (letters) flux type codes
+  char (*FDLmp)[MAXSYMB]; // [nFD] ID of MPG to move in this flux  dim changed!
+  char (*MPGid)[MAXSYMB]; // [nPG] ID list of mobile phase groups
 //
-   (*SBM)[MAXICNAME+MAXSYMB],  // Keys (names) of IC
+  char (*SBM)[MAXICNAME+MAXSYMB];  // Keys (names) of IC
 //  graphics
-    xNames[MAXAXISNAME],        // Abscissa name
-    yNames[MAXAXISNAME],       // Ordinate name
-    (*lNam)[MAXGRNAME],        // List of ID of lines on Graph [nYS]
-    (*lNamE)[MAXGRNAME];       // List of ID of lines of empirical data [nYE]
+  char  xNames[MAXAXISNAME],        // Abscissa name
+    yNames[MAXAXISNAME];      // Ordinate name
+  char  (*lNam)[MAXGRNAME];        // List of ID of lines on Graph [nYS]
+  char  (*lNamE)[MAXGRNAME];       // List of ID of lines of empirical data [nYE]
 
 
 /* Work arrays */
@@ -239,7 +239,7 @@ sizeLc[3],   // spatial dimensions of the medium defines topology of nodes
    rei5
    ;
 
- float
+ double
    cT, // current value of T
    cP, // current value of P
    cV, // current value of V

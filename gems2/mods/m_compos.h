@@ -57,9 +57,6 @@ typedef struct
     R2;   // amount/concentration of compound specified by Ctext
     double *C;  // Resulting GCO bulk: numbers of moles of IC [0:N-1]
     char *CFOR,  // Text-formula of GCO increment
-    (*SB)[MAXICNAME+MAXSYMB],// List of IC symbols
-    (*SA)[MAXFORMUNIT],// List of formula units
-    (*SM)[DC_RKLEN], // List of DC record keys      [0:Ld-1]
     *CIcl, // Units of IC quantity/concentration  [0:N-1]
     *CDcl, //Units of DC quantity/concentration    [0:Ld-1]
     *AUcl, // Units of formulae quantity/concentration  [0:La-1]
@@ -69,9 +66,11 @@ typedef struct
     *CD,  // Quantity/concentration of DC C(DC     [0:Ld-1]
     *CA,  //Quantity/concentration of formulae C(AC)   [0:La-1]
     *delC; //Uncertainty of Cm elements in moles       [0:N-1]
-    char
-    (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources  [0:Nsd-1]
-    (*sdval)[V_SD_VALEN]; // List of comments to data sources [0:Nsd-1]
+    char (*sdref)[V_SD_RKLEN]; // List of SDref keys to data sources  [0:Nsd-1]
+    char (*sdval)[V_SD_VALEN]; // List of comments to data sources [0:Nsd-1]
+    char (*SB)[MAXICNAME+MAXSYMB];// List of IC symbols
+    char (*SA)[MAXFORMUNIT];// List of formula units
+    char (*SM)[DC_RKLEN]; // List of DC record keys      [0:Ld-1]
     // COMPOS Work arrays
     float *A,   // stoichiometry matrix formul. ed and DC  [0:Nmax-1]
     *ICw  //IC atomic (molar) masses [0:Nmax-1]

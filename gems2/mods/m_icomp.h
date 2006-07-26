@@ -26,23 +26,25 @@
 
 typedef struct
 { // Description  ICOMP
-    char //symb[MAXICNAME], // "Symbol of Independent Component (IC)"
+  char //symb[MAXICNAME], // "Symbol of Independent Component (IC)"
     //type[MAXSYMB],   // "IC class { e a z v <isotope> }"
     //grp[MAXICGROUP], // "Record Key Comment to IC description"
     sst[MAXSYMB],    // "Code of standard aggregate state { s l g a }"
     name[MAXFORMULA],// "Name of Independent Component"
     form[MAXFORMULA],// "Formula of Independent Component"
     dc_ref[DC_RKLEN];// "Reference to DCOMP record (reserved)"
-    float awt,   // "Atomic (molar) mass, g/atom (g/mole)"
+  
+  float awt,   // "Atomic (molar) mass, g/atom (g/mole)"
     aSs,   // "Atomic entropy S0 at standard state, J/mole/K"
     aCp,   // "Atomic heat capacity Cp0 at standard state, J/mole/K"
     aVs,   // "Atomic volume V0 at standard state, cm3/mole"
     arad,  // "Ionic radius,  (reserved)"
     idis;  // "Relative isotope abundance { 1; number }"
-    short val,   // "Default valence number (charge) in compounds"
+  
+  short val,   // "Default valence number (charge) in compounds"
     num,     // "Index in Periodical (Mendeleev's) table"
     coor;    // "Default coordination number (reserved)"
-    char *tprn;  // Print bufer
+  char *tprn;  // Print bufer
 }
 
 ICOMP;

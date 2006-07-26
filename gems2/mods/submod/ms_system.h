@@ -78,11 +78,11 @@ typedef struct
     Plref;  // sSDref, sSDval  references to data sources { + * - }
     // at all 38 A_
     /* Fact size of arrays */
-    short N,  // N of IC selected into system <= mu.N
+  short N,  // N of IC selected into system <= mu.N
     L,    // N of DC selected into system <= mu.L
     Ls,   // Ls - final N of DC in all multicomponent phases
     Lw,   // Lw - final N of aqueous+solvent species
-Lsor, // Lsor - final N of DC in sorption phases
+    Lsor, // Lsor - final N of DC in sorption phases
     Lg,   // Lg - final N of DC in gaseous phase
     Lhc,  //  Lhc - final N of DC in liquid hydrocarbon phase (reserved)
     Fi,   // N of phases selected into system  Fi
@@ -102,7 +102,7 @@ Lsor, // Lsor - final N of DC in sorption phases
     Nr1;  /* Reserved */
 
     // Scalar parametres of state
-    float Pmin, Pmax, // Pmin,Pmax for parametric problems (reserved)
+  float Pmin, Pmax, // Pmin,Pmax for parametric problems (reserved)
     Tmin, Tmax, // Tmin,Tmax for parametric problems (reserved)
     Vmin, Vmax, // Vmin,Vmax for parametric problems (reserved)
     Hmin, Hmax, // Hmin,Hmax for parametric problems (reserved)
@@ -120,8 +120,8 @@ Lsor, // Lsor - final N of DC in sorption phases
     NU,   // Nu - current value of process extent variable (reserved)
     Rkin; // reserved
 
-    short *Ll;  // N of DC selected within each phase [0:mu.Fi-1]
-    char
+  short *Ll;  // N of DC selected within each phase [0:mu.Fi-1]
+  char
     // Code classes see in S_CLASS.H
     *RLC,  //Classifier of DC restriction types {OLUB} res. x[j]  [mu.Ls]
     *RSC,  //Classifier of DC restriction scales {MGnvmLwCADE } x[j] [mu.Ls]
@@ -138,19 +138,19 @@ Lsor, // Lsor - final N of DC in sorption phases
     *XAun,  // Scales of COMPOS quantity/concentration (xa_)[0:mu.La-1]
     *XPun   // Scales of phase quantity/concentration ( xp_, pll_[0:mu.Fi-1]
     ;
-    double
+  double
     *B;  // Vector b of bulk chemical composition of the system, moles [0:mu.N-1]
-    float
+  float
     *delB;//Uncertainties of bulk composition vector b elements,in BCun_ units [mu.N]
-    double
+  double
     *BI,   // IC quantity/concentration to calculate  b vector [0:mu.N-1]
     *XeA,  // COMPOS quanity/concentration to calculate  b vector [0:mu.La-1]
     *XeD,  // DC quantity/concentration to calculate  b vector [0:mn.L-1]
     *Phm; //PHASE(equilibrium) quantity/concentration to calculate  b vector [mu.Fi]
-char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [mu.Lads][MCAS]
+  char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [mu.Lads][MCAS]
     /* Classifier of methods of SAT calculation { CNSI }[mu.Ls] */
     /* and allocation of sur DC to carrier components */
-    float
+  float
     *Pparc, // DC partial pressures, bar [0:mu.L-1]
     /*VG*/  *DUL,// Vector of upper DC restrictions to x_j at eqstate (res)[mu.L]
     /*NG*/  *DLL,// Vector of lower DC restrictions to x_j at eqstate [mu.L]
@@ -160,21 +160,20 @@ char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [mu.La
     *YOF,   // Phase metastability parameter, J/g [mu.Fi]
     *lnGmf, // ln of initial DC activity coefficients [mu.L]
     *Aalp,  // Specific surface area of dispersed phases, m2/g [mu.Fi]
-(*MaSdj)[DFCN], // Density, CD-MUSIC, ads.isotherm params [mu.Lads][DFCN]
-    (*Sigm)[2],//Specific surface energy of solid-aqueous (gas) interface, J/m2 [mu.Fi][2]
-    (*Xr0h0)[2],//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [mu.Fi][2]
-    (*XEpsC)[2],// Dielectric constant & conductivity of phase carrier, reserved [mu.Fi][2]
-    (*Nfsp)[MNST],// Fraction of surface types relative to carrier components [mu.Fis][6]
-    (*MaSdt)[MNST],// Max.total reactive species density 1/nm2 [mu.Fis][6]
-    (*XcapA)[MNST],// Inner-layer capacitance density (TLM,CCM) for surface types, F/m2 [mu.Fis][6]
-    (*XcapB)[MNST],// Outer-layer capacitance sensity (TLM) for surface types, F/m2[mu.Fis][6]
-    (*XcapF)[MNST], // Min.total reactive species density 1/nm2 [mu.Fis][6]
-    (*XfIEC)[MNST], // Fix surf charge density or IEC mkeq/m2    [mu.Fis][6]
-    (*Xlam)[MNST],  // Factor of discretnes IDL 0 < 1 - in PHASE  [mu.Fis][6] */
     *Guns,  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
     *Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm
-    char
-    (*SCMT)[MNST]; /* Classifier of EDL models for surface types [mu.Fis][NsTm] */
+  float (*MaSdj)[DFCN]; // Density, CD-MUSIC, ads.isotherm params [mu.Lads][DFCN]
+  float  (*Sigm)[2];//Specific surface energy of solid-aqueous (gas) interface, J/m2 [mu.Fi][2]
+  float  (*Xr0h0)[2];//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [mu.Fi][2]
+  float  (*XEpsC)[2];// Dielectric constant & conductivity of phase carrier, reserved [mu.Fi][2]
+  float  (*Nfsp)[MNST];// Fraction of surface types relative to carrier components [mu.Fis][6]
+  float  (*MaSdt)[MNST];// Max.total reactive species density 1/nm2 [mu.Fis][6]
+  float  (*XcapA)[MNST];// Inner-layer capacitance density (TLM,CCM) for surface types, F/m2 [mu.Fis][6]
+  float  (*XcapB)[MNST];// Outer-layer capacitance sensity (TLM) for surface types, F/m2[mu.Fis][6]
+  float  (*XcapF)[MNST]; // Min.total reactive species density 1/nm2 [mu.Fis][6]
+  float  (*XfIEC)[MNST]; // Fix surf charge density or IEC mkeq/m2    [mu.Fis][6]
+  float  (*Xlam)[MNST];  // Factor of discretnes IDL 0 < 1 - in PHASE  [mu.Fis][6] */
+  char  (*SCMT)[MNST]; /* Classifier of EDL models for surface types [mu.Fis][NsTm] */
 }
 SYSTEM;
 

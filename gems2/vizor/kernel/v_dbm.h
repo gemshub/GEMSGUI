@@ -26,15 +26,10 @@
 #include "gstring.h"
 #include "array.h"
 #include "v_object.h"
+#include "v_dbfile.h"
 
 
 class GemDataStream;
-class TDBFile;
-class RecEntry;
-
-typedef ios::openmode FileStatus;
-
-const int 	MAX_FILENAME_LEN = 20;
 
 const int	MAXRKFRMSTR = 20,  // max fields in key
     		IND_PLUS = 112;    // augment of index key buf

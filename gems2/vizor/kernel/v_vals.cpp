@@ -191,11 +191,11 @@ template<> const char* TVal<char>::PATTERN_SET()
 
 // explicit instantiation of the templates
 
-template class TVal<short>;
-template class TVal<unsigned short>;
-template class TVal<long>;
-template class TVal<unsigned long>;
-template class TVal<float>;
+template struct TVal<short>;
+template struct TVal<unsigned short>;
+template struct TVal<long>;
+template struct TVal<unsigned long>;
+template struct TVal<float>;
 //template class TVal<double>;
 
 
@@ -239,6 +239,7 @@ TValString::SetString(const char* s, size_t )
 
 
 template<>
+inline
 bool
 TVal<unsigned char>::SetString(const char* s, size_t ndx)
 {
@@ -269,6 +270,7 @@ TVal<unsigned char>::SetString(const char* s, size_t ndx)
 
 
 template<>
+inline
 bool
 TVal<signed char>::SetString(const char* s, size_t ndx)
 {
@@ -299,6 +301,7 @@ TVal<signed char>::SetString(const char* s, size_t ndx)
 
 
 template<>
+inline
 gstring
 TVal<double>::GetString(size_t ndx) const
 {

@@ -34,7 +34,7 @@ class QWidget;
 */
 
 struct GraphData;
-class TPlotLine;
+struct TPlotLine;
 
 class TSubModule
 {

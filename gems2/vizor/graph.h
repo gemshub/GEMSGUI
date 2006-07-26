@@ -70,7 +70,7 @@ struct TPlotLine
 };
 
 
-class FPoint;
+struct FPoint;
 
 // description of one plot in graph screen
 class TPlot

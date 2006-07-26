@@ -140,7 +140,7 @@ FOUND:
     case 9:
         return log(val);
     case 10:
-        return pow(10,val);
+        return pow(10.,val);
     case 11:
         return exp(val);
     case 12:

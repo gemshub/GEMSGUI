@@ -22,16 +22,16 @@
 
 typedef struct
 { /* Packed system state description */
-    char
+  char
     PhmKey[EQ_RKLEN],//Key of EQSTATe record to supply phases for b vector calculation
     name[MAXFORMULA],// Full name of this CSD definition
     notes[MAXFORMULA],// Comments
     switches[40],    /* SYSTEM switches line */
     Px[14];         /* Switches of project index vectors */
 
-    short DM[24]; /* Fact dimensions of system */
-    float PPm[20];  // Parametres of System at all
-    short /* Project indices for non-zero increments to bulk composition */
+  short DM[24]; /* Fact dimensions of system */
+  float PPm[20];  // Parametres of System at all
+  short /* Project indices for non-zero increments to bulk composition */
     *nnc, /* IC     on  in  BI[]      [sy.Na]  */
     *llc, /* COMPOS on  in  XeA[]     [sy.La]  */
     *phc, /* PHASE  on  in  Phm[]     [sy.Fib] */
@@ -52,7 +52,7 @@ typedef struct
 
     /* Dynamic data - packed for non-defaults DEFAULT: off */
     /* Non-zero increments to bulk composition */
-    char
+  char
     *Acl,  // COMPOS selection switches { + * - } [0:mu.La-1]
     //  Scales of elements
     *BIun,  // Scales of IC quantity/concentration (bi_)[sy.Na]
@@ -60,7 +60,7 @@ typedef struct
     *XAun,  // Scales of COMPOS quantity/concentration (xa_)[sy.La]
     *XPun   // Scales of phase quantity/concentration ( xp_, pll_[sy.Fib]
     ;
-    double
+  double
     *BI,   // IC quantity/concentration to calculate  b vector [sy.Na]
     *XeA,  // COMPOS quanity/concentration to calculate  b vector [sy.La]
     *XeD,  // DC quantity/concentration to calculate  b vector [sy.Lb]
@@ -68,7 +68,7 @@ typedef struct
     /* Configuration of components and phases
          IC: Default: OFF;   DC: Default ON;  PHASE: Default: ON; */
     *B; /* Non-zero elements of vector b    [sy.N] */
-    float
+  float
     *delB, /* Vector b uncertainty (if present)[sy.N] */
     /* Additional constraints:  default OFF */
     *Pparc, // DC partial pressures, bar [sy.Le]
@@ -76,40 +76,39 @@ typedef struct
     *lnGmf, // ln of initial DC activity coefficients [sy.Le]
     /* Phases */
     *Aalp,  // Specific surface area of dispersed phases, m2/g [sy.Fie]
-    *YOF,   // Phase metastability parameter, J/g [sy.Fie]
-    (*Sigm)[2],//Specific surface energy of solid-aqueous (gas) interface, J/m2 [sy.Fie][2]
-    (*Xr0h0)[2],//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [sy.Fie][2]
-    (*XEpsC)[2];// Dielectric constant & conductivity of phase carrier, reserved [sy.Fie][2]
+    *YOF;   // Phase metastability parameter, J/g [sy.Fie]
+  float (*Sigm)[2];//Specific surface energy of solid-aqueous (gas) interface, J/m2 [sy.Fie][2]
+  float (*Xr0h0)[2];//Parameters r0 and h0 of particles (pores at r0<0), nm reserved [sy.Fie][2]
+  float (*XEpsC)[2];// Dielectric constant & conductivity of phase carrier, reserved [sy.Fie][2]
     /* Kinetic constraints: default OFF */
-    char
+  char
     *RLC,  /* type of non-default constraints on x[j]  [sy.Lk] */
     *RSC,  /* scale codes for non-def. constr. on x[j]  [sy.Lk] */
     *RFLC, /* type of non-default constraints on XF[k] [sy.Fik] */
     *RFSC; /* scale codes for non-def. constr. on XF[k] [sy.Fik] */
     /* see file S_CLASS.H for codes */
-    float
+  float
     /*VG*/  *DUL,// Vector of upper DC restrictions to x_j at eqstate (res)[sy.Lk]
     /*NG*/  *DLL,// Vector of lower DC restrictions to x_j at eqstate [sy.Lk]
     *PUL,//Vector of upper restrictions to phases X_a at eqstate(res.)[sy.Fik]
     *PLL;//Vector of lower restrictions to phases X_a at eqstate(res)[sy.Fik]
     // Adsorption / EDL models     default OFF 
     /* DC parameters */
-    char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [sy.Lsor][MCAS]
-    float (*MaSdj)[DFCN]; // Density, Frumkin, CD-MUSIC params new [sy.Lsor][DFCN]
+  char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [sy.Lsor][MCAS]
+  float (*MaSdj)[DFCN]; // Density, Frumkin, CD-MUSIC params new [sy.Lsor][DFCN]
     /* Phase parameters */
-    char
-    (*SCMT)[MNST]; /* Classifier of EDL models for surface types [sy.Fia][6] */
-    float
-    (*Nfsp)[MNST],// Fraction of surface types relative to carrier components [sy.Fia][6]
-    (*MaSdt)[MNST],// Max.total reactive species density 1/nm2 [sy.Fia][6]
-    (*XcapA)[MNST],// Inner-layer capacitance density (TLM,CCM) for surface types, F/m2 [sy.Fia][6]
-    (*XcapB)[MNST],// Outer-layer capacitance sensity (TLM) for surface types, F/m2[sy.Fia][6]
-    (*XcapF)[MNST], // Min.total reactive species density 1/nm2 [sy.Fia][6]
-    (*XfIEC)[MNST], // Fix surf charge density or IEC mkeq/m2    [sy.Fia][6]
-    (*Xlam)[MNST];  // Factor of discretnes IDL 0 < 1 - in PHASE  [sy.Fia][6] */
-    char
-    (*sdref)[V_SD_RKLEN], /* List of SDref keys to sources of data [sy.Nsd] */
-    (*sdval)[V_SD_VALEN]; /* Comments to data sources [sy.Nsd] */
+  char  (*SCMT)[MNST]; /* Classifier of EDL models for surface types [sy.Fia][6] */
+  
+  float (*Nfsp)[MNST];// Fraction of surface types relative to carrier components [sy.Fia][6]
+  float (*MaSdt)[MNST];// Max.total reactive species density 1/nm2 [sy.Fia][6]
+  float (*XcapA)[MNST];// Inner-layer capacitance density (TLM,CCM) for surface types, F/m2 [sy.Fia][6]
+  float (*XcapB)[MNST];// Outer-layer capacitance sensity (TLM) for surface types, F/m2[sy.Fia][6]
+  float (*XcapF)[MNST]; // Min.total reactive species density 1/nm2 [sy.Fia][6]
+  float (*XfIEC)[MNST]; // Fix surf charge density or IEC mkeq/m2    [sy.Fia][6]
+  float (*Xlam)[MNST];  // Factor of discretnes IDL 0 < 1 - in PHASE  [sy.Fia][6] */
+    
+  char (*sdref)[V_SD_RKLEN]; /* List of SDref keys to sources of data [sy.Nsd] */
+  char (*sdval)[V_SD_VALEN]; /* Comments to data sources [sy.Nsd] */
 }
 SYSPACK;
 
@@ -144,19 +143,19 @@ typedef struct
     *Y, // Prime solution x for DC (moles), packed [L][0]
     *lnGam, //ln of DC activity coefficients, packed [L] [1]
     /* Arrays for phases and mass transport (optional at Psmt==1) */
-    *Ba,     /* Bulk compos. of multicomp. phases     [Fis][N] */
-    (*VM)[5],/* Va Volumes of multicomp. phases cm3   [Fis][0] */
+    *Ba;     /* Bulk compos. of multicomp. phases     [Fis][N] */
+    double (*VM)[5];/* Va Volumes of multicomp. phases cm3   [Fis][0] */
     /* Ma Masses of multicomp. phases, g          [1] */
     /* MaC Mass of carriers of multicomp.ph.,g    [2] */
     /* Cpa Heat capacity of multicomp.ph. J/K/g   [3] */
     /* Enthalpy of multicomp. phases J/g          [4] */
-    (*DIC)[2]; /* Diffusion coeffs. of IC in aq fluid   [N][0] */
+    double (*DIC)[2]; /* Diffusion coeffs. of IC in aq fluid   [N][0] */
     /*                         in gas phase     [1] */
     /* Work arrays */
-    char
-    (*SBp)[MAXICNAME+MAXSYMB], // List of IC names, packed [N] */
-    (*SMp)[MAXDCNAME],         // List of IC names, packed [L] */
-    (*SFp)[MAXPHNAME];      /* Compressed list of phase names [Fis] */
+    
+    char (*SBp)[MAXICNAME+MAXSYMB]; // List of IC names, packed [N] */
+    char (*SMp)[MAXDCNAME];         // List of IC names, packed [L] */
+    char (*SFp)[MAXPHNAME];      /* Compressed list of phase names [Fis] */
 
 }
 EQSTAT;

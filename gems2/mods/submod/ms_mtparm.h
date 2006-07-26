@@ -139,7 +139,7 @@ public:
     void dyn_new( int i=0);
     void set_def( int i=0);
 
-    void LoadMtparm( float cT, float cP );
+    void LoadMtparm( double cT, double cP );
     float b_gamma_TP( double tk, double pb, double eps, double gsf, int mode );
     void MTparmAlloc();
 

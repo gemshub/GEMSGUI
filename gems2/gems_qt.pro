@@ -10,11 +10,12 @@ CONFIG		+= qt thread warn_on debug
 CONFIG		+= debug
 #CONFIG		+= qmake_cache
 
-!win32-borland {
+!win32 {
   DEFINES += __unix
 }
 
 win32-borland {
+	DEFINES += __win32_borland
 	# Keep the size of the .tds file for the Qt library smaller than
 	# 34 Mbytes to avoid linking problems
 	# QMAKE_CFLAGS_DEBUG += -vi -y-
@@ -52,12 +53,12 @@ UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
 
-include($$VIZOR_CPP/vizor.pri)
 include($$LIBS_CPP/libs.pri)
 include($$KERNEL_CPP/kernel.pri)
-include($$DLG_CPP/dlg.pri)
 include($$MODS_CPP/mods.pri)
 include($$NUMERICS_CPP/numerics.pri)
 include($$SUBMOD_CPP/submod.pri)
+include($$VIZOR_CPP/vizor.pri)
+include($$DLG_CPP/dlg.pri)
 
 

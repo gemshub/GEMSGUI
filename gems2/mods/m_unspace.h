@@ -169,30 +169,30 @@ short
    *NgNb,  //  [N]  0-deterministic DC; value >0 is index of a group varying b to which this IC is assigned
    *f_PhA; //  [N]  input phase indexes of known equilibrium phase association for a primary filter (Pa_f_pha)
                     //  in ascending order
-float
 // input uncertainty half-intervals; 0 means deterministic DC or IC
-/*?*/   (*IntLg)[2], //  [L][2]  adapted/initial  uncertainty half-intervals for G variation (flag PsUnInt defines units)
-/*?*/   (*IntGam)[2], //  [Ls][2]  adapted/initial uncertainty half-intervals for gamma params (reserved)
-/*?*/   (*IntLs)[2],  //  [L][2]  adapted/initial uncertainty half-intervals for S (reserved)
-/*?*/   (*IntLv)[2],  //  [L][2]  adapted/initial uncertainty half-intervals for V variation (flag PsUnInt defines units)
-/*?*/   (*IntNb)[2],  //  [N][2]  adapted/initial uncertainty half-intervals for b variation (flag PsUnInB defines units)
+/*?*/  float (*IntLg)[2]; //  [L][2]  adapted/initial  uncertainty half-intervals for G variation (flag PsUnInt defines units)
+/*?*/  float (*IntGam)[2]; //  [Ls][2]  adapted/initial uncertainty half-intervals for gamma params (reserved)
+/*?*/  float (*IntLs)[2];  //  [L][2]  adapted/initial uncertainty half-intervals for S (reserved)
+/*?*/  float (*IntLv)[2];  //  [L][2]  adapted/initial uncertainty half-intervals for V variation (flag PsUnInt defines units)
+/*?*/  float (*IntNb)[2];  //  [N][2]  adapted/initial uncertainty half-intervals for b variation (flag PsUnInB defines units)
 // input filters for sampled solution variants
+float
    *m_t_lo, //  [N]  total IC molality filter - lower limits (default 0/-20) (units defined in PsUnFltI flag)
    *m_t_up, //  [N]  total IC molality filter - upper limits (default 10/+1) (units defined in PsUnFltI flag)
    *fug_lo, //  [Ls] fugacity/activity filter - lower limits (default 0/-20) (units defined in PsUnFltD flag)
    *fug_up, //  [Ls] fugacity/activity filter - upper limits (default 10/+1) (units defined in PsUnFltD flag)
+   *ncp;    //  [Q][nG] table of normalised coordinates of points in uncertainty space (>= 0 <= 1)
 
 // Input II (will be done automatically)
-/*?*/   (*Gs)[2],     //  [L][2]  adapted/initial  copy of deterministic values of G298 for DCs
-/*?*/   (*Ss)[2],     //  [L][2]  adapted/initial  copy of deterministic values of S298 for DCs (reserved)
-/*?*/   (*Vs)[2],     //  [L][2]  adapted/initial  copy of deterministic values of V298 for DCs
-/*?*/   (*GAMs)[2],   //  [Ls][2]  adapted/initial copy of deterministic Par Gamma (reserved)
-   *ncp;    //  [Q][nG] table of normalised coordinates of points in uncertainty space (>= 0 <= 1)
-double
-/*?*/   (*Bs)[2],     //  [N][2]  adapted/initial  copy of deterministic values of bulk composition vector b
+/*?*/ float   (*Gs)[2];     //  [L][2]  adapted/initial  copy of deterministic values of G298 for DCs
+/*?*/ float   (*Ss)[2];     //  [L][2]  adapted/initial  copy of deterministic values of S298 for DCs (reserved)
+/*?*/ float   (*Vs)[2];     //  [L][2]  adapted/initial  copy of deterministic values of V298 for DCs
+/*?*/ float   (*GAMs)[2];   //  [Ls][2]  adapted/initial copy of deterministic Par Gamma (reserved)
+/*?*/ double   (*Bs)[2];    //  [N][2]  adapted/initial  copy of deterministic values of bulk composition vector b
 
 // collected GEM sample calculation output for creation of the payoff matrix
-   *vG,     //   [Q][L]  G0 values used in sample input data variants (indexes q j)
+double
+        *vG,     //   [Q][L]  G0 values used in sample input data variants (indexes q j)
 /*?*/   *vB,     //   [Q][N]  B values used in sample input data variants (indexes q j)
 /*?*/   *vS,     //   [Q][L]  S values used in sample input data variants (indexes q j)
 /*?*/   *vmV,     //   [Q][L]  mV values used in sample input data variants (indexes q j)
@@ -212,13 +212,14 @@ float
    *vT,     //   [Q]   TC vector of temperatures (C) from sample input data variants (index q)
    *vP,     //   [Q]   P vector of pressures (bar) from sample input data variants (index q)
 /*?*/   *vV,     //   [Q]   value of V (in cm3? L?) (index q)
-   (*vpH)[3],    //   [Q][3]   vector of pH, Eh, IC  values from sample GEM solution variants (index t)
    *OVB,    //   [nGB+1]  pseudo-random numbers for Belov algorithm
    *OVR,    //   [nGR+1]  pseudo-random numbers by Monte Carlo with uniform distribution
-   *OVN,    //   [nGN+1]  pseudo-random numbers by Monte Carlo with normal distribution
-/*?*/  (*quanCv)[4]; // [qQ][4] indices of sample GEM variants taken into quantile Laplace,
-                     // Hurtvitz, Wald, Homenyuk (columns )
+   *OVN;    //   [nGN+1]  pseudo-random numbers by Monte Carlo with normal distribution
 
+   float (*vpH)[3];    //   [Q][3]   vector of pH, Eh, IC  values from sample GEM solution variants (index t)
+
+/*?*/float  (*quanCv)[4]; // [qQ][4] indices of sample GEM variants taken into quantile Laplace,
+                     // Hurtvitz, Wald, Homenyuk (columns )
 short
 /*?*/  (*quanCx)[4]; // [qQ][4] Values taken into quantile Laplace,
                      // Hurtvitz, Wald, Homenyuk (columns )
@@ -251,36 +252,35 @@ double
    *Zmax,    //  [Q]  maxima in rows row pay-off matrix  for Hurwitz criterion
    *ZmaxAbs, //  [Q]  abs(max)values in rows of pay-off matrix for Wald criterion
    *Hom,     //  [Q]  array of calculated values for Homenyuk criterion
-   *Prob,    //  [Q]  array of probabilities for calculating Homenuk criterion
+   *Prob;    //  [Q]  array of probabilities for calculating Homenuk criterion
    // array for statistics output
-   (*UnIC)  [UNSP_SIZE1], //  [N][UNSP_SIZE1] statistics over independent components
-   (*UgDC)  [UNSP_SIZE1], //  [nPG][UNSP_SIZE1] statistics set 1 over dependent components
-   (*UaDC)  [UNSP_SIZE1], //  [Ls][UNSP_SIZE1] statistics set 2 over dependent components
-   (*UnDCA) [UNSP_SIZE2]; // [nPG][UNSP_SIZE2] statistics set 1 over dependent components
+ double (*UnIC)  [UNSP_SIZE1]; //  [N][UNSP_SIZE1] statistics over independent components
+ double (*UgDC)  [UNSP_SIZE1]; //  [nPG][UNSP_SIZE1] statistics set 1 over dependent components
+ double (*UaDC)  [UNSP_SIZE1]; //  [Ls][UNSP_SIZE1] statistics set 2 over dependent components
+ double (*UnDCA) [UNSP_SIZE2]; // [nPG][UNSP_SIZE2] statistics set 1 over dependent components
 
 // input GEMS
-char
-    (*UnICn)[NAME_SIZE], //  Names of columns for output array UnIC
-    (*UgDCn)[NAME_SIZE], //  Names of columns for output array UgDC & UaDc
-/*?*/    (*UaDCn)[NAME_SIZE], //  Names of columns for output array UgDC & UaDc
-    (*UnDCAn)[NAME_SIZE], //  Names of columns for output array UnDCA
+ char (*UnICn)[NAME_SIZE]; //  Names of columns for output array UnIC
+ char (*UgDCn)[NAME_SIZE]; //  Names of columns for output array UgDC & UaDc
+/*?*/ char (*UaDCn)[NAME_SIZE]; //  Names of columns for output array UgDC & UaDc
+ char  (*UnDCAn)[NAME_SIZE]; //  Names of columns for output array UnDCA
 
-   (*PhAID)[8],   // [nPhA] list of phase assemblage ID names (def. 0001 0002 ... )
-   (*PhAlst)[80], // [nPhA] list of phase assemblage titles (made of Phase names)
-
+ char  (*PhAID)[8];   // [nPhA] list of phase assemblage ID names (def. 0001 0002 ... )
+ char  (*PhAlst)[80]; // [nPhA] list of phase assemblage titles (made of Phase names)
+ char
     *Expr,     // Text with math script equations (params for activity coeffs ??? reserved )
 /*?*/    *ExprGraph, // Text with math script equations (params for activity coeffs ??? reserved )
-/*?*/    (*lNam)[MAXGRNAME],   // List of ID of lines on Graph
-/*?*/    (*ParNames)[PARNAME_SIZE],   // [nPG]  List of insertain input parameters names
-
-    (*SGp)[MAXPHNAME],    // List of UnSpace group names [kG]
-    (*stl)[EQ_RKLEN],     // List of generated SysEq records [Q]
-    (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources [Nsd]
-    (*sdval)[V_SD_VALEN], // Comments to data sources [Nsd]
-
     stkey[EQ_RKLEN+10],  //  currently loaded (processed) SysEq key
     timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16],
     *tprn;               //  internal
+
+/*?*/ char (*lNam)[MAXGRNAME];   // List of ID of lines on Graph
+/*?*/ char (*ParNames)[PARNAME_SIZE];   // [nPG]  List of insertain input parameters names
+
+    char (*SGp)[MAXPHNAME];    // List of UnSpace group names [kG]
+    char (*stl)[EQ_RKLEN];     // List of generated SysEq records [Q]
+    char (*sdref)[V_SD_RKLEN]; // List of SDref keys to data sources [Nsd]
+    char (*sdval)[V_SD_VALEN]; // Comments to data sources [Nsd]
 
     // work data
 float

@@ -102,15 +102,14 @@ typedef struct
     *Cp0;   // Cp0 molar heat capacity of DC, J/K/mol, [nDC][nPp][nTp] elements
 
 // Name lists
- char
-  (*ICNL)[MaxICN], // List of IC names in the system, [nIC] elements of MaxICN length
-  (*DCNL)[MaxDCN], // List of DC names in the system, [nDC] elements of MaxDCN length
-  (*PHNL)[MaxPHN], // List of phase names in the system, [nPH] elements of MaxPHN length
+ char (*ICNL)[MaxICN]; // List of IC names in the system, [nIC] elements of MaxICN length
+ char (*DCNL)[MaxDCN]; // List of DC names in the system, [nDC] elements of MaxDCN length
+ char (*PHNL)[MaxPHN]; // List of phase names in the system, [nPH] elements of MaxPHN length
 
 // Class code lists
-    *ccIC,   // Class codes of IC, see  enum ICL_CLASSES  ([nIC] elements)
-    *ccDC,   // Class codes of DC, see  enum DCL_CLASSES  ([nDC] elements)
-    *ccPH;   // Class codes of phases, see enum PHL_CLASSES ([nPH] elements)
+ char   *ccIC,   // Class codes of IC, see  enum ICL_CLASSES  ([nIC] elements)
+        *ccDC,   // Class codes of DC, see  enum DCL_CLASSES  ([nDC] elements)
+        *ccPH;   // Class codes of phases, see enum PHL_CLASSES ([nPH] elements)
 }
 DATACH;
 

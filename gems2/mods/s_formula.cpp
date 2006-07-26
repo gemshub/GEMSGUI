@@ -96,7 +96,7 @@ float cha = 1.0;
     case CHARGE_PLUS:
         if( strlen( chan ) == 1 )
         {
-            aZ += (float)sign;
+            aZ += sign;
             return aZ;
         }
         else
@@ -104,7 +104,7 @@ float cha = 1.0;
             if( sscanf( chan+1, "%g", &cha ) )
             {
 //                aZ += (float)(cha*sign);
-                aZ += cha * (float)sign;
+                aZ += cha * sign;
                 return aZ;
             }
     default:
@@ -202,7 +202,7 @@ void Formuan::push_sto()
         gstring buf( next, 0, len);
         double sto;
         sscanf( buf.c_str(), "%lg", &sto );
-        mult[lev] = (float)sto;
+        mult[lev] = sto;
         cur++;
         //return -1;
     }
@@ -334,11 +334,11 @@ int Formuan::icstoc()
 }
 
 //get <elem_st_coef>  ::= <real>
-void Formuan::stoc_get( double& bstoc )
+void Formuan::stoc_get( float& bstoc )
 {
     int len = next - cur;
     gstring buf( cur, 0, len );
-    if( sscanf( buf.c_str(), " %lg", &bstoc ))
+    if( sscanf( buf.c_str(), " %g", &bstoc )) //%lg - double
     {
         cur += len;
     }
@@ -356,7 +356,7 @@ int Formuan::ictcomp( int ii, const char *ick, short val )
 
 //add component to sorted list
 void Formuan::icadd(  const char *icn,
-                      const char *iso,short val,double csto)
+                      const char *iso,short val,float csto)
 {
     char ICkey[MAXICNAME+MAXSYMB+1];
     int iRet;
@@ -382,11 +382,11 @@ void Formuan::icadd(  const char *icn,
             break;
         ii++;
     }
-    itt_.AddAt( new ICTERM( ICkey, val, (float)csto ), ii );
+    itt_.AddAt( new ICTERM( ICkey, val, csto ), ii );
 }
 
 // scan <fterm> s
-double Formuan::scan_formulae( TIArray<ICTERM>& tt )
+float Formuan::scan_formulae( TIArray<ICTERM>& tt )
 {
 //    char savc=' ';
     char *pp, *fs;
@@ -394,7 +394,7 @@ double Formuan::scan_formulae( TIArray<ICTERM>& tt )
 
     int State = SCAN_YES;
     short val;
-    double stoc, aZ =0.0;
+    float stoc, aZ =0.0;
     gstring ic_symb, ic_isotop;
 
     cur = form_buf;
@@ -583,7 +583,7 @@ void TFormula::fo_unpak( TIArray<ICTERM>& itt_ )
         aVal.Add( itt_[i].val  );
 
         if( itt_[i].val != SHORT_EMPTY/*I_EMPTY*/ && *ICI != 'z' )
-            aZ += itt_[i].stoc * (float)itt_[i].val;
+            aZ += itt_[i].stoc * itt_[i].val;
     }
 }
 

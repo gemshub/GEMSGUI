@@ -41,9 +41,9 @@ typedef struct
     name[MAXFORMULA],      // Name of PROCES simulator definition
     notes[MAXFORMULA],     // Notes
     xNames[MAXAXISNAME], // Abscissa name
-    yNames[MAXAXISNAME], // Ordinate name
-    (*lNam)[MAXGRNAME],    // List of ID of lines on Graph
-    (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
+    yNames[MAXAXISNAME]; // Ordinate name
+ char (*lNam)[MAXGRNAME];    // List of ID of lines on Graph
+ char (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
 
  char
     Istat, // PROCES status: 0 or 5 -undefinite; 1or 6-start; 2 or 7-run;
@@ -73,7 +73,7 @@ typedef struct
     PvR1,  // Use previous EQSTAT result (+) or SIMPLEX initial approximation(+-)
     PvEF   // Use empirical data for graphics
     ;
-    short  // N of points controled parameters of process
+  short  // N of points controled parameters of process
     // !!  Nnu,  NT, NV, NphH, Npe, R1 - not use; NP - intermal
     Ntim,Nxi,Nnu, // Ntim Number of mass-transport integration points
                   // Nxi number of points to be generated ;
@@ -98,7 +98,7 @@ typedef struct
     *tm,    // Array of tm (SYSTEM CSD #) values [0:Ntm-1]
     *nv;    // Array of NV (MTPARM variant) values [0:NNV-1]
 
-    double       // Units of measuremen get from start  SYSTEM
+  double       // Units of measuremen get from start  SYSTEM
     Pi[3],    // Pressure P, bar: start, end, increment
     Ti[3],    // Temperature T, C: start, end, increment
     Vi[3],    // Volume of the system (L): start, end, increment
@@ -119,36 +119,35 @@ typedef struct
     *Nu,     // Array of Nu values [0:NNu-1]
 
     *Kin,    // Array of (reaction) kinetic parameters [0:Nrea-1][0:Nrp-1]
-    *Modc    // Array of process script parameters  [0:Ntm-1][Nmc]
+    *Modc    // Array of process script parameters?[0:Ntm-1][Nmc]
     ;
-    double
+  double
      *x0,   // Vector of abscissa dimXY[][1]
      *y0,  // Sampled data array dimXY[][]
      *xE, *yE;         // Input empirical data XE, YE
 
-    float
+  float
      size[2][4]; // Graph axis scale for region and fragment
 
-    char
+  char
     *Expr,  // Text of process simulator equations
     *gr_expr,     // Text with IPN-expressions for data sampler
-    (*stl)[EQ_RKLEN], // List of EQSTAT record keys [0:NeMax-1]
-
-    (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources
-    (*sdval)[V_SD_VALEN], // Comments on data sources
-
     gdkey[GD_RKLEN],   // reserved
     stkey[EQ_RKLEN+10],// SyStat
     tpkey[TP_RKLEN];
+  char (*stl)[EQ_RKLEN]; // List of EQSTAT record keys [0:NeMax-1]
 
-    short NeMax,      // Max. N of iterations allowed for inverse titration
+  char (*sdref)[V_SD_RKLEN]; // List of SDref keys to data sources
+  char (*sdval)[V_SD_VALEN]; // Comments on data sources
+
+  short NeMax,      // Max. N of iterations allowed for inverse titration
     Nst,          // N of completed EQSTAT computatitons
     Loop,         // Switch to continue (1) or finish (0) PROCESS iterations
     i, j,         // i, j index
     c_nrk,        // Current index of EQSTAT in record key list
     c_tm,         // Current Tm - SYSTEM CSD number
     c_NV;         // Current Nv - MTPARM variant number
-    double    // Current values to control process
+ double    // Current values to control process
     c_P, c_V, c_T, c_TC,
     c_Tau, c_pXi, c_Xi, c_Nu,
     c_pH, c_pe, c_Eh;
@@ -157,9 +156,9 @@ typedef struct
     // IPNCalc rpn;       // IPN of equats of process  -- Expr
     time_t syt, stt, utt, // time to build of current records
     pet, tpt, mut;
-    char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
+ char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
 
-    char *tprn;               // internal bufer
+ char *tprn;               // internal bufer
 }
 
 PROCESS;

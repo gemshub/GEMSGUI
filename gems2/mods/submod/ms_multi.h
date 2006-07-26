@@ -128,8 +128,8 @@ typedef struct
     *LsMdc, // Number of non-ideality coeffs per one DC in multicomponent phase[FIs]
     *mui,   // IC indices in RMULTS IC list [N]
     *muk,   // Phase indices in RMULTS phase list [FI]
-    *muj,   // DC indices in RMULTS DC list [L]
-    (*SATX)[4]; // New: work table [Lads]: link indexes to surface type [XL_ST];
+    *muj;   // DC indices in RMULTS DC list [L]
+  short  (*SATX)[4]; // New: work table [Lads]: link indexes to surface type [XL_ST];
             // sorbent em [XL_EM]; surf.site [XL-SI] and EDL plane [XL_SP]
             /* formerly SATndx: surface type index, 0,1,...,Fiat-1 [0:Ls-1][2] */
             /* and assign. sur.DC to carrier end-member indices */
@@ -154,25 +154,25 @@ typedef struct
     *Xeps,  	/* diel.permeability of phase carriers    [0:FI-1] */
     *Aalp,  	/* phase specific surface area m2/g       [0:FI-1] */
     *Sigw,  	/* st.surface free energy in water,J/m2   [0:FI-1] */
-    *Sigg,  	/* st.surface free energy in air,J/m2     [0:FI-1] */
-    (*Xr0h0)[2],  /* mean r & h of particles (- pores) nm  [0:FI-1][2] */
-    (*Nfsp)[MST], /* area fraction of surface types At/A  [FIs][FIat] */
-    (*MASDT)[MST], /* Max.reactive species sur.density, mkmol/g [FIs][FIat] */
-    (*XcapF)[MST], /* eff.capacitance of Ba EDL layer in FLM [FIs][FIat] */
-    (*XcapA)[MST], /* eff.capacitance of A EDL layer, F/m2  [FIs][FIat] */
-    (*XcapB)[MST], /* eff.capacitance of B EDL layer, F/m2  [FIs][FIat] */
-    (*XcapD)[MST], /* eff.capacitance of diffuse layer,F/m2 [FIs][FIat] */
-    (*XdlA)[MST],  /* eff.thickness of A EDL layer, nm      [FIs][FIat] */
-    (*XdlB)[MST],  /* eff.thickness of B EDL layer, nm      [FIs][FIat] */
-    (*XdlD)[MST],  /* eff.thickness of diffuse layer, nm    [FIs][FIat] */
-    (*XlamA)[MST], /* Factor of EDL discretness  A < 1      [FIs][FIat] */
-    (*Xetaf)[MST], /* Fixed charge density at surface type, C/m2 [FIs][FIat] */
-    *XFs,  // Current quantities of phases X_a at IPM iterations [0:FI-1]
+    *Sigg;  	/* st.surface free energy in air,J/m2     [0:FI-1] */
+  float  (*Xr0h0)[2];  /* mean r & h of particles (- pores) nm  [0:FI-1][2] */
+  float  (*Nfsp)[MST]; /* area fraction of surface types At/A  [FIs][FIat] */
+  float  (*MASDT)[MST]; /* Max.reactive species sur.density, mkmol/g [FIs][FIat] */
+  float  (*XcapF)[MST]; /* eff.capacitance of Ba EDL layer in FLM [FIs][FIat] */
+  float  (*XcapA)[MST]; /* eff.capacitance of A EDL layer, F/m2  [FIs][FIat] */
+  float  (*XcapB)[MST]; /* eff.capacitance of B EDL layer, F/m2  [FIs][FIat] */
+  float  (*XcapD)[MST]; /* eff.capacitance of diffuse layer,F/m2 [FIs][FIat] */
+  float  (*XdlA)[MST];  /* eff.thickness of A EDL layer, nm      [FIs][FIat] */
+  float  (*XdlB)[MST];  /* eff.thickness of B EDL layer, nm      [FIs][FIat] */
+  float  (*XdlD)[MST];  /* eff.thickness of diffuse layer, nm    [FIs][FIat] */
+  float  (*XlamA)[MST]; /* Factor of EDL discretness  A < 1      [FIs][FIat] */
+  float  (*Xetaf)[MST]; /* Fixed charge density at surface type, C/m2 [FIs][FIat] */
+  float  *XFs,  // Current quantities of phases X_a at IPM iterations [0:FI-1]
     *Falps, // Current Karpov criteria of phase stability  F_a [0:FI-1]
     *Fug,   // Partial fugacities of gases [0:PG-1]
     *Fug_l, // log  partial fugacities of gases [0:PG-1]
-    *Ppg_l, // log  partial pressures of gases [0:PG-1]
-    (*MASDJ)[DFCN];  // Max. density, CD-music and isotherm params [Lads][DFCN]
+    *Ppg_l; // log  partial pressures of gases [0:PG-1]
+  float  (*MASDJ)[DFCN];  // Max. density, CD-music and isotherm params [Lads][DFCN]
   double
     *DUL,  // VG Vector of upper restrictions to x_j (reserved) [L]
     *DLL,  // NG Vector of lower restrictions to x_j, moles [L]
@@ -196,9 +196,9 @@ typedef struct
     *G,    // Normalized DC energy function c(j), mole/mole [0:L-1]
     *G0,   // Input normalized g0_j(T,P) for DC at unified standard scale[L]
     *lnGam, // ln of DC activity coefficients [0:L-1]
-    *lnGmo, // Copy of lnGam from previous IPM iteration (reserved)
-    (*lnSAC)[4], // former lnSAT ln surface activity coeff and Coulomb's term  [Lads][4]
-    *B,  // Input bulk chem. compos. of the system-b vector, moles of IC[N]
+    *lnGmo; // Copy of lnGam from previous IPM iteration (reserved)
+  double  (*lnSAC)[4]; // former lnSAT ln surface activity coeff and Coulomb's term  [Lads][4]
+  double  *B,  // Input bulk chem. compos. of the system-b vector, moles of IC[N]
     *U,  // IC chemical potentials u_i (mole/mole) - dual IPM solution [N]
     *U_r, // IC chemical potentials u_i (J/mole) [0:N-1]
     *C,   // Calculated IC mass-balance deviations (moles) [0:N-1]
@@ -211,15 +211,15 @@ typedef struct
     *YF,    // Copy of X_a from previous IPM iteration [0:FI-1]
     *XFA,   // Quantity of carrier in asymmetric phases Xwa, moles [FIs]
     *YFA,   // Copy of Xwa from previous IPM iteration [0:FIs-1]
-    *Falp,  // Karpov phase stability criteria F_a [0:FI-1]
-    (*XetaA)[MST], // Total EDL charge on A (0) EDL plane, moles [FIs][FIat]
-    (*XetaB)[MST], // Total charge of surface species on B (1) EDL plane, moles[FIs][FIat]
-    (*XetaD)[MST], // Total charge of surface species on D (2) EDL plane, moles[FIs][FIat]
-    (*XpsiA)[MST], /* Galvani potential at A (0) EDL plane,V [FIs][FIat] */
-    (*XpsiB)[MST], /* Galvani potential at B (1) EDL plane,V [FIs][FIat] */
-    (*XpsiD)[MST], /* Galvani potential at D (2) plane,V [FIs][FIat] */
-    (*XFTS)[MST],  // Total number of moles of surface DC at surtype [FIs][FIat]
-    *X,  // DC quantities at eqstate x_j, moles - prime IPM solution [L]
+    *Falp;  // Karpov phase stability criteria F_a [0:FI-1]
+   double (*XetaA)[MST]; // Total EDL charge on A (0) EDL plane, moles [FIs][FIat]
+   double (*XetaB)[MST]; // Total charge of surface species on B (1) EDL plane, moles[FIs][FIat]
+   double (*XetaD)[MST]; // Total charge of surface species on D (2) EDL plane, moles[FIs][FIat]
+   double (*XpsiA)[MST]; /* Galvani potential at A (0) EDL plane,V [FIs][FIat] */
+   double (*XpsiB)[MST]; /* Galvani potential at B (1) EDL plane,V [FIs][FIat] */
+   double (*XpsiD)[MST]; /* Galvani potential at D (2) plane,V [FIs][FIat] */
+   double (*XFTS)[MST];  // Total number of moles of surface DC at surtype [FIs][FIat]
+   double *X,  // DC quantities at eqstate x_j, moles - prime IPM solution [L]
     *Y,  // Copy of x_j from previous IPM iteration [0:L-1]
     *XY, // Copy of x_j from previous loop of Selekt2() [0:L-1]
     *Qp, // Work IIPN variables related to non-ideal phases FIs*(QPSIZE=60)
@@ -231,30 +231,30 @@ typedef struct
     *Fx,  // Dual DC chemical potentials defined via u_i and a_ji [0:L-1]
     *Wx,  // Mole fractions Wx of DC in multi-component phases [0:L-1]
     *F, //Prime DC chemical potentials defined via g0_j, Wx_j and lnGam_j[L]
-    *F0,  // Excess Gibbs energies for (metastable) DC, mole/mole [0:L-1]
-    (*D)[MST];    // Reserved; new work array for calc. surface act.coeff.
-  char
-    (*sMod)[6], 	 // Codes of models of multicomponent phases [0:FIs-1]
-    (*SB)[MAXICNAME+MAXSYMB], // List of IC names in the system [0:N-1]
-    (*SB1)[MAXICNAME], // List of IC names in the system [0:N-1]
-    (*SM)[MAXDCNAME],  // List of DC names in the system [0:L-1]
-    (*SF)[MAXPHNAME+MAXSYMB],  // List of phase names in the system [0:FI-1]
-    (*SM2)[MAXDCNAME],  // List of multicomp. phase DC names in the system [Ls]
-    (*SM3)[MAXDCNAME],  // List of adsorption DC names in the system [Lads]
-    *DCC3,   // Classifier of DC in sorption phases [Lads]
-    (*SF2)[MAXPHNAME+MAXSYMB], // List of multicomp. phase names in the syst [FIs]
-    (*SFs)[MAXPHNAME+MAXSYMB],
+    *F0;  // Excess Gibbs energies for (metastable) DC, mole/mole [0:L-1]
+   double (*D)[MST];    // Reserved; new work array for calc. surface act.coeff.
+  
+  char  (*sMod)[6]; 	 // Codes of models of multicomponent phases [0:FIs-1]
+  char  (*SB)[MAXICNAME+MAXSYMB]; // List of IC names in the system [0:N-1]
+  char  (*SB1)[MAXICNAME]; // List of IC names in the system [0:N-1]
+  char  (*SM)[MAXDCNAME];  // List of DC names in the system [0:L-1]
+  char  (*SF)[MAXPHNAME+MAXSYMB];  // List of phase names in the system [0:FI-1]
+  char  (*SM2)[MAXDCNAME];  // List of multicomp. phase DC names in the system [Ls]
+  char  (*SM3)[MAXDCNAME];  // List of adsorption DC names in the system [Lads]
+  char  *DCC3;   // Classifier of DC in sorption phases [Lads]
+  char  (*SF2)[MAXPHNAME+MAXSYMB]; // List of multicomp. phase names in the syst [FIs]
+  char  (*SFs)[MAXPHNAME+MAXSYMB];
     // List of phases currently present in non-zero quantities [0:FI-1]
-    *pbuf, 	// Text buffer for EQSTATe table printout
+  char  *pbuf, 	// Text buffer for EQSTATe table printout
     *RLC,   // Classifier of restriction types for x_j 0:L-1
     *RSC,   // Classifier of restriction scales for x_j 0:L-1
     *RFLC,  // Classifier of restriction types for XF_a 0:FIs-1
     *RFSC,  // Classifier of restriction scales for XF_a 0:FIs-1
     *ICC,   // Classifier of IC { e o h a z v i <int> } 0:N-1
     *DCC,   // Classifier of DC { TESWGVCHNIJMDRAB0123XYZPQO } 0:L-1
-    *PHC,   // Classifier of phases { a g p m l x d h } 0:FI-1
-    (*SCM)[MST], //classifier of adsorption models for sur types [FIs][FIat]
-    *SATT,  /* classifier of methods of SAT calculation [0:Lads] */
+    *PHC;   // Classifier of phases { a g p m l x d h } 0:FI-1
+  char  (*SCM)[MST]; //classifier of adsorption models for sur types [FIs][FIat]
+  char  *SATT,  /* classifier of methods of SAT calculation [0:Lads] */
     *DCCW;  // reserved 0:L-1 codes see in file S_CLASS.H
   short
      *sitXcat, // SIT: indices of cations

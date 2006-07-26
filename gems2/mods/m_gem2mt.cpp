@@ -311,7 +311,7 @@ void TGEM2MT::dyn_set(int q)
     ErrorIf( mtp!=&mt[q], GetName(),
        "E06GDrem: Illegal access to mt in dyn_set");
 
-    mtp->lNam = (char (*)[MAXGRNAME])aObj[ o_mtlnam].GetPtr();
+    mtp->lNam = ( char (*)[MAXGRNAME] )aObj[ o_mtlnam].GetPtr();
     mtp->lNamE = (char (*)[MAXGRNAME])aObj[ o_mtlname].GetPtr();
     mtp->tExpr = (char *)aObj[o_mttexpr].GetPtr();
     mtp->gExpr = (char *)aObj[o_mtgexpr].GetPtr();
@@ -739,8 +739,8 @@ void TGEM2MT::set_def(int q)
     mtp->Tau[STOP_] = 0.;
     mtp->Tau[STEP_] = 0.;
 // pointers
-    mtp->lNam = 0;
-    mtp->lNamE = 0;
+    mtp->lNam = NULL;
+    mtp->lNamE = NULL;
     mtp->tExpr = 0;
     mtp->gExpr = 0;
     mtp->sdref = 0;
@@ -871,7 +871,7 @@ TGEM2MT::RecBuild( const char *key, int mode )
     if( pVisor->ProfileMode != true )
       Error( GetName(), "E09DTrem: Please, do it in the Project mode!" );
 
-    int setdef = false;
+    bool setdef = false;
 AGAIN:
     int ret = TCModule::RecBuild( key, mode );
     if( ret == VF_CANCEL )

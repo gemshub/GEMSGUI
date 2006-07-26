@@ -111,7 +111,7 @@ out_stream << "  " << numFiles << endl;
 //get state from cfg file
 void TDataBase::fromCFG(fstream& in_stream)
 {
-    unsigned short tmp = 0;
+    unsigned char tmp = 0;
 
 //    f.read( Keywd, MAXKEYWD );
 in_stream >> Keywd;
@@ -974,7 +974,7 @@ int TDataBase::scanfile( int nF, int& fPos, int& fLen,
         {
             len = getrec(recordEntry, inStream, recordHead);
         }
-        catch( TError& xcpt )
+        catch( TError& /*xcpt*/ )
         {	/*
                    if( !vfQuestion( Keywd,
                         " Continue with possible loss of data in \n"
@@ -1015,7 +1015,7 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 
     for(uint j=0; j<nff.GetCount(); j++)
     {
-	int  nRec, nRT; bool isDel;
+	int  nRec, nRT, isDel;
 	int fPos, fLen;
         unsigned char nF = (unsigned char)nff[j];
         // test and open file

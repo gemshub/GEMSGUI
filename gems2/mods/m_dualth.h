@@ -56,9 +56,9 @@ typedef struct
    aStat,  // DualTh analysis status:  0 - indefinite; 1 ready for analysis;
         //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
    PsSYd,  // Save generated SysEq records to data base ( + - )
-PsIPf,    // interaction parameter formalism code (I G R T M V B O)
-PsIPu,    // interaction parameter units code (J K N)
-PsLSF, //   Control flag for least-square param. fitting  { ( N L S B C )}
+   PsIPf,    // interaction parameter formalism code (I G R T M V B O)
+   PsIPu,    // interaction parameter units code (J K N)
+   PsLSF, //   Control flag for least-square param. fitting  { ( N L S B C )}
        // to be extended !
    name[MAXFORMULA],  //  "Name of DualTh task"
    notes[MAXFORMULA] //  "Comments"
@@ -67,17 +67,17 @@ PsLSF, //   Control flag for least-square param. fitting  { ( N L S B C )}
 // input I
    nQ,   // n(Q) - number of experiments (equilibria) in basis sub-system
    La_b, // Lb - number of formula units to set compositions in basis sub-system
-nM,   // n(M) - number of DC (end-member) candidates in non-basis sub-system (default 2)
+   nM,   // n(M) - number of DC (end-member) candidates in non-basis sub-system (default 2)
    Nsd,  // N of references to data sources
    Nqpn, // reserved
    Nqpg, // Number of elements in the math script work arrays qpg per non-basis DC
    Nb,    // N - number of independent components (in basis sub-system, taken
         // from project system dimensions automatically)
-nP,  // Number of interaction parameters in the non-basis mixture (default 1 - regular)
+   nP,  // Number of interaction parameters in the non-basis mixture (default 1 - regular)
 // for generating syseq record keys
    tmd[3],  // SYSTEM CSD definition #: start, end, step (initial)
    NVd[3],  // Restrictions variant #: start, end, step
-*wa_cp  //  [nP] mixing model parameter classifier (for Bayesian LSF)
+   *wa_cp  //  [nP] mixing model parameter classifier (for Bayesian LSF)
    ;
   float
    Pd[3],    // Pressure P, bar: start, end, increment
@@ -104,38 +104,38 @@ nP,  // Number of interaction parameters in the non-basis mixture (default 1 - r
    *Ub,    //  [Q][N] Table of dual solution values for basis sub-systems U(BS)
 
    *chi,   //  [Q][M] Table of mole fractions of DC (end-member) candidates X(BS)
-*eta_b, //  [Q][M] Table of DualTh chemical potentials of n(M) end-members, d-less H(BS)
-*act_n, //  [Q][M] table of DualTh-calculated activities
-*gam_n, //  [Q][M] Table of activity coefficients for DC candidates
-*Coul,  //  [Q][M] Input Coulombic terms for surface complexes (optional)
+   *eta_b, //  [Q][M] Table of DualTh chemical potentials of n(M) end-members, d-less H(BS)
+   *act_n, //  [Q][M] table of DualTh-calculated activities
+   *gam_n, //  [Q][M] Table of activity coefficients for DC candidates
+   *Coul,  //  [Q][M] Input Coulombic terms for surface complexes (optional)
 
-*mu_b,   // [Q][M] Table of DualTh chemical potentials of M end-members (J/mol) M(BS)
+   *mu_b,   // [Q][M] Table of DualTh chemical potentials of M end-members (J/mol) M(BS)
 
-*mu_o,   // [Q][M]  st. state chem. potentials for candidates (or EMPTY if unknown) GoNS
-*avsd_o, // [2][M] mean and st.dev. over mu_o columns (experiments) for DC candidates
-*mu_a,   // [Q][M] Table of estimated st. Gibbs energy function for trace DC candidates G*NS
-*avsd_a, // [2][M] mean and st.dev. over mu_a cols (experiments) for DC candidates
-
-(*gmx_n)[5],  // [Q][5] in J/mol
-         //        Excess Gibbs energy of mixing for Q experiments (col. 0)   G-Ex
-         //        Gibbs energy of ideal mixing for Q experiments (col. 1)    G-ID
-         //        total Gibbs energy of mixing for Q experiments (col. 2)    G-MIX
-         //   Gibbs energy of mechanical mixture for Q experiments ( col. 3)  G-SS-0
-         //   integral Gibbs energy of mixture for Q experiments ( col. 4) 0  G-SS-BS
-*Wa,     // [Q][P] interaction parameters for the mixing model
-*avsd_w, // [2][P] mean and st.dev. over Wa cols (experiments) for DC candidates
+   *mu_o,   // [Q][M]  st. state chem. potentials for candidates (or EMPTY if unknown) GoNS
+   *avsd_o, // [2][M] mean and st.dev. over mu_o columns (experiments) for DC candidates
+   *mu_a,   // [Q][M] Table of estimated st. Gibbs energy function for trace DC candidates G*NS
+   *avsd_a, // [2][M] mean and st.dev. over mu_a cols (experiments) for DC candidates
+   *Wa,     // [Q][P] interaction parameters for the mixing model
+   *avsd_w, // [2][P] mean and st.dev. over Wa cols (experiments) for DC candidates
 // *chisq,  // [P] chisquare values from LSM fits ( to be extended )
 
    *yconst,   //  [Q] Array for constant for LM&SVD regression
    *qpg    //  [Nqpg] Array for gamma calculation math script (interaction params?)
     ;
+
+ double (*gmx_n)[5];  // [Q][5] in J/mol
+         //        Excess Gibbs energy of mixing for Q experiments (col. 0)   G-Ex
+         //        Gibbs energy of ideal mixing for Q experiments (col. 1)    G-ID
+         //        total Gibbs energy of mixing for Q experiments (col. 2)    G-MIX
+         //   Gibbs energy of mechanical mixture for Q experiments ( col. 3)  G-SS-0
+         //   integral Gibbs energy of mixture for Q experiments ( col. 4) 0  G-SS-BS
  float
    *CIb,  // [Q][N] Table of quantity/concentration of IC in basis sub-systems
    *CIn,  // [Q][N] Table of quantity/concentration of IC in non-basis sub-systems
    *CAb,  // [Q][Lb] Table of quantity/concentration of formulae for basis sub-systems
    *CAn,  // [Q][Lb] Table of quantity/concentration of DC formulae for non-basis sub-systems
 
-*An,  // [M][N] stoich matrix for DC (end-member) stoichiometry candidates
+  *An,  // [M][N] stoich matrix for DC (end-member) stoichiometry candidates
 
   *Tdq,   //  [Q]  Temperatures of experiment (allocation depends on PsTPI)
   *Pdq,   //  [Q]  Pressures of experiment
@@ -144,33 +144,33 @@ nP,  // Number of interaction parameters in the non-basis mixture (default 1 - r
  char
    *cExpr,  // Math script text for calculation of mole fractions of DC in non-basis
    *gExpr,  // Math script text for calculation of activity coeffs of DC in non-basis
-   (*sdref)[V_SD_RKLEN], // "List of bibl. refs to data sources" [0:Nsd-1]
-   (*sdval)[V_SD_VALEN],  // "Parameters taken from the respective data sources"[0:Nsd-1]
-   (*nam_b)[MAXIDNAME], // [Q][12] id names of experiments
-   (*nam_n)[MAXIDNAME], // [K][12] id names of DC (end-member) stoichiometry candidates
-(*par_n)[MAXIDNAME], // [P][12] id names of non-ideal parameters
-   (*for_n)[MAXFORMUNITDT], // [K][40] formulae of DC (end-member) stoichiometry candidates
-   (*for_b)[MAXFORMUNITDT], // [Lb][40] formulae for setting basis and non-basis system compositions
-   (*stld)[EQ_RKLEN], // List of SysEq record keys [Q]
 //
    *typ_n, // [K] type code of DC stoichiometry candidates {O M J I S ... }
    *CIclb, // [N] Units of IC quantity/concentration for basis compositions
    *CIcln, // [N] Units of IC quantity/concentration for non-basis compositions
    *AUclb, // [Lb] Units of setting quantities of formula units for basis system composition
-   *AUcln, // [Lb] Units of setting quantities of DC formulae for non-basis system composition
-//
-   (*SBM)[MAXICNAME+MAXSYMB] // Keys (names) of IC
-   ;
+   *AUcln; // [Lb] Units of setting quantities of DC formulae for non-basis system composition
 
+   char (*sdref)[V_SD_RKLEN]; // "List of bibl. refs to data sources" [0:Nsd-1]
+   char (*sdval)[V_SD_VALEN];  // "Parameters taken from the respective data sources"[0:Nsd-1]
+   char (*nam_b)[MAXIDNAME]; // [Q][12] id names of experiments
+   char (*nam_n)[MAXIDNAME]; // [K][12] id names of DC (end-member) stoichiometry candidates
+   char (*par_n)[MAXIDNAME]; // [P][12] id names of non-ideal parameters
+   char (*for_n)[MAXFORMUNITDT]; // [K][40] formulae of DC (end-member) stoichiometry candidates
+   char (*for_b)[MAXFORMUNITDT]; // [Lb][40] formulae for setting basis and non-basis system compositions
+   char (*stld)[EQ_RKLEN]; // List of SysEq record keys [Q]
+//
+   char (*SBM)[MAXICNAME+MAXSYMB]; // Keys (names) of IC
+   
 //work data
  short
    q,      // index of experiment
    i,      // index of IC
-   jm,     // index of non-basis sub-system component
-kp,    // index of the interaction parameter
+   jm,     // index of non-basis sub-system component 
+   kp,    // index of the interaction parameter
    c_tm,         // Current Tm - SYSTEM CSD number
    c_NV,         // Current Nv - MTPARM variant number
-Asiz,      // Current number of rows in the An matrix
+   Asiz,      // Current number of rows in the An matrix
 // LM fitter data
    n_par,  // number of parameters to fit  (<-nP)
    m_dat,  // number of data points to use in fitting (<-nQ)

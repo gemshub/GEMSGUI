@@ -31,7 +31,7 @@ const int MAXPHSYMB =      8,
 
 typedef struct
 {// Description  PHASE
-    char pst[MAXSYMB],       // Phase aggregate state
+  char pst[MAXSYMB],       // Phase aggregate state
     symb[MAXPHSYMB],    // Symbol of phase definition
     nam[MAXPHNAME],     // Name of phase
     cls[MAXSYMB],       // Class of phase
@@ -52,13 +52,14 @@ typedef struct
     name[MAXFORMULA],   // Full name of phase
     notes[MAXFORMULA]   // Comments
     ;
-    short nDC,      // N of DC in phase definition >= 1
+ short nDC,      // N of DC in phase definition >= 1
     Nsd,        //  N of references to Data Sources  <= 4
     ncpN, ncpM, // Dimensions of 'ph_cf' array (to set up on remake) for SIT: cations and anions
     nscN, nscM, // Dimensions of 'dc_cf' array (to set up on remake)
     NsiT,       // N of surface site types (to set up on remake)
     NR1;        // Number of elements per species in MaSdj array (1: old 6: new)
-    float Asur,  // Specific surface area of major component (carrier), m2/g
+
+ float Asur,  // Specific surface area of major component (carrier), m2/g
     Sigma0,// Standard mean surface energy of solid-aqueous interface, J/m2
     SigmaG,// Standard mean surface energy of gas-aqueous interface, J/m2
     R0p,   // Mean radius r0 for (spherical or cylindrical) particles, nm (reserved)
@@ -68,31 +69,33 @@ typedef struct
     Rsp1,  // Default maximum surface density, 1/nm2"
     *FsiT,    //Fraction of surface type relative to carrier (components)[0:NsiT-1]
     *XfIEC,   // Constant surface charge density or IEC, mkeq/g   [NsiT]
-    (*MSDT)[2], // SAT: Max & min density of reacted species, 1/nm2 [NsiT]
-    (*CapT)[2]; // Inner EDL capacitance density, F/m2 (TLM, CCM)
-                // Outer EDL capacitance density, F/m2 (TLM)  [NsiT]
-    char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [nDC][DFCN]
-    float (*MaSdj)[DFCN], // Max. density, CD-music and isotherm params [nDC][NR1]
-*PXres, // Reserved
+    *PXres, // Reserved
     *pnc, //Array of phase-related coefficients of non-ideality model [ncpN][ncpM]
     *scoef;//Array of DC-related coefficients of non-ideality model[nDC][nscN][nscM]
-    char (*SM)[DC_RKLEN], // List of DC record keys included into phase[0:nDC-1]
-    *DCC,   // DC classes { TESWGVCHNIJM<digit>XYZABPQRO}[0:nDC-1]
+  
+  float (*MSDT)[2]; // SAT: Max & min density of reacted species, 1/nm2 [NsiT]
+  float (*CapT)[2]; // Inner EDL capacitance density, F/m2 (TLM, CCM)
+  float (*MaSdj)[DFCN]; // Max. density, CD-music and isotherm params [nDC][NR1]
+                // Outer EDL capacitance density, F/m2 (TLM)  [NsiT]
+  char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [nDC][DFCN]
+  char (*SM)[DC_RKLEN]; // List of DC record keys included into phase[0:nDC-1]
+  char  
+	*DCC,   // DC classes { TESWGVCHNIJM<digit>XYZABPQRO}[0:nDC-1]
     *DCS,   // Source of input data for DC { r d }.d-DCOMP r-REACT[0:nDC-1]
     *SCMC,  /* Class.of EDL models for surf types [0:NsiT-1]*/
     *pEq, // Text of IPN equations related to the whole phase (IIPN syntax)
     *dEq, // Text of IPN equations related to phase components (IIPN syntax)
+    *tprn;               // internal
 
-    (*sdref)[V_SD_RKLEN], // List of Data Sources SDref keys
-    (*sdval)[V_SD_VALEN],  // Comments to Data Sources
+  char (*sdref)[V_SD_RKLEN]; // List of Data Sources SDref keys
+  char (*sdval)[V_SD_VALEN];  // Comments to Data Sources
 
-    *tprn,               // internal
-
-(*lsCat)[MAXDCNAME],       // work object - vector of names of cations
-(*lsAn)[MAXDCNAME];        // work object - vector of names of anions
-    short
-*nxCat,                  // Vector of indexes for cations in SIT coeff table
-*nxAn;                   // vector of indexes for anions  in SIT coeff table
+  char (*lsCat)[MAXDCNAME];       // work object - vector of names of cations
+  char (*lsAn)[MAXDCNAME];        // work object - vector of names of anions
+  
+  short
+   *nxCat,                  // Vector of indexes for cations in SIT coeff table
+   *nxAn;                   // vector of indexes for anions  in SIT coeff table
 }
 
 PHASE;

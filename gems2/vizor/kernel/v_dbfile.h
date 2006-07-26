@@ -138,9 +138,9 @@ public:
     {
         check_dh(), dh->nRec = n;
     }
-    void GetDh( int& fPos, int& fLen, int& nRT, bool& isDel );
+    void GetDh( int& fPos, int& fLen, int& nRT, int& isDel );
     bool GetDhOver();
-    void SetDh( int fLen, int nRec, int nRT, bool isDel );
+    void SetDh( int fLen, int nRec, int nRT, int isDel );
 
     //---  Manipulation files ---
     void Create( unsigned char nRT, bool isDel );

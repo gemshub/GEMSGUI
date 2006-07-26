@@ -51,14 +51,13 @@ typedef struct
     name[MAXGSNAME+1],    // Full name  sampler definition (title)
     comment[MAXGSNAME+1], // comment
     xNames[MAXAXISNAME], // Abscissa name
-    yNames[MAXAXISNAME], // Ordinate name
-    (*lNam)[MAXGRNAME],    // List of ID of lines on Graph
-    (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
-
+    yNames[MAXAXISNAME]; // Ordinate name
+ char (*lNam)[MAXGRNAME];    // List of ID of lines on Graph
+ char (*lNamE)[MAXGRNAME];   // List of ID of lines of empirical data
 
  short NP,NT,  // N of points along P and  N of points along TC
     NV,       // Total N of points
-    Mode,  /* Mode of indexation of T,P vectors: 0- input of P and ’ values
+    Mode,  /* Mode of indexation of T,P vectors: 0- input of P and ?values
      1- increments in cycle on P nested into cycle on T
      2- increments in cycle on T nested into cycle on P
      3- increment of T and P in one cycle*/
@@ -82,10 +81,10 @@ typedef struct
 
  char
      *trpn,
-    (*sdref)[V_SD_RKLEN], // List of SDref keys to data sources
-    (*sdval)[V_SD_VALEN], // Comments on data sources
      *expr,     // Text with IPN-expressions for data sampler
      *exprE;    // Text with IPN-expressions for empirical data (optional)
+ char (*sdref)[V_SD_RKLEN]; // List of SDref keys to data sources
+ char (*sdval)[V_SD_VALEN]; // Comments on data sources
 
  short // work data
     jTP,     // current index
