@@ -192,9 +192,9 @@ template<> const char* TVal<char>::PATTERN_SET()
 // explicit instantiation of the templates
 
 template struct TVal<short>;
-template struct TVal<unsigned short>;
+//template struct TVal<unsigned short>;
 template struct TVal<long>;
-template struct TVal<unsigned long>;
+//template struct TVal<unsigned long>;
 template struct TVal<float>;
 //template class TVal<double>;
 
@@ -232,6 +232,71 @@ TValString::SetString(const char* s, size_t )
     return true;
 }
 
+// transfered from v_vals.h
+
+
+
+
+template<>
+inline
+bool
+TVal<unsigned char>::SetString(const char* s, size_t ndx)
+{
+    gstring ss = s;
+    ss.strip();
+    if( /*ss.empty() ||*/ ss==S_EMPTY )
+    {
+        ((unsigned char*)ptr)[ndx] = EMPTY();
+        return true;
+    }
+
+    if( ss == S_ANY )
+    {
+        ((unsigned char*)ptr)[ndx] = ANY();
+        return true;
+    }
+
+    vstr sv(strlen(s)+1);
+    unsigned short v;
+    if( sscanf(ss.c_str(), "%hu%s", &v, sv.p ) != 1 )
+        return false;
+    if( v > 255 )
+        return false;
+
+    ((unsigned char*)ptr)[ndx] = (unsigned char)v;
+    return true;
+}
+
+
+template<>
+inline
+bool
+TVal<signed char>::SetString(const char* s, size_t ndx)
+{
+    gstring ss = s;
+    ss.strip();
+    if( /*ss.empty() ||*/ ss==S_EMPTY )
+    {
+        ((signed char*)ptr)[ndx] = EMPTY();
+        return true;
+    }
+
+    if( ss == S_ANY )
+    {
+        ((signed char*)ptr)[ndx] = ANY();
+        return true;
+    }
+
+    vstr sv(strlen(s)+1);
+    signed short v;
+    if( sscanf(ss.c_str(), "%hd%s", &v, sv.p ) != 1 )
+        return false;
+    if( v<-127 || v>127 )
+        return false;
+
+    ((signed char*)ptr)[ndx] = (signed char)v;
+    return true;
+}
 
 template<>
 inline
