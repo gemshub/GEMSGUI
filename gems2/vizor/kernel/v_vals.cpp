@@ -234,11 +234,11 @@ TValString::SetString(const char* s, size_t )
 
 // transfered from v_vals.h
 
-
+#ifdef __unix
 
 
 template<>
-inline
+//inline
 bool
 TVal<unsigned char>::SetString(const char* s, size_t ndx)
 {
@@ -269,7 +269,7 @@ TVal<unsigned char>::SetString(const char* s, size_t ndx)
 
 
 template<>
-inline
+//inline
 bool
 TVal<signed char>::SetString(const char* s, size_t ndx)
 {
@@ -297,6 +297,8 @@ TVal<signed char>::SetString(const char* s, size_t ndx)
     ((signed char*)ptr)[ndx] = (signed char)v;
     return true;
 }
+
+#endif 
 
 template<>
 inline
