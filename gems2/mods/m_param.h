@@ -161,11 +161,10 @@ class TProfil : public TCModule
 
     // to compare with old Project
     bool comp_change_all;
-    char
-    (*SFold)[PH_RKLEN],// List of PHASE definition keys [0:Fi-1]             DB
-    (*SMold)[DC_RKLEN],// List of DC definition keys (DCOMP, REACDC) [0:L-1] DB
-    (*SAold)[BC_RKLEN],// List of COMPOS definition keys [0:La-1]            DB
-    (*SBold)[IC_RKLEN];// List of ICOMP record keys (stoichiometry basis)[0:N-1] DB
+    char (*SFold)[PH_RKLEN];// List of PHASE definition keys [0:Fi-1]             DB
+    char (*SMold)[DC_RKLEN];// List of DC definition keys (DCOMP, REACDC) [0:L-1] DB
+    char (*SAold)[BC_RKLEN];// List of COMPOS definition keys [0:La-1]            DB
+    char (*SBold)[IC_RKLEN];// List of ICOMP record keys (stoichiometry basis)[0:N-1] DB
     short *Llold;// L1 vector, shows a number of DC included to each phase [0:Fi-1] DB
     short Nold,     // N of IC, incl. Zz (charge) and Vol (volume)
     Lold,       // L   - of DC - total for all phases
