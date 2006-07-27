@@ -26,6 +26,7 @@
 #include "s_formula.h"
 #include "service.h"
 #include "visor.h"
+#include "num_methods.h"
 
 /*-----------------------------------------------------------------*/
 // Calculates coefficients A0 to A6 of logK=f(T)
@@ -113,7 +114,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     lgK = rcp->Ks[1];
     //AGAIN_CP:
     switch( CE )
-    { // calc on 2- and 3-term param approximation
+    { // calc on 2- and 3-termï¿½param approximation
     case CTM_LGK:  // Here, all logK-f(T) coeffs are given
 //    case CTM_LGX:
         break;
@@ -407,7 +408,7 @@ NEXT:
     if( CM == CTPM_REA )
     {
         Convert_KT_to_Cp( CE );
-        if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWDC )  // added by KD on 16.07.03 
+        if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWDC )  // added by KD on 16.07.03
            Recalc_rDCN( foS  );
     }
     if( CM == CTPM_REA && rc[q].pct[2] == CPM_PCR && rc[q].PrAki != S_OFF )
@@ -1059,7 +1060,7 @@ void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
     }
     /* call interpolations */
     lgK = LagranInterp( rc[q].TCint, rc[q].Pint, rc[q].logK,
-                Pa, aW.WW(p).TC, nP, rc[q].nTp );
+                Pa, aW.WW(p).TC, nP, rc[q].nTp, 1 );
     //  if( lgK > 7777776. )
     //    return 1;
     aW.WW(p).lgK = lgK;
@@ -1080,69 +1081,6 @@ FINITA:
     aW.WW(p).devV =rc[q].Vs[2];
     aW.WW(p).devCp=rc[q].Cps[2];
     return;
-}
-
-/*-----------------------------------------------------------------*/
-// Interpolation over tabulated values (array y) using Lagrange method
-float TReacDC::LagranInterp(float *a, float *x, float *y, float x1,
-                    float x2, int p0, int p1)
-{
-    float s,z,s1[21];
-    int pa, px, i=0, j, j1, k, ja, ja1;
-
-    if (x2 < a[0])
-        Error( GetName(), "E34RErun: x2 less than Tmin!");
-    if(x1 < x[0])
-        Error( GetName(), "E35RErun: x1 less than Pmin!");
-    /*s=0.;*/
-    pa = p1-1;
-    px = p0-1;
-    for(j1=0;j1<p1;j1++)   /*p1 - dimension over T? rows? */
-        if (x2 >= a[j1] && x2 <= a[j1+1])
-            goto m1;
-    //z=x2;
-    goto m2;
-m1:
-    for(i=0;i<p0;i++)      /*p0 - dimension over P? columns? */
-        if(x1 >= x[i] && x1 <= x[i+1])
-            goto m;
-    // z=x1;
-    if(x1 <= x[p0-1])
-        goto m;
-m2:
-    if(x2 <= a[p1-1])
-        goto m;
-m:
-    if(i < p0-px)
-        j=i;
-    else j=p0-px-1;
-    if(j1 >= p1-pa)
-        j1=p1-pa-1;
-    ja1=j1;
-    for(ja=0;ja <= pa; ja++)
-    {
-        s=0.;
-        for(i=0;i<=px;i++)
-        {
-            z=1; //z1=1;
-            for(k=0;k<=px;k++)
-                if(k!=i)
-                    z*=(x1-x[k+j])/(x[i+j]-x[k+j]);
-            s+=y[i+j+(j1)*p0]*z;
-        }
-        s1[ja]=s;
-        j1++;
-    }
-    s=0.;
-    for(i=0;i<=pa;i++)
-    {
-        z=1;
-        for(k=0;k<=pa;k++)
-            if(k!=i)
-                z*=(x2-a[k+ja1])/(a[i+ja1]-a[k+ja1]);
-        s+=s1[i]*z;
-    }
-    return(s);
 }
 
 /*-----------------------------------------------------------------*/

@@ -3,7 +3,7 @@
 //
 // Declaration of TReacDC class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -56,7 +56,7 @@ typedef struct
     form[MAXFORMULA],  // Chemical formula of reaction-defined DC
     *rDC;   // DC codes: n-new r-REACDC d-DCOMP f-fictive
   char (*DCk)[DC_RKLEN];// List of DC keys (names) involved in reaction [0:nDC-1]
-  
+
   short nDC,     // N of DC in reaction, reaction-defined DC is the last one
     NcKt,     // N of nonzero coeffs of logK = f(T) equation
     NcKp,     // N of nonzero coeffs of dVr = f(P,T) equation
@@ -94,7 +94,7 @@ typedef struct
     TCst,    // Reference temperature Tr (?
     Comp,    // Coefficient of isothermal compressibility of reacdef DC
     Expa,    // Coefficient of isobaric expandability of reacdef DC
-    Der,// Ion-size par.a0,A(Debye-Hueckel aq species);ƒmax,1/nm2(sorbates)
+    Der,// Ion-size par.a0,A(Debye-Hueckel aq species);ï¿½max,1/nm2(sorbates)
     DerB;    // Indiv.par. b (for III Debye-Hueckel aq species)
 
   double *scDC; // Stoichiometry coefficients of DC in reaction (reagents < 0)
@@ -148,7 +148,6 @@ protected:
     void calc_akinf_r( int q, int p, int CE, int CV );
     void calc_lgk_r( int q, int p, int CE, int CV );
     void calc_r_interp( int q, int p, int CE, int CV );
-    float LagranInterp(float *a, float *x, float *y, float x1, float x2,  int p0,int p1);
     void calc_dissoc_r( int q, int p, int CE, int CV );
     void calc_iso_a( int q, int p );
     void calc_exion_r( int q, int p );
@@ -185,7 +184,7 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char* key );
     void TryRecInp( const char *key, time_t& time_s, int q );
-    void CmHelp(); 
+    void CmHelp();
 
     void RCthermo( int q, int p );
 

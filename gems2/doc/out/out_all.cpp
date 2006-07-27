@@ -1,3 +1,65 @@
+/*-----------------------------------------------------------------*/
+// Interpolation over tabulated values (array y) using Lagrange method
+/*float TReacDC::LagranInterp(float *a, float *x, float *y, float x1,
+                    float x2, int p0, int p1)
+{
+    float s,z,s1[21];
+    int pa, px, i=0, j, j1, k, ja, ja1;
+
+    if (x2 < a[0])
+        Error( GetName(), "E34RErun: x2 less than Tmin!");
+    if(x1 < x[0])
+        Error( GetName(), "E35RErun: x1 less than Pmin!");
+    pa = p1-1;
+    px = p0-1;
+    for(j1=0;j1<p1;j1++)
+        if (x2 >= a[j1] && x2 <= a[j1+1])
+            goto m1;
+    //z=x2;
+    goto m2;
+m1:
+    for(i=0;i<p0;i++)
+        if(x1 >= x[i] && x1 <= x[i+1])
+            goto m;
+    // z=x1;
+    if(x1 <= x[p0-1])
+        goto m;
+m2:
+    if(x2 <= a[p1-1])
+        goto m;
+m:
+    if(i < p0-px)
+        j=i;
+    else j=p0-px-1;
+    if(j1 >= p1-pa)
+        j1=p1-pa-1;
+    ja1=j1;
+    for(ja=0;ja <= pa; ja++)
+    {
+        s=0.;
+        for(i=0;i<=px;i++)
+        {
+            z=1; //z1=1;
+            for(k=0;k<=px;k++)
+                if(k!=i)
+                    z*=(x1-x[k+j])/(x[i+j]-x[k+j]);
+            s+=y[i+j+(j1)*p0]*z;
+        }
+        s1[ja]=s;
+        j1++;
+    }
+    s=0.;
+    for(i=0;i<=pa;i++)
+    {
+        z=1;
+        for(k=0;k<=pa;k++)
+            if(k!=i)
+                z*=(x2-a[k+ja1])/(a[i+ja1]-a[k+ja1]);
+        s+=s1[i]*z;
+    }
+    return(s);
+}
+*/
 //GTDEMO.cpp
 
 #include "v_print.h"
@@ -385,7 +447,7 @@ EXPR: // load default equations
 
 DCOMP.cpp
 /*--------------------------------------------------------*/
-//Print record to table  - to be revised 
+//Print record to table  - to be revised
 void
 TDComp::_one_rec_prn( TPrintTable& prTab )
 {
@@ -3000,7 +3062,7 @@ void TProfil::SurfaceActivityTerm( int jb, int je, int k )
     double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, ISAT, SAT,
            / OSAT, * SATst, xjn, q1, q2;
 
-    if( pmp->XFA[k] < pmp->DSM ) // No sorbent retained by the IPM 
+    if( pmp->XFA[k] < pmp->DSM ) // No sorbent retained by the IPM
         return;
     if( pmp->XF[k]-pmp->XFA[k] < pmp->lowPosNum /* *10. * )
         return;  /* No surface species *
@@ -3209,5 +3271,5 @@ cout << "     x[jn]= " << pmp->X[j] << " XSk= " << XSk << " XSkC=" << XSkC << " 
             }
         }
     }  /* j *
-}  
+}
 

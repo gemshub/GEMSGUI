@@ -21,6 +21,11 @@
 
 #include <math.h>
 
+double LagranInterp(float *y, float *x, double *d, float yoi,
+                    float xoi, int M, int N, int pp );
+double LagranInterp(float *y, float *x, float *d, float yoi,
+                    float xoi, int M, int N, int pp );
+
 double enorm( int n, double *x );
 int CholeskyDecomposition( int N, double* R, double* X, double* R1  );
 int LUDecomposition( int N, double* A, double* X  );
@@ -30,7 +35,7 @@ int LUDecomposition( int N, double* A, double* X  );
 // Random numbers ==========================================================
 double randuni(double& x); // uniform point
 double randnorm(double& x); // normal point
-// Long period (> 2 × 1018) random number generator of L’Ecuyer with Bays-Durham
+// Long period (> 2 ï¿½ 1018) random number generator of Lï¿½Ecuyer with Bays-Durham
 // shuffle and added safeguards. Returns a uniform random deviate between 0.0 and 1.0
 float ran2(long& idum);
 // According to Knuth, any large MBIG, and any smaller (but still large) MSEED
