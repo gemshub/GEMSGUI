@@ -16,7 +16,7 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 
-//#include <fstream.h>
+#include "v_user.h"
 #include "num_methods.h"
 #include "verror.h"
 
@@ -28,7 +28,7 @@
 //  xoi - column (x) argument of interest ( x[0] <= xi <= x[M-1] )
 //  yoi - row (y) argument of interest  ( y[0] <= yi <= y[N-1] )
 //  N - number of rows in y array;
-//  M - number of columns in y array.\
+//  M - number of columns in y array.
 //  pp  -level of interpolation ( default 1)
 //  Function returns an interpolated value of d(yoi,xoi) or error if
 //  yoi or xoi are out of range
@@ -36,7 +36,7 @@
 double LagranInterp(float *y, float *x, double *d, float yoi,
                     float xoi, int M, int N, int pp )
 {
-    double s=0,z,s1[21];
+    double s,z,s1[21];
     int ppy, ppx, py, px, i, j, k, jx, jy, jy1;
 
     py = N-1;

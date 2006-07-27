@@ -150,7 +150,7 @@ int main( int argc, char* argv[] )
 
 //  Uncomment this to test variable pressures and temperatures
          m_T[in] += (in-1)*5;
-         m_P[in] += (in-1)*20;
+//         m_P[in] += (in-1)*20;
      // Here the file output for the initial conditions can be implemented
    }
 

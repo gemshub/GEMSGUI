@@ -322,16 +322,7 @@ if( binary_mult )
         profil->readMulti(multu_in.c_str());
 #endif
   }
-// output multy
-      gstring strr = "out_multi.ipm";
-      GemDataStream o_m( strr, ios::out|ios::binary);
-#ifdef IPMGEMPLUGIN
-          profil->outMulti(o_m, strr );
-#else
-          TProfil::pm->outMulti(o_m, strr );
-#endif
-
-    return 0;
+   return 0;
 
 #ifdef IPMGEMPLUGIN
     }

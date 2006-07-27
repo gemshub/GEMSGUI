@@ -122,7 +122,9 @@ gems2/mods/filters_data.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/databr.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/datach.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/m_const.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/gemipm/FMT-Bridge/node.h -text
 gems2/mods/gemipm/FMT-Bridge/nodearray.h -text
+gems2/mods/gemipm/FMT-Bridge/particlearray.h -text
 gems2/mods/gemipm/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_lin svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_w32 svn_keywords=Author+Date+Id+Revision
