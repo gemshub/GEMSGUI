@@ -8,9 +8,17 @@ root password for installing the rpm.
 1. Copy or download  gems2-2.0-1.i586.rpm into your home
 directory. To install, type
 
-  rpm -Uvh ./gems2-2.0-1.i586.rpm
+  su
+  
+  and then the root password, when propmted.
+  
+  execute command: 
+  
+  rpm -Uvh ./gems-2.1.1-rc1.x86_64.rpm
 
-and then the root password, when propmted. 
+or, for 32 bit version, 
+
+  rpm -Uvh ./gems-2.1.1-rc1.i586.rpm
 
 The program with distribution directories will be installed in
   /usr/share/gems2. 

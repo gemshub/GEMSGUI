@@ -12,8 +12,8 @@ Name:		%{name}
 Summary: 	Chemistry, geochemistry, Gibbs energy minimization
 Version:	%{version}
 Release:	%{release}
-Copyright:	Distributable
-#License:	GPL
+#Copyright:	Distributable
+License:	Commercial
 Group:		Applications/Engineering
 Source0: 	%{name}-%{version}.tar.bz2
 #BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
