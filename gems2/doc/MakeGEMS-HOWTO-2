@@ -36,12 +36,14 @@ To changer platform use command
 or
   qmake -spec win32-msvc.net gems_qt.pro > out.bat
 
+If you working in platform msvc.net you need delete 
+compiler flags -w34100 and -w34189 from CXXFLAGS
 
 2.The make script is located in /home/sveta/test/gems directory for linux
   or ./Gems2 directory for Windows
 
 From this directory, different modes can be invoked by 
-typing  make <target>
+typing  make <target>    ( nmake for msvc.net )
 
 The parameter <target> may be one of the following:
 
@@ -62,7 +64,7 @@ The parameter <target> may be one of the following:
   dist:     make zip file for sourses
 
 
-####### Build rules for Linux
+####### Build rules for Linux ( make -f Makefile.lin <coomand> )
 
   rpm      create rpm file
 	To prepare:
