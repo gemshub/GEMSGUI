@@ -3,41 +3,40 @@
 Widows, Linux, Mac
 
   
-1. To produce Makefile use command:  
+1. To produce Makefile for compiling debug version, use a command:  
 
    qmake gems_qt.pro 
 
 All settings will be taken from Qt directory and .pro file
-*.pri files contents list of all *.h, *.cpp and *.ui files
+*.pri files contain lists of all *.h, *.cpp and *.ui files
 
 gems_no_qt.pro -   builds a Makefile for compilation without Qt library
-                   After comand, must be deleted all pointers for Qt
+                   In this Makefile, all entries referring to Qt 
+		   must be deleted
   
-gems_qt_lib.pro -  builds a Makefile for compile only Gems Qt library
+gems_qt_lib.pro -  builds a Makefile for compiling only Qt-dependent Gems library
 
-gems_release.pro - builds a Makefile for compile release of Gems2
-                   will make optimized release version of
+gems_release.pro - builds a Makefile to compile a release version of Gems2
                    GEMS without debugging and *.ini read feature;
 		   don't forget to run make clean before doing it
     
  
-
 Supported platforms and compilers:
 
   win32-borland
-  win32-g++
-  win32-icc
+  linux-g++
+  linux-icc
   win32-msvc
   win32-msvc.net
 
-To changer platform use command
+To change platform, use command
 
   qmake -spec win32-borland gems_qt.pro > out.bat
 or
   qmake -spec win32-msvc.net gems_qt.pro > out.bat
 
-If you working in platform msvc.net you need delete 
-compiler flags -w34100 and -w34189 from CXXFLAGS
+If you work in the msvc.net platform, edit Makefile and delete 
+there compiler flags -w34100 and -w34189 from CXXFLAGS
 
 2.The make script is located in /home/sveta/test/gems directory for linux
   or ./Gems2 directory for Windows
@@ -67,15 +66,15 @@ The parameter <target> may be one of the following:
 ####### Build rules for Linux ( make -f Makefile.lin <coomand> )
 
   rpm      create rpm file
-	To prepare:
-	   copy data dirs (GEMS and GEMS.sys) into /usr/src/redhat/i386/BUILD
-	   copy gems source files into /usr/src/redhat/i386/BUILD
-	Type 
-	   'make rpm' (it will compile *optimized* version of gems 
-	               and create rpm)
-	   'rpm -U gems-0.99-4.rpm'
-	   'rpm -e gems'
-	RPM file is in /usr/src/redhat/RPMS/i386 
+#	To prepare:
+#	   copy data dirs (GEMS and GEMS.sys) into /usr/src/redhat/i386/BUILD
+#	   copy gems source files into /usr/src/redhat/i386/BUILD
+#	Type 
+#	   'make rpm' (it will compile *optimized* version of gems 
+#	               and create rpm)
+#	   'rpm -U gems-0.99-4.rpm'
+#	   'rpm -e gems'
+#	RPM file is in /usr/src/redhat/RPMS/i386 
 	  
 	Note: optimized version of GEMS hasn't been tested thoroghly yet
 
@@ -99,5 +98,6 @@ The parameter <target> may be one of the following:
     Note: I would only profile with optimized (at least -O) code,
 	otherwise inline functions not inlined and you get not final picture
 
-1999-2000 (c) Andy Rysin <arysin@yahoo.com>
+1999-2006 (c) Andy Rysin <arysin@yahoo.com>, S.Dmitrieva
+
 

@@ -19,8 +19,8 @@ was successful):
 2. To update the GEMS source code tree:
 
   cd work/gems2
-  setenv CVS_RSH ssh (optional)
-  cvs update <password> 
+#  setenv CVS_RSH ssh (optional)
+  svn update <password> 
 
 3. Build the GEMS executable file: 
 
@@ -40,10 +40,10 @@ It should look like this:
            projects/
       ...
 
-  make copy_data 
-  SD change for ( make -f Makefile.lin copy_data )
+#  make copy_data 
+    make -f Makefile.lin copy_data 
 
-This will refresh configuration files.
+This will refresh the configuration files.
 
 It makes sense to re-read configuration files before 
 producing the rpm package. This needs a graphic desktop
@@ -59,14 +59,20 @@ files are now re-created.
 
 5. To produce a distribution rpm of GEMS-PSI release:
 
-   make rpm
-  SD change for ( make -f Makefile.lin rpm )
+open a terminal and type su <root password>
 
-then you will be prompted to enter the root password. 
+#   make rpm
+    make -f Makefile.lin rpm
 
-This process takes some time. When finished, the 
-distribution package gems2-2.0-1.i386.rpm
+# then you will be prompted to enter the root password. 
+
+This process takes some time. When finished, 
+the distribution package gems-2.1.2-rc3.i586.rpm
 can be copied from /usr/src/packages/RPMS/i586/. 
+
+Alternatively (on 64bit Linux), 
+the distribution package gems-2.1.2-rc3.x86-64.rpm
+can be copied from /usr/src/packages/RPMS/x86-64/. 
 
 6. For installation steps, see INSTALL-linux.txt
 
