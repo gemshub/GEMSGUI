@@ -211,6 +211,8 @@ gems2/mods/s_tpwork.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/databr.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/submod/datach.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/submod/io_arrays.cpp -text
+gems2/mods/submod/io_arrays.h -text
 gems2/mods/submod/ipm_chemical.cpp -text
 gems2/mods/submod/ipm_chemical2.cpp -text
 gems2/mods/submod/ipm_chemical3.cpp -text

@@ -61,6 +61,7 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_H/node.h \
                     $$SUBMOD_H/particlearray.h \
                     $$SUBMOD_H/ms_multi.h \
+	            $$SUBMOD_H/io_arrays.h \
 		    ms_gem2mt.h \
 		    m_const.h \
 		    m_param.h  \
@@ -88,5 +89,6 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_CPP/ipm_chemical3.cpp \
                     $$SUBMOD_CPP/ipm_main.cpp \
                     $$SUBMOD_CPP/ipm_simplex.cpp \
-		    main.cpp \
+		    $$SUBMOD_CPP/io_arrays.cpp \
+                    main.cpp \
 		    ms_param.cpp

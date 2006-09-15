@@ -12,6 +12,7 @@
 		     $$SUBMOD_H/ms_rmults.h \
 		     $$SUBMOD_H/ms_system.h \
                      $$SUBMOD_H/stepwise.h  \
+		     $$SUBMOD_H/io_arrays.h \
                      $$SUBMOD_H/v_smodhand.h
 
         SOURCES	  +=  $$SUBMOD_CPP/ms_rmults.cpp \
@@ -29,6 +30,7 @@
                     $$SUBMOD_CPP/ipm_chemical3.cpp \
                     $$SUBMOD_CPP/ipm_main.cpp \
                     $$SUBMOD_CPP/ipm_simplex.cpp \
+		      $$SUBMOD_CPP/io_arrays.cpp \
                       $$SUBMOD_CPP/nodearray.cpp  \
                       $$SUBMOD_CPP/node.cpp \
                       $$SUBMOD_CPP/node_format.cpp \

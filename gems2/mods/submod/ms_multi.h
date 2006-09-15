@@ -464,6 +464,7 @@ void inArray( fstream& ff, char *name, double* arr, int size );
 void inArray( fstream& ff, char *name, char* arr,
                               int size, int arr_siz );
 
+/*
 void outArray( fstream& ff, char *name, short* arr,
                             int size, int l_size=-1 );
 void outArray( fstream& ff, char *name,  float* arr,
@@ -472,6 +473,6 @@ void outArray( fstream& ff, char *name,  double* arr,
                              int size, int l_size=-1 );
 void outArray( fstream& ff, char *name, char* arr,
                               int size, int arr_siz );
-
+*/
 #endif   //_ms_multi_h
 

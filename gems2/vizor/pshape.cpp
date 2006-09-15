@@ -395,29 +395,26 @@ TPlotWin::dropEvent(QDropEvent* event)
 void
 TPlotWin::mousePressEvent( QMouseEvent *e ) {
    QWidget::mousePressEvent( e );
-/*
-    for(int ii=shapes.GetCount()-1; ii>=0; ii--) {
-      	PText* txtLabel = dynamic_cast<PText*>((PText*)(&shapes[ii]));
-      //  PText* txtLabel = (PText*)(&shapes[ii]);
-	if( txtLabel != 0 && txtLabel->contains(e->pos()) ) {
 
-	    QFontMetrics fm = QPainter(this).fontMetrics();
-	    QPixmap pixmap(fm.width(txtLabel->text())+2, fm.height()+2);
-	    pixmap.fill(backgroundColor());
-	    QPainter dc(&pixmap);
-//	    dc.setBackgroundMode(Qt::TransparentMode);
-	    //dc.setBackgroundColor(Qt::gray);
-	    dc.drawText(0, fm.height(), txtLabel->text());
-	    //txtLabel->paint(dc);
-	    dc.flush();
+     for(int ii=shapes.GetCount()-1; ii>=0; ii--)
+     {
+       PText* txtLabel = dynamic_cast<PText*>((PText*)(&shapes[ii]));
+       if( txtLabel != 0 && txtLabel->text() != "" )
+        if( txtLabel->contains(e->pos()) )
+        {
+         QFontMetrics fm = QPainter(this).fontMetrics();
+         QPixmap pixmap(fm.width(txtLabel->text())+2, fm.height()+2);
+         pixmap.fill(backgroundColor());
+         QPainter dc(&pixmap);
+         dc.drawText(0, fm.height(), txtLabel->text());
+         dc.flush();
 
-	    QTextDrag *drag = new QTextDrag( txtLabel->text(), this );
-	    drag->setPixmap(pixmap, QPoint(0, pixmap.height()));
-	    drag->drag();
-	    break;
+         QTextDrag *drag = new QTextDrag( txtLabel->text(), this );
+         drag->setPixmap(pixmap, QPoint(0, pixmap.height()));
+         drag->drag();
+         break;
 	}
     }
-*/
 }
 
 // ----------------------------------------------
