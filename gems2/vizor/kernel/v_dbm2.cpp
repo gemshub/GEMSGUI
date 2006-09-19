@@ -1032,6 +1032,9 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 
 	gstring tmpFileName = aFile[nF].GetPath() + ".tmp";
 	GemDataStream outStream( tmpFileName, ios::out | ios::binary );
+        for(int ii=0; ii<fPos; ii++ )
+          outStream.put(0);
+
 	outStream.seekp(fPos/*VDBhead::data_size()*/, ios::beg);
 
         nRec = scanfile( nF, fPos, fLen, aFile[nF].f, outStream );

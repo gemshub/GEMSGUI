@@ -298,7 +298,7 @@ TVal<signed char>::SetString(const char* s, size_t ndx)
     return true;
 }
 
-#endif 
+//#endif
 
 template<>
 inline
@@ -315,6 +315,8 @@ TVal<double>::GetString(size_t ndx) const
 
     return vbuf.p;
 }
+#endif 
+
 //--------------------- End of v_vals.cpp ---------------------------
 
 

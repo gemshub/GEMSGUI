@@ -142,7 +142,7 @@ TDBFile::TDBFile(const gstring& fName,
 
 TDBFile::TDBFile(const gstring& path):
         TFile(path),
-        FPosFree(1),
+        FPosFree(-1),
         dh(0),
         sfe(0)
 {

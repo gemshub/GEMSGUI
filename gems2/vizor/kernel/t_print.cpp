@@ -156,6 +156,7 @@ TPrintData::getFormat( const char * fmt )
  // flags: '+' or '-';  width = nn; [.prec]= .nn
  // type_char
  // s	Prints characters until a null-terminator
+ // c	Prints character in "'" == 'c'
  // f	Floating point	signed value of the form [-]dddd.dddd.
  // e	Floating point	signed value of the form [-]d.dddde[+/-]ddd
  // g	Floating point	signed value in either e or f form,
@@ -173,7 +174,7 @@ TPrintData::getFormat( const char * fmt )
     i++;
  while( isdigit(fmt[i]))
     i++;
- if( fmt[i] == 's' || fmt[i] == 'f' ||
+ if( fmt[i] == 's' || fmt[i] == 'c' || fmt[i] == 'f' ||
      fmt[i] == 'e' || fmt[i] == 'g' )
  {
     aFmts.Add( new PFormat( fmt[i], gstring( fmt, 0, i) ) );
@@ -436,7 +437,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
            {  if( dt.is_label )    // set format to output
                  fmt.type = 's';
               else
-               if( fmt.type != 's')
+               if( fmt.type != 's' && fmt.type != 'c' )
                {
                    switch ( aObj[dt.data].GetType() )
                    {
@@ -466,7 +467,7 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                }
                else
                {
-                 if( fmt.type == 's' )
+                 if( fmt.type == 's' || fmt.type == 'c' )
                  {
                    gstring str_data;
                    if( dt.end_sub > 0 && ( aObj[dt.data].GetType() >= 0 ) )
@@ -476,7 +477,11 @@ TPrintData::prnData( fstream& fout, int ind, PFormat& fmt, PData& dt )
                     }
                    else
                      str_data = aObj[dt.data].GetStringEmpty( ind, dt.index_j );
-                   sprintf( strbuf, fmt.FmtOut().c_str(), str_data.c_str() );
+                   if( fmt.type == 's' )
+                    sprintf( strbuf, fmt.FmtOut().c_str(), str_data.c_str() );
+                   else //c
+                    sprintf( strbuf, "'%c'", str_data.c_str()[0] );
+
                   }
                   else // float or double data
                   {

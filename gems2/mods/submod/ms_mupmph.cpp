@@ -513,6 +513,7 @@ void TMulti::multi_sys_ph()
     aPH->ods_link(0);
 
     pmp->Ls = 0;/* load data to phases */
+    pmp->PG = 0;
     pmp->FIs = syp->Fis;
     pmp->FIa = 0;
     pmp->Lads = 0;   // Is this really needed?

@@ -7,34 +7,38 @@ Script for printout of GEM2MT data to gemipm2k module'
 'Paul Scherrer Institute'
 '2006'
 ''
-^^1 1443 0~~
-'line %s "GEM-Selektor v.2-PSI: Definition of a GEM2MT",
+^^1 1634 0~~
+'line %s "#  GEM-Selektor v.2-PSI: Definition of a GEM2MT",
  %12s date, %6s time 
-line %s rkey
-line %s #mtName
-line %s "Mode = ", %s #mtPsfl[0,0]
-line %s "Size = " , %s #mtCIPF[0,0], %s "1",  %s "1"
-line %s "MaxSteps = ", %s #mtnSnE[0]
-line %s "Tau =", %g #mtTau[0,0], %g #mtTau[1,0], %g #mtTau[2,0]
-line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "Grid = ",%s #mtPvfl[0,8] 
-line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "Types=", %s #mtCIPF[0,6] 
-line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "Props= ",%s #mtCIPF[0,7] 
-line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "LSize = ", %g all #mtSzLc
-line %s "fVel=", %g #ADpar[0]
-line %s "cLen=", %g #ADpar[1]
-line %s "tf=", %g #ADpar[2]
-line %s "cdv=", %g #ADpar[3]
-line %s "cez=", %g #ADpar[4]
-line %s "al_in=", %g #ADpar[5]
-line %s "Dif_in=", %g #ADpar[6]
-line %s  "EndConst"
+line %s "# ", %s rkey
+line %s "# ", %s #mtName
+line %s "<Mode>", %c #mtPsfl[0,0]
+line %s "<Size>" , %s #mtCIPF[0,0], %s "1",  %s "1"
+line %s "<MaxSteps>", %s #mtnSnE[0]
+line %s "<Tau>", %g #mtTau[0,0], %g #mtTau[1,0], %g #mtTau[2,0]
+line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "<Grid>",%c #mtPvfl[0,8]
+line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "<Types>", %s #mtCIPF[0,6] 
+line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "<Props>",%s #mtCIPF[0,7] 
+line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##  %s "<LSize>", %g all #mtSzLc
+line %s "<fVel> ", %g #ADpar[0]
+line %s "<cLen> ", %g #ADpar[1]
+line %s "<tf> ", %g #ADpar[2]
+line %s "<cdv> ", %g #ADpar[3]
+line %s "<cez> ", %g #ADpar[4]
+line %s "<al_in> ", %g #ADpar[5]
+line %s "<Dif_in> ", %g #ADpar[6]
+line %s "" 
+line %s  "<EndStatic>"
+line %s "" 
 
+line %s  "<DiCp>"
 line %5s "#", %6s "Init", %6s "Type", 
    %12s "Vt-m**3", %12s "vp-m/sec", %12s "porosity", %12s "Km-m**2", 
    %12s "al-m", %12s "hDl-m**2/s", %12s "nto"
 list #DiCp %5g index, %6g all #DiCp, %12.6g all #HydP
 line %s "" 
 
+line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ## %s  "<NPmean>"
 line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##
    %5s "#", %6s "Mean", %6s "Min", %6s "Max", 
    %6s "ptype", %6s "mmode", %6s "tcode", %6s "ips", %6s "res", %6s "res"
@@ -42,9 +46,10 @@ list #NPmean %5g index, %6g #NPmean, %6g #nPmin ,%6g #nPmax ,
    %6g all #ParTD
 line %s "" 
 
+line ## prn=:mtPvfl[8] <> "-"; ## %s  "<mGrid>"
 line ## prn=:mtPvfl[8] <> "-"; ##  %s "Grid" 
 list #mGrid  %12.6g all #mGrid
-line %s "-----------"
+line %s "# End of file"
 '
 ^^1 1 32~~
 "                                "
