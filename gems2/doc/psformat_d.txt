@@ -31,6 +31,7 @@ Structure of escript&pscript:
  [.prec]= integer from 0 to 14
  type_char
  - s	Prints characters until a null-terminator
+ - c	Prints first character of string in "\'", only for objects (example 'W')
  - f	Floating point	signed value of the form [-]dddd.dddd.
  - e	Floating point	signed value of the form [-]d.dddde[+/-]ddd
  - g	Floating point	signed value in either e or f form,
