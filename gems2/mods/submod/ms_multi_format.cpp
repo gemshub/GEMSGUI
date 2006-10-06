@@ -57,7 +57,7 @@ outField MULTI_static_fields[44] =  {
   { "PSigm" , 1 , 0 },
   { "Lads" , 1 , 0 },
   { "FIa" , 1 , 0 },
-  { "FIt" , 1 , 0 }
+  { "FIat" , 1 , 0 }
 };
 
 outField MULTI_dynamic_fields[27] =  {
@@ -285,8 +285,8 @@ if( _comment )
    ff << left << setw(12) << "<FIa> " <<  right << setw(8) << pmp->FIa << endl;
    if( _comment )
      ff << "# Allowed number of surface types per adsorption phase (default: 6 if FIa > 0)" << endl;
-   ff << left << setw(12) << "<FIt> " <<  right << setw(8) << pmp->FIat << endl << endl;
-//   ff << left << setw(12) << "<FIt> " <<  right << setw(8) << pmp->FIat << endl;
+   ff << left << setw(12) << "<FIat> " <<  right << setw(8) << pmp->FIat << endl << endl;
+//   ff << left << setw(12) << "<FIat> " <<  right << setw(8) << pmp->FIat << endl;
 //   ff << left << setw(12) << "<sitNc> " <<  right << setw(8) << pmp->sitNcat << endl;
 //   ff << left << setw(12) << "<sitNa> " <<  right << setw(8) << pmp->sitNan << endl;
 
@@ -582,7 +582,7 @@ void TMulti::from_text_file_gemipm( const char *path )
               break;
        case 42: rdar.readArray("FIa" , &pmp->FIa, 1);
               break;
-       case 43: rdar.readArray("FIt" , &pmp->FIat, 1);
+       case 43: rdar.readArray("FIat" , &pmp->FIat, 1);
               break;
     }
    nfild = rdar.findNext();

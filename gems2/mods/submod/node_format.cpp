@@ -33,7 +33,7 @@ outField DataBR_fields[51] =  {
   { "NodeStatusFMT",  1, 0 },
   { "NodeStatusCH",  1, 0 },
   { "IterDone",  1, 0 },
-  { "T_",   1, 0 },
+  { "T",   1, 0 },
   { "P",  1, 0 },
   { "Vs",  1, 0 },
   { "Vi",   1, 0 },
@@ -56,7 +56,7 @@ outField DataBR_fields[51] =  {
   { "Kf",   1, 0 },
   { "S",   1, 0 },
   { "Tr",   1, 0 },
-  { "h_",   1, 0 },
+  { "h",   1, 0 },
   { "rho",   1, 0 },
   { "al",   1, 0 },
   { "at",    1, 0 },
@@ -82,10 +82,10 @@ outField DataBR_fields[51] =  {
 };
 
 outField DataCH_static_fields[13] =  {
-  { "nIC_",   1, 0 },
-  { "nDC_",   1, 0 },
-  { "nPH_",   1, 0 },
-  { "nPS_",    1, 0 },
+  { "nIC",   1, 0 },
+  { "nDC",   1, 0 },
+  { "nPH",   1, 0 },
+  { "nPS",    1, 0 },
   { "nDCs",   1, 0 },
   { "nICb",    1, 0 },
   { "nDCb",   1, 0 },
@@ -165,7 +165,7 @@ void TNode::databr_to_text_file( fstream& ff )
       ff << "##Section (scalar-2): Chemical scalar variables" << endl;
    if( _comment )
          ff << "# Temperature T, K" << endl;
-   ff << left << setw(7) << "<T_> " <<  CNode->T << endl;
+   ff << left << setw(7) << "<T> " <<  CNode->T << endl;
    if( _comment )
          ff << "# Pressure P, bar" << endl;
    ff << left << setw(7) << "<P> " <<  CNode->P << endl;
@@ -237,7 +237,7 @@ void TNode::databr_to_text_file( fstream& ff )
    ff << left << setw(7) << "<Tr> " <<  CNode->Tr << endl;
    if( _comment )
        ff << "# actual hydraulic head (hydraulic potential), m" << endl;
-   ff << left << setw(7) << "<h_> " <<  CNode->h << endl;
+   ff << left << setw(7) << "<h> " <<  CNode->h << endl;
    if( _comment )
        ff << "# actual carrier density for density-driven flow, kg/m3" << endl;
    ff << left << setw(7) << "<rho> " <<  CNode->rho << endl;
@@ -457,16 +457,16 @@ void TNode::datach_to_text_file( fstream& ff )
      ff << "\n## (1) Dimensions for memory allocation" << endl;
      ff << "# Number of ICs"<< endl;
   }
-  ff << left << setw(7) << "<nIC_> " <<  CSD->nIC << endl;
+  ff << left << setw(7) << "<nIC> " <<  CSD->nIC << endl;
   if( _comment )
      ff << "# Number of DCs" << endl;
-  ff << left << setw(7) << "<nDC_> " <<  CSD->nDC << endl;
+  ff << left << setw(7) << "<nDC> " <<  CSD->nDC << endl;
   if( _comment )
      ff << "# Number of phases" << endl;
-  ff << left << setw(7) << "<nPH_> " <<  CSD->nPH << endl;
+  ff << left << setw(7) << "<nPH> " <<  CSD->nPH << endl;
   if( _comment )
      ff << "# Number of phases-solutions" << endl;
-  ff << left << setw(7) << "<nPS_> " <<  CSD->nPS << endl;
+  ff << left << setw(7) << "<nPS> " <<  CSD->nPS << endl;
   if( _comment )
      ff << "# Number of DCs in phases-solutions" << endl;
   ff << left << setw(7) << "<nDCs> " <<  CSD->nDCs << endl;

@@ -106,8 +106,12 @@ void TReadArrays::reset()
 short TReadArrays::findFld( const char *Name )
 {
  short ii;
+ gstring str = Name;
+ size_t len = str.find('>');
+ str = str.substr(0, len );
+
  for( ii=0; ii < numFlds; ii++ )
-  if( !( memcmp( flds[ii].name, Name, strlen(flds[ii].name))) )
+  if( !( strcmp( flds[ii].name, str.c_str() ) ))
     return ii;
  return -1;
 }
