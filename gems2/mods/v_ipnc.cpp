@@ -26,7 +26,7 @@
 char* DIGIT="0123456789.";
 char* OPER="!^*/+-<a>b=c&|()";
 char* RAZD=" +-*/^:[]();=$&|!<>?#";
-const int FuncNumber=27; // number of functions
+const int FuncNumber=28; // number of functions
 
 double derf(double x);
 double derfc(double x);
@@ -63,6 +63,7 @@ static FUNCTION fun[] = {
     { "atan", '\0', D_, 1, 1 },
     { "erf", '\0', D_, 1, 1 },
     { "erfc", '\0', D_, 1, 1 },
+    { "empty", '\0', D_, 0, 1 },
     { "mod", '\0', I_, 2, 1 },
     { "SUM", '\0', D_, 1, 0 },
     { "PROD", '\0', D_, 1, 0 },
@@ -179,7 +180,7 @@ void IPNCalc::InDigit()
     Push( IT_C, con_add(d) );
 }
 
-// skip gstring const "<á¨¬¢®«ë>", in struct put
+// skip gstring const "<á¨¬ï¿½ï¿½ï¿½ï¿½>", in struct put
 // ascii code of the first character in gstring
 void IPNCalc::IsAscii()
 {
@@ -225,10 +226,23 @@ void IPNCalc::Ffun( char *str)
     }
     if( fun[i].par ) // argument is expression
     {
-        for( j=0; j<( fun[i].arn )-1; j++ )
+       if( fun[i].arn == 0 )
+       {
+         if( *input != ')' )
+         {
+           err = "Function ";
+           err += str;
+           err+= "has not parameters.";
+           Error( "E26MSTran: ", err.c_str() );
+         }
+         input++;
+       }
+       else
+       {  for( j=0; j<( fun[i].arn )-1; j++ )
             RPN_expr( ',');
-        RPN_expr( ')');
-        Push( IT_F, i);
+          RPN_expr( ')');
+       }
+       Push( IT_F, i);
     }
     else
     { // argument is interval
@@ -548,16 +562,18 @@ void IPNCalc::bildIf()
     // unconditional jump to equation
     eq_add(  0, aItm.GetCount() );  // 	eq[Neqs].first = Nitems;
     it2 = aItm.GetCount();
-    Push( IT_B, aEq.GetCount()+1 );
+    Push( IT_B, aEq.GetCount()/*+1*/ ); // 27/11/2006 SD
     eq_add( aItm.GetCount() );
     aItm[it].num = aEq.GetCount();
     if( ((input=xblanc( input ))!=0) && !strncmp( input,"else", 4 ))
     { // condition else
         input+=4;
-        // conditional jump to equation
+/* Sveta 27/11/2006
+// conditional jump to equation
         eq_add(  0, aItm.GetCount() );  // 	eq[Neqs].first = Nitems;
         Push( IT_W, aEq.GetCount()+1 );
         eq_add( aItm.GetCount());
+*/
         // analyse before  'end'
         if( ( input=xblanc( input ))==0 ) goto OSH;
         if( strncmp( input,"begin", 5 ))
@@ -575,10 +591,12 @@ void IPNCalc::bildIf()
             Error(  "E32MSTran: ", err.c_str() );
         }
         input+=3;
-        // unconditional jump to equation
+/*  Sveta 27/11/2006
+  // unconditional jump to equation
         eq_add(  0, aItm.GetCount() );  // 	eq[Neqs].first = Nitems;
-        Push( IT_W, aEq.GetCount()+1 );
+        Push( IT_W, aEq.GetCount()+1 ); // 27/11/2006 SD
         eq_add( aItm.GetCount());
+*/
         /*eq[Neqs].first = Nitems;
           Push( IT_B, Neqs+1 );
           eq_add();*/
@@ -825,7 +843,7 @@ void IPNCalc::CalcEquat()
         if( ci == IT_W )  // conditional jump to equation
         {
             ErrorIf( ni<ieq, "E01MSExec", "Illegal conditional goto command");
-            if( fabs( aObj[o_k_].Get() ) < 1e-10 )
+            if( fabs( aObj[o_k_].Get() ) < 1e-34 )
                 ieq = ni;
             else ieq++;
             continue;
@@ -963,7 +981,8 @@ void IPNCalc::CalcEquat()
                 aStack.Add( aCon[ni] );
                 break;
             case IT_F :
-                ErrorIf( aStack.GetCount()<1, "E23MSExec",
+                if( ni != empty_f )
+                  ErrorIf( aStack.GetCount()<1, "E23MSExec",
                          "No operands left in execution stack.");
                 switch( ni )
                 {
@@ -1040,6 +1059,9 @@ void IPNCalc::CalcEquat()
                 case erfc_f :
                     StackEnd(0) = derfc( StackEnd(0) );
                     break;
+                case empty_f :
+                       aStack.Add( DOUBLE_EMPTY );
+                     break;
                 case mod_f  :
                     ErrorIf( StackEnd(0)==0||aStack.GetCount()<2,
                              "E12MSExec","Missing mod() argument(s).");
@@ -1234,11 +1256,11 @@ double derfc(double x)
         0.0161315329733252248) * u + 0.0390976845588484035) * u +
         0.00249367200053503304;
     y = ((((((((((((y * u - 0.0838864557023001992) * u -
-        0.119463959964325415) * u + 0.0166207924969367356) * u + 
+        0.119463959964325415) * u + 0.0166207924969367356) * u +
         0.357524274449531043) * u + 0.805276408752910567) * u +
         1.18902982909273333) * u + 1.37040217682338167) * u +
-        1.31314653831023098) * u + 1.07925515155856677) * u + 
-        0.774368199119538609) * u + 0.490165080585318424) * u + 
+        1.31314653831023098) * u + 1.07925515155856677) * u +
+        0.774368199119538609) * u + 0.490165080585318424) * u +
         0.275374741597376782) * t * exp(-x * x);
     return x < 0 ? 2 - y : y;
 }

@@ -75,7 +75,7 @@ class IPNCalc
         abs_f, sign_f, exp_f, sqrt_f, ln_f,
         lg_f, sin_f, sinh_f, cos_f, cosh_f, tan_f, tanh_f,
         ceil_f, floor_f, round_f, asin_f, acos_f, atan_f,
-        erf_f, erfc_f,
+        erf_f, erfc_f, empty_f,
         mod_f, sum_f, prod_f, max_f, min_f, null_f, one_f
     };
 
