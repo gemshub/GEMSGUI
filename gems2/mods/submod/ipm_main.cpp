@@ -225,6 +225,7 @@ pVisor->Update( false );
 //Calc equstat method IPM (iterations)
 void TMulti::MultiCalcIterations()
 {
+
     MultiCalcMain();
 
     //calc demo data

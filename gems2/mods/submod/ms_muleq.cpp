@@ -408,6 +408,14 @@ void TMulti::MultiCalcInit( const char *key )
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
         MultiRemake( key );
 
+        /* calc mass of system */
+        pmp->MBX = 0.0;
+        for(int i=0; i<pmp->N; i++ )
+        {
+            pmp->MBX += pmp->B[i] * (double)pmp->Awt[i];
+        }
+        pmp->MBX /= 1000.;
+
     // unpackSysEq record
     if( pmp->pESU /*== 1*/ && pmp->pNP )     // problematic statement !!!!!!!!!
     {

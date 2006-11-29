@@ -13,71 +13,35 @@ bool _comment = true;
 
 //===================================================================
 
-outField MULTI_static_fields[44] =  {
-  { "pa_DB" , 0, 0 },
-  { "pa_DHB", 0 , 0 },
-  { "pa_EPS" , 0 , 0 },
-  { "pa_DK", 0 , 0 },
-  { "pa_DF" , 0 , 0 },
-  { "pa_DP", 0 , 0 },
-  { "pa_IIM", 0 , 0 },
-  { "pa_PD" , 0 , 0 },
-  { "pa_PRD" , 0 , 0 },
-  { "pa_AG" , 0 , 0 },
-  { "pa_DGC" , 0 , 0 },
-  { "pa_PSM" , 0 , 0 },
-  { "pa_GAR" , 0 , 0 },
-  { "pa_GAH" , 0 , 0 },
-  { "pa_DS", 0 , 0 },
-  { "pa_XwMin" , 0 , 0 },
-  { "pa_ScMin", 0 , 0 },
-  { "pa_DcMin" , 0 , 0 },
-  { "pa_PhMin" , 0 , 0 },
-  { "pa_ICmin" , 0 , 0 },
-  { "pa_PC" , 0 , 0 },
-  { "pa_DFM" , 0 , 0 },
-  { "pa_DFYw" , 0 , 0 },
-  { "pa_DFYaq" , 0 , 0 },
-  { "pa_DFYid" , 0 , 0 },
-  { "pa_DFYr" , 0 , 0 },
-  { "pa_DFYh" , 0 , 0 },
-  { "pa_DFYc" , 0 , 0 },
-  { "pa_DFYs", 0 , 0 },
-  { "pa_DW", 0 , 0 },
-  { "pa_DT", 0 , 0 },
-  { "pa_GAS", 0 , 0 },
-  { "pa_DNS" , 0 , 0 },
-  { "pa_IEPS" , 0 , 0 },
-  { "pKin" , 1 , 0 },
-  { "pa_DKIN" , 0 , 0 },
+outField MULTI_static_fields[8] =  {
   { "pa_PE" , 0 , 0 },
-  { "PV" , 1 , 0 },
-  { "PSOL" , 1 , 0 },
-  { "PAalp" , 1 , 0 },
-  { "PSigm" , 1 , 0 },
-  { "Lads" , 1 , 0 },
-  { "FIa" , 1 , 0 },
-  { "FIat" , 1 , 0 }
+  { "PV" , 0 , 0 },
+  { "PSOL" , 0 , 0 },
+  { "PAalp" , 0 , 0 },
+  { "PSigm" , 0 , 0 },
+  { "Lads" , 0 , 0 },
+  { "FIa" , 0 , 0 },
+  { "FIat" , 0 , 0 }
 };
 
-outField MULTI_dynamic_fields[27] =  {
+outField MULTI_dynamic_fields[63] =  {
 //read dynamic values from txt file
    {  "sMod", 1 , 0 },
    {  "LsMod", 1 , 0 },
    {  "LsMdc", 1 , 0 },
    {  "B", 1 , 0 },
-   {  "DCCW", 1 , 0 },
-   {  "Pparc", 1 , 0 },
-   {  "GEX", 1 , 0 },
-   {  "lnGmf", 1 , 0 },
-   {  "RLC", 1 , 0 },
-   {  "RSC", 1 , 0 },
-   {  "DLL", 1 , 0 },
-   {  "DUL", 1 , 0 },
-   {  "Aalp", 1 , 0 },
-   {  "Sigw", 1 , 0 },
-   {  "Sigg", 1 , 0 },
-   {  "YOF", 1 , 0 },
+   {  "DCCW", 0 , 0 }, // plase holder
+   {  "Pparc", 0 , 0 },
+   {  "GEX", 0 , 0 },
+   {  "lnGmf", 0 , 0 },
+   {  "RLC", 0 , 0 },
+   {  "RSC", 0 , 0 },
+   {  "DLL", 0 , 0 },
+   {  "DUL", 0 , 0 },
+   {  "Aalp", 0 , 0 },
+   {  "Sigw", 0 , 0 },
+   {  "Sigg", 0 , 0 },
+   {  "YOF", 0 , 0 },
    {  "Nfsp", 1 , 0 },
    {  "MASDT", 1 , 0 },
    {  "C1", 1 , 0 },
@@ -88,7 +52,44 @@ outField MULTI_dynamic_fields[27] =  {
    {  "MASDJ", 1 , 0 },
    {  "SCM", 1 , 0 },
    {  "SACT", 1 , 0 },
-   {  "DCads", 1 , 0 }
+   {  "DCads", 1 , 0 },
+   // static
+   { "pa_DB" , 0, 0 },
+   { "pa_DHB", 0 , 0 },
+   { "pa_EPS" , 0 , 0 },
+   { "pa_DK", 0 , 0 },
+   { "pa_DF" , 0 , 0 },
+   { "pa_DP", 0 , 0 },
+   { "pa_IIM", 0 , 0 },
+   { "pa_PD" , 0 , 0 },
+   { "pa_PRD" , 0 , 0 },
+   { "pa_AG" , 0 , 0 },
+   { "pa_DGC" , 0 , 0 },
+   { "pa_PSM" , 0 , 0 },
+   { "pa_GAR" , 0 , 0 },
+   { "pa_GAH" , 0 , 0 },
+   { "pa_DS", 0 , 0 },
+   { "pa_XwMin" , 0 , 0 },
+   { "pa_ScMin", 0 , 0 },
+   { "pa_DcMin" , 0 , 0 },
+   { "pa_PhMin" , 0 , 0 },
+   { "pa_ICmin" , 0 , 0 },
+   { "pa_PC" , 0 , 0 },
+   { "pa_DFM" , 0 , 0 },
+   { "pa_DFYw" , 0 , 0 },
+   { "pa_DFYaq" , 0 , 0 },
+   { "pa_DFYid" , 0 , 0 },
+   { "pa_DFYr" , 0 , 0 },
+   { "pa_DFYh" , 0 , 0 },
+   { "pa_DFYc" , 0 , 0 },
+   { "pa_DFYs", 0 , 0 },
+   { "pa_DW", 0 , 0 },
+   { "pa_DT", 0 , 0 },
+   { "pa_GAS", 0 , 0 },
+   { "pa_DNS" , 0 , 0 },
+   { "pa_IEPS" , 0 , 0 },
+   { "pKin" , 0 , 0 },
+   { "pa_DKIN" , 0 , 0 }
 };
 
 
@@ -129,9 +130,60 @@ if( _comment )
 }
   ff << "\"" << pmp->stkey << "\"" << endl << endl;
 
+if( _comment )
+{  ff << "## (1) Important flags that affect memory allocation" << endl;
+   ff << "# PE: Flag for using electroneutrality condition in GEM IPM calculations " << endl;
+}
+   ff << left << setw(12) << "<pa_PE> " <<  right << setw(8) << pa->p.PE << endl;
+//   ff << "# 'E'                1" << endl;
+//   ff << left << setw(12) << "<E> " <<  right << setw(8) << pmp->E << endl;
+   if( _comment )
+     ff << "\n# PV: Flag for the volume balance constraint (on Vol IC)" << endl;
+   ff << left << setw(12) << "<PV> " <<  right << setw(8) << pmp->PV << endl;
+//   ff << "# These dimensions can be calculated from the DATACH information" << endl;
+//   ff << "# 'Ls'              23" << endl;
+//   ff << "# 'LO'              18" << endl;
+//   ff << "# 'PG'               4" << endl;
+//   ff << left << setw(12) << "<Ls> " <<  right << setw(8) << pmp->Ls << endl;
+//   ff << left << setw(12) << "<LO> " <<  right << setw(8) << pmp->LO << endl;
+//   ff << left << setw(12) << "<PG> " <<  right << setw(8) << pmp->PG << endl;
+   if( _comment )
+       ff << "\n# PSOL: Total number of DCs in liquid hydrocarbon phases" << endl;
+   ff << left << setw(12) << "<PSOL> " <<  right << setw(8) << pmp->PSOL << endl;
+//   ff << "# Do not know if this stuff is really necessary" << endl;
+//   ff << "# 'GWAT'         55.51" << endl;
+//   ff << "# 'EpsW'       78.2451" << endl;
+//   ff << "# 'RoW'       0.997061" << endl << endl;
+//   ff << left << setw(12) << "<GWAT> " <<  right << setw(8) << pmp->GWAT << endl;
+//   ff << left << setw(12) << "<EpsW> " <<  right << setw(8) << EpsW << endl;
+//   ff << left << setw(12) << "<RoW>  " <<  right << setw(8) << RoW << endl;
+   if( _comment )
+     ff << "\n# PAalp: Flag for using (+) or ignoring (-) specific surface areas of phases " << endl;
+   ff << left << setw(12) << "<PAalp> " <<  right << setw(6) <<
+      "\'" << PAalp << "\'" << endl;
+   if( _comment )
+    ff << "\n# PSigm: Flag for using (+) or ignoring (-) specific surface free energies of phase interfaces " << endl;
+   ff << left << setw(12) << "<PSigm> " <<  right << setw(6) <<
+      "\'" << PSigm << "\'" << endl;
+if( _comment )
+{  ff << "\n## (2) Important dimensionalities that affect memory allocation" << endl;
+   ff << "# Lads: Total number of dependent components in sorption phases included in this system" << endl;
+}
+ff << left << setw(12) << "<Lads> " <<  right << setw(8) << pmp->Lads << endl;
+if( _comment )
+  ff << "# FIa: Number of sorption phases included in this system" << endl;
+ff << left << setw(12) << "<FIa> " <<  right << setw(8) << pmp->FIa << endl;
+if( _comment )
+  ff << "# FIat: Allowed number of surface types per adsorption phase (default: 6 if FIa > 0)" << endl;
+ff << left << setw(12) << "<FIat> " <<  right << setw(8) << pmp->FIat << endl << endl;
+//   ff << left << setw(12) << "<FIat> " <<  right << setw(8) << pmp->FIat << endl;
+//   ff << left << setw(12) << "<sitNc> " <<  right << setw(8) << pmp->sitNcat << endl;
+//   ff << left << setw(12) << "<sitNa> " <<  right << setw(8) << pmp->sitNan << endl;
+ff << "\n<END_DIM>\n\n";
+
 // static data not affected by dimensionalities
   if( _comment )
-  { ff << "## (1) Controls of the numerical behavior of the GEM IPM algorithm" << endl;
+  { ff << "## (3) Controls of the numerical behavior of the GEM IPM algorithm" << endl;
     ff << "#      - Need to be changed only in rare special cases" << endl;
     ff << "# DB - Minimum amount of independent component in bulk composition (except charge Zz), moles" << endl;
   }
@@ -244,60 +296,12 @@ if( _comment )
    ff << left << setw(12) << "<pa_DKIN> " <<  right << setw(8) << pa->p.DKIN << endl;
 //   ff << "# 'pa_PLLG'          0 used only in GEMS-PSI shell" << endl;
 //   ff << left << setw(12) << "<pa_PLLG> " <<  right << setw(8) << pa->p.PLLG << endl;
-   if( _comment )
-     ff << "\n# PE: Flag for using electroneutrality condition in GEM IPM calculations " << endl;
-   ff << left << setw(12) << "<pa_PE> " <<  right << setw(8) << pa->p.PE << endl;
-//   ff << "# 'E'                1" << endl;
-//   ff << left << setw(12) << "<E> " <<  right << setw(8) << pmp->E << endl;
-   if( _comment )
-     ff << "\n# PV: Flag for the volume balance constraint (on Vol IC)" << endl;
-   ff << left << setw(12) << "<PV> " <<  right << setw(8) << pmp->PV << endl;
-//   ff << "# These dimensions can be calculated from the DATACH information" << endl;
-//   ff << "# 'Ls'              23" << endl;
-//   ff << "# 'LO'              18" << endl;
-//   ff << "# 'PG'               4" << endl;
-//   ff << left << setw(12) << "<Ls> " <<  right << setw(8) << pmp->Ls << endl;
-//   ff << left << setw(12) << "<LO> " <<  right << setw(8) << pmp->LO << endl;
-//   ff << left << setw(12) << "<PG> " <<  right << setw(8) << pmp->PG << endl;
-   if( _comment )
-       ff << "\n# PSOL: Total number of DCs in liquid hydrocarbon phases" << endl;
-   ff << left << setw(12) << "<PSOL> " <<  right << setw(8) << pmp->PSOL << endl;
-//   ff << "# Do not know if this stuff is really necessary" << endl;
-//   ff << "# 'GWAT'         55.51" << endl;
-//   ff << "# 'EpsW'       78.2451" << endl;
-//   ff << "# 'RoW'       0.997061" << endl << endl;
-//   ff << left << setw(12) << "<GWAT> " <<  right << setw(8) << pmp->GWAT << endl;
-//   ff << left << setw(12) << "<EpsW> " <<  right << setw(8) << EpsW << endl;
-//   ff << left << setw(12) << "<RoW>  " <<  right << setw(8) << RoW << endl;
-   if( _comment )
-     ff << "\n# PAalp: Flag for using (+) or ignoring (-) specific surface areas of phases " << endl;
-   ff << left << setw(12) << "<PAalp> " <<  right << setw(6) <<
-      "\'" << PAalp << "\'" << endl;
-   if( _comment )
-    ff << "\n# PSigm: Flag for using (+) or ignoring (-) specific surface free energies of phase interfaces " << endl;
-   ff << left << setw(12) << "<PSigm> " <<  right << setw(6) <<
-      "\'" << PSigm << "\'" << endl;
-if( _comment )
-{  ff << "\n## (2) Important dimensionalities that affect memory allocation" << endl;
-   ff << "# Lads: Total number of dependent components in sorption phases included in this system" << endl;
-}
-ff << left << setw(12) << "<Lads> " <<  right << setw(8) << pmp->Lads << endl;
-if( _comment )
-  ff << "# FIa: Number of sorption phases included in this system" << endl;
-ff << left << setw(12) << "<FIa> " <<  right << setw(8) << pmp->FIa << endl;
-if( _comment )
-  ff << "# FIat: Allowed number of surface types per adsorption phase (default: 6 if FIa > 0)" << endl;
-ff << left << setw(12) << "<FIat> " <<  right << setw(8) << pmp->FIat << endl << endl;
-//   ff << left << setw(12) << "<FIat> " <<  right << setw(8) << pmp->FIat << endl;
-//   ff << left << setw(12) << "<sitNc> " <<  right << setw(8) << pmp->sitNcat << endl;
-//   ff << left << setw(12) << "<sitNa> " <<  right << setw(8) << pmp->sitNan << endl;
-ff << "\n<EndStatic>\n\n";
 
 //dynamic arrays
 if( pm.FIs > 0 && pm.Ls > 0 )
 {
   if( _comment )
-  {   ff << "## (3) Initial data for multicomponent phases (see DATACH file for dimension nPHs)" << endl;
+  {   ff << "\n## (4) Initial data for multicomponent phases (see DATACH file for dimension nPHs)" << endl;
       ff << "# sMod: Codes for mixing models of multicomponent phases";
   }
   prar.writeArray(  "sMod", pmp->sMod[0], pmp->FIs, 6 );
@@ -331,17 +335,14 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    }
   }
   if( _comment )
-  {  ff << "\n\n## (4) Some data arrays which are not provided in DATACH and DATABR files" << endl;
+  {  ff << "\n\n## (5) Some data arrays which are not provided in DATACH and DATABR files" << endl;
      ff << "# B: Full total bulk composition of the initial system (vector b) - see DATACH file for dimension nIC";
   }
   prar.writeArray(  "B", pmp->B,  pmp->N);
-   if( _comment )
+  if( _comment )
    {  ff << "\n\n# Initial data for DCs - see DATACH file for dimensions nDC, nDCs" << endl;
-      ff << "# DCCW: generic DC class codes (asymmetric, solvent, ideal, single)";
+      ff << "# Pparc: Partial pressures (fugacities) of dependent components";
    }
-  prar.writeArray(  "DCCW", pmp->DCCW,  pmp->L, 1);
-   if( _comment )
-      ff << "\n\n# Pparc: Partial pressures (fugacities) of dependent components";
   prar.writeArray(  "Pparc", pmp->Pparc,  pmp->L);
  //  ff << "\n\n# This is not necessary - can be calculated from G0 ???????????";
  // prar.writeArray(  "G0", pmp->G0,  pmp->L);
@@ -358,7 +359,7 @@ if( pm.FIs > 0 && pm.Ls > 0 )
  //   prar.writeArray(  "EZ", pmp->EZ,  pmp->L);
 //   }
    if( _comment )
-   {  ff << "\n\n# (5) Section for metastability/ kinetic constraints" << endl;
+   {  ff << "\n\n# (6) Section for metastability/ kinetic constraints" << endl;
       ff << "# RLC: Codes of metastability/kinetic constraints for DCs";
    }
   prar.writeArray(  "RLC", pmp->RLC, pmp->L, 1 );
@@ -372,7 +373,7 @@ if( pm.FIs > 0 && pm.Ls > 0 )
      ff << "\n\n# DUL: Vector of upper metastability constraints on DC amounts in the system";
   prar.writeArray(  "DUL", pmp->DUL,  pmp->L);
    if( _comment )
-   {  ff << "\n\n# (6) Initial data for phases" << endl;
+   {  ff << "\n\n# (7) Initial data for phases" << endl;
       ff << "\n# Aalp: Specific surface areas of phases (whole list), set 0 if unknown";
    }
   prar.writeArray(  "Aalp", pmp->Aalp,  pmp->FI);
@@ -391,7 +392,7 @@ if( pm.FIs > 0 && pm.Ls > 0 )
    if( pm.FIat > 0 && /*pm.Lads > 0 &&Sveta 12/09/99*/ pm.FIs > 0 )
     { /* ADSORPTION AND ION EXCHANGE */
       if( _comment )
-      {  ff << "\n\n# (7) Initial data for sorption" << endl;
+      {  ff << "\n\n# (8) Initial data for sorption" << endl;
          ff << "\n# Nfsp: Function of sorbent surface allocated to surface types";
       }
      prar.writeArray(  "Nfsp", &pmp->Nfsp[0][0], pmp->FIs*pmp->FIat, pmp->FIat);
@@ -469,7 +470,9 @@ void TMulti::from_text_file_gemipm( const char *path )
   memset( &pm.N, 0, 38*sizeof(short));
   memset( &pm.TC, 0, 55*sizeof(double));
   // get sizes from DATACH
-  pmp->TC = pmp->P = 0;
+  pmp->TC = pmp->TCc = 25.;
+  pmp->T = pmp->Tc =298.15;
+  pmp->P = pmp->Pc = 1.;
   pmp->N = pmp->NR = dCH->nIC;
   pmp->L = dCH->nDC;
   pmp->FI = dCH->nPH;
@@ -483,12 +486,23 @@ void TMulti::from_text_file_gemipm( const char *path )
     if( dCH->ccPH[ii] == 'g' || dCH->ccPH[ii] == 'p' || dCH->ccPH[ii] == 'f')
       pmp->PG = dCH->nDCinPH[ii];
   }
+  // setup default constants
+  pa->p.PE =  pmp->E = 1;
+  pmp->PV = 0;
+  pmp->PSOL = 0;
+  PAalp = '+';
+  PSigm = '+';
+  pmp->Lads = 0;
+  pmp->FIa = 0;
+  pmp->FIat = 0; //6
+  pmp->PLIM  = 1;
+
   // read sizes and constants from txt file
   fstream ff( path, ios::in );
   ErrorIf( !ff.good() , path, "Fileopen error");
 
 // static data
-   TReadArrays  rdar( 44, MULTI_static_fields, ff);
+   TReadArrays  rdar( 8, MULTI_static_fields, ff);
    gstring str;
    rdar.skipSpace();
    f_getline( ff, str, '\n');
@@ -498,94 +512,23 @@ void TMulti::from_text_file_gemipm( const char *path )
    while( nfild >=0 )
    {
      switch( nfild )
-     { case 0: rdar.readArray( "pa_DB" , &pa->p.DB, 1);
-               break;
-       case 1: rdar.readArray("pa_DHB", &pa->p.DHB, 1);
-               break;
-       case 2: rdar.readArray("pa_EPS" , &pa->p.EPS, 1);
-               break;
-       case 3: rdar.readArray("pa_DK" , &pa->p.DK, 1);
-               break;
-       case 4: rdar.readArray("pa_DF" , &pa->p.DF, 1);
-               break;
-       case 5: rdar.readArray("pa_DP", &pa->p.DP, 1);
-               break;
-       case 6: rdar.readArray("pa_IIM", &pa->p.IIM, 1);
-               break;
-       case 7: rdar.readArray("pa_PD" , &pa->p.PD, 1);
-               break;
-       case 8: rdar.readArray("pa_PRD" , &pa->p.PRD, 1);
-               break;
-       case 9: rdar.readArray("pa_AG" , &pa->p.AG, 1);
-               break;
-       case 10: rdar.readArray("pa_DGC" , &pa->p.DGC, 1);
-               break;
-       case 11: rdar.readArray("pa_PSM" , &pa->p.PSM, 1);
-               break;
-       case 12: rdar.readArray("pa_GAR" , &pa->p.GAR, 1);
-              break;
-       case 13: rdar.readArray("pa_GAH" , &pa->p.GAH, 1);
-              break;
-       case 14: rdar.readArray("pa_DS", &pa->p.DS, 1);
-              break;
-       case 15: rdar.readArray("pa_XwMin" , &pa->p.XwMin, 1);
-              break;
-       case 16: rdar.readArray("pa_ScMin" , &pa->p.ScMin, 1);
-              break;
-       case 17: rdar.readArray("pa_DcMin" , &pa->p.DcMin, 1);
-              break;
-       case 18: rdar.readArray("pa_PhMin" , &pa->p.PhMin, 1);
-              break;
-       case 19: rdar.readArray("pa_ICmin" , &pa->p.ICmin, 1);
-              break;
-       case 20: rdar.readArray("pa_PC" , &pa->p.PC, 1);
-              break;
-       case 21: rdar.readArray("pa_DFM" , &pa->p.DFM, 1);
-              break;
-       case 22: rdar.readArray("pa_DFYw" , &pa->p.DFYw, 1);
-              break;
-       case 23: rdar.readArray("pa_DFYaq" , &pa->p.DFYaq, 1);
-              break;
-       case 24: rdar.readArray("pa_DFYid" , &pa->p.DFYid, 1);
-              break;
-       case 25: rdar.readArray("pa_DFYr" , &pa->p.DFYr, 1);
-              break;
-       case 26: rdar.readArray("pa_DFYh" , &pa->p.DFYh, 1);
-              break;
-       case 27: rdar.readArray("pa_DFYc" , &pa->p.DFYc, 1);
-              break;
-       case 28: rdar.readArray("pa_DFYs", &pa->p.DFYs, 1);
-              break;
-       case 29: rdar.readArray("pa_DW", &pa->p.DW , 1);
-              break;
-       case 30: rdar.readArray("pa_DT", &pa->p.DT , 1);
-              break;
-       case 31: rdar.readArray("pa_GAS", &pa->p.GAS, 1);
-              break;
-       case 32: rdar.readArray("pa_DNS" , &pa->p.DNS, 1);
-              break;
-       case 33: rdar.readArray("pa_IEPS" , &pa->p.IEPS, 1);
-              break;
-       case 34: rdar.readArray("pKin" , &pmp->PLIM, 1);
-              break;
-       case 35: rdar.readArray("pa_DKIN" , &pa->p.DKIN, 1);
-              break;
-       case 36: rdar.readArray("pa_PE" , &pa->p.PE, 1);
+     {
+       case 0: rdar.readArray("pa_PE" , &pa->p.PE, 1);
                  pmp->E = pa->p.PE;
               break;
-       case 37: rdar.readArray("PV" , &pmp->PV, 1);
+       case 1: rdar.readArray("PV" , &pmp->PV, 1);
               break;
-       case 38: rdar.readArray("PSOL" , &pmp->PSOL, 1);
+       case 2: rdar.readArray("PSOL" , &pmp->PSOL, 1);
               break;
-       case 39: rdar.readArray("PAalp" , &PAalp, 1, 1);
+       case 3: rdar.readArray("PAalp" , &PAalp, 1, 1);
               break;
-       case 40: rdar.readArray("PSigm" , &PSigm, 1, 1);
+       case 4: rdar.readArray("PSigm" , &PSigm, 1, 1);
               break;
-       case 41: rdar.readArray("Lads" , &pmp->Lads, 1);
+       case 5: rdar.readArray("Lads" , &pmp->Lads, 1);
               break;
-       case 42: rdar.readArray("FIa" , &pmp->FIa, 1);
+       case 6: rdar.readArray("FIa" , &pmp->FIa, 1);
               break;
-       case 43: rdar.readArray("FIat" , &pmp->FIat, 1);
+       case 7: rdar.readArray("FIat" , &pmp->FIat, 1);
               break;
     }
    nfild = rdar.findNext();
@@ -662,9 +605,11 @@ void TMulti::from_text_file_gemipm( const char *path )
   memcpy( pmp->DCC, dCH->ccDC, dCH->nDC*sizeof(char));
 // !!!!  memcpy( pmp->DCCW, dCH->ccDCW, dCH->nDC*sizeof(char));
   memcpy( pmp->PHC, dCH->ccPH, dCH->nPH*sizeof(char));
+  // set up DCCW
+  ConvertDCC();
 
 //read dynamic values from txt file
-   TReadArrays  rddar( 27, MULTI_dynamic_fields, ff);
+   TReadArrays  rddar( 63, MULTI_dynamic_fields, ff);
 
 // set up array flags for permanent fields
 
@@ -797,8 +742,80 @@ void TMulti::from_text_file_gemipm( const char *path )
                 Error( "Error", "Array DCC3 not used in this problem");
                rddar.readArray( "DCads", pmp->DCC3, pmp->Lads, 1 );
                break;
+      case 27: rdar.readArray( "pa_DB" , &pa->p.DB, 1);
+               break;
+      case 28: rdar.readArray("pa_DHB", &pa->p.DHB, 1);
+               break;
+      case 29: rdar.readArray("pa_EPS" , &pa->p.EPS, 1);
+               break;
+      case 30: rdar.readArray("pa_DK" , &pa->p.DK, 1);
+               break;
+      case 31: rdar.readArray("pa_DF" , &pa->p.DF, 1);
+               break;
+      case 32: rdar.readArray("pa_DP", &pa->p.DP, 1);
+               break;
+      case 33: rdar.readArray("pa_IIM", &pa->p.IIM, 1);
+               break;
+      case 34: rdar.readArray("pa_PD" , &pa->p.PD, 1);
+               break;
+      case 35: rdar.readArray("pa_PRD" , &pa->p.PRD, 1);
+               break;
+      case 36: rdar.readArray("pa_AG" , &pa->p.AG, 1);
+               break;
+      case 37: rdar.readArray("pa_DGC" , &pa->p.DGC, 1);
+               break;
+      case 38: rdar.readArray("pa_PSM" , &pa->p.PSM, 1);
+               break;
+      case 39: rdar.readArray("pa_GAR" , &pa->p.GAR, 1);
+               break;
+      case 40: rdar.readArray("pa_GAH" , &pa->p.GAH, 1);
+               break;
+      case 41: rdar.readArray("pa_DS", &pa->p.DS, 1);
+               break;
+      case 42: rdar.readArray("pa_XwMin" , &pa->p.XwMin, 1);
+               break;
+      case 43: rdar.readArray("pa_ScMin" , &pa->p.ScMin, 1);
+               break;
+      case 44: rdar.readArray("pa_DcMin" , &pa->p.DcMin, 1);
+               break;
+      case 45: rdar.readArray("pa_PhMin" , &pa->p.PhMin, 1);
+               break;
+      case 46: rdar.readArray("pa_ICmin" , &pa->p.ICmin, 1);
+               break;
+      case 47: rdar.readArray("pa_PC" , &pa->p.PC, 1);
+               break;
+      case 48: rdar.readArray("pa_DFM" , &pa->p.DFM, 1);
+               break;
+      case 49: rdar.readArray("pa_DFYw" , &pa->p.DFYw, 1);
+               break;
+      case 50: rdar.readArray("pa_DFYaq" , &pa->p.DFYaq, 1);
+               break;
+      case 51: rdar.readArray("pa_DFYid" , &pa->p.DFYid, 1);
+               break;
+      case 52: rdar.readArray("pa_DFYr" , &pa->p.DFYr, 1);
+               break;
+      case 53: rdar.readArray("pa_DFYh" , &pa->p.DFYh, 1);
+               break;
+      case 54: rdar.readArray("pa_DFYc" , &pa->p.DFYc, 1);
+               break;
+      case 55: rdar.readArray("pa_DFYs", &pa->p.DFYs, 1);
+               break;
+      case 56: rdar.readArray("pa_DW", &pa->p.DW , 1);
+               break;
+      case 57: rdar.readArray("pa_DT", &pa->p.DT , 1);
+               break;
+      case 58: rdar.readArray("pa_GAS", &pa->p.GAS, 1);
+               break;
+      case 59: rdar.readArray("pa_DNS" , &pa->p.DNS, 1);
+               break;
+      case 60: rdar.readArray("pa_IEPS" , &pa->p.IEPS, 1);
+               break;
+      case 61: rdar.readArray("pKin" , &pmp->PLIM, 1);
+               break;
+      case 62: rdar.readArray("pa_DKIN" , &pa->p.DKIN, 1);
+               break;
     }
-   nfild = rddar.findNext();
+    nfild = rddar.findNext();
   }
 /*
    if( pm.sitNcat*pm.sitNcat )

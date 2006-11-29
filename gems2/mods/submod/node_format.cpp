@@ -27,58 +27,58 @@ extern bool _comment;
 //===============================================================
 
 outField DataBR_fields[51] =  {
-  { "NodeHandle",  1, 0 },
-  { "NodeTypeHY",  1, 0 },
-  { "NodeTypeMT",  1, 0 },
-  { "NodeStatusFMT",  1, 0 },
+  { "NodeHandle",  0, 0 },
+  { "NodeTypeHY",  0, 0 },
+  { "NodeTypeMT",  0, 0 },
+  { "NodeStatusFMT",  0, 0 },
   { "NodeStatusCH",  1, 0 },
-  { "IterDone",  1, 0 },
+  { "IterDone",  0, 0 },
   { "T",   1, 0 },
   { "P",  1, 0 },
   { "Vs",  1, 0 },
-  { "Vi",   1, 0 },
-  { "Ms",   1, 0 },
-  { "Mi",   1, 0 },
-  { "Gs",   1, 0 },
-  { "Hs",   1, 0 },
-  { "Hi",   1, 0 },
-  { "IS",   1, 0 },
-  { "pH",   1, 0 },
-  { "pe",   1, 0 },
-  { "Eh",   1, 0 },
-  { "Tm",   1, 0 },
-  { "dt",    1, 0 },
-  { "Dif",   1, 0 },
-  { "Vt",    1, 0 },
-  { "vp",   1, 0 },
-  { "eps",   1, 0 },
-  { "Km",    1, 0 },
-  { "Kf",   1, 0 },
-  { "S",   1, 0 },
-  { "Tr",   1, 0 },
-  { "h",   1, 0 },
-  { "rho",   1, 0 },
-  { "al",   1, 0 },
-  { "at",    1, 0 },
-  { "av",   1, 0 },
-  { "hDl",    1, 0 },
-  { "hDt",   1, 0 },
-  { "hDv",   1, 0 },
-  { "nto",   1, 0 },
+  { "Vi",   0, 0 },
+  { "Ms",   0, 0 },
+  { "Mi",   0, 0 },
+  { "Hs",   0, 0 },
+  { "Hi",   0, 0 },
+  { "Gs",   0, 0 },
+  { "IS",   0, 0 },
+  { "pH",   0, 0 },
+  { "pe",   0, 0 },
+  { "Eh",   0, 0 },
+  { "Tm",   0, 0 },
+  { "dt",    0, 0 },
+  { "Dif",   0, 0 },
+  { "Vt",    0, 0 },
+  { "vp",   0, 0 },
+  { "eps",   0, 0 },
+  { "Km",    0, 0 },
+  { "Kf",   0, 0 },
+  { "S",   0, 0 },
+  { "Tr",   0, 0 },
+  { "h",   0, 0 },
+  { "rho",   0, 0 },
+  { "al",   0, 0 },
+  { "at",    0, 0 },
+  { "av",   0, 0 },
+  { "hDl",    0, 0 },
+  { "hDt",   0, 0 },
+  { "hDv",   0, 0 },
+  { "nto",   0, 0 },
 // dynamic arrays
   { "bIC",     1, 0 },
-  { "rMB",     1, 0 },
-  { "uIC",     1, 0 },
-  { "xDC",     1, 0 },
-  { "gam",    1, 0 },
+  { "rMB",     0, 0 },
+  { "uIC",     0, 0 },
+  { "xDC",     0, 0 },
+  { "gam",    0, 0 },
   { "dll",    1, 0 },
   { "dul",    1, 0 },
   { "aPH",    1, 0 },
-  { "xPH",    1, 0 },
-  { "vPS",    1, 0 },
-  { "mPS",   1, 0 },
-  { "bPS",   1, 0 },
-  { "xPA",   1, 0 }
+  { "xPH",    0, 0 },
+  { "vPS",    0, 0 },
+  { "mPS",   0, 0 },
+  { "bPS",   0, 0 },
+  { "xPA",   0, 0 }
 };
 
 outField DataCH_static_fields[13] =  {
@@ -106,15 +106,14 @@ outField DataCH_dynamic_fields[25] =  {
    { "ICmm",  1, 0 },
    { "DCNL",  1, 0 },
    { "ccDC",  1, 0 },
+   { "DCmm",  1, 0 },
    { "PHNL",  1, 0 },
    { "ccPH",  1, 0 },
    { "nDCinPH",  1, 0 },
    { "A",  1, 0 },
-   { "DCmm",  1, 0 },
-   { "DD",  1, 0 },
-   { "Ttol",  1, 0 },
+   { "Ttol",  0, 0 },
    { "Tval",  1, 0 },
-   { "Ptol",  1, 0 },
+   { "Ptol",  0, 0 },
    { "Pval",  1, 0 },
    { "roW",  1, 0 },
    { "epsW",  1, 0 },
@@ -122,7 +121,8 @@ outField DataCH_dynamic_fields[25] =  {
    { "G0",  1, 0 },
    { "H0", 1, 0 },
    { "S0",  1, 0 },
-   { "Cp0",  1, 0 }
+   { "Cp0",  1, 0 },
+   { "DD",  0, 0 }
 };
 
 //===============================================================
@@ -182,14 +182,14 @@ void TNode::databr_to_text_file( fstream& ff )
          ff << "# Mass Mi of inert subsystem, kg" << endl;
    ff << left << setw(7) << "<Mi> " <<  CNode->Mi << endl;
    if( _comment )
-         ff << "# Gibbs energy Gs of reactive subsystem, J" << endl;
-   ff << left << setw(7) << "<Gs> " <<  CNode->Gs << endl;
-   if( _comment )
          ff << "# Enthalpy Hs of reactive subsystem, J " << endl;
    ff << left << setw(7) << "<Hs> " <<  CNode->Hs << endl;
    if( _comment )
          ff << "# Enthalpy Hi of inert subsystem, J " << endl;
    ff << left << setw(7) << "<Hi> " <<  CNode->Hi << endl;
+   if( _comment )
+         ff << "# Gibbs energy Gs of reactive subsystem, J" << endl;
+   ff << left << setw(7) << "<Gs> " <<  CNode->Gs << endl;
    if( _comment )
          ff << "# Effective aqueous ionic strength IS, molal" << endl;
    ff << left << setw(7) << "<IS> " <<  CNode->IC << endl;
@@ -322,6 +322,7 @@ void TNode::databr_from_text_file( fstream& ff )
 // fstream ff("DataBR.out", ios::out );
 // ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
 
+ memset( &CNode->Tm, 0, 19*sizeof(double));
  TReadArrays  rdar( 51, DataBR_fields, ff);
  short nfild = rdar.findNext();
  while( nfild >=0 )
@@ -352,12 +353,12 @@ void TNode::databr_from_text_file( fstream& ff )
             break;
     case 11: rdar.readArray( "Mi",  &CNode->Mi, 1);
             break;
-    case 12: rdar.readArray( "Gs",  &CNode->Gs, 1);
+    case 12: rdar.readArray( "Hs",  &CNode->Hs, 1);
             break;
-    case 13: rdar.readArray( "Hs",  &CNode->Hs, 1);
+    case 13: rdar.readArray( "Hi",  &CNode->Hi, 1);
             break;
-    case 14: rdar.readArray( "Hi",  &CNode->Hi, 1);
-            break;
+    case 14: rdar.readArray( "Gs",  &CNode->Gs, 1);
+             break;
     case 15: rdar.readArray( "IS",  &CNode->IC, 1);
             break;
     case 16: rdar.readArray( "pH",  &CNode->pH, 1);
@@ -503,7 +504,7 @@ void TNode::datach_to_text_file( fstream& ff )
     ff << "# fAalp: Flag for keeping specific surface areas in DATABR structures/files" << endl;
   ff << left << setw(7) << "<fAalp> " <<  CSD->nAalp << endl;
 
-  ff<< "\n<EndStatic>\n";
+  ff<< "\n<END_DIM>\n";
 
 // dynamic arrays - must follow after static data
   if( _comment )
@@ -536,6 +537,9 @@ void TNode::datach_to_text_file( fstream& ff )
   if( _comment )
     ff << "\n# ccDC: class codes of Dependent Components";
  prar.writeArray(  "ccDC", CSD->ccDC, CSD->nDC, 1 );
+ if( _comment )
+   ff << "\n\n# DCmm: Molar masses of DCs ";
+ prar.writeArray(  "DCmm", CSD->DCmm, CSD->nDC);
 
   if( _comment )
   {  ff << "\n\n## (7) Phases section" << endl;
@@ -554,12 +558,6 @@ prar.writeArray(  "nDCinPH", CSD->nDCinPH, CSD->nPH);
      ff << "\n# A: Stoichiometry matrix for DCs - one column per IC, row per DC";
   }
  prar.writeArray(  "A", CSD->A, CSD->nDC*CSD->nIC, CSD->nIC );
-  if( _comment )
-    ff << "\n\n# DCmm: Molar masses of DCs ";
- prar.writeArray(  "DCmm", CSD->DCmm, CSD->nDC);
-  if( _comment )
-    ff << "\n\n# DD: Diffusion coefficients for DCs (reserved)";
- prar.writeArray(  "DD", CSD->DD, CSD->nDCs);
 
   if( _comment )
   {  ff << "\n\n## (8) Thermodynamic data section";
@@ -615,12 +613,17 @@ prar.writeArray(  "nDCinPH", CSD->nDCinPH, CSD->nPH);
                                         CSD->nPp*CSD->nTp  );
   }
   if( _comment )
+    ff << "\n\n# DD: Diffusion coefficients for DCs (reserved)";
+  prar.writeArray(  "DD", CSD->DD, CSD->nDCs);
+
+  if( _comment )
       ff << "\n\n# End of file";
 }
 
 // Reading dataCH structure from text file
 void TNode::datach_from_text_file(fstream& ff)
 {
+  int ii;
 // fstream ff("DataCH.out", ios::in );
 // ErrorIf( !ff.good() , "DataCH.out", "Fileopen error");
 
@@ -670,21 +673,46 @@ void TNode::datach_from_text_file(fstream& ff)
   datach_realloc();
   databr_realloc();
 
+
 //dynamic data
  TReadArrays  rddar( 25, DataCH_dynamic_fields, ff);
 
 // Set up flags
    if( CSD->ccPH[0] == PH_AQUEL )
    {
-      rddar.setNoAlws( 18 /*"roW"*/);
-      rddar.setNoAlws( 19 /*"epsW"*/);
+      rddar.setNoAlws( 17 /*"roW"*/);
+      rddar.setNoAlws( 18 /*"epsW"*/);
    }
    if( CSD->iGrd <= 2 )
-      rddar.setNoAlws( 24 /*"Cp0"*/);
+      rddar.setNoAlws( 23 /*"Cp0"*/);
    if( CSD->iGrd <= 0 )
-      rddar.setNoAlws( 22 /*"H0"*/);
+      rddar.setNoAlws( 21 /*"H0"*/);
    if( CSD->iGrd <= 1 )
-      rddar.setNoAlws( 23 /*"S0"*/);
+      rddar.setNoAlws( 22 /*"S0"*/);
+
+// default set up
+  for( ii=0; ii< CSD->nDCs; ii++ )
+    CSD->DD[ii] = 0.;
+  CSD->Ttol = 0.1;
+  CSD->Ptol = 0.1;
+  if( CSD->nIC == CSD->nICb )
+  {
+    rddar.setNoAlws( "xIC");
+    for( ii=0; ii< CSD->nICb; ii++ )
+      CSD->xIC[ii] = (short)ii;
+  }
+  if(CSD->nDC == CSD->nDCb )
+  {
+    rddar.setNoAlws( 1 /*"xDC"*/);
+    for( ii=0; ii< CSD->nDCb; ii++ )
+      CSD->xDC[ii] = (short)ii;
+  }
+  if(CSD->nPH == CSD->nPHb )
+  {
+    rddar.setNoAlws( 2 /*"xPH"*/);
+    for( ii=0; ii< CSD->nPHb; ii++ )
+      CSD->xPH[ii] = (short)ii;
+  }
 
   nfild = rddar.findNext();
   while( nfild >=0 )
@@ -707,49 +735,50 @@ void TNode::datach_from_text_file(fstream& ff)
             break;
     case 7: rddar.readArray( "ccDC", CSD->ccDC, CSD->nDC, 1 );
             break;
-    case 8: rddar.readArray( "PHNL", CSD->PHNL[0], CSD->nPH, MaxPHN );
+    case 8: rddar.readArray( "DCmm", CSD->DCmm, CSD->nDC);
             break;
-    case 9: rddar.readArray( "ccPH", CSD->ccPH, CSD->nPH, 1 );
+    case 9: rddar.readArray( "PHNL", CSD->PHNL[0], CSD->nPH, MaxPHN );
             break;
-    case 10: rddar.readArray( "nDCinPH", CSD->nDCinPH, CSD->nPH);
+    case 10: rddar.readArray( "ccPH", CSD->ccPH, CSD->nPH, 1 );
             break;
-    case 11: rddar.readArray( "A", CSD->A, CSD->nDC*CSD->nIC );
+    case 11: rddar.readArray( "nDCinPH", CSD->nDCinPH, CSD->nPH);
             break;
-    case 12: rddar.readArray( "DCmm", CSD->DCmm, CSD->nDC);
+    case 12: rddar.readArray( "A", CSD->A, CSD->nDC*CSD->nIC );
             break;
-    case 13: rddar.readArray( "DD", CSD->DD, CSD->nDCs);
+    case 13: rddar.readArray( "Ttol", &CSD->Ttol, 1);
             break;
-    case 14: rddar.readArray( "Ttol", &CSD->Ttol, 1);
+    case 14: rddar.readArray( "Tval", CSD->Tval, CSD->nTp );
             break;
-    case 15: rddar.readArray( "Tval", CSD->Tval, CSD->nTp );
+    case 15: rddar.readArray( "Ptol", &CSD->Ptol, 1);
             break;
-    case 16: rddar.readArray( "Ptol", &CSD->Ptol, 1);
-            break;
-    case 17: rddar.readArray( "Pval", CSD->Pval, CSD->nPp );
+    case 16: rddar.readArray( "Pval", CSD->Pval, CSD->nPp );
               break;
-    case 18: if( !CSD->roW )
+    case 17: if( !CSD->roW )
                    Error( "Error", "Array roW not used in task");
              rddar.readArray( "roW", CSD->roW, CSD->nPp*CSD->nTp );
               break;
-    case 19: if( !CSD->epsW )
+    case 18: if( !CSD->epsW )
                    Error( "Error", "Array epsW not used in task");
              rddar.readArray( "epsW", CSD->epsW,  CSD->nPp*CSD->nTp );
             break;
-    case 20: rddar.readArray( "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
+    case 19: rddar.readArray( "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
             break;
-    case 21: rddar.readArray( "G0", CSD->G0, CSD->nDC*CSD->nPp*CSD->nTp );
+    case 20: rddar.readArray( "G0", CSD->G0, CSD->nDC*CSD->nPp*CSD->nTp );
               break;
-    case 22: if( !CSD->H0 )
+    case 21: if( !CSD->H0 )
                    Error( "Error", "Array HO not used in task");
             rddar.readArray( "H0", CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp);
             break;
-    case 23: if( !CSD->S0 )
+    case 22: if( !CSD->S0 )
                    Error( "Error", "Array SO not used in task");
             rddar.readArray( "S0", CSD->S0,CSD->nDC*CSD->nPp*CSD->nTp);
             break;
-    case 24: if( !CSD->Cp0 )
+    case 23: if( !CSD->Cp0 )
                    Error( "Error", "Array CpO not used in task");
             rddar.readArray( "Cp0", CSD->Cp0,CSD->nDC*CSD->nPp*CSD->nTp );
+            break;
+   case 24: rddar.readArray( "DD", CSD->DD, CSD->nDCs);
+              break;
   }
      nfild = rddar.findNext();
  }
@@ -1081,6 +1110,8 @@ void TNode::databr_realloc()
 
  CNode->xDC = new double[CSD->nDCb];
  CNode->gam = new double[CSD->nDCb];
+ for( int ii=0; ii<CSD->nDCb; ii++ )
+   CNode->gam[ii] = 1.;
  CNode->dul = new double[CSD->nDCb];
  CNode->dll = new double[CSD->nDCb];
 

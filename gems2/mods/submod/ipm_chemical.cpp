@@ -1117,4 +1117,86 @@ void TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 //   ofs.close();
 }
 
+
+// Convert class codes of DC into general codes of IPM
+void TMulti::ConvertDCC()
+{
+    int i, j, k, iRet=0;
+    char DCCW;
+
+    j=0;
+    for( k=0; k< pmp->FI; k++ )
+    { /* cycle by phases  */
+        i=j+pmp->L1[k];
+        if( pmp->L1[k] == 1 )
+        {
+            pmp->DCCW[j] = DC_SINGLE;
+            goto NEXT_PHASE;
+        }
+        for( ; j<i; j++ )
+        { /* cykle by DC. */
+            switch( pmp->DCC[j] ) /* selection necessary expressions  v_j */
+            {
+            case DC_SCP_CONDEN:
+                DCCW = DC_SINGLE;
+                break;
+            case DC_GAS_COMP:
+            case DC_GAS_H2O:
+            case DC_GAS_CO2:
+            case DC_GAS_H2:
+            case DC_GAS_N2:
+            case DC_SOL_IDEAL:
+            case DC_SOL_MINOR:
+            case DC_SOL_MAJOR:
+                DCCW = DC_SYMMETRIC;
+                break;
+            case DC_AQ_PROTON:
+            case DC_AQ_ELECTRON:
+            case DC_AQ_SPECIES:
+                DCCW = DC_ASYM_SPECIES;
+                break;
+            case DC_AQ_SOLVCOM:
+            case DC_AQ_SOLVENT:
+                DCCW = DC_ASYM_CARRIER;
+                break;
+            case DC_IESC_A:
+            case DC_IEWC_B:
+                DCCW = DC_ASYM_SPECIES;
+                break;
+                /* Remapping */
+            case DC_SUR_GROUP:
+            case DC_SUR_COMPLEX:
+                DCCW = DC_ASYM_SPECIES;
+                pmp->DCC[j] = DC_SSC_A0;
+                break;
+            case DC_SUR_IPAIR:
+                DCCW = DC_ASYM_SPECIES;
+                pmp->DCC[j] = DC_WSC_A0;
+                break;
+            case DC_SUR_MINAL:
+            case DC_SUR_CARRIER:
+            case DC_PEL_CARRIER:
+                DCCW = DC_ASYM_CARRIER;
+                break;
+            default:
+                if( isdigit( pmp->DCC[j] ))
+                {
+                    if( pmp->PHC[k] == PH_SORPTION ||
+                            pmp->PHC[k] == PH_POLYEL )
+                    {
+                        DCCW = DC_ASYM_SPECIES;
+                        break;
+                    }
+                }
+                DCCW = DC_SINGLE;
+                iRet++;  /* error in code  */
+            }
+            pmp->DCCW[j] = DCCW;
+        }   /* j */
+NEXT_PHASE:
+        j = i;
+    }  /* k */
+    ErrorIf( iRet>0, "Multi", "Error in DCC code.");
+}
+
 //--------------------- End of ipm_chemical.cpp ---------------------------

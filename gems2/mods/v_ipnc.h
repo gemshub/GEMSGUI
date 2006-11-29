@@ -68,7 +68,7 @@ class IPNCalc
         IT_T,   // conditional jump
         IT_G,   // unconditional jump
         IT_W,   // conditional jump to equation
-        IT_B     // unconditional jump to equation
+        IT_B    // unconditional jump to equation
     };
 
     enum func_numbers {

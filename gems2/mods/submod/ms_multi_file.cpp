@@ -460,6 +460,7 @@ ff.readArray((double*)pm.D, MST*MST);
 // realloc dynamic memory
 void TMulti::multi_realloc( char PAalp, char PSigm )
 {
+  int ii;
    if( pm.N < 2 || pm.L < 2 || pm.FI < 1 )
         Error( GetName(), "pm.N < 2 || pm.L < 2 || pm.FI < 1" );
 
@@ -475,13 +476,15 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  memset(pm.muj, 0, pm.L*sizeof(short));
 
  pm.DUL = new double[pm.L];
- memset(pm.DUL, 0, pm.L*sizeof(double));
+ for( ii=0; ii<pm.L; ii++ )         // 28/11/2006
+  pm.DUL[ii] = 1e6;
  pm.DLL = new double[pm.L];
- memset(pm.DLL, 0, pm.L*sizeof(double));
+ memset(pm.DLL, 0, pm.L*sizeof(double));  // 28/11/2006
  pm.Vol = new double[pm.L];
  memset(pm.Vol, 0, pm.L*sizeof(double));
  pm.Pparc = new double[pm.L];
- memset(pm.Pparc, 0, pm.L*sizeof(double));
+ for( ii=0; ii<pm.L; ii++ )        // 28/11/2006
+  pm.Pparc[ii] = 1.;
  pm.MM = new double[pm.L];
  memset(pm.MM, 0, pm.L*sizeof(double));
  pm.Awt = new float[pm.N];
@@ -533,7 +536,7 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  pm.F0 = new double[pm.L];
  memset(pm.F0, 0, pm.L*sizeof(double));
  pm.YOF = new double[pm.FI];
- memset(pm.YOF, 0, pm.FI*sizeof(double));
+ memset(pm.YOF, 0, pm.FI*sizeof(double)); // 28/11/2006
 
     pm.SB = new char[pm.N][MAXICNAME+MAXSYMB];
     memset(pm.SB, 0, pm.N*(MAXICNAME+MAXSYMB)*sizeof(char));
@@ -550,9 +553,11 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
     pm.SF2 = new char[pm.FIs][MAXPHNAME+MAXSYMB];
     memset(pm.SF2, 0, pm.FIs*(MAXPHNAME+MAXSYMB)*sizeof(char));
     pm.RLC = new char[pm.L];
-    memset(pm.RLC, 0, pm.L*sizeof(char));
     pm.RSC = new char[pm.L];
-    memset(pm.RSC, 0, pm.L*sizeof(char));
+    for( ii=0; ii<pm.L; ii++ )        // 28/11/2006
+    { pm.RLC[ii] = 'B';
+      pm.RSC[ii] = 'M';
+    }
     pm.ICC = new char[pm.N];
     memset(pm.ICC, 0, pm.N*sizeof(char));
     pm.DCC = new char[pm.L];
@@ -565,7 +570,7 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  pm.lnGmM = new double[pm.L];
  memset(pm.lnGmM, 0, pm.L*sizeof(double));
  pm.GEX = new double[pm.L];
- memset(pm.GEX, 0, pm.L*sizeof(double));
+ memset(pm.GEX, 0, pm.L*sizeof(double)); // 28/11/2006
  pm.FVOL = new double[pm.FI];
  memset(pm.FVOL, 0, pm.FI*sizeof(double));
  pm.FWGT = new double[pm.FI];
@@ -586,7 +591,7 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
    pm.Gamma = new double[pm.L];
    memset(pm.Gamma, 0, pm.L*sizeof(double));
    pm.lnGmf = new double[pm.L];
-   memset(pm.lnGmf, 0, pm.L*sizeof(double));
+   memset(pm.lnGmf, 0, pm.L*sizeof(double)); // 28/11/2006
 //   pm.D = new double[pm.L];
  }
  else
@@ -675,7 +680,7 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  if( PAalp != S_OFF )
  {
    pm.Aalp = new float[pm.FI];
-   memset(pm.Aalp, 0, pm.FI*sizeof(float));
+   memset(pm.Aalp, 0, pm.FI*sizeof(float)); // 28/11/2006
    pm.Xr0h0 = new float[pm.FI][2];
    memset(pm.Xr0h0, 0, pm.FI*2*sizeof(float));
  }
@@ -688,8 +693,8 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  if( PSigm != S_OFF )
  {   pm.Sigw = new float[pm.FI];
      pm.Sigg = new float[pm.FI];
-     memset(pm.Sigw, 0, pm.FI*sizeof(float));
-     memset(pm.Sigg, 0, pm.FI*sizeof(float));
+     memset(pm.Sigw, 0, pm.FI*sizeof(float)); // 28/11/2006
+     memset(pm.Sigg, 0, pm.FI*sizeof(float)); // 28/11/2006
  }
  else
  {   pm.Sigw = 0;

@@ -126,7 +126,7 @@ short TReadArrays::findNext()
 
  ff >> buf;
 
- if( !( memcmp( "EndStatic", buf+1, 9 )) )
+ if( !( memcmp( "END_DIM", buf+1, 7 )) )
   return -2;
 
  short ii = findFld( buf+1 );

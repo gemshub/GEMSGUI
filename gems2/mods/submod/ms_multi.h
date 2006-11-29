@@ -285,7 +285,6 @@ class TMulti
 
     void multi_sys_dc();
     void multi_sys_ph();
-    void ConvertDCC();
     void ph_sur_param( int k, int kk );
     void ph_surtype_assign( int k, int kk, int jb, int je,
                             short car_l[], int car_c, short Cjs );
@@ -326,6 +325,7 @@ class TMulti
     double GX( double LM  );
     double Cj_init_calc( double g0, int j, int k );
     void Mol_u( double Y[], double X[], double XF[], double XFA[] );
+    void ConvertDCC();
 
 // ipm_chemical2.cpp
     void GasParcP();
