@@ -832,7 +832,7 @@ int TMulti::SolverLinearEquations( int N, bool initAppr )
           B[ii] = aa;
       }
 
-// this routine constructs its Cholesky decomposition, A = L � LT .
+// this routine constructs its Cholesky decomposition, A = L x LT .
   Cholesky<double>  chol(A);
 
   if( chol.is_spd() )  // is positive definite A.

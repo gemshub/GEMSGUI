@@ -450,7 +450,7 @@ void TMulti::MultiCalcInit( const char *key )
             pmp->Gamma[j] = 1.0;
         }
     }
-    if( pmp->FIs && pmp->pIPN <=0 )
+    if( pmp->FIs /*&& pmp->pIPN <=0*/ )  // SD 29/11/2006
     { // not done if already present in MULTI !
         pmp->PD = TProfil::pm->pa.p.PD;
         SolModLoad();
