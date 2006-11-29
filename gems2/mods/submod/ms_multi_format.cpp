@@ -25,12 +25,12 @@ outField MULTI_static_fields[8] =  {
 };
 
 outField MULTI_dynamic_fields[63] =  {
-//read dynamic values from txt file
+//read dynamic (array) data from the txt input file
    {  "sMod", 1 , 0 },
    {  "LsMod", 1 , 0 },
    {  "LsMdc", 1 , 0 },
    {  "B", 1 , 0 },
-   {  "DCCW", 0 , 0 }, // plase holder
+   {  "DCCW", 0 , 0 },  // placeholder - something else can be used here
    {  "Pparc", 0 , 0 },
    {  "GEX", 0 , 0 },
    {  "lnGmf", 0 , 0 },

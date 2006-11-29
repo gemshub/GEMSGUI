@@ -86,7 +86,7 @@ protected:
          short nTp_, short nPp_, float Ttol_, float Ptol_,
          float *Tai, float *Pai );
 
-    void getG0_V0_H0_Cp0_matrix();  // creates arrays of thermodynamic data for interpolation
+    void G0_V0_H0_Cp0_DD_arrays();  // creates arrays of thermodynamic data for interpolation
                                     // which are written into DATACH file
 
     // virtual function for interaction with nodearray class

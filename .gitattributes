@@ -335,6 +335,7 @@ gems2/shared/doc/html/fileprint.png -text
 gems2/shared/doc/html/filesave.png -text
 gems2/shared/doc/html/filesaveas.png -text
 gems2/shared/doc/html/g_about.html -text
+gems2/shared/doc/html/g_formats.html -text
 gems2/shared/doc/html/g_litref.html -text
 gems2/shared/doc/html/g_miscel.html -text
 gems2/shared/doc/html/g_objndx.html -text
@@ -343,6 +344,8 @@ gems2/shared/doc/html/g_tutor.html -text
 gems2/shared/doc/html/g_useref.html -text
 gems2/shared/doc/html/gdb_rkey.html -text
 gems2/shared/doc/html/ge_howto.html -text
+gems2/shared/doc/html/gemipm2k-inp.html -text
+gems2/shared/doc/html/gemipm2k-man.html -text
 gems2/shared/doc/html/gems1.png -text
 gems2/shared/doc/html/gems_bcc.html -text
 gems2/shared/doc/html/gems_gui.html -text
@@ -387,14 +390,17 @@ gems2/shared/doc/html/netnow3.png -text
 gems2/shared/doc/html/ordertool.png -text
 gems2/shared/doc/html/pe_script.html -text
 gems2/shared/doc/html/print.png -text
+gems2/shared/doc/html/process_setup.html -text
 gems2/shared/doc/html/progress.png -text
 gems2/shared/doc/html/reccalc.png -text
 gems2/shared/doc/html/rule07.png -text
 gems2/shared/doc/html/selectElements.png -text
+gems2/shared/doc/html/setfilters.html -text
 gems2/shared/doc/html/setup.png -text
 gems2/shared/doc/html/simbtype.png -text
 gems2/shared/doc/html/syseqkey.png -text
 gems2/shared/doc/html/syseqrem.png -text
+gems2/shared/doc/html/templ_key.html -text
 gems2/shared/doc/html/terms-of-use.html -text
 gems2/shared/doc/html/theorgem.html -text
 gems2/shared/doc/html/theorkin.html -text
