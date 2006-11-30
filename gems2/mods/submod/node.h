@@ -132,8 +132,8 @@ static TNode* na;   // static pointer to this class
 // Loads GEM input data  provided in parameters by the FMT part
 // into the DATABR work structure for the subsequent GEM calculation
    void GEM_from_MT(
-int    short  p_NodeHandle,   // Node identification handle
-int    short  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+    short  p_NodeHandle,   // Node identification handle
+    short  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                      //                                     GEM input output  FMT control
     double p_T,      // Temperature T, K                        +       -      -
     double p_P,      // Pressure P, bar                         +       -      -
@@ -149,8 +149,8 @@ int    short  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
 // Passes (copies) the GEM input data from an already loaded DATABR
 //  work structure into parameters provided by the FMT part
    void GEM_restore_MT(
-int    short  &p_NodeHandle,   // Node identification handle
-int    short  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+    short  &p_NodeHandle,   // Node identification handle
+    short  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                       //                                    GEM input output  FMT control
     double &p_T,      // Temperature T, K                        +       -      -
     double &p_P,      // Pressure P, bar                         +       -      -
@@ -187,9 +187,9 @@ int    short  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
    // FMT part (dimensions and order of elements in arrays must correspond
    // to those in currently existing DATACH structure )
    void GEM_to_MT(
-int   short &p_NodeHandle,    // Node identification handle
-int   short &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
-int   short &p_IterDone,      // Number of iterations performed by GEM IPM
+   short &p_NodeHandle,    // Node identification handle
+   short &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
+   short &p_IterDone,      // Number of iterations performed by GEM IPM
                          //                                     GEM input output  FMT control
     // Chemical scalar variables
     double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +

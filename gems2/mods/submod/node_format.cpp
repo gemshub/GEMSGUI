@@ -818,6 +818,10 @@ void TNode::datach_to_file( GemDataStream& ff )
    ff.writeArray( CSD->Tval,  CSD->nTp );
    ff.writeArray( CSD->Pval,  CSD->nPp );
 
+   ff.writeArray( CSD->ccIC, CSD->nIC*sizeof(char) );
+   ff.writeArray( CSD->ccDC, CSD->nDC*sizeof(char) );
+   ff.writeArray( CSD->ccPH, CSD->nPH*sizeof(char) );
+
    if( CSD->ccPH[0] == PH_AQUEL )
    { ff.writeArray( CSD->roW,  CSD->nPp*CSD->nTp );
      ff.writeArray( CSD->epsW, CSD->nPp*CSD->nTp );
@@ -831,14 +835,9 @@ void TNode::datach_to_file( GemDataStream& ff )
    if(  CSD->iGrd > 2 )
       ff.writeArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
 
-   ff.writeArray( (char *)CSD->ICNL, MaxICN*CSD->nIC );
-   ff.writeArray( (char *)CSD->DCNL, MaxDCN*CSD->nDC );
-   ff.writeArray( (char *)CSD->PHNL, MaxPHN*CSD->nPH );
-
-   ff.writeArray( CSD->ccIC, CSD->nIC );
-   ff.writeArray( CSD->ccDC, CSD->nDC );
-   ff.writeArray( CSD->ccPH, CSD->nPH );
-
+   ff.writeArray( (char *)CSD->ICNL, MaxICN*CSD->nIC*sizeof(char) );
+   ff.writeArray( (char *)CSD->DCNL, MaxDCN*CSD->nDC*sizeof(char) );
+   ff.writeArray( (char *)CSD->PHNL, MaxPHN*CSD->nPH*sizeof(char) );
 }
 
 // Reading dataCH structure from binary file
@@ -866,6 +865,10 @@ void TNode::datach_from_file( GemDataStream& ff )
    ff.readArray( CSD->Tval,  CSD->nTp );
    ff.readArray( CSD->Pval,  CSD->nPp );
 
+   ff.readArray( CSD->ccIC, CSD->nIC*sizeof(char) );
+   ff.readArray( CSD->ccDC, CSD->nDC*sizeof(char) );
+   ff.readArray( CSD->ccPH, CSD->nPH*sizeof(char) );
+
    if( CSD->ccPH[0] == PH_AQUEL )
    {  ff.readArray( CSD->roW,  CSD->nPp*CSD->nTp );
       ff.readArray( CSD->epsW, CSD->nPp*CSD->nTp );
@@ -879,13 +882,10 @@ void TNode::datach_from_file( GemDataStream& ff )
    if(  CSD->iGrd > 2 )
      ff.readArray( CSD->Cp0, CSD->nDC*CSD->nPp*CSD->nTp );
 
-   ff.readArray( (char *)CSD->ICNL, MaxICN*CSD->nIC );
-   ff.readArray( (char *)CSD->DCNL, MaxDCN*CSD->nDC );
-   ff.readArray( (char *)CSD->PHNL, MaxPHN*CSD->nPH );
+   ff.readArray( (char *)CSD->ICNL, MaxICN*CSD->nIC*sizeof(char) );
+   ff.readArray( (char *)CSD->DCNL, MaxDCN*CSD->nDC*sizeof(char) );
+   ff.readArray( (char *)CSD->PHNL, MaxPHN*CSD->nPH*sizeof(char) );
 
-   ff.readArray( CSD->ccIC, CSD->nIC );
-   ff.readArray( CSD->ccDC, CSD->nDC );
-   ff.readArray( CSD->ccPH, CSD->nPH );
 
 }
 

@@ -191,6 +191,10 @@ TIComp::CopyElements( const char * prfName,
    //db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
 
+  // delete the equvalent keys
+   TCStringArray aICkey_new;         // 30/11/2006
+   aICkey_new.Clear();
+
     //  copy to it selected records
     // ( add to last key field first symbol from prfname )
     int nrec;
@@ -202,6 +206,15 @@ TIComp::CopyElements( const char * prfName,
          break;
        if( j<el_data.oldIComps.GetCount() )
          continue;
+
+       // test the same component (overload) 30/11/2006
+       gstring stt = el_data.ICrds[i].substr(0,MAXICNAME+MAXSYMB);
+       for( j=0; j<aICkey_new.GetCount(); j++ )
+       // if( !memcmp( stt.c_str(), aICkey_new[j].c_str(), MAXICNAME+MAXSYMB ))
+         if( stt ==  aICkey_new[j])
+        break;
+      if( j<aICkey_new.GetCount() )
+        continue;
 
        nrec = db->Find( el_data.ICrds[i].c_str() );
        db->Get( nrec );
@@ -217,6 +230,7 @@ TIComp::CopyElements( const char * prfName,
         str1.strip();
         str = str1 + ":" + str;
         AddRecord( str.c_str(), fnum_ );
+        aICkey_new.Add( stt );  // 30/11/2006
     }
 
     // close all no project files

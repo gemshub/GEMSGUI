@@ -28,7 +28,7 @@ line %s "<cez> ", %g #ADpar[4]
 line %s "<al_in> ", %g #ADpar[5]
 line %s "<Dif_in> ", %g #ADpar[6]
 line %s "" 
-line %s  "<EndStatic>"
+line %s  "<END_DIM>"
 line %s "" 
 
 line %s  "<DiCp>"

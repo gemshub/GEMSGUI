@@ -3,7 +3,7 @@
 //
 // Implementation of TCompos class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva 
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -964,15 +964,28 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
     // db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
 
+   // delete the equvalent keys
+   TCStringArray aICkey_new;         // 30/11/2006
+   aICkey_new.Clear();
+
     // get list of records
     db->GetKeyList( "*:*:*:", aComp, anR );
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i, ij, itmp;
+    int i, j, ij, itmp;
     uint jj;
     for(uint ii=0; ii<aComp.GetCount(); ii++ )
     {
+
+      // test the same component (overload) 30/11/2006
+      gstring stt = aComp[ii].substr(0,MAXCMPNAME+MAXSYMB);
+      for( j=0; j<aICkey_new.GetCount(); j++ )
+        if( stt ==  aICkey_new[j])
+       break;
+     if( j<aICkey_new.GetCount() )
+       continue;
+
      RecInput( aComp[ii].c_str() );
      //test record
      ij = 0;
@@ -1016,6 +1029,7 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
         str1.strip();
         str = str1 + ":" + str;
         AddRecord( str.c_str(), fnum_ );
+        aICkey_new.Add( stt );  // 30/11/2006
     }
 
     // close all no project files

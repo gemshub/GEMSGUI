@@ -26,7 +26,7 @@
 
 typedef struct
 {  // DATABR - template node data bridge structure
-   int                                                        
+   short
      NodeHandle,    // Node identification handle
      NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
      NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE

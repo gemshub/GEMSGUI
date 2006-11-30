@@ -575,7 +575,7 @@ void TNode::makeStartDataChBR(
   for( ii=0; ii< selPH.GetCount(); ii++, CSD->nPSb++ )
    if( selPH[ii] >= pmm->FIs )
        break;
-  CSD->uRes2 = 0;
+  CSD->uRes1 = 0;
   CSD->dRes1 = 0.;
   CSD->dRes2 = 0.;
 
@@ -975,7 +975,7 @@ void TNode::GEM_from_MT(
    // Switch only if PIA is ordered, leave if simplex is ordered (KD)
 }
 
-// readonly mode: passing input GEM data to FMT  
+// readonly mode: passing input GEM data to FMT
 void TNode::GEM_restore_MT(
    short  &p_NodeHandle,   // Node identification handle
    short  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH

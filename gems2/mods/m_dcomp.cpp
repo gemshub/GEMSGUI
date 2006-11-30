@@ -18,7 +18,7 @@
 //-------------------------------------------------------------------
 //
 const char *GEMS_DC_HTML = "gm_dcomp";
- 
+
 #include <stdio.h>
 #include <math.h>
 
@@ -435,7 +435,7 @@ AGAIN:
         goto AGAIN;
 
     if( CM == CTPM_HKF && CE == CTM_WAT && CV == CPM_EMP )
-    {// This record is one for H2O-gas with code HWS
+    {// This record is one for H2O-gasï¿½with code HWS
         CM = CTPM_CPT;
         CE = CTM_CST;
         CV = CPM_GAS;
@@ -784,7 +784,7 @@ else if( CV == CPM_PRSV )  // Calculation of fugacity at X=1 using PRSV EoS
       S = standard partial molal third law entropy of the species.
       V = standard partial molal volume of the aqueous species.
       Cp = standard partial molal heat capacity of the aqueous species.
- 
+
       Other parameters used in the program include:
       rx = crystallographic radius of the ion, or
               0.0 if no crystallographic radius is
@@ -797,14 +797,14 @@ else if( CV == CPM_PRSV )  // Calculation of fugacity at X=1 using PRSV EoS
       polar= switch set to 2.0 for the estimation of omega
               of any neutral species. See:
       (all are set to -0.038; Sverjensky et al., 1997)
- 
+
       The Born coefficient w (omega) is calculated
       from the crystallographic radius where available
       or reasonable.  Otherwise, it is calculated from
       the correlation of s with wcon for charged complexes
       and set to -0.038 for neutral complexes
       (Sverjensky, et al., 1997)
- 
+
       Values of the Born Functions Q, X, and Y are taken
       from the Haar-Gallager-Kell equation of state for
       water at 25 C, and may be different from those given
@@ -1133,7 +1133,11 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
     // db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
 
-    // get list of records
+     // delete the equvalent keys
+     TCStringArray aICkey_new;         // 30/11/2006
+     aICkey_new.Clear();
+
+   // get list of records
     db->GetKeyList( "*:*:*:*:", aDCkey, anR );
 
     //  test&copy  selected records
@@ -1152,6 +1156,14 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
        continue;
      if( !el_data.flags[cbSorption_] && aDCkey[ii][0] == 'c' )
        continue;
+
+      // test the same component (overload) 30/11/2006
+      gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
+      for( j=0; j<aICkey_new.GetCount(); j++ )
+         if( stt ==  aICkey_new[j])
+            break;
+      if( j<aICkey_new.GetCount() )
+            continue;
 
      RecInput( aDCkey[ii].c_str() );
      //test record
@@ -1205,7 +1217,8 @@ void TDComp::CopyRecords( const char * prfName, TCIntArray& cnt,
         str1.strip();
         str = str1 + ":" + str;
      AddRecord( str.c_str(), fnum_ );
-    }
+     aICkey_new.Add( stt );  // 30/11/2006
+   }
 
     // close all no project files
     TCStringArray names1;

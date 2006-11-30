@@ -31,7 +31,7 @@ const unsigned int
 typedef struct
 {  // Structure DataCH
 // Dimensionalities
-  int  // was short
+  short
 //  These dimensionalities should be the same as in the GEMIPM work structure (MULTI)
     nIC,    // Total number of IC (independent components) in the reactive part
     nDC,    // Total number of DC (chemical species) in the reactive part
@@ -67,14 +67,14 @@ typedef struct
     *xPH;   // PH name indices in DATABR Phase vectors, [nPHb] elements
             // see below definitions of the ICNL, DCNL and PHNL lists
 
-  double   //  was float
+  float
     *Tval,   // discrete values of Temperature (K), [nTp] elements,
  // that correspond to grid arrays for the interpolation of thermodynamic data
     *Pval,   // discrete values of Pressure (bar), [nPp] elements,
  // that correspond to grid arrays for the interpolation of thermodynamic data
-    *A,      // Stoichiometry matrix A containing elemental stoichiometries
+    *A;      // Stoichiometry matrix A containing elemental stoichiometries
              // of Dependent Components, [nIC][nDC] elements
-
+ double
     Ttol,    // Temperature tolerance (K) for interpolation of thermodynamic data
     Ptol,    // Pressure tolerance (bar) for interpolation of thermodynamic data
     dRes1,   // reserved

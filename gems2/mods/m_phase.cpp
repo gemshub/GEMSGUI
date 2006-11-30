@@ -675,7 +675,7 @@ AGAINRC:
             if( !php->MSDT[i][0] )
                 php->MSDT[i][0] = aPa->pa.p.DNS;
             if( !php->MSDT[i][1] )
-                php->MSDT[i][1] = 4.0; // Third-layer capacitance (reserved)  
+                php->MSDT[i][1] = 4.0; // Third-layer capacitance (reserved)
             if( !php->CapT[i][0] )
                 php->CapT[i][0] = 1.0; // C1 inner capacitance
             if( !php->CapT[i][1] )
@@ -1365,12 +1365,16 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     // db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
 
-    // get list of records
+    // delete the equvalent keys
+    TCStringArray aICkey_new;         // 30/11/2006
+    aICkey_new.Clear();
+
+  // get list of records
     db->GetKeyList( "*:*:*:*:*:", aPHkey, anR );
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i, cnt;
+    int i, j, cnt;
     bool nRec;
     const char *pKey1, *pKey4;
     for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
@@ -1427,6 +1431,14 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
           && pKey4[1] != ' ' )
         continue;
 
+       // test the same component (overload) 30/11/2006
+       gstring stt = aPHkey[ii].substr(0,MAXSYMB+MAXPHSYMB+MAXPHNAME+MAXSYMB);
+       for( j=0; j<aICkey_new.GetCount(); j++ )
+          if( stt ==  aICkey_new[j])
+              break;
+       if( j<aICkey_new.GetCount() )
+            continue;
+
 // Read the record here
      RecInput( aPHkey[ii].c_str() );
 
@@ -1474,7 +1486,8 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
         str1.strip();
         str = str1 + ":" + str;
      AddRecord( str.c_str(), fnum_ );
-    }
+     aICkey_new.Add( stt );  // 30/11/2006
+   }
 
     // close all no project files
     TCStringArray names1;

@@ -3,7 +3,7 @@
 //
 // Implementation of TReacDC class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva   
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -208,7 +208,7 @@ void TReacDC::dyn_new(int q)
     else
         rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
 
-    if( rc[q].PrAki == S_OFF )  /* HKF - ¬model */
+    if( rc[q].PrAki == S_OFF )  /* HKF - ï¿½model */
         rc[q].HKFc =  (float *)aObj[ o_rehkfc ].Free();
     else
         rc[q].HKFc =  (float *)aObj[ o_rehkfc ].Alloc( MAXHKFCOEF, 1, F_);
@@ -1361,6 +1361,10 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
     // db->OpenOnlyFromList(el_data.flNames);
     int fnum_ = db->GetOpenFileNum( prfName );
 
+    // delete the equvalent keys
+    TCStringArray aICkey_new;         // 30/11/2006
+    aICkey_new.Clear();
+
     // get list of records
     db->GetKeyList( "*:*:*:*:", aDCkey, anR );
 
@@ -1381,7 +1385,15 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
      if( !el_data.flags[cbSorption_] && aDCkey[ii][0] == 'c' )
        continue;
 
-     RecInput( aDCkey[ii].c_str() );
+     // test the same component (overload) 30/11/2006
+     gstring stt = aDCkey[ii].substr(0,MAXSYMB+MAXDRGROUP+MAXDCNAME);
+     for( j=0; j<aICkey_new.GetCount(); j++ )
+       if( stt ==  aICkey_new[j])
+           break;
+     if( j<aICkey_new.GetCount() )
+         continue;
+
+    RecInput( aDCkey[ii].c_str() );
      //test record
      aFo.SetFormula( rcp->form ); // and ce_fscan
      itmpl=0;
@@ -1432,6 +1444,7 @@ void TReacDC::CopyRecords( const char * prfName, TCIntArray& cnt,
         str1.strip();
         str = str1 + ":" + str;
      AddRecord( str.c_str(), fnum_ );
+     aICkey_new.Add( stt );  // 30/11/2006
     }
 
     // close all no project files
