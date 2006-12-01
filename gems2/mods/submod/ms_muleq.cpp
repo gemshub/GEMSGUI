@@ -425,9 +425,9 @@ void TMulti::MultiCalcInit( const char *key )
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
     }
-    else
+    else // Simplex initial approximation to be done
         for( j=0; j<pmp->L; j++ )
-            pmp->Y[j] = 0.0;
+            pmp->X[j] = pmp->Y[j] = 0.0;  // 01/12/2006 SD
 
     //  if( wn[W_EQCALC].status )
     //    aSubMod[MD_EQCALC]->ModUpdate("PM_asm4   Assembling IPM arrays (4)");
@@ -455,7 +455,7 @@ void TMulti::MultiCalcInit( const char *key )
         pmp->PD = TProfil::pm->pa.p.PD;
         SolModLoad();
         /*   pmp->pIPN = 1; */
-        GammaCalc( LINK_TP_MODE);
+         GammaCalc( LINK_TP_MODE);
     }
     else
     {

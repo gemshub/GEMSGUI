@@ -264,7 +264,7 @@ pmp->MBX /= 1000.;
 
 
 
-//    if( pmp->pESU  && pmp->pNP )     // problematic statement !!!!!!!!!
+    if( /*pmp->pESU  &&*/ pmp->pNP )     // problematic statement !!!!!!!!!
     {
 //      unpackData(); // loading data from EqstatUnpack( key );
         pmp->IC = 0.;
@@ -272,9 +272,9 @@ pmp->MBX /= 1000.;
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
     }
-//    else
-//        for( j=0; j<pmp->L; j++ )
-//            pmp->Y[j] = 0.0;
+    else
+        for( j=0; j<pmp->L; j++ )
+           pmp->X[j] =  pmp->Y[j] = 0.0;
 
     CompG0Load();
     for( j=0; j< pmp->L; j++ )

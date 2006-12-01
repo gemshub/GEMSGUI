@@ -62,8 +62,8 @@ void TMulti::SolModLoad( )
     time_t crt;
     TPhase* aPH = TPhase::pm;
 
-  //  if( pmp->pIPN >= 1 )  SD 29/11/2006
-   //     return;
+    // if( pmp->pIPN >= 1 )  //SD 29/11/2006
+    //    return;
     ErrorIf( !pmp->FIs, "SolModLoad", "Invalid number of phases-solutions" );
     /* realloc arrays for script calculations */
     if( pmp->pIPN <= 0 )
