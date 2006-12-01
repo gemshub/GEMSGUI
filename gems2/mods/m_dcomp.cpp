@@ -862,10 +862,14 @@ void TDComp::ParCor(  )
 
     if(z != 0.0)
     {
-        if(abs((int)z) == 1.0) alphaz = 72.;
+/*        if(abs((int)z) == 1.0) alphaz = 72.;    // ???? 1/12/2006
         if(abs((int)z) == 2.0) alphaz = 141.;
         if(abs((int)z) == 3.0) alphaz = 211.;
         if(abs((int)z) == 4.0) alphaz = 286.;
+*/      if(fabs(z) == 1.0) alphaz = 72.;    // ???? 1/12/2006
+        if(fabs(z) == 2.0) alphaz = 141.;
+        if(fabs(z) == 3.0) alphaz = 211.;
+        if(fabs(z) == 4.0) alphaz = 286.;
         if(s != 0.0)
         {
             if(rx != 0.0)

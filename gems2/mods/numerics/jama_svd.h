@@ -11,7 +11,7 @@
 #include <algorithm>
 // for min(), max() below
 #include <cmath>
-// for abs() below
+// for abs() below   // 01/11/2006 change abs for fabs
 
 using namespace TNT;
 using namespace std;
@@ -53,7 +53,7 @@ class SVD
       m = Arg.dim1();
       n = Arg.dim2();
       int nu = min(m,n);
-      s = Array1D<Real>(min(m+1,n)); 
+      s = Array1D<Real>(min(m+1,n));
       U = Array2D<Real>(m, nu, Real(0));
       V = Array2D<Real>(n,n);
       Array1D<Real> e(n);
@@ -267,7 +267,7 @@ class SVD
             if (k == -1) {
                break;
             }
-            if (abs(e[k]) <= eps*(abs(s[k]) + abs(s[k+1]))) {
+            if (fabs(e[k]) <= eps*(fabs(s[k]) + fabs(s[k+1]))) {
                e[k] = 0.0;
                break;
             }
@@ -280,9 +280,9 @@ class SVD
                if (ks == k) {
                   break;
                }
-               double t = (ks != p ? abs(e[ks]) : 0.) + 
-                          (ks != k+1 ? abs(e[ks-1]) : 0.);
-               if (abs(s[ks]) <= eps*t)  {
+               double t = (ks != p ? fabs(e[ks]) : 0.) + 
+                          (ks != k+1 ? fabs(e[ks-1]) : 0.);
+               if (fabs(s[ks]) <= eps*t)  {
                   s[ks] = 0.0;
                   break;
                }
@@ -357,8 +357,8 @@ class SVD
                // Calculate the shift.
    
                double scale = max(max(max(max(
-                       abs(s[p-1]),abs(s[p-2])),abs(e[p-2])), 
-                       abs(s[k])),abs(e[k]));
+                       fabs(s[p-1]),fabs(s[p-2])),fabs(e[p-2])), 
+                       fabs(s[k])),fabs(e[k]));
                double sp = s[p-1]/scale;
                double spm1 = s[p-2]/scale;
                double epm1 = e[p-2]/scale;

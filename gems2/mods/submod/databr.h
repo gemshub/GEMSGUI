@@ -1,18 +1,18 @@
 //-------------------------------------------------------------------
-// DATABRIDGE - defines the structure of node-dependent data for
+// DATABRidge - defines the structure of node-dependent data for
 // exchange between the coupled GEM IPM and FMT code parts.
-// Requires DATACH.H
-// Used in TNode and TNodeArray classes
+// Requires DATACH.H header and data structure.
+// DATABR is used in TNode and TNodeArray classes.
 //
 //      CH: chemical structure in GEM IPM
 //      FMT: fluid mass transport
 //
-// Written by D.Kulik, W.Pfingsten, F.Enzmann and S.Dmytriyeva
-// Copyright (C) 2003-2006
+// Copyright (C) 2003-2006 by D.Kulik, W.Pfingsten, F.Enzmann and S.Dmytriyeva
 //
 // This file is part of GEMIPM2K and GEMS-PSI codes for
 // thermodynamic modelling by Gibbs energy minimization
 // developed by the Laboratory of Waste Management, Paul Scherrer Institute
+
 // This file may be distributed together with GEMIPM2K source code
 // under the licence terms defined in GEMIPM2K.QAL
 //

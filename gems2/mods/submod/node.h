@@ -326,7 +326,7 @@ static TNode* na;   // static pointer to this class
 #endif
 };
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Data direct access macroses (for FMT programs written in C++)
 // Work on both sides of assignment - use with caution!
 //
@@ -340,7 +340,7 @@ static TNode* na;   // static pointer to this class
 
 // Redo into a function with interpolation
 // Diffusion coefficient of dependent component with node index ICx
-// #define nodeCH_DD( DCx )    ( TNode::na->pCSD()->DD[ \
+// #define nodeCH_DD( DCx )    ( TNode::na->pCSD()->DD[
 //                              TNode::na->pCSD()->xDC[(DCx)]] )
 
 // stoichiometry coefficient A[j][i] of IC with node index ICx
@@ -350,10 +350,9 @@ static TNode* na;   // static pointer to this class
                                  (TNode::na->pCSD()->xDC[(DCx)]) * \
                                   TNode::na->pCSD()->nIC]) )
 
-
 // more will be added soon!
 
 #endif
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // _node_h_
 

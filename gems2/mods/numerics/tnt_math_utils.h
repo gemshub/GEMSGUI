@@ -22,11 +22,11 @@ Real hypot(const Real &a, const Real &b)
 {
 	
 	if (a== 0)
-		return abs(b);
+		return fabs(b);
 	else
 	{
 		Real c = b/a;
-		return abs(a) * sqrt(1 + c*c);
+		return fabs(a) * sqrt(1 + c*c);
 	}
 }
 } /* TNT namespace */
