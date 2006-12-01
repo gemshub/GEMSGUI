@@ -1,6 +1,6 @@
 
 //#include <iomanip>
-#include  <fstream.h>
+#include  <fstream>
 #include "gstring.h"
 
 class TPrintArrays  // print fields of structure
