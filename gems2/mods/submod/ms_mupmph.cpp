@@ -721,7 +721,7 @@ PARLOAD: if( k < syp->Fis )
             default: /* if( isdigit( pmp->DCC[j] ))
                                     pmp->Lads++;
                                   else */
-                PMM += pmp->MM[j]/pmp->Ll[k]; /* test it last change 4.12.2006 */
+                PMM += pmp->MM[j]/pmp->L1[k]; /* test it last change 4.12.2006 */
                 break;
             }
         }  /* j */

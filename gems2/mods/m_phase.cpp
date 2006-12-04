@@ -438,8 +438,8 @@ AGAIN_SETUP:
                           break;
 // Added 20.07.2006
           case SM_PRFLUID:  // Peng-Robinson EoS - provisional
-                          php->ncpN = max( (short)2, php->ncpN );
-                          php->ncpM = max( (short)2, php->ncpM );
+                          php->ncpN = max( (short)2, php->nDC );
+                          php->ncpM = max( (short)2, php->nDC );
                           php->nscN = 1; php->nscM = 4;
                           break;
 

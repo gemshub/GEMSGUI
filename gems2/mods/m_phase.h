@@ -25,7 +25,7 @@
 
 const int MAXPHSYMB =      8,
                 MAXPHGROUP =     16,
-                           MAXPNCOEF =      1024,
+                           MAXPNCOEF =  8192,
                                       QPSIZE = 60, // earlier 20, 40 SD oct 2005
                                                QDSIZE = 60;
 
