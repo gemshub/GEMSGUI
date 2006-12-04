@@ -37,10 +37,10 @@ c !// Chemical scalar variables
       real*8 p_Gs  [REFERENCE]  !// Gibbs energy of reactive subsystem (J)  -      -      +     +
       real*8 p_Hs  [REFERENCE]  !// Enthalpy of reactive subsystem (J)      -      -      +     +
       real*8 p_Hi  [REFERENCE]  !// Enthalpy of inert subsystem (J) ?       +      -      -     +
-      real*8 p_IC   [REFERENCE] !// Effective molal aq ionic strength           -      -      +     +
-      real*8 p_pH   [REFERENCE] !// pH of aqueous solution                      -      -      +     +
-      real*8 p_pe  [REFERENCE]  !// pe of aqueous solution                      -      -      +     +
-      real*8 p_Eh  [REFERENCE]  !// Eh of aqueous solution, V                   -      -      +     +
+      real*8 p_IC   [REFERENCE] !// Effective molal aq ionic strength       -      -      +     +
+      real*8 p_pH   [REFERENCE] !// pH of aqueous solution                  -      -      +     +
+      real*8 p_pe  [REFERENCE]  !// pe of aqueous solution                  -      -      +     +
+      real*8 p_Eh  [REFERENCE]  !// Eh of aqueous solution, V               -      -      +     +
 c !//  FMT variables (units need dimensionsless form)
       real*8 p_Tm [REFERENCE]   !// actual total simulation time
       real*8 p_dt  [REFERENCE]  !// actual time step
@@ -70,8 +70,8 @@ c !// exchange of values occurs through lists of indices, e.g. xDC, xPH
       real*8  p_gam(17) ! (nDCb)  !  // activity coeffs of DC [nDCb]               -      -      +     +
       real*8  p_dul(17) ! (nDCb)  ! // upper kinetic restrictions [nDCb]           +      +      -     -
       real*8  p_dll(17) ! (nDCb)  ! //  lower kinetic restrictions [nDCb]           +      +      -     -
-   	real*8  p_aPH(20) ! (nPHb)  !// Specific surface areas of phases (m2/g)       +      +      -     -
-   	real*8  p_xPH(20) ! (nPHb)  !// total mole amounts of phases [nPHb]          -      -      +     +
+      real*8  p_aPH(20) ! (nPHb)  !// Specific surface areas of phases (m2/g)       +      +      -     -
+      real*8  p_xPH(20) ! (nPHb)  !// total mole amounts of phases [nPHb]          -      -      +     +
       real*8  p_vPS(20) ! (nPSb)  !// phase volume, cm3/mol        [nPSb]          -      -      +     +
       real*8  p_mPS(20) ! (nPSb)  !// phase (carrier) mass, g      [nPSb]          -      -      +     +
       real*8  p_bPS(7,20) ! (nICBb,nPSb)  !// bulk compositions of phases  [nPSb][nICb]    -      -      +     +
@@ -140,7 +140,7 @@ c !// exchange of values occurs through lists of indices, e.g. xDC, xPH
       real*8  p_gam(17) ! (nDCb)  !  // activity coeffs of DC [nDCb]               -      -      +     +
       real*8  p_dul(17) ! (nDCb)  ! // upper kinetic restrictions [nDCb]           +      +      -     -
       real*8  p_dll(17) ! (nDCb)  ! //  lower kinetic restrictions [nDCb]           +      +      -     -
-   	real*8  p_aPH(20) ! (nPHb)  !// Specific surface areas of phases (m2/g)       +      +      -     -
+      real*8  p_aPH(20) ! (nPHb)  !// Specific surface areas of phases (m2/g)       +      +      -     -
       real*8  p_xPH(20) ! (nPHb)  !// total mole amounts of phases [nPHb]          -      -      +     +
       real*8  p_vPS(20) ! (nPSb)  !// phase volume, cm3/mol        [nPSb]          -      -      +     +
       real*8  p_mPS(20) ! (nPSb)  !// phase (carrier) mass, g      [nPSb]          -      -      +     +
