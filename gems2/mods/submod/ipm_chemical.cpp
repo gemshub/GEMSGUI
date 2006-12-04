@@ -905,7 +905,7 @@ double TMulti::Cj_init_calc( double g0, int j, int k )
 
     G = g0/pmp->RT;
     /*  if( k < pmp->FIs )  */
-    YOF = pmp->YOF[k];
+    YOF = pmp->YOF[k];     // J/g:   check this!   04.12.2006  DK
     /* Calculation of concentration scaling increments */
     switch( pmp->DCC[j] )
     { /* Aqueous electrolyte */
@@ -918,22 +918,27 @@ double TMulti::Cj_init_calc( double g0, int j, int k )
     case DC_AQ_SOLVENT:
 #ifndef IPMGEMPLUGIN
         if( syp->PYOF != S_OFF )
-            pmp->GEX[j] += YOF;
+            pmp->GEX[j] += YOF;  
 #endif
         break;
-        /* as phase- test add ln P general !!!!!!!!!!!!!!!!!!!!!! */
-    case DC_GAS_COMP: /* gases exept H2O and CO2 */
+    case DC_GAS_COMP: /* gases except H2O and CO2 */
     case DC_GAS_H2O: /* index to switch off? */
     case DC_GAS_CO2:
     case DC_GAS_H2:
     case DC_GAS_N2:
-        if( pmp->Pparc[j] != 1.0 && pmp->Pparc[j] > 1e-30 )
-            G += log( pmp->Pparc[j] );
-        /* Solution non-electrolyte */
-    case DC_SCP_CONDEN: /*a single-component phase */
     case DC_SOL_IDEAL:
     case DC_SOL_MINOR:
-    case DC_SOL_MAJOR:
+    case DC_SOL_MAJOR: // changed by DK on 4.12.2006
+        if( pmp->PHC[k] == PH_GASMIX || pmp->PHC[k] == PH_FLUID
+            || pmp->PHC[k] == PH_PLASMA )
+        {
+//        if( pmp->Pparc[j] != 1.0 && pmp->Pparc[j] > 1e-30 )
+//           G += log( pmp->Pparc[j] ); // log partial pressure/fugacity
+//        else
+               G += log( pmp->Pc ); // log general pressure (changed 04.12.2006)
+        }
+        /* Solution of non-electrolyte */
+    case DC_SCP_CONDEN: /*a single-component phase */
     case DC_SUR_MINAL:
     case DC_SUR_CARRIER:
     case DC_PEL_CARRIER:

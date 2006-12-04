@@ -43,7 +43,7 @@ int TPRSVcalc::CalcFugPure( void )
 
 // Calling PRSV EoS functions here
 
-    if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1. && P < 1e5 )
+    if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1e-5 && P < 1e5 )
        retCode = PRFugacityPT( P, T, Coeff, Eos2parPT, Fugcoeff, Volume,
             DeltaH, DeltaS );
     else {

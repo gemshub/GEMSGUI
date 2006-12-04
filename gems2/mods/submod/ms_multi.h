@@ -252,7 +252,7 @@ typedef struct
     *RFSC,  // Classifier of restriction scales for XF_a 0:FIs-1
     *ICC,   // Classifier of IC { e o h a z v i <int> } 0:N-1
     *DCC,   // Classifier of DC { TESWGVCHNIJMDRAB0123XYZPQO } 0:L-1
-    *PHC;   // Classifier of phases { a g p m l x d h } 0:FI-1
+    *PHC;   // Classifier of phases { a g f p m l x d h } 0:FI-1
   char  (*SCM)[MST]; //classifier of adsorption models for sur types [FIs][FIat]
   char  *SATT,  /* classifier of methods of SAT calculation [0:Lads] */
     *DCCW;  // reserved 0:L-1 codes see in file S_CLASS.H

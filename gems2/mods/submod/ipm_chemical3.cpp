@@ -1092,7 +1092,7 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k )
       Error( "E71IPM IPMgamma: ",  buf );
     }
     // Phase volume of the fluid in cm3
-    pmp->FVOL[k] = PhVol * 10.;;
+    pmp->FVOL[k] = PhVol * 10.;
 
     for( jj=0, j=jb; j<je; j++, jj++ )
     {
