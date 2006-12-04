@@ -166,7 +166,7 @@ static TNode* na;   // static pointer to this class
 
    // (2 alternative)
    // reads work node (DATABR structure) from a file
-   int  GEM_read_dbr( bool binary_f, char *fname );
+   int  GEM_read_dbr( bool binary_f, const char *fname );
 
    // (4)
    // Main call for GEM IPM calculation, returns p_NodeStatusCH value

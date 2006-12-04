@@ -3,7 +3,7 @@
 //
 // Declaration of TSData class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva   
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -72,7 +72,7 @@ public:
     void set_def( int i=0);
 
     int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecSave( const char *key, bool onOld ); // Added 09.04.03 KD 
+    void RecSave( const char *key, bool onOld ); // Added 09.04.03 KD
 
     void CmHelp();                       // 05.01.01
     char *getAbstr() const

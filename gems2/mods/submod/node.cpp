@@ -137,7 +137,7 @@ int  TNode::GEM_run()
 }
 
  // reads work node (DATABR structure) from a  file
-int  TNode::GEM_read_dbr( bool binary_f, char *fname )
+int  TNode::GEM_read_dbr( bool binary_f, const char *fname )
 {
   try
   {
@@ -152,7 +152,7 @@ int  TNode::GEM_read_dbr( bool binary_f, char *fname )
        ErrorIf( !in_br.good() , fname, "DataBR Fileopen error");
        databr_from_text_file(in_br);
    }
-  } catch(TError& err)
+  } catch(TError& /*err*/)
     {
       return 1;
     }

@@ -548,8 +548,8 @@ void TMulti::from_text_file_gemipm( const char *path )
 //   }
 //   else
 //  {
-    RoW = 0.99706137180;
-    EpsW = 78.245147705;
+    RoW = (float)0.99706137180;
+    EpsW = (float)78.245147705;
 //  }
 
 #ifndef IPMGEMPLUGIN

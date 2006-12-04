@@ -227,7 +227,10 @@ TValString::SetString(const char* s, size_t )
         Alloc(l);
 
     strncpy((char*)ptr, s, size);
+    if(dynamic)
     ((char*)ptr)[size] = '\0';
+//    else
+//    ((char*)ptr)[size-1] = '\0';
 
     return true;
 }
@@ -315,7 +318,7 @@ TVal<double>::GetString(size_t ndx) const
 
     return vbuf.p;
 }
-#endif 
+#endif
 
 //--------------------- End of v_vals.cpp ---------------------------
 
