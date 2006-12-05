@@ -278,7 +278,8 @@ pmp->MBX /= 1000.;
 
     CompG0Load();
     for( j=0; j< pmp->L; j++ )
-        pmp->G[j] = pmp->G0[j];
+//        pmp->G[j] = pmp->G0[j];   changed 5.12.2006 KD
+        pmp->G[j] = pmp->G0[j] + pmp->GEX[j];
     // test phases - solutions and load models
     if( pmp->FIs )
     {

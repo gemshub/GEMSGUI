@@ -667,9 +667,9 @@ TDComp::DCthermo( int q, int p )
     CM = toupper( dcp->pct[0] );
     CE = toupper( dcp->pct[1] );
     CV = toupper( dcp->pct[2] );
-    if( CM != CTPM_HKF && aW.twp->P < 1e-9 )
-         aW.twp->P = 1e-9;
-    if( CM == CTPM_HKF || aW.twp->P < 1e-9 )  // fixed by KD 03.07.03
+    if( CM != CTPM_HKF && aW.twp->P < 1e-5 )
+         aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
+    if( CM == CTPM_HKF || aW.twp->P < 1.00001e-5 )  // fixed by KD 03.07.03, 05.12.06
     {// HKF calculations or determination of P_sat if P=0
 
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
@@ -679,7 +679,7 @@ TDComp::DCthermo( int q, int p )
             if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
                 aSta.Temp = 0.01;
             aSta.Pres =  aW.twp->P;
-
+aSta.Pres = 0.0;  // experimental check 5.12.2006
             TSupcrt supCrt;
             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
             aW.twp->P = aSta.Pres;

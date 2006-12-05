@@ -918,7 +918,8 @@ double TMulti::Cj_init_calc( double g0, int j, int k )
     case DC_AQ_SOLVENT:
 #ifndef IPMGEMPLUGIN
         if( syp->PYOF != S_OFF )
-            pmp->GEX[j] += YOF;  
+//            pmp->GEX[j] += YOF;
+        G += YOF;
 #endif
         break;
     case DC_GAS_COMP: /* gases except H2O and CO2 */
@@ -944,7 +945,8 @@ double TMulti::Cj_init_calc( double g0, int j, int k )
     case DC_PEL_CARRIER:
 #ifndef IPMGEMPLUGIN
         if( syp->PYOF != S_OFF )
-            pmp->GEX[j] += YOF;
+//            pmp->GEX[j] += YOF;
+           G += YOF;
 #endif
         break;
         /* Sorption phases */
@@ -968,7 +970,8 @@ double TMulti::Cj_init_calc( double g0, int j, int k )
     default: /* error code */
         return 7777777.;
     }
-    return G += pmp->GEX[j];
+//    return G += pmp->GEX[j];
+    return G;
 }
 
 //----------------------------------------------------------------
@@ -1014,8 +1017,9 @@ void TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
     {
       if( XF[k] >= pmp->DSM ) // pmp->lowPosNum ) fixed by KD 23.11.01
       {
-         XU[j] = -pmp->G0[j] -pmp->lnGam[j]
-                 + DualChemPot( pmp->U, pmp->A+j*pmp->N, pmp->NR );
+ //        XU[j] = -pmp->G0[j] -pmp->lnGam[j]  changed 5.12.2006
+         XU[j] = -pmp->G0[j] - pmp->lnGam[j] - pmp->GEX[j]
+                  + DualChemPot( pmp->U, pmp->A+j*pmp->N, pmp->NR );
          if( pmp->PHC[k] == PH_AQUEL ) // pmp->LO && k==0)
          {
             if(j == pmp->LO)

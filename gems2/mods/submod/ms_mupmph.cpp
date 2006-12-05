@@ -349,7 +349,9 @@ CH_FOUND:
         }
         // additional data
         if( syp->PGEX != S_OFF /* && syp->PYOF != S_ON */ )
-            pmp->GEX[j] = syp->GEX[jj]/pmp->RT;
+// !!!!!!!!!!!!!!!!!!!!!! Insert here a case that checks units of
+//    measurement for Gibbs energy increment
+             pmp->GEX[j] = syp->GEX[jj]/pmp->RT;
         else pmp->GEX[j] = 0.0;  // Standard free energy increments
 
         if( syp->PParc != S_OFF )

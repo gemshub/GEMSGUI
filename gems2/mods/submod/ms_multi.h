@@ -176,7 +176,7 @@ typedef struct
   double
     *DUL,  // VG Vector of upper restrictions to x_j (reserved) [L]
     *DLL,  // NG Vector of lower restrictions to x_j, moles [L]
-    *GEX,  // Excess free energy of (metastable) DC, moles [L]
+    *GEX,  // Molar Gibbs energy increment of (metastable) DC, normalized to moles [L]
     *PUL,  // Vector of upper restrictions to X_a (reserved)[FIs]
     *PLL,  // Vector of lower restrictions to X_a (reserved)[FIs]
     *YOF,  // Phase metastability parameter [FI !!!!]

@@ -293,7 +293,7 @@ void TMulti::CompG0Load()
                 }
             else pmp->Vol[j] = 0.0;
 
-            /* load ather t/d parametres - do it! */
+            /* load other t/d parametres - do it! */
         }
     }
     pmp->pTPD = 2;
@@ -382,7 +382,8 @@ void TMulti::EqstatExpand( const char *key )
         {
             /* calc Excess Gibbs energies F0 and values c_j */
             pmp->F0[j] = Ej_init_calc( 0, j, k );
-            pmp->G[j] = pmp->G0[j] + pmp->F0[j];
+//            pmp->G[j] = pmp->G0[j] + pmp->F0[j];
+            pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];
             /* pmp->Gamma[j] = exp( pmp->lnGam[j] ); */
         }
     }
@@ -439,7 +440,8 @@ void TMulti::MultiCalcInit( const char *key )
     for( j=0; j< pmp->L; j++ )
     {
         /* pmp->Y[j] = pmp->X[j]; */
-        pmp->G[j] = pmp->G0[j]; /* pmp->GEX[j]; */
+//        pmp->G[j] = pmp->G0[j]; /* pmp->GEX[j]; */
+        pmp->G[j] = pmp->G0[j] + pmp->GEX[j];    // changed 5.12.2006 
     }
     // test phases - solutions and load models
     if( pmp->FIs )

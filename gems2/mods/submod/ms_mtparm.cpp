@@ -314,6 +314,8 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
     TK = TC + C_to_K;
     P_old = P = cP;
     tp.T = TC; tp.TK = TK; /* scales !!! */
+if( P < 1e-5 )  // trial check  5.12.2006
+  P = 1e-5;
     tp.P = P;
     tp.RT = R_CONSTANT * TK;
     if( tp.La && TC < 120. && TC >= 0.0 )
@@ -360,8 +362,8 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);    // added 07.06.05 by KD
             aDC->DCthermo( 0, 0 );
         else aRC->RCthermo( 0, 0 );
 
-        if( aWp.init && P_old < 1e-6 && P < 1e-6 )      //  Doubtful ??
-        {  /* insert precision?calculated by KNP */
+        if( aWp.init && P_old < 1.00001e-5 && P < 1.00001e-5 )  //  Doubtful ??
+        {  /* insert precision? calculated by Psat */
             P = tp.P = aW.twp->P;
             tp.PeosW = S_ON;
             tp.P_HKF = S_ON;
