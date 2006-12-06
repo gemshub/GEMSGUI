@@ -25,11 +25,12 @@ int  __stdcall  F_GEM_INIT( char* string_, unsigned int length_ )
 
 // Parameter list may be extended in future with other DCH elements
 extern "C"
-int  __stdcall  F_GEM_GET_DCH( int& p_nICb, int& p_nDCb, float* p_A )
+int  __stdcall  F_GEM_GET_DCH( int& p_nICb, int& p_nDCb, int& p_nPHb, float* p_A )
 {
 
    p_nICb = TNode::na->pCSD()->nIC;
    p_nDCb = TNode::na->pCSD()->nDC;
+   p_nPHb = TNode::na->pCSD()->nPHb;
     for( int i=0; i<p_nICb; i++ )
        for( int j=0; j<p_nDCb; j++ )
 		   p_A[j*p_nICb+i] = nodeCH_A(j, i);

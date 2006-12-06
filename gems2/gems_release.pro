@@ -8,8 +8,10 @@ VERSION         = 2.1.1
 DEFINES         += Use_mt_mode
 DEFINES         += GEMS_RELEASE
 
+#CONFIG		= qt thread warn_off debug staticlib exceptions
+#CONFIG		+= thread warn_off
 CONFIG		-= debug
-CONFIG		+= qt thread warn_off release
+CONFIG		+= warn_off release staticlib
 
 !win32 {
   LIBS            -= -lqt-mt
@@ -17,10 +19,12 @@ CONFIG		+= qt thread warn_off release
   DEFINES         += __unix
 }
 
-#CONFIG		+= qmake_cache
-
 win32-borland {
        	DEFINES += __win32_borland
+	# Keep the size of the .tds file for the Qt library smaller than
+	# 34 Mbytes to avoid linking problems
+	# QMAKE_CFLAGS_DEBUG += -vi -y-
+	# QMAKE_CXXFLAGS_DEBUG += -vi -y-
         QMAKE_CFLAGS += -x -xd -xp -VM -RT
         QMAKE_CXXFLAGS += -x -xd -xp -VM -RT
 }
@@ -54,13 +58,13 @@ UI_HEADERDIR  = $$MOC_DIR
 OBJECTS_DIR       = obj
 
 
-include($$VIZOR_CPP/vizor.pri)
 include($$LIBS_CPP/libs.pri)
 include($$KERNEL_CPP/kernel.pri)
-include($$DLG_CPP/dlg.pri)
 include($$MODS_CPP/mods.pri)
 include($$NUMERICS_CPP/numerics.pri)
 include($$SUBMOD_CPP/submod.pri)
+include($$VIZOR_CPP/vizor.pri)
+include($$DLG_CPP/dlg.pri)
 
 
 

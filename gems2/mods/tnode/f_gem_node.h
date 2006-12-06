@@ -32,6 +32,7 @@ extern "C"
 int  __stdcall  F_GEM_GET_DCH(  // All parameters are return values
    int& p_nICb,   // Number of Independent Components (ICs) in chemical system
    int& p_nDCb,   // Number of Dependent Components (DCs) in chemical system
+   int& p_nPHb,
    float* p_A     // Stoichiometry matrix A with nDCb rows and nICb columns
                   // before calling  F_GEM_GET_DCH(), a memory block of the size
                   // greater than sizeof(float)*nDCb*nICb must be allocated and
