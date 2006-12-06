@@ -553,7 +553,8 @@ TSupcrt::valid(int it, int id, int ip, int ih, int itripl, int isat,
             {
                 *eR = 0;
                 Error( "Tsupcrt", "Error 3 HKF H2O: at isat=1 & iopt=1, input T falls"
-                       " outside the region between triple and critical points of H2O!");
+                       " outside the region between triple and critical points of H2O!"
+                       " Please try with pressure P > 0.006 bar...");
             }
         }
         else
