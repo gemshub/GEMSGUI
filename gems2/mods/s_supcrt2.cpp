@@ -535,13 +535,13 @@ TSupcrt::valid(int it, int id, int ip, int ih, int itripl, int isat,
         if (iopt == 1)
         {
             *eR = valTD(trp.T, trp.D, isat, epseqn);
-            ErrorIf( !*eR, "Tsupcrt","Error 1 HKF H2O: at isat=0 & iopt=1,"
+            ErrorIf( !*eR, "Tsupcrt","Error 1 HKF H2O: at isat=0 & iopt=1,\n"
                      " entered values of T & D fall outside validity region of HGK EOS!");
         }
         else
         {
             *eR = valTP(trp.T, trp.P);
-            ErrorIf( !*eR, "Tsupcrt","Error 2 HKF H2O: at isat=0 & iopt=2, "
+            ErrorIf( !*eR, "Tsupcrt","Error 2 HKF H2O: at isat=0 & iopt=2, \n"
                      "entered values of T & P fall outside validity region of HGK EOS!");
         }
     }
@@ -552,8 +552,8 @@ TSupcrt::valid(int it, int id, int ip, int ih, int itripl, int isat,
             if ( !((trp.T + to->FPTOL  >= Ttripl) && (trp.T- to->FPTOL <= Tcrit)))
             {
                 *eR = 0;
-                Error( "Tsupcrt", "Error 3 HKF H2O: at isat=1 & iopt=1, input T falls"
-                       " outside the region between triple and critical points of H2O!"
+                Error( "Tsupcrt", "Error 3 HKF H2O: at isat=1 & iopt=1, input T falls\n"
+                       " outside the region between triple and critical points of H2O!\n"
                        " Please try with pressure P > 0.006 bar...");
             }
         }
@@ -562,7 +562,7 @@ TSupcrt::valid(int it, int id, int ip, int ih, int itripl, int isat,
             if ( !((trp.P+ to->FPTOL >= tt->Ptripl) && (trp.P - to->FPTOL <= Pcrit)))
             {
                 *eR = 0;
-                Error( "Tsupcrt","Error 4 HKF H2O: at isat=1 & iopt=2, input P falls"
+                Error( "Tsupcrt","Error 4 HKF H2O: at isat=1 & iopt=2, input P falls\n"
                        " outside the region between triple and critical points of H2O!");
             }
         }
