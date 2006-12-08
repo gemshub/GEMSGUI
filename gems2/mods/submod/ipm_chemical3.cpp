@@ -205,19 +205,21 @@ NEXT_PHASE:
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Link DOD for Non-ideality Equations in GammaCalc() */
-void TMulti::pm_GC_ods_link( int k, int jb, int jpb, int jdb )
+void TMulti::pm_GC_ods_link( int k, int jb, int jpb, int jdb, int ipb )
 {
-//Ask Dima!!! 20/04/2002
+
 #ifndef IPMGEMPLUGIN
-    ErrorIf( k < 0 || k >= pmp->FIs , "GammaCalc", "Illegal link: k=0||>FIs" );
+    ErrorIf( k < 0 || k >= pmp->FIs , "GammaCalc", "Invalid link: k=0||>FIs" );
     aObj[ o_nsmod].SetPtr( pmp->sMod[k] );
     aObj[ o_nncp].SetPtr( pmp->LsMod+k );
     aObj[ o_nncd].SetPtr( pmp->LsMdc+k );
     aObj[ o_ndc].SetPtr(  pmp->L1+k );
+aObj[ o_wi_ipxpm ].SetPtr( pmp->IPx+ipb);   // added 07.12.2006  KD
+aObj[ o_wi_ipxpm ].SetDim(pmp->LsMod[k*3], pmp->LsMod[k*3+1]); // changed
     aObj[ o_nez].SetPtr( pmp->EZ+jb );
     aObj[o_nez].SetN(  pmp->L1[k]);
-    aObj[ o_npcv].SetPtr( pmp->PMc+jpb );
-    aObj[o_npcv].SetDim( 1, pmp->LsMod[k]);
+aObj[ o_npcv].SetPtr( pmp->PMc+jpb );
+aObj[o_npcv].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+2]); // changed 07.12.2006
     aObj[ o_ndcm].SetPtr( pmp->DMc+jdb );
     aObj[o_ndcm].SetDim( pmp->L1[k], pmp->LsMdc[k] );
     aObj[ o_nmvol].SetPtr( pmp->Vol+jb );
@@ -311,7 +313,7 @@ static double ICold=0.;
 */
 void TMulti::GammaCalc( int LinkMode  )
 {
-    int k, j, jb, je=0, jpb, jpe=0, jdb, jde=0;
+    int k, j, jb, je=0, jpb, jpe=0, jdb, jde=0, ipb, ipe=0;
     char *sMod;
     double LnGam, pmpXFk;
     SPP_SETTING *pa = &TProfil::pm->pa;
@@ -418,8 +420,11 @@ for( j = jb; j < je; j++ )
    pmpXFk += pmp->X[j];
 if( pmp->XF[k] < pmp->DSM ) // Bugfix by KD 09.08.2005 (bug report Th.Matschei)
    pmp->XF[k] = pmpXFk;
+// Indexes for extracting data from IPx, PMc and DMc arrays
+ipb = ipe;                  // added 07.12.2006 by KD
+ipe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
         jpb = jpe;
-        jpe += pmp->LsMod[k];
+        jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
         jdb = jde;
         jde += pmp->LsMdc[k]*pmp->L1[k];
 //  memset( pmp->Qd, 0, sizeof(double)*QDSIZE );  Dubious line! KD 03.07.02
@@ -544,7 +549,7 @@ if( sMod[SPHAS_TYP] == SM_PRFLUID && pmp->XF[k] > pa->p.PhMin )
 //Ask Dima!!! 20/04/2002
 #ifndef IPMGEMPLUGIN
         /* Link DOD and set sizes of work arrays */
-        pm_GC_ods_link( k, jb, jpb, jdb );
+        pm_GC_ods_link( k, jb, jpb, jdb, ipb );
         pmp->is=0;
         pmp->js=0;
         pmp->next=1;

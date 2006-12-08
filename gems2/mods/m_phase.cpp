@@ -61,17 +61,18 @@ void TPhase::ods_link( int q)
     //aObj[ o_phcls].SetPtr(  ph[q].cls );
     //aObj[ o_phgrp].SetPtr(  ph[q].grp );
     aObj[ o_phsolt].SetPtr( ph[q].sol_t );
-    aObj[ o_phps].SetPtr(  &ph[q].PphC );  /*a 6*/
-    aObj[ o_phndc].SetPtr( &ph[q].nDC );   /*i 2*/
-    aObj[ o_phpncp].SetPtr(&ph[q].ncpN );  /*i 2*/
-    aObj[ o_phnsc].SetPtr( &ph[q].nscN );  /*i 2*/
-    aObj[ o_phnsit].SetPtr(&ph[q].NsiT );  /*i 2*/
+    aObj[ o_phps].SetPtr(  &ph[q].PphC );  // a 6
+    aObj[ o_phndc].SetPtr( &ph[q].nDC );   // i 2
+    aObj[ o_phpncp].SetPtr(&ph[q].ncpN );  // i 2
+aObj[ o_phnsc].SetPtr( &ph[q].nscM );  // i 1  changed 07.12.2006 KD
+aObj[ o_phnpx].SetPtr( &ph[q].npxM );  // i 1  added 07.12.2006 KD
+    aObj[ o_phnsit].SetPtr(&ph[q].NsiT );  // i 2
     /* Record 22 fields */
     aObj[ o_phstr].SetPtr(  ph[q].sol_t );
     aObj[ o_phname].SetPtr( ph[q].name );
     aObj[ o_phnotes].SetPtr(ph[q].notes );
-    aObj[ o_phdim].SetPtr( &ph[q].nDC );     /*i 8*/
-    aObj[ o_phdisep].SetPtr(&ph[q].Asur );    /*f 8*/
+    aObj[ o_phdim].SetPtr( &ph[q].nDC );     // i 8
+    aObj[ o_phdisep].SetPtr(&ph[q].Asur );   // f 8
     // NsiT
     aObj[ o_phscmc].SetPtr(  ph[q].SCMC );
     aObj[ o_phscmc].SetDim( ph[q].NsiT, 1 );
@@ -90,8 +91,8 @@ void TPhase::ods_link( int q)
     aObj[ o_phmasdj].SetPtr( ph[q].MaSdj);
 //    aObj[ o_phmasdj].SetDim( ph[q].nDC, 1 );
     aObj[ o_phmasdj].SetDim( ph[q].nDC, DFCN );
-    aObj[ o_phpxres].SetPtr( ph[q].PXres);
-    aObj[ o_phpxres].SetDim( ph[q].nDC, 1 );
+aObj[ o_phpxres].SetPtr( ph[q].ipxt);  // changed 07.12.2006 KD
+    aObj[ o_phpxres].SetDim( ph[q].ncpN, ph[q].npxM );
     aObj[ o_phsm].SetPtr(   ph[q].SM[0] );
     aObj[ o_phsm].SetDim( ph[q].nDC, 1 );
     aObj[ o_phdcc].SetPtr(  ph[q].DCC );
@@ -102,7 +103,8 @@ void TPhase::ods_link( int q)
     aObj[ o_phpnc].SetPtr(  ph[q].pnc );
     aObj[ o_phpnc].SetDim( ph[q].ncpN, ph[q].ncpM );
     aObj[ o_phscoef].SetPtr( ph[q].scoef );
-    aObj[ o_phscoef].SetDim( ph[q].nDC, ph[q].nscN*ph[q].nscM );
+//  aObj[ o_phscoef].SetDim( ph[q].nDC, ph[q].nscN*ph[q].nscM );
+aObj[ o_phscoef].SetDim( ph[q].nDC, ph[q].nscM ); // changed 07.12.2006  KD
     // ??????
     aObj[ o_phpeq].SetPtr(  ph[q].pEq );
     //   aObj[ o_phpeq].SetDim( 1, strlen(ph[q].pEq));
@@ -143,7 +145,7 @@ void TPhase::dyn_set(int q)
     ph[q].CapT  = (float (*)[2])aObj[ o_phcapt ].GetPtr();
     ph[q].SATC  = (char (*)[MCAS])aObj[ o_phsatc ].GetPtr();
     ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].GetPtr();
-    ph[q].PXres = (float *)aObj[ o_phpxres ].GetPtr();
+    ph[q].ipxt =  (short *)aObj[ o_phpxres ].GetPtr(); // changed 07.12.2006 KD
     ph[q].pnc =   (float *)aObj[ o_phpnc ].GetPtr();
     ph[q].scoef = (float *)aObj[ o_phscoef ].GetPtr();
     ph[q].SM =    (char (*)[DC_RKLEN])aObj[ o_phsm ].GetPtr();
@@ -172,7 +174,7 @@ void TPhase::dyn_kill(int q)
     ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Free();
     ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Free();
     ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Free();
-    ph[q].PXres = (float *)aObj[ o_phpxres ].Free();
+    ph[q].ipxt =  (short *)aObj[ o_phpxres ].Free();  // changed 07.12.2006  KD
     ph[q].pnc =   (float *)aObj[ o_phpnc ].Free();
     ph[q].scoef = (float *)aObj[ o_phscoef ].Free();
     ph[q].SM =    (char (*)[DC_RKLEN])aObj[ o_phsm ].Free();
@@ -200,8 +202,8 @@ void TPhase::dyn_new(int q)
     ph[q].DCC = (char *)aObj[ o_phdcc ].Alloc( ph[q].nDC, 1, A_ );
 
     if( ph[q].Psco == S_ON )
-        ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC,
-                      ph[q].nscN*ph[q].nscM, F_ );
+ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
+//                ph[q].nscN*ph[q].nscM, F_ );  changed 07.12.2006  KD
     else
         ph[q].scoef = (float *)aObj[ o_phscoef ].Free();
 
@@ -221,7 +223,7 @@ void TPhase::dyn_new(int q)
         ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Alloc( ph[q].nDC, MCAS, A_);
 //        ph[q].MaSdj = (float *)aObj[ o_phmasdj ].Alloc( ph[q].nDC, 1, F_);
     ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Alloc( ph[q].nDC, DFCN, F_);
-        ph[q].PXres = (float *)aObj[ o_phpxres ].Alloc( ph[q].nDC, 1, F_);
+ph[q].ipxt = (short *)aObj[ o_phpxres ].Alloc( ph[q].ncpN, ph[q].npxM, I_);
     }
     else
     {
@@ -232,7 +234,7 @@ void TPhase::dyn_new(int q)
         ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Free();
         ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Free();
         ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Free();
-        ph[q].PXres = (float *)aObj[ o_phpxres ].Free();
+        ph[q].ipxt = (short *)aObj[ o_phpxres ].Free();
     }
     if( ph[q].Nsd )
     {
@@ -295,7 +297,7 @@ void TPhase::set_def( int q)
 
     ph[q].Nsd = 1;
     ph[q].nDC = ph[q].ncpN = ph[q].ncpM =0;
-    ph[q].NsiT = ph[q].nscN = ph[q].nscM = ph[q].NR1 = 0;
+    ph[q].NsiT = ph[q].nscM = ph[q].npxM = ph[q].NR1 = 0;
     ph[q].Asur =    0;//FLOAT_EMPTY;
     ph[q].Sigma0 =  0;//FLOAT_EMPTY;
     ph[q].SigmaG =  0;//FLOAT_EMPTY;
@@ -311,7 +313,8 @@ void TPhase::set_def( int q)
     ph[q].CapT =  0;
     ph[q].SATC =  0;
     ph[q].MaSdj = 0;
-    ph[q].PXres = 0;
+//    ph[q].PXres = 0;  changed 07.12.2006  by KD 
+ph[q].ipxt = 0;
     ph[q].pnc =   0;
     ph[q].scoef = 0;
     ph[q].SM =    0;
@@ -358,8 +361,8 @@ TPhase::MakeQuery()
     size[0] = php->Nsd;
     size[1] = php->ncpN;
     size[2] = php->ncpM;
-    size[3] = php->nscN;
-    size[4] = php->nscM;
+    size[3] = php->nscM;
+    size[4] = php->npxM;
     size[5] = php->NsiT;
 
     if( !vfPhaseSet( window(), p_key, flgs, size, r2 ))
@@ -370,8 +373,8 @@ TPhase::MakeQuery()
     php->Nsd = (short)size[0];
     php->ncpN = (short)size[1];
     php->ncpM = (short)size[2];
-    php->nscN = (short)size[3];
-    php->nscM = (short)size[4];
+    php->nscM = (short)size[3];
+    php->npxM = (short)size[4];
     php->NsiT = (short)size[5];
     php->Asur = r2;
 }
@@ -395,7 +398,8 @@ TPhase::RecBuild( const char *key, int mode  )
     php->PphC = php->pst[0];
     if( php->PphC == PH_FLUID /* && php->sol_t[SPHAS_TYP] == SM_OTHER */ )
     {
-        php->nscN = 1; php->nscM = MAXEOSPARAM;
+//        php->nscN = 1; php->nscM = MAXEOSPARAM;  changed 07.12.2006 KD
+        php->nscM = MAXEOSPARAM;
     }
 
 AGAIN_SETUP:
@@ -418,67 +422,79 @@ AGAIN_SETUP:
 //       php->sol_t[SCM_TYPE] = SM_UNDEF;
 
        switch(php->sol_t[SPHAS_TYP])
-       {
+       {              // These all have to be checked !!!!!!!!!!!!!!!!!!!!!!!
           case SM_REDKIS:   // Redlich-Kister
-                          php->nscN = php->nscM =0;
+                          php->nscM = 0;
+                          php->npxM = 0;
                           php->ncpN = 1; php->ncpM = 3;
                           break;
           case SM_MARGB:  // Margules binary subregular
-                          php->nscN = php->nscM =0;
+                          php->nscM = 0;
+                          php->npxM = 0;
                           php->ncpN = 2; php->ncpM = 3;
                           break;
           case SM_MARGT:  // Margules ternary regular
-                          php->nscN = php->nscM =0;
+                          php->nscM = 0;
+                          php->npxM = 0;
                           php->ncpN = 4; php->ncpM = 3;
                           break;
 //          case SM_RECIP:
           case SM_CGFLUID:  // Churakov-Gottschalk EoS
-                          php->ncpN = php->ncpM =0;
-                          php->nscN = 1; php->nscM = 4;
+                          php->ncpN = 0;
+                          php->ncpM = 0;
+                          php->nscM = 4;
+                          php->npxM = 0;
+//                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
 // Added 20.07.2006
           case SM_PRFLUID:  // Peng-Robinson EoS - provisional
                           php->ncpN = max( (short)2, php->nDC );
                           php->ncpM = max( (short)2, php->nDC );
-                          php->nscN = 1; php->nscM = 4;
+                          php->nscM = 4;
+                          php->npxM = 2;
+//                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
 
           case SM_AQDAV:  // Aqueous Davies
                           php->ncpN = php->ncpM = 0;
-                          php->nscN = php->nscM = 0;
+                          php->nscM = php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
           case SM_AQDH1:  // Aqueous DH LL
                           php->ncpN = php->ncpM = 0;
-                          php->nscN = php->nscM = 0;
+                          php->nscM = php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
           case SM_AQDH2:  // DH Kielland, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
-                          php->nscN = php->nscM = 1;
+                          php->nscM = 1;
+                          php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
           case SM_AQDH3:  // EDH Kielland, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
-                          php->nscN = php->nscM = 1;
+                          php->nscM = 1;
+                          php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
           case SM_AQDHH:  // EDH Helgeson, common a0, salt-out for neutral
                           php->ncpN = 2; php->ncpM = 4;
-                          php->nscN = php->nscM = 0;
+                          php->nscM = 0;
+                          php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
           case SM_AQSIT:  // SIT model in NEA variant
                           php->ncpN = max( (short)3, php->ncpN );
                           php->ncpM = max( (short)2, php->ncpM );
-                          php->nscN = php->nscM = 1;
+                          php->nscM = 1;
+                          php->npxM = 2;    // to fix later
                           php->PphC = PH_AQUEL;
                           break;
           default:  // other models
              break;
        }
     }
-    if( php->nscN < 0 || php->nscM < 0 || php->ncpN < 0 || php->ncpM < 0 ||
+    if( php->nscM < 0 || php->npxM < 0 || php->ncpN < 0 || php->ncpM < 0 ||
             php->ncpN*php->ncpM > MAXPNCOEF || php->Nsd < 0 || php->Nsd > 16 ||
             php->NsiT < 0 || php->NsiT > 6 )
     {
@@ -594,12 +610,14 @@ AGAINRC:
 //---------------------------------------------------------------------
 
     /* insert coeff of model of solid and other data */
-    if( php->nscN * php->nscM ) php->Psco = S_ON;
+    if( php->nscM ) php->Psco = S_ON;
     else  php->Psco = S_OFF;
+// if( php->nscM ) php->Psco = S_ON;   07.12.2006  KD   Check later!
+//    else  php->Psco = S_OFF;
     if( php->ncpN * php->ncpM ) php->Ppnc = S_ON;
     else php->Ppnc = S_OFF;
-    if( !php->NsiT ) /* && php->PFsiT != S_REM ) php->PFsiT = S_ON;
-               else */  php->PFsiT = S_OFF;
+    if( !php->NsiT )
+         php->PFsiT = S_OFF;
     if( php->sol_t[DCOMP_DEP] == SM_UNDEF ) php->PdEq = S_OFF;
     else php->PdEq = S_ON;
     if( php->sol_t[SPHAS_DEP] == SM_UNDEF ) php->PpEq = S_OFF;
@@ -842,8 +860,9 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     if( (php->PphC == PH_AQUEL /* || php->PphC == PH_SORPTION ||
                   php->PphC == PH_POLYEL */ ) && php->scoef )
     {
-        nsc = (short)(php->nscN * php->nscM);
-//        nCat = 0; nAn = 0;
+//        nsc = (short)(php->nscN * php->nscM);
+        nsc = php->nscM;
+    //        nCat = 0; nAn = 0;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
    "Parameters of aqueous species: Collect from DComp/ReacDC records?"))
         {
@@ -928,7 +947,8 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     if( php->PphC == PH_SORPTION || php->PphC == PH_POLYEL )
     {
 // Rewritten by KD on 13.09.04 for Frumkin and on 25.10.04 for CD EDL models
-      nsc = (short)(php->nscN * php->nscM);
+//      nsc = (short)(php->nscN * php->nscM);
+      nsc = php->nscM;
       memset( dcn, 0, MAXRKEYLEN );
       for( i=0; i<php->nDC; i++ )
       {  /*Get key */
@@ -998,7 +1018,8 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
     if( ( php->PphC == PH_FLUID || php->PphC == PH_LIQUID ) && php->scoef )
     {
         int kx, mcex;
-        nsc = (short)(php->nscN * php->nscM);
+//        nsc = (short)(php->nscN * php->nscM);
+        nsc = php->nscM;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
    "CG2003 fluid EoS coefficients: Collect from DComp records?"))
         {
@@ -1070,7 +1091,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 memcpy( php->sol_t, "DNNSNN", 6 );
                 memcpy( &php->PphC, "a-----", 6 );
                 php->ncpN = 0; php->ncpM = 0;
-                php->nscN = php->nscM = 0;
+                php->nscM = 0; php->npxM = 0;
                 Name += "ion-association model, Davies equation";
                 apar[0] = apar[1] = apar[2] = 0.0;
                 sprintf( nbuf, "Parameters: I_max =%-5.3f ", apar[3] );
@@ -1079,7 +1100,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 memcpy( php->sol_t, "HNNSNN", 6 );
                 memcpy( &php->PphC, "a+----", 6 );
                 php->ncpN = 2; php->ncpM = 4;
-                php->nscN = php->nscM = 0;
+                php->nscM = 0; php->npxM = 0;
                 Name += "ion-association model, EDH(H) equation, common ion size";
     sprintf( nbuf, "Parameters: b_gamma= %-5.3f; a_size= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
                  apar[0], apar[1], apar[2], apar[3] );
@@ -1088,7 +1109,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 memcpy( php->sol_t, "3NNSNN", 6 );
                 memcpy( &php->PphC, "a++---", 6 );
                 php->ncpN = 2; php->ncpM = 4;
-                php->nscN = php->nscM = 1;
+                php->nscM = 1; php->npxM = 0;
                 Name += "ion-association model, EDH(K) equation, Kielland ion sizes";
                 apar[1] = 0.0;
     sprintf( nbuf, "Parameters: b_gamma= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
@@ -1098,7 +1119,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 memcpy( php->sol_t, "2NNSNN", 6 );
                 memcpy( &php->PphC, "a++---", 6 );
                 php->ncpN = 2; php->ncpM = 4;
-                php->nscN = php->nscM = 1;
+                php->nscM = 1; php->npxM = 0;
                 Name += "ion-association model, DH equation, Kielland ion sizes";
                 apar[1] = 0.0;
     sprintf( nbuf, "Parameters: b_gamma= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
@@ -1107,8 +1128,8 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
        case '1': // DH limiting law (no a0 and bg required)
                 memcpy( php->sol_t, "1NNSNN", 6 );
                 memcpy( &php->PphC, "a-----", 6 );
-                php->ncpN = php->ncpM = 0;
-                php->nscN = php->nscM = 0;
+                php->ncpN = 0; php->ncpM = 0;
+                php->nscM = 0; php->npxM = 0;
                 Name += "ion-association model, Debye-Hueckel limiting law";
                 apar[0] = apar[1] = apar[2] = 0.0;
 //                apar[3] = 0.01;
@@ -1135,8 +1156,8 @@ MAKE_GAS_PHASE:
       case 'I':  // Ideal mixture (default)
               memcpy( php->sol_t, "INNINN", 6 );
               memcpy( &php->PphC, "g-----", 6 );
-              php->ncpN = php->ncpM =0;
-              php->nscN = php->nscM =0;
+              php->ncpN = 0; php->ncpM = 0;
+              php->nscM = 0; php->npxM = 0;
               Name += "ideal mixture of ideal or real gases";
               strcpy( php->name, Name.c_str() );
               strcpy( php->notes,
@@ -1145,18 +1166,20 @@ MAKE_GAS_PHASE:
       case 'F':  // Fluid CG EoS model
               memcpy( php->sol_t, "FNNSNN", 6 );
               memcpy( &php->PphC, "f-+---", 6 );
-              php->ncpN = php->ncpM =0;
-              php->nscN = 1; php->nscM = 4;
+              php->ncpN = 0; php->ncpM = 0;
+              php->nscM = 4;  // changed 07.12.2006  KD
+              php->npxM = 0;
               Name += "Perturbation-based EoS (Churakov&Gottschalk,2003)";
               strcpy( php->name, Name.c_str() );
               strcpy( php->notes,
      "Applicable at high P - moderate T for mixed non-electrolyte fluids" );
               break;
       case 'P': // Peng-Robinson EoS, under construction
+// Not auto-set phase!
+              break;
       default:  // unrecognized code
               goto DONE;
     }
-
     part = "g:*:*:*:";
     if( gkey[0] == 'f' )
         part = "f:*:*:*:";
@@ -1329,7 +1352,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
         php->PFsiT = S_ON;
     }
 
-// set model parameters, if necessary
+// set model parameters, if necessary  !!!!!!!!!!!!! check !
     if( php->pnc && ( php->ncpN * php->ncpM >= 8 ) )
     {
        php->pnc[5] = param[0];

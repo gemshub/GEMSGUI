@@ -1086,7 +1086,8 @@ of species-related coefficients for the non-ideality model <br>
 model can be created upon create/remake of the Phase record. The <tt>dc_cf</tt>
 array has the same number of rows as the number of species in the phase
 and
-the user-defined number of columns. &nbsp;This array is automatically
+the user-defined number of columns (number of coefficients per
+species). &nbsp;This array is automatically
 created,
 filled-out and used in some built-in modes for calculation of activity
 coefficients&nbsp;</dd>
@@ -1887,7 +1888,7 @@ species in this multicomponent phase (scalar) </dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>This object is mapped onto L1[k] cell where&nbsp;<tt>k</tt> is
 the index
-of this phase in the GEM IPM data structure. Read only.</dd>
+of this phase in the GEM IPM data structure. Read only!.</dd>
   <dd><br>
   </dd>
   <dd> &nbsp; </dd>
@@ -1953,8 +1954,8 @@ from the respective Phase record.</dd>
 species-related
 coefficients of the non-ideality model </dt>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>This optional array of species-related coefficients &nbsp;has
-in&nbsp; <a
+  <dd>This optional array of species-related coefficients
+&nbsp;has&nbsp;&nbsp; <a
  href="file:///C:/gems2html/program/doc/html/gm_phase.html#Ncp"><tt>Ncd</tt></a>
 columns and <a href="#Ndc"><tt>Ndc</tt></a> rows that can be used as
 numeric
@@ -2000,17 +2001,26 @@ of GEMS.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd> &nbsp; </dd>
-  <dt> <a name="gTn"></a><big><b><tt>gTn</tt></b></big> - normalized
-standard
-molar Gibbs energies for phase components&nbsp;(length <a href="#Ndc"><tt>Ndc</tt></a>,
-read only). </dt>
+  <dt> <a name="gDQF"></a><big><b><tt>gDQF</tt></b></big> -
+corrections to standard molar Gibbs energy for a phase component
+(length <a href="#Ndc"><tt>Ndc</tt></a>). </dt>
   <dd> &nbsp; </dd>
-  <dd>Mapped to a block of the <tt>g0</tt> &nbsp;vector belonging to
-this phase in the GEM IPM data structure.&nbsp;Read only.&nbsp;</dd>
+  <dd>Units of measurement: normalized (J/(RT)/mol), correspond to <span
+ style="font-family: monospace;">ln_gam</span> units. <br>
+  </dd>
+  <dd>Mapped to a block of the&nbsp; <tt>gEx</tt>&nbsp; vector
+belonging to
+this phase in the GEM IPM work data structure. <br>
+  </dd>
+  <dd><big><span style="font-family: monospace;">gDQF</span></big>&nbsp;
+elements can be used e.g. for setting up solid solution models that use
+Darken's Quadratic Formalism (DQF).&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dd>Usage in math scripts: <tt>gTn[js]</tt> (in "public" mode)&nbsp;
-or <tt>gTn[0]</tt> &nbsp;(<tt>gTn[1]</tt> ...) in "private" mode.&nbsp;</dd>
+  <dd>Usage in math scripts: <tt>gDQF[js]</tt> (in "public"
+mode)&nbsp;
+or <tt>gDQF[0]</tt> &nbsp;(<tt>gDQF[1]</tt> ...) in "private"
+mode.&nbsp;</dd>
   <dd> &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -2064,12 +2074,42 @@ will be automatically assigned<tt> exp(ln_gam[js])</tt> value.<br>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="Un"></a><big><b><tt>Un</tt></b></big> - normalized
-chemical
-potentials of elements (read only) </dt>
+  <dt> <a name="ipxt"></a><big><span style="font-family: monospace;"><span
+ style="font-weight: bold;">ipxt</span></span></big> - table of
+indexation for the interaction parameters (new, instead of Un),&nbsp;
+read only<br>
+  </dt>
   <dd> &nbsp;&nbsp;</dd>
-  <dd>Mapped to the dual solution vector <tt>u</tt> in the GEM IPM
-data structure.</dd>
+  <dd>Mapped to the <big><span style="font-family: monospace;">IPx</span></big>
+array in the GEM IPM
+data structure.&nbsp; This table (list) has one row per interaction
+parameter and the number of columns equal to the maximum order of
+interactions (usually number of end members, or less).&nbsp; The number
+of interaction parameters is model-specific and also depends on the
+number of end members. <br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dd>Values in this table are indexes of the end members or -1 if this
+parameter is less than higher-order. Rules for setting up the
+indexation and interaction parameter coefficients for built-in
+functions are provided in the description of&nbsp; <a href="#ph_cf"><big><span
+ style="font-family: monospace;">ph_cf</span></big></a>&nbsp; table. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>For example, in a binary solution phase, the <big><span
+ style="font-family: monospace;">ipxt</span></big> table will have two
+columns and two rows for a subregular mixing model. A multicomponent
+Van Laar model will require two columns because it only considers
+binary interaction parameters; the number of rows depends on how many
+non-zero interaction parameters are known. Any binary interaction
+parameter which is not listed in the <big><span
+ style="font-family: monospace;">ipxt </span></big>table will receive
+its default (usually zero) value in built-in subroutines for
+calculation of activity coefficients.<br>
+  </dd>
+  <dd><br>
+  </dd>
   <dd>Can be used in both Phase math scripts.</dd>
   <dd>&nbsp;<br>
   </dd>

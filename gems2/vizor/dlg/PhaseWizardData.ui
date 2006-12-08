@@ -470,19 +470,30 @@ what kind of mixed phase and non-ideal model should be used.</string>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>11</x>
-                    <y>11</y>
+                    <x>10</x>
+                    <y>10</y>
                     <width>610</width>
-                    <height>240</height>
+                    <height>250</height>
                 </rect>
             </property>
             <property name="title">
-                <string>Dimensions to set only if user-defined scripts for the mixing model will be provided </string>
+                <string>Dimensions to set when built-in functions or scripts for the mixing model shall be used </string>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Attention! For built-in mixing models that use end-member parameters (dc_cf) and/or interaction parameters (ipxT, pc_cf), the respective arrays will be allocated automatically; setting dimensions is not needed in this case.</string>
+                    </property>
+                    <property name="alignment">
+                        <set>WordBreak|AlignVCenter</set>
+                    </property>
+                </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
                         <cstring>layout166</cstring>
@@ -493,7 +504,7 @@ what kind of mixed phase and non-ideal model should be used.</string>
                         </property>
                         <widget class="QSpinBox">
                             <property name="name">
-                                <cstring>spinBox_dc_cf_N</cstring>
+                                <cstring>spinBox_dc_sc_M</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -515,47 +526,7 @@ what kind of mixed phase and non-ideal model should be used.</string>
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Optional dc_cf array: number of rows per phase end member; if set to zero then the dc_cf array will not be allocated (default). Usually is set to 1.</string>
-                            </property>
-                            <property name="alignment">
-                                <set>WordBreak|AlignVCenter</set>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout167</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QSpinBox">
-                            <property name="name">
-                                <cstring>spinBox_dc_cf_M</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>50</width>
-                                    <height>0</height>
-                                </size>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Optional dc_cf array: set here a number of cells in a row per phase end member; if this field is set to zero then the dc_cf array will not be allocated.</string>
+                                <string>Optional dc_cf array: number of rows (coefficients per phase end member); at default (zero) value, the dc_cf array will not be allocated.</string>
                             </property>
                             <property name="alignment">
                                 <set>WordBreak|AlignVCenter</set>
@@ -595,7 +566,47 @@ what kind of mixed phase and non-ideal model should be used.</string>
                                 <cstring>textLabel1_3</cstring>
                             </property>
                             <property name="text">
-                                <string>Optional ph_cf array: number of rows; if set to zero then the pc_cf array will not be allocated (default). Usually is set to the number of phase end members.</string>
+                                <string>Optional ipxT and ph_cf arrays: number of rows (interaction parameters) for the non-ideal mixing model; if set to default (zero) then these arrays will not be allocated.</string>
+                            </property>
+                            <property name="alignment">
+                                <set>WordBreak|AlignVCenter</set>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout167</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>spinBox_ph_px_M</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Optional ipxT array for indexation of interaction parameters: set here the maximum order of a parameter; if set to default (zero) then the interaction parameters will not be used.</string>
                             </property>
                             <property name="alignment">
                                 <set>WordBreak|AlignVCenter</set>
@@ -635,24 +646,13 @@ what kind of mixed phase and non-ideal model should be used.</string>
                                 <cstring>textLabel1_3_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Optional ph_cf array: number of columns; if set to zero then the pc_cf array will not be allocated (default).</string>
+                                <string>Optional ph_cf array of interaction parameter coefficients: number of columns (coefficients per parameter); if set to default (zero) then the interaction parameters will not be used.</string>
                             </property>
                             <property name="alignment">
                                 <set>WordBreak|AlignVCenter</set>
                             </property>
                         </widget>
                     </hbox>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Attention! Some built-in mixing models also need pc_cf or dc_cf arrays. If so, they will be allocated automatically; please, do not change dimensions if this is the case.</string>
-                    </property>
-                    <property name="alignment">
-                        <set>WordBreak|AlignVCenter</set>
-                    </property>
                 </widget>
             </vbox>
         </widget>
@@ -775,8 +775,8 @@ what kind of mixed phase and non-ideal model should be used.</string>
     <tabstop>PhEqModeCode</tabstop>
     <tabstop>DcEqLinkMode</tabstop>
     <tabstop>SCM_code</tabstop>
-    <tabstop>spinBox_dc_cf_N</tabstop>
-    <tabstop>spinBox_dc_cf_M</tabstop>
+    <tabstop>spinBox_dc_sc_M</tabstop>
+    <tabstop>spinBox_ph_px_M</tabstop>
     <tabstop>spinBox_ph_cf_N</tabstop>
     <tabstop>spinBox_ph_cf_M</tabstop>
     <tabstop>checkBoxSorption</tabstop>

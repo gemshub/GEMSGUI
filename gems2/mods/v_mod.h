@@ -148,7 +148,7 @@ o_nldcvs, o_nldchs, o_nlphv, o_nlphh, // new !!!
     o_wd_pe, o_wd_eh, o_wi_mol,  o_wi_gwat,o_wi_ymet,
     o_wio_denw, o_wio_epsw, o_wo_psi, o_wo_lnp, o_wo_rt,
     o_wo_frt,  o_wo_yw,  o_wio_cons,  o_wio_fitv, o_wd_sitn,
-    o_wi_l1,
+    o_wi_l1,        o_wi_ipxpm, // added 07.12.2006
     o_wi_lsmod,  o_wi_lsmdc,  o_wi_mui, o_wi_muk, o_wi_muj,
     o_wi_satndx, o_wi_dul,  o_wi_dll,  o_wi_gex,  o_wi_pul,
     o_wi_pll, o_wi_yof,  o_wi_pmc, o_wi_dmc,  o_wio_vol,
@@ -559,7 +559,7 @@ MAXPHNAME =      16,
 enum phase_objects {   // PHASE
     //o_phpst,   o_phsymb,  o_phnam,  o_phcls,  o_phgrp,
     o_phsolt = o_rttext+1,  o_phps,   /*a 6*/   o_phndc,  /*i 2*/
-    o_phpncp, /*i 2*/  o_phnsc,  /*i 2*/   o_phnsit, /*i 2*/
+    o_phpncp, /*i 2*/  o_phnsc,  /*i 1*/ o_phnpx, /*i 1*/  o_phnsit, /*i 2*/
     /* Record 22 fields */
     o_phstr,     o_phname,     o_phnotes,     o_phdim,   /*i 8*/
     o_phdisep,  /*f 8*/ o_phscmc, o_phxfiec, o_phmsdt,

@@ -79,8 +79,12 @@ void TMulti::ods_link( int /*q*/)
     // dynamic part 1
     aObj[ o_wi_l1 ].SetPtr( pm.L1 );
     aObj[ o_wi_l1 ].SetDim( pm.FI, 1 );
+//  Added 07.12.2006 - new object for solution models  KD
+aObj[ o_wi_ipxpm ].SetPtr( pm.IPx );
+//  Dimension is calculated on MULTI loading
     aObj[ o_wi_lsmod ].SetPtr(pm.LsMod );
-    aObj[ o_wi_lsmod ].SetDim( pm.FIs, 1 );
+// aObj[ o_wi_lsmod ].SetDim( pm.FIs, 1 );  changed 07.12.2006  KD
+aObj[ o_wi_lsmod ].SetDim( pm.FIs, 3 ); // 3 columns
     aObj[ o_wi_lsmdc ].SetPtr(pm.LsMdc );
     aObj[ o_wi_lsmdc ].SetDim( pm.FIs, 1 );
     aObj[ o_wi_mui ].SetPtr( pm.mui );
@@ -360,6 +364,7 @@ void TMulti::dyn_set(int /*q*/)
 {
 
    pm.L1    = (short *)aObj[ o_wi_l1 ].GetPtr();
+pm.IPx = (short *)aObj[ o_wi_ipxpm ].GetPtr();   // added 07.12.2006  KD
    pm.LsMod = (short *)aObj[ o_wi_lsmod ].GetPtr();
     pm.LsMdc = (short *)aObj[ o_wi_lsmdc ].GetPtr();
     pm.mui   = (short *)aObj[ o_wi_mui ].GetPtr();
@@ -498,6 +503,7 @@ pm.DCC3   = (char *)aObj[ o_wi_dcc3 ].GetPtr();
 void TMulti::dyn_kill(int /*q*/)
 {
     pm.L1    = (short *)aObj[ o_wi_l1 ].Free();
+pm.IPx = (short *)aObj[ o_wi_ipxpm ].Free();   // added 07.12.2006  KD
     pm.LsMod = (short *)aObj[ o_wi_lsmod ].Free();
     pm.LsMdc = (short *)aObj[ o_wi_lsmdc ].Free();
     pm.mui   = (short *)aObj[ o_wi_mui ].Free();
@@ -749,7 +755,8 @@ pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );
         pm.YFA = (double *)aObj[ o_ww_yfa].Alloc( pm.FIs, 1, D_ );
         pm.LsMod = (short *)aObj[ o_wi_lsmod].Alloc( pm.FIs, 1, I_ );
         pm.LsMdc = (short *)aObj[ o_wi_lsmdc].Alloc( pm.FIs, 1, I_ );
-        /* PMs and DMS may be realloced after load arrays LsMod and LsMdc */
+    /* IPx, PMc and DMc may be realloced after load arrays LsMod and LsMdc */
+pm.IPx = (short *)aObj[ o_wi_ipxpm ].Alloc(pm.FIs, 1, I_);  // added 07.12.2006  KD
         pm.PMc = (float *)aObj[ o_wi_pmc].Alloc( pm.FIs, 1, F_);
         pm.DMc = (float *)aObj[ o_wi_dmc].Alloc( pm.Ls, 1, F_ );
         pm.PUL = (double *)aObj[ o_wi_pul].Alloc( pm.FIs, 1, D_);
@@ -767,6 +774,7 @@ pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );
         pm.YFA   = (double *)aObj[ o_ww_yfa ].Free();
         pm.LsMod = (short *)aObj[ o_wi_lsmod ].Free();
         pm.LsMdc = (short *)aObj[ o_wi_lsmdc ].Free();
+pm.IPx = (short *)aObj[ o_wi_ipxpm ].Free();   // added 07.12.2006  KD
         pm.PUL   = (double *)aObj[ o_wi_pul ].Free();
         pm.PLL   = (double *)aObj[ o_wi_pll ].Free();
         //    pm.YOF   = (double *)aObj[ o_wi_yof ].Free();

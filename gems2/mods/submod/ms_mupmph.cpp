@@ -545,16 +545,25 @@ void TMulti::multi_sys_ph()
             // read informations from phase-solution
             memcpy( pmp->sMod[k], aPH->php->sol_t, 6 );
             if( aPH->php->Ppnc == S_ON )
-                pmp->LsMod[k] = (short)(aPH->php->ncpN * aPH->php->ncpM);  /* ?error? */
+{
+// Changed 07.12.2006   KD
+//             pmp->LsMod[k] = (short)(aPH->php->ncpN * aPH->php->ncpM);
+pmp->LsMod[k*3] = aPH->php->ncpN;
+pmp->LsMod[k*3+2] = aPH->php->ncpM;
+pmp->LsMod[k*3+1] = aPH->php->npxM;
+}
             else pmp->LsMod[k] = 0;
             if( aPH->php->Psco == S_ON )
-                pmp->LsMdc[k] = (short)(aPH->php->nscN * aPH->php->nscM);
+                pmp->LsMdc[k] = aPH->php->nscM;
+//                pmp->LsMdc[k] = (short)(aPH->php->nscN * aPH->php->nscM);
             else pmp->LsMdc[k] = 0;
         }
         else  // nothing to read in phase record
             if( k<pmp->FIs )
             {
-                pmp->LsMod[k] = 0;
+pmp->LsMod[k*3] = 0;   // Changed 07.12.2006 by KD
+pmp->LsMod[k*3+1] = 0;
+pmp->LsMod[k*3+2] = 0;
                 pmp->LsMdc[k] = 0;
                 memset( pmp->sMod[k], ' ', 6 );
             }

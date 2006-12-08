@@ -86,8 +86,8 @@ PhaseWizard::PhaseWizard( const char* pkey, char flgs[12], int size[6],
       }
     }
 //Page 2
-    spinBox_dc_cf_N->setValue(size[3]);
-    spinBox_dc_cf_M->setValue(size[4]);
+    spinBox_dc_sc_M->setValue(size[3]);
+    spinBox_ph_px_M->setValue(size[4]);
     spinBox_ph_cf_N->setValue(size[1]);
     spinBox_ph_cf_M->setValue(size[2]);
 
@@ -123,8 +123,8 @@ void   PhaseWizard::getSizes( int size[6] )
     size[0]= spinBoxSDrefLnk->value();
     size[1]= spinBox_ph_cf_N->value();
     size[2]= spinBox_ph_cf_M->value();
-    size[3]= spinBox_dc_cf_N->value();
-    size[4]= spinBox_dc_cf_M->value();
+    size[3]= spinBox_dc_sc_M->value();
+    size[4]= spinBox_ph_px_M->value();
     size[5]= spinBox_SurTypes_N->value();
 
     if( SCM_code->currentText()[0] != QChar('N') )
@@ -164,8 +164,8 @@ void PhaseWizard::getFlags( char flgs[12] )
     flgs[7] = '+';
   else flgs[7] = '-';
 
-  if( spinBox_dc_cf_N->value() > 0 &&
-      spinBox_dc_cf_M->value() > 0 )
+  if( spinBox_dc_sc_M->value() > 0 /*&&
+      spinBox_ph_px_M->value() > 0*/ )
     flgs[8] = '+';
   else flgs[8] = '-';
 

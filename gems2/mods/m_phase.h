@@ -48,17 +48,22 @@ typedef struct
     Psco, // Flag for 'dc_cf' array for DC-related parameters {+*-}
     PpEq, // Flag for text field for phase-related equations 'PhEq' {+*-}
     PdEq, // Flag for text field for DC-related equations 'DcEq' {+*-}
-    PFsiT,// Flag for vector of surface type fractions 'PFsiT'? {+*-}
+    PFsiT,// Flag for vector of surface type fractions 'PFsiT' {+*-}
     name[MAXFORMULA],   // Full name of phase
     notes[MAXFORMULA]   // Comments
     ;
  short nDC,      // N of DC in phase definition >= 1
     Nsd,        //  N of references to Data Sources  <= 4
-    ncpN, ncpM, // Dimensions of 'ph_cf' array (to set up on remake) for SIT: cations and anions
-    nscN, nscM, // Dimensions of 'dc_cf' array (to set up on remake)
+// changed 07.12.2006 KD
+ncpN,    // Number of interaction parameters (rows in pnc and ipx tables) SIT - N cations
+ncpM,    // Number of coefficients per IP (cols in pnc table) for SIT - N anions
+nscM,    // Number of parameters per solution phase species (cols in scoef table)
+// nipX replaces nscM  - changed 07.12.2006  by KD
+npxM,    // Maximum order of interaction parameters (cols in ipx, to set up on remake)
     NsiT,       // N of surface site types (to set up on remake)
     NR1;        // Number of elements per species in MaSdj array (1: old 6: new)
-
+short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM 
+             // takes over from PXres
  float Asur,  // Specific surface area of major component (carrier), m2/g
     Sigma0,// Standard mean surface energy of solid-aqueous interface, J/m2
     SigmaG,// Standard mean surface energy of gas-aqueous interface, J/m2
@@ -69,9 +74,9 @@ typedef struct
     Rsp1,  // Default maximum surface density, 1/nm2"
     *FsiT,    //Fraction of surface type relative to carrier (components)[0:NsiT-1]
     *XfIEC,   // Constant surface charge density or IEC, mkeq/g   [NsiT]
-    *PXres, // Reserved
+// *PXres, // Reserved
     *pnc, //Array of phase-related coefficients of non-ideality model [ncpN][ncpM]
-    *scoef;//Array of DC-related coefficients of non-ideality model[nDC][nscN][nscM]
+    *scoef;//Array of DC-related coefficients of non-ideality model[nDC][nscM]
   
   float (*MSDT)[2]; // SAT: Max & min density of reacted species, 1/nm2 [NsiT]
   float (*CapT)[2]; // Inner EDL capacitance density, F/m2 (TLM, CCM)

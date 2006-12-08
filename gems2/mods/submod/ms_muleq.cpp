@@ -365,6 +365,8 @@ void TMulti::EqstatExpand( const char *key )
     {
         jb = je;
         je = jb+pmp->L1[k];
+
+
         jpb = jpe;
         jpe += pmp->LsMod[k];
         jdb = jde;

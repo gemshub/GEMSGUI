@@ -16,7 +16,7 @@ rem gems2 -c -s c:\gems2work\program -u c:\gems2work > gems.out 2> gems.err
 rem gems2 -c -s c:\gems2test\program -u c:\gems2test > gems.out 2> gems.err
 rem gems2.exe -c -s e:\gems2-try\program -u e:\gems2-try > gems.log 
 rem c:\gems2\gems2.exe -d -s e:\gems2-try\program -u e:\gems2-try > gems.log
- cd d:\gems2test_dt
- c:\work\gems2\gems2.exe -c -s d:\gems2test_dt\program -u d:\gems2test_dt > gems.log
+ cd c:\gems2test_dt\program
+ c:\work\gems2\gems2.exe -d -s c:\gems2test_dt\program -u c:\gems2test_dt > gems.log
 rem cd c:\gems2test_dt 
 rem c:\gems2\gems2.exe -d -s c:\gems2test_dt\program -u c:\gems2test_dt > gems.log
