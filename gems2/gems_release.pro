@@ -3,7 +3,7 @@
 TEMPLATE	= app
 LANGUAGE        = C++
 TARGET		= gems2
-VERSION         = 2.1.1
+VERSION         = 2.1.3
 
 DEFINES         += Use_mt_mode
 DEFINES         += GEMS_RELEASE

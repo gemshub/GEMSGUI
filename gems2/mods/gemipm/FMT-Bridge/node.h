@@ -122,8 +122,8 @@ static TNode* na;   // static pointer to this class
    // Loads GEM input data from FMT part provided in parameters
    // into the DATABR work structure for the subsequent GEM calculation
    void GEM_from_MT(
-       short  p_NodeHandle,   // Node identification handle
-       short  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+       int  p_NodeHandle,   // Node identification handle
+       int  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                         //                                     GEM input output  FMT control
        double p_T,      // Temperature T, K                        +       -      -
        double p_P,      // Pressure P, bar                         +       -      -
@@ -140,8 +140,8 @@ static TNode* na;   // static pointer to this class
    // Copies GEM input data from already loaded DATABR work structure
    // into parameters provided by the FMT part
    void GEM_restore_MT(
-   short  &p_NodeHandle,   // Node identification handle
-   short  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+   int  &p_NodeHandle,   // Node identification handle
+   int  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                     //                                     GEM input output  FMT control
    double &p_T,      // Temperature T, K                        +       -      -
    double &p_P,      // Pressure P, bar                         +       -      -
@@ -177,9 +177,9 @@ static TNode* na;   // static pointer to this class
    // FMT part (dimensions and order of elements in arrays must correspond
    // to those in currently existing DATACH structure )
    void GEM_to_MT(
-       short &p_NodeHandle,    // Node identification handle
-       short &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
-       short &p_IterDone,      // Number of iterations performed by GEM IPM
+       int &p_NodeHandle,    // Node identification handle
+       int &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
+       int &p_IterDone,      // Number of iterations performed by GEM IPM
                          //                                     GEM input output  FMT control
        // Chemical scalar variables
        double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
@@ -220,7 +220,7 @@ static TNode* na;   // static pointer to this class
 
     // Setting node identification handle
     void setNodeHandle( int jj )
-    {      CNode->NodeHandle = (short)jj;  }
+    {      CNode->NodeHandle = jj;  }
 
 // Useful methods facilitating the access between DataCH (or FMT)
 // and DataBR (or node) data structures for components and phases
