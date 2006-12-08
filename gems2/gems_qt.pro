@@ -1,4 +1,5 @@
 #qmake -spec win32-borland gems_qt.pro > a
+#version 2.1.3rc4
 
 TEMPLATE	= app
 #LANGUAGE        = C++
