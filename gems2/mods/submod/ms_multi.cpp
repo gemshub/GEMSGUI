@@ -1070,6 +1070,7 @@ pm.XetaD = 0;         // added 12.09.05  KD
     pm.sitXcat = 0;
     pm.sitXan = 0;
     pm.sitE = 0;
- }
+pm.IPx = 0;
+}
 
 //--------------------- End of ms_multi.cpp ---------------------------
