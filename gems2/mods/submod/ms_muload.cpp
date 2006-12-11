@@ -78,6 +78,7 @@ void TMulti::SolModLoad( )
         if( syp->Pcl[kk] == S_OFF || kk >= mup->Fis )
             continue;
         k++;
+        pmp->LsMod[k*3] = pmp->LsMod[k*3+1] = pmp->LsMod[k*3+2] = 0;
         jb=je;
         je+= pmp->L1[k];
 // Indexes for extracting data from IPx, PMc and DMc arrays
