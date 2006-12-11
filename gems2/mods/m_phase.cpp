@@ -208,9 +208,14 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
         ph[q].scoef = (float *)aObj[ o_phscoef ].Free();
 
     if( ph[q].Ppnc == S_ON )
-        ph[q].pnc = (float *)aObj[ o_phpnc ].Alloc( ph[q].ncpN, ph[q].ncpM, F_ );
+    {
+      ph[q].pnc = (float *)aObj[ o_phpnc ].Alloc( ph[q].ncpN, ph[q].ncpM, F_ );
+      ph[q].ipxt = (short *)aObj[ o_phpxres ].Alloc( ph[q].ncpN, ph[q].npxM, I_);
+    }
     else
-        ph[q].pnc =   (float *)aObj[ o_phpnc ].Free();
+    {    ph[q].pnc =   (float *)aObj[ o_phpnc ].Free();
+         ph[q].ipxt = (short *)aObj[ o_phpxres ].Free();
+    }
 
     if( ph[q].PFsiT == S_ON || ph[q].PFsiT == S_REM )
     {
@@ -223,7 +228,6 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
         ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Alloc( ph[q].nDC, MCAS, A_);
 //        ph[q].MaSdj = (float *)aObj[ o_phmasdj ].Alloc( ph[q].nDC, 1, F_);
     ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Alloc( ph[q].nDC, DFCN, F_);
-ph[q].ipxt = (short *)aObj[ o_phpxres ].Alloc( ph[q].ncpN, ph[q].npxM, I_);
     }
     else
     {
@@ -234,7 +238,6 @@ ph[q].ipxt = (short *)aObj[ o_phpxres ].Alloc( ph[q].ncpN, ph[q].npxM, I_);
         ph[q].CapT =  (float (*)[2])aObj[ o_phcapt ].Free();
         ph[q].SATC =  (char (*)[MCAS])aObj[ o_phsatc ].Free();
         ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].Free();
-        ph[q].ipxt = (short *)aObj[ o_phpxres ].Free();
     }
     if( ph[q].Nsd )
     {
@@ -313,7 +316,7 @@ void TPhase::set_def( int q)
     ph[q].CapT =  0;
     ph[q].SATC =  0;
     ph[q].MaSdj = 0;
-//    ph[q].PXres = 0;  changed 07.12.2006  by KD 
+//    ph[q].PXres = 0;  changed 07.12.2006  by KD
 ph[q].ipxt = 0;
     ph[q].pnc =   0;
     ph[q].scoef = 0;
