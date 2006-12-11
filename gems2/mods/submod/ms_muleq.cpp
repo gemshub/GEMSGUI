@@ -368,7 +368,8 @@ void TMulti::EqstatExpand( const char *key )
 
 
         jpb = jpe;
-        jpe += pmp->LsMod[k];
+jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
+// ipe ????
         jdb = jde;
         jde += pmp->LsMdc[k]*pmp->L1[k];
 
@@ -443,7 +444,7 @@ void TMulti::MultiCalcInit( const char *key )
     {
         /* pmp->Y[j] = pmp->X[j]; */
 //        pmp->G[j] = pmp->G0[j]; /* pmp->GEX[j]; */
-        pmp->G[j] = pmp->G0[j] + pmp->GEX[j];    // changed 5.12.2006 
+        pmp->G[j] = pmp->G0[j] + pmp->GEX[j];    // changed 5.12.2006
     }
     // test phases - solutions and load models
     if( pmp->FIs )

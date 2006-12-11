@@ -82,9 +82,9 @@ void TMulti::SolModLoad( )
         je+= pmp->L1[k];
 // Indexes for extracting data from IPx, PMc and DMc arrays
     kx = kxe;                  // added 07.12.2006 by KD
-    kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
+//SD    kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
         kc = kce;
-        kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
+//SD        kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
         kd = kde;
         kde += pmp->LsMdc[k]*pmp->L1[k];
 /*  old variant - prove again!
@@ -155,8 +155,6 @@ pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
             aObj[ o_nnext ].SetPtr( &pmp->next );
             aObj[ o_nrt ].SetPtr( &pmp->RT );
             aObj[ o_nlnrt ].SetPtr(&pmp->FRT );
-            aObj[ o_nu  ].SetPtr( pmp->U );
-            aObj[ o_nu ].SetN( pmp->N);
             aObj[ o_nqp ].SetPtr( pmp->Qp+k*QPSIZE );
             aObj[ o_nqd ].SetPtr( pmp->Qd+k*QDSIZE );  /* QDSIZE cells per phase */
 //      aObj[ o_nncp].SetPtr( pmp->LsMod+k );  changes 07.12.2006  KD
@@ -274,13 +272,15 @@ LOAD_NIDMCOEF:
               }
               else { // Aq phase with SIT model - to be reworked
                  float *ppnc;
-                 ppnc = PackSITcoeffs( k, JB, JE, jb, je, pmp->LsMod[k] );
+                 ppnc = PackSITcoeffs( k, JB, JE, jb, je, pmp->LsMod[k*3] );
                  if( ppnc )
                  {  // ppnc is actually pmp->sitE !
-                    memcpy( pmp->PMc+kc, ppnc, pmp->LsMod[k]*sizeof(float));
+                    memcpy( pmp->PMc+kc, ppnc,
+                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float));
                  }
                  else
-                    memset( pmp->PMc+kc, 0, pmp->LsMod[k]*sizeof(float) );
+                    memset( pmp->PMc+kc, 0,
+                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float) );
               }
           }
           else { // no IP coefficients array
@@ -346,8 +346,9 @@ LOAD_NIDMCOEF:
           }
           else pmp->LsMdc[k] = 0; // no DC coefficients
         }
-
-    } /* k */
+        kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
+        kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 10.12.2006  by KD&SD
+     } /* k */
     pmp->pIPN = 1;
 }
 

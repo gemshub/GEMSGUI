@@ -6,6 +6,23 @@
 #include "m_param.h"
 #include "gdatastream.h"
 
+void TMulti::getLsModsum( int& LsModSum, int& LsIPxSum )
+{  LsModSum = 0;
+   LsIPxSum = 0;
+   for(int i=0; i<pm.FIs; i++)
+   {
+     LsModSum += (pm.LsMod[i*3]*pm.LsMod[i*3+2]);
+     LsIPxSum += (pm.LsMod[i*3]*pm.LsMod[i*3+1]);
+   }
+}
+
+
+void TMulti::getLsMdcsum( int& LsMdcSum )
+{  LsMdcSum = 0;
+   for(int i=0; i<pm.FIs; i++)
+     LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
+}
+
 //---------------------------------------------------------//
 
 // writing MULTI to binary file
@@ -121,15 +138,14 @@ void TMulti::to_file( GemDataStream& ff, gstring& path  )
       ff.writeArray(pm.BF, pm.FIs*pm.N);
       ff.writeArray(pm.XFA, pm.FIs);
       ff.writeArray(pm.YFA, pm.FIs);
-      ff.writeArray(pm.LsMod, pm.FIs);
+      ff.writeArray(pm.LsMod, pm.FIs*3);
       ff.writeArray(pm.LsMdc, pm.FIs);
-      int LsModSum = 0;
-      int LsMdcSum = 0;
-      for(int i=0; i<pm.FIs; i++)
-      {
-        LsModSum += pm.LsMod[i];
-        LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
-      }
+      int LsModSum;
+      int LsIPxSum;
+      int LsMdcSum;
+      getLsModsum( LsModSum, LsIPxSum );
+      getLsMdcsum( LsMdcSum );
+      ff.writeArray(pm.IPx, LsIPxSum);
       ff.writeArray(pm.PMc, LsModSum);
       ff.writeArray(pm.DMc, LsMdcSum);
       ff.writeArray(pm.PUL, pm.FIs);
@@ -343,18 +359,17 @@ void TMulti::from_file( GemDataStream& ff )
       ff.readArray(pm.BF, pm.FIs*pm.N);
       ff.readArray(pm.XFA, pm.FIs);
       ff.readArray(pm.YFA, pm.FIs);
-      ff.readArray(pm.LsMod, pm.FIs);
+      ff.readArray(pm.LsMod, pm.FIs*3);
       ff.readArray(pm.LsMdc, pm.FIs);
-
-      int LsModSum = 0;
-      int LsMdcSum = 0;
-      for(int i=0; i<pm.FIs; i++)
-      {
-        LsModSum += pm.LsMod[i];
-        LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
-      }
-     pm.PMc = new float[LsModSum];
-     pm.DMc = new float[LsMdcSum];
+      int LsModSum;
+      int LsIPxSum;
+      int LsMdcSum;
+      getLsModsum( LsModSum, LsIPxSum );
+      getLsMdcsum( LsMdcSum );
+      pm.IPx = new short[LsIPxSum];
+      pm.PMc = new float[LsModSum];
+      pm.DMc = new float[LsMdcSum];
+      ff.readArray(pm.IPx, LsIPxSum);
       ff.readArray(pm.PMc, LsModSum);
       ff.readArray(pm.DMc, LsMdcSum);
       ff.readArray(pm.PUL, pm.FIs);
@@ -618,14 +633,13 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
    memset(pm.XFA, 0, pm.FIs*sizeof(double));
    pm.YFA = new double[pm.FIs];
    memset(pm.YFA, 0, pm.FIs*sizeof(double));
-   pm.LsMod = new short[pm.FIs];
-   memset(pm.LsMod, 0, pm.FIs*sizeof(short));
+   pm.LsMod = new short[pm.FIs*3];
+   memset(pm.LsMod, 0, pm.FIs*3*sizeof(short));
    pm.LsMdc = new short[pm.FIs];
    memset(pm.LsMdc, 0, pm.FIs*sizeof(short));
-     pm.PMc = 0;
-     pm.DMc = 0;
-//   pm.PMc = new float[pm.FIs];
-//   pm.DMc = new float[pm.Ls];
+   pm.IPx = 0;
+   pm.PMc = 0;
+   pm.DMc = 0;
    pm.PUL = new double[pm.FIs];
    memset(pm.PUL, 0, pm.FIs*sizeof(double));
    pm.PLL = new double[pm.FIs];
@@ -943,6 +957,7 @@ if( pm.BFC ) delete[] pm.BFC;
    if( pm.YFA ) delete[] pm.YFA;
    if( pm.LsMod ) delete[] pm.LsMod;
    if( pm.LsMdc ) delete[] pm.LsMdc;
+   if( pm.IPx ) delete[] pm.IPx;
    if( pm.PMc ) delete[] pm.PMc;
    if( pm.DMc ) delete[] pm.DMc;
    if( pm.PUL ) delete[] pm.PUL;
@@ -1120,15 +1135,14 @@ void TMulti::to_text_file( gstring& path )
      prar.writeArray(  "BFC", pm.BFC, pm.N);
      prar.writeArray(  "XFA", pm.XFA,  pm.FIs);
      prar.writeArray(  "YFA", pm.YFA,  pm.FIs);
-     prar.writeArray(  "LsMod", pm.LsMod, pm.FIs);
+     prar.writeArray(  "LsMod", pm.LsMod, pm.FIs*3);
      prar.writeArray(  "LsMdc", pm.LsMdc, pm.FIs);
-      int LsModSum = 0;
-      int LsMdcSum = 0;
-      for(int i=0; i<pm.FIs; i++)
-      {
-        LsModSum += pm.LsMod[i];
-        LsMdcSum += (pm.LsMdc[i]*pm.L1[i]);
-      }
+     int LsModSum;
+     int LsIPxSum;
+     int LsMdcSum;
+     getLsModsum( LsModSum, LsIPxSum );
+     getLsMdcsum( LsMdcSum );
+     prar.writeArray(  "IPxPH", pm.IPx,  LsIPxSum);
      prar.writeArray(  "PMc", pm.PMc,  LsModSum);
      prar.writeArray(  "DMc", pm.DMc,  LsMdcSum);
 

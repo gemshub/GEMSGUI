@@ -552,7 +552,7 @@ pmp->LsMod[k*3] = aPH->php->ncpN;
 pmp->LsMod[k*3+2] = aPH->php->ncpM;
 pmp->LsMod[k*3+1] = aPH->php->npxM;
 }
-            else pmp->LsMod[k] = 0;
+            else pmp->LsMod[k*3] = pmp->LsMod[k*3+1] = pmp->LsMod[k*3+2] =0;
             if( aPH->php->Psco == S_ON )
                 pmp->LsMdc[k] = aPH->php->nscM;
 //                pmp->LsMdc[k] = (short)(aPH->php->nscN * aPH->php->nscM);

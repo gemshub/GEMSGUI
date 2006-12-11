@@ -211,15 +211,16 @@ void TMulti::pm_GC_ods_link( int k, int jb, int jpb, int jdb, int ipb )
 #ifndef IPMGEMPLUGIN
     ErrorIf( k < 0 || k >= pmp->FIs , "GammaCalc", "Invalid link: k=0||>FIs" );
     aObj[ o_nsmod].SetPtr( pmp->sMod[k] );
-    aObj[ o_nncp].SetPtr( pmp->LsMod+k );
+    aObj[ o_nncp].SetPtr( pmp->LsMod+k*3 ); //Sveta 11/12/2006
     aObj[ o_nncd].SetPtr( pmp->LsMdc+k );
     aObj[ o_ndc].SetPtr(  pmp->L1+k );
-aObj[ o_wi_ipxpm ].SetPtr( pmp->IPx+ipb);   // added 07.12.2006  KD
-aObj[ o_wi_ipxpm ].SetDim(pmp->LsMod[k*3], pmp->LsMod[k*3+1]); // changed
     aObj[ o_nez].SetPtr( pmp->EZ+jb );
     aObj[o_nez].SetN(  pmp->L1[k]);
 aObj[ o_npcv].SetPtr( pmp->PMc+jpb );
 aObj[o_npcv].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+2]); // changed 07.12.2006
+//  Object for indexation of interaction parameters
+aObj[ o_nu].SetPtr( pmp->IPx+ipb ); // added 07.12.2006  KD
+aObj[o_nu].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+1]);
     aObj[ o_ndcm].SetPtr( pmp->DMc+jdb );
     aObj[o_ndcm].SetDim( pmp->L1[k], pmp->LsMdc[k] );
     aObj[ o_nmvol].SetPtr( pmp->Vol+jb );
@@ -233,8 +234,6 @@ aObj[o_npcv].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+2]); // changed 07.12.2006
     aObj[o_ngam].SetN( pmp->L1[k] );
     aObj[ o_nlngam].SetPtr( pmp->lnGam+jb ); /* ln Gamma calculated*/
     aObj[o_nlngam].SetN( pmp->L1[k]);
-    aObj[ o_nu].SetPtr(  pmp->U );
-    aObj[o_nu].SetM( pmp->N );
     aObj[ o_nas].SetPtr(  pmp->A+pmp->N*jb );
     aObj[o_nas].SetDim(  pmp->L1[k], pmp->N );
     aObj[ o_nxa].SetPtr(  pmp->XF+k );
@@ -609,7 +608,7 @@ END_LOOP: /* if( LinkMode == LINK_TP_MODE ) */
                 pmp->Gamma[j] = exp( LnGam );
             else pmp->Gamma[j] = 1.0;
             pmp->F0[j] = Ej_init_calc( 0.0, j, k );
-//            pmp->G[j] = pmp->G0[j] + pmp->F0[j];   changed 5.12.2006   KD 
+//            pmp->G[j] = pmp->G0[j] + pmp->F0[j];   changed 5.12.2006   KD
             pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];
         }
     }  // k - end loop over phases

@@ -309,6 +309,9 @@ class TMulti
 
 #endif
 
+   void getLsModsum( int& LsModSum, int& LsIPxSum );
+   void getLsMdcsum( int& LsMdcSum );
+
 // ipm_chemical.cpp
     void XmaxSAT_IPM2();
     void XmaxSAT_IPM2_reset();

@@ -753,7 +753,7 @@ void TMulti::dyn_new(int /*q*/)
 pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );
         pm.XFA = (double *)aObj[ o_ww_xfa].Alloc( pm.FIs, 1, D_ );
         pm.YFA = (double *)aObj[ o_ww_yfa].Alloc( pm.FIs, 1, D_ );
-        pm.LsMod = (short *)aObj[ o_wi_lsmod].Alloc( pm.FIs, 1, I_ );
+        pm.LsMod = (short *)aObj[ o_wi_lsmod].Alloc( pm.FIs, 3, I_ );
         pm.LsMdc = (short *)aObj[ o_wi_lsmdc].Alloc( pm.FIs, 1, I_ );
     /* IPx, PMc and DMc may be realloced after load arrays LsMod and LsMdc */
 pm.IPx = (short *)aObj[ o_wi_ipxpm ].Alloc(pm.FIs, 1, I_);  // added 07.12.2006  KD
