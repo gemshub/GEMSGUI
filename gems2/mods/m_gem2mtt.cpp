@@ -82,7 +82,7 @@ void  TGEM2MT::NewNodeArray()
  // put DDc
  if( data_CH->DD && mtp->DDc )
   for( int jj=0; jj<data_CH->nDCs; jj ++)
-      data_CH->DD[jj] = mtp->DDc[jj];
+      data_CH->DD[jj*data_CH->nPp*data_CH->nTp] = mtp->DDc[jj];
 
  for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
  {

@@ -1032,7 +1032,7 @@ void  TGEM2MT::LinkCSD(  int nNode )
      aObj[o_ch_dcmm].SetPtr( CH->DCmm );
      aObj[o_ch_dcmm].SetDim( CH->nDC, 1 );
      aObj[o_ch_dd].SetPtr( CH->DD );
-     aObj[o_ch_dd].SetDim( CH->nDCs, 1 );
+     aObj[o_ch_dd].SetDim( CH->nDCs, CH->nPp*CH->nTp);
 //     aObj[o_ch_aalp].SetPtr( CH->Aalp );
 //     aObj[o_ch_aalp].SetDim( CH->nPH, 1 );
   }

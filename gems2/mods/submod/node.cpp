@@ -603,7 +603,7 @@ void TNode::makeStartDataChBR(
      CSD->ICmm[i1] = pmm->Awt[i1];
 
   memcpy( CSD->DCmm, pmm->MM , CSD->nDC*sizeof(double));
-  memset( CSD->DD, 0, CSD->nDCs*sizeof(double));
+//  memset( CSD->DD, 0, CSD->nDCs*sizeof(double));
 
   for( ii=0; ii<CSD->nIC; ii++ )
      memcpy( CSD->ICNL[ii], pmm->SB[ii] , MaxICN*sizeof(char));
@@ -662,6 +662,9 @@ void TNode::makeStartDataChBR(
 
    G0_V0_H0_Cp0_DD_arrays();
 
+   if(  CSD->iGrd > 3 )
+     for( i1=0; i1< CSD->nDCs*CSD->nPp*CSD->nTp; i1++ )
+       CSD->DD[i1] = 0.;
 }
 
 void TNode::G0_V0_H0_Cp0_DD_arrays()
@@ -757,7 +760,7 @@ TNode::TNode()
 
 
 TNode::~TNode()
-{   
+{
    freeMemory();
    na = 0;
 }
