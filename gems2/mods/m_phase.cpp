@@ -64,8 +64,8 @@ void TPhase::ods_link( int q)
     aObj[ o_phps].SetPtr(  &ph[q].PphC );  // a 6
     aObj[ o_phndc].SetPtr( &ph[q].nDC );   // i 2
     aObj[ o_phpncp].SetPtr(&ph[q].ncpN );  // i 2
-aObj[ o_phnsc].SetPtr( &ph[q].nscM );  // i 1  changed 07.12.2006 KD
 aObj[ o_phnpx].SetPtr( &ph[q].npxM );  // i 1  added 07.12.2006 KD
+aObj[ o_phnsc].SetPtr( &ph[q].nscM );  // i 1  changed 07.12.2006 KD
     aObj[ o_phnsit].SetPtr(&ph[q].NsiT );  // i 2
     /* Record 22 fields */
     aObj[ o_phstr].SetPtr(  ph[q].sol_t );
@@ -146,6 +146,9 @@ void TPhase::dyn_set(int q)
     ph[q].SATC  = (char (*)[MCAS])aObj[ o_phsatc ].GetPtr();
     ph[q].MaSdj = (float (*)[DFCN])aObj[ o_phmasdj ].GetPtr();
     ph[q].ipxt =  (short *)aObj[ o_phpxres ].GetPtr(); // changed 07.12.2006 KD
+// For safe use of old Phase records without ipxt table   07.12.2006
+if(!ph[q].ipxt )
+   php->npxM = 0;
     ph[q].pnc =   (float *)aObj[ o_phpnc ].GetPtr();
     ph[q].scoef = (float *)aObj[ o_phscoef ].GetPtr();
     ph[q].SM =    (char (*)[DC_RKLEN])aObj[ o_phsm ].GetPtr();
@@ -353,7 +356,7 @@ static int rkeycmp(const void *e1, const void *e2)
 void
 TPhase::MakeQuery()
 {
-//    pImp->MakeQuery();
+//    pImp->MakeQuery();   Preparing for calling Phase Wizard 
     const char * p_key;
     char flgs[12];
     int size[6];

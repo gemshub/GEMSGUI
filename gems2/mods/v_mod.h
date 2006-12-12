@@ -559,7 +559,7 @@ MAXPHNAME =      16,
 enum phase_objects {   // PHASE
     //o_phpst,   o_phsymb,  o_phnam,  o_phcls,  o_phgrp,
     o_phsolt = o_rttext+1,  o_phps,   /*a 6*/   o_phndc,  /*i 2*/
-    o_phpncp, /*i 2*/  o_phnsc,  /*i 1*/ o_phnpx, /*i 1*/  o_phnsit, /*i 2*/
+    o_phpncp, /*i 2*/   o_phnpx, /*i 1*/ o_phnsc, /*i 1*/  o_phnsit, /*i 2*/
     /* Record 22 fields */
     o_phstr,     o_phname,     o_phnotes,     o_phdim,   /*i 8*/
     o_phdisep,  /*f 8*/ o_phscmc, o_phxfiec, o_phmsdt,

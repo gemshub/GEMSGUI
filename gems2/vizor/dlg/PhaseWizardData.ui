@@ -526,7 +526,7 @@ what kind of mixed phase and non-ideal model should be used.</string>
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Optional dc_cf array: number of rows (coefficients per phase end member); at default (zero) value, the dc_cf array will not be allocated.</string>
+                                <string>Optional dc_cf array: number of columns (coefficients per phase end member); at default (zero) value, the dc_cf array will not be allocated.</string>
                             </property>
                             <property name="alignment">
                                 <set>WordBreak|AlignVCenter</set>
