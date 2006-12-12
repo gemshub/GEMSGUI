@@ -274,6 +274,7 @@ public:
    void outMulti( GemDataStream& ff, gstring& path  );
    void outMulti( gstring& path  );
    void outMulti();
+   void outMultiTxt( const char *path  );
    void readMulti( GemDataStream& ff );
    void calcMulti();
 };

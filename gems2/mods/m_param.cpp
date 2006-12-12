@@ -333,6 +333,11 @@ void TProfil::outMulti( gstring& path  )
     multi->to_text_file_gemipm( path.c_str() );
 }
 
+void TProfil::outMultiTxt( const char *path  )
+{
+    multi->to_text_file( path );
+}
+
 void TProfil::outMulti( )
 {
    TNodeArray* na = new TNodeArray( 1, TProfil::pm->pmp/*multi->GetPM()*/ );

@@ -16,11 +16,14 @@
 // returns 0 if success or 1 if error
 //  Must be called once before the beginning of the coupled RMT calculation
 //
-extern "C"
-int  __stdcall  F_GEM_INIT(
-   char* string_,     // Path to the *.lst file with names of DATACH and MULTI files
-   unsigned int length_  // length of the block string_?
-);
+#ifdef __unix
+ extern "C" int f_gem_init_( char* string_, unsigned int length_ );
+#else
+ extern "C" int  __stdcall  F_GEM_INIT(
+    char* string_,     // Path to the *.lst file with names of DATACH and MULTI files
+    unsigned int length_  // length of the block string_
+   );
+#endif
 
 
 // (2) This function gets some elements of the DATACH data structure
@@ -28,16 +31,19 @@ int  __stdcall  F_GEM_INIT(
 // returns 0 if success or 1 if error
 // Parameter list may be extended in future with other DCH elements
 //
-extern "C"
-int  __stdcall  F_GEM_GET_DCH(  // All parameters are return values
+#ifdef __unix
+   extern "C" int  f_gem_get_dch_( int& p_nICb, int& p_nDCb, int& p_nPHb, float* p_A );
+#else
+  extern "C" int  __stdcall  F_GEM_GET_DCH(  // All parameters are return values
    int& p_nICb,   // Number of Independent Components (ICs) in chemical system
    int& p_nDCb,   // Number of Dependent Components (DCs) in chemical system
-   int& p_nPHb,
+   int& p_nPHb,   // Number of Phases (PHs) in chemical system
    float* p_A     // Stoichiometry matrix A with nDCb rows and nICb columns
                   // before calling  F_GEM_GET_DCH(), a memory block of the size
                   // greater than sizeof(float)*nDCb*nICb must be allocated and
                   // a pointer to is passed in p_A
-);
+  );
+#endif
 
 
 // (3) Reads DATABR input file that describes a single node composition,
@@ -48,10 +54,13 @@ int  __stdcall  F_GEM_GET_DCH(  // All parameters are return values
 //  Usually is called once at the beginning of coupled modeling for initializing
 //  all nodes
 //
-extern "C"
-int  __stdcall   F_GEM_READ_NODE(
-   char* string_,        // path (file name) of the DATABR file
-   unsigned int length_, // length of the block string_
+#ifdef __unix
+  extern "C" int   f_gem_read_node_( char* string_,
+#else
+  extern "C" int __stdcall   F_GEM_READ_NODE(
+  char* string_,        // path (file name) of the DATABR file
+  unsigned int length_, // length of the block string_
+#endif
    int& p_NodeHandle,    // Node identification handle
    int& p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    int& p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -109,7 +118,10 @@ int  __stdcall   F_GEM_READ_NODE(
    double  *p_xPA,  // amount of carrier in phases  [nPSb] ??       -      -      +     +
   // What else?
 //   double  *p_dRes1
-);
+#ifdef __unix
+   , unsigned int length_
+#endif
+ );
 
 
 // (4) Provides GEM input data to GEMIPM2K kernel (by copying them from
@@ -121,8 +133,11 @@ int  __stdcall   F_GEM_READ_NODE(
 //  returns  0 if success or 1 if error
 //  Is called on each external iteration for each node
 //
-extern "C"
-int  __stdcall   F_GEM_CALC_NODE(
+#ifdef __unix
+   extern "C" int  f_gem_calc_node_(
+#else
+   extern "C" int  __stdcall   F_GEM_CALC_NODE(
+#endif
    int& p_NodeHandle,    // Node identification handle
    int& p_NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
    int& p_NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -185,26 +200,30 @@ int  __stdcall   F_GEM_CALC_NODE(
 
 // (5) Writes a DATABR text file (with file path name provided in string_)
 //    from the currently available content of the DATABR work structure.
-// returns  0 if success or 1 if error
 // can be used for interruption of coupled modeling or for debugging purposes
 //
-extern "C"
-   int  __stdcall   F_GEM_WRITE_NODE(
+#ifdef __unix
+ extern "C" void f_gem_write_node( char* string_, unsigned int length_ );
+#else
+ extern "C"  void  __stdcall   F_GEM_WRITE_NODE(
    char* string_,        // path (file name) of the DATABR file
    unsigned int length_, // length of the block fname_
 );
-
+#endif
 
 // (6) For detailed examination of GEM work data structure:
 // writes GEMIPM internal MULTI data structure into text file
 // path name fname in debugging format (different from MULTI input format).
 // This file cannot be read back with F_GEM_INIT()!
 //
-extern "C"
-   int  __stdcall   F_GEM_PRINT_IPM(
+#ifdef __unix
+ extern "C" void f_gem_print_ipm( char* string_, unsigned int length_ );
+#else
+ extern "C"  void  __stdcall   F_GEM_PRINT_IPM(
    char* string_,        // path (file name) of the DATABR file
    unsigned int length_, // length of the block fname_
 );
+#endif
 
 
 #endif

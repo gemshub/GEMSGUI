@@ -224,13 +224,6 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
                      "Process stopped by the user");
           }
 #endif
-// output multi with error
-//              gstring mul_name = "multi_";
-//              gstring br_name = "db_";
-//              sprintf( buf, "%d_%d.err", i, t);
-//              mul_name+=buf;
-//              br_name+=buf;
-//              na->GEM_printf( mul_name.c_str(), br_name.c_str(),0 );
         }
      }
      else { // GEM calculation for this node not needed

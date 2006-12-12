@@ -733,16 +733,12 @@ void TProfil::CalcEqstat( bool /*prg*/)
      if( prg )
 	pVisorImp->OpenProgress();
 #endif
-//    vfMessage(window(),"Test1", "Point1");
-//   multi->to_text_file( "Multi0.txt" );
 
     multi->MultiCalcInit( keyp.c_str() );
-//    vfMessage(window(),"Test1", "Point2");
     if( multi->AutoInitialApprox() == false )
         multi->MultiCalcIterations();
     else //Show results   //if( wn[W_EQCALC].status )
         aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
-//    vfMessage(window(),"Test1", "Point2");
 
     if( pa.p.PRD < 0 && pa.p.PRD > -50 && !pmp->pNP ) // max 50 loops
     {  // Test refinement loops for highly non-ideal systems  KD 18.02.2005

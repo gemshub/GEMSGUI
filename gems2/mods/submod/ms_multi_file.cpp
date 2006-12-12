@@ -243,8 +243,16 @@ ff.writeArray((double*)pm.D, MST*MST);
    if( pm.sitNan )
      ff.writeArray( pm.sitXan, pm.sitNan );
 
-  to_text_file( path );
+/*   gstring Path_ = path;
+     gstring dir;
+     gstring name;
+     gstring ext;
 
+     u_splitpath( Path_, dir, name, ext );
+     Path_ = u_makepath( dir, name, "txt" );
+
+     to_text_file( path.c_str() );
+*/
 }
 
 // reading MULTI from binary file
@@ -1029,7 +1037,7 @@ if( pm.D ) delete[] pm.D;
 
 #endif
 
-void TMulti::to_text_file( gstring& path )
+void TMulti::to_text_file( const char *path )
 {
     //static values
    char PAalp;
@@ -1050,16 +1058,8 @@ void TMulti::to_text_file( gstring& path )
    RoW = RoW_;
 #endif
 
-   gstring Path_ = path;
-   gstring dir;
-   gstring name;
-   gstring ext;
-
-   u_splitpath( Path_, dir, name, ext );
-   Path_ = u_makepath( dir, name, "txt" );
-
-  fstream ff(Path_.c_str(), ios::out );
-  ErrorIf( !ff.good() , Path_.c_str(), "Fileopen error");
+  fstream ff(path, ios::out );
+  ErrorIf( !ff.good() , path, "Fileopen error");
 
   ff << pm.stkey << endl;
 
