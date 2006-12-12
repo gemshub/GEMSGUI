@@ -1714,11 +1714,18 @@ surface type fractions 'PFsiT'? { + * - }</h4>
   <h4> <a href="gm_phase.html#Ph_Nc_0">Ph_Nc[0]</a> N of DC in phase
 definition</h4>
   <h4> <a href="gm_phase.html#Ph_Nc_1">Ph_Nc[1]</a> N of references to
-Data Sources</h4>
-  <h4> <a href="gm_phase.html#Ph_ncp">Ph_ncp</a> Dimensions of 'ph_cf'
-array (to set up on remake)</h4>
-  <h4> <a href="gm_phase.html#Ph_nsc">Ph_nsc</a> Dimensions of 'dc_cf'
-array (to set up on remake)</h4>
+Data Sources (set on remake)<br>
+  </h4>
+  <h4> <a href="gm_phase.html#Ph_ncp">Ph_ncp</a> Dimensions of the
+ph_cf interaction parameter data array (set on remake)<br>
+  </h4>
+  <h4> <a href="gm_phase.html#Ph_nsc">Ph_nsc</a> Number of columns
+(coefficients per end member) in the dc_cf optional array<br>
+  </h4>
+</ul>
+<h4 style="margin-left: 40px;"><a href="gm_phase.html#Ph_npx">Ph_npx</a>
+Number of columns (max. order) in the ipxT parameter indexation array</h4>
+<ul>
   <h4> <a href="gm_phase.html#Ph_nsi_0">Ph_nsi[0]</a> N of surface
 site
 types (to set up on remake)</h4>
@@ -1782,14 +1789,16 @@ parameter
   <h4> <a href="gm_phase.html#MaSDj_5">MaSDj[][5]</a> Isotherm
 parameter
 3 (reserved) </h4>
-  <h4> <a href="gm_phase.html#PhXres">PhXres</a> Reserved</h4>
+  <h4> <a href="gm_phase.html#ipxT">ipxT</a> Table of indexation of
+interaction parameters of mixing models given in the ph_cf array</h4>
   <h4> <a href="gm_phase.html#FSI_t">FSI_t</a> Fraction of surface
 type relative to carrier (components)</h4>
-  <h4> <a href="gm_phase.html#ph_cf">ph_cf</a> Array of phase-related
-coefficients of non-ideality model</h4>
-  <h4> <a href="gm_phase.html#dc_cf">dc_cf</a> Array of DC-related
-coefficients of non-ideality model</h4>
-  <h4> <a href="gm_phase.html#pDC_v_">pDC_v_</a> List of DC record
+  <h4> <a href="gm_phase.html#ph_cf">ph_cf</a> Array of interaction
+parameter coefficients for the non-ideal mixing model</h4>
+  <h4> <a href="gm_phase.html#dc_cf">dc_cf</a> Array of
+end-member-related coefficients for the non-ideal mixing model</h4>
+  <h4> <a href="gm_phase.html#pDC_v_">pDC_v_</a> List of DC
+(end-member) record
 keys included into phase</h4>
   <h4> <a href="gm_phase.html#PhDCC">PhDCC</a> DC classes { T E S W G
 V C H N I J M&nbsp;<digit>X Y Z A B P Q R O }</digit></h4>

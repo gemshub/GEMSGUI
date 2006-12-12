@@ -990,7 +990,8 @@ there, if necessary. </dd>
 </dl>
 <dl>
   <dt> <a name="DcEq"></a><b><big><big><tt>DcEq</tt></big></big></b> -
-Math script related to phase species (optional, for user-defined
+Math script related to phase species concentrations (optional, for
+user-defined
 non-ideal mixing models) <br>
   </dt>
   <dd>&nbsp;&nbsp;<br>
@@ -1078,7 +1079,7 @@ allocated upon create/remake of the Phase record. &nbsp;</dd>
   <dd> &nbsp;</dd>
   <dt> <a name="dc_cf"></a><big><b><tt><big>dc_cf</big> </tt></b></big>-
 Array
-of species-related coefficients for the non-ideality model <br>
+of species-related coefficients for the non-ideal mixing model <br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
@@ -1090,25 +1091,35 @@ the user-defined number of columns (number of coefficients per
 species). &nbsp;This array is automatically
 created,
 filled-out and used in some built-in modes for calculation of activity
-coefficients&nbsp;</dd>
-  <dd>(the <tt>'3', '2', 'F'</tt> codes were set in the <a
- href="#p_solt_0"><tt>p_solt[0,0]</tt></a> cell). &nbsp;</dd>
+coefficients&nbsp; (e.g. if the <tt>'3', '2', 'P', 'F'</tt>&nbsp;
+codes were set in the <a href="#p_solt_0"><tt>p_solt[0,0]</tt></a>
+cell using Phase Wizard). In some models, the user must fill the
+coefficients out. &nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dd>Coefficients stored in this (single precision) array can be used
+  <dd>Coefficients stored in this (single precision real) array can be
+used
 in <a href="gmscript.html">math script</a> equations for calculation
 of
 activity coefficients typed in the <a href="#DcEq"><tt>DcEq</tt></a>
 field,
-where they are accessible at the GEM IPM runtime using the <a
- href="#dCm"><tt>dCm</tt></a> hidden data object.&nbsp;</dd>
+where they are accessible at the GEM IPM runtime using the <big><a
+ href="#dCm"><tt>dCm</tt></a></big> hidden data object. To access a
+cell, two indexes must be provided after <big><span
+ style="font-family: monospace;">dCm</span></big>&nbsp; identifier, for
+instance, as <big><span style="font-family: monospace;">dCm[1][2]</span></big>&nbsp;
+or <big><span style="font-family: monospace;">dCm[js][1]</span></big>&nbsp;
+or <big><span style="font-family: monospace;">dCm[js][is]</span></big>.
+    <br>
+  </dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>Except for built-in mixing models, the user is fully responsible
 for
 setting up correct information in the dc_cf array (either entering it
 or
-calculating using the <a href="#PhEq"><tt>PhEq</tt></a> math script)
+calculating using the <big><a href="#PhEq"><tt>PhEq</tt></a></big>&nbsp;
+math script)
 and
 correct usage of this data in calculation of activity coefficients.</dd>
   <dd>&nbsp; <br>
@@ -1118,7 +1129,8 @@ correct usage of this data in calculation of activity coefficients.</dd>
   <dd>&nbsp; &nbsp;&nbsp; </dd>
   <dt> <a name="PhEq"></a><big><big><b><tt>PhEq</tt></b></big></big>
 -&nbsp;Math
-script related to the whole phase (optional, for user-defined non-ideal
+script related to T,P-interaction parameters (optional, for
+user-defined non-ideal
 mixing models) <br>
   </dt>
   <dd>&nbsp; &nbsp; <br>
@@ -1128,13 +1140,14 @@ mixing models) <br>
 pressure- or composition-dependent coefficients to be used in
 calculation of species' <a href="glossary.html#DT_activity_coefficient">activity
 coefficients</a> in the non-ideal multi-component phase as defined in
-the <a href="#DcEq"><tt>DcEq</tt></a> math script.&nbsp;</dd>
+the <big><a href="#DcEq"><tt>DcEq</tt></a></big> math script.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>We recommend usage of special <a href="#PHASE_DOD_HIDDEN">hidden
 data objects</a> that exist in the runtime IPM data structure and
 automatically map species and parameters of this phase only (see more
-in the description of the <a href="#DcEq"><tt>DcEq</tt></a> field).</dd>
+in the description of the <big><a href="#DcEq"><tt>DcEq</tt></a></big>
+field).</dd>
   <dd>&nbsp;<br>
   </dd>
   <dd>Examples can be found in the template script library, accessible
@@ -1198,38 +1211,68 @@ allocated upon create/remake of the Phase record. &nbsp;</dd>
   <dd>&nbsp; &nbsp; </dd>
   <dt> <a name="ph_cf"></a><big><big><b><tt>ph_cf</tt></b></big></big>
 - Array
-of phase-related coefficients of non-ideality model &nbsp;(optional)<br>
+of interaction parameter coefficients for the non-ideality phase
+non-ideal mixing model (optional)<br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd>This array of phase-related coefficients of the non-ideality
+  <dd>This array of interaction parameter coefficients of the
+non-ideality
 model
 can be created upon create/remake of the Phase record. The <tt>ph_cf</tt>
-array has the numbers of rows and columns defined by the user.&nbsp;</dd>
-  <dd>&nbsp;<br>
+array has the numbers of rows equal to the number of (non-default)
+interaction parameters and columns equal to the number of T,P dependent
+coefficients per parameter, as defined by the user or set up
+automatically by the built-in mixing model. <br>
   </dd>
+  <dd><br>
+  </dd>
+  <dd>Coefficients stored in this (single precision) array can be used
+in <a href="gmscript.html">math script</a> equations for calculation
+of
+activity coefficients typed in the <a href="gm_phase.html#DcEq"><tt>DcEq</tt></a>
+or <a href="gm_phase.html#PhEq"><tt>PhEq</tt></a> fields, where they
+are accessible
+at
+the GEM IPM runtime using the <big><a href="gm_phase.html#pCv"><tt>pCv</tt></a></big>
+hidden
+data
+object.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>Except for built-in mixing models, the user is fully responsible
+for
+correct
+usage of the <tt>ph_cf</tt> data in calculation of activity
+coefficients.</dd>
+  <dd>&nbsp; </dd>
   <dd>This array will be automatically created and used in some
 built-in
 modes for calculation of activity coefficients&nbsp;(if the <tt>'G',
-'M',
+'M', 'P',
 'T'</tt> codes were set in the <a href="gm_phase.html#p_solt_0"><tt>p_solt[0,0]</tt></a>
 cell); in this case, you will only have to enter the coefficient
-values.
-Specifically, the built-in binary Margules model ('M' code) uses three
+values. <br>
+  </dd>
+  <dd>Specifically, the built-in binary Margules model (the 'M' code)
+uses three
 coefficients
 from the first line for the first end-member and three from the second
 line
 for the second end-member (in J/mol, J/K/mol and J/bar) as
-follows:&nbsp;</dd>
+can be represented by the following (PhEq script on the right
+side):&nbsp;</dd>
 </dl>
 <blockquote>
   <dl>
     <dd><i>W</i><sub>1</sub> = <i>W<sub>U</sub></i><sub>,1</sub> - <i>W<sub>S</sub></i><sub>,1</sub>*<i>T</i>
-+ <i>W<sub>V</sub></i><sub>,1</sub>*<i>P</i> =&nbsp; <tt>ph_cf[0,0]</tt>
-- <tt>ph_cf[0,1]</tt>*<i>T</i> + <tt>ph_cf[0,2]</tt>*<i>P</i> ;</dd>
++ <i>W<sub>V</sub></i><sub>,1</sub>*<i>P</i> &nbsp;&nbsp;
+or&nbsp;&nbsp;&nbsp; <tt>Qp[1] = pCv[0][0]</tt>
+- <tt>pCv[0][1]</tt>*<i>T</i>_ + <tt>pCv[0,2]</tt>*<i>P_</i> ;</dd>
     <dd><i>W</i><sub>2</sub> = <i>W<sub>U</sub></i><sub>,2</sub> - <i>W<sub>S</sub></i><sub>,2</sub>*<i>T</i>
-+ <i>W<sub>V</sub></i><sub>,2</sub>*<i>P</i> =&nbsp; <tt>ph_cf[1,0]</tt>
-- <tt>ph_cf[1,1]</tt>*<i>T</i> + <tt>ph_cf[1,2]</tt>*<i>P</i>.&nbsp;</dd>
++ <i>W<sub>V</sub></i><sub>,2</sub>*<i>P</i> &nbsp;&nbsp; or<tt>&nbsp;
+Qp[2] = pCv[1][0]</tt>
+- <tt>pCv[1][1]</tt>*<i>T</i>_ + <tt>pCv[1,2]</tt>*<i>P</i>_.&nbsp;</dd>
   </dl>
 </blockquote>
 <dl>
@@ -1242,24 +1285,28 @@ If you set different values of of <i>W</i><sub>1</sub> and <i>W</i><sub>2</sub>,
 you will run a subregular mixing model; equal values of <i>W</i><sub>1</sub>
 and <i>W</i><sub>2</sub> result in a regular mixing model, and zero
 values
-reduce it to the ideal mixture. The ternary regular Margules model
+reduce it to the ideal mixture. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>A ternary regular Margules model
 requires
 four rows each of three coefficients:</dd>
 </dl>
 <blockquote>
   <blockquote><i>W</i><sub>12</sub> = <i>W<sub>U</sub></i><sub>,12</sub>
 - <i>W<sub>S</sub></i><sub>,12</sub>*<i>T</i> + <i>W<sub>V</sub></i><sub>,12</sub>*<i>P</i>
-=&nbsp; <tt>ph_cf[0,0]</tt> - <tt>ph_cf[0,1]</tt>*<i>T</i> + <tt>ph_cf[0,2]</tt>*<i>P</i>
+=&nbsp; <tt>pCv[0][0]</tt> - <tt>pCv[0][1]</tt>*<i>T</i>_ + <tt>pCv[0][2]</tt>*<i>P_</i>
 ;<br>
     <i>W</i><sub>13</sub> = <i>W<sub>U</sub></i><sub>,13</sub> - <i>W<sub>S</sub></i><sub>,13</sub>*<i>T</i>
-+ <i>W<sub>V</sub></i><sub>,13</sub>*<i>P</i> =&nbsp; <tt>ph_cf[1,0]</tt>
-- <tt>ph_cf[1,1]</tt>*<i>T</i> + <tt>ph_cf[1,2]</tt>*<i>P</i> ;&nbsp;<br>
++ <i>W<sub>V</sub></i><sub>,13</sub>*<i>P</i> =&nbsp; <tt>pCv[1][0]</tt>
+- <tt>pCv[1][1]</tt>*<i>T</i>_ + <tt>pCv[1][2]</tt>*<i>P</i>_ ;&nbsp;<br>
     <i>W</i><sub>23</sub> = <i>W<sub>U</sub></i><sub>,23</sub> - <i>W<sub>S</sub></i><sub>,23</sub>*<i>T</i>
-+ <i>W<sub>V</sub></i><sub>,23</sub>*<i>P</i> =&nbsp; <tt>ph_cf[2,0]</tt>
-- <tt>ph_cf[2,1]</tt>*<i>T</i> + <tt>ph_cf[2,2]</tt>*<i>P</i> ;<br>
++ <i>W<sub>V</sub></i><sub>,23</sub>*<i>P</i> =&nbsp; <tt>pCv[2][0]</tt>
+- <tt>pCv[2][1]</tt>*<i>T</i>_ + <tt>pCv[2][2]</tt>*<i>P_</i> ;<br>
     <i>W</i><sub>123</sub> = <i>W<sub>U</sub></i><sub>,123</sub> - <i>W<sub>S</sub></i><sub>,123</sub>*<i>T</i>
-+ <i>W<sub>V</sub></i><sub>,123</sub>*<i>P</i> =&nbsp; <tt>ph_cf[3,0]</tt>
-- <tt>ph_cf[3,1]</tt>*<i>T</i> + <tt>ph_cf[3,2]</tt>*<i>P</i>.&nbsp;</blockquote>
++ <i>W<sub>V</sub></i><sub>,123</sub>*<i>P</i> =&nbsp; <tt>pCv[3][0]</tt>
+- <tt>pCv[3][1]</tt>*<i>T</i> + <tt>pCv[3][2]</tt>*<i>P_</i>.&nbsp;</blockquote>
 </blockquote>
 <dl>
   <dd>The binary Guggenheim (Redlich - Kister) mixing model needs only
@@ -1272,29 +1319,94 @@ directly
 used in computing activity coefficients, without correcting for <i>T,P</i>
 as in the Margules model. <br>
   </dd>
-  <dd>Details about these calculations can be found in <b><tt>Activity-coeffs.pdf</tt></b>
+  <dd><br>
+  </dd>
+  <dd>Mathematical details about these calculations can be found in <b><tt>Activity-coeffs.pdf</tt></b>
 manual.&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp;&nbsp;&nbsp;</dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dd>Coefficients stored in this (single precision) array can be used
-in <a href="gmscript.html">math script</a> equations for calculation
-of
-activity coefficients typed in the <a href="#DcEq"><tt>DcEq</tt></a>
-or <a href="#PhEq"><tt>PhEq</tt></a> fields, where they are accessible
-at
-the GEM IPM runtime using the <a href="#pCv"><tt>pCv</tt></a> hidden
-data
-object.&nbsp;</dd>
-  <dd>&nbsp; <br>
+  <dd><br>
   </dd>
   <dd><br>
-Except for built-in mixing models, the user is fully responsible for
-correct
-usage of the <tt>ph_cf</tt> data in calculation of activity
-coefficients.</dd>
-  <dd>&nbsp; <br>
   </dd>
+  <dt><a name="ipxT"></a><big><big><b><tt>ipxT </tt></b><small>- <small>Table
+of indexation of interaction parameters of mixing models given in the <big><span
+ style="font-family: monospace;">ph_cf</span></big> array</small></small></big></big>
+  </dt>
+  <dd><br>
+  </dd>
+  <dd>This data object was introduced in GEMS version 2.2.0 (or later)
+for future implementations of multicomponent non-ideal mixing models
+such as Van-Laar, Peng-Robinson, Extended UNIQUAC, general
+Redlich-Kister and so on.</dd>
+  <dd><br>
+  </dd>
+  <dd>The <big><tt>ipxT</tt></big>
+array has the numbers of rows equal to the number of (non-default)
+interaction parameters (set in <a href="#Ph_ncp_0"><big><span
+ style="font-family: monospace;">Ph_ncp[0]</span></big></a> upon
+remake) and columns equal to the maximum order of interaction parameter
+(set in <a href="#Ph_npx"><big><span style="font-family: monospace;">Ph_npx</span></big></a>
+upon remake), as defined by the user or set up
+automatically by the built-in mixing model.&nbsp;<br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>The index in each row of&nbsp; <span
+ style="font-family: monospace;">ipxT</span> table should correspond to
+the interaction parameter&nbsp; in the respective&nbsp; row of the <span
+ style="font-family: monospace;">ph_cf</span> array. For example, the
+ternary Margules model shown above (see description of&nbsp; <a
+ href="#ph_cf"><big><span style="font-family: monospace;">ph_cf</span></big></a>
+array) would require the following <span
+ style="font-family: monospace;">ipxT</span> table:</dd>
+  <dd><br>
+  </dd>
+</dl>
+<dl style="margin-left: 40px;">
+  <dd style="font-family: monospace;"><big>0&nbsp;&nbsp; 1&nbsp;&nbsp;
+-1</big></dd>
+  <dd style="font-family: monospace;"><big>0&nbsp;&nbsp; 2&nbsp;&nbsp;
+-1</big></dd>
+  <dd style="font-family: monospace;"><big>1&nbsp;&nbsp; 2&nbsp;&nbsp;
+-1</big></dd>
+  <dd><big><span style="font-family: monospace;">0&nbsp;&nbsp; 1&nbsp;
+&nbsp; 2</span></big><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dd>As the interaction coefficients are symmetric (<span
+ style="font-style: italic;">W</span><sub>12</sub> = <span
+ style="font-style: italic;">W</span><sub>21</sub>; <span
+ style="font-style: italic;">W</span><sub>123</sub> = <span
+ style="font-style: italic;">W</span><sub>231</sub> = <span
+ style="font-style: italic;">W</span><sub>312</sub> etc.) in such
+mixing models, it is sufficient to index only one of them, as done
+above. The index -1 in the last column means that this interaction
+parameter is not full-order (i.e. binary in a ternary system). For
+multi-component mixing models such as Van Laar, Peng-Robinson, SIT, or
+UNIQAC, which have only binary interaction parameters, it is sufficient
+to have only two columns in the <span style="font-family: monospace;">ipxT</span>
+table. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>Note that the new built-in functions assume that if some index
+combinations are missing from the&nbsp; <span
+ style="font-family: monospace;">ipxT</span>&nbsp; and&nbsp; <span
+ style="font-family: monospace;">ph_cf</span> arrays, the respective
+interactions are assumed ideal and take default values of interaction
+coefficients (usually 0). This makes the setup of multicomponent mixing
+models easier. For instance, if in the above example coefficients W<sub>123</sub>
+and W<sub>13</sub> are not known or assumed to be zero then the
+respective lines (second and the last) could be omitted from <span
+ style="font-family: monospace;">ipxT</span> and <span
+ style="font-family: monospace;">ph_cf</span> arrays, which would have
+then only two rows each. <br>
+  </dd>
+</dl>
+<dl>
   <dd>&nbsp;&nbsp; <br>
   </dd>
   <dd> &nbsp;&nbsp; </dd>
@@ -1572,8 +1684,8 @@ of equilibrium states. Possible values: <a
 &nbsp; </dd>
   <dt> <a name="Ph_Ps_1"></a><big><big><b><tt>Ph_Ps[1]</tt></b></big></big>
 - Allocation flag for the <a href="#ph_cf"><tt>ph_cf</tt></a> array
-for phase-related
-parameters { + * - } <br>
+and <a href="#ipxT"><span style="font-family: monospace;">ipxT</span></a>
+table for interaction parameters { + * - } <br>
   </dt>
   <dd>&nbsp;&nbsp; <br>
 This flag controls allocation an optional dynamic array <a
@@ -1628,7 +1740,8 @@ re-calculation of the Phase record. Default flag is off <tt>'-'</tt>.<br>
 &nbsp; <br>
 &nbsp;&nbsp; </dd>
   <dt> <a name="Ph_Ps_3"></a><big><big><b><tt>Ph_Ps[3]</tt></b></big></big>
-- Allocation flag for the phase-related math script <a href="#PhEq"><tt>PhEq</tt></a>
+- Allocation flag for the T,P-interaction parameters related math
+script <a href="#PhEq"><tt>PhEq</tt></a>
 field { + * - } <br>
   </dt>
   <dd>&nbsp; <br>
@@ -1640,7 +1753,8 @@ for the whole phase. Default flag is off <tt>'-'</tt>.<br>
 &nbsp; <br>
 &nbsp; </dd>
   <dt> <a name="Ph_Ps_4"></a><tt><big><big><b>Ph_Ps[4]</b></big></big></tt>
-- Allocation flag for the species-related math script <a href="#DcEq"><tt>DcEq</tt></a>
+- Allocation flag for the species-concentration-related math script <a
+ href="#DcEq"><tt>DcEq</tt></a>
 field { + * - } <br>
   </dt>
   <dd>&nbsp;<br>
@@ -1689,13 +1803,14 @@ allocate optional lists <a href="#pSDref"><tt>pDSref</tt></a> and <a
  href="#pSDval"><tt>pSDval</tt></a>.&nbsp;</dd>
   <dd><br>
   </dd>
-  <dd>Default value is 0 (the lists will not be allocated). <br>
+  <dd>Default value is 0 (the lists will not be available). <br>
 &nbsp; &nbsp;<br>
 &nbsp;&nbsp; </dd>
   <dt> <a name="Ph_ncp"></a><big><b><big><tt>Ph_ncp</tt></big></b></big>
 -
 Dimensions of the <a href="#ph_cf"><tt>ph_cf</tt></a> optional data
-array <br>
+array and number of rows in the <a href="#ipxT"><span
+ style="font-family: monospace;">ipxT</span></a> optional array. <br>
   </dt>
   <dd><br>
 Set here the number of rows (first cell) and columns (second cell) of
@@ -1706,35 +1821,62 @@ flag
 must be also set on. In some built - in calculation modes, these
 dimensions
 will be set automatically, depending on the code in <a href="#p_solt_0"><tt>&nbsp;p_solt[0]</tt></a>
-field.&nbsp;</dd>
+field.&nbsp; The number of rows&nbsp; in <span
+ style="font-family: monospace;">ph_cf</span>&nbsp; array is also the
+number of&nbsp; rows in the <a href="#ipxT"><span
+ style="font-family: monospace;">ipxT</span></a> array. <br>
+  </dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>Default values are 0 (the <a href="#ph_cf"><tt>ph_cf</tt></a>
 array
-will not be allocated). <br>
+will not be available). <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp; </dd>
+  <dt> <a name="Ph_npx"></a><big><big><b><tt>Ph_npx</tt></b></big>&nbsp;
+    </big>-&nbsp; Number of columns (maximum parameter order) in the<a
+ href="#ipxT"><span style="font-family: monospace;"> ipxT</span></a>
+parameter indexation array </dt>
+  <dd><br>
+  </dd>
+  <dd> Set here the number of columns in the <a href="#ipxT"><span
+ style="font-family: monospace;">ipxT</span></a> table for parameter
+indexation, which corresponds to the maximum order of used parameters.
+For instance, set 2 if only binary parameters are used in the
+multi-component mixing model. Some built-in mixing models set this
+dimension automatically. The number of rows in the <a href="#ipxT"><span
+ style="font-family: monospace;">ipxT</span></a> table is the same as
+in the <a href="#ph_cf"><span style="font-family: monospace;">ph_cf</span></a>
+array (set in <a href="#Ph_ncp"><span style="font-family: monospace;">Ph_ncp</span></a>[1]
+cell upon remake). <br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dd> Default value is 0 (the <span style="font-family: monospace;">ipxT</span>
+array will not be available, except certain built-in mixing models).<br>
 &nbsp; &nbsp;</dd>
   <dd>&nbsp;&nbsp; </dd>
   <dt> <a name="Ph_nsc"></a><big><big><b><tt>Ph_nsc</tt></b></big></big>
--
-Dimension of the <a href="#dc_cf"><tt>dc_cf</tt></a> optional data
+- Number of columns (coefficients per end member) in the <a
+ href="#dc_cf"><tt>dc_cf</tt></a> optional
 array <br>
   </dt>
   <dd><br>
   </dd>
-  <dd>Set here the number of columns (second cell) of the optional <a
- href="#dc_cf"><tt>dc_cf</tt></a> array (to appear on Page 2 of the
-Phase window); the <a href="#Ph_Ps_2"><tt>Ph_Ps[2]</tt></a> flag must
+  <dd>Set here the number of columns of the optional <a href="#dc_cf"><tt>dc_cf</tt></a>
+array (the <a href="#Ph_Ps_2"><tt>Ph_Ps[2]</tt></a> flag must
 be also
-set on. The number of rows in <tt>dc_cf</tt> is given in the <a
- href="#Ph_Nc_0"><tt>Ph_Nc[0]</tt></a> cell (there is no need to enter
-it there). In some built - in calculation modes, these dimensions will
+set on). The number of rows in <tt>dc_cf</tt> is given in the <a
+ href="#Ph_Nc_0"><tt>Ph_Nc[0]</tt></a> cell. In some built - in
+calculation modes, these dimensions will
 be set
 automatically, depending on the code in &nbsp;<a href="#p_solt_0"><tt>p_solt[0]</tt></a>
 field.&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>Default value is 0 (the <a href="#dc_cf"><tt>dc_cf</tt></a>
-array will not be allocated). </dd>
+array will not be available). </dd>
   <dd>&nbsp;&nbsp; <br>
 &nbsp;&nbsp; </dd>
   <dt> <a name="Ph_nsi_0"></a><big><big><b><tt>Ph_nsi[0]</tt></b></big></big>
@@ -1758,7 +1900,7 @@ complexation.&nbsp;</dd>
   <dt> <a name="Ph_nsi_1"></a><big><b><tt>Ph_nsi[1]</tt></b></big>
 -&nbsp; </dt>
   <dd> reserved for future usage. </dd>
-  <dd><br>
+  <dd>&nbsp;. <br>
   </dd>
 </dl>
 <br>
@@ -1767,14 +1909,9 @@ objects</h3>
 <dl>
   <dt><br>
   </dt>
-  <dt><a name="PhXres"></a><big><b><tt>PhXres</tt></b></big> </dt>
-  <dd> Reserved for future development of GEM surface complexation
-models. </dd>
-  <dd><br>
-  </dd>
 </dl>
 <dl>
-  <dt> <a name="PHtprn"></a><big><b><tt>PHtprn</tt></b></big> </dt>
+  <dt><a name="PHtprn"></a><big><b><tt>PHtprn</tt></b></big> </dt>
   <dd> Internal </dd>
   <dd> <br>
   </dd>
@@ -1831,17 +1968,23 @@ molal ionic strength of aqueous electrolyte (scalar, read only) </dt>
   <dd> &nbsp; </dd>
   <dd> &nbsp; </dd>
   <dt> <a name="is"></a><big><b><tt>is</tt></b></big> - internal index
-of a column (e.g. in dc_cf or ph_cf arrays),&nbsp; scalar&nbsp; </dt>
+of a column (e.g. in <a href="#dCm"><big><span
+ style="font-family: monospace;">dCm</span></big></a> or <a href="#pCv"><big><span
+ style="font-family: monospace;">pCv</span></big></a> arrays),&nbsp;
+scalar&nbsp; </dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>This index is not set automatically and can be changed e.g. in a
 math
-script loop.</dd>
+script "do begin ... end" loop.</dd>
   <dd>&nbsp;<br>
   </dd>
   <dd> &nbsp;&nbsp; </dd>
   <dt> <a name="js"></a><b><big><tt>js</tt></big></b> - internal index
 of a species in this phase (scalar) </dt>
   <dd> &nbsp;&nbsp;</dd>
+  <dd>This index can be used to access <a href="#dCm"><big><span
+ style="font-family: monospace;">dCm</span></big></a> array cells. <br>
+  </dd>
   <dd>In "public" mode, this index is automatically changed in the
 GammaCalc() from 0 to <tt>Ndc-1</tt>, where <a href="#Ndc"><tt>Ndc</tt></a>
 is number of dependent components (species) in this phase. In "private"
