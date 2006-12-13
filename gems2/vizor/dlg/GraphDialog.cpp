@@ -266,7 +266,7 @@ void GraphDialog::Show()
 // show plots
 void GraphDialog::ShowPlots()
 {
-  gstring cap = "GEM-Selektor v.2.1-PSI Graphics Dialog";
+  gstring cap = "GEM-Selektor v2.2-PSI Graphics Dialog";
 
   switch( gr_data.graphType )
   {
