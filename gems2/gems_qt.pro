@@ -1,10 +1,10 @@
 #qmake -spec win32-borland gems_qt.pro > a
-#version 2.1.3rc4
+#version 2.2.0
 
 TEMPLATE	= app
 #LANGUAGE        = C++
 TARGET		= gems2
-VERSION         = 2.1.1
+VERSION         = 2.2.0
 
 DEFINES         += Use_mt_mode
 CONFIG		+= qt thread warn_on debug

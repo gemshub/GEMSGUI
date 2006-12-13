@@ -8,6 +8,7 @@ gems2/data/units.ini svn_keywords=Author+Date+Id+Revision
 gems2/data/vis_cn.ini svn_keywords=Author+Date+Id+Revision
 gems2/data/vis_od.ini svn_keywords=Author+Date+Id+Revision
 gems2/data/viz_cndoc.txt svn_keywords=Author+Date+Id+Revision
+gems2/doc/.qt3rc -text
 gems2/doc/ADV_PAGE.TXT svn_keywords=Author+Date+Id+Revision
 gems2/doc/ADV_PROC.TXT svn_keywords=Author+Date+Id+Revision
 gems2/doc/BugLog.dima svn_keywords=Author+Date+Id+Revision
@@ -17,6 +18,7 @@ gems2/doc/ChangeLog.dima svn_keywords=Author+Date+Id+Revision
 gems2/doc/ChangeLog.kostya svn_keywords=Author+Date+Id+Revision
 gems2/doc/ChangeLog.sveta svn_keywords=Author+Date+Id+Revision
 gems2/doc/GEMS.kdelnk svn_keywords=Author+Date+Id+Revision
+gems2/doc/HOWTO-Build-with-Qt3-on-SUSE10.2.doc.txt -text
 gems2/doc/Helpfiles-chart.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/INFORMAL svn_keywords=Author+Date+Id+Revision
 gems2/doc/INSTALL svn_keywords=Author+Date+Id+Revision
