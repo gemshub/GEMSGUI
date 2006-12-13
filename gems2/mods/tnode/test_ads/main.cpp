@@ -220,6 +220,7 @@ int main( int argc, char* argv[] )
  //   cout << " FMT loop begins: " << endl;
 
      // Loop over nodes for calculating the mass transport step
+     if( it > 0 )
      for(  in=0; in<nNodes; in++ )
      {
 // add here some operators as function of tc and dt

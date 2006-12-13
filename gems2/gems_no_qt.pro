@@ -7,10 +7,9 @@ VERSION         = 2.1.1
 
 CONFIG		-= qt
 CONFIG		+= thread warn_on debug windows
-#CONFIG		+= qmake_cache
 
 DEFINES         += Use_mt_mode
-LIBS	        += -L./lib -lgems_qt -lqtmt336 -lqtmain
+LIBS	        += -L./lib -lgems_qt -lqtmt -lqtmain
 
 
 !win32 {
