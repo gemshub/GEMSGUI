@@ -131,6 +131,13 @@ gems2/mods/gemipm/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_lin svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_w32 svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.w32 svn_keywords=Author+Date+Id+Revision
+gems2/mods/gemipm/doc/html/gemipm2k-inp.html -text
+gems2/mods/gemipm/doc/html/gemipm2k-man.html -text
+gems2/mods/gemipm/doc/txt/PGIcompile.txt -text
+gems2/mods/gemipm/doc/txt/dbr-dat-doc.txt -text
+gems2/mods/gemipm/doc/txt/dch-dat-doc.txt -text
+gems2/mods/gemipm/doc/txt/filelist-doc.txt -text
+gems2/mods/gemipm/doc/txt/ipm-dat-doc.txt -text
 gems2/mods/gemipm/gemipm2k-sep.pro -text
 gems2/mods/gemipm/gemipm2k.pro -text
 gems2/mods/gemipm/m_const.h svn_keywords=Author+Date+Id+Revision
@@ -384,8 +391,6 @@ gems2/shared/doc/html/g_tutor.html -text
 gems2/shared/doc/html/g_useref.html -text
 gems2/shared/doc/html/gdb_rkey.html -text
 gems2/shared/doc/html/ge_howto.html -text
-gems2/shared/doc/html/gemipm2k-inp.html -text
-gems2/shared/doc/html/gemipm2k-man.html -text
 gems2/shared/doc/html/gems1.png -text
 gems2/shared/doc/html/gems_bcc.html -text
 gems2/shared/doc/html/gems_gui.html -text

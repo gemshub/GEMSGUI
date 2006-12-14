@@ -435,8 +435,8 @@ AGAIN_SETUP:
                           php->ncpN = 1; php->ncpM = 3;
                           break;
           case SM_MARGB:  // Margules binary subregular
-                          php->nscM = 0;
-                          php->npxM = 0;
+//                          php->nscM = 0;
+//                          php->npxM = 0;
                           php->ncpN = 2; php->ncpM = 3;
                           break;
           case SM_MARGT:  // Margules ternary regular
