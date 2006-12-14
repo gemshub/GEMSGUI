@@ -297,7 +297,7 @@ LOAD_NIDMCOEF:
                 (kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1]), 1, I_ );
              ErrorIf( pmp->IPx == NULL, "SolModLoad", "Error by reallocating memory for pmp->IPx." );
                // temporary memcpy - reimplement with compression!
-             memcpy( pmp->IPx+kx, aPH->php->pnc,
+             memcpy( pmp->IPx+kx, aPH->php->ipxt,
                      (pmp->LsMod[k*3]*pmp->LsMod[k*3+1])*sizeof(short));
           }
           else
