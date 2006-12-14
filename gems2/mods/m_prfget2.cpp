@@ -94,7 +94,7 @@ void TProfil::ICcompare( TIArray<CompItem>& aIComp)
     j = 0;
     while( i<Nold && j<mup->N )
     {
-        l = memcmp( SBold[i], mup->SB[j], IC_RKLEN );
+        l = memcmp( SBold[i], mup->SB[j], IC_RKLEN-MAXICGROUP ); // 14/11/12 SD
         if( l==0 )
         {
             i++;
@@ -132,7 +132,7 @@ void TProfil::COMPcompare( TIArray<CompItem>& aCompos)
     j = 0;
     while( i<Laold && j<mup->La )
     {
-        l = memcmp( SAold[i], mup->SA[j], BC_RKLEN );
+        l = memcmp( SAold[i], mup->SA[j], BC_RKLEN-MAXCMPGROUP ); // 14/11/12 SD
         if( l==0 )
         {
             i++;
