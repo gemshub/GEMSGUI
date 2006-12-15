@@ -194,7 +194,7 @@ void TSyst::mark_ic_to_dc()
                     sy.Dcl[j] = S_OFF;
                     break;
                 }
-            /* Надо ли подключать DС, если вновь включен IC? */
+            /* пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ DпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ IC? */
         } /* ii */
         aFo.Reset();
         if( sy.Dcl[j] != S_OFF )
@@ -234,13 +234,13 @@ void TSyst::make_syst_sizes()
         case DC_AQ_SOLVCOM:
             sy.Ls++;
             break;
-            /* Ges mixture */
+            /* Gas mixture */
         case DC_GAS_COMP:
         case DC_GAS_H2O: /* index to switch off ? */
         case DC_GAS_CO2:
         case DC_GAS_N2:
         case DC_GAS_H2:
-            sy.Lg++;
+//            sy.Lg++;     workaround 15.12.2006  SD KD
             sy.Ls++;
             break;
             /* solution no electrolite */
@@ -295,6 +295,8 @@ void TSyst::make_syst_sizes()
         }
     }
 
+// Temporary workaround for Lg counter   15.12.2006  SD KD
+sy.Lg = 0;
     sy.Fi = 0;
     sy.Lhc = 0;
     sy.Fis = 0;
@@ -315,9 +317,10 @@ void TSyst::make_syst_sizes()
         case PH_PLASMA:
         case PH_GASMIX:
         case PH_FLUID:
-            if( sy.Ll[k] == sy.Lg )
-                break;
-            break; /* error code of gases */
+//            if( sy.Ll[k] == sy.Lg )   workaround  15.12.2006  SD KD
+//                break;
+               sy.Lg += sy.Ll[k];
+               break;
         case PH_HCARBL:
             sy.Lhc = sy.Ll[k];
             break;
@@ -365,10 +368,10 @@ void TSyst::make_syst_sizes()
 
         case IC_CHARGE:   * charch - index *
             if( sy.PE != S_ON )
-                break;   * may be error  *
+                break;   * may be errorпїЅ *
         case IC_VOLUME:   * volume IC - index *
             if( sy.PV != S_ON )
-                break;  * may be error   *
+                break;  * may be errorпїЅпїЅ *
         default:
             ; * error in code IComp *
         } */
@@ -445,7 +448,7 @@ void TSyst::make_syst()
 
     /* calck  bulk chemical composition of the system */
     systbc_calc(0);
-    /* change S_REM ­  S_ON */
+    /* change S_REM пїЅпїЅ S_ON */
     char *Psw = &sy.PbIC;
     for( i=0; i<28; i++ )
         if( Psw[i] == S_REM )

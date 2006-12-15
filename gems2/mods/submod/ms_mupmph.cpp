@@ -756,7 +756,7 @@ PARLOAD: if( k < syp->Fis )
                 pmp->YOF[k] = syp->YOF[kk] * PMM / pmp->RT;
                 break;
             default:
-                if( Cjs >=0 ) // if there is a MAJOR component in the solution 
+                if( Cjs >=0 ) // if there is a MAJOR component in the solutionï¿½
                     PMM = pmp->MM[Cjs];
                 pmp->YOF[k] = syp->YOF[kk] * PMM / pmp->RT;
                 break;
@@ -919,7 +919,7 @@ pmp->D[ist][isi] = 0.0;                    // cleanining the totals for sites
 //                pmp->MASDJ[j] = 1.0;
         }
         /*  if( pmp->SATT[j] == SAT_SITE )
-            { * Correction for neutr.site at ƒ0,max *
+            { * Correction for neutr.site at ï¿½0,max *
               SATst = pa->p.DNS*1.66054*pmp->Aalp[k]/
                  max( pmp->MASDT[k][ist]-pmp->MISDT[k][ist], pmp->MASDJ[j] );
               pmp->GEX[j] += log( SATst );

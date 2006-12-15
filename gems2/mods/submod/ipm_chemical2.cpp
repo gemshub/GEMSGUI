@@ -27,11 +27,19 @@
 // Calc  partial pressures of gases - to remake using dual potentials
 void TMulti::GasParcP()
 {
-    short k,  i,  jj;
+    short k,  i,  jj=0;
     int jb, je, j;
+#ifndef IPMGEMPLUGIN
 
     if( !pmp->PG )
         return;
+
+  char (*SMbuf)[MAXDCNAME] =
+      (char (*)[MAXDCNAME])aObj[ o_w_tprn].Alloc( pmp->PG, 1, MAXDCNAME );
+  pm.Fug = (float *)aObj[ o_wd_fug].Alloc( pm.PG, 1, F_ );
+  pm.Fug_l = (float *)aObj[ o_wd_fugl].Alloc( pm.PG, 1, F_ );
+  pm.Ppg_l = (float *)aObj[ o_wd_ppgl].Alloc( pm.PG, 1, F_ );
+
     for( k=0, je=0; k<pmp->FIs; k++ ) // phase
     {
         jb = je;
@@ -39,15 +47,10 @@ void TMulti::GasParcP()
         if( pmp->PHC[k] == PH_GASMIX || pmp->PHC[k] == PH_PLASMA
            || pmp->PHC[k] == PH_FLUID )
         {
-#ifndef IPMGEMPLUGIN
-            char (*SMbuf)[MAXDCNAME] =
-                (char (*)[MAXDCNAME])aObj[ o_w_tprn].Alloc( pmp->PG, 1, MAXDCNAME );
-            memcpy(SMbuf,pmp->SM[jb], pmp->PG*MAXDCNAME*sizeof(char) );
-            //     aObj[ o_w_tprn].SetPtr( pmp->SM[jb] );
-            //     aObj[ o_w_tprn].SetDim( pmp->PG, 1 );
-#endif
-            for( j=jb,jj=0; j<je; j++,jj++ )
+            for( j=jb/*,jj=0*/; j<je; j++,jj++ )
             {  /* fixed 02.03.98 DAK */
+
+                memcpy(SMbuf[jj], pmp->SM[j], MAXDCNAME*sizeof(char) );
                 pmp->Fug_l[jj] = -(float)(pmp->G0[j]+pmp->GEX[j]); /* + pmp->lnGam[j] */
                 if( pmp->Pc > 1e-9 )
                     pmp->Fug_l[jj] += (float)log(pmp->Pc); /* fixed 02.03.98 DAK */
@@ -61,9 +64,10 @@ void TMulti::GasParcP()
                 pmp->Fug_l[jj] *= (float).43429448;
                 pmp->Ppg_l[jj] *= (float).43429448;
             }
-            break;
+            // break;
         }
     }
+#endif
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
