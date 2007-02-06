@@ -1,3 +1,13 @@
+06/02/2007
+ Fixed error 
+ In function AssemblePhase: Assembling the phase (automatically generated aq or gas/fluid)
+ set as default zeros for php->pnc array
+
+05/02/2007
+ In Graph mode, deleted error message, if 
+  showing only one point as graph line 
+
+//=====================================================
 05/03/2002
  Changed Copy List command: making new keys using template
  Added Rename List command
