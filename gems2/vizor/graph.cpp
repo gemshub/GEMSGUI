@@ -63,7 +63,8 @@ TPlot::TPlot( int aObjX, int aObjY ):
 {
 
     int dNy, dMy, dY;
-    foString = ( aObjX<0 || aObj[aObjX].GetN()>1 );
+    // foString = ( aObjX<0 || aObj[aObjX].GetN()>1 );
+    foString = ( aObjX<0 || aObj[aObjX].GetN()>=1 );// SD 05/02/2007
 
     dNy = aObj[aObjY].GetN();
     dMy = aObj[aObjY].GetM();

@@ -87,7 +87,7 @@ void TMulti::SolModLoad( )
         kc = kce;
 //SD        kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
         kd = kde;
-        kde += pmp->LsMdc[k]*pmp->L1[k];
+//SD        kde += pmp->LsMdc[k]*pmp->L1[k];
 /*  old variant - prove again!
         kc = kce;
         kce += pmp->LsMod[k];
@@ -162,7 +162,7 @@ pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
 aObj[ o_nncp].SetPtr( pmp->LsMod+k*3 );
 aObj[ o_nncp].SetDim( 1, 3 );
             aObj[ o_nncd].SetPtr( pmp->LsMdc+k );
-aObj[ o_nncp].SetDim( 1, 1 );
+aObj[ o_nncd].SetDim( 1, 1 );
             aObj[ o_ndc ].SetPtr( pmp->L1+k );
             aObj[ o_nez ].SetPtr( pmp->EZ+jb );
             aObj[o_nez].SetN( pmp->L1[k]);
@@ -264,7 +264,7 @@ LOAD_NIDMCOEF:
                   (int)(sizeof( pmp->PMc )/sizeof(float)))
                  pmp->PMc = (float *) aObj[ o_wi_pmc ].Alloc(
                    (kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2]), 1, F_ );
-              ErrorIf( pmp->DMc == NULL, "SolModLoad", "Error by reallocating memory for pmp->PMc." );
+              ErrorIf( pmp->PMc == NULL, "SolModLoad", "Error by reallocating memory for pmp->PMc." );
 
               if( modT[SPHAS_TYP] != SM_AQSIT )  // Not SIT model
               {    // temporary memcpy() - reimplement with compression
@@ -349,9 +349,10 @@ LOAD_NIDMCOEF:
         }
         kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
         kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 10.12.2006  by KD&SD
+        kde += pmp->LsMdc[k]*pmp->L1[k];
      } /* k */
     pmp->pIPN = 1;
-}
+ }
 
 // ------------------------------------------------------------------------
 // packs IP index table and IP coeffs table when some end members are

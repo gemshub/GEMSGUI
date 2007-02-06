@@ -356,7 +356,7 @@ static int rkeycmp(const void *e1, const void *e2)
 void
 TPhase::MakeQuery()
 {
-//    pImp->MakeQuery();   Preparing for calling Phase Wizard 
+//    pImp->MakeQuery();   Preparing for calling Phase Wizard
     const char * p_key;
     char flgs[12];
     int size[6];
@@ -1357,6 +1357,9 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
         }
         php->PFsiT = S_ON;
     }
+// set up all 0 06/02/2007
+   for( i=0; i<php->ncpN * php->ncpM; i++)
+    php->pnc[i] = 0.;
 
 // set model parameters, if necessary  !!!!!!!!!!!!! check !
     if( php->pnc && ( php->ncpN * php->ncpM >= 8 ) )
