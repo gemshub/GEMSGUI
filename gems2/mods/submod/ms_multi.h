@@ -281,6 +281,19 @@ class TMulti
     MULTI pm;
     MULTI *pmp;
 
+// Internal arrays for optimization part
+   int sizeN;
+   double *AA;
+   double *BB;
+   int *arrL;
+   int *arrAN;
+
+   void Alloc_A_B( int newN );
+   void Free_A_B();
+   void Build_compressed_xAN();
+   void Free_compressed_xAN();
+   void Free_internal();
+
 #ifndef IPMGEMPLUGIN
     SYSTEM *syp;
     MTPARM *tpp;
@@ -315,7 +328,7 @@ class TMulti
 // ipm_chemical.cpp
     void XmaxSAT_IPM2();
     void XmaxSAT_IPM2_reset();
-    double DualChemPot( double U[], float AL[], int N );
+    double DualChemPot( double U[], float AL[], int N, int j );
     void Set_DC_limits( int Mode );
     void TotalPhases( double X[], double XF[], double XFA[] );
     double Ej_init_calc( double, int j, int k);
@@ -409,6 +422,9 @@ public:
     TIArray<IPNCalc> qEd;
 
     TMulti( int nrt, SYSTEM* sy_, MTPARM *tp_, RMULTS *mu_ );
+    ~TMulti()
+    {  Free_internal(); };
+
 
     void ods_link( int i=0);
     void dyn_set( int i=0);
@@ -433,7 +449,13 @@ public:
 #else
 
    TMulti()
-   { pmp = &pm;}
+   { pmp = &pm;
+     sizeN = 0;
+     AA = 0;
+     BB = 0;
+     arrL = 0;
+     arrAN = 0;
+   }
 
     void multi_realloc( char PAalp, char PSigm );
     void multi_free();

@@ -283,7 +283,7 @@ void TMulti::CompG0Load()
                 case VOL_CONSTR:
                     if( syp->Vuns )
                        Vv = syp->Vuns[jj];
-                    pmp->A[j*pmp->N] = tpp->Vm[jj]+Vv;
+                    pmp->A[j*pmp->N] = tpp->Vm[jj]+Vv; // !!! error
                 case VOL_CALC:
                 case VOL_UNDEF:
                     if( syp->Vuns )
@@ -296,6 +296,9 @@ void TMulti::CompG0Load()
             /* load other t/d parametres - do it! */
         }
     }
+    // optimization 08/02/2007
+    Alloc_A_B( pmp->N );
+    Build_compressed_xAN();
     pmp->pTPD = 2;
 }
 

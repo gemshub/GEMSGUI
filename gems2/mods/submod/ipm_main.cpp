@@ -34,6 +34,7 @@ using namespace JAMA;
 #endif
 
 #include "node.h"
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Main sequence of IPM calculations
 //  Main place for implementation of diagnostics and setup
@@ -547,7 +548,7 @@ int TMulti::InteriorPointsMethod( )
        MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C );
 
        pmp->FX=FX1;
-       // main iteration done�
+       // main iteration doneï¿½
        // Calculation of activity coefficients on IPM iteration
         if( pmp->PD==3 )
             GammaCalc( LINK_UX_MODE );
@@ -603,13 +604,21 @@ STEP_POINT( "IPM Iteration" );
 void
 TMulti::MassBalanceDeviations( int N, int L, float *A, double *Y, double *B, double *C )
 {
-    int I,J;
-    for(J=0;J<N;J++)
+    int ii, jj, i;
+/*    for(J=0;J<N;J++)
     {
         C[J]=B[J];
         for(I=0;I<L;I++)
             C[J]-=(double)(*(A+I*N+J))*Y[I];
     }
+*/
+    for(ii=0;ii<N;ii++)
+        C[ii]=B[ii];
+    for(jj=0;jj<L;jj++)
+     for( i=arrL[jj]; i<arrL[jj+1]; i++ )
+     {  ii = arrAN[i];
+         C[ii]-=(double)(*(A+jj*N+ii))*Y[jj];
+     }
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -807,35 +816,51 @@ void TMulti::WeightMultipliers( bool square )
 // pmp->U - solution vector (N).
 // Return values: 0  - solved OK;
 //                1  - no solution, degenerated or inconsistent system;
-#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*N)))
-//
+#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*Na)))
+//#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*N)))
 int TMulti::SolverLinearEquations( int N, bool initAppr )
 {
-  int ii, jj, kk;
+  int ii,i, jj, kk, k, Na = pmp->N;
   double aa;
-  Array2D<double> A(N,N);
-  Array1D<double> B(N);
+  Alloc_A_B( N );
 
   // making  matrix of IPM linear equations
   for( kk=0; kk<N; kk++)
-    for( ii=0; ii<N; ii++ )
-    {  aa = 0.;
-       for( jj=0; jj<pmp->L; jj++ )
-          if( pmp->Y[jj] > pmp->lowPosNum /* 1E-19 */ )
-            aa += a(jj,ii) * a(jj,kk) * pmp->W[jj];
-      A[kk][ii] = aa;
+   for( ii=0; ii<N; ii++ )
+      (*(AA+(ii)+(kk)*N)) = 0.;
+
+  for( jj=0; jj<pmp->L; jj++ )
+   if( pmp->Y[jj] > pmp->lowPosNum   )
+   {
+      for( k=arrL[jj]; k<arrL[jj+1]; k++)
+        for( i=arrL[jj]; i<arrL[jj+1]; i++ )
+        { ii = arrAN[i];
+          kk = arrAN[k];
+          if( ii>= N || kk>= N )
+           continue;
+          (*(AA+(ii)+(kk)*N)) += a(jj,ii) * a(jj,kk) * pmp->W[jj];
+        }
     }
 
- for( ii=0; ii<N; ii++ )
    if( initAppr )
-       B[ii] = pmp->C[ii];
+     for( ii=0; ii<N; ii++ )
+         BB[ii] = pmp->C[ii];
    else
-      {  aa = 0.;
+      {
+         for( ii=0; ii<N; ii++ )
+            BB[ii] = 0.;
           for( jj=0; jj<pmp->L; jj++)
-           if( pmp->Y[jj] > pmp->lowPosNum /* 1E-19 */ )
-                aa += pmp->F[jj] * a(jj,ii) * pmp->W[jj];
-          B[ii] = aa;
+           if( pmp->Y[jj] > pmp->lowPosNum  )
+              for( i=arrL[jj]; i<arrL[jj+1]; i++ )
+              {  ii = arrAN[i];
+                 if( ii>= N )
+                  continue;
+                 BB[ii] += pmp->F[jj] * a(jj,ii) * pmp->W[jj];
+              }
       }
+
+  Array2D<double> A(N,N, AA);
+  Array1D<double> B(N, BB);
 
 // this routine constructs its Cholesky decomposition, A = L x LT .
   Cholesky<double>  chol(A);
@@ -880,7 +905,7 @@ double TMulti::calcDikin(  int N, bool initAppr )
   {
     if( pmp->Y[J] > pmp->lowPosNum /*1E-19 */)
     {
-      Mu = DualChemPot( pmp->U, pmp->A+J*pmp->N, N );
+      Mu = DualChemPot( pmp->U, pmp->A+J*pmp->N, N, J );
       if( !initAppr )
         Mu -= pmp->F[J];
       PCI += Mu*pmp->W[J]*Mu;
@@ -1112,6 +1137,78 @@ S6: // copy X changed by SELEKT2 algorithm
 S4: // No phases to insert or no distortions
     // end of iterations of SELEKT2
     pmp->MK=1;
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Internal memory allocation for optimization
+//
+void TMulti::Alloc_A_B( int newN )
+{
+  if( AA && BB && newN==sizeN )
+    return;
+  Free_A_B();
+  AA = new  double[newN*newN];
+  BB = new  double[newN];
+  sizeN = newN;
+}
+
+void TMulti::Free_A_B()
+{
+  if( AA  )
+    { delete[] AA; AA = 0; }
+  if( BB )
+    { delete[] BB; BB = 0; }
+  sizeN = 0;
+}
+
+
+// building index list of non 0 elements for matrix pmp->A
+#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*pmp->N)))
+void TMulti::Build_compressed_xAN()
+{
+ int ii, jj, k;
+
+ // free old memory allocation
+ Free_compressed_xAN();
+
+ // calc sizes
+ k = 0;
+ for( jj=0; jj<pmp->L; jj++ )
+   for( ii=0; ii<pmp->N; ii++ )
+     if( fabs( a(jj,ii) ) > 1e-12 )
+       k++;
+
+ // alloc memory
+ arrL = new int[pmp->L+1];
+ arrAN = new int[k];
+
+ // setup data
+ k = 0;
+ for( jj=0; jj<pmp->L; jj++ )
+ { arrL[jj] = k;
+   for( ii=0; ii<pmp->N; ii++ )
+     if( fabs( a(jj,ii) ) > 1e-12 )
+     {
+        arrAN[k] = ii;
+        k++;
+     }
+ }
+ arrL[jj] = k;
+}
+#undef a
+
+void TMulti::Free_compressed_xAN()
+{
+  if( arrL  )
+    { delete[] arrL; arrL = 0; }
+  if( arrAN )
+    { delete[] arrAN; arrAN = 0; }
+}
+
+void TMulti::Free_internal()
+{
+  Free_compressed_xAN();
+  Free_A_B();
 }
 
 //--------------------- End of ipm_main.cpp ---------------------------

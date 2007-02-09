@@ -1,11 +1,42 @@
+
+09/02/2007
+  Added functions for building/deleted index list of non 0 elements
+  for matrix pmp->A ( Build_compressed_xAN(),  Free_compressed_xAN();)
+  and added changes into loops in functions:
+   - SolverLinearEquations
+   - DualChemPot
+   - ConCalcDC
+   - MassBalanceDeviations
+   - phase_bcs
+   - phase_bfc
+ ( large system calculated up to ten times faster)
+
+08/02/2007
+  Fixed error in macros
+  #define  a(j,i) ((double)(*(pmp->A+(i)+(j)*Na)))
+  //#define  a(j,i) ((double)(*(pmp->A+(i)+(j)*N)))
+
+07/02/2007
+ For optimize function int TMulti::SolverLinearEquations( int N, bool initAppr )
+  - chanche order of loops for dependent and undependent components; (15% speed)
+  - allocate memory for work arrays before calculation; (10%)
+    ( add functions: Alloc_A_B( int newN ) and Free_A_B() )
+
+ For optimize function double TMulti::DualChemPot( double U[], float AL[], int N )
+  - deleted check before calculating
+//    Nu += AL[i]? U[i]*(double)(AL[i]): 0.0;
+    Nu += U[i]*(double)(AL[i]);
+
+ Optimize function
+
 06/02/2007
- Fixed error 
+ Fixed error
  In function AssemblePhase: Assembling the phase (automatically generated aq or gas/fluid)
  set as default zeros for php->pnc array
 
 05/02/2007
- In Graph mode, deleted error message, if 
-  showing only one point as graph line 
+ In Graph mode, deleted error message, if
+  showing only one point as graph line
 
 //=====================================================
 05/03/2002
@@ -46,7 +77,7 @@
 
 25/01/2002
   Fixed pop-up of the EqDemo List View after calculation of
-  a single equilibrium state.  
+  a single equilibrium state.
 
 24/12/2001
   Added functions for changed key by templates
@@ -54,7 +85,7 @@
 19/12/2001
   Added  selection mode of making new Profile to
   SettingsDialog
-  
+
 19/12/2001
   Using old direktori to make new Profile, if this directory
   empty.
@@ -402,7 +433,7 @@
 ----------------------------------------------------------------------------
 08/12/99
    - add z_sp_config mode for Profile (make short record lists for
-Phases 
+Phases
      and DComp/ReactDC in System )
 
 
@@ -412,20 +443,20 @@ Phases
 
    -( v_dbm.h, v_dbm2.cpp ) add function DilFile() to delete file from
       data base file list
-   -( visor.h, visor.cpp )  add function deleteDBDir() to delete 
+   -( visor.h, visor.cpp )  add function deleteDBDir() to delete
      directory of GEMS/Profiles/name with deleting file names in data
-base 
-     files lists    
+base
+     files lists
    -(m_prfget.cpp) if error new profile building, we delete all new
 Profile
-    directori    
+    directori
 
 ============================================================================
 
-18/11/99 
+18/11/99
   -(m_prfget.cpp, LoadMessages) more diagnostic about different stages
-       of Profile opening/updating  
-         (it is prototype, write you remark)          
+       of Profile opening/updating
+         (it is prototype, write you remark)
 
   -(v_module.h) current record key is appear, if "Create" command
         in profile mode
@@ -442,26 +473,26 @@ before)
         bi_[\I{Fe}] translate error
 
           (BudLog.dima 10/03/99 )
-  - vector delCm is reallocated, if set flag PcdC to '+'          
+  - vector delCm is reallocated, if set flag PcdC to '+'
   - (m_compos.cpp) no ask DCOMP/REACTDC selections, use only flag
-PcDC(1) 
+PcDC(1)
   - (SelectDialog.cpp) in multi selection mode no select always first
-line 
+line
   - DComp: SDref line, can be entered 33 symbols in my test;
            on remake mode no errors, may be your use break data to 34
 size
-  
+
 
 ===========================================================================
 02/11/99
   -(m_prfget.cpp) changes to dcomp lists in profile, if add phase+dcomp
   -(v_module.cpp) "Save as" current db key
   -(m_phase.cpp)  owerate mehanizm to default Aq and gas phases
-  
-04/11/99 
+
+04/11/99
    -(m_prosess.cpp, m_gtdemo.cpp ) error put "'" to "name" field if
-"Remake"  
-   -(v_module.h) setFilter(const char *filt) 
+"Remake"
+   -(v_module.h) setFilter(const char *filt)
    -(KeyDialog.cpp) save last filter in Module if OK
    -(KeyDialog.cpp) change error in selecting start key in list
    -(v_module.cpp) use last Filter in "Show" command
@@ -470,54 +501,53 @@ size
 work)
        may be error in PHbcalc() p.584: sy.Phm[k] use before
 initialization
-       
+
 11/11/99 (BudLog.dima 03/11/99)
 
-   -(ms_sysbc.cpp) put packed SysEq key to msg "Some b[i]<DB ..."      
- 
-   
+   -(ms_sysbc.cpp) put packed SysEq key to msg "Some b[i]<DB ..."
+
+
    -Colordialog, OnlyColorDialog work on my computer (remake all)  (NO
 ERROR!)
-   
+
    -(m_prfget.cpp ) appear current record key if "New" SysEq
-   
+
    -(ProgressDialog.cpp) save system and close progress window, if
 "Accept"
                          if "Discard" only close
                          fStopCalc not used
-                         
-   - for object GD_rkl(o_gdrkey) in GTDEMO record type are setted as 
+
+   - for object GD_rkl(o_gdrkey) in GTDEMO record type are setted as
             samplad PDB record key len (diferent for different Modules
 )
-         ( 64 default len, 58 SysEq key len)                     (NO ERROR!)  
-                 
-         
-   - (m_rtparm.cpp) Override mode not work in RTParm    
-   
-   - use last filter (see changes of 04/11/99, if not work write me)
-                 
-   - (viz_cn.ini) show base PROCESS key in GTDEMO window
-   
-   - (m_gtdemo.cpp) use base PROCESS/PROBE key in GTDEMO remake,
-           
-                                 
+         ( 64 default len, 58 SysEq key len)                     (NO ERROR!)
 
-12/11/99 
- 
-  - (v_dbm.h, v_dbm2.cpp, v_module.cpp ) "File|Actualize"  
-      get old selection befor comand                     
-      
-      
+
+   - (m_rtparm.cpp) Override mode not work in RTParm
+
+   - use last filter (see changes of 04/11/99, if not work write me)
+
+   - (viz_cn.ini) show base PROCESS key in GTDEMO window
+
+   - (m_gtdemo.cpp) use base PROCESS/PROBE key in GTDEMO remake,
+
+
+
+12/11/99
+
+  - (v_dbm.h, v_dbm2.cpp, v_module.cpp ) "File|Actualize"
+      get old selection befor comand
+
+
 16/11/99
-  - ( m_reacdc.cpp, ms_sysbc.cpp ) return to inial record(key+link), 
-     if error  in calculation/unpacking      
-     
+  - ( m_reacdc.cpp, ms_sysbc.cpp ) return to inial record(key+link),
+     if error  in calculation/unpacking
+
   - ( v_module.cpp, m_prfget.cpp, m_dcomp.cpp ....) save old
      db->UnpackKey. Before it may be lost as pointer (see REACDC error)
-    
-     
+
+
   - (ms_system.h, ms_system.cpp, m_prfget.cpp) insert SyTestSizes()
      instead of SyTest() on Profile update.
      Recalc only sizes of system vectors. Bulk composition mast bee
-     recalculated togethe with equlibrium state to all records. 
-       
+     recalculated togethe with equlibrium state to all records.
