@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (C) 1992-2000 S.Dmitrieva, D.Kulik, K.Chudnenko, I.Karpov
+// (c) 1992-2007 S.Dmitrieva, D.Kulik, K.Chudnenko, I.Karpov
 //
 // Implementation of parts of the Interior Points Method (IPM) module
 // for convex programming Gibbs energy minimization, described in:
@@ -27,16 +27,16 @@
 //#include "visor.h"
 
 
-// Make base structure to calculate equilibrium state
-//    Scheme of work
-// 1) Make full  stoichiometry matrix  by list sy.Dcl
-// 6) look over PHASE records and load dala from it
-//    translate equations of non-ideality
-// 7) continue look over one-component PHASE, if we have
-//    despers phases and electrical parametres
-// 8) recalc necessary values to enter into task
-// 9} test possibilities to take old solution as first
-//    prime solution  and unpack it
+// Aseembling base GEM-IPM structure to calculate equilibrium states
+//
+// 1) Makes full  stoichiometry matrix A using the sy.Dcl list
+// 2) Looks through Phase records and loads data into mixing model arrays
+//    (optionally translating non-ideality Phase scripts)
+// 3) Continues looking through one-component Phases, to seek for
+//    specific surfaces and related surface parameters
+// 4) Terforms necessary re-scaling and conversions of data
+// 5) Tests whether it is possible to take old primal (x, gamma) and dual
+//   (u) solutions as an initial approximation
 //
 void TMulti::MultiRemake( const char *key )
 {
@@ -48,7 +48,7 @@ void TMulti::MultiRemake( const char *key )
 
     memcpy( pmp->stkey, key, EQ_RKLEN );
     pmp->stkey[EQ_RKLEN] = '\0';
-    /* load sizes of arrays to  MULTI */
+//  setting array sizes in MULTI data structure
     pmp->PunE = tpp->PunE;
     pmp->PunV = tpp->PunV;
     pmp->PunP = tpp->PunP;
@@ -62,7 +62,7 @@ void TMulti::MultiRemake( const char *key )
     pmp->Lads = syp->Lsor;
     pmp->FI = syp->Fi;
     pmp->FIs = syp->Fis;
-    /* pmp->FIa = syp->N; */
+//   pmp->FIa = syp->N;
     pmp->FI1 = 0;
     pmp->FI1s = 0;
     pmp->FI1a = 0;
@@ -82,7 +82,7 @@ void TMulti::MultiRemake( const char *key )
     pmp->T = pmp->Tc = tpp->T + C_to_K;
     pmp->TC = pmp->TCc = tpp->T;
     pmp->P = pmp->Pc = tpp->P;
-    pmp->T0 = 273.15;    // not used anywhere
+    pmp->T0 = 273.15;    // not used at present
     pmp->MBX = syp->MBX;
     pmp->FX = 7777777.;
     pmp->pH = pmp->Eh = pmp->pe = 0.0;
@@ -90,17 +90,17 @@ void TMulti::MultiRemake( const char *key )
     pmp->YMET = 0;
     pmp->PCI = 0.0;
 
-    /* set restrictions to volume of the system */
-    memcpy( pkey, pmp->stkey+48/*SY_RKLEN*/-MAXSYWHAT, MAXPTN );
+// setting volume balance constraints, if necessary
+    memcpy( pkey, pmp->stkey+48-MAXSYWHAT, MAXPTN );
     pkey[MAXPTN] = 0;
     VS = atof( pkey );
-    if( VS <= 0 ) /* volume dont fix */
+    if( VS <= 0 ) // no volume balance needed
     {
         pmp->VX_ = pmp->VXc = pmp->VE = 0.0;
         pmp->PV = 0;
     }
     else
-    {  /* volume gives */
+    {  // volume of the system is given
         pmp->VX_ = pmp->VXc = pmp->VE = VS;
         pmp->PV = syp->PV;
     }
@@ -112,7 +112,7 @@ void TMulti::MultiRemake( const char *key )
     pmp->js = 0;
     pmp->next  = 0;
     pmp->IC =  syp->Mbel;
-pmp->FitVar[0] = pa->aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
+    pmp->FitVar[0] = pa->aqPar[0]; // setting T,P dependent b_gamma parameters
     pmp->denW = tpp->RoW;
     pmp->denWg = tpp->RoV;
     pmp->epsW = tpp->EpsW;
@@ -127,19 +127,20 @@ pmp->FitVar[0] = pa->aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
     pmp->logXw = -16.;
     pmp->logYFk = -9.;
     pmp->lnP = 0.;
-    if( tpp->P != 1. )  // Non-reference Pressure
+    if( tpp->P != 1. )  // non-reference pressure
         pmp->lnP = log( tpp->P );
     pmp->DX = pa->p.DK;
 
     pmp->FitVar[4] = pa->p.AG;
-    pmp->pRR1 = 0;      //IPM smoothing factor and level
+    pmp->pRR1 = 0;   // IPM smoothing factor and level
 
-    // realloc memory if necessary
+    // Reallocating memory, if necessary
     if( !pmp->pBAL )
         dyn_new();
     if( pmp->pBAL == 2 )
         /*N=pmp->N;*/  goto NEXT2;
-    // load parameters for independent components
+
+    // loading parameters for ICs (independent components)
     for( N=0, i=-1, ii=0; ii< mup->N; ii++ )
     {
         if( syp->Icl[ii] == S_OFF )
@@ -153,67 +154,31 @@ pmp->FitVar[0] = pa->aqPar[0]; // Added 07.06.05 for T,P dependent b_gamma   KD
         pmp->U[i] = pmp->U_r[i] = pmp->C[i] = 0.0;
         memcpy( pmp->SB[i], mup->SB[ii], MAXICNAME+MAXSYMB );
         memcpy( pmp->SB1[i], mup->SB[ii], MAXICNAME  );
-// Workaround for compile under gcc3.2 - KD 101002
-//        switch( pmp->ICC[i] )
-//        {
-//        case IC_ELEMENT:
-//        case IC_ISOTOPE:
-//        case IC_FORMULA:
-//        case IC_METALION:
-//        case IC_LIGAND:
-//        case IC_ADDIT:
-//            break;
-//
-//        case IC_OXYGEN16:
-//        case IC_OXYGEN18: /* index and quantity of O? */
-//        case IC_OXYGEN:
-//            break;
-//
-//        case IC_PROTIUM:
-//        case IC_DEYTERIUM:
-//        case IC_TRITIUM:  /* index and quantity of  H? */
-//        case IC_HYDROGEN:
-//            break;
-//
-//        case IC_CHARGE:   /* charge - index */
-//            if( !pmp->E )
-//                break;  /* may be error */
-//            break;
-//        case IC_VOLUME:   /* volume IC - index */
-//            if( pmp->PV == VOL_UNDEF )
-//                break;  /* may be error */
-//            break;
-//        default: /* error in code IComp */
-//            ;
-//        }
     }
-    //   ErrorIf( N != pmp->N, "Multi", "Multi make error: N != pmp->N" );
+//   ErrorIf( N != pmp->N, "Multi", "Multi make error: N != pmp->N" );
     if( N != pmp->N )
         vfMessage( window(),
                    "Multi make error: N != pmp->N",
 		   "Please, press the BCC button first!" );
 NEXT2:
-    // load data for dependent components
+    // loading data for DCs (dependent components)
     multi_sys_dc();
 
-    // load data by phases, sorption and solution models
+    // loading data for phases, incl. sorption and solution models
     multi_sys_ph();
 
     if( pmp->pBAL < 2 )
-        ConvertDCC(); // Load codes DCCW
-    /* Tests ? */
-
+        ConvertDCC(); // Loading generic species codes
+    // Tests on integrity of CSD can be added here
     pmp->pBAL = 2;
 }
 
-//#define ms(i,j) syp->MaSdj[(j)+(i)*D_F_CD_NP]
-//#define mp(i,j) pmp->MASDJ[(j)+(i)*D_F_CD_NP]
-//Load data for DC from Modelling Project definition to structure MULTI
+//Load data for DC from Modelling Project definition to MULTI structure
 //
 void TMulti::multi_sys_dc()
 {
     int j, ii, L, iZ=0;
-    short jj, jja/*=0*/, ja/*=0*/, kk;
+    short jj, jja, ja, kk;
     float a, *A, Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
@@ -225,7 +190,7 @@ void TMulti::multi_sys_dc()
       xVol = getXvolume();
 
     if( !pmp->pBAL )
-    {  // make full stoichiometry matrix from DC formula list
+    {  // making full stoichiometry matrix from DC formula list
         // load formulae
         for( ii=0; ii<mup->L; ii++ )
         {
@@ -239,7 +204,7 @@ void TMulti::multi_sys_dc()
         for( ii=0; ii<mup->L; ii++ )
             aFo[ii].Stm_line( mup->N, A+ii*mup->N, (char *)mup->SB, mup->Val );
         aFo.Clear();
-        // load data by dependent components
+        // loading data for dependent components
         for( L=0, j=-1, jj=0; jj<mup->L; jj++ )
         {
             if( syp->Dcl[jj] == S_OFF )
@@ -264,26 +229,25 @@ void TMulti::multi_sys_dc()
                 pmp->DCC3[ja] = mup->DCC[jj];
             }
             mm = 0.0;
-            for( ii=0; ii<pmp->N; ii++ ) /* compressing the stoichiometry matrix */
+            for( ii=0; ii<pmp->N; ii++ ) // compressing the stoichiometry matrix
             {
                 a = A[jj*mup->N + pmp->mui[ii]];
                 pmp->A[j*pmp->N+ii] = a;
-                mm += a * pmp->Awt[ii];
+                mm += a * pmp->Awt[ii];   // calculating molar mass of DC 
             }
             pmp->MM[j] = mm;
-            /*  pmp->MM[j] = MolWeight( pmp->N, pmp->Awt, pmp->A+j*pmp->N ); */
         }
         delete[] A;
         // A = 0;
-        //     ErrorIf( L != pmp->L, "Multi", "Multi make error: L != pmp->L" );
+//     ErrorIf( L != pmp->L, "Multi", "Multi make error: L != pmp->L" );
         if( L != pmp->L )
             vfMessage(  window(), "Multi make error: L != pmp->L", "Please, press BCC!" );
 
     }
-/*    if( pmp->pBAL < 2 || pmp->pTPD < 2 )
-    {  Reload parametres of components */
+//    if( pmp->pBAL < 2 || pmp->pTPD < 2 )
+//    {  Reload parametres of components
     if( pmp->E )
-    { /*index of charge */
+    {   // index of charge
         for(  ii=0; ii<pmp->N; ii++ )
             if( pmp->ICC[ii] == IC_CHARGE )
                 goto CH_FOUND;
@@ -308,15 +272,15 @@ CH_FOUND:
         if( pmp->E )
             pmp->EZ[j] = pmp->A[pmp->N*j+iZ];
         pmp->Pparc[j] = pmp->Pc;
-        /*    pmp->lnGmo[j] = pmp->lnGam[j] = */
+//     pmp->lnGmo[j] = pmp->lnGam[j] = */
         pmp->F0[j] = 0.0;
-        /*    pmp->X[j] = pmp->Y[j] = */
+//     pmp->X[j] = pmp->Y[j] = */
         pmp->XY[j] = 0.0;
-        pmp->G0[j] = tpp->G[jj]; //  /(RT) ? + ln P ? + ln 55.51 ?
+        pmp->G0[j] = tpp->G[jj];          //  /(RT) ? + ln P ? + ln 55.51 ?
 
         if( tpp->PtvVm == S_ON )
             switch( pmp->PV )
-            { /* calc mol volume of component*/
+            { // calculating actual molar volume of DC
             case VOL_CONSTR:
               if( syp->Vuns )
                        Vv = syp->Vuns[jj];
@@ -325,13 +289,14 @@ CH_FOUND:
             case VOL_UNDEF:
                 if( syp->Vuns )
                        Vv = syp->Vuns[jj];
-                pmp->Vol[j] = ( tpp->Vm[jj] + Vv )* 10.; /* Check! */
+                pmp->Vol[j] = ( tpp->Vm[jj] + Vv )* 10.; // Check!
                 break;
             }
         else pmp->Vol[j] = 0.0;
-        /* test kinetic constraints */
-        if( pmp->PLIM && jj < mup->L )  /* Not Ls */
-        { /* restrictions set! */
+
+// testing kinetic/metastability constraints
+        if( pmp->PLIM && jj < mup->L )
+        { // KM constraints necessary!
             pmp->RLC[j] = syp->RLC[jj];
             pmp->RSC[j] = syp->RSC[jj];
             if( syp->DUL )
@@ -339,7 +304,7 @@ CH_FOUND:
             else pmp->DUL[j] = 1e6;
             ja = (short)(j-(pmp->Ls-pmp->Lads));
             if( pmp->lnSAC && ja < pmp->Lads && ja >= 0 )
-               pmp->lnSAC[ja][3] = pmp->DUL[j]; // Copy of DUL for SAT refining
+               pmp->lnSAC[ja][3] = pmp->DUL[j]; // Copy of DUL for SACT refining
             if( syp->DLL )
                 pmp->DLL[j] = syp->DLL[jj];
             else pmp->DLL[j] = 0.0;
@@ -354,7 +319,7 @@ CH_FOUND:
         // additional data
         if( syp->PGEX != S_OFF /* && syp->PYOF != S_ON */ )
 // !!!!!!!!!!!!!!!!!!!!!! Insert here a case that checks units of
-//    measurement for Gibbs energy increment
+//    measurement for the G0 increment
              pmp->GEX[j] = syp->GEX[jj]/pmp->RT;
         else pmp->GEX[j] = 0.0;  // Standard free energy increments
 
@@ -374,22 +339,19 @@ CH_FOUND:
 
         ja = (short)(j-(pmp->Ls-pmp->Lads));
         jja = (short)(jj-(mup->Ls-mup->Lads));
-        // Loading MaSdj - max.sur.densities for non-competitive sorbates */
+// Loading MaSdj - max.sur.densities for non-competitive sorbates */
         if( syp->PMaSdj != S_OFF )
         {
             for( kk=0; kk<DFCN; kk++ )
                if( !IsFloatEmpty( syp->MaSdj[jja][kk] ) )
                    pmp->MASDJ[ja][kk] = syp->MaSdj[jja][kk];
                else pmp->MASDJ[ja][kk]= 0.0;
-//            if( !IsFloatEmpty( syp->MaSdj[jj] ) )
-//                pmp->MASDJ[j] = syp->MaSdj[jj];    1/nm2!
-//            else pmp->MASDJ[j] = 0;
         }
         if( syp->PSATT != S_OFF )
         { // Loading SATC - codes of methods for SAT calculation
             pmp->SATT[ja] = syp->SATC[jja][SA_MCA];
 
-// Loading allocation to surface types
+         // Loading allocation to surface types
             switch( syp->SATC[jja][SA_STX] )
             {
               default:
@@ -413,7 +375,7 @@ CH_FOUND:
                 break;
             }
 
-            /* Loading allocation to carrier end-members */
+            // Loading allocation to carrier end-members
             switch( syp->SATC[jja][SA_EMX] )
             {
               case CCA_0:
@@ -447,14 +409,14 @@ CH_FOUND:
 //                pmp->SATX[ja][XL_EM] = 9;
 //                break;
               case CCA_VOL:
-                pmp->SATX[ja][XL_EM] = -1; /* whole sorbent */
+                pmp->SATX[ja][XL_EM] = -1; // whole sorbent
                 break;
               default:
-                pmp->SATX[ja][XL_EM] = -2; /* main DC of the sorbent */
+                pmp->SATX[ja][XL_EM] = -2; // main DC of the sorbent
                 break;
             }
 
-            /* Loading allocation to surface sites */
+            // Loading allocation to surface sites
             switch( syp->SATC[jja][SA_SITX] )
             {
               default:
@@ -477,7 +439,7 @@ CH_FOUND:
                 pmp->SATX[ja][XL_SI] = 5;
                 break;
             }
-            /* Loading charge allocation to surface planes */
+            // Loading charge allocation to surface planes
             switch( syp->SATC[jja][SA_PLAX] )
             {
               default:
@@ -500,11 +462,11 @@ CH_FOUND:
         }
     }
     // pmp->pTPD = 2; // Sveta 23/12/2005
-    /* it has been =1, don`t load more! */
-   /* } */
+    // it has been =1, don`t load more!
+    // }
 }
 
-//Load data on phases and solution models to structure MULTI
+//Loading data for phases and mixing models into the structure MULTI
 //
 void TMulti::multi_sys_ph()
 {
@@ -513,12 +475,12 @@ void TMulti::multi_sys_ph()
     vstr pkey(MAXRKEYLEN);
     time_t crt;
     double G;
-    double PMM;  /* average mol. phase  weight */
-    short Cjs, car_l[32], car_c/*, cQ*/; /* current index carrier sorbent  */
+    double PMM;  // Phase mean mol. mass
+    short Cjs, car_l[32], car_c; // current index carrier sorbent
     TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
     aPH->ods_link(0);
 
-    pmp->Ls = 0;/* load data to phases */
+    pmp->Ls = 0;
     pmp->PG = 0;
     pmp->FIs = syp->Fis;
     pmp->FIa = 0;
@@ -549,32 +511,29 @@ void TMulti::multi_sys_ph()
             // read informations from phase-solution
             memcpy( pmp->sMod[k], aPH->php->sol_t, 6 );
             if( aPH->php->Ppnc == S_ON )
-{
-// Changed 07.12.2006   KD
-//             pmp->LsMod[k] = (short)(aPH->php->ncpN * aPH->php->ncpM);
-pmp->LsMod[k*3] = aPH->php->ncpN;
-pmp->LsMod[k*3+2] = aPH->php->ncpM;
-pmp->LsMod[k*3+1] = aPH->php->npxM;
-}
+            {
+               pmp->LsMod[k*3] = aPH->php->ncpN;
+               pmp->LsMod[k*3+2] = aPH->php->ncpM;
+               pmp->LsMod[k*3+1] = aPH->php->npxM;
+            }
             else pmp->LsMod[k*3] = pmp->LsMod[k*3+1] = pmp->LsMod[k*3+2] =0;
             if( aPH->php->Psco == S_ON )
                 pmp->LsMdc[k] = aPH->php->nscM;
-//                pmp->LsMdc[k] = (short)(aPH->php->nscN * aPH->php->nscM);
             else pmp->LsMdc[k] = 0;
         }
-        else  // nothing to read in phase record
+        else  // nothing to read in the Phase record
             if( k<pmp->FIs )
             {
-pmp->LsMod[k*3] = 0;   // Changed 07.12.2006 by KD
-pmp->LsMod[k*3+1] = 0;
-pmp->LsMod[k*3+2] = 0;
+                pmp->LsMod[k*3] = 0;
+                pmp->LsMod[k*3+1] = 0;
+                pmp->LsMod[k*3+2] = 0;
                 pmp->LsMdc[k] = 0;
                 memset( pmp->sMod[k], ' ', 6 );
             }
 PARLOAD: if( k < syp->Fis )
              pmp->Ls += pmp->L1[k];
         switch( pmp->PHC[k] )
-        { // load parameters necessary
+        { // loading necessary parameters
         case PH_AQUEL:
              break;
         case PH_GASMIX:
@@ -598,7 +557,7 @@ PARLOAD: if( k < syp->Fis )
                 car_l[i]=-1;
             car_c=0; // cQ=0;
         case PH_SINDIS:
- /*           if( syp->PAalp != S_OFF )
+/*           if( syp->PAalp != S_OFF )
                 pmp->Aalp[k] = syp->Aalp[kk];
             if( syp->PSigm != S_OFF )
             {
@@ -617,7 +576,7 @@ PARLOAD: if( k < syp->Fis )
             }     */
             break;
         default:
-            ; /* error! */
+            ; // Error message may be needed here!
         }
         // Moved by DK on 25.07.2006
         if( syp->PAalp != S_OFF )
@@ -639,11 +598,11 @@ PARLOAD: if( k < syp->Fis )
         }
         PMM = 0.0;
         Cjs = -1;
-        // cycle by DC in phase, calc of it mean mol. mass
+        // Loop over DCs in Phase, calculation of phase mean mol. mass
         for( j=jb; j<je; j++ )
         {
             switch( pmp->DCC[j] )
-            { /* counters */
+            {
             case DC_AQ_SOLVENT:
                 pmp->LO = j;
                 PMM = pmp->MM[j];
@@ -652,7 +611,6 @@ PARLOAD: if( k < syp->Fis )
             case DC_SUR_CARRIER:
                 Cjs = j;
                 PMM = pmp->MM[j];
-                /*cQ=car_c;*/
                 car_l[car_c++]=j;  pmp->Lads++; ja++;
                 break;
             case DC_SUR_MINAL:

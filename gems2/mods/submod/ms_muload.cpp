@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (C) 1992-2000 S.Dmitrieva, D.Kulik, K.Chudnenko, I.Karpov
+// (c) 1992-2007 S.Dmitrieva, D.Kulik, K.Chudnenko, I.Karpov
 //
 // Implementation of parts of the Interior Points Method (IPM) module
 // for convex programming Gibbs energy minimization, described in:

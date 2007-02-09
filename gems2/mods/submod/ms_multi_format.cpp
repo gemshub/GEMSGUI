@@ -12,7 +12,13 @@
 bool _comment = true;
 
 //===================================================================
-
+// in the arrays below, the first field of each structure contains a string
+// which is put into <> to comprise a data object tag, e.g. <IterDone>, in 
+// free text input files. The second field (0 or 1) denotes whether the data
+// object can be skipped from the file (0) and default value(s) can be used,
+// or (1) the data object must be always present in the file. The third
+// field is used internally and must be set to 0 here.
+//
 outField MULTI_static_fields[8] =  {
   { "pa_PE" , 0 , 0 },
   { "PV" , 0 , 0 },

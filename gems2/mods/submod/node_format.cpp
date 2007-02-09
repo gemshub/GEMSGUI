@@ -24,8 +24,15 @@
 #include "gdatastream.h"
 
 extern bool _comment;
-//===============================================================
 
+//===============================================================
+// in the arrays below, the first field of each structure contains a string
+// which is put into <> to comprise a data object tag, e.g. <IterDone>, in 
+// free text input files. The second field (0 or 1) denotes whether the data
+// object can be skipped from the file (0) and default value(s) can be used,
+// or (1) the data object must be always present in the file. The third
+// field is used internally and must be set to 0 here.
+//
 outField DataBR_fields[51] =  {
   { "NodeHandle",  0, 0 },
   { "NodeTypeHY",  0, 0 },
@@ -71,9 +78,9 @@ outField DataBR_fields[51] =  {
   { "uIC",     0, 0 },
   { "xDC",     0, 0 },
   { "gam",    0, 0 },
-  { "dll",    1, 0 },
-  { "dul",    1, 0 },
-  { "aPH",    1, 0 },
+  { "dll",    0, 0 },   // changed to non-obligatory by KD on 19.12.2006
+  { "dul",    0, 0 },   // changed to non-obligatory by KD on 19.12.2006
+  { "aPH",    0, 0 },   // changed to non-obligatory by KD on 19.12.2006
   { "xPH",    0, 0 },
   { "vPS",    0, 0 },
   { "mPS",   0, 0 },
@@ -119,10 +126,10 @@ outField DataCH_dynamic_fields[25] =  {
    { "epsW",  1, 0 },
    { "V0",  1, 0 },
    { "G0",  1, 0 },
-   { "H0", 1, 0 },
-   { "S0",  1, 0 },
-   { "Cp0",  1, 0 },
-   { "DD",  0, 0 }
+   { "H0", 1, 0 },    // Depending on iGrd flag
+   { "S0",  1, 0 },   // Depending on iGrd flag
+   { "Cp0",  1, 0 },  // Depending on iGrd flag
+   { "DD",  0, 0 }    // Depending on iGrd flag
 };
 
 //===============================================================
@@ -437,7 +444,7 @@ void TNode::databr_from_text_file( fstream& ff )
  // testing read
  gstring ret = rdar.testRead();
  if( !ret.empty() )
-  { ret += " - fields must be readed from DataBR structure";
+  { ret += " - fields must be read from DataBR structure";
     Error( "Error", ret);
   }
 }
@@ -506,7 +513,7 @@ void TNode::datach_to_text_file( fstream& ff )
 
   ff<< "\n<END_DIM>\n";
 
-// dynamic arrays - must follow after static data
+// dynamic arrays - must follow static data
   if( _comment )
   {   ff << "\n## (4) Databridge configuration section (for memory allocation)";
       ff << "\n# xIC: indexes of ICs to be kept in DATABR structure";
@@ -800,7 +807,7 @@ void TNode::datach_from_text_file(fstream& ff)
  // testing read
  ret = rddar.testRead();
  if( !ret.empty() )
-  { ret += " - fields must be readed from DataCH structure";
+  { ret += " - fields must be read from DataCH structure";
     Error( "Error", ret);
   }
 
@@ -1129,13 +1136,22 @@ void TNode::databr_realloc()
 
  CNode->xDC = new double[CSD->nDCb];
  CNode->gam = new double[CSD->nDCb];
- for( int ii=0; ii<CSD->nDCb; ii++ )
-   CNode->gam[ii] = 1.;
+
+for( int j=0; j<CSD->nDCb; j++ )
+   CNode->gam[j] = 1.;               //  default assignment
  CNode->dul = new double[CSD->nDCb];
+for( int j=0; j<CSD->nDCb; j++ )
+   CNode->dul[j] = 1.0e6;            // default assignment
  CNode->dll = new double[CSD->nDCb];
+for( int j=0; j<CSD->nDCb; j++ )
+   CNode->dll[j] = 0.0;              // default assignment
 
  if( CSD->nAalp >0 )
-     CNode->aPH = new double[CSD->nPHb];
+ {
+    CNode->aPH = new double[CSD->nPHb];
+    for( int k=0; k<CSD->nPHb; k++ )
+      CNode->aPH[k] = 0.0;       // default assignment
+ }
  else
     CNode->aPH = 0;
 
