@@ -345,6 +345,7 @@ class TMulti
     double Cj_init_calc( double g0, int j, int k );
     void Mol_u( double Y[], double X[], double XF[], double XFA[] );
     void ConvertDCC();
+    int  getXvolume();
 
 // ipm_chemical2.cpp
     void GasParcP();

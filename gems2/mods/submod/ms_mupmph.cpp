@@ -220,6 +220,9 @@ void TMulti::multi_sys_dc()
     gstring form;
 
     ErrorIf( !tpp->G, "Multi", "Multi make error: !tpp->G" );
+    int xVol = 0;   // SD 09/02/2007
+    if( pmp->PV == VOL_CONSTR )
+      xVol = getXvolume();
 
     if( !pmp->pBAL )
     {  // make full stoichiometry matrix from DC formula list
@@ -295,6 +298,7 @@ void TMulti::multi_sys_dc()
 CH_FOUND:
         iZ = ii;
     }
+
     for( j=-1, jj=0; jj<mup->L; jj++ ) // Main loop for data loading
     {
         if( syp->Dcl[jj] == S_OFF )
@@ -316,7 +320,7 @@ CH_FOUND:
             case VOL_CONSTR:
               if( syp->Vuns )
                        Vv = syp->Vuns[jj];
-                pmp->A[j*pmp->N] = tpp->Vm[jj] + Vv; /// !!! error
+                pmp->A[j*pmp->N+xVol] = tpp->Vm[jj] + Vv;
             case VOL_CALC:
             case VOL_UNDEF:
                 if( syp->Vuns )

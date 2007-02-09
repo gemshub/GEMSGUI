@@ -1234,4 +1234,16 @@ NEXT_PHASE:
     ErrorIf( iRet>0, "Multi", "Error in DCC code.");
 }
 
+/* ged index of volume */
+int TMulti::getXvolume()
+{
+ int ii, ret = 0;
+ for( ii = pmp->N-1; ii>=0; ii--)
+ {
+  if( pmp->ICC[ii] == IC_VOLUME )
+  { ret = ii; break; }
+ }
+ return ret;
+}
+
 //--------------------- End of ipm_chemical.cpp ---------------------------

@@ -273,6 +273,10 @@ void TMulti::CompG0Load()
     }
     if( !pmp->pTPD )
     {
+        int xVol = 0;   // SD 09/02/2007
+        if( pmp->PV == VOL_CONSTR )
+          xVol = getXvolume();
+
         for( j=0; j<pmp->L; j++ )
         {
             jj = pmp->muj[j];
@@ -283,7 +287,7 @@ void TMulti::CompG0Load()
                 case VOL_CONSTR:
                     if( syp->Vuns )
                        Vv = syp->Vuns[jj];
-                    pmp->A[j*pmp->N] = tpp->Vm[jj]+Vv; // !!! error
+                    pmp->A[j*pmp->N+xVol] = tpp->Vm[jj]+Vv;
                 case VOL_CALC:
                 case VOL_UNDEF:
                     if( syp->Vuns )
