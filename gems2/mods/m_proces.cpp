@@ -1367,6 +1367,7 @@ TProcess::internalCalc()
 
         if( !(pep->PsPro != S_OFF && pep->NP == 1 ))
             pep->Nst++;
+//    ModUpdate("Working..."); // 11/02/2007 ????
 
     }  /* end while() */
     calcFinished = true;

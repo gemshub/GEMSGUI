@@ -174,15 +174,14 @@ AGAIN:
    if( bin_mode )
    {
        fout.open(path.c_str(), ios::out);
-       fout << "-b \"" << name.c_str() << ".ipm\" ";
        fout << "-b \"" << name.c_str() << "-dch.bin\"";
+       fout << " \"" << name.c_str() << ".ipm\" ";
    }
 // put data to pmfiles-dat.lst file
    else
    {   fout.open(path.c_str(), ios::out);
-//       fout << "-b \"" << name.c_str() << ".ipm\" ";
-       fout << "-t \"" << name.c_str() << "-ipm.dat\" ";
        fout << "-t \"" << name.c_str() << "-dch.dat\"";
+       fout << " \"" << name.c_str() << "-ipm.dat\" ";
    }
 
   if( bin_mode )
@@ -218,6 +217,7 @@ AGAIN:
    }
 
  nIV = min( nIV, nNodes() );
+ bool first = true;
  for( int ii = 0; ii < nIV; ii++ )
  {
    if( !NodT0[ii] )
@@ -238,7 +238,9 @@ AGAIN:
        GemDataStream  f_br1(Path_, ios::out|ios::binary);
        databr_to_file(f_br1);
        f_br1.close();
-       fout << ", \"" << newname.c_str() << ".bin\"";
+       if( !first )
+          fout << ",";
+       fout << " \"" << newname.c_str() << ".bin\"";
      }
      else
      {
@@ -247,8 +249,11 @@ AGAIN:
         fstream  f_br2(Path_.c_str(), ios::out);
         databr_to_text_file(f_br2);
         f_br2.close();
-        fout << ", \"" << newname.c_str() << ".dat\"";
+        if( !first )
+           fout << ",";
+        fout << " \"" << newname.c_str() << ".dat\"";
      }
+     first = false;
 
    if( putNodT1 && NodT1[ii]) // put NodT1[ii] data
    {

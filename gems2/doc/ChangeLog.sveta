@@ -1,3 +1,13 @@
+11/02/2007
+ deleted pVisor->Update() into PackSystat function ???
+
+
+11/02/2007
+ deleted into ipm_simpelx.cpp memset functions or changed to loops if nessasary
+ changed memcpy(), memset() to loops into ipm_main.cpp
+
+
+
 09/02/2007
  Added function int TMulti::getXvolume() - for getting index of volume,
  end fixed errors for saving volums into pmp->A

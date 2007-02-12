@@ -39,10 +39,11 @@ void TMulti::SimplexInitialApproximation( )
         DU= new double[Q+pmp->N];
         B1= new double[pmp->N];
         ErrorIf( !DN || !DU || !B1, "SimplexInitialApproximation()", "Memory alloc error." );
-        memset(DN, 0, sizeof(double)*Q );
-        memset(DU, 0, sizeof(double)*(Q+pmp->N) );
-        memset(B1, 0, sizeof(double)*pmp->N );
-
+//        memset(DN, 0, sizeof(double)*Q );
+//        memset(DU, 0, sizeof(double)*(Q+pmp->N) );
+//        memset(B1, 0, sizeof(double)*pmp->N );
+        for( i=0; i<pmp->N; i++)
+             DU[i+Q] = 0.;
         EPS = TProfil::pm->pa.p.EPS; //  13.10.00  KC  DK
         GZ = 1./EPS;    //  13.10.00
 
@@ -70,9 +71,11 @@ void TMulti::SimplexInitialApproximation( )
         NMB= new int[Q+1];
         ErrorIf( !AA || !STR || !NMB, "SimplexInitialApproximation",
             "Memory allocation error #2");
-        memset(AA, 0, sizeof(double)*T );
-        memset(STR, 0, sizeof(int)*T );
-        memset(NMB, 0, sizeof(int)*(Q+1) );
+ //       memset(AA, 0, sizeof(double)*T );
+//        memset(STR, 0, sizeof(int)*T );
+//        memset(NMB, 0, sizeof(int)*(Q+1) );
+        for( k=0; k<T; k++)
+         STR[k] = 0;
 
         // if( wn[W_EQCALC].status )
         //   aSubMod[MD_EQCALC]->ModUpdate(" SIMPLEX Approximation ");
@@ -214,7 +217,6 @@ void TMulti::NEW(int *OPT,int N,int M,double EPS,double *LEVEL,int *J0,
     double *P;
     P= new double[M+1];
     ErrorIf( !P, "Simplex", "At NEW memory allocation error ");
-    memset(P, 0, sizeof(double)*(M+1) );
     J1=*J0;
     MAX=0.;
     for( J=J1+1;J<=N;J++)
@@ -292,7 +294,6 @@ void TMulti::WORK(double GZ,double EPS,int *I0, int *J0,int *Z,int *ITER,
     double *P;
     P=  new double[M+1];
     ErrorIf( !P, "Simplex", "At WORK memory allocation error. ");
-    memset(P, 0, sizeof(double)*(M+1) );
     *UNO=0;
     *ITER=*ITER+1;
     J=*J0-1;
@@ -383,7 +384,6 @@ void TMulti::FIN(double EPS,int M,int N,int STR[],int NMB[],
     double *P;
     P=  new double[M+1];
     ErrorIf( !P, "Simplex", "At FIN memory allocation error. ");
-    memset(P, 0, sizeof(double)*(M+1) );
     for( J=0;J<N;J++)
     {
         if( UP[J]>-EPS)
@@ -444,9 +444,9 @@ void TMulti::Simplex(int M, int N, int T, double GZ, double EPS,
         Q=  new double[M+1];
         BASE=  new int[M];
         ErrorIf( !A || !Q || !BASE, "Simplex", "Memory allocation error ");
-        memset(A, 0, sizeof(double)*(M+1)*(M+1) );
-        memset(Q, 0, sizeof(double)*(M+1) );
-        memset(BASE, 0, sizeof(int)*(M) );
+//        memset(A, 0, sizeof(double)*(M+1)*(M+1) );
+//        memset(Q, 0, sizeof(double)*(M+1) );
+//        memset(BASE, 0, sizeof(int)*(M) );
 
         LEVEL=GZ;
         START( T, &ITER, M, N, NMB, GZ, EPS, STR, BASE, B,  UND, UP, AA, A, Q );

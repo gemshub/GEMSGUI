@@ -147,7 +147,8 @@ STEP_POINT("After FIA");
 
     if( !pa->p.PC )    //  No PhaseSelect() operation allowed
     {  if( pmp->PD >= 2 )
-           memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
+           for( i=0; i<pmp->L; i++)
+             pmp->G[i] = pmp->G0[i];
         return;  // solved
     }
 
@@ -221,7 +222,8 @@ pVisor->Update( false );
           } // end of i loop
       }
    }
-    memcpy( pmp->G, pmp->G0, pmp->L*sizeof(double));
+   for( i=0; i<pmp->L; i++)
+      pmp->G[i] = pmp->G0[i];
    // Normal return after successfull improvement of mass balance precision
 }
 
@@ -513,7 +515,7 @@ int TMulti::InteriorPointsMethod( )
                 pmp->NR=(short)(pmp->N-1);
         }
         N = pmp->NR;
-        memset( pmp->F, 0, pmp->L*sizeof(double));
+//        memset( pmp->F, 0, pmp->L*sizeof(double));
 
         PrimeChemicalPotentials( pmp->F, pmp->Y, pmp->YF, pmp->YFA );
 
@@ -766,10 +768,10 @@ void TMulti::LagrangeMultiplier()
 // Calculation of weight multipliers for DCs
 void TMulti::WeightMultipliers( bool square )
 {
+  int J;
   double  W1, W2;
-  memset( pmp->W, 0, pmp->L*sizeof(double));
 
-  for(int J=0; J<pmp->L; J++)
+  for( J=0; J<pmp->L; J++)
   {
     switch( pmp->RLC[J] )
     {

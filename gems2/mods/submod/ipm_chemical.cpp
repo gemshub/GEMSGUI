@@ -604,6 +604,9 @@ TMulti::PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA
     int i,j,k;
     double v, Yf; // v is debug variable
 
+    for( j=0; j<pmp->L; j++)
+       pmp->F[j] =0;
+
     j=0;
     for( k=0; k<pmp->FI; k++ )
     { // loop over phases
@@ -1178,8 +1181,10 @@ void TMulti::ConvertDCC()
                     }
                 }
                 DCCW = DC_SINGLE;
-                iRet++;  // error the class code            }
+                iRet++;  // error the class code
+            }
             pmp->DCCW[j] = DCCW;
+
         }   // j
 NEXT_PHASE:
         j = i;
