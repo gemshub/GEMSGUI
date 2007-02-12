@@ -612,7 +612,6 @@ void TProfil::deriveSystat()
     }
     if( pmp->pFAG == 0 || pmp->pFAG == 1 )
         multi->EqstatExpand( keyp.c_str() );
-
     pVisor->Update();
 //    pVisor->OpenModule(window(), MD_SYSTEM);
 }
@@ -663,7 +662,6 @@ void TProfil::newSystat( int mode )
     }
     if( /* pmp->pFAG == 0 || */ pmp->pFAG == 1 ) // !!!!!!!!! 20.06.01
         multi->EqstatExpand( keyp.c_str() );
-
     pVisor->OpenModule(window(), MD_SYSTEM);
     pVisor->Update();
 }

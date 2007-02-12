@@ -598,6 +598,7 @@ double TMulti::PrimeChemPot(
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // VJ - Update of primal chemical potentials
 //
+#include "visor.h"
 void
 TMulti::PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA[] )
 {

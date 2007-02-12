@@ -1,18 +1,18 @@
-11/02/2007
+12/02/2007
+ Fixed error, reloading thermodynamic, if State of reloading CSD 0 (pmp->pBAL).
+
+12/02/2007
  changed memcpy(), memset() to loops into node.cpp, ms_multi_format.cpp,
     ipm_chemical.cpp,  ipm_chemical2.cpp
 
-deleted memset() from ipm_chemical.cpp
+ deleted memset() from ipm_chemical.cpp
 
 11/02/2007
  TESTED pVisor->Update() into PackSystat function (output by process)
 
-
 11/02/2007
  deleted into ipm_simpelx.cpp memset functions or changed to loops if nessasary
  changed memcpy(), memset() to loops into ipm_main.cpp
-
-
 
 09/02/2007
  Added function int TMulti::getXvolume() - for getting index of volume,

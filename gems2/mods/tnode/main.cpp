@@ -29,7 +29,7 @@
 
 #include "node.h"
 
-#define nNodes  2 // set here how many nodes you need
+#define nNodes  20 // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {

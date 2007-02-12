@@ -661,7 +661,9 @@ void TProfil::PMtest( const char *key )
     }
 */    pmp->pBAL =  BAL_compare();
     if( !pmp->pBAL )
-        pmp->pIPN = 0;
+    {    pmp->pIPN = 0;
+         pmp->pTPD = 0;
+    }
 //    if( qEp.GetCount()<1 || qEd.GetCount()<1 )  Caution!
     if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE )
         pmp->pIPN = 0;

@@ -1216,4 +1216,10 @@ void TMulti::Free_internal()
   Free_A_B();
 }
 
+void TMulti::Alloc_internal()
+{
+// optimization 08/02/2007
+ Alloc_A_B( pmp->N );
+ Build_compressed_xAN();
+}
 //--------------------- End of ipm_main.cpp ---------------------------

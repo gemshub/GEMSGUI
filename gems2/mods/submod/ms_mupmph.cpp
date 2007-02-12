@@ -170,7 +170,7 @@ NEXT2:
     if( pmp->pBAL < 2 )
         ConvertDCC(); // Loading generic species codes
     // Tests on integrity of CSD can be added here
-    pmp->pBAL = 2;
+     pmp->pBAL = 2;
 }
 
 //Load data for DC from Modelling Project definition to MULTI structure
@@ -233,7 +233,7 @@ void TMulti::multi_sys_dc()
             {
                 a = A[jj*mup->N + pmp->mui[ii]];
                 pmp->A[j*pmp->N+ii] = a;
-                mm += a * pmp->Awt[ii];   // calculating molar mass of DC 
+                mm += a * pmp->Awt[ii];   // calculating molar mass of DC
             }
             pmp->MM[j] = mm;
         }

@@ -300,10 +300,9 @@ void TMulti::CompG0Load()
             /* load other t/d parametres - do it! */
         }
     }
-    // optimization 08/02/2007
-    Alloc_A_B( pmp->N );
-    Build_compressed_xAN();
-    pmp->pTPD = 2;
+    Alloc_internal(); // optimization 08/02/2007
+
+  pmp->pTPD = 2;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -319,7 +318,7 @@ void TMulti::EqstatExpand( const char *key )
         pmp->NR = pmp->N;
 
     /* Load thermodynamic data for DC, if necessary */
-    if( pmp->pTPD < 2 )
+    if(  pmp->pTPD < 2)
     {
         CompG0Load();
         memcpy( pmp->stkey, key, EQ_RKLEN );
@@ -444,8 +443,9 @@ void TMulti::MultiCalcInit( const char *key )
     //    aSubMod[MD_EQCALC]->ModUpdate("PM_asm4   Assembling IPM arrays (4)");
 
     // loading thermodynamic data, if neccessary
-    if( pmp->pTPD < 2 )
+    if( pmp->pTPD < 2)
         CompG0Load( );
+
 
     for( j=0; j< pmp->L; j++ )
     {

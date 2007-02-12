@@ -492,6 +492,7 @@ public:
 
     // EXTERNAL FUNCTIONS
     // MultiCalc
+    void Alloc_internal();
     void MultiCalcInit( const char *key );
     bool AutoInitialApprox();
     void MultiCalcIterations();
