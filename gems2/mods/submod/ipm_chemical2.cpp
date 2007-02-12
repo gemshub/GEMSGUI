@@ -97,7 +97,9 @@ void TMulti::phase_bcs( int N, int M, float *A, double X[], double BF[] )
 
     if( !A || !X || !BF )
         return;
-    memset( BF, 0, N*sizeof( double ));
+    for( i=0; i<N; i++ )
+          BF[i] = 0.;
+
     for( j=0; j<M; j++ )
     {
         Xx = X[j];
@@ -258,7 +260,7 @@ void TMulti::ConCalcDC( double X[], double XF[], double XFA[],
                 pmp->IC_wm[ii] += X[j]* a(j,ii);  // moles of element in aq spec
             }
             break;
-        case DC_AQ_SOLVENT: // mole fractions in solvent 
+        case DC_AQ_SOLVENT: // mole fractions in solvent
         case DC_AQ_SOLVCOM:
             pmp->Y_m[j] = X[j]/XFA[k];
             pmp->Y_w[j] = 1e3*X[j]*pmp->MM[j]/pmp->FWGT[k];
@@ -348,7 +350,8 @@ void TMulti::ConCalc( double X[], double XF[], double XFA[])
       if( pmp->Ls < 2 || !pmp->FIs )
         return;
 
-    memset( pmp->BFC, 0, sizeof(double)*pmp->N );
+    for( i=0; i< pmp->N; i++ )
+     pmp->BFC[i] = 0.;
 
     for( j=0; j<pmp->Ls; j++ )
     {
@@ -405,7 +408,9 @@ void TMulti::ConCalc( double X[], double XF[], double XFA[])
      (pmp->PHC[k] == PH_AQUEL && ( XFA[k] <= pmp->lowPosNum*1e3 || XF[k] <= pa->p.XwMin ) )
                 || ( pmp->PHC[k] == PH_SORPTION && XFA[k] <= pa->p.ScMin ))
         {
-            memset( pmp->BF+k*pmp->N, 0, sizeof(double)*pmp->N );
+            for( jj=0; jj<pmp->N; jj++)
+             pmp->BF[k*pmp->N+jj] = 0.;
+//            memset( pmp->BF+k*pmp->N, 0, sizeof(double)*pmp->N );
             for(jj=j; jj<i; jj++)   // Loop added 10.03.01  KD (GTDEMO)
             {
                 pmp->Wx[j] = 0.0;
@@ -839,7 +844,7 @@ void TMulti::SurfaceActivityCoeff( int jb, int je, int, int, int k )
            SATst, xjn, q1, q2, aF, cN, eF;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
-    if( pmp->XF[k] <= pmp->DSM ) // No sorbent retained by the IPM 
+    if( pmp->XF[k] <= pmp->DSM ) // No sorbent retained by the IPM
         return;
     if( pmp->XFA[k] <=  pa->p.ScMin )  // fixed 26.11.2006 by KD - elimination of sorption phase
         return;  /* No surface species left */

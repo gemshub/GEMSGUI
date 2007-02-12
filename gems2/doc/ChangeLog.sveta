@@ -1,5 +1,11 @@
 11/02/2007
- deleted pVisor->Update() into PackSystat function ???
+ changed memcpy(), memset() to loops into node.cpp, ms_multi_format.cpp,
+    ipm_chemical.cpp,  ipm_chemical2.cpp
+
+deleted memset() from ipm_chemical.cpp
+
+11/02/2007
+ TESTED pVisor->Update() into PackSystat function (output by process)
 
 
 11/02/2007

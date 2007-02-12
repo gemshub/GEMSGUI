@@ -585,7 +585,6 @@ void TNode::makeStartDataChBR(
 
 // set dynamic data to DataCH
 
-  memcpy( CSD->nDCinPH, pmm->L1 , CSD->nPH*sizeof(short));
   for( ii=0; ii< selIC.GetCount(); ii++ )
     CSD->xIC[ii] = (short)selIC[ii];
   for( ii=0; ii< selDC.GetCount(); ii++ )
@@ -593,24 +592,28 @@ void TNode::makeStartDataChBR(
   for( ii=0; ii< selPH.GetCount(); ii++ )
     CSD->xPH[ii] = (short)selPH[ii];
 
-  memcpy( CSD->A, pmm->A , CSD->nIC*CSD->nDC*sizeof(float));
+  for( i1=0; i1< CSD->nIC*CSD->nDC; i1++ )
+    CSD->A[i1] = pmm->A[i1];
 
+  for( i1=0; i1< CSD->nPH; i1++ )
+  {
+    CSD->nDCinPH[i1] = pmm->L1[i1];
+    CSD->ccPH[i1] = pmm->PHC[i1];
+    memcpy( CSD->PHNL[i1], pmm->SF[i1]+4 , MaxPHN*sizeof(char));
+  }
   for( i1=0; i1< CSD->nIC; i1++ )
-     CSD->ICmm[i1] = pmm->Awt[i1];
-
-  memcpy( CSD->DCmm, pmm->MM , CSD->nDC*sizeof(double));
+  {
+    CSD->ICmm[i1] = pmm->Awt[i1];
+    CSD->ccIC[i1] = pmm->ICC[i1];
+    memcpy( CSD->ICNL[i1], pmm->SB[i1] , MaxICN*sizeof(char));
+  }
+  for( i1=0; i1< CSD->nDC; i1++ )
+  {
+    CSD->DCmm[i1] = pmm->MM[i1];
+    CSD->ccDC[i1] = pmm->DCC[i1];
+    memcpy( CSD->DCNL[i1], pmm->SM[i1] , MaxDCN*sizeof(char));
+  }
 //  memset( CSD->DD, 0, CSD->nDCs*sizeof(double));
-
-  for( ii=0; ii<CSD->nIC; ii++ )
-     memcpy( CSD->ICNL[ii], pmm->SB[ii] , MaxICN*sizeof(char));
-  memcpy( CSD->DCNL, pmm->SM , MaxDCN*CSD->nDC*sizeof(char));
-  for( ii=0; ii< CSD->nPH; ii++ )
-    memcpy( CSD->PHNL[ii], pmm->SF[ii]+4 , MaxPHN*sizeof(char));
-
-
-  memcpy( CSD->ccIC, pmm->ICC , CSD->nIC*sizeof(char));
-  memcpy( CSD->ccDC, pmm->DCC , CSD->nDC*sizeof(char));
-  memcpy( CSD->ccPH, pmm->PHC , CSD->nPH*sizeof(char));
 
 // set default data to DataBr
 
@@ -1040,7 +1043,7 @@ void TNode::GEM_to_MT(
        double  *p_xPA  // amount of carrier in phases  [nPSb] ??       -      -      +     +
 )
 {
-
+   int ii;
    p_NodeHandle = CNode->NodeHandle;
    p_NodeStatusCH = CNode->NodeStatusCH;
    p_IterDone = CNode->IterDone;
@@ -1054,15 +1057,26 @@ void TNode::GEM_to_MT(
    p_pe = CNode->pe;
    p_Eh = CNode->Eh;
 
-  memcpy( p_xDC, CNode->xDC, CSD->nDCb*sizeof(double) );
-  memcpy( p_gam, CNode->gam, CSD->nDCb*sizeof(double) );
-  memcpy( p_xPH, CNode->xPH, CSD->nPHb*sizeof(double) );
-  memcpy( p_vPS, CNode->vPS, CSD->nPSb*sizeof(double) );
-  memcpy( p_mPS, CNode->mPS, CSD->nPSb*sizeof(double) );
-  memcpy( p_bPS, CNode->bPS, CSD->nPSb*CSD->nICb*sizeof(double) );
-  memcpy( p_xPA, CNode->xPA, CSD->nPSb*sizeof(double) );
-  memcpy( p_rMB, CNode->rMB, CSD->nICb*sizeof(double) );
-  memcpy( p_uIC, CNode->uIC, CSD->nICb*sizeof(double) );
+  for( ii=0; ii<CSD->nICb; ii++ )
+  {
+    p_rMB[ii] = CNode->rMB[ii];
+    p_uIC[ii] = CNode->uIC[ii];
+  }
+  for( ii=0; ii<CSD->nDCb; ii++ )
+  {
+    p_xDC[ii] = CNode->xDC[ii];
+    p_gam[ii] = CNode->gam[ii];
+  }
+  for( ii=0; ii<CSD->nPHb; ii++ )
+    p_xPH[ii] = CNode->xPH[ii];
+  for( ii=0; ii<CSD->nPSb; ii++ )
+  {
+    p_vPS[ii] = CNode->vPS[ii];
+    p_mPS[ii] = CNode->mPS[ii];
+    p_xPA[ii] = CNode->xPA[ii];
+  }
+  for( ii=0; ii<CSD->nPSb*CSD->nICb; ii++ )
+    p_bPS[ii] = CNode->bPS[ii];
 }
 
 #endif

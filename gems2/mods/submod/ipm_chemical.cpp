@@ -702,8 +702,8 @@ void TMulti::f_alpha()
 
     EMU = pmp->EMU;
     NMU = pmp->NMU;
-    memset( EMU, 0, pmp->L*sizeof(double));
-    memset( NMU, 0, pmp->L*sizeof(double));
+    //memset( EMU, 0, pmp->L*sizeof(double));
+    //memset( NMU, 0, pmp->L*sizeof(double));
 
     j=0;
     pmp->YMET = 0.0;
@@ -1006,7 +1006,8 @@ void TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
     double  Dsur, DsurT, MMC, *XU;
     XU = new double[pmp->L];
     ErrorIf( !XU, "Mol_u()", "Memory allocation error ");
-    memset(XU, 0, sizeof(double)*(pmp->L) );
+    for(j=0; j<pmp->L; j++ )
+      XU[j] = 0.;
 
 //   ofstream ofs("c:/gems2/x_u.txt",ios::out | ios::app);
 

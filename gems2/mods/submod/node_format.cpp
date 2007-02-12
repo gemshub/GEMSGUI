@@ -27,7 +27,7 @@ extern bool _comment;
 
 //===============================================================
 // in the arrays below, the first field of each structure contains a string
-// which is put into <> to comprise a data object tag, e.g. <IterDone>, in 
+// which is put into <> to comprise a data object tag, e.g. <IterDone>, in
 // free text input files. The second field (0 or 1) denotes whether the data
 // object can be skipped from the file (0) and default value(s) can be used,
 // or (1) the data object must be always present in the file. The third
