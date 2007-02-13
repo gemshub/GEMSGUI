@@ -1,3 +1,19 @@
+13/02/2007
+ Fixed error Ls in calculation into System
+
+13/20/2007
+ Checked Multi load functions and flags:
+  -  Setup of flags for MULTI remake
+    ( void TProfil::PMtest( const char *key ) (m_param.cpp ) )
+  - Load Thermodynamic Data from MTPARM to MULTI
+    ( void TMulti::CompG0Load()(ms_muleq.cpp) )
+
+  Deleted/comented (///) the same rows in MultiRemake() and multi_sys_dc()
+    as in CompG0Load() and call CompG0Load() from MultiRemake()
+
+  Checked flags in functions: EqstatExpand(); MultiCalcInit(); loadSystat();
+            deriveSystat(); newSystat();
+
 12/02/2007
  Fixed error, reloading thermodynamic, if State of reloading CSD 0 (pmp->pBAL).
 

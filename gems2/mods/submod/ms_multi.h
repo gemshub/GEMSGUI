@@ -72,9 +72,9 @@ typedef struct
     pESU,  // Unpack old eqstate from EQSTAT record?  0-no 1-yes
     pIPN,  // State of IPN-arrays:  0-create; 1-available; -1 remake
     pBAL,  // State of reloading CSD:  1- BAL only; 0-whole CSD
-    pFAG,  //State of initial lnGam load: 0-no, 1-on Mbel, 2-lnGmf, -1-SurEta
+    pFAG_,  // reserved SD
     pTPD,  // State of reloading thermod data: 0- all  1 - G0 only  2 - no
-    pULR,  // Start recalc kin ogranich (0-do not, 1-do )internal
+    pULR,  // Start recalc kinetic constraints (0-do not, 1-do )internal
     pRR1,  // internal
     FIat,   // max. number of surface site types
     MK,     // PM return code: 0 - continue;  1 - converged

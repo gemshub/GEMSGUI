@@ -207,10 +207,6 @@ if( dCH->nTp <1 && dCH->nPp <1 )
 //Test outpur ***********************************
 //  f_log << j  << " Gg = " <<  Gg  << "  GO =  " << pmp->G0[j] << endl;
 //Test outpur ***********************************
-    }
- }
- for( j=0; j<pmp->L; j++ )
- {
     jj =  j * dCH->nPp * dCH->nTp;
     Vv = LagranInterp( dCH->Pval, dCH->Tval, dCH->V0+jj,
                           P, TC, dCH->nTp, dCH->nPp, 1 );
@@ -226,6 +222,7 @@ if( dCH->nTp <1 && dCH->nPp <1 )
 //Test outpur ***********************************
 //  f_log << j  << " Vv = " <<  Vv  << "  VO =  " << pmp->Vol[j] << endl;
 //Test outpur ***********************************
+    }
  }
  load = true;
 }

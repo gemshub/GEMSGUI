@@ -209,7 +209,7 @@ void TSyst::make_syst_sizes()
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
 
     /* Test classified codes! Do more!!!!!!!!!! */
-    sy.Ls = 0;
+//    sy.Ls = 0;
     sy.Lw = 0;
     sy.Lg = 0;
     sy.Lsor = 0;
@@ -227,12 +227,12 @@ void TSyst::make_syst_sizes()
         case DC_AQ_ELECTRON:
         case DC_AQ_SPECIES:
             sy.Lw++;
-            sy.Ls++;
+            // sy.Ls++;
             break;
         case DC_AQ_SOLVENT:
             sy.LO = j;
         case DC_AQ_SOLVCOM:
-            sy.Ls++;
+            // sy.Ls++;
             break;
             /* Gas mixture */
         case DC_GAS_COMP:
@@ -241,30 +241,32 @@ void TSyst::make_syst_sizes()
         case DC_GAS_N2:
         case DC_GAS_H2:
 //            sy.Lg++;     workaround 15.12.2006  SD KD
-            sy.Ls++;
+//            sy.Ls++;
             break;
             /* solution no electrolite */
         case DC_SOL_IDEAL:
-            sy.Ls++;
+//            sy.Ls++;
             break;
         case DC_SOL_MINOR:
             if( aPa->pa.p.PSM && aPa->pa.p.GAH > 0 )
                 sy.lnGmf[j] = log( aPa->pa.p.GAH );
-            sy.Ls++;
+//            sy.Ls++;
             break;
         case DC_SOL_MAJOR:
             if( aPa->pa.p.PSM && aPa->pa.p.GAR > 0 )
                 sy.lnGmf[j] = log( aPa->pa.p.GAR );
-            sy.Ls++;
+//            sy.Ls++;
             break;
         case DC_SUR_MINAL:
-            sy.Ls++; sy.Lsor++;
+//            sy.Ls++;
+            sy.Lsor++;
             break;
         case DC_PEL_CARRIER:
         case DC_SUR_CARRIER:
             if( aPa->pa.p.PSM && aPa->pa.p.GAR > 0 ) // DAK testing
                 sy.lnGmf[j] = log( aPa->pa.p.GAR );      // 27.10.99
-            sy.Ls++; sy.Lsor++;
+//            sy.Ls++;
+            sy.Lsor++;
             break;
             /* one component phase */
         case DC_SCP_CONDEN:
@@ -288,7 +290,7 @@ void TSyst::make_syst_sizes()
             if( aPa->pa.p.PSM && aPa->pa.p.GAH > 0 )   // DAK Testing 27.10.99
                 sy.lnGmf[j] = log( aPa->pa.p.GAH );     // Adsorption FIA
             sy.Lsor++;
-            sy.Ls++;
+//            sy.Ls++;
             break;
         default:
             break; /* Error - wrong code ! */
@@ -296,7 +298,8 @@ void TSyst::make_syst_sizes()
     }
 
 // Temporary workaround for Lg counter   15.12.2006  SD KD
-sy.Lg = 0;
+    sy.Ls = 0;
+    sy.Lg = 0;
     sy.Fi = 0;
     sy.Lhc = 0;
     sy.Fis = 0;
@@ -307,7 +310,9 @@ sy.Lg = 0;
             continue;
         sy.Fi++;
         if( k < mup->Fis )
-            sy.Fis++;
+        {    sy.Fis++;
+             sy.Ls += sy.Ll[k];
+        }
         switch( mup->PHC[k] )
         {
         case PH_AQUEL:

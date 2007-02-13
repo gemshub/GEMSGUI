@@ -616,34 +616,34 @@ void TProfil::calcMulti()
 
 }
 
-
-
-
 // Setup of flags for MULTY remake
 // pNP,  //Mode of FIA selection: 0-auto-SIMPLEX,1-old eqstate,-1-user's choice
 // pESU, // Unpack old eqstate from EQSTAT record?  0-no 1-yes
 // pIPN, // State of IPN-arrays:  0-create; 1-available; -1 remake
 // pBAL, // State of reloading CSD:  1- BAL only; 0-whole CSD
-// pFAG, //State of initial lnGam load: 0-no, 1-on Mbel, 2-lnGmf, -1-SurEta
 // pTPD, // State of reloading thermod data: 0- all    2 - no
-// pULR, // reserved
 void TProfil::PMtest( const char *key )
 {
     double T, P;
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     TProcess* Proc = (TProcess*)(&aMod[RT_PROCES]);
-//    TUnSpace* Prob = (TUnSpace*)(&aMod[RT_UNSPACE]);
 
-    ///  pmp->pNP = -1;
+    // test for available old solution
     if( STat->ifCalcFlag())
-    { if( !pmp->pESU )
+    { if( !pmp->pESU )      // if pESU == 2 (task loaded before), left value
           pmp->pESU = 1;
     }
     else pmp->pESU = 0;
 
-    if( pmp->pESU == 0 ) // no old solution
+   //auto simplex => not necessary unpack old soluton added SD 13/02/2007
+   //if( pmp->pNP == 0 )
+   //    pmp->pESU = 0;
+
+  // no old solution => must be simplex
+   if( pmp->pESU == 0 )
         pmp->pNP = 0;
 
+    // special set up from process
     if( Proc->pep->Istat == P_EXECUTE ||
         Proc->pep->Istat == P_MT_EXECUTE )
     {
@@ -652,20 +652,15 @@ void TProfil::PMtest( const char *key )
         else
             pmp->pNP = 1;
     }
-/*    if( Prob->usp->pbcalc == P_EXECUTE )    ???????
-    {
-        if(Prob->usp->zond[11] == S_OFF )
-            pmp->pNP = 0;
-        else
-            pmp->pNP = 1;
-    }
-*/    pmp->pBAL =  BAL_compare();
-    if( !pmp->pBAL )
+
+    // test changes in the modified system relative to MULTI
+    pmp->pBAL =  BAL_compare();
+    if( !pmp->pBAL ) // if some vectors were allocated or some dimensions changed
     {    pmp->pIPN = 0;
-         pmp->pTPD = 0;
+         pmp->pTPD = 1; // reload Go, Vol
     }
-//    if( qEp.GetCount()<1 || qEd.GetCount()<1 )  Caution!
-    if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE )
+
+    if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE ) //?????
         pmp->pIPN = 0;
     // Get P and T from key
     gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);

@@ -24,8 +24,6 @@
 #include "m_param.h"
 #include "s_formula.h"
 #include "service.h"
-//#include "visor.h"
-
 
 // Aseembling base GEM-IPM structure to calculate equilibrium states
 //
@@ -126,9 +124,9 @@ void TMulti::MultiRemake( const char *key )
     pmp->lowPosNum = pa->p.DcMin;
     pmp->logXw = -16.;
     pmp->logYFk = -9.;
-    pmp->lnP = 0.;
-    if( tpp->P != 1. )  // non-reference pressure
-        pmp->lnP = log( tpp->P );
+///    pmp->lnP = 0.;
+///    if( tpp->P != 1. )  // non-reference pressure
+///        pmp->lnP = log( tpp->P );
     pmp->DX = pa->p.DK;
 
     pmp->FitVar[4] = pa->p.AG;
@@ -138,7 +136,7 @@ void TMulti::MultiRemake( const char *key )
     if( !pmp->pBAL )
         dyn_new();
     if( pmp->pBAL == 2 )
-        /*N=pmp->N;*/  goto NEXT2;
+         goto NEXT2;
 
     // loading parameters for ICs (independent components)
     for( N=0, i=-1, ii=0; ii< mup->N; ii++ )
@@ -169,6 +167,10 @@ NEXT2:
 
     if( pmp->pBAL < 2 )
         ConvertDCC(); // Loading generic species codes
+
+   if(  !pmp->pBAL || pmp->pTPD < 2)
+      CompG0Load();
+
     // Tests on integrity of CSD can be added here
      pmp->pBAL = 2;
 }
@@ -185,9 +187,9 @@ void TMulti::multi_sys_dc()
     gstring form;
 
     ErrorIf( !tpp->G, "Multi", "Multi make error: !tpp->G" );
-    int xVol = 0;   // SD 09/02/2007
-    if( pmp->PV == VOL_CONSTR )
-      xVol = getXvolume();
+///    int xVol = 0;   // SD 09/02/2007
+///    if( pmp->PV == VOL_CONSTR )
+///      xVol = getXvolume();
 
     if( !pmp->pBAL )
     {  // making full stoichiometry matrix from DC formula list
@@ -244,8 +246,7 @@ void TMulti::multi_sys_dc()
             vfMessage(  window(), "Multi make error: L != pmp->L", "Please, press BCC!" );
 
     }
-//    if( pmp->pBAL < 2 || pmp->pTPD < 2 )
-//    {  Reload parametres of components
+
     if( pmp->E )
     {   // index of charge
         for(  ii=0; ii<pmp->N; ii++ )
@@ -272,27 +273,25 @@ CH_FOUND:
         if( pmp->E )
             pmp->EZ[j] = pmp->A[pmp->N*j+iZ];
         pmp->Pparc[j] = pmp->Pc;
-//     pmp->lnGmo[j] = pmp->lnGam[j] = */
         pmp->F0[j] = 0.0;
-//     pmp->X[j] = pmp->Y[j] = */
         pmp->XY[j] = 0.0;
-        pmp->G0[j] = tpp->G[jj];          //  /(RT) ? + ln P ? + ln 55.51 ?
+        pmp->G0[j] = tpp->G[jj];
 
-        if( tpp->PtvVm == S_ON )
-            switch( pmp->PV )
-            { // calculating actual molar volume of DC
-            case VOL_CONSTR:
-              if( syp->Vuns )
-                       Vv = syp->Vuns[jj];
-                pmp->A[j*pmp->N+xVol] = tpp->Vm[jj] + Vv;
-            case VOL_CALC:
-            case VOL_UNDEF:
-                if( syp->Vuns )
-                       Vv = syp->Vuns[jj];
-                pmp->Vol[j] = ( tpp->Vm[jj] + Vv )* 10.; // Check!
-                break;
-            }
-        else pmp->Vol[j] = 0.0;
+///        if( tpp->PtvVm == S_ON )
+///            switch( pmp->PV )
+///            { // calculating actual molar volume of DC
+///            case VOL_CONSTR:
+///              if( syp->Vuns )
+///                       Vv = syp->Vuns[jj];
+///                pmp->A[j*pmp->N+xVol] = tpp->Vm[jj] + Vv;
+///            case VOL_CALC:
+///            case VOL_UNDEF:
+///                if( syp->Vuns )
+///                       Vv = syp->Vuns[jj];
+///                pmp->Vol[j] = ( tpp->Vm[jj] + Vv )* 10.; // Check!
+///               break;
+///            }
+///        else pmp->Vol[j] = 0.0;
 
 // testing kinetic/metastability constraints
         if( pmp->PLIM && jj < mup->L )
@@ -461,9 +460,6 @@ CH_FOUND:
             }
         }
     }
-    // pmp->pTPD = 2; // Sveta 23/12/2005
-    // it has been =1, don`t load more!
-    // }
 }
 
 //Loading data for phases and mixing models into the structure MULTI
@@ -770,7 +766,6 @@ PARLOAD: if( k < syp->Fis )
         }
 
     }  /* k */
-    // pmp->pTPD = 2; // Sveta 23/12/2005
 }
 
 // Loading surface type parameters

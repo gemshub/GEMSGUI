@@ -448,7 +448,6 @@ NewSystemDialog::CmSelect()
       return;   // Added to avoid a pitfall at creating new project
     try
     {
-    //  TProfil::pm->pmp->pFAG = 1;
     TProfil::pm->loadSystat();
     loadList1();            // Load...
     loadList2();

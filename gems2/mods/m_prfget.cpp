@@ -564,21 +564,18 @@ void TProfil::loadSystat( const char *key )
     syst->loadData( false );  // set def and unpack syseq to system
 
     // Test MULTY for change (if new System cfg or T, P - new)
-    pmp->pESU = 0;  //Sveta 17/02/2005
+    pmp->pESU = 0;  //  new record was readed
     gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
     PMtest( keyp.c_str() );
-    //  if( pmp->pBAL < 2 )  // rebuild multi
-    multi->MultiRemake( keyp.c_str() );
+    if( pmp->pBAL < 2 || pmp->pTPD < 2)
+       multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
         for(short j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
-        pmp->pFAG =1; // Sveta 11/05/99
-    }
-
-    if( pmp->pFAG == 0 || pmp->pFAG == 1 )
         multi->EqstatExpand( keyp.c_str() );
+    }
     pVisor->Update();
 }
 
@@ -591,27 +588,22 @@ void TProfil::deriveSystat()
     if( keyp.find_first_of( "*?") != gstring::npos )
         Error("SyStat", "Undefined current record!");
     int ret = TSysEq::pm->RecBuild( keyp.c_str() );
-    //  contentsChanged = false;
-    //  TSysEq::pm->CloseWin();
-    //  contentsChanged = true;
 
     // unpack to SYSTEM structure
     syst->loadData( false, ret );  // set def and unpack syseq to system
 
     // Test MULTY for change (if new System cfg or T, P - new)
-    pmp->pESU = 0;  //Sveta 17/02/2005
+    pmp->pESU = 0;  //  new record was readed
     PMtest( keyp.c_str() );
-    //    if( pmp->pBAL < 2 )  // rebuild multi
-    multi->MultiRemake( keyp.c_str() );
+    if( pmp->pBAL < 2 || pmp->pTPD < 2)
+        multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
     {
         multi->loadData( false );  // unpack syseq to multi
         for(short j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
-        pmp->pFAG =1;
-    }
-    if( pmp->pFAG == 0 || pmp->pFAG == 1 )
         multi->EqstatExpand( keyp.c_str() );
+    }
     pVisor->Update();
 //    pVisor->OpenModule(window(), MD_SYSTEM);
 }
@@ -619,12 +611,8 @@ void TProfil::deriveSystat()
 
 //  build new Systat record
 void TProfil::newSystat( int mode )
-{ //vstr pkey(81);
-
-    //rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
-    //            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
-
-    TSysEq::pm->setCalcFlag( false );
+{
+    TSysEq::pm->setCalcFlag( false ); // => pmp->pESU = 0;
 
     gstring key_str = rt[RT_SYSEQ].PackKey();
     if( key_str.find("*") != gstring::npos )
@@ -641,27 +629,12 @@ void TProfil::newSystat( int mode )
         Error("SyStat", "This record already exists!");
 
     int ret = TSysEq::pm->RecBuild( str.c_str(), mode );
-    //  contentsChanged = false;
-    //  TSysEq::pm->CloseWin();
-    //  contentsChanged = true;
-
     syst->loadData( true, ret ); // set def and unpack syseq to system
-    pmp->pESU = 0;  //Sveta 17/02/2005
-
     // Test MULTY for change (if new System cfg or T, P - new)
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     PMtest( keyp.c_str() );
-    //    if( pmp->pBAL < 2 )  // rebuild multi
-    multi->MultiRemake( keyp.c_str() );
-    if( pmp->pESU )      // unpack old solution
-    {
-        multi->loadData( false );  // unpack syseq to multi
-        for(short j=0; j< pmp->L; j++ )
-            pmp->X[j] = pmp->Y[j];
-        pmp->pFAG =1;
-    }
-    if( /* pmp->pFAG == 0 || */ pmp->pFAG == 1 ) // !!!!!!!!! 20.06.01
-        multi->EqstatExpand( keyp.c_str() );
+    if( pmp->pBAL < 2 || pmp->pTPD < 2)
+       multi->MultiRemake( keyp.c_str() );
     pVisor->OpenModule(window(), MD_SYSTEM);
     pVisor->Update();
 }
