@@ -688,6 +688,7 @@ void TProfil::PackSystat()
     if( isSysEq ) // add to z_sp_config show mode 07/12/99
         multi->packData( PHon, DCon );
     else multi->packData();
+
     pVisor->Update();
 
     //Sveta
