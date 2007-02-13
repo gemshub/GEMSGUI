@@ -486,7 +486,7 @@ void TMulti::GammaCalc( int LinkMode  )
                        GouyChapman( jb, je, k );
                     // PoissonBoltzmann( q, jb, je, k )
                     }
-                    / Calculating surface activity coefficient terms
+        // Calculating surface activity coefficient terms
 //                  SurfaceActivityTerm(  jb, je, k );
                     SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
                 }
