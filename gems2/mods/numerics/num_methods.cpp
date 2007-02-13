@@ -2,6 +2,7 @@
 // $Id: num_methods.cpp 705 2006-04-28 19:39:01Z gems $
 //
 // C/C++ Numerical Methods (Linear Algebra) used in GEMS-PSI and GEMIPM2K
+//
 // (c) 2006-2007 S.Dmytriyeva, D.Kulik
 //
 // Uses: JAMA/C++ Linear Algebra Package based on the Template
@@ -24,7 +25,7 @@
 #include "verror.h"
 
 /*-----------------------------------------------------------------*/
-// Interpolation over tabulated values (array y) using the Lagrange method
+// Interpolation over tabulated values (2D array d) using Lagrange method
 //  y[N] - discrete values of argument over rows (ascending order)
 //  x[M] - discrete values of arguments over columns (ascending order)
 //  d[N][M] - discrete values of a function of x and y arguments
@@ -123,28 +124,11 @@ double LagranInterp(float *y, float *x, float *d, float yoi,
 // #define LM_SQRT_GIANT 1.304e19
 #define SQR(x)   (x)*(x)
 
+// This function calculates Euclidean norm of a vector x of length n
+// Modified from ??????????
+//
 double enorm( int n, double *x )
 {
-/*     given an n-vector x, this function calculates the
- *     euclidean norm of x.
- *
- *     the euclidean norm is computed by accumulating the sum of
- *     squares in three different sums. the sums of squares for the
- *     small and large components are scaled so that no overflows
- *     occur. non-destructive underflows are permitted. underflows
- *     and overflows do not occur in the computation of the unscaled
- *     sum of squares for the intermediate components.
- *     the definitions of small, intermediate and large components
- *     depend on two constants, LM_SQRT_DWARF and LM_SQRT_GIANT. the main
- *     restrictions on these constants are that LM_SQRT_DWARF**2 not
- *     underflow and LM_SQRT_GIANT**2 not overflow.
- *
- *     parameters
- *
- *	n is a positive integer input variable.
- *
- *	x is an input array of length n.
- */
     int i;
     double agiant, s1, s2, s3, xabs, x1max, x3max, temp;
 
@@ -162,14 +146,14 @@ double enorm( int n, double *x )
         xabs = fabs(x[i]);
         if ( xabs > LM_SQRT_DWARF && xabs < agiant )
         {
-// **  sum for intermediate components.
+// sum for intermediate components.
             s2 += xabs*xabs;
             continue;
         }
 
         if ( xabs >  LM_SQRT_DWARF )
         {
-// **  sum for large components.
+// sum for large components.
             if (xabs > x1max)
             {
                 temp = x1max/xabs;
@@ -183,7 +167,7 @@ double enorm( int n, double *x )
             }
             continue;
         }
-// **  sum for small components.
+// sum for small components.
         if (xabs > x3max)
         {
             temp = x3max/xabs;
@@ -200,7 +184,7 @@ double enorm( int n, double *x )
         }
     }
 
-// *** calculation of norm.
+// calculation of norm.
 
     if (s1 != 0)
         return x1max*sqrt(s1 + (s2/x1max)/x1max);
@@ -215,14 +199,13 @@ double enorm( int n, double *x )
     return x3max*sqrt(s3);
 }
 
-
-// Random numbers ==========================================================
-
-// uniform point
-double randuni(double& x)
+// Random numbers (re-written from Numerical Recipes in C)
+// with uniform distribution
+//
+double randuni (double& x)
 { double m35=34359738368., m36=68719476736., m37=137438953472.;
   float a=0.,b=1.;
-  if( x < 0 ) // Initialize. process
+  if( x < 0 ) // Initialize process
   {
     int j;
     double R;
@@ -250,7 +233,7 @@ double randnorm(double& x)
            if(R1<0.) R1=0.;
            if(R1>1.) R1=1.;
            return(R1);
-/*return(1./9.*(R1-(-4.5)));*/
+// return(1./9.*(R1-(-4.5)));
 }
 
 #define IM1 2147483563
@@ -268,11 +251,14 @@ double randnorm(double& x)
 #define EPS  1.2e-7
 #define RNMX  (1.0-EPS)
 
-// Long period (> 2 � 1018) random number generator of L�Ecuyer with Bays-Durham shuffle
-// and added safeguards. Returns a uniform random deviate between 0.0 and 1.0 (exclusive of
-// the endpoint values). Call with idum a negative integer to initialize; thereafter, do not alter
-// idum between successive deviates in a sequence. RNMX should approximate the largest floating
-// value that is less than 1.
+// Long period (> 2'1018) random number generator of L'Ecuyer with
+// Bays-Durham shuffle and added safeguards.
+// Returns a uniform random deviate between 0.0 and 1.0 (exclusive of
+// the endpoint values). Call with idum a negative integer to initialize;
+// thereafter, do not alter idum between successive deviates in a sequence.
+// RNMX should approximate the largest floating value that is less than 1.
+// Modified from Numerical Recipes in C
+//
 float ran2(long& idum)
 {
    int j;
@@ -298,14 +284,14 @@ float ran2(long& idum)
          iv[j] = idum;
      }
    iy=iv[0];
-  }
-   k = idum/IQ1;       //    Start here when not initializing.
-   idum = IA1 * (idum-k*IQ1) - k*IR1;  //Compute idum=(IA1*idum) % IM1 without
-                                       // overflows by Schrage�s  method.
+   }
+   k = idum/IQ1;                       // Start here when not initializing.
+   idum = IA1 * (idum-k*IQ1) - k*IR1;  // Compute idum=(IA1*idum) % IM1 without
+                                       // overflows by Schrage's  method.
    if ( idum < 0 )
       idum += IM1;
    k = idum2/IQ2;
-   idum2 = IA2*(idum2-k*IQ2)-k*IR2;  //Compute idum2=(IA2*idum) % IM2 likewise.
+   idum2 = IA2*(idum2-k*IQ2)-k*IR2;  // Compute idum2=(IA2*idum) % IM2 likewise.
    if (idum2 < 0)
       idum2 += IM2;
    j = iy/NDIV;                      // Will be in the range 0..NTAB-1.
@@ -314,7 +300,7 @@ float ran2(long& idum)
    if (iy < 1)
       iy += IMM1;
    if ( ( temp=AM*iy) > RNMX)
-       return (float)RNMX;                //  Because users don�t expect endpoint values.
+       return (float)RNMX;         //  Because users don't expect endpoint values.
    return temp;
 }
 
@@ -325,8 +311,10 @@ float ran2(long& idum)
 
 // According to Knuth, any large MBIG, and any smaller (but still large) MSEED
 // can be substituted for the above values.
-// Returns a uniform random deviate between 0.0 and 1.0. Set idum to any negative value to
-// initialize or reinitialize the sequence.
+// Returns a uniform random deviate between 0.0 and 1.0.
+// Set idum to any negative value to initialize or reinitialize the sequence.
+// Modified From Numerical Recipes in C
+//
 float ran3(long& idum)
 {
   static int inext,inextp;
@@ -349,7 +337,7 @@ float ran3(long& idum)
           mk += MBIG;
         mj=ma[ii];
       }
-      for (k=1;k<=4;k++)    // We randomize them by �warming upthe generator.�
+      for (k=1;k<=4;k++)    // We randomize them by 'warming up the generator'
         for(i=1;i<=55;i++)
         {
          ma[i] -= ma[1+(i+30) % 55];
@@ -373,4 +361,5 @@ float ran3(long& idum)
 }
 
 //-----------------------End of num_methods.cpp--------------------------
+
 

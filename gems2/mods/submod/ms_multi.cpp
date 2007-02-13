@@ -1,14 +1,14 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Implementation of TMulti class, config functions
+// Implementation of TMulti class, configuration functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1995-2007 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
-// modelling by Gibbs energy minimization
-// Uses: GEM-Vizor GUI DBMS library, gems/lib/gemvizor.lib
+// modelling by Gibbs energy minimization and of the
+// standalone GEMIPM2K code (define IPMGEMPLUGIN).
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -21,7 +21,8 @@
 #include "v_object.h"
 #include "visor.h"
 
-
+// Constructor
+//
 TMulti::TMulti( int nrt, SYSTEM* sy_, MTPARM *tp_, RMULTS *mu_ ):
         TSubModule( nrt ), syp(sy_), tpp(tp_), mup(mu_)
 {
@@ -36,7 +37,7 @@ TMulti::TMulti( int nrt, SYSTEM* sy_, MTPARM *tp_, RMULTS *mu_ ):
 }
 
 // link values to objects
-void TMulti::ods_link( int /*q*/)
+void TMulti::ods_link( int )
 {
     //aObj[ o_wd_stkey].SetPtr( pm.stkey );
     //aObj[ o_wd_nv_].SetPtr( pm.NV_ );
@@ -81,7 +82,7 @@ void TMulti::ods_link( int /*q*/)
     aObj[ o_wio_fitv ].SetPtr(pm.FitVar ); /*d 5*/
     aObj[ o_wd_sitn ].SetPtr(&pm.sitNcat );
 
-    // dynamic part 1
+    // dynamic DODs, part 1
     aObj[ o_wi_l1 ].SetPtr( pm.L1 );
     aObj[ o_wi_l1 ].SetDim( pm.FI, 1 );
 //  Added 07.12.2006 - new object for solution models  KD
