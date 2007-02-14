@@ -418,7 +418,8 @@ void TMulti::MultiCalcInit( const char *key )
         }
     }
 
-    if( pmp->FIs && pmp->pIPN <=0 )  // SD 29/11/2006 ???? test
+    if( pmp->FIs /* && pmp->pIPN <=0 */ )  // SD 29/11/2006 temporary until
+                                           // fluid models will be finalized  
     { // not done if already present in MULTI !
         pmp->PD = TProfil::pm->pa.p.PD;
         SolModLoad();
