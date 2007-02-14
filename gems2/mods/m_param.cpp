@@ -652,6 +652,9 @@ void TProfil::PMtest( const char *key )
         else
             pmp->pNP = 1;
     }
+    else
+     if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE ) // 2007 ?????
+        pmp->pIPN = 0;
 
     // test changes in the modified system relative to MULTI
     pmp->pBAL =  BAL_compare();
@@ -660,8 +663,6 @@ void TProfil::PMtest( const char *key )
          pmp->pTPD = 1; // reload Go, Vol
     }
 
-    if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE ) //?????
-        pmp->pIPN = 0;
     // Get P and T from key
     gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);
     P = atof(s.c_str());

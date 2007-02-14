@@ -1619,6 +1619,91 @@ int
   }
   return rnk;
 }
+//====================================================================
+
+// the squares of the following constants shall not under/overflow:
+// these values seem good for an x86:
+#define LM_SQRT_DWARF 1.e-160
+#define LM_SQRT_GIANT 1.e150
+// the following values should work on any machine:
+// #define LM_SQRT_DWARF 3.834e-20
+// #define LM_SQRT_GIANT 1.304e19
+#define SQR(x)   (x)*(x)
+
+// This function calculates Euclidean norm of a vector x of length n
+// Modified from ??????????
+//
+double enorm( int n, double *x )
+{
+    int i;
+    double agiant, s1, s2, s3, xabs, x1max, x3max, temp;
+
+    if( n <= 0 )
+      return 0.0;
+    s1 = 0;
+    s2 = 0;
+    s3 = 0;
+    x1max = 0;
+    x3max = 0;
+    agiant = LM_SQRT_GIANT/( (double) n);
+
+    for ( i=0; i<n; i++ )
+    {
+        xabs = fabs(x[i]);
+        if ( xabs > LM_SQRT_DWARF && xabs < agiant )
+        {
+// sum for intermediate components.
+            s2 += xabs*xabs;
+            continue;
+        }
+
+        if ( xabs >  LM_SQRT_DWARF )
+        {
+// sum for large components.
+            if (xabs > x1max)
+            {
+                temp = x1max/xabs;
+                s1 = 1 + s1*SQR(temp);
+                x1max = xabs;
+            }
+            else
+            {
+                temp = xabs/x1max;
+                s1 += SQR(temp);
+            }
+            continue;
+        }
+// sum for small components.
+        if (xabs > x3max)
+        {
+            temp = x3max/xabs;
+            s3 = 1 + s3*SQR(temp);
+            x3max = xabs;
+        }
+        else
+        {
+            if (xabs != 0.)
+            {
+                temp = xabs/x3max;
+                s3 += SQR(temp);
+            }
+        }
+    }
+
+// calculation of norm.
+
+    if (s1 != 0)
+        return x1max*sqrt(s1 + (s2/x1max)/x1max);
+    if (s2 != 0)
+    {
+        if (s2 >= x3max)
+            return sqrt( s2*(1+(x3max/s2)*(x3max*s3)) );
+        else
+            return sqrt( x3max*((s2/x3max)+(x3max*s3)) );
+    }
+
+    return x3max*sqrt(s3);
+}
 
 //--------------------- End of s_lsm_lm.cpp --------------------------
 

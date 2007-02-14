@@ -43,7 +43,10 @@
 
 #include <jama_svd.h>
 using namespace JAMA;
-#include "num_methods.h"
+//#include "num_methods.h"
+double enorm( int n, double *x );
+
+
 
 class TLMDataType  // data for the task
 // fitting data, function and evaluete function

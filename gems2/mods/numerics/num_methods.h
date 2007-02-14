@@ -29,18 +29,6 @@ double LagranInterp(float *y, float *x, double *d, float yoi,
 double LagranInterp(float *y, float *x, float *d, float yoi,
                     float xoi, int M, int N, int pp );
 
-double enorm( int n, double *x );
-int CholeskyDecomposition( int N, double* R, double* X, double* R1  );
-int LUDecomposition( int N, double* A, double* X  );
-//void InverseofMatrix( int N, double* A, double* Y );
-//double DeterminantofMatrix( int N, double* A );
-
-// Random numbers ==========================================================
-double randuni(double& x); // uniform
-double randnorm(double& x); // normal
-float ran2(long& idum);  // uniform between 1 and 0
-float ran3(long& idum);  // uniform between 1 and 0
-
 #endif   // _num_methods_h_
 
 //-----------------------End of num_methods.h--------------------------

@@ -393,7 +393,7 @@ void TMulti::MultiCalcInit( const char *key )
    pmp->MBX /= 1000.;
 
     // unpackSysEq record
-    if( pmp->pESU /*== 1*/ && pmp->pNP )     // problematic statement !!!!!!!!!
+    if( pmp->pESU == 1 && pmp->pNP )     // problematic statement !!!!!!!!!
     {
        loadData( false );  // unpack syseq to multi
        for( j=0; j< pmp->L; j++ )
@@ -418,11 +418,11 @@ void TMulti::MultiCalcInit( const char *key )
         }
     }
 
-    if( pmp->FIs /*&& pmp->pIPN <=0*/ )  // SD 29/11/2006 ???? test
+    if( pmp->FIs && pmp->pIPN <=0 )  // SD 29/11/2006 ???? test
     { // not done if already present in MULTI !
         pmp->PD = TProfil::pm->pa.p.PD;
         SolModLoad();
-        /*   pmp->pIPN = 1; */
+           pmp->pIPN = 1;
          GammaCalc( LINK_TP_MODE);
     }
     else
