@@ -127,38 +127,21 @@ static bool load = false;
 // Load Thermodynamic Data from MTPARM to MULTI using LagranInterp
 void TMulti::CompG0Load()
 {
-  int j, jj, k, jb, je=0;
+  int j, jj, k, xTP, jb, je=0;
   double Gg, Vv;
-  float TC, P;
+  double TC, P;
 
   DATACH  *dCH = TNode::na->pCSD();
 //  DATABR  *dBR = TNodeArray::na->pCNode();
 
-  TC = TNode::na->cT()-C_to_K;
+  TC = TNode::na->cTC();
   P = TNode::na->cP();
 
 // if( dCH->nTp <=1 && dCH->nPp <=1 )
-if( dCH->nTp <1 && dCH->nPp <1 )
-   return;
+  if( dCH->nTp <1 && dCH->nPp <1 )
+      return;
 
-  for( jj=0; jj<dCH->nTp; jj++)
-    if( fabs( TC - dCH->Tval[jj] ) < dCH->Ttol )
-    {
-        TC = dCH->Tval[jj];
-        break;
-    }
-  for( jj=0; jj<dCH->nPp; jj++)
-   if( fabs( P - dCH->Pval[jj] ) < dCH->Ptol )
-   {
-        P = dCH->Pval[jj];
-        break;
-   }
-
-//Test outpur ***********************************
-//  fstream f_log("CompG0Load.txt", ios::out|ios::app );
-
-//  f_log << "TC = " <<  TC << "  P =  " << P << endl;
-//Test outpur ***********************************
+   xTP = TNode::na->check_grid_TP( TC, P );
 
  if( load && fabs( pmp->TC - TC ) < 1.e-10 &&
             fabs( pmp->P - P ) < 1.e-10 )
@@ -170,22 +153,26 @@ if( dCH->nTp <1 && dCH->nPp <1 )
  pmp->P = pmp->Pc = P;
  if( dCH->ccPH[0] == PH_AQUEL )
  {
-   pmp->denW = LagranInterp( dCH->Pval, dCH->Tval, dCH->roW,
+   if( xTP >= 0 )
+   {
+      pmp->denW = dCH->roW[xTP];
+      pmp->epsW = dCH->epsW[xTP];
+   }
+   else
+   {
+       pmp->denW = LagranInterp( dCH->Pval, dCH->TCval, dCH->roW,
                           P, TC, dCH->nTp, dCH->nPp,1 );
-   //       pmp->denWg = tpp->RoV;
-   pmp->epsW = LagranInterp( dCH->Pval, dCH->Tval, dCH->epsW,
+        //       pmp->denWg = tpp->RoV;
+       pmp->epsW = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsW,
                           P, TC, dCH->nTp, dCH->nPp,1 );
-   //       pmp->epsWg = tpp->EpsV;
+       //       pmp->epsWg = tpp->EpsV;
+   }
  }
  else
  {
    pmp->denW = 1.;
    pmp->epsW = 78.;
  }
-
-//Test outpur ***********************************
-//  f_log << "roW = " <<  pmp->denW << "  epsW =  " << pmp->epsW << endl;
-//Test outpur ***********************************
 
  pmp->RT = R_CONSTANT * pmp->Tc;
  pmp->FRT = F_CONSTANT/pmp->RT;
@@ -201,34 +188,35 @@ if( dCH->nTp <1 && dCH->nPp <1 )
     for( j=jb; j<je; j++ )
     {
       jj =  j * dCH->nPp * dCH->nTp;
-      Gg = LagranInterp( dCH->Pval, dCH->Tval, dCH->G0+jj,
+      if( xTP >= 0 )
+      {
+        Gg = dCH->G0[ jj+xTP];
+        Vv = dCH->V0[ jj+xTP];
+      }
+     else
+     {
+       Gg = LagranInterp( dCH->Pval, dCH->TCval, dCH->G0+jj,
                           P, TC, dCH->nTp, dCH->nPp,1 );
-      pmp->G0[j] = Cj_init_calc( Gg, j, k );
-//Test outpur ***********************************
-//  f_log << j  << " Gg = " <<  Gg  << "  GO =  " << pmp->G0[j] << endl;
-//Test outpur ***********************************
-    jj =  j * dCH->nPp * dCH->nTp;
-    Vv = LagranInterp( dCH->Pval, dCH->Tval, dCH->V0+jj,
-                          P, TC, dCH->nTp, dCH->nPp, 1 );
-    switch( pmp->PV )
-    { /* make mol volumes of components */
+       Vv = LagranInterp( dCH->Pval, dCH->TCval, dCH->V0+jj,
+                            P, TC, dCH->nTp, dCH->nPp, 1 );
+     }
+     pmp->G0[j] = Cj_init_calc( Gg, j, k );
+     switch( pmp->PV )
+     { /* make mol volumes of components */
        case VOL_CONSTR:
                     pmp->A[j*pmp->N] = Vv; // !!  error
        case VOL_CALC:
        case VOL_UNDEF:
                     pmp->Vol[j] = Vv  * 10.;
                     break;
-    }
-//Test outpur ***********************************
-//  f_log << j  << " Vv = " <<  Vv  << "  VO =  " << pmp->Vol[j] << endl;
-//Test outpur ***********************************
+     }
     }
  }
  load = true;
 }
 
 // GEM IPM calculation of equilibrium state in MULTI
-void TMulti::MultiCalcInit( const char *key )
+void TMulti::MultiCalcInit( const char */*key*/ )
 {
   short j,k;
   SPP_SETTING *pa = &TProfil::pm->pa;

@@ -21,7 +21,7 @@
 
 ##Section (scalar-2): Chemical scalar variables
 # Temperature T, K
-<T>    298.15
+<TC>   25
 # Pressure P, bar
 <P>    1
 # Volume V of reactive subsystem, m3 (GEM output)
@@ -45,7 +45,7 @@
 # pe of aqueous solution
 <pe>   10.3367
 # Eh of aqueous solution, V
-<Eh>   1
+<Eh>   0.610285
 
 ## FMT scalar variables (used only on the level of NodeArray)
 # actual total simulation time Tm, s

@@ -1,3 +1,34 @@
+15/02/2007
+  Changed in DataBr structure T to TC temperature C
+  Changed in DataCh structure Tval to TCval
+  Added to TNode class functions
+   // Converts the Phase DCH index into the DC DCH index (1-st)
+   // returns into nDCinPh number of DC included into Phx phase
+    int  PhtoDC_DCH( const int Phx, int& nDCinPh );
+
+   // Converts the Phase DBR index into the DC DBR index (1-st selected )
+   // returns into nDCinPh number of DC selected into Phx phase
+    int  PhtoDC_DBR( const int Phx, int& nDCinPh );
+
+    // Access to interpolated thermodynamic data from DCH structure
+    // Test Tc and P as grid point for the interpolation of thermodynamic data
+    // Return index in grid matrix or -1
+     int  check_grid_TP(  double& Tc, double& P );
+    // Access to interpolated G0 from DCH structure ( xCH the DC DCH index)
+     double  DC_G0_TP( const int xCH, double& Tc, double& P );
+    // Access to interpolated V0 from DCH structure ( xCH the DC DCH index)
+     double  DC_V0_TP( const int xCH, double& Tc, double& P );
+
+     // Retrieval of Phase Volume ( xBR the Ph DBR index)
+      double  Ph_Volume( const int xBR );
+     // Retrieval of Phase mass ( xBR the Ph DBR index)
+      double  Ph_Mass( const int xBR );
+     // Retrieval of Phase composition ( xBR the Ph DBR index)
+      void  Ph_BC( const int xBR, double *ARout=0 );
+
+    Changed function CompG0Load() for separete module, use check_grid_TP() . (ms_param.cpp)
+
+
 13/02/2007
  Fixed error Ls in calculation into System
 

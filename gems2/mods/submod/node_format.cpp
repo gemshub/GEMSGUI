@@ -40,7 +40,7 @@ outField DataBR_fields[51] =  {
   { "NodeStatusFMT",  0, 0 },
   { "NodeStatusCH",  1, 0 },
   { "IterDone",  0, 0 },
-  { "T",   1, 0 },
+  { "TC",   1, 0 },
   { "P",  1, 0 },
   { "Vs",  1, 0 },
   { "Vi",   0, 0 },
@@ -119,7 +119,7 @@ outField DataCH_dynamic_fields[25] =  {
    { "nDCinPH",  1, 0 },
    { "A",  1, 0 },
    { "Ttol",  0, 0 },
-   { "Tval",  1, 0 },
+   { "TCval",  1, 0 },
    { "Ptol",  0, 0 },
    { "Pval",  1, 0 },
    { "roW",  1, 0 },
@@ -172,7 +172,7 @@ void TNode::databr_to_text_file( fstream& ff )
       ff << "##Section (scalar-2): Chemical scalar variables" << endl;
    if( _comment )
          ff << "# Temperature T, K" << endl;
-   ff << left << setw(7) << "<T> " <<  CNode->T << endl;
+   ff << left << setw(7) << "<TC> " <<  CNode->TC << endl;
    if( _comment )
          ff << "# Pressure P, bar" << endl;
    ff << left << setw(7) << "<P> " <<  CNode->P << endl;
@@ -348,7 +348,7 @@ void TNode::databr_from_text_file( fstream& ff )
             break;
     case 5: rdar.readArray( "IterDone",  &CNode->IterDone, 1);
             break;
-    case 6: rdar.readArray( "T",  &CNode->T, 1);
+    case 6: rdar.readArray( "TC",  &CNode->TC, 1);
             break;
     case 7: rdar.readArray( "P",  &CNode->P, 1);
             break;
@@ -573,7 +573,7 @@ prar.writeArray(  "nDCinPH", CSD->nDCinPH, CSD->nPH);
   ff << left << setw(7) << "<Ttol> " <<  CSD->Ttol;
   if( _comment )
     ff << "\n# Tval: Grid temperatures for the interpolation";
- prar.writeArray(  "Tval", CSD->Tval, CSD->nTp );
+ prar.writeArray(  "TCval", CSD->TCval, CSD->nTp );
   if( _comment )
     ff << "\n\n# Ptol: Tolerance for the interpolation over pressure (K)" << endl;
   ff << left << setw(7) << "<Ptol> " <<  CSD->Ptol;
@@ -760,7 +760,7 @@ void TNode::datach_from_text_file(fstream& ff)
             break;
     case 13: rddar.readArray( "Ttol", &CSD->Ttol, 1);
             break;
-    case 14: rddar.readArray( "Tval", CSD->Tval, CSD->nTp );
+    case 14: rddar.readArray( "TCval", CSD->TCval, CSD->nTp );
             break;
     case 15: rddar.readArray( "Ptol", &CSD->Ptol, 1);
             break;
@@ -835,7 +835,7 @@ void TNode::datach_to_file( GemDataStream& ff )
    ff.writeArray( CSD->ICmm, CSD->nIC );
    ff.writeArray( CSD->DCmm, CSD->nDC );
 
-   ff.writeArray( CSD->Tval,  CSD->nTp );
+   ff.writeArray( CSD->TCval,  CSD->nTp );
    ff.writeArray( CSD->Pval,  CSD->nPp );
 
    ff.writeArray( CSD->ccIC, CSD->nIC*sizeof(char) );
@@ -883,7 +883,7 @@ void TNode::datach_from_file( GemDataStream& ff )
    ff.readArray( CSD->ICmm, CSD->nIC );
    ff.readArray( CSD->DCmm, CSD->nDC );
 
-   ff.readArray( CSD->Tval,  CSD->nTp );
+   ff.readArray( CSD->TCval,  CSD->nTp );
    ff.readArray( CSD->Pval,  CSD->nPp );
 
    ff.readArray( CSD->ccIC, CSD->nIC*sizeof(char) );
@@ -931,7 +931,7 @@ void TNode::datach_realloc()
   CSD->ICmm = new double[CSD->nIC];
   CSD->DCmm = new double[CSD->nDC];
 
-  CSD->Tval = new float[CSD->nTp];
+  CSD->TCval = new float[CSD->nTp];
   CSD->Pval = new float[CSD->nPp];
 
   CSD->roW = new double[ CSD->nPp*CSD->nTp];
@@ -1002,9 +1002,9 @@ void TNode::datach_free()
     CSD->DD = 0;
   }
 
- if( CSD->Tval )
-  { delete[] CSD->Tval;
-    CSD->Tval = 0;
+ if( CSD->TCval )
+  { delete[] CSD->TCval;
+    CSD->TCval = 0;
   }
  if( CSD->Pval )
   { delete[] CSD->Pval;
@@ -1073,7 +1073,7 @@ void TNode::databr_to_file( GemDataStream& ff )
 {
 // const data
    ff.writeArray( &CNode->NodeHandle, 6 );
-   ff.writeArray( &CNode->T, 32 );
+   ff.writeArray( &CNode->TC, 32 );
 
 //dynamic data
    ff.writeArray( CNode->bIC, CSD->nICb );
@@ -1103,7 +1103,7 @@ void TNode::databr_from_file( GemDataStream& ff )
 {
 // const data
    ff.readArray( &CNode->NodeHandle, 6 );
-   ff.readArray( &CNode->T, 32 );
+   ff.readArray( &CNode->TC, 32 );
 
 //dynamic data
    ff.readArray( CNode->bIC, CSD->nICb );
@@ -1170,7 +1170,7 @@ DATABR * TNode::databr_free( DATABR *CNode_ )
   if( CNode_ == 0)
     CNode_ = CNode;
   memset( &CNode_->NodeHandle, 0, 6*sizeof(short));
-  memset( &CNode_->T, 0, 32*sizeof(double));
+  memset( &CNode_->TC, 0, 32*sizeof(double));
 
  if( CNode_->bIC )
  { delete[] CNode_->bIC;

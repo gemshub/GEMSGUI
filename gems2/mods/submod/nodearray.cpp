@@ -127,7 +127,7 @@ void  TNodeArray::setNodeArray( gstring& dbr_file, int ndx, bool binary_f )
 // Writing dataCH, dataBR structure to binary/text files
 // and other necessary GEM2MT files
 gstring TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV,
-      bool multi_bin_mode, bool bin_mode, bool putNodT1  )
+      bool /*multi_bin_mode*/, bool bin_mode, bool putNodT1  )
 {
   fstream fout;
   gstring Path_;
@@ -407,7 +407,7 @@ void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
   // memory must be allocated before
 
   memcpy( &pCNode()->NodeHandle, &arr_BR[ii]->NodeHandle, 6*sizeof(short));
-  memcpy( &pCNode()->T, &arr_BR[ii]->T, 32*sizeof(double));
+  memcpy( &pCNode()->TC, &arr_BR[ii]->TC, 32*sizeof(double));
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH
   memcpy( pCNode()->xDC, arr_BR[ii]->xDC, pCSD()->nDCb*sizeof(double) );
@@ -444,7 +444,7 @@ void TNodeArray::MoveWorkNodeToArray( int ii, int nNodes, DATABRPTR* arr_BR )
 // alloc new memory
   TNode::CNode = new DATABR;
   databr_realloc();
-  memset( &pCNode()->T, 0, 32*sizeof(double));
+  memset( &pCNode()->TC, 0, 32*sizeof(double));
 }
 
 void TNodeArray::CopyNodeFromTo( int ndx, int nNod,
@@ -488,18 +488,17 @@ double TNodeArray::get_vPH( int ia, int nodex, int PHx )
      double T, P;
      if( ia == 0 )
      {
-      T = pNodT0()[(nodex)]->T;
+      T = pNodT0()[(nodex)]->TC;
       P = pNodT0()[(nodex)]->P;
+      val = pNodT0()[nodex]->xDC[DC_xCH_to_xDB(DCx)]; // number of moles
      }
      else
      {
-      T = pNodT1()[(nodex)]->T;
+      T = pNodT1()[(nodex)]->TC;
       P = pNodT1()[(nodex)]->P;
+      val = pNodT1()[nodex]->xDC[DC_xCH_to_xDB(DCx)];
      }
-     DCx  *=  pCSD()->nPp * pCSD()->nTp;
-     val = LagranInterp( pCSD()->Pval, pCSD()->Tval, pCSD()->V0+DCx,
-                       P, T, pCSD()->nTp, pCSD()->nPp, 1 )*10.;
-
+     val *= DC_V0_TP( DCx, T, P );
   }
   return val;
 }
@@ -712,11 +711,11 @@ double TNodeArray::GetNodeMass( int ndx,
                         mass = node1_mPS( ndx, ips );
                         break;
         case COLLOID:  // mass of phase - solid solution, sorption or pure solid
-                        if( ips < dch->nPSb )
-                            mass = node1_mPS( ndx, ips );
+                       if( ips < dch->nPSb )
+                          mass = node1_mPS( ndx, ips );
                         else
-                            mass = node1_mPH( ndx, ips );
-                        break;
+                          mass = node1_mPH( ndx, ips );
+                       break;
         case DIFFUSIVE: // mass of the diffusing species
                         mass = nodeCH_DCmm( ips ) * node1_xDC( ndx, ips );
                         break;
@@ -738,12 +737,14 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
    double mass = 0., coeff, mol;
    DATABR* dbr = NodT1[ndx_from];
    DATACH* dch = CSD;
-   int xWatCH, ips = (int)iips;
+   int xWatCH=0, ips = (int)iips;
+   if( tcode == DISSOLVED  )
+     xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
 
    switch( tcode )
    {
     case DISSOLVED: // mass of dissolved matter in aqueous solution
-                    xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
+                    // xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
                         mass = node1_mPS(ndx_from,ips) -
                              node1_xPA(ndx_from,ips) * dch->DCmm[xWatCH];
                    break;
@@ -762,14 +763,15 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
     }
    coeff = m_v/mass; // mass of particle/mass of phase
 
+
    for(short ie=0; ie < CSD->nICb; ie++ )
    {
      mol = 0.; // moles if IC in the particle
      switch( tcode )
      {
         case DISSOLVED: // moving only dissolved IC (-H2 or -O)
-                        xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
-                        mol = (node1_bPS( ndx_from, ips, ie )
+                        // xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
+                        mol = ( node1_bPS( ndx_from, ips, ie )
                               - nodeCH_A( xWatCH, ie)
                               * node1_xPA(ndx_from,ips)) * coeff;
                         break;
