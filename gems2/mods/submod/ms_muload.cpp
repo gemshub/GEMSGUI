@@ -33,24 +33,24 @@
 //#include "visor_w.h"
 #include "stepwise.h"
 
-enum translat_codes { /* codes for translations of equations */
+enum translat_codes { // codes for translations of math script equations
     N_BEGIN = '{',  N_END = '}',    A_reset = '#',
     N_ARBG =  '[',  N_AREND = ']',  A_arcnt = '@',  EQSET_DELIM = '@',
     A_delim_IPM = '\\',
-    /* indexes by  RMULTS, SYSTEM*/
+    // Indexes in the project (system)
     A_ICx = 'I', A_DCx = 'J', A_PHx = 'A', A_ACx = 'K', A_DCSx = 'S',
-    /*indexes by MULTI */
+    // Indexes in MULTI
     A_icx = 'i', A_dcx = 'j', A_phx = 'a', A_dcsx = 's',
-    /* No indexation related to this data object */
+    // No indexation related to this data object
     A_NOx = 'N',
-    /* Tables [I][J], [i][j], [J][I], ... */
+    // Tables [I][J], [i][j], [J][I], ...
     A_ICxDCx = 'B', A_icxdcx = 'b', A_DCxICx = 'C', A_dcxicx = 'c',
     A_PHxICx = 'D', A_phxicx = 'd', A_ICxPHx = 'E', A_icxphx = 'e'
 };
 
 // Loading of scripts for the non-ideality models of
 // phases - solutions into structure for calculations of equlibria
-// Uses IPN stack calculation module (C) S.Dmytrieva 1991-1996
+// Uses the IPN stack calculation module (c) 1991-1996 S.Dmytrieva
 //
 void TMulti::SolModLoad( )
 {
@@ -62,15 +62,16 @@ void TMulti::SolModLoad( )
     time_t crt;
     TPhase* aPH = TPhase::pm;
 
-    // if( pmp->pIPN >= 1 )  //SD 29/11/2006
-    //    return;
-    ErrorIf( !pmp->FIs, "SolModLoad", "Invalid number of phases-solutions" );
-    /* realloc arrays for script calculations */
+if( pmp->pIPN >= 1 )           //SD 29/11/2006
+    return;
+    ErrorIf( !pmp->FIs, "SolModLoad", "No phases-solutions!" );
+    // reallocating arrays for script calculations
     if( pmp->pIPN <= 0 )
     {
         qEp.Clear();
         qEd.Clear();
     }
+    // Data extraction from Phase records
     for( kk=0, k=-1; kk<mup->Fis; kk++ )
     {
         JB = JE;
@@ -81,45 +82,37 @@ void TMulti::SolModLoad( )
         pmp->LsMod[k*3] = pmp->LsMod[k*3+1] = pmp->LsMod[k*3+2] = 0;
         jb=je;
         je+= pmp->L1[k];
-// Indexes for extracting data from IPx, PMc and DMc arrays
-    kx = kxe;                  // added 07.12.2006 by KD
-//SD    kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
+
+        // Indexes for extracting data from IPx, PMc and DMc arrays
+        kx = kxe;                  // added 07.12.2006 by KD
         kc = kce;
-//SD        kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
         kd = kde;
-//SD        kde += pmp->LsMdc[k]*pmp->L1[k];
-/*  old variant - prove again!
-        kc = kce;
-        kce += pmp->LsMod[k];
-        kd = kde;
-        kde += pmp->LsMdc[k]*pmp->L1[k]; */
 
         if( pmp->L1[k] == 1 )
-            continue;  /* one component left in multicomponent phase */
-        aPH->TryRecInp( mup->SF[kk], crt, 0 ); /*read information from phase */
-        /* select type of model*/
-        /*  modT = pmp->sMod[k]; */
+            continue;  // one component is left in the multicomponent phase
+        aPH->TryRecInp( mup->SF[kk], crt, 0 ); // reading phase record
+
+        // selecting type of the model
         memcpy( modT, aPH->php->sol_t, MAXKEYWD );
         memcpy( pmp->sMod[k], modT, MAXKEYWD );
         sMod = pmp->sMod[k];
         switch( modT[DCE_LINK] )
         {
-        case SM_UNDEF:  /* no equations */
+        case SM_UNDEF:  // no script equations were specified
             if( modT[SGM_MODE] != SM_STNGAM )
                 continue;
             if( modT[SPHAS_TYP] != SM_AQSIT )
             {                          // Not an aq phase with SIT model
-pmp->LsMod[k*3] = (short)aPH->php->ncpN;  // number of interaction parameters
-pmp->LsMod[k*3+1] = (short)aPH->php->npxM; // max. order of interaction parameters
-pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
-//        pmp->LsMod[k] = (short)(aPH->php->ncpN * aPH->php->ncpM);
-//             pmp->LsMdc[k] = aPH->php->nscM;
+               pmp->LsMod[k*3] = (short)aPH->php->ncpN;  // number of interaction parameters
+               pmp->LsMod[k*3+1] = (short)aPH->php->npxM; // max. order of interaction parameters
+               pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
                pmp->LsMdc[k] = aPH->php->nscM; // changed 07.12.2006  KD
             }
             else { // Aq phase with SIT model - interaction coeffs must be compressed
                // checking dimensions of the pnc table
                int nCat=0, nAn=0, jj;
 
+               // Calculating number of cations and number of anions
                for( jj = jb; jj<je; jj++ )
                {
                    if( pmp->EZ[jj] < 0 )
@@ -129,22 +122,20 @@ pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
                   else ;
                }
 //               pmp->LsMod[k] = (short)(nCat * nAn);  changed 07.12.2006  KD
-pmp->LsMod[k*3] = (short)nCat;
-pmp->LsMod[k*3+1] = 1;
-pmp->LsMod[k*3+2] = (short)nAn;
+               pmp->LsMod[k*3] = (short)nCat;
+               pmp->LsMod[k*3+1] = 1;
+               pmp->LsMod[k*3+2] = (short)nAn;
                pmp->sitNcat = (short)nCat;
                pmp->sitNan = (short)nAn;
             }
             goto LOAD_NIDMCOEF;
         case SM_PRIVATE_:
-        case SM_PUBLIC:   /* nonideal solution */
-//  Changed 07.12.2006   KD
-pmp->LsMod[k*3] = (short)aPH->php->ncpN;  // number of interaction parameters
-pmp->LsMod[k*3+1] = (short)aPH->php->npxM; // max. order of interaction parameters
-pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
-//            pmp->LsMod[k] = (short)(aPH->php->ncpN * aPH->php->ncpM);
-//          pmp->LsMdc[k] = aPH->php->nscN * aPH->php->nscN;  ??
-          pmp->LsMdc[k] = aPH->php->nscM; // changed 07.12.2006  KD
+        case SM_PUBLIC:   // nonideal solution
+               //  Changed 07.12.2006   KD
+               pmp->LsMod[k*3] = (short)aPH->php->ncpN;  // number of interaction parameters
+               pmp->LsMod[k*3+1] = (short)aPH->php->npxM; // max. order of interaction parameters
+               pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
+               pmp->LsMdc[k] = aPH->php->nscM; // changed 07.12.2006  KD
             /*     if( !pm_GC_ods_link( q, k, jb, kc, kd ))
                  { iRet = AMW_FE; goto WRONG; }  */
             aObj[ o_ntc ].SetPtr( &pmp->TCc );
@@ -157,23 +148,23 @@ pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
             aObj[ o_nrt ].SetPtr( &pmp->RT );
             aObj[ o_nlnrt ].SetPtr(&pmp->FRT );
             aObj[ o_nqp ].SetPtr( pmp->Qp+k*QPSIZE );
-            aObj[ o_nqd ].SetPtr( pmp->Qd+k*QDSIZE );  /* QDSIZE cells per phase */
+            aObj[ o_nqd ].SetPtr( pmp->Qd+k*QDSIZE );  // QDSIZE cells per phase
 //      aObj[ o_nncp].SetPtr( pmp->LsMod+k );  changes 07.12.2006  KD
-aObj[ o_nncp].SetPtr( pmp->LsMod+k*3 );
-aObj[ o_nncp].SetDim( 1, 3 );
+            aObj[ o_nncp].SetPtr( pmp->LsMod+k*3 );
+            aObj[ o_nncp].SetDim( 1, 3 );
             aObj[ o_nncd].SetPtr( pmp->LsMdc+k );
-aObj[ o_nncd].SetDim( 1, 1 );
+            aObj[ o_nncd].SetDim( 1, 1 );
             aObj[ o_ndc ].SetPtr( pmp->L1+k );
             aObj[ o_nez ].SetPtr( pmp->EZ+jb );
             aObj[o_nez].SetN( pmp->L1[k]);
 
 //            aObj[ o_npcv].SetPtr( pmp->PMc+kc );
 //            aObj[o_npcv].SetDim( 1, pmp->LsMod[k]);  // Changed 07.12.2006 KD
-aObj[ o_npcv].SetPtr( pmp->PMc+kc );
-aObj[o_npcv].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+2]);
-//  Object for indexation of interaction parameters
-aObj[ o_nu].SetPtr( pmp->IPx+kx );
-aObj[o_nu].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+1]);
+            aObj[ o_npcv].SetPtr( pmp->PMc+kc );
+            aObj[o_npcv].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+2]);
+            //  Object for indexation of interaction parameters
+            aObj[ o_nu].SetPtr( pmp->IPx+kx );
+            aObj[o_nu].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+1]);
 
             aObj[ o_ndcm].SetPtr( pmp->DMc+kd );
             aObj[o_ndcm].SetDim( pmp->L1[k], pmp->LsMdc[k]);
@@ -183,8 +174,8 @@ aObj[o_nu].SetDim( pmp->LsMod[k*3], pmp->LsMod[k*3+1]);
             aObj[ o_nppar].SetPtr(pmp->VL+jb );
             aObj[ o_nppar].SetN( pmp->L1[k]);
 //            aObj[ o_ngtn].SetPtr( pmp->G0+jb );
-aObj[ o_ngtn].SetPtr( pmp->GEX+jb );             // changed 5.11.2006 by DK
-aObj[ o_ngtn].SetN( pmp->L1[k]);
+            aObj[ o_ngtn].SetPtr( pmp->GEX+jb );     // changed 5.11.2006 by DK
+            aObj[ o_ngtn].SetN( pmp->L1[k]);
             aObj[ o_ngam].SetPtr( pmp->Gamma+jb );
             aObj[ o_ngam].SetN( pmp->L1[k]);
             aObj[ o_nlngam].SetPtr( pmp->lnGam+jb );
@@ -203,7 +194,7 @@ aObj[ o_ngtn].SetN( pmp->L1[k]);
                 aObj[ o_nxast].SetPtr( NULL );
                 aObj[ o_nxcec].SetPtr( NULL );
             }
-            aObj[ o_nbmol].SetPtr(pmp->FVOL+k ); /* Phase volume */
+            aObj[ o_nbmol].SetPtr(pmp->FVOL+k ); // Phase volume
             aObj[ o_nxx].SetPtr(  pmp->X+jb );
             aObj[o_nxx].SetN( pmp->L1[k]);
             aObj[ o_nwx].SetPtr(  pmp->Wx+jb );
@@ -211,37 +202,38 @@ aObj[ o_ngtn].SetN( pmp->L1[k]);
             aObj[ o_nmju].SetPtr( pmp->Fx+jb );
             aObj[o_nmju].SetN( pmp->L1[k]);
             break;
-        default: /* error code of model */
-            Error( "SolModLoad", "Error code of non-ideality model." );
-        }
-        /* translate equations of model  */
+        default: // error - invalid code of the mixing model
+            Error( "SolModLoad", "Wrong code of the model of mixing" );
+        } // end switch
+
+        // Translating Phase math script equations of mixing model
         if( !aPH->php->pEq && !aPH->php->dEq )
-        { /* Error no equations in record */
+        { // Error - no equations in record
             if( vfQuestion(window(), "SolModLoad",
                            "No expressions in non-ideality model: take as ideal?" ))
                 break;
             else Error( "SolModLoad", "Error: no equations in record." );
         }
         if( aPH->php->pEq && *aPH->php->pEq && modT[SPHAS_DEP] != SM_UNDEF )
-        { // translate expressions in non-ideality model fo all phase or/and solvent
+        { // translate expressions in the non-ideality model for the whole phase
             aObj[ o_neqtxt].SetPtr( aPH->php->pEq );
             Type = 0;
             if( pmp->PHC[k] != PH_SORPTION && pmp->PHC[k] != PH_POLYEL )
                 sm_text_analyze( k, Type, JB, JE, jb, je );
             else sm_text_analyze( k, Type, 0, JE, 0, je );
         }
-        else if( modT[SPHAS_DEP] == SM_UXDEP
-                 /* || modT[SPHAS_TYP] == SM_ASYMM */ )
+        else if( modT[SPHAS_DEP] == SM_UXDEP // || modT[SPHAS_TYP] == SM_ASYMM
+                 )
             Error( "SolModLoad", "Error?: modT[SPHAS_DEP] == SM_UXDEP." );
         if( aPH->php->dEq && *aPH->php->dEq && modT[DCOMP_DEP] != SM_UNDEF )
-        { /*translate expressions in non-ideality model for components */
+        { // translate expressions in the non-ideality model for components
             if( modT[DCE_LINK] == SM_PUBLIC )
-            { /* one group of expressions for all components */
+            { // one group of expressions for all components
                 aObj[ o_neqtxt].SetPtr( aPH->php->dEq );
                 Type = 1;
             }
             else
-            { /* separate group of expressions for each component */
+            { // separate group of expressions for each component
                 aObj[ o_neqtxt].SetPtr( NULL );
                 Type = 2;
             }
@@ -253,25 +245,27 @@ aObj[ o_ngtn].SetN( pmp->L1[k]);
             sm_text_analyze( k, Type, JB, JE, jb, je );
         else  sm_text_analyze( k, Type, 0, JE, 0, je );
 
-        // load coefficients in non-ideality models
+        // load coefficients of mixing models into MULTI transfer arrays
+        // Valid for both built-in and scripted mixing models
 LOAD_NIDMCOEF:
-        // Check if coeffs are properly compressed into MULTI !!!!!!!!!!!!!!!
         if( pmp->LsMod[k*3] )
-        { // loading non-ideal interaction parameters - rewritten 07.12.2006 by KD
+        { // loading interaction parameters - rewritten 07.12.2006 by KD
           if( aPH->php->pnc )
           {
               if( kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2] >
                   (int)(sizeof( pmp->PMc )/sizeof(float)))
                  pmp->PMc = (float *) aObj[ o_wi_pmc ].Alloc(
                    (kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2]), 1, F_ );
-              ErrorIf( pmp->PMc == NULL, "SolModLoad", "Error by reallocating memory for pmp->PMc." );
+              ErrorIf( pmp->PMc == NULL, "SolModLoad",
+                       "Error in reallocating memory for pmp->PMc." );
 
-              if( modT[SPHAS_TYP] != SM_AQSIT )  // Not SIT model
-              {    // temporary memcpy() - reimplement with compression
+// Check if coeffs are properly compressed into MULTI !!!!!!!!!!!!!!!
+              if( modT[SPHAS_TYP] != SM_AQSIT )  // Not a SIT model
+              {    // temporary memcpy() - reimplement with compression !!!!!
                   memcpy( pmp->PMc+kc, aPH->php->pnc,
                      (pmp->LsMod[k*3]*pmp->LsMod[k*3+2])*sizeof(float));
               }
-              else { // Aq phase with SIT model - to be reworked
+              else { // Aqueous phase with SIT model - to be reworked
                  float *ppnc;
                  ppnc = PackSITcoeffs( k, JB, JE, jb, je, pmp->LsMod[k*3] );
                  if( ppnc )
@@ -284,18 +278,19 @@ LOAD_NIDMCOEF:
                       pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float) );
               }
           }
-          else { // no IP coefficients array
+          else { // no array with interaction parameters in the Phase record
             pmp->LsMod[k*3] = 0;
             pmp->LsMod[k*3+2] = 0;
           }
-          //  Copying the IP index array
+          //  Copying the IP index array from Phase to MULTI
           if( aPH->php->ipxt )
           {
              if( kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1] >
                 (int)(sizeof( pmp->IPx )/sizeof(short)))
              pmp->IPx = (short *) aObj[ o_wi_ipxpm ].Alloc(
                 (kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1]), 1, I_ );
-             ErrorIf( pmp->IPx == NULL, "SolModLoad", "Error by reallocating memory for pmp->IPx." );
+             ErrorIf( pmp->IPx == NULL, "SolModLoad",
+                      "Error in reallocating memory for pmp->IPx" );
                // temporary memcpy - reimplement with compression!
              memcpy( pmp->IPx+kx, aPH->php->ipxt,
                      (pmp->LsMod[k*3]*pmp->LsMod[k*3+1])*sizeof(short));
@@ -311,37 +306,38 @@ LOAD_NIDMCOEF:
                  > (int)(sizeof( pmp->DMc )/sizeof(float)))
                 pmp->DMc = (float *) aObj[ o_wi_dmc ].Alloc(
                    kd+pmp->LsMdc[k]*pmp->L1[k], 1, F_ );
-            ErrorIf( pmp->DMc == NULL, "SolModLoad", "Error by reallocating memory for pmp->DMc." );
+            ErrorIf( pmp->DMc == NULL, "SolModLoad",
+                    "Error in reallocating memory for pmp->DMc." );
             for( jj=jb, j=JB, jkd=0; j < JE; j++ )
-            { // set index of components - eliminating those for switched off
+            { // set indexes of components - eliminating those switched off
                 if( syp->Dcl[j] == S_OFF )
                     continue;
-                jp = mup->Pl[j]; /* mup->Pl[pmp->muj[j]]; */
+                jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
                 memcpy( pmp->DMc+kd+jkd, aPH->php->scoef+jp*pmp->LsMdc[k],
                         pmp->LsMdc[k]*sizeof(float));
-               // Correction of CG fluid EoS coeffs
-               if( (aPH->php->PphC == PH_FLUID) && (sMod[SPHAS_TYP] == SM_CGFLUID) )
-               {
-                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
-                 {  // to be reworked for compatibility with GEMIPM2K !
-                    memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
-                       pmp->LsMdc[k]*sizeof(float));
-                    pmp->Pparc[jj] = tpp->Fug[j-JB];
-//                   pmp->Pparc[jp] = tpp->Fug[j-JB];
-                 }
-               }
-               // Correction of PRSV fluid EoS coeffs
-               if( (aPH->php->PphC == PH_FLUID || aPH->php->PphC == PH_GASMIX )
-                    && (sMod[SPHAS_TYP] == SM_PRFLUID) )
-               {
-                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
-                 {  // to be reworked for compatibility with GEMIPM2K
-                    memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
-                       pmp->LsMdc[k]*sizeof(float));
-                    pmp->Pparc[jj] = tpp->Fug[j-JB];
-//                   pmp->Pparc[jp] = tpp->Fug[j-JB];
-                 }
-               }
+// Copying the CG fluid EoS coeffs - obsolete 
+//               if( (aPH->php->PphC == PH_FLUID) && (sMod[SPHAS_TYP] == SM_CGFLUID) )
+//               {
+//                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
+//                 {  // to be reworked for compatibility with GEMIPM2K !
+//                    memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
+//                       pmp->LsMdc[k]*sizeof(float));
+//                    pmp->Pparc[jj] = tpp->Fug[j-JB];     // This single line brings
+//                   pmp->Pparc[jp] = tpp->Fug[j-JB];    // T,P depenedence in SolModLoad()!!!
+//                 }
+//               }
+// Copying the PRSV fluid EoS coeffs
+//               if( (aPH->php->PphC == PH_FLUID || aPH->php->PphC == PH_GASMIX )
+//                    && (sMod[SPHAS_TYP] == SM_PRFLUID) )
+//               {
+//                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
+//                 {  // to be reworked for compatibility with GEMIPM2K
+//                    memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
+//                       pmp->LsMdc[k]*sizeof(float));
+//                   pmp->Pparc[jj] = tpp->Fug[j-JB];     // This single line brings
+//                   pmp->Pparc[jp] = tpp->Fug[j-JB];    // T,P depenedence in SolModLoad()!!!
+//                 }
+//               }
                jkd += pmp->LsMdc[k]; jj++;
             } /* j */
           }
@@ -350,7 +346,7 @@ LOAD_NIDMCOEF:
         kxe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
         kce += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 10.12.2006  by KD&SD
         kde += pmp->LsMdc[k]*pmp->L1[k];
-     } /* k */
+     } // k
     pmp->pIPN = 1;
  }
 
@@ -370,6 +366,7 @@ TMulti::PackIP_x_coefs( int k, int JB, int JE, int jb, int je, int kc,
 // creates index lists and packs SIT coeffs table taken from Phase
 // definition record; returns a pointer to packed coeffs. table
 // Essential: aqueous phase must have index k = 0
+//
 float *
 TMulti::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
 {
@@ -503,37 +500,38 @@ void TMulti::sm_text_analyze( int nph, int Type,
 }
 
 //--------------------------------------------------------------------
-// Pack script of PRIVATE type of solution phase
+// Packs the script of PRIVATE type of solution phase
+//
 gstring TMulti::PressSolMod( int nP )
 {
-    int j, jp, k, ks, jb, je=0, /*jse=0,*/ EGlen;
+    int j, jp, k, ks, jb, je=0, EGlen;
     char *EGb;
     TPhase* aPH=TPhase::pm;
     gstring etext;
 
     for( k=0,ks=-1; k < mup->Fis && ks < nP; k++ )
-    {  /* calc indexes */
+    {  // calculating indexes
         jb = je;
         je += mup->Ll[k];
         if( syp->Pcl[k] == S_ON )
         {
             ks++;
-            /*jse += pmp->L1[ks];*/
+            // jse += pmp->L1[ks];
         }
     }
-    /* list of components in solution */
+    // list of components in solution
     for( j=jb; j<je; j++ )
     {
         if( syp->Dcl[j] == S_OFF )
             continue;
-        jp = mup->Pl[j];  /*index component in phase */
+        jp = mup->Pl[j];  // index component in phase
         EGlen = 0;
-        /* get equation number jp in  PHASE */
+        // get equation number jp in  PHASE
         EGb = ExtractEG( aPH->php->dEq, jp, &EGlen, aPH->php->nDC );
         ErrorIf( !EGb,
          "E12MSPrep:", "SolModLoad(): Missing operators group for a phase endmember." );
         if( EGlen )
-        {  /* set text to bufer */
+        {  // set text to buffer
             etext += gstring( EGb, 0, EGlen );
             etext +=  "\n" ;
         }
@@ -544,6 +542,7 @@ gstring TMulti::PressSolMod( int nP )
 //------------------------------------------------------------------
 //Get groop of equations number jp from Etext
 // Returns *EGlen=0 if there is no equations for the group jp
+//
 char *TMulti::ExtractEG( char *Etext, int jp, int *EGlen, int Nes )
 {
     int j;
@@ -769,7 +768,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     size_t eLen, ls, lb;
     int i, ii, pj, LNplace=1, Xplace=0, nO=0;
     char cstate, cc, *etext, *pexpr, *ecur, *cur, *next, *end,
-      *prev, *last, iCode/*=A_NOx*/, odlab[MAXKEYWD+2]; // added KD 30.03.01
+      *prev, *last, iCode, odlab[MAXKEYWD+2];
     vstr name(64), nbuf(64);
 
     etext = (char *)aObj[ nOet ].GetPtr();
@@ -790,7 +789,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     cc=0;
     cstate = A_dcx;
     while( next < end )
-    {  /* loop for analyzing the text */
+    {  // loop for analyzing the text
         if( *next != A_delim_IPM && !cc && *next != N_BEGIN )
         {   // Flush text if not relevant for preprocessing
             *ecur = *cur;
@@ -800,7 +799,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             continue;
         }
         if( *next == N_BEGIN && !cc )
-        { /* '{' - begin name of component */
+        { // '{' - begin name of component
             // back search to a delimiter - pick up the DOD label
             if( *(ecur-1) == N_ARBG )// '['? Space between [ and { not allowed
             {  last = ecur-2;
@@ -849,7 +848,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             iCode = aObj[ii].GetIndexationCode();
             // Getting new indexation code  KD 30.03.01
                 switch( iCode )
-            {  /* analyze indexation code */
+            {  // analyze indexation code
                default:
                   Error( "E01MSPrep: Unknown indexation base for data object", odlab );
 //             case A_reset:
@@ -857,7 +856,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                case A_dcx:
                case A_dcsx:
                case A_phx:
-                    LNplace = 1; /* search index in MULTI */
+                    LNplace = 1; // search index in MULTI
 //                  cstate = iCode;
                     break;
                case A_ICx:
@@ -865,7 +864,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                case A_DCx:
                case A_DCSx:
                case A_PHx:
-                    LNplace = 0;   /* search index in RMULTS */
+                    LNplace = 0;   // search index in RMULTS
 //                  cstate = iCode;
                     break;
                // Tables
@@ -873,14 +872,14 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                case A_DCxICx:
                case A_PHxICx:
                case A_ICxPHx:
-                    LNplace = 0; /* search index in RMULTS */
+                    LNplace = 0; // search index in RMULTS
 //                  cstate = iCode;
                     break;
                case A_icxdcx:
                case A_dcxicx:
                case A_phxicx:
                case A_icxphx:
-                    LNplace = 1;   /* search index in MULTI */
+                    LNplace = 1;   // search index in MULTI
 //                  cstate = iCode;
                     break;
             }
@@ -896,19 +895,19 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
         if( *next == A_delim_IPM && !cc )
         {   // An old-style switch found
             next++;
-            cur++; /* change state of scanner */
-            next++;  // Skip indexation code  KD 30.03.01
+            cur++;    // change state of scanner
+            next++;   // Skip indexation code  KD 30.03.01
             cur++;
             continue;
         }
         if( *next == N_END && cc > 0 && cc < 38 )
-        { /* '}' - end name of component */
+        { // '}' - end name of component
             memcpy( name, cur, next-cur );
             name[next-cur+1] = 0;
             cc = 0;
             next++;
             cur = next;
-            /* search and replace component name by current index */
+            // search and replace component name by current index
             switch( cstate )
             {
             case A_icx:
@@ -980,9 +979,9 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             else
               pj = get_ndx( i, nO, Xplace );
             switch( cstate )
-            { /*change name in the text */
+            { // change name in the text
             case A_icx:
-            case A_ICx: /* index */
+            case A_ICx: // index
             case A_dcx:
             case A_dcsx:
             case A_DCx:
@@ -1011,13 +1010,13 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             ecur += lb;
             continue;
         }
-        if( cc > 0 && cc < 38 ) /* reading name to pre-process */
+        if( cc > 0 && cc < 38 ) // reading name to pre-process
         { next++;
             cc++;
             continue;
         }
         Error( "E03MSPrep: too long name for index substitution", cur );
-    } /* end while */
+    } // end while
     *ecur = 0;
 }
 

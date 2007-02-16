@@ -448,7 +448,7 @@ AGAIN_SETUP:
           case SM_CGFLUID:  // Churakov-Gottschalk EoS
                           php->ncpN = 0;
                           php->ncpM = 0;
-                          php->nscM = 4;
+                          php->nscM = 20; // 4;   changed 16.02.2007
                           php->npxM = 0;
 //                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
@@ -456,7 +456,8 @@ AGAIN_SETUP:
           case SM_PRFLUID:  // Peng-Robinson EoS - provisional
                           php->ncpN = max( (short)2, php->nDC );
                           php->ncpM = max( (short)2, php->nDC );
-                          php->nscM = 4;
+//                          php->nscM = 4;    // Changed 15.02.2006
+                          php->nscM = 10; // 1MAXCRITPARAM;
                           php->npxM = 2;
 //                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
@@ -1020,14 +1021,15 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
       } // i
     }
 
-    // Collecting coefficients of EoS for fluids
-    if( ( php->PphC == PH_FLUID || php->PphC == PH_LIQUID ) && php->scoef )
+    // Collecting coefficients of EoS for fluids and gases
+    if( ( php->PphC == PH_FLUID || php->PphC == PH_LIQUID ||
+          php->PphC == PH_GASMIX ) && php->scoef )
     {
         int kx, mcex;
 //        nsc = (short)(php->nscN * php->nscM);
         nsc = php->nscM;
         if( pVisor->ProfileMode == true || vfQuestion(window(), GetName(),
-   "CG2003 fluid EoS coefficients: Collect from DComp records?"))
+   "PRSV or CG2003 fluid EoS coefficients: Collect from DComp records?"))
         {
            memset( dcn, 0, MAXRKEYLEN );
            for( i=0; i<php->nDC; i++ )
@@ -1039,8 +1041,8 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
               if( php->DCS[i] == SRC_DCOMP )
               {
                  aDC->TryRecInp( dcn, crt, 0 );
-                 if( aDC->dcp->Cemp )
-                 {
+                 if( aDC->dcp->Cemp && !aDC->dcp->CPg )
+                 {    // Churakov-Gottschalk model  coefficients
                     mcex = min( aDC->dcp->Nemp, nsc );
                     for( kx=0; kx< nsc; kx++ )
                     {
@@ -1050,7 +1052,19 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
                         s(i,kx) = 0.;
                     }
                  }
-                 else { // Error - no array in DComp or ReacDC!
+                 if( aDC->dcp->CPg && !aDC->dcp->Cemp )
+                 {
+                    mcex = min( MAXCRITPARAM, (int)nsc );  // PRSV model
+                    for( kx=0; kx< nsc; kx++ )
+                    {
+                      if( kx < mcex ) // Copying only what is possible
+                        s(i,kx) = aDC->dcp->CPg[kx];
+                      else
+                        s(i,kx) = 0.;
+                    }
+                 }
+                 if( !aDC->dcp->CPg && !aDC->dcp->Cemp )
+                 { // Error - no array in DComp or ReacDC!
                     for( kx=0; kx< nsc; kx++ )
                         s(i,kx) = 0.0;
                  }
@@ -1173,14 +1187,14 @@ MAKE_GAS_PHASE:
               memcpy( php->sol_t, "FNNSNN", 6 );
               memcpy( &php->PphC, "f-+---", 6 );
               php->ncpN = 0; php->ncpM = 0;
-              php->nscM = 4;  // changed 07.12.2006  KD
+              php->nscM = 20; // 4;  // changed 07.12.2006  KD
               php->npxM = 0;
               Name += "Perturbation-based EoS (Churakov&Gottschalk,2003)";
               strcpy( php->name, Name.c_str() );
               strcpy( php->notes,
      "Applicable at high P - moderate T for mixed non-electrolyte fluids" );
               break;
-      case 'P': // Peng-Robinson EoS, under construction
+      case SM_PRFLUID: // 'P': Peng-Robinson EoS, under construction
 // Not auto-set phase!
               break;
       default:  // unrecognized code

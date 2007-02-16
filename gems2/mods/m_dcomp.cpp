@@ -705,11 +705,11 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
         calc_tpcv( q, p, CE, CV );
         if( CV == CPM_GAS && ( aW.twp->P > 10. && aW.twp->TC > 100. ) )
         {
-            TFGLcalc aFGL;
+//            TFGLcalc aFGL;           Blocked 15.02.2007 by DK 
             aW.twp->CPg = dcp->CPg;
             aW.twp->mwt = dcp->mwt;
             aW.twp->PdcC = dcp->PdcC;
-            aFGL.calc_FGL( );
+//            aFGL.calc_FGL( );       Will be extended by TW
             aW.twp->CPg = NULL;
         }
         else if( CV == CPM_EMP )  // Calculation of fugacity at X=1 using GC EoS

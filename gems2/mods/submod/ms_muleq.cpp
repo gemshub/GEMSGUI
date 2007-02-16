@@ -24,7 +24,7 @@
 #include "m_syseq.h"
 #include "service.h"
 
-// set size of packed multi arrays
+// Setting sizes of packed MULTI arrays
 void TMulti::setSizes()
 {
     short j, Lp;
@@ -44,22 +44,21 @@ void TMulti::setSizes()
     STat->stp->S = pm.SXc;
     STat->stp->UU = pm.FX;
     STat->stp->PCI = pm.PCI;
-    STat->stp->ParE = pm.FitVar[3]; /* Tinkle supress factor */
+    STat->stp->ParE = pm.FitVar[3]; // smoothing factor
 
-    /* calc DC in solution */
+    // calculatging number of DC to be packed 
     for( Lp=0,j=0; j<pm.L; j++ )
         if( pm.X[j] > pm.lowPosNum )
             Lp++;
     STat->stp->L = Lp;
 }
 
-// packed multi arrays to equstat
+// Packed MULTI arrays into SysEq record
 void TMulti::packData()
 {
     short i,j;
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
 
-    /* load data */
     for( i=0,j=0; j<pm.L; j++ )
         if( pm.X[j] > pm.lowPosNum )
         {
@@ -85,13 +84,13 @@ void TMulti::packData()
         }
 }
 
-// packed multi arrays to equstat (to z_sp_conf mode)
+// Packing MULTI arrays into SysEq record (to z_sp_conf mode)
+//
 void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
 {
     short i,j;
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
 
-    /* load data */
     for( i=0,j=0; j<pm.L; j++ )
         if( pm.X[j] > pm.lowPosNum )
         {
@@ -117,7 +116,8 @@ void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
         }
 }
 
-// unpacked equstat arrays to multi (Y to pm.Y)
+// Unpacksing SysEq arrays to multi (Y to pm.Y)
+//
 void TMulti::unpackData()
 {
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
@@ -125,7 +125,7 @@ void TMulti::unpackData()
 
     int i, j, js, jp, is, ip;
 
-   if( pm.pESU == 2 )   // task unpacked before
+   if( pm.pESU == 2 )   // this SysEq record has already been unpacked
    {     pm.IT = 0;
         return;
    }
@@ -133,7 +133,7 @@ void TMulti::unpackData()
     for( is=0; is<STat->stp->N; is++ )
     {
         i = STat->stp->nnf[is];
-        /*search iComp in multi */
+        // looking for this IComp in MULTI
         for( j=0; j<pm.N; j++ )
             if( i != pm.mui[j] )
                 continue;
@@ -162,7 +162,7 @@ FOUNDI:
     for( js=0; js<STat->stp->L; js++ )
     {
         j = Prf->indDC( STat->stp->llf[js] );
-        /* search component in system */
+        // looking for a DC in MULTI
         for( i=0; i<pm.L; i++ )
             if( j != pm.muj[i] )
                 continue;
@@ -172,27 +172,27 @@ FOUNDI:
                 goto FOUND;
             }
         pm.pNP = 1;
-        Error( GetName(), "No this DComp in system." );
+        Error( GetName(), "No this DComp in the system" );
 FOUND:
         pm.Y[jp] = STat->stp->Y[js];
         pm.lnGam[jp] = STat->stp->lnGam[js];
     }
 
     // short
-    pm.pRR1 = STat->stp->itPar;  /* Level of tinkle supressor */
+    pm.pRR1 = STat->stp->itPar;  // Level of tinkle supressor
     pm.FI1 = STat->stp->Fi;
     pm.FI1s = STat->stp->Fis;
     pm.IT = 0;
     // float
-    pm.FitVar[4] = STat->stp->ParE;  /* Tinkle supress factor */
-    pm.FX  = STat->stp->UU;  /* GX norm */
+    pm.FitVar[4] = STat->stp->ParE;  // Smoothing factor
+    pm.FX  = STat->stp->UU;  // GX normalized
     pm.PCI = STat->stp->PCI;
     pm.VXc = STat->stp->V;
     pm.HXc = STat->stp->H;
     pm.SXc = STat->stp->S;
     // pm.IC = STat->stp->Res1;
 
-    pm.pESU = 2;
+    pm.pESU = 2;  // SysEq unpack flag set
 }
 
 // load data from TSysEq (EQstat => Multi)
@@ -206,7 +206,7 @@ void TMulti::loadData( bool newRec )
 
 
 // =================================================================
-// FROM MS_MULOAD
+// Moved from MS_MULOAD.CPP
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // Load Thermodynamic Data from MTPARM to MULTI
@@ -215,7 +215,7 @@ void TMulti::CompG0Load()
     int j, jj, k, jb, je=0;
     float Gg = 0., Vv = 0.;
 
-    /* pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not*/
+    // ->pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not load
     if( pmp->pTPD < 1 )
     {
         pmp->T = pmp->Tc = tpp->T + C_to_K;
@@ -247,15 +247,15 @@ void TMulti::CompG0Load()
             {
                 jj = pmp->muj[j];
 
-                // load G0
+                // loading G0
                 if( syp->Guns )
                     Gg = syp->Guns[jj];
                 pmp->G0[j] = Cj_init_calc( tpp->G[jj]+Gg, j, k );
 
-                //  load Vol
+                //  loading Vol
                 if( tpp->PtvVm == S_ON )
                     switch( pmp->PV )
-                    { /* make mol volumes of components */
+                    { // loading molar volumes of components into A matrix
                     case VOL_CONSTR:
                         if( syp->Vuns )
                            Vv = syp->Vuns[jj];
@@ -277,12 +277,12 @@ void TMulti::CompG0Load()
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-// Calculation of full structure MULTI by expanding
-// SysEq main vectors read from the database
+// Finalizing the full structure MULTI by expanding the SysEq record
+// read from the database
 //
 void TMulti::EqstatExpand( const char *key )
 {
-    int i, j, k, jb, je/*=0*/, jpb, jpe=0, jdb, jde=0;
+    int i, j, k, jb, je, jpb, jpe=0, jdb, jde=0;
     double FitVar3;
 
     pmp->NR = pmp->N;
@@ -298,7 +298,7 @@ void TMulti::EqstatExpand( const char *key )
             else pmp->Gamma[j] = 1;
         }
     }
-    // recalc kinetic restrictions for DC
+    // recalculate kinetic restrictions for DC
     if( pmp->pULR && pmp->PLIM )
          Set_DC_limits( DC_LIM_INIT );
 
@@ -320,17 +320,19 @@ void TMulti::EqstatExpand( const char *key )
     for( i=0; i<pmp->N; i++ )
         pmp->U_r[i] = pmp->U[i]*pmp->RT;
 
+    // calculate DC (species) concentrations
     ConCalc( pmp->X, pmp->XF, pmp->XFA);
 
-    // Calculate mass-balance deviations (moles)
-    MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C );
+    // Calculate mass-balance residuals (moles)
+    MassBalanceResiduals( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C );
 
     // Calc Eh, pe, pH,and other stuff
     if( pmp->E && pmp->LO )
         IS_EtaCalc();
 
-    FitVar3 = pmp->FitVar[3];   // Switch off smoothing factor
+    FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
     pmp->FitVar[3] = 1.0;
+
     // Scan phases to retrieve concentrations and activities
     je = 0;
     for( k=0; k<pmp->FIs; k++ )
@@ -338,10 +340,8 @@ void TMulti::EqstatExpand( const char *key )
         jb = je;
         je = jb+pmp->L1[k];
 
-
         jpb = jpe;
-jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
-// ipe ????
+        jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
         jdb = jde;
         jde += pmp->LsMdc[k]*pmp->L1[k];
 
@@ -349,34 +349,34 @@ jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
         {
             if( pmp->E && pmp->LO )
                 GouyChapman( jb, je, k );
-            /* calculation of surface activity terms */
+            // Calculation of surface activity coefficient terms
             SurfaceActivityCoeff( jb, je, jpb, jdb, k );
 //            SurfaceActivityTerm(  jb, je, k );
         }
         for( j=jb; j<je; j++ )
         {
-            /* calc Excess Gibbs energies F0 and values c_j */
+            // Calculation of normalized Gibbs energies F0 and values c_j
             pmp->F0[j] = Ej_init_calc( 0, j, k );
 //            pmp->G[j] = pmp->G0[j] + pmp->F0[j];
             pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];
-            /* pmp->Gamma[j] = exp( pmp->lnGam[j] ); */
+            // pmp->Gamma[j] = exp( pmp->lnGam[j] );
         }
     }
     pmp->FitVar[3]=FitVar3;
     pmp->GX_ = pmp->FX * pmp->RT;
 
-    // calc Prime DC chemical potentials defined via g0_j, Wx_j and lnGam_j
-    PrimeChemicalPotentials( pmp->F, pmp->X, pmp->XF, pmp->XFA );
+    // Calculate primal DC chemical potentials defined via g0_j, Wx_j and lnGam_j
+    PrimalChemicalPotentials( pmp->F, pmp->X, pmp->XF, pmp->XFA );
 
-    //calc Karpov phase criteria
+    //calculate Karpov phase criteria
     f_alpha();
 
-    //calc gas partial pressures  -- obsolete?
+    //calculate gas partial pressures  -- obsolete?
     GasParcP();
 }
 
-//Calculation by IPM (preparing for calculation, unpack data)
-// key contains SysEq record key
+//Calculation by IPM (preparing for calculation, unpacking data)
+// parameter "key" contains SysEq record key
 //
 void TMulti::MultiCalcInit( const char *key )
 {
@@ -384,18 +384,23 @@ void TMulti::MultiCalcInit( const char *key )
 
    // Bulk composition and/or dimensions changed ?
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
-        MultiRemake( key );
-
-   // calc mass of system
+    {
+       // Allocating list of phases currently present in non-zero quantities 
+        if( !pmp->SFs )
+           pmp->SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
+                       pmp->FI, 1, MAXPHNAME+MAXSYMB );
+        MultiRemake( key );  // Reallocating/reloading MULTI
+    }
+   // calculate mass of the system
    pmp->MBX = 0.0;
    for(int i=0; i<pmp->N; i++ )
       pmp->MBX += pmp->B[i] * (double)pmp->Awt[i];
    pmp->MBX /= 1000.;
 
-    // unpackSysEq record
-    if( pmp->pESU == 1 && pmp->pNP )     // problematic statement !!!!!!!!!
+    // unpack SysEq record
+    if( pmp->pESU == 1 && pmp->pNP ) // problematic - check ->pNP settings
     {
-       loadData( false );  // unpack syseq to multi
+       loadData( false );  // unpack SysEq record into MULTI
        for( j=0; j< pmp->L; j++ )
          pmp->X[j] = pmp->Y[j];
        pmp->IC = 0.;
@@ -408,7 +413,7 @@ void TMulti::MultiCalcInit( const char *key )
     for( j=0; j< pmp->L; j++ )
         pmp->G[j] = pmp->G0[j] + pmp->GEX[j];    // changed 5.12.2006
 
-    // test phases - solutions and load models
+    // test multicomponent phases and load data for mixing models
     if( pmp->FIs )
     {
         for( j=0; j< pmp->Ls; j++ )
@@ -419,10 +424,10 @@ void TMulti::MultiCalcInit( const char *key )
     }
 
     if( pmp->FIs /* && pmp->pIPN <=0 */ )  // SD 29/11/2006 temporary until
-                                           // fluid models will be finalized  
-    { // not done if already present in MULTI !
+                                           // fluid models will be finalized
+    { // not done if these models are already present in MULTI !
         pmp->PD = TProfil::pm->pa.p.PD;
-        SolModLoad();
+        SolModLoad();   // Call point to loading mixing models
            pmp->pIPN = 1;
          GammaCalc( LINK_TP_MODE);
     }
@@ -435,16 +440,11 @@ void TMulti::MultiCalcInit( const char *key )
         }
     }
 
-    // recalc restrictions for DC quantities
+    // recalculating kinetic restrictions for DC amounts
     if( pmp->pULR && pmp->PLIM )
          Set_DC_limits(  DC_LIM_INIT );
 
-    //   aObj[o_w_sbh].SetPtr( pmp->SB[0]  ); aObj[ o_w_sbh].SetDim( 1, pmp->N );
-    if( !pmp->SFs )
-        pmp->SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
-                       pmp->FI, 1, MAXPHNAME+MAXSYMB );
-
-    // dynamic arrays - begin load
+    // dynamic work arrays - loading initial data 
     for( k=0; k<pmp->FI; k++ )
     {
         pmp->XFs[k] = pmp->YF[k];

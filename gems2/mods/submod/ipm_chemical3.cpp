@@ -333,14 +333,51 @@ void TMulti::GammaCalc( int LinkMode  )
             else pmp->lnGam[j] = 0.;   // + pmp->lnGmm[j];
             pmp->Gamma[j] = 1.;
         }
-    case LINK_TP_MODE:  // Equations depending on T,P only
+    case LINK_TP_MODE:  // Built-in functions depending on T,P only
+         pmp->FitVar[3] = 1.0;  // resetting the IPM smoothing factor
+
+         for( k=0; k<pmp->FI; k++ )
+         { // loop on phases
+            jb = je;
+            je += pmp->L1[k];
+            if( pmp->L1[k] == 1 )
+                continue;
+            // Indexes for extracting data from IPx, PMc and DMc arrays
+            ipb = ipe;
+            ipe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
+            jpb = jpe;
+            jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
+            jdb = jde;
+            jde += pmp->LsMdc[k]*pmp->L1[k];
+
+            sMod = pmp->sMod[k];
+            if( sMod[SGM_MODE] == SM_IDEAL )
+                continue;
+
+            switch( pmp->PHC[k] )
+            {
+               case PH_GASMIX:
+               case PH_PLASMA:
+               case PH_FLUID:
+                     if( sMod[SPHAS_TYP] == SM_CGFLUID )
+                     {
+                       CGofPureGases( jb, je, jpb, jdb, k ); // CG2004 pure gas
+                       break;
+                     }
+                     if( sMod[SPHAS_TYP] == SM_PRFLUID )
+                       PRSVofPureGases( jb, je, jpb, jdb, k ); // PRSV pure gas
+                     break;
+               default: break;
+            }
+//            for( j = jb; j < je; j++ )
+         } // k
 //      if( pmp->LO && pmp->Lads )           Debugging!
 //        {
 //            ConCalc( pmp->X, pmp->XF, pmp->XFA  );
 //            if( pmp->E )
 //                IS_EtaCalc();
 //        }
-        pmp->FitVar[3] = 1.0;  // resetting of the IPM smoothing factor
+
         break;
     case LINK_UX_MODE: // calculating DC concentrations after this IPM iteration
         ConCalc( pmp->X, pmp->XF, pmp->XFA );
@@ -372,6 +409,7 @@ void TMulti::GammaCalc( int LinkMode  )
         Error("GammaCalc","Invalid Link Mode.");
     }
 
+    jpe=0; jde=0; ipe=0; je=0;
     for( k=0; k<pmp->FI; k++ )
     { // loop on phases
         jb = je;
@@ -439,7 +477,7 @@ void TMulti::GammaCalc( int LinkMode  )
                        ChurakovFluid( jb, je, jpb, jdb, k );
                     if( sMod[SPHAS_TYP] == SM_PRFLUID && pmp->XF[k] > pa->p.PhMin )
                        PRSVFluid( jb, je, jpb, jdb, k );
-                          // Added by Th.Wagner and DK on 20.07.06
+                       // Added by Th.Wagner and DK on 20.07.06
                 }
                 goto END_LOOP;             }
             else if( sMod[SGM_MODE] == SM_IDEAL )
@@ -999,19 +1037,85 @@ void TMulti::Davies03temp( int jb, int je, int )
 
 // non-ideal fluid mixtures
 // ---------------------------------------------------------------------
+// Churakov-Gottschalk (2004) calculation of pure gas/fluid component fugacity
+// Added by D.Kulik on 15.02.2007
+//
+void
+TMulti::CGofPureGases( int jb, int je, int jpb, int jdb, int k )
+{
+    double T, P, Fugacity = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
+    float *Coeff, Eos4parPT[4] = { 0.0, 0.0, 0.0, 0.0 } ;
+    int jdc, j, retCode = 0;
+
+    TCGFcalc aCGF;
+    P = pmp->Pc;
+    T = pmp->Tc;
+
+//    Coeff = pmp->DMc+jdb;
+//    FugPure = (double*)malloc( NComp*sizeof(double) );
+//    FugPure = pmp->Pparc+jb;
+
+    for( jdc=0, j=jb; j<je; jdc++,j++)
+    {
+        Coeff = pmp->DMc+jdb+jdc*20;
+
+        // Calling CG EoS for pure fugacity
+        if( T >= 273.15 && T < 1e4 && P >= 1. && P < 1e5 )
+            retCode = aCGF.CGFugacityPT( Coeff, Eos4parPT, Fugacity, Volume,
+               DeltaH, DeltaS, P, T );
+        else {
+            Fugacity = pmp->Pc;
+            Volume = 8.31451*pmp->Tc/pmp->Pc;
+            Coeff[15] = Coeff[0];
+            if( Coeff[15] < 1. || Coeff[15] > 10. )
+                Coeff[15] = 1.;                 // foolproof temporary
+            Coeff[16] = Coeff[1];
+            Coeff[17] = Coeff[2];
+            Coeff[18] = Coeff[3];
+            return;
+        }
+
+        pmp->lnGmM[j] = log( Fugacity / pmp->Pc ); // Constant correction to G0 here!
+        pmp->Pparc[j] = Fugacity;          // Necessary only for performance
+        pmp->Vol[j] = Volume;       // molar volume of pure fluid component, J/bar
+
+        // passing corrected EoS coeffs to calculation of fluid mixtures
+        Coeff[15] = Eos4parPT[0];
+        if( Coeff[15] < 1. || Coeff[15] > 10. )
+            Coeff[15] = 1.;                            // foolproof temporary
+        Coeff[16] = Eos4parPT[1];
+        Coeff[17] = Eos4parPT[2];
+        Coeff[18] = Eos4parPT[3];
+    } // jdc, j
+
+    if ( retCode )
+    {
+      char buf[150];
+      sprintf(buf, "CG2004Fluid(): bad calculation of pure fugacities");
+      Error( "E71IPM IPMgamma: ",  buf );
+    }
+}
+
 // Churakov-Gottschalk (2004) multicomponent fluid mixing model
 //
 void
 TMulti::ChurakovFluid( int jb, int je, int, int jdb, int k )
 {
     double *FugCoefs;
-    float *EoSparam;
-    int j, jj;
+    float *EoSparam, *Coeffs;
+    int i, j, jj;
     double ro;
     TCGFcalc aCGF;
 
     FugCoefs = (double*)malloc( pmp->L1[k]*sizeof(double) );
-    EoSparam = pmp->DMc+jdb;
+    EoSparam = (float*)malloc( pmp->L1[k]*sizeof(double)*4 );
+    Coeffs = pmp->DMc+jdb;
+
+    // Copying T,P corrected coefficients
+    for( j=0; j<pmp->L1[k]; j++)
+       for( i=0; i<4; i++)
+          EoSparam[j*4+i] = Coeffs[j*20+i+15];
+//    EoSparam = pmp->DMc+jdb;
 
     ro = aCGF.CGActivCoefPT( pmp->X+jb, EoSparam, FugCoefs, pmp->L1[k],
         pmp->Pc, pmp->Tc );
@@ -1036,9 +1140,64 @@ TMulti::ChurakovFluid( int jb, int je, int, int jdb, int k )
 
 }
 
+#define MAXPRDCPAR 10
+// ---------------------------------------------------------------------
+// Entry to Peng-Robinson model for calculating pure gas fugacities
+// Added by D.Kulik on 15.02.2007
+//
+void
+TMulti::PRSVofPureGases( int jb, int je, int jpb, int jdb, int k )
+{
+    double /* *FugPure, */ Fugcoeff, Volume, DeltaH, DeltaS;
+    float *Coeff; //  *BinPar;
+    double Eos2parPT[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 } ;
+    int j, jj, jdc, iRet, NComp, retCode = 0;
+
+    NComp = 1; // = pmp->L1[k];
+
+    TPRSVcalc aPRSV( NComp, pmp->Pc, pmp->Tc );
+
+//    Coeff = pmp->DMc+jdb;
+//    FugPure = (double*)malloc( NComp*sizeof(double) );
+//    FugPure = pmp->Pparc+jb;
+
+    for( jdc=0, j=jb; j<je; jdc++,j++)
+    {
+         Coeff = pmp->DMc+jdb+jdc*10;
+         // Calling PRSV EoS for pure fugacity
+         retCode = aPRSV.PRFugacityPT( pmp->Pc, pmp->Tc, Coeff,
+                 Eos2parPT, Fugcoeff, Volume, DeltaH, DeltaS );
+
+//    aW.twp->H +=  DeltaH;   // in J/mol - to be completed
+//    aW.twp->S +=  DeltaS;   // to be completed
+
+         pmp->lnGmM[j] = log( Fugcoeff );    // Constant correction to G0 here!
+         pmp->Pparc[j] = Fugcoeff * pmp->Pc; // Necessary only for performance
+         pmp->Vol[j] = Volume;  // molar volume of pure fluid component, J/bar
+
+//  passing corrected EoS coeffs to calculation of fluid mixtures
+         Coeff[6] = Eos2parPT[0];      // a
+         Coeff[7] = Eos2parPT[1];      // b
+//         Coeff[8] = Eos2parPT[1];      // c
+//         Coeff[9] = Eos2parPT[1];      // d
+         // three more to add !!!  under construction
+
+    } // jdc, j
+
+    if ( retCode )
+    {
+      char buf[150];
+      sprintf(buf, "PRSVFluid(): bad calculation of pure fugacities");
+      Error( "E71IPM IPMgamma: ",  buf );
+    }
+
+//    free( FugPure );
+//    return retCode;
+}
+
 // ---------------------------------------------------------------------
 // Entry to Peng-Robinson model for activity coefficients
-// Added by Th.Wagner and D.Kulik on 19.07.2006
+// Added by Th.Wagner and D.Kulik on 19.07.2006, changed by DK on 15.02.2007
 //
 void
 TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k )
@@ -1050,22 +1209,29 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k )
     NComp = pmp->L1[k];
 
     TPRSVcalc aPRSV( NComp, pmp->Pc, pmp->Tc );
-    // Add a call to the constructor ??
 
     ActCoefs = (double*)malloc( NComp*sizeof(double) );
     EoSparam = pmp->DMc+jdb;
-    FugPure = pmp->Pparc+jb;
+//    FugPure = (double*)malloc( NComp*sizeof(double) );
+    FugPure = pmp->Pparc + jb;
     BinPar = pmp->PMc+jpb;
 
     for( j=jb; j<je; j++)
-     pmp->Wx[j] = pmp->X[j]/pmp->XF[k];
+       pmp->Wx[j] = pmp->X[j]/pmp->XF[k];
+
+//    for( jj=0; jj<NComp; jj++)
+//    {
+//        FugPure[jj] = pmp->Pparc[jb+jj]; // left for debugging
+//        FugPure[jj] = exp( pmp->lnGmM[jb+jj] ) * pmp->Pc ;
+//    }
 
     iRet = aPRSV.PRActivCoefPT( NComp, pmp->Pc, pmp->Tc, pmp->Wx+jb, FugPure,
-     BinPar, EoSparam, ActCoefs, PhVol );
+        BinPar, EoSparam, ActCoefs, PhVol );
 
     if ( iRet )
     {
       free( ActCoefs );
+//      free( FugPure );
       char buf[150];
       sprintf(buf, "PRSVFluid(): bad calculation");
       Error( "E71IPM IPMgamma: ",  buf );
@@ -1075,13 +1241,13 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k )
 
     for( jj=0, j=jb; j<je; j++, jj++ )
     {
-        if( ActCoefs[jj] > 1e-23 /* && pmp->Pparc[j] > 1e-23 */ )
+        if( ActCoefs[jj] > 1e-23 )
              pmp->lnGam[j] = log( ActCoefs[ jj ]);
         else
              pmp->lnGam[j] = 0;
     } /* j */
     free( ActCoefs );
-//  Call destructor?
+//    free( FugPure );
 }
 
 // ------------------ condensed mixtures --------------------------

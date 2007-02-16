@@ -165,7 +165,7 @@ STEP_POINT("After FIA");
      else
        Error( "E08IPM PhaseSelect(): "," Insertion of phases was incomplete!");
 
-  MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
+  MassBalanceResiduals( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
 
 #ifndef IPMGEMPLUGIN
 // STEPWISE (4) Stop point after PhaseSelect()
@@ -420,7 +420,7 @@ int TMulti::EnterFeasibleDomain()
         N=pmp->NR;
 
        // Calculation of mass-balance residuals in IPM
-       MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C);
+       MassBalanceResiduals( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C);
 
       // Testing mass balance residuals
        Z = pmp->N - pmp->E;
@@ -517,7 +517,7 @@ int TMulti::InteriorPointsMethod( )
         N = pmp->NR;
 //        memset( pmp->F, 0, pmp->L*sizeof(double));
 
-        PrimeChemicalPotentials( pmp->F, pmp->Y, pmp->YF, pmp->YFA );
+        PrimalChemicalPotentials( pmp->F, pmp->Y, pmp->YF, pmp->YFA );
 
         // Setting weight multipliers for DC
         WeightMultipliers( false );
@@ -548,7 +548,7 @@ int TMulti::InteriorPointsMethod( )
             else  pmp->DX= 0.5 * pmp->PCI;
         }
 
-       MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C );
+       MassBalanceResiduals( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C );
 
        pmp->FX=FX1;
        // Main IPM iteration done
@@ -591,7 +591,7 @@ STEP_POINT( "IPM Iteration" );
    else
         ConCalc( pmp->X, pmp->XF, pmp->XFA );
 
-   MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
+   MassBalanceResiduals( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
    return 0;
 }
 
@@ -605,7 +605,7 @@ STEP_POINT( "IPM Iteration" );
 //          B - Input bulk chem. compos. (N)
 //          C - mass balance residuals (N)
 void
-TMulti::MassBalanceDeviations( int N, int L, float *A, double *Y, double *B,
+TMulti::MassBalanceResiduals( int N, int L, float *A, double *Y, double *B,
          double *C )
 {
     int ii, jj, i;

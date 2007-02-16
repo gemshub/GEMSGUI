@@ -189,13 +189,13 @@ typedef struct
     *YOF,     // Phase metastability parameter (spec.surf.energy), in J/g [FI !!!!]
     *Vol,     // DC molar volumes, cm3/mol [L]
     *MM,      // DC molar masses, g/mol [L]
-    *Pparc,   // DC partial pressures, bar (Pc by default) [0:L-1]
+    *Pparc,   // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
     *Y_m,     // Molalities of aqueous species and sorbates [0:Ls-1]
     *Y_la,    // log activity of DC in multi-component phases[0:Ls-1]
     *Y_w,     // Mass concentrations of DC in multi-component phases,%(ppm)[Ls]
     *Gamma,   // DC activity coefficients [0:L-1]
     *lnGmf,   // ln of initial DC activity coefficients [0:L-1]
-    *lnGmM,   // ln of DC metastability coefficients (reserved)[0:L-1]
+    *lnGmM,   // ln of DC pure gas fugacity (or metastability) coefficients [0:L-1]
     *EZ,      // Formula charge of DC in multi-component phases [0:Ls-1]
     *FVOL,    // phase volumes, cm3/mol                   [0:FI-1]
     *FWGT,    // phase (carrier) masses, g                [0:FI-1]
@@ -341,9 +341,9 @@ class TMulti
     void Set_DC_limits( int Mode );
     void TotalPhases( double X[], double XF[], double XFA[] );
     double Ej_init_calc( double, int j, int k);
-    double  PrimeChemPot(  double G,  double logY,  double logYF,
+    double  PrimalDC_ChemPot(  double G,  double logY,  double logYF,
                            double asTail,  double logYw,  char DCCW );
-    void PrimeChemicalPotentials( double F[], double Y[],
+    void PrimalChemicalPotentials( double F[], double Y[],
                                   double YF[], double YFA[] );
     double KarpovCriterionDC( double *dNuG, double logYF, double asTail,
                               double logYw, double Wx,  char DCCW );
@@ -385,7 +385,9 @@ class TMulti
     void SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k );
 // fluid mixtures
     void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
+    void CGofPureGases( int jb, int je, int jpb, int jdb, int k );
     void PRSVFluid( int jb, int je, int jpb, int jdb, int k );
+    void PRSVofPureGases( int jb, int je, int jpb, int jdb, int k );
 // condensed mixtures
     void RedlichKister( int jb, int je, int jpb, int jdb, int k );
     void MargulesBinary( int jb, int je, int jpb, int jdb, int k );
@@ -398,7 +400,7 @@ class TMulti
     void SimplexInitialApproximation( );
 
 // ipm_main.cpp - miscellaneous fuctions of GEM-IPM2
-   void MassBalanceDeviations( int N, int L, float *A, double *Y,
+   void MassBalanceResiduals( int N, int L, float *A, double *Y,
                                double *B, double *C );
    double LMD( double LM );
    void RaiseZeroedOffDCs( int iStart, int iEnd, double sfactor, int JJ=-1 );

@@ -561,7 +561,7 @@ double TMulti::Ej_init_calc( double, int j, int k)
 // molar Gibbs energy gT (obtained from pmp->G[])
 // On error returns F = +7777777.
 //
-double TMulti::PrimeChemPot(
+double TMulti::PrimalDC_ChemPot(
     double G,      // gT0+gEx
     double logY,   // ln x
     double logYF,  // ln Xa
@@ -599,7 +599,7 @@ double TMulti::PrimeChemPot(
 // VJ - Update of primal chemical potentials
 //
 void
-TMulti::PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA[] )
+TMulti::PrimalChemicalPotentials( double F[], double Y[], double YF[], double YFA[] )
 {
     int i,j,k;
     double v, Yf; // v is debug variable
@@ -624,7 +624,7 @@ TMulti::PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA
            gstring pbuf(pmp->SF[k],0,20);
            char buf[200];
            sprintf( buf, "Broken IPM solution: Phase %s  Yf= %lg", pbuf.c_str(), Yf );
-           Error( "E13IPM PrimeChemicalPotentials():", buf);
+           Error( "E13IPM PrimalChemicalPotentials():", buf);
 //           Yf = pmp->YFk;
         }
         if( pmp->YFk > pmp->lowPosNum*10. )
@@ -644,7 +644,7 @@ TMulti::PrimeChemicalPotentials( double F[], double Y[], double YF[], double YFA
             if( Y[j] < pmp->lowPosNum )
                 continue;  // exception by minimum DC quantity
                            // calculate chemical potential of j-th DC
-            v = PrimeChemPot( pmp->G[j], log(Y[j]), pmp->logYFk,
+            v = PrimalDC_ChemPot( pmp->G[j], log(Y[j]), pmp->logYFk,
                               pmp->aqsTail, pmp->logXw, pmp->DCCW[j] );
             F[j] = v;
         }   // j

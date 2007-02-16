@@ -113,7 +113,7 @@ void TMulti::SimplexInitialApproximation( )
         TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
 
         pmp->FX = GX( 0.0 ); // calculation of initial G(X) value
-        MassBalanceDeviations( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C );
+        MassBalanceResiduals( pmp->N, pmp->L, pmp->A, pmp->Y, pmp->B, pmp->C );
         // Deleting work arrays
         if( DN) delete[]DN;
         if( DU) delete[]DU;

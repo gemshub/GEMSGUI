@@ -240,15 +240,13 @@ void TMulti::MultiCalcInit( const char */*key*/ )
     pmp->YMET = 0;
     pmp->PCI = 0.0;
 
-/* calc mass of system */
-pmp->MBX = 0.0;
-for(int i=0; i<pmp->N; i++ )
-{
-    pmp->MBX += pmp->B[i] * (double)pmp->Awt[i];
-}
-pmp->MBX /= 1000.;
-
-
+    // calculating mass of the system
+    pmp->MBX = 0.0;
+    for(int i=0; i<pmp->N; i++ )
+    {
+        pmp->MBX += pmp->B[i] * (double)pmp->Awt[i];
+    }
+    pmp->MBX /= 1000.;
 
     if( /*pmp->pESU  &&*/ pmp->pNP )     // problematic statement !!!!!!!!!
     {
