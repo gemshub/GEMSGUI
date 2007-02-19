@@ -639,9 +639,20 @@ void TProfil::PMtest( const char *key )
    //if( pmp->pNP == 0 )
    //    pmp->pESU = 0;
 
-  // no old solution => must be simplex
+   // no old solution => must be simplex
    if( pmp->pESU == 0 )
         pmp->pNP = 0;
+
+   // test changes in the modified system relative to MULTI
+   pmp->pBAL =  BAL_compare();
+   if( !pmp->pBAL ) // if some vectors were allocated or some dimensions changed
+   {
+       pmp->pIPN = 0;
+       pmp->pTPD = 1; // reload Go, Vol
+   }
+
+//   if( !pmp->pBAL /* && !pmp->sitE */ ) // 2007
+//        pmp->pIPN = 0;
 
     // special set up from process
     if( Proc->pep->Istat == P_EXECUTE ||
@@ -652,16 +663,9 @@ void TProfil::PMtest( const char *key )
         else
             pmp->pNP = 1;
     }
-    else
-     if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE ) // 2007 ?????
-        pmp->pIPN = 0;
-
-    // test changes in the modified system relative to MULTI
-    pmp->pBAL =  BAL_compare();
-    if( !pmp->pBAL ) // if some vectors were allocated or some dimensions changed
-    {    pmp->pIPN = 0;
-         pmp->pTPD = 1; // reload Go, Vol
-    }
+//    else   //  This was used until 19.02.2007
+//     if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE )
+//        pmp->pIPN = 0;
 
     // Get P and T from key
     gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);

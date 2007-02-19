@@ -423,8 +423,7 @@ void TMulti::MultiCalcInit( const char *key )
         }
     }
 
-    if( pmp->FIs /* && pmp->pIPN <=0 */ )  // SD 29/11/2006 temporary until
-                                           // fluid models will be finalized
+    if( pmp->FIs && pmp->pIPN <=0 )  // fluid models finalized
     { // not done if these models are already present in MULTI !
         pmp->PD = TProfil::pm->pa.p.PD;
         SolModLoad();   // Call point to loading mixing models
