@@ -1,4 +1,7 @@
 19/02/2007
+  Added output of  time calculate for modules
+
+19/02/2007
   To make separate Unspace
    1. Unload DataCH and DataBR using Gem2mt module type 'S' or 'U'
    2. Unload inital Unspace using pscript

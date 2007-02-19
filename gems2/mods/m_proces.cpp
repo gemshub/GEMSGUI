@@ -1222,9 +1222,7 @@ nRec = rt[RT_SYSEQ].Find(pep->stkey);
 if( nRec >= 0)
    PRof->loadSystat( pep->stkey );   // read SysEq record and unpack data
 
-ModUpdate("Pe_calc    Finished OK");
-
-
+// ModUpdate("");
 }
 
 //internal calc record structure

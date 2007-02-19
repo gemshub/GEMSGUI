@@ -41,7 +41,7 @@
 
 #define Inherited ProgressDialogData
 
-void 
+void
 ProgressDialog::switchToAccept(bool isAccept)
 {
  QToolTip::remove( pStepAccept );
@@ -123,8 +123,8 @@ ProgressDialog::ProgressDialog(QWidget* parent,	bool step, bool autoclose_):
 
 	timer->start( pVisorImp->updateInterval()*100, TRUE );
     }
-     Update(true);
-
+    t_start = clock();
+    Update(true);
 }
 
 
@@ -132,7 +132,7 @@ ProgressDialog::~ProgressDialog()
 {
     delete calcThread;
 // timer deleted with the parent
-//    delete timer;  
+//    delete timer;
 }
 
 
@@ -163,7 +163,7 @@ ProgressDialog::CmStep()
 	    else {
 		throw calcThread->error;
 	    }
-	}	
+	}
 
 /*	if( pVisorImp->getWaitProgress().wait(10000) == FALSE )
 	{
@@ -273,7 +273,7 @@ ProgressDialog::Run()
 	    if( calcThread->error.title != "" ) {
 		throw calcThread->error;
 	    }
-	}	
+	}
 
     }
     catch( TError& err)
@@ -296,9 +296,9 @@ ProgressDialog::CalcFinished()
 	close();
 	return;
     }
-    
+
     switchToAccept(true);
-    
+
     pResume->hide();
     pStepAccept->show();
     pClose->setText("&Discard");
@@ -343,7 +343,7 @@ ProgressDialog::CmClose()
 	    ThreadControl::wakeOne();	// let's tell the calc that all is over
 	    calcThread->wait();
 	}
-    
+
 //    calcTread->clean_up(); // will be called in closeEvent()
     close();
 }
@@ -447,6 +447,13 @@ ProgressDialog::Update(bool force)
     if (progr > 7)
         progr = 7;
     pProgress->setProgress(progr);
+
+    clock_t t_end = clock();
+    clock_t dtime = ( t_end- t_start );
+    str.sprintf("GEM IPM Minimization (run time: %lg s).",
+               (double)dtime/(double)CLOCKS_PER_SEC);
+    TextLabel1->setText(tr(str));
+
 
 //    last_update = time(0);
     update();

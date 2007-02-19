@@ -8,7 +8,7 @@
 //
 // This file is part of the GEM-Vizor library which uses the
 // Qt v.2.x GUI Toolkit (Troll Tech AS, http://www.trolltech.com)
-// according to the Qt Duo Commercial license  
+// according to the Qt Duo Commercial license
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -37,6 +37,7 @@ class ProgressDialog : public ProgressDialogData
     CalcThread* calcThread;
     QTimer* timer;
     bool autoclose;
+    clock_t t_start;
 
     void switchToAccept(bool isAccept);
 
