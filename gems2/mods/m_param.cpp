@@ -608,12 +608,25 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 // GEM IPM calculation of equilibrium state in MULTI
 void TProfil::calcMulti()
 {
-    // MultiCalcInit( keyp.c_str() );
-    multi->CompG0Load();
-    if( multi->AutoInitialApprox() == false )
-        multi->MultiCalcIterations();
+  TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
+  calcFinished = false;
 
+  if( fabs( tpp->curT - pmp->TCc ) > 1.e-10 ||
+         fabs( tpp->curP - pmp->Pc ) > 1.e-10 )
+   { // load new MTPARM on T or P
+      mtparm->LoadMtparm( pmp->TCc, pmp->Pc );
+      pmp->pTPD = 0;
+    }
+   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
+  // multi->CompG0Load(); //16/02/2007
 
+  if( multi->AutoInitialApprox() == false )
+       multi->MultiCalcIterations();
+
+  calcFinished = true;
+
+  STat->setCalcFlag( true );
+  STat->CellChanged();
 }
 
 // Setup of flags for MULTY remake

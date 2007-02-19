@@ -299,6 +299,9 @@ class TUnSpace : public TCModule
     GraphWindow *gd_gr;
     TPlotLine *plot;
 
+    SYSTEM *syu;
+     MULTI *pmu;
+
 
 protected:
 

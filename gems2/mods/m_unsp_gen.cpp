@@ -3,13 +3,12 @@
 
 #include "m_unspace.h"
 #include "s_formula.h"
-#include "m_syseq.h"
 #include "service.h"
 #include "visor.h"
 
 
 //=========================================================================
-// Generation part
+// Generation task part
 //=========================================================================
 
 short Prime[]=
@@ -326,10 +325,10 @@ void TUnSpace::init_generation( )
   UNIFORM0( 0 );
   UNIFORM0( 1 );
 
-  if( TProfil::pm->syp->Guns )
-    memset( TProfil::pm->syp->Guns, 0, TProfil::pm->mup->L*sizeof(float) );
-  if( TProfil::pm->syp->Vuns )
-    memset( TProfil::pm->syp->Vuns, 0, TProfil::pm->mup->L*sizeof(float) );
+  if( syu->Guns )
+    memset( syu->Guns, 0, TProfil::pm->mup->L*sizeof(float) );
+  if( syu->Vuns )
+    memset( syu->Vuns, 0, TProfil::pm->mup->L*sizeof(float) );
 
 // copy data from second column
 
@@ -411,168 +410,6 @@ int TUnSpace::calc_nPG()
            count++;
   return count;
 }
-
-//calculation number of unspace components
-double TUnSpace::value_nPG( int line, int q )
-{
-  int j, count=0;
-
-  if( usp->PsGen[3]== S_ON &&  usp->NgT > 0 )
-  {   if( line == count )
-       return usp->vT[q];
-      count++;
-  }
-  if( usp->PsGen[4]== S_ON &&  usp->NgP > 0 )
-  {   if( line == count )
-       return usp->vP[q];
-      count++;
-  }
-  if( /*usp->PsGen[]== S_ON && */ usp->NgV > 0 )
-  {   if( line == count )
-       return usp->vV[q];
-      count++;
-  }
-
-  if( usp->PsGen[2]== S_ON )
-     for( j=0; j<usp->N; j++)
-       if( usp->NgNb[j] > 0  )
-       {   if( line == count )
-          return usp->vB[q*usp->N+j];
-         count++;
-        }
-
-  if( usp->PsGen[0]== S_ON )
-     for( j=0; j<usp->L; j++)
-       if( usp->NgLg[j] > 0  )
-       {   if( line == count )
-          return usp->vG[q*usp->L+j];
-         count++;
-        }
-
-  if( usp->PsGen[1]== S_ON )
-     for( j=0; j<usp->L; j++)
-       if( usp->NgLs[j] > 0  )
-       {   if( line == count )
-          return usp->vS[q*usp->L+j];
-         count++;
-        }
-
-  if( usp->PsGen[5]== S_ON )
-     for( j=0; j<usp->L; j++)
-       if( usp->NgLv[j] > 0  )
-       {   if( line == count )
-          return usp->vmV[q*usp->L+j];
-         count++;
-        }
-
-  if( usp->PsGen[6]== S_ON )
-     for( j=0; j<usp->Ls; j++)
-       if( usp->NgGam[j] > 0  )
-       {   if( line == count )
-          return usp->vNidP[q*usp->Ls+j];
-          count++;
-        }
-
-  return 0;
-}
-
-
-//set up new data and inervals for  unspace components
-void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
-{
-  int j, count=0;
-
-  if( usp->PsGen[3]== S_ON &&  usp->NgT > 0 )
-  {   if( line == count )
-      {
-       usp->T[0] = new_val;
-       usp->IntT[0] = new_int;
-       return;
-      }
-      count++;
-  }
-  if( usp->PsGen[4]== S_ON &&  usp->NgP > 0 )
-  {   if( line == count )
-      {
-       usp->P[0] = new_val;
-       usp->IntP[0] = new_int;
-       return;
-      }
-      count++;
-  }
-  if( /*usp->PsGen[]== S_ON && */ usp->NgV > 0 )
-  {   if( line == count )
-      {
-       usp->V[0] = new_val;
-       usp->IntV[0] = new_int;
-       return;
-      }
-      count++;
-  }
-
-  if( usp->PsGen[2]== S_ON )
-     for( j=0; j<usp->N; j++)
-       if( usp->NgNb[j] > 0  )
-       {  if( line == count )
-          {
-            usp->Bs[j][0] = new_val;
-            usp->IntNb[j][0] = new_int;
-            return;
-          }
-         count++;
-     }
-
-  if( usp->PsGen[0]== S_ON )
-     for( j=0; j<usp->L; j++)
-       if( usp->NgLg[j] > 0  )
-       {   if( line == count )
-           {
-            usp->Gs[j][0] = (float)new_val;
-            usp->IntLg[j][0] = new_int;
-            TProfil::pm->syp->GEX[j] =
-               usp->Gs[j][0]-float(TProfil::pm->tpp->G[j]);
-            return;
-           }
-         count++;
-        }
-
-  if( usp->PsGen[1]== S_ON )
-     for( j=0; j<usp->L; j++)
-       if( usp->NgLs[j] > 0  )
-       {   if( line == count )
-           {
-             usp->Ss[j][0] = new_val;
-             usp->IntLs[j][0] = new_int;
-             return;
-           }
-         count++;
-        }
-
-  if( usp->PsGen[5]== S_ON )
-     for( j=0; j<usp->L; j++)
-       if( usp->NgLv[j] > 0  )
-       {   if( line == count )
-           {
-             usp->Vs[j][0] = new_val;
-             usp->IntLv[j][0] = new_int;
-             return;
-           }
-         count++;
-        }
-
-  if( usp->PsGen[6]== S_ON )
-     for( j=0; j<usp->Ls; j++)
-       if( usp->NgGam[j] > 0  )
-       {   if( line == count )
-           {
-             usp->GAMs[j][0] = new_val;
-             usp->IntGam[j][0] = new_int;
-             return;
-           }
-          count++;
-        }
-}
-
 
 //build list of unspace components
 void TUnSpace::build_nPG_list()
@@ -685,359 +522,6 @@ void TUnSpace::init_analyse( )
   aFo.Clear();
 }
 
-
-// make EqStat key  && calculate records
-void TUnSpace::unsp_eqkey()
-{
-    vstr buf(40);
-
-    sprintf(buf, "%.4d", usp->q);
-    memset(usp->timep, 0, 5 );
-    strncpy(usp->timep, buf, 4 );
-    gcvt( usp->Tc, 6,  usp->TCp );
-    gcvt( usp->Pc, 6,  usp->Pp );
-    gcvt( usp->Vc, 6,  usp->Bnamep );
-
-   rt[RT_SYSEQ].MakeKey( RT_UNSPACE,  usp->stkey, RT_UNSPACE, 0, RT_UNSPACE,1,
-        RT_UNSPACE, 2, K_IMM, usp->timep, K_IMM, usp->Bnamep,
-        K_IMM, usp->Pp, K_IMM, usp->TCp, RT_UNSPACE, 7, K_END );
-   rt[RT_SYSEQ].Find(usp->stkey);
-
-// calc current SyStat
-    TProfil::pm->CalcEqstat( false );
-    if( usp->PsSY != S_OFF )
-       TSysEq::pm->CmSave();           // save results to DB
-    if( usp->stl )
-       memcpy( usp->stl+usp->q, usp->stkey, EQ_RKLEN );
-}
-
-
-// building arrays for make pay off matrix
-void TUnSpace::buildTestedArrays()
-{
- int i;
- short Ip;
-
- for( Ip=0; Ip<usp->Q; Ip++)
- {
-    usp->q = Ip;
-
-   pVisor->Message( window(), GetName(),
-             "Generation of EqStat records\n"
-                 "Please, wait...", usp->q, usp->Q);
-
- // setup uncertainty point data
-     NexT( Ip );
-
- // calculate EqStat record (Thermodynamic&Equlibria)
-     TProfil::pm->pmp->pTPD = 0;
-     unsp_eqkey();
-
- // set zeros for tested arrays
- if(usp->PsGen[0]== S_ON  )
- {   for( i=0; i<usp->L; i++)
-    {
-       usp->vY[Ip*usp->L+i]  = 0.;
-       usp->vGam[Ip*usp->L+i]= 0.;
-       usp->vG[Ip*usp->L+i]= 0.;
-    }
-    for( i=0; i<usp->Fi; i++)
-         usp->vYF[Ip*usp->Fi+i] = 0.;
-    for( i=0; i<usp->N; i++)
-    {
-       usp->vU[Ip*usp->N+i] = 0.;
-       usp->vMol[Ip*usp->N+i] = 0.;
-    }
-    if(usp->Ls/*TProfil::pm->mup->Pg*/)
-       for( i=0; i<usp->Ls; i++)
-            usp->vFug[Ip*usp->Ls+i] = 0.;
-
- // copy data from multy
-    for( i=0; i<TProfil::pm->pmp->L; i++)
-    {
-      usp->vY[Ip*usp->L+(TProfil::pm->pmp->muj[i])]  =
-                                         TProfil::pm->pmp->X[i];
-      usp->vGam[Ip*usp->L+(TProfil::pm->pmp->muj[i])]=
-                                         TProfil::pm->pmp->lnGam[i];
-
-//      usp->vG[Ip*usp->L+(TProfil::pm->pmp->muj[i])]=
-//                                     TProfil::pm->pmp->G[i];
-     }
-
-    for( i=0; i<usp->L; i++)
-    {
-      double xx = (float)(TProfil::pm->syp->Guns[i]);
-             xx += (float)(TProfil::pm->syp->GEX[i]);
-             xx += TProfil::pm->tpp->G[i];
-      usp->vG[Ip*usp->L+i]= xx;
-     }
-
-    for( i=0; i<TProfil::pm->pmp->FI; i++)
-       usp->vYF[Ip*usp->Fi+(TProfil::pm->pmp->muk[i])] =
-                                           TProfil::pm->pmp->XF[i];
-
-    for( i=0; i<TProfil::pm->pmp->N; i++)
-    {
-       usp->vU[Ip*usp->N+(TProfil::pm->pmp->mui[i])] = TProfil::pm->pmp->U[i];
-       usp->vMol[Ip*usp->N+(TProfil::pm->pmp->mui[i])] =
-                                                    TProfil::pm->pmp->IC_m[i];
-    }
-    usp->vpH[Ip][0] = TProfil::pm->pmp->pH;
-    usp->vpH[Ip][1] = TProfil::pm->pmp->Eh;
-    usp->vpH[Ip][2] = TProfil::pm->pmp->IC;
-    if(usp->Ls/*TProfil::pm->mup->Pg*/)
-       for( i=0; i<TProfil::pm->pmp->Ls; i++)
-          usp->vFug[Ip*usp->Ls+(TProfil::pm->pmp->muj[i])] =
-                TProfil::pm->pmp->Y_la[i];
-
-    usp->vT[Ip]= TProfil::pm->pmp->TCc;
-    usp->vP[Ip]= TProfil::pm->pmp->Pc;
-    usp->vV[Ip]= TProfil::pm->pmp->VXc;
-  }
-  // added for copy of input data
-  if( usp->PsGen[1]== S_ON )
-    for( i=0; i<usp->L; i++)
-      if( TProfil::pm->tpp->S )
-          usp->vS[i] = TProfil::pm->tpp->S[i];
-
-
-  if( usp->PsGen[5]== S_ON )
-    for( i=0; i<usp->L; i++)
-    {
-      double xx = TProfil::pm->syp->Vuns[i];
-             xx += TProfil::pm->tpp->Vm[i];
-      usp->vmV[Ip*usp->L+i]= xx;
-    }
-
-  if( usp->PsGen[2]== S_ON )
-    for( i=0; i<usp->N; i++)
-    {    double xx = TProfil::pm->syp->B[i];
-         usp->vB[i] = xx;
-    }
-
-//  if(usp->PsGen[6]== S_ON && usp->Ls )   // new by DK
-//    for( i=0; i<usp->Ls; i++)
-//    {    usp->vNidP[i] = ?????;
-//    }
-
- }
-}
-
-
-
-//===============================================
-// From Kostya  (not for changed)
-
-/*  select initial values x0 */
-void TUnSpace::UNIFORM0( int reg )
-// reg: 0 - uniform, 1 - normal
-// usp->OVR - ravnomernye sluchainye chusla
-// usp->OVN - normal sluchainye chusla
-{
-  int i,j,k;
-  double R;
-
-  if(!reg)
-    k=usp->nGR;
-  else
-    k=usp->nGN;
-
-  for(i=0;i<k;i++)
-  {   j=rand();
-      R=ceil(24359738368.*j/RAND_MAX + 10000000000.);
-      if(!fmod(R,2))
-         R=R+1.;
-       if(!reg)
-         usp->OVR[i+1]=R;
-       else
-         usp->OVN[i+1]=R;
-    }
-}
-
-void TUnSpace::BELOV(int QT, int NG, float *OVB)
-// QT - kol-vo points
-// NG - kol-vo groups
-// OVB - chisla po zakonu Belova
-{
-   int QT2,i,j,k,D,B,W,MC,m2,*LI,*LI1;
-
-   QT2=(QT-1)/2;
-
-   LI = new int[QT2+1];
-   LI1 = new int[QT2+1];
-
-   W=floor(float(NG)/float(QT2));
-   if(W)
-   {  k=1;
-      for(i=1;i<=QT2;i++)
-         for(j=0;j<=W-1;j++)
-            OVB[i+j*QT2]=i;
-   }
-   else
-      k=0;
-   W*=QT2;
-   if(W>=NG)
-    {
-        delete[] LI;
-        delete[] LI1;
-        return;
-    }
-
-  OVB[W+1]=k*QT2+1;
-  for(i=1;i<=QT2;i++)
-   LI[i]=WL(i,OVB[W+1],QT);
-  for(D=W+2;D<=NG;D++)
-  { MC=0;
-    for(j=1;j<=QT;j++)
-    { for(i=1;i<=QT2;i++)
-         LI1[i]=WL(i,j,QT)+LI[i];
-      B=LI1[1];
-      for(i=2;i<=QT2;i++)
-        if(LI1[i]<B)
-           B=LI1[i];
-      m2=0;
-      if(B==MC)
-       for(i=1;i<=D-1;i++)
-         if(OVB[i]==OVB[D])
-         { OVB[D]=j;
-            m2=1;
-            break;
-         }
-       if(!m2&&B>MC)
-         { MC=B;
-           OVB[D]=j;
-         }
-      }
-      for(i=1;i<=QT2;i++)
-        LI[i]+=WL(i,OVB[D],QT);
-   }
-  delete[] LI;
-  delete[] LI1;
-}
-
-int TUnSpace::WL(int i,int j,int QT)
-{ int W;
-  W=i*j-floor(float(i*j)/float(QT))*QT;  //  ??????????
-  if( QT-W < W )
-      W=QT-W;
-  return(W);
-}
-
-// Belov point
-float TUnSpace::PNTBEL(int J,int QT,int OV)
-// J - number point
-// QT - numbers points
-// OV -  number of Belov for group
-{ float TB;
-  TB=fabs(float(J*OV)-floor(float(J*OV)/float(QT))*float(QT));
-  TB+=(QT-1)/2;
-  while(1)
-   if(TB>=QT) TB-=QT;
-    else break;
-  return(TB);
-}
-
-// uniform point
-double TUnSpace::ravrand(double *x)
-{ double m35=34359738368., m36=68719476736., m37=137438953472.;
-  float a=0.,b=1.;
-  *x=*x*5.;
-  if(*x>=m37) *x=*x-m37;
-  if(*x>=m36) *x=*x-m36;
-  if(*x>=m35) *x=*x-m35;
- return(*x/m35*(b-a)+a);
-}
-
-// normal point
-double TUnSpace::norrand(double *x)
-{ double R1=0.;
-  int j;
-  for(j=0;j<101;j++)
-    R1+=ravrand(x);
-      R1=(R1-101./2.)/pow(101./12.,0.5);
-           R1=1./6.*(R1-(-3.0));
-           if(R1<0.) R1=0.;
-           if(R1>1.) R1=1.;
-           return(R1);
-/*return(1./9.*(R1-(-4.5)));*/
-}
-
-// Next point space uncertainty
-void  TUnSpace::NexT(int J )
-// J - point of sample
-{
-  int i,j,k1,k2,k3;
-  float R;
-  double x, xx;
-
-  k1 = k2 = k3 = 1;
-  for(i=1; i<=usp->nG; i++)
-  { if(!usp->PbD[i-1])
-    {  R = PNTBEL( J, usp->Q, usp->OVB[k1]);
-      k1++;
-      if(usp->Q > 1)
-         R/=(usp->Q-1);
-    }
-   if(usp->PbD[i-1]==1)
-     {  x = usp->OVR[k2];
-        R = ravrand(&x);
-        usp->OVR[k2] = x;
-        k2++;
-     }
-   if(usp->PbD[i-1]==2)
-     {  x = usp->OVN[k3];
-        R = norrand(&x);
-        usp->OVN[k3] = x;
-        k3++;
-     }
-    usp->ncp[J*usp->nG+(i-1)]=R;
-
-   if( usp->PsGen[0]== S_ON || usp->PsGen[1]== S_ON || usp->PsGen[5]== S_ON )
-    for( j=0; j<usp->L; j++)
-     if(usp->PsGen[0]== S_ON && usp->NgLg[j]==i||
-        usp->PsGen[1]== S_ON && usp->NgLs[j]==i||
-        usp->PsGen[5]== S_ON && usp->NgLv[j]==i)
-     {
-
-      if(usp->PsGen[0]== S_ON && usp->NgLg[j]==i)
-      {
-        xx = 2*usp->IntLg[j][0]*R-usp->IntLg[j][0];
-        TProfil::pm->syp->Guns[j] = xx;
-      }
-/*      if(usp->PsGen[1]== S_ON&& usp->NgLs[j]==i)
-      {  xx = usp->Ss[j][0] - usp->IntLs[j][0]+2*usp->IntLs[j][0]*R;
-//         usp->R1[ii*17+3]= xx;
-      }
-*/
-      if(usp->PsGen[5]== S_ON&& usp->NgLv[j]==i)
-      {
-        xx = 2*usp->IntLv[j][0]*R-usp->IntLv[j][0];
-        TProfil::pm->syp->Vuns[j] = xx;
-      }
-    }
-    if( usp->PsGen[2]== S_ON )
-     for(j=0; j<usp->N; j++)
-     {  if( usp->NgNb[j] == i)
-        { xx = usp->Bs[j][0] - usp->IntNb[j][0] + 2*usp->IntNb[j][0]*R;
-          if( xx < 0 )
-            xx = 0.;
-          TProfil::pm->syp->B[j]= xx;
-        }
-     }
-    if( usp->PsGen[3]== S_ON && usp->NgT==i )
-     { xx = usp->T[0] - usp->IntT[0] + 2* usp->IntT[0]*R;
-       usp->Tc = xx;
-       if(usp->Tc<0.)
-          usp->Tc=0.;
-     }
-   if( usp->PsGen[4]== S_ON && usp->NgP==i )
-     {
-       xx = usp->P[0]- usp->IntP[0] + 2*usp->IntP[0]*R;
-       usp->Pc = xx;
-       if(usp->Pc<0.) usp->Pc = 1e-5;
-     }
-   }
-}
 
 //=================================================================
 // Graphics and math scripts
@@ -1174,5 +658,373 @@ TUnSpace::SaveGraphData( GraphData *gr )
     return true;
 }
 
+//=====================================================
+
+// insert changes in Project to TUnSpace
+void TUnSpace::InsertChanges( TIArray<CompItem>& aIComp,
+    TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
+{
+// make copy of UNSPACE  structure (only for changed arrays )
+   ods_link(-2);  //1
+   memcpy( &us[1].N, &us[0].N, 32 );
+   memcpy( &us[1].PunE, &us[0].PunE, 38 );
+   dyn_new(1);
+
+//********************************************************
+   // copy arrays
+  if(usp->PsGen[0] == S_ON )
+  {
+    memcpy( us[1].Gs, us[0].Gs, us[1].L*2*sizeof(float) );
+    memcpy( us[1].NgLg, us[0].NgLg, us[1].L*sizeof(short) );
+    memcpy( us[1].IntLg, us[0].IntLg, us[1].L*2*sizeof(float) );
+
+    memcpy( us[1].vG, us[0].vG, us[1].Q*us[1].L*sizeof(double) );
+    memcpy( us[1].vY, us[0].vY, us[1].Q*us[1].L*sizeof(double) );
+    memcpy( us[1].vYF, us[0].vYF, us[1].Q*us[1].Fi*sizeof(double) );
+    memcpy( us[1].vGam, us[0].vGam, us[1].Q*us[1].L*sizeof(double) );
+    memcpy( us[1].vMol, us[0].vMol, us[1].Q*us[1].N*sizeof(double) );
+    memcpy( us[1].vU, us[0].vU,     us[1].Q*us[1].N*sizeof(double) );
+  }
+
+  if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+  {
+    memcpy( us[1].m_t_lo, us[0].m_t_lo, us[1].N*sizeof(float) );
+    memcpy( us[1].m_t_up, us[0].m_t_up, us[1].N*sizeof(float) );
+  }
+
+  if( usp->PsGen[0] == S_ON  && usp->Ls )
+    memcpy( us[1].vFug, us[0].vFug, us[1].Q*us[1].Ls*sizeof(double) );
+
+  if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+  {
+    memcpy( us[1].fug_lo, us[0].fug_lo, us[1].Ls*sizeof(float) );
+    memcpy( us[1].fug_up, us[0].fug_up, us[1].Ls*sizeof(float) );
+  }
+
+  if(usp->PsGen[1]== S_ON)
+  {
+    memcpy( us[1].Ss, us[0].Ss, us[1].L*2*sizeof(float) );
+    memcpy( us[1].NgLs, us[0].NgLs, us[1].L*sizeof(short) );
+    memcpy( us[1].IntLs, us[0].IntLs, us[1].L*2*sizeof(float) );
+    memcpy( us[1].vS, us[0].vS, us[1].L*us[1].Q*sizeof(double) );
+  }
+
+  if(usp->PsGen[5]== S_ON)
+  {
+    memcpy( us[1].Vs, us[0].Vs, us[1].L*2*sizeof(float) );
+    memcpy( us[1].NgLv, us[0].NgLv, us[1].L*sizeof(short) );
+    memcpy( us[1].IntLv, us[0].IntLv, us[1].L*2*sizeof(float) );
+    memcpy( us[1].vmV, us[0].vmV, us[1].L*us[1].Q*sizeof(double) );
+  }
+
+  if(usp->PsGen[2]== S_ON)
+  {
+    memcpy( us[1].NgNb, us[0].NgNb, us[1].N*sizeof(short) );
+    memcpy( us[1].IntNb, us[0].IntNb, us[1].N*2*sizeof(float) );
+    memcpy( us[1].Bs, us[0].Bs, us[1].N*2*sizeof(double) );
+    memcpy( us[1].vB, us[0].vB, us[1].N*us[1].Q*sizeof(double) );
+  }
+
+  if(usp->PsGen[6]== S_ON)   // new by DK
+  {
+    memcpy( us[1].NgGam, us[0].NgGam, us[1].Ls*sizeof(short) );
+    memcpy( us[1].IntGam, us[0].IntGam, us[1].Ls*2*sizeof(float) );
+    memcpy( us[1].GAMs, us[0].GAMs, us[1].Ls*2*sizeof(float) );
+    memcpy( us[1].vNidP, us[0].vNidP, us[1].Ls*us[1].Q*sizeof(double) );
+  }
+
+//  not for icomps, free array
+//  if(  usp->Pa_f_pha == S_ON)
+//    memcpy( us[1].f_PhA, us[0].f_PhA, us[1].N*sizeof(short) );
+
+//*********************************************************/
+//  resize us[0]
+
+   ods_link(-1);
+   usp->N = TProfil::pm->mup->N;
+   usp->L = TProfil::pm->mup->L;
+   usp->Fi = TProfil::pm->mup->Fi;
+   usp->Ls = TProfil::pm->mup->Ls;
+   dyn_new(0);
+
+   // recorb must be remaked and recalculated
+   usp->Gstat = GS_INDEF;
+   usp->Astat = AS_INDEF;
+
+// pack and copy data from 1 to 0 (using deleting lists)
+//***************************************************
+
+    uint i=0;
+    int j, ii=0, jj =0;
+
+if( aIComp.GetCount() < 1)
+  goto DCOMPS;
+
+// IComps  ( size  N )
+    while( jj < usp->N )
+    {
+      if( i < aIComp.GetCount() &&  aIComp[i].line == ii )
+      {
+        if( aIComp[i].delta == 1 )
+        { // add line
+          if(usp->PsGen[0] == S_ON )
+              for( j =0; j<usp->Q; j++ )
+              {
+                usp->vMol[j*usp->N+jj] = 0.;
+                usp->vU[j*usp->N+jj] = 0.;
+              }
+          if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+          {
+             usp->m_t_lo[jj] = 0.;
+             usp->m_t_up[jj] = 0.;
+          }
+          if(usp->PsGen[2]== S_ON)
+          {
+             for( j =0; j<usp->Q; j++ )
+                usp->vB[j*usp->N+jj] = 0.;
+             usp->NgNb[jj] = 0;
+             usp->IntNb[jj][0] = 0.;
+             usp->IntNb[jj][1] = 0.;
+             usp->Bs[jj][0] = 0.;
+             usp->Bs[jj][1] = 0.;
+          }
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < us[1].N )
+         {
+          if(usp->PsGen[0] == S_ON )
+              for( j =0; j<usp->Q; j++ )
+              {
+                usp->vMol[j*usp->N+jj] = us[1].vMol[j*us[1].N+ii];
+                usp->vU[j*usp->N+jj] = us[1].vU[j*us[1].N+ii];
+              }
+          if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+          {
+             usp->m_t_lo[jj] = us[1].m_t_lo[ii];
+             usp->m_t_up[jj] = us[1].m_t_up[ii];
+          }
+          if(usp->PsGen[2]== S_ON)
+          {
+             usp->NgNb[jj] = us[1].NgNb[ii];
+             usp->IntNb[jj][0] = us[1].IntNb[ii][0];
+             usp->IntNb[jj][1] = us[1].IntNb[ii][1];
+             usp->Bs[jj][0] = us[1].Bs[ii][0];
+             usp->Bs[jj][1] = us[1].Bs[ii][1];
+             for( j =0; j<usp->Q; j++ )
+                usp->vB[j*usp->N+jj] = us[1].vB[j*us[1].N+ii];
+          }
+          }
+        jj++;
+        ii++;
+       }
+    }
+
+DCOMPS:
+if( aDComp.GetCount() < 1)
+  goto PHASES;
+
+// DComps  ( size  L )
+    ii=0; jj =0; i=0;
+
+    while( jj < usp->L )
+    {
+      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      {
+        if( aDComp[i].delta == 1 )
+        { // add line
+          if(usp->PsGen[0] == S_ON )
+          {   for( j =0; j<usp->Q; j++ )
+              {
+                usp->vG[j*usp->L+jj] = 0.;
+                usp->vY[j*usp->L+jj] = 0.;
+                usp->vGam[j*usp->L+jj] = 0.;
+              }
+                usp->Gs[jj][0] = 0.;
+                usp->Gs[jj][1] = 0.;
+                usp->NgLg[jj] = 0;
+                usp->IntLg[jj][0] = 0.;
+                usp->IntLg[jj][1] = 0.;
+            }
+            if(usp->PsGen[1]== S_ON)
+            {
+                for( j =0; j<usp->Q; j++ )
+                     usp->vS[j*usp->L+jj] = 0.;
+                usp->Ss[jj][0] = 0.;
+                usp->Ss[jj][1] = 0.;
+                usp->NgLs[jj] = 0;
+                usp->IntLs[jj][0] = 0.;
+                usp->IntLs[jj][1] = 0.;
+            }
+            if(usp->PsGen[5]== S_ON)
+            {
+                for( j =0; j<usp->Q; j++ )
+                     usp->vmV[j*usp->L+jj] = 0.;
+                usp->Vs[jj][0] = 0.;
+                usp->Vs[jj][1] = 0.;
+                usp->NgLv[jj] = 0;
+                usp->IntLv[jj][0] = 0.;
+                usp->IntLv[jj][1] = 0.;
+            }
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < us[1].L )
+         {
+          if(usp->PsGen[0] == S_ON )
+          {   for( j =0; j<usp->Q; j++ )
+              {
+                usp->vG[j*usp->L+jj] = us[1].vG[j*us[1].L+ii];
+                usp->vY[j*usp->L+jj] = us[1].vY[j*us[1].L+ii];
+                usp->vGam[j*usp->L+jj] = us[1].vGam[j*us[1].L+ii];
+              }
+                usp->Gs[jj][0] = us[1].Gs[ii][0];
+                usp->Gs[jj][1] = us[1].Gs[ii][1];
+                usp->NgLg[jj] = us[1].NgLg[ii];
+                usp->IntLg[jj][0] = us[1].IntLg[ii][0];
+                usp->IntLg[jj][1] = us[1].IntLg[ii][1];
+            }
+            if(usp->PsGen[1]== S_ON)
+            {
+                for( j =0; j<usp->Q; j++ )
+                    usp->vS[j*usp->L+jj] = us[1].vS[j*us[1].L+ii];
+                usp->Ss[jj][0] = us[1].Ss[ii][0];
+                usp->Ss[jj][1] = us[1].Ss[ii][1];
+                usp->NgLs[jj] = us[1].NgLs[ii];
+                usp->IntLs[jj][0] = us[1].IntLs[ii][0];
+                usp->IntLs[jj][1] = us[1].IntLs[ii][1];
+            }
+            if(usp->PsGen[5]== S_ON)
+            {
+                for( j =0; j<usp->Q; j++ )
+                    usp->vmV[j*usp->L+jj] = us[1].vmV[j*us[1].L+ii];
+                usp->Vs[jj][0] = us[1].Vs[ii][0];
+                usp->Vs[jj][1] = us[1].Vs[ii][1];
+                usp->NgLv[jj] = us[1].NgLv[ii];
+                usp->IntLv[jj][0] = us[1].IntLv[ii][0];
+                usp->IntLv[jj][1] = us[1].IntLv[ii][1];
+            }
+          }
+        jj++;
+        ii++;
+       }
+    }
+
+ // DComps  ( size  Ls )
+    ii=0; jj =0;  i=0;
+
+    while( jj < usp->Ls )
+    {
+      if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
+      {
+        if( aDComp[i].delta == 1 )
+        { // add line
+           if( usp->PsGen[0] == S_ON  && usp->Ls )
+                usp->vFug[jj] = 0.;
+           if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+            {
+                usp->fug_lo[jj] = 0.;
+                usp->fug_up[jj] = 0.;
+             }
+           if(usp->PsGen[6]== S_ON)   // new by DK
+            {
+                usp->NgGam[jj] = 0;
+                usp->IntGam[jj][0] = 0.;
+                usp->IntGam[jj][1] = 0.;
+                usp->GAMs[jj][0] = 0.;
+                usp->GAMs[jj][1] = 0.;
+                for( j =0; j<usp->Q; j++ )
+                    usp->vNidP[j*usp->Ls+jj] = 0.;
+
+             }
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < us[1].Ls )
+         {
+           if( usp->PsGen[0] == S_ON  && usp->Ls )
+                usp->vFug[jj] = us[1].vFug[ii];
+           if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+            {
+                usp->fug_lo[jj] = us[1].fug_lo[ii];
+                usp->fug_up[jj] = us[1].fug_up[ii];
+             }
+           if(usp->PsGen[6]== S_ON)   // new by DK
+            {
+                usp->NgGam[jj] = us[1].NgGam[ii];
+                usp->IntGam[jj][0] = us[1].IntGam[ii][0];
+                usp->IntGam[jj][1] = us[1].IntGam[ii][1];
+                usp->GAMs[jj][0] = us[1].GAMs[ii][0];
+                usp->GAMs[jj][1] = us[1].GAMs[ii][1];
+                for( j =0; j<usp->Q; j++ )
+                    usp->vNidP[j*usp->Ls+jj] = us[1].vNidP[j*us[1].Ls+ii];
+
+             }
+          }
+        jj++;
+        ii++;
+       }
+    }
+
+
+//*************************************************************
+PHASES:
+
+if( aPhase.GetCount() < 1)
+  return;
+
+    ii=0; jj =0; i=0;
+// PHases  ( size  Fi )
+    while( jj < usp->Fi )
+    {
+      if( i < aPhase.GetCount() &&  aPhase[i].line == ii )
+      {
+        if( aPhase[i].delta == 1 )
+        { // add line
+          if(usp->PsGen[0] == S_ON )
+              for( j =0; j<usp->Q; j++ )
+                usp->vYF[j*usp->Fi+jj] = 0.;
+          jj++;
+         }
+          else
+           { // delete line
+             ii++;
+           }
+        i++;
+       }
+       else
+       {  // copy line
+         if( ii < us[1].Fi )
+         {
+          if(usp->PsGen[0] == S_ON )
+              for( j =0; j<usp->Q; j++ )
+                usp->vYF[j*usp->Fi+jj] = us[1].vYF[j*us[1].Fi+ii];
+          }
+        jj++;
+        ii++;
+       }
+    }
+}   // end of   InsertChanges
 
 //--------------------- End of m_unsp_gen.cpp ---------------------------

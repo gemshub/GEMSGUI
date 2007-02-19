@@ -196,6 +196,7 @@ gems2/mods/m_syseq.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_syseq.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_syst2.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_unsp_gen.cpp svn_keywords=Author+Date+Id+Revision
+gems2/mods/m_unsp_out.cpp -text
 gems2/mods/m_unsp_stat.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_unspace.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_unspace.h svn_keywords=Author+Date+Id+Revision

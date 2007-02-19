@@ -46,7 +46,7 @@ void TMulti::setSizes()
     STat->stp->PCI = pm.PCI;
     STat->stp->ParE = pm.FitVar[3]; // smoothing factor
 
-    // calculatging number of DC to be packed 
+    // calculatging number of DC to be packed
     for( Lp=0,j=0; j<pm.L; j++ )
         if( pm.X[j] > pm.lowPosNum )
             Lp++;
@@ -385,7 +385,7 @@ void TMulti::MultiCalcInit( const char *key )
    // Bulk composition and/or dimensions changed ?
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
     {
-       // Allocating list of phases currently present in non-zero quantities 
+       // Allocating list of phases currently present in non-zero quantities
         if( !pmp->SFs )
            pmp->SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
                        pmp->FI, 1, MAXPHNAME+MAXSYMB );
@@ -398,7 +398,7 @@ void TMulti::MultiCalcInit( const char *key )
    pmp->MBX /= 1000.;
 
     // unpack SysEq record
-    if( pmp->pESU == 1 && pmp->pNP ) // problematic - check ->pNP settings
+    if( pmp->pESU /*== 1*/ && pmp->pNP ) // problematic - check ->pNP settings
     {
        loadData( false );  // unpack SysEq record into MULTI
        for( j=0; j< pmp->L; j++ )
@@ -444,7 +444,7 @@ void TMulti::MultiCalcInit( const char *key )
     if( pmp->pULR && pmp->PLIM )
          Set_DC_limits(  DC_LIM_INIT );
 
-    // dynamic work arrays - loading initial data 
+    // dynamic work arrays - loading initial data
     for( k=0; k<pmp->FI; k++ )
     {
         pmp->XFs[k] = pmp->YF[k];

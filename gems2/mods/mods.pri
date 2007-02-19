@@ -55,8 +55,9 @@
                      $$MODS_CPP/m_syseq.cpp \
                      $$MODS_CPP/m_syst2.cpp  \
                      $$MODS_CPP/m_unspace.cpp \
-                     $$MODS_CPP/m_unsp_stat.cpp \
                      $$MODS_CPP/m_unsp_gen.cpp \
+                     $$MODS_CPP/m_unsp_stat.cpp \
+                     $$MODS_CPP/m_unsp_out.cpp \
                      $$MODS_CPP/m_dualth.cpp  \
                      $$MODS_CPP/m_dualthc.cpp  \
                      $$MODS_CPP/m_gtdemo.cpp   \

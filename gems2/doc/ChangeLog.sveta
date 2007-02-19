@@ -1,3 +1,27 @@
+19/02/2007
+  To make separate Unspace
+   1. Unload DataCH and DataBR using Gem2mt module type 'S' or 'U'
+   2. Unload inital Unspace using pscript
+   3. Rewrite calcMulti() from ms_param.cpp, add part MultiInit
+
+16/02/2007
+  In Unspace module
+     - Use  TProfil::pm->calcMulti();instead of
+       TProfil::pm->CalcEqstat( false ); // 16/02/2007
+     - added internal points for MULTY and SYSTEM structures
+       syu = TProfil::pm->syp;
+       pmu = TProfil::pm->pmp;
+     - added new file m_unspace_out.cpp and put here output functions;
+       change location of some functions. m_unspace_stat.cpp,
+       m_unspace_out.cpp only calc functions
+     - changed syp->B for pmp->B, syp->GEX for pmp->GEX in this files
+        (comented in NexT )
+
+16/02/2007
+  Changed internal function calcMulti() for changin thermodynamic
+  if change T,P.
+  Set up all flags and initializations as in CalcEqstat().
+
 15/02/2007
   Changed in DataBr structure T to TC temperature C
   Changed in DataCh structure Tval to TCval
