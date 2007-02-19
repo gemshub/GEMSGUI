@@ -208,7 +208,7 @@ double TCGFcalc::K23_13(double T, double ro)
 int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
         double &Volume, double &DeltaH, double &DeltaS, double P, double T )
 {
-      int iRet; double ro;
+      int iRet=0; double ro;
       double X[1]={1.};
       double FugPure[1];
 
@@ -240,7 +240,7 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
       ro = CGActivCoefPT( X, EoSparPT, FugPure, 1, P, T );
       if( ro < 0.  )
       {
-          return (int)ro;
+          return -1;
       };
       Fugacity= FugPure[0];
       ro = DENSITY( X, EoSparPT, 1, P, T );
