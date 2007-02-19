@@ -1130,6 +1130,7 @@ void TNode::databr_from_file( GemDataStream& ff )
 // allocate DataBR structure
 void TNode::databr_realloc()
 {
+  int j;
   CNode->bIC = new double[CSD->nICb];
   CNode->rMB = new double[CSD->nICb];
   CNode->uIC = new double[CSD->nICb];
@@ -1137,13 +1138,13 @@ void TNode::databr_realloc()
  CNode->xDC = new double[CSD->nDCb];
  CNode->gam = new double[CSD->nDCb];
 
-for( int j=0; j<CSD->nDCb; j++ )
+for(  j=0; j<CSD->nDCb; j++ )
    CNode->gam[j] = 1.;               //  default assignment
  CNode->dul = new double[CSD->nDCb];
-for( int j=0; j<CSD->nDCb; j++ )
+for(  j=0; j<CSD->nDCb; j++ )
    CNode->dul[j] = 1.0e6;            // default assignment
  CNode->dll = new double[CSD->nDCb];
-for( int j=0; j<CSD->nDCb; j++ )
+for(  j=0; j<CSD->nDCb; j++ )
    CNode->dll[j] = 0.0;              // default assignment
 
  if( CSD->nAalp >0 )
