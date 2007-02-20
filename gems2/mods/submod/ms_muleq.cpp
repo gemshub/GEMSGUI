@@ -386,10 +386,11 @@ void TMulti::MultiCalcInit( const char *key )
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
     {
        // Allocating list of phases currently present in non-zero quantities
-        if( !pmp->SFs )
-           pmp->SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
-                       pmp->FI, 1, MAXPHNAME+MAXSYMB );
         MultiRemake( key );  // Reallocating/reloading MULTI
+        // Allocating list of phases currently present in non-zero quantities
+         if( !pmp->SFs )
+            pmp->SFs = (char (*)[MAXPHNAME+MAXSYMB])aObj[ o_wd_sfs].Alloc(
+                        pmp->FI, 1, MAXPHNAME+MAXSYMB );
     }
    // calculate mass of the system
    pmp->MBX = 0.0;

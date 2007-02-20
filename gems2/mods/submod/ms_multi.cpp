@@ -664,7 +664,6 @@ void TMulti::dyn_new(int /*q*/)
 {
    if( pm.N < 2 || pm.L < 2 || pm.FI < 1 )
         Error( GetName(), "pm.N < 2 || pm.L < 2 || pm.FI < 1" );
-
     // Part 1
     // always needed
     pm.L1 = (short *)aObj[ o_wi_l1].Alloc( pm.FI, 1, I_ );
@@ -930,6 +929,7 @@ void TMulti::dyn_new(int /*q*/)
         pm.Qp    = (double *)aObj[ o_wi_qp ].Free();
         pm.Qd    = (double *)aObj[ o_wi_qd ].Free();
     }
+
     /* pm.R = (float *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
     sit_dyn_new();
 }

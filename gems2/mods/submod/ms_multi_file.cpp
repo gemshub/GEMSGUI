@@ -1,6 +1,4 @@
 #include <math.h>
-//#include <iomanip>
-//#include <iostream>
 
 #include "io_arrays.h"
 #include "m_param.h"

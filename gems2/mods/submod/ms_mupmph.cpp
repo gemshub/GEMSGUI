@@ -52,6 +52,7 @@ void TMulti::MultiRemake( const char *key )
     pmp->PunP = tpp->PunP;
     pmp->PunT = tpp->PunT;
     pmp->N =    syp->N;
+    pmp->NR =    syp->N; // 20/02/2007
     pmp->L =    syp->L;
     pmp->Ls = syp->Ls;
     pmp->LO =   syp->Lw/*-1*/;

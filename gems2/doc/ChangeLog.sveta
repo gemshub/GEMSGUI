@@ -1,3 +1,8 @@
+20/02/2007
+ Fixed error! In MultiRemake() set up     pmp->N =    syp->N;
+  but  pmp->NR left old value (may be more then pmp->N )
+
+
 19/02/2007
   Added output of  time calculation for modules
 
