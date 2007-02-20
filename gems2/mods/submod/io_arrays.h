@@ -45,6 +45,7 @@ struct outField
 
     short findFld( const char *Name ); // find field by name
     short findNext();  // read next name from file and find in fields list
+    void  readNext( const char* label);
     void  setNoAlws( short ii )
     {  flds[ii].alws = 0; }
 

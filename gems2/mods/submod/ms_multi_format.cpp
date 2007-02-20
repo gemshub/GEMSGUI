@@ -670,9 +670,17 @@ void TMulti::from_text_file_gemipm( const char *path )
               int LsIPxSum;
               getLsModsum( LsModSum, LsIPxSum );
               if(LsIPxSum )
-               rddar.readArray( "IPxPH", pmp->IPx,  LsIPxSum);
-               if(LsModSum )
-               rddar.readArray( "PMc", pmp->PMc,  LsModSum);
+              { rddar.readNext( "IPxPH");
+                if(!pmp->IPx )
+                  pmp->IPx = new short[LsIPxSum];
+                rddar.readArray( "IPxPH", pmp->IPx,  LsIPxSum);
+              }
+              if(LsModSum )
+              { rddar.readNext( "PMc");
+                if(!pmp->PMc )
+                  pmp->PMc = new float[LsModSum];
+                rddar.readArray( "PMc", pmp->PMc,  LsModSum);
+              }
               break;
              }
       case 2: { if( !pmp->LsMdc )
@@ -681,7 +689,11 @@ void TMulti::from_text_file_gemipm( const char *path )
                 int LsMdcSum;
                 getLsMdcsum( LsMdcSum );
                 if(LsMdcSum )
-                 rddar.readArray( "DMc", pmp->DMc,  LsMdcSum);
+                { rddar.readNext( "DMc");
+                  if(!pmp->DMc )
+                     pmp->DMc = new float[LsMdcSum];
+                  rddar.readArray( "DMc", pmp->DMc,  LsMdcSum);
+                }
                 break;
               }
       case 3: rddar.readArray( "B", pmp->B,  pmp->N);
@@ -758,77 +770,77 @@ void TMulti::from_text_file_gemipm( const char *path )
                 Error( "Error", "Array DCC3 not used in this problem");
                rddar.readArray( "DCads", pmp->DCC3, pmp->Lads, 1 );
                break;
-      case 27: rdar.readArray( "pa_DB" , &pa->p.DB, 1);
+      case 27: rddar.readArray( "pa_DB" , &pa->p.DB, 1);
                break;
-      case 28: rdar.readArray("pa_DHB", &pa->p.DHB, 1);
+      case 28: rddar.readArray("pa_DHB", &pa->p.DHB, 1);
                break;
-      case 29: rdar.readArray("pa_EPS" , &pa->p.EPS, 1);
+      case 29: rddar.readArray("pa_EPS" , &pa->p.EPS, 1);
                break;
-      case 30: rdar.readArray("pa_DK" , &pa->p.DK, 1);
+      case 30: rddar.readArray("pa_DK" , &pa->p.DK, 1);
                break;
-      case 31: rdar.readArray("pa_DF" , &pa->p.DF, 1);
+      case 31: rddar.readArray("pa_DF" , &pa->p.DF, 1);
                break;
-      case 32: rdar.readArray("pa_DP", &pa->p.DP, 1);
+      case 32: rddar.readArray("pa_DP", &pa->p.DP, 1);
                break;
-      case 33: rdar.readArray("pa_IIM", &pa->p.IIM, 1);
+      case 33: rddar.readArray("pa_IIM", &pa->p.IIM, 1);
                break;
-      case 34: rdar.readArray("pa_PD" , &pa->p.PD, 1);
+      case 34: rddar.readArray("pa_PD" , &pa->p.PD, 1);
                break;
-      case 35: rdar.readArray("pa_PRD" , &pa->p.PRD, 1);
+      case 35: rddar.readArray("pa_PRD" , &pa->p.PRD, 1);
                break;
-      case 36: rdar.readArray("pa_AG" , &pa->p.AG, 1);
+      case 36: rddar.readArray("pa_AG" , &pa->p.AG, 1);
                break;
-      case 37: rdar.readArray("pa_DGC" , &pa->p.DGC, 1);
+      case 37: rddar.readArray("pa_DGC" , &pa->p.DGC, 1);
                break;
-      case 38: rdar.readArray("pa_PSM" , &pa->p.PSM, 1);
+      case 38: rddar.readArray("pa_PSM" , &pa->p.PSM, 1);
                break;
-      case 39: rdar.readArray("pa_GAR" , &pa->p.GAR, 1);
+      case 39: rddar.readArray("pa_GAR" , &pa->p.GAR, 1);
                break;
-      case 40: rdar.readArray("pa_GAH" , &pa->p.GAH, 1);
+      case 40: rddar.readArray("pa_GAH" , &pa->p.GAH, 1);
                break;
-      case 41: rdar.readArray("pa_DS", &pa->p.DS, 1);
+      case 41: rddar.readArray("pa_DS", &pa->p.DS, 1);
                break;
-      case 42: rdar.readArray("pa_XwMin" , &pa->p.XwMin, 1);
+      case 42: rddar.readArray("pa_XwMin" , &pa->p.XwMin, 1);
                break;
-      case 43: rdar.readArray("pa_ScMin" , &pa->p.ScMin, 1);
+      case 43: rddar.readArray("pa_ScMin" , &pa->p.ScMin, 1);
                break;
-      case 44: rdar.readArray("pa_DcMin" , &pa->p.DcMin, 1);
+      case 44: rddar.readArray("pa_DcMin" , &pa->p.DcMin, 1);
                break;
-      case 45: rdar.readArray("pa_PhMin" , &pa->p.PhMin, 1);
+      case 45: rddar.readArray("pa_PhMin" , &pa->p.PhMin, 1);
                break;
-      case 46: rdar.readArray("pa_ICmin" , &pa->p.ICmin, 1);
+      case 46: rddar.readArray("pa_ICmin" , &pa->p.ICmin, 1);
                break;
-      case 47: rdar.readArray("pa_PC" , &pa->p.PC, 1);
+      case 47: rddar.readArray("pa_PC" , &pa->p.PC, 1);
                break;
-      case 48: rdar.readArray("pa_DFM" , &pa->p.DFM, 1);
+      case 48: rddar.readArray("pa_DFM" , &pa->p.DFM, 1);
                break;
-      case 49: rdar.readArray("pa_DFYw" , &pa->p.DFYw, 1);
+      case 49: rddar.readArray("pa_DFYw" , &pa->p.DFYw, 1);
                break;
-      case 50: rdar.readArray("pa_DFYaq" , &pa->p.DFYaq, 1);
+      case 50: rddar.readArray("pa_DFYaq" , &pa->p.DFYaq, 1);
                break;
-      case 51: rdar.readArray("pa_DFYid" , &pa->p.DFYid, 1);
+      case 51: rddar.readArray("pa_DFYid" , &pa->p.DFYid, 1);
                break;
-      case 52: rdar.readArray("pa_DFYr" , &pa->p.DFYr, 1);
+      case 52: rddar.readArray("pa_DFYr" , &pa->p.DFYr, 1);
                break;
-      case 53: rdar.readArray("pa_DFYh" , &pa->p.DFYh, 1);
+      case 53: rddar.readArray("pa_DFYh" , &pa->p.DFYh, 1);
                break;
-      case 54: rdar.readArray("pa_DFYc" , &pa->p.DFYc, 1);
+      case 54: rddar.readArray("pa_DFYc" , &pa->p.DFYc, 1);
                break;
-      case 55: rdar.readArray("pa_DFYs", &pa->p.DFYs, 1);
+      case 55: rddar.readArray("pa_DFYs", &pa->p.DFYs, 1);
                break;
-      case 56: rdar.readArray("pa_DW", &pa->p.DW , 1);
+      case 56: rddar.readArray("pa_DW", &pa->p.DW , 1);
                break;
-      case 57: rdar.readArray("pa_DT", &pa->p.DT , 1);
+      case 57: rddar.readArray("pa_DT", &pa->p.DT , 1);
                break;
-      case 58: rdar.readArray("pa_GAS", &pa->p.GAS, 1);
+      case 58: rddar.readArray("pa_GAS", &pa->p.GAS, 1);
                break;
-      case 59: rdar.readArray("pa_DNS" , &pa->p.DNS, 1);
+      case 59: rddar.readArray("pa_DNS" , &pa->p.DNS, 1);
                break;
-      case 60: rdar.readArray("pa_IEPS" , &pa->p.IEPS, 1);
+      case 60: rddar.readArray("pa_IEPS" , &pa->p.IEPS, 1);
                break;
-      case 61: rdar.readArray("pKin" , &pmp->PLIM, 1);
+      case 61: rddar.readArray("pKin" , &pmp->PLIM, 1);
                break;
-      case 62: rdar.readArray("pa_DKIN" , &pa->p.DKIN, 1);
+      case 62: rddar.readArray("pa_DKIN" , &pa->p.DKIN, 1);
                break;
     }
     nfild = rddar.findNext();

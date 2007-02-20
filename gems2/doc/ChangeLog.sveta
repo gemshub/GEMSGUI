@@ -1,4 +1,8 @@
 20/02/2007
+ Fixed error in mode reading ipm text format files:
+  pmp->IPx, pmp->PMc, pmp->DMc arrays reading and allocation error
+
+20/02/2007
  Fixed error! In MultiRemake() set up     pmp->N =    syp->N;
   but  pmp->NR left old value (may be more then pmp->N )
 

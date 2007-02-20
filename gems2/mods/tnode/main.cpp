@@ -29,7 +29,7 @@
 
 #include "node.h"
 
-#define nNodes  11 // set here how many nodes you need
+#define nNodes  5 // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {
@@ -149,7 +149,7 @@ int main( int argc, char* argv[] )
        m_bPS+in*nIC*nPS, m_xPA+in*nPS );
 
 //  Uncomment this to test variable pressures and temperatures
-         m_T[in] += in*5;
+//         m_T[in] += in*5;
 //         m_P[in] += (in-1)*20;
 //         m_T[in] += in*7;
 //         m_P[in] += (in-1)*20;

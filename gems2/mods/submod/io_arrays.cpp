@@ -131,12 +131,30 @@ short TReadArrays::findNext()
 
  short ii = findFld( buf+1 );
  if(  ii < 0 )
-    Error( buf, "DataBR text read 01: Invalid name of array");
+    Error( buf, "Format text read 01: Invalid name of array");
 
  flds[ii].readed = 1;
  return ii;
 }
 
+
+void TReadArrays::readNext( const char* label)
+{
+ char buf[200];
+ skipSpace();
+
+ if( ff.eof() )
+   Error( label, "Format text read 02: No array");
+
+ ff >> buf;
+ gstring str = buf+1;
+ size_t len = str.find('>');
+ str = str.substr(0, len );
+
+ if( !( strcmp( label, str.c_str() ) ))
+     return;
+ Error( buf, "Format text read 03: Invalid name of array");
+}
 
 void TReadArrays::readArray( char*, short* arr, int size )
 {
