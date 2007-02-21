@@ -41,14 +41,14 @@ enum solmod_switches { // indexes of keys of model solution
     SPHAS_TYP, DCOMP_DEP, SPHAS_DEP, SGM_MODE, DCE_LINK, SCM_TYPE,
     // link state
     LINK_UX_MODE, LINK_TP_MODE, LINK_FIA_MODE,
-    // Posible values of  of keys of model solution - DCOMP_DEP, SPHAS_DEP
+    // Posible values of ï¿½of keys of model solution - DCOMP_DEP, SPHAS_DEP
     SM_UNDEF = 'N', SM_TPDEP = 'T', SM_UXDEP = 'X', SM_PRIVATE_ = 'P',
     SM_PUBLIC = 'U',
     // Posible modes calculating of activity coefficients SGM_MODE
     SM_STNGAM = 'S', SM_NOSTGAM = 'N',
     // This code (one upper-case letter or digit) defines type of mixing
-    and default method of calculation of mixing properties before and at
-    IPM iterations.   Possible values: (SPHAS_TYP) */
+    //and default method of calculation of mixing properties before and at
+    //IPM iterations.   Possible values: (SPHAS_TYP)
     SM_IDEAL =  'I', // ideal solution or single-component phase;
     SM_REDKIS = 'G', // built-in Guggenheim (Redlich-Kister) binary SS model
                      // (with 3 coeffs)
