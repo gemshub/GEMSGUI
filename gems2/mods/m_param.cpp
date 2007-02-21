@@ -328,9 +328,9 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 }
 
 // outpu MULTI to txt format
-void TProfil::outMulti( gstring& path  )
+void TProfil::outMulti( gstring& path, bool addMui  )
 {
-    multi->to_text_file_gemipm( path.c_str() );
+    multi->to_text_file_gemipm( path.c_str(), addMui );
 }
 
 void TProfil::outMultiTxt( const char *path  )
@@ -356,7 +356,7 @@ void TProfil::outMulti( )
    na->MoveWorkNodeToArray( 0, 1, na->pNodT0() );
 // make  all files
 //   na->PutGEM2MTFiles( window(), 1, true, true );
-na->PutGEM2MTFiles( window(), 1, true, false );
+na->PutGEM2MTFiles( window(), 1, true, false );// addMui, to txt
    delete na;
 }
 

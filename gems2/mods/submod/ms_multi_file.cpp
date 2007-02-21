@@ -507,11 +507,14 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
  pm.L1 = new short[pm.FI];
  memset(pm.L1, 0, pm.FI*sizeof(short));
  pm.muk = new short[pm.FI];
- memset(pm.muk, 0, pm.FI*sizeof(short));
+ for( ii=0; ii<pm.FI; ii++)
+   pm.muk[ii] = ii;
  pm.mui = new short[pm.N];
- memset(pm.mui, 0, pm.N*sizeof(short));
+ for( ii=0; ii<pm.N; ii++)
+   pm.mui[ii] = ii;
  pm.muj = new short[pm.L];
- memset(pm.muj, 0, pm.L*sizeof(short));
+ for( ii=0; ii<pm.L; ii++)
+   pm.muj[ii] = ii;
 
  pm.DUL = new double[pm.L];
  for( ii=0; ii<pm.L; ii++ )         // 28/11/2006

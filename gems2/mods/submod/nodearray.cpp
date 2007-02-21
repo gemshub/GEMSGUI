@@ -127,7 +127,7 @@ void  TNodeArray::setNodeArray( gstring& dbr_file, int ndx, bool binary_f )
 // Writing dataCH, dataBR structure to binary/text files
 // and other necessary GEM2MT files
 gstring TNodeArray::PutGEM2MTFiles( QWidget* par, int nIV,
-      bool /*multi_bin_mode*/, bool bin_mode, bool putNodT1  )
+      bool addMui, bool bin_mode, bool putNodT1  )
 {
   fstream fout;
   gstring Path_;
@@ -196,7 +196,7 @@ AGAIN:
 // output MULTI to txt file
     newname = name+"-ipm";
     Path_ = u_makepath( dir, newname, "dat" );
-    TProfil::pm->outMulti( Path_  );
+    TProfil::pm->outMulti( Path_, addMui  );
   }
 
 // out dataCH to binary file

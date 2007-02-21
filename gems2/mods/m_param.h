@@ -272,7 +272,7 @@ public:
 
    //test
    void outMulti( GemDataStream& ff, gstring& path  );
-   void outMulti( gstring& path  );
+   void outMulti( gstring& path, bool addMui  );
    void outMulti();
    void outMultiTxt( const char *path  );
    void readMulti( GemDataStream& ff );

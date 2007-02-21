@@ -46,7 +46,7 @@ outField MULTI_static_fields[8] =  {
   { "FIat" , 0 , 0 }
 };
 
-outField MULTI_dynamic_fields[63] =  {
+outField MULTI_dynamic_fields[66] =  {
 //read dynamic (array) data from the txt input file
    {  "sMod", 1 , 0 },
    {  "LsMod", 1 , 0 },
@@ -111,13 +111,16 @@ outField MULTI_dynamic_fields[63] =  {
    { "pa_DNS" , 0 , 0 },
    { "pa_IEPS" , 0 , 0 },
    { "pKin" , 0 , 0 },
-   { "pa_DKIN" , 0 , 0 }
+   { "pa_DKIN" , 0 , 0 },
+   { "mui" , 0 , 0 },
+   { "muk" , 0 , 0 },
+   { "muj" , 0 , 0 }
 };
 
 
 //===================================================================
 
-void TMulti::to_text_file_gemipm( const char *path )
+void TMulti::to_text_file_gemipm( const char *path, bool addMui )
 {
   SPP_SETTING *pa = &TProfil::pm->pa;
 
@@ -477,6 +480,19 @@ if(LsIPxSum )
    if( pm.sitNan )
      prar.writeArray(  "sitXa", pmp->sitXan, pmp->sitNan );
 */
+if( addMui )
+{
+  if( _comment )
+    ff << "\n\n# mui: IC indices in RMULTS IC list";
+  prar.writeArray(  "mui", pmp->mui,  pmp->N);
+  if( _comment )
+    ff << "\n\n# muk: Phase indices in RMULTS phase list";
+  prar.writeArray(  "muk", pmp->muk,  pmp->FI);
+  if( _comment )
+    ff << "\n\n# muj: DC indices in RMULTS DC list";
+  prar.writeArray(  "muj", pmp->muj,  pmp->L);
+}
+
  if( _comment )
    ff << "\n\n# End of file" << endl;
 
@@ -640,7 +656,7 @@ void TMulti::from_text_file_gemipm( const char *path )
   ConvertDCC();
 
 //reads dynamic values from txt file
-   TReadArrays  rddar( 63, MULTI_dynamic_fields, ff);
+   TReadArrays  rddar( 66, MULTI_dynamic_fields, ff);
 
 // set up array flags for permanent fields
 
@@ -857,6 +873,12 @@ void TMulti::from_text_file_gemipm( const char *path )
       case 61: rddar.readArray("pKin" , &pmp->PLIM, 1);
                break;
       case 62: rddar.readArray("pa_DKIN" , &pa->p.DKIN, 1);
+               break;
+      case 63: rddar.readArray("mui" , pmp->mui, pmp->N);
+               break;
+      case 64: rddar.readArray("muk" , pmp->muk, pmp->FI);
+               break;
+      case 65: rddar.readArray("muj" , pmp->muj, pmp->L);
                break;
     }
     nfild = rddar.findNext();
