@@ -1,3 +1,20 @@
+//-------------------------------------------------------------------
+// $Id$
+//
+// Implementation of writing/reading IPM work data structure files
+//
+// Copyright (C) 2006-2007 S.Dmytriyeva
+//
+// This file is part of the GEM-Vizor library and GEMIPM2K
+// code package
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
+// E-mail gems2.support@psi.ch
+//-------------------------------------------------------------------
+
 #include <math.h>
 
 #include "io_arrays.h"
@@ -887,7 +904,7 @@ else
 }
 
 
-// realloc dynamic memory
+// Reallocation of dynamic memory
 void TMulti::multi_free()
 {
     // Part 1
@@ -1160,7 +1177,7 @@ void TMulti::to_text_file( const char *path )
      prar.writeArray(  "IC_wm", pm.IC_wm,  pm.N);
     }
 
-    /* dispersed and sorption phases */
+    // dispersed and sorption phases
     if( PAalp != S_OFF )
     {
      prar.writeArray(  "Aalp", pm.Aalp, pm.FI);

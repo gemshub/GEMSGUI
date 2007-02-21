@@ -1,3 +1,21 @@
+//-------------------------------------------------------------------
+// $Id: io_arrays.cpp 774 2006-07-26 08:45:45Z gems $
+//
+// Implementation of service functions for writing/reading arrays in files
+//
+// Copyright (C) 2006-2007 S.Dmytriyeva
+// Uses  gstring class
+//
+// This file is part of the GEM-Vizor library and GEMIPM2K
+// code package
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
+// E-mail gems2.support@psi.ch
+//-------------------------------------------------------------------
+
 #include <iomanip>
 #include  <iostream>
 
@@ -213,3 +231,4 @@ gstring TReadArrays::testRead()
 }
 
 //=============================================================================
+// io_arrays.cpp

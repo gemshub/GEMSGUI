@@ -1,3 +1,19 @@
+//-------------------------------------------------------------------
+// $Id: ms_multi_format.cpp 774 2006-07-26 08:45:45Z gems $
+//
+// Implementation of text writing/reading IPM, DCH and DBR files
+//
+// Copyright (C) 2006-2007 S.Dmytriyeva
+//
+// This file is part of the GEM-Vizor library and GEMIPM2K
+// code package
+//
+// This file may be distributed under the terms of the GEMS-PSI
+// QA Licence (GEMSPSI.QAL)
+//
+// See http://les.web.psi.ch/Software/GEMS-PSI/ for more information
+// E-mail gems2.support@psi.ch
+//-------------------------------------------------------------------
 //#include  <iostream>
 
 #include "io_arrays.h"
@@ -127,8 +143,8 @@ void TMulti::to_text_file_gemipm( const char *path )
   TPrintArrays  prar(ff);
 
 if( _comment )
-{   ff << "# GEMIPM2K v. 0.98" << endl;
-   ff << "# Prototype 12.12.2006" << endl;
+{   ff << "# GEMIPM2K v. 2.2.0" << endl;
+   ff << "# Prototype 22.02.2007" << endl;
    ff << "# Comments can be marked with # $ ; as the first character in the line" << endl << endl;
    ff << "# Template for the ipm-dat text input file for the internal MULTI data" << endl;
    ff << "# (should be read after the DATACH file and before DATABR files)" << endl << endl;
@@ -508,7 +524,7 @@ void TMulti::from_text_file_gemipm( const char *path )
   pmp->FIat = 0; //6
   pmp->PLIM  = 1;
 
-  // read sizes and constants from txt file
+  // reads sizes and constants from txt file
   fstream ff( path, ios::in );
   ErrorIf( !ff.good() , path, "Fileopen error");
 
@@ -623,7 +639,7 @@ void TMulti::from_text_file_gemipm( const char *path )
   // set up DCCW
   ConvertDCC();
 
-//read dynamic values from txt file
+//reads dynamic values from txt file
    TReadArrays  rddar( 63, MULTI_dynamic_fields, ff);
 
 // set up array flags for permanent fields
@@ -862,3 +878,5 @@ void TMulti::from_text_file_gemipm( const char *path )
 }
 
 //=============================================================================
+// ms_multi_format.cpp
+
