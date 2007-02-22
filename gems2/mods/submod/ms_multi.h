@@ -358,7 +358,7 @@ class TMulti
 
 // ipm_chemical2.cpp
     void GasParcP();
-    void phase_bcs( int N, int M, float *A, double X[], double BF[] );
+    void phase_bcs( int N, int M, int jb, float *A, double X[], double BF[] );
     void phase_bfc( int k, int jj );
     double pH_via_hydroxyl( double x[], double Factor, int j);
     void ConCalcDC( double X[], double XF[], double XFA[],
