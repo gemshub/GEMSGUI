@@ -344,8 +344,8 @@ void TProfil::outMulti( )
 
 // set default data and realloc arrays
    float Tai[3], Pai[3];
-   Tai[0] = Tai[1] = 25.;
-   Pai[0] = Pai[1] = 1.;
+   Tai[0] = Tai[1] = pmp->TCc; // 25.;
+   Pai[0] = Pai[1] = pmp->Pc; //  1.;
    Tai[2] = Pai[2] = 0.;
 
 // realloc and setup data for dataCH and DataBr structures
