@@ -130,6 +130,11 @@
                     </item>
                     <item>
                         <property name="text">
+                            <string>V   Van Laar mixing model for multicomponent solutions</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
                             <string>N   No mixing (pure or single-component phase) </string>
                         </property>
                     </item>
