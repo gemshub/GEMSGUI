@@ -242,6 +242,7 @@ public:
 
 };
 
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Added 19 July 2006 by Th.Wagner and D.Kulik
 // Definition of a class for PRSV EOS calculations for fluids
@@ -299,6 +300,74 @@ int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
 double ObtainResults( double *ActCoef ); // returns activity coeffs and phase volume
 
 };
+
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Added 07 March 2007 by Th.Wagner and D.Kulik
+// Definition of a class for several mineral solid-solution models
+
+class TSolMod
+{
+
+private:
+        char ModCode;      // Code of the mixing model
+	double R_CONST;    // R constant
+	int NComp;    // Number of components in the solution phase
+        int NPar;     // Number of non-zero interaction parameters
+        int NPcoef;   // Number of coefs per parameter (cols in the aIPc table)
+        int MaxOrd;   // max. parameter order (or number pf columns in aIPx)
+        int NP_DC;    // Number of coeffs per one DC in the phase (cols in aDCc)
+        short *aIPx;  // Pointer to list of indexes of non-zero interaction parameters
+        float *aIPc;  // Table of interaction parameter coefficients
+        float *aDCc;  // End-member parameter coefficients
+        double Tk;    // Temperature, K
+        double Pbar;  // Pressure, bar
+
+        double *x;    // Pointer to mole fractions of end members
+// Results
+        double Gam;   // work cell for activity coeff of end member
+        double lnGam;
+        double Gex;   // Molar excess Gibbs energy (debugging)
+        double Vex;   // Excess molar volume (debugging)
+        double Hex;   // Excess molar enthalpy (debugging)
+        double Sex;   // Excess molar entropy (debugging)
+
+        double *ActCoeff;  // Pointer to activity coefficients
+        double *lnGamma;   // Pointer to ln activity coefficients of end members
+
+public:
+// Generic constructor
+    TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
+         int NPperDC, double T_k, double P_bar, char Mod_Code,
+         short* arIPx, float* arIPc, float* arDCc,
+         double *arWx, double *arlnGam, double *arGam );
+    ~TSolMod();
+
+// Van Laar model for solid solutions
+    int VanLaarPT();
+    int VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ );
+
+// Prototypes for other models to be added here
+// Redlich-Kister / Guggenheim ...
+// Margules ...
+// Darken ...
+// Pitzer ...
+// SIT ...
+// EUniquac ...
+// PRSV can also be moved here
+
+
+};
+
+
+
+
+
+
+
+
+
+
 
 #endif
 // _s_fgl_h

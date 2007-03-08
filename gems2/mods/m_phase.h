@@ -187,6 +187,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_IONEX = 'E',  // ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A', // models of surface complexation at solid-aqueous interface
     SM_USERDEF = 'U', // user-defined mixing model (in Phase record)
+    SM_VANLAAR = 'V', // Generalized Van Laar solution model (under construction) 
     SM_OTHER = 'O'   //  other models of non-ideal solutions (reserved)
 };
 

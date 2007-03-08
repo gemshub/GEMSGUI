@@ -386,12 +386,15 @@ class TMulti
 // fluid mixtures
     void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
     void CGofPureGases( int jb, int je, int jpb, int jdb, int k );
-    void PRSVFluid( int jb, int je, int jpb, int jdb, int k );
-    void PRSVofPureGases( int jb, int je, int jpb, int jdb, int k );
+    void PRSVFluid( int jb, int je, int jpb, int jdb, int k, int ipb );
+    void PRSVofPureGases( int jb, int je, int jpb, int jdb, int k, int ipb );
 // condensed mixtures
     void RedlichKister( int jb, int je, int jpb, int jdb, int k );
     void MargulesBinary( int jb, int je, int jpb, int jdb, int k );
     void MargulesTernary( int jb, int je, int jpb, int jdb, int k );
+// Generic solution model calls
+void SolModParPT ( int jb, int je, int jpb, int jdb, int k, int ipb, char ModCode );
+void SolModActCoeff( int jb, int je, int jpb, int jdb, int k, int ipb, char ModCode );
 
 // ipm_main.cpp - numerical part of GEM-IPM2
     void MultiCalcMain();

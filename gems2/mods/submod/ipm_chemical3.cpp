@@ -349,6 +349,7 @@ void TMulti::GammaCalc( int LinkMode  )
             jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
             jdb = jde;
             jde += pmp->LsMdc[k]*pmp->L1[k];
+// jpx
 
             sMod = pmp->sMod[k];
             if( sMod[SGM_MODE] == SM_IDEAL )
@@ -356,6 +357,13 @@ void TMulti::GammaCalc( int LinkMode  )
 
             switch( pmp->PHC[k] )
             {
+               case PH_LIQUID:
+               case PH_SINCOND:
+               case PH_SINDIS:
+               case PH_HCARBL:
+               case PH_SIMELT:
+                       SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // VanLaar TW 2007
+                    break;
                case PH_GASMIX:
                case PH_PLASMA:
                case PH_FLUID:
@@ -365,7 +373,7 @@ void TMulti::GammaCalc( int LinkMode  )
                        break;
                      }
                      if( sMod[SPHAS_TYP] == SM_PRFLUID )
-                       PRSVofPureGases( jb, je, jpb, jdb, k ); // PRSV pure gas
+                       PRSVofPureGases( jb, je, jpb, jdb, k, ipb ); // PRSV pure gas
                      break;
                default: break;
             }
@@ -431,6 +439,7 @@ void TMulti::GammaCalc( int LinkMode  )
         jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
         jdb = jde;
         jde += pmp->LsMdc[k]*pmp->L1[k];
+//  jpx
 
         switch( pmp->PHC[k] )
         {  // calculating activity coefficients using built-in functions
@@ -476,7 +485,7 @@ void TMulti::GammaCalc( int LinkMode  )
                     if( sMod[SPHAS_TYP] == SM_CGFLUID && pmp->XF[k] > pa->p.PhMin )
                        ChurakovFluid( jb, je, jpb, jdb, k );
                     if( sMod[SPHAS_TYP] == SM_PRFLUID && pmp->XF[k] > pa->p.PhMin )
-                       PRSVFluid( jb, je, jpb, jdb, k );
+                       PRSVFluid( jb, je, jpb, jdb, k, ipb );
                        // Added by Th.Wagner and DK on 20.07.06
                 }
                 goto END_LOOP;             }
@@ -502,6 +511,11 @@ void TMulti::GammaCalc( int LinkMode  )
                        MargulesTernary( jb, je, jpb, jdb, k );
                           break;
                   case SM_RECIP: // under construction
+                          break;
+                  case SM_VANLAAR:
+                  // .....
+                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // VanLaar TW 2007
+                         break;
                   default:
                           break;
                 }
@@ -1041,7 +1055,7 @@ void TMulti::Davies03temp( int jb, int je, int )
 // Added by D.Kulik on 15.02.2007
 //
 void
-TMulti::CGofPureGases( int jb, int je, int jpb, int jdb, int k )
+TMulti::CGofPureGases( int jb, int je, int, int jdb, int )
 {
     double T, P, Fugacity = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
     float *Coeff, Eos4parPT[4] = { 0.0, 0.0, 0.0, 0.0 } ;
@@ -1146,12 +1160,12 @@ TMulti::ChurakovFluid( int jb, int je, int, int jdb, int k )
 // Added by D.Kulik on 15.02.2007
 //
 void
-TMulti::PRSVofPureGases( int jb, int je, int jpb, int jdb, int k )
+TMulti::PRSVofPureGases( int jb, int je, int, int jdb, int, int )
 {
     double /* *FugPure, */ Fugcoeff, Volume, DeltaH, DeltaS;
     float *Coeff; //  *BinPar;
     double Eos2parPT[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 } ;
-    int j, jj, jdc, iRet, NComp, retCode = 0;
+    int j, jdc, NComp, retCode = 0;
 
     NComp = 1; // = pmp->L1[k];
 
@@ -1200,7 +1214,7 @@ TMulti::PRSVofPureGases( int jb, int je, int jpb, int jdb, int k )
 // Added by Th.Wagner and D.Kulik on 19.07.2006, changed by DK on 15.02.2007
 //
 void
-TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k )
+TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k, int )
 {
     double *ActCoefs, PhVol, *FugPure;
     float *EoSparam, *BinPar;
@@ -1387,5 +1401,91 @@ pmp->FVOL[k] += Vex*10.;
 //  Hex = (WU12+P*WV12)*X1*X2 + (WU13+P*WV13)*X1*X3
 //         + (WU23+P*WV23)*X2*X3 + (WU123+P*WV123)*X1*X2*X3;
 }
+
+
+// ------------------------------------------------------------------------
+// Wrapper calls for VanLaar model (see s_fgl.h and s_fgl2.cpp)
+// Uses the TSolMod class by Th.Wagner and D.Kulik
+
+void
+TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
+{
+    int NComp, NPar, NPcoef, MaxOrd, NP_DC;
+    float *aIPc, *aDCc;
+    short * aIPx;
+
+    NComp = pmp->L1[k];          // Number of components in the phase
+    NPar = pmp->LsMod[k*3];      // Number of interaction parameters
+    NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
+    MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
+    NP_DC = pmp->LsMdc[k]; // Number of non-ideality coeffs per one DC in multicomponent phase
+    aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters for non-ideal solutions
+                              // -> NPar x MaxOrd   added 07.12.2006   KD
+    aIPc = pmp->PMc+jpb;   // Interaction parameter coefficients f(TP) -> NPar x NPcoef
+    aDCc = pmp->DMc+jdb;   // End-member parameter coefficients f(TPX) -> NComp x NP_DC
+
+    TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+       aIPx, aIPc, aDCc, NULL, NULL, NULL );
+// Extended constructor is required, also to load params and coeffs
+
+   // calculate P-T dependence of interaction parameters
+    switch( ModCode )
+    {
+        case SM_VANLAAR:
+             aSM.VanLaarPT();
+             break;
+//        case SM_REDKIST:
+//        .............
+        default:
+             break;
+    }
+}
+
+void
+TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
+            char ModCode )
+{
+
+    int NComp, NPar, NPcoef, MaxOrd, NP_DC;
+    float *aIPc, *aDCc;
+    double *aWx, *alnGam, *aGam;
+    short * aIPx;
+    double Gex=0.0, Vex=0.0, Hex=0.0, Sex=0.0;
+
+    NComp = pmp->L1[k];          // Number of components in the phase
+    NPar = pmp->LsMod[k*3];      // Number of interaction parameters
+    NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
+    MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
+    NP_DC = pmp->LsMdc[k]; // Number of non-ideality coeffs per one DC in multicomponent phase[FIs]
+
+// These pointers provide direct access to parts of MULTI arrays related to this phase!
+    aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters for non-ideal solutions
+                              // -> NPar x MaxOrd   added 07.12.2006   KD
+    aIPc = pmp->PMc+jpb;    // Interaction parameter coefficients f(TP) -> NPar x NPcoef
+    aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x NP_DC
+    aWx = pmp->Wx+jb;       // End member mole fractions
+    alnGam = pmp->lnGam+jb; // End member ln activity coeffs
+    aGam = pmp->Gamma+jb;   // End member activity coefficients
+
+    TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+       aIPx, aIPc, aDCc, aWx, alnGam, aGam );
+    // Extended constructor to connect to params, coeffs, and mole fractions
+
+    switch( ModCode )
+    {
+        case SM_VANLAAR:
+             aSM.VanLaarMixMod( Gex, Vex, Hex, Sex );
+             break;
+//        case SM_REDKIST:
+//        .............
+        default: // catch error here
+              break;
+    }
+    // To add handling of excess properties for the phase
+    // Gex, Vex, Hex, Sex
+
+}
+
+
 
 //--------------------- End of ipm_chemical3.cpp ---------------------------

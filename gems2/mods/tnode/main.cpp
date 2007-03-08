@@ -29,7 +29,7 @@
 
 #include "node.h"
 
-#define nNodes  5 // set here how many nodes you need
+#define nNodes  11 // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {
@@ -149,10 +149,8 @@ int main( int argc, char* argv[] )
        m_bPS+in*nIC*nPS, m_xPA+in*nPS );
 
 //  Uncomment this to test variable pressures and temperatures
-//         m_T[in] += in*5;
-//         m_P[in] += (in-1)*20;
-//         m_T[in] += in*7;
-//         m_P[in] += (in-1)*20;
+         m_T[in] += in*7;
+         m_P[in] += (in-1)*20;
      // Here the file output for the initial conditions can be implemented
    }
 
@@ -187,8 +185,6 @@ int main( int argc, char* argv[] )
  }
 
    cout << "End Initialiation part" << endl;
-   clock_t t_start11, t_end11;
-   t_start11 = clock();
 
    // (2) ----------------------------------------------
    // Work loop for the coupled FMT-GEM modelling
@@ -264,10 +260,6 @@ int main( int argc, char* argv[] )
 
     tc += dt;
   }
-  t_end11 = clock();
-  double dtime = ( t_end11- t_start11 );
-  double clc_sec = CLOCKS_PER_SEC;
-  cout <<  "Total time of calculation  s; " <<  (dtime)/clc_sec << endl;
   cout << " End Coupled Modelling part" << endl;
 
   // (3) ----------------------------------------------

@@ -1,11 +1,11 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (c) 2003-2007   S.Churakov, Th.Wagner, 
+// Copyright (c) 2003-2007   S.Churakov, Th.Wagner,
 //    D.Kulik, S.Dmitrieva
 //
 // Implementation of parts of TPRSVcalc and TCFGcalc classes
-// called from m_dcomp.cpp 
+// called from m_dcomp.cpp
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry
@@ -127,5 +127,174 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 //
     return retCode;
 }
+
+
+
+
+
+
+
+
+
+// -----------------------------------------------------------------------------
+// Implementation of the TSolMod class
+// Started by Th.Wagner and D.Kulik on 07.03.2007
+
+// Generic constructor for the TSolMod class
+//
+TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
+       int NPperDC, double T_k, double P_bar, char Mod_Code,
+       short* arIPx, float* arIPc, float* arDCc,
+       double *arWx, double *arlnGam, double *arGam )
+{
+    R_CONST = 8.31451;
+    NComp = NSpecies;
+    NPar = NParams;
+    NPcoef = NPcoefs;
+    MaxOrd = MaxOrder;
+    NP_DC = NPperDC;
+    Tk = T_k;
+    Pbar = P_bar;
+    ModCode = Mod_Code;
+
+    // pointer assignment
+    aIPx = arIPx;   // Direct access to index list and parameter coeff arrays!
+    aIPc = arIPc;
+    aDCc = arDCc;
+    x = arWx;
+    ActCoeff = arGam;
+    lnGamma = arlnGam;
+}
+
+TSolMod::~TSolMod()
+{
+
+// In principle, the stuff below is not necessary if the memory is not
+// allocated within the class
+	aIPx = NULL;
+	aIPc = NULL;
+	aDCc = NULL;
+	x = NULL;
+	ActCoeff = NULL;
+	lnGamma = NULL;
+}
+
+
+
+// Van Laar model for solid solutions (c) TW March 2007
+// Calculates T,P corrected binary interaction parameters
+// Returns 0 if Ok or 1 if error
+int
+TSolMod::VanLaarPT()
+{
+// calculates P-T dependence of binary interaction parameters
+	int ip;
+	double Wij[4];
+
+        if ( /* ModCode != SM_VANLAAR || */ NPcoef < 4 || NPar < 1 )
+           return 1;  // foolproof!
+
+	for (ip=0; ip<NPar; ip++)
+	{
+		Wij[0] = (double)aIPc[NPcoef*ip];
+		Wij[1] = (double)aIPc[NPcoef*ip+1];
+		Wij[2] = (double)aIPc[NPcoef*ip+2];
+		Wij[3] = Wij[0]+ Wij[1]*Tk + Wij[2]*Pbar;
+		aIPc[NPcoef*ip+3] = Wij[3];
+	}
+	return 0;
+}
+
+// Van Laar model for solid solutions (c) TW March 2007
+// References:  Van Laar (19XX)  Wagner (20XX)
+//
+// Calculates activity coefficients and excess functions
+// Returns 0 if Ok or not 0 if error
+//
+int
+TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ )
+{
+	int ip, j;
+	int index1, index2;
+	double dj, dk;
+	double sumPhi; // Sum of Phi terms
+	double *Wpt;   // Interaction coeffs
+	double *Phi;   // Mixing terms
+	double *PsVol; // End member volume parameters
+
+        if ( /* ModCode != SM_VANLAAR || */ NPcoef < 4 || NPar < 1 || NComp < 2
+            || MaxOrd < 2 || !x || !lnGamma || !ActCoeff )
+           return 1;  // foolproof!
+
+	Wpt = new double [NPar];
+	Phi = new double [NComp];
+	PsVol = new double [NComp];
+
+        if( !Wpt || !Phi || !PsVol )
+          return -1;  // memory alloc failure
+
+	// read P-T corrected interaction parameters
+	for (ip=0; ip<NPar; ip++)
+            Wpt[ip] = (double)aIPc[NPcoef*ip+3]; // were stored in VanLaarPT()
+
+	// calculating Phi values
+	sumPhi = 0.;
+	for (j=0; j<NComp; j++)
+	{
+	     PsVol[j] = aDCc[NP_DC*j];  // reading pseudo-volumes
+	     sumPhi +=  x[j]*PsVol[j];
+	}
+        if( fabs(sumPhi) < 1e-30 )
+           return 2;    // to prevent zerodivide!
+
+	for (j=0; j<NComp; j++)
+	     Phi[j] = x[j]*PsVol[j]/sumPhi;
+
+	// calculate activity coefficients
+	for (j=0; j<NComp; j++)      // index end members with j
+	{
+		lnGam = 0.;
+		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+		{
+			index1 = (int)aIPx[MaxOrd*ip];
+			index2 = (int)aIPx[MaxOrd*ip+1];
+
+			if( j == index1 )
+				dj = 1.;
+			else
+				dj = 0.;
+			if( j == index2 )
+				dk = 1.;
+			else
+				dk = 0.;
+			lnGam -= (dj-Phi[index1])*(dk-Phi[index2])*Wpt[ip]
+                                *2.*PsVol[j]/(PsVol[index1]+PsVol[index2]);
+		}
+                lnGam /= (R_CONST*Tk);
+		Gam = exp(lnGam);
+		lnGamma[j] = lnGam;
+		ActCoeff[j] = Gam;
+	}
+
+	// calculate bulk phase excess properties (to be completed)
+        Gex = 0.;
+	Vex = 0.;
+	Hex = 0.;
+	Sex = 0.;
+
+        Gex_ = Gex;
+        Vex_ = Vex;
+        Hex_ = Hex;
+        Sex_ = Sex;
+
+	delete[]Wpt;
+	delete[]Phi;
+	delete[]PsVol;
+	return 0;
+}
+
+
+// To add other models here!
+
 
 //--------------------- End of s_fgl2.cpp ---------------------------
