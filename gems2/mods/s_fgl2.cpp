@@ -200,7 +200,7 @@ TSolMod::VanLaarPT()
 		Wij[1] = (double)aIPc[NPcoef*ip+1];
 		Wij[2] = (double)aIPc[NPcoef*ip+2];
 		Wij[3] = Wij[0]+ Wij[1]*Tk + Wij[2]*Pbar;
-		aIPc[NPcoef*ip+3] = Wij[3];
+		aIPc[NPcoef*ip+3] = (float)Wij[3];
 	}
 	return 0;
 }
@@ -226,7 +226,7 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ )
             || MaxOrd < 2 || !x || !lnGamma || !ActCoeff )
            return 1;  // foolproof!
 
-	Wpt = new double [NPar];
+        Wpt = new double [NPar];
 	Phi = new double [NComp];
 	PsVol = new double [NComp];
 
