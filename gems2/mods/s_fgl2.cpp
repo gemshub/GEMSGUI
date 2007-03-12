@@ -145,7 +145,7 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
        int NPperDC, double T_k, double P_bar, char Mod_Code,
        short* arIPx, float* arIPc, float* arDCc,
-       double *arWx, double *arlnGam, double *arGam )
+       double *arWx, double *arlnGam )
 {
     R_CONST = 8.31451;
     NComp = NSpecies;
@@ -162,7 +162,6 @@ TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
     aIPc = arIPc;
     aDCc = arDCc;
     x = arWx;
-    ActCoeff = arGam;
     lnGamma = arlnGam;
 }
 
@@ -175,10 +174,8 @@ TSolMod::~TSolMod()
 	aIPc = NULL;
 	aDCc = NULL;
 	x = NULL;
-	ActCoeff = NULL;
 	lnGamma = NULL;
 }
-
 
 
 // Van Laar model for solid solutions (c) TW March 2007
@@ -223,7 +220,7 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ )
 	double *PsVol; // End member volume parameters
 
         if ( /* ModCode != SM_VANLAAR || */ NPcoef < 4 || NPar < 1 || NComp < 2
-            || MaxOrd < 2 || !x || !lnGamma || !ActCoeff )
+            || MaxOrd < 2 || !x || !lnGamma )
            return 1;  // foolproof!
 
         Wpt = new double [NPar];
@@ -273,7 +270,6 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ )
                 lnGam /= (R_CONST*Tk);
 		Gam = exp(lnGam);
 		lnGamma[j] = lnGam;
-		ActCoeff[j] = Gam;
 	}
 
 	// calculate bulk phase excess properties (to be completed)

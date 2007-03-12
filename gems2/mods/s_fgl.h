@@ -323,7 +323,7 @@ private:
         double Tk;    // Temperature, K
         double Pbar;  // Pressure, bar
 
-        double *x;    // Pointer to mole fractions of end members
+        double *x;    // Pointer to mole fractions of end members (provided)
 // Results
         double Gam;   // work cell for activity coeff of end member
         double lnGam;
@@ -331,16 +331,14 @@ private:
         double Vex;   // Excess molar volume (debugging)
         double Hex;   // Excess molar enthalpy (debugging)
         double Sex;   // Excess molar entropy (debugging)
-
-        double *ActCoeff;  // Pointer to activity coefficients
         double *lnGamma;   // Pointer to ln activity coefficients of end members
-
+                           // (memory must be provided from the calling program)
 public:
 // Generic constructor
     TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
          int NPperDC, double T_k, double P_bar, char Mod_Code,
          short* arIPx, float* arIPc, float* arDCc,
-         double *arWx, double *arlnGam, double *arGam );
+         double *arWx, double *arlnGam );
     ~TSolMod();
 
 // Van Laar model for solid solutions

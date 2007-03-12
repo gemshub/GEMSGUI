@@ -1425,7 +1425,7 @@ TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
     aDCc = pmp->DMc+jdb;   // End-member parameter coefficients f(TPX) -> NComp x NP_DC
 
     TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-       aIPx, aIPc, aDCc, NULL, NULL, NULL );
+       aIPx, aIPc, aDCc, NULL, NULL );
 // Extended constructor is required, also to load params and coeffs
 
    // calculate P-T dependence of interaction parameters
@@ -1448,7 +1448,7 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
 
     int NComp, NPar, NPcoef, MaxOrd, NP_DC;
     float *aIPc, *aDCc;
-    double *aWx, *alnGam, *aGam;
+    double *aWx, *alnGam;
     short * aIPx;
     double Gex=0.0, Vex=0.0, Hex=0.0, Sex=0.0;
 
@@ -1465,10 +1465,9 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
     aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x NP_DC
     aWx = pmp->Wx+jb;       // End member mole fractions
     alnGam = pmp->lnGam+jb; // End member ln activity coeffs
-    aGam = pmp->Gamma+jb;   // End member activity coefficients
 
     TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-       aIPx, aIPc, aDCc, aWx, alnGam, aGam );
+       aIPx, aIPc, aDCc, aWx, alnGam );
     // Extended constructor to connect to params, coeffs, and mole fractions
 
     switch( ModCode )
