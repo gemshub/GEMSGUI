@@ -140,6 +140,7 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 // Implementation of the TSolMod class
 // Started by Th.Wagner and D.Kulik on 07.03.2007
 
+
 // Generic constructor for the TSolMod class
 //
 TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
@@ -202,20 +203,23 @@ TSolMod::VanLaarPT()
 	return 0;
 }
 
+
 // Van Laar model for solid solutions (c) TW March 2007
-// References:  Van Laar (19XX)  Wagner (20XX)
-//
+// References:  Holland & Powell (2003)
 // Calculates activity coefficients and excess functions
 // Returns 0 if Ok or not 0 if error
 //
 int
-TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ )
+TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
 {
 	int ip, j;
 	int index1, index2;
 	double dj, dk;
 	double sumPhi; // Sum of Phi terms
-	double *Wpt;   // Interaction coeffs
+	double *Wh;
+	double *Ws;
+	double *Wv;
+	double *Wpt;   // Interaction coeffs at P-T
 	double *Phi;   // Mixing terms
 	double *PsVol; // End member volume parameters
 
@@ -223,7 +227,10 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ )
             || MaxOrd < 2 || !x || !lnGamma )
            return 1;  // foolproof!
 
-        Wpt = new double [NPar];
+    Wh = new double [NPar];
+    Ws = new double [NPar];
+    Wv = new double [NPar];
+    Wpt = new double [NPar];
 	Phi = new double [NComp];
 	PsVol = new double [NComp];
 
@@ -232,13 +239,18 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ )
 
 	// read P-T corrected interaction parameters
 	for (ip=0; ip<NPar; ip++)
-            Wpt[ip] = (double)aIPc[NPcoef*ip+3]; // were stored in VanLaarPT()
+	{
+		Wh[ip] = (double)aIPc[NPcoef*ip];
+		Ws[ip] = (double)aIPc[NPcoef*ip+1];
+		Wv[ip] = (double)aIPc[NPcoef*ip+2];
+		Wpt[ip] = (double)aIPc[NPcoef*ip+3]; // were stored in VanLaarPT()
+	}
 
 	// calculating Phi values
 	sumPhi = 0.;
 	for (j=0; j<NComp; j++)
 	{
-	     PsVol[j] = aDCc[NP_DC*j];  // reading pseudo-volumes
+	     PsVol[j] = (double)aDCc[NP_DC*j];  // reading pseudo-volumes
 	     sumPhi +=  x[j]*PsVol[j];
 	}
         if( fabs(sumPhi) < 1e-30 )
@@ -267,22 +279,37 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ )
 			lnGam -= (dj-Phi[index1])*(dk-Phi[index2])*Wpt[ip]
                                 *2.*PsVol[j]/(PsVol[index1]+PsVol[index2]);
 		}
-                lnGam /= (R_CONST*Tk);
+        lnGam /= (R_CONST*Tk);
 		Gam = exp(lnGam);
 		lnGamma[j] = lnGam;
 	}
 
-	// calculate bulk phase excess properties (to be completed)
-        Gex = 0.;
+	// calculate bulk phase excess properties
+	Gex = 0.;
 	Vex = 0.;
 	Hex = 0.;
 	Sex = 0.;
+	CPex = 0.;
 
-        Gex_ = Gex;
-        Vex_ = Vex;
-        Hex_ = Hex;
-        Sex_ = Sex;
+	for (ip=0; ip<NPar; ip++)
+	{
+		index1 = (int)aIPx[MaxOrd*ip];
+		index2 = (int)aIPx[MaxOrd*ip+1];
+		Gex += Phi[index1]*Phi[index2]*2*sumPhi/(PsVol[index1]+PsVol[index2])*Wpt[ip];
+		Vex += Phi[index1]*Phi[index2]*2*sumPhi/(PsVol[index1]+PsVol[index2])*Wv[ip];
+		Hex += Phi[index1]*Phi[index2]*2*sumPhi/(PsVol[index1]+PsVol[index2])*Wh[ip];
+		Sex -= Phi[index1]*Phi[index2]*2*sumPhi/(PsVol[index1]+PsVol[index2])*Wv[ip];
+	}
 
+    Gex_ = Gex;
+    Vex_ = Vex;
+    Hex_ = Hex;
+    Sex_ = Sex;
+    CPex_ = CPex;
+
+	delete[]Wh;
+	delete[]Ws;
+	delete[]Wv;
 	delete[]Wpt;
 	delete[]Phi;
 	delete[]PsVol;

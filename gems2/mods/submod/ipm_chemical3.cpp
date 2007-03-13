@@ -1450,7 +1450,7 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
     float *aIPc, *aDCc;
     double *aWx, *alnGam;
     short * aIPx;
-    double Gex=0.0, Vex=0.0, Hex=0.0, Sex=0.0;
+    double Gex=0.0, Vex=0.0, Hex=0.0, Sex=0.0, CPex=0.0;
 
     NComp = pmp->L1[k];          // Number of components in the phase
     NPar = pmp->LsMod[k*3];      // Number of interaction parameters
@@ -1473,7 +1473,7 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
     switch( ModCode )
     {
         case SM_VANLAAR:
-             aSM.VanLaarMixMod( Gex, Vex, Hex, Sex );
+             aSM.VanLaarMixMod( Gex, Vex, Hex, Sex, CPex );
              break;
 //        case SM_REDKIST:
 //        .............
@@ -1481,7 +1481,7 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
               break;
     }
     // To add handling of excess properties for the phase
-    // Gex, Vex, Hex, Sex
+    // Gex, Vex, Hex, Sex, CPex
 
 }
 

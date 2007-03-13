@@ -327,10 +327,11 @@ private:
 // Results
         double Gam;   // work cell for activity coeff of end member
         double lnGam;
-        double Gex;   // Molar excess Gibbs energy (debugging)
-        double Vex;   // Excess molar volume (debugging)
-        double Hex;   // Excess molar enthalpy (debugging)
-        double Sex;   // Excess molar entropy (debugging)
+        double Gex;   // Molar excess Gibbs energy
+        double Vex;   // Excess molar volume
+        double Hex;   // Excess molar enthalpy
+        double Sex;   // Excess molar entropy
+        double CPex;  // Excess heat capacity
         double *lnGamma;   // Pointer to ln activity coefficients of end members
                            // (memory must be provided from the calling program)
 public:
@@ -343,7 +344,15 @@ public:
 
 // Van Laar model for solid solutions
     int VanLaarPT();
-    int VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_ );
+    int VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ );
+
+// Regular model for solid solutions
+//	int RegularPT();
+//	int RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ );
+
+// Redlich-Kister model for solid solutions
+//	int RedlichKisterPT();
+//	int RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ );
 
 // Prototypes for other models to be added here
 // Redlich-Kister / Guggenheim ...
@@ -352,6 +361,7 @@ public:
 // Pitzer ...
 // SIT ...
 // EUniquac ...
+// NRTL (Wilson) ...
 // PRSV can also be moved here
 
 
