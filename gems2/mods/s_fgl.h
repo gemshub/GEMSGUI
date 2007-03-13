@@ -344,11 +344,13 @@ public:
 
 // Van Laar model for solid solutions
     int VanLaarPT();
-    int VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ );
+    int VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+         double &CPex_ );
 
 // Regular model for solid solutions
-//	int RegularPT();
-//	int RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ );
+    int RegularPT();
+    int RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+         double &CPex_ );
 
 // Redlich-Kister model for solid solutions
 //	int RedlichKisterPT();

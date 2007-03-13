@@ -510,8 +510,8 @@ void TMulti::GammaCalc( int LinkMode  )
                   case SM_MARGT:
                        MargulesTernary( jb, je, jpb, jdb, k );
                           break;
-                  case SM_RECIP: // under construction
-                          break;
+//                  case SM_REGULAR: // under construction - formerly SM_RECIP
+//                          break;
                   case SM_VANLAAR:
                   // .....
                        SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // VanLaar TW 2007
@@ -1434,7 +1434,10 @@ TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
         case SM_VANLAAR:
              aSM.VanLaarPT();
              break;
-//        case SM_REDKIST:
+//        case SM_REDKIS:
+        case SM_REGULAR:
+             aSM.RegularPT();
+             break;
 //        .............
         default:
              break;
@@ -1475,7 +1478,10 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
         case SM_VANLAAR:
              aSM.VanLaarMixMod( Gex, Vex, Hex, Sex, CPex );
              break;
-//        case SM_REDKIST:
+//        case SM_REDKIS:
+        case SM_REGULAR:
+             aSM.RegularMixMod( Gex, Vex, Hex, Sex, CPex );
+             break;
 //        .............
         default: // catch error here
               break;

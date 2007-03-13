@@ -3,7 +3,7 @@
 //
 // Declaration of TPhase class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -62,7 +62,7 @@ nscM,    // Number of parameters per solution phase species (cols in scoef table
 // nipX replaces nscM  - changed 07.12.2006  by KD
     NsiT,     // N of surface site types (to set up on remake)
     NR1;      // Number of elements per species in MaSdj array (1: old 6: new)
-short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM 
+short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM
               // takes over from PXres
  float Asur,  // Specific surface area of major component (carrier), m2/g
     Sigma0,// Standard mean surface energy of solid-aqueous interface, J/m2
@@ -77,14 +77,14 @@ short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM
 // *PXres, // Reserved
     *pnc, //Array of phase-related coefficients of non-ideality model [ncpN][ncpM]
     *scoef;//Array of DC-related coefficients of non-ideality model[nDC][nscM]
-  
+
   float (*MSDT)[2]; // SAT: Max & min density of reacted species, 1/nm2 [NsiT]
   float (*CapT)[2]; // Inner EDL capacitance density, F/m2 (TLM, CCM)
   float (*MaSdj)[DFCN]; // Max. density, CD-music and isotherm params [nDC][NR1]
                 // Outer EDL capacitance density, F/m2 (TLM)  [NsiT]
   char (*SATC)[MCAS]; // SACT method codes & allocations of surface species [nDC][DFCN]
   char (*SM)[DC_RKLEN]; // List of DC record keys included into phase[0:nDC-1]
-  char  
+  char
 	*DCC,   // DC classes { TESWGVCHNIJM<digit>XYZABPQRO}[0:nDC-1]
     *DCS,   // Source of input data for DC { r d }.d-DCOMP r-REACT[0:nDC-1]
     *SCMC,  /* Class.of EDL models for surf types [0:NsiT-1]*/
@@ -97,7 +97,7 @@ short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM
 
   char (*lsCat)[MAXDCNAME];       // work object - vector of names of cations
   char (*lsAn)[MAXDCNAME];        // work object - vector of names of anions
-  
+
   short
    *nxCat,                  // Vector of indexes for cations in SIT coeff table
    *nxAn;                   // vector of indexes for anions  in SIT coeff table
@@ -143,13 +143,13 @@ public:
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
     void CmHelp();
-    // added by KD on 21.11.04 for SIT 
+    // added by KD on 21.11.04 for SIT
     void MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut );
     // make new aq and/or gas phases (re-written by KD 30.07.03)
     void newAqGasPhase( const char *akey, const char *gkey, int file,
         const char amod, const char gmod, float apar[4], float gpar[4],
             bool useLst = false, TCStringArray lst = 0 );
-    // Added by KD on 31.07.03 
+    // Added by KD on 31.07.03
     void AssemblePhase( const char* key, const char* part, float param[4],
            int file, bool useLst = false, TCStringArray lst = 0 );
 
@@ -162,7 +162,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SPHAS_TYP, DCOMP_DEP, SPHAS_DEP, SGM_MODE, DCE_LINK, SCM_TYPE,
     /* link state */
     LINK_UX_MODE, LINK_TP_MODE, LINK_FIA_MODE,
-    /* Posible values of  of keys of model solution - DCOMP_DEP, SPHAS_DEP */
+    /* Posible values of ï¿½of keys of model solution - DCOMP_DEP, SPHAS_DEP */
     SM_UNDEF = 'N', SM_TPDEP = 'T', SM_UXDEP = 'X', SM_PRIVATE_ = 'P',
     SM_PUBLIC = 'U',
     // Posible modes calculating of activity coefficients SGM_MODE
@@ -176,7 +176,8 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_MARGB = 'M',  // built-in binary Margules SS (subreg. w. 3 coeff U,P,T )
     SM_MARGT = 'T',  // built-in ternary Margules SS (reg. w. 3 coeff U,P,T )
     SM_CGFLUID = 'F',  // built-in multicomp. EOS fluid Churakov&Gottschalk 2003
-    SM_RECIP = 'R',  // reciprocal solution (to be done), formerly regular solution
+//    SM_RECIP = 'R',  // reciprocal solution (to be done), formerly regular solution
+    SM_REGULAR = 'R',  // regular multicomponent solution (for now with binary IP)
     SM_AQDAV = 'D',  // built-in Davies equation (with 0.3) added KD 25.01.02
     SM_AQDH1 = '1',  // built-in limiting Debye-Hueckel law for aqueous species
     SM_AQDH2 = '2',  // built-in 2-term Debye-Hueckel (Kielland)
@@ -187,7 +188,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_IONEX = 'E',  // ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A', // models of surface complexation at solid-aqueous interface
     SM_USERDEF = 'U', // user-defined mixing model (in Phase record)
-    SM_VANLAAR = 'V', // Generalized Van Laar solution model (under construction) 
+    SM_VANLAAR = 'V', // Generalized Van Laar solution model
     SM_OTHER = 'O'   //  other models of non-ideal solutions (reserved)
 };
 

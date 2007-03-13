@@ -36,8 +36,8 @@ int TPRSVcalc::CalcFugPure( void )
 
     ErrorIf( !aW.twp, "PRSV EoS", "Undefined twp");
 
-    P = aW.twp->P;    /* P in 10^5 Pa  */
-    T = aW.twp->TC+273.15;   /* T in K */
+    P = aW.twp->P;    /* P in 10^5 Paï¿½ */
+    T = aW.twp->TC+273.15;   /* Tï¿½in K */
 
     Coeff = aW.twp->CPg;     /* pointer to coeffs of CG EOS */
 
@@ -79,8 +79,8 @@ int TCGFcalc::CGcalcFug( void )
 
     ErrorIf( !aW.twp, "CG EoS", "Undefined twp");
 
-    P = aW.twp->P;    /* P in 10^5 Pa  */
-    T = aW.twp->TC+273.15;   /* T in K */
+    P = aW.twp->P;    /* P in 10^5 Paï¿½ */
+    T = aW.twp->TC+273.15;   /* Tï¿½in K */
 
     Coeff = aW.twp->Cemp;     /* pointer to coeffs of CG EOS */
 
@@ -127,13 +127,6 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 //
     return retCode;
 }
-
-
-
-
-
-
-
 
 
 // -----------------------------------------------------------------------------
@@ -194,11 +187,11 @@ TSolMod::VanLaarPT()
 
 	for (ip=0; ip<NPar; ip++)
 	{
-		Wij[0] = (double)aIPc[NPcoef*ip];
-		Wij[1] = (double)aIPc[NPcoef*ip+1];
-		Wij[2] = (double)aIPc[NPcoef*ip+2];
-		Wij[3] = Wij[0]+ Wij[1]*Tk + Wij[2]*Pbar;
-		aIPc[NPcoef*ip+3] = (float)Wij[3];
+            Wij[0] = (double)aIPc[NPcoef*ip];
+            Wij[1] = (double)aIPc[NPcoef*ip+1];
+            Wij[2] = (double)aIPc[NPcoef*ip+2];
+	    Wij[3] = Wij[0]+ Wij[1]*Tk + Wij[2]*Pbar;
+	    aIPc[NPcoef*ip+3] = (float)Wij[3];
 	}
 	return 0;
 }
@@ -210,114 +203,135 @@ TSolMod::VanLaarPT()
 // Returns 0 if Ok or not 0 if error
 //
 int
-TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+         double &CPex_ )
 {
-	int ip, j;
-	int index1, index2;
-	double dj, dk;
-	double sumPhi; // Sum of Phi terms
-	double *Wh;
-	double *Ws;
-	double *Wv;
-	double *Wpt;   // Interaction coeffs at P-T
-	double *Phi;   // Mixing terms
-	double *PsVol; // End member volume parameters
+   int ip, j;
+   int index1, index2;
+   double dj, dk;
+   double sumPhi; // Sum of Phi terms
+   double *Wh;
+   double *Ws;
+   double *Wv;
+   double *Wpt;   // Interaction coeffs at P-T
+   double *Phi;   // Mixing terms
+   double *PsVol; // End member volume parameters
 
-        if ( /* ModCode != SM_VANLAAR || */ NPcoef < 4 || NPar < 1 || NComp < 2
-            || MaxOrd < 2 || !x || !lnGamma )
+   if ( /* ModCode != SM_VANLAAR || */ NPcoef < 4 || NPar < 1 || NComp < 2
+         || MaxOrd < 2 || !x || !lnGamma )
            return 1;  // foolproof!
 
-    Wh = new double [NPar];
-    Ws = new double [NPar];
-    Wv = new double [NPar];
-    Wpt = new double [NPar];
-	Phi = new double [NComp];
-	PsVol = new double [NComp];
+   Wh = new double [NPar];
+   Ws = new double [NPar];
+   Wv = new double [NPar];
+   Wpt = new double [NPar];
+   Phi = new double [NComp];
+   PsVol = new double [NComp];
 
-        if( !Wpt || !Phi || !PsVol )
-          return -1;  // memory alloc failure
+   if( !Wpt || !Phi || !PsVol )
+        return -1;  // memory alloc failure
 
 	// read P-T corrected interaction parameters
-	for (ip=0; ip<NPar; ip++)
+   for (ip=0; ip<NPar; ip++)
+   {
+        Wh[ip] = (double)aIPc[NPcoef*ip];
+	Ws[ip] = (double)aIPc[NPcoef*ip+1];
+	Wv[ip] = (double)aIPc[NPcoef*ip+2];
+	Wpt[ip] = (double)aIPc[NPcoef*ip+3]; // were stored in VanLaarPT()
+   }
+
+   // calculating Phi values
+   sumPhi = 0.;
+   for (j=0; j<NComp; j++)
+   {
+       PsVol[j] = (double)aDCc[NP_DC*j];  // reading pseudo-volumes
+       sumPhi +=  x[j]*PsVol[j];
+   }
+   if( fabs(sumPhi) < 1e-30 )
+       return 2;    // to prevent zerodivide!
+
+   for (j=0; j<NComp; j++)
+       Phi[j] = x[j]*PsVol[j]/sumPhi;
+
+   // calculate activity coefficients
+   for (j=0; j<NComp; j++)      // index end members with j
+   {
+	lnGam = 0.;
+	for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
 	{
-		Wh[ip] = (double)aIPc[NPcoef*ip];
-		Ws[ip] = (double)aIPc[NPcoef*ip+1];
-		Wv[ip] = (double)aIPc[NPcoef*ip+2];
-		Wpt[ip] = (double)aIPc[NPcoef*ip+3]; // were stored in VanLaarPT()
+            index1 = (int)aIPx[MaxOrd*ip];
+	    index2 = (int)aIPx[MaxOrd*ip+1];
+
+   	    if( j == index1 )
+		dj = 1.;
+	    else
+		dj = 0.;
+	    if( j == index2 )
+		dk = 1.;
+	    else
+		dk = 0.;
+	    lnGam -= (dj-Phi[index1])*(dk-Phi[index2])*Wpt[ip]
+                         *2.*PsVol[j]/(PsVol[index1]+PsVol[index2]);
 	}
-
-	// calculating Phi values
-	sumPhi = 0.;
-	for (j=0; j<NComp; j++)
-	{
-	     PsVol[j] = (double)aDCc[NP_DC*j];  // reading pseudo-volumes
-	     sumPhi +=  x[j]*PsVol[j];
-	}
-        if( fabs(sumPhi) < 1e-30 )
-           return 2;    // to prevent zerodivide!
-
-	for (j=0; j<NComp; j++)
-	     Phi[j] = x[j]*PsVol[j]/sumPhi;
-
-	// calculate activity coefficients
-	for (j=0; j<NComp; j++)      // index end members with j
-	{
-		lnGam = 0.;
-		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
-		{
-			index1 = (int)aIPx[MaxOrd*ip];
-			index2 = (int)aIPx[MaxOrd*ip+1];
-
-			if( j == index1 )
-				dj = 1.;
-			else
-				dj = 0.;
-			if( j == index2 )
-				dk = 1.;
-			else
-				dk = 0.;
-			lnGam -= (dj-Phi[index1])*(dk-Phi[index2])*Wpt[ip]
-                                *2.*PsVol[j]/(PsVol[index1]+PsVol[index2]);
-		}
         lnGam /= (R_CONST*Tk);
-		Gam = exp(lnGam);
-		lnGamma[j] = lnGam;
+//	Gam = exp(lnGam);
+	lnGamma[j] = lnGam;
 	}
 
-	// calculate bulk phase excess properties
-	Gex = 0.;
-	Vex = 0.;
-	Hex = 0.;
-	Sex = 0.;
-	CPex = 0.;
+   // calculate bulk phase excess properties
+   Gex = 0.;
+   Vex = 0.;
+   Hex = 0.;
+   Sex = 0.;
+   CPex = 0.;
 
-	for (ip=0; ip<NPar; ip++)
-	{
-		index1 = (int)aIPx[MaxOrd*ip];
-		index2 = (int)aIPx[MaxOrd*ip+1];
-		Gex += Phi[index1]*Phi[index2]*2*sumPhi/(PsVol[index1]+PsVol[index2])*Wpt[ip];
-		Vex += Phi[index1]*Phi[index2]*2*sumPhi/(PsVol[index1]+PsVol[index2])*Wv[ip];
-		Hex += Phi[index1]*Phi[index2]*2*sumPhi/(PsVol[index1]+PsVol[index2])*Wh[ip];
-		Sex -= Phi[index1]*Phi[index2]*2*sumPhi/(PsVol[index1]+PsVol[index2])*Wv[ip];
-	}
+   for (ip=0; ip<NPar; ip++)
+   {
+      index1 = (int)aIPx[MaxOrd*ip];
+      index2 = (int)aIPx[MaxOrd*ip+1];
+      Gex += Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Wpt[ip];
+      Vex += Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Wv[ip];
+      Hex += Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Wh[ip];
+      Sex -= Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Wv[ip];
+   }
 
-    Gex_ = Gex;
-    Vex_ = Vex;
-    Hex_ = Hex;
-    Sex_ = Sex;
-    CPex_ = CPex;
+   Gex_ = Gex;
+   Vex_ = Vex;
+   Hex_ = Hex;
+   Sex_ = Sex;
+   CPex_ = CPex;
 
-	delete[]Wh;
-	delete[]Ws;
-	delete[]Wv;
-	delete[]Wpt;
-	delete[]Phi;
-	delete[]PsVol;
-	return 0;
+   delete[]Wh;
+   delete[]Ws;
+   delete[]Wv;
+   delete[]Wpt;
+   delete[]Phi;
+   delete[]PsVol;
+   return 0;
 }
-
 
 // To add other models here!
 
+// Regular model for multicomponent solid solutions (c) TW March 2007
+// Calculates T,P corrected binary interaction parameters
+// Returns 0 if Ok or 1 if error
+int
+TSolMod::RegularPT()
+{
 
+}
+
+
+// Regular model for multicomponent solid solutions (c) TW March 2007
+// References:  Holland & Powell (2003)
+// Calculates activity coefficients and excess functions
+// Returns 0 if Ok or not 0 if error
+//
+int
+TSolMod::RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+         double &CPex_ )
+{
+
+   return 0;
+}
 //--------------------- End of s_fgl2.cpp ---------------------------
