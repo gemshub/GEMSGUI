@@ -285,19 +285,19 @@ class TPRSVcalc // Peng-Robinson-Styjek-Vera EOS calculations
 
 protected:
 
-int PureParam( double *params ); // calculates a and b arrays
-double A(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit);
-double B(double Tcrit, double Pcrit);
-int FugacityPure( void ); // Calculates the fugacity of pure species
-int Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3);
-int MixParam( double &amix, double &bmix);
-int FugacityMix( double amix, double bmix,
+	int PureParam( double *params ); // calculates a and b arrays
+	double A(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit);
+	double B(double Tcrit, double Pcrit);
+	int FugacityPure( void ); // Calculates the fugacity of pure species
+	int Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3);
+	int MixParam( double &amix, double &bmix);
+	int FugacityMix( double amix, double bmix,
      double &fugmix, double &zmix, double &vmix);
-int FugacitySpec( double *fugpure, float *binpar, float *params  );
+	int FugacitySpec( double *fugpure, float *binpar, float *params  );
 
-int GetEosParam( float *params ); // Loads EoS parameters for NComp species
-int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
-double ObtainResults( double *ActCoef ); // returns activity coeffs and phase volume
+	int GetEosParam( float *params ); // Loads EoS parameters for NComp species
+	int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
+	double ObtainResults( double *ActCoef ); // returns activity coeffs and phase volume
 
 };
 
@@ -322,10 +322,10 @@ private:
         float *aDCc;  // End-member parameter coefficients
         double Tk;    // Temperature, K
         double Pbar;  // Pressure, bar
-
         double *x;    // Pointer to mole fractions of end members (provided)
 // Results
         double Gam;   // work cell for activity coeff of end member
+        double lnGamRT;
         double lnGam;
         double Gex;   // Molar excess Gibbs energy
         double Vex;   // Excess molar volume

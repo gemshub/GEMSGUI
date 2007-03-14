@@ -36,8 +36,8 @@ int TPRSVcalc::CalcFugPure( void )
 
     ErrorIf( !aW.twp, "PRSV EoS", "Undefined twp");
 
-    P = aW.twp->P;    /* P in 10^5 Pa� */
-    T = aW.twp->TC+273.15;   /* T�in K */
+    P = aW.twp->P;    /* P in 10^5 Pa? */
+    T = aW.twp->TC+273.15;   /* T?in K */
 
     Coeff = aW.twp->CPg;     /* pointer to coeffs of CG EOS */
 
@@ -79,8 +79,8 @@ int TCGFcalc::CGcalcFug( void )
 
     ErrorIf( !aW.twp, "CG EoS", "Undefined twp");
 
-    P = aW.twp->P;    /* P in 10^5 Pa� */
-    T = aW.twp->TC+273.15;   /* T�in K */
+    P = aW.twp->P;    /* P in 10^5 Pa? */
+    T = aW.twp->TC+273.15;   /* T?in K */
 
     Coeff = aW.twp->Cemp;     /* pointer to coeffs of CG EOS */
 
@@ -134,6 +134,7 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 // Started by Th.Wagner and D.Kulik on 07.03.2007
 
 
+
 // Generic constructor for the TSolMod class
 //
 TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
@@ -162,6 +163,8 @@ TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
 TSolMod::~TSolMod()
 {
 
+
+
 // In principle, the stuff below is not necessary if the memory is not
 // allocated within the class
 	aIPx = NULL;
@@ -170,6 +173,7 @@ TSolMod::~TSolMod()
 	x = NULL;
 	lnGamma = NULL;
 }
+
 
 
 // Van Laar model for solid solutions (c) TW March 2007
@@ -187,14 +191,15 @@ TSolMod::VanLaarPT()
 
 	for (ip=0; ip<NPar; ip++)
 	{
-            Wij[0] = (double)aIPc[NPcoef*ip];
-            Wij[1] = (double)aIPc[NPcoef*ip+1];
-            Wij[2] = (double)aIPc[NPcoef*ip+2];
+        Wij[0] = (double)aIPc[NPcoef*ip];
+        Wij[1] = (double)aIPc[NPcoef*ip+1];
+        Wij[2] = (double)aIPc[NPcoef*ip+2];
 	    Wij[3] = Wij[0]+ Wij[1]*Tk + Wij[2]*Pbar;
 	    aIPc[NPcoef*ip+3] = (float)Wij[3];
 	}
 	return 0;
 }
+
 
 
 // Van Laar model for solid solutions (c) TW March 2007
@@ -256,10 +261,10 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
    // calculate activity coefficients
    for (j=0; j<NComp; j++)      // index end members with j
    {
-	lnGam = 0.;
+	lnGamRT = 0.;
 	for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
 	{
-            index1 = (int)aIPx[MaxOrd*ip];
+        index1 = (int)aIPx[MaxOrd*ip];
 	    index2 = (int)aIPx[MaxOrd*ip+1];
 
    	    if( j == index1 )
@@ -270,10 +275,10 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 		dk = 1.;
 	    else
 		dk = 0.;
-	    lnGam -= (dj-Phi[index1])*(dk-Phi[index2])*Wpt[ip]
+	    lnGamRT -= (dj-Phi[index1])*(dk-Phi[index2])*Wpt[ip]
                          *2.*PsVol[j]/(PsVol[index1]+PsVol[index2]);
 	}
-        lnGam /= (R_CONST*Tk);
+        lnGam = lnGamRT/(R_CONST*Tk);
 //	Gam = exp(lnGam);
 	lnGamma[j] = lnGam;
 	}
@@ -310,7 +315,7 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
    return 0;
 }
 
-// To add other models here!
+
 
 // Regular model for multicomponent solid solutions (c) TW March 2007
 // Calculates T,P corrected binary interaction parameters
@@ -318,12 +323,28 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 int
 TSolMod::RegularPT()
 {
+// calculates P-T dependence of binary interaction parameters
+	int ip;
+	double Wij[4];
 
+        if ( /* ModCode != SM_REGULAR || */ NPcoef < 4 || NPar < 1 )
+           return 1;  // foolproof!
+
+	for (ip=0; ip<NPar; ip++)
+	{
+        Wij[0] = (double)aIPc[NPcoef*ip];
+        Wij[1] = (double)aIPc[NPcoef*ip+1];
+        Wij[2] = (double)aIPc[NPcoef*ip+2];
+	    Wij[3] = Wij[0]+ Wij[1]*Tk + Wij[2]*Pbar;
+	    aIPc[NPcoef*ip+3] = (float)Wij[3];
+	}
+	return 0;
 }
 
 
+
 // Regular model for multicomponent solid solutions (c) TW March 2007
-// References:  Holland & Powell (2003)
+// References:  Holland & Powell (1993)
 // Calculates activity coefficients and excess functions
 // Returns 0 if Ok or not 0 if error
 //
@@ -331,7 +352,94 @@ int
 TSolMod::RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
          double &CPex_ )
 {
+   int ip, j;
+   int index1, index2;
+   double dj, dk;
+   double *Wh;
+   double *Ws;
+   double *Wv;
+   double *Wpt;   // Interaction coeffs at P-T
 
+   if ( /* ModCode != SM_REGULAR || */ NPcoef < 4 || NPar < 1 || NComp < 2
+         || MaxOrd < 2 || !x || !lnGamma )
+           return 1;  // foolproof!
+
+   Wh = new double [NPar];
+   Ws = new double [NPar];
+   Wv = new double [NPar];
+   Wpt = new double [NPar];
+
+   if( !Wpt || !Wh || !Ws || !Wv )
+        return -1;  // memory alloc failure
+
+	// read P-T corrected interaction parameters
+   for (ip=0; ip<NPar; ip++)
+   {
+    Wh[ip] = (double)aIPc[NPcoef*ip];
+	Ws[ip] = (double)aIPc[NPcoef*ip+1];
+	Wv[ip] = (double)aIPc[NPcoef*ip+2];
+	Wpt[ip] = (double)aIPc[NPcoef*ip+3]; // were stored in RegularPT()
+   }
+
+   // calculate activity coefficients
+   for (j=0; j<NComp; j++)      // index end members with j
+   {
+	lnGamRT = 0.;
+	for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+	{
+        index1 = (int)aIPx[MaxOrd*ip];
+	    index2 = (int)aIPx[MaxOrd*ip+1];
+
+   	    if( j == index1 )
+		dj = 1.;
+	    else
+		dj = 0.;
+	    if( j == index2 )
+		dk = 1.;
+	    else
+		dk = 0.;
+	    lnGamRT -= (dj-x[index1])*(dk-x[index2])*Wpt[ip];
+	}
+        lnGam = lnGamRT/(R_CONST*Tk);
+//	Gam = exp(lnGam);
+	lnGamma[j] = lnGam;
+	}
+
+   // calculate bulk phase excess properties
+   Gex = 0.;
+   Vex = 0.;
+   Hex = 0.;
+   Sex = 0.;
+   CPex = 0.;
+
+   for (ip=0; ip<NPar; ip++)
+   {
+      index1 = (int)aIPx[MaxOrd*ip];
+      index2 = (int)aIPx[MaxOrd*ip+1];
+      Gex += x[index1]*x[index2]*Wpt[ip];
+      Vex += x[index1]*x[index2]*Wv[ip];
+      Hex += x[index1]*x[index2]*Wh[ip];
+      Sex -= x[index1]*x[index2]*Wv[ip];
+   }
+
+   Gex_ = Gex;
+   Vex_ = Vex;
+   Hex_ = Hex;
+   Sex_ = Sex;
+   CPex_ = CPex;
+
+   delete[]Wh;
+   delete[]Ws;
+   delete[]Wv;
+   delete[]Wpt;
    return 0;
 }
+
+
+
+// add multi-component Redlich-Kister model here
+
+
+
+
 //--------------------- End of s_fgl2.cpp ---------------------------
