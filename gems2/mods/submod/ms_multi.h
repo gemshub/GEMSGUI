@@ -314,7 +314,7 @@ class TMulti
                             short car_l[], int car_c, short Cjs );
     void sm_text_analyze( int nph, int Type, int JB, int JE, int jb, int je );
     void SolModLoad();
-    float *PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA );
+//    float *PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA );
     gstring PressSolMod( int nP );
     char *ExtractEG( char *Etext, int jp, int *EGlen, int Nes );
     int find_icnum( char *name, int LNmode );
@@ -382,7 +382,7 @@ class TMulti
     void DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k );
     void DebyeHueckel1LL( int jb, int je, int k );
     void Davies03temp( int jb, int je, int k );
-    void SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k );
+    void SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k, int ipb );
 // fluid mixtures
     void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
     void CGofPureGases( int jb, int je, int jpb, int jdb, int k );
@@ -451,7 +451,7 @@ public:
     void dyn_kill( int i=0);
     void dyn_new( int i=0);
     void set_def( int i=0);
-    void sit_dyn_new();
+//    void sit_dyn_new();
 
     // ms_muleq.cpp
     void packData();

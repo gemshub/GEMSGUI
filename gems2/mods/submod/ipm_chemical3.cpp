@@ -465,7 +465,7 @@ void TMulti::GammaCalc( int LinkMode  )
                        Davies03temp( jb, je, k );
                           break;
                   case SM_AQSIT:  // SIT - under construction
-                       SIT_aqac_PSI( jb, je, jpb, jdb, k );
+                       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );
                           break;
                   default:
                           break;
@@ -648,10 +648,12 @@ END_LOOP:
 // SIT NEA PSI (not yet official)
 //
 void
-TMulti::SIT_aqac_PSI( int jb, int je, int, int, int )
+TMulti::SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k, int ipb )
 {
 
-    int j, icat, ian, ic, ia;
+    int j, icat, ian, ic, ia,  index1, index2, ip, NComp, NPar, NPcoef, MaxOrd;
+    short *aIPx;
+    float *aIPc, *aDCc;
     double T, A, B, I, sqI, bgi=0, Z2, lgGam, SumSIT;
 //    float nPolicy;
 
@@ -667,6 +669,20 @@ TMulti::SIT_aqac_PSI( int jb, int je, int, int, int )
 
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
         "Error: A,B were not calculated - no values of RoW and EpsW !" );
+
+NComp = pmp->L1[k];          // Number of components in the phase
+NPar = pmp->LsMod[k*3];      // Number of interaction parameters
+NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
+MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
+
+// These pointers provide direct access to parts of MULTI arrays related to this phase!
+aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters for non-ideal solutions
+                          // -> NPar x MaxOrd   added 07.12.2006   KD
+aIPc = pmp->PMc+jpb;    // Interaction parameter coefficients f(TP) -> NPar x NPcoef
+aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x NP_DC
+// aWx = pmp->Wx+jb;       // End member mole fractions
+// alnGam = pmp->lnGam+jb; // End member ln activity coeffs
+
 
     // Calculation of EDH equation
 //  bgi = bg;
@@ -685,8 +701,30 @@ TMulti::SIT_aqac_PSI( int jb, int je, int, int, int )
       {       // Charged species : calculation of the DH part
            Z2 = pmp->EZ[j]*pmp->EZ[j];
            lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
-              // Calculation of SIT sums
+
+// Calculation of SIT sums - new variant
            SumSIT = 0.;
+           for( ip=0; ip<NPar; ip++ )
+           {
+             index1 = aIPx[ip*MaxOrd];
+             index2 = aIPx[ip*MaxOrd+1];
+             if( pmp->EZ[j] > 0 && index1 == icat )
+             { // cation
+               SumSIT += (double)aIPc[ip*NPcoef]
+//               pmp->sitE[ icat*pmp->sitNan + ia ]
+                        * I * pmp->Y_m[jb+index2];
+               lgGam += SumSIT;
+             }
+             else if( pmp->EZ[j] < 0 && index2 == ian )
+             {  // anion
+                SumSIT += (double)aIPc[ip*NPcoef]
+//                pmp->sitE[ ic*pmp->sitNan + ian ]
+                        * I * pmp->Y_m[jb + index1];
+                lgGam += SumSIT;
+             }
+           }
+              // Calculation of SIT sums - old variant
+/*           SumSIT = 0.;
            if( pmp->EZ[j] > 0 )
            {       // this is a cation
               for( ia=0; ia<pmp->sitNan; ia++ )
@@ -700,6 +738,7 @@ TMulti::SIT_aqac_PSI( int jb, int je, int, int, int )
                         * I * pmp->Y_m[pmp->sitXcat[ic]];
               lgGam += SumSIT;
            }
+*/
       }
       else
       { // Neutral species
@@ -710,9 +749,9 @@ TMulti::SIT_aqac_PSI( int jb, int je, int, int, int )
       }
       pmp->lnGam[j] = lgGam * lg_to_ln;
     } // j
-    if( ++icat != pmp->sitNcat || ++ian != pmp->sitNan )
-       Error( "SITgamma",
-          "Inconsistent numbers of cations and anions in gamma calculation" );
+//    if( ++icat != pmp->sitNcat || ++ian != pmp->sitNan )
+//       Error( "SITgamma",
+//          "Inconsistent numbers of cations and anions in gamma calculation" );
 }
 
 //----------------------------------------------------------------------------

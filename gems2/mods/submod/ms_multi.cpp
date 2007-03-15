@@ -356,6 +356,7 @@ aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
 aObj[ o_wo_lnsat].SetPtr( pm.lnSAC );
 aObj[ o_wo_lnsat ].SetDim( pm.Lads, 4 );
 
+/*
 //  Added 16.11.2004 by Sveta
     aObj[ o_wd_sitxcat ].SetPtr( pm.sitXcat );
     aObj[ o_wd_sitxcat ].SetDim( pm.sitNcat, 1 );
@@ -363,6 +364,7 @@ aObj[ o_wo_lnsat ].SetDim( pm.Lads, 4 );
     aObj[ o_wd_sitxan ].SetDim( 1, pm.sitNan );
     aObj[ o_wd_site ].SetPtr( pm.sitE );
     aObj[ o_wd_site ].SetDim( pm.sitNcat, pm.sitNan );
+*/
 }
 
 // set dynamic Objects ptr to values
@@ -497,11 +499,12 @@ void TMulti::dyn_set(int /*q*/)
     pm.SCM   = (char (*)[MST])aObj[ o_wi_scm ].GetPtr();
     pm.SATT  = (char *)aObj[ o_wi_satt ].GetPtr();
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].GetPtr();
+/*
 //  Added 16.11.2004 by Sveta
     pm.sitXcat = (short *)aObj[ o_wd_sitxcat ].GetPtr();
     pm.sitXan = (short *)aObj[ o_wd_sitxan ].GetPtr();
     pm.sitE = (float *)aObj[ o_wd_site ].GetPtr();
-
+*/
 }
 
 
@@ -636,12 +639,15 @@ void TMulti::dyn_kill(int /*q*/)
     pm.SCM   = (char (*)[MST])aObj[ o_wi_scm ].Free();
     pm.SATT  = (char *)aObj[ o_wi_satt ].Free();
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].Free();
+/*
 //  Added 16.11.2004 by Sveta
     pm.sitXcat = (short *)aObj[ o_wd_sitxcat ].Free();
     pm.sitXan = (short *)aObj[ o_wd_sitxan ].Free();
     pm.sitE = (float *)aObj[ o_wd_site ].Free();
+*/
 }
 
+/*
 void TMulti::sit_dyn_new()
 {
 //  Added 16.11.2004 by SD
@@ -658,7 +664,7 @@ void TMulti::sit_dyn_new()
    else
      pm.sitXan = (short *)aObj[ o_wd_sitxan].Free();
 }
-
+*/
 // reallocation of dynamic memory
 void TMulti::dyn_new(int /*q*/)
 {
@@ -931,7 +937,7 @@ void TMulti::dyn_new(int /*q*/)
     }
 
     /* pm.R = (float *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
-    sit_dyn_new();
+//    sit_dyn_new();
 }
 
 

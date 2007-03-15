@@ -260,23 +260,23 @@ LOAD_NIDMCOEF:
                        "Error in reallocating memory for pmp->PMc." );
 
 // Check if coeffs are properly compressed into MULTI !!!!!!!!!!!!!!!
-              if( modT[SPHAS_TYP] != SM_AQSIT )  // Not a SIT model
-              {    // temporary memcpy() - reimplement with compression !!!!!
+//              if( modT[SPHAS_TYP] != SM_AQSIT )  // Not a SIT model
+//              {    // temporary memcpy() - reimplement with compression !!!!!
                   memcpy( pmp->PMc+kc, aPH->php->pnc,
                      (pmp->LsMod[k*3]*pmp->LsMod[k*3+2])*sizeof(float));
-              }
-              else { // Aqueous phase with SIT model - to be reworked
-                 float *ppnc;
-                 ppnc = PackSITcoeffs( k, JB, JE, jb, je, pmp->LsMod[k*3] );
-                 if( ppnc )
-                 {  // ppnc is actually pmp->sitE !
-                    memcpy( pmp->PMc+kc, ppnc,
-                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float));
-                 }
-                 else
-                    memset( pmp->PMc+kc, 0,
-                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float) );
-              }
+//              }
+//              else { // Aqueous phase with SIT model - to be reworked
+//                 float *ppnc;
+//                 ppnc = PackSITcoeffs( k, JB, JE, jb, je, pmp->LsMod[k*3] );
+//                 if( ppnc )
+//                 {  // ppnc is actually pmp->sitE !
+//                    memcpy( pmp->PMc+kc, ppnc,
+//                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float));
+//                 }
+//                 else
+//                    memset( pmp->PMc+kc, 0,
+//                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float) );
+//              }
           }
           else { // no array with interaction parameters in the Phase record
             pmp->LsMod[k*3] = 0;
@@ -315,7 +315,7 @@ LOAD_NIDMCOEF:
                 jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
                 memcpy( pmp->DMc+kd+jkd, aPH->php->scoef+jp*pmp->LsMdc[k],
                         pmp->LsMdc[k]*sizeof(float));
-// Copying the CG fluid EoS coeffs - obsolete 
+// Copying the CG fluid EoS coeffs - obsolete
 //               if( (aPH->php->PphC == PH_FLUID) && (sMod[SPHAS_TYP] == SM_CGFLUID) )
 //               {
 //                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
@@ -349,103 +349,6 @@ LOAD_NIDMCOEF:
      } // k
     pmp->pIPN = 1;
  }
-
-// ------------------------------------------------------------------------
-// packs IP index table and IP coeffs table when some end members are
-// switched off   - to be implemented
-/*
-float *
-TMulti::PackIP_x_coefs( int k, int JB, int JE, int jb, int je, int kc,
-   int kx, int& nIP, int& Ord, int& nCoef, short *pIPx )
-{
-  TPhase* aPH = TPhase::pm;
-  return
-}
-*/
-
-// creates index lists and packs SIT coeffs table taken from Phase
-// definition record; returns a pointer to packed coeffs. table
-// Essential: aqueous phase must have index k = 0
-//
-float *
-TMulti::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
-{
-   int iCat=0, iAn=0, nCat/*=0*/, nAn/*=0*/, pos/*=0*/, icat=0, ian=0, nan/*=0*/;
-   short j, js, *nxCAT, *nxAN; //, *nxcat, *nxan;
-   gstring spName;
-   TPhase* aPH = TPhase::pm;
-
-   if( k )   // not an aqueous phase!
-     return 0;
-   // allocating dyn memory
-   sit_dyn_new();
-
-   nxCAT = (short *)malloc( (JE-JB)*sizeof(short) );
-   nxAN = (short *)malloc( (JE-JB)*sizeof(short) );
-// !!!!!! check for malloc errors
-
-// filling out MULTI SIT indexes for cations and anions
-   for( j = (short)jb; j< (short)je; j++ )
-   {
-      if( pmp->EZ[j] < 0 )
-          pmp->sitXan[ian++] = j;
-      else if( pmp->EZ[j] > 0 )
-          pmp->sitXcat[icat++] = j;
-      else ;
-   }
-   if( icat * ian != nCxA || icat * ian != pmp->sitNan * pmp->sitNcat )
-       Error( "PackSIT01",
-              "Inconsistent numbers of cations and anions" );
-
-   memset( pmp->sitE, 0, sizeof(float)*nCxA );
-// Analyzing Phase/System DC list for cations and anions
-   for( js=0; js < aPH->php->nDC; js++ )
-   {  // Determining if cation or anion
-      spName = gstring( aPH->php->SM[js], MAXSYMB+MAXDRGROUP, MAXDCNAME);
-      spName.strip();
-      pos = spName.length()-1;
-      while( pos>0 && spName[pos] <= '9' && spName[pos] >= '0' )
-          pos--;
-      switch( spName[pos] )
-      {
-         case '-': nxAN[iAn++] = js;
-                   break;
-         case '+': nxCAT[iCat++] = js;
-                   break;
-         case '@':
-         default:
-                   continue;
-      }
-   }
-   nCat = iCat;
-   nAn = iAn;
-
-nan = pmp->sitNan;
-// Analyzing cations in the phase SIT table
-   icat = 0;
-   for( iCat = 0; iCat<nCat; iCat++ )
-   {
-//      J = nxCat[iCat];
-      if( syp->Dcl[nxCAT[iCat]] == S_OFF )
-         continue; // this cation and the whole line is switched off
-      ian = 0;
-      for( iAn = 0; iAn<nAn; iAn++ )
-      {
-         if( syp->Dcl[nxAN[iAn]] == S_OFF )
-            continue;   // this anion (column) is switched off
-         // Temperature dependence ??
-         pmp->sitE[ icat*nan + ian ] = aPH->php->pnc[ iCat*nAn + iAn ];
-         ian++;
-      }
-      icat++;
-   }
-// check if ian*icat == nCxA
-   if(nxAN)
-      free(nxAN);
-   if(nxCAT)
-      free(nxCAT);
-   return pmp->sitE;
-}
 
 //-------------------------------------------------------------------
 // Translates, analyzes and unpacks equations of phase non-ideal model
@@ -1019,6 +922,108 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     } // end while
     *ecur = 0;
 }
+
+
+// ------------------------------------------------------------------------
+// packs IP index table and IP coeffs table when some end members are
+// switched off   - to be implemented
+/*
+float *
+TMulti::PackIP_x_coefs( int k, int JB, int JE, int jb, int je, int kc,
+   int kx, int& nIP, int& Ord, int& nCoef, short *pIPx )
+{
+  TPhase* aPH = TPhase::pm;
+  return
+}
+*/
+
+/*
+// creates index lists and packs SIT coeffs table taken from Phase
+// definition record; returns a pointer to packed coeffs. table
+// Essential: aqueous phase must have index k = 0
+//
+float *
+TMulti::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
+{
+   int iCat=0, iAn=0, nCat, nAn, pos, icat=0, ian=0, nan;
+   short j, js, *nxCAT, *nxAN; //, *nxcat, *nxan;
+   gstring spName;
+   TPhase* aPH = TPhase::pm;
+
+   if( k )   // not an aqueous phase!
+     return 0;
+   // allocating dyn memory
+   sit_dyn_new();
+
+   nxCAT = (short *)malloc( (JE-JB)*sizeof(short) );
+   nxAN = (short *)malloc( (JE-JB)*sizeof(short) );
+// !!!!!! check for malloc errors
+
+// filling out MULTI SIT indexes for cations and anions
+   for( j = (short)jb; j< (short)je; j++ )
+   {
+      if( pmp->EZ[j] < 0 )
+          pmp->sitXan[ian++] = j;
+      else if( pmp->EZ[j] > 0 )
+          pmp->sitXcat[icat++] = j;
+      else ;
+   }
+   if( icat * ian != nCxA || icat * ian != pmp->sitNan * pmp->sitNcat )
+       Error( "PackSIT01",
+              "Inconsistent numbers of cations and anions" );
+
+   memset( pmp->sitE, 0, sizeof(float)*nCxA );
+// Analyzing Phase/System DC list for cations and anions
+   for( js=0; js < aPH->php->nDC; js++ )
+   {  // Determining if cation or anion
+      spName = gstring( aPH->php->SM[js], MAXSYMB+MAXDRGROUP, MAXDCNAME);
+      spName.strip();
+      pos = spName.length()-1;
+      while( pos>0 && spName[pos] <= '9' && spName[pos] >= '0' )
+          pos--;
+      switch( spName[pos] )
+      {
+         case '-': nxAN[iAn++] = js;
+                   break;
+         case '+': nxCAT[iCat++] = js;
+                   break;
+         case '@':
+         default:
+                   continue;
+      }
+   }
+   nCat = iCat;
+   nAn = iAn;
+
+nan = pmp->sitNan;
+// Analyzing cations in the phase SIT table
+   icat = 0;
+   for( iCat = 0; iCat<nCat; iCat++ )
+   {
+//      J = nxCat[iCat];
+      if( syp->Dcl[nxCAT[iCat]] == S_OFF )
+         continue; // this cation and the whole line is switched off
+      ian = 0;
+      for( iAn = 0; iAn<nAn; iAn++ )
+      {
+         if( syp->Dcl[nxAN[iAn]] == S_OFF )
+            continue;   // this anion (column) is switched off
+         // Temperature dependence ??
+         pmp->sitE[ icat*nan + ian ] = aPH->php->pnc[ iCat*nAn + iAn ];
+         ian++;
+      }
+      icat++;
+   }
+// check if ian*icat == nCxA
+   if(nxAN)
+      free(nxAN);
+   if(nxCAT)
+      free(nxCAT);
+   return pmp->sitE;
+}
+*/
+
+
 
 //--------------------- End of muload.cpp ---------------------------
 

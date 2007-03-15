@@ -275,11 +275,11 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
     if( ph[q].Ppnc == S_ON && ph[q].sol_t[SPHAS_TYP] == SM_AQSIT )
     {
          ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Alloc(
-                          ph[q].ncpN, 1, MAXDCNAME );
+                          ph[q].nCat, 1, MAXDCNAME );
          ph[q].lsAn  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Alloc(
-                          1, ph[q].ncpM, MAXDCNAME );
-         ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( ph[q].ncpN, 1, I_);
-         ph[q].nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( 1, ph[q].ncpM, I_);
+                          1, ph[q].nAn, MAXDCNAME );
+         ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( ph[q].nCat, 1, I_);
+         ph[q].nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( ph[q].nAn, 1, I_);
     }
     else {
         ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
@@ -332,6 +332,8 @@ ph[q].ipxt = 0;
     ph[q].sdval = 0;
     ph[q].tprn = 0;
 // Work objects for SIT
+ph[q].nCat = 0;
+ph[q].nAn = 0;
 ph[q].lsCat = 0;
 ph[q].lsAn =  0;
 ph[q].nxCat = 0;
@@ -463,7 +465,6 @@ AGAIN_SETUP:
                           php->npxM = 0;
                           php->ncpN = 4; php->ncpM = 3;
                           break;
-//          case SM_RECIP:
           case SM_CGFLUID:  // Churakov-Gottschalk EoS
                           php->ncpN = 0;
                           php->ncpM = 0;
@@ -509,13 +510,24 @@ AGAIN_SETUP:
                           php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
-          case SM_AQSIT:  // SIT model in NEA variant
+          case SM_AQSIT:  // SIT model in NEA variant - new implementation
+                          php->nscM = 1;  // NP_DC
+                          php->npxM = 2;  // MaxOrd
+                          if( php->ncpN < 1 ) // NPar
+                              php->ncpN = 1;
+                          if( php->ncpN > php->nDC*php->nDC/2 )
+                              php->ncpN = php->nDC*php->nDC/2;
+                          php->ncpM = 1;  // NPcoef
+                          php->PphC = PH_AQUEL;
+                          break;
+/* old implementation of SIT (before 13.03.2007)
                           php->ncpN = max( (short)3, php->ncpN );
                           php->ncpM = max( (short)2, php->ncpM );
                           php->nscM = 1;
                           php->npxM = 2;    // to fix later
                           php->PphC = PH_AQUEL;
                           break;
+*/
           default:  // other models
              break;
        }
@@ -630,8 +642,8 @@ AGAINRC:
        if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
             Error( GetName(),
               "E39PHrem: No cations or no anions - SIT model cannot be applied...");
-       php->ncpN = nCat;
-       php->ncpM = nAn;
+        php->nCat = nCat;
+        php->nAn = nAn;
     }
 //---------------------------------------------------------------------
 
@@ -710,7 +722,7 @@ AGAINRC:
 
     if( php->NsiT > 0 && (php->PFsiT == S_REM || php->PFsiT == S_ON  ))
     {  /* Setup of default values */
-        php->PphC == PH_SORPTION;
+        php->PphC = PH_SORPTION;
         for( i=0; i<php->NsiT; i++ )
         { /* if( !php->SCMC[i] || php->SCMC[i]==A_NUL ) */
             php->SCMC[i] = php->sol_t[SCM_TYPE];  // fix by DK 24.07.2006
@@ -757,12 +769,12 @@ void
 TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 {
    int pos;
-   short i, iCat=0, iAn=0;
+   short i, iCat=0, iAn=0, nAn, nCat;
    gstring spName;
 
    if( WorkCount )
    {   // pre-proc. loop for SIT: determining number of cations and anions
-      short nAn=0, nCat=0;
+      nAn=0, nCat=0;
       for( i=0; i<php->nDC; i++ )
       {
          spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
@@ -784,8 +796,8 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
       if( nCat <=0 || nCat >= php->nDC || nAn <=0 || nCat >= php->nDC )
            Error( GetName(),
               "E39PHrem: No cations or no anions - SIT model cannot be applied...");
-      php->ncpN = nCat;
-      php->ncpM = nAn;
+      php->nCat = nCat;
+      php->nAn = nAn;
    }
 
    if( WorkAlloc )
@@ -793,11 +805,11 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
       if( php->Ppnc == S_ON && php->sol_t[SPHAS_TYP] == SM_AQSIT )
       {
          php->lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Alloc(
-                          php->ncpN, 1, MAXDCNAME );
+                          php->nCat, 1, MAXDCNAME );
          php->lsAn  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Alloc(
-                          1, php->ncpM, MAXDCNAME );
-         php->nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( php->ncpN, 1, I_);
-         php->nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( 1, php->ncpM, I_);
+                          php->nAn, 1, MAXDCNAME );
+         php->nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( php->nCat, 1, I_);
+         php->nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( php->nAn, 1, I_);
       }
       else {
         php->lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
@@ -829,9 +841,9 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
                   continue;
         }
      }
-     if( iCat != php->ncpN || iAn != php->ncpM )
+     if( iCat != php->nCat || iAn != php->nAn )
        Error( GetName(),
-        "E38PHrem: Mismatch in the number of cations or anions in the SIT model...");
+        "E38PHrem: Mismatch in the number of cations or anions in SIT model...");
    }
 }
 

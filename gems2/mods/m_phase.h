@@ -99,8 +99,10 @@ short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM
   char (*lsAn)[MAXDCNAME];        // work object - vector of names of anions
 
   short
-   *nxCat,                  // Vector of indexes for cations in SIT coeff table
-   *nxAn;                   // vector of indexes for anions  in SIT coeff table
+    nCat,   // Work data - number of cations
+    nAn,    // Work data - number of anions
+   *nxCat,            // Vector of indexes for cations in SIT coeff table
+   *nxAn;             // vector of indexes for anions  in SIT coeff table
 }
 
 PHASE;
