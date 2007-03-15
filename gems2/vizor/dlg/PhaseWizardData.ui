@@ -60,17 +60,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>G  Binary Redlich-Kister model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>M  Binary Margules subregular model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>T  Multicomponent Redlich-Kister mixing model (built-in)  </string>
+                            <string>D   Aqueous, Davies equation (built-in)</string>
                         </property>
                     </item>
                     <item>
@@ -95,11 +85,6 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>D   Aqueous, Davies equation (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
                             <string>S   Aqueous, SIT model (NEA TDB variant, built-in)</string>
                         </property>
                     </item>
@@ -120,17 +105,17 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>U   Other non-ideal mixing model (user-defined scripts)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>O   Other non-ideal mixing model (user-defined scripts)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
                             <string>P   Peng-Robinson-Stryjek-Vera (PRSV) EOS fluid model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>G  Binary Redlich-Kister model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>M  Binary Margules subregular model (built-in)</string>
                         </property>
                     </item>
                     <item>
@@ -140,7 +125,22 @@
                     </item>
                     <item>
                         <property name="text">
+                            <string>T  Multicomponent Redlich-Kister mixing model (built-in, reserved)  </string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
                             <string>V   Van Laar multicomponent mixing model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>O   Other non-ideal mixing model (user-defined scripts)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>U   Other non-ideal mixing model (user-defined scripts)</string>
                         </property>
                     </item>
                     <item>
