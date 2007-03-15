@@ -692,37 +692,42 @@ aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x N
     {
 // Determining the index of cation or anion
       if( pmp->EZ[j] < 0 )
-          ian++;
+          ian = j-jb; // ian++;
       else if( pmp->EZ[j] > 0 )
-          icat++;
+          icat = j-jb; // icat++;
       else ;
 
       if( pmp->EZ[j] )
-      {       // Charged species : calculation of the DH part
+      {    // Charged species : calculation of the DH part
            Z2 = pmp->EZ[j]*pmp->EZ[j];
            lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
 
-// Calculation of SIT sums - new variant
+// Calculation of SIT sum - new variant
            SumSIT = 0.;
-           for( ip=0; ip<NPar; ip++ )
+           if( pmp->EZ[j] > 0 )  // cation
            {
-             index1 = aIPx[ip*MaxOrd];
-             index2 = aIPx[ip*MaxOrd+1];
-             if( pmp->EZ[j] > 0 && index1 == icat )
-             { // cation
-               SumSIT += (double)aIPc[ip*NPcoef]
-//               pmp->sitE[ icat*pmp->sitNan + ia ]
+              for( ip=0; ip<NPar; ip++ )
+              {
+                 index1 = aIPx[ip*MaxOrd];
+                 if( index1 != icat )
+                    continue;
+                 index2 = aIPx[ip*MaxOrd+1];
+                 SumSIT += (double)aIPc[ip*NPcoef]   // epsilon
                         * I * pmp->Y_m[jb+index2];
-               lgGam += SumSIT;
-             }
-             else if( pmp->EZ[j] < 0 && index2 == ian )
-             {  // anion
-                SumSIT += (double)aIPc[ip*NPcoef]
-//                pmp->sitE[ ic*pmp->sitNan + ian ]
-                        * I * pmp->Y_m[jb + index1];
-                lgGam += SumSIT;
-             }
+              }
            }
+           else {   // anion
+              for( ip=0; ip<NPar; ip++ )
+              {
+                 index2 = aIPx[ip*MaxOrd+1];
+                 if( index2 != ian )
+                    continue;
+                 index1 = aIPx[ip*MaxOrd];  // index of cation
+                 SumSIT += (double)aIPc[ip*NPcoef]  // epsilon
+                            * I * pmp->Y_m[jb + index1];
+              }
+           }
+           lgGam += SumSIT;
               // Calculation of SIT sums - old variant
 /*           SumSIT = 0.;
            if( pmp->EZ[j] > 0 )
@@ -740,8 +745,7 @@ aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x N
            }
 */
       }
-      else
-      { // Neutral species
+      else { // Neutral species
          if( pmp->DCC[j] != DC_AQ_SOLVENT ) // common salting-out coefficient ??
                lgGam = bgi * I;
             else // water-solvent - a0 - osmotic coefficient

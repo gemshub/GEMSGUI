@@ -101,14 +101,14 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
         case SM_UNDEF:  // no script equations were specified
             if( modT[SGM_MODE] != SM_STNGAM )
                 continue;
-            if( modT[SPHAS_TYP] != SM_AQSIT )
-            {                          // Not an aq phase with SIT model
+//            if( modT[SPHAS_TYP] != SM_AQSIT )
+//            {                          // Not an aq phase with SIT model
                pmp->LsMod[k*3] = (short)aPH->php->ncpN;  // number of interaction parameters
                pmp->LsMod[k*3+1] = (short)aPH->php->npxM; // max. order of interaction parameters
                pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
                pmp->LsMdc[k] = aPH->php->nscM; // changed 07.12.2006  KD
-            }
-            else { // Aq phase with SIT model - interaction coeffs must be compressed
+//            }
+/*            else { // Aq phase with SIT model - interaction coeffs must be compressed
                // checking dimensions of the pnc table
                int nCat=0, nAn=0, jj;
 
@@ -128,6 +128,7 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
                pmp->sitNcat = (short)nCat;
                pmp->sitNan = (short)nAn;
             }
+*/
             goto LOAD_NIDMCOEF;
         case SM_PRIVATE_:
         case SM_PUBLIC:   // nonideal solution
