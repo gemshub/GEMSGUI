@@ -120,13 +120,13 @@ aObj[ o_phscoef].SetDim( ph[q].nDC, ph[q].nscM ); // changed 07.12.2006  KD
 
 // Added for SIT aqueous model implementation
 aObj[o_ph_w_lsc].SetPtr( ph[q].lsCat );
-aObj[o_ph_w_lsc].SetDim( ph[q].ncpN, 1 );
+aObj[o_ph_w_lsc].SetDim( ph[q].nCat, 1 );
 aObj[o_ph_w_lsa].SetPtr( ph[q].lsAn );
-aObj[o_ph_w_lsa].SetDim( 1, ph[q].ncpM );
+aObj[o_ph_w_lsa].SetDim( ph[q].nAn, 1 );
 aObj[o_ph_w_nxc].SetPtr( ph[q].nxCat );
-aObj[o_ph_w_nxc].SetDim( ph[q].ncpN, 1 );
+aObj[o_ph_w_nxc].SetDim( ph[q].nCat, 1 );
 aObj[o_ph_w_nxa].SetPtr( ph[q].nxAn );
-aObj[o_ph_w_nxa].SetDim( 1, ph[q].ncpM );
+aObj[o_ph_w_nxa].SetDim( ph[q].nAn, 1 );
 
     //    aObj[ o_phtprn].SetDim( 1,strlen(ph[q].tprn));
     php=&ph[q];
@@ -277,7 +277,7 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
          ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Alloc(
                           ph[q].nCat, 1, MAXDCNAME );
          ph[q].lsAn  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Alloc(
-                          1, ph[q].nAn, MAXDCNAME );
+                          ph[q].nAn, 1, MAXDCNAME );
          ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( ph[q].nCat, 1, I_);
          ph[q].nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( ph[q].nAn, 1, I_);
     }
@@ -511,7 +511,7 @@ AGAIN_SETUP:
                           php->PphC = PH_AQUEL;
                           break;
           case SM_AQSIT:  // SIT model in NEA variant - new implementation
-                          php->nscM = 1;  // NP_DC
+                          php->nscM = 0;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
@@ -520,14 +520,6 @@ AGAIN_SETUP:
                           php->ncpM = 1;  // NPcoef
                           php->PphC = PH_AQUEL;
                           break;
-/* old implementation of SIT (before 13.03.2007)
-                          php->ncpN = max( (short)3, php->ncpN );
-                          php->ncpM = max( (short)2, php->ncpM );
-                          php->nscM = 1;
-                          php->npxM = 2;    // to fix later
-                          php->PphC = PH_AQUEL;
-                          break;
-*/
           default:  // other models
              break;
        }
