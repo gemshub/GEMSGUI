@@ -507,8 +507,11 @@ void TMulti::GammaCalc( int LinkMode  )
                   case SM_MARGB:
                        MargulesBinary( jb, je, jpb, jdb, k );
                           break;
-                  case SM_MARGT:
-                       MargulesTernary( jb, je, jpb, jdb, k );
+//                  case SM_MARGT:
+//                       MargulesTernary( jb, je, jpb, jdb, k );
+//                          break;
+                  case SM_GUGGENM:
+                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Guggenheim TW 2007
                           break;
                   case SM_VANLAAR:
                        SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // VanLaar TW 2007

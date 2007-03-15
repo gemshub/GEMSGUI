@@ -457,7 +457,8 @@ AGAIN_SETUP:
 //                          php->npxM = 0;
                           php->ncpN = 2; php->ncpM = 3;
                           break;
-          case SM_MARGT:  // Margules ternary regular
+//          case SM_MARGT:  // Margules ternary regular
+           case SM_GUGGENM: // Multicomponent Guggenheim (RK) model (new)
                           php->nscM = 0;
                           php->npxM = 0;
                           php->ncpN = 4; php->ncpM = 3;
