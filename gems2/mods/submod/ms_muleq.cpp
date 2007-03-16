@@ -424,7 +424,7 @@ void TMulti::MultiCalcInit( const char *key )
         }
     }
 
-    if( pmp->FIs && pmp->pIPN <=0 )  // fluid models finalized
+    if( pmp->FIs && pmp->pIPN <=0 )  // mixing models finalized
     {
         // not done if these models are already present in MULTI !
         pmp->PD = TProfil::pm->pa.p.PD;
@@ -433,11 +433,14 @@ void TMulti::MultiCalcInit( const char *key )
         GammaCalc( LINK_TP_MODE);
     }
     else
-    {
+    {   // it may happen that mixing models are already loaded 
         if( !pmp->FIs ) // no multi-component phases
         {
             pmp->PD = 0;
             pmp->pIPN = 1;
+        }
+        else { // there are multicomponent phases - TP_MODE run for mix.models
+            GammaCalc( LINK_TP_MODE);
         }
     }
 
