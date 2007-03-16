@@ -449,6 +449,15 @@ AGAIN_SETUP:
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 4;  // NPcoef
                           break;
+          case SM_GUGGENM:   // Redlich-Kister model multicomponent
+                          php->nscM = 0;  // NP_DC
+                          php->npxM = 2;  // MaxOrd
+                          if( php->ncpN < 1 ) // NPar
+                              php->ncpN = 1;
+                          if( php->ncpN > php->nDC*php->nDC/2 )
+                              php->ncpN = php->nDC*php->nDC/2;
+                          php->ncpM = 20;  // NPcoef
+                          break;
           case SM_REDKIS:   // Redlich-Kister
                           php->nscM = 0;
                           php->npxM = 0;
@@ -460,11 +469,6 @@ AGAIN_SETUP:
                           php->ncpN = 2; php->ncpM = 3;
                           break;
 //          case SM_MARGT:  // Margules ternary regular
-           case SM_GUGGENM: // Multicomponent Guggenheim (RK) model (new)
-                          php->nscM = 0;
-                          php->npxM = 0;
-                          php->ncpN = 4; php->ncpM = 3;
-                          break;
           case SM_CGFLUID:  // Churakov-Gottschalk EoS
                           php->ncpN = 0;
                           php->ncpM = 0;

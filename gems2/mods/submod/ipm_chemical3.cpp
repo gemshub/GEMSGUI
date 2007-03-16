@@ -511,16 +511,14 @@ void TMulti::GammaCalc( int LinkMode  )
 //                       MargulesTernary( jb, je, jpb, jdb, k );
 //                          break;
                   case SM_GUGGENM:
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Guggenheim TW 2007
+                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Redlich-Kister TW 2007
                           break;
                   case SM_VANLAAR:
                        SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // VanLaar TW 2007
                          break;
-                  case SM_REGULAR: // under construction - formerly SM_RECIP
+                  case SM_REGULAR: // formerly SM_RECIP
                        SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Regular TW 2007
                          break;
-//                  case SM_GUGGENH:
-//						 break;
                   default:
                           break;
                 }
@@ -1485,8 +1483,9 @@ TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
         case SM_REGULAR:
              aSM.RegularPT();
              break;
-//      case SM_GUGGENH:
-//        	 break;
+        case SM_GUGGENM:
+        	 aSM.RedlichKisterPT();
+        	 break;
         default:
              break;
     }
@@ -1529,8 +1528,9 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
         case SM_REGULAR:
              aSM.RegularMixMod( Gex, Vex, Hex, Sex, CPex );
              break;
-//      case SM_GUGGENH:
-//        	 break;
+        case SM_GUGGENM:
+        	 aSM.RedlichKisterMixMod( Gex, Vex, Hex, Sex, CPex );
+        	 break;
         default: // catch error here
               break;
     }

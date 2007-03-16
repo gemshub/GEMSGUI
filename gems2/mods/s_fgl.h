@@ -353,8 +353,10 @@ public:
          double &CPex_ );
 
 // Redlich-Kister model for solid solutions
-//	int RedlichKisterPT();
-//	int RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ );
+	int RedlichKisterPT();
+	int RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+		 double &CPex_ );
+
 
 // Prototypes for other models to be added here
 // Redlich-Kister / Guggenheim ...
