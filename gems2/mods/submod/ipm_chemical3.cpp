@@ -820,7 +820,7 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
             {
                if( pmp->DCC[j] != DC_AQ_SOLVENT ) // salting-out coefficient
                    lgGam = bgi * I;
-               else // water-solvent 
+               else if( nPolicy > 0.9999999 )// water-solvent
                {
 // Calculation of activity coefficient of water should be inserted here
                    Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
