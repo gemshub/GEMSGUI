@@ -276,7 +276,8 @@ class TPRSVcalc // Peng-Robinson-Styjek-Vera EOS calculations
 
    // Called from IPM-Gamma() where activity coefficients are computed
    int PRActivCoefPT( int NComp, double Pbar, double Tk, double *X,
-        double *fugpure, float *binpar, float *param, double *act, double &PhaseVol );
+        double *fugpure, float *binpar, float *param, double *act, double &PhaseVol,
+        int NPar, int NPcoef, int MaxOrd, short *aIPx );
 
    int CalcFugPure( void );
    // Calc. fugacity for 1 species at X=1

@@ -476,14 +476,17 @@ AGAIN_SETUP:
                           php->npxM = 0;
 //                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
-// Added 20.07.2006
+// Added 20.07.2006, modified 20.03.2007 
           case SM_PRFLUID:  // Peng-Robinson EoS - provisional
-                          php->ncpN = max( (short)2, php->nDC );
-                          php->ncpM = max( (short)2, php->nDC );
-//                          php->nscM = 4;    // Changed 15.02.2006
+//                          php->ncpN = max( (short)2, php->nDC );
+//                          php->ncpM = max( (short)2, php->nDC );
+                          if( php->ncpN < 1 ) // NPar
+                              php->ncpN = 1;
+                          if( php->ncpN > php->nDC*php->nDC/2 )
+                              php->ncpN = php->nDC*php->nDC/2;
+                          php->ncpM = 1;  // For now, no T,P dependence 
                           php->nscM = 10; // 1MAXCRITPARAM;
                           php->npxM = 2;
-//                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
 
           case SM_AQDAV:  // Aqueous Davies

@@ -1599,10 +1599,11 @@ TPRSVcalc::FugacitySpec( double *fugpure, float *binpar, float *params  )
       }
     }
 
+/*
     for( j=0; j<NComp; j++ )
       for( i=0; i<NComp; i++ )
         KK0ij[j][i] = (double)binpar[j*NComp+i];
-
+*/
 	// retrieve properties of the mixture
 	iRet = MixParam( amix, bmix);
 	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix);
@@ -1807,10 +1808,30 @@ TPRSVcalc::PRFugacityPT( double P, double Tk, float *EoSparam, double *Eos2parPT
  // Called from IPM-Gamma() where activity coefficients are computed
 int
 TPRSVcalc::PRActivCoefPT( int NComp, double Pbar, double Tk, double *X,
-    double *fugpure, float *binpar, float *param, double *act, double &PhaseVol )
+    double *fugpure, float *binpar, float *param, double *act, double &PhaseVol,
+    int NPar, int NPcoef, int MaxOrd, short *aIPx  )
 {
 
    int iRet;
+   int j, i, ip;
+   int index1, index2;
+
+   if( NPcoef > 0 )
+   {
+      // fill internal array of interaction parameters with standard value
+      for( j=0; j<NComp; j++ )
+        for( i=0; i<NComp; i++ )
+          KK0ij[j][i] = 0.;
+
+      // transfer those interaction parameters that have non-standard value
+      for ( ip=0; ip<NPar; ip++ )
+      {
+         index1 = (int)aIPx[MaxOrd*ip];
+         index2 = (int)aIPx[MaxOrd*ip+1];
+	 KK0ij[index1][index2] = binpar[NPcoef*ip];
+	 KK0ij[index2][index1] = binpar[NPcoef*ip];	// symmetric case
+      }
+    }
 
     GetMoleFract( X );
 

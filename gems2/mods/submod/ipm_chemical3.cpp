@@ -760,10 +760,10 @@ aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x N
 // Extended Debye-Hueckel (EDH) model with a common ion-size parameter
 //
 void
-TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int )
+TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
 {
     int j;
-    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam; //  molt;
+    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam, Xw, Xaq; //  molt;
     float nPolicy;
 
     I= pmp->IC;
@@ -820,9 +820,14 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int )
             {
                if( pmp->DCC[j] != DC_AQ_SOLVENT ) // salting-out coefficient
                    lgGam = bgi * I;
-               else // water-solvent - a0 - osmotic coefficient
+               else // water-solvent 
+               {
+// Calculation of activity coefficient of water should be inserted here
+                   Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
+                   Xw = pmp->XFA[k]; // Mole amount of water-solvent
                    lgGam = 0.;
 //                 lgGam = a0 * molt; // corrected: instead of I - tot.molality
+               }
             }
             else { // nPolicy < 0 - all gamma = 1 for neutral species
                lgGam = 0.;
@@ -1260,11 +1265,12 @@ TMulti::PRSVofPureGases( int jb, int je, int, int jdb, int, int )
 // Added by Th.Wagner and D.Kulik on 19.07.2006, changed by DK on 15.02.2007
 //
 void
-TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k, int )
+TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k, int ipb )
 {
     double *ActCoefs, PhVol, *FugPure;
     float *EoSparam, *BinPar;
-    int j, jj, iRet, NComp;
+    int j, jj, iRet, NComp, NPar, NPcoef, MaxOrd;
+    short *aIPx;
 
     NComp = pmp->L1[k];
 
@@ -1275,6 +1281,10 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k, int )
 //    FugPure = (double*)malloc( NComp*sizeof(double) );
     FugPure = pmp->Pparc + jb;
     BinPar = pmp->PMc+jpb;
+    NPar = pmp->LsMod[k*3];      // Number of non-zero interaction parameters
+    NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
+    MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
+    aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters
 
     for( j=jb; j<je; j++)
        pmp->Wx[j] = pmp->X[j]/pmp->XF[k];
@@ -1286,7 +1296,7 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k, int )
 //    }
 
     iRet = aPRSV.PRActivCoefPT( NComp, pmp->Pc, pmp->Tc, pmp->Wx+jb, FugPure,
-        BinPar, EoSparam, ActCoefs, PhVol );
+        BinPar, EoSparam, ActCoefs, PhVol, NPar, NPcoef, MaxOrd, aIPx );
 
     if ( iRet )
     {
