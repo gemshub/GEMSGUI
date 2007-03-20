@@ -7,7 +7,7 @@
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry
-// and part of the GEMIPM2K standalone code 
+// and part of the GEMIPM2K standalone code
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -212,7 +212,13 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
       double X[1]={1.};
       double FugPure[1];
 
-      switch (int(EoSparam[4]))
+		// modification to simplify CG database structure, TW 20/03/2007
+        EoSparPT[0] = EoSparam[0]+EoSparam[4]*(float)exp(T*EoSparam[5]);
+        EoSparPT[1] = EoSparam[1]+EoSparam[6]*(float)exp(T*EoSparam[7]);
+        EoSparPT[2] = EoSparam[2]+EoSparam[8]/((float)T+EoSparam[9]);
+        EoSparPT[3] = EoSparam[3]+EoSparam[10]/((float)T+EoSparam[11]);
+
+      /*switch (int(EoSparam[4]))
       {
        case 0:
         EoSparPT[0]=EoSparam[0];
@@ -235,7 +241,9 @@ int TCGFcalc::CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
         default:
 
         return 1;// Error: Wrong type of equation
-      };
+      };*/
+
+
  // returns density!
       ro = CGActivCoefPT( X, EoSparPT, FugPure, 1, P, T );
       if( ro < 0.  )
