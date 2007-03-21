@@ -464,11 +464,15 @@ AGAIN_SETUP:
                           php->ncpN = 1; php->ncpM = 3;
                           break;
           case SM_MARGB:  // Margules binary subregular
-//                          php->nscM = 0;
-//                          php->npxM = 0;
+                          php->nscM = 0;
+                          php->npxM = 0;
                           php->ncpN = 2; php->ncpM = 3;
                           break;
-//          case SM_MARGT:  // Margules ternary regular
+          case SM_MARGT:  // Margules ternary regular
+                          php->nscM = 0;
+                          php->npxM = 0;
+                          php->ncpN = 4; php->ncpM = 3;
+                          break;
           case SM_CGFLUID:  // Churakov-Gottschalk EoS
                           php->ncpN = 0;
                           php->ncpM = 0;
@@ -476,8 +480,8 @@ AGAIN_SETUP:
                           php->npxM = 0;
 //                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
-// Added 20.07.2006, modified 20.03.2007 
-          case SM_PRFLUID:  // Peng-Robinson EoS - provisional
+// Added 20.07.2006, modified 20.03.2007
+          case SM_PRFLUID:  // Peng-Robinson EoS - with interaction parameters
 //                          php->ncpN = max( (short)2, php->nDC );
 //                          php->ncpM = max( (short)2, php->nDC );
                           if( php->ncpN < 1 ) // NPar

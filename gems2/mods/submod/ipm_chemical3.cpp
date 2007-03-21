@@ -501,24 +501,24 @@ void TMulti::GammaCalc( int LinkMode  )
              {
                 switch( sMod[SPHAS_TYP] )
                 {
-                  case SM_REDKIS:
+                  case SM_REDKIS:  // left for compatibility with old projects
                        RedlichKister( jb, je, jpb, jdb, k );
                           break;
-                  case SM_MARGB:
+                  case SM_MARGB:   // left for compatibility with old projects
                        MargulesBinary( jb, je, jpb, jdb, k );
                           break;
-//                  case SM_MARGT:
-//                       MargulesTernary( jb, je, jpb, jdb, k );
-//                          break;
-                  case SM_GUGGENM:
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Redlich-Kister TW 2007
+                  case SM_MARGT:   // left for compatibility with old projects
+                       MargulesTernary( jb, je, jpb, jdb, k );
                           break;
-                  case SM_VANLAAR:
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // VanLaar TW 2007
-                         break;
-                  case SM_REGULAR: // formerly SM_RECIP
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Regular TW 2007
-                         break;
+                  case SM_GUGGENM: // Redlich-Kister generalized TW 2007
+                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                          break;
+                  case SM_VANLAAR: // VanLaar for solid solutions TW 2007
+                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                          break;
+                  case SM_REGULAR: // Regular multicomponent TW 2007  // formerly SM_RECIP
+                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                          break;
                   default:
                           break;
                 }
@@ -840,20 +840,16 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
            continue;
         }
         // Water-solvent
-        lnGam = 0.0;
+        lnGam = 0.0;  Lgam = 0.;
         if( nPolicy > -1.000001 && nPolicy < 0.000001 )
         {
        	   // Calculate activity coefficient of water solvent
 	   // Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
-	   Lgam = 0.;
 	   Lam = 1. + a0*B*sqI;
 	   SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
-//	   Phi = -log(10.)*(A*sqrt(I)*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
 	   Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
-	   lnActWat = -Phi*molT/Nw;
-//	   ActWat = exp(lnActWat);
-           lnGam = lnActWat - lnwxWat;
-//	   gamWat = ActWat/wxWat;
+	   lnActWat = -Phi*molT/Nw;         //	   ActWat = exp(lnActWat);
+           lnGam = lnActWat - lnwxWat;      //	   gamWat = ActWat/wxWat;
 //         lgGam = a0 * molt; // corrected: instead of I - tot.molality
         }
         pmp->lnGam[j] = lnGam;

@@ -110,12 +110,17 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>G  Binary Redlich-Kister model (built-in)</string>
+                            <string>G   Binary Redlich-Kister model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>M  Binary Margules subregular model (built-in)</string>
+                            <string>M   Binary Margules subregular model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>T   Ternary regular Margules model (built-in)</string>
                         </property>
                     </item>
                     <item>
@@ -125,7 +130,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>T  Multicomponent Redlich-Kister mixing model (built-in, reserved)  </string>
+                            <string>K   Multicomponent Redlich-Kister mixing model (built-in)  </string>
                         </property>
                     </item>
                     <item>

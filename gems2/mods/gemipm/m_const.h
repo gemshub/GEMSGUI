@@ -53,8 +53,8 @@ enum solmod_switches { // indexes of keys of model solution
     SM_REDKIS = 'G', // built-in Guggenheim (Redlich-Kister) binary SS model
                      // (with 3 coeffs)
     SM_MARGB = 'M',  // built-in binary Margules SS (subreg. w. 3 coeff U,P,T )
-// SM_MARGT = 'T',  // built-in ternary Margules SS (reg. w. 3 coeff U,P,T )
-SM_GUGGENM = 'T', // built-in multicomponent Guggenheim SS model (added by Th.Wagner)
+SM_MARGT = 'T',  // built-in ternary Margules SS (reg. w. 3 coeff U,P,T )
+SM_GUGGENM = 'K', // built-in multicomponent Guggenheim SS model (added by Th.Wagner)
     SM_CGFLUID = 'F',  // built-in multicomp. EOS fluid Churakov&Gottschalk 2003
 //    SM_RECIP = 'R',  // reciprocal solution (to be done), formerly regular solution
     SM_REGULAR = 'R',  // regular multicomponent solution model (added by Th.Wagner)
