@@ -763,7 +763,9 @@ void
 TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
 {
     int j;
-    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam, Xw, Xaq; //  molt;
+    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam; //  molt;
+    double Xw, Xaq, Nw, molT, Lgam, lnwxWat, lnGam;
+    double Lam, SigTerm, Phi, lnActWat, ActWat, gamWat;
     float nPolicy;
 
     I= pmp->IC;
@@ -773,11 +775,16 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
     A = (double)pmp->PMc[jpb+0];
     B = (double)pmp->PMc[jpb+1];
     bg = pmp->FitVar[0];   // Changed 07.06.05 for T,P-dep. b_gamma in DHH
-//    bg = pmp->PMc[jpb+5];
+//    bg = pmp->PMc[jpb+5];     // May be inappropriate for GEMIPM2K !
     a0c = (double)pmp->PMc[jpb+6];
     nPolicy = pmp->PMc[jpb+7];
 
+    Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
+    Xw = pmp->XFA[k]; // Mole amount of water-solvent
+    Nw = 1000./18.01528;
+    molT = (Xaq-Xw)/(Nw/Xw);
 //    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; // tot.molality
+    lnwxWat = log(Xw/Xaq);
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -804,37 +811,53 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel3Hel",
         "Error: A,B were not calculated - no values of RoW and EpsW !" );
     // Calculation of the EDH equation
-//  bgi = bg;
+    bgi = bg; // Common third parameter
+    a0 = a0c; // Common ion-size parameter
     for( j=jb; j<je; j++ )
     {
-        bgi = bg; // Common third parameter
-        a0 = a0c; // Common ion-size parameter
+//        bgi = bg; // Common third parameter
+//        a0 = a0c; // Common ion-size parameter
         if( pmp->EZ[j] )
         { // Charged species
             Z2 = pmp->EZ[j]*pmp->EZ[j];
             lgGam = ( -A * sqI * Z2 ) / ( 1. + B * a0 * sqI ) + bgi * I ;
+            pmp->lnGam[j] = lgGam * lg_to_ln;
+            continue;
         }
-        else
-        { // Neutral species
-            if( nPolicy >= 0.0 )
-            {
-               if( pmp->DCC[j] != DC_AQ_SOLVENT ) // salting-out coefficient
-                   lgGam = bgi * I;
-               else if( nPolicy > 0.9999999 )// water-solvent
-               {
-// Calculation of activity coefficient of water should be inserted here
-                   Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
-                   Xw = pmp->XFA[k]; // Mole amount of water-solvent
-                   lgGam = 0.;
-//                 lgGam = a0 * molt; // corrected: instead of I - tot.molality
-               }
-            }
-            else { // nPolicy < 0 - all gamma = 1 for neutral species
-               lgGam = 0.;
-            }
+        // Neutral species
+        // <= -2 - gamma of both neutral aqueous species and water = 1.0
+        // -1 - gamma of neutral species = 1.0, H2O activity coef. calculated
+        // 0 - gamma of neutral species from salting out coefficient,
+        //       H2O activity coefficient calculated
+        //  >= 1 gamma of neutral species from salting out coefficient,
+        //       H2O activity coefficient set to 1.0
+        lgGam = 0.0; Lgam = 0.0;
+        // Calculation of gamma for neutral species except water
+        if( pmp->DCC[j] != DC_AQ_SOLVENT && nPolicy > -0.000001 )
+        {
+	   lgGam = bgi * I;
+           pmp->lnGam[j] = lgGam * lg_to_ln;
         }
-        pmp->lnGam[j] = lgGam * lg_to_ln;
+        else { // Water-solvent
+           lnGam = 0.0;
+           if( nPolicy > -1.000001 && nPolicy < 0.000001 )
+           {
+       	      // Calculate activity coefficient of water solvent
+	      Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
+	      Lam = 1. + a0*B*sqI;
+	      SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
+//	      Phi = -log(10.)*(A*sqrt(I)*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
+	      Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
+	      lnActWat = -Phi*molT/Nw;
+//	      ActWat = exp(lnActWat);
+              lnGam = lnActWat - lnwxWat;
+//	      gamWat = ActWat/wxWat;
+//            lgGam = a0 * molt; // corrected: instead of I - tot.molality
+           }
+           pmp->lnGam[j] = lnGam;
+        }
     } // j
+    return;
 }
 
 // Extended Debye-Hueckel eq. with Kielland ion-size and optional salting-out
