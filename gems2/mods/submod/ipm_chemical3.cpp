@@ -844,7 +844,8 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
         if( nPolicy > -1.000001 && nPolicy < 0.000001 )
         {
        	   // Calculate activity coefficient of water solvent
-	   Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
+	   // Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
+	   Lgam = 0.;
 	   Lam = 1. + a0*B*sqI;
 	   SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
 //	   Phi = -log(10.)*(A*sqrt(I)*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
