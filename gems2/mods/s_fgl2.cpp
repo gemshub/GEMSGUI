@@ -26,7 +26,7 @@
 //#include "visor.h"
 
 
-
+#ifndef IPMGEMPLUGIN
 //--------------------------------------------------------------------//
 //
 int TPRSVcalc::CalcFugPure( void )
@@ -70,8 +70,9 @@ int TPRSVcalc::CalcFugPure( void )
     return retCode;
 }
 
+#endif
 
-
+#ifndef IPMGEMPLUGIN
 //--------------------------------------------------------------------//
 //
 int TCGFcalc::CGcalcFug( void )
@@ -131,10 +132,7 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
     return retCode;
 }
 
-
-
-
-
+#endif
 
 
 // -----------------------------------------------------------------------------
