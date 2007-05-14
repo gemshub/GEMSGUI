@@ -759,7 +759,13 @@ AGAINRC:
 //---------------------------------------------------------------------
     if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
     {  // Filling out name and index lists for cations and anions
-       MakeCatAnLists( false, false, true );
+       if( !php->lsCat )                      // Crash fix 11.05.07 KD
+       {
+           php->Ppnc = S_ON;
+           MakeCatAnLists( true, true, true );
+       }
+       else
+           MakeCatAnLists( false, false, true);
     }
 //--------------------------------------------------------------
     SetString("PH_make   Remake of Phase definition OK");

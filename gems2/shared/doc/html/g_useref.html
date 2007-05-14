@@ -2130,27 +2130,23 @@ Possible values:</p>
   <table border="1" cellpadding="2" cellspacing="2" width="100%">
     <tbody>
       <tr>
-        <td><b><big><tt> I &nbsp;&nbsp;&nbsp;</tt></big></b></td>
+        <td><b><big><tt> I<br>
+N&nbsp;&nbsp;&nbsp; <br>
+        </tt></big></b></td>
         <td><tt><a href="glossary.html#DT_mixture"> ideal solution</a>
 or <a href="glossary.html#DT_phase_single">single-component phase</a>
 (default for non-electrolyte phases)</tt></td>
       </tr>
       <tr>
-        <td><b><big><tt>R</tt></big></b></td>
-        <td><tt><a href="glossary.html#DT_miscibility_gap"></a></tt><tt>Reciprocal
-quaternary solid solution (reserved for future versions)</tt><br>
-        </td>
-      </tr>
-      <tr>
-        <td valign="top"><b><big><tt>G</tt></big></b><br>
-        </td>
-        <td valign="top"><tt>Binary Guggenheim (Redlich-Kister)
+        <td style="vertical-align: top;"><b><big><tt>G</tt></big></b></td>
+        <td style="vertical-align: top;"><tt>Binary Guggenheim
+(Redlich-Kister)
 subregular
-solution (Glynn, 2000), built-in; </tt>requires 3 parameters (<i>a</i>0,
-        <i>a</i>1, <i>a</i>2) to be entered into the<tt> <a
- href="gm_phase.html#ph_cf">ph_cf</a> </tt>field on Page 3 of Phase
-record<br>
-        </td>
+solution (Glynn, 2000), built-in; </tt>requires 3 dimensionless
+parameters (<i>a</i>0, <i>a</i>1, <i>a</i>2) to be entered into the<tt>
+        <a href="gm_phase.html#ph_cf">ph_cf</a> </tt>field on Page 3
+of the Phase
+record</td>
       </tr>
       <tr>
         <td valign="top"><b><big><tt>M</tt></big></b><br>
@@ -2160,9 +2156,8 @@ T,P
 dependent parameters</tt><tt>, built-in</tt>; &nbsp;requires 3
 parameters
 (<i>Wu</i>, <i>Ws</i>, <i>Wv</i>) per end-member to be entered into
-the<tt> <a
- href="file:///G:/4401/Software/GEMS-PSI/doc/html/gm_phase.html#ph_cf">ph_cf</a>
-        </tt>field on Page 3 of Phase record<br>
+the<tt> <a href="gm_phase.html#ph_cf">ph_cf</a> </tt>field on Page 3
+of Phase record<br>
         </td>
       </tr>
       <tr>
@@ -2172,9 +2167,77 @@ the<tt> <a
 dependent
 parameters</tt><tt>, built-in; </tt>requires &nbsp;4 x 3 parameters (<i>Wu</i>,
         <i>Ws</i>, <i>Wv</i>) to be entered into the<tt> <a
- href="file:///G:/4401/Software/GEMS-PSI/doc/html/gm_phase.html#ph_cf">ph_cf</a>
-        </tt>field on Page 3 of Phase record<br>
+ href="gm_phase.html#ph_cf">ph_cf</a> </tt>field on Page 3 of Phase
+record<br>
         </td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;"><b><big><tt>R</tt></big></b></td>
+        <td style="vertical-align: top;"><small><small><small><small><span
+ style="font-size: 12pt;">Regular model (multicomponent), built-in;</span></small></small></small></small><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"> </span><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">requires 1
+binary interaction parameter per pair of components,
+represented as <span style="">&nbsp;</span><i style="">a</i> + <i
+ style="">b</i></span><span style=""><i style=""><span
+ style="font-size: 12pt; font-family: Symbol;"><span style="">&times;</span></span></i></span><i
+ style=""><span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">T</span></i><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"> + <i
+ style="">c</i></span><span style=""><i style=""><span
+ style="font-size: 12pt; font-family: Symbol;"><span style="">&times;</span></span></i></span><i
+ style=""><span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">P</span></i><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">&nbsp;
+(coefficients in J/mol, J/mol/K, J/mol/bar, to be entered into </span>the<tt>
+        <a href="gm_phase.html#ph_cf">ph_cf</a> </tt>field on Page 3
+of Phase record<span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">) <br>
+        </span></td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;"><b><big><tt>V</tt></big></b></td>
+        <td style="vertical-align: top;"><tt>Van Laar model
+(multicomponent), built-in; </tt>requires&nbsp;
+1 binary interaction parameter per pair of components, represented
+as<i style=""> a + b</i><span style=""><i style=""><span
+ style="font-family: Symbol;"><span style="">&times;</span></span></i></span><i
+ style="">T + c</i><span style=""><i style=""><span
+ style="font-family: Symbol;"><span style="">&times;</span></span></i></span><i
+ style="">P </i><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">(coefficients
+in J/mol, J/mol/K, J/mol/bar, to be entered into </span>the<tt> <a
+ href="gm_phase.html#ph_cf">ph_cf</a> </tt>field on Page 3 of Phase
+record<span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">),
+        </span><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">and 1 size
+parameter per component (end member) to be entered in </span><b
+ style=""><span style="font-size: 10pt; font-family: &quot;Courier New&quot;;">dc_cf</span></b><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"> array</span>
+on Page 2<br>
+        </td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;"><b><big><tt>K</tt></big></b></td>
+        <td style="vertical-align: top;"><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">Redlich-Kister
+model (multicomponent), built-in; requires </span><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">4 binary
+interaction parameters per pair of components,
+represented as <i style="">a + b</i></span><i style=""><span
+ style="font-size: 12pt; font-family: Symbol;"><span style="">&times;</span></span><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">T + c</span><span
+ style="font-size: 12pt; font-family: Symbol;"><span style="">&times;</span></span><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">T</span></i><span
+ style="font-size: 12pt; font-family: Symbol;"><span style="">&times;</span></span><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">ln(<i style="">T</i>)
+        <i style="">+</i></span><i style=""><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"> d</span><span
+ style="font-size: 12pt; font-family: Symbol;"><span style="">&times;</span></span><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">P,&nbsp; </span></i><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">coefficients <span
+ style="font-style: italic;">a, b, c, d</span>&nbsp; to be entered into
+        </span>the<tt> <a href="gm_phase.html#ph_cf">ph_cf</a> </tt>field
+on Page 3 of Phase record<span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">)</span></td>
       </tr>
       <tr>
         <td valign="top"><b><big><tt>H</tt></big></b><br>
@@ -2225,10 +2288,16 @@ equation</a> (default for aqueous electrolyte phase), built-in<br>
       <tr>
         <td valign="top"><b><big><tt>S</tt></big></b><br>
         </td>
-        <td valign="top"><tt>SIT aqueous electrolyte model (NEA-PSI
-version),
-to be implemented </tt><br>
-        </td>
+        <td valign="top"><tt>SIT (Broensted-Guggenheim-Scatchard)
+aqueous electrolyte model (NEA-TDB
+variant),
+built-in;</tt><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"> one constant
+interaction parameter per cation-anion
+pair (to be entered into </span><b style=""><span
+ style="font-size: 10pt; font-family: &quot;Courier New&quot;;">ph_cf</span></b><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"> array of
+Phase record)</span><tt> </tt> </td>
       </tr>
       <tr>
         <td><b><big><tt>A</tt></big></b></td>
@@ -2246,8 +2315,20 @@ solution</a> model (user-defined in Phase record scripts)</tt></td>
         <td valign="top"><b><big><tt>O</tt></big></b><br>
         </td>
         <td valign="top"><tt>other <a href="glossary.html#DT_mixture">non-ideal
-solution</a> model (user-defined in Phase record scripts)</tt><br>
+solution</a> model (may be user-defined in Phase record scripts),
+reserved</tt><br>
         </td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;"><b><big><tt>P</tt></big></b></td>
+        <td style="vertical-align: top;"><tt>Peng-Robinson-Stryjek-Vera
+(PRSV) EoS-based mixing model for fluids, built-in; </tt>6 parameters
+per species (collected from DComp records); 1 constant binary
+interaction parameter per species pair<o:p></o:p><span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"> (to enter
+into </span><b style=""><span
+ style="font-size: 10pt; font-family: &quot;Courier New&quot;;">ph_cf</span></b><span
+ style="">&nbsp; </span>array) </td>
       </tr>
       <tr>
         <td valign="top"><b><big><tt>F</tt></big></b><br>
@@ -2255,8 +2336,10 @@ solution</a> model (user-defined in Phase record scripts)</tt><br>
         <td valign="top"><tt> EoS-based mixing model of Churakov &amp;
 Gottschalk
 (2003) for fluids, built-in</tt> (details in a contributed
-document&nbsp; <tt>Tpx-corrections-CG-EoS.pdf</tt>).&nbsp; &nbsp;<br>
-        </td>
+document&nbsp; <tt>Tpx-corrections-CG-EoS.pdf</tt>); <span
+ style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;">4 to 12
+parameters per species, collected from
+DComp records</span>&nbsp; &nbsp; </td>
       </tr>
     </tbody>
   </table>
@@ -2265,8 +2348,10 @@ document&nbsp; <tt>Tpx-corrections-CG-EoS.pdf</tt>).&nbsp; &nbsp;<br>
 GEM-Selektor.
 Available built-in calculations are described in <a
  href="theorgem.html"><b><tt>theorgem.html</tt></b></a>
-and <b><tt>Activity-coeffs.pdf</tt></b> &nbsp;manual files. <br>
+and <b><tt>Activity-coeffs.pdf</tt></b> &nbsp;manual files.<br>
 </p>
+<p></p>
+<span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"></span>
 <p>To use a built-in non-ideal model in GEM IPM calculations, the <b><tt>'<big>S</big>'</tt></b>
 <a href="#P_SOLT3">mode of calculation of activity coefficients</a>
 must
