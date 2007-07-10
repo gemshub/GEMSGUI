@@ -1250,8 +1250,6 @@ void TNode::GEM_to_MT(
     p_bPS[ii] = CNode->bPS[ii];
 }
 
-#endif
-
 // Overloaded variant - takes input to bIC vector also from the speciation
 //     vector xDC.     Added by DK on 09.07.2007
 // calculation mode: passing input GEM data changed on previous FMT iteration
@@ -1309,6 +1307,7 @@ void TNode::GEM_from_MT(
    }
 }
 
+#endif
 //-----------------------End of node.cpp--------------------------
 
 

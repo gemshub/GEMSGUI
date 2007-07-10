@@ -19,14 +19,11 @@
 
 #include <math.h>
 
-#include "s_tpwork.h"
 #include "s_fgl.h"
 #include "m_const.h"
-//#include "service.h"
-//#include "visor.h"
-
 
 #ifndef IPMGEMPLUGIN
+#include "s_tpwork.h"
 //--------------------------------------------------------------------//
 //
 int TPRSVcalc::CalcFugPure( void )
