@@ -343,7 +343,7 @@ if( binary_f )
 //-----------------------------------------------------------------
 // work with lists
 
-// Return DCH index of IC by Name or -1 if illegal name
+// Return DCH index of IC by Name or -1 if name not found
 int TNode::IC_name_to_x( const char *Name )
 {
   uint len = strlen( Name );
@@ -354,7 +354,7 @@ int TNode::IC_name_to_x( const char *Name )
   return -1;
 }
 
-// Return DCH index of DC by Name or -1 if illegal name
+// Return DCH index of DC by Name or -1 if name not found
 int TNode::DC_name_to_x( const char *Name )
 {
   uint len = strlen( Name );
@@ -365,7 +365,7 @@ int TNode::DC_name_to_x( const char *Name )
   return -1;
 }
 
-// Return DCH index of Ph by Name or -1 if illegal name
+// Return DCH index of Ph by Name or -1 if name not found
 int TNode::Ph_name_to_x( const char *Name )
 {
   uint len = strlen( Name );
@@ -376,7 +376,7 @@ int TNode::Ph_name_to_x( const char *Name )
   return -1;
 }
 
-// Return for IComp DBR index from DCH index or -1 if not used in the data bridge
+// Return for IComp DBR index from DCH index or -1 if IComp is not used in the data bridge
 int TNode::IC_xCH_to_xDB( const int xCH )
 {
   for(int ii = 0; ii<CSD->nICb; ii++ )
