@@ -45,6 +45,8 @@ struct TPWORK
     Fug, dVg,      // molar fugacity at TP (reserved), dVm of gas (reserved)
     RT,            // RT factor
     wRo, wEps,     //Density of H2O fluid, Dielectric constant of H2O fluid
+wAlp, wdAlpdT, wBet, // Compressibility, its derivative, and expansibility of
+                   // H2O fluid (added for MRB model by DK on 03.08.2007)
 gfun,             // g function from HKF (added 07.06.05 by KD )
     wtW[10];       //Work cells for RTparam script
 // work objects copied from DComp structure (invisible in GUI)

@@ -324,6 +324,11 @@
                                     <string>G   Calculation of standard Gibbs energy function g0T  </string>
                                 </property>
                             </item>
+                            <item>
+                                <property name="text">
+                                    <string>Y   Calculation of logK, dSr, dCpr, dVr using modified Ryzhenko-Bryzgalin algorithm</string>
+                                </property>
+                            </item>
                             <property name="name">
                                 <cstring>p_pct_2</cstring>
                             </property>

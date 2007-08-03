@@ -105,7 +105,7 @@ typedef struct
     *HKFc,  // Coeffs a1-a4, c1,c2, w, rAB for HKF EOS of reaction (reserved)
     // [MAXHKFCOEF]
     *DVt,   // Coeffs for dVr = f(P,T) equation (reserved) [MAXVTCOEF]
-    *DSt,   // Coeffs for electrostatic model equations(reserved)[MAXCPCOEF]
+*DSt,   // Coeffs for modified Ryzhenko-Bryzgalin electrostatic model [MAXCPCOEF]
     *pKt,//Coefficients of logK = f(T) or 1000ln(alpha) = f(T) equation:a0
     //  a1 *T    (isotopic: a1/T)
     //  a2 /T    (isotopic: a2/T^2)
@@ -148,12 +148,12 @@ protected:
     void calc_akinf_r( int q, int p, int CE, int CV );
     void calc_lgk_r( int q, int p, int CE, int CV );
     void calc_r_interp( int q, int p, int CE, int CV );
-    void calc_dissoc_r( int q, int p, int CE, int CV );
     void calc_iso_a( int q, int p );
     void calc_exion_r( int q, int p );
     void calc_tpcv_r( int q, int p, int CM, int CV );
     void PronsPrep( const char *key );
-
+void calc_r_MRB( int q, int p, int CE, int CV );
+int MRBcalc ( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp );
 
 public:
 

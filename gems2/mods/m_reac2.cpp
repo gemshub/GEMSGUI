@@ -23,6 +23,7 @@
 #include "m_param.h"
 #include "m_reacdc.h"
 #include "m_dcomp.h"
+#include "s_supcrt.h"
 #include "s_formula.h"
 #include "service.h"
 #include "visor.h"
@@ -1083,28 +1084,199 @@ FINITA:
     return;
 }
 
-/*-----------------------------------------------------------------*/
-void TReacDC::calc_dissoc_r( int q, int p, int /*CE*/, int /*CV*/ )
+//-----------------------------------------------------------------
+// Calculation of deltaR with modified Ryzhenko-Bryzgalin
+//                       model (added by TW and DK on 3.08.2007
+// Modified Ryzhenko-Bryzgalin (MRB) model
+// the calculation is done in the function MRBcalc, we need to pass
+// the following data to this function:
+//  TK: temperature in K
+//  MRBcoef[3]: array with 3 model parameters, that are taken from database
+//    ReacDC entry
+//  H2Oprop[4]: array with 4 water properties, these are [0] density,
+//  	[1] isobaric expansibility (alpha),
+//      [2] temperature derivative of alpha (d alpha /d T),
+//  	[3] isothermal copressibility (beta)
+//  - those water properties are obtained from SUPCRT subroutines (s_supcrt.h)
+//  in Gems, and exist in the water work structure: Alphaw, Betaw, dAldT
+//  ReactProp[6]: array with reaction properties that are returned
+// to the ReacDC function that calls the MRBcalc() function;
+// the reaction properties are: [0] log K at PT, [1] delta G,
+//  	[2] delta S, [3] delta H, [4] delta CP, [5] delta V
+//
+// - the following existing data structures (and counters) in ReacDC can be used:
+//  PreDS   flag for coeffs of electrost. models
+//  NcSt    N of nonzero coeffs of electrost. models
+//  *DSt    coeffs of electrostatic models
+//
+// - we then need a case for the mode of P-T corrections, would propose:
+//  CTM_RYZ = ´Y´     using electrostatic model of Ryzhenko-Bryzgalin
+//
+
+void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
 {
-    aW.WW(p).K =   rc[q].Ks[0];
-    aW.WW(p).lgK = rc[q].Ks[1];
+    double TK;
+    double H2Oprop[4];
+    double MRBcoef[3];
+    double ReactProp[6];
+    double rhoW, alphaW, betaW, dAldTW;
+
+    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
+    {  // standard temperature - just get data from ReacDC record
+       aW.WW(p).K =   rc[q].Ks[0];
+       aW.WW(p).lgK = rc[q].Ks[1];
+       aW.WW(p).dG =  rc[q].Gs[0];
+       aW.WW(p).G  =  rc[q].Gs[1];
+       aW.WW(p).dH =  rc[q].Hs[0];
+       aW.WW(p).H  =  rc[q].Hs[1];
+       aW.WW(p).dS =  rc[q].Ss[0];
+       aW.WW(p).S  =  rc[q].Ss[1];
+       aW.WW(p).dV =  rc[q].Vs[0];
+       aW.WW(p).V  =  rc[q].Vs[1];
+       aW.WW(p).dCp = rc[q].Cps[0];
+       aW.WW(p).Cp =  rc[q].Cps[1];
+        goto FINITA;
+    }
+     // input section
+     TK = aW.WW(p).T;
+//     P = aW.WW(p).P;
+//     std::cout << "Enter temperature (deg C) : ";
+//     std::cin >> TC;
+//     std::cout << "Enter density of H2O (g cm-3): ";
+//     std::cin >> rho;
+//     TK = TC + 273.15;
+// supcrt water structure Alphaw, Betaw, dAldT
+    // test water properties (400 deg C, 1000 bar)
+//    alphaW = -1.479899e-3;
+//    dAldtW = -3.782078e-8;
+//    betaW = 1.4617737e-4;
+    rhoW =    aSta.Dens[aSpc.isat];
+    alphaW = aW.twp->wAlp;
+    dAldTW = aW.twp->wdAlpdT;
+    betaW = aW.twp->wBet;
+    H2Oprop[0] = rhoW;
+    H2Oprop[1] = -1./rhoW*alphaW;
+    H2Oprop[2] = 1./pow(rhoW,2.)*pow(alphaW,2.) - 1./rhoW*dAldTW;
+    H2Oprop[3] = 1./rhoW*betaW;
+
+// get species parameters
+    MRBcoef[0] = rc[q].DSt[0];
+    MRBcoef[1] = rc[q].DSt[1];
+    MRBcoef[2] = rc[q].DSt[2];
+// . . . . . . . . . . . . . . . .
+// NaCO3- is test case: MRBcoef[0] = 0.9; MRBcoef[1] = 0.744; MRBcoef[2] = 0.0;
+
+    // calculate results - call MRB function (see below)
+    MRBcalc (TK, H2Oprop, MRBcoef, ReactProp);
+
+       aW.WW(p).K =   rc[q].Ks[0];
+       aW.WW(p).lgK = ReactProp[0];
+       if( fabs(aW.WW(p).lgK) < 34. )
+         aW.WW(p).K = exp( aW.WW(p).lgK*lg_to_ln );
+       else aW.WW(p).K = FLOAT_EMPTY;
+       aW.WW(p).dG =  ReactProp[1];
+       aW.WW(p).dH =  ReactProp[3];
+       aW.WW(p).dS =  ReactProp[2];
+       aW.WW(p).dV =  ReactProp[5];
+       aW.WW(p).dCp = ReactProp[4];
+//    std::cout << "logK at TP of interest: " << ReactProp[0] << "\n";
+//    std::cout << "deltaG at TP of interest: " << ReactProp[1] << "\n";
+//    std::cout << "deltaS at TP of interest: " << ReactProp[2] << "\n";
+//   std::cout << "deltaH at TP of interest: " << ReactProp[3] << "\n";
+//    std::cout << "deltaCP at TP of interest: " << ReactProp[4] << "\n";
+//    std::cout << "deltaV at TP of interest: " << ReactProp[5] << "\n";
+FINITA:
     aW.WW(p).dlgK =rc[q].Ks[2];
-    aW.WW(p).dG =  rc[q].Gs[0];
-    aW.WW(p).G  =  rc[q].Gs[1];
-    aW.WW(p).devG =rc[q].Gs[2];
-    aW.WW(p).dH =  rc[q].Hs[0];
-    aW.WW(p).H  =  rc[q].Hs[1];
+    aW.WW(p).devG = rc[q].Gs[2];
     aW.WW(p).devH =rc[q].Hs[2];
-    aW.WW(p).dS =  rc[q].Ss[0];
-    aW.WW(p).S  =  rc[q].Ss[1];
     aW.WW(p).devS =rc[q].Ss[2];
-    aW.WW(p).dV =  rc[q].Vs[0];
-    aW.WW(p).V  =  rc[q].Vs[1];
     aW.WW(p).devV =rc[q].Vs[2];
-    aW.WW(p).dCp = rc[q].Cps[0];
-    aW.WW(p).Cp =  rc[q].Cps[1];
     aW.WW(p).devCp=rc[q].Cps[2];
 }
+
+// Written 10/07/2007 by T. Wagner
+// calculates the pK of aqueous species from the MRB model
+// parameters: temperature in K, MRB parameters (pK298, Azz, Bzz),
+// H2O properties (density, alpha, temperature derivative of alpha, beta)
+int
+TReacDC::MRBcalc( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp )
+{
+	// calculates reaction properties from MRB model
+	double a, b, c, d, e, f, g, RHO298;
+	double R_C = 8.31451;
+	double RHO, ALP, dALPdT, BET, dRHOdT, d2RHOdT2, dRHOdP;
+	double pK298, A, B;
+	double dGr, dSr, dHr, dCPr, dVr, dG298;
+	double pKw298, pKwTP, zzH2O, zzA, BB, pKTP, logKTP;
+	double I, J, dI, dJ, d2I, d2J;
+
+	RHO = H2Oprop[0];
+	ALP = H2Oprop[1];
+	dALPdT = H2Oprop[2];
+	BET = H2Oprop[3];
+
+	pK298 = MRBcoef[0];
+	A = MRBcoef[1];
+	B = MRBcoef[2];
+
+	dRHOdT = -ALP*RHO;
+	d2RHOdT2 = RHO *(pow(ALP,2.)-dALPdT);
+	dRHOdP = BET*RHO;
+
+	a = -4.098;
+	b = -3245.2;
+	c = 2.2362e+5;
+	d = -3.984e+7;
+	e = 13.957;
+	f = -1262.3;
+	g = 8.5641e+5;
+	RHO298 = 0.997061;
+	zzH2O = 1.0107;
+
+	pKw298 = -(a + b/298.15 + c/pow(298.15,2.) + d/pow(298.15,3.)
+		+ ( e + f/298.15 + g/pow(298.15,2.))*log10(RHO298));
+
+	pKwTP = -(a + b/TK + c/pow(TK,2.) + d/pow(TK,3.)
+		+ ( e + f/TK + g/pow(TK,2.))*log10(RHO));
+
+	zzA = A + B/TK;
+	BB = ( pKwTP - pKw298*(298.15)/TK ) / zzH2O;
+	pKTP = pK298*(298.15/TK ) + zzA*BB;
+	logKTP = - pKTP;
+	dGr = pKTP*log(10.)*R_C*TK;
+	dG298 = pK298*log(10.)*R_C*298.15;
+
+	/*dGr = dG298 - R_C*log(10.)/zzH2O * (a*TK + b + c/TK + d/pow(TK,2.)
+		+ (e*TK + f + g/TK)*log10(RHO) + pKw298*298.15) * (A+B/TK);*/
+
+	I = a*TK + b + c/TK + d/pow(TK,2.)
+		+ ( e*TK + f + g/TK ) * log10(RHO) - (-pKw298)*298.15;
+	J = A + B/TK;
+	dI = a - c/pow(TK,2.) - 2.*d/pow(TK,3.) + ( e - g/pow(TK,2.) ) * log10(RHO)
+		+ ( e*TK + f + g/TK) * 1./(RHO*log(10.)) * dRHOdT;
+	dJ = -B/pow(TK,2.);
+	d2I = 2.*c/pow(TK,3.) + 6.*d/pow(TK,4.) + 2.*g/pow(TK,3.)*log10(RHO)
+		+ 2.*( e - g/pow(TK,2.) ) * 1./(RHO*log(10.)) * dRHOdT
+		- ( e*TK + f + g/TK ) * 1./(pow(RHO,2.)*log(10.)) * pow(dRHOdT,2.)
+		+ ( e*TK + f + g/TK ) * 1./(RHO*log(10.)) * d2RHOdT2;
+	d2J = 2.*B/pow(TK,3.);
+
+	dSr = R_C*log(10.)/zzH2O * ( dI*J + dJ*I );
+	dCPr = R_C*log(10.)/zzH2O * TK * ( d2I*J + 2.*dI*dJ + d2J*I );
+	dVr = - R_C*log(10.)/zzH2O * ( e*TK + f + g/TK ) * 1./(RHO*log(10.))
+		* dRHOdP * ( A + B/TK);
+	dHr = dGr + dSr*TK;
+
+	ReactProp[0] = logKTP;
+	ReactProp[1] = dGr;
+	ReactProp[2] = dSr;
+	ReactProp[3] = dHr;
+	ReactProp[4] = dCPr;
+	ReactProp[5] = dVr;
+
+	return 0;
+}
+
 
 /*-----------------------------------------------------------------*/
 // Calc parametres for isotop form if povishen TP

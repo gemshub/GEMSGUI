@@ -345,7 +345,7 @@ bool TReacDC::check_input( const char *key, int Level )
     return iRet;
 }
 
-// Input nessasery data and links objects
+// Input nesessary data and link data objects
 void TReacDC::RecInput( const char *key )
 {
     TCModule::RecInput( key );
@@ -353,8 +353,7 @@ void TReacDC::RecInput( const char *key )
 
 }
 
-/* opens window with 'Remake record' parameters
-*/
+// opens window with 'Remake record' parameters
 void
 TReacDC::MakeQuery()
 {
@@ -382,7 +381,7 @@ TReacDC::MakeQuery()
 
 }
 
-//Rebild record structure before calc
+//Rebild record structure before calculation
 
 int TReacDC::RecBuild( const char *key, int mode  )
 {
@@ -445,8 +444,6 @@ AGAIN_MOD:
         rcp->PreDS = S_ON;
         break;
     case CTPM_EOS:
-        if( CE == CTM_DKR /*|| CE == CTM_PPE*/ )
-            rcp->PreDS = S_ON;
         break;
     case CTPM_REA:
         switch(CE)
@@ -463,8 +460,10 @@ AGAIN_MOD:
         case CTM_IKZ:
             rcp->PreKP = S_ON;
             break; /* calc lgK(TP) */
+        case CTM_DKE:
+            rcp->PreDS = S_ON;  // Modified Ryzhenko-Bryzgalin model 
         case CTM_DKR:
-            /* 19.05.98 */
+            break; /* 19.05.98 */
         case CTM_PPE:
             rcp->PreKT = S_ON;
             break;
@@ -676,12 +675,16 @@ TReacDC::RCthermo( int q, int p )
             aSta.Temp = aW.twp->TC;
             aSta.Pres = aW.twp->P;
 
-            TSupcrt sapCrt;
-            sapCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
+            TSupcrt supCrt;
+            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
             aW.twp->P = aSta.Pres;
             aW.twp->wRo  = aSta.Dens[aSpc.isat];
             aW.twp->wEps = aWp.Dielw[aSpc.isat];
 //            aW.twp->wVis = aWp.Viscw[aSpc.isat];
+//   Added 03.08.2007 for MRB calculations (DK)
+            aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];
+            aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];
+            aW.twp->wBet  = aWp.Betaw[aSpc.isat];
         }
         else
         { /* calculated before */
@@ -808,7 +811,9 @@ CALCULATE_DELTA_R:
             /*  case CTM_EK1:  dbc = calc_isocoul_r( q, p, CE, CV );
                                break;  */
         case CTM_DKR: // not used in this version
-            /*  case CTM_DKE:  calc_dissoc_r( q, p, CE, CV ); */
+            break;
+        case CTM_DKE: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
+             calc_r_MRB( q, p, CE, CV );
             break;
         default:
             Error(dckey.p,"E13RErem: Invalid CE method flag!");
