@@ -1137,27 +1137,23 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
        aW.WW(p).Cp =  rc[q].Cps[1];
         goto FINITA;
     }
-     // input section
+
      TK = aW.WW(p).T;
 //     P = aW.WW(p).P;
-//     std::cout << "Enter temperature (deg C) : ";
-//     std::cin >> TC;
-//     std::cout << "Enter density of H2O (g cm-3): ";
-//     std::cin >> rho;
-//     TK = TC + 273.15;
 // supcrt water structure Alphaw, Betaw, dAldT
     // test water properties (400 deg C, 1000 bar)
-//    alphaW = -1.479899e-3;
-//    dAldtW = -3.782078e-8;
-//    betaW = 1.4617737e-4;
-    rhoW =    aSta.Dens[aSpc.isat];
+    // alphaW = 0.00213595;
+    // dAldTW = 4.61687e-6;
+    // betaW = 0.000210979;
+
+    rhoW = aSta.Dens[aSpc.isat];
     alphaW = aW.twp->wAlp;
     dAldTW = aW.twp->wdAlpdT;
     betaW = aW.twp->wBet;
     H2Oprop[0] = rhoW;
-    H2Oprop[1] = -1./rhoW*alphaW;
-    H2Oprop[2] = 1./pow(rhoW,2.)*pow(alphaW,2.) - 1./rhoW*dAldTW;
-    H2Oprop[3] = 1./rhoW*betaW;
+    H2Oprop[1] = alphaW;
+    H2Oprop[2] = dAldTW;
+    H2Oprop[3] = betaW;
 
 // get species parameters
     MRBcoef[0] = rc[q].DSt[0];
@@ -1179,12 +1175,7 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
        aW.WW(p).dS =  ReactProp[2];
        aW.WW(p).dV =  ReactProp[5];
        aW.WW(p).dCp = ReactProp[4];
-//    std::cout << "logK at TP of interest: " << ReactProp[0] << "\n";
-//    std::cout << "deltaG at TP of interest: " << ReactProp[1] << "\n";
-//    std::cout << "deltaS at TP of interest: " << ReactProp[2] << "\n";
-//   std::cout << "deltaH at TP of interest: " << ReactProp[3] << "\n";
-//    std::cout << "deltaCP at TP of interest: " << ReactProp[4] << "\n";
-//    std::cout << "deltaV at TP of interest: " << ReactProp[5] << "\n";
+
 FINITA:
     aW.WW(p).dlgK =rc[q].Ks[2];
     aW.WW(p).devG = rc[q].Gs[2];
