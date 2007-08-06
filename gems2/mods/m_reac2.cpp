@@ -115,7 +115,8 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     lgK = rcp->Ks[1];
     //AGAIN_CP:
     switch( CE )
-    { // calc on 2- and 3-termï¿½param approximation
+    { // calculation 2- and 3-termï¿½param approximation
+    case CTM_MRB: // 3-term extrap. from MRB at 25 C (provisional DK 06.08.07)
     case CTM_LGK:  // Here, all logK-f(T) coeffs are given
 //    case CTM_LGX:
         break;
@@ -258,6 +259,7 @@ void TReacDC::Recalc( int q, const char *key  )
     Count = rcp->nDC;
     CM = toupper( rcp->pct[0] );
     CE = toupper( rcp->pct[1] );
+
     for( i=0; i<Count; i++ )
     {  /* Get key */
         if( rc[q].rDC[i] != SRC_DCOMP && rc[q].rDC[i] != SRC_REACDC )
@@ -309,8 +311,8 @@ void TReacDC::Recalc( int q, const char *key  )
     //AGAINF:  Edit fields of record ?? vRet = Vaccess( W_REACDC, msg(cp_rcomp) );
     //FIRSTTIME:  Set formula
     /* Get formula and test it */
-    aFo.SetFormula( rc[q].form );   // set formula and analyse
-    /* Calc molal ves and zaryd */
+    aFo.SetFormula( rc[q].form );   // set formula and analyse it
+    /* Calc molar mass and formula charge */
     aFo.Fmwtz( Z, MW, foS );
     if( fabs( Z ) < ZBALANCE_PREC )
         rc[q].Zz = 0.;
@@ -321,12 +323,12 @@ void TReacDC::Recalc( int q, const char *key  )
     Update();
 
     switch( rc[q].pstate[0] )
-    { /* test phase state?*/
+    { /* check phase state */
     case CP_SOLID:
     case CP_GAS:
     case CP_UNIV:
     case CP_HCARB:
-    case CP_LIQID: /* no zaryd  */
+    case CP_LIQID: /* no charge  */
         if( fabs( Z ) < ZBALANCE_PREC &&
                 memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
         {
@@ -338,14 +340,14 @@ void TReacDC::Recalc( int q, const char *key  )
     case CP_GASI:
     case CP_SSPC:
     case CP_SORB:
-    case CP_MELT: /* must be zaryd */
+    case CP_MELT: /* must be charge */
         if( !memcmp( CHARGE_NAME, aFo.GetCn( aFo.GetIn()-1 ), 2 ))
             goto NEXT;
     }
     Error( GetName(),
     "W26RErun: Please, check stoichiometry, charge or valences in the formula.");
 NEXT:
-    /* test value st.mol.volume */
+    /* test value of st.mol.volume */
     if( ( rc[q].pstate[0] == CP_GAS || rc[q].pstate[0] == CP_GASI )
      &&  rc[q].Vs[1] < 1. )
         rc[q].Vs[1] = GAS_MV_STND;
@@ -357,6 +359,49 @@ NEXT:
     if( st1 )
         rc[q].Pst = (float)STANDARD_P;
 
+    if( CE == CTM_MRB )  // Inserted provisionally by DK on 06.08.07
+    {
+        if( vfQuestion(window(), GetName(),
+            "Estimate dGr,dSr,dHr,dCpr,dVr using modified Ryzhenko-Bryzgalin model?" ))
+         { /* Check if this is a dissociation reaction */
+            if( rc[q].scDC[rc[q].nDC-1] >= 0 )
+               Error( GetName(),"W27RErun: MRB model requires a dissociation reaction!");
+
+            double TK;
+            double H2Oprop[4];
+            double MRBcoef[3];
+            double ReactProp[6];
+            double rhoW, alphaW, betaW, dAldTW;
+
+            TK = 298.15;
+            // test water properties (25 deg C, 1 bar)
+            rhoW = 0.9970614;
+            alphaW = 0.0002594;
+            dAldTW = 9.5686e-6;
+            betaW = 4.5219e-5;
+            H2Oprop[0] = rhoW;
+            H2Oprop[1] = alphaW;
+            H2Oprop[2] = dAldTW;
+            H2Oprop[3] = betaW;
+
+        // get species parameters
+            MRBcoef[0] = rc[q].DSt[0];
+            MRBcoef[1] = rc[q].DSt[1];
+            MRBcoef[2] = rc[q].DSt[2];
+
+           // calculate MRB function 
+            MRBcalc (TK, H2Oprop, MRBcoef, ReactProp);
+
+           // get results
+           rc[q].Ks[0] = FLOAT_EMPTY;
+           rc[q].Ks[1] = ReactProp[0];
+           rc[q].Gs[0] = ReactProp[1];
+           rc[q].Hs[0] = ReactProp[3];
+           rc[q].Ss[0] = ReactProp[2];
+           rc[q].Vs[0] = ReactProp[5];
+           rc[q].Cps[0] = ReactProp[4];
+         }
+    }
     if( CM == CTPM_REA )
     {
         if( CE == CTM_EK0 )
@@ -408,15 +453,15 @@ NEXT:
         Convert_Cp_to_KT( CE );
     if( CM == CTPM_REA )
     {
-        Convert_KT_to_Cp( CE );
-        if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWDC )  // added by KD on 16.07.03
+       Convert_KT_to_Cp( CE );
+       if( rc[q].rDC[rc[q].nDC-1] == SRC_NEWDC )  // added by KD on 16.07.03
            Recalc_rDCN( foS  );
     }
     if( CM == CTPM_REA && rc[q].pct[2] == CPM_PCR && rc[q].PrAki != S_OFF )
     {   /*  Call PRONSPREP  added 19.05.98 */
         if( vfQuestion(window(), GetName(),
                        "Estimate S, H, Cp, V using PRONSPREP97 algorithm?" ))
-        { /* Check if this is dissociation reaction */
+        { /* Check if this is a dissociation reaction */
             if( rc[q].scDC[rc[q].nDC-1] < 0 )
                 PronsPrep( key );
             else Error( GetName(),"W27RErun: PP97 requires a dissociation reaction!");
@@ -581,7 +626,7 @@ STAGE2:
 }
 
 /*-----------------------------------------------------------------*/
-// Calc delta reactions from svoystv component
+// Calculate delta_reaction from properties of components
 void TReacDC::Recalc_rDCD( )
 {
     double  RR, R_T, T, lgK;
@@ -608,7 +653,7 @@ void TReacDC::Recalc_rDCD( )
         rcp->Cps[0] += rcp->scDC[i]*rcp->ParDC[i][_Cps_];
         rcp->Vs[0]  += rcp->scDC[i]*rcp->ParDC[i][_Vs_];
     }
-    /* calc const ravnovesiya and it lg */
+    /* calc equilibrium constant K and lgK */
     T = (double)rcp->TCst + C_to_K;
     RR = R_CONSTANT; /*  !!!!! */
     R_T = RR*T;
@@ -1112,7 +1157,6 @@ FINITA:
 // - we then need a case for the mode of P-T corrections, would propose:
 //  CTM_RYZ = ´Y´     using electrostatic model of Ryzhenko-Bryzgalin
 //
-
 void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
 {
     double TK;
@@ -1121,7 +1165,7 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
     double ReactProp[6];
     double rhoW, alphaW, betaW, dAldTW;
 
-    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
+    if( fabs( aW.WW(p).TC - rc[q].TCst ) > 1000 ) // < 0.2 )   provisional
     {  // standard temperature - just get data from ReacDC record
        aW.WW(p).K =   rc[q].Ks[0];
        aW.WW(p).lgK = rc[q].Ks[1];
@@ -1145,11 +1189,10 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
     // alphaW = 0.00213595;
     // dAldTW = 4.61687e-6;
     // betaW = 0.000210979;
-
-    rhoW = aSta.Dens[aSpc.isat];
-    alphaW = aW.twp->wAlp;
-    dAldTW = aW.twp->wdAlpdT;
-    betaW = aW.twp->wBet;
+       rhoW = aW.WW(p).wRo;
+       alphaW = aW.WW(p).wAlp;
+       dAldTW = aW.WW(p).wdAlpdT;
+       betaW = aW.WW(p).wBet;
     H2Oprop[0] = rhoW;
     H2Oprop[1] = alphaW;
     H2Oprop[2] = dAldTW;
@@ -1165,7 +1208,7 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
     // calculate results - call MRB function (see below)
     MRBcalc (TK, H2Oprop, MRBcoef, ReactProp);
 
-       aW.WW(p).K =   rc[q].Ks[0];
+//       aW.WW(p).K =   rc[q].Ks[0];
        aW.WW(p).lgK = ReactProp[0];
        if( fabs(aW.WW(p).lgK) < 34. )
          aW.WW(p).K = exp( aW.WW(p).lgK*lg_to_ln );
@@ -1185,6 +1228,7 @@ FINITA:
     aW.WW(p).devCp=rc[q].Cps[2];
 }
 
+// -------------------------------
 // Written 10/07/2007 by T. Wagner
 // calculates the pK of aqueous species from the MRB model
 // parameters: temperature in K, MRB parameters (pK298, Azz, Bzz),

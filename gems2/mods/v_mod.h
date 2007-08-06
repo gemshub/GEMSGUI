@@ -304,7 +304,7 @@ enum DC_CNTRL_CODES {
                          from equation: lgK= A + B*RO(H2O) (Frantz & Marshall, 1982)
                        - REACDC only (reserved); */
     CTM_PPE = 'E',  /* Dissociation reaction for PRONSPREP 19.05.98 */
-    CTM_DKE = 'Y',  /* Calculation of deltaR with modified Ryzhenko-Bryzgalin
+    CTM_MRB = 'Y',  /* Calculation of deltaR with modified Ryzhenko-Bryzgalin
                        model (added by TW and DK on 3.08.2007 */
     // (S) CTPM_EOS
     CTM_CPG = 'C',  /* reserved (FGL) */ //(S) - reserved

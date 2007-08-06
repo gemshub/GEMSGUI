@@ -460,7 +460,7 @@ AGAIN_MOD:
         case CTM_IKZ:
             rcp->PreKP = S_ON;
             break; /* calc lgK(TP) */
-        case CTM_DKE:
+        case CTM_MRB:
             rcp->PreDS = S_ON;  // Modified Ryzhenko-Bryzgalin model 
         case CTM_DKR:
             break; /* 19.05.98 */
@@ -637,6 +637,12 @@ TReacDC::RCthermo( int q, int p )
     aW.twp->Tst = aW.twp->TCst + C_to_K;
     aW.twp->RT = R_CONSTANT * aW.twp->T; /* !!!! */
     /* aW.twp->ln10RT ??? */
+   // test method codes for thermodynamic calculations 
+    CM = toupper( rc[q].pct[0] );
+    CE = toupper( rc[q].pct[1] );
+    CV = toupper( rc[q].pct[2] );
+
+// if( CE != CTM_MRB )  // Provisional for MRB model - DK on 06.08.07
     if( fabs( aW.twp->T - 298.15 ) < 0.01 && fabs(aW.twp->P-1.) < 0.01 )
     {
         aW.twp->K = rcp->Ks[0];
@@ -659,16 +665,12 @@ TReacDC::RCthermo( int q, int p )
     TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
     aDC->ods_link(0);
 
-    /*test method of calculations thermodynamic and set counters*/
-    CM = toupper( rc[q].pct[0] );
-    CE = toupper( rc[q].pct[1] );
-    CV = toupper( rc[q].pct[2] );
     /*  memcpy( dckey, rc[q].pstate, DC_RKLEN ); */
     //  dckey[DC_RKLEN] = 0;
 
-    if( CM == CTPM_HKF )
+    if( CM == CTPM_HKF || CE == CTM_MRB )
     {
-        /* calculate water properties */
+        /* calculate water properties from SUPCRT subroutines */
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
                 ( aW.twp->P > 1e-4 && fabs( aW.twp->P - aSta.Pres ) > 0.001 ))
         { /* calculate water from HGK EoS */
@@ -692,11 +694,11 @@ TReacDC::RCthermo( int q, int p )
         }
     }
     w_dyn_new();
-    /*test the component of reaction and calc its t/d properties*/
+    /*test the component of reaction and calculate its t/d properties*/
     for( j=0; j<rc[q].nDC; j++ )
     {
         strncpy( dckey, rc[q].DCk[j], DC_RKLEN );  // Override off !!!
-/* !!!!!!!! exept field t/d base any? (*) */
+/* !!!!!!!! except "any"=* field in data base record */
         aW.ods_link( p+1 );
         /* clear new TPwork structure */
         aW.set_zero( p+1 );
@@ -710,6 +712,10 @@ TReacDC::RCthermo( int q, int p )
         aW.twp->wRo = aW.WW(p).wRo;
         aW.twp->wEps = aW.WW(p).wEps;
 //        aW.twp->wVis = aW.WW(p).wVis;
+//   Added 06.08.2007 for MRB calculations (DK)
+       aW.twp->wAlp  = aW.WW(p).wAlp;
+       aW.twp->wdAlpdT = aW.WW(p).wdAlpdT;
+       aW.twp->wBet  = aW.WW(p).wBet;
 
         aW.twp->unE = aW.WW(p).unE;  /* test units of measurement */
         aW.twp->unV = aW.WW(p).unV;
@@ -812,7 +818,7 @@ CALCULATE_DELTA_R:
                                break;  */
         case CTM_DKR: // not used in this version
             break;
-        case CTM_DKE: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
+        case CTM_MRB: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
              calc_r_MRB( q, p, CE, CV );
             break;
         default:
@@ -834,8 +840,7 @@ CALCULATE_DELTA_R:
             Error( dckey.p, "E14RErun: Invalid CM method flag in ReacDC!");
             //  else  RecBuild( dckey );  // !!!!!! Recalc new record?
         }
-
-    }
+     }
     /* Volume */
     switch ( CV )
     {
@@ -845,6 +850,7 @@ CALCULATE_DELTA_R:
     case CPM_NUL:   // Added by KD on 15.07.03
 //    case CPM_VBM:
 //    case CPM_CEH: // constant volume only in this version!
+         if( CE != CTM_MRB )  // if not Ryzhenko-Bryzgalin model (provisional)
         calc_tpcv_r( q, p, CM, CV );
     default:
         break;

@@ -690,6 +690,10 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
             aW.twp->wRo  = aSta.Dens[aSpc.isat]; // density of water g/cm3
             aW.twp->wEps = aWp.Dielw[aSpc.isat]; // dielectric constant of water
 //            aW.twp->wVis = aWp.Viscw[aSpc.isat]; // dynamic viscosity of water
+//   Added 03.08.2007 for MRB calculations (DK)
+            aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];
+            aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];
+            aW.twp->wBet  = aWp.Betaw[aSpc.isat];
         }
         else
         { // calculated before
