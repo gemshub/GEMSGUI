@@ -670,28 +670,24 @@ TReacDC::RCthermo( int q, int p )
 
     if( CM == CTPM_HKF || CE == CTM_MRB )
     {
-        /* calculate water properties from SUPCRT subroutines */
+        // calculate water properties from SUPCRT subroutines
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
                 ( aW.twp->P > 1e-4 && fabs( aW.twp->P - aSta.Pres ) > 0.001 ))
-        { /* calculate water from HGK EoS */
-            aSta.Temp = aW.twp->TC;
-            aSta.Pres = aW.twp->P;
-
-            TSupcrt supCrt;
-            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
-            aW.twp->P = aSta.Pres;
-            aW.twp->wRo  = aSta.Dens[aSpc.isat];
-            aW.twp->wEps = aWp.Dielw[aSpc.isat];
+        {  // calculate water from HGK EoS
+             aSta.Temp = aW.twp->TC;
+             aSta.Pres = aW.twp->P;
+             TSupcrt supCrt;
+             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
+             aW.twp->P = aSta.Pres;
+        }
+        aW.twp->P = aSta.Pres;
+        aW.twp->wRo  = aSta.Dens[aSpc.isat];
+        aW.twp->wEps = aWp.Dielw[aSpc.isat];
 //            aW.twp->wVis = aWp.Viscw[aSpc.isat];
 //   Added 03.08.2007 for MRB calculations (DK)
-            aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];
-            aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];
-            aW.twp->wBet  = aWp.Betaw[aSpc.isat];
-        }
-        else
-        { /* calculated before */
-            aW.twp->P = aSta.Pres;
-        }
+        aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];
+        aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];
+        aW.twp->wBet  = aWp.Betaw[aSpc.isat];
     }
     w_dyn_new();
     /*test the component of reaction and calculate its t/d properties*/

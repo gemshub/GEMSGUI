@@ -1155,7 +1155,7 @@ FINITA:
 //  *DSt    coeffs of electrostatic models
 //
 // - we then need a case for the mode of P-T corrections, would propose:
-//  CTM_RYZ = ´Y´     using electrostatic model of Ryzhenko-Bryzgalin
+//  CTM_MRB = ´Y´     using electrostatic model of Ryzhenko-Bryzgalin
 //
 void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
 {
@@ -1165,7 +1165,7 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
     double ReactProp[6];
     double rhoW, alphaW, betaW, dAldTW;
 
-    if( fabs( aW.WW(p).TC - rc[q].TCst ) > 1000 ) // < 0.2 )   provisional
+    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
     {  // standard temperature - just get data from ReacDC record
        aW.WW(p).K =   rc[q].Ks[0];
        aW.WW(p).lgK = rc[q].Ks[1];
