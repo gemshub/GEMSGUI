@@ -1105,8 +1105,8 @@ void TReacDC::calc_r_interp( int q, int p, int /*CE*/, int /*CV*/ )
         break;
     }
     /* call interpolations */
-    lgK = LagranInterp( rc[q].TCint, rc[q].Pint, rc[q].logK,
-                Pa, aW.WW(p).TC, nP, rc[q].nTp, 1 );
+    lgK = LagranInterp(  rc[q].Pint, rc[q].TCint, rc[q].logK,
+                Pa, aW.WW(p).TC, rc[q].nTp, nP, 1 );
     //  if( lgK > 7777776. )
     //    return 1;
     aW.WW(p).lgK = lgK;
