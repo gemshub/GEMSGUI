@@ -347,9 +347,11 @@ if( binary_f )
 int TNode::IC_name_to_x( const char *Name )
 {
   uint len = strlen( Name );
+  len =  min(len,MaxICN);
 
   for(int ii = 0; ii<CSD->nIC; ii++ )
-       if(!memcmp(Name, CSD->ICNL[ii], min(len,MaxICN)))
+       if(!memcmp(Name, CSD->ICNL[ii], len ))
+        if( len == MaxICN || CSD->ICNL[ii][len] == ' ' || CSD->ICNL[ii][len] == '\0' )
          return ii;
   return -1;
 }
@@ -358,9 +360,11 @@ int TNode::IC_name_to_x( const char *Name )
 int TNode::DC_name_to_x( const char *Name )
 {
   uint len = strlen( Name );
+  len =  min(len,MaxDCN);
 
   for(int ii = 0; ii<CSD->nDC; ii++ )
        if(!memcmp(Name, CSD->DCNL[ii], min(len,MaxDCN)))
+        if( len == MaxDCN || CSD->DCNL[ii][len] == ' ' || CSD->DCNL[ii][len] == '\0' )
          return ii;
   return -1;
 }
@@ -369,9 +373,11 @@ int TNode::DC_name_to_x( const char *Name )
 int TNode::Ph_name_to_x( const char *Name )
 {
   uint len = strlen( Name );
+  len =  min(len,MaxPHN);
 
   for(int ii = 0; ii<CSD->nPH; ii++ )
        if(!memcmp(Name, CSD->PHNL[ii], min(len,MaxPHN)))
+        if( len == MaxPHN || CSD->PHNL[ii][len] == ' ' || CSD->PHNL[ii][len] == '\0' )
          return ii;
   return -1;
 }
