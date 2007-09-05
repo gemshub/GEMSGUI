@@ -625,35 +625,39 @@ void TFormula::fixup_ics( char* ICs )
             if( *(ICs+1) == 'z' )
                 ICs[MAXICNAME] = IC_CHARGE;
             else ICs[MAXICNAME] = IC_ELEMENT;
-            goto IC_TEST;
+            break;
         case 'V':
-            if( *(ICs+1) == 'o' )
+            if( *(ICs+1) == 'o' && *(ICs+2) == 'l' )
                 ICs[MAXICNAME] = IC_VOLUME;
             else ICs[MAXICNAME] = IC_ELEMENT;
-            goto IC_TEST;
+            break;
         case 'O':
             if( *(ICs+1) == ' ' )
                 ICs[MAXICNAME] = IC_OXYGEN;
             else ICs[MAXICNAME] = IC_ELEMENT;
-            goto IC_TEST;
+            break;
         case 'H':
             if( *(ICs+1) == ' ' )
-            {
                 ICs[MAXICNAME] = IC_HYDROGEN;
-                goto IC_TEST;
-            }
+             else ICs[MAXICNAME] = IC_ELEMENT;
+             break;
         default:
             ICs[MAXICNAME] = IC_ELEMENT;
-            if( strcspn( ICs, " *" ) > 2 )
-                ICs[MAXICNAME] = IC_ADDIT;
-            // symb mast be >2 letter and no with Z V O
+//            if( strcspn( ICs, " *" ) > 2 )
+//                ICs[MAXICNAME] = IC_ADDIT;
+            // symbols must be >2 characters and not start with Z V O - obsolete!
         }
-
-IC_TEST:
-    ICs[MAXICNAME+MAXSYMB] = '*';
+// IC_TEST: // Changed by DK on 5.09.2007  New rule: if IC symbol has >= 3 chars
+            // then it is declared as IC_ADDIT, except Vol (IC_VOLUME)
+               // Caution! Anything starting with Vol is recognized as IC_VOLUME!
+            // Zz is recognized as IC_CHARGE; O as IC_OXYGEN; H as IC_HYDROGEN
+    if( ICs[MAXICNAME] != IC_VOLUME )
+         if( strcspn( ICs, " *" ) > 2 )
+                ICs[MAXICNAME] = IC_ADDIT; // >2 and <6 characters: IC_ADDIT is set!
+    ICs[MAXICNAME+MAXSYMB] = '*';  // This key field is actually not checked!
 }
 
-// calculate charge, mol mass and elemental entropy from chemical formulae
+// calculate charge, molar mass and elemental entropy from chemical formulae
 void TFormula::Fmwtz( double &Z, double &mW, double &eS )
 {
     time_t icrtim;
