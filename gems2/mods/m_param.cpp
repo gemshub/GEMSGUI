@@ -606,7 +606,9 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 }
 
 // GEM IPM calculation of equilibrium state in MULTI
-void TProfil::calcMulti()
+// Modified on 10.09.2007 to return elapsed GEMIPM runtime in seconds
+//
+double TProfil::calcMulti()
 {
   TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
   calcFinished = false;
@@ -617,16 +619,21 @@ void TProfil::calcMulti()
       mtparm->LoadMtparm( pmp->TCc, pmp->Pc );
       pmp->pTPD = 0;
     }
+pmp->t_start = clock();     // Added 06.09.2007 by DK to check pure runtime
+pmp->t_end = pmp->t_start;
+pmp->t_elap_sec = 0.0;
    multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
   // multi->CompG0Load(); //16/02/2007
 
   if( multi->AutoInitialApprox() == false )
        multi->MultiCalcIterations();
-
+pmp->t_end = clock();
+pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
   calcFinished = true;
 
   STat->setCalcFlag( true );
   STat->CellChanged();
+  return pmp->t_elap_sec;
 }
 
 // Setup of flags for MULTY remake

@@ -680,12 +680,13 @@ void TProfil::CalcBcc()
     TSysEq::pm->CellChanged();    // DAK
 }
 
-//Calculated multy
-// this function is run in another thread!
-// don't call any GUI (Qt or VisorImp) functions!!!
+// Calculation of equilibrium state with GEMIPM2 kernel
+// GEMS: Caution - this function is run in another thread!
+// don't call any GUI (Qt or VisorImp) functions from here!
 // exceptions should be kept inside the function either
-
-void TProfil::CalcEqstat( bool /*prg*/)
+// Modified on 10.09.2007 to return GEMIPM calculation time in seconds as double
+//
+double TProfil::CalcEqstat( bool /*prg*/)
 {
     TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
     STat->ods_link(0);
@@ -701,6 +702,9 @@ void TProfil::CalcEqstat( bool /*prg*/)
     PMtest( keyp.c_str() );
     //MultiCalc( keyp.c_str() );
 //non-mt    if( prg )
+pmp->t_start = clock();
+pmp->t_end = pmp->t_start;
+pmp->t_elap_sec = 0.0;
 #ifndef Use_mt_mode
      if( prg )
 	pVisorImp->OpenProgress();
@@ -727,11 +731,13 @@ void TProfil::CalcEqstat( bool /*prg*/)
        pmp->IT = (short)TotIT;
     }
     calcFinished = true;
-
+pmp->t_end = clock();
+pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
 //nmt    pVisor->Update();
 //nmt    pVisor->CalcFinished();
     STat->setCalcFlag( true );
     STat->CellChanged();
+return pmp->t_elap_sec;
 }
 
 //add new Project structure

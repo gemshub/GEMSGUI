@@ -250,7 +250,7 @@ public:
     void newSystat( int mode );
     void deriveSystat();
     void PackSystat();
-    void CalcEqstat( bool show_progress=true );
+double CalcEqstat( bool show_progress=true );
     int  indDC( int );
     int  indPH( int );
 
@@ -276,7 +276,7 @@ public:
    void outMulti();
    void outMultiTxt( const char *path  );
    void readMulti( GemDataStream& ff );
-   void calcMulti();
+   double calcMulti();
 };
 
 /* Work codes of surface site types in pm->AtNdx vector (compatibility with old-style SCMs *

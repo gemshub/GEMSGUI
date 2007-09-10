@@ -1000,7 +1000,8 @@ double TProcess::f_proc( double x )
     pep->c_Eh = x;
     CalcEquat();
     // calc SyStat on iterations
-    PRof->CalcEqstat( false /*pointShow==-1*/ ); // calc current SyStat
+    pep->c_Tau +=
+      PRof->CalcEqstat( false /*pointShow==-1*/ ); // calc current SyStat
     pep->Loop = 1;
     CalcEquat();
     return( pep->c_Nu );
@@ -1113,7 +1114,8 @@ TProcess::RecCalc( const char *key )
 /*  char * */ text_fmt = 0;
 /*  gstring */ sd_key = "";
 /*  gstring */ filename = "";
-
+// Try pure calculation time - temporarily stored in c_Tau!  DK 06.09.2007
+pep->c_Tau = 0.0;
 
     if( pep->Istat != P_EXECUTE && pep->Istat != P_MT_EXECUTE )
     {
@@ -1178,9 +1180,8 @@ TProcess::RecCalc( const char *key )
         //       if( nRec < 0 || pep->syt < pep->pet )
 
         { // current key in base set before
-            PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SyStat
+pep->c_Tau += PRof->CalcEqstat( false /*pointShow==-1*/); // calc current SyStat
 //	    pVisorImp->CalcMulti();
-
             TSysEq::pm->CmSave();  // save results
         }
 
@@ -1311,9 +1312,8 @@ TProcess::internalCalc()
             pep->syt = rt[RT_SYSEQ].GetTime( nRec );
 //        if( nRec < 0 || pep->PsUX != S_OFF || pep->syt < pep->pet )
 //        {
-            PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
+pep->c_Tau += PRof->CalcEqstat( false/*pointShow==-1*/); // calc current SyStat
 //	    pVisorImp->CalcMulti();
-
     if( pep->Istat < P_MT_MODE )
            if( pep->PsSY != S_OFF  || pep->PsUX != S_OFF  )
                  TSysEq::pm->CmSave();  // save results

@@ -123,7 +123,7 @@ ProgressDialog::ProgressDialog(QWidget* parent,	bool step, bool autoclose_):
 
 	timer->start( pVisorImp->updateInterval()*100, TRUE );
     }
-    t_start = clock();
+//    t_start = clock();
     Update(true);
 }
 
@@ -448,10 +448,10 @@ ProgressDialog::Update(bool force)
         progr = 7;
     pProgress->setProgress(progr);
 
-    clock_t t_end = clock();
-    clock_t dtime = ( t_end- t_start );
-    str.sprintf("GEM IPM Minimization (run time: %lg s).",
-               (double)dtime/(double)CLOCKS_PER_SEC);
+//    clock_t t_end = clock();
+//    clock_t dtime = ( t_end- t_start );
+    str.sprintf("GEM IPM Minimization (pure run time: %lg s).",
+       pData->t_elap_sec );   //  (double)dtime/(double)CLOCKS_PER_SEC);
     TextLabel1->setText(tr(str));
 
 

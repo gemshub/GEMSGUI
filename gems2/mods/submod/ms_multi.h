@@ -30,7 +30,7 @@
 typedef int (tget_ndx)( int nI, int nO, int Xplace );
 
 #else
-
+#include <time.h>
 #include "m_const.h"
 
 #endif
@@ -271,6 +271,8 @@ typedef struct
      *sitXan;  // SIT: indices of anions
   float
      *sitE;    // pointer to SIT coeff. table (may be changed soon)
+  clock_t t_start, t_end;
+  double t_elap_sec;  // work variables for determining IPM calculation time
 }
 MULTI;
 

@@ -60,6 +60,7 @@ int main( int argc, char* argv[] )
 // int nNodes = 1;     // number of local equilibrium nodes, 1 or more
    int nTimes = 100;   // Maximum number of time iteration steps
    double t_start = 0., t_end = 10000., dt = 100., tc = 1.;
+   double CalcTime = 0.0;
 
    cout << "Start of gemnode test: " << ipm_input_file_list_name << " "
          << dbr_input_file_name << endl;
@@ -255,6 +256,7 @@ int main( int argc, char* argv[] )
                 if( !( m_NodeStatusCH[in] == OK_GEM_AIA ||
                m_NodeStatusCH[in] == OK_GEM_PIA ) )
             return 5;
+CalcTime += node->GEM_CalcTime();  // Incrementing calculation time
 
         // Extracting GEM IPM output data to FMT part
         node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
@@ -280,6 +282,7 @@ int main( int argc, char* argv[] )
   t_end11 = clock(); // getting end time of coupled calculations
   double dtime = ( t_end11- t_start11 );
   double clc_sec = CLOCKS_PER_SEC;
+cout <<  "Pure time of calculation, s: " <<  CalcTime << endl;
   cout <<  "Total time of calculation, s: " <<  (dtime)/clc_sec << endl;
   cout << " This gem_node test ";
 

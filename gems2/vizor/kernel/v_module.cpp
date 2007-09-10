@@ -695,7 +695,7 @@ TCModule::CmCalc()
         t_end11 = clock();
         clock_t dtime = ( t_end11- t_start11 );
         vstr  buf(200);
-        sprintf(buf, "Calculation finished OK (total time: %lg s).",
+        sprintf(buf, "Calculation finished OK (elapsed time: %lg s).",
                    (double)dtime/(double)CLOCKS_PER_SEC);
         SetString(buf);
 

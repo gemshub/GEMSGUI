@@ -19,6 +19,7 @@
 // make EqStat key  && calculate records
 void TUnSpace::unsp_eqkey()
 {
+    double calculation_time;
     vstr buf(40);
 
     sprintf(buf, "%.4d", usp->q);
@@ -36,7 +37,7 @@ void TUnSpace::unsp_eqkey()
 // calc current SyStat 16/02/2007
      pmu->TCc = usp->Tc;
      pmu->Pc = usp->Pc;
-     TProfil::pm->calcMulti();
+calculation_time = TProfil::pm->calcMulti();
     //TProfil::pm->CalcEqstat( false ); // 16/02/2007
     if( usp->PsSY != S_OFF )
        TSysEq::pm->CmSave();           // save results to DB
