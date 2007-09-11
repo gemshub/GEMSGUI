@@ -1,3 +1,12 @@
+
+30/08/2007
+ Fixed error in function gstring::gstring(const char* s, size_t pos, size_t len)
+
+14/08/2007
+ In functions finding index C by Name check
+ full names for DComp, IComp, PHase in node.cpp
+ (IC_name_to_x, DC_name_to_x, PH_name_to_x)
+
 21/02/2007
  Added to out multi ipm arrays mui, muk,mij by flag addMui
 

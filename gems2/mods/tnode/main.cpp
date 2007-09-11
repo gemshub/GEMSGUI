@@ -41,7 +41,8 @@ int main( int argc, char* argv[] )
 
      if (argc >= 2 )
        strncpy( ipm_input_file_list_name, argv[1], 256);
-         // list of files needed as input for initializing GEMIPM2K
+
+     // list of files needed as input for initializing GEMIPM2K
      if (argc >= 3 )
            strncpy( dbr_input_file_name, argv[2], 256);
              // input file for boundary conditions

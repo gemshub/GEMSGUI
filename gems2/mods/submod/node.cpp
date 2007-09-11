@@ -354,7 +354,7 @@ if( binary_f )
 //-----------------------------------------------------------------
 // work with lists
 
-// Return DCH index of IC by Name or -1 if name not found
+// Return ICH index of IC by Name or -1 if name not found
 int TNode::IC_name_to_x( const char *Name )
 {
   uint len = strlen( Name );
