@@ -1,5 +1,5 @@
 //--------------------------------------------------------------------
-// $Id: main.cpp 717 2006-07-06 08:06:21Z gems $
+// $Id: main.cpp 922 2007-09-14 08:06:21Z gems $
 //
 // Demo test of usage of the TNode class for implementing a simple
 // direct coupling scheme between FMT and GEM in a single-GEM-call
@@ -29,7 +29,7 @@
 
 #include "node.h"
 
-#define nNodes  5 // set here how many nodes you need
+// #define nNodes  5   // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {
@@ -58,12 +58,14 @@ int main( int argc, char* argv[] )
    if( node->GEM_init( ipm_input_file_list_name ) )
        return 1;  // error occured during reading the files
 
-// int nNodes = 1;     // number of local equilibrium nodes, 1 or more
+   int nNodes = 5;     // number of local equilibrium nodes, 1 or more
    int nTimes = 100;   // Maximum number of time iteration steps
+   unsigned int nTotIt;   // Number of GEM iterations per time step
    double t_start = 0., t_end = 10000., dt = 100., tc = 1.;
    double CalcTime = 0.0;
+   double MeanIt;      // mean number of GEM iterations at time step
 
-   cout << "Start of gemnode test: " << ipm_input_file_list_name << " "
+   cout << "Start of gemnode PIA test: " << ipm_input_file_list_name << " "
          << dbr_input_file_name << endl;
    cout << " nNodes = " << nNodes << "  nTimes = " << nTimes
          << "  t_start = " << t_start << " t_end = " << t_end
@@ -78,8 +80,8 @@ int main( int argc, char* argv[] )
    // Number of ICs, DCs, Phases and Phases-solutions kept in the node
    // DATABR structure for exchange with GEMIPM - for your convenience
    int nIC, nDC, nPH, nPS;
-   int i,   j,   k,   ks;    // indices for direct access to components
-                             // and phases data in the DataCH framework
+//   int i,   j,   k,   ks;    // indices for direct access to components
+                               // and phases data in the DataCH framework
 
    // Getting direct access to DataCH structure in GEMIPM2K memory
    DATACH* dCH = node->pCSD();
@@ -123,8 +125,8 @@ int main( int argc, char* argv[] )
    m_xPH = (double*)malloc( nNodes*nPH*sizeof(double) );
    m_vPS = (double*)malloc( nNodes*nPS*sizeof(double) );
    m_mPS = (double*)malloc( nNodes*nPS*sizeof(double) );
-   m_bPS = (double*)malloc( nNodes*nIC*nPS*sizeof(double) );
    m_xPA = (double*)malloc( nNodes*nPS*sizeof(double) );
+   m_bPS = (double*)malloc( nNodes*nIC*nPS*sizeof(double) );
 
    // (1) ---------------------------------------------
    // Initialization of chemical data kept in the FMT part.
@@ -195,34 +197,37 @@ int main( int argc, char* argv[] )
 
    cout << "Begin Coupled Modelling Part" << endl;
       // Getting DATABR indexes for chemical species to be monitored
-   int xCa = node->IC_name_to_xDB("Ca");
-   int xMg = node->IC_name_to_xDB("Mg");
-   int xCl = node->IC_name_to_xDB("Cl");
-   int xCalcite = node->Ph_name_to_xDB("Calcite");
-   int xDolomite = node->Ph_name_to_xDB("Dolomite-dis");
+   int xiCa = node->IC_name_to_xDB("Ca");
+   int xiSr = node->IC_name_to_xDB("Sr");
+   int xCl = node->DC_name_to_xDB("Cl-");
+   int xiCl = node->IC_name_to_xDB("Cl");
+   int xCal = node->Ph_name_to_xDB("Calcite");
+   int xStr = node->Ph_name_to_xDB("Strontianite");
    // Checking indexes
-   cout << "xCa= " << xCa << " xMg=" << xMg << " xCl=" << xCl
-        << " xCalcite=" << xCalcite << " xDolomite=" << xDolomite << endl;
+   cout << "xiCa= " << xiCa << " xiSr=" << xiSr << " xCl-=" << xCl  
+        << " xCalcite=" << xCal << " xStrontianite=" << xStr << endl;
+ nTotIt = 0;
 
    for( int it=0; it<nTimes; it++ )  // iterations over time
    {
      int in;
  //   cout << " FMT loop begins: " << endl;
-
      // Loop over nodes for calculating the mass transport step
-//     ( this whole loop may be replaced by call(s) to FMT subroutines)
+         // ( this whole loop may be replaced by call(s) to FMT subroutines)
      for(  in=1; in<nNodes; in++ )
      {
        ; // Add here some operators as function of tc and dt
        // that transfer mass between nodes (i.e. change some elements of
        // m_bIC array). Take care about mass conservation and consistency
        // of chemical compositions of the nodes.
-       // in this example, simply adding MgCl2 to m_bIC vector
-       // in order to cause the conversion of calcite to dolomite
+       // in this example, simply adding SrCl2 to m_bIC vector
+       // in order to cause the conversion of calcite to strontianite
        if( it > 0 )
        {
-         m_bIC[in*nIC+xMg] += dt*4e-7;
-         m_bIC[in*nIC+xCl] += dt*8e-7;
+         if( xiSr >= 0 )
+           m_bIC[in*nIC+xiSr] += dt*in*5e-7;
+         if( xiCl >= 0 )  
+           m_bIC[in*nIC+xiCl] += dt*in*1e-6;
        }
        // Alternatively, the transport may be simulated using m_xDC arrays.
        // In this case, an alternative (overloaded) call to GEM_from_MT()
@@ -238,12 +243,15 @@ int main( int argc, char* argv[] )
         cout << "  in = " << in << "  T = " << m_T[in];
 
         m_NodeHandle[in] = in;
-        m_NodeStatusCH[in] = NEED_GEM_AIA; // or NEED_GEM_PIA
+//        m_NodeStatusCH[in] = NEED_GEM_AIA; 
+        m_NodeStatusCH[in] = NEED_GEM_PIA; 
 
         // Setting input data for GEM IPM
         node->GEM_from_MT( m_NodeHandle[in], m_NodeStatusCH[in],
-             m_T[in], m_P[in], m_Vs[in], m_Ms[in],
-             m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH );
+            m_T[in], m_P[in], m_Vs[in], m_Ms[in],
+            m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH,
+	    m_xDC+in*nDC, m_gam+in*nDC );   // this overload call works also 
+	                                    // in NEED_GEM_PIA mode!
 //  Alternative call to correct bulk chemical composition using changed
 //     m_xDC (chemical species amounts) data. Take care that this function
 //     actually compresses the xDC values into mole amounts of elements
@@ -258,7 +266,6 @@ int main( int argc, char* argv[] )
                m_NodeStatusCH[in] == OK_GEM_PIA ) )
             return 5;
 CalcTime += node->GEM_CalcTime();  // Incrementing calculation time
-
         // Extracting GEM IPM output data to FMT part
         node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
           m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
@@ -266,25 +273,30 @@ CalcTime += node->GEM_CalcTime();  // Incrementing calculation time
           m_xPH+in*nPH, m_vPS+in*nPS, m_mPS+in*nPS,
           m_bPS+in*nIC*nPS, m_xPA+in*nPS  );
 
+nTotIt += m_IterDone[in];
         // Here the debug print for each node can be implemented
 //        cout << " Gem run ends: ";
-        cout << " Cal= " << m_xPH[in*nPH+xCalcite] <<
-                " Dol= " << m_xPH[in*nPH+xDolomite];
-        cout << " [Ca]= " << m_bPS[in*nIC*nPS+xCa] <<
-                " [Mg]= " << m_bPS[in*nIC*nPS+xMg] <<
-                " pH= " << m_pH[in] << endl;
+        cout << " Cal= " << m_xPH[in*nPH+xCal] <<
+                " Str= " << m_xPH[in*nPH+xStr];
+        cout << " [Ca]= " << m_bPS[in*nIC*nPS+xiCa] <<
+                " [Sr]= " << m_bPS[in*nIC*nPS+xiSr] <<
+                " bSr= "  << m_bIC[in*nIC+xiSr] <<
+                " pH= " << m_pH[in] << "  It= " << m_IterDone[in] << endl;
    }
 //    cout << " Chemical loop ends: " << endl;
     // Here the output for the current transport state at tc can be implemented
 
-//
     tc += dt;  // time increment
   }
   t_end11 = clock(); // getting end time of coupled calculations
   double dtime = ( t_end11- t_start11 );
   double clc_sec = CLOCKS_PER_SEC;
-cout <<  "Pure time of calculation, s: " <<  CalcTime << endl;
+  MeanIt = double(nTotIt)/500.; // (double(nNodes*nTimes);
+
+  cout <<  "Pure GEM IPM2 runtime , s: " <<  CalcTime << endl;
   cout <<  "Total time of calculation, s: " <<  (dtime)/clc_sec << endl;
+  cout << "    Mean GEM IPM iterations: " << MeanIt << endl;
+
   cout << " This gem_node test ";
 
   // (3) ----------------------------------------------
