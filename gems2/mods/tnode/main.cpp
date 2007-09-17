@@ -28,8 +28,7 @@
 #include <string.h>
 
 #include "node.h"
-
-// #define nNodes  5   // set here how many nodes you need
+#define nNodes  5   // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {
@@ -58,7 +57,7 @@ int main( int argc, char* argv[] )
    if( node->GEM_init( ipm_input_file_list_name ) )
        return 1;  // error occured during reading the files
 
-   int nNodes = 5;     // number of local equilibrium nodes, 1 or more
+//   int nNodes = 5;     // number of local equilibrium nodes, 1 or more
    int nTimes = 100;   // Maximum number of time iteration steps
    unsigned int nTotIt;   // Number of GEM iterations per time step
    double t_start = 0., t_end = 10000., dt = 100., tc = 1.;
@@ -197,15 +196,21 @@ int main( int argc, char* argv[] )
 
    cout << "Begin Coupled Modelling Part" << endl;
       // Getting DATABR indexes for chemical species to be monitored
+
+   int xiC = node->IC_name_to_xDB("C");
    int xiCa = node->IC_name_to_xDB("Ca");
+   int xiH = node->IC_name_to_xDB("H");
+   int xiO = node->IC_name_to_xDB("O");
    int xiSr = node->IC_name_to_xDB("Sr");
-   int xCl = node->DC_name_to_xDB("Cl-");
+   int xiZz = node->IC_name_to_xDB("Zz");
+//   int xCl = node->DC_name_to_xDB("Cl-");
    int xiCl = node->IC_name_to_xDB("Cl");
-   int xCal = node->Ph_name_to_xDB("Calcite");
+   int xCal = node->Ph_name_to_xDB("(Sr,Ca)CO3(reg)");
    int xStr = node->Ph_name_to_xDB("Strontianite");
    // Checking indexes
-   cout << "xiCa= " << xiCa << " xiSr=" << xiSr << " xCl-=" << xCl  
-        << " xCalcite=" << xCal << " xStrontianite=" << xStr << endl;
+   cout << " xiC= " << xiC << "  xiCa= " << xiCa << "  xiH= " << xiH
+        << "  xiO= " << xiO << "  xiSr=" << xiSr << "  xiZz=" << xiZz
+        << "  xCalcite=" << xCal << "  xStrontianite=" << xStr << endl;
  nTotIt = 0;
 
    for( int it=0; it<nTimes; it++ )  // iterations over time
@@ -225,33 +230,40 @@ int main( int argc, char* argv[] )
        if( it > 0 )
        {
          if( xiSr >= 0 )
-           m_bIC[in*nIC+xiSr] += dt*in*5e-7;
-         if( xiCl >= 0 )  
-           m_bIC[in*nIC+xiCl] += dt*in*1e-6;
+           m_bIC[in*nIC+xiSr] += dt*in*1e-6;
+         if( xiCl >= 0 )
+           m_bIC[in*nIC+xiCl] += dt*in*2e-6;
        }
        // Alternatively, the transport may be simulated using m_xDC arrays.
        // In this case, an alternative (overloaded) call to GEM_from_MT()
        // should be used (see below)
      }
 //     cout << " FMT loop ends: ";
-     cout << " it = " << it << "  dt = " << dt << "  tc = " << tc << endl;
+     cout << " it = " << it << "  tc = " << tc << endl;
 
 //     cout << " Chemical loop begins: " << endl;
      // Loop over nodes for calculating the chemical equilibration step
      for( in=0; in<nNodes; in++ )
      {
+//if( !in)
         cout << "  in = " << in << "  T = " << m_T[in];
 
         m_NodeHandle[in] = in;
-//        m_NodeStatusCH[in] = NEED_GEM_AIA; 
-        m_NodeStatusCH[in] = NEED_GEM_PIA; 
+//        m_NodeStatusCH[in] = NEED_GEM_AIA;
+        m_NodeStatusCH[in] = NEED_GEM_PIA;
 
         // Setting input data for GEM IPM
         node->GEM_from_MT( m_NodeHandle[in], m_NodeStatusCH[in],
             m_T[in], m_P[in], m_Vs[in], m_Ms[in],
             m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH,
-	    m_xDC+in*nDC, m_gam+in*nDC );   // this overload call works also 
+	    m_xDC+in*nDC, m_gam+in*nDC );   // this overload call works also
 	                                    // in NEED_GEM_PIA mode!
+//if(!in)
+//    for( int j=0; j<nDC; j++ )
+//      cout << "  " << m_xDC[in*nDC+j];
+// if(!in)
+//    for( int j=0; j<nDC; j++ )
+//      cout << "  " << m_gam[in*nDC+j];
 //  Alternative call to correct bulk chemical composition using changed
 //     m_xDC (chemical species amounts) data. Take care that this function
 //     actually compresses the xDC values into mole amounts of elements
@@ -275,13 +287,19 @@ CalcTime += node->GEM_CalcTime();  // Incrementing calculation time
 
 nTotIt += m_IterDone[in];
         // Here the debug print for each node can be implemented
-//        cout << " Gem run ends: ";
-        cout << " Cal= " << m_xPH[in*nPH+xCal] <<
-                " Str= " << m_xPH[in*nPH+xStr];
-        cout << " [Ca]= " << m_bPS[in*nIC*nPS+xiCa] <<
-                " [Sr]= " << m_bPS[in*nIC*nPS+xiSr] <<
-                " bSr= "  << m_bIC[in*nIC+xiSr] <<
-                " pH= " << m_pH[in] << "  It= " << m_IterDone[in] << endl;
+// if( !in )
+//{ //        cout << " Gem run ends: ";
+/*
+        cout << "  bC= " << m_bIC[in*nIC+xiC] << "  bCa= " << m_bIC[in*nIC+xiCa]
+             << "  bH= " << m_bIC[in*nIC+xiH] << "  bO= " << m_bIC[in*nIC+xiO]
+             << "  bSr= " << m_bIC[in*nIC+xiSr] << "  bZz= " << m_bIC[in*nIC+xiZz];
+//      cout << endl;  */
+        cout << "     Cal= " << m_xPH[in*nPH+xCal] <<
+                "  Str= " << m_xPH[in*nPH+xStr];
+        cout << "  [Ca]= " << m_bPS[in*nIC*nPS+xiCa] <<
+                "  [Sr]= " << m_bPS[in*nIC*nPS+xiSr] <<
+        cout << "  pH= " << m_pH[in] << "  It= " <<  m_IterDone[in] << endl;
+//}
    }
 //    cout << " Chemical loop ends: " << endl;
     // Here the output for the current transport state at tc can be implemented
