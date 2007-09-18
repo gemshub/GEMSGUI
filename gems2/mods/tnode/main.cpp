@@ -247,17 +247,18 @@ int main( int argc, char* argv[] )
      {
 //if( !in)
         cout << "  in = " << in << "  T = " << m_T[in];
-
         m_NodeHandle[in] = in;
-//        m_NodeStatusCH[in] = NEED_GEM_AIA;
-        m_NodeStatusCH[in] = NEED_GEM_PIA;
+
+// Below one can switch between AIA and PIA initial approximation modes
+        m_NodeStatusCH[in] = NEED_GEM_AIA;    // tests are marked *.out2B (-O2)
+//        m_NodeStatusCH[in] = NEED_GEM_PIA;      // tests are marked *.out2P
 
         // Setting input data for GEM IPM
         node->GEM_from_MT( m_NodeHandle[in], m_NodeStatusCH[in],
             m_T[in], m_P[in], m_Vs[in], m_Ms[in],
-            m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH,
-	    m_xDC+in*nDC, m_gam+in*nDC );   // this overload call works also
-	                                    // in NEED_GEM_PIA mode!
+            m_bIC+in*nIC, m_dul+in*nDC, m_dll+in*nDC, m_aPH+in*nPH // );
+	    ,m_xDC+in*nDC, m_gam+in*nDC );   // this overload call works also
+	                                // in NEED_GEM_PIA mode, only in v.2.2!
 //if(!in)
 //    for( int j=0; j<nDC; j++ )
 //      cout << "  " << m_xDC[in*nDC+j];
@@ -277,7 +278,7 @@ int main( int argc, char* argv[] )
                 if( !( m_NodeStatusCH[in] == OK_GEM_AIA ||
                m_NodeStatusCH[in] == OK_GEM_PIA ) )
             return 5;
-CalcTime += node->GEM_CalcTime();  // Incrementing calculation time
+CalcTime += node->GEM_CalcTime();  // Incrementing calculation time - only v.2.2.0
         // Extracting GEM IPM output data to FMT part
         node->GEM_to_MT( m_NodeHandle[in], m_NodeStatusCH[in], m_IterDone[in],
           m_Vs[in], m_Ms[in], m_Gs[in], m_Hs[in], m_IC[in], m_pH[in], m_pe[in],
@@ -297,7 +298,7 @@ nTotIt += m_IterDone[in];
         cout << "     Cal= " << m_xPH[in*nPH+xCal] <<
                 "  Str= " << m_xPH[in*nPH+xStr];
         cout << "  [Ca]= " << m_bPS[in*nIC*nPS+xiCa] <<
-                "  [Sr]= " << m_bPS[in*nIC*nPS+xiSr] <<
+                "  [Sr]= " << m_bPS[in*nIC*nPS+xiSr];
         cout << "  pH= " << m_pH[in] << "  It= " <<  m_IterDone[in] << endl;
 //}
    }
@@ -311,7 +312,7 @@ nTotIt += m_IterDone[in];
   double clc_sec = CLOCKS_PER_SEC;
   MeanIt = double(nTotIt)/500.; // (double(nNodes*nTimes);
 
-  cout <<  "Pure GEM IPM2 runtime , s: " <<  CalcTime << endl;
+  cout <<  "Pure GEM IPM2 runtime , s: " <<  CalcTime << endl; // Only v. 2.2.0
   cout <<  "Total time of calculation, s: " <<  (dtime)/clc_sec << endl;
   cout << "    Mean GEM IPM iterations: " << MeanIt << endl;
 

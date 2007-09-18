@@ -114,7 +114,7 @@ gstring::gstring(const char* s, size_t pos, size_t len)
     size_t s_len;
     if( len == npos )
       //    s_len = strlen(s);// ? pos Changed SD 27/08/2007
-     s_len = max( strlen(s) - pos, 0 );
+     s_len = max( strlen(s) - pos, (size_t)0 );
     else
         for(s_len = 0; s_len < len && s[s_len+pos]; s_len++ );
 
