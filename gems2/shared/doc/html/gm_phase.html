@@ -677,11 +677,11 @@ is possible even if they have identical first three fields of their <a
   <dd> &nbsp; &nbsp; </dd>
   <dt> <a name="SAT_C_0"></a><big><big><b><tt>SAT_C[0]</tt></b></big></big>
 - Classifier of methods of SACT&nbsp; calculation { L
-Q 1 2 3 4 B W F R P } and obsolete SAT calculation { C N S I }<br>
+Q 1 2 3 4 F R N I } and obsolete SAT calculation { C S }<br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> This input column contains <a href="g_useref.html#SAT_CODES">SACT
+  <dd> This input column contains <a href="g_useref.html#SACT_CODES">SACT
 codes for surface species</a>, used in calculation of&nbsp; the <a
  href="glossary.html#DT_SAT">surface activity coefficient terms</a>
 (SACT). The
@@ -697,8 +697,14 @@ be set appropriately in the <a style="font-family: monospace;"
  href="#MaSDj_0"><big>MaSDj</big></a><span
  style="font-family: monospace;"> </span>table, first of all, the site
 density parameter.&nbsp; Recommended&nbsp; value in this column is "L"
-(competitive Langmuir SACT) which produces effects similar to site
-balance in LMA SCMs. <span style="font-style: italic;"></span><br>
+(competitive Langmuir SACT) which produces effects similar to the site
+balance in LMA SCMs. Competition takes place when more than one surface
+species is assigned with the same site density parameter to the same
+site type on the same surface type.</dd>
+  <dd><br>
+  </dd>
+  <dd>Use of the obsolete SAT codes and equations ( C, S ) is not
+recommended.<span style="font-style: italic;"></span><br>
 &nbsp;&nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="SAT_C_1"></a><big><big><b><tt>SAT_C[1]</tt></b></big></big>
@@ -727,7 +733,8 @@ sorbent&nbsp; { 0 1 2 3 4 5 } <br>
   <dd>&nbsp; <br>
   </dd>
   <dd> This input column contains the codes for assigning surface&nbsp;
-species, sites, and EDL models to a certain surface type (or surface
+species, sites, and electrical interface layer (EIL) models to a
+certain surface type (or surface
 patch) on the solid sorbent. There can be up to six surface patches
 (types) in a sorption phase, indexed from 0 (default) to 5. The number
 of active surface types can be set upon remake of the Phase record (see
@@ -746,19 +753,21 @@ if necessary. <br>
 &nbsp; <br>
 &nbsp;&nbsp; </dd>
   <dt> <a name="SAT_C_3"></a><big><big><b><tt>SAT_C[3]</tt></b></big></big>
--&nbsp; Allocation of the surface complex outer charge to EDL model
-plane&nbsp; { 0 1 b 2 d 3 c } <br>
+-&nbsp; Allocation of the surface complex outer charge to EIL model
+plane&nbsp; { 0&nbsp; 1 b&nbsp; 2 d&nbsp; 3 c } <br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
   <dd> This input column contains the <a
  href="g_useref.html#SURFDC_ALLOC_CODES">allocation codes</a> assigning
-an outer portion of unit charge of a surface species to a certain EDL
-model plain. The respective charge should be given in the <big><a
- style="font-family: monospace;" href="#MaSDj_2">MaSDj[*,2]</a></big>
-column. The charge given in <big><span style="font-family: monospace;">MaSDj[*,1]</span></big>
-column ("inner charge") will be always assigned to the 0 EDL plane. The
-associated EDL model (for this surface type) is encoded in the <a
+an outer portion of the formula charge of a surface species to a
+certain EIL
+model plane. The respective charge should be given in the <big><a
+ style="font-family: monospace;" href="#MaSDj_2">MaSDj[][2]</a></big>
+column. The charge given in <a href="#MaSDj_1"><big><span
+ style="font-family: monospace;">MaSDj[][1]</span></big></a>
+column ("inner charge") will be always assigned to the 0 EIL plane. The
+associated EIL model (for this surface type) is encoded in the <a
  href="#SCM_C"><big><span style="font-family: monospace;">SCM_C</span></big></a>
 field on Page 3 of the Phase window.<br>
   </dd>
@@ -768,7 +777,7 @@ field on Page 3 of the Phase window.<br>
 whole charge of surface species is located on the sorbent surface
 directly (as in NEM, DLM, CCM, inner-sphere species in TLM, BSM and
 3LM). Any non-zero charge given in the <big><a
- style="font-family: monospace;" href="gm_phase.html#MaSDj_2">MaSDj[*,2]</a></big>
+ style="font-family: monospace;" href="gm_phase.html#MaSDj_2">MaSDj[][2]</a></big>
 column will be ignored in this case. <br>
   </dd>
   <dd><br>
@@ -779,7 +788,7 @@ plane&nbsp; (in three-layer CD model by Hiemstra &amp; Van Riemsdijk
 (1996). The outer charge of inner-sphere adsorbed metal complexes or
 anions considered in 3LM CD should be located on the 1 (b) plane. The
 inner charge is assigned to 0 plane in all cases. Codes '3' or 'c' are
-reserved for future implementations.<br>
+reserved for future implementations of EIL models.<br>
   </dd>
   <dd><br>
   </dd>
@@ -806,8 +815,10 @@ indexed from 0 (default) to 5. <br>
   </dd>
   <dd>All species assigned to the same site type on the same surface
 patch will potentially compete for these sites if a competitive SACT is
-used (e.g. 'L'). All such species must be given the same value of site
-density parameter (complete coverage site density) in the MaSDj[*,0]
+used (e.g. 'L'). All such competing species must be given the same
+value of site
+density parameter (complete coverage site density) in the <a
+ href="#MaSDj_0"><big><span style="font-family: monospace;">MaSDj[][0]</span></big></a>
 column. <br>
   </dd>
   <dd><br>
@@ -821,8 +832,8 @@ if necessary. </dd>
   <dd>&nbsp;<br>
 &nbsp;&nbsp; </dd>
   <dt> <a name="SAT_C_5"></a><big><big><b><tt>SAT_C[5]</tt></b></big></big>
--&nbsp; Units in which surface site density is given in MaSDj[*,0]
-column { n; m M g reserved } <br>
+-&nbsp; Units in which surface site density is given in MaSDj[][0]
+column { n } ( { m M g } reserved } <br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
@@ -834,7 +845,7 @@ Other codes are reserved for future versions. <br>
   <dd> <br>
   </dd>
   <dt> <a name="MaSDj_0"></a><big><big><b><tt>MaSDj[0]</tt></b></big></big>
-- Surface site (type) density parameter, 1/nm2, to be used in SACT
+- Surface site (type) density parameter, in 1/nm2, to be used in SACT
 calculations&nbsp;</dt>
   <dd>&nbsp; <br>
 This input column contains surface site (or complete site coverage)
@@ -845,11 +856,12 @@ densities for&nbsp; surface species, expressed in
   </dd>
   <dd><b style="text-decoration: underline;">Attention: </b>All
 surface species allocated to the same site type&nbsp; (<big><a
- style="font-family: monospace;" href="#SAT_C_4">SAT_C[*,4]</a></big>
-column) on the same surface type (<a href="#SAT_C_2">SAT_C[*,2]</a>
+ style="font-family: monospace;" href="#SAT_C_4">SAT_C[][4]</a></big>
+column) on the same surface type (<big><a
+ style="font-family: monospace;" href="#SAT_C_2">SAT_C[][,2]</a></big>
 column)&nbsp; must have the same density parameter value if they are
-assigned with a competitive SACT code (in <big><a
- style="font-family: monospace;" href="#SAT_C_0">SAT_C[*,0]</a></big>
+assigned with a competitive SACT code in <big><a
+ style="font-family: monospace;" href="#SAT_C_0">SAT_C[][0]</a></big>
 column).<br>
   </dd>
   <dd>&nbsp;</dd>
@@ -861,22 +873,18 @@ there, if necessary. <br>
   </dd>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
   <dt> <a name="MaSDj_1"></a><big><big><b><tt>MaSDj[1]</tt></b></big></big>
-- Effective part of the unit charge of surface species allocated to 0
-plane <br>
+- Effective part of the formula unit charge of surface species
+allocated to 0
+plane (sorbent surface)<br>
   </dt>
   <dd>&nbsp; <br>
-This input column contains unit charges of surface species to be
-allocated to 0 EDL plane (sorbent surface). <br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dd>These numbers will be used only in calculations of charge
-densities and electrostatic potentials in EDL model Coulombic terms,
+These numbers will be used only in calculations of charge
+densities and electrostatic potentials in EIL model Coulombic term,
 which does not&nbsp; affect the overall charge balance in the chemical
 system stoichiometry. Hence, the effective charges entered here must
 not necessarily co-inside with formula charges of surface species. The
 charges in this column will be applied regardless of the allocation
-code set in <big><a style="font-family: monospace;" href="#SAT_C_3">SAT_C[*,3]</a></big>
+code set in <big><a style="font-family: monospace;" href="#SAT_C_3">SAT_C[][3]</a></big>
 column.<br>
   </dd>
   <dd><br>
@@ -894,14 +902,15 @@ there, if necessary. </dd>
 </dl>
 <dl>
   <dt> <a name="MaSDj_2"></a><big><big><b><tt>MaSDj[2]</tt></b></big></big>
-- Effective part of the unit charge of surface species allocated to 1
+- Effective part of the formula unit charge of surface species
+allocated to 1
 or 2 plane (CD 3LM;&nbsp; BSM, TLM) <br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>This input column contains unit charges of surface species to be
-allocated to one of outer EDL planes&nbsp; according to the allocation
-code in <big><a style="font-family: monospace;" href="#SAT_C_3">SAT_C[*,3]</a></big>
+allocated to one of outer EIL planes&nbsp; according to the allocation
+code in <big><a style="font-family: monospace;" href="#SAT_C_3">SAT_C[][3]</a></big>
 column. If the corresponding allocation code is '0', the charge value
 in this column will be ignored.<br>
   </dd>
@@ -909,7 +918,7 @@ in this column will be ignored.<br>
   </dd>
   <dd>These numbers will be used only in calculations of charge
 densities
-and electrostatic potentials in EDL model Coulombic terms, which does
+and electrostatic potentials in EIL model Coulombic terms, which does
 not&nbsp; affect the overall charge balance in the chemical system
 stoichiometry. Hence, the effective charges entered here must not
 necessarily co-inside with formula charges of surface species.<br>
@@ -931,7 +940,8 @@ there, if necessary.</dd>
 </dl>
 <dl>
   <dt> <a name="MaSDj_3"></a><big><big><b><tt>MaSDj[3]</tt></b></big></big>
-- SACT isotherm parameter 1 (e.g. aF term in Frumkin SACT)<br>
+- SACT isotherm parameter 1 (e.g. interaction parameter a<sub>F</sub>&nbsp;
+in Frumkin SACT)<br>
   </dt>
   <dd>&nbsp; <br>
 This input column contains an optional additional parameter value to be
@@ -939,7 +949,8 @@ used in some SACT equations.&nbsp; <br>
   </dd>
   <dd>&nbsp;</dd>
   <dd>In Frumkin SACT, this column should provide the value of
-parameter aF (negative means lateral repulsion, positive means lateral
+interaction parameter aF (negative means lateral repulsion, positive
+means lateral
 attraction).</dd>
   <dd>&nbsp;</dd>
   <dd>Later on, the data will be automatically copied into the
@@ -951,8 +962,7 @@ there, if necessary. <br>
   <dd><br>
   </dd>
   <dt> <a name="MaSDj_4"></a><big><big><b><tt>MaSDj[4]</tt></b></big></big>
--&nbsp; SACT isotherm parameter 2 (e.g. CN in Frumkin SACT or
-dentateness n in QCA) <br>
+-&nbsp; SACT isotherm parameter 2 (e.g. denticity n in QCA SACTs) <br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
@@ -960,9 +970,12 @@ dentateness n in QCA) <br>
 to be used in some SACT equations.&nbsp; <br>
   </dd>
   <dd>&nbsp;</dd>
-  <dd>In Frumkin SACT, this column should provide the value of CN
+  <dd>In Frumkin SACT, this column should provide the value of
+coordination number
 (default value 2 gives the standard Frumkin term).</dd>
-  <dd>In QCA SACT, this column provides the dentateness n (1, 2, 3 or
+  <dd><br>
+  </dd>
+  <dd>In QCA SACT, this column provides the denticity n (1, 2, 3 or
 4).<br>
   </dd>
   <dd>&nbsp;</dd>
@@ -978,7 +991,7 @@ equations) <br>
   </dt>
   <dd>&nbsp; <br>
 This input column contains an optional additional parameter value to be
-used in some SACT equations.&nbsp;</dd>
+used in&nbsp; SACT equations added in future.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>&nbsp;Later on, the data will be automatically copied into the
@@ -1412,7 +1425,7 @@ then only two rows each. <br>
   <dd> &nbsp;&nbsp; </dd>
   <dt> <a name="SCM_C"></a><big><big><b><tt>SCM_C</tt></b></big></big>
 - Classifier
-of SCM applied to surface types {&nbsp; N I D C S T M E } <br>
+of SCM applied to surface types {&nbsp; D C S T 3 M I N&nbsp; } <br>
   </dt>
   <dd>&nbsp; <br>
   </dd>
@@ -1437,7 +1450,10 @@ of surface type relative to &nbsp;the whole surface of the sorbent <br>
 of the
 sorbent assigned to each surface type. The numbers must be entered by
 user;
-the total fraction may be greater or smaller than 1.&nbsp;</dd>
+the total fraction may be greater or smaller than 1. The total &lt; 1
+indicates that the remaining part of the sorbent surface is considered
+non-reactive. <br>
+  </dd>
   <dd><br>
   </dd>
   <dd>Surface fractions will be automatically copied into the modelling
@@ -1447,9 +1463,11 @@ if necessary.<br>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="MsDt_0"></a><big><big><b><tt>MsDt[0]</tt></b></big></big>
-- Common maximum density of competitive surface complexes, 1/nm2&nbsp;</dt>
+- Common maximum density of competitive surface complexes, 1/nm2
+(obsolete)&nbsp;</dt>
   <dd>&nbsp; <br>
-This input data object contains maximum density of surface complexes
+This input data object used in old SAT setup contains maximum density
+of surface complexes
 (marked
 as "C" in the <a href="#SAT_C_0"><tt>SAT_C[0]</tt></a> column) that
 compete for sites of the same type on the same surface patch (type).

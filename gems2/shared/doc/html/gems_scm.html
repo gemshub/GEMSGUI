@@ -86,26 +86,29 @@ in the sorbent. <br>
 <hr size="2" width="100%">
 <h2><a name="CSD_SCM_DATA"></a>2. CSD (System) Submodule Input Data
 Objects</h2>
-<h3></h3>
 These input data objects are provided in addition to the main input
 data described in the <a href="gems_bcc.html"><tt>gems_bcc.html</tt></a>
 manual. <br>
 <br>
 <dl>
   <dt> <a name="Aalp_"></a><b><big><tt><big>Aalp_</big> </tt></big></b>-
-Specific surface area of phases Av, m2/g</dt>
+Specific surface area of phases As, m2/g</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Non-zero specific surface area is treated in GEMS as an
 additional thermodynamic factor of state. <br>
   </dd>
-  <dd>Av &gt; 0.001 m2/g&nbsp; must be given for any sorption phase. <br>
+  <dd>As &gt; 0.001 m2/g&nbsp; must be given for any sorption phase. <br>
   </dd>
 </dl>
 <dl>
-  <dd> The Av value (default 0) is initially taken from Phase records
-(also for non-sorption phases). You can modify it here; the modified
-value will persist until the Project is closed. This means that
-changed Av&nbsp; will be retained longer only if the change was done
+  <dd> The As value (default 0) is initially taken from Phase records
+(also for non-sorption phases). <br>
+  </dd>
+  <dd>You can modify it here; the modified
+value will persist until the Project is closed. <br>
+  </dd>
+  <dd>This means that
+changed As&nbsp; will be retained longer only if the change was done
 directly in the respective <a href="gm_phase.html">Phase</a>
 record (<a href="gm_phase.html#DisPar_0"><tt>DisPar[0,0]</tt></a>
 field).&nbsp;</dd>
@@ -119,9 +122,13 @@ surface energy of solid-aqueous (gas) interface, J/m2</dt>
 and the second column - to the solid-gas interfaces. <br>
   </dd>
   <dd>
-    <p>The optional values (default 0) is initially taken from <a
+    <p>The optional value (default 0) is initially taken from <a
  href="gm_phase.html">Phase</a> record for each (also non-sorption)
-phase. You can modify it here; the modified value will persist until
+phase. <br>
+    </p>
+  </dd>
+  <dd>
+    <p>You can modify it here; the modified value will persist until
 the Project is closed.</p>
   </dd>
   <dd>If non-zero value of Sigma for the solid-water interface for the
@@ -136,136 +143,372 @@ in water or gas. <br>
   <dd>&nbsp;&nbsp;&nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="SATC__0"></a><big><b><big><tt>SATC_[0]</tt></big></b></big>
-- Classifier of methods of SAT calculations { C N S I }</dt>
+  <dt> <a name="mDCC3"></a><b><big><tt><big>mDCC3</big> - </tt></big></b>DC
+class codes for surface species and the sorbent { X Y Z P Q }</dt>
+  <dd><br>
+  </dd>
+  <dd>This column&nbsp; contains <a
+ href="g_useref.html#DCCLASSCODES_SORPTION">class codes</a> of
+Dependent Components used in sorption phases in the given chemical
+system definition. The codes are collected from the <big><a
+ href="gm_phase.html#PhDCC"><span style="font-family: monospace;">PhDCC</span></a>&nbsp;</big>
+column from the respective Phase records when the SysEq record is
+created.&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>In the present setup of surface complexation (since version 2.2.0
+of GEMS), the use of obsolete codes (0 1 2 3 ...) is still possible but
+not recommended.</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="SATC__0"></a><big><b><big><tt>SATC_[][0]</tt></big></b></big>
+- Classifier of methods of non-electrostatic SACT calculations
+describing site saturation effects { L Q 1 2 3 4 F N I }</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>This input column contains a classifier of <a
- href="theorscm.html">methods of calculation</a> of the <a
- href="glossary.html#DT_SAT">surface activity terms</a> (SAT)
+ href="g_useref.html#SACT_CODES">methods of calculation</a> of the <a
+ href="glossary.html#DT_SACT">surface activity coefficient terms</a>
+(SACT)
 separately for each surface species (DC). The codes are copied from
 Phase definitions at creation of <a href="gems_bcc.html">CSD</a> and
-SysEq record, where they can be edited by the user in the "Surfaces"
+SysEq record. The codes can be edited here in the "Surfaces"
 page of the "System" submodule window. </dd>
   <dd>&nbsp;<br>
   </dd>
-  <dd>Possible codes:&nbsp;</dd>
-  <dd>
-    <p>C &nbsp; &nbsp; &nbsp; Competitive surface activity term (SAT); <br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; the corresponding value in the <a
- href="file:///C:/GEMS2test/program/doc/html/gems_scm.html#MaSdj_"><tt>MaSDj</tt></a>_
-column must be <br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set to 1 (-1 for negative
-outer-sphere surface complexes)</p>
+  <dd>If in doubt, use the L code which reproduces the (competitive)
+Langmuir isotherm referenced to the site density parameter given in
+MaSdj[0] column. <br>
   </dd>
   <dd>
-    <p>N &nbsp; &nbsp; &nbsp; Non-competitive SAT; the corresponding
-maximum density <br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; must be entered in the <a
- href="file:///C:/GEMS2test/program/doc/html/gems_scm.html#MaSdj_"><tt>MaSDj_</tt></a>
-column;&nbsp;</p>
-  </dd>
-  <dd>
-    <p>S &nbsp; &nbsp; &nbsp;&nbsp; Special SAT for &gt;OH@ group
-(according to the <a
- href="file:///C:/GEMS2test/program/doc/html/gems_scm.html#MaSdj_"><tt>MaSDj_</tt></a>
-density);</p>
-  </dd>
-  <dd>
-    <p>I &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;indefinite - SAT is not
-calculated (e.g. for the sorbent). . </p>
+    <p>Using the&nbsp; I code (indefinite) causes the program not to
+apply any non-electrostatic site saturation correction (e.g. for the
+sorbent DC).. </p>
   </dd>
   <dd>
     <p>For all species of non-sorption phases, this column must contain
-EMPTY values.&nbsp;</p>
+EMPTY values.</p>
   </dd>
   <dd>
-    <p>&nbsp;&nbsp;&nbsp;</p>
+    <p>The codes are initially copied from the Phase definition when
+CSD
+and SysEq record is created. Later on, the codes can be changed by
+the user here, if necessary. The change will affect only this SysEq
+record.&nbsp; </p>
   </dd>
-  <dt> <a name="SATC__1"></a><b><big><tt><big>SATC_[1]</big> - </tt></big></b>Allocation
+  <dd>
+    <p>&nbsp;</p>
+  </dd>
+  <dt> <a name="SATC__1"></a><b><big><tt><big>SATC_[][1]</big> - </tt></big></b>Allocation
 of surface DC to carrier (end-members) { V [digit]}</dt>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>This column allocates a surface component to mole quantity of the
-whole solid carrier (V code; default), or mole quantity of one of
-its end-members indexed by &lt;digit&gt;. Any other letter:
-indefinite, whole carrier is assumed. Indexation always starts from 0
-in GEMS.&nbsp;&nbsp;</dd>
+  <dd>This column contains<a href="g_useref.html#SURFDC_ALLOC_CODES">
+codes that control allocation</a> of a surface component to the amount
+of sorbent or some of its components. <br>
+  </dd>
+  <dd>Default is the V code telling that the amount of this surface
+species is scaled by the&nbsp; mole quantity of the
+whole solid sorbent. <br>
+  </dd>
+  <dd>A digit indicates the index of sorbent end-member by which the
+amount of surface species is scaled. <br>
+  </dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>The codes are initially copied from the Phase definition when CSD
-and SysEq record is created. Later on, the codes can be changed by
-the user here, if necessary; the change will affect only this SysEq
+and SysEq record is created. <br>
+  </dd>
+  <dd>Later on, the codes can be changed by
+the user here, if necessary. The change will affect only this SysEq
 record.&nbsp; </dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="MaSdj_"></a><b><big><tt><big>MaSdj_</big> -</tt></big></b>
-Total (maximum) densities for non-competitive surface species, 1/nm2</dt>
-  <dd>
-    <p>This vector contains maximum densities for the non-competitve
-surface species (marked as "N" in the first column of the <a
- href="#SATC__0"><tt>SATC_</tt></a> data object) in 1/nm2. For "strong"
-surface complexes, this is often a fitting parameter since it
-installs an individual Langmuirian limit and determines a magnitude
-of "competitive SAT" correction of &nbsp;the surface species
-concentration due to saturation of the specific sites available to this
-surface species only.&nbsp;</p>
+  <dt> <a name="SATC__2"></a><b><big><tt><big>SATC_[][2]</big> - </tt></big></b>Allocation
+of
+surface species to surface type { 0 1 2 3 4 5 }</dt>
+  <dd><br>
   </dd>
-  <dd>
-    <p>In the case of an outer-sphere surface complex with negative
-counter-ion in TLM or BSM (marked with an odd digit in the <a
- href="gm_project.html#mDCC"><tt>mDCC</tt></a> column), its maximum
-density must be entered as negative (for example, -1.2 for
-&gt;OH2+Cl- ). </p>
-    <p>For surface complexes competing on a surface type (marked as "C"
-in the first column of the <a href="gems_scm.html#SATC__0"><tt>SATC_</tt></a>
-data object), 1 (or -1 for TLM/BSM outer-sphere anions) must be entered.</p>
+  <dd>&nbsp;This column contains the codes for assigning surface&nbsp;
+species, sites, and EIL models to a certain surface type (or surface
+patch) on the solid sorbent. There can be up to six surface patches
+(types) in a sorption phase, indexed from 0 (default) to 5. Each
+surface type must be assigned an effective fraction (<a
+ style="font-family: monospace;" href="#Nfsp_">Nfsp_</a>) that it
+occupies on the sorbent surface; the sum of these fractions must not
+necessary equal to 1 (if less than 1, part of the sorbent surface will
+be considered as non-reactive). <br>
   </dd>
-  <dd>For the neutral surface OH group (marked as "S" in the first
-column of the <a href="gems_scm.html#SATC__0"><tt>SATC_</tt></a> data
-object), 12.05 is usually entered (reference density at standard
-state), but any smaller positive density can also be entered,
-&nbsp;for instance, the same value as total site density for the
-competitive binding on a surface type (see <a href="#MaSdt_"><tt>MaSdt_</tt></a>
-object).</dd>
-  <dd>&nbsp;<br>
+  <dd><br>
   </dd>
-  <dd>The numbers in <tt>MaSdj_</tt> are initially copied from <a
- href="gm_phase.html#SAT_C_0">Phase</a> definitions when the CSD is
-created. They can be edited by the user and saved later on in the
-SysEq record.&nbsp;&nbsp;</dd>
-  <dd>&nbsp;<br>
+  <dd>The codes are initially copied from the Phase definition when CSD
+and SysEq record is created. <br>
   </dd>
-  <dd>The numbers in&nbsp;in <tt>MaSdj_</tt> will be ignored for all
-species in the non-sorption phases; as a rule, EMPTY values should be
-entered in this case. &nbsp;</dd>
-  <dd>&nbsp;&nbsp;</dd>
-  <dd>&nbsp; &nbsp;<br>
+  <dd>Later on, the codes can be changed by
+the user here, if necessary. The change will affect only this SysEq
+record.&nbsp; </dd>
+  <dd><br>
   </dd>
-  <dt> <a name="Nfsp_"></a><big><b><big><tt>Nfsp_</tt></big></b></big>
-&nbsp;- Fractions of sorbent surface allocated to surface types</dt>
-  <dd>&nbsp;&nbsp;&nbsp;</dd>
-  <dd>This array (n(Fis) rows and 6 columns) contains fractions of the
-total surface of the sorbent assigned to each surface type on each
-adsorption phase. The numbers must be non-negative (their total for a
-sorption phase can be greater or smaller than unity). A zero or EMPTY
-value means that the surface type is not used (the unused surface
-types can only be located consecutively on the right side of each row).
-&nbsp;</dd>
-  <dd>&nbsp;&nbsp;</dd>
-  <dd>For non-sorption multi-component phases, the <tt>Nfsp_</tt>
-numbers are ignored and must be filled out with zeros. </dd>
-  <dd>
-    <p>The <tt>Nfsp_</tt> numbers are initially copied from Phase
-records at creation of the CSD, and can be edited by the user and
-then saved within the SysEq record. . </p>
+  <dd>&nbsp; </dd>
+  <dt> <a name="SATC__3"></a><b><big><tt><big>SATC_[][3]</big> - </tt></big></b>Allocation
+of
+surface complexes to EDL plane { 0 1 b 2 c 3 d }</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This column contains the <a
+ href="g_useref.html#SURFDC_ALLOC_CODES">allocation codes</a> assigning
+an outer portion of unit charge of a surface species to a certain EDL
+model plain. The respective charge should be given in the <big><a
+ style="font-family: monospace;" href="gm_phase.html#MaSdj__2">MaSdj_[][2]</a></big>
+column. The charge given in <a href="#MaSdj__1"><big><span
+ style="font-family: monospace;">MaSdj_[][1]</span></big></a>
+column ("inner charge") will always be assigned to the 0 EDL plane. The
+associated EDL model (for this surface type) is encoded in the <a
+ href="#SCMT_"><big><span style="font-family: monospace;">SCMT_</span></big></a>
+field in this screen form above. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>Default allocation code is 0 (zero plane), which means that the
+whole charge of surface species is located on the sorbent surface
+directly (as in NEM, DLM, CCM, inner-sphere species in TLM, BSM and
+3LM). Any non-zero charge given in the <big><a
+ style="font-family: monospace;" href="MaSdj__2">MaSdj_[][2]</a></big>
+column will be ignored in this case. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>Charge of outer-sphere electrolyte complexes is usually allocated
+to the beta (b) or 1 plane (in "classic" TLM or BSM) or the 2 (d)
+plane&nbsp; (in three-layer CD model by Hiemstra &amp; Van Riemsdijk
+(1996). The outer charge of inner-sphere adsorbed metal complexes or
+anions considered in 3LM CD should be located on the 1 (b) plane. The
+inner charge is assigned to 0 plane in all cases. Codes '3' or 'c' are
+reserved for future implementations.</dd>
+  <dd><br>
+  </dd>
+  <dd>The codes are initially copied from the Phase definition when CSD
+and SysEq record is created. <br>
+  </dd>
+  <dd>Later on, the codes can be changed by
+the user here, if necessary. The change will affect only this SysEq
+record.&nbsp; </dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp; <br>
   </dd>
 </dl>
 <dl>
-  <dd> &nbsp;&nbsp;</dd>
+  <dt> <a name="SATC__4"></a><b><big><tt><big>SATC_[][4]</big> - </tt></big></b>Allocation
+of
+surface species to site type within surface type { 0 1 2 3 4 5 }</dt>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd> This input column contains the codes for assigning surface&nbsp;
+species to a certain site type (within a surface type or patch) on the
+sorbent surface. There can be up to six site types on one surface type,
+indexed from 0 (default) to 5. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>All species assigned to the same site type on the same surface
+patch will potentially compete for these sites if a competitive SACT is
+used (e.g. 'L'). All such species must be given the same value of site
+density parameter (complete coverage site density) in the <big><a
+ href="#MaSdj__0"><span style="font-family: monospace;">MaSdj_[][0]</span></a></big>
+column. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>The codes are initially copied from the Phase definition when CSD
+and SysEq record is created. <br>
+  </dd>
+  <dd>Later on, the codes can be changed by
+the user here, if necessary. The change will affect only this SysEq
+record.&nbsp; </dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="SATC__5"></a><b><big><tt><big>SATC_[][5]</big> - </tt></big></b>Units
+in which
+max. surface density is given in MaSdj[][0] { n m M g } (reserved)</dt>
+  <dd>&nbsp;</dd>
+  <dd>&nbsp;This input column contains the code 'n' which tells that
+site
+densities are given in nm-2 units (one site per one square nanometer).
+Other codes are reserved for future versions.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="MaSdj__0"></a><b><big><tt><big>MaSdj_[][0]</big> -</tt></big></b>
+Surface site (type) density parameter, in 1/nm2, to be used in SACT
+calculations</dt>
+  <dd>
+    <p>This vector contains complete-coverage (site) densities for
+surface species, both competitive and not.&nbsp; For species competing
+on the same site type on the same surface type (e.g. when 'L' SACT is
+used), the site density values must be equal. </p>
+  </dd>
+  <dd>The monolayer coverage density is about 10 to 12 nm-2
+(corresponds with 16.6054 to 20 micromoles per m2).</dd>
+  <dd>Much higher values (e.g. 100 nm-2) correspond to 10 or more
+adsorbed layers and can potentially account for surface
+condensation/precipitation effects.</dd>
+  <dd>Please, keep in mind that this area needs more research.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>The numbers in <tt>MaSdj_[][0]</tt> are initially copied from <a
+ href="gm_phase.html#SAT_C_0">Phase</a> definitions when the CSD is
+created. They can be edited by the user and saved later on in the
+SysEq record. The changes will then affect only this SysEq record.
+&nbsp;</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>The numbers in&nbsp;in <tt>MaSdj_[][0]</tt> will be ignored for
+all components of the sorbent. &nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="MaSdj__1"></a><b><big><tt><big>MaSdj_[][1]</big> -</tt></big></b>
+Charge distribution: Surface species charge assigned to 0 surface EIL
+plane</dt>
+  <dd><br>
+  </dd>
+  <dd>These numbers will be used only in calculations of charge
+densities and electrostatic potentials in EIL model Coulombic term,
+which does not&nbsp; affect the overall charge balance in the chemical
+system stoichiometry. Hence, the effective charges entered here must
+not necessarily co-inside with formula charges of surface species. The
+charges in this column will be applied regardless of the allocation
+code set in <big><a style="font-family: monospace;" href="#SATC__3">SATC_[][3]</a></big>
+column.</dd>
+  <dd><br>
+  </dd>
+  <dd>The numbers in <tt>MaSdj_[][1]</tt> are initially copied from <a
+ href="gm_phase.html#SAT_C_0">Phase</a> definitions when the CSD is
+created. They can be edited by the user and saved later on in the
+SysEq record. The changes will then affect only this SysEq
+record.&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>The numbers in&nbsp;in <tt>MaSdj_[][1]</tt> will be ignored for
+all components of the sorbent. &nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="MaSdj__2"></a><b><big><tt><big>MaSdj_[][2]</big> -</tt></big></b>
+Charge distribution: Surface species charge assigned to beta surface
+EIL plane</dt>
+  <dd> &nbsp; <br>
+  </dd>
+  <dd>This column contains unit charges of surface species to be
+allocated to one of outer EIL planes&nbsp; according to the allocation
+code in <big><a style="font-family: monospace;" href="#SATC__3">SATC_[][3]</a></big>
+column. If the corresponding allocation code is '0', the charge value
+in this column will be ignored.<br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>These numbers will be used only in calculations of charge
+densities
+and electrostatic potentials in EIL model Coulombic terms, which does
+not&nbsp; affect the overall charge balance in the chemical system
+stoichiometry. Hence, the effective charges entered here must not
+necessarily co-inside with formula charges of surface species.</dd>
+  <dd><br>
+  </dd>
+  <dd>The numbers in <tt>MaSdj_[][2]</tt> are initially copied from <a
+ href="gm_phase.html#SAT_C_0">Phase</a> definitions when the CSD is
+created. They can be edited by the user and saved later on in the
+SysEq record. The changes will then affect only this SysEq
+record.&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>The numbers in&nbsp;in <tt>MaSdj_[][2]</tt> will be ignored for
+all components of the sorbent. &nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp; </dd>
+  <dt> <a name="MaSdj__3"></a><b><big><tt><big>MaSdj_[][3]</big> -</tt></big></b>
+Isotherm parameter 1 (e.g. energy interaction parameter in Frumkin
+isotherm)</dt>
+  <dd> &nbsp; <br>
+  </dd>
+  <dd>This input column contains an optional additional parameter value
+to be
+used in some SACT equations.&nbsp; <br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dd>In Frumkin SACT, this column should provide the value of
+interaction parameter aF (negative means lateral repulsion, positive
+means lateral
+attraction).</dd>
+  <dd><br>
+  </dd>
+  <dd>The numbers in <tt>MaSdj_[][3]</tt> are initially copied from <a
+ href="gm_phase.html#SAT_C_0">Phase</a> definitions when the CSD is
+created. They can be edited by the user and saved later on in the
+SysEq record. The changes will then affect only this SysEq
+record.&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>The numbers in&nbsp;in <tt>MaSdj_[][3]</tt> will be ignored for
+all components of the sorbent. &nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="MaSdj__4"></a><b><big><tt><big>MaSdj_[][4]</big> -</tt></big></b>
+Isotherm parameter 2 (CN in Frumkin or denticity n in QCA isotherms)</dt>
+  <dd> &nbsp; <br>
+  </dd>
+  <dd>This input column contains an optional additional parameter value
+to be used in some SACT equations.&nbsp; <br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dd>In Frumkin SACT, this column should provide the value of
+coordination number
+(default value 2 gives the standard Frumkin term).</dd>
+  <dd><br>
+  </dd>
+  <dd>In QCA SACT, this column provides the denticity n (1, 2, 3 or
+4).</dd>
+  <dd><br>
+  </dd>
+  <dd>The numbers in <tt>MaSdj_[][4]</tt> are initially copied from <a
+ href="gm_phase.html#SAT_C_0">Phase</a> definitions when the CSD is
+created. They can be edited by the user and saved later on in the
+SysEq record. The changes will then affect only this SysEq
+record.&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>The numbers in&nbsp;in <tt>MaSdj_[][4]</tt> will be ignored for
+all components of the sorbent. &nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="MaSdj__5"></a><b><big><tt><big>MaSdj_[][5]</big> -</tt></big></b>
+Isotherm parameter 3 (reserved)</dt>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;This input column contains an optional additional parameter
+value to be
+used in&nbsp; SACT equations added in future.</dd>
+  <dd>&nbsp;<br>
+  </dd>
+  <dt><br>
+  </dt>
   <dt> <a name="SCMT_"></a><big><b><big><tt>SCMT_</tt></big></b></big>
-&nbsp;- Classifier of SCM EDL models applied on surface types { C T D
-M E X I S N }</dt>
+&nbsp;- Classifier of SCM EDL models applied on surface types { D C S T
+3 M I N&nbsp; }</dt>
   <dd>
     <p><a href="g_useref.html#SCM_CODES">SCM codes</a> in this array
 (n(Fis) rows and 6 columns) define which adsorption EDL models will
@@ -292,9 +535,30 @@ and then saved within the SysEq record.&nbsp;</p>
   </dd>
 </dl>
 <dl>
-  <dt> <a name="MaSdt_"></a><big><b><big><tt>MaSdt_</tt></big></b></big>
-&nbsp;Total maximum site density for surface types, 1/nm2 (for
-competitive SAT)</dt>
+  <dt> <a name="Nfsp_"></a><big><b><big><tt>Nfsp_</tt></big></b></big>
+&nbsp;- Fractions of sorbent surface allocated to surface types</dt>
+  <dd>&nbsp;&nbsp;&nbsp;</dd>
+  <dd>This array (n(Fis) rows and 6 columns) contains fractions of the
+total surface of the sorbent assigned to each surface type on each
+adsorption phase. The numbers must be non-negative (their total for a
+sorption phase can be greater or smaller than unity). A zero or EMPTY
+value means that the surface type is not used (the unused surface
+types can only be located consecutively on the right side of each row).
+&nbsp;</dd>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>For non-sorption multi-component phases, the <tt>Nfsp_</tt>
+numbers are ignored and must be filled out with zeros. </dd>
+  <dd>
+    <p>The <tt>Nfsp_</tt> numbers are initially copied from Phase
+records at creation of the CSD, and can be edited by the user and
+then saved within the SysEq record. . </p>
+  </dd>
+</dl>
+<dd> &nbsp;&nbsp;</dd>
+<dl>
+  <dt> <a name="MaSdt_"></a><big><b><big><tt>MaSdt_</tt></big></b></big>&nbsp;
+Common maximum density of competitive surface complexes, 1/nm2
+(obsolete)</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>This array (n(Fis) rows and 6 columns) contains positive total
@@ -319,7 +583,8 @@ then saved within the SysEq record.&nbsp;&nbsp;</dd>
 Inner capacitance density parameter C1 (TLM,BSM,CCM) for surface
 types, F/m2</dt>
   <dd>
-    <p>This array (n(Fis) rows and 6 columns) contains values of inner
+    <p>This array (n(Fis) rows and 6 columns) contains values of
+inner
 capacitance density C1 in F/m2 for each surface type on each
 adsorption phase for&nbsp;<a href="glossary.html#DT_Coulombic_EDL">Coulombic
 EDL corrections</a> of concentration of charged surface species in
@@ -367,7 +632,8 @@ or used as fitting parameters. Typical value for clay minerals is
 between 1 and 3 mkeq/m2.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dd>For purely amphoteric surfaces, this parameter must be set to 0.
+  <dd>For purely amphoteric surfaces, this parameter must be set to
+0.
 For any kind of surface, the non-zero negative or positive XfIEC_
 parameters affect concentrations of adsorbed species only in
 electrostatic EDL models (TLM,BSM,CCM,DLM).&nbsp; &nbsp;</dd>
@@ -385,7 +651,8 @@ then saved within the SysEq record.&nbsp;&nbsp;</dd>
 <dl>
   <dd> <br>
   </dd>
-  <dt> <a name="XcapF_"></a><big><b><tt>XcapF_</tt></b></big> &nbsp;-
+  <dt> <a name="XcapF_"></a><big><b><tt>XcapF_</tt></b></big>
+&nbsp;-
 Anionic outer-sphere capacitance density parameter C3 (F/m2), reserved</dt>
   <dd>&nbsp; <br>
   </dd>
@@ -431,7 +698,6 @@ solvent, reserved</dd>
 <hr size="2" width="100%"><br>
 <h2><a name="IPM_SCM_DATA"></a>3. IPM (Multi) Submodule Data for
 Sorption Models</h2>
-<h3></h3>
 &nbsp;<br>
 <h3><a name="IPM_SCM_DATA_INPUT"></a>3.1. Input Data Objects</h3>
 These input data objects are provided in addition to the main IPM input
@@ -439,7 +705,8 @@ data described in the <a href="gems_sys.html"><tt>gems_sys.html</tt></a>
 manual. <br>
 <br>
 <dl>
-  <dt> <a name="Aalp"></a><big><b><big><tt>Aalp</tt></big></b></big> -
+  <dt> <a name="Aalp"></a><big><b><big><tt>Aalp</tt></big></b></big>
+-
 Specific surface area of phases Av, m2/g</dt>
   <dd>&nbsp;&nbsp; <br>
   </dd>
@@ -449,8 +716,8 @@ additional thermodynamic factor of state and&nbsp; <br>
   <dd>must be given for any sorption phase.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dd>The Av values are copied into the IPM problem structure from the <a
- href="#Aalp_"><tt>Aalp_</tt></a> data object. </dd>
+  <dd>The Av values are copied into the IPM problem structure from
+the <a href="#Aalp_"><tt>Aalp_</tt></a> data object. </dd>
 </dl>
 <dl>
   <dd> &nbsp;&nbsp;</dd>
@@ -513,7 +780,8 @@ values in the <a href="#etaA"><tt>etaA</tt></a> matrix.&nbsp;</dd>
   <dt> <a name="SCM"></a><big><b><big><tt>SCM</tt></big></b></big> -
 Classifier of SCM EDL models applied on surface types</dt>
   <dd>&nbsp;</dd>
-  <dd> <a href="g_useref.html#SCM_CODES">SCM codes</a> in each row of
+  <dd> <a href="g_useref.html#SCM_CODES">SCM codes</a> in each row
+of
 this array define which adsorption EDL models will be used for each
 surface type in this adsorption phase. Rows of SCM codes are
 copied&nbsp; into the IPM problem structure from the <a href="#SCMT_"><tt>SCMT_</tt></a>
@@ -526,7 +794,8 @@ matrix.&nbsp;</dd>
   <dt> <a name="nfsp"></a><big><b><big><tt>nfsp</tt></big></b></big>&nbsp;
 &nbsp;- Fractions of sorbent surface allocated to surface types</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
-  <dd>The row of values of input fraction of surface type area for each
+  <dd>The row of values of input fraction of surface type area for
+each
 surface type on each adsorption phase is copied&nbsp; into the IPM
 problem structure from the <a href="#Nfsp_"><tt>Nfsp_</tt></a>
 matrix.&nbsp;</dd>
@@ -578,12 +847,14 @@ output data described in the <a href="gems_sys.html"><tt>gems_sys.html</tt></a>
 manual. <br>
 &nbsp; &nbsp;<br>
 <dl>
-  <dt> <a name="Xfts"></a><big><big><b><tt>Xfts</tt></b></big></big> -
+  <dt> <a name="Xfts"></a><big><big><b><tt>Xfts</tt></b></big></big>
+-
 Total number of moles of surface species at surface type</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>
-    <p>This array (n(Fis) rows and 6 columns) contains calculated total
+    <p>This array (n(Fis) rows and 6 columns) contains calculated
+total
 mole quantities of surface species at each surface type on sorption
 phases. For non-sorption multi-component phases, this array contains
 zeros. <br>
@@ -596,7 +867,8 @@ zeros. <br>
 Total surface charge on zero EDL plane (sorbent surface), moles&nbsp;</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd>This array (n(Fis) rows and 6 columns) contains calculated total
+  <dd>This array (n(Fis) rows and 6 columns) contains calculated
+total
 charge on zero EDL plane at each surface type on sorption phases. For
 non-sorption multi-component phases, this array contains zeros. Values
 of total surface charge are further on converted into charge density
@@ -610,7 +882,8 @@ codes) into the relative electrostatic potential <a href="#psiA"><tt>psiA</tt></
 Total surface charge on beta EDL plane (outer-sphere), moles</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd>This array (n(Fis) rows and 6 columns) contains calculated total
+  <dd>This array (n(Fis) rows and 6 columns) contains calculated
+total
 charge on the beta EDL plane at each surface type on sorption phases.
 For non-sorption multi-component phases, this array contains zeros.
 Values of total surface charge are further on converted into charge
@@ -662,7 +935,8 @@ phases, this array contains zeros. <br>
 </dl>
 <h3><a name="IPM_SCM_DATA_WORK"></a>3.3. Work Data Objects</h3>
 <dl>
-  <dt> <a name="sati_0"></a><b><big><tt>sati[0]</tt></big></b> &nbsp;-
+  <dt> <a name="sati_0"></a><b><big><tt>sati[0]</tt></big></b>
+&nbsp;-
 Assignment index of surface type for surface species { 0,...,5 }</dt>
   <dd>&nbsp;<br>
   </dd>
@@ -701,7 +975,8 @@ activity terms for surface species (reserved)</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="capF"></a><b><tt>capF </tt></b>- Capacitance density
+  <dt> <a name="capF"></a><b><tt>capF </tt></b>- Capacitance
+density
 of anionic EDL layer in FLM or CD-MUSIC, F/m2 (reserved)</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
@@ -711,12 +986,14 @@ of anionic EDL layer in FLM or CD-MUSIC, F/m2 (reserved)</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="dlhB"></a><b><tt>dlhB </tt></b>- Effective thickness
+  <dt> <a name="dlhB"></a><b><tt>dlhB </tt></b>- Effective
+thickness
 of beta EDL layer, nm (reserved)</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="dlhD"></a><b><tt>dlhD </tt></b>- Effective thickness
+  <dt> <a name="dlhD"></a><b><tt>dlhD </tt></b>- Effective
+thickness
 of diffuse EDL layer, nm (reserved)</dt>
   <dd><br>
   </dd>
@@ -739,7 +1016,8 @@ conductivity of the sorbent (reserved)</dt>
   <dd> &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="Eps"></a><b><tt>Eps </tt></b>- Dielectric constant of
+  <dt> <a name="Eps"></a><b><tt>Eps </tt></b>- Dielectric constant
+of
 the sorbent (reserved)</dt>
   <dd> &nbsp;</dd>
   <dt> &nbsp;<br>

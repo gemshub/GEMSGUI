@@ -4,11 +4,11 @@
 // Declaration of TProfil class, config and calculation functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1995-2007 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
-// Uses: GEM-Vizor GUI DBMS library, gems/lib/gemvizor.lib
+// Uses: GEM-Vizor GUI DBMS library, gems2/lib/gems_qt.lib
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -37,7 +37,7 @@ extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
 //
 
 struct BASE_PARAM
-{ // Flags and thersholds for numeric modules
+{ // Flags and thresholds for numeric modules
     short PC,    // "Mode of Selekt2() subroutine operation"
     PD,// Mode of DHH():0-invoke,1-at FIA only,2-last IPM it. 3-every IPM it.
     PRD,//Positive: mode GammaCalc(): 0-inactive, 1-FIA only, 2-SELEKT2 only 3-every IPM iteration
