@@ -87,7 +87,7 @@ int TCGFcalc::CGcalcFug( void )
 
 // Calling CG EoS functions here
 
-    if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1. && P < 1e5 )
+    if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1e-6 && P < 1e5 )
        retCode = CGFugacityPT( Coeff, Eos4parPT, Fugacity, Volume,
             DeltaH, DeltaS, P, T );
     else {
