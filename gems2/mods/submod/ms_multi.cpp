@@ -1077,10 +1077,11 @@ void TMulti::set_def( int /*q*/)
         pm.SF2    = 0;
         pm.DCC3   = 0;
 //  Added 16.11.2004 by Sveta
-    pm.sitXcat = 0;
-    pm.sitXan = 0;
-    pm.sitE = 0;
+//    pm.sitXcat = 0;
+//    pm.sitXan = 0;
+//    pm.sitE = 0;
 pm.IPx = 0;
+pm.ITF = pm.ITG = 0;
 }
 
 //--------------------- End of ms_multi.cpp ---------------------------

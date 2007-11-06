@@ -705,6 +705,7 @@ double TProfil::CalcEqstat( bool /*prg*/)
 pmp->t_start = clock();
 pmp->t_end = pmp->t_start;
 pmp->t_elap_sec = 0.0;
+pmp->ITF = 0; pmp->ITG = 0;
 #ifndef Use_mt_mode
      if( prg )
 	pVisorImp->OpenProgress();
@@ -718,17 +719,21 @@ pmp->t_elap_sec = 0.0;
 
     if( pa.p.PRD < 0 && pa.p.PRD > -50 && !pmp->pNP ) // max 50 loops
     {  // Test refinement loops for highly non-ideal systems  KD 18.02.2005
-       int pp, TotIT = pmp->IT;
+       int pp, TotIT = pmp->IT, TotITG = pmp->ITG, TotITF = pmp->ITF;
        pmp->pNP = 1;
        for( pp=0; pp < abs(pa.p.PRD); pp++ )
        {
          pmp->IT = 0;
          if( multi->AutoInitialApprox() == false )
+         {
+             pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
              multi->MultiCalcIterations();
-         TotIT += pmp->IT;
+         }
+         TotIT += pmp->IT; TotITF = (int)pmp->ITF; TotITG = (int)pmp->ITG;
        }
        pmp->pNP = 0;
        pmp->IT = (short)TotIT;
+//       pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
     }
     calcFinished = true;
 pmp->t_end = clock();

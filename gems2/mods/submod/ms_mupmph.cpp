@@ -69,7 +69,7 @@ void TMulti::MultiRemake( const char *key )
         pmp->PLIM = 1;
     else pmp->PLIM = 0;
 
-    pmp->IT = 0;
+    pmp->IT = 0; pmp->ITF = 0; pmp->ITG = 0;
     if( syp->PE != S_OFF )
         pmp->E = 1;
     else pmp->E = 0;
