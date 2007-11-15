@@ -182,7 +182,7 @@ FOUND:
     pm.pRR1 = STat->stp->itPar;  // Level of tinkle supressor
     pm.FI1 = STat->stp->Fi;
     pm.FI1s = STat->stp->Fis;
-    pm.IT = 0;
+    pm.IT = 0; pm.W1 = 0; pm.K2 = 0;
     // float
     pm.FitVar[4] = STat->stp->ParE;  // Smoothing factor
     pm.FX  = STat->stp->UU;  // GX normalized

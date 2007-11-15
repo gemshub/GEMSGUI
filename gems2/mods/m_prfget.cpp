@@ -680,11 +680,11 @@ void TProfil::CalcBcc()
     TSysEq::pm->CellChanged();    // DAK
 }
 
-// Calculation of equilibrium state with GEMIPM2 kernel
+// Calculation of equilibrium state with GEM IPM2 kernel within GEM-Selektor
 // GEMS: Caution - this function is run in another thread!
 // don't call any GUI (Qt or VisorImp) functions from here!
 // exceptions should be kept inside the function either
-// Modified on 10.09.2007 to return GEMIPM calculation time in seconds as double
+// Modified on 10.09.2007 to return GEM IPM2 calculation time in seconds as double
 //
 double TProfil::CalcEqstat( bool /*prg*/)
 {

@@ -607,8 +607,10 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
 
 // GEM IPM calculation of equilibrium state in MULTI
 // Modified on 10.09.2007 to return elapsed GEMIPM runtime in seconds
+// Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations 
+// and precision refinement loops
 //
-double TProfil::calcMulti()
+double TProfil::calcMulti( int& NumPrecLoops, int& NumIterFIA, int& NumIterIPM )
 {
   TSysEq* STat = (TSysEq*)(&aMod[RT_SYSEQ]);
   calcFinished = false;
@@ -623,10 +625,38 @@ pmp->t_start = clock();     // Added 06.09.2007 by DK to check pure runtime
 pmp->t_end = pmp->t_start;
 pmp->t_elap_sec = 0.0;
    multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
-  // multi->CompG0Load(); //16/02/2007
+   // multi->CompG0Load(); //16/02/2007
 
-  if( multi->AutoInitialApprox() == false )
-       multi->MultiCalcIterations();
+   if( multi->AutoInitialApprox() == false )
+      multi->MultiCalcIterations();
+
+NumPrecLoops = pmp->W1+pmp->K2-2; 
+NumIterFIA = pmp->ITF;
+NumIterIPM = pmp->ITG;
+
+if( pa.p.PRD < 0 && pa.p.PRD > -50 && !pmp->pNP ) // max 50 loops
+{  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
+          int pp, TotIT = pmp->IT, TotITG = pmp->ITG, TotITF = pmp->ITF, TotW1 = pmp->W1+pmp->K2-2;
+          pmp->pNP = 1;
+          for( pp=0; pp < abs(pa.p.PRD); pp++ )
+          {
+            pmp->IT = 0; pmp->ITG = 0; pmp->ITF = 0;
+            if( multi->AutoInitialApprox() == false )
+            {
+//                pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
+                multi->MultiCalcIterations();
+            }
+            TotIT += pmp->IT; TotW1 += pmp->W1+pmp->K2-2; 
+            TotITF += pmp->ITF; TotITG += pmp->ITG;
+          }
+          pmp->pNP = 0;
+          pmp->IT = (short)TotIT;
+          pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
+          NumPrecLoops = TotW1; 
+          NumIterFIA = TotITF;
+          NumIterIPM = TotITG;
+}       
+       
 pmp->t_end = clock();
 pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
   calcFinished = true;

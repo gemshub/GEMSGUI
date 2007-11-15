@@ -276,7 +276,7 @@ double CalcEqstat( bool show_progress=true );
    void outMulti();
    void outMultiTxt( const char *path  );
    void readMulti( GemDataStream& ff );
-   double calcMulti();
+   double calcMulti( int& NumPrecLoops, int& NumIterFIA, int& NumIterIPM );
 };
 
 /* Work codes of surface site types in pm->AtNdx vector (compatibility with old-style SCMs *

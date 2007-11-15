@@ -395,7 +395,7 @@ ProgressDialog::Update(bool force)
     MULTI* pData = TProfil::pm->pmp;
 
 //    str.sprintf( "%*hu", 7, pData->IT );
-    str.sprintf( "%2hu:%4hu:%4hu ", pData->W1, pData->ITF, pData->ITG ); // pData->IT );
+    str.sprintf( "%2hu:%4hu:%4hu ", pData->W1+pData->K2, pData->ITF, pData->ITG ); // pData->IT );
     pIT->setText( str );
     str.sprintf( "%*g", 8, pData->pH );
     pPH->setText( str );
@@ -580,7 +580,7 @@ ProgressDialog::Update(bool force)
     MULTI* pData = TProfil::pm->pmp;
 
 //    str.sprintf( "%*hu", 7, pData->IT );
-    str.sprintf( "%2hu:%4hu:%4hu", pData->W1, pData->ITF, pData->ITG );
+    str.sprintf( "%2hu:%4hu:%4hu", pData->W1+pData->K2, pData->ITF, pData->ITG );
     pIT->setText( str );
     str.sprintf( "%*g", 8, pData->pH );
     pPH->setText( str );

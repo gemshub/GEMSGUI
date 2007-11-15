@@ -20,6 +20,7 @@
 void TUnSpace::unsp_eqkey()
 {
     double calculation_time;
+    int NumPrecLoops = 0, NumIterFIA = 0, NumIterIPM = 0;
     vstr buf(40);
 
     sprintf(buf, "%.4d", usp->q);
@@ -37,8 +38,10 @@ void TUnSpace::unsp_eqkey()
 // calc current SyStat 16/02/2007
      pmu->TCc = usp->Tc;
      pmu->Pc = usp->Pc;
-calculation_time = TProfil::pm->calcMulti();
+calculation_time = TProfil::pm->calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM );
     //TProfil::pm->CalcEqstat( false ); // 16/02/2007
+// Later: to implement account for calculation time and numbers of iterations/loops
+
     if( usp->PsSY != S_OFF )
        TSysEq::pm->CmSave();           // save results to DB
     if( usp->stl )
