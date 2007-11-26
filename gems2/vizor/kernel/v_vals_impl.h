@@ -252,8 +252,6 @@ struct TValString:
 //  TVal<T> functions definitions
 //
 
-
-
 template<class T>
 inline
 gstring
@@ -266,6 +264,22 @@ TVal<T>::GetString(size_t ndx) const
 
     vstr vbuf(30);	// double is ~15 digit
     sprintf(vbuf, PATTERN_GET(), ((T*)ptr)[ndx]);
+
+    return vbuf.p;
+}
+
+template<>
+inline
+gstring
+TVal<double>::GetString(size_t ndx) const
+{
+    if( IsEmpty(ndx) )
+        return S_EMPTY;
+    if( IsAny(ndx) )
+        return S_ANY;
+
+    vstr vbuf(30);	// double is ~15 digit   PATTERN_GET()
+    sprintf(vbuf, "%.*lg" , doublePrecision, ((double*)ptr)[ndx]);
 
     return vbuf.p;
 }

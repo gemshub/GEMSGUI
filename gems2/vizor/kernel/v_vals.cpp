@@ -302,7 +302,7 @@ TVal<signed char>::SetString(const char* s, size_t ndx)
 }
 
 //#endif
-
+/*
 template<>
 inline
 gstring
@@ -317,7 +317,7 @@ TVal<double>::GetString(size_t ndx) const
     sprintf(vbuf, "%.*lg" , doublePrecision, ((double*)ptr)[ndx]);
 
     return vbuf.p;
-}
+}*/
 #endif
 
 //--------------------- End of v_vals.cpp ---------------------------
