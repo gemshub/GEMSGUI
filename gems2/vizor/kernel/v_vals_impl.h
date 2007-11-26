@@ -323,10 +323,28 @@ TVal<char>::SetString(const char* s, size_t ndx)
     return true;
 }
 
+// Set/GetString() for <char> need special handling
+template<>
+inline
+bool
+TVal<unsigned char>::SetString(const char* s, size_t ndx)
+{
+    ((unsigned char*)ptr)[ndx] = *s;
+    return true;
+}
+
 template<>
 inline
 gstring
 TVal<char>::GetString(size_t ndx) const
+{
+    return gstring(1, ((char*)ptr)[ndx]);
+}
+
+template<>
+inline
+gstring
+TVal<unsigned char>::GetString(size_t ndx) const
 {
     return gstring(1, ((char*)ptr)[ndx]);
 }
