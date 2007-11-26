@@ -239,7 +239,7 @@ TValString::SetString(const char* s, size_t )
 
 #ifdef __unix
 
-
+/*
 template<>
 //inline
 bool
@@ -247,7 +247,7 @@ TVal<unsigned char>::SetString(const char* s, size_t ndx)
 {
     gstring ss = s;
     ss.strip();
-    if( /*ss.empty() ||*/ ss==S_EMPTY )
+    if( *ss.empty() ||* ss==S_EMPTY )
     {
         ((unsigned char*)ptr)[ndx] = EMPTY();
         return true;
@@ -269,7 +269,7 @@ TVal<unsigned char>::SetString(const char* s, size_t ndx)
     ((unsigned char*)ptr)[ndx] = (unsigned char)v;
     return true;
 }
-
+*/
 
 template<>
 //inline
