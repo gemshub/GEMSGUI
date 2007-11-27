@@ -389,6 +389,40 @@ void u_splitpath(const gstring& Path, gstring& dir,
     }
 }
 
+// Reading list of names from file, return number of names 
+int f_getnames(istream& is, TCStringArray& nameList, char delim = ' ')
+{
+  gstring name;
+
+  nameList.Clear();
+  while( !is.eof() )
+  {
+	f_getline( is, name, delim);
+	nameList.Add(name);
+  }
+	
+ return nameList.GetCount();
+}
+
+// Get Path of file and Reading list of file names from it, return number of files
+int f_getfiles(gstring flst_name, gstring& Path, TCStringArray& filesList, char delim = ',')
+{
+// Get path
+     size_t pos = flst_name.rfind("/");
+     Path = "";
+     if( pos < npos )
+     Path = flst_name.substr(0, pos+1);
+
+//  open file stream for the file names list file
+     fstream f_lst( flst_name.c_str(), ios::in );
+     ErrorIf( !f_lst.good() , flst_name.c_str(), "Fileopen error");
+
+// Reading list of names from file	
+	
+    return f_getnames(f_lst, filesList, delim);	
+}
+
+
 // ------------------ End of ms_param.cpp -----------------------
 
 

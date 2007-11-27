@@ -296,9 +296,13 @@ if( binary_f )
   }
 
 // Prepare for reading DBR_DAT files
-     i = 0;
-     while( !f_lst.eof() )  // For all DBR_DAT files listed
-     {
+// Reading list of names from file, return number of names 
+  TCStringArray nameList;  
+  i = f_getnames(f_lst, nameList, ',');
+  ErrorIf( i==0, datachbr_fn.c_str(), "GEM_init() error: No DBR_DAT files read!" );
+
+  for(int ii=0; ii<i; ii++ ) // For all DBR_DAT files listed
+  {
 
 #ifndef IPMGEMPLUGIN
    pVisor->Message( 0, "GEM2MT node array",
@@ -307,12 +311,7 @@ if( binary_f )
 #endif
 
 // Reading DBR_DAT file into work DATABR structure
-         if( i )  // Comma only after the first DBR_DAT file!
-            f_getline( f_lst, datachbr_fn, ',');
-         else
-            f_getline( f_lst, datachbr_fn, ' ');
-
-         gstring dbr_file = Path + datachbr_fn;
+         gstring dbr_file = Path + nameList[ii];
          if( binary_f )
          {
              GemDataStream in_br(dbr_file, ios::in|ios::binary);
@@ -331,17 +330,16 @@ if( binary_f )
 #ifndef IPMGEMPLUGIN
         if( getNodT1 )
         {
-           setNodeArray( dbr_file, i, binary_f );
+           setNodeArray( dbr_file, ii, binary_f );
         }
         else
 #endif
         {
 // Copying data from work DATABR structure into the node array
 // (as specified in nodeTypes array)
-           setNodeArray( i, nodeTypes  );
+           setNodeArray( ii, nodeTypes  );
          }
-          i++;
-     }  // end while()
+     }  // end for()
 #ifndef IPMGEMPLUGIN
    pVisor->CloseMessage();
 #endif

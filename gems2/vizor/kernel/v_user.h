@@ -177,6 +177,11 @@ void
 u_splitpath(const gstring& Path, gstring& dir,
             gstring& name, gstring& ext);
 
+// Reading list of names from file, return number of names 
+int f_getnames(istream& is, TCStringArray& nameList, char delim );
+// Get Path of file and Reading list of file names from it, return number of files
+int f_getfiles(gstring flst_name, gstring& Path, TCStringArray& filesList, char delim);
+
 #endif
 // _v_user_h_
 
