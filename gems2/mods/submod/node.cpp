@@ -183,6 +183,9 @@ int  TNode::GEM_read_dbr( const char* fname, bool binary_f )
        ErrorIf( !in_br.good() , fname, "DataBR Fileopen error");
        databr_from_text_file(in_br);
    }
+
+    dbr_file_name = fname;
+
   } catch(TError& /*err*/)
     {
       return 1;
@@ -323,6 +326,7 @@ if( binary_f )
                     "DBR_DAT fileopen error");
                databr_from_text_file(in_br);
           }
+         dbr_file_name = dbr_file;
 
 // Unpacking work DATABR structure into MULTI (GEM IPM work structure): uses DATACH
 //    unpackDataBr();
@@ -942,6 +946,7 @@ TNode::TNode( MULTI *apm  )
     CNode = 0;
     allocMemory();
     na = this;
+    dbr_file_name = "dbr_file_name";
 }
 
 #else
@@ -952,6 +957,7 @@ TNode::TNode()
   CNode = 0;
   allocMemory();
   na = this;
+  dbr_file_name = "dbr_file_name";
 }
 
 #endif
@@ -1114,15 +1120,21 @@ void TNode::unpackDataBr()
 //
    void  TNode::GEM_write_dbr( const char* fname, bool binary_f )
    {
-       if( binary_f )
+       gstring str_file;
+       if( fname == 0)	   
+    	   str_file = dbr_file_name+".out";
+       else
+           str_file = fname;
+       
+	   if( binary_f )
            {
-              gstring str_file = fname;
+            // gstring str_file = fname;
               GemDataStream out_br(str_file, ios::out|ios::binary);
               databr_to_file(out_br);
            }
       else
-      {  fstream out_br(fname, ios::out );
-         ErrorIf( !out_br.good() , fname, "DataBR text make error");
+      {  fstream out_br(str_file.c_str(), ios::out );
+         ErrorIf( !out_br.good() , str_file.c_str(), "DataBR text make error");
          databr_to_text_file(out_br);
       }
    }
@@ -1134,7 +1146,13 @@ void TNode::unpackDataBr()
 //
    void  TNode::GEM_print_ipm( const char* fname )
    {
-       TProfil::pm->outMultiTxt( fname  );
+     gstring str_file;  
+     if( fname == 0)	   
+    	   str_file = dbr_file_name+".GEMIPM-Dump.out";
+     else
+           str_file = fname;
+      
+	   TProfil::pm->outMultiTxt( str_file.c_str()  );
    }
 
 #ifdef IPMGEMPLUGIN

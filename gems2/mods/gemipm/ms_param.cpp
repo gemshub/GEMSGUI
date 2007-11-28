@@ -405,21 +405,35 @@ int f_getnames(istream& is, TCStringArray& nameList, char delim = ' ')
 }
 
 // Get Path of file and Reading list of file names from it, return number of files
-int f_getfiles(gstring flst_name, gstring& Path, TCStringArray& filesList, char delim = ',')
+char  (* f_getfiles(const char *f_name, char *Path, 
+		int& nElem, char delim ))[fileNameLength]
 {
-// Get path
-     size_t pos = flst_name.rfind("/");
-     Path = "";
-     if( pos < npos )
-     Path = flst_name.substr(0, pos+1);
+  char  (*filesList)[fileNameLength];
 
+// Get path
+     gstring path_;
+	 gstring flst_name = f_name;
+	 size_t pos = flst_name.rfind("/");
+     path_ = "";
+     if( pos < npos )
+      path_ = flst_name.substr(0, pos+1);
+     strncpy( Path, path_.c_str(), 256-fileNameLength);
+     Path[255] = '\0';
+     
 //  open file stream for the file names list file
-     fstream f_lst( flst_name.c_str(), ios::in );
-     ErrorIf( !f_lst.good() , flst_name.c_str(), "Fileopen error");
+     fstream f_lst( f_name/*flst_name.c_str()*/, ios::in );
+     ErrorIf( !f_lst.good(), f_name, "Fileopen error");
 
 // Reading list of names from file	
-	
-    return f_getnames(f_lst, filesList, delim);	
+    TCStringArray nameList; 
+	nElem = f_getnames(f_lst, nameList, delim);
+	filesList = new char[nElem][fileNameLength];
+
+	for(int ii=0; ii<nElem; ii++)
+	{     strncpy( filesList[ii], nameList[ii].c_str(), fileNameLength);
+	      filesList[ii][fileNameLength-1] = '\0';
+	}
+   return filesList;	
 }
 
 
