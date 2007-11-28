@@ -121,6 +121,18 @@ gems2/makew_noqt.bat svn_keywords=Author+Date+Id+Revision
 gems2/makew_r.bat svn_keywords=Author+Date+Id+Revision
 gems2/mods/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/mods/filters_data.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/gem2mt-sep/CalcColumn.BAT -text
+gems2/mods/gem2mt-sep/Makefile -text
+gems2/mods/gem2mt-sep/gem2mtsep.pro -text
+gems2/mods/gem2mt-sep/main.cpp -text
+gems2/mods/gem2mt-sep/ms_gem2mt.h -text
+gems2/mods/gem2mt-sep/test/CalcColumn-dat.lst -text
+gems2/mods/gem2mt-sep/test/CalcColumn-dbr-0-0000.dat -text
+gems2/mods/gem2mt-sep/test/CalcColumn-dbr-0-0001.dat -text
+gems2/mods/gem2mt-sep/test/CalcColumn-dch.dat -text
+gems2/mods/gem2mt-sep/test/CalcColumn-ipm.dat -text
+gems2/mods/gem2mt-sep/test/testA.dat -text
+gems2/mods/gem2mt-sep/test/testW.dat -text
 gems2/mods/gemipm/FMT-Bridge/databr.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/datach.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/m_const.h svn_keywords=Author+Date+Id+Revision
@@ -144,7 +156,6 @@ gems2/mods/gemipm/m_const.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/m_param.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/main.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/makew.bat svn_keywords=Author+Date+Id+Revision
-gems2/mods/gemipm/ms_gem2mt.h -text
 gems2/mods/gemipm/ms_param.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/test/CalcColumn-dat.lst -text
 gems2/mods/gemipm/test/CalcColumn-dbr-0-0000.dat -text
@@ -154,8 +165,6 @@ gems2/mods/gemipm/test/CalcColumn-ipm.dat -text
 gems2/mods/gemipm/test/CalcColumn.BAT -text
 gems2/mods/gemipm/test/Readme.1st -text
 gems2/mods/gemipm/test/main.cpp -text
-gems2/mods/gemipm/test/testA.dat -text
-gems2/mods/gemipm/test/testW.dat -text
 gems2/mods/gemipm/test/test_data.out -text
 gems2/mods/m_compos.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_compos.h svn_keywords=Author+Date+Id+Revision
