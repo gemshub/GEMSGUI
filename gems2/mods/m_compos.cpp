@@ -973,7 +973,8 @@ void TCompos::CopyRecords( const char * prfName, TCStringArray& aCMnoused,
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i, j, ij, itmp;
+    uint j;
+    int i, ij, itmp;
     uint jj;
     for(uint ii=0; ii<aComp.GetCount(); ii++ )
     {

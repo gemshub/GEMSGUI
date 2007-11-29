@@ -38,7 +38,7 @@
 
 // ***** the following messages are referenced by the variable info.
 
-char *lm_shortmsg[] = {
+const char *lm_shortmsg[] = {
         "invalid input",
         "success (f)",
         "success (p)",
@@ -52,7 +52,7 @@ char *lm_shortmsg[] = {
         "user break"
 };
 
-char *lm_infmsg[] = {
+const char *lm_infmsg[] = {
     "improper input parameters",
     "the relative error in the sum of squares is at most tol",
     "the relative error between x and the solution is at most tol",

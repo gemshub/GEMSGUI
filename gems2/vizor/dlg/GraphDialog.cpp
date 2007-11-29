@@ -363,7 +363,7 @@ void GraphDialog::ShowPlots()
            nScale = gr_data.getColorLine( ii );
 
            if( pnt.IsEmpty() || nLn == 0 ||
-               abs(nLn) > gr_data.lines.GetCount() ||
+               (uint)abs(nLn) > gr_data.lines.GetCount() ||
                nScale < 0 )
              continue;   // undefined point or point type
 

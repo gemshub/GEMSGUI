@@ -247,7 +247,7 @@ public:
     TCStringArray fOpenNameBuf;
 
     //  TDateBase();
-    TDataBase( int nrt, char* name, bool Rclose, bool isDel,
+    TDataBase( int nrt, const char* name, bool Rclose, bool isDel,
                int nOf, unsigned char Nobj, int filesNum,
                unsigned char nRkflds, const unsigned char* rkfrm );
     TDataBase( fstream& f );

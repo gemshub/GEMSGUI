@@ -97,13 +97,13 @@ protected:
     {
         return(isdigit(c)||c=='.');
     }
-    int INDEX( char *s, char ch );
+    int INDEX( const char *s, char ch );
     int SPRTY( char c );
     void InDigit();
     void IsAscii();
     void Ident( char *s );
     void Ffun( char * str);
-    void Variab( char * str);
+    void Variab( const char * str);
     void I_Variab( char * str);
     void bildEquat();
     void bildWhile();

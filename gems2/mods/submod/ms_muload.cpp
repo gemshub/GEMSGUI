@@ -664,7 +664,7 @@ int TMulti::find_acnum( char *name, int LNmode )
 // Modified by KD 30.03.01 to ignore \J ... switches and instead
 // obtain indexation codes from data object name and DOD.
 //
-char* MSDELIM = " +-*/^:[]();=$&|!<>?#\n\t";
+const char* MSDELIM = " +-*/^:[]();=$&|!<>?#\n\t";
 //
 void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
         tget_ndx *get_ndx )

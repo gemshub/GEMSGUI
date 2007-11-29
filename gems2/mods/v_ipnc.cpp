@@ -23,9 +23,9 @@
 #include "v_ipnc.h"
 #include "v_object.h"
 
-char* DIGIT="0123456789.";
-char* OPER="!^*/+-<a>b=c&|()";
-char* RAZD=" +-*/^:[]();=$&|!<>?#";
+const char* DIGIT="0123456789.";
+const char* OPER="!^*/+-<a>b=c&|()";
+const char* RAZD=" +-*/^:[]();=$&|!<>?#";
 const int FuncNumber=28; // number of functions
 
 double derf(double x);
@@ -139,7 +139,7 @@ char *IPNCalc::xblanc( char *cur )
     else return 0;
 }
 
-int IPNCalc::INDEX( char *s, char ch )
+int IPNCalc::INDEX( const char *s, char ch )
 {
     if( s == 0 )
         return -1;
@@ -272,7 +272,7 @@ OSH:
 }
 
 //analyse IPN variable
-void IPNCalc::Variab( char *str)
+void IPNCalc::Variab( const char *str)
 {
     int j = aObj.Find(str);
 

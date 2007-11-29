@@ -179,8 +179,8 @@ struct lm_control_type{
 };
 
 #ifndef _LMDIF
-extern char *lm_infmsg[];
-extern char *lm_shortmsg[];
+extern const char *lm_infmsg[];
+extern const char *lm_shortmsg[];
 #endif
 
 

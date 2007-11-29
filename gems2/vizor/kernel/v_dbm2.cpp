@@ -153,7 +153,7 @@ in_stream >> numFiles;
 }
 
 //default configuration of the database
-TDataBase::TDataBase( int nrt, char* name,
+TDataBase::TDataBase( int nrt, const char* name,
                       bool Rclose, bool isDel, int nOf, unsigned char Nobj,
                       int filesNum, unsigned char nRkflds, const unsigned char* rkfrm ):
         nRT((unsigned char)nrt), status(UNDF_), rclose(Rclose), isDelete(isDel),

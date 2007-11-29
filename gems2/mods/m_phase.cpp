@@ -1138,7 +1138,8 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
    bool useLst, TCStringArray lst )
 {
 //    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    char *part, nbuf[MAXFORMULA];
+    const char *part;
+    char nbuf[MAXFORMULA];
     gstring Name = "Auto-set ";
 
 //  Setup of aqueous phase
@@ -1460,7 +1461,8 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
 
     //  test&copy  selected records
     // ( add to last key field first symbol from prfname )
-    int i, j, cnt;
+    uint j;
+    int i, cnt;
     bool nRec;
     const char *pKey1, *pKey4;
     for(uint ii=0; ii<aPHkey.GetCount(); ii++ )
