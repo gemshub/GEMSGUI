@@ -1,1 +1,1 @@
-exec ./gem2mtsep test/CalcColumn-dat.lst test/testA.dat > test.ou
+exec ./gem2mtsep test/CalcColumn-dat.lst test/testA.dat > test.out

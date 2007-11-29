@@ -1427,10 +1427,11 @@
                             </property>
                             <property name="text">
                                 <string>&lt;p&gt;(1) The necessary arrays will be allocated, and the Page 1 of the UnSpace module window will appear.&lt;/p&gt;
-&lt;p&gt;(3) Enter the full UnSpace task name into the USname field and (optionally) a comment into the USnote line. If math scripts will be used then type them on Page 3. Use template scripts accessible through "Help" "Scripts" menu command.&lt;/p&gt;
-&lt;p&gt;(4) Enter the.
-(5) Click on the "Calculate" toolbar button to start calculation of . 
-(6) Click the "Calculate" button again to perform .&lt;/p&gt;</string>
+&lt;p&gt;(2) Enter the full UnSpace task name into the USname field and (optionally) a comment into the USnote line. If math scripts will be used then type them on Page 3. Use template scripts accessible through "Help" "Scripts" menu command.&lt;/p&gt;
+&lt;p&gt;(3) On the "UnSpace" page, enter or change the uncertainty intervals, space group names and indexes.  &lt;/p&gt;
+&lt;p&gt;(4) Click on the "Calculate" toolbar button to start calculation of equilibria that sample the uncertainty space.  &lt;/p&gt;
+&lt;p&gt;(5) Click the "Calculate" button again to perform the sampling of GEM-calculated results and calculation of statistical criteria. &lt;/p&gt;
+&lt;p&gt;[6] On the "Graph" page, check the plot labels, plot the graph and customize it, if desired. &lt;/p&gt;</string>
                             </property>
                             <property name="alignment">
                                 <set>WordBreak|AlignVCenter</set>
