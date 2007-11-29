@@ -1,9 +1,19 @@
 #include <math.h>
 #include <stdio.h>
 
+#ifndef IPMGEMPLUGIN
+
 #include "m_unspace.h"
 #include "m_syseq.h"
 #include "visor.h"
+
+#else
+
+#include "ms_unspace.h"
+#include "nodearray.h"
+
+#endif
+
 
 // !!! internal using syp->GEX, syp->B, syp->Dcl, mup->Laq, mup->Pg, mup->Ll
 // if( syp->PGEX != S_OFF )
@@ -15,6 +25,8 @@
 //=========================================================================
 // Generation arrays part
 //=========================================================================
+
+#ifndef IPMGEMPLUGIN
 
 // make EqStat key  && calculate records
 void TUnSpace::unsp_eqkey()
@@ -46,8 +58,10 @@ calculation_time = TProfil::pm->calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM 
        TSysEq::pm->CmSave();           // save results to DB
     if( usp->stl )
        memcpy( usp->stl+usp->q, usp->stkey, EQ_RKLEN );
+    
 }
 
+#endif
 
 // building arrays for make pay off matrix
 void TUnSpace::buildTestedArrays()
@@ -59,10 +73,13 @@ void TUnSpace::buildTestedArrays()
  {
     usp->q = Ip;
 
+#ifndef IPMGEMPLUGIN
+
    pVisor->Message( window(), GetName(),
              "Generation of EqStat records\n"
                  "Please, wait...", usp->q, usp->Q);
-
+#endif
+   
  // setup uncertainty point data
      NexT( Ip );
 

@@ -308,6 +308,10 @@ gems2/mods/tnode/tp_test/CalcColumn-ipm.dat -text
 gems2/mods/tnode/tp_test/CalcColumn.BAT -text
 gems2/mods/tnode/tp_test/main.cpp -text
 gems2/mods/tnode/tp_test/tp_test.out -text
+gems2/mods/unspace-sep/Makefile -text
+gems2/mods/unspace-sep/main.cpp -text
+gems2/mods/unspace-sep/ms_unspace.h -text
+gems2/mods/unspace-sep/unspacesep.pro -text
 gems2/mods/v_ipnc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_ipnc.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_mod.h svn_keywords=Author+Date+Id+Revision

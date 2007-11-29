@@ -1,8 +1,15 @@
 #include <math.h>
 #include <stdio.h>
 
+#ifndef IPMGEMPLUGIN
+
 #include "m_unspace.h"
 
+#else
+
+#include "ms_unspace.h"
+
+#endif
 // !!! internal using  syp->GEX, mup->Laq, pm->tpp->G
 
 
