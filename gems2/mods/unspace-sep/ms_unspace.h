@@ -16,13 +16,10 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
-#ifndef _m_unspace_h_
-#define _m_unspace_h_
+#ifndef _ms_unspace_h_
+#define _ms_unspace_h_
 
-//#include "m_param.h"
-//#include "v_ipnc.h"
-//#include "graph.h"
-//#include "v_module.h"
+#include "nodearray.h"
 
 
 //============================================================================
@@ -34,8 +31,10 @@ enum grr_constants { // gstring len for graph
 };
 
 const unsigned int  MAXFORMULA =     81,
-                    V_SD_RKLEN = 32,
-                    V_SD_VALEN = 24;
+                      MAXPHSYMB = 8,
+                      PH_RKLEN = 48,
+                      V_SD_RKLEN = 32,
+                      V_SD_VALEN = 24;
 const int  MAXIDNAME = 12;
 const   int MAXFORMUNITDT=     40;
 
@@ -313,18 +312,38 @@ class TUnSpace
 {
     UNSPACE us[2];
 
-//    GraphWindow *gd_gr;
-//    TPlotLine *plot;
+// !!! internaal from Profile
+//    RMULTS* mup;
+   short mup_Laq;     // LO  - of DC in aqueous phase
+   short mup_Pg;      // PG  - of DC in gaseous phase
+   char (*mup_SF)[PH_RKLEN];// List of PHASE definition keys [0:Fi-1]             DB   
+   short  *mup_Ll;          // L1 vector, shows a number of DC included to each phase [0:Fi-1] DB
 
-//    SYSTEM *syu;
-     MULTI *pmu;
+//    SYSTEM *syu; // syu = TProfil::pm->syp;
+   char  *syu_Dcl;  // DC selection switches { + * - } [0:mu.L-1]
+   float *syu_Guns;  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
+   float *syu_Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm
+   double  *syu_B;  // Vector b of bulk chemical composition of the system, moles [0:mu.N-1]
+   
+//    MTPARM *tpp;
+   double *tpp_G; // Partial molar(molal) Gibbs energy g(TP) (always), J/mole 
+   float *tpp_S;    // Partial molar(molal) entropy s(TP), J/mole/K
+   float *tpp_Vm;   // Partial molar(molal) volume Vm(TP) (always), J/bar
+    
+//    SYSTEM *syu; // syu = TProfil::pm->syp;
+      MULTI *pmu; // pmu = TProfil::pm->pmp;
 
+      TNode* na;       // pointer to nodearray class instance
 
 protected:
 
-//    IPNCalc rpn[2];       // IPN of equats of process  -- Expr
+// For separate mode
 
+// memory allocation	
+	 void Alloc();
+	 void Free();
 
+	   
 //    void keyTest( const char *key );
 
     // internal my
@@ -395,39 +414,30 @@ protected:
 
 public:
 
+	// write/read unspace structure	   
+		 int Unspace_to_format_txt( const char *fname );
+		 int Unspace_from_format_txt( const char *fname );
+
+	
     static TUnSpace* pm;
 
     UNSPACE *usp;
 
-    TUnSpace( int nrt );
+    TUnSpace();
+    ~TUnSpace();
 
     const char* GetName() const
     {
         return "UnSpace";
     }
 
-//    void ods_link( int i=0);
-//    void dyn_set( int i=0);
-//    void dyn_kill( int i=0);
-//    void dyn_new( int i=0);
-//    void set_def( int i=0);
-//    bool check_input( const char *key, int level=1 );
 
-//    gstring   GetKeyofRecord( const char *oldKey, const char *strTitle,
-//                              int keyType );
 
 //    void RecInput( const char *key );
 //    void MakeQuery();
-    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
-//    void RecordPlot( const char *key );
-//    bool SaveGraphData( GraphData* graph );
-//    void CmHelp();
+//    int RecBuild( const char *key, int mode = VF_UNDEF );
+//    void RecCalc( const char *key );
 
-    //insert changes in profile  (must be in next version)
-//    void InsertChanges( TIArray<CompItem>& aIComp,
-//                        TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp );
-//    void newSizeifChange();
 
 };
 
@@ -471,5 +481,5 @@ typedef enum {
 
 
 
-#endif  // _m_unspace_h_
+#endif  // _ms_unspace_h_
 

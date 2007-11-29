@@ -13,36 +13,33 @@
 
 #include <time.h>
 #include <math.h>
+
 #include "ms_unspace.h"
+#include "io_arrays.h"
 
 
 
 
-TGEM2MT* TGEM2MT::pm;
+TUnSpace* TUnSpace::pm;
 
-TGEM2MT::TGEM2MT()
+TUnSpace::TUnSpace()
 {
-    mtp=&mt[0];
+    usp=&us[0];
 
     // default data
-    memset(mtp, 0, sizeof(GEM2MT) );
-    mtp->PvMO =   S_ON;
-    mtp->iStat =  AS_READY;
-
+    memset(usp, 0, sizeof(UNSPACE) );
+  
     na = 0;
-    pa = 0;
-}
+}  
 
-TGEM2MT::~TGEM2MT()
+TUnSpace::~TUnSpace()
 {
   Free();
   if( na )
    delete na;
-  if( pa )
-    delete pa;
 }
 
-outField TGEM2MT_static_fields[15] =  {
+outField TUnSpace_static_fields[15] =  {
  { "Mode", 1,0 },
  { "Size" , 1,0 },
  { "MaxSteps", 1,0 },
@@ -60,45 +57,30 @@ outField TGEM2MT_static_fields[15] =  {
  { "Dif_in", 1,0 }
  };
 
-outField TGEM2MT_dynamic_fields[3] =  {
+outField TUnSpace_dynamic_fields[3] =  {
  { "DiCp", 1, 0 },
  { "NPmean", 1, 0 },
  { "mGrid", 1, 0 }
  };
 
-// The mass transport start constant
-int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
+// The unspace start constant
+int TUnSpace::Unspace_to_format_txt( const char *unspace_in1 )
 {
-/*
-  mtp->PsMode = GMT_MODE_A;
-  mtp->nC = 101;    // number of nodes (default 1500)
-  mtp->ntM = 300;   // max number of time steps   10000
-
-  mtp->cLen = 1.;      // length in m
-  mtp->fVel = 1e-9;    // fluid velocity constant m/sec
-  mtp->tf = 1.;     // time step reduce factor
-  mtp->cdv = 1e-7;   // cutoff value for delta_T corrections for bulk compositions)
-  mtp->cez = 1e-12;   // minimal allowed amount of element (except charge) in bulk composition
-
-  mtp->Tau[START_] = 0.;
-  mtp->Tau[STOP_] = 0.;
-  mtp->Tau[STEP_] = 0.;
-*/
  // read GEM2MT structure from file
   fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {
-   fstream ff(gem2mt_in1, ios::in );
-   ErrorIf( !ff.good() , gem2mt_in1, "Fileopen error");
+   fstream ff(unspace_in1, ios::in );
+   ErrorIf( !ff.good() , unspace_in1, "Fileopen error");
 
 // static arrays
-   TReadArrays  rdar( 15, TGEM2MT_static_fields, ff);
+   TReadArrays  rdar( 15, TUnSpace_static_fields, ff);
    short nfild = rdar.findNext();
    while( nfild >=0 )
    {
      switch( nfild )
      {
-       case 0: rdar.readArray( "Mode", &mtp->PsMode, 1, 1);
+ /*      case 0: rdar.readArray( "Mode", &mtp->PsMode, 1, 1);
             break;
        case 1: rdar.readArray( "Size", &mtp->xC, 3);
             mtp->nC = mtp->xC*mtp->yC*mtp->zC;
@@ -129,19 +111,19 @@ int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
             break;
        case 14: rdar.readArray( "Dif_in", &mtp->Dif_in, 1);
             break;
-     }
+     */}
      nfild = rdar.findNext();
   }
 
    // testing read
-   if( mtp->PsMode != GMT_MODE_W && mtp->PsMode != GMT_MODE_V )
-   {
-      rdar.setNoAlws( 4 /*"Grid"*/);
-      rdar.setNoAlws( 5 /*"Types"*/);
-      rdar.setNoAlws( 6 /*"Props"*/);
-      rdar.setNoAlws( 7 /*"LSize"*/);
-      mtp->PvGrid = '-';
-   }
+//   if( mtp->PsMode != GMT_MODE_W && mtp->PsMode != GMT_MODE_V )
+//   {
+//      rdar.setNoAlws( 4 /*"Grid"*/);
+//      rdar.setNoAlws( 5 /*"Types"*/);
+//      rdar.setNoAlws( 6 /*"Props"*/);
+//      rdar.setNoAlws( 7 /*"LSize"*/);
+//      mtp->PvGrid = '-';
+//   }
    gstring ret = rdar.testRead();
    if( !ret.empty() )
    { ret += " - fields must be readed from TGEM2MT structure";
@@ -153,12 +135,12 @@ int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
  // read arrays
    int ii, jj, indx;
 
-   TReadArrays  rddar( 3, TGEM2MT_dynamic_fields, ff);
+   TReadArrays  rddar( 3, TUnSpace_dynamic_fields, ff);
   // Set up flags
-   if( mtp->PsMode != GMT_MODE_W && mtp->PsMode != GMT_MODE_V )
-      rddar.setNoAlws( 1 /*"NPmean"*/);
-   if( mtp->PvGrid == S_OFF )
-      rddar.setNoAlws( 2 /*"mGrid"*/);
+ //  if( mtp->PsMode != GMT_MODE_W && mtp->PsMode != GMT_MODE_V )
+ //     rddar.setNoAlws( 1 /*"NPmean"*/);
+ //  if( mtp->PvGrid == S_OFF )
+ //     rddar.setNoAlws( 2 /*"mGrid"*/);
 
    nfild = rddar.findNext();
    while( nfild >=0 )
@@ -169,7 +151,7 @@ int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
 //   %12s "Vt-m**3", %12s "vp-m/sec", %12s "porosity", %12s "Km-m**2",
 //   %12s "al-m", %12s "hDl-m**2/s", %12s "nto"
 // list #DiCp %5g index, %6g all #DiCp, %12.6g all #HydP
-       case 0:  rddar.skipSpace();
+/*       case 0:  rddar.skipSpace();
                for( ii=0; ii<mtp->nC; ii++ )
                {
                  ff >> indx >> mtp->DiCp[ii][0] >> mtp->DiCp[ii][1];
@@ -199,7 +181,7 @@ int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
              for( ii=0; ii<mtp->nPTypes; ii++ )
                ff >> mtp->grid[ii][0]  >> mtp->grid[ii][1] >> mtp->grid[ii][2];
           break;
-     }
+*/     }
      nfild = rddar.findNext();
    }
    ret = rddar.testRead();
@@ -217,9 +199,9 @@ int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
   return 1;
 }
 
-void TGEM2MT::Alloc()
+void TUnSpace::Alloc()
 {
-  mtp->DiCp = new short[mtp->nC][2];
+/*  mtp->DiCp = new short[mtp->nC][2];
   mtp->HydP = new double[mtp->nC][SIZE_HYDP];
   if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
   {
@@ -230,11 +212,11 @@ void TGEM2MT::Alloc()
     if( mtp->PvGrid != S_OFF )
       mtp->grid = new float[mtp->nC][3];
   }
-}
+*/}
 
-void TGEM2MT::Free()
+void TUnSpace::Free()
 {
-  if( mtp->DiCp  )
+/*  if( mtp->DiCp  )
     delete[] mtp->DiCp;
   if( mtp->HydP  )
      delete[] mtp->HydP;
@@ -248,58 +230,31 @@ void TGEM2MT::Free()
     delete[] mtp->ParTD;
   if( mtp->grid  )
     delete[] mtp->grid;
+*/    
 }
 
-// Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
-// Set up NodeArray and ParticleArray classes
-int TGEM2MT::MassTransInit( const char *chbr_in1 )
+//realloc dynamic memory for work arrays
+void TUnSpace::phase_lists_new()
 {
-  int ii;
-  // The NodeArray must be allocated here
-  TNodeArray::na = na = new TNodeArray( mtp->xC,mtp->yC,mtp->zC/*mtp->nC*/ );
 
- // Prepare the array for initial conditions allocation
-  int* nodeType = new int[mtp->nC];
-  for( ii =0; ii<mtp->nC; ii++ )
-         nodeType[ii] = mtp->DiCp[ii][0];
-
-  // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
-  if( na->GEM_init( chbr_in1, nodeType ) )
-        return 1;  // error reading files
-
-  // put HydP
-  DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
-  for( int jj=0; jj<mtp->nC; jj ++)
+// alloc memory for nPhA size
+/*
+if( usp->nPhA > 0 )
   {
-     C0[jj]->NodeTypeHY = mtp->DiCp[jj][1];
-     if( mtp->HydP )
-     { C0[jj]->Vt = mtp->HydP[jj][0];
-       C0[jj]->vp = mtp->HydP[jj][1];
-       C0[jj]->eps = mtp->HydP[jj][2];
-       C0[jj]->Km = mtp->HydP[jj][3];
-       C0[jj]->al = mtp->HydP[jj][4];
-       C0[jj]->Dif = mtp->HydP[jj][5];
-       C0[jj]->hDl = C0[jj]->al*C0[jj]->vp+C0[jj]->Dif;
-       C0[jj]->nto = mtp->HydP[jj][6];
-     }
+    usp->PhAndx = (short *)aObj[ o_unphndx].Alloc( usp->nPhA, usp->N, I_);
+    usp->PhNum = (short *)aObj[ o_unphnum].Alloc( usp->nPhA, 1 , I_ );
+    usp->PhAID = (char (*)[8])aObj[ o_unphaid].Alloc( usp->nPhA, 1, 8 );
+    usp->PhAlst = (char (*)[80])aObj[ o_unphalst].Alloc( usp->nPhA, 1, 80 );
+    usp->PhAfreq = (float *)aObj[ o_unafreg].Alloc( usp->nPhA, 1, F_ );
   }
-
- for ( ii=0; ii<mtp->nC; ii++)    // node iteration
-  {
-      na->CopyNodeFromTo( ii, mtp->nC, C0, na->pNodT1() );
-  }  // ii    end of node iteration loop
-
-
-  // use particles
-  if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
-  {
-   na->SetGrid( mtp->sizeLc, mtp->grid );   // set up grid structure
-   pa = new TParticleArray( mtp->nPTypes, mtp->nProps,
-         mtp->NPmean, mtp->ParTD, mtp->nPmin, mtp->nPmax, na );
+else
+  {  usp->PhAndx = (short *)aObj[ o_unphndx].Free();
+     usp->PhNum = (short *)aObj[ o_unphnum].Free();
+     usp->PhAID = (char (*)[8])aObj[ o_unphaid].Free();
+     usp->PhAlst = (char (*)[80])aObj[ o_unphalst].Free();
+     usp->PhAfreq = (float *)aObj[ o_unafreg].Free();
   }
-
-  delete[] nodeType;
-  return 0;
+*/
 }
 
 //---------------------------------------------------------------------------

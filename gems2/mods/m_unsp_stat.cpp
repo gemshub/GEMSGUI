@@ -26,12 +26,13 @@
 // Generation arrays part
 //=========================================================================
 
-#ifndef IPMGEMPLUGIN
 
 // make EqStat key  && calculate records
 void TUnSpace::unsp_eqkey()
 {
-    double calculation_time;
+#ifndef IPMGEMPLUGIN
+
+	double calculation_time;
     int NumPrecLoops = 0, NumIterFIA = 0, NumIterIPM = 0;
     vstr buf(40);
 
@@ -59,9 +60,10 @@ calculation_time = TProfil::pm->calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM 
     if( usp->stl )
        memcpy( usp->stl+usp->q, usp->stkey, EQ_RKLEN );
     
+#endif
+
 }
 
-#endif
 
 // building arrays for make pay off matrix
 void TUnSpace::buildTestedArrays()
@@ -128,9 +130,15 @@ void TUnSpace::buildTestedArrays()
      }*/
      for( i=0; i<pmu->L; i++)
      { int ii = (pmu->muj[i]);
+#ifndef IPMGEMPLUGIN
        double xx = (float)(syu->Guns[ii]);
-              xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
-              xx += TProfil::pm->tpp->G[ii];
+            xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
+            xx += TProfil::pm->tpp->G[ii];
+#else
+       double xx = (float)(syu_Guns[ii]);
+            xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
+            xx += tpp_G[ii];
+#endif
       usp->vG[Ip*usp->L+ii]= xx;
      }
 
@@ -155,18 +163,28 @@ void TUnSpace::buildTestedArrays()
     usp->vP[Ip]= pmu->Pc;
     usp->vV[Ip]= pmu->VXc;
   }
-  // added for copy of input data
+
+ // added for copy of input data
   if( usp->PsGen[1]== S_ON )
     for( i=0; i<usp->L; i++)
-      if( TProfil::pm->tpp->S )
-          usp->vS[i] = TProfil::pm->tpp->S[i];
-
+#ifndef IPMGEMPLUGIN
+        if( TProfil::pm->tpp->S )
+            usp->vS[i] = TProfil::pm->tpp->S[i];
+#else
+            if( tpp_S )
+                usp->vS[i] = tpp_S[i];
+#endif
 
   if( usp->PsGen[5]== S_ON )
     for( i=0; i<usp->L; i++)
     {
-      double xx = syu->Vuns[i];
-             xx += TProfil::pm->tpp->Vm[i];
+#ifndef IPMGEMPLUGIN
+        double xx = syu->Vuns[i];
+                xx += TProfil::pm->tpp->Vm[i];
+#else
+       double xx = syu_Vuns[i];
+               xx += tpp_Vm[i];
+#endif
       usp->vmV[Ip*usp->L+i]= xx;
     }
 
@@ -365,7 +383,11 @@ void  TUnSpace::NexT(int J )
       if(usp->PsGen[0]== S_ON && usp->NgLg[j]==i)
       {
         xx = 2*usp->IntLg[j][0]*R-usp->IntLg[j][0];
+#ifndef IPMGEMPLUGIN
         syu->Guns[j] = xx;
+#else
+        syu_Guns[j] = xx;
+#endif
       }
 /*      if(usp->PsGen[1]== S_ON&& usp->NgLs[j]==i)
       {  xx = usp->Ss[j][0] - usp->IntLs[j][0]+2*usp->IntLs[j][0]*R;
@@ -375,7 +397,11 @@ void  TUnSpace::NexT(int J )
       if(usp->PsGen[5]== S_ON&& usp->NgLv[j]==i)
       {
         xx = 2*usp->IntLv[j][0]*R-usp->IntLv[j][0];
+#ifndef IPMGEMPLUGIN
         syu->Vuns[j] = xx;
+#else
+        syu_Vuns[j] = xx;
+#endif
       }
     }
     if( usp->PsGen[2]== S_ON )
@@ -384,7 +410,11 @@ void  TUnSpace::NexT(int J )
         { xx = usp->Bs[j][0] - usp->IntNb[j][0] + 2*usp->IntNb[j][0]*R;
           if( xx < 0 )
             xx = 0.;
+#ifndef IPMGEMPLUGIN
           syu->B[j]= xx;
+#else
+          syu_B[j]= xx;
+#endif
         }
      }
      /*for( j=0; j<pmu->N; j++)
@@ -578,19 +608,29 @@ double TUnSpace::ePO( int i, int j )
 {
   double PM,/*rab,*/RG;
   int k,ii,z,GF=-1,WF=-1,i1,j1;
-
+  short Laq_;
+#ifndef IPMGEMPLUGIN
+  Laq_ = TProfil::pm->mup->Laq;
+#else
+  Laq_ = mup_Laq; 
+#endif
+  
   RG = R_CONSTANT;
   if(usp->PvSi == S_ON)
     { j1=j; i1=i;}
   else
     { j1=i; i1=j;}
 
-
-  if( TProfil::pm->mup->Laq )
+  if( Laq_ )
      WF=0;
 
+#ifndef IPMGEMPLUGIN
   if( TProfil::pm->mup->Pg )
-  { if(!TProfil::pm->mup->Laq)
+#else
+  if( mup_Pg )
+#endif
+  { 
+     if( Laq_ )
          GF=0;
     else GF=1;
    }
@@ -598,20 +638,25 @@ double TUnSpace::ePO( int i, int j )
    ii=0;
    for( z=0; z<usp->Fi; z++)
    {
-     for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++)
-      if (syu->Dcl[k]!=S_OFF )
+#ifndef IPMGEMPLUGIN
+    for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++)
+       if (syu->Dcl[k]!=S_OFF )
+#else
+     for( k=ii; k<ii+(mup_Ll[z]); k++)
+         if (syu_Dcl[k]!=S_OFF )
+#endif
        { if( z==WF )
-         { if( k < (TProfil::pm->mup->Laq-1) &&
+         { if( k < ( Laq_-1) &&
                usp->vYF[i*usp->Fi] >1e-19 &&
-               usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1] >1e-19 &&
+               usp->vY[i*usp->L+( Laq_ )-1] >1e-19 &&
                usp->vY[i*usp->L+ k ] >1e-19 )
 
-             PM += (usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log(55.51) - usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1]/
-                    usp->vYF[i*usp->Fi] + log(usp->vY[i*usp->L+k]) - log(usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1]) +
+             PM += (usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log(55.51) - usp->vY[i*usp->L+(Laq_)-1]/
+                    usp->vYF[i*usp->Fi] + log(usp->vY[i*usp->L+k]) - log(usp->vY[i*usp->L+(Laq_)-1]) +
                     1. + usp->vGam[i*usp->L+k]) * usp->vY[i*usp->L+k];
 
-           if( k == (TProfil::pm->mup->Laq-1) &&
-               usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)] > 1e-19 &&
+           if( k == (Laq_-1) &&
+               usp->vY[i*usp->L+(Laq_-1)] > 1e-19 &&
                usp->vYF[i*usp->Fi+z] > 1e-19 )
 
               PM += (usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log( usp->vY[i*usp->L+k] ) - log( usp->vYF[i*usp->Fi+z] ) -
@@ -633,7 +678,11 @@ double TUnSpace::ePO( int i, int j )
            PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15)) + log(usp->vY[i*usp->L+k])
                    - log(usp->vYF[i*usp->Fi+z])  + usp->vGam[i*usp->L+k] ) * (usp->vY[i*usp->L+k] );
        }
-      ii += TProfil::pm->mup->Ll[z];
+#ifndef IPMGEMPLUGIN
+    ii += TProfil::pm->mup->Ll[z];
+#else
+    ii += mup_Ll[z];
+#endif
      }
 
 //     for( z=0; z<usp->N; z++) // 16/02/2007
@@ -650,17 +699,27 @@ double TUnSpace::ePO1( int i,int j )
 {
   double PM/*,rab*/,RG;
   int k,ii,z,GF=-1,WF=-1,i1,j1;
+  short Laq_;
+#ifndef IPMGEMPLUGIN
+  Laq_ = TProfil::pm->mup->Laq;
+#else
+  Laq_ = mup_Laq; 
+#endif
 
   RG = R_CONSTANT;
   if(usp->PvSi == S_ON)
     { j1=j; i1=i;}
   else
     { j1=i; i1=j;}
-  if( TProfil::pm->mup->Laq )
+  if( Laq_ )
      WF=0;
 
+#ifndef IPMGEMPLUGIN
   if( TProfil::pm->mup->Pg )
-  { if(!TProfil::pm->mup->Laq)
+#else
+  if( mup_Pg )
+#endif
+  { if(!Laq_)
          GF=0;
     else GF=1;
    }
@@ -669,21 +728,26 @@ double TUnSpace::ePO1( int i,int j )
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
-   for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++ )
-    if (syu->Dcl[k]!=S_OFF )
+#ifndef IPMGEMPLUGIN
+    for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++)
+       if (syu->Dcl[k]!=S_OFF )
+#else
+     for( k=ii; k<ii+(mup_Ll[z]); k++)
+         if (syu_Dcl[k]!=S_OFF )
+#endif
     {
       if( z==WF )
       {
-         if( k < (TProfil::pm->mup->Laq-1) &&
+         if( k < (Laq_-1) &&
                usp->vYF[i*usp->Fi] >1e-19 &&
-               usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1] >1e-19 &&
+               usp->vY[i*usp->L+(Laq_)-1] >1e-19 &&
                usp->vY[i*usp->L+ k ] >1e-19  )
 
-             PM += usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log(55.51) - usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)]/
-                    usp->vYF[i*usp->Fi] + log(usp->vY[i*usp->L+k]) - log(usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)]) +
+             PM += usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log(55.51) - usp->vY[i*usp->L+(Laq_-1)]/
+                    usp->vYF[i*usp->Fi] + log(usp->vY[i*usp->L+k]) - log(usp->vY[i*usp->L+(Laq_-1)]) +
                    1. + usp->vGam[i*usp->L+k];
 
-           if( k == (TProfil::pm->mup->Laq-1) && usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)] > 1e-19 &&
+           if( k == (Laq_-1) && usp->vY[i*usp->L+(Laq_-1)] > 1e-19 &&
                usp->vYF[i*usp->Fi+z] > 1e-19 )
 
               PM += usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log( usp->vY[i*usp->L+k] ) - log( usp->vYF[i*usp->Fi+z] ) -
@@ -703,12 +767,20 @@ double TUnSpace::ePO1( int i,int j )
            PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15)) + log(usp->vY[i*usp->L+k])
                    - log(usp->vYF[i*usp->Fi+z]) + usp->vGam[i*usp->L+k] );
         }
-      ii += TProfil::pm->mup->Ll[z];
+#ifndef IPMGEMPLUGIN
+    ii += TProfil::pm->mup->Ll[z];
+#else
+    ii += mup_Ll[z];
+#endif
      }
 
      double R=0.;
      for( k=0; k< usp->L; k++)
-      if (syu->Dcl[k]!=S_OFF && usp->vY[i1*usp->L+k] > 1e-19 )
+#ifndef IPMGEMPLUGIN
+         if (syu->Dcl[k]!=S_OFF && usp->vY[i1*usp->L+k] > 1e-19 )
+#else
+         if (syu_Dcl[k]!=S_OFF && usp->vY[i1*usp->L+k] > 1e-19 )
+#endif
         for( z=0; z<usp->N; z++)
            R += usp->A[k*usp->N+z]* (usp->vU[i1*usp->N+z]);
 
@@ -720,17 +792,28 @@ double TUnSpace::ePO2( int i,int j )
 {
   double PM,R,RG;
   int k,ii,z,GF=-1,WF=-1,i1,j1;
-
+  short Laq_;
+#ifndef IPMGEMPLUGIN
+  Laq_ = TProfil::pm->mup->Laq;
+#else
+  Laq_ = mup_Laq; 
+#endif
+  
+  
   RG = R_CONSTANT;
   if(usp->PvSi == S_ON)
     { j1=j; i1=i;}
   else
     { j1=i; i1=j;}
-  if( TProfil::pm->mup->Laq )
+  if( Laq_ )
      WF=0;
 
+#ifndef IPMGEMPLUGIN
   if( TProfil::pm->mup->Pg )
-  { if(!TProfil::pm->mup->Laq)
+#else
+  if( mup_Pg )
+#endif
+  { if(!Laq_)
          GF=0;
     else GF=1;
    }
@@ -739,21 +822,26 @@ double TUnSpace::ePO2( int i,int j )
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
-    for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++ )
-     if (syu->Dcl[k]!=S_OFF )
+#ifndef IPMGEMPLUGIN
+    for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++)
+       if (syu->Dcl[k]!=S_OFF )
+#else
+     for( k=ii; k<ii+(mup_Ll[z]); k++)
+         if (syu_Dcl[k]!=S_OFF )
+#endif
     {
       if( z==WF )
       {
-         if( k < (TProfil::pm->mup->Laq-1) &&
+         if( k < (Laq_-1) &&
                usp->vYF[i*usp->Fi] >1e-19 &&
-               usp->vY[i*usp->L+(TProfil::pm->mup->Laq)-1] >1e-19 &&
+               usp->vY[i*usp->L+(Laq_)-1] >1e-19 &&
                usp->vY[i*usp->L+ k ] >1e-19 )
            PM += usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log(55.51) -
-             usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)]/usp->vYF[i*usp->Fi] +
-             log(usp->vY[i*usp->L+k]) - log(usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)]) +
+             usp->vY[i*usp->L+(Laq_-1)]/usp->vYF[i*usp->Fi] +
+             log(usp->vY[i*usp->L+k]) - log(usp->vY[i*usp->L+(Laq_-1)]) +
              1. + usp->vGam[i*usp->L+k];
-          if( k == (TProfil::pm->mup->Laq-1) &&
-               usp->vY[i*usp->L+(TProfil::pm->mup->Laq-1)] > 1e-19 &&
+          if( k == (Laq_-1) &&
+               usp->vY[i*usp->L+(Laq_-1)] > 1e-19 &&
                usp->vYF[i*usp->Fi+z] > 1e-19 )
             PM += usp->vG[j1*usp->L+k]/(RG*(usp->vT[j1]+273.15)) + log( usp->vY[i*usp->L+k] ) -
               log( usp->vYF[i*usp->Fi+z] ) - ( usp->vY[i*usp->L+k] / usp->vYF[i*usp->Fi+z]) -
@@ -773,26 +861,35 @@ double TUnSpace::ePO2( int i,int j )
           PM += ( usp->vG[j1*usp->L+k] / (RG*(usp->vT[j1]+273.15))+ log(usp->vY[i*usp->L+k])
                    - log(usp->vYF[i*usp->Fi+z]) + usp->vGam[i*usp->L+k] );
       }
-      ii += TProfil::pm->mup->Ll[z];
+#ifndef IPMGEMPLUGIN
+    ii += TProfil::pm->mup->Ll[z];
+#else
+    ii += mup_Ll[z];
+#endif
      }
   ii=0;
   for( z=0; z<usp->Fi; z++)
   {
-    for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++ )
-     if (syu->Dcl[k]!=S_OFF )
+#ifndef IPMGEMPLUGIN
+    for( k=ii; k<ii+(TProfil::pm->mup->Ll[z]); k++)
+       if (syu->Dcl[k]!=S_OFF )
+#else
+     for( k=ii; k<ii+(mup_Ll[z]); k++)
+         if (syu_Dcl[k]!=S_OFF )
+#endif
     {
       if( z==WF )
       {
-         if( k < (TProfil::pm->mup->Laq-1) &&
+         if( k < (Laq_-1) &&
                usp->vYF[j*usp->Fi] >1e-19 &&
-               usp->vY[j*usp->L+(TProfil::pm->mup->Laq)-1] >1e-19 &&
+               usp->vY[j*usp->L+(Laq_)-1] >1e-19 &&
                usp->vY[j*usp->L+ k ] >1e-19 )
            R += usp->vG[i1*usp->L+k]/(RG*(usp->vT[i1]+273.15)) + log(55.51) -
-             usp->vY[j*usp->L+(TProfil::pm->mup->Laq-1)]/usp->vYF[j*usp->Fi] +
-             log(usp->vY[j*usp->L+k]) - log(usp->vY[j*usp->L+(TProfil::pm->mup->Laq-1)]) +
+             usp->vY[j*usp->L+(Laq_-1)]/usp->vYF[j*usp->Fi] +
+             log(usp->vY[j*usp->L+k]) - log(usp->vY[j*usp->L+(Laq_-1)]) +
              1. + usp->vGam[j*usp->L+k];
-          if( k == (TProfil::pm->mup->Laq-1) &&
-               usp->vY[j*usp->L+(TProfil::pm->mup->Laq-1)] > 1e-19 &&
+          if( k == (Laq_-1) &&
+               usp->vY[j*usp->L+(Laq_-1)] > 1e-19 &&
                usp->vYF[j*usp->Fi+z] > 1e-19 )
             R += usp->vG[i1*usp->L+k]/(RG*(usp->vT[i1]+273.15)) + log( usp->vY[j*usp->L+k] ) -
               log( usp->vYF[j*usp->Fi+z] ) - ( usp->vY[j*usp->L+k] / usp->vYF[j*usp->Fi+z]) -
@@ -812,7 +909,11 @@ double TUnSpace::ePO2( int i,int j )
           R += ( usp->vG[i1*usp->L+k] / (RG*(usp->vT[i1]+273.15))+ log(usp->vY[j*usp->L+k])
                    - log(usp->vYF[j*usp->Fi+z]) + usp->vGam[j*usp->L+k] );
       }
-      ii += TProfil::pm->mup->Ll[z];
+#ifndef IPMGEMPLUGIN
+    ii += TProfil::pm->mup->Ll[z];
+#else
+    ii += mup_Ll[z];
+#endif
      }
   PM-=R;
   return(PM);
@@ -891,9 +992,12 @@ void TUnSpace::Un_criteria()
 
    for( t=0; t<usp->Q; t++ )
    {
+#ifndef IPMGEMPLUGIN
    pVisor->Message( window(), GetName(),
              "Generation of pay off matrix\n"
                  "Please, wait...", t, usp->Q);
+#endif
+  
 
 
     for( q=0; q<usp->Q; q++ )
@@ -915,8 +1019,10 @@ void TUnSpace::Un_criteria()
             if( usp->PvPOM == S_ON )
             {
              usp->pmr = usp->POM + t*usp->Q ;
+#ifndef IPMGEMPLUGIN
              aObj[ o_unpmr].SetPtr( usp->pmr );
              usp->POM[ t*usp->Q+q ] = R;
+#endif
             }
             if( usp->PvPOR == S_ON )
              usp->POR[ q ] = R;
@@ -1104,8 +1210,13 @@ for(np=0; np<usp->nPhA; np++ )
           {
             usp->PhAndx[np*usp->N+numPH ] = (short)k;
             numPH++;
+#ifndef IPMGEMPLUGIN
             lst += gstring(
                TProfil::pm->mup->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
+#else
+            lst += gstring(
+               mup_SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
+#endif
             lst.strip();
             lst += ";";
           }

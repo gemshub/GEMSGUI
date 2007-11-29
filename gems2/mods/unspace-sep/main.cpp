@@ -14,7 +14,7 @@
 #include <time.h>
 #include <math.h>
 #include "io_arrays.h"
-#include "ms_gem2mt.h"
+#include "ms_unspace.h"
 #include "gstring.h"
 
 istream&
@@ -31,8 +31,7 @@ f_getline(istream& is, gstring& str, char delim);
 int main( int argc, char* argv[] )
  {
      int       RetC = 0;
-     gstring gem2mt_in1 = "gem2mt_init.txt";
-     //gstring multu_in1 = "MgWBoundC.ipm";
+     gstring unspace_in1 = "unspace_init.txt";
      gstring chbr_in1 = "ipmfiles-dat.lst";
 
 // from argv
@@ -41,7 +40,7 @@ int main( int argc, char* argv[] )
       if (argc >= 2 )
        chbr_in1 = argv[1];
       if (argc >= 3 )
-        gem2mt_in1 = argv[2];
+    	  unspace_in1 = argv[2];
 
    try{
 /*

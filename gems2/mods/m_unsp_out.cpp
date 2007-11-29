@@ -30,7 +30,11 @@ void TUnSpace::out_QT( int Ngr  )
 // UiDC
 
   ii = usp->N;
+#ifndef IPMGEMPLUGIN
   if( TProfil::pm->mup->Laq )
+#else
+  if(mup_Laq )
+#endif
       ii--;
 
   for( l=0; l<ii ; l++ )
@@ -447,8 +451,13 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
             for( int jj=0; jj<pmu->L; jj++)
              if( pmu->muj[jj] == j )
              {
-               pmu->GEX[jj] = (usp->Gs[j][0]-
-                float(TProfil::pm->tpp->G[j]))/pmu->RT;
+#ifndef IPMGEMPLUGIN
+                 pmu->GEX[jj] = (usp->Gs[j][0]-
+                  float(TProfil::pm->tpp->G[j]))/pmu->RT;
+#else
+                  pmu->GEX[jj] = (usp->Gs[j][0]-
+                   float(tpp_G[j]))/pmu->RT;
+#endif
                break;
              }
             return;
