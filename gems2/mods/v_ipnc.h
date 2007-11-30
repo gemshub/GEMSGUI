@@ -97,7 +97,7 @@ protected:
     {
         return(isdigit(c)||c=='.');
     }
-    int INDEX( const char *s, char ch );
+    int INDEX( char *s, char ch );
     int SPRTY( char c );
     void InDigit();
     void IsAscii();

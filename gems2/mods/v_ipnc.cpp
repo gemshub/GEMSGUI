@@ -24,7 +24,7 @@
 #include "v_object.h"
 
 const char* DIGIT="0123456789.";
-const char* OPER="!^*/+-<a>b=c&|()";
+char* OPER="!^*/+-<a>b=c&|()";
 const char* RAZD=" +-*/^:[]();=$&|!<>?#";
 const int FuncNumber=28; // number of functions
 
@@ -139,7 +139,7 @@ char *IPNCalc::xblanc( char *cur )
     else return 0;
 }
 
-int IPNCalc::INDEX( const char *s, char ch )
+int IPNCalc::INDEX( char *s, char ch )
 {
     if( s == 0 )
         return -1;
