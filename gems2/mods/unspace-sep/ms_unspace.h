@@ -52,13 +52,13 @@ typedef struct
     //  the same record key as in Proces
     name[MAXFORMULA],      // Full name of UnSpace task
     notes[MAXFORMULA],     // Comments
-/*?*/    xNames[MAXAXISNAME], // Abscissa name
-/*?*/    yNames[MAXAXISNAME], // Ordinate name
+//////*?*/    xNames[MAXAXISNAME], // Abscissa name
+//////*?*/    yNames[MAXAXISNAME], // Ordinate name
 
-    PunE,          // Units of energy   { j;  J c C N reserved }
-    PunV,          // Units of volume   { j;  c L a reserved }
-    PunP,          //  Units of pressure  { b;  B p P A reserved }
-    PunT,          // Units of temperature  { C; K F reserved }
+/////    PunE,          // Units of energy   { j;  J c C N reserved }
+/////   PunV,          // Units of volume   { j;  c L a reserved }
+/////   PunP,          //  Units of pressure  { b;  B p P A reserved }
+/////    PunT,          // Units of temperature  { C; K F reserved }
 
 //  Status and control flags (+-)
     Gstat,   // UnSpace generation status: 0 -indefinite; 1 on-going generation run;
@@ -67,14 +67,14 @@ typedef struct
              //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
 
 // Flags that control construction and sampling of UnSpace
-    PsUnInt,  //  ( % 0 A 1 ) scale of uncertainty intervals for G S V: % or 0 - in %; A or 1- absolute
-    PsUnInB,  //  ( % A L) scale for uncertainty intervals for B (% or 0 - in %; A or 1 - abs; L or 2 - log10)
-    PsUnFltI, // ( A L ) scale for IC molality interval filters (A absolute, L log scale)
-    PsUnFltD, // ( A L C) scale for DC activity/fugacity interval filters (A absolute, L log scale C mol fraction)
+/////    PsUnInt,  //  ( % 0 A 1 ) scale of uncertainty intervals for G S V: % or 0 - in %; A or 1- absolute
+/////    PsUnInB,  //  ( % A L) scale for uncertainty intervals for B (% or 0 - in %; A or 1 - abs; L or 2 - log10)
+/////    PsUnFltI, // ( A L ) scale for IC molality interval filters (A absolute, L log scale)
+/////    PsUnFltD, // ( A L C) scale for DC activity/fugacity interval filters (A absolute, L log scale C mol fraction)
     PsGen[7], // (+ 1 on; - 0 off ) int zond[6]; probe type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam
-    PsSY,     // Save generated SysEq records to data base (+ -)
-    PsEqn,    // Will math script be specified in this UnSpace definition (+ -)
-    PsGraph,    // Will graphics be specified in this UnSpace definition (+ -)
+/////    PsSY,     // Save generated SysEq records to data base (+ -)
+/////    PsEqn,    // Will math script be specified in this UnSpace definition (+ -)
+/////    PsGraph,    // Will graphics be specified in this UnSpace definition (+ -)
 
 // Plags that control input of criteria and analysis of sampled results
     Pa_f_pha,   //  (+ -)   flag of input for the filter on phase association
@@ -92,10 +92,10 @@ typedef struct
 // Allocation flags
     PvPOM,     //  (+ -) allocation flag for payoff matrix (if Q <= 1001)    + - + -
     PvPOR,     //  (+ -) allocation flag for payoff matrix row (if Q > 1001) + + - -
-    PvGs,      //  (+ -) allocation flag for G0-related vectors
-    PvSs,      //  (+ -) allocation flag for S0-related vectors
-    PvVs,      //  (+ -) allocation flag for V0-related vectors
-    PvPgam,    //  (+ -) allocation flag for ParGamma-related vectors (reserved)
+/////    PvGs,      //  (+ -) allocation flag for G0-related vectors
+/////    PvSs,      //  (+ -) allocation flag for S0-related vectors
+/////    PvVs,      //  (+ -) allocation flag for V0-related vectors
+/////    PvPgam,    //  (+ -) allocation flag for ParGamma-related vectors (reserved)
     PvSi,      //  (+ -) flag of mode of calculation of chemical potentials in payoff function
     Pa_f_IC;    //  (+ -)   flag of input for the filter on Independent Components
 
@@ -107,7 +107,7 @@ typedef struct
     Ls,        //   Total number of DC in multi-comp.phases (from mup->Ls)
     Fi,        //   Number of phases                   (from mup->Fi)
     nPG,       //   Total number of uncertain input parameters (for all unspace groups)
-    Nsd,       //   N of data source references (default 0)
+/////    Nsd,       //   N of data source references (default 0)
 // input I
     Q,     //  0 < Q < 1001 input number of sample GEM calculations to be generated
     qQ,    //  number of points in quantile
@@ -137,12 +137,12 @@ typedef struct
     i,     // current index of independent component (<N)
     j,     // current index of dependent component  (<L)
     k,     // current index of phase ( 0 to Fi-1)  (<Fi)
-    ka,    // current index of phase assemblage  (<nPhA)
+    ka;    // current index of phase assemblage  (<nPhA)
 
-/*?*/    dimEF[2],    // Dimensions of array of empirical data
-/*?*/    dimXY[2],    // Dimensions of data sampler tables: col.1 - N of records;
+//////*?*/    dimEF[2],    // Dimensions of array of empirical data
+//////*?*/    dimXY[2],    // Dimensions of data sampler tables: col.1 - N of records;
 
-/*?*/    axisType[6];  // axis graph type, background(3), graph type, reserved
+//////*?*/    axisType[6];  // axis graph type, background(3), graph type, reserved
 
 // input
 float
@@ -163,8 +163,8 @@ float
     IC_lo,   // Ionic strength lower limit (default 0)
     IC_up,   // Ionic strength lower limit (default 3)
 // Quantile level (size)
-    quan_lev, // quantile level (default 0.05)
-/*?*/  size[2][4]; // Graph axis scale for region and fragment
+    quan_lev; // quantile level (default 0.05)
+//////*?*/  size[2][4]; // Graph axis scale for region and fragment
 
 // calculated
 double
@@ -219,11 +219,11 @@ double
    *vMol,   //   [Q][N]  m_t values of total IC molality from sample GEM solution variants (indexes t i)
                // for filtering/statistics
    *vU,     //   [Q][N]  u values of dual chemical potentials from sample GEM solution variants (indexes t i)
-   *vFug,   //   [Q][Ls] lga values of log10 fugacity/activity from sample GEM solution variants (indexes t j)
-/*?*/   *x0,   // Vector of abscissa dimXY[1]
-/*?*/   *y0;  // Sampled data array [Q] [dimXY[1]]
+   *vFug;   //   [Q][Ls] lga values of log10 fugacity/activity from sample GEM solution variants (indexes t j)
+//////*?*/   *x0,   // Vector of abscissa dimXY[1]
+//////*?*/   *y0;  // Sampled data array [Q] [dimXY[1]]
 float
-/*?*/   *xE, *yE,         // Input scale data xS , yS
+//////*?*/   *xE, *yE,         // Input scale data xS , yS
    *vT,     //   [Q]   TC vector of temperatures (C) from sample input data variants (index q)
    *vP,     //   [Q]   P vector of pressures (bar) from sample input data variants (index q)
 /*?*/   *vV,     //   [Q]   value of V (in cm3? L?) (index q)
@@ -238,17 +238,6 @@ float
 short
 /*?*/  (*quanCx)[4]; // [qQ][4] Values taken into quantile Laplace,
                      // Hurtvitz, Wald, Homenyuk (columns )
-/*char
-   *mq_Lap,  //   [Q]   (+ -) marks of sample GEM variants taken into quantile Laplace criterion
-   *mq_Hom,  //   [Q]   (+ -) marks of sample GEM variants taken into quantile Homenyuk criterion
-   *mf_pha,  //   [Q]   (+ -) marks of sample GEM variants that went trough phase filter
-   *mf_mol,  //   [Q]   (+ -) marks of sample GEM variants that went trough molality filter
-   *mf_fug,  //   [Q]   (+ -) marks of sample GEM variants that went trough activity filter
-   *mf_mfr,  //   [Q]   (+ -) marks of sample GEM variants that went trough mole fraction filter
-   *mf_pH,   //   [Q]   (+ -) marks of sample GEM variants that went trough pH filter
-   *mf_Eh,   //   [Q]   (+ -) marks of sample GEM variants that went trough Eh filter
-   *mf_All;   //  [Q]   (+ -) marks of sample GEM variants that went trough superposition of all filters
-*/
 // Work arrays
 short
    *PhAndx,  //  [Q][N] -> [nPhA][N]  Table of system indices of phases to identify Phase Assemblages
@@ -282,20 +271,20 @@ double
 
  char  (*PhAID)[8];   // [nPhA] list of phase assemblage ID names (def. 0001 0002 ... )
  char  (*PhAlst)[80]; // [nPhA] list of phase assemblage titles (made of Phase names)
- char
-    *Expr,     // Text with math script equations (params for activity coeffs ??? reserved )
-/*?*/    *ExprGraph, // Text with math script equations (params for activity coeffs ??? reserved )
-    stkey[EQ_RKLEN+10],  //  currently loaded (processed) SysEq key
-    timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16],
-    *tprn;               //  internal
+///// char
+/////    *Expr,     // Text with math script equations (params for activity coeffs ??? reserved )
+//////*?*/    *ExprGraph, // Text with math script equations (params for activity coeffs ??? reserved )
+/////    stkey[EQ_RKLEN+10],  //  currently loaded (processed) SysEq key
+/////    timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16],
+/////    *tprn;               //  internal
 
-/*?*/ char (*lNam)[MAXGRNAME];   // List of ID of lines on Graph
+//////*?*/ char (*lNam)[MAXGRNAME];   // List of ID of lines on Graph
 /*?*/ char (*ParNames)[PARNAME_SIZE];   // [nPG]  List of insertain input parameters names
 
     char (*SGp)[MAXPHNAME];    // List of UnSpace group names [kG]
-    char (*stl)[EQ_RKLEN];     // List of generated SysEq records [Q]
-    char (*sdref)[V_SD_RKLEN]; // List of SDref keys to data sources [Nsd]
-    char (*sdval)[V_SD_VALEN]; // Comments to data sources [Nsd]
+/////    char (*stl)[EQ_RKLEN];     // List of generated SysEq records [Q]
+/////    char (*sdref)[V_SD_RKLEN]; // List of SDref keys to data sources [Nsd]
+/////    char (*sdval)[V_SD_VALEN]; // Comments to data sources [Nsd]
 
     // work data
 float

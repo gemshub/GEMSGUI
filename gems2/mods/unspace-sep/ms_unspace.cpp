@@ -199,62 +199,307 @@ int TUnSpace::Unspace_to_format_txt( const char *unspace_in1 )
   return 1;
 }
 
+//realloc dynamic memory for work arrays (do not reading)
+void TUnSpace::phase_lists_new()
+{
+// alloc memory for nPhA size
+if( usp->nPhA > 0 )
+  {
+    usp->PhAndx = new short[usp->nPhA*usp->N];
+    usp->PhNum = new short[usp->nPhA];
+    usp->PhAID = new char[usp->nPhA][8];
+    usp->PhAlst = new char[usp->nPhA][80];
+    usp->PhAfreq = new float[ usp->nPhA];
+  }
+}
+
+//realloc dynamic memory for work arrays (do not reading)
+void TUnSpace::work_dyn_new()
+{
+//  work (not in record)
+    usp->A = new float[ usp->L* usp->N];
+    usp->sv = new short[ usp->Q];
+
+    usp->Zcp = new double[ usp->Q];
+    usp->Zmin = new double[ usp->Q];
+    usp->Zmax = new double[ usp->Q];
+    usp->ZmaxAbs = new double[ usp->Q];
+    usp->Hom = new double[ usp->Q];
+    usp->Prob = new double[ usp->Q];
+
+    usp->pmr = 0;
+    if( usp->PvPOR == S_ON )
+    {  usp->POR = new float[ usp->Q];
+       usp->pmr = usp->POR;
+    }
+    
+    if( usp->PvPOM == S_ON )
+    {
+      usp->POM = new float[ usp->Q*usp->Q]; 
+      usp->pmr = usp->POM;
+    }
+
+  usp->UnIC = new double[usp->N][UNSP_SIZE1];
+  usp->UgDC = new double[usp->nPG][UNSP_SIZE1];
+  usp->UaDC = new double[usp->Ls][UNSP_SIZE1];
+  usp->UnDCA = new double[usp->nPG][UNSP_SIZE2];
+}
+
+//realloc dynamic memory for work arrays (reading)
+void TUnSpace::nG_dyn_new()
+{
+	usp->nG = usp->nGB +usp->nGR+usp->nGN; 	
+  if(usp->nG)
+  {
+    usp->PbD =  new short[ usp->nG];
+    usp->SGp =  new char[ usp->nG][MAXPHNAME];
+    usp->ncp =  new float [ usp->Q* usp->nG];
+  }
+  if(usp->nGB)
+    usp->OVB = new float[ usp->nGB+1 ];
+  if(usp->nGR)
+    usp->OVR = new float[ usp->nGR+1];
+  if(usp->nGN)
+    usp->OVN = new float[ usp->nGN+1];
+
+  if( usp->nPG )
+    usp->ParNames = new char[usp->nPG][PARNAME_SIZE];
+}
+
+// realloc dynamic memory
 void TUnSpace::Alloc()
 {
-/*  mtp->DiCp = new short[mtp->nC][2];
-  mtp->HydP = new double[mtp->nC][SIZE_HYDP];
-  if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+
+    usp->UnICn = new char[UNSP_SIZE1][NAME_SIZE];
+    usp->UgDCn = new char[UNSP_SIZE1][NAME_SIZE];
+    usp->UaDCn = new char[UNSP_SIZE1][NAME_SIZE];
+    usp->UnDCAn = new char[UNSP_SIZE2][NAME_SIZE];
+  // allocation memory for arrays
+
+  if(usp->PsGen[0] == S_ON )
   {
-    mtp->NPmean = new short[ mtp->nPTypes ];
-    mtp->nPmin =  new short[ mtp->nPTypes ];
-    mtp->nPmax =  new short[ mtp->nPTypes ];
-    mtp->ParTD = new short[ mtp->nPTypes][6];
-    if( mtp->PvGrid != S_OFF )
-      mtp->grid = new float[mtp->nC][3];
+    usp->Gs = new float[usp->L][2];
+    usp->NgLg = new short[usp->L];
+    usp->IntLg = new float[usp->L][2];
+    
+    // do not read 
+    usp->vG = new double[ usp->Q* usp->L];
+    usp->vY = new double[ usp->Q* usp->L];
+    usp->vYF = new double[ usp->Q* usp->Fi];
+    usp->vGam = new double[ usp->Q* usp->L];
+    usp->vMol = new double[ usp->Q* usp->N];
+    usp->vU = new double[ usp->Q* usp->N];
+    usp->vpH = new float[usp->Q][3];
+    usp->vT = new float[usp->Q];
+    usp->vP = new float[usp->Q];
+    usp->vV = new float[usp->Q];
+
+    usp->qQ = (short)(usp->quan_lev*usp->Q);
+    if(usp->qQ<1)
+        usp->qQ=1;
+    usp->quanCx = new short[usp->Q][4];
+    usp->quanCv = new float[usp->Q][4];
   }
-*/}
+
+  if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+  {
+    usp->m_t_lo = new float[ usp->N];
+    usp->m_t_up = new float[ usp->N];
+  }
+
+  // do not read 
+  if( usp->PsGen[0] == S_ON  && usp->Ls )
+       usp->vFug = new double[ usp->Q* usp->Ls];
+
+  if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+  {
+    usp->fug_lo = new float[ usp->Ls];
+    usp->fug_up = new float[ usp->Ls];
+  }
+
+  if(usp->PsGen[1]== S_ON)
+  {
+    usp->Ss = new float[usp->L][2];
+    usp->NgLs = new short[usp->L];
+    usp->IntLs = new float[usp->L][2];
+    usp->vS = new double[ usp->Q* usp->L]; // do not read
+  }
+  
+  if(usp->PsGen[5]== S_ON)
+  {
+    usp->Vs = new float[usp->L][2];
+    usp->NgLv = new short[usp->L];
+    usp->IntLv = new float[usp->L][2];
+    usp->vmV = new double[ usp->Q* usp->L]; // do not read
+  }
+
+  if(usp->PsGen[2]== S_ON)
+  {
+    usp->NgNb = new short[usp->N];
+    usp->IntNb = new float[usp->N][2];
+    usp->Bs = new double[usp->N][2];
+    usp->vB = new double[ usp->Q* usp->N];  // do not read
+  } 
+
+  if(usp->PsGen[6]== S_ON && usp->Ls )   
+  {
+    usp->NgGam = new short[usp->Ls];
+    usp->IntGam = new float[usp->Ls][2];
+    usp->GAMs = new float[usp->Ls][2];
+    usp->vNidP = new double[ usp->Q* usp->Ls]; // do not read
+  } 
+  
+  if(/*usp->PsGen[0??] == S_ON  &&*/ usp->Pa_f_pha == S_ON)
+    usp->f_PhA = new short[ usp->N ];
+
+   nG_dyn_new();               
+   work_dyn_new();
+   phase_lists_new();
+}
 
 void TUnSpace::Free()
 {
-/*  if( mtp->DiCp  )
-    delete[] mtp->DiCp;
-  if( mtp->HydP  )
-     delete[] mtp->HydP;
-  if( mtp->NPmean  )
-    delete[] mtp->NPmean;
-  if( mtp->nPmin  )
-    delete[] mtp->nPmin;
-  if( mtp->nPmax  )
-    delete[] mtp->nPmax;
-  if( mtp->ParTD  )
-    delete[] mtp->ParTD;
-  if( mtp->grid  )
-    delete[] mtp->grid;
-*/    
-}
+  if( usp->PhAndx  )
+    delete[] usp->PhAndx;
+  if( usp->PhNum  )
+    delete[] usp->PhNum;
+  if( usp->PhAID  )
+     delete[] usp->PhAID;
+  if(usp->PhAlst  )
+      delete[] usp->PhAlst;
+  if( usp->PhAfreq  )
+      delete[] usp->PhAfreq;
 
-//realloc dynamic memory for work arrays
-void TUnSpace::phase_lists_new()
-{
+  //  work (not in record)
+  if( usp->A  )
+     delete[] usp->A;
+  if( usp->sv  )
+     delete[] usp->sv;
+  if( usp->Zcp  )
+    delete[] usp->Zcp;
+  if( usp->Zmin  )
+      delete[] usp->Zmin;
+  if( usp->Zmax  )
+    delete[] usp->Zmax;
+  if( usp->ZmaxAbs  )
+     delete[] usp->ZmaxAbs;
+  if(usp->Hom  )
+      delete[] usp->Hom;
+  if( usp->Prob  )
+      delete[] usp->Prob;
+   if( usp->POR  )
+      delete[] usp->POR;
+   if( usp->POM  )
+      delete[] usp->POM;
+  if( usp->UnIC  )
+    delete[] usp->UnIC;
+  if( usp->UgDC  )
+      delete[] usp->UgDC;
+  if( usp->UaDC  )
+    delete[] usp->UaDC;
+  if( usp->UnDCA  )
+     delete[] usp->UnDCA;
 
-// alloc memory for nPhA size
-/*
-if( usp->nPhA > 0 )
-  {
-    usp->PhAndx = (short *)aObj[ o_unphndx].Alloc( usp->nPhA, usp->N, I_);
-    usp->PhNum = (short *)aObj[ o_unphnum].Alloc( usp->nPhA, 1 , I_ );
-    usp->PhAID = (char (*)[8])aObj[ o_unphaid].Alloc( usp->nPhA, 1, 8 );
-    usp->PhAlst = (char (*)[80])aObj[ o_unphalst].Alloc( usp->nPhA, 1, 80 );
-    usp->PhAfreq = (float *)aObj[ o_unafreg].Alloc( usp->nPhA, 1, F_ );
-  }
-else
-  {  usp->PhAndx = (short *)aObj[ o_unphndx].Free();
-     usp->PhNum = (short *)aObj[ o_unphnum].Free();
-     usp->PhAID = (char (*)[8])aObj[ o_unphaid].Free();
-     usp->PhAlst = (char (*)[80])aObj[ o_unphalst].Free();
-     usp->PhAfreq = (float *)aObj[ o_unafreg].Free();
-  }
-*/
+//realloc dynamic memory for work arrays (reading)
+   if( usp->PbD )
+      delete[] usp->PbD;
+   if( usp->SGp  )
+      delete[] usp->SGp;
+   if( usp->ncp  )
+     delete[] usp->ncp;
+   if( usp->OVB  )
+       delete[] usp->OVB;
+   if( usp->OVR  )
+     delete[] usp->OVR;
+   if( usp->OVN  )
+      delete[] usp->OVN;
+   if(usp->ParNames  )
+       delete[] usp->ParNames;
+
+// allocation memory for arrays
+   if( usp->UnICn )
+      delete[] usp->UnICn;
+   if( usp->UgDCn  )
+      delete[] usp->UgDCn;
+   if( usp->UaDCn  )
+     delete[] usp->UaDCn;
+   if( usp->UnDCAn  )
+       delete[] usp->UnDCAn;
+   
+   if( usp->Gs )
+      delete[] usp->Gs;
+   if( usp->NgLg  )
+      delete[] usp->NgLg;
+   if( usp->IntLg  )
+     delete[] usp->IntLg;
+   if( usp->vG  )
+       delete[] usp->vG;
+  if( usp->vY)
+     delete[] usp->vY;
+  if( usp->vYF  )
+     delete[] usp->vYF;
+  if( usp->vGam  )
+    delete[] usp->vGam;
+  if( usp->vMol  )
+      delete[] usp->vMol;
+   if( usp->vU )
+      delete[] usp->vU;
+   if( usp->vpH  )
+      delete[] usp->vpH;
+   if( usp->vT  )
+     delete[] usp->vT;
+   if( usp->vP  )
+       delete[] usp->vP;
+   if( usp->vV )
+      delete[] usp->vV;
+   if( usp->quanCx  )
+      delete[] usp->quanCx;
+   if( usp->quanCv  )
+     delete[] usp->quanCv;
+   if( usp->m_t_lo  )
+       delete[] usp->m_t_lo;
+  if( usp->m_t_up)
+     delete[] usp->m_t_up;
+  if( usp->vFug  )
+     delete[] usp->vFug;
+  if( usp->fug_lo  )
+    delete[] usp->fug_lo;
+  if( usp->fug_up  )
+      delete[] usp->fug_up;
+   if( usp->Ss )
+      delete[] usp->Ss;
+   if( usp->NgLs  )
+      delete[] usp->NgLs;
+   if( usp->IntLs  )
+     delete[] usp->IntLs;
+   if( usp->vS  )
+       delete[] usp->vS;
+    if( usp->Vs  )
+       delete[] usp->Vs;
+    if( usp->NgLv  )
+      delete[] usp->NgLv;
+    if( usp->IntLv  )
+        delete[] usp->IntLv;
+   if( usp->vmV)
+      delete[] usp->vmV;
+   if( usp->NgNb  )
+      delete[] usp->NgNb;
+   if( usp->IntNb  )
+     delete[] usp->IntNb;
+   if( usp->Bs  )
+       delete[] usp->Bs;
+   if( usp->vB )
+       delete[] usp->vB;
+   if( usp->NgGam  )
+       delete[] usp->NgGam;
+   if( usp->IntGam  )
+      delete[] usp->IntGam;
+   if( usp->GAMs  )
+        delete[] usp->GAMs;
+   if( usp->vNidP  )
+        delete[] usp->vNidP;
+   if( usp->f_PhA  )
+       delete[] usp->f_PhA;
 }
 
 //---------------------------------------------------------------------------
