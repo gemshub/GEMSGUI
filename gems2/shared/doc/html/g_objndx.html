@@ -124,14 +124,14 @@ iterations in IPM task { 400 }</h4>
 of GEM IPM solver (Jordan) { 1e-12 }</h4>
   <h4> <a href="gems_ipm.html#Pa_DHB">Pa_DHB</a> Precision of mass
 balance deviations at EFD { 1e-6 }</h4>
-  <h4> <a href="gems_ipm.html#Pa_DS">Pa_DS</a> Cutoff number of moles
-of a phase { 1e-8 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DS">Pa_DS</a> Cutoff (threshold) 
+for the amount of phase for phase elimination { 1e-12 }</h4>
   <h4> <a href="gems_ipm.html#Pa_DK">Pa_DK</a> Threshold of Dikin
 criterion of IPM convergence { 1e-4 }</h4>
-  <h4> <a href="gems_ipm.html#Pa_DF_0">Pa_DF[0]</a> Threshold of
-Karpov' criteria for phase stability { 0.01 }</h4>
-  <h4> <a href="gems_ipm.html#Pa_DF_1">Pa_DF[1]</a> Threshold for
-Karpov' criteria for insertion of phases { -0.1 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DF_0">Pa_DF[0]</a> Threshold for Karpov's 
+criterion (Fa > DF) for a lost stable phase to be inserted { 0.01 }</h4>
+  <h4> <a href="gems_ipm.html#Pa_DF_1">Pa_DF[1]</a> Threshold for Karpov's 
+criterion (Fa < -DFM) for a present unstable phase to be eliminated { 0.1 }</h4>
   <h4> <a href="gems_ipm.html#Pa_DFY_0">Pa_DFY[0]</a> N of moles of
 H2O-solvent for phase insertion { 2e-5 }</h4>
   <h4> <a href="gems_ipm.html#Pa_DFY_1">Pa_DFY[1]</a> N of moles of

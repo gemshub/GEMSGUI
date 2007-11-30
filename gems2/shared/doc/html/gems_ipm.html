@@ -175,14 +175,12 @@ Cutoff mole quantity for the elimination of phases at IPM iterations {
   <dd>&nbsp;&nbsp;</dd>
   <dd>The IPM algorithm will automatically zero off any phase and all
 its species in the x vector (primal solution) if current total number
-of moles becomes less than the <tt>Pa_DS</tt> cutoff value. This is
-done to prevent appearance of "phantom" phases with very small total
-quantities that have no physical meaning and result from round-off and
-mass balance errors or from slight inconsistensies in the input
-thermodynamic data.&nbsp;</dd>
+of moles in the phase becomes less than the <tt>Pa_DS</tt> cutoff
+value. <br>
+  </dd>
   <dd>&nbsp; <br>
   </dd>
-  <dd>Possible values: 1e-6 to 1e-17 mol, recommended is 1e-9 mol,
+  <dd>Possible values: 1e-6 to 1e-17 mol, recommended is 1e-10 mol,
 default is 1e-12 mol.&nbsp;</dd>
   <dd><br>
   </dd>
@@ -313,7 +311,7 @@ Simplex()-&gt;FIADE() bridge { 1e-6 }</dt>
   </dd>
   <dt> <a name="Pa_DFY_6"></a><b><big><tt>Pa_DFY[6]</tt></big></b>
 -&nbsp;Insertion mole quantity for a single-component phase in
-PhaseSelect() { 1e-9 }</dt>
+PhaseSelect() { 1e-7 }</dt>
   <dd>&nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
@@ -329,10 +327,12 @@ precision may be required.&nbsp;</dd>
   </dd>
   <dt> <a name="Pa_EPS_1"></a><big><b><tt>Pa_EPS[1]</tt></b><small> -</small></big>
 Tolerance for calculation of surface activity terms for surface species
-{ 1e-8 }</dt>
+{ 1e-3 }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>This is an experimental value for smoothing bad numerical
-behavior of SAT at high surface coverages.&nbsp;</dd>
+behavior of SACT at high surface coverages. In most cases, the value of
+1e-3 should be used.<br>
+  </dd>
   <dd>&nbsp; <br>
   </dd>
   <dd><br>
@@ -396,7 +396,8 @@ versions of the program. &nbsp;</dd>
 reached, declares that the procedure did not converge and the IPM
 feasible domain cannot be entered at the requested mass balance
 precision as defined in the <a href="#Pa_DHB"><tt>Pa_DHB</tt></a>
-(DHBM) thresholds.&nbsp;</dd>
+(DHBM) thresholds. 95 % of systems require 1 to 6 iterations. <br>
+  </dd>
   <dd>&nbsp;<br>
   </dd>
   <dd>Possible values: 10 to 200, recommended value: 144, default
@@ -434,7 +435,8 @@ quantities of trace species in the primal solution vector x should be
 replaced with values calculated using the dual solution vector u.
 Possible values:</dd>
   <dd>from -5 to +2 relative to DHBM value. Default exponent is
--2.&nbsp;</dd>
+-2. Recommended value is 0. <br>
+  </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Example: value of -2 means that all values in the x vector less
 than DHBM * 10^-2 will be replaced with the DualT-calculated values.</dd>
@@ -466,43 +468,99 @@ containing at least one independent component with <i>b<sub>i</sub></i>
   <dd><br>
   </dd>
   <dt> <a name="Pa_DF_0"></a><big><big><b><tt>Pa_DF[0]</tt></b></big></big>
-- Threshold of Karpov's phase stability criteria in PhaseSelect() {
+- Threshold for Karpov's criterion (Fa &gt; DF) for a lost stable phase
+to be inserted {
 0.01
 }</dt>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>This absolute numerical threshold is used in the PhaseSelect()
-function to check stability of all phases present in the system after
+  <dd>This numerical threshold is used in the PhaseSelect()
+function to check stability of all pure (single-component) phases
+absent from the system mass balance after
 the main cycle of IPM iterations has converged. Theoretically, if a
-phase is stable then its Karpov stability criterion f_alpha is 0.
-Numerically, it is satisfied with some positive or negative deviations
+phase is stable and present in some non-zero amount, then its Karpov
+stability criterion Fa = 0.
+Numerically, it is satisfied with some deviation
 because of limited precision of mass balance and inconsistency of
-thermodynamic data. The Pa_DF criterion defines this maximum allowed
-deviation: if |f_alpha| &lt; Pa_DF for a phase then this phase is
-considered stable.&nbsp;</dd>
-  <dd><br>
+thermodynamic data.</dd>
+  <dd>&nbsp;</dd>
+  <dd>In principle, two cases of inconsistency are possible. <br>
   </dd>
-  <dd>PhaseSelect() procedure performs these checks for all phases; if
-any stable phase is present in zero quantity but has &nbsp;a positive
-value of f_alpha &gt; Pa_DF then all its species will be inserted into
-the primal solution vector as positive values defined in <a
- href="#Pa_DFY_6"><tt>Pa_DFY[6]</tt></a> field and, in addition, the <a
- href="#Pa_DF_1"><tt>Pa_DF[1]</tt></a> value will be inserted instead
-of
-all zeroed-off x vector elements for stable multicomponent phases, and
-thus modified vector x will be used as a new initial approximation in
-the FIADE() procedure.&nbsp;</dd>
+  <dd>(1) The Karpov criterion Fa &gt; DF but the amount of phase Xa =
+0 (phase is stable but absent from the mass balance).</dd>
+  <dd>(2) The Karpov criterion Fa &lt; -DFM but the amount of phase Xa
+&gt; 0 (phase is unstable but present in the mass balance). &nbsp; <br>
+  </dd>
+</dl>
+<dl>
+  <dd>Hence, the Pa_DF[0] threshold defines the maximum tolerance for
+the case (1). If this is the case and the phase dependent component has
+trivial metastability constraints (0 from below and 1e6 from above)
+then the PhaseSelekt() will insert this DC in the amount defined in the
+    <a style="font-family: monospace;" href="#Pa_DFY_6">Pa_DFY[6]</a>
+field (usually 1e-7 mol). Thus modified GEM primal solution will be
+used as a new initial approximation for the next IPM loop. Up to 3 such
+loops can be performed. If the situation persists then the stability
+and/or stoichiometry of this phase has to be checked. Another reason
+could be that other relevant components/phases for this chemical
+element are not present in the chemical system definition and must be
+inserted. <br>
+  </dd>
   <dd><br>
   </dd>
   <dd>Recommended value: 0.01.</dd>
+  <dd><br>
+  </dd>
+  <dd>See the <span style="font-family: monospace;">Pa_DF[1]</span>
+field below for explanation of the inconsistency case (2).&nbsp; <br>
+  </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="Pa_DF_1"></a><big><b><tt>Pa_DF[1]</tt></b></big> -
-Insertion mole quantity for species eliminated from stable
-multicomponent phases { 1e-12 }</dt>
+  <dt> <a name="Pa_DF_1"></a><big><big><b><tt>Pa_DF[1]</tt></b></big></big>
+-
+Threshold for Karpov's criterion (Fa &lt; -DFM) for a present unstable
+phase to be eliminated { 0.1 }</dt>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>&nbsp;Set this value equal to 1e-9 or 1e-12. See the explanation
-above.&nbsp; </dd>
+  <dd>This numerical threshold is used in the PhaseSelect()
+function to check stability of all pure (single-component) phases
+present in the system mass balance after
+the main cycle of IPM iterations has converged. Theoretically, if a
+phase is stable and present in some non-zero amount, then its Karpov
+stability criterion Fa = 0.
+Numerically, it is satisfied with some deviation
+because of limited precision of mass balance and inconsistency of
+thermodynamic data.</dd>
+  <dd><br>
+  </dd>
+  <dd>In principle, two cases of inconsistency are possible. <br>
+  </dd>
+  <dd>(1) The Karpov criterion Fa &gt; DF but the amount of phase Xa =
+0 (phase is stable but absent from the mass balance).</dd>
+  <dd>(2) The Karpov criterion Fa &lt; -DFM but the amount of phase Xa
+&gt; 0 (phase is unstable but present in the mass balance). &nbsp; </dd>
+  <dd><br>
+  </dd>
+  <dd>Hence, the Pa_DF[1] threshold defines the maximum tolerance for
+the
+case (2). If this is the case and the phase dependent component has
+trivial metastability constraints (0 from below and 1e6 from above)
+then the PhaseSelekt() will zero off the amounts of this DC and
+phase.Thus modified GEM primal solution will be used as a new initial
+approximation for the next IPM loop. Up to 3 such loops can be
+performed. If the situation persists then the stability and/or
+stoichiometry of this phase has to be checked and eventually corrected.
+Sometimes it may be sufficient to set a smaller <a
+ style="font-family: monospace;" href="#Pa_DS">Pa_DS</a>
+threshold.&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dd>Recommended values: 0.1 or 0.01.&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd>See the <span style="font-family: monospace;">Pa_DF[0]</span>
+field above for explanation of the inconsistency case (1).&nbsp;<br>
+  </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
@@ -517,12 +575,12 @@ above.&nbsp; </dd>
   </dd>
   <dt> <a name="Pa_DK"></a><big><big><b><tt>Pa_DK</tt></b></big></big>
 -
-Tolerance threshold for the Dikin's criterion of IPM convergence { 1e-5
+Tolerance threshold for the Dikin's criterion of IPM convergence { 1e-4
 }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>This important criterion is used to decide whether the IPM
 minimization has converged.</dd>
-  <dd>Possible values: 1e-3 to 1e-6, 1e-5 is recommended.&nbsp;</dd>
+  <dd>Possible values: 1e-3 to 1e-6, 1e-4 is recommended.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>The criterion is given here for systems of approximately 1 kg
@@ -530,10 +588,13 @@ mass. Internally, it will be automatically corrected if the system is
 much larger of much smaller (see Chudnenko et al., 2002).&nbsp;</dd>
   <dd><br>
   </dd>
-  <dd>Inconsistent thermodynamic data may require to increase DK to
-1e-4 or 1e-3 even for a small system, otherwise convergence may not be
+  <dd>Inconsistent thermodynamic data may require to increase DK even
+for a small system, otherwise convergence may not be
 achieved. However, at such high DK values, incorrect results may be
-obtained.</dd>
+obtained. Too low tolerance threshold may dramatically increase the
+number of IPM iterations and worsen the accuracy of GEM primal
+solution. <br>
+  </dd>
   <dd>&nbsp;</dd>
   <dd> <br>
   </dd>
