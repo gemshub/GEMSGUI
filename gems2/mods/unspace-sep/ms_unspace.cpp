@@ -16,8 +16,10 @@
 
 #include "ms_unspace.h"
 #include "io_arrays.h"
+#include "node.h"
+//#include <iomanip>
 
-
+//extern bool _comment;
 
 
 TUnSpace* TUnSpace::pm;
@@ -28,9 +30,29 @@ TUnSpace::TUnSpace()
 
     // default data
     memset(usp, 0, sizeof(UNSPACE) );
-  
+//  setup_defaults();
+    
     na = 0;
 }  
+
+// Reading TUnSpace structure from text file
+void TUnSpace::setup_defaults()
+{
+	usp->Gstat = GS_INDEF;
+	usp->Astat = AS_INDEF;
+	memcpy( &usp->PsUnInt, "%%AA+------", 11 );
+	memcpy( &usp->Pa_f_pha, "------0A1+", 10 );
+	usp->Pa_Crit = UNSP_CRIT_PA;
+	memcpy( &usp->PvPOM, "+-+-", 4 );
+    usp->quan_lev = 0.05;
+    usp->ph_lo = 0.;
+    usp->ph_up = 14.;
+    usp->Eh_lo = -1.;
+    usp->Eh_up = 1.;
+    usp->IC_lo = 0.;
+    usp->IC_up = 3.;
+
+}
 
 TUnSpace::~TUnSpace()
 {
@@ -39,164 +61,332 @@ TUnSpace::~TUnSpace()
    delete na;
 }
 
-outField TUnSpace_static_fields[15] =  {
- { "Mode", 1,0 },
- { "Size" , 1,0 },
- { "MaxSteps", 1,0 },
- { "Tau", 1,0 },
- { "Grid", 1,0 },
- { "Types", 1,0 },
- { "Props", 1,0 },
- { "LSize", 1,0 },
- { "fVel", 1,0 },
- { "cLen", 1,0 },
- { "tf", 1,0 },
- { "cdv", 1,0 },
- { "cez", 1,0 },
- { "al_in", 1,0 },
- { "Dif_in", 1,0 }
- };
+outField TUnSpace_static_fields[25] =  {
+ { "PsGen", 1,0 },  // 7
+ { "Pa_Adapt" , 1,0 },
+ { "Pa_OF", 1,0 },
+ { "Pa_Crit", 1,0 },
+ { "Pa_Zcp", 1,0 },
+ { "PvSi", 1,0 },
+ { "Pa_f_pha", 0,0 }, // default '-' !! ne zabyt` ustanovit` default v konstructore
+ { "Pa_f_mol", 0,0 },
+ { "Pa_f_fug", 0,0 },
+ { "Pa_f_mfr", 0,0 },
+ { "Pa_f_pH", 0,0 },
+ { "Pa_f_Eh", 0,0 },
+ { "Pa_f_IC", 0,0 },
+ { "PvPOM", 0,0 }, // default '+'
+ { "PvPOR", 0,0 },  // default '-'
+ // Dimensionalities related to the UnSpace problem
+ { "Q", 1,0 },
+ { "quan_lev", 0,0 },  // float 0.05
+ { "nPG", 1,0 },
+ { "nGB", 1,0 },
+ { "nGN", 1,0 },
+ { "nGR", 1,0 },
+ { "N", 1,0 },  // take from node (will be do not reading)
+ { "L", 1,0 },
+ { "Ls", 1,0 },
+ { "Fi", 1,0 }
+};
 
-outField TUnSpace_dynamic_fields[3] =  {
- { "DiCp", 1, 0 },
- { "NPmean", 1, 0 },
- { "mGrid", 1, 0 }
- };
 
-// The unspace start constant
-int TUnSpace::Unspace_to_format_txt( const char *unspace_in1 )
+outField TUnSpace_dynamic_fields[45] =  {
+		{ "SGp", 1, 0 },
+		{ "PbD", 1, 0 },
+		{ "OVB", 1, 0 },
+		{ "OVR", 1, 0 },
+		{ "OVN", 1, 0 },
+		{ "pH_lo", 0, 0 },
+		{ "pH_up", 0, 0 },
+		{ "Eh_lo", 0, 0 },
+		{ "Eh_up", 0, 0 },
+		{ "IC_lo", 0, 0 },
+		{ "IC_up", 0, 0 },
+		{ "m_t_lo", 0, 0 },
+		{ "m_t_up", 0, 0 },
+		{ "fug_lo", 0, 0 },
+		{ "fug_up", 0, 0 },
+		{ "f_PhA", 0, 0 },
+		{ "NgT", 0, 0 },
+		{ "T", 0, 0 },
+		{ "IntT", 0, 0 },
+		{ "NgP", 0, 0 },
+		{ "P", 0, 0 },
+		{ "IntP", 0, 0 },
+		{ "NgV", 0, 0 },
+		{ "V", 0, 0 },
+		{ "IntV", 0, 0 },
+		{ "NgLg", 1, 0 },
+		{ "Gs", 1, 0 },
+		{ "IntLg", 1, 0 },
+		{ "NgGam", 0, 0 },
+		{ "GAMs", 0, 0 },
+		{ "IntGam", 0, 0 },
+		{ "NgLs", 0, 0 },
+		{ "Ss", 0, 0 },
+		{ "IntLs", 0, 0 },
+		{ "NgLv", 0, 0 },
+		{ "Vs", 0, 0 },
+		{ "IntLv", 0, 0 },
+		{ "NgNb", 0, 0 },
+		{ "Bs", 0, 0 },
+		{ "IntNb", 0, 0 },
+		{ "UnICn", 1, 0 },
+		{ "UgDCn", 1, 0 },
+		{ "UaDCn", 1, 0 },
+		{ "UnDCAn", 1, 0 },
+		{ "ParNames", 1, 0 }
+};
+
+   
+// Reading TUnSpace structure from text file
+void TUnSpace::from_text_file(fstream& ff)
 {
- // read GEM2MT structure from file
-  fstream f_log("ipmlog.txt", ios::out|ios::app );
-  try
-  {
-   fstream ff(unspace_in1, ios::in );
-   ErrorIf( !ff.good() , unspace_in1, "Fileopen error");
-
 // static arrays
-   TReadArrays  rdar( 15, TUnSpace_static_fields, ff);
-   short nfild = rdar.findNext();
-   while( nfild >=0 )
+ TReadArrays  rdar( 25, TUnSpace_static_fields, ff);
+ short nfild = rdar.findNext();
+ while( nfild >=0 )
+ {
+   switch( nfild )
    {
-     switch( nfild )
-     {
- /*      case 0: rdar.readArray( "Mode", &mtp->PsMode, 1, 1);
-            break;
-       case 1: rdar.readArray( "Size", &mtp->xC, 3);
-            mtp->nC = mtp->xC*mtp->yC*mtp->zC;
-             break;
-       case 2: rdar.readArray( "MaxSteps", &mtp->ntM, 1);
-             break;
-       case 3: rdar.readArray( "Tau", mtp->Tau, 3);
-            break;
-       case 4: rdar.readArray( "Grid", &mtp->PvGrid, 1, 1);
-            break;
-       case 5: rdar.readArray( "Types", &mtp->nPTypes, 1);
-            break;
-       case 6: rdar.readArray( "Props", &mtp->nProps, 1);
-            break;
-       case 7: rdar.readArray( "LSize", mtp->sizeLc, 3);
-            break;
-       case 8: rdar.readArray( "fVel", &mtp->fVel, 1);
-            break;
-       case 9: rdar.readArray( "cLen", &mtp->cLen, 1);
-             break;
-       case 10: rdar.readArray( "tf", &mtp->tf, 1);
-            break;
-       case 11: rdar.readArray( "cdv", &mtp->cdv, 1);
-            break;
-       case 12: rdar.readArray( "cez", &mtp->cez, 1);
-            break;
-       case 13: rdar.readArray( "al_in", &mtp->al_in, 1);
-            break;
-       case 14: rdar.readArray( "Dif_in", &mtp->Dif_in, 1);
-            break;
-     */}
-     nfild = rdar.findNext();
+   case 0: rdar.readArray( "PsGen", usp->PsGen, 7, 1);
+           break;
+   case 1: rdar.readArray( "Pa_Adapt", &usp->Pa_Adapt, 1, 1);
+           break;
+   case 2: rdar.readArray( "Pa_OF", &usp->Pa_OF, 1, 1);
+           break;
+   case 3: rdar.readArray( "Pa_Crit", &usp->Pa_Crit, 1, 1);
+           break;
+   case 4: rdar.readArray( "Pa_Zcp", &usp->Pa_Zcp, 1, 1);
+           break;
+   case 5: rdar.readArray( "PvSi", &usp->PvSi, 1, 1);
+           break;
+   case 6: rdar.readArray( "Pa_f_pha", &usp->Pa_f_pha, 1, 1);
+           break;
+   case 7: rdar.readArray( "Pa_f_mol", &usp->Pa_f_mol, 1, 1);
+           break;
+   case 8: rdar.readArray( "Pa_f_fug", &usp->Pa_f_fug, 1, 1);
+           break;
+   case 9: rdar.readArray( "Pa_f_mfr", &usp->Pa_f_mfr, 1, 1);
+           break;
+   case 10: rdar.readArray( "Pa_f_pH", &usp->Pa_f_pH, 1, 1);
+           break;
+   case 11: rdar.readArray( "Pa_f_Eh", &usp->Pa_f_Eh, 1, 1);
+           break;
+   case 12: rdar.readArray( "Pa_f_IC", &usp->Pa_f_IC, 1, 1);
+           break;
+   case 13: rdar.readArray( "PvPOM", &usp->PvPOM, 1, 1);
+           break;
+   case 14: rdar.readArray( "PvPOR", &usp->PvPOR, 1, 1);
+           break;
+   case 15: rdar.readArray( "Q", &usp->Q, 1);
+           break;
+   case 16: rdar.readArray( "quan_lev", &usp->quan_lev, 1);
+           break;
+   case 17: rdar.readArray( "nPG", &usp->nPG, 1);
+           break;
+   case 18: rdar.readArray( "nGB", &usp->nGB, 1);
+           break;
+   case 19: rdar.readArray( "nGN", &usp->nGN, 1);
+           break;
+   case 20: rdar.readArray( "nGR", &usp->nGR, 1);
+           break;
+   case 21: rdar.readArray( "N", &usp->N, 1);
+           break;
+   case 22: rdar.readArray( "L", &usp->L, 1);
+           break;
+   case 23: rdar.readArray( "Ls", &usp->Ls, 1);
+           break;
+   case 24: rdar.readArray( "Fi", &usp->Fi, 1);
+           break;
+  }
+   nfild = rdar.findNext();
+ }
+
+ // testing read
+ gstring ret = rdar.testRead();
+ if( !ret.empty() )
+  { ret += " - fields must be readed from TUnSpace structure";
+    Error( "Error", ret);
   }
 
-   // testing read
-//   if( mtp->PsMode != GMT_MODE_W && mtp->PsMode != GMT_MODE_V )
-//   {
-//      rdar.setNoAlws( 4 /*"Grid"*/);
-//      rdar.setNoAlws( 5 /*"Types"*/);
-//      rdar.setNoAlws( 6 /*"Props"*/);
-//      rdar.setNoAlws( 7 /*"LSize"*/);
-//      mtp->PvGrid = '-';
-//   }
-   gstring ret = rdar.testRead();
-   if( !ret.empty() )
-   { ret += " - fields must be readed from TGEM2MT structure";
-     Error( "Error", ret);
-   }
+  Alloc();
 
- // realloc memory
-   Alloc();
- // read arrays
-   int ii, jj, indx;
+//dynamic data
+ TReadArrays  rddar( 45, TUnSpace_dynamic_fields, ff);
 
-   TReadArrays  rddar( 3, TUnSpace_dynamic_fields, ff);
-  // Set up flags
- //  if( mtp->PsMode != GMT_MODE_W && mtp->PsMode != GMT_MODE_V )
- //     rddar.setNoAlws( 1 /*"NPmean"*/);
- //  if( mtp->PvGrid == S_OFF )
- //     rddar.setNoAlws( 2 /*"mGrid"*/);
+// Set up flags
+ usp->nG = usp->nGB +usp->nGR+usp->nGN; 	
+ if(usp->PsGen[0] != S_ON )
+ {
+    rddar.setNoAlws( 26 /*"Gs"*/);
+    rddar.setNoAlws( 25 /*"NgLg"*/);
+    rddar.setNoAlws( 27 /*"IntLg"*/);
+ }
+ if(usp->PsGen[0] == S_ON  && usp->Pa_f_mol == S_ON)
+ {
+    rddar.setAlws( 11 /*"m_t_lo"*/);
+    rddar.setAlws( 12 /*"m_t_up"*/);
+ }
+ if( usp->PsGen[0] == S_ON  && usp->Ls && usp->Pa_f_fug== S_ON )
+ {
+    rddar.setAlws( 13 /*"fug_lo"*/);
+    rddar.setAlws( 14 /*"fug_up"*/);
+ }
+ if(usp->PsGen[1]== S_ON)
+ {
+   rddar.setAlws( 32 /*"Ss"*/);
+   rddar.setAlws( 31 /*"NgLs"*/);
+   rddar.setAlws( 33 /*"IntLs"*/);
+ }
+ if(usp->PsGen[5]== S_ON)
+ {
+  rddar.setAlws( 35 /*"Vs"*/);
+  rddar.setAlws( 34 /*"NgLv"*/);
+  rddar.setAlws( 36 /*"IntLv"*/);
+ }
+ if(usp->PsGen[2]== S_ON)
+ {
+  rddar.setAlws( 38 /*"Bs"*/);
+  rddar.setAlws( 37 /*"NgNb"*/);
+  rddar.setAlws( 39 /*"IntNb"*/);
+ } 
+ if(usp->PsGen[6]== S_ON && usp->Ls )   
+ {
+  rddar.setAlws( 29 /*"GAMs"*/);
+  rddar.setAlws( 28 /*"NgGam"*/);
+  rddar.setAlws( 30 /*"IntGam"*/);
+ } 
+ if( usp->Pa_f_pha == S_ON)
+	  rddar.setAlws( 15 /*"f_PhA"*/);
 
-   nfild = rddar.findNext();
-   while( nfild >=0 )
-   {
-     switch( nfild )
-     {
-// line %5s "#", %6s "Init", %6s "Type",
-//   %12s "Vt-m**3", %12s "vp-m/sec", %12s "porosity", %12s "Km-m**2",
-//   %12s "al-m", %12s "hDl-m**2/s", %12s "nto"
-// list #DiCp %5g index, %6g all #DiCp, %12.6g all #HydP
-/*       case 0:  rddar.skipSpace();
-               for( ii=0; ii<mtp->nC; ii++ )
-               {
-                 ff >> indx >> mtp->DiCp[ii][0] >> mtp->DiCp[ii][1];
-                 for( jj=0; jj< SIZE_HYDP; jj++)
-                    ff >> mtp->HydP[ii][jj];
-               }
-            break;
-       case 1:  rddar.skipSpace();
-           if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
-// line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##
-//    %5s "#", %6s "Mean", %6s "Min", %6s "Max",
-//    %6s "ptype", %6s "mmode", %6s "tcode", %6s "ips", %6s "res", %6s "res"
-// list #NPmean %5g index, %6g #NPmean, %6g #nPmin ,%6g #nPmax ,
-//    %6g all #ParTD
-              for( ii=0; ii<mtp->nPTypes; ii++ )
-              {
-                ff >> indx >> mtp->NPmean[ii];
-                ff >> mtp->nPmin[ii] >> mtp->nPmax[ii];
-                for( jj=0; jj< 6; jj++)
-                   ff >> mtp->ParTD[ii][jj];
-              }
-            break;
-       case 2:  rddar.skipSpace();
-          if( mtp->PvGrid != S_OFF )
-//     line ## prn=:mtPvfl[8] <> "-"; ##  %s "Grid"
-//     list #mGrid  %12.6g all #mGrid
-             for( ii=0; ii<mtp->nPTypes; ii++ )
-               ff >> mtp->grid[ii][0]  >> mtp->grid[ii][1] >> mtp->grid[ii][2];
-          break;
-*/     }
-     nfild = rddar.findNext();
-   }
-   ret = rddar.testRead();
-   if( !ret.empty() )
-   { ret += " - fields must be readed from TGEM2MT structure";
-     Error( "Error", ret);
-   }
-
-   return 0;
-  }
-  catch(TError& err)
+  nfild = rddar.findNext();
+  while( nfild >=0 )
   {
-      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
+   switch( nfild )
+   {
+   case 0: rddar.readArray(  "SGp", usp->SGp[0], usp->nG, MAXPHNAME);
+            break;
+   case 1: rddar.readArray(  "PbD", usp->PbD, usp->nG);
+            break;
+   case 2: rddar.readArray(  "OVB", usp->OVB, usp->nGB);
+            break;
+   case 3: rddar.readArray(  "OVR", usp->OVR, usp->nGR);
+            break;
+   case 4: rddar.readArray(  "OVN", usp->OVN, usp->nGN);
+            break;
+   case 5: rddar.readArray(  "pH_lo", &usp->pH_lo, 1);
+             break;
+   case 6: rddar.readArray(  "pH_up", &usp->pH_up, 1);
+             break;
+   case 7: rddar.readArray(  "Eh_lo", &usp->Eh_lo, 1);
+             break;
+   case 8: rddar.readArray(  "Eh_up", &usp->Eh_up, 1);
+             break;
+   case 9: rddar.readArray(  "IC_lo", &usp->IC_lo, 1);
+             break;
+   case 10: rddar.readArray(  "IC_up", &usp->IC_up, 1);
+             break;
+   case 11:if( !usp->m_t_lo ) Error( "Error", "Array m_t_lo not used in task"); 
+	        rddar.readArray(  "m_t_lo", usp->m_t_lo, usp->N);
+            break;
+   case 12:if( !usp->m_t_up ) Error( "Error", "Array m_t_up not used in task"); 
+            rddar.readArray(  "m_t_up", usp->m_t_up, usp->N);
+            break;
+   case 13: if( !usp->fug_lo ) Error( "Error", "Array fug_lo not used in task"); 
+             rddar.readArray(  "fug_lo", usp->fug_lo, usp->Ls);
+            break;
+   case 14: if( !usp->fug_up ) Error( "Error", "Array fug_up not used in task"); 
+            rddar.readArray(  "fug_up", usp->fug_up, usp->Ls);
+            break;
+   case 15: if( !usp->f_PhA ) Error( "Error", "Array f_PhA not used in task"); 
+            rddar.readArray(  "f_PhA", usp->f_PhA, usp->N);
+            break;
+   case 16: rddar.readArray(  "NgT", &usp->NgT, 1);
+             break;
+   case 17: rddar.readArray(  "T", usp->T, 2);
+            break;
+   case 18: rddar.readArray(  "IntT", usp->IntT, 2);
+            break;
+   case 19: rddar.readArray(  "NgP", &usp->NgP, 1);
+             break;
+   case 20: rddar.readArray(  "P", usp->P, 2);
+            break;
+   case 21: rddar.readArray(  "IntP", usp->IntP, 2);
+            break;
+   case 22: rddar.readArray(  "NgV", &usp->NgV, 1);
+            break;
+   case 23: rddar.readArray(  "V", usp->V, 2);
+            break;
+   case 24: rddar.readArray(  "IntV", usp->IntV, 2);
+            break;
+   case 25: if( !usp->NgLg ) Error( "Error", "Array NgLg not used in task"); 
+            rddar.readArray(  "NgLg", usp->NgLg, usp->L);
+            break;
+   case 26: if( !usp->Gs ) Error( "Error", "Array Gs not used in task"); 
+            rddar.readArray(  "Gs", usp->Gs[0], usp->L*2);
+            break;
+   case 27: if( !usp->IntLg ) Error( "Error", "Array IntLg not used in task"); 
+            rddar.readArray(  "IntLg", usp->IntLg[0], usp->L*2);
+            break;
+   case 28: if( !usp->NgGam ) Error( "Error", "Array NgGam not used in task"); 
+            rddar.readArray(  "NgGam", usp->NgGam, usp->Ls);
+            break;
+   case 29: if( !usp->GAMs ) Error( "Error", "Array GAMs not used in task"); 
+            rddar.readArray(  "GAMs", usp->GAMs[0], usp->Ls*2);
+            break;
+   case 30: if( !usp->IntGam ) Error( "Error", "Array IntGam not used in task"); 
+            rddar.readArray(  "IntGam", usp->IntGam[0], usp->Ls*2);
+            break;
+   case 31: if( !usp->NgLs ) Error( "Error", "Array NgLs not used in task"); 
+            rddar.readArray(  "NgLs", usp->NgLs, usp->L);
+            break;
+   case 32: if( !usp->Ss ) Error( "Error", "Array Ss not used in task"); 
+            rddar.readArray(  "Ss", usp->Ss[0], usp->L*2);
+            break;
+   case 33: if( !usp->IntLs ) Error( "Error", "Array IntLs not used in task"); 
+            rddar.readArray(  "IntLs", usp->IntLs[0], usp->L*2);
+            break;
+   case 34: if( !usp->NgLv ) Error( "Error", "Array NgLv not used in task"); 
+            rddar.readArray(  "NgLv", usp->NgLv, usp->L);
+            break;
+   case 35: if( !usp->Vs ) Error( "Error", "Array Vs not used in task"); 
+             rddar.readArray(  "Vs", usp->Vs[0], usp->L*2);
+            break;
+   case 36: if( !usp->IntLv ) Error( "Error", "Array IntLv not used in task"); 
+             rddar.readArray(  "IntLv", usp->IntLv[0], usp->L*2);
+            break;
+   case 37: if( !usp->NgNb ) Error( "Error", "Array NgNb not used in task"); 
+            rddar.readArray(  "NgNb", usp->NgNb, usp->N);
+            break;
+   case 38: if( !usp->Bs ) Error( "Error", "Array Bs not used in task"); 
+            rddar.readArray(  "Bs", usp->Bs[0], usp->N*2);
+            break;
+   case 39:if( !usp->IntNb ) Error( "Error", "Array IntNb not used in task"); 
+            rddar.readArray(  "IntNb", usp->IntNb[0], usp->N*2);
+            break;
+   case 40: rddar.readArray(  "UnICn", usp->UnICn[0], UNSP_SIZE1, NAME_SIZE);
+            break;
+   case 41: rddar.readArray(  "UgDCn", usp->UgDCn[0], UNSP_SIZE1, NAME_SIZE);
+            break;
+   case 42: rddar.readArray(  "UaDCn", usp->UaDCn[0], UNSP_SIZE1, NAME_SIZE);
+            break;
+   case 43: rddar.readArray(  "UnDCAn", usp->UnICn[0], UNSP_SIZE2, NAME_SIZE);
+            break;
+   case 44: rddar.readArray(  "ParNames", usp->ParNames[0], usp->nPG, PARNAME_SIZE);
+            break;
   }
-  return 1;
+     nfild = rddar.findNext();
+ }
+ 
+ // testing read
+ ret = rddar.testRead();
+ if( !ret.empty() )
+  { ret += " - fields must be read from TUnSpace structure";
+    Error( "Error", ret);
+  }
+
 }
 
 //realloc dynamic memory for work arrays (do not reading)

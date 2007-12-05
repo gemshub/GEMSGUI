@@ -373,6 +373,8 @@ protected:
     void text_analyze( int nObj );
     void calc_graph();
 
+    // for separete TUnSpace
+    void to_text_file( fstream& ff, bool with_comments );
 
 
 
@@ -403,6 +405,7 @@ public:
     void MakeQuery();
     int RecBuild( const char *key, int mode = VF_UNDEF );
     void RecCalc( const char *key );
+    void RecordPrint( const char *key=0 ); //sddata key
     void RecordPlot( const char *key );
     bool SaveGraphData( GraphData* graph );
     void CmHelp();

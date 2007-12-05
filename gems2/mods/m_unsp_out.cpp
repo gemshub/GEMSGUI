@@ -1,5 +1,7 @@
 #include <math.h>
 #include <stdio.h>
+#include <iomanip>
+#include "io_arrays.h"
 
 #ifndef IPMGEMPLUGIN
 
@@ -503,5 +505,269 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
 }
 
 //====================================================================
+extern bool _comment;
 
+void TUnSpace::to_text_file( fstream& ff, bool with_comments )
+{
+  _comment = with_comments;
+  
+  TPrintArrays  prar(ff);
 
+   if( _comment )
+   {  ff << "# GEMIPM2K v. 2.2.0" << endl;
+      ff << "# Prototype 04.12.2007" << endl;
+      ff << "# Comments can be marked with # $ ;" << endl << endl;
+      ff << "# Template for the UnSpace data" << endl;
+      ff << "# (should be read only after the DATACH, the IPM-DAT and DATABR files)" << endl << endl;
+      ff << "#Section (scalar): Controls and dimensionalities of the UnSpace operation" << endl;
+   }
+   if( _comment )
+      ff << "# ( + on; - off ) probe type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam" << endl;
+    prar.writeArray(  "PsGen", usp->PsGen, 7, 1 );
+    if( _comment )
+       ff << "# code for adaptive loops for G(298): 0-no; >=1-yes (max number of loops)" << endl;
+    ff << left << setw(17) << "<Pa_Adapt> " << "\'"<<  usp->Pa_Adapt << "\'"<< endl;
+    if( _comment )
+       ff << "# code of function to construct the payoff matrix (A or 0; B or 1; C or 2; D or 3; E or 4; F or 5)" << endl;
+    ff << left << setw(17) << "<Pa_OF> " << "\'"<<  usp->Pa_OF << "\'"<< endl;
+    if( _comment )
+    {
+    	ff << "# (0 1 2 3 4) OSP criterion: 0- PA frequency statistics, 1- Laplace(quantile)" << endl;
+        ff << "#  2-Homeniuk(quantile) 3-Laplace (single point), 4-Homeniuk (single point)" << endl;
+    }
+    ff << left << setw(17) << "<Pa_Crit> " << "\'"<<  usp->Pa_Crit << "\'" << endl;
+    if( _comment )
+       ff << "# mode of Laplace function calculation: + mean of abs.values; - abs. mean of values" << endl;
+    ff << left << setw(17) << "<Pa_Zcp> " << "\'" <<  usp->Pa_Zcp << "\'" << endl;
+    if( _comment )
+       ff << "# code of function to construct the payoff matrix (A or 0; B or 1; C or 2; D or 3; E or 4; F or 5)" << endl;
+    ff << left << setw(17) << "<PvSi> " << "\'" <<  usp->PvSi << "\'" << endl;
+
+    if( _comment )
+       ff << "\n#  Flags that control input of criteria and analysis of sampled results" << endl;
+    if( _comment )
+       ff << "# flag of input for the filter on phase association" << endl;
+    ff << left << setw(17) << "<Pa_f_pha> " << "\'" <<  usp->Pa_f_pha << "\'" << endl;
+    if( _comment )
+       ff << "#  flag of input for filters on total IC molality" << endl;
+    ff << left << setw(17) << "<Pa_f_mol> " << "\'" <<  usp->Pa_f_mol << "\'" << endl;
+    if( _comment )
+       ff << "#  flag of input for the filters on fugacity/activity " << endl;
+    ff << left << setw(17) << "<Pa_f_fug> " << "\'" <<  usp->Pa_f_fug << "\'" << endl;
+    if( _comment )
+       ff << "# flag of input for the filters on mole fraction" << endl;
+    ff << left << setw(17) << "<Pa_f_mfr> " << "\'" <<  usp->Pa_f_mfr << "\'" << endl;
+    if( _comment )
+       ff << "# flag of input for the filter on pH" << endl;
+    ff << left << setw(17) << "<Pa_f_pH> " << "\'" <<  usp->Pa_f_pH << "\'" << endl;
+    if( _comment )
+       ff << "# flag of input for the filter on Eh" << endl;
+    ff << left << setw(17) << "<Pa_f_Eh> " << "\'" <<  usp->Pa_f_Eh << "\'" << endl;
+    if( _comment )
+       ff << "# flag of input for the filter on Independent Components" << endl;
+    ff << left << setw(17) << "<Pa_f_IC> " << "\'" <<  usp->Pa_f_IC << "\'" << endl;
+
+    if( _comment )
+       ff << "\n#  Allocation flags" << endl;
+    if( _comment )
+       ff << "# allocation flag for payoff matrix (if Q <= 1001)" << endl;
+    ff << left << setw(17) << "<PvPOM> " << "\'" <<  usp->PvPOM << "\'" << endl;
+    if( _comment )
+       ff << "#  allocation flag for payoff matrix row (if Q > 1001)" << endl;
+    ff << left << setw(17) << "<PvPOR> " << "\'" <<  usp->PvPOR << "\'" << endl;
+   
+    if( _comment )
+       ff << "\n#  Dimensionalities related to the UnSpace problem (Project/System indexation)" << endl;
+    if( _comment )
+       ff << "# input number of sample GEM calculations to be generated" << endl;
+    ff << left << setw(7) << "<Q> " <<  usp->Q << endl;
+    if( _comment )
+       ff << "#  quantile level (default 0.05)" << endl;
+    ff << left << setw(7) << "<quan_lev> " <<  usp->quan_lev << endl;
+    if( _comment )
+       ff << "# Total number of uncertain input parameters (for all unspace groups)" << endl;
+    ff << left << setw(7) << "<nPG> " <<  usp->nPG << endl;
+    if( _comment )
+       ff << "#  number of UnSpace parameter groups for sampling by Belov's grid" << endl;
+    ff << left << setw(7) << "<nGB> " <<  usp->nGB << endl;
+    if( _comment )
+       ff << "# number of UnSpace groups used in Monte Carlo with normal distribution" << endl;
+    ff << left << setw(7) << "<nGN> " <<  usp->nGN << endl;
+    if( _comment )
+       ff << "#  number of UnSpace groups used in Monte Carlo with uniform distribution" << endl;
+    ff << left << setw(7) << "<nGR> " <<  usp->nGR << endl;
+
+    if( _comment )
+       ff << "# Number of independent components   (from mup->N)" << endl;
+    ff << left << setw(7) << "<N> " <<  usp->N << endl;
+    if( _comment )
+       ff << "#  Number of dependent components     (from mup->L)" << endl;
+    ff << left << setw(7) << "<L> " <<  usp->L << endl;
+    if( _comment )
+       ff << "# Total number of DC in multi-comp.phases (from mup->Ls)" << endl;
+    ff << left << setw(7) << "<Ls> " <<  usp->Ls << endl;
+    if( _comment )
+       ff << "# Number of phases                   (from mup->Fi)" << endl;
+    ff << left << setw(7) << "<Fi> " <<  usp->Fi << endl;
+ 
+    ff<< "\n<END_DIM>\n";
+
+  // dynamic arrays - must follow static data
+    if( _comment )
+    {   ff << "\n## Task configuration section ";
+        ff << "\n# List of UnSpace group name";
+    }
+   prar.writeArray(  "SGp", usp->SGp[0], usp->nG, MAXPHNAME);
+    if( _comment )
+      ff << "\n# generation codes for unspace groups: 0- Belov; 1-uniform; 2-normale";
+   prar.writeArray(  "PbD", usp->PbD, usp->nG);
+   if( _comment )
+     ff << "\n# pseudo-random numbers for Belov algorithm";
+   prar.writeArray(  "OVB", usp->OVB, usp->nGB);
+   if( _comment )
+     ff << "\n# pseudo-random numbers by Monte Carlo with uniform distribution";
+   prar.writeArray(  "OVR", usp->OVR, usp->nGR);
+   if( _comment )
+      ff << "\n#  pseudo-random numbers by Monte Carlo with normal distribution";
+   prar.writeArray(  "OVN", usp->OVN, usp->nGN);
+
+   if( _comment )
+      ff << "\n\n## Input filters for sampled solution variants ";
+   if( _comment )
+      ff << "\n# pH lower filter limit (default 0)" << endl;
+   ff << left << setw(7) << "<pH_lo> " <<  usp->pH_lo << endl;
+   if( _comment )
+      ff << "#  pH upper filter limit (default 14)" << endl;
+   ff << left << setw(7) << "<pH_up> " <<  usp->pH_up << endl;
+   if( _comment )
+      ff << "# Eh lower filter limit (default -1)" << endl;
+   ff << left << setw(7) << "<Eh_lo> " <<  usp->Eh_lo << endl;
+   if( _comment )
+      ff << "# Eh upper filter limit (default 1)" << endl;
+   ff << left << setw(7) << "<Eh_up> " <<  usp->Eh_up << endl;
+   if( _comment )
+      ff << "# Ionic strength lower limit (default 0)" << endl;
+   ff << left << setw(7) << "<IC_lo> " <<  usp->IC_lo << endl;
+   if( _comment )
+      ff << "# Ionic strength lower limit (default 3))" << endl;
+   ff << left << setw(7) << "<IC_up> " <<  usp->IC_up << endl;
+   if( _comment )
+     ff << "# total IC molality filter - lower limits (default 0/-20) (units defined in PsUnFltI flag)";
+   prar.writeArray(  "m_t_lo", usp->m_t_lo, pmu->N/*usp->N*/, pmu->mui);
+   if( _comment )
+    ff << "\n# total IC molality filter - upper limits (default 10/+1) (units defined in PsUnFltI flag)";
+   prar.writeArray(  "m_t_up", usp->m_t_up, pmu->N/*usp->N*/, pmu->mui);
+   if( _comment )
+    ff << "\n# fugacity/activity filter - lower limits (default 0/-20) (units defined in PsUnFltD flag)";
+   prar.writeArray(  "fug_lo", usp->fug_lo, pmu->Ls/*usp->Ls*/, pmu->muj);
+   if( _comment )
+     ff << "\n#  fugacity/activity filter - upper limits (default 10/+1) (units defined in PsUnFltD flag)";
+   prar.writeArray(  "fug_up", usp->fug_up, pmu->Ls/*usp->Ls*/, pmu->muj);
+   if( _comment )
+     ff << "\n#  input phase indexes of known equilibrium phase association for a primary filter (Pa_f_pha)";
+   prar.writeArray(  "f_PhA", usp->f_PhA, pmu->N/*usp->N*/, pmu->mui);
+   
+   if( _comment )
+      ff << "\n\n## Input intervals for filtering sampled GEM solution variants ";
+   if( _comment )
+      ff << "\n# Unspace group index for uncertain temperature T; 0- T is not uncertain" << endl;
+   ff << left << setw(7) << "<NgT> " <<  usp->NgT << endl;
+   if( _comment )
+     ff << "# Adapted/Initial Deterministic value of T (Celsius)";
+   prar.writeArray(  "T", usp->T, 2);
+   if( _comment )
+    ff << "\n# Adapted/Initial 0 or uncertainty half-interval for T (C)";
+   prar.writeArray(  "IntT", usp->IntT, 2);
+ 
+   if( _comment )
+      ff << "\n# Unspace group index for uncertain pressure P; 0- P not uncertain" << endl;
+   ff << left << setw(7) << "<NgP> " <<  usp->NgP << endl;
+   if( _comment )
+     ff << "# Adapted/Initial Deterministic value of P (bar)";
+   prar.writeArray(  "P", usp->P, 2);
+   if( _comment )
+    ff << "\n# Adapted/Initial 0 or uncertainty half-interval for P (bar)";
+   prar.writeArray(  "IntP", usp->IntP, 2);
+
+   if( _comment )
+      ff << "\n# Unspace group index for uncertain volume constraint V, 0 - V not uncertain (reserved)" << endl;
+   ff << left << setw(7) << "<NgV> " <<  usp->NgV << endl;
+   if( _comment )
+     ff << "# Adapted/Initial Deterministic value of V (in cm3? L?)";
+   prar.writeArray(  "V", usp->V, 2);
+   if( _comment )
+    ff << "\n# Adapted/Initial 0 or uncertainty half-interval for V (in cm3? L?)";
+   prar.writeArray(  "IntV", usp->IntV, 2);
+
+   if( _comment )
+     ff << "\n# 0-deterministic DC; value >0 is index of a group of varying G to which this DC is assigned";
+   prar.writeArray(  "NgLg", usp->NgLg, pmu->L/*usp->L*/, pmu->muj);
+   if( _comment )
+     ff << "\n# adapted/initial  copy of deterministic values of G298 for DCs";
+   prar.writeArray(  "Gs", usp->Gs[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+   if( _comment )
+    ff << "\n# adapted/initial  uncertainty half-intervals for G variation (flag PsUnInt defines units)";
+   prar.writeArray(  "IntLg", usp->IntLg[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+
+   if( _comment )
+     ff << "\n# 0-deterministic DC; value >0 is index of a group varying gamma params (reserved)";
+   prar.writeArray(  "NgGam", usp->NgGam, pmu->Ls/*usp->Ls*/, pmu->muj);
+   if( _comment )
+     ff << "\n# adapted/initial copy of deterministic Par Gamma (reserved)";
+   prar.writeArray(  "GAMs", usp->GAMs[0], 2*pmu->Ls/*usp->Ls*/, pmu->muj, 2);
+   if( _comment )
+    ff << "\n# adapted/initial uncertainty half-intervals for gamma params (reserved)";
+   prar.writeArray(  "IntGam", usp->IntGam[0], 2*pmu->Ls/*usp->Ls*/, pmu->muj, 2);
+
+   if( _comment )
+      ff << "\n# 0-deterministic DC; value >0 is index of a group varying S";
+    prar.writeArray(  "NgLs", usp->NgLs, pmu->L/*usp->L*/, pmu->muj);
+    if( _comment )
+      ff << "\n# adapted/initial  copy of deterministic values of S298 for DCs (reserved)";
+    prar.writeArray(  "Ss", usp->Ss[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+    if( _comment )
+     ff << "\n#  adapted/initial uncertainty half-intervals for S (reserved)";
+    prar.writeArray(  "IntLs", usp->IntLs[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+   
+    if( _comment )
+       ff << "\n#  0-deterministic DC; value >0 is index of a group varying V";
+    prar.writeArray(  "NgLv", usp->NgLv, pmu->L/*usp->L*/, pmu->muj);
+    if( _comment )
+       ff << "\n# adapted/initial  copy of deterministic values of V298 for DCs";
+    prar.writeArray(  "Vs", usp->Vs[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+    if( _comment )
+      ff << "\n#  adapted/initial uncertainty half-intervals for V variation (flag PsUnInt defines units)";
+    prar.writeArray(  "IntLv", usp->IntLv[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+    
+    if( _comment )
+       ff << "\n#  0-deterministic DC; value >0 is index of a group varying b to which this IC is assigned";
+    prar.writeArray(  "NgNb", usp->NgNb, pmu->N/*usp->N*/, pmu->mui);
+    if( _comment )
+       ff << "\n# adapted/initial  copy of deterministic values of bulk composition vector b";
+    prar.writeArray(  "Bs", usp->Bs[0], 2*pmu->N/*usp->N*/, pmu->mui, 2);
+    if( _comment )
+      ff << "\n#  adapted/initial uncertainty half-intervals for b variation (flag PsUnInB defines units)";
+    prar.writeArray(  "IntNb", usp->IntNb[0], 2*pmu->N/*usp->N*/, pmu->mui, 2);
+    
+    if( _comment )
+      ff << "\n## Names of columns for output array UnIC ";
+    prar.writeArray(  "UnICn", usp->UnICn[0], UNSP_SIZE1, NAME_SIZE);
+    if( _comment )
+      ff << "\n## Names of columns for output array UgDC  ";
+    prar.writeArray(  "UgDCn", usp->UgDCn[0], UNSP_SIZE1, NAME_SIZE);
+    if( _comment )
+      ff << "\n## Names of columns for output array  UaDc ";
+    prar.writeArray(  "UaDCn", usp->UaDCn[0], UNSP_SIZE1, NAME_SIZE);
+    if( _comment )
+      ff << "\n## Names of columns for output array UnDCA ";
+    prar.writeArray(  "UnDCAn", usp->UnICn[0], UNSP_SIZE2, NAME_SIZE);
+    if( _comment )
+      ff << "\n## List of insertain input parameters names ";
+    prar.writeArray(  "ParNames", usp->ParNames[0], usp->nPG, PARNAME_SIZE);
+
+    
+   if( _comment )
+         ff << "\n# End of file"<< endl;
+}
+
+// end of m_unsp_out.cpp

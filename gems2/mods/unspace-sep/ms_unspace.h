@@ -67,10 +67,10 @@ typedef struct
              //  2 - analysis run; 3 - analysis done; ( + 5: the same using stepwise mode)
 
 // Flags that control construction and sampling of UnSpace
-/////    PsUnInt,  //  ( % 0 A 1 ) scale of uncertainty intervals for G S V: % or 0 - in %; A or 1- absolute
-/////    PsUnInB,  //  ( % A L) scale for uncertainty intervals for B (% or 0 - in %; A or 1 - abs; L or 2 - log10)
-/////    PsUnFltI, // ( A L ) scale for IC molality interval filters (A absolute, L log scale)
-/////    PsUnFltD, // ( A L C) scale for DC activity/fugacity interval filters (A absolute, L log scale C mol fraction)
+    PsUnInt,  //  ( % 0 A 1 ) scale of uncertainty intervals for G S V: % or 0 - in %; A or 1- absolute
+    PsUnInB,  //  ( % A L) scale for uncertainty intervals for B (% or 0 - in %; A or 1 - abs; L or 2 - log10)
+    PsUnFltI, // ( A L ) scale for IC molality interval filters (A absolute, L log scale)
+    PsUnFltD, // ( A L C) scale for DC activity/fugacity interval filters (A absolute, L log scale C mol fraction)
     PsGen[7], // (+ 1 on; - 0 off ) int zond[6]; probe type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam
 /////    PsSY,     // Save generated SysEq records to data base (+ -)
 /////    PsEqn,    // Will math script be specified in this UnSpace definition (+ -)
@@ -331,6 +331,7 @@ protected:
 // memory allocation	
 	 void Alloc();
 	 void Free();
+     void setup_defaults();
 
 	   
 //    void keyTest( const char *key );
@@ -404,9 +405,8 @@ protected:
 public:
 
 	// write/read unspace structure	   
-		 int Unspace_to_format_txt( const char *fname );
-		 int Unspace_from_format_txt( const char *fname );
-
+	void to_text_file( fstream& ff, bool with_comments );
+	void from_text_file(fstream& ff);
 	
     static TUnSpace* pm;
 

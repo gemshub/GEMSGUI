@@ -1182,3 +1182,17 @@ TUnSpace::CmHelp()
     pVisor->OpenHelp( GEMS_USP_HTML );  //  05.01.01
 }
 
+void
+TUnSpace::RecordPrint( const char* key )
+{
+    int res = vfQuestion3(window(), key,
+                    "Will you produce input files for standalone UnSpace (Yes) or use print script (No)?",
+		       "Yes", "No", "Cancel");
+	if( res == VF3_3 )
+	    return;
+
+	if( res == VF3_1 )
+		/*to_text_file( fstream& ff, true )*/;
+	else
+	     TCModule::RecordPrint( key );
+}
