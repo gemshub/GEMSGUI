@@ -22,6 +22,7 @@ const char *GEMS_USP_HTML = "gm_unspace";
 
 #include <math.h>
 #include <stdio.h>
+using namespace std;
 
 #include "m_unspace.h"
 #include "m_syseq.h"
