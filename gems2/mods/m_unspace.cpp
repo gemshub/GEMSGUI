@@ -1185,14 +1185,34 @@ TUnSpace::CmHelp()
 void
 TUnSpace::RecordPrint( const char* key )
 {
-    int res = vfQuestion3(window(), key,
+    int res = vfQuestion3(window(), "Question",
                     "Will you produce input files for standalone UnSpace (Yes) or use print script (No)?",
 		       "Yes", "No", "Cancel");
 	if( res == VF3_3 )
 	    return;
 
 	if( res == VF3_1 )
-		/*to_text_file( fstream& ff, true )*/;
+	{
+		gstring filename;   
+		if( vfChooseFileSave(window(), filename, 
+				   "Please, enter the Unspace work structure file name", "*.unc" ) )
+		{
+		    if( !access(filename.c_str(), 0 ) ) //file exists
+		        if( !vfQuestion( window(), filename.c_str(),
+		        		"This file exists! Overwrite?") )
+                   return;
+            fstream ff( filename.c_str(), ios::out );
+	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
+	        to_text_file( ff, true );
+            
+	        filename +=".res";
+	        fstream ff1( filename.c_str(), ios::out );
+	        ErrorIf( !ff1.good() , filename.c_str(), "Fileopen error");
+	        result_to_text_file( ff1, true );
+		}
+		TProfil::pm->outMulti();
+		//	     na->GEM_init( f_name.c_str(), 0, true );
+	}
 	else
 	     TCModule::RecordPrint( key );
 }

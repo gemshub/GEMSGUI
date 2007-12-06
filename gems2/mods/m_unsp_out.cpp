@@ -522,10 +522,10 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
       ff << "#Section (scalar): Controls and dimensionalities of the UnSpace operation" << endl;
    }
    if( _comment )
-      ff << "# ( + on; - off ) probe type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam" << endl;
+      ff << "# ( + on; - off ) probe type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam";
     prar.writeArray(  "PsGen", usp->PsGen, 7, 1 );
     if( _comment )
-       ff << "# code for adaptive loops for G(298): 0-no; >=1-yes (max number of loops)" << endl;
+       ff << "\n# code for adaptive loops for G(298): 0-no; >=1-yes (max number of loops)" << endl;
     ff << left << setw(17) << "<Pa_Adapt> " << "\'"<<  usp->Pa_Adapt << "\'"<< endl;
     if( _comment )
        ff << "# code of function to construct the payoff matrix (A or 0; B or 1; C or 2; D or 3; E or 4; F or 5)" << endl;
@@ -598,17 +598,17 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
     ff << left << setw(7) << "<nGR> " <<  usp->nGR << endl;
 
     if( _comment )
-       ff << "# Number of independent components   (from mup->N)" << endl;
-    ff << left << setw(7) << "<N> " <<  usp->N << endl;
+       ff << "# Number of independent components   (from pmu->N)" << endl;
+    ff << left << setw(7) << "<N> " <<  /*usp*/pmu->N << endl;
     if( _comment )
-       ff << "#  Number of dependent components     (from mup->L)" << endl;
-    ff << left << setw(7) << "<L> " <<  usp->L << endl;
+       ff << "#  Number of dependent components     (from pmu->L)" << endl;
+    ff << left << setw(7) << "<L> " <<  /*usp*/pmu->L << endl;
     if( _comment )
-       ff << "# Total number of DC in multi-comp.phases (from mup->Ls)" << endl;
-    ff << left << setw(7) << "<Ls> " <<  usp->Ls << endl;
+       ff << "# Total number of DC in multi-comp.phases (from pmu->Ls)" << endl;
+    ff << left << setw(7) << "<Ls> " <<  /*usp*/pmu->Ls << endl;
     if( _comment )
-       ff << "# Number of phases                   (from mup->Fi)" << endl;
-    ff << left << setw(7) << "<Fi> " <<  usp->Fi << endl;
+       ff << "# Number of phases                   (from pmu->Fi)" << endl;
+    ff << left << setw(7) << "<Fi> " <<  /*usp*/pmu->FI << endl;
  
     ff<< "\n<END_DIM>\n";
 
@@ -704,50 +704,50 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
    prar.writeArray(  "NgLg", usp->NgLg, pmu->L/*usp->L*/, pmu->muj);
    if( _comment )
      ff << "\n# adapted/initial  copy of deterministic values of G298 for DCs";
-   prar.writeArray(  "Gs", usp->Gs[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+   prar.writeArray(  "Gs", usp->Gs[0], pmu->L/*usp->L*/, pmu->muj, 2);
    if( _comment )
     ff << "\n# adapted/initial  uncertainty half-intervals for G variation (flag PsUnInt defines units)";
-   prar.writeArray(  "IntLg", usp->IntLg[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+   prar.writeArray(  "IntLg", usp->IntLg[0], pmu->L/*usp->L*/, pmu->muj, 2);
 
    if( _comment )
      ff << "\n# 0-deterministic DC; value >0 is index of a group varying gamma params (reserved)";
    prar.writeArray(  "NgGam", usp->NgGam, pmu->Ls/*usp->Ls*/, pmu->muj);
    if( _comment )
      ff << "\n# adapted/initial copy of deterministic Par Gamma (reserved)";
-   prar.writeArray(  "GAMs", usp->GAMs[0], 2*pmu->Ls/*usp->Ls*/, pmu->muj, 2);
+   prar.writeArray(  "GAMs", usp->GAMs[0], pmu->Ls/*usp->Ls*/, pmu->muj, 2);
    if( _comment )
     ff << "\n# adapted/initial uncertainty half-intervals for gamma params (reserved)";
-   prar.writeArray(  "IntGam", usp->IntGam[0], 2*pmu->Ls/*usp->Ls*/, pmu->muj, 2);
+   prar.writeArray(  "IntGam", usp->IntGam[0], pmu->Ls/*usp->Ls*/, pmu->muj, 2);
 
    if( _comment )
       ff << "\n# 0-deterministic DC; value >0 is index of a group varying S";
     prar.writeArray(  "NgLs", usp->NgLs, pmu->L/*usp->L*/, pmu->muj);
     if( _comment )
       ff << "\n# adapted/initial  copy of deterministic values of S298 for DCs (reserved)";
-    prar.writeArray(  "Ss", usp->Ss[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+    prar.writeArray(  "Ss", usp->Ss[0], pmu->L/*usp->L*/, pmu->muj, 2);
     if( _comment )
      ff << "\n#  adapted/initial uncertainty half-intervals for S (reserved)";
-    prar.writeArray(  "IntLs", usp->IntLs[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+    prar.writeArray(  "IntLs", usp->IntLs[0], pmu->L/*usp->L*/, pmu->muj, 2);
    
     if( _comment )
        ff << "\n#  0-deterministic DC; value >0 is index of a group varying V";
     prar.writeArray(  "NgLv", usp->NgLv, pmu->L/*usp->L*/, pmu->muj);
     if( _comment )
        ff << "\n# adapted/initial  copy of deterministic values of V298 for DCs";
-    prar.writeArray(  "Vs", usp->Vs[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+    prar.writeArray(  "Vs", usp->Vs[0], pmu->L/*usp->L*/, pmu->muj, 2);
     if( _comment )
       ff << "\n#  adapted/initial uncertainty half-intervals for V variation (flag PsUnInt defines units)";
-    prar.writeArray(  "IntLv", usp->IntLv[0], 2*pmu->L/*usp->L*/, pmu->muj, 2);
+    prar.writeArray(  "IntLv", usp->IntLv[0], pmu->L/*usp->L*/, pmu->muj, 2);
     
     if( _comment )
        ff << "\n#  0-deterministic DC; value >0 is index of a group varying b to which this IC is assigned";
     prar.writeArray(  "NgNb", usp->NgNb, pmu->N/*usp->N*/, pmu->mui);
     if( _comment )
        ff << "\n# adapted/initial  copy of deterministic values of bulk composition vector b";
-    prar.writeArray(  "Bs", usp->Bs[0], 2*pmu->N/*usp->N*/, pmu->mui, 2);
+    prar.writeArray(  "Bs", usp->Bs[0], pmu->N/*usp->N*/, pmu->mui, 2);
     if( _comment )
       ff << "\n#  adapted/initial uncertainty half-intervals for b variation (flag PsUnInB defines units)";
-    prar.writeArray(  "IntNb", usp->IntNb[0], 2*pmu->N/*usp->N*/, pmu->mui, 2);
+    prar.writeArray(  "IntNb", usp->IntNb[0], pmu->N/*usp->N*/, pmu->mui, 2);
     
     if( _comment )
       ff << "\n## Names of columns for output array UnIC ";
@@ -768,6 +768,99 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
     
    if( _comment )
          ff << "\n# End of file"<< endl;
+}
+
+void TUnSpace::result_to_text_file( fstream& ff, bool with_comments )
+{
+  _comment = with_comments;
+  
+  TPrintArrays  prar(ff);
+  
+  if( _comment )
+   ff << "\n# index of optimal sample point";
+  prar.writeArray(  "Lapl", &usp->Lapl, 4 );
+  if( _comment )
+   ff << "\n# number of sample points with the same phase assemblage as that selected by";
+  prar.writeArray(  "nl", &usp->nl, 4 );
+  if( _comment )
+   ff << "\n# single criterion value (from analysing payoff matrix)";
+  prar.writeArray(  "CrL", &usp->CrL, 4 );
+ 
+  /* do not read 
+   usp->vG = new double[ usp->Q* usp->L];
+   usp->vY = new double[ usp->Q* usp->L];
+   usp->vYF = new double[ usp->Q* usp->Fi];
+   usp->vGam = new double[ usp->Q* usp->L];
+   usp->vMol = new double[ usp->Q* usp->N];
+   usp->vU = new double[ usp->Q* usp->N];
+   usp->vpH = new float[usp->Q][3];
+   usp->vT = new float[usp->Q];
+   usp->vP = new float[usp->Q];
+   usp->vV = new float[usp->Q];
+*/
+  
+  if( _comment )
+   ff << "\n# indices of sample GEM variants taken into quantile Laplace, Hurtvitz, Wald, Homenyuk (columns";
+  prar.writeArray(  "quanCv", usp->quanCv[0], usp->Q*4 );
+  if( _comment )
+   ff << "\n# Values taken into quantile Laplace. Hurtvitz, Wald, Homenyuk (columns )";
+  prar.writeArray(  "quanCx", usp->quanCx[0],  usp->Q*4);
+/*
+  if( usp->nPhA > 0 )
+     {
+       usp->PhAndx = new short[usp->nPhA*usp->N];
+       usp->PhNum = new short[usp->nPhA];
+       usp->PhAID = new char[usp->nPhA][8];
+       usp->PhAlst = new char[usp->nPhA][80];
+       usp->PhAfreq = new float[ usp->nPhA];
+     }
+  usp->sv = new short[ usp->Q];
+
+*/
+  if( usp->PvPOM == S_ON )
+  {  if( _comment )
+     ff << "\n# payoff matrix";
+    prar.writeArray(  "POM", usp->POM, usp->Q*usp->Q );
+  }
+  if( usp->PvPOR == S_ON )
+    {  if( _comment )
+       ff << "\n# payoff matrix row";
+      prar.writeArray(  "POR", usp->POR, usp->Q );
+    }
+  if( _comment )
+   ff << "\n# Values taken into quantile Laplace. Hurtvitz, Wald, Homenyuk (columns )";
+  prar.writeArray(  "UnIC", usp->UnIC[0],  usp->N*UNSP_SIZE1);
+
+/*
+double
+  *Zcp,     //  [Q]  mean over rows of pay-off matrix for Laplace criterion
+  *Zmin,    //  [Q]  minima in rows of pay-off matrix for Hurwitz criterion
+  *Zmax,    //  [Q]  maxima in rows row pay-off matrix  for Hurwitz criterion
+  *ZmaxAbs, //  [Q]  abs(max)values in rows of pay-off matrix for Wald criterion
+  *Hom,     //  [Q]  array of calculated values for Homenyuk criterion
+  *Prob;    //  [Q]  array of probabilities for calculating Homenuk criterion
+  // array for statistics output
+double (*UnIC)  [UNSP_SIZE1]; //  [N][UNSP_SIZE1] statistics over independent components
+double (*UgDC)  [UNSP_SIZE1]; //  [nPG][UNSP_SIZE1] statistics set 1 over dependent components
+double (*UaDC)  [UNSP_SIZE1]; //  [Ls][UNSP_SIZE1] statistics set 2 over dependent components
+double (*UnDCA) [UNSP_SIZE2]; // [nPG][UNSP_SIZE2] statistics set 1 over dependent components
+
+  usp->Zcp = new double[ usp->Q];
+       usp->Zmin = new double[ usp->Q];
+       usp->Zmax = new double[ usp->Q];
+       usp->ZmaxAbs = new double[ usp->Q];
+       usp->Hom = new double[ usp->Q];
+       usp->Prob = new double[ usp->Q];
+
+
+     usp->UnIC = new double[usp->N][UNSP_SIZE1];
+     usp->UgDC = new double[usp->nPG][UNSP_SIZE1];
+     usp->UaDC = new double[usp->Ls][UNSP_SIZE1];
+     usp->UnDCA = new double[usp->nPG][UNSP_SIZE2];
+ */
+  
+  if( _comment )
+        ff << "\n# End of file"<< endl;
 }
 
 // end of m_unsp_out.cpp

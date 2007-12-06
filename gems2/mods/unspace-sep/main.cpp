@@ -35,29 +35,33 @@ int main( int argc, char* argv[] )
      gstring chbr_in1 = "ipmfiles-dat.lst";
 
 // from argv
-      //if (argc >= 2 )
-      //  multu_in1 = argv[1];
       if (argc >= 2 )
        chbr_in1 = argv[1];
       if (argc >= 3 )
     	  unspace_in1 = argv[2];
 
    try{
-/*
-// The NodeArray must be allocated here
-    TGEM2MT::pm = new TGEM2MT();
 
-// Here we read the GEM2MT structure, prepared from GEMS or by hand
-   if( TGEM2MT::pm->MassTransSetUp( gem2mt_in1.c_str() ))
-     return 1;  // error reading files
+    // Allocate the main module here
+	 TUnSpace::pm = new TUnSpace();
 
-// Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
-    if( TGEM2MT::pm->MassTransInit( chbr_in1.c_str() ) )
-      return 1;  // error reading files
+    // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
+	 if( TUnSpace::pm->TaskSystemInit( chbr_in1.c_str() ) )
+	       return 1;  // error reading files
 
-// here we call the mass-transport finite-difference coupled routine
-   RetC = TGEM2MT::pm->Trans1D( NEED_GEM_AIA );
-*/   }
+    // Here we read the TUnSpace structure, prepared from GEMS or by hand
+     if( TUnSpace::pm->ReadTask( unspace_in1.c_str() ))
+        return 1;  // error reading files
+
+   // here we call the mass-transport finite-difference coupled routine
+   // RetC = TGEM2MT::pm->Trans1D( NEED_GEM_AIA );
+     TUnSpace::pm->RecCalc( "" );
+    
+    // test output
+     if( TUnSpace::pm->WriteTask( "test.out" ))
+        return 1;  // error reading files
+  
+   }
    catch(TError& err)
        {
         fstream f_log("ipmlog.txt", ios::out|ios::app );

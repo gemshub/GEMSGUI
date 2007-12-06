@@ -45,6 +45,21 @@ const int UNSP_RKLEN = 80,
           UNSP_SIZE2 = 8,
           PARNAME_SIZE = 20;
 
+typedef enum {
+
+    GS_INDEF   = '0',
+    GS_GOING    = '1',
+    GS_DONE    = '2',
+    GS_ERR     = '3',
+
+    AS_INDEF   = '0',
+    AS_READY   = '1',
+    AS_RUN     = '2',
+    AS_DONE    = '3',
+
+
+} GS_AS_CLASSES;
+
 
 typedef struct
 { // Description  UnSpace
@@ -305,11 +320,11 @@ class TUnSpace
 //    RMULTS* mup;
    short mup_Laq;     // LO  - of DC in aqueous phase
    short mup_Pg;      // PG  - of DC in gaseous phase
-   char (*mup_SF)[PH_RKLEN];// List of PHASE definition keys [0:Fi-1]             DB   
+   char (*mup_SF)[MAXPHNAME+MAXSYMB];// List of PHASE definition keys [0:Fi-1]             DB   
    short  *mup_Ll;          // L1 vector, shows a number of DC included to each phase [0:Fi-1] DB
 
 //    SYSTEM *syu; // syu = TProfil::pm->syp;
-   char  *syu_Dcl;  // DC selection switches { + * - } [0:mu.L-1]
+//   char  *syu_Dcl;  // DC selection switches { + * - } [0:mu.L-1]
    float *syu_Guns;  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
    float *syu_Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm
    double  *syu_B;  // Vector b of bulk chemical composition of the system, moles [0:mu.N-1]
@@ -317,7 +332,7 @@ class TUnSpace
 //    MTPARM *tpp;
    double *tpp_G; // Partial molar(molal) Gibbs energy g(TP) (always), J/mole 
    float *tpp_S;    // Partial molar(molal) entropy s(TP), J/mole/K
-   float *tpp_Vm;   // Partial molar(molal) volume Vm(TP) (always), J/bar
+   double *tpp_Vm;   // Partial molar(molal) volume Vm(TP) (always), J/bar
     
 //    SYSTEM *syu; // syu = TProfil::pm->syp;
       MULTI *pmu; // pmu = TProfil::pm->pmp;
@@ -407,6 +422,11 @@ public:
 	// write/read unspace structure	   
 	void to_text_file( fstream& ff, bool with_comments );
 	void from_text_file(fstream& ff);
+    void result_to_text_file( fstream& ff, bool with_comments );
+    int TaskSystemInit( const char *chbr_in1 );
+	int ReadTask( const char *unsp_in1 );
+	int WriteTask( const char *unsp_in1 );
+
 	
     static TUnSpace* pm;
 
@@ -425,7 +445,7 @@ public:
 //    void RecInput( const char *key );
 //    void MakeQuery();
 //    int RecBuild( const char *key, int mode = VF_UNDEF );
-//    void RecCalc( const char *key );
+    void RecCalc( const char *key );
 
 
 };

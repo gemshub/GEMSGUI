@@ -375,6 +375,7 @@ protected:
 
     // for separete TUnSpace
     void to_text_file( fstream& ff, bool with_comments );
+    void result_to_text_file( fstream& ff, bool with_comments );
 
 
 

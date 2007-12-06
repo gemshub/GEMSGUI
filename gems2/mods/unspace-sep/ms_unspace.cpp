@@ -30,23 +30,22 @@ TUnSpace::TUnSpace()
 
     // default data
     memset(usp, 0, sizeof(UNSPACE) );
-//  setup_defaults();
-    
+    setup_defaults();
     na = 0;
 }  
 
 // Reading TUnSpace structure from text file
 void TUnSpace::setup_defaults()
 {
-	usp->Gstat = GS_INDEF;
-	usp->Astat = AS_INDEF;
+	usp->Gstat = 0;
+	usp->Astat = 0;
 	memcpy( &usp->PsUnInt, "%%AA+------", 11 );
 	memcpy( &usp->Pa_f_pha, "------0A1+", 10 );
 	usp->Pa_Crit = UNSP_CRIT_PA;
 	memcpy( &usp->PvPOM, "+-+-", 4 );
     usp->quan_lev = 0.05;
-    usp->ph_lo = 0.;
-    usp->ph_up = 14.;
+    usp->pH_lo = 0.;
+    usp->pH_up = 14.;
     usp->Eh_lo = -1.;
     usp->Eh_up = 1.;
     usp->IC_lo = 0.;
@@ -61,6 +60,134 @@ TUnSpace::~TUnSpace()
    delete na;
 }
 
+
+// Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
+// Set up Node classes
+int TUnSpace::TaskSystemInit( const char *chbr_in1 )
+{
+  // The NodeArray must be allocated here
+  TNode::na = na = new TNode();
+
+  // Here we read the files needed as input for initializing GEMIPM2K
+  // This files anloaded from UnSpace print comand
+  if( TNode::na->GEM_init( chbr_in1 ) )
+  {
+    cout << "Error: Chemical system definition files listed in " << endl
+         << chbr_in1 << endl
+         << " cannot be found or are corrupt" << endl;
+     return 1;  // error occured during reading the files
+  }
+  
+  // setup some internal data 
+  pmu = TProfil::pm->pmp;
+  
+  // !!! internaal from Profile Must be cheked
+  //    RMULTS* mup;
+   mup_Laq = pmu->LO;     // LO  - of DC in aqueous phase
+   mup_Pg = pmu->PG;      // PG  - of DC in gaseous phase
+   mup_SF   =  pmu->SF;   // List of PHASE definition keys [0:Fi-1]             DB   
+   mup_Ll = pmu->L1;      // L1 vector, shows a number of DC included to each phase [0:Fi-1] DB
+
+  //    SYSTEM *syu; // syu = TProfil::pm->syp;
+  // char  *syu_Dcl;  // DC selection switches { + * - } [0:mu.L-1]
+    syu_B = pmu->B;  // Vector b of bulk chemical composition of the system, moles [0:mu.N-1]
+     
+  //    MTPARM *tpp;
+     tpp_G = pmu->G0; // Partial molar(molal) Gibbs energy g(TP) (always), J/mole 
+     tpp_S = pmu->S0;    // Partial molar(molal) entropy s(TP), J/mole/K
+     tpp_Vm = pmu->Vol;   // Partial molar(molal) volume Vm(TP) (always), J/bar
+
+     
+     syu_Guns = new float[pmu->L];  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
+     syu_Vuns = new float[pmu->L];  //  mu.L work vector of uncertainty space increments to tp->Vm
+     memset( syu_Guns, 0, pmu->L*sizeof(float) );
+     memset( syu_Vuns, 0, pmu->L*sizeof(float) );
+
+     
+  return 0;
+}
+
+//Recalc record structure
+void
+TUnSpace::RecCalc( const char *key )
+{
+    int nAdapt = 1;
+
+    if( usp->Pa_Adapt > '1')
+    {  nAdapt = (int)(usp->Pa_Adapt-'0');
+       usp->Gstat = GS_INDEF; // for Adapt mode need   buildTestedArrays
+                                  // for each cicle
+    }
+
+    usp->A = pmu->A;
+    
+    for( int ii=0; ii<nAdapt; ii++ )
+    {
+      if( usp->Gstat != GS_DONE )
+      {
+          usp->Gstat = GS_GOING;
+          usp->Astat = AS_INDEF;
+          buildTestedArrays();
+      }
+      if( usp->PsGen[0] == S_ON )
+      {
+        analiseArrays();
+        if( usp->Pa_Adapt > '1')
+           AdapG();                    // !!!! test Kostin beak ob =0 or ob>Q*0.95
+      }
+    }
+
+  if( usp->Pa_Adapt > '1')
+    usp->Pa_Adapt = '1';
+  usp->Gstat = GS_DONE;   // for Adapt mode need   buildTestedArrays
+                                 // for each cicle
+  usp->Astat = AS_DONE;
+}
+
+// read TUnSpace structure from file
+int TUnSpace::ReadTask( const char *unsp_in1 )
+{
+ // read GEM2MT structure from file
+  fstream f_log("ipmlog.txt", ios::out|ios::app );
+  try
+  {
+   fstream ff(unsp_in1, ios::in );
+   ErrorIf( !ff.good() , unsp_in1, "Fileopen error");
+   from_text_file( ff );
+   return 0;
+  }
+  catch(TError& err)
+  {
+      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
+  }
+  return 1;
+}
+
+// Write TUnSpace structure from file
+int TUnSpace::WriteTask( const char *unsp_in1 )
+{
+ // read GEM2MT structure from file
+  fstream f_log("ipmlog.txt", ios::out|ios::app );
+  try
+  {
+   fstream ff(unsp_in1, ios::out );
+   ErrorIf( !ff.good() , unsp_in1, "Fileopen error");
+   to_text_file( ff, true);
+   gstring filename = unsp_in1;
+           filename += ".res";
+   fstream ff1( filename.c_str(), ios::out );
+   ErrorIf( !ff1.good() , filename.c_str(), "Fileopen error");
+   result_to_text_file( ff1, true );
+   return 0;
+  }
+  catch(TError& err)
+  {
+      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
+  }
+  return 1;
+}
+
+//--------------------------------------------------------------------------------------------------
 outField TUnSpace_static_fields[25] =  {
  { "PsGen", 1,0 },  // 7
  { "Pa_Adapt" , 1,0 },
@@ -407,7 +534,7 @@ if( usp->nPhA > 0 )
 void TUnSpace::work_dyn_new()
 {
 //  work (not in record)
-    usp->A = new float[ usp->L* usp->N];
+//??pmu->A??    usp->A = new float[ usp->L* usp->N];
     usp->sv = new short[ usp->Q];
 
     usp->Zcp = new double[ usp->Q];

@@ -643,7 +643,7 @@ double TUnSpace::ePO( int i, int j )
        if (syu->Dcl[k]!=S_OFF )
 #else
      for( k=ii; k<ii+(mup_Ll[z]); k++)
-         if (syu_Dcl[k]!=S_OFF )
+//         if (syu_Dcl[k]!=S_OFF )
 #endif
        { if( z==WF )
          { if( k < ( Laq_-1) &&
@@ -733,7 +733,7 @@ double TUnSpace::ePO1( int i,int j )
        if (syu->Dcl[k]!=S_OFF )
 #else
      for( k=ii; k<ii+(mup_Ll[z]); k++)
-         if (syu_Dcl[k]!=S_OFF )
+//         if (syu_Dcl[k]!=S_OFF )
 #endif
     {
       if( z==WF )
@@ -779,7 +779,7 @@ double TUnSpace::ePO1( int i,int j )
 #ifndef IPMGEMPLUGIN
          if (syu->Dcl[k]!=S_OFF && usp->vY[i1*usp->L+k] > 1e-19 )
 #else
-         if (syu_Dcl[k]!=S_OFF && usp->vY[i1*usp->L+k] > 1e-19 )
+         if (/*syu_Dcl[k]!=S_OFF && */usp->vY[i1*usp->L+k] > 1e-19 )
 #endif
         for( z=0; z<usp->N; z++)
            R += usp->A[k*usp->N+z]* (usp->vU[i1*usp->N+z]);
@@ -827,7 +827,7 @@ double TUnSpace::ePO2( int i,int j )
        if (syu->Dcl[k]!=S_OFF )
 #else
      for( k=ii; k<ii+(mup_Ll[z]); k++)
-         if (syu_Dcl[k]!=S_OFF )
+//         if (syu_Dcl[k]!=S_OFF )
 #endif
     {
       if( z==WF )
@@ -875,7 +875,7 @@ double TUnSpace::ePO2( int i,int j )
        if (syu->Dcl[k]!=S_OFF )
 #else
      for( k=ii; k<ii+(mup_Ll[z]); k++)
-         if (syu_Dcl[k]!=S_OFF )
+//         if (syu_Dcl[k]!=S_OFF )
 #endif
     {
       if( z==WF )
@@ -1215,7 +1215,7 @@ for(np=0; np<usp->nPhA; np++ )
                TProfil::pm->mup->SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
 #else
             lst += gstring(
-               mup_SF[k]+MAXSYMB+MAXPHSYMB, 0, MAXPHNAME);
+               mup_SF[k]+MAXSYMB, 0, MAXPHNAME);
 #endif
             lst.strip();
             lst += ";";
