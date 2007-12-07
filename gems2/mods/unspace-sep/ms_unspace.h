@@ -325,8 +325,8 @@ class TUnSpace
 
 //    SYSTEM *syu; // syu = TProfil::pm->syp;
 //   char  *syu_Dcl;  // DC selection switches { + * - } [0:mu.L-1]
-   float *syu_Guns;  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
-   float *syu_Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm
+//   float *syu_Guns;  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
+//   float *syu_Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm
    double  *syu_B;  // Vector b of bulk chemical composition of the system, moles [0:mu.N-1]
    
 //    MTPARM *tpp;

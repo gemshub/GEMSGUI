@@ -275,6 +275,12 @@ typedef struct
         ITG;        // Number of completed GEM IPM iterations
   clock_t t_start, t_end;
   double t_elap_sec;  // work variables for determining IPM calculation time
+#ifdef IPMGEMPLUGIN
+  float *Guns;  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
+  float *Vuns;  //  mu.L work vector of uncertainty space increments to tp->Vm
+
+  
+#endif  
 }
 MULTI;
 
@@ -480,6 +486,8 @@ public:
      BB = 0;
      arrL = 0;
      arrAN = 0;
+     pmp->Guns = 0;
+     pmp->Vuns = 0;
    }
 
     void multi_realloc( char PAalp, char PSigm );

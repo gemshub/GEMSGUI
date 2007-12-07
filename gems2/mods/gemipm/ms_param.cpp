@@ -159,7 +159,7 @@ void TProfil::readMulti( const char* path )
       multi->from_text_file_gemipm( path);
 }
 
-static bool load = false;
+ bool load = false;
 
 // Load Thermodynamic Data from MTPARM to MULTI using LagranInterp
 void TMulti::CompG0Load()
@@ -237,6 +237,8 @@ void TMulti::CompG0Load()
        Vv = LagranInterp( dCH->Pval, dCH->TCval, dCH->V0+jj,
                             P, TC, dCH->nTp, dCH->nPp, 1 );
      }
+      if( pmp->Guns )
+           Gg += pmp->Guns[j];
      pmp->G0[j] = Cj_init_calc( Gg, j, k );
      switch( pmp->PV )
      { // put mol volumes of components into A matrix
@@ -244,8 +246,10 @@ void TMulti::CompG0Load()
                     pmp->A[j*pmp->N] = Vv; // !!  error
        case VOL_CALC:
        case VOL_UNDEF:
-                    pmp->Vol[j] = Vv  * 10.;
-                    break;
+              if( pmp->Vuns )
+                     Vv += pmp->Vuns[j];
+ 	          pmp->Vol[j] = Vv  * 10.;
+              break;
      }
     }
  }

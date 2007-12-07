@@ -26,14 +26,22 @@
 // Generation arrays part
 //=========================================================================
 
+#ifdef IPMGEMPLUGIN
+  extern  bool load;
+#endif
 
 // make EqStat key  && calculate records
 void TUnSpace::unsp_eqkey()
 {
-#ifndef IPMGEMPLUGIN
 
 	double calculation_time;
     int NumPrecLoops = 0, NumIterFIA = 0, NumIterIPM = 0;
+
+#ifndef IPMGEMPLUGIN
+
+    // calculate EqStat record (Thermodynamic&Equlibria)
+    pmu->pTPD = 0;
+    //     pmu->pNP = 0;
     vstr buf(40);
 
     sprintf(buf, "%.4d", usp->q);
@@ -51,7 +59,9 @@ void TUnSpace::unsp_eqkey()
 // calc current SyStat 16/02/2007
      pmu->TCc = usp->Tc;
      pmu->Pc = usp->Pc;
-calculation_time = TProfil::pm->calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM );
+     
+     
+     calculation_time = TProfil::pm->calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM );
     //TProfil::pm->CalcEqstat( false ); // 16/02/2007
 // Later: to implement account for calculation time and numbers of iterations/loops
 
@@ -60,7 +70,15 @@ calculation_time = TProfil::pm->calcMulti( NumPrecLoops, NumIterFIA, NumIterIPM 
     if( usp->stl )
        memcpy( usp->stl+usp->q, usp->stkey, EQ_RKLEN );
     
-#endif
+#else
+    // calculate EqStat record (Thermodynamic&Equlibria)
+     load = false;
+    
+    TNode::na->pCNode()->NodeStatusCH = NEED_GEM_AIA; // activating GEM IPM for automatic initial
+                                      // approximation
+ // re-calculating equilibrium by calling GEMIPM
+    TNode::na->GEM_run();
+#endif    
 
 }
 
@@ -85,9 +103,6 @@ void TUnSpace::buildTestedArrays()
  // setup uncertainty point data
      NexT( Ip );
 
- // calculate EqStat record (Thermodynamic&Equlibria)
-      pmu->pTPD = 0;
- //     pmu->pNP = 0;
      unsp_eqkey();
 
  // set zeros for tested arrays
@@ -123,7 +138,7 @@ void TUnSpace::buildTestedArrays()
 
      /*for( i=0; i<usp->L; i++) //16/02/2007
     {
-       double xx = (float)(syu->Guns[i]);
+       double xx = (float)(pmu->Guns[i]);
               xx += (float)(syu->GEX[i]);
               xx += TProfil::pm->tpp->G[i];
        usp->vG[Ip*usp->L+i]= xx;
@@ -135,9 +150,9 @@ void TUnSpace::buildTestedArrays()
             xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
             xx += TProfil::pm->tpp->G[ii];
 #else
-       double xx = (float)(syu_Guns[ii]);
+       double xx = (float)(pmu->Guns[ii]);
             xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
-            xx += tpp_G[ii];
+            xx += tpp_G[ii]*pmu->RT;
 #endif
       usp->vG[Ip*usp->L+ii]= xx;
      }
@@ -182,7 +197,7 @@ void TUnSpace::buildTestedArrays()
         double xx = syu->Vuns[i];
                 xx += TProfil::pm->tpp->Vm[i];
 #else
-       double xx = syu_Vuns[i];
+       double xx = pmu->Vuns[i];
                xx += tpp_Vm[i];
 #endif
       usp->vmV[Ip*usp->L+i]= xx;
@@ -351,6 +366,12 @@ void  TUnSpace::NexT(int J )
   float R;
   double x, xx;
 
+#ifdef IPMGEMPLUGIN
+ DATABR* dBR = TNode::na->pCNode();
+ //TC = TNode::na->cTC();
+ //P = TNode::na->cP();
+#endif
+ 
   k1 = k2 = k3 = 1;
   for(i=1; i<=usp->nG; i++)
   { if(!usp->PbD[i-1])
@@ -371,8 +392,11 @@ void  TUnSpace::NexT(int J )
         usp->OVN[k3] = x;
         k3++;
      }
-    usp->ncp[J*usp->nG+(i-1)]=R;
-
+#ifndef IPMGEMPLUGIN
+   usp->ncp[J*usp->nG+(i-1)]=R;
+#else
+   R = usp->ncp[J*usp->nG+(i-1)];
+#endif
    if( usp->PsGen[0]== S_ON || usp->PsGen[1]== S_ON || usp->PsGen[5]== S_ON )
     for( j=0; j<usp->L; j++)
      if(usp->PsGen[0]== S_ON && usp->NgLg[j]==i||
@@ -386,7 +410,7 @@ void  TUnSpace::NexT(int J )
 #ifndef IPMGEMPLUGIN
         syu->Guns[j] = xx;
 #else
-        syu_Guns[j] = xx;
+        pmu->Guns[j] = xx;
 #endif
       }
 /*      if(usp->PsGen[1]== S_ON&& usp->NgLs[j]==i)
@@ -400,7 +424,7 @@ void  TUnSpace::NexT(int J )
 #ifndef IPMGEMPLUGIN
         syu->Vuns[j] = xx;
 #else
-        syu_Vuns[j] = xx;
+        pmu->Vuns[j] = xx;
 #endif
       }
     }
@@ -413,6 +437,7 @@ void  TUnSpace::NexT(int J )
 #ifndef IPMGEMPLUGIN
           syu->B[j]= xx;
 #else
+          dBR->bIC[TNode::na->IC_xCH_to_xDB( j )] = xx;
           syu_B[j]= xx;
 #endif
         }
@@ -432,12 +457,18 @@ void  TUnSpace::NexT(int J )
        usp->Tc = xx;
        if(usp->Tc<0.)
           usp->Tc=0.;
+#ifdef IPMGEMPLUGIN
+         dBR->TC = usp->Tc; 
+#endif          
      }
    if( usp->PsGen[4]== S_ON && usp->NgP==i )
      {
        xx = usp->P[0]- usp->IntP[0] + 2*usp->IntP[0]*R;
        usp->Pc = xx;
        if(usp->Pc<0.) usp->Pc = 1e-5;
+#ifdef IPMGEMPLUGIN
+         dBR->P = usp->Pc; 
+#endif          
      }
    }
 }

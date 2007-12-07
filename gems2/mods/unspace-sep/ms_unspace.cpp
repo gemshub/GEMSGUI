@@ -98,10 +98,10 @@ int TUnSpace::TaskSystemInit( const char *chbr_in1 )
      tpp_Vm = pmu->Vol;   // Partial molar(molal) volume Vm(TP) (always), J/bar
 
      
-     syu_Guns = new float[pmu->L];  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
-     syu_Vuns = new float[pmu->L];  //  mu.L work vector of uncertainty space increments to tp->Vm
-     memset( syu_Guns, 0, pmu->L*sizeof(float) );
-     memset( syu_Vuns, 0, pmu->L*sizeof(float) );
+     pmu->Guns = new float[pmu->L];  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
+     pmu->Vuns = new float[pmu->L];  //  mu.L work vector of uncertainty space increments to tp->Vm
+     memset( pmu->Guns, 0, pmu->L*sizeof(float) );
+     memset( pmu->Vuns, 0, pmu->L*sizeof(float) );
 
      
   return 0;
@@ -218,7 +218,7 @@ outField TUnSpace_static_fields[25] =  {
 };
 
 
-outField TUnSpace_dynamic_fields[45] =  {
+outField TUnSpace_dynamic_fields[46] =  {
 		{ "SGp", 1, 0 },
 		{ "PbD", 1, 0 },
 		{ "OVB", 1, 0 },
@@ -263,7 +263,8 @@ outField TUnSpace_dynamic_fields[45] =  {
 		{ "UgDCn", 1, 0 },
 		{ "UaDCn", 1, 0 },
 		{ "UnDCAn", 1, 0 },
-		{ "ParNames", 1, 0 }
+		{ "ParNames", 1, 0 },
+		{ "ncp", 1, 0 }
 };
 
    
@@ -327,7 +328,7 @@ void TUnSpace::from_text_file(fstream& ff)
            break;
    case 24: rdar.readArray( "Fi", &usp->Fi, 1);
            break;
-  }
+ }
    nfild = rdar.findNext();
  }
 
@@ -341,7 +342,7 @@ void TUnSpace::from_text_file(fstream& ff)
   Alloc();
 
 //dynamic data
- TReadArrays  rddar( 45, TUnSpace_dynamic_fields, ff);
+ TReadArrays  rddar( 46, TUnSpace_dynamic_fields, ff);
 
 // Set up flags
  usp->nG = usp->nGB +usp->nGR+usp->nGN; 	
@@ -503,6 +504,8 @@ void TUnSpace::from_text_file(fstream& ff)
             break;
    case 44: rddar.readArray(  "ParNames", usp->ParNames[0], usp->nPG, PARNAME_SIZE);
             break;
+   case 45: // for test
+	   rddar.readArray(  "ncp", usp->ncp, usp->Q*usp->nG );
   }
      nfild = rddar.findNext();
  }

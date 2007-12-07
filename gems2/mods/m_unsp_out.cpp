@@ -765,6 +765,9 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
       ff << "\n## List of insertain input parameters names ";
     prar.writeArray(  "ParNames", usp->ParNames[0], usp->nPG, PARNAME_SIZE);
 
+    if( _comment )
+     ff << "\n# table of normalised coordinates of points in uncertainty space";
+    prar.writeArray(  "ncp", usp->ncp, usp->Q*usp->nG );
     
    if( _comment )
          ff << "\n# End of file"<< endl;
@@ -775,9 +778,26 @@ void TUnSpace::result_to_text_file( fstream& ff, bool with_comments )
   _comment = with_comments;
   
   TPrintArrays  prar(ff);
+
+  if( _comment )
+   ff << "\n# table of normalised coordinates of points in uncertainty space";
+  prar.writeArray(  "ncp", usp->ncp, usp->Q*usp->nG );
+  if( _comment )
+    ff << "\n# index of optimal sample point";
+   prar.writeArray(  "vY", usp->vY, usp->Q*usp->L );
+   if( _comment )
+     ff << "\n# G0 values used in sample input data variants (indexes q j)";
+   prar.writeArray(  "vG", usp->vG, usp->Q*usp->L );
+   if( _comment )
+     ff << "\n# m_t values of total IC molality from sample GEM solution variants (indexes t i)";
+  prar.writeArray(  "vMol", usp->vMol, usp->Q*usp->N );
+  if( _comment )
+     ff << "\n# index of optimal sample point";
+   prar.writeArray(  "vGam", usp->vGam, usp->Q*usp->L );
+ 
   
   if( _comment )
-   ff << "\n# index of optimal sample point";
+   ff << "\n\n# index of optimal sample point";
   prar.writeArray(  "Lapl", &usp->Lapl, 4 );
   if( _comment )
    ff << "\n# number of sample points with the same phase assemblage as that selected by";
@@ -801,10 +821,10 @@ void TUnSpace::result_to_text_file( fstream& ff, bool with_comments )
   
   if( _comment )
    ff << "\n# indices of sample GEM variants taken into quantile Laplace, Hurtvitz, Wald, Homenyuk (columns";
-  prar.writeArray(  "quanCv", usp->quanCv[0], usp->Q*4 );
+  prar.writeArray(  "quanCv", usp->quanCv[0], usp->qQ*4 );
   if( _comment )
    ff << "\n# Values taken into quantile Laplace. Hurtvitz, Wald, Homenyuk (columns )";
-  prar.writeArray(  "quanCx", usp->quanCx[0],  usp->Q*4);
+  prar.writeArray(  "quanCx", usp->quanCx[0],  usp->qQ*4);
 /*
   if( usp->nPhA > 0 )
      {
