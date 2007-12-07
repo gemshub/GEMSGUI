@@ -468,12 +468,12 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
     		 c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
     		 cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
     		 dc = cr*(c12-cm12);
-
+             dc /= fmolal; 
     		 // Checking the difference to assign
-    		 if( (c0-dc)/fmolal > min( mtp->cdv, node1_bIC(ii, ic) * 1e-4 ))
+    		 if( (c0/fmolal - dc) > min( mtp->cdv, node1_bIC(ii, ic) * 1e-4 ))
     		 {
-    			 node1_bPS( ii, 0, ic ) -= dc/fmolal;
-    			 node1_bIC(ii, ic) -= dc/fmolal;
+    			 node1_bPS( ii, 0, ic ) -= dc;
+    			 node1_bIC(ii, ic) -= dc;
     		 }
     		 //    C1[ii]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
     		 /*if( dc >= C1[i]->bIC[ic] )
@@ -499,7 +499,7 @@ bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;
   bool iRet = false;
-  bool CompMode = true;   // Component transport mode: true: DC; false: IC
+  bool CompMode = false;   // Component transport mode: true: DC; false: IC
   int nStart = 0, nEnd = mtp->nC;
   int NodesSetToAIA;
 
