@@ -22,7 +22,10 @@ const char *GEMS_USP_HTML = "gm_unspace";
 
 #include <math.h>
 #include <stdio.h>
-using namespace std;
+
+#ifndef __unix
+#include <io.h>
+#endif
 
 #include "m_unspace.h"
 #include "m_syseq.h"
@@ -1194,8 +1197,8 @@ TUnSpace::RecordPrint( const char* key )
 
 	if( res == VF3_1 )
 	{
-		gstring filename;   
-		if( vfChooseFileSave(window(), filename, 
+		gstring filename;
+		if( vfChooseFileSave(window(), filename,
 				   "Please, enter the Unspace work structure file name", "*.unc" ) )
 		{
 		    if( !access(filename.c_str(), 0 ) ) //file exists
@@ -1205,7 +1208,7 @@ TUnSpace::RecordPrint( const char* key )
             fstream ff( filename.c_str(), ios::out );
 	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
 	        to_text_file( ff, true );
-            
+
 	        filename +=".res";
 	        fstream ff1( filename.c_str(), ios::out );
 	        ErrorIf( !ff1.good() , filename.c_str(), "Fileopen error");
