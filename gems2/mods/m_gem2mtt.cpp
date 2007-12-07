@@ -272,7 +272,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
    for( int ii = start_node; ii<= end_node; ii++) // node iteration
    {
      mtp->qc = (short)ii;
-     C1[ii]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
+//     C1[ii]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
      NeedGEM = true;
      if( mode == NEED_GEM_PIA )
      {   // smart algorithm
@@ -287,18 +287,18 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
     		 for( ic=0; ic < CH->nICb; ic++)    // do we check charge here?
     		 {     // It has to be checked on minimal allowed c0 value
     			 if( C1[ii]->bIC[ic] < mtp->cez )
-    			 { // to prevent loss of Independent Component
+			     { // to prevent loss of Independent Component
     				 C1[ii]->bIC[ic] = mtp->cez;
     			 }
     			 dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
-    			 if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-4 )))
+    			 if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3 )))
     				 NeedGEM = true;  // we still need to recalculate equilibrium
                                   // in this node because its vector b has changed
     		 }
     	 }
      }
      else Mode = NEED_GEM_AIA;
-// NeedGEM = true; Mode = NEED_GEM_AIA;     // debugging
+NeedGEM = true;  // Mode = NEED_GEM_AIA;     // debugging
      if( NeedGEM )
      {
         RetCode = na->RunGEM( ii, Mode );
@@ -394,8 +394,8 @@ void TGEM2MT::MassTransParticleStep()
 //
 void TGEM2MT::MassTransAdvecStep( bool CompMode )
 {
- double c0, c1, cm1,  cm2, cmax,
-        c12, cm12, c0new, dc, cr, aji, fmolal;      // some help variables
+ double c0, c1, cm1,  cm2, cmax, c12, cm12, 
+        charge, c0new, dc, cr, aji, fmolal;      // some help variables
  int ii, ic, jc;
 
  //  Getting direct access to TNodeArray class data
@@ -413,7 +413,7 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
      if( CompMode == true )
      {  // Advective mass transport over DC gradients in Aq phase
          fmolal = 55.5084/node1_xDC( ii, CH->nDCinPH[0]-1 );
-    	 for( jc=0; jc < CH->nDCinPH[0]; jc++ )
+    	 for( jc=0; jc < CH->nDCinPH[0]-1; jc++ )
      	 {   // splitting for dependent components except H2O@
      		 // It has to be checked on minimal allowed c0 value
     		 c0  = node1_xDC( ii, jc )* fmolal;
@@ -421,40 +421,41 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
      		 cm1 = node1_xDC( ii-1, jc )* fmolal;
      		 cm2 = node1_xDC( ii-2, jc )* fmolal;
        		 if( c0 < 1e-20 && c1 < 1e-20 && cm1 < 1e-20 && cm2 < 1e-20 )
-     			continue;
+      			continue;
      		 c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
     	     cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
     	     dc = cr*(c12-cm12);
-    	     // Checking the difference to assign
-    	     c0new = c0 - dc;
-     	     if( c0new <= 1e-18 )
-            	 dc = c0 - 1e-18;
-             if( fabs( dc ) < 1e-18 )     // Insignificant f.diff. Is the threshold justified?
+             if( fabs( dc ) < mtp->cdv )   // *c0   Insignificant fractional difference?
             	 continue;
-             cmax = c0;
-             if( cmax < c1 )
-            	 cmax = c1;
-             if( cmax < cm1 )
-            	 cmax = cm1;
-             if( cmax < cm2 )
-                 cmax = cm2;
-             if( c0new > cmax )
-                 dc = c0 - cmax;
-             dc /= fmolal;   // converting back into moles
-             node1_xDC( ii, jc ) = c0new / fmolal;  // Correcting back speciation
-        	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
-        	 {
-        		 aji = nodeCH_A( jc, ic );
-        		 if( aji )
-        		     node1_bIC(ii, ic) -= aji * dc;
-        	 }
+    	     dc /= fmolal;
+             // Checking the new DC amount
+    	     if( (c0/fmolal - dc) > mtp->cez )
+    	     {  // the amount of DC remains positive 
+    	    	 node1_xDC( ii, jc ) -= dc;			 
+            	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
+            	 {
+            		 aji = nodeCH_A( jc, ic );
+            		 if( aji )
+            		     node1_bIC(ii, ic) -= aji * dc;
+            	 }
+    	     }
+    	     else {  // setting the DC amount to minimum
+    	    	 node1_xDC( ii, jc ) = mtp->cez;
+    	    	 dc = c0/fmolal - mtp->cez;
+    	    	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
+            	 {
+            		 aji = nodeCH_A( jc, ic );
+            		 if( aji )
+            		     node1_bIC(ii, ic) -= aji * dc;
+            	 }
+    	     }	 
     	 } // loop over DC
      }
      else { // Advective mass transport over IC gradients in Aq phase
     	 double niw; // IC amount in H2O
     	 fmolal = 55.5084/node1_xDC( ii, CH->nDCinPH[0]-1 ); // molality factor
-    	 for( ic=0; ic < CH->nICb-1; ic++)  // splitting for independent components
-    	 {                          // Charge (Zz) is not checked here!
+    	 for( ic=0; ic < CH->nICb; ic++)  // splitting for independent components
+    	 {                        
     		 niw = node1_xDC( ii, CH->nDCinPH[0]-1 )* nodeCH_A( CH->nDCinPH[0]-1, ic );
     		    // IC amount in H2O
     		 // Chemical compositions may become inconsistent with time
@@ -468,14 +469,19 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
     		 c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
     		 cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
     		 dc = cr*(c12-cm12);
-             dc /= fmolal; 
-    		 // Checking the difference to assign
-    		 if( (c0/fmolal - dc) > min( mtp->cdv, node1_bIC(ii, ic) * 1e-4 ))
-    		 {
+             if( fabs( dc ) < mtp->cdv )  // *c0
+            	 continue;
+    		 dc /= fmolal; 
+    		 // Checking the new IC amount 
+    		 if( (c0/fmolal - dc) > mtp->cez ) // min( mtp->cez, node1_bIC(ii, ic) * 1e-4 ))
+    		 {  // New IC amount is positive
     			 node1_bPS( ii, 0, ic ) -= dc;
     			 node1_bIC(ii, ic) -= dc;
     		 }
-    		 //    C1[ii]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
+    		 else { // Setting the new IC amount to threshold  
+    			 node1_bPS( ii, 0, ic ) = mtp->cez;
+    			 node1_bIC(ii, ic) = mtp->cez;
+    		 }
     		 /*if( dc >= C1[i]->bIC[ic] )
  			 {
     			fprintf( diffile, "\nError in Mass Transport calculation part :" );
@@ -486,7 +492,10 @@ void TGEM2MT::MassTransAdvecStep( bool CompMode )
  			 } */
     	 } // loop over IC
      }
-  } // end of loop over nodes
+	 // checking charge balance
+	 charge = node1_bIC(ii, CH->nICb-1 );
+node1_bIC(ii, CH->nICb-1 ) = 0.0;		// debugging
+   } // end of loop over nodes
 }
 
 // Main call for the mass transport iterations in 1D case
