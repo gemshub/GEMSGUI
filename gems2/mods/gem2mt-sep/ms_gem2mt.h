@@ -302,6 +302,7 @@ protected:
 
 
     void  copyNodeArrays();
+    int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
     bool  CalcIPM( char mode, int start_node = 0,
          int end_node = 1000, FILE* diffile = NULL );
     void  MassTransAdvecStart();

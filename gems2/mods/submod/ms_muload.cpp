@@ -690,6 +690,13 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
     ecur = etext;
     cur = pexpr;
     next = cur;
+    
+    if( *cur != '$' ) //SD&DK fixed error 05/12/2007)
+    {
+      *ecur = ' ';
+       ecur++;
+    }	
+    
     cc=0;
     cstate = A_dcx;
     while( next < end )

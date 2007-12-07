@@ -29,7 +29,7 @@ const int MT_RKLEN = 80;
 #define SIZE_HYDP 7
 
 typedef struct
-{ // Description of GEM2MT data structure (prototype of 21 Feb. 2005)
+{ // Description of GEM2MT data structure (prototype of 04 Dec. 2007)
   // Record key format: the same as Proces
   char
    PunE,          // Units of energy   { j;  J c C N reserved }
@@ -138,8 +138,8 @@ typedef struct
    fVel,   // Advection/diffusion mass transport: initial fluid advection velocity (m/sec)
    cLen,   // column length (m)
    tf,     // time step reduction factor
-   cdv,    // cutoff factor for differences
-   cez,    // cutoff factor for minimal amounts of IC in node bulk compositions
+   cdv,    // cutoff factor for differences (1e-9)
+   cez,    // cutoff factor for minimal amounts of IC in node bulk compositions (1e-12)
    al_in,  // initial value of longitudinal dispersivity (m), usually 1e-3
    Dif_in, // initial general diffusivity (m2/sec), usually 1e-9
    ADrs3,
@@ -296,10 +296,11 @@ protected:
     void  LinkNode1(  int nNode );
     void  LinkCSD(  int nNode );
     void  CalcGraph();
+int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
     bool  CalcIPM( char mode, int start_node = 0,
          int end_node = 1000, FILE* diffile = NULL );
     void  MassTransAdvecStart();
-    void  MassTransAdvecStep();
+    void  MassTransAdvecStep( bool ComponentMode = true );
     void  MassTransParticleStart();
     void  MassTransParticleStep();
 

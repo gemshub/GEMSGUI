@@ -74,7 +74,7 @@ class TNodeArray : public TNode
                        // relative to coordinate origin (0,0,0) units
     LOCATION* grid;   // Array of grid point locations, size is anNodes
 
-    char* tNode;      // Node type codes (see databr.h), size anNodes
+    char* tcNodee;      // Node type codes (see databr.h), size anNodes
 
     void allocMemory();
     void freeMemory();

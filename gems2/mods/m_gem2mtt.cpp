@@ -137,8 +137,119 @@ void  TGEM2MT::NewNodeArray()
 
 #endif
 
+
+// This function (for 1D-case only) analyses the node array 
+// to decide where to use AIA and where PIA for GEM calculations
+// in each node.
+// if IAmode == NEED_GEM_AIA then all nodes are set to AIA  
+// If IAmode == NEED_GEM_PIA then the adjacent nodes with different 
+// reactive phase assemblage (very different pe, pH), as well as their 
+// neighbors from each side, are set to AIA. Other nodes are set to PIA. 
+// returns: Number of nodes set to AIA 
+//
+int TGEM2MT::CheckPIAinNodes1D( char IAmode, int start_node, int end_node )
+{
+       int nSetAIA = 0; 
+       // Getting direct access to data 
+       DATACH* CH = na->pCSD();       // DataCH structure
+       DATABRPTR* C0 = na->pNodT0();  // nodes at previous time point
+//       DATABRPTR* C1 = na->pNodT1();  // nodes at current time point
+       bool* iaN = na->piaNode();      // indicators for IA in the nodes 
+   
+	   start_node = max( start_node, 0 );
+       end_node = min( end_node, (int)mtp->nC-1 );
+
+       // Initializing iaNode vector
+       if( IAmode == NEED_GEM_PIA && CH->nDCb == CH->nDC )
+       {
+    	  for( int ii = start_node; ii<= end_node; ii++ )   
+    		 iaN[ii] = false;    // potentially need PIA 
+       }
+       else { // setting all nodes to AIA GEM calculations
+     	  for( int ii = 0; ii< (int)mtp->nC; ii++ )   
+     	  {
+     		  iaN[ii] = true;
+     		  nSetAIA++; 
+     	  }
+          return nSetAIA;      
+       }
+	   
+       // This is done only if PIA mode is requested! 
+       // First variant: 1-neighbour algorithm
+       for( int ii = start_node; ii<= end_node; ii++) // node iteration
+	   {
+    	 // mtp->qc = (short)ii;
+	      switch( C0[ii]->NodeTypeMT )
+	     {
+	        case normal: // normal node 
+	             // Checking phase assemblage        
+	        	break;
+	                     // boundary condition node
+	        case NBC1source:  //1: Dirichlet source ( constant concentration )
+	        	    break;
+	        case NBC1sink:    // -1: Dirichlet sink
+	        case NBC2source:  // 2: Neumann source ( constant gradient )
+	        case NBC2sink:    // -2: Neumann sink
+	        case NBC3source:  // 3: Cauchy source ( constant flux )
+	        case NBC3sink:    // -3: Cauchy sink
+	        case INIT_FUNK:   // 4: functional conditions (e.g. input time-depended functions)
+	        default: 
+	        			iaN[ii] = true;
+	        			nSetAIA++;
+	        			continue;
+	     }
+	     if( (ii == 0 || ii == (int)mtp->nC-1 ) ) // && 
+//	    	 (C0[ii]->NodeTypeMT == normal || C0[ii]->NodeTypeMT == NBC1source) )
+//	     {
+//	     	iaN[ii] = true;
+//	     	nSetAIA++; 
+	     	continue; 
+//	     }
+	     // checking pair of adjacent nodes for phase assemblage differences  	    
+	     for( int kk=0; kk<CH->nPHb; kk++ )
+	     {
+	    	if( C0[ii]->xPH[kk] == 0.0 && C0[ii-1]->xPH[kk] == 0.0 )
+	    		continue;    // Phase kk is absent in both node systems
+	    	if( C0[ii]->xPH[kk] > 0.0 && C0[ii-1]->xPH[kk] > 0.0 )
+	    		continue;    // Phase kk is present in both node systems
+	    	// At least one phase is absent in one and present in another node system
+	    	goto DIFFERENT;
+	     }
+	     // Should we check difference in pe or pH? 
+         
+	     continue; 
+DIFFERENT:
+         if( iaN[ii] == false )
+         {
+	         iaN[ii] = true; 
+	         nSetAIA++;
+         }
+         if( iaN[ii-1] == false )
+         {
+	         iaN[ii-1] = true;
+	         nSetAIA++;
+         }
+// Activating first neighbours - experimental algorithm
+         if( iaN[ii+1] == false )
+         {
+	         iaN[ii+1] = true; 
+	         nSetAIA++;
+         }
+         if( ii > start_node+1 && iaN[ii-2] == false )
+         {
+	         iaN[ii-2] = true;
+	         nSetAIA++;
+         }
+	   } // loop ii  
+     
+      // End of checking 
+       return nSetAIA;
+}
+
 //   Here we call a loop on GEM calculations over nodes
 //   parallelization should affect this loop only
+//   mode can be NEED_GEM_PIA (smart algorithm) or NEED_GEM_AIA 
+//   (forced AIA, usually used at the beginning of coupled run)
 //   return code   true   Ok
 //                 false  Error in GEMipm calculation part
 //
@@ -151,40 +262,46 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
    //  Getting direct access to TNodeArray class data
 
    DATACH* CH = na->pCSD();       // DataCH structure
-   DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
-   DATABRPTR* C1 = na->pNodT1();  // nodes at previous time point
+   DATABRPTR* C0 = na->pNodT0();  // nodes at previous time point
+   DATABRPTR* C1 = na->pNodT1();  // nodes at current time point
+   bool* iaN = na->piaNode();     // indicators for IA in the nodes 
+   
+   start_node = max( start_node, 0 );
+   end_node = min( end_node, (int)mtp->nC-1 );
 
-   end_node = min( end_node, (int)mtp->nC );
-
-   for( int ii = start_node; ii< end_node; ii++) // node iteration
+   for( int ii = start_node; ii<= end_node; ii++) // node iteration
    {
      mtp->qc = (short)ii;
-     Mode = mode;  // debugging  NEED_GEM_PIA;
-     NeedGEM = false;     // debugging
-
      C1[ii]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
-
-     // Here we compare this node for current time and for previous time
-      for( ic=0; ic < CH->nICb-1; ic++)    // we do not check charge here!
-       {     // It has to be checked on minimal allowed c0 value
-         if( C1[ii]->bIC[ic] < mtp->cez )
-         { // to stay on safe side
-            C1[ii]->bIC[ic] = mtp->cez;
-         }
-         dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
-
-        if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3 )))
-            NeedGEM = true;  // we need to recalculate equilibrium in this node
-        if( fabs( dc ) > min( mtp->cdv*100., C1[ii]->bIC[ic] * 1e-2 ))
-                  Mode = NEED_GEM_AIA;  // we even need to do it in auto Simplex mode
-// this has to be done in an intelligent way as a separate subroutine
-       }
-
+     NeedGEM = true;
+     if( mode == NEED_GEM_PIA )
+     {   // smart algorithm 
+    	 if( iaN[ii] == true )
+    	 {
+    		 Mode = NEED_GEM_AIA;
+       	 }
+    	 else {
+    		 Mode = NEED_GEM_PIA;
+     		 NeedGEM = false;       // temporary off for debugging    
+    		 // Here we compare this node for current time and for previous time
+    		 for( ic=0; ic < CH->nICb; ic++)    // do we check charge here?
+    		 {     // It has to be checked on minimal allowed c0 value
+    			 if( C1[ii]->bIC[ic] < mtp->cez )
+    			 { // to prevent loss of Independent Component
+    				 C1[ii]->bIC[ic] = mtp->cez;
+    			 }
+    			 dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
+    			 if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-4 )))
+    				 NeedGEM = true;  // we still need to recalculate equilibrium 
+                                  // in this node because its vector b has changed
+    		 }
+    	 }
+     }
+     else Mode = NEED_GEM_AIA; 
+// NeedGEM = true; Mode = NEED_GEM_AIA;     // debugging
      if( NeedGEM )
      {
-
         RetCode = na->RunGEM( ii, Mode );
-
         // check RetCode from GEM IPM calculation
         if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
         {
@@ -272,16 +389,19 @@ void TGEM2MT::MassTransParticleStep()
 }
 
 // The mass transport iteration time step
-void TGEM2MT::MassTransAdvecStep()
+// CompMode: true: Transport via dependent components in Aq phase (except H2O)
+//           false: Transport via dissolved indepedent components (with H2O)
+//
+void TGEM2MT::MassTransAdvecStep( bool CompMode )
 {
- double c0, c1, cm1,  cm2,
-        c12, cm12, dc, cr;      // some help variables
- int ii, ic;
+ double c0, c1, cm1,  cm2, cmax, 
+        c12, cm12, c0new, dc, cr, aji, fmolal;      // some help variables
+ int ii, ic, jc;
 
  //  Getting direct access to TNodeArray class data
  DATACH* CH = na->pCSD();       // DataCH structure
  // DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
- DATABRPTR* C1 = na->pNodT1();  // nodes at previous time point
+ // DATABRPTR* C1 = na->pNodT1();  // nodes at previous time point
 
    mtp->ct += 1;
    mtp->cTau += mtp->dTau;
@@ -290,45 +410,99 @@ void TGEM2MT::MassTransAdvecStep()
    for( ii = 2; ii< mtp->nC-1; ii++) // node iteration, -1 the right boundary is open ....
    {
      mtp->qc = (short)ii;
-     for( ic=0; ic < CH->nICb-1; ic++)  // splitting for independent components
-     {                          // Charge (Zz) is not checked here!
-       // Chemical compositions may become inconsistent with time
-       // It has to be checked on minimal allowed c0 value
-        c0  = node1_bPS( ii, 0, ic );//C1[ii]->bPS[0*CH->nICb + ic];
-        c1  = node1_bPS( ii+1, 0, ic );//C1[ii+1]->bPS[0*CH->nICb + ic];
-        cm1 = node1_bPS( ii-1, 0, ic );//C1[ii-1]->bPS[0*CH->nICb + ic];
-        cm2 = node1_bPS( ii-2, 0, ic );//C1[ii-2]->bPS[0*CH->nICb + ic];
+     if( CompMode == true )
+     {  // Advective mass transport over DC gradients in Aq phase	 
+         fmolal = 55.5084/node1_xDC( ii, CH->nDCinPH[0]-1 );
+    	 for( jc=0; jc < CH->nDCinPH[0]; jc++ )  
+     	 {   // splitting for dependent components except H2O@
+     		 // It has to be checked on minimal allowed c0 value
+    		 c0  = node1_xDC( ii, jc )* fmolal;
+     		 c1  = node1_xDC( ii+1, jc )* fmolal;
+     		 cm1 = node1_xDC( ii-1, jc )* fmolal;
+     		 cm2 = node1_xDC( ii-2, jc )* fmolal;
+       		 if( c0 < 1e-20 && c1 < 1e-20 && cm1 < 1e-20 && cm2 < 1e-20 )  
+     			continue; 
+     		 c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
+    	     cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
+    	     dc = cr*(c12-cm12);
+    	     // Checking the difference to assign
+    	     c0new = c0 - dc;
+     	     if( c0new <= 1e-18 ) 
+            	 dc = c0 - 1e-18; 
+             if( fabs( dc ) < 1e-18 )     // Insignificant f.diff. Is the threshold justified? 
+            	 continue;
+             cmax = c0; 
+             if( cmax < c1 )
+            	 cmax = c1; 
+             if( cmax < cm1 )
+            	 cmax = cm1;
+             if( cmax < cm2 )
+                 cmax = cm2;
+             if( c0new > cmax )
+                 dc = c0 - cmax;           	 
+             dc /= fmolal;   // converting back into moles
+             node1_xDC( ii, jc ) = c0new / fmolal;  // Correcting back speciation
+        	 for( ic=0; ic<CH->nICb; ic++)  // incrementing independent components
+        	 {
+        		 aji = nodeCH_A( jc, ic );
+        		 if( aji )
+        		     node1_bIC(ii, ic) -= aji * dc;  
+        	 }
+    	 } // loop over DC
+     }
+     else { // Advective mass transport over IC gradients in Aq phase
+    	 double niw; // IC amount in H2O 	 
+    	 fmolal = 55.5084/node1_xDC( ii, CH->nDCinPH[0]-1 ); // molality factor
+    	 for( ic=0; ic < CH->nICb-1; ic++)  // splitting for independent components
+    	 {                          // Charge (Zz) is not checked here!
+    		 niw = node1_xDC( ii, CH->nDCinPH[0]-1 )* nodeCH_A( CH->nDCinPH[0]-1, ic );   
+    		    // IC amount in H2O	 
+    		 // Chemical compositions may become inconsistent with time
+    		 // It has to be checked on minimal allowed c0 value
+    		 c0  = (node1_bPS( ii, 0, ic ) - niw )*fmolal;    //C1[ii]->bPS[0*CH->nICb + ic];
+    		 c1  = (node1_bPS( ii+1, 0, ic) - niw )*fmolal;   //C1[ii+1]->bPS[0*CH->nICb + ic];
+    		 cm1 = (node1_bPS( ii-1, 0, ic ) - niw )*fmolal;  //C1[ii-1]->bPS[0*CH->nICb + ic];
+    		 cm2 = (node1_bPS( ii-2, 0, ic ) - niw )*fmolal;  //C1[ii-2]->bPS[0*CH->nICb + ic];
+             
+    		 // Finite-difference calculation (suggested by FE )
+    		 c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
+    		 cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
+    		 dc = cr*(c12-cm12);
 
-        c12=((c1+c0)/2)-(cr*(c1-c0)/2)-((1-cr*cr)*(c1-2*c0+cm1)/6);
-        cm12=((c0+cm1)/2)-(cr*(c0-cm1)/2)-((1-cr*cr)*(c0-2*cm1+cm2)/6);
-        dc = cr*(c12-cm12);
-
-// Checking the difference to assign
-// if( fabs(dc) > min( cdv, C1[i]->bIC[ic] * 1e-4 ))
-    node1_bPS( ii, 0, ic ) = c0-dc;
-//    C1[ii]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
-/*if( dc >= C1[i]->bIC[ic] )
- {
-    fprintf( diffile, "\nError in Mass Transport calculation part :" );
-    fprintf( diffile, " Node= %-8d  Step= %-8d  IC= %s ", i, t, CH->ICNL[ic] );
-    fprintf(diffile, "\n Attempt to set new amount to %lg (old: %lg  Diff: = %lg ) ",
-         C1[i]->bIC[ic]-dc, C1[i]->bIC[ic], dc);
-    BC_error = true;
- } */
-       if( fabs(dc) > min( mtp->cdv, node1_bIC(ii, ic)/*C1[ii]->bIC[ic]*/ * 1e-3 ))
-         node1_bIC(ii, ic)/*C1[ii]->bIC[ic]*/ -= dc; // correction for GEM calcuation
-   } // loop over IC
+    		 // Checking the difference to assign
+    		 if( (c0-dc)/fmolal > min( mtp->cdv, node1_bIC(ii, ic) * 1e-4 ))
+    		 {    
+    			 node1_bPS( ii, 0, ic ) -= dc/fmolal;
+    			 node1_bIC(ii, ic) -= dc/fmolal;
+    		 }
+    		 //    C1[ii]->bPS[0*CH->nICb + ic] = c0-dc;  // Correction for FD numerical scheme
+    		 /*if( dc >= C1[i]->bIC[ic] )
+ 			 {
+    			fprintf( diffile, "\nError in Mass Transport calculation part :" );
+    			fprintf( diffile, " Node= %-8d  Step= %-8d  IC= %s ", i, t, CH->ICNL[ic] );
+    			fprintf(diffile, "\n Attempt to set new amount to %lg (old: %lg  Diff: = %lg ) ",
+         		C1[i]->bIC[ic]-dc, C1[i]->bIC[ic], dc);
+    			BC_error = true;
+ 			 } */
+    	 } // loop over IC
+     }
   } // end of loop over nodes
 }
 
-// Main call for the mass transport iterations
-// returns true if canceled
+// Main call for the mass transport iterations in 1D case
+//
+// mode is NEED_GEM_AIA or NEED_GEM_PIA (see DATABR.H) mode of GEM initial approximation 
+// If NEED_GEM_PIA then the program will try smart initial approximation for the nodes
+// (PIA when possible, AIA in the vicinity of fronts, pH and pe barriers).
+// returns true, if cancelled/interrupted by the user; false if finished Ok
 bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;
   bool iRet = false;
+  bool CompMode = false;   // Component transport mode: true: DC; false: IC
   int nStart = 0, nEnd = mtp->nC;
-
+  int NodesSetToAIA;
+  
 FILE* logfile;
 FILE* ph_file;
 FILE* diffile = NULL;
@@ -347,7 +521,7 @@ if( !logfile)
   return iRet;
 }
 
-// time testing
+// time scales testing
 clock_t t_start, t_end, t_out, t_out2;
 clock_t outp_time = (clock_t)0;
 t_start = clock();
@@ -355,17 +529,21 @@ t_start = clock();
    if( mtp->iStat != AS_RUN  )
    {  switch( mtp->PsMode )
      {
-       case GMT_MODE_A: MassTransAdvecStart();
+       case GMT_MODE_A:   // A: 1D advection (numerical) coupled FMT scoping model
+    	                MassTransAdvecStart();
                         nStart = 1; nEnd = mtp->nC-1;
                  break;
-       case GMT_MODE_V:
-       case GMT_MODE_W: MassTransParticleStart();
-                           break;
+       case GMT_MODE_V:   // V: const volume coupled FMT scoping model
+       case GMT_MODE_W:   // W: random-walk advection-diffusion coupled FMT scoping model
+    	                MassTransParticleStart();
+                 break;
       default: // more mass transport models here
                break;
      }
-
-    CalcIPM( mode, nStart, nEnd, diffile );
+//  
+   // Calculation of chemical equilibria in all nodes at the beginning
+   // with the Simplex initial approximation
+     CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
    }
    mtp->iStat = AS_READY;
 
@@ -382,14 +560,13 @@ outp_time += ( t_out2 - t_out);
 }
 
 #ifndef IPMGEMPLUGIN
-
       if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic monitoring?") )
         {
             RecordPlot( 0 );
         }
-
 #endif
+
 //  This loop contains the mass transport iteration time step
      do {   // time iteration step
 
@@ -404,7 +581,7 @@ outp_time += ( t_out2 - t_out);
         //  the mass transport iteration time step
          switch( mtp->PsMode )
          {
-          case GMT_MODE_A: MassTransAdvecStep();
+          case GMT_MODE_A: MassTransAdvecStep( CompMode );
                   break;
           case GMT_MODE_V:
           case GMT_MODE_W: MassTransParticleStep();
@@ -413,10 +590,12 @@ outp_time += ( t_out2 - t_out);
                   break;
         }
 
+        // The analysis of GEM IA modes in nodes - optional 
+        NodesSetToAIA = CheckPIAinNodes1D( mode, nStart, nEnd );  
 
-       //   Here we call a loop on GEM calculations over nodes
-       //   parallelization should affect this loop only
-       CalcIPM( mode,nStart, nEnd, diffile );
+        //   Here we call a loop on GEM calculations over nodes
+        //   parallelization should affect this loop only
+        CalcIPM( mode, nStart, nEnd, diffile );
 
 if( mtp->PvMO != S_OFF )
 {

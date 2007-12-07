@@ -7,7 +7,7 @@
 //
 // Direct access to the TNodeArray class for storing all data for nodes
 //
-// Copyright (C) 2005 S.Dmytriyeva, F.Enzmann, D.Kulik
+// Copyright (C) 2005,2007 S.Dmytriyeva, F.Enzmann, D.Kulik
 //
 //-------------------------------------------------------------------
 

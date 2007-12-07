@@ -717,6 +717,8 @@ void TGEM2MT::set_def(int q)
     mtp->nC =2;
     mtp->nIV =2;
     mtp->ntM =1000;
+    mtp->cdv = 1e-9;
+    mtp->cez = 1e-12; 
     mtp->nYS =0;
     mtp->nYE =1;
     mtp->nPai =1;
@@ -964,7 +966,7 @@ TGEM2MT::RecCalc( const char * key )
          NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
      if( mtp->PvMSg != S_OFF )
          Expr_analyze( o_mtgexpr );
-     if( Trans1D( NEED_GEM_AIA ) )
+     if( Trans1D( NEED_GEM_PIA ) )
      { // canceled calculations
         if( vfQuestion( window(), "GEM2MT task interrupt",
            "RMT calculations have been stopped by the user.\n"
