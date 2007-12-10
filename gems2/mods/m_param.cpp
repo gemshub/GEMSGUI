@@ -628,7 +628,9 @@ pmp->t_elap_sec = 0.0;
    // multi->CompG0Load(); //16/02/2007
 
    if( multi->AutoInitialApprox() == false )
-      multi->MultiCalcIterations();
+   {
+	   multi->MultiCalcIterations();
+   }
 
 NumPrecLoops = pmp->W1+pmp->K2-2; 
 NumIterFIA = pmp->ITF;

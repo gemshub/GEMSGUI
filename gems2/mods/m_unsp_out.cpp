@@ -458,7 +458,7 @@ void TUnSpace::adapt_nPG( int line, double new_val, double new_int )
                   float(TProfil::pm->tpp->G[j]))/pmu->RT;
 #else
                   pmu->GEX[jj] = (usp->Gs[j][0]-
-                   float(tpp_G[j]))/pmu->RT;
+                   float(pmu->tpp_G[j]))/pmu->RT;
 #endif
                break;
              }
@@ -765,9 +765,9 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
       ff << "\n## List of insertain input parameters names ";
     prar.writeArray(  "ParNames", usp->ParNames[0], usp->nPG, PARNAME_SIZE);
 
-    if( _comment )
-     ff << "\n# table of normalised coordinates of points in uncertainty space";
-    prar.writeArray(  "ncp", usp->ncp, usp->Q*usp->nG );
+//    if( _comment )
+//     ff << "\n# table of normalised coordinates of points in uncertainty space";
+//    prar.writeArray(  "ncp", usp->ncp, usp->Q*usp->nG );
     
    if( _comment )
          ff << "\n# End of file"<< endl;
@@ -784,101 +784,82 @@ void TUnSpace::result_to_text_file( fstream& ff, bool with_comments )
   prar.writeArray(  "ncp", usp->ncp, usp->Q*usp->nG );
   if( _comment )
     ff << "\n# index of optimal sample point";
-   prar.writeArray(  "vY", usp->vY, usp->Q*usp->L );
+   prar.writeArray(  "vY", usp->vY, usp->Q*usp->L, usp->L );
    if( _comment )
      ff << "\n# G0 values used in sample input data variants (indexes q j)";
-   prar.writeArray(  "vG", usp->vG, usp->Q*usp->L );
+   prar.writeArray(  "vG", usp->vG, usp->Q*usp->L,  usp->L );
    if( _comment )
      ff << "\n# m_t values of total IC molality from sample GEM solution variants (indexes t i)";
-  prar.writeArray(  "vMol", usp->vMol, usp->Q*usp->N );
+  prar.writeArray(  "vMol", usp->vMol, usp->Q*usp->N, usp->N );
   if( _comment )
-     ff << "\n# index of optimal sample point";
-   prar.writeArray(  "vGam", usp->vGam, usp->Q*usp->L );
- 
+     ff << "\n#   lnGam values for DC from sample GEM solution variants (indexes t j)";
+   prar.writeArray(  "vGam", usp->vGam, usp->Q*usp->L, usp->L );
+   if( _comment )
+      ff << "\n# XF (phase mole amounts) from sample GEM solution variants (indexes t k)";
+    prar.writeArray(  "vYF", usp->vYF, usp->Q*usp->Fi, usp->Fi );
+  if( _comment )
+       ff << "\n#  u values of dual chemical potentials from sample GEM solution variants";
+   prar.writeArray(  "vU", usp->vU, usp->Q*usp->N,usp->N );
+   if( _comment )
+      ff << "\n# lga values of log10 fugacity/activity from sample GEM solution variants";
+    prar.writeArray(  "vFug", usp->vFug, usp->Q*usp->Ls );
+  if( _comment )
+       ff << "\n#  vector of pH, Eh, IC  values from sample GEM solution variants";
+   prar.writeArray(  "vpH", usp->vpH[0], usp->Q*3, 3 );
   
-  if( _comment )
-   ff << "\n\n# index of optimal sample point";
-  prar.writeArray(  "Lapl", &usp->Lapl, 4 );
-  if( _comment )
-   ff << "\n# number of sample points with the same phase assemblage as that selected by";
-  prar.writeArray(  "nl", &usp->nl, 4 );
-  if( _comment )
-   ff << "\n# single criterion value (from analysing payoff matrix)";
-  prar.writeArray(  "CrL", &usp->CrL, 4 );
- 
-  /* do not read 
-   usp->vG = new double[ usp->Q* usp->L];
-   usp->vY = new double[ usp->Q* usp->L];
-   usp->vYF = new double[ usp->Q* usp->Fi];
-   usp->vGam = new double[ usp->Q* usp->L];
-   usp->vMol = new double[ usp->Q* usp->N];
-   usp->vU = new double[ usp->Q* usp->N];
-   usp->vpH = new float[usp->Q][3];
-   usp->vT = new float[usp->Q];
-   usp->vP = new float[usp->Q];
-   usp->vV = new float[usp->Q];
-*/
-  
-  if( _comment )
-   ff << "\n# indices of sample GEM variants taken into quantile Laplace, Hurtvitz, Wald, Homenyuk (columns";
-  prar.writeArray(  "quanCv", usp->quanCv[0], usp->qQ*4 );
-  if( _comment )
-   ff << "\n# Values taken into quantile Laplace. Hurtvitz, Wald, Homenyuk (columns )";
-  prar.writeArray(  "quanCx", usp->quanCx[0],  usp->qQ*4);
-/*
-  if( usp->nPhA > 0 )
-     {
-       usp->PhAndx = new short[usp->nPhA*usp->N];
-       usp->PhNum = new short[usp->nPhA];
-       usp->PhAID = new char[usp->nPhA][8];
-       usp->PhAlst = new char[usp->nPhA][80];
-       usp->PhAfreq = new float[ usp->nPhA];
-     }
-  usp->sv = new short[ usp->Q];
+   if( _comment )
+        ff << "\n#   list of phase assemblage titles (made of Phase names";
+   prar.writeArray(  "PhAlst", usp->PhAlst[0], usp->nPhA, 80 );
+   prar.writeArray(  "PhNum", usp->PhNum, usp->nPhA );
+   prar.writeArray(  "PhAfreq", usp->PhAfreq, usp->nPhA );
+   prar.writeArray(  "sv", usp->sv, usp->Q );
 
-*/
-  if( usp->PvPOM == S_ON )
+   if( _comment )
+    ff << "\n\n# index of optimal sample point";
+   prar.writeArray(  "Lapl", &usp->Lapl, 4 );
+   if( _comment )
+    ff << "\n# number of sample points with the same phase assemblage as that selected by";
+   prar.writeArray(  "nl", &usp->nl, 4 );
+   if( _comment )
+    ff << "\n# single criterion value (from analysing payoff matrix)";
+   prar.writeArray(  "CrL", &usp->CrL, 4 );
+  
+   if( _comment )
+    ff << "\n# indices of sample GEM variants taken into quantile Laplace, Hurtvitz, Wald, Homenyuk (columns";
+   prar.writeArray(  "quanCv", usp->quanCv[0], usp->qQ*4, 4 );
+   if( _comment )
+    ff << "\n# Values taken into quantile Laplace. Hurtvitz, Wald, Homenyuk (columns )";
+   prar.writeArray(  "quanCx", usp->quanCx[0],  usp->qQ*4, 4);
+
+   if( usp->PvPOM == S_ON )
   {  if( _comment )
      ff << "\n# payoff matrix";
-    prar.writeArray(  "POM", usp->POM, usp->Q*usp->Q );
+    prar.writeArray(  "POM", usp->POM, usp->Q*usp->Q, usp->Q );
   }
   if( usp->PvPOR == S_ON )
     {  if( _comment )
        ff << "\n# payoff matrix row";
       prar.writeArray(  "POR", usp->POR, usp->Q );
     }
+
   if( _comment )
-   ff << "\n# Values taken into quantile Laplace. Hurtvitz, Wald, Homenyuk (columns )";
-  prar.writeArray(  "UnIC", usp->UnIC[0],  usp->N*UNSP_SIZE1);
-
-/*
-double
-  *Zcp,     //  [Q]  mean over rows of pay-off matrix for Laplace criterion
-  *Zmin,    //  [Q]  minima in rows of pay-off matrix for Hurwitz criterion
-  *Zmax,    //  [Q]  maxima in rows row pay-off matrix  for Hurwitz criterion
-  *ZmaxAbs, //  [Q]  abs(max)values in rows of pay-off matrix for Wald criterion
-  *Hom,     //  [Q]  array of calculated values for Homenyuk criterion
-  *Prob;    //  [Q]  array of probabilities for calculating Homenuk criterion
-  // array for statistics output
-double (*UnIC)  [UNSP_SIZE1]; //  [N][UNSP_SIZE1] statistics over independent components
-double (*UgDC)  [UNSP_SIZE1]; //  [nPG][UNSP_SIZE1] statistics set 1 over dependent components
-double (*UaDC)  [UNSP_SIZE1]; //  [Ls][UNSP_SIZE1] statistics set 2 over dependent components
-double (*UnDCA) [UNSP_SIZE2]; // [nPG][UNSP_SIZE2] statistics set 1 over dependent components
-
-  usp->Zcp = new double[ usp->Q];
-       usp->Zmin = new double[ usp->Q];
-       usp->Zmax = new double[ usp->Q];
-       usp->ZmaxAbs = new double[ usp->Q];
-       usp->Hom = new double[ usp->Q];
-       usp->Prob = new double[ usp->Q];
+     ff << "\n# statistics over independent components";
+  prar.writeArray(  "UnIC", usp->UnIC[0],  usp->N*UNSP_SIZE1, UNSP_SIZE1 );
+  if( _comment )
+     ff << "\n# V statistics set 1 over dependent components";
+  prar.writeArray(  "UgDC", usp->UgDC[0],  usp->nPG*UNSP_SIZE1, UNSP_SIZE1);
+  if( _comment )
+     ff << "\n# statistics set 2 over dependent components";
+  prar.writeArray(  "UaDC", usp->UaDC[0],  usp->Ls*UNSP_SIZE1, UNSP_SIZE1 );
+  if( _comment )
+     ff << "\n# statistics set 1 over dependent components";
+  prar.writeArray(  "UnDCA", usp->UnDCA[0],  usp->nPG*UNSP_SIZE2, UNSP_SIZE2);
 
 
-     usp->UnIC = new double[usp->N][UNSP_SIZE1];
-     usp->UgDC = new double[usp->nPG][UNSP_SIZE1];
-     usp->UaDC = new double[usp->Ls][UNSP_SIZE1];
-     usp->UnDCA = new double[usp->nPG][UNSP_SIZE2];
- */
-  
+//  if( _comment )
+//     ff << "\n# matrix A - test";
+//  prar.writeArray(  "A", usp->A,  usp->L*usp->N, usp->L);
+
   if( _comment )
         ff << "\n# End of file"<< endl;
 }

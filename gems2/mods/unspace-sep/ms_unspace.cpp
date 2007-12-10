@@ -77,13 +77,21 @@ int TUnSpace::TaskSystemInit( const char *chbr_in1 )
          << " cannot be found or are corrupt" << endl;
      return 1;  // error occured during reading the files
   }
-  
+  TNode::na->pCNode()->NodeStatusCH = NEED_GEM_AIA; // activating GEM IPM for automatic initial
+                                    // approximation
+// re-calculating equilibrium by calling GEMIPM
+  TNode::na->GEM_run();
   // setup some internal data 
   pmu = TProfil::pm->pmp;
   
   // !!! internaal from Profile Must be cheked
   //    RMULTS* mup;
-   mup_Laq = pmu->LO;     // LO  - of DC in aqueous phase
+  for( int ii=0; ii<pmu->FIs; ii++)
+  {
+    if( pmu->PHC[ii] == 'a' )
+    	mup_Laq = pmu->L1[ii];
+  }
+  // mup_Laq = pmu->LO+1;     // LO  - of DC in aqueous phase
    mup_Pg = pmu->PG;      // PG  - of DC in gaseous phase
    mup_SF   =  pmu->SF;   // List of PHASE definition keys [0:Fi-1]             DB   
    mup_Ll = pmu->L1;      // L1 vector, shows a number of DC included to each phase [0:Fi-1] DB
@@ -93,9 +101,13 @@ int TUnSpace::TaskSystemInit( const char *chbr_in1 )
     syu_B = pmu->B;  // Vector b of bulk chemical composition of the system, moles [0:mu.N-1]
      
   //    MTPARM *tpp;
-     tpp_G = pmu->G0; // Partial molar(molal) Gibbs energy g(TP) (always), J/mole 
-     tpp_S = pmu->S0;    // Partial molar(molal) entropy s(TP), J/mole/K
-     tpp_Vm = pmu->Vol;   // Partial molar(molal) volume Vm(TP) (always), J/bar
+    pmu->tpp_G = new double[pmu->L]; // Partial molar(molal) Gibbs energy g(TP) (always), J/mole 
+    pmu->tpp_S = new float[pmu->L];    // Partial molar(molal) entropy s(TP), J/mole/K
+    pmu->tpp_Vm = new double[pmu->L];   // Partial molar(molal) volume Vm(TP) (always), J/bar
+    memset( pmu->tpp_G, 0, pmu->L*sizeof(double) );
+    memset( pmu->tpp_S, 0, pmu->L*sizeof(float) );
+    memset( pmu->tpp_Vm, 0, pmu->L*sizeof(double) );
+    tpp_S = pmu->S0;  // overload
 
      
      pmu->Guns = new float[pmu->L];  //  mu.L work vector of uncertainty space increments to tp->G + sy->GEX
@@ -264,7 +276,7 @@ outField TUnSpace_dynamic_fields[46] =  {
 		{ "UaDCn", 1, 0 },
 		{ "UnDCAn", 1, 0 },
 		{ "ParNames", 1, 0 },
-		{ "ncp", 1, 0 }
+		{ "ncp", 0, 0 }
 };
 
    

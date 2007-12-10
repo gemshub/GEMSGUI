@@ -27,6 +27,13 @@
 #include "service.h"
 #include "visor.h"
 
+inline
+double ROUND_EXP(double x, int ex )
+{    double dd = pow( 10., double(ex) );
+     return double( int( (x)*dd+.5 ) ) / dd;
+}
+
+
 TMTparm::TMTparm( int nrt, RMULTS* mu_ ):
         TSubModule( nrt ), mup(mu_)
 {
@@ -318,6 +325,8 @@ if( P < 1e-5 )  // trial check  5.12.2006
   P = 1e-5;
     tp.P = P;
     tp.RT = R_CONSTANT * TK;
+    //tp.RT = ROUND_EXP(tp.RT , 5 ); // test 7/12/2007
+     
     if( tp.La && TC < 120. && TC >= 0.0 )
     { /* calc approximation of water properties Nordstrom ea, 1990 */
         if( TC < 0.01 )

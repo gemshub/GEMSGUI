@@ -213,7 +213,7 @@ void TMulti::loadData( bool newRec )
 void TMulti::CompG0Load()
 {
     int j, jj, k, jb, je=0;
-    float Gg = 0., Vv = 0.;
+    double Gg = 0., Vv = 0.;
 
     // ->pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not load
     if( pmp->pTPD < 1 )
@@ -228,7 +228,7 @@ void TMulti::CompG0Load()
         pmp->denWg = tpp->RoV;
         pmp->epsW = tpp->EpsW;
         pmp->epsWg = tpp->EpsV;
-        pmp->RT = tpp->RT; // R_CONSTANT * pm->Tc
+        pmp->RT =  R_CONSTANT * pmp->Tc; // tpp->RT; // test 07/12/2007
         pmp->FRT = F_CONSTANT/pmp->RT;
         pmp->lnP = log( pmp->P );
     }

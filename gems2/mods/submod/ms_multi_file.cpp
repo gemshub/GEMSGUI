@@ -666,7 +666,8 @@ void TMulti::multi_realloc( char PAalp, char PSigm )
    pm.PMc = 0;
    pm.DMc = 0;
    pm.PUL = new double[pm.FIs];
-   memset(pm.PUL, 0, pm.FIs*sizeof(double));
+   for( ii=0; ii<pm.FIs; ii++ )        // 08/12/2007
+    pm.PUL[ii] = 1e6;
    pm.PLL = new double[pm.FIs];
    memset(pm.PLL, 0, pm.FIs*sizeof(double));
 

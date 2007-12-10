@@ -89,6 +89,8 @@ void TUnSpace::buildTestedArrays()
  int i;
  short Ip;
 
+
+ 
  for( Ip=0; Ip<usp->Q; Ip++)
  {
     usp->q = Ip;
@@ -102,8 +104,10 @@ void TUnSpace::buildTestedArrays()
    
  // setup uncertainty point data
      NexT( Ip );
-
      unsp_eqkey();
+if(!Ip) 
+	TProfil::pm->outMultiTxt( "ipm_1.txt"  );
+
 
  // set zeros for tested arrays
  if(usp->PsGen[0]== S_ON  )
@@ -152,7 +156,7 @@ void TUnSpace::buildTestedArrays()
 #else
        double xx = (float)(pmu->Guns[ii]);
             xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
-            xx += tpp_G[ii]*pmu->RT;
+            xx += pmu->tpp_G[ii];
 #endif
       usp->vG[Ip*usp->L+ii]= xx;
      }
@@ -186,8 +190,8 @@ void TUnSpace::buildTestedArrays()
         if( TProfil::pm->tpp->S )
             usp->vS[i] = TProfil::pm->tpp->S[i];
 #else
-            if( tpp_S )
-                usp->vS[i] = tpp_S[i];
+            if( tpp_S )   // not initalazed
+                usp->vS[i] = tpp_S[i];// pmu->tpp_S
 #endif
 
   if( usp->PsGen[5]== S_ON )
@@ -198,7 +202,7 @@ void TUnSpace::buildTestedArrays()
                 xx += TProfil::pm->tpp->Vm[i];
 #else
        double xx = pmu->Vuns[i];
-               xx += tpp_Vm[i];
+               xx += pmu->tpp_Vm[i];
 #endif
       usp->vmV[Ip*usp->L+i]= xx;
     }
@@ -218,6 +222,7 @@ void TUnSpace::buildTestedArrays()
 //    {    usp->vNidP[i] = ?????;
 //    }
 
+ 
  }
 }
 
@@ -392,11 +397,11 @@ void  TUnSpace::NexT(int J )
         usp->OVN[k3] = x;
         k3++;
      }
-#ifndef IPMGEMPLUGIN
+//#ifndef IPMGEMPLUGIN // test for compare
    usp->ncp[J*usp->nG+(i-1)]=R;
-#else
-   R = usp->ncp[J*usp->nG+(i-1)];
-#endif
+//#else
+//   R = usp->ncp[J*usp->nG+(i-1)];
+//#endif
    if( usp->PsGen[0]== S_ON || usp->PsGen[1]== S_ON || usp->PsGen[5]== S_ON )
     for( j=0; j<usp->L; j++)
      if(usp->PsGen[0]== S_ON && usp->NgLg[j]==i||
@@ -1052,8 +1057,8 @@ void TUnSpace::Un_criteria()
              usp->pmr = usp->POM + t*usp->Q ;
 #ifndef IPMGEMPLUGIN
              aObj[ o_unpmr].SetPtr( usp->pmr );
-             usp->POM[ t*usp->Q+q ] = R;
 #endif
+             usp->POM[ t*usp->Q+q ] = R;
             }
             if( usp->PvPOR == S_ON )
              usp->POR[ q ] = R;

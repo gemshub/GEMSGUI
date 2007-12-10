@@ -29,6 +29,12 @@
 #include "gdatastream.h"
 #include "node.h"
 
+inline
+double ROUND_EXP(double x, int ex )
+{    double dd = pow( 10., double(ex) );
+     return double( int( (x)*dd+.5 ) ) / dd;
+}
+
 TProfil* TProfil::pm;
 
 const double R_CONSTANT = 8.31451,
@@ -98,6 +104,7 @@ double TProfil::calcMulti( int& PrecLoops_, int& NumIterFIA_, int& NumIterIPM_ )
 pmp->t_start = clock();
 pmp->t_end = pmp->t_start;
     multi->MultiCalcInit( 0 );
+
     if( multi->AutoInitialApprox() == false )
     {
         multi->MultiCalcIterations();
@@ -212,7 +219,9 @@ void TMulti::CompG0Load()
  }
 
  pmp->RT = R_CONSTANT * pmp->Tc;
- pmp->FRT = F_CONSTANT/pmp->RT;
+// pmp->RT = ROUND_EXP(pmp->RT , 5 );// test 7/12/2007
+// pmp->RT = 2478.97119140625;// test 7/12/2007
+ pmp->FRT = F_CONSTANT/pmp->RT; 
  pmp->lnP = 0.;
  if( P != 1. ) // ???????
    pmp->lnP = log( P );
@@ -237,20 +246,28 @@ void TMulti::CompG0Load()
        Vv = LagranInterp( dCH->Pval, dCH->TCval, dCH->V0+jj,
                             P, TC, dCH->nTp, dCH->nPp, 1 );
      }
-      if( pmp->Guns )
+     if( pmp->tpp_G )
+    	  pmp->tpp_G[j] = Gg;
+     if( pmp->Guns )
            Gg += pmp->Guns[j];
      pmp->G0[j] = Cj_init_calc( Gg, j, k );
      switch( pmp->PV )
      { // put mol volumes of components into A matrix
        case VOL_CONSTR:
-                    pmp->A[j*pmp->N] = Vv; // !!  error
+           if( pmp->Vuns )
+              Vv += pmp->Vuns[jj];
+           // pmp->A[j*pmp->N+xVol] = tpp->Vm[jj]+Vv;
+             pmp->A[j*pmp->N] = Vv; // !!  error
        case VOL_CALC:
        case VOL_UNDEF:
+    	     if( pmp->tpp_Vm )
+    	    	  pmp->tpp_Vm[j] = Vv;
               if( pmp->Vuns )
                      Vv += pmp->Vuns[j];
  	          pmp->Vol[j] = Vv  * 10.;
               break;
      }
+   	 
     }
  }
  load = true;
@@ -273,6 +290,7 @@ void TMulti::MultiCalcInit( const char* /*key*/ )
     pmp->logXw = -16.;
     pmp->logYFk = -9.;
     pmp->FitVar[4] = pa->p.AG;
+    pmp->FitVar[0] = 0.0640000030398369; // pa->aqPar[0]; setting T,P dependent b_gamma parameters
     pmp->pRR1 = 0;      //IPM smoothing factor and level
     pmp->DX = pa->p.DK;
 

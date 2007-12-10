@@ -330,9 +330,9 @@ class TUnSpace
    double  *syu_B;  // Vector b of bulk chemical composition of the system, moles [0:mu.N-1]
    
 //    MTPARM *tpp;
-   double *tpp_G; // Partial molar(molal) Gibbs energy g(TP) (always), J/mole 
+//   double *tpp_G; // Partial molar(molal) Gibbs energy g(TP) (always), J/mole 
    float *tpp_S;    // Partial molar(molal) entropy s(TP), J/mole/K
-   double *tpp_Vm;   // Partial molar(molal) volume Vm(TP) (always), J/bar
+//   double *tpp_Vm;   // Partial molar(molal) volume Vm(TP) (always), J/bar
     
 //    SYSTEM *syu; // syu = TProfil::pm->syp;
       MULTI *pmu; // pmu = TProfil::pm->pmp;
