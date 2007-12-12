@@ -15,7 +15,7 @@ CONFIG		+= debug
   DEFINES += __unix
 }
 
-Darwin {
+macx-g++{
   DEFINES += __APPLE__
 }
 
