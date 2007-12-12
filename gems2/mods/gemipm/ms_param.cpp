@@ -29,12 +29,6 @@
 #include "gdatastream.h"
 #include "node.h"
 
-inline
-double ROUND_EXP(double x, int ex )
-{    double dd = pow( 10., double(ex) );
-     return double( int( (x)*dd+.5 ) ) / dd;
-}
-
 TProfil* TProfil::pm;
 
 const double R_CONSTANT = 8.31451,
@@ -95,7 +89,7 @@ TProfil::TProfil( TMulti* amulti )
 
 // GEM IPM calculation of equilibrium state in MULTI
 // Modified on 10.09.2007 to return elapsed GEMIPM2 runtime in seconds
-// Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations 
+// Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations
 // and precision refinement loops
 //
 double TProfil::calcMulti( int& PrecLoops_, int& NumIterFIA_, int& NumIterIPM_ )
@@ -109,9 +103,9 @@ pmp->t_end = pmp->t_start;
     {
         multi->MultiCalcIterations();
     }
-PrecLoops_ = pmp->W1 + pmp->K2 - 2; // Prec.ref. + Selekt2() loops 
-NumIterFIA_ = pmp->ITF; 
-NumIterIPM_ = pmp->ITG; 
+PrecLoops_ = pmp->W1 + pmp->K2 - 2; // Prec.ref. + Selekt2() loops
+NumIterFIA_ = pmp->ITF;
+NumIterIPM_ = pmp->ITG;
 
 if( pa.p.PRD < 0 && pa.p.PRD > -50 && !pmp->pNP ) // max 50 loops after simplex FIA
 {  // Test refinement loops for highly non-ideal systems  Added here by KD 15.10.2007
@@ -126,13 +120,13 @@ if( pa.p.PRD < 0 && pa.p.PRD > -50 && !pmp->pNP ) // max 50 loops after simplex 
          multi->MultiCalcIterations();
      }
      TotIT += pmp->IT; TotW1 += pmp->W1 + pmp->K2 - 2;
-     TotITF += (int)pmp->ITF; TotITG += (int)pmp->ITG; 
+     TotITF += (int)pmp->ITF; TotITG += (int)pmp->ITG;
    }
    pmp->pNP = 0;
    pmp->IT = (short)TotIT;
    pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
-   PrecLoops_ = TotW1;   //  
-   NumIterFIA_ = TotITF; 
+   PrecLoops_ = TotW1;   //
+   NumIterFIA_ = TotITF;
    NumIterIPM_ = TotITG; // pmp->IT
 }
 pmp->t_end = clock();
@@ -219,9 +213,7 @@ void TMulti::CompG0Load()
  }
 
  pmp->RT = R_CONSTANT * pmp->Tc;
-// pmp->RT = ROUND_EXP(pmp->RT , 5 );// test 7/12/2007
-// pmp->RT = 2478.97119140625;// test 7/12/2007
- pmp->FRT = F_CONSTANT/pmp->RT; 
+ pmp->FRT = F_CONSTANT/pmp->RT;
  pmp->lnP = 0.;
  if( P != 1. ) // ???????
    pmp->lnP = log( P );
@@ -267,7 +259,7 @@ void TMulti::CompG0Load()
  	          pmp->Vol[j] = Vv  * 10.;
               break;
      }
-   	 
+
     }
  }
  load = true;
@@ -414,7 +406,7 @@ void u_splitpath(const gstring& Path, gstring& dir,
 const size_t bGRAN = 20;
 
 // Get Path of file and Reading list of file names from it, return number of files
-char  (* f_getfiles(const char *f_name, char *Path, 
+char  (* f_getfiles(const char *f_name, char *Path,
 		int& nElem, char delim ))[fileNameLength]
 {
   size_t ii, bSize = bGRAN;
@@ -432,12 +424,12 @@ char  (* f_getfiles(const char *f_name, char *Path,
       path_ = flst_name.substr(0, pos+1);
    strncpy( Path, path_.c_str(), 256-fileNameLength);
    Path[255] = '\0';
-     
+
 //  open file stream for the file names list file
    fstream f_lst( f_name/*flst_name.c_str()*/, ios::in );
    ErrorIf( !f_lst.good(), f_name, "Fileopen error");
 
-// Reading list of names from file	
+// Reading list of names from file
   nElem = 0;
   while( !f_lst.eof() )
   {
@@ -452,12 +444,12 @@ char  (* f_getfiles(const char *f_name, char *Path,
 	}
     strncpy( filesList[nElem], name.c_str(), fileNameLength);
 	filesList[nElem][fileNameLength-1] = '\0';
-    nElem++; 
+    nElem++;
   }
-  
+
   // Realloc memory for reading size
   if( nElem != bSize )
-  {    
+  {
     filesListNew = new char[nElem][fileNameLength];
     for(  ii=0; ii<nElem; ii++ )
 	  strncpy( filesListNew[ii], filesList[ii], fileNameLength);
@@ -465,7 +457,7 @@ char  (* f_getfiles(const char *f_name, char *Path,
 	filesList =  filesListNew;
   }
 
-  return filesList;	
+  return filesList;
 }
 
 

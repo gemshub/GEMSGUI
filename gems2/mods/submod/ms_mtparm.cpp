@@ -3,7 +3,7 @@
 //
 // Implementation of TMTparm class, config and  load functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva 
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -325,8 +325,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
   P = 1e-5;
     tp.P = P;
     tp.RT = R_CONSTANT * TK;
-    //tp.RT = ROUND_EXP(tp.RT , 5 ); // test 7/12/2007
-     
+
     if( tp.La && TC < 120. && TC >= 0.0 )
     { /* calc approximation of water properties Nordstrom ea, 1990 */
         if( TC < 0.01 )
@@ -603,17 +602,17 @@ TMTparm::b_gamma_TP( double tk, double pb, double eps, double gsf, int mode )
               a5=-0.206; c1=-1.50; c2=53300.; omg=178650.;
               bg=-174.623; bs=2.164; rc=0.97; ra=1.81;
               break;
-      case 2:  // KCl  
+      case 2:  // KCl
               ni=2.; a1=0.0172; a2=-115.36; a3=-1.1857; a4=13854.2;
               a5=-0.262; c1=-2.53; c2=38628.4; omg=164870.;
               bg=-70.0; bs=1.727; rc=1.33; ra=1.81;
               break;
-      case 3: // NaOH  
+      case 3: // NaOH
               ni=2.; a1=0.030056; a2=-202.55; a3=-2.9092; a4=20302;
               a5=-0.206; c1=-1.50; c2=53300.; omg=205520.;
               bg=-267.4; bs=1.836; rc=0.97; ra=1.40;
               break;
-      case 4: // KOH   
+      case 4: // KOH
               ni=2.; a1=0.0172; a2=-115.36; a3=-1.1857; a4=13854.2;
               a5=-0.262; c1=-2.53; c2=38628.4; omg=191730.;
               bg=-335.7; bs=1.26; rc=1.33; ra=1.40;
