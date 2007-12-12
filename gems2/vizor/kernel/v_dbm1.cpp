@@ -955,10 +955,6 @@ TDBKeyList::addndx( int nF, int len, const char *key )
             delete[] ndx[j];
             ndx[j] = new_sp;
         }
-        //            ndx[j] = (char *)realloc( ndx[j], nBuf*FldLen(j)*sizeof(char));
-
-        //     re = (RecEntry *)realloc( re, nBuf*sizeof(RecEntry));
-
         RecEntry* new_sp = new RecEntry[nBuf];
         memcpy(new_sp, re, (nBuf-IND_PLUS)*sizeof(RecEntry));
         delete[] re;

@@ -15,6 +15,10 @@ CONFIG		+= debug
   DEFINES += __unix
 }
 
+Darwin {
+  DEFINES += __APPLE__
+}
+
 win32-borland {
 	DEFINES += __win32_borland
 	# Keep the size of the .tds file for the Qt library smaller than
