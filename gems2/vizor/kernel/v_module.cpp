@@ -633,7 +633,7 @@ TCModule::CmDerive()
             || ( db->GetStatus() == UNDF_ && nRT != RT_SDATA) )   // 09/11/2004 Sveta
             Error( GetName(), "E2 Cannot save under record key template, or record contents are not yet loaded!");
 
-        //check_input( db->UnpackKey() );
+        check_input( db->UnpackKey() );  // 13/12/2007
         RecBuild( str.c_str(), VF_REMAKE );
         SetString("Remake finished OK. "
                   " It is recommended to re-calculate the data.");
