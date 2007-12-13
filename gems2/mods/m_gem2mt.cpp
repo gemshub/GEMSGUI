@@ -12,7 +12,7 @@
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
 //
-// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
@@ -161,7 +161,7 @@ aObj[o_mtsizelc].SetPtr( mtp->sizeLc );     /* f3 */
     aObj[o_mtdtau].SetPtr( &mtp->dTau );
     aObj[o_mtotau].SetPtr( &mtp->oTau );
     aObj[o_mtdx].SetPtr( &mtp->dx );
-    aObj[o_mtref2].SetPtr( &mtp->ref2 );
+    aObj[o_mtref2].SetPtr( &mtp->TimeGEM );
     aObj[o_mtref3].SetPtr( &mtp->ref3 );
     aObj[o_mtref4].SetPtr( &mtp->ref4 );
 

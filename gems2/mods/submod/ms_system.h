@@ -13,7 +13,7 @@
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
 //
-// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
@@ -86,7 +86,7 @@ typedef struct
     Lg,   // Lg - final N of DC in gaseous phase
     Lhc,  //  Lhc - final N of DC in liquid hydrocarbon phase (reserved)
     Fi,   // N of phases selected into system  Fi
-    Fis,  // Fib - N of phases used in calculation of bulk composition
+    Fis,  // Fis - N of multi-component phases selected into the system
     Fib,  // Fib - N of phases used in calculation of bulk composition
     Fik,  // Fik - N of phases with kinetic restrictions to X_a (reserved)
     La,   // La - final N of COMPOSes used in calculation of b vector
@@ -125,8 +125,8 @@ typedef struct
     // Code classes see in S_CLASS.H
     *RLC,  //Classifier of DC restriction types {OLUB} res. x[j]  [mu.Ls]
     *RSC,  //Classifier of DC restriction scales {MGnvmLwCADE } x[j] [mu.Ls]
-    *RFLC, //Classifier of phase restriction types {OLUB} res. XF[k] [mu.Fi]
-    *RFSC, // Classifier of phase restriction scales {MGnvwsS} XF[k] [mu.Fi]
+    *RFLC, //Classifier of phase restriction types {OLUB} res. XF[k] [mu.Fis]
+    *RFSC, // Classifier of phase restriction scales {MGnvwsS} XF[k] [mu.Fis]
     // Selection switches
     *Icl,  // IC selection switches { + * - } [0:mu.N-1]
     *Dcl,  // DC selection switches { + * - } [0:mu.L-1]

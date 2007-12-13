@@ -12,7 +12,7 @@
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
 //
-// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 
@@ -247,7 +247,7 @@ float (*grid)[3];      // Array of grid point locations, size is nC
    dTau, // current time step value
    oTau, // old time step value
    dx,   // node distance [L/nC]
-   ref2,
+   TimeGEM, // pure GEM runtime, in seconds
    ref3,
    ref4
   ;
@@ -302,7 +302,7 @@ int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
     void  MassTransAdvecStart();
     void  MassTransAdvecStep( bool ComponentMode = true );
     void  MassTransParticleStart();
-    void  MassTransParticleStep();
+    void  MassTransParticleStep( bool ComponentMode = true );
 
 
     bool Trans1D( char mode  );  // return true if canceled

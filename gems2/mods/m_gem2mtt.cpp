@@ -12,7 +12,7 @@
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
 //
-// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
@@ -302,7 +302,9 @@ NeedGEM = true;  // Mode = NEED_GEM_AIA;     // debugging
      if( NeedGEM )
      {
         RetCode = na->RunGEM( ii, Mode );
-        // check RetCode from GEM IPM calculation
+        // Returns GEMIPM2 calculation time in sec after the last call to GEM_run()
+        mtp->TimeGEM +=	na->GEM_CalcTime();
+        // checking RetCode from GEM IPM calculation
         if( !(RetCode==OK_GEM_AIA || RetCode == OK_GEM_PIA ))
         {
 //          cout << "CalcIPM4 " << RetCode << endl;
@@ -380,12 +382,12 @@ void TGEM2MT::MassTransParticleStart()
 
 
 // The mass transport iteration time step
-void TGEM2MT::MassTransParticleStep()
+void TGEM2MT::MassTransParticleStep( bool CompMode )
 {
    mtp->ct += 1;
    mtp->oTau = mtp->cTau;
    mtp->cTau += mtp->dTau;
-   pa->GEMCOTAC( mtp->PsMode, mtp->oTau, mtp->cTau );
+   pa->GEMPARTRACK( mtp->PsMode, CompMode, mtp->oTau, mtp->cTau );
 }
 
 // The mass transport iteration time step
@@ -508,7 +510,7 @@ bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;
   bool iRet = false;
-  bool CompMode = false;   // Component transport mode: true: DC; false: IC
+  bool CompMode = true;   // Component transport mode: true: DC; false: IC
   int nStart = 0, nEnd = mtp->nC;
   int NodesSetToAIA;
 
@@ -534,6 +536,7 @@ if( !logfile)
 clock_t t_start, t_end, t_out, t_out2;
 clock_t outp_time = (clock_t)0;
 t_start = clock();
+mtp->TimeGEM = 0.0; 
 
    if( mtp->iStat != AS_RUN  )
    {  switch( mtp->PsMode )
@@ -593,7 +596,7 @@ outp_time += ( t_out2 - t_out);
           case GMT_MODE_A: MassTransAdvecStep( CompMode );
                   break;
           case GMT_MODE_V:
-          case GMT_MODE_W: MassTransParticleStep();
+          case GMT_MODE_W: MassTransParticleStep( CompMode );
                                       break;
           default: // more mass transport models here
                   break;
@@ -651,8 +654,8 @@ double clc_sec = CLOCKS_PER_SEC;
 if( mtp->PvMO != S_OFF )
 {
 fprintf( diffile,
-  "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s\n",
-    (dtime-outp_time)/clc_sec,  outp_time/clc_sec, dtime/clc_sec );
+  "\nTotal time of calculation %lg s;  Time of output %lg s;  Whole run time %lg s;  Pure GEM run time %lg s\n",
+    (dtime-outp_time)/clc_sec,  outp_time/clc_sec, dtime/clc_sec, mtp->TimeGEM );
 fclose( logfile );
 fclose( ph_file );
 fclose( diffile );

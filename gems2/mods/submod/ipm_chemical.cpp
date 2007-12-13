@@ -16,7 +16,7 @@
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
 //
-// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch; chud@igc.irk.ru
 //-------------------------------------------------------------------
 //
@@ -259,6 +259,9 @@ void TMulti::Set_DC_limits( int Mode )
         for( j=jb; j<je; j++ )
             if( pmp->RLC[j] != NO_LIM )
                 MpL = 1;
+
+if( k < pmp->FIs )
+{					// Temporary workaround - DK  13.12.2007         	
         if( pmp->RFLC[k] == NO_LIM && !MpL )
         { // check type restrictions on phase
             goto NEXT_PHASE;
@@ -293,6 +296,7 @@ void TMulti::Set_DC_limits( int Mode )
             XFL = 0.0;
             XFU = 1e6;
 //        }
+} 
         for( j=jb; j<je; j++ )
         { // loop over DCs
             if( pmp->RLC[j] == NO_LIM )

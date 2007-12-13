@@ -12,7 +12,7 @@
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
 //
-// See http://les.web.psi.ch/Software/GEMS-PSI for more information
+// See http://gems.web.psi.ch/ for more information
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
@@ -273,8 +273,8 @@ void TGEM2MT::init_arrays( bool mode )
         mtp->nPmin[ii] = 100;
         mtp->nPmax[ii] = 1000;
         mtp->ParTD[ii][0] = (short)ii;
-        mtp->ParTD[ii][1] = IMMOBILE_C_VOLUME;
-        mtp->ParTD[ii][2] = ADVECTIVE;
+        mtp->ParTD[ii][1] = MOBILE_C_MASS;
+        mtp->ParTD[ii][2] = DISSOLVED;
         mtp->ParTD[ii][3] = 0;
         mtp->ParTD[ii][4] = 0;
         mtp->ParTD[ii][5] = 0;
