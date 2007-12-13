@@ -4,25 +4,26 @@ Needs Tres Thoenen's G4 Mac running
 
 1. Open a SSH terminal: 
 
-  ssh guest@129.129.204.77   (password: GEM-Selektor)
+  ssh guest@129.129.204.98:0   (password: a )
 
 Check QTDIR (if Qt is istalled):
 
   echo $QTDIR
 
   cd work/gems2
-  setenv CVS_RSH ssh
 
-2. Make update of GEMS source code tree: 
 
-  cvs update <password> 
+2. Make update of GEMS source code tree use SVN client,
+   for example SmartSvn 
+
 
 3. Build the release executable file: 
 
+  cp Makefile.mac Makefile
   make RELEASE=YES
 
 This will create a release version of GEMS-PSI 
-in ~/work/gems2.app/Contents/MacOS
+in ~/work/gems2/gems2.app/Contents/MacOS
 
 4. Check that actual distribution directories stored 
 in ~/work/gems2/shared/ are copied into
@@ -35,7 +36,7 @@ It should look like this:
 		                 img/
 		                 doc/
 		                 data/
-                                 projects/
+                         projects/
                 ...
 
 If necessary, use "cp -R" command to copy the five
@@ -44,37 +45,27 @@ directories listed above from ./shared/.
 
 Execute 
 
-  make copy_data
+  make -f Makefile.lin copy_data
 
 This will refresh configuration files.
 It makes sense to re-read configuration files before 
 producing the zip package. This needs a graphic desktop, 
 either native or virtual.
 
-5. To run GEMS from virtual desktop (on Linux): 
+5. To run GEMS in terminal: 
 
-start KDE virtual desktop client for 
-  129.129.204.77:0  <password for user guest>
+  cd ~/work/gems2/gems2.app 
+  exec ~/work/gems2/gems2.app -d 
 
-After getting Mac desktop window, open a 
-terminal there and (if not done before):
-
-  cd ~/work/gems2
-  setenv CVS_RSH ssh
-  cvs update <password> 
-  make RELEASE=YES 
-  make copy_data
-
-when done, re-read configuration files: 
-
-  cd ~/work/gems2 
-  ./rungems.sh -d 
-
-and then exit GEMS. 
+ or 
+ 
+ use eclipse "Run" command with argument -d
+ 
+ and then exit GEMS.
 
 6. In terminal, get in ~/work/gems2/ and execute 
 
-   make zip
+   make -f Makefile.lin zip
 
 This will create the archive 'gems2-mac-{current_date}.zip' 
 on the current MacOS user's Desktop (if there is an existing 
@@ -85,7 +76,7 @@ gems2-mac-{current_date}.zip file can be distributed by
 copying it from the desktop to your (remote) location, 
 e.g. for Linux as follows:
 
-  scp guest@129.129.204.77:/Users/guest/Desktop/gems2-mac*.zip .  
+  scp guest@129.129.204.98:/Users/guest/Desktop/gems2-mac*.zip .  
 
 and type the "guest" user's password on the prompt. 
 

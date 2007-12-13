@@ -397,7 +397,7 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
     selectM1 = 
     selectM2 = 0;
 
-    p->setFont( pVisorImp->getCellFont() );
+ //   p->setFont( pVisorImp->getCellFont() ); // 13/12/2007
 
     //--- Circular list section ---
     if( tied )
