@@ -328,6 +328,8 @@ bool TRTParm::check_input( const char *key, int Level )
             iRet = true;
     }
     else iRet = true;
+    
+    pVisor->Update();
     return iRet;
 }
 
@@ -622,7 +624,8 @@ TRTParm::RecCalc( const char *key )
     SetString("RTPARM arrays calculated OK");
     TCModule::RecCalc(key);
     pVisor->CloseMessage();
-
+    check_input( key );
+    pVisor->Update();
 }
 
 void

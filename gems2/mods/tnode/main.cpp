@@ -20,7 +20,7 @@
 // This file may be distributed under the licence terms defined
 // in GEMIPM2K.QAL
 //
-// See also http://gems.web.psi.ch/
+// See also http://les.web.psi.ch/Software/GEMS-PSI
 // mailto://gems2.support@psi.ch
 //-------------------------------------------------------------------
 
@@ -29,7 +29,7 @@
 #include <string.h>
 
 #include "node.h"
-#define nNodes  5   // set here how many nodes you need
+const int  nNodes =  5;   // set here how many nodes you need
 
 int main( int argc, char* argv[] )
  {
