@@ -91,19 +91,94 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 
 #undef dMB
 #undef MB
+
+#define Mb( q, i)  ( mtp->MB[ (q)*mtp->Nb + (i)])
+
+#define dMb( q, i)  (mtp->dMB[(q)*mtp->Nb + (i)])
+
+
 // Calculate new reservuir states for tcur = x
 void
-TGEM2MT::CalcNewStates( int Ni,int pr, double x, double step, double *y )
+TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
 {
-/*
-    allx[Ni] = x;
-    allst[Ni] = step;
-    allpr[Ni] = (short)pr;
-    for( i=0; i<dimM; i++)
-        ally[Ni*dimM+i] = y[i];
-*/        
+  int q, i, f;
+  double Mqfi = 0., Bqi = 0., Wqi = 0.;
+  bool iRet = false;
+  FILE* diffile = NULL;
+
+ if( mtp->PvMO != S_OFF )
+ {
+   // Preparations: opening output files for monitoring 1D profiles
+    diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
+    if( !diffile)
+    return;
+ }
+ clock_t t_start, t_end, t_out, t_out2;
+ clock_t outp_time = (clock_t)0;
+ t_start = clock();
+
+// Set up new reservoir states at tcur
+ for( q=0; q <mtp->nC; q++ )
+	for(i =0; i< mtp->Nb; i++ )
+	{
+		node1_bIC(q, i) +=dMb( q, i);
+	}	
+ 
+// The analysis of GEM IA modes in nodes - optional
+  int NodesSetToAIA = CheckPIAinNodes1D( NEED_GEM_AIA, 0, mtp->nC );
+
+	
+// Calculate new reservoir states at tcur	
+// Calculation of chemical equilibria in all nodes at the beginning
+// with the Simplex initial approximation
+   CalcIPM( NEED_GEM_AIA, 0, mtp->nC, diffile );
+	
+ 
+  // Here one has to compare old and new equilibrium phase assemblage
+  // and pH/pe in all nodes and decide if the time step was Ok or it
+  // should be decreased. If so then the nodes from C0 should be
+  // copied to C1 (to be implemented)
+
+  // Output resalt if step accepted
+   if( mtp->PvMO != S_OFF )
+   {
+    t_out = clock();
+    na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 0 );
+        // logging differences after the MT iteration loop
+    t_out2 = clock();
+    outp_time += ( t_out2 -  t_out);
+   }
+
+   
+  #ifndef IPMGEMPLUGIN
+             // time step accepted - Copying nodes from C1 to C0 row
+             pVisor->Update();
+             CalcGraph();
+  #endif
+  
+  // copy node array for T0 into node array for T1
+     copyNodeArrays();
+
+  // Set parameters for mass transport
+     for( q=0; q <mtp->nC; q++ )
+		 for(i=0; i<mtp->Nb; i++ )
+			 Mb( q, i) = 0.;
+
+     for( q=0; q <mtp->nC; q++ )
+	   for(f=0; f<mtp->nPG; f++ )
+		 for(i=0; i<mtp->Nb; i++ )
+	     {	  
+			 // Mqfi = ???;
+			 // Bqi =  ???;
+			 // Wqi =  ???;
+			 g(q,f,i) =  Mqfi/Bqi/Wqi;
+			 Mb( q, i) += Mqfi;
+	     }
+     
 }
 
+#undef dMB
+#undef MB
 
 //Calculate record
 bool TGEM2MT::CalcBoxModel()
