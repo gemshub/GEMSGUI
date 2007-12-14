@@ -510,13 +510,18 @@ bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;
   bool iRet = false;
-  bool CompMode = false;   // Component transport mode: true: DC; false: IC
+  bool CompMode;   // Component transport mode: true: DC; false: IC
   int nStart = 0, nEnd = mtp->nC;
   int NodesSetToAIA;
 
 FILE* logfile;
 FILE* ph_file;
 FILE* diffile = NULL;
+
+if( mtp->PsDDc == S_ON && mtp->PsDIc == S_OFF )  // Set of DC transport using record switches
+	CompMode = true; 
+if( mtp->PsDDc == S_OFF && mtp->PsDIc == S_ON )  // Set of IC transport using record switches
+	CompMode = false; 
 
 if( mtp->PvMO != S_OFF )
 {
