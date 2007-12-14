@@ -720,9 +720,9 @@ double TNodeArray::GetNodeMass( int ndx,
      switch( tcode )
      {
         case DISSOLVED: // mass of dissolved matter in aqueous solution
-                    xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
-                        mass = node1_mPS(ndx,ips) - node1_xPA(ndx,ips) *
-                               dch->DCmm[xWatCH];
+                        xWatCH = dch->nDCinPH[dch->xPH[0]]-1; // CH index of water
+//                       mass = node1_mPS(ndx,ips); // - node1_xPA(ndx,ips)*dch->DCmm[xWatCH];
+                        mass = node1_xPA(ndx,ips)*dch->DCmm[xWatCH]; // Mass of aq-solvent
                         break;
         case ADVECTIVE: // mass of aq solution
                         mass = node1_mPS( ndx, ips );
@@ -761,14 +761,16 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
 	   xWatCH = CSD->nDCinPH[CSD->xPH[0]]-1; // CH index of water
 //	   mWat = node1_xDC( ndx_from, xWatCH )* CSD->DCmm[xWatCH]; 
 	   mWat = node1_xPA(ndx_from, ips) * CSD->DCmm[xWatCH];  // Mass of water-solvent
-	   fmolal = 1000./mWat;              // molality conversion factor
+	   fmolal = 1.0; // 1000./mWat;              // molality conversion factor
    }
 
    switch( tcode )
    {
     case DISSOLVED: // mass of dissolved matter in aqueous solution
-    				mass = mWat;
-//    	mass = node1_mPS(ndx_from,ips) - mWat;
+    				mass = mWat;  // trying normalization over mass of water-solvent
+//    				mass = 1000/fmolal; // grams of water in the node
+//    				fmolal = 1.0;
+    				//    	mass = node1_mPS(ndx_from,ips) - mWat;
                    break;
     case ADVECTIVE: // mass of liquid phase for full advection
                    mass = node1_mPS( ndx_from, ips );
@@ -794,8 +796,8 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
 	  switch( tcode )
 	  {
         case DISSOLVED: // moving only dissolved DC (-H2O)
-             if( jc == xWatCH )
-            	 continue;  // H2O is ignored 
+//             if( jc == xWatCH )
+//            	 continue;  // H2O is ignored - not moved with the particle 
 	    case ADVECTIVE: // moving DC of the whole aq phase
              if( jc > xWatCH )
             	 continue;     // ignoring non-aqueous species 
@@ -852,8 +854,8 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
      } 	  
 	} // loop jc  	  
   }
-  else {  // Transport of independent components 
-	  
+  else {  
+	      // Transport of independent components 
    for(short ie=0; ie < CSD->nICb; ie++ )
    {
      mol = 0.; // moles of IC in the particle
@@ -861,8 +863,8 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
      {
         case DISSOLVED: // moving only dissolved IC (-H2O)
                         mol = ( node1_bPS( ndx_from, ips, ie )
-                              - nodeCH_A( xWatCH, ie)
-                              * node1_xPA(ndx_from,ips)) * coeff * fmolal;
+//                              - nodeCH_A( xWatCH, ie)* node1_xPA(ndx_from,ips)
+                              ) * coeff * fmolal;
                         break;
         case ADVECTIVE: // moving IC of the whole aq phase
                         mol = ( node1_bPS( ndx_from, ips, ie )

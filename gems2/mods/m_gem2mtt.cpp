@@ -3,7 +3,7 @@
 //
 // Implementation of TGEM2MT class, mass transport functions
 //
-// Copyright (C) 2005 S.Dmytriyeva, D.Kulik
+// Copyright (C) 2005,2007  S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -510,7 +510,7 @@ bool TGEM2MT::Trans1D( char mode )
 {
   int evrt =10;
   bool iRet = false;
-  bool CompMode = true;   // Component transport mode: true: DC; false: IC
+  bool CompMode = false;   // Component transport mode: true: DC; false: IC
   int nStart = 0, nEnd = mtp->nC;
   int NodesSetToAIA;
 
