@@ -309,6 +309,30 @@ protected:
     void  MassTransAdvecStep();
     void  MassTransParticleStart();
     void  MassTransParticleStep();
+    
+    // for box floor model
+    int MaxIter,  // max number of iterations
+         nfcn,      // number of functional estimates
+         nstep,     // number of steps
+         naccept,   // number of permissible steps
+         nrejct;    // number of unpermissible steps
+    double *x;
+    double *dx;
+    double *tv;
+
+    double (*tt)[9];
+
+    bool CalcBoxModel(); // calculate Mobile Phase-Group Flows
+    
+    // calculate 1-step from system of equation 
+    void Solut( double *m, double *dm, double t );
+    // Calculate new reservuir states for tcur = x
+    void CalcNewStates( int Ni,int pr, double x, double step, double *y );
+    // internal point j calculation
+    void MIDEX( int j, double t, double h );
+    void INTEG( double eps, double& step, double t_begin, double t_end );
+
+ 
 
 public:
 

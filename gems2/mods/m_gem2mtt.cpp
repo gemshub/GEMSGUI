@@ -530,10 +530,10 @@ logfile = fopen( "ICaq-log.dat", "w+" );    // Total dissolved element molaritie
 if( !logfile)
   return iRet;
 ph_file = fopen( "Ph-log.dat", "w+" );   // Mole amounts of phases
-if( !logfile)
+if( !ph_file)
   return iRet;
 diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
-if( !logfile)
+if( !diffile)
   return iRet;
 }
 

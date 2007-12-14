@@ -2,6 +2,7 @@
 gems2/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/Makefile.MinGW -text
+gems2/Makefile.gcc -text
 gems2/Makefile.lin -text
 gems2/Makefile.w32 svn_keywords=Author+Date+Id+Revision
 gems2/RUNGEMS.BAT svn_keywords=Author+Date+Id+Revision
@@ -181,6 +182,7 @@ gems2/mods/m_dualth.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_dualthc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_gem2mt.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_gem2mt.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/m_gem2mtbox.cpp -text
 gems2/mods/m_gem2mtc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/m_gem2mtt.cpp -text
 gems2/mods/m_gtdemo.cpp svn_keywords=Author+Date+Id+Revision

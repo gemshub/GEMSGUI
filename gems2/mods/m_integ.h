@@ -102,4 +102,3 @@ public:
 
 #endif  // _integ_h
 
-

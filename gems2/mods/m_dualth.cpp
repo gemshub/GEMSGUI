@@ -685,7 +685,7 @@ bool TDualTh::check_input( const char * /*key*/, int /*Level*/ )
                            RT_DUALTH, 5, RT_DUALTH, 6, RT_DUALTH, 7, K_END);
     // read SysEq record and unpack data
     TProfil::pm->loadSystat( pkey );
-    // test changes in system after process calc
+   // test changes in system after process calc
     if( rt[RT_SYSEQ].Rtime() > rt[nRT].Rtime() )
         return true;
     return false;

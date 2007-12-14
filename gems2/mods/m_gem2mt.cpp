@@ -966,7 +966,15 @@ TGEM2MT::RecCalc( const char * key )
          NewNodeArray();  // set up start DATACH structure and DATABR arrays structure
      if( mtp->PvMSg != S_OFF )
          Expr_analyze( o_mtgexpr );
-     if( Trans1D( NEED_GEM_PIA ) )
+     
+     bool iRet; 
+     
+     if( mtp->PsMode == 'B' ) // box floor model
+       iRet = CalcBoxModel();
+     else
+    	iRet =  Trans1D( NEED_GEM_PIA );
+ 
+     if( iRet )
      { // canceled calculations
         if( vfQuestion( window(), "GEM2MT task interrupt",
            "RMT calculations have been stopped by the user.\n"
