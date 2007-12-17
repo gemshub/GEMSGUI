@@ -41,6 +41,9 @@ TGEM2MT::test_sizes( )
   mtp->Nb = TProfil::pm->mup->N;
   mtp->FIb = TProfil::pm->mup->Fi;
   mtp->Lb = TProfil::pm->mup->L;
+//  mtp->Nf = TProfil::pm->pmp->N;
+//  mtp->FIf = TProfil::pm->pmp->FI;
+  mtp->Lsf = TProfil::pm->pmp->Ls;
 
 
   if( mtp->nC<=0 || mtp->nIV <= 0)
@@ -171,11 +174,14 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
   mtp->nICb = (short)aSelIC.GetCount();
   mtp->nDCb = (short)aSelDC.GetCount();
   mtp->nPHb = (short)aSelPH.GetCount();
-  mtp->nPSb = 0;
-  for( jj=0; jj< aSelPH.GetCount(); jj++, mtp->nPSb++ )
-   if( aSelPH[jj] >= mult->FIs )
-       break;
+  //int nPSb = 0;
+  //for( jj=0; jj< aSelPH.GetCount(); jj++, nPSb+= )
+  // if( aSelPH[jj] >= mult->FIs )
+  //     break;
+  mtp->Nf =  mtp->nICb;
+  mtp->FIf = mtp->nPHb;
 
+  
 // realloc memory
   dyn_new();
 
@@ -262,7 +268,7 @@ void TGEM2MT::init_arrays( bool mode )
     }
 
     if( mtp->UMPG)
-      for( ii=0; ii<TProfil::pm->pmp->FI; ii++)
+      for( ii=0; ii<mtp->FIf; ii++)
          mtp->UMPG[ii] = QUAN_GRAM;
 
 // set up defaults for particles

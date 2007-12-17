@@ -80,9 +80,9 @@ typedef struct
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
    Nqpg, // Number of elements in the script work array qpc for graphics
-   Nb,   // N - number of independent components (set automatically from Multi)
-   FIb,   // N - number of phases (set automatically from Multi)
-   Lb,   // N - number of dependent components in multycomponent phases (set automatically from Multi)
+   Nb,   // N - number of independent components (set automatically from RMults)
+   FIb,   // N - number of phases (set automatically from RMults)
+   Lb,   // N - number of dependent components in multycomponent phases (set automatically from RMults)
    bTau, // Time point for the simulation break (Tau[0] at start)
    ntM, // Maximum allowed number of time iteration steps (default 1000)
    nYS,  // number of plots (columns in the yt array)
@@ -90,15 +90,15 @@ typedef struct
    nYE,  // number of experimental parameters (columns in the yEt array)
    nPai,  // Number of P points in MTP interpolation array in DataCH ( 1 to 10 )
    nTai,  // Number of T points in MTP interpolation array in DataCH ( 1 to 20 )
-   sRes,   // reserved
+   Lsf,       // number of DCs in phases-solutions in Multi (DATACH) for setting box-fluxes
   // These dimensionalities define sizes of dynamic data in DATABR structure!!!
   // Needed to reduce on storage demand for data bridge instances (nodes)!
   // Connection occurs through xIC, xPH and xDC lists!
     nICb,       // number of stoichiometry units (<= nIC) used in the data bridge
     nDCb,      	// number of DC (chemical species, <= nDC) used in the data bridge
     nPHb,     	// number of phases (<= nPH) used in the data bridge
-    nPSb,       // number of multicomponent phases (<= nPS) used in the data bridge
-    uRes3,
+    Nf,       // nICb number of ICs in  (DATABR) for setting box-fluxes
+    FIf,      // nPHb number of phases in (DATABR) for setting box-fluxes
 
 // iterators for generating syseq record keys for initial system variants
    tmi[3],   // SYSTEM CSD definition #: start, end, step (initial)
@@ -157,22 +157,22 @@ typedef struct
    sizeLc[3],   // spatial dimensions of the medium defines topology of nodes
    *xEt,    // Abscissa for experimental points [nXE]
    *yEt,       // Ordinates for experimental points to plot [nXE, nYE]
-   *DDc,  //  [Ls] diffusion coefficients for DC
-   *DIc,  //  [N] diffusion coefficients for IC
+   *DDc,  //  [Lsf] diffusion coefficients for DC
+   *DIc,  //  [Nf] diffusion coefficients for IC
    *DEl   //  [nE] diffusion coefficients for electrolyte salts
     ;
 float (*grid)[3];      // Array of grid point locations, size is nC
 
  double
-   *Bn,    //  [nIV][N] Table of bulk compositions of initial systems
+   *Bn,    //  [nIV][Nb] Table of bulk compositions of initial systems
    *qpi,   //  [Nqpi] Work array for initial systems math script
    *qpc,    //  [Nqpc] Work array for mass transport math script,
    *xt,    //  Abscissa for sampled data [nS]
    *yt,     //  Ordinates for sampled data [nS][nYS]
-   *BSF,    // [nSFD][N] table of bulk compositions of source fluxes
+   *BSF,    // [nSFD][Nf] table of bulk compositions of source fluxes
             //  More to be added here for seq reactors?
-   *MB,  // [nC] [Nb] column of current masses of boxes (in kg)
-   *dMB // [nC][Nb]  Table of current derivatives dM for elements in reservoirs
+   *MB,  // [nC] [Nf] column of current masses of boxes (in kg)
+   *dMB // [nC][Nf]  Table of current derivatives dM for elements in reservoirs
     ;
  double  (*HydP)[SIZE_HYDP]; // [nC][6] hydraulic parameters for nodes in mass transport model
    //  value order to be described
@@ -180,18 +180,18 @@ float (*grid)[3];      // Array of grid point locations, size is nC
    *Tval,   // discrete values of T [nTai] in grid arrays in DataCH
    *Pval,   // discrete values of P [nPai]
 
-   *CIb, // [nIV][N] Table of quantity/concentration of IC in initial systems
+   *CIb, // [nIV][Nb] Table of quantity/concentration of IC in initial systems
    *CAb, // [nIV][Lbi] Table of quantity/concentration of formulae for initial systems
-   *PGT  // Quantities of phases in MPG [Fi][nPG]
+   *PGT  // Quantities of phases in MPG [FIf][nPG]
     ;
  float  (*FDLf)[4]; // [nFD][4] Part of the flux defnition list (flux order, flux rate, MPG quantities)
  char
    *tExpr,  // Math script text for calculation of mass transport
    *gExpr,  // Math script text for calculation of data sampling and plotting
 //
-   *CIclb, // [N] Units of IC quantity/concentration for initial systems compositions
+   *CIclb, // [Nb] Units of IC quantity/concentration for initial systems compositions
    *AUcln, // [Lbi] Units of setting UDF quantities for initial system compositions
-   *UMPG;  // [nFi] units for setting phase quantities in MPG (see PGT )
+   *UMPG;  // [FIf] units for setting phase quantities in MPG (see PGT )
 
   char (*sdref)[V_SD_RKLEN]; // "List of bibl. refs to data sources" [0:Nsd-1]
   char (*sdval)[V_SD_VALEN];  // "Parameters taken from the respective data sources"[0:Nsd-1]
@@ -218,7 +218,7 @@ float (*grid)[3];      // Array of grid point locations, size is nC
     *Ae  // [nE][N] stoich matrix for for diffusing electrolytes
    ;
  double
-   *gc  // [nC][nPG][Nb] Array of element partition coefficients for MPG and its source reservoir
+   *gc  // [nC][nPG][Nf] Array of element partition coefficients for MPG and its source reservoir
    ;
    char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
    *etext,              // internal

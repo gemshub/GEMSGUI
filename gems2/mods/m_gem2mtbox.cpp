@@ -36,15 +36,15 @@
 
 #endif
 
-#define dMB( q, i) ( dm[ (q)*mtp->Nb + (i)] ) 
+#define dMB( q, i) ( dm[ (q)*mtp->Nf + (i)] ) 
 
-#define MB( q, i)  ( m[ (q)*mtp->Nb + (i)] )
+#define MB( q, i)  ( m[ (q)*mtp->Nf + (i)] )
 
-#define g(q,f,i)   ( mtp->gc[ (q)*(mtp->nC*mtp->Nb)+ (f)*mtp->Nb + (i)] )
+#define g(q,f,i)   ( mtp->gc[ (q)*(mtp->nC*mtp->Nf)+ (f)*mtp->Nf + (i)] )
 
 #define v(f)       ( (mtp->FDLf[f][1]) )
 
-#define H(p, i)    ( mtp->BSF[(abs(p)-1)* mtp->Nb + ( i )] )
+#define H(p, i)    ( mtp->BSF[(abs(p)-1)* mtp->Nf + ( i )] )
 
 // calculate 1-step from system of equation 
 void TGEM2MT::Solut( double *m, double *dm, double t )
@@ -53,7 +53,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
   
   // set up 0.
   for( q=0; q <mtp->nC; q++ )
-	for(i =0; i< mtp->Nb; i++ )
+	for(i =0; i< mtp->Nf; i++ )
       dMB(q,i) = 0.;
 
   for(kk=0; kk<mtp->nFD; kk++ )
@@ -63,7 +63,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 	if( q >= 0 && p>=0 )
 	{
 	  for(f=0; f<mtp->nPG; f++ )
-		for(i=0; i<mtp->Nb; i++ )
+		for(i=0; i<mtp->Nf; i++ )
 	    {	  
 		  dMB(q,i) -=  v(f) * MB(q,i) * g(q,f,i);
 		  dMB(p,i) +=  v(f) * MB(q,i) * g(q,f,i);
@@ -72,7 +72,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 		 if( q>= 0 )
 		 {
 		   for(f=0; f<mtp->nPG; f++ )
-		     for(i=0; i<mtp->Nb; i++ )
+		     for(i=0; i<mtp->Nf; i++ )
 			 {	  
 				  dMB(q,i) -=  v(f) * MB(q,i) * g(q,f,i);
 			 }	
@@ -80,7 +80,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 				 if( p>= 0 )
 				 {
 				   for(f=0; f<mtp->nPG; f++ )
-				     for(i=0; i<mtp->Nb; i++ )
+				     for(i=0; i<mtp->Nf; i++ )
 					 {	  
 						  dMB(p,i) +=  H(q,i)*  v(f)  * g(p,f,i);
 					 }	
@@ -91,9 +91,9 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 #undef dMB
 #undef MB
 
-#define Mb( q, i)  ( mtp->MB[ (q)*mtp->Nb + (i)])
+#define Mb( q, i)  ( mtp->MB[ (q)*mtp->Nf + (i)])
 
-#define dMb( q, i)  (mtp->dMB[(q)*mtp->Nb + (i)])
+#define dMb( q, i)  (mtp->dMB[(q)*mtp->Nf + (i)])
 
 // Calculate new equilibrium states in the boxes for tcur = x
 bool
@@ -118,7 +118,7 @@ TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
  if( Ni >= 0)
  { // Set up new reservoir states at tcur
    for( q=0; q <mtp->nC; q++ )
-	 for(i =0; i< mtp->Nb; i++ )
+	 for(i =0; i< mtp->Nf; i++ )
 	 {
 		node1_bIC(q, i) +=dMb( q, i);
 	 }
@@ -158,12 +158,12 @@ TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
 
   // Set parameters for mass transport
      for( q=0; q <mtp->nC; q++ )
-		 for(i=0; i<mtp->Nb; i++ )
+		 for(i=0; i<mtp->Nf; i++ )
 			 Mb( q, i) = 0.;
 
      for( q=0; q <mtp->nC; q++ )
 	   for(f=0; f<mtp->nPG; f++ )
-		 for(i=0; i<mtp->Nb; i++ )
+		 for(i=0; i<mtp->Nf; i++ )
 	     {	  
 			 // Mqfi = ???;
 			 // Bqi =  ???;
@@ -199,6 +199,7 @@ bool TGEM2MT::CalcBoxModel( char mode )
     mtp->cTau = mtp->Tau[START_];
     // mtp->cTau = 0;
     mtp->ct = 0;
+    mtp->gc = (double *)aObj[ o_mtgc].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
 
 #ifndef IPMGEMPLUGIN
       if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
@@ -215,7 +216,7 @@ bool TGEM2MT::CalcBoxModel( char mode )
     
      
   // calc part  
-    int n = mtp->nC * mtp->Nb;  
+    int n = mtp->nC * mtp->Nf;  
     tt = new double[ n ][9];
     nfcn = nstep = naccept = nrejct = 0;
     INTEG( mtp->cdv, mtp->dTau, mtp->Tau[START_], mtp->Tau[STOP_] );
@@ -260,7 +261,7 @@ void TGEM2MT::MIDEX( int j, double t, double h )
     int i,m,mm,l,n;
     try
     {
-        n = mtp->nC*mtp->Nb;
+        n = mtp->nC*mtp->Nf;
         z1 = new double[n];
         z2 = new double[n];
         dz = new double[n];
@@ -415,7 +416,7 @@ l60:
         t += h;
         step = h;
         mtp->cTau = t;
-        for( i=0; i < mtp->nC*mtp->Nb; i++ )
+        for( i=0; i < mtp->nC*mtp->Nf; i++ )
             x[i] = tt[i][0];
         Solut(  x, dx, t );
         naccept++;

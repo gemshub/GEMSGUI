@@ -102,3 +102,34 @@ public:
 
 #endif  // _integ_h
 
+outField TGEM2MT_static_fields[19] =  {
+ { "Mode", 1,0 },
+ { "PvFDL", 0,0 },  // PvPGD, PvFDL, PvSFL
+ { "PvGrid", 0,0 },
+ { "Size" , 1,0 },
+ { "nFD" , 0,0 },
+ { "nPG" , 0,0 },
+ { "nSFD" , 0,0 },
+ { "MaxSteps", 1,0 },
+ { "nPTypes", 0,0 },
+ { "nProps", 0,0 },
+ { "Tau", 1,0 },
+ { "LSize", 0,0 },
+ { "fVel", 1,0 },
+ { "cLen", 1,0 },
+ { "tf", 1,0 },
+ { "cdv", 1,0 },
+ { "cez", 1,0 },
+ { "al_in", 1,0 },
+ { "Dif_in", 1,0 }
+ };
+
+outField TGEM2MT_dynamic_fields[3] =  {
+ { "DiCp", 1, 0 },
+ { "HydP", 1, 0 },
+ { "NPmean", 1, 0 },
+ { "NPmin", 1, 0 },
+ { "NPmax", 1, 0 },
+ { "mGrid", 1, 0 }
+ };
+

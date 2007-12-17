@@ -224,7 +224,7 @@ aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f22 */
     aObj[ o_mtfdlf].SetPtr( mtp->FDLf);
     aObj[ o_mtfdlf].SetDim( mtp->nFD, 4 );
     aObj[ o_mtpgt].SetPtr( mtp->PGT);
-    aObj[ o_mtpgt].SetDim( mtp->FIb, mtp->nPG );
+    aObj[ o_mtpgt].SetDim( mtp->FIf, mtp->nPG );
     aObj[ o_mttval].SetPtr( mtp->Tval);
     aObj[ o_mttval].SetDim( mtp->nTai, 1 );
     aObj[ o_mtpval].SetPtr( mtp->Pval);
@@ -248,23 +248,23 @@ aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f22 */
     aObj[ o_mtmpgid].SetPtr( mtp->MPGid );
     aObj[ o_mtmpgid].SetDim(  mtp->nPG, 1 );
     aObj[ o_mtumpg].SetPtr( mtp->UMPG );
-    aObj[ o_mtumpg].SetDim( mtp->FIb, 1 );
+    aObj[ o_mtumpg].SetDim( mtp->FIf, 1 );
     aObj[ o_mtbm].SetPtr( mtp->SBM );
     aObj[ o_mtbm].SetDim(  1, mtp->Nb );
     aObj[ o_mtplline].SetPtr( plot );
     aObj[ o_mtplline].SetDim( mtp->nYS+mtp->nYE,  sizeof(TPlotLine));
     //added 30/11/2005
     aObj[ o_mtbsf].SetPtr( mtp->BSF);
-    aObj[ o_mtbsf].SetDim( mtp->nSFD, mtp->Nb );
+    aObj[ o_mtbsf].SetDim( mtp->nSFD, mtp->Nf );
     aObj[ o_mtmb].SetPtr( mtp->MB);
-    aObj[ o_mtmb].SetDim( mtp->nC, mtp->Nb );
+    aObj[ o_mtmb].SetDim( mtp->nC, mtp->Nf );
     aObj[ o_mtdmb].SetPtr( mtp->dMB);
-    aObj[ o_mtdmb].SetDim( mtp->nC, mtp->Nb  );
+    aObj[ o_mtdmb].SetDim( mtp->nC, mtp->Nf  );
     //added 07/12/2005
     aObj[ o_mtddc].SetPtr( mtp->DDc);
-    aObj[ o_mtddc].SetDim( mtp->Lb, 1 );
+    aObj[ o_mtddc].SetDim( mtp->Lsf, 1 );
     aObj[ o_mtdic].SetPtr( mtp->DIc);
-    aObj[ o_mtdic].SetDim( mtp->Nb, 1 );
+    aObj[ o_mtdic].SetDim( mtp->Nf, 1 );
     aObj[ o_mtdel].SetPtr( mtp->DEl);
     aObj[ o_mtdel].SetDim( mtp->nEl, 1 );
     aObj[ o_mtfor_e].SetPtr( mtp->for_e);
@@ -296,7 +296,7 @@ aObj[o_mtpartd].SetDim( mtp->nPTypes, 6 );
     aObj[ o_mtae].SetDim( mtp->nEl, mtp->Nb );
 
     aObj[ o_mtgc].SetPtr(mtp->gc);
-    aObj[ o_mtgc].SetDim( mtp->nC*mtp->nPG, mtp->Nb );
+    aObj[ o_mtgc].SetDim( mtp->nC*mtp->nPG, mtp->Nf );
 
     aObj[ o_mwetext].SetPtr( mtp->etext );
     // aObj[ o_mwetext].SetDim(1, 0 );
@@ -540,22 +540,22 @@ if( mtp->PvFDL == S_OFF )
    }
    else
    {
-      mtp->PGT  = (float *)aObj[ o_mtpgt ].Alloc( mtp->FIb, mtp->nPG, F_);
+      mtp->PGT  = (float *)aObj[ o_mtpgt ].Alloc( mtp->FIf, mtp->nPG, F_);
       mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid ].Alloc(
                     1, mtp->nPG, MAXSYMB);
-      mtp->UMPG = (char *)aObj[ o_mtumpg].Alloc( mtp->FIb, 1, A_);
+      mtp->UMPG = (char *)aObj[ o_mtumpg].Alloc( mtp->FIf, 1, A_);
    }
 
  if( mtp->PvSFL == S_OFF )
      mtp->BSF = (double *)aObj[ o_mtbsf].Free();
    else
-     mtp->BSF = (double *)aObj[ o_mtbsf].Alloc( mtp->nSFD, mtp->Nb, D_);
+     mtp->BSF = (double *)aObj[ o_mtbsf].Alloc( mtp->nSFD, mtp->Nf, D_);
 
 
  if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
    {
-      mtp->MB = (double *)aObj[ o_mtmb].Alloc( mtp->nC, mtp->Nb, D_);
-      mtp->dMB = (double *)aObj[ o_mtdmb].Alloc( mtp->nC, mtp->Nb, D_);
+      mtp->MB = (double *)aObj[ o_mtmb].Alloc( mtp->nC, mtp->Nf, D_);
+      mtp->dMB = (double *)aObj[ o_mtdmb].Alloc( mtp->nC, mtp->Nf, D_);
    }
    else
    {
@@ -567,12 +567,12 @@ if( mtp->PvFDL == S_OFF )
    if( mtp->PsDDc == S_OFF )
      mtp->DDc = (float*)aObj[ o_mtddc].Free();
    else
-     mtp->DDc = (float*)aObj[ o_mtddc].Alloc( mtp->Lb, 1, F_);
+     mtp->DDc = (float*)aObj[ o_mtddc].Alloc( mtp->Lsf, 1, F_);
 
    if( mtp->PsDIc == S_OFF )
      mtp->DIc = (float*)aObj[ o_mtdic].Free();
    else
-     mtp->DIc = (float*)aObj[ o_mtdic].Alloc( mtp->Nb, 1, F_);
+     mtp->DIc = (float*)aObj[ o_mtdic].Alloc( mtp->Nf, 1, F_);
 
    if( mtp->nEl <= 0  )
    {
@@ -797,7 +797,7 @@ mtp->ParTD = 0;
 
 // work
     mtp->An = 0;
-mtp->Ae = 0;
+   mtp->Ae = 0;
     mtp->gc = 0;
     mtp->etext = 0;
     mtp->tprn = 0;
@@ -906,7 +906,7 @@ TGEM2MT::RecCalc( const char * key )
    if( pVisor->ProfileMode != true  )
        Error( GetName(), "E02GDexec: Please, do it in the Project mode" );
    if( mtp->nICb == 0 && mtp->nDCb == 0 &&
-       mtp->nPHb == 0 && mtp->nPSb == 0 )
+       mtp->nPHb == 0  )
        Error( GetName(), "Added/deleted components in the project system.\n"
                          "Please, remake the record." );
 
@@ -1053,12 +1053,12 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
 
     char  *p_CIclb;
     float *p_CIb;
-    float *p_PGT;
-    char  *p_UMPG;
-    double* p_BSF;
-    double* p_dMB;
-    float *p_DDc;
-    float *p_DIc;
+ //   float *p_PGT;   all this arrays must be changed by user after remake the record!!! 17/12/2007
+ //   char  *p_UMPG;  Nf, Lsf, FIf sizes from selection undef after resize the project
+ //   double* p_BSF;
+ //   double* p_dMB;
+ //   float *p_DDc;
+ //   float *p_DIc;
 
     if( mtp->PvICi != S_OFF )
     {
@@ -1068,36 +1068,36 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
       memcpy( p_CIb, mtp->CIb, mtp->nIV*mtp->Nb*sizeof(float));
     }
 
-    if( mtp->PvPGD != S_OFF )
-    {
-      p_UMPG = new char[mtp->FIb];
-      memcpy( p_UMPG, mtp->UMPG, mtp->FIb*sizeof(char));
-      p_PGT = new float[mtp->nIV*mtp->Nb];
-      memcpy( p_PGT, mtp->PGT, mtp->nPG*mtp->FIb*sizeof(float));
-    }
+//    if( mtp->PvPGD != S_OFF )
+//    {
+//      p_UMPG = new char[mtp->FIb];
+//      memcpy( p_UMPG, mtp->UMPG, mtp->FIf*sizeof(char));
+//      p_PGT = new float[mtp->nIV*mtp->Nb];
+//      memcpy( p_PGT, mtp->PGT, mtp->nPG*mtp->FIf*sizeof(float));
+//    }
 
-   if( mtp->PvSFL != S_OFF )
-   {
-     p_BSF = new double[mtp->nSFD*mtp->Nb];
-     memcpy( p_BSF, mtp->BSF, mtp->nSFD*mtp->Nb*sizeof(double));
-   }
+//   if( mtp->PvSFL != S_OFF )
+//   {
+//     p_BSF = new double[mtp->nSFD*mtp->Nb];
+//     memcpy( p_BSF, mtp->BSF, mtp->nSFD*mtp->Nf*sizeof(double));
+//   }
 
-   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
-   {
-      p_dMB = new double[mtp->nC*mtp->Nb];
-      memcpy( p_dMB, mtp->dMB, mtp->nC*mtp->Nb*sizeof(double));
-   }
+//   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+//   {
+//      p_dMB = new double[mtp->nC*mtp->Nb];
+//      memcpy( p_dMB, mtp->dMB, mtp->nC*mtp->Nf*sizeof(double));
+//   }
 
-   if( mtp->PsDDc != S_OFF )
-   {
-      p_DDc = new float[mtp->Lb];
-      memcpy( p_DDc, mtp->DDc, mtp->Lb*sizeof(float));
-   }
-   if( mtp->PsDIc != S_OFF )
-   {
-      p_DIc = new float[mtp->Nb];
-      memcpy( p_DIc, mtp->DIc, mtp->Nb*sizeof(float));
-   }
+//   if( mtp->PsDDc != S_OFF )
+//   {
+//      p_DDc = new float[mtp->Lb];
+//      memcpy( p_DDc, mtp->DDc, mtp->Lsf*sizeof(float));
+//   }
+//   if( mtp->PsDIc != S_OFF )
+//   {
+//      p_DIc = new float[mtp->Nb];
+//      memcpy( p_DIc, mtp->DIc, mtp->Nf*sizeof(float));
+//   }
 
     // alloc new memory
      mtp->Nb = TProfil::pm->mup->N;
@@ -1106,7 +1106,7 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
      mtp->nICb = 0;   // number of stoichiometry units (<= nIC) used in the data bridge
      mtp->nDCb = 0;   // number of DC (chemical species, <= nDC) used in the data bridge
      mtp->nPHb = 0;   // number of phases (<= nPH) used in the data bridge
-     mtp->nPSb = 0;  // number of multicomponent phases (<= nPS) used in the data bridge
+
      dyn_new();
 
 //***************************************************
@@ -1128,14 +1128,14 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
           }
           if( mtp->PvICi != S_OFF )
               mtp->CIclb[jj] = QUAN_GRAM;
-          if( mtp->PvSFL != S_OFF )
-             for( j=0; j<mtp->nSFD; j++ )
-               mtp->BSF[j*mtp->Nb+jj] = 0.;
-          if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
-             for( j=0; j<mtp->nC; j++ )
-               mtp->dMB[j*mtp->Nb+jj] = 0.;
-          if( mtp->PsDIc != S_OFF )
-              mtp->DIc[jj] = 0.;
+//          if( mtp->PvSFL != S_OFF )
+//             for( j=0; j<mtp->nSFD; j++ )
+//               mtp->BSF[j*mtp->Nf+jj] = 0.; // ??????
+//          if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+//             for( j=0; j<mtp->nC; j++ )
+//               mtp->dMB[j*mtp->Nf+jj] = 0.;
+//          if( mtp->PsDIc != S_OFF )
+//              mtp->DIc[jj] = 0.; // ??????
           jj++;
        }
        else
@@ -1156,20 +1156,20 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
              }
              if( mtp->PvICi != S_OFF )
                  mtp->CIclb[jj] = p_CIclb[ii];
-             if( mtp->PvSFL != S_OFF )
-               for( j=0; j<mtp->nSFD; j++ )
-                 mtp->BSF[j*mtp->Nb+jj] = p_BSF[j*Nold+ii];
-             if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
-               for( j=0; j<mtp->nC; j++ )
-                 mtp->dMB[j*mtp->Nb+jj] = p_dMB[j*Nold+ii];
-             if( mtp->PsDIc != S_OFF )
-               mtp->DIc[jj] =  p_DIc[ii];
+//            if( mtp->PvSFL != S_OFF )
+//               for( j=0; j<mtp->nSFD; j++ )
+//                 mtp->BSF[j*mtp->Nf+jj] = p_BSF[j*Nold+ii]; ///????
+//             if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+//               for( j=0; j<mtp->nC; j++ )
+//                 mtp->dMB[j*mtp->Nf+jj] = p_dMB[j*Nold+ii];
+//             if( mtp->PsDIc != S_OFF )
+//               mtp->DIc[jj] =  p_DIc[ii]; // ????
           }
         jj++;
         ii++;
        }
     }
-//*************************************************************
+/*************************************************************
 // Phases
  if( mtp->PvPGD != S_OFF )
  {    i=0; jj = 0; ii = 0;
@@ -1180,7 +1180,7 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
         if( aPhase[i].delta == 1 )
         { // add line
           for( j =0; j<mtp->nPG; j++ )
-            mtp->PGT[j*mtp->FIb+jj] = 0.;
+            mtp->PGT[j*mtp->FIf+jj] = 0.;
           mtp->UMPG[jj] = QUAN_GRAM;
           jj++;
         }
@@ -1195,7 +1195,7 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
          if( ii < FIold )
          {
              for( j =0; j<mtp->nPG; j++ )
-               mtp->PGT[j*mtp->FIb+jj] = p_PGT[j*FIold+ii];
+               mtp->PGT[j*mtp->FIf+jj] = p_PGT[j*FIold+ii];
              mtp->UMPG[jj] = p_UMPG[ii];
           }
         jj++;
@@ -1203,13 +1203,13 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
       }
     }
  }
-
-//*************************************************************
+*/
+/*************************************************************
 // DCOMP
  if( mtp->PsDDc != S_OFF )
  {
     i=0; jj = 0; ii = 0;
-    while( jj < mtp->Lb )
+    while( jj < mtp->Lsf )
     {
       if( i < aDComp.GetCount() &&  aDComp[i].line == ii )
       {
@@ -1235,7 +1235,7 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
       }
     }
  }
-
+*/
 //*************************************************************
 
 // free memory
@@ -1245,20 +1245,20 @@ void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
      delete[] p_CIclb;
      delete[] p_CIb;
     }
-   if( mtp->PvPGD != S_OFF )
-   {
-     delete[] p_PGT;
-     delete[] p_UMPG;
-    }
-   if( mtp->PvSFL != S_OFF )
-    delete[] p_BSF;
-   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
-    delete[] p_dMB;
+//   if( mtp->PvPGD != S_OFF )
+//   {
+//     delete[] p_PGT;
+//     delete[] p_UMPG;
+//    }
+//   if( mtp->PvSFL != S_OFF )
+//    delete[] p_BSF;
+//   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+//    delete[] p_dMB;
 
-   if( mtp->PsDDc != S_OFF )
-     delete[] p_DDc;
-   if( mtp->PsDIc != S_OFF )
-     delete[] p_DIc;
+//   if( mtp->PsDDc != S_OFF )
+//     delete[] p_DDc;
+//   if( mtp->PsDIc != S_OFF )
+//     delete[] p_DIc;
 
 }
 
