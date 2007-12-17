@@ -100,7 +100,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 bool
 TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
 {
-  int q, i, f;
+  int q, i, f, k;
   double Mqfi = 0., Bqi = 0., Wqi = 0.;
   bool iRet = true;
   FILE* diffile = NULL;
@@ -217,7 +217,7 @@ bool TGEM2MT::CalcBoxModel( char mode )
     mtp->gfc = (double *)aObj[ o_mtgc].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
 if( mtp->yfb )
 	delete[] mtp->yfb; 
-    mtp->yfb = new[mtp->nC * mtp->nPG * mtp->Nf];
+    mtp->yfb = new double[mtp->nC * mtp->nPG * mtp->Nf];
     
 #ifndef IPMGEMPLUGIN
       if(  mtp->PvMSg != S_OFF && vfQuestion(window(),

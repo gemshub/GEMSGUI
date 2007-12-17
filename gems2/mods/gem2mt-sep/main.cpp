@@ -95,8 +95,6 @@ TGEM2MT::~TGEM2MT()
 
 outField TGEM2MT_static_fields[15] =  {
  { "Mode", 1,0 },
- { "Mode", 1,0 },
- 
  { "Size" , 1,0 },
  { "MaxSteps", 1,0 },
  { "Tau", 1,0 },

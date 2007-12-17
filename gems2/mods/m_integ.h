@@ -124,12 +124,49 @@ outField TGEM2MT_static_fields[19] =  {
  { "Dif_in", 1,0 }
  };
 
-outField TGEM2MT_dynamic_fields[3] =  {
+outField TGEM2MT_dynamic_fields[16] =  {
  { "DiCp", 1, 0 },
  { "HydP", 1, 0 },
- { "NPmean", 1, 0 },
- { "NPmin", 1, 0 },
- { "NPmax", 1, 0 },
- { "mGrid", 1, 0 }
+ { "NPmean", 0, 0 },
+ { "NPmin", 0, 0 },
+ { "NPmax", 0, 0 },
+ { "ParTD", 0, 0 },
+ { "mGrid", 0, 0 },
+ { "FDLi", 0, 0 },
+ { "FDLf", 0, 0 },
+ { "BSF", 0, 0 },
+ { "PGT", 0, 0 },
+ { "UMPG", 0, 0 },
+ { "FDLid", 0, 0 },
+ { "FDLop", 0, 0 },
+ { "FDLmp", 0, 0 },
+ { "MPGid", 0, 0 }
  };
 
+//====================================================================
+extern bool _comment;
+
+void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
+{
+  _comment = with_comments;
+  
+  TPrintArrays  prar(ff);
+
+   if( _comment )
+   {  ff << "# GEMIPM2K v. 2.2.0" << endl;
+      ff << "# Prototype 04.12.2007" << endl;
+      ff << "# Comments can be marked with # $ ;" << endl << endl;
+      ff << "# Template for the Gem2mt data" << endl;
+      ff << "# (should be read only after the DATACH, the IPM-DAT and DATABR files)" << endl << endl;
+      ff << "#Section (scalar): Controls and dimensionalities of the Gem2mt operation" << endl;
+   }
+   if( _comment )
+      ff << "# code of function to construct the payoff matrix (A or 0; B or 1; C or 2; D or 3; E or 4; F or 5)" << endl;
+   ff << left << setw(17) << "<Pa_OF> " << "\'"<<  usp->Pa_OF << "\'"<< endl;
+   if( _comment )
+      ff << "# ( + on; - off ) probe type  [0]-G; [1]-S; [2]-b; [3]-T; [4]-P; [5]-V [6] pGam";
+    prar.writeArray(  "PsGen", usp->PsGen, 7, 1 );
+    if( _comment )
+          ff << "\n# End of file"<< endl;
+ }
+ 
