@@ -472,7 +472,7 @@ void TGEM2MT::dyn_new(int q)
  mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Alloc(
              1, mtp->Nb, MAXICNAME+MAXSYMB);
 
-   if( mtp->PsMode == 'A' || mtp->PsMode == 'D' || mtp->PsMode == 'T'||
+   if( mtp->PsMode == GMT_MODE_A || mtp->PsMode == GMT_MODE_D || mtp->PsMode == GMT_MODE_T ||
       mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
  {
      mtp->HydP = (double (*)[SIZE_HYDP])aObj[ o_mthydp].Alloc(
@@ -495,7 +495,7 @@ void TGEM2MT::dyn_new(int q)
       mtp->CIclb = (char *)aObj[ o_mtciclb].Alloc(1, mtp->Nb, A_);
     }
 
-    if( mtp->PvAUi == S_OFF )
+if( mtp->PvAUi == S_OFF )
     {
       mtp->CAb = (float *)aObj[ o_mtcab].Free();
       mtp->for_i = (char (*)[MAXFORMUNITDT])aObj[ o_mtfor_i].Free();
@@ -512,7 +512,7 @@ void TGEM2MT::dyn_new(int q)
       mtp->An = (float *)aObj[ o_mtan].Alloc( mtp->Lbi, mtp->Nb, F_ );
     }
 
-   if( mtp->PvFDL == S_OFF )
+if( mtp->PvFDL == S_OFF )
    {
      mtp->FDLi = (short (*)[2])aObj[ o_mtfdli].Free();
      mtp->FDLf = (float (*)[4])aObj[ o_mtfdlf].Free();
@@ -520,7 +520,7 @@ void TGEM2MT::dyn_new(int q)
      mtp->FDLop = (char (*)[MAXSYMB])aObj[ o_mtfdlop].Free();
      mtp->FDLmp = (char (*)[MAXSYMB])aObj[ o_mtfdlmp].Free();
      mtp->nFD = 0;
-   }
+  }
    else
    {
       mtp->FDLi = (short (*)[2])aObj[ o_mtfdli ].Alloc( mtp->nFD, 2, I_);
@@ -531,7 +531,7 @@ void TGEM2MT::dyn_new(int q)
                     mtp->nFD, 1, MAXSYMB);
    }
 
-   if( mtp->PvPGD == S_OFF )
+ if( mtp->PvPGD == S_OFF )
    {
      mtp->PGT = (float *)aObj[ o_mtpgt].Free();
      mtp->MPGid = (char (*)[MAXSYMB])aObj[ o_mtmpgid].Free();
@@ -546,13 +546,13 @@ void TGEM2MT::dyn_new(int q)
       mtp->UMPG = (char *)aObj[ o_mtumpg].Alloc( mtp->FIb, 1, A_);
    }
 
-   if( mtp->PvSFL == S_OFF )
+ if( mtp->PvSFL == S_OFF )
      mtp->BSF = (double *)aObj[ o_mtbsf].Free();
    else
      mtp->BSF = (double *)aObj[ o_mtbsf].Alloc( mtp->nSFD, mtp->Nb, D_);
 
 
-   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+ if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
    {
       mtp->MB = (double *)aObj[ o_mtmb].Alloc( mtp->nC, mtp->Nb, D_);
       mtp->dMB = (double *)aObj[ o_mtdmb].Alloc( mtp->nC, mtp->Nb, D_);

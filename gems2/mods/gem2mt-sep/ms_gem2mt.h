@@ -202,7 +202,7 @@ typedef struct
    //  value order to be described
    *BSF,    // [nSFD][N] table of bulk compositions of source fluxes
             //  More to be added here for seq reactors?
-   *MB,  // [nC]  column of current masses of boxes (in kg)
+   *MB,  // [nC][Nb]  column of current masses of boxes (in kg)
    *dMB // [nC][Nb]  Table of current derivatives dM for elements in reservoirs
     ;
  double  (*HydP)[SIZE_HYDP]; // [nC][6] hydraulic parameters for nodes in mass transport model
@@ -322,12 +322,12 @@ protected:
 
     double (*tt)[9];
 
-    bool CalcBoxModel(); // calculate Mobile Phase-Group Flows
+    bool CalcBoxModel( char mode ); // calculate Mobile Phase-Group Flows
     
     // calculate 1-step from system of equation 
     void Solut( double *m, double *dm, double t );
     // Calculate new reservuir states for tcur = x
-    void CalcNewStates( int Ni,int pr, double x, double step, double *y );
+    bool CalcNewStates( int Ni,int pr, double x, double step );
     // internal point j calculation
     void MIDEX( int j, double t, double h );
     void INTEG( double eps, double& step, double t_begin, double t_end );

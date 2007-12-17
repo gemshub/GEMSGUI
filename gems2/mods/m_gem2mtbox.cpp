@@ -96,46 +96,45 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 #define dMb( q, i)  (mtp->dMB[(q)*mtp->Nb + (i)])
 
 // Calculate new equilibrium states in the boxes for tcur = x
-void
-TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
+bool
+TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
 {
   int q, i, f;
   double Mqfi = 0., Bqi = 0., Wqi = 0.;
-  bool iRet = false;
+  bool iRet = true;
   FILE* diffile = NULL;
 
  if( mtp->PvMO != S_OFF )
  {
    // Preparations: opening output files for monitoring 1D profiles
     diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
-    if( !diffile)
-    return;
+    ErrorIf( !diffile, "GEM2MT Flux-box model",
+    "Error writing monitoring file (ICdif-log.dat)");
  }
  clock_t t_start, t_end, t_out, t_out2;
  clock_t outp_time = (clock_t)0;
  t_start = clock();
 
-// Set up new reservoir states at tcur
- for( q=0; q <mtp->nC; q++ )
-	for(i =0; i< mtp->Nb; i++ )
-	{
+ if( Ni >= 0)
+ { // Set up new reservoir states at tcur
+   for( q=0; q <mtp->nC; q++ )
+	 for(i =0; i< mtp->Nb; i++ )
+	 {
 		node1_bIC(q, i) +=dMb( q, i);
-	}	
+	 }
+ }  
  
-// The analysis of GEM IA modes in nodes - optional
-//  int NodesSetToAIA = CheckPIAinNodes1D( NEED_GEM_AIA, 0, mtp->nC );
-
-	
 // Calculate new reservoir states at tcur	
 // Calculation of chemical equilibria in all nodes at the beginning
 // with the Simplex initial approximation
    CalcIPM( NEED_GEM_AIA, 0, mtp->nC, diffile );
 	
+ if( Ni >= 0 )
+ { // Here one has to compare old and new equilibrium phase assemblage
+   // and pH/pe in all nodes and decide if the time step was Ok or it
+   // should be decreased. If so then the nodes from C0 should be
+   // copied to C1 (to be implemented)
  
-  // Here one has to compare old and new equilibrium phase assemblage
-  // and pH/pe in all nodes and decide if the time step was Ok or it
-  // should be decreased. If so then the nodes from C0 should be
-  // copied to C1 (to be implemented)
 
   // Output result if step accepted
    if( mtp->PvMO != S_OFF )
@@ -145,13 +144,14 @@ TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
         // logging differences after the MT iteration loop
     t_out2 = clock();
     outp_time += ( t_out2 -  t_out);
-   }
+  }
 
 #ifndef IPMGEMPLUGIN
    // time step accepted - Copying nodes from C1 to C0 row
       pVisor->Update();
       CalcGraph();
 #endif
+ } 
   
   // copy node array for T0 into node array for T1
      copyNodeArrays();
@@ -172,6 +172,7 @@ TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
 			 Mb( q, i) += Mqfi;
 	     }
      
+   return iRet;  
 }
 
 #undef dMB
@@ -199,14 +200,6 @@ bool TGEM2MT::CalcBoxModel( char mode )
     // mtp->cTau = 0;
     mtp->ct = 0;
 
- // calculate inital states
- // Calculation of chemical equilibria in all nodes at the beginning
- // with the Simplex initial approximation
-    CalcIPM( NEED_GEM_AIA, nStart, nEnd, diffile );
-   
- // Set initial parameter values
- //   GetMBfromNodes(); 
-    
 #ifndef IPMGEMPLUGIN
       if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic monitoring?") )
@@ -214,6 +207,12 @@ bool TGEM2MT::CalcBoxModel( char mode )
             RecordPlot( 0 );
         }
 #endif
+
+  // calculate inital states
+  // Calculation of chemical equilibria in all nodes at the beginning
+  // with the Simplex initial approximation
+  CalcNewStates( -1,  0, mtp->cTau, mtp->dTau );
+    
      
   // calc part  
     int n = mtp->nC * mtp->Nb;  
@@ -224,37 +223,6 @@ bool TGEM2MT::CalcBoxModel( char mode )
     
     return iRet;
 }
-
-/*set default information
-void TInteg::set_def(int)
-{
-    name[0][0] = '\0';
-    name[1][0] = '\0';
-    Nequ = 1;
-    x_bg =0.;
-    x_end = 1.;
-    step_bg = 1.;
-    Eps = 1e-10;
-    step =0.;
-    nfcn = nstep = naccept = nrejct = 0;
-    arg_x = 0.;
-    Bsize = 0;
-    MaxIter = MAXITER;
-
-    y_bg = 0;
-    param = 0;
-    TxtEqu = 0;
-    val_y = 0;
-    valdy = 0;
-    allx = 0;
-    ally = 0;
-    allpr = 0;
-    allst = 0;
-    dyn_new();
-}
-
-*/
-
 
 //--------------------------------------------------------------------
 // Integration process
@@ -396,7 +364,7 @@ TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
     h1 = t_end-t;
     v1 = min( MAXSTEP, h1/2. );
     h = min( h, v1 );
-    CalcNewStates( 0, k, t, h, x ); // 14/12/2007 ????? may be done before in calc
+    CalcNewStates( 0, k, t, h ); // 14/12/2007 ????? may be done before in calc
     err = w[ 0 ] = 0.0;
     reject = last = 0;   // false
 
@@ -451,7 +419,7 @@ l60:
             x[i] = tt[i][0];
         Solut(  x, dx, t );
         naccept++;
-        CalcNewStates( naccept, kc, t, h, x );
+        CalcNewStates( naccept, kc, t, h );
         //
         if( kc == 1 )
         {

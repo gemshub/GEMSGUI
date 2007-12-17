@@ -325,7 +325,7 @@ int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
     // calculate 1-step from system of equation 
     void Solut( double *m, double *dm, double t );
     // Calculate new reservuir states for tcur = x
-    void CalcNewStates( int Ni,int pr, double x, double step, double *y );
+    bool CalcNewStates( int Ni,int pr, double x, double step );
     // internal point j calculation
     void MIDEX( int j, double t, double h );
     void INTEG( double eps, double& step, double t_begin, double t_end );
