@@ -796,8 +796,8 @@ void TNodeArray::MoveParticleMass( int ndx_from, int ndx_to,
 	  switch( tcode )
 	  {
         case DISSOLVED: // moving only dissolved DC (-H2O)
-//             if( jc == xWatCH )
-//            	 continue;  // H2O is ignored - not moved with the particle 
+             if( jc == xWatCH )
+            	 continue;  // H2O is ignored - not moved with the particle 
 	    case ADVECTIVE: // moving DC of the whole aq phase
              if( jc > xWatCH )
             	 continue;     // ignoring non-aqueous species 

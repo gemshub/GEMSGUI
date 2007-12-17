@@ -1,1 +1,1 @@
-exec ./unspacesep test/Portlandit-dat.lst test/test1.uns > out.dat
+unspacesep test/Portlandit-dat.lst test/test1.uns > out.dat

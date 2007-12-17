@@ -172,6 +172,7 @@ SOURCES =	vizor/libs/config.cpp \
 		mods/m_gem2mt.cpp \
 		mods/m_gem2mtc.cpp \
 		mods/m_gem2mtt.cpp \
+		mods/m_gem2mtbox.cpp \
 		mods/m_param.cpp \
 		mods/m_icomp.cpp \
 		mods/v_ipnc.cpp \
@@ -287,6 +288,7 @@ OBJECTS =	obj/config.o \
 		obj/m_gem2mt.o \
 		obj/m_gem2mtc.o \
 		obj/m_gem2mtt.o \
+		obj/m_gem2mtbox.o \
 		obj/m_param.o \
 		obj/m_icomp.o \
 		obj/v_ipnc.o \
@@ -709,6 +711,7 @@ clean:
 	-$(DEL_FILE) obj\m_gem2mt.o
 	-$(DEL_FILE) obj\m_gem2mtc.o
 	-$(DEL_FILE) obj\m_gem2mtt.o
+	-$(DEL_FILE) obj\m_gem2mtbox.o
 	-$(DEL_FILE) obj\m_param.o
 	-$(DEL_FILE) obj\m_icomp.o
 	-$(DEL_FILE) obj\v_ipnc.o
@@ -1312,6 +1315,37 @@ obj/m_gem2mtt.o: mods/m_gem2mtt.cpp mods/m_gem2mt.h \
 		mods/submod/datach.h \
 		mods/submod/databr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_gem2mtt.o mods/m_gem2mtt.cpp
+
+obj/m_gem2mtbox.o: mods/m_gem2mtbox.cpp mods/m_gem2mt.h \
+		mods/submod/nodearray.h \
+		vizor/service.h \
+		vizor/visor.h \
+		mods/m_param.h \
+		mods/v_ipnc.h \
+		vizor/graph.h \
+		vizor/kernel/v_module.h \
+		mods/submod/particlearray.h \
+		mods/v_mod.h \
+		mods/submod/ms_rmults.h \
+		mods/submod/ms_mtparm.h \
+		mods/submod/ms_system.h \
+		mods/submod/ms_multi.h \
+		mods/submod/ms_calc.h \
+		vizor/kernel/v_vals.h \
+		vizor/libs/gstring.h \
+		vizor/libs/array.h \
+		vizor/kernel/v_object.h \
+		vizor/kernel/v_dbm.h \
+		vizor/kernel/v_user.h \
+		vizor/libs/verror.h \
+		vizor/kernel/v_dbfile.h \
+		vizor/kernel/v_file.h \
+		mods/m_phase.h \
+		mods/m_const.h \
+		mods/submod/node.h \
+		mods/submod/datach.h \
+		mods/submod/databr.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_gem2mtbox.o mods/m_gem2mtbox.cpp
 
 obj/m_param.o: mods/m_param.cpp mods/m_unspace.h \
 		mods/m_gtdemo.h \

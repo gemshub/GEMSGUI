@@ -1,10 +1,11 @@
 //-------------------------------------------------------------------
 // $Id: m_integ.cpp 968 2007-12-13 13:23:32Z gems $
 //
-// Implementation of TInteg class, config and calculation functions
+// Implementation of TInteg/TGEM2MT classes, calculation functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva  
-// Copyright (C) 1995-2001 S.Dmytriyeva
+// Copyright (C) 1995,2001 S.Dmytriyeva
+//           (C) 2007      S. Dmytriyeva, D.Kulik 
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -35,15 +36,15 @@
 
 #endif
 
-#define dMB( q, i)  (dm[ (q)*mtp->Nb + (i)]) 
+#define dMB( q, i) ( dm[ (q)*mtp->Nb + (i)] ) 
 
-#define MB( q, i)  ( m[ (q)*mtp->Nb + (i)])
+#define MB( q, i)  ( m[ (q)*mtp->Nb + (i)] )
 
-#define g(q,f,i)   ( mtp->gc[ (q)*(mtp->nC*mtp->Nb)+ (f)*mtp->Nb + (i)])
+#define g(q,f,i)   ( mtp->gc[ (q)*(mtp->nC*mtp->Nb)+ (f)*mtp->Nb + (i)] )
 
 #define v(f)       ( (mtp->FDLf[f][1]) )
 
-#define H(p, i)      (mtp->BSF[(abs(p)-1)* mtp->Nb + ( i )])
+#define H(p, i)    ( mtp->BSF[(abs(p)-1)* mtp->Nb + ( i )] )
 
 // calculate 1-step from system of equation 
 void TGEM2MT::Solut( double *m, double *dm, double t )
@@ -83,10 +84,8 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 					 {	  
 						  dMB(p,i) +=  H(q,i)*  v(f)  * g(p,f,i);
 					 }	
-				  }
-	       
+				  }      
   }
- 
 }
 
 #undef dMB
@@ -96,8 +95,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
 
 #define dMb( q, i)  (mtp->dMB[(q)*mtp->Nb + (i)])
 
-
-// Calculate new reservuir states for tcur = x
+// Calculate new equilibrium states in the boxes for tcur = x
 void
 TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
 {
@@ -125,7 +123,7 @@ TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
 	}	
  
 // The analysis of GEM IA modes in nodes - optional
-  int NodesSetToAIA = CheckPIAinNodes1D( NEED_GEM_AIA, 0, mtp->nC );
+//  int NodesSetToAIA = CheckPIAinNodes1D( NEED_GEM_AIA, 0, mtp->nC );
 
 	
 // Calculate new reservoir states at tcur	
@@ -139,7 +137,7 @@ TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
   // should be decreased. If so then the nodes from C0 should be
   // copied to C1 (to be implemented)
 
-  // Output resalt if step accepted
+  // Output result if step accepted
    if( mtp->PvMO != S_OFF )
    {
     t_out = clock();
@@ -149,12 +147,11 @@ TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
     outp_time += ( t_out2 -  t_out);
    }
 
-   
-  #ifndef IPMGEMPLUGIN
-             // time step accepted - Copying nodes from C1 to C0 row
-             pVisor->Update();
-             CalcGraph();
-  #endif
+#ifndef IPMGEMPLUGIN
+   // time step accepted - Copying nodes from C1 to C0 row
+      pVisor->Update();
+      CalcGraph();
+#endif
   
   // copy node array for T0 into node array for T1
      copyNodeArrays();
@@ -367,17 +364,19 @@ VEL:
         if( z1 ) delete[] z1;
         if( z2 ) delete[] z2;
         if( dz ) delete[] dz;
-        Error( "INTEG ", "Error in MIXED!");
+        Error( "INTEG ", "Error in MIDEX!");
     }
 }
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//  ������� INTEG ������ ������ ���� ����
-//		 dyi/dx = f( y1,y2, ... ,yn,x )  i=1,...,n
-//               yi( x0 )=yi0
-//  ������� ������������� � ��������� �������� � ����������
-//  ������ ����
+//  Subroutine INTEG - numerical integration of the system of n ordinary 
+//    differential equations of the form 
+//		 dxi/dt = f( x1,x2, ... ,xn,t )  i=1,...,n
+//               xi( t0 )=xi0
+//  over the time interval [t_begin, t_end] with minimal time step length 
+//     step and precision eps 
+//  
 void
 TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
 {
@@ -397,19 +396,19 @@ TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
     h1 = t_end-t;
     v1 = min( MAXSTEP, h1/2. );
     h = min( h, v1 );
-    CalcNewStates( 0, k, t, h, x ); // 14/12/2007 ????? may be did before in calc
+    CalcNewStates( 0, k, t, h, x ); // 14/12/2007 ????? may be done before in calc
     err = w[ 0 ] = 0.0;
-    reject = last = 0;   /*false*/
+    reject = last = 0;   // false
 
     //
     while( fabs( h1 ) >= UROUND )
     {
         v1 = min( h1, MAXSTEP);
         h = min( h, v1 );
-        if( h >= ( h1 - UROUND ) )  last = 1;      /*true*/
+        if( h >= ( h1 - UROUND ) )  last = 1;      // true
         Solut(  x, dx, t );
         nfcn++;
-        if (( nstep == 0 )||( last ))     //1
+        if (( nstep == 0 )||( last ))     // 1
         {
             nstep++;
             for( j=0; j <= k; j++ )
@@ -423,7 +422,7 @@ TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
         //
 l30:
         nstep++;
-        ErrorIf( nstep >= MaxIter, "INTEG", "Excess iteration number" ); // 14/12/2007 !!!!
+        ErrorIf( nstep >= MaxIter, "INTEG", "No convergence - too many iterations" ); // 14/12/2007 !!!!
         kc = k-1;
         for( j=0; j <= kc; j++ )
             MIDEX( j, t, h);
@@ -479,7 +478,7 @@ l60:
         {
             k = min( kopt, kc );
             h = min( h, hh[ k ] );
-            reject = 0;           /*false*/
+            reject = 0;           // false
         }
         else
         {  // 
@@ -491,7 +490,7 @@ l60:
             k = kopt;
         }
         h1=t_end-t;
-    }     /*while*/
+    }     // end while
     *tv = t;
     step = h;
     return;
@@ -504,7 +503,6 @@ l100:
     reject = 1;
     goto l30;
 }
-
 
 // --------------------- end of m_gem2mtbox.cpp ---------------------------
 
