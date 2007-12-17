@@ -171,7 +171,7 @@ float (*grid)[3];      // Array of grid point locations, size is nC
    *yt,     //  Ordinates for sampled data [nS][nYS]
    *BSF,    // [nSFD][N] table of bulk compositions of source fluxes
             //  More to be added here for seq reactors?
-   *MB,  // [nC]  column of current masses of boxes (in kg)
+   *MB,  // [nC] [Nb] column of current masses of boxes (in kg)
    *dMB // [nC][Nb]  Table of current derivatives dM for elements in reservoirs
     ;
  double  (*HydP)[SIZE_HYDP]; // [nC][6] hydraulic parameters for nodes in mass transport model
@@ -320,7 +320,7 @@ int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
 
     double (*tt)[9];
 
-    bool CalcBoxModel(); // calculate Mobile Phase-Group Flows
+    bool CalcBoxModel( char mode ); // calculate Mobile Phase-Group Flows
     
     // calculate 1-step from system of equation 
     void Solut( double *m, double *dm, double t );

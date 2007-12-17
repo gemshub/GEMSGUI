@@ -181,7 +181,7 @@ TGEM2MT::CalcNewStates( int Ni,int pr, double tcur, double step, double *y )
 #undef MB
 
 //Calculate record
-bool TGEM2MT::CalcBoxModel()
+bool TGEM2MT::CalcBoxModel( char mode )
 {
     int nStart = 0, nEnd = mtp->nC;
     bool iRet = false;

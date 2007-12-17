@@ -257,7 +257,7 @@ aObj[o_mtfloat].SetPtr( mtp->Pai );    /* f22 */
     aObj[ o_mtbsf].SetPtr( mtp->BSF);
     aObj[ o_mtbsf].SetDim( mtp->nSFD, mtp->Nb );
     aObj[ o_mtmb].SetPtr( mtp->MB);
-    aObj[ o_mtmb].SetDim( mtp->nC, 1 );
+    aObj[ o_mtmb].SetDim( mtp->nC, mtp->Nb );
     aObj[ o_mtdmb].SetPtr( mtp->dMB);
     aObj[ o_mtdmb].SetDim( mtp->nC, mtp->Nb  );
     //added 07/12/2005
@@ -554,7 +554,7 @@ void TGEM2MT::dyn_new(int q)
 
    if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
    {
-      mtp->MB = (double *)aObj[ o_mtmb].Alloc( mtp->nC, 1, D_);
+      mtp->MB = (double *)aObj[ o_mtmb].Alloc( mtp->nC, mtp->Nb, D_);
       mtp->dMB = (double *)aObj[ o_mtdmb].Alloc( mtp->nC, mtp->Nb, D_);
    }
    else
@@ -969,8 +969,8 @@ TGEM2MT::RecCalc( const char * key )
      
      bool iRet; 
      
-     if( mtp->PsMode == 'B' ) // box floor model
-       iRet = CalcBoxModel();
+     if( mtp->PsMode == GMT_MODE_F ) // Flux-box RMT scoping model
+       iRet = CalcBoxModel( NEED_GEM_PIA );
      else
     	iRet =  Trans1D( NEED_GEM_PIA );
  
