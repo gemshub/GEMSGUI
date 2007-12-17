@@ -295,7 +295,7 @@ aObj[o_mtpartd].SetDim( mtp->nPTypes, 6 );
     aObj[ o_mtae].SetPtr(mtp->Ae);
     aObj[ o_mtae].SetDim( mtp->nEl, mtp->Nb );
 
-    aObj[ o_mtgc].SetPtr(mtp->gc);
+    aObj[ o_mtgc].SetPtr(mtp->gfc);
     aObj[ o_mtgc].SetDim( mtp->nC*mtp->nPG, mtp->Nf );
 
     aObj[ o_mwetext].SetPtr( mtp->etext );
@@ -371,7 +371,7 @@ mtp->ParTD = (short (*)[6])aObj[o_mtpartd].GetPtr();
 // work
     mtp->An = (float *)aObj[ o_mtan].GetPtr();
 mtp->Ae = (float *)aObj[ o_mtae].GetPtr();
-    mtp->gc = (double *)aObj[ o_mtgc].GetPtr();
+    mtp->gfc = (double *)aObj[ o_mtgc].GetPtr();
     mtp->etext = (char *)aObj[ o_mwetext].GetPtr();
     mtp->tprn = (char *)aObj[ o_mwtprn].GetPtr();
 }
@@ -442,7 +442,12 @@ mtp->ParTD = (short (*)[6])aObj[o_mtpartd].Free();
 // work
     mtp->An = (float *)aObj[ o_mtan].Free();
     mtp->Ae = (float *)aObj[ o_mtae].Free();
-    mtp->gc = (double *)aObj[ o_mtgc].Free();
+    mtp->gfc = (double *)aObj[ o_mtgc].Free();
+if( mtp->yfb) 
+{	
+	delete[] mtp->yfb;
+    mtp->yfb = NULL;
+}
     mtp->etext = (char *)aObj[ o_mwetext].Free();
     mtp->tprn = (char *)aObj[ o_mwtprn].Free();
 }
@@ -798,7 +803,8 @@ mtp->ParTD = 0;
 // work
     mtp->An = 0;
    mtp->Ae = 0;
-    mtp->gc = 0;
+    mtp->gfc = 0;
+mtp->yfb = NULL; 
     mtp->etext = 0;
     mtp->tprn = 0;
 }

@@ -170,7 +170,7 @@ void TGEM2MT::SelectNodeStructures( bool select_all )
          "Please, mark phases for selection into DataBridge",
          aSelPH);
 
-// These dimensionalities define sizes of dynamic data in DATABT structure
+// These dimensionalities define sizes of dynamic data in DATABR structure
   mtp->nICb = (short)aSelIC.GetCount();
   mtp->nDCb = (short)aSelDC.GetCount();
   mtp->nPHb = (short)aSelPH.GetCount();

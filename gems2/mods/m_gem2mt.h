@@ -80,11 +80,12 @@ typedef struct
    Nsd,  // N of references to data sources
    Nqpt, // Number of elements in the script work array qpi for transport
    Nqpg, // Number of elements in the script work array qpc for graphics
+
    Nb,   // N - number of independent components (set automatically from RMults)
-   FIb,   // N - number of phases (set automatically from RMults)
+   FIb,  // N - number of phases (set automatically from RMults)
    Lb,   // N - number of dependent components in multycomponent phases (set automatically from RMults)
    bTau, // Time point for the simulation break (Tau[0] at start)
-   ntM, // Maximum allowed number of time iteration steps (default 1000)
+   ntM,  // Maximum allowed number of time iteration steps (default 1000)
    nYS,  // number of plots (columns in the yt array)
    nE,   // Total number of experiments points (in xEt, yEt) to plot over
    nYE,  // number of experimental parameters (columns in the yEt array)
@@ -166,13 +167,13 @@ float (*grid)[3];      // Array of grid point locations, size is nC
  double
    *Bn,    //  [nIV][Nb] Table of bulk compositions of initial systems
    *qpi,   //  [Nqpi] Work array for initial systems math script
-   *qpc,    //  [Nqpc] Work array for mass transport math script,
+   *qpc,   //  [Nqpc] Work array for mass transport math script,
    *xt,    //  Abscissa for sampled data [nS]
-   *yt,     //  Ordinates for sampled data [nS][nYS]
-   *BSF,    // [nSFD][Nf] table of bulk compositions of source fluxes
-            //  More to be added here for seq reactors?
-   *MB,  // [nC] [Nf] column of current masses of boxes (in kg)
-   *dMB // [nC][Nf]  Table of current derivatives dM for elements in reservoirs
+   *yt,    //  Ordinates for sampled data [nS][nYS]
+   *BSF,   // [nSFD][Nf] table of bulk compositions of source fluxes
+           //  More to be added here for seq reactors?
+   *MB,    // [nC][Nf] column of current IC masses in the boxes (in kg)
+   *dMB    // [nC][Nf]  Table of current derivatives dM/dTau for ICs in boxes
     ;
  double  (*HydP)[SIZE_HYDP]; // [nC][6] hydraulic parameters for nodes in mass transport model
    //  value order to be described
@@ -218,9 +219,9 @@ float (*grid)[3];      // Array of grid point locations, size is nC
     *Ae  // [nE][N] stoich matrix for for diffusing electrolytes
    ;
  double
-   *gc  // [nC][nPG][Nf] Array of element partition coefficients for MPG and its source reservoir
-   ;
-   char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
+   *gfc,  // [nC][nPG][Nf] Array of element partition coefficients between MPG and its source box
+   *yfb;  // [nC][nPG][Nf] Array of MPG bulk compositions at current time point 
+ char sykey[EQ_RKLEN+10],   // Key of currently processed SysEq record
    *etext,              // internal
    *tprn;              // internal
 //work data

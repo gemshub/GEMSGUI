@@ -36,11 +36,12 @@
 
 #endif
 
-#define dMB( q, i) ( dm[ (q)*mtp->Nf + (i)] ) 
+#define dMB( q, i) ( mtp->dMB[ (q)*mtp->Nf + (i)] ) 
 
-#define MB( q, i)  ( m[ (q)*mtp->Nf + (i)] )
+#define MB( q, i)  ( mtp->MB[ (q)*mtp->Nf + (i)] )
 
-#define g(q,f,i)   ( mtp->gc[ (q)*(mtp->nC*mtp->Nf)+ (f)*mtp->Nf + (i)] )
+#define g(q,f,i)   ( mtp->gfc[ (q)*(mtp->nC*mtp->Nf)+ (f)*mtp->Nf + (i)] )
+#define y(q,f,i)   ( mtp->yfb[ (q)*(mtp->nC*mtp->Nf)+ (f)*mtp->Nf + (i)] )
 
 #define v(f)       ( (mtp->FDLf[f][1]) )
 
@@ -116,11 +117,11 @@ TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
  t_start = clock();
 
  if( Ni >= 0)
- { // Set up new reservoir states at tcur
+ { // Set up new reservoir states at cTau
    for( q=0; q <mtp->nC; q++ )
 	 for(i =0; i< mtp->Nf; i++ )
 	 {
-		node1_bIC(q, i) +=dMb( q, i);
+		node1_bIC(q, i) += dMb( q, i) / nodeCH_ICmm( i ) * mtp->dTau;
 	 }
  }  
  
@@ -156,21 +157,35 @@ TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
   // copy node array for T0 into node array for T1
      copyNodeArrays();
 
-  // Set parameters for mass transport
+  // Calculation of current box reactive IC masses in g   
      for( q=0; q <mtp->nC; q++ )
 		 for(i=0; i<mtp->Nf; i++ )
-			 Mb( q, i) = 0.;
-
+			 Mb( q, i) = node1_bIC( q, i ) * nodeCH_ICmm( i );
+  
+  // Calculation of MPG bulk compoisitions
      for( q=0; q <mtp->nC; q++ )
 	   for(f=0; f<mtp->nPG; f++ )
 		 for(i=0; i<mtp->Nf; i++ )
-	     {	  
-			 // Mqfi = ???;
-			 // Bqi =  ???;
-			 // Wqi =  ???;
-			 g(q,f,i) =  Mqfi/Bqi/Wqi;
-			 Mb( q, i) += Mqfi;
-	     }
+   		   y(q,f,i) = 0.0;
+     for( q=0; q <mtp->nC; q++ )
+	   for(f=0; f<mtp->nPG; f++ )
+	     for( k=0; k<mtp->FIf; k++) 
+	   {  
+	      if( fabs(mtp->PGT[k*mtp->nPG+f]) > 0.0 )   // Quantities of phases in MPG [FIf][nPG])
+	      {
+	    	 if( k < na->pCSD()->nPSb )
+	    	     for(i=0; i<mtp->Nf; i++ )
+			        y(q,f,i) += node1_bPS( q, k, i );
+	    	 else
+	    		 for(i=0; i<mtp->Nf; i++ )
+	 			    y(q,f,i) += node1_bPH( q, k, i );
+	      } 
+	   }
+  //  Calculation of MPG IC distribution coefficients   
+     for( q=0; q <mtp->nC; q++ )
+	   for(f=0; f<mtp->nPG; f++ )
+		 for(i=0; i<mtp->Nf; i++ )
+			 g(q,f,i) = y(q,f,i)/node1_bIC( q, i );
      
    return iRet;  
 }
@@ -199,8 +214,11 @@ bool TGEM2MT::CalcBoxModel( char mode )
     mtp->cTau = mtp->Tau[START_];
     // mtp->cTau = 0;
     mtp->ct = 0;
-    mtp->gc = (double *)aObj[ o_mtgc].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
-
+    mtp->gfc = (double *)aObj[ o_mtgc].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
+if( mtp->yfb )
+	delete[] mtp->yfb; 
+    mtp->yfb = new[mtp->nC * mtp->nPG * mtp->Nf];
+    
 #ifndef IPMGEMPLUGIN
       if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
              GetName(), "Use graphic monitoring?") )
