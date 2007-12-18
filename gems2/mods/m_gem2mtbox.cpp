@@ -55,7 +55,7 @@ int TGEM2MT::LookUpXMGP( const char* MGPid )
 	int found = -1;
 	// Check if the first character is 0 1 2 3 4 5 6 7 8 9 
 	// If so, this is index of elemental flux with composition from BSF table
-	for( int f=0; mtp->nPG; f++ )
+	for( int f=0; f < mtp->nPG; f++ )
 	{
 		if( strncmp( mtp->MPGid[f], MGPid, MAXSYMB ) )
 			continue; 
@@ -101,7 +101,7 @@ FLXorder = ord(kk);
 		
 	if( q >= 0 && f >= 0 )
 	{            // Normal MGP flux from box q to box p
-        fRate = v(kk) * g(q,f,i);   
+ //       fRate = v(kk) * g(q,f,i);   
 // NB: Negative v(f) means "production" in q box and "consumption" in p box 
 		if( p < 0 ) 
 			sinkOut = true; // This is a sinkout flux from box q to nowhere (if v > 0)
@@ -111,7 +111,7 @@ FLXorder = ord(kk);
           case 0:  // Zero-order flux 
         	 for(i=0; i<mtp->Nf; i++ )
         	 {	  
-//        	    fRate = v(kk) * g(q,f,i);
+        	    fRate = v(kk) * g(q,f,i);
         		dMB(q,i) -=  fRate;
         	    if( !sinkOut)
         	       dMB(p,i) +=  fRate;
@@ -120,7 +120,7 @@ FLXorder = ord(kk);
           case 1:  // First-order to source flux 
              for(i=0; i<mtp->Nf; i++ )
 	         {	  
-	            fRate *= MB(q,i); 
+                 fRate = v(kk) * g(q,f,i) * MB(q,i); 
             	dMB(q,i) -=  fRate;
             	if( !sinkOut)
             	   dMB(p,i) +=  fRate;
@@ -129,7 +129,7 @@ FLXorder = ord(kk);
           case 2:  // Second-order to source flux 
              for(i=0; i<mtp->Nf; i++ )
 	         {	  
-            	fRate *= MB(q,i)*MB(q,i);
+                 fRate = v(kk) * g(q,f,i) * MB(q,i)*MB(q,i);
             	dMB(q,i) -=  fRate;
             	if( !sinkOut)
             	   dMB(p,i) +=  fRate;
@@ -141,7 +141,7 @@ FLXorder = ord(kk);
             	 break; 
         	 for(i=0; i<mtp->Nf; i++ )
 	         {	  
-            	fRate *= MB(q,i)*MB(p,i);
+                 fRate = v(kk) * g(q,f,i) * MB(q,i)*MB(p,i);
             	dMB(q,i) -=  fRate;
             	dMB(p,i) +=  fRate;
 	         }
@@ -151,7 +151,7 @@ FLXorder = ord(kk);
               	 break;        
         	 for(i=0; i<mtp->Nf; i++ )
           	 {	  
-              	fRate *= MB(p,i);
+                 fRate = v(kk) * g(q,f,i) * MB(p,i);
                	dMB(q,i) -=  fRate;
                	dMB(p,i) +=  fRate;
           	 }
@@ -161,7 +161,7 @@ FLXorder = ord(kk);
         	     break;                	          	 
         	 for(i=0; i<mtp->Nf; i++ )
           	 {	  
-                fRate *= MB(p,i)*MB(p,i);
+                 fRate = v(kk) * g(q,f,i) * MB(p,i)*MB(p,i);
                 dMB(q,i) -=  fRate;
            	    dMB(p,i) +=  fRate;
           	 }
@@ -174,7 +174,7 @@ FLXorder = ord(kk);
 	else { 
 		if( q >= 0 && f < 0 )
 		 {    // This is an elemental flux ( fe row in BSF table )         
-             fRate = v(kk) * H(fe,i);   
+    //         fRate = v(kk) * H(fe,i);   
 	// NB: Negative v(f) means "production" in q box and "consumption" in p box 
 			if( p < 0 ) 
 				sinkOut = true; // This is an elemental sinkout flux from box q to nowhere (if v > 0)
@@ -184,7 +184,7 @@ FLXorder = ord(kk);
 	          case 0:  // Zero-order flux 
 	        	 for(i=0; i<mtp->Nf; i++ )
 	        	 {	  
-//	        	    fRate = v(kk) * H(fe,i);
+	        	    fRate = v(kk) * H(fe,i);
 	        		dMB(q,i) -=  fRate;
 	        	    if( !sinkOut)
 	        	       dMB(p,i) +=  fRate;
@@ -193,7 +193,7 @@ FLXorder = ord(kk);
 	          case 1:  // First-order to source flux 
 	             for(i=0; i<mtp->Nf; i++ )
 		         {	  
-		            fRate *= MB(q,i); 
+	            	 fRate = v(kk) * H(fe,i) * MB(q,i); 
 	            	dMB(q,i) -=  fRate;
 	            	if( !sinkOut)
 	            	   dMB(p,i) +=  fRate;
@@ -202,7 +202,7 @@ FLXorder = ord(kk);
 	          case 2:  // Second-order to source flux 
 	             for(i=0; i<mtp->Nf; i++ )
 		         {	  
-	            	fRate *= MB(q,i)*MB(q,i);
+	            	 fRate = v(kk) * H(fe,i) * MB(q,i)*MB(q,i);
 	            	dMB(q,i) -=  fRate;
 	            	if( !sinkOut)
 	            	   dMB(p,i) +=  fRate;
@@ -214,7 +214,7 @@ FLXorder = ord(kk);
 	            	 break; 
 	        	 for(i=0; i<mtp->Nf; i++ )
 		         {	  
-	            	fRate *= MB(q,i)*MB(p,i);
+	        		 fRate = v(kk) * H(fe,i) * MB(q,i)*MB(p,i);
 	            	dMB(q,i) -=  fRate;
 	            	dMB(p,i) +=  fRate;
 		         }
@@ -224,7 +224,7 @@ FLXorder = ord(kk);
 	              	 break;        
 	        	 for(i=0; i<mtp->Nf; i++ )
 	          	 {	  
-	              	fRate *= MB(p,i);
+	        		 fRate = v(kk) * H(fe,i) * MB(p,i);
 	               	dMB(q,i) -=  fRate;
 	               	dMB(p,i) +=  fRate;
 	          	 }
@@ -234,7 +234,7 @@ FLXorder = ord(kk);
 	        	     break;                	          	 
 	        	 for(i=0; i<mtp->Nf; i++ )
 	          	 {	  
-	                fRate *= MB(p,i)*MB(p,i);
+	        		 fRate = v(kk) * H(fe,i) * MB(p,i)*MB(p,i);
 	                dMB(q,i) -=  fRate;
 	           	    dMB(p,i) +=  fRate;
 	          	 }
