@@ -36,12 +36,12 @@
 
 #endif
 
-#define dMB( q, i) ( mtp->dMB[ (q)*mtp->Nf + (i)] ) 
+#define dMB( q, i) ( dm[ (q)*mtp->Nf + (i)] ) 
 
-#define MB( q, i)  ( mtp->MB[ (q)*mtp->Nf + (i)] )
+#define MB( q, i)  ( m[ (q)*mtp->Nf + (i)] )
 
-#define g(q,f,i)   ( mtp->gfc[ (q)*(mtp->nC*mtp->Nf)+ (f)*mtp->Nf + (i)] )
-#define y(q,f,i)   ( mtp->yfb[ (q)*(mtp->nC*mtp->Nf)+ (f)*mtp->Nf + (i)] )
+#define g(q,f,i)   ( mtp->gfc[ (q)*(mtp->nPG*mtp->Nf)+ (f)*mtp->Nf + (i)] )
+#define y(q,f,i)   ( mtp->yfb[ (q)*(mtp->nPG*mtp->Nf)+ (f)*mtp->Nf + (i)] )
 
 #define ord(kk)    ( ROUND(mtp->FDLf[kk][0]) )
 #define v(kk)      ( (mtp->FDLf[kk][1]) )
@@ -308,21 +308,22 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
    if( mtp->PvMO != S_OFF )
    {
     t_out = clock();
-    na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 0 );
+    na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 10 );
         // logging differences after the MT iteration loop
     t_out2 = clock();
     outp_time += ( t_out2 -  t_out);
   }
-
+ }
 #ifndef IPMGEMPLUGIN
    // time step accepted - Copying nodes from C1 to C0 row
       pVisor->Update();
       CalcGraph();
 #endif
- } 
+  
   
   // copy node array for T0 into node array for T1
-     copyNodeArrays();
+  mtp->oTau = mtp->cTau;
+  copyNodeArrays();
 
   // Calculation of current box reactive IC masses in g   
      for( q=0; q <mtp->nC; q++ )
@@ -375,8 +376,8 @@ bool TGEM2MT::CalcBoxModel( char mode )
       return iRet;
     }
     // Init part ?????  
-    mtp->dx = mtp->cLen/mtp->nC;
-    mtp->dTau = 0.5*(mtp->dx/mtp->fVel)*1/mtp->tf;
+    // mtp->dx = mtp->cLen/mtp->nC;
+    mtp->dTau = 1;
     mtp->oTau = 0;
     mtp->cTau = mtp->Tau[START_];
     // mtp->cTau = 0;
@@ -550,7 +551,7 @@ TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
     h1 = t_end-t;
     v1 = min( MAXSTEP, h1/2. );
     h = min( h, v1 );
-    CalcNewStates( 0, k, t, h ); // 14/12/2007 ????? may be done before in calc
+    //CalcNewStates( 0, k, t, h ); // 14/12/2007 ????? may be done before in calc
     err = w[ 0 ] = 0.0;
     reject = last = 0;   // false
 
@@ -576,7 +577,7 @@ TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
         //
 l30:
         nstep++;
-        ErrorIf( nstep >= MaxIter, "INTEG", "No convergence - too many iterations" ); // 14/12/2007 !!!!
+        ErrorIf( nstep >= mtp->ntM /*MaxIter*/, "INTEG", "No convergence - too many iterations" ); // 14/12/2007 !!!!
         kc = k-1;
         for( j=0; j <= kc; j++ )
             MIDEX( j, t, h);

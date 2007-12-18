@@ -247,7 +247,8 @@ float (*grid)[3];      // Array of grid point locations, size is nC
     *Ae  // [nE][N] stoich matrix for for diffusing electrolytes
    ;
  double
-   *gc  // [nC][nPG][Nf] Array of element partition coefficients for MPG and its source reservoir
+ *gfc,  // [nC][nPG][Nf] Array of element partition coefficients between MPG and its source box
+ *yfb;  // [nC][nPG][Nf] Array of MPG bulk compositions at current time point 
    ;
    char sykey[EQ_RKLEN+10],    // Key of currently processed SysEq record
    *etext,              // internal
@@ -325,8 +326,7 @@ protected:
 
     double (*tt)[9];
 
-    bool CalcBoxModel( char mode ); // calculate Mobile Phase-Group Flows
-    
+   
     // calculate 1-step from system of equation 
     void Solut( double *m, double *dm, double t );
     // Calculate new reservuir states for tcur = x
@@ -338,9 +338,17 @@ protected:
     
 public:
 
-   int MassTransSetUp( const char *gem2mt_in1 );
+	// write/read unspace structure	   
+	void to_text_file( fstream& ff, bool with_comments );
+	void from_text_file(fstream& ff);
+//    void result_to_text_file( fstream& ff, bool with_comments );
+	int ReadTask( const char *unsp_in1 );
+	int WriteTask( const char *unsp_in1 );
+	
+//   int MassTransSetUp( const char *gem2mt_in1 );
    int MassTransInit( const char *chbr_in1 );
    bool Trans1D( char mode  );  // return true if canceled
+   bool CalcBoxModel( char mode ); // calculate Mobile Phase-Group Flows
 
     static TGEM2MT* pm;
 

@@ -477,16 +477,16 @@ void TGEM2MT::dyn_new(int q)
  mtp->SBM = (char (*)[MAXICNAME+MAXSYMB])aObj[ o_mtbm].Alloc(
              1, mtp->Nb, MAXICNAME+MAXSYMB);
 
-   if( mtp->PsMode == GMT_MODE_A || mtp->PsMode == GMT_MODE_D || mtp->PsMode == GMT_MODE_T ||
-      mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+//   if( mtp->PsMode == GMT_MODE_A || mtp->PsMode == GMT_MODE_D || mtp->PsMode == GMT_MODE_T ||
+//      mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
  {
      mtp->HydP = (double (*)[SIZE_HYDP])aObj[ o_mthydp].Alloc(
          mtp->nC,SIZE_HYDP, D_);
     }
-    else
-    {
-      mtp->HydP = (double (*)[SIZE_HYDP])aObj[ o_mthydp].Free();
-    }
+//    else
+//    {
+//      mtp->HydP = (double (*)[SIZE_HYDP])aObj[ o_mthydp].Free();
+//    }
 
 
  if( mtp->PvICi == S_OFF )

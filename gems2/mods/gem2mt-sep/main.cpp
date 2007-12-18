@@ -13,6 +13,7 @@
 
 #include <time.h>
 #include <math.h>
+#include <iomanip>
 #include "io_arrays.h"
 #include "ms_gem2mt.h"
 #include "gstring.h"
@@ -49,7 +50,7 @@ int main( int argc, char* argv[] )
     TGEM2MT::pm = new TGEM2MT();
 
 // Here we read the GEM2MT structure, prepared from GEMS or by hand
-   if( TGEM2MT::pm->MassTransSetUp( gem2mt_in1.c_str() ))
+   if( TGEM2MT::pm->ReadTask( gem2mt_in1.c_str() ))
      return 1;  // error reading files
 
 // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
@@ -93,172 +94,16 @@ TGEM2MT::~TGEM2MT()
     delete pa;
 }
 
-outField TGEM2MT_static_fields[15] =  {
- { "Mode", 1,0 },
- { "Size" , 1,0 },
- { "MaxSteps", 1,0 },
- { "Tau", 1,0 },
- { "Grid", 1,0 },
- { "Types", 1,0 },
- { "Props", 1,0 },
- { "LSize", 1,0 },
- { "fVel", 1,0 },
- { "cLen", 1,0 },
- { "tf", 1,0 },
- { "cdv", 1,0 },
- { "cez", 1,0 },
- { "al_in", 1,0 },
- { "Dif_in", 1,0 }
- };
-
-outField TGEM2MT_dynamic_fields[3] =  {
- { "DiCp", 1, 0 },
- { "NPmean", 1, 0 },
- { "mGrid", 1, 0 }
- };
-
-// The mass transport start constant
-int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
+// read TGEM2MT structure from file
+int TGEM2MT::ReadTask( const char *unsp_in1 )
 {
-/*
-  mtp->PsMode = GMT_MODE_A;
-  mtp->nC = 101;    // number of nodes (default 1500)
-  mtp->ntM = 300;   // max number of time steps   10000
-
-  mtp->cLen = 1.;      // length in m
-  mtp->fVel = 1e-9;    // fluid velocity constant m/sec
-  mtp->tf = 1.;     // time step reduce factor
-  mtp->cdv = 1e-7;   // cutoff value for delta_T corrections for bulk compositions)
-  mtp->cez = 1e-12;   // minimal allowed amount of element (except charge) in bulk composition
-
-  mtp->Tau[START_] = 0.;
-  mtp->Tau[STOP_] = 0.;
-  mtp->Tau[STEP_] = 0.;
-*/
  // read GEM2MT structure from file
   fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {
-   fstream ff(gem2mt_in1, ios::in );
-   ErrorIf( !ff.good() , gem2mt_in1, "Fileopen error");
-
-// static arrays
-   TReadArrays  rdar( 15, TGEM2MT_static_fields, ff);
-   short nfild = rdar.findNext();
-   while( nfild >=0 )
-   {
-     switch( nfild )
-     {
-       case 0: rdar.readArray( "Mode", &mtp->PsMode, 1, 1);
-            break;
-       case 1: rdar.readArray( "Size", &mtp->xC, 3);
-            mtp->nC = mtp->xC*mtp->yC*mtp->zC;
-             break;
-       case 2: rdar.readArray( "MaxSteps", &mtp->ntM, 1);
-             break;
-       case 3: rdar.readArray( "Tau", mtp->Tau, 3);
-            break;
-       case 4: rdar.readArray( "Grid", &mtp->PvGrid, 1, 1);
-            break;
-       case 5: rdar.readArray( "Types", &mtp->nPTypes, 1);
-            break;
-       case 6: rdar.readArray( "Props", &mtp->nProps, 1);
-            break;
-       case 7: rdar.readArray( "LSize", mtp->sizeLc, 3);
-            break;
-       case 8: rdar.readArray( "fVel", &mtp->fVel, 1);
-            break;
-       case 9: rdar.readArray( "cLen", &mtp->cLen, 1);
-             break;
-       case 10: rdar.readArray( "tf", &mtp->tf, 1);
-            break;
-       case 11: rdar.readArray( "cdv", &mtp->cdv, 1);
-            break;
-       case 12: rdar.readArray( "cez", &mtp->cez, 1);
-            break;
-       case 13: rdar.readArray( "al_in", &mtp->al_in, 1);
-            break;
-       case 14: rdar.readArray( "Dif_in", &mtp->Dif_in, 1);
-            break;
-     }
-     nfild = rdar.findNext();
-  }
-
-   // testing read
-   if( mtp->PsMode != GMT_MODE_W && mtp->PsMode != GMT_MODE_V )
-   {
-      rdar.setNoAlws( 4 /*"Grid"*/);
-      rdar.setNoAlws( 5 /*"Types"*/);
-      rdar.setNoAlws( 6 /*"Props"*/);
-      rdar.setNoAlws( 7 /*"LSize"*/);
-      mtp->PvGrid = '-';
-   }
-   gstring ret = rdar.testRead();
-   if( !ret.empty() )
-   { ret += " - fields must be readed from TGEM2MT structure";
-     Error( "Error", ret);
-   }
-
- // realloc memory
-   Alloc();
- // read arrays
-   int ii, jj, indx;
-
-   TReadArrays  rddar( 3, TGEM2MT_dynamic_fields, ff);
-  // Set up flags
-   if( mtp->PsMode != GMT_MODE_W && mtp->PsMode != GMT_MODE_V )
-      rddar.setNoAlws( 1 /*"NPmean"*/);
-   if( mtp->PvGrid == S_OFF )
-      rddar.setNoAlws( 2 /*"mGrid"*/);
-
-   nfild = rddar.findNext();
-   while( nfild >=0 )
-   {
-     switch( nfild )
-     {
-// line %5s "#", %6s "Init", %6s "Type",
-//   %12s "Vt-m**3", %12s "vp-m/sec", %12s "porosity", %12s "Km-m**2",
-//   %12s "al-m", %12s "hDl-m**2/s", %12s "nto"
-// list #DiCp %5g index, %6g all #DiCp, %12.6g all #HydP
-       case 0:  rddar.skipSpace();
-               for( ii=0; ii<mtp->nC; ii++ )
-               {
-                 ff >> indx >> mtp->DiCp[ii][0] >> mtp->DiCp[ii][1];
-                 for( jj=0; jj< SIZE_HYDP; jj++)
-                    ff >> mtp->HydP[ii][jj];
-               }
-            break;
-       case 1:  rddar.skipSpace();
-           if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
-// line ## prn=:mtPsfl[0] = "W" | mtPsfl[0] = "V"; ##
-//    %5s "#", %6s "Mean", %6s "Min", %6s "Max",
-//    %6s "ptype", %6s "mmode", %6s "tcode", %6s "ips", %6s "res", %6s "res"
-// list #NPmean %5g index, %6g #NPmean, %6g #nPmin ,%6g #nPmax ,
-//    %6g all #ParTD
-              for( ii=0; ii<mtp->nPTypes; ii++ )
-              {
-                ff >> indx >> mtp->NPmean[ii];
-                ff >> mtp->nPmin[ii] >> mtp->nPmax[ii];
-                for( jj=0; jj< 6; jj++)
-                   ff >> mtp->ParTD[ii][jj];
-              }
-            break;
-       case 2:  rddar.skipSpace();
-          if( mtp->PvGrid != S_OFF )
-//     line ## prn=:mtPvfl[8] <> "-"; ##  %s "Grid"
-//     list #mGrid  %12.6g all #mGrid
-             for( ii=0; ii<mtp->nPTypes; ii++ )
-               ff >> mtp->grid[ii][0]  >> mtp->grid[ii][1] >> mtp->grid[ii][2];
-          break;
-     }
-     nfild = rddar.findNext();
-   }
-   ret = rddar.testRead();
-   if( !ret.empty() )
-   { ret += " - fields must be readed from TGEM2MT structure";
-     Error( "Error", ret);
-   }
-
+   fstream ff(unsp_in1, ios::in );
+   ErrorIf( !ff.good() , unsp_in1, "Fileopen error");
+   from_text_file( ff );
    return 0;
   }
   catch(TError& err)
@@ -267,6 +112,411 @@ int TGEM2MT::MassTransSetUp( const char *gem2mt_in1 )
   }
   return 1;
 }
+
+// Write TGEM2MT structure from file
+int TGEM2MT::WriteTask( const char *unsp_in1 )
+{
+ // read GEM2MT structure from file
+  fstream f_log("ipmlog.txt", ios::out|ios::app );
+  try
+  {
+   fstream ff(unsp_in1, ios::out );
+   ErrorIf( !ff.good() , unsp_in1, "Fileopen error");
+   to_text_file( ff, true);
+   gstring filename = unsp_in1;
+           filename += ".res";
+   //fstream ff1( filename.c_str(), ios::out );
+   //ErrorIf( !ff1.good() , filename.c_str(), "Fileopen error");
+   // result_to_text_file( ff1, true );
+   return 0;
+  }
+  catch(TError& err)
+  {
+      f_log << err.title.c_str() << "  : " << err.mess.c_str() << endl;
+  }
+  return 1;
+}
+
+outField TGEM2MT_static_fields[21] =  {
+ { "Mode", 1,0 },
+ { "PvFDL", 0,0 },  // PvPGD, PvFDL, PvSFL
+ { "PvGrid", 0,0 },
+ { "Size" , 1,0 },
+ { "nFD" , 0,0 },
+ { "nPG" , 0,0 },
+ { "nSFD" , 0,0 },
+ { "MaxSteps", 1,0 },
+ { "nPTypes", 0,0 },
+ { "nProps", 0,0 },
+ { "Tau", 1,0 },
+ { "LSize", 0,0 },
+ { "fVel", 1,0 },
+ { "cLen", 1,0 },
+ { "tf", 1,0 },
+ { "cdv", 1,0 },
+ { "cez", 1,0 },
+ { "al_in", 1,0 },
+ { "Dif_in", 1,0 },
+ { "FIf", 0,0 },
+ { "Nf", 0,0 }
+  };
+
+outField TGEM2MT_dynamic_fields[16] =  {
+ { "DiCp", 1, 0 },
+ { "HydP", 1, 0 },
+ { "NPmean", 0, 0 },
+ { "NPmin", 0, 0 },
+ { "NPmax", 0, 0 },
+ { "ParTD", 0, 0 },
+ { "mGrid", 0, 0 },
+ { "FDLi", 0, 0 },
+ { "FDLf", 0, 0 },
+ { "BSF", 0, 0 },
+ { "PGT", 0, 0 },
+ { "UMPG", 0, 0 },
+ { "FDLid", 0, 0 },
+ { "FDLop", 0, 0 },
+ { "FDLmp", 0, 0 },
+ { "MPGid", 0, 0 }
+ };
+
+//====================================================================
+extern bool _comment;
+
+void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
+{
+  _comment = with_comments;
+  
+  TPrintArrays  prar(ff);
+
+   if( _comment )
+   {  ff << "# GEMIPM2K v. 2.2.0" << endl;
+      ff << "# Prototype 04.12.2007" << endl;
+      ff << "# Comments can be marked with # $ ;" << endl << endl;
+      ff << "# Template for the Gem2mt data" << endl;
+      ff << "# (should be read before the DATACH, the IPM-DAT and DATABR files)" << endl << endl;
+      ff << "#Section (scalar): Controls and dimensionalities of the Gem2mt operation" << endl;
+   }
+   if( _comment )
+      ff << "# Code of GEM2MT mode of operation { S F A D T }" << endl;
+   ff << left << setw(17) << "<Mode> " << "\'"<<  mtp->PsMode << "\'"<< endl;
+   if( _comment )
+        ff << "# numbers of nodes along x, y, z coordinates";
+   ff << left << setw(7) << "<Size> " <<   mtp->nC << " 1" << " 1" << endl;
+   if( _comment )
+       ff << "# Maximum allowed number of time iteration steps (default 1000)" << endl;
+   ff << left << setw(7) << "<MaxSteps> " <<   mtp->ntM << endl;
+   if( _comment )
+        ff << "# Physical time iterator";
+   prar.writeArray(  "Tau", mtp->Tau, 3 );
+   ff << endl;
+   
+   if( mtp->PsMode == GMT_MODE_F )
+   {  if( _comment )
+       ff << "# Use phase groups definitions, flux definition list & source fluxes and elemental stoichiometries";
+      prar.writeArray(  "PvFDL", &mtp->PvPGD, 3, 1 );
+      if( _comment )
+        ff << "#  number of MPG flux definitions (0 or >1)" <<  endl;
+      ff << left << setw(7) << "<nFD> " <<   mtp->nFD << endl;
+      if( _comment )
+        ff << "# number of mobile phase groups (0 or >1)" << endl;
+      ff << left << setw(7) << "<nPG> " << mtp->nPG <<  endl;
+      if( _comment )
+        ff << "# number of source flux definitions (0 or < nFD )" << endl;
+      ff << left << setw(7) << "<nSFD> " << mtp->nSFD <<  endl;
+      if( _comment )
+        ff << "# nICb number of ICs in  (DATABR) for setting box-fluxes" << endl;
+      ff << left << setw(7) << "<Nf> " << mtp->Nf <<  endl;
+      if( _comment )
+        ff << "# nPHb number of phases in (DATABR) for setting box-fluxes" << endl;
+      ff << left << setw(7) << "<FIf> " << mtp->FIf <<  endl;
+   }     
+
+   if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+   {  if( _comment )
+       ff << "# Use array of grid point locations? (+ -)" << endl;
+       ff << left << setw(17) << "<PvGrid> " << "\'"<<  mtp->PvGrid << "\'"<< endl;
+       if( _comment )
+        ff << "# res Number of allocated particle types (< 20 ? )" << endl;
+       ff << left << setw(7) << "<nPTypes> " << mtp->nSFD <<  endl;
+       if( _comment )
+         ff << "# res Number of particle statistic properties (for monitoring) >= anPTypes" << endl;
+       ff << left << setw(7) << "<nProps> " << mtp->nProps <<  endl;
+       if( _comment )
+         ff << "# spatial dimensions of the medium defines topology of nodes";
+      prar.writeArray(  "LSize", mtp->sizeLc, 3 );
+      ff << endl;
+   }     
+
+   if( _comment )
+    ff << "# Advection/diffusion mass transport: initial fluid advection velocity (m/sec)" << endl;
+   ff << left << setw(7) << "<fVel> " << mtp->fVel <<  endl;
+   if( _comment )
+    ff << "# column length (m)" << endl;
+   ff << left << setw(7) << "<cLen> " << mtp->cLen <<  endl;
+   if( _comment )
+    ff << "# time step reduction factor" << endl;
+   ff << left << setw(7) << "<tf> " << mtp->tf <<  endl;
+   if( _comment )
+    ff << "# cutoff factor for differences (1e-9)" << endl;
+   ff << left << setw(7) << "<cdv> " << mtp->cdv <<  endl;
+   if( _comment )
+    ff << "# cutoff factor for minimal amounts of IC in node bulk compositions (1e-12)" << endl;
+   ff << left << setw(7) << "<cez> " << mtp->cez <<  endl;
+   if( _comment )
+    ff << "# initial value of longitudinal dispersivity (m), usually 1e-3" << endl;
+   ff << left << setw(7) << "<al_in> " << mtp->al_in <<  endl;
+   if( _comment )
+    ff << "# initial general diffusivity (m2/sec), usually 1e-9" << endl;
+   ff << left << setw(7) << "<Dif_in> " << mtp->Dif_in <<  endl;
+        
+   ff<< "\n<END_DIM>\n";
+
+ // dynamic arrays - must follow static data
+   if( _comment )
+   {   ff << "\n## Task configuration section ";
+       ff << "\n#  Array of indexes of initial system variants for distributing to nodes";
+   }
+   prar.writeArray(  "DiCp", mtp->DiCp[0], mtp->nC*2, 2);
+   if( _comment )
+    ff << "\n# Hydraulic parameters for nodes in mass transport model";
+   prar.writeArray(  "HydP", mtp->HydP[0], mtp->nC*SIZE_HYDP, SIZE_HYDP);
+       
+   if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+   {  if( _comment )
+       ff << "\n# Array of initial mean particle type numbers per node";
+       prar.writeArray(  "NPmean", mtp->NPmean, mtp->nPTypes );
+       if( _comment )
+        ff << "\n# Minimum average total number of particles of each type per one node";
+       prar.writeArray(  "nPmin", mtp->nPmin, mtp->nPTypes );
+        if( _comment )
+         ff << "\n# Maximum average total number of particles of each type per one node";
+       prar.writeArray(  "nPmax", mtp->nPmax, mtp->nPTypes );
+       if( _comment )
+         ff << "\n# Array of particle type definitions at t0 or after interruption";
+       prar.writeArray(  "ParTD", mtp->ParTD[0], mtp->nPTypes*6, 6 );
+      if( mtp->PvGrid != S_OFF )
+      {
+          if( _comment )
+            ff << "\n# Array of grid point locations";
+          prar.writeArray(  "grid", mtp->grid[0], mtp->nC*3, 3 );
+      }
+   }     
+   if( mtp->PsMode == GMT_MODE_F )
+   {  
+    if( mtp->PvFDL != S_OFF )
+    {
+ 	   if( _comment )
+        ff << "\n# Indexes of nodes where this flux begins and ends";
+        prar.writeArray(  "FDLi", mtp->FDLi[0], mtp->nFD*2,2 );
+ 	   if( _comment )
+        ff << "\n# Part of the flux defnition list (flux order, flux rate, MPG quantities)";
+        prar.writeArray(  "FDLf", mtp->FDLf[0], mtp->nFD*4, 4 );
+ 	   if( _comment )
+        ff << "\n# ID of fluxes";
+        prar.writeArray(  "FDLid", mtp->FDLid[0], mtp->nFD, MAXSYMB );
+ 	   if( _comment )
+        ff << "\n# Operation codes (letters) flux type codes";
+        prar.writeArray(  "FDLop", mtp->FDLop[0],  mtp->nFD, MAXSYMB  );
+ 	   if( _comment )
+        ff << "\n# ID of MPG to move in this flux";
+        prar.writeArray(  "FDLmp", mtp->FDLmp[0], mtp->nFD, MAXSYMB  );
+    }
+	if( mtp->PvPGD != S_OFF )
+	{
+	  if( _comment )
+        ff << "\n# Units for setting phase quantities in MPG";
+      prar.writeArray(  "UMPG", mtp->UMPG, mtp->FIf, 1 );
+	  if( _comment )
+         ff << "\n# Quantities of phases in MPG ";
+	  prar.writeArray(  "PGT", mtp->PGT, mtp->FIf*mtp->nPG, mtp->nPG );
+	  if( _comment )
+	     ff << "\n# ID list of mobile phase groups";
+	  prar.writeArray(  "MPGid", mtp->MPGid[0], mtp->nPG, MAXSYMB );
+	}
+   if( mtp->PvSFL != S_OFF )
+   {
+	  if( _comment )
+	     ff << "\n# Table of bulk compositions of source fluxes";
+      prar.writeArray(  "BSF", mtp->BSF, mtp->nSFD*mtp->Nf, mtp->Nf );
+   }
+ }     
+   if( _comment )
+     ff << "\n# End of file"<< endl;
+ }
+
+
+// Reading TGEM2MT structure from text file
+void TGEM2MT::from_text_file(fstream& ff)
+{
+// static arrays
+ TReadArrays  rdar( 21, TGEM2MT_static_fields, ff);
+ short nfild = rdar.findNext();
+ while( nfild >=0 )
+ {
+   switch( nfild )
+   {
+   case 0: rdar.readArray( "Mode", &mtp->PsMode, 1, 1);
+           break;
+   case 1: rdar.readArray( "PvFDL", &mtp->PvPGD, 3, 1);
+           break;
+   case 2: rdar.readArray( "PvGrid", &mtp->PvGrid, 1, 1);
+           break;
+   case 3: rdar.readArray( "Size", &mtp->xC, 3);
+            mtp->nC = mtp->xC*mtp->yC*mtp->zC;
+           break;
+   case 4: rdar.readArray( "nFD", &mtp->nFD, 1);
+           break;
+   case 5: rdar.readArray( "nPG", &mtp->nPG, 1);
+           break;
+   case 6: rdar.readArray( "nSFD", &mtp->nSFD,  1);
+           break;
+   case 7: rdar.readArray( "MaxSteps", &mtp->ntM, 1);
+           break;
+   case 8: rdar.readArray( "nPTypes", &mtp->nPTypes,  1);
+           break;
+   case 9: rdar.readArray( "nProps", &mtp->nProps,  1);
+           break;
+   case 10: rdar.readArray( "Tau", mtp->Tau, 3);
+           break;
+   case 11: rdar.readArray( "LSize", mtp->sizeLc, 3);
+           break;
+   case 12: rdar.readArray( "fVel", &mtp->fVel, 1);
+        break;
+   case 13: rdar.readArray( "cLen", &mtp->cLen, 1);
+         break;
+   case 14: rdar.readArray( "tf", &mtp->tf, 1);
+        break;
+   case 15: rdar.readArray( "cdv", &mtp->cdv, 1);
+        break;
+   case 16: rdar.readArray( "cez", &mtp->cez, 1);
+        break;
+   case 17: rdar.readArray( "al_in", &mtp->al_in, 1);
+        break;
+   case 18: rdar.readArray( "Dif_in", &mtp->Dif_in, 1);
+        break;
+   case 19: rdar.readArray( "Nf", &mtp->Nf, 1);
+        break;
+   case 20: rdar.readArray( "FIf", &mtp->FIf, 1);
+        break;
+ }
+   nfild = rdar.findNext();
+ }
+
+ if( mtp->PsMode == GMT_MODE_F )
+ { 
+    rdar.setAlws( 1 /*"PvFDL"*/);
+    rdar.setAlws( 4 /*"nFD"*/);
+    rdar.setAlws( 5 /*"nPG"*/);
+    rdar.setAlws( 6 /*"nSFD"*/);
+    rdar.setAlws( 19 /*"Nf"*/);
+    rdar.setAlws( 20 /*"Fif"*/);
+ }     
+
+ if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+ {  
+    rdar.setAlws( 2 /*"PvGrid"*/);
+    rdar.setAlws( 8 /*"nPTypes"*/);
+    rdar.setAlws( 9 /*"nProps"*/);
+    rdar.setAlws( 11 /*"LSize"*/);
+ }     
+ // setup default DATACH readed after
+  //mtp->Nf =  mtp->nICb = TNodeArray::na->pCSD()->nICb;
+  //mtp->FIf = mtp->nPHb = TNodeArray::na->pCSD()->nPHb;
+  // mtp->nDCb =TNodeArray::na->pCSD()->nDCb;
+ 
+ // testing read
+ gstring ret = rdar.testRead();
+ if( !ret.empty() )
+  { ret += " - fields must be readed from TGEM2MT structure";
+    Error( "Error", ret);
+  }
+
+  Alloc();
+
+//dynamic data
+ TReadArrays  rddar( 16, TGEM2MT_dynamic_fields, ff);
+
+// Set up flags
+ if( mtp->PsMode == GMT_MODE_W || mtp->PsMode == GMT_MODE_V )
+ { 
+   rddar.setAlws( 2 /*"NPmean"*/);
+   rddar.setAlws( 3 /*"nPmin"*/);
+   rddar.setAlws( 4 /*"nPmax"*/);
+   rddar.setAlws( 5 /*"ParTD"*/);
+   if( mtp->PvGrid != S_OFF )
+	    rddar.setAlws( 6 /*"grid"*/);
+ }     
+ if( mtp->PsMode == GMT_MODE_F )
+ {  
+   if( mtp->PvFDL != S_OFF )
+   {
+	   rddar.setAlws( 7 /*"FDLi"*/);
+	   rddar.setAlws( 8 /*"FDLf"*/);
+	   rddar.setAlws( 12 /*"FDLid"*/);
+	   rddar.setAlws( 13 /*"FDLop"*/);
+	   rddar.setAlws( 14 /*"FDLmp"*/);
+   }
+  if( mtp->PvPGD != S_OFF )
+  {
+		   rddar.setAlws( 11 /*"UMPG"*/);
+		   rddar.setAlws( 10 /*"PGT"*/);
+		   rddar.setAlws( 15 /*"MPGid"*/);
+  }
+  if( mtp->PvSFL != S_OFF )
+	   rddar.setAlws( 9 /*"BSF"*/);
+ }     
+
+ nfild = rddar.findNext();
+ while( nfild >=0 )
+ {
+   switch( nfild )
+   {
+   case 0: rddar.readArray( "DiCp", mtp->DiCp[0], mtp->nC*2 );
+            break;
+   case 1: rddar.readArray( "HydP", mtp->HydP[0], mtp->nC*SIZE_HYDP );
+            break;
+   case 2: rddar.readArray( "NPmean", mtp->NPmean, mtp->nPTypes );
+            break;
+   case 3: rddar.readArray( "nPmin", mtp->nPmin, mtp->nPTypes );
+            break;
+   case 4: rddar.readArray( "nPmax", mtp->nPmax, mtp->nPTypes );
+            break;
+   case 5: rddar.readArray( "ParTD", mtp->ParTD[0], mtp->nPTypes*6 );
+             break;
+   case 6: rddar.readArray(  "grid", mtp->grid[0], mtp->nC*3 );
+             break;
+   case 7: rddar.readArray( "FDLi", mtp->FDLi[0], mtp->nFD*2 );
+             break;
+   case 8: rddar.readArray( "FDLf", mtp->FDLf[0], mtp->nFD*4 );
+             break;
+   case 9: rddar.readArray(  "BSF", mtp->BSF, mtp->nSFD*mtp->Nf );
+             break;
+   case 10: rddar.readArray(  "PGT", mtp->PGT, mtp->FIf*mtp->nPG );
+             break;
+   case 11: rddar.readArray(  "UMPG", mtp->UMPG, mtp->FIf, 1 );
+            break;
+   case 12: rddar.readArray(  "FDLid", mtp->FDLid[0], mtp->nFD, MAXSYMB );
+            break;
+   case 13: rddar.readArray(  "FDLop", mtp->FDLop[0],  mtp->nFD, MAXSYMB  );
+            break;
+   case 14:rddar.readArray(  "FDLmp", mtp->FDLmp[0], mtp->nFD, MAXSYMB  );
+            break;
+   case 15:rddar.readArray(  "MPGid", mtp->MPGid[0], mtp->nPG, MAXSYMB );
+            break;
+  }
+     nfild = rddar.findNext();
+ }
+ 
+ // testing read
+ ret = rddar.testRead();
+ if( !ret.empty() )
+  { ret += " - fields must be read from TUnSpace structure";
+    Error( "Error", ret);
+  }
+
+}
+
 
 void TGEM2MT::Alloc()
 {
@@ -281,6 +531,31 @@ void TGEM2MT::Alloc()
     if( mtp->PvGrid != S_OFF )
       mtp->grid = new float[mtp->nC][3];
   }
+  if( mtp->PvFDL != S_OFF )
+     {
+        mtp->FDLi =  new short [mtp->nFD][2];
+        mtp->FDLf =  new float [mtp->nFD][4];
+        mtp->FDLid=  new char [mtp->nFD][MAXSYMB];
+        mtp->FDLop=  new char [mtp->nFD][MAXSYMB];
+        mtp->FDLmp = new char [mtp->nFD][MAXSYMB];
+     }
+   if( mtp->PvPGD != S_OFF )
+     {
+        mtp->PGT  =  new float[mtp->FIf*mtp->nPG];
+        mtp->MPGid = new char [mtp->nPG][MAXSYMB];
+        mtp->UMPG =  new char [ mtp->FIf ];
+     }
+
+   if( mtp->PvSFL != S_OFF )
+       mtp->BSF =  new double[ mtp->nSFD*mtp->Nf];
+
+
+   if( mtp->PvPGD != S_OFF && mtp->PvFDL != S_OFF )
+     {
+        mtp->MB =  new double[ mtp->nC * mtp->Nf];
+        mtp->dMB = new double[ mtp->nC * mtp->Nf];
+     }
+
 }
 
 void TGEM2MT::Free()
@@ -299,6 +574,32 @@ void TGEM2MT::Free()
     delete[] mtp->ParTD;
   if( mtp->grid  )
     delete[] mtp->grid;
+  if(  mtp->FDLi )
+	  delete[] mtp->FDLi;	  
+  if( mtp->FDLf  )
+    delete[] mtp->FDLf;
+  if( mtp->FDLid  )
+     delete[] mtp->FDLid;
+  if( mtp->FDLop  )
+    delete[] mtp->FDLop;
+  if( mtp->FDLmp  )
+    delete[] mtp->FDLmp;
+  if( mtp->PGT  )
+    delete[] mtp->PGT;
+  if( mtp->MPGid  )
+    delete[] mtp->MPGid;
+  if( mtp->UMPG  )
+    delete[] mtp->UMPG;
+  if(  mtp->BSF )
+	  delete[] mtp->BSF;
+  if( mtp->MB  )
+    delete[] mtp->MB;
+  if( mtp->dMB  )
+    delete[] mtp->dMB;
+  if( mtp->gfc  )
+    delete[] mtp->gfc;
+  if( mtp->yfb  )
+    delete[] mtp->yfb;
 }
 
 // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS
@@ -318,7 +619,7 @@ int TGEM2MT::MassTransInit( const char *chbr_in1 )
   if( na->GEM_init( chbr_in1, nodeType ) )
         return 1;  // error reading files
 
-  // put HydP
+   // put HydP
   DATABRPTR* C0 = na->pNodT0();  // nodes at current time point
   for( int jj=0; jj<mtp->nC; jj ++)
   {

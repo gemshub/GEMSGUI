@@ -351,13 +351,13 @@ void TUnSpace::from_text_file(fstream& ff)
     Error( "Error", ret);
   }
 
+ usp->nG = usp->nGB +usp->nGR+usp->nGN; 	
   Alloc();
 
 //dynamic data
  TReadArrays  rddar( 46, TUnSpace_dynamic_fields, ff);
 
 // Set up flags
- usp->nG = usp->nGB +usp->nGR+usp->nGN; 	
  if(usp->PsGen[0] != S_ON )
  {
     rddar.setNoAlws( 26 /*"Gs"*/);
