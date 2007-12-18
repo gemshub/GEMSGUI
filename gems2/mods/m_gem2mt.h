@@ -70,9 +70,9 @@ typedef struct
    nC,   // nQ - number of local equilibrium compartments (nodes)
 // xC, yC, zC  numbers of nodes along x, y, z coordinates
    nIV,  // number of initial variants of the chemical system, nIV <= nC
-   nPG,  // number of mobile phase groups (0 or >1)
-   nFD,  // number of MPG flux definitions (0 or >1)
-   nSFD,   // number of source flux definitions (0 or < nFD )
+   nPG,  // number of mobile phase groups (0 or >= 1)
+   nFD,  // number of MPG flux definitions (0 or >1 )
+   nSFD,   // number of elemental flux definitions (0 or >= 1 )
    nEl, // number of electrolytes for setting up electrolyte diffusion coefficients in mDEl vector
    nPTypes,     // res Number of allocated particle types (< 20 ? )
    nProps,      // res Number of particle statistic properties (for monitoring) >= anPTypes
@@ -170,7 +170,7 @@ float (*grid)[3];      // Array of grid point locations, size is nC
    *qpc,   //  [Nqpc] Work array for mass transport math script,
    *xt,    //  Abscissa for sampled data [nS]
    *yt,    //  Ordinates for sampled data [nS][nYS]
-   *BSF,   // [nSFD][Nf] table of bulk compositions of source fluxes
+   *BSF,   // [nSFD][Nf] table of bulk compositions of elemental fluxes
            //  More to be added here for seq reactors?
    *MB,    // [nC][Nf] column of current IC masses in the boxes (in kg)
    *dMB    // [nC][Nf]  Table of current derivatives dM/dTau for ICs in boxes
@@ -201,8 +201,9 @@ float (*grid)[3];      // Array of grid point locations, size is nC
   char (*for_e)[MAXFORMUNITDT]; // [nE][40] formulae for diffusing dissolved electrolytes
   char (*stld)[EQ_RKLEN]; // List of SysEq record keys for initial systems [nIV]
   char (*FDLid)[MAXSYMB]; // [nFD] ID of fluxes
-  char (*FDLop)[MAXSYMB]; // [nFD] Operation codes (letters) flux type codes
-  char (*FDLmp)[MAXSYMB]; // [nFD] ID of MPG to move in this flux  dim changed!
+  char (*FDLop)[MAXSYMB]; // [nFD] Operation codes (letters): flux order,  type codes
+  char (*FDLmp)[MAXSYMB]; // [nFD] ID of MPG to move in this flux (if starts with letter)
+                             // Otherwise BSF row index of elemental flux (if 0,1,2,...) 
   char (*MPGid)[MAXSYMB]; // [nPG] ID list of mobile phase groups
 //
   char (*SBM)[MAXICNAME+MAXSYMB];  // Keys (names) of IC
@@ -322,7 +323,7 @@ int CheckPIAinNodes1D( char mode, int start_node = 0, int end_node = 1000 );
     double (*tt)[9];
 
     bool CalcBoxModel( char mode ); // calculate Mobile Phase-Group Flows
-    
+    int LookUpXMGP( const char* MGPid );
     // calculate 1-step from system of equation 
     void Solut( double *m, double *dm, double t );
     // Calculate new reservuir states for tcur = x

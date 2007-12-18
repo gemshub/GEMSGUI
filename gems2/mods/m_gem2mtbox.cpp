@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: m_integ.cpp 968 2007-12-13 13:23:32Z gems $
+// $Id: m_gem2mtbox.cpp 968 2007-12-13 13:23:32Z gems $
 //
 // Implementation of TInteg/TGEM2MT classes, calculation functions
 //
@@ -43,50 +43,209 @@
 #define g(q,f,i)   ( mtp->gfc[ (q)*(mtp->nC*mtp->Nf)+ (f)*mtp->Nf + (i)] )
 #define y(q,f,i)   ( mtp->yfb[ (q)*(mtp->nC*mtp->Nf)+ (f)*mtp->Nf + (i)] )
 
-#define v(f)       ( (mtp->FDLf[f][1]) )
+#define ord(kk)    ( ROUND(mtp->FDLf[kk][0]) )
+#define v(kk)      ( (mtp->FDLf[kk][1]) )
 
-#define H(p, i)    ( mtp->BSF[(abs(p)-1)* mtp->Nf + ( i )] )
+#define H(f, i)    ( mtp->BSF[ (f) * mtp->Nf + ( i )] )
+
+// Returns MGP index from MGP identifier MGPid
+//   or -1 if the identifier was not found in the MGP id list
+int TGEM2MT::LookUpXMGP( const char* MGPid )
+{   
+	int found = -1;
+	// Check if the first character is 0 1 2 3 4 5 6 7 8 9 
+	// If so, this is index of elemental flux with composition from BSF table
+	for( int f=0; mtp->nPG; f++ )
+	{
+		if( strncmp( mtp->MPGid[f], MGPid, MAXSYMB ) )
+			continue; 
+	    found = f;
+	    break;
+	}
+	return found;
+}
 
 // calculate 1-step from system of equation 
 void TGEM2MT::Solut( double *m, double *dm, double t )
 { 
-  int kk, q, p, f, i;
+  int kk, q, p, f, fe=-1, i;
+  char FLXid[MAXSYMB+1], MGPid[MAXSYMB+1];
+  int FLXorder, FLXtype;
+  double fRate;
+  bool sinkOut; 
   
-  // set up 0.
+  // Zeroing element mass derivatives off
   for( q=0; q <mtp->nC; q++ )
 	for(i =0; i< mtp->Nf; i++ )
       dMB(q,i) = 0.;
 
-  for(kk=0; kk<mtp->nFD; kk++ )
+  for(kk=0; kk<mtp->nFD; kk++ )  // Looking through the list of fluxes 
   {
-    q = mtp->FDLi[kk][0];
-	p = mtp->FDLi[kk][1];
-	if( q >= 0 && p>=0 )
-	{
-	  for(f=0; f<mtp->nPG; f++ )
-		for(i=0; i<mtp->Nf; i++ )
-	    {	  
-		  dMB(q,i) -=  v(f) * MB(q,i) * g(q,f,i);
-		  dMB(p,i) +=  v(f) * MB(q,i) * g(q,f,i);
-	   }	
-	} else
-		 if( q>= 0 )
-		 {
-		   for(f=0; f<mtp->nPG; f++ )
-		     for(i=0; i<mtp->Nf; i++ )
-			 {	  
-				  dMB(q,i) -=  v(f) * MB(q,i) * g(q,f,i);
-			 }	
-		  } else
-				 if( p>= 0 )
-				 {
-				   for(f=0; f<mtp->nPG; f++ )
-				     for(i=0; i<mtp->Nf; i++ )
-					 {	  
-						  dMB(p,i) +=  H(q,i)*  v(f)  * g(p,f,i);
-					 }	
-				  }      
-  }
+    fe = -1;
+	q = mtp->FDLi[kk][0];    // index of source box
+	p = mtp->FDLi[kk][1];    // index of receiving box 
+//	FLXorder = mtp->FDLop[kk][0];  // flux order code
+FLXorder = ord(kk);
+//	FLXtype = mtp->FDLop[kk][1];   // flux type code
+	strncpy( MGPid, mtp->FDLmp[kk], MAXSYMB );  
+	MGPid[MAXSYMB] = 0;                           // MGP identifier
+	f = LookUpXMGP( MGPid );                      // Getting MGP index 
+    if( f<0 ) // Elemental production flux? 	
+    {
+    	sscanf( MGPid, "%d", &fe );  // Reading BSF row index 
+        if( fe < 0 || fe > mtp->nSFD )
+           Error( "BOXFLUX:", "Wrong MPG identifier or BSF row index!" );	
+    }
+    strncpy( FLXid, mtp->FDLid[kk], MAXSYMB );  
+	FLXid[MAXSYMB] = 0; 						  // Flux identifier
+		
+	if( q >= 0 && f >= 0 )
+	{            // Normal MGP flux from box q to box p
+        fRate = v(kk) * g(q,f,i);   
+// NB: Negative v(f) means "production" in q box and "consumption" in p box 
+		if( p < 0 ) 
+			sinkOut = true; // This is a sinkout flux from box q to nowhere (if v > 0)
+		                    //  or production of MGP in box q (if v < 0) 
+        switch( FLXorder )
+        {
+          case 0:  // Zero-order flux 
+        	 for(i=0; i<mtp->Nf; i++ )
+        	 {	  
+//        	    fRate = v(kk) * g(q,f,i);
+        		dMB(q,i) -=  fRate;
+        	    if( !sinkOut)
+        	       dMB(p,i) +=  fRate;
+        	 }
+        	 break; 
+          case 1:  // First-order to source flux 
+             for(i=0; i<mtp->Nf; i++ )
+	         {	  
+	            fRate *= MB(q,i); 
+            	dMB(q,i) -=  fRate;
+            	if( !sinkOut)
+            	   dMB(p,i) +=  fRate;
+	         }
+             break; 
+          case 2:  // Second-order to source flux 
+             for(i=0; i<mtp->Nf; i++ )
+	         {	  
+            	fRate *= MB(q,i)*MB(q,i);
+            	dMB(q,i) -=  fRate;
+            	if( !sinkOut)
+            	   dMB(p,i) +=  fRate;
+	         }
+             break;
+          case 3:  // Second-order to source and sink flux 
+        	         // (proportional to product of masses in both boxes)  
+             if( sinkOut )
+            	 break; 
+        	 for(i=0; i<mtp->Nf; i++ )
+	         {	  
+            	fRate *= MB(q,i)*MB(p,i);
+            	dMB(q,i) -=  fRate;
+            	dMB(p,i) +=  fRate;
+	         }
+             break;
+           case -1:  // First-order to receiver flux only 
+             if( sinkOut )
+              	 break;        
+        	 for(i=0; i<mtp->Nf; i++ )
+          	 {	  
+              	fRate *= MB(p,i);
+               	dMB(q,i) -=  fRate;
+               	dMB(p,i) +=  fRate;
+          	 }
+             break;
+          case -2:  // Second-order to receiver flux 
+        	  if( sinkOut )
+        	     break;                	          	 
+        	 for(i=0; i<mtp->Nf; i++ )
+          	 {	  
+                fRate *= MB(p,i)*MB(p,i);
+                dMB(q,i) -=  fRate;
+           	    dMB(p,i) +=  fRate;
+          	 }
+             break;                      
+          default:  // Other orders or flux types - nothing to be done yet! 
+        	 break; 
+        }
+        ;  
+    } 
+	else { 
+		if( q >= 0 && f < 0 )
+		 {    // This is an elemental flux ( fe row in BSF table )         
+             fRate = v(kk) * H(fe,i);   
+	// NB: Negative v(f) means "production" in q box and "consumption" in p box 
+			if( p < 0 ) 
+				sinkOut = true; // This is an elemental sinkout flux from box q to nowhere (if v > 0)
+			                    //  or elemental production in box q (if v < 0) 
+	        switch( FLXorder )
+	        {
+	          case 0:  // Zero-order flux 
+	        	 for(i=0; i<mtp->Nf; i++ )
+	        	 {	  
+//	        	    fRate = v(kk) * H(fe,i);
+	        		dMB(q,i) -=  fRate;
+	        	    if( !sinkOut)
+	        	       dMB(p,i) +=  fRate;
+	        	 }
+	        	 break; 
+	          case 1:  // First-order to source flux 
+	             for(i=0; i<mtp->Nf; i++ )
+		         {	  
+		            fRate *= MB(q,i); 
+	            	dMB(q,i) -=  fRate;
+	            	if( !sinkOut)
+	            	   dMB(p,i) +=  fRate;
+		         }
+	             break; 
+	          case 2:  // Second-order to source flux 
+	             for(i=0; i<mtp->Nf; i++ )
+		         {	  
+	            	fRate *= MB(q,i)*MB(q,i);
+	            	dMB(q,i) -=  fRate;
+	            	if( !sinkOut)
+	            	   dMB(p,i) +=  fRate;
+		         }
+	             break;
+	          case 3:  // Second-order to source and sink flux 
+	        	         // (proportional to product of masses in both boxes)  
+	             if( sinkOut )
+	            	 break; 
+	        	 for(i=0; i<mtp->Nf; i++ )
+		         {	  
+	            	fRate *= MB(q,i)*MB(p,i);
+	            	dMB(q,i) -=  fRate;
+	            	dMB(p,i) +=  fRate;
+		         }
+	             break;
+	           case -1:  // First-order to receiver flux only 
+	             if( sinkOut )
+	              	 break;        
+	        	 for(i=0; i<mtp->Nf; i++ )
+	          	 {	  
+	              	fRate *= MB(p,i);
+	               	dMB(q,i) -=  fRate;
+	               	dMB(p,i) +=  fRate;
+	          	 }
+	             break;
+	          case -2:  // Second-order to receiver flux 
+	        	  if( sinkOut )
+	        	     break;                	          	 
+	        	 for(i=0; i<mtp->Nf; i++ )
+	          	 {	  
+	                fRate *= MB(p,i)*MB(p,i);
+	                dMB(q,i) -=  fRate;
+	           	    dMB(p,i) +=  fRate;
+	          	 }
+	             break;                      
+	          default:  // Other orders or flux types - nothing to be done yet!
+	        	 break; 
+	        }
+	        ;
+		}
+	 }
+  }   // end kk loop
 }
 
 #undef dMB
@@ -101,7 +260,7 @@ bool
 TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
 {
   int q, i, f, k;
-  double Mqfi = 0., Bqi = 0., Wqi = 0.;
+//  double Mqfi = 0., Bqi = 0., Wqi = 0.;
   bool iRet = true;
   FILE* diffile = NULL;
 
@@ -196,7 +355,7 @@ TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
 //Calculate record
 bool TGEM2MT::CalcBoxModel( char mode )
 {
-    int nStart = 0, nEnd = mtp->nC;
+//    int nStart = 0, nEnd = mtp->nC;
     bool iRet = false;
     FILE* diffile = NULL;
 
@@ -230,8 +389,7 @@ if( mtp->yfb )
   // calculate inital states
   // Calculation of chemical equilibria in all nodes at the beginning
   // with the Simplex initial approximation
-  CalcNewStates( -1,  0, mtp->cTau, mtp->dTau );
-    
+  CalcNewStates( -1,  0, mtp->cTau, mtp->dTau );  
      
   // calc part  
     int n = mtp->nC * mtp->Nf;  
