@@ -255,16 +255,24 @@ FLXorder = ord(kk);
 
 #define dMb( q, i)  (mtp->dMB[(q)*mtp->Nf + (i)])
 
-// Calculate new equilibrium states in the boxes for tcur = x
+// Calculate new equilibrium states in the boxes for tcur = t
+//  Ni 
+//  pr
+//  tcur
+//  step
+//
 bool
-TGEM2MT::CalcNewStates(  int Ni,int pr, double tcur, double step)
+TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
 {
   int q, i, f, k;
 //  double Mqfi = 0., Bqi = 0., Wqi = 0.;
   bool iRet = true;
   FILE* diffile = NULL;
 
- if( mtp->PvMO != S_OFF )
+  mtp->dTau = step; 
+  mtp->cTau = tcur;
+  
+  if( mtp->PvMO != S_OFF )
  {
    // Preparations: opening output files for monitoring 1D profiles
     diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
@@ -521,7 +529,8 @@ VEL:
 //               xi( t0 )=xi0
 //  over the time interval [t_begin, t_end] with minimal time step length 
 //     step and precision eps 
-//  
+//  Uses implicit method of rational extrapolation (??)
+// 
 void
 TGEM2MT::INTEG( double eps, double& step, double t_begin, double t_end )
 {
@@ -591,7 +600,7 @@ l55:
 l60:
         t += h;
         step = h;
-        mtp->cTau = t;
+//        mtp->cTau = t;
         for( i=0; i < mtp->nC*mtp->Nf; i++ )
             x[i] = tt[i][0];
         Solut(  x, dx, t );
