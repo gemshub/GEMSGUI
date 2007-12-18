@@ -377,7 +377,7 @@ bool TGEM2MT::CalcBoxModel( char mode )
     }
     // Init part ?????  
     // mtp->dx = mtp->cLen/mtp->nC;
-    mtp->dTau = 1;
+    mtp->dTau = 100;
     mtp->oTau = 0;
     mtp->cTau = mtp->Tau[START_];
     // mtp->cTau = 0;
