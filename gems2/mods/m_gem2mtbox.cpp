@@ -104,7 +104,6 @@ FLXorder = ord(kk);
 		
 	if( q >= 0 && f >= 0 )
 	{            // Normal MGP flux from box q to box p
- //       fRate = v(kk) * g(q,f,i);   
 // NB: Negative v(f) means "production" in q box and "consumption" in p box 
 		if( p < 0 ) 
 			sinkOut = true; // This is a sinkout flux from box q to nowhere (if v > 0)
@@ -169,7 +168,7 @@ FLXorder = ord(kk);
            	    dMB(p,i) +=  fRate;
           	 }
              break;                      
-          default:  // Other orders or flux types - nothing to be done yet! 
+          default:  // Other orders or flux types - to be done! 
         	 break; 
         }
         ;  
@@ -177,7 +176,6 @@ FLXorder = ord(kk);
 	else { 
 		if( q >= 0 && f < 0 )
 		 {    // This is an elemental flux ( fe row in BSF table )         
-    //         fRate = v(kk) * H(fe,i);   
 	// NB: Negative v(f) means "production" in q box and "consumption" in p box 
 			if( p < 0 ) 
 				sinkOut = true; // This is an elemental sinkout flux from box q to nowhere (if v > 0)
@@ -274,7 +272,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
 
 #ifndef IPMGEMPLUGIN
        iRet = pVisor->Message( window(), GetName(),
-           "Calculating Reactive Mass Transport (RMT)\n"
+           "Calculating Reactive Mass Transport Box-Flux Simulation \n"
            "Please, wait (may take long)...", nstep, mtp->ntM );
        if( iRet )
         Error("GEM2MT Flux-box model", "Cancel by user");
@@ -300,8 +298,9 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
 	 for(i =0; i< mtp->Nf; i++ )
 	 {
 		node1_bIC(q, i) += dMb( q, i) / nodeCH_ICmm( i ) * mtp->dTau;
-		if( node1_bIC(q, i) <= mtp->cez )   
+		if( i < mtp->Nf-1 && node1_bIC(q, i) <= mtp->cez )   
 			node1_bIC(q, i) = mtp->cez;    // preventing negative amounts of ICs
+		else node1_bIC(q, i) = 0.0;  // Provisorial - zeroing-off charge
 	 }
  }  
  
@@ -317,7 +316,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
    // copied to C1 (to be implemented)
  
 
-  // Output result if step accepted
+  // Output of the results if step accepted
    if( mtp->PvMO != S_OFF )
    {
     t_out = clock();
@@ -332,8 +331,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
       pVisor->Update();
       CalcGraph();
 #endif
-  
-  
+   
   // copy node array for T0 into node array for T1
   mtp->oTau = mtp->cTau;
   copyNodeArrays();
@@ -361,14 +359,17 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
 	    	  else
 	    		 for(i=0; i<mtp->Nf; i++ )
 	 			    y(q,f,i) += node1_bPH( q, k, i ) * MGPfactor;
+	    	  y(q,f,mtp->Nf-1) = 0.0;    // provisorial - zeroing-off charge
 	        } 
 	     }
   //  Calculation of MPG IC distribution coefficients   
      for( q=0; q <mtp->nC; q++ )
 	   for(f=0; f<mtp->nPG; f++ )
-		 for(i=0; i<mtp->Nf; i++ )
-			 g(q,f,i) = y(q,f,i)/node1_bIC( q, i );
-     
+	   { 
+		  for(i=0; i<mtp->Nf; i++ )
+	    	 g(q,f,i) = y(q,f,i)/node1_bIC( q, i );
+		  g(q,f,mtp->Nf-1) = 0.0;    // Provisorial for charge
+	   }
    return iRet;  
 }
 
