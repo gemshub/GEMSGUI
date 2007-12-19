@@ -600,6 +600,8 @@ void TGEM2MT::Free()
     delete[] mtp->gfc;
   if( mtp->yfb  )
     delete[] mtp->yfb;
+  if( tt  )
+      delete[] tt;
 }
 
 // Here we read the MULTI structure, DATACH and DATABR files prepared from GEMS

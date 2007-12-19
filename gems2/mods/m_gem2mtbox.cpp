@@ -93,7 +93,7 @@ FLXorder = ord(kk);
     if( f<0 ) // Elemental production flux? 	
     {
     	sscanf( MGPid, "%d", &fe );  // Reading BSF row index 
-        if( fe < 0 || fe > mtp->nSFD )
+        if( fe < 0 || fe >= mtp->nSFD )
            Error( "BOXFLUX:", "Wrong MPG identifier or BSF row index!" );	
     }
     strncpy( FLXid, mtp->FDLid[kk], MAXSYMB );  
@@ -269,6 +269,14 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
   bool iRet = true;
   FILE* diffile = NULL;
 
+#ifndef IPMGEMPLUGIN
+       iRet = pVisor->Message( window(), GetName(),
+           "Calculating Reactive Mass Transport (RMT)\n"
+           "Please, wait (may take long)...", nstep, mtp->ntM );
+       if( iRet )
+        Error("GEM2MT Flux-box model", "Cancel by user");
+#endif
+  
   mtp->dTau = step; 
   mtp->cTau = tcur;
   
@@ -364,28 +372,23 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
 //Calculate record
 bool TGEM2MT::CalcBoxModel( char mode )
 {
-//    int nStart = 0, nEnd = mtp->nC;
+  try{
+	 
     bool iRet = false;
-    FILE* diffile = NULL;
 
-    if( mtp->PvMO != S_OFF )
-    {
-    // Preparations: opening output files for monitoring 1D profiles
-    diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
-    if( !diffile)
-      return iRet;
-    }
     // Init part ?????  
     // mtp->dx = mtp->cLen/mtp->nC;
-    mtp->dTau = 100;
-    mtp->oTau = 0;
-    mtp->cTau = mtp->Tau[START_];
+    mtp->dTau = mtp->Tau[STEP_];;
+    mtp->oTau =  mtp->cTau = mtp->Tau[START_];
     // mtp->cTau = 0;
     mtp->ct = 0;
     mtp->gfc = (double *)aObj[ o_mtgc].Alloc(  mtp->nC*mtp->nPG, mtp->Nf, D_);
-if( mtp->yfb )
-	delete[] mtp->yfb; 
+    if( mtp->yfb )
+	    delete[] mtp->yfb; 
     mtp->yfb = new double[mtp->nC * mtp->nPG * mtp->Nf];
+    if( tt )
+    	delete[] tt; 
+    tt = new double[mtp->nC * mtp->Nf][9];
     
 #ifndef IPMGEMPLUGIN
       if(  mtp->PvMSg != S_OFF && vfQuestion(window(),
@@ -401,13 +404,41 @@ if( mtp->yfb )
   CalcNewStates( -1,  0, mtp->cTau, mtp->dTau );  
      
   // calc part  
-    int n = mtp->nC * mtp->Nf;  
-    tt = new double[ n ][9];
-    nfcn = nstep = naccept = nrejct = 0;
-    INTEG( mtp->cdv, mtp->dTau, mtp->Tau[START_], mtp->Tau[STOP_] );
-    delete[] tt;
+   nfcn = nstep = naccept = nrejct = 0;
+   
+#ifndef IPMGEMPLUGIN
+       iRet = pVisor->Message( window(), GetName(),
+           "Calculating Reactive Mass Transport (RMT)\n"
+           "Please, wait (may take long)...", nstep, mtp->ntM );
+       if( iRet )
+        Error("GEM2MT Flux-box model", "Cancel by user");
+#endif
+  INTEG( mtp->cdv, mtp->dTau, mtp->Tau[START_], mtp->Tau[STOP_] );
+
+#ifndef IPMGEMPLUGIN
+    pVisor->CloseMessage();
+#endif
     
-    return iRet;
+  }
+  catch( TError& xcpt )
+   {
+#ifndef IPMGEMPLUGIN
+       vfMessage(window(), xcpt.title, xcpt.mess);
+#else
+       cerr << xcpt.title << "  " <<  xcpt.mess << endl;
+#endif
+       return 1;
+   }
+  catch(...)
+  {
+#ifndef IPMGEMPLUGIN
+       vfMessage(window(), "CalcBoxModel", "Unknown exception");
+#else
+       cerr << "CalcBoxModel Unknown exception" << endl;
+#endif
+      return -1;
+  }
+  return 0;
 }
 
 //--------------------------------------------------------------------

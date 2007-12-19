@@ -448,6 +448,12 @@ if( mtp->yfb)
 	delete[] mtp->yfb;
     mtp->yfb = NULL;
 }
+if( tt ) 
+{	
+	delete[] tt;
+    tt = NULL;
+}
+
     mtp->etext = (char *)aObj[ o_mwetext].Free();
     mtp->tprn = (char *)aObj[ o_mwtprn].Free();
 }
@@ -804,7 +810,8 @@ mtp->ParTD = 0;
     mtp->An = 0;
    mtp->Ae = 0;
     mtp->gfc = 0;
-mtp->yfb = NULL; 
+    mtp->yfb = NULL; 
+    tt = NULL; 
     mtp->etext = 0;
     mtp->tprn = 0;
 }
