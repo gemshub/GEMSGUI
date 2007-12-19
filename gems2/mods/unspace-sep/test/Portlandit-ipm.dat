@@ -6,7 +6,7 @@
 # (should be read after the DATACH file and before DATABR files)
 
 # ID key of the initial chemical system definition
-"UnSpTest  G  Portlandit  0052 0       1       25      0   "
+"UnSpTest  G  Portlandit  0    0       1       25      0   "
 
 ## (1) Important flags that affect memory allocation
 # PE: Flag for using electroneutrality condition in GEM IPM calculations 
@@ -140,7 +140,7 @@
 
 # PMc: Parameters of non-ideal mixing models for multicomponent phases 
 <PMc>
-0 0 0 0 0 0.064 3.72 0 
+0 0 1.70679e-38 0 4.484155e-44 0 6.866362e-44 0 
 
 # LsMdc: Number of parameters per component of the phase
 <LsMdc>

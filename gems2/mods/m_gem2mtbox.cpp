@@ -305,12 +305,14 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
    			     node1_bIC(q, i) = 1e-16;    // preventing negative amounts of ICs
 	 }
  }  
+
  
 // Calculate new reservoir states at tcur	
 // Calculation of chemical equilibria in all nodes at the beginning
 // with the Simplex initial approximation
    CalcIPM( NEED_GEM_AIA, 0, mtp->nC, diffile );
-	
+
+
  if( Ni >= 0 )
  { // Here one has to compare old and new equilibrium phase assemblage
    // and pH/pe in all nodes and decide if the time step was Ok or it
@@ -367,11 +369,11 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
   //  Calculation of MPG IC distribution coefficients   
      for( q=0; q <mtp->nC; q++ )
 	   for(f=0; f<mtp->nPG; f++ )
-	   { 
-		  for(i=0; i<mtp->Nf; i++ )
-	    	 g(q,f,i) = y(q,f,i)/node1_bIC( q, i );
-		  g(q,f,mtp->Nf-1) = 0.0;    // Provisorial for charge
-	   }
+	   { for(i=0; i<mtp->Nf; i++ )
+		    	 g(q,f,i) = y(q,f,i)/node1_bIC( q, i );
+			  g(q,f,mtp->Nf-1) = 0.0;    // Provisorial for charge
+	   } 
+     
    return iRet;  
 }
 
