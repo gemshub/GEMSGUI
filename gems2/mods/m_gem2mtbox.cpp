@@ -298,9 +298,10 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
 	 for(i =0; i< mtp->Nf; i++ )
 	 {
 		node1_bIC(q, i) += dMb( q, i) / nodeCH_ICmm( i ) * mtp->dTau;
-		if( i < mtp->Nf-1 && node1_bIC(q, i) <= mtp->cez )   
-			node1_bIC(q, i) = mtp->cez;    // preventing negative amounts of ICs
-		else node1_bIC(q, i) = 0.0;  // Provisorial - zeroing-off charge
+		if( i == mtp->Nf-1 )
+			node1_bIC(q, i) = 0.0;  // Provisorial - zeroing-off charge
+		else if( node1_bIC(q, i) < 1e-16 )   
+   			     node1_bIC(q, i) = 1e-16;    // preventing negative amounts of ICs
 	 }
  }  
  
@@ -426,7 +427,7 @@ bool TGEM2MT::CalcBoxModel( char mode )
        if( iRet )
         Error("GEM2MT Flux-box model", "Cancel by user");
 #endif
-  INTEG( mtp->cdv, mtp->dTau, mtp->Tau[START_], mtp->Tau[STOP_] );
+  INTEG( 1e-4, /*mtp->cdv,*/ mtp->dTau, mtp->Tau[START_], mtp->Tau[STOP_] );
 
 #ifndef IPMGEMPLUGIN
     pVisor->CloseMessage();

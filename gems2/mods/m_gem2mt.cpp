@@ -21,6 +21,10 @@ const char *GEMS_MT_HTML = "gm_gem2mt";
 #include <math.h>
 #include <stdio.h>
 
+#ifndef __unix
+#include <io.h>
+#endif
+
 #include "m_gem2mt.h"
 #include "nodearray.h"
 #include "v_object.h"
