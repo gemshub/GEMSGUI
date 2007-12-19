@@ -430,7 +430,7 @@ bool TGEM2MT::CalcBoxModel( char mode )
        if( iRet )
         Error("GEM2MT Flux-box model", "Cancel by user");
 #endif
-  INTEG( 1e-4, /*mtp->cdv,*/ mtp->dTau, mtp->Tau[START_], mtp->Tau[STOP_] );
+  INTEG( 1e-3, /*mtp->cdv,*/ mtp->dTau, mtp->Tau[START_], mtp->Tau[STOP_] );
 
 #ifndef IPMGEMPLUGIN
     pVisor->CloseMessage();
@@ -470,7 +470,8 @@ const double FAC3 = .9;
 const double FAC4 = .8;
 const double SAFE1 = .65;
 const double SAFE2 = .94;
-const double MAXSTEP = 1.7;
+// const double MAXSTEP = 1.7;
+const double MAXSTEP = 3.3;
 //const int MAXINTEGEXPR = 200;
 
 //double *x;
