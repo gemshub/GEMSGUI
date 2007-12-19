@@ -1,4 +1,4 @@
-; gems220rc2-w32-install.nsi
+; gems221rc3-w32-install.nsi
 ; requires NullSoft NSIS v.1.98 or later to be installed on your PC!
 ;
 ; This script will install GEM-Selektor program package 
@@ -7,13 +7,13 @@
 ; The name of the installer
 Name "GEMS2-PSI"
 Caption "GEM-Selektor Package"
-BrandingText "(C) 2000-2007, GEMS-PSI Team"
-Icon "C:\GEMS220inst\program\img\gems2.ico"
+BrandingText "(C) 2000,2007, GEMS-PSI Team"
+Icon "C:\GEMS221inst\program\img\gems2.ico"
 WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems220rc2-w32-install.exe"
+OutFile "gems221rc3-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS2
@@ -22,8 +22,8 @@ InstallDir $PROGRAMFILES\GEMS2
 InstallDirRegKey HKLM SOFTWARE\GEMS2 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 2.2.0-PSI rc2 $\nLICENSE and DISCLAIMER"
-LicenseData "C:\GEMS220inst\program\doc\txt\TermsOfUse.txt"
+LicenseText "Version to be installed: 2.2.1-PSI rc3 $\nLICENSE and DISCLAIMER"
+LicenseData "C:\GEMS221inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory
 ComponentText "The GEM-Selektor v.2.2-PSI package is about to be installed on your PC. (De)select optional components that you want to install, and hit 'Next' to continue."
@@ -35,54 +35,54 @@ Section "GEMS2 (required)"
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   ; Put file there
-  File "C:\GEMS220inst\readme1.txt"
-  File "C:\GEMS220inst\rungems2.bat"
+  File "C:\GEMS221inst\readme1.txt"
+  File "C:\GEMS221inst\rungems2.bat"
   CreateDirectory "$INSTDIR\program"
   SetOutPath $INSTDIR\program
   Delete "$INSTDIR\program\qt*.dll"
  ; Put file there
-    File "C:\GEMS220inst\program\gems2.exe"
-    File "C:\GEMS220inst\program\gems2.ico"
+    File "C:\GEMS221inst\program\gems2.exe"
+    File "C:\GEMS221inst\program\gems2.ico"
  ; Set the right version of qt*.dll below
- ;    File "C:\GEMS220inst\program\qtmt336.dll"
-    File "C:\GEMS220inst\program\cc3260mt.dll"
-    File "C:\GEMS220inst\program\stlpmt45.dll" 
- ;   File "C:\GEMS220inst\program\imm32.dll"
-    File "C:\GEMS220inst\program\readme.txt"
+ ;    File "C:\GEMS221inst\program\qtmt336.dll"
+    File "C:\GEMS221inst\program\cc3260mt.dll"
+    File "C:\GEMS221inst\program\stlpmt45.dll" 
+ ;   File "C:\GEMS221inst\program\imm32.dll"
+    File "C:\GEMS221inst\program\readme.txt"
   CreateDirectory "$INSTDIR\program\data"
   SetOutPath $INSTDIR\program\data
-    File "C:\GEMS220inst\program\data\units.ini"
-    File "C:\GEMS220inst\program\data\vis_cn.ini"
-    File "C:\GEMS220inst\program\data\vis_od.ini"
-    File "C:\GEMS220inst\program\data\viz_cndoc.txt"
+    File "C:\GEMS221inst\program\data\units.ini"
+    File "C:\GEMS221inst\program\data\vis_cn.ini"
+    File "C:\GEMS221inst\program\data\vis_od.ini"
+    File "C:\GEMS221inst\program\data\viz_cndoc.txt"
   CreateDirectory "$INSTDIR\program\visor.data"
   SetOutPath "$INSTDIR\program\visor.data"
-    File "C:\GEMS220inst\program\visor.data\visor.dat"
-    File "C:\GEMS220inst\program\visor.data\visobj.dat"
+    File "C:\GEMS221inst\program\visor.data\visor.dat"
+    File "C:\GEMS221inst\program\visor.data\visobj.dat"
   CreateDirectory "$INSTDIR\program\img"
   SetOutPath $INSTDIR\program\img
    Delete "$INSTDIR\program\img\*.*"
-    File "C:\GEMS220inst\program\img\*.*"
+    File "C:\GEMS221inst\program\img\*.*"
   CreateDirectory "$INSTDIR\program\DB.default"
   SetOutPath "$INSTDIR\program\DB.default"
    Delete "$INSTDIR\program\DB.default\*.*"
-    File "C:\GEMS220inst\program\DB.default\*.ndx"
-    File "C:\GEMS220inst\program\DB.default\*.pdb"
+    File "C:\GEMS221inst\program\DB.default\*.ndx"
+    File "C:\GEMS221inst\program\DB.default\*.pdb"
   CreateDirectory "$INSTDIR\program\doc"
   CreateDirectory "$INSTDIR\program\doc\html"
   CreateDirectory "$INSTDIR\program\doc\pdf"
   CreateDirectory "$INSTDIR\program\doc\txt"
   SetOutPath $INSTDIR\program\doc\txt
    Delete "$INSTDIR\program\doc\txt\*.*" 
-    File "C:\GEMS220inst\program\doc\txt\*.txt"
+    File "C:\GEMS221inst\program\doc\txt\*.txt"
   SetOutPath $INSTDIR\program\doc\html
    Delete "$INSTDIR\program\doc\html\*.*"
-    File "C:\GEMS220inst\program\doc\html\*.html"
-    File "C:\GEMS220inst\program\doc\html\*.png"
-    File "C:\GEMS220inst\program\doc\html\prefDialog.jpg"
+    File "C:\GEMS221inst\program\doc\html\*.html"
+    File "C:\GEMS221inst\program\doc\html\*.png"
+    File "C:\GEMS221inst\program\doc\html\prefDialog.jpg"
   SetOutPath $INSTDIR\program\doc\pdf
    Delete "$INSTDIR\program\doc\pdf\*.*"
-    File "C:\GEMS220inst\program\doc\pdf\*.pdf"
+    File "C:\GEMS221inst\program\doc\pdf\*.pdf"
   SetOutPath $INSTDIR
   CreateDirectory "$INSTDIR\projects"
   ; Write the installation path into the registry
@@ -109,21 +109,21 @@ Section "Test Modelling Projects"
   SetOutPath $INSTDIR\projects
   ; Put files here 
 ifFileExists "$INSTDIR\projects\*.conf" ConfSkip 0
-    File "C:\GEMS220inst\projects\*.conf"
+    File "C:\GEMS221inst\projects\*.conf"
   ; Will only be copied during the first installation!
 ConfSkip:
   CreateDirectory "$INSTDIR\projects\TryNPTDB"
   SetOutPath $INSTDIR\projects\TryNPTDB
-    File "C:\GEMS220inst\projects\TryNPTDB\*.pdb"
-    File "C:\GEMS220inst\projects\TryNPTDB\*.ndx"
+    File "C:\GEMS221inst\projects\TryNPTDB\*.pdb"
+    File "C:\GEMS221inst\projects\TryNPTDB\*.ndx"
 ;  CreateDirectory "$INSTDIR\projects\TS-Case1"
 ;  SetOutPath $INSTDIR\projects\TS-Case1
-;    File "C:\GEMS220inst\projects\TS-Case1\*.pdb"
-;    File "C:\GEMS220inst\projects\TS-Case1\*.ndx"
+;    File "C:\GEMS221inst\projects\TS-Case1\*.pdb"
+;    File "C:\GEMS221inst\projects\TS-Case1\*.ndx"
 ;  CreateDirectory "$INSTDIR\projects\TS-Case2"
 ;  SetOutPath $INSTDIR\projects\TS-Case2
-;    File "C:\GEMS220inst\projects\TS-Case2\*.pdb"
-;    File "C:\GEMS220inst\projects\TS-Case2\*.ndx"
+;    File "C:\GEMS221inst\projects\TS-Case2\*.pdb"
+;    File "C:\GEMS221inst\projects\TS-Case2\*.ndx"
 ; More test projects to come here!  
 MessageBox MB_YESNO "Please, click YES to check if GEMS can start Ok and refresh its configuration files. This is especially recommended if you install GEMS in this directory for the first time." IDNO ExecSkipped 
   Exec '"$INSTDIR\program\gems2.exe" -d -s "$INSTDIR\program" -u "$INSTDIR"'
