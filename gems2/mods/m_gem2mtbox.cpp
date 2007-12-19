@@ -281,13 +281,14 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
   mtp->dTau = step; 
   mtp->cTau = tcur;
   
-  if( mtp->PvMO != S_OFF )
+/*  if( mtp->PvMO != S_OFF )
  {
    // Preparations: opening output files for monitoring 1D profiles
     diffile = fopen( "ICdif-log.dat", "w+" );   //  Element amount diffs for t and t-1
     ErrorIf( !diffile, "GEM2MT Flux-box model",
     "Error writing monitoring file (ICdif-log.dat)");
  }
+*/
  clock_t t_start, t_end, t_out, t_out2;
  clock_t outp_time = (clock_t)0;
  t_start = clock();
@@ -318,7 +319,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
  
 
   // Output of the results if step accepted
-   if( mtp->PvMO != S_OFF )
+   if( mtp->PvMO != S_OFF && diffile )
    {
     t_out = clock();
     na->logDiffsIC( diffile, mtp->ct, mtp->cTau/(365*86400), mtp->nC, 10 );

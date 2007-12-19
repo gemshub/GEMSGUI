@@ -330,7 +330,7 @@ NeedGEM = true;  // Mode = NEED_GEM_AIA;     // debugging
                       break;
                case  TERROR_GEM:  err_msg +=  "Terminal error in GEMIPM2 module";
           }
-          if( mtp->PvMO != S_OFF )
+          if( mtp->PvMO != S_OFF && diffile )
           {  fprintf( diffile, "\nError reported from GEMIPM2 module\n%s\n",
                     err_msg.c_str() );
           }
