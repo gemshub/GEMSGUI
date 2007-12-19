@@ -265,7 +265,7 @@ bool
 TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
 {
   int q, i, f, k;
-//  double Mqfi = 0., Bqi = 0., Wqi = 0.;
+  double MGPfactor = 0.;
   bool iRet = true;
   FILE* diffile = NULL;
 
@@ -297,6 +297,8 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
 	 for(i =0; i< mtp->Nf; i++ )
 	 {
 		node1_bIC(q, i) += dMb( q, i) / nodeCH_ICmm( i ) * mtp->dTau;
+		if( node1_bIC(q, i) <= mtp->cez )   
+			node1_bIC(q, i) = mtp->cez;    // preventing negative amounts of ICs
 	 }
  }  
  
@@ -346,17 +348,18 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
      for( q=0; q <mtp->nC; q++ )
 	   for(f=0; f<mtp->nPG; f++ )
 	     for( k=0; k<mtp->FIf; k++) 
-	   {  
-	      if( fabs(mtp->PGT[k*mtp->nPG+f]) > 0.0 )   // Quantities of phases in MPG [FIf][nPG])
-	      {
-	    	 if( k < na->pCSD()->nPSb )
+	     {  
+	    	MGPfactor = mtp->PGT[k*mtp->nPG+f];
+	        if( fabs(MGPfactor) > 0.0 )   // For now, moles only!!!
+	        {  	  
+	    	  if( k < na->pCSD()->nPSb )
 	    	     for(i=0; i<mtp->Nf; i++ )
-			        y(q,f,i) += node1_bPS( q, k, i );
-	    	 else
+			        y(q,f,i) += node1_bPS( q, k, i ) * MGPfactor;
+	    	  else
 	    		 for(i=0; i<mtp->Nf; i++ )
-	 			    y(q,f,i) += node1_bPH( q, k, i );
-	      } 
-	   }
+	 			    y(q,f,i) += node1_bPH( q, k, i ) * MGPfactor;
+	        } 
+	     }
   //  Calculation of MPG IC distribution coefficients   
      for( q=0; q <mtp->nC; q++ )
 	   for(f=0; f<mtp->nPG; f++ )
