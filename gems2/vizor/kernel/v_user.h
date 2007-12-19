@@ -50,14 +50,14 @@ typedef unsigned int uint;
 
 #endif //  __noborl
 
-
-#ifndef IPMGEMPLUGIN
-
 inline
 int ROUND(double x )
 {
     return int((x)+.5);
 }
+
+#ifndef IPMGEMPLUGIN
+
 
 inline
 bool

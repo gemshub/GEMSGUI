@@ -327,6 +327,8 @@ protected:
     double (*tt)[9];
 
    
+//    bool CalcBoxModel( char mode ); // calculate Mobile Phase-Group Flows
+    int LookUpXMGP( const char* MGPid );
     // calculate 1-step from system of equation 
     void Solut( double *m, double *dm, double t );
     // Calculate new reservuir states for tcur = x
@@ -356,6 +358,7 @@ public:
 
     TGEM2MT();
     ~TGEM2MT();
+    void RecCalc( );
 
     const char* GetName() const
     {

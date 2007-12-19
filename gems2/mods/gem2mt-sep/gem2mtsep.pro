@@ -83,6 +83,7 @@ OBJECTS_DIR       = obj
                     $$MODS_CPP/s_fgl.cpp \
                     $$MODS_CPP/s_fgl2.cpp \
                     $$MODS_CPP/m_gem2mtt.cpp \
+                    $$MODS_CPP/m_gem2mtbox.cpp \
                     $$SUBMOD_CPP/nodearray.cpp \
                     $$SUBMOD_CPP/node.cpp \
                     $$SUBMOD_CPP/node_format.cpp \
@@ -95,5 +96,6 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_CPP/ipm_main.cpp \
                     $$SUBMOD_CPP/ipm_simplex.cpp \
 		    $$SUBMOD_CPP/io_arrays.cpp \
+                    ms_gem2mt.cpp \
                     main.cpp \
 		    $$GEMIPM_CPP/ms_param.cpp

@@ -126,8 +126,10 @@ gems2/mods/filters_data.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gem2mt-sep/CalcColumn.BAT -text
 gems2/mods/gem2mt-sep/Makefile -text
 gems2/mods/gem2mt-sep/Makefile.MinGW -text
+gems2/mods/gem2mt-sep/Makefile.gcc -text
 gems2/mods/gem2mt-sep/gem2mtsep.pro -text
 gems2/mods/gem2mt-sep/main.cpp -text
+gems2/mods/gem2mt-sep/ms_gem2mt.cpp -text
 gems2/mods/gem2mt-sep/ms_gem2mt.h -text
 gems2/mods/gem2mt-sep/test/CalcColumn-dat.lst -text
 gems2/mods/gem2mt-sep/test/CalcColumn-dbr-0-0000.dat -text

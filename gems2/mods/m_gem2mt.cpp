@@ -1044,6 +1044,44 @@ TGEM2MT::CmHelp()
     pVisor->OpenHelp( GEMS_MT_HTML );
 }
 
+void TGEM2MT::RecordPrint( const char* key )
+{
+    int res = vfQuestion3(window(), "Question",
+                    "Will you produce input files for standalone TGEM2MT (Yes) or use print script (No)?",
+		       "Yes", "No", "Cancel");
+	if( res == VF3_3 )
+	    return;
+
+	if( res == VF3_1 )
+	{
+		gstring filename;
+		if( vfChooseFileSave(window(), filename,
+				   "Please, enter the TGEM2MT work structure file name", "*.mtc" ) )
+		{
+		    if( !access(filename.c_str(), 0 ) ) //file exists
+		        if( !vfQuestion( window(), filename.c_str(),
+		        		"This file exists! Overwrite?") )
+                   return;
+            fstream ff( filename.c_str(), ios::out );
+	        ErrorIf( !ff.good() , filename.c_str(), "Fileopen error");
+	        to_text_file( ff, true );
+
+		}
+    na = new TNodeArray( mtp->nC, TProfil::pm->pmp/*multi->GetPM()*/ );
+    mtp->gStat = GS_GOING;
+    mt_reset();
+    Bn_Calc();
+    mtp->gStat = GS_DONE;
+    mtp->iStat = AS_READY;
+    outMulti();
+    mtp->iStat = AS_DONE;
+    delete na;
+    na = 0;
+	}
+	else
+	     TCModule::RecordPrint( key );
+}
+
 // insert changes in Project to GEM2MT
 void TGEM2MT::InsertChanges( TIArray<CompItem>& aIComp,
       TIArray<CompItem>& aPhase,  TIArray<CompItem>&aDComp )
