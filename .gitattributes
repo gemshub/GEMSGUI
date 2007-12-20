@@ -1,6 +1,7 @@
 * text=auto !eol
 gems2/.cvsignore svn_keywords=Author+Date+Id+Revision
 gems2/Makefile svn_keywords=Author+Date+Id+Revision
+gems2/Makefile-noqt.bcc -text
 gems2/Makefile.MinGW -text
 gems2/Makefile.gcc -text
 gems2/Makefile.lin -text
