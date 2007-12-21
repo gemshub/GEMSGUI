@@ -1,6 +1,6 @@
 %define	name	gems
-%define	version	2.2.0
-%define	release	rc2
+%define	version	2.2.1
+%define	release	rc3
 %define install_dir /usr
 %define shared_dir %{install_dir}/share
 %define shared_src_dir shared
@@ -18,7 +18,7 @@ Group:		Applications/Engineering
 Source0: 	%{name}-%{version}.tar.bz2
 #BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 #Target: i586-gnu-linux
-Url:		http://les.web.psi.ch/Software/GEMS-PSI/
+Url:		http://gems.web.psi.ch/
 #BuildRequires: 	libqt3-devel
 #Requires:	%{libname} = %{version}-%{release}
 

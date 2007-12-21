@@ -140,7 +140,7 @@
 
 # PMc: Parameters of non-ideal mixing models for multicomponent phases 
 <PMc>
-0 0 1.70679e-38 0 4.484155e-44 0 6.866362e-44 0 
+0 0 1.948747e-38 0 4.484155e-44 0 9.10844e-44 0 
 
 # LsMdc: Number of parameters per component of the phase
 <LsMdc>

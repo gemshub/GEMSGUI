@@ -470,8 +470,7 @@ const double FAC3 = .9;
 const double FAC4 = .8;
 const double SAFE1 = .65;
 const double SAFE2 = .94;
-// const double MAXSTEP = 1.7;
-const double MAXSTEP = 3.3;
+const double MAXSTEP = 1.7;
 //const int MAXINTEGEXPR = 200;
 
 //double *x;
