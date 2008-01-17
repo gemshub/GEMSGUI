@@ -1031,6 +1031,8 @@ vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key
     apdlg.get_akey( a_key );
     apdlg.get_gkey( g_key );
 
+if( acode == 'S' )
+	acode = 'U';     // Blocking unavailable automatic SIT mode 
     return true;
 }
 

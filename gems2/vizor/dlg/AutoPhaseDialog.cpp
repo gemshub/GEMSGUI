@@ -24,8 +24,17 @@ const char * dfAqKey3 =  "a   AQELIA  aq_gen          aq  EDH_K           ";
 const char * dfAqKey2 =  "a   AQELIA  aq_gen          aq  DH_K            ";
 const char * dfAqKey1 =  "a   AQELIA  aq_gen          aq  DH_LL           ";
 const char * dfAqKeyS =  "a   AQELSI  aq_gen          aq  SIT             ";
+const char * dfAqKeyU =  "a   AQELSI  aq_gen          aq  EUNIQUAC        ";
 const char * dfGasKey =  "g   GASMXID gas_gen         gm  Ideal           ";
 const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  GC_EoS          ";
+
+const double dfImaxD = 0.5;
+const double dfImaxH = 1.5;
+const double dfImax3 = 1.0;
+const double dfImax2 = 0.3; 
+const double dfImax1 = 0.01;
+const double dfImaxS = 3.0;
+const double dfImaxU = 9.9;
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -51,8 +60,7 @@ AutoPhaseDialog::AutoPhaseDialog (
     switch( acode )
     {
       case '-': aselNo->setChecked( true ); break;
-      case 'U': aselU->setChecked( true );
-                 break;
+      case 'U': aselU->setChecked( true );  break;
       case 'H': aselH->setChecked( true ); break;
       case '3': asel3->setChecked( true ); break;
       case '2': asel2->setChecked( true ); break;
@@ -101,6 +109,7 @@ void
 AutoPhaseDialog::set_apar ( float par[4] )
 {
     QString str;
+    double I_max;
 
     apEdit0->setValidator( new QDoubleValidator( apEdit0 ) );
     apEdit0->setText( str.setNum( (double)par[0] ) );
@@ -111,8 +120,22 @@ AutoPhaseDialog::set_apar ( float par[4] )
     apEdit2->setValidator( new QDoubleValidator( apEdit2 ) );
     apEdit2->setText( str.setNum( (double)par[2] ) );
 
+    switch( aqu_code )
+    {
+       case '-':
+       default:  I_max = 0.; break;
+       case 'Q':
+       case 'U': I_max =  dfImaxU; break; 
+       case 'S': I_max =  dfImaxS; break;
+       case 'H': I_max =  dfImaxH; break;
+       case '3': I_max =  dfImax3; break;
+       case '2': I_max =  dfImax2; break; 
+       case '1': I_max =  dfImax1; break;
+       case 'D': I_max =  dfImaxD; break;
+    }
     apEdit3->setValidator( new QDoubleValidator( apEdit3 ) );
-    apEdit3->setText( str.setNum( (double)par[3] ) );
+    apEdit3->setText( str.setNum( I_max ) );
+//   apEdit3->setText( str.setNum( (double)par[3] ) );
 }
 
 char
@@ -130,8 +153,8 @@ AutoPhaseDialog::get_acode()
                   aqu_code ='2';
                else if( asel1->isChecked())
                      aqu_code = '1';
-//               else if( aselS->isChecked())
-//                     aqu_code = 'S';
+                 else if( aselS->isChecked())
+                       aqu_code = 'S';
                    else if( aselNo->isChecked())
                          aqu_code = '-';
   return aqu_code;
@@ -149,8 +172,10 @@ AutoPhaseDialog::set_akey( gstring& a_key )
   aqu_key = a_key;
 /*  if( aselU->isChecked())
       aqu_key = "a:*:*:*:*:";
-  else*/  if( aselD->isChecked())
-        aqu_key = dfAqKeyD;
+  else*/  
+  if( aselD->isChecked())
+  {    aqu_key = dfAqKeyD;
+  }    
      else if( aselH->isChecked())
            aqu_key = dfAqKeyH;
         else if( asel3->isChecked())
@@ -249,10 +274,12 @@ AutoPhaseDialog::CmCheck()
   set_akey( a_key );
   get_acode();
   get_apar( par );
+  set_apar( par );
 
   set_gkey( g_key );
   get_gcode();
   get_gpar( par );
+// set_gpar( par );
 }
 
 void
