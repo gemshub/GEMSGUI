@@ -47,6 +47,8 @@ void TMulti::ods_link( int )
     aObj[ o_wi_fdim ].SetPtr( &pm.FI );  /*i 3*/
     aObj[ o_wo_fdim ].SetPtr( &pm.FI1 ); /*i 3*/
     aObj[ o_wo_it ].SetPtr( &pm.IT );
+aObj[ o_wo_it_efd ].SetPtr( &pm.ITF ); /* pm.ITF */
+aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
     aObj[ o_wi_mode ].SetPtr( &pm.E );   /*i 4*/
     aObj[ o_wo_ipar ].SetPtr( &pm.Ec );  /*i 17*/
     aObj[ o_wio_tc ].SetPtr( &pm.TC );   /*d 2*/

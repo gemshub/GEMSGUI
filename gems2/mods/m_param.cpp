@@ -625,38 +625,50 @@ pmp->t_start = clock();     // Added 06.09.2007 by DK to check pure runtime
 pmp->t_end = pmp->t_start;
 pmp->t_elap_sec = 0.0;
    multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
+pmp->ITF = pmp->ITG = 0;    
    // multi->CompG0Load(); //16/02/2007
-
-   if( multi->AutoInitialApprox() == false )
+FORCED_AIA:
+//   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
+  
+   if( multi->AutoInitialApprox( ) == false )
    {
-	   multi->MultiCalcIterations();
+	   multi->MultiCalcIterations( -1 );
    }
-
-NumPrecLoops = pmp->W1+pmp->K2-2; 
+   if( pmp->MK == 2 )
+   {
+	   pmp->pNP = 0; 
+	   pmp->MK = 0;
+	   goto FORCED_AIA;  // Trying again with AIA set after bad PIA 
+   }
+   
+NumPrecLoops = pmp->W1+pmp->K2-1; 
 NumIterFIA = pmp->ITF;
 NumIterIPM = pmp->ITG;
 
-if( pa.p.PRD < 0 && pa.p.PRD > -50 && !pmp->pNP ) // max 50 loops
+if( pa.p.PRD < 0 && pa.p.PRD > -50 /* && !pmp->pNP */ ) // max 50 loops
 {  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
-          int pp, TotIT = pmp->IT, TotITG = pmp->ITG, TotITF = pmp->ITF, TotW1 = pmp->W1+pmp->K2-2;
+          int pp, pNPo = pmp->pNP,  TotIT = pmp->IT, // TotITG = pmp->ITG, TotITF = pmp->ITF,
+                   TotW1 = pmp->W1+pmp->K2-1;
           pmp->pNP = 1;
           for( pp=0; pp < abs(pa.p.PRD); pp++ )
           {
-            pmp->IT = 0; pmp->ITG = 0; pmp->ITF = 0;
-            if( multi->AutoInitialApprox() == false )
+            pmp->IT = 0;  // This may be sensitive   // pmp->ITG = 0; pmp->ITF = 0;
+            if( multi->AutoInitialApprox( ) == false )
             {
 //                pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
-                multi->MultiCalcIterations();
+                multi->MultiCalcIterations( pp );
             }
-            TotIT += pmp->IT; TotW1 += pmp->W1+pmp->K2-2; 
-            TotITF += pmp->ITF; TotITG += pmp->ITG;
+            TotIT += pmp->IT; 
+            TotW1 += pmp->W1+pmp->K2-2; 
+//           TotITF += pmp->ITF; TotITG += pmp->ITG;
           }
-          pmp->pNP = 0;
-          pmp->IT = (short)TotIT;
-          pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
+          if( !pNPo )
+            pmp->pNP = 0;
+            pmp->IT = (short)TotIT;
+//          pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
           NumPrecLoops = TotW1; 
-          NumIterFIA = TotITF;
-          NumIterIPM = TotITG;
+          NumIterFIA = pmp->ITF;  //   TotITF;
+          NumIterIPM = pmp->ITG;  //   TotITG;
 }       
        
 pmp->t_end = clock();

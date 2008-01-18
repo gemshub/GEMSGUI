@@ -710,28 +710,41 @@ pmp->ITF = 0; pmp->ITG = 0;
      if( prg )
 	pVisorImp->OpenProgress();
 #endif
+	multi->MultiCalcInit( keyp.c_str() );
+FORCED_AIA:
+	pmp->ITF = 0; pmp->ITG = 0;
+//	multi->MultiCalcInit( keyp.c_str() );
+    if( multi->AutoInitialApprox( ) == false )
+    {
+    	multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
+    }
+    if( pmp->MK == 2 )
+    {
+        pmp->pNP = 0; 
+        pmp->MK = 0;
+//       pmp->IT = 0; 
+        goto FORCED_AIA;  // Trying again with AIA set after bad PIA 
+    }
+        //    else //Show results   //if( wn[W_EQCALC].status )
+    // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
 
-    multi->MultiCalcInit( keyp.c_str() );
-    if( multi->AutoInitialApprox() == false )
-        multi->MultiCalcIterations();
-    else //Show results   //if( wn[W_EQCALC].status )
-        aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
-
-    if( pa.p.PRD < 0 && pa.p.PRD > -50 && !pmp->pNP ) // max 50 loops
+    if( pa.p.PRD < 0 && pa.p.PRD > -50 /* && !pmp->pNP */ ) // max 50 loops
     {  // Test refinement loops for highly non-ideal systems  KD 18.02.2005
-       int pp, TotIT = pmp->IT, TotITG = pmp->ITG, TotITF = pmp->ITF;
+       int pNPo = pmp->pNP; 
+       int pp, TotIT = pmp->IT; // TotITG = pmp->ITG, TotITF = pmp->ITF;
        pmp->pNP = 1;
        for( pp=0; pp < abs(pa.p.PRD); pp++ )
        {
          pmp->IT = 0;
-         if( multi->AutoInitialApprox() == false )
+         if( multi->AutoInitialApprox( ) == false )
          {
-             pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
-             multi->MultiCalcIterations();
+//             pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
+             multi->MultiCalcIterations( pp );
          }
-         TotIT += pmp->IT; TotITF = (int)pmp->ITF; TotITG = (int)pmp->ITG;
+         TotIT += pmp->IT; // TotITF = (int)pmp->ITF; TotITG = (int)pmp->ITG;
        }
-       pmp->pNP = 0;
+       if( !pNPo )
+          pmp->pNP = 0;
        pmp->IT = (short)TotIT;
 //       pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
     }

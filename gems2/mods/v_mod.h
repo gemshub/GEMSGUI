@@ -178,8 +178,8 @@ o_wd_sm3,  //  new
 o_wi_dcc3, // new
     o_wi_phc,  o_wi_scm,  o_wi_satt,  o_wi_dccw,
     o_w_r, o_w_r1,
-o_wd_sitxcat, o_wd_sitxan, o_wd_site,
-    o_w_sbh, o_w_tprn,
+o_wo_it_efd,  o_wo_it_ipm,    //   o_wd_sitxcat, o_wd_sitxan,
+    o_wd_site, o_w_sbh, o_w_tprn,
     // GammaCalc() - adjustable DOD for calculation of activity coefficients
     o_neqtxt,  o_nsmod,  o_ntc,  o_ntk,  o_np ,
     o_nis, o_ni,  o_njs,  o_nnext, o_nncp ,

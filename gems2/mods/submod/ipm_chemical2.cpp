@@ -753,7 +753,7 @@ GEMU_CALC:
             if( fabs( PsiA ) > 1.1 )  // truncated 0-plane potential
             {
 // cout << "EDL (TLM) PsiA = " << PsiA << " truncated to +- 1.1 V" <<
-//      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
+//      "  IT= " << k << " k= " << k << " ist= " << ist << endl;
                 PsiA = PsiA<0? -1.1: 1.1;
             }
             pmp->XpsiA[k][ist] = PsiA;
