@@ -792,14 +792,14 @@ if( pmp->pNP && !pmp->K2 )
               pmp->Falp[k] += Fj; // incrementing Karpov stability criterion (only positive)
        }
 	   else {                  // DC is zeroed off  
-		   if( Fj > 0.)
-	          pmp->Falp[k] += Fj;    // we are interested only in a potentially stable DC with Fj > 0 ?
+		   if( Fj > pa->p.DF*100. )
+	          pmp->Falp[k] += Fj;    // we are interested only in a potentially stable DC with Fj >> DF ?
 	   }       
        EMU[j] = Fj;
    }
    else {  // The whole phase is absent
-	   if( Fj > 0.)
-          pmp->Falp[k] += Fj;    // we are interested only in a potentially stable DC with Fj > 0 ?  
+	   if( Fj > pa->p.DF*100. )
+          pmp->Falp[k] += Fj;    // we are interested only in a potentially stable DC with Fj >> DF ?  
        EMU[j] = Fj;              // To check values (remove this line later on) 
    }
 }             

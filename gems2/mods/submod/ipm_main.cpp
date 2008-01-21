@@ -211,7 +211,7 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " AI
         return;  // solved
     }
 
-//========= call Selekt2 algorithm =======
+//========= calling Selekt2 algorithm =======
    int ps_rcode, k_miss, k_unst;
 
 if( rLoop < 0 )   
