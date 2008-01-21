@@ -230,8 +230,9 @@ else
                 break;
       case 0:   // some phases were inserted and a new IPM loop is needed
 #ifdef GEMITERTRACE
-f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " K2=" << pmp->K2 << " ! (new Selekt loop)" << endl;
-#endif
+f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " K2=" << pmp->K2 << 
+      " k_miss=" << k_miss << " k_unst=" << k_unst <<  " ! (new Selekt loop)" << endl;
+#endif 
     	        goto mEFD;
       default:
       case -1:  // the IPM solution is inconsistent after 3 Selekt2() loops
@@ -239,7 +240,8 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " K2=" << pmp->K2 << " ! 
     	  {   // bad PIA mode - there are inconsistent phases after 3 attempts. Attempting AIA mode
         	  pmp->MK = 2;   // Set to check in calcMulti() later on
 #ifdef GEMITERTRACE
-f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! PIA->AIA on E08IPM (Selekt)" << endl;
+f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << 
+      " k_miss=" << k_miss << " k_unst=" << k_unst << " ! PIA->AIA on E08IPM (Selekt)" << endl;
 #endif
         	  goto FORCED_AIA;                                 
     	  }
@@ -320,7 +322,7 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! 
    }
 #ifdef GEMITERTRACE
 f_log << "ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " MBPRL=" 
-   << pmp->W1-1 << " rLoop=" << rLoop; 
+   << pmp->W1 << " rLoop=" << rLoop; 
 if( pmp->pNP )
 	f_log << " Ok after PIA" << endl;
 else 
@@ -1192,9 +1194,9 @@ double TMulti::calcSfactor()
 //  In this case, the index of most problematic phase is passed through kf or
 //  ku parameter (parameter value -1 means that no problematic phases were found)
 //
-int TMulti::PhaseSelect( int &kf, int &ku, int rLoop )
+int TMulti::PhaseSelect( int &kfr, int &kur, int rLoop )
 {
-    short k, j, jb;
+    short k, j, jb;  int kf, ku; 
     double F1, F2, *F0, sfactor;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
@@ -1222,8 +1224,9 @@ int TMulti::PhaseSelect( int &kf, int &ku, int rLoop )
             ku=k;
         }
     }
-
-    if( kf < 0 && ku < 0 )
+kfr = kf;
+kur = ku; 
+    if( kfr < 0 && kur < 0 )
     {    // No phases to insert/exclude or no Fa distortions found
           // Successful end of iterations of SELEKT2()
         pmp->MK=1;
