@@ -34,14 +34,21 @@
 void TPrintArrays::writeArray( const char *name, char* arr,
                               int size, int arr_siz )
 {
- 
+ bool isComment = false;
+	
  if( name ) 
      ff << endl << "<" << name << ">" << endl;
- else ff << endl << "#  ";
+ else 
+ { ff << endl << "#  ";
+   isComment = true;
+ }
  for( int ii=0, jj=0; ii<size; ii++, jj++  )
  {
-    if(jj == 40)
-    { jj=0;  ff << endl;}
+    if(jj == 40 )
+    { jj=0;  ff << endl;
+      if(isComment)
+    	  ff << "#  ";  
+    }
     gstring str = gstring( arr +(ii*arr_siz), 0, arr_siz );
     str.strip();
     ff  << "\'" << str.c_str() << "\'" << " ";

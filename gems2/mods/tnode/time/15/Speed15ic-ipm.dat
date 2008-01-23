@@ -38,19 +38,19 @@
 ## (3) Controls of the numerical behavior of the GEM IPM algorithm
 #      - Need to be changed only in rare special cases
 # DB - Minimum amount of independent component in bulk composition (except charge Zz), moles
-<pa_DB>       1e-017
+<pa_DB>        1e-17
 
 # DHB: Maximum allowed mass balance residual (moles) for major independent components
-<pa_DHB>      1e-008
+<pa_DHB>       1e-08
 
 # EPS: Precision criterion of the simplex() procedure for automatic initial approximation
-<pa_EPS>      1e-009
+<pa_EPS>       1e-09
 
 # DK: IPM convergence threshold for the Dikin criterion (1e-6 < DK < 1e-4)
 <pa_DK>       0.0001
 
 # DB: Cutoff (threshold) for the amount of phase for phase elimination 
-<pa_DS>       1e-012
+<pa_DS>        1e-12
 
 # DF: Threshold for Karpov's criterion (Fa > DF) for a lost stable phase to be inserted
 <pa_DF>         0.01
@@ -68,7 +68,7 @@
 
 # PRD: Positive: control of calling IPM_gamma() on iterations of GEM EFD and IPM (default 3)
 #      Negative: the number of additional EFD-IPM loops to improve the GEM final solution
-<pa_PRD>          -1
+<pa_PRD>           3
 
 # AG,DGC: Smoothing parameters controlling convergence in highly non-ideal systems 
 <pa_AG>          0.7
@@ -82,32 +82,32 @@
 
 # _Min: Cutoffs for elimination of: Xw water solvent; Sc - solid sorbent; Dc - solution or surface species; 
 # Ph - non-electrolyte solution phases
-<pa_XwMin>    1e-009
-<pa_ScMin>    1e-007
-<pa_DcMin>    1e-020
-<pa_PhMin>    1e-009
+<pa_XwMin>     1e-09
+<pa_ScMin>     1e-07
+<pa_DcMin>     1e-20
+<pa_PhMin>     1e-09
 
 # ICmin: Minimal ionic strength, below which the aqueous activity coefficients are set to 1
-<pa_ICmin>    3e-005
+<pa_ICmin>     3e-05
 
 # PC: Mode of Selekt2() procedure operation
 <pa_PC>            1
 # DFY: Insertion amounts used after the simplex() initial approximation and in Selekt2() algorithm
 # DFYw - water solvent;
-<pa_DFYw>     1e-006
+<pa_DFYw>      1e-06
 # DFYaq - aqueous species;
-<pa_DFYaq>    1e-006
+<pa_DFYaq>     1e-06
 
 # DFYid - ideal solution components;
-<pa_DFYid>    1e-006
+<pa_DFYid>     1e-06
 # DFYr - major solution components;
-<pa_DFYr>     1e-006
+<pa_DFYr>      1e-06
 # DFYh - minor solution components;
-<pa_DFYh>     1e-006
+<pa_DFYh>      1e-06
 # DFYc - single-component phase; 
-<pa_DFYc>     1e-006
+<pa_DFYc>      1e-06
 # Insertion amount of single-component phase (Selekt2() algorithm only)
-<pa_DFYs>     1e-007
+<pa_DFYs>      1e-07
 
 # Parameters for high-accuracy IPM-2 algorithm 
 # DW: Number of the IPM-2 enhancement loops for high-accuracy mass balance (from 0 to 14)
@@ -118,7 +118,7 @@
 # GAS: IPM2 balance accuracy control factor DHBM[i]/b[i]
 <pa_GAS>       0.001
 # DG: Minimal step length in the initial approximation EFD() procedure, 1e-7 
-<pa_DG>       1e-007
+<pa_DG>        1e-15
 # DNS: Standard surface density (nm-2) for calculating activity of surface species
 <pa_DNS>       12.05
 # IEPS: Control parameter of SACT calculation in sorption/surface complexation models
@@ -153,7 +153,7 @@
 ## (5) Some data arrays which are not provided in DATACH and DATABR files
 # B: Full total bulk composition of the initial system (vector b) - see DATACH file for dimension nIC
 <B>
-0.00428462590208231 0.0805497004403213 0.0417983350570942 0.0305525366832498 0.0112547021720737 110.873100881807 0.013464735434373 0.0115026087912702 0.00121885966617127 0.0171107480084272 54.7295179489383 71.2112907472893 0.0305792482533074 0.0166432825786777 0.00544411439344023 0 
+0.00428462590208231 0.0805496999666643 0.0417983352337964 0.0305525366832498 0.0112547021720737 110.873100884525 0.013464735434373 0.0115026087912702 0.00121885968033924 0.0171107480084272 54.7295162831208 71.2112903111295 0.0305792482533074 0.0166432825786777 0.00544411439344023 0 
 
 # Initial data for DCs - see DATACH file for dimensions nDC, nDCs
 # Pparc: Partial pressures (fugacities) of dependent components
