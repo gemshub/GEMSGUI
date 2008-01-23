@@ -39,8 +39,9 @@ TNodeArray* TNodeArray::na;
 //-------------------------------------------------------------------------
 // RunGEM()
 // GEM IPM calculation of equilibrium state for the iNode node
-// from array NodT1. Mode - mode of GEMS calculation
-//
+// from array NodT1. abs(Mode)) - mode of GEMS calculation (NEED_GEM_PIA or NEED_GEM_AIA)
+//    if Mode is negative then the loading of primal solution from the node is forced
+//    (only in PIA mode)
 //  Function returns: NodeStatus code after GEM calculation
 //   ( OK_GEM_AIA; OK_GEM_PIA; error codes )
 //
@@ -48,12 +49,17 @@ TNodeArray* TNodeArray::na;
 
 int  TNodeArray::RunGEM( int  iNode, int Mode )
 {
-// Copy data from the iNode node from array NodT1 to work DATABR structure
+
+bool uPrimalSol = false;  
+  if( Mode < 0 || (short)abs(Mode) == NEED_GEM_PIA )
+	  uPrimalSol = true;
+	  
+// Copy data from the iNode node from array NodT1 to the work DATABR structure
    CopyWorkNodeFromArray( iNode, anNodes, NodT1 );
 
 // GEM IPM calculation of equilibrium state in MULTI
-  pCNode()->NodeStatusCH = (short)Mode;
-  int retCode = GEM_run();
+  pCNode()->NodeStatusCH = (short)abs(Mode);
+  int retCode = GEM_run( uPrimalSol );
 
 // Copying data for node iNode back from work DATABR structure into the node array
 //   if( retCode == OK_GEM_AIA ||

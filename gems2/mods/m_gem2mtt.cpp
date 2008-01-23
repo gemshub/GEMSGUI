@@ -266,13 +266,16 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
    DATABRPTR* C1 = na->pNodT1();  // nodes at current time point
    bool* iaN = na->piaNode();     // indicators for IA in the nodes
 
+for(int ii=0; ii<(int)mtp->nC; ii++ )  // Temporary 
+	iaN[ii] = false; 
+   
    start_node = max( start_node, 0 );
    end_node = min( end_node, (int)mtp->nC-1 );
 
    for( int ii = start_node; ii<= end_node; ii++) // node iteration
    {
      mtp->qc = (short)ii;
-//     C1[ii]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
+     C1[ii]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
      NeedGEM = true;
      if( mode == NEED_GEM_PIA )
      {   // smart algorithm
@@ -298,7 +301,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
     	 }
      }
      else Mode = NEED_GEM_AIA;
-NeedGEM = true;  // Mode = NEED_GEM_AIA;     // debugging
+// NeedGEM = true;  // Mode = NEED_GEM_AIA;     // debugging - calculating all nodes with PIA!
      if( NeedGEM )
      {
         RetCode = na->RunGEM( ii, Mode );
@@ -608,8 +611,8 @@ outp_time += ( t_out2 - t_out);
         }
 
         // The analysis of GEM IA modes in nodes - optional
-        NodesSetToAIA = CheckPIAinNodes1D( mode, nStart, nEnd );
-
+//        NodesSetToAIA = CheckPIAinNodes1D( mode, nStart, nEnd );
+         
         //   Here we call a loop on GEM calculations over nodes
         //   parallelization should affect this loop only
         CalcIPM( mode, nStart, nEnd, diffile );

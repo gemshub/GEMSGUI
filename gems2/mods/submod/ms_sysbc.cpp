@@ -413,7 +413,7 @@ void TSyst::make_syst()
     // due to specific surface area and energy
     if( sy.PYOF != S_OFF )
     {
-        double SSA = 0.1, STEN = 0.5;
+        double SSA = 0.0, STEN = 0.1;  // Fixed 22.01.2008 by DK 
         for( k=0; k<mup->Fi; k++ )
         {
             if( sy.Pcl[k] == S_OFF )

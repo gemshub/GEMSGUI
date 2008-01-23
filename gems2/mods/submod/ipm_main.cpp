@@ -34,7 +34,6 @@ using namespace JAMA;
 #include "service.h"
 #include "stepwise.h"
 #endif
-
 #include "node.h"
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

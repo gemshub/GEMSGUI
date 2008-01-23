@@ -281,8 +281,8 @@ void TReadArrays::readArray( const char*, char* arr, int size, int el_size )
  {
    skipSpace();
    ff.get(ch);
-   while( ff.good() && ch != '\'' )
-       ff.get(ch);
+//   while( ff.good() && ch != '\'' )
+//       ff.get(ch);
    ff.getline( buf, el_size+1, '\'');
    strncpy( arr +(ii*el_size), buf, el_size );
  }
