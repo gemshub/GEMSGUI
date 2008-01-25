@@ -4,6 +4,7 @@ gems2/Makefile svn_keywords=Author+Date+Id+Revision
 gems2/Makefile-noqt.bcc -text
 gems2/Makefile.MinGW -text
 gems2/Makefile.gcc -text
+gems2/Makefile.icc -text
 gems2/Makefile.lin -text
 gems2/Makefile.w32 svn_keywords=Author+Date+Id+Revision
 gems2/RUNGEMS.BAT svn_keywords=Author+Date+Id+Revision
@@ -31,6 +32,7 @@ gems2/doc/LM_SVD_objects.txt -text
 gems2/doc/MKPATCH svn_keywords=Author+Date+Id+Revision
 gems2/doc/MakeGEMS-HOWTO svn_keywords=Author+Date+Id+Revision
 gems2/doc/MakeGEMS-HOWTO-2 -text
+gems2/doc/PRODUCE-icc.txt -text
 gems2/doc/PRODUCE-linux.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/PRODUCE-mac.txt svn_keywords=Author+Date+Id+Revision
 gems2/doc/Patch+Diff-HOWTO svn_keywords=Author+Date+Id+Revision
