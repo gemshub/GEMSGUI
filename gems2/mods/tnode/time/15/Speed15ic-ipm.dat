@@ -55,7 +55,7 @@
 # DF: Threshold for Karpov's criterion (Fa > DF) for a lost stable phase to be inserted
 <pa_DF>         0.01
 # DFM: Threshold for Karpov's criterion (Fa < -DFM) for a present unstable phase to be eliminated
-<pa_DFM>         0.1
+<pa_DFM>         0.5
 
 # DP: Maximum allowed number of iterations in the EnterFeasibleDomain() procedure
 <pa_DP>          144

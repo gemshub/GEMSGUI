@@ -266,9 +266,13 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
    DATABRPTR* C1 = na->pNodT1();  // nodes at current time point
    bool* iaN = na->piaNode();     // indicators for IA in the nodes
 
-for(int ii=0; ii<(int)mtp->nC; ii++ )  // Temporary 
-	iaN[ii] = false; 
-   
+   if(mtp->PvSIA == S_OFF)
+     for(int ii=0; ii<(int)mtp->nC; ii++ )  // AIA mode forced 
+	   iaN[ii] = true; 
+   else 
+	 for(int ii=0; ii<(int)mtp->nC; ii++ )  // PIA mode allowed (if mode==NEED_GEM_PIA) 
+	   iaN[ii] = false;
+
    start_node = max( start_node, 0 );
    end_node = min( end_node, (int)mtp->nC-1 );
 
@@ -285,6 +289,8 @@ for(int ii=0; ii<(int)mtp->nC; ii++ )  // Temporary
        	 }
     	 else {
     		 Mode = NEED_GEM_PIA;
+    		 if( mtp->PvSIA == S_ON )   // force loading of primal solution into GEMIPM
+    			 Mode *= -1;            // othervise use internal (old) primal solution
      		 NeedGEM = false;       // temporary off for debugging
     		 // Here we compare this node for current time and for previous time
     		 for( ic=0; ic < CH->nICb; ic++)    // do we check charge here?
@@ -301,7 +307,7 @@ for(int ii=0; ii<(int)mtp->nC; ii++ )  // Temporary
     	 }
      }
      else Mode = NEED_GEM_AIA;
-// NeedGEM = true;  // Mode = NEED_GEM_AIA;     // debugging - calculating all nodes with PIA!
+// NeedGEM = true;  // Mode = NEED_GEM_AIA;   // debugging - calculating all nodes with AIA!
      if( NeedGEM )
      {
         RetCode = na->RunGEM( ii, Mode );

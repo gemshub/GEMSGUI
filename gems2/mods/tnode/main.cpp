@@ -262,8 +262,8 @@ int main( int argc, char* argv[] )
         m_NodeHandle[in] = in;
 
 // Below you can switch between AIA and PIA initial approximation modes
-        m_NodeStatusCH[in] = NEED_GEM_AIA;    // tests are marked *.out2A 
-//        m_NodeStatusCH[in] = NEED_GEM_PIA;      // tests are marked *.out2P
+//        m_NodeStatusCH[in] = NEED_GEM_AIA;    // tests are marked *.out2A 
+        m_NodeStatusCH[in] = NEED_GEM_PIA;      // tests are marked *.out2P
 
 // Setting input data for GEM IPM
         node->GEM_from_MT( m_NodeHandle[in], m_NodeStatusCH[in],
@@ -287,9 +287,9 @@ int main( int argc, char* argv[] )
 
 // Calling GEM IPM2 calculation
 // re-calculating equilibrium by calling GEMIPM using previous primal solution in this node
-//    m_NodeStatusCH[in] = node->GEM_run( true );
+    m_NodeStatusCH[in] = node->GEM_run( true );
 // re-calculating equilibrium by calling GEMIPM using previous content of GEMIPM structure
-       m_NodeStatusCH[in] = node->GEM_run( false );
+//       m_NodeStatusCH[in] = node->GEM_run( false );
        if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_PIA ) )
             return 5;
         CalcTime += node->GEM_CalcTime();  // Incrementing calculation time - only v.2.2.0

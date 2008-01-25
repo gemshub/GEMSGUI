@@ -1,0 +1,609 @@
+Start of gemnode PIA test: time/15/Speed15ic-dat.lst time/15/Speed15ic-dbr-0-0000.dat
+ nNodes = 5  nTimes = 100  t_start = 0 t_end = 10000  dt = 100  tc = 1
+End of gem_node test initialisation
+Begin Coupled Modelling Part
+ xiC= 1  xiCa= 2  xiH= 5  xiO= 11  xiSr=14  xiZz=15  xCalcite=3  xStrontianite=28
+ it = 0  tc = 1
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 3  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 4  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+ it = 1  tc = 101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199607  Str= 0  [Ca]= 0.0211591  [Sr]= 0.000136575  pH= 7.33655  It= 78  nPRL= 2  nFIA= 2  nIPM= 76
+  in = 2  T = 25     Cal= 0.0199609  Str= 0  [Ca]= 0.0211457  [Sr]= 0.000137377  pH= 7.33629  It= 75  nPRL= 2  nFIA= 2  nIPM= 73
+  in = 3  T = 25     Cal= 0.0199612  Str= 0  [Ca]= 0.021156  [Sr]= 0.000137539  pH= 7.33591  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 4  T = 25     Cal= 0.0199614  Str= 0  [Ca]= 0.0211509  [Sr]= 0.000137992  pH= 7.33562  It= 79  nPRL= 2  nFIA= 2  nIPM= 77
+ it = 2  tc = 201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199609  Str= 0  [Ca]= 0.0211457  [Sr]= 0.000137377  pH= 7.33629  It= 75  nPRL= 2  nFIA= 2  nIPM= 73
+  in = 2  T = 25     Cal= 0.0199614  Str= 0  [Ca]= 0.0211509  [Sr]= 0.000137992  pH= 7.33562  It= 79  nPRL= 2  nFIA= 2  nIPM= 77
+  in = 3  T = 25     Cal= 0.0199619  Str= 0  [Ca]= 0.0211561  [Sr]= 0.000139039  pH= 7.33494  It= 79  nPRL= 2  nFIA= 2  nIPM= 77
+  in = 4  T = 25     Cal= 0.0199624  Str= 0  [Ca]= 0.0211534  [Sr]= 0.00014019  pH= 7.3343  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+ it = 3  tc = 301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199612  Str= 0  [Ca]= 0.021156  [Sr]= 0.000137539  pH= 7.33591  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199619  Str= 0  [Ca]= 0.021156  [Sr]= 0.000139052  pH= 7.33494  It= 79  nPRL= 2  nFIA= 2  nIPM= 77
+  in = 3  T = 25     Cal= 0.0199625  Str= 0  [Ca]= 0.0211583  [Sr]= 0.00014126  pH= 7.33404  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 4  T = 25     Cal= 0.0199633  Str= 0  [Ca]= 0.0211486  [Sr]= 0.000142955  pH= 7.33306  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+ it = 4  tc = 401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199614  Str= 0  [Ca]= 0.0211509  [Sr]= 0.000137992  pH= 7.33562  It= 79  nPRL= 2  nFIA= 2  nIPM= 77
+  in = 2  T = 25     Cal= 0.0199624  Str= 0  [Ca]= 0.0211534  [Sr]= 0.000140188  pH= 7.3343  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 3  T = 25     Cal= 0.0199633  Str= 0  [Ca]= 0.0211488  [Sr]= 0.000142926  pH= 7.33306  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 4  T = 25     Cal= 0.0199643  Str= 0  [Ca]= 0.0211489  [Sr]= 0.000145796  pH= 7.33176  It= 75  nPRL= 2  nFIA= 2  nIPM= 73
+ it = 5  tc = 501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019962  Str= 0  [Ca]= 0.0211753  [Sr]= 0.0001383  pH= 7.335  It= 75  nPRL= 2  nFIA= 2  nIPM= 73
+  in = 2  T = 25     Cal= 0.019962  Str= 0  [Ca]= 0.0211585  [Sr]= 0.000141419  pH= 7.33369  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 3  T = 25     Cal= 0.0199641  Str= 0  [Ca]= 0.0211444  [Sr]= 0.000144709  pH= 7.33209  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 4  T = 25     Cal= 0.0199653  Str= 0  [Ca]= 0.0211401  [Sr]= 0.000148085  pH= 7.33045  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+ it = 6  tc = 601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199619  Str= 0  [Ca]= 0.021156  [Sr]= 0.000139053  pH= 7.33494  It= 79  nPRL= 2  nFIA= 2  nIPM= 77
+  in = 2  T = 25     Cal= 0.0199633  Str= 0  [Ca]= 0.0211486  [Sr]= 0.000142973  pH= 7.33306  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 3  T = 25     Cal= 0.0199648  Str= 0  [Ca]= 0.0211408  [Sr]= 0.000146762  pH= 7.33111  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 4  T = 25     Cal= 0.0199663  Str= 0  [Ca]= 0.0211364  [Sr]= 0.000150895  pH= 7.32913  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+ it = 7  tc = 701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199623  Str= 0  [Ca]= 0.0211667  [Sr]= 0.000139881  pH= 7.33451  It= 73  nPRL= 2  nFIA= 2  nIPM= 71
+  in = 2  T = 25     Cal= 0.0199638  Str= 0  [Ca]= 0.0211457  [Sr]= 0.000144296  pH= 7.33241  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 3  T = 25     Cal= 0.0199655  Str= 0  [Ca]= 0.0211366  [Sr]= 0.000148697  pH= 7.33011  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 4  T = 25     Cal= 0.0199672  Str= 0  [Ca]= 0.0211313  [Sr]= 0.000154165  pH= 7.32785  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+ it = 8  tc = 801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199624  Str= 0  [Ca]= 0.0211534  [Sr]= 0.000140191  pH= 7.3343  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199643  Str= 0  [Ca]= 0.0211489  [Sr]= 0.000145825  pH= 7.33176  It= 75  nPRL= 2  nFIA= 2  nIPM= 73
+  in = 3  T = 25     Cal= 0.0199663  Str= 0  [Ca]= 0.0211365  [Sr]= 0.000150827  pH= 7.32913  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 4  T = 25     Cal= 0.0199682  Str= 0  [Ca]= 0.021124  [Sr]= 0.000156843  pH= 7.32653  It= 80  nPRL= 2  nFIA= 2  nIPM= 78
+ it = 9  tc = 901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199625  Str= 0  [Ca]= 0.0211583  [Sr]= 0.00014126  pH= 7.33404  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 2  T = 25     Cal= 0.0199648  Str= 0  [Ca]= 0.0211408  [Sr]= 0.000146772  pH= 7.33111  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 3  T = 25     Cal= 0.019967  Str= 0  [Ca]= 0.0211377  [Sr]= 0.000152789  pH= 7.32814  It= 80  nPRL= 2  nFIA= 2  nIPM= 78
+  in = 4  T = 25     Cal= 0.0199692  Str= 0  [Ca]= 0.0211362  [Sr]= 0.000159447  pH= 7.32514  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+ it = 10  tc = 1001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019962  Str= 0  [Ca]= 0.0211585  [Sr]= 0.000141419  pH= 7.33369  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 2  T = 25     Cal= 0.0199653  Str= 0  [Ca]= 0.0211398  [Sr]= 0.000148116  pH= 7.33045  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 3  T = 25     Cal= 0.0199677  Str= 0  [Ca]= 0.0211281  [Sr]= 0.000155243  pH= 7.32719  It= 80  nPRL= 2  nFIA= 2  nIPM= 78
+  in = 4  T = 25     Cal= 0.0199702  Str= 0  [Ca]= 0.0211423  [Sr]= 0.000163172  pH= 7.32377  It= 86  nPRL= 2  nFIA= 2  nIPM= 84
+ it = 11  tc = 1101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199632  Str= 0  [Ca]= 0.0211556  [Sr]= 0.000141943  pH= 7.33336  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0199658  Str= 0  [Ca]= 0.0211372  [Sr]= 0.000149366  pH= 7.32979  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 3  T = 25     Cal= 0.0199685  Str= 0  [Ca]= 0.0211256  [Sr]= 0.000157527  pH= 7.32619  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 4  T = 25     Cal= 0.0199712  Str= 0  [Ca]= 0.0211494  [Sr]= 0.000166619  pH= 7.32244  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+ it = 12  tc = 1201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199633  Str= 0  [Ca]= 0.0211486  [Sr]= 0.000142955  pH= 7.33306  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 2  T = 25     Cal= 0.0199663  Str= 0  [Ca]= 0.0211364  [Sr]= 0.000150889  pH= 7.32913  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 3  T = 25     Cal= 0.0199692  Str= 0  [Ca]= 0.0211362  [Sr]= 0.000159443  pH= 7.32514  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 4  T = 25     Cal= 0.0199721  Str= 0  [Ca]= 0.0211546  [Sr]= 0.000171316  pH= 7.3211  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+ it = 13  tc = 1301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199636  Str= 0  [Ca]= 0.0211514  [Sr]= 0.000143514  pH= 7.33273  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 2  T = 25     Cal= 0.0199668  Str= 0  [Ca]= 0.0211342  [Sr]= 0.000152465  pH= 7.32847  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 3  T = 25     Cal= 0.01997  Str= 0  [Ca]= 0.0211353  [Sr]= 0.000162938  pH= 7.32414  It= 82  nPRL= 2  nFIA= 2  nIPM= 80
+  in = 4  T = 25     Cal= 0.0199731  Str= 0  [Ca]= 0.0211631  [Sr]= 0.000174652  pH= 7.31969  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+ it = 14  tc = 1401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199638  Str= 0  [Ca]= 0.0211456  [Sr]= 0.000144311  pH= 7.33241  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 2  T = 25     Cal= 0.0199672  Str= 0  [Ca]= 0.0211313  [Sr]= 0.000154165  pH= 7.32785  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 3  T = 25     Cal= 0.0199707  Str= 0  [Ca]= 0.0211464  [Sr]= 0.000164785  pH= 7.32309  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 4  T = 25     Cal= 0.0199741  Str= 0  [Ca]= 0.0211647  [Sr]= 0.000179301  pH= 7.31833  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+ it = 15  tc = 1501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199641  Str= 0  [Ca]= 0.0211443  [Sr]= 0.000144747  pH= 7.33209  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 2  T = 25     Cal= 0.0199677  Str= 0  [Ca]= 0.0211282  [Sr]= 0.000155238  pH= 7.32719  It= 80  nPRL= 2  nFIA= 2  nIPM= 78
+  in = 3  T = 25     Cal= 0.0199714  Str= 0  [Ca]= 0.0211495  [Sr]= 0.000167729  pH= 7.32211  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 4  T = 25     Cal= 0.019975  Str= 0  [Ca]= 0.0211721  [Sr]= 0.000183365  pH= 7.31694  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+ it = 16  tc = 1601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199643  Str= 0  [Ca]= 0.0211489  [Sr]= 0.000145796  pH= 7.33176  It= 75  nPRL= 2  nFIA= 2  nIPM= 73
+  in = 2  T = 25     Cal= 0.0199682  Str= 0  [Ca]= 0.0211265  [Sr]= 0.000156708  pH= 7.32652  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 3  T = 25     Cal= 0.0199721  Str= 0  [Ca]= 0.0211545  [Sr]= 0.000171317  pH= 7.3211  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 4  T = 25     Cal= 0.0199761  Str= 0  [Ca]= 0.0211822  [Sr]= 0.000187447  pH= 7.31551  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+ it = 17  tc = 1701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199646  Str= 0  [Ca]= 0.0211596  [Sr]= 0.000146217  pH= 7.33135  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199687  Str= 0  [Ca]= 0.0211257  [Sr]= 0.000158363  pH= 7.32585  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 3  T = 25     Cal= 0.0199729  Str= 0  [Ca]= 0.0211631  [Sr]= 0.000173303  pH= 7.32004  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 4  T = 25     Cal= 0.0199769  Str= 0  [Ca]= 0.0211853  [Sr]= 0.000193686  pH= 7.3142  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+ it = 18  tc = 1801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199648  Str= 0  [Ca]= 0.0211407  [Sr]= 0.000146779  pH= 7.33111  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 2  T = 25     Cal= 0.0199692  Str= 0  [Ca]= 0.0211362  [Sr]= 0.00015945  pH= 7.32514  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 3  T = 25     Cal= 0.0199737  Str= 0  [Ca]= 0.0211655  [Sr]= 0.000176682  pH= 7.31891  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 4  T = 25     Cal= 0.019978  Str= 0  [Ca]= 0.0211974  [Sr]= 0.000198491  pH= 7.31272  It= 91  nPRL= 2  nFIA= 2  nIPM= 89
+ it = 19  tc = 1901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199651  Str= 0  [Ca]= 0.0211387  [Sr]= 0.000147403  pH= 7.33077  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199697  Str= 0  [Ca]= 0.0211417  [Sr]= 0.000161246  pH= 7.32445  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 3  T = 25     Cal= 0.0199744  Str= 0  [Ca]= 0.0211669  [Sr]= 0.000179338  pH= 7.31792  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 4  T = 25     Cal= 0.0199789  Str= 0  [Ca]= 0.0212026  [Sr]= 0.000205007  pH= 7.31141  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+ it = 20  tc = 2001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199653  Str= 0  [Ca]= 0.02114  [Sr]= 0.000148088  pH= 7.33045  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 2  T = 25     Cal= 0.0199702  Str= 0  [Ca]= 0.0211423  [Sr]= 0.000163179  pH= 7.32377  It= 86  nPRL= 2  nFIA= 2  nIPM= 84
+  in = 3  T = 25     Cal= 0.019975  Str= 0  [Ca]= 0.021172  [Sr]= 0.000183389  pH= 7.31694  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 4  T = 25     Cal= 0.0199799  Str= 0  [Ca]= 0.0212178  [Sr]= 0.000210958  pH= 7.30994  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+ it = 21  tc = 2101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199655  Str= 0  [Ca]= 0.0211365  [Sr]= 0.000148652  pH= 7.33011  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199707  Str= 0  [Ca]= 0.0211464  [Sr]= 0.000164785  pH= 7.32309  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 3  T = 25     Cal= 0.019976  Str= 0  [Ca]= 0.0211686  [Sr]= 0.000190129  pH= 7.31583  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 4  T = 25     Cal= 0.0199809  Str= 0  [Ca]= 0.0212243  [Sr]= 0.000218735  pH= 7.30855  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+ it = 22  tc = 2201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199658  Str= 0  [Ca]= 0.0211372  [Sr]= 0.000149366  pH= 7.32979  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199711  Str= 0  [Ca]= 0.0211493  [Sr]= 0.000166637  pH= 7.32244  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 3  T = 25     Cal= 0.0199765  Str= 0  [Ca]= 0.0211839  [Sr]= 0.000190672  pH= 7.31488  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 4  T = 25     Cal= 0.0199818  Str= 0  [Ca]= 0.0212405  [Sr]= 0.000224679  pH= 7.30712  It= 89  nPRL= 2  nFIA= 2  nIPM= 87
+ it = 23  tc = 2301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019966  Str= 0  [Ca]= 0.0211393  [Sr]= 0.000150064  pH= 7.32946  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199717  Str= 0  [Ca]= 0.0211481  [Sr]= 0.000169142  pH= 7.32173  It= 82  nPRL= 2  nFIA= 2  nIPM= 80
+  in = 3  T = 25     Cal= 0.0199772  Str= 0  [Ca]= 0.0211883  [Sr]= 0.000194721  pH= 7.31383  It= 86  nPRL= 2  nFIA= 2  nIPM= 84
+  in = 4  T = 25     Cal= 0.0199827  Str= 0  [Ca]= 0.0212444  [Sr]= 0.000234103  pH= 7.30585  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+ it = 24  tc = 2401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199663  Str= 0  [Ca]= 0.0211364  [Sr]= 0.000150899  pH= 7.32913  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199721  Str= 0  [Ca]= 0.0211545  [Sr]= 0.000171317  pH= 7.3211  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 3  T = 25     Cal= 0.019978  Str= 0  [Ca]= 0.0211971  [Sr]= 0.000198492  pH= 7.31272  It= 91  nPRL= 2  nFIA= 2  nIPM= 89
+  in = 4  T = 25     Cal= 0.0199835  Str= 0  [Ca]= 0.0212667  [Sr]= 0.000240213  pH= 7.3044  It= 91  nPRL= 2  nFIA= 2  nIPM= 89
+ it = 25  tc = 2501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199665  Str= 0  [Ca]= 0.0211358  [Sr]= 0.000151715  pH= 7.3288  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199726  Str= 0  [Ca]= 0.0211616  [Sr]= 0.000172354  pH= 7.32037  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 3  T = 25     Cal= 0.0199788  Str= 0  [Ca]= 0.0212005  [Sr]= 0.00020342  pH= 7.31168  It= 86  nPRL= 2  nFIA= 2  nIPM= 84
+  in = 4  T = 25     Cal= 0.0199845  Str= 0  [Ca]= 0.0212787  [Sr]= 0.00024894  pH= 7.30308  It= 94  nPRL= 2  nFIA= 2  nIPM= 92
+ it = 26  tc = 2601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199668  Str= 0  [Ca]= 0.0211342  [Sr]= 0.000152465  pH= 7.32847  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 2  T = 25     Cal= 0.0199731  Str= 0  [Ca]= 0.0211632  [Sr]= 0.000174754  pH= 7.31969  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 3  T = 25     Cal= 0.0199792  Str= 0  [Ca]= 0.0212074  [Sr]= 0.000209208  pH= 7.3108  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 4  T = 25     Cal= 0.0199856  Str= 0  [Ca]= 0.0212906  [Sr]= 0.000259322  pH= 7.30152  It= 92  nPRL= 2  nFIA= 2  nIPM= 90
+ it = 27  tc = 2701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019967  Str= 0  [Ca]= 0.0211377  [Sr]= 0.000152789  pH= 7.32814  It= 80  nPRL= 2  nFIA= 2  nIPM= 78
+  in = 2  T = 25     Cal= 0.0199737  Str= 0  [Ca]= 0.0211655  [Sr]= 0.000176686  pH= 7.31891  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 3  T = 25     Cal= 0.0199799  Str= 0  [Ca]= 0.0212169  [Sr]= 0.000213357  pH= 7.30973  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 4  T = 25     Cal= 0.0199864  Str= 0  [Ca]= 0.0213105  [Sr]= 0.000267015  pH= 7.30016  It= 107  nPRL= 2  nFIA= 2  nIPM= 105
+ it = 28  tc = 2801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199672  Str= 0  [Ca]= 0.0211313  [Sr]= 0.000154165  pH= 7.32785  It= 76  nPRL= 2  nFIA= 2  nIPM= 74
+  in = 2  T = 25     Cal= 0.0199741  Str= 0  [Ca]= 0.0211647  [Sr]= 0.000179301  pH= 7.31833  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 3  T = 25     Cal= 0.0199809  Str= 0  [Ca]= 0.0212242  [Sr]= 0.000218722  pH= 7.30855  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 4  T = 25     Cal= 0.0199873  Str= 0  [Ca]= 0.0213188  [Sr]= 0.000282254  pH= 7.29874  It= 93  nPRL= 2  nFIA= 2  nIPM= 91
+ it = 29  tc = 2901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199675  Str= 0  [Ca]= 0.0211292  [Sr]= 0.000155033  pH= 7.32753  It= 78  nPRL= 2  nFIA= 2  nIPM= 76
+  in = 2  T = 25     Cal= 0.0199748  Str= 0  [Ca]= 0.0211672  [Sr]= 0.000182184  pH= 7.3177  It= 78  nPRL= 2  nFIA= 2  nIPM= 76
+  in = 3  T = 25     Cal= 0.0199817  Str= 0  [Ca]= 0.0212359  [Sr]= 0.000224126  pH= 7.30747  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 4  T = 25     Cal= 0.0199881  Str= 0  [Ca]= 0.0213356  [Sr]= 0.00029324  pH= 7.29736  It= 97  nPRL= 2  nFIA= 2  nIPM= 95
+ it = 30  tc = 3001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199677  Str= 0  [Ca]= 0.0211283  [Sr]= 0.000155237  pH= 7.32719  It= 80  nPRL= 2  nFIA= 2  nIPM= 78
+  in = 2  T = 25     Cal= 0.019975  Str= 0  [Ca]= 0.0211721  [Sr]= 0.000183364  pH= 7.31694  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 3  T = 25     Cal= 0.0199823  Str= 0  [Ca]= 0.0212478  [Sr]= 0.000227068  pH= 7.30643  It= 95  nPRL= 2  nFIA= 2  nIPM= 93
+  in = 4  T = 25     Cal= 0.0199892  Str= 0  [Ca]= 0.0213586  [Sr]= 0.000299989  pH= 7.29596  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+ it = 31  tc = 3101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019968  Str= 0  [Ca]= 0.0211301  [Sr]= 0.000155728  pH= 7.32683  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 2  T = 25     Cal= 0.0199755  Str= 0  [Ca]= 0.0211787  [Sr]= 0.000185602  pH= 7.31626  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 3  T = 25     Cal= 0.0199829  Str= 0  [Ca]= 0.0212572  [Sr]= 0.000234342  pH= 7.30547  It= 92  nPRL= 2  nFIA= 2  nIPM= 90
+  in = 4  T = 25     Cal= 0.0199897  Str= 0  [Ca]= 0.0213703  [Sr]= 0.000318758  pH= 7.29465  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+ it = 32  tc = 3201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199682  Str= 0  [Ca]= 0.0211266  [Sr]= 0.000156699  pH= 7.32652  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 2  T = 25     Cal= 0.0199761  Str= 0  [Ca]= 0.0211825  [Sr]= 0.000187394  pH= 7.31551  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 3  T = 25     Cal= 0.0199835  Str= 0  [Ca]= 0.0212671  [Sr]= 0.000239938  pH= 7.3044  It= 91  nPRL= 2  nFIA= 2  nIPM= 89
+  in = 4  T = 25     Cal= 0.0199911  Str= 0  [Ca]= 0.021386  [Sr]= 0.000335689  pH= 7.29316  It= 100  nPRL= 2  nFIA= 2  nIPM= 98
+ it = 33  tc = 3301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199685  Str= 0  [Ca]= 0.0211256  [Sr]= 0.000157528  pH= 7.32619  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 2  T = 25     Cal= 0.0199765  Str= 0  [Ca]= 0.0211837  [Sr]= 0.000190692  pH= 7.31488  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 3  T = 25     Cal= 0.0199844  Str= 0  [Ca]= 0.0212768  [Sr]= 0.000246007  pH= 7.30331  It= 105  nPRL= 2  nFIA= 2  nIPM= 103
+  in = 4  T = 25     Cal= 0.0199917  Str= 0  [Ca]= 0.0214078  [Sr]= 0.000350937  pH= 7.29181  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 34  tc = 3401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199687  Str= 0  [Ca]= 0.0211257  [Sr]= 0.000158363  pH= 7.32585  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 2  T = 25     Cal= 0.0199769  Str= 0  [Ca]= 0.0211852  [Sr]= 0.000193693  pH= 7.3142  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 3  T = 25     Cal= 0.019985  Str= 0  [Ca]= 0.0212846  [Sr]= 0.000254832  pH= 7.30242  It= 94  nPRL= 2  nFIA= 2  nIPM= 92
+  in = 4  T = 25     Cal= 0.0199924  Str= 0  [Ca]= 0.0214214  [Sr]= 0.000378101  pH= 7.29053  It= 130  nPRL= 2  nFIA= 2  nIPM= 128
+ it = 35  tc = 3501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019969  Str= 0  [Ca]= 0.021126  [Sr]= 0.000159184  pH= 7.32551  It= 81  nPRL= 2  nFIA= 2  nIPM= 79
+  in = 2  T = 25     Cal= 0.0199775  Str= 0  [Ca]= 0.021196  [Sr]= 0.000194924  pH= 7.31345  It= 95  nPRL= 2  nFIA= 2  nIPM= 93
+  in = 3  T = 25     Cal= 0.0199858  Str= 0  [Ca]= 0.0212964  [Sr]= 0.000260269  pH= 7.30115  It= 94  nPRL= 2  nFIA= 2  nIPM= 92
+  in = 4  T = 25     Cal= 0.0199934  Str= 0  [Ca]= 0.0214468  [Sr]= 0.000389256  pH= 7.28903  It= 113  nPRL= 2  nFIA= 2  nIPM= 111
+ it = 36  tc = 3601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199692  Str= 0  [Ca]= 0.0211362  [Sr]= 0.00015945  pH= 7.32514  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 2  T = 25     Cal= 0.019978  Str= 0  [Ca]= 0.0211971  [Sr]= 0.000198593  pH= 7.31272  It= 91  nPRL= 2  nFIA= 2  nIPM= 89
+  in = 3  T = 25     Cal= 0.0199864  Str= 0  [Ca]= 0.0213103  [Sr]= 0.000267158  pH= 7.30016  It= 107  nPRL= 2  nFIA= 2  nIPM= 105
+  in = 4  T = 25     Cal= 0.0199938  Str= 0  [Ca]= 0.0214537  [Sr]= 0.000442471  pH= 7.2879  It= 209  nPRL= 2  nFIA= 2  nIPM= 207
+ it = 37  tc = 3701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199695  Str= 0  [Ca]= 0.0211373  [Sr]= 0.000160547  pH= 7.3248  It= 86  nPRL= 2  nFIA= 2  nIPM= 84
+  in = 2  T = 25     Cal= 0.0199785  Str= 0  [Ca]= 0.0211976  [Sr]= 0.000202047  pH= 7.31207  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 3  T = 25     Cal= 0.0199871  Str= 0  [Ca]= 0.0213187  [Sr]= 0.000275991  pH= 7.29906  It= 93  nPRL= 2  nFIA= 2  nIPM= 91
+  in = 4  T = 25     Cal= 0.0199949  Str= 0  [Ca]= 0.0215184  [Sr]= 0.000469918  pH= 7.28628  It= 170  nPRL= 2  nFIA= 2  nIPM= 168
+ it = 38  tc = 3801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199697  Str= 0  [Ca]= 0.0211418  [Sr]= 0.000161242  pH= 7.32445  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 2  T = 25     Cal= 0.0199789  Str= 0  [Ca]= 0.0212025  [Sr]= 0.000205029  pH= 7.31141  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 3  T = 25     Cal= 0.0199878  Str= 0  [Ca]= 0.0213283  [Sr]= 0.000286328  pH= 7.29803  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+  in = 4  T = 25     Cal= 0.0199957  Str= 0  [Ca]= 0.0215655  [Sr]= 0.000495604  pH= 7.28475  It= 161  nPRL= 2  nFIA= 2  nIPM= 159
+ it = 39  tc = 3901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.01997  Str= 0  [Ca]= 0.0211351  [Sr]= 0.000162973  pH= 7.32414  It= 82  nPRL= 2  nFIA= 2  nIPM= 80
+  in = 2  T = 25     Cal= 0.0199792  Str= 0  [Ca]= 0.0212074  [Sr]= 0.00020922  pH= 7.3108  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 3  T = 25     Cal= 0.0199885  Str= 0  [Ca]= 0.0213419  [Sr]= 0.000293764  pH= 7.29694  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+  in = 4  T = 25     Cal= 0.0199967  Str= 0  [Ca]= 0.0216107  [Sr]= 0.000524691  pH= 7.28324  It= 156  nPRL= 2  nFIA= 2  nIPM= 154
+ it = 40  tc = 4001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199702  Str= 0  [Ca]= 0.0211423  [Sr]= 0.000163179  pH= 7.32377  It= 86  nPRL= 2  nFIA= 2  nIPM= 84
+  in = 2  T = 25     Cal= 0.0199799  Str= 0  [Ca]= 0.0212179  [Sr]= 0.000210942  pH= 7.30994  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 3  T = 25     Cal= 0.0199892  Str= 0  [Ca]= 0.0213584  [Sr]= 0.000300152  pH= 7.29596  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+  in = 4  T = 25     Cal= 0.0199977  Str= 0  [Ca]= 0.0216667  [Sr]= 0.000555277  pH= 7.28169  It= 148  nPRL= 2  nFIA= 2  nIPM= 146
+ it = 41  tc = 4101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199705  Str= 0  [Ca]= 0.0211462  [Sr]= 0.000163665  pH= 7.32342  It= 89  nPRL= 2  nFIA= 2  nIPM= 87
+  in = 2  T = 25     Cal= 0.0199803  Str= 0  [Ca]= 0.0212216  [Sr]= 0.000215086  pH= 7.30939  It= 89  nPRL= 2  nFIA= 2  nIPM= 87
+  in = 3  T = 25     Cal= 0.0199897  Str= 0  [Ca]= 0.021372  [Sr]= 0.000310411  pH= 7.29491  It= 98  nPRL= 2  nFIA= 2  nIPM= 96
+  in = 4  T = 25     Cal= 0.0199984  Str= 0  [Ca]= 0.0216939  [Sr]= 0.000592211  pH= 7.28033  It= 146  nPRL= 2  nFIA= 2  nIPM= 144
+ it = 42  tc = 4201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199707  Str= 0  [Ca]= 0.0211464  [Sr]= 0.000164786  pH= 7.32309  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 2  T = 25     Cal= 0.0199809  Str= 0  [Ca]= 0.0212244  [Sr]= 0.000218726  pH= 7.30855  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 3  T = 25     Cal= 0.0199903  Str= 0  [Ca]= 0.0213793  [Sr]= 0.000328462  pH= 7.29395  It= 114  nPRL= 2  nFIA= 2  nIPM= 112
+  in = 4  T = 25     Cal= 0.0199993  Str= 0  [Ca]= 0.0217574  [Sr]= 0.000629954  pH= 7.27877  It= 135  nPRL= 2  nFIA= 2  nIPM= 133
+ it = 43  tc = 4301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199709  Str= 0  [Ca]= 0.0211474  [Sr]= 0.000165904  pH= 7.32277  It= 89  nPRL= 2  nFIA= 2  nIPM= 87
+  in = 2  T = 25     Cal= 0.0199814  Str= 0  [Ca]= 0.0212364  [Sr]= 0.000220742  pH= 7.30781  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 3  T = 25     Cal= 0.019991  Str= 0  [Ca]= 0.0213945  [Sr]= 0.000337887  pH= 7.29289  It= 106  nPRL= 2  nFIA= 2  nIPM= 104
+  in = 4  T = 25     Cal= 0.02  Str= 0  [Ca]= 0.0217877  [Sr]= 0.000676645  pH= 7.27744  It= 131  nPRL= 2  nFIA= 2  nIPM= 129
+ it = 44  tc = 4401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199712  Str= 0  [Ca]= 0.0211494  [Sr]= 0.000166621  pH= 7.32244  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 2  T = 25     Cal= 0.0199818  Str= 0  [Ca]= 0.0212405  [Sr]= 0.000224679  pH= 7.30712  It= 89  nPRL= 2  nFIA= 2  nIPM= 87
+  in = 3  T = 25     Cal= 0.0199917  Str= 0  [Ca]= 0.0214077  [Sr]= 0.000350982  pH= 7.29181  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.0200007  Str= 0  [Ca]= 0.0218174  [Sr]= 0.000729995  pH= 7.27613  It= 126  nPRL= 2  nFIA= 2  nIPM= 124
+ it = 45  tc = 4501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199714  Str= 0  [Ca]= 0.0211494  [Sr]= 0.000167769  pH= 7.32211  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 2  T = 25     Cal= 0.0199823  Str= 0  [Ca]= 0.0212477  [Sr]= 0.000227089  pH= 7.30643  It= 95  nPRL= 2  nFIA= 2  nIPM= 93
+  in = 3  T = 25     Cal= 0.0199922  Str= 0  [Ca]= 0.0214167  [Sr]= 0.000372117  pH= 7.29087  It= 116  nPRL= 2  nFIA= 2  nIPM= 114
+  in = 4  T = 25     Cal= 0.0200015  Str= 0  [Ca]= 0.021846  [Sr]= 0.000790921  pH= 7.27486  It= 122  nPRL= 2  nFIA= 2  nIPM= 120
+ it = 46  tc = 4601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199717  Str= 0  [Ca]= 0.021148  [Sr]= 0.000169144  pH= 7.32173  It= 82  nPRL= 2  nFIA= 2  nIPM= 80
+  in = 2  T = 25     Cal= 0.0199827  Str= 0  [Ca]= 0.0212445  [Sr]= 0.000234078  pH= 7.30585  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 3  T = 25     Cal= 0.0199928  Str= 0  [Ca]= 0.021429  [Sr]= 0.000392993  pH= 7.28988  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+  in = 4  T = 25     Cal= 0.0200019  Str= 0  [Ca]= 0.0218696  [Sr]= 0.000862378  pH= 7.27365  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+ it = 47  tc = 4701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199719  Str= 0  [Ca]= 0.0211508  [Sr]= 0.000169722  pH= 7.32138  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0199831  Str= 0  [Ca]= 0.0212605  [Sr]= 0.000235863  pH= 7.30512  It= 100  nPRL= 2  nFIA= 2  nIPM= 98
+  in = 3  T = 25     Cal= 0.0199934  Str= 0  [Ca]= 0.0214408  [Sr]= 0.000415904  pH= 7.28888  It= 142  nPRL= 2  nFIA= 2  nIPM= 140
+  in = 4  T = 25     Cal= 0.0200025  Str= 0  [Ca]= 0.0218921  [Sr]= 0.000944384  pH= 7.27248  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+ it = 48  tc = 4801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199721  Str= 0  [Ca]= 0.0211545  [Sr]= 0.000171317  pH= 7.3211  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 2  T = 25     Cal= 0.0199835  Str= 0  [Ca]= 0.0212667  [Sr]= 0.000240201  pH= 7.3044  It= 91  nPRL= 2  nFIA= 2  nIPM= 89
+  in = 3  T = 25     Cal= 0.0199939  Str= 0  [Ca]= 0.0214539  [Sr]= 0.000441892  pH= 7.2879  It= 189  nPRL= 2  nFIA= 2  nIPM= 187
+  in = 4  T = 25     Cal= 0.0200028  Str= 0  [Ca]= 0.0219127  [Sr]= 0.00104022  pH= 7.27136  It= 122  nPRL= 2  nFIA= 2  nIPM= 120
+ it = 49  tc = 4901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199725  Str= 0  [Ca]= 0.0211574  [Sr]= 0.000171457  pH= 7.32065  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0199842  Str= 0  [Ca]= 0.0212681  [Sr]= 0.000245067  pH= 7.30365  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 3  T = 25     Cal= 0.0199946  Str= 0  [Ca]= 0.0214882  [Sr]= 0.00046534  pH= 7.28678  It= 191  nPRL= 2  nFIA= 2  nIPM= 189
+  in = 4  T = 25     Cal= 0.0200037  Str= 0  [Ca]= 0.0219348  [Sr]= 0.00115069  pH= 7.2703  It= 125  nPRL= 2  nFIA= 2  nIPM= 123
+ it = 50  tc = 5001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199726  Str= 0  [Ca]= 0.0211616  [Sr]= 0.000172326  pH= 7.32037  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 2  T = 25     Cal= 0.0199845  Str= 0  [Ca]= 0.0212785  [Sr]= 0.000249043  pH= 7.30308  It= 94  nPRL= 2  nFIA= 2  nIPM= 92
+  in = 3  T = 25     Cal= 0.0199952  Str= 0  [Ca]= 0.0215515  [Sr]= 0.000482183  pH= 7.28545  It= 164  nPRL= 2  nFIA= 2  nIPM= 162
+  in = 4  T = 25     Cal= 0.0200034  Str= 0  [Ca]= 0.0219667  [Sr]= 0.0012751  pH= 7.26923  It= 125  nPRL= 2  nFIA= 2  nIPM= 123
+ it = 51  tc = 5101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199728  Str= 0  [Ca]= 0.021163  [Sr]= 0.000173332  pH= 7.32004  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 2  T = 25     Cal= 0.019985  Str= 0  [Ca]= 0.0212846  [Sr]= 0.000254809  pH= 7.30242  It= 94  nPRL= 2  nFIA= 2  nIPM= 92
+  in = 3  T = 25     Cal= 0.0199961  Str= 0  [Ca]= 0.0215589  [Sr]= 0.000502134  pH= 7.28448  It= 147  nPRL= 2  nFIA= 2  nIPM= 145
+  in = 4  T = 25     Cal= 0.020004  Str= 0  [Ca]= 0.0220138  [Sr]= 0.00141165  pH= 7.26813  It= 107  nPRL= 2  nFIA= 2  nIPM= 105
+ it = 52  tc = 5201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199731  Str= 0  [Ca]= 0.0211631  [Sr]= 0.000174554  pH= 7.31969  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 2  T = 25     Cal= 0.0199856  Str= 0  [Ca]= 0.0212906  [Sr]= 0.000259334  pH= 7.30152  It= 92  nPRL= 2  nFIA= 2  nIPM= 90
+  in = 3  T = 25     Cal= 0.0199967  Str= 0  [Ca]= 0.0216107  [Sr]= 0.000524728  pH= 7.28324  It= 156  nPRL= 2  nFIA= 2  nIPM= 154
+  in = 4  T = 25     Cal= 0.0200043  Str= 0  [Ca]= 0.0220473  [Sr]= 0.00157181  pH= 7.26716  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 53  tc = 5301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199734  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000176172  pH= 7.31931  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 2  T = 25     Cal= 0.019986  Str= 0  [Ca]= 0.0212983  [Sr]= 0.000262636  pH= 7.30079  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 3  T = 25     Cal= 0.0199975  Str= 0  [Ca]= 0.0216746  [Sr]= 0.000545793  pH= 7.28195  It= 145  nPRL= 2  nFIA= 2  nIPM= 143
+  in = 4  T = 25     Cal= 0.0200045  Str= 0  [Ca]= 0.0220855  [Sr]= 0.00174953  pH= 7.26623  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+ it = 54  tc = 5401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199737  Str= 0  [Ca]= 0.0211654  [Sr]= 0.000176635  pH= 7.31891  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0199864  Str= 0  [Ca]= 0.0213103  [Sr]= 0.000267151  pH= 7.30016  It= 107  nPRL= 2  nFIA= 2  nIPM= 105
+  in = 3  T = 25     Cal= 0.0199981  Str= 0  [Ca]= 0.0216855  [Sr]= 0.000572804  pH= 7.28097  It= 146  nPRL= 2  nFIA= 2  nIPM= 144
+  in = 4  T = 25     Cal= 0.0200046  Str= 0  [Ca]= 0.0221291  [Sr]= 0.00194385  pH= 7.26532  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 55  tc = 5501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199741  Str= 0  [Ca]= 0.0211597  [Sr]= 0.000178836  pH= 7.31866  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 2  T = 25     Cal= 0.0199868  Str= 0  [Ca]= 0.0213113  [Sr]= 0.000275168  pH= 7.29953  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 3  T = 25     Cal= 0.0199985  Str= 0  [Ca]= 0.0217132  [Sr]= 0.000601239  pH= 7.27991  It= 143  nPRL= 2  nFIA= 2  nIPM= 141
+  in = 4  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0221761  [Sr]= 0.0021544  pH= 7.26443  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 56  tc = 5601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199741  Str= 0  [Ca]= 0.0211646  [Sr]= 0.000179249  pH= 7.31833  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 2  T = 25     Cal= 0.0199873  Str= 0  [Ca]= 0.0213189  [Sr]= 0.000282197  pH= 7.29874  It= 93  nPRL= 2  nFIA= 2  nIPM= 91
+  in = 3  T = 25     Cal= 0.0199993  Str= 0  [Ca]= 0.0217574  [Sr]= 0.000629996  pH= 7.27877  It= 135  nPRL= 2  nFIA= 2  nIPM= 133
+  in = 4  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0222269  [Sr]= 0.00237957  pH= 7.26357  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 57  tc = 5701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199744  Str= 0  [Ca]= 0.0211671  [Sr]= 0.000179308  pH= 7.31792  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 2  T = 25     Cal= 0.0199878  Str= 0  [Ca]= 0.0213283  [Sr]= 0.000286309  pH= 7.29803  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+  in = 3  T = 25     Cal= 0.0199998  Str= 0  [Ca]= 0.0217828  [Sr]= 0.000663998  pH= 7.27775  It= 131  nPRL= 2  nFIA= 2  nIPM= 129
+  in = 4  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0222816  [Sr]= 0.00261737  pH= 7.26273  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 58  tc = 5801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199748  Str= 0  [Ca]= 0.0211672  [Sr]= 0.000182191  pH= 7.3177  It= 78  nPRL= 2  nFIA= 2  nIPM= 76
+  in = 2  T = 25     Cal= 0.0199881  Str= 0  [Ca]= 0.0213356  [Sr]= 0.00029324  pH= 7.29736  It= 97  nPRL= 2  nFIA= 2  nIPM= 95
+  in = 3  T = 25     Cal= 0.0200004  Str= 0  [Ca]= 0.0218043  [Sr]= 0.000702421  pH= 7.27677  It= 128  nPRL= 2  nFIA= 2  nIPM= 126
+  in = 4  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0223397  [Sr]= 0.00286597  pH= 7.26189  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 59  tc = 5901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019975  Str= 0  [Ca]= 0.0211697  [Sr]= 0.000182672  pH= 7.31731  It= 80  nPRL= 2  nFIA= 2  nIPM= 78
+  in = 2  T = 25     Cal= 0.0199887  Str= 0  [Ca]= 0.0213493  [Sr]= 0.000294718  pH= 7.2966  It= 105  nPRL= 2  nFIA= 2  nIPM= 103
+  in = 3  T = 25     Cal= 0.0200008  Str= 0  [Ca]= 0.0218261  [Sr]= 0.000744008  pH= 7.2758  It= 125  nPRL= 2  nFIA= 2  nIPM= 123
+  in = 4  T = 25     Cal= 0.0200047  Str= 1.50071e-012  [Ca]= 0.0224013  [Sr]= 0.00312353  pH= 7.26104  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 60  tc = 6001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199751  Str= 0  [Ca]= 0.0211736  [Sr]= 0.000183185  pH= 7.31694  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0199892  Str= 0  [Ca]= 0.0213586  [Sr]= 0.000300037  pH= 7.29596  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+  in = 3  T = 25     Cal= 0.0200011  Str= 0  [Ca]= 0.0218466  [Sr]= 0.000790857  pH= 7.27485  It= 121  nPRL= 2  nFIA= 2  nIPM= 119
+  in = 4  T = 25     Cal= 0.0200045  Str= 8.33359e-009  [Ca]= 0.0224664  [Sr]= 0.00338845  pH= 7.2602  It= 113  nPRL= 2  nFIA= 2  nIPM= 111
+ it = 61  tc = 6101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199753  Str= 0  [Ca]= 0.0211733  [Sr]= 0.000184381  pH= 7.31658  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0199896  Str= 0  [Ca]= 0.021363  [Sr]= 0.000310154  pH= 7.29524  It= 95  nPRL= 2  nFIA= 2  nIPM= 93
+  in = 3  T = 25     Cal= 0.0200017  Str= 0  [Ca]= 0.021864  [Sr]= 0.00084303  pH= 7.27395  It= 120  nPRL= 2  nFIA= 2  nIPM= 118
+  in = 4  T = 25     Cal= 0.0200007  Str= 3.93917e-006  [Ca]= 0.0225364  [Sr]= 0.00365765  pH= 7.25934  It= 122  nPRL= 2  nFIA= 2  nIPM= 120
+ it = 62  tc = 6201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199755  Str= 0  [Ca]= 0.0211788  [Sr]= 0.000185545  pH= 7.31626  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 2  T = 25     Cal= 0.0199897  Str= 0  [Ca]= 0.0213703  [Sr]= 0.000318764  pH= 7.29465  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+  in = 3  T = 25     Cal= 0.0200023  Str= 0  [Ca]= 0.0218813  [Sr]= 0.000901607  pH= 7.27306  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+  in = 4  T = 25     Cal= 0.0198075  Str= 0.000197987  [Ca]= 0.022754  [Sr]= 0.00381165  pH= 7.25752  It= 113  nPRL= 2  nFIA= 2  nIPM= 111
+ it = 63  tc = 6301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019976  Str= 0  [Ca]= 0.0211683  [Sr]= 0.00019023  pH= 7.31583  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0199903  Str= 0  [Ca]= 0.0213793  [Sr]= 0.000328494  pH= 7.29395  It= 114  nPRL= 2  nFIA= 2  nIPM= 112
+  in = 3  T = 25     Cal= 0.0200025  Str= 0  [Ca]= 0.0218985  [Sr]= 0.00096643  pH= 7.2722  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+  in = 4  T = 25     Cal= 0.019464  Str= 0.000542569  [Ca]= 0.023087  [Sr]= 0.00387213  pH= 7.25496  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+ it = 64  tc = 6401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199761  Str= 0  [Ca]= 0.0211824  [Sr]= 0.000187404  pH= 7.31551  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 2  T = 25     Cal= 0.019991  Str= 0  [Ca]= 0.021386  [Sr]= 0.00033567  pH= 7.29316  It= 100  nPRL= 2  nFIA= 2  nIPM= 98
+  in = 3  T = 25     Cal= 0.0200028  Str= 0  [Ca]= 0.0219128  [Sr]= 0.0010402  pH= 7.27136  It= 122  nPRL= 2  nFIA= 2  nIPM= 120
+  in = 4  T = 25     Cal= 0.0191132  Str= 0.000894656  [Ca]= 0.0234245  [Sr]= 0.00392886  pH= 7.25242  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+ it = 65  tc = 6501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199764  Str= 0  [Ca]= 0.021179  [Sr]= 0.000189678  pH= 7.31513  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 2  T = 25     Cal= 0.0199912  Str= 0  [Ca]= 0.0213994  [Sr]= 0.000341001  pH= 7.29255  It= 120  nPRL= 2  nFIA= 2  nIPM= 118
+  in = 3  T = 25     Cal= 0.0200033  Str= 0  [Ca]= 0.0219411  [Sr]= 0.0011181  pH= 7.2705  It= 113  nPRL= 2  nFIA= 2  nIPM= 111
+  in = 4  T = 25     Cal= 0.0187621  Str= 0.00124719  [Ca]= 0.0237622  [Sr]= 0.00398538  pH= 7.24992  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 66  tc = 6601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199765  Str= 0  [Ca]= 0.0211842  [Sr]= 0.000190674  pH= 7.31488  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 2  T = 25     Cal= 0.0199917  Str= 0  [Ca]= 0.0214077  [Sr]= 0.000351049  pH= 7.29181  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 3  T = 25     Cal= 0.0200038  Str= 0  [Ca]= 0.0219525  [Sr]= 0.00121007  pH= 7.26976  It= 123  nPRL= 2  nFIA= 2  nIPM= 121
+  in = 4  T = 25     Cal= 0.0184104  Str= 0.00160005  [Ca]= 0.0241001  [Sr]= 0.00404205  pH= 7.24746  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 67  tc = 6701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199769  Str= 0  [Ca]= 0.021181  [Sr]= 0.000192256  pH= 7.31454  It= 82  nPRL= 2  nFIA= 2  nIPM= 80
+  in = 2  T = 25     Cal= 0.019992  Str= 0  [Ca]= 0.0214137  [Sr]= 0.000365909  pH= 7.2912  It= 114  nPRL= 2  nFIA= 2  nIPM= 112
+  in = 3  T = 25     Cal= 0.0200034  Str= 0  [Ca]= 0.0219813  [Sr]= 0.00130676  pH= 7.26893  It= 118  nPRL= 2  nFIA= 2  nIPM= 116
+  in = 4  T = 25     Cal= 0.0180587  Str= 0.00195303  [Ca]= 0.0244381  [Sr]= 0.00409878  pH= 7.24503  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 68  tc = 6801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199769  Str= 0  [Ca]= 0.0211853  [Sr]= 0.000193686  pH= 7.3142  It= 83  nPRL= 2  nFIA= 2  nIPM= 81
+  in = 2  T = 25     Cal= 0.0199924  Str= 0  [Ca]= 0.0214218  [Sr]= 0.000377621  pH= 7.29053  It= 128  nPRL= 2  nFIA= 2  nIPM= 126
+  in = 3  T = 25     Cal= 0.020004  Str= 0  [Ca]= 0.0220138  [Sr]= 0.00141166  pH= 7.26813  It= 107  nPRL= 2  nFIA= 2  nIPM= 105
+  in = 4  T = 25     Cal= 0.0177067  Str= 0.0023062  [Ca]= 0.0247762  [Sr]= 0.0041554  pH= 7.24264  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 69  tc = 6901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199773  Str= 0  [Ca]= 0.021192  [Sr]= 0.000194121  pH= 7.31379  It= 96  nPRL= 2  nFIA= 2  nIPM= 94
+  in = 2  T = 25     Cal= 0.0199928  Str= 0  [Ca]= 0.0214291  [Sr]= 0.000392861  pH= 7.28988  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+  in = 3  T = 25     Cal= 0.0200042  Str= 0  [Ca]= 0.0220369  [Sr]= 0.00153078  pH= 7.26741  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+  in = 4  T = 25     Cal= 0.0173547  Str= 0.00265927  [Ca]= 0.0251142  [Sr]= 0.0042123  pH= 7.24028  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+ it = 70  tc = 7001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199775  Str= 0  [Ca]= 0.0211961  [Sr]= 0.000194893  pH= 7.31345  It= 95  nPRL= 2  nFIA= 2  nIPM= 93
+  in = 2  T = 25     Cal= 0.0199934  Str= 0  [Ca]= 0.0214472  [Sr]= 0.000388575  pH= 7.28903  It= 113  nPRL= 2  nFIA= 2  nIPM= 111
+  in = 3  T = 25     Cal= 0.0200044  Str= 0  [Ca]= 0.0220645  [Sr]= 0.00165896  pH= 7.2667  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+  in = 4  T = 25     Cal= 0.0170023  Str= 0.00301286  [Ca]= 0.0254525  [Sr]= 0.0042691  pH= 7.23795  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+ it = 71  tc = 7101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199777  Str= 0  [Ca]= 0.0211901  [Sr]= 0.000198001  pH= 7.31316  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0199935  Str= 0  [Ca]= 0.0214475  [Sr]= 0.000420262  pH= 7.28854  It= 150  nPRL= 2  nFIA= 2  nIPM= 148
+  in = 3  T = 25     Cal= 0.0200045  Str= 0  [Ca]= 0.0220964  [Sr]= 0.00179629  pH= 7.26599  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+  in = 4  T = 25     Cal= 0.0166501  Str= 0.00336615  [Ca]= 0.0257909  [Sr]= 0.00432571  pH= 7.23565  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 72  tc = 7201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019978  Str= 0  [Ca]= 0.0211969  [Sr]= 0.000198732  pH= 7.31272  It= 91  nPRL= 2  nFIA= 2  nIPM= 89
+  in = 2  T = 25     Cal= 0.0199939  Str= 0  [Ca]= 0.0214538  [Sr]= 0.000442103  pH= 7.2879  It= 191  nPRL= 2  nFIA= 2  nIPM= 189
+  in = 3  T = 25     Cal= 0.0200046  Str= 0  [Ca]= 0.0221291  [Sr]= 0.00194377  pH= 7.26532  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+  in = 4  T = 25     Cal= 0.0162979  Str= 0.0037195  [Ca]= 0.0261294  [Sr]= 0.00438245  pH= 7.23338  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 73  tc = 7301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199783  Str= 0  [Ca]= 0.0211945  [Sr]= 0.000200565  pH= 7.31237  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 2  T = 25     Cal= 0.0199944  Str= 0  [Ca]= 0.021468  [Sr]= 0.000460057  pH= 7.28721  It= 209  nPRL= 2  nFIA= 2  nIPM= 207
+  in = 3  T = 25     Cal= 0.0200046  Str= 0  [Ca]= 0.0221641  [Sr]= 0.00210033  pH= 7.26465  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+  in = 4  T = 25     Cal= 0.0159454  Str= 0.00407303  [Ca]= 0.0264679  [Sr]= 0.00443924  pH= 7.23115  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 74  tc = 7401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199785  Str= 0  [Ca]= 0.0211979  [Sr]= 0.000201978  pH= 7.31207  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 2  T = 25     Cal= 0.0199949  Str= 0  [Ca]= 0.0215184  [Sr]= 0.000469918  pH= 7.28628  It= 170  nPRL= 2  nFIA= 2  nIPM= 168
+  in = 3  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0222011  [Sr]= 0.00226526  pH= 7.264  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+  in = 4  T = 25     Cal= 0.015593  Str= 0.0044265  [Ca]= 0.0268064  [Sr]= 0.0044961  pH= 7.22894  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+ it = 75  tc = 7501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199788  Str= 0  [Ca]= 0.0212004  [Sr]= 0.000203435  pH= 7.31168  It= 86  nPRL= 2  nFIA= 2  nIPM= 84
+  in = 2  T = 25     Cal= 0.0199955  Str= 0  [Ca]= 0.0215506  [Sr]= 0.000482849  pH= 7.28545  It= 165  nPRL= 2  nFIA= 2  nIPM= 163
+  in = 3  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0222402  [Sr]= 0.00243792  pH= 7.26336  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+  in = 4  T = 25     Cal= 0.0152402  Str= 0.00478032  [Ca]= 0.0271452  [Sr]= 0.00455283  pH= 7.22676  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 76  tc = 7601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199789  Str= 0  [Ca]= 0.0212025  [Sr]= 0.000205015  pH= 7.31141  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 2  T = 25     Cal= 0.0199956  Str= 0  [Ca]= 0.0215654  [Sr]= 0.000495729  pH= 7.28475  It= 163  nPRL= 2  nFIA= 2  nIPM= 161
+  in = 3  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0222816  [Sr]= 0.00261735  pH= 7.26273  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+  in = 4  T = 25     Cal= 0.0148873  Str= 0.00513417  [Ca]= 0.027484  [Sr]= 0.00460966  pH= 7.22461  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 77  tc = 7701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199791  Str= 0  [Ca]= 0.0212027  [Sr]= 0.000207112  pH= 7.31109  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 2  T = 25     Cal= 0.019996  Str= 0  [Ca]= 0.0215179  [Sr]= 0.000513532  pH= 7.2844  It= 185  nPRL= 2  nFIA= 2  nIPM= 183
+  in = 3  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0223248  [Sr]= 0.00280295  pH= 7.2621  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+  in = 4  T = 25     Cal= 0.0145347  Str= 0.00548781  [Ca]= 0.0278228  [Sr]= 0.00466651  pH= 7.22249  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 78  tc = 7801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199792  Str= 0  [Ca]= 0.0212075  [Sr]= 0.000209257  pH= 7.3108  It= 85  nPRL= 2  nFIA= 2  nIPM= 83
+  in = 2  T = 25     Cal= 0.0199968  Str= 0  [Ca]= 0.0216106  [Sr]= 0.000524554  pH= 7.28324  It= 157  nPRL= 2  nFIA= 2  nIPM= 155
+  in = 3  T = 25     Cal= 0.0200047  Str= 0  [Ca]= 0.0223701  [Sr]= 0.00299375  pH= 7.26146  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+  in = 4  T = 25     Cal= 0.014182  Str= 0.00584146  [Ca]= 0.0281616  [Sr]= 0.00472341  pH= 7.22039  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+ it = 79  tc = 7901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199796  Str= 0  [Ca]= 0.0212165  [Sr]= 0.000208759  pH= 7.31034  It= 97  nPRL= 2  nFIA= 2  nIPM= 95
+  in = 2  T = 25     Cal= 0.0199974  Str= 0  [Ca]= 0.0216515  [Sr]= 0.000538592  pH= 7.28238  It= 149  nPRL= 2  nFIA= 2  nIPM= 147
+  in = 3  T = 25     Cal= 0.0200048  Str= 1.10174e-011  [Ca]= 0.0224168  [Sr]= 0.00318938  pH= 7.26084  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+  in = 4  T = 25     Cal= 0.0138288  Str= 0.00619559  [Ca]= 0.0285007  [Sr]= 0.00478033  pH= 7.21831  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 80  tc = 8001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199799  Str= 0  [Ca]= 0.0212179  [Sr]= 0.000210925  pH= 7.30994  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 2  T = 25     Cal= 0.0199977  Str= 0  [Ca]= 0.0216668  [Sr]= 0.000555218  pH= 7.28169  It= 148  nPRL= 2  nFIA= 2  nIPM= 146
+  in = 3  T = 25     Cal= 0.0200045  Str= 8.28149e-009  [Ca]= 0.0224664  [Sr]= 0.00338846  pH= 7.2602  It= 113  nPRL= 2  nFIA= 2  nIPM= 111
+  in = 4  T = 25     Cal= 0.0134761  Str= 0.00654928  [Ca]= 0.0288396  [Sr]= 0.00483719  pH= 7.21627  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+ it = 81  tc = 8101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199799  Str= 0  [Ca]= 0.0212169  [Sr]= 0.000213357  pH= 7.30973  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 2  T = 25     Cal= 0.0199981  Str= 0  [Ca]= 0.0216855  [Sr]= 0.000572766  pH= 7.28097  It= 146  nPRL= 2  nFIA= 2  nIPM= 144
+  in = 3  T = 25     Cal= 0.0200037  Str= 1.06517e-006  [Ca]= 0.0225173  [Sr]= 0.00359082  pH= 7.25957  It= 118  nPRL= 2  nFIA= 2  nIPM= 116
+  in = 4  T = 25     Cal= 0.0131228  Str= 0.00690343  [Ca]= 0.0291788  [Sr]= 0.00489411  pH= 7.21424  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 82  tc = 8201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199803  Str= 0  [Ca]= 0.0212216  [Sr]= 0.000215086  pH= 7.30939  It= 89  nPRL= 2  nFIA= 2  nIPM= 87
+  in = 2  T = 25     Cal= 0.0199984  Str= 0  [Ca]= 0.0216938  [Sr]= 0.000592262  pH= 7.28033  It= 146  nPRL= 2  nFIA= 2  nIPM= 144
+  in = 3  T = 25     Cal= 0.019949  Str= 5.60123e-005  [Ca]= 0.0226103  [Sr]= 0.00376292  pH= 7.25866  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+  in = 4  T = 25     Cal= 0.0127697  Str= 0.00725745  [Ca]= 0.029518  [Sr]= 0.00495093  pH= 7.21224  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+ it = 83  tc = 8301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199805  Str= 0  [Ca]= 0.0212272  [Sr]= 0.00021573  pH= 7.309  It= 93  nPRL= 2  nFIA= 2  nIPM= 91
+  in = 2  T = 25     Cal= 0.0199987  Str= 0  [Ca]= 0.0217255  [Sr]= 0.000610937  pH= 7.27954  It= 141  nPRL= 2  nFIA= 2  nIPM= 139
+  in = 3  T = 25     Cal= 0.0197245  Str= 0.000281246  [Ca]= 0.0228353  [Sr]= 0.0038284  pH= 7.25689  It= 113  nPRL= 2  nFIA= 2  nIPM= 111
+  in = 4  T = 25     Cal= 0.0124168  Str= 0.00761134  [Ca]= 0.0298572  [Sr]= 0.00500782  pH= 7.21026  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+ it = 84  tc = 8401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199809  Str= 0  [Ca]= 0.0212244  [Sr]= 0.000218726  pH= 7.30855  It= 87  nPRL= 2  nFIA= 2  nIPM= 85
+  in = 2  T = 25     Cal= 0.0199993  Str= 0  [Ca]= 0.0217574  [Sr]= 0.000630057  pH= 7.27877  It= 135  nPRL= 2  nFIA= 2  nIPM= 133
+  in = 3  T = 25     Cal= 0.019464  Str= 0.00054257  [Ca]= 0.023087  [Sr]= 0.00387214  pH= 7.25496  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+  in = 4  T = 25     Cal= 0.0120635  Str= 0.00796545  [Ca]= 0.0301965  [Sr]= 0.00506473  pH= 7.20831  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+ it = 85  tc = 8501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.019981  Str= 0  [Ca]= 0.0212362  [Sr]= 0.000217723  pH= 7.30825  It= 103  nPRL= 2  nFIA= 2  nIPM= 101
+  in = 2  T = 25     Cal= 0.0199996  Str= 0  [Ca]= 0.0217727  [Sr]= 0.000652561  pH= 7.2781  It= 133  nPRL= 2  nFIA= 2  nIPM= 131
+  in = 3  T = 25     Cal= 0.019201  Str= 0.00080655  [Ca]= 0.0233401  [Sr]= 0.00391469  pH= 7.25305  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+  in = 4  T = 25     Cal= 0.0117105  Str= 0.00831931  [Ca]= 0.0305359  [Sr]= 0.00512163  pH= 7.20637  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 86  tc = 8601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199814  Str= 0  [Ca]= 0.0212364  [Sr]= 0.000220752  pH= 7.30781  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 2  T = 25     Cal= 0.02  Str= 0  [Ca]= 0.0217877  [Sr]= 0.000676582  pH= 7.27744  It= 131  nPRL= 2  nFIA= 2  nIPM= 129
+  in = 3  T = 25     Cal= 0.0189376  Str= 0.00107091  [Ca]= 0.0235934  [Sr]= 0.00395719  pH= 7.25117  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+  in = 4  T = 25     Cal= 0.0113571  Str= 0.00867357  [Ca]= 0.0308753  [Sr]= 0.00517858  pH= 7.20446  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 87  tc = 8701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199817  Str= 0  [Ca]= 0.0212359  [Sr]= 0.000224114  pH= 7.30747  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 2  T = 25     Cal= 0.0200004  Str= 0  [Ca]= 0.0218043  [Sr]= 0.000702451  pH= 7.27677  It= 128  nPRL= 2  nFIA= 2  nIPM= 126
+  in = 3  T = 25     Cal= 0.0186742  Str= 0.00133542  [Ca]= 0.0238467  [Sr]= 0.00399956  pH= 7.2493  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.0110036  Str= 0.00902785  [Ca]= 0.0312147  [Sr]= 0.00523553  pH= 7.20257  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 88  tc = 8801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199818  Str= 0  [Ca]= 0.0212405  [Sr]= 0.000224679  pH= 7.30712  It= 89  nPRL= 2  nFIA= 2  nIPM= 87
+  in = 2  T = 25     Cal= 0.0200007  Str= 0  [Ca]= 0.0218174  [Sr]= 0.000729995  pH= 7.27613  It= 126  nPRL= 2  nFIA= 2  nIPM= 124
+  in = 3  T = 25     Cal= 0.0184104  Str= 0.00160005  [Ca]= 0.0241001  [Sr]= 0.00404209  pH= 7.24746  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.0106502  Str= 0.00938212  [Ca]= 0.0315542  [Sr]= 0.00529247  pH= 7.2007  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 89  tc = 8901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199821  Str= 0  [Ca]= 0.0212435  [Sr]= 0.000226408  pH= 7.30679  It= 88  nPRL= 2  nFIA= 2  nIPM= 86
+  in = 2  T = 25     Cal= 0.0200009  Str= 0  [Ca]= 0.0218342  [Sr]= 0.000758962  pH= 7.27547  It= 123  nPRL= 2  nFIA= 2  nIPM= 121
+  in = 3  T = 25     Cal= 0.0181466  Str= 0.00186479  [Ca]= 0.0243535  [Sr]= 0.00408455  pH= 7.24563  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.0102967  Str= 0.0097364  [Ca]= 0.0318938  [Sr]= 0.00534941  pH= 7.19885  It= 109  nPRL= 2  nFIA= 2  nIPM= 107
+ it = 90  tc = 9001
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199823  Str= 0  [Ca]= 0.0212478  [Sr]= 0.000227035  pH= 7.30643  It= 95  nPRL= 2  nFIA= 2  nIPM= 93
+  in = 2  T = 25     Cal= 0.0200011  Str= 0  [Ca]= 0.0218466  [Sr]= 0.000790833  pH= 7.27485  It= 121  nPRL= 2  nFIA= 2  nIPM= 119
+  in = 3  T = 25     Cal= 0.0178827  Str= 0.00212961  [Ca]= 0.0246071  [Sr]= 0.00412712  pH= 7.24383  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.00994316  Str= 0.0100907  [Ca]= 0.0322334  [Sr]= 0.00540637  pH= 7.19701  It= 108  nPRL= 2  nFIA= 2  nIPM= 106
+ it = 91  tc = 9101
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199825  Str= 0  [Ca]= 0.0212462  [Sr]= 0.000231149  pH= 7.30619  It= 86  nPRL= 2  nFIA= 2  nIPM= 84
+  in = 2  T = 25     Cal= 0.0200018  Str= 0  [Ca]= 0.0218585  [Sr]= 0.00082497  pH= 7.27425  It= 120  nPRL= 2  nFIA= 2  nIPM= 118
+  in = 3  T = 25     Cal= 0.0176187  Str= 0.00239445  [Ca]= 0.0248607  [Sr]= 0.00416962  pH= 7.24204  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.00958955  Str= 0.0104451  [Ca]= 0.0325731  [Sr]= 0.00546337  pH= 7.1952  It= 108  nPRL= 2  nFIA= 2  nIPM= 106
+ it = 92  tc = 9201
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199827  Str= 0  [Ca]= 0.0212445  [Sr]= 0.000234078  pH= 7.30585  It= 84  nPRL= 2  nFIA= 2  nIPM= 82
+  in = 2  T = 25     Cal= 0.0200019  Str= 0  [Ca]= 0.0218696  [Sr]= 0.000862363  pH= 7.27365  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+  in = 3  T = 25     Cal= 0.0173547  Str= 0.00265927  [Ca]= 0.0251142  [Sr]= 0.00421225  pH= 7.24028  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+  in = 4  T = 25     Cal= 0.00923587  Str= 0.0107996  [Ca]= 0.0329128  [Sr]= 0.00552034  pH= 7.19341  It= 108  nPRL= 2  nFIA= 2  nIPM= 106
+ it = 93  tc = 9301
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199828  Str= 0  [Ca]= 0.0212571  [Sr]= 0.000234452  pH= 7.30547  It= 92  nPRL= 2  nFIA= 2  nIPM= 90
+  in = 2  T = 25     Cal= 0.0200023  Str= 0  [Ca]= 0.0218813  [Sr]= 0.000901611  pH= 7.27306  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+  in = 3  T = 25     Cal= 0.0170905  Str= 0.00292443  [Ca]= 0.025368  [Sr]= 0.00425475  pH= 7.23853  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.00888219  Str= 0.011154  [Ca]= 0.0332525  [Sr]= 0.00557732  pH= 7.19163  It= 108  nPRL= 2  nFIA= 2  nIPM= 106
+ it = 94  tc = 9401
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199831  Str= 0  [Ca]= 0.0212606  [Sr]= 0.000235739  pH= 7.30512  It= 100  nPRL= 2  nFIA= 2  nIPM= 98
+  in = 2  T = 25     Cal= 0.0200025  Str= 0  [Ca]= 0.0218921  [Sr]= 0.000944417  pH= 7.27248  It= 119  nPRL= 2  nFIA= 2  nIPM= 117
+  in = 3  T = 25     Cal= 0.0168263  Str= 0.00318942  [Ca]= 0.0256217  [Sr]= 0.00429723  pH= 7.2368  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.0085284  Str= 0.0115085  [Ca]= 0.0335923  [Sr]= 0.00563433  pH= 7.18987  It= 108  nPRL= 2  nFIA= 2  nIPM= 106
+ it = 95  tc = 9501
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199835  Str= 0  [Ca]= 0.0212624  [Sr]= 0.000238382  pH= 7.30467  It= 94  nPRL= 2  nFIA= 2  nIPM= 92
+  in = 2  T = 25     Cal= 0.0200027  Str= 0  [Ca]= 0.0219053  [Sr]= 0.000989693  pH= 7.27191  It= 118  nPRL= 2  nFIA= 2  nIPM= 116
+  in = 3  T = 25     Cal= 0.0165621  Str= 0.0034544  [Ca]= 0.0258755  [Sr]= 0.00433983  pH= 7.23508  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.00817456  Str= 0.0118631  [Ca]= 0.0339321  [Sr]= 0.00569133  pH= 7.18813  It= 108  nPRL= 2  nFIA= 2  nIPM= 106
+ it = 96  tc = 9601
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199835  Str= 0  [Ca]= 0.0212667  [Sr]= 0.000240184  pH= 7.3044  It= 91  nPRL= 2  nFIA= 2  nIPM= 89
+  in = 2  T = 25     Cal= 0.0200028  Str= 0  [Ca]= 0.0219128  [Sr]= 0.00104018  pH= 7.27137  It= 122  nPRL= 2  nFIA= 2  nIPM= 120
+  in = 3  T = 25     Cal= 0.0162979  Str= 0.00371946  [Ca]= 0.0261293  [Sr]= 0.00438254  pH= 7.23339  It= 110  nPRL= 2  nFIA= 2  nIPM= 108
+  in = 4  T = 25     Cal= 0.00782073  Str= 0.0122176  [Ca]= 0.034272  [Sr]= 0.00574832  pH= 7.1864  It= 108  nPRL= 2  nFIA= 2  nIPM= 106
+ it = 97  tc = 9701
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199839  Str= 0  [Ca]= 0.0212712  [Sr]= 0.000241729  pH= 7.30409  It= 100  nPRL= 2  nFIA= 2  nIPM= 98
+  in = 2  T = 25     Cal= 0.0200031  Str= 0  [Ca]= 0.0219249  [Sr]= 0.00109329  pH= 7.27082  It= 122  nPRL= 2  nFIA= 2  nIPM= 120
+  in = 3  T = 25     Cal= 0.0160335  Str= 0.00398467  [Ca]= 0.0263832  [Sr]= 0.00442512  pH= 7.2317  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.0074676  Str= 0.0125715  [Ca]= 0.0346119  [Sr]= 0.00580533  pH= 7.1847  It= 106  nPRL= 2  nFIA= 2  nIPM= 104
+ it = 98  tc = 9801
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199842  Str= 0  [Ca]= 0.0212681  [Sr]= 0.00024506  pH= 7.30365  It= 90  nPRL= 2  nFIA= 2  nIPM= 88
+  in = 2  T = 25     Cal= 0.0200037  Str= 0  [Ca]= 0.0219347  [Sr]= 0.00115067  pH= 7.2703  It= 125  nPRL= 2  nFIA= 2  nIPM= 123
+  in = 3  T = 25     Cal= 0.015769  Str= 0.00425  [Ca]= 0.026637  [Sr]= 0.00446781  pH= 7.23004  It= 112  nPRL= 2  nFIA= 2  nIPM= 110
+  in = 4  T = 25     Cal= 0.00711369  Str= 0.0129261  [Ca]= 0.0349519  [Sr]= 0.00586234  pH= 7.183  It= 106  nPRL= 2  nFIA= 2  nIPM= 104
+ it = 99  tc = 9901
+  in = 0  T = 25     Cal= 0.0199605  Str= 0  [Ca]= 0.0211639  [Sr]= 0.000135981  pH= 7.33685  It= 77  nPRL= 2  nFIA= 2  nIPM= 75
+  in = 1  T = 25     Cal= 0.0199844  Str= 0  [Ca]= 0.0212767  [Sr]= 0.00024607  pH= 7.30331  It= 105  nPRL= 2  nFIA= 2  nIPM= 103
+  in = 2  T = 25     Cal= 0.0200038  Str= 0  [Ca]= 0.0219525  [Sr]= 0.00121008  pH= 7.26976  It= 123  nPRL= 2  nFIA= 2  nIPM= 121
+  in = 3  T = 25     Cal= 0.0155047  Str= 0.00451504  [Ca]= 0.0268912  [Sr]= 0.00451027  pH= 7.22839  It= 111  nPRL= 2  nFIA= 2  nIPM= 109
+  in = 4  T = 25     Cal= 0.00675974  Str= 0.0132807  [Ca]= 0.0352919  [Sr]= 0.00591939  pH= 7.18133  It= 106  nPRL= 2  nFIA= 2  nIPM= 104
+Pure GEM IPM2 runtime , s: 42.062
+Total time of calculation, s: 42.122
+    Mean GEMIPM2 iterations per node: 2 2 93.926 95.926
+ This gem_node test has finished Ok

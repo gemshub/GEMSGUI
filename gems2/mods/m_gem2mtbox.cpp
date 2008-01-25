@@ -4,8 +4,7 @@
 // Implementation of TInteg/TGEM2MT classes, calculation functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva  
-// Copyright (C) 1995,2001 S.Dmytriyeva
-//           (C) 2007      S. Dmytriyeva, D.Kulik 
+// Copyright (C) 1995, 2008  S. Dmytriyeva, D.Kulik 
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -87,7 +86,7 @@ void TGEM2MT::Solut( double *m, double *dm, double t )
     fe = -1;
 	q = mtp->FDLi[kk][0];    // index of source box
 	p = mtp->FDLi[kk][1];    // index of receiving box 
-//	FLXorder = mtp->FDLop[kk][0];  // flux order code
+//	FLXorder = mtp->FDLf[kk][0];  // flux order code
 FLXorder = ord(kk);
 //	FLXtype = mtp->FDLop[kk][1];   // flux type code
 	strncpy( MGPid, mtp->FDLmp[kk], MAXSYMB );  

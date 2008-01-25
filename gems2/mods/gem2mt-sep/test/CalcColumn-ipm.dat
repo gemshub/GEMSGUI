@@ -121,7 +121,7 @@
 <pa_DNS>       12.05
 # IEPS: Control parameter of SACT calculation in sorption/surface complexation models
 <pa_IEPS>      0.001
-
+<pa_DG>        1e-6
 # pKin: Flag for using metastability/kinetic constraints on calculated DC amounts (see dll, dul arrays)
 <pKin>             1
 # DKIN: Tolerance on amount of DC with two-side metastability constraints set in dll, dul (moles) 

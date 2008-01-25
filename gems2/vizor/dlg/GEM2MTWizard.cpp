@@ -102,7 +102,11 @@ GEM2MTWizard::GEM2MTWizard( const char* pkey, char flgs[22],
 
    if( flgs[12] != '-' )
      c_PvGrid->setChecked( true );
-   else c_PvGrid->setChecked( false );
+   else
+	  c_PvGrid->setChecked( false );
+   if( flgs[13] != '-' )
+     c_PvSIA->setChecked( true );
+   else c_PvSIA->setChecked( false );
 //Page4
     spinBox18->setValue(size[14]);
 
@@ -205,7 +209,12 @@ void   GEM2MTWizard::getFlags( char flgs[22] )
   if( c_PvGrid->isChecked() )
      flgs[12] = '+';
   else flgs[12] = '-';
-// flags 0,1,2,3, 13, 15, 16 not used or internal
+  if( c_PvSIA->isChecked() )
+     flgs[13] = '+';
+  else flgs[13] = '-';
+  
+  
+// flags 0,1,2,3, 15, 16 not used or internal
 }
 
 void

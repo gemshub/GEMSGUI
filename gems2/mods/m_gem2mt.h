@@ -37,17 +37,17 @@ typedef struct
    PunP,          //  Units of pressure  { b;  B p P A reserved }
    PunT,          // Units of temperature  { C; K F reserved }
 
-// Allocation flags
+// Allocation and setup flags
    PvICi,    // Use IC quantities for initial system compositions? { + * - }
    PvAUi,    // Use formula units for initial sub-system compositions? { + * - }
    PvMO,     // Use non stop debug output for nodes (+ -)?
    PvMSg,    // Use math script for graphic presentation (+ -)?
-   PvEF,      // Use empirical data for graphics  (+ -)?
+   PvEF,     // Use empirical data for graphics  (+ -)?
    PvPGD,    // Use phase groups definitions (+ -)?
    PvFDL,    // Use flux definition list (+ -)
    PvSFL,    // Use source fluxes and elemental stoichiometries for them? (+ -)
-   PvGrid,    // Use array of grid point locations? (+ -)
-   PvRes,    // reserved (+ -)
+   PvGrid,   // Use array of grid point locations? (+ -)
+   PvSIA,    // Use smart initial approximation in GEM IPM (+); SIA internal (*); AIA (-)
 
      // Controls on operation
    PsMode,  // Code of GEM2MT mode of operation { S F A D T }

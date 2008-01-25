@@ -50,38 +50,17 @@ OBJECTS_DIR = obj/
 
 ####### Files
 
-HEADERS =	../../vizor/libs/array.h \
-		../../vizor/libs/verror.h \
-		../../vizor/libs/gstring.h \
-		../../vizor/libs/gdatastream.h \
-		../../vizor/kernel/v_user.h \
-		../s_fgl.h \
-		ms_gem2mt.h \
-		../submod/databr.h \
-		../submod/datach.h \
-		../submod/node.h \
-		../submod/particlearray.h \
-		../submod/nodearray.h \
-		../submod/ms_multi.h \
-		../submod/io_arrays.h \
-		../gemipm/m_const.h \
-		../gemipm/m_param.h \
-		../numerics/num_methods.h \
-		../numerics/tnt_i_refvec.h \
-		../numerics/tnt_array1d.h \
-		../numerics/tnt_array2d.h \
-		../numerics/tnt.h \
-		../numerics/jama_cholesky.h \
-		../numerics/jama_lu.h
-SOURCES =	../../vizor/libs/gstring.cpp \
+SOURCES = ../../vizor/libs/gstring.cpp \
 		../../vizor/libs/gdatastream.cpp \
+		../numerics/num_methods.cpp \
 		../s_fgl.cpp \
 		../s_fgl2.cpp \
 		../m_gem2mtt.cpp \
-		../submod/node.cpp \
+		../m_gem2mtbox.cpp \
 		../submod/nodearray.cpp \
-		../submod/particlearray.cpp \
+		../submod/node.cpp \
 		../submod/node_format.cpp \
+		../submod/particlearray.cpp \
 		../submod/ms_multi_file.cpp \
 		../submod/ms_multi_format.cpp \
 		../submod/ipm_chemical.cpp \
@@ -90,18 +69,20 @@ SOURCES =	../../vizor/libs/gstring.cpp \
 		../submod/ipm_main.cpp \
 		../submod/ipm_simplex.cpp \
 		../submod/io_arrays.cpp \
+		ms_gem2mt.cpp \
 		main.cpp \
-		../gemipm/ms_param.cpp \
-		../numerics/num_methods.cpp
-OBJECTS =	obj/gstring.o \
+		../gemipm/ms_param.cpp
+OBJECTS = obj/gstring.o \
 		obj/gdatastream.o \
+		obj/num_methods.o \
 		obj/s_fgl.o \
 		obj/s_fgl2.o \
 		obj/m_gem2mtt.o \
-		obj/node.o \
+		obj/m_gem2mtbox.o \
 		obj/nodearray.o \
-		obj/particlearray.o \
+		obj/node.o \
 		obj/node_format.o \
+		obj/particlearray.o \
 		obj/ms_multi_file.o \
 		obj/ms_multi_format.o \
 		obj/ipm_chemical.o \
@@ -110,9 +91,9 @@ OBJECTS =	obj/gstring.o \
 		obj/ipm_main.o \
 		obj/ipm_simplex.o \
 		obj/io_arrays.o \
+		obj/ms_gem2mt.o \
 		obj/main.o \
-		obj/ms_param.o \
-		obj/num_methods.o
+		obj/ms_param.o
 
 DIST	   = gem2mt-sep.pro
 DESTDIR  = 
@@ -154,6 +135,7 @@ clean:
 	-$(DEL_FILE) obj\s_fgl.o
 	-$(DEL_FILE) obj\s_fgl2.o
 	-$(DEL_FILE) obj\m_gem2mtt.o
+	-$(DEL_FILE) obj\m_gem2mtbox.o
 	-$(DEL_FILE) obj\node.o
 	-$(DEL_FILE) obj\nodearray.o 
 	-$(DEL_FILE) obj\particlearray.o 
@@ -167,6 +149,7 @@ clean:
 	-$(DEL_FILE) obj\ipm_simplex.o
 	-$(DEL_FILE) obj\io_arrays.o
 	-$(DEL_FILE) obj\main.o
+	-$(DEL_FILE) obj\ms_gem2mt.o
 	-$(DEL_FILE) obj\ms_param.o
 	-$(DEL_FILE) obj\num_methods.o
 	-$(DEL_FILE) $(TARGET)
@@ -185,32 +168,49 @@ obj/gstring.o: ../../vizor/libs/gstring.cpp ../../vizor/libs/gstring.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/gstring.o ../../vizor/libs/gstring.cpp
 
 obj/gdatastream.o: ../../vizor/libs/gdatastream.cpp ../../vizor/libs/gdatastream.h \
-		../../vizor/libs/verror.h \
 		../../vizor/libs/gstring.h \
-		../../vizor/libs/array.h
+		../../vizor/libs/array.h \
+		../../vizor/libs/verror.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/gdatastream.o ../../vizor/libs/gdatastream.cpp
+
+obj/num_methods.o: ../numerics/num_methods.cpp ../../vizor/kernel/v_user.h \
+		../../vizor/libs/gstring.h \
+		../../vizor/libs/array.h \
+		../../vizor/libs/verror.h \
+		../numerics/num_methods.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/num_methods.o ../numerics/num_methods.cpp
 
 obj/s_fgl.o: ../s_fgl.cpp ../s_fgl.h \
 		../m_const.h \
-		../../vizor/libs/verror.h \
-		../../vizor/kernel/v_user.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
 		../../vizor/libs/gstring.h \
-		../../vizor/libs/array.h
+		../../vizor/libs/array.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_vals.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fgl.o ../s_fgl.cpp
 
 obj/s_fgl2.o: ../s_fgl2.cpp ../s_fgl.h \
 		../m_const.h \
-		../s_tpwork.h \
-		../../vizor/libs/verror.h \
-		../../vizor/kernel/v_user.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
 		../../vizor/libs/gstring.h \
 		../../vizor/libs/array.h \
-		../../vizor/kernel/v_object.h \
-		../v_mod.h \
-		../../vizor/kernel/v_vals.h
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_vals.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../s_tpwork.h \
+		../v_mod.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fgl2.o ../s_fgl2.cpp
 
-obj/m_gem2mtt.o: ../m_gem2mtt.cpp \
+obj/m_gem2mtt.o: ../m_gem2mtt.cpp ../m_gem2mt.h \
 		../m_param.h \
 		../v_mod.h \
 		../../vizor/kernel/v_vals.h \
@@ -239,20 +239,31 @@ obj/m_gem2mtt.o: ../m_gem2mtt.cpp \
 		ms_gem2mt.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_gem2mtt.o ../m_gem2mtt.cpp
 
-obj/node.o: ../submod/node.cpp ../submod/node.h \
-		../../vizor/libs/gdatastream.h \
-		../numerics/num_methods.h \
-		../gemipm/m_param.h \
-		../submod/datach.h \
-		../submod/databr.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
+obj/m_gem2mtbox.o: ../m_gem2mtbox.cpp ../submod/io_arrays.h \
+		../m_gem2mt.h \
+		../submod/nodearray.h \
+		ms_gem2mt.h \
 		../../vizor/libs/gstring.h \
 		../../vizor/libs/array.h \
+		../m_param.h \
 		../v_ipnc.h \
+		../../vizor/kernel/v_module.h \
+		../submod/particlearray.h \
+		../../vizor/libs/gdatastream.h \
+		../submod/ms_multi.h \
+		../../vizor/libs/verror.h \
 		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/node.o ../submod/node.cpp
+		../../vizor/kernel/v_user.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_vals.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/node.h \
+		../gemipm/m_param.h \
+		../submod/datach.h \
+		../submod/databr.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_gem2mtbox.o ../m_gem2mtbox.cpp
 
 obj/nodearray.o: ../submod/nodearray.cpp ../submod/particlearray.h \
 		../submod/nodearray.h \
@@ -283,6 +294,60 @@ obj/nodearray.o: ../submod/nodearray.cpp ../submod/particlearray.h \
 		../numerics/num_methods.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/nodearray.o ../submod/nodearray.cpp
 
+obj/node.o: ../submod/node.cpp ../submod/node.h \
+		../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
+		../../vizor/libs/gstring.h \
+		../../vizor/libs/array.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
+		../v_ipnc.h \
+		../m_const.h \
+		../submod/ms_calc.h \
+		../submod/datach.h \
+		../submod/databr.h \
+		../../vizor/libs/gdatastream.h \
+		../numerics/num_methods.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/node.o ../submod/node.cpp
+
+obj/node_format.o: ../submod/node_format.cpp ../submod/io_arrays.h \
+		../../vizor/libs/gstring.h \
+		../../vizor/libs/array.h \
+		../submod/node.h \
+		../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
+		../v_ipnc.h \
+		../m_const.h \
+		../submod/ms_calc.h \
+		../submod/datach.h \
+		../submod/databr.h \
+		../../vizor/libs/gdatastream.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/node_format.o ../submod/node_format.cpp
+
 obj/particlearray.o: ../submod/particlearray.cpp ../submod/particlearray.h \
 		../submod/nodearray.h \
 		../submod/node.h \
@@ -311,155 +376,244 @@ obj/particlearray.o: ../submod/particlearray.cpp ../submod/particlearray.h \
 		../numerics/num_methods.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/particlearray.o ../submod/particlearray.cpp
 
-obj/node_format.o: ../submod/node_format.cpp ../submod/io_arrays.h \
-		../submod/node.h \
-		../../vizor/libs/gdatastream.h \
-		../../vizor/libs/gstring.h \
-		../../vizor/libs/array.h \
-		../gemipm/m_param.h \
-		../submod/datach.h \
-		../submod/databr.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
-		../v_ipnc.h \
-		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/node_format.o ../submod/node_format.cpp
-
 obj/ms_multi_file.o: ../submod/ms_multi_file.cpp ../submod/io_arrays.h \
-		../gemipm/m_param.h \
-		../../vizor/libs/gdatastream.h \
 		../../vizor/libs/gstring.h \
 		../../vizor/libs/array.h \
-		../submod/ms_multi.h \
+		../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
 		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
 		../v_ipnc.h \
-		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h
+		../m_const.h \
+		../submod/ms_calc.h \
+		../../vizor/libs/gdatastream.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_multi_file.o ../submod/ms_multi_file.cpp
 
 obj/ms_multi_format.o: ../submod/ms_multi_format.cpp ../submod/io_arrays.h \
-		../gemipm/m_param.h \
-		../submod/node.h \
 		../../vizor/libs/gstring.h \
 		../../vizor/libs/array.h \
-		../../vizor/libs/gdatastream.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
-		../v_ipnc.h \
-		../gemipm/m_const.h \
+		../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
 		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
+		../v_ipnc.h \
+		../m_const.h \
+		../submod/ms_calc.h \
+		../submod/node.h \
 		../submod/datach.h \
 		../submod/databr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_multi_format.o ../submod/ms_multi_format.cpp
 
-obj/ipm_chemical.o: ../submod/ipm_chemical.cpp ../gemipm/m_param.h \
-		../../vizor/libs/gdatastream.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
+obj/ipm_chemical.o: ../submod/ipm_chemical.cpp ../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
 		../../vizor/libs/gstring.h \
 		../../vizor/libs/array.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
 		../v_ipnc.h \
-		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h
+		../m_const.h \
+		../submod/ms_calc.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ipm_chemical.o ../submod/ipm_chemical.cpp
 
-obj/ipm_chemical2.o: ../submod/ipm_chemical2.cpp ../gemipm/m_param.h \
-		../../vizor/libs/gdatastream.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
+obj/ipm_chemical2.o: ../submod/ipm_chemical2.cpp ../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
 		../../vizor/libs/gstring.h \
 		../../vizor/libs/array.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
 		../v_ipnc.h \
-		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h
+		../m_const.h \
+		../submod/ms_calc.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ipm_chemical2.o ../submod/ipm_chemical2.cpp
 
-obj/ipm_chemical3.o: ../submod/ipm_chemical3.cpp ../gemipm/m_param.h \
-		../s_fgl.h \
-		../../vizor/libs/gdatastream.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
+obj/ipm_chemical3.o: ../submod/ipm_chemical3.cpp ../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
 		../../vizor/libs/gstring.h \
 		../../vizor/libs/array.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
 		../v_ipnc.h \
-		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h
+		../m_const.h \
+		../submod/ms_calc.h \
+		../s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ipm_chemical3.o ../submod/ipm_chemical3.cpp
 
-obj/ipm_main.o: ../submod/ipm_main.cpp ../gemipm/m_param.h \
+obj/ipm_main.o: ../submod/ipm_main.cpp ../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
+		../../vizor/libs/gstring.h \
+		../../vizor/libs/array.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
+		../v_ipnc.h \
+		../m_const.h \
+		../submod/ms_calc.h \
 		../numerics/jama_lu.h \
+		../numerics/tnt.h \
+		../numerics/tnt_array1d.h \
+		../numerics/tnt_i_refvec.h \
+		../numerics/tnt_array2d.h \
 		../numerics/jama_cholesky.h \
 		../submod/stepwise.h \
 		../submod/node.h \
-		../../vizor/libs/gdatastream.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
-		../../vizor/libs/gstring.h \
-		../../vizor/libs/array.h \
-		../v_ipnc.h \
-		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h \
-		../numerics/tnt.h \
-		../numerics/tnt_array1d.h \
-		../numerics/tnt_array2d.h \
-		../numerics/tnt_i_refvec.h \
 		../submod/datach.h \
 		../submod/databr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ipm_main.o ../submod/ipm_main.cpp
 
-obj/ipm_simplex.o: ../submod/ipm_simplex.cpp ../gemipm/m_param.h \
-		../../vizor/libs/gdatastream.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
+obj/ipm_simplex.o: ../submod/ipm_simplex.cpp ../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
 		../../vizor/libs/gstring.h \
 		../../vizor/libs/array.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
 		../v_ipnc.h \
-		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h
+		../m_const.h \
+		../submod/ms_calc.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ipm_simplex.o ../submod/ipm_simplex.cpp
 
 obj/io_arrays.o: ../submod/io_arrays.cpp ../submod/io_arrays.h \
-		../../vizor/libs/verror.h \
 		../../vizor/libs/gstring.h \
-		../../vizor/libs/array.h
+		../../vizor/libs/array.h \
+		../../vizor/libs/verror.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/io_arrays.o ../submod/io_arrays.cpp
 
-obj/main.o: main.cpp ../submod/node.h \
+obj/ms_gem2mt.o: ms_gem2mt.cpp ../submod/io_arrays.h \
+		ms_gem2mt.h \
+		../../vizor/libs/gstring.h \
+		../../vizor/libs/array.h \
+		../submod/particlearray.h \
+		../submod/nodearray.h \
+		../submod/node.h \
 		../gemipm/m_param.h \
 		../submod/datach.h \
 		../submod/databr.h \
 		../../vizor/libs/gdatastream.h \
 		../submod/ms_multi.h \
 		../../vizor/libs/verror.h \
+		../v_ipnc.h \
+		../gemipm/m_const.h \
+		../../vizor/kernel/v_user.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_gem2mt.o ms_gem2mt.cpp
+
+obj/main.o: main.cpp ms_gem2mt.h \
 		../../vizor/libs/gstring.h \
+		../submod/particlearray.h \
+		../submod/nodearray.h \
+		../submod/node.h \
+		../gemipm/m_param.h \
+		../submod/datach.h \
+		../submod/databr.h \
+		../../vizor/libs/gdatastream.h \
+		../submod/ms_multi.h \
+		../../vizor/libs/verror.h \
 		../../vizor/libs/array.h \
 		../v_ipnc.h \
 		../gemipm/m_const.h \
 		../../vizor/kernel/v_user.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/main.o main.cpp
 
-obj/ms_param.o: ../gemipm/ms_param.cpp ../gemipm/m_param.h \
+obj/ms_param.o: ../gemipm/ms_param.cpp ../m_param.h \
+		../v_mod.h \
+		../../vizor/kernel/v_vals.h \
+		../../vizor/libs/gstring.h \
+		../../vizor/libs/array.h \
+		../submod/ms_rmults.h \
+		../../vizor/kernel/v_module.h \
+		../../vizor/kernel/v_object.h \
+		../../vizor/kernel/v_user.h \
+		../../vizor/libs/verror.h \
+		../../vizor/kernel/v_dbm.h \
+		../../vizor/kernel/v_dbfile.h \
+		../../vizor/kernel/v_file.h \
+		../submod/ms_mtparm.h \
+		../submod/ms_system.h \
+		../m_phase.h \
+		../submod/ms_multi.h \
+		../v_ipnc.h \
+		../m_const.h \
+		../submod/ms_calc.h \
 		../numerics/num_methods.h \
 		../../vizor/libs/gdatastream.h \
 		../submod/node.h \
-		../submod/ms_multi.h \
-		../../vizor/libs/verror.h \
-		../../vizor/libs/gstring.h \
-		../../vizor/libs/array.h \
-		../v_ipnc.h \
-		../gemipm/m_const.h \
-		../../vizor/kernel/v_user.h \
 		../submod/datach.h \
 		../submod/databr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_param.o ../gemipm/ms_param.cpp
-
-obj/num_methods.o: ../numerics/num_methods.cpp ../../vizor/kernel/v_user.h \
-		../numerics/num_methods.h \
-		../../vizor/libs/verror.h \
-		../../vizor/libs/gstring.h \
-		../../vizor/libs/array.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/num_methods.o ../numerics/num_methods.cpp
 
 ####### Install
 
