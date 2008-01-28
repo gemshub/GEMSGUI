@@ -361,10 +361,10 @@ NEXT:
         rc[q].Pst = (float)STANDARD_P;
 
     if( CE == CTM_DKR )  // Franck-Marshall density model added by TW and DK 29.01.2008
-    {	
+    {
         if( vfQuestion(window(), GetName(),
             "Estimate dGr,dSr,dHr,dCpr,dVr using the Franck-Marshall density model?" ))
-         { 
+         {
             double TK;
             double H2Oprop[4];
             double MFDcoef[7];
@@ -390,8 +390,8 @@ NEXT:
             MFDcoef[4] = rc[q].DSt[4];
             MFDcoef[5] = rc[q].DSt[5];
             MFDcoef[6] = rc[q].DSt[6];
-            
-           // calculate MFD function 
+
+           // calculate MFD function
             MFDcalc(TK, H2Oprop, MFDcoef, ReactProp);
 
            // get results
@@ -402,7 +402,7 @@ NEXT:
            rc[q].Ss[0] = ReactProp[2];
            rc[q].Vs[0] = ReactProp[5];
            rc[q].Cps[0] = ReactProp[4];
-         }    
+         }
     }
     if( CE == CTM_MRB )  // Inserted provisionally by DK on 06.08.07
     {
@@ -434,7 +434,7 @@ NEXT:
             MRBcoef[1] = rc[q].DSt[1];
             MRBcoef[2] = rc[q].DSt[2];
 
-           // calculate MRB function 
+           // calculate MRB function
             MRBcalc (TK, H2Oprop, MRBcoef, ReactProp);
 
            // get results
@@ -1176,32 +1176,8 @@ FINITA:
 
 //-----------------------------------------------------------------
 // Calculation of deltaR with modified Ryzhenko-Bryzgalin
-//                       model (added by TW and DK on 3.08.2007
-// Modified Ryzhenko-Bryzgalin (MRB) model
-// the calculation is done in the function MRBcalc, we need to pass
-// the following data to this function:
-//  TK: temperature in K
-//  MRBcoef[3]: array with 3 model parameters, that are taken from database
-//    ReacDC entry
-//  H2Oprop[4]: array with 4 water properties, these are [0] density,
-//  	[1] isobaric expansibility (alpha),
-//      [2] temperature derivative of alpha (d alpha /d T),
-//  	[3] isothermal copressibility (beta)
-//  - those water properties are obtained from SUPCRT subroutines (s_supcrt.h)
-//  in Gems, and exist in the water work structure: Alphaw, Betaw, dAldT
-//  ReactProp[6]: array with reaction properties that are returned
-// to the ReacDC function that calls the MRBcalc() function;
-// the reaction properties are: [0] log K at PT, [1] delta G,
-//  	[2] delta S, [3] delta H, [4] delta CP, [5] delta V
-//
-// - the following existing data structures (and counters) in ReacDC can be used:
-//  PreDS   flag for coeffs of electrost. models
-//  NcSt    N of nonzero coeffs of electrost. models
-//  *DSt    coeffs of electrostatic models
-//
-// - we then need a case for the mode of P-T corrections, would propose:
-//  CTM_MRB = ´Y´     using electrostatic model of Ryzhenko-Bryzgalin
-//
+// model (added by TW and DK on 3.08.2007)
+
 void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
 {
     double TK;
@@ -1229,11 +1205,6 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
 
      TK = aW.WW(p).T;
 //     P = aW.WW(p).P;
-// supcrt water structure Alphaw, Betaw, dAldT
-    // test water properties (400 deg C, 1000 bar)
-    // alphaW = 0.00213595;
-    // dAldTW = 4.61687e-6;
-    // betaW = 0.000210979;
        rhoW = aW.WW(p).wRo;
        alphaW = aW.WW(p).wAlp;
        dAldTW = aW.WW(p).wdAlpdT;
@@ -1247,10 +1218,8 @@ void TReacDC::calc_r_MRB( int q, int p, int /*CE*/, int /*CV*/ )
     MRBcoef[0] = rc[q].DSt[0];
     MRBcoef[1] = rc[q].DSt[1];
     MRBcoef[2] = rc[q].DSt[2];
-// . . . . . . . . . . . . . . . .
-// NaCO3- is test case: MRBcoef[0] = 0.9; MRBcoef[1] = 0.744; MRBcoef[2] = 0.0;
 
-    // calculate results - call MRB function (see below)
+// calculate results - call MRB function (see below)
     MRBcalc (TK, H2Oprop, MRBcoef, ReactProp);
 
 //       aW.WW(p).K =   rc[q].Ks[0];
@@ -1278,6 +1247,7 @@ FINITA:
 // calculates the pK of aqueous species from the MRB model
 // parameters: temperature in K, MRB parameters (pK298, Azz, Bzz),
 // H2O properties (density, alpha, temperature derivative of alpha, beta)
+
 int
 TReacDC::MRBcalc( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp )
 {
@@ -1326,9 +1296,6 @@ TReacDC::MRBcalc( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp
 	dGr = pKTP*log(10.)*R_C*TK;
 	dG298 = pK298*log(10.)*R_C*298.15;
 
-	/*dGr = dG298 - R_C*log(10.)/zzH2O * (a*TK + b + c/TK + d/pow(TK,2.)
-		+ (e*TK + f + g/TK)*log10(RHO) + pKw298*298.15) * (A+B/TK);*/
-
 	I = a*TK + b + c/TK + d/pow(TK,2.)
 		+ ( e*TK + f + g/TK ) * log10(RHO) - (-pKw298)*298.15;
 	J = A + B/TK;
@@ -1359,9 +1326,9 @@ TReacDC::MRBcalc( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp
 
 
 //-----------------------------------------------------------------
-// Calculation of deltaR with Franck-Marshall density model 
-//                       model (added by TW and DK on 29.01.2008
-//
+// Calculation of deltaR with Franck-Marshall density model
+// (added by TW and DK on 29.01.2008
+
 void TReacDC::calc_r_FMD( int q, int p, int /*CE*/, int /*CV*/ )
 {
     double TK;
@@ -1389,11 +1356,6 @@ void TReacDC::calc_r_FMD( int q, int p, int /*CE*/, int /*CV*/ )
 
      TK = aW.WW(p).T;
 //     P = aW.WW(p).P;
-// supcrt water structure Alphaw, Betaw, dAldT
-    // test water properties (400 deg C, 1000 bar)
-    // alphaW = 0.00213595;
-    // dAldTW = 4.61687e-6;
-    // betaW = 0.000210979;
        rhoW = aW.WW(p).wRo;
        alphaW = aW.WW(p).wAlp;
        dAldTW = aW.WW(p).wdAlpdT;
@@ -1411,8 +1373,7 @@ void TReacDC::calc_r_FMD( int q, int p, int /*CE*/, int /*CV*/ )
     MFDcoef[4] = rc[q].DSt[4];
     MFDcoef[5] = rc[q].DSt[5];
     MFDcoef[6] = rc[q].DSt[6];
-    // . . . . . . . . . . . . . . . .
-// 
+
     // calculate results - call MRB function (see below)
     MFDcalc (TK, H2Oprop, MFDcoef, ReactProp);
 
@@ -1436,7 +1397,7 @@ FINITA:
     aW.WW(p).devCp=rc[q].Cps[2];
 }
 
-int 
+int
 TReacDC::MFDcalc( double TK, double *H2Oprop, double *MFDcoef, double *ReactProp )
 {
 	// calculates reaction properties from Marshall-Franck density (MFD) model
