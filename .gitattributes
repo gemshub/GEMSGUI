@@ -396,6 +396,8 @@ gems2/mods/v_ipnc.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_ipnc.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/v_mod.h svn_keywords=Author+Date+Id+Revision
 gems2/obj/Readme.txt -text
+gems2/object_ld_script -text
+gems2/objmoc_ld_script -text
 gems2/qmake_no_qt.bat -text
 gems2/qmake_qt.bat -text
 gems2/qmake_qt_lib.bat -text
