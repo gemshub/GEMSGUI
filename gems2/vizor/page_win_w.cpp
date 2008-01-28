@@ -38,7 +38,7 @@
 #include "query_w.h"
 #include "help.h"
 #include "dlg/CalcDialog.h"
-#include "dlg/CalcCheckDialog.h"
+//#include "dlg/CalcCheckDialog.h"
 
 
 

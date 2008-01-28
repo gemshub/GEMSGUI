@@ -9,11 +9,11 @@
   <meta name="description" content="Version 2.0.0-PSI">
 </head>
 <body>
-<h1><img src="gems1.png" height="48" width="48" align="left"> <font
+<h1><img src="gems1.png" align="left" height="48" width="48"> <font
  color="#000066"> GEM-Selektor version 2-PSI</font></h1>
 <h2>CSD (System) and MTparm Submodule Manual<br>
 </h2>
-<hr width="100%" size="2">
+<hr size="2" width="100%">
 <h3>Contents </h3>
 <ul style="font-family: helvetica,arial,sans-serif;">
   <li>
@@ -49,7 +49,7 @@ Project Remake only&nbsp;</a></li>
     <p><a href="#ERROR_MESSAGES">5. Warnings and Error Messages</a></p>
   </li>
 </ul>
-<hr width="100%" size="2">
+<hr size="2" width="100%">
 <h2><a name="CSD_SYSTEM"></a>1. CSD (Project System) and MTparm
 Submodules</h2>
 Introduction <br>
@@ -57,7 +57,7 @@ Introduction <br>
 (coming soon)<br>
 <p><br>
 </p>
-<hr width="100%" size="2">
+<hr size="2" width="100%">
 <h2><a name="SYSTEM_DOD"></a>2. Description of System Submodule Data
 Objects</h2>
 <p> <br>
@@ -72,51 +72,54 @@ gems_scm.html.</a> </p>
   </dd>
   <dd>This line may contain a SysEq record key with results of a
 previous calculation of equilibrium state for another CSD variant of a
-system  with     the same name (third field of <a
- href="gdb_rkey.html#dbm_SysEq">SysEq   record    key</a>). This field
+system with the same name (third field of <a
+ href="gdb_rkey.html#dbm_SysEq">SysEq record key</a>). This field
 is used only in a "<a href="glossary.html#DT_sequential_reactor">sequential
-reactor</a>" mode of irreversible  mass transfer simulations; in other
-modes, contents of this      data field are  ignored and should be set
+reactor</a>" mode of irreversible mass transfer simulations; in other
+modes, contents of this data field are ignored and should be set
 to EMPTY value "---".&nbsp;&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>&nbsp;The "sequential reactor" mode is activated upon
 create/remake of the project system (and SysEq record) by setting the <a
  href="#SyPvec_3"><tt>SyPvec[3]</tt></a> flag to "+". After the remake
-is      finished, you will be asked to select a SysEq record key from
-the appearing      list, and it will be automatically copied into the <tt>SyPhEQ</tt>
-field. At the same time, the <a href="#xp_"><tt>xp_</tt></a> vector will
-be allocated     (see "Phases" page of the "System" window), where
-quantities of phases  to   borrow from selected equilibrium state
-should be entered.  &nbsp;</dd>
+is finished, you will be asked to select a SysEq record key from
+the appearing list, and it will be automatically copied into the <tt>SyPhEQ</tt>
+field. At the same time, the <a href="#xp_"><tt>xp_</tt></a> vector
+will
+be allocated (see "Phases" page of the "System" window), where
+quantities of phases to borrow from selected equilibrium state
+should be entered. &nbsp;</dd>
   <dd><br>
   </dd>
   <dd>During the BCC calculation, the bulk composition of
 multicomponent phases from the equilibrium calculation specified by the
 SysEq record key in the <tt>SyPhEQ</tt> filed will be used for the
-addition to the bulk composition       of this system according to
+addition to the bulk composition of this system according to
 quantities given in the <a href="#xp_">xp_</a> vector. Usually, the
-composition of equilibrated aqueous or gas phase  is   transferred in
-this way. Such "sequential reactor" models are helpful  in  simulating
+composition of equilibrated aqueous or gas phase is transferred in
+this way. Such "sequential reactor" models are helpful in simulating
 infiltration metasomatosis or weathering, where the fluid composition
 changes upon equilibriation while moving through the rock column.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>When "cloning" subsequent SysEq records and CSD from this one,
-simply edit the SysEq record key displayed in <tt>SyPhEQ</tt> field (to
-point    to  the previously calculated equilibrium); no remake is
+simply edit the SysEq record key displayed in <tt>SyPhEQ</tt> field
+(to
+point to the previously calculated equilibrium); no remake is
 required anymore.</dd>
   <dd><br>
   </dd>
   <dd><br>
   </dd>
   <dt><a name="SYname"></a><tt><b><big><a name="tname"></a><big>SYname</big></big></b></tt>
-- Comment line for full identification      of this CSD&nbsp;</dt>
+- Comment line for full identification of this CSD&nbsp;</dt>
   <dd><br>
   </dd>
   <dd>Here the user has to enter a comment string that identifies this
-chemical system. The string will also be printed at the beginning of the
-CSD or   EqDemo   printouts (if selected in the "Print" menu of the
+chemical system. The string will also be printed at the beginning of
+the
+CSD or EqDemo printouts (if selected in the "Print" menu of the
 System Dialog).</dd>
   <dd><br>
   </dd>
@@ -146,7 +149,8 @@ Anticipated mass (kg) of water-solvent (<i>Mwat</i> ).</dt>
  href="g_useref.html#QUANCONCUNITS">concentration units</a> (coded in
 the&nbsp;<a href="#XAun_"><tt>XAun_</tt></a>, &nbsp;<tt><a href="#XDun_">XDun_</a>,<a
  href="#XPun_">XPun_</a> </tt>or&nbsp; <tt><a
- href="gems_bcc.html#BCun_">BCun_</a></tt> vectors) &nbsp;for some cells
+ href="gems_bcc.html#BCun_">BCun_</a></tt> vectors) &nbsp;for some
+cells
 of the&nbsp; <tt><a href="#xa_">xa_</a>, <a href="#xd_">xd_</a>, <a
  href="#xp_">xp_</a> </tt>and&nbsp;<a href="#bi_"> <tt>bi_</tt></a>
 &nbsp;vectors, respecitvely.&nbsp;</dd>
@@ -154,7 +158,7 @@ of the&nbsp; <tt><a href="#xa_">xa_</a>, <a href="#xd_">xd_</a>, <a
   </dd>
   <dd>Default value: 0 (addition of molalities will have no effect to
 bulk composition of the system). Positive value will cause to convert
-molal   concentrations   (positive or negative) into mole quantities of <a
+molal concentrations (positive or negative) into mole quantities of <a
  href="glossary.html#DT_independent_component">Independent Components</a>
 and add them to <tt><a href="#B_">B_</a></tt> vector.</dd>
   <dd>&nbsp; <br>
@@ -167,13 +171,15 @@ and add them to <tt><a href="#B_">B_</a></tt> vector.</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Positive <i>Msys</i>&nbsp; value must be entered if&nbsp;if at
 least one cell in the <tt><a href="#bi_">bi_</a>, <a href="#xd_">xd_</a>,<a
- href="#xp_">xp_</a></tt> or <a href="#xa_"><tt>xa_</tt></a> vectors  is
+ href="#xp_">xp_</a></tt> or <a href="#xa_"><tt>xa_</tt></a> vectors
+is
 specified as mass percent <a href="g_useref.html#QUANCONCUNITS">concentrations</a>
 ( coded in <tt><a href="#BCun_">BCun_</a>, <a href="#XDun_">XDun_</a>,
- <a href="#XPun_">XPun</a>, </tt>or <a href="#XAun_"><tt>XAun_</tt></a>
+    <a href="#XPun_">XPun</a>, </tt>or <a href="#XAun_"><tt>XAun_</tt></a>
 vectors). In this case, the mass fractions will be recalculated to mole
 quantities of <a href="glossary.html#DT_independent_component">Independent
-Components</a> using stoichiometry and <i>Msys</i> value, then added to
+Components</a> using stoichiometry and <i>Msys</i> value, then added
+to
 the <a href="#B_"><tt>B_</tt></a> vector.</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Default value: 0 (addition of mass fractions will have no effect
@@ -187,7 +193,8 @@ to bulk composition of the system).</dd>
   <dd>Positive <i>Maq&nbsp;</i> value must be entered if&nbsp;if at
 least one cell in the <tt><a href="gems_bcc.html#bi_">bi_</a>, <a
  href="gems_bcc.html#xd_">xd_</a>, <a href="gems_bcc.html#xp_">xp_</a></tt>
-or <a href="gems_bcc.html#xa_"><tt>xa_</tt></a> vectors is specified as <a
+or <a href="gems_bcc.html#xa_"><tt>xa_</tt></a> vectors is specified
+as <a
  href="file:///C:/GEMS2test/program/doc/html/g_useref.html#QUANCONCUNITS">concentrations</a>
 per 1 kg of aqueous solution ( coded in <tt><a
  href="gems_bcc.html#BCun_">BCun_</a>, <a href="gems_bcc.html#XDun_">XDun_</a>,<a
@@ -205,14 +212,14 @@ solution will have no effect to bulk composition of the system).</dd>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="Masses_4"></a><big><b><big><tt>Masses[4]</tt></big></b></big>
-- Final      total mass of the system <i>MBX</i> (kg).</dt>
+- Final total mass of the system <i>MBX</i> (kg).</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>This field contains total mass of the system <i>MBX</i> &nbsp;in
-kg, automatically calculated  from the <a href="#B_"><tt>B_</tt></a>
-vector of  input&nbsp; bulk chemical composition upon "Calculate BCC"
-user's command      (also done when "Calculate IPM" command is
-executed). Can be used for  checking    input composition data, or
-refining the <i>Msys</i> &nbsp;input  value.</dd>
+kg, automatically calculated from the <a href="#B_"><tt>B_</tt></a>
+vector of input&nbsp; bulk chemical composition upon "Calculate BCC"
+user's command (also done when "Calculate IPM" command is
+executed). Can be used for checking input composition data, or
+refining the <i>Msys</i> &nbsp;input value.</dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;<br>
@@ -221,13 +228,13 @@ refining the <i>Msys</i> &nbsp;input  value.</dd>
 -&nbsp; Total number of IC moles in the system <i>NMS</i> &nbsp;(for
 mole %% calculations).</dt>
   <dd>If a default value 0 or EMPTY was specified then the NMS value
-will be automatically calculated  from the <a href="gems_bcc.html#B_"><tt>B_</tt></a>
+will be automatically calculated from the <a href="gems_bcc.html#B_"><tt>B_</tt></a>
 vector of input&nbsp; bulk chemical composition upon "Calculate BCC"
-user's    command (also done when "Calculate IPM" command is executed).</dd>
+user's command (also done when "Calculate IPM" command is executed).</dd>
   <dd>
     <p>If <i>NMS</i> &gt; 0 was entered by the user it will be
 interpreted as total number of moles to normalize the&nbsp; input mole
-percents or   mole fraction <a href="g_useref.html#QUANCONCUNITS">concentrations</a>
+percents or mole fraction <a href="g_useref.html#QUANCONCUNITS">concentrations</a>
 ( coded in <tt><a href="gems_bcc.html#BCun_">BCun_</a>, <a
  href="gems_bcc.html#XDun_">XDun_</a>,<a href="gems_bcc.html#XPun_">XPun</a>,</tt>or<a
  href="gems_bcc.html#XAun_"><tt>XAun_</tt></a> vectors)&nbsp;in
@@ -244,11 +251,12 @@ or <a href="gems_bcc.html#xa_"><tt>xa_</tt></a> vectors. </p>
   <dd>Positive <i>Vsys&nbsp;</i> value must be entered here if&nbsp;if
 at least one cell in the&nbsp; <tt><a href="gems_bcc.html#bi_">bi_</a>,<a
  href="gems_bcc.html#xd_">xd_</a>, <a href="gems_bcc.html#xp_">xp_</a></tt>
-or <a href="gems_bcc.html#xa_"><tt>xa_</tt></a> vectors is specified as
+or <a href="gems_bcc.html#xa_"><tt>xa_</tt></a> vectors is specified
+as
 volume fraction <a href="g_useref.html#QUANCONCUNITS">concentrations</a>
 ( coded in <tt><a href="gems_bcc.html#BCun_">BCun_</a>, <a
  href="gems_bcc.html#XDun_">XDun_</a>, <a href="gems_bcc.html#XPun_">XPun</a>,</tt>or<a
- href="gems_bcc.html#XAun_"><tt>XAun_</tt></a> vectors).  The   volume
+ href="gems_bcc.html#XAun_"><tt>XAun_</tt></a> vectors). The volume
 fractions will be recalculated into mole quantities of <a
  href="glossary.html#DT_independent_component">Independent Components</a>
 using stoichiometry and <i>Vsys&nbsp;</i> value, then added to the <a
@@ -261,18 +269,19 @@ effect to bulk composition of the system).</dd>
   </dd>
   <p> </p>
   <dt> <a name="Volums_1"></a><big><b><big><tt>Volums[1]</tt></big></b></big>
-- Anticipated     volume <i>Vaq</i> &nbsp;of aqueous phase (L) for
+- Anticipated volume <i>Vaq</i> &nbsp;of aqueous phase (L) for
 molarities</dt>
   <dd><br>
   </dd>
   <dd>Positive <i>Vaq&nbsp;</i> value must be entered here if&nbsp;if
 at least one cell in the <tt><a href="gems_bcc.html#bi_">&nbsp;bi_</a>,<a
  href="gems_bcc.html#xd_">xd_</a>, <a href="gems_bcc.html#xp_">xp_</a></tt>
-or <a href="gems_bcc.html#xa_"><tt>xa_</tt></a> vectors is specified as
+or <a href="gems_bcc.html#xa_"><tt>xa_</tt></a> vectors is specified
+as
 molarity&nbsp; <a href="g_useref.html#QUANCONCUNITS">concentrations</a>
 ( coded in&nbsp; <tt><a href="gems_bcc.html#BCun_">BCun_</a>, <a
  href="gems_bcc.html#XDun_">XDun_</a>, <a href="gems_bcc.html#XPun_">XPun</a>,</tt>or<a
- href="gems_bcc.html#XAun_"><tt>XAun_</tt></a> vectors).  Molarities
+ href="gems_bcc.html#XAun_"><tt>XAun_</tt></a> vectors). Molarities
 will be recalculated into mole quantities of <a
  href="glossary.html#DT_independent_component">Independent Components</a>
 using stoichiometry and <i>Vaq&nbsp;</i> value, then added to the <a
@@ -285,19 +294,19 @@ bulk composition of the system).</dd>
   </dd>
   <dd>&nbsp;</dd>
   <dt> <a name="L1_"></a><big><b><big><tt>L1_</tt></big></b></big> -
-Number of Dependent     Components selected within each phase</dt>
+Number of Dependent Components selected within each phase</dt>
   <dd>&nbsp;</dd>
   <dd>This vector defines how many species (Dependent Components) were
 included within each phase in this CSD and will be used in IPM
-calculation of the    equilibrium state. Good for debugging purposes:
-for instance, a potentially    dangerous situation that only one
-component was   selected in the non-ideal    multi-component or
-adsorption phase can be seen before the IPM calculation.    &nbsp;</dd>
+calculation of the equilibrium state. Good for debugging purposes:
+for instance, a potentially dangerous situation that only one
+component was selected in the non-ideal multi-component or
+adsorption phase can be seen before the IPM calculation. &nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <p> </p>
   <dt> <a name="RLC_"></a><big><b><big><tt>RLC_</tt></big></b></big> -
-Type codes for    DC metastability restrictions given in the &nbsp;<a
+Type codes for DC metastability restrictions given in the &nbsp;<a
  href="gems_bcc.html#dll_"><tt>dll_</tt></a> &nbsp;and/or&nbsp; <a
  href="gems_bcc.html#dul_"><tt>dul_</tt></a> &nbsp;vectors</dt>
   <dd>&nbsp;&nbsp;</dd>
@@ -305,12 +314,13 @@ Type codes for    DC metastability restrictions given in the &nbsp;<a
 their counterparts in the "Input:..." listview page of the "Single
 thermodynamic Systen" dialog), defines how the sought-for mole quantity<a
  href="gems_sys.html#x"><tt> x</tt></a> of the respective Dependent
-Component    in the <a href="glossary.html#DT_prime_solution">prime
-solution</a> will   be restricted by the IPM algorithm.&nbsp;</dd>
+Component in the <a href="glossary.html#DT_prime_solution">prime
+solution</a> will be restricted by the IPM algorithm.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>Possible codes:&nbsp;&nbsp;</dd>
-  <dd><b>O</b> - trivial or no restrictions (even if non-trivial numbers
+  <dd><b>O</b> - trivial or no restrictions (even if non-trivial
+numbers
 have been entered in dll_ or dul_ cells)</dd>
   <dd><b>L</b> &nbsp;- respective value in <a href="gems_sys.html#x">x</a>
 vector cell will be kept greater or equal to that entered in the dll_
@@ -327,7 +337,7 @@ cells.</dd>
   </dd>
   <dd> &nbsp;</dd>
   <dt> <a name="RSC_"></a><big><b><big><tt>RSC_</tt></big></b></big> -
-Codes of concentration/quantity    for DC metastability restrictions
+Codes of concentration/quantity for DC metastability restrictions
 in&nbsp; <a href="#dll_"><tt>dll_</tt></a> &nbsp;and <a href="#dul_"><tt>dul_</tt></a>
 &nbsp;vectors</dt>
   <dd>&nbsp; <br>
@@ -336,14 +346,14 @@ in&nbsp; <a href="#dll_"><tt>dll_</tt></a> &nbsp;and <a href="#dul_"><tt>dul_</t
 units</a> in which the restrictions in dll_ and dul_ vectors are
 specified.&nbsp;</dd>
   <dd><font color="#990000"><b>Attention!</b></font> Only <tt>"M"</tt>
-code (moles) can be used in this  version of GEM-Selektor, all other
-codes are   reserved for implementation in future versions! &nbsp;</dd>
+code (moles) can be used in this version of GEM-Selektor, all other
+codes are reserved for implementation in future versions! &nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <dd> &nbsp;</dd>
   <dt> <a name="IC_on"></a><big><b><big><tt>IC_on</tt></big></b> </big>-
-&nbsp;Selector   of Independent Components into <a
- href="glossary.html#DT_CSD">CSD</a> { +&nbsp;  - }</dt>
+&nbsp;Selector of Independent Components into <a
+ href="glossary.html#DT_CSD">CSD</a> { +&nbsp; - }</dt>
   <dd>&nbsp;</dd>
   <dd>Using switches in this selection vector, you can define the <a
  href="glossary.html#DT_independent_component">Independent Components</a>
@@ -363,35 +373,36 @@ CSD.&nbsp; <br>
 <dl>
   <dd>Some IC will be automatically excluded after calculation of BCC
 (bulk chemical composition) if zero total mole quantities in <tt><a
- href="#B_">B_</a></tt> vector have been calculated for these IC; before
- excluding them, the program  displays a "Missing IC warning" dialog.
-The BCC calculation subroutine checks  that all Dependent Components
-whose stoichiometry  includes an excluded IC  will also be turned off in
+ href="#B_">B_</a></tt> vector have been calculated for these IC;
+before excluding them, the program displays a "Missing IC warning"
+dialog.
+The BCC calculation subroutine checks that all Dependent Components
+whose stoichiometry includes an excluded IC will also be turned off in
 the <a href="#DC_on"><tt>DC_on</tt></a> selector. <br>
   </dd>
   <dd><br>
   </dd>
   <dd><font color="#990000"><b>Attention!</b> </font>The program will
 not automatically turn on an excluded IC and its DCs if non-zero
-quantity of  this IC were entered in either<a href="#bi_"> <tt>bi_</tt></a>
+quantity of this IC were entered in either<a href="#bi_"> <tt>bi_</tt></a>
 or <tt><a href="#xa_">xa_</a></tt> vectors. Unless you turn on the IC
-and respective   DC, the contents of the respective cells in the <a
+and respective DC, the contents of the respective cells in the <a
  href="#bi_"><tt>bi_</tt></a>, <a href="#xa_">xa_</a> and <a
- href="#xd_">xd_</a> vectors will be ignored   in the BCC calculation.</dd>
+ href="#xd_">xd_</a> vectors will be ignored in the BCC calculation.</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <p> </p>
   <dt> <a name="DC_on"></a><big><b><big><tt>DC_on</tt></big></b> </big>-
-Selector of   Dependent Components into <a href="glossary.html#DT_CSD">CSD</a>
-{ +&nbsp;   - }</dt>
+Selector of Dependent Components into <a href="glossary.html#DT_CSD">CSD</a>
+{ +&nbsp; - }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Using switches in this selection vector, you can define which <a
  href="glossary.html#DT_dependent_component">Dependent Components</a>
 (DC, species)&nbsp; will be taken into this variant of chemical system
-and IPM   calculation of equilibrium state. Switches in this vector can
-also be accessed   conveniently from the "Input:..." listview page of
-the "Single Thermodynamic   System" dialog. Possible values:&nbsp;</dd>
+and IPM calculation of equilibrium state. Switches in this vector can
+also be accessed conveniently from the "Input:..." listview page of
+the "Single Thermodynamic System" dialog. Possible values:&nbsp;</dd>
 </dl>
 <blockquote>
   <dl>
@@ -405,12 +416,13 @@ CSD.&nbsp; <br>
 <dl>
   <dd>Some DC can be automatically excluded after calculation of BCC
 (bulk chemical composition) if their formulae contain at least one
-excluded IC.   If, later on, this IC will be manually included then its
-DC can also be manually  turned on. <br>
+excluded IC. If, later on, this IC will be manually included then its
+DC can also be manually turned on. <br>
   </dd>
   <dd><br>
   </dd>
-  <dd><font color="#990000"><b>Attention!</b> </font>Unless an excluded
+  <dd><font color="#990000"><b>Attention!</b> </font>Unless an
+excluded
 DC will be turned on again, the contents of the respective cell in the <a
  href="#xd_"><tt>xd_</tt></a> vector will be ignored in BCC
 calculation.&nbsp;To include the previously excluded DC, first turn on
@@ -421,20 +433,22 @@ Phases (in <a href="#PC_on"><tt>PC_on</tt></a> selector).&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <p> </p>
-  <dt> <a name="PC_on"></a><big><b><big><tt>PC_on</tt></big></b></big> -
-Selector of   Phases to be included into <a href="glossary.html#DT_CSD">CSD</a>
-{ +&nbsp;   - }</dt>
+  <dt> <a name="PC_on"></a><big><b><big><tt>PC_on</tt></big></b></big>
+-
+Selector of Phases to be included into <a href="glossary.html#DT_CSD">CSD</a>
+{ +&nbsp; - }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Using switches in this selection vector, you can define which <a
  href="glossary.html#DT_phase">Phases</a> will be taken into this
 variant of chemical system and appear in GEM IPM calculation of
-equilibrium state.   Switches in this vector can also be accessed
-conveniently from the "Input:..."   listview page of the "Single
+equilibrium state. Switches in this vector can also be accessed
+conveniently from the "Input:..." listview page of the "Single
 Thermodynamic System" dialog. Possible values:&nbsp;</dd>
 </dl>
 <blockquote>
   <dl>
-    <dd><b>+</b> &nbsp;Phase with the same index will be taken into this
+    <dd><b>+</b> &nbsp;Phase with the same index will be taken into
+this
 CSD (default);&nbsp;</dd>
     <dd><b>-</b> &nbsp; the respective Phase will be excluded from this
 CSD.&nbsp; <br>
@@ -446,13 +460,15 @@ CSD.&nbsp; <br>
 BCC (bulk chemical composition) all their DC are going to be excluded.
 Later on, you can turn on this phase but its DC (species) will not be
 automatically included; you must check the DC_on selector part for this
-phase and manually turn the required species on.  This is easier in the
-hierarchical list view on the "Input:" page of the "Single Thermodynamic
+phase and manually turn the required species on. This is easier in the
+hierarchical list view on the "Input:" page of the "Single
+Thermodynamic
 System" dialog.<br>
   </dd>
   <dd><br>
   </dd>
-  <dd><font color="#990000"><b>Attention!</b> </font>Unless an excluded
+  <dd><font color="#990000"><b>Attention!</b> </font>Unless an
+excluded
 Phase will be turned on again, the contents of the respective cell in
 the <a href="gems_bcc.html#xp_"><tt>xp_</tt></a> vector (present in "<a
  href="glossary.html#DT_sequential_reactors">sequential reactors</a>"
@@ -462,13 +478,14 @@ mode) will be ignored in the BCC calculation.&nbsp;&nbsp;</dd>
 </dl>
 <dl>
   <p> </p>
-  <dt> <a name="AC_on"></a><big><b><big><tt>AC_on</tt></big></b></big> -
+  <dt> <a name="AC_on"></a><big><b><big><tt>AC_on</tt></big></b></big>
+-
 Selector of <a href="glossary.html#DT_PCO">PCO</a> (Compos) to be used
-in the BCC   calculation { + - * }</dt>
+in the BCC calculation { + - * }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Using switches in this selector, you can define which PCO
-stoichiometries will  be actually used in calculation of the bulk
-composition vector <a href="#B_">B_</a>.&nbsp;Possible values:&nbsp;   
+stoichiometries will be actually used in calculation of the bulk
+composition vector <a href="#B_">B_</a>.&nbsp;Possible values:&nbsp;
     <blockquote>
       <dl>
         <dd><b>+</b> &nbsp;PCO with the same index is fully taken into
@@ -483,18 +500,19 @@ used (automatically set after the&nbsp;BCC calculation). <br>
 Normally, all the PCO are turned on because the program first checks
 the contents of the <a href="#xa_"><tt>xa_</tt></a> vector cells: if a
 cell contains zero then it does not contribute to the bulk composition
-and its  switch is not affected. But you can turn the switch off if the
-respective  cell in <a href="#xa_"><tt>xa_</tt></a> vector is not zero
-in order to deactivate  this increment in BCC calculation but preserve
+and its switch is not affected. But you can turn the switch off if the
+respective cell in <a href="#xa_"><tt>xa_</tt></a> vector is not zero
+in order to deactivate this increment in BCC calculation but preserve
 the value for later times.&nbsp; </dd>
 </dl>
 <dl>
   <dd>&nbsp; &nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="BCun_"></a><big><b><big><tt>BCun_</tt></big></b></big> -
+  <dt> <a name="BCun_"></a><big><b><big><tt>BCun_</tt></big></b></big>
+-
 Codes for <a href="g_useref.html#QUANCONCUNITS">quantities/concentrations</a>
-of Independent   Components given in the <a href="#bi_"><tt>bi_</tt></a>
+of Independent Components given in the <a href="#bi_"><tt>bi_</tt></a>
 vector</dt>
   <dd><br>
   </dd>
@@ -518,7 +536,8 @@ each cell of the <a href="gems_bcc.html#xd_">xd_</a> vector.&nbsp;</dd>
   <dd>Default code is <tt>"M"</tt> (moles).&nbsp;</dd>
   <dd><b><font color="#990000">Attention!</font></b> Check the <a
  href="g_useref.html#QUANCONCRULES">rules of application</a> when
-setting concentrations in the <a href="gems_bcc.html#xd_">xd_</a> vector.</dd>
+setting concentrations in the <a href="gems_bcc.html#xd_">xd_</a>
+vector.</dd>
   <dd>&nbsp; &nbsp; <br>
   </dd>
   <dd><br>
@@ -535,7 +554,8 @@ each cell of the <a href="gems_bcc.html#xa_">xa_</a> vector.&nbsp;</dd>
   <dd>Default code is <tt>"g"</tt> (grams).&nbsp;</dd>
   <dd><b><font color="#990000">Attention!</font></b> Check the <a
  href="g_useref.html#QUANCONCRULES">rules of application</a> when
-setting concentrations in the <a href="gems_bcc.html#xa_">xa_</a> vector.</dd>
+setting concentrations in the <a href="gems_bcc.html#xa_">xa_</a>
+vector.</dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
 </dl>
 <dl>
@@ -548,7 +568,7 @@ vector</dt>
   </dd>
   <dd>The <tt>XPun_</tt> and <tt>xp_</tt> vectors are used only in
 "sequential reactors" mode, in which the bulk compositions of phases
-will be taken from   equilibrium speciation stored in another SysEq
+will be taken from equilibrium speciation stored in another SysEq
 record referenced in the <tt><a href="#SyPhEQ">SyPhEQ</a></tt> field.<br>
   </dd>
   <dd>You can set a separate code of <a
@@ -557,12 +577,14 @@ each cell of the <a href="gems_bcc.html#xp_">xp_</a> vector.&nbsp;</dd>
   <dd>Default code is <tt>"g"</tt> (grams).&nbsp;</dd>
   <dd><b><font color="#990000">Attention!</font></b> Check the <a
  href="g_useref.html#QUANCONCRULES">rules of application</a> when
-setting concentrations in the <a href="gems_bcc.html#xp_">xp_</a> vector.</dd>
+setting concentrations in the <a href="gems_bcc.html#xp_">xp_</a>
+vector.</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <p> </p>
-  <dt> <a name="B_"></a><big><b><big><tt>B_</tt></big></b></big> - Input
-bulk composition   of the system (moles of IC) obtained from BCC
+  <dt> <a name="B_"></a><big><b><big><tt>B_</tt></big></b></big> -
+Input
+bulk composition of the system (moles of IC) obtained from BCC
 calculation</dt>
   <dd>&nbsp; <br>
   </dd>
@@ -575,23 +597,25 @@ bulk composition.&nbsp;</dd>
   <dd>All Independent Components for which zeros were calculated in the<tt>
 B_ </tt>vector cells will be (after the warning dialog) excluded from
 CSD together with their Dependent Components. Default values for the <tt>B_</tt>
-vector cells are zeros. All non-zero elements of the <tt>B_</tt> vector
-will be copied into the<a href="gems_sys.html#b"><tt> b</tt></a> vector as
+vector cells are zeros. All non-zero elements of the <tt>B_</tt>
+vector
+will be copied into the<a href="gems_sys.html#b"><tt> b</tt></a> vector
+as
 input for the GEM IPM calculation of equilibrium state. &nbsp;</dd>
   <dd><br>
   </dd>
   <dd>Cells of the <tt>B_</tt> vector cannot be edited directly.
 However, to change them, you can e.g. enter some mole quantities of IC
 in the adjacent<a href="#bi_"> bi_</a> vector, and they will be added
-when "Calculate BCC"   command is executed next time (this command is
-automatically when "Calculate   IPM" command is activated). <br>
+when "Calculate BCC" command is executed next time (this command is
+automatically when "Calculate IPM" command is activated). <br>
   </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd> &nbsp;</dd>
   <dd>&nbsp; &nbsp;</dd>
   <dt> <a name="bi_"></a><big><b><big><tt>bi_</tt></big></b></big> -
-Input quantities   or concentrations of <a
- href="glossary.html#DT_independent_component">Independent   Components</a>
+Input quantities or concentrations of <a
+ href="glossary.html#DT_independent_component">Independent Components</a>
 contributing to <a href="#B_"><tt>B_</tt></a> vector</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Here, you can enter IC quantities or concentrations to formulate
@@ -602,24 +626,26 @@ contributing to <a href="#B_"><tt>B_</tt></a> vector</dt>
   <dd>The entered numbers will be interpreted according to <a
  href="g_useref.html#QUANCONCUNITS">quantity/concentration codes</a>
 that you can set in the respective cells of the <a href="#BCun_"><tt>BCun_</tt></a>
-selector. The actual calculation occurs on "Calculate BCC" command.&nbsp;</dd>
+selector. The actual calculation occurs on "Calculate BCC"
+command.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>Negative values can also be specified in <a href="#bi_"><tt>bi_</tt></a>
-vector cells, as long as they do not     produce zero or negative values
- in the <a href="#B_"><tt>B_</tt></a> vector.&nbsp;</dd>
+vector cells, as long as they do not produce zero or negative values in
+the <a href="#B_"><tt>B_</tt></a> vector.&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <p> </p>
   <dt> <a name="xa_"></a><big><b><big><tt>xa_</tt></big></b></big>&nbsp;-
-Input quantities   or concentrations of <a href="glossary.html#DT_PCO">PCO</a>
+Input quantities or concentrations of <a href="glossary.html#DT_PCO">PCO</a>
 contributing to <a href="gems_bcc.html#B_"><tt>B_</tt></a> vector</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Enter here the PCO quantities or concentrations to formulate
 (part of) bulk composition of the system.&nbsp;Default value is zero.
 This is the most convenient place to set up bulk composition of the
-chemical system - a main input data for calculation of equilibria by GEM
+chemical system - a main input data for calculation of equilibria by
+GEM
 IPM algorithm.&nbsp; <br>
   </dd>
   <dd>&nbsp; <br>
@@ -632,8 +658,9 @@ calculation occurs on "Calculate BCC" command.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>Negative values can also be specified in <a
- href="gems_bcc.html#xa_"><tt>xa_</tt></a> vector cells, as long as they
-do not     produce zero or negative values in the <a
+ href="gems_bcc.html#xa_"><tt>xa_</tt></a> vector cells, as long as
+they
+do not produce zero or negative values in the <a
  href="gems_bcc.html#B_"><tt>B_</tt></a> vector.&nbsp;</dd>
   <dd>&nbsp; &nbsp; <br>
   </dd>
@@ -641,23 +668,24 @@ do not     produce zero or negative values in the <a
 <dl>
   <p> </p>
   <dt> <a name="xd_"></a><big><b><big><tt>xd_</tt></big></b></big>&nbsp;
-- Input quantities   or concentrations of <a
- href="glossary.html#DT_dependent_component">Dependent   Components</a>
+- Input quantities or concentrations of <a
+ href="glossary.html#DT_dependent_component">Dependent Components</a>
 contributing to <a href="gems_bcc.html#B_"><tt>B_</tt></a> vector</dt>
   <dd>&nbsp; </dd>
   <dd>Here, you can enter quantities or concentrations of DC
 &nbsp;stoichiometries to formulate (part of) bulk composition of the
-system.&nbsp;Default value   is zero.</dd>
+system.&nbsp;Default value is zero.</dd>
   <dd><br>
   </dd>
-  <dd><font color="#990000"><b>Attention!</b></font> An entered positive
+  <dd><font color="#990000"><b>Attention!</b></font> An entered
+positive
 quantity of DC in this vector does not mean that this species will
 appear at equilibrium state in the same quantity, if at all. Only
 stoichiometry (<a href="g_useref.html#FORMULA">formula</a>) from the
 respective <a href="gm_dcomp.html">DComp</a> (<a
  href="gm_dcomp.html#FORMULA"><tt>DCform</tt></a> field) or <a
  href="gm_reacdc.html">ReacDC</a> (<a href="gm_reacdc.html#RDform"><tt>RDform</tt></a>
-field) record will be extracted   and used in incrementing the <a
+field) record will be extracted and used in incrementing the <a
  href="#B_">B_</a> vector according to <a
  href="g_useref.html#QUANCONCUNITS">quantity/concentration codes</a>
 that you can set in the respective cells of the <a
@@ -666,8 +694,9 @@ calculation occurs on "Calculate BCC" command.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>Negative values can also be specified in the <a
- href="gems_bcc.html#xd_"><tt>xd_</tt></a> vector cells, as long as they
-do not     produce zero or negative values in the <a
+ href="gems_bcc.html#xd_"><tt>xd_</tt></a> vector cells, as long as
+they
+do not produce zero or negative values in the <a
  href="file:///C:/GEMS2test/program/doc/html/gems_bcc.html#B_"><tt>B_</tt></a>
 vector.</dd>
   <dd>&nbsp;&nbsp;</dd>
@@ -675,34 +704,35 @@ vector.</dd>
   </dd>
   <dd>&nbsp; </dd>
   <dt> <a name="xp_"></a><big><b><big><tt>xp_</tt></big></b>&nbsp;</big>
-- Input quantities   or concentrations of Phases (from another SysEq)
+- Input quantities or concentrations of Phases (from another SysEq)
 contributing to <a
  href="file:///C:/GEMS2test/program/doc/html/gems_bcc.html#B_"><tt>B_</tt></a>
 vector</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd>Here, you can enter quantities or concentrations of DC
 &nbsp;stoichiometries to formulate (part of) bulk composition of the
-system.&nbsp;Default value   is zero.</dd>
+system.&nbsp;Default value is zero.</dd>
   <dd><br>
   </dd>
   <dd><font color="#990000"><b>Attention!</b></font> This xp_ vector is
 accessible only in <a href="glossary.html#DT_sequential_reactors">"sequential
 reactors"</a> mode. An entered positive quantity of a Phase in this
-vector does not mean   that this phase will appear at equilibrium state
-in the same quantity, if   at all, or will have the same composition.
-Only the bulk elemental composition   of this Phase at another
-equilibrium state, taken from a SysEq record specified   in the&nbsp; <tt><a
- href="gems_bcc.html#SyPhEQ">SyPhEQ</a></tt> &nbsp;field,&nbsp;   will
+vector does not mean that this phase will appear at equilibrium state
+in the same quantity, if at all, or will have the same composition.
+Only the bulk elemental composition of this Phase at another
+equilibrium state, taken from a SysEq record specified in the&nbsp; <tt><a
+ href="gems_bcc.html#SyPhEQ">SyPhEQ</a></tt> &nbsp;field,&nbsp; will
 be extracted and used in incrementing the <a href="gems_bcc.html#B_">B_</a>
 vector according to <a href="g_useref.html#QUANCONCUNITS">quantity/concentration
-codes</a> that   you can set in the respective cells of the <a
+codes</a> that you can set in the respective cells of the <a
  href="gems_bcc.html#XDun_"><tt>XPun_</tt></a> selector. The actual
 calculation occurs upon the "Calculate BCC" command.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>Negative values can also be specified in the <a
- href="gems_bcc.html#xp_"><tt>xp_</tt></a> vector cells, as long as they
-do not     produce zeros or negative values in the calculated&nbsp; <a
+ href="gems_bcc.html#xp_"><tt>xp_</tt></a> vector cells, as long as
+they
+do not produce zeros or negative values in the calculated&nbsp; <a
  href="gems_bcc.html#B_"><tt>B_</tt></a> vector.</dd>
   <dd>&nbsp;<br>
   </dd>
@@ -710,14 +740,14 @@ do not     produce zeros or negative values in the calculated&nbsp; <a
 </dl>
 <dl>
   <dt> <a name="dul_"></a><big><b><big><tt>dul_</tt></big></b></big> -
-Upper metastability   restrictions for DC mole quantities &nbsp;<a
- href="gems_sys.html#x"><tt>x</tt></a>&nbsp;   at equilibrium state</dt>
+Upper metastability restrictions for DC mole quantities &nbsp;<a
+ href="gems_sys.html#x"><tt>x</tt></a>&nbsp; at equilibrium state</dt>
   <dd>&nbsp; &nbsp;</dd>
   <dd>In this input column, you can set positive non-trivial
 metastability restrictions from above to the sought-for mole quantities
-of Dependent Components   at equilibrium state. The <a
- href="theorgem.html">GEM IPM algorithm</a> will  keep these quantities
-lower or equal to the prescribed restrictions. Default  (trivial) value
+of Dependent Components at equilibrium state. The <a
+ href="theorgem.html">GEM IPM algorithm</a> will keep these quantities
+lower or equal to the prescribed restrictions. Default (trivial) value
 is 1e6 moles. These restrictions will be applied if the respective
 codes in the <a href="#RLC_"><tt>RLC_</tt></a> column are set to <tt>"B"</tt>
 or <tt>"U"</tt> &nbsp;values.&nbsp;</dd>
@@ -726,9 +756,10 @@ or <tt>"U"</tt> &nbsp;values.&nbsp;</dd>
   <dd>This vector is a good tool to simulate precipitation kinetics and
 related processes. Keep in mind, however, that inadequate (too low)
 restrictions to DC that are going to appear in major concentrations at
-complete equilibrium   (for example, onto H<sub>2</sub>O-solvent if H<sub>2</sub>O
-vapour is not   included in the gas phase) may lead to an inconsistent <a
- href="glossary.html#DT_CSD">CSD</a> that may cause wrong results,&nbsp;
+complete equilibrium (for example, onto H<sub>2</sub>O-solvent if H<sub>2</sub>O
+vapour is not included in the gas phase) may lead to an inconsistent <a
+ href="glossary.html#DT_CSD">CSD</a> that may cause wrong
+results,&nbsp;
 convergence faults, or crash in the IPM module.&nbsp; <br>
   </dd>
   <dd>&nbsp;&nbsp;</dd>
@@ -736,36 +767,36 @@ convergence faults, or crash in the IPM module.&nbsp; <br>
 <dl>
   <dd> &nbsp; &nbsp;</dd>
   <dt> <a name="dll_"></a><big><b><big><tt>dll_</tt></big></b></big> -
-Lower metastability   restrictions for DC mole quantities &nbsp;<a
- href="gems_sys.html#x"><tt>x</tt></a>&nbsp;   at equilibrium state</dt>
+Lower metastability restrictions for DC mole quantities &nbsp;<a
+ href="gems_sys.html#x"><tt>x</tt></a>&nbsp; at equilibrium state</dt>
   <dd> &nbsp;<br>
   </dd>
   <dd>Here you can set positive non-trivial metastability restrictions
 from below to the sought-for mole quantities of Dependent Components at
-equilibrium   state. The <a href="theorgem.html">GEM IPM algorithm</a>
-will keep these  quantities greater or equal to the prescribed
-restrictions. Default (trivial)  value is 0 moles.&nbsp;These
-restrictions will be applied if the respective  codes in the <a
- href="gems_bcc.html#RLC_"><tt>RLC_</tt></a> column are set  to <tt>"B"</tt>
+equilibrium state. The <a href="theorgem.html">GEM IPM algorithm</a>
+will keep these quantities greater or equal to the prescribed
+restrictions. Default (trivial) value is 0 moles.&nbsp;These
+restrictions will be applied if the respective codes in the <a
+ href="gems_bcc.html#RLC_"><tt>RLC_</tt></a> column are set to <tt>"B"</tt>
 or <tt>"L"</tt> &nbsp;values.&nbsp;</dd>
   <dd><br>
   </dd>
   <dd>This vector is a good tool to simulate dissolution kinetics and
 related processes. Keep in mind, however, that inadequate (too high)
 restrictions will violate the mole balance constraints for some IC
-(stoichiometry units)   and thus will make the whole <a
- href="glossary.html#DT_CSD">CSD</a> &nbsp;inconsistent.   In turn, this
+(stoichiometry units) and thus will make the whole <a
+ href="glossary.html#DT_CSD">CSD</a> &nbsp;inconsistent. In turn, this
 may cause wrong results, bad mass balance precision, convergence
 faults, or crash in the IPM module.&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
   <dd>In any case, an upper restriction cannot exceed the total mole
 quantity of the respective IC in the <a href="#B_"><tt>B_</tt></a>
-vector. Example:   0.06 mol of Fe is given in the B_ vector. Thus, a
-lower restriction to hematite   Fe<sub>2</sub>O<sub>3</sub> must be less
+vector. Example: 0.06 mol of Fe is given in the B_ vector. Thus, a
+lower restriction to hematite Fe<sub>2</sub>O<sub>3</sub> must be less
 than 0.03 mol, for siderite FeCO<sub>3</sub> - 0.06 mol, and for
-magnetite Fe<sub>3</sub>O<sub>4</sub> - 0.02 mol. If  all three
-restrictions are applied at the same time then their total (with  due
+magnetite Fe<sub>3</sub>O<sub>4</sub> - 0.02 mol. If all three
+restrictions are applied at the same time then their total (with due
 account for DC stoichiometry) must not result in total&nbsp; <i>b </i>(Fe)
 &gt;= 0.06 mol. In future versions of GEM-Selektor, automatic
 consistensy checks will be implemented. <br>
@@ -775,7 +806,7 @@ consistensy checks will be implemented. <br>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;</dd>
   <dt> <a name="gEx_"></a><big><b><big><tt>gEx_</tt></big></b></big>
-&nbsp;- Optional   additions to input g(T,P) values for <a
+&nbsp;- Optional additions to input g(T,P) values for <a
  href="glossary.html#DT_dependent_component">Dependent Components</a>
 (J/mol)</dt>
   <dd> <br>
@@ -783,23 +814,23 @@ consistensy checks will be implemented. <br>
   <dd>You can "fine tune" input thermodynamic data provided in the<a
  href="#gTP"><tt> gTP</tt></a> vector by adding positive or negative
 numbers (in J/mol) entered in the corresponding cells of this (<tt>gEx_</tt>)
-vector.   Entering +5708 corresponds     to 1 logK unit decrease of
-stability of this   component at 25 C; -5708 J/mole    leads to 1 logK
-unit increase. Any proportional   numbers can be applied.&nbsp;</dd>
+vector. Entering +5708 corresponds to 1 logK unit decrease of
+stability of this component at 25 C; -5708 J/mole leads to 1 logK
+unit increase. Any proportional numbers can be applied.&nbsp;</dd>
   <dd>Default value is zero. <br>
   </dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>Assigning increments greater than +100000 J/mole will effectively
 eliminate the species from the equilibrium state, although this species
-will remain   turned on in the <a href="glossary.html#DT_CSD">CSD</a>.&nbsp;Doing
-this  will not change dimensionalities in the GEM IPM problem.</dd>
+will remain turned on in the <a href="glossary.html#DT_CSD">CSD</a>.&nbsp;Doing
+this will not change dimensionalities in the GEM IPM problem.</dd>
   <dd>&nbsp;&nbsp; &nbsp; <br>
   </dd>
   <dd><font color="#990000"><b>Attention!</b></font> The <tt>gEx_</tt>
 additions apply only to DC that are turned on in the CSD and will be
-ignored for any   excluded (turned off) Dependent Component. The <tt>gEx_</tt>increments
-have  no effect on the contents of the respective<a href="gm_dcomp.html">
+ignored for any excluded (turned off) Dependent Component. The <tt>gEx_</tt>increments
+have no effect on the contents of the respective<a href="gm_dcomp.html">
 DComp </a>or <a href="gm_reacdc.html">ReacDC</a> records in the <a
  href="gm_project.html">project</a> thermodynamic database.&nbsp; &nbsp;</dd>
 </dl>
@@ -808,21 +839,22 @@ DComp </a>or <a href="gm_reacdc.html">ReacDC</a> records in the <a
 </dl>
 <dl>
   <dt> <a name="Yof_"></a><big><b><big><tt>Yof_</tt></big></b></big> -
-Input Phase metastability   parameter, J/g</dt>
+Input Phase metastability parameter, J/g</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>This optional correction to input thermodynamic data can be
 entered in joules per 1 g of phase mass. Upon BCC calculation, it will
-be multiplied   by the phase molar mass (<font color="#990000">check!</font>
-variable for   multicomponent phases) and added to <a href="#gTP"><tt>gTP</tt></a>
+be multiplied by the phase molar mass (<font color="#990000">check!</font>
+variable for multicomponent phases) and added to <a href="#gTP"><tt>gTP</tt></a>
 values of all Dependent Components in this phase.&nbsp;&nbsp;</dd>
   <dd>Defaut value iz zero.<br>
   </dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>The phase metastability parameter Yof_ is automatically computed
-upon creation or remake of the <a href="gm_syseq.html">SysEq</a> record
-for dispersed   and sorption&nbsp;    phases from specific surface area
-and surface free  energy in pure water provided in the respective Phase
+upon creation or remake of the <a href="gm_syseq.html">SysEq</a>
+record
+for dispersed and sorption&nbsp; phases from specific surface area
+and surface free energy in pure water provided in the respective Phase
 records.</dd>
   <dd><br>
   </dd>
@@ -830,21 +862,22 @@ records.</dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="lnGmf_"></a><big><b><big><tt>lnGmf_</tt></big></b></big>
-- DC activity   coefficients for Simplex initial approximation (in ln
+- DC activity coefficients for Simplex initial approximation (in ln
 scale) &nbsp;</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>This optional input vector contains natural logarithms of DC
-activity coefficients that  will be applied only in calculation of the
-Simplex initial   approximation (IPM module). These  coefficients may
-be inavoidable for solid   solution phases with miscibility gaps, or
-when   an  initial approximation   can not be obtained otherwise (for
+activity coefficients that will be applied only in calculation of the
+Simplex initial approximation (IPM module). These coefficients may
+be inavoidable for solid solution phases with miscibility gaps, or
+when an initial approximation can not be obtained otherwise (for
 some sorption phases).&nbsp;</dd>
   <dd>Default value is zero.</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>For end-members marked in Phase definitions as <tt>"J"</tt>
 ("junior"), the respective cells in the <tt>lnGmf_</tt> vector will be
-automatically set to 6.907755 (or ln of the value specified in numerical
+automatically set to 6.907755 (or ln of the value specified in
+numerical
 settings of the <a href="gems_ipm.html">GEM IPM module</a>).&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
@@ -873,8 +906,9 @@ During Create/Remake Only<br>
 &nbsp;- Flag for the electroneutrality constraint PE { + - }</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd>The flag must be turned on (+) if charged species will be
-considered (in aqueous, sorption or plasma phases). Otherwise, this flag
-must be off  (-). Default value: +.&nbsp;</dd>
+considered (in aqueous, sorption or plasma phases). Otherwise, this
+flag
+must be off (-). Default value: +.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>&nbsp; <br>
@@ -895,8 +929,9 @@ value: -.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>The flag defines whether pressure P is used as state variable (+)
-or not (-). Default is +.&nbsp; As this version of GEM-Selektor can only
-minimize  Gibbs energy (isobaric-isothermal potential), this flag must
+or not (-). Default is +.&nbsp; As this version of GEM-Selektor can
+only
+minimize Gibbs energy (isobaric-isothermal potential), this flag must
 always be +.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
@@ -982,7 +1017,7 @@ allocated in the CSD (project system) structure&nbsp;</h3>
   <dt> <b><big><tt><a name="SyPvec_0"></a></tt></big><big><tt><a
  name="tSwch_10"></a><big>SyPvec[0]</big></tt></big></b> - Allocation
 flag for the&nbsp; <a href="#bi_"><tt>bi_</tt></a> vector of input IC
-quantities { +   * - }</dt>
+quantities { + * - }</dt>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <dd>Default value: +<br>
   </dd>
@@ -990,7 +1025,7 @@ quantities { +   * - }</dt>
   <p>&nbsp; </p>
   <dt> <a name="SyPvec_1"></a><big><b><tt><a name="tSwch_11"></a><big>SyPvec[1]</big></tt></b></big>
 -&nbsp;Allocation flag for the&nbsp; <a href="#xd_"><tt>xd_</tt></a>
-vector of input DC stoichiometry quantities { +     * - }</dt>
+vector of input DC stoichiometry quantities { + * - }</dt>
   <dd> &nbsp;<br>
   </dd>
   <dd>Default value: +</dd>
@@ -999,7 +1034,7 @@ vector of input DC stoichiometry quantities { +     * - }</dt>
   <dd> &nbsp;</dd>
   <dt> <a name="SyPvec_2"></a><b><big><tt><a name="tSwch_12"></a><big>SyPvec[2]</big></tt></big></b>
 -&nbsp;Allocation flag for the&nbsp; <a href="#xa_"><tt>xa_</tt></a>
-vector of input PCO quantities { +     * - }</dt>
+vector of input PCO quantities { + * - }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Default value: +</dd>
   <dd><br>
@@ -1007,7 +1042,7 @@ vector of input PCO quantities { +     * - }</dt>
   <dd> &nbsp;</dd>
   <dt> <a name="SyPvec_3"></a><b><big><tt><a name="tSwch_13"></a><big>SyPvec[3]</big></tt></big></b>
 -&nbsp;Allocation flag for the&nbsp; <a href="#xp_"><tt>xp_</tt></a>
-vector of input Phase stoichiometry quantities { +     * - }</dt>
+vector of input Phase stoichiometry quantities { + * - }</dt>
   <dd> <br>
   </dd>
   <dd>Default value: -</dd>
@@ -1015,7 +1050,8 @@ vector of input Phase stoichiometry quantities { +     * - }</dt>
   </dd>
   <dd> &nbsp;</dd>
   <dt> <a name="SyPvec_4"></a><b><big><tt><a name="tSwch_14"></a><big>SyPvec[4]</big></tt></big></b>
--&nbsp;Allocation flag for the <a href="#dll_"><tt>dll_</tt></a> vector
+-&nbsp;Allocation flag for the <a href="#dll_"><tt>dll_</tt></a>
+vector
 of lower metastability restrictions { + * - }</dt>
   <dd>&nbsp; </dd>
   <dd>Default value: +</dd>
@@ -1067,7 +1103,8 @@ the project; - otherwise.</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <dt> <a name="SyPvec_10"></a><a name="tSwch_20"></a><big><b><big><tt>SyPvec[10]</tt></big></b></big>
--&nbsp;Allocation flag for the <a href="#gEx_"><tt>gEx_</tt></a> vector
+-&nbsp;Allocation flag for the <a href="#gEx_"><tt>gEx_</tt></a>
+vector
 of additions to <a href="#gTP"><tt>gTP</tt></a> values { + * - }</dt>
   <dd>&nbsp; </dd>
   <dd>Default value: +</dd>
@@ -1075,7 +1112,8 @@ of additions to <a href="#gTP"><tt>gTP</tt></a> values { + * - }</dt>
   </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="SyPvec_11"></a><a name="tSwch_21"></a><big><b><big><tt>SyPvec[11]</tt></big></b></big>
--&nbsp;Allocation flag for the <a href="#Yof_"><tt>Yof_</tt></a> vector
+-&nbsp;Allocation flag for the <a href="#Yof_"><tt>Yof_</tt></a>
+vector
 of phase metastability parameters { + * - }</dt>
   <dd>&nbsp; </dd>
   <dd>Default value: +</dd>
@@ -1084,7 +1122,7 @@ of phase metastability parameters { + * - }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="SyPvec_12"></a><a name="tSwch_22"></a><big><b><big><tt>SyPvec[12]</tt></big></b></big>
 - Allocation flag for the <a href="gems_scm.html#MaSdj_"><tt>MaSdj_</tt></a>
-vector of DC max.densities (SAT) { + *      - }</dt>
+vector of DC max.densities (SAT) { + * - }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>Default values: &nbsp;+ &nbsp;if sorption phases are present in
@@ -1113,7 +1151,7 @@ the project; - otherwise.</dd>
   </dd>
   <dt> <a name="SyPvec_15"></a><a name="tSwch_25"></a><big><b><big><tt>SyPvec[15]</tt></big></b></big>
 - Allocation flag for the <a href="gems_scm.html#Sigm_"><tt>Sigm_</tt></a>
-vectors of specific surface energies      { + * - }</dt>
+vectors of specific surface energies { + * - }</dt>
   <dd>&nbsp;&nbsp; </dd>
   <dd>Default values: &nbsp;+ &nbsp;if sorption phases are present in
 the project; - otherwise.</dd>
@@ -1139,7 +1177,8 @@ vectors (reserved)</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dt> <a name="SyPvec_18"></a><a name="tSwch_28"></a><big><b><big><tt>SyPvec[18]</tt></big></b></big>
 - Allocation flag for the <a href="gems_scm.html#Nfsp_"><tt>Nfsp_</tt></a>
-and <a href="gems_scm.html#SCMT_"><tt>SCMT_</tt></a> arrays for surface
+and <a href="gems_scm.html#SCMT_"><tt>SCMT_</tt></a> arrays for
+surface
 types { + * - }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Default values: &nbsp;+ &nbsp;if sorption phases are present in
@@ -1203,7 +1242,8 @@ partial pressures (reserved)</dt>
   </dd>
   <dd> &nbsp;&nbsp;</dd>
   <dt> <a name="SyPvec_25"></a><a name="tSwch_35"></a><b><big><tt>SyPvec[25]</tt></big></b>
-- Allocation flag for the <a href="#delB_"><tt>delB_</tt></a> vector of
+- Allocation flag for the <a href="#delB_"><tt>delB_</tt></a> vector
+of
 uncertainties (reserved)</dt>
   <dd>&nbsp;<br>
   </dd>
@@ -1266,8 +1306,9 @@ composition.&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
   <dd>This number is usually less than the total number of DC in the
-project system because some phases with their species or some individual
-DCs may  be excluded from the system definition..&nbsp;</dd>
+project system because some phases with their species or some
+individual
+DCs may be excluded from the system definition..&nbsp;</dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
   <p> </p>
   <dt> <a name="L__1"></a><b><big><tt><a name="tDM_2"></a><big>L_[1]</big></tt></big></b>
@@ -1277,7 +1318,8 @@ phases (Ls)</dt>
   </dd>
   <dd> &nbsp; &nbsp;<br>
   </dd>
-  <dt> <a name="L__2"></a><a name="tDM_3"></a><b><big><tt><big>L_[2]</big> </tt></big></b>-
+  <dt> <a name="L__2"></a><a name="tDM_3"></a><b><big><tt><big>L_[2]</big>
+    </tt></big></b>-
 Number of species selected into the aqueous phase (Lw, including
 solvent)</dt>
   <dd> &nbsp; <br>
@@ -1345,7 +1387,8 @@ dll_ or dul_ vectors (Lk)</dt>
   </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="Lbc__3"></a><b><big><tt><a name="tDM_14"></a>Lbc_[3]</tt></big></b>
-- Number of non-zero IC quantities (bi_ vector) used in BCC calculations
+- Number of non-zero IC quantities (bi_ vector) used in BCC
+calculations
 (Na)</dt>
   <dd> &nbsp;<br>
   </dd>
@@ -1365,7 +1408,8 @@ list)</dt>
   <dd> &nbsp;<br>
   </dd>
   <dd> &nbsp;&nbsp;</dd>
-  <dt> <a name="LO__2"></a><b><big><tt><a name="tDM_17"></a><big>LO_[2]</big> </tt></big></b>-
+  <dt> <a name="LO__2"></a><b><big><tt><a name="tDM_17"></a><big>LO_[2]</big>
+    </tt></big></b>-
 Maximal number of surface types in sorption phases (NsTm)</dt>
   <dd>&nbsp; <br>
   </dd>
@@ -1401,7 +1445,8 @@ Reserved</dt>
 <h4>Data Objects Reserved for Future Versions</h4>
 &nbsp;
 <dl>
-  <dt> <a name="RFLC_"></a><b><big><tt>RFLC_</tt></big></b> - Type codes
+  <dt> <a name="RFLC_"></a><b><big><tt>RFLC_</tt></big></b> - Type
+codes
 of Phase metastability restrictions in the <a
  href="file:///C:/GEMS2test/program/doc/html/gems_bcc.html#pll_"><tt>pll_</tt></a>
 and/or <a
@@ -1435,7 +1480,8 @@ code.</dd>
   </dd>
 </dl>
 <dl>
-  <dt> <a name="Pp_"></a><b><big><tt>Pp_</tt></big></b> - Input partial
+  <dt> <a name="Pp_"></a><b><big><tt>Pp_</tt></big></b> - Input
+partial
 pressures for Dependent Components, bar (reserved)</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Here, the partial pressures can be set for "perfectly mobile"
@@ -1475,17 +1521,20 @@ enthalpy interval for parametric problems (reserved)</dt>
   <dd>&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="Procs_0"></a><b><big><tt>Procs[0] </tt></big></b>- Tau
+  <dt> <a name="Procs_0"></a><b><big><tt>Procs[0] </tt></big></b>-
+Tau
 - physical time (for kinetic Process simulators) reserved</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="Procs_1"></a><b><big><tt>Procs[1]</tt></big></b> - Xi -
+  <dt> <a name="Procs_1"></a><b><big><tt>Procs[1]</tt></big></b> - Xi
+-
 current value of process extent variable (reserved)</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="Procs_2"></a><big><b><tt>Procs[2]</tt></b></big> - Nu -
+  <dt> <a name="Procs_2"></a><big><b><tt>Procs[2]</tt></b></big> - Nu
+-
 current value of process extent variable (reserved)</dt>
   <dd> &nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
@@ -1496,14 +1545,14 @@ reserved</dt>
   <dd><br>
   </dd>
 </dl>
-<hr width="100%" size="2">
+<hr size="2" width="100%">
 <dl>
   <h2><a name="DOD_MTPARM"></a>4.Description of Data Entries (MTparm
 submodule)</h2>
   <br>
   <br>
   <dt> <a name="TPun_0"></a><big><big><b><tt>TPun[0]</tt></b></big></big>
-&nbsp;- Code  of units of measurement of molar energy values { j }</dt>
+&nbsp;- Code of units of measurement of molar energy values { j }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>This code defines in which <a
@@ -1516,7 +1565,7 @@ objects are dispalyed.&nbsp;</dd>
   <dd>&nbsp;&nbsp; <br>
   </dd>
   <dt> <a name="TPun_1"></a><big><b><big><tt>TPun[1]</tt></big></b></big>&nbsp;
-- Code  of units of measurement of molar volumes { j }</dt>
+- Code of units of measurement of molar volumes { j }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;This code defines in which <a
  href="g_useref.html#UNITS_VOLUME_CODES">units of measurement of volume</a>
@@ -1529,7 +1578,7 @@ dispalyed.</dd>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="TPun_2"></a><big><b><big><tt>TPun[2]</tt></big></b></big>&nbsp;
-- Code  of units of measurement of pressure { b }</dt>
+- Code of units of measurement of pressure { b }</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>This code defines in which <a
@@ -1540,7 +1589,8 @@ the values in the MTparm objects are dispalyed.</dd>
   <dd>&nbsp; &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="TPun_3"></a><b><big><tt>TPun[3]</tt></big></b> - Code of
+  <dt> <a name="TPun_3"></a><b><big><tt>TPun[3]</tt></big></b> - Code
+of
 units of measurement of temperature { C }</dt>
   <dd>&nbsp;<br>
   </dd>
@@ -1554,7 +1604,6 @@ GEM-Selektor. </dd>
   <dd>&nbsp;<br>
   </dd>
 </dl>
-<h3></h3>
 <dl>
   <dt><a name="T"></a><big><b><big><tt>T</tt></big></b></big> - Current
 temperature of interest (T)</dt>
@@ -1563,20 +1612,22 @@ temperature of interest (T)</dt>
   <dd>This cell contains temperature (in units defined by <a
  href="#TPun_3"><tt>TPun[3]</tt></a> code) for which thermodynamic data
 in <tt><a href="#gTP">gTP</a>, <a href="#VTP">VTP</a></tt> and other
-vectors  are displayed.These data are automatically computed for all
-species included  in the project system list from the standard
-properties and temperature corrections  provided in thermodynamic
-database (<a href="gm_dcomp.html">DComp</a> and <a href="gm_reacdc.html">ReacDC</a>
+vectors are displayed.These data are automatically computed for all
+species included in the project system list from the standard
+properties and temperature corrections provided in thermodynamic
+database (<a href="gm_dcomp.html">DComp</a> and <a
+ href="gm_reacdc.html">ReacDC</a>
 records) for the temperature value taken from the <a
  href="gdb_rkey.html#dbm_SysEq">SysEq record key</a>. When another
-SysEq record key is created with different temperature, all the data 
-in MTparm module will be automatically re-computed.&nbsp;</dd>
+SysEq record key is created with different temperature, all the data in
+MTparm module will be automatically re-computed.&nbsp;</dd>
   <dd>Default value is Tr = 25 <sup>o</sup>C (298.15 K).&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
   <dd>&nbsp;&nbsp; <br>
   </dd>
-  <dt> <a name="P"></a><big><big><b><tt>P</tt></b></big></big> - Current
+  <dt> <a name="P"></a><big><big><b><tt>P</tt></b></big></big> -
+Current
 pressure of interest (P)</dt>
   <dd>&nbsp;<br>
   </dd>
@@ -1584,40 +1635,42 @@ pressure of interest (P)</dt>
  href="gems_bcc.html#TPun_2"><tt>TPun[2]</tt></a> code) for which
 thermodynamic data in <tt><a href="gems_bcc.html#gTP">gTP</a>, <a
  href="gems_bcc.html#VTP">VTP</a></tt> and other vectors are
-displayed.These data are automatically computed for all species included
-in the project system  list from the standard properties and pressure
-corrections provided in thermodynamic  database (<a href="gm_dcomp.html">DComp</a>
-and <a href="gm_reacdc.html">ReacDC</a> records) for the pressure value
+displayed.These data are automatically computed for all species
+included
+in the project system list from the standard properties and pressure
+corrections provided in thermodynamic database (<a href="gm_dcomp.html">DComp</a>
+and <a href="gm_reacdc.html">ReacDC</a> records) for the pressure
+value
 taken from the <a href="gdb_rkey.html#dbm_SysEq">SysEq record key</a>.
-If 0 is specified there  ("Saturated Vapor Curve") then the current
-pressure P is first calculated  from temperature using a SUPCRT92
-subroutine.&nbsp; When another SysEq record  key is created for a
-different pressure, all the data in MTparm module will  be
+If 0 is specified there ("Saturated Vapor Curve") then the current
+pressure P is first calculated from temperature using a SUPCRT92
+subroutine.&nbsp; When another SysEq record key is created for a
+different pressure, all the data in MTparm module will be
 automatically re-computed.&nbsp;</dd>
   <dd>Default value is Pr = 1 bar (1e5 Pa).&nbsp;</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp;&nbsp; &nbsp;<br>
   </dd>
   <dt> <a name="RTf"></a><big><b><big><tt>RTf</tt></big></b></big> -
-Current RT factor  (J/mol)&nbsp;</dt>
+Current RT factor (J/mol)&nbsp;</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>This cell displays current value of RT product, where R=8.31451
 J/mole/K is the universal gas constant and <a href="#T"><tt>T</tt></a>
-is converted  to Kelvins.&nbsp;</dd>
+is converted to Kelvins.&nbsp;</dd>
   <dd>Default value (for 25 C): 2478.97 J/mol.</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <dt> <a name="RoW"></a><big><b><big><tt>RoW</tt></big></b></big> -
-Current densities  of liquid water and steam (in g/cm3)</dt>
+Current densities of liquid water and steam (in g/cm3)</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd> Densities are calculated for current <a href="#T"><tt>T</tt></a>
 and <tt><a href="#P">P</a></tt> values using SUPCRT92 subroutines, if
 aqueous phase is present in the project system definition. These
-properties are used  in <a href="theortdb.html">HKF EoS calculations</a>
+properties are used in <a href="theortdb.html">HKF EoS calculations</a>
 of <a href="#VTP"><tt>VTP</tt></a> and <a href="#gTP"><tt>gTP</tt></a>
 values for aqueous species.&nbsp;</dd>
   <dd>&nbsp;<br>
@@ -1625,11 +1678,12 @@ values for aqueous species.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="EpsW"></a><big><b><big><tt>EpsW</tt></big></b></big> -
-Current dielectric  constants of liquid water and steam&nbsp;</dt>
+Current dielectric constants of liquid water and steam&nbsp;</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd> Dielectric constants are calculated for current <a
- href="gems_bcc.html#T"><tt>T</tt></a> and <tt><a href="gems_bcc.html#P">P</a></tt>
+ href="gems_bcc.html#T"><tt>T</tt></a> and <tt><a
+ href="gems_bcc.html#P">P</a></tt>
 values using SUPCRT92 subroutines, if aqueous phase is present in the
 project system definition.&nbsp;These properties are used in <a
  href="theortdb.html">HKF EoS calculations</a> of <a href="#VTP"><tt>VTP</tt></a>
@@ -1639,11 +1693,12 @@ and <a href="#gTP"><tt>gTP</tt></a> values for aqueous species.&nbsp;</dd>
   <dd>&nbsp;&nbsp; <br>
   </dd>
   <dt> <a name="VisW"></a><big><b><big><tt>VisW</tt></big></b> </big>-
-Current dynamic  viscosities of liquid water and steam (in kg/m*sec)</dt>
+Current dynamic viscosities of liquid water and steam (in kg/m*sec)</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>Dynamic viscosities are calculated for current <a
- href="gems_bcc.html#T"><tt>T</tt></a> and <tt><a href="gems_bcc.html#P">P</a></tt>
+ href="gems_bcc.html#T"><tt>T</tt></a> and <tt><a
+ href="gems_bcc.html#P">P</a></tt>
 values using SUPCRT92 subroutines, if aqueous phase is present in the
 project system definition.&nbsp;These properties are used in <a
  href="theortdb.html">HKF EoS calculations</a> of <a href="#VTP"><tt>VTP</tt></a>
@@ -1652,17 +1707,18 @@ and <a href="#gTP"><tt>gTP</tt></a> values for aqueous species.&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="TPmark"></a><big><b><big><tt>TPmark</tt></big></b></big>
-- Quality codes  for temperature and pressure corrections { + - e }</dt>
+- Quality codes for temperature and pressure corrections { + - e }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Codes in this column show for each Dependent Component, whether
 the corrections to the current&nbsp;temperature and pressure have been
 successful. In most techniques, for instance Cp=f(T) integration,
-temperature corrections  are only valid within the temperature interval
-where the coefficients were  originally fitted (these intervals are
-given in DComp or ReacDC records).  Beyond this interval, the
-extrapolated corrections are usually not reliable  and may contain large
-errors, and even be not applicable at all. The program  sets the
-quality code to inform you about possible problems related to this.&nbsp;</dd>
+temperature corrections are only valid within the temperature interval
+where the coefficients were originally fitted (these intervals are
+given in DComp or ReacDC records). Beyond this interval, the
+extrapolated corrections are usually not reliable and may contain large
+errors, and even be not applicable at all. The program sets the
+quality code to inform you about possible problems related to
+this.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dd>Possible values (separate for each Dependent Component): :&nbsp;</dd>
@@ -1683,12 +1739,13 @@ species has to be excluded from CSD.&nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <dt> <a name="gTP"></a><big><b><big><tt>gTP</tt></big></b></big> -
-Molar (molal) standard  Gibbs energy functions of Dependent Components
+Molar (molal) standard Gibbs energy functions of Dependent Components
 at T,P of interest&nbsp;</dt>
   <dd> <br>
   </dd>
   <dd> This vector contains the main input data for the <a
- href="theorgem.html">GEM IPM problem</a> - the values of molar (partial
+ href="theorgem.html">GEM IPM problem</a> - the values of molar
+(partial
 molal for aqueous and surface species) Gibbs energy function corrected
 to temperature <a href="#T"><tt>T</tt></a> and pressure <a href="#P"><tt>P</tt></a>
 of interest separately for each <a
@@ -1698,9 +1755,17 @@ as prescribed in the respective source data records (<a
   <dd>&nbsp;<br>
   </dd>
   <dd>The units of measurement are defined by the TPun[0] code. If the
-corrected gTP cell value could not be calculated, this cell will contain
-7777777 (J/mol)  and the respective species will be effectively
-eliminated from equilbrium  speciation.&nbsp;</dd>
+corrected gTP cell value could not be calculated, this cell will
+contain
+7777777 (J/mol) and the respective species will be effectively
+eliminated from equilbrium speciation.&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="gUns"></a><big><b><big><tt>gUns</tt></big></b></big> -
+work vector of uncertainty space increments to tp-&gt;G +
+sy-&gt;GEX(J/mol) </dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>&nbsp; <br>
@@ -1718,11 +1783,12 @@ calculations, to be implemented in Version 3 of GEMS-PSI code.</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <dt> <a name="hTP"></a><big><b><big><tt>hTP</tt></big></b></big> -
-Molar (molal) standard  enthalpy functions of Dependent Components at
+Molar (molal) standard enthalpy functions of Dependent Components at
 T,P of interest &nbsp;</dt>
   <dd><br>
   </dd>
-  <dd> This vector contains molar (partial molal for aqueous and surface
+  <dd> This vector contains molar (partial molal for aqueous and
+surface
 species) enthalpy functions h(TP) (in J/mol),&nbsp;corrected to
 temperature <a href="gems_bcc.html#T"><tt>T</tt></a> and pressure <a
  href="gems_bcc.html#P"><tt>P</tt></a> of interest separately for each <a
@@ -1739,16 +1805,17 @@ minimization of other than G(x) thermodynamic potentials [<a
   </dd>
   <dt> <a name="hTPuns"></a><b><big><tt>hTPuns</tt></big></b> -
 Uncertainties of <a href="gems_bcc.html#hTP"><tt>hTP</tt></a> values
-(reserved for future  versions)</dt>
+(reserved for future versions)</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="STP"></a><big><b><big><tt>STP</tt></big></b></big> -
-Molar (molal) entropies  of Dependent Components at T,P of interest&nbsp;</dt>
+Molar (molal) entropies of Dependent Components at T,P of interest&nbsp;</dt>
   <dd> <br>
   </dd>
-  <dd> This vector contains molar (partial molal for aqueous and surface
+  <dd> This vector contains molar (partial molal for aqueous and
+surface
 species) entropies S(TP) ( in J/K/mol ),&nbsp;corrected to temperature <a
  href="gems_bcc.html#T"><tt>T</tt></a> and pressure <a
  href="gems_bcc.html#P"><tt>P</tt></a> of interest separately for each <a
@@ -1765,17 +1832,18 @@ minimization of other than G(x) thermodynamic potentials [<a
   </dd>
   <dt> <a name="STPuns"></a><b><big><tt>STPuns</tt></big></b> -
 Uncertainties of <a href="gems_bcc.html#STP"><tt>STP</tt></a> values
-(reserved for future  versions)</dt>
+(reserved for future versions)</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="CpTP"></a><big><b><big><tt>CpTP</tt></big></b> </big>-
-Molar (molal)  standard entropies of Dependent Components at T, P of
+Molar (molal) standard entropies of Dependent Components at T, P of
 interest&nbsp; </dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> This vector contains molar (partial molal for aqueous and surface
+  <dd> This vector contains molar (partial molal for aqueous and
+surface
 species) heat capacities Cp(TP) at constant pressure (in
 J/K/mol),&nbsp;corrected to temperature <a href="gems_bcc.html#T"><tt>T</tt></a>
 and pressure <a href="gems_bcc.html#P"><tt>P</tt></a> of interest
@@ -1791,15 +1859,16 @@ Component</a>, as prescribed in the respective source data records (<a
   </dd>
   <dt> <a name="CTPuns"></a><b><big><tt>CTPuns</tt></big></b> -
 Uncertainties of <a href="gems_bcc.html#CpTP"><tt>CpTP</tt></a> values
-(reserved for future  versions)</dt>
+(reserved for future versions)</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="VTP"></a><big><b><big><tt>VTP</tt></big></b></big> -
-Molar (molal) volumes  of Dependent Components at T,P of interest &nbsp;</dt>
+Molar (molal) volumes of Dependent Components at T,P of interest &nbsp;</dt>
   <dd>&nbsp;</dd>
-  <dd> This vector contains molar (partial molal for aqueous and surface
+  <dd> This vector contains molar (partial molal for aqueous and
+surface
 species) volumes V(TP) ( in J/bar ),&nbsp;corrected to temperature <a
  href="gems_bcc.html#T"><tt>T</tt></a> and pressure <a
  href="gems_bcc.html#P"><tt>P</tt></a> of interest separately for each <a
@@ -1812,19 +1881,25 @@ as prescribed in the respective source data records (<a
   <dd>The molar volumes of species are used in GEM calculations to
 determine the volume of phases and the whole chemical system at
 equilibrium state, and can be also copied into the stoichiometry martix
-a if the <tt>"Vol"</tt>&nbsp;  Independent Component (volume balance
-constraint) is included in the system  stoichiometry basis.&nbsp;</dd>
+a if the <tt>"Vol"</tt>&nbsp; Independent Component (volume balance
+constraint) is included in the system stoichiometry basis.&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>The molar volumes will also be used in future versions of GEMS
-code, e.g. for minimization of other than G(x) thermodynamic potentials [<a
- href="g_litref.html#2002KAR/CHU">2002KAR/CHU</a>].&nbsp;</dd>
+code, e.g. for minimization of other than G(x) thermodynamic potentials
+[<a href="g_litref.html#2002KAR/CHU">2002KAR/CHU</a>].&nbsp;</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
+  <dt> <a name="vUns"></a><big><b><big><tt>vUns</tt></big></b></big> -
+work vector of uncertainty space increments to tp-&gt;Vm (J/mol) </dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>&nbsp;&nbsp;<br>
   </dd>
   <dt> <a name="VTPuns"></a><b><big><tt>VTPuns</tt></big></b> -
 Uncertainties of <a href="gems_bcc.html#VTP"><tt>VTP</tt></a> values
-(reserved for future  versions)</dt>
+(reserved for future versions)</dt>
   <dd><br>
   </dd>
   <dd>&nbsp;&nbsp;</dd>
@@ -1848,7 +1923,7 @@ Uncertainties of <a href="gems_bcc.html#VTP"><tt>VTP</tt></a> values
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="beta"></a><b><tt>beta</tt></b></dt>
-  <dd> Expansibilities&nbsp; of Dependent Components  (reserved)</dd>
+  <dd> Expansibilities&nbsp; of Dependent Components (reserved)</dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="Wborn"></a><b><tt>Wborn</tt></b></dt>
@@ -1874,8 +1949,8 @@ Project Remake only&nbsp;</h3>
 &nbsp;
 <dl>
   <dt> <a name="TPsv_0"></a><big><b><big><tt>TPsv[0]</tt></big></b></big>
-- Flag for  calculation of H<sub>2</sub>O properties using EoS
-subroutines from SUPCRT92&nbsp;{  + - }</dt>
+- Flag for calculation of H<sub>2</sub>O properties using EoS
+subroutines from SUPCRT92&nbsp;{ + - }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>This flag (if turned on, +) activates SUPCRT92 subroutines to
@@ -1890,12 +1965,13 @@ project system, - otherwise.&nbsp; <br>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="TPsv_1"></a><big><b><big><tt>TPsv[1]</tt></big></b></big>&nbsp;-
-Flag  for calculation of thermodynamic properties of aqueous species
+Flag for calculation of thermodynamic properties of aqueous species
 using HKF EoS { + - }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>This flag (if turned on, +) activates SUPCRT92 subroutines to
-calculate thermodynamic properties of aqueous species at T,P of interest
+calculate thermodynamic properties of aqueous species at T,P of
+interest
 using HKF EoS coefficients and standard state data from DComp
 records.&nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
@@ -1919,7 +1995,7 @@ accessible in this version).&nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <dt> <a name="TPsv_3"></a><big><b><big><tt>TPsv[3]</tt></big></b></big>
-- Allocation  flag for the <a href="#TPmark"><tt>TPmark</tt></a> vector
+- Allocation flag for the <a href="#TPmark"><tt>TPmark</tt></a> vector
 { + - }</dt>
   <dd>&nbsp;<br>
   </dd>
@@ -1929,8 +2005,8 @@ accessible in this version).&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="TPptv_0"></a><big><b><big><tt>TPptv[0]</tt></big></b></big>
-- Allocation  flag for the <a href="gems_bcc.html#gTP"><tt>gTP</tt></a>
-vector of DC  molar Gibbs energy functions g(TP) { + - }</dt>
+- Allocation flag for the <a href="gems_bcc.html#gTP"><tt>gTP</tt></a>
+vector of DC molar Gibbs energy functions g(TP) { + - }</dt>
   <dd><br>
   </dd>
   <dd>This flag must always be turned on. </dd>
@@ -1940,8 +2016,9 @@ vector of DC  molar Gibbs energy functions g(TP) { + - }</dt>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="TPptv_1"></a><b><big><tt>TPptv[1]</tt></big></b> -
-Allocation flag for the <a href="#gTPuns"><tt>gTPuns</tt></a> vector of
-g(TP)  uncertainties { + - }</dt>
+Allocation flag for the <a href="#gTPuns"><tt>gTPuns</tt></a> vector
+of
+g(TP) uncertainties { + - }</dt>
   <dd><br>
   </dd>
   <dd>Default value: - &nbsp;(off, reserved for use in future versions).</dd>
@@ -1950,8 +2027,8 @@ g(TP)  uncertainties { + - }</dt>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="TPptv_2"></a><big><b><big><tt>TPptv[2]</tt></big></b></big>
-- Allocation  flag for the <a href="gems_bcc.html#hTP"><tt>hTP</tt></a>
-vector of DC molar  enthalpy functions h(TP) { + - }</dt>
+- Allocation flag for the <a href="gems_bcc.html#hTP"><tt>hTP</tt></a>
+vector of DC molar enthalpy functions h(TP) { + - }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>Default value: - &nbsp;</dd>
@@ -1969,8 +2046,8 @@ Allocation flag for the&nbsp; <a href="#hTPuns"><tt>hTPuns</tt></a>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="TPptv_4"></a><big><big><b><tt>TPptv[4]</tt></b></big></big>
-- Allocation  flag for the <a href="gems_bcc.html#STP"><tt>STP</tt></a>
-vector of DC molar  entropies S(TP) { + - }</dt>
+- Allocation flag for the <a href="gems_bcc.html#STP"><tt>STP</tt></a>
+vector of DC molar entropies S(TP) { + - }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>Default value: -</dd>
@@ -1988,8 +2065,8 @@ Allocation flag for the&nbsp; <a href="#STPuns"><tt>STPuns</tt></a>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="TPptv_6"></a><big><b><big><tt>TPptv[6]</tt></big></b></big>
-- Allocation  flag for the <a href="gems_bcc.html#CpTP"><tt>CpTP</tt></a>
-vector of DC molar constant-pressure  heat capacities Cp(TP) { + - }</dt>
+- Allocation flag for the <a href="gems_bcc.html#CpTP"><tt>CpTP</tt></a>
+vector of DC molar constant-pressure heat capacities Cp(TP) { + - }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>Default value: -</dd>
@@ -1999,7 +2076,7 @@ vector of DC molar constant-pressure  heat capacities Cp(TP) { + - }</dt>
   </dd>
   <dt> <a name="TPptv_7"></a><b><big><tt>TPptv[7]</tt></big></b>-
 Allocation flag for the&nbsp; <a href="#CTPuns"><tt>CTPuns</tt></a>
-&nbsp;vector of Cp(TP)  uncertainties { + - }</dt>
+&nbsp;vector of Cp(TP) uncertainties { + - }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>Default value: - &nbsp;(off, reserved for use in future versions).</dd>
@@ -2009,7 +2086,7 @@ Allocation flag for the&nbsp; <a href="#CTPuns"><tt>CTPuns</tt></a>
   </dd>
   <dt> <a name="TPptv_8"></a><b><big><tt>TPptv[8]</tt></big></b> -
 Allocation flag for the <a href="gems_bcc.html#VTP"><tt>VTP</tt></a>
-vector of DC  molar volumes V(TP) { + - }</dt>
+vector of DC molar volumes V(TP) { + - }</dt>
   <dd>&nbsp;<br>
   </dd>
   <dd>This flag must always be turned on. </dd>
@@ -2088,7 +2165,7 @@ future versions)&nbsp;</h4>
 </dl>
 <p><br>
 </p>
-<hr width="100%" size="2">
+<hr size="2" width="100%">
 <h2><a name="ERROR_MESSAGES"></a>5. Warnings and Error Messages</h2>
 <p><tt><br>
 </tt></p>
@@ -2096,7 +2173,7 @@ future versions)&nbsp;</h4>
 </tt></p>
 <p><tt><br>
 </tt></p>
-<hr width="100%" size="2">
+<hr size="2" width="100%">
 <p><tt><a href="index.html">To Contents</a> &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp;<a href="g_about.html">About GEM-Selektor</a> </tt><br>
 </p>

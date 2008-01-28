@@ -88,7 +88,6 @@ application of the Laplace- and other decision-making statistical
 criteria to find "optimally consistent" variant(s) of input data. This
 is normally done according to the following schematic algorithm: <br>
   </span></p>
-  <p></p>
   <ol>
     <li>
       <p>Formulation
@@ -1441,7 +1440,7 @@ functions C, D, E and F.</dd>
     </dd>
     <dd><br>
     </dd>
-    <dt> <a name="upHc"></a><big><b><big><tt>upHc</tt></big></b></big>
+    <dt> <a name="upHc_0"></a><big><b><big><tt>upHc[0]</tt></big></b></big>
 Vector of pH values
 from sample GEM solution variants (index t) </dt>
     <dd><br>
@@ -1449,6 +1448,35 @@ from sample GEM solution variants (index t) </dt>
     <dd>This vector-column of nQ (<a href="gm_unspace.html#nQ_0"><big><span
  style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; cells
 contains values of pH from calculated equilibria in all UnSpace sample
+variants. One cell in
+this vector corresponds to a t-th sample equilibrium calculation. This
+vector can be used&nbsp; in filtering sample variants.</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="upHc_1"></a><big><b><big><tt>upHc[1]</tt></big></b></big>
+Vector of Eh values from sample GEM solution variants (index t) </dt>
+    <dd><br>
+    </dd>
+    <dd>This vector-column of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; cells
+contains values of Eh from calculated equilibria in all UnSpace sample
+variants. One cell in
+this vector corresponds to a t-th sample equilibrium calculation. This
+vector can be used&nbsp; in filtering sample variants.</dd>
+    <dd><br>
+    </dd>
+    <dd><br>
+    </dd>
+    <dt> <a name="upHc_2"></a><big><b><big><tt>upHc[2]</tt></big></b></big>
+Vector of IS values
+from sample GEM solution variants (index t) </dt>
+    <dd><br>
+    </dd>
+    <dd>This vector-column of nQ (<a href="gm_unspace.html#nQ_0"><big><span
+ style="font-family: monospace;">nQ[0]</span></big></a>)&nbsp; cells
+contains values of IS from calculated equilibria in all UnSpace sample
 variants. One cell in
 this vector corresponds to a t-th sample equilibrium calculation. This
 vector can be used&nbsp; in filtering sample variants.</dd>
@@ -1518,7 +1546,7 @@ calculations, it is recommended that this threshold is set to 1e-9. <br>
     </dd>
   </dl>
   <dl>
-    <dt> <a name="UnOV_0"></a><big><b><big><tt>UnOV[0]</tt></big></b></big>
+    <dt> <a name="unOV_0"></a><big><b><big><tt>unOV[0]</tt></big></b></big>
 Index
 of optimal
 sampled variant selected by the Laplace criterion (within 0 to nQ-1) </dt>
@@ -1538,7 +1566,7 @@ cell.</dd>
     </dd>
     <dd><br>
     </dd>
-    <dt> <a name="UnOV_1"></a><big><b><big><tt>UnOV[1]</tt></big></b></big>
+    <dt> <a name="unOV_1"></a><big><b><big><tt>unOV[1]</tt></big></b></big>
 Index
 of optimal
 sampled variant selected by the Hurvitz criterion&nbsp; (within 0 to
@@ -1561,7 +1589,7 @@ cell.</dd>
     </dd>
     <dd><br>
     </dd>
-    <dt> <a name="UnOV_2"></a><big><b><big><tt>UnOV[2]</tt></big></b></big>
+    <dt> <a name="unOV_2"></a><big><b><big><tt>unOV[2]</tt></big></b></big>
 Index
 of optimal
 sampled variant selected by the Wald criterion (within 0 to nQ-1)<br>
@@ -1583,7 +1611,7 @@ cell.</dd>
     </dd>
     <dd><br>
     </dd>
-    <dt> <a name="UnOV_3"></a><big><b><big><tt>UnOV[3]</tt></big></b></big>
+    <dt> <a name="unOV_3"></a><big><b><big><tt>unOV[3]</tt></big></b></big>
 Index
 of optimal
 sampled variant selected by the Homeniuk criterion (within 0 to nQ-1)<br>
@@ -1682,7 +1710,7 @@ criterion value<br>
     <dd>This Laplace criterion value (taken from&nbsp; <a href="#Zcp"><big><span
  style="font-family: monospace;">Zcp</span></big></a>&nbsp;
 vector)&nbsp; corresponds to the "optimal" selected sample variant with
-the index <a href="#UnOV_0"><big><tt>UnOV[0]</tt></big></a> . Through
+the index <a href="#unOV_0"><big><tt>unOV[0]</tt></big></a> . Through
 this index, all properties of the selected variant can be found in
 vectors and tables on "SamVar" and "Criteria" pages.</dd>
     <dd>&nbsp;<br>
@@ -1699,7 +1727,7 @@ single criterion value <br>
  style="font-family: monospace;">Zmin</span></big></a>&nbsp; and&nbsp; <a
  href="#Zmax"><big><span style="font-family: monospace;">Zmax</span></big></a>&nbsp;
 vectors)&nbsp; corresponds to the "optimal" selected sample variant
-with the index <a href="#UnOV_1"><big><tt>UnOV[1]</tt></big></a>
+with the index <a href="#unOV_1"><big><tt>unOV[1]</tt></big></a>
 . Through this index, all properties of the selected variant can be
 found in vectors and tables on "SamVar" and "Criteria" pages.</dd>
     <dd>&nbsp;</dd>
@@ -1715,7 +1743,7 @@ criterion value <br>
     <dd>This Wald criterion value (taken from&nbsp; <a href="#ZmaxAb"><big><span
  style="font-family: monospace;">ZmaxAb</span></big></a>&nbsp;
 vector)&nbsp; corresponds to the "optimal" selected sample variant with
-the index <a href="#UnOV_2"><big><tt>UnOV[2]</tt></big></a>
+the index <a href="#unOV_2"><big><tt>unOV[2]</tt></big></a>
 . Through this index, all properties of the selected variant can be
 found in vectors and tables on "SamVar" and "Criteria" pages.</dd>
     <dd>&nbsp;</dd>
@@ -1731,7 +1759,7 @@ criterion value <br>
     <dd>This Homeniuk criterion value (taken from&nbsp; <a href="#Hom"><big><span
  style="font-family: monospace;">Hom</span></big></a>&nbsp;
 vector)&nbsp; corresponds to the "optimal" selected sample variant with
-the index <a href="#UnOV_3"><big><tt>UnOV[3]</tt></big></a>
+the index <a href="#unOV_3"><big><tt>unOV[3]</tt></big></a>
 . Through this index, all properties of the selected variant can be
 found in vectors and tables on "SamVar" and "Criteria" pages.</dd>
     <dd>&nbsp;</dd>
@@ -1820,7 +1848,7 @@ Values of the quantile Laplace criterion </dt>
     <dd>These Laplace criterion values (taken from the&nbsp; <a
  href="#Zcp"><big><span style="font-family: monospace;">Zcp</span></big></a>&nbsp;
 vector)&nbsp; correspond to the "optimal" selected sample variants with
-the index <a href="#UnOV_0"><big><tt>UnOV[0]</tt></big></a> . Through
+the index <a href="#unOV_0"><big><tt>unOV[0]</tt></big></a> . Through
 this index, all properties of the selected variants can be found in
 vectors and tables on "SamVar" and "Criteria" pages.</dd>
     <dd><br>
@@ -1835,7 +1863,7 @@ Values of the quantile Hurvitz criterion </dt>
     </dd>
     <dd>These Hurvitz criterion values&nbsp; correspond to the
 "optimal" selected sample variants with
-the index <a href="#UnOV_1"><big><tt>UnOV[1]</tt></big></a> . Through
+the index <a href="#unOV_1"><big><tt>unOV[1]</tt></big></a> . Through
 this index, all properties of the selected variants can be found in
 vectors and tables on "SamVar" and "Criteria" pages.</dd>
     <dd><br>
@@ -1850,7 +1878,7 @@ Values of the quantile Wald criterion </dt>
     </dd>
     <dd>These Wald criterion values&nbsp; correspond to the "optimal"
 selected sample variants with
-the index <a href="#UnOV_2"><big><tt>UnOV[2]</tt></big></a> . Through
+the index <a href="#unOV_2"><big><tt>unOV[2]</tt></big></a> . Through
 this index, all properties of the selected variants can be found in
 vectors and tables on "SamVar" and "Criteria" pages.</dd>
     <dd><br>
@@ -1865,7 +1893,7 @@ Values of the quantile Homeniuk criterion </dt>
     </dd>
     <dd>These Homeniuk criterion values&nbsp; correspond to the
 "optimal" selected sample variants with
-the index <a href="#UnOV_3"><big><tt>UnOV[3]</tt></big></a> . Through
+the index <a href="#unOV_3"><big><tt>unOV[3]</tt></big></a> . Through
 this index, all properties of the selected variants can be found in
 vectors and tables on "SamVar" and "Criteria" pages.</dd>
     <dd><br>
@@ -2030,7 +2058,7 @@ column on "Criteria" page). <br>
     </dd>
     <dd>If no quantile criteria were specified the values in this
 column will be taken from a sample variant selected by a single-value
-Laplace criterion (q index in the <a href="#UnOV_0"><big><span
+Laplace criterion (q index in the <a href="#unOV_0"><big><span
  style="font-family: monospace;">unOV[0]</span></big></a> cell). </dd>
   </dl>
   <dl>
@@ -2054,7 +2082,7 @@ column on "Criteria" page). <br>
     <dd>If no quantile criteria were specified the values in this
 column
 will be taken from a sample variant selected by a single-value Hurvitz
-criterion (q index in the <a href="#UnOV_1"><big><span
+criterion (q index in the <a href="#unOV_1"><big><span
  style="font-family: monospace;">unOV[1]</span></big></a> cell). </dd>
     <dd><br>
     </dd>
@@ -2079,7 +2107,7 @@ column on "Criteria" page). <br>
     <dd>If no quantile criteria were specified the values in this
 column
 will be taken from a sample variant selected by a single-value Wald
-criterion (q index in the <a href="#UnOV_2"><big><span
+criterion (q index in the <a href="#unOV_2"><big><span
  style="font-family: monospace;">unOV[2]</span></big></a> cell).</dd>
   </dl>
   <dl>
@@ -2103,7 +2131,7 @@ column on "Criteria" page). <br>
     <dd>If no quantile criteria were specified the values in this
 column
 will be taken from a sample variant selected by a single-value Homeniuk
-criterion (q index in the <a href="#UnOV_3"><big><span
+criterion (q index in the <a href="#unOV_3"><big><span
  style="font-family: monospace;">unOV[3]</span></big></a> cell).</dd>
     <dd><br>
     </dd>
