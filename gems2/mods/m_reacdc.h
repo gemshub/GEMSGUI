@@ -44,7 +44,7 @@ typedef struct
 
     PreKT,// Flag for lgK=f(T) coefficients { +*- }
     PreKP,// Flag for lgK(Tf,Pf) array for lgK interpolation {+*-}
-    PreDS,// Flag for coefficieents of electrostatic models {+*-}(reserved)
+    PreDS,// Flag for coefficients of electrostatic models {+*-}
     PreDV,     //Flag for dVr=f(P,T) coefficients {+*-}
     PreDC,     // Flag for dCpr=f(T) coefficients  {+*-}
     PrSVC,     //Will TP vary along SVC curve only? {+-} (reserved)
@@ -154,6 +154,9 @@ protected:
     void PronsPrep( const char *key );
 void calc_r_MRB( int q, int p, int CE, int CV );
 int MRBcalc ( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp );
+
+void calc_r_FMD( int q, int p, int CE, int CV ); // added by TW 29.01.2008
+int MFDcalc ( double TK, double *H2Oprop, double *MFDcoef, double *ReactProp );
 
 public:
 

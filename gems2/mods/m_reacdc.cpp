@@ -460,10 +460,10 @@ AGAIN_MOD:
         case CTM_IKZ:
             rcp->PreKP = S_ON;
             break; /* calc lgK(TP) */
-        case CTM_MRB:
-            rcp->PreDS = S_ON;  // Modified Ryzhenko-Bryzgalin model 
-        case CTM_DKR:
-            break; /* 19.05.98 */
+        case CTM_DKR:   // Franck-Marshall density model 
+        case CTM_MRB:   // Modified Ryzhenko-Bryzgalin model 
+            rcp->PreDS = S_ON;  
+             break; 
         case CTM_PPE:
             rcp->PreKT = S_ON;
             break;
@@ -668,7 +668,7 @@ TReacDC::RCthermo( int q, int p )
     /*  memcpy( dckey, rc[q].pstate, DC_RKLEN ); */
     //  dckey[DC_RKLEN] = 0;
 
-    if( CM == CTPM_HKF || CE == CTM_MRB )
+    if( CM == CTPM_HKF || CE == CTM_MRB || CE == CTM_DKR )
     {
         // calculate water properties from SUPCRT subroutines
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
@@ -812,7 +812,8 @@ CALCULATE_DELTA_R:
             break;
             /*  case CTM_EK1:  dbc = calc_isocoul_r( q, p, CE, CV );
                                break;  */
-        case CTM_DKR: // not used in this version
+        case CTM_DKR: // Franck-Marshall density model 
+        	calc_r_FMD( q, p, CE, CV );
             break;
         case CTM_MRB: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
              calc_r_MRB( q, p, CE, CV );
@@ -846,7 +847,7 @@ CALCULATE_DELTA_R:
     case CPM_NUL:   // Added by KD on 15.07.03
 //    case CPM_VBM:
 //    case CPM_CEH: // constant volume only in this version!
-         if( CE != CTM_MRB )  // if not Ryzhenko-Bryzgalin model (provisional)
+         if( (CE != CTM_MRB) && (CE != CTM_DKR) )  // if not Ryzhenko-Bryzgalin model (provisional)
         calc_tpcv_r( q, p, CM, CV );
     default:
         break;

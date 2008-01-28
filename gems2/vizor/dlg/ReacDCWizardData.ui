@@ -329,6 +329,11 @@
                                     <string>Y   Calculation of logK, dSr, dCpr, dVr using modified Ryzhenko-Bryzgalin algorithm</string>
                                 </property>
                             </item>
+                            <item>
+                                <property name="text">
+                                    <string>R   Calculation of logK, dSr, dCpr, dVr using Franck-Marshall density model</string>
+                                </property>
+                            </item>
                             <property name="name">
                                 <cstring>p_pct_2</cstring>
                             </property>

@@ -116,6 +116,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     //AGAIN_CP:
     switch( CE )
     { // calculation 2- and 3-term�param approximation
+    case CTM_DKR: // 3-term extrap. from Franck-Marshall density model
     case CTM_MRB: // 3-term extrap. from MRB at 25 C (provisional DK 06.08.07)
     case CTM_LGK:  // Here, all logK-f(T) coeffs are given
 //    case CTM_LGX:
@@ -359,6 +360,50 @@ NEXT:
     if( st1 )
         rc[q].Pst = (float)STANDARD_P;
 
+    if( CE == CTM_DKR )  // Franck-Marshall density model added by TW and DK 29.01.2008
+    {	
+        if( vfQuestion(window(), GetName(),
+            "Estimate dGr,dSr,dHr,dCpr,dVr using the Franck-Marshall density model?" ))
+         { 
+            double TK;
+            double H2Oprop[4];
+            double MFDcoef[7];
+            double ReactProp[6];
+            double rhoW, alphaW, betaW, dAldTW;
+
+            TK = 298.15;
+            // test water properties (25 deg C, 1 bar)
+            rhoW = 0.9970614;
+            alphaW = 0.0002594;
+            dAldTW = 9.5686e-6;
+            betaW = 4.5219e-5;
+            H2Oprop[0] = rhoW;
+            H2Oprop[1] = alphaW;
+            H2Oprop[2] = dAldTW;
+            H2Oprop[3] = betaW;
+
+        // get species parameters
+            MFDcoef[0] = rc[q].DSt[0];
+            MFDcoef[1] = rc[q].DSt[1];
+            MFDcoef[2] = rc[q].DSt[2];
+            MFDcoef[3] = rc[q].DSt[3];
+            MFDcoef[4] = rc[q].DSt[4];
+            MFDcoef[5] = rc[q].DSt[5];
+            MFDcoef[6] = rc[q].DSt[6];
+            
+           // calculate MFD function 
+            MFDcalc(TK, H2Oprop, MFDcoef, ReactProp);
+
+           // get results
+           rc[q].Ks[0] = FLOAT_EMPTY;
+           rc[q].Ks[1] = ReactProp[0];
+           rc[q].Gs[0] = ReactProp[1];
+           rc[q].Hs[0] = ReactProp[3];
+           rc[q].Ss[0] = ReactProp[2];
+           rc[q].Vs[0] = ReactProp[5];
+           rc[q].Cps[0] = ReactProp[4];
+         }    
+    }
     if( CE == CTM_MRB )  // Inserted provisionally by DK on 06.08.07
     {
         if( vfQuestion(window(), GetName(),
@@ -1303,6 +1348,139 @@ TReacDC::MRBcalc( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp
 	dHr = dGr + dSr*TK;
 
 	ReactProp[0] = logKTP;
+	ReactProp[1] = dGr;
+	ReactProp[2] = dSr;
+	ReactProp[3] = dHr;
+	ReactProp[4] = dCPr;
+	ReactProp[5] = dVr;
+
+	return 0;
+}
+
+
+//-----------------------------------------------------------------
+// Calculation of deltaR with Franck-Marshall density model 
+//                       model (added by TW and DK on 29.01.2008
+//
+void TReacDC::calc_r_FMD( int q, int p, int /*CE*/, int /*CV*/ )
+{
+    double TK;
+    double H2Oprop[4];
+    double MFDcoef[7];
+    double ReactProp[6];
+    double rhoW, alphaW, betaW, dAldTW;
+
+    if( fabs( aW.WW(p).TC - rc[q].TCst ) < 0.2 )
+    {  // standard temperature - just get data from ReacDC record
+       aW.WW(p).K =   rc[q].Ks[0];
+       aW.WW(p).lgK = rc[q].Ks[1];
+       aW.WW(p).dG =  rc[q].Gs[0];
+       aW.WW(p).G  =  rc[q].Gs[1];
+       aW.WW(p).dH =  rc[q].Hs[0];
+       aW.WW(p).H  =  rc[q].Hs[1];
+       aW.WW(p).dS =  rc[q].Ss[0];
+       aW.WW(p).S  =  rc[q].Ss[1];
+       aW.WW(p).dV =  rc[q].Vs[0];
+       aW.WW(p).V  =  rc[q].Vs[1];
+       aW.WW(p).dCp = rc[q].Cps[0];
+       aW.WW(p).Cp =  rc[q].Cps[1];
+        goto FINITA;
+    }
+
+     TK = aW.WW(p).T;
+//     P = aW.WW(p).P;
+// supcrt water structure Alphaw, Betaw, dAldT
+    // test water properties (400 deg C, 1000 bar)
+    // alphaW = 0.00213595;
+    // dAldTW = 4.61687e-6;
+    // betaW = 0.000210979;
+       rhoW = aW.WW(p).wRo;
+       alphaW = aW.WW(p).wAlp;
+       dAldTW = aW.WW(p).wdAlpdT;
+       betaW = aW.WW(p).wBet;
+    H2Oprop[0] = rhoW;
+    H2Oprop[1] = alphaW;
+    H2Oprop[2] = dAldTW;
+    H2Oprop[3] = betaW;
+
+// get species parameters
+    MFDcoef[0] = rc[q].DSt[0];
+    MFDcoef[1] = rc[q].DSt[1];
+    MFDcoef[2] = rc[q].DSt[2];
+    MFDcoef[3] = rc[q].DSt[3];
+    MFDcoef[4] = rc[q].DSt[4];
+    MFDcoef[5] = rc[q].DSt[5];
+    MFDcoef[6] = rc[q].DSt[6];
+    // . . . . . . . . . . . . . . . .
+// 
+    // calculate results - call MRB function (see below)
+    MFDcalc (TK, H2Oprop, MFDcoef, ReactProp);
+
+//       aW.WW(p).K =   rc[q].Ks[0];
+       aW.WW(p).lgK = ReactProp[0];
+       if( fabs(aW.WW(p).lgK) < 34. )
+         aW.WW(p).K = exp( aW.WW(p).lgK*lg_to_ln );
+       else aW.WW(p).K = FLOAT_EMPTY;
+       aW.WW(p).dG =  ReactProp[1];
+       aW.WW(p).dH =  ReactProp[3];
+       aW.WW(p).dS =  ReactProp[2];
+       aW.WW(p).dV =  ReactProp[5];
+       aW.WW(p).dCp = ReactProp[4];
+
+FINITA:
+    aW.WW(p).dlgK =rc[q].Ks[2];
+    aW.WW(p).devG = rc[q].Gs[2];
+    aW.WW(p).devH =rc[q].Hs[2];
+    aW.WW(p).devS =rc[q].Ss[2];
+    aW.WW(p).devV =rc[q].Vs[2];
+    aW.WW(p).devCp=rc[q].Cps[2];
+}
+
+int 
+TReacDC::MFDcalc( double TK, double *H2Oprop, double *MFDcoef, double *ReactProp )
+{
+	// calculates reaction properties from Marshall-Franck density (MFD) model
+	double a, b, c, d, e, f, g;
+	double R_C = 8.31451;
+	double RHO, ALP, dALPdT, BET, dRHOdT, d2RHOdT2, dRHOdP;
+	double logK, dGr, dSr, dHr, dCPr, dVr, dG298;
+	double J, dJ, d2J;
+
+	RHO = H2Oprop[0];
+	ALP = H2Oprop[1];
+	dALPdT = H2Oprop[2];
+	BET = H2Oprop[3];
+	dRHOdT = -ALP*RHO;
+	dRHOdP = BET*RHO;
+	d2RHOdT2 = RHO*(pow(ALP,2.)-dALPdT);
+
+	a = MFDcoef[0];
+	b = MFDcoef[1];
+	c = MFDcoef[2];
+	d = MFDcoef[3];
+	e = MFDcoef[4];
+	f = MFDcoef[5];
+	g = MFDcoef[6];
+
+	logK = a + b/TK + c/pow(TK,2.) + d/pow(TK,3.) + ( e + f/TK + g/pow(TK,2.) )*log10(RHO);
+
+	J = a + b/TK + c/pow(TK,2.) + d/pow(TK,3.) + ( e + f/TK + g/pow(TK,2.) )*log10(RHO);
+	dJ = - b/pow(TK,2.) - 2.*c/pow(TK,3.) - 3.*d/pow(TK,4.)
+		+ ( -f/pow(TK,2.) - 2.*g/pow(TK,3.) )*log10(RHO)
+		+ ( e + f/TK + g/pow(TK,2.) ) * 1./(RHO*log(10.)) * dRHOdT;
+	d2J = 2.*b/pow(TK,3.) + 6.*c/pow(TK,4.) + 12.*d/pow(TK,5.)
+		+ ( 2.*f/pow(TK,3.) + 6.*g/pow(TK,4.) )*log10(RHO)
+		+ 2.*( -f/pow(TK,2.) -2.*g/pow(TK,3.) ) * 1./(RHO*log(10.)) * dRHOdT
+		- ( e + f/TK + g/pow(TK,2.) ) * 1./(pow(RHO,2.)*log(10.)) * pow (dRHOdT,2.)
+		+ ( e + f/TK + g/pow(TK,2.) ) * 1./(RHO*log(10.)) * d2RHOdT2;
+
+	dGr = - R_C*TK*log(10.)*logK;
+	dSr = R_C*log(10.)*( J + dJ*TK );
+	dCPr = R_C*log(10.)*TK*( 2.*dJ + d2J*TK );
+	dVr = - R_C*log(10.)*TK*( ( e + f/TK + g/pow(TK,2.) ) * 1./(RHO*log(10.)) * dRHOdP );
+	dHr = dGr + dSr*TK;
+
+	ReactProp[0] = logK;
 	ReactProp[1] = dGr;
 	ReactProp[2] = dSr;
 	ReactProp[3] = dHr;
