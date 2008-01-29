@@ -1241,6 +1241,19 @@ three standard&nbsp; <i>dSr</i>, <i>dHr</i>, and dGr (or&nbsp; log<i>K</i>
 re-calculation.&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
+  <dt> <b><tt><font size="+1">(C)H</font></tt></b></dt>
+  <dd> Calculation of <i>g<sup>o</sup><sub>T </sub></i>, <i>h<sup>o</sup><sub>T</sub></i>,<i>S<sup>o</sup><sub>T&nbsp;</sub></i>
+from <a href="theortdb.html#ST_CP_INTEGRATION">standard entropy
+integration functions</a> using <a href="g_useref.html#CPFT_COEFFS">coefficients
+of <i>Cp = f
+(T )</i> equations</a> with additional Landau phase transition
+contribution to heat capacity. In addition to the heat capacity
+coefficients, the Landau parameters Tcritical, Smax and Vmax have to be
+entered into <a href="gm_dcomp.html#LamST_0">LamST[0,1]</a>,&nbsp;<a
+ href="gm_dcomp.html#LamST_0">LamST[0,0]</a> and <a
+ href="gm_dcomp.html#ab_0">ab[0,0]</a>, respectively.<br>
+  </dd>
+  <dd>&nbsp; </dd>
   <dt><b><tt><font size="+1">(H)K</font></tt></b></dt>
   <dd> Calculation using <a href="theortdb.html#HKF_EOS">HKF EoS</a> <a
  href="#HKFEOS_COEFFS">coefficients</a> (for aqueous species) and
@@ -1351,9 +1364,29 @@ fixed <i>Tf</i> &nbsp;and <i>Pf</i> &nbsp;points. The grid of log<i>K</i>
 &nbsp;values must be entered into a <a href="gm_reacdc.html#logKTP"><tt>logKTP</tt></a>&nbsp;
 table on Page 2 of ReacDC window, the respective <i>Tf </i>&nbsp;and&nbsp;
     <i>Pf</i>&nbsp;values - into the <a href="gm_reacdc.html#TCint_"><tt>&nbsp;TCint_</tt></a>
+and <tt><a href="gm_reacdc.html#P_int">P_int</a></tt> vectors. <br>
+  </dd>
+</dl>
+<dl>
+  <dt><b><tt><font size="+1">(K)R</font></tt></b></dt>
+  <dd>Calculation of log<i>K (P,T )</i><i><sub></sub></i> for reactions
+using the Marshall-Franck density model. Coefficients a, b, c, d, e, f
+and g must be entered into <a href="gm_reacdc.html#la_dST"><tt>a_dST</tt></a>&nbsp;
+array on Page 2 of ReacDC window, the temperature-pressure range of
+applicability into the <a href="gm_reacdc.html#TCint_"><tt>TCint</tt></a>
 and <tt><a href="gm_reacdc.html#P_int">P_int</a></tt> vectors.&nbsp;</dd>
   <dd><br>
   </dd>
+  <dt><b><tt><font size="+1">(K)Y</font></tt></b></dt>
+  <dd>Calculation of log<i>K (P,T )</i> for reactions using the
+modified Ryzhenko-Bryzgalin model. Coefficients pK298, A and B must be
+entered into <a href="gm_reacdc.html#logKTP"><tt>a_dST</tt></a>&nbsp;
+array on Page 2 of ReacDC window, the temperature-pressure range of
+applicability into the <a href="gm_reacdc.html#TCint_"><tt>TCint</tt></a>
+and <tt><a href="gm_reacdc.html#P_int">P_int</a></tt> vectors. <br>
+  </dd>
+</dl>
+<dl>
   <dt> <b><tt><font size="+1">(I)G</font></tt></b></dt>
   <dd> Calculation of standard Gibbs energy function <i>g<sup>o</sup><sub>T&nbsp;</sub></i>
 &nbsp;for isotopic forms of compounds from <i>T</i> - dependence
@@ -1412,7 +1445,7 @@ of the DComp window).</dd>
   <dt><big> <b><tt>(CS)E</tt></b></big></dt>
   <dd> Molar volume <i>V (T,P )</i> &nbsp;increment to <i>V<sup>o</sup></i>(1,298)
 &nbsp;is calculated from the input values of bulk modulus k for the
-Birch-Murnaghan EoS (to be entered in the<a
+Birch-Murnaghan EoS (to be entered in the <a
  href="gm_dcomp.html#BetAlp_0">BetAlp[0,0]</a> field) and
 high-temperature limit value of thermal expansion coefficient a (<a
  href="gm_dcomp.html#BetAlp_1">BetAlp[0,1]</a> field) according to
@@ -1426,7 +1459,29 @@ Birch-Murnaghan (1982) equation in conjunction with the companion
 database of M.Gottschalk [1997]. The coefficients must be entered in
 the optional <a href="gm_dcomp.html#aiODc"><tt>aiODc</tt></a> vector
 (Page 2 of the DComp window). Recommended for corrections of standard
-molar properties of minerals at high <i>TP</i>.&nbsp; &nbsp; &nbsp;</dd>
+molar properties of minerals at high <i>TP</i>. <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt><big><b><tt>(CS)R</tt></b></big><br>
+  </dt>
+  <dd>Molar volume of gases and fluids is corrected using the
+Peng-Robinson-Stryjek-Vera (PRSV) equation of state. To use this model,
+the critical temperature (Tcr) in K, the critical pressure (Pcr) in
+bar, the Pitzer acentric factor (w), and the empirical coefficients k1,
+k2 and k3 (k2 and k3 are optional for higher precision of vapor
+pressure data) have to be entered into the <a
+ href="gm_dcomp.html#CRIT_PAR_GAS">CritPg</a> vector. <br>
+  </dd>
+</dl>
+<dl>
+  <dt><big><b><tt>(CS)S</tt></b></big><br>
+  </dt>
+  <dd>Molar volume of gases and fluids is corrected using the
+Churakov-Gottschalk (CG) equation of state. To use this model, the
+Lennard-Jones paramaters sigma0, eps0/k, dipole moment mu0, and
+polarizability alpha0 have to be entered into the <a
+ href="gm_dcomp.html#Cemp_s">Cemp_s</a> vector.</dd>
   <dd><br>
   </dd>
 </dl>
