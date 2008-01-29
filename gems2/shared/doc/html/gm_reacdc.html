@@ -1351,7 +1351,8 @@ or 3-term temperature extrapolations.&nbsp;</dd>
   <dd><i>&nbsp; </i><br>
   </dd>
 </dl>
-<h3><a name="RE_LOGK_FT"></a> 2.1. Coefficients of logK = f(T) equation</h3>
+<h3><a name="RE_LOGK_FT"></a> <big><b><tt>aiLgKr - </tt></b></big>Coefficients
+of the logK = f(T) equation</h3>
 <p>This dynamic vector will be allocated on create/remake when the <tt>"K"</tt>
 code is entered in <a href="#REcMod_0"><tt>REcMod[0]</tt></a> cell,
 the modification
@@ -1393,8 +1394,7 @@ compound and the element in its standard state, T is taken in Kelvin,
 and
 &nbsp;<tt>a0, ..., a4 </tt>are the empirical coefficients (default
 value
-is 0). <tt>&nbsp;</tt> <br>
-&nbsp;&nbsp;<br>
+is 0).<tt></tt><br>
 &nbsp;&nbsp;</p>
 <dl>
   <dt> <a name="aiLgKr_0"></a><big><b><tt>aiLgKr[0]</tt></b></big> -
@@ -1463,7 +1463,8 @@ be automatically calculated from 3-term extrapolations.&nbsp;</dd>
 a4 coefficient in the a4/T^2 term of&nbsp;<a href="#RE_LOGK_FT">logK =
 f(T)
 equation</a> (for isotopic species: in the a4/T^4 term)</dt>
-  <dd>&nbsp; &nbsp;</dd>
+  <dd><br>
+  </dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <dt> <a name="aiLgKr_5"></a><big><b><tt>aiLgKr[5]</tt></b></big> -
@@ -1477,9 +1478,82 @@ a6 coefficient
 in the a6/T^0.5 term of&nbsp;<a href="#aiLgKr_0">logK = f(T) equation</a></dt>
   <dd> &nbsp;</dd>
   <dd>&nbsp;</dd>
+</dl>
+<br>
+<h3><a name="a_dST"></a> <big><b><tt>a_dST - </tt></b></big>Coefficients
+of electrostatic or density models (aquoeus species)<br>
+</h3>
+<p>This dynamic vector will be allocated on create/remake when either
+the <tt>"Y"</tt>
+(modified Ryzhenko-Bryzgalin model) or <tt>"R"</tt> (Marshall-Franck
+density model) code is entered in <tt><a href="gm_reacdc.html#REcMod_1"><tt>REcMod[1]</tt></a></tt>
+cell.
+In both cases, the code for pressure correction in the <tt><a
+ href="gm_reacdc.html#REcMod_2"><tt>REcMod[2]</tt></a></tt> cell has to
+be set to the <tt>"0" </tt><tt>value </tt>(pressure correction
+inherently accounted for by the chosen model). The array contain
+empirical coefficient that allow the extrapolation of equilibrium
+constants of aqueous species (e.g., dissociation reactions) to elevated
+temperatures and pressures. The modified Ryzhenko-Bryzgalin model
+requires up to 3 coefficients (pK298, A, and B), whereas the
+Marshall-Franck density model requires up to 7 coefficients (a, b, c,
+d, e, f, and g).<br>
+<br>
+</p>
+<dl>
+  <dt> <a name="a_dST0"></a><big><b><tt>a_dST[0]</tt></b></big><br>
+  </dt>
+  <dd>When the&nbsp; modified Ryzhenko-Bryzgalin model is chosen,
+pK298, the pK of reaction at Pr and Tr, can be entered here. For the
+Marshall-Franck density model, the empirical coefficient a of the
+density equation can be entered:</dd>
+</dl>
+<dl>
+  <dd><big><tt>logK = </tt></big><big><tt>a + b/T + c/T^2 + d/T^3 + (e
++ f/T + g/T^2)</tt></big> </dd>
+  <dd><br>
+  </dd>
+  <dt><a name="a_dST1"></a><big><b><tt>a_dST</tt></b></big><big><b><tt>[1]</tt></b></big><br>
+  </dt>
+  <dd>For the Ryzhenko-Bryzgalin model coefficient A, for the
+Marshall-Franck model coefficient b can be entered here.</dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="a_dST2"></a><big><b><tt>a_dST</tt></b></big><big><b><tt>[2]</tt></b></big><br>
+  </dt>
+  <dd>For the Ryzhenko-Bryzgalin model coefficient B, for the
+Marshall-Franck model coefficient c can be entered here.&nbsp; </dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="a_dST3"></a><big><b><tt>a_dST</tt></b></big><big><b><tt>[3]</tt></b></big><br>
+  </dt>
+  <dd>For the Marshall-Franck model coefficient d can be entered here.</dd>
+  <dd>&nbsp;&nbsp; <br>
+  </dd>
+  <dt> <a name="a_dST4"></a><big><b><tt>a_dST</tt></b></big><big><b><tt>[4]</tt></b></big><br>
+  </dt>
+  <dd>For the Marshall-Franck model coefficient e can be entered here. <br>
+  </dd>
+  <dd>&nbsp;</dd>
+  <dt> <a name="a_dST5"></a><big><b><tt>a_dST</tt></b></big><big><b><tt>[5]</tt></b></big><br>
+  </dt>
+  <dd>For the Marshall-Franck model coefficient f can be entered here.</dd>
+  <dt><br>
+  </dt>
+  <dt> <a name="a_dST6"></a><big><b><tt>a_dST</tt></b></big><big><b><tt>[6]</tt></b></big><br>
+  </dt>
+  <dd>For the Marshall-Franck model coefficient g can be entered here. <br>
+  </dd>
+  <dt><br>
+  </dt>
+  <dd><br>
+  </dd>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
   <dd>&nbsp;</dd>
 </dl>
-<h3><a name="REACDC_DOD_REMAKE"></a>2.2. Data objects that can be
+<h3><a name="REACDC_DOD_REMAKE"></a>2.1. Data objects that can be
 modified
 during remake/create only</h3>
 <dl>
@@ -1817,7 +1891,7 @@ Default value is 1.</dd>
   </dd>
   <br>
 </dl>
-<h3>&nbsp;<a name="REACDC_DOD_OBSOLETE"></a>2.3. Reserved and obsolete
+<h3>&nbsp;<a name="REACDC_DOD_OBSOLETE"></a>2.2. Reserved and obsolete
 data
 objects</h3>
 <dl>
@@ -1921,8 +1995,7 @@ incorrectly and need to be fixed.</dd>
   </dd>
   <dt> <a name="adVTP"></a><b><tt>adVTP</tt></b> - Coefficients for
 dVr =
-f(P,T) equation (reserved)</dt>
-  <dd> &nbsp;&nbsp;</dd>
+f(P,T) equation (reserved)&nbsp;&nbsp;</dt>
 </dl>
 <blockquote>
   <dl>
@@ -1932,18 +2005,10 @@ a<sub>2</sub>(T-Tr)^<sup>3</sup> + b<sub>0</sub>P + b<sub>1</sub>P^<sup>2</sup><
   </dl>
 </blockquote>
 <dl>
-  <dd> &nbsp;</dd>
   <dd> This equation&nbsp; is used to account for the <i>T,P</i>
 dependent
 volume effects in <a href="theortdb.html">thermodynamic calculations</a>.</dd>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>&nbsp;<br>
-  </dd>
-  <dt> <a name="a_dST"></a><tt style="font-weight: bold;">a_dST</tt> -
-Coefficients for the modified-Ryzhenko-Bryzgalin and Marhsall-Franck
-density model.<br>
-  </dt>
-  <dd>&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="REtprn"></a><tt>REtprn</tt></dt>

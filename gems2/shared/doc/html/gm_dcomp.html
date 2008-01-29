@@ -795,8 +795,8 @@ has been chosen.</dd>
   <dd>&nbsp;&nbsp; <br>
   </dd>
   <dd>For minerals, this field may optionally contain the Vmax
-parameter (j/bar) used in lambda-transition calculations (still under
-testing).</dd>
+parameter (j/bar) used in lambda-transition calculations according to
+Holland and Powell (1998).</dd>
   <dd> &nbsp;</dd>
   <dt> <a name="ab_1"></a><b><tt><font size="+2">ab[1]</font></tt></b>
 - Individual
@@ -811,8 +811,44 @@ Truesdell-Jones modification or 3-term Debye- Hueckel equation (see [<a
 electrolyte phase.</dd>
   <dd> &nbsp;</dd>
   <dd> If unknown, set "Empty value" here.</dd>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
+  <dd> &nbsp; <br>
+  </dd>
+</dl>
+<br>
+<dl>
+  <dt> <a name="LamST_0"></a><b><tt><font size="+2">LamST[0]</font></tt></b><b><tt>
+-</tt></b> Entropy of
+lambda transition (J/mol/K)</dt>
+  <dd><br>
+  </dd>
+  <dd>The value of Smax can be entered and employed in
+thermodynamic
+calculations for condensed substances undergoing phase transitions,
+based
+on Landau theory as implemented in calculation scheme by Holland and
+Powell
+(1998). </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dd><br>
+  </dd>
+  <dt> <a name="LamST_1"></a><b><tt><font size="+2">LamST[1]</font></tt></b><b><tt>
+- </tt></b>Temperature
+of lambda transition (C)</dt>
+  <dd>&nbsp;<br>
+  </dd>
+  <dd>The critical temperature of lambda transition Tcrit can be
+enetered here. The temperature must be entered in centigrade. Note that
+the corresponding critical volume Vmax of lambda transition (required
+to calculate the pressure dependence of the phase transition) needs to
+be entered into the <tt><a href="gm_dcomp.html#ab_0">ab[0]</a></tt>
+field.<br>
+  </dd>
+</dl>
+<dl>
+  <dd>&nbsp; &nbsp;</dd>
+</dl>
+<dl>
   <dd> &nbsp;</dd>
   <dt> <a name="TCint_0"></a><b><tt><font size="+2">TCint[0]</font></tt></b>
 - Lower temperature validity limit(s) for&nbsp; <i>Cp</i>&nbsp; = <i>f</i>
@@ -845,7 +881,6 @@ parameters
 and do not allow extrapolations.</dd>
   <dd> &nbsp;</dd>
   <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
   <dt> <a name="TCint_1"></a><b><tt><font size="+2">TCint[1]</font></tt></b>
 - Upper temperature validity limit(s) for&nbsp; <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp;&nbsp; equation</dt>
@@ -864,7 +899,8 @@ the next interval.</dd>
   <dt> <b><i>&nbsp;</i></b></dt>
   <dt> <b><i>&nbsp;</i></b></dt>
   <dt> <b><i>&nbsp;</i></b></dt>
-  <dt> <a name="CPFT_COEFF"></a><big><b>2.1. Empirical coefficients
+  <dt> <a name="CPFT_COEFF"></a><b><tt><font size="+2">aiCpT-</font></tt></b><big><b>
+Array of empirical coefficients
 of&nbsp; Cp</b><sup>0</sup><b> = f (T )&nbsp; equations</b></big></dt>
   <dd> &nbsp;</dd>
   <dd> Each column of this data object has 11 cells for input
@@ -983,13 +1019,16 @@ term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 for future use)</dt>
   <dd>&nbsp; <br>
   </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt><br>
+  </dt>
   <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="HKF_COEFF"></a><b><font size="+1">2.2. Empirical
+  <dt> <a name="HKF_COEFF"></a><b><tt><font size="+2">aiHKF -</font></tt></b><b><font
+ size="+1"> array of empirical
 coefficients of&nbsp; the revised&nbsp; HKF&nbsp; equation of state</font></b></dt>
-  <br>
 </dl>
-<p> &nbsp;This optional vector contains empirical parameters of revised
+<p> This optional vector contains empirical parameters of revised
 Helgeson- Kirkham- Flowers equation of state for calculation of
 standard partial
 molal properties of aqueous species up to 1000 oC and 5000 bar
@@ -1163,8 +1202,8 @@ Angstrom (reserved)
 below after multiplication by scale factor, for instance: c2 from
 SPRONS.DAT as follows: c2 *10^-4. </p>
 <dl>
-  <dd> &nbsp;</dd>
-&nbsp;<dt> <a name="aiHKF_0"></a><b><tt><font size="+2">aiHKF[0]</font></tt></b>
+&nbsp; <br>
+  <dt> <a name="aiHKF_0"></a><b><tt><font size="+2">aiHKF[0]</font></tt></b>
 - Empirical coefficient a1 of the <a href="#HKF_COEFF">HKF EoS</a>:
 cal/bar/mol</dt>
   <dd> &nbsp;</dd>
@@ -1199,14 +1238,22 @@ cal*K/mol</dt>
   <dd> &nbsp;</dd>
   <dd> &nbsp;</dd>
   <dt> <a name="aiHKF_7"></a><b><tt><font size="+2">aiHKF[7]</font></tt></b></dt>
-  <dd> Reserved</dd>
+  <dd> Reserved. When the Pronsprep and Parcor algorithms for
+predicting thermodynamic properties and HKF coefficients of aqueous
+species is used in ReacDc module, the effectice electrostatic radius of
+the aqueous species at Pr and Tr is automatically placed in this field.
+However, this parameter is currently not used in any calculations.<br>
+  </dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt><br>
+  </dt>
   <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="MOL_VOL_DEP"></a><b><font size="+1">2.3. Molar volume
-dependence:</font></b>
-Empirical coefficients of the equation</dt>
+  <dt> <a name="MOL_VOL_DEP"></a><b><tt><font size="+2">ai_Vtp</font></tt></b><b><tt><font
+ size="+2"> -</font></tt></b><b><font size="+1"> array of empirical
+coefficients for calculating molar volume at P and T of interest<br>
+    </font></b></dt>
   <dl>
-    <dd> &nbsp;</dd>
   </dl>
 </dl>
 <blockquote>
@@ -1216,13 +1263,12 @@ Empirical coefficients of the equation</dt>
   </dl>
 </blockquote>
 <dl>
-  <dd> &nbsp;This equation (applicable for minerals, liquids and melts
+  <dd>This equation (applicable for minerals, liquids and melts
 at high pressures P &gt;&gt; Pr and elevated temperatures) is used to
 account for the volume effects in <a href="theortdb.html">thermodynamic
 calculations</a>.</dd>
 </dl>
 <dl>
-  <dd> &nbsp;</dd>
   <dl>
     <dd> &nbsp;</dd>
   </dl>
@@ -1301,27 +1347,206 @@ planned to be implemented:</dd>
 future versions)</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> One column in this optional object contains data for one phase
-transition.</dd>
+  <dd>Each column in this optional object contains data for one
+first-order phase
+transition. The number of phase transitions has to be set in the
+counter <a href="gm_dcomp.html#DC_cnt_1">DC_cnt[1]</a> on page 2 of
+the PhaseWizard and has to be less than the number of discrete Cp
+equations that is set in the counter&nbsp;<a
+ href="gm_dcomp.html#DC_cnt_2">DC_cnt[1]</a>.<br>
+  </dd>
 </dl>
-<blockquote>
-  <dl>
-    <dd> Cell&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp; &nbsp; &nbsp;Parameter</dd>
-    <dd> [0] T_pt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Temperature
-of phase transition</dd>
-    <dd> [1] dS_pt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Entropy change
-(molar)</dd>
-    <dd> [2] dH_pt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enthalpy change (molar)</dd>
-    <dd> [3] dV_pt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Volume change (molar)</dd>
-    <dd> [4] lm_pt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Slope of
-PT-curve of phase transition relative to P axis</dd>
-  </dl>
-</blockquote>
 <dl>
-  <dd> Units of measurement: defined in respective DCset cells.</dd>
+  <dt> <a name="FT_p0"></a><b><tt><font size="+1">FT_p[0]</font></tt></b></dt>
+  <dd>Temperature of phase transition (in degrees C)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="FT_p1"></a><b><tt><font size="+1">FT_p[1]</font></tt></b></dt>
+  <dd>Entropy change of phase transition dS_pt (J/K). If unknown, this
+values can be calculated from the enthalpy of transition and the
+transition temperature.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="FT_p2"></a><b><tt><font size="+1">FT_p[2]</font></tt></b></dt>
+  <dd>Enthalpy change of phase transition dH_pt&nbsp; (J)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="FT_p3"></a><b><tt><font size="+1">FT_p[3]</font></tt></b></dt>
+  <dd>Volume change of phase transition dV_pt (J/bar)</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="FT_p4"></a><b><tt><font size="+1">FT_p[4]</font></tt></b></dt>
+  <dd>Slope of the P-T curve dP/dT</dd>
+  <dd>&nbsp; <br>
+  </dd>
+</dl>
+<dl>
   <br>
-&nbsp;
+  <dt> <br>
+  </dt>
+  <dt> <a name="CRIT_PAR_GAS"></a><b><font size="+1">CritPg </font></b>-
+critical and equation of state paramters of gases and fluids<br>
+  </dt>
+  <dt> <br>
+  </dt>
+  <dt>Used in calculations of thermodynamic properties of non-ideal
+gases and fluids. This array of data objects is currently used for the
+Peng-Robinson-Stryjek-Vera (PRSV) fluid model, a modification of the
+well-kow Peng-Robinson cubic equation of state. In some older versions
+of Selektor codes, these parameters were used for calculations
+according to the principle of corresponding states, as implemented in
+FGL module.Critical parameters can be entered into an optional <tt>CritPg</tt>
+vector
+used for calculation of increments of thermodynamic properties of real
+gases from T, Pr to T,P.</dt>
+  <dd><br>
+  </dd>
+  <dt> <a name="CritPg_0"></a><b><tt><font size="+1">CritPg[0]</font></tt></b></dt>
+  <dd> Critical temperature <i>T<sub>cr</sub></i> (K) of the PRSV
+fluid model</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="CritPg_1"></a><b><tt><font size="+1">CritPg[1]</font></tt></b></dt>
+  <dd> Critical pressure <i>P<sub>cr</sub></i> (bar) of the PRSV fluid
+model&nbsp;</dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="CritPg_2"></a><b><tt><font size="+1">CritPg[2]</font></tt></b></dt>
+  <dd> Pitzer acentric factor <i>W</i> of the PRSV fluid model</dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="CritPg_3"></a><b><tt><font size="+1">CritPg[3]</font></tt></b></dt>
+  <dd> Parameter <i>k1</i> of the PRSV fluid model</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="CritPg_4"></a><b><tt><font size="+1">CritPg[4]</font></tt></b></dt>
+  <dd> Parameter <i>k2</i> of the PRSV fluid model<br>
+&nbsp;&nbsp;</dd>
+  <dt> <a name="CritPg_5"></a><b><tt><font size="+1">CritPg[4]</font></tt></b></dt>
+  <dd> Parameter <i>k3</i> of the PRSV fluid model</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="CritPg_6"></a><b><tt>CritPg[6]</tt></b></dt>
+  <dd> Reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <br>
+  <br>
+  <dt> <a name="Cemp_s"></a><b><font size="+1">Cemp_s </font></b>-
+empirical equation of state paramters of gases and fluids<br>
+  </dt>
+  <dt> <br>
+  </dt>
+  <dt>Used in calculations of thermodynamic properties of non-ideal
+gases and fluids. This array of data objects is currently used for the
+Churakov-Gottschalk (CG) fluid model, which belongs to a new class of
+perturbation-theory based equation of state. This model was originally
+developed for non-electrolyte fluids at high tempaeratures and
+pressures. It uses the two parameters of the Lennard-Jones potential,
+the dipole moment and the molecular polarizability as input parameters.
+For water and carbon dioxide, some of these parameters have additional
+coefficients that describe the temperature dependence. The Cemp_s array
+will be also used for storing empirical coefficients of other future
+implementations of fluid equations of state.<br>
+  </dt>
+  <dt><br>
+  </dt>
+  <dt> <a name="Cemp_s0"></a><b><tt><font size="+1">Cemp_s[0]</font></tt></b></dt>
+  <dd>Lennard-Jones parameter <i>sigma0</i> (Angstrom) of
+the Churakov-Gottschalk fluid model</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Cemp_s1"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[1]</font></tt></b></dt>
+  <dd>Lennard-Jones parameter <span style="font-style: italic;">eps</span><i>0/K</i>
+(K) of the Churakov-Gottschalk fluid model <br>
+  </dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="Cemp_s2"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[2]</font></tt></b></dt>
+  <dd>Molecular dipole moment <span style="font-style: italic;">mu</span><i>0</i>
+(Debye) of the Churakov-Gottschalk fluid model</dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="Cemp_s3"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[3]</font></tt></b></dt>
+  <dd>Molecular polarizability <span style="font-style: italic;">alpha</span><i>0</i>
+(A3) of the Churakov-Gottschalk fluid model</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Cemp_s4"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[4]</font></tt></b></dt>
+  <dd>Additional T,P dependence parameter <i>sigma1</i> of the
+Churakov-Gottschalk fluid model, currently only used for CO2<br>
+&nbsp;&nbsp;</dd>
+  <dt> <a name="Cemp_s5"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[5]</font></tt></b></dt>
+  <dd>Additional T,P dependence parameter <i>sigma2</i> of the
+Churakov-Gottschalk fluid model, currently only used for CO2<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s6"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[6]</font></tt></b></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">eps</span><i>1</i> of the
+Churakov-Gottschalk fluid model, currently only used for CO2<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s7"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[7]</font></tt></b></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">eps2</span> of the Churakov-Gottschalk
+fluid model, currently only used for CO2<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s8"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[8]</font></tt></b></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">mu1</span> of the Churakov-Gottschalk
+fluid model, currently only used for H2O<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s9"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[9]</font></tt></b></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">mu2</span> of the Churakov-Gottschalk
+fluid model, currently only used for H2O<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s10"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[10]</font></tt></b></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">alpha1</span> of the Churakov-Gottschalk
+fluid model, currently only used for H2O<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s11"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
+ size="+1">[11]</font></tt></b></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">alpha2</span> of the Churakov-Gottschalk
+fluid model, currently only used for H2O</dd>
+  <dd><br>
+  </dd>
+  <dd>&nbsp;<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="aiCpFS"></a><b><font size="+1">aiCpFS </font></b>-
+empirical coefficients describing hydration properties of aqueous
+nonelectrolyte species (under construction)<br>
+  </dt>
+  <dt> <br>
+  </dt>
+  <dt>The thermodynamic properties of aqueous nonelectrolyte species
+can be conveniently described through the properties of hydration,
+which are added to the properties of the species in the ideal gas
+state. This concept is used is several recently published equations of
+state for dissolved nonelectrolytes (but is also applicable to
+electrolytes). Implementation of the model proposed by Akinfiev and
+Diamond (2002) is under construction.<br>
+  </dt>
+  <dt><br>
+  </dt>
+</dl>
+<dl>
+  <br>
+  <br>
 </dl>
 <hr size="2" width="100%">
 <dl>
@@ -1629,103 +1854,19 @@ command), the current date will be inserted automatically.&nbsp;<br>
   <dd><br>
   </dd>
 </dl>
-<h3> Data objects reserved for the future versions</h3>
+<h3> Data objects reserved for future versions</h3>
 <dl>
   <dt> <br>
   </dt>
-  <dt> <a name="CRIT_PAR_GAS"></a><b><font size="+1">Critical
-parameters
-for gases and liquids</font></b></dt>
-  <dt> <br>
-  </dt>
-  <dt> Used in calculations of thermodynamic properties of non-ideal
-gases according to the "correspondence states" theory. These
-calculations are implemented in FGL module, available in some versions
-of Selektor codes.</dt>
-  <p>Critical parameters can be entered into an optional <tt>CritPg</tt>
-vector
-used for calculation of increments of thermodynamic properties of real
-gases from Tr, Pr to T,P. <br>
-&nbsp; <br>
-&nbsp; </p>
-  <dt> <a name="CritPg_0"></a><b><tt><font size="+1">CritPg[0]</font></tt></b></dt>
-  <dd> Critical temperature <i>T<sub>cr</sub></i>&nbsp; (K) for the PRSV fluid model</a></dd>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="CritPg_1"></a><b><tt><font size="+1">CritPg[1]</font></tt></b></dt>
-  <dd> Critical pressure <i>P<sub>cr</sub></i>&nbsp; (bar) for the PRSV fluid model</a></dd>
-  <dt> &nbsp;</dt>
-  <dt> <br>
-  </dt>
-  <dt> <a name="CritPg_2"></a><b><tt><font size="+1">CritPg[2]</font></tt></b></dt>
-  <dd> Pitzer acentric factor <i>W</i>&nbsp; for the PRSV fluid model</a></dd>
-  <dt> <br>
-  </dt>
-  <dt> <br>
-  </dt>
-  <dt> <a name="CritPg_3"></a><b><tt><font size="+1">CritPg[3]</font></tt></b></dt>
-  <dd> Parameter <i>k1</i>&nbsp;
-for the PRSV fluid model</a></dd>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="CritPg_4"></a><b><tt><font size="+1">CritPg[4]</font></tt></b></dt>
-  <dd> Parameter <i>k2</i>&nbsp; for the PRSV fluid model</a></dd>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="CritPg_5"></a><b><tt><font size="+1">CritPg[4]</font></tt></b></dt>
-  <dd> Parameter <i>k3</i>&nbsp; for the PRSV fluid model</a></dd>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
- <dt> <a name="CritPg_6"></a><b><tt>CritPg[6]</tt></b></dt>
-  <dd> Reserved</dd>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <br>
-  </dt>
   <dt> <a name="FT_pb"></a><b><tt>FT_pb</tt></b></dt>
-  <dd> Properties of phase transition (Berman), optional (reserved)</dd>
-  <dd>&nbsp;&nbsp;</dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dt> <a name="Cemp_s"></a><b><tt>Cemp_s</tt></b></dt>
-  <dd> Empirical EOS coefficients, optional (reserved)</dd>
-  <dd>&nbsp;&nbsp;</dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dt> <a name="aiCpFS"></a><b><tt>aiCpFS</tt></b></dt>
-  <dd> Reserved</dd>
+  <dd> Properties of lambda phase transition (Berman), optional
+(reserved)</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="ai_ODc"></a><b><tt>ai_ODc</tt></b></dt>
 Coeffs of Birch-Murnaghan (1988) V(T,P) equation (to be described)&nbsp;<dd>
 &nbsp;</dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dt> <a name="LamST_0"></a><b><tt>LamST[0] -</tt></b> Entropy of
-lambda transition (J/mol/K)</dt>
-  <dd><br>
-  </dd>
-  <dd>Value of Smax can be entered by user and employed in
-thermodynamic
-calculations for substances undergoing phase transition of II kind,
-based
-on Landau theory as implemented in calculation scheme by Holland and
-Powell
-(1990). </dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dd>Not tested in this version of GEM-Selektor. </dd>
-  <dd><br>
-  </dd>
-  <dd><br>
-  </dd>
-  <dt> <a name="LamST_1"></a><b><tt>LamST[1] - </tt></b>Temperature
-of lambda transition (C)</dt>
-  <dd>&nbsp;<br>
-  </dd>
-  <dd>Temperature of lambda-transition must be entered in centigrade.</dd>
-  <dd>&nbsp; &nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
   <dt> <a name="DCtprn"></a><b><tt>DCtprn</tt></b></dt>
