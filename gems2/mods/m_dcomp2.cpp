@@ -228,7 +228,8 @@ NEXT:
 // cout << "   qQ=" << a << " S(T)=" << aW.twp->S << " G(T)=" << aW.twp->G << " H(T)="
 //     << aW.twp->H << " Cp(T)=" << aW.twp->Cp << " Tcr=" << Tcr_ << endl;
 
-    calc_voldp( q, p, CE, CV );
+    if( CV != CPM_AKI )
+       calc_voldp( q, p, CE, CV );
 
 // cout << " P=" << aW.twp->P << " S(T,P)=" << aW.twp->S << " G(T,P)=" << aW.twp->G
 //     << " H(T,P)=" << aW.twp->H << " V(T,P)=" << aW.twp->V <<  endl;
@@ -575,6 +576,118 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
 }
 // End of section for Birch-Murnaghan calculations
 //
+
+
+//-----------------------------------------------------------------
+// calculation of partial molal volumes for aqueous non-polar species 
+//  using EOS (Akinfiev,Diamond 2003) provided by TW 30.01.2008
+//
+void TDComp::calc_akinf( int q, int p )
+{
+	double CaltoJ = cal_to_J;
+	// calculate infinite dilution properties of aqueous species at T and P of interest
+	double Pbar, Tk, rho, alp, bet, dalpT, Tr = 298.15, Pr = 1.0, R_CONST = 8.31451;
+	double Gig, Hig, Sig, CPig, Gw, Sw, CPw;
+	double Geos, Veos, Seos, CPeos, Heos;
+	double Gids, Vids, Sids, CPids, Hids;
+			
+	// Properties of water at Tr,Pr 
+	Gig = -228581.9;
+	Sig = 188.83501;
+	CPig = 33.59055;
+	Gw = -237181.;
+	Sw = 69.944;
+	CPw = 75.361;
+	rho = 0.997061;
+	alp = 2.594265e-4;
+	bet = 4.521877e-5;
+	dalpT = 9.564858e-6;
+	
+	Akinfiev_EOS_increments(Tr, Pr, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q, 
+			           Geos, Veos, Seos, CPeos, Heos );	
+	
+	// Getting back ideal gas properties corrected for T of interest
+	// by substracting properties of hydration at Tr, Pr
+    Gids = aW.twp->G -= Geos;
+//	Vids = aW.twp->V -= Veos;  // j/bar 
+    Sids = aW.twp->S -= Seos;
+    CPids = aW.twp->Cp -= CPeos;
+    Hids = aW.twp->H -= Heos;
+    
+    // Properties of water at T,P
+	Gig = aWp.Gw[2] * CaltoJ;  // still to fix!
+	Sig = aWp.Sw[2] * R_CONST;
+	CPig = aWp.Cpw[2] * R_CONST;
+	Gw = aWp.Gw[0] * CaltoJ;
+	Sw = aWp.Sw[0] * CaltoJ;
+	CPw = aWp.Cpw[0] * CaltoJ;
+	rho = aSta.Dens[aSpc.isat];
+	alp = aWp.Alphaw[0];
+	bet = aWp.Betaw[0];
+	dalpT = aWp.dAldT[0];
+	Tk = aW.twp->T; 
+	Pbar = aW.twp->P;
+
+	Akinfiev_EOS_increments(Tk, Pbar, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q,
+			           Geos, Veos, Seos, CPeos, Heos );	
+	
+	// Getting dissolved gas properties corrected for T,P of interest
+		// by adding properties of hydration at T, P	
+	aW.twp->G = Gids + Geos;
+//	aW.twp->V = Vids + Veos;  // j/bar 
+	aW.twp->V = Veos/10.;  // j/bar 
+	aW.twp->S = Sids + Seos;
+    aW.twp->Cp = CPids + CPeos;
+    aW.twp->H = Hids + Heos;
+    
+}
+// Implementation of calculation of hydration properties of a gas (Akinfiev & Diamond, 2003)
+void 
+TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, double CPig, 
+		double Gw, double Sw, double CPw, double rho, double alp, double bet, double dalpT, int q, 
+		double& Geos, double& Veos, double& Seos, double& CPeos, double& Heos )
+{
+	double derP, derT, der2T;
+	double deltaB, lnKH, Nw, xi, aa, bb, RT; 	
+	double fug, vol, drhoT, drhoP, d2rhoT, lnfug, Gres, Sres, CPres;
+	const double RR = 83.1451, R_CONST = 8.31451;
+	const double MW = 18.01528;
+
+	RT = Tk*R_CONST;
+	// EOS coefficients 
+	xi = (double)dc[q].CpFS[0];
+	aa = (double)dc[q].CpFS[1];
+	bb = (double)dc[q].CpFS[2];
+	
+	Gres = Gw-Gig;
+	Sres = Sw-Sig;
+	CPres = CPw - CPig;
+	lnfug = Gres/RT;
+	fug = exp(lnfug);
+	vol = MW/rho;
+	drhoT = - alp*rho;
+	drhoP = bet*rho;
+	d2rhoT = rho*(pow(alp,2.)-dalpT);
+
+	// calculation of infinite dilution properties
+	Nw = 1000./MW;
+	deltaB = 0.5*(aa + bb*pow((1000./Tk),0.5));
+	lnKH = (1.-xi)*log(fug) + xi*log(RR*Tk/MW*rho) + 2.*rho*deltaB;
+
+	Geos = - R_CONST*Tk*log(Nw) + (1.-xi)*R_CONST*Tk*log(fug) + R_CONST*Tk*xi*log(RR*Tk/MW*rho)
+		+ R_CONST*Tk*rho*(aa+bb*pow((1000./Tk),0.5));
+	derP = aa*Tk*drhoP + bb*pow(10.,1.5)*pow(Tk,0.5)*drhoP;
+	derT = aa*(rho+Tk*drhoT) + bb*(0.5*pow(10.,1.5)*pow(Tk,-0.5)*rho + pow(10.,1.5)*pow(Tk,0.5)*drhoT);
+	der2T = aa*(2.*drhoT+Tk*d2rhoT) + bb*((-0.25)*pow(10.,1.5)*pow(Tk,-1.5)*rho
+		+ pow(10.,1.5)*pow(Tk,-0.5)*drhoT + pow(10.,1.5)*pow(Tk,0.5)*d2rhoT);
+	Veos = vol*(1.-xi) + xi*RR*Tk*(1./rho)*drhoP + RR*derP;
+	Seos = (1.-xi)*(Sres) + R_CONST*log(Nw) - R_CONST*(xi + xi*log(RR*Tk/MW) + xi*log(rho)
+		+ xi*Tk*(1./rho)*drhoT) - R_CONST*derT;
+	CPeos = (1.-xi)*(CPres) - R_CONST*(xi + 2.*xi*Tk*(1./rho)*drhoT
+		- xi*pow(Tk,2.)/pow(rho,2.)*pow(drhoT,2.) + xi*pow(Tk,2.)/rho*d2rhoT) - R_CONST*Tk*der2T;
+	Heos = Geos + Tk*Seos;
+}
+
 //--------------------------------------------------------------------
 // Begin section converted from SUPCRT92
 //
@@ -843,9 +956,9 @@ void TDComp::calc_tphkf( int q, int /*p*/ )
     arf.wref = dc[q].HKFc[6];
     arf.chg = (int)dc[q].Zz;
     if ( aSpc.isat )
-        i=1;        /* обеспечивает выбор св-в воды-жидкости  */
-    else             /* при расчетах по кнп                    */
-        i=0;        /* выбор св-в воды при расчетах в однофаз. обл. */
+        i=1;        // below Psat curve (vapour field)? 
+    else             
+        i=0;        // Above Psat curve (liquid field)
     TK = TdegK(aSpc.it, aSta.Temp);     /* transform T to degK */
     /*Calc t/d param water solut for Temp (K), Pres (bar) */
     calc_thkf( arf, aSta.Pres, TK, aSta.Dens[i],

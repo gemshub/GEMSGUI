@@ -1253,7 +1253,7 @@ void
 TSupcrt::load(int phase, WATERPARAM& wp)
 {
     if( !phase )
-    {
+    {   // liquid state
         wp.Aw[0]     = wr.Aw;
         wp.Gw[0]     = wr.Gw;
         wp.Sw[0]     = wr.Sw;
@@ -1279,7 +1279,7 @@ TSupcrt::load(int phase, WATERPARAM& wp)
         wp.Visckw[0] = wr.Visckw;
     }
     else
-    {
+    {   // gas state
         wp.Aw[1]     = wl.Aw;
         wp.Gw[1]     = wl.Gw;
         wp.Sw[1]     = wl.Sw;
@@ -1304,6 +1304,14 @@ TSupcrt::load(int phase, WATERPARAM& wp)
         wp.Viscw[1]  = wl.Viscw;
         wp.Visckw[1] = wl.Visckw;
     }
+    // Added by DK and TW for implementation of Akinfiev (2003) and other models for non-polar species
+    wp.Aw[2]     = id.ai;
+    wp.Gw[2]     = id.gi;
+    wp.Sw[2]     = id.si;
+    wp.Uw[2]     = id.ui;
+    wp.Hw[2]     = id.hi;
+    wp.Cvw[2]    = id.cvi;
+    wp.Cpw[2]    = id.cpi;
 }
 
 //--------------------------------------------------------------------//

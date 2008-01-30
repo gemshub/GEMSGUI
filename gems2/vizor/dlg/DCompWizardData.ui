@@ -378,6 +378,11 @@
                             <string>R   Pressure corrections using critical parameters and PRSV EoS </string>
                         </property>
                     </item>
+                    <item>
+                        <property name="text">
+                            <string>A   Pressure correction to aqueous nonelectrolytes (Akinfiev and Diamond, 2003)</string>
+                        </property>
+                    </item>
                     <property name="name">
                         <cstring>p_pct_3</cstring>
                     </property>

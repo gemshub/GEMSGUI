@@ -790,9 +790,6 @@ CALCULATE_DELTA_R:
         case CTM_HKF:
             calc_tphkf_r( q, p );
             break; /* calc aqueous species */
-        case CTM_AKI:
-            calc_akinf_r( q, p, CE, CV );
-            break; /* calc on Akinfiev */
         }
         break;
     case CTPM_CPT:

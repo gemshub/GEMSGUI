@@ -250,7 +250,7 @@ void TDComp::dyn_new(int q)
                         dc[q].Nsd, 1, V_SD_VALEN );
     }
 
-    if( CM == CTPM_CPT && CE == CTM_FEI )
+    if( CM == CTPM_CPT && CV == CPM_AKI )
         dc[q].CpFS = (float *)aObj[ o_dccpfs].Alloc(MAXCPFSCOEF, 1, F_ );
     else
         dc[q].CpFS = (float *)aObj[ o_dccpfs ].Free();
@@ -669,9 +669,8 @@ TDComp::DCthermo( int q, int p )
     CV = toupper( dcp->pct[2] );
     if( CM != CTPM_HKF && aW.twp->P < 1e-5 )
          aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
-    if( CM == CTPM_HKF /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06
+    if( CM == CTPM_HKF || CV == CPM_AKI /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06, 30.01.08
     {// HKF calculations and/or or determination of P_sat if P=0
-
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
                 ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ))    // corrected by KD 25.11.05
         { // re-calculation of properties of H2O using HGF/HGK
@@ -725,16 +724,21 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
             aCGF.CGcalcFug( );
             aW.twp->Cemp = NULL;
         }
-else if( CV == CPM_PRSV )  // Calculation of fugacity at X=1 using PRSV EoS
-{                         // Added by Th.Wagner in July 2006
-  TPRSVcalc aPRSV( 1, aW.twp->P, aW.twp->TC+273.15 );
-// aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
-  aW.twp->CPg = dcp->CPg;
-  aW.twp->TClow = dcp->TCint[0];
-  aPRSV.CalcFugPure( );
-// aPRSV.~TPRSVcalc();
-  aW.twp->CPg = NULL; // ????
-}
+        else if( CV == CPM_PRSV )  // Calculation of fugacity at X=1 using PRSV EoS
+        {                         // Added by Th.Wagner in July 2006
+           TPRSVcalc aPRSV( 1, aW.twp->P, aW.twp->TC+273.15 );
+           // aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
+           aW.twp->CPg = dcp->CPg;
+           aW.twp->TClow = dcp->TCint[0];
+           aPRSV.CalcFugPure( );
+           // aPRSV.~TPRSVcalc();
+           aW.twp->CPg = NULL; // ????
+        }
+        else if( CV == CPM_AKI )
+        {  	// calculation of partial molal volumes for aqueous non-polar species 
+        	//  using EOS (Akinfiev,Diamond 2003) added by DK and TW 30.01.2008
+        	calc_akinf( q, p );
+        }
         break;
     case CTPM_HKF:
         {

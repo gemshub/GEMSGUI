@@ -88,15 +88,15 @@ extern TpworkList aW;
 
 
 struct WATERPARAM
-{ // WATER termodinamic
+{ // WATER termodynamic properties - extracted from HGK subroutines (SUPCRT92)
     bool init;
-    double Aw[2];
-    double Gw[2];
-    double Sw[2];
-    double Uw[2];
-    double Hw[2];
-    double Cvw[2];
-    double Cpw[2];
+    double Aw[3];    // dimensions changed from 2 to 3 by DK & TW on 30.01.2008
+    double Gw[3];    // 0 is number for liquid state; 1 for real gas state; 2 for ideal gas state
+    double Sw[3];
+    double Uw[3];
+    double Hw[3];
+    double Cvw[3];
+    double Cpw[3];
     double Speedw[2];
     double Alphaw[2];
     double Betaw[2];
@@ -144,7 +144,7 @@ struct STATES
 extern struct STATES aSta;
 
 struct SPECS
-{// ≈ƒ»Õ»÷€ »«Ã≈–≈Õ»ﬂ
+{// HGK CONTROLS AND SPECIFICAIONS
     int it;
     int id;
     int ip;

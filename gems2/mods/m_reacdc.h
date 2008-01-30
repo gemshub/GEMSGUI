@@ -145,7 +145,7 @@ protected:
     void Recalc_ISO2( double foS );
     void Calc_rDCD( int q, int p );
     void calc_tphkf_r( int q, int p );
-    void calc_akinf_r( int q, int p, int CE, int CV );
+
     void calc_lgk_r( int q, int p, int CE, int CV );
     void calc_r_interp( int q, int p, int CE, int CV );
     void calc_iso_a( int q, int p );

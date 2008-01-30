@@ -954,29 +954,6 @@ void TReacDC::calc_tphkf_r( int q, int p )
     aW.WW(p).devCp=rc[q].Cps[2];
 }
 
-/*-----------------------------------------------------------------*/
-// Calc on Akinfiev
-void TReacDC::calc_akinf_r( int q, int p, int /*CE*/, int /*CV*/ )
-{
-    aW.WW(p).K =   rc[q].Ks[0];
-    aW.WW(p).lgK = rc[q].Ks[1];
-    aW.WW(p).dlgK =rc[q].Ks[2];
-    aW.WW(p).dG =  rc[q].Gs[0];
-    aW.WW(p).G  =  rc[q].Gs[1];
-    aW.WW(p).devG =rc[q].Gs[2];
-    aW.WW(p).dH =  rc[q].Hs[0];
-    aW.WW(p).H  =  rc[q].Hs[1];
-    aW.WW(p).devH =rc[q].Hs[2];
-    aW.WW(p).dS =  rc[q].Ss[0];
-    aW.WW(p).S  =  rc[q].Ss[1];
-    aW.WW(p).devS =rc[q].Ss[2];
-    aW.WW(p).dV =  rc[q].Vs[0];
-    aW.WW(p).V  =  rc[q].Vs[1];
-    aW.WW(p).devV =rc[q].Vs[2];
-    aW.WW(p).dCp = rc[q].Cps[0];
-    aW.WW(p).Cp =  rc[q].Cps[1];
-    aW.WW(p).devCp=rc[q].Cps[2];
-}
 
 /*-----------------------------------------------------------------*/
 // Calculation of d(reaction) from logK = f(T)

@@ -290,7 +290,6 @@ enum DC_CNTRL_CODES {
     CTM_HKF = 'K',//calculation with HKF EOS (for aqueous species) as in SUPCRT92
     CTM_WAT = 'W',/* calculation of H2O water(steam) properties from HGK and LVS
                         equations of state (also using subroutines of SUPCRT92); */
-    CTM_AKI = 'A',// modified HKF EOS for ion pairs by Akinfiev,1992 (reserved);
     // (K) CTPM_REA
     CTM_LGK = 'L',/* calculation from empirical function lgK=f(T) in 7-term form
                       (Nordstrom&Munoz,1988) - REACDC only; */
@@ -339,11 +338,11 @@ enum DC_CNTRL_CODES {
     // 3. Codes used together with calculations by modified HKF EOS:
     // CTPM_HKF
     CPM_HKF  = 'F',/*account for pressure up to 5 kbar by HKF (Tanger,Helgeson,1988)*/
-    /*  CPM_AKI  = 'A', *calculation of partial molal volumes for aqueous ions after
-          EOS (Akinfiev, 1995) - reserved; */
+    CPM_AKI  = 'A', /*calculation of partial molal volumes for aqueous non-polar species 
+                      using EOS (Akinfiev,Diamond 2003) */
     CPM_PCR  = 'P',  /* PARCOR estimation of HKF EOS params 19.05.98 */
-// Added 5.03.2005 by KD for CORK EoS (D.Dolejs, Th.Wagner)
-CPM_PRSV = 'R', /* Peng-Robinson EoS calculation added by Th.Wagner in July 2006 */
+     // Added 5.03.2005 by KD for CORK EoS (D.Dolejs, Th.Wagner)
+    CPM_PRSV = 'R', /* Peng-Robinson EoS calculation added by Th.Wagner in July 2006 */
     /* Selection of routines for H2O, CO2 and others done using DC Class code*/
     // CTPM_REA
     CPM_INK  = 'Z', /* calculation using Lagrange polinomial interpolation over

@@ -25,7 +25,7 @@
 
 const int
 MAXCPCOEF =      12,
-  MAXCPFSCOEF=     9,
+  MAXCPFSCOEF=     7,
      MAXHKFCOEF =     8,
         MAXVTCOEF =      5,
            MAXODCOEF =     12, // Total number of V(T,P) coeffs BM Gottschalk
@@ -90,9 +90,9 @@ typedef struct
     Der,     // Ion-size parameter a0, A (Debye-Hueckel aq species)
     DerB,   // Indiv.par. b (for III Debye-Hueckel aq species)
 
-    *TCint, // Lower and upper T limits for ‘à=f(T) equation [NeCp][2]
-    *Cp,    // Coeffs of Cp=f(T) (J,mole,K), one column per equation [MAXCPCOEF][NeCp] */
-    *CpFS,  // reserved [MAXCPFSCOEF][NeCp]
+    *TCint, // Lower and upper T limits for Cp=f(T) equation [NeCp][2]
+    *Cp,    // Coeffs of Cp=f(T) (J,mole,K), one column per equation [MAXCPCOEF][NeCp] 
+    *CpFS,  // Empirical coefficients for non-polar aq solutes in Akinfiev etc. [MAXCPFSCOEF][NeCp]
     *HKFc,  // Empirical coefficients of HKF EOS [MAXHKFCOEF]
     *Vt,    // Coefficients of mV=f(T,P) [MAXVTCOEF]
     *CPg,   // Critical parameters (for FGL)?[MAXCRITPARAM]
@@ -161,7 +161,11 @@ protected:
     // void B_import( int Nft, fstream& imp );
     // From PRONSPREP97
     void ParCor();
-
+    void calc_akinf( int q, int p );   
+    void Akinfiev_EOS_increments(double T, double P, double Gig, double Sig, double CPig, 
+    		double Gw, double Sw, double CPw, double rho, double alp, double bet, double dalpT, int q,
+    		double &Geos, double &Veos, double &Seos, double &CPeos, double &Heos );
+    
 public:
 
     static TDComp* pm;

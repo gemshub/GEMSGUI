@@ -29,7 +29,7 @@ double TdegK(int it, double t);
 
 typedef struct
 { //work structure  t/d properties of water-solution (if isat = 0)
-    // water-vaipor (if isat = 1);  ( see at WATERPARAM)
+    // water-vapour (if isat = 1);  ( see at WATERPARAM)
     double Aw, Gw, Sw, Uw, Hw, Cvw, Cpw, Speedw, Alphaw,
     Betaw, Dielw, Viscw, Tcondw, Surtenw, Tdiffw,
     Prndtlw, Visckw, Albew;
