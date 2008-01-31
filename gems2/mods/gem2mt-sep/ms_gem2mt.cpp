@@ -162,8 +162,8 @@ void TGEM2MT::from_text_file(fstream& ff)
            break;
    case 2: rdar.readArray( "PvGrid", &mtp->PvGrid, 1, 1);
            break;
-   case 3: rdar.readArray( "Size", &mtp->xC, 3);
-            mtp->nC = mtp->xC*mtp->yC*mtp->zC;
+   case 3: // rdar.readArray( "Size", &mtp->xC, 3);
+           //  mtp->nC = mtp->xC*mtp->yC*mtp->zC;
            break;
    case 4: rdar.readArray( "nFD", &mtp->nFD, 1);
            break;
@@ -410,7 +410,7 @@ int TGEM2MT::MassTransInit( const char *chbr_in1 )
 {
   int ii;
   // The NodeArray must be allocated here
-  TNodeArray::na = na = new TNodeArray( mtp->xC,mtp->yC,mtp->zC/*mtp->nC*/ );
+  TNodeArray::na = na = new TNodeArray( /* mtp->xC,mtp->yC,mtp->zC */ mtp->nC );
 
  // Prepare the array for initial conditions allocation
   int* nodeType = new int[mtp->nC];
