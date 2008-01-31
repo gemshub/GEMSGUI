@@ -54,15 +54,16 @@ fstream f_log("ipmlog.txt", ios::out|ios::app );
     if( pmp->pULR && pmp->PLIM )
         Set_DC_limits( DC_LIM_INIT );
 
-// cleaning the f_alpha vector (phase stability criteria)
-    for( k=0; k<pmp->FI; k++ )
+    if( rLoop < 0 )
+    {   // cleaning the f_alpha vector (phase stability criteria) - not done during refinement loops
+        for( k=0; k<pmp->FI; k++ )
             pmp->Falp[k] = 0.0;
-    for( j=0; j<pmp->L; j++ )
-    {
-        pmp->EMU[j] = 0.0;
-        pmp->NMU[j] = 0.0;
+        for( j=0; j<pmp->L; j++ )
+        {
+        	pmp->EMU[j] = 0.0;
+        	pmp->NMU[j] = 0.0;
+        }
     }
-
    // testing the entry into feasible domain
 mEFD:
      if(pmp->PZ && pmp->W1)
