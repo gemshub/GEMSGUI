@@ -372,11 +372,11 @@ NEXT:
             double rhoW, alphaW, betaW, dAldTW;
 
             TK = 298.15;
-            // test water properties (25 deg C, 1 bar)
-            rhoW = 0.9970614;
-            alphaW = 0.0002594;
-            dAldTW = 9.5686e-6;
-            betaW = 4.5219e-5;
+            // water properties (25 deg C, 1 bar) from SUPCRT92
+            rhoW = 0.99706136;
+            alphaW = 2.59426542e-4;
+            dAldTW = 9.56485765e-6;
+            betaW = 4.52187717e-5;
             H2Oprop[0] = rhoW;
             H2Oprop[1] = alphaW;
             H2Oprop[2] = dAldTW;
@@ -419,11 +419,11 @@ NEXT:
             double rhoW, alphaW, betaW, dAldTW;
 
             TK = 298.15;
-            // test water properties (25 deg C, 1 bar)
-            rhoW = 0.9970614;
-            alphaW = 0.0002594;
-            dAldTW = 9.5686e-6;
-            betaW = 4.5219e-5;
+            // test water properties (25 deg C, 1 bar) from SUPCRT92
+            rhoW = 0.99706136;
+            alphaW = 2.59426542e-4;
+            dAldTW = 9.56485765e-6;
+            betaW = 4.52187717e-5;
             H2Oprop[0] = rhoW;
             H2Oprop[1] = alphaW;
             H2Oprop[2] = dAldTW;

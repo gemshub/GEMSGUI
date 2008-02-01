@@ -591,17 +591,17 @@ void TDComp::calc_akinf( int q, int p )
 	double Geos, Veos, Seos, CPeos, Heos;
 	double Gids, Vids, Sids, CPids, Hids;
 			
-	// Properties of water at Tr,Pr 
-	Gig = -228581.9;
-	Sig = 188.83501;
-	CPig = 33.59055;
-	Gw = -237181.;
-	Sw = 69.944;
-	CPw = 75.361;
-	rho = 0.997061;
-	alp = 2.594265e-4;
-	bet = 4.521877e-5;
-	dalpT = 9.564858e-6;
+	// Properties of water at Tr,Pr (25 deg C, 1 bar) from SUPCRT92
+	Gig = -228581.9;  // Gig provisional value, needs refinement
+	Sig = 188.72683;
+	CPig = 33.58743;
+	Gw = -237181.38;
+	Sw = 69.92418;
+	CPw = 75.36053;
+	rho = 0.99706136;
+	alp = 2.59426542e-4;
+	bet = 4.52187717e-5;
+	dalpT = 9.56485765e-6;
 	
 	Akinfiev_EOS_increments(Tr, Pr, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q, 
 			           Geos, Veos, Seos, CPeos, Heos );	
@@ -609,9 +609,10 @@ void TDComp::calc_akinf( int q, int p )
 	// Getting back ideal gas properties corrected for T of interest
 	// by substracting properties of hydration at Tr, Pr
     Gids = aW.twp->G -= Geos;
-//	Vids = aW.twp->V -= Veos;  // j/bar 
+//	Vids = aW.twp->V -= Veos;
     Sids = aW.twp->S -= Seos;
-    CPids = aW.twp->Cp -= CPeos;
+//  CPids = aW.twp->Cp -= CPeos;
+    CPids = aW.twp->Cp;
     Hids = aW.twp->H -= Heos;
     
     // Properties of water at T,P
@@ -634,8 +635,8 @@ void TDComp::calc_akinf( int q, int p )
 	// Getting dissolved gas properties corrected for T,P of interest
 		// by adding properties of hydration at T, P	
 	aW.twp->G = Gids + Geos;
-//	aW.twp->V = Vids + Veos;  // j/bar 
-	aW.twp->V = Veos/10.;  // j/bar 
+//	aW.twp->V = Vids + Veos;
+	aW.twp->V = Veos;
 	aW.twp->S = Sids + Seos;
     aW.twp->Cp = CPids + CPeos;
     aW.twp->H = Hids + Heos;
@@ -680,7 +681,7 @@ TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, dou
 	derT = aa*(rho+Tk*drhoT) + bb*(0.5*pow(10.,1.5)*pow(Tk,-0.5)*rho + pow(10.,1.5)*pow(Tk,0.5)*drhoT);
 	der2T = aa*(2.*drhoT+Tk*d2rhoT) + bb*((-0.25)*pow(10.,1.5)*pow(Tk,-1.5)*rho
 		+ pow(10.,1.5)*pow(Tk,-0.5)*drhoT + pow(10.,1.5)*pow(Tk,0.5)*d2rhoT);
-	Veos = vol*(1.-xi) + xi*RR*Tk*(1./rho)*drhoP + RR*derP;
+	Veos = (vol*(1.-xi) + xi*RR*Tk*(1./rho)*drhoP + RR*derP)/10.;
 	Seos = (1.-xi)*(Sres) + R_CONST*log(Nw) - R_CONST*(xi + xi*log(RR*Tk/MW) + xi*log(rho)
 		+ xi*Tk*(1./rho)*drhoT) - R_CONST*derT;
 	CPeos = (1.-xi)*(CPres) - R_CONST*(xi + 2.*xi*Tk*(1./rho)*drhoT

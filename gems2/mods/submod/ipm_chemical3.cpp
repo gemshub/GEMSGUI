@@ -765,7 +765,7 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
     int j;
     double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam; //  molt;
     double Xw, Xaq, Nw, molT, Lgam, lnwxWat, lnGam;
-    double Lam, SigTerm, Phi, lnActWat, ActWat, gamWat;
+    double Lam, SigTerm, Phi, lnActWat;
     float nPolicy;
 
     I= pmp->IC;
@@ -848,8 +848,8 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
 	   Lam = 1. + a0*B*sqI;
 	   SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
 	   Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
-	   lnActWat = -Phi*molT/Nw;         //	   ActWat = exp(lnActWat);
-           lnGam = lnActWat - lnwxWat;      //	   gamWat = ActWat/wxWat;
+	   lnActWat = -Phi*molT/Nw;         
+           lnGam = lnActWat - lnwxWat;      
 //         lgGam = a0 * molt; // corrected: instead of I - tot.molality
         }
         pmp->lnGam[j] = lnGam;
