@@ -394,6 +394,7 @@ TDComp::RecBuild( const char *key, int mode  )
     int CM, CE, CV;
     //  int q=0;
 
+    memcpy( dcp->pstate, rt[nRT].UnpackKey(), DC_RKLEN );
     switch( dcp->pstate[0] )
     {
     case  CP_LIQID: // EoS liquid component
