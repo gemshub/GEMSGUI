@@ -590,10 +590,11 @@ void TDComp::calc_akinf( int q, int p )
 	double Gig, Hig, Sig, CPig, Gw, Sw, CPw;
 	double Geos, Veos, Seos, CPeos, Heos;
 	double Gids, Vids, Sids, CPids, Hids;
+	double Geos298, Veos298, Seos298, CPeos298, Heos298;
 			
-	// Properties of water at Tr,Pr (25 deg C, 1 bar) from SUPCRT92
-	Gig = -228581.9;  // Gig provisional value, needs refinement
-	Sig = 188.72683;
+	// Properties of water at Tr,Pr (25 deg C, 1 bar) from SUPCRT92 routines
+	Gig = -228526.66;  // adopted H298 for H2O ideal gas from NIST-TRC database
+	Sig = 188.72683;  // S298 of H2O ideal gas consistent with NIST-TRC database
 	CPig = 33.58743;
 	Gw = -237181.38;
 	Sw = 69.92418;
@@ -604,37 +605,37 @@ void TDComp::calc_akinf( int q, int p )
 	dalpT = 9.56485765e-6;
 	
 	Akinfiev_EOS_increments(Tr, Pr, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q, 
-			           Geos, Veos, Seos, CPeos, Heos );	
+			           Geos298, Veos298, Seos298, CPeos298, Heos298 );	
 	
 	// Getting back ideal gas properties corrected for T of interest
 	// by substracting properties of hydration at Tr, Pr
-    Gids = aW.twp->G -= Geos;
-//	Vids = aW.twp->V -= Veos;
-    Sids = aW.twp->S -= Seos;
-//  CPids = aW.twp->Cp -= CPeos;
+    Gids = aW.twp->G -= Geos298;
+//	Vids = aW.twp->V -= Veos298;
+    Sids = aW.twp->S -= Seos298;
+//  CPids = aW.twp->Cp -= CPeos298;
     CPids = aW.twp->Cp;
-    Hids = aW.twp->H -= Heos;
+    Hids = aW.twp->H -= Heos298;
     
     // Properties of water at T,P
-	Gig = aWp.Gw[2] * CaltoJ;  // still to fix!
-	Sig = aWp.Sw[2] * R_CONST;
-	CPig = aWp.Cpw[2] * R_CONST;
-	Gw = aWp.Gw[0] * CaltoJ;
-	Sw = aWp.Sw[0] * CaltoJ;
-	CPw = aWp.Cpw[0] * CaltoJ;
+	Tk = aW.twp->T; 
+	Pbar = aW.twp->P;
+	Gig = aWp.Gw[2]*R_CONST*Tk + (-182161.88);  // converting normalized ideal gas values
+	Sig = aWp.Sw[2]*R_CONST;
+	CPig = aWp.Cpw[2]*R_CONST;
+	Gw = aWp.Gw[0]*CaltoJ;
+	Sw = aWp.Sw[0]*CaltoJ;
+	CPw = aWp.Cpw[0]*CaltoJ;
 	rho = aSta.Dens[aSpc.isat];
 	alp = aWp.Alphaw[0];
 	bet = aWp.Betaw[0];
 	dalpT = aWp.dAldT[0];
-	Tk = aW.twp->T; 
-	Pbar = aW.twp->P;
 
 	Akinfiev_EOS_increments(Tk, Pbar, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q,
 			           Geos, Veos, Seos, CPeos, Heos );	
 	
 	// Getting dissolved gas properties corrected for T,P of interest
-		// by adding properties of hydration at T, P	
-	aW.twp->G = Gids + Geos;
+	// by adding properties of hydration at T,P
+	aW.twp->G = Gids + Geos + Seos298*(Tk-298.15);  // S(T-Tr) corrected for dSh at Tr,Pr
 //	aW.twp->V = Vids + Veos;
 	aW.twp->V = Veos;
 	aW.twp->S = Sids + Seos;
