@@ -5,7 +5,7 @@
  content="text/html; charset=iso-8859-1">
   <meta name="GENERATOR"
  content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
-  <title>GEM-Selektor Data Object Index v.2.1</title>
+  <title>GEM-Selektor Data Object Index v.2.2</title>
 </head>
 <body>
 &lt;&gt;This is&nbsp; OBJNDX.HTML&nbsp; file used internally by
@@ -120,9 +120,10 @@ time on EQCALC screen from (sec) or 0</h4>
 electroneutrality condition? { 0 1 }</h4>
   <h4> <a href="gems_ipm.html#Pa_IIM">Pa_IIM</a> Maximum number of
 iterations in IPM task { 400 }</h4>
-  <h4> <a href="gems_ipm.html#Pa_DG">Pa_DG</a><a name="Pa_DG"></a>Precision
-of GEM IPM solver (Jordan) { 1e-12 }</h4>
-  <h4> <a href="gems_ipm.html#Pa_DHB">Pa_DHB</a> Precision of mass
+  <h4> <a href="gems_ipm.html#Pa_DG">Pa_DG</a> Threshold of minimal
+step length in EnterFeasibleDomain(){ 1e-5 }</h4>
+  <h4><a href="gems_ipm.html#Pa_DG"> </a><a href="gems_ipm.html#Pa_DHB">Pa_DHB</a>
+Precision of mass
 balance deviations at EFD { 1e-6 }</h4>
   <h4> <a href="gems_ipm.html#Pa_DS">Pa_DS</a> Cutoff (threshold) for
 the amount of phase for phase elimination { 1e-12 }</h4>
@@ -2485,6 +2486,8 @@ sampled PDB record</h4>
   <h4> <a href="gm_gtdemo.html#gwTxt">gwTxt</a> internal</h4>
   <h4> <a href="gm_gtdemo.html#gwTab">gwTab</a> internal</h4>
   <h4> <a href="gm_gtdemo.html#GDtprn">GDtprn</a> internal</h4>
+  <br>
+  <br>
   <h4> <a href="gm_unspace.html#unStat_0">unStat[0]</a> Units of
 energy { j; J c C N reserved }</h4>
   <h4> <a href="gm_unspace.html#unStat_1">unStat[1]</a> Units of
@@ -3314,14 +3317,366 @@ interaction parameter values (calculation of activity coefficients, LS
 fitting) </h4>
   <h4> <a href="gm_dualth.html#dSTkey">dSTkey</a> Key of the currently
 processed SysEq record </h4>
-  <h4> <a href="gm_dualth.html#dtTprn">dtTprn</a> Internal </h4>
-  <h4> <a href="gm_integ.html#I_allx">I_allx</a> Array of intermediate
+  <h4> <a href="gm_dualth.html#dtTprn">dtTprn</a> Internal</h4>
+  <h4><a href="gm_gem2mt.html#mtPufl_0">mtPufl[0]</a> Units of
+energy { j; J c C N reserved }</h4>
+  <h4><a href="gm_gem2mt.html#mtPufl_1">mtPufl[1]</a> Units of
+volume { j; c L a reserved }</h4>
+  <h4><a href="gm_gem2mt.html#mtPufl_2">mtPufl[2]</a> Units of
+pressure { b; B p P A reserved }</h4>
+  <h4><a href="gm_gem2mt.html#mtPufl_3">mtPufl[3]</a> Units of
+temperature { C; K F reserved }</h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_0">mtPvfl[0]</a> Use IC
+quantities for initial system compositions { + * - }</h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_1">mtPvfl[1]</a> Use formula
+units for initial sub-system compositions { + * - }</h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_2">mtPvfl[2]</a> Use non-stop
+debug output for nodes (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_3">mtPvfl[3]</a> Use math script
+for graphic presentation (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_4">mtPvfl[4]</a> Use empirical
+data for graphics (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_5">mtPvfl[5]</a> Use phase
+groups definitions (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_6">mtPvfl[6]</a> Use flux
+definition list ( + - ) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_7">mtPvfl[7]</a> Use source
+fluxes and elemental stoichiometries for them (+ -)</h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_8">mtPvfl[8]</a> Use array of
+grid point locations (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPvfl_9">mtPvfl[9]</a> reserved (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPsfl_0">mtPsfl[0]</a> Code of GEM2MT
+mode of operation { S F A D T } </h4>
+  <h4> <a href="gm_gem2mt.html#mtPsfl_1">mtPsfl[1]</a> GEM2MT
+generation status: 0 -start; 1 run; 2 - done run; 3 - error (+ 5: the
+same in stepwise mode) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPsfl_2">mtPsfl[2]</a> GEM2MT
+iteration status: 0 -start; 1 ready; 2 - run; 3 - done; ( + 5: the same
+using stepwise mode) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPsfl_3">mtPsfl[3]</a> Save generated
+SysEq records to data base (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPsfl_4">mtPsfl[4]</a> Save DataCH and
+inital DataBR files as text files (+) or binary (-) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPsfl_5">mtPsfl[5]</a> Use diffusion
+coefficients for DC - DDc vector (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPsfl_6">mtPsfl[6]</a> Use diffusion
+coefficients for DC - DIc vector (+ -) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPsfl_7">mtPsfl[7]</a> Create T,P
+values in Tval, Pval using iterator(+) or enter(-) </h4>
+  <h4> <a href="gm_gem2mt.html#mtCIPF_0">mtCIPF[0]</a> nC - input
+number of local equilibrium cells (nodes) </h4>
+  <h4> <a href="gm_gem2mt.html#mtCIPF_1">mtCIPF[1]</a> nIV - number of
+initial variants of the chemical system, nIV &lt;= nC </h4>
+  <h4> <a href="gm_gem2mt.html#mtCIPF_2">mtCIPF[2]</a> nPG - number of
+mobile phase groups (0 or &gt;1) </h4>
+  <h4> <a href="gm_gem2mt.html#mtCIPF_3">mtCIPF[3]</a> nFD - number of
+MGP
+flux definitions (0 or &gt;1) </h4>
+  <h4> <a href="gm_gem2mt.html#mtCIPF_4">mtCIPF[4]</a> nSFD - number
+of IC source flux definitions (0 or &lt; nFD )</h4>
+  <h4> <a href="gm_gem2mt.html#mtCIPF_5">mtCIPF[5]</a> nEl - number of
+electrolytes for setting up electrolyte diffusion coefficients in mDEl
+vector </h4>
+  <h4> <a href="gm_gem2mt.html#mtCIPF_6">mtCIPF[6]</a> Number of
+allocated particle types &lt; 20 </h4>
+  <h4> <a href="gm_gem2mt.html#mtCIPF_7">mtCIPF[7]</a> Number of
+particle statistic properties (for monitoring) &gt;= nPTypes </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzT_0">mtSzT[0]</a> Lb - number of
+formula units to set compositions in initial variants </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzT_1">mtSzT[1]</a> Number of
+references to data sources </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzT_2">mtSzT[2]</a> Number of
+elements in the script work array qpi for transport</h4>
+  <h4> <a href="gm_gem2mt.html#mtSzT_3">mtSzT[3]</a> Number of
+elements in the script work array qpc for graphics </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzT_4">mtSzT[4]</a> N - number of
+independent components (set automatically) </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzT_5">mtSzT[5]</a> Fi - number of
+phases (set automatically) </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzT_6">mtSzT[6]</a> Ls - number of
+dependent components in multicomponent phases (set automatically) </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzT_7">mtSzT[7]</a> Time point for
+the simulation break (Tau[0] at start) </h4>
+  <h4> <a href="gm_gem2mt.html#mtnSnE_0">mtnSnE[0]</a> Maximum allowed
+number of time iteration steps </h4>
+  <h4> <a href="gm_gem2mt.html#mtnSnE_1">mtnSnE[1]</a> Number of plots
+(columns in the yt array which contains ) </h4>
+  <h4> <a href="gm_gem2mt.html#mtnSnE_2">mtnSnE[2]</a> Total number of
+experimental points (in xEt, yEt) to plot over </h4>
+  <h4> <a href="gm_gem2mt.html#mtnSnE_3">mtnSnE[3]</a> Number of
+experimental parameters (columns in the yEt array) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPTai_0">mtPTai[0]</a> Number of P
+points in MTP interpolation array in DataCH ( 1 to 10 )</h4>
+  <h4> <a href="gm_gem2mt.html#mtPTai_1">mtPTai[1]</a> Number of T
+points in MTP interpolation array in DataCH ( 1 to 20 ) </h4>
+  <h4> <a href="gm_gem2mt.html#mtPTai_2">mtPTai[2]</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#mtCHBR_0">mtCHBR[0]</a> Number of
+stoichiometry units (&lt;= nIC) used in the data bridge </h4>
+  <h4> <a href="gm_gem2mt.html#mtCHBR_1">mtCHBR[1]</a> Number of DC
+(chemical species, &lt;= nDC) used in the data bridge</h4>
+  <h4> <a href="gm_gem2mt.html#mtCHBR_2">mtCHBR[2]</a> Number of
+phases (&lt;= nPH) used in the data bridge </h4>
+  <h4> <a href="gm_gem2mt.html#mtCHBR_3">mtCHBR[3]</a> Number of
+multicomponent phases (&lt;= nPS) used in the data bridge </h4>
+  <h4> <a href="gm_gem2mt.html#mtCHBR_4">mtCHBR[4]</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#mttmi_0">mttmi[0]</a> SYSTEM CSD
+definition #: start value </h4>
+  <h4> <a href="gm_gem2mt.html#mttmi_1">mttmi[1]</a> SYSTEM CSD
+definition #: end value </h4>
+  <h4> <a href="gm_gem2mt.html#mttmi_2">mttmi[2]</a> SYSTEM CSD
+definition #: step value </h4>
+  <h4> <a href="gm_gem2mt.html#mtNVi_0">mtNVi[0]</a> Restrictions
+variant #: start value </h4>
+  <h4> <a href="gm_gem2mt.html#mtNVi_1">mtNVi[1]</a> Restrictions
+variant #: end value </h4>
+  <h4> <a href="gm_gem2mt.html#mtNVi_2">mtNVi[2]</a> Restrictions
+variant #: step value </h4>
+  <h4> <a href="gm_gem2mt.html#mtAxis">mtAxis</a> Axis Type (plot
+setup), backgr color, internal </h4>
+  <h4> <a href="gm_gem2mt.html#mtPai_0">mtPai[0]</a> Pressure P, bar:
+start (real) for MTP array in DataCH </h4>
+  <h4> <a href="gm_gem2mt.html#mtPai_1">mtPai[1]</a> Pressure P, bar:
+end for MTP array in DataCH </h4>
+  <h4> <a href="gm_gem2mt.html#mtPai_2">mtPai[2]</a> Pressure P, bar:
+step for MTP array in DataCH </h4>
+  <h4> <a href="gm_gem2mt.html#mtPai_3">mtPai[3]</a> Pressure P, bar:
+tolerance Ptol </h4>
+  <h4> <a href="gm_gem2mt.html#mtTai_0">mtTai[0]</a> Temperature T, C:
+start (real) for MTP array in DataCH </h4>
+  <h4> <a href="gm_gem2mt.html#mtTai_1">mtTai[1]</a> Temperature T, C:
+end for MTP array in DataCH </h4>
+  <h4> <a href="gm_gem2mt.html#mtTai_2">mtTai[2]</a> Temperature T, C:
+step for MTP array in DataCH </h4>
+  <h4> <a href="gm_gem2mt.html#mtTai_3">mtTai[3]</a> Temperature T, C:
+tolerance Ttol </h4>
+  <h4> <a href="gm_gem2mt.html#mtTau_0">mtTau[0]</a> Physical time
+iterator: start </h4>
+  <h4> <a href="gm_gem2mt.html#mtTau_1">mtTau[1]</a> Physical time
+iterator: end</h4>
+  <h4> <a href="gm_gem2mt.html#mtTau_2">mtTau[2]</a> Physical time
+iterator: step </h4>
+  <h4> <a href="gm_gem2mt.html#mtSize_0">mtSize[0]</a> Graph axis
+scale for the region </h4>
+  <h4> <a href="gm_gem2mt.html#mtSize_1">mtSize[1]</a> Graph axis
+scale for the fragment </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzLc_0">mtSzLc[0]</a> spatial
+dimensions x of the medium defines topology of nodes </h4>
+  <h4> <a href="gm_gem2mt.html#mtSzLc_1">mtSzLc[1]</a> spatial
+dimensions y of the medium defines topology of nodes</h4>
+  <h4> <a href="gm_gem2mt.html#mtSzLc_2">mtSzLc[2]</a> spatial
+dimensions z of the medium defines topology of nodes </h4>
+  <h4> <a href="gm_gem2mt.html#mtName">mtName</a> Comment line for the
+full name of this GEM2MT task </h4>
+  <h4> <a href="gm_gem2mt.html#mtNote">mtNote</a> Comment line for
+optional enhancement of the mtName line </h4>
+  <h4> <a href="gm_gem2mt.html#mInput_0">mInput[0]</a> Masses (kg) and
+volumes (L) for initial systems: Ms (total mass, normalize)</h4>
+  <h4> <a href="gm_gem2mt.html#mInput_1">mInput[1]</a> Vs (total
+volume of the object, for volume concentrations)</h4>
+  <h4> <a href="gm_gem2mt.html#mInput_2">mInput[2]</a> M(H2O) (mass of
+water-solvent for molalities) </h4>
+  <h4> <a href="gm_gem2mt.html#mInput_3">mInput[3]</a> Maq (mass of
+aqueous solution for ppm etc.) </h4>
+  <h4> <a href="gm_gem2mt.html#mInput_4">mInput[4]</a> Vaq (volume of
+aqueous solution for molarities) </h4>
+  <h4> <a href="gm_gem2mt.html#mInput_5">mInput[5]</a> Pg (pressure in
+gas, for partial pressures) </h4>
+  <h4> <a href="gm_gem2mt.html#mInput_6">mInput[6]</a> MOL total mole
+amount for basis sub-system composition calculations </h4>
+  <h4> <a href="gm_gem2mt.html#mInput_7">mInput[7]</a> mole fraction
+of the carrier DC (e.g. sorbent or solvent)</h4>
+  <h4> <a href="gm_gem2mt.html#mInput_8">mInput[8]</a> Specific
+surface area of the sorbent (for adsorbed species) </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_0">ADpar[0]</a>
+Advection/diffusion mass transport:fluid advection velocity (m/sec)</h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_1">ADpar[1]</a> column length </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_2">ADpar[2]</a> time step
+reduction factor </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_3">ADpar[3]</a> cutoff factor for
+differences in node composition between t and t-1 steps </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_4">ADpar[4]</a> cutoff factor for
+minimal amounts of IC in node bulk compositions </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_5">ADpar[5]</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_6">ADpar[6]</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_7">ADpar[7]</a> reserved</h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_8">ADpar[8]</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_9">ADpar[9]</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#ADpar_10">ADpar[10]</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#mX_Nam">mX_Nam</a> Abscissa name (for
+the graph), up to 8 characters </h4>
+  <h4> <a href="gm_gem2mt.html#mY_Nam">mY_Nam</a> Ordinate name (for
+the graph), up to 8 characters </h4>
+  <h4> <a href="gm_gem2mt.html#mLnam">mLnam</a> List of ID of lines on
+Graph [nYS] </h4>
+  <h4> <a href="gm_gem2mt.html#mLnamE">mLnamE</a> List of ID of lines
+of empirical data [nYE] </h4>
+  <h4> <a href="gm_gem2mt.html#mtExpr">mtExpr</a> Math script text for
+calculation of mass transport </h4>
+  <h4> <a href="gm_gem2mt.html#mgExpr">mgExpr</a> Math script text for
+data sampling and plotting </h4>
+  <h4> <a href="gm_gem2mt.html#mSDref">mSDref</a> List of SDref keys
+to data sources </h4>
+  <h4> <a href="gm_gem2mt.html#mSDval">mSDval</a> List of short
+comments to SDref record keys in the mSDref list</h4>
+  <h4> <a href="gm_gem2mt.html#DiCp">DiCp</a> Array of indexes of
+initial system variants for distributing to nodes [nC] </h4>
+  <h4> <a href="gm_gem2mt.html#mtIC">mtIC</a> ICNL indices in DATABR
+IC vectors [nICb]</h4>
+  <h4> <a href="gm_gem2mt.html#mtDC">mtDC</a> DCNL indices in DATABR
+DC list [nDCb]</h4>
+  <h4> <a href="gm_gem2mt.html#mtPH">mtPH</a> PHNL indices in DATABR
+phase vectors [nPHb] </h4>
+  <h4> <a href="gm_gem2mt.html#FDLi_0">FDLi[][0]</a> Source box index
+in the flux definition </h4>
+  <h4> <a href="gm_gem2mt.html#FDLi_1">FDLi[][1]</a> Receiver box
+index in the flux definition </h4>
+  <h4> <a href="gm_gem2mt.html#Pi">Pi</a> Pressure P, bar for initial
+systems (values within Pai range) [nIV] </h4>
+  <h4> <a href="gm_gem2mt.html#Ti">Ti</a> Temperature T, C for initial
+systems (values within Tai range) [nIV] </h4>
+  <h4> <a href="gm_gem2mt.html#Vi">Vi</a> Volume of the system (L)
+[nIV], usually zeros </h4>
+  <h4> <a href="gm_gem2mt.html#xEt">xEt</a> Abscissa for experimental
+points [nXE] </h4>
+  <h4> <a href="gm_gem2mt.html#yEt">yEt</a> Ordinates for experimental
+points to plot [nXE, nYE] </h4>
+  <h4> <a href="gm_gem2mt.html#mDDc">mDDc</a> [Ls] diffusion
+coefficients for DC </h4>
+  <h4> <a href="gm_gem2mt.html#mDIc">mDIc</a> [N] diffusion
+coefficients for IC </h4>
+  <h4> <a href="gm_gem2mt.html#mDEl">mDEl</a> [nE] diffusion
+coefficients for electrolyte salts </h4>
+  <h4> <a href="gm_gem2mt.html#mBn">mBn</a> [nIV][N] Table of bulk
+compositions of initial systems </h4>
+  <h4> <a href="gm_gem2mt.html#HydP_0">HydP[][0]</a> Initial
+hydraulic parameters in nodes: Vt - total volume of node = dx*dy*dz,
+m**3 </h4>
+  <h4> <a href="gm_gem2mt.html#HydP_1">HydP[][1]</a> vp - advection
+velocity (in pores) in this node (m/sec) </h4>
+  <h4> <a href="gm_gem2mt.html#HydP_2">HydP[][2]</a> eps - effective
+(actual) porosity (0 &lt; eps &lt; 1) </h4>
+  <h4> <a href="gm_gem2mt.html#HydP_3">HydP[][3]</a> Km - effective
+(actual) actual permeability, m**2 </h4>
+  <h4> <a href="gm_gem2mt.html#HydP_4">HydP[][4]</a> al - specific
+longitudinal dispersivity of porous medium, m </h4>
+  <h4> <a href="gm_gem2mt.html#HydP_5">HydP[][5]</a> Dif - general
+diffusivity of disolved matter in the mode </h4>
+  <h4> <a href="gm_gem2mt.html#HydP_6">HydP[][6]</a> nto - tortuosity
+factor </h4>
+  <h4> <a href="gm_gem2mt.html#BSF">BSF</a> [nSFD][N] table of bulk
+compositions of source fluxes </h4>
+  <h4> <a href="gm_gem2mt.html#MB">MB</a> [nC] column of current
+masses of boxes or reservoirs (in kg) </h4>
+  <h4> <a href="gm_gem2mt.html#dMB">dMB</a> [nC][Nb] Table of current
+derivatives dM for elements in reservoirs </h4>
+  <h4> <a href="gm_gem2mt.html#qpi">qpi</a> [Nqpi] Work array for
+initial systems math script </h4>
+  <h4> <a href="gm_gem2mt.html#qpc">qpc</a> [Nqpc] Work array for mass
+transport math script </h4>
+  <h4> <a href="gm_gem2mt.html#xt">xt</a> Abscissa for sampled data
+(usually profile distance) [nS] </h4>
+  <h4> <a href="gm_gem2mt.html#yt">yt</a> Ordinates for sampled
+profile data [nS][nYS] </h4>
+  <h4> <a href="gm_gem2mt.html#mCIb">mCIb</a> [nIV][N] Table of
+quantity/concentration of IC in initial systems </h4>
+  <h4> <a href="gm_gem2mt.html#mCAb">mCAb</a> [nIV][Lbi] Table of
+quantity/concentration of formulae for initial systems</h4>
+  <h4> <a href="gm_gem2mt.html#FDLf_0">FDLf[][0]</a> [nFD][4] Part of
+the flux defnition list: flux order {0 1 2 3 -1 -2 ... } </h4>
+  <h4> <a href="gm_gem2mt.html#FDLf_1">FDLf[][1]</a> flux rate
+(depending on order) </h4>
+  <h4> <a href="gm_gem2mt.html#FDLf_2">FDLf[][2]</a> MPG quantity 1
+(reserved) </h4>
+  <h4> <a href="gm_gem2mt.html#FDLf_3">FDLf[][3]</a> MPG quantity 2
+(reserved) </h4>
+  <h4> <a href="gm_gem2mt.html#PGT">PGT</a> Quantities of phases in
+MGP [Fi][nPG]</h4>
+  <h4> <a href="gm_gem2mt.html#Tval">Tval</a> discrete values of T
+[nTai]</h4>
+  <h4> <a href="gm_gem2mt.html#Pval">Pval</a> discrete values of P
+[nPai]</h4>
+  <h4> <a href="gm_gem2mt.html#nam_i">nam_i</a> [nIV][12] id names of
+initial systems </h4>
+  <h4> <a href="gm_gem2mt.html#for_i">for_i</a> [Lbi][40] formulae for
+setting initial system compositions </h4>
+  <h4> <a href="gm_gem2mt.html#for_e">for_e</a> [nE][40] formulae for
+diffusing dissolved electrolytes </h4>
+  <h4> <a href="gm_gem2mt.html#mstld">mstld</a> List of SysEq record
+keys for initial systems [nIV] </h4>
+  <h4> <a href="gm_gem2mt.html#mCIclb">mCIclb</a> [N] Units of IC
+quantity/concentration for initial systems compositions </h4>
+  <h4> <a href="gm_gem2mt.html#mAUcln">mAUcln</a> [Lbi] Units of
+setting UDF quantities for initial system compositions </h4>
+  <h4> <a href="gm_gem2mt.html#FDLid">FDLid</a> [nFD] IDs of fluxes </h4>
+  <h4> <a href="gm_gem2mt.html#FDLop">FDLop</a> [nFD] Operation codes
+(letters) </h4>
+  <h4> <a href="gm_gem2mt.html#FDLmp">FDLmp</a> [nFD] ID of MPG to
+move in this flux </h4>
+  <h4> <a href="gm_gem2mt.html#MPGid">MPGid</a> [nPG] ID list of
+mobile phase groups</h4>
+  <h4> <a href="gm_gem2mt.html#UMPG">UMPG</a> [nFi] units for setting
+phase quantities in MPG (see PGT ) </h4>
+  <h4> <a href="gm_gem2mt.html#mSBM">mSBM</a> Keys (names) of IC </h4>
+  <h4> <a href="gm_gem2mt.html#mGrid">mGrid</a> Array of grid point
+locations, size is nC*3 </h4>
+  <h4> <a href="gm_gem2mt.html#NPmean">NPmean</a> Array of initial
+mean particle type numbers per node [BnPTypes]</h4>
+  <h4> <a href="gm_gem2mt.html#npmin">nPmin</a> Minimum average total
+number of
+particles of each type per one node [nPTypes] </h4>
+  <h4> <a href="gm_gem2mt.html#nPmax">nPmax</a> Maximum average total
+number of particles of each type per one node [nPTypes] </h4>
+  <h4> <a href="gm_gem2mt.html#ParTD">ParTD</a> Array of particle type
+definitions at t0 or after interruption [nPTypes]</h4>
+  <h4> <a href="gm_gem2mt.html#mtSkey">mtSkey</a> Current key of
+sampled SysEq database record </h4>
+  <h4> <a href="gm_gem2mt.html#mAn">mAn</a> Stoichiometry matrix for
+???? </h4>
+  <h4> <a href="gm_gem2mt.html#mAe">mAe</a> Stoich matrix for for
+diffusing electrolytes </h4>
+  <h4> <a href="gm_gem2mt.html#gfc">gfc</a> [nC][nPG][Nb] Array of
+element partition coefficients for MPG and its source reservoir </h4>
+  <h4> <a href="gm_gem2mt.html#_ctm">_ctm</a> current CSD # </h4>
+  <h4> <a href="gm_gem2mt.html#cnv">cnv</a> current restriction
+variant # </h4>
+  <h4> <a href="gm_gem2mt.html#qc">qc</a> current index of the
+compartment ( 1 to nC ) </h4>
+  <h4> <a href="gm_gem2mt.html#kv">kv</a> current index of the initial
+system variant (1 to nIV ) </h4>
+  <h4> <a href="gm_gem2mt.html#jqc">jqc</a> script c-style index (=
+qc-1) for transport </h4>
+  <h4> <a href="gm_gem2mt.html#jqs">jqs</a> script c-style index (=
+qc-1) for graphics </h4>
+  <h4> <a href="gm_gem2mt.html#jt">jt</a> index of sampled point (for
+sampling scripts) </h4>
+  <h4> <a href="gm_gem2mt.html#jdd">jdd</a> current index of diffusing
+DC </h4>
+  <h4> <a href="gm_gem2mt.html#jdi">jdi</a> current index of diffusing
+IC</h4>
+  <h4> <a href="gm_gem2mt.html#ide">ide</a> current index of diffusing
+electrolyte </h4>
+  <h4> <a href="gm_gem2mt.html#ct">ct</a> actual time iterator </h4>
+  <h4> <a href="gm_gem2mt.html#rei5">rei5</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#cTt">cTt</a> current value of T </h4>
+  <h4> <a href="gm_gem2mt.html#cPt">cPt</a> current value of P </h4>
+  <h4> <a href="gm_gem2mt.html#cVt">cVt</a> current value of V</h4>
+  <h4> <a href="gm_gem2mt.html#cTaut">cTaut</a> current physical time </h4>
+  <h4> <a href="gm_gem2mt.html#dTau">dTau</a> current time step value</h4>
+  <h4> <a href="gm_gem2mt.html#oTau">oTau</a> old time step value</h4>
+  <h4> <a href="gm_gem2mt.html#ref2">ref2</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#ref3">ref3</a> reserved </h4>
+  <h4> <a href="gm_gem2mt.html#ref4">ref4</a> reserved </h4>
+  <h4> <a href="gm_integ.html#I_allx">I_allx</a> Array of
+intermediate
 argument values during calculations</h4>
-  <h4> <a href="gm_integ.html#I_ally">I_ally</a> Array of intermediate
+  <h4> <a href="gm_integ.html#I_ally">I_ally</a> Array of
+intermediate
 function values during calculations</h4>
-  <h4> <a href="gm_integ.html#Iallst">Iallst</a> Array of intermediate
+  <h4> <a href="gm_integ.html#Iallst">Iallst</a> Array of
+intermediate
 step (increment) values during calculations</h4>
-  <h4> <a href="gm_integ.html#Iallpr">Iallpr</a> Array of intermediate
+  <h4> <a href="gm_integ.html#Iallpr">Iallpr</a> Array of
+intermediate
 order values during calculations</h4>
   <h4> <a href="gm_integ.html#IPstr">IPstr</a> ! String buffer </h4>
   <h4> <a href="gm_integ.html#IGexpr">IGexpr</a> Number of (diff)
@@ -3336,7 +3691,8 @@ differential equations of the Cochy problem</h4>
 in the database</h4>
   <h4> <a href="gm_integ.html#IGName">IGName</a> Full name of
 the integration problem</h4>
-  <h4> <a href="gm_integ.html#IGbgen">IGbgen</a> Integration interval
+  <h4> <a href="gm_integ.html#IGbgen">IGbgen</a> Integration
+interval
 [x0:x]</h4>
   <h4> <a href="gm_integ.html#IGeps">IGeps</a> Required maximal
 deviation of calculations</h4>
