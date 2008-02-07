@@ -261,55 +261,55 @@ enum dcomp_objects {                  // work objects
 enum DC_CNTRL_CODES {
     //Codes for methods of calculation of DC thermod. parameters
     CTPM_CPT = 'C',  /* on the basis of empirical heat capacity equation Cp=f(T),
-                    used for DCOMP and REACDC definitions (solid, liquid, gaseous
-                     substances and aqueous species). */
+                    used for DComp and ReacDC definitions (solid, liquid, gaseous
+                     substances and aqueous species) */
     CTPM_HKF = 'H',  /* on the basis of Helgeson-Kirkham-Flowers equation of state
                         (HKF EOS), used for aqueous species (DCOMP) or for reactions
-                        bwtween them (REACDC). */
+                        bwtween them (ReacDC) */
     CTPM_REA = 'K',/*calculation of logK of reactions as they depend functionally
-                       on T and P, used only for REACDC definitions of all phase
+                       on T and P, used only for ReacDC definitions of all phase
                        types of substances. */
     CTPM_EOS = 'S',  /*calculations via general equations of state (reserved) */
     CTPM_ISO = 'I',  /* calculation of parameters for isotopic forms of compounds
                          from fractionation constants and their dependency on T
-                        (after Grichuk,1988); REACDC only. */
+                        (after Grichuk,1988) - ReacDC only */
     CTPM_SOR = 'X',  /* calculations via adsorption or ion exchange constants, using
-                 LFER correlations (Sverjensky 1993,1994) REACDC only (reserved). */
+                 LFER correlations (Sverjensky 1993,1994) - ReacDC only (reserved). */
 
     //Codes for T dependencies of energy parameters'
     // (C) CTPM_CPT
     CTM_CST = 'S',/*calculation of ordinary integral using 11-term Cp=f(T) equations
                      (up to 3 phase transitions or up to 3 Cp=f(T) equations
-                      for a DCOMP definition) */
-    CTM_CHP = 'H', //the same with modifications by Holland&Powell,1998 (minerals);
-    CTM_BER = 'B', // the same with modifications by Berman,1988 (minerals)
-    CTM_FEI = 'F', // Cp=f(T) equation by Fei&Saxena,1986 (reserved)
+                      for a DComp definition) */
+    CTM_CHP = 'H', //the same with modifications by Holland and Powell (1998) (minerals);
+    CTM_BER = 'B', // the same with modifications by Berman (1988) (minerals)
+    CTM_FEI = 'F', // Cp=f(T) equation by Fei and Saxena (1986) (reserved)
     CTM_LGX = 'X', // REACDC: calculation of reaction properties from empirical
                    // function lgK=f(T) in 7-term form obtained from 5-term Cp(T)
     // (H) CTPM_HKF
     CTM_HKF = 'K',//calculation with HKF EOS (for aqueous species) as in SUPCRT92
     CTM_WAT = 'W',/* calculation of H2O water(steam) properties from HGK and LVS
-                        equations of state (also using subroutines of SUPCRT92); */
+                        equations of state (also using subroutines of SUPCRT92) */
     // (K) CTPM_REA
     CTM_LGK = 'L',/* calculation from empirical function lgK=f(T) in 7-term form
-                      (Nordstrom&Munoz,1988) - REACDC only; */
+                      (Nordstrom and Munoz, 1988) - ReacDC only */
     CTM_EK0 = '0', /* one-term extrapolation at dHr = 0 and logK = const added 15.07.03*/
     CTM_EK1 = '1', /* one-term extrapolation (Gu et al.,1994), dGr(T)= const */
-    CTM_EK2 = '2', /* two-term extrapolation Vant Hoff) - REACDC only; */
-    CTM_EK3 = '3',  /*three-term extrapolation (dCpr = const)- REACDC only;*/
+    CTM_EK2 = '2', /* two-term extrapolation Vant Hoff) - ReacDC only */
+    CTM_EK3 = '3',  /*three-term extrapolation (dCpr = const) - ReacDC only */
     CTM_IKZ = 'Z',/* calculation using Lagrange polynomial interpolation over the
-                    array of lgK for several fixed T (P) points (REACDC only). */
+                    array of lgK for several fixed T (P) points (ReacDC only). */
     CTM_DKR = 'R',  /* calculation of lgK of dissociation reactions at elevated TP
-                         from equation: lgK= A + B*RO(H2O) (Frantz & Marshall, 1982)
-                       - REACDC only (reserved); */
+                         from density equation (Marshall and Franck, 1978) - ReacDC only*/
+                       
     CTM_PPE = 'E',  /* Dissociation reaction for PRONSPREP 19.05.98 */
     CTM_MRB = 'Y',  /* Calculation of deltaR with modified Ryzhenko-Bryzgalin
-                       model (added by TW and DK on 3.08.2007 */
+                       model (added by TW and DK on 03.08.2007 */
     // (S) CTPM_EOS
     CTM_CPG = 'C',  /* reserved (FGL) */ //(S) - reserved
     // (I) CTPM_ISO
     CTM_IFG = 'G',  /* calculation of G0 for isotopic forms from equations (Grichuk,
-                      1988) - REACDC only. */
+                      1988) - ReacDC only */
     // (X) CTPM_SOR
     CTM_KAS = 'K',  /* reserved */
     CTM_DAS = 'D',  /* reserved */
@@ -331,15 +331,15 @@ enum DC_CNTRL_CODES {
 
     CPM_VBM  = 'B', /* alloc. array; calculate Birch-Murnaghan (1947) V(T,P) */
     CPM_CEH  = 'E',/*DC molar volume V(T,P) is calculated from isothermal compres-
-                      sibility and isobaric expandability (Holland&Powell,1990); */
+                      sibility and isobaric expansibility (Holland and Powell, 1998) */
     CPM_GAS  = 'G', /*calculation of fugacities of gases from their critical para-
-                      meters and corresponding state theory (FGL-Karpov ea.1995)
-                      (reserved); */
+                      meters and corresponding state theory (FGL-Karpov et al., 1995)
+                      (reserved) */
     // 3. Codes used together with calculations by modified HKF EOS:
     // CTPM_HKF
     CPM_HKF  = 'F',/*account for pressure up to 5 kbar by HKF (Tanger,Helgeson,1988)*/
-    CPM_AKI  = 'A', /*calculation of partial molal volumes for aqueous non-polar species 
-                      using EOS (Akinfiev,Diamond 2003) */
+    CPM_AKI  = 'A', /*calculation of partial molal volumes for aqueous nonelectrolyte species 
+                      using EOS (Akinfiev and Diamond, 2003) */
     CPM_PCR  = 'P',  /* PARCOR estimation of HKF EOS params 19.05.98 */
      // Added 5.03.2005 by KD for CORK EoS (D.Dolejs, Th.Wagner)
     CPM_PRSV = 'R', /* Peng-Robinson EoS calculation added by Th.Wagner in July 2006 */
@@ -347,7 +347,7 @@ enum DC_CNTRL_CODES {
     // CTPM_REA
     CPM_INK  = 'Z', /* calculation using Lagrange polinomial interpolation over
                      the array  of lgK(T,P). */
-    CPM_EMP  = 'S'  /* calculation from CG2004 Equation of State */
+    CPM_EMP  = 'S'  /* calculation from Churakov-Gottschalk (2003) Equation of State */
     /*4. Codes for calculations of pressure impact on properties derived via
       REACDC lgK functions.
       K - V=f(T,P) equation in the form (Dorogokupets et.al.,1988);

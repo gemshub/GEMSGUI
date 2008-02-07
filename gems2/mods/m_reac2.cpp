@@ -1381,7 +1381,7 @@ TReacDC::MFDcalc( double TK, double *H2Oprop, double *MFDcoef, double *ReactProp
 	double a, b, c, d, e, f, g;
 	double R_C = 8.31451;
 	double RHO, ALP, dALPdT, BET, dRHOdT, d2RHOdT2, dRHOdP;
-	double logK, dGr, dSr, dHr, dCPr, dVr, dG298;
+	double logK, dGr, dSr, dHr, dCPr, dVr;
 	double J, dJ, d2J;
 
 	RHO = H2Oprop[0];

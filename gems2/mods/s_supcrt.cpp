@@ -1253,7 +1253,8 @@ void
 TSupcrt::load(int phase, WATERPARAM& wp)
 {
     if( !phase )
-    {   // liquid state
+    {   // single phase region or vapor at Psat
+    	// added water ideal gas properties (TW, 06.02.2008)
         wp.Aw[0]     = wr.Aw;
         wp.Gw[0]     = wr.Gw;
         wp.Sw[0]     = wr.Sw;
@@ -1277,9 +1278,12 @@ TSupcrt::load(int phase, WATERPARAM& wp)
         wp.Speedw[0] = wr.Speedw;
         wp.Viscw[0]  = wr.Viscw;
         wp.Visckw[0] = wr.Visckw;
+        wp.Gigw[0]   = id.gi;
+        wp.Sigw[0]   = id.si;
+        wp.Cpigw[0]  = id.cpi;
     }
     else
-    {   // gas state
+    {   // liquid at Psat
         wp.Aw[1]     = wl.Aw;
         wp.Gw[1]     = wl.Gw;
         wp.Sw[1]     = wl.Sw;
@@ -1303,15 +1307,11 @@ TSupcrt::load(int phase, WATERPARAM& wp)
         wp.Speedw[1] = wl.Speedw;
         wp.Viscw[1]  = wl.Viscw;
         wp.Visckw[1] = wl.Visckw;
+        wp.Gigw[1]   = id.gi;
+        wp.Sigw[1]   = id.si;
+        wp.Cpigw[1]  = id.cpi;
     }
-    // Added by DK and TW for implementation of Akinfiev (2003) and other models for non-polar species
-    wp.Aw[2]     = id.ai;
-    wp.Gw[2]     = id.gi;
-    wp.Sw[2]     = id.si;
-    wp.Uw[2]     = id.ui;
-    wp.Hw[2]     = id.hi;
-    wp.Cvw[2]    = id.cvi;
-    wp.Cpw[2]    = id.cpi;
+    
 }
 
 //--------------------------------------------------------------------//

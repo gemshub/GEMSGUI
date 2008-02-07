@@ -579,22 +579,26 @@ TDComp::BirchMurnaghan( double Pref, double P, double Tref, double T, double v0,
 
 
 //-----------------------------------------------------------------
-// calculation of partial molal volumes for aqueous non-polar species 
-//  using EOS (Akinfiev,Diamond 2003) provided by TW 30.01.2008
+// calculation of partial molal volumes for aqueous nonelectrolyte species 
+// using EOS (Akinfiev and Diamond, 2003) provided by TW 30.01.2008
 //
 void TDComp::calc_akinf( int q, int p )
 {
 	double CaltoJ = cal_to_J;
 	// calculate infinite dilution properties of aqueous species at T and P of interest
-	double Pbar, Tk, rho, alp, bet, dalpT, Tr = 298.15, Pr = 1.0, R_CONST = 8.31451;
-	double Gig, Hig, Sig, CPig, Gw, Sw, CPw;
+	double Pbar, Tk, rho, alp, bet, dalpT, dH0k;
+	double Tr = 298.15, Pr = 1.0, R_CONST = 8.31451;
+	double Gig, Sig, CPig, Gw, Sw, CPw;
 	double Geos, Veos, Seos, CPeos, Heos;
 	double Gids, Vids, Sids, CPids, Hids;
 	double Geos298, Veos298, Seos298, CPeos298, Heos298;
+	
+	dH0k = (-182161.88);  // enthapy of ideal gas water at 0 K
 			
 	// Properties of water at Tr,Pr (25 deg C, 1 bar) from SUPCRT92 routines
-	Gig = -228526.66;  // adopted H298 for H2O ideal gas from NIST-TRC database
-	Sig = 188.72683;  // S298 of H2O ideal gas consistent with NIST-TRC database
+	// adopted H2O ideal gas data from NIST-TRC database
+	Gig = -228526.66;
+	Sig = 188.72683;  
 	CPig = 33.58743;
 	Gw = -237181.38;
 	Sw = 69.92418;
@@ -614,22 +618,22 @@ void TDComp::calc_akinf( int q, int p )
     Sids = aW.twp->S -= Seos298;
 //  CPids = aW.twp->Cp -= CPeos298;
     CPids = aW.twp->Cp;
-    Hids = aW.twp->H -= Heos298;
-    
-    // Properties of water at T,P
+    Hids = aW.twp->H -= Heos298;    
+ 
+    // Properties of water at T,P of interest, modified 06.02.2008 (TW)
 	Tk = aW.twp->T; 
 	Pbar = aW.twp->P;
-	Gig = aWp.Gw[2]*R_CONST*Tk + (-182161.88);  // converting normalized ideal gas values
-	Sig = aWp.Sw[2]*R_CONST;
-	CPig = aWp.Cpw[2]*R_CONST;
-	Gw = aWp.Gw[0]*CaltoJ;
-	Sw = aWp.Sw[0]*CaltoJ;
-	CPw = aWp.Cpw[0]*CaltoJ;
+	Gig = aWp.Gigw[aSpc.isat]*R_CONST*Tk + dH0k;  // converting normalized ideal gas values
+	Sig = aWp.Sigw[aSpc.isat]*R_CONST;
+	CPig = aWp.Cpigw[aSpc.isat]*R_CONST;
+	Gw = aWp.Gw[aSpc.isat]*CaltoJ;
+	Sw = aWp.Sw[aSpc.isat]*CaltoJ;
+	CPw = aWp.Cpw[aSpc.isat]*CaltoJ;
 	rho = aSta.Dens[aSpc.isat];
-	alp = aWp.Alphaw[0];
-	bet = aWp.Betaw[0];
-	dalpT = aWp.dAldT[0];
-
+	alp = aWp.Alphaw[aSpc.isat];
+	bet = aWp.Betaw[aSpc.isat];
+	dalpT = aWp.dAldT[aSpc.isat];
+        
 	Akinfiev_EOS_increments(Tk, Pbar, Gig, Sig, CPig, Gw, Sw, CPw, rho, alp, bet, dalpT, q,
 			           Geos, Veos, Seos, CPeos, Heos );	
 	
@@ -641,9 +645,9 @@ void TDComp::calc_akinf( int q, int p )
 	aW.twp->S = Sids + Seos;
     aW.twp->Cp = CPids + CPeos;
     aW.twp->H = Hids + Heos;
-    
 }
-// Implementation of calculation of hydration properties of a gas (Akinfiev & Diamond, 2003)
+
+// Implementation of calculation of hydration properties of nonelectrolytes (Akinfiev and Diamond, 2003)
 void 
 TDComp::Akinfiev_EOS_increments(double Tk, double P, double Gig, double Sig, double CPig, 
 		double Gw, double Sw, double CPw, double rho, double alp, double bet, double dalpT, int q, 

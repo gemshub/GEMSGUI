@@ -92,7 +92,7 @@ typedef struct
 
     *TCint, // Lower and upper T limits for Cp=f(T) equation [NeCp][2]
     *Cp,    // Coeffs of Cp=f(T) (J,mole,K), one column per equation [MAXCPCOEF][NeCp] 
-    *CpFS,  // Empirical coefficients for non-polar aq solutes in Akinfiev etc. [MAXCPFSCOEF][NeCp]
+    *CpFS,  // Empirical coefficients for nonelectrolyte aqueous solutes in Akinfiev etc. [MAXCPFSCOEF][NeCp]
     *HKFc,  // Empirical coefficients of HKF EOS [MAXHKFCOEF]
     *Vt,    // Coefficients of mV=f(T,P) [MAXVTCOEF]
     *CPg,   // Critical parameters (for FGL)?[MAXCRITPARAM]
