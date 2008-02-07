@@ -624,8 +624,10 @@ TReacDC::RecCalc( const char* key )
     db->SetStatus(ONEF_);   //  Experimental - trying to bugfix! 13.01.05
 }
 
-//Calc thermodynamic values vedushego DC of REACDC for T,P
-//that giv from twp. Result set to twp.
+// Calculation of thermodynamic properties of reaction and reaction-defined
+//    DC for T,P of interest
+//  Input data are loaded into tpwork structure, results extracted from 
+//    that structure. RCthermo() is recursive (up to 6 levels).
 //
 void
 TReacDC::RCthermo( int q, int p )
@@ -644,7 +646,7 @@ TReacDC::RCthermo( int q, int p )
 
 // if( CE != CTM_MRB )  // Provisional for MRB model - DK on 06.08.07
     if( fabs( aW.twp->T - 298.15 ) < 0.01 && fabs(aW.twp->P-1.) < 0.01 )
-    {
+    {   // standard conditions (Tr,Pr) 
         aW.twp->K = rcp->Ks[0];
         aW.twp->lgK = rcp->Ks[1];
         aW.twp->dG =  rcp->Gs[0];
@@ -670,10 +672,10 @@ TReacDC::RCthermo( int q, int p )
 
     if( CM == CTPM_HKF || CE == CTM_MRB || CE == CTM_DKR )
     {
-        // calculate water properties from SUPCRT subroutines
+        // calculate water properties from SUPCRT subroutines, if necessary
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
-                ( aW.twp->P > 1e-4 && fabs( aW.twp->P - aSta.Pres ) > 0.001 ))
-        {  // calculate water from HGK EoS
+               /* ( aW.twp->P > 1e-4 && */ fabs( aW.twp->P - aSta.Pres ) > 0.001 ) // )
+        {  // calculate water properties from HGK EoS
              aSta.Temp = aW.twp->TC;
              aSta.Pres = aW.twp->P;
              TSupcrt supCrt;
@@ -690,11 +692,11 @@ TReacDC::RCthermo( int q, int p )
         aW.twp->wBet  = aWp.Betaw[aSpc.isat];
     }
     w_dyn_new();
-    /*test the component of reaction and calculate its t/d properties*/
+    // test the component of reaction and calculate its t/d properties
     for( j=0; j<rc[q].nDC; j++ )
     {
         strncpy( dckey, rc[q].DCk[j], DC_RKLEN );  // Override off !!!
-/* !!!!!!!! except "any"=* field in data base record */
+// !!!!!!!! except "any"=* field in data base record 
         aW.ods_link( p+1 );
         /* clear new TPwork structure */
         aW.set_zero( p+1 );
@@ -727,7 +729,7 @@ TReacDC::RCthermo( int q, int p )
             aW.twp->Pst = rc[q+1].Pst;
             aW.twp->TCst = rc[q+1].TCst;
             aW.twp->T = aW.twp->TC + C_to_K;
-            /* Recursive call RCthermo()! */
+            // Recursive call of RCthermo()! 
             RCthermo( q+1, p+1 );
             break;
         case SRC_FICT:   /* fictive component */
@@ -741,7 +743,7 @@ TReacDC::RCthermo( int q, int p )
             aW.twp->TCst = aDC->dcp->TCst;
             aW.twp->T = aW.twp->TC + C_to_K;
             aDC->DCthermo( 0, p+1 ); // calculate properties at T,P
-            aW.WW(p).P = aW.twp->P;  /* !!!!!!return P on KNP */
+            aW.WW(p).P = aW.twp->P;  // !!!!!!return P on Psat curve
             break;
         case SRC_NEWDC: /* new component */
             aW.twp->pSD = SRC_NEWDC;

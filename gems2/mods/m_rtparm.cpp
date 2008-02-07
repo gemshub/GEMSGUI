@@ -614,7 +614,7 @@ TRTParm::RecCalc( const char *key )
         /* Set results to arrays */
 //        aW.ods_link(0);
         if( P_old < 1e-6 && rpp->P[j] < 1e-6 )
-        {  /* set precision calc by TNP*/
+        {  // Set calculated pressure if it was zero in RTparam record 
             rpp->P[j] = aW.twp->P;  // ???????
         }
         // calculate equations of  data
