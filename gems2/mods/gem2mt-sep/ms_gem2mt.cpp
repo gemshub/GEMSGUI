@@ -162,7 +162,7 @@ void TGEM2MT::from_text_file(fstream& ff)
            break;
    case 2: rdar.readArray( "PvGrid", &mtp->PvGrid, 1, 1);
            break;
-   case 3: // rdar.readArray( "Size", &mtp->xC, 3);
+   case 3: rdar.readArray( "Size", &mtp->nC, 1);
            //  mtp->nC = mtp->xC*mtp->yC*mtp->zC;
            break;
    case 4: rdar.readArray( "nFD", &mtp->nFD, 1);

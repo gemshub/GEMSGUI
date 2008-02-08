@@ -50,7 +50,7 @@ typedef struct
    PvSIA,    // Use smart initial approximation in GEM IPM (+); SIA internal (*); AIA (-)
 
      // Controls on operation
-   PsMode,  // Code of GEM2MT mode of operation { S F A D T }
+   PsMode,  // Code of GEM2MT mode of operation { S F A D T W V }
 //  Status and control flags (+ -)
    gStat,  // GEM2MT generation status: 0 -indefinite; 1 on-going generation run;
         //  2 - done generation run; 3 - generation run error (+ 5: the same in stepwise mode)

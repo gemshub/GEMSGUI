@@ -144,6 +144,7 @@ gems2/mods/gem2mt-sep/test/testW.dat -text
 gems2/mods/gemipm/FMT-Bridge/databr.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/datach.h svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/FMT-Bridge/m_const.h svn_keywords=Author+Date+Id+Revision
+gems2/mods/gemipm/FMT-Bridge/m_param.h -text
 gems2/mods/gemipm/FMT-Bridge/node.h -text
 gems2/mods/gemipm/FMT-Bridge/nodearray.h -text
 gems2/mods/gemipm/FMT-Bridge/particlearray.h -text
@@ -152,8 +153,12 @@ gems2/mods/gemipm/Makefile.MinGW -text
 gems2/mods/gemipm/Makefile.mod_lin svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.mod_w32 svn_keywords=Author+Date+Id+Revision
 gems2/mods/gemipm/Makefile.w32 svn_keywords=Author+Date+Id+Revision
+gems2/mods/gemipm/doc/html/GEMS1.PNG -text
+gems2/mods/gemipm/doc/html/gemipm2k-exm.html -text
 gems2/mods/gemipm/doc/html/gemipm2k-inp.html -text
 gems2/mods/gemipm/doc/html/gemipm2k-man.html -text
+gems2/mods/gemipm/doc/html/gemipm2k-ref.html -text
+gems2/mods/gemipm/doc/html/index.html -text
 gems2/mods/gemipm/doc/txt/PGIcompile.txt -text
 gems2/mods/gemipm/doc/txt/dbr-dat-doc.txt -text
 gems2/mods/gemipm/doc/txt/dch-dat-doc.txt -text

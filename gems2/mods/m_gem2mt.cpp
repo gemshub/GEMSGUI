@@ -1058,9 +1058,9 @@ void TGEM2MT::RecordPrint( const char* key )
 
 	if( res == VF3_1 )
 	{
-		gstring filename;
+		gstring filename = "GEM2MT-task.dat";
 		if( vfChooseFileSave(window(), filename,
-				   "Please, enter the TGEM2MT work structure file name", "*.mtc" ) )
+				   "Please, enter the TGEM2MT work structure file name", "*.dat" ) )
 		{
 		    if( !access(filename.c_str(), 0 ) ) //file exists
 		        if( !vfQuestion( window(), filename.c_str(),

@@ -76,8 +76,8 @@ void TUnSpace::unsp_eqkey()
     
     TNode::na->pCNode()->NodeStatusCH = NEED_GEM_AIA; // activating GEM IPM for automatic initial
                                       // approximation
- // re-calculating equilibrium by calling GEMIPM
-    TNode::na->GEM_run();
+ // re-calculating equilibria by calling GEMIPM
+    TNode::na->GEM_run( false );
 #endif    
 
 }

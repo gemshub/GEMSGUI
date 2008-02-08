@@ -65,16 +65,17 @@ class TNodeArray : public TNode
     DATABR* (*NodT1);  // array of nodes for current time point
 
     int anNodes;       // Number of allocated nodes
-    int sizeN;		 // Number of nodes along x direction
+    int sizeN;		   // Number of nodes along x direction
     int sizeM;           // Number of nodes along y direction
     int sizeK;           // Number of nodes along z direction
 
     LOCATION size;     // spatial dimensions of the medium ( x, 0, 0 - 1D; x,y,0 - 2D; x,0,z - 2D; x,y,z - 3D )
                        // defines topology of nodes (N of grid points per node): 1D- 2; 2D- 4; 3D- 8 )
                        // relative to coordinate origin (0,0,0) units
-    LOCATION* grid;   // Array of grid point locations, size is anNodes
+    LOCATION* grid;    // Array of grid point locations, size is anNodes
 
-    char* tcNodee;      // Node type codes (see databr.h), size anNodes
+    char* tcNode;      // Node type codes (see databr.h), size anNodes
+    bool* iaNode;      // GEM IA status for all nodes (true: NEED_GEM_AIA, false: NEED_GEM_PIA)
 
     void allocMemory();
     void freeMemory();
@@ -164,6 +165,9 @@ public:
     DATABRPTR* pNodT1() const // get pointer to array of nodes for the current time point
     { return NodT1; }
 
+    bool* piaNode() const // get pointer to IA switches for nodes
+    { return iaNode; }
+    
     // Calls GEM IPM calculation for a node with absolute index ndx
     int RunGEM( int ndx, int Mode );
 
@@ -253,8 +257,8 @@ public:
      double GetNodeMass( int ndx, char type, char tcode, unsigned char ips );
 
      // move a mass m_v from node ndx_from to node ind_to, for particle type
-     void MoveParticleMass( int ndx_from, int ind_to,
-            char type, char tcode, unsigned char ips, double m_v );
+     void MoveParticleMass( int ndx_from, int ind_to, char type, char ComponentMode, 
+    		 char tcode, unsigned char ips, double m_v );
 
 };
 
@@ -313,6 +317,7 @@ public:
 #define node0_mPH( nodex, PHx )  (TNodeArray::na->get_mPH( 0, (nodex), (PHx)))
   // mass of single-component phase with index PHx from T1 node with index nodex
 #define node1_mPH( nodex, PHx )  (TNodeArray::na->get_mPH( 1, (nodex), (PHx)))
+
 
   // amount of solvent/sorbent in phase with index PHx from T0 node with index nodex
 #define node0_xPA( nodex, PHx ) (TNodeArray::na->pNodT0()[(nodex)]->xPA[(PHx)])

@@ -649,7 +649,7 @@ void
 TMulti::SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k, int ipb )
 {
 
-    int j, icat, ian, ic, ia,  index1, index2, ip, NComp, NPar, NPcoef, MaxOrd;
+    int j, icat, ian, /*ic, ia,*/  index1, index2, ip, NComp, NPar, NPcoef, MaxOrd;
     short *aIPx;
     float *aIPc, *aDCc;
     double T, A, B, I, sqI, bgi=0, Z2, lgGam, SumSIT;

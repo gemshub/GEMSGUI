@@ -80,11 +80,11 @@ int TUnSpace::TaskSystemInit( const char *chbr_in1 )
   TNode::na->pCNode()->NodeStatusCH = NEED_GEM_AIA; // activating GEM IPM for automatic initial
                                     // approximation
 // re-calculating equilibrium by calling GEMIPM
-  TNode::na->GEM_run();
+  TNode::na->GEM_run( false );
   // setup some internal data 
   pmu = TProfil::pm->pmp;
   
-  // !!! internaal from Profile Must be cheked
+  // !!! internal from Profile Must be checked
   //    RMULTS* mup;
   for( int ii=0; ii<pmu->FIs; ii++)
   {
@@ -145,7 +145,7 @@ TUnSpace::RecCalc( const char *key )
       {
         analiseArrays();
         if( usp->Pa_Adapt > '1')
-           AdapG();                    // !!!! test Kostin beak ob =0 or ob>Q*0.95
+           AdapG();                    // !!!! test Kostin break ob =0 or ob>Q*0.95
       }
     }
 

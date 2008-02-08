@@ -717,19 +717,19 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
   TPrintArrays  prar(ff);
 
    if( _comment )
-   {  ff << "# GEMIPM2K v. 2.2.0" << endl;
-      ff << "# Prototype 04.12.2007" << endl;
+   {  ff << "# GEMIPM2K v. 2.2.2" << endl;
+      ff << "# Prototype 07.02.2008" << endl;
       ff << "# Comments can be marked with # $ ;" << endl << endl;
-      ff << "# Template for the Gem2mt data" << endl;
+      ff << "# Template for the Gem2mt data file" << endl;
       ff << "# (should be read before the DATACH, the IPM-DAT and DATABR files)" << endl << endl;
       ff << "#Section (scalar): Controls and dimensionalities of the Gem2mt operation" << endl;
    }
    if( _comment )
-      ff << "# Code of GEM2MT mode of operation { S F A D T }" << endl;
+      ff << "# Code of GEM2MT mode of operation { S F A D T V W }" << endl;
    ff << left << setw(17) << "<Mode> " << "\'"<<  mtp->PsMode << "\'"<< endl;
    if( _comment )
-        ff << "# numbers of nodes along x, y, z coordinates" << endl;
-   ff << left << setw(7) << "<Size> " <<   mtp->nC << " 1" << " 1" << endl;
+        ff << "# number of nodes nC (1D mass-transport or box-flux models only)" << endl;
+   ff << left << setw(7) << "<Size> " <<   mtp->nC /* << " 1" << " 1" */ << endl;
    if( _comment )
        ff << "# Maximum allowed number of time iteration steps (default 1000)" << endl;
    ff << left << setw(7) << "<MaxSteps> " <<   mtp->ntM << endl;

@@ -153,15 +153,15 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
   TPrintArrays  prar(ff);
 
    if( _comment )
-   {  ff << "# GEMIPM2K v. 2.2.0" << endl;
-      ff << "# Prototype 04.12.2007" << endl;
+   {  ff << "# GEMIPM2K v. 2.2.2" << endl;
+      ff << "# Prototype 07.02.2008" << endl;
       ff << "# Comments can be marked with # $ ;" << endl << endl;
       ff << "# Template for the Gem2mt data" << endl;
       ff << "# (should be read only after the DATACH, the IPM-DAT and DATABR files)" << endl << endl;
-      ff << "#Section (scalar): Controls and dimensionalities of the Gem2mt operation" << endl;
+      ff << "#Section (scalar): Controls and dimensionalities of the GEM2MT operation" << endl;
    }
    if( _comment )
-      ff << "# Code of GEM2MT mode of operation { S F A D T }" << endl;
+      ff << "# Code of GEM2MT mode of operation { S F A D T W V }" << endl;
    ff << left << setw(17) << "<Mode> " << "\'"<<  mtp->PsMode << "\'"<< endl;
    if( _comment )
         ff << "# numbers of nodes along x, y, z coordinates";
