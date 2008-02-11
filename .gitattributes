@@ -21,6 +21,12 @@ gems2/doc/ChangeLog.andy svn_keywords=Author+Date+Id+Revision
 gems2/doc/ChangeLog.dima svn_keywords=Author+Date+Id+Revision
 gems2/doc/ChangeLog.kostya svn_keywords=Author+Date+Id+Revision
 gems2/doc/ChangeLog.sveta svn_keywords=Author+Date+Id+Revision
+gems2/doc/Descriptions/Activity-Coeffs.doc -text
+gems2/doc/Descriptions/P-corrections.doc -text
+gems2/doc/Descriptions/Readme.1st -text
+gems2/doc/Descriptions/T-corrections-Reac.doc -text
+gems2/doc/Descriptions/T-corrections.doc -text
+gems2/doc/Descriptions/Tpx-corrections-CG-EoS.doc -text
 gems2/doc/GEMS.kdelnk svn_keywords=Author+Date+Id+Revision
 gems2/doc/HOWTO-Build-with-Qt3-on-SUSE10.2.doc.txt -text
 gems2/doc/Helpfiles-chart.txt svn_keywords=Author+Date+Id+Revision
