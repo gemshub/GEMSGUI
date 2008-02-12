@@ -221,7 +221,7 @@ double TMulti::DualChemPot( double U[], float AL[], int N, int j )
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //  This procedure sets kinetic constraints according to a given
 //  concentration units
-//  Needs much more work, elaboration, and perfromance optimization
+//  Needs much more work, elaboration, and performance optimization
 //
 void TMulti::Set_DC_limits( int Mode )
 {

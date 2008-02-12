@@ -45,6 +45,7 @@ class MLineEdit :
 protected:
     void focusOutEvent(QFocusEvent* ev);
     void mousePressEvent(QMouseEvent* e);
+    void keyPressEvent(QKeyEvent* e);
 //    void mouseDoubleClickEvent(QMouseEvent *ev);
 
 protected slots:

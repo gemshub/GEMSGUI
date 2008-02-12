@@ -77,6 +77,11 @@ NewSystemDialog::NewSystemDialog(QWidget* parent, const char* name):
      this, SLOT( CmEdit( QListViewItem *, const QPoint &, int ) ) );
     loadList1();
 
+    connect( ListView1, SIGNAL(
+     doubleClicked( QListViewItem *, const QPoint &, int )  ),
+     this, SLOT( CmEdit( QListViewItem *, const QPoint &, int ) ) );
+    loadList1();
+
     ListView2->setSorting(-1);
     ListView2->setAllColumnsShowFocus(true);
      ListView2->setColumnWidthMode(0, QListView::Manual);
@@ -1379,6 +1384,25 @@ MLineEdit::SetIndex(int ii)
     getData();
     //it->setText( col, val.c_str() );
 }
+
+void
+MLineEdit::keyPressEvent(QKeyEvent* e)
+{
+  int key = e->ascii();
+  if( type != -1 ) // spec simbol
+  {    //if( (key >= 0x21 && key < 0xFF) || key == ' ' )
+      {
+        size_t newIndex = Vals.find(char(key));
+        if( newIndex == gstring::npos )
+            return;
+
+        SetIndex(newIndex);
+        return;   
+     }
+  }
+  QLineEdit::keyPressEvent(e);
+}
+
 
 
 //-------- End of file NewSystemDialog.cpp ----------------------------
