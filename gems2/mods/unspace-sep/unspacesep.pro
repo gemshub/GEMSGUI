@@ -4,13 +4,13 @@
 TEMPLATE	= app
 LANGUAGE        = C++
 TARGET		= unspacesep
-VERSION         = 2.2.0
+VERSION         = 2.2.2
 
 CONFIG		-= qt
 CONFIG		+=  warn_on debug windows
 CONFIG		+= console
 
-DEFINES         += IPMGEMPLUGIN
+DEFINES     += IPMGEMPLUGIN
 
 
 !win32 {
@@ -65,9 +65,9 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_H/node.h \
 #                    $$SUBMOD_H/particlearray.h \
                     $$SUBMOD_H/ms_multi.h \
-	            $$SUBMOD_H/io_arrays.h \
-		    $$GEMIPM_H/m_const.h \
-		    $$GEMIPM_H/m_param.h  \
+	                $$SUBMOD_H/io_arrays.h \
+		            $$GEMIPM_H/m_const.h \
+		            $$GEMIPM_H/m_param.h  \
                     $$NUMERICS_H/tnt_i_refvec.h \
                     $$NUMERICS_H/tnt_array1d.h \
                     $$NUMERICS_H/tnt_array2d.h \
@@ -75,7 +75,7 @@ OBJECTS_DIR       = obj
                     $$NUMERICS_H/jama_cholesky.h \
                     $$NUMERICS_H/jama_lu.h \
                     $$NUMERICS_H/num_methods.h \
-		    ms_unspace.h 
+ 		    		ms_unspace.h 
 
         SOURCES	  +=  $$LIBS_CPP/gstring.cpp  \
                       $$LIBS_CPP/gdatastream.cpp  \
@@ -93,9 +93,9 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_CPP/ipm_chemical3.cpp \
                     $$SUBMOD_CPP/ipm_main.cpp \
                     $$SUBMOD_CPP/ipm_simplex.cpp \
-		    $$SUBMOD_CPP/io_arrays.cpp \
+  				    $$SUBMOD_CPP/io_arrays.cpp \
                     $$MODS_CPP/m_unsp_out.cpp \
                     $$MODS_CPP/m_unsp_stat.cpp \
-		    $$GEMIPM_CPP/ms_param.cpp \
-		    ms_unspace.cpp \
+				    $$GEMIPM_CPP/ms_param.cpp \
+				    ms_unspace.cpp \
                     main.cpp 

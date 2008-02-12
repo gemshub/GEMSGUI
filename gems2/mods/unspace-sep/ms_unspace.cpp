@@ -1,13 +1,9 @@
 //-------------------------------------------------------------------
-// $Id: main.cpp 792 2006-09-19 08:10:41Z gems $
+// $Id: ms_unspace.cpp 792 2006-09-19 08:10:41Z gems $
 //
-// Debugging version of a finite-difference 1D advection-diffusion
-// mass transport model supplied by Dr. Frieder Enzmann (Uni Mainz)
-// coupled with GEMIPM2K module for calculation of chemical equilibria
+// Standalone variant of UnSpace module service functions 
 //
-// Direct access to the TNodeArray class for storing all data for nodes
-//
-// Copyright (C) 2005 S.Dmytriyeva, F.Enzmann, D.Kulik
+// Copyright (C) 2007,2008 S.Dmytrieva, D.Kulik
 //
 //-------------------------------------------------------------------
 
@@ -22,7 +18,7 @@
 //extern bool _comment;
 
 
-TUnSpace* TUnSpace::pm;
+TUnSpace* TUnSpace::pu;
 
 TUnSpace::TUnSpace()
 {
@@ -34,7 +30,8 @@ TUnSpace::TUnSpace()
     na = 0;
 }  
 
-// Reading TUnSpace structure from text file
+// Setting defaults before reading TUnSpace structure from text file
+// 
 void TUnSpace::setup_defaults()
 {
 	usp->Gstat = 0;
@@ -119,9 +116,9 @@ int TUnSpace::TaskSystemInit( const char *chbr_in1 )
   return 0;
 }
 
-//Recalc record structure
+// Calculation of the UnSpace task
 void
-TUnSpace::RecCalc( const char *key )
+TUnSpace::CalcTask( const char *key )
 {
     int nAdapt = 1;
 
@@ -143,7 +140,7 @@ TUnSpace::RecCalc( const char *key )
       }
       if( usp->PsGen[0] == S_ON )
       {
-        analiseArrays();
+        analyseArrays();
         if( usp->Pa_Adapt > '1')
            AdapG();                    // !!!! test Kostin break ob =0 or ob>Q*0.95
       }
@@ -175,17 +172,18 @@ int TUnSpace::ReadTask( const char *unsp_in1 )
   return 1;
 }
 
-// Write TUnSpace structure from file
-int TUnSpace::WriteTask( const char *unsp_in1 )
+// Write TUnSpace data and results to file
+//
+int TUnSpace::WriteTask( const char *unsp_out_file )
 {
- // read GEM2MT structure from file
+ // write UnSpace task setup data to file
   fstream f_log("ipmlog.txt", ios::out|ios::app );
   try
   {
-   fstream ff(unsp_in1, ios::out );
-   ErrorIf( !ff.good() , unsp_in1, "Fileopen error");
+   fstream ff(unsp_out_file, ios::out );
+   ErrorIf( !ff.good() , unsp_out_file, "Fileopen error");
    to_text_file( ff, true);
-   gstring filename = unsp_in1;
+   gstring filename = unsp_out_file;
            filename += ".res";
    fstream ff1( filename.c_str(), ios::out );
    ErrorIf( !ff1.good() , filename.c_str(), "Fileopen error");
@@ -207,7 +205,7 @@ outField TUnSpace_static_fields[25] =  {
  { "Pa_Crit", 1,0 },
  { "Pa_Zcp", 1,0 },
  { "PvSi", 1,0 },
- { "Pa_f_pha", 0,0 }, // default '-' !! ne zabyt` ustanovit` default v konstructore
+ { "Pa_f_pha", 0,0 }, // default '-' !! do not forget to set default in the constructor
  { "Pa_f_mol", 0,0 },
  { "Pa_f_fug", 0,0 },
  { "Pa_f_mfr", 0,0 },
@@ -223,7 +221,7 @@ outField TUnSpace_static_fields[25] =  {
  { "nGB", 1,0 },
  { "nGN", 1,0 },
  { "nGR", 1,0 },
- { "N", 1,0 },  // take from node (will be do not reading)
+ { "N", 1,0 },  // take these dims from TNode (actually no need to read here)
  { "L", 1,0 },
  { "Ls", 1,0 },
  { "Fi", 1,0 }

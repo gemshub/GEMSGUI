@@ -1,13 +1,15 @@
 //-------------------------------------------------------------------
 // $Id: m_unspace.h 861 2007-02-19 11:29:37Z gems $
-// Under construction, to be included in version 3.0 (2004)
-// Declaration of TUnSpace class, config and calculation functions
-// (formerly TUnSpace class rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995-2004 K.Chudnenko, S.Dmytriyeva, D.Kulik
+// Under construction, to be included in version 3.0 (2008)
+// Declaration of standalone variant of TUnSpace class and its methods
+// 
+// Attention: This header differs from m_unspace.h 
+//   The ms_unspace.h and m)unspace.h headers cannot be used together!
+//
+// Copyright (C) 1995,2004,2008 K.Chudnenko, S.Dmytrieva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
-// Uses: GEM-Vizor GUI DBMS library, gems/lib/gemvizor.lib
 //
 // This file may be distributed under the terms of the GEMS-PSI
 // QA Licence (GEMSPSI.QAL)
@@ -23,7 +25,8 @@
 
 
 //============================================================================
-// internal
+// internal definitions
+//
 enum grr_constants { // gstring len for graph
     MAXAXISNAME = 9,
     MAXGSNAME = 70,
@@ -62,7 +65,7 @@ typedef enum {
 
 
 typedef struct
-{ // Description  UnSpace
+{ // Description of UnSpace data structure
     char
     //  the same record key as in Proces
     name[MAXFORMULA],      // Full name of UnSpace task
@@ -310,13 +313,13 @@ UNSPACE;
 
 
 
-// Current UnSpace
+// Current UnSpace instances
 class TUnSpace 
 //: public TCModule
 {
     UNSPACE us[2];
 
-// !!! internaal from Profile
+// !!! internaal data extracted fron GEMS modelling project
 //    RMULTS* mup;
    short mup_Laq;     // LO  - of DC in aqueous phase
    short mup_Pg;      // PG  - of DC in gaseous phase
@@ -351,7 +354,7 @@ protected:
 	   
 //    void keyTest( const char *key );
 
-    // internal my
+    // internal methods
     void unsp_eqkey();           // calculate EqStat
     void setPhaseAssemb();       // set phase groups lists & counters
     void work_dyn_kill();
@@ -368,16 +371,13 @@ protected:
     void build_nPG_list();
     void init_analyse();
 
-
    //calc part big modules ( prosledit` ispol`zovanie, reorganizovat`)
     // kirpichiki dlya RecCalc
-    void analiseArrays();
+    void analyseArrays();
     void AdapG();                    // output to array  UnDCA
     void buildTestedArrays();
 
-
-
-    //test switches for calc flags & types, not calc all  !!!!!!
+    //test switches for calculation flags & types, not calculate all  !!!!!!
 
     // must be changed
      int filters( int k );  // add new filters : f_PhA ...
@@ -390,9 +390,9 @@ protected:
       void kvant_index(float per,int N,double *mas, short type /**ind*/);
       int sel_parg( short *sv );
 
-    // calc part  ( inernal Kostya, not be changed )
-    void Un_criteria();             // calc pay off matrix & criter.
-    void  NexT(int J );              // Next point space uncertainty
+    // calculation part  ( inernal from Kostya, not to be changed )
+    void Un_criteria();             // calculates payoff matrix & criteria
+    void  NexT(int J );              // Next point in space uncertainty
     void UNIFORM0( int reg );
     void BELOV(int QT, int NG, float *OVB);
     int  WL(int i,int j,int QT);
@@ -419,7 +419,7 @@ protected:
 
 public:
 
-	// write/read unspace structure	   
+	// write/read the UnSpace structure data	   
 	void to_text_file( fstream& ff, bool with_comments );
 	void from_text_file(fstream& ff);
     void result_to_text_file( fstream& ff, bool with_comments );
@@ -428,7 +428,7 @@ public:
 	int WriteTask( const char *unsp_in1 );
 
 	
-    static TUnSpace* pm;
+    static TUnSpace* pu;
 
     UNSPACE *usp;
 
@@ -445,7 +445,7 @@ public:
 //    void RecInput( const char *key );
 //    void MakeQuery();
 //    int RecBuild( const char *key, int mode = VF_UNDEF );
-    void RecCalc( const char *key );
+    void CalcTask( const char *key );
 
 
 };

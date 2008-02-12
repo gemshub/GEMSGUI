@@ -400,7 +400,7 @@ gems2/mods/unspace-sep/test/Portlandit-dat.lst -text
 gems2/mods/unspace-sep/test/Portlandit-dbr-0-0000.dat -text
 gems2/mods/unspace-sep/test/Portlandit-dch.dat -text
 gems2/mods/unspace-sep/test/Portlandit-ipm.dat -text
-gems2/mods/unspace-sep/test/test1.uns -text
+gems2/mods/unspace-sep/test/test1-uns.dat -text
 gems2/mods/unspace-sep/unspace.bat -text
 gems2/mods/unspace-sep/unspacesep.pro -text
 gems2/mods/v_ipnc.cpp svn_keywords=Author+Date+Id+Revision
