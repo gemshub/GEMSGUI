@@ -80,7 +80,8 @@ class NewSystemDialog : public NewSystemDialogData
    int pStepwiseCheck;
    int pRaisedCheck;
 
-
+   void setGex(char code, QString& val );
+   
 public:
     static NewSystemDialog* pDia;
 

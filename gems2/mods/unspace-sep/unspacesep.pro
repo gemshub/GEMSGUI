@@ -61,9 +61,9 @@ OBJECTS_DIR       = obj
                     $$MODS_H/s_fgl.h \
                     $$SUBMOD_H/databr.h \
                     $$SUBMOD_H/datach.h \
-                    $$SUBMOD_H/nodearray.h \
+#                    $$SUBMOD_H/nodearray.h \
                     $$SUBMOD_H/node.h \
-                    $$SUBMOD_H/particlearray.h \
+#                    $$SUBMOD_H/particlearray.h \
                     $$SUBMOD_H/ms_multi.h \
 	            $$SUBMOD_H/io_arrays.h \
 		    $$GEMIPM_H/m_const.h \
@@ -82,10 +82,10 @@ OBJECTS_DIR       = obj
                     $$NUMERICS_CPP/num_methods.cpp \
                     $$MODS_CPP/s_fgl.cpp \
                     $$MODS_CPP/s_fgl2.cpp \
-                    $$SUBMOD_CPP/nodearray.cpp \
+#                    $$SUBMOD_CPP/nodearray.cpp \
                     $$SUBMOD_CPP/node.cpp \
                     $$SUBMOD_CPP/node_format.cpp \
-                    $$SUBMOD_CPP/particlearray.cpp \
+#                    $$SUBMOD_CPP/particlearray.cpp \
                     $$SUBMOD_CPP/ms_multi_file.cpp \
                     $$SUBMOD_CPP/ms_multi_format.cpp \
                     $$SUBMOD_CPP/ipm_chemical.cpp \

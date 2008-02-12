@@ -292,6 +292,15 @@
                         <property name="rootIsDecorated">
                             <bool>true</bool>
                         </property>
+                        <property name="toolTip" stdset="0">
+                            <string>rrrrrrrrrrrr</string>
+                        </property>
+                        <property name="whatsThis" stdset="0">
+                            <string>Test
+
+FFFf
+ttttttt</string>
+                        </property>
                     </widget>
                 </grid>
             </widget>

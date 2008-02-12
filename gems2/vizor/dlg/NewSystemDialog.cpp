@@ -29,6 +29,7 @@ const char *GEMS_HOWTO_HTML = "ge_howto";
 #include <qapplication.h>
 #include <qheader.h>
 #include <qtabwidget.h>
+#include <qwhatsthis.h>
 
 
 #include "NewSystemDialog.h"
@@ -241,6 +242,7 @@ NewSystemDialog::LoadMenu()
     imgFile = imgDir + "help.png";
     new QToolButton( QPixmap(imgFile.c_str()), "Help", 0,
                      this, SLOT(CmHelp()), toolBar, "help" );
+    QToolButton * btn = QWhatsThis::whatsThisButton(toolBar );
    toolBar->addSeparator();
    toolBar->addSeparator();
 
@@ -1084,6 +1086,29 @@ void NewSystemDialog::loadList1()
     ListView1->setFocus();
 }
 
+void NewSystemDialog::setGex(char code, QString& val )
+{
+  double dat = val.toDouble();
+  double tK = TProfil::pm->tpp->TK;
+  
+  switch( code )
+  {
+     case 'J': //dat *=1.; J/mol
+           break;   
+     case 'k': dat *=1000.; // kJ/mol
+           break;   
+     case 'p': dat *=lg_to_ln*R_CONSTANT*tK; // pK
+           break;   
+     case 'l': dat *=(-1)*lg_to_ln*R_CONSTANT*tK; // logK
+           break;   
+     case 'n': dat *=(-1)*R_CONSTANT*tK; // lnK
+           break;   
+     case 'm': dat *=R_CONSTANT*tK; // mol/mol
+           break;   
+  }
+ val = QString("%1").arg(dat);	
+}
+
 void NewSystemDialog::saveList1()
 {
    if( colEdit )
@@ -1091,7 +1116,9 @@ void NewSystemDialog::saveList1()
 
     QListViewItem* pPhase = item1->firstChild();
     QListViewItem* pComp;
+    QString val;
     const char *col;
+    char cType = 'J';
     vstr buf(30);
     int ii, nPh =0, nDc =0;
 
@@ -1105,8 +1132,9 @@ void NewSystemDialog::saveList1()
          {
               case 0:
               case 1:
-              case 2:
-              case 6: // no edited
+              case 2: // no edited
+                  break;
+              case 6: cType = col[0];
                  break;
               case 3: if( !aObj[o_sypcl].IsNull() )
                        aObj[o_sypcl].SetString( col, nPh );
@@ -1117,8 +1145,11 @@ void NewSystemDialog::saveList1()
               case 5: if( !aObj[o_syphm].IsNull() )
                        aObj[o_syphm].SetString( col, nPh );
                       break;
-              case 7: if( !aObj[o_syyof].IsNull() )
-                       aObj[o_syyof].SetString( col, nPh );
+              case 7: 
+            	      val = col;
+            	      setGex( cType, val );
+            	      if( !aObj[o_syyof].IsNull() )
+                       aObj[o_syyof].SetString( val, nPh );
                       break;
            }
       }
@@ -1131,8 +1162,9 @@ void NewSystemDialog::saveList1()
             {
               case 0:
               case 1:
-              case 2:
-              case 6: // no edited
+              case 2:// no edited
+                  break;
+              case 6: cType = col[0];
                  break;
               case 3: if( !aObj[o_sydcl].IsNull() )
                        aObj[o_sydcl].SetString( col, nDc );
@@ -1143,8 +1175,10 @@ void NewSystemDialog::saveList1()
               case 5: if( !aObj[o_syxed].IsNull() )
                        aObj[o_syxed].SetString( col, nDc );
                       break;
-              case 7: if( !aObj[o_sygex].IsNull() )
-                       aObj[o_sygex].SetString( col, nDc );
+              case 7: val = col;
+    	              setGex( cType, val );
+             	      if( !aObj[o_sygex].IsNull() )
+                       aObj[o_sygex].SetString( val, nDc );
                       break;
               case 8: if( !aObj[o_syrsc].IsNull() )
                        aObj[o_syrsc].SetString( col, nDc );
