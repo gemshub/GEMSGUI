@@ -330,7 +330,7 @@ protected:
 
    //calc part big modules ( prosledit` ispol`zovanie, reorganizovat`)
     // kirpichiki dlya RecCalc
-    void analiseArrays();
+    void analyseArrays();
     void AdapG();                    // output to array  UnDCA
     void buildTestedArrays();
 

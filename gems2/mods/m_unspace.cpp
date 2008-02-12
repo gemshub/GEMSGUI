@@ -1144,7 +1144,7 @@ TUnSpace::RecCalc( const char *key )
       aMod[RT_UNSPACE].ModUpdate("UnSpace data analysing in progress...");
       if( usp->PsGen[0] == S_ON )
       {
-        analiseArrays();
+        analyseArrays();
         if( usp->PsGraph != S_OFF )
            calc_graph();
 

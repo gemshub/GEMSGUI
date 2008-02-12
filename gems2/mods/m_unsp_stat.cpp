@@ -483,7 +483,7 @@ void  TUnSpace::NexT(int J )
 //=========================================================================
 
 // calculated pay-off matrix  && analise data
-void TUnSpace::analiseArrays( )
+void TUnSpace::analyseArrays( )
 {
      int k, Ngr;
 
@@ -501,8 +501,8 @@ void TUnSpace::analiseArrays( )
      {
        case UNSP_OF_A:
        case UNSP_OF_B:
-       default:   Un_criteria( );     // biuld payoff matrix and analise
-                  out_QT( Ngr );  // put data for resalt arrays
+       default:   Un_criteria( );     // biuld payoff matrix and analyse
+                  out_QT( Ngr );  // put data for result arrays
                   break;
 
      }

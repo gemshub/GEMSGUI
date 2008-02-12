@@ -3,7 +3,7 @@
 //
 // Implementation of NewSystemDialog class
 //
-// Copyright (C) 1996-2002 S.Dmytriyeva
+// Copyright (C) 1996,2007 S.Dmytrieva
 // Uses  gstring class (C) A.Rysin 1999
 //
 // This file is part of the GEM-Vizor library which uses the

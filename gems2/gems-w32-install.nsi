@@ -39,11 +39,11 @@ Section "GEMS2 (required)"
   File "C:\GEMS222inst\rungems2.bat"
   CreateDirectory "$INSTDIR\program"
   SetOutPath $INSTDIR\program
-  Delete "$INSTDIR\program\qt*.dll"
+  Delete "$INSTDIR\program\*.dll"
  ; Put file there
     File "C:\GEMS222inst\program\gems2.exe"
     File "C:\GEMS222inst\program\gems2.ico"
- ; Set the right version of qt*.dll below
+ ; Set the right version of *.dll below
  ;    File "C:\GEMS222inst\program\qtmt336.dll"
  ;   File "C:\GEMS222inst\program\cc3260mt.dll"
  ;   File "C:\GEMS222inst\program\stlpmt45.dll" 
