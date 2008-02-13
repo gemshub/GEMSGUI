@@ -481,7 +481,7 @@ cerr << "trunc dummy" << endl;
 }
 
 //-------------------------------------------------------------
-// TDBKey  - workin with DB record key
+// TDBKey  - working with DB record key
 //-------------------------------------------------------------
 
 // default configuration
@@ -489,7 +489,7 @@ TDBKey::TDBKey( unsigned char nRkflds, const unsigned char* rkfrm ):
         rkFlds( nRkflds )
 {
     ErrorIf( rkFlds<=0 || rkFlds>MAXRKFRMSTR,
-             "TDBKey", "Illegan number fields in key.");
+             "TDBKey", "Error: Invalid number of fields in record key (1).");
     rkLen = new unsigned char[rkFlds];
     rkInd = new unsigned char[rkFlds];
     int i;
@@ -520,7 +520,7 @@ TDBKey::TDBKey(fstream& in_stream)
     in_stream >> tmp;
     rkFlds = tmp;
     ErrorIf( rkFlds<=0 || rkFlds>MAXRKFRMSTR,
-             "TDBKey", "Illegan number fields in key.");
+             "TDBKey", "Error: Invalid number of fields in record key (2).");
     rkLen = new unsigned char[rkFlds];
     rkInd = new unsigned char[rkFlds];
 //    f.read( (char*)rkLen, rkFlds*sizeof(unsigned char) );
