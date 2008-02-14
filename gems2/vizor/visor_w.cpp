@@ -79,7 +79,7 @@ const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 #ifdef __unix
 const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.2.2-PSI (Linux/MacOS)";
 #ifdef __APPLE__
-const int GEMS_DEFAULT_FONT_SIZE = 10;
+const int GEMS_DEFAULT_FONT_SIZE = 12;
 #else
 const int GEMS_DEFAULT_FONT_SIZE = 10;
 #endif
@@ -585,7 +585,7 @@ int TVisorImp:: getCharWidth() const
 int TVisorImp:: getCharHeight() const
 {
 #ifdef __unix
-    return charHeight + 2;
+    return charHeight + 4;//2
 #else
     return charHeight + 4;
 #endif

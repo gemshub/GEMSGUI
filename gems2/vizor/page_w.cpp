@@ -450,20 +450,20 @@ TField::TField(QWidget* p, const FieldInfo& fi, int xx0, int yy0,
 
     if( Lab )
     {
-        QLabel* p = new QLabel(this);
-        p->setGeometry(0, 0, pVisorImp->getLabelWidth(), pVisorImp->getCharHeight());
-        //        p->setFont( pVisorImp->getCellFont() );
-        p->setText(GetObj().GetKeywd());
+        QLabel* lp = new QLabel(this);
+        lp->setGeometry(0, 0, pVisorImp->getLabelWidth(), pVisorImp->getCharHeight());
+        lp->setFont( pVisorImp->getCellFont() );
+        lp->setText(GetObj().GetKeywd());
         //    p->show();
 
         if( GetObj().GetN() > 1 )
         {
-            p->setAlignment( AlignLeft );
+            lp->setAlignment( AlignLeft );
             yy += pVisorImp->getCharHeight(); /// + htSPACE;
         }
         else
         {
-            p->setAlignment( AlignRight );
+            lp->setAlignment( AlignRight );
             xx += pVisorImp->getLabelWidth() + wdSPACE;
         }
     }
