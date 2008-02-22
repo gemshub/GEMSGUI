@@ -195,7 +195,7 @@ typedef struct
     *Y_w,     // Mass concentrations of DC in multi-component phases,%(ppm)[Ls]
     *Gamma,   // DC activity coefficients [0:L-1]
     *lnGmf,   // ln of initial DC activity coefficients [0:L-1]
-    *lnGmM,   // ln of DC pure gas fugacity (or metastability) coefficients [0:L-1]
+    *lnGmM,   // ln of DC pure gas fugacity (or metastability) coeffs or DDF correction [0:L-1]
     *EZ,      // Formula charge of DC in multi-component phases [0:Ls-1]
     *FVOL,    // phase volumes, cm3/mol                   [0:FI-1]
     *FWGT,    // phase (carrier) masses, g                [0:FI-1]

@@ -116,7 +116,7 @@ void TMulti::packData( TCIntArray PHon, TCIntArray DCon )
         }
 }
 
-// Unpacksing SysEq arrays to multi (Y to pm.Y)
+// Unpacking SysEq arrays to multi (Y to pm.Y)
 //
 void TMulti::unpackData()
 {
@@ -408,12 +408,13 @@ void TMulti::MultiCalcInit( const char *key )
        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
     }
     else // Simplex initial approximation to be done
-        for( j=0; j<pmp->L; j++ )
+    {
+    	for( j=0; j<pmp->L; j++ )
             pmp->X[j] = pmp->Y[j] = 0.0;
-
-    for( j=0; j< pmp->L; j++ )
-        pmp->G[j] = pmp->G0[j] + pmp->GEX[j];    // changed 5.12.2006
-
+    }
+//    for( j=0; j< pmp->L; j++ )              // Comm.out experimentally! DK 21.02.2008
+//        pmp->G[j] = pmp->G0[j] + pmp->GEX[j];    // changed 5.12.2006
+    
     // test multicomponent phases and load data for mixing models
     if( pmp->FIs )
     {

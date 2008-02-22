@@ -329,8 +329,8 @@ CH_FOUND:
         if( jj < mup->Ls && syp->PlnGf != S_OFF )
         {
             pmp->lnGmf[j] = syp->lnGmf[jj];
-            if( !TProfil::pm->pa.p.PSM )  // Constant activity coefficients
-                pmp->lnGmM[j] = syp->lnGmf[jj];
+//            if( !TProfil::pm->pa.p.PSM )  // Constant activity coefficients
+//                pmp->lnGmM[j] = syp->lnGmf[jj];    // Disabled by DK 19.02.2008
         }
         else pmp->lnGmf[j] = 0.0;
 
@@ -876,12 +876,6 @@ pmp->D[ist][isi] = 0.0;                    // cleanining the totals for sites
                 pmp->MASDJ[ja][PI_DEN] = 1.0;
 //                pmp->MASDJ[j] = 1.0;
         }
-        /*  if( pmp->SATT[j] == SAT_SITE )
-            { * Correction for neutr.site at ï¿½0,max *
-              SATst = pa->p.DNS*1.66054*pmp->Aalp[k]/
-                 max( pmp->MASDT[k][ist]-pmp->MISDT[k][ist], pmp->MASDJ[j] );
-              pmp->GEX[j] += log( SATst );
-            } */
     } /* for j */
 }
 

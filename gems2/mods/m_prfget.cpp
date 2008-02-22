@@ -710,10 +710,10 @@ pmp->ITF = 0; pmp->ITG = 0;
      if( prg )
 	pVisorImp->OpenProgress();
 #endif
-	multi->MultiCalcInit( keyp.c_str() );
-FORCED_AIA:
-	pmp->ITF = 0; pmp->ITG = 0;
 //	multi->MultiCalcInit( keyp.c_str() );
+FORCED_AIA:
+	multi->MultiCalcInit( keyp.c_str() );
+//	pmp->ITF = 0; pmp->ITG = 0;
     if( multi->AutoInitialApprox( ) == false )
     {
     	multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence

@@ -585,7 +585,7 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
                 mod = ios::out|ios::app;
                 break;
             case VF3_3:
-                return true;
+                return true;LoadMtparm
             }
 */
         fstream f( filename, mod );
@@ -620,15 +620,15 @@ double TProfil::calcMulti( int& NumPrecLoops, int& NumIterFIA, int& NumIterIPM )
    { // load new MTPARM on T or P
       mtparm->LoadMtparm( pmp->TCc, pmp->Pc );
       pmp->pTPD = 0;
-    }
+   }
 pmp->t_start = clock();     // Added 06.09.2007 by DK to check pure runtime
 pmp->t_end = pmp->t_start;
 pmp->t_elap_sec = 0.0;
-   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
+//   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
 pmp->ITF = pmp->ITG = 0;    
    // multi->CompG0Load(); //16/02/2007
 FORCED_AIA:
-//   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
+   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
   
    if( multi->AutoInitialApprox( ) == false )
    {

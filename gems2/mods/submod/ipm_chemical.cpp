@@ -399,7 +399,7 @@ void TMulti::TotalPhases( double X[], double XF[], double XFA[] )
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Corrections to prime chemical potentials F0[j]
+// Corrections to primal chemical potentials F0[j]
 //  of j-th species in k-th phase among IPM main iterations
 //  Returns double - value of corrected chem. potential.
 //  If error, returns +7777777 J/mole.

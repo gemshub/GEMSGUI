@@ -40,7 +40,8 @@ using namespace JAMA;
 // Main sequence of IPM calculations
 //  Main place for implementation of diagnostics and setup
 //  of IPM precision and convergence
-//  rLoop is the index of primal solution refinement loop (for tracing) or -1 if this is main call 
+//  rLoop is the index of the primal solution refinement loop (for tracing) 
+//   or -1 if this is main GEMIPM2 call 
 //
 void TMulti::MultiCalcMain( int rLoop )
 {
@@ -340,7 +341,9 @@ FORCED_AIA:
 void TMulti::MultiCalcIterations( int rLoop )
 {
 
-    MultiCalcMain( rLoop );
+to_text_file( "MultiDump.txt" );   // Debugging 
+	
+	MultiCalcMain( rLoop );
 
     // calculation of demo data for gases
     for( int ii=0; ii<pmp->N; ii++ )
@@ -422,6 +425,7 @@ STEP_POINT( "End Simplex" );
 
         // Setting default trace amounts to DCs that were zeroed off
         RaiseZeroedOffDCs( 0, pmp->L, sfactor );
+// GammaCalc in UX mode?         
     }
     else  // Taking previous GEMIPM result as initial approximation
     {
@@ -459,7 +463,8 @@ STEP_POINT( "End Simplex" );
             }
             for( j=jb; j<je; j++ )
             {
-                LnGam = pmp->lnGam[j];
+// Try GammaCalc in UX mode but with actual smoothing parameter instead !! 
+            	LnGam = pmp->lnGam[j];
                 if( fabs( LnGam ) > 1e-9 )
                     pmp->Gamma[j] = exp( LnGam );
                 else pmp->Gamma[j] = 1.0;
