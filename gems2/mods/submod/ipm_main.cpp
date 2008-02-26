@@ -324,10 +324,10 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
 #ifdef GEMITERTRACE
 f_log << "ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " MBPRL=" 
    << pmp->W1 << " rLoop=" << rLoop; 
-if( pmp->pNP )
-	f_log << " Ok after PIA" << endl;
-else 
-	f_log << " Ok after AIA" << endl;
+    if( pmp->pNP )
+	   f_log << " Ok after PIA" << endl;
+    else 
+	   f_log << " Ok after AIA" << endl;
 #endif
 FORCED_AIA:
    for( i=0; i<pmp->L; i++)
@@ -340,11 +340,13 @@ FORCED_AIA:
 //Call for IPM iteration sequence
 void TMulti::MultiCalcIterations( int rLoop )
 {
-
-to_text_file( "MultiDump.txt" );   // Debugging 
-	
+#ifdef GEMITERTRACE
+to_text_file( "MultiDumpA.txt" );   // Debugging 
+#endif	
 	MultiCalcMain( rLoop );
-
+#ifdef GEMITERTRACE
+to_text_file( "MultiDumpB.txt" );   // Debugging 
+#endif	
     // calculation of demo data for gases
     for( int ii=0; ii<pmp->N; ii++ )
         pmp->U_r[ii] = pmp->U[ii]*pmp->RT;

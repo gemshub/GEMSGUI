@@ -63,7 +63,7 @@ SPP_SETTING pa_ = {
         1,  /* PSM  */ 15,  /* DP */   15,   /* DW */
         0, /* DT */     0,   /* PLLG */   1,  /* PE */
         500,   /* IIM */
-        1e-7, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
+        1e-6, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
         1e-4,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
         1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
         1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
@@ -626,7 +626,8 @@ pmp->t_end = pmp->t_start;
 pmp->t_elap_sec = 0.0;
 //   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
 pmp->ITF = pmp->ITG = 0;    
-   // multi->CompG0Load(); //16/02/2007
+// pmp->pTPD = 0;       // turned on 26/02/2008     
+// multi->CompG0Load(); //  26/02/2008
 FORCED_AIA:
    multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
   

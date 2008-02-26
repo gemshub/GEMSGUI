@@ -1221,7 +1221,7 @@ rt[RT_SYSEQ].MakeKey( RT_PROCES, pep->stkey, RT_PROCES, 0, RT_PROCES,1,
                         RT_PROCES, 6, RT_PROCES, 7, K_END );
 nRec = rt[RT_SYSEQ].Find(pep->stkey);
 if( nRec >= 0)
-   PRof->loadSystat( pep->stkey );   // read SysEq record and unpack data
+   PRof->loadSystat( pep->stkey );   // read parent SysEq record and unpack data
 
 // ModUpdate("");
 }

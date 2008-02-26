@@ -272,8 +272,8 @@ void TMulti::CompG0Load()
         }
     }
 
-  Alloc_internal(); // optimization 08/02/2007
-  pmp->pTPD = 2;
+  Alloc_internal(); // performance optimization 08/02/2007
+  pmp->pTPD = 2;  
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

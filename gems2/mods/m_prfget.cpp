@@ -567,6 +567,7 @@ void TProfil::loadSystat( const char *key )
     pmp->pESU = 0;  //  new record was readed
     gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
     PMtest( keyp.c_str() );
+pmp->pTPD = 0;   // set temporarily 26.02.2008  DK 
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
        multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
