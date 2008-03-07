@@ -567,7 +567,7 @@ void TProfil::loadSystat( const char *key )
     pmp->pESU = 0;  //  new record was readed
     gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
     PMtest( keyp.c_str() );
-pmp->pTPD = 0;   // set temporarily 26.02.2008  DK 
+    pmp->pTPD = 0;   // workaround 26.02.2008  DK 
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
        multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
@@ -596,6 +596,7 @@ void TProfil::deriveSystat()
     // Test MULTY for change (if new System cfg or T, P - new)
     pmp->pESU = 0;  //  new record was readed
     PMtest( keyp.c_str() );
+    pmp->pTPD = 0;   // workaround 26.02.2008  DK 
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
         multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
@@ -634,6 +635,7 @@ void TProfil::newSystat( int mode )
     // Test MULTY for change (if new System cfg or T, P - new)
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     PMtest( keyp.c_str() );
+    pmp->pTPD = 0;   // workaround 26.02.2008  DK 
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
        multi->MultiRemake( keyp.c_str() );
     pVisor->OpenModule(window(), MD_SYSTEM);
@@ -711,7 +713,7 @@ pmp->ITF = 0; pmp->ITG = 0;
      if( prg )
 	pVisorImp->OpenProgress();
 #endif
-//	multi->MultiCalcInit( keyp.c_str() );
+
 FORCED_AIA:
 	multi->MultiCalcInit( keyp.c_str() );
 //	pmp->ITF = 0; pmp->ITG = 0;
@@ -730,7 +732,7 @@ FORCED_AIA:
     // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
 
     if( pa.p.PRD < 0 && pa.p.PRD > -50 /* && !pmp->pNP */ ) // max 50 loops
-    {  // Test refinement loops for highly non-ideal systems  KD 18.02.2005
+    {  // Refinement loops for highly non-ideal systems  KD 18.02.2005
        int pNPo = pmp->pNP; 
        int pp, TotIT = pmp->IT; // TotITG = pmp->ITG, TotITF = pmp->ITF;
        pmp->pNP = 1;

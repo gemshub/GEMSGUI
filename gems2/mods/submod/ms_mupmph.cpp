@@ -116,12 +116,12 @@ void TMulti::MultiRemake( const char *key )
     pmp->denWg = tpp->RoV;
     pmp->epsW = tpp->EpsW;
     pmp->epsWg = tpp->EpsV;
-    pmp->GWAT = syp->Mwat * 55.508373;
+    pmp->GWAT = syp->Mwat * 55.50837344;   // constant corrected 06.03.2008
 
     pmp->RT = tpp->RT;  // R_CONSTANT * pmp->Tc
     pmp->FRT = F_CONSTANT/pmp->RT;
 
-    pmp->ln5551 = 4.0165339;
+    pmp->ln5551 = 4.016533882;             // constant corrected 06.03.2008
     pmp->lowPosNum = pa->p.DcMin;
     pmp->logXw = -16.;
     pmp->logYFk = -9.;
@@ -276,8 +276,8 @@ CH_FOUND:
         pmp->Pparc[j] = pmp->Pc;
         pmp->F0[j] = 0.0;
         pmp->XY[j] = 0.0;
-        pmp->G0[j] = tpp->G[jj];
-
+//        pmp->G0[j] = tpp->G[jj];          // Temporarily commented out for debugging
+//        pmp->G0[j] = 0.0; 
 ///        if( tpp->PtvVm == S_ON )
 ///            switch( pmp->PV )
 ///            { // calculating actual molar volume of DC
@@ -317,11 +317,12 @@ CH_FOUND:
             pmp->DLL[j] = 0.0;
         }
         // additional data
-        if( syp->PGEX != S_OFF /* && syp->PYOF != S_ON */ )
-// !!!!!!!!!!!!!!!!!!!!!! Insert here a case that checks units of
+//        if( syp->PGEX != S_OFF /* && syp->PYOF != S_ON */ )
+// !!!!!!!!!!!!!!!!!!!!!! Insert here a case that checks units of  
 //    measurement for the G0 increment
-             pmp->GEX[j] = syp->GEX[jj]/pmp->RT;
-        else pmp->GEX[j] = 0.0;  // Standard free energy increments
+//             pmp->GEX[j] = syp->GEX[jj]/pmp->RT;            // temporarily moved to CompG0load()
+//        else 											      //  26.02.2008 DK  
+       	pmp->GEX[j] = 0.0;  // Molar constant excess free energy increments zeroed off
 
         if( syp->PParc != S_OFF )
             pmp->Pparc[j] = syp->Pparc[jj];
@@ -722,12 +723,12 @@ PARLOAD: if( k < syp->Fis )
             }
         else pmp->YOF[k] = 0.0;
 
-        for( j=jb; j<je; j++ )
-        {
-            G = Cj_init_calc( pmp->G0[j], j, k );
-            /* Calculation of normalized values of G0 function */
-            pmp->G0[j] = G;
-        } /* j */
+//        for( j=jb; j<je; j++ )
+//        {
+//            G = Cj_init_calc( pmp->G0[j], j, k );   // Commented out 07.08.2008 DK
+//             Calculation of normalized values of G0 function 
+//            pmp->G0[j] = G;
+//        } /* j */
         // test of kinetic constraints (units of measurement!)
         if( pmp->PLIM && k >= pmp->FIs /* pmp->PPHk != S_OFF */ )
         { /* restrictions set! */

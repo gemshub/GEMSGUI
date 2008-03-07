@@ -427,30 +427,43 @@ STEP_POINT( "End Simplex" );
 
         // Setting default trace amounts to DCs that were zeroed off
         RaiseZeroedOffDCs( 0, pmp->L, sfactor );
-// GammaCalc in UX mode?         
+        // this operation greatly affects the accuracy of mass balance! 
+
+        TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
+        for( j=0; j< pmp->L; j++ )
+            pmp->X[j] = pmp->Y[j];
+        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+//        ConCalc( pmp->X, pmp->XF, pmp->XFA );
+//        if( pmp->E && pmp->LO )
+//            IS_EtaCalc();
+//       if( pmp->PD==3 )
+//          GammaCalc( LINK_UX_MODE );   // experimental after simplex 
+
     }
     else  // Taking previous GEMIPM result as initial approximation
     {
         int jb, je=0, jpb, jpe=0, jdb, jde=0, ipb, ipe=0;
         double LnGam, FitVar3;
 // pmp->K2 = 0;
-        FitVar3 = pmp->FitVar[3];
-        pmp->FitVar[3] = 1.0;
+//        FitVar3 = pmp->FitVar[3];
+//        pmp->FitVar[3] = 1.0;
         TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
         for( j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-        ConCalc( pmp->X, pmp->XF, pmp->XFA );
-        if( pmp->E && pmp->LO )
-            IS_EtaCalc();
-
+//        ConCalc( pmp->X, pmp->XF, pmp->XFA );
+//        if( pmp->E && pmp->LO )
+//            IS_EtaCalc();
+        if( pmp->PD==3 )              // added for stability at PIA 06.03.2008 DK
+            GammaCalc( LINK_UX_MODE);
+/*        
         for( k=0; k<pmp->FI; k++ )
         {
             jb = je;
             je += pmp->L1[k];
-// Indexes for extracting data from IPx, PMc and DMc arrays
-    ipb = ipe;                  // added 07.12.2006 by KD
-    ipe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
+            // Indexes for extracting data from IPx, PMc and DMc arrays
+            ipb = ipe;                  // added 07.12.2006 by KD
+            ipe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
             jpb = jpe;
             jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
             jdb = jde;
@@ -475,7 +488,8 @@ STEP_POINT( "End Simplex" );
                 pmp->lnGmo[j] = LnGam;
             }  // j
         } // k
-        pmp->FitVar[3] = FitVar3; // Restoring smoothing parameter
+*/ 
+//        pmp->FitVar[3] = FitVar3; // Restoring smoothing parameter
 
         if( pmp->pNP <= -1 )
         {  // With raising species and phases zeroed off by simplex()
@@ -676,7 +690,7 @@ int TMulti::InteriorPointsMethod( )
        // Main IPM iteration done
        // Calculation of activity coefficients
         if( pmp->PD==3 )
-            GammaCalc( LINK_UX_MODE );
+            GammaCalc( LINK_UX_MODE ); 
 
         if( pmp->PHC[0] == PH_AQUEL && pmp->XF[0] <= pa->p.XwMin &&
              pmp->X[pmp->LO] <= pmp->lowPosNum*1e3 )    // bugfix 29.11.05 KD
@@ -710,8 +724,8 @@ STEP_POINT( "IPM Iteration" );
 
   if( pmp->PD==1 || pmp->PD == 2  /*|| pmp->PD == 3*/  )
         GammaCalc( LINK_UX_MODE);
-   else
-        ConCalc( pmp->X, pmp->XF, pmp->XFA );
+//   else
+  ConCalc( pmp->X, pmp->XF, pmp->XFA );
 
    MassBalanceResiduals( pmp->N, pmp->L, pmp->A, pmp->X, pmp->B, pmp->C);
    return 0;

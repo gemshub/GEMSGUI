@@ -64,7 +64,7 @@ SPP_SETTING pa_ = {
         0, /* DT */     0,   /* PLLG */   1,  /* PE */
         500,   /* IIM */
         1e-6, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
-        1e-4,  /* DK */  0.01,  /* DF */  0.01,  /* DFM */
+        1e-4,  /* DK */  0.01,  /* DF */  0.1,  /* DFM */
         1e-6,  /* DFYw */  1e-6,  /* DFYaq */    1e-6,  /* DFYid */
         1e-6,  /* DFYr,*/  1e-6,  /* DFYh,*/   1e-6,  /* DFYc,*/
         1e-7, /* DFYs, */  1e-17,  /* DB */   0.7,   /* AG */
@@ -624,10 +624,8 @@ double TProfil::calcMulti( int& NumPrecLoops, int& NumIterFIA, int& NumIterIPM )
 pmp->t_start = clock();     // Added 06.09.2007 by DK to check pure runtime
 pmp->t_end = pmp->t_start;
 pmp->t_elap_sec = 0.0;
-//   multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
 pmp->ITF = pmp->ITG = 0;    
-// pmp->pTPD = 0;       // turned on 26/02/2008     
-// multi->CompG0Load(); //  26/02/2008
+
 FORCED_AIA:
    multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
   

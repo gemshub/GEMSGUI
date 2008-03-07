@@ -213,7 +213,7 @@ void TMulti::loadData( bool newRec )
 void TMulti::CompG0Load()
 {
     int j, jj, k, jb, je=0;
-    double Gg = 0., Vv = 0.;
+    double Go, Gg, Ge, Vv = 0.;
 
     // ->pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not load
     if( pmp->pTPD < 1 )
@@ -247,10 +247,14 @@ void TMulti::CompG0Load()
             {
                 jj = pmp->muj[j];
 
-                // loading G0
-                if( syp->Guns )
-                    Gg = syp->Guns[jj];
-                pmp->G0[j] = Cj_init_calc( tpp->G[jj]+Gg, j, k );
+                // loading G0  - re-furbished 07.03.2008  DK
+                Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
+                if( syp->Guns )  // This is used mainly in UnSpace calculations
+                    Gg = syp->Guns[jj];    // User-set increment to G0 from project system
+                if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
+                 	Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK         
+  	// !!!!!!! Insert here a case that checks units of measurement for the G0 increment
+                pmp->G0[j] = Cj_init_calc( Go+Gg+Ge, j, k );
 
                 //  loading Vol
                 if( tpp->PtvVm == S_ON )
@@ -287,7 +291,7 @@ void TMulti::EqstatExpand( const char *key )
 
     pmp->NR = pmp->N;
 
-    // Load activity coeffs for phases-solutions
+/*    // Load activity coeffs for phases-solutions
     if( pmp->FIs )
     {
         for( j=0; j< pmp->Ls; j++ )
@@ -298,6 +302,7 @@ void TMulti::EqstatExpand( const char *key )
             else pmp->Gamma[j] = 1;
         }
     }
+*/
     // recalculate kinetic restrictions for DC
     if( pmp->pULR && pmp->PLIM )
          Set_DC_limits( DC_LIM_INIT );
@@ -333,35 +338,39 @@ void TMulti::EqstatExpand( const char *key )
     FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
     pmp->FitVar[3] = 1.0;
 
-    // Scan phases to retrieve concentrations and activities
-    je = 0;
-    for( k=0; k<pmp->FIs; k++ )
+    // test multicomponent phases and load data for mixing models
+    // Added experimentally 07.03.2008   by DK
+    if( pmp->FIs )
     {
-        jb = je;
-        je = jb+pmp->L1[k];
-
-        jpb = jpe;
-        jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];
-        jdb = jde;
-        jde += pmp->LsMdc[k]*pmp->L1[k];
-
-        if( pmp->PHC[k] == PH_SORPTION )
+    	 // Load activity coeffs for phases-solutions
+    	for( j=0; j< pmp->Ls; j++ )
         {
-            if( pmp->E && pmp->LO )
-                GouyChapman( jb, je, k );
-            // Calculation of surface activity coefficient terms
-            SurfaceActivityCoeff( jb, je, jpb, jdb, k );
-//            SurfaceActivityTerm(  jb, je, k );
+            pmp->lnGmo[j] = pmp->lnGam[j];
+            if( fabs( pmp->lnGam[j] ) <= 84. )
+                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+            else pmp->Gamma[j] = 1.0;
         }
-        for( j=jb; j<je; j++ )
+    	if( pmp->pIPN <=0 )  // mixing models finalized
         {
-            // Calculation of normalized Gibbs energies F0 and values c_j
-            pmp->F0[j] = Ej_init_calc( 0, j, k );
-//            pmp->G[j] = pmp->G0[j] + pmp->F0[j];
-            pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];
-            // pmp->Gamma[j] = exp( pmp->lnGam[j] );
+             // not done if these models are already present in MULTI !
+           pmp->PD = TProfil::pm->pa.p.PD;
+           SolModLoad();   // Call point to loading scripts for mixing models      
         }
+    	pmp->pIPN = 1;
+
+    	GammaCalc( LINK_TP_MODE); 
+//        if(pmp->PD==3 && pmp->pNP ) // PIA case!
+//        {
+//            if( pmp->E && pmp->LO )
+//                IS_EtaCalc();
+//        	GammaCalc( LINK_UX_MODE);
+//        }    	
     }
+    else {  // no multi-component phases
+        pmp->PD = 0;
+        pmp->pIPN = 1;	
+    }
+
     pmp->FitVar[3]=FitVar3;
     pmp->GX_ = pmp->FX * pmp->RT;
 
@@ -371,7 +380,15 @@ void TMulti::EqstatExpand( const char *key )
     //calculate Karpov phase criteria
     f_alpha();
 
-    //calculate gas partial pressures  -- obsolete?
+    // dynamic work arrays - loading initial data  (added 07.03.2008)
+    for( k=0; k<pmp->FI; k++ )
+    {
+        pmp->XFs[k] = pmp->XF[k];
+        pmp->Falps[k] = pmp->Falp[k];
+        memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
+    } 
+    
+    //calculate gas partial pressures  -- obsolete?, retained evtl. for old process scripts 
     GasParcP();
 }
 
@@ -381,7 +398,7 @@ void TMulti::EqstatExpand( const char *key )
 void TMulti::MultiCalcInit( const char *key )
 {
     int j, k;
-
+    SPP_SETTING *pa = &TProfil::pm->pa;
    // Bulk composition and/or dimensions changed ?
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
     {
@@ -410,39 +427,45 @@ void TMulti::MultiCalcInit( const char *key )
     else // Simplex initial approximation to be done
     {
     	for( j=0; j<pmp->L; j++ )
-            pmp->X[j] = pmp->Y[j] = 0.0;
+    	{                           // cleaning work vectors
+    		pmp->X[j] = pmp->Y[j] = pmp->lnGam[j] = pmp->lnGmo[j] = 0.0;
+    		pmp->Gamma[j] = 1.0;
+    	}
+    	pmp->FitVar[4] = pa->p.AG;
+    	pmp->pRR1 = 0;   // Resetting smoothing factors
     }
-//    for( j=0; j< pmp->L; j++ )              // Comm.out experimentally! DK 21.02.2008
-//        pmp->G[j] = pmp->G0[j] + pmp->GEX[j];    // changed 5.12.2006
     
     // test multicomponent phases and load data for mixing models
     if( pmp->FIs )
     {
-        for( j=0; j< pmp->Ls; j++ )
+    	 // Load activity coeffs for phases-solutions
+    	for( j=0; j< pmp->Ls; j++ )
         {
             pmp->lnGmo[j] = pmp->lnGam[j];
-            pmp->Gamma[j] = 1.0;
+            if( fabs( pmp->lnGam[j] ) <= 84. )
+                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+            else pmp->Gamma[j] = 1.0;
         }
-    }
-
-    if( pmp->FIs && pmp->pIPN <=0 )  // mixing models finalized
-    {
-        // not done if these models are already present in MULTI !
-        pmp->PD = TProfil::pm->pa.p.PD;
-        SolModLoad();   // Call point to loading mixing models
-        pmp->pIPN = 1;
-        GammaCalc( LINK_TP_MODE);
-    }
-    else
-    {   // it may happen that mixing models are already loaded 
-        if( !pmp->FIs ) // no multi-component phases
+    	if( pmp->pIPN <=0 )  // mixing models finalized
         {
-            pmp->PD = 0;
-            pmp->pIPN = 1;
+             // not done if these models are already present in MULTI !
+           pmp->PD = TProfil::pm->pa.p.PD;
+           SolModLoad();   // Call point to loading scripts for mixing models      
         }
-        else { // there are multicomponent phases - TP_MODE run for mix.models
-            GammaCalc( LINK_TP_MODE);
-        }
+    	pmp->pIPN = 1;
+
+    	GammaCalc( LINK_TP_MODE); 
+
+    	//        if(pmp->PD==3 && pmp->pNP ) // PIA case!
+//        {
+//            if( pmp->E && pmp->LO )
+//                IS_EtaCalc();
+//        	GammaCalc( LINK_UX_MODE);
+//        }    	
+    }
+    else {  // no multi-component phases
+        pmp->PD = 0;
+        pmp->pIPN = 1;	
     }
 
     // recalculating kinetic restrictions for DC amounts
@@ -456,7 +479,7 @@ void TMulti::MultiCalcInit( const char *key )
         pmp->Falps[k] = pmp->Falp[k];
         memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
     }
-}
+} 
 
 //--------------------- End of ms_muleq.cpp ---------------------------
 
