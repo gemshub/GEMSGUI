@@ -98,10 +98,11 @@ double TProfil::calcMulti( int& PrecLoops_, int& NumIterFIA_, int& NumIterIPM_ )
     pmp = multi->GetPM();
 pmp->t_start = clock();
 pmp->t_end = pmp->t_start;
-    multi->MultiCalcInit( 0 );
+//    multi->MultiCalcInit( 0 );
     pmp->ITF = pmp->ITG = 0;  
 FORCED_AIA:
-    if( multi->AutoInitialApprox() == false )
+    multi->MultiCalcInit( 0 );
+	if( multi->AutoInitialApprox() == false )
     {
         multi->MultiCalcIterations( -1 );
     }
@@ -126,17 +127,14 @@ FORCED_AIA:
                 pmp->IT = 0;  // This may be sensitive   // pmp->ITG = 0; pmp->ITF = 0;
                 if( multi->AutoInitialApprox( ) == false )
                 {
-    //                pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
                     multi->MultiCalcIterations( pp );
                 }
                 TotIT += pmp->IT; 
                 TotW1 += pmp->W1+pmp->K2-2; 
-    //           TotITF += pmp->ITF; TotITG += pmp->ITG;
               }
               if( !pNPo )
                 pmp->pNP = 0;
                 pmp->IT = (short)TotIT;
-    //          pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
               PrecLoops_ = TotW1; 
               NumIterFIA_ = pmp->ITF;  //   TotITF;
               NumIterIPM_ = pmp->ITG;  //   TotITG;
@@ -174,11 +172,11 @@ void TProfil::readMulti( const char* path )
 
  bool load = false;
 
-// Load Thermodynamic Data from MTPARM to MULTI using LagranInterp
+// Load Thermodynamic Data from DATACH to MULTI using Lagrangian Interpolator
 void TMulti::CompG0Load()
 {
   int j, jj, k, xTP, jb, je=0;
-  double Gg, Vv;
+  double Go, Gg, Vv;
   double TC, P;
 
   DATACH  *dCH = TNode::na->pCSD();
@@ -195,8 +193,7 @@ void TMulti::CompG0Load()
 
  if( load && fabs( pmp->TC - TC ) < 1.e-10 &&
             fabs( pmp->P - P ) < 1.e-10 )
-   return;    //T, P not changed
-
+   return;    //T, P not changed - problematic for UnSpace! 
 
  pmp->T = pmp->Tc = TC + C_to_K;
  pmp->TC = pmp->TCc = TC;
@@ -240,21 +237,21 @@ void TMulti::CompG0Load()
       jj =  j * dCH->nPp * dCH->nTp;
       if( xTP >= 0 )
       {
-        Gg = dCH->G0[ jj+xTP];
+        Go = dCH->G0[ jj+xTP];
         Vv = dCH->V0[ jj+xTP];
       }
      else
      {
-       Gg = LagranInterp( dCH->Pval, dCH->TCval, dCH->G0+jj,
+       Go = LagranInterp( dCH->Pval, dCH->TCval, dCH->G0+jj,
                           P, TC, dCH->nTp, dCH->nPp,1 );
        Vv = LagranInterp( dCH->Pval, dCH->TCval, dCH->V0+jj,
                             P, TC, dCH->nTp, dCH->nPp, 1 );
      }
      if( pmp->tpp_G )
-    	  pmp->tpp_G[j] = Gg;
+    	  pmp->tpp_G[j] = Go;
      if( pmp->Guns )
-           Gg += pmp->Guns[j];
-     pmp->G0[j] = Cj_init_calc( Gg, j, k );
+           Gg = pmp->Guns[j];
+     pmp->G0[j] = Cj_init_calc( Go+Gg, j, k ); // Inside this function, pmp->YOF[k] can be added!
      switch( pmp->PV )
      { // put mol volumes of components into A matrix
        case VOL_CONSTR:
@@ -271,8 +268,7 @@ void TMulti::CompG0Load()
  	          pmp->Vol[j] = Vv  * 10.;
               break;
      }
-
-    }
+   }
  }
  load = true;
 }
@@ -289,7 +285,7 @@ void TMulti::MultiCalcInit( const char* /*key*/ )
     pmp->is = 0;
     pmp->js = 0;
     pmp->next  = 0;
-    pmp->ln5551 = 4.0165339;
+    pmp->ln5551 = 4.016533882;  //  ln(55.50837344)  4.0165339; 
     pmp->lowPosNum = pa->p.DcMin;
     pmp->logXw = -16.;
     pmp->logYFk = -9.;
@@ -311,43 +307,55 @@ void TMulti::MultiCalcInit( const char* /*key*/ )
     }
     pmp->MBX /= 1000.;
 
-    if( /*pmp->pESU  &&*/ pmp->pNP )     // problematic statement !!!!!!!!!
+    if(  pmp->pNP )     // Checking if this is PIA or AIA mode 
     {
-//      unpackData(); // loading data from EqstatUnpack( key );
         pmp->IC = 0.;
         for( j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
     }
-    else
-        for( j=0; j<pmp->L; j++ )
-           pmp->X[j] =  pmp->Y[j] = 0.0;
+    else {                // Simplex initial approximation to be done
+    	for( j=0; j<pmp->L; j++ )
+    	{                           // cleaning work vectors
+    		pmp->X[j] = pmp->Y[j] = pmp->lnGam[j] = pmp->lnGmo[j] = 0.0;
+    		pmp->Gamma[j] = 1.0;
+    	}
+    	pmp->FitVar[4] = pa->p.AG;
+    	pmp->pRR1 = 0;   // Resetting smoothing factors
+    }	
 
-    CompG0Load();
+    CompG0Load(); // Loading thermodynamic data into MULTI structure
     // optimization 08/02/2007
     Alloc_A_B( pmp->N );
     Build_compressed_xAN();
 
-    for( j=0; j< pmp->L; j++ )
-//        pmp->G[j] = pmp->G0[j];   changed 5.12.2006 KD
-        pmp->G[j] = pmp->G0[j] + pmp->GEX[j];
-    // test phases - solutions and load models
+    // testing phases - solutions and loading models
     if( pmp->FIs )
     {
         for( j=0; j< pmp->Ls; j++ )
         {
             pmp->lnGmo[j] = pmp->lnGam[j];
-            pmp->Gamma[j] = 1.0;
+            if( fabs( pmp->lnGam[j] ) <= 84. )
+                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+            else pmp->Gamma[j] = 1.0;
         }
         pmp->PD = pa->p.PD;
-//        SolModLoad();
-        GammaCalc( LINK_TP_MODE);
+//           SolModLoad();   Scripts cannot be used here!
+        GammaCalc(LINK_TP_MODE);  // calculating TP-dep data such as DQF coeffs or fugacities
+
+//        if(pmp->PD==3 && pmp->pNP ) // PIA case!
+//        {
+//            if( pmp->E && pmp->LO )
+//                IS_EtaCalc();
+//        	GammaCalc( LINK_UX_MODE);
+//        }  
+
     }
     // recalculate kinetic restrictions for DC quantities
     if( pmp->pULR && pmp->PLIM )
          Set_DC_limits(  DC_LIM_INIT );
 
-   // dynamic arrays - begin load
+   // dynamic demo arrays - do we need it here at all? - DK
     for( k=0; k<pmp->FI; k++ )
     {
         pmp->XFs[k] = pmp->YF[k];

@@ -654,17 +654,14 @@ if( pa.p.PRD < 0 && pa.p.PRD > -50 /* && !pmp->pNP */ ) // max 50 loops
             pmp->IT = 0;  // This may be sensitive   // pmp->ITG = 0; pmp->ITF = 0;
             if( multi->AutoInitialApprox( ) == false )
             {
-//                pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
                 multi->MultiCalcIterations( pp );
             }
             TotIT += pmp->IT; 
             TotW1 += pmp->W1+pmp->K2-2; 
-//           TotITF += pmp->ITF; TotITG += pmp->ITG;
           }
           if( !pNPo )
             pmp->pNP = 0;
             pmp->IT = (short)TotIT;
-//          pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
           NumPrecLoops = TotW1; 
           NumIterFIA = pmp->ITF;  //   TotITF;
           NumIterIPM = pmp->ITG;  //   TotITG;
@@ -698,10 +695,6 @@ void TProfil::PMtest( const char *key )
     }
     else pmp->pESU = 0;
 
-   //auto simplex => not necessary unpack old soluton added SD 13/02/2007
-   //if( pmp->pNP == 0 )
-   //    pmp->pESU = 0;
-
    // no old solution => must be simplex
    if( pmp->pESU == 0 )
         pmp->pNP = 0;
@@ -714,10 +707,7 @@ void TProfil::PMtest( const char *key )
        pmp->pTPD = 1; // reload Go, Vol
    }
 
-//   if( !pmp->pBAL /* && !pmp->sitE */ ) // 2007
-//        pmp->pIPN = 0;
-
-    // special set up from process
+    // special setup from process simulator
     if( Proc->pep->Istat == P_EXECUTE ||
         Proc->pep->Istat == P_MT_EXECUTE )
     {
@@ -726,9 +716,6 @@ void TProfil::PMtest( const char *key )
         else
             pmp->pNP = 1;
     }
-//    else   //  This was used until 19.02.2007
-//     if( multi->qEp.GetCount()<1 && multi->qEd.GetCount()<1 && !pmp->sitE )
-//        pmp->pIPN = 0;
 
     // Get P and T from key
     gstring s = gstring( key,MAXMUNAME+MAXTDPCODE+MAXSYSNAME+MAXTIME+MAXPTN,MAXPTN);

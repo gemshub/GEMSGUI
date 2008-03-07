@@ -246,8 +246,7 @@ void TMulti::CompG0Load()
             for( j=jb; j<je; j++ )
             {
                 jj = pmp->muj[j];
-
-                // loading G0  - re-furbished 07.03.2008  DK
+   // loading G0  - re-furbished 07.03.2008  DK
                 Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
                 if( syp->Guns )  // This is used mainly in UnSpace calculations
                     Gg = syp->Guns[jj];    // User-set increment to G0 from project system
@@ -286,7 +285,7 @@ void TMulti::CompG0Load()
 //
 void TMulti::EqstatExpand( const char *key )
 {
-    int i, j, k, jb, je, jpb, jpe=0, jdb, jde=0;
+    int i, j, k; //  jb, je, jpb, jpe=0, jdb, jde=0;
     double FitVar3;
 
     pmp->NR = pmp->N;
@@ -456,7 +455,7 @@ void TMulti::MultiCalcInit( const char *key )
 
     	GammaCalc( LINK_TP_MODE); 
 
-    	//        if(pmp->PD==3 && pmp->pNP ) // PIA case!
+//        if(pmp->PD==3 && pmp->pNP ) // PIA case!
 //        {
 //            if( pmp->E && pmp->LO )
 //                IS_EtaCalc();

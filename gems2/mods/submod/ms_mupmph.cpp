@@ -276,8 +276,7 @@ CH_FOUND:
         pmp->Pparc[j] = pmp->Pc;
         pmp->F0[j] = 0.0;
         pmp->XY[j] = 0.0;
-//        pmp->G0[j] = tpp->G[jj];          // Temporarily commented out for debugging
-//        pmp->G0[j] = 0.0; 
+
 ///        if( tpp->PtvVm == S_ON )
 ///            switch( pmp->PV )
 ///            { // calculating actual molar volume of DC
@@ -317,11 +316,6 @@ CH_FOUND:
             pmp->DLL[j] = 0.0;
         }
         // additional data
-//        if( syp->PGEX != S_OFF /* && syp->PYOF != S_ON */ )
-// !!!!!!!!!!!!!!!!!!!!!! Insert here a case that checks units of  
-//    measurement for the G0 increment
-//             pmp->GEX[j] = syp->GEX[jj]/pmp->RT;            // temporarily moved to CompG0load()
-//        else 											      //  26.02.2008 DK  
        	pmp->GEX[j] = 0.0;  // Molar constant excess free energy increments zeroed off
 
         if( syp->PParc != S_OFF )

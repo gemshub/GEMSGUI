@@ -256,7 +256,7 @@ DIFFERENT:
 bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
 {
    int Mode, ic, RetCode=OK_GEM_AIA;
-   bool NeedGEM;
+   bool NeedGEM = false;
    bool iRet = true;
    double dc; // difference (decrement) to concentration/amount
    //  Getting direct access to TNodeArray class data
@@ -266,9 +266,10 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
    DATABRPTR* C1 = na->pNodT1();  // nodes at current time point
    bool* iaN = na->piaNode();     // indicators for IA in the nodes
 
-   if(mtp->PvSIA == S_OFF)
-     for(int ii=0; ii<(int)mtp->nC; ii++ )  // AIA mode forced 
-	   iaN[ii] = true; 
+   if(mtp->PvSIA == S_OFF )
+   {  for(int ii=0; ii<(int)mtp->nC; ii++ )  // AIA mode forced 
+	    iaN[ii] = true;
+   }
    else 
 	 for(int ii=0; ii<(int)mtp->nC; ii++ )  // PIA mode allowed (if mode==NEED_GEM_PIA) 
 	   iaN[ii] = false;
@@ -279,8 +280,26 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
    for( int ii = start_node; ii<= end_node; ii++) // node iteration
    {
      mtp->qc = (short)ii;
+     if(mtp->PvSIA == S_OFF )
+        NeedGEM = true; 
+     else {
+    	 C1[ii]->IterDone = 0;
+    	 NeedGEM = false; 
+     }
+    	 // Here we compare this node for current time and for previous time - works for AIA and PIA
+	 for( ic=0; ic < CH->nICb; ic++)    // do we check charge here?
+	 {     // It has to be checked on minimal allowed c0 value
+		 if( C1[ii]->bIC[ic] < mtp->cez )
+	     { // to prevent loss of Independent Component
+			 C1[ii]->bIC[ic] = mtp->cez;
+		 }
+		 dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
+		 if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3 )))
+			 NeedGEM = true;  // we still need to recalculate equilibrium
+                          // in this node because its vector b has changed
+	 }
      C1[ii]->bIC[CH->nICb-1] = 0.;   // zeroing charge off in bulk composition
-     NeedGEM = true;
+//     NeedGEM = true;
      if( mode == NEED_GEM_PIA )
      {   // smart algorithm
     	 if( iaN[ii] == true )
@@ -291,19 +310,6 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
     		 Mode = NEED_GEM_PIA;
     		 if( mtp->PvSIA == S_ON )   // force loading of primal solution into GEMIPM
     			 Mode *= -1;            // othervise use internal (old) primal solution
-     		 NeedGEM = false;       // temporary off for debugging
-    		 // Here we compare this node for current time and for previous time
-    		 for( ic=0; ic < CH->nICb; ic++)    // do we check charge here?
-    		 {     // It has to be checked on minimal allowed c0 value
-    			 if( C1[ii]->bIC[ic] < mtp->cez )
-			     { // to prevent loss of Independent Component
-    				 C1[ii]->bIC[ic] = mtp->cez;
-    			 }
-    			 dc = C0[ii]->bIC[ic] - C1[ii]->bIC[ic];
-    			 if( fabs( dc ) > min( mtp->cdv, (C1[ii]->bIC[ic] * 1e-3 )))
-    				 NeedGEM = true;  // we still need to recalculate equilibrium
-                                  // in this node because its vector b has changed
-    		 }
     	 }
      }
      else Mode = NEED_GEM_AIA;
@@ -355,7 +361,7 @@ bool TGEM2MT::CalcIPM( char mode, int start_node, int end_node, FILE* diffile )
         }
      }
      else { // GEM calculation for this node not needed
-       C0[ii]->IterDone = 0;
+//       C0[ii]->IterDone = 0;
        C1[ii]->IterDone = 0; // number of GEMIPM iterations is set to 0
      }
    }  // ii   end of node iteration loop

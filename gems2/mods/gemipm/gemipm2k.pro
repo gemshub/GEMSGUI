@@ -62,7 +62,6 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_H/particlearray.h \
                     $$SUBMOD_H/ms_multi.h \
 	            $$SUBMOD_H/io_arrays.h \
-		    ms_gem2mt.h \
 		    m_const.h \
 		    m_param.h  \
                      $$NUMERICS_H/tnt_i_refvec.h \
@@ -78,8 +77,7 @@ OBJECTS_DIR       = obj
                     $$NUMERICS_CPP/num_methods.cpp \
                     $$MODS_CPP/s_fgl.cpp \
                     $$MODS_CPP/s_fgl2.cpp \
-                    $$MODS_CPP/m_gem2mtt.cpp \
-                    $$SUBMOD_CPP/nodearray.cpp \
+		    $$SUBMOD_CPP/nodearray.cpp \
                     $$SUBMOD_CPP/node.cpp \
                     $$SUBMOD_CPP/node_format.cpp \
                     $$SUBMOD_CPP/particlearray.cpp \
