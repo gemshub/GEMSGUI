@@ -356,7 +356,8 @@ void TMulti::GammaCalc( int LinkMode  )
    		    double nxk = 1./pmp->L1[k];
             for( j= jb; j<je; j++ )
     		{  
-    		   pmp->Wx[j] = nxk;  // need this eventually to avoid problems with zero mole fractions
+if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK 
+   pmp->Wx[j] = nxk;  // need this eventually to avoid problems with zero mole fractions
     		   pmp->GEX[j] =0.0;  // cleaning GEX in TP mode!
     		   pmp->lnGmo[j] = pmp->lnGam[j]; // saving activity coefficients in TP mode
        	    }	  
@@ -572,8 +573,8 @@ void TMulti::GammaCalc( int LinkMode  )
                     qEd[k].CalcEquat();
                     break;
                 }
-            }
-            break;
+            }           
+        	break;
         case LINK_FIA_MODE: // cold start approximation
             goto END_LOOP;
         	break;
@@ -631,12 +632,15 @@ void TMulti::GammaCalc( int LinkMode  )
             Error("GammaCalc","Invalid LinkMode 2");
         } // end switch
 #endif
+
 END_LOOP:
         if( LinkMode == LINK_TP_MODE )  // TP mode - added 04.03.2008 by DK
         {
         	for( j=jb; j<je; j++ )
         	{
-               LnGam = pmp->lnGmo[j];
+if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
+	pmp->Wx[j] = 0.0;               //
+        	   LnGam = pmp->lnGmo[j];
                pmp->lnGam[j] = LnGam;
                if( fabs( LnGam ) > 1e-9 && fabs( LnGam ) < 84. )  
                     pmp->Gamma[j] = exp( LnGam );
