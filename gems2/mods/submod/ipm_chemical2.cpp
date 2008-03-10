@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: ipm_gamma.cpp 825 2006-03-29 07:10:23Z gems $
+// $Id: ipm_chemical2.cpp 825 2006-03-29 07:10:23Z gems $
 //
 // Copyright (C) 1992-2007  D.Kulik, S.Dmitrieva, K.Chudnenko, I.Karpov
 //
@@ -172,30 +172,30 @@ pmp->Wx[j] = 0.0;
             if( pmp->PHC[0] == PH_AQUEL )
                pmp->Y_m[j] = 0.0;
             switch( pmp->DCC[j] ) // choice of expressions
-            {
-               case DC_SCP_CONDEN:
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] -pmp->GEX[j]);
+            {                      // since 10.03.2008, changed the concept of DualTh activity
+               case DC_SCP_CONDEN: // to: ln_a_j = Mju_j - g0_j (removed pmp->GEX everywhere)  DK, TW
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* -pmp->GEX[j] */);
                     break;
                case DC_AQ_ELECTRON: case DC_AQ_PROTON:  case DC_AQ_SPECIES:
-                    pmp->Y_la[j] = ln_to_lg*(Muj - pmp->G0[j] -pmp->GEX[j]
+                    pmp->Y_la[j] = ln_to_lg*(Muj - pmp->G0[j] /* -pmp->GEX[j] */
                                         + Dsur + lnFmol);
                     break;
                case DC_AQ_SOLVENT: case DC_AQ_SOLVCOM:
-                    pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j] - pmp->GEX[j]
+                    pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j] /* - pmp->GEX[j] */
                                         + Dsur - 1. + 1. / ( 1.+Dsur ) );
                     break;
                case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:   /* gases */
                case DC_GAS_H2: case DC_GAS_N2:
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j]);
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */ );
                     if( pmp->Pc > 1e-9 )
                         pmp->Y_la[j] += log10( pmp->Pc );
                     break;
                case DC_SOL_IDEAL: case DC_SOL_MINOR: case DC_SOL_MAJOR:
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j] );
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */ );
                     break;
                case DC_SUR_GROUP:
                     DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j]
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
                     break;
                case DC_SSC_A0: case DC_SSC_A1: case DC_SSC_A2: case DC_SSC_A3:
@@ -203,12 +203,12 @@ pmp->Wx[j] = 0.0;
                case DC_WSC_A3: case DC_WSC_A4: case DC_SUR_COMPLEX:
                case DC_SUR_IPAIR: case DC_IESC_A: case DC_IEWC_B:
                     DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j]
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
                                          + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
                     break; // Coulombic term needs to be considered !!!!!!!!!!
                case DC_PEL_CARRIER: case DC_SUR_MINAL: case DC_SUR_CARRIER: // sorbent
                     DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
-                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j]
+                    pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
                        + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
                     break;
                default:
@@ -232,7 +232,7 @@ pmp->Wx[j] = 0.0;
             else pmp->Y_m[j] = 0.0;
             pmp->Y_w[j] = // mass % of the system
                 1e2 * X[j] * pmp->MM[j] / pmp->MBX;
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j]- pmp->GEX[j] );
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */ );
             pmp->FVOL[k] += pmp->Vol[j]*X[j];
             break;
         case DC_AQ_ELECTRON:
@@ -241,7 +241,7 @@ pmp->Wx[j] = 0.0;
             pmp->Y_w[j] = 0.0;
             break;
         case DC_AQ_PROTON:
-            pmp->pH = -ln_to_lg*(Muj-pmp->G0[j]-pmp->GEX[j]+Dsur+lnFmol);
+            pmp->pH = -ln_to_lg*(Muj-pmp->G0[j] /* -pmp->GEX[j]*/ + Dsur + lnFmol);
         case DC_AQ_SPECIES:
             SPmol = X[j]*Factor;  // molality
             pmp->IC +=  // increment to effective molal ionic strength
@@ -249,7 +249,7 @@ pmp->Wx[j] = 0.0;
 //    pmp->FVOL[k] += pmp->Vol[j]*SPmol;  Error - found by B.Lothenbach 03.02.03
           pmp->FVOL[k] += pmp->Vol[j]*X[j]; // fixed 04.02.03 KD
             pmp->Y_m[j] = SPmol;
-            pmp->Y_la[j] = ln_to_lg*(Muj - pmp->G0[j] -pmp->GEX[j]
+            pmp->Y_la[j] = ln_to_lg*(Muj - pmp->G0[j] /* -pmp->GEX[j] */
                             + Dsur + lnFmol); //    Variant: Without Dsur?
             pmp->Y_w[j] = 1e6 * X[j] * pmp->MM[j] / pmp->FWGT[k];
 //  Optimized for performance - dualth calculation inline
@@ -266,7 +266,7 @@ pmp->Wx[j] = 0.0;
             pmp->Y_m[j] = X[j]/XFA[k];
             pmp->Y_w[j] = 1e3*X[j]*pmp->MM[j]/pmp->FWGT[k];
             pmp->FVOL[k] += pmp->Vol[j]*X[j];
-            pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j] - pmp->GEX[j]
+            pmp->Y_la[j] = ln_to_lg* (Muj - pmp->G0[j] /* - pmp->GEX[j] */
                                         + Dsur - 1. + 1. / ( 1.+Dsur ) );
             break;
         case DC_GAS_COMP:
@@ -275,7 +275,7 @@ pmp->Wx[j] = 0.0;
         case DC_GAS_H2:    // volume
         case DC_GAS_N2:
             pmp->FVOL[k] += pmp->Vol[j]*X[j];
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j] );
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */ );
             if( pmp->Pc > 1e-9 )
                 pmp->Y_la[j] += log10( pmp->Pc );
             break;
@@ -283,7 +283,7 @@ pmp->Wx[j] = 0.0;
         case DC_SOL_MINOR:   // volume
         case DC_SOL_MAJOR:
             pmp->FVOL[k] += pmp->Vol[j]*X[j];
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j] );
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */ );
             break;
             // adsorption: Simplified by DK 11.01.00
         case DC_SUR_GROUP:
@@ -291,7 +291,7 @@ pmp->Wx[j] = 0.0;
             pmp->Y_w[j] =  // mg/g sorbent
                 1e3 * X[j] * pmp->MM[j] / (MMC*XFA[k]);
             DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j]
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
                                   + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
             break;
         case DC_SSC_A0:
@@ -312,7 +312,7 @@ pmp->Wx[j] = 0.0;
             pmp->Y_w[j] =  // mg/g sorbent
                 1e3 * X[j] * pmp->MM[j] / (MMC*XFA[k]);
             DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j]
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
                                  + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
             break;
         case DC_PEL_CARRIER:
@@ -324,7 +324,7 @@ pmp->Wx[j] = 0.0;
               pmp->Y_w[j] = // mg of sorbent per kg aq solution
                 1e6 * X[j] * pmp->MM[j] / pmp->FWGT[0];
             DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] - pmp->GEX[j]
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
                            + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
             pmp->FVOL[k] += pmp->Vol[j]*X[j];
             break;
@@ -380,7 +380,7 @@ void TMulti::ConCalc( double X[], double XF[], double XFA[])
                     pmp->Y_m[j] = 0.0;
                 pmp->Y_w[j] = 0.0;
                 pmp->Fx[j] = DualChemPot( pmp->U, pmp->A+j*pmp->N, pmp->NR, j );
-                pmp->Y_la[j] = ln_to_lg * ( pmp->Fx[j] - pmp->G0[j] -pmp->GEX[j] );
+                pmp->Y_la[j] = ln_to_lg * ( pmp->Fx[j] - pmp->G0[j] /* -pmp->GEX[j] */ );
                 pmp->Fx[j] *= pmp->RT;     // el-chem potential
                 goto NEXT_PHASE;
             }
@@ -391,7 +391,7 @@ void TMulti::ConCalc( double X[], double XF[], double XFA[])
             pmp->Y_w[j] = // mass % in the system
                 1e2 * X[j] * pmp->MM[j] / pmp->MBX;
             pmp->Fx[j] = DualChemPot( pmp->U, pmp->A+j*pmp->N, pmp->NR, j );
-            pmp->Y_la[j] = ln_to_lg * ( pmp->Fx[j] - pmp->G0[j] - pmp->GEX[j] );
+            pmp->Y_la[j] = ln_to_lg * ( pmp->Fx[j] - pmp->G0[j] /* - pmp->GEX[j] */ );
             pmp->Fx[j] *= pmp->RT;     // el-chem potential
             pmp->FWGT[k] += X[j] * pmp->MM[j];
             pmp->FVOL[k] += X[j] * pmp->Vol[j];
