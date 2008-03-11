@@ -829,13 +829,16 @@ void TMulti::ZeroDCsOff( int jStart, int jEnd, int k )
 // (important for the automatic initial approximation with solution phases
 //  (k = -1)  or after Selekt2() algorithm (k >= 0)
 //
-void TMulti::RaiseZeroedOffDCs( int jStart, int jEnd, double sfactor, int k )
+void TMulti::RaiseZeroedOffDCs( int jStart, int jEnd, double scalingFactor, int k )
 {
+  double sfactor = scalingFactor;
   SPP_SETTING *pa = &TProfil::pm->pa;
 
+  if( sfactor > 1. )      // can reach 30 at total moles in system above 300000 (DK 11.03.2008)
+	  sfactor = 1.;       // Workaround for very large systems (insertion breaks the EFD convergence)
   if( k >= 0 )
-     pmp->YF[k] = 0.;
-
+       pmp->YF[k] = 0.;	
+    
   for(int j=jStart; j<jEnd; j++ )
   {
      switch( pmp->DCC[j] )

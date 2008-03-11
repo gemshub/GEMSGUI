@@ -3,7 +3,7 @@
 # compile variables
 
 NAME		= gems
-VERSION		= 2.2.2
+VERSION		= 2.2.3
 
 ifeq ("x$(QTDIR)","x")
 QTDIR		= /usr/lib/qt3

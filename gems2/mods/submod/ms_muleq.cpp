@@ -455,7 +455,7 @@ void TMulti::MultiCalcInit( const char *key )
 
     	GammaCalc( LINK_TP_MODE); 
 
-//        if(pmp->PD==3 && pmp->pNP ) // PIA case!
+//       if(pmp->PD==3 && pmp->pNP ) // PIA case!
 //        {
 //            if( pmp->E && pmp->LO )
 //                IS_EtaCalc();
