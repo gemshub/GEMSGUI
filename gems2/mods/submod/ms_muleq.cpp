@@ -24,7 +24,7 @@
 #include "m_syseq.h"
 #include "service.h"
 
-// Setting sizes of packed MULTI arrays
+// Setting sizes of packed MULTI arrays and scalars from GEMIPM calculation
 void TMulti::setSizes()
 {
     short j, Lp;
@@ -126,7 +126,7 @@ void TMulti::unpackData()
     int i, j, js, jp, is, ip;
 
    if( pm.pESU == 2 )   // this SysEq record has already been unpacked
-   {     pm.IT = 0;
+   {    // pm.IT = 0;   // Debugging 12.03.2008 DK
         return;
    }
 
@@ -182,7 +182,9 @@ FOUND:
     pm.pRR1 = STat->stp->itPar;  // Level of tinkle supressor
     pm.FI1 = STat->stp->Fi;
     pm.FI1s = STat->stp->Fis;
-    pm.IT = 0; pm.W1 = 0; pm.K2 = 0;
+pm.IT = STat->stp->itIPM;   
+//    pm.IT = 0;         Debugging 12.03.2008 DK 
+    pm.W1 = 0; pm.K2 = 0;
     // float
     pm.FitVar[4] = STat->stp->ParE;  // Smoothing factor
     pm.FX  = STat->stp->UU;  // GX normalized
@@ -285,23 +287,11 @@ void TMulti::CompG0Load()
 //
 void TMulti::EqstatExpand( const char *key )
 {
-    int i, j, k; //  jb, je, jpb, jpe=0, jdb, jde=0;
-    double FitVar3;
-
+    int i, j, k, jb, je=0; // jpb, jpe=0, jdb, jde=0;
+//    double FitVar3;
+    SPP_SETTING *pa = &TProfil::pm->pa;
     pmp->NR = pmp->N;
 
-/*    // Load activity coeffs for phases-solutions
-    if( pmp->FIs )
-    {
-        for( j=0; j< pmp->Ls; j++ )
-        {
-            pmp->lnGmo[j] = pmp->lnGam[j];
-            if( fabs( pmp->lnGam[j] ) <= 84. )
-                pmp->Gamma[j] = exp( pmp->lnGam[j] );
-            else pmp->Gamma[j] = 1;
-        }
-    }
-*/
     // recalculate kinetic restrictions for DC
     if( pmp->pULR && pmp->PLIM )
          Set_DC_limits( DC_LIM_INIT );
@@ -320,7 +310,7 @@ void TMulti::EqstatExpand( const char *key )
     // set IPM weight multipliers for DC
     WeightMultipliers( false );
 
-    // Calculate elemental chemical potentials in J/mole
+    // calculate elemental chemical potentials in J/mole
     for( i=0; i<pmp->N; i++ )
         pmp->U_r[i] = pmp->U[i]*pmp->RT;
 
@@ -333,9 +323,6 @@ void TMulti::EqstatExpand( const char *key )
     // Calc Eh, pe, pH,and other stuff
     if( pmp->E && pmp->LO )
         IS_EtaCalc();
-
-    FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
-    pmp->FitVar[3] = 1.0;
 
     // test multicomponent phases and load data for mixing models
     // Added experimentally 07.03.2008   by DK
@@ -356,27 +343,38 @@ void TMulti::EqstatExpand( const char *key )
            SolModLoad();   // Call point to loading scripts for mixing models      
         }
     	pmp->pIPN = 1;
-
-    	GammaCalc( LINK_TP_MODE); 
-//        if(pmp->PD==3 && pmp->pNP ) // PIA case!
-//        {
-//            if( pmp->E && pmp->LO )
-//                IS_EtaCalc();
-//        	GammaCalc( LINK_UX_MODE);
-//        }    	
+ 
+if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models are present  
+{
+	for( k=0; k<pmp->FIs; k++ )
+	{ // loop on solution phases
+	   jb = je;
+	   je += pmp->L1[k];
+	   if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )	
+	   {  
+		  if( pmp->PHC[0] == PH_AQUEL && pmp->XF[k] > pmp->DSM
+		       && (pmp->XFA[0] > pmp->lowPosNum && pmp->XF[0] > pa->p.XwMin ))
+		       GouyChapman( jb, je, k );                 
+	   }                   
+	}
+//   GammaCalc( LINK_UX_MODE);
+}    	
+//   double FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
+//   pmp->FitVar[3] = 1.0;
+       GammaCalc( LINK_TP_MODE);   // Computing DQF, FugPure and G wherever necessary
+                                   // Activity coeffs are restored from lnGmo 
+//   pmp->FitVar[3]=FitVar3;
     }
     else {  // no multi-component phases
         pmp->PD = 0;
         pmp->pIPN = 1;	
     }
-
-    pmp->FitVar[3]=FitVar3;
     pmp->GX_ = pmp->FX * pmp->RT;
 
     // Calculate primal DC chemical potentials defined via g0_j, Wx_j and lnGam_j
     PrimalChemicalPotentials( pmp->F, pmp->X, pmp->XF, pmp->XFA );
 
-    //calculate Karpov phase criteria
+    //calculate Karpov phase stability criteria
     f_alpha();
 
     // dynamic work arrays - loading initial data  (added 07.03.2008)
@@ -396,7 +394,7 @@ void TMulti::EqstatExpand( const char *key )
 //
 void TMulti::MultiCalcInit( const char *key )
 {
-    int j, k;
+    int j, k, jb, je=0;
     SPP_SETTING *pa = &TProfil::pm->pa;
    // Bulk composition and/or dimensions changed ?
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
@@ -420,8 +418,9 @@ void TMulti::MultiCalcInit( const char *key )
        loadData( false );  // unpack SysEq record into MULTI
        for( j=0; j< pmp->L; j++ )
          pmp->X[j] = pmp->Y[j];
-       pmp->IC = 0.;
+//       pmp->IC = 0.;  //  Problematic statement!  blocked 13.03.2008 DK
        TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+       ConCalc( pmp->X, pmp->XF, pmp->XFA);             // 13.03.2008  DK
     }
     else // Simplex initial approximation to be done
     {
@@ -432,12 +431,17 @@ void TMulti::MultiCalcInit( const char *key )
     	}
     	pmp->FitVar[4] = pa->p.AG;
     	pmp->pRR1 = 0;   // Resetting smoothing factors
+        pmp->IT = 0;     // needed here to clean LINK_TP_MODE
     }
+    
+    // recalculating kinetic restrictions for DC amounts
+     if( pmp->pULR && pmp->PLIM )
+          Set_DC_limits(  DC_LIM_INIT );
     
     // test multicomponent phases and load data for mixing models
     if( pmp->FIs )
     {
-    	 // Load activity coeffs for phases-solutions
+     	// Load activity coeffs for phases-solutions
     	for( j=0; j< pmp->Ls; j++ )
         {
             pmp->lnGmo[j] = pmp->lnGam[j];
@@ -452,24 +456,38 @@ void TMulti::MultiCalcInit( const char *key )
            SolModLoad();   // Call point to loading scripts for mixing models      
         }
     	pmp->pIPN = 1;
-
-    	GammaCalc( LINK_TP_MODE); 
-
-//       if(pmp->PD==3 && pmp->pNP ) // PIA case!
-//        {
-//            if( pmp->E && pmp->LO )
-//                IS_EtaCalc();
-//        	GammaCalc( LINK_UX_MODE);
-//        }    	
+        
+    	// Calc Eh, pe, pH,and other stuff
+if( pmp->E && pmp->LO && pmp->pNP )
+{    
+	ConCalc( pmp->X, pmp->XF, pmp->XFA);
+	IS_EtaCalc();
+    if( pmp->Lads )  // Calling this only when sorption models are present  
+    {
+	   for( k=0; k<pmp->FIs; k++ )
+	   { // loop on solution phases
+	      jb = je;
+	      je += pmp->L1[k];
+	      if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )	
+	      {  
+		     if( pmp->PHC[0] == PH_AQUEL && pmp->XF[k] > pmp->DSM
+		       && (pmp->XFA[0] > pmp->lowPosNum && pmp->XF[0] > pa->p.XwMin ))
+		       GouyChapman( jb, je, k );  // getting PSIs - elecrtic potentials on surface planes               
+	      }                   
+	   }
+    }   
+//  GammaCalc( LINK_UX_MODE );     
+}    	
+//   double FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
+//   pmp->FitVar[3] = 1.0;
+    GammaCalc( LINK_TP_MODE);   // Computing DQF, FugPure and G wherever necessary
+                                   // Activity coeffs are restored from lnGmo 
+//   pmp->FitVar[3]=FitVar3;
     }
     else {  // no multi-component phases
         pmp->PD = 0;
         pmp->pIPN = 1;	
     }
-
-    // recalculating kinetic restrictions for DC amounts
-    if( pmp->pULR && pmp->PLIM )
-         Set_DC_limits(  DC_LIM_INIT );
 
     // dynamic work arrays - loading initial data
     for( k=0; k<pmp->FI; k++ )

@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: ipm_gamma.cpp 690 2006-03-29 07:10:23Z gems $
+// $Id: ipm_chemical3.cpp 690 2006-03-29 07:10:23Z gems $
 //
 // Copyright (C) 1992-2007  D.Kulik, S.Dmitrieva, K.Chudnenko, I.Karpov
 //
@@ -278,19 +278,23 @@ static double ICold=0.;
 //   LINK_UX_MODE  - calculation of equations depending on current
 //                   IPM approximation of the equilibrium state;
 //   LINK_FIA_MODE - calculation of Gammas on the initial approximation (FIA).
+//    Added 13.03.2008 by DK: returns int value showing (if not 0) 
+//    that some extreme values were obtained for some SACTs, PSIs,
+//    or activity coefficients (for detecting bad PIA case). 0 if Ok.
 //
-void TMulti::GammaCalc( int LinkMode  )
+int 
+TMulti::GammaCalc( int LinkMode  )
 {
     int k, j, jb, je=0, jpb, jpe=0, jdb, jde=0, ipb, ipe=0;
-    char *sMod;
+    char *sMod;  
+    int statusGam=0, statusGC, statusSACT;
     double LnGam, pmpXFk;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
- //  high-precision IPM-2 debugging
- //   if(pmp->PZ && pmp->W1 > 1 )
- //     goto END_LOOP;
-
-   pmp->FitVar[3] = TinkleSupressFactor( pmp->FitVar[4], pmp->IT );
+//  high-precision IPM-2 debugging
+//   if(pmp->PZ && pmp->W1 > 1 )
+//     goto END_LOOP;
+//   pmp->FitVar[3] = TinkleSupressFactor( pmp->FitVar[4], pmp->IT );
 
     // calculating concentrations of species in multi-component phases
     switch( LinkMode )
@@ -304,8 +308,8 @@ void TMulti::GammaCalc( int LinkMode  )
                 if( pmp->X[j] < pmp->lowPosNum )
                     pmp->X[j] = pa->p.DFYaq;
             ConCalc( pmp->X, pmp->XF, pmp->XFA );
-//            if( pmp->E )
-//                IS_EtaCalc( );
+// if( pmp->E )
+//    IS_EtaCalc( );
 //          pmp->IC = max( pmp->MOL, pmp->IC );
             pmp->IC = 0.0;  // Important for the simplex FIA reproducibility
             if( pmp->E && pmp->FIat > 0 )
@@ -389,6 +393,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
         } // k
         break;
     case LINK_UX_MODE: 
+pmp->FitVar[3] = TinkleSupressFactor( pmp->FitVar[4], pmp->IT );  // Getting actual smoothing parameter    	
     	// calculating DC concentrations after this IPM iteration
         ConCalc( pmp->X, pmp->XF, pmp->XFA );
         // cleaning activity coefficients
@@ -399,7 +404,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
         }
         if( pmp->E && pmp->LO ) // checking electrostatics
         {
-          //  IS_EtaCalc();  //  Experimental
+          IS_EtaCalc();  //  calculating charges and charge densities 
           if( pmp->FIat > 0 )
              for( k=0; k<pmp->FIs; k++ )
              {
@@ -407,7 +412,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                {  int ist;
                   for( ist=0; ist<pmp->FIat; ist++ ) // loop over surface types
                   {
-                     pmp->XpsiA[k][ist] = 0.0;
+                     pmp->XpsiA[k][ist] = 0.0;        // cleaning Psi before GouyChapman() 
                      pmp->XpsiB[k][ist] = 0.0;
                      pmp->XpsiD[k][ist] = 0.0;
                   }  // ist
@@ -530,12 +535,12 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
 //              ConCalc( pmp->X, pmp->XF, pmp->XFA  );  Debugging
                     if( pmp->E )
                     {
-                       IS_EtaCalc();
-                       GouyChapman( jb, je, k );
+//                       IS_EtaCalc();
+                       statusGC = GouyChapman( jb, je, k );
                     // PoissonBoltzmann( q, jb, je, k )
                     }
         // Calculating surface activity coefficient terms
-                    SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
+                    statusSACT = SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
             }
 //            if( sMod[SGM_MODE] == SM_IDEAL )
 //                goto END_LOOP;
@@ -668,6 +673,11 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
     }  // k - end loop over phases
     //  if( wn[W_EQCALC].status )
     //  aSubMod[MD_EQCALC]->ModUpdate("PM_ipms   EqCalc() converged");
+    if( statusGC )
+        	return statusGC;     
+    if( statusSACT )
+    	return statusSACT; 
+    return statusGam; 
 }
 
 // ----------------------------------------------------------------------------

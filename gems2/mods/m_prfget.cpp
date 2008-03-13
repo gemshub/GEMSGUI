@@ -716,7 +716,6 @@ pmp->ITF = 0; pmp->ITG = 0;
 
 FORCED_AIA:
 	multi->MultiCalcInit( keyp.c_str() );
-//	pmp->ITF = 0; pmp->ITG = 0;
     if( multi->AutoInitialApprox( ) == false )
     {
     	multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
@@ -731,34 +730,46 @@ FORCED_AIA:
         //    else //Show results   //if( wn[W_EQCALC].status )
     // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
 
-    if( pa.p.PRD < 0 && pa.p.PRD > -50 /* && !pmp->pNP */ ) // max 50 loops
-    {  // Refinement loops for highly non-ideal systems  KD 18.02.2005
-       int pNPo = pmp->pNP; 
-       int pp, TotIT = pmp->IT; // TotITG = pmp->ITG, TotITF = pmp->ITF;
+    int NumPrecLoops = pmp->W1+pmp->K2-1; 
+    int NumIterFIA = pmp->ITF;
+    int NumIterIPM = pmp->ITG;    
+    
+    if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
+    {  // Refinement loops for highly non-ideal systems. Added here by KD on 15.11.2007
+       int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,  
+            ITold = pmp->IT, TotIT = pmp->IT;
        pmp->pNP = 1;
        for( pp=0; pp < abs(pa.p.PRD); pp++ )
        {
-         pmp->IT = 0;
-         if( multi->AutoInitialApprox( ) == false )
-         {
-//             pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
+          pmp->IT = 0; // Important for refinement in highly non-ideal systems!
+          if( multi->AutoInitialApprox( ) == false )
+          {
              multi->MultiCalcIterations( pp );
-         }
-         TotIT += pmp->IT; // TotITF = (int)pmp->ITF; TotITG = (int)pmp->ITG;
+          }
+          TotIT += pmp->IT;
+          TotW1 += pmp->W1+pmp->K2-2; 
        }
-       if( !pNPo )
-          pmp->pNP = 0;
-       pmp->IT = (short)TotIT;
-//       pmp->ITF = (short)TotITF; pmp->ITG = (short)TotITG;
-    }
+       if( !pNPo ) 
+       {   
+     	  pmp->IT = (TotIT-ITold)/2;
+           pmp->pNP = 0;
+       }
+       else pmp->IT = ITold;
+       
+       NumPrecLoops = TotW1; 
+       NumIterFIA = pmp->ITF;  
+       NumIterIPM = pmp->ITG;  
+    }       
     calcFinished = true;
-pmp->t_end = clock();
-pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
+
+    pmp->t_end = clock();
+    pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
 //nmt    pVisor->Update();
 //nmt    pVisor->CalcFinished();
     STat->setCalcFlag( true );
     STat->CellChanged();
-return pmp->t_elap_sec;
+    
+    return pmp->t_elap_sec;
 }
 
 //add new Project structure

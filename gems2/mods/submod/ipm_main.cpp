@@ -45,7 +45,7 @@ using namespace JAMA;
 //
 void TMulti::MultiCalcMain( int rLoop )
 {
-    int i, j, k, eRet;
+    int i, j, k, eRet, status=0;
     SPP_SETTING *pa = &TProfil::pm->pa;
 #ifdef GEMITERTRACE
 fstream f_log("ipmlog.txt", ios::out|ios::app );
@@ -74,7 +74,16 @@ mEFD:
         TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
      }
 
-    eRet = EnterFeasibleDomain( );
+// #ifdef GEMITERTRACE
+// to_text_file( "MultiDumpB.txt" );   // Debugging 
+// #endif	
+
+     eRet = EnterFeasibleDomain( ); // Here the IPM-2 EFD() algorithm is called 
+
+#ifdef GEMITERTRACE
+to_text_file( "MultiDumpC.txt" );   // Debugging 
+#endif	
+    
 #ifndef IPMGEMPLUGIN
 #ifndef Use_mt_mode
     pVisor->Update(false);
@@ -123,8 +132,12 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! 
            break;
     }
 
-   // call of main IPM minimization algorithm
-   eRet = InteriorPointsMethod( );
+   // call of the main IPM-2 minimization algorithm 
+   eRet = InteriorPointsMethod( status, rLoop );
+
+#ifdef GEMITERTRACE
+to_text_file( "MultiDumpD.txt" );   // Debugging 
+#endif	
 
 #ifndef IPMGEMPLUGIN
 #ifndef Use_mt_mode
@@ -138,6 +151,14 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " ! 
    switch( eRet )
    {
      case 0:  // OK
+              break;
+     case 3:  // bad GammaCalc() status in PIA mode        
+    	      pmp->MK = 2;   // Set to check in calcMulti() later on
+#ifdef GEMITERTRACE
+f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << 
+" status= " << status << " ! PIA-AEA on bad GammaCalc() status" << endl;
+#endif
+              goto FORCED_AIA;
               break;
      case 2:  // max number of iterations has been exceeded in InteriorPointsMethod()
          if( pmp->pNP )
@@ -295,26 +316,36 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
                }
                else
                {
-                 gstring  buf,buf1;
-                 vstr pl(5);
-                 int jj=0;
-                 for( j=0; j<pmp->N-pmp->E; j++ )
+             	  if( pmp->pNP )
+             	  {   // bad PIA mode - precision cannot be reached. Attempting the AIA mode
+                 	  pmp->MK = 2;   // Set to check in calcMulti() later on
+#ifdef GEMITERTRACE
+  f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << 
+      " W1= " << pmp->W1 << " ! PIA-AEA on Prec.refin.errors E09IPM or E10IPM" << endl;
+#endif
+                     goto FORCED_AIA;                                 
+                  }
+                  gstring  buf,buf1;
+                  vstr pl(5);
+                  int jj=0;
+                  for( j=0; j<pmp->N-pmp->E; j++ )
    //  if( fabs(pmp->C[j]) > pmp->DHBM  || fabs(pmp->C[j]) > pmp->B[j] * pa->p.GAS )
                   if( fabs(pmp->C[j]) > pmp->B[j] * pa->p.GAS )
-                  { sprintf( pl, " %-2.2s  ", pmp->SB[j] );
-                    buf1 +=pl;
-                    jj=1;
+                  { 
+                	  sprintf( pl, " %-2.2s  ", pmp->SB[j] );
+                      buf1 +=pl;
+                      jj=1;
                   }
-                 if( jj )
-                 {
-                    buf = "Prescribed balance precision cannot be reached\n";
-                    buf += "for some trace independent components: ";
-                    buf += buf1;
-                    Error("E09IPM IPM-main(): ", buf.c_str() );
-                 }
-                else
-                    Error("E10IPM IPM-main(): " ,
-                       "Inconsistent GEM solution: imprecise mass balance\n"
+                  if( jj )
+                  {
+                     buf = "Prescribed mass balance accuracy cannot be reached\n";
+                     buf += "for some trace independent components: ";
+                     buf += buf1;
+                     Error("E09IPM IPM-main(): ", buf.c_str() );
+                  }
+                  else
+                     Error("E10IPM IPM-main(): " ,
+                       "Inconsistent GEM solution: Inaccurate mass balance\n"
                        "for some major independent components: " );
               }
             }
@@ -341,12 +372,16 @@ FORCED_AIA:
 void TMulti::MultiCalcIterations( int rLoop )
 {
 #ifdef GEMITERTRACE
-to_text_file( "MultiDumpA.txt" );   // Debugging 
-#endif	
-	MultiCalcMain( rLoop );
-#ifdef GEMITERTRACE
 to_text_file( "MultiDumpB.txt" );   // Debugging 
+#endif	   
+// short It_for_smoothing = pmp->IT; 
+     MultiCalcMain( rLoop );
+// if( pmp->pNP ) 
+//     pmp->IT = It_for_smoothing; 
+#ifdef GEMITERTRACE
+to_text_file( "MultiDumpE.txt" );   // Debugging 
 #endif	
+
     // calculation of demo data for gases
     for( int ii=0; ii<pmp->N; ii++ )
         pmp->U_r[ii] = pmp->U[ii]*pmp->RT;
@@ -365,10 +400,14 @@ to_text_file( "MultiDumpB.txt" );   // Debugging
 //
 bool TMulti::AutoInitialApprox(  )
 {
-    int i, j, k, NN;
+    int i, j, NN;
     double minB, sfactor;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
+#ifdef GEMITERTRACE
+to_text_file( "MultiDumpA.txt" );   // Debugging 
+#endif	
+    // Scaling the IPM numerical controls for the system total amount and minimum b(IC) 
     NN = pmp->N - pmp->E;
     minB=pmp->B[0];
     for(i=0;i<NN;i++)
@@ -397,10 +436,11 @@ bool TMulti::AutoInitialApprox(  )
    pVisor->Update(false);
 #endif
 #endif
-    // Analyzing if Simplex approximation is needed
+
+// Analyzing if the Simplex approximation is necessary
     if( !pmp->pNP  )
     {   // Preparing to call Simplex method
-        pmp->FitVar[4] = pa->p.AG;  // smoothing parameter initialization
+        pmp->FitVar[4] = pa->p.AG;  //  initializing the smoothing parameter
         pmp->pRR1 = 0;
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
 //      pmp->IC = 0.0;  For reproducibility of simplex FIA?
@@ -433,68 +473,25 @@ STEP_POINT( "End Simplex" );
         for( j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-//        ConCalc( pmp->X, pmp->XF, pmp->XFA );
-//        if( pmp->E && pmp->LO )
-//            IS_EtaCalc();
-//       if( pmp->PD==3 )
-//          GammaCalc( LINK_UX_MODE );   // experimental after simplex 
-
     }
-    else  // Taking previous GEMIPM result as initial approximation
+
+    else  // Taking previous GEMIPM result as an initial approximation
     {
-        int jb, je=0, jpb, jpe=0, jdb, jde=0, ipb, ipe=0;
-        double LnGam, FitVar3;
 // pmp->K2 = 0;
-//        FitVar3 = pmp->FitVar[3];
-//        pmp->FitVar[3] = 1.0;
-        TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
+// double FitVar3 = pmp->FitVar[3];
+// pmp->FitVar[3] = 1.0;
+		TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
         for( j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-//        ConCalc( pmp->X, pmp->XF, pmp->XFA );
-//        if( pmp->E && pmp->LO )
-//            IS_EtaCalc();
-        if( pmp->PD==3 )              // added for stability at PIA 06.03.2008 DK
+        if( pmp->PD==3 /* && pmp->Lads==0 */ )    // added for stability at PIA 06.03.2008 DK
             GammaCalc( LINK_UX_MODE);
-/*        
-        for( k=0; k<pmp->FI; k++ )
-        {
-            jb = je;
-            je += pmp->L1[k];
-            // Indexes for extracting data from IPx, PMc and DMc arrays
-            ipb = ipe;                  // added 07.12.2006 by KD
-            ipe += pmp->LsMod[k*3]*pmp->LsMod[k*3+1];
-            jpb = jpe;
-            jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
-            jdb = jde;
-            jde += pmp->LsMdc[k]*pmp->L1[k];
-
-            if( pmp->PHC[k] == PH_SORPTION || pmp->PHC[k] == PH_POLYEL )
-            {
-               if( pmp->E && pmp->LO )
-                   GouyChapman( jb, je, k );
-//               SurfaceActivityTerm( jb, je, k );
-                 SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
-            }
-            for( j=jb; j<je; j++ )
-            {
-// Try GammaCalc in UX mode but with actual smoothing parameter instead !! 
-            	LnGam = pmp->lnGam[j];
-                if( fabs( LnGam ) > 1e-9 )
-                    pmp->Gamma[j] = exp( LnGam );
-                else pmp->Gamma[j] = 1.0;
-                pmp->F0[j] = Ej_init_calc( 0.0, j, k  );
-                pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];
-                pmp->lnGmo[j] = LnGam;
-            }  // j
-        } // k
-*/ 
-//        pmp->FitVar[3] = FitVar3; // Restoring smoothing parameter
+// pmp->FitVar[3] = FitVar3; // Restoring smoothing parameter
 
         if( pmp->pNP <= -1 )
         {  // With raising species and phases zeroed off by simplex()
            // Setting default trace amounts of DCs that were zeroed off
-           RaiseZeroedOffDCs( 0, pmp->L, 1/1000. );
+           RaiseZeroedOffDCs( 0, pmp->L, sfactor );
         }
     }  // else
     pmp->MK = 1;
@@ -502,7 +499,6 @@ STEP_POINT( "End Simplex" );
 #ifndef IPMGEMPLUGIN
 STEP_POINT("Before FIA");
 #endif
-
 
     return false;
 }
@@ -529,7 +525,7 @@ int TMulti::EnterFeasibleDomain()
                               "Error alloc pmp->MU or pmp->W." );
     DHB = pmp->DHBM;  // Convergence (balance precision) criterion
     pmp->Ec=0;  // Return code
-
+    
     // calculation of total mole amounts of phases
     TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
 
@@ -618,13 +614,15 @@ STEP_POINT("FIA Iteration");
 //          1, in the case of R matrix degeneration
 //          2, (more than max iteration) - no convergence
 //              or user's interruption
+//          3, GammaCalc() returns bad (non-zero) status (in PIA mode only) 
 //
-int TMulti::InteriorPointsMethod( )
+int TMulti::InteriorPointsMethod( int &status, int rLoop )
 {
-    int N, IT1,J,Z,iRet;
+    int N, IT1,J,Z,iRet;  
     double LM=0., LM1, FX1;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
+    status = 0;
     if( pmp->FIs )
       for( J=0; J<pmp->Ls; J++ )
             pmp->lnGmo[J] = pmp->lnGam[J];
@@ -690,7 +688,7 @@ int TMulti::InteriorPointsMethod( )
        // Main IPM iteration done
        // Calculation of activity coefficients
         if( pmp->PD==3 )
-            GammaCalc( LINK_UX_MODE ); 
+            status = GammaCalc( LINK_UX_MODE ); 
 
         if( pmp->PHC[0] == PH_AQUEL && pmp->XF[0] <= pa->p.XwMin &&
              pmp->X[pmp->LO] <= pmp->lowPosNum*1e3 )    // bugfix 29.11.05 KD
@@ -700,6 +698,9 @@ int TMulti::InteriorPointsMethod( )
         }
         // Restoring vectors Y and YF
         Restoring_Y_YF();
+        
+if( pmp->pNP && rLoop < 0 && status )
+   	return 3;
 
 #ifndef IPMGEMPLUGIN
 #ifndef Use_mt_mode

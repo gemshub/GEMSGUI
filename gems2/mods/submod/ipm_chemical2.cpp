@@ -293,6 +293,7 @@ pmp->Wx[j] = 0.0;
             DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
                                   + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+            pmp->FVOL[k] += pmp->Vol[j]*X[j]; // fixed 11.03.2008 KD
             break;
         case DC_SSC_A0:
         case DC_SSC_A1:
@@ -314,6 +315,7 @@ pmp->Wx[j] = 0.0;
             DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
                                  + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+            pmp->FVOL[k] += pmp->Vol[j]*X[j]; // fixed 11.03.2008   KD
             break;
         case DC_PEL_CARRIER:
         case DC_SUR_MINAL:
@@ -531,14 +533,19 @@ NEXT_PHASE:
 // ( in moles ) using Gouy-Chapman equation.
 // Strictly valid at PSI < 30 mV. Modified by DAK 5 Jan 2000
 // to add a Basic Stern EDL model.
-//
-void TMulti::GouyChapman(  int, int, int k )
+//    Added 13.03.2008 by DK: returns int value showing (if not 0) 
+//    that some extreme values were reached for charge densities or 
+//    electric potentials (for detecting bad PIA), 0 otherwise 
+// 
+int 
+TMulti::GouyChapman(  int, int, int k )
 {
-    int ist;
+    int status=0; 
+	int ist;
     double SigA=0., SigD=0., SigB=0., SigDDL=0.,
       XetaA[MST], XetaB[MST], XetaD[MST], f1, f3, A, Sig, F2RT, I, Cap;
     if( pmp->XF[k] <  TProfil::pm->pa.p.ScMin )
-        return; // no sorbent
+        return status; // no sorbent
 
     // sorbent mass in grams
     pmp->YFk = pmp->FWGT[k];
@@ -570,19 +577,22 @@ void TMulti::GouyChapman(  int, int, int k )
         {
 // cout << "EDL charge density A " << XetaA[ist] << " truncated to +- 0.7 C/m2" <<
 //        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
-            XetaA[ist] = XetaA[ist] < 0.0 ? -1.4: 1.4;
+            XetaA[ist] = XetaA[ist] < 0.0 ? -1.4: 1.4; 
+            status = 60;
         }
         if( fabs(XetaB[ist]) > 2.0 )
         {
 // cout << "EDL charge density B " << XetaB[ist] << " truncated to +- 1.7 C/m2" <<
 //        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
             XetaB[ist] = XetaB[ist] < 0.0 ? -2.0: 2.0;
+            status = 61;
         }
         if( fabs(XetaD[ist]) > 1.4 )
         {
 // cout << "EDL charge density D " << XetaD[ist] << " truncated to +- 0.7 C/m2" <<
 //        "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
             XetaD[ist] = XetaD[ist] < 0.0 ? -1.4: 1.4;
+            status = 62;
         }
         if( fabs( XetaA[ist] ) < pmp->lowPosNum*1e6 &&
                fabs( XetaB[ist] ) < pmp->lowPosNum*1e6 &&
@@ -688,6 +698,7 @@ void TMulti::GouyChapman(  int, int, int k )
 // cout << "All EDL models: PsiD = " << PsiD << " truncated to +- 0.4 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
             PsiD = PsiD<0? -0.4: 0.4;
+            status = 63;
         }
 GEMU_CALC:
         // calculating potentials at EDL planes
@@ -704,6 +715,7 @@ GEMU_CALC:
                if( fabs( PsiA ) > 0.7 ) // truncated 0-plane potential
                {
                    PsiA = PsiA<0? -0.7: 0.7;
+                   status = 64;
                }
                pmp->XpsiA[k][ist] = PsiA;
             }
@@ -712,11 +724,13 @@ GEMU_CALC:
                if( fabs( PsiB ) > 0.3 )  // truncated B-plane potential
                {
                    PsiB = PsiB<0? -0.3: 0.3;
+                   status = 65;
                }
                PsiA = PsiB + SigA / (double)pmp->XcapA[k][ist];
                if( fabs( PsiA ) > 0.7 )
                {
                   PsiA = PsiA<0? -0.7: 0.7;
+                  status = 66;
                }
                pmp->XpsiA[k][ist] = PsiA;
                pmp->XpsiB[k][ist] = PsiB;
@@ -730,6 +744,7 @@ GEMU_CALC:
 // cout << "EDL (MTL) PsiB = " << PsiB << " truncated to +- 0.6 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiB = PsiB<0? -0.6: 0.6;
+                status = 67;
             }
             PsiA = PsiB + SigA / (double)pmp->XcapA[k][ist];
             if( fabs( PsiA ) > 1.1 )  // truncated 0 plane potential
@@ -737,6 +752,7 @@ GEMU_CALC:
 // cout << "EDL (MTL) PsiA = " << PsiA << " truncated to +- 1.1 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiA = PsiA<0? -1.1: 1.1;
+                status = 68;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
@@ -748,6 +764,7 @@ GEMU_CALC:
 // cout << "EDL (TLM) PsiB = " << PsiB << " truncated to +- 0.6 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiB = PsiB<0? -0.6: 0.6;
+                status = 69;
             }
             PsiA = PsiB + SigA / (double)pmp->XcapA[k][ist];
             if( fabs( PsiA ) > 1.1 )  // truncated 0-plane potential
@@ -755,6 +772,7 @@ GEMU_CALC:
 // cout << "EDL (TLM) PsiA = " << PsiA << " truncated to +- 1.1 V" <<
 //      "  IT= " << k << " k= " << k << " ist= " << ist << endl;
                 PsiA = PsiA<0? -1.1: 1.1;
+                status = 70;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
@@ -771,6 +789,7 @@ GEMU_CALC:
 // cout << "EDL (3LM) PsiB = " << PsiB << " truncated to +- 0.6 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiB = PsiB<0? -0.6: 0.6;
+                status = 71;
             }
             PsiA = PsiB + SigA / (double)pmp->XcapA[k][ist];
             if( fabs( PsiA ) > 1.1 )   // truncated 0-plane potential
@@ -778,6 +797,7 @@ GEMU_CALC:
 // cout << "EDL (3LM) PsiA = " << PsiA << " truncated to +- 1.1 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiA = PsiA<0? -1.1: 1.1;
+                status = 72;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
@@ -789,6 +809,7 @@ GEMU_CALC:
 //cout << "EDL (BSM) PsiB = " << PsiB << " truncated to +- 0.6 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiB = PsiB<0? -0.6: 0.6;
+                status = 73;
             }
             PsiA = PsiB + SigA / (double)pmp->XcapA[k][ist];
             if( fabs( PsiA ) > 1.1 )  // truncated 0-plane potential
@@ -796,6 +817,7 @@ GEMU_CALC:
 //cout << "EDL (BSM) PsiA = " << PsiA << " truncated to +- 1.1 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiA = PsiA<0? -1.1: 1.1;
+                status = 74;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
@@ -807,6 +829,7 @@ GEMU_CALC:
 // cout << "EDL (MXC) PsiB = " << PsiB << " truncated to +- 0.6 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiB = PsiB<0? -0.6: 0.6;
+                status = 75;
             }
             PsiA = PsiB + SigA / (double)pmp->XcapA[k][ist];
             if( fabs( PsiA ) > 1.1 ) // truncated 0-plane potential
@@ -814,6 +837,7 @@ GEMU_CALC:
 // cout << "EDL (MXC) PsiA = " << PsiA << " truncated to +- 1.1 V" <<
 //      "  IT= " << pmp->IT << " k= " << k << " ist= " << ist << endl;
                 PsiA = PsiA<0? -1.1: 1.1;
+                status = 76;
             }
             pmp->XpsiA[k][ist] = PsiA;
             pmp->XpsiB[k][ist] = PsiB;
@@ -826,6 +850,7 @@ GEMU_CALC:
             break;
         }
     }  // ist   end of loop over surface types
+    return status; 
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -842,18 +867,23 @@ GEMU_CALC:
 //
 //  pmp->lnSAC[*][3] vector is now used to keep original DUL[j] to restore
 //  them after IPM-2 refinements for surface complexes.
-//
-void TMulti::SurfaceActivityCoeff( int jb, int je, int, int, int k )
+//    Added 13.03.2008 by DK: returns int value showing (if true) 
+//    that some extreme values were obtained for some SACTs, 
+//    0 otherwise (for detecting bad PIA) 
+// 
+int
+TMulti::SurfaceActivityCoeff( int jb, int je, int, int, int k )
 {
-    int i, ii, j, ja, ist, iss, dent, Cj, iSite[6];
+    int status = 0; 
+	int i, ii, j, ja, ist, iss, dent, Cj, iSite[6];
     double XS0,  xj0, XVk, XSk, XSkC, xj, Mm, rIEPS, ISAT, XSs,
-           SATst, xjn, q1, q2, aF, cN, eF;
+           SATst, xjn, q1, q2, aF, cN, eF, lnGamjo;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
     if( pmp->XF[k] <= pmp->DSM ) // No sorbent retained by the IPM - phase killed
-        return;
+        return status;
     if( pmp->XFA[k] <=  pa->p.ScMin )  // elimination of sorption phase
-        return;  // No surface species left
+        return status;  // No surface species left
 
     for(i=0; i<MST; i++)
     {
@@ -889,7 +919,8 @@ void TMulti::SurfaceActivityCoeff( int jb, int je, int, int, int k )
 
     for( j=jb; j<je; j++ )
     { // Main loop for DCs - surface complexes
-        if( pmp->X[j] <= pmp->lowPosNum )
+        lnGamjo = pmp->lnGam[j];
+    	if( pmp->X[j] <= pmp->lowPosNum )
             continue;  // This surface DC has been killed by IPM
 //        OSAT = pmp->lnGmo[j]; // added 6.07.01 by KDA
         ja = j - ( pmp->Ls - pmp->Lads );
@@ -1223,7 +1254,10 @@ void TMulti::SurfaceActivityCoeff( int jb, int je, int, int, int k )
                 break;
             }
         }
+        if( fabs( lnGamjo - pmp->lnGam[j] ) > 2. ) // 7.4 times 
+    	   status = 101;   // the SACT has changed too much; threshold needs adjustment!  
     }  // j
+   return status;
 }
 
 //--------------------- End of ipm_chemical2.cpp ---------------------------

@@ -32,7 +32,7 @@
 //    (optionally translating non-ideality Phase scripts)
 // 3) Continues looking through one-component Phases, to seek for
 //    specific surfaces and related surface parameters
-// 4) Terforms necessary re-scaling and conversions of data
+// 4) Performs necessary re-scaling and conversions of data
 // 5) Tests whether it is possible to take old primal (x, gamma) and dual
 //   (u) solutions as an initial approximation
 //
@@ -68,8 +68,8 @@ void TMulti::MultiRemake( const char *key )
     if( syp->DLLim == S_ON || syp->DULim == S_ON )
         pmp->PLIM = 1;
     else pmp->PLIM = 0;
-
-    pmp->IT = 0; pmp->ITF = 0; pmp->ITG = 0;
+//    pmp->IT = 0;     Debugging 12.03.2008 DK 
+    pmp->ITF = 0; pmp->ITG = 0;
     if( syp->PE != S_OFF )
         pmp->E = 1;
     else pmp->E = 0;
@@ -182,7 +182,7 @@ void TMulti::multi_sys_dc()
 {
     int j, ii, L, iZ=0;
     short jj, jja, ja, kk;
-    float a, *A, Vv =0.;
+    float a, *A; // , Vv =0.;
     double mm;
     TIArray<TFormula> aFo;
     gstring form;
@@ -466,7 +466,7 @@ void TMulti::multi_sys_ph()
     short kk, j, je, jb, ja=0;
     vstr pkey(MAXRKEYLEN);
     time_t crt;
-    double G;
+//    double G;
     double PMM;  // Phase mean mol. mass
     short Cjs, car_l[32], car_c; // current index carrier sorbent
     TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);

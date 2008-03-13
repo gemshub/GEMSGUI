@@ -644,28 +644,32 @@ NumPrecLoops = pmp->W1+pmp->K2-1;
 NumIterFIA = pmp->ITF;
 NumIterIPM = pmp->ITG;
 
-if( pa.p.PRD < 0 && pa.p.PRD > -50 /* && !pmp->pNP */ ) // max 50 loops
-{  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
-          int pp, pNPo = pmp->pNP,  TotIT = pmp->IT, // TotITG = pmp->ITG, TotITF = pmp->ITF,
-                   TotW1 = pmp->W1+pmp->K2-1;
-          pmp->pNP = 1;
-          for( pp=0; pp < abs(pa.p.PRD); pp++ )
-          {
-            pmp->IT = 0;  // This may be sensitive   // pmp->ITG = 0; pmp->ITF = 0;
-            if( multi->AutoInitialApprox( ) == false )
-            {
-                multi->MultiCalcIterations( pp );
-            }
-            TotIT += pmp->IT; 
-            TotW1 += pmp->W1+pmp->K2-2; 
-          }
-          if( !pNPo )
-            pmp->pNP = 0;
-            pmp->IT = (short)TotIT;
-          NumPrecLoops = TotW1; 
-          NumIterFIA = pmp->ITF;  //   TotITF;
-          NumIterIPM = pmp->ITG;  //   TotITG;
-}       
+   if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
+   {  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
+      int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,  
+        ITold = pmp->IT, TotIT = pmp->IT;
+      pmp->pNP = 1;
+      for( pp=0; pp < abs(pa.p.PRD); pp++ )
+      {
+         pmp->IT = 0; // Important for refinement in highly non-ideal systems!
+         if( multi->AutoInitialApprox( ) == false )
+         {
+            multi->MultiCalcIterations( pp );
+         }
+         TotIT += pmp->IT;
+         TotW1 += pmp->W1+pmp->K2-2; 
+      }
+      if( !pNPo ) 
+      {   
+    	  pmp->IT = (TotIT-ITold)/2;
+          pmp->pNP = 0;
+      }
+      else pmp->IT = ITold;         
+
+      NumPrecLoops = TotW1; 
+      NumIterFIA = pmp->ITF;  
+      NumIterIPM = pmp->ITG;  
+   }       
        
 pmp->t_end = clock();
 pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
