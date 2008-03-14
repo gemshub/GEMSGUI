@@ -57,7 +57,7 @@ const double R_CONSTANT = 8.31451,
                             ln_to_lg = 0.434294481;
 
 SPP_SETTING pa_ = {
-    "GEMS-PSI v2.2: Controls and defaults for numeric modules",
+    "GEMS-PSI v2.2.3: Controls and defaults for numeric modules",
     {
         1,  /* PC */  3,     /* PD */   3,   /* PRD */
         1,  /* PSM  */ 15,  /* DP */   15,   /* DW */

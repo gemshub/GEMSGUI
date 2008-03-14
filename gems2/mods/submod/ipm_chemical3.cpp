@@ -1204,7 +1204,7 @@ TMulti::CGofPureGases( int jb, int je, int, int jdb, int )
 //        pmp->lnGmM[j] = log( Fugacity / pmp->Pc ); // Constant correction to G0 here!
 pmp->GEX[j] = log( Fugacity / pmp->Pc );   // now here (since 26.02.2008)  DK
         pmp->Pparc[j] = Fugacity;          // Necessary only for performance
-        pmp->Vol[j] = Volume;       // molar volume of pure fluid component, J/bar
+        pmp->Vol[j] = Volume * 10.;       // molar volume of pure fluid component, J/bar to cm3
 
         // passing corrected EoS coeffs to calculation of fluid mixtures
         Coeff[15] = Eos4parPT[0];
@@ -1313,7 +1313,7 @@ TMulti::PRSVofPureGases( int jb, int je, int, int jdb, int, int )
 //         pmp->lnGmM[j] = log( Fugcoeff );    // Constant correction to G0 here!
 pmp->GEX[j] = log( Fugcoeff );    // now here (since 26.02.2008) DK
          pmp->Pparc[j] = Fugcoeff * pmp->Pc; // Necessary only for performance
-         pmp->Vol[j] = Volume;  // molar volume of pure fluid component, J/bar
+         pmp->Vol[j] = Volume * 10.;  // molar volume of pure fluid component, J/bar to cm3
 
 //  passing corrected EoS coeffs to calculation of fluid mixtures
          Coeff[6] = Eos2parPT[0];      // a
