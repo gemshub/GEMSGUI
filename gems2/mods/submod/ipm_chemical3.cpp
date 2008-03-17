@@ -287,7 +287,7 @@ TMulti::GammaCalc( int LinkMode  )
 {
     int k, j, jb, je=0, jpb, jpe=0, jdb, jde=0, ipb, ipe=0;
     char *sMod;  
-    int statusGam=0, statusGC, statusSACT;
+    int statusGam=0, statusGC=0, statusSACT=0;
     double LnGam, pmpXFk;
     SPP_SETTING *pa = &TProfil::pm->pa;
 

@@ -919,7 +919,7 @@ TMulti::SurfaceActivityCoeff( int jb, int je, int, int, int k )
 
     for( j=jb; j<je; j++ )
     { // Main loop for DCs - surface complexes
-        lnGamjo = pmp->lnGam[j];
+        lnGamjo = pmp->lnGmo[j];             // bugfix 16.03.2008 DK 
     	if( pmp->X[j] <= pmp->lowPosNum )
             continue;  // This surface DC has been killed by IPM
 //        OSAT = pmp->lnGmo[j]; // added 6.07.01 by KDA
