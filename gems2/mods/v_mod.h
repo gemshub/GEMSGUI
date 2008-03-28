@@ -302,7 +302,7 @@ enum DC_CNTRL_CODES {
     CTM_DKR = 'R',  /* calculation of lgK of dissociation reactions at elevated TP
                          from density equation (Marshall and Franck, 1978) - ReacDC only*/
                        
-    CTM_PPE = 'E',  /* Dissociation reaction for PRONSPREP 19.05.98 */
+    CTM_PPE = 'E',  /* Dissociation reaction for PRONSPREP-OH 28.03.2008 */
     CTM_MRB = 'Y',  /* Calculation of deltaR with modified Ryzhenko-Bryzgalin
                        model (added by TW and DK on 03.08.2007 */
     // (S) CTPM_EOS

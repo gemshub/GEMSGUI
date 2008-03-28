@@ -334,6 +334,11 @@
                                     <string>R   Calculation of logK, dSr, dCpr, dVr using Franck-Marshall density model</string>
                                 </property>
                             </item>
+                            <item>
+                                <property name="text">
+                                    <string>E   (PRONSPREP97) - predictions for aqueous hydroxocomplexes only</string>
+                                </property>
+                            </item>
                             <property name="name">
                                 <cstring>p_pct_2</cstring>
                             </property>
@@ -387,12 +392,12 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>P   Application of built-in PRONSPREP97  (for aqueous dissociation reactions)</string>
+                                    <string>F   Pressure corrections for the properties of H2O liquid (reserved)</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>F   Pressure corrections for the properties of H2O liquid (reserved)</string>
+                                    <string>P   Application of built-in PRONSPREP97  (for aqueous dissociation reactions)</string>
                                 </property>
                             </item>
                             <property name="name">

@@ -658,7 +658,9 @@ void TFormula::fixup_ics( char* ICs )
 }
 
 // calculate charge, molar mass and elemental entropy from chemical formulae
-void TFormula::Fmwtz( double &Z, double &mW, double &eS )
+// Modified by adding extraction of atomic numbers lAn on 28.03.2008  DK TW
+// returns number of elements (ICs) used in the formula
+int TFormula::Fmwtz( double &Z, double &mW, double &eS, short *lAn )
 {
     time_t icrtim;
     TIComp* aIC = TIComp::pm;
@@ -677,6 +679,7 @@ void TFormula::Fmwtz( double &Z, double &mW, double &eS )
         Sc = aSC[i];
         mW += Sc * aIC->icp->awt;
         eS += Sc * aIC->icp->aSs;
+        lAn[i] = aIC->icp->num;    // getting atomic number
         if( aVal[i] == SHORT_EMPTY/*I_EMPTY*/ )
             aVal[i] = aIC->icp->val;
         Z += Sc * aVal[i];
@@ -685,6 +688,7 @@ void TFormula::Fmwtz( double &Z, double &mW, double &eS )
     }
     if( fabs( Zf ) > 1e-10 && fabs(Z) > 1e-10 )
         Z -= Zf;
+    return aCn.GetCount();
 }
 
 const char* tc_ecname    ="Zz";

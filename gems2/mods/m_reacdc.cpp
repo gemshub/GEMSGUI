@@ -1278,6 +1278,372 @@ void TReacDC::PronsPrep( const char *key )
                 "Don't forget to re-calculate it! ");
 }
 
+
+/* --------------------------------------------------------------- */
+/* This is an implementation of the hydroxide algorithm of:
+	Shock, E.L., Sassani, D.C., Willis, M., Sverjensky, D.A. (1997):
+	Inorganic species in geologic fluids: Correlations among standard
+	molal thermodynamic properties of aqueous ions and hydroxide
+	complexes. Geochim. Cosmochim. Acta, 61, 907-950.
+	note: the calculated properties are those of hydroxide species
+	with non-conventional stoichiometry, i.e. MOH, MO, HMO2, MO2
+*/
+
+void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
+{
+    double ZC,HC,SC,CPC,VC,ZL,HL,SL,CPL,VL,Z,H,S,CP,V,
+    H1,S1,CP1,V1,H2,S2,CP2,V2,H3,S3,CP3,V3,H4,S4,CP4,V4,
+    DELGR1,DELGR2,DELGR3,DELGR4,DELSR1,DELSR2,DELSR3,DELSR4,
+    DELHR1,DELHR2,DELHR3,DELHR4,DELVR1,DELVR2,DELVR3,DELVR4,
+    CSC, LSC, DZ, scC, LOGKR, Sw, Hw, Gw, Cpw, Vw;
+    int i, iL, iC, scL, NC, ZZ;
+    vstr dcn(MAXRKEYLEN+5);
+    int Rfind;
+
+    Sw = 69.923/cal_to_J;
+    Hw = (-285881)/cal_to_J;
+    Gw = (-237183)/cal_to_J;
+    Cpw = 75.3605/cal_to_J;
+    Vw = 1.80684*10.;
+
+    // Finding index of cation and anion
+    for( i=0; i<2; i++ )
+    {
+        Z = rcp->ParDC[i][_Zs_];
+        if( Z > 0.0 )
+            iC = i;
+        else if( Z < 0.0 )
+            iL = i;
+        else Error( GetName(), "Z=0 in PronsPrep");
+    }
+    // Loading data for cation
+    ZC = rcp->ParDC[iC][_Zs_];
+//    GC = rcp->ParDC[iC][_Gs_]/cal_to_J;
+    HC = rcp->ParDC[iC][_Hs_]/cal_to_J;
+    SC = rcp->ParDC[iC][_Ss_]/cal_to_J;
+    CPC = rcp->ParDC[iC][_Cps_]/cal_to_J;
+    VC = rcp->ParDC[iC][_Vs_]*10.0;
+    CSC = rcp->scDC[iC];
+    scC = fabs(CSC);
+    if ( scC > 1. )
+        Error( GetName(), "E15RErun: |Cps| > 1 in PronsPrep for this reaction!");
+
+    // Loading data for ligand
+    ZL = rcp->ParDC[iL][_Zs_];
+//    GL = rcp->ParDC[iL][_Gs_]/cal_to_J;
+    HL = rcp->ParDC[iL][_Hs_]/cal_to_J;
+    SL = rcp->ParDC[iL][_Ss_]/cal_to_J;
+    CPL = rcp->ParDC[iL][_Cps_]/cal_to_J;
+    VL = rcp->ParDC[iL][_Vs_]*10.0;
+    LSC = rcp->scDC[iL];
+
+    scL = (int)fabs(LSC);
+    LOGKR = rcp->Ks[1];
+    if(LOGKR == 0.0 )
+        LOGKR = 1e-9;
+    ZZ = (int)fabs(ZC);
+    
+//    NC = 0;  // needs to pull atomic number of cation from IComp here
+    NC = (int)lAN[iC];      
+    
+    // calculations for complex number 1
+    switch ( ZZ )
+    {
+	case 1:
+		S1 = 1.32*SC - 6.0;
+		CP1 = (-1.14)*S1 + 9.0;
+		DELVR1 = 0.11419*VC + 8.9432;
+		V1 = DELVR1 + VC + (1.0*VL);
+		DELSR1 = S1 - SC - (1.0*SL);
+		DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR1 = DELGR1 + (298.15*DELSR1);
+		H1 = DELHR1 + HC + (1.0*HL);
+		break;
+	case 2:
+		S1 = 1.32*SC + 24.5;
+		CP1 = (-1.14)*S1 + 9.0;
+		if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
+			V1 = 0.16*S1 + 4.9;
+		else
+			V1 = 0.45*S1 - 12.0;
+		DELSR1 = S1 - SC - (1.0*SL);
+		DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR1 = DELGR1 + (298.15*DELSR1);
+		H1 = DELHR1 + HC + (1.0*HL);
+		break;
+	case 3:
+		if ( NC == 31 || NC == 49 || NC == 81 || NC == 83 )
+			S1 = 1.32*SC + 37.0;
+		else
+			S1 = 1.32*SC + 62.0;
+		CP1 = (-1.14)*S1 - 37.2;
+		if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
+			|| NC == 27 || NC == 28 )
+			V1 = 0.45*S1 - 12.0;
+		else
+			V1 = 0.16*S1 + 4.9;
+		DELSR1 = S1 - SC - (1.0*SL);
+		DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR1 = DELGR1 + (298.15*DELSR1);
+		H1 = DELHR1 + HC + (1.0*HL);
+		break;
+	case 4:
+		S1 = 1.32*SC + 74.0;
+		CP1 = (-1.14)*S1 - 37.2;
+		V1 = 0.16*S1 + 4.9;
+		DELSR1 = S1 - SC - (1.0*SL);
+		DELGR1 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR1 = DELGR1 + (298.15*DELSR1);
+		H1 = DELHR1 + HC + (1.0*HL);
+		break;
+	default:
+		Error( GetName(), "E16RErun: Estimation of standard state properties"
+				"not possible for cations with charge larger than 4!");
+	}
+
+
+    // calculations for the complex number 2
+    switch ( ZZ )
+    {
+	case 1:
+		S2 = 1.42*SC - 11.0;
+		CP2 = (-1.14)*S2 - 15.5;
+		V2 = 0.45*S2 - 12.0;
+		DELSR2 = S2 - SC - (2.0*SL) + Sw;
+		DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR2 = DELGR2 + (298.15*DELSR2);
+		H2 = DELHR2 + HC + (2.0*HL) - Hw;
+		break;
+	case 2:
+		S2 = 1.42*SC + 20.5;
+		CP2 = (-1.14)*S2 - 15.5;
+		if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
+			V2 = 0.16*S2 + 4.9;
+		else
+			V2 = 0.45*S2 - 12.0;
+		DELSR2 = S2 - SC - (2.0*SL) + Sw;
+		DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR2 = DELGR2 + (298.15*DELSR2);
+		H2 = DELHR2 + HC + (2.0*HL) - Hw;
+		break;
+	case 3:
+		S2 = 1.42*SC + 83.0;
+		CP2 = (-1.14)*S2 - 60.8;
+		if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
+			|| NC == 27 || NC == 28 )
+			V2 = 0.45*S2 - 12.0;
+		else
+			V2 = 0.16*S2 + 4.9;
+		DELSR2 = S2 - SC - (2.0*SL) + Sw;
+		DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR2 = DELGR2 + (298.15*DELSR2);
+		H2 = DELHR2 + HC + (2.0*HL) - Hw;
+		break;
+	case 4:
+		S2 = 1.42*SC + 108.0;
+		CP2 = (-1.14)*S2 - 60.8;
+		V2 = 0.16*S2 + 4.9;
+		DELSR2 = S2 - SC - (2.0*SL) + Sw;
+		DELGR2 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR2 = DELGR2 + (298.15*DELSR2);
+		H2 = DELHR2 + HC + (2.0*HL) - Hw;
+		break;
+	default:
+		Error( GetName(), "E16RErun: Estimation of standard state properties"
+				"not possible for cations with charge larger than 4!" );
+	}
+
+    // calculations for complex number 3
+    switch ( ZZ )
+    {
+	case 1:
+		Error( GetName(), "E16RErun: Estimation of standard state properties"
+				"not possible for complexes of monovalent cations with ligand numbers larger than 2!");
+		break;
+	case 2:
+		S3 = 1.52*SC + 15.5;
+		CP3 = (-2.28)*S3 - 24.0;
+		if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
+			V3 = 0.25*S3 + 11.7;
+		else
+			V3 = 0.54*S3 - 4.8;
+		DELSR3 = S3 - SC - (3.0*SL) + Sw;
+		DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR3 = DELGR3 + (298.15*DELSR3);
+		H3 = DELHR3 + HC + (3.0*HL) - Hw;
+		break;
+	case 3:
+		S3 = 1.52*SC + 123.0;
+		CP3 = (-2.28)*S3 - 24.0;
+		if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
+			|| NC == 27 || NC == 28 )
+			V3 = 0.54*S3 - 4.8;
+		else
+			V3 = 0.25*S3 + 11.7;
+		DELSR3 = S3 - SC - (3.0*SL) + Sw;
+		DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR3 = DELGR3 + (298.15*DELSR3);
+		H3 = DELHR3 + HC + (3.0*HL) - Hw;
+		break;
+	case 4:
+		S3 = 1.52*SC + 140.0;
+		CP3 = (-2.28)*S3 - 24.0;
+		V3 = 0.25*S3 + 11.7;
+		DELSR3 = S3 - SC - (3.0*SL) + Sw;
+		DELGR3 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR3 = DELGR3 + (298.15*DELSR3);
+		H3 = DELHR3 + HC + (3.0*HL) - Hw;
+		break;
+	default:
+		Error( GetName(), "E16RErun: Estimation of standard state properties"
+				"not possible for cations with charge larger than 4!");
+	}
+
+
+    // calculations for complex number 4
+    switch ( ZZ )
+    {
+	case 1:
+		Error( GetName(), "E16RErun: Estimation of standard state properties"
+				"not possible for complexes of monovalent cations with ligand numbers larger than 2!");
+		break;
+	case 2:
+		S4 = 1.62*SC + 11.0;
+		CP4 = (-2.28)*S4 - 106.2;
+		if ( NC == 4 || NC == 12 || NC == 20 || NC == 38 || NC == 56 || NC == 88 )
+			V4 = 0.25*S4 + 11.7;
+		else
+			V4 = 0.54*S4 - 4.8;
+		DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
+		DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR4 = DELGR4 + (298.15*DELSR4);
+		H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
+		break;
+	case 3:
+		S4 = 1.62*SC + 118.0;
+		CP4 = (-2.06)*S4 - 34.5;
+		if ( NC == 21 || NC == 22 || NC == 23 || NC == 24 || NC == 25 || NC == 26
+			|| NC == 27 || NC == 28 )
+			V4 = 0.54*S4 - 4.8;
+		else
+			V4 = 0.25*S4 + 11.7;
+		DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
+		DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR4 = DELGR4 + (298.15*DELSR4);
+		H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
+		break;
+	case 4:
+		S4 = 1.62*SC + 135.0;
+		CP4 = (-2.06)*S4 - 34.5;
+		V4 = 0.25*S4 + 11.7;
+		DELSR4 = S4 - SC - (4.0*SL) + (2.0*Sw);
+		DELGR4 = LOGKR * lg_to_ln * 1.98719 * 298.15;
+		DELHR4 = DELGR4 + (298.15*DELSR4);
+		H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
+		break;
+	default:
+		Error( GetName(), "E16RErun: PRONSPREP-OH is not possible for cations"
+				"with charge larger than 4!");
+	}
+
+
+    if( scL == 1 )
+    {
+        H = H1;
+        S = S1;
+        CP = CP1;
+        V = V1;
+    }
+    if( scL == 2 )
+    {
+        H = H2;
+        S = S2;
+        CP = CP2;
+        V = V2;
+    }
+    if( scL == 3 )
+    {
+        H = H3;
+        S = S3;
+        CP = CP3;
+        V = V3;
+    }
+    if( scL == 4 )
+    {
+        H = H4;
+        S = S4;
+        CP = CP4;
+        V = V4;
+    }
+
+    // Putting the results into REACDC fields
+    rcp->Hs[0] += rcp->Hs[1] - H * cal_to_J;
+    rcp->Ss[0] += rcp->Ss[1] - (float)(S * cal_to_J);
+    rcp->Cps[0] += rcp->Cps[1] - (float)(CP * cal_to_J);
+    rcp->Vs[0]  += rcp->Vs[1] - (float)(V / 10.0);
+    rcp->Hs[1] = H * cal_to_J;
+    rcp->Ss[1] = (float)(S * cal_to_J);
+    rcp->Cps[1] = (float)(CP * cal_to_J);
+    rcp->Vs[1] = (float)(V/10.0);
+
+    aMod[RT_REACDC].ModUpdate("PRONSPREP correlations (Step 1) done Ok!");
+
+    if( !vfQuestion( window(), "DComp",
+               "Would you like to create/modify a DComp record?" ))
+        return;
+    // Trying to read resulting DCOMP
+
+    strncpy( dcn, key, MAXRKEYLEN );
+    TDComp* aDC=(TDComp *)(&aMod[RT_DCOMP]);
+    aDC->ods_link(0);
+    Rfind = rt[RT_DCOMP].Find( dcn );
+    if(Rfind <0 )
+    { // There is no such record - copying data
+        aDC->dcp->Zz = rcp->Zz;
+        aDC->dcp->mwt = rcp->mwt;
+        aDC->dcp->Pst = rcp->Pst;
+        aDC->dcp->TCst = rcp->TCst;
+        aDC->dcp->Comp = rcp->Comp;
+        aDC->dcp->Expa = rcp->Expa;
+        aDC->dcp->Der = rcp->Der;
+        aDC->dcp->DerB = rcp->DerB;
+        aDC->dcp->PdcC = rcp->PreC;
+        aDC->dcp->pct[2] = rcp->pct[2];
+        memcpy( aDC->dcp->form, rcp->form, MAXFORMULA );
+        memcpy( aDC->dcp->name, rcp->name, MAXFORMULA );
+        memcpy( aDC->dcp->rmtm, rcp->rmtm, MAXRMTM );
+    }
+    else
+    {  // The record is found
+        rt[RT_DCOMP].Get(Rfind);
+        aDC->dyn_set();
+    }
+    aDC->dcp->Gs[0] = rcp->Gs[1];
+    aDC->dcp->Hs[0] = rcp->Hs[1];
+    aDC->dcp->Ss[0] = rcp->Ss[1];
+    aDC->dcp->Cps[0] = rcp->Cps[1];
+    aDC->dcp->mVs[0] = rcp->Vs[1];
+    aDC->dcp->Gs[1] = rcp->Gs[2];
+    aDC->dcp->Hs[1] = rcp->Hs[2];
+    aDC->dcp->Ss[1] = rcp->Ss[2];
+    // Creating/saving DCOMP record
+    if( Rfind>=0 )
+    {
+        if( !vfQuestion( window(), "DComp",
+             "The DComp record already exists! Modify it (Y) or skip (N)?" ))
+            return;
+        //Rnum = rt[RT_DCOMP].Find(dcn);
+        rt[RT_DCOMP].Rep(Rfind/*Rnum*/);
+    }
+    else TDComp::pm->AddRecord(dcn);
+    // A reminder
+    vfQuestion( window(), "DComp", "PRONSPREP Step 2: the DComp record is ready!"
+                "Don't forget to re-calculate it! ");
+}
+
+
+
+
 // Help on ReacDC module ( ? button )
 void
 TReacDC::CmHelp()

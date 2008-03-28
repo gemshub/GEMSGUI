@@ -134,7 +134,7 @@ public:
     //--- Value manipulation
     void fixup_ics( char* ICs );
     void SetFormula( const char * StrFopm ); // and ce_fscan
-    void Fmwtz( double &Z, double &mW, double &eS );
+    int Fmwtz( double &Z, double &mW, double &eSm, short *lAn );
     void TestIC( const char *key, int N, char *ICsym );
     void Stm_line( int N, float *Sml, char *ICsym, short *ICval );
     void Reset();

@@ -152,6 +152,7 @@ protected:
     void calc_exion_r( int q, int p );
     void calc_tpcv_r( int q, int p, int CM, int CV );
     void PronsPrep( const char *key );
+void PronsPrepOH( const char *key, int nICs, short *listAN );   // added by TW 28.03.2008 
 void calc_r_MRB( int q, int p, int CE, int CV );
 int MRBcalc ( double TK, double *H2Oprop, double *MRBcoef, double *ReactProp );
 

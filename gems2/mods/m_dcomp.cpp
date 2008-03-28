@@ -504,9 +504,10 @@ TDComp::RecCalc( const char *key )      // dcomp_test
 
     TFormula aFo;
     //double Z, MW, foS;
-
+    int nICs;
+    short listAN[100];  // atomic numbers of ICs involved in the formula
     aFo.SetFormula( dcp->form );   // set formula to analyse
-    aFo.Fmwtz( Z, MW, foS );       // calculate molar mass
+    nICs = aFo.Fmwtz( Z, MW, foS, listAN );  // calculate molar mass, return number of ICs
     if( fabs( Z ) < ZBALANCE_PREC )
         dcp->Zz = 0.;
     else

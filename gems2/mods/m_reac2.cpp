@@ -150,6 +150,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
         A[5]=0.0;
         A[6]=0.0;
         break;
+    case CTM_PPE: 
     case CTM_EK3: // Generating 3-term extrapolation at constant dCpr
         if( Cp )
         {
@@ -313,8 +314,11 @@ void TReacDC::Recalc( int q, const char *key  )
     //FIRSTTIME:  Set formula
     /* Get formula and test it */
     aFo.SetFormula( rc[q].form );   // set formula and analyse it
+    /* Get number of elements in the formula */
+    int nICs;
+    short listAN[100];
     /* Calc molar mass and formula charge */
-    aFo.Fmwtz( Z, MW, foS );
+    nICs = aFo.Fmwtz( Z, MW, foS, listAN );
     if( fabs( Z ) < ZBALANCE_PREC )
         rc[q].Zz = 0.;
     else rc[q].Zz = (float)Z;
@@ -508,7 +512,12 @@ NEXT:
                        "Estimate S, H, Cp, V using PRONSPREP97 algorithm?" ))
         { /* Check if this is a dissociation reaction */
             if( rc[q].scDC[rc[q].nDC-1] < 0 )
-                PronsPrep( key );
+            {              
+                if( rc[q].pct[1] != CTM_PPE )  // if not 'E' then old PRONSPREP
+            	   PronsPrep( key );
+                else 
+                   PronsPrepOH( key, nICs, listAN );
+            }
             else Error( GetName(),"W27RErun: PP97 requires a dissociation reaction!");
         }
     }
