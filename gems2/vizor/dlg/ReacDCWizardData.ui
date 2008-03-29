@@ -271,42 +271,62 @@
                         <widget class="QComboBox">
                             <item>
                                 <property name="text">
-                                    <string>3   Three-term extrapolation of logK (T ) at dCpr(T) = const </string>
+                                    <string>0   One-term extrapolation of logK (T) </string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>2   Two-term extrapolation of logK (T ) </string>
+                                    <string>1   One-term extrapolation of logK (T)  assuming dGr (T) = dGr (Tr ) = const.</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>1   One-term extrapolation of logK (T )  assuming dGr (T ) = dGr (Tr ) = const,</string>
+                                    <string>2   Two-term extrapolation of logK (T) </string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>0   One-term extrapolation of logK (T ) </string>
+                                    <string>3   Three-term extrapolation of logK (T) at dCpr (T) = const.</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
+                                    <string>L    Calculation of logK (T) for reactions from 7 empirical coefficients</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>X   Calculation of logKT   for reactions from the empirical coefficients</string>
+                                    <string>X   Calculation of logK (T) for reactions from 5 empirical Cp coefficients</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>S   Calculation of g0T , h0T, S0T  from standard entropy integration</string>
+                                    <string>Z   Lagrange polynomial interpolation of discrete logK (P,T) values</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>K   Calculation using HKF EoS coefficients (reserved)</string>
+                                    <string>R   Calculation of logK, dSr, dCpr, dVr using Marshall-Franck density model</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Y   Calculation of logK, dSr, dCpr, dVr using modified Ryzhenko-Bryzgalin model</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>G   Calculation of standard Gibbs energy function g0T for isotopic forms of compounds</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>S   Calculation of g0T, h0T, S0T from standard entropy integration</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>E   Pronsprep97 - prediction of properties for aqueous hydroxide complexes</string>
                                 </property>
                             </item>
                             <item>
@@ -316,27 +336,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>L    Calculation of logKT  for reactions (reserved)</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>G   Calculation of standard Gibbs energy function g0T  </string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Y   Calculation of logK, dSr, dCpr, dVr using modified Ryzhenko-Bryzgalin algorithm</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>R   Calculation of logK, dSr, dCpr, dVr using Franck-Marshall density model</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>E   (PRONSPREP97) - predictions for aqueous hydroxocomplexes only</string>
+                                    <string>K   Calculation using HKF EoS coefficients (reserved)</string>
                                 </property>
                             </item>
                             <property name="name">
@@ -357,7 +357,7 @@
                         <widget class="QComboBox">
                             <item>
                                 <property name="text">
-                                    <string>C   Molar volume of new DC from constant dVr  of reaction</string>
+                                    <string>C   Molar volume of new DC calculated from constant dVr  of reaction</string>
                                 </property>
                             </item>
                             <item>
@@ -367,12 +367,12 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Z   Lagrange polynomial interpolation of logK (P,T ) </string>
+                                    <string>Z   Lagrange polynomial interpolation of discrete logK (P,T ) </string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>B   Molar volume corrected using Birch-Murnaghan EoS coefficients</string>
+                                    <string>B   Molar volume correction calculated from Birch-Murnaghan EoS</string>
                                 </property>
                             </item>
                             <item>
@@ -397,7 +397,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>P   Application of built-in PRONSPREP97  (for aqueous dissociation reactions)</string>
+                                    <string>P   Pronsprep97 - prediction of standard state data for aqueous metal complexes</string>
                                 </property>
                             </item>
                             <property name="name">

@@ -150,7 +150,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
         A[5]=0.0;
         A[6]=0.0;
         break;
-    case CTM_PPE: 
+    case CTM_PPE:
     case CTM_EK3: // Generating 3-term extrapolation at constant dCpr
         if( Cp )
         {

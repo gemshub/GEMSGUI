@@ -811,7 +811,7 @@ CALCULATE_DELTA_R:
             break;
             /*  case CTM_EK1:  dbc = calc_isocoul_r( q, p, CE, CV );
                                break;  */
-        case CTM_DKR: // Franck-Marshall density model 
+        case CTM_DKR: // Marshall-Franck density model 
         	calc_r_FMD( q, p, CE, CV );
             break;
         case CTM_MRB: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
