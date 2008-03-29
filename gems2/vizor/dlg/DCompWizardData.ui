@@ -267,7 +267,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>H   Calculation on the basis of revised HKF EoS (reserved)</string>
+                            <string>H   Calculation on the basis of the revised HKF EoS</string>
                         </property>
                     </item>
                     <property name="name">
@@ -294,12 +294,12 @@
                 <widget class="QComboBox">
                     <item>
                         <property name="text">
-                            <string>S   Calculation of g0T , h0T, S0T  from standard entropy integration</string>
+                            <string>S   Calculation of g0T, h0T, S0T  from standard entropy integration</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>H   Calculation using Landau contribution to Cp(T) (Holland&amp;Powell,1998)</string>
+                            <string>H   Calculation using Landau contribution to Cp(T) (Holland and Powell 1998)</string>
                         </property>
                     </item>
                     <item>
@@ -335,17 +335,17 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>E   Pressure corrections using dV (T,P ) according to Holland &amp;Powell 1998</string>
+                            <string>E   Pressure corrections using dV (T,P) from Birch-Murnaghan EoS (Holland and Powell 1998)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>F    Pressure corrections using HKF EoS for aqueous species or HGK EoS for water</string>
+                            <string>F   Pressure corrections using HKF EoS for aqueous species or HGK EoS for water</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>S    Pressure corrections for fluids using CG (Churakov-Gottschalk, 2004) EoS</string>
+                            <string>S   Pressure corrections for fluids using Churakov-Gottschalk EoS (Churakov and Gottschalk 200)</string>
                         </property>
                     </item>
                     <item>
@@ -355,17 +355,17 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>B   Pressure corrections using V(T,P) from Birch-Murnaghan EoS coefficients</string>
+                            <string>B   Pressure corrections using V(T,P) from Birch-Murnaghan EoS (Gottschalk 1997)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>K   Pressure corrections using dV(T,P) calculated from 5 empirical coefficients</string>
+                            <string>K   Pressure corrections using dV (T,P) calculated from 5 empirical coefficients</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>P   Application of built-in PARCOR (PRONSPREP97) to retrieve HKF EoS coefficients</string>
+                            <string>P   Application of Parcor algorithm (Pronsprep97) to retrieve HKF EoS coefficients</string>
                         </property>
                     </item>
                     <item>
@@ -375,12 +375,12 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>R   Pressure corrections using critical parameters and PRSV EoS </string>
+                            <string>R   Pressure corrections for fluids using Peng-Robinson-Stryjek-Vera (PRSV) EoS</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>A   Pressure correction to aqueous nonelectrolytes (Akinfiev and Diamond, 2003)</string>
+                            <string>A   Pressure correction for aqueous nonelectrolytes (Akinfiev and Diamond 2003)</string>
                         </property>
                     </item>
                     <property name="name">
