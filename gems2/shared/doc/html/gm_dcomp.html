@@ -737,11 +737,13 @@ equilibria,
 if the default aqueous phase is specified in the <a
  href="gm_project.html">modelling project</a>.</dd>
   <dd> &nbsp;</dd>
-  <dd> If absent from the Kielland (1936) table (see [<a
- href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>] or [<a
- href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]), the following
+</dl>
+<div style="margin-left: 40px;"> If absent from the Kielland (1936)
+table (see [<a href="g_litref.html#%5B1994NOR/MUN%5D">1994NOR/MUN</a>]
+or [<a href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]), the following
 default
-values can be used:</dd>
+values can be used:</div>
+<dl style="margin-left: 40px;">
   <dd> &nbsp;</dd>
   <table border="1" cols="7" width="93%">
     <tbody>
@@ -766,6 +768,8 @@ values can be used:</dd>
     </tbody>
   </table>
   <dd> &nbsp;</dd>
+</dl>
+<dl>
   <dd>Negative values <i>b</i> &gt; -1 or positive values <i>b</i>
 &lt; +1
 can be entered here for neutral aqueous species. If the built-in
@@ -797,6 +801,8 @@ has been chosen.</dd>
   <dd>For minerals, this field may optionally contain the Vmax
 parameter (j/bar) used in lambda-transition calculations according to
 Holland and Powell (1998).</dd>
+  <dt><br>
+  </dt>
   <dd> &nbsp;</dd>
   <dt> <a name="ab_1"></a><b><tt><font size="+2">ab[1]</font></tt></b>
 - Individual
@@ -808,9 +814,7 @@ Truesdell-Jones modification or 3-term Debye- Hueckel equation (see [<a
  href="g_litref.html#%5B1997LAN%5D">1997LAN</a>]).</dd>
   <dd> &nbsp;</dd>
   <dd> To be used, requires an explicit definition of aqueous
-electrolyte phase.</dd>
-  <dd> &nbsp;</dd>
-  <dd> If unknown, set "Empty value" here.</dd>
+electrolyte phase. If unknown, set "Empty value" here.</dd>
   <dd> &nbsp; <br>
   </dd>
 </dl>
@@ -899,7 +903,8 @@ the next interval.</dd>
   <dt> <b><i>&nbsp;</i></b></dt>
   <dt> <b><i>&nbsp;</i></b></dt>
   <dt> <b><i>&nbsp;</i></b></dt>
-  <dt> <a name="CPFT_COEFF"></a><b><tt><font size="+2">aiCpT-</font></tt></b><big><b>
+  <dt> <a name="CPFT_COEFF"></a><b><tt><font size="+2"><font size="+3">aiCpT</font>
+-</font></tt></b><big><b>
 Array of empirical coefficients
 of&nbsp; Cp</b><sup>0</sup><b> = f (T )&nbsp; equations</b></big></dt>
   <dd> &nbsp;</dd>
@@ -957,66 +962,100 @@ will be taken into&nbsp; <tt><a href="#Cp0d_0">Cp0d[0]</a></tt> field
 upon
 recalculation of this DComp record.</dd>
   <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
   <dt> <a name="aiCpT_1"></a><b><tt><font size="+2">aiCpT[1]</font></tt></b>
-- Coefficient <i>a<sub>1&nbsp; </sub></i>of the&nbsp; <i>a<sub>1</sub>T</i>&nbsp;
+- <br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>1&nbsp; </sub></i>of the&nbsp; <i>a<sub>1</sub>T</i>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiCpT_2"></a><b><tt><font size="+2">aiCpT[2]</font></tt></b>
-- Coefficient <i>a<sub>2&nbsp; </sub></i>of the&nbsp; <i>a<sub>2</sub>T</i>^<sup>-2</sup>&nbsp;
+</dl>
+<dl>
+  <dt> <a name="aiCpT_2"></a><b><tt><font size="+2">aiCpT[2]</font></tt></b><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>2&nbsp; </sub></i>of the&nbsp; <i>a<sub>2</sub>T</i>^<sup>-2</sup>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
+</dl>
+<dl>
   <dt> <a name="aiCpT_3"></a><b><tt><font size="+2">aiCpT[3]</font></tt></b>
-- Coefficient <i>a<sub>3&nbsp; </sub></i>of the&nbsp; <i>a<sub>3</sub>T</i>^<sup>-0.5</sup>&nbsp;
+    <br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>3&nbsp; </sub></i>of the&nbsp; <i>a<sub>3</sub>T</i>^<sup>-0.5</sup>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
+</dl>
+<dl>
   <dt> <a name="aiCpT_4"></a><b><tt><font size="+2">aiCpT[4]</font></tt></b>
-- Coefficient <i>a<sub>4&nbsp; </sub></i>of the&nbsp; <i>a<sub>4</sub>T</i>^<sup>2</sup>&nbsp;
+    <br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>4&nbsp; </sub></i>of the&nbsp; <i>a<sub>4</sub>T</i>^<sup>2</sup>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>(<i>T</i>&nbsp;
 )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiCpT_5"></a><b><tt><font size="+2">aiCpT[5]</font></tt></b>
-- Coefficient <i>a<sub>5&nbsp; </sub></i>of the&nbsp; <i>a<sub>5</sub>T</i>^<sup>3</sup>&nbsp;
+</dl>
+<dl>
+  <dt> <a name="aiCpT_5"></a><b><tt><font size="+2">aiCpT[5]</font></tt></b><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>5&nbsp; </sub></i>of the&nbsp; <i>a<sub>5</sub>T</i>^<sup>3</sup>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiCpT_6"></a><b><tt><font size="+2">aiCpT[6]</font></tt></b>
-- Coefficient <i>a<sub>6&nbsp; </sub></i>of the&nbsp; <i>a<sub>6</sub>T</i>^<sup>4</sup>&nbsp;
+</dl>
+<dl>
+  <dt> <a name="aiCpT_6"></a><b><tt><font size="+2">aiCpT[6]</font></tt></b><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>6&nbsp; </sub></i>of the&nbsp; <i>a<sub>6</sub>T</i>^<sup>4</sup>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiCpT_7"></a><b><tt><font size="+2">aiCpT[7]</font></tt></b>
-- Coefficient <i>a<sub>7&nbsp; </sub></i>of the&nbsp; <i>a<sub>7</sub>T</i>^<sup>-3</sup>&nbsp;
+</dl>
+<dl>
+  <dt> <a name="aiCpT_7"></a><b><tt><font size="+2">aiCpT[7]</font></tt></b><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>7&nbsp; </sub></i>of the&nbsp; <i>a<sub>7</sub>T</i>^<sup>-3</sup>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiCpT_8"></a><b><tt><font size="+2">aiCpT[8]</font></tt></b>
-- Coefficient <i>a<sub>8&nbsp; </sub></i>of the&nbsp; <i>a<sub>8</sub>T</i>^<sup>-1</sup>&nbsp;
+</dl>
+<dl>
+  <dt> <a name="aiCpT_8"></a><b><tt><font size="+2">aiCpT[8]</font></tt></b><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>8&nbsp; </sub></i>of the&nbsp; <i>a<sub>8</sub>T</i>^<sup>-1</sup>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiCpT_9"></a><b><tt><font size="+2">aiCpT[9]</font></tt></b>
-- Coefficient <i>a<sub>9&nbsp; </sub></i>of the&nbsp; <i>a<sub>9</sub>T</i>^<sup>0.5</sup>&nbsp;
+</dl>
+<dl>
+  <dt> <a name="aiCpT_9"></a><b><tt><font size="+2">aiCpT[9]</font></tt></b><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>9&nbsp; </sub></i>of the&nbsp; <i>a<sub>9</sub>T</i>^<sup>0.5</sup>&nbsp;
 term&nbsp; of&nbsp; <a href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i>
 (<i>T</i>&nbsp; )&nbsp; equation</a></dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiCpT_10"></a><b><tt><font size="+2">aiCpT[10]</font></tt></b>
-- Coefficient <i>a<sub>10&nbsp; </sub></i>of&nbsp; <a
+</dl>
+<dl>
+  <dt> <a name="aiCpT_10"></a><b><tt><font size="+2">aiCpT[10]</font></tt></b><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>Coefficient <i>a<sub>10&nbsp; </sub></i>of&nbsp; <a
  href="#CPFT_COEFF">general <i>Cp</i>&nbsp; = <i>f</i> (<i>T</i>&nbsp;
 )&nbsp; equation</a> &nbsp;(reserved
 for future use)</dt>
+</dl>
+<dl>
   <dd>&nbsp; <br>
   </dd>
   <dd>&nbsp; <br>
@@ -1024,11 +1063,12 @@ for future use)</dt>
   <dt><br>
   </dt>
   <dd> &nbsp;</dd>
-  <dt> <a name="HKF_COEFF"></a><b><tt><font size="+2">aiHKF -</font></tt></b><b><font
- size="+1"> array of empirical
+  <dt> <a name="HKF_COEFF"></a><b><tt><font size="+2"><font size="+3">aiHKF</font>
+-</font></tt></b><b><font size="+1"> array of empirical
 coefficients of&nbsp; the revised&nbsp; HKF&nbsp; equation of state</font></b></dt>
 </dl>
-<p> This optional vector contains empirical parameters of revised
+<p style="margin-left: 40px;"> This optional vector contains empirical
+parameters of revised
 Helgeson- Kirkham- Flowers equation of state for calculation of
 standard partial
 molal properties of aqueous species up to 1000 oC and 5000 bar
@@ -1037,10 +1077,12 @@ molal properties of aqueous species up to 1000 oC and 5000 bar
 [1992JOH/OEL]
 and its latest extension, SLOP98.DAT [1997SHO/SAS;
 http://epsc.wustl.edu/geopig].</p>
-<p> In this version of GEMS database, units of measurement and order of
+<p style="margin-left: 40px;"> In this version of GEMS database, units
+of measurement and order of
 the coefficients follows the original data sources:</p>
 &nbsp;
-<table border="3" cellpadding="3" cellspacing="3" width="42%">
+<table style="margin-left: 40px;" border="3" cellpadding="3"
+ cellspacing="3" width="42%">
   <tbody>
     <tr>
       <td>
@@ -1197,12 +1239,16 @@ Angstrom (reserved)
     </tr>
   </tbody>
 </table>
-<br>
-<p> Please, note that HKF parameters must be entered into the fields
+<div style="margin-left: 40px;"><br>
+</div>
+<p style="margin-left: 40px;"> Please, note that HKF parameters must be
+entered into the fields
 below after multiplication by scale factor, for instance: c2 from
 SPRONS.DAT as follows: c2 *10^-4. </p>
 <dl>
 &nbsp; <br>
+</dl>
+<dl>
   <dt> <a name="aiHKF_0"></a><b><tt><font size="+2">aiHKF[0]</font></tt></b>
 - Empirical coefficient a1 of the <a href="#HKF_COEFF">HKF EoS</a>:
 cal/bar/mol</dt>
@@ -1249,7 +1295,7 @@ However, this parameter is currently not used in any calculations.<br>
   <dt><br>
   </dt>
   <dd> &nbsp;</dd>
-  <dt> <a name="MOL_VOL_DEP"></a><b><tt><font size="+2">ai_Vtp</font></tt></b><b><tt><font
+  <dt> <a name="MOL_VOL_DEP"></a><font size="+3"><b><tt>ai_Vtp</tt></b></font><b><tt><font
  size="+2"> -</font></tt></b><b><font size="+1"> array of empirical
 coefficients for calculating molar volume at P and T of interest<br>
     </font></b></dt>
@@ -1296,6 +1342,8 @@ Always 0 for Berman's equation format.<br>
   <dl>
     <dd> &nbsp;</dd>
     <dd>&nbsp;</dd>
+    <dt><br>
+    </dt>
     <dd>&nbsp;<br>
     </dd>
   </dl>
@@ -1326,25 +1374,28 @@ list.</dd>
 short comments indicating which data were taken from the data source
 referenced in the respective <tt>dSDref</tt> list entry.</dd>
   <br>
-&nbsp;<dt> <a name="FT_typ"></a><b><tt>FT_typ</tt></b> - List of phase
+&nbsp;<dt> <a name="FT_typ"></a><b><tt><font size="+2">FT_typ</font></tt></b>
+- List of phase
 transition type codes, optional (reserved)</dt>
   <dd>&nbsp; <br>
   </dd>
-  <dd> This field contains code of phase transition, which is used in
+  <dd> This field contains code of phase transition, which can be used
+in
 calculations of standard thermodynamic properties if between Tr,Pr and
 T,P at least one phase transition occurs. The following codes are
-planned to be implemented:</dd>
-  <dd> &nbsp;&nbsp;&nbsp; sl&nbsp;&nbsp;&nbsp; solid-liquid</dd>
-  <dd> &nbsp;&nbsp;&nbsp; lg&nbsp;&nbsp;&nbsp; liquid-gas</dd>
-  <dd> &nbsp;&nbsp;&nbsp; sg&nbsp;&nbsp;&nbsp; solid-gas</dd>
-  <dd> &nbsp;&nbsp;&nbsp; pm&nbsp; polymorph transition (solid-solid)</dd>
-  <dd> <br>
+planned to be implemented: sl (solid-liquid), lg (liquid-gas), sg
+(solid-gas), pm (polymorph transition, solid-solid). It is highly
+recommended to consistently use this phase transition identifiers in
+developing thermodynamic databases for GEM-Selektor.<br>
   </dd>
   <dd> <br>
   </dd>
-  <dt> &nbsp;<a name="FT_p"></a><b><tt><font size="+2">FT_p</font></tt></b>
-- Thermodynamic parameters of phase transitions&nbsp; (reserved for
-future versions)</dt>
+  <dd> <br>
+  </dd>
+  <dt> &nbsp;<a name="FT_p"></a><font size="+3"><b><tt>FT_p</tt></b></font>
+    <font style="font-weight: bold;" size="+1">- Thermodynamic
+parameters of phase transitions</font><br>
+  </dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>Each column in this optional object contains data for one
@@ -1353,30 +1404,44 @@ transition. The number of phase transitions has to be set in the
 counter <a href="gm_dcomp.html#DC_cnt_1">DC_cnt[1]</a> on page 2 of
 the PhaseWizard and has to be less than the number of discrete Cp
 equations that is set in the counter&nbsp;<a
- href="gm_dcomp.html#DC_cnt_2">DC_cnt[1]</a>.<br>
+ href="gm_dcomp.html#DC_cnt_2">DC_cnt [1]</a>.<br>
   </dd>
 </dl>
 <dl>
-  <dt> <a name="FT_p0"></a><b><tt><font size="+1">FT_p[0]</font></tt></b></dt>
-  <dd>Temperature of phase transition (in degrees C)</dd>
+  <dt> <a name="FT_p_0"></a><font size="+2"><b><tt>FT_p[0]</tt></b></font></dt>
+  <dd>Temperature <span style="font-style: italic;">T_pt</span> (in
+degrees C) of phase transition. Inoput of this value is required for
+correct integration of heat capacity functions over several segments.
+The value set here needs to be identical to the upper temperature limit
+of the validity of the heat capacity function before the phase
+transition set in <a href="gm_dcomp.html#TCint_0">TCint [0]</a> and
+the lowertemperature limit of the heat capacity function after the
+transition as specified in&nbsp;<a href="gm_dcomp.html#TCint_1">TCint
+[0]</a>.</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="FT_p1"></a><b><tt><font size="+1">FT_p[1]</font></tt></b></dt>
-  <dd>Entropy change of phase transition dS_pt (J/K). If unknown, this
+  <dt> <a name="FT_p_1"></a><font size="+2"><b><tt>FT_p[1]</tt></b></font></dt>
+  <dd>Entropy change <span style="font-style: italic;">dS_pt </span>(J/K)
+of phase transition. If unknown, this
 values can be calculated from the enthalpy of transition and the
 transition temperature.</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="FT_p2"></a><b><tt><font size="+1">FT_p[2]</font></tt></b></dt>
-  <dd>Enthalpy change of phase transition dH_pt&nbsp; (J)</dd>
+  <dt> <a name="FT_p_2"></a><font size="+2"><b><tt>FT_p[2]</tt></b></font></dt>
+  <dd>Enthalpy <span style="font-style: italic;">dH_pt</span>&nbsp;
+(J) change of phase transition.<br>
+  </dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="FT_p3"></a><b><tt><font size="+1">FT_p[3]</font></tt></b></dt>
-  <dd>Volume change of phase transition dV_pt (J/bar)</dd>
+  <dt> <a name="FT_p_3"></a><font size="+2"><b><tt>FT_p[3]</tt></b></font></dt>
+  <dd>Volume change <span style="font-style: italic;">dV_pt</span>
+(J/bar) of phase transition.<br>
+  </dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="FT_p4"></a><b><tt><font size="+1">FT_p[4]</font></tt></b></dt>
-  <dd>Slope of the P-T curve dP/dT</dd>
+  <dt> <a name="FT_p_4"></a><font size="+2"><b><tt>FT_p[4]</tt></b></font></dt>
+  <dd>Slope <span style="font-style: italic;">dP/dT</span> of the P-T
+curve&nbsp;of the phase transition.</dd>
   <dd>&nbsp; <br>
   </dd>
 </dl>
@@ -1384,11 +1449,13 @@ transition temperature.</dd>
   <br>
   <dt> <br>
   </dt>
-  <dt> <a name="CRIT_PAR_GAS"></a><b><font size="+1">CritPg </font></b>-
-critical and equation of state paramters of gases and fluids<br>
+  <dt> <a name="CRIT_PAR_GAS"></a><font size="+3"><b><tt>CritPg</tt></b></font><b><font
+ size="+1"> </font></b><font size="+1">- </font><font
+ style="font-weight: bold;" size="+1">critical and equation of state
+paramters of gases and fluid</font><span style="font-weight: bold;">s</span><br>
   </dt>
-  <dt> <br>
-  </dt>
+</dl>
+<dl style="margin-left: 40px;">
   <dt>Used in calculations of thermodynamic properties of non-ideal
 gases and fluids. This array of data objects is currently used for the
 Peng-Robinson-Stryjek-Vera (PRSV) fluid model, a modification of the
@@ -1399,41 +1466,48 @@ FGL module.Critical parameters can be entered into an optional <tt>CritPg</tt>
 vector
 used for calculation of increments of thermodynamic properties of real
 gases from T, Pr to T,P.</dt>
+</dl>
+<dl>
   <dd><br>
   </dd>
-  <dt> <a name="CritPg_0"></a><b><tt><font size="+1">CritPg[0]</font></tt></b></dt>
-  <dd> Critical temperature <i>T<sub>cr</sub></i> (K) of the PRSV
-fluid model</dd>
+  <dt> <a name="CritPg_0"></a><font size="+2"><b><tt>CritPg[0]</tt></b></font></dt>
+  <dd> Critical temperature <i>T<sub>cr</sub></i> (K) to be used for
+the PRSV
+fluid model.</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="CritPg_1"></a><b><tt><font size="+1">CritPg[1]</font></tt></b></dt>
-  <dd> Critical pressure <i>P<sub>cr</sub></i> (bar) of the PRSV fluid
-model&nbsp;</dd>
+  <dt> <a name="CritPg_1"></a><font size="+2"><b><tt>CritPg[1]</tt></b></font></dt>
+  <dd> Critical pressure <i>P<sub>cr</sub></i> (bar) to be used for
+the PRSV fluid
+model.<br>
+  </dd>
   <dt> <br>
   </dt>
-  <dt> <a name="CritPg_2"></a><b><tt><font size="+1">CritPg[2]</font></tt></b></dt>
-  <dd> Pitzer acentric factor <i>W</i> of the PRSV fluid model</dd>
+  <dt> <a name="CritPg_2"></a><font size="+2"><b><tt>CritPg[2]</tt></b></font></dt>
+  <dd> Pitzer acentric factor <i>W</i> to be used for the PRSV fluid
+model.</dd>
   <dt> <br>
   </dt>
-  <dt> <a name="CritPg_3"></a><b><tt><font size="+1">CritPg[3]</font></tt></b></dt>
-  <dd> Parameter <i>k1</i> of the PRSV fluid model</dd>
+  <dt> <a name="CritPg_3"></a><font size="+2"><b><tt>CritPg[3]</tt></b></font></dt>
+  <dd> Parameter <i>k1</i> to be used for the PRSV fluid model.</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="CritPg_4"></a><b><tt><font size="+1">CritPg[4]</font></tt></b></dt>
-  <dd> Parameter <i>k2</i> of the PRSV fluid model<br>
+  <dt> <a name="CritPg_4"></a><font size="+2"><b><tt>CritPg[4]</tt></b></font></dt>
+  <dd> Parameter <i>k2</i> to be used for the PRSV fluid model.<br>
 &nbsp;&nbsp;</dd>
-  <dt> <a name="CritPg_5"></a><b><tt><font size="+1">CritPg[4]</font></tt></b></dt>
-  <dd> Parameter <i>k3</i> of the PRSV fluid model</dd>
+  <dt> <a name="CritPg_5"></a><font size="+2"><b><tt>CritPg[4]</tt></b></font></dt>
+  <dd> Parameter <i>k3</i> to be used for the PRSV fluid model.</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="CritPg_6"></a><b><tt>CritPg[6]</tt></b></dt>
+  <dt> <a name="CritPg_6"></a><font size="+2"><b><tt>CritPg[6]</tt></b></font></dt>
   <dd> Reserved</dd>
   <dd>&nbsp; <br>
   </dd>
   <br>
   <br>
-  <dt> <a name="Cemp_s"></a><b><font size="+1">Cemp_s </font></b>-
-empirical equation of state paramters of gases and fluids<br>
+  <dt> <a name="Cemp_s"></a><font size="+3"><b><tt>Cemp_s</tt></b></font><b><font
+ size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
+empirical equation of state paramters of gases and fluids</font><br>
   </dt>
-  <dt> <br>
-  </dt>
+</dl>
+<dl style="margin-left: 40px;">
   <dt>Used in calculations of thermodynamic properties of non-ideal
 gases and fluids. This array of data objects is currently used for the
 Churakov-Gottschalk (CG) fluid model, which belongs to a new class of
@@ -1446,105 +1520,246 @@ coefficients that describe the temperature dependence. The Cemp_s array
 will be also used for storing empirical coefficients of other future
 implementations of fluid equations of state.<br>
   </dt>
-  <dt><br>
-  </dt>
-  <dt> <a name="Cemp_s0"></a><b><tt><font size="+1">Cemp_s[0]</font></tt></b></dt>
-  <dd>Lennard-Jones parameter <i>sigma0</i> (Angstrom) of
-the Churakov-Gottschalk fluid model</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="Cemp_s1"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[1]</font></tt></b></dt>
-  <dd>Lennard-Jones parameter <span style="font-style: italic;">eps</span><i>0/K</i>
-(K) of the Churakov-Gottschalk fluid model <br>
-  </dd>
-  <dt> <br>
-  </dt>
-  <dt> <a name="Cemp_s2"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[2]</font></tt></b></dt>
-  <dd>Molecular dipole moment <span style="font-style: italic;">mu</span><i>0</i>
-(Debye) of the Churakov-Gottschalk fluid model</dd>
-  <dt> <br>
-  </dt>
-  <dt> <a name="Cemp_s3"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[3]</font></tt></b></dt>
-  <dd>Molecular polarizability <span style="font-style: italic;">alpha</span><i>0</i>
-(A3) of the Churakov-Gottschalk fluid model</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="Cemp_s4"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[4]</font></tt></b></dt>
-  <dd>Additional T,P dependence parameter <i>sigma1</i> of the
-Churakov-Gottschalk fluid model, currently only used for CO2<br>
-&nbsp;&nbsp;</dd>
-  <dt> <a name="Cemp_s5"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[5]</font></tt></b></dt>
-  <dd>Additional T,P dependence parameter <i>sigma2</i> of the
-Churakov-Gottschalk fluid model, currently only used for CO2<br>
-&nbsp; <br>
-  </dd>
-  <dt> <a name="Cemp_s6"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[6]</font></tt></b></dt>
-  <dd>Additional T,P dependence parameter <span
- style="font-style: italic;">eps</span><i>1</i> of the
-Churakov-Gottschalk fluid model, currently only used for CO2<br>
-&nbsp; <br>
-  </dd>
-  <dt> <a name="Cemp_s7"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[7]</font></tt></b></dt>
-  <dd>Additional T,P dependence parameter <span
- style="font-style: italic;">eps2</span> of the Churakov-Gottschalk
-fluid model, currently only used for CO2<br>
-&nbsp; <br>
-  </dd>
-  <dt> <a name="Cemp_s8"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[8]</font></tt></b></dt>
-  <dd>Additional T,P dependence parameter <span
- style="font-style: italic;">mu1</span> of the Churakov-Gottschalk
-fluid model, currently only used for H2O<br>
-&nbsp; <br>
-  </dd>
-  <dt> <a name="Cemp_s9"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[9]</font></tt></b></dt>
-  <dd>Additional T,P dependence parameter <span
- style="font-style: italic;">mu2</span> of the Churakov-Gottschalk
-fluid model, currently only used for H2O<br>
-&nbsp; <br>
-  </dd>
-  <dt> <a name="Cemp_s10"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[10]</font></tt></b></dt>
-  <dd>Additional T,P dependence parameter <span
- style="font-style: italic;">alpha1</span> of the Churakov-Gottschalk
-fluid model, currently only used for H2O<br>
-&nbsp; <br>
-  </dd>
-  <dt> <a name="Cemp_s11"></a><b><tt><font size="+1">Cemp_s</font></tt></b><b><tt><font
- size="+1">[11]</font></tt></b></dt>
-  <dd>Additional T,P dependence parameter <span
- style="font-style: italic;">alpha2</span> of the Churakov-Gottschalk
-fluid model, currently only used for H2O</dd>
-  <dd><br>
-  </dd>
-  <dd>&nbsp;<br>
-  </dd>
 </dl>
 <dl>
-  <dt> <a name="aiCpFS"></a><b><font size="+1">aiCpFS </font></b>-
-empirical coefficients describing hydration properties of aqueous
-nonelectrolyte species (under construction)<br>
+  <dt><br>
   </dt>
+  <dt> <a name="Cemp_s_0"></a><font size="+2"><b><tt>Cemp_s[0]</tt></b></font></dt>
+  <dd>Lennard-Jones parameter <i>sigma0</i> (Angstrom) of
+the Churakov-Gottschalk fluid model.</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Cemp_s_1"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[1]</tt></b></font></dt>
+  <dd>Lennard-Jones parameter <span style="font-style: italic;">eps</span><i>0/K</i>
+(K) of the Churakov-Gottschalk fluid model.<br>
+  </dd>
   <dt> <br>
   </dt>
+  <dt> <a name="Cemp_s_2"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[2]</tt></b></font></dt>
+  <dd>Molecular dipole moment <span style="font-style: italic;">mu</span><i>0</i>
+(Debye) of the Churakov-Gottschalk fluid model.</dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="Cemp_s_3"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[3]</tt></b></font></dt>
+  <dd>Molecular polarizability <span style="font-style: italic;">alpha</span><i>0</i>
+(A3) of the Churakov-Gottschalk fluid model.</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="Cemp_s_4"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[4]</tt></b></font></dt>
+  <dd>Additional T,P dependence parameter <i>sigma1</i> of the
+Churakov-Gottschalk fluid model, currently only used for CO2.<br>
+&nbsp;&nbsp;</dd>
+  <dt> <a name="Cemp_s_5"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[5]</tt></b></font></dt>
+  <dd>Additional T,P dependence parameter <i>sigma2</i> of the
+Churakov-Gottschalk fluid model, currently only used for CO2.<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_6"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[6]</tt></b></font></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">eps</span><i>1</i> of the
+Churakov-Gottschalk fluid model, currently only used for CO2.<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_7"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[7]</tt></b></font></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">eps2</span> of the Churakov-Gottschalk
+fluid model, currently only used for CO2.<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_8"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[8]</tt></b></font></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">mu1</span> of the Churakov-Gottschalk
+fluid model, currently only used for H2O.<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_9"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[9]</tt></b></font></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">mu2</span> of the Churakov-Gottschalk
+fluid model, currently only used for H2O.<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_10"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[10]</tt></b></font></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">alpha1</span> of the Churakov-Gottschalk
+fluid model, currently only used for H2O.<br>
+&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_11"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[11]</tt></b></font></dt>
+  <dd>Additional T,P dependence parameter <span
+ style="font-style: italic;">alpha2</span> of the Churakov-Gottschalk
+fluid model, currently only used for H2O.</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_12"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[12]</tt></b></font></dt>
+  <dd>Reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_13"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[13]</tt></b></font></dt>
+  <dd>Reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_14"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[14]</tt></b></font></dt>
+  <dd>Reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_15"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[15]</tt></b></font></dt>
+  <dd>Reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_16"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[16]</tt></b></font></dt>
+  <dd>Reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_17"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[17]</tt></b></font></dt>
+  <dd>Reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_18"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[18]</tt></b></font></dt>
+  <dd>Reserved</dd>
+  <dd>&nbsp; <br>
+  </dd>
+  <dt> <a name="Cemp_s_19"></a><font size="+2"><b><tt>Cemp_s</tt></b><b><tt>[19]</tt></b></font></dt>
+  <dd>Rserved</dd>
+  <dd><br>
+  </dd>
+</dl>
+<br>
+<br>
+<dl>
+  <dt> <a name="aiNEs"></a><font size="+3"><b><tt>aiNEs</tt></b></font><b><font
+ size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
+empirical coefficients describing hydration properties of aqueous
+nonelectrolyte species</font><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
   <dt>The thermodynamic properties of aqueous nonelectrolyte species
 can be conveniently described through the properties of hydration,
 which are added to the properties of the species in the ideal gas
 state. This concept is used is several recently published equations of
-state for dissolved nonelectrolytes (but is also applicable to
-electrolytes). Implementation of the model proposed by Akinfiev and
-Diamond (2002) is under construction.<br>
-  </dt>
-  <dt><br>
+state for aqueous nonelectrolytes, such as dissolved gases (but in
+principle it is also applicable to
+electrolytes). Currently, the model proposed by Akinfiev and Diamond
+(2003) is implemented in GEM-Selektor, which requires 3
+species-dependent coefficients (xi, a and b). In the future, other
+models such as that by Plyasunov et al. (2001a; 2001b) might be added.<br>
   </dt>
 </dl>
 <dl>
+  <dt><br>
+  </dt>
+  <dt> <a name="aiNEs_0"></a><font size="+2"><b><tt>aiNEs[0]</tt></b></font></dt>
+  <dd>Nonelectrolyte parameter xi to be used for the Akinfiev-Diamond
+model. This parameter describes how different the volumetric behavior
+of the aqueous nonelectrolyte species is from the pure water solvent
+(Akinfiev and Diamond 2003).</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="aiNEs_1"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[1]</tt></b></font></dt>
+  <dd>Nonelectrolyte parameter a to be used for the Akinfiev-Diamond
+model. This parameter is the constant term in the empirical function
+that describes the difference in second virial coefficient between the
+aqueous nonelectrolyte species and the water solvent. </dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="aiNEs_2"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[2]</tt></b></font></dt>
+  <dd>Nonelectrolyte parameter a to be used for the Akinfiev-Diamond
+model. his parameter is the temperature dependent term in the empirical
+function that
+describes the difference in second virial coefficient between the
+aqueous nonelectrolyte species and the water solvent.</dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="aiNEs_3"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[3]</tt></b></font></dt>
+  <dd>(reserved)</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="aiNEs_4"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[4]</tt></b></font></dt>
+  <dd>(reserved)<br>
+&nbsp;&nbsp;</dd>
+  <dt> <a name="aiNEs_5"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[5]</tt></b></font></dt>
+  <dd>(reserved)<br>
+&nbsp;&nbsp;</dd>
+  <dt> <a name="aiNEs_6"></a><font size="+2"><b><tt>aiNEs</tt></b></font><font
+ size="+2"><b><tt>[6]</tt></b></font></dt>
+  <dd>(reserved)<br>
+  </dd>
+</dl>
+<dl>
+  <br>
+  <br>
+  <br>
+  <dt> <a name="aiODc"></a><font size="+3"><b><tt>aiODc</tt></b></font><b><font
+ size="+1"> </font></b><font style="font-weight: bold;" size="+1">-
+Birch-Murnaghan equation of state parameters for describing temperature
+and pressure dependence of molar volumes</font><br>
+  </dt>
+</dl>
+<dl style="margin-left: 40px;">
+  <dt>The molar volume of minerals at high pressures and temperatures
+can be decribed by different functional forms, with variants of the
+Birch-Murnaghan equation of state being widely used. This data objects
+hosts up to 9 parameters for the version of the Birch-Murnaghan
+equation that is used in the thermodynamic database of Gottschalk
+(1997). Currently only the parameters a1, a2, a3, kt00, dkdt, kp and
+kpp.<br>
+  </dt>
+</dl>
+<dl>
+  <dd><br>
+  </dd>
+  <dt> <a name="aiODc_0"></a><font size="+2"><b><tt>aiODc[0]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter a1.<br>
+  </dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="aiODc_1"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[1]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter a2. </dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="aiODc_2"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[2]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter a3.</dd>
+  <dt> <br>
+  </dt>
+  <dt> <a name="aiODc_3"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[3]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter a4 (reseved for
+future development of the EoS).<br>
+  </dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="aiODc_4"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[4]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter a5 (reserved for
+future development of the EoS).<br>
+&nbsp;&nbsp;</dd>
+  <dt> <a name="aiODc_5"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[5]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter kt00.<br>
+&nbsp;&nbsp;</dd>
+  <dt> <a name="aiODc_6"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[6]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter dkdt.<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="aiODc_7"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[7]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter kp.<br>
+  </dd>
+</dl>
+<dl>
+  <dt> <a name="aiODc_8"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
+ size="+2"><b><tt>[8]</tt></b></font></dt>
+  <dd>Birch-Murnaghan equation of state parameter kpp.<br>
+  </dd>
+</dl>
+<dl>
+  <br>
+</dl>
+<dl>
+  <br>
   <br>
   <br>
 </dl>
@@ -1850,26 +2065,24 @@ Date when this DC definition was created or substantionally modified</dt>
   <dd> When a new DComp record is created (using "Record" "Create" menu
 command), the current date will be inserted automatically.&nbsp;<br>
   </dd>
-  <dd> &nbsp;&nbsp;</dd>
+  <dd> &nbsp; <br>
+  </dd>
+  <dt><br>
+  </dt>
   <dd><br>
   </dd>
 </dl>
-<h3> Data objects reserved for future versions</h3>
+<h3><font size="+2"> Data objects reserved for future versions</font></h3>
 <dl>
   <dt> <br>
   </dt>
-  <dt> <a name="FT_pb"></a><b><tt>FT_pb</tt></b></dt>
+  <dt> <a name="FT_pb"></a><font size="+2"><b><tt>FT_pb</tt></b></font></dt>
   <dd> Properties of lambda phase transition (Berman), optional
 (reserved)</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="ai_ODc"></a><b><tt>ai_ODc</tt></b></dt>
-Coeffs of Birch-Murnaghan (1988) V(T,P) equation (to be described)&nbsp;<dd>
-&nbsp;</dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dt> <a name="DCtprn"></a><b><tt>DCtprn</tt></b></dt>
+  <dt> <a name="DCtprn"></a><font size="+2"><b><tt>DCtprn</tt></b></font></dt>
   <dd> (internal)</dd>
   <br>
   <dd>&nbsp;</dd>
