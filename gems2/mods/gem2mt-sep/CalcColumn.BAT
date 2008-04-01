@@ -1,1 +1,1 @@
-gem2mtsep test/CalcColumn-dat.lst test/testA.dat > test.out
+gem2mt-sep test/CalcColumn-dat.lst test/testA.dat > test.out

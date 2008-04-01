@@ -58,7 +58,7 @@
 <pa_DFM>         0.1
 
 # DP: Maximum allowed number of iterations in the EnterFeasibleDomain() procedure
-<pa_DP>          144
+<pa_DP>          15
 
 # IIM: Maximum allowed number of iterations in the MainIPM_Descent() procedure
 <pa_IIM>         500
@@ -68,7 +68,7 @@
 
 # PRD: Positive: control of calling IPM_gamma() on iterations of GEM EFD and IPM (default 3)
 #      Negative: the number of additional EFD-IPM loops to improve the GEM final solution
-<pa_PRD>          -1
+<pa_PRD>          3
 
 # AG,DGC: Smoothing parameters controlling convergence in highly non-ideal systems 
 <pa_AG>          0.7
@@ -82,7 +82,7 @@
 
 # _Min: Cutoffs for elimination of: Xw water solvent; Sc - solid sorbent; Dc - solution or surface species; 
 # Ph - non-electrolyte solution phases
-<pa_XwMin>    1e-009
+<pa_XwMin>    1e-005
 <pa_ScMin>    1e-007
 <pa_DcMin>    1e-020
 <pa_PhMin>    1e-009

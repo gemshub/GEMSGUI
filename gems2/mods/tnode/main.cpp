@@ -292,7 +292,7 @@ int main( int argc, char* argv[] )
 //       m_NodeStatusCH[in] = node->GEM_run( false );
        if( !( m_NodeStatusCH[in] == OK_GEM_AIA || m_NodeStatusCH[in] == OK_GEM_PIA ) )
             return 5;
-        CalcTime += node->GEM_CalcTime();  // Incrementing calculation time - only v.2.2.0
+        CalcTime += node->GEM_CalcTime();  // Incrementing calculation time - from v.2.2.0 
         nIterTotal += node->GEM_Iterations( nPrecL[in], nFIA[in], nIPM[in] );
         nPrecLoops += nPrecL[in];
         nIterFIA += nFIA[in];
@@ -341,7 +341,7 @@ int main( int argc, char* argv[] )
   MeanIPM = double(nIterIPM)/500.;
   MeanPRL = double(nPrecLoops)/500.;
 
-  cout <<  "Pure GEM IPM2 runtime , s: " <<  CalcTime << endl; // Only v. 2.2.0
+  cout <<  "Pure GEM IPM2 runtime , s: " <<  CalcTime << endl; // From v. 2.2.0
   cout <<  "Total time of calculation, s: " <<  (dtime)/clc_sec << endl;
   cout << "    Mean GEMIPM2 iterations per node: " << MeanPRL << " " <<
                MeanFIA << " " << MeanIPM << " " << MeanIt << endl;

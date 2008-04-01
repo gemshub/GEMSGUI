@@ -514,8 +514,8 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
   TPrintArrays  prar(ff);
 
    if( _comment )
-   {  ff << "# GEMIPM2K v. 2.2.0" << endl;
-      ff << "# Prototype 04.12.2007" << endl;
+   {  ff << "# GEMIPM2K v. 2.2.3" << endl;
+      ff << "# Prototype 31.03.2008" << endl;
       ff << "# Comments can be marked with # $ ;" << endl << endl;
       ff << "# Template for the UnSpace data" << endl;
       ff << "# (should be read only after the DATACH, the IPM-DAT and DATABR files)" << endl << endl;
