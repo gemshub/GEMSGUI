@@ -130,8 +130,8 @@ outField TGEM2MT_dynamic_fields[16] =  {
  { "DiCp", 1, 0 },
  { "HydP", 1, 0 },
  { "NPmean", 0, 0 },
- { "NPmin", 0, 0 },
- { "NPmax", 0, 0 },
+ { "nPmin", 0, 0 },
+ { "nPmax", 0, 0 },
  { "ParTD", 0, 0 },
  { "mGrid", 0, 0 },
  { "FDLi", 0, 0 },
@@ -228,7 +228,7 @@ void TGEM2MT::from_text_file(fstream& ff)
  // testing read
  gstring ret = rdar.testRead();
  if( !ret.empty() )
-  { ret += " - fields must be readed from TGEM2MT structure";
+  { ret += " - fields must be read from TGEM2MT structure";
     Error( "Error", ret);
   }
 
@@ -311,7 +311,7 @@ void TGEM2MT::from_text_file(fstream& ff)
  // testing read
  ret = rddar.testRead();
  if( !ret.empty() )
-  { ret += " - fields must be read from TUnSpace structure";
+  { ret += " - fields must be read from TGEM2MT structure";
     Error( "Error", ret);
   }
 

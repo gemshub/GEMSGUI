@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems223-rc5-1052-w32-install.exe"
+OutFile "gems223rc5-1052-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS2

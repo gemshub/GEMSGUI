@@ -717,8 +717,8 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
   TPrintArrays  prar(ff);
 
    if( _comment )
-   {  ff << "# GEMIPM2K v. 2.2.2" << endl;
-      ff << "# Prototype 07.02.2008" << endl;
+   {  ff << "# GEMIPM2K v. 2.2.3" << endl;
+      ff << "# Prototype 31.03.2008" << endl;
       ff << "# Comments can be marked with # $ ;" << endl << endl;
       ff << "# Template for the Gem2mt data file" << endl;
       ff << "# (should be read before the DATACH, the IPM-DAT and DATABR files)" << endl << endl;
