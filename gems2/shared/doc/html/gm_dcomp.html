@@ -11,7 +11,7 @@
 <body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <font
  color="#000066"> GEM-Selektor version 2-PSI</font> </h1>
-<h2>Dependent Components (DComp) Module Manual&nbsp;</h2>
+<h2><font size="+3">Dependent Components (DComp) Module Manual&nbsp;</font></h2>
 <hr size="2" width="100%">
 <h3>Contents<br>
 </h3>
@@ -44,7 +44,8 @@ Warnings, errors and troubleshooting<br>
 </blockquote>
 <br>
 <hr size="2" width="100%">
-<h2><a name="DC_DATA_FORMAT"></a>1. Thermochemical Data Format</h2>
+<h2><a name="DC_DATA_FORMAT"></a><font size="+3">1. Thermochemical Data
+Format</font></h2>
 <p><br>
 DComp records contain the standard state thermodynamic properties of
 species (Dependent Components, DC) in a "thermochemical" format&nbsp;
@@ -253,7 +254,8 @@ field on Page 1 of "DComp" window according to <a
  href="g_useref.html#FORMULASYNTAX">chemical formula syntax</a>. <br>
 </p>
 <p>&nbsp; </p>
-<h3><a name="DC_CALCULATIONS"></a>1.1. DComp module calculations<br>
+<h3><a name="DC_CALCULATIONS"></a><font size="+3">1.1. DComp module
+calculations</font><br>
 </h3>
 <p>When the <a href="#P333R4">Calculate</a> button (or menu command,
 or <tt>F9</tt> hot key) is clicked from the "DComp" window,
@@ -269,8 +271,9 @@ until all the input data becomes consistent. <br>
 &nbsp;</p>
 <hr size="2" width="100%">
 <p> </p>
-<h2><a name="DC_DATA_OBJECTS"></a> 2. Description of Input Data Objects
-and Fields</h2>
+<h2><a name="DC_DATA_OBJECTS"></a> <font size="+3">2. Description of
+Input Data Objects
+and Fields</font></h2>
 <dl>
   <h3> <br>
   </h3>
@@ -1076,8 +1079,7 @@ molal properties of aqueous species up to 1000 oC and 5000 bar
 1997SHO/SAS]. The coefficients were imported from SPRONS92.DAT file
 [1992JOH/OEL]
 and its latest extension, SLOP98.DAT [1997SHO/SAS;
-http://epsc.wustl.edu/geopig].</p>
-<p style="margin-left: 40px;"> In this version of GEMS database, units
+http://epsc.wustl.edu/geopig]. In this version of GEMS database, units
 of measurement and order of
 the coefficients follows the original data sources:</p>
 &nbsp;
@@ -1245,57 +1247,68 @@ Angstrom (reserved)
 entered into the fields
 below after multiplication by scale factor, for instance: c2 from
 SPRONS.DAT as follows: c2 *10^-4. </p>
+<b><tt><font size="+2"></font></tt></b>
 <dl>
-&nbsp; <br>
+  <dt> <a name="aiHKF_0"></a><b><tt><font size="+2">aiHKF[0]</font></tt></b></dt>
 </dl>
+<div style="margin-left: 40px;">Empirical coefficient a1 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal/bar/mol</div>
 <dl>
-  <dt> <a name="aiHKF_0"></a><b><tt><font size="+2">aiHKF[0]</font></tt></b>
-- Empirical coefficient a1 of the <a href="#HKF_COEFF">HKF EoS</a>:
-cal/bar/mol</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiHKF_1"></a><b><tt><font size="+2">aiHKF[1]</font></tt></b>
-- Empirical coefficient a2 of the <a href="#HKF_COEFF">HKF EoS</a>:
-cal/mol</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiHKF_2"></a><b><tt><font size="+2">aiHKF[2]</font></tt></b>
-- Empirical coefficient a3 of the <a href="#HKF_COEFF">HKF EoS</a>:
-cal*K/bar/mol</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiHKF_3"></a><b><tt><font size="+2">aiHKF[3]</font></tt></b>
-- Empirical coefficient a4&nbsp; of the <a href="#HKF_COEFF">HKF EoS</a>:
-cal*K/mol</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiHKF_4"></a><b><tt><font size="+2">aiHKF[4]</font></tt></b>
-- Empirical coefficient c1&nbsp; of the <a href="#HKF_COEFF">HKF EoS</a>:
-cal/K/mol</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiHKF_5"></a><b><tt><font size="+2">aiHKF[5]</font></tt></b>
-- Empirical coefficient c2&nbsp; of the <a href="#HKF_COEFF">HKF EoS</a>:
-cal*K/mol</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
-  <dt> <a name="aiHKF_6"></a><b><tt><font size="+2">aiHKF[6]</font></tt></b>
-- wB Born factor&nbsp; of the <a href="#HKF_COEFF">HKF EoS</a>: cal/mol</dt>
-  <dd> &nbsp;</dd>
-  <dd> &nbsp;</dd>
+  <dt> <a name="aiHKF_1"></a><b><tt><font size="+2">aiHKF[1]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient a2 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal/mol</div>
+<dl>
+  <dt> <a name="aiHKF_2"></a><b><tt><font size="+2">aiHKF[2]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient a3 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal*K/bar/mol</div>
+<dl>
+  <dt> <a name="aiHKF_3"></a><b><tt><font size="+2">aiHKF[3]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient a4 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal*K/mol</div>
+<dl>
+  <dt> <a name="aiHKF_4"></a><b><tt><font size="+2">aiHKF[4]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient c1 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal/K/mol</div>
+<dl>
+  <dt> <a name="aiHKF_5"></a><b><tt><font size="+2">aiHKF[5]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient c2 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal*K/mol</div>
+<dl>
+  <dt> <a name="aiHKF_6"></a><b><tt><font size="+2">aiHKF[6]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">wB Born factor&nbsp; of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>: cal/mol</div>
+<dl>
   <dt> <a name="aiHKF_7"></a><b><tt><font size="+2">aiHKF[7]</font></tt></b></dt>
-  <dd> Reserved. When the Pronsprep and Parcor algorithms for
+</dl>
+<div style="margin-left: 40px;"> Reserved. When the Pronsprep and
+Parcor algorithms for
 predicting thermodynamic properties and HKF coefficients of aqueous
 species is used in ReacDc module, the effectice electrostatic radius of
 the aqueous species at Pr and Tr is automatically placed in this field.
-However, this parameter is currently not used in any calculations.<br>
+However, this parameter is currently not used in any calculations.</div>
+<div style="margin-left: 40px;">
+<dl>
+  <dd><br>
   </dd>
-  <dd>&nbsp; <br>
+  <dd><br>
   </dd>
-  <dt><br>
-  </dt>
+</dl>
+</div>
+<dl>
   <dd> &nbsp;</dd>
-  <dt> <a name="MOL_VOL_DEP"></a><font size="+3"><b><tt>ai_Vtp</tt></b></font><b><tt><font
+  <dt> <a name="MOL_VOL_DEP"></a><font size="+3"><b><tt>aiVTP</tt></b></font><b><tt><font
  size="+2"> -</font></tt></b><b><font size="+1"> array of empirical
 coefficients for calculating molar volume at P and T of interest<br>
     </font></b></dt>
@@ -1318,32 +1331,35 @@ calculations</a>.</dd>
   <dl>
     <dd> &nbsp;</dd>
   </dl>
-  <dt> <a name="ai_Vtp_0"></a><b><tt><font size="+2">ai_Vtp[0]</font></tt></b>
+  <dt> <a name="aiVTP_0"></a><b><tt><font size="+2">aiVTP[0]</font></tt></b>
 - Coefficient&nbsp; a0(T) of the <a href="#MOL_VOL_DEP">molar volume
 equation</a></dt>
   <dd> &nbsp;</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="ai_Vtp_1"></a><b><tt><font size="+2">ai_Vtp[1]</font></tt></b>
+  <dt> <a name="aiVTP_1"></a><b><tt><font size="+2">aiVTP[1]</font></tt></b>
 - Coefficient a1(T) of the <a href="#MOL_VOL_DEP">molar volume equation</a></dt>
   <dd> &nbsp;</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="ai_Vtp_2"></a><b><tt><font size="+2">ai_Vtp[2]</font></tt></b>
+  <dt> <a name="aiVTP_2"></a><b><tt><font size="+2">aiVTP[2]</font></tt></b>
 - Coefficient a2(T) of the <a href="#MOL_VOL_DEP">molar volume equation</a></dt>
   <dd> &nbsp; &nbsp;<br>
 Always 0 for Berman's equation format.<br>
 &nbsp;&nbsp;</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="ai_Vtp_3"></a><b><tt><font size="+2">ai_Vtp[3]</font></tt></b>
+  <dt> <a name="aiVTP_3"></a><b><tt><font size="+2">aiVTP[3]</font></tt></b>
 - Coefficient b0(P) of the <a href="#MOL_VOL_DEP">molar volume equation</a></dt>
   <dd> &nbsp;</dd>
   <dd> &nbsp;</dd>
-  <dt> <a name="ai_Vtp_4"></a><b><tt><font size="+2">ai_Vtp[4]</font></tt></b>
+  <dt> <a name="aiVTP_4"></a><b><tt><font size="+2">aiVTP[4]</font></tt></b>
 - Coefficient b1(P) of the <a href="#MOL_VOL_DEP">molar volume equation</a></dt>
   <dl>
     <dd> &nbsp;</dd>
     <dd>&nbsp;</dd>
-    <dt><br>
-    </dt>
+  </dl>
+</dl>
+<br>
+<dl>
+  <dl>
     <dd>&nbsp;<br>
     </dd>
   </dl>
@@ -1390,8 +1406,9 @@ developing thermodynamic databases for GEM-Selektor.<br>
   </dd>
   <dd> <br>
   </dd>
-  <dd> <br>
-  </dd>
+</dl>
+<br>
+<dl>
   <dt> &nbsp;<a name="FT_p"></a><font size="+3"><b><tt>FT_p</tt></b></font>
     <font style="font-weight: bold;" size="+1">- Thermodynamic
 parameters of phase transitions</font><br>
@@ -1740,32 +1757,27 @@ future development of the EoS).<br>
 &nbsp;&nbsp;</dd>
   <dt> <a name="aiODc_6"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
  size="+2"><b><tt>[6]</tt></b></font></dt>
-  <dd>Birch-Murnaghan equation of state parameter dkdt.<br>
-  </dd>
-</dl>
-<dl>
+  <dd>Birch-Murnaghan equation of state parameter dkdt.</dd>
+  <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="aiODc_7"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
  size="+2"><b><tt>[7]</tt></b></font></dt>
-  <dd>Birch-Murnaghan equation of state parameter kp.<br>
-  </dd>
-</dl>
-<dl>
+  <dd>Birch-Murnaghan equation of state parameter kp.</dd>
+  <dd>&nbsp;&nbsp;</dd>
   <dt> <a name="aiODc_8"></a><font size="+2"><b><tt>aiODc</tt></b></font><font
  size="+2"><b><tt>[8]</tt></b></font></dt>
-  <dd>Birch-Murnaghan equation of state parameter kpp.<br>
+  <dd>Birch-Murnaghan equation of state parameter kpp.</dd>
+  <dd>&nbsp; <br>
   </dd>
 </dl>
+<br>
 <dl>
-  <br>
-</dl>
-<dl>
-  <br>
   <br>
   <br>
 </dl>
 <hr size="2" width="100%">
 <dl>
-  <h2> &nbsp;<a name="DC_CREATE"></a>3. Creating/Remaking DComp records</h2>
+  <h2> &nbsp;<a name="DC_CREATE"></a><font size="+3">3.
+Creating/Remaking DComp records</font></h2>
   <p><br>
 To construct a DComp record, close your <a href="gm_project.html">modelling
 project</a> and switch to the "Thermodynamic Database" mode of
@@ -1838,8 +1850,9 @@ calculated from HKF EoS data. &nbsp;</p>
   <p><br>
 &nbsp; <br>
 &nbsp; </p>
-  <h3> <a name="DC_CREATE_DATA"></a>3.1. Data Entries Accessible on
-Creation/Remake Only</h3>
+  <h3> <a name="DC_CREATE_DATA"></a><font size="+3">3.1. Data Entries
+Accessible on
+Creation/Remake Only</font></h3>
 &nbsp;
 </dl>
 <dl>
@@ -2088,7 +2101,8 @@ command), the current date will be inserted automatically.&nbsp;<br>
   <dd>&nbsp;</dd>
   <dd>. </dd>
 </dl>
-<h2><a name="DC_ERRORS"></a>4. Warnings, errors and troubleshooting</h2>
+<h2><a name="DC_ERRORS"></a><font size="+3">4. Warnings, errors and
+troubleshooting</font></h2>
 (under construction)<br>
 <br>
 <dl>
@@ -2433,9 +2447,10 @@ send a bug report.&nbsp;</dd>
   <dt><br>
   </dt>
 </dl>
-<h3><a name="DCOMP_FORMULA_ERRORS"></a>4.1. Error messages from the
+<h3><a name="DCOMP_FORMULA_ERRORS"></a><font size="+3">4.1. Error
+messages from the
 Formula
-Parser</h3>
+Parser</font></h3>
 <p>These error messages may appear during processing of <a
  href="g_useref.html#FORMULA">chemical formulae</a> in calculations of
 DComp,

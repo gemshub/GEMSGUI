@@ -1876,20 +1876,20 @@ Born parameter (cal/mol)</h4>
   <h4> <a href="gm_dcomp.html#aiHKF_7">aiHKF[7]</a>&nbsp;&nbsp; rAB
 solvation
 radius (angstrom), reserved</h4>
-  <h4> <a href="gm_dcomp.html#ai_Vtp_0">ai_Vtp[0]</a>&nbsp;&nbsp;
+  <h4> <a href="gm_dcomp.html#aiVTP_0">aiVTP[0]</a>&nbsp;&nbsp;
 Coefficients of
 mV=f(T,P): a0 (T)</h4>
-  <h4> <a href="gm_dcomp.html#ai_Vtp_1">ai_Vtp[1]</a>&nbsp;&nbsp; a1
+  <h4> <a href="gm_dcomp.html#aiVTP_1">aiVTP[1]</a>&nbsp;&nbsp; a1
 (T^2)</h4>
 </ul>
 <ul>
-  <h4> <a href="gm_dcomp.html#ai_Vtp_2">ai_Vtp[2]</a>&nbsp;&nbsp; a2
+  <h4> <a href="gm_dcomp.html#aiVTP_2">aiVTP[2]</a>&nbsp;&nbsp; a2
 (T^3)</h4>
 </ul>
 <ul>
-  <h4> <a href="gm_dcomp.html#ai_Vtp_3">ai_Vtp[3]</a>&nbsp;&nbsp; b0
+  <h4> <a href="gm_dcomp.html#aiVTP_3">aiVTP[3]</a>&nbsp;&nbsp; b0
 (P)</h4>
-  <h4> <a href="gm_dcomp.html#ai_Vtp_4">ai_Vtp[4]</a>&nbsp;&nbsp; b1
+  <h4> <a href="gm_dcomp.html#aiVTP_4">aiVTP[4]</a>&nbsp;&nbsp; b1
 (P^2)</h4>
 </ul>
 <ul>
@@ -2322,27 +2322,58 @@ of temperature T</h4>
   <h4> <a href="gm_reacdc.html#P_int">P_int</a>&nbsp;&nbsp; Vector or
 interval of
 pressure P</h4>
-  <h4> <a href="gm_reacdc.html#adCpT_0">a_dCpT[0]</a> &nbsp; Empirical
+  <h4> <a href="gm_reacdc.html#adCpT_0">adCpT[0]</a> &nbsp; Empirical
 coefficients of dCpr =
 f(T) equation: a0 coefficient<br>
   </h4>
 </ul>
-<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adCpT_1">a_dCpT[1]</a>
+<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adCpT_1">adCpT[1]</a>
 &nbsp; a1 coefficient in dCpr&nbsp; =&nbsp; f(T) equation</h4>
-<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adCpT_2">a_dCpT[2]</a>
+<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adCpT_2">adCpT[2]</a>
 &nbsp; a2 coefficient in the dCpr&nbsp; =&nbsp; f(T) equation</h4>
-<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adCpT_3">a_dCpT[3]</a>
+<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adCpT_3">adCpT[3]</a>
 &nbsp; a3 coefficient in the dCpr&nbsp; =&nbsp; f(T) equation</h4>
-<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adCpT_4">a_dCpT[4]</a>
-&nbsp; a4 coefficient in the dCpr&nbsp; =&nbsp; f(T) equation<br>
+<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adCpT_4">adCpT[4]</a>
+&nbsp; a4 coefficient in the dCpr&nbsp; =&nbsp; f(T) equation</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adVTP_0">adVTP[0]</a>
+&nbsp; Coefficients of dVr = f(T,P): a0 (T)</h4>
+<h4 style="margin-left: 40px;"> </h4>
+<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adVTP_1">adVTP[1]</a>
+&nbsp; a2 (T^2)<br>
 </h4>
+<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adVTP_2">adVTP[2]</a>
+&nbsp; a3 (T^3)<br>
+</h4>
+<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adVTP_3">adVTP[3]</a>
+&nbsp; b0 (P)<br>
+</h4>
+<h4 style="margin-left: 40px;"><a href="gm_reacdc.html#adVTP_4">adVTP[4]</a>
+&nbsp; b1 (P^2)</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adHKF_0">adHKF[0]</a>&nbsp;&nbsp;
+Empirical
+coefficients of HKF EOS: a1 (cal/bar/mol)</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adHKF_1">adHKF[1]</a>&nbsp;&nbsp;&nbsp;
+a2 (cal/mol)</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adHKF_2">adHKF[2]</a>&nbsp;&nbsp;
+a3
+(cal*K/bar/mol)</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adHKF_3">adHKF[3]</a>&nbsp;&nbsp;
+a4
+(cal*K/mol)</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adHKF_4">adHKF[4]</a>&nbsp;&nbsp;
+c1
+(cal/K/mol)</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adHKF_5">adHKF[5]</a>&nbsp;&nbsp;
+c2
+(cal*K/mol)</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adHKF_6">adHKF[6]</a>&nbsp;&nbsp;
+wB
+Born parameter (cal/mol)</h4>
+<h4 style="margin-left: 40px;"> <a href="gm_reacdc.html#adHKF_7">adHKF[7]</a>&nbsp;&nbsp;
+rAB
+solvation
+radius (angstrom), reserved</h4>
 <ul>
-  <h4> <a href="gm_reacdc.html#a_dHKF">a_dHKF</a>&nbsp;&nbsp; Coeffs
-a1-a4, c1,c2,
-w, rAB for HKF EOS of reaction (reserved)</h4>
-  <h4> <a href="gm_reacdc.html#a_dVp">a_dVp</a>&nbsp;&nbsp; Coeffs for
-dVr =
-f(P,T) equation (reserved)</h4>
   <h4> <a href="gm_reacdc.html#a_dST_0">a_dST[0]</a>&nbsp;&nbsp;
 Coefficients for
 electrostatic and density model equations: pK298 for Ryzhenko-Bryzgalin

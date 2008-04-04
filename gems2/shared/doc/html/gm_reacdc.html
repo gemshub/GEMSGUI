@@ -10,7 +10,7 @@
 <body>
 <h1><img src="gems1.png" align="left" height="48" width="48"> <font
  color="#000066"> GEM-Selektor version 2-PSI</font> </h1>
-<h2>ReacDC&nbsp; Module &nbsp;Manual&nbsp; </h2>
+<h2><font size="+3">ReacDC&nbsp; Module &nbsp;Manual</font>&nbsp; </h2>
 <hr size="2" width="100%">
 <h3>Contents</h3>
 <blockquote>
@@ -38,9 +38,10 @@ Warnings and error messages</a></font></p>
 </blockquote>
 <br>
 <hr size="2" width="100%">
-<h2><a name="REACDC_FORMAT"></a>1. Reaction-Defined Format of
+<h2><a name="REACDC_FORMAT"></a><font size="+3">1. Reaction-Defined
+Format of
 Thermodynamic
-Data for Dependent Components<br>
+Data for Dependent Components</font><br>
 </h2>
 <p>ReacDC records can be used for defining thermodynamic properties of
 aqueous
@@ -143,7 +144,8 @@ cancel
 out. <br>
 </p>
 <br>
-<h3><a name="REACDC_CREATE"></a>1.1. Creating new ReacDC records</h3>
+<h3><a name="REACDC_CREATE"></a><font size="+3">1.1. Creating new
+ReacDC records</font></h3>
 <p>To construct a reaction in ReacDC record, close your <a
  href="gm_project.html">modelling project</a> and switch to
 "Thermodynamic
@@ -248,7 +250,8 @@ const and
 non-zero dS0.&nbsp; &nbsp; <br>
 </p>
 <br>
-<h3><a name="REACDC_CALCULATE"></a>1.2. ReacDC module calculations</h3>
+<h3><a name="REACDC_CALCULATE"></a><font size="+3">1.2. ReacDC module
+calculations</font></h3>
 <p>After you have entered the standard effects of the reaction (and
 EMPTY
 values where necessary), click on the "Calculate..." toolbar button or
@@ -287,14 +290,16 @@ save the record to database. Now, you can browse other records or
 "clone"
 to create a new ReacDC record. </p>
 <br>
-<h3><a name="REACDC_CASES"></a>1.3. Examples and special cases</h3>
+<h3><a name="REACDC_CASES"></a><font size="+3">1.3. Examples and
+special cases</font></h3>
 &lt;to be added&gt;<br>
 <br>
 <br>
 <br>
 <hr size="2" width="100%">
-<h2><a name="REACDC_DATA_OBJECTS"></a>2. Data Entries on ReacDC Window
-Pages
+<h2><a name="REACDC_DATA_OBJECTS"></a><font size="+3">2. Data Entries
+on ReacDC Window
+Pages</font>
 </h2>
 <dl>
   <dt> <br>
@@ -1117,6 +1122,8 @@ default
 values can be used:</dd>
 </dl>
 <dl>
+</dl>
+<dl style="margin-left: 40px;">
   <dd> &nbsp;</dd>
   <table border="1" cols="7" width="93%">
     <tbody>
@@ -1140,9 +1147,10 @@ values can be used:</dd>
       </tr>
     </tbody>
   </table>
-  <dd>&nbsp;&nbsp;</dd>
-  <dd>&nbsp;<br>
+  <dd>&nbsp; <br>
   </dd>
+</dl>
+<dl>
   <dd>Negative values <i>b</i> &gt; -1 or positive values <i>b</i>
 &lt; +1
 can be entered here for neutral aqueous species. If the built-in
@@ -1360,49 +1368,55 @@ or 3-term temperature extrapolations.&nbsp;</dd>
 <h3><a name="RE_LOGK_FT"></a> <big><b><tt><font size="+3">aiLgKr</font>
 - </tt></b></big>Coefficients
 of the logK = f(T) equation</h3>
-<p>This dynamic vector will be allocated on create/remake when the <tt>"K"</tt>
+<div style="margin-left: 40px;">This dynamic vector will be allocated
+on create/remake when the <tt>"K"</tt>
 code is entered in <a href="#REcMod_0"><tt>REcMod[0]</tt></a> cell,
 the modification
 of method is set in <a href="#REcMod_1"><tt>REcMod[1]</tt></a> cell,
 and
 the flag <a href="#RE_arr_0"><tt>RE_arr[0]</tt></a> is turned on. <br>
-</p>
-<p>For a reaction describing an ordinary (non-isotopic) component
+</div>
+<div style="margin-left: 40px;">For a reaction describing an ordinary
+(non-isotopic) component
 (codes
 <tt>"1", "2", "3"</tt> or <tt>"L"</tt> in the <a href="#REcMod_1"><tt>REcMod[1]</tt></a>
 cell), the following form of logK=f(T) equation is applied: <br>
-</p>
-<blockquote><big><tt>logK = <a href="#aiLgKr_0">a0</a> + <a
- href="#aiLgKr_1">a1</a>*T + <a href="#aiLgKr_2">a2</a>/T + <a
- href="#aiLgKr_5">a3</a>*lnT + <a href="#aiLgKr_4">a4</a>/T^2 + <a
- href="#aiLgKr_5">a5</a>*T^2 + <a href="#aiLgKr_6">a6</a>/T^0.5</tt></big>
-  <br>
+</div>
+<blockquote style="margin-left: 40px;"><big><tt>logK = <a
+ href="#aiLgKr_0">a0</a> + <a href="#aiLgKr_1">a1</a>*T + <a
+ href="#aiLgKr_2">a2</a>/T + <a href="#aiLgKr_5">a3</a>*lnT + <a
+ href="#aiLgKr_4">a4</a>/T^2 + <a href="#aiLgKr_5">a5</a>*T^2 + <a
+ href="#aiLgKr_6">a6</a>/T^0.5</tt></big> <br>
 </blockquote>
-<p>where T is absolute temperature (K), and &nbsp;<tt>a0, ..., a6</tt>
+<div style="margin-left: 40px;">where T is absolute temperature (K),
+and &nbsp;<tt>a0, ..., a6</tt>
 are
 the empirical coefficients functionally related to dGr, dHr, dSr,
 dCpr&nbsp;
 of the reaction (see Nordstrom &amp; Munoz 1994). Default value of all
 coefficients
 is 0.<br>
-</p>
-<p>For a pseudo-reaction defining an isotopic form of compound, (<tt>"G"</tt>
+</div>
+<div style="margin-left: 40px;">For a pseudo-reaction defining an
+isotopic form of compound, (<tt>"G"</tt>
 code set in the <a href="#REcMod_1"><tt>REcMod[1]</tt></a> cell ),
 another
 form of lnK" = f(T) equation will be applied: <br>
-</p>
-<blockquote><tt>1000*lnK" = <a href="#aiLgKr_1">a0</a> + <a
- href="#aiLgKr_2">a1</a>/T + <a href="#aiLgKr_2">a2</a>/T^2 + <a
- href="#aiLgKr_3">a3</a>/T^3 + <a href="#aiLgKr_5">a4</a>/T^4</tt><br>
+</div>
+<blockquote style="margin-left: 40px;"><tt>1000*lnK" = <a
+ href="#aiLgKr_1">a0</a> + <a href="#aiLgKr_2">a1</a>/T + <a
+ href="#aiLgKr_2">a2</a>/T^2 + <a href="#aiLgKr_3">a3</a>/T^3 + <a
+ href="#aiLgKr_5">a4</a>/T^4</tt><br>
 </blockquote>
-<p>where K" stands for a fractionation constant of an isotope between
+<div style="margin-left: 40px;">where K" stands for a fractionation
+constant of an isotope between
 this
 compound and the element in its standard state, T is taken in Kelvin,
 and
 &nbsp;<tt>a0, ..., a4 </tt>are the empirical coefficients (default
 value
-is 0).<tt></tt><br>
-&nbsp;&nbsp;</p>
+is 0).<br>
+</div>
 <dl>
   <dt> <a name="aiLgKr_0"></a><font size="+2"><b><tt>aiLgKr[0]</tt></b></font>
 -
@@ -1421,22 +1435,16 @@ const). <br>
   </dd>
   <dd>&nbsp; <br>
   </dd>
-  <dd><br>
-  </dd>
   <dt><a name="aiLgKr_1"></a><font size="+2"><b><tt>aiLgKr[1]</tt></b></font>
 - a1
 coefficient
 in the a1*T term of&nbsp;<a href="#RE_LOGK_FT">logK = f(T) equation</a>
 (for
 isotopic species: in the a1/T term)</dt>
-  <dd><br>
-  </dd>
   <dd>For non-isotopic species, a non-zero value of this coefficient
 requires
 that dCpr of reaction changes with temperature.</dd>
-  <dd>&nbsp;&nbsp;<br>
-  </dd>
-  <dd>&nbsp;&nbsp; <br>
+  <dd><br>
   </dd>
   <dt> <a name="aiLgKr_2"></a><font size="+2"><b><tt>aiLgKr[2]</tt></b></font>
 -
@@ -1444,8 +1452,6 @@ a2 coefficient
 in the a2/T term of&nbsp;<a href="#RE_LOGK_FT">logK = f(T) equation</a>
 (for
 isotopic species: in the a2/T^2 term)</dt>
-  <dd><br>
-  </dd>
   <dd>For non-isotopic species, a non-zero value of this coefficient
 will
 be automatically calculated from 2 or 3-term extrapolations, as well as
@@ -1455,20 +1461,16 @@ will
 be zeros (dGr = const). <br>
   </dd>
   <dd>&nbsp;&nbsp;&nbsp;</dd>
-  <dd>&nbsp; <br>
-  </dd>
   <dt> <a name="aiLgKr_3"></a><font size="+2"><b><tt>aiLgKr[3]</tt></b></font>
 -
 a3 coefficient
 in the a3*lnT term of&nbsp;<a href="#RE_LOGK_FT">logK = f(T) equation</a>
 (for isotopic species: in the a3/T^3 term)</dt>
-  <dd>&nbsp;&nbsp;</dd>
-  <dd>For non-isotopic species, a non-zero value of this coefficient
+  <dd>&nbsp; For non-isotopic species, a non-zero value of this
+coefficient
 will
 be automatically calculated from 3-term extrapolations.&nbsp;</dd>
   <dd>&nbsp;&nbsp;</dd>
-  <dd>&nbsp;<br>
-  </dd>
   <dt> <a name="aiLgKr_4"></a><font size="+2"><b><tt>aiLgKr[4]</tt></b></font>
 -&nbsp;
 a4 coefficient in the a4/T^2 term of&nbsp;<a href="#RE_LOGK_FT">logK =
@@ -1476,15 +1478,11 @@ f(T)
 equation</a> (for isotopic species: in the a4/T^4 term)</dt>
   <dd><br>
   </dd>
-  <dd>&nbsp; &nbsp;<br>
-  </dd>
   <dt> <a name="aiLgKr_5"></a><font size="+2"><b><tt>aiLgKr[5]</tt></b></font>
 -
 a5 coefficient
 in the a5*T^2 term of&nbsp;<a href="#RE_LOGK_FT">logK = f(T) equation</a></dt>
   <dd> &nbsp;</dd>
-  <dd>&nbsp;<br>
-  </dd>
   <dt> <a name="aiLgKr_6"></a><font size="+2"><b><tt>aiLgKr[6]</tt></b>
     </font>-
 a6 coefficient
@@ -1549,33 +1547,32 @@ typical range
 few hundred J/K/mol) then some of the <i>Cp</i> coeffcients have been
 entered
 incorrectly and need to be fixed.</dd>
-  <dd>&nbsp; </dd>
 </dl>
 <dl>
-  <dt><a name="adCpT_0"></a><font size="+2"><b><tt>a_dCpT</tt></b><b><tt>[0]</tt></b></font><br>
+  <dt><a name="adCpT_0"></a><font size="+2"><b><tt>adCpT</tt></b><b><tt>[0]</tt></b></font><br>
   </dt>
   <dd>a0 coefficient of the dCpr&nbsp; =&nbsp; f(T) equation.</dd>
   <dt><br>
   </dt>
-  <dt><a name="adCpT_1"></a><font size="+2"><b><tt>a_dCpT</tt></b><b><tt>[1]</tt></b></font><br>
+  <dt><a name="adCpT_1"></a><font size="+2"><b><tt>adCpT</tt></b><b><tt>[1]</tt></b></font><br>
   </dt>
   <dd>a1 coefficient in the a1*T term of the dCpr&nbsp; =&nbsp; f(T)
 equation.</dd>
   <dt><br>
   </dt>
-  <dt><a name="adCpT_2"></a><font size="+2"><b><tt>a_dCpT</tt></b><b><tt>[2]</tt></b></font><br>
+  <dt><a name="adCpT_2"></a><font size="+2"><b><tt>adCpT</tt></b><b><tt>[2]</tt></b></font><br>
   </dt>
   <dd>a2 coefficient in the a2*T^-2 term of the dCpr&nbsp; =&nbsp; f(T)
 equation.</dd>
   <dt><br>
   </dt>
-  <dt><a name="adCpT_3"></a><font size="+2"><b><tt>a_dCpT</tt></b><b><tt>[3]</tt></b></font><br>
+  <dt><a name="adCpT_3"></a><font size="+2"><b><tt>adCpT</tt></b><b><tt>[3]</tt></b></font><br>
   </dt>
   <dd>a3 coefficient in the a3*T^-0.5 term of the dCpr&nbsp; =&nbsp;
 f(T) equation.</dd>
   <dt><br>
   </dt>
-  <dt><a name="adCpT_4"></a><font size="+2"><b><tt>a_dCpT</tt></b><b><tt>[4]</tt></b></font><br>
+  <dt><a name="adCpT_4"></a><font size="+2"><b><tt>adCpT</tt></b><b><tt>[4]</tt></b></font><br>
   </dt>
   <dd>a4 coefficient in the a4*T^2 term of the dCpr&nbsp; =&nbsp; f(T)
 equation.<br>
@@ -1605,8 +1602,6 @@ requires up to 3 coefficients (pK298, A, and B), whereas the
 Marshall-Franck density model requires up to 7 coefficients (a, b, c,
 d, e, f, and g).<br>
 </div>
-<p><br>
-</p>
 <dl>
   <dt> <a name="a_dST_0"></a><font size="+2"><b><tt>a_dST[0]</tt></b></font><br>
   </dt>
@@ -1656,13 +1651,141 @@ Marshall-Franck model coefficient c can be entered here.&nbsp; </dd>
   </dd>
 </dl>
 <dl>
+</dl>
+<br>
+<dl>
+  <dt> <a name="adVTP"></a><font size="+3"><b><tt>adVTP</tt></b></font><b><tt><font
+ size="+2"> -</font></tt></b><b><font size="+1"> array of empirical
+coefficients for calculating molar volume of reaction at P and T of
+interest<br>
+    </font></b></dt>
+</dl>
+<blockquote>
+  <dl>
+    <dd><i>dVr = a<sub>0</sub>(T-Tr) + a<sub>1</sub>(T-Tr)^<sup>2</sup>
++ a<sub>2</sub>(T-Tr)^<sup>3</sup> + b<sub>0</sub>P + b<sub>1</sub>P^<sup>2</sup></i></dd>
+  </dl>
+</blockquote>
+<dl>
+  <dd>This equation (applicable for minerals, liquids and melts
+at high pressures P &gt;&gt; Pr and elevated temperatures) is used to
+account for the volume effects in <a href="theortdb.html">thermodynamic
+calculations</a>.</dd>
+</dl>
+<dl>
+  <dt> <a name="adVTP_0"></a><b><tt><font size="+2">adVTP[0]</font></tt></b>
+- Coefficient&nbsp; a0(T) of the <a href="gm_dcomp.html#MOL_VOL_DEP">molar
+volume
+equation</a></dt>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="adVTP_1"></a><b><tt><font size="+2">adVTP[1]</font></tt></b>
+- Coefficient a1(T) of the <a href="gm_dcomp.html#MOL_VOL_DEP">molar
+volume equation</a></dt>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="adVTP_2"></a><b><tt><font size="+2">adVTP[2]</font></tt></b>
+- Coefficient a2(T) of the <a href="gm_dcomp.html#MOL_VOL_DEP">molar
+volume equation</a></dt>
+  <dd> &nbsp; &nbsp;<br>
+Always 0 for Berman's equation format.<br>
+&nbsp;&nbsp;</dd>
+  <dt> <a name="adVTP_3"></a><b><tt><font size="+2">adVTP[3]</font></tt></b>
+- Coefficient b0(P) of the <a href="gm_dcomp.html#MOL_VOL_DEP">molar
+volume equation</a></dt>
+  <dd> &nbsp;</dd>
+  <dd> &nbsp;</dd>
+  <dt> <a name="adVTP_4"></a><b><tt><font size="+2">adVTP[4]</font></tt></b>
+- Coefficient b1(P) of the <a href="gm_dcomp.html#MOL_VOL_DEP">molar
+volume equation</a></dt>
+  <dl>
+    <dd> &nbsp;</dd>
+    <dd>&nbsp;</dd>
+  </dl>
+</dl>
+<br>
+<dl>
+  <dt> <a name="adHKF"></a><b><tt><font size="+2"><font size="+3">adHKF</font>
+-</font></tt></b><b><font size="+1"> array of empirical
+coefficients of&nbsp; the revised&nbsp; HKF&nbsp; equation of state</font></b></dt>
+</dl>
+<p style="margin-left: 40px;"> This optional vector contains empirical
+parameters of revised
+Helgeson- Kirkham- Flowers equation of state for calculation of
+standard partial
+molal properties of aqueous species up to 1000 oC and 5000 bar
+[1981HEL/KIR;
+1997SHO/SAS]. The coefficients were imported from SPRONS92.DAT file
+[1992JOH/OEL]
+and its latest extension, SLOP98.DAT [1997SHO/SAS;
+http://epsc.wustl.edu/geopig]. Please, note that HKF parameters must be
+entered into the fields
+below after multiplication by scale factor, for instance: c2 from
+SPRONS.DAT as follows: c2 *10^-4. </p>
+<dl>
+  <dt> <a name="adHKF_0"></a><b><tt><font size="+2">adHKF[0]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient a1 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal/bar/mol</div>
+<dl>
+  <dt> <a name="adHKF_1"></a><b><tt><font size="+2">adHKF[1]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient a2 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal/mol</div>
+<dl>
+  <dt> <a name="adHKF_2"></a><b><tt><font size="+2">adHKF[2]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient a3 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal*K/bar/mol</div>
+<dl>
+  <dt> <a name="adHKF_3"></a><b><tt><font size="+2">adHKF[3]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient a4 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal*K/mol</div>
+<dl>
+  <dt> <a name="adHKF_4"></a><b><tt><font size="+2">adHKF[4]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient c1 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal/K/mol</div>
+<dl>
+  <dt> <a name="adHKF_5"></a><b><tt><font size="+2">adHKF[5]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">Empirical coefficient c2 of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>:
+cal*K/mol</div>
+<dl>
+  <dt> <a name="adHKF_6"></a><b><tt><font size="+2">adHKF[6]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;">wB Born factor&nbsp; of the <a
+ href="gm_dcomp.html#HKF_COEFF">HKF EoS</a>: cal/mol</div>
+<dl>
+  <dt> <a name="adHKF_7"></a><b><tt><font size="+2">adHKF[7]</font></tt></b></dt>
+</dl>
+<div style="margin-left: 40px;"> Reserved. When the Pronsprep and
+Parcor algorithms for
+predicting thermodynamic properties and HKF coefficients of aqueous
+species is used in ReacDc module, the effectice electrostatic radius of
+the aqueous species at Pr and Tr is automatically placed in this field.
+However, this parameter is currently not used in any calculations.</div>
+<div style="margin-left: 40px;">
+<dl>
   <dd><br>
   </dd>
-  <dd>&nbsp;</dd>
+  <dd><br>
+  </dd>
+  <dd><br>
+  </dd>
 </dl>
-<h3><a name="REACDC_DOD_REMAKE"></a>2.1. Data objects that can be
+</div>
+<h3><a name="REACDC_DOD_REMAKE"></a><font size="+3">2.1. Data objects
+that can be
 modified
-during remake/create only</h3>
+during remake/create only</font></h3>
 <dl>
   <br>
   <dt> <a name="REcMod_0"></a><big><big><b><tt>REcMod[0]</tt></b></big></big>
@@ -1871,7 +1994,8 @@ interest.&nbsp;</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_2"></a><tt>RE_arr[2]</tt> - Flag for
+  <dt> <a name="RE_arr_2"></a><font size="+2"><tt
+ style="font-weight: bold;">RE_arr[2]</tt></font> - Flag for
 coefficients of
 electrostatic models (reserved)</dt>
   <dd>&nbsp; <br>
@@ -1881,7 +2005,8 @@ code.</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp;&nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_3"></a><tt>RE_arr[3]</tt> - Flag for dVr=f(P,T)
+  <dt> <a name="RE_arr_3"></a><font style="font-weight: bold;"
+ size="+2"><tt>RE_arr[3]</tt></font> - Flag for dVr=f(P,T)
 coefficients
 (reserved)</dt>
   <dd>&nbsp; <br>
@@ -1892,7 +2017,8 @@ coefficients (reserved for future versions of GEM-Selektor).</dd>
   <dd>&nbsp;</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_4"></a><tt>RE_arr[4]</tt> - Flag for dCpr=f(T)
+  <dt> <a name="RE_arr_4"></a><font style="font-weight: bold;"
+ size="+2"><tt>RE_arr[4]</tt></font> - Flag for dCpr=f(T)
 coefficients
 (reserved)</dt>
   <dd>&nbsp; <br>
@@ -1904,7 +2030,9 @@ empirical coefficients (reserved for future versions of GEM-Selektor).</dd>
   </dd>
   <dd>&nbsp; &nbsp;&nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_5"></a>RE_arr[5] - Will TP vary along SVC curve
+  <dt> <a name="RE_arr_5"></a><font style="font-weight: bold;"
+ size="+2"><tt>RE_arr[5]</tt></font><font style="font-weight: bold;"
+ size="+2"> </font>- Will TP vary along SVC curve
 only?
 { + - } (reserved)</dt>
   <dd>&nbsp; <br>
@@ -1913,7 +2041,8 @@ only?
   <dd>&nbsp;&nbsp; &nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="RE_arr_6"></a>RE_arr[6] &nbsp;- Flag for coefficients
+  <dt> <a name="RE_arr_6"></a><font style="font-weight: bold;"
+ size="+2"><tt>RE_arr[6]</tt></font> - Flag for coefficients
 of
 HKF EOS { + - } (reserved)</dt>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
@@ -1921,7 +2050,8 @@ HKF EOS { + - } (reserved)</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="RE_arr_7"></a><big><b><tt>RE_arr[7]</tt></b></big> -
+  <dt> <a name="RE_arr_7"></a><font style="font-weight: bold;"
+ size="+2"><tt>RE_arr[7]</tt></font> -
 Is the
 "new" reaction-defined an isotope form species? { + - }</dt>
   <dd>&nbsp; <br>
@@ -1929,8 +2059,10 @@ Is the
   <dd> This flag tells the program how to interprete the reaction and
 numbers
 in the <a href="#RE_LOGK_FT"><tt>logK(T)</tt></a> vector.&nbsp;</dd>
-  <dd>Possible values:&nbsp;</dd>
-  <blockquote> <dd>- &nbsp; &nbsp; &nbsp;(default): this is a reaction
+  <dd>Possible values:</dd>
+  <dt><br>
+  </dt>
+  <dd>- &nbsp; &nbsp; &nbsp;(default): this is a reaction
 with
 ordinary species involved elements of logK vector are coefficients in
 logK=f(T)
@@ -1940,10 +2072,9 @@ form
 from the "non-isotopic" species; elements of logK vector are
 interpreted
 as coefficients of 1000ln(alpha) = f(T) equation.&nbsp;</dd>
-    <dd>&nbsp;&nbsp;</dd>
-    <dd>&nbsp; &nbsp;<br>
-    </dd>
-  </blockquote>
+  <dd>&nbsp;&nbsp;</dd>
+  <dd>&nbsp; &nbsp;<br>
+  </dd>
   <dt> <a name="RE_dim_0"></a><big><big><b><tt>RE_dim[0]</tt></b></big></big>
 - Number of species involved in the reaction ("new" species must be the
 last
@@ -1958,22 +2089,24 @@ to enter this value because it is automatically managed by the program.</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt><a name="RE_dim_1"></a>RE_dim[1]&nbsp;</dt>
+  <dt><a name="RE_dim_1"></a><big><big><b><tt>RE_dim[1]</tt></b></big></big></dt>
   <dd> Number of nonzero coeffs of logK = f(T) equation (reserved)</dd>
   <dd> &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="RE_dim_2"></a>RE_dim[2]</dt>
+  <dt> <a name="RE_dim_2"></a><big><big><b><tt>RE_dim[2]</tt></b></big></big></dt>
   <dd> Number of nonzero coeffs of dVr = f(P,T) equation (reserved)</dd>
   <dd> &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
-  <dt> <a name="RE_dim_3"></a>RE_dim[3]&nbsp;</dt>
+  <dt> <a name="RE_dim_3"></a><big><big><b><tt>RE_dim[3]</tt></b></big></big>
+    <br>
+  </dt>
   <dd> Number of nonzero coeffs of electrostatic equations (reserved)</dd>
   <dd> &nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
-  <dt> <a name="RE_dim_4"></a>RE_dim[4]</dt>
+  <dt> <a name="RE_dim_4"></a><big><big><b><tt>RE_dim[4]</tt></b></big></big></dt>
   <dd> Number of nonzero coeffs of dCpr = f(T) equation (reserved)</dd>
   <dd> &nbsp;</dd>
   <dd>&nbsp;<br>
@@ -1998,9 +2131,10 @@ Default value is 1.</dd>
   </dd>
   <br>
 </dl>
-<h3>&nbsp;<a name="REACDC_DOD_OBSOLETE"></a>2.2. Reserved and obsolete
+<h3>&nbsp;<a name="REACDC_DOD_OBSOLETE"></a><font size="+3">2.2.
+Reserved and obsolete
 data
-objects</h3>
+objects</font></h3>
 <dl>
   <dt> <a name="BetAl__0"></a><big><b><tt>BetAl_[0]</tt></b></big> -
 Coefficient
@@ -2039,38 +2173,18 @@ field).</dd>
   <dd><i>&nbsp;&nbsp; &nbsp;</i></dd>
   <dd>&nbsp; &nbsp;&nbsp;<br>
   </dd>
-  <dd>&nbsp; &nbsp;&nbsp;<br>
-  </dd>
-  <dt> <a name="adHKF"></a><tt>adHKF</tt> - reserved</dt>
-  <dd> &nbsp;&nbsp;</dd>
-  <dd>&nbsp; <br>
-  </dd>
-  <dt> <a name="adVTP"></a><b><tt>adVTP</tt></b> - Coefficients for
-dVr =
-f(P,T) equation (reserved)&nbsp;&nbsp;</dt>
 </dl>
-<blockquote>
-  <dl>
-    <dd><i>dVr = a<sub>0</sub>(T-Tr) + a<sub>1</sub>(T-Tr)^<sup>2</sup>
-+
-a<sub>2</sub>(T-Tr)^<sup>3</sup> + b<sub>0</sub>P + b<sub>1</sub>P^<sup>2</sup></i></dd>
-  </dl>
-</blockquote>
 <dl>
-  <dd> This equation&nbsp; is used to account for the <i>T,P</i>
-dependent
-volume effects in <a href="theortdb.html">thermodynamic calculations</a>.</dd>
-  <dd>&nbsp;&nbsp;</dd>
-  <dd>&nbsp;<br>
-  </dd>
-  <dt> <a name="REtprn"></a><tt>REtprn</tt></dt>
+  <dt> <a name="REtprn"></a><font size="+1"><tt
+ style="font-weight: bold;">REtprn</tt></font></dt>
   <dd> Internal</dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd>&nbsp; <br>
   </dd>
 </dl>
 <hr size="2" width="100%"><br>
-<h2><a name="REACDC_ERRORS"></a>3. Warnings and error messages</h2>
+<h2><a name="REACDC_ERRORS"></a><font size="+3">3. Warnings and error
+messages</font></h2>
 <p>For error messages from the <a href="g_useref.html#FORMULA">Formula</a>
 Parser or calculation of temperature corrections for linked DComp
 records,
