@@ -17,7 +17,10 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 
+#ifndef NOPARTICLEARRAY
 #include "particlearray.h"
+#endif
+
 #include "nodearray.h"
 #include "gdatastream.h"
 #include "num_methods.h"
@@ -299,7 +302,10 @@ AGAIN:
 void TNodeArray::allocMemory()
 {
   int ii;
-  TParticleArray::pa = 0;
+
+#ifndef NOPARTICLEARRAY
+TParticleArray::pa = 0;
+#endif
 
 // alloc memory for data bidge structures
 // did in constructor TNode::allocMemory();
@@ -1002,7 +1008,8 @@ void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int e
        pm = NodT1[i]->xPH[ip];
        fprintf( logfile, "%-12.4g ", pm );
      }
-     if( TParticleArray::pa )
+#ifndef NOPARTICLEARRAY
+    if( TParticleArray::pa )
      {       // printing number of particles in nodes
        TParticleArray * ppa = TParticleArray::pa;
        int npa;
@@ -1012,6 +1019,7 @@ void TNodeArray::logProfilePhMol( FILE* logfile, int t, double at, int nx, int e
             fprintf( logfile, "%-8d ", npa );
        }
      }
+#endif
   }
   fprintf( logfile, "\n" );
 }
