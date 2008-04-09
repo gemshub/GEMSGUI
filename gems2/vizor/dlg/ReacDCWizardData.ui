@@ -372,11 +372,6 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>B   Molar volume correction calculated from Birch-Murnaghan EoS</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
                                     <string>0   Account for pressure dependence is inherent</string>
                                 </property>
                             </item>
