@@ -1,81 +1,258 @@
 <!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
-               
   <meta http-equiv="Content-Type"
  content="text/html; charset=iso-8859-1">
-               
   <meta name="GENERATOR"
  content="Mozilla/4.72 [en] (Win98; I) [Netscape]">
   <title>Autophase Setup Wizard</title>
-                           
   <meta name="author" content="GEMS-PSI Development Team">
-               
   <meta name="description" content="Small help page for AutoPhaseDialog">
 </head>
-  <body>
-       
-<h1><img src="gems1.png" height="48" width="48" align="left">
-   GEM-Selektor version 2-PSI</h1>
-       
+<body>
+<h1><img src="gems1.png" align="left" height="48" width="48">
+GEM-Selektor version 2-PSI</h1>
 <h2>Automatic Setup of Aqueous and Gas/Fluid Phases</h2>
-       
-<hr style="width: 100%; height: 2px;">    
+<hr style="width: 100%; height: 2px;">
 <h2> </h2>
-       
-<p>This dialog facilitates setup of definitions of the aqueous electrolyte
-phase and the gas/fluid mixture phase that will be automatically assembled
-when opening (or creating) a GEMS modelling project. For the underlying models
-and equations, see the <a href="theorgem.html"><b>theorgem.html</b></a> manual
+<p>This dialog facilitates setup of definitions of the aqueous
+electrolyte
+phase and the gas/fluid mixture phase that will be automatically
+assembled
+when opening (or creating) a GEMS modelling project. For the underlying
+models
+and equations, see the <a href="theorgem.html"><b>theorgem.html</b></a>
+manual
 and <b>pdf</b> manual files linked to it. <br>
 </p>
-<p>The first tab "Select Aqueous Electrolyte Model" lets you define a built-in
-function for calculating activity coefficients of individual aqueous species.
-These can be selected by clicking on radio-buttons on the left side, or pressing&nbsp;
-<b><tt>Alt-D, Alt-H, Alt-3</tt></b>, ... key combinations. Two last choices
-should be used when none of the built-in functions is applicable, or no aqueous
-phase should be included into the chemical system definition. In the "Parameters"
-frame, you can change some default parameters used in some of the built-in
-aqueous activity functions.&nbsp;</p>
-<p>Clicking on the "Check" button displays a record key of the <a
- href="gm_phase.html">Phase record</a> to be automatically generated; &nbsp;the
+<p>The first tab "Select Aqueous Electrolyte Model" lets you define a
+built-in
+function for calculating activity coefficients of individual aqueous
+species.
+These can be selected by clicking on radio-buttons on the left side, or
+pressing&nbsp;
+<b><tt>Alt-D, Alt-H, Alt-3</tt></b>, ... key combinations. Two last
+choices
+should be used when none of the built-in functions is applicable, or no
+aqueous
+phase should be included into the chemical system definition. In the
+"Parameters for the aqueous model"
+frame, you can change some default parameters used in some of the
+built-in
+aqueous activity functions which are described below.<br>
+</p>
+<p>Most of the aqueous activity coefficient models that are currently
+supported by GEM-Selektor code belong to the class of extended
+Debye-H&uuml;ckel (EDH) models (see document Activity-Coeffs.pdf for
+details about the underlying theory and references). In these models,
+the extended term (b_gamma) can be a function of pressure and
+temperature or a constant value. In the select box "b_gamma(P,T) mode"
+the operation model of the b-gamma function needs to be selceted. If
+the mode "constant" is chosen, the value of b_gamma at reference state
+conditions (25 deg. C, 1 bar) needs to be entered in the
+"b_gamma(1,298) value" field above the select box.<br>
+</p>
+<p>Alternatively, for calculations at hydrothermal conditions, the
+b_gamma term can be a function of temperature and pressure. In this
+case, four b_gamma functions for different so-called background
+electrolytes (NaCl, KCl, NaOH, KOH) can be selected. The concept of the
+background electrolyte means that it is assumed that the aqueous
+solution that is modeled is dominantly composed of that particular
+electrolyte and the model should be chosen accordingly. If in your
+project you mainly deal with NaCl-rich fluids (most common case), you
+should then chose the NaCl model. Note that the T-P-dependent b_gamma
+functions should be used in conjunction with the extended
+Debeye-H&uuml;ckel model after Helgeson and coworkers (Oelkers and
+Helgeson 1990; Pokrovski and Helgeson 1995; 1997a; 1997b), the second
+model in the list that "IA with extended Debeye-Hueckel equation,
+common b_gama and a0, H" which has the code letter "H" because of
+thermodynamic consistency. If a T-P dependent b_gamma model is
+selected, there is no need to enter a value into the "b_gamma(1,298)
+value" field, because this value is automatically calculated from a
+built-in routine. However, it is neccessary to set up the appropriate
+value of the ion size parameter for each of the four background
+electrolytes. The value of the ion size parameter (also called distance
+of closest approach is entered in the "Common a0 value" field just
+below the model select box. The specific values for the four background
+electrolytes are:<br>
+<br>
+</p>
+<dl style="margin-left: 40px;">
+  <table style="width: 900px;" border="1" cols="7">
+    <tbody>
+      <tr>
+        <td><span style="font-weight: bold;">Background electrolyte</span><br>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaCl<br>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KCl<br>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NaOH</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KOH<br>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">a0 value<br>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.72<br>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4.08<br>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.31</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.67</td>
+      </tr>
+    </tbody>
+  </table>
+  <dd>&nbsp; <br>
+  </dd>
+</dl>
+From the Debye-Hueckel models described above the activity coefficients
+of aqueous electrolyte species (charged ions and complexes) will be
+calculated. For the uncharged species (neutral ion pairs and complexes,
+neutral dissolved gas molecules such as CO<sub>2</sub>, H<sub>2</sub>S
+etc.) and for water solven different activity coefficient models will
+be used. Four different options for these models exist, which are
+specified by a numebr code that is entered in the "Policy_to_neutral:"
+field. If is foreseen that this number code is replaced by a more
+user-friendly select box in forthcoming versions of GEM-Selektor code.
+The currently used number codes are:<br>
+<br>
+<dl style="margin-left: 40px;">
+  <table style="width: 900px; height: 56px;" border="1" cols="7">
+    <tbody>
+      <tr>
+        <td><span style="font-weight: bold;">Number code</span><br>
+        </td>
+        <td><span style="font-weight: bold;">Activity coeff. of neutral
+species</span><br>
+        </td>
+        <td style="vertical-align: top;"><span
+ style="font-weight: bold;">Activity coeff. of H2O solvent<br>
+        </span></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;"><span
+ style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -2</span><span
+ style="font-style: italic;"></span><br>
+        </td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.0<span
+ style="font-weight: normal;"></span><span style="font-weight: normal;"></span><br>
+        </td>
+        <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1.0<span style="font-weight: normal;"></span></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;"><span
+ style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -1</span><span
+ style="font-style: italic;"></span><br>
+        </td>
+        <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1.0<span style="font-weight: normal;"></span><span
+ style="font-weight: normal;"></span><br>
+        </td>
+        <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+calculated<span style="font-weight: normal;"></span></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;"><span
+ style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0</span><span
+ style="font-style: italic;"></span><br>
+        </td>
+        <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+b_gamma * IS<span style="font-weight: normal;"></span></td>
+        <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+calculated<span style="font-weight: normal;"></span><span
+ style="font-weight: normal;"></span><br>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;"><span
+ style="font-weight: normal;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1</span><span
+ style="font-style: italic;"></span><br>
+        </td>
+        <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+b_gamma * IS<span style="font-weight: normal;"></span><span
+ style="font-weight: normal;"></span><span style="font-weight: normal;"></span><br>
+        </td>
+        <td style="vertical-align: top;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1.0<span style="font-weight: normal;"></span></td>
+      </tr>
+    </tbody>
+  </table>
+  <dd>&nbsp; <br>
+  </dd>
+</dl>
+Note that one should select the basic model (click on the appropriate
+radio button on the left side) before setting up details of the
+calculation mode and parameters (T-P dependence of parameters,
+calculation activity coefficients for neutral species and water
+solvent). Because of thermodynamic consistency, those options (from the
+table above) that calculate the activity coefficient of water solvent
+should only be used with the extended Debeye-H&uuml;ckel model after
+Helgeson and coworkers.<br>
+<br>
+Clicking on the "Check" button displays a record key of the <a
+ href="gm_phase.html">Phase record</a> to be automatically generated;
+&nbsp;the
 chosen model and its parameters will be identified in the <a
  href="gm_phase.html#PhName"><b><tt>PhName</tt></b></a> and <a
- href="gm_phase.html#PhNote"><b><tt>PhNote</tt></b></a> fields. You can check
-them later when you open the "Phase" page of the "System" window from the
-"Single Thermodynamic System" dialog, mark the phase record key and press
-<b><tt>F7</tt></b>. Note that, when the same modelling project is opened
-next time, this Phase definition record will be automatically deleted and
-generated again without displaying this setup dialog. <br>
+ href="gm_phase.html#PhNote"><b><tt>PhNote</tt></b></a> fields. You can
+check
+them later when you open the "Phase" page of the "System" window from
+the
+"Single Thermodynamic System" dialog, mark the phase record key and
+press
+<b><tt>F7</tt></b>. Note that, when the same modelling project is
+opened
+next time, this Phase definition record will be automatically deleted
+and
+generated again without displaying this setup dialog.<br>
+<p>The second tab "Select Gas/Fluid Mixture Model" defines the
+automatically
+generated Phase record for gas or fluid mixture. It functions in a way
+similar
+to that for the aqueous phase. The generic models that are currently
+supported are (1) an ideal gas mixture, and (2) non-ideal gas (fluid)
+mixture calculated with the Churakov-Gottschalk (CG) model. The
+Peng-Robinson-Stryjek-Vera (PRSV) model for non-ideal gas (fluid)
+mixtures that is also implemented in the GEM-Selektor code requires
+that first a specific <a href="gm_phase.html">Phase record</a> (in
+database management mode) has to be created. Here the gas species that
+are included in the gas mixture need to be selected and the binary
+interaction parameters are to be entered into a table. If a phase
+record is prepared in this way, it can then be selected in the Setup of
+Aqueous and Gas/Fluid Phase wizard by chosing the option "Do not
+generate; select a user-defined Phase record from database,U". After
+selecting this option, a list of phase records that are available in
+the database will be displayed. Note that no additional parameters for
+the gas/fluid
+mixture (right side of the wizard) are used in this version of
+GEM-Selektor.<br>
 </p>
-<p>The second tab "Select Gas/Fluid Mixture Model" defines the automatically
-generated Phase record for gas or fluid mixture. It functions in a way similar
-to that for the aqueous phase. Note that no Parameters for the gas/fluid
-mixture (on the right side) are used in this version of GEM Selektor. <br>
-</p>
-<p>The setup of automatically generated Phase records for aqueous and gas
-phases can be changed any time upon opening this modelling project. To do
+<p>The setup of automatically generated Phase records for aqueous and
+gas
+phases can be changed any time upon opening this modelling project. To
+do
 this, unclick the "Retain setup of aqueous (and gas) phases" in the <a
- href="gp_howto.html">"Modelling Projects" dialog</a> before selecting in
+ href="gp_howto.html">"Modelling Projects" dialog</a> before selecting
+in
 the list an exitsting project to be opened. <br>
 </p>
-      
 <hr style="width: 100%; height: 2px;"><span
  style="font-family: helvetica,arial,sans-serif;"><br>
-  <a href="gm_project.html">To Project Module Manual</a></span><a
+<a href="gm_project.html">To Project Module Manual</a></span><a
  href="gm_phase.html"><span
  style="font-family: helvetica,arial,sans-serif;"><br>
-    To Phase Module Manual</span></a><br>
-    <tt><a href="index.html"><br>
-    To Contents</a> &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;<a
- href="g_about.html">About GEM-Selektor</a> </tt><br>
-    <tt><br>
-    end of file</tt>    
+To Phase Module Manual</span></a><br>
+<tt><a href="index.html"><br>
+To Contents</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="g_about.html">About
+GEM-Selektor</a> </tt><br>
+<tt><br>
+end of file</tt>
 <p>&nbsp;<br>
-    &nbsp; </p>
-    <br>
-   <br>
-  <br>
- <br>
+&nbsp; </p>
+<br>
+<br>
+<br>
 </body>
 </html>
