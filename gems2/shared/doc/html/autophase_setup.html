@@ -29,9 +29,9 @@ and <b>pdf</b> manual files linked to it. <br>
 built-in
 function for calculating activity coefficients of individual aqueous
 species.
-These can be selected by clicking on radio-buttons on the left side, or
+These can be selected by clicking on radio buttons on the left side, or
 pressing&nbsp;
-<b><tt>Alt-D, Alt-H, Alt-3</tt></b>, ... key combinations. Two last
+<b><tt>Alt-D, Alt-H, Alt-3</tt></b>, ... key combinations. The two last
 choices
 should be used when none of the built-in functions is applicable, or no
 aqueous
@@ -47,7 +47,7 @@ Debye-H&uuml;ckel (EDH) models (see document Activity-Coeffs.pdf for
 details about the underlying theory and references). In these models,
 the extended term (b_gamma) can be a function of pressure and
 temperature or a constant value. In the select box "b_gamma(P,T) mode"
-the operation model of the b-gamma function needs to be selceted. If
+the operation mode of the b_gamma function needs to be selceted. If
 the mode "constant" is chosen, the value of b_gamma at reference state
 conditions (25 deg. C, 1 bar) needs to be entered in the
 "b_gamma(1,298) value" field above the select box.<br>
@@ -59,20 +59,20 @@ electrolytes (NaCl, KCl, NaOH, KOH) can be selected. The concept of the
 background electrolyte means that it is assumed that the aqueous
 solution that is modeled is dominantly composed of that particular
 electrolyte and the model should be chosen accordingly. If in your
-project you mainly deal with NaCl-rich fluids (most common case), you
-should then chose the NaCl model. Note that the T-P-dependent b_gamma
+project you mainly deal with NaCl-rich fluids (the most common case),
+you
+should then choose the NaCl model. Note that the T-P-dependent b_gamma
 functions should be used in conjunction with the extended
 Debeye-H&uuml;ckel model after Helgeson and coworkers (Oelkers and
 Helgeson 1990; Pokrovski and Helgeson 1995; 1997a; 1997b), the second
-model in the list that "IA with extended Debeye-Hueckel equation,
-common b_gama and a0, H" which has the code letter "H" because of
+model in the list which has the code letter "H", because of
 thermodynamic consistency. If a T-P dependent b_gamma model is
 selected, there is no need to enter a value into the "b_gamma(1,298)
 value" field, because this value is automatically calculated from a
 built-in routine. However, it is neccessary to set up the appropriate
 value of the ion size parameter for each of the four background
 electrolytes. The value of the ion size parameter (also called distance
-of closest approach is entered in the "Common a0 value" field just
+of closest approach) is entered in the "Common a0 value" field just
 below the model select box. The specific values for the four background
 electrolytes are:<br>
 <br>
@@ -108,11 +108,11 @@ electrolytes are:<br>
 </dl>
 From the Debye-Hueckel models described above the activity coefficients
 of aqueous electrolyte species (charged ions and complexes) will be
-calculated. For the uncharged species (neutral ion pairs and complexes,
+calculated. For uncharged species (neutral ion pairs and complexes,
 neutral dissolved gas molecules such as CO<sub>2</sub>, H<sub>2</sub>S
-etc.) and for water solven different activity coefficient models will
-be used. Four different options for these models exist, which are
-specified by a numebr code that is entered in the "Policy_to_neutral:"
+etc.) and for water solvent different activity coefficient models will
+be used. Four options for these models exist, which are
+specified by a number code that is entered in the "Policy_to_neutral:"
 field. If is foreseen that this number code is replaced by a more
 user-friendly select box in forthcoming versions of GEM-Selektor code.
 The currently used number codes are:<br>
@@ -127,7 +127,7 @@ The currently used number codes are:<br>
 species</span><br>
         </td>
         <td style="vertical-align: top;"><span
- style="font-weight: bold;">Activity coeff. of H2O solvent<br>
+ style="font-weight: bold;">Activity coeff. of H<sub>2</sub>O solvent<br>
         </span></td>
       </tr>
       <tr>
@@ -184,10 +184,11 @@ b_gamma * IS<span style="font-weight: normal;"></span><span
 </dl>
 Note that one should select the basic model (click on the appropriate
 radio button on the left side) before setting up details of the
-calculation mode and parameters (T-P dependence of parameters,
-calculation activity coefficients for neutral species and water
+calculation mode and parameters (T-P-dependence of parameters,
+calculation of activity coefficients for neutral species and water
 solvent). Because of thermodynamic consistency, those options (from the
-table above) that calculate the activity coefficient of water solvent
+table above) that explicitly calculate the activity coefficient of
+water solvent
 should only be used with the extended Debeye-H&uuml;ckel model after
 Helgeson and coworkers.<br>
 <br>
@@ -217,9 +218,10 @@ mixture calculated with the Churakov-Gottschalk (CG) model. The
 Peng-Robinson-Stryjek-Vera (PRSV) model for non-ideal gas (fluid)
 mixtures that is also implemented in the GEM-Selektor code requires
 that first a specific <a href="gm_phase.html">Phase record</a> (in
-database management mode) has to be created. Here the gas species that
-are included in the gas mixture need to be selected and the binary
-interaction parameters are to be entered into a table. If a phase
+database management mode) is created. The gas species that
+are included in the gas mixture need to be selected and binary
+interaction parameters can be entered into the <a
+ href="gm_phase.html#ph_cf">ph_cf</a> table. If a phase
 record is prepared in this way, it can then be selected in the Setup of
 Aqueous and Gas/Fluid Phase wizard by chosing the option "Do not
 generate; select a user-defined Phase record from database,U". After
@@ -233,8 +235,9 @@ GEM-Selektor.<br>
 gas
 phases can be changed any time upon opening this modelling project. To
 do
-this, unclick the "Retain setup of aqueous (and gas) phases" in the <a
- href="gp_howto.html">"Modelling Projects" dialog</a> before selecting
+this, uncheck the "Retain setup of aqueous (and gas) phases" option in
+the <a href="gp_howto.html">"Modelling Projects" dialog</a> before
+selecting
 in
 the list an exitsting project to be opened. <br>
 </p>

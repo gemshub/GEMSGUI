@@ -89,33 +89,34 @@ extern TpworkList aW;
 
 struct WATERPARAM
 { // WATER termodynamic properties - extracted from HGK subroutines (SUPCRT92)
+  // old dimensions [2] restored, added ideal gas water properties, 06.02.2008 (TW)
     bool init;
-    double Aw[2];    // old dimensions [2] restored, 06.02.2008 (TW)
-    double Gw[2];    
-    double Sw[2];
-    double Uw[2];
-    double Hw[2];
-    double Cvw[2];
-    double Cpw[2];
-    double Speedw[2];
-    double Alphaw[2];
-    double Betaw[2];
-    double Dielw[2];
-    double Viscw[2];
-    double Tcondw[2];
-    double Surtenw[2];
-    double Tdiffw[2];
-    double Prndtlw[2];
-    double Visckw[2];
-    double Albew[2];  /* Alphaw / Betaw */
-    double ZBorn[2];
-    double YBorn[2];
-    double QBorn[2];
-    double dAldT[2];
-    double XBorn[2];
-    double Gigw[2];  // added ideal gas water properties, 06.02.2008 (TW)
-    double Sigw[2];
-    double Cpigw[2];
+    double Aw[2];        // Helmholtz energy
+    double Gw[2];        // Gibbs energy
+    double Sw[2];        // entropy
+    double Uw[2];        // internal energy
+    double Hw[2];        // enthalpy
+    double Cvw[2];       // isochoric heat capacity
+    double Cpw[2];       // isobaric heat capacity
+    double Speedw[2];    // speed of sound
+    double Alphaw[2];    // constant pressure expansion (alpha)
+    double Betaw[2];     // constant temperature compressibility (beta)
+    double Dielw[2];     // dielectrical constant
+    double Viscw[2];     // dynamic viscosity
+    double Tcondw[2];    // thermal conductivity
+    double Surtenw[2];   // surface tension
+    double Tdiffw[2];    // not clear (currently not used)
+    double Prndtlw[2];   // Prandtl number (currently not used)
+    double Visckw[2];    // kinetic viscosity (currently not used) 
+    double Albew[2];     // alpha/beta ratio
+    double ZBorn[2];     // Born function Z
+    double YBorn[2];     // Born function Y
+    double QBorn[2];     // Born function Q
+    double dAldT[2];     // T derivative of isobaric expansion
+    double XBorn[2];     // Born function X
+    double Gigw[2];      // ideal gas Gibbs energy
+    double Sigw[2];      // ideal gas entropy
+    double Cpigw[2];     // ideal gas isobaric heat capacity
     WATERPARAM()
     {
         init = false;
