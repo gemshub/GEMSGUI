@@ -1366,7 +1366,8 @@ void TSupcrt::Supcrt_H2O( double /*TC*/, double *P )
     if ( aSpc.useLVS )
     { // calculation of thermodynamic and transport water properties
         // in the near critical region
-        LVSeqn(aSpc.isat, aSpc.iopt, aSpc.itripl,
+        ideal(aSta.Temp);   // bugfix for Akinfiev nonelectrolyte model (TW, 16.05.2008)
+    	LVSeqn(aSpc.isat, aSpc.iopt, aSpc.itripl,
                aSta.Temp, &aSta.Pres, &aSta.Dens[0], aSpc.epseqn);
         aSta.Dens[0] /= 1.0e3;
         if ( aSpc.isat == 1 )
