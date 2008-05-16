@@ -767,8 +767,10 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,
 // else if nothing has changed - return 2.
 short TProfil::BAL_compare()
 {
-    int i,j,k;
-    /* test sizes */
+    int i,j,k, jj, jb, je=0;
+    double Go, Gg, Ge, pGo; 
+    
+// Test A - sizes and selectors
     if( pmp->N != syp->N || pmp->L != syp->L || pmp->Ls != syp->Ls
             || pmp->LO != syp->Lw || pmp->PG != syp->Lg
             || pmp->PSOL != syp->Lhc || pmp->Lads != syp->Lsor
@@ -778,8 +780,7 @@ short TProfil::BAL_compare()
         return 0;
     else if( syp->DLLim == S_OFF && syp->DULim == S_OFF && pmp->PLIM == 1 )
         return 0;
-
-    /* test selectors */
+// test selectors 
     for( i=0; i<pmp->N; i++ )
         if( syp->Icl[pmp->mui[i]] == S_OFF )
             return 0;
@@ -789,33 +790,50 @@ short TProfil::BAL_compare()
     for( k=0; k<pmp->FI; k++ )
         if( syp->Pcl[pmp->muk[k]] == S_OFF )
             return 0;
-    /* lists of components didn't change */
-    /* test B */
+// lists of components didn't change 
+// test B - recipes and constraints
     for( i=0; i<pmp->N; i++ )
         if( fabs( syp->B[pmp->mui[i]] - pmp->B[i] ) >= pa.p.DB )
             return 1;
-    /* test other restrictions */
-    for( j=0; j<pmp->L; j++ )
-    {
-        if( syp->PGEX != S_OFF )
-            if( fabs( syp->GEX[pmp->muj[j]] - pmp->GEX[j]*pmp->RT ) >= 0.001 )
-                break;
+    // test other settings for DCs
+  for( k = 0; k < pmp->FI; k++ )
+  {
+	jb = je;
+	je += pmp->L1[k];
+	for( j=jb; j<je; j++ )
+    {    		
+       Gg = Ge = 0.0;    //   This part had to be changed after integrating Ge into pmp->G0 
+       jj = pmp->muj[j]; //        DK    07.03.2008,  16.05.2008
+       Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
+       if( syp->Guns )  // This is used mainly in UnSpace calculations
+           Gg = syp->Guns[jj];    // User-set increment to G0 from project system
+       if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
+           Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK  
+       pGo = multi->Cj_init_calc( Go+Gg+Ge, j, k );       
+       if( fabs( pGo - pmp->G0[j] )* pmp->RT >= 0.001 )
+       {
+           pmp->pTPD = 1;   // Fixed here to invoke CompG0Load() DK 16.05.2008
+    	   break;   // GEX or Guns has changed for this DC in the system definition     
+       }
+ //      if( syp->PGEX != S_OFF )
+ //           if( fabs( syp->GEX[pmp->muj[j]] - pmp->GEX[j]*pmp->RT ) >= 0.001 )
+ //               break;
         if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
-            if( fabs( syp->DLL[pmp->muj[j]] - pmp->DLL[j] ) >= 1e-19 )
+            if( fabs( syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
                 break;
         if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
-            if( fabs( syp->DUL[pmp->muj[j]] - pmp->DUL[j] ) >= 1e-19 )
+            if( fabs( syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )
               break;
         if( syp->DULim != S_OFF || syp->DLLim != S_OFF )
-        {  if( pmp->RLC[j] != syp->RLC[pmp->muj[j]] )
+        {  if( pmp->RLC[j] != syp->RLC[jj] )
              break;
-           if( pmp->RSC[j] != syp->RSC[pmp->muj[j]] )
+           if( pmp->RSC[j] != syp->RSC[jj] )
              break;
         }
-    }
-    if( j < pmp->L )
-      return 1;
-
+    }  // j
+    if( j < je )
+       return 1;
+  }  // k
     if( pmp->FIat > 0 )  //      Adsorption models - always
        return 1;
 
