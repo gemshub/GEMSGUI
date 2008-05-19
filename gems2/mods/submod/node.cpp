@@ -55,23 +55,23 @@ bool  TNode::check_TP( double& Tc, double& P )
      Tc = CSD->TCval[CSD->nTp-1];
    }
 
-  if( !ok )
-  {
-    fstream f_log("ipmlog.txt", ios::out|ios::app );
-    f_log << "In node "<< CNode->NodeHandle << "  Given T= "<<  T_ <<
+   if( !ok )
+   {
+     fstream f_log("ipmlog.txt", ios::out|ios::app );
+     f_log << "In node "<< CNode->NodeHandle << "  Given T= "<<  T_ <<
              "  is beyond the range for thermodynamic data;" <<
              " set to T= " << Tc << endl;
-  }
+   }
 
-  ok = true;
-  if( P < CSD->Pval[0] )
-  { ok = false;
-    P = CSD->Pval[0];
-  }
-  if( P > CSD->Pval[CSD->nPp-1] )
-  { ok = false;
-    P = CSD->Pval[CSD->nPp-1];
-  }
+   ok = true;
+   if( P < CSD->Pval[0] )
+   { ok = false;
+     P = CSD->Pval[0];
+   }
+   if( P > CSD->Pval[CSD->nPp-1] )
+   { ok = false;
+     P = CSD->Pval[CSD->nPp-1];
+   }
 
   if( !ok )
   {

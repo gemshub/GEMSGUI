@@ -38,6 +38,7 @@ using namespace std;
 #define __FreeBSD
 #endif
 
+typedef unsigned int uint;
 #endif
 
 const int MAXKEYWD = 6+1;
