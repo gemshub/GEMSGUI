@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright  (C) 1992-2007 K.Chudnenko, I.Karpov, D.Kulik, S.Dmitrieva
+// Copyright  (C) 1992,2007 K.Chudnenko, I.Karpov, D.Kulik, S.Dmitrieva
 //
 // Implementation  of parts of the Interior Points Method (IPM) module
 // for convex programming Gibbs energy minimization, described in:
@@ -177,6 +177,8 @@ void TProfil::readMulti( const char* path )
  bool load = false;
 
 // Load Thermodynamic Data from DATACH to MULTI using Lagrangian Interpolator
+// (only used in standalone GEMIPM2K version)
+ //
 void TMulti::CompG0Load()
 {
   int j, jj, k, xTP, jb, je=0;
@@ -235,7 +237,8 @@ void TMulti::CompG0Load()
  {
    jb = je;
    je += pmp->L1[k];
-   // load t/d data from DC
+   // load t/d data from DC - to be extended for DCH->H0, DCH->S0, DCH->Cp0, DCH->DD
+   // depending on the presence of these arrays in DATACH and Multi structures
     for( j=jb; j<je; j++ )
     {
       jj =  j * dCH->nPp * dCH->nTp;
@@ -257,7 +260,8 @@ void TMulti::CompG0Load()
            Gg = pmp->Guns[j];
      pmp->G0[j] = Cj_init_calc( Go+Gg, j, k ); // Inside this function, pmp->YOF[k] can be added!
      switch( pmp->PV )
-     { // put mol volumes of components into A matrix
+     { // put mol volumes of components into A matrix or into the vector of molar volumes
+       // to be checked! 
        case VOL_CONSTR:
            if( pmp->Vuns )
               Vv += pmp->Vuns[jj];
@@ -311,7 +315,7 @@ void TMulti::MultiCalcInit( const char* /*key*/ )
     }
     pmp->MBX /= 1000.;
 
-    if(  pmp->pNP )     // Checking if this is PIA or AIA mode 
+    if(  pmp->pNP )     // Checking if this is SIA or AIA mode 
     {
         for( j=0; j< pmp->L; j++ )
           pmp->X[j] = pmp->Y[j];
@@ -319,7 +323,7 @@ void TMulti::MultiCalcInit( const char* /*key*/ )
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
         ConCalc( pmp->X, pmp->XF, pmp->XFA);  
     }
-    else // Simplex initial approximation to be done
+    else // Simplex initial approximation to be done (AIA mode)
     {
     	for( j=0; j<pmp->L; j++ )
     	{                           // cleaning work vectors

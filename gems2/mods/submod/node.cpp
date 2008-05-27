@@ -112,7 +112,7 @@ int TNode::GEM_run( bool uPrimalSol )
    check_TP( CNode->TC, CNode->P);
 // Unpacking work DATABR structure into MULTI (GEM IPM structure): uses DATACH
 // setting up up PIA or AIA mode
-   if( CNode->NodeStatusCH == NEED_GEM_PIA )
+   if( CNode->NodeStatusCH == NEED_GEM_SIA )
    {
 	   pmm->pNP = 1;
 	   unpackDataBr( uPrimalSol );
@@ -135,7 +135,7 @@ int TNode::GEM_run( bool uPrimalSol )
    if( CNode->NodeStatusCH  == NEED_GEM_AIA )
          CNode->NodeStatusCH = OK_GEM_AIA;
    else
-         CNode->NodeStatusCH = OK_GEM_PIA;
+         CNode->NodeStatusCH = OK_GEM_SIA;
 
    }
    catch(TError& err)
@@ -145,7 +145,7 @@ int TNode::GEM_run( bool uPrimalSol )
      if( CNode->NodeStatusCH  == NEED_GEM_AIA )
        CNode->NodeStatusCH = BAD_GEM_AIA;
      else
-       CNode->NodeStatusCH = BAD_GEM_PIA;
+       CNode->NodeStatusCH = BAD_GEM_SIA;
 
     }
     catch(...)
@@ -155,7 +155,7 @@ int TNode::GEM_run( bool uPrimalSol )
        if( CNode->NodeStatusCH  == NEED_GEM_AIA )
          CNode->NodeStatusCH = ERR_GEM_AIA;
        else
-         CNode->NodeStatusCH = ERR_GEM_PIA;
+         CNode->NodeStatusCH = ERR_GEM_SIA;
     }
    return CNode->NodeStatusCH;
 }
@@ -534,8 +534,9 @@ int TNode::Ph_xCH_to_xDB( const int xCH )
    return -1;
  }
 
-  // Test Tc and P as grid point for the interpolation of thermodynamic data
- // Return index in grid matrix or -1
+ // Test if Tc and P are at a grid point for the interpolation of thermodynamic data
+ // Return the index in grid matrix or -1 if interpolation is needed
+ //
   int  TNode::check_grid_TP(  double& Tc, double& P )
   {
     int xT, xP, ndx=-1;
@@ -547,7 +548,7 @@ int TNode::Ph_xCH_to_xDB( const int xCH )
     return ndx;
   }
 
- // Access to interpolated G0 from DCH structure ( xCH the DC DCH index)
+ // Access to interpolated G0 value from DCH structure ( xCH is the DC index in DATACH)
   double  TNode::DC_G0_TP( const int xCH, double& Tc, double& P )
   {
     int xTP, jj;
@@ -846,7 +847,7 @@ void TNode::makeStartDataChBR(
    if( pmm->pNP == 0 )
     CNode->NodeStatusCH = NEED_GEM_AIA;
   else
-     CNode->NodeStatusCH = NEED_GEM_PIA;
+     CNode->NodeStatusCH = NEED_GEM_SIA;
 
    CNode->IterDone = 0;
 
@@ -1001,14 +1002,14 @@ void TNode::packDataBr()
    if( pmm->pNP == 0 )
     CNode->NodeStatusCH = NEED_GEM_AIA;
   else
-     CNode->NodeStatusCH = NEED_GEM_PIA;
+     CNode->NodeStatusCH = NEED_GEM_SIA;
 //#else
 //
  // numbers
 //  if( pmm->pNP == 0 )
 //    CNode->NodeStatusCH = OK_GEM_AIA;
 //  else
-//    CNode->NodeStatusCH = OK_GEM_PIA;
+//    CNode->NodeStatusCH = OK_GEM_SIA;
 //
 #endif
 
@@ -1064,7 +1065,7 @@ void TNode::packDataBr()
 //  will be unpacked - as an option for PIA mode with previous GEM solution from 
 //  the same node. 
 //  If uPrimalSol = false then the primal solution data will not be unpacked 
-//  into the MULTI structure (AIA mode or PIA mode with primal solution retained 
+//  into the MULTI structure (AIA mode or SIA mode with primal solution retained 
 //    in the MULTI structure from previous IPM calculation)
 void TNode::unpackDataBr( bool uPrimalSol )
 {
@@ -1072,7 +1073,7 @@ void TNode::unpackDataBr( bool uPrimalSol )
  double Gamm;
 // numbers
 
-//  if( CNode->NodeStatusCH >= NEED_GEM_PIA )
+//  if( CNode->NodeStatusCH >= NEED_GEM_SIA )
 //   pmm->pNP = 1;
 //  else
 //   pmm->pNP = 0; //  NEED_GEM_AIA;
@@ -1229,9 +1230,9 @@ void TNode::GEM_from_MT(
     if( CSD->nAalp >0 )
      for( ii=0; ii<CSD->nPHb; ii++ )
          CNode->aPH[ii] = p_aPH[ii];
-   if( useSimplex && CNode->NodeStatusCH == NEED_GEM_PIA )
+   if( useSimplex && CNode->NodeStatusCH == NEED_GEM_SIA )
      CNode->NodeStatusCH = NEED_GEM_AIA;
-   // Switch only if PIA is ordered, leave if simplex is ordered (KD)
+   // Switch only if SIA is ordered, leave if simplex is ordered (KD)
 }
 
 // readonly mode: passing input GEM data to FMT
@@ -1374,7 +1375,7 @@ void TNode::GEM_from_MT(
     if( CSD->nAalp >0 )
      for( ii=0; ii<CSD->nPHb; ii++ )
          CNode->aPH[ii] = p_aPH[ii];
-   if( useSimplex && CNode->NodeStatusCH == NEED_GEM_PIA )
+   if( useSimplex && CNode->NodeStatusCH == NEED_GEM_SIA )
      CNode->NodeStatusCH = NEED_GEM_AIA;
    // Switch only if PIA is ordered, leave if simplex is ordered (KD)
 
@@ -1390,7 +1391,7 @@ void TNode::GEM_from_MT(
 }
 
 // Overloaded variant - uses xDC and gam vectors as old primal solution
-// for the node in GEM IPM2 input when NEED_GEM_PIA flag is set for calculation
+// for the node in GEM IPM2 input when NEED_GEM_SIA flag is set for calculation
 // Important! This variant works only when DATACH contains a full list of DCs
 // with passed through the DATABR structure.
 // added by DK on 17.09.2007
@@ -1443,8 +1444,8 @@ void TNode::GEM_from_MT(
         CNode->gam[ii] = p_gam[ii];
       }
    }
-   else if( CNode->NodeStatusCH == NEED_GEM_PIA )
-            CNode->NodeStatusCH = NEED_GEM_AIA;   // no complete old primal
+   else if( CNode->NodeStatusCH == NEED_GEM_SIA )
+            CNode->NodeStatusCH = NEED_GEM_AIA;   // no complete old primal solution
                                                   // provided!
 }
 

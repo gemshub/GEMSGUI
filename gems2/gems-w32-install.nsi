@@ -13,7 +13,7 @@ WindowIcon on
 
 ; The file to write
 ; OutFile "gems-w32-install.exe"
-OutFile "gems223rc5-1052-w32-install.exe"
+OutFile "gems223rc6-1065-w32-install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\GEMS2
@@ -22,7 +22,7 @@ InstallDir $PROGRAMFILES\GEMS2
 InstallDirRegKey HKLM SOFTWARE\GEMS2 "Install_Dir"
 
 ;License text
-LicenseText "Version to be installed: 2.2.3-PSI rc5 $\nLICENSE and DISCLAIMER"
+LicenseText "Version to be installed: 2.2.3-PSI rc6 $\nLICENSE and DISCLAIMER"
 LicenseData "C:\GEMS223inst\program\doc\txt\TermsOfUse.txt"
 
 ; The text to prompt the user to enter a directory

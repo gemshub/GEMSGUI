@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (C) 2006-2007  S.Dmitrieva, D.Kulik
+// Copyright (C) 2006,2007  S.Dmitrieva, D.Kulik
 //
 // Codes and parameters used in GEM IPM work structure (standalone version)
 //

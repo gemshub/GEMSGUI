@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (C) 2006-2007  S.Dmitrieva, D.Kulik
+// Copyright (C) 2006,2007  S.Dmitrieva, D.Kulik
 //
-// Base parameters and codes used in GEM IPM work structure
+// Basic codes and numerical settings used in GEM IPM-2 operation
 // (standalone version)
 //
 // This file is part of the standalone GEMIPM2K code

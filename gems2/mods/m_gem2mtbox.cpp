@@ -312,7 +312,7 @@ TGEM2MT::CalcNewStates(  int Ni, int pr, double tcur, double step)
  if( mtp->PvSIA != S_ON )  
      CalcIPM( NEED_GEM_AIA, 0, mtp->nC, diffile );
  else 
-	 CalcIPM( NEED_GEM_PIA, 0, mtp->nC, diffile );
+	 CalcIPM( NEED_GEM_SIA, 0, mtp->nC, diffile );
  
  if( Ni >= 0 )
  { // Here one has to compare old and new equilibrium phase assemblage
