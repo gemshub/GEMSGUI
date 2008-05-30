@@ -60,7 +60,7 @@ SPP_SETTING pa_ = {
     "GEMS-PSI v2.2.3: Controls and defaults for numeric modules",
     {
         1,  /* PC */  3,     /* PD */   3,   /* PRD */
-        1,  /* PSM  */ 15,  /* DP */   15,   /* DW */
+        1,  /* PSM  */ 150,  /* DP */   15,   /* DW */
         0, /* DT */     0,   /* PLLG */   1,  /* PE */
         500,   /* IIM */
         1e-6, /* DG */   1e-8,  /* DHB */  1e-12,  /* DS */
