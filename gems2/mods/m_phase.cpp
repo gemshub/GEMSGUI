@@ -489,7 +489,7 @@ AGAIN_SETUP:
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 1;  // For now, no T,P dependence 
-                          php->nscM = 10; // 1MAXCRITPARAM;
+                          php->nscM = 12; // increased to 12 (31.05.2008 TW)
                           php->npxM = 2;
                           break;
 

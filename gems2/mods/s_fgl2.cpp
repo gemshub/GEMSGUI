@@ -60,10 +60,13 @@ int TPRSVcalc::CalcFugPure( void )
     aW.twp->V = Volume; /* /10.  in J/bar */
     aW.twp->Fug = Fugcoeff * P;   /* fugacity at P */
 
-//  passing corrected EoS coeffs to calculation of fluid mixtures
-    aW.twp->wtW[6] = Eos2parPT[0];      // a
-    aW.twp->wtW[7] = Eos2parPT[1];      // b
-// three more to add !!!
+//  passing corrected EoS coeffs to calculation of fluid mixtures (3 added, 31.05.2008 TW)
+    aW.twp->wtW[6] = Eos2parPT[0];	// a
+    aW.twp->wtW[7] = Eos2parPT[1];  // b
+    aW.twp->wtW[8] = Eos2parPT[2];	// sqrAL
+    aW.twp->wtW[9] = Eos2parPT[3];	// ac
+    aW.twp->wtW[10] = Eos2parPT[4];	// dALdT
+
     return retCode;
 }
 

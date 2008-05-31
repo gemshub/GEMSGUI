@@ -1303,7 +1303,7 @@ TMulti::PRSVofPureGases( int jb, int je, int, int jdb, int, int )
 
     for( jdc=0, j=jb; j<je; jdc++,j++)
     {
-         Coeff = pmp->DMc+jdb+jdc*10;
+         Coeff = pmp->DMc+jdb+jdc*12;	// increased from 10 to 12 (31.05.2008 TW)
          // Calling PRSV EoS for pure fugacity
          retCode = aPRSV.PRFugacityPT( pmp->Pc, pmp->Tc, Coeff,
                  Eos2parPT, Fugcoeff, Volume, DeltaH, DeltaS );
@@ -1315,12 +1315,12 @@ pmp->GEX[j] = log( Fugcoeff );    // now here (since 26.02.2008) DK
          pmp->Pparc[j] = Fugcoeff * pmp->Pc; // Necessary only for performance
          pmp->Vol[j] = Volume * 10.;  // molar volume of pure fluid component, J/bar to cm3
 
-//  passing corrected EoS coeffs to calculation of fluid mixtures
-         Coeff[6] = Eos2parPT[0];      // a
-         Coeff[7] = Eos2parPT[1];      // b
-//         Coeff[8] = Eos2parPT[1];      // c
-//         Coeff[9] = Eos2parPT[1];      // d
-         // three more to add !!!  under construction
+//  passing corrected EoS coeffs to calculation of fluid mixtures (3 added, 31.05.2008 TW)
+         Coeff[6] = Eos2parPT[0];	// a
+         Coeff[7] = Eos2parPT[1];	// b
+         Coeff[8] = Eos2parPT[2];	// sqrAL
+         Coeff[9] = Eos2parPT[3];	// ac
+         Coeff[10] = Eos2parPT[4];	// dALdT
 
     } // jdc, j
 

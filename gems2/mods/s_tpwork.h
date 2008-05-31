@@ -48,7 +48,7 @@ struct TPWORK
 wAlp, wdAlpdT, wBet, // Compressibility, its derivative, and expansibility of
                    // H2O fluid (added for MRB model by DK on 03.08.2007)
 gfun,             // g function from HKF (added 07.06.05 by KD )
-    wtW[10];       //Work cells for RTparam script
+    wtW[12];       //Work cells for RTparam script (increased to 12 for PRSV model, 31.05.2008 TW)
 // work objects copied from DComp structure (invisible in GUI)
     float *CPg,   // Input critical parameters (for FGL)
     *Cemp,        // Array of empirical EOS coefficients (CG EOS)

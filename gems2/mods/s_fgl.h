@@ -287,14 +287,15 @@ class TPRSVcalc // Peng-Robinson-Styjek-Vera EOS calculations
 protected:
 
 	int PureParam( double *params ); // calculates a and b arrays
-	double A(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit);
-	double B(double Tcrit, double Pcrit);
+	int A(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit,
+			double &apure, double &sqrAL, double &ac, double &dALdT);
+	int B(double Tcrit, double Pcrit, double &bpure);
 	int FugacityPure( void ); // Calculates the fugacity of pure species
 	int Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3);
 	int MixParam( double &amix, double &bmix);
 	int FugacityMix( double amix, double bmix,
      double &fugmix, double &zmix, double &vmix);
-	int FugacitySpec( double *fugpure, float *binpar, float *params  );
+	int FugacitySpec( double *fugpure, float *params  );
 
 	int GetEosParam( float *params ); // Loads EoS parameters for NComp species
 	int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
