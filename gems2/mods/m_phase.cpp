@@ -458,6 +458,15 @@ AGAIN_SETUP:
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 20;  // NPcoef
                           break;
+          case SM_NRTLLIQ:   // NRTL liquid model multicomponent, added 03.06.2008 (TW)
+                          php->nscM = 0;  // NP_DC
+                          php->npxM = 2;  // MaxOrd
+                          if( php->ncpN < 1 ) // NPar
+                              php->ncpN = 1;
+                          if( php->ncpN > php->nDC*php->nDC/2 )
+                              php->ncpN = php->nDC*php->nDC/2;
+                          php->ncpM = 7;  // NPcoef
+                          break;
           case SM_REDKIS:   // Redlich-Kister
                           php->nscM = 0;
                           php->npxM = 0;
@@ -492,7 +501,6 @@ AGAIN_SETUP:
                           php->nscM = 12; // increased to 12 (31.05.2008 TW)
                           php->npxM = 2;
                           break;
-
           case SM_AQDAV:  // Aqueous Davies
                           php->ncpN = php->ncpM = 0;
                           php->nscM = php->npxM = 0;

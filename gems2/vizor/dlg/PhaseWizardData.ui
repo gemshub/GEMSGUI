@@ -55,7 +55,7 @@
                 <widget class="QComboBox">
                     <item>
                         <property name="text">
-                            <string>I    Ideal mixture or pure phase (default)</string>
+                            <string>I   Ideal mixture or pure phase (default)</string>
                         </property>
                     </item>
                     <item>
@@ -136,6 +136,11 @@
                     <item>
                         <property name="text">
                             <string>V   Van Laar multicomponent mixing model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>L   NRTL multicomponent mixing model (built-in)</string>
                         </property>
                     </item>
                     <item>

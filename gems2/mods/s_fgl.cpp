@@ -1742,86 +1742,46 @@ TPRSVcalc::TPRSVcalc( int NCmp, double Pp, double Tkp )
        Pureparm = new double *[NComp];
        Fugpure = new double *[NComp];
        Fugci = new double *[NComp];
-
-       for (i=0; i<NComp; i++)
-       {
-         Eosparm[i] = new double [6];
-       }
-       for (i=0; i<NComp; i++)
-       {
-         Pureparm[i] = new double [5];	// increased to 5 (31.05.2008 TW)
-       }
-       for (i=0; i<NComp; i++)
-       {
-         Fugpure[i] = new double [5];
-       }
-       for (i=0; i<NComp; i++)
-       {
-         Fugci[i] = new double [4];
-       }
-//
        KK0ij = new double *[NComp];
        KK1ij = new double *[NComp];
        AAij = new double *[NComp];
 
        for (i=0; i<NComp; i++)
        {
-		KK0ij[i] = new double[NComp];
-       }
-       for (i=0; i<NComp; i++)
-       {
-        	KK1ij[i] = new double[NComp];
-       }
-       for (i=0; i<NComp; i++)
-       {
-		AAij[i] = new double[NComp];
-       }
+         Eosparm[i] = new double [6];
+         Pureparm[i] = new double [5];	// increased to 5 (31.05.2008 TW)
+         Fugpure[i] = new double [5];
+         Fugci[i] = new double [4];
+         KK0ij[i] = new double[NComp];
+         KK1ij[i] = new double[NComp];
+         AAij[i] = new double[NComp];
+       }      
     }
 
 
 TPRSVcalc::~TPRSVcalc()
     {
-        int i;
+    	int i;
 
-        delete[]Wx;
-
-       for (i=0; i<NComp; i++)
-       {
-         delete[]Eosparm[i];
-       }
-       for (i=0; i<NComp; i++)
-       {
-         delete[]Pureparm[i];
-       }
-       for (i=0; i<NComp; i++)
-       {
-         delete[]Fugpure[i];
-       }
-       for (i=0; i<NComp; i++)
-       {
-         delete[]Fugci[i];
-       }
-
-       for (i=0; i<NComp; i++)
-       {
-	  delete[]KK0ij[i];
-       }
-       for (i=0; i<NComp; i++)
-       {
-          delete[]KK1ij[i];
-       }
-       for (i=0; i<NComp; i++)
-       {
-	  delete[]AAij[i];
-       }
-
-	delete[]Eosparm;
-	delete[]Pureparm;
-	delete[]Fugpure;
-	delete[]Fugci;
-        delete[]KK0ij;
-	delete[]KK1ij;
-	delete[]AAij;
+    	for (i=0; i<NComp; i++)
+    	{
+    		delete[]Eosparm[i];
+    		delete[]Pureparm[i];
+    		delete[]Fugpure[i];
+    		delete[]Fugci[i];
+    		delete[]KK0ij[i];
+    		delete[]KK1ij[i];
+    		delete[]AAij[i];
+    	}
+ 
+    	delete[]Wx;
+    	delete[]Eosparm;
+    	delete[]Pureparm;
+    	delete[]Fugpure;
+    	delete[]Fugci;
+    	delete[]KK0ij;
+    	delete[]KK1ij;
+    	delete[]AAij;
     }
 
  
