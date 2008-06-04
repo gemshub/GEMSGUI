@@ -8,7 +8,11 @@
 //  Must be called once before the beginning of the coupled RMT calculation
 //
 #ifdef __unix
-   extern "C" int f_gem_init_( char* string_, unsigned int length_ )
+#ifdef __PGI
+    extern "C" int f_gem_init_( char* string_, unsigned int length_ )
+ #else
+   extern "C" int f_gem_init( char* string_, unsigned int length_ )
+#endif
 #else
    extern "C" int __stdcall F_GEM_INIT( char* string_, unsigned int length_ )
 #endif
@@ -34,7 +38,11 @@
 // Parameter list may be extended in future with other DCH elements
 //
 #ifdef __unix
-   extern "C" int  f_gem_get_dch_( int& p_nICb, int& p_nDCb, int& p_nPHb, float* p_A )
+#ifdef __PGI
+    extern "C" int  f_gem_get_dch_( int& p_nICb, int& p_nDCb, int& p_nPHb, float* p_A )
+#else
+   extern "C" int  f_gem_get_dch( int& p_nICb, int& p_nDCb, int& p_nPHb, float* p_A )
+#endif
 #else
   extern "C" int  __stdcall  F_GEM_GET_DCH(  // All parameters are return values
    int& p_nICb,   // Number of Independent Components (ICs) in chemical system
@@ -66,7 +74,11 @@
 //  all nodes
 //
 #ifdef __unix
-  extern "C" int   f_gem_read_node_( char* string_,
+#ifdef __PGI
+   extern "C" int   f_gem_read_node_( char* string_,  
+#else
+  extern "C" int   f_gem_read_node( char* string_,
+#endif
 #else
   extern "C" int __stdcall   F_GEM_READ_NODE(
   char* string_,        // path (file name) of the DATABR file
@@ -93,25 +105,25 @@
    double &p_pe,    // pe of aqueous solution                      -      -      +     +
    double &p_Eh,    // Eh of aqueous solution, V                   -      -      +     +
 //  FMT variables (units need dimensionsless form)
-   double &p_Tm,    // actual total simulation time
-   double &p_dt,    // actual time step
-   double &p_dt1,   // priveous time step
-   double &p_Vt,    // total volume of node (voxel) = dx*dy*dz, m**3
-   double &p_vp,	// advection velocity (in pores) in this node
-   double &p_eps,   // effective (actual) porosity normalized to 1
-   double &p_Km,    // actual permeability, m**2
-   double &p_Kf,    // actual DARCY`s constant, m**2/s
-   double &p_S,	    // specific storage coefficient, dimensionless
-   double &p_Tr,    // transmissivity m**2/s
-   double &p_h,	    // actual hydraulic head (hydraulic potential), m
-   double &p_rho,   // actual carrier density for density driven flow, g/cm**3
-   double &p_al,    // specific longitudinal dispersivity of porous media, m
-   double &p_at,    // specific transversal dispersivity of porous media, m
-   double &p_av,    // specific vertical dispersivity of porous media, m
-   double &p_hDl,   // hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
-   double &p_hDt,   // hydraulic transversal dispersivity, m**2/s
-   double &p_hDv,   // hydraulic vertical dispersivity, m**2/s
-   double &p_nto,   // tortuosity factor
+//   double &p_Tm,    // actual total simulation time
+//   double &p_dt,    // actual time step
+//   double &p_dt1,   // priveous time step
+//   double &p_Vt,    // total volume of node (voxel) = dx*dy*dz, m**3
+//   double &p_vp,	// advection velocity (in pores) in this node
+//   double &p_eps,   // effective (actual) porosity normalized to 1
+//   double &p_Km,    // actual permeability, m**2
+//   double &p_Kf,    // actual DARCY`s constant, m**2/s
+//   double &p_S,	    // specific storage coefficient, dimensionless
+//   double &p_Tr,    // transmissivity m**2/s
+//   double &p_h,	    // actual hydraulic head (hydraulic potential), m
+//   double &p_rho,   // actual carrier density for density driven flow, g/cm**3
+//   double &p_al,    // specific longitudinal dispersivity of porous media, m
+//   double &p_at,    // specific transversal dispersivity of porous media, m
+//   double &p_av,    // specific vertical dispersivity of porous media, m
+//   double &p_hDl,   // hydraulic longitudinal dispersivity, m**2/s, diffusities from chemical database
+//   double &p_hDt,   // hydraulic transversal dispersivity, m**2/s
+//   double &p_hDv,   // hydraulic vertical dispersivity, m**2/s
+//   double &p_nto,   // tortuosity factor
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH
    double  *p_bIC,  // bulk mole amounts of IC[nICb]                +      +      -     -
@@ -183,7 +195,11 @@
 //  Is called on each external iteration for each node
 //
 #ifdef __unix
-   extern "C" int  f_gem_calc_node_(
+#ifdef __PGI
+    extern "C" int  f_gem_calc_node_(
+ #else
+   extern "C" int  f_gem_calc_node(
+#endif
 #else
    extern "C" int  __stdcall   F_GEM_CALC_NODE(
 #endif
@@ -247,6 +263,9 @@
  )
 {
   int iRet = 0;
+  bool uPrimalSol = true;
+
+
 
   short NodeHandle, NodeStatusCH, IterDone;
 
@@ -256,13 +275,21 @@
   // (2) ----------------------------------------------
   // Work loop for the coupled FMT-GEM modelling
 
+  if (uPrimalSol) {
+   // sends also speciation changed by mcotac : used for smart initial aproximation
+   TNode::na->GEM_from_MT( NodeHandle, NodeStatusCH,
+             p_T, p_P, p_Vs, p_Ms, p_bIC, p_dul, p_dll,  p_aPH, p_xDC, p_gam );
+
+   }
+   else
+   {
   // Setting input data for GEMIPM
    TNode::na->GEM_from_MT( NodeHandle, NodeStatusCH,
              p_T, p_P, p_Vs, p_Ms, p_bIC, p_dul, p_dll,  p_aPH );
-
+   }
  // Calling GEMIPM calculation
-   iRet = TNode::na->GEM_run( );
-   if( !( iRet == OK_GEM_AIA || iRet == OK_GEM_PIA ) )
+   iRet = TNode::na->GEM_run(uPrimalSol);
+   if( !( iRet == OK_GEM_AIA || iRet == OK_GEM_SIA ) )
    {
 	  return 1;
    }
@@ -320,7 +347,7 @@
   f_log <<  endl;
   f_log <<  endl;
 
-//*****************************************************************/
+*************************************************************/
 
   return 0;
 }
