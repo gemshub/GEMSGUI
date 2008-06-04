@@ -1568,7 +1568,8 @@ TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
 {
     int NComp, NPar, NPcoef, MaxOrd, NP_DC;
     float *aIPc, *aDCc;
-    short * aIPx;
+    short *aIPx;
+    double RhoW, EpsW;
 
     NComp = pmp->L1[k];          // Number of components in the phase
     NPar = pmp->LsMod[k*3];      // Number of interaction parameters
@@ -1579,9 +1580,11 @@ TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
                               // -> NPar x MaxOrd   added 07.12.2006   KD
     aIPc = pmp->PMc+jpb;   // Interaction parameter coefficients f(TP) -> NPar x NPcoef
     aDCc = pmp->DMc+jdb;   // End-member parameter coefficients f(TPX) -> NComp x NP_DC
+    RhoW = pmp->denW;		// added 04.06.2008 (TW)
+    EpsW = pmp->epsW;
 
     TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-       aIPx, aIPc, aDCc, NULL, NULL );
+       aIPx, aIPc, aDCc, NULL, NULL, RhoW, EpsW, NULL );
 
    // calculate P-T dependence of interaction parameters
     switch( ModCode )
@@ -1610,8 +1613,9 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
     int NComp, NPar, NPcoef, MaxOrd, NP_DC;
     float *aIPc, *aDCc;
     double *aWx, *alnGam;
-    short * aIPx;
+    short *aIPx;
     double Gex=0.0, Vex=0.0, Hex=0.0, Sex=0.0, CPex=0.0;
+    double RhoW, EpsW, IonStr;
 
     NComp = pmp->L1[k];          // Number of components in the phase
     NPar = pmp->LsMod[k*3];      // Number of interaction parameters
@@ -1626,9 +1630,12 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
     aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x NP_DC
     aWx = pmp->Wx+jb;       // End member mole fractions
     alnGam = pmp->lnGam+jb; // End member ln activity coeffs
+    RhoW = pmp->denW;		// added 04.06.2008 (TW)
+    EpsW = pmp->epsW;
+    IonStr = pmp->IC;
 
     TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-       aIPx, aIPc, aDCc, aWx, alnGam );
+       aIPx, aIPc, aDCc, aWx, alnGam, RhoW, EpsW, IonStr );
     // Extended constructor to connect to params, coeffs, and mole fractions
 
     switch( ModCode )

@@ -146,7 +146,7 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
        int NPperDC, double T_k, double P_bar, char Mod_Code,
        short* arIPx, float* arIPc, float* arDCc,
-       double *arWx, double *arlnGam )
+       double *arWx, double *arlnGam, double dW, double eW, double iS )
 {
     R_CONST = 8.31451;
     NComp = NSpecies;
@@ -157,6 +157,9 @@ TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
     Tk = T_k;
     Pbar = P_bar;
     ModCode = Mod_Code;
+    RhoW = dW;
+    EpsW = eW;
+    IonStr = iS;
 
     // pointer assignment
     aIPx = arIPx;   // Direct access to index list and parameter coeff arrays!
