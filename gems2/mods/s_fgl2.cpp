@@ -499,7 +499,7 @@ TSolMod::RedlichKisterPT()
 
 
 // Redlich-Kister model for multicomponent solid solutions (c) TW March 2007
-// References:  Hillert (1998)
+// References: Hillert (1998)
 // Calculates activity coefficients and excess functions
 // Returns 0 if Ok or not 0 if error
 int
@@ -727,7 +727,7 @@ TSolMod::NRTL_PT()
 {
 	// calculates T-dependence of binary interaction parameters
 	int ip;
-	double alpha, A, B, C, D, tau, dtau;
+	double alpha, A, B, C, D, tau, dtau, d2tau;
 
         if ( /* ModCode != SM_NRTL || */ NPcoef < 7 || NPar < 1 )
            return 1;  // foolproof!
@@ -740,9 +740,11 @@ TSolMod::NRTL_PT()
 		C = (double)aIPc[NPcoef*ip+3];
 		D = (double)aIPc[NPcoef*ip+4];
 		tau = A + B/Tk + C*Tk + D*log(Tk);
-		dtau = - B/pow(Tk,2.) + C + D/Tk;  // partial derivative of tau
+		dtau = - B/pow(Tk,2.) + C + D/Tk;  // partial derivatives of tau
+		d2tau = 2.*B/pow(Tk,3.) - D/pow(Tk,2.);
 		aIPc[NPcoef*ip+5] = (float)tau;
 		aIPc[NPcoef*ip+6] = (float)dtau;
+		aIPc[NPcoef*ip+7] = (float)d2tau;
 	}
 	return 0;
 }
@@ -750,40 +752,48 @@ TSolMod::NRTL_PT()
 
 
 // NRTL model for liquid solutions (c) TW June 2008
-// References: Renon and Prausnitz (1968)
+// References: Renon and Prausnitz (1968), Prausnitz et al. (1997)
 // Calculates activity coefficients and excess functions
+// heat capacity calculation added, 06.06.2008 (TW)
 // Returns 0 if OK or 1 if error
 int
 TSolMod::NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
          double &CPex_ )
 {
 	int ip, j, i, k;
-	int index1, index2;
+	int i1, i2;
 	double K, L, M, N, O;
-	double U, dU, V, dV, g, dg, lnGam;
+	double U, dU, V, dV, d2U, d2V;
+	double g, dg, d2g, lnGam;
 	double gEX, vEX, hEX, sEX, cpEX;
-	double **Alpha;
+	double **Alp;
 	double **Tau;
 	double **G;
 	double **dTau;
 	double **dG;
+	double **d2Tau;
+	double **d2G;
 
 	if ( NPcoef < 7 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;  // foolproof!
 
-	Alpha = new double *[NComp];
+	Alp = new double *[NComp];
 	Tau = new double *[NComp];
 	G = new double *[NComp];
-	dTau = new double *[NComp];	// matrix of partial derivatives
+	dTau = new double *[NComp];	// matrices of partial derivatives
 	dG = new double *[NComp];
+	d2Tau = new double *[NComp];
+	d2G = new double *[NComp];
 
     for (j=0; j<NComp; j++)
     {
-		Alpha[j] = new double [NComp];    
+		Alp[j] = new double [NComp];    
 		Tau[j] = new double [NComp];
 		G[j] = new double [NComp];
 		dTau[j] = new double [NComp];
 		dG[j] = new double [NComp];
+		d2Tau[j] = new double [NComp];
+		d2G[j] = new double [NComp];
 	}
 
 	// fill internal arrays of interaction parameters with standard value
@@ -791,25 +801,29 @@ TSolMod::NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	{
 		for ( i=0; i<NComp; i++ )
 		{
-			Alpha[j][i] = 0.0;
+			Alp[j][i] = 0.0;
 			Tau[j][i] = 0.0;
 			G[j][i] = 1.0;
 			dTau[j][i] = 0.0;
 			dG[j][i] = 0.0;
+			d2Tau[j][i] = 0.0;
+			d2G[j][i] = 0.0;
 		}
 	}
 
 	// read and convert parameters that have non-standard value
 	for (ip=0; ip<NPar; ip++)
 	{
-		index1 = (int)aIPx[MaxOrd*ip];
-		index2 = (int)aIPx[MaxOrd*ip+1];
-		Alpha[index1][index2] = (double)aIPc[NPcoef*ip+0];
-		Tau[index1][index2] = (double)aIPc[NPcoef*ip+5];
-		G[index1][index2] = exp(-Alpha[index1][index2]*Tau[index1][index2]);
-		dTau[index1][index2] = (double)aIPc[NPcoef*ip+6];
-		dG[index1][index2] = - Alpha[index1][index2] * exp( -Alpha[index1][index2]*Tau[index1][index2] )
-			* dTau[index1][index2];
+		i1 = (int)aIPx[MaxOrd*ip];
+		i2 = (int)aIPx[MaxOrd*ip+1];
+		Alp[i1][i2] = (double)aIPc[NPcoef*ip+0];
+		Tau[i1][i2] = (double)aIPc[NPcoef*ip+5];
+		dTau[i1][i2] = (double)aIPc[NPcoef*ip+6];
+		d2Tau[i1][i2] = (double)aIPc[NPcoef*ip+7];
+		G[i1][i2] = exp(-Alp[i1][i2]*Tau[i1][i2]);
+		dG[i1][i2] = -Alp[i1][i2] * exp( -Alp[i1][i2]*Tau[i1][i2] ) * dTau[i1][i2];
+		d2G[i1][i2] = -Alp[i1][i2]*(-Alp[i1][i2]*exp(-Alp[i1][i2]*Tau[i1][i2])*dTau[i1][i2]*dTau[i1][i2]
+				+ exp(-Alp[i1][i2]*Tau[i1][i2])*d2Tau[i1][i2]);		                                                                                                                                  
 	}
 
 	// calculate activity coefficients
@@ -844,6 +858,7 @@ TSolMod::NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
    	cpEX = 0.0;
    	g = 0.0;
    	dg = 0.0;
+   	d2g = 0.0;
 
    	for (j=0; j<NComp; j++)
    	{
@@ -851,20 +866,28 @@ TSolMod::NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 		V = 0.0;
 		dU = 0.0;
 		dV = 0.0;
+		d2U = 0.0;
+		d2V = 0.0;
 		for (i=0; i<NComp; i++)
 		{
-			U += ( x[i]*Tau[i][j]*G[i][j] );
-			V += ( x[i]*G[i][j] );
-			dU += ( x[i] * ( dTau[i][j]*G[i][j] + Tau[i][j]*dG[i][j] ) );
-			dV += ( x[i]*dG[i][j] );
+			U += x[i]*Tau[i][j]*G[i][j];
+			V += x[i]*G[i][j];
+			dU += x[i] * ( dTau[i][j]*G[i][j] + Tau[i][j]*dG[i][j] );
+			dV += x[i]*dG[i][j];
+			d2U += x[i] * ( d2Tau[i][j]*G[i][j] + dTau[i][j]*dG[i][j]
+					+ dTau[i][j]*dG[i][j] + Tau[i][j]*d2G[i][j] );
+			d2V += x[i]*d2G[i][j];
 		}
-		g += ( x[j]*U/V );
-		dg += ( x[j] * (dU*V-U*dV)/pow(V,2.) );
+		g += x[j]*U/V;
+		dg += x[j] * (dU*V-U*dV)/pow(V,2.);
+		d2g += x[j] * ( (d2U*V+dU*dV)*pow(V,2.)/pow(V,4.) - (dU*V)*(2.*V*dV)/pow(V,4.)
+				- (dU*dV+U*d2V)*pow(V,2.)/pow(V,4.) + (U*dV)*(2.*V*dV)/pow(V,4.) );
 	}
 
 	gEX = g*R_CONST*Tk;
-	hEX = - R_CONST*pow(Tk,2.)*dg;
+	hEX = -R_CONST*pow(Tk,2.)*dg;
 	sEX = (hEX-gEX)/Tk;
+	cpEX = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
 
 	Gex_ = gEX;
 	Vex_ = vEX;
@@ -875,17 +898,21 @@ TSolMod::NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
    	// cleaning memory
    	for (j=0; j<NComp; j++)
    	{
-		delete[]Alpha[j];
+		delete[]Alp[j];
 		delete[]Tau[j];
 		delete[]G[j];
 		delete[]dTau[j];
 		delete[]dG[j];
+		delete[]d2Tau[j];
+		delete[]d2G[j];
 	}
-	delete[]Alpha;
+	delete[]Alp;
 	delete[]Tau;
 	delete[]G;
 	delete[]dTau;
 	delete[]dG;
+	delete[]d2Tau;
+	delete[]d2G;
 	return 0;
 }
 
