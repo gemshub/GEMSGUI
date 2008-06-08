@@ -465,7 +465,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
-                          php->ncpM = 8;  // NPcoef
+                          php->ncpM = 12;  // NPcoef
                           break;
           case SM_REDKIS:   // Redlich-Kister
                           php->nscM = 0;
