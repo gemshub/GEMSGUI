@@ -946,6 +946,167 @@ TSolMod::NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	return 0;
 }
 
+
+
+// Wilson model for liquid solutions (c) TW June 2008
+// Calculates T-corrected interaction parameters
+// Returns 0 if OK or 1 if error
+int
+TSolMod::Wilson_PT()
+{
+	// calculates T-dependence of binary interaction parameters
+	int ip;
+	double alpha, A, B, C, D;
+	double lam, dlam, d2lam;
+
+        if ( /* ModCode != SM_NRTL || */ NPcoef < 7 || NPar < 1 )
+           return 1;  // foolproof!
+
+	for (ip=0; ip<NPar; ip++)
+	{
+		A = (double)aIPc[NPcoef*ip+0];
+		B = (double)aIPc[NPcoef*ip+1];
+		C = (double)aIPc[NPcoef*ip+2];
+		D = (double)aIPc[NPcoef*ip+3];
+		lam = exp( A + B/Tk + C*Tk + D*log(Tk) );
+		dlam = lam*( - B/pow(Tk,2.) + C + D/Tk );
+		d2lam = dlam*( - B/pow(Tk,2.) + C + D/Tk ) + lam*( 2.*B/pow(Tk,3.) - D/pow(Tk,2.) );
+		aIPc[NPcoef*ip+4] = (float)lam;
+		aIPc[NPcoef*ip+5] = (float)dlam;
+		aIPc[NPcoef*ip+6] = (float)d2lam;
+	}
+	return 0;
+}
+
+
+
+// Wilson model for liquid solutions (c) TW June 2008
+// References: Prausnitz et al. (1997)
+// Calculates activity coefficients and excess functions
+// heat capacity calculation added, 06.06.2008 (TW)
+// Returns 0 if OK or 1 if error
+int
+TSolMod::Wilson_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+         double &CPex_ )
+{
+	int ip, j, i, k;
+	int i1, i2;
+	double K, L, M;
+	double U, dU, d2U;
+	double g, dg, d2g, lnGam;
+	double gEX, vEX, hEX, sEX, cpEX;
+	double **Lam;
+	double **dLam;
+	double **d2Lam;
+
+	if ( NPcoef < 7 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+	        return 1;  // foolproof!
+
+	Lam = new double *[NComp];
+	dLam = new double *[NComp];
+	d2Lam = new double *[NComp];
+
+    for (j=0; j<NComp; j++)
+    {
+		Lam[j] = new double [NComp];
+		dLam[j] = new double [NComp];
+		d2Lam[j] = new double [NComp];
+	}
+
+	// fill internal arrays of interaction parameters with standard value
+	for (j=0; j<NComp; j++)
+	{
+		for ( i=0; i<NComp; i++ )
+		{
+			Lam[j][i] = 1.0;
+			dLam[j][i] = 0.0;
+			d2Lam[j][i] = 0.0;
+		}
+	}
+
+	// read and convert parameters that have non-standard value
+	for (ip=0; ip<NPar; ip++)
+	{
+		i1 = (int)aIPx[MaxOrd*ip];
+		i2 = (int)aIPx[MaxOrd*ip+1];
+		Lam[i1][i2] = (double)aIPc[NPcoef*ip+4];
+		dLam[i1][i2] = (double)aIPc[NPcoef*ip+5];
+		d2Lam[i1][i2] = (double)aIPc[NPcoef*ip+6];
+	}
+
+	// calculate activity coefficients (Wilson)
+	for (j=0; j<NComp; j++)
+	{
+		lnGam = 0.0;
+		K = 0.0;
+		L = 0.0;
+		for (i=0; i<NComp; i++)
+		{
+			M = 0.0;
+			K += x[i]*Lam[j][i];
+			for (k=0; k<NComp; k++)
+			{
+				M += x[k]*Lam[i][k];
+			}
+			L += x[i]*Lam[i][j]/M;
+		}
+		lnGam = 1.-log(K)-L;
+		lnGamma[j] = lnGam;
+	}
+
+	// calculate bulk phase excess properties
+	gEX = 0.0;
+	vEX = 0.0;
+	hEX = 0.0;
+	sEX = 0.0;
+	cpEX = 0.0;
+	g = 0.0;
+	dg = 0.0;
+	d2g = 0.0;
+
+	for (j=0; j<NComp; j++)
+	{
+		U = 0.0;
+		dU = 0.0;
+		d2U = 0.0;
+		for (i=0; i<NComp; i++)
+		{
+			U += x[i]*Lam[j][i];
+			dU += x[i]*dLam[j][i];
+			d2U += x[i]*d2Lam[j][i];
+		}
+		g -= x[j]*log(U);
+		dg -= x[j]*(1./U)*dU;
+		d2g -= x[j] * ( (-1./pow(U,2.))*dU + (1./U)*d2U );
+	}
+
+	// final calculations and assignments
+	gEX = g*R_CONST*Tk;
+	hEX = -R_CONST*pow(Tk,2.)*dg;
+	sEX = (hEX-gEX)/Tk;
+	cpEX = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
+
+	Gex_ = gEX;
+	Vex_ = vEX;
+	Hex_ = hEX;
+	Sex_ = sEX;
+	CPex_ = cpEX;
+
+   	// cleaning memory
+   	for (j=0; j<NComp; j++)
+   	{
+		delete[]Lam[j];
+		delete[]dLam[j];
+		delete[]d2Lam[j];
+	}
+	delete[]Lam;
+	delete[]dLam;
+	delete[]d2Lam;
+	return 0;
+}
+
+
+
 // add other solution models here
 
 

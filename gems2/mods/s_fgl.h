@@ -367,6 +367,13 @@ public:
 	int NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	         double &CPex_ );
 	
+// Wilson model for liquid solutions
+	int Wilson_PT();
+	int Wilson_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+	         double &CPex_ );
+	
+	
+	
 // Prototypes for other models to be added here
 // Redlich-Kister / Guggenheim ...
 // Darken ...
@@ -374,7 +381,6 @@ public:
 // SIT ...
 // EUniquac ...
 // UNIQUAC
-// Wilson ...
 // PRSV can also be moved here
 
 

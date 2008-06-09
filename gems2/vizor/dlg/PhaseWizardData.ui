@@ -145,6 +145,11 @@
                     </item>
                     <item>
                         <property name="text">
+                            <string>W  Wilson multicomponent mixing model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
                             <string>O   Other non-ideal mixing model (user-defined scripts)</string>
                         </property>
                     </item>

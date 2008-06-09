@@ -431,7 +431,7 @@ AGAIN_SETUP:
 
        switch(php->sol_t[SPHAS_TYP])
        {              // These all have to be checked !!!!!!!!!!!!!!!!!!!!!!!
-          case SM_VANLAAR:   // Van Laar model multicomponent
+          case SM_VANLAAR:   // Van Laar model (multicomponent)
                           php->nscM = 1;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
@@ -440,7 +440,7 @@ AGAIN_SETUP:
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 4;  // NPcoef
                           break;
-          case SM_REGULAR:   // Regular model multicomponent
+          case SM_REGULAR:   // Regular model (multicomponent)
                           php->nscM = 0;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
@@ -449,7 +449,7 @@ AGAIN_SETUP:
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 4;  // NPcoef
                           break;
-          case SM_GUGGENM:   // Redlich-Kister model multicomponent
+          case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
                           php->nscM = 0;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
@@ -458,7 +458,7 @@ AGAIN_SETUP:
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 20;  // NPcoef
                           break;
-          case SM_NRTLLIQ:   // NRTL liquid model multicomponent, added 03.06.2008 (TW)
+          case SM_NRTLLIQ:   // NRTL liquid model (multicomponent), added 03.06.2008 (TW)
                           php->nscM = 0;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
@@ -467,17 +467,26 @@ AGAIN_SETUP:
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 12;  // NPcoef
                           break;
-          case SM_REDKIS:   // Redlich-Kister
+          case SM_WILSLIQ:   // Wilson liquid model (multicomponent), added 09.06.2008 (TW)
+                          php->nscM = 0;  // NP_DC
+                          php->npxM = 2;  // MaxOrd
+                          if( php->ncpN < 1 ) // NPar
+                              php->ncpN = 1;
+                          if( php->ncpN > php->nDC*php->nDC/2 )
+                              php->ncpN = php->nDC*php->nDC/2;
+                          php->ncpM = 7;  // NPcoef
+                          break; 
+          case SM_REDKIS:   // Redlich-Kister model (binary)
                           php->nscM = 0;
                           php->npxM = 0;
                           php->ncpN = 1; php->ncpM = 3;
                           break;
-          case SM_MARGB:  // Margules binary subregular
+          case SM_MARGB:  // Margules subregular model (binary)
                           php->nscM = 0;
                           php->npxM = 0;
                           php->ncpN = 2; php->ncpM = 3;
                           break;
-          case SM_MARGT:  // Margules ternary regular
+          case SM_MARGT:  // Margules regular model (ternary)
                           php->nscM = 0;
                           php->npxM = 0;
                           php->ncpN = 4; php->ncpM = 3;

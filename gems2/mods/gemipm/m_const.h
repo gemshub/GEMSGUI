@@ -81,7 +81,7 @@ SM_AQEUQ = 'Q',  // built-in EUNIQUAC model for aqueous activity coeffs (reserve
     SM_USERDEF = 'U',	// user-defined mixing model (in Phase record)
     SM_VANLAAR = 'V',	// Generalized Van Laar solution model
     SM_NRTLLIQ = 'L',	// NRTL multicomponent model for liquids, added 03.06.2008 (TW)
-    SM_WILSLIQ = 'W',	// Wilson NRTL multicomponent model for liquids (reserved)
+    SM_WILSLIQ = 'W',	// Wilson multicomponent model for liquids, added 09.06.2008 (TW)
     SM_OTHER = 'O'		//  other models of non-ideal solutions (reserved)
 };
 
