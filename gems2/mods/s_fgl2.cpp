@@ -1047,7 +1047,7 @@ TSolMod::Wilson_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 		}
 		g -= x[j]*log(U);
 		dg -= x[j]*(1./U)*dU;
-		d2g -= x[j] * ( (-1./pow(U,2.))*dU + (1./U)*d2U );
+		d2g -= x[j] * ( (-1./pow(U,2.))*dU*dU + (1./U)*d2U );  // fixed, 11.06.2008 (TW)
 	}
 
 	// final calculations and assignments
