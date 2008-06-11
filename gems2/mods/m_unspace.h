@@ -72,7 +72,8 @@ typedef struct
     Pa_OF,      //  code of function to construct the payoff matrix (A or 0; B or 1; C or 2; D or 3; E or 4; F or 5)
     Pa_Crit,    //  (0 1 2 3 4) OSP criterion: 0- PA frequency statistics, 1- Laplace(quantile),
                    //  2-Homeniuk(quantile) 3-Laplace (single point), 4-Homeniuk (single point)
-    Pa_Zcp,     // mode of Laplace function calculation: + mean of abs.values; - abs. mean of values
+    Pa_Zcp,     // mode of payoff matrix cell and row means (Laplace function) calculation: 
+                        // + mean of absolute values; - mean of real values
 
 // Allocation flags
     PvPOM,     //  (+ -) allocation flag for payoff matrix (if Q <= 1001)    + - + -
@@ -301,7 +302,7 @@ class TUnSpace : public TCModule
 
     SYSTEM *syu;
      MULTI *pmu;
-
+     MTPARM *tpu;
 
 protected:
 
@@ -439,12 +440,12 @@ typedef enum {
     AS_DONE    = '3',
 */
 
-    UNSP_OF_A      = 'A',
-    UNSP_OF_B      = 'B',
-    UNSP_OF_C      = 'C',
-    UNSP_OF_D      = 'D',
-    UNSP_OF_E      = 'E',
-    UNSP_OF_F      = 'F',
+    UNSP_OF_A      = 'A',  // Payoff function Eq. 8 p.18-19 of TM44-04-01
+    UNSP_OF_B      = 'B',  // Payoff function Eq. 9 p.20
+    UNSP_OF_C      = 'C',  // Payoff function Eq. 10 p.20 (in symmetric form)
+    UNSP_OF_D      = 'D',  // Payoff function Eq. 11 p.21
+    UNSP_OF_E      = 'E',  // Payoff function Eq. 12 p.21
+    UNSP_OF_F      = 'F',  // Payoff function Eq. 13 p.21
 
     UNSP_CRIT_PA       =  '0',
     UNSP_CRIT_LAPL_QAN  = '1',

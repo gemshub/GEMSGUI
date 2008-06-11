@@ -225,7 +225,8 @@ public:
     MTPARM *tpp;
     SYSTEM *syp;
     MULTI *pmp;
-
+TMulti *pmulti;
+    
     SPP_SETTING pa;
 
     TProfil( int nrt );

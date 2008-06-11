@@ -1019,7 +1019,7 @@
                                 <cstring>c_Pa_Zcp</cstring>
                             </property>
                             <property name="text">
-                                <string>Laplace criterion function: calculated as mean of abs.values (on) or absolute mean value (off)</string>
+                                <string>Laplace function (payoff matrix row average): of absolute values (on) or of real values (off)</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>

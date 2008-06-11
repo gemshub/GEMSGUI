@@ -191,6 +191,7 @@ void TProfil::InitSubModules()
         syst->ods_link();
         syp = syst->GetSY();
         aMod.Add( multi = new TMulti( MD_MULTI, syp, tpp, mup ) );
+pmulti = multi; 
         multi->ods_link();
         pmp = multi->GetPM();
         aMod.Add( new TEQCalc( MD_EQCALC ) );

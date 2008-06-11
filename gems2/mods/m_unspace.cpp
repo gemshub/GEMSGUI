@@ -1101,6 +1101,7 @@ TUnSpace::RecCalc( const char *key )
 
    syu = TProfil::pm->syp;
    pmu = TProfil::pm->pmp;
+   tpu = TProfil::pm->tpp;
 
 //    TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
     if( pVisor->ProfileMode != true )
