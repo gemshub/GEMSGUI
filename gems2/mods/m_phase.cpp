@@ -1245,7 +1245,7 @@ MAKE_GAS_PHASE:
               memcpy( php->sol_t, "FNNSNN", 6 );
               memcpy( &php->PphC, "f-+---", 6 );
               php->ncpN = 0; php->ncpM = 0;
-              php->nscM = 20; // 4;  // changed 07.12.2006  KD
+              php->nscM = 24; // 4;  // changed, 07.12.2006 (KD), increased to 24, 19.06.2008 (TW)
               php->npxM = 0;
               Name += "Perturbation-based EoS (Churakov&Gottschalk,2003)";
               strcpy( php->name, Name.c_str() );
