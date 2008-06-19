@@ -96,6 +96,14 @@ MAXPARAMKEY =    24,
                      MCAS  = 6,  // number of columns in SATC table
                             DFCN = 6; // number of columns in MASDJ table
 
+const int 
+	MPP_TOT = 0,       // index of column with total mixed phase property 
+	MPP_STD = 1,       // index of column with standard property sum for mixed phases
+	MPP_RES = 2,       // index of column with residual property sum for mixed phases
+	MPP_ID = 3,        // index of column with ideal mixing property for the phases 
+	MPP_EX = 4,        // index of column with excess mixing property for the phases 
+	MIXPHPROPS = 5;    // Number of columns in the property table for mixed phases
+
 enum param_objects {                  // work objects
     o_paver = o_lms_paf+1, //o_rttime+1,
     // BASE_PARAM

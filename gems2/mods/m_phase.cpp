@@ -494,7 +494,7 @@ AGAIN_SETUP:
           case SM_CGFLUID:  // Churakov-Gottschalk EoS
                           php->ncpN = 0;
                           php->ncpM = 0;
-                          php->nscM = 20; // 4;   changed 16.02.2007
+                          php->nscM = 24; // 4;   last changed 19.06.2008
                           php->npxM = 0;
 //                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;

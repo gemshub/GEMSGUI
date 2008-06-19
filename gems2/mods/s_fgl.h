@@ -238,8 +238,14 @@ public:
 
     int CGcalcFug( void );  // Calc. fugacity for 1 species at X=1
     int CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
-        double &Volume, double &DeltaH, double &DeltaS, double P, double T );
-
+        double &Volume, double P, double T );
+    // Calculates excess enthalpy and entropy
+    int CGEntalpyRhoT(double *X, float *param, float *param1, unsigned NN,
+         double ro, double T, double &H, double &S );
+    double GetDELTA( void )
+    {
+    	return DELTA;
+    }
 };
 
 
