@@ -50,7 +50,7 @@ void TReacDC::Convert_Cp_to_KT( int /*CE*/ )
     Cp = rcp->DCp;
     A = rcp->pKt;
 
-// calculation of logK=f(T) coeffs
+// calculation of logK=f(T) coeffs (only first 5 Cp coefficients, conforming to Haas-Fisher function)
     A[0] = ( Sr - Cp[0] - Cp[0]*lnT - Cp[1]*T + Cp[2]/(2.0*T_2)
                   + 2.0*Cp[3]/T_05 - Cp[4]*T_2/2.0 ) / Rln10;
     A[1] = Cp[1]/(2.0*Rln10);
@@ -62,10 +62,10 @@ void TReacDC::Convert_Cp_to_KT( int /*CE*/ )
     A[6] = -4.0*Cp[3]/Rln10;
 
 // Old version - comment out after debugging !
-    A[0] = Sr/Rln10 - ( Cp[1]*T + Cp[0]*(1.0+lnT) - Cp[2]/(2.0*T_2) +
-                        Cp[4]*T_2/2.0 - 2.0*Cp[3]/T_05 ) / Rln10;
-    A[2] = ( Cp[1]*T_2/2.0 + Cp[0]*T -Cp[2]/T + Cp[4]*T_3/3.0 +
-             2.0*Cp[3]*T_05 - Hr ) / Rln10;
+//    A[0] = Sr/Rln10 - ( Cp[1]*T + Cp[0]*(1.0+lnT) - Cp[2]/(2.0*T_2) +
+//                        Cp[4]*T_2/2.0 - 2.0*Cp[3]/T_05 ) / Rln10;
+//    A[2] = ( Cp[1]*T_2/2.0 + Cp[0]*T -Cp[2]/T + Cp[4]*T_3/3.0 +
+//             2.0*Cp[3]*T_05 - Hr ) / Rln10;
 /* commented out by KD on 15.07.03
     switch(CE) // zeroing off unnecessary coeffs for specific cases
     {
@@ -86,7 +86,7 @@ void TReacDC::Convert_Cp_to_KT( int /*CE*/ )
         return;
     }
 */   // Calculation of Cpr and lgK at 25 C
-    Cpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[4]*T_2 + Cp[3]/T_05;
+    Cpr = Cp[0] + Cp[1]*T + Cp[2]/T_2 + Cp[3]/T_05 + Cp[4]*T_2;
     lgK = A[0] + A[1]*T + A[2]/T + A[3]*lnT + A[4]/T_2 +
           A[5]*T_2 + A[6]/T_05;
     rcp->Cps[0] = Cpr;
@@ -119,7 +119,7 @@ void TReacDC::Convert_KT_to_Cp( int CE )
     case CTM_DKR: // 3-term extrap. from Franck-Marshall density model
     case CTM_MRB: // 3-term extrap. from MRB at 25 C (provisional DK 06.08.07)
     case CTM_LGK:  // Here, all logK-f(T) coeffs are given
-//    case CTM_LGX:
+    case CTM_LGX:  // uncommented, 19.06.2008
         break;
     case CTM_IKZ:  // Isotopic forms
         return;
@@ -482,10 +482,25 @@ NEXT:
         }
         else if( CE == CTM_LGK )
         {
+        	if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
+        		rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+        	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
+        		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
             for( i=0; i<7; i++ )
               if( IsFloatEmpty( rc[q].Cps[i] ) )
                   rc[q].Cps[i] = 0.0;
         }
+        else if (CE == CTM_LGX)
+        {
+        	if( !rc[q].pKt || rc[q].PreKT == S_OFF ) /* Temporarily !!!!!!! */
+        		rc[q].pKt =   (float *)aObj[ o_repkt ].Alloc( MAXCPCOEF, 1, F_);
+        	if( !rc[q].Cps || rc[q].PreDC == S_OFF ) /* Temporarily !!!!!!! */
+        		 rc[q].DCp =   (float *)aObj[ o_redcp ].Alloc( MAXCPCOEF, 1, F_);
+            for( i=0; i<7; i++ )
+              if( IsFloatEmpty( rc[q].pKt[i] ) )
+                  rc[q].pKt[i] = 0.0;        	
+        }
+        	
     }
     /*----------------------------------------------------*/
     /*if( rc[q].pct[0]==CTP_CP && rc[q].pct[1]==CEV_ST && rc[q].pct[2]==CVV_NO )*/
@@ -498,7 +513,8 @@ NEXT:
     }
     else // calc delta reactions
         Recalc_rDCD();
-    if( CM == CTPM_CPT && CE == CTM_LGX )
+    // if( CM == CTPM_CPT && CE == CTM_LGX )
+    	if ( CE == CTM_LGX)
         Convert_Cp_to_KT( CE );
     if( CM == CTPM_REA )
     {
@@ -524,8 +540,8 @@ NEXT:
 }
 
 /*-----------------------------------------------------------------*/
-// Recalc svoystv of vedushego DC po deltam reakcii i svoystvam
-// other components
+// Caclulation of the properties of new reaction-defined component 
+//  from reaction deltas and properties of other involved components
 void TReacDC::Recalc_rDCN( double /*foS*/ )
 {
     double  LK, RR, R_T, T, G=0.0, H=0.0, S=0.0, Cp=0.0, V=0.0;
@@ -660,7 +676,7 @@ STAGE2:
     else
         Error( GetName(),"W29RErun: One of values dGr, dHr, or dSr is missing.");
 
-    /* calc Cp and V for vedushiy component?*/
+    /* calc Cp and V for the reaction-defined component */
     if( IsFloatEmpty( rcp->Cps[0] ))
         rcp->Cps[0] = 0.0;
     if( IsFloatEmpty( rcp->Vs[0] ))
