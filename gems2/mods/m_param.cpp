@@ -629,7 +629,13 @@ pmp->ITF = pmp->ITG = 0;
 
 FORCED_AIA:
    multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
-  
+	if( pmp->pNP )
+   { 
+	   if( pmp->ITaia <=30 )       // Foolproof     
+		  pmp->IT = 30;
+	   else 
+		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter  
+   }  
    if( multi->AutoInitialApprox( ) == false )
    {
 	   multi->MultiCalcIterations( -1 );
@@ -644,29 +650,27 @@ FORCED_AIA:
 NumPrecLoops = pmp->W1+pmp->K2-1; 
 NumIterFIA = pmp->ITF;
 NumIterIPM = pmp->ITG;
+pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
 
    if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
    {  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
       int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,  
-        ITold = pmp->IT, TotIT = pmp->IT;
+ITstart = 10,        TotIT = pmp->IT;   // ITold = pmp->IT,
       pmp->pNP = 1;
       for( pp=0; pp < abs(pa.p.PRD); pp++ )
       {
-         pmp->IT = 0; // Important for refinement in highly non-ideal systems!
+         pmp->IT = ITstart; // 0  Important for refinement in highly non-ideal systems!
          if( multi->AutoInitialApprox( ) == false )
          {
             multi->MultiCalcIterations( pp );
          }
-         TotIT += pmp->IT;
-         TotW1 += pmp->W1+pmp->K2-2; 
-      }
-      if( !pNPo ) 
-      {   
-    	  pmp->IT = (TotIT-ITold)/2;
-          pmp->pNP = 0;
-      }
-      else pmp->IT = ITold;         
-
+         TotIT += pmp->IT - ITstart;
+         TotW1 += pmp->W1+pmp->K2-1; 
+      } // end pp loop
+      
+      pmp->pNP = pNPo;
+      pmp->IT = TotIT; // ITold;         
+   
       NumPrecLoops = TotW1; 
       NumIterFIA = pmp->ITF;  
       NumIterIPM = pmp->ITG;  

@@ -130,9 +130,6 @@ void TMulti::MultiRemake( const char *key )
 ///        pmp->lnP = log( tpp->P );
     pmp->DX = pa->p.DK;
 
-    pmp->FitVar[4] = pa->p.AG;
-    pmp->pRR1 = 0;   // IPM smoothing factor and level
-
     // Reallocating memory, if necessary
     if( !pmp->pBAL )
         dyn_new();

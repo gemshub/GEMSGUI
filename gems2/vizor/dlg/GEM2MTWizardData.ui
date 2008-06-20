@@ -1261,7 +1261,7 @@
                             <cstring>c_PvSIA</cstring>
                         </property>
                         <property name="text">
-                            <string>Use "smart initial approximation" for GEM IPM wherever possible</string>
+                            <string>Use Smart Initial Approximation of GEMIPM2 for faster calculations wherever possible</string>
                         </property>
                         <property name="checked">
                             <bool>false</bool>

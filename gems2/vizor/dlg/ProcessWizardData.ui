@@ -646,7 +646,7 @@
                         <cstring>c_PvR1</cstring>
                     </property>
                     <property name="text">
-                        <string>Use previous GEM IPM result instead of the automatic (Simplex) inital approximation</string>
+                        <string>Use Smart Initial Approximation of GEMIPM2 for faster calculations</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">

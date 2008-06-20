@@ -35,7 +35,8 @@ void TMulti::setSizes()
     STat->stp->Fi = pm.FI1;
     STat->stp->Fis = pm.FI1s;
     STat->stp->itIPM = pm.IT;
-    STat->stp->itPar = pm.W1;  // Number of IPM-2 loops KD 29.11.01
+//    STat->stp->itPar = pm.W1;  // Number of IPM-2 loops KD 29.11.01 obsolete
+    STat->stp->itPar = pm.ITaia;  // Added 20.06.2008 DK
     // float
     STat->stp->V = pm.VXc;
     STat->stp->T = pm.Tc;
@@ -179,14 +180,15 @@ FOUND:
     }
 
     // short
-    pm.pRR1 = STat->stp->itPar;  // Level of tinkle supressor
+    pm.ITaia = STat->stp->itPar;  // Level of tinkle supressor
+//    pm.pRR1 = STat->stp->itPar;  // Level of tinkle supressor
     pm.FI1 = STat->stp->Fi;
     pm.FI1s = STat->stp->Fis;
 pm.IT = STat->stp->itIPM;   
 //    pm.IT = 0;         Debugging 12.03.2008 DK 
     pm.W1 = 0; pm.K2 = 0;
     // float
-    pm.FitVar[4] = STat->stp->ParE;  // Smoothing factor
+    pm.FitVar[3] = STat->stp->ParE;  // Smoothing factor
     pm.FX  = STat->stp->UU;  // GX normalized
     pm.PCI = STat->stp->PCI;
     pm.VXc = STat->stp->V;
@@ -429,9 +431,8 @@ void TMulti::MultiCalcInit( const char *key )
     		pmp->X[j] = pmp->Y[j] = pmp->lnGam[j] = pmp->lnGmo[j] = 0.0;
     		pmp->Gamma[j] = 1.0;
     	}
-    	pmp->FitVar[4] = pa->p.AG;
-    	pmp->pRR1 = 0;   // Resetting smoothing factors
-        pmp->IT = 0;     // needed here to clean LINK_TP_MODE
+//    	pmp->FitVar[4] = pa->p.AG;
+//        pmp->IT = 0;     // needed here to clean LINK_TP_MODE
     }
     
     // recalculating kinetic restrictions for DC amounts
