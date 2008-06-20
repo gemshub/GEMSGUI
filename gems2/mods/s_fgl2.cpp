@@ -129,7 +129,7 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
     
     // add enthalpy and enthropy increments 
     retCode = CGFugacityPT( Coeff, Eos4parPT1, Fugacity, Volume, P, T+T*DELTA );   
-    CGEntalpyRhoT( X, Eos4parPT, Eos4parPT1, 1, P, T, DeltaH, DeltaS );
+    CGEnthalpy( X, Eos4parPT, Eos4parPT1, 1, P, T, DeltaH, DeltaS );
     aW.twp->H +=  DeltaH;   
     aW.twp->S +=  DeltaS;   
 //
