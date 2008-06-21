@@ -233,12 +233,12 @@ public:
    double DENSITY(double *X,float *param, unsigned NN ,double Pbar, double T );
    int CGActivCoefRhoT(double *X,float *param, double *act, unsigned NN,
      double ro, double T );
-   double CGActivCoefPT(double *X,float *param,double *act, unsigned NN,
-     double Pbar, double T );
+   int CGActivCoefPT(double *X,float *param,double *act, unsigned NN,
+     double Pbar, double T, double &roro );
 
     int CGcalcFug( void );  // Calc. fugacity for 1 species at X=1
     int CGFugacityPT( float *EoSparam, float *EoSparPT, double &Fugacity,
-        double &Volume, double P, double T );
+        double &Volume, double P, double T, double &roro );
     // Calculates residual enthalpy and entropy
     int CGEnthalpy(double *X, float *param, float *param1, unsigned NN,
          double ro, double T, double &H, double &S );
