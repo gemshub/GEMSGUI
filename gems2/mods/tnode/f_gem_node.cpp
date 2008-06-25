@@ -305,8 +305,7 @@
    // sends only speciation changed by mcotac 
 	for ( ii=0 ; ii < TNode::na->pCSD()->nICb ; ii++ ) 
              p_bIC[ii]=0;
-   TNode::na->GEM_from_MT( NodeHandle, NodeStatusCH,
-             p_T, p_P, p_Vs, p_Ms, p_bIC, p_dul, p_dll,  p_aPH, p_xDC);
+            TNode::na->GEM_from_MT( NodeHandle, NodeStatusCH, p_T, p_P, p_Vs, p_Ms, p_bIC, p_dul, p_dll,  p_aPH, p_xDC);
           TNode::na->pCNode()->bIC[(TNode::na->pCSD()->nICb)-1]=0.0;
 //	for ( ii=0 ; ii < TNode::na->pCSD()->nICb ; ii++ )
 //	      printf("bIC: %i %g \n",ii, TNode::na->pCNode()->bIC[ii]);
@@ -317,29 +316,44 @@
 //   TNode::na->GEM_from_MT( NodeHandle, NodeStatusCH,
 //             p_T, p_P, p_Vs, p_Ms, p_bIC, p_dul, p_dll,  p_aPH );
    }
-//  TNode::na->GEM_write_dbr( "Test-clay-cement-dbr_befor2.dat");
+//  TNode::na->GEM_write_dbr( "Test-clay-cement-dbr_before_calc.dat");
  // Calling GEMIPM calculation
-   iRet = TNode::na->GEM_run(uPrimalSol);
+   iRet = TNode::na->GEM_run(3.0, uPrimalSol); // use the overload to normalize mass of the system to 3.0 kg 
 
+    idum=0;
    if( !( (iRet == OK_GEM_AIA) || (iRet == OK_GEM_SIA) ) )
    {
 	printf("GEMS returned: %d for node %d \n",iRet,p_NodeHandle);
+        idum=0;
+   } 	   
+   else { idum=1;}   // end calculation attempt
 
-	for ( ii=0 ; ii < TNode::na->pCSD()->nICb ; ii++ ) {
-	      printf("bIC: %i %g \n",ii, TNode::na->pCNode()->bIC[ii]);
-		}
-//  TNode::na->GEM_write_dbr( "Test-clay-cement-dbr_error.dat");
+   if (idum ==0) { // try again with different normalization
+        iRet = TNode::na->GEM_run(1.0, uPrimalSol); // use the overload to normalize mass of the system to 1.0 kg 
+          if( !( (iRet == OK_GEM_AIA) || (iRet == OK_GEM_SIA) ) ) {
+   	     printf("GEMS returned: %d for node %d \n",iRet,p_NodeHandle);
+             idum=0;
+           }
+	   else { idum=1;} 
+    }
 
-	/* here we stop the execution */
-        abort();
-        idum =0;
-	  return idum;
-   }
+   if (idum ==0) { // try again with different normalization
+        iRet = TNode::na->GEM_run(10.0, uPrimalSol); // use the overload to normalize mass of the system to 10.0 kg 
+          if( !( (iRet == OK_GEM_AIA) || (iRet == OK_GEM_SIA) ) ) {
+   	     printf("GEMS returned: %d for node %d ..giving up!\n",iRet,p_NodeHandle);
+             idum=0;
+             return idum;
+           }
+	   else { idum=1;} 
+    }
+
 
   // Extracting GEMIPM output data to FMT part
    TNode::na->GEM_to_MT( NodeHandle, NodeStatusCH, IterDone,
        p_Vs, p_Ms, p_Gs, p_Hs, p_IC, p_pH, p_pe, p_Eh, p_rMB, p_uIC,
        p_xDC, p_gam, p_xPH, p_vPS, p_mPS, p_bPS, p_xPA  );
+
+//  TNode::na->GEM_write_dbr( "Test-clay-cement-dbr_after_calc.dat");
 
  p_NodeHandle =(int) NodeHandle;
  p_NodeStatusCH =(int)  NodeStatusCH;
