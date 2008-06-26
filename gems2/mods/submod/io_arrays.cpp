@@ -71,6 +71,22 @@ void TPrintArrays::writeArray( const char *name, short* arr,
  }
 }
 
+void TPrintArrays::writeArray( const char *name, int* arr,
+                 int size, int l_size  )
+{
+  int sz = 40;
+  if( l_size > 0 )
+        sz = l_size;
+
+ ff << endl << "<" << name << ">" << endl;
+ for( int ii=0, jj=0; ii<size; ii++, jj++  )
+ {
+    if(jj == sz)
+    { jj=0;  ff << endl;}
+    ff << arr[ii] << " ";
+ }
+}
+
 void TPrintArrays::writeArray( const char *name,  float* arr,
             int size, int l_size )
 {
@@ -107,6 +123,94 @@ void TPrintArrays::writeArray( const char *name,  double* arr,
 
 //-------------------------------------------------------------------------
 void TPrintArrays::writeArray( const char *name, short* arr,
+                 int size, int* selArr, int nColumns, int l_size )
+{
+  if(!arr) return;
+  int sz = 40;
+  if( l_size > 0 )
+        sz = l_size;
+
+ ff << endl << "<" << name << ">" << endl;
+ for( int ii=0, jj=0; ii<size; ii++  )
+ {
+	for(int cc=0; cc<nColumns; cc++ )  
+    {
+		if(jj == sz)
+        { jj=0;  ff << endl;}
+    	ff << arr[selArr[ii]*nColumns+cc] << " ";
+    	jj++;
+    } 	
+ }
+}
+
+void TPrintArrays::writeArray( const char *name, int* arr,
+                 int size, int* selArr, int nColumns, int l_size )
+{
+  if(!arr) return;
+  int sz = 40;
+  if( l_size > 0 )
+        sz = l_size;
+
+ ff << endl << "<" << name << ">" << endl;
+ for( int ii=0, jj=0; ii<size; ii++  )
+ {
+	for(int cc=0; cc<nColumns; cc++ )  
+    {
+		if(jj == sz)
+        { jj=0;  ff << endl;}
+    	ff << arr[selArr[ii]*nColumns+cc] << " ";
+    	jj++;
+    } 	
+ }
+}
+
+void TPrintArrays::writeArray( const char *name,  float* arr,
+            int size, int* selArr, int nColumns, int l_size )
+{
+ if(!arr) return;
+ int sz = 40;
+ if( l_size > 0 )
+       sz = l_size;
+
+ ff << endl << "<" << name << ">" << endl;
+ for( int ii=0, jj=0; ii<size; ii++  )
+ {
+	for(int cc=0; cc<nColumns; cc++ )  
+    {
+    	if(jj == sz)
+	    { jj=0;  ff << endl;}
+   	//    ff << setprecision(10) << scientific << arr[selArr[ii]*nColumns+cc] << " ";
+   	    ff << setprecision(7) << arr[selArr[ii]*nColumns+cc] << " ";
+	   	jj++;
+	} 	
+ }
+}
+
+void TPrintArrays::writeArray( const char *name,  double* arr,
+            int size, int* selArr, int nColumns, int l_size )
+{
+ if(!arr) return;
+ int sz = 40;
+ if( l_size > 0 )
+       sz = l_size;
+
+ ff << endl << "<" << name << ">" << endl;
+ for( int ii=0, jj=0; ii<size; ii++  )
+ {
+		for(int cc=0; cc<nColumns; cc++ )  
+	    {
+			if(jj == sz)
+	        { jj=0;  ff << endl;}
+		    //    ff << setprecision(18) << scientific << arr[selArr[ii]*nColumns+cc] << " ";
+		    ff << setprecision(15) << arr[selArr[ii]*nColumns+cc] << " ";
+	    	jj++;
+	    } 	
+ }
+}
+
+
+//-------------------------------------------------------------------------
+void TPrintArrays::writeArray( const char *name, short* arr,
                  int size, short* selArr, int nColumns, int l_size )
 {
   if(!arr) return;
@@ -125,7 +229,27 @@ void TPrintArrays::writeArray( const char *name, short* arr,
     	jj++;
     } 	
  }
- 
+}
+
+void TPrintArrays::writeArray( const char *name, int* arr,
+                 int size, short* selArr, int nColumns, int l_size )
+{
+  if(!arr) return;
+  int sz = 40;
+  if( l_size > 0 )
+        sz = l_size;
+
+ ff << endl << "<" << name << ">" << endl;
+ for( int ii=0, jj=0; ii<size; ii++  )
+ {
+	for(int cc=0; cc<nColumns; cc++ )  
+    {
+		if(jj == sz)
+        { jj=0;  ff << endl;}
+    	ff << arr[selArr[ii]*nColumns+cc] << " ";
+    	jj++;
+    } 	
+ }
 }
 
 void TPrintArrays::writeArray( const char *name,  float* arr,
@@ -253,6 +377,15 @@ void TReadArrays::readNext( const char* label)
 }
 
 void TReadArrays::readArray( const char*, short* arr, int size )
+{
+ for( int ii=0; ii<size; ii++  )
+ {
+   skipSpace();
+   ff >> arr[ii];
+ }
+}
+
+void TReadArrays::readArray( const char*, int* arr, int size )
 {
  for( int ii=0; ii<size; ii++  )
  {

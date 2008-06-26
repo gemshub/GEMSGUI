@@ -55,16 +55,13 @@ protected:
         NumIterFIA,   // Total Number of performed FIA entry iterations 
         NumIterIPM;   // Total Number of performed IPM main iterations
     
-    // Checks if given Tc and P fit within the interpolation intervals
-    bool  check_TP( double& Tc, double& P );
-
     // Tests Tc as a grid point for the interpolation of thermodynamic data
     // Returns index in the lookup grid array or -1  if it is not a grid point
-    int  check_grid_T( double& Tc );
+    int  check_grid_T( double Tc );
 
     // Tests P as a grid point for the interpolation of thermodynamic data
     // Return index in the lookup grid array or -1 if it is not a grid point
-    int  check_grid_P( double& P );
+    int  check_grid_P( double P );
 
     void allocMemory();
     void freeMemory();
@@ -131,8 +128,8 @@ static TNode* na;   // static pointer to this TNode class instance
   TNode();      // constructor for standalone GEMIPM2K or coupled program
 #endif
 
-  virtual ~TNode();      // destructor
-
+  virtual ~TNode();      // destructor  
+  
 // Typical sequence for using TNode class ----------------------------------
 // (1)
 // For separate coupled FMT-GEM programs that use GEMIPM2K module
@@ -160,8 +157,8 @@ static TNode* na;   // static pointer to this TNode class instance
 //  work structure into parameters provided by the FMT part
 //
    void GEM_restore_MT(
-    short  &p_NodeHandle,   // Node identification handle
-    short  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+    int  &p_NodeHandle,   // Node identification handle
+    int  &p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                       //                                    GEM input output  FMT control
     double &p_TC,      // Temperature T, C                       +       -      -
     double &p_P,      // Pressure P, bar                         +       -      -
@@ -178,8 +175,8 @@ static TNode* na;   // static pointer to this TNode class instance
 // into the DATABR work structure for the subsequent GEM calculation
 //
    void GEM_from_MT(
-    short  p_NodeHandle,   // Node identification handle
-    short  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+    int  p_NodeHandle,   // Node identification handle
+    int  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                      //                                     GEM input output  FMT control
     double p_TC,     // Temperature T, C                        +       -      -
     double p_P,      // Pressure P, bar                         +       -      -
@@ -194,8 +191,8 @@ static TNode* na;   // static pointer to this TNode class instance
 // Overload - uses also xDC vector for bulk composition input to GEM
 // added by DK on 09.07.2007
 void GEM_from_MT(
- short  p_NodeHandle,   // Node identification handle
- short  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+ int  p_NodeHandle,   // Node identification handle
+ int  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                   //                                     GEM input output  FMT control
  double p_TC,     // Temperature T, C                        +       -      -
  double p_P,      // Pressure P, bar                         +       -      -
@@ -217,8 +214,8 @@ void GEM_from_MT(
 // with passed through the DATABR structure.
 // added by DK on 17.09.2007
 void GEM_from_MT(
- short  p_NodeHandle,   // Node identification handle
- short  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
+ int  p_NodeHandle,   // Node identification handle
+ int  p_NodeStatusCH, // Node status code;  see typedef NODECODECH
                   //                                     GEM input output  FMT control
  double p_TC,     // Temperature T, C                         +      -      -
  double p_P,      // Pressure P, bar                          +      -      -
@@ -291,9 +288,9 @@ void GEM_from_MT(
 // to those in currently existing DATACH structure )
 //
    void GEM_to_MT(
-   short &p_NodeHandle,    // Node identification handle
-   short &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
-   short &p_IterDone,      // Number of iterations performed by GEM IPM
+   int &p_NodeHandle,    // Node identification handle
+   int &p_NodeStatusCH,  // Node status code (changed after GEM calculation); see typedef NODECODECH
+   int &p_IterDone,      // Number of iterations performed by GEM IPM
                          //                                     GEM input output  FMT control
     // Chemical scalar variables
     double &p_Vs,    // Volume V of reactive subsystem, cm3     -      -      +     +
@@ -417,13 +414,18 @@ void GEM_from_MT(
     void unpackDataBr( bool uPrimalSol, double ScFact );     
     
     // Access to interpolated thermodynamic data from DCH structure
+    // Checks if given Tc and P fit within the interpolation intervals
+    bool  check_TP( double Tc, double P );
+    
     // Test Tc and P as grid point for the interpolation of thermodynamic data
     // Return index in grid matrix or -1
-     int  check_grid_TP(  double& Tc, double& P );
-    // Access to interpolated G0 from DCH structure ( xCH is the DC DCH index)
-     double  DC_G0_TP( const int xCH, double& Tc, double& P );
-    // Access to interpolated V0 from DCH structure ( xCH is the DC DCH index)
-     double  DC_V0_TP( const int xCH, double& Tc, double& P );
+     int  check_grid_TP(  double Tc, double P );
+
+     // Access to interpolated G0 from DCH structure ( xCH is the DC DCH index)
+     double  DC_G0_TP( const int xCH, double Tc, double P );
+    
+     // Access to interpolated V0 from DCH structure ( xCH is the DC DCH index)
+     double  DC_V0_TP( const int xCH, double Tc, double P );
 
 // To be provided - access to interpolated thermodynamic data from DCH structure
 //  DC_H0_TP
@@ -436,7 +438,8 @@ void GEM_from_MT(
      // Retrieval of Phase mass ( xBR is DBR phase index)
       double  Ph_Mass( const int xBR );
      // Retrieval of Phase composition ( xBR is DBR phase index)
-      void  Ph_BC( const int xBR, double *ARout=0 );
+     // Returns pointer to ARout which may also be allocated inside of Ph_BC()
+      double* Ph_BC( const int xBR, double *ARout=0 );
 
 
 #ifndef IPMGEMPLUGIN
@@ -479,7 +482,7 @@ void GEM_from_MT(
 
 // stoichiometry coefficient A[j][i] of IC with node DATABRIDGE index ICx
 // in the formula of DC with node index DCx
-#define nodeCH_A( DCx, ICx )  ( (double)(TNode::na->pCSD()->A[ \
+#define nodeCH_A( DCx, ICx )  ( (TNode::na->pCSD()->A[ \
                                  (TNode::na->pCSD()->xIC[(ICx)])+ \
                                  (TNode::na->pCSD()->xDC[(DCx)]) * \
                                   TNode::na->pCSD()->nIC]) )

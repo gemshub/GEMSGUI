@@ -196,9 +196,14 @@ void TMulti::CompG0Load()
   P = TNode::na->cP();
 
 // if( dCH->nTp <=1 && dCH->nPp <=1 )
-  if( dCH->nTp <1 && dCH->nPp <1 )
+  if( dCH->nTp <1 || dCH->nPp <1 || TNode::na->check_TP( TC, P ) == false )
+  {
+	  char buff[256]; 
+	  sprintf( buff, " Temperature %g or pressure %g out of range, or no T/D data are provided\n", 
+			  TC, P );
+	  Error( "ECompG0Load: " , buff );
       return;
-
+  }
    xTP = TNode::na->check_grid_TP( TC, P );
 
  if( load && fabs( pmp->TC - TC ) < 1.e-10 &&
@@ -256,7 +261,7 @@ void TMulti::CompG0Load()
        Go = LagranInterp( dCH->Pval, dCH->TCval, dCH->G0+jj,
                           P, TC, dCH->nTp, dCH->nPp,1 );
        Vv = LagranInterp( dCH->Pval, dCH->TCval, dCH->V0+jj,
-                            P, TC, dCH->nTp, dCH->nPp, 1 );
+                          P, TC, dCH->nTp, dCH->nPp, 1 );
      }
      if( pmp->tpp_G )
     	  pmp->tpp_G[j] = Go;
