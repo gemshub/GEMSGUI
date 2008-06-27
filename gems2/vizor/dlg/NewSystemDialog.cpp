@@ -869,7 +869,8 @@ void NewSystemDialog::loadList2()
    QListViewItem* elem;
    short *l1_     = (short *)aObj[ o_wi_l1 ].GetPtr();
    double *Y_la_  = (double *)aObj[ o_wd_yla ].GetPtr();
-   double *lnGam_ = (double *)aObj[ o_wo_lngam ].GetPtr();
+// double *lnGam_ = (double *)aObj[ o_wo_lngam ].GetPtr();  Changed to Gamma 26.06.08 DK
+   double *Gamma_ = (double *)aObj[ o_wd_gamma ].GetPtr(); 
    double *Wx_ = (double *)aObj[ o_wo_wx ].GetPtr();
    double *Ym_ = (double *)aObj[o_wd_ym ].GetPtr();
    vstr buf(30), buf1(30), buf2(30);
@@ -893,9 +894,10 @@ void NewSystemDialog::loadList2()
            if( Y_la_[jj] > -150. && Y_la_[jj] < 150. )
              sprintf( buf, " %lg ", exp( Y_la_[jj]/0.434294481 ) );
          sprintf( buf1, " %g ", 0. );
-         if( lnGam_ )
-           if( lnGam_[jj] > -200. && lnGam_[jj] < 200. )
-              sprintf( buf1, " %g ", exp( lnGam_[jj]) );
+//         if( lnGam_ )
+//           if( lnGam_[jj] > -200. && lnGam_[jj] < 200. )
+//              sprintf( buf1, " %g ", exp( lnGam_[jj]) );
+         sprintf( buf1, " %g ", Gamma_[jj] );
          sprintf( buf2, " %g ", 0. );
          switch( aObj[o_wi_dcc].GetStringEmpty(jj)[0])
          {

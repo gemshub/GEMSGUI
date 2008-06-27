@@ -353,17 +353,23 @@ void TMulti::MultiCalcInit( const char* key )
     // multicomponent phases and mixing models
  if( pmp->FIs )
  {
-     	// Load activity coeffs for phases-solutions
-    	for( j=0; j< pmp->Ls; j++ )
+     int k, jb, je=0; 
+	 for( k=0; k<pmp->FIs; k++ )
+     { // loop on solution phases
+         jb = je;
+         je += pmp->L1[k];
+	 // Load activity coeffs for phases-solutions
+    	for( j=jb; j< je; j++ )
         {
             pmp->lnGmo[j] = pmp->lnGam[j];
             if( fabs( pmp->lnGam[j] ) <= 84. )
-                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+//                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+         	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );           
             else pmp->Gamma[j] = 1.0;
-        }
-        pmp->PD = pa->p.PD;
-
-        //           SolModLoad();   Scripts cannot be used here!
+        } // j
+     }  // k
+     pmp->PD = pa->p.PD;
+	 //           SolModLoad();   Scripts cannot be used here!
     // Calculate Eh, pe, pH,and other stuff
     if( pmp->E && pmp->LO && pmp->pNP )
     {    

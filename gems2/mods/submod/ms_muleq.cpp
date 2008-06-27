@@ -175,7 +175,7 @@ FOUNDI:
         pm.pNP = 1;
         Error( GetName(), "No this DComp in the system" );
 FOUND:
-        pm.Y[jp] = STat->stp->Y[js];
+        pm.Y[jp] /* = pm.X[jp] */ = STat->stp->Y[js];
         pm.lnGam[jp] = STat->stp->lnGam[js];
     }
 
@@ -330,14 +330,21 @@ void TMulti::EqstatExpand( const char *key )
     // Added experimentally 07.03.2008   by DK
     if( pmp->FIs )
     {
-    	 // Load activity coeffs for phases-solutions
-    	for( j=0; j< pmp->Ls; j++ )
-        {
-            pmp->lnGmo[j] = pmp->lnGam[j];
-            if( fabs( pmp->lnGam[j] ) <= 84. )
-                pmp->Gamma[j] = exp( pmp->lnGam[j] );
-            else pmp->Gamma[j] = 1.0;
-        }
+      int k, jb, je=0; 
+      for( k=0; k<pmp->FIs; k++ )
+      { // loop on solution phases
+            jb = je;
+            je += pmp->L1[k];
+   	 // Load activity coeffs for phases-solutions
+       	for( j=jb; j< je; j++ )
+           {
+               pmp->lnGmo[j] = pmp->lnGam[j];
+               if( fabs( pmp->lnGam[j] ) <= 84. )
+   //                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+            	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );           
+               else pmp->Gamma[j] = 1.0;
+           } // j
+        }  // k
     	if( pmp->pIPN <=0 )  // mixing models finalized
         {
              // not done if these models are already present in MULTI !
@@ -443,20 +450,28 @@ void TMulti::MultiCalcInit( const char *key )
     if( pmp->FIs )
     {
      	// Load activity coeffs for phases-solutions
-    	for( j=0; j< pmp->Ls; j++ )
-        {
+      int k, jb, je=0; 
+   	  for( k=0; k<pmp->FIs; k++ )
+      { // loop on solution phases
+         jb = je;
+         je += pmp->L1[k];
+   	 // Load activity coeffs for phases-solutions
+       	 for( j=jb; j< je; j++ )
+         {
             pmp->lnGmo[j] = pmp->lnGam[j];
             if( fabs( pmp->lnGam[j] ) <= 84. )
-                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+   //                pmp->Gamma[j] = exp( pmp->lnGam[j] );
+           	   pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );           
             else pmp->Gamma[j] = 1.0;
-        }
-    	if( pmp->pIPN <=0 )  // mixing models finalized
-        {
+          } // j
+       }  // k
+   	   if( pmp->pIPN <=0 )  // mixing models finalized
+       {
              // not done if these models are already present in MULTI !
            pmp->PD = TProfil::pm->pa.p.PD;
            SolModLoad();   // Call point to loading scripts for mixing models      
-        }
-    	pmp->pIPN = 1;
+       }
+       pmp->pIPN = 1;
         
     	// Calc Eh, pe, pH,and other stuff
 if( pmp->E && pmp->LO && pmp->pNP )

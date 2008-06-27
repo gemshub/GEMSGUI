@@ -672,8 +672,9 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
 	pmp->Wx[j] = 0.0;               //
         	   LnGam = pmp->lnGmo[j];
                pmp->lnGam[j] = LnGam;
-               if( fabs( LnGam ) > 1e-9 && fabs( LnGam ) < 84. )  
-                    pmp->Gamma[j] = exp( LnGam );
+               if( /* fabs( LnGam ) > 1e-9 && */ fabs( LnGam ) < 84. )  
+//                    pmp->Gamma[j] = exp( LnGam );
+            	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 ); 
                else pmp->Gamma[j] = 1.0;
                pmp->F0[j] = Ej_init_calc( 0.0, j, k );
                pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];       		
@@ -681,15 +682,20 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
         }
         else 
         { // Real mode for activity coefficients
-          for( j=jb; j<je; j++ )
+          double lnGamG;
+	      for( j=jb; j<je; j++ )
           {
-            if( fabs( 1.0-pmp->Gamma[j] ) > 1e-9 
-            		&& pmp->Gamma[j] > 3.3e-37 && pmp->Gamma[j] < 3.03e+36 )   // > 1e-35 before 26.02.08
-                pmp->lnGam[j] += log( pmp->Gamma[j] );
+//          	lnGamG = PhaseSpecificGamma( j, jb, je, k, 1 );
+//            if( fabs( 1.0-pmp->Gamma[j] ) > 1e-9 
+//           		&& pmp->Gamma[j] > 3.3e-37 && pmp->Gamma[j] < 3.03e+36 )   // > 1e-35 before 26.02.08
+//                pmp->lnGam[j] += log( pmp->Gamma[j] );
+//            if( fabs( lnGamG ) > 1e-9 ) 
+//            	pmp->lnGam[j] += lnGamG;
             LnGam = pmp->lnGam[j];
             pmp->lnGmo[j] = LnGam;
-            if( fabs( LnGam ) > 1e-9 && fabs( LnGam ) < 84. )   // before 26.02.08: < 42.
-                pmp->Gamma[j] = exp( LnGam );
+            if( /*fabs( LnGam ) > 1e-9 &&*/ fabs( LnGam ) < 84. )   // before 26.02.08: < 42.
+//                pmp->Gamma[j] = exp( LnGam );
+          	    pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );             	
             else pmp->Gamma[j] = 1.0;
             pmp->F0[j] = Ej_init_calc( 0.0, j, k );
             pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];
