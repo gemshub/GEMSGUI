@@ -1284,8 +1284,8 @@ TMulti::PhaseSpecificGamma( int j, int jb, int je, int k, int DirFlag )
 	      case DC_AQ_PROTON: case DC_AQ_ELECTRON:  case DC_AQ_SPECIES:
 	        if( pmp->XF[k] && pmp->XFA[k] )
 	        	NonLogTerm = 1. - pmp->XFA[k]/pmp->XF[k];
-	        lnGamS += NonLogTerm; 	    	
-	    	break; 
+	        lnGamS += NonLogTerm;    // Correction by asymmetry term 	    	
+	        break; 
 	    	// calculate molar mass of solvent
 	    case DC_AQ_SOLVCOM:	    case DC_AQ_SOLVENT:
 	        if( pmp->XF[k] && pmp->XFA[k] )
@@ -1326,7 +1326,7 @@ TMulti::PhaseSpecificGamma( int j, int jb, int je, int k, int DirFlag )
 		   case DC_AQ_PROTON: case DC_AQ_ELECTRON:  case DC_AQ_SPECIES:
 		        if( pmp->XF[k] && pmp->XFA[k] )
 		        	NonLogTerm = 1. - pmp->XFA[k]/pmp->XF[k];
-			    lnGam -= NonLogTerm; 	    	
+			    lnGam -= NonLogTerm;  // Correction by asymmetry term 
 		    	break; 
 		   case DC_AQ_SOLVCOM:	    case DC_AQ_SOLVENT:
 		        if( pmp->XF[k] && pmp->XFA[k] )

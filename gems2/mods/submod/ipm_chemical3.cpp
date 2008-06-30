@@ -685,13 +685,15 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
           double lnGamG;
 	      for( j=jb; j<je; j++ )
           {
-//          	lnGamG = PhaseSpecificGamma( j, jb, je, k, 1 );
+          	lnGamG = PhaseSpecificGamma( j, jb, je, k, 1 );
 //            if( fabs( 1.0-pmp->Gamma[j] ) > 1e-9 
 //           		&& pmp->Gamma[j] > 3.3e-37 && pmp->Gamma[j] < 3.03e+36 )   // > 1e-35 before 26.02.08
 //                pmp->lnGam[j] += log( pmp->Gamma[j] );
 //            if( fabs( lnGamG ) > 1e-9 ) 
 //            	pmp->lnGam[j] += lnGamG;
             LnGam = pmp->lnGam[j];
+            if( fabs( lnGamG ) > 1e-9 ) 
+            	LnGam += lnGamG; 
             pmp->lnGmo[j] = LnGam;
             if( /*fabs( LnGam ) > 1e-9 &&*/ fabs( LnGam ) < 84. )   // before 26.02.08: < 42.
 //                pmp->Gamma[j] = exp( LnGam );
@@ -835,8 +837,8 @@ void
 TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
 {
     int j;
-    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam; //  molt;
-    double Xw, Xaq, Nw, molT, Lgam, lnwxWat, lnGam;
+    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam, Hel, Karp; //  molt;
+    double Xw, Xaq, Nw, molT, Lgam, lnwxWat, lnGam, WxW = 1.;
     double Lam, SigTerm, Phi, lnActWat;
     float nPolicy;
 
@@ -853,10 +855,16 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
 
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
+    if( Xaq )
+      WxW = Xw/Xaq;   // Mole fraction of water-solvent
     Nw = 1000./18.01528;
-    molT = (Xaq-Xw)/(Nw/Xw);
 //    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; // tot.molality
-    lnwxWat = log(Xw/Xaq);
+    molT = (Xaq-Xw)*(Nw/Xw);      // Bug corrected 30.04.2008 DK
+//    Hel = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
+    Hel = log10( WxW );  // Helgeson large gamma simplified - turns to be the same as Thomsen's
+    Karp = 1. - WxW;      // Karpov's correction - to subtract ? 
+    Lgam = Hel - 0.4342945*Karp;  // Do we really need this all bullshit here ??  DK
+    lnwxWat = log(WxW);
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -893,7 +901,7 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
         { // Charged species
             Z2 = pmp->EZ[j]*pmp->EZ[j];
             lgGam = ( -A * sqI * Z2 ) / ( 1. + B * a0 * sqI ) + bgi * I ;
-            pmp->lnGam[j] = lgGam * lg_to_ln;
+            pmp->lnGam[j] = (lgGam + Lgam) * lg_to_ln;
             continue;
         }
         // Neutral species
@@ -908,7 +916,7 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
         {  // Calculation of gamma for neutral species except water
            if( nPolicy > -0.000001 )
   	       lgGam = bgi * I;
-           pmp->lnGam[j] = lgGam * lg_to_ln;
+           pmp->lnGam[j] = (lgGam + Lgam) * lg_to_ln;
            continue;
         }
         // Water-solvent
@@ -916,7 +924,8 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
         if( nPolicy > -1.000001 && nPolicy < 0.000001 )
         {
        	   // Calculate activity coefficient of water solvent
-	   // Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
+Lgam = 0.;
+// Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
 	   Lam = 1. + a0*B*sqI;
 	   SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
 	   Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
