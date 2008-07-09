@@ -860,10 +860,8 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
     Nw = 1000./18.01528;
 //    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; // tot.molality
     molT = (Xaq-Xw)*(Nw/Xw);      // Bug corrected 30.04.2008 DK
-//    Hel = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
-    Hel = log10( WxW );  // Helgeson large gamma simplified - turns to be the same as Thomsen's
-    Karp = 1. - WxW;      // Karpov's correction - to subtract ? 
-    Lgam = Hel - 0.4342945*Karp;  // Do we really need this all bullshit here ??  DK
+//    Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
+    Lgam = log10( WxW );  // Helgeson large gamma simplified - turns to be the same as Thomsen's
     lnwxWat = log(WxW);
     sqI = sqrt( I );
 
@@ -915,16 +913,16 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
         if( pmp->DCC[j] != DC_AQ_SOLVENT )
         {  // Calculation of gamma for neutral species except water
            if( nPolicy > -0.000001 )
-  	       lgGam = bgi * I;
+  	          lgGam = bgi * I;
            pmp->lnGam[j] = (lgGam + Lgam) * lg_to_ln;
            continue;
         }
         // Water-solvent
-        lnGam = 0.0;  Lgam = 0.;
+Lgam=0.;    // Unblock after debugging!  DK 09.07.2008
+        lnGam = 0.0;  
         if( nPolicy > -1.000001 && nPolicy < 0.000001 )
         {
        	   // Calculate activity coefficient of water solvent
-Lgam = 0.;
 // Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
 	   Lam = 1. + a0*B*sqI;
 	   SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
@@ -958,8 +956,15 @@ TMulti::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
 //    bg = pmp->PMc[jpb+5];
 //    a0c = pmp->PMc[jpb+6];
     nPolicy = (pmp->PMc[jpb+7]);
-
-    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; // tot.molality
+// Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
+double Xaq, Xw, WxW, Nw, Lgam;
+    Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
+    Xw = pmp->XFA[k]; // Mole amount of water-solvent
+    if( Xaq )
+      WxW = Xw/Xaq;   // Mole fraction of water-solvent
+    Nw = 1000./18.01528;
+    molt = (Xaq-Xw)*(Nw/Xw); 
+    Lgam = log10( WxW );  // Helgeson large gamma simplified
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -994,6 +999,7 @@ TMulti::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
         { // Charged species
             Z2 = pmp->EZ[j]*pmp->EZ[j];
             lgGam = ( -A * sqI * Z2 ) / ( 1. + B * a0 * sqI ); // + bgi * I ;
+            lgGam += Lgam;  // Conversion to molality gamma
         }
         else
         { // Neutral species
@@ -1002,20 +1008,20 @@ TMulti::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
                if( a0 > 0.0 )
                {
                   if( pmp->DCC[j] != DC_AQ_SOLVENT ) // salting-out coefficient
-                     lgGam = a0 * I;
+                     lgGam = a0 * I  + Lgam;
                   else // water-solvent - a0 - rational osmotic coefficient
                      lgGam = a0 * molt; // corrected: instead of I - sum.molality
                }
                else {
                   if( a0 < -0.99 )
-                      lgGam = 0.;
+                      lgGam = 0. + Lgam;
                   else if( fabs( a0 ) < 1e-9 )
-                      lgGam = bgi * I;  // Average salting-out coeff.
-                  else lgGam = a0 * I;  // Busenberg & Plummer
+                      lgGam = bgi * I + Lgam;  // Average salting-out coeff.
+                  else lgGam = a0 * I + Lgam;  // Busenberg & Plummer
                }
             }
             else { // nPolicy < 0 - all gamma = 1 for neutral species
-               lgGam = 0.;
+               lgGam = 0.;   // enforces gamma=1 and does not correct for molal scale!
             }
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
@@ -1025,7 +1031,7 @@ TMulti::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
 // Debye-Hueckel limiting law
 //
 void
-TMulti::DebyeHueckel1LL( int jb, int je, int )
+TMulti::DebyeHueckel1LL( int jb, int je, int k )
 {
     int j;
     double T, A, I, sqI, Z2, lgGam;
@@ -1036,6 +1042,16 @@ TMulti::DebyeHueckel1LL( int jb, int je, int )
         return;
     T = pmp->Tc;
 //    A = pmp->PMc[jpb+0];
+
+// Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
+double Xaq, Xw, WxW, Nw, Lgam;
+    Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
+    Xw = pmp->XFA[k]; // Mole amount of water-solvent
+    if( Xaq )
+      WxW = Xw/Xaq;   // Mole fraction of water-solvent
+    Nw = 1000./18.01528;
+//    molt = (Xaq-Xw)*(Nw/Xw); 
+    Lgam = log10( WxW );  // Helgeson large gamma simplified    
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -1055,10 +1071,12 @@ TMulti::DebyeHueckel1LL( int jb, int je, int )
         if( pmp->EZ[j] )
         { // Charged species
             Z2 = pmp->EZ[j]*pmp->EZ[j];
-            lgGam = ( -A * sqI * Z2 ); // / ( 1 + B * a0 * sqI ) + bgi * I ;
+            lgGam = ( -A * sqI * Z2 ) + Lgam; // / ( 1 + B * a0 * sqI ) + bgi * I ;
         }
-        else  { // Neutral species
-            lgGam = 0.;
+        else  { // Neutral species            
+       	  lgGam = 0.;
+       	  if( pmp->DCC[j] != DC_AQ_SOLVENT ) 
+          	  lgGam = Lgam;
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
     } // j
@@ -1087,7 +1105,15 @@ void TMulti::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
 //    a0c = pmp->PMc[jpb+6];
     nPolicy = (pmp->PMc[jpb+7]);
 
-    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; /* tot.molality */
+// Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
+double Xaq, Xw, WxW, Nw, Lgam;
+    Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
+    Xw = pmp->XFA[k]; // Mole amount of water-solvent
+    if( Xaq )
+      WxW = Xw/Xaq;   // Mole fraction of water-solvent
+    Nw = 1000./18.01528;
+    molt = (Xaq-Xw)*(Nw/Xw); 
+    Lgam = log10( WxW );  // Helgeson large gamma simplified    
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -1129,6 +1155,7 @@ void TMulti::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
         { // Charged species
             Z2 = pmp->EZ[j]*pmp->EZ[j];
             lgGam = ( -A * sqI * Z2 ) / ( 1. + B * a0 * sqI ) + bgi * I ;
+            lgGam += Lgam;
         }
         else
         { // Neutral species
@@ -1137,20 +1164,20 @@ void TMulti::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
                if( a0 > 0.0 )
                {
                   if( pmp->DCC[j] != DC_AQ_SOLVENT ) // Setchenow coefficient
-                     lgGam = a0 * I;
+                     lgGam = a0 * I + Lgam;
                   else // water-solvent - a0 - rational osmotic coefficient
                      lgGam = a0 * molt; // corrected: instead of I - sum.molality
                }
                else {
                   if( a0 < -0.99 )
-                      lgGam = 0.;
+                      lgGam = 0. + Lgam;
                   else if( fabs( a0 ) < 1e-9 )
-                      lgGam = bgi * I;  // Average Setchenow coeff.
-                  else lgGam = a0 * I;  // Busenberg & Plummer
+                      lgGam = bgi * I + Lgam;  // Average Setchenow coeff.
+                  else lgGam = a0 * I + Lgam;  // Busenberg & Plummer
                }
             }
             else { // nPolicy < 0 - all gamma = 1 for neutral species
-               lgGam = 0.;
+               lgGam = 0.;  // enforces gamma=1 and does not correct for molal scale!
             }
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
@@ -1198,6 +1225,7 @@ void TMulti::Davies03temp( int jb, int je, int )
           lgGam = 0;
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
+// Important - we assume Davies equation to be defined in molality scale! 
     } // j
 }
 
