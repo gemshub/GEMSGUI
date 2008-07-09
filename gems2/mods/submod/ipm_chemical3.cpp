@@ -1674,7 +1674,7 @@ TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
     EpsW = pmp->epsW;
 
     TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-       aIPx, aIPc, aDCc, NULL, NULL, RhoW, EpsW, pmp->IC );
+       aIPx, aIPc, aDCc, NULL, NULL, RhoW, EpsW, 0 );
 
    // calculate P-T dependence of interaction parameters
     switch( ModCode )
