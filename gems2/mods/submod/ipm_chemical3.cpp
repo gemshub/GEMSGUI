@@ -488,9 +488,9 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                        DebyeHueckel3Hel( jb, je, jpb, jdb, k );
                           break;
                   case SM_AQDAV:
-                       Davies03temp( jb, je, k );
+                       Davies03temp( jb, je, jpb, k );
                           break;
-                  case SM_AQSIT:  // SIT - under construction
+                  case SM_AQSIT:  // SIT - under testing
                        SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );
                           break;
                   default:
@@ -837,7 +837,7 @@ void
 TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
 {
     int j;
-    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam, Hel, Karp; //  molt;
+    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam; //  molt;
     double Xw, Xaq, Nw, molT, Lgam, lnwxWat, lnGam, WxW = 1.;
     double Lam, SigTerm, Phi, lnActWat;
     float nPolicy;
@@ -862,6 +862,8 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
     molT = (Xaq-Xw)*(Nw/Xw);      // Bug corrected 30.04.2008 DK
 //    Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
     Lgam = log10( WxW );  // Helgeson large gamma simplified - turns to be the same as Thomsen's
+if( Lgam < -0.7 )
+	Lgam = -0.7;     // experimental truncation of Lgam to min ln(0.5)
     lnwxWat = log(WxW);
     sqI = sqrt( I );
 
@@ -917,19 +919,17 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
            pmp->lnGam[j] = (lgGam + Lgam) * lg_to_ln;
            continue;
         }
-        // Water-solvent
-Lgam=0.;    // Unblock after debugging!  DK 09.07.2008
-        lnGam = 0.0;  
+        lnGam = 0.;  // Water-solvent
         if( nPolicy > -1.000001 && nPolicy < 0.000001 )
         {
-       	   // Calculate activity coefficient of water solvent
+Lgam=0.;  // Calculate activity coefficient of water solvent - 
+          //    Phi second term seems to be incorrect DK TW 10.07.2008
 // Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
 	   Lam = 1. + a0*B*sqI;
 	   SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
 	   Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
 	   lnActWat = -Phi*molT/Nw;         
            lnGam = lnActWat - lnwxWat;      
-//         lgGam = a0 * molt; // corrected: instead of I - tot.molality
         }
         pmp->lnGam[j] = lnGam;
     } // j
@@ -957,7 +957,7 @@ TMulti::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
 //    a0c = pmp->PMc[jpb+6];
     nPolicy = (pmp->PMc[jpb+7]);
 // Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
-double Xaq, Xw, WxW, Nw, Lgam;
+double Xaq, Xw, WxW=1., Nw, Lgam;
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
@@ -965,6 +965,8 @@ double Xaq, Xw, WxW, Nw, Lgam;
     Nw = 1000./18.01528;
     molt = (Xaq-Xw)*(Nw/Xw); 
     Lgam = log10( WxW );  // Helgeson large gamma simplified
+    if( Lgam < -0.7 )
+    	Lgam = -0.7;  
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -1044,14 +1046,16 @@ TMulti::DebyeHueckel1LL( int jb, int je, int k )
 //    A = pmp->PMc[jpb+0];
 
 // Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
-double Xaq, Xw, WxW, Nw, Lgam;
+double Xaq, Xw, WxW=1., Nw, Lgam;
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
       WxW = Xw/Xaq;   // Mole fraction of water-solvent
     Nw = 1000./18.01528;
 //    molt = (Xaq-Xw)*(Nw/Xw); 
-    Lgam = log10( WxW );  // Helgeson large gamma simplified    
+    Lgam = log10( WxW );  // Helgeson large gamma simplified 
+    if( Lgam < -0.7 )
+    	Lgam = -0.7;  
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -1106,14 +1110,16 @@ void TMulti::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
     nPolicy = (pmp->PMc[jpb+7]);
 
 // Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
-double Xaq, Xw, WxW, Nw, Lgam;
+double Xaq, Xw, WxW=1., Nw, Lgam;
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
       WxW = Xw/Xaq;   // Mole fraction of water-solvent
     Nw = 1000./18.01528;
     molt = (Xaq-Xw)*(Nw/Xw); 
-    Lgam = log10( WxW );  // Helgeson large gamma simplified    
+    Lgam = log10( WxW );  // Helgeson large gamma simplified  
+    if( Lgam < -0.7 )
+    	Lgam = -0.7;  
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -1190,7 +1196,7 @@ double Xaq, Xw, WxW, Nw, Lgam;
 // using the Davies equation with common 0.3 parameter and
 // temperature-dependent A parameter
 //
-void TMulti::Davies03temp( int jb, int je, int )
+void TMulti::Davies03temp( int jb, int je, int jpb, int k )
 {
     int j;
     double T, A, I, sqI, Z2, lgGam;
@@ -1198,9 +1204,17 @@ void TMulti::Davies03temp( int jb, int je, int )
     I= pmp->IC;
     if( I < TProfil::pm->pa.p.ICmin )
         return;  // too low ionic strength
-
+    float nPolicy = (pmp->PMc[jpb+7]);
     T=pmp->Tc;
     sqI = sqrt( I );
+double Xaq, Xw, WxW=1., Lgam;
+    Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
+    Xw = pmp->XFA[k]; // Mole amount of water-solvent
+    if( Xaq )
+       WxW = Xw/Xaq;   // Mole fraction of water-solvent
+    Lgam = log10( WxW );  // Helgeson large gamma simplified  
+    if( Lgam < -0.7 )
+      	Lgam = -0.7;  
 //    if( fabs(A) < 1e-9 )
 #ifndef IPMGEMPLUGIN
     A = 1.82483e6 * sqrt( (double)(tpp->RoW) ) /
@@ -1224,8 +1238,15 @@ void TMulti::Davies03temp( int jb, int je, int )
         { // Neutral species
           lgGam = 0;
         }
+        if( pmp->DCC[j] != DC_AQ_SOLVENT )
+        {  // Calculation of gamma in molal scale (except water)
+           if( nPolicy > 0.000001 )
+  	          lgGam += Lgam;   // all species (new default at npolicy = 1)
+           else if( nPolicy < -0.000001 && pmp->EZ[j] )
+   	          lgGam += Lgam;   // only charged species  
+           // if npolicy == 0, no Lgam correction, assuming molal-scale equation
+        }
         pmp->lnGam[j] = lgGam * lg_to_ln;
-// Important - we assume Davies equation to be defined in molality scale! 
     } // j
 }
 

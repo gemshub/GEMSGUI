@@ -219,7 +219,7 @@ pmp->Wx[j] = 0.0;
         // calculation of the mole fraction
         pmp->Wx[j] = X[j]/XF[k];
         if( pmp->Wx[j] > pmp->lowPosNum )
-            pmp->VL[j] = (float)log( pmp->Wx[j] );
+            pmp->VL[j] = (float)log( pmp->Wx[j] );     // this is used nowhere except in some scripts. Remove? 
         else pmp->VL[j] = (float)log( pmp->lowPosNum );   // debugging 29.11.05 KD
         pmp->Y_la[j] = 0.0;
         switch( pmp->DCC[j] ) // choice of expressions
@@ -232,7 +232,7 @@ pmp->Wx[j] = 0.0;
             else pmp->Y_m[j] = 0.0;
             pmp->Y_w[j] = // mass % of the system
                 1e2 * X[j] * pmp->MM[j] / pmp->MBX;
-            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */ );
+            pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */ ); 
             pmp->FVOL[k] += pmp->Vol[j]*X[j];
             break;
         case DC_AQ_ELECTRON:

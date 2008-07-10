@@ -511,8 +511,9 @@ AGAIN_SETUP:
                           php->npxM = 2;
                           break;
           case SM_AQDAV:  // Aqueous Davies
-                          php->ncpN = php->ncpM = 0;
-                          php->nscM = php->npxM = 0;
+                          // php->ncpN = php->ncpM = 0;
+        	  			  php->ncpN = 2; php->ncpM = 4; // changed 10.07.2008 DK
+        	  			  php->nscM = php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
           case SM_AQDH1:  // Aqueous DH LL
@@ -1167,12 +1168,14 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                  goto MAKE_GAS_PHASE;
        case 'D': // Davies equation, no a0 needed; opt. bg for neutral aq sp.
                 memcpy( php->sol_t, "DNNSNN", 6 );
-                memcpy( &php->PphC, "a-----", 6 );
-                php->ncpN = 0; php->ncpM = 0;
+                // memcpy( &php->PphC, "a-----", 6 );
+                memcpy( &php->PphC, "a+----", 6 );  // Changed 10.07.2008 DK
+                php->ncpN = 2; php->ncpM = 4;
+                // php->ncpN = 0; php->ncpM = 0;
                 php->nscM = 0; php->npxM = 0;
                 Name += "ion-association model, Davies equation";
-                apar[0] = apar[1] = apar[2] = 0.0;
-                sprintf( nbuf, "Parameters: I_max =%-5.3f ", apar[3] );
+                apar[0] = apar[1] /* = apar[2]*/ = 0.0;
+                sprintf( nbuf, "Parameters: ; neutral= %-4.1f; I_max =%-5.3f ", apar[2], apar[3] );
                 break;
        case 'H': // EDH (Helgeson) with common bg and common a0
                 memcpy( php->sol_t, "HNNSNN", 6 );
@@ -1214,7 +1217,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 sprintf( nbuf, "Parameters: I_max =%-5.3f ", apar[3] );
                 break;
        default: // Unrecognized code - error message ?
-       case 'S': // SIT - under construction
+       case 'S': // SIT - under testing
                  goto MAKE_GAS_PHASE;
     }
     strcpy( php->name, Name.c_str() );

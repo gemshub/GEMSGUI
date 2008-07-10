@@ -407,7 +407,7 @@ class TMulti
     void DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k );
     void DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k );
     void DebyeHueckel1LL( int jb, int je, int k );
-    void Davies03temp( int jb, int je, int k );
+    void Davies03temp( int jb, int je, int jpb, int k );
     void SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k, int ipb );
 // fluid mixtures
     void ChurakovFluid( int jb, int je, int jpb, int jdb, int k );
