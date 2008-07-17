@@ -713,6 +713,8 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
     return statusGam; 
 }
 
+
+
 // ----------------------------------------------------------------------------
 // Built-in functions for activity coefficients
 //
@@ -830,18 +832,24 @@ TMulti::SIT_aqac_PSI( int jb, int je, int jpb, int jdb, int k, int ipb )
 //          "Inconsistent numbers of cations and anions in gamma calculation" );
 }
 
+
+
 //----------------------------------------------------------------------------
-// Extended Debye-Hueckel (EDH) model with a common ion-size parameter
-//
+// Aqueous electrolyte
+// Extended Debye-Hueckel (EDH) model with common ion-size parameter
+// Variant of Helgeson et al. (1981) with optional T,P-dependent extended term
+// optional calculation of water activity coefficient
 void
 TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
 {
     int j;
-    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam; //  molt;
-    double Xw, Xaq, Nw, molT, Lgam, lnwxWat, lnGam, WxW = 1.;
+    double T, A, B, a0, a0c, I, sqI, bg, bgi, Z2, lgGam;
+    double Xw, Xaq, Nw, molT, molZ, Lgam, lnwxWat, lnGam, WxW;
     double Lam, SigTerm, Phi, lnActWat;
     float nPolicy;
-
+    WxW = 1.0;
+    molZ = 0.0;
+    
     I= pmp->IC;
     if( I < TProfil::pm->pa.p.ICmin )
         return;
@@ -856,9 +864,8 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
-      WxW = Xw/Xaq;   // Mole fraction of water-solvent
+    WxW = Xw/Xaq;   // Mole fraction of water-solvent
     Nw = 1000./18.01528;
-//    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; // tot.molality
     molT = (Xaq-Xw)*(Nw/Xw);      // Bug corrected 30.04.2008 DK
 //    Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
     Lgam = log10( WxW );  // Helgeson large gamma simplified - turns to be the same as Thomsen's
@@ -890,26 +897,26 @@ if( Lgam < -0.7 )
 #endif
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel3Hel",
         "Error: A,B were not calculated - no values of RoW and EpsW !" );
+    
     // Calculation of the EDH equation
     bgi = bg; // Common third parameter
     a0 = a0c; // Common ion-size parameter
     for( j=jb; j<je; j++ )
     {
-//        bgi = bg; // Common third parameter
-//        a0 = a0c; // Common ion-size parameter
         if( pmp->EZ[j] )
         { // Charged species
             Z2 = pmp->EZ[j]*pmp->EZ[j];
             lgGam = ( -A * sqI * Z2 ) / ( 1. + B * a0 * sqI ) + bgi * I ;
             pmp->lnGam[j] = (lgGam + Lgam) * lg_to_ln;
+            molZ += pmp->Y_m[j];
             continue;
         }
-        // Neutral species
-        // <= -2 - gamma of both neutral aqueous species and water = 1.0
-        // -1 - gamma of neutral species = 1.0, H2O activity coef. calculated
-        // 0 - gamma of neutral species from salting out coefficient,
+        // Neutral species and water solvent
+        // <= -2: gamma of both neutral aqueous species and water = 1.0
+        // -1: gamma of neutral species = 1.0, H2O activity coef. calculated
+        // 0: gamma of neutral species from salting out coefficient,
         //       H2O activity coefficient calculated
-        //  >= 1 gamma of neutral species from salting out coefficient,
+        // >= 1: gamma of neutral species from salting out coefficient,
         //       H2O activity coefficient set to 1.0
         lgGam = 0.0;
         if( pmp->DCC[j] != DC_AQ_SOLVENT )
@@ -922,28 +929,30 @@ if( Lgam < -0.7 )
         lnGam = 0.;  // Water-solvent
         if( nPolicy > -1.000001 && nPolicy < 0.000001 )
         {
-Lgam=0.;  // Calculate activity coefficient of water solvent - 
-          //    Phi second term seems to be incorrect DK TW 10.07.2008
-// Lgam = -log10(1.+0.0180153*molT); // large gamma added (Helgeson 1981)
-	   Lam = 1. + a0*B*sqI;
-	   SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
-	   Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
-	   lnActWat = -Phi*molT/Nw;         
+        // Calculate activity coefficient of water solvent
+        // Phi corrected using eq. (190) from Helgeson et al. (1981), 16.07.2008 (TW)
+	    Lam = 1. + a0*B*sqI;
+	    SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
+	    // Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
+	    Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
+	    lnActWat = -Phi*molT/Nw;         
            lnGam = lnActWat - lnwxWat;      
         }
         pmp->lnGam[j] = lnGam;
-    } // j
+    }
     return;
 }
 
-// Extended Debye-Hueckel eq. with Kielland ion-size and optional salting-out
-// correction for neutral species
-//
+
+// Aqueous electrolyte
+// Debye-Hueckel (DH) equation with Kielland-type ion-size parameters
+// optional salting-out correction for neutral species
 void
 TMulti::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
 {
     int j;
     double T, A, B, a0, I, sqI, bg, bgi, Z2, lgGam, molt;
+    double Xaq, Xw, WxW=1., Nw, Lgam;
     float nPolicy;
 
     I= pmp->IC;
@@ -957,7 +966,6 @@ TMulti::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
 //    a0c = pmp->PMc[jpb+6];
     nPolicy = (pmp->PMc[jpb+7]);
 // Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
-double Xaq, Xw, WxW=1., Nw, Lgam;
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
@@ -1023,20 +1031,23 @@ double Xaq, Xw, WxW=1., Nw, Lgam;
                }
             }
             else { // nPolicy < 0 - all gamma = 1 for neutral species
-               lgGam = 0.;   // enforces gamma=1 and does not correct for molal scale!
+               lgGam = 0.;   // enforces gamma=1 and does not correct for molal scale
             }
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
-    } // j
+    }
 }
 
+
+
+// Aqueous electrolyte
 // Debye-Hueckel limiting law
-//
 void
 TMulti::DebyeHueckel1LL( int jb, int je, int k )
 {
     int j;
     double T, A, I, sqI, Z2, lgGam;
+    double Xaq, Xw, WxW=1., Nw, Lgam;
 //    float nPolicy;
 
     I= pmp->IC;
@@ -1046,7 +1057,6 @@ TMulti::DebyeHueckel1LL( int jb, int je, int k )
 //    A = pmp->PMc[jpb+0];
 
 // Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
-double Xaq, Xw, WxW=1., Nw, Lgam;
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
@@ -1083,19 +1093,21 @@ double Xaq, Xw, WxW=1., Nw, Lgam;
           	  lgGam = Lgam;
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
-    } // j
+    }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+//----------------------------------------------------------------------------
 // Aqueous electrolyte  (Karpov's variant)
-// Calculation of individual activity coefficients using extended
-// Debye-Hueckel equation with common 3rd parameter (HKF81)
-//  and individual (Kielland) ion size parameters
+// Extended Debye-Hueckel (EDH) equation with common 3rd parameter (HKF81)
+// and individual Kielland-type ion-size parameters
 //
 void TMulti::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
 {
     int j;
     double T, A, B, a0, I, sqI, bg, bgi, Z2, lgGam, molt;
+    double Xaq, Xw, WxW=1., Nw, Lgam;
     float nPolicy;
 
     I= pmp->IC;
@@ -1110,7 +1122,6 @@ void TMulti::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
     nPolicy = (pmp->PMc[jpb+7]);
 
 // Bugfix 10.07.2008 for calculation of DH-type activity coefficients  DK TW
-double Xaq, Xw, WxW=1., Nw, Lgam;
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
@@ -1187,19 +1198,20 @@ double Xaq, Xw, WxW=1., Nw, Lgam;
             }
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
-    } // j
+    }
 }
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+//----------------------------------------------------------------------------
 // Aqueous electrolyte
-// Calculation of individual activity coefficients
-// using the Davies equation with common 0.3 parameter and
+// Davies equation with common 0.3 parameter and
 // temperature-dependent A parameter
-//
 void TMulti::Davies03temp( int jb, int je, int jpb, int k )
 {
     int j;
     double T, A, I, sqI, Z2, lgGam;
+    double Xaq, Xw, WxW=1., Lgam;
 
     I= pmp->IC;
     if( I < TProfil::pm->pa.p.ICmin )
@@ -1207,7 +1219,7 @@ void TMulti::Davies03temp( int jb, int je, int jpb, int k )
     float nPolicy = (pmp->PMc[jpb+7]);
     T=pmp->Tc;
     sqI = sqrt( I );
-double Xaq, Xw, WxW=1., Lgam;
+
     Xaq = pmp->XF[k]; // Mole amount of the whole aqueous phase
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
@@ -1247,8 +1259,10 @@ double Xaq, Xw, WxW=1., Lgam;
            // if npolicy == 0, no Lgam correction, assuming molal-scale equation
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
-    } // j
+    }
 }
+
+
 
 // non-ideal fluid mixtures
 // ---------------------------------------------------------------------
@@ -1328,6 +1342,8 @@ pmp->GEX[j] = log( Fugacity / pmp->Pc );   // now here (since 26.02.2008)  DK
     }
 }
 
+
+
 // Churakov-Gottschalk (2004) multicomponent fluid mixing model
 //
 void
@@ -1397,6 +1413,8 @@ TMulti::ChurakovFluid( int jb, int je, int, int jdb, int k )
 
 }
 
+
+
 #define MAXPRDCPAR 10
 // ---------------------------------------------------------------------
 // Entry to Peng-Robinson model for calculating pure gas fugacities
@@ -1451,6 +1469,8 @@ pmp->GEX[j] = log( Fugcoeff );    // now here (since 26.02.2008) DK
 //    free( FugPure );
 //    return retCode;
 }
+
+
 
 // ---------------------------------------------------------------------
 // Entry to Peng-Robinson model for activity coefficients
@@ -1515,6 +1535,8 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k, int ipb )
 //    free( FugPure );
 }
 
+
+
 // ------------------ condensed mixtures --------------------------
 // Binary Redlich-Kister model - parameters (dimensionless)
 // in ph_cf Phase opt.array 2x3, see also Phase module
@@ -1551,6 +1573,8 @@ TMulti::RedlichKister( int jb, int, int jpb, int, int k )
   pmp->lnGam[jb] = lnGam1;
   pmp->lnGam[jb+1] = lnGam2;
 }
+
+
 
 // Binary Margules model - parameters (in J/mol) in ph_cf Phase opt.array 2x3
 // See also Phase module
@@ -1601,6 +1625,8 @@ TMulti::MargulesBinary( int jb, int, int jpb, int, int k )
   pmp->FVOL[k] += vEX*10.;  // make consistent with TSolMod
   
  }
+
+
 
 // Ternary regular Margules model - parameters (in J/mol)
 // in ph_cf Phase opt.array 4x3; see also Phase module
@@ -1670,6 +1696,7 @@ TMulti::MargulesTernary( int jb, int, int jpb, int, int k )
 }
 
 
+
 // ------------------------------------------------------------------------
 // Wrapper calls for generic multi-component mixing models (see s_fgl.h and s_fgl2.cpp)
 // Uses the TSolMod class by Th.Wagner and D.Kulik
@@ -1719,6 +1746,8 @@ TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
              break;
     }
 }
+
+
 
 void
 TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
