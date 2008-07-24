@@ -196,7 +196,7 @@ pmp->Wx[j] = 0.0;
                case DC_SUR_GROUP:
                     DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
-                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+                                       /*  + Dsur + DsurT/( 1.0+DsurT ) */ + lnFmol );
                     break;
                case DC_SSC_A0: case DC_SSC_A1: case DC_SSC_A2: case DC_SSC_A3:
                case DC_SSC_A4: case DC_WSC_A0: case DC_WSC_A1: case DC_WSC_A2:
@@ -204,12 +204,12 @@ pmp->Wx[j] = 0.0;
                case DC_SUR_IPAIR: case DC_IESC_A: case DC_IEWC_B:
                     DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
-                                         + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+                                       /*  + Dsur + DsurT/( 1.0+DsurT ) */ + lnFmol );
                     break; // Coulombic term needs to be considered !!!!!!!!!!
                case DC_PEL_CARRIER: case DC_SUR_MINAL: case DC_SUR_CARRIER: // sorbent
                     DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
                     pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
-                       + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
+                      /* + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) */ );
                     break;
                default:
                     break; // error in DC class code
@@ -292,7 +292,7 @@ pmp->Wx[j] = 0.0;
                 1e3 * X[j] * pmp->MM[j] / (MMC*XFA[k]);
             DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
-                                  + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+                               /*   + Dsur + DsurT/( 1.0+DsurT ) */ + lnFmol );
             pmp->FVOL[k] += pmp->Vol[j]*X[j]; // fixed 11.03.2008 KD
             break;
         case DC_SSC_A0:
@@ -314,7 +314,7 @@ pmp->Wx[j] = 0.0;
                 1e3 * X[j] * pmp->MM[j] / (MMC*XFA[k]);
             DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
-                                 + Dsur + DsurT/( 1.0+DsurT ) + lnFmol );
+                              /*   + Dsur + DsurT/( 1.0+DsurT ) */ + lnFmol );
             pmp->FVOL[k] += pmp->Vol[j]*X[j]; // fixed 11.03.2008   KD
             break;
         case DC_PEL_CARRIER:
@@ -327,7 +327,7 @@ pmp->Wx[j] = 0.0;
                 1e6 * X[j] * pmp->MM[j] / pmp->FWGT[0];
             DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
             pmp->Y_la[j] = ln_to_lg * ( Muj - pmp->G0[j] /* - pmp->GEX[j] */
-                           + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) );
+                         /*  + Dsur - 1. + 1./(1.+Dsur) - DsurT + DsurT/(1+DsurT) */ );
             pmp->FVOL[k] += pmp->Vol[j]*X[j];
             break;
         default:
@@ -1270,7 +1270,43 @@ TMulti::SurfaceActivityCoeff( int jb, int je, int, int, int k )
 double 
 TMulti::PhaseSpecificGamma( int j, int jb, int je, int k, int DirFlag )
 {
-    double NonLogTerm = 0., NonLogTermW = 0.; 
+    double NonLogTerm = 0., NonLogTermW = 0., NonLogTermS = 0., NonLogTermDS = 0.,
+           NonLogTermD = 0., DsurT = 0., MMC = 0.; 
+    SPP_SETTING *pa = &TProfil::pm->pa;
+    
+    switch( pmp->PHC[k] )
+    {
+      case PH_AQUEL:
+           if( pmp->XF[k] && pmp->XFA[k] )
+           {	
+             	NonLogTerm = 1. - pmp->XFA[k]/pmp->XF[k];    	        
+    	       	NonLogTermW = 2. - pmp->XFA[k]/pmp->XF[k] - pmp->XF[k]/pmp->XFA[k];
+    	   }
+           break; 
+      case PH_GASMIX:  case PH_FLUID:   case PH_PLASMA:   case PH_SIMELT:
+      case PH_HCARBL:  case PH_SINCOND:  case PH_SINDIS:  case PH_LIQUID:
+           break;
+      case PH_POLYEL:
+      case PH_SORPTION: // only sorbent end-members!
+           if( pmp->XF[k] && pmp->XFA[k] )
+           { 
+              for( int jj=jb; jj<je; jj++ )
+              {
+                if( pmp->DCC[jj] == DC_SUR_CARRIER ||
+                    pmp->DCC[jj] == DC_SUR_MINAL || pmp->DCC[jj] == DC_PEL_CARRIER )                 
+                    MMC += pmp->MM[jj]*pmp->X[jj]/pmp->XFA[k];
+                    // Weighted-average sorbent mole mass
+              }
+              NonLogTerm = 1. - pmp->XFA[k]/pmp->XF[k];  // Also for sorption phases
+       	      NonLogTermS = 2. - pmp->XFA[k]/pmp->XF[k] - pmp->XF[k]/pmp->XFA[k];
+    	      DsurT = MMC * (double)pmp->Aalp[k] * pa->p.DNS*1.66054e-6;
+    	      NonLogTermD = - DsurT/( 1.0+DsurT );
+    	      NonLogTermDS = DsurT - DsurT/(1+DsurT);	
+           }
+    	   break;
+       default:
+          break; // Phase class code error!
+    }
     
 	if( DirFlag == 0 )
 	{	 // Converting lnGam[j] into Gamma[j]
@@ -1282,15 +1318,11 @@ TMulti::PhaseSpecificGamma( int j, int jb, int je, int k, int DirFlag )
 	    switch( pmp->DCC[j] )
 	    { // Aqueous electrolyte
 	      case DC_AQ_PROTON: case DC_AQ_ELECTRON:  case DC_AQ_SPECIES:
-	        if( pmp->XF[k] && pmp->XFA[k] )
-	        	NonLogTerm = 1. - pmp->XFA[k]/pmp->XF[k];
 // NonLogTerm =0.;
 	        lnGamS += NonLogTerm;    // Correction by asymmetry term 	    	
 	        break; 
 	    	// calculate molar mass of solvent
 	    case DC_AQ_SOLVCOM:	    case DC_AQ_SOLVENT:
-	        if( pmp->XF[k] && pmp->XFA[k] )
-	        	NonLogTermW = 2. - pmp->XFA[k]/pmp->XF[k] - pmp->XF[k]/pmp->XFA[k];
 	    	lnGamS += NonLogTermW; 
 	        break;
 	    case DC_GAS_COMP: case DC_GAS_H2O:  case DC_GAS_CO2:
@@ -1302,13 +1334,14 @@ TMulti::PhaseSpecificGamma( int j, int jb, int je, int k, int DirFlag )
 	    case DC_SCP_CONDEN: case DC_SUR_MINAL: 
 	        break; 	
 	    case DC_SUR_CARRIER: case DC_PEL_CARRIER:
-	        break;
+	        lnGamS += NonLogTermS + NonLogTermDS;
+	    	break;
 	        // Sorption phases
 	    case DC_SSC_A0: case DC_SSC_A1: case DC_SSC_A2: case DC_SSC_A3: case DC_SSC_A4:
 	    case DC_WSC_A0: case DC_WSC_A1: case DC_WSC_A2: case DC_WSC_A3: case DC_WSC_A4:
 	    case DC_SUR_GROUP: case DC_SUR_COMPLEX: case DC_SUR_IPAIR:  case DC_IESC_A:
 	    case DC_IEWC_B:
-            // To be completed
+	    	lnGamS += NonLogTerm + NonLogTermD;
 	    	break;
 	    default: 
 	        break; 
@@ -1325,14 +1358,10 @@ TMulti::PhaseSpecificGamma( int j, int jb, int je, int k, int DirFlag )
 		switch( pmp->DCC[j] )
         { // Aqueous electrolyte
 		   case DC_AQ_PROTON: case DC_AQ_ELECTRON:  case DC_AQ_SPECIES:
-		        if( pmp->XF[k] && pmp->XFA[k] )
-		        	NonLogTerm = 1. - pmp->XFA[k]/pmp->XF[k];
 // NonLogTerm =0.;
 		        lnGam -= NonLogTerm;  // Correction by asymmetry term 
 		    	break; 
 		   case DC_AQ_SOLVCOM:	    case DC_AQ_SOLVENT:
-		        if( pmp->XF[k] && pmp->XFA[k] )
-		        	NonLogTermW = 2. - pmp->XFA[k]/pmp->XF[k] - pmp->XF[k]/pmp->XFA[k];
 		    	lnGam -= NonLogTermW; 
 		        break;
    	       case DC_GAS_COMP: case DC_GAS_H2O: case DC_GAS_CO2: case DC_GAS_H2: case DC_GAS_N2:
@@ -1342,13 +1371,14 @@ TMulti::PhaseSpecificGamma( int j, int jb, int je, int k, int DirFlag )
    	       case DC_SCP_CONDEN: case DC_SUR_MINAL: 
 			    break; 	
 		   case DC_SUR_CARRIER: case DC_PEL_CARRIER:
+			    lnGam -= NonLogTermS + NonLogTermDS;
 			    break;
 			        // Sorption phases
 	       case DC_SSC_A0: case DC_SSC_A1: case DC_SSC_A2: case DC_SSC_A3: case DC_SSC_A4:
 		   case DC_WSC_A0: case DC_WSC_A1: case DC_WSC_A2: case DC_WSC_A3: case DC_WSC_A4:
 		   case DC_SUR_GROUP: case DC_SUR_COMPLEX: case DC_SUR_IPAIR:  case DC_IESC_A:
 		   case DC_IEWC_B:
-		     // To be completed
+		        lnGam -= NonLogTerm + NonLogTermD;
 		    	break;
 		    default: 
 		        break; 

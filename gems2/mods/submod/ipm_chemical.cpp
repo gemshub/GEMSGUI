@@ -409,6 +409,7 @@ double TMulti::Ej_init_calc( double, int j, int k)
 {
     int ja=0, ist, isp, jc=-1;
     double F0=0.0, Fold, dF0, Mk=0.0, Ez, psiA, psiB, CD0, CDb, ObS;
+    double FactSur, FactSurT; 
     SPP_SETTING *pa = &TProfil::pm->pa;
 
     Fold = pmp->F0[j];
@@ -524,24 +525,33 @@ double TMulti::Ej_init_calc( double, int j, int k)
                }
             }
         }
-        if( Mk > 1e-9 )
-        {
-            if( pmp->SCM[k][ist] == SC_MXC || pmp->SCM[k][ist] == SC_NNE ||
+        if( Mk > 1e-9 )  // Mk is carrier molar mass in g/mkmol
+        {   // Correction for standard density, surface area and surface type fraction 
+        	FactSur = Mk * (double)(pmp->Aalp[k]) * pa->p.DNS*1.66054; 
+        	    // FactSur is adsorbed mole amount at st. surf. density per mole of solid carrier 
+        	FactSurT = FactSur * (double)(pmp->Nfsp[k][ist]);
+        	if( pmp->SCM[k][ist] == SC_MXC || pmp->SCM[k][ist] == SC_NNE ||
                     pmp->SCM[k][ist] == SC_IEV )
-                F0 -= log( Mk * (double)(pmp->Nfsp[k][ist]) *
-                   (double)(pmp->Aalp[k]) * pa->p.DNS*1.66054 );
-            else F0 -= log( Mk * (double)(pmp->Nfsp[k][ist]) *
-                  (double)(pmp->Aalp[k]) * pa->p.DNS*1.66054 );
-            F0 -= (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 /
-                  ( 1.0 + (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 );
+ //               F0 -= log( Mk * (double)(pmp->Nfsp[k][ist]) *
+//                   (double)(pmp->Aalp[k]) * pa->p.DNS*1.66054 );
+                  F0 -= log( FactSurT ); 
+            else  F0 -= log( FactSurT ); 
+//            	  F0 -= log( Mk * (double)(pmp->Nfsp[k][ist]) *
+//                  (double)(pmp->Aalp[k]) * pa->p.DNS*1.66054 );
+            F0 -= FactSur / ( 1. + FactSur );
+//            F0 -= (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 /
+//                  ( 1.0 + (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 );
         }
         break;
     case DC_PEL_CARRIER:
     case DC_SUR_MINAL:  // constant charge of carrier - not completed
-    case DC_SUR_CARRIER:
-        F0 -= (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 /
-              ( 1.0 + (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 );
-        F0 += (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054;
+    case DC_SUR_CARRIER: // Mk is carrier molar mass in g/mkmol
+       	FactSur = Mk * (double)(pmp->Aalp[k]) * pa->p.DNS*1.66054;
+        F0 -= FactSur / ( 1. + FactSur ); 
+//    	F0 -= (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 /
+//              ( 1.0 + (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054 );
+        F0 += FactSur; 
+//        F0 += (double)(pmp->Aalp[k])*Mk*pa->p.DNS*1.66054;
         break;
     }
     F0 += pmp->lnGam[j];
