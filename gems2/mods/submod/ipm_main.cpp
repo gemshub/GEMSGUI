@@ -818,7 +818,8 @@ TMulti::CheckMassBalanceResiduals(double *Y )
 {	
 	double cutoff; 
 	
-	cutoff = pmp->DHBM * 1e4; 
+	// cutoff = pmp->DHBM * 1e4;
+	cutoff = min (pmp->DHBM*1.0e5, 1.0e3 );	// changed, 28.08.2008 (TW,DK)
 	if( cutoff > 1e-3 )
 		cutoff = 1e-3;
 	MassBalanceResiduals( pmp->N, pmp->L, pmp->A, Y, pmp->B, pmp->C);
