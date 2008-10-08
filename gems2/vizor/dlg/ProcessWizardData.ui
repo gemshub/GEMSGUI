@@ -418,10 +418,10 @@
                                         </size>
                                     </property>
                                     <property name="maxValue">
-                                        <number>100</number>
+                                        <number>500</number>
                                     </property>
                                     <property name="minValue">
-                                        <number>0</number>
+                                        <number>-2</number>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
