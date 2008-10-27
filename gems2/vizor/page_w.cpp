@@ -804,7 +804,7 @@ TField::setFromString(const QString& str, int N1, int N2, int M1, int M2, bool t
 	    for( cellIt = cells.begin(); 
 			cellIt != cells.end() && cellNum < mLimit; ++cellIt, cellNum++) {
 		QString value(*cellIt);
-
+		value = value.stripWhiteSpace();
 		if( value.isEmpty() || ( value == emptiness ) )
 		    value = S_EMPTY;
 		//cerr << "pasting row " << rowNum << " cell " << cellNum << ": '" << value << "'" << endl;
