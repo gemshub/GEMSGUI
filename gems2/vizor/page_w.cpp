@@ -762,6 +762,8 @@ TField::createString(int N1, int N2, int M1, int M2)
             gstring str_sh = visualizeEmpty(object.GetString(nn, mm));
             if( object.GetType() > 0 )
                      str_sh.strip();
+            if( str_sh == emptiness ) // SD 29/10/2008
+            	str_sh = "\r"; 
             clipText += str_sh.c_str();
 //            clipText += visualizeEmpty(object.GetString(nn, mm)).c_str();
             if( mm < M2 - 1 )
@@ -793,8 +795,8 @@ TField::setFromString(const QString& str, int N1, int N2, int M1, int M2, bool t
 	const int nLimit = (transpose) ? (N1 + M2-M1) : N2;
 	QStringList::const_iterator it;
 	for( it = rows.begin(); it != rows.end() && rowNum < nLimit; ++it, rowNum++) {
-	    if( (*it).isEmpty() )
-		continue;
+	   // if( (*it).isEmpty() ) //SD 29/10/2008 
+	   // continue;
 	
 	    const QStringList cells = QStringList::split('\t', *it, true);
 
@@ -804,7 +806,7 @@ TField::setFromString(const QString& str, int N1, int N2, int M1, int M2, bool t
 	    for( cellIt = cells.begin(); 
 			cellIt != cells.end() && cellNum < mLimit; ++cellIt, cellNum++) {
 		QString value(*cellIt);
-		value = value.stripWhiteSpace();
+                value = value.stripWhiteSpace();
 		if( value.isEmpty() || ( value == emptiness ) )
 		    value = S_EMPTY;
 		//cerr << "pasting row " << rowNum << " cell " << cellNum << ": '" << value << "'" << endl;
