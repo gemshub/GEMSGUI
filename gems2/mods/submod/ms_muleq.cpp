@@ -283,7 +283,7 @@ void TMulti::CompG0Load()
   pmp->pTPD = 2;  
 }
 
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // Finalizing the full structure MULTI by expanding the SysEq record
 // read from the database
 //

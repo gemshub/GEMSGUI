@@ -45,7 +45,7 @@ using namespace JAMA;
 //
 void TMulti::MultiCalcMain( int rLoop )
 {
-    int i, j, k, eRet, status=0;
+    int i, j, k, eRet, iB, status=0;
     SPP_SETTING *pa = &TProfil::pm->pa;
 #ifdef GEMITERTRACE
 fstream f_log("ipmlog.txt", ios::out|ios::app );
@@ -243,7 +243,7 @@ if( rLoop < 0 )
 else 
    ps_rcode = 1; // do not call Selekt2() in primal solution refinement loops (experimental!!!!!)
 
-int iB = CheckMassBalanceResiduals( pmp->X );
+iB = CheckMassBalanceResiduals( pmp->X );
 if( iB >= 0 )
 {	
     if( pmp->pNP )
@@ -376,6 +376,7 @@ f_log << "ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT << " MBP
     else 
 	   f_log << " Ok after AIA" << endl;
 #endif
+
 FORCED_AIA:
    for( i=0; i<pmp->L; i++)
       pmp->G[i] = pmp->G0[i];

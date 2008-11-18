@@ -633,7 +633,7 @@ TCModule::CmDerive()
             || ( db->GetStatus() == UNDF_ && nRT != RT_SDATA) )   // 09/11/2004 Sveta
             Error( GetName(), "E2 Cannot save under record key template, or record contents are not yet loaded!");
 
-        check_input( db->UnpackKey() );  // 13/12/2007
+        check_input( db->UnpackKey(), 0 );  // SD 18/11/2008
         RecBuild( str.c_str(), VF_REMAKE );
         SetString("Remake finished OK. "
                   " It is recommended to re-calculate the data.");
@@ -729,8 +729,8 @@ TCModule::CmNew()
         int  Rnum = db->Find( str.c_str() );
         ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
-        check_input( str.c_str() );
-        RecBuild( str.c_str(), VF_REMAKE );
+        check_input( str.c_str(), 0 ); // SD 18/11/2008
+        RecBuild( str. c_str(), VF_REMAKE );
         SetString("Remake of the new record finished OK. "
                   " It is recommended to re-calculate the data.");
         pVisor->Update();
@@ -761,7 +761,7 @@ TCModule::CmCreate()
         int  Rnum = db->Find( str.c_str() );
         ErrorIf( Rnum>=0, GetName(), "This record alredy exist!");
         str = gstring( db->UnpackKey(), 0, db->KeyLen() );
-        check_input( str.c_str() );
+        check_input( str.c_str() , 0 ); // SD 18/11/2008
         RecBuild( str.c_str(), VF_CLEARALL );
         SetString("Remake of the new record finished OK. "
                   " It is recommended to re-calculate the data");

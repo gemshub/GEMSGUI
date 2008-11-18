@@ -313,7 +313,7 @@ bool TReacDC::check_input( const char *key, int Level )
     ods_link( q+1);
     try
     {
-        for( i=0; i<rc[q].nDC; i++ )
+    	for( i=0; i<rc[q].nDC; i++ )
         {
             if( rc[q].rDC[i] == SRC_DCOMP )
             {
@@ -510,6 +510,8 @@ AGAIN_MOD:
             }
         }
      }
+    
+         
     // made vectors selections DCOMP and REACDC
     if( Nc1>0 || Nr1>0 )
     {
@@ -519,7 +521,7 @@ AGAIN_MOD:
 
         for( i=0; i<rcp->nDC; i++ )
         {
-          gstring key_dr = gstring( rcp->DCk[i], 0, DC_RKLEN );
+          gstring key_dr = gstring( rcp->DCk[i], 0, DC_RKLEN-MAXSYMB ); // SD 18/11/2008
           if( rcp->rDC[i] == SRC_DCOMP )
               aDclist_old.Add( key_dr.c_str() );
           else
