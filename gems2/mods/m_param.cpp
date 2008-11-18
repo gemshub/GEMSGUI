@@ -754,7 +754,7 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,
     epsW = tpp->EpsW;
     for( int jj=0; jj<mup->L; jj++ )
     {
-      G0[jj] =  tpp->G[jj];
+      G0[jj] =  tpp->G[jj]+syp->GEX[jj];
       V0[jj] =  tpp->Vm[jj];
       if( H0 && tpp->H )
         H0[jj] =  tpp->H[jj];
