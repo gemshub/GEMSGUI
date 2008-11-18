@@ -63,7 +63,7 @@ HEADERS =	..\..\vizor\libs\array.h \
 		..\numerics\tnt.h \
 		..\numerics\jama_cholesky.h \
 		..\numerics\jama_lu.h \
-		..\numerics\num_methods.h \
+		..\numerics\num_methods.h \type filter text
 		ms_unspace.h
 SOURCES =	..\..\vizor\libs\gstring.cpp \
 		..\..\vizor\libs\gdatastream.cpp \
