@@ -475,7 +475,7 @@ AGAIN_SETUP:
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 7;  // NPcoef
-                          break; 
+                          break;
           case SM_REDKIS:   // Redlich-Kister model (binary)
                           php->nscM = 0;
                           php->npxM = 0;
@@ -506,7 +506,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
-                          php->ncpM = 1;  // For now, no T,P dependence 
+                          php->ncpM = 1;  // For now, no T,P dependence
                           php->nscM = 12; // increased to 12 (31.05.2008 TW)
                           php->npxM = 2;
                           break;
@@ -549,6 +549,19 @@ AGAIN_SETUP:
                           php->ncpM = 1;  // NPcoef
                           php->PphC = PH_AQUEL;
                           break;
+          case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs (reserved)
+        	              break;
+          case SM_AQPITZ: // built-in Pitzer HMW aqueous activity coefficient model (under construction)
+        	              php->nscM = 0;  // NP_DC
+        	              php->npxM = 3;  // MaxOrd
+        	              if( php->ncpN < 1 ) // NPar
+        	                  php->ncpN = 1;
+        	              if( php->ncpN > php->nDC*php->nDC/2 )
+        	                  php->ncpN = php->nDC*php->nDC*php->nDC/2;
+        	              php->ncpM = 3;  // NPcoef
+ //       	              php->nscN = 0;
+        	              php->PphC = PH_AQUEL;
+						  break;
           default:  // other models
              break;
        }

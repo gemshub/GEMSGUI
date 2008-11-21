@@ -199,7 +199,7 @@ void TMulti::pm_GC_ods_link( int k, int jb, int jpb, int jdb, int ipb )
     aObj[o_nppar].SetN(  pmp->L1[k]);
 //    aObj[ o_ngtn].SetPtr( pmp->G0+jb );
  aObj[ o_ngtn].SetPtr( pmp->GEX+jb );     // changed 05.12.2006 by DK
-//  aObj[ o_ngtn].SetPtr( pmp->lnGmM+jb );     // experimental: 21.02.2007 by DK   
+//  aObj[ o_ngtn].SetPtr( pmp->lnGmM+jb );     // experimental: 21.02.2007 by DK
     aObj[o_ngtn].SetN( pmp->L1[k] );
     aObj[ o_ngam].SetPtr( pmp->Gamma+jb ); // Gamma calculated
     aObj[o_ngam].SetN( pmp->L1[k] );
@@ -241,7 +241,7 @@ double TMulti::SmoothingFactor( )
 	   return pmp->FitVar[3];
    else
 	   return pmp->FitVar[4];
-}	
+}
 
 // Correction of smoothing factor for high non-ideality systems
 //  re-written 18.06.2008 DK
@@ -253,16 +253,16 @@ void TMulti::SetSmoothingFactor( )
 
     ir = pmp->IT; // (double)ir;
     irf = (double)ir;
-    ag = TProfil::pm->pa.p.AG; // pmp->FitVar[4]; 
+    ag = TProfil::pm->pa.p.AG; // pmp->FitVar[4];
     dg = TProfil::pm->pa.p.DGC;
-    
-    if( dg > -0.1 )       // Smoothing used in the IPM-2 algorithm 
+
+    if( dg > -0.1 )       // Smoothing used in the IPM-2 algorithm
     {
         if(ag>1) ag=1;
         if(ag<0.1) ag=0.1;
         if(dg>0.15) dg=0.15;
         if( irf > 1000. )
-        	irf = 1000; 
+        	irf = 1000;
         if( dg <= 0.0 )
           TF = ag;
         else
@@ -271,7 +271,7 @@ void TMulti::SetSmoothingFactor( )
     }
     else
     {  // Obsolete smoothing for solid solutions: -1.0 < pa.p.DGC < 0
-        Level = (int)pmp->FitVar[2]; 
+        Level = (int)pmp->FitVar[2];
     	itq = ir/60;
         dg = fabs( dg );
         itqF = ir/(60/(itq+1))-itq;  // 0,1,2,4,5,6...
@@ -281,7 +281,7 @@ void TMulti::SetSmoothingFactor( )
         Level = itqF;
         pmp->FitVar[2] = (double)Level;
     }
-    pmp->FitVar[3] = TF;     
+    pmp->FitVar[3] = TF;
 //    pmp->pRR1 = (short)Level;
 //    return TF;
 }
@@ -296,15 +296,15 @@ static double ICold=0.;
 //   LINK_UX_MODE  - calculation of equations depending on current
 //                   IPM approximation of the equilibrium state;
 //   LINK_FIA_MODE - calculation of Gammas on the initial approximation (FIA).
-//    Added 13.03.2008 by DK: returns int value showing (if not 0) 
+//    Added 13.03.2008 by DK: returns int value showing (if not 0)
 //    that some extreme values were obtained for some SACTs, PSIs,
 //    or activity coefficients (for detecting bad PIA case). 0 if Ok.
 //
-int 
+int
 TMulti::GammaCalc( int LinkMode  )
 {
     int k, j, jb, je=0, jpb, jpe=0, jdb, jde=0, ipb, ipe=0;
-    char *sMod;  
+    char *sMod;
     int statusGam=0, statusGC=0, statusSACT=0;
     double LnGam, pmpXFk;
     SPP_SETTING *pa = &TProfil::pm->pa;
@@ -356,7 +356,7 @@ TMulti::GammaCalc( int LinkMode  )
         break;      // added as bugfix 04.03.2008  DK
     case LINK_TP_MODE:  // Built-in functions depending on T,P only
          pmp->FitVar[3] = 1.0;  // resetting the IPM smoothing factor
-         
+
          for( k=0; k<pmp->FIs; k++ )
          { // loop on solution phases
             jb = je;
@@ -374,17 +374,17 @@ TMulti::GammaCalc( int LinkMode  )
 
    		    double nxk = 1./pmp->L1[k];
             for( j= jb; j<je; j++ )
-    		{  
-if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK 
+    		{
+if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
    pmp->Wx[j] = nxk;  // need this eventually to avoid problems with zero mole fractions
     		   pmp->GEX[j] =0.0;  // cleaning GEX in TP mode!
     		   pmp->lnGmo[j] = pmp->lnGam[j]; // saving activity coefficients in TP mode
-       	    }	  
+       	    }
             if( sMod[SGM_MODE] != SM_STNGAM )
                 continue;  // The switch below is for built-in functions only!
-            
+
             // the following section probably needs to be re-written to allow more flexible
-            // combinations of fluid models for pure gases with gEX mixing models, 
+            // combinations of fluid models for pure gases with gEX mixing models,
             // scheme should probably be the same as in LINK_UX_MODE, 03.06.2008 (TW)
             switch( pmp->PHC[k] )
             {
@@ -410,8 +410,8 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
             }
         } // k
         break;
-    case LINK_UX_MODE: 
-// pmp->FitVar[3] = TinkleSupressFactor( pmp->FitVar[4], pmp->IT );  // Getting actual smoothing parameter    	
+    case LINK_UX_MODE:
+// pmp->FitVar[3] = TinkleSupressFactor( pmp->FitVar[4], pmp->IT );  // Getting actual smoothing parameter
     	SetSmoothingFactor();   // Changed 18.06.2008 by DK
     	// calculating DC concentrations after this IPM iteration
         ConCalc( pmp->X, pmp->XF, pmp->XFA );
@@ -423,7 +423,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
         }
         if( pmp->E && pmp->LO ) // checking electrostatics
         {
-          IS_EtaCalc();  //  calculating charges and charge densities 
+          IS_EtaCalc();  //  calculating charges and charge densities
           if( pmp->FIat > 0 )
              for( k=0; k<pmp->FIs; k++ )
              {
@@ -431,7 +431,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                {  int ist;
                   for( ist=0; ist<pmp->FIat; ist++ ) // loop over surface types
                   {
-                     pmp->XpsiA[k][ist] = 0.0;        // cleaning Psi before GouyChapman() 
+                     pmp->XpsiA[k][ist] = 0.0;        // cleaning Psi before GouyChapman()
                      pmp->XpsiB[k][ist] = 0.0;
                      pmp->XpsiD[k][ist] = 0.0;
                   }  // ist
@@ -465,7 +465,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
         jpe += pmp->LsMod[k*3]*pmp->LsMod[k*3+2];  // Changed 07.12.2006  by KD
         jdb = jde;
         jde += pmp->LsMdc[k]*pmp->L1[k];
-      
+
    if( LinkMode == LINK_UX_MODE && sMod[SGM_MODE] == SM_STNGAM )
    {                             // check that SGM_MODE for adsorption is not SM_IDEAL in Phase records!
         switch( pmp->PHC[k] )
@@ -491,8 +491,15 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                        Davies03temp( jb, je, jpb, k );
                           break;
                   case SM_AQSIT:  // SIT - under testing
-                       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );
+                       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );  // To switch to TSolMod class
+ //                      SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
                           break;
+                  case SM_AQPITZ:
+                	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                       break;
+                  case SM_AQEXUQ:
+                	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                       break;
                   default:
                           break;
                 }
@@ -511,7 +518,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                     PRSVFluid( jb, je, jpb, jdb, k, ipb );
                     // Added by Th.Wagner and DK on 20.07.06
              }
-             goto END_LOOP;             
+             goto END_LOOP;
              break;
          case PH_LIQUID:
          case PH_SIMELT:
@@ -545,7 +552,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                           break;
                   case SM_WILSLIQ: // Wilson model (multicomponent), 09.06.2007 (TW)
                        SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                          break;              	  	
+                          break;
                   default:
                           break;
                 }
@@ -572,8 +579,8 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
             break;
          default:
             goto END_LOOP;
-       } // end switch 
-   }  // end if LinkMode == LINK_UX_MODE 
+       } // end switch
+   }  // end if LinkMode == LINK_UX_MODE
 
 
 #ifndef IPMGEMPLUGIN
@@ -603,23 +610,23 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                     qEd[k].CalcEquat();
                     break;
                 }
-            }           
+            }
         	break;
         case LINK_FIA_MODE: // cold start approximation
             goto END_LOOP;
         	break;
-        case LINK_UX_MODE:  // the model is dependent on current concentrations on IPM iteration    	
+        case LINK_UX_MODE:  // the model is dependent on current concentrations on IPM iteration
             switch( pmp->PHC[k] )
             {  //
-              case PH_AQUEL:  
+              case PH_AQUEL:
                  if(!(pmpXFk > pa->p.XwMin && pmp->X[pmp->LO] > pmp->lowPosNum*1e3 && pmp->IC > pa->p.ICmin ))
-                	 goto END_LOOP; 
+                	 goto END_LOOP;
                  break;
               case PH_GASMIX:
               case PH_PLASMA:
               case PH_FLUID:
                  if( !(pmpXFk > pmp->DSM && pmp->XF[k] > pa->p.PhMin))
-                     goto END_LOOP;             
+                     goto END_LOOP;
                  break;
              case PH_LIQUID:
              case PH_SIMELT:
@@ -637,8 +644,8 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                 break;
              default:
                 goto END_LOOP;
-           } // end switch         	
-        	
+           } // end switch
+
             if( sMod[SPHAS_DEP] == SM_UXDEP && qEp[k].nEquat() )
                 // Equations for the whole phase
                 qEp[k].CalcEquat();
@@ -672,45 +679,45 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
 	pmp->Wx[j] = 0.0;               //
         	   LnGam = pmp->lnGmo[j];
                pmp->lnGam[j] = LnGam;
-               if( /* fabs( LnGam ) > 1e-9 && */ fabs( LnGam ) < 84. )  
+               if( /* fabs( LnGam ) > 1e-9 && */ fabs( LnGam ) < 84. )
 //                    pmp->Gamma[j] = exp( LnGam );
-            	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 ); 
+            	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
                else pmp->Gamma[j] = 1.0;
                pmp->F0[j] = Ej_init_calc( 0.0, j, k );
-               pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];       		
-        	}	
+               pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];
+        	}
         }
-        else 
+        else
         { // Real mode for activity coefficients
           double lnGamG;
 	      for( j=jb; j<je; j++ )
           {
           	lnGamG = PhaseSpecificGamma( j, jb, je, k, 1 );
-//            if( fabs( 1.0-pmp->Gamma[j] ) > 1e-9 
+//            if( fabs( 1.0-pmp->Gamma[j] ) > 1e-9
 //           		&& pmp->Gamma[j] > 3.3e-37 && pmp->Gamma[j] < 3.03e+36 )   // > 1e-35 before 26.02.08
 //                pmp->lnGam[j] += log( pmp->Gamma[j] );
-//            if( fabs( lnGamG ) > 1e-9 ) 
+//            if( fabs( lnGamG ) > 1e-9 )
 //            	pmp->lnGam[j] += lnGamG;
             LnGam = pmp->lnGam[j];
-            if( fabs( lnGamG ) > 1e-9 ) 
-            	LnGam += lnGamG; 
+            if( fabs( lnGamG ) > 1e-9 )
+            	LnGam += lnGamG;
             pmp->lnGmo[j] = LnGam;
             if( /*fabs( LnGam ) > 1e-9 &&*/ fabs( LnGam ) < 84. )   // before 26.02.08: < 42.
 //                pmp->Gamma[j] = exp( LnGam );
-          	    pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );             	
+          	    pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
             else pmp->Gamma[j] = 1.0;
             pmp->F0[j] = Ej_init_calc( 0.0, j, k );
             pmp->G[j] = pmp->G0[j] + pmp->GEX[j] + pmp->F0[j];
           }
-        }   
+        }
     }  // k - end loop over phases
     //  if( wn[W_EQCALC].status )
     //  aSubMod[MD_EQCALC]->ModUpdate("PM_ipms   EqCalc() converged");
     if( statusGC )
-        	return statusGC;     
+        	return statusGC;
     if( statusSACT )
-    	return statusSACT; 
-    return statusGam; 
+    	return statusSACT;
+    return statusGam;
 }
 
 
@@ -849,7 +856,7 @@ TMulti::DebyeHueckel3Hel( int jb, int je, int jpb, int, int k )
     float nPolicy;
     WxW = 1.0;
     molZ = 0.0;
-    
+
     I= pmp->IC;
     if( I < TProfil::pm->pa.p.ICmin )
         return;
@@ -897,7 +904,7 @@ if( Lgam < -0.7 )
 #endif
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "DebyeHueckel3Hel",
         "Error: A,B were not calculated - no values of RoW and EpsW !" );
-    
+
     // Calculation of the EDH equation
     bgi = bg; // Common third parameter
     a0 = a0c; // Common ion-size parameter
@@ -935,8 +942,8 @@ if( Lgam < -0.7 )
 	    SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(I,(3./2.)))*(Lam-1./Lam-2*log(Lam));
 	    // Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
 	    Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*I) - bgi*I/2.);
-	    lnActWat = -Phi*molT/Nw;         
-           lnGam = lnActWat - lnwxWat;      
+	    lnActWat = -Phi*molT/Nw;
+           lnGam = lnActWat - lnwxWat;
         }
         pmp->lnGam[j] = lnGam;
     }
@@ -971,10 +978,10 @@ TMulti::DebyeHueckel2Kjel( int jb, int je, int jpb, int jdb, int k )
     if( Xaq )
       WxW = Xw/Xaq;   // Mole fraction of water-solvent
     Nw = 1000./18.01528;
-    molt = (Xaq-Xw)*(Nw/Xw); 
+    molt = (Xaq-Xw)*(Nw/Xw);
     Lgam = log10( WxW );  // Helgeson large gamma simplified
     if( Lgam < -0.7 )
-    	Lgam = -0.7;  
+    	Lgam = -0.7;
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -1062,10 +1069,10 @@ TMulti::DebyeHueckel1LL( int jb, int je, int k )
     if( Xaq )
       WxW = Xw/Xaq;   // Mole fraction of water-solvent
     Nw = 1000./18.01528;
-//    molt = (Xaq-Xw)*(Nw/Xw); 
-    Lgam = log10( WxW );  // Helgeson large gamma simplified 
+//    molt = (Xaq-Xw)*(Nw/Xw);
+    Lgam = log10( WxW );  // Helgeson large gamma simplified
     if( Lgam < -0.7 )
-    	Lgam = -0.7;  
+    	Lgam = -0.7;
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -1087,9 +1094,9 @@ TMulti::DebyeHueckel1LL( int jb, int je, int k )
             Z2 = pmp->EZ[j]*pmp->EZ[j];
             lgGam = ( -A * sqI * Z2 ) + Lgam; // / ( 1 + B * a0 * sqI ) + bgi * I ;
         }
-        else  { // Neutral species            
+        else  { // Neutral species
        	  lgGam = 0.;
-       	  if( pmp->DCC[j] != DC_AQ_SOLVENT ) 
+       	  if( pmp->DCC[j] != DC_AQ_SOLVENT )
           	  lgGam = Lgam;
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
@@ -1127,10 +1134,10 @@ void TMulti::DebyeHueckel3Karp( int jb, int je, int jpb, int jdb, int k )
     if( Xaq )
       WxW = Xw/Xaq;   // Mole fraction of water-solvent
     Nw = 1000./18.01528;
-    molt = (Xaq-Xw)*(Nw/Xw); 
-    Lgam = log10( WxW );  // Helgeson large gamma simplified  
+    molt = (Xaq-Xw)*(Nw/Xw);
+    Lgam = log10( WxW );  // Helgeson large gamma simplified
     if( Lgam < -0.7 )
-    	Lgam = -0.7;  
+    	Lgam = -0.7;
     sqI = sqrt( I );
 
 #ifndef IPMGEMPLUGIN
@@ -1224,9 +1231,9 @@ void TMulti::Davies03temp( int jb, int je, int jpb, int k )
     Xw = pmp->XFA[k]; // Mole amount of water-solvent
     if( Xaq )
        WxW = Xw/Xaq;   // Mole fraction of water-solvent
-    Lgam = log10( WxW );  // Helgeson large gamma simplified  
+    Lgam = log10( WxW );  // Helgeson large gamma simplified
     if( Lgam < -0.7 )
-      	Lgam = -0.7;  
+      	Lgam = -0.7;
 //    if( fabs(A) < 1e-9 )
 #ifndef IPMGEMPLUGIN
     A = 1.82483e6 * sqrt( (double)(tpp->RoW) ) /
@@ -1255,7 +1262,7 @@ void TMulti::Davies03temp( int jb, int je, int jpb, int k )
            if( nPolicy > 0.000001 )
   	          lgGam += Lgam;   // all species (new default at npolicy = 1)
            else if( nPolicy < -0.000001 && pmp->EZ[j] )
-   	          lgGam += Lgam;   // only charged species  
+   	          lgGam += Lgam;   // only charged species
            // if npolicy == 0, no Lgam correction, assuming molal-scale equation
         }
         pmp->lnGam[j] = lgGam * lg_to_ln;
@@ -1318,9 +1325,9 @@ pmp->GEX[j] = log( Fugacity / pmp->Pc );   // now here (since 26.02.2008)  DK
         Coeff[16] = Eos4parPT[1];
         Coeff[17] = Eos4parPT[2];
         Coeff[18] = Eos4parPT[3];
-        
+
         aCGF.CGFugacityPT( Coeff, Eos4parPT1, Fugacity, Volume, P, T+T*aCGF.GetDELTA(), roro );
-         
+
         // passing corrected EoS coeffs for T+T*DELTA
         Coeff[19] = Eos4parPT1[0];
         if( Coeff[15] < 1. || Coeff[15] > 10. )
@@ -1328,10 +1335,10 @@ pmp->GEX[j] = log( Fugacity / pmp->Pc );   // now here (since 26.02.2008)  DK
         Coeff[20] = Eos4parPT1[1];
         Coeff[21] = Eos4parPT1[2];
         Coeff[22] = Eos4parPT1[3];
-        
+
         // Calculation of residual H and S
         aCGF.CGEnthalpy( X, Eos4parPT, Eos4parPT1, 1, roro, T, DeltaH, DeltaS);  // changed, 21.06.2008 (TW)
-        
+
     } // jdc, j
 
     if ( retCode )
@@ -1361,12 +1368,12 @@ TMulti::ChurakovFluid( int jb, int je, int, int jdb, int k )
 //    EoSparam = (float*)malloc( pmp->L1[k]*sizeof(double)*4 );
     FugCoefs =  new double[ pmp->L1[k] ];
     EoSparam =  new float[ pmp->L1[k]*4 ];
-    EoSparam1 =  new float[ pmp->L1[k]*4 ];        
+    EoSparam1 =  new float[ pmp->L1[k]*4 ];
     Coeffs = pmp->DMc+jdb;
 
     // Copying T,P corrected coefficients
     for( j=0; j<pmp->L1[k]; j++)
-    {   
+    {
     	for( i=0; i<4; i++)
           EoSparam[j*4+i] = Coeffs[j*24+i+15];
     	for( i=0; i<4; i++)
@@ -1379,9 +1386,9 @@ TMulti::ChurakovFluid( int jb, int je, int, int jdb, int k )
              pmp->Pc, pmp->Tc, roro );  // changed, 21.06.2008 (TW)
         if (roro <= 0. )
         {
-            delete[] FugCoefs;	
+            delete[] FugCoefs;
             delete[] EoSparam;
-            delete[] EoSparam1;	
+            delete[] EoSparam1;
 //           free( FugCoefs );
            char buf[150];
            sprintf(buf, "CGFluid(): bad calculation of density ro= %lg", roro);
@@ -1389,11 +1396,11 @@ TMulti::ChurakovFluid( int jb, int je, int, int jdb, int k )
         }
         // Phase volume of the fluid in cm3
         pmp->FVOL[k] = pmp->FWGT[k] / roro;
-        // Get back residual H and S 
+        // Get back residual H and S
         aCGF.CGEnthalpy( pmp->X+jb, EoSparam, EoSparam1, pmp->L1[k], roro, pmp->Tc,
         		DeltaH, DeltaS );
-        // Utilize residual enthalpy DeltaH, entropy DeltaS 
- 
+        // Utilize residual enthalpy DeltaH, entropy DeltaS
+
     }
     else // Setting Fugcoefs to 0 outside TP interval
       for( j=0; j<pmp->L1[k]; j++ )
@@ -1408,7 +1415,7 @@ TMulti::ChurakovFluid( int jb, int je, int, int jdb, int k )
     } // j
     delete[] EoSparam;
     delete[] EoSparam1;
-    delete[] FugCoefs;	
+    delete[] FugCoefs;
 //    free( FugCoefs );
 
 }
@@ -1513,7 +1520,7 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k, int ipb )
 
     if ( iRet )
     {
-      delete[] ActCoefs;	
+      delete[] ActCoefs;
 //      free( ActCoefs );
 //      free( FugPure );
       char buf[150];
@@ -1530,7 +1537,7 @@ TMulti::PRSVFluid( int jb, int je, int jpb, int jdb, int k, int ipb )
         else
              pmp->lnGam[j] = 0;
     } /* j */
-   delete[] ActCoefs;	
+   delete[] ActCoefs;
 //    free( ActCoefs );
 //    free( FugPure );
 }
@@ -1547,20 +1554,20 @@ TMulti::RedlichKister( int jb, int, int jpb, int, int k )
 {
   double a0, a1, a2, lnGam1, lnGam2, X1, X2;
   double gEX, vEX, hEX, sEX, cpEX, uEX;
-  
+
   // load parameters
   a0 = (double)pmp->PMc[jpb+0];
   a1 = (double)pmp->PMc[jpb+1];  // in regular model should be 0
   a2 = (double)pmp->PMc[jpb+2];  // in regular model should be 0
-  
+
   // load mole fractions
   X1 = pmp->X[jb] / pmp->XF[k];
   X2 = pmp->X[jb+1] / pmp->XF[k];
-  
+
   // activity coeffs
   lnGam1 = X2*X2*( a0 + a1*(3.*X1-X2) + a2*(X1-X2)*(5.*X1-X2) );
   lnGam2 = X1*X1*( a0 - a1*(3.*X2-X1) + a2*(X2-X1)*(5.*X2-X1) );
-  
+
   // bulk phase excess properties (added by TW, 29.05.2008)
   gEX = (X1*X2*( a0 + a1*(X1-X2) + a2*pow((X1-X2),2.) ))* pmp->RT;
   vEX = 0.0;
@@ -1568,7 +1575,7 @@ TMulti::RedlichKister( int jb, int, int jpb, int, int k )
   sEX = 0.0;
   cpEX = 0.0;
   hEX = uEX;
-  
+
   // assignments
   pmp->lnGam[jb] = lnGam1;
   pmp->lnGam[jb+1] = lnGam2;
@@ -1596,17 +1603,17 @@ TMulti::MargulesBinary( int jb, int, int jpb, int, int k )
   WU2 = (double)pmp->PMc[jpb+3];
   WS2 = (double)pmp->PMc[jpb+4];  // if unknown should be 0
   WV2 = (double)pmp->PMc[jpb+5];  // if unknown should be 0
-  
+
   // calculate parameters at (T,P)
   WG1 = WU1 - T*WS1 + P*WV1;
   WG2 = WU2 - T*WS2 + P*WV2;
   a1 = WG1 / pmp->RT;
   a2 = WG2 / pmp->RT;
-  
+
   // load mole fractions
   X1 = pmp->X[jb] / pmp->XF[k];
   X2 = pmp->X[jb+1] / pmp->XF[k];
-  
+
   // activity coefficients
   lnGam1 = (2.*a2-a1)*X2*X2 + 2.*(a1-a2)*X2*X2*X2;
   lnGam2 = (2.*a1-a2)*X1*X1 + 2.*(a2-a1)*X1*X1*X1;
@@ -1618,12 +1625,12 @@ TMulti::MargulesBinary( int jb, int, int jpb, int, int k )
   sEX = X1*X2*( X2*WS1 + X1*WS2 );
   cpEX = 0.0;
   hEX = uEX+vEX*P;
-  
+
   // assignments
   pmp->lnGam[jb] = lnGam1;
   pmp->lnGam[jb+1] = lnGam2;
   pmp->FVOL[k] += vEX*10.;  // make consistent with TSolMod
-  
+
  }
 
 
@@ -1655,7 +1662,7 @@ TMulti::MargulesTernary( int jb, int, int jpb, int, int k )
   WU123 = (double)pmp->PMc[jpb+9];
   WS123 = (double)pmp->PMc[jpb+10];  // if unknown should be 0
   WV123 = (double)pmp->PMc[jpb+11];  // if unknown should be 0
-  
+
   // calculate parameters at (T,P)
   WG12 = WU12 - T*WS12 + P*WV12;
   WG13 = WU13 - T*WS13 + P*WV13;
@@ -1665,7 +1672,7 @@ TMulti::MargulesTernary( int jb, int, int jpb, int, int k )
   a13 = WG13 / pmp->RT;
   a23 = WG23 / pmp->RT;
   a123 = WG123 / pmp->RT;
-  
+
   // load mole fractions
   X1 = pmp->X[jb] / pmp->XF[k];
   X2 = pmp->X[jb+1] / pmp->XF[k];
@@ -1678,7 +1685,7 @@ TMulti::MargulesTernary( int jb, int, int jpb, int, int k )
            + a123*X1*X3*(1.-2.*X2);
   lnGam3 = a13*X1*(1.-X3) + a23*X2*(1.-X3) - a12*X1*X2
            + a123*X1*X2*(1.-2.*X3);
-  
+
   // bulk phase excess properties (added by TW, 29.05.2008)
   gEX = X1*X2*WG12 + X1*X3*WG13 + X2*X3*WG23 + X1*X2*X3*WG123;
   vEX = X1*X2*WV12 + X1*X3*WV13 + X2*X3*WV23 + X1*X2*X3*WV123;
@@ -1686,7 +1693,7 @@ TMulti::MargulesTernary( int jb, int, int jpb, int, int k )
   sEX = X1*X2*WS12 + X1*X3*WS13 + X2*X3*WS23 + X1*X2*X3*WS123;
   cpEX = 0.0;
   hEX = uEX+vEX*P;
-  
+
   // assignments
   pmp->lnGam[jb] = lnGam1;
   pmp->lnGam[jb+1] = lnGam2;
@@ -1742,12 +1749,19 @@ TMulti::SolModParPT( int, int, int jpb, int jdb, int k, int ipb, char ModCode )
         case SM_WILSLIQ:
         	 aSM.Wilson_PT();
         	 break;
+//        case SM_AQSIT:
+//             aSM.SIT_PT();
+//             break;
+        case SM_AQPITZ:
+             aSM.Pitzer_PT();
+             break;
+        case SM_AQEXUQ:
+        	 aSM.EUNIQUAC_PT();
+        	 break;
         default:
              break;
     }
 }
-
-
 
 void
 TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
@@ -1798,6 +1812,15 @@ TMulti::SolModActCoeff( int jb, int, int jpb, int jdb, int k, int ipb,
         case SM_WILSLIQ:
         	 aSM.Wilson_MixMod( Gex, Vex, Hex, Sex, CPex );
         	 break;
+//        case SM_AQSIT:
+//              aSM.SIT_MixMod( Gex, Vex, Hex, Sex, CPex );
+//              break;
+        case SM_AQPITZ:
+             aSM.Pitzer_MixMod( Gex, Vex, Hex, Sex, CPex );
+             break;
+        case SM_AQEXUQ:
+             aSM.EUNIQUAC_MixMod( Gex, Vex, Hex, Sex, CPex );
+             break;
         default: // catch error here
               break;
     }

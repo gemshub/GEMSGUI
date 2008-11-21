@@ -1,11 +1,10 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (c) 2003-2007   S.Churakov, Th.Wagner,
-//    D.Kulik, S.Dmitrieva
+// Copyright (c) 2007,2008  Th.Wagner, D.Kulik, S.Dmitrieva
 //
-// Implementation of parts of TPRSVcalc and TCFGcalc classes
-// called from m_dcomp.cpp
+// Implementation of the TSolMod class
+// Started by Th.Wagner and D.Kulik on 07.03.2007
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry
@@ -18,133 +17,8 @@
 //-------------------------------------------------------------------
 
 #include <math.h>
-
 #include "s_fgl.h"
 #include "m_const.h"
-
-#ifndef IPMGEMPLUGIN
-#include "s_tpwork.h"
-//--------------------------------------------------------------------//
-//
-int TPRSVcalc::CalcFugPure( void )
-{
-    double T, P, Fugcoeff = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
-    float *Coeff;
-    double Eos2parPT[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 } ;
-    int retCode = 0;
-
-    ErrorIf( !aW.twp, "PRSV EoS", "Undefined twp");
-
-    P = aW.twp->P;    /* P in 10^5 Pa? */
-    T = aW.twp->TC+273.15;   /* T?in K */
-
-    Coeff = aW.twp->CPg;     /* pointer to coeffs of CG EOS */
-
-// Calling PRSV EoS functions here
-
-    if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1e-5 && P < 1e5 )
-       retCode = PRFugacityPT( P, T, Coeff, Eos2parPT, Fugcoeff, Volume,
-            DeltaH, DeltaS );
-    else {
-            Fugcoeff = 1.;
-            Volume = 8.31451*T/P;
-            aW.twp->V = Volume;
-            aW.twp->Fug = Fugcoeff*P;
-            return retCode;
-          }
-
-    aW.twp->G += 8.31451 * T * log( Fugcoeff );   // from fugacity coeff
-    /* add enthalpy and enthropy increments */
-    aW.twp->H +=  DeltaH;   // in J/mol - to be completed
-    aW.twp->S +=  DeltaS;   // to be completed
-    aW.twp->V = Volume; /* /10.  in J/bar */
-    aW.twp->Fug = Fugcoeff * P;   /* fugacity at P */
-
-//  passing corrected EoS coeffs to calculation of fluid mixtures (3 added, 31.05.2008 TW)
-    aW.twp->wtW[6] = Eos2parPT[0];	// a
-    aW.twp->wtW[7] = Eos2parPT[1];  // b
-    aW.twp->wtW[8] = Eos2parPT[2];	// sqrAL
-    aW.twp->wtW[9] = Eos2parPT[3];	// ac
-    aW.twp->wtW[10] = Eos2parPT[4];	// dALdT
-
-    return retCode;
-}
-
-#endif
-
-#ifndef IPMGEMPLUGIN
-//--------------------------------------------------------------------//
-//
-int TCGFcalc::CGcalcFug( void )
-{
-    double T, P, Fugacity = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
-    double X[1]={1.};
-    double roro;  // added 21.06.2008 (TW)
-    float *Coeff, Eos4parPT[4] = { 0.0, 0.0, 0.0, 0.0 },
-                  Eos4parPT1[4] = { 0.0, 0.0, 0.0, 0.0 } ;
-    int retCode = 0;
-
-    ErrorIf( !aW.twp, "CG EoS", "Undefined twp");
-
-    P = aW.twp->P;    /* P in 10^5 Pa? */
-    T = aW.twp->TC+273.15;   /* T?in K */
-
-    Coeff = aW.twp->Cemp;     /* pointer to coeffs of CG EOS */
-
-// Calling CG EoS functions here
-
-    if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1e-6 && P < 1e5 )
-       retCode = CGFugacityPT( Coeff, Eos4parPT, Fugacity, Volume, P, T, roro );
-    else {
-            Fugacity = P;
-            Volume = 8.31451*T/P;
-            aW.twp->V = Volume;
-            aW.twp->Fug = Fugacity;
-            aW.twp->wtW[6] = Coeff[0];
-            if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
-                aW.twp->wtW[6] = 1.;                 // foolproof temporary
-            aW.twp->wtW[7] = Coeff[1];
-            aW.twp->wtW[8] = Coeff[2];
-            aW.twp->wtW[9] = Coeff[3];
-            return retCode;
-          }
-
-//    if( retCode < 0 )
-//    {  //  error - too low pressure
-//       Fugacity = P;
-//      Volume = 8.31451*T;
-//    }
-
-    aW.twp->G += 8.31451 * T * log( Fugacity / P );
-    aW.twp->V = Volume /* /10.  in J/bar */;
-//    aW.twp->U = ((aW.twp->H/4.184)-RP*fg.VLK*fg.P2)*4.184;
-    aW.twp->Fug = Fugacity;   /* fugacity at P */
-// For passing corrected EoS coeffs to calculation of fluid
-// mixtures
-    aW.twp->wtW[6] = Eos4parPT[0];
-if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
-  aW.twp->wtW[6] = 1.;                            // foolproof temporary
-    aW.twp->wtW[7] = Eos4parPT[1];
-    aW.twp->wtW[8] = Eos4parPT[2];
-    aW.twp->wtW[9] = Eos4parPT[3];
-    
-    // add enthalpy and enthropy increments 
-    retCode = CGFugacityPT( Coeff, Eos4parPT1, Fugacity, Volume, P, T+T*DELTA, roro );   
-    CGEnthalpy( X, Eos4parPT, Eos4parPT1, 1, roro, T, DeltaH, DeltaS );
-    aW.twp->H +=  DeltaH;   
-    aW.twp->S +=  DeltaS;   
-//
-    return retCode;
-}
-
-#endif
-
-
-// -----------------------------------------------------------------------------
-// Implementation of the TSolMod class
-// Started by Th.Wagner and D.Kulik on 07.03.2007
-
-
 
 // Generic constructor for the TSolMod class
 //
@@ -175,7 +49,6 @@ TSolMod::TSolMod( int NSpecies, int NParams, int NPcoefs, int MaxOrder,
 }
 
 
-
 TSolMod::~TSolMod()
 {
 // In principle, the stuff below is not necessary if the memory is not
@@ -186,7 +59,6 @@ TSolMod::~TSolMod()
 	x = NULL;
 	lnGamma = NULL;
 }
-
 
 
 // Van Laar model for solid solutions (c) TW March 2007
@@ -212,7 +84,6 @@ TSolMod::VanLaarPT()
 	}
 	return 0;
 }
-
 
 
 // Van Laar model for solid solutions (c) TW March 2007
@@ -313,7 +184,7 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
       uEX += Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Wu[ip];
       sEX -= Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Ws[ip];
    }
-   
+
    hEX = uEX+vEX*Pbar;
    Gex_ = gEX;
    Vex_ = vEX;
@@ -329,7 +200,6 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
    delete[]PsVol;
    return 0;
 }
-
 
 
 // Regular model for multicomponent solid solutions (c) TW March 2007
@@ -437,14 +307,14 @@ TSolMod::RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
       uEX += x[index1]*x[index2]*Wu[ip];
       sEX -= x[index1]*x[index2]*Ws[ip];
    }
-   
+
    hEX = uEX+vEX*Pbar;
    Gex_ = gEX;
    Vex_ = vEX;
    Hex_ = hEX;
    Sex_ = sEX;
    CPex_ = cpEX;
-   
+
    delete[]Wu;
    delete[]Ws;
    delete[]Wv;
@@ -516,7 +386,7 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
    double LU, LS, LCP, LV, LPT;
    double L0, L1, L2, L3;
    double gEX, vEX, hEX, sEX, cpEX, uEX;
-   
+
    double **Lu;
    double **Ls;
    double **Lcp;
@@ -532,7 +402,7 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
    Lcp = new double *[NPar];
    Lv = new double *[NPar];
    Lpt = new double *[NPar];
-   
+
    for (ip=0; ip<NPar; ip++)
    {
 	   Lu[ip] = new double [4];
@@ -674,7 +544,7 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
    	Hex_ = hEX;
    	Sex_ = sEX;
    	CPex_ = cpEX;
-   	
+
    	for (ip=0; ip<NPar; ip++)
    	{
    		delete[]Lu[ip];
@@ -688,7 +558,7 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
    	delete[]Lcp;
    	delete[]Lv;
    	delete[]Lpt;
- 
+
    	return 0;
 }
 
@@ -813,18 +683,18 @@ TSolMod::NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 		Alp[i1][i2] = (double)aIPc[NPcoef*ip+9];
 		dAlp[i1][i2] = (double)aIPc[NPcoef*ip+10];
 		d2Alp[i1][i2] = (double)aIPc[NPcoef*ip+11];
-		
+
 		G[i1][i2] = exp(-Alp[i1][i2]*Tau[i1][i2]);
 		dG[i1][i2] = - ( dAlp[i1][i2]*Tau[i1][i2] + Alp[i1][i2]*dTau[i1][i2] )
 				* exp(-Alp[i1][i2]*Tau[i1][i2]);
 		d2G[i1][i2] = - ( (d2Alp[i1][i2]*Tau[i1][i2] + 2.*dAlp[i1][i2]*dTau[i1][i2]
 				+ Alp[i1][i2]*d2Tau[i1][i2])*G[i1][i2]
 				+ (dAlp[i1][i2]*Tau[i1][i2] + Alp[i1][i2]*dTau[i1][i2])*dG[i1][i2] );
-		
+
 		// old version with constant Alp
 		// dG[i1][i2] = -Alp[i1][i2] * exp( -Alp[i1][i2]*Tau[i1][i2] ) * dTau[i1][i2];
 		// d2G[i1][i2] = -Alp[i1][i2]*(-Alp[i1][i2]*exp(-Alp[i1][i2]*Tau[i1][i2])*dTau[i1][i2]*dTau[i1][i2]
-		//		+ exp(-Alp[i1][i2]*Tau[i1][i2])*d2Tau[i1][i2]);		                                                                                                                                  
+		//		+ exp(-Alp[i1][i2]*Tau[i1][i2])*d2Tau[i1][i2]);
 	}
 
 	// calculate activity coefficients
@@ -920,7 +790,6 @@ TSolMod::NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	delete[]d2G;
 	return 0;
 }
-
 
 
 // Wilson model for liquid solutions (c) TW June 2008
@@ -1081,11 +950,41 @@ TSolMod::Wilson_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 }
 
 
-
 // add other solution models here
+// SIT model re-implementation for aqueous electrolyte solutions
+int TSolMod::SIT_PT()
+{
+   return 0;
+}
 
+int TSolMod::SIT_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+		double &CPex_ )
+{
+    return 0;
+}
 
+// Pitzer HMW model for aqueous electrolyte solutions
+int TSolMod::Pitzer_PT()
+{
+	return 0;
+}
 
+int TSolMod::Pitzer_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+		double &CPex_ )
+{
+	return 0;
+}
 
+// Extended UNIQUAC model for aqueous electrolyte solutions
+int TSolMod::EUNIQUAC_PT()
+{
+    return 0;
+}
+
+int TSolMod::EUNIQUAC_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+   		double &CPex_ )
+{
+	return 0;
+}
 
 //--------------------- End of s_fgl2.cpp ---------------------------

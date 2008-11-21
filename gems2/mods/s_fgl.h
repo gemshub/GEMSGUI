@@ -372,34 +372,32 @@ public:
 	int NRTL_PT();
 	int NRTL_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	         double &CPex_ );
-	
+
 // Wilson model for liquid solutions
 	int Wilson_PT();
 	int Wilson_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	         double &CPex_ );
-	
-	
-	
-// Prototypes for other models to be added here
-// Redlich-Kister / Guggenheim ...
-// Darken ...
-// Pitzer ...
-// SIT ...
-// EUniquac ...
-// UNIQUAC
+
 // PRSV can also be moved here
 
+// Prototypes for other models to be added here
+// Darken ...
+// SIT model reimplementation for aqueous electrolyte solutions
+	int SIT_PT();
+	int SIT_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+			double &CPex_ );
+
+// Pitzer HMW model for aqueous electrolyte solutions
+   int Pitzer_PT();
+   int Pitzer_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+		double &CPex_ );
+
+// Extended UNIQUAC model for aqueous electrolyte solutions
+   int EUNIQUAC_PT();
+   int EUNIQUAC_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
+   		double &CPex_ );
 
 };
-
-
-
-
-
-
-
-
-
 
 
 #endif

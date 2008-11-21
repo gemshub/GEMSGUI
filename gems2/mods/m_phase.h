@@ -161,15 +161,15 @@ public:
 ;
 
 enum solmod_switches { /* indexes of keys of model solution*/
-    SPHAS_TYP, 
-    DCOMP_DEP, 
-    SPHAS_DEP, 
-    SGM_MODE, 
-    DCE_LINK, 
+    SPHAS_TYP,
+    DCOMP_DEP,
+    SPHAS_DEP,
+    SGM_MODE,
+    DCE_LINK,
     SCM_TYPE,
     /* link state */
-    LINK_UX_MODE, 
-    LINK_TP_MODE, 
+    LINK_UX_MODE,
+    LINK_TP_MODE,
     LINK_FIA_MODE,
     /* Posible values of keys of model solution - DCOMP_DEP, SPHAS_DEP */
     SM_UNDEF = 'N',
@@ -197,7 +197,8 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_AQDH3 = '3',		// built-in 3-d approximation of Debye-Hueckel
     SM_AQDHH = 'H',		// built-in 3-d approximation of Debye-Hueckel (Helgeson)
     SM_AQSIT = 'S',		// built-in SIT model for aq activity coeffs (reserved)
-SM_AQEUQ = 'Q',  // built-in EUNIQUAC model for aqueous activity coeffs (reserved)
+    SM_AQEXUQ = 'Q',    // built-in EUNIQUAC model for aqueous activity coeffs (reserved)
+    SM_AQPITZ = 'Z',    // built-in Pitzer HMW aqueous activity coefficient model (under construction)
     SM_PRFLUID = 'P',	// Peng-Robinson-Stryjek-Vera EOS fluid model (Added by Th.Wagner)
     SM_IONEX = 'E',		// ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A',	// models of surface complexation at solid-aqueous interface
