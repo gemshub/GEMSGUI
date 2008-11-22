@@ -95,7 +95,7 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
          double &CPex_ )
 {
    int ip, j;
-   int index1, index2;
+   int i1, i2;
    double dj, dk;
    double sumPhi; // Sum of Phi terms
    double gEX, vEX, hEX, sEX, cpEX, uEX;
@@ -148,19 +148,19 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	lnGamRT = 0.;
 	for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
 	{
-        index1 = (int)aIPx[MaxOrd*ip];
-	    index2 = (int)aIPx[MaxOrd*ip+1];
+        i1 = (int)aIPx[MaxOrd*ip];
+	    i2 = (int)aIPx[MaxOrd*ip+1];
 
-   	    if( j == index1 )
+   	    if( j == i1 )
 		dj = 1.;
 	    else
 		dj = 0.;
-	    if( j == index2 )
+	    if( j == i2 )
 		dk = 1.;
 	    else
 		dk = 0.;
-	    lnGamRT -= (dj-Phi[index1])*(dk-Phi[index2])*Wpt[ip]
-                         *2.*PsVol[j]/(PsVol[index1]+PsVol[index2]);
+	    lnGamRT -= (dj-Phi[i1])*(dk-Phi[i2])*Wpt[ip]
+                         *2.*PsVol[j]/(PsVol[i1]+PsVol[i2]);
 	}
         lnGam = lnGamRT/(R_CONST*Tk);
 //	Gam = exp(lnGam);
@@ -177,12 +177,12 @@ TSolMod::VanLaarMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 
    for (ip=0; ip<NPar; ip++)
    {
-      index1 = (int)aIPx[MaxOrd*ip];
-      index2 = (int)aIPx[MaxOrd*ip+1];
-      gEX += Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Wpt[ip];
-      vEX += Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Wv[ip];
-      uEX += Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Wu[ip];
-      sEX -= Phi[index1]*Phi[index2]*2.*sumPhi/(PsVol[index1]+PsVol[index2])*Ws[ip];
+      i1 = (int)aIPx[MaxOrd*ip];
+      i2 = (int)aIPx[MaxOrd*ip+1];
+      gEX += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wpt[ip];
+      vEX += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wv[ip];
+      uEX += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wu[ip];
+      sEX -= Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Ws[ip];
    }
 
    hEX = uEX+vEX*Pbar;
@@ -237,7 +237,7 @@ TSolMod::RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
          double &CPex_ )
 {
    int ip, j;
-   int index1, index2;
+   int i1, i2;
    double dj, dk;
    double gEX, vEX, hEX, sEX, cpEX, uEX;
    double *Wu;
@@ -272,18 +272,18 @@ TSolMod::RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	lnGamRT = 0.;
 	for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
 	{
-        index1 = (int)aIPx[MaxOrd*ip];
-	    index2 = (int)aIPx[MaxOrd*ip+1];
+        i1 = (int)aIPx[MaxOrd*ip];
+	    i2 = (int)aIPx[MaxOrd*ip+1];
 
-   	    if( j == index1 )
+   	    if( j == i1 )
 		dj = 1.;
 	    else
 		dj = 0.;
-	    if( j == index2 )
+	    if( j == i2 )
 		dk = 1.;
 	    else
 		dk = 0.;
-	    lnGamRT -= (dj-x[index1])*(dk-x[index2])*Wpt[ip];
+	    lnGamRT -= (dj-x[i1])*(dk-x[i2])*Wpt[ip];
 	}
         lnGam = lnGamRT/(R_CONST*Tk);
 //	Gam = exp(lnGam);
@@ -300,12 +300,12 @@ TSolMod::RegularMixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 
    for (ip=0; ip<NPar; ip++)
    {
-      index1 = (int)aIPx[MaxOrd*ip];
-      index2 = (int)aIPx[MaxOrd*ip+1];
-      gEX += x[index1]*x[index2]*Wpt[ip];
-      vEX += x[index1]*x[index2]*Wv[ip];
-      uEX += x[index1]*x[index2]*Wu[ip];
-      sEX -= x[index1]*x[index2]*Ws[ip];
+      i1 = (int)aIPx[MaxOrd*ip];
+      i2 = (int)aIPx[MaxOrd*ip+1];
+      gEX += x[i1]*x[i2]*Wpt[ip];
+      vEX += x[i1]*x[i2]*Wv[ip];
+      uEX += x[i1]*x[i2]*Wu[ip];
+      sEX -= x[i1]*x[i2]*Ws[ip];
    }
 
    hEX = uEX+vEX*Pbar;
@@ -382,7 +382,7 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
          double &CPex_ )
 {
    int ip, j;
-   int index1, index2, L, I, J;
+   int i1, i2, L, I, J;
    double LU, LS, LCP, LV, LPT;
    double L0, L1, L2, L3;
    double gEX, vEX, hEX, sEX, cpEX, uEX;
@@ -446,15 +446,15 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
 		lnGamRT = 0.;
 		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
 		{
-			index1 = (int)aIPx[MaxOrd*ip];
-			index2 = (int)aIPx[MaxOrd*ip+1];
+			i1 = (int)aIPx[MaxOrd*ip];
+			i2 = (int)aIPx[MaxOrd*ip+1];
 
-			if ( j == index1 || j == index2) // interaction terms with j
+			if ( j == i1 || j == i2) // interaction terms with j
 			{
-				if ( index1 == j ) // check order of idexes
+				if ( i1 == j ) // check order of idexes
 				{
-					L = index1;
-					I = index2;
+					L = i1;
+					I = i2;
 					L0 = Lpt[ip][0];
 					L1 = Lpt[ip][1];
 					L2 = Lpt[ip][2];
@@ -462,8 +462,8 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
 				}
 				else
 				{
-					L = index2;
-					I = index1;
+					L = i2;
+					I = i1;
 					L0 = Lpt[ip][0];
 					L1 = -Lpt[ip][1];
 					L2 = Lpt[ip][2];
@@ -478,8 +478,8 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
 
 			else // interaction terms without j
 			{
-				I = index1;
-				J = index2;
+				I = i1;
+				J = i2;
 				L0 = Lpt[ip][0];
 				L1 = Lpt[ip][1];
 				L2 = Lpt[ip][2];
@@ -506,36 +506,36 @@ TSolMod::RedlichKisterMixMod( double &Gex_, double &Vex_, double &Hex_, double &
 
    	for (ip=0; ip<NPar; ip++)
    	{
-   	   	index1 = (int)aIPx[MaxOrd*ip];
-   	   	index2 = (int)aIPx[MaxOrd*ip+1];
+   	   	i1 = (int)aIPx[MaxOrd*ip];
+   	   	i2 = (int)aIPx[MaxOrd*ip+1];
 
-      	LPT = Lpt[ip][0] + Lpt[ip][1]*(x[index1]-x[index2])
-      			+ Lpt[ip][2]*pow((x[index1]-x[index2]),2.)
-      			+ Lpt[ip][3]*pow((x[index1]-x[index2]),3.);
+      	LPT = Lpt[ip][0] + Lpt[ip][1]*(x[i1]-x[i2])
+      			+ Lpt[ip][2]*pow((x[i1]-x[i2]),2.)
+      			+ Lpt[ip][3]*pow((x[i1]-x[i2]),3.);
 
-      	LV = Lv[ip][0] + Lv[ip][1]*(x[index1]-x[index2])
-      			+ Lv[ip][2]*pow((x[index1]-x[index2]),2.)
-      			+ Lv[ip][3]*pow((x[index1]-x[index2]),3.);
+      	LV = Lv[ip][0] + Lv[ip][1]*(x[i1]-x[i2])
+      			+ Lv[ip][2]*pow((x[i1]-x[i2]),2.)
+      			+ Lv[ip][3]*pow((x[i1]-x[i2]),3.);
 
    	   	LU = (Lu[ip][0]-Lcp[ip][0]*Tk)
-   	  			+ (Lu[ip][1]-Lcp[ip][1]*Tk)*(x[index1]-x[index2])
-      			+ (Lu[ip][2]-Lcp[ip][2]*Tk)*pow((x[index1]-x[index2]),2.)
-      			+ (Lu[ip][3]-Lcp[ip][3]*Tk)*pow((x[index1]-x[index2]),3.);
+   	  			+ (Lu[ip][1]-Lcp[ip][1]*Tk)*(x[i1]-x[i2])
+      			+ (Lu[ip][2]-Lcp[ip][2]*Tk)*pow((x[i1]-x[i2]),2.)
+      			+ (Lu[ip][3]-Lcp[ip][3]*Tk)*pow((x[i1]-x[i2]),3.);
 
    	   	LS = (-Ls[ip][0]-Lcp[ip][0]*(1.+log(Tk)))
-      			+ (-Ls[ip][1]-Lcp[ip][1]*(1.+log(Tk)))*(x[index1]-x[index2])
-      			+ (-Ls[ip][2]-Lcp[ip][2]*(1.+log(Tk)))*pow((x[index1]-x[index2]),2.)
-      			+ (-Ls[ip][3]-Lcp[ip][3]*(1.+log(Tk)))*pow((x[index1]-x[index2]),3.);
+      			+ (-Ls[ip][1]-Lcp[ip][1]*(1.+log(Tk)))*(x[i1]-x[i2])
+      			+ (-Ls[ip][2]-Lcp[ip][2]*(1.+log(Tk)))*pow((x[i1]-x[i2]),2.)
+      			+ (-Ls[ip][3]-Lcp[ip][3]*(1.+log(Tk)))*pow((x[i1]-x[i2]),3.);
 
-   	   	LCP = (-Lcp[ip][0]) + (-Lcp[ip][1])*(x[index1]-x[index2])
-      			+ (-Lcp[ip][2])*pow((x[index1]-x[index2]),2.)
-      			+ (-Lcp[ip][3])*pow((x[index1]-x[index2]),3.);
+   	   	LCP = (-Lcp[ip][0]) + (-Lcp[ip][1])*(x[i1]-x[i2])
+      			+ (-Lcp[ip][2])*pow((x[i1]-x[i2]),2.)
+      			+ (-Lcp[ip][3])*pow((x[i1]-x[i2]),3.);
 
-      	gEX += x[index1]*x[index2]*LPT;
-      	vEX += x[index1]*x[index2]*LV;
-      	uEX += x[index1]*x[index2]*LU;
-      	sEX += x[index1]*x[index2]*LS;
-      	cpEX += x[index1]*x[index2]*LCP;
+      	gEX += x[i1]*x[i2]*LPT;
+      	vEX += x[i1]*x[i2]*LV;
+      	uEX += x[i1]*x[i2]*LU;
+      	sEX += x[i1]*x[i2]*LS;
+      	cpEX += x[i1]*x[i2]*LCP;
   	}
 
    	hEX = uEX+vEX*Pbar;
