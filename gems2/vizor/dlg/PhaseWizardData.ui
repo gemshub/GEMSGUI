@@ -95,6 +95,11 @@
                     </item>
                     <item>
                         <property name="text">
+                            <string>Z   Aqueous, Pitzer model (built-in, reserved)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
                             <string>A   Adsorption, SACT and EDL models (built-in)</string>
                         </property>
                     </item>
