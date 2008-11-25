@@ -69,7 +69,20 @@ SPP_SETTING pa_ = {
 
 void BASE_PARAM::write(ostream& oss)
 {
-    oss.write( (char*)&PC, 10*sizeof(short) );
+  short arr[10];
+  
+  arr[0] = PC;
+  arr[1] = PD;
+  arr[2] = PRD;
+  arr[3] = PSM;
+  arr[4] = DP;
+  arr[5] = DW;
+  arr[6] = DT;
+  arr[7] = PLLG;
+  arr[8] = PE;
+  arr[9] = IIM;
+  
+	oss.write( (char*)arr, 10*sizeof(short) );
     oss.write( (char*)&DG, 28*sizeof(double) );
     oss.write( (char*)&tprn, sizeof(char*) );
 }
@@ -154,7 +167,20 @@ return pmp->t_elap_sec;
 
 void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 {
-    ff.writeArray( &pa.p.PC, 10 );
+	 short arr[10];
+	  
+	  arr[0] = pa.p.PC;
+	  arr[1] = pa.p.PD;
+	  arr[2] = pa.p.PRD;
+	  arr[3] = pa.p.PSM;
+	  arr[4] = pa.p.DP;
+	  arr[5] = pa.p.DW;
+	  arr[6] = pa.p.DT;
+	  arr[7] = pa.p.PLLG;
+	  arr[8] = pa.p.PE;
+	  arr[9] = pa.p.IIM;
+
+	ff.writeArray( arr, 10 );
     ff.writeArray( &pa.p.DG, 28 );
     multi->to_file( ff, path );
 }
@@ -167,8 +193,21 @@ void TProfil::outMultiTxt( const char *path  )
 // Reading structure MULTI (GEM IPM work structure)
 void TProfil::readMulti( GemDataStream& ff )
 {
-      ff.readArray( &pa.p.PC, 10 );
-      ff.readArray( &pa.p.DG, 28 );
+	 short arr[10];
+
+	 ff.readArray( arr, 10 );
+	  pa.p.PC = arr[0];
+	  pa.p.PD = arr[1];
+	  pa.p.PRD = arr[2];
+	  pa.p.PSM = arr[3];
+	  pa.p.DP = arr[4];
+	  pa.p.DW = arr[5];
+	  pa.p.DT = arr[6];
+	  pa.p.PLLG = arr[7];
+	  pa.p.PE = arr[8];
+	  pa.p.IIM = arr[9];
+
+	  ff.readArray( &pa.p.DG, 28 );
       multi->from_file( ff );
 }
 

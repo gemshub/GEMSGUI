@@ -36,7 +36,8 @@ extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
 
 struct BASE_PARAM
 { // Flags and thresholds for numeric modules
-    short PC,    // Mode of PhaseSelekt() (Selekt2) operation ( 0 1 2 ... )
+   long int 
+    PC,    // Mode of PhaseSelekt() (Selekt2) operation ( 0 1 2 ... )
     PD,  // Mode of DHH():0-invoke,1-at FIA only,2-last IPM it. 3-every IPM it.
     PRD, //Positive: mode GammaCalc(): 0-inactive, 1-FIA only, 2-SELEKT2 only 3-every IPM iteration
          // Negative: number of additional EFD-IPM improvement loops (-1 to -30 )
@@ -48,7 +49,7 @@ struct BASE_PARAM
     PE,  // Include electroneutrality condition? { 0 1 }
     IIM  // Maximum number of iterations in the main IPM algorithm { 500 }
     ;
-    double DG,   // Precision of LEM IPM solver (Jordan) { 1e-15 }
+  double DG,   // Precision of LEM IPM solver (Jordan) { 1e-15 }
     DHB, // Precision of mass balance deviations at EFD { 1e-8 }
     DS,  // Cutoff number of moles of a phase { 1e-10 }
     DK,  // Threshold of Dikin criterion of IPM convergence { 1e-4 }
