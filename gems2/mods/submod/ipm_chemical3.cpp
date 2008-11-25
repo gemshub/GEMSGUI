@@ -29,7 +29,7 @@
 //
 void TMulti::IS_EtaCalc()
 {
-    int k, i, ist, isp, j=0, ja;
+    long int k, i, ist, isp, j=0, ja;
     double XetaS=0., XetaW=0.,  Ez, CD0, CDb;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
@@ -249,9 +249,9 @@ double TMulti::SmoothingFactor( )
 void TMulti::SetSmoothingFactor( )
 {
     double TF, ag, dg, irf; // rg=0.0;
-    int ir, Level, itqF, itq;
+    long int ir, Level, itqF, itq;
 
-    ir = pmp->IT; // (double)ir;
+    ir = pmp->IT; 
     irf = (double)ir;
     ag = TProfil::pm->pa.p.AG; // pmp->FitVar[4];
     dg = TProfil::pm->pa.p.DGC;
@@ -271,7 +271,7 @@ void TMulti::SetSmoothingFactor( )
     }
     else
     {  // Obsolete smoothing for solid solutions: -1.0 < pa.p.DGC < 0
-        Level = (int)pmp->FitVar[2];
+        Level = (long int)pmp->FitVar[2];
     	itq = ir/60;
         dg = fabs( dg );
         itqF = ir/(60/(itq+1))-itq;  // 0,1,2,4,5,6...
@@ -331,7 +331,7 @@ TMulti::GammaCalc( long int LinkMode  )
             {
                for( k=0; k<pmp->FIs; k++ )
                {
-                 int ist;
+                 long int ist;
                  if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )
                    for( ist=0; ist<pmp->FIat; ist++ ) // loop over surface types
                    {
@@ -428,7 +428,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
              for( k=0; k<pmp->FIs; k++ )
              {
                if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )
-               {  int ist;
+               {  long int ist;
                   for( ist=0; ist<pmp->FIat; ist++ ) // loop over surface types
                   {
                      pmp->XpsiA[k][ist] = 0.0;        // cleaning Psi before GouyChapman()
@@ -814,13 +814,13 @@ TMulti::SIT_aqac_PSI( long int jb, long int je, long int jpb, long int jdb, long
            if( pmp->EZ[j] > 0 )
            {       // this is a cation
               for( ia=0; ia<pmp->sitNan; ia++ )
-                 SumSIT += (double)pmp->sitE[ icat*pmp->sitNan + ia ]
+                 SumSIT += pmp->sitE[ icat*pmp->sitNan + ia ]
                         * I * pmp->Y_m[pmp->sitXan[ia]];
               lgGam += SumSIT;
            }
            else {  // this is an anion
               for( ic=0; ic<pmp->sitNcat; ic++ )
-                 SumSIT += (double)pmp->sitE[ ic*pmp->sitNan + ian ]
+                 SumSIT += pmp->sitE[ ic*pmp->sitNan + ian ]
                         * I * pmp->Y_m[pmp->sitXcat[ic]];
               lgGam += SumSIT;
            }
@@ -1366,7 +1366,7 @@ TMulti::ChurakovFluid( long int jb, long int je, long int, long int jdb, long in
     T = pmp->Tc;
 
 //    FugCoefs = (double*)malloc( pmp->L1[k]*sizeof(double) );
-//    EoSparam = (float*)malloc( pmp->L1[k]*sizeof(double)*4 );
+//    EoSparam = (double*)malloc( pmp->L1[k]*sizeof(double)*4 );
     FugCoefs =  new double[ pmp->L1[k] ];
     EoSparam =  new double[ pmp->L1[k]*4 ];
     EoSparam1 =  new double[ pmp->L1[k]*4 ];

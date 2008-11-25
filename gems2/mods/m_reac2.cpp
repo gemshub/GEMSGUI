@@ -766,7 +766,7 @@ void TReacDC::Recalc_ISO1( double /*foS*/ )
         rcp->Gs[0] = -rcp->Ks[1] * R_T/1000.;
         goto STAGE2;
     }
-    if( stK && stG || stLK && stG || stK && stLK && stG )
+    if( (stK && stG) || (stLK && stG) || (stK && stLK && stG) )
     {
         LK = -rcp->Gs[0]*1000./R_T;
         if( !stK )

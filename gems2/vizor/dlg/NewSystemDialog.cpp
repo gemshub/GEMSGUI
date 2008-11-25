@@ -867,7 +867,7 @@ void NewSystemDialog::loadList2()
    item2 = new QListViewItem( ListView2, tr( "Equilibrium" ) );
    QListViewItem* phase;
    QListViewItem* elem;
-   short *l1_     = (short *)aObj[ o_wi_l1 ].GetPtr();
+   long int *l1_     = (long int *)aObj[ o_wi_l1 ].GetPtr();
    double *Y_la_  = (double *)aObj[ o_wd_yla ].GetPtr();
 // double *lnGam_ = (double *)aObj[ o_wo_lngam ].GetPtr();  Changed to Gamma 26.06.08 DK
    double *Gamma_ = (double *)aObj[ o_wd_gamma ].GetPtr(); 

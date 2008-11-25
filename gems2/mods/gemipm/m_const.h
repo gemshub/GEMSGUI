@@ -27,12 +27,12 @@ using namespace std;
 const long int MST =  6,
           DFCN = 6; // number of columns in MASDJ table
 
-const unsigned int
+const unsigned long int
     MAXICNAME =      6,
     MAXSYMB =        4,
     TDBVERSION =     64;
 
-const int
+const long int
     MAXDCNAME =      16,
     MAXPHNAME =      16,
     EQ_RKLEN = 58;

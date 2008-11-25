@@ -35,7 +35,7 @@ long int TPRSVcalc::CalcFugPure( void )
     double T, P, Fugcoeff = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
     float *Coeff;
     double Eos2parPT[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 } ;
-    int retCode = 0;
+    long int retCode = 0;
 
     ErrorIf( !aW.twp, "PRSV EoS", "Undefined twp");
 
@@ -503,7 +503,7 @@ long int TCGFcalc::CGEnthalpy(double *X, double *param, double *param1, unsigned
       double F0,Z,F1,fideal;
       //double e[4],s3[4],m,a,xnonp;
       double ro,delta=DELTA,ax,dx /*,tmp*/;
-      /* unsigned */ int i;
+      /* unsigned */ long int i;
 
        norm(paar.XX0,paar.NCmp());
        copy(paar.XX0,xtmp,paar.NCmp());
@@ -767,7 +767,7 @@ double TCGFcalc::dHS(double beta,double ro )
    double a0,a1,a6,a3,a4,a7,a9,a12;
    double p0,p2,p6,p3,p5,p8,p11;
    double dbdl,ri6ro,ri6ro2,d3,d2,dnew,F0,F1;
-   unsigned i;
+   unsigned long int i;
 
    T12=sqrt(beta);
    T112=exp(DV112*log(beta));
@@ -960,7 +960,7 @@ double TCGFcalc::FWCA(double T,double ro)
     //unsigned iall,inopol;
     double emix,s3mix,rotmp,T2R;
     double Jind,Jdp;
-    int /*itmp,jtmp,ktmp,*/ i,j,k;
+    long int /*itmp,jtmp,ktmp,*/ i,j,k;
     double s3tmp,mtmp,IK /*,atmp*/;
     double imtmp,jmtmp,iatmp,jatmp;
     double m2i,m2j,m2k;
@@ -1137,9 +1137,9 @@ double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
  #define ROMIN (1.E-2)
  #define NPOINT (5)
 
- void  choose(double *pres, double P,unsigned &x1,unsigned &x2)
+ void  choose(double *pres, double P,unsigned long int &x1,unsigned long int &x2)
  {
-  unsigned i;
+  unsigned long int i;
   double deltam=-10000000.,tmp;
   double deltap=10000000.;
 
@@ -1171,14 +1171,14 @@ double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
 /////////////////////////////////////////////////////////////////
  double TCGFcalc::ROTOTALMIX(double P,double TT,EOSPARAM& param)
  {
-     unsigned i;
+     unsigned long int i;
      double T /*,ro*/;
      double fact, fact0, romax, dro, roarr[FIRSTSEED];
      double Ptmp[FIRSTSEED], ro0, ro1, rotest, PP0, PP1 /* ,Ptest */;
      double a,b;
      double inttofloat;
      double f[4],x[4],ff,dens[5],pres[5];
-     unsigned x1,x2;
+     unsigned long int x1,x2;
 //     double ptmp;
 
      T=TT/param.EMIX();
@@ -1330,7 +1330,7 @@ double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
 
 EOSPARAM::~EOSPARAM()
 {
-  unsigned  i;
+  unsigned  long int i;
   if ( isize > 0)
   {
          for ( i=0;i<isize;i++ )
@@ -1414,7 +1414,7 @@ void EOSPARAM::allocate(unsigned long int inew)
   }
 }
 
-unsigned EOSPARAM::ParamMix(double *Xin)
+unsigned long int EOSPARAM::ParamMix(double *Xin)
   {
     /* unsigned */ long int j,i;
     double tmp,tmp1,tmp2;
@@ -1896,32 +1896,32 @@ TPRSVcalc::FugacitySpec( double *fugpure, double *params  )
 }
 
 
-int
+long int
 TPRSVcalc::GetEosParam( float *EoSparam )
 {
    // reads EoS parameters from database into work array
-   int i;
+   long int i;
    if( !EoSparam )
      return -1;  // Memory alloc error
 
    for (i=0; i<NComp; i++)
    {
-      Eosparm[i][0] = (double)EoSparam[0];   // critical temperature in K
-      Eosparm[i][1] = (double)EoSparam[1];   // critical pressure in bar
-      Eosparm[i][2] = (double)EoSparam[2];   // Pitzer acentric factor omega
-      Eosparm[i][3] = (double)EoSparam[3];   // empirical EoS parameter k1
-      Eosparm[i][4] = (double)EoSparam[4];   // empirical EoS parameter k2
-      Eosparm[i][5] = (double)EoSparam[5];   // empirical EoS parameter k3
+      Eosparm[i][0] = EoSparam[0];   // critical temperature in K
+      Eosparm[i][1] = EoSparam[1];   // critical pressure in bar
+      Eosparm[i][2] = EoSparam[2];   // Pitzer acentric factor omega
+      Eosparm[i][3] = EoSparam[3];   // empirical EoS parameter k1
+      Eosparm[i][4] = EoSparam[4];   // empirical EoS parameter k2
+      Eosparm[i][5] = EoSparam[5];   // empirical EoS parameter k3
     }
     return 0;
 }
 
 
-int
+long int
 TPRSVcalc::GetMoleFract( double *X )
 {
   ; // Loads mole fractions for NComp species
-  for( int j = 0; j< NComp; j++ )
+  for( long int j = 0; j< NComp; j++ )
     Wx[j] = X[j];
   return 0;
 }
@@ -1930,7 +1930,7 @@ TPRSVcalc::GetMoleFract( double *X )
 double
 TPRSVcalc::ObtainResults( double *ActCoef )
 {
-    int j;
+    long int j;
 
     for(j=0; j<NComp; j++)
        ActCoef[j] = Fugci[j][3];
@@ -1977,7 +1977,7 @@ TPRSVcalc::TPRSVcalc( long int NCmp, double Pp, double Tkp )
 
 TPRSVcalc::~TPRSVcalc()
     {
-    	int i;
+    	long int i;
 
     	for (i=0; i<NComp; i++)
     	{
@@ -2006,7 +2006,7 @@ TPRSVcalc::PRFugacityPT( double P, double Tk, float *EoSparam, double *Eos2parPT
         double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
  {
 
-      int iRet = 0;
+      long int iRet = 0;
 
       iRet = GetEosParam( EoSparam );
       if( iRet)
@@ -2040,7 +2040,7 @@ TPRSVcalc::PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parP
       if( !EoSparam )
         return -1;  // Memory alloc error
 
-      for (int i=0; i<NComp; i++)
+      for (long int i=0; i<NComp; i++)
       {
          Eosparm[i][0] = EoSparam[0];   // critical temperature in K
          Eosparm[i][1] = EoSparam[1];   // critical pressure in bar

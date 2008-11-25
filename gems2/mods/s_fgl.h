@@ -95,7 +95,7 @@ class EOSPARAM
   double M2R(unsigned long int i) {return m2par[i];};
   double A(unsigned long int i)  {return apar[i];};
 
-  unsigned ParamMix( double *Xin);
+  unsigned long int ParamMix( double *Xin);
   void PureParam(double* ,double*,double*,double* );
   long int NCmp(){return NComp;};
 };
@@ -307,8 +307,8 @@ protected:
      double &fugmix, double &zmix, double &vmix);
 	long int FugacitySpec( double *fugpure, double *params  );
 
-	int GetEosParam( float *params ); // Loads EoS parameters for NComp species
-	int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
+	long int GetEosParam( float *params ); // Loads EoS parameters for NComp species
+	long int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
 	double ObtainResults( double *ActCoef ); // returns activity coeffs and phase volume
 
 };
