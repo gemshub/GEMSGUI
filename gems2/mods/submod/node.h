@@ -102,7 +102,7 @@ protected:
     // virtual functions for interaction with TNodeArray class (not used at TNode level)
     virtual void  setNodeArray( long int , long int*  ) { }
     virtual void  checkNodeArray( long int, long int*, const char* ) { }
-    virtual int nNodes()  const // virtual call for interaction with TNodeArray class
+    virtual long int nNodes()  const // virtual call for interaction with TNodeArray class
     { return 1; }
 
 #ifndef IPMGEMPLUGIN

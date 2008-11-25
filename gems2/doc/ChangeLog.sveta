@@ -1,4 +1,8 @@
-
+25/11/2008
+Changed float to double, short to long int, int to long int types throughout in GEMIPM2K 
+and in the respective parts of GEMS-PSI (with DODs for MULTI data objects); 
+replaced outdated calls (like memset(), memcpy() etc.) with loops, 
+all this to improve compatibility with parallel architectures (SD)
 
 20/11/2008
 Fixed error in QT4 interfase part: error in calc sizes of objectTables

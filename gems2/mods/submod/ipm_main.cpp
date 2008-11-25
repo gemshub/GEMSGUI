@@ -290,7 +290,7 @@ f_log << " ITF=" << pmp->ITF << " ITG=" << pmp->ITG << " IT=" << pmp->IT <<
            char buf[400];
            sprintf( buf,
     " The computed phase assemblage remains inconsistent after 3 PhaseSelect() loops.\n"
-    " Problematic phase(s): %d %s   %d %s \n"
+    " Problematic phase(s): %ld %s   %ld %s \n"
     " Probably, vector b is not balanced, or DC stoichiometries\n"
     " or standard g0 are wrong, or some relevant phases or DCs are missing.",
                     k_miss, pmbuf.c_str(), k_unst, pubuf.c_str() );

@@ -348,7 +348,7 @@ if( k < pmp->FIs )
             {
  //               JJ = j;
 //                KK = k;
-                sprintf( tbuf, "Inconsistent upper metastability limits j=%dL k=%dL XU=%g XFU=%g",
+                sprintf( tbuf, "Inconsistent upper metastability limits j=%ld k=%ld XU=%g XFU=%g",
                          j, k, XU, XFU );
                 Error( "E11IPM Set_DC_limits(): ",tbuf.p );
 //                XU = XFU; // - pmp->lowPosNum;
@@ -357,7 +357,7 @@ if( k < pmp->FIs )
             {
 //                JJ = j;
 //                KK = k;
-                sprintf( tbuf, "Inconsistent lower metastability limits j=%dL k=%dL XL=%g XFL=%g",
+                sprintf( tbuf, "Inconsistent lower metastability limits j=%ld k=%ld XL=%g XFL=%g",
                          j, k, XL, XFL );
                 Error( "E12IPM Set_DC_limits(): ",tbuf.p );
 //                XL = XFL; // - pmp->lowPosNum;
