@@ -27,7 +27,7 @@
 
 typedef struct
 {  // DATABR - template node data bridge structure
-   int    // changed from short on 26.06.2008   DK
+   long int    // changed from short on 26.06.2008   DK
      NodeHandle,    // Node identification handle
      NodeTypeHY,    // Node type (hydraulic); see typedef NODETYPE
      NodeTypeMT,    // Node type (mass transport); see typedef NODETYPE
@@ -36,7 +36,7 @@ typedef struct
      IterDone;      // Number of iterations performed by IPM
 
 /*  these important data array dimensions are provided in the DATACH structure
-   int
+   long int
     nICb,     // number of Independent Components (<= nIC) used in the data bridge
     nDCb,     // number of DC (chemical species, <= nDC) used in the data bridge
     nPHb,     // number of Phases (<= nPH) used in the data bridge

@@ -1020,10 +1020,10 @@ void  TGEM2MT::LinkCSD(  int nNode )
   {
      DATACH* CH = na->pCSD();
      // static
-     aObj[o_ch_nicb].SetPtr( &CH->nICb );                     /* i1 */
-     aObj[o_ch_ndcb].SetPtr( &CH->nDCb );                     /* i1 */
-     aObj[o_ch_nphb].SetPtr( &CH->nPHb );                     /* i1 */
-     aObj[o_ch_npsb].SetPtr( &CH->nPSb );                     /* i1 */
+     aObj[o_ch_nicb].SetPtr( &CH->nICb );                     /* l1 */
+     aObj[o_ch_ndcb].SetPtr( &CH->nDCb );                     /* l1 */
+     aObj[o_ch_nphb].SetPtr( &CH->nPHb );                     /* l1 */
+     aObj[o_ch_npsb].SetPtr( &CH->nPSb );                     /* l1 */
      //dynamic
      aObj[o_ch_xic].SetPtr( CH->xIC );
      aObj[o_ch_xic].SetDim( CH->nICb, 1 );

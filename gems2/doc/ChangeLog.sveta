@@ -1,4 +1,23 @@
 
+
+20/11/2008
+Fixed error in QT4 interfase part: error in calc sizes of objectTables
+if using horizontal scrolling.
+
+20/11/2008
+Replaced  all memset() and memcpy() functions in code files from GEMIPM2K part
+to internal functions fillValue(), copyValues() and other program text
+
+19/11/2008
+Transfer of Gex corrections when dumping G0 to GEMIPM2K
+
+18/11/2008
+Fixbug in Remake/Create modes in ReacDC module when one of records mentioned in the 
+current list in ReacDC is absent in the database chain.
+Fixbug in Remake/Create modes in ReacDC module for set up old selection compare only first
+three key fields, not full key. 
+//-------------------------------------------------------------------
+
 30/08/2007
  Fixed error in function gstring::gstring(const char* s, size_t pos, size_t len)
 

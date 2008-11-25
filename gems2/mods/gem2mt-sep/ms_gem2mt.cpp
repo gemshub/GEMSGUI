@@ -413,7 +413,7 @@ int TGEM2MT::MassTransInit( const char *chbr_in1 )
   TNodeArray::na = na = new TNodeArray( /* mtp->xC,mtp->yC,mtp->zC */ mtp->nC );
 
  // Prepare the array for initial conditions allocation
-  int* nodeType = new int[mtp->nC];
+  long int* nodeType = new long int[mtp->nC];
   for( ii =0; ii<mtp->nC; ii++ )
          nodeType[ii] = mtp->DiCp[ii][0];
 

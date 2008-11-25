@@ -68,7 +68,7 @@ int main( int argc, char* argv[] )
    int nPrecLoops =0;     // Number of IPM-2 precision enhancement loops
    int nIterFIA =0;       // Number of EnterFeasibleDomain() iterations
    int nIterIPM =0;       // Number of main IPM iterations
-   int nIterTotal=0;      // Total FIA+IPM iterations done
+   long int nIterTotal=0;      // Total FIA+IPM iterations done
 
    cout << "Start of gemnode PIA test: " << ipm_input_file_list_name << " "
          << dbr_input_file_name << endl;
@@ -110,8 +110,8 @@ int main( int argc, char* argv[] )
    // Names of arrays are taken consistent with the DATABR structure
    //  (see "databr.h") for better readability
 
-   short m_NodeHandle[nNodes], m_NodeStatusCH[nNodes], m_IterDone[nNodes];
-   int nPrecL[nNodes], nFIA[nNodes], nIPM[nNodes];
+   long int m_NodeHandle[nNodes], m_NodeStatusCH[nNodes], m_IterDone[nNodes];
+   long int nPrecL[nNodes], nFIA[nNodes], nIPM[nNodes];
 
    double m_T[nNodes], m_P[nNodes], m_Vs[nNodes], m_Ms[nNodes],
           m_Gs[nNodes], m_Hs[nNodes], m_IC[nNodes], m_pH[nNodes],

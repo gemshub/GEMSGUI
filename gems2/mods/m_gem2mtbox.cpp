@@ -835,7 +835,7 @@ void TGEM2MT::to_text_file( fstream& ff, bool with_comments )
     {
  	   if( _comment )
         ff << "\n# Indexes of nodes where this flux begins and ends";
-        prar.writeArray(  "FDLi", mtp->FDLi[0], mtp->nFD*2,2 );
+        prar.writeArray(  "FDLi", mtp->FDLi[0], mtp->nFD*2, 2 );
  	   if( _comment )
         ff << "\n# Part of the flux defnition list (flux order, flux rate, MPG quantities)";
         prar.writeArray(  "FDLf", mtp->FDLf[0], mtp->nFD*4, 4 );

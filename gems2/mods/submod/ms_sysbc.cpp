@@ -771,7 +771,7 @@ NEXT:
             X[i] = aSE->stp->Y[jsf+i];   // load mole quantities
         }
         A = new float[Lf*mup->N];
-        memset( A, 0, sizeof(float)*(Lf*mup->N) );
+        fillValue( A, (float)0., (Lf*mup->N) );
         B = new double[mup->N];
         memset( B, 0, sizeof(double)*(mup->N) );
 
@@ -834,6 +834,20 @@ double TSyst::MolWeight( int N, float *ICaw, float *Smline )
     for( i=0; i<N; i++ )
         if( ICaw[i] && Smline[i] )
             MW += (double)(ICaw[i]) * (double)(Smline[i]);
+
+    return( MW );
+}
+
+//Calc mol mass ofDC by gstring of stehiometric matr and vector
+// atom mass
+double TSyst::MolWeight( int N, double *ICaw, double *Smline )
+{
+    int i;
+    double MW = 0.0;
+
+    for( i=0; i<N; i++ )
+        if( ICaw[i] && Smline[i] )
+            MW += (ICaw[i]) * (Smline[i]);
 
     return( MW );
 }

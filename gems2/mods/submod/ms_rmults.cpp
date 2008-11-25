@@ -307,8 +307,8 @@ void TRMults::set_def( int /*q*/)
     memcpy( &mu.PmvSA, aPa->pa.MUpmv, 10 );
 //    strcpy( mu.name, "`");
 //    strcpy( mu.notes, "`");
-    memset( mu.name, 0, MAXFORMULA);
-    memset( mu.notes, 0, MAXFORMULA);
+    fillValue( mu.name, '\0', MAXFORMULA);
+    fillValue( mu.notes, '\0', MAXFORMULA);
     strncpy( mu.name, rt[RT_PARAM].FldKey(0), rt[RT_PARAM].FldLen(0) );
     strncpy( mu.notes, rt[RT_PARAM].FldKey(1), rt[RT_PARAM].FldLen(1) );
     memset( &mu.N, 0, 14*sizeof(short));
@@ -561,8 +561,8 @@ void TRMults::PHmake()
         // read Phase record
         aPH->TryRecInp( mu.SF[kk], crt, 0 );
         mu.PHC[kk] = aPH->php->PphC;
-        // test and load   DCOMP and REACDC
-        memset( dkey, 0, MAXRKEYLEN );
+        // test and load ï¿½ DCOMP and REACDC
+        fillValue( dkey, '\0', MAXRKEYLEN );
 
         for( ; jj<ii; jj++ )
         {

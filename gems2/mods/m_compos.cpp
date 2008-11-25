@@ -730,7 +730,7 @@ TCompos::RecCalc( const char* key )
 
 SPECIFY_C:
 
-    memset( pkey, 0, MAXRKEYLEN+9 );
+	memset( pkey, 0, MAXRKEYLEN+9 );
     for( i=0; i<bcp->Nmax; i++ )
     {
         /* load molar mass */
@@ -745,7 +745,7 @@ SPECIFY_C:
     }
     if( !C )
         C = new double[bcp->Nmax];
-    memset( C, 0, sizeof(double)*bcp->Nmax );
+    fillValue( C, 0., bcp->Nmax );
 
     if( bcp->PcIC != S_OFF )
     { /*  Through IC */
@@ -829,7 +829,7 @@ IC_FOUND:
             for(int ii=0; ii<aFo.GetIn(); ii++ )
             { /* terms */
                 ICs[IC_RKLEN-1]=0;
-                memset( ICs, ' ', IC_RKLEN-1 );
+                fillValue( ICs.p, ' ', IC_RKLEN-1 );
                 memcpy( ICs, aFo.GetCn( ii ), MAXICNAME+MAXSYMB );
                 aFo.fixup_ics( ICs );
                 for( i=0; i<bcp->Nmax; i++ )

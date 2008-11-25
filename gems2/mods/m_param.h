@@ -268,8 +268,8 @@ double CalcEqstat( bool show_progress=true );
     void ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
      tget_ndx *get_ndx = 0 )
      { multi->ET_translate( nOet, nOpex, JB, JE, jb, je, get_ndx); }
-    double MolWeight( int N, float *ICaw, float *Smline )
-     { return syst->MolWeight( N, ICaw, Smline ); }
+    double MolWeight( int N, double *ICaw, double *Smline )
+     { 	return syst->MolWeight( N, ICaw, Smline ); }
 
    //test
    void outMulti( GemDataStream& ff, gstring& path  );
@@ -277,7 +277,7 @@ double CalcEqstat( bool show_progress=true );
    void outMulti();
    void outMultiTxt( const char *path  );
    void readMulti( GemDataStream& ff );
-   double calcMulti( int& NumPrecLoops, int& NumIterFIA, int& NumIterIPM );
+   double calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM );
 };
 
 /* Work codes of surface site types in pm->AtNdx vector (compatibility with old-style SCMs *

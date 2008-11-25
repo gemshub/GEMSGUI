@@ -596,7 +596,7 @@ void TDualTh::set_def( int q)
 
     memset( &dtp->nQ, 0, sizeof(short)*8 );
     memset( &dtp->Msysb, 0, sizeof(float)*12 );
-    memset( dtp->sykey, 0, sizeof(char)*(EQ_RKLEN+10) );
+    fillValue( dtp->sykey, '\0', (EQ_RKLEN+10) );
     memset( &dtp->q, 0, sizeof(short)*5 );
 
     dtp->tmd[START_] = 1000;

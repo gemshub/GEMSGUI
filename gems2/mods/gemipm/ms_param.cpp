@@ -93,7 +93,7 @@ TProfil::TProfil( TMulti* amulti )
 // and precision refinement loops
 // Modified on 22.01.2008 to implement "smart PIA" mode 
 //
-double TProfil::calcMulti( int& RefinLoops_, int& NumIterFIA_, int& NumIterIPM_ )
+double TProfil::calcMulti( long int& RefinLoops_, long int& NumIterFIA_, long int& NumIterIPM_ )
 {
     pmp = multi->GetPM();
     pmp->t_start = clock();
@@ -126,7 +126,7 @@ FORCED_AIA:
 
     if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
     {  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
-       int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,  
+       long int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,  
 ITstart = 10,        TotIT = pmp->IT;  //  ITold = pmp->IT,
        pmp->pNP = 1;
        for( pp=0; pp < abs(pa.p.PRD); pp++ )
@@ -185,7 +185,7 @@ void TProfil::readMulti( const char* path )
  //
 void TMulti::CompG0Load()
 {
-  int j, jj, k, xTP, jb, je=0;
+  long int j, jj, k, xTP, jb, je=0;
   double Go, Gg, Vv;
   double TC, P;
 
@@ -267,6 +267,8 @@ void TMulti::CompG0Load()
     	  pmp->tpp_G[j] = Go;
      if( pmp->Guns )
            Gg = pmp->Guns[j];
+     else 
+           Gg = 0.;	   
      pmp->G0[j] = Cj_init_calc( Go+Gg, j, k ); // Inside this function, pmp->YOF[k] can be added!
      switch( pmp->PV )
      { // put mol volumes of components into A matrix or into the vector of molar volumes
@@ -293,7 +295,7 @@ void TMulti::CompG0Load()
 // GEM IPM calculation of equilibrium state in MULTI
 void TMulti::MultiCalcInit( const char* key )
 {
-  short j,k, jb, je=0;;
+  long int  j,k, jb, je=0;;
   SPP_SETTING *pa = &TProfil::pm->pa;
     strncpy( pmp->stkey, key, EQ_RKLEN );  // needed for the ipmlog error diagnostics
     pmp->Ec = pmp->K2 = pmp->MK = 0;
@@ -318,9 +320,9 @@ void TMulti::MultiCalcInit( const char* key )
 
     // calculating mass of the system
     pmp->MBX = 0.0;
-    for(int i=0; i<pmp->N; i++ )
+    for(long int i=0; i<pmp->N; i++ )
     {
-        pmp->MBX += pmp->B[i] * (double)pmp->Awt[i];
+        pmp->MBX += pmp->B[i] * pmp->Awt[i];
     }
     pmp->MBX /= 1000.;
 
@@ -353,7 +355,7 @@ void TMulti::MultiCalcInit( const char* key )
     // multicomponent phases and mixing models
  if( pmp->FIs )
  {
-     int k, jb, je=0; 
+     long int k, jb, je=0; 
 	 for( k=0; k<pmp->FIs; k++ )
      { // loop on solution phases
          jb = je;
@@ -469,13 +471,13 @@ void u_splitpath(const gstring& Path, gstring& dir,
     }
 }
 
-const size_t bGRAN = 20;
+const long int bGRAN = 20;
 
 // Get Path of file and Reading list of file names from it, return number of files
 char  (* f_getfiles(const char *f_name, char *Path,
-		int& nElem, char delim ))[fileNameLength]
+		long int& nElem, char delim ))[fileNameLength]
 {
-  size_t ii, bSize = bGRAN;
+  long int ii, bSize = bGRAN;
   char  (*filesList)[fileNameLength];
   char  (*filesListNew)[fileNameLength];
   filesList = new char[bSize][fileNameLength];
@@ -484,7 +486,7 @@ char  (* f_getfiles(const char *f_name, char *Path,
 // Get path
    gstring path_;
    gstring flst_name = f_name;
-   size_t pos = flst_name.rfind("/");
+   long int pos = flst_name.rfind("/");
    path_ = "";
    if( pos < npos )
       path_ = flst_name.substr(0, pos+1);

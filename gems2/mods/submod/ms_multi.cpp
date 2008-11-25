@@ -42,15 +42,15 @@ void TMulti::ods_link( int )
     //aObj[ o_wd_stkey].SetPtr( pm.stkey );
     //aObj[ o_wd_nv_].SetPtr( pm.NV_ );
     aObj[ o_wi_pun ].SetPtr( &pm.PunE ); /*a 4*/
-    aObj[ o_wi_nnr ].SetPtr( &pm.N );    /*i 2*/
-    aObj[ o_wi_ldim ].SetPtr( &pm.L );   /*i 6*/
-    aObj[ o_wi_fdim ].SetPtr( &pm.FI );  /*i 3*/
-    aObj[ o_wo_fdim ].SetPtr( &pm.FI1 ); /*i 3*/
+    aObj[ o_wi_nnr ].SetPtr( &pm.N );    /*l 2*/
+    aObj[ o_wi_ldim ].SetPtr( &pm.L );   /*l 6*/
+    aObj[ o_wi_fdim ].SetPtr( &pm.FI );  /*l 3*/
+    aObj[ o_wo_fdim ].SetPtr( &pm.FI1 ); /*l 3*/
     aObj[ o_wo_it ].SetPtr( &pm.IT );
 aObj[ o_wo_it_efd ].SetPtr( &pm.ITF ); /* pm.ITF */
 aObj[ o_wo_it_ipm ].SetPtr( &pm.ITG ); /* pm.ITG */
-    aObj[ o_wi_mode ].SetPtr( &pm.E );   /*i 4*/
-    aObj[ o_wo_ipar ].SetPtr( &pm.Ec );  /*i 17*/
+    aObj[ o_wi_mode ].SetPtr( &pm.E );   /*l 4*/
+    aObj[ o_wo_ipar ].SetPtr( &pm.Ec );  /*l 17*/
     aObj[ o_wio_tc ].SetPtr( &pm.TC );   /*d 2*/
     aObj[ o_wio_t ].SetPtr( &pm.T );     /*d 2*/
     aObj[ o_wio_p ].SetPtr( &pm.P );     /*d 2*/
@@ -373,32 +373,32 @@ aObj[ o_wo_lnsat ].SetDim( pm.Lads, 4 );
 void TMulti::dyn_set(int /*q*/)
 {
 
-   pm.L1    = (short *)aObj[ o_wi_l1 ].GetPtr();
-   pm.IPx = (short *)aObj[ o_wi_ipxpm ].GetPtr();   // added 07.12.2006  KD
-   pm.LsMod = (short *)aObj[ o_wi_lsmod ].GetPtr();
-    pm.LsMdc = (short *)aObj[ o_wi_lsmdc ].GetPtr();
-    pm.mui   = (short *)aObj[ o_wi_mui ].GetPtr();
-    pm.muk   = (short *)aObj[ o_wi_muk ].GetPtr();
-    pm.muj   = (short *)aObj[ o_wi_muj ].GetPtr();
-    pm.SATX =(short (*)[4])aObj[ o_wi_satndx ].GetPtr();
+   pm.L1    = (long int *)aObj[ o_wi_l1 ].GetPtr();
+   pm.IPx = (long int *)aObj[ o_wi_ipxpm ].GetPtr();   // added 07.12.2006  KD
+   pm.LsMod = (long int *)aObj[ o_wi_lsmod ].GetPtr();
+    pm.LsMdc = (long int *)aObj[ o_wi_lsmdc ].GetPtr();
+    pm.mui   = (long int *)aObj[ o_wi_mui ].GetPtr();
+    pm.muk   = (long int *)aObj[ o_wi_muk ].GetPtr();
+    pm.muj   = (long int *)aObj[ o_wi_muj ].GetPtr();
+    pm.SATX =(long int (*)[4])aObj[ o_wi_satndx ].GetPtr();
     pm.DUL   = (double *)aObj[ o_wi_dul ].GetPtr();
     pm.DLL   = (double *)aObj[ o_wi_dll ].GetPtr();
     pm.GEX   = (double *)aObj[ o_wi_gex ].GetPtr();
     pm.PUL   = (double *)aObj[ o_wi_pul ].GetPtr();
     pm.PLL   = (double *)aObj[ o_wi_pll ].GetPtr();
     pm.YOF   = (double *)aObj[ o_wi_yof ].GetPtr();
-    pm.PMc   = (float *)aObj[ o_wi_pmc ].GetPtr();
-    pm.DMc   = (float *)aObj[ o_wi_dmc ].GetPtr();
+    pm.PMc   = (double *)aObj[ o_wi_pmc ].GetPtr();
+    pm.DMc   = (double *)aObj[ o_wi_dmc ].GetPtr();
     pm.Vol   = (double *)aObj[ o_wio_vol ].GetPtr();
-    pm.HYM   = (float *)aObj[ o_w_hym ].GetPtr();
-    pm.VL    = (float *)aObj[ o_w_vl ].GetPtr();
+    pm.HYM   = (double *)aObj[ o_w_hym ].GetPtr();
+    pm.VL    = (double *)aObj[ o_w_vl ].GetPtr();
     pm.MM    = (double *)aObj[ o_wi_mm ].GetPtr();
-    pm.H0    = (float *)aObj[ o_wio_h0 ].GetPtr();
-    pm.A0    = (float *)aObj[ o_wio_a0 ].GetPtr();
-    pm.U0    = (float *)aObj[ o_wio_u0 ].GetPtr();
-    pm.S0    = (float *)aObj[ o_wio_s0 ].GetPtr();
-    pm.Cp0   = (float *)aObj[ o_wio_cp0 ].GetPtr();
-    pm.Cv0   = (float *)aObj[ o_wio_cv0 ].GetPtr();
+    pm.H0    = (double *)aObj[ o_wio_h0 ].GetPtr();
+    pm.A0    = (double *)aObj[ o_wio_a0 ].GetPtr();
+    pm.U0    = (double *)aObj[ o_wio_u0 ].GetPtr();
+    pm.S0    = (double *)aObj[ o_wio_s0 ].GetPtr();
+    pm.Cp0   = (double *)aObj[ o_wio_cp0 ].GetPtr();
+    pm.Cv0   = (double *)aObj[ o_wio_cv0 ].GetPtr();
     pm.Pparc = (double *)aObj[ o_wi_pparc ].GetPtr();
     pm.Y_m   = (double *)aObj[ o_wd_ym ].GetPtr();
     pm.Y_la  = (double *)aObj[ o_wd_yla ].GetPtr();
@@ -407,40 +407,40 @@ void TMulti::dyn_set(int /*q*/)
     pm.lnGmf = (double *)aObj[ o_wi_lngmf ].GetPtr();
     pm.lnGmM = (double *)aObj[ o_wio_lngmm ].GetPtr();
     pm.EZ    = (double *)aObj[ o_wi_ez ].GetPtr();
-    pm.Wb    = (float *)aObj[ o_wio_wb ].GetPtr();
-    pm.Wabs  = (float *)aObj[ o_wio_wabs ].GetPtr();
-    pm.Rion  = (float *)aObj[ o_wi_rion ].GetPtr();
-    pm.Aalp  = (float *)aObj[ o_wi_aalp ].GetPtr();
-    pm.Sigw  = (float *)aObj[ o_wi_sigw ].GetPtr();
-    pm.Sigg  = (float *)aObj[ o_wi_sigg ].GetPtr();
-    pm.Nfsp  = (float (*)[MST])aObj[ o_wi_nfsp ].GetPtr();
-    pm.MASDT = (float (*)[MST])aObj[ o_wi_masdt ].GetPtr();
+    pm.Wb    = (double *)aObj[ o_wio_wb ].GetPtr();
+    pm.Wabs  = (double *)aObj[ o_wio_wabs ].GetPtr();
+    pm.Rion  = (double *)aObj[ o_wi_rion ].GetPtr();
+    pm.Aalp  = (double *)aObj[ o_wi_aalp ].GetPtr();
+    pm.Sigw  = (double *)aObj[ o_wi_sigw ].GetPtr();
+    pm.Sigg  = (double *)aObj[ o_wi_sigg ].GetPtr();
+    pm.Nfsp  = (double (*)[MST])aObj[ o_wi_nfsp ].GetPtr();
+    pm.MASDT = (double (*)[MST])aObj[ o_wi_masdt ].GetPtr();
     pm.FVOL  = (double *)aObj[ o_wd_fvol ].GetPtr();
     pm.FWGT  = (double *)aObj[ o_wd_fwgt ].GetPtr();
-    pm.XcapA = (float (*)[MST])aObj[ o_w_xcapa ].GetPtr();
-    pm.XcapB = (float (*)[MST])aObj[ o_w_xcapb ].GetPtr();
-    pm.XcapD = (float (*)[MST])aObj[ o_w_xcapd ].GetPtr();
-    pm.XcapF = (float (*)[MST])aObj[ o_w_xcapf ].GetPtr();
-    pm.XdlA  = (float (*)[MST])aObj[ o_wo_xdla ].GetPtr();
-    pm.XdlB  = (float (*)[MST])aObj[ o_wo_xdlb ].GetPtr();
-    pm.XdlD  = (float (*)[MST])aObj[ o_wo_xdld ].GetPtr();
+    pm.XcapA = (double (*)[MST])aObj[ o_w_xcapa ].GetPtr();
+    pm.XcapB = (double (*)[MST])aObj[ o_w_xcapb ].GetPtr();
+    pm.XcapD = (double (*)[MST])aObj[ o_w_xcapd ].GetPtr();
+    pm.XcapF = (double (*)[MST])aObj[ o_w_xcapf ].GetPtr();
+    pm.XdlA  = (double (*)[MST])aObj[ o_wo_xdla ].GetPtr();
+    pm.XdlB  = (double (*)[MST])aObj[ o_wo_xdlb ].GetPtr();
+    pm.XdlD  = (double (*)[MST])aObj[ o_wo_xdld ].GetPtr();
     pm.XpsiA = (double (*)[MST])aObj[ o_wo_psia ].GetPtr();
     pm.XpsiB = (double (*)[MST])aObj[ o_wo_psib ].GetPtr();
     pm.XpsiD = (double (*)[MST])aObj[ o_wo_psid ].GetPtr();
-    pm.Xr0h0 = (float (*)[2])aObj[ o_wi_xr0h0 ].GetPtr();
-    pm.XlamA = (float (*)[MST])aObj[ o_wi_xlama ].GetPtr();
-    pm.Xetaf = (float (*)[MST])aObj[ o_wi_xetaf ].GetPtr();
-    pm.Xcond = (float *)aObj[ o_wi_xcond ].GetPtr();
-    pm.Xeps  = (float *)aObj[ o_wi_xeps ].GetPtr();
-    pm.Awt   = (float *)aObj[ o_wi_awt ].GetPtr();
-    pm.A     = (float *)aObj[ o_wi_a ].GetPtr();
-    pm.XFs   = (float *)aObj[ o_wd_xfs ].GetPtr();
-    pm.Falps = (float *)aObj[ o_wd_falps ].GetPtr();
-    pm.Fug   = (float *)aObj[ o_wd_fug ].GetPtr();
-    pm.Fug_l = (float *)aObj[ o_wd_fugl ].GetPtr();
-    pm.Ppg_l = (float *)aObj[ o_wd_ppgl ].GetPtr();
+    pm.Xr0h0 = (double (*)[2])aObj[ o_wi_xr0h0 ].GetPtr();
+    pm.XlamA = (double (*)[MST])aObj[ o_wi_xlama ].GetPtr();
+    pm.Xetaf = (double (*)[MST])aObj[ o_wi_xetaf ].GetPtr();
+    pm.Xcond = (double *)aObj[ o_wi_xcond ].GetPtr();
+    pm.Xeps  = (double *)aObj[ o_wi_xeps ].GetPtr();
+    pm.Awt   = (double *)aObj[ o_wi_awt ].GetPtr();
+    pm.A     = (double *)aObj[ o_wi_a ].GetPtr();
+    pm.XFs   = (double *)aObj[ o_wd_xfs ].GetPtr();
+    pm.Falps = (double *)aObj[ o_wd_falps ].GetPtr();
+    pm.Fug   = (double *)aObj[ o_wd_fug ].GetPtr();
+    pm.Fug_l = (double *)aObj[ o_wd_fugl ].GetPtr();
+    pm.Ppg_l = (double *)aObj[ o_wd_ppgl ].GetPtr();
     pm.XFTS  = (double (*)[MST])aObj[ o_w_xfts ].GetPtr();
-    pm.MASDJ = (float (*)[DFCN])aObj[ o_wo_masdj ].GetPtr();
+    pm.MASDJ = (double (*)[DFCN])aObj[ o_wo_masdj ].GetPtr();
     pm.G     = (double *)aObj[ o_wo_g ].GetPtr();
     pm.G0    = (double *)aObj[ o_wi_g0 ].GetPtr();
     pm.lnGam = (double *)aObj[ o_wo_lngam ].GetPtr();
@@ -503,9 +503,9 @@ void TMulti::dyn_set(int /*q*/)
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].GetPtr();
 /*
 //  Added 16.11.2004 by Sveta
-    pm.sitXcat = (short *)aObj[ o_wd_sitxcat ].GetPtr();
-    pm.sitXan = (short *)aObj[ o_wd_sitxan ].GetPtr();
-    pm.sitE = (float *)aObj[ o_wd_site ].GetPtr();
+    pm.sitXcat = (long int *)aObj[ o_wd_sitxcat ].GetPtr();
+    pm.sitXan = (long int *)aObj[ o_wd_sitxan ].GetPtr();
+    pm.sitE = (double *)aObj[ o_wd_site ].GetPtr();
 */
 }
 
@@ -513,32 +513,32 @@ void TMulti::dyn_set(int /*q*/)
 // free dynamic memory in objects and values
 void TMulti::dyn_kill(int /*q*/)
 {
-    pm.L1    = (short *)aObj[ o_wi_l1 ].Free();
-    pm.IPx = (short *)aObj[ o_wi_ipxpm ].Free();   // added 07.12.2006  KD
-    pm.LsMod = (short *)aObj[ o_wi_lsmod ].Free();
-    pm.LsMdc = (short *)aObj[ o_wi_lsmdc ].Free();
-    pm.mui   = (short *)aObj[ o_wi_mui ].Free();
-    pm.muk   = (short *)aObj[ o_wi_muk ].Free();
-    pm.muj   = (short *)aObj[ o_wi_muj ].Free();
-    pm.SATX =(short (*)[4])aObj[ o_wi_satndx ].Free();
+    pm.L1    = (long int *)aObj[ o_wi_l1 ].Free();
+    pm.IPx = (long int *)aObj[ o_wi_ipxpm ].Free();   // added 07.12.2006  KD
+    pm.LsMod = (long int *)aObj[ o_wi_lsmod ].Free();
+    pm.LsMdc = (long int *)aObj[ o_wi_lsmdc ].Free();
+    pm.mui   = (long int *)aObj[ o_wi_mui ].Free();
+    pm.muk   = (long int *)aObj[ o_wi_muk ].Free();
+    pm.muj   = (long int *)aObj[ o_wi_muj ].Free();
+    pm.SATX =(long int (*)[4])aObj[ o_wi_satndx ].Free();
     pm.DUL   = (double *)aObj[ o_wi_dul ].Free();
     pm.DLL   = (double *)aObj[ o_wi_dll ].Free();
     pm.GEX   = (double *)aObj[ o_wi_gex ].Free();
     pm.PUL   = (double *)aObj[ o_wi_pul ].Free();
     pm.PLL   = (double *)aObj[ o_wi_pll ].Free();
     pm.YOF   = (double *)aObj[ o_wi_yof ].Free();
-    pm.PMc   = (float *)aObj[ o_wi_pmc ].Free();
-    pm.DMc   = (float *)aObj[ o_wi_dmc ].Free();
+    pm.PMc   = (double *)aObj[ o_wi_pmc ].Free();
+    pm.DMc   = (double *)aObj[ o_wi_dmc ].Free();
     pm.Vol   = (double *)aObj[ o_wio_vol ].Free();
-    pm.HYM   = (float *)aObj[ o_w_hym ].Free();
-    pm.VL    = (float *)aObj[ o_w_vl ].Free();
+    pm.HYM   = (double *)aObj[ o_w_hym ].Free();
+    pm.VL    = (double *)aObj[ o_w_vl ].Free();
     pm.MM    = (double *)aObj[ o_wi_mm ].Free();
-    pm.H0    = (float *)aObj[ o_wio_h0 ].Free();
-    pm.A0    = (float *)aObj[ o_wio_a0 ].Free();
-    pm.U0    = (float *)aObj[ o_wio_u0 ].Free();
-    pm.S0    = (float *)aObj[ o_wio_s0 ].Free();
-    pm.Cp0   = (float *)aObj[ o_wio_cp0 ].Free();
-    pm.Cv0   = (float *)aObj[ o_wio_cv0 ].Free();
+    pm.H0    = (double *)aObj[ o_wio_h0 ].Free();
+    pm.A0    = (double *)aObj[ o_wio_a0 ].Free();
+    pm.U0    = (double *)aObj[ o_wio_u0 ].Free();
+    pm.S0    = (double *)aObj[ o_wio_s0 ].Free();
+    pm.Cp0   = (double *)aObj[ o_wio_cp0 ].Free();
+    pm.Cv0   = (double *)aObj[ o_wio_cv0 ].Free();
     pm.Pparc = (double *)aObj[ o_wi_pparc ].Free();
     pm.Y_m   = (double *)aObj[ o_wd_ym ].Free();
     pm.Y_la  = (double *)aObj[ o_wd_yla ].Free();
@@ -547,40 +547,40 @@ void TMulti::dyn_kill(int /*q*/)
     pm.lnGmf = (double *)aObj[ o_wi_lngmf ].Free();
     pm.lnGmM = (double *)aObj[ o_wio_lngmm ].Free();
     pm.EZ    = (double *)aObj[ o_wi_ez ].Free();
-    pm.Wb    = (float *)aObj[ o_wio_wb ].Free();
-    pm.Wabs  = (float *)aObj[ o_wio_wabs ].Free();
-    pm.Rion  = (float *)aObj[ o_wi_rion ].Free();
-    pm.Aalp  = (float *)aObj[ o_wi_aalp ].Free();
-    pm.Sigw  = (float *)aObj[ o_wi_sigw ].Free();
-    pm.Sigg  = (float *)aObj[ o_wi_sigg ].Free();
-    pm.Nfsp  = (float (*)[MST])aObj[ o_wi_nfsp ].Free();
-    pm.MASDT = (float (*)[MST])aObj[ o_wi_masdt ].Free();
+    pm.Wb    = (double *)aObj[ o_wio_wb ].Free();
+    pm.Wabs  = (double *)aObj[ o_wio_wabs ].Free();
+    pm.Rion  = (double *)aObj[ o_wi_rion ].Free();
+    pm.Aalp  = (double *)aObj[ o_wi_aalp ].Free();
+    pm.Sigw  = (double *)aObj[ o_wi_sigw ].Free();
+    pm.Sigg  = (double *)aObj[ o_wi_sigg ].Free();
+    pm.Nfsp  = (double (*)[MST])aObj[ o_wi_nfsp ].Free();
+    pm.MASDT = (double (*)[MST])aObj[ o_wi_masdt ].Free();
     pm.FVOL  = (double *)aObj[ o_wd_fvol ].Free();
     pm.FWGT  = (double *)aObj[ o_wd_fwgt ].Free();
-    pm.XcapA = (float (*)[MST])aObj[ o_w_xcapa ].Free();
-    pm.XcapB = (float (*)[MST])aObj[ o_w_xcapb ].Free();
-    pm.XcapD = (float (*)[MST])aObj[ o_w_xcapd ].Free();
-    pm.XcapF = (float (*)[MST])aObj[ o_w_xcapf ].Free();
-    pm.XdlA  = (float (*)[MST])aObj[ o_wo_xdla ].Free();
-    pm.XdlB  = (float (*)[MST])aObj[ o_wo_xdlb ].Free();
-    pm.XdlD  = (float (*)[MST])aObj[ o_wo_xdld ].Free();
+    pm.XcapA = (double (*)[MST])aObj[ o_w_xcapa ].Free();
+    pm.XcapB = (double (*)[MST])aObj[ o_w_xcapb ].Free();
+    pm.XcapD = (double (*)[MST])aObj[ o_w_xcapd ].Free();
+    pm.XcapF = (double (*)[MST])aObj[ o_w_xcapf ].Free();
+    pm.XdlA  = (double (*)[MST])aObj[ o_wo_xdla ].Free();
+    pm.XdlB  = (double (*)[MST])aObj[ o_wo_xdlb ].Free();
+    pm.XdlD  = (double (*)[MST])aObj[ o_wo_xdld ].Free();
     pm.XpsiA = (double (*)[MST])aObj[ o_wo_psia ].Free();
     pm.XpsiB = (double (*)[MST])aObj[ o_wo_psib ].Free();
     pm.XpsiD = (double (*)[MST])aObj[ o_wo_psid ].Free();
-    pm.Xr0h0 = (float (*)[2])aObj[ o_wi_xr0h0 ].Free();
-    pm.XlamA = (float (*)[MST])aObj[ o_wi_xlama ].Free();
-    pm.Xetaf = (float (*)[MST])aObj[ o_wi_xetaf ].Free();
-    pm.Xcond = (float *)aObj[ o_wi_xcond ].Free();
-    pm.Xeps  = (float *)aObj[ o_wi_xeps ].Free();
-    pm.Awt   = (float *)aObj[ o_wi_awt ].Free();
-    pm.A     = (float *)aObj[ o_wi_a ].Free();
-    pm.XFs   = (float *)aObj[ o_wd_xfs ].Free();
-    pm.Falps = (float *)aObj[ o_wd_falps ].Free();
-    pm.Fug   = (float *)aObj[ o_wd_fug ].Free();
-    pm.Fug_l = (float *)aObj[ o_wd_fugl ].Free();
-    pm.Ppg_l = (float *)aObj[ o_wd_ppgl ].Free();
+    pm.Xr0h0 = (double (*)[2])aObj[ o_wi_xr0h0 ].Free();
+    pm.XlamA = (double (*)[MST])aObj[ o_wi_xlama ].Free();
+    pm.Xetaf = (double (*)[MST])aObj[ o_wi_xetaf ].Free();
+    pm.Xcond = (double *)aObj[ o_wi_xcond ].Free();
+    pm.Xeps  = (double *)aObj[ o_wi_xeps ].Free();
+    pm.Awt   = (double *)aObj[ o_wi_awt ].Free();
+    pm.A     = (double *)aObj[ o_wi_a ].Free();
+    pm.XFs   = (double *)aObj[ o_wd_xfs ].Free();
+    pm.Falps = (double *)aObj[ o_wd_falps ].Free();
+    pm.Fug   = (double *)aObj[ o_wd_fug ].Free();
+    pm.Fug_l = (double *)aObj[ o_wd_fugl ].Free();
+    pm.Ppg_l = (double *)aObj[ o_wd_ppgl ].Free();
     pm.XFTS  = (double (*)[MST])aObj[ o_w_xfts ].Free();
-    pm.MASDJ = (float (*)[DFCN])aObj[ o_wo_masdj ].Free();
+    pm.MASDJ = (double (*)[DFCN])aObj[ o_wo_masdj ].Free();
     pm.G     = (double *)aObj[ o_wo_g ].Free();
     pm.G0    = (double *)aObj[ o_wi_g0 ].Free();
     pm.lnGam = (double *)aObj[ o_wo_lngam ].Free();
@@ -643,9 +643,9 @@ void TMulti::dyn_kill(int /*q*/)
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].Free();
 /*
 //  Added 16.11.2004 by Sveta
-    pm.sitXcat = (short *)aObj[ o_wd_sitxcat ].Free();
-    pm.sitXan = (short *)aObj[ o_wd_sitxan ].Free();
-    pm.sitE = (float *)aObj[ o_wd_site ].Free();
+    pm.sitXcat = (long int *)aObj[ o_wd_sitxcat ].Free();
+    pm.sitXan = (long int *)aObj[ o_wd_sitxan ].Free();
+    pm.sitE = (double *)aObj[ o_wd_site ].Free();
 */
 }
 
@@ -654,17 +654,17 @@ void TMulti::sit_dyn_new()
 {
 //  Added 16.11.2004 by SD
    if( pm.sitNcat*pm.sitNan )
-     pm.sitE = (float *)aObj[ o_wd_site].Alloc(pm.sitNcat, pm.sitNan, F_);
+     pm.sitE = (double *)aObj[ o_wd_site].Alloc(pm.sitNcat, pm.sitNan, D_);
    else
-     pm.sitE = (float *)aObj[ o_wd_site].Free();
+     pm.sitE = (double *)aObj[ o_wd_site].Free();
    if( pm.sitNcat )
-     pm.sitXcat = (short *)aObj[ o_wd_sitxcat].Alloc( pm.sitNcat, 1, I_ );
+     pm.sitXcat = (long int *)aObj[ o_wd_sitxcat].Alloc( pm.sitNcat, 1, L_ );
    else
-     pm.sitXcat = (short *)aObj[ o_wd_sitxcat].Free();
+     pm.sitXcat = (long int *)aObj[ o_wd_sitxcat].Free();
    if( pm.sitNan )
-     pm.sitXan = (short *)aObj[ o_wd_sitxan].Alloc( 1, pm.sitNan, I_ );
+     pm.sitXan = (long int *)aObj[ o_wd_sitxan].Alloc( 1, pm.sitNan, L_ );
    else
-     pm.sitXan = (short *)aObj[ o_wd_sitxan].Free();
+     pm.sitXan = (long int *)aObj[ o_wd_sitxan].Free();
 }
 */
 // reallocation of dynamic memory
@@ -674,19 +674,19 @@ void TMulti::dyn_new(int /*q*/)
         Error( GetName(), "pm.N < 2 || pm.L < 2 || pm.FI < 1" );
     // Part 1
     // always needed
-    pm.L1 = (short *)aObj[ o_wi_l1].Alloc( pm.FI, 1, I_ );
-    pm.muk = (short *)aObj[ o_wi_muk].Alloc( pm.FI, 1, I_ );
-    pm.mui = (short *)aObj[ o_wi_mui].Alloc( pm.N, 1, I_);
-    pm.muj = (short *)aObj[ o_wi_muj].Alloc( pm.L, 1, I_ );
+    pm.L1 = (long int *)aObj[ o_wi_l1].Alloc( pm.FI, 1, L_ );
+    pm.muk = (long int *)aObj[ o_wi_muk].Alloc( pm.FI, 1, L_ );
+    pm.mui = (long int *)aObj[ o_wi_mui].Alloc( pm.N, 1, L_);
+    pm.muj = (long int *)aObj[ o_wi_muj].Alloc( pm.L, 1, L_ );
     pm.DUL = (double *)aObj[ o_wi_dul].Alloc( pm.L, 1, D_ );
     pm.DLL = (double *)aObj[ o_wi_dll].Alloc( pm.L, 1, D_ );
     pm.Vol = (double *)aObj[ o_wio_vol].Alloc( pm.L, 1, D_ );
     pm.Pparc = (double *)aObj[ o_wi_pparc].Alloc( pm.L, 1, D_ );
     pm.MM = (double *)aObj[ o_wi_mm].Alloc( pm.L, 1, D_ );
-    pm.Awt = (float *)aObj[ o_wi_awt].Alloc( pm.N, 1, F_ );
-    pm.A = (float *)aObj[ o_wi_a].Alloc( pm.L, pm.N, F_ );
-    pm.XFs = (float *)aObj[ o_wd_xfs].Alloc( pm.FI, 1, F_ );
-    pm.Falps = (float *)aObj[ o_wd_falps].Alloc( pm.FI, 1, F_ );
+    pm.Awt = (double *)aObj[ o_wi_awt].Alloc( pm.N, 1, D_ );
+    pm.A = (double *)aObj[ o_wi_a].Alloc( pm.L, pm.N, D_ );
+    pm.XFs = (double *)aObj[ o_wd_xfs].Alloc( pm.FI, 1, D_ );
+    pm.Falps = (double *)aObj[ o_wd_falps].Alloc( pm.FI, 1, D_ );
     pm.G = (double *)aObj[ o_wo_g].Alloc( pm.L, 1, D_);
     pm.G0 = (double *)aObj[ o_wi_g0].Alloc( pm.L, 1, D_);
     pm.lnGam = (double *)aObj[ o_wo_lngam].Alloc( pm.L, 1, D_);
@@ -741,7 +741,7 @@ void TMulti::dyn_new(int /*q*/)
         pm.Y_w = (double *)aObj[ o_wd_yw].Alloc( pm.L, 1, D_ );
         pm.Fx = (double *)aObj[ o_wo_fxa].Alloc( pm.L, 1, D_);
         pm.Wx = (double *)aObj[ o_wo_wx].Alloc( pm.L, 1, D_);
-        pm.VL = (float *)aObj[ o_w_vl].Alloc( pm.L, 1, F_ );
+        pm.VL = (double *)aObj[ o_w_vl].Alloc( pm.L, 1, D_ );
         pm.Gamma = (double *)aObj[ o_wd_gamma].Alloc( pm.L, 1, D_ );  /*!*/
         pm.lnGmf = (double *)aObj[ o_wi_lngmf].Alloc( pm.L, 1, D_ );  /*!*/
 //        pm.D = (double *)aObj[ o_w_d].Alloc( pm.L, 1, D_);
@@ -752,7 +752,7 @@ void TMulti::dyn_new(int /*q*/)
         pm.Y_w   = (double *)aObj[ o_wd_yw ].Free();
         pm.Fx    = (double *)aObj[ o_wo_fxa ].Free();
         pm.Wx    = (double *)aObj[ o_wo_wx ].Free();
-        pm.VL    = (float *)aObj[ o_w_vl ].Free();
+        pm.VL    = (double *)aObj[ o_w_vl ].Free();
         pm.Gamma = (double *)aObj[ o_wd_gamma ].Free();
         pm.lnGmf = (double *)aObj[ o_wi_lngmf ].Free();
 //        pm.D     = (double *)aObj[ o_w_d ].Free();
@@ -765,12 +765,12 @@ void TMulti::dyn_new(int /*q*/)
        pm.BFC = (double *)aObj[ o_wo_bfc].Alloc( 1, pm.N, D_ );
         pm.XFA = (double *)aObj[ o_ww_xfa].Alloc( pm.FIs, 1, D_ );
         pm.YFA = (double *)aObj[ o_ww_yfa].Alloc( pm.FIs, 1, D_ );
-        pm.LsMod = (short *)aObj[ o_wi_lsmod].Alloc( pm.FIs, 3, I_ );
-        pm.LsMdc = (short *)aObj[ o_wi_lsmdc].Alloc( pm.FIs, 1, I_ );
+        pm.LsMod = (long int *)aObj[ o_wi_lsmod].Alloc( pm.FIs, 3, L_ );
+        pm.LsMdc = (long int *)aObj[ o_wi_lsmdc].Alloc( pm.FIs, 1, L_ );
     // IPx, PMc and DMc may be realloced after load arrays LsMod and LsMdc
-        pm.IPx = (short *)aObj[ o_wi_ipxpm ].Alloc(pm.FIs, 1, I_);  // added 07.12.2006 KD
-        pm.PMc = (float *)aObj[ o_wi_pmc].Alloc( pm.FIs, 1, F_);
-        pm.DMc = (float *)aObj[ o_wi_dmc].Alloc( pm.Ls, 1, F_ );
+        pm.IPx = (long int *)aObj[ o_wi_ipxpm ].Alloc(pm.FIs, 1, L_);  // added 07.12.2006 KD
+        pm.PMc = (double *)aObj[ o_wi_pmc].Alloc( pm.FIs, 1, D_);
+        pm.DMc = (double *)aObj[ o_wi_dmc].Alloc( pm.Ls, 1, D_ );
         pm.PUL = (double *)aObj[ o_wi_pul].Alloc( pm.FIs, 1, D_);
         pm.PLL = (double *)aObj[ o_wi_pll].Alloc( pm.FIs, 1, D_);
         //     pm.YOF = (double *)aObj[ o_wi_yof].Alloc( pm.FI, 1, D_ );
@@ -784,14 +784,14 @@ void TMulti::dyn_new(int /*q*/)
         pm.BFC    = (double *)aObj[ o_wo_bfc ].Free();
         pm.XFA   = (double *)aObj[ o_ww_xfa ].Free();
         pm.YFA   = (double *)aObj[ o_ww_yfa ].Free();
-        pm.LsMod = (short *)aObj[ o_wi_lsmod ].Free();
-        pm.LsMdc = (short *)aObj[ o_wi_lsmdc ].Free();
-        pm.IPx = (short *)aObj[ o_wi_ipxpm ].Free();   // added 07.12.2006  KD
+        pm.LsMod = (long int *)aObj[ o_wi_lsmod ].Free();
+        pm.LsMdc = (long int *)aObj[ o_wi_lsmdc ].Free();
+        pm.IPx = (long int *)aObj[ o_wi_ipxpm ].Free();   // added 07.12.2006  KD
         pm.PUL   = (double *)aObj[ o_wi_pul ].Free();
         pm.PLL   = (double *)aObj[ o_wi_pll ].Free();
         //    pm.YOF   = (double *)aObj[ o_wi_yof ].Free();
-        pm.PMc   = (float *)aObj[ o_wi_pmc ].Free();
-        pm.DMc   = (float *)aObj[ o_wi_dmc ].Free();
+        pm.PMc   = (double *)aObj[ o_wi_pmc ].Free();
+        pm.DMc   = (double *)aObj[ o_wi_dmc ].Free();
         pm.sMod  = (char (*)[6])aObj[ o_wi_smod ].Free();
         pm.RFLC  = (char *)aObj[ o_wi_rflc ].Free();
         pm.RFSC  = (char *)aObj[ o_wi_rfsc ].Free();
@@ -815,62 +815,62 @@ void TMulti::dyn_new(int /*q*/)
     /* sorption phases */
     if( syp->PAalp != S_OFF )
     {
-        pm.Aalp = (float *)aObj[ o_wi_aalp].Alloc( pm.FI, 1, F_ );
-        pm.Xr0h0 = (float (*)[2])aObj[ o_wi_xr0h0].Alloc( pm.FI, 2, F_ );
+        pm.Aalp = (double *)aObj[ o_wi_aalp].Alloc( pm.FI, 1, D_ );
+        pm.Xr0h0 = (double (*)[2])aObj[ o_wi_xr0h0].Alloc( pm.FI, 2, D_ );
     }
     else
     {
-        pm.Aalp  = (float *)aObj[ o_wi_aalp ].Free();
-        pm.Xr0h0 = (float (*)[2])aObj[ o_wi_xr0h0 ].Free();
+        pm.Aalp  = (double *)aObj[ o_wi_aalp ].Free();
+        pm.Xr0h0 = (double (*)[2])aObj[ o_wi_xr0h0 ].Free();
     }
 
    if( syp->PSigm != S_OFF )
-           pm.Sigw = (float *)aObj[ o_wi_sigw].Alloc( pm.FI, 1, F_ );
-    else  pm.Sigw  = (float *)aObj[ o_wi_sigw ].Free();
+           pm.Sigw = (double *)aObj[ o_wi_sigw].Alloc( pm.FI, 1, D_ );
+    else  pm.Sigw  = (double *)aObj[ o_wi_sigw ].Free();
 
     if( syp->PSigm != S_OFF )
-        pm.Sigg = (float *)aObj[ o_wi_sigg].Alloc( pm.FI, 1, F_ );
-    else  pm.Sigg  = (float *)aObj[ o_wi_sigg ].Free();
+        pm.Sigg = (double *)aObj[ o_wi_sigg].Alloc( pm.FI, 1, D_ );
+    else  pm.Sigg  = (double *)aObj[ o_wi_sigg ].Free();
 
     if( pm.E )
     {
         pm.EZ = (double *)aObj[ o_wi_ez].Alloc( pm.L, 1, D_ );
-        pm.Xcond = (float *)aObj[ o_wi_xcond].Alloc( pm.FI, 1, F_ );
-        pm.Xeps = (float *)aObj[ o_wi_xeps].Alloc( pm.FI, 1, F_ );
+        pm.Xcond = (double *)aObj[ o_wi_xcond].Alloc( pm.FI, 1, D_ );
+        pm.Xeps = (double *)aObj[ o_wi_xeps].Alloc( pm.FI, 1, D_ );
     }
     else
     {
         pm.EZ    = (double *)aObj[ o_wi_ez ].Free();
-        pm.Xcond = (float *)aObj[ o_wi_xcond ].Free();
-        pm.Xeps  = (float *)aObj[ o_wi_xeps ].Free();
+        pm.Xcond = (double *)aObj[ o_wi_xcond ].Free();
+        pm.Xeps  = (double *)aObj[ o_wi_xeps ].Free();
     }
 
     if( pm.FIat > 0 && pm.FIs > 0 )
     { // ADSORPTION AND ION EXCHANGE
-        pm.SATX = (short (*)[4])aObj[ o_wi_satndx].Alloc( pm.Lads, 4, I_ );
+        pm.SATX = (long int (*)[4])aObj[ o_wi_satndx].Alloc( pm.Lads, 4, L_ );
         pm.SCM  = (char (*)[MST])aObj[ o_wi_scm].Alloc( pm.FIs, pm.FIat, A_ );
-        //   memset( pm.SCM, SC_NOT_USED, pm.FIs*pm.FIat );
-        pm.Nfsp = (float (*)[MST])aObj[ o_wi_nfsp].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.MASDT = (float (*)[MST])aObj[ o_wi_masdt].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.XcapA = (float (*)[MST])aObj[ o_w_xcapa].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.XcapB = (float (*)[MST])aObj[ o_w_xcapb].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.XcapD = (float (*)[MST])aObj[ o_w_xcapd].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.XcapF = (float (*)[MST])aObj[ o_w_xcapf].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.XdlA = (float (*)[MST])aObj[ o_wo_xdla].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.XdlB = (float (*)[MST])aObj[ o_wo_xdlb].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.XdlD = (float (*)[MST])aObj[ o_wo_xdld].Alloc( pm.FIs, pm.FIat, F_ );
+        //   fillValue( pm.SCM, SC_NOT_USED, pm.FIs*pm.FIat );
+        pm.Nfsp = (double (*)[MST])aObj[ o_wi_nfsp].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.MASDT = (double (*)[MST])aObj[ o_wi_masdt].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.XcapA = (double (*)[MST])aObj[ o_w_xcapa].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.XcapB = (double (*)[MST])aObj[ o_w_xcapb].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.XcapD = (double (*)[MST])aObj[ o_w_xcapd].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.XcapF = (double (*)[MST])aObj[ o_w_xcapf].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.XdlA = (double (*)[MST])aObj[ o_wo_xdla].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.XdlB = (double (*)[MST])aObj[ o_wo_xdlb].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.XdlD = (double (*)[MST])aObj[ o_wo_xdld].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XpsiA = (double (*)[MST])aObj[ o_wo_psia].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XpsiB = (double (*)[MST])aObj[ o_wo_psib].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XpsiD = (double (*)[MST])aObj[ o_wo_psid].Alloc( pm.FIs, pm.FIat, D_ );
-        pm.XlamA = (float (*)[MST])aObj[ o_wi_xlama].Alloc( pm.FIs, pm.FIat, F_ );
-        pm.Xetaf = (float (*)[MST])aObj[ o_wi_xetaf].Alloc( pm.FIs, pm.FIat, F_ );
+        pm.XlamA = (double (*)[MST])aObj[ o_wi_xlama].Alloc( pm.FIs, pm.FIat, D_ );
+        pm.Xetaf = (double (*)[MST])aObj[ o_wi_xetaf].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XetaB = (double (*)[MST])aObj[ o_w_xetab].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XetaD = (double (*)[MST])aObj[ o_w_xetad].Alloc( pm.FIs, pm.FIat, D_ );
         pm.XFTS = (double (*)[MST])aObj[ o_w_xfts].Alloc( pm.FIs, pm.FIat, D_ );
         pm.SATT = (char *)aObj[ o_wi_satt].Alloc( pm.Lads, 1, A_ );
-        pm.MASDJ = (float (*)[DFCN])aObj[ o_wo_masdj].Alloc( pm.Lads, DFCN, F_ );
-//        pm.MASDJ = (float *)aObj[ o_wo_masdj].Alloc( pm.Ls, 1, F_ );
+        pm.MASDJ = (double (*)[DFCN])aObj[ o_wo_masdj].Alloc( pm.Lads, DFCN, D_ );
+//        pm.MASDJ = (double *)aObj[ o_wo_masdj].Alloc( pm.Ls, 1, D_ );
         pm.D = (double (*)[MST])aObj[ o_w_d].Alloc( MST, MST, D_);
         pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat].Alloc( pm.Lads, 4, D_ );
         pm.SM3 = (char (*)[MAXDCNAME])aObj[ o_wd_sm3].Alloc( pm.Lads, 1, MAXDCNAME );
@@ -878,28 +878,28 @@ void TMulti::dyn_new(int /*q*/)
     }
     else
     {
-        pm.SATX =(short (*)[4])aObj[ o_wi_satndx ].Free();
+        pm.SATX =(long int (*)[4])aObj[ o_wi_satndx ].Free();
         pm.SCM   = (char (*)[MST])aObj[ o_wi_scm ].Free();
-        pm.Nfsp  = (float (*)[MST])aObj[ o_wi_nfsp ].Free();
-        pm.MASDT = (float (*)[MST])aObj[ o_wi_masdt ].Free();
-        pm.XcapA = (float (*)[MST])aObj[ o_w_xcapa ].Free();
-        pm.XcapB = (float (*)[MST])aObj[ o_w_xcapb ].Free();
-        pm.XcapD = (float (*)[MST])aObj[ o_w_xcapd ].Free();
-        pm.XcapF = (float (*)[MST])aObj[ o_w_xcapf ].Free();
-        pm.XdlA  = (float (*)[MST])aObj[ o_wo_xdla ].Free();
-        pm.XdlB  = (float (*)[MST])aObj[ o_wo_xdlb ].Free();
-        pm.XdlD  = (float (*)[MST])aObj[ o_wo_xdld ].Free();
+        pm.Nfsp  = (double (*)[MST])aObj[ o_wi_nfsp ].Free();
+        pm.MASDT = (double (*)[MST])aObj[ o_wi_masdt ].Free();
+        pm.XcapA = (double (*)[MST])aObj[ o_w_xcapa ].Free();
+        pm.XcapB = (double (*)[MST])aObj[ o_w_xcapb ].Free();
+        pm.XcapD = (double (*)[MST])aObj[ o_w_xcapd ].Free();
+        pm.XcapF = (double (*)[MST])aObj[ o_w_xcapf ].Free();
+        pm.XdlA  = (double (*)[MST])aObj[ o_wo_xdla ].Free();
+        pm.XdlB  = (double (*)[MST])aObj[ o_wo_xdlb ].Free();
+        pm.XdlD  = (double (*)[MST])aObj[ o_wo_xdld ].Free();
         pm.XpsiA = (double (*)[MST])aObj[ o_wo_psia ].Free();
         pm.XpsiB = (double (*)[MST])aObj[ o_wo_psib ].Free();
         pm.XpsiD = (double (*)[MST])aObj[ o_wo_psid ].Free();
-        pm.XlamA = (float (*)[MST])aObj[ o_wi_xlama ].Free();
-        pm.Xetaf = (float (*)[MST])aObj[ o_wi_xetaf ].Free();
+        pm.XlamA = (double (*)[MST])aObj[ o_wi_xlama ].Free();
+        pm.Xetaf = (double (*)[MST])aObj[ o_wi_xetaf ].Free();
         pm.XFTS  = (double (*)[MST])aObj[ o_w_xfts ].Free();
         pm.XetaA = (double (*)[MST])aObj[ o_w_xetaa ].Free();
         pm.XetaB = (double (*)[MST])aObj[ o_w_xetab ].Free();
         pm.XetaD = (double (*)[MST])aObj[ o_w_xetad ].Free();  // added 12.09.05  KD
         pm.SATT  = (char *)aObj[ o_wi_satt ].Free();
-        pm.MASDJ = (float (*)[DFCN])aObj[ o_wo_masdj ].Free();
+        pm.MASDJ = (double (*)[DFCN])aObj[ o_wo_masdj ].Free();
         pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat ].Free();
         pm.D = (double (*)[MST])aObj[ o_w_d ].Free();
         pm.SM3 = (char (*)[MAXDCNAME])aObj[ o_wd_sm3 ].Free();
@@ -908,182 +908,41 @@ void TMulti::dyn_new(int /*q*/)
 
     if( pm.PG > 0 )
     {
-        pm.Fug = (float *)aObj[ o_wd_fug].Alloc( pm.PG, 1, F_ );
-        pm.Fug_l = (float *)aObj[ o_wd_fugl].Alloc( pm.PG, 1, F_ );
-        pm.Ppg_l = (float *)aObj[ o_wd_ppgl].Alloc( pm.PG, 1, F_ );
+        pm.Fug = (double *)aObj[ o_wd_fug].Alloc( pm.PG, 1, D_ );
+        pm.Fug_l = (double *)aObj[ o_wd_fugl].Alloc( pm.PG, 1, D_ );
+        pm.Ppg_l = (double *)aObj[ o_wd_ppgl].Alloc( pm.PG, 1, D_ );
     }
     else
     {
-        pm.Fug   = (float *)aObj[ o_wd_fug ].Free();
-        pm.Fug_l = (float *)aObj[ o_wd_fugl ].Free();
-        pm.Ppg_l = (float *)aObj[ o_wd_ppgl ].Free();
+        pm.Fug   = (double *)aObj[ o_wd_fug ].Free();
+        pm.Fug_l = (double *)aObj[ o_wd_fugl ].Free();
+        pm.Ppg_l = (double *)aObj[ o_wd_ppgl ].Free();
     }
 
     // Part 3
 
     if( pm.Ls > 1 && pm.FIs > 0 )
     {
-        pm.Wb = (float *)aObj[ o_wio_wb].Alloc( pm.Ls, 1, F_ );
-        pm.Wabs = (float *)aObj[ o_wio_wabs].Alloc( pm.Ls, 1, F_ );
-        pm.Rion = (float *)aObj[ o_wi_rion].Alloc( pm.Ls, 1, F_ );
+        pm.Wb = (double *)aObj[ o_wio_wb].Alloc( pm.Ls, 1, D_ );
+        pm.Wabs = (double *)aObj[ o_wio_wabs].Alloc( pm.Ls, 1, D_ );
+        pm.Rion = (double *)aObj[ o_wi_rion].Alloc( pm.Ls, 1, D_ );
         pm.Qp = (double *)aObj[ o_wi_qp].Alloc( pm.FIs, QPSIZE, D_ );
         pm.Qd = (double *)aObj[ o_wi_qd].Alloc( pm.FIs, QDSIZE, D_ );
     }
     else
     {
-        pm.Wb    = (float *)aObj[ o_wio_wb ].Free();
-        pm.Wabs  = (float *)aObj[ o_wio_wabs ].Free();
-        pm.Rion  = (float *)aObj[ o_wi_rion ].Free();
+        pm.Wb    = (double *)aObj[ o_wio_wb ].Free();
+        pm.Wabs  = (double *)aObj[ o_wio_wabs ].Free();
+        pm.Rion  = (double *)aObj[ o_wi_rion ].Free();
         pm.Qp    = (double *)aObj[ o_wi_qp ].Free();
         pm.Qd    = (double *)aObj[ o_wi_qd ].Free();
     }
 
-    /* pm.R = (float *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
+    /* pm.R = (double *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
 //    sit_dyn_new();
 }
 
 
-//set default information
-void TMulti::set_def( int /*q*/)
-{
-    memcpy( &pm.PunE, "jjbC", 4 );
-    memset( &pm.N, 0, 36*sizeof(short));
-    memset( &pm.TC, 0, 54*sizeof(double));
-    pm.sitNcat = 0;
-    pm.sitNan = 0;
-    pm.L1    = 0;
-    pm.LsMod = 0;
-    pm.LsMdc = 0;
-    pm.mui   = 0;
-    pm.muk   = 0;
-    pm.muj   = 0;
-    pm.SATX =0;
-    pm.DUL   = 0;
-    pm.DLL   = 0;
-    pm.GEX   = 0;
-    pm.PUL   = 0;
-    pm.PLL   = 0;
-    pm.YOF   = 0;
-    pm.PMc   = 0;
-    pm.DMc   = 0;
-    pm.Vol   = 0;
-    pm.HYM   = 0;
-    pm.VL    = 0;
-    pm.MM    = 0;
-    pm.H0    = 0;
-    pm.A0    = 0;
-    pm.U0    = 0;
-    pm.S0    = 0;
-    pm.Cp0   = 0;
-    pm.Cv0   = 0;
-    pm.Pparc = 0;
-    pm.Y_m   = 0;
-    pm.Y_la  = 0;
-    pm.Y_w   = 0;
-    pm.Gamma = 0;
-    pm.lnGmf = 0;
-    pm.lnGmM = 0;
-    pm.EZ    = 0;
-    pm.Wb    = 0;
-    pm.Wabs  = 0;
-    pm.Rion  = 0;
-    pm.Aalp  = 0;
-    pm.Sigw  = 0;
-    pm.Sigg  = 0;
-    pm.Nfsp  = 0;
-    pm.MASDT = 0;
-    pm.FVOL  = 0;
-    pm.FWGT  = 0;
-    pm.XcapA = 0;
-    pm.XcapB = 0;
-    pm.XcapD = 0;
-    pm.XdlA  = 0;
-    pm.XdlB  = 0;
-    pm.XdlD  = 0;
-    pm.XpsiA = 0;
-    pm.XpsiB = 0;
-    pm.XpsiD = 0;
-    pm.Xr0h0 = 0;
-    pm.XlamA = 0;
-    pm.Xetaf = 0;
-    pm.Xcond = 0;
-    pm.Xeps  = 0;
-    pm.Awt   = 0;
-    pm.A     = 0;
-    pm.XFs   = 0;
-        pm.Falps = 0;
-        pm.Fug   = 0;
-        pm.Fug_l = 0;
-        pm.Ppg_l = 0;
-        pm.XFTS  = 0;
-        pm.MASDJ = 0;
-        pm.G     = 0;
-        pm.G0    = 0;
-        pm.lnGam = 0;
-        pm.lnGmo = 0;
-//        pm.lnSAT = 0;
-        pm.lnSAC = 0;
-        pm.B     = 0;
-        pm.U     = 0;
-        pm.U_r   = 0;
-        pm.C     = 0;
-        pm.IC_m  = 0;
-        pm.IC_lm = 0;
-        pm.IC_wm = 0;
-        pm.BF    = 0;
-        pm.BFC    = 0;
-        pm.XF    = 0;
-        pm.YF    = 0;
-        pm.XFA   = 0;
-        pm.YFA   = 0;
-        pm.Falp  = 0;
-        pm.XetaA = 0;
-        pm.XetaB = 0;
-        pm.XetaD = 0;         // added 12.09.05  KD
-        pm.X     = 0;
-        pm.Y     = 0;
-        pm.XY    = 0;
-        pm.Qp    = 0;
-        pm.Qd    = 0;
-        pm.MU    = 0;
-        pm.EMU   = 0;
-        pm.NMU   = 0;
-        pm.W     = 0;
-        pm.Fx    = 0;
-        pm.Wx    = 0;
-        pm.F     = 0;
-        pm.F0    = 0;
-        pm.D     = 0;
-     //   pm.R     = 0;
-     //   pm.R1    = 0;
-        pm.sMod  = 0;
-        pm.SB    = 0;
-        pm.SB1    = 0; // added Sveta 6/07/2001
-        pm.SM    = 0;
-        pm.SF    = 0;
-        pm.SFs   = 0;
-        pm.pbuf  = 0; //
-        pm.RLC   = 0;
-        pm.RSC   = 0;
-        pm.RFLC  = 0;
-        pm.RFSC  = 0;
-        pm.ICC   = 0;
-        pm.DCC   = 0;
-        pm.PHC   = 0;
-        pm.SCM   = 0;
-        pm.SATT  = 0;
-        pm.DCCW  = 0;
-        pm.XcapF = 0;
-        pm.SM2    = 0;
-        pm.SM3    = 0;
-        pm.SF2    = 0;
-        pm.DCC3   = 0;
-//  Added 16.11.2004 by Sveta
-//    pm.sitXcat = 0;
-//    pm.sitXan = 0;
-//    pm.sitE = 0;
-pm.IPx = 0;
-pm.ITF = pm.ITG = 0;
-}
+
 
 //--------------------- End of ms_multi.cpp ---------------------------

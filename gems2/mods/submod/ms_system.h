@@ -251,6 +251,7 @@ public:
 
     //Multi calck
     double MolWeight( int N, float *ICaw, float *Smline );
+    double MolWeight( int N, double *ICaw, double *Smline );
 
     const gstring& GetString()
     {
@@ -266,7 +267,7 @@ typedef enum {  /* Limits on DC and phases */
     /* type of lmits */
     NO_LIM = 'O', LOWER_LIM ='L', UPPER_LIM = 'U', BOTH_LIM ='B',
     /* mode recalc of limits Set_DC_Limits() */
-    DC_LIM_INIT = 0, DC_LIM_CURRENT = 1
+    DC_LIM_INIT = 0L, DC_LIM_CURRENT = 1L
 } DC_LIMITS;
 
 #endif  //_ms_system_h_

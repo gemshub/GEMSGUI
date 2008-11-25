@@ -35,7 +35,7 @@ void TUnSpace::unsp_eqkey()
 {
 
 	double calculation_time;
-    int NumPrecLoops = 0, NumIterFIA = 0, NumIterIPM = 0;
+    long int NumPrecLoops = 0, NumIterFIA = 0, NumIterIPM = 0;
 
 #ifndef IPMGEMPLUGIN
 
@@ -187,13 +187,6 @@ if(!Ip)
 //                                     pmu->G[i];
      }
 
-     /*for( i=0; i<usp->L; i++) //16/02/2007
-    {
-       double xx = (float)(pmu->Guns[i]);
-              xx += (float)(syu->GEX[i]);
-              xx += TProfil::pm->tpp->G[i];
-       usp->vG[Ip*usp->L+i]= xx;
-     }*/
      for( i=0; i<pmu->L; i++)
      { int ii = (pmu->muj[i]);
 #ifndef IPMGEMPLUGIN
@@ -202,7 +195,7 @@ if(!Ip)
 //            xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
        xx += TProfil::pm->tpp->G[ii];
 #else
-       double xx = (float)(pmu->Guns[ii]);
+       double xx = (pmu->Guns[ii]);
 //            xx += (float)(pmu->GEX[i])/pmu->RT; // syu->GEX[ii]
             xx += pmu->tpp_G[ii];
 #endif

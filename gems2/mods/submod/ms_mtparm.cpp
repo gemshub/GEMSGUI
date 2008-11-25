@@ -340,7 +340,7 @@ if( P < 1e-5 )  // trial check  5.12.2006
         /* is not activated, e.g., no HKF data for aqueous species */
     }
     if( tp.Pres1 != S_OFF && tp.mark )
-        memset( tp.mark, '+', tp.L );
+    	fillValue( tp.mark, '+', tp.L );
 
     aW.ods_link(0);
     for( j=0; j < tp.L; j++ )

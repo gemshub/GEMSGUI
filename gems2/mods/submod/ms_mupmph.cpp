@@ -465,7 +465,7 @@ void TMulti::multi_sys_ph()
     time_t crt;
 //    double G;
     double PMM;  // Phase mean mol. mass
-    short Cjs, car_l[32], car_c; // current index carrier sorbent
+    int Cjs, car_l[32], car_c; // current index carrier sorbent
     TPhase* aPH=(TPhase *)(&aMod[RT_PHASE]);
     aPH->ods_link(0);
 
@@ -516,7 +516,7 @@ void TMulti::multi_sys_ph()
                 pmp->LsMod[k*3] = 0;
                 pmp->LsMod[k*3+1] = 0;
                 pmp->LsMod[k*3+2] = 0;
-                pmp->LsMdc[k] = 0;
+                pmp->LsMdc[k] = 0L;
                 memset( pmp->sMod[k], ' ', 6 );
             }
 PARLOAD: if( k < syp->Fis )
@@ -770,12 +770,12 @@ void TMulti::ph_sur_param( int k, int kk )
     {
         if( syp->SCMT[kk][i] == SC_NOT_USED || fabs(syp->Nfsp[kk][i])<1e-9 )
         { /*this type surface of dont used*/
-            pmp->Nfsp[k][i] =  FLOAT_EMPTY;
-            pmp->MASDT[k][i] = FLOAT_EMPTY;
+            pmp->Nfsp[k][i] =  DOUBLE_EMPTY;
+            pmp->MASDT[k][i] = DOUBLE_EMPTY;
             //    pmp->MISDT[k][i] = FLOAT_EMPTY;
-            pmp->XcapA[k][i] = FLOAT_EMPTY;
-            pmp->XcapB[k][i] = FLOAT_EMPTY;
-            pmp->Xetaf[k][i] = FLOAT_EMPTY;
+            pmp->XcapA[k][i] = DOUBLE_EMPTY;
+            pmp->XcapB[k][i] = DOUBLE_EMPTY;
+            pmp->Xetaf[k][i] = DOUBLE_EMPTY;
             pmp->SCM[k][i] = SC_NOT_USED;
             /*  pmp->CSTS[k][i] = CCA_VOL; */
             continue;
@@ -832,9 +832,11 @@ void TMulti::ph_sur_param( int k, int kk )
 // Assigning surface types to carrier (DC) - added 5/13/97 DAK
 // Extended for CD-MUSIC by KD 31.10.2004
 void TMulti::ph_surtype_assign( int k, int kk, int jb, int je,
-                                 short car_l[], int car_c, short Cjs )
+                                 int car_l[], int car_c, int Cjs )
 {
-    int j, jcl, ist/*=0*/, isi/*=0*/, ja/*=0*/;
+    int j, jcl, ja/*=0*/;
+    long int  ist/*=0*/, isi/*=0*/;
+    
     /*  double SATst; */
 
     for( j=jb; j<je; j++ )

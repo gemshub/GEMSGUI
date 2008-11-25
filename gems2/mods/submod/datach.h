@@ -25,7 +25,7 @@
 #ifndef _DataCh_H_
 #define _DataCh_H_
 
-const int
+const long int
     MaxICN =      6,      // IC name length
     MaxDCN =      16,     // DC name length
     MaxPHN =      16;     // PH name length
@@ -33,7 +33,7 @@ const int
 typedef struct
 {  // Structure DataCH
 // Dimensionalities
-  int     // changed from short on 26.06.2008   DK
+  long int     // changed from short on 26.06.2008   DK
 //  These dimensionalities should be the same as in the GEMIPM work structure (MULTI)
     nIC,    // Total number of IC (independent components) in the reactive part
     nDC,    // Total number of DC (chemical species) in the reactive part

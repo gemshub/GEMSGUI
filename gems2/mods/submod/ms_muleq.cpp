@@ -216,8 +216,8 @@ void TMulti::loadData( bool newRec )
 // Load Thermodynamic Data from MTPARM to MULTI
 void TMulti::CompG0Load()
 {
-    int j, jj, k, jb, je=0;
-    double Go, Gg, Ge, Vv = 0.;
+    long int j, jj, k, jb, je=0;
+    double Go, Gg=0., Ge, Vv = 0.;
 
     // ->pTPD state of reload t/d data 0-all, 1 G0, Vol, 2 do not load
     if( pmp->pTPD < 1 )
@@ -289,7 +289,7 @@ void TMulti::CompG0Load()
 //
 void TMulti::EqstatExpand( const char *key )
 {
-    int i, j, k, jb, je=0; // jpb, jpe=0, jdb, jde=0;
+    long int i, j, k, jb, je=0; // jpb, jpe=0, jdb, jde=0;
 //    double FitVar3;
     SPP_SETTING *pa = &TProfil::pm->pa;
     pmp->NR = pmp->N;
@@ -403,7 +403,7 @@ if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models a
 //
 void TMulti::MultiCalcInit( const char *key )
 {
-    int j, k, jb, je=0;
+    long int j, k, jb, je=0;
     SPP_SETTING *pa = &TProfil::pm->pa;
    // Bulk composition and/or dimensions changed ?
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
@@ -418,7 +418,7 @@ void TMulti::MultiCalcInit( const char *key )
    // calculate mass of the system
    pmp->MBX = 0.0;
    for(int i=0; i<pmp->N; i++ )
-      pmp->MBX += pmp->B[i] * (double)pmp->Awt[i];
+      pmp->MBX += pmp->B[i] * pmp->Awt[i];
    pmp->MBX /= 1000.;
 
     // unpack SysEq record

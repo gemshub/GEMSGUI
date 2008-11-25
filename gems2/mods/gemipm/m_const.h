@@ -24,7 +24,7 @@ using namespace std;
 #include "verror.h"
 #include "v_user.h"
 
-const int MST =  6,
+const long int MST =  6,
           DFCN = 6; // number of columns in MASDJ table
 
 const unsigned int
@@ -157,7 +157,7 @@ typedef enum {  // Classifications of DC
     DC_SUR_IPAIR   = 'Z',   // Weak sur complex B plane -> '1'
 
     // Single-component phases:
-    DC_SCP_CONDEN  = 'O',   // DC forming a single-component phase
+    DC_SCP_CONDEN  = 'O'   // DC forming a single-component phase
 
 } DC_CLASSES;
 

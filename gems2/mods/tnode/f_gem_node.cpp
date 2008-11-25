@@ -172,14 +172,14 @@
 #endif
 )
 {
-   short NodeHandle, NodeTypeHY,  NodeTypeMT, NodeStatusFMT, NodeStatusCH, IterDone;
+   long int NodeHandle, NodeTypeHY,  NodeTypeMT, NodeStatusFMT, NodeStatusCH, IterDone;
 
-   NodeHandle = (short) p_NodeHandle;
-   NodeTypeHY = (short) p_NodeTypeHY;
-   NodeTypeMT = (short) p_NodeTypeMT;
-   NodeStatusFMT = (short) p_NodeStatusFMT;
-   NodeStatusCH = (short) p_NodeStatusCH;
-   IterDone = (short) p_IterDone;
+   NodeHandle =  p_NodeHandle;
+   NodeTypeHY =  p_NodeTypeHY;
+   NodeTypeMT =  p_NodeTypeMT;
+   NodeStatusFMT =  p_NodeStatusFMT;
+   NodeStatusCH =  p_NodeStatusCH;
+   IterDone =  p_IterDone;
 
    gstring dbr_file_name( string_, 0, length_);
    dbr_file_name.strip();

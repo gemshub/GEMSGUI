@@ -125,7 +125,7 @@ void TDualTh::make_A( int siz_, char (*for_)[MAXFORMUNITDT] )
 
   dtp->An = (float *)aObj[ o_dtan ].Alloc( siz_, dtp->Nb, F_ );
 dtp->Asiz = (short)siz_;
-  memset(dtp->An, 0, sizeof(float)*(siz_*dtp->Nb) );
+memset(dtp->An, 0, sizeof(float)*(siz_*dtp->Nb) );
   for( ii=0; ii<siz_; ii++ )
      aFo[ii].Stm_line( TProfil::pm->mup->N, dtp->An+ii*TProfil::pm->mup->N,
            (char *)TProfil::pm->mup->SB, TProfil::pm->mup->Val );

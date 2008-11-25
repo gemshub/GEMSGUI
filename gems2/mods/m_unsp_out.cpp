@@ -653,19 +653,19 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
    ff << left << setw(7) << "<IC_up> " <<  usp->IC_up << endl;
    if( _comment )
      ff << "# total IC molality filter - lower limits (default 0/-20) (units defined in PsUnFltI flag)";
-   prar.writeArray(  "m_t_lo", usp->m_t_lo, (int)pmu->N/*usp->N*/, pmu->mui);
+   prar.writeArray(  "m_t_lo", usp->m_t_lo, pmu->N/*usp->N*/, pmu->mui);
    if( _comment )
     ff << "\n# total IC molality filter - upper limits (default 10/+1) (units defined in PsUnFltI flag)";
-   prar.writeArray(  "m_t_up", usp->m_t_up, (int)pmu->N/*usp->N*/, pmu->mui);
+   prar.writeArray(  "m_t_up", usp->m_t_up, pmu->N/*usp->N*/, pmu->mui);
    if( _comment )
     ff << "\n# fugacity/activity filter - lower limits (default 0/-20) (units defined in PsUnFltD flag)";
-   prar.writeArray(  "fug_lo", usp->fug_lo, (int)pmu->Ls/*usp->Ls*/, pmu->muj);
+   prar.writeArray(  "fug_lo", usp->fug_lo, pmu->Ls/*usp->Ls*/, pmu->muj);
    if( _comment )
      ff << "\n#  fugacity/activity filter - upper limits (default 10/+1) (units defined in PsUnFltD flag)";
-   prar.writeArray(  "fug_up", usp->fug_up, (int)pmu->Ls/*usp->Ls*/, pmu->muj);
+   prar.writeArray(  "fug_up", usp->fug_up, pmu->Ls/*usp->Ls*/, pmu->muj);
    if( _comment )
      ff << "\n#  input phase indexes of known equilibrium phase association for a primary filter (Pa_f_pha)";
-   prar.writeArray(  "f_PhA", usp->f_PhA, (int)pmu->N/*usp->N*/, pmu->mui);
+   prar.writeArray(  "f_PhA", usp->f_PhA, pmu->N/*usp->N*/, pmu->mui);
    
    if( _comment )
       ff << "\n\n## Input intervals for filtering sampled GEM solution variants ";
@@ -701,53 +701,53 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
 
    if( _comment )
      ff << "\n# 0-deterministic DC; value >0 is index of a group of varying G to which this DC is assigned";
-   prar.writeArray(  "NgLg", usp->NgLg, (int)pmu->L/*usp->L*/, pmu->muj);
+   prar.writeArray(  "NgLg", usp->NgLg, pmu->L/*usp->L*/, pmu->muj);
    if( _comment )
      ff << "\n# adapted/initial  copy of deterministic values of G298 for DCs";
-   prar.writeArray(  "Gs", usp->Gs[0], (int)pmu->L/*usp->L*/, pmu->muj, 2);
+   prar.writeArray(  "Gs", usp->Gs[0], pmu->L/*usp->L*/, pmu->muj, 2L);
    if( _comment )
     ff << "\n# adapted/initial  uncertainty half-intervals for G variation (flag PsUnInt defines units)";
-   prar.writeArray(  "IntLg", usp->IntLg[0], (int)pmu->L/*usp->L*/, pmu->muj, 2);
+   prar.writeArray(  "IntLg", usp->IntLg[0], pmu->L/*usp->L*/, pmu->muj, 2L);
 
    if( _comment )
      ff << "\n# 0-deterministic DC; value >0 is index of a group varying gamma params (reserved)";
-   prar.writeArray(  "NgGam", usp->NgGam, (int)pmu->Ls/*usp->Ls*/, pmu->muj);
+   prar.writeArray(  "NgGam", usp->NgGam, pmu->Ls/*usp->Ls*/, pmu->muj);
    if( _comment )
      ff << "\n# adapted/initial copy of deterministic Par Gamma (reserved)";
-   prar.writeArray(  "GAMs", usp->GAMs[0], (int)pmu->Ls/*usp->Ls*/, pmu->muj, 2);
+   prar.writeArray(  "GAMs", usp->GAMs[0], pmu->Ls/*usp->Ls*/, pmu->muj, 2L);
    if( _comment )
     ff << "\n# adapted/initial uncertainty half-intervals for gamma params (reserved)";
-   prar.writeArray(  "IntGam", usp->IntGam[0], (int)pmu->Ls/*usp->Ls*/, pmu->muj, 2);
+   prar.writeArray(  "IntGam", usp->IntGam[0], pmu->Ls/*usp->Ls*/, pmu->muj, 2L);
 
    if( _comment )
       ff << "\n# 0-deterministic DC; value >0 is index of a group varying S";
-    prar.writeArray(  "NgLs", usp->NgLs, (int)pmu->L/*usp->L*/, pmu->muj);
+    prar.writeArray(  "NgLs", usp->NgLs, pmu->L/*usp->L*/, pmu->muj);
     if( _comment )
       ff << "\n# adapted/initial  copy of deterministic values of S298 for DCs (reserved)";
-    prar.writeArray(  "Ss", usp->Ss[0], (int)pmu->L/*usp->L*/, pmu->muj, 2);
+    prar.writeArray(  "Ss", usp->Ss[0], pmu->L/*usp->L*/, pmu->muj, 2L);
     if( _comment )
      ff << "\n#  adapted/initial uncertainty half-intervals for S (reserved)";
-    prar.writeArray(  "IntLs", usp->IntLs[0], (int)pmu->L/*usp->L*/, pmu->muj, 2);
+    prar.writeArray(  "IntLs", usp->IntLs[0], pmu->L/*usp->L*/, pmu->muj, 2L);
    
     if( _comment )
        ff << "\n#  0-deterministic DC; value >0 is index of a group varying V";
-    prar.writeArray(  "NgLv", usp->NgLv, (int)pmu->L/*usp->L*/, pmu->muj);
+    prar.writeArray(  "NgLv", usp->NgLv, pmu->L/*usp->L*/, pmu->muj);
     if( _comment )
        ff << "\n# adapted/initial  copy of deterministic values of V298 for DCs";
-    prar.writeArray(  "Vs", usp->Vs[0], (int)pmu->L/*usp->L*/, pmu->muj, 2);
+    prar.writeArray(  "Vs", usp->Vs[0], pmu->L/*usp->L*/, pmu->muj, 2L);
     if( _comment )
       ff << "\n#  adapted/initial uncertainty half-intervals for V variation (flag PsUnInt defines units)";
-    prar.writeArray(  "IntLv", usp->IntLv[0], (int)pmu->L/*usp->L*/, pmu->muj, 2);
+    prar.writeArray(  "IntLv", usp->IntLv[0], pmu->L/*usp->L*/, pmu->muj, 2L);
     
     if( _comment )
        ff << "\n#  0-deterministic DC; value >0 is index of a group varying b to which this IC is assigned";
-    prar.writeArray(  "NgNb", usp->NgNb, (int)pmu->N/*usp->N*/, pmu->mui);
+    prar.writeArray(  "NgNb", usp->NgNb, pmu->N/*usp->N*/, pmu->mui);
     if( _comment )
        ff << "\n# adapted/initial  copy of deterministic values of bulk composition vector b";
-    prar.writeArray(  "Bs", usp->Bs[0], (int)pmu->N/*usp->N*/, pmu->mui, 2);
+    prar.writeArray(  "Bs", usp->Bs[0], pmu->N/*usp->N*/, pmu->mui, 2L);
     if( _comment )
       ff << "\n#  adapted/initial uncertainty half-intervals for b variation (flag PsUnInB defines units)";
-    prar.writeArray(  "IntNb", usp->IntNb[0], (int)pmu->N/*usp->N*/, pmu->mui, 2);
+    prar.writeArray(  "IntNb", usp->IntNb[0], pmu->N/*usp->N*/, pmu->mui, 2L);
     
     if( _comment )
       ff << "\n## Names of columns for output array UnIC ";

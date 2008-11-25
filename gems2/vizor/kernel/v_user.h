@@ -57,6 +57,44 @@ int ROUND(double x )
     return int((x)+.5);
 }
 
+template <class T>
+inline
+void fillValue( T* arr, T value, int size )
+{
+  if( !arr )
+    return;
+  for(int ii=0; ii<size; ii++)
+    arr[ii] = value;
+}
+
+template <class T>
+inline
+void copyValues( T* arr, T* data, int size )
+{
+  if( !arr || !data )
+    return;
+  for(int ii=0; ii<size; ii++)
+    arr[ii] = data[ii];
+}
+
+inline
+void copyValues( double* arr, float* data, int size )
+{
+  if( !arr || !data )
+    return;
+  for(int ii=0; ii<size; ii++)
+    arr[ii] = (double)data[ii];
+}
+
+inline
+void copyValues( long int* arr, short* data, int size )
+{
+  if( !arr || !data )
+    return;
+  for(int ii=0; ii<size; ii++)
+    arr[ii] = (long int)data[ii];
+}
+
 #ifndef IPMGEMPLUGIN
 
 

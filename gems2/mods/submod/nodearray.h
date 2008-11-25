@@ -113,7 +113,7 @@ public:
    // Reads DATABR files saved by GEMS as a break point of the FMT calculation
    // Copying data from work DATABR structure into the node array NodT0
    // and read DATABR structure into the node array NodT1 from file dbr_file
-   void  setNodeArray( gstring& dbr_file, int ndx, bool binary_f );
+   void  setNodeArray( gstring& dbr_file, long int ndx, bool binary_f );
 
 #else
 // Used in GEMIPM2 standalone module only
@@ -189,10 +189,10 @@ public:
 
     // Copies data from the work DATABR structure into the node ndx in  ?????
     // the node arrays NodT0 and NodT1  (as specified in nodeTypes array)
-    void  setNodeArray( int ndx, int* nodeTypes  );
+    void  setNodeArray( long int ndx, long int* nodeTypes  );
 
    // test setup of the boundary condition for all nodes in the task
-    void  checkNodeArray(int i, int* nodeTypes, const char*  datachbr_file );
+    void  checkNodeArray( long int i, long int* nodeTypes, const char*  datachbr_file );
 
    //---------------------------------------------------------
    // Methods for working with node arrays (access to data from DBR)

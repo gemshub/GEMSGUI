@@ -103,9 +103,9 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
                 continue;
 //            if( modT[SPHAS_TYP] != SM_AQSIT )
 //            {                          // Not an aq phase with SIT model
-               pmp->LsMod[k*3] = (short)aPH->php->ncpN;  // number of interaction parameters
-               pmp->LsMod[k*3+1] = (short)aPH->php->npxM; // max. order of interaction parameters
-               pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
+               pmp->LsMod[k*3] = aPH->php->ncpN;  // number of interaction parameters
+               pmp->LsMod[k*3+1] = aPH->php->npxM; // max. order of interaction parameters
+               pmp->LsMod[k*3+2] = aPH->php->ncpM; // number of coeffs per int.parameter
                pmp->LsMdc[k] = aPH->php->nscM; // changed 07.12.2006  KD
 //            }
 /*            else { // Aq phase with SIT model - interaction coeffs must be compressed
@@ -133,9 +133,9 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
         case SM_PRIVATE_:
         case SM_PUBLIC:   // nonideal solution
                //  Changed 07.12.2006   KD
-               pmp->LsMod[k*3] = (short)aPH->php->ncpN;  // number of interaction parameters
-               pmp->LsMod[k*3+1] = (short)aPH->php->npxM; // max. order of interaction parameters
-               pmp->LsMod[k*3+2] = (short)aPH->php->ncpM; // number of coeffs per int.parameter
+               pmp->LsMod[k*3] = aPH->php->ncpN;  // number of interaction parameters
+               pmp->LsMod[k*3+1] = aPH->php->npxM; // max. order of interaction parameters
+               pmp->LsMod[k*3+2] = aPH->php->ncpM; // number of coeffs per int.parameter
                pmp->LsMdc[k] = aPH->php->nscM; // changed 07.12.2006  KD
             /*     if( !pm_GC_ods_link( q, k, jb, kc, kd ))
                  { iRet = AMW_FE; goto WRONG; }  */
@@ -255,29 +255,29 @@ LOAD_NIDMCOEF:
           if( aPH->php->pnc )
           {
               if( kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2] >
-                  (int)(sizeof( pmp->PMc )/sizeof(float)))
-                 pmp->PMc = (float *) aObj[ o_wi_pmc ].Alloc(
-                   (kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2]), 1, F_ );
+                  (int)(sizeof( pmp->PMc )/sizeof(double)))
+                 pmp->PMc = (double *) aObj[ o_wi_pmc ].Alloc(
+                   (kc+pmp->LsMod[k*3]*pmp->LsMod[k*3+2]), 1, D_ );
               ErrorIf( pmp->PMc == NULL, "SolModLoad",
                        "Error in reallocating memory for pmp->PMc." );
 
 // Check if coeffs are properly compressed into MULTI !!!!!!!!!!!!!!!
 //              if( modT[SPHAS_TYP] != SM_AQSIT )  // Not a SIT model
 //              {    // temporary memcpy() - reimplement with compression !!!!!
-                  memcpy( pmp->PMc+kc, aPH->php->pnc,
-                     (pmp->LsMod[k*3]*pmp->LsMod[k*3+2])*sizeof(float));
+                  copyValues( pmp->PMc+kc, aPH->php->pnc,
+                     (pmp->LsMod[k*3]*pmp->LsMod[k*3+2]));
 //              }
 //              else { // Aqueous phase with SIT model - to be reworked
 //                 float *ppnc;
 //                 ppnc = PackSITcoeffs( k, JB, JE, jb, je, pmp->LsMod[k*3] );
 //                 if( ppnc )
 //                 {  // ppnc is actually pmp->sitE !
-//                    memcpy( pmp->PMc+kc, ppnc,
-//                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float));
+//                    copyValues( pmp->PMc+kc, ppnc,
+//                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]);
 //                 }
 //                 else
-//                    memset( pmp->PMc+kc, 0,
-//                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]*sizeof(float) );
+//                    fillValue( pmp->PMc+kc, 0,
+//                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]);
 //              }
           }
           else { // no array with interaction parameters in the Phase record
@@ -288,14 +288,14 @@ LOAD_NIDMCOEF:
           if( aPH->php->ipxt )
           {
              if( kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1] >
-                (int)(sizeof( pmp->IPx )/sizeof(short)))
-             pmp->IPx = (short *) aObj[ o_wi_ipxpm ].Alloc(
-                (kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1]), 1, I_ );
+                (int)(sizeof( pmp->IPx )/sizeof(long int)))
+             pmp->IPx = (long int *) aObj[ o_wi_ipxpm ].Alloc(
+                (kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1]), 1, L_ );
              ErrorIf( pmp->IPx == NULL, "SolModLoad",
                       "Error in reallocating memory for pmp->IPx" );
                // temporary memcpy - reimplement with compression!
-             memcpy( pmp->IPx+kx, aPH->php->ipxt,
-                     (pmp->LsMod[k*3]*pmp->LsMod[k*3+1])*sizeof(short));
+             copyValues( pmp->IPx+kx, aPH->php->ipxt,
+                     (pmp->LsMod[k*3]*pmp->LsMod[k*3+1]));
           }
           else
              pmp->LsMod[k*3+1] = 0;  // no IP indexation table
@@ -305,9 +305,9 @@ LOAD_NIDMCOEF:
           if( aPH->php->scoef )
           {
             if( kd+pmp->LsMdc[k]*pmp->L1[k]
-                 > (int)(sizeof( pmp->DMc )/sizeof(float)))
-                pmp->DMc = (float *) aObj[ o_wi_dmc ].Alloc(
-                   kd+pmp->LsMdc[k]*pmp->L1[k], 1, F_ );
+                 > (int)(sizeof( pmp->DMc )/sizeof(double)))
+                pmp->DMc = (double *) aObj[ o_wi_dmc ].Alloc(
+                   kd+pmp->LsMdc[k]*pmp->L1[k], 1, D_ );
             ErrorIf( pmp->DMc == NULL, "SolModLoad",
                     "Error in reallocating memory for pmp->DMc." );
             for( jj=jb, j=JB, jkd=0; j < JE; j++ )
@@ -315,15 +315,15 @@ LOAD_NIDMCOEF:
                 if( syp->Dcl[j] == S_OFF )
                     continue;
                 jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
-                memcpy( pmp->DMc+kd+jkd, aPH->php->scoef+jp*pmp->LsMdc[k],
-                        pmp->LsMdc[k]*sizeof(float));
+                copyValues( pmp->DMc+kd+jkd, aPH->php->scoef+jp*pmp->LsMdc[k],
+                        pmp->LsMdc[k]);
 // Copying the CG fluid EoS coeffs - obsolete
 //               if( (aPH->php->PphC == PH_FLUID) && (sMod[SPHAS_TYP] == SM_CGFLUID) )
 //               {
 //                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
 //                 {  // to be reworked for compatibility with GEMIPM2K !
-//                    memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
-//                       pmp->LsMdc[k]*sizeof(float));
+//                    copyValues( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
+//                       pmp->LsMdc[k]);
 //                    pmp->Pparc[jj] = tpp->Fug[j-JB];     // This single line brings
 //                   pmp->Pparc[jp] = tpp->Fug[j-JB];    // T,P depenedence in SolModLoad()!!!
 //                 }
@@ -334,8 +334,8 @@ LOAD_NIDMCOEF:
 //               {
 //                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
 //                 {  // to be reworked for compatibility with GEMIPM2K
-//                    memcpy( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
-//                       pmp->LsMdc[k]*sizeof(float));
+//                    copyValues( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
+//                       pmp->LsMdc[k]);
 //                   pmp->Pparc[jj] = tpp->Fug[j-JB];     // This single line brings
 //                   pmp->Pparc[jp] = tpp->Fug[j-JB];    // T,P depenedence in SolModLoad()!!!
 //                 }
@@ -505,7 +505,7 @@ int TMulti::find_icnum( char *name, int LNmode )
 
     nbg = name;
     nend = name+strlen(name)-1;
-    memset( ICs, ' ', IC_RKLEN );
+    fillValue( ICs.p, ' ', IC_RKLEN );
     ICs[/*MAXSYMB*/IC_RKLEN] = 0;
     if( isdigit( name[0] ))
 { /* this is isotope 34S */ MOVEDIGIT:
@@ -745,7 +745,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
                 }
             }
             // Copying DOD label from text
-            memset( odlab, 0, MAXKEYWD+2 );
+            fillValue( odlab, '\0', MAXKEYWD+2 );
             if( (last+1-prev) > 0 )
                 memcpy( odlab, prev, last+1-prev );
             ii = aObj.Find( odlab );
@@ -797,7 +797,7 @@ void TMulti::ET_translate( int nOet, int nOpex, int JB, int JE, int jb, int je,
             }
             cstate = iCode;
             // preparing for getting species/phase/icomp/compos name in
-            memset( name, ' ', 63 );
+            fillValue( name.p, ' ', 63 );
             name[63] = 0;
             cc = 1;
             cur++;
@@ -981,7 +981,7 @@ TMulti::PackSITcoeffs( int k, int JB, int JE, int jb, int je, int nCxA )
        Error( "PackSIT01",
               "Inconsistent numbers of cations and anions" );
 
-   memset( pmp->sitE, 0, sizeof(float)*nCxA );
+   fillValue( pmp->sitE, 0, nCxA );
 // Analyzing Phase/System DC list for cations and anions
    for( js=0; js < aPH->php->nDC; js++ )
    {  // Determining if cation or anion

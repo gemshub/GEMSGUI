@@ -78,7 +78,7 @@ int retCode;
 }
 
 void  TNodeArray::checkNodeArray(
-    int i, int* nodeTypes, const char*  datachbr_file )
+    long int i, long int* nodeTypes, const char*  datachbr_file )
 {
  if(nodeTypes)
    for( int ii=0; ii<anNodes; ii++)
@@ -97,12 +97,12 @@ void  TNodeArray::checkNodeArray(
 //    the ipmfiles_lst_name list).
 //
 //-------------------------------------------------------------------
-void  TNodeArray::setNodeArray( int ndx, int* nodeTypes  )
+void  TNodeArray::setNodeArray( long int ndx, long int* nodeTypes  )
 {
    for( int ii=0; ii<anNodes; ii++)
             if(  (!nodeTypes && ndx==0) ||
               ( nodeTypes && (nodeTypes[ii] == ndx/*i+1*/ )) )
-                  {    pCNode()->NodeHandle = (short)ndx/*(i+1)*/;
+                  {    pCNode()->NodeHandle = ndx/*(i+1)*/;
                        MoveWorkNodeToArray(ii, anNodes, NodT0);
                        CopyWorkNodeFromArray(ii, anNodes,NodT0);
                        MoveWorkNodeToArray(ii, anNodes, NodT1);
@@ -120,7 +120,7 @@ void  TNodeArray::setNodeArray( int ndx, int* nodeTypes  )
 //
 //-------------------------------------------------------------------
 
-void  TNodeArray::setNodeArray( gstring& dbr_file, int ndx, bool binary_f )
+void  TNodeArray::setNodeArray( gstring& dbr_file, long int ndx, bool binary_f )
 {
    MoveWorkNodeToArray(ndx, anNodes, NodT0);
    dbr_file = dbr_file.replace("dbr-0-","dbr-1-");
@@ -437,7 +437,6 @@ TNodeArray::~TNodeArray()
 
 
 // Copying data for node ii from node array into work DATABR structure
-// Rewrite avoiding memcpy()!   DK
 //
 void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
 {
@@ -446,27 +445,67 @@ void TNodeArray::CopyWorkNodeFromArray( int ii, int nNodes, DATABRPTR* arr_BR )
     return;
   // memory must be allocated before
 
-  memcpy( &pCNode()->NodeHandle, &arr_BR[ii]->NodeHandle, 6*sizeof(short));
-  memcpy( &pCNode()->TC, &arr_BR[ii]->TC, 32*sizeof(double));
+  // mem_cpy( &pCNode()->NodeHandle, &arr_BR[ii]->NodeHandle, 6*sizeof(short));
+  pCNode()->NodeHandle = arr_BR[ii]->NodeHandle;
+  pCNode()->NodeTypeHY = arr_BR[ii]->NodeTypeHY;
+  pCNode()->NodeTypeMT = arr_BR[ii]->NodeTypeMT;
+  pCNode()->NodeStatusFMT = arr_BR[ii]->NodeStatusFMT;
+  pCNode()->NodeStatusCH = arr_BR[ii]->NodeStatusCH;
+  pCNode()->IterDone = arr_BR[ii]->IterDone;      //6
+  // mem_cpy( &pCNode()->TC, &arr_BR[ii]->TC, 32*sizeof(double));
+	pCNode()->TC = arr_BR[ii]->TC;
+	pCNode()->P = arr_BR[ii]->P;
+	pCNode()->Vs = arr_BR[ii]->Vs;  
+	pCNode()->Vi = arr_BR[ii]->Vi;   
+	pCNode()->Ms = arr_BR[ii]->Ms;   
+	pCNode()->Mi = arr_BR[ii]->Mi;    
+	pCNode()->Gs = arr_BR[ii]->Gs;    
+	pCNode()->Hs = arr_BR[ii]->Hs; 	
+	pCNode()->Hi = arr_BR[ii]->Hi;    
+	pCNode()->IC = arr_BR[ii]->IC;    
+	pCNode()->pH = arr_BR[ii]->pH;    
+	pCNode()->pe = arr_BR[ii]->pe;     
+	pCNode()->Eh = arr_BR[ii]->Eh; //13     
+
+	pCNode()->Tm = arr_BR[ii]->Tm;    
+	pCNode()->dt = arr_BR[ii]->dt;    
+	pCNode()->Dif = arr_BR[ii]->Dif;    
+	pCNode()->Vt = arr_BR[ii]->Vt;		
+	pCNode()->vp = arr_BR[ii]->vp;		
+	pCNode()->eps = arr_BR[ii]->eps;	
+	pCNode()->Km = arr_BR[ii]->Km;		
+	pCNode()->Kf = arr_BR[ii]->Kf;		
+	pCNode()->S = arr_BR[ii]->S;	
+	pCNode()->Tr = arr_BR[ii]->Tr;     
+	pCNode()->h = arr_BR[ii]->h;		
+	pCNode()->rho = arr_BR[ii]->rho;	
+	pCNode()->al = arr_BR[ii]->al;		
+	pCNode()->at = arr_BR[ii]->at;		
+	pCNode()->av = arr_BR[ii]->av;		
+	pCNode()->hDl = arr_BR[ii]->hDl;	
+	pCNode()->hDt = arr_BR[ii]->hDt;	
+	pCNode()->hDv = arr_BR[ii]->hDv;	
+	pCNode()->nto = arr_BR[ii]->nto; //19	
+  
 // Dynamic data - dimensions see in DATACH.H and DATAMT.H structures
 // exchange of values occurs through lists of indices, e.g. xDC, xPH
-  memcpy( pCNode()->xDC, arr_BR[ii]->xDC, pCSD()->nDCb*sizeof(double) );
-  memcpy( pCNode()->gam, arr_BR[ii]->gam, pCSD()->nDCb*sizeof(double) );
+  copyValues( pCNode()->xDC, arr_BR[ii]->xDC, pCSD()->nDCb );
+  copyValues( pCNode()->gam, arr_BR[ii]->gam, pCSD()->nDCb );
   if( CSD->nAalp >0 )
-    memcpy( pCNode()->aPH, arr_BR[ii]->aPH, pCSD()->nPHb*sizeof(double) );
+	  copyValues( pCNode()->aPH, arr_BR[ii]->aPH, pCSD()->nPHb );
   else  pCNode()->aPH = 0;
-  memcpy( pCNode()->xPH, arr_BR[ii]->xPH, pCSD()->nPHb*sizeof(double) );
-  memcpy( pCNode()->vPS, arr_BR[ii]->vPS, pCSD()->nPSb*sizeof(double) );
-  memcpy( pCNode()->mPS, arr_BR[ii]->mPS, pCSD()->nPSb*sizeof(double) );
+  copyValues( pCNode()->xPH, arr_BR[ii]->xPH, pCSD()->nPHb );
+  copyValues( pCNode()->vPS, arr_BR[ii]->vPS, pCSD()->nPSb );
+  copyValues( pCNode()->mPS, arr_BR[ii]->mPS, pCSD()->nPSb );
 
-  memcpy( pCNode()->bPS, arr_BR[ii]->bPS,
-                          pCSD()->nPSb*pCSD()->nICb*sizeof(double) );
-  memcpy( pCNode()->xPA, arr_BR[ii]->xPA, pCSD()->nPSb*sizeof(double) );
-  memcpy( pCNode()->dul, arr_BR[ii]->dul, pCSD()->nDCb*sizeof(double) );
-  memcpy( pCNode()->dll, arr_BR[ii]->dll, pCSD()->nDCb*sizeof(double) );
-  memcpy( pCNode()->bIC, arr_BR[ii]->bIC, pCSD()->nICb*sizeof(double) );
-  memcpy( pCNode()->rMB, arr_BR[ii]->rMB, pCSD()->nICb*sizeof(double) );
-  memcpy( pCNode()->uIC, arr_BR[ii]->uIC, pCSD()->nICb*sizeof(double) );
+  copyValues( pCNode()->bPS, arr_BR[ii]->bPS,
+                          pCSD()->nPSb*pCSD()->nICb );
+  copyValues( pCNode()->xPA, arr_BR[ii]->xPA, pCSD()->nPSb );
+  copyValues( pCNode()->dul, arr_BR[ii]->dul, pCSD()->nDCb );
+  copyValues( pCNode()->dll, arr_BR[ii]->dll, pCSD()->nDCb );
+  copyValues( pCNode()->bIC, arr_BR[ii]->bIC, pCSD()->nICb );
+  copyValues( pCNode()->rMB, arr_BR[ii]->rMB, pCSD()->nICb );
+  copyValues( pCNode()->uIC, arr_BR[ii]->uIC, pCSD()->nICb );
   pCNode()->dRes1 = 0;
 }
 
@@ -483,8 +522,9 @@ void TNodeArray::MoveWorkNodeToArray( int ii, int nNodes, DATABRPTR* arr_BR )
   arr_BR[ii] = pCNode();
 // alloc new memory
   TNode::CNode = new DATABR;
+  databr_reset( CNode, 1 );
   databr_realloc();
-  memset( &pCNode()->TC, 0, 32*sizeof(double));
+  // mem_set( &pCNode()->TC, 0, 32*sizeof(double));
 }
 
 void TNodeArray::CopyNodeFromTo( int ndx, int nNod,
@@ -502,7 +542,7 @@ void TNodeArray::CopyNodeFromTo( int ndx, int nNod,
 // Calculate phase (carrier) mass, g  of single component phase
 double TNodeArray::get_mPH( int ia, int nodex, int PHx )
 {
-  int DCx = Phx_to_DCx( Ph_xDB_to_xCH(PHx) );
+  long int DCx = Phx_to_DCx( Ph_xDB_to_xCH(PHx) );
   double val=0.;
 
   if( DCx >= pCSD()->nDCs && DCx < pCSD()->nDC )
@@ -520,7 +560,7 @@ double TNodeArray::get_mPH( int ia, int nodex, int PHx )
 // Calculate phase volume (in cm3) of single - component phase
 double TNodeArray::get_vPH( int ia, int nodex, int PHx )
 {
-  int DCx = Phx_to_DCx( Ph_xDB_to_xCH(PHx) );
+  long int DCx = Phx_to_DCx( Ph_xDB_to_xCH(PHx) );
   double val=0.;
 
   if( DCx >= pCSD()->nDCs && DCx < pCSD()->nDC )
@@ -547,7 +587,7 @@ double TNodeArray::get_vPH( int ia, int nodex, int PHx )
 // Calculate bulk compositions  of single component phase
 double TNodeArray::get_bPH( int ia, int nodex, int PHx, int ICx )
 {
-  int DCx = Phx_to_DCx( Ph_xDB_to_xCH(PHx) );
+  long int DCx = Phx_to_DCx( Ph_xDB_to_xCH(PHx) );
   double val=0.;
 
   if( DCx >= pCSD()->nDCs && DCx < pCSD()->nDC )
@@ -970,7 +1010,7 @@ void TNodeArray::logProfileAqDC( FILE* logfile, int t, double at, int nx, int ev
 	for (i=0; i<nx; i++)    // node iteration
 	{
 		fprintf( logfile, "\n%5d   ", i );
-		for( is=0; is < int(pCSD()->nDCinPH[0]); is++ )
+		for( is=0; is < (pCSD()->nDCinPH[0]); is++ )
 		{
 			pm = NodT1[i]->xDC[is]/NodT1[i]->vPS[0]*1000.;  // Assumes there is aq phase!
                // dissolved species molarity

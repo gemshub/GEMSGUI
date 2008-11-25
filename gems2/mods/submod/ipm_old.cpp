@@ -18,7 +18,8 @@ int TProfil::Gordan( int N, double /*DG*/, double *A, double *X )
 
     INV = new int[N];
     ErrorIf( !INV, "Gordan", "Error of memory allocation" );
-    memset(INV, 0, sizeof(int)*N );
+    for(I=0;I<N;I++)
+     INV[I] = 0.;	
     N1 = N+1;
     for(I=0;I<N;I++)
     {
@@ -100,9 +101,10 @@ int TProfil::SquareRoots( int N, double *R, double *X, double *B )
     double *gg;
     N1 = N + 1;
     ErrorIf( !B, "SquareRoots", "Error param B." );
-    memset( B, 0, N*N1*sizeof(double));
-    Q=-1;
+    for(I=0;I<N*n1;I++)
+      B[I]= 0.;
 
+    Q=-1;
     for(I=0;I<N;I++)
     {
         for(J=I;J<N;J++)
@@ -220,8 +222,8 @@ KN:
 //  if( kd < pmp->FI )
 //    for( k=kd; k<pmp->FI; k++ )
 //    {
-//      pmp->XFs[k] = pmp->Falps[k] = FLOAT_EMPTY;
-//      memset( pmp->SFs[k], ' ', MAXPHNAME+MAXSYMB );
+//      pmp->XFs[k] = pmp->Falps[k] = DOUBLE_EMPTY;
+//      mem_set( pmp->SFs[k], ' ', MAXPHNAME+MAXSYMB );
 //      pmp->SFs[k][0] = '`';
 //    }
 // }

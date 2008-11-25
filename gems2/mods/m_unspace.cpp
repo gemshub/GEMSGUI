@@ -435,7 +435,7 @@ void TUnSpace::dyn_set(int q)
 //    usp->pmr = (float *)aObj[ o_unpmr].GetPtr();
     usp->POM = (float *)aObj[ o_unpom].GetPtr();
     usp->POR = (float *)aObj[ o_unpor].GetPtr();
-    usp->A = (float *)aObj[ o_una].GetPtr();
+    usp->A = (double *)aObj[ o_una].GetPtr();
     usp->Zcp = (double *)aObj[ o_unzcp].GetPtr();
     usp->Zmin = (double *)aObj[ o_unzmin].GetPtr();
     usp->Zmax = (double *)aObj[ o_unzmax].GetPtr();
@@ -1165,9 +1165,9 @@ TUnSpace::RecCalc( const char *key )
   pVisor->CloseMessage();
 
   if( TProfil::pm->syp->Guns )
-    memset( TProfil::pm->syp->Guns, 0, TProfil::pm->mup->L*sizeof(float) );
+	  fillValue( TProfil::pm->syp->Guns, (float)0., (int)TProfil::pm->mup->L );
   if( TProfil::pm->syp->Vuns )
-    memset( TProfil::pm->syp->Vuns, 0, TProfil::pm->mup->L*sizeof(float) );
+	  fillValue( TProfil::pm->syp->Vuns, (float)0., (int)TProfil::pm->mup->L );
 
 // Get startup syseq record for fitting
   //Get base SysEq key from UnSpace key

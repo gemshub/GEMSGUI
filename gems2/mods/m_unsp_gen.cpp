@@ -326,9 +326,9 @@ void TUnSpace::init_generation( )
   UNIFORM0( 1 );
 
   if( syu->Guns )
-    memset( syu->Guns, 0, TProfil::pm->mup->L*sizeof(float) );
+	  fillValue( syu->Guns, (float)0., TProfil::pm->mup->L );
   if( syu->Vuns )
-    memset( syu->Vuns, 0, TProfil::pm->mup->L*sizeof(float) );
+	  fillValue( syu->Vuns, (float)0., TProfil::pm->mup->L );
 
 // copy data from second column
 
@@ -515,7 +515,7 @@ void TUnSpace::init_analyse( )
      aFo[ii].SetFormula( form.c_str() ); // and ce_fscan
   }
 
-  memset(usp->A, 0, sizeof(float)*(TProfil::pm->mup->N*TProfil::pm->mup->L) );
+  fillValue(usp->A, (float)0., (TProfil::pm->mup->N*TProfil::pm->mup->L) );
   for( ii=0; ii<TProfil::pm->mup->L; ii++ )
      aFo[ii].Stm_line( TProfil::pm->mup->N, usp->A+ii*TProfil::pm->mup->N,
            (char *)TProfil::pm->mup->SB, TProfil::pm->mup->Val );
