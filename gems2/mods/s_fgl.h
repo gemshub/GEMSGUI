@@ -315,7 +315,7 @@ protected:
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Added 07 March 2007 by Th.Wagner and D.Kulik
+// Added 07 March 2007 by TW and DK; extended 25.11.2008 by DK
 // Definition of a class for several mineral solid-solution models
 
 class TSolMod
@@ -326,20 +326,23 @@ private:
         double R_CONST; // R constant
         long int NComp;    	// Number of components in the solution phase
         long int NPar;     	// Number of non-zero interaction parameters
-        long int NPcoef;   	// Number of coefs per parameter (cols in the aIPc table)
-        long int MaxOrd;   	// max. parameter order (or number pf columns in aIPx)
-        long int NP_DC;    	// Number of coeffs per one DC in the phase (cols in aDCc)
+        long int NPcoef;   	// Number of coeffs per parameter (columns in the aIPc table)
+        long int MaxOrd;   	// max. parameter order (or number of columns in aIPx)
+        long int NP_DC;    	// Number of coeffs per one DC in the phase (columns in aDCc)
         long int *aIPx;  	// Pointer to list of indexes of non-zero interaction parameters
         double *aIPc;  	// Table of interaction parameter coefficients
+double *aIP;    // Vector of interaction parameters corrected to T,P of interest
         double *aDCc;  	// End-member parameter coefficients
         double Tk;    	// Temperature, K
         double Pbar;  	// Pressure, bar
         double *x;    	// Pointer to mole fractions of end members (provided)
+double *z;    // Vector of species charges (for aqueous models)
+double *m;    // Vector of species molality (for aqueous models)
         double RhoW;	// Density of liquid water, added 04.06.2008 (TW)
-        double EpsW;	// Dielectrical constant of liquid water
+        double EpsW;	// Dielectric constant of liquid water
         double IonStr;	// Ionic strength
 // Results
-        double Gam;   	// work cell for activity coeff of end member
+        double Gam;   	// work cell for activity coefficient of end member
         double lnGamRT;
         double lnGam;
         double Gex;   	// Molar excess Gibbs energy
@@ -349,6 +352,10 @@ private:
         double CPex;  	// Excess heat capacity
         double *lnGamma;   // Pointer to ln activity coefficients of end members
                            // (memory must be provided from the calling program)
+
+   //     TPitzer *pzr;    // Pointer to TPitzer work class instance
+   //     TEUNIQUAC *euq; // Pointer to TEUNIQUAC work class instance
+
 public:
 // Generic constructor
     TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
@@ -386,6 +393,7 @@ public:
 
 // Prototypes for other models to be added here
 // Darken ...
+
 // SIT model reimplementation for aqueous electrolyte solutions
 	long int SIT_PT();
 	long int SIT_MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,

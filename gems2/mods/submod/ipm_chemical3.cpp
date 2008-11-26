@@ -251,7 +251,7 @@ void TMulti::SetSmoothingFactor( )
     double TF, ag, dg, irf; // rg=0.0;
     long int ir, Level, itqF, itq;
 
-    ir = pmp->IT; 
+    ir = pmp->IT;
     irf = (double)ir;
     ag = TProfil::pm->pa.p.AG; // pmp->FitVar[4];
     dg = TProfil::pm->pa.p.DGC;
@@ -388,12 +388,15 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
             // scheme should probably be the same as in LINK_UX_MODE, 03.06.2008 (TW)
             switch( pmp->PHC[k] )
             {
-               case PH_LIQUID:
+               case PH_AQUEL:
+            	    SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Pitzer, EUNIQUAC, SIT
+            	    break;
+			   case PH_LIQUID:
                case PH_SINCOND:
                case PH_SINDIS:
                case PH_HCARBL:
                case PH_SIMELT:
-                       SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // new solution models (TW, DK 2007)
+                    SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // new solution models (TW, DK 2007)
                     break;
                case PH_GASMIX:
                case PH_PLASMA:
@@ -1734,7 +1737,7 @@ TMulti::SolModParPT( long int, long int, long int jpb, long int jdb, long int k,
     if( k < pmp->FIs )
     {
     	if(phSolMod[k])
-    	  delete[] phSolMod[k];
+    	  delete phSolMod[k];
     	phSolMod[k] = aSM;
     }
     
@@ -1798,11 +1801,17 @@ TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long 
     IonStr = pmp->IC;
 
     
-    if( k >= pmp->FIs || !phSolMod[k] )
+   if( k >= pmp->FIs || !phSolMod[k] )
      Error("","Illegal index of phase");
     TSolMod* aSM = phSolMod[k];
-    //TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-    //   aIPx, aIPc, aDCc, aWx, alnGam, RhoW, EpsW, IonStr );
+//    TSolMod* aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+//       aIPx, aIPc, aDCc, aWx, alnGam, RhoW, EpsW, IonStr );
+//    if( k < pmp->FIs )
+//    {
+//    	if(phSolMod[k])
+//    	  delete[] phSolMod[k];
+//    	phSolMod[k] = aSM;
+//    }
     // Extended constructor to connect to params, coeffs, and mole fractions
 
     switch( ModCode )
@@ -1863,11 +1872,12 @@ void TMulti::Free_TSolMod()
   long int kk;
 
   if( phSolMod )
-    for(  kk=0; kk<sizeFIs; kk++ )
+  {  for(  kk=0; kk<sizeFIs; kk++ )
       if( phSolMod[kk] )
-           delete[] phSolMod[kk];
+           delete phSolMod[kk];
   
-  delete[]  phSolMod;
+      delete[]  phSolMod;
+  }    
   phSolMod = 0;
   sizeFIs = 0;
 }
