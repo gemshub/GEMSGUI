@@ -35,6 +35,8 @@ typedef int (tget_ndx)( int nI, int nO, int Xplace );
 
 #endif
 
+#include "s_fgl.h"
+
 typedef struct
 {  // MULTI is base structure to Project (local values)
   char
@@ -320,7 +322,7 @@ class TMulti
     MULTI *pmp;
 
 // Internal arrays for the performance optimization  (since version 2.0.0)
-   long int sizeN, sizeL, sizeAN; 
+   long int sizeN; /*, sizeL, sizeAN;*/ 
    double *AA;
    double *BB;
    long int *arrL;
@@ -332,6 +334,12 @@ class TMulti
    void Free_compressed_xAN();
    void Free_internal();
 
+   long int sizeFIs;     // current size of phSolMod
+   TSolMod* (*phSolMod); // size current FIs -   number of multicomponent phases
+   
+   void Alloc_TSolMod( long int newFIs );
+   void Free_TSolMod();
+   
 #ifndef IPMGEMPLUGIN
 // These pointers and methods are only used in GEMS-PSI
     SYSTEM *syp;
@@ -508,11 +516,15 @@ public:
    TMulti()
    { 
 	 pmp = &pm;
-     sizeN = 0; sizeL = 0; sizeAN = 0;
+     sizeN = 0; 
      AA = 0;
      BB = 0;
      arrL = 0;
      arrAN = 0;
+     
+     sizeFIs = 0;
+     phSolMod = 0;
+
      pmp->Guns = 0;
      pmp->Vuns = 0;
      pmp->tpp_G = 0;  

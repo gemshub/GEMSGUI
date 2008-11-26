@@ -34,6 +34,9 @@ TMulti::TMulti( int nrt, SYSTEM* sy_, MTPARM *tp_, RMULTS *mu_ ):
     BB=0;
     arrL=0;
     arrAN=0;
+    
+    sizeFIs = 0;
+    phSolMod = 0;
 }
 
 // link values to objects

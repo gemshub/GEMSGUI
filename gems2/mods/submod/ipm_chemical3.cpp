@@ -1729,35 +1729,41 @@ TMulti::SolModParPT( long int, long int, long int jpb, long int jdb, long int k,
     RhoW = pmp->denW;		// added 04.06.2008 (TW)
     EpsW = pmp->epsW;
 
-    TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+    TSolMod* aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
        aIPx, aIPc, aDCc, NULL, NULL, RhoW, EpsW, 0 );
-
+    if( k < pmp->FIs )
+    {
+    	if(phSolMod[k])
+    	  delete[] phSolMod[k];
+    	phSolMod[k] = aSM;
+    }
+    
    // calculate P-T dependence of interaction parameters
     switch( ModCode )
     {
         case SM_VANLAAR:
-             aSM.VanLaarPT();
+             aSM->VanLaarPT();
              break;
         case SM_REGULAR:
-             aSM.RegularPT();
+             aSM->RegularPT();
              break;
         case SM_GUGGENM:
-        	 aSM.RedlichKisterPT();
+        	 aSM->RedlichKisterPT();
         	 break;
         case SM_NRTLLIQ:
-        	 aSM.NRTL_PT();
+        	 aSM->NRTL_PT();
         	 break;
         case SM_WILSLIQ:
-        	 aSM.Wilson_PT();
+        	 aSM->Wilson_PT();
         	 break;
 //        case SM_AQSIT:
-//             aSM.SIT_PT();
+//             aSM->SIT_PT();
 //             break;
         case SM_AQPITZ:
-             aSM.Pitzer_PT();
+             aSM->Pitzer_PT();
              break;
         case SM_AQEXUQ:
-        	 aSM.EUNIQUAC_PT();
+        	 aSM->EUNIQUAC_PT();
         	 break;
         default:
              break;
@@ -1791,35 +1797,39 @@ TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long 
     EpsW = pmp->epsW;
     IonStr = pmp->IC;
 
-    TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-       aIPx, aIPc, aDCc, aWx, alnGam, RhoW, EpsW, IonStr );
+    
+    if( k >= pmp->FIs || !phSolMod[k] )
+     Error("","Illegal index of phase");
+    TSolMod* aSM = phSolMod[k];
+    //TSolMod aSM( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+    //   aIPx, aIPc, aDCc, aWx, alnGam, RhoW, EpsW, IonStr );
     // Extended constructor to connect to params, coeffs, and mole fractions
 
     switch( ModCode )
     {
         case SM_VANLAAR:
-             aSM.VanLaarMixMod( Gex, Vex, Hex, Sex, CPex );
+             aSM->VanLaarMixMod( Gex, Vex, Hex, Sex, CPex );
              break;
         case SM_REGULAR:
-             aSM.RegularMixMod( Gex, Vex, Hex, Sex, CPex );
+             aSM->RegularMixMod( Gex, Vex, Hex, Sex, CPex );
              break;
         case SM_GUGGENM:
-        	 aSM.RedlichKisterMixMod( Gex, Vex, Hex, Sex, CPex );
+        	 aSM->RedlichKisterMixMod( Gex, Vex, Hex, Sex, CPex );
         	 break;
         case SM_NRTLLIQ:
-        	 aSM.NRTL_MixMod( Gex, Vex, Hex, Sex, CPex );
+        	 aSM->NRTL_MixMod( Gex, Vex, Hex, Sex, CPex );
         	 break;
         case SM_WILSLIQ:
-        	 aSM.Wilson_MixMod( Gex, Vex, Hex, Sex, CPex );
+        	 aSM->Wilson_MixMod( Gex, Vex, Hex, Sex, CPex );
         	 break;
 //        case SM_AQSIT:
-//              aSM.SIT_MixMod( Gex, Vex, Hex, Sex, CPex );
+//              aSM->SIT_MixMod( Gex, Vex, Hex, Sex, CPex );
 //              break;
         case SM_AQPITZ:
-             aSM.Pitzer_MixMod( Gex, Vex, Hex, Sex, CPex );
+             aSM->Pitzer_MixMod( Gex, Vex, Hex, Sex, CPex );
              break;
         case SM_AQEXUQ:
-             aSM.EUNIQUAC_MixMod( Gex, Vex, Hex, Sex, CPex );
+             aSM->EUNIQUAC_MixMod( Gex, Vex, Hex, Sex, CPex );
              break;
         default: // catch error here
               break;
@@ -1829,6 +1839,37 @@ TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long 
 
 }
 
+//-------------------------------------------------------------------------
+// Added SD 26/11/2008
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Internal memory allocation for TSolMod performance optimization
+// (since version 2.3.0)
+//
+void TMulti::Alloc_TSolMod( long int newFIs )
+{
+  if(  phSolMod && ( newFIs == sizeFIs) )
+    return;
+  
+  Free_TSolMod();
+  // alloc memory for all multicomponents phases 
+  phSolMod = new  TSolMod *[newFIs];
+  sizeFIs = newFIs;
+ for( long int ii=0; ii<newFIs; ii++ )
+    	  phSolMod[ii] = 0;
+}
 
+void TMulti::Free_TSolMod()
+{
+  long int kk;
+
+  if( phSolMod )
+    for(  kk=0; kk<sizeFIs; kk++ )
+      if( phSolMod[kk] )
+           delete[] phSolMod[kk];
+  
+  delete[]  phSolMod;
+  phSolMod = 0;
+  sizeFIs = 0;
+}
 
 //--------------------- End of ipm_chemical3.cpp ---------------------------

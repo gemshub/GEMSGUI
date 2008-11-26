@@ -366,8 +366,8 @@ void TMulti::MultiCalcInit( const char* key )
     pmp->MBX /= 1000.;
 
     // optimization 08/02/2007 - allocation of A matrix index lists and IPM work arrays
-    Alloc_A_B( pmp->N );
-    Build_compressed_xAN();
+    
+    Alloc_internal(); // performance optimization 08/02/2007
 
     if(  pmp->pNP )     // Checking if this is SIA or AIA mode 
     {
