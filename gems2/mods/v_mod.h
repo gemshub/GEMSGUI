@@ -96,12 +96,12 @@ MAXPARAMKEY =    24,
                      MCAS  = 6,  // number of columns in SATC table
                             DFCN = 6; // number of columns in MASDJ table
 
-const int 
-	MPP_TOT = 0,       // index of column with total mixed phase property 
+const int
+	MPP_TOT = 0,       // index of column with total mixed phase property
 	MPP_STD = 1,       // index of column with standard property sum for mixed phases
 	MPP_RES = 2,       // index of column with residual property sum for mixed phases
-	MPP_ID = 3,        // index of column with ideal mixing property for the phases 
-	MPP_EX = 4,        // index of column with excess mixing property for the phases 
+	MPP_ID = 3,        // index of column with ideal mixing property for the phases
+	MPP_EX = 4,        // index of column with excess mixing property for the phases
 	MIXPHPROPS = 5;    // Number of columns in the property table for mixed phases
 
 enum param_objects {                  // work objects
@@ -283,11 +283,11 @@ enum DC_CNTRL_CODES {
                         (after Grichuk,1988) - ReacDC only */
     CTPM_SOR = 'X',  /* calculations via adsorption or ion exchange constants, using
                         LFER correlations (Sverjensky 1993,1994) - ReacDC only (reserved). */
-    
+
     //Codes for T dependencies of energy parameters'
     // (C) CTPM_CPT
     CTM_CST = 'S',   /* calculation of ordinary integral using 11-term Cp=f(T) equations
-                        (up to 3 phase transitions or up to 3 Cp=f(T) equations for DComp) */                       
+                        (up to 3 phase transitions or up to 3 Cp=f(T) equations for DComp) */
     CTM_CHP = 'H',   /* the same with modifications by Holland and Powell (1998) (minerals); */
     CTM_BER = 'B',   /* the same with modifications by Berman (1988) (minerals) */
     CTM_FEI = 'F',   /* Cp=f(T) equation by Fei and Saxena (1986) (reserved) */
@@ -323,7 +323,7 @@ enum DC_CNTRL_CODES {
     // (X) CTPM_SOR
     CTM_KAS = 'K',   /* reserved */
     CTM_DAS = 'D',   /* reserved */
-    
+
     // Codes for accounting P-dependencies
     // 1.Codes valid for any combination of method - and T-dependence codes:
     CPM_OFF  = 'N',  /* no account for pressure dependence */
@@ -348,7 +348,7 @@ enum DC_CNTRL_CODES {
     // 3. Codes used together with calculations by modified HKF EOS:
     // CTPM_HKF
     CPM_HKF  = 'F',  /* account for pressure up to 5 kbar by HKF (Tanger,Helgeson,1988) */
-    CPM_AKI  = 'A',  /* calculation of partial molal volumes for aqueous nonelectrolyte species 
+    CPM_AKI  = 'A',  /* calculation of partial molal volumes for aqueous nonelectrolyte species
                         using EOS (Akinfiev and Diamond, 2003) */
     CPM_PCR  = 'P',  /* PARCOR estimation of HKF EoS parameters 19.05.98 */
     CPM_PRSV = 'R',  /* Peng-Robinson-Stryjek-Vera EoS for gases and fluids (nonelectrolytes)
@@ -568,7 +568,7 @@ MAXPHNAME =      16,
 enum phase_objects {   // PHASE
     //o_phpst,   o_phsymb,  o_phnam,  o_phcls,  o_phgrp,
     o_phsolt = o_rttext+1,  o_phps,   /*a 6*/   o_phndc,  /*i 2*/
-    o_phpncp, /*i 2*/   o_phnpx, /*i 1*/ o_phnsc, /*i 1*/  o_phnsit, /*i 2*/
+    o_phpncp, /*i 2*/   o_phnpx, /*i 1*/ o_phnsc, /*i 1*/  o_phnsit, /*i 3*/
     /* Record 22 fields */
     o_phstr,     o_phname,     o_phnotes,     o_phdim,   /*i 8*/
     o_phdisep,  /*f 8*/ o_phscmc, o_phxfiec, o_phmsdt,
@@ -577,7 +577,7 @@ enum phase_objects {   // PHASE
     o_phsm,    /*s dyn*/  o_phdcc,   /*a dyn*/   o_phdcs,   /*a dyn*/
     o_phpeq,   /* txt */  o_phdeq,   /* txt */   o_phsdref, /*s dyn*/
     o_phsdval, /*s dyn*/
-o_ph_w_lsc, o_ph_w_lsa, o_ph_w_nxc, o_ph_w_nxa,  // new work dyn objects
+o_ph_w_lsc, o_ph_w_lsa, o_ph_w_lsn, o_ph_w_nxc, o_ph_w_nxa, o_ph_w_nxn, // new work dyn objects
     o_phtprn, /*txt*/
 };
 

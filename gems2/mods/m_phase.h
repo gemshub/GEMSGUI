@@ -97,12 +97,15 @@ short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM
 
   char (*lsCat)[MAXDCNAME];       // work object - vector of names of cations
   char (*lsAn)[MAXDCNAME];        // work object - vector of names of anions
+char (*lsNs)[MAXDCNAME];        // work object - names of neutral species except H2O
 
   short
     nCat,   // Work data - number of cations
     nAn,    // Work data - number of anions
-   *nxCat,            // Vector of indexes for cations in SIT coeff table
-   *nxAn;             // vector of indexes for anions  in SIT coeff table
+nNs,      // Work data - number of neutral species except water
+   *nxCat,            // Vector of indexes for cations in SIT or Pitzer coeff table
+   *nxAn,             // vector of indexes for anions  in SIT or Pitzer coeff table
+*nxNs;    // Vector of indexes of neutral species in Pitzer coeff table
 }
 
 PHASE;

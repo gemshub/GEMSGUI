@@ -118,16 +118,19 @@ aObj[ o_phscoef].SetDim( ph[q].nDC, ph[q].nscM ); // changed 07.12.2006  KD
     /// ??????
     aObj[o_phtprn].SetPtr( ph[q].tprn );
 
-// Added for SIT aqueous model implementation
-aObj[o_ph_w_lsc].SetPtr( ph[q].lsCat );
-aObj[o_ph_w_lsc].SetDim( ph[q].nCat, 1 );
-aObj[o_ph_w_lsa].SetPtr( ph[q].lsAn );
-aObj[o_ph_w_lsa].SetDim( ph[q].nAn, 1 );
-aObj[o_ph_w_nxc].SetPtr( ph[q].nxCat );
-aObj[o_ph_w_nxc].SetDim( ph[q].nCat, 1 );
-aObj[o_ph_w_nxa].SetPtr( ph[q].nxAn );
-aObj[o_ph_w_nxa].SetDim( ph[q].nAn, 1 );
-
+    // Added for SIT and Pitzer aqueous models implementation
+    aObj[o_ph_w_lsc].SetPtr( ph[q].lsCat );
+    aObj[o_ph_w_lsc].SetDim( ph[q].nCat, 1 );
+    aObj[o_ph_w_lsa].SetPtr( ph[q].lsAn );
+    aObj[o_ph_w_lsa].SetDim( ph[q].nAn, 1 );
+aObj[o_ph_w_lsn].SetPtr( ph[q].lsNs );
+aObj[o_ph_w_lsn].SetDim( ph[q].nNs, 1 );
+    aObj[o_ph_w_nxc].SetPtr( ph[q].nxCat );
+    aObj[o_ph_w_nxc].SetDim( ph[q].nCat, 1 );
+    aObj[o_ph_w_nxa].SetPtr( ph[q].nxAn );
+    aObj[o_ph_w_nxa].SetDim( ph[q].nAn, 1 );
+aObj[o_ph_w_nxn].SetPtr( ph[q].nxNs );
+aObj[o_ph_w_nxn].SetDim( ph[q].nNs, 1 );
     //    aObj[ o_phtprn].SetDim( 1,strlen(ph[q].tprn));
     php=&ph[q];
 }
@@ -159,11 +162,13 @@ if(!ph[q].ipxt )
     ph[q].sdref = (char (*)[V_SD_RKLEN])aObj[ o_phsdref ].GetPtr();
     ph[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_phsdval ].GetPtr();
     ph[q].tprn = (char *)aObj[ o_phtprn ].GetPtr();
-// Added for SIT aqueous model
-ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].GetPtr();
-ph[q].lsAn = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].GetPtr();
-ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].GetPtr();
-ph[q].nxAn = (short *)aObj[ o_ph_w_nxa ].GetPtr();
+    // Added for SIT aqueous model
+    ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].GetPtr();
+    ph[q].lsAn = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].GetPtr();
+ph[q].lsNs = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].GetPtr();
+    ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].GetPtr();
+    ph[q].nxAn = (short *)aObj[ o_ph_w_nxa ].GetPtr();
+ph[q].nxNs = (short *)aObj[ o_ph_w_nxn ].GetPtr();
 }
 
 // free dynamic memory in objects and values
@@ -189,10 +194,12 @@ void TPhase::dyn_kill(int q)
     ph[q].sdval = (char (*)[V_SD_VALEN])aObj[ o_phsdval ].Free();
     ph[q].tprn = (char *)aObj[ o_phtprn ].Free();
 
-ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
-ph[q].lsAn =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Free();
-ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Free();
-ph[q].nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
+    ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
+    ph[q].lsAn =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Free();
+ph[q].lsNs =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].Free();
+    ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Free();
+    ph[q].nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
+ph[q].nxNs =  (short *)aObj[ o_ph_w_nxn ].Free();
 }
 
 // realloc dynamic memory
@@ -278,14 +285,19 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
                           ph[q].nCat, 1, MAXDCNAME );
          ph[q].lsAn  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Alloc(
                           ph[q].nAn, 1, MAXDCNAME );
+ph[q].lsNs  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].Alloc(
+                          ph[q].nNs, 1, MAXDCNAME );
          ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( ph[q].nCat, 1, I_);
          ph[q].nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( ph[q].nAn, 1, I_);
+ph[q].nxNs  = (short *)aObj[ o_ph_w_nxn ].Alloc( ph[q].nNs, 1, I_);
     }
     else {
         ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
         ph[q].lsAn =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Free();
+ph[q].lsNs =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].Free();
         ph[q].nxCat = (short *)aObj[ o_ph_w_nxc ].Free();
         ph[q].nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
+ph[q].nxNs =  (short *)aObj[ o_ph_w_nxn ].Free();
     }
     //  ph[q].tprn = (char *)aObj[ o_phtprn ].Free();
 }
@@ -331,13 +343,16 @@ ph[q].ipxt = 0;
     ph[q].sdref = 0;
     ph[q].sdval = 0;
     ph[q].tprn = 0;
-// Work objects for SIT
-ph[q].nCat = 0;
-ph[q].nAn = 0;
-ph[q].lsCat = 0;
-ph[q].lsAn =  0;
-ph[q].nxCat = 0;
-ph[q].nxAn =  0;
+    // Work objects for SIT
+    ph[q].nCat = 0;
+    ph[q].nAn = 0;
+ph[q].nNs = 0;
+    ph[q].lsCat = 0;
+    ph[q].lsAn =  0;
+ph[q].lsNs =  0;
+    ph[q].nxCat = 0;
+    ph[q].nxAn =  0;
+ph[q].nxNs =  0;
 
 }
 
@@ -392,7 +407,7 @@ int
 TPhase::RecBuild( const char *key, int mode  )
 {
     int iic, i;
-    short nCat, nAn;
+    short nCat, nAn, nNs;
     vstr pkeydc(81);
     vstr pkeyrd(81);
 
@@ -551,14 +566,17 @@ AGAIN_SETUP:
                           break;
           case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs (reserved)
         	              break;
-          case SM_AQPITZ: // built-in Pitzer HMW aqueous activity coefficient model (under construction)
+          case SM_AQPITZ: // built-in Pitzer HMW aqueous activity coefficient model
         	              php->nscM = 0;  // NP_DC
-        	              php->npxM = 3;  // MaxOrd
+        	              php->npxM = 4;  // MaxOrd
         	              if( php->ncpN < 1 ) // NPar
         	                  php->ncpN = 1;
-        	              if( php->ncpN > php->nDC*php->nDC/2 )
-        	                  php->ncpN = php->nDC*php->nDC*php->nDC/2;
-        	              php->ncpM = 3;  // NPcoef
+        	              if( php->ncpN > php->nDC*php->nDC )
+        	                  php->ncpN = php->nDC*php->nDC;
+        	              if( php->ncpM <= 5 )
+        	                  php->ncpM = 5;  // NPcoef
+        	              if( php->ncpM >= 8 )
+        	            	  php->ncpM = 8;
  //       	              php->nscN = 0;
         	              php->PphC = PH_AQUEL;
 						  break;
@@ -645,13 +663,14 @@ AGAINRC:
     iic = aDclist.GetCount();
 
 //-------------------------------------------------------
-    nCat = 0; nAn = 0;
+    nCat = 0; nAn = 0; nNs = 0;
 
-    if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
-    {  // pre-proc. loop for SIT: determining number of cations and anions
+    if( php->PphC == PH_AQUEL &&
+    	( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ))
+    {  // pre-proc. loop for SIT or Pitzer: determining number of cations and anions
        int pos;
        gstring spName;
-       for( i=0; i<php->nDC; i++ )
+       for( i=0; i<php->nDC-1; i++ )
        {
           if( i < iic )
             spName = gstring( aDclist[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
@@ -668,7 +687,8 @@ AGAINRC:
                      break;
            case '+': nCat++;
                      break;
-           case '@':
+           case '@': nNs++;   // neutral species except H2O
+        	         break;
            default:
                      break;
          }
@@ -678,6 +698,7 @@ AGAINRC:
               "E39PHrem: No cations or no anions - SIT model cannot be applied...");
         php->nCat = nCat;
         php->nAn = nAn;
+        php->nNs = nNs;
     }
 //---------------------------------------------------------------------
 
@@ -788,7 +809,8 @@ AGAINRC:
         php->NR1 = DFCN; // Added for CD-MUSIC by KD on 25.10.2004
 
 //---------------------------------------------------------------------
-    if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
+    if( php->PphC == PH_AQUEL &&
+    		( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ) )
     {  // Filling out name and index lists for cations and anions
        if( !php->lsCat )                      // Crash fix 11.05.07 KD
        {
@@ -809,13 +831,13 @@ void
 TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 {
    int pos;
-   short i, iCat=0, iAn=0, nAn, nCat;
+   short i, iCat=0, iAn=0, iNs=0, nAn, nCat, nNs;
    gstring spName;
 
    if( WorkCount )
-   {   // pre-proc. loop for SIT: determining number of cations and anions
-      nAn=0, nCat=0;
-      for( i=0; i<php->nDC; i++ )
+   {   // pre-proc. loop: determining number of cations, anions and neutral species
+      nAn=0, nCat=0, nNs=0;
+      for( i=0; i<php->nDC-1; i++ )
       {
          spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
          spName.strip();
@@ -828,7 +850,8 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
                      break;
            case '+': nCat++;
                      break;
-           case '@':
+           case '@': nNs++;  // H2O@ is not included
+                     break;
            default:
                      break;
          }
@@ -838,6 +861,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
               "E39PHrem: No cations or no anions - SIT model cannot be applied...");
       php->nCat = nCat;
       php->nAn = nAn;
+      php->nNs = nNs;
    }
 
    if( WorkAlloc )
@@ -850,18 +874,27 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
                           php->nAn, 1, MAXDCNAME );
          php->nxCat = (short *)aObj[ o_ph_w_nxc ].Alloc( php->nCat, 1, I_);
          php->nxAn  = (short *)aObj[ o_ph_w_nxa ].Alloc( php->nAn, 1, I_);
+         if( php->nNs )
+         {
+             php->lsNs  = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].Alloc(
+                              php->nNs, 1, MAXDCNAME );
+             php->nxNs  = (short *)aObj[ o_ph_w_nxn ].Alloc( php->nNs, 1, I_);
+         }
       }
       else {
         php->lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Free();
         php->lsAn =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsa ].Free();
+        php->lsNs =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].Free();
         php->nxCat = (short *)aObj[ o_ph_w_nxc ].Free();
         php->nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
+        php->nxNs =  (short *)aObj[ o_ph_w_nxn ].Free();
+
       }
    }
 
    if( FillOut )
    {
-     for( i=0; i<php->nDC; i++ )
+     for( i=0; i<php->nDC-1; i++ )
      { // Determining if cation or anion
        spName = gstring( php->SM[i], MAXSYMB+MAXDRGROUP, MAXDCNAME);
        spName.strip();
@@ -871,19 +904,20 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
        switch( spName[pos] )
        {
           case '-': memcpy( php->lsAn[iAn], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
-                  php->nxAn[iAn++] = i;
-                  break;
+                    php->nxAn[iAn++] = i;
+                    break;
           case '+': memcpy( php->lsCat[iCat], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
-                   php->nxCat[iCat++] = i;
-                  break;
-          case '@':
+                    php->nxCat[iCat++] = i;
+                    break;
+          case '@': memcpy( php->lsNs[iNs], php->SM[i]+MAXSYMB+MAXDRGROUP, MAXDCNAME );
+				    php->nxNs[iNs++] = i;
           default:
                   continue;
         }
      }
-     if( iCat != php->nCat || iAn != php->nAn )
+     if( iCat != php->nCat || iAn != php->nAn || iNs != php->nNs )
        Error( GetName(),
-        "E38PHrem: Mismatch in the number of cations or anions in SIT model...");
+        "E38PHrem: Mismatch in the number of cations, anions or neutral species...");
    }
 }
 
@@ -896,7 +930,8 @@ TPhase::RecCalc( const char *key )
 {
     bool getDCC;
 
-    if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT )
+    if( php->PphC == PH_AQUEL &&
+    	( php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ ) )
     {  // refreshing lists for SIT coefficients
        MakeCatAnLists( true, true, true );
     }
@@ -904,11 +939,12 @@ TPhase::RecCalc( const char *key )
     getDCC = vfQuestion(window(), GetName(),
        "Extract parameters from DComp/ReacDC records and refresh DC class codes?");
 
-    if( php->PphC == PH_AQUEL && php->sol_t[SPHAS_TYP] == SM_AQSIT &&
+    if( php->PphC == PH_AQUEL && ( php->sol_t[SPHAS_TYP] == SM_AQSIT
+    		|| php->sol_t[SPHAS_TYP] == SM_AQPITZ ) &&
         php->nxAn[0] <= 0 && php->nxCat[0] <=0 )
     {
         getDCC = vfQuestion(window(), GetName(),
-          "For the SIT model, please remake the record if not yet done.\n Proceed with extracting DC parameters (Y)?");
+          "For SIT or Pitzer model, please remake the record if not yet done.\n Proceed with extracting DC parameters (Y)?");
         if(!getDCC)
            return;
     }

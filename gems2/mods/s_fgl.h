@@ -316,7 +316,7 @@ protected:
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Added 07 March 2007 by TW and DK; extended 25.11.2008 by DK
-// Definition of a class for several mineral solid-solution models
+// Definition of a class for built-in solution models
 
 class TSolMod
 {
