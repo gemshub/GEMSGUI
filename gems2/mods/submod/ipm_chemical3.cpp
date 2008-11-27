@@ -1713,10 +1713,10 @@ TMulti::MargulesTernary( long int jb, long int, long int jpb, long int, long int
 // Uses the TSolMod class by Th.Wagner and D.Kulik
 
 void
-TMulti::SolModParPT( long int, long int, long int jpb, long int jdb, long int k, long int ipb, char ModCode )
+TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int k, long int ipb, char ModCode )
 {
     long int NComp, NPar, NPcoef, MaxOrd, NP_DC;
-    double *aIPc, *aDCc;
+    double *aIPc, *aDCc, *aWx, *alnGam;
     long int *aIPx;
     double RhoW, EpsW;
 
@@ -1729,11 +1729,13 @@ TMulti::SolModParPT( long int, long int, long int jpb, long int jdb, long int k,
                               // -> NPar x MaxOrd   added 07.12.2006   KD
     aIPc = pmp->PMc+jpb;   // Interaction parameter coefficients f(TP) -> NPar x NPcoef
     aDCc = pmp->DMc+jdb;   // End-member parameter coefficients f(TPX) -> NComp x NP_DC
+    aWx = pmp->Wx+jb;       // End member mole fractions
+    alnGam = pmp->lnGam+jb; // End member ln activity coeffs
     RhoW = pmp->denW;		// added 04.06.2008 (TW)
     EpsW = pmp->epsW;
 
     TSolMod* aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-       aIPx, aIPc, aDCc, NULL, NULL, RhoW, EpsW, 0 );
+       aIPx, aIPc, aDCc,  aWx, alnGam, RhoW, EpsW, 0 );
     if( k < pmp->FIs )
     {
     	if(phSolMod[k])
@@ -1777,13 +1779,13 @@ void
 TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long int k, long int ipb,
             char ModCode )
 {
-    long int NComp, NPar, NPcoef, MaxOrd, NP_DC;
-    double *aIPc, *aDCc, *aWx, *alnGam;
-    long int *aIPx;
+//   long int NComp, NPar, NPcoef, MaxOrd, NP_DC;
+//    double *aIPc, *aDCc, *aWx, *alnGam;
+//    long int *aIPx;
     double Gex=0.0, Vex=0.0, Hex=0.0, Sex=0.0, CPex=0.0;
     double RhoW, EpsW, IonStr;
 
-    NComp = pmp->L1[k];          // Number of components in the phase
+/*    NComp = pmp->L1[k];          // Number of components in the phase
     NPar = pmp->LsMod[k*3];      // Number of interaction parameters
     NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
     MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
@@ -1798,6 +1800,7 @@ TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long 
     alnGam = pmp->lnGam+jb; // End member ln activity coeffs
     RhoW = pmp->denW;		// added 04.06.2008 (TW)
     EpsW = pmp->epsW;
+ */
     IonStr = pmp->IC;
 
     
@@ -1806,14 +1809,8 @@ TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long 
     TSolMod* aSM = phSolMod[k];
 //    TSolMod* aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
 //       aIPx, aIPc, aDCc, aWx, alnGam, RhoW, EpsW, IonStr );
-//    if( k < pmp->FIs )
-//    {
-//    	if(phSolMod[k])
-//    	  delete[] phSolMod[k];
-//    	phSolMod[k] = aSM;
-//    }
-    // Extended constructor to connect to params, coeffs, and mole fractions
 
+    // Extended constructor to connect to params, coeffs, and mole fractions
     switch( ModCode )
     {
         case SM_VANLAAR:
