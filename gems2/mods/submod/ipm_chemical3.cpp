@@ -1716,7 +1716,7 @@ void
 TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int k, long int ipb, char ModCode )
 {
     long int NComp, NPar, NPcoef, MaxOrd, NP_DC;
-    double *aIPc, *aDCc, *aWx, *alnGam;
+    double *aIPc, *aDCc, *aWx, *alnGam, *aZ, *aM;
     long int *aIPx;
     double RhoW, EpsW;
 
@@ -1733,46 +1733,73 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
     alnGam = pmp->lnGam+jb; // End member ln activity coeffs
     RhoW = pmp->denW;		// added 04.06.2008 (TW)
     EpsW = pmp->epsW;
-
-    TSolMod* aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-       aIPx, aIPc, aDCc,  aWx, alnGam, RhoW, EpsW, 0 );
-    if( k < pmp->FIs )
-    {
-    	if(phSolMod[k])
-    	  delete phSolMod[k];
-    	phSolMod[k] = aSM;
-    }
     
+    aM = pmp->Y_m+jb;
+    aZ = pmp->EZ+jb;
+
+    TSolMod* aSM;
+       
    // calculate P-T dependence of interaction parameters
     switch( ModCode )
     {
         case SM_VANLAAR:
-             aSM->VanLaarPT();
+        {
+        	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+            aSM = (TSolMod*)aPT;
+            break;
+        }   
              break;
         case SM_REGULAR:
-             aSM->RegularPT();
-             break;
+        {
+        	TRegular* aPT = new TRegular( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+            aSM = (TSolMod*)aPT;
+            break;
+        }   
         case SM_GUGGENM:
-        	 aSM->RedlichKisterPT();
-        	 break;
+        {
+        	TRedlichKister* aPT = new TRedlichKister( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+            aSM = (TSolMod*)aPT;
+            break;
+        }   
         case SM_NRTLLIQ:
-        	 aSM->NRTL_PT();
-        	 break;
+        {
+        	TNRTL* aPT = new TNRTL( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+            aSM = (TSolMod*)aPT;
+            break;
+        }   
         case SM_WILSLIQ:
-        	 aSM->Wilson_PT();
-        	 break;
-//        case SM_AQSIT:
-//             aSM->SIT_PT();
-//             break;
+        {
+        	TWilson* aPT = new TWilson( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+            aSM = (TSolMod*)aPT;
+            break;
+        }   
         case SM_AQPITZ:
-             aSM->Pitzer_PT();
+        {
+           	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+             aSM = (TSolMod*)aPT;
              break;
+        }   
+        case SM_AQSIT:
+        //             aSM->SIT_PT();
+        //             break;
         case SM_AQEXUQ:
-        	 aSM->EUNIQUAC_PT();
-        	 break;
+        //        	 aSM->EUNIQUAC_PT();
+        //        	 break;
         default:
+            aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                  aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
              break;
     }
+    
+  	if(phSolMod[k])
+   	  delete phSolMod[k];
+   	phSolMod[k] = aSM; // set up pointer for the solution model
 }
 
 void
@@ -1802,40 +1829,27 @@ TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long 
     EpsW = pmp->epsW;
  */
     IonStr = pmp->IC;
-
     
-   if( k >= pmp->FIs || !phSolMod[k] )
+   if( !phSolMod[k] )
      Error("","Illegal index of phase");
     TSolMod* aSM = phSolMod[k];
-//    TSolMod* aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-//       aIPx, aIPc, aDCc, aWx, alnGam, RhoW, EpsW, IonStr );
 
     // Extended constructor to connect to params, coeffs, and mole fractions
     switch( ModCode )
     {
         case SM_VANLAAR:
-             aSM->VanLaarMixMod( Gex, Vex, Hex, Sex, CPex );
-             break;
         case SM_REGULAR:
-             aSM->RegularMixMod( Gex, Vex, Hex, Sex, CPex );
-             break;
         case SM_GUGGENM:
-        	 aSM->RedlichKisterMixMod( Gex, Vex, Hex, Sex, CPex );
-        	 break;
         case SM_NRTLLIQ:
-        	 aSM->NRTL_MixMod( Gex, Vex, Hex, Sex, CPex );
-        	 break;
         case SM_WILSLIQ:
-        	 aSM->Wilson_MixMod( Gex, Vex, Hex, Sex, CPex );
-        	 break;
-//        case SM_AQSIT:
-//              aSM->SIT_MixMod( Gex, Vex, Hex, Sex, CPex );
-//              break;
         case SM_AQPITZ:
-             aSM->Pitzer_MixMod( Gex, Vex, Hex, Sex, CPex );
+             aSM->MixMod( Gex, Vex, Hex, Sex, CPex );
              break;
+        case SM_AQSIT:
+             //              aSM->SIT_MixMod( Gex, Vex, Hex, Sex, CPex );
+             //              break;
         case SM_AQEXUQ:
-             aSM->EUNIQUAC_MixMod( Gex, Vex, Hex, Sex, CPex );
+//             aSM->EUNIQUAC_MixMod( Gex, Vex, Hex, Sex, CPex );
              break;
         default: // catch error here
               break;
