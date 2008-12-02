@@ -512,7 +512,7 @@ long int TCGFcalc::CGEnthalpy(double *X, double *param, double *param1, unsigned
 
         ro=ROTOTALMIX(P,T,paar);
 if( ro < 0.0 ) //  Too low pressure - no corrections will be done
-  return ( -1. );
+  return ( -1 );
         Z=P/(R*T*ro);
         F0=FTOTALMIX(T,ro,paar);
 

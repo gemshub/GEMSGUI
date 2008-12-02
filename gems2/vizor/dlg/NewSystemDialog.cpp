@@ -881,7 +881,7 @@ void NewSystemDialog::loadList2()
    {
     if( l1_ == NULL )
       break;
-    sprintf( buf, " %d", l1_[ii] );
+    sprintf( buf, " %ld", l1_[ii] );
     phase = new QListViewItem( item2,
      aObj[o_wd_sf].GetStringEmpty(ii).c_str(), buf.p,
      aObj[o_wi_phc].GetStringEmpty(ii).c_str(),

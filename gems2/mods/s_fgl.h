@@ -364,7 +364,7 @@ public:
          long int* arIPx, double* arIPc, double* arDCc,
          double *arWx, double *arlnGam, double *arM, double *arZ, 
          double dW, double eW, double iS );
-    ~TSolMod();
+    virtual ~TSolMod();
 
 // 
     virtual long int PTparam()
