@@ -26,6 +26,562 @@
   #include "m_const.h"
 #endif
 
+// - - - - - - -
+
+// TPRSVcalc class - high-level methods
+// Constructor
+
+TPRSVcalc::TPRSVcalc( long int NCmp, double Pp, double Tkp )
+    {
+       long int i;
+
+       NComp = NCmp;
+       P = Pp;
+       Tk = Tkp;
+       R_CONSTANT = 8.31451;
+
+       Wx = new double [NComp];
+       Eosparm = new double *[NComp];
+       Pureparm = new double *[NComp];
+       Fugpure = new double *[NComp];
+       Fugci = new double *[NComp];
+       KK0ij = new double *[NComp];
+       KK1ij = new double *[NComp];
+       AAij = new double *[NComp];
+
+       for (i=0; i<NComp; i++)
+       {
+         Eosparm[i] = new double [6];
+         Pureparm[i] = new double [5];	// increased to 5 (31.05.2008 TW)
+         Fugpure[i] = new double [5];
+         Fugci[i] = new double [4];
+         KK0ij[i] = new double[NComp];
+         KK1ij[i] = new double[NComp];
+         AAij[i] = new double[NComp];
+       }
+    }
+
+
+TPRSVcalc::~TPRSVcalc()
+    {
+    	long int i;
+
+    	for (i=0; i<NComp; i++)
+    	{
+    		delete[]Eosparm[i];
+    		delete[]Pureparm[i];
+    		delete[]Fugpure[i];
+    		delete[]Fugci[i];
+    		delete[]KK0ij[i];
+    		delete[]KK1ij[i];
+    		delete[]AAij[i];
+    	}
+
+    	delete[]Wx;
+    	delete[]Eosparm;
+    	delete[]Pureparm;
+    	delete[]Fugpure;
+    	delete[]Fugci;
+    	delete[]KK0ij;
+    	delete[]KK1ij;
+    	delete[]AAij;
+    }
+
+
+
+ // Called from IPM-Gamma() where activity coefficients are computed
+long int
+TPRSVcalc::PRActivCoefPT( long int NComp, double Pbar, double Tk, double *X,
+    double *fugpure, double *binpar, double *param, double *act, double &PhaseVol,
+    long int NPar, long int NPcoef, long int MaxOrd, long int *aIPx  )
+{
+
+   long int iRet;
+   long int j, i, ip;
+   long int index1, index2;
+
+   if( NPcoef > 0 )
+   {
+      // fill internal array of interaction parameters with standard value
+      for( j=0; j<NComp; j++ )
+        for( i=0; i<NComp; i++ )
+          KK0ij[j][i] = 0.;
+
+      // transfer those interaction parameters that have non-standard value
+      for ( ip=0; ip<NPar; ip++ )
+      {
+         index1 = aIPx[MaxOrd*ip];
+         index2 = aIPx[MaxOrd*ip+1];
+         KK0ij[index1][index2] = binpar[NPcoef*ip];
+         KK0ij[index2][index1] = binpar[NPcoef*ip];	// symmetric case
+      }
+    }
+
+    GetMoleFract( X );
+
+    iRet = FugacitySpec( fugpure, param );	// removed binpar from arguments, 31.05.2008 (TW)
+
+    PhaseVol = ObtainResults( act );	// needs to be changed to pull departure functions
+
+    return iRet;
+}
+
+
+
+long int
+TPRSVcalc::PRFugacityPT( double P, double Tk, float *EoSparam, double *Eos2parPT,
+        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
+ {
+
+      long int iRet = 0;
+
+      // reads EoS parameters from database into work array
+      if( !EoSparam )
+        return -1;  // Memory alloc error
+
+      for (long int i=0; i<NComp; i++)
+      {
+         Eosparm[i][0] = EoSparam[0];   // critical temperature in K
+         Eosparm[i][1] = EoSparam[1];   // critical pressure in bar
+         Eosparm[i][2] = EoSparam[2];   // Pitzer acentric factor omega
+         Eosparm[i][3] = EoSparam[3];   // empirical EoS parameter k1
+         Eosparm[i][4] = EoSparam[4];   // empirical EoS parameter k2
+         Eosparm[i][5] = EoSparam[5];   // empirical EoS parameter k3
+       }
+
+      iRet = PureParam( Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
+
+      if( iRet)
+        return iRet;
+
+      iRet = FugacityPure();
+      if( iRet)
+        return iRet;
+
+      Fugacity = Fugpure[0][0]; // Fugacity coefficient
+      DeltaH = Fugpure[0][2];   // H departure function
+      DeltaS = Fugpure[0][3];   // S departure function
+      Volume = Fugpure[0][4];   //  J/bar
+
+      return iRet;
+ }
+
+
+long int
+TPRSVcalc::PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parPT,
+        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
+ {
+
+      long int iRet = 0;
+
+      // reads EoS parameters from database into work array
+      if( !EoSparam )
+        return -1;  // Memory alloc error
+
+      for (long int i=0; i<NComp; i++)
+      {
+         Eosparm[i][0] = EoSparam[0];   // critical temperature in K
+         Eosparm[i][1] = EoSparam[1];   // critical pressure in bar
+         Eosparm[i][2] = EoSparam[2];   // Pitzer acentric factor omega
+         Eosparm[i][3] = EoSparam[3];   // empirical EoS parameter k1
+         Eosparm[i][4] = EoSparam[4];   // empirical EoS parameter k2
+         Eosparm[i][5] = EoSparam[5];   // empirical EoS parameter k3
+       }
+
+      iRet = PureParam( Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
+                                     
+      if( iRet)
+        return iRet;
+
+      iRet = FugacityPure();
+      if( iRet)
+        return iRet;
+
+      Fugacity = Fugpure[0][0]; // Fugacity coefficient
+      DeltaH = Fugpure[0][2];   // H departure function
+      DeltaS = Fugpure[0][3];   // S departure function
+      Volume = Fugpure[0][4];   //  J/bar
+
+      return iRet;
+ }
+
+// -------------------------------------------------------------------------
+// Implementation
+// TPRSVcalc class - private methods
+long int
+TPRSVcalc::PureParam( double *Eos2parPT )
+{ // calculates a and b arrays
+	// calculates a, b, sqrAL, ac, dALdT of pure species
+   long int i;
+   double Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, sqrAL, ac, dALdT;
+
+   for (i=0; i<NComp; i++)
+   {
+      Tcrit = Eosparm[i][0];
+      Pcrit = Eosparm[i][1];
+      omg = Eosparm[i][2];
+      k1 = Eosparm[i][3];
+      k2 = Eosparm[i][4];
+      k3 = Eosparm[i][5];
+
+      AB(Tcrit, omg, k1, k2, k3, Pcrit, apure, bpure, sqrAL, ac, dALdT);
+      // B(Tcrit, Pcrit, bpure);
+      Pureparm[i][0] = apure;
+      Pureparm[i][1] = bpure;
+      Pureparm[i][2] = sqrAL;
+      Pureparm[i][3] = ac;
+      Pureparm[i][4] = dALdT;
+      Eos2parPT[0] = apure;
+      Eos2parPT[1] = bpure;
+      Eos2parPT[2] = sqrAL;
+      Eos2parPT[3] = ac;
+      Eos2parPT[4] = dALdT;
+   }
+   return 0;
+}
+
+long int
+TPRSVcalc::AB(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit,
+		double &apure, double &bpure, double &sqrAL, double &ac, double &dALdT)
+{
+	// calculates a term of cubic EoS, modified 31.05.2008 (TW)
+	double Tred, k0, k, alph;
+
+	Tred = Tk/Tcrit;
+	k0 = 0.378893 + 1.4897153*omg - 0.17131848*pow(omg,2.) + 0.0196554*pow(omg,3.);
+	if(Tk >= Tcrit)
+	{
+		k1 = 0.0;
+		k2 = 0.0;
+		k3 = 0.0;
+	}
+	k = k0 + (k1 + k2*(k3-Tred)*(1.-sqrt(Tred))) * (1.+sqrt(Tred)) * (0.7-Tred);
+	alph = pow(1. + k*(1.-sqrt(Tred)), 2.);
+	apure = alph*(0.457235*pow(R_CONSTANT,2.)*pow(Tcrit,2.) / Pcrit);
+	bpure = 0.077796*R_CONSTANT*Tcrit/Pcrit;
+	sqrAL = 1.+k*(1.-sqrt(Tred));
+	ac = 0.457235*pow(R_CONSTANT,2.)*pow(Tcrit,2.) / Pcrit;
+	dALdT = (-1.)*k0/(2.*sqrt(Tk*Tcrit)) - 1.7*k1/Tcrit + 2.*k1*Tk/(pow(Tcrit,2.));  // extend dA/dT for k2, k3
+	return 0;
+}
+
+// long int
+// TPRSVcalc::B(double Tcrit, double Pcrit, double &bpure)
+// {
+//    bpure = 0.077796*R_CONSTANT*Tcrit/Pcrit;
+//    return 0;
+// }
+
+long int
+TPRSVcalc::FugacityPure( )
+{ // Calculates the fugacity of pure species
+// calculates fugacity and state functions of pure species
+    long int i;
+	double Tcrit, Pcrit, Tred, aprsv, bprsv, alph, k, aa, bb, a2, a1, a0,
+               z1, z2, z3;
+	double vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
+	double gig, hig, sig, gdep, hdep, sdep, g, h, s, fugpure;
+
+	// ideal gas changes from 1 bar to P at T of interest
+	hig = 0.;
+	sig = (-1.)*R_CONSTANT*log(P);
+	gig = hig - Tk*sig;
+
+	for (i=0; i<NComp; i++)
+	{
+		// calculate a and b terms of cubic EoS
+		Tcrit = Eosparm[i][0];
+		Pcrit = Eosparm[i][1];
+		Tred = Tk/Tcrit;
+		aprsv = Pureparm[i][0];
+		bprsv = Pureparm[i][1];
+		// solve cubic equation
+		aa = aprsv*P/(pow(R_CONSTANT,2.)*pow(Tk,2.));
+		bb = bprsv*P/(R_CONSTANT*Tk);
+		a2 = bb - 1.;
+		a1 = aa - 3.*pow(bb,2.) - 2.*bb;
+		a0 = pow(bb,3.) + pow(bb,2.) - aa*bb;
+		Cardano(a2, a1, a0, z1, z2, z3);
+
+		// find stable roots
+		vol1 = z1*R_CONSTANT*Tk/P;
+		vol2 = z2*R_CONSTANT*Tk/P;
+		vol3 = z3*R_CONSTANT*Tk/P;
+		if (z1 > bb)
+			lnf1 = (-1.)*log(z1-bb)
+				- aa/(bb*sqrt(8.))*log((z1+(1.+sqrt(2.))*bb)/(z1+(1.-sqrt(2.))*bb))+z1-1.;
+		else
+			lnf1 = 1000.;
+		if (z2 > bb)
+			lnf2 = (-1.)*log(z2-bb)
+				- aa/(bb*sqrt(8.))*log((z2+(1.+sqrt(2.))*bb)/(z2+(1.-sqrt(2.))*bb))+z2-1.;
+		else
+			lnf2 = 1000.;
+		if (z3 > bb)
+			lnf3 = (-1.)*log(z3-bb)
+				- aa/(bb*sqrt(8.))*log((z3+(1.+sqrt(2.))*bb)/(z3+(1.-sqrt(2.))*bb))+z3-1.;
+		else
+			lnf3 = 1000.;
+
+		if (lnf2 < lnf1)
+		{
+			z = z2; vol = vol2; lnf = lnf2;
+		}
+		else
+		{
+			z = z1; vol = vol1; lnf = lnf1;
+		}
+		if (lnf3 < lnf)
+		{
+			z = z3; vol = vol3; lnf = lnf3;
+		}
+		else
+		{
+			z = z; vol = vol; lnf = lnf;
+		}
+		// calculate thermodynamic properties
+		alph = aprsv/(0.457235*pow(R_CONSTANT,2.)*pow(Tcrit,2.) / Pcrit);
+		k = (sqrt(alph)-1.)/(1.-sqrt(Tred));
+		gdep = R_CONSTANT*Tk*(z-1.-log(z-bb)-aa/(bb*sqrt(8.))
+                       *log((z+(1+sqrt(2.))*bb)/(z+(1-sqrt(2.))*bb)));
+		hdep = R_CONSTANT*Tk*(z-1.-log((z+(1+sqrt(2.))*bb)/(z+(1-sqrt(2.))*bb))
+                       *aa/(bb*sqrt(8.))*(1+k*sqrt(Tred)/sqrt(alph)));
+		sdep = (hdep-gdep)/Tk;
+		g = gig + gdep;
+		h = hig + hdep;
+		s = sig + sdep;
+		fugpure = exp(lnf);
+		Fugpure[i][0] = fugpure;
+		Fugpure[i][1] = gdep;	// changed to departure functions, 31.05.2008 (TW)
+		Fugpure[i][2] = hdep;
+		Fugpure[i][3] = sdep;
+        Fugpure[i][4] = vol;
+	}
+        return 0;
+}
+
+
+long int
+TPRSVcalc::Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3)
+{
+   // finds roots of cubic equation
+   double q, rc, q3, rc2, theta, ac, bc;
+
+   q = (pow(a2,2.) - 3.*a1)/9.;
+   rc = (2.*pow(a2,3.) - 9.*a2*a1 + 27.*a0)/54.;
+   q3 = pow(q,3.);
+   rc2 = pow(rc,2.);
+   if (rc2 < q3)   // three real roots
+   {
+      theta = acos(rc/sqrt(q3));
+       z1 = (-2.)*sqrt(q)*cos(theta/3.)-a2/3.;
+       z2 = (-2.)*sqrt(q)*cos(theta/3.+2./3.*3.1415927)-a2/3.;
+       z3 = (-2.)*sqrt(q)*cos(theta/3.-2./3.*3.1415927)-a2/3.;
+   }
+   else   // one real root
+   {
+  	ac = (-1.)*rc/fabs(rc)*pow(fabs(rc)+sqrt(rc2-q3), 1./3.);
+  	if (ac != 0.)
+        	bc = q/ac;
+   	else
+  		bc = 0.;
+    	z1 = ac+bc-a2/3.;
+   	z2 = ac+bc-a2/3.;
+   	z3 = ac+bc-a2/3.;
+   }
+   return 0;
+}
+
+
+long int
+TPRSVcalc::MixParam( double &amix, double &bmix)
+{;
+	// calculates a and b parameters of the mixture
+	long int i, j;
+	double K;
+	amix = 0.;
+	bmix = 0.;
+
+	// calculate binary aij parameters
+	for (i=0; i<NComp; i++)
+	{
+		for (j=0; j<NComp; j++)
+		{
+			// K = KK0ij[i][j] + KK1ij[i][j]*Tk;
+            K = KK0ij[i][j];
+			AAij[i][j] = sqrt(Pureparm[i][0]*Pureparm[j][0])*(1.-K);
+		}
+	}
+	// find a and b of the mixture
+	for (i=0; i<NComp; i++)
+	{
+		for (j=0; j<NComp; j++)
+		{
+			amix = amix + Wx[i]*Wx[j]*AAij[i][j];
+		}
+	}
+	for (i=0; i<NComp; i++)
+	{
+		bmix = bmix + Wx[i]*Pureparm[i][1];
+	}
+	return 0;
+}
+
+
+long int
+TPRSVcalc::FugacityMix( double amix, double bmix,
+    double &fugmix, double &zmix, double &vmix)
+{
+	// calculates fugacity of the mixture
+    double aa, bb, a2, a1, a0, z1, z2, z3;
+	double vol1, vol2, vol3, lnf1, lnf2, lnf3, lnf;
+
+	// solve cubic equation
+	aa = amix*P/(pow(R_CONSTANT,2.)*pow(Tk,2.));
+	bb = bmix*P/(R_CONSTANT*Tk);
+	a2 = bb - 1.;
+	a1 = aa - 3.*pow(bb,2.) - 2.*bb;
+	a0 = pow(bb,3.) + pow(bb,2.) - aa*bb;
+	Cardano(a2, a1, a0, z1, z2, z3);
+
+	// find stable roots
+	vol1 = z1*R_CONSTANT*Tk/P;
+	vol2 = z2*R_CONSTANT*Tk/P;
+	vol3 = z3*R_CONSTANT*Tk/P;
+	if (z1 > bb)
+		lnf1 = (-1.)*log(z1-bb)
+			- aa/(bb*sqrt(8.))*log((z1+(1.+sqrt(2.))*bb)/(z1+(1.-sqrt(2.))*bb))+z1-1.;
+	else
+		lnf1 = 1000.;
+	if (z2 > bb)
+		lnf2 = (-1.)*log(z2-bb)
+			- aa/(bb*sqrt(8.))*log((z2+(1.+sqrt(2.))*bb)/(z2+(1.-sqrt(2.))*bb))+z2-1.;
+	else
+		lnf2 = 1000.;
+	if (z3 > bb)
+		lnf3 = (-1.)*log(z3-bb)
+			- aa/(bb*sqrt(8.))*log((z3+(1.+sqrt(2.))*bb)/(z3+(1.-sqrt(2.))*bb))+z3-1.;
+	else
+		lnf3 = 1000.;
+
+	if (lnf2 < lnf1)
+	{
+		zmix = z2; vmix = vol2; lnf = lnf2;
+	}
+	else
+	{
+		zmix = z1; vmix = vol1; lnf = lnf1;
+	}
+	if (lnf3 < lnf)
+	{
+		zmix = z3; vmix = vol3; lnf = lnf3;
+	}
+	else
+	{
+		zmix = zmix; vmix = vmix; lnf = lnf;
+	}
+	fugmix = exp(lnf);
+        PhVol = vmix;
+	return 0;
+}
+
+
+// #define MAXPUREPARAM 7
+long int
+TPRSVcalc::FugacitySpec( double *fugpure, double *params  )
+{
+    // calculates fugacity and activity of species
+    long int i, j, iRet=0;
+	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
+	double au, bu, lnfci, fci;
+	double dAMIXdT, KK, Gdep, Hdep, Sdep;
+
+    // Reload params to Pureparm
+    for( j=0; j<NComp; j++ )
+    {
+      Fugpure[j][0] = fugpure[j]/P;
+//      for( i=0; i<4; i++ )
+//        Pureparm[j][i] = params[j*4+i];
+      // for( i=0; i<4; i++ )  //
+      for( i=0; i<5; i++ )  // increased from 4 to 5, 31.05.2008 (TW)
+      {
+          // Pureparm[j][i] = params[j*10+i+6];
+    	  Pureparm[j][i] = params[j*12+i+6];  // increased from 10 to 12, 31.05.2008 (TW)
+      }
+    }
+
+	// retrieve properties of the mixture
+	iRet = MixParam( amix, bmix);
+	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix);
+
+	// calculate fugacity coefficient, fugacity and activity of species i
+	for (i=0; i<NComp; i++)
+	{
+		au = amix*P/(pow(R_CONSTANT, 2.)*pow(Tk, 2.));
+		bu = bmix*P/(R_CONSTANT*Tk);
+		sum = 0.;
+		for (j=0; j<NComp; j++)
+		{
+			sum = sum + Wx[j]*AAij[i][j];
+		}
+		lnfci = Pureparm[i][1]/bmix*(zmix-1.) - log(zmix-bu)
+		      + au/(sqrt(8.)*bu)*(2.*sum/amix-Pureparm[i][1]/bmix)
+                      * log((zmix+bu*(1.-sqrt(2.)))/(zmix+bu*(1.+sqrt(2.))));
+		fci = exp(lnfci);
+		Fugci[i][0] = fci;	// fugacity coefficient using engineering convention
+		Fugci[i][1] = Wx[i]*fci;  // fugacity coefficient using geology convention
+		Fugci[i][2] = Fugci[i][1]/Fugpure[i][0];  // activity of species
+		if (Wx[i]>1.0e-20)
+			Fugci[i][3] = Fugci[i][2]/Wx[i];  // activity coefficient of species
+		else
+			Fugci[i][3] = 1.0;
+	}
+
+	// calculate total departure function of the mixture
+	dAMIXdT = 0.;
+	for (i=0; i<NComp; i++)
+	{
+		for (j=0; j<NComp; j++)
+		{
+			KK = KK0ij[i][j];
+			if (i==j)
+				dAMIXdT = dAMIXdT + 2.*Wx[i]*Wx[i]*Pureparm[i][3]*Pureparm[i][2]*Pureparm[i][4];
+			else
+				dAMIXdT = dAMIXdT + 2.*Wx[i]*Wx[j]*sqrt(Pureparm[i][3]*Pureparm[j][3])
+					*Pureparm[i][4]*Pureparm[j][2]*(1.-KK);
+		}
+	}
+
+	Gdep = (amix/(R_CONSTANT*Tk*sqrt(8.)*bmix)  *log((vmix+(1.-sqrt(2.))*bmix)
+		/(vmix+(1.+sqrt(2.))*bmix))-log(zmix*(1.-bmix/vmix))+zmix-1.)*R_CONSTANT*Tk;
+	Hdep = ((amix-Tk*dAMIXdT)/(R_CONSTANT*Tk*sqrt(8.)*bmix)*log((vmix+(1.-sqrt(2.))
+		*bmix)/(vmix+(1.+sqrt(2))*bmix))+zmix-1.)*R_CONSTANT*Tk;
+	Sdep = (Hdep - Gdep)/Tk;
+
+	return iRet;
+}
+
+long int
+TPRSVcalc::GetMoleFract( double *X )
+{
+  ; // Loads mole fractions for NComp species
+  for( long int j = 0; j< NComp; j++ )
+    Wx[j] = X[j];
+  return 0;
+}
+
+
+double
+TPRSVcalc::ObtainResults( double *ActCoef )
+{
+    long int j;
+
+    for(j=0; j<NComp; j++)
+       ActCoef[j] = Fugci[j][3];
+
+    return PhVol;
+}
+
 #ifndef IPMGEMPLUGIN
 #include "s_tpwork.h"
 //--------------------------------------------------------------------//
@@ -1534,574 +2090,5 @@ void EOSPARAM::norm(double *X,unsigned long int mNum)
   }
  }
 
-// -------------------------------------------------------------------------
-
-// Implementation
-// TPRSVcalc class - private methods
-long int
-TPRSVcalc::PureParam( double *Eos2parPT )
-{ // calculates a and b arrays
-	// calculates a, b, sqrAL, ac, dALdT of pure species
-   long int i;
-   double Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, sqrAL, ac, dALdT;
-
-   for (i=0; i<NComp; i++)
-   {
-      Tcrit = Eosparm[i][0];
-      Pcrit = Eosparm[i][1];
-      omg = Eosparm[i][2];
-      k1 = Eosparm[i][3];
-      k2 = Eosparm[i][4];
-      k3 = Eosparm[i][5];
-
-      AB(Tcrit, omg, k1, k2, k3, Pcrit, apure, bpure, sqrAL, ac, dALdT);
-      // B(Tcrit, Pcrit, bpure);
-      Pureparm[i][0] = apure;
-      Pureparm[i][1] = bpure;
-      Pureparm[i][2] = sqrAL;
-      Pureparm[i][3] = ac;
-      Pureparm[i][4] = dALdT;
-      Eos2parPT[0] = apure;
-      Eos2parPT[1] = bpure;
-      Eos2parPT[2] = sqrAL;
-      Eos2parPT[3] = ac;
-      Eos2parPT[4] = dALdT;
-   }
-   return 0;
-
-}
-
-
-long int
-TPRSVcalc::AB(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit,
-		double &apure, double &bpure, double &sqrAL, double &ac, double &dALdT)
-{
-	// calculates a term of cubic EoS, modified 31.05.2008 (TW)
-	double Tred, k0, k, alph;
-
-	Tred = Tk/Tcrit;
-	k0 = 0.378893 + 1.4897153*omg - 0.17131848*pow(omg,2.) + 0.0196554*pow(omg,3.);
-	if(Tk >= Tcrit)
-	{
-		k1 = 0.0;
-		k2 = 0.0;
-		k3 = 0.0;
-	}
-	k = k0 + (k1 + k2*(k3-Tred)*(1.-sqrt(Tred))) * (1.+sqrt(Tred)) * (0.7-Tred);
-	alph = pow(1. + k*(1.-sqrt(Tred)), 2.);
-	apure = alph*(0.457235*pow(R_CONSTANT,2.)*pow(Tcrit,2.) / Pcrit);
-	bpure = 0.077796*R_CONSTANT*Tcrit/Pcrit;
-	sqrAL = 1.+k*(1.-sqrt(Tred));
-	ac = 0.457235*pow(R_CONSTANT,2.)*pow(Tcrit,2.) / Pcrit;
-	dALdT = (-1.)*k0/(2.*sqrt(Tk*Tcrit)) - 1.7*k1/Tcrit + 2.*k1*Tk/(pow(Tcrit,2.));  // extend dA/dT for k2, k3
-	return 0;
-}
-
-
-// long int
-// TPRSVcalc::B(double Tcrit, double Pcrit, double &bpure)
-// {
-//    bpure = 0.077796*R_CONSTANT*Tcrit/Pcrit;
-//    return 0;
-// }
-
-
-long int
-TPRSVcalc::FugacityPure( )
-{ // Calculates the fugacity of pure species
-// calculates fugacity and state functions of pure species
-    long int i;
-	double Tcrit, Pcrit, Tred, aprsv, bprsv, alph, k, aa, bb, a2, a1, a0,
-               z1, z2, z3;
-	double vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
-	double gig, hig, sig, gdep, hdep, sdep, g, h, s, fugpure;
-
-	// ideal gas changes from 1 bar to P at T of interest
-	hig = 0.;
-	sig = (-1.)*R_CONSTANT*log(P);
-	gig = hig - Tk*sig;
-
-	for (i=0; i<NComp; i++)
-	{
-		// calculate a and b terms of cubic EoS
-		Tcrit = Eosparm[i][0];
-		Pcrit = Eosparm[i][1];
-		Tred = Tk/Tcrit;
-		aprsv = Pureparm[i][0];
-		bprsv = Pureparm[i][1];
-		// solve cubic equation
-		aa = aprsv*P/(pow(R_CONSTANT,2.)*pow(Tk,2.));
-		bb = bprsv*P/(R_CONSTANT*Tk);
-		a2 = bb - 1.;
-		a1 = aa - 3.*pow(bb,2.) - 2.*bb;
-		a0 = pow(bb,3.) + pow(bb,2.) - aa*bb;
-		Cardano(a2, a1, a0, z1, z2, z3);
-
-		// find stable roots
-		vol1 = z1*R_CONSTANT*Tk/P;
-		vol2 = z2*R_CONSTANT*Tk/P;
-		vol3 = z3*R_CONSTANT*Tk/P;
-		if (z1 > bb)
-			lnf1 = (-1.)*log(z1-bb)
-				- aa/(bb*sqrt(8.))*log((z1+(1.+sqrt(2.))*bb)/(z1+(1.-sqrt(2.))*bb))+z1-1.;
-		else
-			lnf1 = 1000.;
-		if (z2 > bb)
-			lnf2 = (-1.)*log(z2-bb)
-				- aa/(bb*sqrt(8.))*log((z2+(1.+sqrt(2.))*bb)/(z2+(1.-sqrt(2.))*bb))+z2-1.;
-		else
-			lnf2 = 1000.;
-		if (z3 > bb)
-			lnf3 = (-1.)*log(z3-bb)
-				- aa/(bb*sqrt(8.))*log((z3+(1.+sqrt(2.))*bb)/(z3+(1.-sqrt(2.))*bb))+z3-1.;
-		else
-			lnf3 = 1000.;
-
-		if (lnf2 < lnf1)
-		{
-			z = z2; vol = vol2; lnf = lnf2;
-		}
-		else
-		{
-			z = z1; vol = vol1; lnf = lnf1;
-		}
-		if (lnf3 < lnf)
-		{
-			z = z3; vol = vol3; lnf = lnf3;
-		}
-		else
-		{
-			z = z; vol = vol; lnf = lnf;
-		}
-		// calculate thermodynamic properties
-		alph = aprsv/(0.457235*pow(R_CONSTANT,2.)*pow(Tcrit,2.) / Pcrit);
-		k = (sqrt(alph)-1.)/(1.-sqrt(Tred));
-		gdep = R_CONSTANT*Tk*(z-1.-log(z-bb)-aa/(bb*sqrt(8.))
-                       *log((z+(1+sqrt(2.))*bb)/(z+(1-sqrt(2.))*bb)));
-		hdep = R_CONSTANT*Tk*(z-1.-log((z+(1+sqrt(2.))*bb)/(z+(1-sqrt(2.))*bb))
-                       *aa/(bb*sqrt(8.))*(1+k*sqrt(Tred)/sqrt(alph)));
-		sdep = (hdep-gdep)/Tk;
-		g = gig + gdep;
-		h = hig + hdep;
-		s = sig + sdep;
-		fugpure = exp(lnf);
-		Fugpure[i][0] = fugpure;
-		Fugpure[i][1] = gdep;	// changed to departure functions, 31.05.2008 (TW)
-		Fugpure[i][2] = hdep;
-		Fugpure[i][3] = sdep;
-        Fugpure[i][4] = vol;
-	}
-        return 0;
-}
-
-
-long int
-TPRSVcalc::Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3)
-{
-   // finds roots of cubic equation
-   double q, rc, q3, rc2, theta, ac, bc;
-
-   q = (pow(a2,2.) - 3.*a1)/9.;
-   rc = (2.*pow(a2,3.) - 9.*a2*a1 + 27.*a0)/54.;
-   q3 = pow(q,3.);
-   rc2 = pow(rc,2.);
-   if (rc2 < q3)   // three real roots
-   {
-      theta = acos(rc/sqrt(q3));
-       z1 = (-2.)*sqrt(q)*cos(theta/3.)-a2/3.;
-       z2 = (-2.)*sqrt(q)*cos(theta/3.+2./3.*3.1415927)-a2/3.;
-       z3 = (-2.)*sqrt(q)*cos(theta/3.-2./3.*3.1415927)-a2/3.;
-   }
-   else   // one real root
-   {
-  	ac = (-1.)*rc/fabs(rc)*pow(fabs(rc)+sqrt(rc2-q3), 1./3.);
-  	if (ac != 0.)
-        	bc = q/ac;
-   	else
-  		bc = 0.;
-    	z1 = ac+bc-a2/3.;
-   	z2 = ac+bc-a2/3.;
-   	z3 = ac+bc-a2/3.;
-   }
-   return 0;
-}
-
-
-long int
-TPRSVcalc::MixParam( double &amix, double &bmix)
-{;
-	// calculates a and b parameters of the mixture
-	long int i, j;
-	double K;
-	amix = 0.;
-	bmix = 0.;
-
-	// calculate binary aij parameters
-	for (i=0; i<NComp; i++)
-	{
-		for (j=0; j<NComp; j++)
-		{
-			// K = KK0ij[i][j] + KK1ij[i][j]*Tk;
-            K = KK0ij[i][j];
-			AAij[i][j] = sqrt(Pureparm[i][0]*Pureparm[j][0])*(1.-K);
-		}
-	}
-	// find a and b of the mixture
-	for (i=0; i<NComp; i++)
-	{
-		for (j=0; j<NComp; j++)
-		{
-			amix = amix + Wx[i]*Wx[j]*AAij[i][j];
-		}
-	}
-	for (i=0; i<NComp; i++)
-	{
-		bmix = bmix + Wx[i]*Pureparm[i][1];
-	}
-	return 0;
-}
-
-
-long int
-TPRSVcalc::FugacityMix( double amix, double bmix,
-    double &fugmix, double &zmix, double &vmix)
-{
-	// calculates fugacity of the mixture
-    double aa, bb, a2, a1, a0, z1, z2, z3;
-	double vol1, vol2, vol3, lnf1, lnf2, lnf3, lnf;
-
-	// solve cubic equation
-	aa = amix*P/(pow(R_CONSTANT,2.)*pow(Tk,2.));
-	bb = bmix*P/(R_CONSTANT*Tk);
-	a2 = bb - 1.;
-	a1 = aa - 3.*pow(bb,2.) - 2.*bb;
-	a0 = pow(bb,3.) + pow(bb,2.) - aa*bb;
-	Cardano(a2, a1, a0, z1, z2, z3);
-
-	// find stable roots
-	vol1 = z1*R_CONSTANT*Tk/P;
-	vol2 = z2*R_CONSTANT*Tk/P;
-	vol3 = z3*R_CONSTANT*Tk/P;
-	if (z1 > bb)
-		lnf1 = (-1.)*log(z1-bb)
-			- aa/(bb*sqrt(8.))*log((z1+(1.+sqrt(2.))*bb)/(z1+(1.-sqrt(2.))*bb))+z1-1.;
-	else
-		lnf1 = 1000.;
-	if (z2 > bb)
-		lnf2 = (-1.)*log(z2-bb)
-			- aa/(bb*sqrt(8.))*log((z2+(1.+sqrt(2.))*bb)/(z2+(1.-sqrt(2.))*bb))+z2-1.;
-	else
-		lnf2 = 1000.;
-	if (z3 > bb)
-		lnf3 = (-1.)*log(z3-bb)
-			- aa/(bb*sqrt(8.))*log((z3+(1.+sqrt(2.))*bb)/(z3+(1.-sqrt(2.))*bb))+z3-1.;
-	else
-		lnf3 = 1000.;
-
-	if (lnf2 < lnf1)
-	{
-		zmix = z2; vmix = vol2; lnf = lnf2;
-	}
-	else
-	{
-		zmix = z1; vmix = vol1; lnf = lnf1;
-	}
-	if (lnf3 < lnf)
-	{
-		zmix = z3; vmix = vol3; lnf = lnf3;
-	}
-	else
-	{
-		zmix = zmix; vmix = vmix; lnf = lnf;
-	}
-	fugmix = exp(lnf);
-        PhVol = vmix;
-	return 0;
-}
-
-
-// #define MAXPUREPARAM 7
-long int
-TPRSVcalc::FugacitySpec( double *fugpure, double *params  )
-{
-    // calculates fugacity and activity of species
-    long int i, j, iRet=0;
-	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
-	double au, bu, lnfci, fci;
-	double dAMIXdT, KK, Gdep, Hdep, Sdep;
-
-    // Reload params to Pureparm
-    for( j=0; j<NComp; j++ )
-    {
-      Fugpure[j][0] = fugpure[j]/P;
-//      for( i=0; i<4; i++ )
-//        Pureparm[j][i] = params[j*4+i];
-      // for( i=0; i<4; i++ )  //
-      for( i=0; i<5; i++ )  // increased from 4 to 5, 31.05.2008 (TW)
-      {
-          // Pureparm[j][i] = params[j*10+i+6];
-    	  Pureparm[j][i] = params[j*12+i+6];  // increased from 10 to 12, 31.05.2008 (TW)
-      }
-    }
-
-	// retrieve properties of the mixture
-	iRet = MixParam( amix, bmix);
-	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix);
-
-	// calculate fugacity coefficient, fugacity and activity of species i
-	for (i=0; i<NComp; i++)
-	{
-		au = amix*P/(pow(R_CONSTANT, 2.)*pow(Tk, 2.));
-		bu = bmix*P/(R_CONSTANT*Tk);
-		sum = 0.;
-		for (j=0; j<NComp; j++)
-		{
-			sum = sum + Wx[j]*AAij[i][j];
-		}
-		lnfci = Pureparm[i][1]/bmix*(zmix-1.) - log(zmix-bu)
-		      + au/(sqrt(8.)*bu)*(2.*sum/amix-Pureparm[i][1]/bmix)
-                      * log((zmix+bu*(1.-sqrt(2.)))/(zmix+bu*(1.+sqrt(2.))));
-		fci = exp(lnfci);
-		Fugci[i][0] = fci;	// fugacity coefficient using engineering convention
-		Fugci[i][1] = Wx[i]*fci;  // fugacity coefficient using geology convention
-		Fugci[i][2] = Fugci[i][1]/Fugpure[i][0];  // activity of species
-		if (Wx[i]>1.0e-20)
-			Fugci[i][3] = Fugci[i][2]/Wx[i];  // activity coefficient of species
-		else
-			Fugci[i][3] = 1.0;
-	}
-
-	// calculate total departure function of the mixture
-	dAMIXdT = 0.;
-	for (i=0; i<NComp; i++)
-	{
-		for (j=0; j<NComp; j++)
-		{
-			KK = KK0ij[i][j];
-			if (i==j)
-				dAMIXdT = dAMIXdT + 2.*Wx[i]*Wx[i]*Pureparm[i][3]*Pureparm[i][2]*Pureparm[i][4];
-			else
-				dAMIXdT = dAMIXdT + 2.*Wx[i]*Wx[j]*sqrt(Pureparm[i][3]*Pureparm[j][3])
-					*Pureparm[i][4]*Pureparm[j][2]*(1.-KK);
-		}
-	}
-
-	Gdep = (amix/(R_CONSTANT*Tk*sqrt(8.)*bmix)  *log((vmix+(1.-sqrt(2.))*bmix)
-		/(vmix+(1.+sqrt(2.))*bmix))-log(zmix*(1.-bmix/vmix))+zmix-1.)*R_CONSTANT*Tk;
-	Hdep = ((amix-Tk*dAMIXdT)/(R_CONSTANT*Tk*sqrt(8.)*bmix)*log((vmix+(1.-sqrt(2.))
-		*bmix)/(vmix+(1.+sqrt(2))*bmix))+zmix-1.)*R_CONSTANT*Tk;
-	Sdep = (Hdep - Gdep)/Tk;
-
-	return iRet;
-}
-
-
-long int
-TPRSVcalc::GetEosParam( float *EoSparam )
-{
-   // reads EoS parameters from database into work array
-   long int i;
-   if( !EoSparam )
-     return -1;  // Memory alloc error
-
-   for (i=0; i<NComp; i++)
-   {
-      Eosparm[i][0] = EoSparam[0];   // critical temperature in K
-      Eosparm[i][1] = EoSparam[1];   // critical pressure in bar
-      Eosparm[i][2] = EoSparam[2];   // Pitzer acentric factor omega
-      Eosparm[i][3] = EoSparam[3];   // empirical EoS parameter k1
-      Eosparm[i][4] = EoSparam[4];   // empirical EoS parameter k2
-      Eosparm[i][5] = EoSparam[5];   // empirical EoS parameter k3
-    }
-    return 0;
-}
-
-
-long int
-TPRSVcalc::GetMoleFract( double *X )
-{
-  ; // Loads mole fractions for NComp species
-  for( long int j = 0; j< NComp; j++ )
-    Wx[j] = X[j];
-  return 0;
-}
-
-
-double
-TPRSVcalc::ObtainResults( double *ActCoef )
-{
-    long int j;
-
-    for(j=0; j<NComp; j++)
-       ActCoef[j] = Fugci[j][3];
-
-    return PhVol;
-}
-
-
-// - - - - - - -
-
-// TPRSVcalc class - high-level methods
-// Constructor
-
-TPRSVcalc::TPRSVcalc( long int NCmp, double Pp, double Tkp )
-    {
-       long int i;
-
-       NComp = NCmp;
-       P = Pp;
-       Tk = Tkp;
-       R_CONSTANT = 8.31451;
-
-       Wx = new double [NComp];
-       Eosparm = new double *[NComp];
-       Pureparm = new double *[NComp];
-       Fugpure = new double *[NComp];
-       Fugci = new double *[NComp];
-       KK0ij = new double *[NComp];
-       KK1ij = new double *[NComp];
-       AAij = new double *[NComp];
-
-       for (i=0; i<NComp; i++)
-       {
-         Eosparm[i] = new double [6];
-         Pureparm[i] = new double [5];	// increased to 5 (31.05.2008 TW)
-         Fugpure[i] = new double [5];
-         Fugci[i] = new double [4];
-         KK0ij[i] = new double[NComp];
-         KK1ij[i] = new double[NComp];
-         AAij[i] = new double[NComp];
-       }
-    }
-
-
-TPRSVcalc::~TPRSVcalc()
-    {
-    	long int i;
-
-    	for (i=0; i<NComp; i++)
-    	{
-    		delete[]Eosparm[i];
-    		delete[]Pureparm[i];
-    		delete[]Fugpure[i];
-    		delete[]Fugci[i];
-    		delete[]KK0ij[i];
-    		delete[]KK1ij[i];
-    		delete[]AAij[i];
-    	}
-
-    	delete[]Wx;
-    	delete[]Eosparm;
-    	delete[]Pureparm;
-    	delete[]Fugpure;
-    	delete[]Fugci;
-    	delete[]KK0ij;
-    	delete[]KK1ij;
-    	delete[]AAij;
-    }
-
-
-long int
-TPRSVcalc::PRFugacityPT( double P, double Tk, float *EoSparam, double *Eos2parPT,
-        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
- {
-
-      long int iRet = 0;
-
-      iRet = GetEosParam( EoSparam );
-      if( iRet)
-        return iRet;
-
-      iRet = PureParam( Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
-
-      if( iRet)
-        return iRet;
-
-      iRet = FugacityPure();
-      if( iRet)
-        return iRet;
-
-      Fugacity = Fugpure[0][0]; // Fugacity coefficient
-      DeltaH = Fugpure[0][2];   // H departure function
-      DeltaS = Fugpure[0][3];   // S departure function
-      Volume = Fugpure[0][4];   //  J/bar
-
-      return iRet;
- }
-
-
-long int
-TPRSVcalc::PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parPT,
-        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
- {
-
-      long int iRet = 0;
-
-      if( !EoSparam )
-        return -1;  // Memory alloc error
-
-      for (long int i=0; i<NComp; i++)
-      {
-         Eosparm[i][0] = EoSparam[0];   // critical temperature in K
-         Eosparm[i][1] = EoSparam[1];   // critical pressure in bar
-         Eosparm[i][2] = EoSparam[2];   // Pitzer acentric factor omega
-         Eosparm[i][3] = EoSparam[3];   // empirical EoS parameter k1
-         Eosparm[i][4] = EoSparam[4];   // empirical EoS parameter k2
-         Eosparm[i][5] = EoSparam[5];   // empirical EoS parameter k3
-       }
-
-      iRet = PureParam( Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
-                                     
-      if( iRet)
-        return iRet;
-
-      iRet = FugacityPure();
-      if( iRet)
-        return iRet;
-
-      Fugacity = Fugpure[0][0]; // Fugacity coefficient
-      DeltaH = Fugpure[0][2];   // H departure function
-      DeltaS = Fugpure[0][3];   // S departure function
-      Volume = Fugpure[0][4];   //  J/bar
-
-      return iRet;
- }
-
- // Called from IPM-Gamma() where activity coefficients are computed
-long int
-TPRSVcalc::PRActivCoefPT( long int NComp, double Pbar, double Tk, double *X,
-    double *fugpure, double *binpar, double *param, double *act, double &PhaseVol,
-    long int NPar, long int NPcoef, long int MaxOrd, long int *aIPx  )
-{
-
-   long int iRet;
-   long int j, i, ip;
-   long int index1, index2;
-
-   if( NPcoef > 0 )
-   {
-      // fill internal array of interaction parameters with standard value
-      for( j=0; j<NComp; j++ )
-        for( i=0; i<NComp; i++ )
-          KK0ij[j][i] = 0.;
-
-      // transfer those interaction parameters that have non-standard value
-      for ( ip=0; ip<NPar; ip++ )
-      {
-         index1 = aIPx[MaxOrd*ip];
-         index2 = aIPx[MaxOrd*ip+1];
-         KK0ij[index1][index2] = binpar[NPcoef*ip];
-         KK0ij[index2][index1] = binpar[NPcoef*ip];	// symmetric case
-      }
-    }
-
-    GetMoleFract( X );
-
-    iRet = FugacitySpec( fugpure, param );	// removed binpar from arguments, 31.05.2008 (TW)
-
-    PhaseVol = ObtainResults( act );	// needs to be changed to pull departure functions
-
-    return iRet;
-}
 
 //--------------------- End of s_fgl.cpp ---------------------------

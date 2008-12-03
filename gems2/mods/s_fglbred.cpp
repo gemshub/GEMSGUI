@@ -26,6 +26,101 @@ using namespace std;
 #include "s_fgl.h"
 
 
+//=============================================================================================
+// SIT model reimplementation for aqueous electrolyte solutions//=============================================================================================
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Generic constructor for the TVanLaar class
+TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+        long int NPperDC, double T_k, double P_bar, char Mod_Code,
+        long int* arIPx, double* arIPc, double* arDCc,
+        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double dW, double eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
+        			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
+        			 arlnGam, arM, arZ, dW, eW )    	
+{
+  PTparam();
+}
+
+
+// Calculates activity coefficients and excess functions
+// Returns 0 if Ok or not 0 if error
+long int TSIT::MixMod()
+{
+    long int j, icat, ian, /*ic, ia,*/  index1, index2, ip;
+    double T, A, B, sqI, bgi=0, Z2, lgGam, SumSIT;
+//    double nPolicy;
+
+    I= IonicStr();
+    if( I <  1e-6 /*TProfil::pm->pa.p.ICmin*/ )
+    {
+      for( j=0; j<NComp; j++)
+    	  lnGamma[j] = 0.;
+	  return 0;
+    }	
+    T = Tk;
+    A = 1.82483e6 * sqrt( RhoW ) / pow( T*EpsW, 1.5 );
+    B = 50.2916 * sqrt( RhoW ) / sqrt( T*EpsW );
+
+    sqI = sqrt( I );
+    ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
+        "Error: A,B were not calculated - no values of RoW and EpsW !" );
+
+    // Calculation of EDH equation
+//  bgi = bg;
+    ian= -1;
+    icat = -1;
+    for( j=0; j<NComp; j++ )
+    {
+// Determining the index of cation or anion
+      if( aZ[j] < 0 )
+          ian = j; // ian++;
+      else if( aZ[j] > 0 )
+          icat = j; // icat++;
+//      else ;
+      if( aZ[j] )
+      {    // Charged species : calculation of the DH part
+           Z2 = aZ[j]*aZ[j];
+           lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
+
+// Calculation of SIT sum - new variant
+           SumSIT = 0.;
+           if( aZ[j] > 0 )  // cation
+           {
+              for( ip=0; ip<NPar; ip++ )
+              {
+                 index1 = aIPx[ip*MaxOrd];
+                 if( index1 != icat )
+                    continue;
+                 index2 = aIPx[ip*MaxOrd+1];
+                 SumSIT += aIPc[ip*NPcoef]   // epsilon
+                        * aM[index2];
+              }
+           }
+           else {   // anion
+              for( ip=0; ip<NPar; ip++ )
+              {
+                 index2 = aIPx[ip*MaxOrd+1];
+                 if( index2 != ian )
+                    continue;
+                 index1 = aIPx[ip*MaxOrd];  // index of cation
+                 SumSIT += aIPc[ip*NPcoef]  // epsilon
+                         * aM[index1];
+              }
+           }
+           lgGam += SumSIT;
+      }
+      else { // Neutral species
+         if( j != NComp-1 /*pmp->DCC[j] != DC_AQ_SOLVENT*/ ) // common salting-out coefficient ??
+               lgGam = bgi * I;
+            else // water-solvent - a0 - osmotic coefficient
+               lgGam = 0.;
+      }
+      lnGamma[j] = lgGam * 2.302585093/*lg_to_ln*/;
+    } // j
+
+    return 0;
+}
 
 //=============================================================================================
 //   Pitzer model
@@ -54,10 +149,10 @@ TPitzer::TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long in
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *arM, double *arZ, 
-        double dW, double eW, double iS ):
+        double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW, iS )    	
+        			 arlnGam, arM, arZ, dW, eW )    	
 {
   // calculate sizes Nc, Na, Nn, Ns 
    calcSizes();	
@@ -69,10 +164,10 @@ TPitzer::TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long in
 	PTparam( Tk );
 
   // build conversion of species indexes between aq phase and Pitzer parameter tables
-	setupIndexes();
+	setIndexes();
   
   // put data from arIPx, arIPc to internal structure
-	setupValues();	
+	setValues();	
 }
 
 TPitzer::~TPitzer()
@@ -280,7 +375,7 @@ void TPitzer::calcSizes()
 // list of indexes of Nc cations in aqueous phase
 // list of indexes of Na anions in aq phase
 // list of indexes of Nn neutral species in aq phase
-void TPitzer::setupIndexes()
+void TPitzer::setIndexes()
 {
   long int jj, ic, ia, in; 
 	
@@ -304,7 +399,7 @@ void TPitzer::setupIndexes()
 }
 
 // put data from arIPx, arIPc, arDCc to internal structure
-void TPitzer::	setupValues()
+void TPitzer::	setValues()
 {
   long int ii, ic, ia,in, i;
 	      

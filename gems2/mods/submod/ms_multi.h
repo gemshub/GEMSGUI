@@ -421,7 +421,6 @@ class TMulti
     void DebyeHueckel2Kjel( long int jb, long int je, long int jpb, long int jdb, long int k );
     void DebyeHueckel1LL( long int jb, long int je, long int k );
     void Davies03temp( long int jb, long int je, long int jpb, long int k );
-    void SIT_aqac_PSI( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb );
 // fluid mixtures
     void ChurakovFluid( long int jb, long int je, long int jpb, long int jdb, long int k );
     void CGofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k );
@@ -433,7 +432,8 @@ class TMulti
     void MargulesTernary( long int jb, long int je, long int jpb, long int jdb, long int k );
 // Generic solution model calls
 void SolModParPT ( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb, char ModCode );
-void SolModActCoeff( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb, char ModCode );
+void SolModActCoeff( long int k, char ModCode );
+void SolModExcessParam( long int k, char ModCode );
 
 // ipm_main.cpp - numerical part of GEM IPM-2
     void MultiCalcMain( long int rLoop );

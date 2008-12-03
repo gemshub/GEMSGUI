@@ -27,10 +27,10 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *arM, double *arZ, 
-        double dW, double eW, double iS ):
+        double dW, double eW ):
     ModCode(Mod_Code), NComp(NSpecies),  NPar(NParams), NPcoef(NPcoefs),
     MaxOrd(MaxOrder),  NP_DC(NPperDC), R_CONST(8.31451), RhoW(dW),
-    EpsW(eW),  IonStr(iS), Tk(T_k), Pbar(P_bar)
+    EpsW(eW),  Tk(T_k), Pbar(P_bar)
         	
 {
     // pointer assignment
@@ -60,10 +60,10 @@ TVanLaar::TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long 
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *arM, double *arZ, 
-        double dW, double eW, double iS ):
+        double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW, iS )    	
+        			 arlnGam, arM, arZ, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -117,8 +117,7 @@ long int TVanLaar::PTparam()
 
 // Calculates activity coefficients and excess functions
 // Returns 0 if Ok or not 0 if error
-long int TVanLaar::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
-         double &CPex_ )
+long int TVanLaar::MixMod()
 {
    long int ip, j, i1, i2;
    double dj, dk;
@@ -187,11 +186,6 @@ long int TVanLaar::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex
    }
 
    hEX = uEX+vEX*Pbar;
-   Gex_ = gEX;
-   Vex_ = vEX;
-   Hex_ = hEX;
-   Sex_ = sEX;
-   CPex_ = cpEX;
 
    return 0;
 }
@@ -206,10 +200,10 @@ TRegular::TRegular( long int NSpecies, long int NParams, long int NPcoefs, long 
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *arM, double *arZ, 
-        double dW, double eW, double iS ):
+        double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW, iS )    	
+        			 arlnGam, arM, arZ, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -261,8 +255,7 @@ long int TRegular::PTparam()
 // Calculates activity coefficients and excess functions
 // Returns 0 if Ok or not 0 if error
 long int
-TRegular::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
-         double &CPex_ )
+TRegular::MixMod()
 {
    long int ip, j, i1, i2;
    double dj, dk;
@@ -315,11 +308,6 @@ TRegular::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
    }
 
    hEX = uEX+vEX*Pbar;
-   Gex_ = gEX;
-   Vex_ = vEX;
-   Hex_ = hEX;
-   Sex_ = sEX;
-   CPex_ = cpEX;
 
    return 0;
 }
@@ -334,10 +322,10 @@ TRedlichKister::TRedlichKister( long int NSpecies, long int NParams, long int NP
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *arM, double *arZ, 
-        double dW, double eW, double iS ):
+        double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW, iS )    	
+        			 arlnGam, arM, arZ, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -411,8 +399,7 @@ long int TRedlichKister::PTparam()
 // Calculates activity coefficients and excess functions
 // Returns 0 if Ok or not 0 if error
 long int
-TRedlichKister::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
-         double &CPex_ )
+TRedlichKister::MixMod()
 {
    long int ip, j;
    long int i1, i2, L, I, J;
@@ -525,12 +512,6 @@ TRedlichKister::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
   	}
 
    	hEX = uEX+vEX*Pbar;
-   	Gex_ = gEX;
-   	Vex_ = vEX;
-   	Hex_ = hEX;
-   	Sex_ = sEX;
-   	CPex_ = cpEX;
-
    	return 0;
 }
 
@@ -544,10 +525,10 @@ TNRTL::TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int Ma
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *arM, double *arZ, 
-        double dW, double eW, double iS ):
+        double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW, iS )    	
+        			 arlnGam, arM, arZ, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -688,8 +669,7 @@ long int TNRTL::PTparam()
 // heat capacity calculation added, 06.06.2008 (TW)
 // Returns 0 if OK or 1 if error
 long int
-TNRTL::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
-         double &CPex_ )
+TNRTL::MixMod()
 {
 	long int  j, i, k;
 	double K, L, M, N, O;
@@ -763,12 +743,6 @@ TNRTL::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	sEX = (hEX-gEX)/Tk;
 	cpEX = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
 
-	Gex_ = gEX;
-	Vex_ = vEX;
-	Hex_ = hEX;
-	Sex_ = sEX;
-	CPex_ = cpEX;
-
 	return 0;
 }
 
@@ -782,10 +756,10 @@ TWilson::TWilson( long int NSpecies, long int NParams, long int NPcoefs, long in
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *arM, double *arZ, 
-        double dW, double eW, double iS ):
+        double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW, iS )    	
+        			 arlnGam, arM, arZ, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -872,8 +846,7 @@ long int TWilson::PTparam()
 // heat capacity calculation added, 06.06.2008 (TW)
 // Returns 0 if OK or 1 if error
 long int
-TWilson::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
-         double &CPex_ )
+TWilson::MixMod( )
 {
 	long int  j, i, k;
 	double K, L, M;
@@ -935,12 +908,6 @@ TWilson::MixMod( double &Gex_, double &Vex_, double &Hex_, double &Sex_,
 	hEX = -R_CONST*pow(Tk,2.)*dg;
 	sEX = (hEX-gEX)/Tk;
 	cpEX = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
-
-	Gex_ = gEX;
-	Vex_ = vEX;
-	Hex_ = hEX;
-	Sex_ = sEX;
-	CPex_ = cpEX;
 
 	return 0;
 }

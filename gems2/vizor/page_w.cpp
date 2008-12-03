@@ -200,10 +200,11 @@ TCPage::Update()
     {
         bool appeared = false;
         if( !getField(ii) )
-            if( !rInfo.aFieldInfo[ii].pObj->IsNull() )
+        {    if( !rInfo.aFieldInfo[ii].pObj->IsNull() )
                 appeared = true;
             else
                 continue;
+        }
         if( appeared || getField(ii)->SizeChanged() )
         {
             fRedraw = true;

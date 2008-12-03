@@ -389,8 +389,8 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
             switch( pmp->PHC[k] )
             {
                case PH_AQUEL:
-            	    SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Pitzer, EUNIQUAC, SIT
-            	    break;
+//            	    SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Pitzer, EUNIQUAC, SIT
+//            	    break;
 			   case PH_LIQUID:
                case PH_SINCOND:
                case PH_SINDIS:
@@ -494,14 +494,14 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                        Davies03temp( jb, je, jpb, k );
                           break;
                   case SM_AQSIT:  // SIT - under testing
-                       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );  // To switch to TSolMod class
- //                      SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                          break;
+//                       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );  // To switch to TSolMod class
+//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+//                          break;
                   case SM_AQPITZ:
-                	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                       break;
+//                	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+//                       break;
                   case SM_AQEXUQ:
-                	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                	  SolModActCoeff( k, sMod[SPHAS_TYP] );
                        break;
                   default:
                           break;
@@ -542,19 +542,19 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                        MargulesTernary( jb, je, jpb, jdb, k );
                           break;
                   case SM_GUGGENM: // Redlich-Kister model (multicomponent), 2007 (TW)
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                          break;
+//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+//                          break;
                   case SM_VANLAAR: // VanLaar model (multicomponent), 2007 (TW)
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                          break;
+//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+//                          break;
                   case SM_REGULAR: // Regular model (multicomponent), 2007 (TW)
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                          break;
+//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+//                          break;
                   case SM_NRTLLIQ: // NRTL model (multicomponent), 03.06.2007 (TW)
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                          break;
+//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+//                          break;
                   case SM_WILSLIQ: // Wilson model (multicomponent), 09.06.2007 (TW)
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                       SolModActCoeff( k, sMod[SPHAS_TYP] );
                           break;
                   default:
                           break;
@@ -722,127 +722,6 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
     	return statusSACT;
     return statusGam;
 }
-
-
-
-// ----------------------------------------------------------------------------
-// Built-in functions for activity coefficients
-//
-// aqueous electrolyte
-// SIT NEA PSI (not yet official)
-//
-void
-TMulti::SIT_aqac_PSI( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb )
-{
-
-    long int j, icat, ian, /*ic, ia,*/  index1, index2, ip, NComp, NPar, NPcoef, MaxOrd;
-    long int *aIPx;
-    double *aIPc;//, *aDCc;
-    double T, A, B, I, sqI, bgi=0, Z2, lgGam, SumSIT;
-//    double nPolicy;
-
-    I= pmp->IC;
-    if( I <  TProfil::pm->pa.p.ICmin )
-        return;
-    T = pmp->Tc;
-    A = 1.82483e6 * sqrt( pmp->denW ) / pow( T*pmp->epsW, 1.5 );
-    B = 50.2916 * sqrt( pmp->denW ) / sqrt( T*pmp->epsW );
-
-//    molt = ( pmp->XF[0]-pmp->XFA[0] )*1000./18.01528/pmp->XFA[0]; // tot.molality
-    sqI = sqrt( I );
-
-    ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
-        "Error: A,B were not calculated - no values of RoW and EpsW !" );
-
-    NComp = pmp->L1[k];          // Number of components in the phase
-    NPar = pmp->LsMod[k*3];      // Number of interaction parameters
-    NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
-    MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
-
-    // These pointers provide direct access to parts of MULTI arrays related to this phase!
-    aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters for non-ideal solutions
-                          // -> NPar x MaxOrd   added 07.12.2006   KD
-    aIPc = pmp->PMc+jpb;    // Interaction parameter coefficients f(TP) -> NPar x NPcoef
-    //aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x NP_DC
-    // aWx = pmp->Wx+jb;       // End member mole fractions
-    // alnGam = pmp->lnGam+jb; // End member ln activity coeffs
-
-
-    // Calculation of EDH equation
-//  bgi = bg;
-    ian= -1;
-    icat = -1;
-    for( j=jb; j<je; j++ )
-    {
-// Determining the index of cation or anion
-      if( pmp->EZ[j] < 0 )
-          ian = j-jb; // ian++;
-      else if( pmp->EZ[j] > 0 )
-          icat = j-jb; // icat++;
-//      else ;
-
-      if( pmp->EZ[j] )
-      {    // Charged species : calculation of the DH part
-           Z2 = pmp->EZ[j]*pmp->EZ[j];
-           lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
-
-// Calculation of SIT sum - new variant
-           SumSIT = 0.;
-           if( pmp->EZ[j] > 0 )  // cation
-           {
-              for( ip=0; ip<NPar; ip++ )
-              {
-                 index1 = aIPx[ip*MaxOrd];
-                 if( index1 != icat )
-                    continue;
-                 index2 = aIPx[ip*MaxOrd+1];
-                 SumSIT += aIPc[ip*NPcoef]   // epsilon
-                        * pmp->Y_m[jb+index2];
-              }
-           }
-           else {   // anion
-              for( ip=0; ip<NPar; ip++ )
-              {
-                 index2 = aIPx[ip*MaxOrd+1];
-                 if( index2 != ian )
-                    continue;
-                 index1 = aIPx[ip*MaxOrd];  // index of cation
-                 SumSIT += aIPc[ip*NPcoef]  // epsilon
-                         * pmp->Y_m[jb + index1];
-              }
-           }
-           lgGam += SumSIT;
-              // Calculation of SIT sums - old variant
-/*           SumSIT = 0.;
-           if( pmp->EZ[j] > 0 )
-           {       // this is a cation
-              for( ia=0; ia<pmp->sitNan; ia++ )
-                 SumSIT += pmp->sitE[ icat*pmp->sitNan + ia ]
-                        * I * pmp->Y_m[pmp->sitXan[ia]];
-              lgGam += SumSIT;
-           }
-           else {  // this is an anion
-              for( ic=0; ic<pmp->sitNcat; ic++ )
-                 SumSIT += pmp->sitE[ ic*pmp->sitNan + ian ]
-                        * I * pmp->Y_m[pmp->sitXcat[ic]];
-              lgGam += SumSIT;
-           }
-*/
-      }
-      else { // Neutral species
-         if( pmp->DCC[j] != DC_AQ_SOLVENT ) // common salting-out coefficient ??
-               lgGam = bgi * I;
-            else // water-solvent - a0 - osmotic coefficient
-               lgGam = 0.;
-      }
-      pmp->lnGam[j] = lgGam * lg_to_ln;
-    } // j
-//    if( ++icat != pmp->sitNcat || ++ian != pmp->sitNan )
-//       Error( "SITgamma",
-//          "Inconsistent numbers of cations and anions in gamma calculation" );
-}
-
-
 
 //----------------------------------------------------------------------------
 // Aqueous electrolyte
@@ -1737,7 +1616,7 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
     aM = pmp->Y_m+jb;
     aZ = pmp->EZ+jb;
 
-    TSolMod* aSM;
+    TSolMod* aSM = 0;
        
    // calculate P-T dependence of interaction parameters
     switch( ModCode )
@@ -1745,7 +1624,7 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         case SM_VANLAAR:
         {
         	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
@@ -1753,47 +1632,51 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         case SM_REGULAR:
         {
         	TRegular* aPT = new TRegular( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
         case SM_GUGGENM:
         {
         	TRedlichKister* aPT = new TRedlichKister( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
         case SM_NRTLLIQ:
         {
         	TNRTL* aPT = new TNRTL( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
         case SM_WILSLIQ:
         {
         	TWilson* aPT = new TWilson( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
         case SM_AQPITZ:
         {
            	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
              aSM = (TSolMod*)aPT;
              break;
         }   
         case SM_AQSIT:
-        //             aSM->SIT_PT();
-        //             break;
+        {
+           	TSIT* aPT = new TSIT( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
+             aSM = (TSolMod*)aPT;
+             break;
+        }   
         case SM_AQEXUQ:
         //        	 aSM->EUNIQUAC_PT();
         //        	 break;
         default:
-            aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                  aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW, 0 );
+//            aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+//                  aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
              break;
     }
     
@@ -1803,34 +1686,9 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
 }
 
 void
-TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long int k, long int ipb,
-            char ModCode )
+TMulti::SolModActCoeff( long int k, char ModCode )
 {
-//   long int NComp, NPar, NPcoef, MaxOrd, NP_DC;
-//    double *aIPc, *aDCc, *aWx, *alnGam;
-//    long int *aIPx;
-    double Gex=0.0, Vex=0.0, Hex=0.0, Sex=0.0, CPex=0.0;
-    double RhoW, EpsW, IonStr;
-
-/*    NComp = pmp->L1[k];          // Number of components in the phase
-    NPar = pmp->LsMod[k*3];      // Number of interaction parameters
-    NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
-    MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
-    NP_DC = pmp->LsMdc[k]; // Number of non-ideality coeffs per one DC in multicomponent phase[FIs]
-
-    // These pointers provide direct access to parts of MULTI arrays related to this phase!
-    aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters for non-ideal solutions
-                              // -> NPar x MaxOrd   added 07.12.2006   KD
-    aIPc = pmp->PMc+jpb;    // Interaction parameter coefficients f(TP) -> NPar x NPcoef
-    aDCc = pmp->DMc+jdb;    // End-member parameter coefficients f(TPX) -> NComp x NP_DC
-    aWx = pmp->Wx+jb;       // End member mole fractions
-    alnGam = pmp->lnGam+jb; // End member ln activity coeffs
-    RhoW = pmp->denW;		// added 04.06.2008 (TW)
-    EpsW = pmp->epsW;
- */
-    IonStr = pmp->IC;
-    
-   if( !phSolMod[k] )
+    if( !phSolMod[k] )
      Error("","Illegal index of phase");
     TSolMod* aSM = phSolMod[k];
 
@@ -1843,11 +1701,37 @@ TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long 
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
         case SM_AQPITZ:
-             aSM->MixMod( Gex, Vex, Hex, Sex, CPex );
-             break;
         case SM_AQSIT:
-             //              aSM->SIT_MixMod( Gex, Vex, Hex, Sex, CPex );
-             //              break;
+             aSM->MixMod();
+             break;
+        case SM_AQEXUQ:
+//             aSM->MixMod(  );
+             break;
+        default: // catch error here
+              break;
+    }
+}
+
+void
+TMulti::SolModExcessParam( long int k, char ModCode )
+{
+	double Gex, Vex, Hex, Sex,  CPex;
+    if( !phSolMod[k] )
+     Error("","Illegal index of phase");
+    TSolMod* aSM = phSolMod[k];
+
+    // Extended constructor to connect to params, coeffs, and mole fractions
+    switch( ModCode )
+    {
+        case SM_VANLAAR:
+        case SM_REGULAR:
+        case SM_GUGGENM:
+        case SM_NRTLLIQ:
+        case SM_WILSLIQ:
+        case SM_AQPITZ:
+        case SM_AQSIT:
+             aSM->getExcessProp( Gex, Vex, Hex, Sex, CPex );
+             break;
         case SM_AQEXUQ:
 //             aSM->EUNIQUAC_MixMod( Gex, Vex, Hex, Sex, CPex );
              break;
@@ -1856,7 +1740,6 @@ TMulti::SolModActCoeff( long int jb, long int, long int jpb, long int jdb, long 
     }
     // To add handling of excess properties for the phase
     // Gex, Vex, Hex, Sex, CPex
-
 }
 
 //-------------------------------------------------------------------------
