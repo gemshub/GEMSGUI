@@ -518,7 +518,8 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                  if( sMod[SPHAS_TYP] == SM_CGFLUID )
                     ChurakovFluid( jb, je, jpb, jdb, k );
                  if( sMod[SPHAS_TYP] == SM_PRFLUID )
-                    PRSVFluid( jb, je, jpb, jdb, k, ipb );
+                     SolModActCoeff( k, sMod[SPHAS_TYP] );
+                    // PRSVFluid( jb, je, jpb, jdb, k, ipb );
                     // Added by Th.Wagner and DK on 20.07.06
              }
              goto END_LOOP;
@@ -1311,7 +1312,7 @@ TMulti::ChurakovFluid( long int jb, long int je, long int, long int jdb, long in
 // Added by D.Kulik on 15.02.2007
 //
 void
-TMulti::PRSVofPureGases( long int jb, long int je, long int, long int jdb, long int, long int )
+TMulti::PRSVofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb  )
 {
     double /* *FugPure, */ Fugcoeff, Volume, DeltaH, DeltaS;
     double *Coeff; //  *BinPar;
@@ -1321,11 +1322,6 @@ TMulti::PRSVofPureGases( long int jb, long int je, long int, long int jdb, long 
     NComp = 1; // = pmp->L1[k];
 
     TPRSVcalc aPRSV( NComp, pmp->Pc, pmp->Tc );
-
-//    Coeff = pmp->DMc+jdb;
-//    FugPure = (double*)malloc( NComp*sizeof(double) );
-//    FugPure = pmp->Pparc+jb;
-
     for( jdc=0, j=jb; j<je; jdc++,j++)
     {
          Coeff = pmp->DMc+jdb+jdc*12;	// increased from 10 to 12 (31.05.2008 TW)
@@ -1333,10 +1329,7 @@ TMulti::PRSVofPureGases( long int jb, long int je, long int, long int jdb, long 
          retCode = aPRSV.PRFugacityPT( pmp->Pc, pmp->Tc, Coeff,
                  Eos2parPT, Fugcoeff, Volume, DeltaH, DeltaS );
 
-//    aW.twp->H +=  DeltaH;   // in J/mol - to be completed
-//    aW.twp->S +=  DeltaS;   // to be completed
-//         pmp->lnGmM[j] = log( Fugcoeff );    // Constant correction to G0 here!
-pmp->GEX[j] = log( Fugcoeff );    // now here (since 26.02.2008) DK
+         pmp->GEX[j] = log( Fugcoeff );    // now here (since 26.02.2008) DK
          pmp->Pparc[j] = Fugcoeff * pmp->Pc; // Necessary only for performance
          pmp->Vol[j] = Volume * 10.;  // molar volume of pure fluid component, J/bar to cm3
 
@@ -1356,8 +1349,9 @@ pmp->GEX[j] = log( Fugcoeff );    // now here (since 26.02.2008) DK
       Error( "E71IPM IPMgamma: ",  buf );
     }
 
-//    free( FugPure );
-//    return retCode;
+    // set work structure
+    SolModParPT( jb, je, jpb, jdb, k, ipb, SM_PRFLUID );
+    
 }
 
 
@@ -1369,60 +1363,13 @@ pmp->GEX[j] = log( Fugcoeff );    // now here (since 26.02.2008) DK
 void
 TMulti::PRSVFluid( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb )
 {
-    double *ActCoefs, PhVol, *FugPure, *BinPar;
-    double *EoSparam;
-    long int j, jj, iRet, NComp, NPar, NPcoef, MaxOrd;
-    long int *aIPx;
+    if( !phSolMod[k] )
+     Error("","Illegal index of phase");
+    TSolMod* aSM = phSolMod[k];
+    //for( j=jb; j<je; j++)
+      // pmp->Wx[j] = pmp->X[j]/pmp->XF[k];
+    aSM->MixMod();
 
-    NComp = pmp->L1[k];
-
-    TPRSVcalc aPRSV( NComp, pmp->Pc, pmp->Tc );
-
-//    ActCoefs = (double*)malloc( NComp*sizeof(double) );
-    ActCoefs =  new double[NComp];
-    EoSparam = pmp->DMc+jdb;
-//    FugPure = (double*)malloc( NComp*sizeof(double) );
-    FugPure = pmp->Pparc + jb;
-    BinPar = pmp->PMc+jpb;
-    NPar = pmp->LsMod[k*3];      // Number of non-zero interaction parameters
-    NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
-    MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
-    aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters
-
-    for( j=jb; j<je; j++)
-       pmp->Wx[j] = pmp->X[j]/pmp->XF[k];
-
-//    for( jj=0; jj<NComp; jj++)
-//    {
-//        FugPure[jj] = pmp->Pparc[jb+jj]; // left for debugging
-//        FugPure[jj] = exp( pmp->lnGmM[jb+jj] ) * pmp->Pc ;
-//    }
-
-    iRet = aPRSV.PRActivCoefPT( NComp, pmp->Pc, pmp->Tc, pmp->Wx+jb, FugPure,
-        BinPar, EoSparam, ActCoefs, PhVol, NPar, NPcoef, MaxOrd, aIPx );
-
-    if ( iRet )
-    {
-      delete[] ActCoefs;
-//      free( ActCoefs );
-//      free( FugPure );
-      char buf[150];
-      sprintf(buf, "PRSVFluid(): bad calculation");
-      Error( "E71IPM IPMgamma: ",  buf );
-    }
-    // Phase volume of the fluid in cm3
-    pmp->FVOL[k] = PhVol * 10.;
-
-    for( jj=0, j=jb; j<je; j++, jj++ )
-    {
-        if( ActCoefs[jj] > 1e-23 )
-             pmp->lnGam[j] = log( ActCoefs[ jj ]);
-        else
-             pmp->lnGam[j] = 0;
-    } /* j */
-   delete[] ActCoefs;
-//    free( ActCoefs );
-//    free( FugPure );
 }
 
 
@@ -1595,7 +1542,7 @@ void
 TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int k, long int ipb, char ModCode )
 {
     long int NComp, NPar, NPcoef, MaxOrd, NP_DC;
-    double *aIPc, *aDCc, *aWx, *alnGam, *aZ, *aM;
+    double *aIPc, *aDCc, *aWx, *alnGam, *aphVOL, *aZ, *aM;
     long int *aIPx;
     double RhoW, EpsW;
 
@@ -1615,6 +1562,7 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
     
     aM = pmp->Y_m+jb;
     aZ = pmp->EZ+jb;
+    aphVOL = pmp->FVOL+k;
 
     TSolMod* aSM = 0;
        
@@ -1624,7 +1572,7 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         case SM_VANLAAR:
         {
         	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
@@ -1632,48 +1580,56 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         case SM_REGULAR:
         {
         	TRegular* aPT = new TRegular( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
         case SM_GUGGENM:
         {
         	TRedlichKister* aPT = new TRedlichKister( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
         case SM_NRTLLIQ:
         {
         	TNRTL* aPT = new TNRTL( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
         case SM_WILSLIQ:
         {
         	TWilson* aPT = new TWilson( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }   
         case SM_AQPITZ:
         {
            	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, aM, aZ, RhoW, EpsW );
              aSM = (TSolMod*)aPT;
              break;
         }   
         case SM_AQSIT:
         {
            	TSIT* aPT = new TSIT( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, aM, aZ, RhoW, EpsW );
              aSM = (TSolMod*)aPT;
              break;
         }   
         case SM_AQEXUQ:
         //        	 aSM->EUNIQUAC_PT();
         //        	 break;
+        case SM_PRFLUID:
+        {
+        	TPRSVcalc* aPT = new TPRSVcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, pmp->Pparc+jb, RhoW, EpsW );
+            aSM = (TSolMod*)aPT;
+            break;
+        }   
+        	
         default:
 //            aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
 //                  aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );

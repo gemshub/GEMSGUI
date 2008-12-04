@@ -276,12 +276,11 @@ protected:
         double Tk;    	// Temperature, K
         double Pbar;  	// Pressure, bar
 
-double *aIPc;  	// Table of interaction parameter coefficients
-double *aIP;    // Vector of interaction parameters corrected to T,P of interest
+        double *aIPc;  	// Table of interaction parameter coefficients
+        double *aIP;    // Vector of interaction parameters corrected to T,P of interest
         double *aDCc;  	// End-member parameter coefficients
         double *x;    	// Pointer to mole fractions of end members (provided)
-double *aZ;    // Vector of species charges (for aqueous models)
-double *aM;    // Vector of species molality (for aqueous models)
+        double *phVOL;    // phase volumes, cm3/mol                   [0:FI-1]
 
 // Results
         double Gam;   	// work cell for activity coefficient of end member
@@ -300,8 +299,7 @@ public:
     TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
          long int NPperDC, double T_k, double P_bar, char Mod_Code,
          long int* arIPx, double* arIPc, double* arDCc,
-         double *arWx, double *arlnGam, double *arM, double *arZ, 
-         double dW, double eW );
+         double *arWx, double *arlnGam, double *aphVOL, double dW, double eW );
     virtual ~TSolMod();
 
 // 
@@ -336,39 +334,48 @@ public:
 // Reference: http://www.uni-tuebingen.de/uni/emi/ag-markl/pages/wagner/
 // th.wagner@uni-tuebingen.de
 //
-class TPRSVcalc // Peng-Robinson-Styjek-Vera EOS calculations
+class TPRSVcalc: public TSolMod 
+// Peng-Robinson-Styjek-Vera EOS calculations
 {
   private:
-     double R_CONSTANT;
-     long int NComp; // number of species;
-//     long int i;
-     double P, Tk, PhVol;   // bar, T Kelvin, phase volume in cm3
+
+	 double PhVol;   // bar, T Kelvin, phase volume in cm3
+     double *Pparc;   // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
+
      // main work arrays
-     double *Wx;         // mole fractions of species
-     double **Eosparm;   // EoS parameters
-     double **Pureparm;  // Parameters a and b for cubic EoS
-     double **Fugpure;   // Fugacity parameters of pure gas species
-     double **Fugci;     // Fugacity parameters of species in the mixture
+     double (*Eosparm)[6];   // EoS parameters
+     double (*Pureparm)[5];  // Parameters a and b for cubic EoS
+     double (*Fugpure)[5];   // Fugacity parameters of pure gas species
+     double (*Fugci)[4];     // Fugacity parameters of species in the mixture
 
      double **KK0ij;    //  Constant term of the binary interaction parameter
      double **KK1ij;    //  T-dependent term
      double **AAij;     //  binary a terms in the mixture
 
+ 	void alloc_internal();
+ 	void free_internal();
+
     public:
 
     TPRSVcalc( long int NCmp, double Pp, double Tkp );
+    TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+         long int NPperDC, double T_k, double P_bar, char Mod_Code,
+         long int* arIPx, double* arIPc, double* arDCc,
+         double *arWx, double *arlnGam, double *aphVOL, double * aPparc, double dW, double eW );
 
     ~TPRSVcalc();
 
-   // Called from IPM-Gamma() where activity coefficients are computed
-   long int PRActivCoefPT( long int NComp, double Pbar, double Tk, double *X,
-        double *fugpure, double *binpar, double *param, double *act, double &PhaseVol,
-        long int NPar, long int NPcoef, long int MaxOrd, long int *aIPx );
+    long int MixMod();
+
+    // Calculation of internal tables (at each GEM iteration)
+	long int PTparam();
+
+	// Called from IPM-Gamma() where activity coefficients are computed
+//   long int PRActivCoefPT( 
+//        double *fugpure );
 
    long int CalcFugPure( void );
    // Calc. fugacity for 1 species at X=1
-   long int PRFugacityPT( double P, double Tk, float *EoSparam, double *Eos2parPT,
-        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
    long int PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parPT,
         double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
 
@@ -386,7 +393,7 @@ protected:
 	long int FugacitySpec( double *fugpure, double *params  );
 
 //	long int GetEosParam( float *params ); // Loads EoS parameters for NComp species
-	long int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
+//  long int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
 	double ObtainResults( double *ActCoef ); // returns activity coeffs and phase volume
 
 };
@@ -397,6 +404,8 @@ class TSIT: public TSolMod
 {
 private:
 	
+	double *aZ;    // Vector of species charges (for aqueous models)
+	double *aM;    // Vector of species molality (for aqueous models)
 	double I;	// Ionic strength
 
 	inline double IonicStr()
@@ -414,7 +423,7 @@ public:
 	TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ, 
 	         double dW, double eW );
 	
 	// Destructor
@@ -448,7 +457,7 @@ public:
 	TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL,  
 	         double dW, double eW );
 	
 	// Destructor
@@ -480,7 +489,7 @@ public:
 	TRegular( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL,  
 	         double dW, double eW  );
 	
 	// Destructor
@@ -512,7 +521,7 @@ public:
 	TRedlichKister( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL,
 	         double dW, double eW  );
 	
 	// Destructor
@@ -549,7 +558,7 @@ public:
 	TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL, 
 	         double dW, double eW  );
 	
 	// Destructor
@@ -580,7 +589,7 @@ public:
 	TWilson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL, 
 	         double dW, double eW  );
 	
 	// Destructor
@@ -605,6 +614,8 @@ private:
 	long int *xcx;   // list of indexes of Nc cations in aqueous phase
 	long int *xax;   // list of indexes of Na anions in aq phase
 	long int *xnx;   // list of indexes of Nn neutral species in aq phase
+	double *aZ;    // Vector of species charges (for aqueous models)
+	double *aM;    // Vector of species molality (for aqueous models)
 
     double Aphi; //------------ Computing A- Factor
 	double I;  //----------- Ionic Strength
@@ -709,7 +720,7 @@ public:
 	TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ, 
 	         double dW, double eW );
 	
 	// Destructor

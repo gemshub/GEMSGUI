@@ -26,7 +26,7 @@
 TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
-        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double *arWx, double *arlnGam, double *aphVOL, 
         double dW, double eW ):
     ModCode(Mod_Code), NComp(NSpecies),  NPar(NParams), NPcoef(NPcoefs),
     MaxOrd(MaxOrder),  NP_DC(NPperDC), R_CONST(8.31451), RhoW(dW),
@@ -39,8 +39,9 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
     aIP = new double[ NPar ];
     aDCc = arDCc;
     x = arWx;
-    aZ = arZ;
-    aM =	arM;
+    phVOL = aphVOL;
+//    aZ = arZ;
+//    aM =	arM;
     lnGamma = arlnGam;
 }
 
@@ -59,11 +60,11 @@ TSolMod::~TSolMod()
 TVanLaar::TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
-        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double *arWx, double *arlnGam, double *aphVOL, 
         double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW )    	
+        			 arlnGam, aphVOL, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -199,11 +200,11 @@ long int TVanLaar::MixMod()
 TRegular::TRegular( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
-        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double *arWx, double *arlnGam, double *aphVOL, 
         double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW )    	
+        			 arlnGam, aphVOL, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -321,11 +322,11 @@ TRegular::MixMod()
 TRedlichKister::TRedlichKister( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
-        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double *arWx, double *arlnGam, double *aphVOL, 
         double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW )    	
+        			 arlnGam, aphVOL, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -524,11 +525,11 @@ TRedlichKister::MixMod()
 TNRTL::TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
-        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double *arWx, double *arlnGam, double *aphVOL, 
         double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW )    	
+        			 arlnGam, aphVOL, dW, eW )    	
 {
   alloc_internal();	
   PTparam();
@@ -755,11 +756,11 @@ TNRTL::MixMod()
 TWilson::TWilson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
-        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double *arWx, double *arlnGam, double *aphVOL, 
         double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW )    	
+        			 arlnGam, aphVOL, dW, eW )    	
 {
   alloc_internal();	
   PTparam();

@@ -1,3 +1,13 @@
+03/12/2008
+Rewrited SIT model as class TSIT inherited from TSolMod class (SD)
+
+02/12/2008
+Added  Pitzer model calculations using TPitzer class  (SD)
+Rewrited models Van Larr, Regular, Redlich-Kister, NRTL and Wilson
+as classes TVanLaar, TRegular, TRedlichKister, TNRTL and TWilson
+inherited from TSolMod class (SD)
+
+ 
 25/11/2008
 Changed float to double, short to long int, int to long int types throughout in GEMIPM2K 
 and in the respective parts of GEMS-PSI (with DODs for MULTI data objects); 

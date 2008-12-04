@@ -33,13 +33,15 @@ using namespace std;
 TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
-        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ, 
         double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW )    	
+        			 arlnGam, aphVOL, dW, eW )    	
 {
   PTparam();
+  aZ = arZ;
+  aM =	arM;
 }
 
 
@@ -148,13 +150,16 @@ static double ak2[23] = {  0.628023320520852,  0.462762985338493,  0.15004463718
 TPitzer::TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
-        double *arWx, double *arlnGam, double *arM, double *arZ, 
+        double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ, 
         double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
-        			 arlnGam, arM, arZ, dW, eW )    	
+        			 arlnGam, aphVOL, dW, eW )    	
 {
-  // calculate sizes Nc, Na, Nn, Ns 
+	aZ = arZ;
+	aM = arM;
+
+   // calculate sizes Nc, Na, Nn, Ns 
    calcSizes();	
 	
   // realloc internal arrays and set zeros
