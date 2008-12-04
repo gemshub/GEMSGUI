@@ -1658,6 +1658,7 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_WILSLIQ:
         case SM_AQPITZ:
         case SM_AQSIT:
+        case SM_PRFLUID:
              aSM->MixMod();
              break;
         case SM_AQEXUQ:
