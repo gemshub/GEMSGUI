@@ -135,7 +135,7 @@ class TCGFcalc // Churakov & Gottschalk (2003) EOS calculations
          TWOPOW1SIX(1.12246204830937302),   // 2^(1/6)
          DELTA (0.00001),
          DELTAMOLLIM (0.0000001),
-         R(8.31439),
+         R(8.31439), // R_CONST; // R constant
          NA(0.6023),
          P1(1.186892378996),
          PP2(-0.4721963005527),
@@ -174,7 +174,12 @@ class TCGFcalc // Churakov & Gottschalk (2003) EOS calculations
       {}
 
 protected:
+	
+   void choose(double *pres, double P,unsigned long int &x1,unsigned long int &x2);
+   double Melt2(double T);
+   double Melt(double T);
 
+	 
    void copy(double* sours,double *dest,unsigned long int num);
    void norm(double *X,unsigned long int mNum);
    double RPA(double beta,double nuw);
@@ -212,28 +217,30 @@ inline double fa3(double nuw ,double nu1w5)
      return ((A31+(A32+(A33+A34*nuw)*nuw)*nuw)*nuw)/nu1w5;
 };
 
-   double DIntegral(double T, double ro, unsigned long int IType);
-   double LIntegral(double T, double ro, unsigned long int IType);
-   double KIntegral(double T, double ro, unsigned long int IType);
+   double DIntegral(double T, double ro, unsigned long int IType); // not used
+   double LIntegral(double T, double ro, unsigned long int IType); // not used
+   double KIntegral(double T, double ro, unsigned long int IType); // not used
    double K23_13(double T, double ro);
    double J6LJ(double T,double ro);
-   double FDipPair(double T,double ro,double m2);
+   double FDipPair(double T,double ro,double m2); // not used
    double UWCANum(double T,double ro);
    double ZWCANum(double T,double ro);
 
    double FWCA(double T,double ro);
    double FTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param);
-   double UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param);
+   double UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param); // not used
    double ZTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param);
    double PTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param);
    double ROTOTALMIX(double P,double TT,EOSPARAM& param);
 
-public:
-    //
-   double PRESSURE(double *X, double *param, unsigned long int NN, double ro, double T );
+
+   double PRESSURE(double *X, double *param, unsigned long int NN, double ro, double T ); // not used
    double DENSITY(double *X,double *param, unsigned long int NN ,double Pbar, double T );
    long int CGActivCoefRhoT(double *X,double *param, double *act, unsigned long int NN,
-     double ro, double T );
+     double ro, double T ); // not used
+   
+public:
+    //
    long int CGActivCoefPT(double *X,double *param,double *act, unsigned long int NN,
      double Pbar, double T, double &roro );
 
