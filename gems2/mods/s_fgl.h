@@ -44,9 +44,10 @@
 class EOSPARAM
 {
   //static double Told;
-  unsigned long int isize;  // int isize;
-  double emix,s3mix;
-  long int NComp;
+//  unsigned long int isize;  // int isize = NComp;
+   long int NComp;
+ 
+   double emix,s3mix;
    double *epspar,*sig3par;
    double *XX;
    double *eps;
@@ -57,207 +58,50 @@ class EOSPARAM
    double *aredpar;
    double *m2par;
    double **mixpar;
-  void init(double*,double *, unsigned long int );
-  void allocate(unsigned long int );
-
-  void copy(double* sours,double *dest,unsigned long int num);
-  void norm(double *X,unsigned long int mNum);
-
+  
+   void allocate();
+   void free();
+   
   public:
-  double *XX0;
+  
+   double *XX0;
 
-  EOSPARAM():isize(0),emix(0),s3mix(0),NComp(0){};
+  //EOSPARAM():isize(0),emix(0),s3mix(0),NComp(0){};
     //EOSPARAM(double*data, unsigned nn):isize(0){allocate(nn);init(data,nn);};
 
-    EOSPARAM(double *Xtmp, double *data, unsigned long int nn)
-    :isize(0),emix(0),s3mix(0),NComp(0)
-         {allocate(nn);init(Xtmp,data,nn);};
+    EOSPARAM(double *Xtmp, double *data, long int nn)
+    :NComp(nn), emix(0),s3mix(0)
+         { allocate(); init(Xtmp,data,nn);};
 
-  ~EOSPARAM();
+  ~EOSPARAM()
+         { free(); }
 
-  double EPS05(unsigned long int i)           {return eps05[i];};
-  double X(unsigned long int i)               {return XX[i];};
-  double EPS(unsigned long int i)             {return eps[i];};
-  double EMIX(void){return emix;};
-  double S3MIX(void){return s3mix;};
-  double MIXS3(unsigned long int i,unsigned long int j)
+  void init(double*,double *, long int);
+  long int NCmp()   {return NComp;};
+
+  double EPS05( long int i){return eps05[i];};
+  double X( long int i)    {return XX[i];};
+  double EPS( long int i)  {return eps[i];};
+  double EMIX(void)                  {return emix;};
+  double S3MIX(void)                 {return s3mix;};
+  double MIXS3( long int i, long int j)
   {
     if (i==j) return sig3par[i];
     if (i<j) return mixpar[i][j]; else return mixpar[j][i];
   };
 
-  double MIXES3(unsigned long int i,unsigned long int j)
+  double MIXES3( long int i, long int j)
   {
     if ( i==j ) return epspar[i];
     if (i<j) return mixpar[j][i]; else return mixpar[i][j];
   };
 
-  double SIG3(unsigned long int i){return sig3par[i];};
-  double M2R(unsigned long int i) {return m2par[i];};
-  double A(unsigned long int i)  {return apar[i];};
+  double SIG3( long int i){return sig3par[i];};
+  double M2R( long int i) {return m2par[i];};
+  double A( long int i)   {return apar[i];};
 
-  unsigned long int ParamMix( double *Xin);
-  void PureParam(double* ,double*,double*,double* );
-  long int NCmp(){return NComp;};
+  long int ParamMix( double *Xin);
 };
-
-
-class TCGFcalc // Churakov & Gottschalk (2003) EOS calculations
-{
-  private:
-
-  const double
-          PI,    // pi
-          TWOPI,    // 2.*pi
-          PISIX,    // pi/6.
-          TWOPOW1SIX,   // 2^(1/6)
-          DELTA,
-          DELTAMOLLIM,
-          R,  NA,  P1,
-          PP2, P3, P4,
-          P5,  P6, P7,
-          P8,  P9, P10,
-          AA1, AA2, AA3,
-          A4, A5, A6,
-          BB1, BB2, BB3,
-          B4,  B5,  B6,
-          A00, A01, A10,
-          A11, A12, A21,
-          A22, A23, A31,
-          A32, A33, A34;
-
-  public:
-
-        TCGFcalc():
-         PI( 3.141592653589793120),    // pi
-         TWOPI( 6.283185307179586230),    // 2.*pi
-         PISIX( 0.523598775598298927),    // pi/6.
-         TWOPOW1SIX(1.12246204830937302),   // 2^(1/6)
-         DELTA (0.00001),
-         DELTAMOLLIM (0.0000001),
-         R(8.31439), // R_CONST; // R constant
-         NA(0.6023),
-         P1(1.186892378996),
-         PP2(-0.4721963005527),
-         P3(3.259515855283),
-         P4(3.055229342609),
-         P5(1.095409321023),
-         P6(1.282306659774E-2),
-         P7(9.55712461425E-2),
-         P8(13.67807693107),
-         P9(35.75464856619),
-         P10(16.04724381643),
-         AA1(-0.120078459237),
-         AA2(-.808712488307),
-         AA3(.321543801337),
-         A4(1.16965477132),
-         A5(-.410564939543),
-         A6(-.516834310691),
-         BB1(-2.18839961483),
-         BB2(1.59897428009),
-         BB3(-.392578806128),
-         B4(-.189396607904),
-         B5(-.576898496254),
-         B6(-0.0185167641359),
-         A00(.9985937977069455),
-         A01(.5079834224407451),
-         A10(1.021887697885469),
-         A11(-5.136619463333883),
-         A12(-5.196188074016755),
-         A21(-6.049240839050804),
-         A22(18.67848155616692),
-         A23(20.10652684217768),
-         A31(9.896491419756988),
-         A32(14.6738380473899),
-         A33(-77.44825116542995),
-         A34(-4.82871082941229)
-      {}
-
-protected:
-	
-   void choose(double *pres, double P,unsigned long int &x1,unsigned long int &x2);
-   double Melt2(double T);
-   double Melt(double T);
-
-	 
-   void copy(double* sours,double *dest,unsigned long int num);
-   void norm(double *X,unsigned long int mNum);
-   double RPA(double beta,double nuw);
-   double dHS(double beta,double ro );
-   inline double fI1_6(double nuw)
-{
-   return (1.+(A4+(A5+A6*nuw)*nuw)*nuw)/
-   ((1.+(AA1+(AA2+AA3*nuw)*nuw)*nuw)*3.);
-};
-
-inline double fI1_12(double nuw)
-{
-   return (1.+(B4+(B5+B6*nuw)*nuw)*nuw)/
-   ((1.+(BB1+(BB2+BB3*nuw)*nuw)*nuw)*9.);
-};
-
-
-inline double fa0(double nuw ,double nu1w2)
-{
-     return (A00 + A01*nuw)/nu1w2;
-};
-
-inline double fa1(double nuw ,double nu1w3)
-{
-     return (A10+(A11+A12*nuw)*nuw)/nu1w3;
-};
-
-inline double fa2(double nuw ,double nu1w4)
-{
-     return ((A21+(A22+A23*nuw)*nuw)*nuw)/nu1w4;
-};
-
-inline double fa3(double nuw ,double nu1w5)
-{
-     return ((A31+(A32+(A33+A34*nuw)*nuw)*nuw)*nuw)/nu1w5;
-};
-
-   double DIntegral(double T, double ro, unsigned long int IType); // not used
-   double LIntegral(double T, double ro, unsigned long int IType); // not used
-   double KIntegral(double T, double ro, unsigned long int IType); // not used
-   double K23_13(double T, double ro);
-   double J6LJ(double T,double ro);
-   double FDipPair(double T,double ro,double m2); // not used
-   double UWCANum(double T,double ro);
-   double ZWCANum(double T,double ro);
-
-   double FWCA(double T,double ro);
-   double FTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param);
-   double UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param); // not used
-   double ZTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param);
-   double PTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param);
-   double ROTOTALMIX(double P,double TT,EOSPARAM& param);
-
-
-   double PRESSURE(double *X, double *param, unsigned long int NN, double ro, double T ); // not used
-   double DENSITY(double *X,double *param, unsigned long int NN ,double Pbar, double T );
-   long int CGActivCoefRhoT(double *X,double *param, double *act, unsigned long int NN,
-     double ro, double T ); // not used
-   
-public:
-    //
-   long int CGActivCoefPT(double *X,double *param,double *act, unsigned long int NN,
-     double Pbar, double T, double &roro );
-
-    long int CGcalcFug( void );  // Calc. fugacity for 1 species at X=1
-    long int CGFugacityPT( float *EoSparam, double *EoSparPT, double &Fugacity,
-        double &Volume, double P, double T, double &roro );
-    long int CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fugacity,
-        double &Volume, double P, double T, double &roro );
-    // Calculates residual enthalpy and entropy
-    long int CGEnthalpy(double *X, double *param, double *param1, unsigned long int NN,
-         double ro, double T, double &H, double &S );
-    double GetDELTA( void )
-    {
-    	return DELTA;
-    }
-};
-
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Added 07 March 2007 by TW and DK; extended 25.11.2008 by DK
@@ -323,15 +167,148 @@ public:
 	   CPex_ = CPex;
 	};
 
-// PRSV can also be moved here
-
 // Prototypes for other models to be added here
 // Darken ...
-
-// SIT model reimplementation for aqueous electrolyte solutions
-
 // Extended UNIQUAC model for aqueous electrolyte solutions
 
+};
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Churakov & Gottschalk (2003) EOS calculations
+class TCGFcalc : public TSolMod
+{
+  private:
+
+  double
+          PI,    // pi
+          TWOPI,    // 2.*pi
+          PISIX,    // pi/6.
+          TWOPOW1SIX,   // 2^(1/6)
+          DELTA,
+          DELTAMOLLIM,
+          R,  NA,  P1,
+          PP2, P3, P4,
+          P5,  P6, P7,
+          P8,  P9, P10,
+          AA1, AA2, AA3,
+          A4, A5, A6,
+          BB1, BB2, BB3,
+          B4,  B5,  B6,
+          A00, A01, A10,
+          A11, A12, A21,
+          A22, A23, A31,
+          A32, A33, A34;
+
+//  double PhVol;   // bar, T Kelvin, phase volume in cm3
+  double *Pparc;   // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
+  double *phWGT;
+  double *aX;  // DC quantities at eqstate x_j, moles - primal IPM solution [L]  
+  // main work arrays
+  EOSPARAM *paar;
+  EOSPARAM *paar1;
+  
+  double *FugCoefs;
+  double *EoSparam;
+  double *EoSparam1;
+
+  void alloc_internal();
+  void free_internal();
+  void set_internal();
+	
+  void choose(double *pres, double P,unsigned long int &x1,unsigned long int &x2);
+  double Melt2(double T);
+  double Melt(double T);
+	 
+   void copy(double* sours,double *dest,unsigned long int num);
+   void norm(double *X,unsigned long int mNum);
+   double RPA(double beta,double nuw);
+   double dHS(double beta,double ro );
+   inline double fI1_6(double nuw)
+{
+   return (1.+(A4+(A5+A6*nuw)*nuw)*nuw)/
+   ((1.+(AA1+(AA2+AA3*nuw)*nuw)*nuw)*3.);
+};
+
+inline double fI1_12(double nuw)
+{
+   return (1.+(B4+(B5+B6*nuw)*nuw)*nuw)/
+   ((1.+(BB1+(BB2+BB3*nuw)*nuw)*nuw)*9.);
+};
+
+
+inline double fa0(double nuw ,double nu1w2)
+{
+     return (A00 + A01*nuw)/nu1w2;
+};
+
+inline double fa1(double nuw ,double nu1w3)
+{
+     return (A10+(A11+A12*nuw)*nuw)/nu1w3;
+};
+
+inline double fa2(double nuw ,double nu1w4)
+{
+     return ((A21+(A22+A23*nuw)*nuw)*nuw)/nu1w4;
+};
+
+inline double fa3(double nuw ,double nu1w5)
+{
+     return ((A31+(A32+(A33+A34*nuw)*nuw)*nuw)*nuw)/nu1w5;
+};
+
+   double DIntegral(double T, double ro, unsigned long int IType); // not used
+   double LIntegral(double T, double ro, unsigned long int IType); // not used
+   double KIntegral(double T, double ro, unsigned long int IType); // not used
+   double K23_13(double T, double ro);
+   double J6LJ(double T,double ro);
+   double FDipPair(double T,double ro,double m2); // not used
+   double UWCANum(double T,double ro);
+   double ZWCANum(double T,double ro);
+
+   double FWCA(double T,double ro);
+   double FTOTALMIX(double T_Real,double ro_Real,EOSPARAM* param);
+   double UTOTALMIX(double T_Real,double ro_Real,EOSPARAM* param); // not used
+   double ZTOTALMIX(double T_Real,double ro_Real,EOSPARAM* param);
+   double PTOTALMIX(double T_Real,double ro_Real,EOSPARAM* param);
+   double ROTOTALMIX(double P,double TT,EOSPARAM* param);
+
+
+   double PRESSURE(double *X, double *param, unsigned long int NN, double ro, double T ); // not used
+   double DENSITY(double *X,double *param, unsigned long int NN ,double Pbar, double T );
+   long int CGActivCoefRhoT(double *X,double *param, double *act, unsigned long int NN,
+     double ro, double T ); // not used
+   //
+   long int CGActivCoefPT(double *X,double *param,double *act, unsigned long int NN,
+              double Pbar, double T, double &roro );
+
+public:
+
+ 	 TCGFcalc( long int NCmp, double Pp, double Tkp );
+ 	 TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+       long int NPperDC, double T_k, double P_bar, char Mod_Code,
+       long int* arIPx, double* arIPc, double* arDCc,
+       double *arWx, double *arlnGam, double *aphVOL, 
+       double * aPparc, double *aphWGT, double *arX, double dW, double eW );
+
+       ~TCGFcalc();
+
+       //// Churakov-Gottschalk (2004) multicomponent fluid mixing model
+       long int MixMod();
+
+       // Calculation of internal tables (at each GEM iteration)
+       long int PTparam();
+
+    // CGofPureGases - Calc. fugacity for 1 species at X=1
+    long int CGcalcFug( void );  // Calc. fugacity for 1 species at X=1
+    long int CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fugacity,
+        double &Volume, double P, double T, double &roro );
+    // Calculates residual enthalpy and entropy
+    long int CGEnthalpy(double *X, double *param, double *param1, unsigned long int NN,
+         double ro, double T, double &H, double &S );
+    double GetDELTA( void )
+    {
+    	return DELTA;
+    };
 };
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -719,7 +719,7 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
         }
         else if( CV == CPM_EMP )  // Calculation of fugacity at X=1 using GC EoS
         {                         // Churakov & Gottschalk 2003 GCA
-            TCGFcalc aCGF;
+            TCGFcalc aCGF(1, aW.twp->P, aW.twp->TC+273.15 );
             aW.twp->Cemp = dcp->Cemp;
             aW.twp->PdcC = dcp->PdcC;
             aW.twp->TClow = dcp->TCint[0];

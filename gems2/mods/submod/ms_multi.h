@@ -422,9 +422,9 @@ class TMulti
     void DebyeHueckel1LL( long int jb, long int je, long int k );
     void Davies03temp( long int jb, long int je, long int jpb, long int k );
 // fluid mixtures
-    void ChurakovFluid( long int jb, long int je, long int jpb, long int jdb, long int k );
-    void CGofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k );
-    void PRSVFluid( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb );
+//    void ChurakovFluid( long int jb, long int je, long int jpb, long int jdb, long int k );
+    void CGofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb );
+//    void PRSVFluid( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb );
     void PRSVofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb );
 // condensed mixtures
     void RedlichKister( long int jb, long int je, long int jpb, long int jdb, long int k );

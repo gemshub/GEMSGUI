@@ -36,6 +36,7 @@ TPRSVcalc::TPRSVcalc(  long int NCmp, double Pp, double Tkp ):
          0, 0, 0, 0, 0, 0, 0, 0 )
 	
 {
+	Pparc = 0;	
 	alloc_internal();
 }
 
@@ -142,7 +143,7 @@ TPRSVcalc::MixMod()
     if ( iRet )
     {
       char buf[150];
-      sprintf(buf, "PRSVFluid(): bad calculation");
+      sprintf(buf, "PRSV Fluid(): bad calculation");
       Error( "E71IPM IPMgamma: ",  buf );
     }
     return iRet;
@@ -604,7 +605,8 @@ long int TCGFcalc::CGcalcFug( void )
     double T, P, Fugacity = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
     double X[1]={1.};
     double roro;  // added 21.06.2008 (TW)
-    float *Coeff;
+//    float *Coeff;
+    double Coeff[20]; // MAXEOSPARAM = 20;  // Maximum number of EoS coefficients
     double Eos4parPT[4] = { 0.0, 0.0, 0.0, 0.0 },
             Eos4parPT1[4] = { 0.0, 0.0, 0.0, 0.0 } ;
     long int retCode = 0;
@@ -614,7 +616,9 @@ long int TCGFcalc::CGcalcFug( void )
     P = aW.twp->P;    /* P in 10^5 Pa? */
     T = aW.twp->TC+273.15;   /* T?in K */
 
-    Coeff = aW.twp->Cemp;     /* pointer to coeffs of CG EOS */
+    for(long int ii=0; ii<20; ii++ )
+      Coeff[ii] = aW.twp->Cemp[ii];     /* pointer to coeffs of CG EOS */
+//   Coeff = aW.twp->Cemp;     /* pointer to coeffs of CG EOS */
 
 // Calling CG EoS functions here
 
@@ -663,67 +667,170 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 }
 
 #endif
+
+
+// TPRSVcalc class - high-level methods
+// Constructor
+
+TCGFcalc::TCGFcalc(  long int NCmp, double Pp, double Tkp ):
+    TSolMod( NCmp, 0, 0, 0, 0, Tkp, Pp, 'F',
+         0, 0, 0, 0, 0, 0, 0, 0 )
+{   
+	Pparc = 0;	
+	phWGT = 0;
+	aX = 0;
+	set_internal();
+	alloc_internal();
+}
+
+// Generic constructor for the TRegular class
+TCGFcalc::TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+        long int NPperDC, double T_k, double P_bar, char Mod_Code,
+        long int* arIPx, double* arIPc, double* arDCc,
+        double *arWx, double *arlnGam, double *aphVOL, 
+        double * arPparc, double *arphWGT,double *arX, 
+        double dW, double eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
+        			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
+        			 arlnGam, aphVOL, dW, eW )    	
+{
+  Pparc = arPparc;
+  phWGT = arphWGT;
+  aX  =  arX;
+  set_internal();
+  alloc_internal();	
+  PTparam();
+}
+
+TCGFcalc::~TCGFcalc()
+{
+  free_internal();
+}
+
+void TCGFcalc::set_internal()
+{
+   PI = 3.141592653589793120;    // pi
+   TWOPI = 6.283185307179586230;   // 2.*pi
+   PISIX = 0.523598775598298927;    // pi/6.
+   TWOPOW1SIX = 1.12246204830937302;   // 2^ = 1/6)
+   DELTA  = 0.00001;
+   DELTAMOLLIM  = 0.0000001;
+   R = 8.31439; // R_CONST; // R constant
+   NA = 0.6023;
+   P1 = 1.186892378996;
+   PP2 = -0.4721963005527;
+   P3 = 3.259515855283;
+   P4 = 3.055229342609;
+   P5 = 1.095409321023;
+   P6 = 1.282306659774E-2;
+   P7 = 9.55712461425E-2;
+   P8 = 13.67807693107;
+   P9 = 35.75464856619;
+   P10 = 16.04724381643;
+   AA1 = -0.120078459237;
+   AA2 = -.808712488307;
+   AA3 = .321543801337;
+   A4 = 1.16965477132;
+   A5 = -.410564939543;
+   A6 = -.516834310691;
+   BB1 = -2.18839961483;
+   BB2 = 1.59897428009;
+   BB3 = -.392578806128;
+   B4 = -.189396607904;
+   B5 = -.576898496254;
+   B6 = -0.0185167641359;
+   A00 = .9985937977069455;
+   A01 = .5079834224407451;
+   A10 = 1.021887697885469;
+   A11 = -5.136619463333883;
+   A12 = -5.196188074016755;
+   A21 = -6.049240839050804;
+   A22 = 18.67848155616692;
+   A23 = 20.10652684217768;
+   A31 = 9.896491419756988;
+   A32 = 14.6738380473899;
+   A33 = -77.44825116542995;
+   A34 = -4.82871082941229;
+}
+
+void TCGFcalc::alloc_internal()
+{
+	  paar = 0;
+	  paar1 = 0;
+	  FugCoefs = 0;
+	  EoSparam = 0;
+	  EoSparam1 = 0;
+	 
+}
+
+void TCGFcalc::free_internal()
+{
+	if( paar )   delete paar;
+	if( paar1 )  delete paar1;
+	if( FugCoefs )  delete[] FugCoefs;
+	if( EoSparam )  delete[] EoSparam;
+	if( EoSparam1 ) delete[] EoSparam1;
+}
+
+//   Calculates T,P corrected binary interaction parameters
+// Returns 0 if Ok or 1 if error
+long int TCGFcalc::PTparam()
+{
+    long int i,j;
+	FugCoefs =  new double[ NComp ];
+    EoSparam =  new double[ NComp*4 ];
+    EoSparam1 = new double[ NComp*4 ];
+
+    // Copying T,P corrected coefficients
+    for( j=0; j<NComp; j++)
+    {
+    	for( i=0; i<4; i++)
+          EoSparam[j*4+i] = aDCc[j*24+i+15];
+    	for( i=0; i<4; i++)
+    	  EoSparam1[j*4+i] = aDCc[j*24+i+19];
+    }
+   return 0;
+}
+
+// Churakov-Gottschalk (2004) multicomponent fluid mixing model
+//
+long int TCGFcalc::MixMod()
+{
+    long int j;
+    double roro, DeltaH, DeltaS; // changed, 21.06.2008 (TW)
+
+    if( Tk >= 273.15 && Tk < 1e4 && Pbar >= 1e-6 && Pbar < 1e5 )
+    {
+        CGActivCoefPT( aX, EoSparam, FugCoefs, NComp, Pbar, Tk, roro );  // changed, 21.06.2008 (TW)
+        if (roro <= 0. )
+        {
+           char buf[150];
+           sprintf(buf, "CGFluid(): bad calculation of density ro= %lg", roro);
+           Error( "E71IPM IPMgamma: ",  buf );
+        }
+        // Phase volume of the fluid in cm3
+        phVOL[0] = phWGT[0] / roro;
+        // Get back residual H and S
+        CGEnthalpy( aX, EoSparam, EoSparam1, NComp, roro, Tk, DeltaH, DeltaS );
+        // Utilize residual enthalpy DeltaH, entropy DeltaS
+
+    }
+    else // Setting Fugcoefs to 0 outside TP interval
+      for( j=0; j<NComp; j++ )
+        FugCoefs[ j ] = 0.0;
+
+    for( j=0; j<NComp; j++  )
+    {
+        if( FugCoefs[j] > 1e-23 )
+        	lnGamma[j] = log(FugCoefs[j]/Pparc[j]);
+        else
+        	lnGamma[j] = 0;
+    } // j
+    return 0;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // Implementation of TCGFcalc class
-
-long int TCGFcalc::CGFugacityPT( float *EoSparam, double *EoSparPT, double &Fugacity,
-        double &Volume, double P, double T, double &roro )
-{
-      long int iRet = 0;
-      // double ro;
-      double X[1]={1.};
-      double FugPure[1];
-
-		// modification to simplify CG database structure, TW 20/03/2007
-        EoSparPT[0] = EoSparam[0]+EoSparam[4]*exp(T*EoSparam[5]);
-        EoSparPT[1] = EoSparam[1]+EoSparam[6]*exp(T*EoSparam[7]);
-        EoSparPT[2] = EoSparam[2]+EoSparam[8]/(T+EoSparam[9]);
-        EoSparPT[3] = EoSparam[3]+EoSparam[10]/(T+EoSparam[11]);
-
-      /*switch (int(EoSparam[4]))
-      {
-       case 0:
-        EoSparPT[0]=EoSparam[0];
-        EoSparPT[1]=EoSparam[1];
-        EoSparPT[2]=EoSparam[2];
-        EoSparPT[3]=EoSparam[3];
-       break;
-       case 1:  // H2O type
-        EoSparPT[0]=EoSparam[0]+EoSparam[5]/((float)T+EoSparam[6]);
-        EoSparPT[1]=EoSparam[1]+EoSparam[7]/((float)T+EoSparam[8]);
-        EoSparPT[2]=EoSparam[2]+EoSparam[9]/((float)T+EoSparam[10]);
-        EoSparPT[3]=EoSparam[3]+EoSparam[11]/((float)T+EoSparam[12]);
-        break;
-       case 2:  // CO2 type
-        EoSparPT[0]=EoSparam[0]+EoSparam[5]*(float)exp(T*EoSparam[6]);
-        EoSparPT[1]=EoSparam[1]+EoSparam[7]*(float)exp(T*EoSparam[8]);
-        EoSparPT[2]=EoSparam[2]+EoSparam[9]*(float)exp(T*EoSparam[10]);
-        EoSparPT[3]=EoSparam[3]+EoSparam[11]*(float)exp(T*EoSparam[12]);
-        break;
-        default:
-
-        return 1;// Error: Wrong type of equation
-      };*/
-
-
- // returns density!
-      CGActivCoefPT( X, EoSparPT, FugPure, 1, P, T, roro );  // changed, 21.06.2008 (TW)
-      if( roro < 0.  )
-      {
-          return -1;
-      };
-      Fugacity= FugPure[0];
-      roro = DENSITY( X, EoSparPT, 1, P, T );
-      if( roro < 0 )
-      {  // error - density could not be calculated
-         iRet = -2; roro = 1.0;
-      }
-      Volume = 0.1/roro;  // in J/bar
-      // roro = ro;  // added, 21.06.2008 (TW)
-
-      return iRet;
-  }
-
 long int TCGFcalc::CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fugacity,
         double &Volume, double P, double T, double &roro )
 {
@@ -737,32 +844,6 @@ long int TCGFcalc::CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fug
         EoSparPT[1] = EoSparam[1]+EoSparam[6]*exp(T*EoSparam[7]);
         EoSparPT[2] = EoSparam[2]+EoSparam[8]/(T+EoSparam[9]);
         EoSparPT[3] = EoSparam[3]+EoSparam[10]/(T+EoSparam[11]);
-
-      /*switch (int(EoSparam[4]))
-      {
-       case 0:
-        EoSparPT[0]=EoSparam[0];
-        EoSparPT[1]=EoSparam[1];
-        EoSparPT[2]=EoSparam[2];
-        EoSparPT[3]=EoSparam[3];
-       break;
-       case 1:  // H2O type
-        EoSparPT[0]=EoSparam[0]+EoSparam[5]/(T+EoSparam[6]);
-        EoSparPT[1]=EoSparam[1]+EoSparam[7]/(T+EoSparam[8]);
-        EoSparPT[2]=EoSparam[2]+EoSparam[9]/(T+EoSparam[10]);
-        EoSparPT[3]=EoSparam[3]+EoSparam[11]/(T+EoSparam[12]);
-        break;
-       case 2:  // CO2 type
-        EoSparPT[0]=EoSparam[0]+EoSparam[5]*exp(T*EoSparam[6]);
-        EoSparPT[1]=EoSparam[1]+EoSparam[7]*exp(T*EoSparam[8]);
-        EoSparPT[2]=EoSparam[2]+EoSparam[9]*exp(T*EoSparam[10]);
-        EoSparPT[3]=EoSparam[3]+EoSparam[11]*exp(T*EoSparam[12]);
-        break;
-        default:
-
-        return 1;// Error: Wrong type of equation
-      };*/
-
 
  // returns density!
       CGActivCoefPT( X, EoSparPT, FugPure, 1, P, T, roro );  // changed, 21.06.2008 (TW)
@@ -786,56 +867,46 @@ long int TCGFcalc::CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fug
 long int TCGFcalc::CGActivCoefPT(double *X,double *param, double *act, 
 		   unsigned long int NN,   double Pbar, double T, double &roro )
 {
-   //double act[MAXPARAM];
-   //unsigned long int ncmp;
     double *xtmp,*Fx;
     double P=Pbar/10.;
-   //ncmp= ((nn-2)/5);
-//      try
-//      {
-     xtmp=new double [NN];
-       Fx=new double [NN];
 
+    xtmp=new double [NN];
+    Fx=new double [NN];
 
-//      }
-//      catch(xalloc)
-//      {
-//        printf("Can't allocate memory\n");
-//        exit(1);
-//      }
-
-   EOSPARAM paar(X,param,NN);
+   if(!paar)
+	  paar = new  EOSPARAM(X, param, NN);
+   else
+	  paar->init( X, param, NN ); 
+   
    double F0,Z,F1,fideal;
-   //double e[4],s3[4],m,a,xnonp;
    double ro,delta=DELTA,ax,dx /*,tmp*/;
-   /* unsigned */ long int i;
+   long int i;
 
-    norm(paar.XX0,paar.NCmp());
-    copy(paar.XX0,xtmp,paar.NCmp());
+    norm(paar->XX0,paar->NCmp());
+    copy(paar->XX0,xtmp,paar->NCmp());
 
-     paar.ParamMix(xtmp);
+     paar->ParamMix(xtmp);
 
      ro=ROTOTALMIX(P,T,paar);
-if( ro < 0.0 ) //  Too low pressure - no corrections will be done
-return ( -1 );
+    if( ro < 0.0 ) //  Too low pressure - no corrections will be done
+         return ( -1 );
      Z=P/(R*T*ro);
      F0=FTOTALMIX(T,ro,paar);
-
 
 //       fideal=log(R*T*ro/BARMPA);
       fideal=log(R*T*ro/0.1);
       ax= Z - 1.+fideal;
 
-    for ( i=0;i<paar.NCmp();i++)
+    for ( i=0;i<paar->NCmp();i++)
     {
       if ( xtmp[i]>0. )
       {
-       copy(paar.XX0,xtmp,paar.NCmp());
+       copy(paar->XX0,xtmp,paar->NCmp());
        dx=xtmp[i]*delta;
        xtmp[i]+=dx;
-       norm(xtmp,paar.NCmp());
+       norm(xtmp,paar->NCmp());
 
-       paar.ParamMix(xtmp);
+       paar->ParamMix(xtmp);
        F1=FTOTALMIX(T,ro,paar)*(1.+dx);
 
        Fx[i]=(F1-F0)/(dx);
@@ -844,7 +915,7 @@ return ( -1 );
     };
 
    // GMix=0.;
-    for ( i=0;i<paar.NCmp();i++)
+    for ( i=0;i<paar->NCmp();i++)
     {
       if ( xtmp[i]>0. && Fx[i]< 100. )
       {
@@ -864,28 +935,33 @@ return ( -1 );
      delete [] Fx;
 
      roro = ro;  // added, 21.06.2008 (TW)
-      return 0;  // changed, 21.06.2008 (TW)
+     return 0;  // changed, 21.06.2008 (TW)
 }
+
 //  Numerical derivative of Ares/RT to obtain Sres and Hres
 long int TCGFcalc::CGEnthalpy(double *X, double *param, double *param1, unsigned long int NN,
      double ro, double T, double &H, double &S )
  {
+   double   F0,Z,F1;
+   double delta=DELTA;
    double * xtmp=new double [NN];
 
-    EOSPARAM paar(X,param,NN);
-    EOSPARAM paar1(X,param1,NN);
+   if(!paar)
+	  paar = new  EOSPARAM(X, param, NN);
+   else
+	  paar->init( X, param, NN ); 
+   if(!paar1)
+	  paar1 = new  EOSPARAM(X, param1, NN);
+   else
+ 	  paar1->init( X, param1, NN ); 
 
-    double   F0,Z,F1;
-    double delta=DELTA,tmp;
+    norm(paar->XX0,paar->NCmp());
+    norm(paar1->XX0,paar1->NCmp());
 
-    norm(paar.XX0,paar.NCmp());
-    norm(paar1.XX0,paar1.NCmp());
+    copy(paar->XX0,xtmp,paar->NCmp());
 
-    copy(paar.XX0,xtmp,paar.NCmp());
-
-
-    paar.ParamMix(xtmp);
-    paar1.ParamMix(xtmp);
+    paar->ParamMix(xtmp);
+    paar1->ParamMix(xtmp);
 
     Z = ZTOTALMIX(T,ro,paar);
 
@@ -895,7 +971,6 @@ long int TCGFcalc::CGEnthalpy(double *X, double *param, double *param1, unsigned
    // F1 = FTOTALMIX(T+T*delta,ro,paar);
     S = - ( (F1-F0)/(delta*T)*T + F0 ) * R;	// corrected, 20.06.2008 (TW)
     H = (F0*T*R + T*S) + Z*R*T;
-
 
     delete [] xtmp;
     return 0;
@@ -908,47 +983,33 @@ long int TCGFcalc::CGEnthalpy(double *X, double *param, double *param1, unsigned
    long int TCGFcalc::CGActivCoefRhoT(double *X,double *param,double *act, 
 		   unsigned long int NN,   double ro, double T )
    {
-
-      //double  act[MAXPARAM];
-     // unsigned long int ncmp;
-      //ncmp=unsigned((nn-2)/5);
-
-      //double  T = data[nn - 2];
-      //double  ro = data[nn - 1];
-
-       double *Fx,*xtmp;
-//      try
-//      {
-        xtmp=new double [NN];
-        Fx=new double [NN];
-
-//      }
-//      catch(xalloc)
-//      {
-//        printf("Cannot allocate memory\n");
-//        exit(1);
-//      }
-      EOSPARAM paar(X,param,NN);
-
       double   F0,Z,F1,GMix,fideal;
       double delta=DELTA,ax,dx,tmp;
       long int i;
+       double *Fx,*xtmp;
+       xtmp=new double [NN];
+       Fx=new double [NN];
 
-       norm(paar.XX0,paar.NCmp());
-       copy(paar.XX0,xtmp,paar.NCmp());
+        if(!paar)
+     	  paar = new  EOSPARAM(X, param, NN);
+        else
+     	  paar->init( X, param, NN ); 
 
-        paar.ParamMix(xtmp);
+       norm(paar->XX0,paar->NCmp());
+       copy(paar->XX0,xtmp,paar->NCmp());
+
+        paar->ParamMix(xtmp);
         Z=ZTOTALMIX(T,ro,paar);
 
         F0=FTOTALMIX(T,ro,paar);
          fideal=log(R*T*ro/0.1);
          ax= Z - 1.+fideal;
 
-       for ( i=0;i<paar.NCmp();i++)
+       for ( i=0;i<paar->NCmp();i++)
        {
          if ( xtmp[i]>0. )
          {
-          copy(paar.XX0,xtmp,NN);
+          copy(paar->XX0,xtmp,NN);
           if ( xtmp[i]>DELTAMOLLIM )
           {
             dx=xtmp[i]*delta;
@@ -959,9 +1020,9 @@ long int TCGFcalc::CGEnthalpy(double *X, double *param, double *param1, unsigned
           }
 
           xtmp[i]+=dx;
-          norm(xtmp,paar.NCmp());
+          norm(xtmp,paar->NCmp());
 
-          paar.ParamMix(xtmp);
+          paar->ParamMix(xtmp);
           F1=FTOTALMIX(T,ro,paar)*(1.+dx);
 
           Fx[i]=(F1-F0)/(dx);
@@ -970,12 +1031,12 @@ long int TCGFcalc::CGEnthalpy(double *X, double *param, double *param1, unsigned
        };
 
        GMix=0.;
-       for ( i=0;i<paar.NCmp();i++)
+       for ( i=0;i<paar->NCmp();i++)
        {
          if ( xtmp[i]>0. )
          {
-          tmp=log(paar.XX0[i]);
-          GMix+=tmp*paar.XX0[i];
+          tmp=log(paar->XX0[i]);
+          GMix+=tmp*paar->XX0[i];
           act[i] = exp(ax+Fx[i]);
          }
         else
@@ -1172,36 +1233,24 @@ double TCGFcalc::K23_13(double T, double ro)
    double TCGFcalc::DENSITY(double *X,double *param, unsigned long NN ,double Pbar, double T )
    {
       double P = Pbar * 0.1;
-      //unsigned ncmp;
-      //ncmp=unsigned((nn-2)/5);
-
-     // double  P = data[nn - 2];
-     // double  T = data[nn - 1];
-
-       double *xtmp;
-//      try
-//      {
-        xtmp=new double [NN];
-
-
-//      }
-//      catch(xalloc)
-//      {
-//        printf("Can't allocate memory\n");
-//        exit(1);
-//      }
-      EOSPARAM paar(X,param,NN);
-
+      double *xtmp;
       double ro;
 
-       norm(paar.XX0,paar.NCmp());
-       copy(paar.XX0,xtmp,paar.NCmp());
+      xtmp=new double [NN];
+      if( !paar1 )
+         paar1 = new EOSPARAM(X,param,NN);
+      else
+   	     paar1->init( X, param, NN ); 
 
-        paar.ParamMix(xtmp);
-        ro=ROTOTALMIX(P,T,paar);
-        delete [] xtmp;
-    if( ro < 0. )
-       printf(" Error - density cannot be found at this T,P" );
+      norm(paar1->XX0,paar1->NCmp());
+      copy(paar1->XX0,xtmp,paar1->NCmp());
+
+      paar1->ParamMix(xtmp);
+      ro=ROTOTALMIX(P,T,paar1);
+        
+      delete [] xtmp;
+      if( ro < 0. )
+          Error( ""," Error - density cannot be found at this T,P" );
         return ro;
    };
    
@@ -1209,31 +1258,20 @@ double TCGFcalc::K23_13(double T, double ro)
    double TCGFcalc::PRESSURE(double *X,double *param,
 		    unsigned long int NN,double ro, double T)
    {
-   //   unsigned ncmp;
-   //   ncmp=unsigned((nn-2)/5);
-
-   //   double  T = data[nn - 2];
-   //   double ro = data[nn - 1];
-
 
       double *xtmp;
-//      try
-//      {
-        xtmp=new double [NN];
+       xtmp=new double [NN];
 
-//      }
-//      catch(xalloc)
-//      {
-//        printf("Can't allocate memory\n");
-//        exit(1);
-//      }
-      EOSPARAM paar(X,param,NN);
+       if( !paar1 )
+          paar1 = new EOSPARAM(X,param,NN);
+       else
+   	     paar1->init( X, param, NN ); 
 
-       norm(paar.XX0,paar.NCmp());
-       copy(paar.XX0,xtmp,paar.NCmp());
+       norm(paar1->XX0,paar1->NCmp());
+       copy(paar1->XX0,xtmp,paar1->NCmp());
 
-        paar.ParamMix(xtmp);
-        double P=PTOTALMIX(T,ro,paar);
+        paar1->ParamMix(xtmp);
+        double P=PTOTALMIX(T,ro,paar1);
         delete [] xtmp;
         return P*10.;
    };
@@ -1470,7 +1508,7 @@ double TCGFcalc::FWCA(double T,double ro)
    return F;
  }
 
- double TCGFcalc::FTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
+ double TCGFcalc::FTOTALMIX(double T_Real,double ro_Real,EOSPARAM* param)
   {
     double FF,A0,A2,A3,AP,A1;
     //unsigned iall,inopol;
@@ -1485,40 +1523,35 @@ double TCGFcalc::FWCA(double T,double ro)
 
     //iall=param.inonzero();
     //inopol=param.inonpolar();
-    emix=param.EMIX();
-    s3mix=param.S3MIX();
+    emix=param->EMIX();
+    s3mix=param->S3MIX();
 
       rotmp=NA*ro_Real;
       T2R=T_Real*T_Real;
 
       A0=FWCA(T_Real/emix,s3mix*rotmp);
-
-
      // if ( inopol< iall )
       {
         /// dipole part
         A2=0.;
-        for ( i=0;i<param.NCmp()-1;i++ )
+        for ( i=0;i<param->NCmp()-1;i++ )
         {
-          //itmp=param.ind(i);
-          for ( j=i+1; j<param.NCmp(); j++ )
+          for ( j=i+1; j<param->NCmp(); j++ )
           {
-           // jtmp=param.ind(j);
-
-            s3tmp=param.MIXS3(i,j);
-            Jdp=J6LJ(T_Real*s3tmp/param.MIXES3(i,j) , s3tmp*rotmp);
-            A2+=param.M2R(i)*param.M2R(j)*Jdp*
-                           param.X(i)*param.X(j)/s3tmp;
+            s3tmp=param->MIXS3(i,j);
+            Jdp=J6LJ(T_Real*s3tmp/param->MIXES3(i,j) , s3tmp*rotmp);
+            A2+=param->M2R(i)*param->M2R(j)*Jdp*
+                           param->X(i)*param->X(j)/s3tmp;
           }
         }
           A2*=2.;
-          for ( i=0; i<param.NCmp(); i++ )
+          for ( i=0; i<param->NCmp(); i++ )
           {
-            //itmp=param.ind(i);
-            mtmp=param.M2R(i);
-            s3tmp=param.SIG3(i);
-            Jdp=J6LJ(T_Real/param.EPS(i),s3tmp*rotmp);
-            A2+=mtmp*mtmp*Jdp*param.X(i)*param.X(i)/s3tmp;
+            //itmp=param->ind(i);
+            mtmp=param->M2R(i);
+            s3tmp=param->SIG3(i);
+            Jdp=J6LJ(T_Real/param->EPS(i),s3tmp*rotmp);
+            A2+=mtmp*mtmp*Jdp*param->X(i)*param->X(i)/s3tmp;
           }
 
          A2=-A2*TWOPI*rotmp/(3.*T2R);
@@ -1528,35 +1561,35 @@ double TCGFcalc::FWCA(double T,double ro)
          {
 
           A3=0.;
-          for ( i=0; i<param.NCmp(); i++ )
+          for ( i=0; i<param->NCmp(); i++ )
           {
-            //itmp=param.ind(i);
-            m2i=param.M2R(i);
+            //itmp=param->ind(i);
+            m2i=param->M2R(i);
 
-            for ( j=0; j<param.NCmp(); j++  )
+            for ( j=0; j<param->NCmp(); j++  )
             {
-             // jtmp=param.ind(j);
-              m2j=param.M2R(j);
+             // jtmp=param->ind(j);
+              m2j=param->M2R(j);
 
-              s3tmpij=param.MIXS3(i,j);
-              IKtmpij=K23_13(T_Real*s3tmpij/param.MIXES3(i,j),
+              s3tmpij=param->MIXS3(i,j);
+              IKtmpij=K23_13(T_Real*s3tmpij/param->MIXES3(i,j),
                                                     s3tmpij*rotmp);
-              for ( k=0; k<param.NCmp(); k++  )
+              for ( k=0; k<param->NCmp(); k++  )
               {
-               //ktmp=param.ind(k);
-               m2k=param.M2R(k);
+               //ktmp=param->ind(k);
+               m2k=param->M2R(k);
 
-               s3tmpik=param.MIXS3(i,k);
-               s3tmpjk=param.MIXS3(j,k);
+               s3tmpik=param->MIXS3(i,k);
+               s3tmpjk=param->MIXS3(j,k);
 
-               IKtmpik=K23_13(T_Real*s3tmpik/param.MIXES3(i,k),
+               IKtmpik=K23_13(T_Real*s3tmpik/param->MIXES3(i,k),
                                                     s3tmpik*rotmp);
-               IKtmpjk=K23_13(T_Real*s3tmpjk/param.MIXES3(j,k),
+               IKtmpjk=K23_13(T_Real*s3tmpjk/param->MIXES3(j,k),
                                                     s3tmpjk*rotmp);
 
                IK=IKtmpij*IKtmpik*IKtmpjk;
                A3+= m2i*m2j*m2k*IK*pow(s3tmpij*s3tmpik*s3tmpjk,-1./3.)*
-               param.X(i)*param.X(j)*param.X(k);
+               param->X(i)*param->X(j)*param->X(k);
               }
             }
           }
@@ -1568,22 +1601,22 @@ double TCGFcalc::FWCA(double T,double ro)
 
         /// induced interaction
         A1=0.;
-        for ( i=0;i<param.NCmp();i++ )
+        for ( i=0;i<param->NCmp();i++ )
         {
-         // itmp=param.ind(i);
-          iatmp=param.A(i);
-          imtmp=param.M2R(i);
-          for ( j=0;j<param.NCmp();j++ )
+         // itmp=param->ind(i);
+          iatmp=param->A(i);
+          imtmp=param->M2R(i);
+          for ( j=0;j<param->NCmp();j++ )
           {
-            //jtmp=param.ind(j);
-            jatmp=param.A(j);
-            jmtmp=param.M2R(j);
+            //jtmp=param->ind(j);
+            jatmp=param->A(j);
+            jmtmp=param->M2R(j);
 
-            s3tmp=param.MIXS3(i,j);
-            Jind=J6LJ(T_Real*s3tmp/param.MIXES3(i,j),s3tmp*rotmp);
+            s3tmp=param->MIXS3(i,j);
+            Jind=J6LJ(T_Real*s3tmp/param->MIXES3(i,j),s3tmp*rotmp);
 
            A1+= (iatmp*jmtmp + jatmp*imtmp)
-                  *Jind*param.X(i)*param.X(j)/s3tmp;
+                  *Jind*param->X(i)*param->X(j)/s3tmp;
           }
         }
         A1=-A1*TWOPI*rotmp/T_Real;
@@ -1600,12 +1633,12 @@ double TCGFcalc::FWCA(double T,double ro)
   }
 
 
-double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
+double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM* param)
 {
   double T /*,ro,s3 */;
   double delta=DELTA;
   double a0,a1,beta0,beta1,eps;
-  eps=param.EMIX();
+  eps=param->EMIX();
   T=T_Real/eps;
 
   beta0=1./T;
@@ -1615,8 +1648,7 @@ double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
   return (a1-a0)/(beta1-beta0);
  }
 
-
- double TCGFcalc::ZTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
+ double TCGFcalc::ZTOTALMIX(double T_Real,double ro_Real,EOSPARAM* param)
  {
   double delta=DELTA;
   double a0,a1;
@@ -1626,14 +1658,12 @@ double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
   return 1.+(a1-a0)/delta;
  }
 
-
- double TCGFcalc::PTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
+ double TCGFcalc::PTOTALMIX(double T_Real,double ro_Real,EOSPARAM* param)
  {
   double Z;
     Z = ZTOTALMIX(T_Real,ro_Real,param);
     return Z*R*T_Real*ro_Real;
  }
-
 
  /*  melting density  */
  double TCGFcalc::Melt(double T)
@@ -1685,7 +1715,7 @@ double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
  }
 
 /////////////////////////////////////////////////////////////////
- double TCGFcalc::ROTOTALMIX(double P,double TT,EOSPARAM& param)
+ double TCGFcalc::ROTOTALMIX(double P,double TT,EOSPARAM* param)
  {
      unsigned long int i;
      double T /*,ro*/;
@@ -1697,8 +1727,8 @@ double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
      unsigned long int x1,x2;
 //     double ptmp;
 
-     T=TT/param.EMIX();
-     fact0=1./(param.S3MIX()*NA);
+     T=TT/param->EMIX();
+     fact0=1./(param->S3MIX()*NA);
      fact=R*TT*fact0;
 
      romax=Melt(T);
@@ -1842,153 +1872,62 @@ double TCGFcalc::UTOTALMIX(double T_Real,double ro_Real,EOSPARAM& param)
  }
 
 //=======================================================================================================
-
 // Implementation of EOSPARAM class
-
-EOSPARAM::~EOSPARAM()
+void EOSPARAM::free()
 {
-  unsigned  long int i;
-  if ( isize > 0)
+  long int i;
+  if ( NComp > 0)
   {
-         for ( i=0;i<isize;i++ )
-         {
+     for ( i=0;i<NComp;i++ )
            delete [] mixpar[i];
-         }
 
-   delete [] epspar;
-   delete [] sig3par;
-   delete [] XX;
-   delete [] eps;
-   delete [] eps05;
-   delete [] sigpar;
-   delete [] mpar;
-   delete [] apar;
-   delete [] aredpar;
-   delete [] m2par;
-   delete [] XX0;
-
-   delete [] mixpar;
-
+     delete [] epspar;
+     delete [] sig3par;
+     delete [] XX;
+     delete [] eps;
+     delete [] eps05;
+     delete [] sigpar;
+     delete [] mpar;
+     delete [] apar;
+     delete [] aredpar;
+     delete [] m2par;
+     delete [] XX0;
+    delete [] mixpar;
   }
 }
 
-
-void EOSPARAM::allocate(unsigned long int inew)
+void EOSPARAM::allocate( )
 {
-   unsigned long int i;
-  if ( (isize > 0) && (inew > isize) )
-  {
-         for ( i=0;i<isize;i++ )
-         {
-           delete [] mixpar[i];
-         }
+   long int i;
 
-   delete [] epspar;
-   delete [] sig3par;
-   delete [] XX;
-   delete [] eps;
-   delete [] eps05;
-   delete [] sigpar;
-   delete [] mpar;
-   delete [] apar;
-   delete [] aredpar;
-   delete [] m2par;
-   delete [] XX0;
+   mixpar=new   double* [NComp];
+   for ( i=0;i<NComp;i++ )
+       mixpar[i]=new   double [NComp];
 
-   delete [] mixpar;
-
-  }
-
-  if ( (inew > isize) )
-  {
-
-//    try{
-           mixpar=new   double* [inew];
-         for ( i=0;i<inew;i++ )
-         {
-           mixpar[i]=new   double [inew];
-         }
-
-   epspar =new double [inew];
-   sig3par=new double [inew];
-   XX     =new double [inew];
-   eps    =new double [inew];
-   eps05  =new double [inew];
-   sigpar =new double [inew];
-   mpar   =new double [inew];
-   apar   =new double [inew];
-   aredpar=new double [inew];
-   m2par  =new double [inew];
-   XX0    =new double [inew];
-//  }
-//  catch (xalloc)
-//  {
-//    printf("Can't allocate mamory\n");
-//    exit(1);
-//  }
-
-  isize=inew;
-  }
+   epspar =new double [NComp];
+   sig3par=new double [NComp];
+   XX     =new double [NComp];
+   eps    =new double [NComp];
+   eps05  =new double [NComp];
+   sigpar =new double [NComp];
+   mpar   =new double [NComp];
+   apar   =new double [NComp];
+   aredpar=new double [NComp];
+   m2par  =new double [NComp];
+   XX0    =new double [NComp];
 }
 
-unsigned long int EOSPARAM::ParamMix(double *Xin)
-  {
-    /* unsigned */ long int j,i;
-    double tmp,tmp1,tmp2;
-    for ( i=0; i<NComp; i++ ) XX[i]=Xin[i];
-
-    emix=0.;
-    s3mix=0.;
-
-    for ( i=0;i<NComp-1;i++ )
-    {
-      for ( j=i+1;j<NComp;j++ )
-      {
-          tmp=XX[i]*XX[j];
-          tmp2=mixpar[j][i]; //eps
-          tmp1=mixpar[i][j]; //signa
-          s3mix+= tmp1*tmp;
-          emix+= tmp2*tmp;
-      }
-    }
-
-    s3mix*=2.;
-    emix*=2.;
-
-    for ( i=0;i<NComp;i++ )
-    {
-          tmp=XX[i]*XX[i];
-
-          s3mix+= sig3par[i]*tmp;
-          emix +=  epspar[i]*tmp;
-    }
-    emix=emix/s3mix;
-    return NComp;
-  }
-
-  void EOSPARAM::PureParam(double* e,double* s,double* m,double* a)
-  {
-    /* unsigned */ long int i;
-
-    for ( i=0;i<NComp;i++ )
-    {
-      e[i]=eps[i];
-      s[i]=sigpar[i];
-      m[i]=mpar[i];
-      a[i]=aredpar[i];
-    }
-
-  }
-
- ////////////////////////////////////////////////////////////////////
-void EOSPARAM::init(double *Xinp, double * data,unsigned long int ncmp)
+void EOSPARAM::init(double *Xinp, double * data, long int nn )
 {
   long int i,j;
   double tmp;
-
-  //if ( ncmp>MAXPARAM ) NComp=MAXPARAM;
-   allocate(ncmp);
-   NComp= ncmp;
+  
+  if( nn != NComp )
+  { // or error message
+	  free();
+	  NComp = nn;
+	  allocate();
+  }
 
   for ( i=0;i<NComp;i++ )
   {
@@ -1998,11 +1937,9 @@ void EOSPARAM::init(double *Xinp, double * data,unsigned long int ncmp)
        eps[i] = data[i*4 + 1];
       mpar[i] = data[i*4 + 2];
       apar[i] = data[i*4 + 3];
-
   }
-
-    for ( i=0;i<NComp;i++ )
-    {
+   for ( i=0;i<NComp;i++ )
+   {
       tmp=sigpar[i];
       tmp=tmp*tmp*tmp;
       sig3par[i]=tmp;
@@ -2011,7 +1948,6 @@ void EOSPARAM::init(double *Xinp, double * data,unsigned long int ncmp)
       m2par[i]=mpar[i]*mpar[i]/(1.38048E-4);
       aredpar[i]=apar[i]/tmp;
     }
-
   /// calculation of mixing properties ///
     for ( i=0;i<NComp-1;i++ )
     {
@@ -2025,31 +1961,37 @@ void EOSPARAM::init(double *Xinp, double * data,unsigned long int ncmp)
     }
 };
 
-/////////////////////////////////////////////////////////////////////
-
-void EOSPARAM::copy(double* sours,double *dest,unsigned long int num)
- {
-  unsigned long int i;
-       for ( i=0;i<num;i++)
-       {
-        dest[i]=sours[i];
-       };
- }
-
-void EOSPARAM::norm(double *X,unsigned long int mNum)
- {
-  double tmp=0.;
-  unsigned long int i;
-  for ( i=0;i<mNum;i++ )
+ long int EOSPARAM::ParamMix(double *Xin)
   {
-    tmp+=X[i];
-  }
-  tmp=1./tmp;
-  for ( i=0;i<mNum;i++ )
-  {
-    X[i]*=tmp;
-  }
- }
+    long int j,i;
+    double tmp,tmp1,tmp2;
+    
+    for ( i=0; i<NComp; i++ ) 
+    	XX[i]=Xin[i];
 
+    emix=0.;
+    s3mix=0.;
+    for ( i=0;i<NComp-1;i++ )
+    {
+      for ( j=i+1;j<NComp;j++ )
+      {
+          tmp=XX[i]*XX[j];
+          tmp2=mixpar[j][i]; //eps
+          tmp1=mixpar[i][j]; //signa
+          s3mix+= tmp1*tmp;
+          emix+= tmp2*tmp;
+      }
+    }
+    s3mix*=2.;
+    emix*=2.;
+    for ( i=0;i<NComp;i++ )
+    {
+          tmp=XX[i]*XX[i];
 
+          s3mix+= sig3par[i]*tmp;
+          emix +=  epspar[i]*tmp;
+    }
+    emix=emix/s3mix;
+    return NComp;
+  }
 //--------------------- End of s_fgl.cpp ---------------------------

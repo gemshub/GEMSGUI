@@ -403,7 +403,7 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                case PH_FLUID:
                      if( sMod[SPHAS_TYP] == SM_CGFLUID )
                      {
-                       CGofPureGases( jb, je, jpb, jdb, k ); // CG2004 pure gas
+                       CGofPureGases( jb, je, jpb, jdb, k, ipb ); // CG2004 pure gas
                        break;
                      }
                      if( sMod[SPHAS_TYP] == SM_PRFLUID )
@@ -516,7 +516,8 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
              if( pmpXFk > pmp->DSM && pmp->XF[k] > pa->p.PhMin )
              {
                  if( sMod[SPHAS_TYP] == SM_CGFLUID )
-                    ChurakovFluid( jb, je, jpb, jdb, k );
+                     SolModActCoeff( k, sMod[SPHAS_TYP] );
+                   //  ChurakovFluid( jb, je, jpb, jdb, k );
                  if( sMod[SPHAS_TYP] == SM_PRFLUID )
                      SolModActCoeff( k, sMod[SPHAS_TYP] );
                     // PRSVFluid( jb, je, jpb, jdb, k, ipb );
@@ -1160,23 +1161,19 @@ void TMulti::Davies03temp( long int jb, long int je, long int jpb, long int k )
 // Added by D.Kulik on 15.02.2007
 //
 void
-TMulti::CGofPureGases( long int jb, long int je, long int, long int jdb, long int )
+TMulti::CGofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb)
 {
     double T, P, Fugacity = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
     double *Coeff;
     double Eos4parPT[4] = { 0.0, 0.0, 0.0, 0.0 },
-                  Eos4parPT1[4] = { 0.0, 0.0, 0.0, 0.0 } ;
+            Eos4parPT1[4] = { 0.0, 0.0, 0.0, 0.0 } ;
     double X[1]={1.};
     double roro;  // added, 21.06.2008 (TW)
     long int jdc, j, retCode = 0;
 
-    TCGFcalc aCGF;
     P = pmp->Pc;
     T = pmp->Tc;
-
-//    Coeff = pmp->DMc+jdb;
-//    FugPure = (double*)malloc( NComp*sizeof(double) );
-//    FugPure = pmp->Pparc+jb;
+    TCGFcalc aCGF(1, P, T);
 
     for( jdc=0, j=jb; j<je; jdc++,j++)
     {
@@ -1197,8 +1194,7 @@ TMulti::CGofPureGases( long int jb, long int je, long int, long int jdb, long in
             return;
         }
 
-//        pmp->lnGmM[j] = log( Fugacity / pmp->Pc ); // Constant correction to G0 here!
-pmp->GEX[j] = log( Fugacity / pmp->Pc );   // now here (since 26.02.2008)  DK
+        pmp->GEX[j] = log( Fugacity / pmp->Pc );   // now here (since 26.02.2008)  DK
         pmp->Pparc[j] = Fugacity;          // Necessary only for performance
         pmp->Vol[j] = Volume * 10.;       // molar volume of pure fluid component, J/bar to cm3
 
@@ -1231,79 +1227,9 @@ pmp->GEX[j] = log( Fugacity / pmp->Pc );   // now here (since 26.02.2008)  DK
       sprintf(buf, "CG2004Fluid(): bad calculation of pure fugacities");
       Error( "E71IPM IPMgamma: ",  buf );
     }
+    // set work structure
+    SolModParPT( jb, je, jpb, jdb, k, ipb, SM_CGFLUID );
 }
-
-
-
-// Churakov-Gottschalk (2004) multicomponent fluid mixing model
-//
-void
-TMulti::ChurakovFluid( long int jb, long int je, long int, long int jdb, long int k )
-{
-    double *FugCoefs, *Coeffs;
-    double *EoSparam, *EoSparam1;
-    long int i, j, jj;
-    double T, P, roro, DeltaH, DeltaS; // changed, 21.06.2008 (TW)
-    TCGFcalc aCGF;
-    P = pmp->Pc;
-    T = pmp->Tc;
-
-//    FugCoefs = (double*)malloc( pmp->L1[k]*sizeof(double) );
-//    EoSparam = (double*)malloc( pmp->L1[k]*sizeof(double)*4 );
-    FugCoefs =  new double[ pmp->L1[k] ];
-    EoSparam =  new double[ pmp->L1[k]*4 ];
-    EoSparam1 =  new double[ pmp->L1[k]*4 ];
-    Coeffs = pmp->DMc+jdb;
-
-    // Copying T,P corrected coefficients
-    for( j=0; j<pmp->L1[k]; j++)
-    {
-    	for( i=0; i<4; i++)
-          EoSparam[j*4+i] = Coeffs[j*24+i+15];
-    	for( i=0; i<4; i++)
-    	  EoSparam1[j*4+i] = Coeffs[j*24+i+19];
-    }
-
-    if( T >= 273.15 && T < 1e4 && P >= 1e-6 && P < 1e5 )
-    {
-        aCGF.CGActivCoefPT( pmp->X+jb, EoSparam, FugCoefs, pmp->L1[k],
-             pmp->Pc, pmp->Tc, roro );  // changed, 21.06.2008 (TW)
-        if (roro <= 0. )
-        {
-            delete[] FugCoefs;
-            delete[] EoSparam;
-            delete[] EoSparam1;
-//           free( FugCoefs );
-           char buf[150];
-           sprintf(buf, "CGFluid(): bad calculation of density ro= %lg", roro);
-           Error( "E71IPM IPMgamma: ",  buf );
-        }
-        // Phase volume of the fluid in cm3
-        pmp->FVOL[k] = pmp->FWGT[k] / roro;
-        // Get back residual H and S
-        aCGF.CGEnthalpy( pmp->X+jb, EoSparam, EoSparam1, pmp->L1[k], roro, pmp->Tc,
-        		DeltaH, DeltaS );
-        // Utilize residual enthalpy DeltaH, entropy DeltaS
-
-    }
-    else // Setting Fugcoefs to 0 outside TP interval
-      for( j=0; j<pmp->L1[k]; j++ )
-        FugCoefs[ j ] = 0.0;
-
-    for( jj=0, j=jb; j<je; j++, jj++ )
-    {
-        if( FugCoefs[jj] > 1e-23 /* && pmp->Pparc[j] > 1e-23 */ )
-             pmp->lnGam[j] = log(FugCoefs[ jj ]/pmp->Pparc[j]);
-        else
-             pmp->lnGam[j] = 0;
-    } // j
-    delete[] EoSparam;
-    delete[] EoSparam1;
-    delete[] FugCoefs;
-//    free( FugCoefs );
-
-}
-
 
 
 #define MAXPRDCPAR 10
@@ -1345,34 +1271,12 @@ TMulti::PRSVofPureGases( long int jb, long int je, long int jpb, long int jdb, l
     if ( retCode )
     {
       char buf[150];
-      sprintf(buf, "PRSVFluid(): bad calculation of pure fugacities");
+      sprintf(buf, "PRSV Fluid(): bad calculation of pure fugacities");
       Error( "E71IPM IPMgamma: ",  buf );
     }
-
     // set work structure
     SolModParPT( jb, je, jpb, jdb, k, ipb, SM_PRFLUID );
-    
 }
-
-
-
-// ---------------------------------------------------------------------
-// Entry to Peng-Robinson model for activity coefficients
-// Added by Th.Wagner and D.Kulik on 19.07.2006, changed by DK on 15.02.2007
-//
-void
-TMulti::PRSVFluid( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb )
-{
-    if( !phSolMod[k] )
-     Error("","Illegal index of phase");
-    TSolMod* aSM = phSolMod[k];
-    //for( j=jb; j<je; j++)
-      // pmp->Wx[j] = pmp->X[j]/pmp->XF[k];
-    aSM->MixMod();
-
-}
-
-
 
 // ------------------ condensed mixtures --------------------------
 // Binary Redlich-Kister model - parameters (dimensionless)
@@ -1629,7 +1533,14 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
             aSM = (TSolMod*)aPT;
             break;
         }   
-        	
+        case SM_CGFLUID:	
+        {
+        	TCGFcalc* aPT = new TCGFcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, 
+                    pmp->Pparc+jb, pmp->FWGT+k, pmp->X+jb, RhoW, EpsW );
+            aSM = (TSolMod*)aPT;
+            break;
+        }   
         default:
 //            aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
 //                  aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
@@ -1659,6 +1570,7 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_AQPITZ:
         case SM_AQSIT:
         case SM_PRFLUID:
+        case SM_CGFLUID:	
              aSM->MixMod();
              break;
         case SM_AQEXUQ:
@@ -1687,6 +1599,8 @@ TMulti::SolModExcessParam( long int k, char ModCode )
         case SM_WILSLIQ:
         case SM_AQPITZ:
         case SM_AQSIT:
+        case SM_PRFLUID:
+        case SM_CGFLUID:	
              aSM->getExcessProp( Gex, Vex, Hex, Sex, CPex );
              break;
         case SM_AQEXUQ:
