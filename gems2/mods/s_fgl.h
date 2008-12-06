@@ -46,7 +46,7 @@ class EOSPARAM
   //static double Told;
 //  unsigned long int isize;  // int isize = NComp;
    long int NComp;
- 
+
    double emix,s3mix;
    double *epspar,*sig3par;
    double *XX;
@@ -58,12 +58,12 @@ class EOSPARAM
    double *aredpar;
    double *m2par;
    double **mixpar;
-  
+
    void allocate();
    void free();
-   
+
   public:
-  
+
    double *XX0;
 
   //EOSPARAM():isize(0),emix(0),s3mix(0),NComp(0){};
@@ -102,6 +102,8 @@ class EOSPARAM
 
   long int ParamMix( double *Xin);
 };
+
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Added 07 March 2007 by TW and DK; extended 25.11.2008 by DK
@@ -144,22 +146,26 @@ protected:
         double CPex;  	// Excess heat capacity
         double *lnGamma;   // Pointer to ln activity coefficients of end members
                            // (memory must be provided from the calling program)
-        
+
 public:
-// Generic constructor
+
+	// Generic constructor
     TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
          long int NPperDC, double T_k, double P_bar, char Mod_Code,
          long int* arIPx, double* arIPc, double* arDCc,
          double *arWx, double *arlnGam, double *aphVOL, double dW, double eW );
+
+    // Destructor
     virtual ~TSolMod();
 
-// 
     virtual long int PTparam( )
         { return 0;}
-    virtual long int MixMod( ) 
+
+    virtual long int MixMod( )
         { return 0;}
+
     virtual void getExcessProp(  double &Gex_, double &Vex_, double &Hex_, double &Sex_,
-    		double &CPex_ ) 
+    		double &CPex_ )
     {  Gex_ = Gex;
        Vex_ = Vex;
        Hex_ = Hex;
@@ -167,14 +173,13 @@ public:
 	   CPex_ = CPex;
 	};
 
-// Prototypes for other models to be added here
-// Darken ...
-// Extended UNIQUAC model for aqueous electrolyte solutions
-
 };
+
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Churakov & Gottschalk (2003) EOS calculations
+
 class TCGFcalc : public TSolMod
 {
   private:
@@ -199,14 +204,15 @@ class TCGFcalc : public TSolMod
           A22, A23, A31,
           A32, A33, A34;
 
-//  double PhVol;   // bar, T Kelvin, phase volume in cm3
+  //  double PhVol;   // bar, T Kelvin, phase volume in cm3
   double *Pparc;   // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
   double *phWGT;
-  double *aX;  // DC quantities at eqstate x_j, moles - primal IPM solution [L]  
+  double *aX;  // DC quantities at eqstate x_j, moles - primal IPM solution [L]
+
   // main work arrays
   EOSPARAM *paar;
   EOSPARAM *paar1;
-  
+
   double *FugCoefs;
   double *EoSparam;
   double *EoSparam1;
@@ -214,16 +220,17 @@ class TCGFcalc : public TSolMod
   void alloc_internal();
   void free_internal();
   void set_internal();
-	
+
   void choose(double *pres, double P,unsigned long int &x1,unsigned long int &x2);
   double Melt2(double T);
   double Melt(double T);
-	 
+
    void copy(double* sours,double *dest,unsigned long int num);
    void norm(double *X,unsigned long int mNum);
    double RPA(double beta,double nuw);
    double dHS(double beta,double ro );
-   inline double fI1_6(double nuw)
+
+inline double fI1_6(double nuw)
 {
    return (1.+(A4+(A5+A6*nuw)*nuw)*nuw)/
    ((1.+(AA1+(AA2+AA3*nuw)*nuw)*nuw)*3.);
@@ -234,7 +241,6 @@ inline double fI1_12(double nuw)
    return (1.+(B4+(B5+B6*nuw)*nuw)*nuw)/
    ((1.+(BB1+(BB2+BB3*nuw)*nuw)*nuw)*9.);
 };
-
 
 inline double fa0(double nuw ,double nu1w2)
 {
@@ -283,13 +289,15 @@ inline double fa3(double nuw ,double nu1w5)
 
 public:
 
+	// Constructor
  	 TCGFcalc( long int NCmp, double Pp, double Tkp );
  	 TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
        long int NPperDC, double T_k, double P_bar, char Mod_Code,
        long int* arIPx, double* arIPc, double* arDCc,
-       double *arWx, double *arlnGam, double *aphVOL, 
+       double *arWx, double *arlnGam, double *aphVOL,
        double * aPparc, double *aphWGT, double *arX, double dW, double eW );
 
+ 	   // Destructor
        ~TCGFcalc();
 
        //// Churakov-Gottschalk (2004) multicomponent fluid mixing model
@@ -311,14 +319,15 @@ public:
     };
 };
 
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Added 19 July 2006 by Th.Wagner and D.Kulik
 // Definition of a class for PRSV EOS calculations for fluids
 // Incorporates a C++ program written by Thomas Wagner (Univ. Tuebingen)
-// Reference: http://www.uni-tuebingen.de/uni/emi/ag-markl/pages/wagner/
 // th.wagner@uni-tuebingen.de
-//
-class TPRSVcalc: public TSolMod 
+
+class TPRSVcalc: public TSolMod
 // Peng-Robinson-Styjek-Vera EOS calculations
 {
   private:
@@ -336,17 +345,19 @@ class TPRSVcalc: public TSolMod
      double **KK1ij;    //  T-dependent term
      double **AAij;     //  binary a terms in the mixture
 
- 	void alloc_internal();
- 	void free_internal();
+ 	 void alloc_internal();
+ 	 void free_internal();
 
     public:
 
+    // Constructor
     TPRSVcalc( long int NCmp, double Pp, double Tkp );
     TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
          long int NPperDC, double T_k, double P_bar, char Mod_Code,
          long int* arIPx, double* arIPc, double* arDCc,
          double *arWx, double *arlnGam, double *aphVOL, double * aPparc, double dW, double eW );
 
+    // Destructor
     ~TPRSVcalc();
 
     long int MixMod();
@@ -355,8 +366,8 @@ class TPRSVcalc: public TSolMod
 	long int PTparam();
 
 	// Called from IPM-Gamma() where activity coefficients are computed
-//   long int PRActivCoefPT( 
-//        double *fugpure );
+    // long int PRActivCoefPT(
+    // double *fugpure );
 
    long int CalcFugPure( void );
    // Calc. fugacity for 1 species at X=1
@@ -382,12 +393,15 @@ protected:
 
 };
 
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // SIT model reimplementation for aqueous electrolyte solutions
+
 class TSIT: public TSolMod
 {
 private:
-	
+
 	double *aZ;    // Vector of species charges (for aqueous models)
 	double *aM;    // Vector of species molality (for aqueous models)
 	double I;	// Ionic strength
@@ -400,28 +414,30 @@ private:
 		return 0.5*Is;
 	}
 
-	
 public:
 
 	// Constructor
 	TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 	         double dW, double eW );
-	
+
 	// Destructor
 	~TSIT() { }
-	
-    long int MixMod(); 
+
+    long int MixMod();
 
     // Calculation of internal tables (at each GEM iteration)
 	long int PTparam() { return 0; }
 };
 
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-//   Van Laar model for solid solutions (c) TW March 2007
+//  Van Laar model for solid solutions (c) TW March 2007
 // References:  Holland & Powell (2003)
+
 class TVanLaar: public TSolMod
 {
 private:
@@ -431,7 +447,7 @@ private:
 	double *Wpt;   // Interaction coeffs at P-T
 	double *Phi;   // Mixing terms
 	double *PsVol; // End member volume parameters
-	
+
 	void alloc_internal();
 	void free_internal();
 
@@ -441,21 +457,24 @@ public:
 	TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *aphVOL,  
+	         double *arWx, double *arlnGam, double *aphVOL,
 	         double dW, double eW );
-	
+
 	// Destructor
 	~TVanLaar();
-	
-    long int MixMod(); 
+
+    long int MixMod();
 
     // Calculation of internal tables (at each GEM iteration)
 	long int PTparam();
 };
 
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Regular model for multicomponent solid solutions (c) TW March 2007
 // References:  Holland & Powell (1993)
+
 class TRegular: public TSolMod
 {
 private:
@@ -463,7 +482,7 @@ private:
    double *Ws;
    double *Wv;
    double *Wpt;   // Interaction coeffs at P-T
-	
+
 	void alloc_internal();
 	void free_internal();
 
@@ -473,20 +492,24 @@ public:
 	TRegular( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *aphVOL,  
+	         double *arWx, double *arlnGam, double *aphVOL,
 	         double dW, double eW  );
-	
+
 	// Destructor
 	~TRegular();
-	
-    long int MixMod(); 
+
+    long int MixMod();
 
     // Calculation of internal tables (at each GEM iteration)
 	long int PTparam();
 };
+
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Redlich-Kister model for multicomponent solid solutions (c) TW March 2007
 // References: Hillert (1998)
+
 class TRedlichKister: public TSolMod
 {
 private:
@@ -495,7 +518,7 @@ private:
 	   double (*Lcp)[4];
 	   double (*Lv)[4];
 	   double (*Lpt)[4];
-	
+
 	void alloc_internal();
 	void free_internal();
 
@@ -507,19 +530,22 @@ public:
 	         long int* arIPx, double* arIPc, double* arDCc,
 	         double *arWx, double *arlnGam, double *aphVOL,
 	         double dW, double eW  );
-	
+
 	// Destructor
 	~TRedlichKister();
-	
-    long int MixMod(); 
+
+    long int MixMod();
 
     // Calculation of internal tables (at each GEM iteration)
 	long int PTparam();
 };
 
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // NRTL model for liquid solutions (c) TW June 2008
 // References: Renon and Prausnitz (1968), Prausnitz et al. (1997)
+
 class TNRTL: public TSolMod
 {
 private:
@@ -532,7 +558,7 @@ private:
 	double **G;
 	double **dG;
 	double **d2G;
-	
+
 	void alloc_internal();
 	void free_internal();
 
@@ -542,28 +568,31 @@ public:
 	TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *aphVOL, 
+	         double *arWx, double *arlnGam, double *aphVOL,
 	         double dW, double eW  );
-	
+
 	// Destructor
 	~TNRTL();
-	
-    long int MixMod(); 
+
+    long int MixMod();
 
     // Calculation of internal tables (at each GEM iteration)
 	long int PTparam();
 };
 
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Wilson model for liquid solutions (c) TW June 2008
 // References: Prausnitz et al. (1997)
+
 class TWilson: public TSolMod
 {
 private:
 	double **Lam;
 	double **dLam;
 	double **d2Lam;
-	
+
 	void alloc_internal();
 	void free_internal();
 
@@ -573,19 +602,24 @@ public:
 	TWilson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *aphVOL, 
+	         double *arWx, double *arlnGam, double *aphVOL,
 	         double dW, double eW  );
-	
+
 	// Destructor
 	~TWilson();
-	
-    long int MixMod(); 
+
+    long int MixMod();
 
     // Calculation of internal tables (at each GEM iteration)
 	long int PTparam();
 };
 
+
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Pitzer model, Harvie-Möller-Weare (HMW) version, with explicit temperature dependence
+// References:
+
 class TPitzer: public TSolMod
 {
 
@@ -619,7 +653,7 @@ private:
 	double *aPsi;     // Psi array for cation-cation-anion interactions [Nc][Nc][Na]
 	double *aPsi1;    // Psi1 array for anion-anion-cation interactions [Na][Na][Nc]
 	double *aZeta;    // Zeta array for neutral-cation-anion interactions [Nn][Nc][Na]
-	
+
                   // Work parameter arrays
 /*	double *B1;      // B' table for cation-anion interactions corrected for IS [Nc][Na]
 	double *B2;      // B table for cation-anion interactions corrected for IS [Nc][Na]
@@ -634,13 +668,13 @@ private:
 	double dk[21];   // work space
 */
 	enum eTableType
-	{ bet0_ = -10, bet1_ = -11, bet2_ = -12, Cphi_ = -20, Lam_ = -30, Lam1_ = -31, 
+	{ bet0_ = -10, bet1_ = -11, bet2_ = -12, Cphi_ = -20, Lam_ = -30, Lam1_ = -31,
 	  Theta_ = -40,  Theta1_ = -41, Psi_ = -50, Psi1_ = -51, Zeta_ = -60
 	};
-	
+
  // internal calculations
 	// Calculation of Etheta and Ethetap values
-	void Ecalc( double z, double z1, double I, double Aphi, 
+	void Ecalc( double z, double z1, double I, double Aphi,
 			double& Etheta, double& Ethetap);
 	inline long int getN() const
 	 { return Nc+Na+Nn; }
@@ -655,27 +689,26 @@ private:
 	double lnGammaX(  long int X );
 	double lnGammaH2O();
 
-  // internal setup	
+  // internal setup
 	void calcSizes();
 	void alloc_internal();
 	void free_internal();
   // calc vector of interaction parameters corrected to T,P of interest
-	void PTparam( double T ); 
+	void PTparam( double T );
   // build conversion of species indexes between aq phase and Pitzer parameter tables
 	void setIndexes();
 	void setValues();
 
-    
 	inline long int getIc( long int jj )
-    { 
+    {
 		for( long int ic=0; ic<Nc; ic++ )
 			if( xcx[ic] == jj )
 				return ic;
 		return -1;
     }
-	
+
 	inline long int getIa( long int jj )
-    { 
+    {
 		for( long int ia=0; ia<Na; ia++ )
 			if( xax[ia] == jj )
 				return ia;
@@ -683,7 +716,7 @@ private:
     }
 
 	inline long int getIn( long int jj )
-    { 
+    {
 		for( long int in=0; in<Nn; in++ )
 			if( xnx[in] == jj )
 				return in;
@@ -691,7 +724,7 @@ private:
     }
 
 	inline double sum( double* arr, long int *xx, long int Narr )
-    { 
+    {
 		double sum_ =0.;
 		for( long int i=0; i<Narr; i++ )
           sum_ += arr[ xx[i]];
@@ -699,23 +732,23 @@ private:
     }
 
 public:
-    // Constructor
 
+    // Constructor
 	TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 	         long int NPperDC, double T_k, double P_bar, char Mod_Code,
 	         long int* arIPx, double* arIPc, double* arDCc,
-	         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ, 
+	         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
 	         double dW, double eW );
-	
+
 	// Destructor
 	~TPitzer();
-	
-    long int MixMod() 
+
+    long int MixMod()
     { return Pitzer_calc_Gamma();}
 
     // Calculation of internal tables (at each GEM iteration)
 	long int Pitzer_Init();
-	
+
 	// Calculation of activity coefficients
 	long int Pitzer_calc_Gamma( );
 

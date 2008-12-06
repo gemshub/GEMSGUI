@@ -453,7 +453,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
-                          php->ncpM = 4;  // NPcoef
+                          php->ncpM = 3;  // NPcoef
                           break;
           case SM_REGULAR:   // Regular model (multicomponent)
                           php->nscM = 0;  // NP_DC
@@ -462,7 +462,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
-                          php->ncpM = 4;  // NPcoef
+                          php->ncpM = 3;  // NPcoef
                           break;
           case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
                           php->nscM = 0;  // NP_DC
@@ -471,7 +471,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
-                          php->ncpM = 20;  // NPcoef
+                          php->ncpM = 16;  // NPcoef
                           break;
           case SM_NRTLLIQ:   // NRTL liquid model (multicomponent), added 03.06.2008 (TW)
                           php->nscM = 0;  // NP_DC
@@ -480,7 +480,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
-                          php->ncpM = 12;  // NPcoef
+                          php->ncpM = 6;  // NPcoef
                           break;
           case SM_WILSLIQ:   // Wilson liquid model (multicomponent), added 09.06.2008 (TW)
                           php->nscM = 0;  // NP_DC
@@ -489,7 +489,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
-                          php->ncpM = 7;  // NPcoef
+                          php->ncpM = 4;  // NPcoef
                           break;
           case SM_REDKIS:   // Redlich-Kister model (binary)
                           php->nscM = 0;
