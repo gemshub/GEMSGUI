@@ -29,7 +29,9 @@
 
 
 //=======================================================================================================
-// TPRSVcalc class implementation
+// Peng-Robinson-Stryjek-Vera (PRSV) model for fluid mixtures
+// References: Stryjek and Vera (1986), Proust and Vera (1989)
+// Implementation of the TPRSVcalc class
 //=======================================================================================================
 
 
@@ -54,7 +56,7 @@ TPRSVcalc::TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, lon
 {
   Pparc = arPparc;
   alloc_internal();
-  PTparam();
+  // PTparam();
 }
 
 
@@ -102,6 +104,13 @@ void TPRSVcalc::free_internal()
 	delete[]KK0ij;
 	delete[]KK1ij;
 	delete[]AAij;
+}
+
+
+// High-level method to retrieve pure fluid fugacities
+long int TPRSVcalc::PureSpecies()
+{
+	return 0;
 }
 
 
@@ -609,7 +618,9 @@ long int TPRSVcalc::CalcFugPure( void )
 
 
 //=======================================================================================================
-// TCGFcalc class implementation
+// Churakov-Gottschalk (CG) model for fluid mixtures
+// References: Churakov and Gottschalk (2003a, 2003b)
+// Implementation of the TCGFcalc class
 //=======================================================================================================
 
 #ifndef IPMGEMPLUGIN
@@ -713,7 +724,7 @@ TCGFcalc::TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long 
   aX  =  arX;
   set_internal();
   alloc_internal();
-  PTparam();
+  // PTparam();
 }
 
 // Destructor
@@ -791,7 +802,14 @@ void TCGFcalc::free_internal()
 }
 
 
-//   Calculates T,P corrected binary interaction parameters
+// High-level method to retrieve pure fluid fugacities
+long int TCGFcalc::PureSpecies()
+{
+	return 0;
+}
+
+
+// Calculates T,P corrected binary interaction parameters
 long int TCGFcalc::PTparam()
 {
     long int i,j;

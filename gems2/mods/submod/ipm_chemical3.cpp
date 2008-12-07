@@ -1463,13 +1463,13 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
     alnGam = pmp->lnGam+jb; // End member ln activity coeffs
     RhoW = pmp->denW;		// added 04.06.2008 (TW)
     EpsW = pmp->epsW;
-    
+
     aM = pmp->Y_m+jb;
     aZ = pmp->EZ+jb;
     aphVOL = pmp->FVOL+k;
 
     TSolMod* aSM = 0;
-       
+
    // calculate P-T dependence of interaction parameters
     switch( ModCode )
     {
@@ -1477,52 +1477,57 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
         	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
+        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
-        }   
+        }
              break;
         case SM_REGULAR:
         {
         	TRegular* aPT = new TRegular( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
+        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
-        }   
+        }
         case SM_GUGGENM:
         {
         	TRedlichKister* aPT = new TRedlichKister( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
+        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
-        }   
+        }
         case SM_NRTLLIQ:
         {
         	TNRTL* aPT = new TNRTL( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
+        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
-        }   
+        }
         case SM_WILSLIQ:
         {
         	TWilson* aPT = new TWilson( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
+        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
-        }   
+        }
         case SM_AQPITZ:
         {
            	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, aM, aZ, RhoW, EpsW );
              aSM = (TSolMod*)aPT;
              break;
-        }   
+        }
         case SM_AQSIT:
         {
            	TSIT* aPT = new TSIT( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, aM, aZ, RhoW, EpsW );
              aSM = (TSolMod*)aPT;
              break;
-        }   
+        }
         case SM_AQEXUQ:
         //        	 aSM->EUNIQUAC_PT();
         //        	 break;
@@ -1530,23 +1535,25 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
         	TPRSVcalc* aPT = new TPRSVcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, pmp->Pparc+jb, RhoW, EpsW );
+        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
-        }   
-        case SM_CGFLUID:	
+        }
+        case SM_CGFLUID:
         {
         	TCGFcalc* aPT = new TCGFcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, 
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL,
                     pmp->Pparc+jb, pmp->FWGT+k, pmp->X+jb, RhoW, EpsW );
+        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
-        }   
+        }
         default:
 //            aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
 //                  aIPx, aIPc, aDCc,  aWx, alnGam, aM, aZ, RhoW, EpsW );
              break;
     }
-    
+
   	if(phSolMod[k])
    	  delete phSolMod[k];
    	phSolMod[k] = aSM; // set up pointer for the solution model
@@ -1570,7 +1577,7 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_AQPITZ:
         case SM_AQSIT:
         case SM_PRFLUID:
-        case SM_CGFLUID:	
+        case SM_CGFLUID:
              aSM->MixMod();
              break;
         case SM_AQEXUQ:
@@ -1600,7 +1607,7 @@ TMulti::SolModExcessParam( long int k, char ModCode )
         case SM_AQPITZ:
         case SM_AQSIT:
         case SM_PRFLUID:
-        case SM_CGFLUID:	
+        case SM_CGFLUID:
              aSM->getExcessProp( Gex, Vex, Hex, Sex, CPex );
              break;
         case SM_AQEXUQ:
@@ -1623,9 +1630,9 @@ void TMulti::Alloc_TSolMod( long int newFIs )
 {
   if(  phSolMod && ( newFIs == sizeFIs) )
     return;
-  
+
   Free_TSolMod();
-  // alloc memory for all multicomponents phases 
+  // alloc memory for all multicomponents phases
   phSolMod = new  TSolMod *[newFIs];
   sizeFIs = newFIs;
  for( long int ii=0; ii<newFIs; ii++ )
@@ -1640,9 +1647,9 @@ void TMulti::Free_TSolMod()
   {  for(  kk=0; kk<sizeFIs; kk++ )
       if( phSolMod[kk] )
            delete phSolMod[kk];
-  
+
       delete[]  phSolMod;
-  }    
+  }
   phSolMod = 0;
   sizeFIs = 0;
 }

@@ -158,6 +158,9 @@ public:
     // Destructor
     virtual ~TSolMod();
 
+    virtual long int PureSpecies( )
+		{ return 0;}
+
     virtual long int PTparam( )
         { return 0;}
 
@@ -289,7 +292,7 @@ inline double fa3(double nuw ,double nu1w5)
 
 public:
 
-	// Constructor
+	 // Constructor
  	 TCGFcalc( long int NCmp, double Pp, double Tkp );
  	 TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
        long int NPperDC, double T_k, double P_bar, char Mod_Code,
@@ -297,26 +300,30 @@ public:
        double *arWx, double *arlnGam, double *aphVOL,
        double * aPparc, double *aphWGT, double *arX, double dW, double eW );
 
- 	   // Destructor
-       ~TCGFcalc();
+ 	 // Destructor
+     ~TCGFcalc();
 
-       //// Churakov-Gottschalk (2004) multicomponent fluid mixing model
-       long int MixMod();
+     // Calculation of pure species properties (pure fugacities)
+     long int PureSpecies( );
 
-       // Calculation of internal tables (at each GEM iteration)
-       long int PTparam();
+     // Calculation of T,P corrected interaction parameters
+     long int PTparam();
 
-    // CGofPureGases - Calc. fugacity for 1 species at X=1
-    long int CGcalcFug( void );  // Calc. fugacity for 1 species at X=1
-    long int CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fugacity,
-        double &Volume, double P, double T, double &roro );
-    // Calculates residual enthalpy and entropy
-    long int CGEnthalpy(double *X, double *param, double *param1, unsigned long int NN,
+     // Calculation of activity coefficients
+     long int MixMod();
+
+
+     // CGofPureGases - Calc. fugacity for 1 species at X=1
+     long int CGcalcFug( void );  // Calc. fugacity for 1 species at X=1
+     long int CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fugacity,
+    		double &Volume, double P, double T, double &roro );
+     // Calculates residual enthalpy and entropy
+     long int CGEnthalpy(double *X, double *param, double *param1, unsigned long int NN,
          double ro, double T, double &H, double &S );
-    double GetDELTA( void )
-    {
+     double GetDELTA( void )
+     {
     	return DELTA;
-    };
+     };
 };
 
 
@@ -360,10 +367,14 @@ class TPRSVcalc: public TSolMod
     // Destructor
     ~TPRSVcalc();
 
-    long int MixMod();
+    // Calculation of pure species properties (pure fugacities)
+    long int PureSpecies( );
 
-    // Calculation of internal tables (at each GEM iteration)
+    // Calculation of T,P corrected interaction parameters
 	long int PTparam();
+
+    // Calculation of activity coefficients
+    long int MixMod();
 
 	// Called from IPM-Gamma() where activity coefficients are computed
     // long int PRActivCoefPT(
@@ -463,10 +474,12 @@ public:
 	// Destructor
 	~TVanLaar();
 
+	// Calculation of T,P corrected interaction parameters
+	long int PTparam();
+
+	// Calculation of activity coefficients
     long int MixMod();
 
-    // Calculation of internal tables (at each GEM iteration)
-	long int PTparam();
 };
 
 
@@ -498,10 +511,12 @@ public:
 	// Destructor
 	~TRegular();
 
+	// Calculation of T,P corrected interaction parameters
+	long int PTparam();
+
+	// Calculation of activity coefficients
     long int MixMod();
 
-    // Calculation of internal tables (at each GEM iteration)
-	long int PTparam();
 };
 
 
@@ -534,10 +549,12 @@ public:
 	// Destructor
 	~TRedlichKister();
 
-    long int MixMod();
-
-    // Calculation of internal tables (at each GEM iteration)
+	// Calculation of T,P corrected interaction parameters
 	long int PTparam();
+
+	// Calculation of activity coefficients
+	long int MixMod();
+
 };
 
 
@@ -574,10 +591,12 @@ public:
 	// Destructor
 	~TNRTL();
 
-    long int MixMod();
-
-    // Calculation of internal tables (at each GEM iteration)
+	// Calculation of T,P corrected interaction parameters
 	long int PTparam();
+
+	// Calculation of activity coefficients
+	long int MixMod();
+
 };
 
 
@@ -608,10 +627,12 @@ public:
 	// Destructor
 	~TWilson();
 
-    long int MixMod();
-
-    // Calculation of internal tables (at each GEM iteration)
+	// Calculation of T,P corrected interaction parameters
 	long int PTparam();
+
+	// Calculation of activity coefficients
+	long int MixMod();
+
 };
 
 

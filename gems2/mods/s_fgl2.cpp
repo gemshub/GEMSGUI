@@ -56,7 +56,7 @@ TSolMod::~TSolMod()
 
 
 //=============================================================================================
-//   Van Laar model for solid solutions (c) TW March 2007
+// Van Laar model for solid solutions (c) TW March 2007
 // References:  Holland & Powell (2003)
 //=============================================================================================
 
@@ -72,7 +72,7 @@ TVanLaar::TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long 
         			 arlnGam, aphVOL, dW, eW )
 {
   alloc_internal();
-  PTparam();
+  // PTparam();
 }
 
 
@@ -217,7 +217,7 @@ TRegular::TRegular( long int NSpecies, long int NParams, long int NPcoefs, long 
         			 arlnGam, aphVOL, dW, eW )
 {
   alloc_internal();
-  PTparam();
+  // PTparam();
 }
 
 
@@ -343,7 +343,7 @@ TRedlichKister::TRedlichKister( long int NSpecies, long int NParams, long int NP
         			 arlnGam, aphVOL, dW, eW )
 {
   alloc_internal();
-  PTparam();
+  // PTparam();
 }
 
 
@@ -547,7 +547,7 @@ TNRTL::TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int Ma
         			 arlnGam, aphVOL, dW, eW )
 {
   alloc_internal();
-  PTparam();
+  // PTparam();
 }
 
 
@@ -784,7 +784,7 @@ TWilson::TWilson( long int NSpecies, long int NParams, long int NPcoefs, long in
         			 arlnGam, aphVOL, dW, eW )
 {
   alloc_internal();
-  PTparam();
+  // PTparam();
 }
 
 
