@@ -133,7 +133,7 @@ long int NPTP_DC;    	// Number of properties per one DC at T,P of interest (col
         double *aIPc;  	// Table of interaction parameter coefficients
         double *aIP;    // Vector of interaction parameters corrected to T,P of interest
         double *aDCc;  	// End-member properties coefficients
-double *aDC;     // Table of corrected end member properties at T,P of interest (
+double **aDC;     // Table of corrected end member properties at T,P of interest (
         double *x;    	// Pointer to mole fractions of end members (provided)
         double *phVOL;    // phase volumes, cm3/mol                   [0:FI-1]
 
@@ -153,7 +153,7 @@ public:
 
 	// Generic constructor
     TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-         long int NPperDC, double T_k, double P_bar, char Mod_Code,
+         long int NPperDC, long int NPTPperDC, double T_k, double P_bar, char Mod_Code,
          long int* arIPx, double* arIPc, double* arDCc,
          double *arWx, double *arlnGam, double *aphVOL, double dW, double eW );
 
@@ -343,6 +343,8 @@ class TPRSVcalc: public TSolMod
 
 	 double PhVol;   // bar, T Kelvin, phase volume in cm3
      double *Pparc;   // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
+     double *aGEX;     // Increments to molar G0 values of DCs from pure fugacities or DQF terms, normalized [L]
+     double *aVol;     // DC molar volumes, cm3/mol [L]
 
      // main work arrays
      double (*Eosparm)[6];   // EoS parameters
@@ -364,7 +366,8 @@ class TPRSVcalc: public TSolMod
     TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
          long int NPperDC, double T_k, double P_bar, char Mod_Code,
          long int* arIPx, double* arIPc, double* arDCc,
-         double *arWx, double *arlnGam, double *aphVOL, double * aPparc, double dW, double eW );
+         double *arWx, double *arlnGam, double *aphVOL, double * aPparc, 
+         double *arGEX, double *arVol, double dW, double eW );
 
     // Destructor
     ~TPRSVcalc();
@@ -383,22 +386,22 @@ class TPRSVcalc: public TSolMod
     // double *fugpure );
 
    long int CalcFugPure( void );
-   // Calc. fugacity for 1 species at X=1
-   long int PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parPT,
-        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
 
 protected:
 
-	long int PureParam( double *params ); // calculates a and b arrays
+	long int PureParam( long int i,double *params ); // calculates a and b arrays
 	long int AB(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit,
 			double &apure, double &bpure, double &sqrAL, double &ac, double &dALdT);
-//	int B(double Tcrit, double Pcrit, double &bpure);
-	long int FugacityPure( void ); // Calculates the fugacity of pure species
+  // Calc. fugacity for 1 species at X=1
+   long int PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
+	        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
+  //	int B(double Tcrit, double Pcrit, double &bpure);
+	long int FugacityPure( long int j ); // Calculates the fugacity of pure species
 	long int Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3);
 	long int MixParam( double &amix, double &bmix);
 	long int FugacityMix( double amix, double bmix,
      double &fugmix, double &zmix, double &vmix);
-	long int FugacitySpec( double *fugpure, double *params  );
+	long int FugacitySpec( double *fugpure  );
 
 //	long int GetEosParam( float *params ); // Loads EoS parameters for NComp species
 //  long int GetMoleFract( double *Wx ); // Loads mole fractions for NComp species
@@ -640,7 +643,7 @@ public:
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Pitzer model, Harvie-Möller-Weare (HMW) version, with explicit temperature dependence
+// Pitzer model, Harvie-Mï¿½ller-Weare (HMW) version, with explicit temperature dependence
 // References:
 
 class TPitzer: public TSolMod
@@ -712,12 +715,13 @@ private:
 	double lnGammaX(  long int X );
 	double lnGammaH2O();
 
-  // internal setup
+  // calc vector of interaction parameters corrected to T,P of interest
+	void PTcalc( double T );
+
+   // internal setup
 	void calcSizes();
 	void alloc_internal();
 	void free_internal();
-  // calc vector of interaction parameters corrected to T,P of interest
-	void PTparam( double T );
   // build conversion of species indexes between aq phase and Pitzer parameter tables
 	void setIndexes();
 	void setValues();
@@ -766,11 +770,12 @@ public:
 	// Destructor
 	~TPitzer();
 
+	// Calculation of T,P corrected interaction parameters
+	long int PTparam();
+
+
     long int MixMod()
     { return Pitzer_calc_Gamma();}
-
-    // Calculation of internal tables (at each GEM iteration)
-	long int Pitzer_Init();
 
 	// Calculation of activity coefficients
 	long int Pitzer_calc_Gamma( );

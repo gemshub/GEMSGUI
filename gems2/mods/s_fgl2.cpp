@@ -26,12 +26,12 @@
 // Generic constructor for the TSolMod class
 //
 TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
-        long int NPperDC, double T_k, double P_bar, char Mod_Code,
+        long int NPperDC, long int NPTPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
         double dW, double eW ):
     ModCode(Mod_Code), NComp(NSpecies),  NPar(NParams), NPcoef(NPcoefs),
-    MaxOrd(MaxOrder),  NP_DC(NPperDC), R_CONST(8.31451), RhoW(dW),
+    MaxOrd(MaxOrder),  NP_DC(NPperDC), NPTP_DC(NPTPperDC), R_CONST(8.31451), RhoW(dW),
     EpsW(eW),  Tk(T_k), Pbar(P_bar)
 
 {
@@ -40,6 +40,12 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
     aIPc = arIPc;
     aIP = new double[ NPar ];
     aDCc = arDCc;
+    if( NPTP_DC )
+    {	aDC = new double *[NComp];
+       for (long int i=0; i<NComp; i++)
+           aDC[i] = new double[NComp];
+    }
+    else aDC = 0;
     x = arWx;
     phVOL = aphVOL;
 //    aZ = arZ;
@@ -51,6 +57,12 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
 TSolMod::~TSolMod()
 {
    delete[] aIP;
+   if( aDC )
+   {
+	for ( long i=0; i<NComp; i++)
+      delete[] aDC[i];
+    delete[] aDC;
+   }
 }
 
 
@@ -67,7 +79,7 @@ TVanLaar::TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long 
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC,
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, dW, eW )
 {
@@ -212,7 +224,7 @@ TRegular::TRegular( long int NSpecies, long int NParams, long int NPcoefs, long 
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC,
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0, 
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, dW, eW )
 {
@@ -338,7 +350,7 @@ TRedlichKister::TRedlichKister( long int NSpecies, long int NParams, long int NP
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC,
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, dW, eW )
 {
@@ -542,7 +554,7 @@ TNRTL::TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int Ma
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC,
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, dW, eW )
 {
@@ -779,7 +791,7 @@ TWilson::TWilson( long int NSpecies, long int NParams, long int NPcoefs, long in
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC,
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, dW, eW )
 {

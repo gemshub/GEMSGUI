@@ -37,10 +37,12 @@
 
 // Constructor
 TPRSVcalc::TPRSVcalc(  long int NCmp, double Pp, double Tkp ):
-    TSolMod( NCmp, 0, 0, 0, 0, Tkp, Pp, 'P',
+    TSolMod( NCmp, 0, 0, 0, 0, 5, Tkp, Pp, 'P',
          0, 0, 0, 0, 0, 0, 0, 0 )
 
 {
+    aGEX = 0;
+    aVol = 0;
 	Pparc = 0;
 	alloc_internal();
 }
@@ -49,12 +51,15 @@ TPRSVcalc::TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, lon
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL, double * arPparc,
+        double *arGEX, double *arVol, 
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC,
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 5,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, dW, eW )
 {
   Pparc = arPparc;
+  aGEX = arGEX;
+  aVol = arVol;
   alloc_internal();
   // PTparam();
 }
@@ -110,7 +115,27 @@ void TPRSVcalc::free_internal()
 // High-level method to retrieve pure fluid fugacities
 long int TPRSVcalc::PureSpecies()
 {
-	return 0;
+   double Fugcoeff, Volume, DeltaH, DeltaS;
+   long int j, retCode = 0;
+
+    for( j=0; j<NComp; j++)
+    {
+         // Calling PRSV EoS for pure fugacity
+         retCode =  PRFugacityPT( j,  Pbar, Tk, aDCc+j*NP_DC,
+	                 aDC[j], Fugcoeff, Volume, DeltaH, DeltaS );
+
+         aGEX[j] = log( Fugcoeff );    // now here (since 26.02.2008) DK
+         Pparc[j] = Fugcoeff * Pbar; // Necessary only for performance
+         aVol[j] = Volume * 10.;  // molar volume of pure fluid component, J/bar to cm3
+	} // j
+
+	if ( retCode )
+	{
+	   char buf[150];
+	   sprintf(buf, "PRSV Fluid(): bad calculation of pure fugacities");
+	    Error( "E71IPM IPMgamma: ",  buf );
+	}
+   return 0;
 }
 
 
@@ -120,6 +145,8 @@ long int TPRSVcalc::PTparam()
    long int j, i, ip;
    long int index1, index2;
 
+   PureSpecies();
+   
    if( NPcoef > 0 )
    {
       // fill internal array of interaction parameters with standard value
@@ -148,7 +175,7 @@ TPRSVcalc::MixMod()
 {
    long int j, iRet;
 
-    iRet = FugacitySpec( Pparc, aDCc );	// removed binpar from arguments, 31.05.2008 (TW)
+    iRet = FugacitySpec( Pparc );	// removed binpar from arguments, 31.05.2008 (TW)
     phVOL[0] = PhVol * 10.;
     for(j=0; j<NComp; j++)
     {
@@ -168,7 +195,7 @@ TPRSVcalc::MixMod()
 
 // High-level method to retrieve pure fluid properties
 long int
-TPRSVcalc::PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parPT,
+TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
         double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
  {
 
@@ -178,7 +205,7 @@ TPRSVcalc::PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parP
       if( !EoSparam )
         return -1;  // Memory alloc error
 
-      for (long int i=0; i<NComp; i++)
+//      for (long int i=0; i<NComp; i++)
       {
          Eosparm[i][0] = EoSparam[0];   // critical temperature in K
          Eosparm[i][1] = EoSparam[1];   // critical pressure in bar
@@ -188,19 +215,19 @@ TPRSVcalc::PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parP
          Eosparm[i][5] = EoSparam[5];   // empirical EoS parameter k3
        }
 
-      iRet = PureParam( Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
+      iRet = PureParam( i, Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
 
       if( iRet)
         return iRet;
 
-      iRet = FugacityPure();
+      iRet = FugacityPure( i );
       if( iRet)
         return iRet;
 
-      Fugacity = Fugpure[0][0]; // Fugacity coefficient
-      DeltaH = Fugpure[0][2];   // H departure function
-      DeltaS = Fugpure[0][3];   // S departure function
-      Volume = Fugpure[0][4];   //  J/bar
+      Fugacity = Fugpure[i][0]; // Fugacity coefficient
+      DeltaH = Fugpure[i][2];   // H departure function
+      DeltaS = Fugpure[i][3];   // S departure function
+      Volume = Fugpure[i][4];   //  J/bar
 
       return iRet;
  }
@@ -208,13 +235,12 @@ TPRSVcalc::PRFugacityPT( double P, double Tk, double *EoSparam, double *Eos2parP
 
 // Calculates T,P corrected parameters of pure fluid species
 long int
-TPRSVcalc::PureParam( double *Eos2parPT )
+TPRSVcalc::PureParam( long int i, double *Eos2parPT )
 { // calculates a and b arrays
 	// calculates a, b, sqrAL, ac, dALdT of pure species
-   long int i;
    double Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, sqrAL, ac, dALdT;
 
-   for (i=0; i<NComp; i++)
+//   for (i=0; i<NComp; i++)
    {
       Tcrit = Eosparm[i][0];
       Pcrit = Eosparm[i][1];
@@ -269,9 +295,8 @@ TPRSVcalc::AB(double Tcrit, double omg, double k1, double k2, double k3, double 
 
 // Calculates fugacities and departure functions of pure fluid species
 long int
-TPRSVcalc::FugacityPure( )
+TPRSVcalc::FugacityPure( long int i )
 {
-    long int i;
 	double Tcrit, Pcrit, Tred, aprsv, bprsv, alph, k, aa, bb, a2, a1, a0,
                z1, z2, z3;
 	double vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
@@ -282,7 +307,7 @@ TPRSVcalc::FugacityPure( )
 	sig = (-1.)*R_CONST*log(Pbar);
 	gig = hig - Tk*sig;
 
-	for (i=0; i<NComp; i++)
+//	for (i=0; i<NComp; i++)
 	{
 		// retrieve a and b terms of cubic EoS
 		Tcrit = Eosparm[i][0];
@@ -488,7 +513,7 @@ TPRSVcalc::FugacityMix( double amix, double bmix,
 // Calculates fugacities and activities of fluid species in the mixture,
 // as well as departure functions of the bulk fluid mixture
 long int
-TPRSVcalc::FugacitySpec( double *fugpure, double *params  )
+TPRSVcalc::FugacitySpec( double *fugpure  )
 {
 
     long int i, j, iRet=0;
@@ -500,14 +525,11 @@ TPRSVcalc::FugacitySpec( double *fugpure, double *params  )
     for( j=0; j<NComp; j++ )
     {
       Fugpure[j][0] = fugpure[j]/Pbar;
-//      for( i=0; i<4; i++ )
-//        Pureparm[j][i] = params[j*4+i];
-      // for( i=0; i<4; i++ )  //
-      for( i=0; i<5; i++ )  // increased from 4 to 5, 31.05.2008 (TW)
-      {
-          // Pureparm[j][i] = params[j*10+i+6];
-    	  Pureparm[j][i] = params[j*12+i+6];  // increased from 10 to 12, 31.05.2008 (TW)
-      }
+//      for( i=0; i<5; i++ )  // increased from 4 to 5, 31.05.2008 (TW)
+//      {
+//          // Pureparm[j][i] = params[j*12+i+6];
+//    	  Pureparm[j][i] = aDC[j][i];  // increased from 10 to 12, 31.05.2008 (TW)
+//      }
     }
 
 	// retrieve properties of the mixture
@@ -586,7 +608,7 @@ long int TPRSVcalc::CalcFugPure( void )
 // Calling PRSV EoS functions here
 
     if( T >= aW.twp->TClow +273.15 && T < 1e4 && P >= 1e-5 && P < 1e5 )
-       retCode = PRFugacityPT( P, T, Coeff, Eos2parPT, Fugcoeff, Volume,
+       retCode = PRFugacityPT( 0, P, T, Coeff, Eos2parPT, Fugcoeff, Volume,
             DeltaH, DeltaS );
     else {
             Fugcoeff = 1.;
@@ -698,7 +720,7 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 
 // Constructor
 TCGFcalc::TCGFcalc(  long int NCmp, double Pp, double Tkp ):
-    TSolMod( NCmp, 0, 0, 0, 0, Tkp, Pp, 'F',
+    TSolMod( NCmp, 0, 0, 0, 0, 8, Tkp, Pp, 'F',
          0, 0, 0, 0, 0, 0, 0, 0 )
 {
 	Pparc = 0;
@@ -715,7 +737,7 @@ TCGFcalc::TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long 
         double *arWx, double *arlnGam, double *aphVOL,
         double * arPparc, double *arphWGT,double *arX,
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC,
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 8,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, dW, eW )
 {

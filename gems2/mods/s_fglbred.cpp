@@ -35,7 +35,7 @@ TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxO
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ, 
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
         			 arlnGam, aphVOL, dW, eW )    	
 {
@@ -152,7 +152,7 @@ TPitzer::TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long in
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ, 
         double dW, double eW ):
-        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx, 
         			 arlnGam, aphVOL, dW, eW )    	
 {
@@ -164,20 +164,24 @@ TPitzer::TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long in
 	
   // realloc internal arrays and set zeros
    alloc_internal();
-
-  // calc vector of interaction parameters corrected to T,P of interest
-	PTparam( Tk );
-
-  // build conversion of species indexes between aq phase and Pitzer parameter tables
-	setIndexes();
-  
-  // put data from arIPx, arIPc to internal structure
-	setValues();	
 }
 
 TPitzer::~TPitzer()
 {
   free_internal();
+}
+
+long int TPitzer::PTparam( )
+{
+	  // calc vector of interaction parameters corrected to T,P of interest
+		PTcalc( Tk );
+
+	  // build conversion of species indexes between aq phase and Pitzer parameter tables
+		setIndexes();
+	  
+	  // put data from arIPx, arIPc to internal structure
+		setValues();	
+    return 0;
 }
 
 // Calculation of activity coefficients
@@ -337,7 +341,7 @@ void TPitzer::free_internal()
 
 // Calculate temperature dependence of the interaction parameters.
 // There are different versions
-void TPitzer::PTparam( double T )
+void TPitzer::PTcalc( double T )
 {
    long int ii;
    double Tr = 298.15; 

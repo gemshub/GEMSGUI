@@ -407,7 +407,8 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
                        break;
                      }
                      if( sMod[SPHAS_TYP] == SM_PRFLUID )
-                       PRSVofPureGases( jb, je, jpb, jdb, k, ipb ); // PRSV pure gas
+                       // PRSVofPureGases( jb, je, jpb, jdb, k, ipb ); // PRSV pure gas
+                     SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
                      break;
                default: break;
             }
@@ -1237,10 +1238,11 @@ TMulti::CGofPureGases( long int jb, long int je, long int jpb, long int jdb, lon
 // Entry to Peng-Robinson model for calculating pure gas fugacities
 // Added by D.Kulik on 15.02.2007
 //
+/*
 void
 TMulti::PRSVofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb  )
 {
-    double /* *FugPure, */ Fugcoeff, Volume, DeltaH, DeltaS;
+    double  *FugPure, * Fugcoeff, Volume, DeltaH, DeltaS;
     double *Coeff; //  *BinPar;
     double Eos2parPT[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 } ;
     long int j, jdc, NComp, retCode = 0;
@@ -1277,7 +1279,7 @@ TMulti::PRSVofPureGases( long int jb, long int je, long int jpb, long int jdb, l
     // set work structure
     SolModParPT( jb, je, jpb, jdb, k, ipb, SM_PRFLUID );
 }
-
+*/
 // ------------------ condensed mixtures --------------------------
 // Binary Redlich-Kister model - parameters (dimensionless)
 // in ph_cf Phase opt.array 2x3, see also Phase module
@@ -1518,15 +1520,17 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
            	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, aM, aZ, RhoW, EpsW );
-             aSM = (TSolMod*)aPT;
+        	aPT->PTparam();
+            aSM = (TSolMod*)aPT;
              break;
         }
         case SM_AQSIT:
         {
            	TSIT* aPT = new TSIT( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, aM, aZ, RhoW, EpsW );
-             aSM = (TSolMod*)aPT;
-             break;
+        	aPT->PTparam();
+            aSM = (TSolMod*)aPT;
+            break;
         }
         case SM_AQEXUQ:
         //        	 aSM->EUNIQUAC_PT();
@@ -1534,7 +1538,8 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         case SM_PRFLUID:
         {
         	TPRSVcalc* aPT = new TPRSVcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, pmp->Pparc+jb, RhoW, EpsW );
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, pmp->Pparc+jb, 
+                    pmp->GEX+jb, pmp->Vol+jb, RhoW, EpsW );
         	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
