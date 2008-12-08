@@ -120,6 +120,7 @@ protected:
         long int NPcoef;   	// Number of coeffs per parameter (columns in the aIPc table)
         long int MaxOrd;   	// max. parameter order (or number of columns in aIPx)
         long int NP_DC;    	// Number of coeffs per one DC in the phase (columns in aDCc)
+long int NPTP_DC;    	// Number of properties per one DC at T,P of interest (columns in aDC)
         long int *aIPx;  	// Pointer to list of indexes of non-zero interaction parameters
 
         double R_CONST; // R constant
@@ -131,7 +132,8 @@ protected:
 
         double *aIPc;  	// Table of interaction parameter coefficients
         double *aIP;    // Vector of interaction parameters corrected to T,P of interest
-        double *aDCc;  	// End-member parameter coefficients
+        double *aDCc;  	// End-member properties coefficients
+double *aDC;     // Table of corrected end member properties at T,P of interest (
         double *x;    	// Pointer to mole fractions of end members (provided)
         double *phVOL;    // phase volumes, cm3/mol                   [0:FI-1]
 
