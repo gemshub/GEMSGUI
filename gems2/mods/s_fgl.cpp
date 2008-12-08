@@ -51,7 +51,7 @@ TPRSVcalc::TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, lon
         long int NPperDC, double T_k, double P_bar, char Mod_Code,
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL, double * arPparc,
-        double *arGEX, double *arVol, 
+        double *arGEX, double *arVol,
         double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 5,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
@@ -146,7 +146,7 @@ long int TPRSVcalc::PTparam()
    long int index1, index2;
 
    PureSpecies();
-   
+
    if( NPcoef > 0 )
    {
       // fill internal array of interaction parameters with standard value
@@ -193,6 +193,7 @@ TPRSVcalc::MixMod()
     return iRet;
 }
 
+
 // High-level method to retrieve pure fluid properties
 long int
 TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
@@ -200,6 +201,7 @@ TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, doub
  {
 
       long int iRet = 0;
+      double Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, sqrAL, ac, dALdT;
 
       // reads EoS parameters from database into work array
       if( !EoSparam )
@@ -213,12 +215,31 @@ TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, doub
          Eosparm[i][3] = EoSparam[3];   // empirical EoS parameter k1
          Eosparm[i][4] = EoSparam[4];   // empirical EoS parameter k2
          Eosparm[i][5] = EoSparam[5];   // empirical EoS parameter k3
+         Tcrit = Eosparm[i][0];
+         Pcrit = Eosparm[i][1];
+         omg = Eosparm[i][2];
+         k1 = Eosparm[i][3];
+         k2 = Eosparm[i][4];
+         k3 = Eosparm[i][5];
        }
 
-      iRet = PureParam( i, Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
+      // iRet = PureParam( i, Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
 
-      if( iRet)
-        return iRet;
+      AB(Tcrit, omg, k1, k2, k3, Pcrit, apure, bpure, sqrAL, ac, dALdT);
+
+      Pureparm[i][0] = apure;
+      Pureparm[i][1] = bpure;
+      Pureparm[i][2] = sqrAL;
+      Pureparm[i][3] = ac;
+      Pureparm[i][4] = dALdT;
+      Eos2parPT[0] = apure;
+      Eos2parPT[1] = bpure;
+      Eos2parPT[2] = sqrAL;
+      Eos2parPT[3] = ac;
+      Eos2parPT[4] = dALdT;
+
+      // if( iRet)
+      //  return iRet;
 
       iRet = FugacityPure( i );
       if( iRet)
@@ -233,37 +254,37 @@ TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, doub
  }
 
 
-// Calculates T,P corrected parameters of pure fluid species
-long int
-TPRSVcalc::PureParam( long int i, double *Eos2parPT )
-{ // calculates a and b arrays
-	// calculates a, b, sqrAL, ac, dALdT of pure species
-   double Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, sqrAL, ac, dALdT;
-
-//   for (i=0; i<NComp; i++)
-   {
-      Tcrit = Eosparm[i][0];
-      Pcrit = Eosparm[i][1];
-      omg = Eosparm[i][2];
-      k1 = Eosparm[i][3];
-      k2 = Eosparm[i][4];
-      k3 = Eosparm[i][5];
-
-      AB(Tcrit, omg, k1, k2, k3, Pcrit, apure, bpure, sqrAL, ac, dALdT);
-      // B(Tcrit, Pcrit, bpure);
-      Pureparm[i][0] = apure;
-      Pureparm[i][1] = bpure;
-      Pureparm[i][2] = sqrAL;
-      Pureparm[i][3] = ac;
-      Pureparm[i][4] = dALdT;
-      Eos2parPT[0] = apure;
-      Eos2parPT[1] = bpure;
-      Eos2parPT[2] = sqrAL;
-      Eos2parPT[3] = ac;
-      Eos2parPT[4] = dALdT;
-   }
-   return 0;
-}
+//// Calculates T,P corrected parameters of pure fluid species
+//long int
+//TPRSVcalc::PureParam( long int i, double *Eos2parPT )
+//{ // calculates a and b arrays
+//	// calculates a, b, sqrAL, ac, dALdT of pure species
+//   double Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, sqrAL, ac, dALdT;
+//
+////   for (i=0; i<NComp; i++)
+//   {
+//      Tcrit = Eosparm[i][0];
+//      Pcrit = Eosparm[i][1];
+//      omg = Eosparm[i][2];
+//      k1 = Eosparm[i][3];
+//      k2 = Eosparm[i][4];
+//      k3 = Eosparm[i][5];
+//
+//      AB(Tcrit, omg, k1, k2, k3, Pcrit, apure, bpure, sqrAL, ac, dALdT);
+//      // B(Tcrit, Pcrit, bpure);
+//      Pureparm[i][0] = apure;
+//      Pureparm[i][1] = bpure;
+//      Pureparm[i][2] = sqrAL;
+//      Pureparm[i][3] = ac;
+//      Pureparm[i][4] = dALdT;
+//      Eos2parPT[0] = apure;
+//      Eos2parPT[1] = bpure;
+//      Eos2parPT[2] = sqrAL;
+//      Eos2parPT[3] = ac;
+//      Eos2parPT[4] = dALdT;
+//   }
+//   return 0;
+//}
 
 
 // Calculates attractive (a) and repulsive (b) parameter of PRSV equation of state

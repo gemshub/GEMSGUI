@@ -366,7 +366,7 @@ class TPRSVcalc: public TSolMod
     TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
          long int NPperDC, double T_k, double P_bar, char Mod_Code,
          long int* arIPx, double* arIPc, double* arDCc,
-         double *arWx, double *arlnGam, double *aphVOL, double * aPparc, 
+         double *arWx, double *arlnGam, double *aphVOL, double * aPparc,
          double *arGEX, double *arVol, double dW, double eW );
 
     // Destructor
@@ -389,13 +389,12 @@ class TPRSVcalc: public TSolMod
 
 protected:
 
-	long int PureParam( long int i,double *params ); // calculates a and b arrays
+	// long int PureParam( long int i,double *params ); // calculates a and b arrays
 	long int AB(double Tcrit, double omg, double k1, double k2, double k3, double Pcrit,
 			double &apure, double &bpure, double &sqrAL, double &ac, double &dALdT);
-  // Calc. fugacity for 1 species at X=1
-   long int PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
+	// Calc. fugacity for 1 species at X=1
+	long int PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
 	        double &Fugacity, double &Volume, double &DeltaH, double &DeltaS );
-  //	int B(double Tcrit, double Pcrit, double &bpure);
 	long int FugacityPure( long int j ); // Calculates the fugacity of pure species
 	long int Cardano(double a2, double a1, double a0, double &z1, double &z2, double &z3);
 	long int MixParam( double &amix, double &bmix);
