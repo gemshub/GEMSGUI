@@ -741,13 +741,15 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 
 // Constructor
 TCGFcalc::TCGFcalc(  long int NCmp, double Pp, double Tkp ):
-    TSolMod( NCmp, 0, 0, 0, 0, 8, Tkp, Pp, 'F',
+    TSolMod( NCmp, 0, 0, 0, 0, 0, Tkp, Pp, 'F',
          0, 0, 0, 0, 0, 0, 0, 0 )
 {
 	Pparc = 0;
 	phWGT = 0;
 	aX = 0;
-	set_internal();
+    aGEX = 0;
+	aVol = 0;
+    set_internal();
 	alloc_internal();
 }
 
@@ -757,7 +759,7 @@ TCGFcalc::TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long 
         long int* arIPx, double* arIPc, double* arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
         double * arPparc, double *arphWGT,double *arX,
-        double dW, double eW ):
+        double *arGEX, double *arVol, double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 8,
         			 T_k, P_bar, Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, dW, eW )
@@ -765,6 +767,8 @@ TCGFcalc::TCGFcalc( long int NSpecies, long int NParams, long int NPcoefs, long 
   Pparc = arPparc;
   phWGT = arphWGT;
   aX  =  arX;
+  aGEX = arGEX;
+  aVol = arVol;
   set_internal();
   alloc_internal();
   // PTparam();
@@ -826,19 +830,20 @@ void TCGFcalc::set_internal()
 
 void TCGFcalc::alloc_internal()
 {
-	  paar = 0;
-	  paar1 = 0;
-	  FugCoefs = 0;
-	  EoSparam = 0;
-	  EoSparam1 = 0;
-
+	paar = 0;
+	paar1 = 0;
+    FugCoefs =  0;
+    EoSparam =  0;
+    EoSparam1 = 0;
 }
 
 
 void TCGFcalc::free_internal()
 {
 	if( paar )   delete paar;
+	paar = 0;
 	if( paar1 )  delete paar1;
+    paar1 = 0;
 	if( FugCoefs )  delete[] FugCoefs;
 	if( EoSparam )  delete[] EoSparam;
 	if( EoSparam1 ) delete[] EoSparam1;
@@ -848,6 +853,66 @@ void TCGFcalc::free_internal()
 // High-level method to retrieve pure fluid fugacities
 long int TCGFcalc::PureSpecies()
 {
+    double Fugacity = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
+    double X[1]={1.};
+    double Eos4parPT[4] = { 0.0, 0.0, 0.0, 0.0 },
+            Eos4parPT1[4] = { 0.0, 0.0, 0.0, 0.0 } ;
+    double roro;  // added, 21.06.2008 (TW)
+    long int j, retCode = 0;
+
+    for( j=0; j<NComp; j++)
+    {
+        // Calling CG EoS for pure fugacity
+        if( Tk >= 273.15 && Tk < 1e4 && Pbar >= 1e-6 && Pbar < 1e5 )
+            retCode = CGFugacityPT( aDCc+j*NP_DC, Eos4parPT, Fugacity, Volume, Pbar, Tk, roro );
+        else {
+            Fugacity = Pbar;
+            Volume = 8.31451*Tk/Pbar;
+            aDC[j][0] = aDCc[j*NP_DC];
+            if( aDC[j][0] < 1. || aDC[j][0] > 10. )
+            	aDC[j][0] = 1.;                 // foolproof temporary
+            aDC[j][1] = aDCc[j*NP_DC+1];
+            aDC[j][2] = aDCc[j*NP_DC+2];
+            aDC[j][3] = aDCc[j*NP_DC+3];
+            aDC[j][4] = 0.;
+            aDC[j][5] = 0.;
+            aDC[j][6] = 0.;
+            aDC[j][7] = 0.;
+            continue;
+        }
+
+        aGEX[j] = log( Fugacity / Pbar );   // now here (since 26.02.2008)  DK
+        Pparc[j] = Fugacity;          // Necessary only for performance
+        aVol[j] = Volume * 10.;  // molar volume of pure fluid component, J/bar to cm3
+
+        // passing corrected EoS coeffs to calculation of fluid mixtures
+        aDC[j][0] = Eos4parPT[0];
+        if( aDC[j][0] < 1. || aDC[j][0] > 10. )
+        	aDC[j][0] = 1.;                            // foolproof temporary
+        aDC[j][1] = Eos4parPT[1];
+        aDC[j][2] = Eos4parPT[2];
+        aDC[j][3] = Eos4parPT[3];
+
+        CGFugacityPT( aDCc+j*NP_DC, Eos4parPT1, Fugacity, Volume, Pbar, Tk+Tk*GetDELTA(), roro );
+
+        // passing corrected EoS coeffs for T+T*DELTA
+        aDC[j][4] =Eos4parPT1[0];
+        if( aDC[j][4] < 1. || aDC[j][4] > 10. )
+        	aDC[j][4] = 1.;                            // foolproof temporary
+        aDC[j][5] = Eos4parPT1[1];
+        aDC[j][6] = Eos4parPT1[2];
+        aDC[j][7] = Eos4parPT1[3];
+
+        // Calculation of residual H and S
+        CGEnthalpy( X, Eos4parPT, Eos4parPT1, 1, roro, Tk, DeltaH, DeltaS);  // changed, 21.06.2008 (TW)
+    } // j
+
+    if ( retCode )
+    {
+      char buf[150];
+      sprintf(buf, "CG2004Fluid(): bad calculation of pure fugacities");
+      Error( "E71IPM IPMgamma: ",  buf );
+    }
 	return 0;
 }
 
@@ -856,17 +921,20 @@ long int TCGFcalc::PureSpecies()
 long int TCGFcalc::PTparam()
 {
     long int i,j;
-	FugCoefs =  new double[ NComp ];
+
+    FugCoefs =  new double[ NComp ];
     EoSparam =  new double[ NComp*4 ];
     EoSparam1 = new double[ NComp*4 ];
+
+    PureSpecies();
 
     // Copying T,P corrected coefficients
     for( j=0; j<NComp; j++)
     {
     	for( i=0; i<4; i++)
-          EoSparam[j*4+i] = aDCc[j*24+i+15];
+          EoSparam[j*4+i] = aDC[j][i];
     	for( i=0; i<4; i++)
-    	  EoSparam1[j*4+i] = aDCc[j*24+i+19];
+    	  EoSparam1[j*4+i] = aDC[j][i+4];
     }
    return 0;
 }
@@ -1973,23 +2041,25 @@ double TCGFcalc::ROTOTALMIX(double P,double TT,EOSPARAM* param)
 void EOSPARAM::free()
 {
   long int i;
+
   if ( NComp > 0)
   {
-     for ( i=0;i<NComp;i++ )
-           delete [] mixpar[i];
+	  for ( i=0;i<NComp;i++ )
+           delete[] mixpar[i];
+      delete[] mixpar;
 
-     delete [] epspar;
-     delete [] sig3par;
-     delete [] XX;
-     delete [] eps;
-     delete [] eps05;
-     delete [] sigpar;
-     delete [] mpar;
-     delete [] apar;
-     delete [] aredpar;
-     delete [] m2par;
-     delete [] XX0;
-    delete [] mixpar;
+     delete[] epspar;
+     delete[] sig3par;
+     delete[] XX;
+     delete[] eps;
+     delete[] eps05;
+     delete[] sigpar;
+     delete[] mpar;
+     delete[] apar;
+     delete[] aredpar;
+     delete[] m2par;
+     delete[] XX0;
+     NComp = 0;
   }
 }
 
@@ -1998,21 +2068,21 @@ void EOSPARAM::allocate( )
 {
    long int i;
 
-   mixpar=new   double* [NComp];
+   mixpar=new   double*[NComp];
    for ( i=0;i<NComp;i++ )
-       mixpar[i]=new   double [NComp];
+       mixpar[i] = new   double[NComp];
 
-   epspar =new double [NComp];
-   sig3par=new double [NComp];
-   XX     =new double [NComp];
-   eps    =new double [NComp];
-   eps05  =new double [NComp];
-   sigpar =new double [NComp];
-   mpar   =new double [NComp];
-   apar   =new double [NComp];
-   aredpar=new double [NComp];
-   m2par  =new double [NComp];
-   XX0    =new double [NComp];
+   epspar =new double[NComp];
+   sig3par=new double[NComp];
+   XX     =new double[NComp];
+   eps    =new double[NComp];
+   eps05  =new double[NComp];
+   sigpar =new double[NComp];
+   mpar   =new double[NComp];
+   apar   =new double[NComp];
+   aredpar=new double[NComp];
+   m2par  =new double[NComp];
+   XX0    =new double[NComp];
 }
 
 

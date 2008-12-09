@@ -188,7 +188,7 @@ public:
 class TCGFcalc : public TSolMod
 {
   private:
-
+ 
   double
           PI,    // pi
           TWOPI,    // 2.*pi
@@ -213,6 +213,8 @@ class TCGFcalc : public TSolMod
   double *Pparc;   // DC partial pressures/ pure fugacities, bar (Pc by default) [0:L-1]
   double *phWGT;
   double *aX;  // DC quantities at eqstate x_j, moles - primal IPM solution [L]
+  double *aGEX;     // Increments to molar G0 values of DCs from pure fugacities or DQF terms, normalized [L]
+  double *aVol;     // DC molar volumes, cm3/mol [L]
 
   // main work arrays
   EOSPARAM *paar;
@@ -300,7 +302,8 @@ public:
        long int NPperDC, double T_k, double P_bar, char Mod_Code,
        long int* arIPx, double* arIPc, double* arDCc,
        double *arWx, double *arlnGam, double *aphVOL,
-       double * aPparc, double *aphWGT, double *arX, double dW, double eW );
+       double * aPparc, double *aphWGT, double *arX, double *arGEX, double *arVol,
+       double dW, double eW );
 
  	 // Destructor
      ~TCGFcalc();

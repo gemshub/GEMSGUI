@@ -431,7 +431,8 @@ class TMulti
     void MargulesBinary( long int jb, long int je, long int jpb, long int jdb, long int k );
     void MargulesTernary( long int jb, long int je, long int jpb, long int jdb, long int k );
 // Generic solution model calls
-void SolModParPT ( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb, char ModCode );
+void SolModCreate( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb, char ModCode );
+void SolModParPT( long int k, char ModCode );
 void SolModActCoeff( long int k, char ModCode );
 void SolModExcessParam( long int k, char ModCode );
 

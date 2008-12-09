@@ -389,26 +389,28 @@ if(pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
             switch( pmp->PHC[k] )
             {
                case PH_AQUEL:
-//            	    SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // Pitzer, EUNIQUAC, SIT
-//            	    break;
 			   case PH_LIQUID:
                case PH_SINCOND:
                case PH_SINDIS:
                case PH_HCARBL:
                case PH_SIMELT:
-                    SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // new solution models (TW, DK 2007)
-                    break;
+            	    SolModCreate( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // new solution models (TW, DK 2007)
+            	    SolModParPT(  k, sMod[SPHAS_TYP] );
+            	    break;
                case PH_GASMIX:
                case PH_PLASMA:
                case PH_FLUID:
                      if( sMod[SPHAS_TYP] == SM_CGFLUID )
                      {
-                       CGofPureGases( jb, je, jpb, jdb, k, ipb ); // CG2004 pure gas
+                      // CGofPureGases( jb, je, jpb, jdb, k, ipb ); // CG2004 pure gas
+                        SolModCreate( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                	    SolModParPT(  k, sMod[SPHAS_TYP] );
                        break;
                      }
                      if( sMod[SPHAS_TYP] == SM_PRFLUID )
                        // PRSVofPureGases( jb, je, jpb, jdb, k, ipb ); // PRSV pure gas
-                     SolModParPT( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                     SolModCreate( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+             	    SolModParPT(  k, sMod[SPHAS_TYP] );
                      break;
                default: break;
             }
@@ -1161,6 +1163,7 @@ void TMulti::Davies03temp( long int jb, long int je, long int jpb, long int k )
 // Churakov-Gottschalk (2004) calculation of pure gas/fluid component fugacity
 // Added by D.Kulik on 15.02.2007
 //
+/*
 void
 TMulti::CGofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb)
 {
@@ -1234,6 +1237,7 @@ TMulti::CGofPureGases( long int jb, long int je, long int jpb, long int jdb, lon
 
 
 #define MAXPRDCPAR 10
+*/
 // ---------------------------------------------------------------------
 // Entry to Peng-Robinson model for calculating pure gas fugacities
 // Added by D.Kulik on 15.02.2007
@@ -1438,14 +1442,11 @@ TMulti::MargulesTernary( long int jb, long int, long int jpb, long int, long int
 
 }
 
-
-
 // ------------------------------------------------------------------------
 // Wrapper calls for generic multi-component mixing models (see s_fgl.h and s_fgl2.cpp)
 // Uses the TSolMod class by Th.Wagner and D.Kulik
-
 void
-TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int k, long int ipb, char ModCode )
+TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, long int k, long int ipb, char ModCode )
 {
     long int NComp, NPar, NPcoef, MaxOrd, NP_DC;
     double *aIPc, *aDCc, *aWx, *alnGam, *aphVOL, *aZ, *aM;
@@ -1479,7 +1480,6 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
         	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
-        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1488,7 +1488,6 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
         	TRegular* aPT = new TRegular( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
-        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1496,7 +1495,6 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
         	TRedlichKister* aPT = new TRedlichKister( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
-        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1504,7 +1502,6 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
         	TNRTL* aPT = new TNRTL( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
-        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1512,7 +1509,6 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
         	TWilson* aPT = new TWilson( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, RhoW, EpsW );
-        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1520,7 +1516,6 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
            	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, aM, aZ, RhoW, EpsW );
-        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
              break;
         }
@@ -1528,7 +1523,6 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
            	TSIT* aPT = new TSIT( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, aM, aZ, RhoW, EpsW );
-        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1540,7 +1534,6 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         	TPRSVcalc* aPT = new TPRSVcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, pmp->Pparc+jb, 
                     pmp->GEX+jb, pmp->Vol+jb, RhoW, EpsW );
-        	aPT->PTparam();
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1548,8 +1541,8 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
         {
         	TCGFcalc* aPT = new TCGFcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
                     aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL,
-                    pmp->Pparc+jb, pmp->FWGT+k, pmp->X+jb, RhoW, EpsW );
-        	aPT->PTparam();
+                    pmp->Pparc+jb, pmp->FWGT+k, pmp->X+jb,
+                    pmp->GEX+jb, pmp->Vol+jb, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1565,12 +1558,8 @@ TMulti::SolModParPT( long int jb, long int, long int jpb, long int jdb, long int
 }
 
 void
-TMulti::SolModActCoeff( long int k, char ModCode )
+TMulti::SolModParPT( long int k, char ModCode )
 {
-    if( !phSolMod[k] )
-     Error("","Illegal index of phase");
-    TSolMod* aSM = phSolMod[k];
-
     // Extended constructor to connect to params, coeffs, and mole fractions
     switch( ModCode )
     {
@@ -1583,12 +1572,42 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_AQSIT:
         case SM_PRFLUID:
         case SM_CGFLUID:
+        {    ErrorIf( !phSolMod[k], "","Illegal index of phase");
+              TSolMod* aSM = phSolMod[k];
+              aSM->PTparam();
+             break;
+        }     
+        case SM_AQEXUQ:
+
+             break;
+        default: 
+              break;
+    }
+}
+
+void
+TMulti::SolModActCoeff( long int k, char ModCode )
+{
+    switch( ModCode )
+    {
+        case SM_VANLAAR:
+        case SM_REGULAR:
+        case SM_GUGGENM:
+        case SM_NRTLLIQ:
+        case SM_WILSLIQ:
+        case SM_AQPITZ:
+        case SM_AQSIT:
+        case SM_PRFLUID:
+        case SM_CGFLUID:
+        {    ErrorIf( !phSolMod[k], "","Illegal index of phase");
+             TSolMod* aSM = phSolMod[k];
              aSM->MixMod();
              break;
+        }    
         case SM_AQEXUQ:
 //             aSM->MixMod(  );
              break;
-        default: // catch error here
+        default: 
               break;
     }
 }
@@ -1597,11 +1616,6 @@ void
 TMulti::SolModExcessParam( long int k, char ModCode )
 {
 	double Gex, Vex, Hex, Sex,  CPex;
-    if( !phSolMod[k] )
-     Error("","Illegal index of phase");
-    TSolMod* aSM = phSolMod[k];
-
-    // Extended constructor to connect to params, coeffs, and mole fractions
     switch( ModCode )
     {
         case SM_VANLAAR:
@@ -1613,12 +1627,15 @@ TMulti::SolModExcessParam( long int k, char ModCode )
         case SM_AQSIT:
         case SM_PRFLUID:
         case SM_CGFLUID:
-             aSM->getExcessProp( Gex, Vex, Hex, Sex, CPex );
-             break;
+         {    ErrorIf( !phSolMod[k], "","Illegal index of phase");
+              TSolMod* aSM = phSolMod[k];
+              aSM->getExcessProp( Gex, Vex, Hex, Sex, CPex );
+              break;
+         }    
         case SM_AQEXUQ:
 //             aSM->EUNIQUAC_MixMod( Gex, Vex, Hex, Sex, CPex );
              break;
-        default: // catch error here
+        default: 
               break;
     }
     // To add handling of excess properties for the phase

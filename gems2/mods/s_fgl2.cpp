@@ -43,7 +43,7 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
     if( NPTP_DC )
     {	aDC = new double *[NComp];
        for (long int i=0; i<NComp; i++)
-           aDC[i] = new double[NComp];
+           aDC[i] = new double[NPTP_DC];
     }
     else aDC = 0;
     x = arWx;
