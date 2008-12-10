@@ -253,7 +253,6 @@ gems2/mods/s_fgl2.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_fgl2_old.cpp -text
 gems2/mods/s_fgl_old.cpp -text
 gems2/mods/s_fgl_old.h -text
-gems2/mods/s_fglbred.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_fglbred_old.cpp -text
 gems2/mods/s_formula.cpp svn_keywords=Author+Date+Id+Revision
 gems2/mods/s_formula.h svn_keywords=Author+Date+Id+Revision
