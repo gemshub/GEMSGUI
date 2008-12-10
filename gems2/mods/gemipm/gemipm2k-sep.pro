@@ -61,10 +61,10 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_H/node.h \
                     $$SUBMOD_H/particlearray.h \
                     $$SUBMOD_H/ms_multi.h \
-	            $$SUBMOD_H/io_arrays.h \
-		    ms_gem2mt.h \
-		    m_const.h \
-		    m_param.h  \
+	                $$SUBMOD_H/io_arrays.h \
+		             ms_gem2mt.h \
+		             m_const.h \
+		             m_param.h  \
                      $$NUMERICS_H/tnt_i_refvec.h \
                      $$NUMERICS_H/tnt_array1d.h \
                      $$NUMERICS_H/tnt_array2d.h \
@@ -75,9 +75,12 @@ OBJECTS_DIR       = obj
 
         SOURCES	  +=  $$LIBS_CPP/gstring.cpp  \
                       $$LIBS_CPP/gdatastream.cpp  \
-                    $$NUMERICS_CPP/num_methods.cpp \
-                    $$MODS_CPP/s_fgl.cpp \
-                    $$MODS_CPP/s_fgl2.cpp \
+                     $$NUMERICS_CPP/num_methods.cpp \
+                     $$MODS_CPP/s_fgl.cpp \
+                     $$MODS_CPP/s_fgl1.cpp \
+                     $$MODS_CPP/s_fgl2.cpp \
+                     $$MODS_CPP/s_fgl3.cpp \
+                     $$MODS_CPP/s_fgl4.cpp \
                     $$MODS_CPP/m_gem2mtt.cpp \
                     $$SUBMOD_CPP/nodearray.cpp \
                     $$SUBMOD_CPP/node.cpp \
@@ -90,6 +93,6 @@ OBJECTS_DIR       = obj
                     $$SUBMOD_CPP/ipm_chemical3.cpp \
                     $$SUBMOD_CPP/ipm_main.cpp \
                     $$SUBMOD_CPP/ipm_simplex.cpp \
-		    $$SUBMOD_CPP/io_arrays.cpp \
+		            $$SUBMOD_CPP/io_arrays.cpp \
                     main.cpp \
-		    ms_param.cpp
+		            ms_param.cpp

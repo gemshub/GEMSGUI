@@ -186,8 +186,10 @@ SOURCES = vizor/libs/config.cpp \
 		mods/s_supcrt2.cpp \
 		mods/m_compos.cpp \
 		mods/s_fgl.cpp \
+		mods/s_fgl1.cpp \
 		mods/s_fgl2.cpp \
-		mods/s_fglbred.cpp \
+		mods/s_fgl3.cpp \
+		mods/s_fgl4.cpp \
 		mods/s_lsm_fun.cpp \
 		mods/s_lsm_lm.cpp \
 		mods/s_lsm_svd.cpp \
@@ -302,8 +304,10 @@ OBJECTS = obj/config.o \
 		obj/s_supcrt2.o \
 		obj/m_compos.o \
 		obj/s_fgl.o \
+		obj/s_fgl1.o \
 		obj/s_fgl2.o \
-		obj/s_fglbred.o \
+		obj/s_fgl3.o \
+		obj/s_fgl4.o \
 		obj/s_lsm_fun.o \
 		obj/s_lsm_lm.o \
 		obj/s_lsm_svd.o \
@@ -739,7 +743,9 @@ obj/config.o: vizor/libs/config.cpp vizor/libs/config.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/config.o vizor/libs/config.cpp
 
 obj/gstring.o: vizor/libs/gstring.cpp vizor/libs/gstring.h \
-		vizor/libs/array.h
+		vizor/kernel/v_user.h \
+		vizor/libs/array.h \
+		vizor/libs/verror.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/gstring.o vizor/libs/gstring.cpp
 
 obj/gdatastream.o: vizor/libs/gdatastream.cpp vizor/libs/gdatastream.h \
@@ -786,7 +792,8 @@ obj/v_object.o: vizor/kernel/v_object.cpp vizor/kernel/v_vals_impl.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/v_object.o vizor/kernel/v_object.cpp
 
 obj/v_file.o: vizor/kernel/v_file.cpp vizor/kernel/v_file.h \
@@ -932,6 +939,7 @@ obj/m_gem2mt.o: mods/m_gem2mt.cpp mods/m_gem2mt.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/submod/node.h \
 		mods/submod/datach.h \
 		mods/submod/databr.h
@@ -968,6 +976,7 @@ obj/m_gem2mtc.o: mods/m_gem2mtc.cpp mods/m_gem2mt.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/submod/node.h \
 		mods/submod/datach.h \
 		mods/submod/databr.h
@@ -999,15 +1008,19 @@ obj/m_gem2mtt.o: mods/m_gem2mtt.cpp mods/m_gem2mt.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/submod/node.h \
 		mods/submod/datach.h \
 		mods/submod/databr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_gem2mtt.o mods/m_gem2mtt.cpp
 
-obj/m_gem2mtbox.o: mods/m_gem2mtbox.cpp mods/m_gem2mt.h \
+obj/m_gem2mtbox.o: mods/m_gem2mtbox.cpp mods/submod/io_arrays.h \
+		mods/m_gem2mt.h \
 		mods/submod/nodearray.h \
 		vizor/service.h \
 		vizor/visor.h \
+		vizor/libs/gstring.h \
+		vizor/libs/array.h \
 		mods/m_param.h \
 		mods/v_ipnc.h \
 		vizor/graph.h \
@@ -1020,8 +1033,6 @@ obj/m_gem2mtbox.o: mods/m_gem2mtbox.cpp mods/m_gem2mt.h \
 		mods/submod/ms_multi.h \
 		mods/submod/ms_calc.h \
 		vizor/kernel/v_vals.h \
-		vizor/libs/gstring.h \
-		vizor/libs/array.h \
 		vizor/kernel/v_object.h \
 		vizor/kernel/v_dbm.h \
 		vizor/kernel/v_user.h \
@@ -1030,6 +1041,7 @@ obj/m_gem2mtbox.o: mods/m_gem2mtbox.cpp mods/m_gem2mt.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/submod/node.h \
 		mods/submod/datach.h \
 		mods/submod/databr.h
@@ -1070,6 +1082,7 @@ obj/m_param.o: mods/m_param.cpp mods/m_unspace.h \
 		vizor/kernel/v_dbfile.h \
 		vizor/kernel/v_file.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/s_tpwork.h \
 		mods/submod/node.h \
 		mods/submod/datach.h \
@@ -1171,7 +1184,8 @@ obj/m_dcomp2.o: mods/m_dcomp2.cpp mods/m_dcomp.h \
 		mods/submod/ms_calc.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_dcomp2.o mods/m_dcomp2.cpp
 
 obj/s_tpwork.o: mods/s_tpwork.cpp vizor/kernel/v_object.h \
@@ -1234,24 +1248,11 @@ obj/m_compos.o: mods/m_compos.cpp vizor/service.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/s_tpwork.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_compos.o mods/m_compos.cpp
 
 obj/s_fgl.o: mods/s_fgl.cpp mods/s_fgl.h \
-		mods/m_const.h \
-		vizor/kernel/v_module.h \
-		vizor/kernel/v_object.h \
-		vizor/kernel/v_dbm.h \
-		vizor/libs/gstring.h \
-		vizor/libs/array.h \
-		vizor/kernel/v_user.h \
-		vizor/kernel/v_vals.h \
-		vizor/libs/verror.h \
-		vizor/kernel/v_dbfile.h \
-		vizor/kernel/v_file.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fgl.o mods/s_fgl.cpp
-
-obj/s_fgl2.o: mods/s_fgl2.cpp mods/s_fgl.h \
 		mods/m_const.h \
 		mods/s_tpwork.h \
 		vizor/kernel/v_module.h \
@@ -1265,10 +1266,39 @@ obj/s_fgl2.o: mods/s_fgl2.cpp mods/s_fgl.h \
 		vizor/kernel/v_dbfile.h \
 		vizor/kernel/v_file.h \
 		mods/v_mod.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fgl.o mods/s_fgl.cpp
+
+obj/s_fgl1.o: mods/s_fgl1.cpp vizor/libs/verror.h \
+		mods/s_fgl.h \
+		vizor/libs/gstring.h \
+		vizor/libs/array.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fgl1.o mods/s_fgl1.cpp
+
+obj/s_fgl2.o: mods/s_fgl2.cpp mods/s_fgl.h \
+		mods/m_const.h \
+		vizor/kernel/v_module.h \
+		vizor/kernel/v_object.h \
+		vizor/kernel/v_dbm.h \
+		vizor/libs/gstring.h \
+		vizor/libs/array.h \
+		vizor/kernel/v_user.h \
+		vizor/kernel/v_vals.h \
+		vizor/libs/verror.h \
+		vizor/kernel/v_dbfile.h \
+		vizor/kernel/v_file.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fgl2.o mods/s_fgl2.cpp
 
-obj/s_fglbred.o: mods/s_fglbred.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fglbred.o mods/s_fglbred.cpp
+obj/s_fgl3.o: mods/s_fgl3.cpp vizor/libs/verror.h \
+		mods/s_fgl.h \
+		vizor/libs/gstring.h \
+		vizor/libs/array.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fgl3.o mods/s_fgl3.cpp
+
+obj/s_fgl4.o: mods/s_fgl4.cpp vizor/libs/verror.h \
+		mods/s_fgl.h \
+		vizor/libs/gstring.h \
+		vizor/libs/array.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/s_fgl4.o mods/s_fgl4.cpp
 
 obj/s_lsm_fun.o: mods/s_lsm_fun.cpp vizor/kernel/v_object.h \
 		mods/v_mod.h \
@@ -1345,7 +1375,8 @@ obj/m_reacdc.o: mods/m_reacdc.cpp vizor/kernel/v_object.h \
 		mods/submod/ms_calc.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_reacdc.o mods/m_reacdc.cpp
 
 obj/m_phase.o: mods/m_phase.cpp vizor/kernel/v_object.h \
@@ -1373,7 +1404,8 @@ obj/m_phase.o: mods/m_phase.cpp vizor/kernel/v_object.h \
 		mods/submod/ms_multi.h \
 		mods/submod/ms_calc.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_phase.o mods/m_phase.cpp
 
 obj/m_proces.o: mods/m_proces.cpp mods/m_proces.h \
@@ -1402,7 +1434,8 @@ obj/m_proces.o: mods/m_proces.cpp mods/m_proces.h \
 		mods/submod/ms_multi.h \
 		mods/submod/ms_calc.h \
 		mods/m_phase.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_proces.o mods/m_proces.cpp
 
 obj/m_reac2.o: mods/m_reac2.cpp mods/m_param.h \
@@ -1432,6 +1465,7 @@ obj/m_reac2.o: mods/m_reac2.cpp mods/m_param.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/s_tpwork.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_reac2.o mods/m_reac2.cpp
 
@@ -1459,6 +1493,7 @@ obj/m_prfget.o: mods/m_prfget.cpp mods/m_param.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		vizor/graph.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_prfget.o mods/m_prfget.cpp
 
@@ -1487,6 +1522,7 @@ obj/m_prfget2.o: mods/m_prfget2.cpp mods/m_param.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		vizor/graph.h \
 		mods/submod/particlearray.h \
 		mods/submod/nodearray.h \
@@ -1517,7 +1553,8 @@ obj/m_syseq.o: mods/m_syseq.cpp mods/m_syseq.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_syseq.o mods/m_syseq.cpp
 
 obj/m_syst2.o: mods/m_syst2.cpp mods/m_syseq.h \
@@ -1541,7 +1578,8 @@ obj/m_syst2.o: mods/m_syst2.cpp mods/m_syseq.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_syst2.o mods/m_syst2.cpp
 
 obj/m_unspace.o: mods/m_unspace.cpp mods/m_unspace.h \
@@ -1568,7 +1606,8 @@ obj/m_unspace.o: mods/m_unspace.cpp mods/m_unspace.h \
 		vizor/kernel/v_dbfile.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_unspace.o mods/m_unspace.cpp
 
 obj/m_unsp_gen.o: mods/m_unsp_gen.cpp mods/m_unspace.h \
@@ -1595,12 +1634,14 @@ obj/m_unsp_gen.o: mods/m_unsp_gen.cpp mods/m_unspace.h \
 		vizor/kernel/v_dbfile.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_unsp_gen.o mods/m_unsp_gen.cpp
 
 obj/m_unsp_stat.o: mods/m_unsp_stat.cpp mods/m_unspace.h \
 		mods/m_syseq.h \
 		vizor/visor.h \
+		mods/submod/nodearray.h \
 		mods/m_param.h \
 		mods/v_ipnc.h \
 		vizor/graph.h \
@@ -1621,10 +1662,17 @@ obj/m_unsp_stat.o: mods/m_unsp_stat.cpp mods/m_unspace.h \
 		vizor/kernel/v_dbfile.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h \
+		mods/submod/node.h \
+		mods/submod/datach.h \
+		mods/submod/databr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_unsp_stat.o mods/m_unsp_stat.cpp
 
-obj/m_unsp_out.o: mods/m_unsp_out.cpp mods/m_unspace.h \
+obj/m_unsp_out.o: mods/m_unsp_out.cpp mods/submod/io_arrays.h \
+		mods/m_unspace.h \
+		vizor/libs/gstring.h \
+		vizor/libs/array.h \
 		mods/m_param.h \
 		mods/v_ipnc.h \
 		vizor/graph.h \
@@ -1636,8 +1684,6 @@ obj/m_unsp_out.o: mods/m_unsp_out.cpp mods/m_unspace.h \
 		mods/submod/ms_multi.h \
 		mods/submod/ms_calc.h \
 		vizor/kernel/v_vals.h \
-		vizor/libs/gstring.h \
-		vizor/libs/array.h \
 		vizor/kernel/v_object.h \
 		vizor/kernel/v_dbm.h \
 		vizor/kernel/v_user.h \
@@ -1645,7 +1691,8 @@ obj/m_unsp_out.o: mods/m_unsp_out.cpp mods/m_unspace.h \
 		vizor/kernel/v_dbfile.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_unsp_out.o mods/m_unsp_out.cpp
 
 obj/m_dualth.o: mods/m_dualth.cpp mods/m_dualth.h \
@@ -1671,7 +1718,8 @@ obj/m_dualth.o: mods/m_dualth.cpp mods/m_dualth.h \
 		vizor/kernel/v_dbfile.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_dualth.o mods/m_dualth.cpp
 
 obj/m_dualthc.o: mods/m_dualthc.cpp mods/m_dualth.h \
@@ -1702,6 +1750,7 @@ obj/m_dualthc.o: mods/m_dualthc.cpp mods/m_dualth.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/numerics/jama_svd.h \
 		mods/numerics/tnt_array1d.h \
 		mods/numerics/tnt_array1d_utils.h \
@@ -1736,7 +1785,8 @@ obj/m_gtdemo.o: mods/m_gtdemo.cpp mods/m_proces.h \
 		mods/submod/ms_multi.h \
 		mods/submod/ms_calc.h \
 		mods/m_phase.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_gtdemo.o mods/m_gtdemo.cpp
 
 obj/m_rtparm.o: mods/m_rtparm.cpp mods/m_rtparm.h \
@@ -1766,6 +1816,7 @@ obj/m_rtparm.o: mods/m_rtparm.cpp mods/m_rtparm.h \
 		mods/submod/ms_calc.h \
 		mods/m_phase.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/s_tpwork.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/m_rtparm.o mods/m_rtparm.cpp
 
@@ -1803,6 +1854,7 @@ obj/ms_rmults.o: mods/submod/ms_rmults.cpp vizor/kernel/v_object.h \
 		vizor/kernel/v_file.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/s_tpwork.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_rmults.o mods/submod/ms_rmults.cpp
 
@@ -1830,6 +1882,7 @@ obj/ms_mtparm.o: mods/submod/ms_mtparm.cpp vizor/kernel/v_object.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/s_tpwork.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_mtparm.o mods/submod/ms_mtparm.cpp
 
@@ -1853,7 +1906,8 @@ obj/ms_multi.o: mods/submod/ms_multi.cpp mods/m_param.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_multi.o mods/submod/ms_multi.cpp
 
 obj/ms_system.o: mods/submod/ms_system.cpp mods/m_param.h \
@@ -1878,7 +1932,8 @@ obj/ms_system.o: mods/submod/ms_system.cpp mods/m_param.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_system.o mods/submod/ms_system.cpp
 
 obj/ms_sysbc.o: mods/submod/ms_sysbc.cpp vizor/kernel/v_object.h \
@@ -1905,7 +1960,8 @@ obj/ms_sysbc.o: mods/submod/ms_sysbc.cpp vizor/kernel/v_object.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_sysbc.o mods/submod/ms_sysbc.cpp
 
 obj/ms_mupmph.o: mods/submod/ms_mupmph.cpp mods/m_param.h \
@@ -1929,7 +1985,8 @@ obj/ms_mupmph.o: mods/submod/ms_mupmph.cpp mods/m_param.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_mupmph.o mods/submod/ms_mupmph.cpp
 
 obj/ms_muload.o: mods/submod/ms_muload.cpp mods/m_param.h \
@@ -1958,6 +2015,7 @@ obj/ms_muload.o: mods/submod/ms_muload.cpp mods/m_param.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		vizor/graph.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_muload.o mods/submod/ms_muload.cpp
 
@@ -1982,7 +2040,8 @@ obj/ms_muleq.o: mods/submod/ms_muleq.cpp mods/m_param.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_muleq.o mods/submod/ms_muleq.cpp
 
 obj/ms_multi_file.o: mods/submod/ms_multi_file.cpp mods/submod/io_arrays.h \
@@ -2006,7 +2065,8 @@ obj/ms_multi_file.o: mods/submod/ms_multi_file.cpp mods/submod/io_arrays.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_multi_file.o mods/submod/ms_multi_file.cpp
 
 obj/ms_multi_format.o: mods/submod/ms_multi_format.cpp mods/submod/io_arrays.h \
@@ -2031,6 +2091,7 @@ obj/ms_multi_format.o: mods/submod/ms_multi_format.cpp mods/submod/io_arrays.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/submod/datach.h \
 		mods/submod/databr.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ms_multi_format.o mods/submod/ms_multi_format.cpp
@@ -2054,7 +2115,8 @@ obj/ipm_chemical.o: mods/submod/ipm_chemical.cpp mods/m_param.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ipm_chemical.o mods/submod/ipm_chemical.cpp
 
 obj/ipm_chemical2.o: mods/submod/ipm_chemical2.cpp mods/m_param.h \
@@ -2076,7 +2138,8 @@ obj/ipm_chemical2.o: mods/submod/ipm_chemical2.cpp mods/m_param.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ipm_chemical2.o mods/submod/ipm_chemical2.cpp
 
 obj/ipm_chemical3.o: mods/submod/ipm_chemical3.cpp mods/m_param.h \
@@ -2127,6 +2190,7 @@ obj/ipm_main.o: mods/submod/ipm_main.cpp mods/m_param.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/numerics/tnt.h \
 		mods/numerics/tnt_array1d.h \
 		mods/numerics/tnt_array2d.h \
@@ -2154,11 +2218,13 @@ obj/ipm_simplex.o: mods/submod/ipm_simplex.cpp mods/m_param.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ipm_simplex.o mods/submod/ipm_simplex.cpp
 
 obj/io_arrays.o: mods/submod/io_arrays.cpp mods/submod/io_arrays.h \
 		vizor/libs/verror.h \
+		vizor/kernel/v_user.h \
 		vizor/libs/gstring.h \
 		vizor/libs/array.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/io_arrays.o mods/submod/io_arrays.cpp
@@ -2191,7 +2257,8 @@ obj/nodearray.o: mods/submod/nodearray.cpp mods/submod/particlearray.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/nodearray.o mods/submod/nodearray.cpp
 
 obj/node.o: mods/submod/node.cpp mods/submod/node.h \
@@ -2220,7 +2287,8 @@ obj/node.o: mods/submod/node.cpp mods/submod/node.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/node.o mods/submod/node.cpp
 
 obj/node_format.o: mods/submod/node_format.cpp mods/submod/io_arrays.h \
@@ -2247,7 +2315,8 @@ obj/node_format.o: mods/submod/node_format.cpp mods/submod/io_arrays.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/node_format.o mods/submod/node_format.cpp
 
 obj/particlearray.o: mods/submod/particlearray.cpp mods/submod/particlearray.h \
@@ -2275,7 +2344,8 @@ obj/particlearray.o: mods/submod/particlearray.cpp mods/submod/particlearray.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/particlearray.o mods/submod/particlearray.cpp
 
 obj/page_f.o: vizor/page_f.cpp vizor/page_s.h \
@@ -2334,6 +2404,7 @@ obj/visor.o: vizor/visor.cpp vizor/libs/config.h \
 		mods/submod/ms_system.h \
 		mods/submod/ms_multi.h \
 		mods/submod/ms_calc.h \
+		mods/s_fgl.h \
 		mods/submod/nodearray.h \
 		mods/submod/node.h \
 		mods/submod/datach.h \
@@ -2409,6 +2480,7 @@ obj/visor_w.o: vizor/visor_w.cpp vizor/helpwindow.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		vizor/graph.h \
 		vizor/page_s.h \
 		vizor/libs/config.h \
@@ -2489,6 +2561,7 @@ obj/page_w.o: vizor/page_w.cpp vizor/units.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		tmp/CalcDialogData.h \
 		tmp/CalcCheckDialogData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/page_w.o vizor/page_w.cpp
@@ -2507,7 +2580,6 @@ obj/page_win_w.o: vizor/page_win_w.cpp vizor/units.h \
 		vizor/query_w.h \
 		vizor/help.h \
 		vizor/dlg/CalcDialog.h \
-		vizor/dlg/CalcCheckDialog.h \
 		vizor/libs/array.h \
 		vizor/libs/gstring.h \
 		vizor/page_s.h \
@@ -2528,8 +2600,8 @@ obj/page_win_w.o: vizor/page_win_w.cpp vizor/units.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
-		tmp/CalcDialogData.h \
-		tmp/CalcCheckDialogData.h
+		mods/s_fgl.h \
+		tmp/CalcDialogData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/page_win_w.o vizor/page_win_w.cpp
 
 obj/pshape.o: vizor/pshape.cpp vizor/pshape.h \
@@ -2692,7 +2764,8 @@ obj/NewSystemDialog.o: vizor/dlg/NewSystemDialog.cpp vizor/dlg/NewSystemDialog.h
 		mods/submod/ms_calc.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/NewSystemDialog.o vizor/dlg/NewSystemDialog.cpp
 
 obj/ProgressDialog.o: vizor/dlg/ProgressDialog.cpp vizor/calcthread.h \
@@ -2722,6 +2795,7 @@ obj/ProgressDialog.o: vizor/dlg/ProgressDialog.cpp vizor/calcthread.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		vizor/graph.h \
 		tmp/ProgressDialogData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ProgressDialog.o vizor/dlg/ProgressDialog.cpp
@@ -3043,7 +3117,8 @@ obj/ElementsDialog.o: vizor/dlg/ElementsDialog.cpp vizor/dlg/ElementsDialog.h \
 		mods/submod/ms_calc.h \
 		mods/m_phase.h \
 		mods/v_ipnc.h \
-		mods/m_const.h
+		mods/m_const.h \
+		mods/s_fgl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/ElementsDialog.o vizor/dlg/ElementsDialog.cpp
 
 obj/SetFiltersDialog.o: vizor/dlg/SetFiltersDialog.cpp vizor/dlg/SetFiltersDialog.h \
@@ -3090,6 +3165,7 @@ obj/LoadMessage.o: vizor/dlg/LoadMessage.cpp vizor/dlg/LoadMessage.h \
 		vizor/kernel/v_file.h \
 		mods/m_phase.h \
 		mods/m_const.h \
+		mods/s_fgl.h \
 		mods/submod/nodearray.h \
 		mods/submod/node.h \
 		mods/submod/datach.h \

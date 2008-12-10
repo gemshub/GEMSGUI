@@ -3,7 +3,6 @@
 //
 // Copyright (C) 2004,2008  S.Churakov, Th.Wagner, D.Kulik
 //
-// Implementation of TFGLcalc class (see s_fgl.h)
 // Implementation of parts of TPRSVcalc and TCFGcalc classes
 // called from m_dcomp.cpp
 //
@@ -22,10 +21,10 @@
 #include <stdio.h>
 
 #include "s_fgl.h"
+#include "verror.h"
 #ifndef IPMGEMPLUGIN
   #include "m_const.h"
 #endif
-
 
 
 //=======================================================================================================
@@ -33,7 +32,6 @@
 // References: Stryjek and Vera (1986), Proust and Vera (1989)
 // Implementation of the TPRSVcalc class
 //=======================================================================================================
-
 
 // Constructor
 TPRSVcalc::TPRSVcalc(  long int NCmp, double Pp, double Tkp ):
@@ -64,12 +62,10 @@ TPRSVcalc::TPRSVcalc( long int NSpecies, long int NParams, long int NPcoefs, lon
   // PTparam();
 }
 
-
 TPRSVcalc::~TPRSVcalc()
 {
   free_internal();
 }
-
 
 // allocate work arrays for pure fluid and fluid mixture properties
 void TPRSVcalc::alloc_internal()
@@ -90,7 +86,6 @@ void TPRSVcalc::alloc_internal()
     }
 }
 
-
 void TPRSVcalc::free_internal()
 {
 	long int i;
@@ -110,7 +105,6 @@ void TPRSVcalc::free_internal()
 	delete[]KK1ij;
 	delete[]AAij;
 }
-
 
 // High-level method to retrieve pure fluid fugacities
 long int TPRSVcalc::PureSpecies()
@@ -137,7 +131,6 @@ long int TPRSVcalc::PureSpecies()
 	}
    return 0;
 }
-
 
 // Calculates T,P corrected binary interaction parameters
 long int TPRSVcalc::PTparam()
@@ -167,7 +160,6 @@ long int TPRSVcalc::PTparam()
    return 0;
 }
 
-
 // High-level method to retrieve activity coefficients in the fluid mixture
 // Called from GammaCalc() where activity coefficients are computed
 long int
@@ -192,7 +184,6 @@ TPRSVcalc::MixMod()
     }
     return iRet;
 }
-
 
 // High-level method to retrieve pure fluid properties
 long int
@@ -253,7 +244,6 @@ TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, doub
       return iRet;
  }
 
-
 //// Calculates T,P corrected parameters of pure fluid species
 //long int
 //TPRSVcalc::PureParam( long int i, double *Eos2parPT )
@@ -286,7 +276,6 @@ TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, doub
 //   return 0;
 //}
 
-
 // Calculates attractive (a) and repulsive (b) parameter of PRSV equation of state
 // and partial derivatives of alpha function
 long int
@@ -312,7 +301,6 @@ TPRSVcalc::AB(double Tcrit, double omg, double k1, double k2, double k3, double 
 	dALdT = (-1.)*k0/(2.*sqrt(Tk*Tcrit)) - 1.7*k1/Tcrit + 2.*k1*Tk/(pow(Tcrit,2.));  // extend dA/dT for k2, k3
 	return 0;
 }
-
 
 // Calculates fugacities and departure functions of pure fluid species
 long int
@@ -657,7 +645,6 @@ long int TPRSVcalc::CalcFugPure( void )
 }
 
 #endif
-
 
 
 //=======================================================================================================
@@ -2164,6 +2151,5 @@ long int EOSPARAM::ParamMix(double *Xin)
     emix=emix/s3mix;
     return NComp;
   }
-
 
 //--------------------- End of s_fgl.cpp ---------------------------

@@ -42,8 +42,10 @@
                      $$MODS_CPP/s_supcrt2.cpp \
                      $$MODS_CPP/m_compos.cpp \
                      $$MODS_CPP/s_fgl.cpp \
+                     $$MODS_CPP/s_fgl1.cpp \
                      $$MODS_CPP/s_fgl2.cpp \
-                     $$MODS_CPP/s_fglbred.cpp \
+                     $$MODS_CPP/s_fgl3.cpp \
+                     $$MODS_CPP/s_fgl4.cpp \
                      $$MODS_CPP/s_lsm_fun.cpp \
                      $$MODS_CPP/s_lsm_lm.cpp  \
                      $$MODS_CPP/s_lsm_svd.cpp \

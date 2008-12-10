@@ -33,7 +33,7 @@
 int main( int argc, char* argv[] )
  {
    double PureTime = 0.0;
-   int nNodes = 1, nRecipes = 0;
+   long int nNodes = 1, nRecipes = 0;
    char  (*recipes)[fileNameLength] = 0;
 
    //  char *recipes = NULL;
@@ -66,10 +66,10 @@ int main( int argc, char* argv[] )
 
   // Number of ICs, DCs, Phases and Phases-solutions kept in the node
   // DATABR structure for exchange with GEMIPM - for your convenience
-  int nIC, nDC, nPH, nPS;
-  int i,   j,   k,   ks;    // indices for direct access to components
+  long int nIC, nDC, nPH, nPS;
+  long int i,   j,   k,   ks;    // indices for direct access to components
                             // and phases data in the DataCH framework
-  short nodeHandle, NodeStatusCH, IterDone;
+  long int nodeHandle, NodeStatusCH, IterDone;
   double NewMass;
   
   // Getting direct access to DataCH structure in GEMIPM2K memory

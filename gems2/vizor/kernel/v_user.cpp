@@ -111,7 +111,7 @@ const int bGRAN = 20;
 
 // Get Path of file and Reading list of file names from it, return number of files
 char  (* f_getfiles(const char *f_name, char *Path, 
-		int& nElem, char delim ))[fileNameLength]
+		long int& nElem, char delim ))[fileNameLength]
 {
   int ii, bSize = bGRAN;
   char  (*filesList)[fileNameLength];

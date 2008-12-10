@@ -52,9 +52,9 @@ void TGEM2MT::RecCalc( )
      bool iRet; 
      
      if( mtp->PsMode == GMT_MODE_F ) // Flux-box RMT scoping model
-       iRet = CalcBoxModel( NEED_GEM_PIA );
+       iRet = CalcBoxModel( NEED_GEM_SIA );
      else
-    	iRet =  Trans1D( NEED_GEM_PIA );
+    	iRet =  Trans1D( NEED_GEM_SIA );
 
   }
 }

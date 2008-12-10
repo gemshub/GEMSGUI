@@ -4,6 +4,7 @@
 // Copyright (c) 2007,2008  Th.Wagner, D.Kulik, S.Dmitrieva
 //
 // Implementation of the TSolMod class
+// and TVanLaar, TRegular, TRedlichKister, TNRTL and TWilson classes
 // Started by Th.Wagner and D.Kulik on 07.03.2007
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
@@ -19,8 +20,6 @@
 #include <math.h>
 #include "s_fgl.h"
 #include "m_const.h"
-
-
 
 //--------------------------------------------------------------------------------------------------------------
 // Generic constructor for the TSolMod class

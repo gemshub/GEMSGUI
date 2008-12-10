@@ -617,7 +617,7 @@ void TUnSpace::to_text_file( fstream& ff, bool with_comments )
     {   ff << "\n## Task configuration section ";
         ff << "\n# List of UnSpace group name";
     }
-   prar.writeArray(  "SGp", usp->SGp[0], usp->nG, MAXPHNAME);
+   prar.writeArray(  "SGp", usp->SGp[0], usp->nG, (int)MAXPHNAME);
     if( _comment )
       ff << "\n# generation codes for unspace groups: 0- Belov; 1-uniform; 2-normale";
    prar.writeArray(  "PbD", usp->PbD, usp->nG);

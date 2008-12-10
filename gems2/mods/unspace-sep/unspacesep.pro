@@ -80,8 +80,11 @@ OBJECTS_DIR       = obj
         SOURCES	  +=  $$LIBS_CPP/gstring.cpp  \
                       $$LIBS_CPP/gdatastream.cpp  \
                     $$NUMERICS_CPP/num_methods.cpp \
-                    $$MODS_CPP/s_fgl.cpp \
-                    $$MODS_CPP/s_fgl2.cpp \
+                     $$MODS_CPP/s_fgl.cpp \
+                     $$MODS_CPP/s_fgl1.cpp \
+                     $$MODS_CPP/s_fgl2.cpp \
+                     $$MODS_CPP/s_fgl3.cpp \
+                     $$MODS_CPP/s_fgl4.cpp \
 #                    $$SUBMOD_CPP/nodearray.cpp \
                     $$SUBMOD_CPP/node.cpp \
                     $$SUBMOD_CPP/node_format.cpp \

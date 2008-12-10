@@ -334,7 +334,7 @@ class TUnSpace
    
 //    MTPARM *tpp;
 //   double *tpp_G; // Partial molar(molal) Gibbs energy g(TP) (always), J/mole 
-   float *tpp_S;    // Partial molar(molal) entropy s(TP), J/mole/K
+   double *tpp_S;    // Partial molar(molal) entropy s(TP), J/mole/K
 //   double *tpp_Vm;   // Partial molar(molal) volume Vm(TP) (always), J/bar
     
 //    SYSTEM *syu; // syu = TProfil::pm->syp;
