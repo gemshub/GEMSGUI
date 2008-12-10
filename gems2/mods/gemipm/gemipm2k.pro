@@ -4,7 +4,7 @@
 TEMPLATE	= app
 LANGUAGE        = C++
 TARGET		= gemipm2k
-VERSION         = 2.2.0
+VERSION         = 2.3.0
 
 CONFIG		-= qt
 CONFIG		+=  warn_on debug windows

@@ -28,8 +28,10 @@ INPUT(
 ./obj\s_supcrt2.o
 ./obj\m_compos.o
 ./obj\s_fgl.o
+./obj\s_fgl1.o
 ./obj\s_fgl2.o
-./obj\s_fglbred.o
+./obj\s_fgl3.o
+./obj\s_fgl4.o
 ./obj\s_lsm_fun.o
 ./obj\s_lsm_lm.o
 ./obj\s_lsm_svd.o
