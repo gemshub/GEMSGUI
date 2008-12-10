@@ -195,11 +195,10 @@ void TMulti::pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb
     aObj[o_ndcm].SetDim( pmp->L1[k], pmp->LsMdc[k] );
     aObj[ o_nmvol].SetPtr( pmp->Vol+jb );
     aObj[o_nmvol].SetN( pmp->L1[k]);
-    aObj[ o_nppar].SetPtr(pmp->VL+jb );
+    aObj[ o_nppar].SetPtr(pmp->G0+jb );  // changed 10.12.2008 by DK
     aObj[o_nppar].SetN(  pmp->L1[k]);
 //    aObj[ o_ngtn].SetPtr( pmp->G0+jb );
- aObj[ o_ngtn].SetPtr( pmp->GEX+jb );     // changed 05.12.2006 by DK
-//  aObj[ o_ngtn].SetPtr( pmp->lnGmM+jb );     // experimental: 21.02.2007 by DK
+    aObj[ o_ngtn].SetPtr( pmp->GEX+jb );     // changed 05.12.2006 by DK
     aObj[o_ngtn].SetN( pmp->L1[k] );
     aObj[ o_ngam].SetPtr( pmp->Gamma+jb ); // Gamma calculated
     aObj[o_ngam].SetN( pmp->L1[k] );
@@ -1532,7 +1531,7 @@ TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, long in
         case SM_PRFLUID:
         {
         	TPRSVcalc* aPT = new TPRSVcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, pmp->Tc, pmp->Pc, ModCode,
-                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, pmp->Pparc+jb, 
+                    aIPx, aIPc, aDCc,  aWx, alnGam, aphVOL, pmp->Pparc+jb,
                     pmp->GEX+jb, pmp->Vol+jb, RhoW, EpsW );
             aSM = (TSolMod*)aPT;
             break;
@@ -1576,11 +1575,11 @@ TMulti::SolModParPT( long int k, char ModCode )
               TSolMod* aSM = phSolMod[k];
               aSM->PTparam();
              break;
-        }     
+        }
         case SM_AQEXUQ:
 
              break;
-        default: 
+        default:
               break;
     }
 }
@@ -1603,11 +1602,11 @@ TMulti::SolModActCoeff( long int k, char ModCode )
              TSolMod* aSM = phSolMod[k];
              aSM->MixMod();
              break;
-        }    
+        }
         case SM_AQEXUQ:
 //             aSM->MixMod(  );
              break;
-        default: 
+        default:
               break;
     }
 }
@@ -1631,11 +1630,11 @@ TMulti::SolModExcessParam( long int k, char ModCode )
               TSolMod* aSM = phSolMod[k];
               aSM->getExcessProp( Gex, Vex, Hex, Sex, CPex );
               break;
-         }    
+         }
         case SM_AQEXUQ:
 //             aSM->EUNIQUAC_MixMod( Gex, Vex, Hex, Sex, CPex );
              break;
-        default: 
+        default:
               break;
     }
     // To add handling of excess properties for the phase
