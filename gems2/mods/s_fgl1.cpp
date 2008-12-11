@@ -1,5 +1,5 @@
 //-------------------------------------------------------------------
-// $Id: s_fglbred.cpp 1140 2008-12-08 19:07:05Z wagner $
+// $Id: s_fgl1.cpp 1140 2008-12-08 19:07:05Z wagner $
 //
 // Copyright (C) 2008   D.Kulik,  S.Dmitrieva
 //
@@ -126,9 +126,14 @@ long int TSIT::MixMod()
     return 0;
 }
 
+
+
 //=============================================================================================
 // Pitzer model for aqueous electrolyte solutions, Harvie-Moller-Weare (HMW) version
-// References: Zhang et al. (2006)
+// References: Zhang et al. (2006)  Pitzer-Toughreact report
+// Implemented by F.Hingerl as Matlab script,
+//    converted by s.Dmytrieva into C++ program
+//    in December 2008 for GEOTHERM CCES project
 //=============================================================================================
 
 
@@ -168,7 +173,7 @@ TPitzer::TPitzer( long int NSpecies, long int NParams, long int NPcoefs, long in
    // calculate sizes Nc, Na, Nn, Ns
    calcSizes();
 
-  // realloc internal arrays and set zeros
+  // reallocate internal arrays and set zeros
    alloc_internal();
 }
 
@@ -181,10 +186,10 @@ TPitzer::~TPitzer()
 
 long int TPitzer::PTparam( )
 {
-	  // calc vector of interaction parameters corrected to T,P of interest
+	  // calculate vector of interaction parameters corrected to T,P of interest
 		PTcalc( Tk );
 
-	  // build conversion of species indexes between aq phase and Pitzer parameter tables
+	  // build conversion of species indexes between aqueous phase and Pitzer parameter tables
 		setIndexes();
 
 	  // put data from arIPx, arIPc to internal structure
@@ -202,7 +207,7 @@ long int TPitzer::Pitzer_calc_Gamma( )
 	  Aphi = A_Factor( Tk );
 	//----------- Ionic Strength
 	  Is = IonicStr( I );
-	//----------- ------- F-Factor________________ Pitzer-Toughreact Report 2006 equation (A6)
+	//----------- ------- F-Factor_______ Pitzer-Toughreact Report 2006 equation (A6)
 	  Ffac = F_Factor( Aphi, I, Is );
 	//----------- Z- Term________________ Pitzer-Toughreact Report 2006 equation (A8)
 	  Zfac = Z_Term();
@@ -222,7 +227,7 @@ long int TPitzer::Pitzer_calc_Gamma( )
 }
 
 
-// Out test results for file
+// Output of test results into text file (standalone variant only)
 void TPitzer::Pitzer_test_out( const char *path )
 {
 
@@ -354,26 +359,26 @@ void TPitzer::free_internal()
 }
 
 // Calculate temperature dependence of the interaction parameters.
-// There are different versions
+// Two different versions: with 5 (4) or with 8 coefficients
 void TPitzer::PTcalc( double T )
 {
    long int ii;
    double Tr = 298.15;
 
-   if( NPcoef == 5 ) // PHREEQPITZ version
+   if( NPcoef == 5 ) // PHREEQPITZ and TOUGHREACT version
    {
 	  for( ii=0; ii<NPar; ii++ )
        	aIP[ii] = IPc(ii,0) + IPc(ii,1)*(1/T-1/Tr) + IPc(ii,2)*log(T/Tr) +
        	          IPc(ii,3)*(T-Tr) + IPc(ii,4)*(T*T-Tr*Tr);
    }
    else
-	if( NPcoef == 8 ) // original HMW version
+	if( NPcoef == 8 ) // original HMW version, also Felmy (GMIN) version
 	{
 	  for( ii=0; ii<NPar; ii++ )
 	     aIP[ii] = IPc(ii,0) + IPc(ii,1)*T + IPc(ii,2)/T + IPc(ii,3)*log(T) + IPc(ii,4)/(T-263) +
 	       IPc(ii,5)*T*T + IPc(ii,6)/(680-T) + IPc(ii,7)/(T-227);
 	}
-	else Error( "", "Illegal equations to describe T dependence");
+	else Error( "", "PitzerHMW: Invalid number of coefficients to describe T dependence");
 }
 
 
@@ -424,7 +429,7 @@ void TPitzer::setIndexes()
 }
 
 
-// put data from arIPx, arIPc, arDCc to internal structure
+// put data from arIPx, arIPc, arDCc to internal structures
 void TPitzer::	setValues()
 {
   long int ii, ic, ia,in, i;
@@ -441,7 +446,7 @@ void TPitzer::	setValues()
 	      }
 	      else
 	         ia = getIa( IPx(ii,1) );
-	      ErrorIf( ia<0||ic<0, "", "Parameters must be cation and anion index"  );
+	      ErrorIf( ia<0||ic<0, "", "Cation and anion index needed here"  );
 	      bet0( ic, ia ) = aIP[ii];
 	      break;
 	  case bet1_:
@@ -452,7 +457,7 @@ void TPitzer::	setValues()
 	      }
 	      else
 	         ia = getIa( IPx(ii,1) );
-	      ErrorIf( ia<0||ic<0, "", "Parameters must be cation and anion index"  );
+	      ErrorIf( ia<0||ic<0, "", "Cation and anion index needed here"  );
 	      bet1( ic, ia ) = aIP[ii];
 	      break;
 	  case bet2_:
@@ -463,7 +468,7 @@ void TPitzer::	setValues()
 	      }
 	      else
 	         ia = getIa( IPx(ii,1) );
-	      ErrorIf( ia<0||ic<0, "", "Parameters must be cation and anion index"  );
+	      ErrorIf( ia<0||ic<0, "", "Cation and anion indexes needed here"  );
 	      bet2( ic, ia ) = aIP[ii];
 	      break;
 	  case Cphi_:
@@ -474,7 +479,7 @@ void TPitzer::	setValues()
 	      }
 	      else
 	         ia = getIa( IPx(ii,1) );
-	      ErrorIf( ia<0||ic<0, "", "Parameters must be cation and anion index"  );
+	      ErrorIf( ia<0||ic<0, "", "Cation and anion indexes needed here"  );
 	      Cphi( ic, ia ) = aIP[ii];
 	      break;
 	  case Lam_:
@@ -485,7 +490,7 @@ void TPitzer::	setValues()
 	      }
 	      else
 	         ic = getIc( IPx(ii,1) );
-	      ErrorIf( in<0||ic<0, "", "Parameters must be cation and neutral species index"  );
+	      ErrorIf( in<0||ic<0, "", "Cation and neutral species indexes needed here"  );
 	      Lam( in, ic ) = aIP[ii];
 	      break;
 	  case Lam1_:
@@ -502,13 +507,13 @@ void TPitzer::	setValues()
 	  case Theta_:
 	      ic = getIc( IPx(ii,0) );
           i = getIc( IPx(ii,1) );
-	      ErrorIf( i<0||ic<0, "", "Parameters must be cations"  );
+	      ErrorIf( i<0||ic<0, "", "Only indexes of cations needed here"  );
 	      Theta( ic, i ) = aIP[ii];
 	      break;
 	  case Theta1_:
 	      ia = getIa( IPx(ii,0) );
           i = getIa( IPx(ii,1) );
-	      ErrorIf( i<0||ia<0, "", "Parameters must be anions"  );
+	      ErrorIf( i<0||ia<0, "", "Only indexes of anions needed here"  );
 	      Theta1( ia, i ) = aIP[ii];
 	      break;
 	  case Psi_:
@@ -528,7 +533,7 @@ void TPitzer::	setValues()
 	         else
 	          ia = getIa( IPx(ii,2) );
 	      }
-          ErrorIf( ic<0||ia<0||i<0, "", "Parameters must be anion and 2 cations index"  );
+          ErrorIf( ic<0||ia<0||i<0, "", "Index of anion and 2 indexes of cations needed here"  );
 	      Psi( ic, i, ia ) = aIP[ii];
 	      break;
 	  case Psi1_:
@@ -548,7 +553,7 @@ void TPitzer::	setValues()
 	         else
 	          ic = getIc( IPx(ii,2) );
 	      }
-         ErrorIf( ic<0||ia<0||i<0, "", "Parameters must be 2 anions and cation index"  );
+         ErrorIf( ic<0||ia<0||i<0, "", "Indexes of 2 anions and one cation needed here"  );
 	      Psi1( ia, i, ic ) = aIP[ii];
 	      break;
 	  case Zeta_:
@@ -570,7 +575,8 @@ void TPitzer::	setValues()
 	         if( ia < 0 )
 	        	 ia = getIa( IPx(ii,1) );
 	      }
-	      ErrorIf( ic<0||ia<0||in<0, "", "Parameters must be  neutral species, cation  and anion index"  );
+	      ErrorIf( ic<0||ia<0||in<0, "",
+	    		  "Index of neutral species, index of cation and index of anion needed here"  );
 	      Zeta( in, ic, ia ) = aIP[ii];
 	      break;
 	}
@@ -708,7 +714,7 @@ double TPitzer::IonicStr( double& I )
 
 
 
-// Calculate osmotic Coefficient and activity of water
+// Calculate osmotic coefficient, activity, and activity coefficient of water-solvent
 double TPitzer::lnGammaH2O( )
 {
     double Etheta, Ethetap;
@@ -850,8 +856,8 @@ double TPitzer::F_Factor( double Aphi, double I, double Is )
 }
 
 
-// Calculate lnGammaM
-// Activity coefficient will be calculated for cation M (here cation number 1)
+// Calculate lnGammaM - activity coefficient of a cation with index X
+//
 double TPitzer::lnGammaM(  long int M )
 {
   double Etheta, Ethetap;
@@ -917,7 +923,7 @@ double TPitzer::lnGammaM(  long int M )
 }
 
 
-// Calculate lnGammaX
+// Calculate lnGammaX - activity coefficient of an anion with index X
 double TPitzer::lnGammaX(  long int X )
 {
   double Etheta, Ethetap;
@@ -982,8 +988,7 @@ double TPitzer::lnGammaX(  long int X )
 }
 
 
-// Calculate lngammaN
-// Activity coefficient will be calculated for this neutral species
+// Calculate lngammaN - activity coefficient of a neutral species with index N
 double TPitzer::lnGammaN(  long int N )
 {
   long int c, a;
@@ -1006,6 +1011,11 @@ double TPitzer::lnGammaN(  long int N )
 
   return GN;
 }
+
+
+// Down here comes the Extended Uniquac model
+//
+
 
 //--------------------- End of s_fgl1.cpp ---------------------------
 
