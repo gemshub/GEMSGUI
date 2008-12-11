@@ -35,7 +35,9 @@ CalcCheckDialog::CalcCheckDialog(QWidget* parent,
         rObj(obj)
 {
     setCaption( "Check boxes Calculator" );
-    pObjectBox->setTitle(obj.GetKeywd());
+    QString str = obj.GetKeywd();
+    	    str += " cell range";
+    pObjectBox->setTitle(str/*obj.GetKeywd()*/);
 
     // set selection
     pN1->setValue( sel.top() );

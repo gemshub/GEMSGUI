@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>724</width>
-            <height>257</height>
+            <width>606</width>
+            <height>290</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,6 +19,73 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>layout4</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox">
+                    <item>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>--- (empty)</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>pValue</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="currentItem">
+                        <number>0</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_3</cstring>
+                    </property>
+                    <property name="acceptDrops">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>&lt;- Value of the Second Operand</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer8</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
         <widget class="QButtonGroup" row="1" column="0">
             <property name="name">
                 <cstring>pButtonBox</cstring>
@@ -243,6 +310,9 @@
                     <property name="text">
                         <string>&amp;=</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+=</string>
+                    </property>
                     <property name="toggleButton">
                         <bool>true</bool>
                     </property>
@@ -405,44 +475,6 @@
                     </property>
                 </spacer>
             </grid>
-        </widget>
-        <widget class="QLayoutWidget" row="0" column="0">
-            <property name="name">
-                <cstring>layout5</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>pValue</cstring>
-                    </property>
-                    <property name="focusPolicy">
-                        <enum>StrongFocus</enum>
-                    </property>
-                    <property name="acceptDrops">
-                        <bool>true</bool>
-                    </property>
-                    <property name="edited">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Type in here a value of second operand for binary operations</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel1_3</cstring>
-                    </property>
-                    <property name="acceptDrops">
-                        <bool>false</bool>
-                    </property>
-                    <property name="text">
-                        <string>&lt;- Value of the Second Operand</string>
-                    </property>
-                </widget>
-            </hbox>
         </widget>
         <widget class="QLayoutWidget" row="1" column="1">
             <property name="name">
@@ -632,7 +664,7 @@
                                 <string>Alt+O</string>
                             </property>
                             <property name="default">
-                                <bool>true</bool>
+                                <bool>false</bool>
                             </property>
                         </widget>
                         <spacer>
@@ -847,6 +879,19 @@
         <slot>binaryMode()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>pValue</tabstop>
+    <tabstop>pAssignBtn</tabstop>
+    <tabstop>pClearBtn</tabstop>
+    <tabstop>pN1</tabstop>
+    <tabstop>pN2</tabstop>
+    <tabstop>pM1</tabstop>
+    <tabstop>pM2</tabstop>
+    <tabstop>PushButton22</tabstop>
+    <tabstop>PushButton1_3</tabstop>
+    <tabstop>PushButton1_2</tabstop>
+    <tabstop>PushButton42</tabstop>
+</tabstops>
 <slots>
     <slot access="protected">binaryMode()</slot>
     <slot access="protected">ok()</slot>

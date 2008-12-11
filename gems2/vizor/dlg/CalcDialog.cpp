@@ -23,6 +23,7 @@
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qgroupbox.h>
+#include <qcombobox.h>
 
 #include "CalcDialog.h"
 #include "service.h"
@@ -35,7 +36,9 @@ CalcDialog::CalcDialog(QWidget* parent, TObject& obj,
         rObj(obj),
         selection(sel)
 {
-    pObjectBox->setTitle(obj.GetKeywd());
+    QString str = obj.GetKeywd();
+    	    str += " Cell selection range";
+    pObjectBox->setTitle(str/*obj.GetKeywd()*/);
 
    pN1->setRange( 0, obj.GetN()-1 );
    pN2->setRange( 0, obj.GetN()-1 );
@@ -110,8 +113,8 @@ FOUND:
     double val2;
     if( ii <= 5 )
     {  // SD oct 2005
-      QString str = pValue->text();
-      if( str == "---" || str[0] == '`' )
+      QString str = pValue->currentText();
+      if( ( str.find("---") != -1 ) || str[0] == '`' )
          val2 = DOUBLE_EMPTY;
       else
          val2 = str.toDouble();  /// check for error
