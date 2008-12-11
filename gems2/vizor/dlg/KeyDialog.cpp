@@ -126,10 +126,12 @@ KeyDialog::SetList()
     int n = rt[iRt].GetKeyList( keyFilter.c_str(), keyList, temp);
 
     for( int ii=0; ii<n; ii++ )
-    {
         pList->insertItem(keyList[ii].c_str());
-        if( multi )
-        {  for(uint jj=0; jj<old_sel.GetCount(); jj++)
+
+    if( multi )
+    {  
+    	for(uint jj=0; jj<old_sel.GetCount(); jj++)
+           for( int ii=0; ii<n; ii++ )
            {
             // comparing parts before '*' for overwrite dcomp, reacdc ....
             size_t pos = old_sel[jj].find('*');
@@ -140,8 +142,7 @@ KeyDialog::SetList()
               break;
             }
            }
-       }
-    }
+     }
 }
 
 
