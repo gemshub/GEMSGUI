@@ -188,7 +188,7 @@ public:
 class TCGFcalc : public TSolMod
 {
   private:
- 
+
   double
           PI_1,    // pi
           TWOPI,    // 2.*pi
@@ -645,7 +645,7 @@ public:
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Pitzer model, Harvie-M�ller-Weare (HMW) version, with explicit temperature dependence
+// Pitzer model, Harvie-Moller-Weare (HMW) version, with explicit temperature dependence
 // References:
 
 class TPitzer: public TSolMod

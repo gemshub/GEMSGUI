@@ -32,6 +32,7 @@ const char *GEMS_PH_HTML = "gm_phase";
 
 TPhase* TPhase::pm;
 
+
 TPhase::TPhase( int nrt ):
         TCModule( nrt )
 {
@@ -50,6 +51,7 @@ TPhase::TPhase( int nrt ):
     set_def();
     start_title = " Definition of thermodynamic phase ";
 }
+
 
 // link values to objects
 void TPhase::ods_link( int q)
@@ -135,6 +137,7 @@ aObj[o_ph_w_nxn].SetDim( ph[q].nNs, 1 );
     php=&ph[q];
 }
 
+
 // set dynamic Objects ptr to values
 void TPhase::dyn_set(int q)
 {
@@ -171,6 +174,7 @@ ph[q].lsNs = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].GetPtr();
 ph[q].nxNs = (short *)aObj[ o_ph_w_nxn ].GetPtr();
 }
 
+
 // free dynamic memory in objects and values
 void TPhase::dyn_kill(int q)
 {
@@ -201,6 +205,7 @@ ph[q].lsNs =  (char (*)[MAXDCNAME])aObj[ o_ph_w_lsn ].Free();
     ph[q].nxAn =  (short *)aObj[ o_ph_w_nxa ].Free();
 ph[q].nxNs =  (short *)aObj[ o_ph_w_nxn ].Free();
 }
+
 
 // realloc dynamic memory
 void TPhase::dyn_new(int q)
@@ -302,8 +307,8 @@ ph[q].nxNs =  (short *)aObj[ o_ph_w_nxn ].Free();
     //  ph[q].tprn = (char *)aObj[ o_phtprn ].Free();
 }
 
-//set default information
 
+//set default information
 void TPhase::set_def( int q)
 {
     ErrorIf( php!=&ph[q], GetName(), "E05PHrem: Illegal access to ph in set_def()");
@@ -356,6 +361,7 @@ ph[q].nxNs =  0;
 
 }
 
+
 // Input necessary data and links objects
 void TPhase::RecInput( const char *key )
 {
@@ -368,6 +374,7 @@ static int rkeycmp(const void *e1, const void *e2)
     RCmp = memcmp( e1, e2, DC_RKLEN );
     return RCmp;
 }
+
 
 // opens window with 'Remake record' parameters
 void
@@ -401,6 +408,7 @@ TPhase::MakeQuery()
     php->NsiT = (short)size[5];
     php->Asur = r2;
 }
+
 
 //Rebuild record structure before calc
 int
@@ -509,7 +517,7 @@ AGAIN_SETUP:
           case SM_CGFLUID:  // Churakov-Gottschalk EoS
                           php->ncpN = 0;
                           php->ncpM = 0;
-                          php->nscM = 24; // 4;   last changed 19.06.2008
+                          php->nscM = 12; // last changed 12.12.2008 (TW)
                           php->npxM = 0;
 //                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
@@ -522,7 +530,7 @@ AGAIN_SETUP:
                           if( php->ncpN > php->nDC*php->nDC/2 )
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 1;  // For now, no T,P dependence
-                          php->nscM = 12; // increased to 12 (31.05.2008 TW)
+                          php->nscM = 7; // last changed 12.12.2008 (TW)
                           php->npxM = 2;
                           break;
           case SM_AQDAV:  // Aqueous Davies
@@ -826,6 +834,7 @@ AGAINRC:
     return ret;
 }
 
+
 // Assembling indices and name lists for cations and anions
 void
 TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
@@ -921,6 +930,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
    }
 }
 
+
 #define s(i,j) php->scoef[(j)+(i)*nsc]
 #define sit(i,j) php->pnc[(j)+(i)*nAn] // not used SD 11/12/2008
 // #define m(i,j) php->MaSdj[(j)+(i)*DFCN]
@@ -952,6 +962,7 @@ TPhase::RecCalc( const char *key )
     SetString("PH_solm   PHASE-solution model OK");
     TCModule::RecCalc(key);
 }
+
 
 //Recalc record structure
 void
@@ -1196,10 +1207,10 @@ TPhase::CalcPhaseRecord(  bool getDCC  )
 //    if( iic ) goto NEXT;
 }
 
+
 //-------------------------------------------------------------------------
 // called from Project - extended by KD on 16.06.03 to add CG EoS
 // Re-written (for AutoPhaseWizard) by KD on 31.07.03
-//
 void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
    const char amod, const char gmod, float apar[4], float gpar[4],
    bool useLst, TCStringArray lst )
@@ -1303,7 +1314,7 @@ MAKE_GAS_PHASE:
               memcpy( php->sol_t, "FNNSNN", 6 );
               memcpy( &php->PphC, "f-+---", 6 );
               php->ncpN = 0; php->ncpM = 0;
-              php->nscM = 24; // 4;  // changed, 07.12.2006 (KD), increased to 24, 19.06.2008 (TW)
+              php->nscM = 12; // last changed 12.12.2008 (TW)
               php->npxM = 0;
               Name += "Perturbation-based EoS (Churakov&Gottschalk,2003)";
               strcpy( php->name, Name.c_str() );
@@ -1326,6 +1337,7 @@ MAKE_GAS_PHASE:
    DONE:
     contentsChanged = false;
 }
+
 
 // Assembling the phase (automatically generated aq or gas/fluid)
 // Separated by KD on 31.07.03
@@ -1665,6 +1677,7 @@ void TPhase::CopyRecords( const char * prfName, TCStringArray& aPHnoused,
     names1.Add(prfName);
     db->OpenOnlyFromList(names1);
 }
+
 
 // ----------------- End of m_phase.cpp -------------------------
 
