@@ -922,7 +922,7 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 }
 
 #define s(i,j) php->scoef[(j)+(i)*nsc]
-#define sit(i,j) php->pnc[(j)+(i)*nAn]
+#define sit(i,j) php->pnc[(j)+(i)*nAn] // not used SD 11/12/2008
 // #define m(i,j) php->MaSdj[(j)+(i)*DFCN]
 //Recalc record structure
 void
@@ -1490,7 +1490,7 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
     {
        php->pnc[5] = param[0];
        php->pnc[6] = param[1];
-       php->pnc[7] = param[2];
+       php->pnc[7] = param[2];  // must be changed SD 11/12/2008
     }
 // Calculating the phase record and saving it to database
     CalcPhaseRecord( true );

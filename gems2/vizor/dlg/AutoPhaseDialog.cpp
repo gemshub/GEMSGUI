@@ -99,28 +99,28 @@ AutoPhaseDialog::set_resp( int resp_t )
 void
 AutoPhaseDialog::get_apar ( float par[4] )
 {
-    par[0] = QString( apEdit0->text() ).toDouble();
-    par[1] = QString( apEdit1->text() ).toDouble();
-    par[2] = QString( apEdit2->text() ).toDouble();
-    par[3] = QString( apEdit3->text() ).toDouble();
+    par[0] = QString( apEdit0->currentText() ).toDouble();
+    par[1] = QString( apEdit1->currentText() ).toDouble();
+    par[2] = apEdit2->currentItem();
+    par[3] = apEdit3->currentItem();
 }
 
 void
 AutoPhaseDialog::set_apar ( float par[4] )
 {
     QString str;
-    double I_max;
+ //   double I_max;
 
     apEdit0->setValidator( new QDoubleValidator( apEdit0 ) );
-    apEdit0->setText( str.setNum( (double)par[0] ) );
+    apEdit0->setCurrentText( str.setNum( (double)par[0] ) );
 
     apEdit1->setValidator( new QDoubleValidator( apEdit1 ) );
-    apEdit1->setText( str.setNum( (double)par[1] ) );
+    apEdit1->setCurrentText( str.setNum( (double)par[1] ) );
 
-    apEdit2->setValidator( new QDoubleValidator( apEdit2 ) );
-    apEdit2->setText( str.setNum( (double)par[2] ) );
+//    apEdit2->setValidator( new QDoubleValidator( apEdit2 ) ); // SD 2008
+    apEdit2->setCurrentItem( ( (int)par[2] ) );
 
-    switch( aqu_code )
+/*    switch( aqu_code )
     {
        case '-':
        default:  I_max = 0.; break;
@@ -134,7 +134,8 @@ AutoPhaseDialog::set_apar ( float par[4] )
        case 'D': I_max =  dfImaxD; break;
     }
     apEdit3->setValidator( new QDoubleValidator( apEdit3 ) );
-    apEdit3->setText( str.setNum( I_max ) );
+*/
+    apEdit3->setCurrentItem( (int)par[2] );
 //   apEdit3->setText( str.setNum( (double)par[3] ) );
 }
 

@@ -643,7 +643,7 @@ void TPitzer::Ecalc( double z, double z1, double I, double Aphi,
   else
 	if( k==2 )
 	{
-     JMM=0.25*x -1. + 0.5*(bk[0]-dk[2]);
+     JMM=0.25*x -1. + 0.5*(bk[0]-bk[2]);
      JpMM=0.25 + 0.5*dzdx*(dk[0]-dk[2]);
 	}
     else
@@ -653,8 +653,8 @@ void TPitzer::Ecalc( double z, double z1, double I, double Aphi,
     }
 
   } //k
-  Etheta=(2.0 /(4.0*I)) * (JMN - 0.5*JMM - 0.5*JNN);
-  Ethetap= - (Etheta/I) +(2.0/(8.0*I*I)) *(xMN*JpMN - 0.5*JpMM - 0.5*xNN*JpNN);
+  Etheta=((z*z1) /(4.0*I)) * (JMN - 0.5*JMM - 0.5*JNN);
+  Ethetap= - (Etheta/I) +((z*z1)/(8.0*I*I)) *(xMN*JpMN - 0.5*JpMM - 0.5*xNN*JpNN);
 }
 
 
@@ -734,31 +734,27 @@ double TPitzer::lnGammaH2O( )
 	     OC2 +=(mc(c)*ma(a)*(B3+Zfac*(C/(2.*sqrt(fabs(zc(c)*za(a)))))));
 	  }
 // Term OC3
-	double OC3=0., OC3a=0., z, z1, Phiphi;
+	double OC3=0., z, z1, Phiphi;
 	for( c=0; c<Nc; c++ )
 	  for( c1=c+1; c1<Nc; c1++ )
-	  {
-		  for( a=0; a<Na; a++)
-			  OC3a += ma(a)*Psi(c, c1, a);
-	     
+	     for( a=0; a<Na; a++)
+	     {
 	    	 z=zc(c);
              z1=zc(c1);
 	         Ecalc( z, z1, I, Aphi, Etheta,Ethetap);
 	         Phiphi = Theta(c,c1) + Etheta + Ethetap * sqrt(I);	// Pitzer-Toughreact Report 2006, equation (A14)
-	         OC3 += (mc(c)*mc(c1)*(Phiphi + OC3a));
-	 }
+	         OC3 += (mc(c)*mc(c1)*(Phiphi + (ma(a)*Psi(c,c1,a))));
+	     }
 // Term OC4
-	double OC4=0.,OC4a=0., Phiphi1;
+	double OC4=0., Phiphi1;
 	for( a=0; a<Na; a++)
 	  for( a1=a+1; a1<Na; a1++)
-	  {
-		  for( c=0; c<Nc; c++)
-			  OC4a += mc(c)*Psi1(a,a1,c); 
-	       z=za(a);
+	    for( c=0; c<Nc; c++)
+	    {  z=za(a);
 	       z1=za(a1);
 	       Ecalc(z,z1,I,Aphi, Etheta,Ethetap);
 	       Phiphi1 = Theta1(a,a1) + Etheta + Ethetap * sqrt(I);	// Pitzer-Toughreact Report, 2006 equation (A14)
-	       OC4 += (ma(a)*ma(a1)*(Phiphi1+OC4a));
+	       OC4 += (ma(a)*ma(a1)*(Phiphi1+(mc(c)*Psi1(a,a1,c))));
 	    }
 // Term OC5
 	double OC5, OC5a=0., OC5b=0.;
@@ -781,7 +777,7 @@ double TPitzer::lnGammaH2O( )
 // Summation of Molalities
 	double   OCmol= sum(aM, xcx, Nc)+ sum(aM, xax, Na)+ sum(aM, xnx, Nn);
 // Osmotic coefficient (OC) = (1+Oges)/(OCmol)
-	double OC = 1.+( 2.*OCges / OCmol);
+	double OC = (1.+OCges) / OCmol;
 // Activity of Water, Pitzer-Toughreact Report 2006, equation (A1)
 	double Lna =(-18.1/1000.)*OC*OCmol;
 
@@ -884,11 +880,10 @@ double TPitzer::lnGammaM(  long int M )
      GM2=GM2+(ma(a)*(2.*B2+Zfac*(C/(2.*sqrt(fabs(zc(M)*za(a)))))));
  }
 // Term GM3
-  double GM3=0.,GM3a=0., Phi, z, z1;
+  double GM3=0., Phi, z, z1;
   for( c1=0; c1<Nc; c1++)
-  {	 for( a=0; a<Na; a++)
-	  GM3a += ma(a)*Psi(M,c1,a);
-	  
+	 for( a=0; a<Na; a++)
+	 {
 	    if( M == c1)
 	    {
 	      Phi = 0.;
@@ -900,7 +895,7 @@ double TPitzer::lnGammaM(  long int M )
            Ecalc(z,z1,I,Aphi,Etheta,Ethetap);
            Phi=Theta(M,c1)+Etheta;  					// Pitzer-Toughreact Report 2006, equation (A15)
 	    }
-        GM3=GM3+mc(c1)*(2.*Phi+ GM3a  );
+        GM3=GM3+mc(c1)*(2.*Phi+ ma(a)*Psi(M,c1,a)  );
 	 }
 // Term GM4
     double GM4=0.;
@@ -950,24 +945,22 @@ double TPitzer::lnGammaX(  long int X )
      GX2=GX2+(mc(c)*(2.*B2+Zfac*(C/(2.*sqrt(fabs(zc(c)*za(X)))))));
   }
 // Term GX3
-  double  GX3=0.,GX3a=0., z, z1, Phi1 ;
+  double  GX3=0., z, z1, Phi1 ;
   for( a1=0; a1<Na; a1++)
-  {	 
-	  for( c=0; c<Nc; c++)
-		  GX3a += mc(c)*Psi1(X,a1,c);
-		  
+	 for( c=0; c<Nc; c++)
+	 {
 	    if( X == a1)
 	    {
 	      Phi1 = 0.;
 	      Psi1(X,a1,c) = 0.;
 	    }else
 	      {
-           z=zc(X);
-           z1=zc(a1);
+           z=za(X);
+           z1=za(a1);
            Ecalc(z,z1,I,Aphi, Etheta,Ethetap);
-           Phi1=Theta(X,a1)+Etheta; 			 // Pitzer-Toughreact Report 2006, equation (A15)
+           Phi1=Theta1(X,a1)+Etheta; 			 // Pitzer-Toughreact Report 2006, equation (A15)
 	      }
-          GX3=GX3+ma(a1)*(2*Phi1+GX3a);
+          GX3=GX3+ma(a1)*(2*Phi1+mc(c)*Psi(X,a1,c));
 	 }
 // Term GX4
     double  GX4=0.;
@@ -982,7 +975,7 @@ double TPitzer::lnGammaX(  long int X )
           C =Cphi(c,a1)/(2*sqrt(fabs(za(a1)*zc(c))));	 // Pitzer-Toughreact Report 2006, equation (A7)
           GX5a =GX5a+(mc(c)*ma(a1)* (C/(2*sqrt(fabs(zc(c)*za(X))))) );
   	   }
-      double GX5=za(X)*GX5a;
+      double GX5=fabs(za(X))*GX5a;
 // Term GX6
      double GX6a=0.;
      for( n=0; n<Nn; n++)

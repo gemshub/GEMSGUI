@@ -18,44 +18,28 @@
     <property name="sizeGripEnabled">
         <bool>true</bool>
     </property>
-    <widget class="QLayoutWidget">
+    <vbox>
         <property name="name">
-            <cstring>layout19</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>11</y>
-                <width>730</width>
-                <height>410</height>
-            </rect>
-        </property>
-        <vbox>
+        <widget class="QTabWidget">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>tabWidget</cstring>
             </property>
-            <widget class="QTabWidget">
+            <widget class="QWidget">
                 <property name="name">
-                    <cstring>tabWidget</cstring>
+                    <cstring>Widget8</cstring>
                 </property>
-                <widget class="QWidget">
+                <attribute name="title">
+                    <string>Select Aqueous Electrolyte Model</string>
+                </attribute>
+                <hbox>
                     <property name="name">
-                        <cstring>Widget8</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <attribute name="title">
-                        <string>Select Aqueous Electrolyte Model</string>
-                    </attribute>
                     <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>layout17</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>15</x>
-                                <y>13</y>
-                                <width>510</width>
-                                <height>310</height>
-                            </rect>
                         </property>
                         <vbox>
                             <property name="name">
@@ -223,14 +207,6 @@
                         <property name="name">
                             <cstring>groupBox1_2</cstring>
                         </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>540</x>
-                                <y>10</y>
-                                <width>170</width>
-                                <height>310</height>
-                            </rect>
-                        </property>
                         <property name="title">
                             <string></string>
                         </property>
@@ -269,9 +245,35 @@ the aqueous phase model</string>
                                     <string>b_gamma(1,298) value:</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="QComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>0.064</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>0.064</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>0.064</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>0.064</string>
+                                    </property>
+                                </item>
                                 <property name="name">
                                     <cstring>apEdit0</cstring>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="currentItem">
+                                    <number>0</number>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>This value of third EDH parameter will be used in H and 3 models and in 2 (aqueous species only)</string>
@@ -323,9 +325,32 @@ the aqueous phase model</string>
                                     <string>Common a0 value:</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="QComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>3.72</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>4.08</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>3.31</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>3.67</string>
+                                    </property>
+                                </item>
                                 <property name="name">
                                     <cstring>apEdit1</cstring>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>This value in 1e-8 cm (to be used in the H model) can be changed here</string>
@@ -336,10 +361,20 @@ the aqueous phase model</string>
                                     <cstring>textLabel2_3_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Policy_to_neutral:</string>
+                                    <string>Gamma (neutral sp.)</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="QComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>Set to 1.0</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Set as b_gamma*IS</string>
+                                    </property>
+                                </item>
                                 <property name="name">
                                     <cstring>apEdit2</cstring>
                                 </property>
@@ -352,425 +387,435 @@ the aqueous phase model</string>
                                     <cstring>textLabel2_4_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>I_max_applicable:</string>
+                                    <string>Gamma (H2O)</string>
                                 </property>
                             </widget>
-                            <widget class="QLineEdit">
+                            <widget class="QComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>Set to 1.0</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Calculate</string>
+                                    </property>
+                                </item>
                                 <property name="name">
                                     <cstring>apEdit3</cstring>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>This reminds you up to what ionic strength the chosen model can be used</string>
+                                    <string>This value can be 0 (default) or -1 (set gamma=1 for all neutral species)</string>
                                 </property>
                             </widget>
                         </vbox>
                     </widget>
-                </widget>
-                <widget class="QWidget">
-                    <property name="name">
-                        <cstring>Widget9</cstring>
-                    </property>
-                    <attribute name="title">
-                        <string>Select Gas/Fluid Mixture Model</string>
-                    </attribute>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout13</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLayoutWidget">
-                                    <property name="name">
-                                        <cstring>layout12</cstring>
-                                    </property>
-                                    <vbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QButtonGroup">
-                                            <property name="name">
-                                                <cstring>ButtonGroup1_2</cstring>
-                                            </property>
-                                            <property name="title">
-                                                <string></string>
-                                            </property>
-                                            <vbox>
-                                                <property name="name">
-                                                    <cstring>unnamed</cstring>
-                                                </property>
-                                                <widget class="QRadioButton">
-                                                    <property name="name">
-                                                        <cstring>gselI</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>Ideal mixture of gaseous components, &amp;I (default)</string>
-                                                    </property>
-                                                    <property name="checked">
-                                                        <bool>true</bool>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QRadioButton">
-                                                    <property name="name">
-                                                        <cstring>gselF</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>CG EoS for non-electrolyte fluid (Churakov &amp;&amp; Gottschalk, 2003), &amp;F</string>
-                                                    </property>
-                                                </widget>
-                                                <spacer>
-                                                    <property name="name">
-                                                        <cstring>spacer7_3</cstring>
-                                                    </property>
-                                                    <property name="orientation">
-                                                        <enum>Vertical</enum>
-                                                    </property>
-                                                    <property name="sizeType">
-                                                        <enum>Expanding</enum>
-                                                    </property>
-                                                    <property name="sizeHint">
-                                                        <size>
-                                                            <width>20</width>
-                                                            <height>16</height>
-                                                        </size>
-                                                    </property>
-                                                </spacer>
-                                                <widget class="QRadioButton">
-                                                    <property name="name">
-                                                        <cstring>gselU</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>Do not generate; select a user-defined Phase record from database, &amp;U</string>
-                                                    </property>
-                                                    <property name="checked">
-                                                        <bool>false</bool>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QRadioButton">
-                                                    <property name="name">
-                                                        <cstring>gselNo</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>Do not include gas/fluid mixture phase into the system definition, &amp;N</string>
-                                                    </property>
-                                                    <property name="checked">
-                                                        <bool>false</bool>
-                                                    </property>
-                                                </widget>
-                                            </vbox>
-                                        </widget>
-                                        <spacer>
-                                            <property name="name">
-                                                <cstring>spacer6</cstring>
-                                            </property>
-                                            <property name="orientation">
-                                                <enum>Vertical</enum>
-                                            </property>
-                                            <property name="sizeType">
-                                                <enum>Expanding</enum>
-                                            </property>
-                                            <property name="sizeHint">
-                                                <size>
-                                                    <width>20</width>
-                                                    <height>50</height>
-                                                </size>
-                                            </property>
-                                        </spacer>
-                                        <widget class="QLayoutWidget">
-                                            <property name="name">
-                                                <cstring>layout11</cstring>
-                                            </property>
-                                            <hbox>
-                                                <property name="name">
-                                                    <cstring>unnamed</cstring>
-                                                </property>
-                                                <widget class="QLabel">
-                                                    <property name="name">
-                                                        <cstring>textLabel1_2</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>Phase record key:</string>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QLineEdit">
-                                                    <property name="name">
-                                                        <cstring>gpRkeyEdit</cstring>
-                                                    </property>
-                                                    <property name="toolTip" stdset="0">
-                                                        <string>This field shows a record key of the gas/fluid Phase to be automatically generated</string>
-                                                    </property>
-                                                </widget>
-                                            </hbox>
-                                        </widget>
-                                    </vbox>
-                                </widget>
-                                <widget class="QGroupBox">
-                                    <property name="name">
-                                        <cstring>groupBox1</cstring>
-                                    </property>
-                                    <property name="title">
-                                        <string></string>
-                                    </property>
-                                    <vbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>textLabel1_2_2</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Parameters for generated Phase&lt;br&gt;(under construction)</string>
-                                            </property>
-                                        </widget>
-                                        <widget class="QLayoutWidget">
-                                            <property name="name">
-                                                <cstring>layout16</cstring>
-                                            </property>
-                                            <grid>
-                                                <property name="name">
-                                                    <cstring>unnamed</cstring>
-                                                </property>
-                                                <widget class="QLineEdit" row="3" column="1">
-                                                    <property name="name">
-                                                        <cstring>gpEdit3</cstring>
-                                                    </property>
-                                                    <property name="toolTip" stdset="0">
-                                                        <string>Reserved for use in future versions</string>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QLabel" row="2" column="0">
-                                                    <property name="name">
-                                                        <cstring>textLabel2_3</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>Par2:</string>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QLineEdit" row="2" column="1">
-                                                    <property name="name">
-                                                        <cstring>gpEdit2</cstring>
-                                                    </property>
-                                                    <property name="toolTip" stdset="0">
-                                                        <string>Reserved for use in future versions</string>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QLabel" row="3" column="0">
-                                                    <property name="name">
-                                                        <cstring>textLabel2_4</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>Par3:</string>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QLineEdit" row="0" column="1">
-                                                    <property name="name">
-                                                        <cstring>gpEdit0</cstring>
-                                                    </property>
-                                                    <property name="toolTip" stdset="0">
-                                                        <string>Reserved for use in future versions</string>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QLabel" row="0" column="0">
-                                                    <property name="name">
-                                                        <cstring>textLabel2</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>Par0:</string>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QLineEdit" row="1" column="1">
-                                                    <property name="name">
-                                                        <cstring>gpEdit1</cstring>
-                                                    </property>
-                                                    <property name="toolTip" stdset="0">
-                                                        <string>Reserved for use in future versions</string>
-                                                    </property>
-                                                </widget>
-                                                <widget class="QLabel" row="1" column="0">
-                                                    <property name="name">
-                                                        <cstring>textLabel2_2</cstring>
-                                                    </property>
-                                                    <property name="text">
-                                                        <string>Par1:</string>
-                                                    </property>
-                                                </widget>
-                                            </grid>
-                                        </widget>
-                                    </vbox>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </vbox>
-                </widget>
+                </hbox>
             </widget>
-            <widget class="QLayoutWidget">
+            <widget class="QWidget">
                 <property name="name">
-                    <cstring>layout9</cstring>
+                    <cstring>Widget9</cstring>
                 </property>
-                <hbox>
+                <attribute name="title">
+                    <string>Select Gas/Fluid Mixture Model</string>
+                </attribute>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QPushButton">
+                    <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>buttonOk</cstring>
+                            <cstring>layout13</cstring>
                         </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>100</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Arial</family>
-                                <bold>1</bold>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>&amp;OK</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+O</string>
-                        </property>
-                        <property name="autoDefault">
-                            <bool>true</bool>
-                        </property>
-                        <property name="default">
-                            <bool>true</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Click to accept selections and proceed with creating/opening the modelling project</string>
-                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout12</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QButtonGroup">
+                                        <property name="name">
+                                            <cstring>ButtonGroup1_2</cstring>
+                                        </property>
+                                        <property name="title">
+                                            <string></string>
+                                        </property>
+                                        <vbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QRadioButton">
+                                                <property name="name">
+                                                    <cstring>gselI</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Ideal mixture of gaseous components, &amp;I (default)</string>
+                                                </property>
+                                                <property name="checked">
+                                                    <bool>true</bool>
+                                                </property>
+                                            </widget>
+                                            <widget class="QRadioButton">
+                                                <property name="name">
+                                                    <cstring>gselF</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>CG EoS for non-electrolyte fluid (Churakov &amp;&amp; Gottschalk, 2003), &amp;F</string>
+                                                </property>
+                                            </widget>
+                                            <spacer>
+                                                <property name="name">
+                                                    <cstring>spacer7_3</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Vertical</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Expanding</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>20</width>
+                                                        <height>16</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                            <widget class="QRadioButton">
+                                                <property name="name">
+                                                    <cstring>gselU</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Do not generate; select a user-defined Phase record from database, &amp;U</string>
+                                                </property>
+                                                <property name="checked">
+                                                    <bool>false</bool>
+                                                </property>
+                                            </widget>
+                                            <widget class="QRadioButton">
+                                                <property name="name">
+                                                    <cstring>gselNo</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Do not include gas/fluid mixture phase into the system definition, &amp;N</string>
+                                                </property>
+                                                <property name="checked">
+                                                    <bool>false</bool>
+                                                </property>
+                                            </widget>
+                                        </vbox>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer6</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>50</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout11</cstring>
+                                        </property>
+                                        <hbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel1_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Phase record key:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLineEdit">
+                                                <property name="name">
+                                                    <cstring>gpRkeyEdit</cstring>
+                                                </property>
+                                                <property name="toolTip" stdset="0">
+                                                    <string>This field shows a record key of the gas/fluid Phase to be automatically generated</string>
+                                                </property>
+                                            </widget>
+                                        </hbox>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                            <widget class="QGroupBox">
+                                <property name="name">
+                                    <cstring>groupBox1</cstring>
+                                </property>
+                                <property name="title">
+                                    <string></string>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_2_2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Parameters for generated Phase&lt;br&gt;(under construction)</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout16</cstring>
+                                        </property>
+                                        <grid>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QLineEdit" row="3" column="1">
+                                                <property name="name">
+                                                    <cstring>gpEdit3</cstring>
+                                                </property>
+                                                <property name="toolTip" stdset="0">
+                                                    <string>Reserved for use in future versions</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="2" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel2_3</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Par2:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLineEdit" row="2" column="1">
+                                                <property name="name">
+                                                    <cstring>gpEdit2</cstring>
+                                                </property>
+                                                <property name="toolTip" stdset="0">
+                                                    <string>Reserved for use in future versions</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="3" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel2_4</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Par3:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLineEdit" row="0" column="1">
+                                                <property name="name">
+                                                    <cstring>gpEdit0</cstring>
+                                                </property>
+                                                <property name="toolTip" stdset="0">
+                                                    <string>Reserved for use in future versions</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="0" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Par0:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLineEdit" row="1" column="1">
+                                                <property name="name">
+                                                    <cstring>gpEdit1</cstring>
+                                                </property>
+                                                <property name="toolTip" stdset="0">
+                                                    <string>Reserved for use in future versions</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="1" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel2_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Par1:</string>
+                                                </property>
+                                            </widget>
+                                        </grid>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
                     </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>buttonCancel</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>100</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Arial</family>
-                                <bold>1</bold>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Cancel</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+C</string>
-                        </property>
-                        <property name="autoDefault">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Horizontal Spacing2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>150</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>buttonCheck</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>100</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Arial</family>
-                                <bold>1</bold>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>C&amp;heck</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+H</string>
-                        </property>
-                        <property name="autoDefault">
-                            <bool>false</bool>
-                        </property>
-                        <property name="default">
-                            <bool>false</bool>
-                        </property>
-                        <property name="toolTip" stdset="0">
-                            <string>Click to see updated Phase record keys and parameters related to chosen models </string>
-                        </property>
-                    </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>Horizontal Spacing2_2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>140</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>buttonHelp</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>100</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <family>Arial</family>
-                                <bold>1</bold>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Help</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+H</string>
-                        </property>
-                        <property name="autoDefault">
-                            <bool>true</bool>
-                        </property>
-                    </widget>
-                </hbox>
+                </vbox>
             </widget>
-        </vbox>
-    </widget>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout9</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Click to accept selections and proceed with creating/opening the modelling project</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>150</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCheck</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>C&amp;heck</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+H</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>false</bool>
+                    </property>
+                    <property name="default">
+                        <bool>false</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Click to see updated Phase record keys and parameters related to chosen models </string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>140</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonHelp</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Arial</family>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Help</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+H</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
 </widget>
 <connections>
     <connection>
