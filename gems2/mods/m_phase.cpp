@@ -1206,10 +1206,16 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
 {
 //    TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     const char *part;
-    char nbuf[MAXFORMULA];
+    char nbuf[MAXFORMULA], neutbuf[16], H2Obuf[16];
     gstring Name = "Auto-set ";
 
 //  Setup of aqueous phase
+    if( !apar[2] )
+    	strcpy(neutbuf, "1.0");
+    else strcpy(neutbuf, "b_q*IS");
+    if( !apar[3] )
+    	strcpy(H2Obuf, "1.0");
+    else strcpy(H2Obuf, "calculate");
     switch( amod )
     {
        case 'N': // No aqueous phase
@@ -1224,7 +1230,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->nscM = 0; php->npxM = 0;
                 Name += "ion-association model, Davies equation";
                 apar[0] = apar[1] /* = apar[2]*/ = 0.0;
-                sprintf( nbuf, "Parameters: ; neutral= %-4.1f; I_max =%-5.3f ", apar[2], apar[3] );
+                sprintf( nbuf, "Parameters: gam_neut= %s; gam_H2O= %s", neutbuf, H2Obuf );
                 break;
        case 'H': // EDH (Helgeson) with common bg and common a0
                 memcpy( php->sol_t, "HNNSNN", 6 );
@@ -1232,8 +1238,8 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->ncpN = 2; php->ncpM = 4;
                 php->nscM = 0; php->npxM = 0;
                 Name += "ion-association model, EDH(H) equation, common ion size";
-    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; a_size= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
-                 apar[0], apar[1], apar[2], apar[3] );
+    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; a_size= %-5.3f; gam_neut= %s; gam_H2O= %s ",
+                 apar[0], apar[1], neutbuf, H2Obuf );
                 break;
        case '3': // EDH with Kielland a0 and common bg
                 memcpy( php->sol_t, "3NNSNN", 6 );
@@ -1242,8 +1248,8 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->nscM = 1; php->npxM = 0;
                 Name += "ion-association model, EDH(K) equation, Kielland ion sizes";
                 apar[1] = 0.0;
-    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
-                 apar[0], apar[2], apar[3] );
+    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; a_size=specific; gam_neut= %s; gam_H2O= %s ",
+                 apar[0], neutbuf, H2Obuf );
                 break;
        case '2': // DH without bg and Kielland a0
                 memcpy( php->sol_t, "2NNSNN", 6 );
@@ -1252,8 +1258,8 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->nscM = 1; php->npxM = 0;
                 Name += "ion-association model, DH equation, Kielland ion sizes";
                 apar[1] = 0.0;
-    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; neutral= %-4.1f; I_max =%-5.3f ",
-                 apar[0], apar[2], apar[3] );
+    sprintf( nbuf, "Parameters: b_gamma= %-5.3f; a_size=specific; gam_neut= %s; gam_H2O= %s ",
+                 apar[0], neutbuf, H2Obuf );
                 break;
        case '1': // DH limiting law (no a0 and bg required)
                 memcpy( php->sol_t, "1NNSNN", 6 );
@@ -1263,7 +1269,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 Name += "ion-association model, Debye-Hueckel limiting law";
                 apar[0] = apar[1] = apar[2] = 0.0;
 //                apar[3] = 0.01;
-                sprintf( nbuf, "Parameters: I_max =%-5.3f ", apar[3] );
+                sprintf( nbuf, "Parameters: gam_H2O= %s ", H2Obuf );
                 break;
        default: // Unrecognized code - error message ?
        case 'S': // SIT - under testing
@@ -1490,7 +1496,15 @@ TPhase::AssemblePhase( const char* key, const char* part, float param[4],
     {
        php->pnc[5] = param[0];
        php->pnc[6] = param[1];
-       php->pnc[7] = param[2];  // must be changed SD 11/12/2008
+// Temporary workaround  SD 11/12/2008
+if(!param[2] && !param[3] )
+	   php->pnc[7] = -2.;
+else if(!param[2] && param[3] )
+	   php->pnc[7] = -1.;
+else if( param[2] && param[3] )
+	   php->pnc[7] = 0.0;
+else if( param[2] && !param[3] )
+	   php->pnc[7] = 1.;
     }
 // Calculating the phase record and saving it to database
     CalcPhaseRecord( true );
