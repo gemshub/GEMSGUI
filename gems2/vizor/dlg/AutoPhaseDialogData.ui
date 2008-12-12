@@ -242,7 +242,7 @@ the aqueous phase model</string>
                                     <cstring>textLabel2_5</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>b_gamma(1,298) value:</string>
+                                    <string>b_gamma (298,1) value:</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
@@ -253,17 +253,17 @@ the aqueous phase model</string>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>0.064</string>
+                                        <string>0.025</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>0.064</string>
+                                        <string>0.098</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>0.064</string>
+                                        <string>0.123</string>
                                     </property>
                                 </item>
                                 <property name="name">
@@ -284,7 +284,7 @@ the aqueous phase model</string>
                                     <cstring>textLabel2_5_2</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>b_gamma(P,T) mode</string>
+                                    <string>b_gamma (T,P) mode</string>
                                 </property>
                             </widget>
                             <widget class="QComboBox">
