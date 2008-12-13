@@ -1,3 +1,33 @@
+12/12/2008
+Insert new changes in as in gems2 to CalcDialog and AutophaseDialog
+
+12/12/2008
+Changed AutoPhaseDialog, added editable comboboxes for b_gamma and a0
+and comboboxes for selection mode of calculation gammas neutral sp. and H2O
+( results sets in aPa->pa.aqPar and php->pnc[7] = param[2] )
+
+11/12/2008
+Copy changes from gems2 to standalone ( TSolMod class, and other models)
+Added new files to projects s_fgl1.cpp, s_fgl3.cpp and s_fgl4.cpp
+Change all *.pro files and all Makefiles for Linux-GNU, Linux-PGI and CRAYXT3-catamount
+
+11/12/2008
+Insert changes into CalcDialog
+Changed Pitzer calculation
+Fixed error: Select all records with the same key (without last fild) on remake
+
+10/12/2008
+Renamed file s_fglbred.cpp into s_fgl1.cpp and added 2 empty files s_fgl3.cpp and s_fgl4.cpp 
+Changed all *.pro files and Makefile.gcc files SD
+
+09/12/2008
+Impemented PureSpecies() function  into TCGFcalc class 
+Isolated  creation of an instance of the class and calculation of TP corrected
+
+05/12/2008
+Rewrited Churakov-Gottschalk (2004) multicomponent fluid mixin model 
+as class TCGFcalc  inherited from TSolMod class (SD)
+
 04/12/2008
 Rewrited PRSV EOS calculations for fluids model as class TPRSVcalc  inherited from TSolMod class (SD)
 
