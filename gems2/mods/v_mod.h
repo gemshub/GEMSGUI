@@ -267,7 +267,7 @@ enum dcomp_objects {                  // work objects
 };
 
 enum DC_CNTRL_CODES {
-    //Codes for methods of calculation of DC thermod. parameters
+    // General codes for methods of calculation of DC thermodynamic parameters
     CTPM_CPT = 'C',  /* on the basis of empirical heat capacity equation Cp=f(T),
                         used for DComp and ReacDC definitions (solid, liquid, gaseous
                         substances and aqueous species) */
@@ -284,8 +284,7 @@ enum DC_CNTRL_CODES {
     CTPM_SOR = 'X',  /* calculations via adsorption or ion exchange constants, using
                         LFER correlations (Sverjensky 1993,1994) - ReacDC only (reserved). */
 
-    //Codes for T dependencies of energy parameters'
-    // (C) CTPM_CPT
+    //Codes for temperature corrections of thermodynamic properties
     CTM_CST = 'S',   /* calculation of ordinary integral using 11-term Cp=f(T) equations
                         (up to 3 phase transitions or up to 3 Cp=f(T) equations for DComp) */
     CTM_CHP = 'H',   /* the same with modifications by Holland and Powell (1998) (minerals); */
@@ -293,13 +292,11 @@ enum DC_CNTRL_CODES {
     CTM_FEI = 'F',   /* Cp=f(T) equation by Fei and Saxena (1986) (reserved) */
     CTM_LGX = 'X',   /* REACDC: calculation of reaction properties from empirical
                         function lgK=f(T) in 7-term form obtained from 5-term Cp(T) */
-    // (H) CTPM_HKF
     CTM_HKF = 'K',   /* calculation with HKF EOS (for aqueous species) as in SUPCRT92 */
     CTM_WAT = 'W',   /* calculation of H2O water(steam) properties from HGK and LVS
                         equations of state (also using subroutines of SUPCRT92) */
     CTM_WAS = 'V',   /* calculation of H2O water (steam) properties from IAPWS-95
                         equation of state (reserved) */
-    // (K) CTPM_REA
     CTM_LGK = 'L',   /* calculation from empirical function lgK=f(T) in 7-term form
                        (Nordstrom and Munoz, 1988) - ReacDC only */
     CTM_EK0 = '0',   /* one-term extrapolation at dHr = 0 and logK = const added 15.07.03 */
@@ -315,17 +312,13 @@ enum DC_CNTRL_CODES {
                         added 28.03.2008 */
     CTM_MRB = 'Y',   /* Calculation of deltaR with modified Ryzhenko-Bryzgalin
                         model (added by TW and DK on 03.08.2007 */
-    // (S) CTPM_EOS
     CTM_CPG = 'C',   /* reserved (FGL) */
-    // (I) CTPM_ISO
     CTM_IFG = 'G',   /* calculation of G0 for isotopic forms from equations (Grichuk,
                       1 988) - ReacDC only */
-    // (X) CTPM_SOR
     CTM_KAS = 'K',   /* reserved */
     CTM_DAS = 'D',   /* reserved */
 
-    // Codes for accounting P-dependencies
-    // 1.Codes valid for any combination of method - and T-dependence codes:
+    // Codes for pressure corrections of thermodynamic properties
     CPM_OFF  = 'N',  /* no account for pressure dependence */
     CPM_NUL  = '0',  /* account for pressure dependence is already specified as
                         inherent to a method */
@@ -333,40 +326,27 @@ enum DC_CNTRL_CODES {
     CPM_TWO  = '2',
     CPM_TRI  = '3',
     CPM_CON  = 'C',  /* molar volume of DC or dVr are assumed independent of P and T */
-    // 2.Codes valid for calculations based on empirical Cp=f(T) equation
-    // CTPM_CPT and CTPM_REA
     CPM_VKE  = 'K',  /* molar volume is calculated from empirical equation V=f(T,P)
                         (modification by Dorogokupets et.al. 1988) */
     CPM_VBE  = 'V',  /* calculation via V=f(T,P) as modified by (Berman,1988) */
-    // CTPM_CPT
     CPM_VBM  = 'B',  /* alloc. array; calculate Birch-Murnaghan (1947) V(T,P) */
     CPM_CEH  = 'E',  /* DC molar volume V(T,P) is calculated from isothermal compres-
                         sibility and isobaric expansibility (Holland and Powell, 1998) */
     CPM_GAS  = 'G',  /* calculation of fugacities of gases from their critical para-
-                        meters and corresponding state theory (FGL-Karpov et al., 1995)
-                       (reserved) */
-    // 3. Codes used together with calculations by modified HKF EOS:
-    // CTPM_HKF
+                        meters and corresponding state theory (reserved) */
+    CPM_PRSV = 'R',  /* Peng-Robinson-Stryjek-Vera EOS for gases and fluids (nonelectrolytes)
+                        (added by T.Wagner in July 2006) */
+    CPM_EMP  = 'S',  /* calculation from Churakov-Gottschalk (2003) EOS for gases
+                        and fluids (nonelectrolytes) */
+    CPM_SRK  = 'T',  /* Soave-Redlich-Kwong EOS for gases and fluids (nonelectrolytes) */
+
     CPM_HKF  = 'F',  /* account for pressure up to 5 kbar by HKF (Tanger,Helgeson,1988) */
     CPM_AKI  = 'A',  /* calculation of partial molal volumes for aqueous nonelectrolyte species
                         using EOS (Akinfiev and Diamond, 2003) */
     CPM_PCR  = 'P',  /* PARCOR estimation of HKF EoS parameters 19.05.98 */
-    CPM_PRSV = 'R',  /* Peng-Robinson-Stryjek-Vera EoS for gases and fluids (nonelectrolytes)
-                        (added by T.Wagner in July 2006) */
-    // CTPM_REA
-    CPM_INK  = 'Z',  /* calculation using Lagrange polinomial interpolation over
+    CPM_INK  = 'Z'   /* calculation using Lagrange polinomial interpolation over
                         the array  of lgK(T,P) */
-    CPM_EMP  = 'S'   /* calculation from Churakov-Gottschalk (2003) EoS for gases
-                        and fluids (nonelectrolytes) */
-    /*4. Codes for calculations of pressure impact on properties derived via
-      REACDC lgK functions.
-      K - V=f(T,P) equation in the form (Dorogokupets et.al.,1988);
-      V - V=f(T,P) equation in the form (Berman,1988);
-      Z - calculation using Lagrange polinomial interpolation over the array
-          of lgK(T,P).
-     0 - for 1,2,3 - parametric approximations of isocoulombic reactions
-           assuming dVr = const.
-                                              */
+
 };
 
 enum DC_phase_state {   // Code of phase state identification of DC record keys

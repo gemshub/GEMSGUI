@@ -3,8 +3,7 @@
 //
 // Copyright (C) 2004,2008  S.Churakov, Th.Wagner, D.Kulik
 //
-// Implementation of parts of TPRSVcalc and TCFGcalc classes
-// called from m_dcomp.cpp
+// Implementation of TPRSVcalc, TCGFcalc and TSRKcalc classes
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry
@@ -576,7 +575,7 @@ TPRSVcalc::FugacitySpec( double *fugpure  )
 #include "s_tpwork.h"
 
 // Calculates properties of pure fluids when called from RTParm
-long int TPRSVcalc::CalcFugPure( void )
+long int TPRSVcalc::PRCalcFugPure( void )
 {
     double T, P, Fugcoeff = 0.1, Volume = 0.0, DeltaH=0, DeltaS=0;
 //    float*Coeff;
@@ -2003,6 +2002,7 @@ if( aW.twp->wtW[6] < 1. || aW.twp->wtW[6] > 10. )
 
 //=======================================================================================================
 // Implementation of EOSPARAM class (used by TCGFcalc class)
+//=======================================================================================================
 
 void EOSPARAM::free()
 {
@@ -2130,5 +2130,17 @@ long int EOSPARAM::ParamMix(double *Xin)
     emix = emix/s3mix;
     return NComp;
   }
+
+
+
+//=======================================================================================================
+// Soave-Redlich-Kwong (SRK) model for fluid mixtures
+// References: Soave (1972), Soave (1993)
+// Implementation of the TSRKcalc class
+//=======================================================================================================
+
+
+
+
 
 //--------------------- End of s_fgl.cpp ---------------------------

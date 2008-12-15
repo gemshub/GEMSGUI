@@ -710,7 +710,7 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
         calc_tpcv( q, p, CE, CV );
         if( CV == CPM_GAS && ( aW.twp->P > 10. && aW.twp->TC > 100. ) )
         {
-//            TFGLcalc aFGL;           Blocked 15.02.2007 by DK 
+//            TFGLcalc aFGL;           Blocked 15.02.2007 by DK
             aW.twp->CPg = dcp->CPg;
             aW.twp->mwt = dcp->mwt;
             aW.twp->PdcC = dcp->PdcC;
@@ -732,12 +732,12 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
            // aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
            aW.twp->CPg = dcp->CPg;
            aW.twp->TClow = dcp->TCint[0];
-           aPRSV.CalcFugPure( );
+           aPRSV.PRCalcFugPure( );
            // aPRSV.~TPRSVcalc();
            aW.twp->CPg = NULL; // ????
         }
         else if( CV == CPM_AKI )
-        {  	// calculation of partial molal volumes for aqueous non-polar species 
+        {  	// calculation of partial molal volumes for aqueous non-polar species
         	//  using EOS (Akinfiev,Diamond 2003) added by DK and TW 30.01.2008
         	calc_akinf( q, p );
         }

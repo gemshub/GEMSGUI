@@ -60,6 +60,61 @@
                     </item>
                     <item>
                         <property name="text">
+                            <string>G   Binary Redlich-Kister model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>M   Binary Margules subregular model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>T   Ternary regular Margules model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>R   Regular multicomponent mixing model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>V   Van Laar multicomponent mixing model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>K   Multicomponent Redlich-Kister mixing model (built-in)  </string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>L   NRTL multicomponent mixing model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>W  Wilson multicomponent mixing model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>F   Churakov-Gottschalk (CG) EoS fluid model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>P   Peng-Robinson-Stryjek-Vera (PRSV) EoS fluid model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>E   Soave-Redlich-Kwong (SRK) EoS fluid model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
                             <string>D   Aqueous, Davies equation (built-in)</string>
                         </property>
                     </item>
@@ -101,56 +156,6 @@
                     <item>
                         <property name="text">
                             <string>A   Adsorption, SACT and EDL models (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>F   Churakov-Gottschalk EoS fluid model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>P   Peng-Robinson-Stryjek-Vera (PRSV) EOS fluid model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>G   Binary Redlich-Kister model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>M   Binary Margules subregular model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>T   Ternary regular Margules model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>R   Regular multicomponent mixing model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>K   Multicomponent Redlich-Kister mixing model (built-in)  </string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>V   Van Laar multicomponent mixing model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>L   NRTL multicomponent mixing model (built-in)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>W  Wilson multicomponent mixing model (built-in)</string>
                         </property>
                     </item>
                     <item>

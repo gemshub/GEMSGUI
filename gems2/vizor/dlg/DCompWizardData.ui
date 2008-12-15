@@ -330,37 +330,47 @@
                 <widget class="QComboBox">
                     <item>
                         <property name="text">
-                            <string>C   Pressure corrections assuming constant molar volume V0</string>
+                            <string>C   Pressure correction assuming constant molar volume V0</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>E   Pressure corrections using dV (T,P) from Birch-Murnaghan EoS (Holland and Powell 1998)</string>
+                            <string>E   Pressure correction using dV (T,P) from Birch-Murnaghan EoS (Holland and Powell 1998)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>F   Pressure corrections using HKF EoS for aqueous species or HGK EoS for water</string>
+                            <string>B   Pressure correction using dV (T,P) from Birch-Murnaghan EoS (Gottschalk 1997)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>S   Pressure corrections for fluids using Churakov-Gottschalk EoS (Churakov and Gottschalk 200)</string>
+                            <string>K   Pressure correction using dV (T,P) calculated from 5 empirical coefficients</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>N   No pressure corrections at all to be done</string>
+                            <string>S   Pressure correction for fluids using Churakov-Gottschalk (CG) EoS</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>B   Pressure corrections using V(T,P) from Birch-Murnaghan EoS (Gottschalk 1997)</string>
+                            <string>R   Pressure correction for fluids using Peng-Robinson-Stryjek-Vera (PRSV) EoS</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>K   Pressure corrections using dV (T,P) calculated from 5 empirical coefficients</string>
+                            <string>T   Pressure correction for fluids using Soave-Redlich-Kwong (SRK) EoS</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>F   Pressure correction using HKF EoS for aqueous electrolytes or HGK EoS for water</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>A   Pressure correction for aqueous nonelectrolytes (Akinfiev and Diamond 2003)</string>
                         </property>
                     </item>
                     <item>
@@ -370,17 +380,12 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>0   Account for pressure dependence is inherent e.g. in EoS model</string>
+                            <string>N   No pressure correction to be done (not recommended)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>R   Pressure corrections for fluids using Peng-Robinson-Stryjek-Vera (PRSV) EoS</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>A   Pressure correction for aqueous nonelectrolytes (Akinfiev and Diamond 2003)</string>
+                            <string>0   Account for pressure corrections is inherent in the specified model (e.g. the EoS)</string>
                         </property>
                     </item>
                     <property name="name">
