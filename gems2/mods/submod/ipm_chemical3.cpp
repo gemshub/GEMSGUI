@@ -1571,7 +1571,7 @@ TMulti::SolModParPT( long int k, char ModCode )
         case SM_AQSIT:
         case SM_PRFLUID:
         case SM_CGFLUID:
-        {    ErrorIf( !phSolMod[k], "","Illegal index of phase");
+        {    ErrorIf( !phSolMod[k], "","Invalid index of phase");
               TSolMod* aSM = phSolMod[k];
               aSM->PTparam();
              break;
@@ -1598,7 +1598,7 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_AQSIT:
         case SM_PRFLUID:
         case SM_CGFLUID:
-        {    ErrorIf( !phSolMod[k], "","Illegal index of phase");
+        {    ErrorIf( !phSolMod[k], "","Invalid index of phase");
              TSolMod* aSM = phSolMod[k];
              aSM->MixMod();
              break;
@@ -1626,7 +1626,7 @@ TMulti::SolModExcessParam( long int k, char ModCode )
         case SM_AQSIT:
         case SM_PRFLUID:
         case SM_CGFLUID:
-         {    ErrorIf( !phSolMod[k], "","Illegal index of phase");
+         {    ErrorIf( !phSolMod[k], "","Invalid index of phase");
               TSolMod* aSM = phSolMod[k];
               aSM->getExcessProp( Gex, Vex, Hex, Sex, CPex );
               break;

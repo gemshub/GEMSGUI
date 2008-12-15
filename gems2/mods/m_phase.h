@@ -181,7 +181,7 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_PRIVATE_ = 'P',
     SM_PUBLIC = 'U',
     // Posible modes calculating of activity coefficients SGM_MODE
-    SM_STNGAM = 'S',
+    SM_STNGAM = 'S',        // Built-in function for activity coefficients
     SM_NOSTGAM = 'N',
  // This code (one upper-case letter or digit) defines type of mixing
  //   and default method of calculation of mixing properties before and at
@@ -199,9 +199,9 @@ enum solmod_switches { /* indexes of keys of model solution*/
     SM_AQDH2 = '2',		// built-in 2-term Debye-Hueckel (Kielland)
     SM_AQDH3 = '3',		// built-in 3-d approximation of Debye-Hueckel
     SM_AQDHH = 'H',		// built-in 3-d approximation of Debye-Hueckel (Helgeson)
-    SM_AQSIT = 'S',		// built-in SIT model for aq activity coeffs (reserved)
+    SM_AQSIT = 'S',		// built-in SIT model for aq activity coeffs
     SM_AQEXUQ = 'Q',    // built-in EUNIQUAC model for aqueous activity coeffs (reserved)
-    SM_AQPITZ = 'Z',    // built-in Pitzer HMW aqueous activity coefficient model (under construction)
+    SM_AQPITZ = 'Z',    // built-in Pitzer HMW aqueous activity coefficient model
     SM_PRFLUID = 'P',	// Peng-Robinson-Stryjek-Vera EOS fluid model (Added by Th.Wagner)
     SM_IONEX = 'E',		// ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A',	// models of surface complexation at solid-aqueous interface

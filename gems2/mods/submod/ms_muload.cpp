@@ -99,37 +99,13 @@ if( pmp->pIPN >= 1 )           //SD 29/11/2006
         switch( modT[DCE_LINK] )
         {
         case SM_UNDEF:  // no script equations were specified
-            if( modT[SGM_MODE] != SM_STNGAM )
-                continue;
-//            if( modT[SPHAS_TYP] != SM_AQSIT )
-//            {                          // Not an aq phase with SIT model
+               if( modT[SGM_MODE] != SM_STNGAM )
+                  continue;
                pmp->LsMod[k*3] = aPH->php->ncpN;  // number of interaction parameters
                pmp->LsMod[k*3+1] = aPH->php->npxM; // max. order of interaction parameters
                pmp->LsMod[k*3+2] = aPH->php->ncpM; // number of coeffs per int.parameter
                pmp->LsMdc[k] = aPH->php->nscM; // changed 07.12.2006  KD
-//            }
-/*            else { // Aq phase with SIT model - interaction coeffs must be compressed
-               // checking dimensions of the pnc table
-               int nCat=0, nAn=0, jj;
-
-               // Calculating number of cations and number of anions
-               for( jj = jb; jj<je; jj++ )
-               {
-                   if( pmp->EZ[jj] < 0 )
-                    nAn++;
-                  else if( pmp->EZ[jj] > 0 )
-                    nCat++;
-                  else ;
-               }
-//               pmp->LsMod[k] = (short)(nCat * nAn);  changed 07.12.2006  KD
-               pmp->LsMod[k*3] = (short)nCat;
-               pmp->LsMod[k*3+1] = 1;
-               pmp->LsMod[k*3+2] = (short)nAn;
-               pmp->sitNcat = (short)nCat;
-               pmp->sitNan = (short)nAn;
-            }
-*/
-            goto LOAD_NIDMCOEF;
+               goto LOAD_NIDMCOEF;
         case SM_PRIVATE_:
         case SM_PUBLIC:   // nonideal solution
                //  Changed 07.12.2006   KD
@@ -260,24 +236,7 @@ LOAD_NIDMCOEF:
               ErrorIf( pmp->PMc == NULL, "SolModLoad",
                        "Error in reallocating memory for pmp->PMc." );
 
-// Check if coeffs are properly compressed into MULTI !!!!!!!!!!!!!!!
-//              if( modT[SPHAS_TYP] != SM_AQSIT )  // Not a SIT model
-//              {    // temporary memcpy() - reimplement with compression !!!!!
-                  copyValues( pmp->PMc+kc, aPH->php->pnc,
-                     (pmp->LsMod[k*3]*pmp->LsMod[k*3+2]));
-//              }
-//              else { // Aqueous phase with SIT model - to be reworked
-//                 float *ppnc;
-//                 ppnc = PackSITcoeffs( k, JB, JE, jb, je, pmp->LsMod[k*3] );
-//                 if( ppnc )
-//                 {  // ppnc is actually pmp->sitE !
-//                    copyValues( pmp->PMc+kc, ppnc,
-//                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]);
-//                 }
-//                 else
-//                    fillValue( pmp->PMc+kc, 0,
-//                      pmp->LsMod[k*3]*pmp->LsMod[k*3+2]);
-//              }
+              copyValues( pmp->PMc+kc, aPH->php->pnc, (pmp->LsMod[k*3]*pmp->LsMod[k*3+2]));
           }
           else { // no array with interaction parameters in the Phase record
             pmp->LsMod[k*3] = 0;
@@ -292,7 +251,7 @@ LOAD_NIDMCOEF:
                 (kx+pmp->LsMod[k*3]*pmp->LsMod[k*3+1]), 1, L_ );
              ErrorIf( pmp->IPx == NULL, "SolModLoad",
                       "Error in reallocating memory for pmp->IPx" );
-               // temporary memcpy - reimplement with compression!
+
              copyValues( pmp->IPx+kx, aPH->php->ipxt,
                      (pmp->LsMod[k*3]*pmp->LsMod[k*3+1]));
           }
@@ -316,30 +275,7 @@ LOAD_NIDMCOEF:
                 jp = mup->Pl[j]; // mup->Pl[pmp->muj[j]];
                 copyValues( pmp->DMc+kd+jkd, aPH->php->scoef+jp*pmp->LsMdc[k],
                         pmp->LsMdc[k]);
-// Copying the CG fluid EoS coeffs - obsolete
-//               if( (aPH->php->PphC == PH_FLUID) && (sMod[SPHAS_TYP] == SM_CGFLUID) )
-//               {
-//                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
-//                 {  // to be reworked for compatibility with GEMIPM2K !
-//                    copyValues( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
-//                       pmp->LsMdc[k]);
-//                    pmp->Pparc[jj] = tpp->Fug[j-JB];     // This single line brings
-//                   pmp->Pparc[jp] = tpp->Fug[j-JB];    // T,P depenedence in SolModLoad()!!!
-//                 }
-//               }
-// Copying the PRSV fluid EoS coeffs
-//               if( (aPH->php->PphC == PH_FLUID || aPH->php->PphC == PH_GASMIX )
-//                    && (sMod[SPHAS_TYP] == SM_PRFLUID) )
-//               {
-//                 if( tpp->PtvdVg != S_OFF && j-JB < tpp->Lg )
-//                 {  // to be reworked for compatibility with GEMIPM2K
-//                    copyValues( pmp->DMc+kd+jkd, tpp->dVg +(j-JB)*4,
-//                       pmp->LsMdc[k]);
-//                   pmp->Pparc[jj] = tpp->Fug[j-JB];     // This single line brings
-//                   pmp->Pparc[jp] = tpp->Fug[j-JB];    // T,P depenedence in SolModLoad()!!!
-//                 }
-//               }
-               jkd += pmp->LsMdc[k]; jj++;
+                jkd += pmp->LsMdc[k]; jj++;
             } /* j */
           }
           else pmp->LsMdc[k] = 0; // no DC coefficients

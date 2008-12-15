@@ -875,7 +875,8 @@ TPhase::MakeCatAnLists( bool WorkCount, bool WorkAlloc, bool FillOut )
 
    if( WorkAlloc )
    {
-      if( php->Ppnc == S_ON && php->sol_t[SPHAS_TYP] == SM_AQSIT )
+      if( php->Ppnc == S_ON
+    		  && (php->sol_t[SPHAS_TYP] == SM_AQSIT || php->sol_t[SPHAS_TYP] == SM_AQPITZ) )
       {
          php->lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Alloc(
                           php->nCat, 1, MAXDCNAME );
