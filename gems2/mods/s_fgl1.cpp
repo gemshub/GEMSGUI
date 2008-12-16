@@ -420,7 +420,7 @@ void TPitzer::calcSizes()
 	  else
 		 Nn++;
   }
-  Ns = NComp-1;
+  Ns = NComp-1;  // index of water-solvent
 }
 
 
@@ -614,9 +614,9 @@ void TPitzer::Ecalc( double z, double z1, double I, double Aphi,
 		double& Etheta, double& Ethetap)
 {
   double xMN, xMM, xNN,  x;
-  double zet, dzdx;
+  double zet=0., dzdx=0.;
   double bk[23], dk[23];
-  double JMN, JpMN, JMM, JpMM, JNN, JpNN;
+  double JMN=0., JpMN=0., JMM=0., JpMM=0., JNN=0., JpNN=0.;
   long int k, m;
 
   xMN= 6. * z*z1 * Aphi * pow(I,0.5);
@@ -740,12 +740,12 @@ double TPitzer::IonicStr( double& I )
 // Calculate osmotic coefficient, activity, and activity coefficient of water-solvent
 double TPitzer::lnGammaH2O( )
 {
-    double Etheta, Ethetap;
+    double Etheta=0., Ethetap=0.;
 	long int a, c, n, c1, a1;
 // Term OC1, Pitzer-Toughreact Report 2006, equation (A2)
 	double OC1 = 2. * ( (-(Aphi*pow(I,1.5)) / (1.+1.2*Is) ));
 // Term OC2
-	double OC2=0., alp, alp1, C, h1, h2, B3;
+	double OC2=0., alp=0., alp1=0., C=0., h1=0., h2=0., B3=0.;
 	for( c=0; c<Nc; c++)
 	  for( a=0; a<Na; a++)
 	  {
@@ -799,7 +799,7 @@ double TPitzer::lnGammaH2O( )
 	double OCges=OC1+OC2+OC3+OC4+OC5+OC6;
 // Summation of Molalities
 	double   OCmol= sum(aM, xcx, Nc)+ sum(aM, xax, Na)+ sum(aM, xnx, Nn);
-// Osmotic coefficient (OC) = (1+Oges)/(OCmol)
+// Osmotic coefficient (OC)
 	double OC = (1.+OCges) / OCmol;
 // Activity of Water, Pitzer-Toughreact Report 2006, equation (A1)
 	double Lna =(-18.1/1000.)*OC*OCmol;
@@ -807,23 +807,23 @@ double TPitzer::lnGammaH2O( )
 	double activityH2O=exp(Lna);
 
 //  lnGamma[Ns] = activityH2O/molefractionH2O;
-	return Lna-log(x[Ns]);;
+	return Lna-log(x[Ns]);
 }
 
 
 void TPitzer::getAlp( long int c, long int a, double& alp, double& alp1 )
 {
-    if( zc(c) && fabs(za(a)) == 1. )   // was || operator!  (DK)
+    if( zc(c) == 1. || za(a) == -1. )
     {    alp=2;
         alp1=12.;
     }
     else
-      if( zc(c) && fabs(za(a)) == 2. )
+      if( zc(c) == 2. && za(a) == -2. )
       {   alp=1.4;
           alp1=12.;
       }
       else
-        if( zc(c) && fabs(za(a)) > 2. )
+        if( zc(c) > 2. && za(a) <= -2. )
         { alp=2.0;
           alp1=50.;
         }
@@ -837,7 +837,7 @@ double TPitzer::F_Factor( double Aphi, double I, double Is )
 {
 
   long int c, c1, a, a1;
-  double z, z1, Etheta, Ethetap;
+  double z=0., z1=0., Etheta=0., Ethetap=0.;
 // Term F1
   double F1=-Aphi*( (Is/(1.+1.2*Is)) + 2.*log(1.+1.2*Is)/1.2);
 // Term F2
@@ -862,7 +862,7 @@ double TPitzer::F_Factor( double Aphi, double I, double Is )
         F3 +=(ma(a)*ma(a1)*(Phip1));
 	 }
 // Term F4
-  double F4=0., alp, alp1, h1, h2, g3, g4, B1;
+  double F4=0., alp=0., alp1=0., h1, h2, g3, g4, B1;
   for( c=0; c<Nc; c++)
 	 for( a=0; a<Na; a++)
 	 {
@@ -883,14 +883,14 @@ double TPitzer::F_Factor( double Aphi, double I, double Is )
 //
 double TPitzer::lnGammaM(  long int M )
 {
-  double Etheta, Ethetap;
+  double Etheta=0., Ethetap=0.;
   long int a, n, c1, a1;
 
 // Calculate GM1, Pitzer-Toughreact Report 2006, equation (A3)
 
  double GM1=(zc(M)*zc(M))*Ffac;
 // Term GM2
- double GM2=0., alp, alp1, h1, h2, g1,g2, B2, C;
+ double GM2=0., alp=0., alp1=0., h1, h2, g1,g2, B2, C;
  for( a=0; a<Na; a++)
  {
 	 getAlp(  M,  a, alp, alp1 );
@@ -949,13 +949,13 @@ double TPitzer::lnGammaM(  long int M )
 // Calculate lnGammaX - activity coefficient of an anion with index X
 double TPitzer::lnGammaX(  long int X )
 {
-  double Etheta, Ethetap;
+  double Etheta=0., Ethetap=0.;
   long int c, n, c1, a1;
 
 // Term GX1 (Pitzer-Toughreact Report 2006, equation A4)
   double   GX1=(za(X)*za(X))*Ffac;
 // Term GX2
-  double GX2=0., C, h1, h2, g1, g2, B2, alp, alp1;
+  double GX2=0., C=0., h1, h2, g1, g2, B2, alp, alp1;
   for( c=0; c<Nc; c++)
   {
  	 getAlp(  c,  X, alp, alp1 );

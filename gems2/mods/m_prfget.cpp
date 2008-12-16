@@ -536,8 +536,8 @@ AGAIN:
 }
 
 
-// load  SysEq and unpack data
-// record from data base
+// load  SysEq and unpack data record from data base
+// (for Process, GTdemo, UnSpace ... calculations)
 void TProfil::loadSystat( const char *key )
 {
     vstr pkey(81);
@@ -567,7 +567,7 @@ void TProfil::loadSystat( const char *key )
     pmp->pESU = 0;  //  new record was readed
     gstring keyp = gstring( rt[RT_SYSEQ].UnpackKey(), 0, rt[RT_SYSEQ].KeyLen() );
     PMtest( keyp.c_str() );
-    pmp->pTPD = 0;   // workaround 26.02.2008  DK 
+    pmp->pTPD = 0;   // workaround 26.02.2008  DK
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
        multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
@@ -596,7 +596,7 @@ void TProfil::deriveSystat()
     // Test MULTY for change (if new System cfg or T, P - new)
     pmp->pESU = 0;  //  new record was readed
     PMtest( keyp.c_str() );
-    pmp->pTPD = 0;   // workaround 26.02.2008  DK 
+    pmp->pTPD = 0;   // workaround 26.02.2008  DK
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
         multi->MultiRemake( keyp.c_str() );
     if( pmp->pESU )      // unpack old solution
@@ -635,7 +635,7 @@ void TProfil::newSystat( int mode )
     // Test MULTY for change (if new System cfg or T, P - new)
     gstring keyp = rt[RT_SYSEQ].UnpackKey();
     PMtest( keyp.c_str() );
-    pmp->pTPD = 0;   // workaround 26.02.2008  DK 
+    pmp->pTPD = 0;   // workaround 26.02.2008  DK
     if( pmp->pBAL < 2 || pmp->pTPD < 2)
        multi->MultiRemake( keyp.c_str() );
     pVisor->OpenModule(window(), MD_SYSTEM);
@@ -717,11 +717,11 @@ pmp->ITF = 0; pmp->ITG = 0;
 FORCED_AIA:
 	multi->MultiCalcInit( keyp.c_str() );
 	if( pmp->pNP )
-    { 
-	   if( pmp->ITaia <=30 )       // Foolproof     
+    {
+	   if( pmp->ITaia <=30 )       // Foolproof
 		  pmp->IT = 30;
-	   else 
-		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter  
+	   else
+		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter
     }
 	if( multi->AutoInitialApprox( ) == false )
     {
@@ -729,21 +729,21 @@ FORCED_AIA:
     }
     if( pmp->MK == 2 )
     {
-        pmp->pNP = 0; 
+        pmp->pNP = 0;
         pmp->MK = 0;
-        goto FORCED_AIA;  // Trying again with AIA set after bad PIA 
+        goto FORCED_AIA;  // Trying again with AIA set after bad PIA
     }
         //    else //Show results   //if( wn[W_EQCALC].status )
     // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
 
-    int NumPrecLoops = pmp->W1+pmp->K2-1; 
+    int NumPrecLoops = pmp->W1+pmp->K2-1;
     int NumIterFIA = pmp->ITF;
-    int NumIterIPM = pmp->ITG;    
+    int NumIterIPM = pmp->ITG;
     pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
 
     if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
     {  // Refinement loops for highly non-ideal systems. Added here by KD on 15.11.2007
-       int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,  
+       int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,
 ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
        pmp->pNP = 1;
        for( pp=0; pp < abs(pa.p.PRD); pp++ )
@@ -754,16 +754,16 @@ ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
              multi->MultiCalcIterations( pp );
           }
           TotIT += pmp->IT - ITstart;
-          TotW1 += pmp->W1+pmp->K2-1; 
+          TotW1 += pmp->W1+pmp->K2-1;
        } // end pp loop
-       
+
        pmp->pNP = pNPo;
-       pmp->IT = TotIT; // ITold;   
-        
-       NumPrecLoops = TotW1; 
-       NumIterFIA = pmp->ITF;  
-       NumIterIPM = pmp->ITG;  
-    }       
+       pmp->IT = TotIT; // ITold;
+
+       NumPrecLoops = TotW1;
+       NumIterFIA = pmp->ITF;
+       NumIterIPM = pmp->ITG;
+    }
     calcFinished = true;
 
     pmp->t_end = clock();
@@ -772,7 +772,7 @@ ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
 //nmt    pVisor->CalcFinished();
     STat->setCalcFlag( true );
     STat->CellChanged();
-    
+
     return pmp->t_elap_sec;
 }
 

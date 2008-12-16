@@ -825,7 +825,7 @@ private:
     {
 		double sum_ =0.;
 		for( long int i=0; i<Narr; i++ )
-          sum_ += arr[ xx[i]];
+          sum_ += arr[xx[i]];
 		return sum_;
     }
 

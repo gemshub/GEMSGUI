@@ -68,7 +68,7 @@ void TMulti::MultiRemake( const char *key )
     if( syp->DLLim == S_ON || syp->DULim == S_ON )
         pmp->PLIM = 1;
     else pmp->PLIM = 0;
-//    pmp->IT = 0;     Debugging 12.03.2008 DK 
+//    pmp->IT = 0;     Debugging 12.03.2008 DK
     pmp->ITF = 0; pmp->ITG = 0;
     if( syp->PE != S_OFF )
         pmp->E = 1;
@@ -717,7 +717,7 @@ PARLOAD: if( k < syp->Fis )
 //        for( j=jb; j<je; j++ )
 //        {
 //            G = Cj_init_calc( pmp->G0[j], j, k );   // Commented out 07.08.2008 DK
-//             Calculation of normalized values of G0 function 
+//             Calculation of normalized values of G0 function
 //            pmp->G0[j] = G;
 //        } /* j */
         // test of kinetic constraints (units of measurement!)
@@ -836,7 +836,7 @@ void TMulti::ph_surtype_assign( int k, int kk, int jb, int je,
 {
     int j, jcl, ja/*=0*/;
     long int  ist/*=0*/, isi/*=0*/;
-    
+
     /*  double SATst; */
 
     for( j=jb; j<je; j++ )
