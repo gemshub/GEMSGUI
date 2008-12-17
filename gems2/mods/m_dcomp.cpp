@@ -265,12 +265,12 @@ void TDComp::dyn_new(int q)
     else
         dc[q].Vt = (float *)aObj[ o_dcvt].Alloc(MAXVTCOEF, 1, F_ );
 
-    if( CV == CPM_GAS  || CV == CPM_PRSV  )
+    if( CV == CPM_GAS  || CV == CPM_PRSV  || CV == CPM_SRK )  // case SRK added, 17.12.2008 (TW)
         dc[q].CPg = (float *)aObj[ o_dccritpg].Alloc(MAXCRITPARAM, 1, F_ );
     else
         dc[q].CPg = (float *)aObj[ o_dccritpg ].Free();
 
-    if( CV == CPM_VBM )     // 04.04.2003  Birch-Murnaghan coeffs
+    if( CV == CPM_VBM )     // Birch-Murnaghan coeffs, 04.04.2003
         dc[q].ODc = (float *)aObj[ o_dcodc].Alloc(MAXODCOEF, 1, F_ );
     else
         dc[q].ODc = (float *)aObj[ o_dcodc ].Free();
@@ -714,11 +714,12 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
             aW.twp->CPg = dcp->CPg;
             aW.twp->mwt = dcp->mwt;
             aW.twp->PdcC = dcp->PdcC;
-//            aFGL.calc_FGL( );       Will be extended by TW
+//            aFGL.calc_FGL( );
             aW.twp->CPg = NULL;
         }
+
         else if( CV == CPM_EMP )  // Calculation of fugacity at X=1 using GC EoS
-        {                         // Churakov & Gottschalk 2003 GCA
+        {
             TCGFcalc aCGF(1, aW.twp->P, aW.twp->TC+273.15 );
             aW.twp->Cemp = dcp->Cemp;
             aW.twp->PdcC = dcp->PdcC;
@@ -726,8 +727,9 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
             aCGF.CGcalcFug( );
             aW.twp->Cemp = NULL;
         }
+
         else if( CV == CPM_PRSV )  // Calculation of fugacity at X=1 using PRSV EoS
-        {                         // Added by Th.Wagner in July 2006
+        {
            TPRSVcalc aPRSV( 1, aW.twp->P, aW.twp->TC+273.15 );
            // aPRSV.TPRSVcalc( 1, aW.twp->P, aW.twp->TC+273.15 );
            aW.twp->CPg = dcp->CPg;
@@ -736,12 +738,24 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
            // aPRSV.~TPRSVcalc();
            aW.twp->CPg = NULL; // ????
         }
+
+        else if( CV == CPM_SRK )  // Calculation of fugacity at X=1 using SRK EoS
+        {                         // added 17.12.2008 (TW)
+           TSRKcalc aSRK( 1, aW.twp->P, aW.twp->TC+273.15 );
+           aW.twp->CPg = dcp->CPg;
+           aW.twp->TClow = dcp->TCint[0];
+           aSRK.SRCalcFugPure( );
+           // aSRK.~TSRKcalc();
+           aW.twp->CPg = NULL; // ????
+        }
+
         else if( CV == CPM_AKI )
         {  	// calculation of partial molal volumes for aqueous non-polar species
         	//  using EOS (Akinfiev,Diamond 2003) added by DK and TW 30.01.2008
         	calc_akinf( q, p );
         }
         break;
+
     case CTPM_HKF:
         {
             switch( CE )

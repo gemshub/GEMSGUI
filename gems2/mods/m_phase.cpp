@@ -514,15 +514,14 @@ AGAIN_SETUP:
                           php->npxM = 0;
                           php->ncpN = 4; php->ncpM = 3;
                           break;
-          case SM_CGFLUID:  // Churakov-Gottschalk EoS
+          case SM_CGFLUID:  // Churakov-Gottschalk (CG) EoS
                           php->ncpN = 0;
                           php->ncpM = 0;
                           php->nscM = 12; // last changed 12.12.2008 (TW)
                           php->npxM = 0;
 //                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
-// Added 20.07.2006, modified 20.03.2007
-          case SM_PRFLUID:  // Peng-Robinson EoS - with interaction parameters
+          case SM_PRFLUID:  // Peng-Robinson-Stryjek-Vera (PRSV) EoS, one binary interaction parameter
 //                          php->ncpN = max( (short)2, php->nDC );
 //                          php->ncpM = max( (short)2, php->nDC );
                           if( php->ncpN < 1 ) // NPar
@@ -531,6 +530,15 @@ AGAIN_SETUP:
                               php->ncpN = php->nDC*php->nDC/2;
                           php->ncpM = 1;  // For now, no T,P dependence
                           php->nscM = 7; // last changed 12.12.2008 (TW)
+                          php->npxM = 2;
+                          break;
+          case SM_SRFLUID:  // Soave-Redlich-Kwong (SRK) EoS, one binary interaction parameter
+                          if( php->ncpN < 1 ) // NPar
+                              php->ncpN = 1;
+                          if( php->ncpN > php->nDC*php->nDC/2 )
+                              php->ncpN = php->nDC*php->nDC/2;
+                          php->ncpM = 1;
+                          php->nscM = 7; // set to 7 to pull all parameters from CPg
                           php->npxM = 2;
                           break;
           case SM_AQDAV:  // Aqueous Davies
@@ -1322,9 +1330,8 @@ MAKE_GAS_PHASE:
               strcpy( php->notes,
      "Applicable at high P - moderate T for mixed non-electrolyte fluids" );
               break;
-      case SM_PRFLUID: // 'P': Peng-Robinson EoS, under construction
-// Not auto-set phase!
-              break;
+      // case SM_PRFLUID: // 'P': Peng-Robinson EoS, under construction
+      //        break;
       default:  // unrecognized code
               goto DONE;
     }
