@@ -2387,7 +2387,7 @@ TSRKcalc::FugacityPure( long int i )
 	// solve cubic equation
 	A = asrk*Pbar/(pow(R_CONST,2.)*pow(Tk,2.));
 	B = bsrk*Pbar/(R_CONST*Tk);
-	a2 = 0.;
+	a2 = (-1.);
 	a1 = A-B-pow(B,2.);
 	a0 = -A*B;
 	Cardano(a2, a1, a0, z1, z2, z3);
@@ -2525,7 +2525,7 @@ TSRKcalc::FugacityMix( double amix, double bmix,
 	// solve cubic equation
 	A = amix*Pbar/(pow(R_CONST,2.)*pow(Tk,2.));
 	B = bmix*Pbar/(R_CONST*Tk);
-	a2 = 0.;
+	a2 = (-1.);
 	a1 = A-B-pow(B,2.);
 	a0 = -A*B;
 	Cardano(a2, a1, a0, z1, z2, z3);
