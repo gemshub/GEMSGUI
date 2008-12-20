@@ -291,7 +291,7 @@ TPRSVcalc::FugacityPure( long int i )
 	double vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
 	double gig, hig, sig, cpig, fugpure;
 	double gdep, hdep, sdep, cpdep;
-	double cv, dA, dB, dZ, dP, dV;
+	double cv, dPdT, dPdV, dVdT;
 
 	// ideal gas changes from 1 bar to P at T of interest
 	hig = 0.;
@@ -364,14 +364,11 @@ TPRSVcalc::FugacityPure( long int i )
 
 	// heat capacity part
 	cv = Tk*d2a/(bprsv*sqrt(8.))
-				* log( (z+B*(1.+sqrt(2.)))/(z+B*(1.-sqrt(2.))) );
-	dA = Pbar/(pow(R_CONST,2.)*pow(Tk,2.)) * (da-2.*aprsv/Tk);
-	dB = - bprsv*Pbar/(R_CONST*pow(Tk,2.));
-	dZ = ( dA*(B-z) + dB*(6.*B*z+2.*z-3.*pow(B,2.)-2.*B+A-pow(z,2.)) )
-				/ ( 3.*pow(z,2.)+2.*(B-1.)*z+(A-2.*B-3*pow(B,2.)) );
-	dV = R_CONST/Pbar * (Tk*dZ + z);
-	dP = R_CONST/(vol-bprsv) - da/( vol*(vol+bprsv) + bprsv*(vol-bprsv) );
-	cpdep = cv + Tk*dP*dV - R_CONST;
+			 * log( (z+B*(1.+sqrt(2.)))/(z+B*(1.-sqrt(2.))) );
+	dPdT = R_CONST/(vol-bprsv) - da/( vol*(vol+bprsv) + bprsv*(vol-bprsv) );
+	dPdV = - R_CONST*Tk/pow((vol-bprsv),2.) + 2*aprsv*(vol+bprsv)/pow((vol*(vol+bprsv)+bprsv*(vol-bprsv)),2.);
+	dVdT = (-1.)*(1./dPdV)*dPdT;
+	cpdep = cv + Tk*dPdT*dVdT - R_CONST;
 
 	// increment thermodynamic properties
 	fugpure = exp(lnf);
@@ -382,7 +379,7 @@ TPRSVcalc::FugacityPure( long int i )
     Fugpure[i][4] = vol;
     Fugpure[i][5] = cpdep;
 
-        return 0;
+    return 0;
 }
 
 
@@ -520,9 +517,8 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
 	double A, B, lnfci, fci;
 	double KK, Gdep, Hdep, Sdep, CPdep;
-	double damix, d2amix;
-	double ai, aj, dai, daj, d2ai, d2aj;
-	double cv, dA, dB, dZ, dP, dV;
+	double damix, d2amix, ai, aj, dai, daj, d2ai, d2aj;
+	double cv, dPdT, dPdV, dVdT;
 
     // Reload params to Pureparm
     for( j=0; j<NComp; j++ )
@@ -596,13 +592,10 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 	// heat capacity part
 	cv = Tk*d2amix/(bmix*sqrt(8.))
 			 * log( (zmix+B*(1.+sqrt(2.)))/(zmix+B*(1.-sqrt(2.))) );
-	dA = Pbar/(pow(R_CONST,2.)*pow(Tk,2.)) * (damix-2.*amix/Tk);
-	dB = - bmix*Pbar/(R_CONST*pow(Tk,2.));
-	dZ = ( dA*(B-zmix) + dB*(6.*B*zmix+2.*zmix-3.*pow(B,2.)-2.*B+A-pow(zmix,2.)) )
-			/ ( 3.*pow(zmix,2.)+2.*(B-1.)*zmix+(A-2.*B-3*pow(B,2.)) );
-	dV = R_CONST/Pbar * (Tk*dZ + zmix);
-	dP = R_CONST/(vmix-bmix) - damix/( vmix*(vmix+bmix) + bmix*(vmix-bmix) );
-	CPdep = cv + Tk*dP*dV - R_CONST;
+	dPdT = R_CONST/(vmix-bmix) - damix/( vmix*(vmix+bmix) + bmix*(vmix-bmix) );
+	dPdV = - R_CONST*Tk/pow((vmix-bmix),2.) + 2*amix*(vmix+bmix)/pow((vmix*(vmix+bmix)+bmix*(vmix-bmix)),2.);
+	dVdT = (-1.)*(1./dPdV)*dPdT;
+	CPdep = cv + Tk*dPdT*dVdT - R_CONST;
 
 	return iRet;
 }
@@ -2382,7 +2375,7 @@ long int
 TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
 		double &apure, double &bpure, double &da, double &d2a )
 {
-	double Tred, m, alph, ac, sqa, dsqa;
+	double Tred, m, alph, ac, sqa, dsqa, d2sqa;
 
 	Tred = Tk/Tcrit;
 	m = 0.48 + 1.574*omg - 0.176*pow(omg,2.);
@@ -2392,8 +2385,9 @@ TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
 	bpure = 0.08664*R_CONST*Tcrit/Pcrit;
 	sqa = 1. + m*(1-sqrt(Tred));
 	dsqa = -0.5*m/(sqrt(Tred)*Tcrit);
-	da = ac*(2*sqa*dsqa);
-	d2a = 0.;
+	da = 2.*ac*(sqa*dsqa);
+	d2sqa = 0.25*m/(pow(Tred,1.5)*pow(Tcrit,2.));
+	d2a = 2.*ac*(dsqa*dsqa + sqa*d2sqa);
 
 	return 0;
 }
@@ -2403,24 +2397,27 @@ TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
 long int
 TSRKcalc::FugacityPure( long int i )
 {
-	double Tcrit, Pcrit, Tred, asrk, bsrk, alph, ac, sqa, da, dsqa,
-		A, B, a2, a1, a0, z1, z2, z3;
+	double Tcrit, Pcrit, Tred, asrk, bsrk, alph, da, d2a;
+	double A, B, a2, a1, a0, z1, z2, z3;
 	double vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
-	double gig, hig, sig, g, h, s, fugpure;
-	double gdep, hdep, sdep, udep, cvdep, cpdep;
+	double gig, hig, sig, cpig;
+	double fugpure, gdep, hdep, sdep, cpdep;
+	double cv, dPdT, dPdV, dVdT;
 
 	// ideal gas changes from 1 bar to P at T of interest
 	hig = 0.;
 	sig = (-1.)*R_CONST*log(Pbar);
 	gig = hig - Tk*sig;
+	cpig = 0.;
 
 	// retrieve a and b terms of cubic EoS
 	Tcrit = Eosparm[i][0];
 	Pcrit = Eosparm[i][1];
+	Tred = Tk/Tcrit;
 	asrk = Pureparm[i][0];
 	bsrk = Pureparm[i][1];
 	da = Pureparm[i][2];
-	Tred = Tk/Tcrit;
+	d2a = Pureparm[i][3];
 
 	// solve cubic equation
 	A = asrk*Pbar/(pow(R_CONST,2.)*pow(Tk,2.));
@@ -2469,9 +2466,15 @@ TSRKcalc::FugacityPure( long int i )
 	hdep = - ( 1 - z + 1./(bsrk*R_CONST*Tk) * (asrk-Tk*da) * log(1.+ bsrk/vol) )*R_CONST*Tk;
 	sdep = ( log(z*(1.-bsrk/vol)) + 1./(bsrk*R_CONST) * da * log(1.+bsrk/vol) )*R_CONST;
 	gdep = hdep - Tk*sdep;
-	g = gig + gdep;
-	h = hig + hdep;
-	s = sig + sdep;
+
+	// heat capacity part
+	cv = Tk*d2a/bsrk * log(1.+B/z);
+	dPdT = R_CONST/(vol-bsrk) - da/(vol*(vol+bsrk));
+	dPdV = - R_CONST*Tk/pow((vol-bsrk),2.) + asrk*(2.*vol+bsrk)/pow((vol*(vol+bsrk)),2.);
+	dVdT = (-1.)*(1./dPdV)*dPdT;
+	cpdep = cv + Tk*dPdT*dVdT - R_CONST;
+
+	// increment thermodynamic properties
 	fugpure = exp(lnf);
 	Fugpure[i][0] = fugpure;
 	Fugpure[i][1] = gdep;
@@ -2618,10 +2621,16 @@ TSRKcalc::FugacitySpec( double *fugpure )
 	long int i, j, iRet=0;
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
 	double A, B, bi, Bi, lnfci, fci;
-	double KK, Gdep, Hdep, Sdep, Udep, CVdep, CPdep;
-	double damix, d2amix;
-	double ai, aj, dai, daj, d2ai, d2aj;
+	double KK, Hig, Sig, Gig, CPig;
+	double Gdep, Hdep, Sdep, CPdep;
+	double damix, d2amix, ai, aj, dai, daj, d2ai, d2aj;
+	double cv, dPdT, dPdV, dVdT;
 
+	// ideal gas changes from 1 bar to P at T of interest
+	Hig = 0.;
+	Sig = (-1.)*R_CONST*log(Pbar);
+	Gig = Hig - Tk*Sig;
+	CPig = 0.;
 
 	// Reload params to Pureparm (possibly not required any more)
 	for( j=0; j<NComp; j++ )
@@ -2671,10 +2680,15 @@ TSRKcalc::FugacitySpec( double *fugpure )
 			aj = Pureparm[j][0];
 			dai = Pureparm[i][2];
 			daj = Pureparm[j][2];
+			d2ai = Pureparm[i][3];
+			d2aj = Pureparm[j][3];
 			KK = KKij[i][j];
 
 			damix = damix + 0.5*x[i]*x[j]*(1.-KK)
 				* ( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
+			d2amix = d2amix + 0.5*x[i]*x[j]*(1.-KK)
+				* ( dai*daj/sqrt(ai*aj) + d2ai*sqrt(aj)/sqrt(ai) + d2aj*sqrt(ai)/sqrt(aj)
+				- 0.5*( pow(dai,2.)*sqrt(aj)/sqrt(pow(ai,3.)) + pow(daj,2.)*sqrt(ai)/sqrt(pow(aj,3.)) ) );
 		}
 	}
 
@@ -2686,6 +2700,11 @@ TSRKcalc::FugacitySpec( double *fugpure )
 	Gdep = Hdep - Tk*Sdep;
 
 	// heat capacity part
+	cv = Tk*d2amix/bmix * log(1.+B/zmix);
+	dPdT = R_CONST/(vmix-bmix) - damix/(vmix*(vmix+bmix));
+	dPdV = - R_CONST*Tk/pow((vmix-bmix),2.) + amix*(2.*vmix+bmix)/pow((vmix*(vmix+bmix)),2.);
+	dVdT = (-1.)*(1./dPdV)*dPdT;
+	CPdep = cv + Tk*dPdT*dVdT - R_CONST;
 
 	return iRet;
 }
