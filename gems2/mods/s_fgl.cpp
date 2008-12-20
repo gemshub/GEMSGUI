@@ -223,20 +223,16 @@ TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, doub
          k3 = Eosparm[i][5];
        }
 
-      // iRet = PureParam( i, Eos2parPT ); // Calculates a, b, sqrAL, ac, dALdT
-
       AB(Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, da, d2a);
 
       Pureparm[i][0] = apure;
       Pureparm[i][1] = bpure;
       Pureparm[i][2] = da;
       Pureparm[i][3] = d2a;
-      // Pureparm[i][4] = dALdT;
       Eos2parPT[0] = apure;
       Eos2parPT[1] = bpure;
       Eos2parPT[2] = da;
       Eos2parPT[3] = d2a;
-      // Eos2parPT[4] = dALdT;
 
       iRet = FugacityPure( i );
       if( iRet)
@@ -257,7 +253,7 @@ long int
 TPRSVcalc::AB( double Tcrit, double Pcrit, double omg, double k1, double k2, double k3,
 		double &apure, double &bpure, double &da, double &d2a )
 {
-	double Tred, k0, k, alph, ac, sqa, dsqa;
+	double Tred, k0, k, alph, ac, sqa, dsqa, d2sqa;
 
 	Tred = Tk/Tcrit;
 	k0 = 0.378893 + 1.4897153*omg - 0.17131848*pow(omg,2.) + 0.0196554*pow(omg,3.);
@@ -273,9 +269,14 @@ TPRSVcalc::AB( double Tcrit, double Pcrit, double omg, double k1, double k2, dou
 	apure = alph*ac;
 	bpure = 0.077796*R_CONST*Tcrit/Pcrit;
 	sqa = 1.+k*(1.-sqrt(Tred));
-	dsqa = (-1.)*k0/(2.*sqrt(Tk*Tcrit)) - 1.7*k1/Tcrit + 2.*k1*Tk/(pow(Tcrit,2.));  // extend dA/dT for k2, k3
-	da = ac*(2*sqa*dsqa);
-	d2a = 0.;
+	// dsqa = (-1.)*k0/(2.*sqrt(Tk*Tcrit)) - 1.7*k1/Tcrit + 2.*k1*Tk/(pow(Tcrit,2.));  // extend dA/dT for k2, k3
+	dsqa = ( k1*(0.7-Tred)/(2.*sqrt(Tred)*Tcrit) - k1*(1.+sqrt(Tred))/Tcrit ) * (1.-sqrt(Tred))
+				- (k0 + k1*(1.+sqrt(Tred))*(0.7-Tred))/(2*sqrt(Tred)*Tcrit);
+	da = 2.*ac*(sqa*dsqa);
+	d2sqa = ( - (k1*(0.7-Tred))/(4.*pow(Tred,1.5)*pow(Tcrit,2.)) - k1/(sqrt(Tred)*pow(Tcrit,2.)) ) * (1.-sqrt(Tred))
+				+ ( - k1*(0.7-Tred)/(2.*sqrt(Tred)*Tcrit) - k1*(1.+sqrt(Tred))/Tcrit ) / (sqrt(Tred)*Tcrit)
+				+ ( k0 + k1*(1.+sqrt(Tred))*(0.7-Tred) ) / (4.*pow(Tred,1.5)*pow(Tcrit,2.));
+	d2a = 2.*ac*(dsqa*dsqa + sqa*d2sqa);
 
 	return 0;
 }
@@ -285,90 +286,102 @@ TPRSVcalc::AB( double Tcrit, double Pcrit, double omg, double k1, double k2, dou
 long int
 TPRSVcalc::FugacityPure( long int i )
 {
-	double Tcrit, Pcrit, Tred, aprsv, bprsv, alph, k, A, B, a2, a1, a0,
-               z1, z2, z3;
+	double Tcrit, Pcrit, Tred, aprsv, bprsv, alph, da, d2a;
+	double k, A, B, a2, a1, a0, z1, z2, z3;
 	double vol1, vol2, vol3, lnf1, lnf2, lnf3, z, vol, lnf;
-	double gig, hig, sig, g, h, s, fugpure;
-	double gdep, hdep, sdep, udep, cvdep, cpdep;
+	double gig, hig, sig, cpig, fugpure;
+	double gdep, hdep, sdep, cpdep;
+	double cv, dA, dB, dZ, dP, dV;
 
 	// ideal gas changes from 1 bar to P at T of interest
 	hig = 0.;
 	sig = (-1.)*R_CONST*log(Pbar);
 	gig = hig - Tk*sig;
+	cpig = 0.;
 
-// for (i=0; i<NComp; i++)
+	// retrieve a and b terms of cubic EoS
+	Tcrit = Eosparm[i][0];
+	Pcrit = Eosparm[i][1];
+	Tred = Tk/Tcrit;
+	aprsv = Pureparm[i][0];
+	bprsv = Pureparm[i][1];
+	da = Pureparm[i][2];
+	d2a = Pureparm[i][3];
+
+	// solve cubic equation
+	A = aprsv*Pbar/(pow(R_CONST,2.)*pow(Tk,2.));
+	B = bprsv*Pbar/(R_CONST*Tk);
+	a2 = B - 1.;
+	a1 = A - 3.*pow(B,2.) - 2.*B;
+	a0 = pow(B,3.) + pow(B,2.) - A*B;
+	Cardano(a2, a1, a0, z1, z2, z3);
+
+	// find stable roots
+	vol1 = z1*R_CONST*Tk/Pbar;
+	vol2 = z2*R_CONST*Tk/Pbar;
+	vol3 = z3*R_CONST*Tk/Pbar;
+	if (z1 > B)
+		lnf1 = (-1.)*log(z1-B)
+			- A/(B*sqrt(8.))*log((z1+(1.+sqrt(2.))*B)/(z1+(1.-sqrt(2.))*B))+z1-1.;
+	else
+		lnf1 = 1000.;
+	if (z2 > B)
+		lnf2 = (-1.)*log(z2-B)
+			- A/(B*sqrt(8.))*log((z2+(1.+sqrt(2.))*B)/(z2+(1.-sqrt(2.))*B))+z2-1.;
+	else
+		lnf2 = 1000.;
+	if (z3 > B)
+		lnf3 = (-1.)*log(z3-B)
+			- A/(B*sqrt(8.))*log((z3+(1.+sqrt(2.))*B)/(z3+(1.-sqrt(2.))*B))+z3-1.;
+	else
+		lnf3 = 1000.;
+
+	if (lnf2 < lnf1)
 	{
-		// retrieve a and b terms of cubic EoS
-		Tcrit = Eosparm[i][0];
-		Pcrit = Eosparm[i][1];
-		Tred = Tk/Tcrit;
-		aprsv = Pureparm[i][0];
-		bprsv = Pureparm[i][1];
-
-		// solve cubic equation
-		A = aprsv*Pbar/(pow(R_CONST,2.)*pow(Tk,2.));
-		B = bprsv*Pbar/(R_CONST*Tk);
-		a2 = B - 1.;
-		a1 = A - 3.*pow(B,2.) - 2.*B;
-		a0 = pow(B,3.) + pow(B,2.) - A*B;
-		Cardano(a2, a1, a0, z1, z2, z3);
-
-		// find stable roots
-		vol1 = z1*R_CONST*Tk/Pbar;
-		vol2 = z2*R_CONST*Tk/Pbar;
-		vol3 = z3*R_CONST*Tk/Pbar;
-		if (z1 > B)
-			lnf1 = (-1.)*log(z1-B)
-				- A/(B*sqrt(8.))*log((z1+(1.+sqrt(2.))*B)/(z1+(1.-sqrt(2.))*B))+z1-1.;
-		else
-			lnf1 = 1000.;
-		if (z2 > B)
-			lnf2 = (-1.)*log(z2-B)
-				- A/(B*sqrt(8.))*log((z2+(1.+sqrt(2.))*B)/(z2+(1.-sqrt(2.))*B))+z2-1.;
-		else
-			lnf2 = 1000.;
-		if (z3 > B)
-			lnf3 = (-1.)*log(z3-B)
-				- A/(B*sqrt(8.))*log((z3+(1.+sqrt(2.))*B)/(z3+(1.-sqrt(2.))*B))+z3-1.;
-		else
-			lnf3 = 1000.;
-
-		if (lnf2 < lnf1)
-		{
-			z = z2; vol = vol2; lnf = lnf2;
-		}
-		else
-		{
-			z = z1; vol = vol1; lnf = lnf1;
-		}
-		if (lnf3 < lnf)
-		{
-			z = z3; vol = vol3; lnf = lnf3;
-		}
-		else
-		{
-			z = z; vol = vol; lnf = lnf;
-		}
-
-		// calculate thermodynamic properties
-		alph = aprsv/(0.457235*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit);
-		k = (sqrt(alph)-1.)/(1.-sqrt(Tred));
-		gdep = R_CONST*Tk*(z-1.-log(z-B)-A/(B*sqrt(8.))
-                       *log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B)));
-		hdep = R_CONST*Tk*(z-1.-log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B))
-                       *A/(B*sqrt(8.))*(1+k*sqrt(Tred)/sqrt(alph)));
-		sdep = (hdep-gdep)/Tk;
-		g = gig + gdep;
-		h = hig + hdep;
-		s = sig + sdep;
-		fugpure = exp(lnf);
-		Fugpure[i][0] = fugpure;
-		Fugpure[i][1] = gdep;  // changed to departure functions, 31.05.2008 (TW)
-		Fugpure[i][2] = hdep;
-		Fugpure[i][3] = sdep;
-        Fugpure[i][4] = vol;
-        Fugpure[i][5] = 0.;
+		z = z2; vol = vol2; lnf = lnf2;
 	}
+	else
+	{
+		z = z1; vol = vol1; lnf = lnf1;
+	}
+	if (lnf3 < lnf)
+	{
+		z = z3; vol = vol3; lnf = lnf3;
+	}
+	else
+	{
+		z = z; vol = vol; lnf = lnf;
+	}
+
+	// calculate thermodynamic properties
+	alph = aprsv/(0.457235*pow(R_CONST,2.)*pow(Tcrit,2.) / Pcrit);
+	k = (sqrt(alph)-1.)/(1.-sqrt(Tred));
+	gdep = R_CONST*Tk*(z-1.-log(z-B)-A/(B*sqrt(8.))
+				*log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B)));
+	hdep = R_CONST*Tk*(z-1.-log((z+(1+sqrt(2.))*B)/(z+(1-sqrt(2.))*B))
+				*A/(B*sqrt(8.))*(1+k*sqrt(Tred)/sqrt(alph)));
+	sdep = (hdep-gdep)/Tk;
+
+	// heat capacity part
+	cv = Tk*d2a/(bprsv*sqrt(8.))
+				* log( (z+B*(1.+sqrt(2.)))/(z+B*(1.-sqrt(2.))) );
+	dA = Pbar/(pow(R_CONST,2.)*pow(Tk,2.)) * (da-2.*aprsv/Tk);
+	dB = - bprsv*Pbar/(R_CONST*pow(Tk,2.));
+	dZ = ( dA*(B-z) + dB*(6.*B*z+2.*z-3.*pow(B,2.)-2.*B+A-pow(z,2.)) )
+				/ ( 3.*pow(z,2.)+2.*(B-1.)*z+(A-2.*B-3*pow(B,2.)) );
+	dV = R_CONST/Pbar * (Tk*dZ + z);
+	dP = R_CONST/(vol-bprsv) - da/( vol*(vol+bprsv) + bprsv*(vol-bprsv) );
+	cpdep = cv + Tk*dP*dV - R_CONST;
+
+	// increment thermodynamic properties
+	fugpure = exp(lnf);
+	Fugpure[i][0] = fugpure;
+	Fugpure[i][1] = gdep;  // changed to departure functions, 31.05.2008 (TW)
+	Fugpure[i][2] = hdep;
+	Fugpure[i][3] = sdep;
+    Fugpure[i][4] = vol;
+    Fugpure[i][5] = cpdep;
+
         return 0;
 }
 
@@ -409,7 +422,6 @@ TPRSVcalc::Cardano( double a2, double a1, double a0, double &z1, double &z2, dou
 long int
 TPRSVcalc::MixParam( double &amix, double &bmix )
 {
-	// calculates a and b parameters of the mixture
 	long int i, j;
 	double K;
 	amix = 0.;
@@ -442,10 +454,9 @@ TPRSVcalc::MixParam( double &amix, double &bmix )
 
 // Calculates fugacity of the bulk fluid mixture
 long int
-TPRSVcalc::FugacityMix( double amix, double bmix,
-    double &fugmix, double &zmix, double &vmix )
+TPRSVcalc::FugacityMix( double amix, double bmix, double &fugmix, double &zmix,
+		double &vmix )
 {
-	// calculates fugacity of the mixture
     double A, B, a2, a1, a0, z1, z2, z3;
 	double vol1, vol2, vol3, lnf1, lnf2, lnf3, lnf;
 
@@ -507,11 +518,11 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 
     long int i, j, iRet=0;
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
-	double au, bu, lnfci, fci;
-	double KK, Gdep, Hdep, Sdep, Udep, CVdep, CPdep;
+	double A, B, lnfci, fci;
+	double KK, Gdep, Hdep, Sdep, CPdep;
 	double damix, d2amix;
 	double ai, aj, dai, daj, d2ai, d2aj;
-
+	double cv, dA, dB, dZ, dP, dV;
 
     // Reload params to Pureparm
     for( j=0; j<NComp; j++ )
@@ -531,16 +542,16 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 	// calculate fugacity coefficient, fugacity and activity of species i
 	for (i=0; i<NComp; i++)
 	{
-		au = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
-		bu = bmix*Pbar/(R_CONST*Tk);
+		A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
+		B = bmix*Pbar/(R_CONST*Tk);
 		sum = 0.;
 		for (j=0; j<NComp; j++)
 		{
 			sum = sum + x[j]*AAij[i][j];
 		}
-		lnfci = Pureparm[i][1]/bmix*(zmix-1.) - log(zmix-bu)
-		      + au/(sqrt(8.)*bu)*(2.*sum/amix-Pureparm[i][1]/bmix)
-                      * log((zmix+bu*(1.-sqrt(2.)))/(zmix+bu*(1.+sqrt(2.))));
+		lnfci = Pureparm[i][1]/bmix*(zmix-1.) - log(zmix-B)
+		      + A/(sqrt(8.)*B)*(2.*sum/amix-Pureparm[i][1]/bmix)
+                      * log((zmix+B*(1.-sqrt(2.)))/(zmix+B*(1.+sqrt(2.))));
 		fci = exp(lnfci);
 		Fugci[i][0] = fci;  // fugacity coefficient using engineering convention
 		Fugci[i][1] = x[i]*fci;  // fugacity coefficient using geology convention
@@ -551,7 +562,7 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 			Fugci[i][3] = 1.0;
 	}
 
-	// calculate total state functions of the mixture #2
+	// calculate total state functions of the mixture
 	damix = 0.;
 	d2amix = 0.;
 	for (i=0; i<NComp; i++)
@@ -563,18 +574,35 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 			aj = Pureparm[j][0];
 			dai = Pureparm[i][2];
 			daj = Pureparm[j][2];
-
+			d2ai = Pureparm[i][3];
+			d2aj = Pureparm[j][3];
 			KK = KK0ij[i][j];
+
 			damix = damix + 0.5*x[i]*x[j]*(1.-KK)
 				* ( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
+			d2amix = d2amix + 0.5*x[i]*x[j]*(1.-KK)
+				* ( dai*daj/sqrt(ai*aj) + d2ai*sqrt(aj)/sqrt(ai) + d2aj*sqrt(ai)/sqrt(aj)
+				- 0.5*( pow(dai,2.)*sqrt(aj)/sqrt(pow(ai,3.)) + pow(daj,2.)*sqrt(ai)/sqrt(pow(aj,3.)) ) );
 		}
 	}
 
+	// calculate thermodynamic properties
 	Gdep = (amix/(R_CONST*Tk*sqrt(8.)*bmix)  *log((vmix+(1.-sqrt(2.))*bmix)
 		/(vmix+(1.+sqrt(2.))*bmix))-log(zmix*(1.-bmix/vmix))+zmix-1.)*R_CONST*Tk;
 	Hdep = ((amix-Tk*damix)/(R_CONST*Tk*sqrt(8.)*bmix)*log((vmix+(1.-sqrt(2.))
 		*bmix)/(vmix+(1.+sqrt(2))*bmix))+zmix-1.)*R_CONST*Tk;
 	Sdep = (Hdep - Gdep)/Tk;
+
+	// heat capacity part
+	cv = Tk*d2amix/(bmix*sqrt(8.))
+			 * log( (zmix+B*(1.+sqrt(2.)))/(zmix+B*(1.-sqrt(2.))) );
+	dA = Pbar/(pow(R_CONST,2.)*pow(Tk,2.)) * (damix-2.*amix/Tk);
+	dB = - bmix*Pbar/(R_CONST*pow(Tk,2.));
+	dZ = ( dA*(B-zmix) + dB*(6.*B*zmix+2.*zmix-3.*pow(B,2.)-2.*B+A-pow(zmix,2.)) )
+			/ ( 3.*pow(zmix,2.)+2.*(B-1.)*zmix+(A-2.*B-3*pow(B,2.)) );
+	dV = R_CONST/Pbar * (Tk*dZ + zmix);
+	dP = R_CONST/(vmix-bmix) - damix/( vmix*(vmix+bmix) + bmix*(vmix-bmix) );
+	CPdep = cv + Tk*dP*dV - R_CONST;
 
 	return iRet;
 }
@@ -621,7 +649,7 @@ long int TPRSVcalc::PRCalcFugPure( void )
     aW.twp->V = Volume;  // in J/bar
     aW.twp->Fug = Fugcoeff * P;  // fugacity at P
 
-    // passing corrected EoS coeffs to calculation of fluid mixtures (3 added, 31.05.2008 TW)
+    // passing corrected EoS coeffs to calculation of fluid mixtures
     aW.twp->wtW[6] = Eos2parPT[0];  // a
     aW.twp->wtW[7] = Eos2parPT[1];  // b
     aW.twp->wtW[8] = Eos2parPT[2];  // da
@@ -2330,12 +2358,10 @@ TSRKcalc::SRFugacityPT( long int i, double P, double Tk, double *EoSparam, doubl
 	Pureparm[i][1] = bpure;
 	Pureparm[i][2] = da;
 	Pureparm[i][3] = d2a;
-	// Pureparm[i][4] = dALdT;
 	Eos2parPT[0] = apure;
 	Eos2parPT[1] = bpure;
 	Eos2parPT[2] = da;
 	Eos2parPT[3] = d2a;
-	// Eos2parPT[4] = dALdT;
 
 	iRet = FugacityPure( i );
     if( iRet)
@@ -2645,18 +2671,21 @@ TSRKcalc::FugacitySpec( double *fugpure )
 			aj = Pureparm[j][0];
 			dai = Pureparm[i][2];
 			daj = Pureparm[j][2];
-
 			KK = KKij[i][j];
+
 			damix = damix + 0.5*x[i]*x[j]*(1.-KK)
 				* ( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
 		}
 	}
 
+	// calculate thermodynamic properties
 	Hdep = - ( 1. - zmix + 1./(bmix*R_CONST*Tk) * (amix-Tk*damix )
 			* log(1.+bmix/vmix) )*R_CONST*Tk;
 	Sdep = ( log(zmix*(1.-bmix/vmix)) + 1./(bmix*R_CONST)*damix
 			* log(1.+bmix/vmix) )*R_CONST;
 	Gdep = Hdep - Tk*Sdep;
+
+	// heat capacity part
 
 	return iRet;
 }
@@ -2701,7 +2730,6 @@ long int TSRKcalc::SRCalcFugPure( void )
 	aW.twp->Fug = Fugcoeff * P;   // fugacity at P
 
 	// passing corrected EoS coeffs to calculation of fluid mixtures
-	// this section is probably obsolete now (TW)
 	aW.twp->wtW[6] = Eos2parPT[0];  // a
 	aW.twp->wtW[7] = Eos2parPT[1];  // b
 	aW.twp->wtW[8] = Eos2parPT[2];  // da
