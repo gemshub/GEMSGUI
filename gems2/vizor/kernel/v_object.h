@@ -138,6 +138,22 @@ public:
         return M;
     }
 
+    int GetNS() const
+    {
+      if(IsNull())
+    	  return 0;
+    	return N;
+    }
+
+    int GetMS() const
+    {
+      if(IsNull())
+      	  return 0;
+      if(Type == S_ )	
+    	  return 1; 
+        return M;
+    }
+
     void *GetPtr() const
     {
         return ((!pV) ? 0 : pV->GetPtr());
