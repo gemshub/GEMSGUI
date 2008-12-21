@@ -77,15 +77,17 @@ void TPRSVcalc::alloc_internal()
     Pureparm = new double [NComp][4];
     Fugpure = new double [NComp][6];
     Fugci = new double [NComp][4];
-    KK0ij = new double *[NComp];
-    KK1ij = new double *[NComp];
-    AAij = new double *[NComp];
+    KK = new double *[NComp];
+    dKK = new double *[NComp];
+    d2KK = new double *[NComp];
+    AA = new double *[NComp];
 
     for (long int i=0; i<NComp; i++)
     {
-      KK0ij[i] = new double[NComp];
-      KK1ij[i] = new double[NComp];
-      AAij[i] = new double[NComp];
+      KK[i] = new double[NComp];
+      dKK[i] = new double[NComp];
+      d2KK[i] = new double[NComp];
+      AA[i] = new double[NComp];
     }
 }
 
@@ -96,18 +98,20 @@ void TPRSVcalc::free_internal()
 
 	for (i=0; i<NComp; i++)
 	{
-		delete[]KK0ij[i];
-		delete[]KK1ij[i];
-		delete[]AAij[i];
+		delete[]KK[i];
+		delete[]dKK[i];
+		delete[]d2KK[i];
+		delete[]AA[i];
 	}
 
 	delete[]Eosparm;
 	delete[]Pureparm;
 	delete[]Fugpure;
 	delete[]Fugci;
-	delete[]KK0ij;
-	delete[]KK1ij;
-	delete[]AAij;
+	delete[]KK;
+	delete[]dKK;
+	delete[]d2KK;
+	delete[]AA;
 }
 
 
@@ -142,7 +146,7 @@ long int TPRSVcalc::PureSpecies()
 long int TPRSVcalc::PTparam()
 {
    long int j, i, ip;
-   long int index1, index2;
+   long int i1, i2;
 
    PureSpecies();
 
@@ -150,16 +154,22 @@ long int TPRSVcalc::PTparam()
    {
       // fill internal array of interaction parameters with standard value
       for( j=0; j<NComp; j++ )
-        for( i=0; i<NComp; i++ )
-          KK0ij[j][i] = 0.;
+      {
+    	  for( i=0; i<NComp; i++ )
+    	  {
+    		  KK[j][i] = 0.;
+    		  dKK[j][i] = 0.;
+    		  d2KK[j][i] = 0.;
+    	  }
+      }
 
       // transfer those interaction parameters that have non-standard value
       for ( ip=0; ip<NPar; ip++ )
       {
-         index1 = aIPx[MaxOrd*ip];
-         index2 = aIPx[MaxOrd*ip+1];
-         KK0ij[index1][index2] = aIPc[NPcoef*ip];
-         KK0ij[index2][index1] = aIPc[NPcoef*ip];  // symmetric case
+         i1 = aIPx[MaxOrd*ip];
+         i2 = aIPx[MaxOrd*ip+1];
+         KK[i1][i2] = aIPc[NPcoef*ip];
+         KK[i2][i1] = aIPc[NPcoef*ip];  // symmetric case
       }
     }
 
@@ -429,8 +439,8 @@ TPRSVcalc::MixParam( double &amix, double &bmix )
 	{
 		for (j=0; j<NComp; j++)
 		{
-            K = KK0ij[i][j];
-			AAij[i][j] = sqrt(Pureparm[i][0]*Pureparm[j][0])*(1.-K);
+            K = KK[i][j];
+			AA[i][j] = sqrt(Pureparm[i][0]*Pureparm[j][0])*(1.-K);
 		}
 	}
 	// find a and b of the mixture
@@ -438,7 +448,7 @@ TPRSVcalc::MixParam( double &amix, double &bmix )
 	{
 		for (j=0; j<NComp; j++)
 		{
-			amix = amix + x[i]*x[j]*AAij[i][j];
+			amix = amix + x[i]*x[j]*AA[i][j];
 		}
 	}
 	for (i=0; i<NComp; i++)
@@ -516,7 +526,7 @@ TPRSVcalc::FugacitySpec( double *fugpure )
     long int i, j, iRet=0;
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
 	double A, B, lnfci, fci;
-	double KK, Gdep, Hdep, Sdep, CPdep;
+	double K, dK, d2K, Gdep, Hdep, Sdep, CPdep;
 	double damix, d2amix, ai, aj, dai, daj, d2ai, d2aj;
 	double cv, dPdT, dPdV, dVdT;
 
@@ -543,7 +553,7 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 		sum = 0.;
 		for (j=0; j<NComp; j++)
 		{
-			sum = sum + x[j]*AAij[i][j];
+			sum = sum + x[j]*AA[i][j];
 		}
 		lnfci = Pureparm[i][1]/bmix*(zmix-1.) - log(zmix-B)
 		      + A/(sqrt(8.)*B)*(2.*sum/amix-Pureparm[i][1]/bmix)
@@ -572,11 +582,11 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 			daj = Pureparm[j][2];
 			d2ai = Pureparm[i][3];
 			d2aj = Pureparm[j][3];
-			KK = KK0ij[i][j];
+			K = KK[i][j];
 
-			damix = damix + 0.5*x[i]*x[j]*(1.-KK)
+			damix = damix + 0.5*x[i]*x[j]*(1.-K)
 				* ( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
-			d2amix = d2amix + 0.5*x[i]*x[j]*(1.-KK)
+			d2amix = d2amix + 0.5*x[i]*x[j]*(1.-K)
 				* ( dai*daj/sqrt(ai*aj) + d2ai*sqrt(aj)/sqrt(ai) + d2aj*sqrt(ai)/sqrt(aj)
 				- 0.5*( pow(dai,2.)*sqrt(aj)/sqrt(pow(ai,3.)) + pow(daj,2.)*sqrt(ai)/sqrt(pow(aj,3.)) ) );
 		}
@@ -2211,13 +2221,17 @@ void TSRKcalc::alloc_internal()
 	Pureparm = new double [NComp][4];
 	Fugpure = new double [NComp][6];
 	Fugci = new double [NComp][4];
-	KKij = new double *[NComp];
-	AAij = new double *[NComp];
+	KK = new double *[NComp];
+	dKK = new double *[NComp];
+	d2KK = new double *[NComp];
+	AA = new double *[NComp];
 
 	for (long int i=0; i<NComp; i++)
 	    {
-	      KKij[i] = new double[NComp];
-	      AAij[i] = new double[NComp];
+	      KK[i] = new double[NComp];
+	      dKK[i] = new double[NComp];
+	      d2KK[i] = new double[NComp];
+	      AA[i] = new double[NComp];
 	    }
 }
 
@@ -2228,16 +2242,20 @@ void TSRKcalc::free_internal()
 
 	for (i=0; i<NComp; i++)
 	{
-		delete[]KKij[i];
-		delete[]AAij[i];
+		delete[]KK[i];
+		delete[]dKK[i];
+		delete[]d2KK[i];
+		delete[]AA[i];
 	}
 
 	delete[]Eosparm;
 	delete[]Pureparm;
 	delete[]Fugpure;
 	delete[]Fugci;
-	delete[]KKij;
-	delete[]AAij;
+	delete[]KK;
+	delete[]dKK;
+	delete[]d2KK;
+	delete[]AA;
 
 }
 
@@ -2272,7 +2290,7 @@ long int TSRKcalc::PureSpecies()
 long int TSRKcalc::PTparam()
 {
 	long int j, i, ip;
-	long int index1, index2;
+	long int i1, i2;
 
 	PureSpecies();
 
@@ -2280,16 +2298,22 @@ long int TSRKcalc::PTparam()
 	{
 		// fill internal array of interaction parameters with standard value
 		for( j=0; j<NComp; j++ )
+		{
 			for( i=0; i<NComp; i++ )
-				KKij[j][i] = 0.;
+			{
+				KK[j][i] = 0.;
+				dKK[j][i] = 0.;
+				d2KK[j][i] = 0.;
+			}
+		}
 
 		// transfer those interaction parameters that have non-standard value
 		for ( ip=0; ip<NPar; ip++ )
 		{
-			index1 = aIPx[MaxOrd*ip];
-			index2 = aIPx[MaxOrd*ip+1];
-			KKij[index1][index2] = aIPc[NPcoef*ip];
-			KKij[index2][index1] = aIPc[NPcoef*ip];  // symmetric case
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
+			KK[i1][i2] = aIPc[NPcoef*ip];
+			KK[i2][i1] = aIPc[NPcoef*ip];  // symmetric case
 		}
 	}
 	return 0;
@@ -2535,8 +2559,8 @@ TSRKcalc::MixParam( double &amix, double &bmix )
 	{
 		for (j=0; j<NComp; j++)
 		{
-			K = KKij[i][j];
-			AAij[i][j] = sqrt(Pureparm[i][0]*Pureparm[j][0])*(1.-K);
+			K = KK[i][j];
+			AA[i][j] = sqrt(Pureparm[i][0]*Pureparm[j][0])*(1.-K);
 		}
 	}
 
@@ -2545,7 +2569,7 @@ TSRKcalc::MixParam( double &amix, double &bmix )
 	{
 		for (j=0; j<NComp; j++)
 		{
-			amix = amix + x[i]*x[j]*AAij[i][j];
+			amix = amix + x[i]*x[j]*AA[i][j];
 		}
 	}
 	for (i=0; i<NComp; i++)
@@ -2621,7 +2645,7 @@ TSRKcalc::FugacitySpec( double *fugpure )
 	long int i, j, iRet=0;
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
 	double A, B, bi, Bi, lnfci, fci;
-	double KK, Hig, Sig, Gig, CPig;
+	double K, dK, d2K, Hig, Sig, Gig, CPig;
 	double Gdep, Hdep, Sdep, CPdep;
 	double damix, d2amix, ai, aj, dai, daj, d2ai, d2aj;
 	double cv, dPdT, dPdV, dVdT;
@@ -2653,7 +2677,7 @@ TSRKcalc::FugacitySpec( double *fugpure )
 		sum = 0.;
 		for (j=0; j<NComp; j++)
 		{
-			sum = sum + x[j]*AAij[i][j];
+			sum = sum + x[j]*AA[i][j];
 		}
 
 		lnfci = Bi/B*(zmix-1.) - log(zmix-B)
@@ -2682,11 +2706,11 @@ TSRKcalc::FugacitySpec( double *fugpure )
 			daj = Pureparm[j][2];
 			d2ai = Pureparm[i][3];
 			d2aj = Pureparm[j][3];
-			KK = KKij[i][j];
+			K = KK[i][j];
 
-			damix = damix + 0.5*x[i]*x[j]*(1.-KK)
+			damix = damix + 0.5*x[i]*x[j]*(1.-K)
 				* ( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
-			d2amix = d2amix + 0.5*x[i]*x[j]*(1.-KK)
+			d2amix = d2amix + 0.5*x[i]*x[j]*(1.-K)
 				* ( dai*daj/sqrt(ai*aj) + d2ai*sqrt(aj)/sqrt(ai) + d2aj*sqrt(ai)/sqrt(aj)
 				- 0.5*( pow(dai,2.)*sqrt(aj)/sqrt(pow(ai,3.)) + pow(daj,2.)*sqrt(ai)/sqrt(pow(aj,3.)) ) );
 		}
