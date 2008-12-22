@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: s_fgl1.cpp 1140 2008-12-08 19:07:05Z wagner $
 //
-// Copyright (C) 2008   D.Kulik,  S.Dmitrieva
+// Copyright (C) 2008    S.Dmitrieva, F.Hingerl, D.Kulik, Th.Wagner
 //
 // Implementation of TSIT and TPitzer class
 //
@@ -135,26 +135,6 @@ long int TSIT::MixMod()
 //    converted by s.Dmytrieva into C++ program
 //    in December 2008 for GEOTHERM CCES project
 //=============================================================================================
-
-
-// parameters for ak1 and ak2 values from Pitzer 1991 (p. 125, Table B1)
-static double ak1[21] = {  1.925154014814667, -0.060076477753119, -0.029779077456514,
-                    -0.007299499690937,  0.000388260636404,  0.000636874599598,
-                     0.000036583601823, -0.000045036975204, -0.000004537895710,
-                     0.000002937706971,  0.000000396566462, -0.000000202099617,
-                    -0.000000025267769,  0.000000013522610,  0.000000001229405,
-                    -0.000000000821969, -0.000000000050847,  0.000000000046333,
-                     0.000000000001943, -0.000000000002563, -0.000000000010991 };  // Prescribed constants
-static double ak2[23] = {  0.628023320520852,  0.462762985338493,  0.150044637187895,
-                    -0.028796057604906, -0.036552745910311, -0.001668087945272,
-                     0.006519840398744,  0.001130378079086, -0.000887171310131,
-                    -0.000242107641309,  0.000087294451594,  0.000034682122751,
-                    -0.000004583768938, -0.000003548684306, -0.000000250453880,
-                     0.000000216991779,  0.000000080779570,  0.000000004558555,
-                    -0.000000006944757, -0.000000002849257,  0.000000000237816,
-                     0, 0 };  // Prescribed constants
-
-
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Generic constructor for the TPitzer class
@@ -337,20 +317,7 @@ void TPitzer::alloc_internal()
 		aLam1 = 0;
 		aZeta = 0;
 	}
-
-	/* Work parameter arrays
-	B1 = new double[Nc*Na];
-    B2 = new double[Nc*Na];
-	B3 = new double[Nc*Na];
-	Phi1 = new double[Na*Na];
-	Phi2 = new double[Nc*Nc];
-	Phi3 = new double[Na*Na];
-	C = new double[Nc*Na];
-	Etheta = new double[Nc*Nc];
-	Ethetap = new double[Na*Na];
-	*/
 }
-
 
 void TPitzer::free_internal()
 {
@@ -372,18 +339,32 @@ void TPitzer::free_internal()
 	if( aLam1 ) delete[] aLam1;
 	if( aZeta ) delete[] aZeta;
 
-	/* Work parameter arrays
-	if( B1 ) delete[] B1;
-	if( B2 ) delete[] B2;
-	if( B3 ) delete[] B3;
-	if( Phi1 ) delete[] Phi1;
-	if( Phi2 ) delete[] Phi2;
-	if( Phi3 ) delete[] Phi3;
-	if( C ) delete[] C;
-	if( Etheta ) delete[] Etheta;
-	if( Ethetap ) delete[] Ethetap;
-	*/
 }
+
+// Moved macros here from s_fgl.h to restrict their visibility
+// in other files (DK)
+#define IPc( ii, jj )  ( aIPc[ (ii) * NPcoef + (jj) ])
+#define IPx( ii, jj )  ( aIPx[ (ii) * MaxOrd + (jj) ])
+
+#define mc( ii ) (aM[ xcx[(ii)] ])
+#define ma( ii ) (aM[ xax[(ii)] ])
+#define mn( ii ) (aM[ xnx[(ii)] ])
+#define zc( ii ) (aZ[ xcx[(ii)] ])
+#define za( ii ) (aZ[ xax[(ii)] ])
+
+#define bet0( c,a ) ( abet0[ ((c)*Na+(a)) ])
+#define bet1( c,a ) ( abet1[ ((c)*Na+(a)) ])
+#define bet2( c,a ) ( abet2[ ((c)*Na+(a)) ])
+#define Cphi( c,a ) ( aCphi[ ((c)*Na+(a)) ])
+#define Lam( n,c )  ( aLam[ ((n)*Nc+(c)) ])
+#define Lam1( n,a )  ( aLam[ ((n)*Na+(a)) ])
+#define Theta( c,c1 )  ( aTheta[ ((c)*Nc+(c1)) ])
+#define Theta1( a,a1 ) ( aTheta1[ ((a)*Na+(a1)) ])
+
+#define Psi( c,c1,a )  ( aPsi[(( (c) * Nc + (c1)  ) * Na + (a)) ])
+#define Psi1( a,a1,c ) ( aPsi1[(( (a) * Na + (a1) ) * Nc + (c)) ])
+#define Zeta( n,c,a )  ( aZeta[(( (n) * Nc + (c)  ) * Na + (a)) ])
+//
 
 // Calculate temperature dependence of the interaction parameters.
 // Two different versions: with 5 (4) or with 8 coefficients
@@ -629,6 +610,25 @@ void TPitzer::Ecalc( double z, double z1, double I, double Aphi,
   double zet=0., dzdx=0.;
   double bk[23], dk[23];
   double JMN=0., JpMN=0., JMM=0., JpMM=0., JNN=0., JpNN=0.;
+
+  // parameters for ak1 and ak2 values from Pitzer 1991 (p. 125, Table B1)
+  static double ak1[21] = {  1.925154014814667, -0.060076477753119, -0.029779077456514,
+                      -0.007299499690937,  0.000388260636404,  0.000636874599598,
+                       0.000036583601823, -0.000045036975204, -0.000004537895710,
+                       0.000002937706971,  0.000000396566462, -0.000000202099617,
+                      -0.000000025267769,  0.000000013522610,  0.000000001229405,
+                      -0.000000000821969, -0.000000000050847,  0.000000000046333,
+                       0.000000000001943, -0.000000000002563, -0.000000000010991 };
+					   // Prescribed constants
+  static double ak2[23] = {  0.628023320520852,  0.462762985338493,  0.150044637187895,
+                      -0.028796057604906, -0.036552745910311, -0.001668087945272,
+                       0.006519840398744,  0.001130378079086, -0.000887171310131,
+                      -0.000242107641309,  0.000087294451594,  0.000034682122751,
+                      -0.000004583768938, -0.000003548684306, -0.000000250453880,
+                       0.000000216991779,  0.000000080779570,  0.000000004558555,
+                      -0.000000006944757, -0.000000002849257,  0.000000000237816,
+                       0, 0 };  // Prescribed constants
+
   long int k, m;
 
   xMN= 6. * z*z1 * Aphi * pow(I,0.5);
@@ -929,7 +929,7 @@ double TPitzer::lnGammaM(  long int M )
 	       z1=zc(c1);
            Ecalc(z,z1,I,Aphi,Etheta,Ethetap);
            Phi=Theta(M,c1)+Etheta;  					// Pitzer-Toughreact Report 2006, equation (A15)
-	    
+
         GM3=GM3+mc(c1)*(2.*Phi+ ma(a)*Psi(M,c1,a)  );
 	    } // Sveta 19/12/2008
 	 }
@@ -995,7 +995,7 @@ double TPitzer::lnGammaX(  long int X )
            z1=za(a1);
            Ecalc(z,z1,I,Aphi, Etheta,Ethetap);
            Phi1=Theta1(X,a1)+Etheta; 			 // Pitzer-Toughreact Report 2006, equation (A15)
-	      
+
           GX3=GX3+ma(a1)*(2.*Phi1+mc(c)*Psi1(X,a1,c));  // Sveta 19/12/2008
 	      }
 	 }

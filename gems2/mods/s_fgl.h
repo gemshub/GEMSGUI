@@ -853,7 +853,7 @@ public:
 	void Pitzer_test_out( const char *path );
 
 };
-
+/*
 #define IPc( ii, jj )  ( aIPc[ (ii) * NPcoef + (jj) ])
 #define IPx( ii, jj )  ( aIPx[ (ii) * MaxOrd + (jj) ])
 
@@ -875,7 +875,7 @@ public:
 #define Psi( c,c1,a )  ( aPsi[(( (c) * Nc + (c1)  ) * Na + (a)) ])
 #define Psi1( a,a1,c ) ( aPsi1[(( (a) * Na + (a1) ) * Nc + (c)) ])
 #define Zeta( n,c,a )  ( aZeta[(( (n) * Nc + (c)  ) * Na + (a)) ])
-
+*/
 #endif
 
 
