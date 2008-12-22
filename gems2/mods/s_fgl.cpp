@@ -147,6 +147,8 @@ long int TPRSVcalc::PTparam()
 {
    long int j, i, ip;
    long int i1, i2;
+   double p0, p1, p2;
+   double k, dk, d2k;
 
    PureSpecies();
 
@@ -168,8 +170,10 @@ long int TPRSVcalc::PTparam()
       {
          i1 = aIPx[MaxOrd*ip];
          i2 = aIPx[MaxOrd*ip+1];
-         KK[i1][i2] = aIPc[NPcoef*ip];
-         KK[i2][i1] = aIPc[NPcoef*ip];  // symmetric case
+         p0 = aIPc[NPcoef*ip];
+         k = p0;
+         KK[i1][i2] = k;
+         KK[i2][i1] = k;   // symmetric case
       }
     }
 
@@ -184,7 +188,7 @@ TPRSVcalc::MixMod()
 {
    long int j, iRet;
 
-    iRet = FugacitySpec( Pparc );	// removed binpar from arguments, 31.05.2008 (TW)
+    iRet = FugacitySpec( Pparc );
     phVOL[0] = PhVol * 10.;
     for(j=0; j<NComp; j++)
     {
@@ -233,7 +237,7 @@ TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, doub
          k3 = Eosparm[i][5];
        }
 
-      AB(Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, da, d2a);
+      AB( Tcrit, Pcrit, omg, k1, k2, k3, apure, bpure, da, d2a );
 
       Pureparm[i][0] = apure;
       Pureparm[i][1] = bpure;
@@ -473,7 +477,7 @@ TPRSVcalc::FugacityMix( double amix, double bmix, double &fugmix, double &zmix,
 	a2 = B - 1.;
 	a1 = A - 3.*pow(B,2.) - 2.*B;
 	a0 = pow(B,3.) + pow(B,2.) - A*B;
-	Cardano(a2, a1, a0, z1, z2, z3);
+	Cardano( a2, a1, a0, z1, z2, z3 );
 
 	// find stable roots
 	vol1 = z1*R_CONST*Tk/Pbar;
@@ -526,9 +530,16 @@ TPRSVcalc::FugacitySpec( double *fugpure )
     long int i, j, iRet=0;
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
 	double A, B, lnfci, fci;
-	double K, dK, d2K, Gdep, Hdep, Sdep, CPdep;
+	double Gig, Hig, Sig, CPig, Gdep, Hdep, Sdep, CPdep;
+	double K, dK, d2K, Q, dQ, d2Q;
 	double damix, d2amix, ai, aj, dai, daj, d2ai, d2aj;
 	double cv, dPdT, dPdV, dVdT;
+
+	// ideal gas changes from 1 bar to P (at T of interest)
+	Hig = 0.;
+	Sig = (-1.)*R_CONST*log(Pbar);
+	Gig = Hig - Tk*Sig;
+	CPig = 0.;
 
     // Reload params to Pureparm
     for( j=0; j<NComp; j++ )
@@ -542,8 +553,8 @@ TPRSVcalc::FugacitySpec( double *fugpure )
     }
 
 	// retrieve properties of the mixture
-	iRet = MixParam( amix, bmix);
-	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix);
+	iRet = MixParam( amix, bmix );
+	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix );
 
 	// calculate fugacity coefficient, fugacity and activity of species i
 	for (i=0; i<NComp; i++)
@@ -575,7 +586,7 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 	{
 		for (j=0; j<NComp; j++)
 		{
-			// pull parameters here
+			// pull parameters
 			ai = Pureparm[i][0];
 			aj = Pureparm[j][0];
 			dai = Pureparm[i][2];
@@ -583,12 +594,17 @@ TPRSVcalc::FugacitySpec( double *fugpure )
 			d2ai = Pureparm[i][3];
 			d2aj = Pureparm[j][3];
 			K = KK[i][j];
+			dK = dKK[i][j];
+			d2K = d2KK[i][j];
 
-			damix = damix + 0.5*x[i]*x[j]*(1.-K)
-				* ( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
-			d2amix = d2amix + 0.5*x[i]*x[j]*(1.-K)
-				* ( dai*daj/sqrt(ai*aj) + d2ai*sqrt(aj)/sqrt(ai) + d2aj*sqrt(ai)/sqrt(aj)
-				- 0.5*( pow(dai,2.)*sqrt(aj)/sqrt(pow(ai,3.)) + pow(daj,2.)*sqrt(ai)/sqrt(pow(aj,3.)) ) );
+			// increments to derivatives
+			Q = sqrt(ai*aj);
+			dQ = 0.5*( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
+			d2Q = 0.5*( dai*daj/sqrt(ai*aj) + d2ai*sqrt(aj)/sqrt(ai) + d2aj*sqrt(ai)/sqrt(aj)
+					- 0.5*( pow(dai,2.)*sqrt(aj)/sqrt(pow(ai,3.))
+					+ pow(daj,2.)*sqrt(ai)/sqrt(pow(aj,3.)) ) );
+			damix = damix + x[i]*x[j] * ( dQ*(1.-K) - Q*dK );
+			d2amix = d2amix + x[i]*x[j] * ( d2Q*(1.-K) - 2.*dQ*dK - Q*d2K );
 		}
 	}
 
@@ -2291,6 +2307,8 @@ long int TSRKcalc::PTparam()
 {
 	long int j, i, ip;
 	long int i1, i2;
+	double p0, p1, p2;
+	double k, dk, d2k;
 
 	PureSpecies();
 
@@ -2312,8 +2330,10 @@ long int TSRKcalc::PTparam()
 		{
 			i1 = aIPx[MaxOrd*ip];
 			i2 = aIPx[MaxOrd*ip+1];
-			KK[i1][i2] = aIPc[NPcoef*ip];
-			KK[i2][i1] = aIPc[NPcoef*ip];  // symmetric case
+			p0 = aIPc[NPcoef*ip];
+			k = p0;
+			KK[i1][i2] = k;
+			KK[i2][i1] = k;   // symmetric case
 		}
 	}
 	return 0;
@@ -2645,12 +2665,12 @@ TSRKcalc::FugacitySpec( double *fugpure )
 	long int i, j, iRet=0;
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
 	double A, B, bi, Bi, lnfci, fci;
-	double K, dK, d2K, Hig, Sig, Gig, CPig;
-	double Gdep, Hdep, Sdep, CPdep;
+	double Gig, Hig, Sig, CPig, Gdep, Hdep, Sdep, CPdep;
+	double K, dK, d2K, Q, dQ, d2Q;
 	double damix, d2amix, ai, aj, dai, daj, d2ai, d2aj;
 	double cv, dPdT, dPdV, dVdT;
 
-	// ideal gas changes from 1 bar to P at T of interest
+	// ideal gas changes from 1 bar to P (at T of interest)
 	Hig = 0.;
 	Sig = (-1.)*R_CONST*log(Pbar);
 	Gig = Hig - Tk*Sig;
@@ -2699,7 +2719,7 @@ TSRKcalc::FugacitySpec( double *fugpure )
 	{
 		for (j=0; j<NComp; j++)
 		{
-			// pull parameters here
+			// pull parameters
 			ai = Pureparm[i][0];
 			aj = Pureparm[j][0];
 			dai = Pureparm[i][2];
@@ -2707,12 +2727,17 @@ TSRKcalc::FugacitySpec( double *fugpure )
 			d2ai = Pureparm[i][3];
 			d2aj = Pureparm[j][3];
 			K = KK[i][j];
+			dK = dKK[i][j];
+			d2K = d2KK[i][j];
 
-			damix = damix + 0.5*x[i]*x[j]*(1.-K)
-				* ( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
-			d2amix = d2amix + 0.5*x[i]*x[j]*(1.-K)
-				* ( dai*daj/sqrt(ai*aj) + d2ai*sqrt(aj)/sqrt(ai) + d2aj*sqrt(ai)/sqrt(aj)
-				- 0.5*( pow(dai,2.)*sqrt(aj)/sqrt(pow(ai,3.)) + pow(daj,2.)*sqrt(ai)/sqrt(pow(aj,3.)) ) );
+			// increments to derivatives
+			Q = sqrt(ai*aj);
+			dQ = 0.5*( sqrt(aj/ai)*dai + sqrt(ai/aj)*daj );
+			d2Q = 0.5*( dai*daj/sqrt(ai*aj) + d2ai*sqrt(aj)/sqrt(ai) + d2aj*sqrt(ai)/sqrt(aj)
+					- 0.5*( pow(dai,2.)*sqrt(aj)/sqrt(pow(ai,3.))
+					+ pow(daj,2.)*sqrt(ai)/sqrt(pow(aj,3.)) ) );
+			damix = damix + x[i]*x[j] * ( dQ*(1.-K) - Q*dK );
+			d2amix = d2amix + x[i]*x[j] * ( d2Q*(1.-K) - 2.*dQ*dK - Q*d2K );
 		}
 	}
 
