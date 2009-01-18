@@ -1078,8 +1078,13 @@ TEUNIQUAC::TEUNIQUAC( long int NSpecies, long int NParams, long int NPcoefs, lon
         			 arlnGam, aphVOL, dW, eW )
 {
 	alloc_internal();
-	Z = arZ;
-	M = arM;
+	for (long int j=0; j<NComp; j++)
+	{
+		Z[j] = arZ[j];
+		M[j] = arM[j];
+	}
+	// Z = arZ;
+	// M = arM;
 }
 
 
