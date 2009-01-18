@@ -1187,6 +1187,9 @@ long int TEUNIQUAC::PTparam()
 		U[i1][i2] = u;
 		dU[i1][i2] = du;
 		d2U[i1][i2] = d2u;
+		U[i2][i1] = u;
+		dU[i2][i1] = du;
+		d2U[i2][i1] = d2u;   // uij identical to uji
 	}
 
 	// calculate Psi and its partial derivatives
