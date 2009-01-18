@@ -580,7 +580,15 @@ AGAIN_SETUP:
                           php->ncpM = 1;  // NPcoef
                           php->PphC = PH_AQUEL;
                           break;
-          case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs (reserved)
+          case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs, changed 18.01.2009 (TW)
+						  php->nscM = 2;  // NP_DC
+						  php->npxM = 2;  // MaxOrd
+						  if( php->ncpN < 1 ) // NPar
+							  php->ncpN = 1;
+						  if( php->ncpN > php->nDC*php->nDC/2 )
+							  php->ncpN = php->nDC*php->nDC/2;
+						  php->ncpM = 2;  // NPcoef
+						  php->PphC = PH_AQUEL;
         	              break;
           case SM_AQPITZ: // built-in Pitzer HMW aqueous activity coefficient model
         	              php->nscM = 0;  // NP_DC
