@@ -512,7 +512,11 @@ TRTParm::RecCalc( const char *key )
 {
   short ij, i, j;
   double P_old;
-
+  
+  float K_to_C = 0.;
+  if(rpp->Ptun == PVT_KELVIN )
+	  K_to_C = -C_to_K;
+  
     /* insert values to arrays  rp->T, rp->P, rp->RT; */
    switch( rpp->Mode )
     {
@@ -522,14 +526,10 @@ TRTParm::RecCalc( const char *key )
     case 1: // increments in cycle on P nested into cycle on T
         for( ij=0, i=0; i<rpp->NT; i++ )
         {
-            rpp->T[ij] = rpp->Ti[0] + rpp->Ti[2] * i;
-//            if( rpp->T[ij] > rpp->Ti[1] )
-//                rpp->T[ij] = rpp->Ti[1];
+            rpp->T[ij] = (rpp->Ti[0]+K_to_C) + rpp->Ti[2] * i;
             for( j=0; j<rpp->NP; j++ )
             {
                 rpp->P[ij] = rpp->Pi[0] + rpp->Pi[2] * j;
-//               if( rpp->P[ij] > rpp->Pi[1] )
-//                    rpp->P[i] = rpp->Pi[1];
                 if( j ) rpp->T[ij] = rpp->T[ij-1];
                 ij++;
             }
@@ -539,13 +539,9 @@ TRTParm::RecCalc( const char *key )
         for( ij=0, i=0; i<rpp->NP; i++ )
         {
             rpp->P[ij] = rpp->Pi[0] + rpp->Pi[2] * i;
-//            if( rpp->P[ij] > rpp->Pi[1] )
-//                rpp->P[ij] = rpp->Pi[1];
             for( j=0; j<rpp->NT; j++ )
             {
-                rpp->T[ij] = rpp->Ti[0] + rpp->Ti[2] * j;
-//                if( rpp->T[ij] > rpp->Ti[1] )
-//                    rpp->T[ij] = rpp->Ti[1];
+                rpp->T[ij] = (rpp->Ti[0]+K_to_C) + rpp->Ti[2] * j;
                 if( j ) rpp->P[ij] = rpp->P[ij-1];
                 ij++;
             }
@@ -555,11 +551,7 @@ TRTParm::RecCalc( const char *key )
         for( i=0; i<rpp->NV; i++ )
         {
             rpp->P[i] = rpp->Pi[0] + rpp->Pi[2] * i;
-//            if( rpp->P[i] > rpp->Pi[1] )
-//                rpp->P[i] = rpp->Pi[1];
-            rpp->T[i] = rpp->Ti[0] + rpp->Ti[2] * i;
-//            if( rpp->T[i] > rpp->Ti[1] )
-//                rpp->T[i] = rpp->Ti[1];
+            rpp->T[i] = (rpp->Ti[0]+K_to_C) + rpp->Ti[2] * i;
         }
         break;
     }
