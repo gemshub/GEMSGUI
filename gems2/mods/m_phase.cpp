@@ -585,8 +585,8 @@ AGAIN_SETUP:
 						  php->npxM = 2;  // MaxOrd
 						  if( php->ncpN < 1 ) // NPar
 							  php->ncpN = 1;
-						  if( php->ncpN > php->nDC*php->nDC/2 )
-							  php->ncpN = php->nDC*php->nDC/2;
+						  if( php->ncpN > php->nDC*php->nDC )
+							  php->ncpN = php->nDC*php->nDC;
 						  php->ncpM = 2;  // NPcoef
 						  php->PphC = PH_AQUEL;
         	              break;

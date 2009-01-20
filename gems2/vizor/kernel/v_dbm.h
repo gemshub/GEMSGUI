@@ -345,7 +345,7 @@ public:
 
     //--- Information about of open file list
     int GetOpenFileNum( const char *secondName  );
-    void SetNewOpenFileList( const TCStringArray& aFlNames );
+    bool SetNewOpenFileList( const TCStringArray& aFlNames );
     void GetFileList( int mode, TCStringArray& names,
                       TCIntArray& indx,  TCIntArray& sel );
     //  int GetNumFiles() { return aFile.GetCount(); }

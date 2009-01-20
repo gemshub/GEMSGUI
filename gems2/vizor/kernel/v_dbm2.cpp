@@ -1057,30 +1057,41 @@ void TDataBase::RebildFile(const TCIntArray& nff)
 }
 
 //Set new open Files list  (Reopen by list)
-void TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
+bool TDataBase::SetNewOpenFileList(const TCStringArray& aFlKeywd)
 {
-    if(aFlKeywd.GetCount() < 1 )
-        return;
+    bool allOpend = true;
+    
+	if(aFlKeywd.GetCount() < 1 )
+        return  allOpend;
 
     Close();
     for(uint i=0; i<aFlKeywd.GetCount(); i++)
     {
         int nF = -1;
-        for(uint j=0; j<aFile.GetCount(); j++) {
+        for(uint j=0; j<aFile.GetCount(); j++)
+        {
             if( aFlKeywd[i] == aFile[j].GetKeywd() )
             {
                 nF = j;
                 break;
             }
-	}
+	    }
 
         if( nF >= 0 )
             fls.Add(nF);
         else
-            Error( aFlKeywd[i], "No such file name in this configuration!");
+        {	
+            if( !vfQuestion( 0, aFlKeywd[i],
+             "This database file was not found in the project or default database.\n"
+            		" Continue without this file (Y) or cancel(N)?" ))
+               Error( aFlKeywd[i], 
+            		"Please, provide this database file and try opening the project again!");
+            allOpend = false;
+        }    
     }
 
     Open(false, UPDATE_DBV, fls);
+    return allOpend;
 }
 
 //Make new project-file and close another project files (make new Project)

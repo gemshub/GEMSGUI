@@ -900,7 +900,9 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
 // Reopen file configuration on data in Project structure
 void TProfil::SetFN()
 {
-    unsigned i, nx=0;
+    bool allOpend = true;
+    
+	unsigned i, nx=0;
     short j, k=0;
     TCStringArray aFls;
     gstring s;
@@ -924,8 +926,18 @@ void TProfil::SetFN()
             s = gstring( mup->FN[k++], 0, MAX_FILENAME_LEN);
             aFls.Add(s);
         }
-        rt[aMod[i].rtNum()].SetNewOpenFileList( aFls );
+        
+        if( !rt[aMod[i].rtNum()].SetNewOpenFileList( aFls ))
+            allOpend = false;
     }
+    if( !allOpend )
+    {
+        vstr _fstKeyFld(rt[RT_PARAM].FldLen(0), rt[RT_PARAM].FldKey(0));
+        gstring fstKeyFld(_fstKeyFld);
+        StripLine(fstKeyFld);
+
+    	GetFN( fstKeyFld.c_str(), false );
+    }	
 }
 
 //------------------ End of m_prfget.cpp --------------------------
