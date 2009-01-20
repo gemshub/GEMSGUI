@@ -459,17 +459,17 @@ AGAIN_SETUP:
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-                          if( php->ncpN > php->nDC*php->nDC/2 )
-                              php->ncpN = php->nDC*php->nDC/2;
-                          php->ncpM = 3;  // NPcoef
+						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
+							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
+						  php->ncpM = 3;  // NPcoef
                           break;
           case SM_REGULAR:   // Regular model (multicomponent)
                           php->nscM = 0;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-                          if( php->ncpN > php->nDC*php->nDC/2 )
-                              php->ncpN = php->nDC*php->nDC/2;
+						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
+							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
                           php->ncpM = 3;  // NPcoef
                           break;
           case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
@@ -477,8 +477,8 @@ AGAIN_SETUP:
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-                          if( php->ncpN > php->nDC*php->nDC/2 )
-                              php->ncpN = php->nDC*php->nDC/2;
+						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
+							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
                           php->ncpM = 16;  // NPcoef
                           break;
           case SM_NRTLLIQ:   // NRTL liquid model (multicomponent), added 03.06.2008 (TW)
@@ -486,8 +486,8 @@ AGAIN_SETUP:
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-                          if( php->ncpN > php->nDC*php->nDC/2 )
-                              php->ncpN = php->nDC*php->nDC/2;
+						  if( php->ncpN > (php->nDC*(php->nDC-1)) )
+							  php->ncpN = (php->nDC*(php->nDC-1));
                           php->ncpM = 6;  // NPcoef
                           break;
           case SM_WILSLIQ:   // Wilson liquid model (multicomponent), added 09.06.2008 (TW)
@@ -495,8 +495,8 @@ AGAIN_SETUP:
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-                          if( php->ncpN > php->nDC*php->nDC/2 )
-                              php->ncpN = php->nDC*php->nDC/2;
+						  if( php->ncpN > (php->nDC*(php->nDC-1)) )
+							  php->ncpN = (php->nDC*(php->nDC-1));
                           php->ncpM = 4;  // NPcoef
                           break;
           case SM_REDKIS:   // Redlich-Kister model (binary)
@@ -526,8 +526,8 @@ AGAIN_SETUP:
 //                          php->ncpM = max( (short)2, php->nDC );
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-                          if( php->ncpN > php->nDC*php->nDC/2 )
-                              php->ncpN = php->nDC*php->nDC/2;
+						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
+							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
                           php->ncpM = 1;  // For now, no T,P dependence
                           php->nscM = 7; // last changed 12.12.2008 (TW)
                           php->npxM = 2;
@@ -535,8 +535,8 @@ AGAIN_SETUP:
           case SM_SRFLUID:  // Soave-Redlich-Kwong (SRK) EoS, one binary interaction parameter
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-                          if( php->ncpN > php->nDC*php->nDC/2 )
-                              php->ncpN = php->nDC*php->nDC/2;
+						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
+							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
                           php->ncpM = 1;
                           php->nscM = 7; // set to 7 to pull all parameters from CPg
                           php->npxM = 2;
