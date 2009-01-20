@@ -600,6 +600,9 @@ what kind of mixed phase and non-ideal model should be used.</string>
                                     <height>0</height>
                                 </size>
                             </property>
+                            <property name="maxValue">
+                                <number>999</number>
+                            </property>
                         </widget>
                         <widget class="QLabel">
                             <property name="name">

@@ -1,3 +1,13 @@
+20/01/2009
+Fixed errors
+- In RTparam added calculation with different 
+  units of measurement of temperature for the abscissa  { C K }  
+
+- If database file was not found in the project or default database user 
+can continue work without this file  or cancel
+
+- If phase remake user can increase rows in ph_cf to nDC*nDC
+
 12/12/2008
 Insert new changes in as in gems2 to CalcDialog and AutophaseDialog
 
