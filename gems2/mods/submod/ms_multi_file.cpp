@@ -1177,6 +1177,9 @@ else
     pm.Qd = 0;
 
  }
+ 
+ Alloc_TSolMod( pm.FIs );
+
 //  Added 16.11.2004 by Sveta
 //    if( pm.sitNcat*pm.sitNcat )
 //    { pm.sitE = new double[pm.sitNcat*pm.sitNan];
@@ -1345,6 +1348,7 @@ if( pm.D ) delete[] pm.D;
 //    if( pm.sitXan )    delete[] pm.sitXan;
 
     // optimization 08/02/2007
+    Free_TSolMod();
     Free_internal();
 }
 

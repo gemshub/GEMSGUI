@@ -644,6 +644,8 @@ void TMulti::dyn_kill(int /*q*/)
     pm.SCM   = (char (*)[MST])aObj[ o_wi_scm ].Free();
     pm.SATT  = (char *)aObj[ o_wi_satt ].Free();
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].Free();
+    
+    Free_TSolMod();
 /*
 //  Added 16.11.2004 by Sveta
     pm.sitXcat = (long int *)aObj[ o_wd_sitxcat ].Free();
@@ -940,6 +942,8 @@ void TMulti::dyn_new(int /*q*/)
         pm.Qp    = (double *)aObj[ o_wi_qp ].Free();
         pm.Qd    = (double *)aObj[ o_wi_qd ].Free();
     }
+
+    Alloc_TSolMod( pm.FIs );
 
     /* pm.R = (double *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
 //    sit_dyn_new();

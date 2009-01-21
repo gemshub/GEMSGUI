@@ -1518,7 +1518,7 @@ void TMulti::Free_internal()
 {
   Free_compressed_xAN();
   Free_A_B();
-  Free_TSolMod();
+//  Free_TSolMod();
 }
 
 void TMulti::Alloc_internal()
@@ -1526,6 +1526,6 @@ void TMulti::Alloc_internal()
 // optimization 08/02/2007
  Alloc_A_B( pmp->N );
  Build_compressed_xAN();
- Alloc_TSolMod( pmp->FIs );
+// Alloc_TSolMod( pmp->FIs );
 }
 //--------------------- End of ipm_main.cpp ---------------------------
