@@ -976,7 +976,7 @@ void TMulti::RaiseZeroedOffDCs( long int jStart, long int jEnd, double scalingFa
 // Adjustment of primal approximation according to kinetic constraints
 long int TMulti::MetastabilityLagrangeMultiplier()
 {
-    double E = 1E-8;  // pa.p.DKIN? Default min value of Lagrange multiplier p
+    double E = TProfil::pm->pa.p.DKIN; //1E-8;  // pa.p.DKIN? Default min value of Lagrange multiplier p
 //    E = 1E-30;
 
     for(long int J=0;J<pmp->L;J++)
