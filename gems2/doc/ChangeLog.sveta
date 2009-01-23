@@ -1,3 +1,11 @@
+22/01/2009
+Fixed errors
+- No calculate without Simplex, if using metastability restrictions (data conversions float-double )
+- In function Adjustment of primal approximation according to kinetic constraints for small metastability restrictions segment (<1e-8)  
+
+21/01/2009
+Avoid unnecessary allocations of TSolMod classes in Process and other calculations 
+
 20/01/2009
 Fixed errors
 - In RTparam added calculation with different 

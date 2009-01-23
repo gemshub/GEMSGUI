@@ -52,6 +52,7 @@ fstream f_log("ipmlog.txt", ios::out|ios::app );
 #endif
     pmp->W1=0; pmp->K2=0;
     
+
     if( pmp->pULR && pmp->PLIM )
         Set_DC_limits( DC_LIM_INIT );
 
@@ -487,6 +488,7 @@ STEP_POINT( "End Simplex" );
         // this operation greatly affects the accuracy of mass balance! 
 
         TotalPhases( pmp->Y, pmp->YF, pmp->YFA );
+
         for( j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
@@ -549,6 +551,7 @@ long int TMulti::EnterFeasibleDomain()
  
     // Initial rough check of mass balance residuals
     iB = CheckMassBalanceResiduals( pmp->Y );
+   
     if( iB >= 0 )
     {  // Experimental 
        if( !pmp->pNP )     // cannot improve in AIA mode!
@@ -824,7 +827,7 @@ TMulti::CheckMassBalanceResiduals(double *Y )
 	if( cutoff > 1e-3 )
 		cutoff = 1e-3;
 	MassBalanceResiduals( pmp->N, pmp->L, pmp->A, Y, pmp->B, pmp->C);
-	for(long int i=0; i<pmp->N; i++)
+    for(long int i=0; i<pmp->N; i++)
 	{	
 	   if( pmp->B[i] > cutoff )
 	   {	   // Major IC
@@ -993,12 +996,23 @@ long int TMulti::MetastabilityLagrangeMultiplier()
         case BOTH_LIM:
             if( pmp->Y[J]<=pmp->DLL[J])
                 pmp->Y[J]=pmp->DLL[J]+E;  /* 1e-10: pa.DKIN ? */
+            if( pmp->Y[J]>=pmp->DUL[J])     // SD 22/01/2009
+            {    
+                if( pmp->DUL[J] == 1e6 )
+                   return J;   // Broken initial approximation! 
+                pmp->Y[J]=pmp->DUL[J]-E;   
+                if( pmp->Y[J]<=pmp->DLL[J])
+                  	pmp->Y[J]=(pmp->DUL[J]+pmp->DLL[J])/2.;
+             }
+             break;
         case UPPER_LIM:
             if( pmp->Y[J]>=pmp->DUL[J])
             {    
                	if( pmp->DUL[J] == 1e6 )
                	    return J;   // Broken initial approximation! 
-            	pmp->Y[J]=pmp->DUL[J]-E;            
+            	pmp->Y[J]=pmp->DUL[J]-E;   
+                if( pmp->Y[J]<=0)         // SD 22/01/2009
+                	pmp->Y[J]=(pmp->DUL[J])/2.;
             }
             break;
         }
