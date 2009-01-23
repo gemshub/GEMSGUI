@@ -3,7 +3,7 @@
 //
 // Declaration of TProcess class, config and calculation functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -156,6 +156,7 @@ typedef struct
     // IPNCalc rpn;       // IPN of equats of process  -- Expr
     time_t syt, stt, utt, // time to build of current records
     pet, tpt, mut;
+ double ccTime;           // Added to control calc.time 15.01.09 DK
  char timep[16], TCp[16], Pp[16], NVp[16], Bnamep[16];
 
  char *tprn;               // internal bufer
