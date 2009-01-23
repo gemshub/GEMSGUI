@@ -51,6 +51,8 @@ typedef unsigned int uint;
 
 #endif //  __noborl
 
+void Gcvt(double number, size_t ndigit, char *buf);
+
 inline
 int ROUND(double x )
 {

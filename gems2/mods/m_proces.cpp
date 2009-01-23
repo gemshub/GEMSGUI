@@ -816,9 +816,9 @@ TProcess::pe_qekey()
     sprintf(buf, "%.3d", pep->c_NV);
     memset( pep->NVp, 0, 4 );
     strncpy( pep->NVp, buf, 3 );
-    gcvt( pep->c_TC, 6, pep->TCp );
-    gcvt( pep->c_P, 6, pep->Pp );
-    gcvt( pep->c_V, 6, pep->Bnamep );
+    Gcvt( pep->c_TC, 6, pep->TCp );
+    Gcvt( pep->c_P, 6, pep->Pp );
+    Gcvt( pep->c_V, 6, pep->Bnamep );
 }
 
 // save current values in process iterations to arrays

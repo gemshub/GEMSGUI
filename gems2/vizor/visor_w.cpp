@@ -77,14 +77,14 @@ const char* GEMS_LOGO_ICON = "img/gems1.png";
 const char* GEMS_SYS_ICON = "img/sciences_section.xpm";
 const char* GEMS_DEFAULT_FONT_NAME = "Courier New";
 #ifdef __unix
-const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.2.4-PSI (Linux/MacOS)";
+const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.3.0-PSI (Linux/MacOS)";
 #ifdef __APPLE__
 const int GEMS_DEFAULT_FONT_SIZE = 12;
 #else
 const int GEMS_DEFAULT_FONT_SIZE = 10;
 #endif
 #else
-const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.2.4-PSI (Windows)";
+const char* GEMS_VERSION_STAMP = "GEM-Selektor v2.3.0-PSI (Windows)";
 const int GEMS_DEFAULT_FONT_SIZE = 9;
 #endif
 extern const char* GEMS_ABOUT_HTML;

@@ -106,6 +106,21 @@ f_getline(istream& is, gstring& str, char delim)
    return is;
 }
 
+// The gcvt() function converts number to a minimal length NULL terminated
+// ASCII string and stores the result in buf.  It produces ndigit signifi‐
+// cant digits in either printf(3) F format or E format.
+void Gcvt(double number, size_t ndigit, char *buf)
+{
+    vstr internalbuf(40);
+    int dg = 6;
+     do{
+          sprintf(internalbuf, "%.*g", dg, number);
+          dg--;
+      } while ( strlen(internalbuf)>ndigit && dg>0 );  
+    memset( buf, 0, ndigit );
+    strncpy(buf, internalbuf, ndigit );
+}
+
 
 const int bGRAN = 20;
 
