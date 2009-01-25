@@ -35,7 +35,7 @@ const char *GEMS_TOC_HTML = "gems_toc";
 #include "t_print.h"
 #include "t_read.h"
 
-#include "dlg/NewSystemDialog.h"
+#include "NewSystemDialog.h"
 
 
 // Default constructor and destructor

@@ -23,7 +23,7 @@
 #include "v_module.h"
 #include "visor_w.h"
 #include "v_object.h"
-#include "dlg/GraphDialog.h"
+#include "GraphDialog.h"
 
 #include "gdatastream.h"
 
