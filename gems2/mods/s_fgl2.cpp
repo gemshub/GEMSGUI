@@ -49,7 +49,7 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
     lnGamma = arlnGam;
 }
 
-bool TSolMod::testSizes( long int NSpecies, long int NParams,	long int NPcoefs, 
+bool TSolMod::testSizes( long int NSpecies, long int NParams,	long int NPcoefs,
 		long int MaxOrder,  long int NPperDC, char Mod_Code )
 {
   return(  (ModCode == Mod_Code) && (NComp == NSpecies) && ( NPar == NParams) &&
@@ -65,6 +65,17 @@ TSolMod::~TSolMod()
       delete[] aDC[i];
     delete[] aDC;
    }
+}
+
+
+long int TSolMod::UpdatePT ( double T_k, double P_bar, double dW, double eW )
+{
+	// set new P, T, rho, and eps
+	  RhoW = dW;
+	  EpsW =eW;
+	  Tk = T_k;
+	  Pbar = P_bar;
+	  return 0;
 }
 
 

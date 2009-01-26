@@ -164,15 +164,15 @@ public:
 		{ return 0;}
 
     virtual long int PTparam( double T_k, double P_bar, double dW, double eW )
-        { 
+        {
     	  RhoW = dW;
-    	  EpsW =eW; 
+    	  EpsW =eW;
     	  Tk = T_k;
-    	  Pbar = P_bar;  
+    	  Pbar = P_bar;
           return 0;
         }
 
-    bool testSizes( long int NSpecies, long int NParams,	long int NPcoefs, 
+    bool testSizes( long int NSpecies, long int NParams,	long int NPcoefs,
     		long int MaxOrder,  long int NPperDC, char Mod_Code );
 
     virtual long int MixMod( )
@@ -186,6 +186,9 @@ public:
        Sex_ = Sex;
 	   CPex_ = CPex;
 	};
+
+    // new access function to set new system state
+    long int UpdatePT ( double T_k, double P_bar, double dW, double eW );
 
 };
 
@@ -522,7 +525,7 @@ public:
     long int MixMod();
 
     // Calculation of internal tables (at each GEM iteration)
-	long int PTparam(double T_k, double P_bar, double dW, double eW) 
+	long int PTparam(double T_k, double P_bar, double dW, double eW)
 	 { return TSolMod::PTparam( T_k, P_bar, dW, eW); }
 };
 
