@@ -27,9 +27,12 @@
 TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, long int NPTPperDC, char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL ):
+        double *arWx, double *arlnGam, double *aphVOL, 
+        double T_k, double P_bar, double dW, double eW ):
     ModCode(Mod_Code), NComp(NSpecies),  NPar(NParams), NPcoef(NPcoefs),
-    MaxOrd(MaxOrder),  NP_DC(NPperDC), NPTP_DC(NPTPperDC), R_CONST(8.31451)
+    MaxOrd(MaxOrder),  NP_DC(NPperDC), NPTP_DC(NPTPperDC), R_CONST(8.31451),
+    RhoW(dW), EpsW(eW), Tk(T_k), Pbar(P_bar)
+
 {
     // pointer assignment
     aIPx = arIPx;   // Direct access to index list and parameter coeff arrays!
@@ -90,10 +93,11 @@ long int TSolMod::UpdatePT ( double T_k, double P_bar, double dW, double eW )
 TVanLaar::TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL ):
+        double *arWx, double *arlnGam, double *aphVOL,
+        double T_k, double P_bar, double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL )
+        			 arlnGam, aphVOL, T_k, P_bar, dW, eW )
 {
   alloc_internal();
 
@@ -129,10 +133,10 @@ void TVanLaar::free_internal()
 
 
 // Calculates T,P corrected binary interaction parameters
-long int TVanLaar::PTparam(double T_k, double P_bar, double dW, double eW)
+long int TVanLaar::PTparam()
 {
 	long int ip;
-	TSolMod::PTparam( T_k, P_bar, dW, eW);
+
     if ( NPcoef < 3 || NPar < 1 )
        return 1;
 
@@ -235,10 +239,11 @@ long int TVanLaar::MixMod()
 TRegular::TRegular( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL ):
+        double *arWx, double *arlnGam, double *aphVOL,
+        double T_k, double P_bar, double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL )
+        			 arlnGam, aphVOL, T_k, P_bar, dW, eW )
 {
   alloc_internal();
 
@@ -270,11 +275,11 @@ void TRegular::free_internal()
 
 
 //   Calculates T,P corrected binary interaction parameters
-long int TRegular::PTparam(double T_k, double P_bar, double dW, double eW)
+long int TRegular::PTparam()
 {
 	long int ip;
-	TSolMod::PTparam( T_k, P_bar, dW, eW);
-   if ( NPcoef < 3 || NPar < 1 )
+
+	if ( NPcoef < 3 || NPar < 1 )
 	           return 1;
 
 // read interaction parameters and correct to T,P
@@ -361,10 +366,11 @@ TRegular::MixMod()
 TRedlichKister::TRedlichKister( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC,char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL ):
+        double *arWx, double *arlnGam, double *aphVOL,
+        double T_k, double P_bar, double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL)
+        			 arlnGam, aphVOL, T_k, P_bar, dW, eW)
 {
   alloc_internal();
 
@@ -398,10 +404,10 @@ void TRedlichKister::free_internal()
 
 
 //   Calculates T,P corrected binary interaction parameters
-long int TRedlichKister::PTparam(double T_k, double P_bar, double dW, double eW)
+long int TRedlichKister::PTparam()
 {
    long int ip;
-   TSolMod::PTparam( T_k, P_bar, dW, eW);
+   
    if ( NPcoef < 16 || NPar < 1 )
       return 1;
 
@@ -564,10 +570,11 @@ TRedlichKister::MixMod()
 TNRTL::TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL ):
+        double *arWx, double *arlnGam, double *aphVOL,
+        double T_k, double P_bar, double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL )
+        			 arlnGam, aphVOL, T_k, P_bar, dW, eW )
 {
   alloc_internal();
 }
@@ -634,12 +641,11 @@ void TNRTL::free_internal()
 
 
 //   Calculates T,P corrected binary interaction parameters
-long int TNRTL::PTparam(double T_k, double P_bar, double dW, double eW)
+long int TNRTL::PTparam()
 {
 	long int ip, i, j, i1, i2;
 	double A, B, C, D, E, F;
 	double tau, dtau, d2tau, alp, dalp, d2alp;
-	TSolMod::PTparam( T_k, P_bar, dW, eW);
 
     if ( NPcoef < 6 || NPar < 1 )
        return 1;
@@ -800,10 +806,11 @@ TNRTL::MixMod()
 TWilson::TWilson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL ):
+        double *arWx, double *arlnGam, double *aphVOL,
+        double T_k, double P_bar, double dW, double eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
-        			 arlnGam, aphVOL )
+        			 arlnGam, aphVOL, T_k, P_bar, dW, eW )
 {
   alloc_internal();
 
@@ -847,12 +854,11 @@ void TWilson::free_internal()
 
 
 // Calculates T-corrected interaction parameters
-long int TWilson::PTparam(double T_k, double P_bar, double dW, double eW)
+long int TWilson::PTparam()
 {
 	long int ip, i, j, i1, i2;
 	double A, B, C, D;
 	double lam, dlam, d2lam;
-	TSolMod::PTparam( T_k, P_bar, dW, eW);
 
     if ( NPcoef < 4 || NPar < 1 )
            return 1;
