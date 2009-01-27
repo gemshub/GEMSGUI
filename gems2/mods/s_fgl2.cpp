@@ -27,7 +27,7 @@
 TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, long int NPTPperDC, char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
-        double *arWx, double *arlnGam, double *aphVOL, 
+        double *arWx, double *arlnGam, double *aphVOL,
         double T_k, double P_bar, double dW, double eW ):
     ModCode(Mod_Code), NComp(NSpecies),  NPar(NParams), NPcoef(NPcoefs),
     MaxOrd(MaxOrder),  NP_DC(NPperDC), NPTP_DC(NPTPperDC), R_CONST(8.31451),
@@ -52,12 +52,14 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
     lnGamma = arlnGam;
 }
 
+
 bool TSolMod::testSizes( long int NSpecies, long int NParams,	long int NPcoefs,
 		long int MaxOrder,  long int NPperDC, char Mod_Code )
 {
   return(  (ModCode == Mod_Code) && (NComp == NSpecies) && ( NPar == NParams) &&
 		    (NPcoef == NPcoefs) && (MaxOrd == MaxOrder) &&  ( NP_DC == NPperDC) );
 }
+
 
 TSolMod::~TSolMod()
 {
@@ -73,13 +75,20 @@ TSolMod::~TSolMod()
 
 long int TSolMod::UpdatePT ( double T_k, double P_bar, double dW, double eW )
 {
-	// set new P, T, rho, and eps
 	  RhoW = dW;
 	  EpsW =eW;
 	  Tk = T_k;
 	  Pbar = P_bar;
 	  return 0;
 }
+
+
+void TSolMod::GetPhaseName( const char *PhName )
+{
+	 strncpy( PhaseName, PhName, MAXPHASENAME );
+	 PhaseName[MAXPHASENAME] = 0;
+}
+
 
 
 
@@ -407,7 +416,7 @@ void TRedlichKister::free_internal()
 long int TRedlichKister::PTparam()
 {
    long int ip;
-   
+
    if ( NPcoef < 16 || NPar < 1 )
       return 1;
 

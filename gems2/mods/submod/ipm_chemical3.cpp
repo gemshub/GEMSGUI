@@ -1557,7 +1557,7 @@ TMulti::SolModExcessParam( long int k, char ModCode )
         case SM_SRFLUID:
          {    ErrorIf( !phSolMod[k], "","Invalid index of phase");
               TSolMod* aSM = phSolMod[k];
-              aSM->getExcessProp( Gex, Vex, Hex, Sex, CPex );
+              aSM->ExcessProp( Gex, Vex, Hex, Sex, CPex );
               break;
          }
 

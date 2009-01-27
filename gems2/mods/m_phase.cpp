@@ -453,24 +453,20 @@ AGAIN_SETUP:
 //       php->sol_t[SCM_TYPE] = SM_UNDEF;
 
        switch(php->sol_t[SPHAS_TYP])
-       {              // These all have to be checked !!!!!!!!!!!!!!!!!!!!!!!
-       case SM_OTHER:   // Hard-coded solid solution models (multicomponent)
-/*                       php->nscM = 1;  // NP_DC
-                       php->npxM = 2;  // MaxOrd
-                       if( php->ncpN < 1 ) // NPar
-                           php->ncpN = 1;
-						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
-							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
-						  php->ncpM = 3;  // NPcoef
-*/
-                       break;
+       {
+       case SM_OTHER:   // Customized hardcoded solid-solution models
+						  php->nscM = 0;   // NP_DC
+						  php->npxM = 0;   // MaxOrd
+                          php->ncpN = 0;   // NPar
+						  php->ncpM = 0;   // NPcoef
+						  break;
        case SM_VANLAAR:   // Van Laar model (multicomponent)
                           php->nscM = 1;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-						  if( php->ncpN > php->nDC*(php->nDC-1)/2 )
-							  php->ncpN = php->nDC*(php->nDC-1)/2;
+						  if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+							  php->ncpN = (php->nDC*(php->nDC-1)/2);
 						  php->ncpM = 3;  // NPcoef
                           break;
           case SM_REGULAR:   // Regular model (multicomponent)
@@ -478,8 +474,8 @@ AGAIN_SETUP:
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
-							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
+						  if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+							  php->ncpN = (php->nDC*(php->nDC-1)/2);
                           php->ncpM = 3;  // NPcoef
                           break;
           case SM_GUGGENM:   // Redlich-Kister model (multicomponent)
@@ -487,8 +483,8 @@ AGAIN_SETUP:
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
-							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
+						  if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+							  php->ncpN = (php->nDC*(php->nDC-1)/2);
                           php->ncpM = 16;  // NPcoef
                           break;
           case SM_NRTLLIQ:   // NRTL liquid model (multicomponent), added 03.06.2008 (TW)
@@ -532,23 +528,21 @@ AGAIN_SETUP:
 //                          php->nscN = 1; php->nscM = 4;  changed 07.12.2006 KD
                           break;
           case SM_PRFLUID:  // Peng-Robinson-Stryjek-Vera (PRSV) EoS, one binary interaction parameter
-//                          php->ncpN = max( (short)2, php->nDC );
-//                          php->ncpM = max( (short)2, php->nDC );
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
-							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
-                          php->ncpM = 1;  // For now, no T,P dependence
-                          php->nscM = 7; // last changed 12.12.2008 (TW)
+						  if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+							  php->ncpN = (php->nDC*(php->nDC-1)/2);
+                          php->ncpM = 1;  // NPcoef
+                          php->nscM = 7;  // set to 7 to pull all parameters from CPg
                           php->npxM = 2;
                           break;
           case SM_SRFLUID:  // Soave-Redlich-Kwong (SRK) EoS, one binary interaction parameter
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
-							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
-                          php->ncpM = 1;
-                          php->nscM = 7; // set to 7 to pull all parameters from CPg
+						  if( php->ncpN > (php->nDC*(php->nDC-1)/2) )
+							  php->ncpN = (php->nDC*(php->nDC-1)/2);
+                          php->ncpM = 1;  // NPcoef
+                          php->nscM = 7;  // set to 7 to pull all parameters from CPg
                           php->npxM = 2;
                           break;
           case SM_AQDAV:  // Aqueous Davies
@@ -585,8 +579,8 @@ AGAIN_SETUP:
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-                          if( php->ncpN > php->nDC*php->nDC/2 )
-                              php->ncpN = php->nDC*php->nDC/2;
+                          if( php->ncpN > (php->nDC*php->nDC/2) )
+                              php->ncpN = (php->nDC*php->nDC/2);
                           php->ncpM = 1;  // NPcoef
                           php->PphC = PH_AQUEL;
                           break;
@@ -595,8 +589,8 @@ AGAIN_SETUP:
 						  php->npxM = 2;  // MaxOrd
 						  if( php->ncpN < 1 ) // NPar
 							  php->ncpN = 1;
-						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)+php->nDC) )
-							  php->ncpN = (0.5*php->nDC*(php->nDC-1)+php->nDC);
+						  if( php->ncpN > (php->nDC*(php->nDC-1)/2+php->nDC) )
+							  php->ncpN = (php->nDC*(php->nDC-1)/2+php->nDC);
 						  php->ncpM = 2;  // NPcoef
 						  php->PphC = PH_AQUEL;
         	              break;
@@ -605,8 +599,8 @@ AGAIN_SETUP:
         	              php->npxM = 4;  // MaxOrd
         	              if( php->ncpN < 1 ) // NPar
         	                  php->ncpN = 1;
-        	              if( php->ncpN > php->nDC*php->nDC )
-        	                  php->ncpN = php->nDC*php->nDC;
+        	              if( php->ncpN > (php->nDC*php->nDC) )
+        	                  php->ncpN = (php->nDC*php->nDC);
         	              if( php->ncpM <= 5 )
         	                  php->ncpM = 5;  // NPcoef
         	              if( php->ncpM >= 8 )
