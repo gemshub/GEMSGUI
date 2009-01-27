@@ -64,13 +64,14 @@ SM_GUGGENM = 'K', // built-in multicomponent Guggenheim SS model (added by Th.Wa
     SM_AQDH3 = '3',  // built-in 3-d approximation of Debye-Hueckel
     SM_AQDHH = 'H',  // built-in 3-d approximation of Debye-Hueckel (Helgeson)
     SM_AQSIT = 'S',  // built-in SIT model for aq activity coeffs (reserved)
-SM_AQEUQ = 'Q',  // built-in EUNIQUAC model for aqueous activity coeffs (reserved)
+    SM_AQEUQ = 'Q',  // built-in EUNIQUAC model for aqueous activity coeffs (reserved)
     SM_PRFLUID = 'P', // Peng-Robinson-Stryjek-Vera EOS fluid model (Added by Th.Wagner)
     SM_IONEX = 'E',  // ion exchange (Donnan, Nikolskii) (reserved)
     SM_SURCOM = 'A', // models of surface complexation at solid-aqueous interface
     SM_USERDEF = 'U', // user-defined mixing model (in Phase record)
     SM_VANLAAR = 'V', // Generalized Van Laar solution model
-    SM_OTHER = 'O'   //  other models of non-ideal solutions (reserved)
+    SM_OTHER = 'O'		// other built-in phase-specific models of non-ideal solutions
+    	                //    (selected through phase name)
 };
 
 #ifndef _chbr_classes_h_

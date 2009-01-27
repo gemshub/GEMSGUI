@@ -454,13 +454,23 @@ AGAIN_SETUP:
 
        switch(php->sol_t[SPHAS_TYP])
        {              // These all have to be checked !!!!!!!!!!!!!!!!!!!!!!!
-          case SM_VANLAAR:   // Van Laar model (multicomponent)
+       case SM_OTHER:   // Hard-coded solid solution models (multicomponent)
+/*                       php->nscM = 1;  // NP_DC
+                       php->npxM = 2;  // MaxOrd
+                       if( php->ncpN < 1 ) // NPar
+                           php->ncpN = 1;
+						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
+							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
+						  php->ncpM = 3;  // NPcoef
+*/
+                       break;
+       case SM_VANLAAR:   // Van Laar model (multicomponent)
                           php->nscM = 1;  // NP_DC
                           php->npxM = 2;  // MaxOrd
                           if( php->ncpN < 1 ) // NPar
                               php->ncpN = 1;
-						  if( php->ncpN > (0.5*php->nDC*(php->nDC-1)) )
-							  php->ncpN = (0.5*php->nDC*(php->nDC-1));
+						  if( php->ncpN > php->nDC*(php->nDC-1)/2 )
+							  php->ncpN = php->nDC*(php->nDC-1)/2;
 						  php->ncpM = 3;  // NPcoef
                           break;
           case SM_REGULAR:   // Regular model (multicomponent)
