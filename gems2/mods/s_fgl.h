@@ -154,7 +154,7 @@ public:
     TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
          long int NPperDC, long int NPTPperDC, char Mod_Code,
          long int* arIPx, double* arIPc, double* arDCc,
-         double *arWx, double *arlnGam, double *aphVOL, 
+         double *arWx, double *arlnGam, double *aphVOL,
          double T_k, double P_bar, double dW, double eW );
 
 
@@ -523,7 +523,7 @@ public:
     long int MixMod();
 
     // Calculation of internal tables (at each GEM iteration)
-	//long int PTparam() 
+	//long int PTparam()
 	// { return TSolMod::PTparam(); }
 };
 
@@ -883,6 +883,10 @@ private:
 	double **Psi;
 	double **dPsi;
 	double **d2Psi;
+
+	double gammaDH[20];
+	double gammaC[20];
+	double gammaR[20];
 
 	void alloc_internal();
 	void free_internal();

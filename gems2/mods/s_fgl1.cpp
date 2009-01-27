@@ -1207,9 +1207,7 @@ long int TEUNIQUAC::PTparam()
 	return 0;
 }
 
-double gammaDH[20];
-double gammaC[20];
-double gammaR[20];
+
 // Calculates activity coefficients and excess functions
 long int TEUNIQUAC::MixMod()
 {
@@ -1270,19 +1268,21 @@ long int TEUNIQUAC::MixMod()
 			}
 
 			gamDH = - pow(Z[j],2.)*A*sqrt(IS)/(1.+b*sqrt(IS));
-gammaDH[j] = gamDH;
 			gamC = log(Phi[j]/x[j]) - Phi[j]/x[j] - log(R[j]/R[w]) + R[j]/R[w]
 					- 5.0*Q[j] * ( log(Phi[j]/Theta[j]) - Phi[j]/Theta[j]
 					- log(R[j]*Q[w]/(R[w]*Q[j])) + R[j]*Q[w]/(R[w]*Q[j]) );
-gammaC[j] = gamC;
 			gamR = Q[j] * ( - log(K) - L + log(Psi[w][j]) + Psi[j][w] );
-gammaR[j] = gamR;
+
 			lnGam = gamDH + gamC + gamR;
 
 			// convert activity coefficient to molality scale
 			lnGam = lnGam + log(x[w]);
 			lnGamma[j] = lnGam;
 			Gam = exp(lnGam);
+			gammaDH[j] = gamDH;
+			gammaC[j] = gamC;
+			gammaR[j] = gamR;
+
 		}
 
 		// water solvent
@@ -1303,14 +1303,17 @@ gammaR[j] = gamR;
 			}
 
 			gamDH = Mw*2.*A/pow(b,3.) * ( 1. + b*sqrt(IS) - 1./(1.+b*sqrt(IS)) - 2*log(1.+b*sqrt(IS)) );
-gammaDH[j]=gamDH;
+
 			gamC = log(Phi[j]/x[j]) + 1. - Phi[j]/x[j] - 5.0*Q[j] * ( log(Phi[j]/Theta[j]) + 1. - Phi[j]/Theta[j] );
-gammaC[j] = gamC;
+
 			gamR = Q[j] * (1. - log(K) - L );
-gammaR[j] = gamR;
+
 			lnGam = gamDH + gamC + gamR;
 			lnGamma[j] = lnGam;
 			Gam = exp(lnGam);
+			gammaDH[j]=gamDH;
+			gammaC[j] = gamC;
+			gammaR[j] = gamR;
 		}
 	}
 
