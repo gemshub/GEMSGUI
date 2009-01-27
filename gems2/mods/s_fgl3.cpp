@@ -52,13 +52,21 @@ TModOther::~TModOther()
 
 void TModOther::alloc_internal()
 {
-	// add internal memory allocation
+    Gdqf = new double [NComp];
+    Hdqf = new double [NComp];
+    Sdqf = new double [NComp];
+    CPdqf = new double [NComp];
+    Vdqf = new double [NComp];
 }
 
 
 void TModOther::free_internal()
 {
-	// add internal memory cleaning
+	delete[]Gdqf;
+	delete[]Hdqf;
+	delete[]Sdqf;
+	delete[]CPdqf;
+	delete[]Vdqf;
 }
 
 

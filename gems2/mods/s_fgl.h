@@ -967,6 +967,10 @@ private:
     double *aGEX;   // Increments to molar G0 values of DCs from pure fugacities or DQF terms, normalized [L]
     double *aVol;   // DC molar volumes, cm3/mol [L]
     double *Gdqf;	// DQF correction terms
+    double *Hdqf;
+    double *Sdqf;
+    double *CPdqf;
+    double *Vdqf;
 
 	void alloc_internal();
 	void free_internal();
@@ -994,6 +998,11 @@ public:
 
     // calculates excess properties
     long int ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ );
+
+    // functions for individual models
+    long int Feldspar1_PTParam();
+    long int Feldspar1_MixMod();
+    long int Feldspar1_ExcessProp();
 
 };
 
