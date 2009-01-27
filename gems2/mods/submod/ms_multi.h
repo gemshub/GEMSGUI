@@ -37,6 +37,13 @@ typedef int (tget_ndx)( int nI, int nO, int Xplace );
 
 #include "s_fgl.h"
 
+/*typedef enum {
+	MIXPHPROPS=3,
+	TOTALPHASE=0,
+	MECHMIXED =1,
+	INCREMENT =2
+} MULTI_PHASE_TABLES;
+*/
 typedef struct
 {  // MULTI is base structure to Project (local values)
   char
