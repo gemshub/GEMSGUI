@@ -1080,16 +1080,22 @@ double TMulti::Cj_init_calc( double g0, long int j, long int k )
 //
 long int TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 {
-    long int i,j,ja,jj,ii,jb,je,k;
-    long int isp, ist;
-    double Ez, Psi;   // added by KD 23.11.01
-    double  Dsur, DsurT, MMC, *XU;
-    XU = new double[pmp->L];
-    ErrorIf( !XU, "Mol_u()", "Memory allocation error ");
-    for(j=0; j<pmp->L; j++ )
+  long int i,j,ja,jj,ii,jb,je,k;
+  long int isp, ist;
+  double Ez, Psi;   // added by KD 23.11.01
+  double  Dsur, DsurT, MMC, *XU;
+  bool mbBroken = false;
+    
+  XU = new double[pmp->L];
+  ErrorIf( !XU, "Mol_u()", "Memory allocation error ");
+  for(j=0; j<pmp->L; j++ )
       XU[j] = 0.;
 
-//   ofstream ofs("c:/gems2/x_u.txt",ios::out | ios::app);
+  double cutoff; 
+  cutoff = min (pmp->DHBM*1.0e5, 1.0e-3 );	// changed, 28.08.2008 (TW,DK)
+
+  if( cutoff > 1e-3 )
+		cutoff = 1e-3;
 
   jb=0;
   for( k=0; k<pmp->FI; k++ )
@@ -1159,16 +1165,18 @@ long int TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
          {
         	 // Checking restored value against vector b
         	 XU[j] = exp( XU[j] );
-        	 for( i=0; i<pmp->N-pmp->E; i++ )
-        	 {
-        		 if( !a(i,j))
-        			 continue;
-        		 if( XU[j]*a(i,j) > pmp->B[i])
-        		 {
-        			 // Mass balance broken
-        			 return 4L;
-        		 }
-        	 }
+       	     for( i=arrL[j]; i<arrL[j+1]; i++ )
+             {  ii = arrAN[i];
+                if( ii< pmp->N-pmp->E )
+                 {
+                	if(  XU[j]*a(ii,j)  > pmp->B[ii]+cutoff )
+                    {
+                		// Mass balance broken
+        			 pmp->Ec  = j;
+        			 mbBroken = true;
+        		    }
+                 }	
+             }
          }
          else
              XU[j] = 0.0;
@@ -1197,12 +1205,14 @@ long int TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
       else
         X[j]=Y[j];
     }
+ 
     delete[] XU;
 
+    if( mbBroken )
+      return 5L;
+    
     TotalPhases( X, XF, XFA );
-
     return 0L;
-//   ofs.close();
 }
 
 // Converting DC class codes into generic internal codes of IPM

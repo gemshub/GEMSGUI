@@ -343,7 +343,7 @@ class TMulti
 
    long int sizeFIs;     // current size of phSolMod
    TSolMod* (*phSolMod); // size current FIs -   number of multicomponent phases
-
+   
    void Alloc_TSolMod( long int newFIs );
    void Free_TSolMod();
 
@@ -397,7 +397,7 @@ class TMulti
     double FreeEnergyIncr(   double G,  double x,  double logXF,
                              double logXw,  char DCCW );
     double GX( double LM  );
-    void Mol_u( double Y[], double X[], double XF[], double XFA[] );
+    long int  Mol_u( double Y[], double X[], double XF[], double XFA[] );
     void ConvertDCC();
     long int  getXvolume();
 

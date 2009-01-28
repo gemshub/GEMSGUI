@@ -922,9 +922,9 @@ private:
 	double **dPsi;
 	double **d2Psi;
 
-	double gammaDH[20];
-	double gammaC[20];
-	double gammaR[20];
+	double gammaDH[200];
+	double gammaC[200];
+	double gammaR[200];
 
 	void alloc_internal();
 	void free_internal();
