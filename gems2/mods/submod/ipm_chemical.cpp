@@ -1075,27 +1075,22 @@ double TMulti::Cj_init_calc( double g0, long int j, long int k )
 //----------------------------------------------------------------------------
 // KC: dual-thermo calculation of DC amount X(j) from A matrix and u vector
 //  using method and formulae from [Karpov et al., 2001]
+//  !!!!!  Attention !!!! XU[j] calculation for some classes of DCs may be in error!
 //
 #define  a(j,i) ((*(pmp->A+(i)+(j)*pmp->N)))
 //
 long int TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 {
-  long int i,j,ja,jj,ii,jb,je,k;
+  long int i,j,ja,jj,ii,ix, jb,je,k;
   long int isp, ist;
   double Ez, Psi;   // added by KD 23.11.01
   double  Dsur, DsurT, MMC, *XU;
   bool mbBroken = false;
-    
+
   XU = new double[pmp->L];
   ErrorIf( !XU, "Mol_u()", "Memory allocation error ");
   for(j=0; j<pmp->L; j++ )
       XU[j] = 0.;
-
-  double cutoff; 
-  cutoff = min (pmp->DHBM*1.0e5, 1.0e-3 );	// changed, 28.08.2008 (TW,DK)
-
-  if( cutoff > 1e-3 )
-		cutoff = 1e-3;
 
   jb=0;
   for( k=0; k<pmp->FI; k++ )
@@ -1165,18 +1160,18 @@ long int TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
          {
         	 // Checking restored value against vector b
         	 XU[j] = exp( XU[j] );
-       	     for( i=arrL[j]; i<arrL[j+1]; i++ )
-             {  ii = arrAN[i];
-                if( ii< pmp->N-pmp->E )
-                 {
-                	if(  XU[j]*a(ii,j)  > pmp->B[ii]+cutoff )
-                    {
+//       	     for( i=arrL[j]; i<arrL[j+1]; i++ )
+//             {  ii = arrAN[i];
+//                if( ii< pmp->N-pmp->E )
+//                 {
+//                	if(  XU[j]*a(ii,j)  > pmp->B[ii]+cutoff )
+//                    {
                 		// Mass balance broken
-        			 pmp->Ec  = j;
-        			 mbBroken = true;
-        		    }
-                 }	
-             }
+//        			 pmp->Ec  = j;
+//        			 mbBroken = true;
+//        		    }
+//                }
+//           }
          }
          else
              XU[j] = 0.0;
@@ -1189,28 +1184,45 @@ long int TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
     jb = je;
   }  // k
 
+  double cutoff;
+  cutoff = min (pmp->DHBM*1.0e6, 1.0e-3 );	// changed, 28.02.2009 (DK,SD)
+
     for( j=0; j<pmp->L; j++ )
     { // DC loop
-      ii=0;
+      ix=0;
       if(TProfil::pm->pa.p.PLLG)
       { for( i=0; i<pmp->N-pmp->E; i++ )
         if(a(i,j) && pmp->B[i] < pmp->DHBM*pow(10.,TProfil::pm->pa.p.DT))
-        { ii=1; break; }
+        { ix=1; break; }
       }
       else
         if(Y[j]<pmp->DHBM*pow(10.,TProfil::pm->pa.p.DT))
-          ii=1;
-      if (ii)
-        X[j]=XU[j];
+          ix=1;
+      if (ix)
+      {   // Checking if the restored value breaks the mass balance
+    	  for( i=arrL[j]; i<arrL[j+1]; i++ )
+          {  ii = arrAN[i];
+             if( ii< pmp->N-pmp->E )
+              {
+             	if(  (XU[j]*a(ii,j))  > pmp->B[ii]+cutoff )
+                {
+             	  // The dual solution appears bad, and the insertion of XU[j] will damage
+     			  pmp->Ec  = j;    // and the insertion of XU[j] will break the mass balance
+     			  mbBroken = true;  // Error state is activated
+     		    }
+             }
+          }
+    	  X[j]=XU[j];
+      }
       else
         X[j]=Y[j];
     }
- 
+
     delete[] XU;
 
     if( mbBroken )
       return 5L;
-    
+
     TotalPhases( X, XF, XFA );
     return 0L;
 }
@@ -1290,7 +1302,6 @@ void TMulti::ConvertDCC()
                 iRet++;  // error the class code
             }
             pmp->DCCW[j] = DCCW;
-
         }   // j
 NEXT_PHASE:
         j = i;
