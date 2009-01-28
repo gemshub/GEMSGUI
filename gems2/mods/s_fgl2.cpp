@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (c) 2007-2008  T.Wagner, D.Kulik, S.Dmitrieva
+// Copyright (c) 2007-2009  T.Wagner, D.Kulik, S.Dmitrieva
 //
 // Implementation of the TSolMod class
 // and TVanLaar, TRegular, TRedlichKister, TNRTL and TWilson classes
@@ -20,6 +20,8 @@
 #include <math.h>
 #include "s_fgl.h"
 #include "m_const.h"
+
+
 
 //--------------------------------------------------------------------------------------------------------------
 // Generic constructor for the TSolMod class
@@ -237,6 +239,20 @@ long int TVanLaar::MixMod()
 }
 
 
+long int TVanLaar::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
+}
+
+
 
 //=============================================================================================
 // Regular model for multicomponent solid solutions (c) TW March 2007
@@ -306,8 +322,7 @@ long int TRegular::PTparam()
 
 
 // Calculates activity coefficients and excess functions
-long int
-TRegular::MixMod()
+long int TRegular::MixMod()
 {
    long int ip, j, i1, i2;
    double dj, dk;
@@ -361,6 +376,20 @@ TRegular::MixMod()
    hE = uE+vE*Pbar;
 
    return 0;
+}
+
+
+long int TRegular::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
 }
 
 
@@ -454,8 +483,7 @@ long int TRedlichKister::PTparam()
 
 
 // Calculates activity coefficients and excess functions
-long int
-TRedlichKister::MixMod()
+long int TRedlichKister::MixMod()
 {
    long int ip, j;
    long int i1, i2, L, I, J;
@@ -565,6 +593,20 @@ TRedlichKister::MixMod()
 
    	hE = uE+vE*Pbar;
    	return 0;
+}
+
+
+long int TRedlichKister::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
 }
 
 
@@ -725,8 +767,7 @@ long int TNRTL::PTparam()
 
 // Calculates activity coefficients and excess functions
 // heat capacity calculation added, 06.06.2008 (TW)
-long int
-TNRTL::MixMod()
+long int TNRTL::MixMod()
 {
 	long int  j, i, k;
 	double K, L, M, N, O;
@@ -800,6 +841,20 @@ TNRTL::MixMod()
 	sE = (hE-gE)/Tk;
 	cpE = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
 
+	return 0;
+}
+
+
+long int TNRTL::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
 	return 0;
 }
 
@@ -908,8 +963,7 @@ long int TWilson::PTparam()
 
 // Calculates activity coefficients and excess functions
 // heat capacity calculation added, 06.06.2008 (TW)
-long int
-TWilson::MixMod( )
+long int TWilson::MixMod()
 {
 	long int  j, i, k;
 	double K, L, M;
@@ -974,6 +1028,21 @@ TWilson::MixMod( )
 
 	return 0;
 }
+
+
+long int TWilson::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
+}
+
 
 
 //--------------------- End of s_fgl2.cpp ---------------------------

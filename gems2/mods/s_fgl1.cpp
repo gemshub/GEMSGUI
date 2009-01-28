@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: s_fgl1.cpp 1140 2008-12-08 19:07:05Z wagner $
 //
-// Copyright (C) 2008    S.Dmitrieva, F.Hingerl, D.Kulik, Th.Wagner
+// Copyright (C) 2008-2009  S.Dmitrieva, F.Hingerl, D.Kulik, T.Wagner
 //
 // Implementation of TSIT and TPitzer class
 //
@@ -123,6 +123,20 @@ long int TSIT::MixMod()
     } // j
 
     return 0;
+}
+
+
+long int TSIT::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
 }
 
 
@@ -1059,6 +1073,20 @@ double TPitzer::lnGammaN(  long int N )
 }
 
 
+long int TPitzer::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
+}
+
+
 
 //=============================================================================================
 // Extended universal quasi-chemical (EUNIQUAC) model for aqueous electrolyte solutions
@@ -1350,6 +1378,20 @@ long int TEUNIQUAC::MixMod()
 	gR = - M;
 	gE = ( gDH + gC + gR ) * R_CONST * Tk;
 
+	return 0;
+}
+
+
+long int TEUNIQUAC::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
 	return 0;
 }
 

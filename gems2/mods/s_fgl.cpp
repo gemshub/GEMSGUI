@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (C) 2004-2008  T.Wagner, S.Churakov, D.Kulik
+// Copyright (C) 2004-2009  T.Wagner, S.Churakov, D.Kulik
 //
 // Implementation of TPRSVcalc, TCGFcalc and TSRKcalc classes
 //
@@ -182,8 +182,7 @@ long int TPRSVcalc::PTparam()
 
 // High-level method to retrieve activity coefficients in the fluid mixture
 // Called from GammaCalc() where activity coefficients are computed
-long int
-TPRSVcalc::MixMod()
+long int TPRSVcalc::MixMod()
 {
    long int j, iRet;
 
@@ -206,9 +205,22 @@ TPRSVcalc::MixMod()
 }
 
 
+long int TPRSVcalc::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
+}
+
+
 // High-level method to retrieve pure fluid properties
-long int
-TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
+long int TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
         double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
  {
 
@@ -262,8 +274,7 @@ TPRSVcalc::PRFugacityPT( long int i, double P, double Tk, double *EoSparam, doub
 
 // Calculates attractive (a) and repulsive (b) parameter of PRSV equation of state
 // and partial derivatives of alpha function
-long int
-TPRSVcalc::AB( double Tcrit, double Pcrit, double omg, double k1, double k2, double k3,
+long int TPRSVcalc::AB( double Tcrit, double Pcrit, double omg, double k1, double k2, double k3,
 		double &apure, double &bpure, double &da, double &d2a )
 {
 	double Tred, k0, k, alph, ac, sqa, dsqa, d2sqa;
@@ -296,8 +307,7 @@ TPRSVcalc::AB( double Tcrit, double Pcrit, double omg, double k1, double k2, dou
 
 
 // Calculates fugacities and departure functions of pure fluid species
-long int
-TPRSVcalc::FugacityPure( long int i )
+long int TPRSVcalc::FugacityPure( long int i )
 {
 	double Tcrit, Pcrit, Tred, aprsv, bprsv, alph, da, d2a;
 	double k, A, B, a2, a1, a0, z1, z2, z3;
@@ -397,8 +407,7 @@ TPRSVcalc::FugacityPure( long int i )
 
 
 // Cubic equation root solver based on Cardanos method
-long int
-TPRSVcalc::Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 )
+long int TPRSVcalc::Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 )
 {
    double q, rc, q3, rc2, theta, ac, bc;
 
@@ -429,8 +438,7 @@ TPRSVcalc::Cardano( double a2, double a1, double a0, double &z1, double &z2, dou
 
 
 // Calculates mixing properties of the fluid mixture
-long int
-TPRSVcalc::MixParam( double &amix, double &bmix )
+long int TPRSVcalc::MixParam( double &amix, double &bmix )
 {
 	long int i, j;
 	double K;
@@ -463,8 +471,7 @@ TPRSVcalc::MixParam( double &amix, double &bmix )
 
 
 // Calculates fugacity of the bulk fluid mixture
-long int
-TPRSVcalc::FugacityMix( double amix, double bmix, double &fugmix, double &zmix,
+long int TPRSVcalc::FugacityMix( double amix, double bmix, double &fugmix, double &zmix,
 		double &vmix )
 {
     double A, B, a2, a1, a0, z1, z2, z3;
@@ -522,8 +529,7 @@ TPRSVcalc::FugacityMix( double amix, double bmix, double &fugmix, double &zmix,
 
 // Calculates fugacities and activities of fluid species in the mixture,
 // as well as departure functions of the bulk fluid mixture
-long int
-TPRSVcalc::FugacitySpec( double *fugpure )
+long int TPRSVcalc::FugacitySpec( double *fugpure )
 {
 
     long int i, j, iRet=0;
@@ -927,6 +933,20 @@ long int TCGFcalc::MixMod()
         	lnGamma[j] = 0;
     }  // j
     return 0;
+}
+
+
+long int TCGFcalc::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
 }
 
 
@@ -2346,8 +2366,7 @@ long int TSRKcalc::PTparam()
 
 // High-level method to retrieve activity coefficients in the fluid mixture
 // Called from GammaCalc() where activity coefficients are computed
-long int
-TSRKcalc::MixMod()
+long int TSRKcalc::MixMod()
 {
 	long int j, iRet;
 
@@ -2371,9 +2390,22 @@ TSRKcalc::MixMod()
 }
 
 
+long int TSRKcalc::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+
+	// final assigments
+	Gex_ = Gex;
+	Vex_ = Vex;
+	Hex_ = Hex;
+	Sex_ = Sex;
+	CPex_ = CPex;
+	return 0;
+}
+
+
 // High-level method to retrieve pure fluid properties
-long int
-TSRKcalc::SRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
+long int TSRKcalc::SRFugacityPT( long int i, double P, double Tk, double *EoSparam, double *Eos2parPT,
         double &Fugacity, double &Volume, double &DeltaH, double &DeltaS )
 {
 	long int iRet = 0;
@@ -2419,8 +2451,7 @@ TSRKcalc::SRFugacityPT( long int i, double P, double Tk, double *EoSparam, doubl
 
 // Calculates attractive (a) and repulsive (b) parameter of SRK equation of state
 // and partial derivatives of alpha function
-long int
-TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
+long int TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
 		double &apure, double &bpure, double &da, double &d2a )
 {
 	double Tred, m, alph, ac, sqa, dsqa, d2sqa;
@@ -2442,8 +2473,7 @@ TSRKcalc::AB( double Tcrit, double Pcrit, double omg, double N,
 
 
 // Calculates fugacities and departure functions of pure fluid species
-long int
-TSRKcalc::FugacityPure( long int i )
+long int TSRKcalc::FugacityPure( long int i )
 {
 	double Tcrit, Pcrit, Tred, asrk, bsrk, alph, da, d2a;
 	double A, B, a2, a1, a0, z1, z2, z3;
@@ -2536,8 +2566,7 @@ TSRKcalc::FugacityPure( long int i )
 
 
 // Cubic equation root solver based on Cardanos method
-long int
-TSRKcalc::Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 )
+long int TSRKcalc::Cardano( double a2, double a1, double a0, double &z1, double &z2, double &z3 )
 {
 	double q, rc, q3, rc2, theta, ac, bc;
 
@@ -2570,8 +2599,7 @@ TSRKcalc::Cardano( double a2, double a1, double a0, double &z1, double &z2, doub
 
 
 // Calculates mixing properties of the fluid mixture
-long int
-TSRKcalc::MixParam( double &amix, double &bmix )
+long int TSRKcalc::MixParam( double &amix, double &bmix )
 {
 	long int i, j;
 	double K;
@@ -2605,8 +2633,7 @@ TSRKcalc::MixParam( double &amix, double &bmix )
 
 
 // Calculates fugacity of the bulk fluid mixture
-long int
-TSRKcalc::FugacityMix( double amix, double bmix,
+long int TSRKcalc::FugacityMix( double amix, double bmix,
     double &fugmix, double &zmix, double &vmix )
 {
 	double A, B, a2, a1, a0, z1, z2, z3;
@@ -2663,8 +2690,7 @@ TSRKcalc::FugacityMix( double amix, double bmix,
 
 // Calculates fugacities and activities of fluid species in the mixture,
 // as well as departure functions of the bulk fluid mixture
-long int
-TSRKcalc::FugacitySpec( double *fugpure )
+long int TSRKcalc::FugacitySpec( double *fugpure )
 {
 	long int i, j, iRet=0;
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
