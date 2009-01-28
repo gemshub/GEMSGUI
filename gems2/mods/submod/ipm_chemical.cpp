@@ -1078,7 +1078,7 @@ double TMulti::Cj_init_calc( double g0, long int j, long int k )
 //
 #define  a(j,i) ((*(pmp->A+(i)+(j)*pmp->N)))
 //
-void TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
+long int TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
 {
     long int i,j,ja,jj,ii,jb,je,k;
     long int isp, ist;
@@ -1155,8 +1155,21 @@ void TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
          else
            XU[j] += log(XF[k]);
 
-         if( XU[j] > -42. && XU[j] < 42. )
-             XU[j] = exp( XU[j] );
+         if( XU[j] > -54. && XU[j] < 13.815 )
+         {
+        	 // Checking restored value against vector b
+        	 XU[j] = exp( XU[j] );
+        	 for( i=0; i<pmp->N-pmp->E; i++ )
+        	 {
+        		 if( !a(i,j))
+        			 continue;
+        		 if( XU[j]*a(i,j) > pmp->B[i])
+        		 {
+        			 // Mass balance broken
+        			 return 4L;
+        		 }
+        	 }
+         }
          else
              XU[j] = 0.0;
          if( XU[j] <= pmp->lowPosNum )
@@ -1184,9 +1197,11 @@ void TMulti::Mol_u( double Y[], double X[], double XF[], double XFA[] )
       else
         X[j]=Y[j];
     }
+    delete[] XU;
+
     TotalPhases( X, XF, XFA );
 
-    delete[] XU;
+    return 0L;
 //   ofs.close();
 }
 
