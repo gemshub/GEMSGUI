@@ -3,7 +3,7 @@
 //
 // Copyright (C) 2003-2009  T.Wagner, S.Churakov, D.Kulik, S.Dmitrieva
 //
-// Declaration of new implementation of fluid, liquid, aquous
+// Declaration of new versions of fluid, liquid, aquous
 // and solid-solution models
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
@@ -36,7 +36,7 @@ class TSolMod
 
 protected:
         char ModCode;   // Code of the mixing model
-char PhaseName[MAXPHASENAME+1];    // Phase name (for specific built-in models)
+        char PhaseName[MAXPHASENAME+1];    // Phase name (for specific built-in models)
 
         long int NComp;    	// Number of components in the solution phase
         long int NPar;     	// Number of non-zero interaction parameters

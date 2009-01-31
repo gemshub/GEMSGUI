@@ -1,9 +1,9 @@
 //-------------------------------------------------------------------
 // $Id: s_fgl1.cpp 1140 2008-12-08 19:07:05Z wagner $
 //
-// Copyright (C) 2008-2009  S.Dmitrieva, F.Hingerl, D.Kulik, T.Wagner
+// Copyright (C) 2008-2009  S.Dmitrieva, F.Hingerl, T.Wagner, D.Kulik
 //
-// Implementation of TSIT and TPitzer class
+// Implementation of TSIT, TPitzer and TEUNIQUAC classes
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry

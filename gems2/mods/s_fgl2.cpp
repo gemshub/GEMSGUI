@@ -110,146 +110,205 @@ TVanLaar::TVanLaar( long int NSpecies, long int NParams, long int NPcoefs, long 
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar, dW, eW )
 {
-  alloc_internal();
-
+	alloc_internal();
 }
 
 
 TVanLaar::~TVanLaar()
 {
-  free_internal();
+	free_internal();
 }
 
 
 void TVanLaar::alloc_internal()
 {
-	   Wu = new double [NPar];
-	   Ws = new double [NPar];
-	   Wv = new double [NPar];
-	   Wpt = new double [NPar];
-	   Phi = new double [NComp];
-	   PsVol = new double [NComp];
+	Wu = new double [NPar];
+	Ws = new double [NPar];
+	Wv = new double [NPar];
+	Wpt = new double [NPar];
+	Phi = new double [NComp];
+	PsVol = new double [NComp];
 }
 
 
 void TVanLaar::free_internal()
 {
-	 if(Wu)  delete[]Wu;
-	 if(Ws)  delete[]Ws;
-	 if(Wv)  delete[]Wv;
-	 if(Wpt)  delete[]Wpt;
-	 if(Phi)  delete[]Phi;
-	 if(PsVol)  delete[]PsVol;
+	if(Wu)  delete[]Wu;
+	if(Ws)  delete[]Ws;
+	if(Wv)  delete[]Wv;
+	if(Wpt)  delete[]Wpt;
+	if(Phi)  delete[]Phi;
+	if(PsVol)  delete[]PsVol;
 }
 
 
 // Calculates T,P corrected binary interaction parameters
 long int TVanLaar::PTparam()
 {
-	long int ip;
+	long int j, ip;
 
     if ( NPcoef < 3 || NPar < 1 )
        return 1;
 
-// read P-T corrected interaction parameters
-	   for (ip=0; ip<NPar; ip++)
-	   {
-	     Wu[ip] = aIPc[NPcoef*ip];
-		 Ws[ip] = aIPc[NPcoef*ip+1];
-		 Wv[ip] = aIPc[NPcoef*ip+2];
-		 Wpt[ip] = Wu[ip]+ Ws[ip]*Tk + Wv[ip]*Pbar;
-	     aIP[ip] = Wpt[ip];
-		 // aIPc[NPcoef*ip+3] = Wpt[ip]; // obsolete
-	   }
-	   return 0;
+    for (j=0; j<NComp; j++)
+    {
+    	PsVol[j] = aDCc[NP_DC*j];  // reading pseudo-volumes
+    }
+
+    for (ip=0; ip<NPar; ip++)
+	{
+    	Wu[ip] = aIPc[NPcoef*ip];
+		Ws[ip] = aIPc[NPcoef*ip+1];
+		Wv[ip] = aIPc[NPcoef*ip+2];
+		Wpt[ip] = Wu[ip]+ Ws[ip]*Tk + Wv[ip]*Pbar;
+	    aIP[ip] = Wpt[ip];
+	}
+    return 0;
 }
 
 
-// Calculates activity coefficients and excess functions
+// Calculates activity coefficients
 long int TVanLaar::MixMod()
 {
-   long int ip, j, i1, i2;
-   double dj, dk;
-   double sumPhi; // Sum of Phi terms
-   double gE, vE, hE, sE, cpE, uE;
+	long int ip, j, i1, i2;
+	double dj, dk;
+	double sumPhi; // Sum of Phi terms
 
-   if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
-           return 1;
+	if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+		return 1;
 
-   // calculating Phi values
-   sumPhi = 0.;
-   for (j=0; j<NComp; j++)
-   {
-       PsVol[j] = aDCc[NP_DC*j];  // reading pseudo-volumes
-       sumPhi +=  x[j]*PsVol[j];
-   }
-
-   if( fabs(sumPhi) < 1e-30 )
-       return 2;    // to prevent zerodivide!
-
-   for (j=0; j<NComp; j++)
-       Phi[j] = x[j]*PsVol[j]/sumPhi;
-
-   // calculate activity coefficients
-   for (j=0; j<NComp; j++)      // index end members with j
-   {
-	lnGamRT = 0.;
-	for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+	// calculating Phi values
+	sumPhi = 0.;
+	for (j=0; j<NComp; j++)
 	{
-        i1 = aIPx[MaxOrd*ip];
-	    i2 = aIPx[MaxOrd*ip+1];
-
-   	    if( j == i1 )
-		dj = 1.;
-	    else
-		dj = 0.;
-	    if( j == i2 )
-		dk = 1.;
-	    else
-		dk = 0.;
-	    lnGamRT -= (dj-Phi[i1])*(dk-Phi[i2])*Wpt[ip]
-                         *2.*PsVol[j]/(PsVol[i1]+PsVol[i2]);
+		sumPhi +=  x[j]*PsVol[j];
 	}
 
-    lnGam = lnGamRT/(R_CONST*Tk);
-	lnGamma[j] = lnGam;
+	if( fabs(sumPhi) < 1e-30 )
+		return 2;    // to prevent zerodivide
+
+	for (j=0; j<NComp; j++)
+		Phi[j] = x[j]*PsVol[j]/sumPhi;
+
+	// calculate activity coefficients
+	for (j=0; j<NComp; j++)      // index end members with j
+	{
+		lnGamRT = 0.;
+		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+		{
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
+
+			if( j == i1 )
+				dj = 1.;
+			else
+				dj = 0.;
+			if( j == i2 )
+				dk = 1.;
+			else
+				dk = 0.;
+			lnGamRT -= (dj-Phi[i1])*(dk-Phi[i2])*Wpt[ip]
+			             *2.*PsVol[j]/(PsVol[i1]+PsVol[i2]);
+		}
+		lnGam = lnGamRT/(R_CONST*Tk);
+		lnGamma[j] = lnGam;
 	}
-
-   // calculate bulk phase excess properties
-   gE = 0.0;
-   vE = 0.0;
-   hE = 0.0;
-   sE = 0.0;
-   cpE = 0.0;
-   uE = 0.0;
-
-   for (ip=0; ip<NPar; ip++)
-   {
-      i1 = aIPx[MaxOrd*ip];
-      i2 = aIPx[MaxOrd*ip+1];
-      gE += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wpt[ip];
-      vE += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wv[ip];
-      uE += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wu[ip];
-      sE -= Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Ws[ip];
-   }
-
-   hE = uE+vE*Pbar;
-
-   return 0;
+	return 0;
 }
 
 
+// calculates bulk phase excess properties (activity coefficients retained)
 long int TVanLaar::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
 {
-	// add excess property calculations
+	long int ip, j, i1, i2;
+	double dj, dk;
+	double sumPhi; // Sum of Phi terms
+	double gE, vE, hE, sE, cpE, uE;
+	double gi, si, gI, sI;
 
-	// final assigments
-	Gex_ = Gex;
-	Vex_ = Vex;
-	Hex_ = Hex;
-	Sex_ = Sex;
-	CPex_ = CPex;
-	return 0;
+	if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+		return 1;
+
+	// calculating Phi values
+	sumPhi = 0.;
+	for (j=0; j<NComp; j++)
+	{
+		PsVol[j] = aDCc[NP_DC*j];  // reading pseudo-volumes
+	    sumPhi +=  x[j]*PsVol[j];
+	}
+
+	if( fabs(sumPhi) < 1e-30 )
+		return 2;    // to prevent zerodivide!
+
+	for (j=0; j<NComp; j++)
+	    Phi[j] = x[j]*PsVol[j]/sumPhi;
+
+	// calculate activity coefficients
+	for (j=0; j<NComp; j++)      // index end members with j
+	{
+		lnGamRT = 0.;
+
+		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+		{
+			i1 = aIPx[MaxOrd*ip];
+		    i2 = aIPx[MaxOrd*ip+1];
+
+	   	    if( j == i1 )
+			dj = 1.;
+		    else
+			dj = 0.;
+		    if( j == i2 )
+			dk = 1.;
+		    else
+			dk = 0.;
+		    lnGamRT -= (dj-Phi[i1])*(dk-Phi[i2])*Wpt[ip]
+	                         *2.*PsVol[j]/(PsVol[i1]+PsVol[i2]);
+		}
+
+	    lnGam = lnGamRT/(R_CONST*Tk);
+		lnGamma[j] = lnGam;
+	}
+
+	// calculating bulk phase ideal mixing contributions
+	gi = 0.0;
+	si = 0.0;
+
+	for (j=0; j<NComp; j++)
+	{
+		gi += x[j]*log(x[j]);
+		si += x[j]*log(x[j]);
+	}
+	gI = R_CONST*Tk*gi;
+	sI = - R_CONST*si;
+
+	// calculate bulk phase excess properties
+	gE = 0.0;
+	vE = 0.0;
+	hE = 0.0;
+	sE = 0.0;
+	cpE = 0.0;
+	uE = 0.0;
+
+	for (ip=0; ip<NPar; ip++)
+	{
+		i1 = aIPx[MaxOrd*ip];
+	    i2 = aIPx[MaxOrd*ip+1];
+	    gE += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wpt[ip];
+	    vE += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wv[ip];
+	    uE += Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Wu[ip];
+	    sE -= Phi[i1]*Phi[i2]*2.*sumPhi/(PsVol[i1]+PsVol[i2])*Ws[ip];
+	 }
+
+	 hE = uE+vE*Pbar;
+
+	 // assigments
+	 Gex_ = gE + gI;
+	 Vex_ = vE;
+	 Hex_ = hE;
+	 Sex_ = sE + sI;
+	 CPex_ = cpE;
+
+	 return 0;
 }
 
 
@@ -270,36 +329,35 @@ TRegular::TRegular( long int NSpecies, long int NParams, long int NPcoefs, long 
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar, dW, eW )
 {
-  alloc_internal();
-
+	alloc_internal();
 }
 
 
 TRegular::~TRegular()
 {
-  free_internal();
+	free_internal();
 }
 
 
 void TRegular::alloc_internal()
 {
-	   Wu = new double [NPar];
-	   Ws = new double [NPar];
-	   Wv = new double [NPar];
-	   Wpt = new double [NPar];
+	Wu = new double [NPar];
+	Ws = new double [NPar];
+	Wv = new double [NPar];
+	Wpt = new double [NPar];
 }
 
 
 void TRegular::free_internal()
 {
-	 if(Wu)  delete[]Wu;
-	 if(Ws)  delete[]Ws;
-	 if(Wv)  delete[]Wv;
-	 if(Wpt)  delete[]Wpt;
+	if(Wu)  delete[]Wu;
+	if(Ws)  delete[]Ws;
+	if(Wv)  delete[]Wv;
+	if(Wpt)  delete[]Wpt;
 }
 
 
-//   Calculates T,P corrected binary interaction parameters
+// Calculates T,P corrected binary interaction parameters
 long int TRegular::PTparam()
 {
 	long int ip;
@@ -307,88 +365,130 @@ long int TRegular::PTparam()
 	if ( NPcoef < 3 || NPar < 1 )
 	           return 1;
 
-// read interaction parameters and correct to T,P
-	   for (ip=0; ip<NPar; ip++)
-	   {
-	     Wu[ip] = aIPc[NPcoef*ip];
-		 Ws[ip] = aIPc[NPcoef*ip+1];
-		 Wv[ip] = aIPc[NPcoef*ip+2];
-		 Wpt[ip] = Wu[ip]+ Ws[ip]*Tk + Wv[ip]*Pbar;
-	     aIP[ip] = Wpt[ip];
-		 // aIPc[NPcoef*ip+3] = Wpt[ip]; // obsolete
-	   }
-	   return 0;
+	for (ip=0; ip<NPar; ip++)
+	{
+		Wu[ip] = aIPc[NPcoef*ip];
+		Ws[ip] = aIPc[NPcoef*ip+1];
+		Wv[ip] = aIPc[NPcoef*ip+2];
+		Wpt[ip] = Wu[ip]+ Ws[ip]*Tk + Wv[ip]*Pbar;
+	    aIP[ip] = Wpt[ip];
+	}
+	return 0;
 }
 
 
-// Calculates activity coefficients and excess functions
+// Calculates activity coefficients
 long int TRegular::MixMod()
 {
-   long int ip, j, i1, i2;
-   double dj, dk;
-   double gE, vE, hE, sE, cpE, uE;
+	long int ip, j, i1, i2;
+	double dj, dk;
 
-   if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
-           return 1;
+	if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+		return 1;
 
-   // calculate activity coefficients
-   for (j=0; j<NComp; j++)      // index end members with j
-   {
-	lnGamRT = 0.;
-	for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+	// calculate activity coefficients
+	for (j=0; j<NComp; j++)      // index end members with j
 	{
-        i1 = aIPx[MaxOrd*ip];
-	    i2 = aIPx[MaxOrd*ip+1];
+		lnGamRT = 0.;
 
-   	    if( j == i1 )
-		dj = 1.;
-	    else
-		dj = 0.;
-	    if( j == i2 )
-		dk = 1.;
-	    else
-		dk = 0.;
-	    lnGamRT -= (dj-x[i1])*(dk-x[i2])*Wpt[ip];
-	 }
+		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+		{
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
 
-    lnGam = lnGamRT/(R_CONST*Tk);
-	lnGamma[j] = lnGam;
+			if( j == i1 )
+				dj = 1.;
+			else
+				dj = 0.;
+			if( j == i2 )
+				dk = 1.;
+			else
+				dk = 0.;
+			lnGamRT -= (dj-x[i1])*(dk-x[i2])*Wpt[ip];
+		}
+
+		lnGam = lnGamRT/(R_CONST*Tk);
+		lnGamma[j] = lnGam;
 	}
-
-   // calculate bulk phase excess properties
-   gE = 0.0;
-   vE = 0.0;
-   hE = 0.0;
-   sE = 0.0;
-   cpE = 0.0;
-   uE = 0.0;
-
-   for (ip=0; ip<NPar; ip++)
-   {
-      i1 = aIPx[MaxOrd*ip];
-      i2 = aIPx[MaxOrd*ip+1];
-      gE += x[i1]*x[i2]*Wpt[ip];
-      vE += x[i1]*x[i2]*Wv[ip];
-      uE += x[i1]*x[i2]*Wu[ip];
-      sE -= x[i1]*x[i2]*Ws[ip];
-   }
-
-   hE = uE+vE*Pbar;
-
-   return 0;
+	return 0;
 }
 
 
+// calculates bulk phase excess properties (activity coefficients retained)
 long int TRegular::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
 {
-	// add excess property calculations
+	long int ip, j, i1, i2;
+	double dj, dk;
+	double gE, vE, hE, sE, cpE, uE;
+	double gI, sI, gi, si;
 
-	// final assigments
-	Gex_ = Gex;
-	Vex_ = Vex;
-	Hex_ = Hex;
-	Sex_ = Sex;
-	CPex_ = CPex;
+	if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+		return 1;
+
+	// calculate activity coefficients
+	for (j=0; j<NComp; j++)      // index end members with j
+	{
+		lnGamRT = 0.;
+
+		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+		{
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
+
+			if( j == i1 )
+				dj = 1.;
+			else
+				dj = 0.;
+			if( j == i2 )
+				dk = 1.;
+			else
+				dk = 0.;
+			lnGamRT -= (dj-x[i1])*(dk-x[i2])*Wpt[ip];
+		}
+
+		lnGam = lnGamRT/(R_CONST*Tk);
+		lnGamma[j] = lnGam;
+	}
+
+	// calculating bulk phase ideal mixing contributions
+	gi = 0.0;
+	si = 0.0;
+
+	for (j=0; j<NComp; j++)
+	{
+		gi += x[j]*log(x[j]);
+		si += x[j]*log(x[j]);
+	}
+	gI = R_CONST*Tk*gi;
+	sI = - R_CONST*si;
+
+	// calculate bulk phase excess properties
+	gE = 0.0;
+	vE = 0.0;
+	hE = 0.0;
+	sE = 0.0;
+	cpE = 0.0;
+	uE = 0.0;
+
+	for (ip=0; ip<NPar; ip++)
+	{
+		i1 = aIPx[MaxOrd*ip];
+		i2 = aIPx[MaxOrd*ip+1];
+		gE += x[i1]*x[i2]*Wpt[ip];
+		vE += x[i1]*x[i2]*Wv[ip];
+		uE += x[i1]*x[i2]*Wu[ip];
+		sE -= x[i1]*x[i2]*Ws[ip];
+	}
+
+	hE = uE+vE*Pbar;
+
+	// assigments
+	Gex_ = gE + gI;
+	Vex_ = vE;
+	Hex_ = hE;
+	Sex_ = sE + sI;
+	CPex_ = cpE;
+
 	return 0;
 }
 
@@ -410,89 +510,158 @@ TRedlichKister::TRedlichKister( long int NSpecies, long int NParams, long int NP
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar, dW, eW)
 {
-  alloc_internal();
-
+	alloc_internal();
 }
 
 
 TRedlichKister::~TRedlichKister()
 {
-  free_internal();
+	free_internal();
 }
 
 
 void TRedlichKister::alloc_internal()
 {
-	   Lu = new double [NPar][4];
-	   Ls = new double [NPar][4];
-	   Lcp = new double [NPar][4];
-	   Lv = new double [NPar][4];
-	   Lpt = new double [NPar][4];
+	Lu = new double [NPar][4];
+	Ls = new double [NPar][4];
+	Lcp = new double [NPar][4];
+	Lv = new double [NPar][4];
+	Lpt = new double [NPar][4];
 }
 
 
 void TRedlichKister::free_internal()
 {
-	 if(Lu)  delete[]Lu;
-	 if(Ls)  delete[]Ls;
-	 if(Lv)  delete[]Lv;
-	 if(Lpt)  delete[]Lpt;
-	 if(Lcp)  delete[]Lcp;
+	if(Lu)  delete[]Lu;
+	if(Ls)  delete[]Ls;
+	if(Lv)  delete[]Lv;
+	if(Lpt)  delete[]Lpt;
+	if(Lcp)  delete[]Lcp;
 }
 
 
 //   Calculates T,P corrected binary interaction parameters
 long int TRedlichKister::PTparam()
 {
-   long int ip;
+	long int ip;
 
-   if ( NPcoef < 16 || NPar < 1 )
-      return 1;
+	if ( NPcoef < 16 || NPar < 1 )
+		return 1;
 
-   // read in interaction parameters
-  	for (ip=0; ip<NPar; ip++)
-  	{
-	   	Lu[ip][0] = aIPc[NPcoef*ip+0];
+	// read in interaction parameters
+	for (ip=0; ip<NPar; ip++)
+	{
+		Lu[ip][0] = aIPc[NPcoef*ip+0];
 	   	Ls[ip][0] = aIPc[NPcoef*ip+1];
 	   	Lcp[ip][0] = aIPc[NPcoef*ip+2];
 	   	Lv[ip][0] = aIPc[NPcoef*ip+3];
 	   	Lpt[ip][0] = Lu[ip][0] + Ls[ip][0]*Tk + Lcp[ip][0]*Tk*log(Tk) + Lv[ip][0]*Pbar;
 	    aIP[ip] = Lpt[ip][0];
-	// aIPc[NPcoef*ip+16] = Lpt[ip][0]; // obsolete
+
 	   	Lu[ip][1] = aIPc[NPcoef*ip+4];
 	   	Ls[ip][1] = aIPc[NPcoef*ip+5];
 	   	Lcp[ip][1] = aIPc[NPcoef*ip+6];
 	   	Lv[ip][1] = aIPc[NPcoef*ip+7];
 	   	Lpt[ip][1] = Lu[ip][1] + Ls[ip][1]*Tk + Lcp[ip][1]*Tk*log(Tk) + Lv[ip][1]*Pbar;
-	// aIPc[NPcoef*ip+17] = Lpt[ip][1]; // obsolete
+
 	   	Lu[ip][2] = aIPc[NPcoef*ip+8];
 	   	Ls[ip][2] = aIPc[NPcoef*ip+9];
 	   	Lcp[ip][2] = aIPc[NPcoef*ip+10];
 	   	Lv[ip][2] = aIPc[NPcoef*ip+11];
 	   	Lpt[ip][2] = Lu[ip][2] + Ls[ip][2]*Tk + Lcp[ip][2]*Tk*log(Tk) + Lv[ip][2]*Pbar;
-	// aIPc[NPcoef*ip+18] = Lpt[ip][2]; // obsolete
+
 	   	Lu[ip][3] = aIPc[NPcoef*ip+12];
 	   	Ls[ip][3] = aIPc[NPcoef*ip+13];
 	   	Lcp[ip][3] = aIPc[NPcoef*ip+14];
 	   	Lv[ip][3] = aIPc[NPcoef*ip+15];
 	   	Lpt[ip][3] = Lu[ip][3] + Ls[ip][3]*Tk + Lcp[ip][3]*Tk*log(Tk) + Lv[ip][3]*Pbar;
-	// aIPc[NPcoef*ip+19] = Lpt[ip][3]; // obsolete
+
 	}
-   return 0;
+	return 0;
 }
 
 
-// Calculates activity coefficients and excess functions
+// Calculates activity coefficients
 long int TRedlichKister::MixMod()
 {
-   long int ip, j;
-   long int i1, i2, L, I, J;
-   double LU, LS, LCP, LV, LPT;
-   double L0, L1, L2, L3;
-   double gE, vE, hE, sE, cpE, uE;
+	long int ip, j;
+	long int i1, i2, L, I, J;
+	double L0, L1, L2, L3;
 
-   if ( NPcoef < 16 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
-           return 1;
+	if ( NPcoef < 16 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+		return 1;
+
+	// calculate activity coefficients
+	for (j=0; j<NComp; j++)      // index end members with j
+	{
+		lnGamRT = 0.;
+		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
+		{
+			i1 = aIPx[MaxOrd*ip];
+			i2 = aIPx[MaxOrd*ip+1];
+
+			if ( j == i1 || j == i2) // interaction terms with j
+			{
+				if ( i1 == j ) // check order of idexes
+				{
+					L = i1;
+					I = i2;
+					L0 = Lpt[ip][0];
+					L1 = Lpt[ip][1];
+					L2 = Lpt[ip][2];
+					L3 = Lpt[ip][3];
+				}
+				else
+				{
+					L = i2;
+					I = i1;
+					L0 = Lpt[ip][0];
+					L1 = -Lpt[ip][1];
+					L2 = Lpt[ip][2];
+					L3 = -Lpt[ip][3];
+				}
+
+				lnGamRT += L0*x[I]*(1.-x[L])
+					+ L1*x[I]*(2.*(1.-x[L])*(x[L]-x[I])+x[I])
+					+ L2*x[I]*(x[L]-x[I])*(3.*(1.-x[L])*(x[L]-x[I])+2.*x[I])
+					+ L3*x[I]*pow((x[L]-x[I]),2.)*(4.*(1.-x[L])*(x[L]-x[I])+3.*x[I]);
+			}
+
+			else // interaction terms without j
+			{
+				I = i1;
+				J = i2;
+				L0 = Lpt[ip][0];
+				L1 = Lpt[ip][1];
+				L2 = Lpt[ip][2];
+				L3 = Lpt[ip][3];
+
+				lnGamRT -= x[I]*x[J]*( L0 + L1*2.*(x[I]-x[J])
+					+ L2*3.*pow((x[I]-x[J]),2.)
+					+ L3*4.*pow((x[I]-x[J]),3.) );
+			}
+		}
+
+		lnGam = lnGamRT/(R_CONST*Tk);
+		lnGamma[j] = lnGam;
+	}
+   	return 0;
+}
+
+
+// calculates bulk phase excess properties (activity coefficients retained)
+long int TRedlichKister::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+
+	long int ip, j;
+	long int i1, i2, L, I, J;
+	double LU, LS, LCP, LV, LPT;
+	double L0, L1, L2, L3;
+	double gE, vE, hE, sE, cpE, uE;
+	double gI, sI, gi, si;
+
+	if ( NPcoef < 16 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+		return 1;
 
 	// calculate activity coefficients
 	for (j=0; j<NComp; j++)      // index end members with j
@@ -549,6 +718,18 @@ long int TRedlichKister::MixMod()
 		lnGamma[j] = lnGam;
 	}
 
+	// calculating bulk phase ideal mixing contributions
+	gi = 0.0;
+	si = 0.0;
+
+	for (j=0; j<NComp; j++)
+	{
+		gi += x[j]*log(x[j]);
+		si += x[j]*log(x[j]);
+	}
+	gI = R_CONST*Tk*gi;
+	sI = - R_CONST*si;
+
    	// calculate bulk phase excess properties
    	gE = 0.0;
    	vE = 0.0;
@@ -559,7 +740,7 @@ long int TRedlichKister::MixMod()
 
    	for (ip=0; ip<NPar; ip++)
    	{
-   	   	i1 = aIPx[MaxOrd*ip];
+   		i1 = aIPx[MaxOrd*ip];
    	   	i2 = aIPx[MaxOrd*ip+1];
 
       	LPT = Lpt[ip][0] + Lpt[ip][1]*(x[i1]-x[i2])
@@ -592,20 +773,14 @@ long int TRedlichKister::MixMod()
   	}
 
    	hE = uE+vE*Pbar;
-   	return 0;
-}
 
+	// assigments
+	Gex_ = gE + gI;
+	Vex_ = vE;
+	Hex_ = hE;
+	Sex_ = sE + sI;
+	CPex_ = cpE;
 
-long int TRedlichKister::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
-{
-	// add excess property calculations
-
-	// final assigments
-	Gex_ = Gex;
-	Vex_ = Vex;
-	Hex_ = Hex;
-	Sex_ = Sex;
-	CPex_ = CPex;
 	return 0;
 }
 
@@ -627,13 +802,13 @@ TNRTL::TNRTL( long int NSpecies, long int NParams, long int NPcoefs, long int Ma
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar, dW, eW )
 {
-  alloc_internal();
+	alloc_internal();
 }
 
 
 TNRTL::~TNRTL()
 {
-  free_internal();
+	free_internal();
 }
 
 
@@ -666,28 +841,28 @@ void TNRTL::alloc_internal()
 
 void TNRTL::free_internal()
 {
-  	// cleaning memory
-	   	for (long int j=0; j<NComp; j++)
-	   	{
-	   		delete[]Tau[j];
-	   		delete[]dTau[j];
-	   		delete[]d2Tau[j];
-	   		delete[]Alp[j];
-	   		delete[]dAlp[j];
-	   		delete[]d2Alp[j];
-			delete[]G[j];
-			delete[]dG[j];
-			delete[]d2G[j];
-		}
-	   	delete[]Tau;
-	   	delete[]dTau;
-	   	delete[]d2Tau;
-	   	delete[]Alp;
-	   	delete[]dAlp;
-	   	delete[]d2Alp;
-		delete[]G;
-		delete[]dG;
-		delete[]d2G;
+	// cleaning memory
+	for (long int j=0; j<NComp; j++)
+	{
+		delete[]Tau[j];
+	   	delete[]dTau[j];
+	   	delete[]d2Tau[j];
+	   	delete[]Alp[j];
+	   	delete[]dAlp[j];
+	   	delete[]d2Alp[j];
+		delete[]G[j];
+		delete[]dG[j];
+		delete[]d2G[j];
+	}
+	delete[]Tau;
+	delete[]dTau;
+	delete[]d2Tau;
+	delete[]Alp;
+	delete[]dAlp;
+	delete[]d2Alp;
+	delete[]G;
+	delete[]dG;
+	delete[]d2G;
 }
 
 
@@ -729,6 +904,7 @@ long int TNRTL::PTparam()
 		D = aIPc[NPcoef*ip+3];
 		E = aIPc[NPcoef*ip+4];
 		F = aIPc[NPcoef*ip+5];
+
 		tau = A + B/Tk + C*Tk + D*log(Tk);	// partial derivatives of tau and alp
 		dtau = - B/pow(Tk,2.) + C + D/Tk;
 		d2tau = 2.*B/pow(Tk,3.) - D/pow(Tk,2.);
@@ -742,12 +918,6 @@ long int TNRTL::PTparam()
 		Alp[i1][i2] = alp;
 		dAlp[i1][i2] = dalp;
 		d2Alp[i1][i2] =  d2alp;
-		//aIPc[NPcoef*ip+6] = tau;          //obsolete
-		//aIPc[NPcoef*ip+7] = dtau;
-		//aIPc[NPcoef*ip+8] = d2tau;
-		//aIPc[NPcoef*ip+9] = alp;
-		//aIPc[NPcoef*ip+10] = dalp;
-		//aIPc[NPcoef*ip+11] = d2alp;
 
 		G[i1][i2] = exp(-Alp[i1][i2]*Tau[i1][i2]);
 		dG[i1][i2] = - ( dAlp[i1][i2]*Tau[i1][i2] + Alp[i1][i2]*dTau[i1][i2] )
@@ -761,19 +931,16 @@ long int TNRTL::PTparam()
 		// d2G[i1][i2] = -Alp[i1][i2]*(-Alp[i1][i2]*exp(-Alp[i1][i2]*Tau[i1][i2])*dTau[i1][i2]*dTau[i1][i2]
 		//		+ exp(-Alp[i1][i2]*Tau[i1][i2])*d2Tau[i1][i2]);
 	}
-   return 0;
+	return 0;
 }
 
 
-// Calculates activity coefficients and excess functions
-// heat capacity calculation added, 06.06.2008 (TW)
+// Calculates activity coefficients
 long int TNRTL::MixMod()
 {
 	long int  j, i, k;
 	double K, L, M, N, O;
-	double U, dU, V, dV, d2U, d2V;
-	double g, dg, d2g, lnGam;
-	double gE, vE, hE, sE, cpE;
+	double lnGam;
 
 	if ( NPcoef < 6 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
@@ -801,6 +968,59 @@ long int TNRTL::MixMod()
 		lnGam = K/L + M;
 		lnGamma[j] = lnGam;
 	}
+	return 0;
+}
+
+
+// calculates bulk phase excess properties (activity coefficients retained)
+long int TNRTL::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	// add excess property calculations
+	long int  j, i, k;
+	double K, L, M, N, O;
+	double U, dU, V, dV, d2U, d2V;
+	double g, dg, d2g, lnGam;
+	double gE, vE, hE, sE, cpE;
+	double gI, sI, gi, si;
+
+	if ( NPcoef < 6 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+	        return 1;
+
+	// calculate activity coefficients
+	for (j=0; j<NComp; j++)
+	{
+		lnGam = 0.0;
+		K = 0.0;
+		L = 0.0;
+		M = 0.0;
+		for (i=0; i<NComp; i++)
+		{
+			N = 0.0;
+			O = 0.0;
+			K += ( x[i]*Tau[i][j]*G[i][j] );
+			L += ( x[i]*G[i][j] );
+			for (k=0; k<NComp; k++)
+			{
+				N += ( x[k]*G[k][i] );
+				O += ( x[k]*Tau[k][i]*G[k][i] );
+			}
+			M += ( x[i]*G[j][i]/N * ( Tau[j][i] - O/N ) );
+		}
+		lnGam = K/L + M;
+		lnGamma[j] = lnGam;
+	}
+
+	// calculating bulk phase ideal mixing contributions
+	gi = 0.0;
+	si = 0.0;
+
+	for (j=0; j<NComp; j++)
+	{
+		gi += x[j]*log(x[j]);
+		si += x[j]*log(x[j]);
+	}
+	gI = R_CONST*Tk*gi;
+	sI = - R_CONST*si;
 
 	// calculate bulk phase excess properties
    	gE = 0.0;
@@ -836,25 +1056,19 @@ long int TNRTL::MixMod()
 				- (dU*dV+U*d2V)*pow(V,2.)/pow(V,4.) + (U*dV)*(2.*V*dV)/pow(V,4.) );
 	}
 
+   	// final calculations
 	gE = g*R_CONST*Tk;
 	hE = -R_CONST*pow(Tk,2.)*dg;
 	sE = (hE-gE)/Tk;
 	cpE = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
 
-	return 0;
-}
+	// assigments
+	Gex_ = gE + gI;
+	Vex_ = vE;
+	Hex_ = hE;
+	Sex_ = sE + sI;
+	CPex_ = cpE;
 
-
-long int TNRTL::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
-{
-	// add excess property calculations
-
-	// final assigments
-	Gex_ = Gex;
-	Vex_ = Vex;
-	Hex_ = Hex;
-	Sex_ = Sex;
-	CPex_ = CPex;
 	return 0;
 }
 
@@ -876,14 +1090,13 @@ TWilson::TWilson( long int NSpecies, long int NParams, long int NPcoefs, long in
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar, dW, eW )
 {
-  alloc_internal();
-
+	alloc_internal();
 }
 
 
 TWilson::~TWilson()
 {
-  free_internal();
+	free_internal();
 }
 
 
@@ -895,7 +1108,7 @@ void TWilson::alloc_internal()
 
     for (long int j=0; j<NComp; j++)
     {
-		Lam[j] = new double [NComp];
+    	Lam[j] = new double [NComp];
 		dLam[j] = new double [NComp];
 		d2Lam[j] = new double [NComp];
 	}
@@ -907,7 +1120,7 @@ void TWilson::free_internal()
    	// cleaning memory
    	for (long int j=0; j<NComp; j++)
    	{
-		delete[]Lam[j];
+   		delete[]Lam[j];
 		delete[]dLam[j];
 		delete[]d2Lam[j];
 	}
@@ -953,23 +1166,17 @@ long int TWilson::PTparam()
 		Lam[i1][i2] = lam;
 		dLam[i1][i2] = dlam;
 		d2Lam[i1][i2] = d2lam;
-		//aIPc[NPcoef*ip+4] = lam;     //obsolete
-		//aIPc[NPcoef*ip+5] = dlam;
-		//aIPc[NPcoef*ip+6] = d2lam;
 	}
 	return 0;
 }
 
 
-// Calculates activity coefficients and excess functions
-// heat capacity calculation added, 06.06.2008 (TW)
+// Calculates activity coefficients
 long int TWilson::MixMod()
 {
 	long int  j, i, k;
 	double K, L, M;
-	double U, dU, d2U;
-	double g, dg, d2g, lnGam;
-	double gE, vE, hE, sE, cpE;
+	double lnGam;
 
 	if ( NPcoef < 4 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
@@ -993,6 +1200,55 @@ long int TWilson::MixMod()
 		lnGam = 1.-log(K)-L;
 		lnGamma[j] = lnGam;
 	}
+
+	return 0;
+}
+
+
+// calculates bulk phase excess properties (activity coefficients retained)
+long int TWilson::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
+{
+	long int  j, i, k;
+	double K, L, M;
+	double U, dU, d2U;
+	double g, dg, d2g, lnGam;
+	double gE, vE, hE, sE, cpE;
+	double gI, sI, gi, si;
+
+	if ( NPcoef < 4 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
+	        return 1;
+
+	// calculate activity coefficients (Wilson)
+	for (j=0; j<NComp; j++)
+	{
+		lnGam = 0.0;
+		K = 0.0;
+		L = 0.0;
+		for (i=0; i<NComp; i++)
+		{
+			M = 0.0;
+			K += x[i]*Lam[j][i];
+			for (k=0; k<NComp; k++)
+			{
+				M += x[k]*Lam[i][k];
+			}
+			L += x[i]*Lam[i][j]/M;
+		}
+		lnGam = 1.-log(K)-L;
+		lnGamma[j] = lnGam;
+	}
+
+	// calculating bulk phase ideal mixing contributions
+	gi = 0.0;
+	si = 0.0;
+
+	for (j=0; j<NComp; j++)
+	{
+		gi += x[j]*log(x[j]);
+		si += x[j]*log(x[j]);
+	}
+	gI = R_CONST*Tk*gi;
+	sI = - R_CONST*si;
 
 	// calculate bulk phase excess properties
 	gE = 0.0;
@@ -1020,26 +1276,19 @@ long int TWilson::MixMod()
 		d2g -= x[j] * ( (-1./pow(U,2.))*dU*dU + (1./U)*d2U );  // fixed, 11.06.2008 (TW)
 	}
 
-	// final calculations and assignments
+	// final calculations
 	gE = g*R_CONST*Tk;
 	hE = -R_CONST*pow(Tk,2.)*dg;
 	sE = (hE-gE)/Tk;
 	cpE = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
 
-	return 0;
-}
+	// assigments
+	Gex_ = gE + gI;
+	Vex_ = vE;
+	Hex_ = hE;
+	Sex_ = sE + sI;
+	CPex_ = cpE;
 
-
-long int TWilson::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
-{
-	// add excess property calculations
-
-	// final assigments
-	Gex_ = Gex;
-	Vex_ = Vex;
-	Hex_ = Hex;
-	Sex_ = Sex;
-	CPex_ = CPex;
 	return 0;
 }
 
