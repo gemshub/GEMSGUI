@@ -339,9 +339,9 @@ class TCGFcalc: public TSolMod
 		long int CGFugacityPT( double *EoSparam, double *EoSparPT, double &Fugacity,
 				double &Volume, double P, double T, double &roro );
 
-		// Calculates residual enthalpy and entropy
-		long int CGEnthalpy( double *X, double *param, double *param1, unsigned long int NN,
-				double ro, double T, double &H, double &S );
+		// calculates departure functions
+		long int CGDepartureFunct( double *X, double *param, double *param1, unsigned long int NN,
+				double ro, double T );
 
 		double GetDELTA( void )
 		{

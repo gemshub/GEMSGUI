@@ -283,10 +283,10 @@ long int TVanLaar::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 
 	// calculate bulk phase excess properties
 	gE = 0.0;
-	vE = 0.0;
-	hE = 0.0;
 	sE = 0.0;
+	hE = 0.0;
 	cpE = 0.0;
+	vE = 0.0;
 	uE = 0.0;
 
 	for (ip=0; ip<NPar; ip++)
@@ -303,10 +303,10 @@ long int TVanLaar::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 
 	 // assigments
 	 Gex_ = gE + gI;
-	 Vex_ = vE;
-	 Hex_ = hE;
 	 Sex_ = sE + sI;
+	 Hex_ = hE;
 	 CPex_ = cpE;
+	 Vex_ = vE;
 
 	 return 0;
 }
@@ -464,10 +464,10 @@ long int TRegular::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 
 	// calculate bulk phase excess properties
 	gE = 0.0;
-	vE = 0.0;
-	hE = 0.0;
 	sE = 0.0;
+	hE = 0.0;
 	cpE = 0.0;
+	vE = 0.0;
 	uE = 0.0;
 
 	for (ip=0; ip<NPar; ip++)
@@ -484,10 +484,10 @@ long int TRegular::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 
 	// assigments
 	Gex_ = gE + gI;
-	Vex_ = vE;
-	Hex_ = hE;
 	Sex_ = sE + sI;
+	Hex_ = hE;
 	CPex_ = cpE;
+	Vex_ = vE;
 
 	return 0;
 }
@@ -732,10 +732,10 @@ long int TRedlichKister::ExcessProp( double &Gex_, double &Vex_, double &Hex_, d
 
    	// calculate bulk phase excess properties
    	gE = 0.0;
-   	vE = 0.0;
-   	hE = 0.0;
    	sE = 0.0;
+   	hE = 0.0;
    	cpE = 0.0;
+   	vE = 0.0;
    	uE = 0.0;
 
    	for (ip=0; ip<NPar; ip++)
@@ -776,10 +776,10 @@ long int TRedlichKister::ExcessProp( double &Gex_, double &Vex_, double &Hex_, d
 
 	// assigments
 	Gex_ = gE + gI;
-	Vex_ = vE;
-	Hex_ = hE;
 	Sex_ = sE + sI;
+	Hex_ = hE;
 	CPex_ = cpE;
+	Vex_ = vE;
 
 	return 0;
 }
@@ -1024,10 +1024,10 @@ long int TNRTL::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Se
 
 	// calculate bulk phase excess properties
    	gE = 0.0;
-   	vE = 0.0;
-   	hE = 0.0;
    	sE = 0.0;
+   	hE = 0.0;
    	cpE = 0.0;
+   	vE = 0.0;
    	g = 0.0;
    	dg = 0.0;
    	d2g = 0.0;
@@ -1064,10 +1064,10 @@ long int TNRTL::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Se
 
 	// assigments
 	Gex_ = gE + gI;
-	Vex_ = vE;
-	Hex_ = hE;
 	Sex_ = sE + sI;
+	Hex_ = hE;
 	CPex_ = cpE;
+	Vex_ = vE;
 
 	return 0;
 }
@@ -1252,10 +1252,10 @@ long int TWilson::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &
 
 	// calculate bulk phase excess properties
 	gE = 0.0;
-	vE = 0.0;
-	hE = 0.0;
 	sE = 0.0;
+	hE = 0.0;
 	cpE = 0.0;
+	vE = 0.0;
 	g = 0.0;
 	dg = 0.0;
 	d2g = 0.0;
@@ -1284,10 +1284,10 @@ long int TWilson::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &
 
 	// assigments
 	Gex_ = gE + gI;
-	Vex_ = vE;
-	Hex_ = hE;
 	Sex_ = sE + sI;
+	Hex_ = hE;
 	CPex_ = cpE;
+	Vex_ = vE;
 
 	return 0;
 }
