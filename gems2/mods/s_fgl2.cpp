@@ -217,11 +217,10 @@ long int TVanLaar::MixMod()
 }
 
 
-// calculates bulk phase excess properties (activity coefficients retained)
+// calculates bulk phase excess properties
 long int TVanLaar::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
 {
 	long int ip, j, i1, i2;
-	double dj, dk;
 	double sumPhi; // Sum of Phi terms
 	double gE, vE, hE, sE, cpE, uE;
 	double gi, si, gI, sI;
@@ -242,32 +241,6 @@ long int TVanLaar::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 
 	for (j=0; j<NComp; j++)
 	    Phi[j] = x[j]*PsVol[j]/sumPhi;
-
-	// calculate activity coefficients
-	for (j=0; j<NComp; j++)      // index end members with j
-	{
-		lnGamRT = 0.;
-
-		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
-		{
-			i1 = aIPx[MaxOrd*ip];
-		    i2 = aIPx[MaxOrd*ip+1];
-
-	   	    if( j == i1 )
-			dj = 1.;
-		    else
-			dj = 0.;
-		    if( j == i2 )
-			dk = 1.;
-		    else
-			dk = 0.;
-		    lnGamRT -= (dj-Phi[i1])*(dk-Phi[i2])*Wpt[ip]
-	                         *2.*PsVol[j]/(PsVol[i1]+PsVol[i2]);
-		}
-
-	    lnGam = lnGamRT/(R_CONST*Tk);
-		lnGamma[j] = lnGam;
-	}
 
 	// calculating bulk phase ideal mixing contributions
 	gi = 0.0;
@@ -301,7 +274,7 @@ long int TVanLaar::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 
 	 hE = uE+vE*Pbar;
 
-	 // assigments
+	 // assignments
 	 Gex_ = gE + gI;
 	 Sex_ = sE + sI;
 	 Hex_ = hE;
@@ -414,41 +387,15 @@ long int TRegular::MixMod()
 }
 
 
-// calculates bulk phase excess properties (activity coefficients retained)
+// calculates bulk phase excess properties
 long int TRegular::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
 {
 	long int ip, j, i1, i2;
-	double dj, dk;
 	double gE, vE, hE, sE, cpE, uE;
 	double gI, sI, gi, si;
 
 	if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 		return 1;
-
-	// calculate activity coefficients
-	for (j=0; j<NComp; j++)      // index end members with j
-	{
-		lnGamRT = 0.;
-
-		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
-		{
-			i1 = aIPx[MaxOrd*ip];
-			i2 = aIPx[MaxOrd*ip+1];
-
-			if( j == i1 )
-				dj = 1.;
-			else
-				dj = 0.;
-			if( j == i2 )
-				dk = 1.;
-			else
-				dk = 0.;
-			lnGamRT -= (dj-x[i1])*(dk-x[i2])*Wpt[ip];
-		}
-
-		lnGam = lnGamRT/(R_CONST*Tk);
-		lnGamma[j] = lnGam;
-	}
 
 	// calculating bulk phase ideal mixing contributions
 	gi = 0.0;
@@ -482,7 +429,7 @@ long int TRegular::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 
 	hE = uE+vE*Pbar;
 
-	// assigments
+	// assignments
 	Gex_ = gE + gI;
 	Sex_ = sE + sI;
 	Hex_ = hE;
@@ -649,74 +596,17 @@ long int TRedlichKister::MixMod()
 }
 
 
-// calculates bulk phase excess properties (activity coefficients retained)
+// calculates bulk phase excess properties
 long int TRedlichKister::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
 {
-
 	long int ip, j;
-	long int i1, i2, L, I, J;
+	long int i1, i2;
 	double LU, LS, LCP, LV, LPT;
-	double L0, L1, L2, L3;
 	double gE, vE, hE, sE, cpE, uE;
 	double gI, sI, gi, si;
 
 	if ( NPcoef < 16 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 		return 1;
-
-	// calculate activity coefficients
-	for (j=0; j<NComp; j++)      // index end members with j
-	{
-		lnGamRT = 0.;
-		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
-		{
-			i1 = aIPx[MaxOrd*ip];
-			i2 = aIPx[MaxOrd*ip+1];
-
-			if ( j == i1 || j == i2) // interaction terms with j
-			{
-				if ( i1 == j ) // check order of idexes
-				{
-					L = i1;
-					I = i2;
-					L0 = Lpt[ip][0];
-					L1 = Lpt[ip][1];
-					L2 = Lpt[ip][2];
-					L3 = Lpt[ip][3];
-				}
-				else
-				{
-					L = i2;
-					I = i1;
-					L0 = Lpt[ip][0];
-					L1 = -Lpt[ip][1];
-					L2 = Lpt[ip][2];
-					L3 = -Lpt[ip][3];
-				}
-
-				lnGamRT += L0*x[I]*(1.-x[L])
-					+ L1*x[I]*(2.*(1.-x[L])*(x[L]-x[I])+x[I])
-					+ L2*x[I]*(x[L]-x[I])*(3.*(1.-x[L])*(x[L]-x[I])+2.*x[I])
-					+ L3*x[I]*pow((x[L]-x[I]),2.)*(4.*(1.-x[L])*(x[L]-x[I])+3.*x[I]);
-			}
-
-			else // interaction terms without j
-			{
-				I = i1;
-				J = i2;
-				L0 = Lpt[ip][0];
-				L1 = Lpt[ip][1];
-				L2 = Lpt[ip][2];
-				L3 = Lpt[ip][3];
-
-				lnGamRT -= x[I]*x[J]*( L0 + L1*2.*(x[I]-x[J])
-					+ L2*3.*pow((x[I]-x[J]),2.)
-					+ L3*4.*pow((x[I]-x[J]),3.) );
-			}
-		}
-
-		lnGam = lnGamRT/(R_CONST*Tk);
-		lnGamma[j] = lnGam;
-	}
 
 	// calculating bulk phase ideal mixing contributions
 	gi = 0.0;
@@ -774,7 +664,7 @@ long int TRedlichKister::ExcessProp( double &Gex_, double &Vex_, double &Hex_, d
 
    	hE = uE+vE*Pbar;
 
-	// assigments
+	// assignments
 	Gex_ = gE + gI;
 	Sex_ = sE + sI;
 	Hex_ = hE;
@@ -972,43 +862,17 @@ long int TNRTL::MixMod()
 }
 
 
-// calculates bulk phase excess properties (activity coefficients retained)
+// calculates bulk phase excess properties
 long int TNRTL::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
 {
-	// add excess property calculations
-	long int  j, i, k;
-	double K, L, M, N, O;
+	long int  j, i;
 	double U, dU, V, dV, d2U, d2V;
-	double g, dg, d2g, lnGam;
+	double g, dg, d2g;
 	double gE, vE, hE, sE, cpE;
 	double gI, sI, gi, si;
 
 	if ( NPcoef < 6 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
-
-	// calculate activity coefficients
-	for (j=0; j<NComp; j++)
-	{
-		lnGam = 0.0;
-		K = 0.0;
-		L = 0.0;
-		M = 0.0;
-		for (i=0; i<NComp; i++)
-		{
-			N = 0.0;
-			O = 0.0;
-			K += ( x[i]*Tau[i][j]*G[i][j] );
-			L += ( x[i]*G[i][j] );
-			for (k=0; k<NComp; k++)
-			{
-				N += ( x[k]*G[k][i] );
-				O += ( x[k]*Tau[k][i]*G[k][i] );
-			}
-			M += ( x[i]*G[j][i]/N * ( Tau[j][i] - O/N ) );
-		}
-		lnGam = K/L + M;
-		lnGamma[j] = lnGam;
-	}
 
 	// calculating bulk phase ideal mixing contributions
 	gi = 0.0;
@@ -1062,7 +926,7 @@ long int TNRTL::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Se
 	sE = (hE-gE)/Tk;
 	cpE = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
 
-	// assigments
+	// assignments
 	Gex_ = gE + gI;
 	Sex_ = sE + sI;
 	Hex_ = hE;
@@ -1181,7 +1045,7 @@ long int TWilson::MixMod()
 	if ( NPcoef < 4 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
 
-	// calculate activity coefficients (Wilson)
+	// calculate activity coefficients
 	for (j=0; j<NComp; j++)
 	{
 		lnGam = 0.0;
@@ -1205,38 +1069,17 @@ long int TWilson::MixMod()
 }
 
 
-// calculates bulk phase excess properties (activity coefficients retained)
+// calculates bulk phase excess properties
 long int TWilson::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &Sex_, double &CPex_ )
 {
-	long int  j, i, k;
-	double K, L, M;
+	long int  j, i;
 	double U, dU, d2U;
-	double g, dg, d2g, lnGam;
+	double g, dg, d2g;
 	double gE, vE, hE, sE, cpE;
 	double gI, sI, gi, si;
 
 	if ( NPcoef < 4 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
-
-	// calculate activity coefficients (Wilson)
-	for (j=0; j<NComp; j++)
-	{
-		lnGam = 0.0;
-		K = 0.0;
-		L = 0.0;
-		for (i=0; i<NComp; i++)
-		{
-			M = 0.0;
-			K += x[i]*Lam[j][i];
-			for (k=0; k<NComp; k++)
-			{
-				M += x[k]*Lam[i][k];
-			}
-			L += x[i]*Lam[i][j]/M;
-		}
-		lnGam = 1.-log(K)-L;
-		lnGamma[j] = lnGam;
-	}
 
 	// calculating bulk phase ideal mixing contributions
 	gi = 0.0;
@@ -1282,7 +1125,7 @@ long int TWilson::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double &
 	sE = (hE-gE)/Tk;
 	cpE = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
 
-	// assigments
+	// assignments
 	Gex_ = gE + gI;
 	Sex_ = sE + sI;
 	Hex_ = hE;

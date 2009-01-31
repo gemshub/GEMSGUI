@@ -221,7 +221,7 @@ long int TPRSVcalc::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double
     	Error( "E71IPM IPMgamma: ",  buf );
     }
 
-	// assigments
+	// assignments
 	Gex_ = DepPh[0];
 	Sex_ = DepPh[1];
 	Hex_ = DepPh[2];
@@ -540,7 +540,6 @@ long int TPRSVcalc::FugacityMix( double amix, double bmix, double &fugmix, doubl
 // Calculates fugacities and activities of fluid species in the mixture,
 long int TPRSVcalc::FugacitySpec( double *fugpure )
 {
-
     long int i, j, iRet=0;
 	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
 	double A, B, lnfci, fci;
@@ -554,12 +553,12 @@ long int TPRSVcalc::FugacitySpec( double *fugpure )
 	// retrieve properties of the mixture
 	iRet = MixParam( amix, bmix );
 	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix );
+	A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
+	B = bmix*Pbar/(R_CONST*Tk);
 
 	// calculate fugacity coefficient, fugacity and activity of species i
 	for (i=0; i<NComp; i++)
 	{
-		A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
-		B = bmix*Pbar/(R_CONST*Tk);
 		sum = 0.;
 		for (j=0; j<NComp; j++)
 		{
@@ -582,13 +581,12 @@ long int TPRSVcalc::FugacitySpec( double *fugpure )
 }
 
 
-// calculates departure functions in the mixture
+// calculates departure functions in the mixture bla
 long int TPRSVcalc::DepartureFunct( double *fugpure )
 {
-
     long int i, j, iRet=0;
-	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
-	double A, B, lnfci, fci;
+	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0.;
+	double A, B;
 	double Gig, Hig, Sig, CPig, Gdep, Hdep, Sdep, CPdep;
 	double K, dK, d2K, Q, dQ, d2Q;
 	double damix, d2amix, ai, aj, dai, daj, d2ai, d2aj;
@@ -603,29 +601,8 @@ long int TPRSVcalc::DepartureFunct( double *fugpure )
 	// retrieve properties of the mixture
 	iRet = MixParam( amix, bmix );
 	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix );
-
-	// calculate fugacity coefficient, fugacity and activity of species i
-	for (i=0; i<NComp; i++)
-	{
-		A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
-		B = bmix*Pbar/(R_CONST*Tk);
-		sum = 0.;
-		for (j=0; j<NComp; j++)
-		{
-			sum = sum + x[j]*AA[i][j];
-		}
-		lnfci = Pureparm[i][1]/bmix*(zmix-1.) - log(zmix-B)
-		      + A/(sqrt(8.)*B)*(2.*sum/amix-Pureparm[i][1]/bmix)
-                      * log((zmix+B*(1.-sqrt(2.)))/(zmix+B*(1.+sqrt(2.))));
-		fci = exp(lnfci);
-		Fugci[i][0] = fci;  // fugacity coefficient using engineering convention
-		Fugci[i][1] = x[i]*fci;  // fugacity coefficient using geology convention
-		Fugci[i][2] = Fugci[i][1]/Fugpure[i][0];  // activity of species
-		if (x[i]>1.0e-20)
-			Fugci[i][3] = Fugci[i][2]/x[i];  // activity coefficient of species
-		else
-			Fugci[i][3] = 1.0;
-	}
+	A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
+	B = bmix*Pbar/(R_CONST*Tk);
 
 	// ideal gas changes from 1 bar to P (at T of interest)
 	Hig = 0.;
@@ -663,8 +640,8 @@ long int TPRSVcalc::DepartureFunct( double *fugpure )
 	}
 
 	// calculate thermodynamic properties
-	Gdep = (amix/(R_CONST*Tk*sqrt(8.)*bmix)  *log((vmix+(1.-sqrt(2.))*bmix)
-		/(vmix+(1.+sqrt(2.))*bmix))-log(zmix*(1.-bmix/vmix))+zmix-1.)*R_CONST*Tk;
+	Gdep = (amix/(R_CONST*Tk*sqrt(8.)*bmix) * log((vmix+(1.-sqrt(2.))*bmix)
+		/ (vmix+(1.+sqrt(2.))*bmix))-log(zmix*(1.-bmix/vmix))+zmix-1.)*R_CONST*Tk;
 	Hdep = ((amix-Tk*damix)/(R_CONST*Tk*sqrt(8.)*bmix)*log((vmix+(1.-sqrt(2.))
 		*bmix)/(vmix+(1.+sqrt(2))*bmix))+zmix-1.)*R_CONST*Tk;
 	Sdep = (Hdep - Gdep)/Tk;
@@ -920,12 +897,12 @@ long int TCGFcalc::PureSpecies()
         CGDepartureFunct( X, Eos4parPT, Eos4parPT1, 1, roro, Tk );  // changed, 21.06.2008 (TW)
     }  // j
 
-    if ( retCode )
-    {
-      char buf[150];
-      sprintf(buf, "CG2004Fluid(): calculation of pure fugacity failed");
-      Error( "E71IPM IPMgamma: ",  buf );
-    }
+	if ( retCode )
+	{
+		char buf[150];
+		sprintf(buf, "CG2004Fluid(): calculation of pure fugacity failed");
+		Error( "E71IPM IPMgamma: ",  buf );
+	}
 	return 0;
 }
 
@@ -1014,9 +991,6 @@ long int TCGFcalc::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 			Error( "E71IPM IPMgamma: ",  buf );
 		}
 
-		// Phase volume of the fluid in cm3 (not needed any more?)
-		phVOL[0] = phWGT[0] / roro;
-
 		// calculate departure functions
 		CGDepartureFunct( aX, EoSparam, EoSparam1, NComp, roro, Tk );
 
@@ -1031,7 +1005,7 @@ long int TCGFcalc::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
 		DepPh[4] = 0.;
 	}
 
-	// assigments
+	// assignments
 	Gex_ = DepPh[0] + Gig;
 	Sex_ = DepPh[1] + Sig;
 	Hex_ = DepPh[2];
@@ -1205,177 +1179,171 @@ long int TCGFcalc::CGDepartureFunct( double *X, double *param, double *param1, u
 
 
 // void ACTDENS(double *data,long nn, double *act )
-long int TCGFcalc::CGActivCoefRhoT( double *X,double *param,double *act,
-		   unsigned long int NN,   double ro, double T )
-   {
-      double   F0,Z,F1,GMix,fideal;
-      double delta = DELTA,ax,dx,tmp;
-      long int i;
-       double *Fx,*xtmp;
-       xtmp = new double [NN];
-       Fx = new double [NN];
+long int TCGFcalc::CGActivCoefRhoT( double *X, double *param, double *act,
+		unsigned long int NN, double ro, double T )
+{
+	double   F0,Z,F1,GMix,fideal;
+	double delta = DELTA,ax,dx,tmp;
+	long int i;
+	double *Fx,*xtmp;
+	xtmp = new double [NN];
+	Fx = new double [NN];
 
-        if(!paar)
-     	  paar = new EOSPARAM(X, param, NN);
-        else
-     	  paar->init( X, param, NN );
+	if(!paar)
+		paar = new EOSPARAM(X, param, NN);
+		else
+			paar->init( X, param, NN );
 
-       norm(paar->XX0,paar->NCmp());
-       copy(paar->XX0,xtmp,paar->NCmp());
+	norm(paar->XX0,paar->NCmp());
+	copy(paar->XX0,xtmp,paar->NCmp());
+	paar->ParamMix(xtmp);
+	Z = ZTOTALMIX(T,ro,paar);
+	F0 = FTOTALMIX(T,ro,paar);
+	fideal = log(R*T*ro/0.1);
+	ax = Z - 1.+fideal;
 
-        paar->ParamMix(xtmp);
-        Z = ZTOTALMIX(T,ro,paar);
+	for ( i=0;i<paar->NCmp();i++)
+	{
+		if ( xtmp[i]>0. )
+		{
+			copy(paar->XX0,xtmp,NN);
+			if ( xtmp[i]>DELTAMOLLIM )
+			{
+				dx = xtmp[i]*delta;
+			}
+			else
+			{
+				dx = DELTAMOLLIM*delta;
+			}
 
-        F0 = FTOTALMIX(T,ro,paar);
-         fideal = log(R*T*ro/0.1);
-         ax = Z - 1.+fideal;
+			xtmp[i] += dx;
+			norm(xtmp,paar->NCmp());
+			paar->ParamMix(xtmp);
+			F1 = FTOTALMIX(T,ro,paar)*(1.+dx);
+			Fx[i] = (F1-F0)/(dx);
 
-       for ( i=0;i<paar->NCmp();i++)
-       {
-         if ( xtmp[i]>0. )
-         {
-          copy(paar->XX0,xtmp,NN);
-          if ( xtmp[i]>DELTAMOLLIM )
-          {
-            dx = xtmp[i]*delta;
-          }
-          else
-          {
-            dx = DELTAMOLLIM*delta;
-          }
+		}
+		else Fx[i] = 0.;
+	};
 
-          xtmp[i] += dx;
-          norm(xtmp,paar->NCmp());
+	GMix = 0.;
+	for ( i=0;i<paar->NCmp();i++)
+	{
+		if ( xtmp[i]>0. )
+		{
+			tmp = log(paar->XX0[i]);
+			GMix += tmp*paar->XX0[i];
+			act[i] = exp(ax+Fx[i]);
+		}
+		else
+		{
+			act[i] = 0.;
+		}
+	};
 
-          paar->ParamMix(xtmp);
-          F1 = FTOTALMIX(T,ro,paar)*(1.+dx);
-
-          Fx[i] = (F1-F0)/(dx);
-         }
-         else Fx[i] = 0.;
-       };
-
-       GMix = 0.;
-       for ( i=0;i<paar->NCmp();i++)
-       {
-         if ( xtmp[i]>0. )
-         {
-          tmp = log(paar->XX0[i]);
-          GMix += tmp*paar->XX0[i];
-          act[i] = exp(ax+Fx[i]);
-         }
-        else
-         {
-          act[i] = 0.;
-         }
-       };
-
-        delete[]xtmp;
-        delete[]Fx;
-        return 0;
-
+	delete[]xtmp;
+	delete[]Fx;
+	return 0;
     // MLPutRealList(stdlink,act,paar.NCmp());
    };
 
 
 double TCGFcalc::DIntegral( double T, double ro, unsigned long int IType )
 {
-  static double TOld,roOld;
-  static double a,b,c,d,e;
-   static double data[][6]=
-      {{-0.257431, 0.439229,  0.414783,  -0.457019, -0.145520,  0.299666},
-      {-0.396724, 0.690721,  0.628935,  -0.652622, -0.201462, -0.23163 },
-      {-0.488498, 0.863195,  0.761344,  -0.750086, -0.218562, -0.538463},
-      {-0.556600, 0.995172,  0.852903,  -0.804710, -0.214736, -0.761700},
-      {-0.611295, 1.103390,  0.921359,  -0.838804, -0.197999, -0.940714},
-      {-0.657866, 1.196189,  0.975721,  -0.862346, -0.172526, -1.091678},
-      {-0.698790, 1.278054,  1.020604,  -0.880027, -0.140749, -1.222733},
-      {-0.735855, 1.351533,  1.058986,  -0.894024, -0.104174, -1.338626},
-      {-0.769504, 1.418223,  1.092052,  -0.905347, -0.063730, -1.442391},
-      {-0.800934, 1.479538,  1.121453,  -0.914864, -0.020150, -1.536070},
-      {-0.829779, 1.535822,  1.147161,  -0.922381, 0.026157 , -1.621183},
-      {-0.856655, 1.587957,  1.169885,  -0.928269, 0.074849 , -1.698853},
-      {-0.881757, 1.636402,  1.190082,  -0.932668, 0.125590 , -1.769898},
-      {-0.904998, 1.681421,  1.207610,  -0.935419, 0.178283 , -1.835070},
-      {-0.926828, 1.723393,  1.223088,  -0.936667, 0.232649 , -1.894899},
-      {-0.946773, 1.762571,  1.236007,  -0.936403, 0.288687 , -1.949858},
-      {-0.965248, 1.799170,  1.246887,  -0.934650, 0.346207 , -2.000344}};
+	static double TOld,roOld;
+	static double a,b,c,d,e;
+	static double data[][6]=
+		{{-0.257431, 0.439229,  0.414783,  -0.457019, -0.145520,  0.299666},
+		{-0.396724, 0.690721,  0.628935,  -0.652622, -0.201462, -0.23163 },
+		{-0.488498, 0.863195,  0.761344,  -0.750086, -0.218562, -0.538463},
+		{-0.556600, 0.995172,  0.852903,  -0.804710, -0.214736, -0.761700},
+		{-0.611295, 1.103390,  0.921359,  -0.838804, -0.197999, -0.940714},
+		{-0.657866, 1.196189,  0.975721,  -0.862346, -0.172526, -1.091678},
+		{-0.698790, 1.278054,  1.020604,  -0.880027, -0.140749, -1.222733},
+		{-0.735855, 1.351533,  1.058986,  -0.894024, -0.104174, -1.338626},
+		{-0.769504, 1.418223,  1.092052,  -0.905347, -0.063730, -1.442391},
+		{-0.800934, 1.479538,  1.121453,  -0.914864, -0.020150, -1.536070},
+		{-0.829779, 1.535822,  1.147161,  -0.922381, 0.026157 , -1.621183},
+		{-0.856655, 1.587957,  1.169885,  -0.928269, 0.074849 , -1.698853},
+		{-0.881757, 1.636402,  1.190082,  -0.932668, 0.125590 , -1.769898},
+		{-0.904998, 1.681421,  1.207610,  -0.935419, 0.178283 , -1.835070},
+		{-0.926828, 1.723393,  1.223088,  -0.936667, 0.232649 , -1.894899},
+		{-0.946773, 1.762571,  1.236007,  -0.936403, 0.288687 , -1.949858},
+		{-0.965248, 1.799170,  1.246887,  -0.934650, 0.346207 , -2.000344}};
 
-// static double dt12[]=
-//      {-2.139734,1.971553, 0.945513, -1.901492,-0.588630,-5.390941};
-//      {-0.637684, 0.708107,  0.222086,  -0.481116, -0.332141, -3.492213};
+		// static double dt12[]=
+		// {-2.139734,1.971553, 0.945513, -1.901492,-0.588630,-5.390941};
+		// {-0.637684, 0.708107,  0.222086,  -0.481116, -0.332141, -3.492213};
 
-   unsigned long int n;
-   double *dtmp,rez;
+	unsigned long int n;
+	double *dtmp,rez;
 
-  if ( (T!=TOld) || (ro!=roOld) )
-  {
-    TOld = T;
-    roOld = ro;
-    e = log(T);
-    b = ro*ro;
-    d = ro;
-    c = ro*e;
-    a = b*e;
-  }
+	if ( (T!=TOld) || (ro!=roOld) )
+	{
+		TOld = T;
+		roOld = ro;
+		e = log(T);
+		b = ro*ro;
+		d = ro;
+		c = ro*e;
+		a = b*e;
+	}
 
-  // special case
-  /*
-  if ( IType==12 )
-  {
-    rez=(dt12[0]*T + dt12[1])*b +
-    (dt12[2]*T + dt12[3])*ro + dt12[4]*T + dt12[5];
-    return exp(rez);
-  }
-    */
+	// special case
+	/*
+	if ( IType==12 )
+	{
+		rez=(dt12[0]*T + dt12[1])*b +
+		(dt12[2]*T + dt12[3])*ro + dt12[4]*T + dt12[5];
+		return exp(rez);
+	}
+	*/
 
-  n = IType-4;
-  dtmp = data[n];
-  rez = dtmp[0]*a + dtmp[1]*b + dtmp[2]*c + dtmp[3]*d + dtmp[4]*e + dtmp[5];
-  return exp(rez);
+	n = IType-4;
+	dtmp = data[n];
+	rez = dtmp[0]*a + dtmp[1]*b + dtmp[2]*c + dtmp[3]*d + dtmp[4]*e + dtmp[5];
+	return exp(rez);
 }
 
 
 double TCGFcalc::LIntegral( double T, double ro,unsigned long int IType )
 {
-  static double TOld,roOld;
-  static double a,b,c,d,e;
-  static double data[][6]=
-  {{ -1.010391, 1.628552,  2.077476,  -2.30162 , -0.689931, -2.688117},
-   { -1.228611, 2.060090,  2.463396,  -2.453303, -0.573894, -3.350638},
-   { -1.354004, 2.402034,  2.718124,  -2.462814, -0.412252, -4.018632}};
+	static double TOld,roOld;
+	static double a,b,c,d,e;
+	static double data[][6]=
+	{{ -1.010391, 1.628552,  2.077476,  -2.30162 , -0.689931, -2.688117},
+	{ -1.228611, 2.060090,  2.463396,  -2.453303, -0.573894, -3.350638},
+	{ -1.354004, 2.402034,  2.718124,  -2.462814, -0.412252, -4.018632}};
 
-   double *dtmp,rez;
+	double *dtmp,rez;
 
-  if ( (T!=TOld) || (ro!=roOld) )
-  {
-    TOld = T;
-    roOld = ro;
-    a = ro*ro*log(T);
-    b = ro*ro;
-    c = ro*log(T);
-    d = ro;
-    e = log(T);
-  }
+	if ( (T!=TOld) || (ro!=roOld) )
+	{
+		TOld = T;
+		roOld = ro;
+		a = ro*ro*log(T);
+		b = ro*ro;
+		c = ro*log(T);
+		d = ro;
+		e = log(T);
+	}
 
-  switch ( IType )
-  {
-    case 662:
-         dtmp = data[0];
-         break;
-    case 1262:
-         dtmp = data[1];
-         break;
-    case 12122:
-         dtmp = data[2];
-         break;
-    default:
-         return 0;
-  }
-
-  rez = dtmp[0]*a + dtmp[1]*b + dtmp[2]*c + dtmp[3]*d + dtmp[4]*e + dtmp[5];
-  return -exp(rez);
-
+	switch ( IType )
+	{
+		case 662:
+			dtmp = data[0];
+			break;
+		case 1262:
+			dtmp = data[1];
+			break;
+		case 12122:
+			dtmp = data[2];
+			break;
+		default:
+			return 0;
+	}
+	rez = dtmp[0]*a + dtmp[1]*b + dtmp[2]*c + dtmp[3]*d + dtmp[4]*e + dtmp[5];
+	return -exp(rez);
 }
 
 
@@ -1433,321 +1401,308 @@ double TCGFcalc::KIntegral( double T, double ro,unsigned long int IType )
 
 double TCGFcalc::K23_13( double T, double ro )
 {
-  static double TOld,roOld,KOLD;
-  static double a,b,c,d,e;
-  static double dtmp[]=
-  { -1.050534, 1.747476,  1.749366,  -1.999227, -0.661046, -3.028720};
+	static double TOld,roOld,KOLD;
+	static double a,b,c,d,e;
+	static double dtmp[]=
+	{ -1.050534, 1.747476,  1.749366,  -1.999227, -0.661046, -3.028720};
 
-  if ( (T!=TOld) || (ro!=roOld) )
-  {
-    TOld = T;
-    roOld = ro;
-    a = ro*ro*log(T);
-    b = ro*ro;
-    c = ro*log(T);
-    d = ro;
-    e = log(T);
-  }
-  else return KOLD;
+	if ( (T!=TOld) || (ro!=roOld) )
+	{
+		TOld = T;
+		roOld = ro;
+		a = ro*ro*log(T);
+		b = ro*ro;
+		c = ro*log(T);
+		d = ro;
+		e = log(T);
+	}
+	else return KOLD;
 
-   KOLD = dtmp[0]*a + dtmp[1]*b + dtmp[2]*c + dtmp[3]*d + dtmp[4]*e + dtmp[5];
-   KOLD = exp(KOLD/3.);
-   return KOLD;
-
-  }
+	KOLD = dtmp[0]*a + dtmp[1]*b + dtmp[2]*c + dtmp[3]*d + dtmp[4]*e + dtmp[5];
+	KOLD = exp(KOLD/3.);
+	return KOLD;
+}
 
 
 double TCGFcalc::DENSITY( double *X,double *param, unsigned long NN ,double Pbar, double T )
-   {
-      double P = Pbar * 0.1;
-      double *xtmp;
-      double ro;
+{
+	double P = Pbar * 0.1;
+	double *xtmp;
+	double ro;
 
-      xtmp = new double [NN];
-      if( !paar1 )
-         paar1 = new EOSPARAM(X,param,NN);
-      else
-   	     paar1->init( X, param, NN );
+	xtmp = new double [NN];
+	if( !paar1 )
+		paar1 = new EOSPARAM(X,param,NN);
+	else
+		paar1->init( X, param, NN );
 
-      norm(paar1->XX0,paar1->NCmp());
-      copy(paar1->XX0,xtmp,paar1->NCmp());
+	norm(paar1->XX0,paar1->NCmp());
+	copy(paar1->XX0,xtmp,paar1->NCmp());
+	paar1->ParamMix(xtmp);
+	ro = ROTOTALMIX(P,T,paar1);
 
-      paar1->ParamMix(xtmp);
-      ro = ROTOTALMIX(P,T,paar1);
-
-      delete [] xtmp;
-      if( ro < 0. )
-          Error( ""," Error - density cannot be found at this T,P" );
-        return ro;
-   };
+	delete [] xtmp;
+	if( ro < 0. )
+		Error( ""," Error - density cannot be found at this T,P" );
+	return ro;
+};
 
 
 double TCGFcalc::PRESSURE( double *X,double *param,
-		    unsigned long int NN,double ro, double T )
-   {
+		unsigned long int NN,double ro, double T )
+{
+	double *xtmp;
+	xtmp = new double [NN];
 
-      double *xtmp;
-       xtmp = new double [NN];
+	if( !paar1 )
+		paar1 = new EOSPARAM(X,param,NN);
+	else
+		paar1->init( X, param, NN );
 
-       if( !paar1 )
-          paar1 = new EOSPARAM(X,param,NN);
-       else
-   	     paar1->init( X, param, NN );
-
-       norm(paar1->XX0,paar1->NCmp());
-       copy(paar1->XX0,xtmp,paar1->NCmp());
-
-        paar1->ParamMix(xtmp);
-        double P = PTOTALMIX(T,ro,paar1);
-        delete [] xtmp;
-        return P*10.;
-   };
+	norm(paar1->XX0,paar1->NCmp());
+	copy(paar1->XX0,xtmp,paar1->NCmp());
+	paar1->ParamMix(xtmp);
+	double P = PTOTALMIX(T,ro,paar1);
+	delete [] xtmp;
+	return P*10.;
+};
 
 
 void TCGFcalc::copy( double* sours,double *dest,unsigned long int num )
- {
-  unsigned long int i;
-       for ( i=0; i<num; i++)
-       {
-        dest[i]=sours[i];
-       };
- }
+{
+	unsigned long int i;
+	for ( i=0; i<num; i++)
+	{
+		dest[i]=sours[i];
+	};
+}
 
 
 void TCGFcalc::norm( double *X,unsigned long int mNum )
- {
-  double tmp=0.;
-  unsigned long int i;
-  for ( i=0; i<mNum; i++ )
-  {
-    tmp += X[i];
-  }
-  tmp = 1./tmp;
-  for ( i=0; i<mNum; i++ )
-  {
-    X[i] *= tmp;
-  }
- }
+{
+	double tmp=0.;
+	unsigned long int i;
+	for ( i=0; i<mNum; i++ )
+	{
+		tmp += X[i];
+	}
+	tmp = 1./tmp;
+	for ( i=0; i<mNum; i++ )
+	{
+		X[i] *= tmp;
+	}
+}
 
 
 double TCGFcalc::RPA( double beta,double nuw )
 {
-  double fi1,fi2;
- fi1 = (1.20110+(0.064890+(-76.860+(562.686+(-2280.090+(6266.840+(-11753.40+(14053.8+(-9491.490 +2731.030*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw;
- fi2 = (0.588890+(-7.455360+(40.57590+(-104.8970+(60.25470+(390.6310+(-1193.080+(1576.350+(-1045.910+283.7580*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw*nuw;
- return  (-12.*fi1 + 192.*fi2*beta)*beta*beta/PI_1;
+	double fi1,fi2;
+	fi1 = (1.20110+(0.064890+(-76.860+(562.686+(-2280.090+(6266.840+(-11753.40+(14053.8
+			+(-9491.490 +2731.030*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw;
+	fi2 = (0.588890+(-7.455360+(40.57590+(-104.8970+(60.25470+(390.6310+(-1193.080
+			+(1576.350+(-1045.910+283.7580*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw)*nuw*nuw;
+	return  (-12.*fi1 + 192.*fi2*beta)*beta*beta/PI_1;
 }
 
 
 double TCGFcalc::dHS( double beta,double ro )
 {
-// service constants
-   double DV112 = 1./12.;
-   double DV712 = 7./12.;
-// local variables
-   double T12,T112,T712,B13,
-          dB,delta,d;
-   double a0,a1,a6,a3,a4,a7,a9,a12;
-   double p0,p2,p6,p3,p5,p8,p11;
-   double dbdl,ri6ro,ri6ro2,d3,d2,dnew,F0,F1;
-   unsigned long int i;
+	// service constants
+	double DV112 = 1./12.;
+	double DV712 = 7./12.;
+	// local variables
+	double T12, T112, T712, B13, dB, delta, d;
+	double a0, a1, a6, a3, a4, a7, a9, a12;
+	double p0, p2, p6, p3, p5, p8, p11;
+	double dbdl, ri6ro, ri6ro2, d3, d2, dnew, F0, F1;
+	unsigned long int i;
 
-   T12 = sqrt(beta);
-   T112 = exp(DV112*log(beta));
-   T712 = exp(DV712*log(beta));
+	T12 = sqrt(beta);
+	T112 = exp(DV112*log(beta));
+	T712 = exp(DV712*log(beta));
+	B13 = (1+beta);
+	B13 = B13*B13*B13;
 
-   B13 = (1+beta);
-   B13 = B13*B13*B13;
+	dB = (P1*T112+PP2*T712+(P3+(P4+P5*beta)*beta)*beta)/B13;
+	delta = (P6+P7*T12)/(1.+(P8+(P9+P10*T12)*T12)*T12);
 
-   dB = (P1*T112+PP2*T712+(P3+(P4+P5*beta)*beta)*beta)/B13;
-   delta = (P6+P7*T12)/(1.+(P8+(P9+P10*T12)*T12)*T12);
+	dbdl = dB*delta;
+	ri6ro = PISIX*ro;
+	ri6ro2 = ri6ro*ri6ro;
 
-   dbdl = dB*delta;
-   ri6ro = PISIX*ro;
-   ri6ro2 = ri6ro*ri6ro;
+	a0 = dB+dbdl;
+	a1 = -1.;
+	a3 = (-1.5*dB -3.75*dbdl)*ri6ro;
+	a4 = (1.5*ri6ro);
+	a6 = (2.*dB + dbdl)*0.25*ri6ro2;
+	a7 = -0.5*ri6ro2;
+	a9 = -2.89325*ri6ro2*ri6ro*dbdl;
+	a12 = -0.755*ri6ro2*ri6ro2*dbdl;
 
-   a0 = dB+dbdl;
-   a1 = -1.;
-   a3 = (-1.5*dB -3.75*dbdl)*ri6ro;
-   a4 = (1.5*ri6ro);
-   a6 = (2.*dB + dbdl)*0.25*ri6ro2;
-   a7 = -0.5*ri6ro2;
-   a9 = -2.89325*ri6ro2*ri6ro*dbdl;
-   a12 = -0.755*ri6ro2*ri6ro2*dbdl;
+	p0 = -1.;
+	p2 = a3*3.;
+	p3 = a4*4.;
+	p5 = a6*6.;
+	p6 = a7*7.;
+	p8 = a9*9.;
+	p11 = a12*12.;
 
-   p0 = -1.;
-   p2 = a3*3.;
-   p3 = a4*4.;
-   p5 = a6*6.;
-   p6 = a7*7.;
-   p8 = a9*9.;
-   p11 = a12*12.;
+	d = dB;
+	i = 0;
 
-   d = dB;
-   i = 0;
-   while ( i++<21 )
-   {
-      d2 = d*d;
-      d3 = d*d*d;
+	while ( i++<21 )
+	{
+		d2 = d*d;
+		d3 = d*d*d;
+		F0 = a0+(a1+(a3+(a4+(a6+(a7+(a9+a12*d3)*d2)*d)*d2)*d)*d2)*d;
+		F1 = p0+(p2+(p3+(p5+(p6+(p8+p11*d3)*d2)*d)*d2)*d)*d2;
+		dnew = d-F0/F1;
+		if ( fabs(dnew-d)<1.E-7 )
+		{
+			return dnew;
+		}
+		d = dnew;
+	}
 
-      F0 = a0+(a1+(a3+(a4+(a6+(a7+(a9+a12*d3)*d2)*d)*d2)*d)*d2)*d;
-      F1 = p0+(p2+(p3+(p5+(p6+(p8+p11*d3)*d2)*d)*d2)*d)*d2;
-
-      dnew = d-F0/F1;
-      if ( fabs(dnew-d)<1.E-7 )
-      {
-        return dnew;
-      }
-      d = dnew;
-   }
-
-     if ( i>=20 )
-     {
-      return dB;
-     }
-
-   return dnew;
-
+	if ( i>=20 )
+	{
+		return dB;
+	}
+	return dnew;
 };
 
 
 double TCGFcalc::FWCA( double T,double ro )
 {
-  static double TOld,roOld,F;
-  double d,beta,nu,nuw;
-  double nu1w1,nu1w2,nu1w3,nu1w4,nu1w5;
-  double a0,a1,a2,a3;
-  double I2;
-  double I1_6,I1_12;
-  double dW,dW12,dW6;
-  double tmp1,tmp2,tmp3,tmp4,tmp5,tmp6,tmp7;
-  double F0,F1,FA;
-  double rm,rmdw1,rmdw2,rmdw3,rmdw4,rmdw5;
+	static double TOld,roOld,F;
+	double d,beta,nu,nuw;
+	double nu1w1,nu1w2,nu1w3,nu1w4,nu1w5;
+	double a0,a1,a2,a3;
+	double I2;
+	double I1_6,I1_12;
+	double dW,dW12,dW6;
+	double tmp1,tmp2,tmp3,tmp4,tmp5,tmp6,tmp7;
+	double F0,F1,FA;
+	double rm,rmdw1,rmdw2,rmdw3,rmdw4,rmdw5;
 
+	if ((T==TOld) && (ro==roOld))
+	{
+		return F;
+	}
+	else
+	{
+		TOld = T;
+		roOld = ro;
+	}
 
-  if ((T==TOld) && (ro==roOld))
-  {
-    return F;
-  }
-  else
-  {
-   TOld = T;
-   roOld = ro;
-  }
+	rm = TWOPOW1SIX;
+	beta = 1./T;
+	d = dHS( beta, ro );
+	tmp2 = PISIX*d*d*d;
+	nu = tmp2*ro;
+	tmp1 = (1. - nu/16.);
+	nuw = nu*tmp1;
+	dW = d*exp(1./3.*log(tmp1));
 
-      rm = TWOPOW1SIX;
+	nu1w1 = (1.-nuw);
+	nu1w2 = nu1w1*nu1w1;
+	nu1w3 = nu1w2*nu1w1;
+	nu1w4 = nu1w2*nu1w2;
+	nu1w5 = nu1w2*nu1w3;
 
-  beta = 1./T;
+	tmp1 = (1-nu);
+	tmp1 = tmp1*tmp1;
+	F0 = ((4.-3.*nu)*nu)/tmp1;
 
-  d = dHS( beta, ro );
+	a0 = fa0( nuw , nu1w2);
+	a1 = fa1( nuw , nu1w3);
+	a2 = fa2( nuw , nu1w4);
+	a3 = fa3( nuw , nu1w5);
 
-  tmp2 = PISIX*d*d*d;
-  nu = tmp2*ro;
-  tmp1 = (1. - nu/16.);
-  nuw = nu*tmp1;
-  dW = d*exp(1./3.*log(tmp1));
+	I1_6 = fI1_6( nuw );
+	I1_12 = fI1_12( nuw );
 
+	rmdw1 = rm/dW;
+	rmdw2 = rmdw1*rmdw1;
+	rmdw3 = rmdw1*rmdw2;
+	rmdw4 = rmdw2*rmdw2;
+	rmdw5 = rmdw3*rmdw2;
 
-  nu1w1 = (1.-nuw);
-  nu1w2 = nu1w1*nu1w1;
-  nu1w3 = nu1w2*nu1w1;
-  nu1w4 = nu1w2*nu1w2;
-  nu1w5 = nu1w2*nu1w3;
+	dW6 = dW*dW*dW;
+	dW6 = 1./(dW6*dW6);
+	dW12 = dW6*dW6;
 
-  tmp1 = (1-nu);
-  tmp1 = tmp1*tmp1;
-  F0 = ((4.-3.*nu)*nu)/tmp1;
+	tmp1 = (a0/4.+ a1/12. + a2/24. + a3/24.)*dW6;
+	tmp2 = (a0/10.+ a1/90. + a2/720. + a3/5040.)*(-dW12);
+	tmp3 = (a0 - a1/3. + a2/12 - a3/60)/8.;
+	tmp4 = (a0 - a1 + a2/2. - a3/6.)*rmdw2*(-9.)/40.;
+	tmp5 = (a1 - a2 + a3/2)*rmdw3*(-2.)/9.;
+	tmp6 = (a2 - a3)*rmdw4*(-9.)/64.;
+	tmp7 = a3*(-3.)/35.*rmdw5;
 
-  a0 = fa0( nuw , nu1w2);
-  a1 = fa1( nuw , nu1w3);
-  a2 = fa2( nuw , nu1w4);
-  a3 = fa3( nuw , nu1w5);
+	I2 = tmp1+tmp2+tmp3+tmp4+tmp5+tmp6+tmp7;
 
-  I1_6 = fI1_6( nuw );
-  I1_12 = fI1_12( nuw );
+	F1 = 48.*nuw*(I1_12*dW12-I1_6*dW6 + I2)*beta;
+	FA = RPA(beta,nuw);
 
-  rmdw1 = rm/dW;
-  rmdw2 = rmdw1*rmdw1;
-  rmdw3 = rmdw1*rmdw2;
-  rmdw4 = rmdw2*rmdw2;
-  rmdw5 = rmdw3*rmdw2;
+	F = F0+F1+FA;
 
-  dW6 = dW*dW*dW;
-  dW6 = 1./(dW6*dW6);
-  dW12 = dW6*dW6;
-
-  tmp1 = (a0/4.+ a1/12. + a2/24. + a3/24.)*dW6;
-  tmp2 = (a0/10.+ a1/90. + a2/720. + a3/5040.)*(-dW12);
-  tmp3 = (a0 - a1/3. + a2/12 - a3/60)/8.;
-  tmp4 = (a0 - a1 + a2/2. - a3/6.)*rmdw2*(-9.)/40.;
-  tmp5 = (a1 - a2 + a3/2)*rmdw3*(-2.)/9.;
-  tmp6 = (a2 - a3)*rmdw4*(-9.)/64.;
-  tmp7 = a3*(-3.)/35.*rmdw5;
-
-  I2 = tmp1+tmp2+tmp3+tmp4+tmp5+tmp6+tmp7;
-
-  F1 = 48.*nuw*(I1_12*dW12-I1_6*dW6 + I2)*beta;
-  FA = RPA(beta,nuw);
-
-
-  F = F0+F1+FA;
-
- return F;
+	return F;
 }
 
 
 double TCGFcalc::ZWCANum( double T,double ro )
- {
-  double delta = DELTA;
-  double a0,a1;
-  a1 = FWCA(T,ro*(1.+delta));
-  a0 = FWCA(T,ro);
-  return 1.+(a1-a0)/delta;
- }
+{
+	double delta = DELTA;
+	double a0,a1;
+	a1 = FWCA(T,ro*(1.+delta));
+	a0 = FWCA(T,ro);
+	return 1.+(a1-a0)/delta;
+}
 
 
 double TCGFcalc::UWCANum( double T,double ro )
- {
-  double delta = DELTA;
-  double a0,a1,beta0,beta1;
-  beta0 = 1./T;
-  beta1 = beta0*(1.+delta);
-  a1 = FWCA(1./beta1,ro);
-  a0 = FWCA(T,ro);
-  return (a1-a0)/(beta1-beta0);
- }
+{
+	double delta = DELTA;
+	double a0,a1,beta0,beta1;
+	beta0 = 1./T;
+	beta1 = beta0*(1.+delta);
+	a1 = FWCA(1./beta1,ro);
+	a0 = FWCA(T,ro);
+	return (a1-a0)/(beta1-beta0);
+}
 
 
 double TCGFcalc::FDipPair( double T,double ro,double m2 )
- {
-  double kappa,Z,U,beta,F;
-   kappa = m2*m2/(24.*T);
-   beta = 1./T;
-   Z = ZWCANum(T,ro);
-   U = UWCANum(T,ro);
-   F = kappa*(4.*beta*U-Z+1.);
-   return F;
- }
+{
+	double kappa,Z,U,beta,F;
+	kappa = m2*m2/(24.*T);
+	beta = 1./T;
+	Z = ZWCANum(T,ro);
+	U = UWCANum(T,ro);
+	F = kappa*(4.*beta*U-Z+1.);
+	return F;
+}
 
 
 double TCGFcalc::J6LJ( double T,double ro )
- {
-  double kappa,Z,U,beta,F;
-   beta = 1./T;
-   Z = ZWCANum(T,ro);
-   kappa = -16.*PI_1*ro*beta;
-   U = UWCANum(T,ro);
-   F = (4.*beta*U-Z+1.)/kappa;
-   return F;
- }
+{
+	double kappa,Z,U,beta,F;
+	beta = 1./T;
+	Z = ZWCANum(T,ro);
+	kappa = -16.*PI_1*ro*beta;
+	U = UWCANum(T,ro);
+	F = (4.*beta*U-Z+1.)/kappa;
+	return F;
+}
 
 
 double TCGFcalc::FTOTALMIX( double T_Real,double ro_Real,EOSPARAM* param )
-  {
-    double FF,A0,A2,A3,AP,A1;
-    // unsigned iall,inopol;
-    double emix,s3mix,rotmp,T2R;
-    double Jind,Jdp;
+{
+	double FF,A0,A2,A3,AP,A1;
+	// unsigned iall,inopol;
+	double emix,s3mix,rotmp,T2R;
+	double Jind,Jdp;
     long int /*itmp,jtmp,ktmp,*/ i,j,k;
     double s3tmp,mtmp,IK /*,atmp*/;
     double imtmp,jmtmp,iatmp,jatmp;
@@ -2507,7 +2462,7 @@ long int TSRKcalc::ExcessProp( double &Gex_, double &Vex_, double &Hex_, double 
     	Error( "E71IPM IPMgamma: ",  buf );
     }
 
-	// assigments
+	// assignments
 	Gex_ = DepPh[0];
 	Sex_ = DepPh[1];
 	Hex_ = DepPh[2];
@@ -2819,13 +2774,13 @@ long int TSRKcalc::FugacitySpec( double *fugpure )
 	// calculate properties of the mixture
 	iRet = MixParam( amix, bmix);
 	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix);
+	A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
+	B = bmix*Pbar/(R_CONST*Tk);
 
 	// calculate fugacity coefficient, fugacity and activity of species i
 	for (i=0; i<NComp; i++)
 	{
 		bi = Pureparm[i][1];
-		A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
-		B = bmix*Pbar/(R_CONST*Tk);
 		Bi = bi*Pbar/(R_CONST*Tk);
 
 		sum = 0.;
@@ -2854,8 +2809,8 @@ long int TSRKcalc::FugacitySpec( double *fugpure )
 long int TSRKcalc::DepartureFunct( double *fugpure )
 {
 	long int i, j, iRet=0;
-	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0., sum=0.;
-	double A, B, bi, Bi, lnfci, fci;
+	double fugmix=0., zmix=0., vmix=0., amix=0., bmix=0.;
+	double A, B;
 	double Gig, Hig, Sig, CPig, Gdep, Hdep, Sdep, CPdep;
 	double K, dK, d2K, Q, dQ, d2Q;
 	double damix, d2amix, ai, aj, dai, daj, d2ai, d2aj;
@@ -2870,32 +2825,8 @@ long int TSRKcalc::DepartureFunct( double *fugpure )
 	// calculate properties of the mixture
 	iRet = MixParam( amix, bmix);
 	iRet = FugacityMix( amix, bmix, fugmix, zmix, vmix);
-
-	// calculate fugacity coefficient, fugacity and activity of species i
-	for (i=0; i<NComp; i++)
-	{
-		bi = Pureparm[i][1];
-		A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
-		B = bmix*Pbar/(R_CONST*Tk);
-		Bi = bi*Pbar/(R_CONST*Tk);
-
-		sum = 0.;
-		for (j=0; j<NComp; j++)
-		{
-			sum = sum + x[j]*AA[i][j];
-		}
-
-		lnfci = Bi/B*(zmix-1.) - log(zmix-B)
-			+ A/B * ( Bi/B - 2./amix*sum ) * log(1.+B/zmix);
-		fci = exp(lnfci);
-		Fugci[i][0] = fci;  // fugacity coefficient using engineering convention
-		Fugci[i][1] = x[i]*fci;  // fugacity coefficient using geology convention
-		Fugci[i][2] = Fugci[i][1]/Fugpure[i][0];  // activity of species
-		if (x[i]>1.0e-20)
-			Fugci[i][3] = Fugci[i][2]/x[i];  // activity coefficient of species
-		else
-			Fugci[i][3] = 1.0;
-	}
+	A = amix*Pbar/(pow(R_CONST, 2.)*pow(Tk, 2.));
+	B = bmix*Pbar/(R_CONST*Tk);
 
 	// ideal gas changes from 1 bar to P (at T of interest)
 	Hig = 0.;
