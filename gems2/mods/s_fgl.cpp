@@ -76,6 +76,7 @@ void TPRSVcalc::alloc_internal()
     Pureparm = new double [NComp][4];
     Fugpure = new double [NComp][6];
     Fugci = new double [NComp][4];
+    DepPh = new double [5];
     KK = new double *[NComp];
     dKK = new double *[NComp];
     d2KK = new double *[NComp];
@@ -107,6 +108,7 @@ void TPRSVcalc::free_internal()
 	delete[]Pureparm;
 	delete[]Fugpure;
 	delete[]Fugci;
+	delete[]DepPh;
 	delete[]KK;
 	delete[]dKK;
 	delete[]d2KK;
@@ -632,6 +634,15 @@ long int TPRSVcalc::FugacitySpec( double *fugpure )
 }
 
 
+// calculates departure functions in the mixture
+long int TPRSVcalc::DepartureFunct( double *fugpure )
+{
+	// add departure function calculations
+
+	return 0;
+}
+
+
 #ifndef IPMGEMPLUGIN
 #include "s_tpwork.h"
 
@@ -790,6 +801,7 @@ void TCGFcalc::alloc_internal()
     FugCoefs =  0;
     EoSparam =  0;
     EoSparam1 = 0;
+    DepPh = new double [5];
 }
 
 
@@ -802,6 +814,7 @@ void TCGFcalc::free_internal()
 	if( FugCoefs )  delete[]FugCoefs;
 	if( EoSparam )  delete[]EoSparam;
 	if( EoSparam1 ) delete[]EoSparam1;
+	if (DepPh)	delete[]DepPh;
 }
 
 
@@ -2261,6 +2274,7 @@ void TSRKcalc::alloc_internal()
 	Pureparm = new double [NComp][4];
 	Fugpure = new double [NComp][6];
 	Fugci = new double [NComp][4];
+	DepPh = new double [5];
 	KK = new double *[NComp];
 	dKK = new double *[NComp];
 	d2KK = new double *[NComp];
@@ -2292,6 +2306,7 @@ void TSRKcalc::free_internal()
 	delete[]Pureparm;
 	delete[]Fugpure;
 	delete[]Fugci;
+	delete[]DepPh;
 	delete[]KK;
 	delete[]dKK;
 	delete[]d2KK;
@@ -2786,6 +2801,15 @@ long int TSRKcalc::FugacitySpec( double *fugpure )
 	CPdep = cv + Tk*dPdT*dVdT - R_CONST;
 
 	return iRet;
+}
+
+
+// calculates departure functions in the mixture
+long int TSRKcalc::DepartureFunct ( double *fugpure )
+{
+	// add departure function calculations
+
+	return 0;
 }
 
 
