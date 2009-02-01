@@ -1240,7 +1240,8 @@ long int TEUNIQUAC::PTparam()
 long int TEUNIQUAC::MixMod()
 {
 	int j, i, l, k, w;
-	double Mw, Xw, IS, A, b;
+	double Mw, Xw, IS, b, c;
+	double A, dAdT, dAdP, d2AdT2;
 	double RR, QQ, K, L, M, N;
 	double gamDH, gamC, gamR, lnGam, Gam;
 	double gE, hE, sE, cpE, vE, gDH, gC, gR;
@@ -1249,8 +1250,10 @@ long int TEUNIQUAC::MixMod()
 	w = NComp - 1;
 
 	// calculation of DH parameters
-	A = 1.131 + (1.335e-3)*(Tk-273.15) + (1.164e-5)*pow( (Tk-273.15), 2.);
 	b = 1.5;
+	c = 1.3287e-5;
+	// A = c*sqrt(RhoW)/pow((EpsW*Tk),1.5);
+	A = 1.131 + (1.335e-3)*(Tk-273.15) + (1.164e-5)*pow( (Tk-273.15), 2.);  // valid only for temperatures below 200 deg. C and Psat
 
 	// calculation of ionic strength
 	IS = 0.0;
