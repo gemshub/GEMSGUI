@@ -1,6 +1,6 @@
 %define	name	gems
-%define	version	2.2.4
-%define	release	rc7
+%define	version	2.3.0
+%define	release	rc8
 %define install_dir /usr
 %define shared_dir %{install_dir}/share
 %define shared_src_dir shared
@@ -24,8 +24,10 @@ Url:		http://gems.web.psi.ch/
 
 %description
 This program calculates complex geochemical equilibria
-and helps preparing consistent thermodynamic databases
-
+and helps in preparing consistent thermodynamic databases.
+The code is developed jointly at PSI LES and ETHZ IGMR,
+Switzerland. The code is available free of charge for 
+non-profit academic research.
 %prep
 
 %setup

@@ -19,14 +19,14 @@ was successful):
 2. To update the GEMS source code tree:
 
   cd work/gems2
-#  setenv CVS_RSH ssh (optional)
   svn update <password> 
 
 3. Build the GEMS executable file: 
 
+  qmake gems_qt.pro
   make
 
-This will create an executable of debugging version of 
+This will create an executable of the debugging version of 
 GEMS-PSI (*gems2) in .~/work/gems2 subdirectory
 
 4. Check that the actual distribution directories 
@@ -47,7 +47,7 @@ This will refresh the configuration files.
 
 It makes sense to re-read configuration files before 
 producing the rpm package. This needs a graphic desktop
-(KDE) running, either native or virtual.
+(KDE) running.
 
 To run debugging version of GEMS, type in the terminal:
   
@@ -59,19 +59,23 @@ files are now re-created.
 
 5. To produce a distribution rpm of GEMS-PSI release:
 
-open a terminal and type su <root password>
+create makefile for release version:
+
+qmake gems_release.pro
+
+open another terminal and type su <root password>
 
 #   make rpm
     make -f Makefile.lin rpm
 
-# then you will be prompted to enter the root password. 
+#  you may also be prompted to enter the root password. 
 
 This process takes some time. When finished, 
-the distribution package gems-2.1.2-rc3.i586.rpm
+the distribution package gems-2.3.0-rc8.i586.rpm
 can be copied from /usr/src/packages/RPMS/i586/. 
 
 Alternatively (on 64bit Linux), 
-the distribution package gems-2.1.2-rc3.x86-64.rpm
+the distribution package gems-2.3.0-rc8.x86-64.rpm
 can be copied from /usr/src/packages/RPMS/x86-64/. 
 
 6. For installation steps, see INSTALL-linux.txt

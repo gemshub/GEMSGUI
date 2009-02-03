@@ -13,4 +13,6 @@ out
 *.rpo
 tmp.moc.cpp
 CVS
+SVN
 gems2.app
+.svn
