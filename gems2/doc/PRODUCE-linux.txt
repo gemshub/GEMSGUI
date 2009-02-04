@@ -52,7 +52,7 @@ producing the rpm package. This needs a graphic desktop
 To run debugging version of GEMS, type in the terminal:
   
  cd work/gems2
- ./rungems.sh -d [-s ./shared -u ./shared]
+ ./rungems.sh -d $@ [-s ./shared -u ./shared]
 
 After GEMS-PSI has started, close it. The configuration
 files are now re-created.  
