@@ -100,6 +100,19 @@ TProfil::TProfil( TMulti* amulti )
     pmp = multi->GetPM();
 }
 
+// test result GEM IPM calculation of equilibrium state in MULTI
+long int TProfil::testMulti(  )
+{
+  if( pmp->MK || pmp->PZ )	
+  {
+   fstream f_log("ipmlog.txt", ios::out|ios::app );
+   f_log << "Warning " << pmp->stkey << " " <<
+   pmp->errorCode << ": " << pmp->errorBuf << endl;
+   return 1L;	  
+  }
+  return 0L	;  
+}
+
 // GEM IPM calculation of equilibrium state in MULTI
 // Modified on 10.09.2007 to return elapsed GEMIPM2 runtime in seconds
 // Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations
@@ -111,6 +124,7 @@ double TProfil::calcMulti( long int& RefinLoops_, long int& NumIterFIA_, long in
     pmp = multi->GetPM();
     pmp->t_start = clock();
     pmp->t_end = pmp->t_start;
+
 //    multi->MultiCalcInit( 0 );
     pmp->ITF = pmp->ITG = 0;  
 FORCED_AIA:
@@ -126,12 +140,9 @@ FORCED_AIA:
     {
     	multi->MultiCalcIterations( -1 );
     }
-    if( pmp->MK == 2 )
-    {
-    	pmp->pNP = 0; 
-    	pmp->MK = 0;
-    	goto FORCED_AIA;  // Trying again with AIA set after bad PIA 
-    }    
+    if( pmp->MK || pmp->PZ ) // no good solution
+    	goto FINISHED;    
+
     RefinLoops_ = pmp->W1 + pmp->K2 - 1; // Prec.ref. + Selekt2() loops
     NumIterFIA_ = pmp->ITF;
     NumIterIPM_ = pmp->ITG;
@@ -151,6 +162,9 @@ ITstart = 10,        TotIT = pmp->IT;  //  ITold = pmp->IT,
           }
           TotIT += pmp->IT - ITstart;
           TotW1 += pmp->W1+pmp->K2-1; 
+          if( pmp->MK || pmp->PZ ) // no good solution
+            break;	 // goto FINISHED;
+          	
        }  // end pp loop
        
        pmp->pNP = pNPo;
@@ -160,8 +174,33 @@ ITstart = 10,        TotIT = pmp->IT;  //  ITold = pmp->IT,
        NumIterFIA_ = pmp->ITF;  //   TotITF;
        NumIterIPM_ = pmp->ITG;  //   TotITG;
     }       
-pmp->t_end = clock();
-pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
+
+FINISHED:    
+
+	if( pmp->MK == 2 )
+	{	if( pmp->pNP )
+         {
+    	    pmp->pNP = 0; 
+    	    pmp->MK = 0;
+    	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA 
+         }    
+    	else
+    		Error( pmp->errorCode ,pmp->errorBuf );	
+	}
+    if( pmp->MK || pmp->PZ ) // no good solution
+    {
+//cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;
+    }	
+    else // only test 30/01/2009 SD
+    {	int iB = multi->CheckMassBalanceResiduals( pmp->X );
+    	if( iB >= 0 )
+    	{	
+    	   	    Error( "Point1  -  After Finish calculation",pmp->errorBuf );
+    	}	
+ 	
+    }
+    pmp->t_end = clock();
+    pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
 return pmp->t_elap_sec;
 }
 
@@ -182,7 +221,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 
 	ff.writeArray( arr, 10 );
     ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff, path );
+    multi->to_file( ff );
 }
 
 void TProfil::outMultiTxt( const char *path  )
@@ -334,9 +373,10 @@ void TMulti::CompG0Load()
 // GEM IPM calculation of equilibrium state in MULTI
 void TMulti::MultiCalcInit( const char* key )
 {
-  long int  j,k, jb, je=0;;
+  long int  j;
+
   SPP_SETTING *pa = &TProfil::pm->pa;
-    strncpy( pmp->stkey, key, EQ_RKLEN );  // needed for the ipmlog error diagnostics
+   // SD 09/03/09 strncpy( pmp->stkey, key, EQ_RKLEN );  // needed for the ipmlog error diagnostics
     pmp->Ec = pmp->K2 = pmp->MK = 0;
     pmp->PZ = pa->p.DW; // IPM-2 default
     pmp->W1 = 0;
@@ -347,7 +387,11 @@ void TMulti::MultiCalcInit( const char* key )
     pmp->lowPosNum = pa->p.DcMin;
     pmp->logXw = -16.;
     pmp->logYFk = -9.;
-//    pmp->FitVar[4] = pa->p.AG;
+//    pmp->YFk = 0.;   // SD 05/02/2009
+//    pmp->Yw = 0.;   // SD 05/02/2009
+//    pmp->FitVar[3] = 1.0;  // SD 05/02/2009 
+//    pmp->FitVar[4] = pa->p.AG; // SD 05/02/2009
+
     pmp->FitVar[0] = 0.0640000030398369; // pa->aqPar[0]; setting T,P dependent b_gamma parameters 
 
     pmp->DX = pa->p.DK;
@@ -525,7 +569,7 @@ char  (* f_getfiles(const char *f_name, char *Path,
 // Get path
    gstring path_;
    gstring flst_name = f_name;
-   long int pos = flst_name.rfind("/");
+   unsigned long int pos = flst_name.rfind("/");
    path_ = "";
    if( pos < npos )
       path_ = flst_name.substr(0, pos+1);

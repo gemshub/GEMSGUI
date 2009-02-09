@@ -143,10 +143,10 @@ void TDualTh::calc_eqstat()
     sprintf(buf, "%.3d", dtp->c_NV);
     memset( dtp->NVp, 0, 4 );
     strncpy( dtp->NVp, buf, 3 );
-    gcvt( dtp->cT, 6, dtp->TCp );
-    gcvt( dtp->cP, 6, dtp->Pp );
-    gcvt( dtp->cV, 6, dtp->Bnamep );
-
+    Gcvt( dtp->cT, 6, dtp->TCp );
+    Gcvt( dtp->cP, 6, dtp->Pp );
+    Gcvt( dtp->cV, 6, dtp->Bnamep );
+ 
    rt[RT_SYSEQ].MakeKey( RT_DUALTH,  dtp->sykey, RT_DUALTH, 0, RT_DUALTH,1,
          RT_DUALTH, 2, K_IMM, dtp->timep, K_IMM, dtp->Bnamep,
          K_IMM, dtp->Pp, K_IMM, dtp->TCp, K_IMM, dtp->NVp, K_END );
@@ -167,7 +167,8 @@ void TDualTh::build_Ub()
  double RT/* = 2479.*/;
 
  dt_initiate( false );
-
+ showMss = 1L;
+ 
  for( ii=0; ii<dtp->nQ; ii++)
  {
    dtp->q = ii;

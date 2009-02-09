@@ -205,6 +205,7 @@ void TMulti::set_def( long int /*q*/)
         pm.lnSAC = 0;
         pm.B     = 0;
         pm.U     = 0;
+        pm.Uc     = 0;
         pm.U_r   = 0;
         pm.C     = 0;
         pm.IC_m  = 0;
@@ -223,6 +224,7 @@ void TMulti::set_def( long int /*q*/)
         pm.X     = 0;
         pm.Y     = 0;
         pm.XY    = 0;
+        pm.XU    = 0;
         pm.Qp    = 0;
         pm.Qd    = 0;
         pm.MU    = 0;
@@ -268,7 +270,7 @@ pm.ITF = pm.ITG = 0;
 
 //---------------------------------------------------------//
 // writing MULTI to binary file
-void TMulti::to_file( GemDataStream& ff, gstring& path  )
+void TMulti::to_file( GemDataStream& ff  )
 {
    if( pm.N < 2 || pm.L < 2 || pm.FI < 1 )
         Error( GetName(), "pm.N < 2 || pm.L < 2 || pm.FI < 1" );
@@ -484,17 +486,6 @@ ff.writeArray((double*)pm.D, MST*MST);
 //     ff.writeArray( pm.sitXcat, pm.sitNcat );
 //   if( pm.sitNan )
 //     ff.writeArray( pm.sitXan, pm.sitNan );
-
-/*   gstring Path_ = path;
-     gstring dir;
-     gstring name;
-     gstring ext;
-
-     u_splitpath( Path_, dir, name, ext );
-     Path_ = u_makepath( dir, name, "txt" );
-
-     to_text_file( path.c_str() );
-*/
 }
 
 // reading MULTI from binary file
@@ -1178,6 +1169,14 @@ else
 
  }
  
+ // added SD 03/02/2009
+ pm.XU = new double[pm.L];
+ for( ii=0; ii<pm.L; ii++ )
+ 	  pm.XU[ii] = 0.;
+ pm.Uc = new double[pm.N];
+  for( ii=0; ii<pm.N; ii++ )
+  	  pm.Uc[ii] = 0.;
+
  Alloc_TSolMod( pm.FIs );
 
 //  Added 16.11.2004 by Sveta
@@ -1342,6 +1341,10 @@ if( pm.D ) delete[] pm.D;
    if( pm.Qp ) delete[] pm.Qp;
    if( pm.Qd ) delete[] pm.Qd;
 
+   // added SD 03/02/2009
+    if( pm.XU ) delete[] pm.XU;
+    if( pm.Uc ) delete[] pm.Uc;
+
 //  Added 16.11.2004 by Sveta
 //    if( pm.sitE )     delete[] pm.sitE;
 //    if( pm.sitXcat )  delete[] pm.sitXcat;
@@ -1386,6 +1389,8 @@ void TMulti::to_text_file( const char *path )
   prar.writeArray(  "Double_Const",  &pm.TC, 55 );
   prar.writeArray(  "EpsW", &EpsW, 1);
   prar.writeArray(  "RoW", &RoW, 1);
+  ff << endl << "Error Code " << pm.errorCode << endl;
+  ff << "Error Message" << pm.errorBuf << endl;
 
    //dynamic values
 
@@ -1411,6 +1416,7 @@ void TMulti::to_text_file( const char *path )
   prar.writeArray(  "lnGmo", pm.lnGmo,  pm.L);
   prar.writeArray(  "B", pm.B,  pm.N);
   prar.writeArray(  "U", pm.U,  pm.N);
+  prar.writeArray(  "Uc", pm.Uc,  pm.N);
   prar.writeArray(  "U_r", pm.U_r,  pm.N);
   prar.writeArray(  "C", pm.C,  pm.N);
   prar.writeArray(  "XF", pm.XF,  pm.FI);
@@ -1419,6 +1425,7 @@ void TMulti::to_text_file( const char *path )
   prar.writeArray(  "X", pm.X,  pm.L);
   prar.writeArray(  "Y", pm.Y,  pm.L);
   prar.writeArray(  "XY", pm.XY,  pm.L);
+  prar.writeArray(  "XU", pm.XU,  pm.L);
   prar.writeArray(  "MU", pm.MU,  pm.L);
   prar.writeArray(  "EMU", pm.EMU,  pm.L);
   prar.writeArray(  "NMU", pm.NMU,  pm.L);
@@ -1514,7 +1521,7 @@ void TMulti::to_text_file( const char *path )
      prar.writeArray(  "Xetaf", &pm.Xetaf[0][0], pm.FIs*pm.FIat);
      prar.writeArray(  "XetaA", &pm.XetaA[0][0],  pm.FIs*pm.FIat);
      prar.writeArray(  "XetaB", &pm.XetaB[0][0],  pm.FIs*pm.FIat);
-prar.writeArray(  "XetaD", &pm.XetaD[0][0],  pm.FIs*pm.FIat);   // added 12.09.05 KD
+     prar.writeArray(  "XetaD", &pm.XetaD[0][0],  pm.FIs*pm.FIat);   
      prar.writeArray(  "XFTS", &pm.XFTS[0][0],  pm.FIs*pm.FIat);
 
      prar.writeArray(  "SATX", &pm.SATX[0][0], pm.Lads*4);

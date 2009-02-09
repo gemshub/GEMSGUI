@@ -325,7 +325,7 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
 {
     ff.writeArray( &pa.p.PC, 10 );
     ff.writeArray( &pa.p.DG, 28 );
-    multi->to_file( ff, path );
+    multi->to_file( ff/*, path*/ );
 }
 
 // outpu MULTI to txt format
@@ -606,6 +606,36 @@ bool TProfil::rCopyFilterProfile( const char * prfName )
     return true;
 }
 
+long int showMss = 1L;
+// test result GEM IPM calculation of equilibrium state in MULTI
+long int TProfil::testMulti()
+{
+  if( pmp->MK || pmp->PZ )	
+  {
+   fstream f_log("ipmlog.txt", ios::out|ios::app );
+   f_log << "Warning " << pmp->stkey << " " <<
+   pmp->errorCode << ": " << pmp->errorBuf << endl;
+   if( showMss )
+   {	   
+	   multi->addErrorMessage(" \nContinue?");
+      switch( vfQuestion3(0, pmp->errorCode, pmp->errorBuf,
+                           "&Yes", "&No", "&Yes to All" ))
+       {
+       case VF3_3:
+    	   showMss=0l;
+       case VF3_1:
+           break;
+       case VF3_2:
+    	   Error(pmp->errorCode, pmp->errorBuf);
+       }
+   }
+  
+   return 1L;	  
+  }
+
+  return 0L	;  
+}
+
 // GEM IPM calculation of equilibrium state in MULTI
 // Modified on 10.09.2007 to return elapsed GEMIPM runtime in seconds
 // Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations 
@@ -640,13 +670,9 @@ FORCED_AIA:
    {
 	   multi->MultiCalcIterations( -1 );
    }
-   if( pmp->MK == 2 )
-   {
-	   pmp->pNP = 0; 
-	   pmp->MK = 0;
-	   goto FORCED_AIA;  // Trying again with AIA set after bad PIA 
-   }
-   
+if( pmp->MK || pmp->PZ ) // no good solution
+   	goto FINISHED;    
+  
 NumPrecLoops = pmp->W1+pmp->K2-1; 
 NumIterFIA = pmp->ITF;
 NumIterIPM = pmp->ITG;
@@ -666,7 +692,9 @@ ITstart = 10,        TotIT = pmp->IT;   // ITold = pmp->IT,
          }
          TotIT += pmp->IT - ITstart;
          TotW1 += pmp->W1+pmp->K2-1; 
-      } // end pp loop
+         if( pmp->MK || pmp->PZ ) // no good solution
+             break;
+       } // end pp loop
       
       pmp->pNP = pNPo;
       pmp->IT = TotIT; // ITold;         
@@ -676,6 +704,24 @@ ITstart = 10,        TotIT = pmp->IT;   // ITold = pmp->IT,
       NumIterIPM = pmp->ITG;  
    }       
        
+FINISHED:    
+
+   	if( pmp->MK == 2 )
+   	{	if( pmp->pNP )
+            {
+       	    pmp->pNP = 0; 
+       	    pmp->MK = 0;
+       	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA 
+            }    
+       	else
+       		Error( pmp->errorCode ,pmp->errorBuf );	
+   	}
+
+   if( pmp->MK || pmp->PZ ) // no good solution
+   {
+    	 testMulti();
+   //cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;
+   }	
 pmp->t_end = clock();
 pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
   calcFinished = true;

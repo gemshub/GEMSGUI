@@ -226,6 +226,8 @@ aObj[ o_wi_lsmod ].SetDim( pm.FIs, 3 ); // 3 columns
     aObj[ o_wi_b ].SetDim( pm.N, 1 );
     aObj[ o_wo_u].SetPtr( pm.U );
     aObj[ o_wo_u ].SetDim( pm.N, 1 );
+    aObj[ o_wd_uc].SetPtr( pm.Uc );
+    aObj[ o_wd_uc ].SetDim( pm.N, 1 );
     aObj[ o_wd_ur].SetPtr( pm.U_r );
     aObj[ o_wd_ur ].SetDim( pm.N, 1 );
     aObj[ o_wo_c].SetPtr( pm.C );
@@ -270,6 +272,8 @@ aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
     aObj[ o_wo_y ].SetDim( pm.L, 1 );
     aObj[ o_w_xy].SetPtr( pm.XY );
     aObj[ o_w_xy ].SetDim( pm.L, 1 );
+    aObj[ o_w_xu].SetPtr( pm.XU );
+    aObj[ o_w_xu ].SetDim( pm.L, 1 );
     aObj[ o_wi_qp].SetPtr( pm.Qp );        // aObj[ o_wi_qp ].SetDim( pm., 1 );
     aObj[ o_wi_qd].SetPtr( pm.Qd );        // aObj[ o_wi_qd ].SetDim( pm., 1 );
     aObj[ o_wo_mu].SetPtr( pm.MU );
@@ -452,6 +456,7 @@ void TMulti::dyn_set(int /*q*/)
 //    pm.lnSAT = (double *)aObj[ o_wo_lnsat ].GetPtr();
     pm.B     = (double *)aObj[ o_wi_b ].GetPtr();
     pm.U     = (double *)aObj[ o_wo_u ].GetPtr();
+    pm.Uc   = (double *)aObj[ o_wd_uc ].GetPtr();
     pm.U_r   = (double *)aObj[ o_wd_ur ].GetPtr();
     pm.C     = (double *)aObj[ o_wo_c ].GetPtr();
     pm.IC_m  = (double *)aObj[ o_wd_icm ].GetPtr();
@@ -470,6 +475,7 @@ void TMulti::dyn_set(int /*q*/)
     pm.X     = (double *)aObj[ o_w_x ].GetPtr();
     pm.Y     = (double *)aObj[ o_wo_y ].GetPtr();
     pm.XY    = (double *)aObj[ o_w_xy ].GetPtr();
+    pm.XU    = (double *)aObj[ o_w_xu ].GetPtr();
     pm.Qp    = (double *)aObj[ o_wi_qp ].GetPtr();
     pm.Qd    = (double *)aObj[ o_wi_qd ].GetPtr();
     pm.MU    = (double *)aObj[ o_wo_mu ].GetPtr();
@@ -592,6 +598,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.lnSAC = (double (*)[4])aObj[ o_wo_lnsat ].Free();
     pm.B     = (double *)aObj[ o_wi_b ].Free();
     pm.U     = (double *)aObj[ o_wo_u ].Free();
+    pm.Uc   = (double *)aObj[ o_wd_uc ].Free();
     pm.U_r   = (double *)aObj[ o_wd_ur ].Free();
     pm.C     = (double *)aObj[ o_wo_c ].Free();
     pm.IC_m  = (double *)aObj[ o_wd_icm ].Free();
@@ -610,6 +617,7 @@ void TMulti::dyn_kill(int /*q*/)
     pm.X     = (double *)aObj[ o_w_x ].Free();
     pm.Y     = (double *)aObj[ o_wo_y ].Free();
     pm.XY    = (double *)aObj[ o_w_xy ].Free();
+    pm.XU    = (double *)aObj[ o_w_xu ].Free();
     pm.Qp    = (double *)aObj[ o_wi_qp ].Free();
     pm.Qd    = (double *)aObj[ o_wi_qd ].Free();
     pm.MU    = (double *)aObj[ o_wo_mu ].Free();
@@ -698,6 +706,7 @@ void TMulti::dyn_new(int /*q*/)
     pm.lnGmo = (double *)aObj[ o_w_lngmo].Alloc( pm.L, 1, D_);
     pm.B = (double *)aObj[ o_wi_b].Alloc( pm.N, 1, D_ );
     pm.U = (double *)aObj[ o_wo_u].Alloc( pm.N, 1, D_ );
+    pm.Uc = (double *)aObj[ o_wd_uc].Alloc( pm.N, 1, D_ );
     pm.U_r = (double *)aObj[ o_wd_ur].Alloc( pm.N, 1, D_ );
     pm.C = (double *)aObj[ o_wo_c].Alloc( pm.N, 1, D_ );
     pm.XF = (double *)aObj[ o_w_xf].Alloc( pm.FI, 1, D_ );
@@ -706,6 +715,7 @@ void TMulti::dyn_new(int /*q*/)
     pm.X = (double *)aObj[ o_w_x].Alloc( pm.L, 1, D_);
     pm.Y = (double *)aObj[ o_wo_y].Alloc( pm.L, 1, D_);
     pm.XY = (double *)aObj[ o_w_xy].Alloc( pm.L, 1, D_);
+    pm.XU = (double *)aObj[ o_w_xu].Alloc( pm.L, 1, D_);
     pm.MU = (double *)aObj[ o_wo_mu].Alloc( pm.L, 1, D_);
     pm.EMU = (double *)aObj[ o_w_emu].Alloc( pm.L, 1, D_);
     pm.NMU = (double *)aObj[ o_w_nmu].Alloc( pm.L, 1, D_);

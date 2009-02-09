@@ -349,9 +349,9 @@ void TGEM2MT::calc_eqstat()
     sprintf(buf, "%.3d", mtp->cnv);
     memset( mtp->NVp, 0, 4 );
     strncpy( mtp->NVp, buf, 3 );
-    gcvt( mtp->cT, 6, mtp->TCp );
-    gcvt( mtp->cP, 6, mtp->Pp );
-    gcvt( mtp->cV, 6, mtp->Bnamep );
+    Gcvt( mtp->cT, 6, mtp->TCp );
+    Gcvt( mtp->cP, 6, mtp->Pp );
+    Gcvt( mtp->cV, 6, mtp->Bnamep );
 
    rt[RT_SYSEQ].MakeKey( RT_GEM2MT,  mtp->sykey, RT_GEM2MT, 0, RT_GEM2MT,1,
          RT_GEM2MT, 2, K_IMM, mtp->timep, K_IMM, mtp->Bnamep,
@@ -576,6 +576,7 @@ void TGEM2MT::outMulti()
      mtp->Tval, mtp->Pval,
      mtp->nTai,  mtp->nPai, mtp->Tai[3], mtp->Pai[3]  );
 
+   showMss = 1L;
    for( mtp->kv = 0; mtp->kv < mtp->nIV; mtp->kv++ )
    {
      pVisor->Message( window(), GetName(),

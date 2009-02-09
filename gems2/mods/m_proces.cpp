@@ -1107,6 +1107,7 @@ TProcess::RecCalc( const char *key )
     TProfil* PRof = (TProfil*)(&aMod[RT_PARAM]);
     TProfil::pm->userCancel = false;
     TProfil::pm->stepWise = false;
+    showMss = 1L;
 
     if( pVisor->ProfileMode != true )
         Error( GetName(), "E02PEexec: Please, do it in the Project mode!" );

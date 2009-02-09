@@ -32,7 +32,8 @@ public:
 	error.title = "";
 	error.mess = "";
 	try {
-    	    TProfil::pm->CalcEqstat(false);
+		showMss = 1L;    
+		TProfil::pm->CalcEqstat(false);
 	}
 	catch( TError& err ) {
 	    error = err;

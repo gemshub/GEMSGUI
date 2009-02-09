@@ -727,18 +727,16 @@ FORCED_AIA:
     {
     	multi->MultiCalcIterations(-1 );    // Calling main IPM2 sequence
     }
-    if( pmp->MK == 2 )
-    {
-        pmp->pNP = 0;
-        pmp->MK = 0;
-        goto FORCED_AIA;  // Trying again with AIA set after bad PIA
-    }
-        //    else //Show results   //if( wn[W_EQCALC].status )
-    // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
-
     int NumPrecLoops = pmp->W1+pmp->K2-1;
     int NumIterFIA = pmp->ITF;
     int NumIterIPM = pmp->ITG;
+
+    if( pmp->MK || pmp->PZ ) // no good solution
+    	goto FINISHED;    
+
+        //    else //Show results   //if( wn[W_EQCALC].status )
+    // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
+
     pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
 
     if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
@@ -755,6 +753,8 @@ ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
           }
           TotIT += pmp->IT - ITstart;
           TotW1 += pmp->W1+pmp->K2-1;
+          if( pmp->MK || pmp->PZ ) // no good solution
+          	break;    
        } // end pp loop
 
        pmp->pNP = pNPo;
@@ -764,8 +764,23 @@ ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
        NumIterFIA = pmp->ITF;
        NumIterIPM = pmp->ITG;
     }
+FINISHED:    
+  	if( pmp->MK == 2 )
+   	{	if( pmp->pNP )
+             {
+        	    pmp->pNP = 0; 
+        	    pmp->MK = 0;
+        	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA 
+             }    
+        	else
+        		Error( pmp->errorCode ,pmp->errorBuf );	
+   	}
+   if( pmp->MK || pmp->PZ ) // no good solution
+   {
+  	 testMulti( );
+    //cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;
+   }	
     calcFinished = true;
-
     pmp->t_end = clock();
     pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
 //nmt    pVisor->Update();

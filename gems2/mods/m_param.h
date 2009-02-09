@@ -34,6 +34,8 @@ class GemDataStream;
 // Physical constants - see m_param.cpp
 extern const double R_CONSTANT, NA_CONSTANT, F_CONSTANT,
     e_CONSTANT,k_CONSTANT, cal_to_J, C_to_K, lg_to_ln, ln_to_lg;
+extern long int showMss;
+
 //
 
 struct BASE_PARAM
@@ -278,6 +280,8 @@ double CalcEqstat( bool show_progress=true );
    void outMultiTxt( const char *path  );
    void readMulti( GemDataStream& ff );
    double calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM );
+   long int testMulti();
+
 };
 
 /* Work codes of surface site types in pm->AtNdx vector (compatibility with old-style SCMs *

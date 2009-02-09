@@ -320,7 +320,8 @@ TVisorImp::CalcMulti()
 
     try
     {
-        TProfil::pm->CalcEqstat();
+    	showMss = 1L;
+    	TProfil::pm->CalcEqstat();
     }
     catch( TError& xcpt )
     {
