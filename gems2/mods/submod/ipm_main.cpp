@@ -54,7 +54,10 @@ fstream f_log("ipmlog.txt", ios::out|ios::app );
     pmp->W1=0; pmp->K2=0;               // internal counters 
     pmp->Ec = pmp->MK = pmp->PZ = 0;    // Return codes
     setErrorMessage( 0, "" , "");  // empty error info
-
+    if( TProfil::pm->pa.p.PLLG == 0 )  // SD 10/02/2009
+    	TProfil::pm->pa.p.PLLG = 32000;
+    	
+    
     if( pmp->pULR && pmp->PLIM )
         Set_DC_limits( DC_LIM_INIT );
 
@@ -671,7 +674,7 @@ long int TMulti::InteriorPointsMethod( long int &status, long int rLoop )
           for(J=0;J<pmp->N;J++)
           {  
       		 char buf[200]; 
-          	  if( fabs(pmp->U[J]-pmp->Uc[J] ) > 500. ) // broken dual solution
+          	  if( fabs(pmp->U[J]-pmp->Uc[J] ) > (double)(TProfil::pm->pa.p.PLLG)/*500.*/ ) // broken dual solution
         	  {
         	     if( pmp->Ec != 14 )
         	     { sprintf( buf, "Dual solution (vector u) has changed too much "
