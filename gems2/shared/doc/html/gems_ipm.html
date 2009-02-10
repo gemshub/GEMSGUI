@@ -390,26 +390,31 @@ versions of the program. &nbsp;</dd>
   <dd><br>
   </dd>
   <dt> <a name="Pa_DPV_0"></a><big><big><b><tt>Pa_DPV[0]</tt></b></big></big>
-- Maximal number of iterations in FIADE() procedure { 100 }</dt>
+- Maximal number of iterations in EntryFeasibleDomain() procedure { 100
+}</dt>
   <dd> &nbsp;</dd>
-  <dd>This control defines a number of FIADE() iterations that, when
+  <dd>This control defines a maximum number of EFD() iterations that,
+when
 reached, declares that the procedure did not converge and the IPM
 feasible domain cannot be entered at the requested mass balance
 precision as defined in the <a href="#Pa_DHB"><tt>Pa_DHB</tt></a>
-(DHBM) thresholds. 95 % of systems require 1 to 6 iterations. <br>
+(DHBM) thresholds. 95 % of chemical systems require 1 to 6 iterations,
+some need 300 or more. <br>
   </dd>
   <dd>&nbsp;<br>
   </dd>
-  <dd>Possible values: 10 to 200, recommended value: 144, default
+  <dd>Possible values: 10 to 200, recommended value: 150, default
 value: 100.&nbsp;</dd>
   <dd>&nbsp;&nbsp; &nbsp;</dd>
   <dd>&nbsp;<br>
   </dd>
   <dt> <a name="Pa_DPV_1"></a><big><b><big><tt>Pa_DPV[1]</tt></big></b></big>
-- Maximum number of allowed IPM-2 precision enhancement loops { 15 }</dt>
+- Maximum number of allowed IPM-2 balance precision improvement loops {
+15 }</dt>
   <dd> <br>
   </dd>
-  <dd>This control defines &nbsp;how many loops of IPM-2 precision
+  <dd>This control defines &nbsp;how many loops of IPM-2 mass balance
+precision
 improvement can be executed. Possible values:&nbsp;</dd>
 </dl>
 <blockquote>
@@ -445,8 +450,8 @@ than DHBM * 10^-2 will be replaced with the DualT-calculated values.</dd>
   <dd>&nbsp; &nbsp;<br>
   </dd>
   <dt> <a name="Pa_LLG"></a><big><big><b><tt>Pa_LLG</tt></b></big></big>
-- IPM-2 mode of restoration of primal x vector elements using the dual
-vector u { 0 }</dt>
+- IPM-2 tolerance for checking change in dual solution among refinement
+loops { 0 to 1000 }</dt>
   <dd>&nbsp; <br>
   </dd>
   <dd>Possible values: <br>
@@ -454,16 +459,20 @@ vector u { 0 }</dt>
 </dl>
 <blockquote>
   <dl>
-    <dd> 0 - restore mole quantities of all species whose mole
-quantities in x vector less than DHBM * 10^<tt>Pa_DPV[2]</tt>;</dd>
-    <dd>1 - restore species of trace IC only (i.e. with stoichiometries
-containing at least one independent component with <i>b<sub>i</sub></i>
-&lt; DHBM) according to cutoff exponent in <a href="#Pa_DPV_2"><tt>Pa_DPV[2]</tt></a>.&nbsp;
-&nbsp;</dd>
+    <dd> 0 - no check (is set internally to 32000 units to retain
+compatibility with older projects created ib GEMS v.2.2.4 or earlier)</dd>
+    <dd>1 to 1000 - if an element of the dual solution vector u has
+changed in the magnitude more than in Pa_LLG units (of dimensionless
+chemical potential) between refinement loops then the alert condition
+is raised. In SIA mode, this will cause the calculation of this
+equilibrium in AIA (simplex) mode. In the AIA mode, the warning W14IPM
+will be generated.&nbsp; &nbsp; <br>
+    </dd>
   </dl>
 </blockquote>
 <dl>
-  <dd>Default mode: 0</dd>
+  <dd>Default value: 0 (32000). <br>
+  </dd>
   <dd>&nbsp;&nbsp;</dd>
   <dd><br>
   </dd>

@@ -20,7 +20,8 @@ struct BASE_PARAM
     DW     MultiCalcMain            0 - 15         // IPM-2 balance precision refinement mode: 0- disable >=1  - enable (number of loops, default 15)
             
     DT     Mol_u()                                 // Exponent for retrieving x_j from dual solution {-5 to +2, default 0}
-??  PLLG   Mol_u()                  0 - !0         // Method of retrieval of x_j from dual solution (????????) { 0 1 }
+
+    PLLG   MultiCalcMain()          0 to 32000     // Tolerance for checking change in dual solution in refinement loops { 0 to 1000, default 0 - no check }
    
     PE     ( pmp->E = pa->p.PE )                   // Include electroneutrality condition? { 0 1 }
               see below
