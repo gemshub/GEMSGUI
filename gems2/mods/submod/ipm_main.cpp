@@ -699,14 +699,6 @@ long int TMulti::InteriorPointsMethod( long int &status, long int rLoop )
           }
         }
 
-#ifndef IPMGEMPLUGIN
-#ifndef Use_mt_mode
-  pVisor->Update( false );
-#endif
-// STEPWISE (6)  Stop point at IPM() main iteration
-STEP_POINT( "Test1" );
-#endif
-        
 //SOLVED: got the dual solution u vector - calculating the Dikin criterion
 //    of GEM IPM convergence
 //       f_alpha( );  commented out 30.10.2007  DK
