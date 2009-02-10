@@ -25,7 +25,7 @@
 
 const char* DIGIT="0123456789.";
 char* OPER="!^*/+-<a>b=c&|()";
-const char* RAZD=" +-*/^:[]();=$&|!<>?#";
+const char* RAZD=" +-*/^:[]();=$&|!<>?#,";
 const int FuncNumber=28; // number of functions
 
 double derf(double x);
