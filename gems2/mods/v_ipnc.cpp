@@ -26,7 +26,7 @@
 const char* DIGIT="0123456789.";
 char* OPER="!^*/+-<a>b=c&|()";
 const char* RAZD=" +-*/^:[]();=$&|!<>?#,";
-const int FuncNumber=28; // number of functions
+const int FuncNumber=29; // number of functions
 
 double derf(double x);
 double derfc(double x);
@@ -65,6 +65,7 @@ static FUNCTION fun[] = {
     { "erfc", '\0', D_, 1, 1 },
     { "empty", '\0', D_, 0, 1 },
     { "mod", '\0', I_, 2, 1 },
+    { "pow", '\0', D_, 2, 1 },
     { "SUM", '\0', D_, 1, 0 },
     { "PROD", '\0', D_, 1, 0 },
     { "MAX", '\0', D_, 1, 0 },
@@ -221,7 +222,7 @@ void IPNCalc::Ffun( char *str)
     {
         err = "Function ";
         err += str;
-        err+= "is not defined.";
+        err+= " is not defined.";
         Error( "E02MSTran: ", err.c_str() );
     }
     if( fun[i].par ) // argument is expression
@@ -232,7 +233,7 @@ void IPNCalc::Ffun( char *str)
          {
            err = "Function ";
            err += str;
-           err+= "has not parameters.";
+           err+= " has not parameters.";
            Error( "E26MSTran: ", err.c_str() );
          }
          input++;
@@ -280,7 +281,7 @@ void IPNCalc::Variab( const char *str)
     {
         gstring err = "Variable ";
         err += str;
-        err+= "is not known.";
+        err+= " is not known.";
         Error( "E06MSTran: ", err.c_str() );
     }
     if( aObj[j].GetN() > 1 )
@@ -319,7 +320,7 @@ void IPNCalc::I_Variab( char * str)
     {
         gstring err = "Variable ";
         err += str;
-        err+= "is not declared.";
+        err+= " is not declared.";
         Error( "E16MSTran: ", err.c_str() );
     }
     if( aObj[j].GetN() > 1 )
@@ -869,6 +870,7 @@ void IPNCalc::CalcEquat()
                     if( fabs(StackEnd(0)) >1e-34 )
                         StackEnd(0) = 0.;
                     else StackEnd(0) = 1.;
+                    break;
                 case 1 :
                     StackEnd(-1) =
                         pow (  StackEnd(-1),  StackEnd(0) );
@@ -1069,6 +1071,11 @@ void IPNCalc::CalcEquat()
                         (double)( ROUND (StackEnd(-1))%
                                   ROUND (StackEnd(0)) );
 
+                    StackDel();
+                    break;
+                case pow_f  :
+                    StackEnd(-1) =
+                        pow (  StackEnd(-1),  StackEnd(0) );
                     StackDel();
                     break;
                 default:

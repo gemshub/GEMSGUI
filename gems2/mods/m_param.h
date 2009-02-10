@@ -279,6 +279,8 @@ double CalcEqstat( bool show_progress=true );
    void outMulti();
    void outMultiTxt( const char *path  );
    void readMulti( GemDataStream& ff );
+   void readMulti( const char* path );
+   void CmReadMulti( const char* path );
    double calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM );
    long int testMulti();
 

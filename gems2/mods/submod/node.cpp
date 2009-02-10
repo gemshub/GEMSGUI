@@ -427,6 +427,8 @@ if( binary_f )
   {
 #ifdef IPMGEMPLUGIN
         profil->readMulti(mult_in.c_str());
+#else
+    TProfil::pm->readMulti(mult_in.c_str());
 #endif
   }
 
@@ -1280,10 +1282,11 @@ void TNode::unpackDataBr( bool uPrimalSol )
  //double Gamm;
 // numbers
   
+#ifdef IPMGEMPLUGIN
  char buf[300];
  sprintf( buf, "Node:%ld:time:%lg:dt:%lg", CNode->NodeHandle, CNode->Tm, CNode->dt );
  strncpy( pmm->stkey, buf, EQ_RKLEN );
- 
+#endif 
 //  if( CNode->NodeStatusCH >= NEED_GEM_SIA )
 //   pmm->pNP = 1;
 //  else
@@ -1368,9 +1371,11 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
 {
  long int ii;
  //double Gamm;
+#ifdef IPMGEMPLUGIN
  char buf[300];
  sprintf( buf, "Node:%ld:time:%lg:dt:%lg", CNode->NodeHandle, CNode->Tm, CNode->dt );
  strncpy( pmm->stkey, buf, EQ_RKLEN );
+#endif 
  
  if( ScFact < 1e-6 )    // foolproof
 	 ScFact = 1e-6;

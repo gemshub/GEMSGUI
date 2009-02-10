@@ -370,6 +370,28 @@ void TProfil::readMulti( GemDataStream& ff )
       multi->from_file( ff );
 }
 
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::readMulti( const char* path )
+{
+      multi->from_text_file_gemipm( path);
+}
+
+// Reading structure MULTI (GEM IPM work structure)
+void TProfil::CmReadMulti( const char* path )
+{
+
+    TNodeArray* na = new TNodeArray( 1, TProfil::pm->pmp/*multi->GetPM()*/ );
+    if( na->GEM_init( path ) )
+    {
+      Error( path , "Chemical system definition files listed in this file \n"
+   		                     " cannot be found or are corrupt");
+    }
+    // setup from dataBR to Multi
+    na->unpackDataBr( true );
+   delete na; 
+}
+
+
 //Delete record with key
 void
 TProfil::DeleteRecord( const char *key, bool /*errifNo*/ )
