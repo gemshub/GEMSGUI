@@ -121,7 +121,7 @@ public:
         return RemoteDocURL;
     }
 
-    const bool localDoc() const {
+    bool localDoc() const {
         return LocalDoc;
     }
 

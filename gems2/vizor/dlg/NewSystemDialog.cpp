@@ -347,12 +347,11 @@ NewSystemDialog::CmReadMulti()
       gstring filename;
 
      if( vfChooseFileSave(this, filename,
-          "Get file name for reading" ) == false )
-//        if( vfChooseFileOpen(this, filename,
-//          "Get file name for reading" ) == false )
+          "Get *.lst file name for reading" ) == false )
                return;
-      GemDataStream f(filename, ios::in|ios::binary);
-      TProfil::pm->readMulti(f);
+     TProfil::pm->CmReadMulti( filename.c_str() );
+//     GemDataStream f(filename, ios::in|ios::binary);
+//      TProfil::pm->readMulti(f);
        loadList1();            // Load...
        loadList2();
        Update();
