@@ -184,8 +184,8 @@ FOUND:
 //    pm.pRR1 = STat->stp->itPar;  // Level of tinkle supressor
     pm.FI1 = STat->stp->Fi;
     pm.FI1s = STat->stp->Fis;
-pm.IT = STat->stp->itIPM;   
-//    pm.IT = 0;         Debugging 12.03.2008 DK 
+pm.IT = STat->stp->itIPM;
+//    pm.IT = 0;         Debugging 12.03.2008 DK
     pm.W1 = 0; pm.K2 = 0;
     // float
     pm.FitVar[3] = STat->stp->ParE;  // Smoothing factor
@@ -228,10 +228,10 @@ void TMulti::CompG0Load()
             pmp->P = pmp->Pc = tpp->P;
         else pmp->P = pmp->Pc = 1e-9;
         pmp->FitVar[0] = TProfil::pm->pa.aqPar[0];
-        pmp->denW = tpp->RoW;
-        pmp->denWg = tpp->RoV;
-        pmp->epsW = tpp->EpsW;
-        pmp->epsWg = tpp->EpsV;
+        pmp->denW[0] = tpp->RoW;
+        pmp->denWg[0] = tpp->RoV;
+        pmp->epsW[0] = tpp->EpsW;
+        pmp->epsWg[0] = tpp->EpsV;
         pmp->RT =  R_CONSTANT * pmp->Tc; // tpp->RT; // test 07/12/2007
         pmp->FRT = F_CONSTANT/pmp->RT;
         pmp->lnP = log( pmp->P );
@@ -255,7 +255,7 @@ void TMulti::CompG0Load()
                 if( syp->Guns )  // This is used mainly in UnSpace calculations
                     Gg = syp->Guns[jj];    // User-set increment to G0 from project system
                 if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
-                 	Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK         
+                 	Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
   	// !!!!!!! Insert here a case that checks units of measurement for the G0 increment
                 pmp->G0[j] = Cj_init_calc( Go+Gg+Ge, j, k );
 
@@ -280,7 +280,7 @@ void TMulti::CompG0Load()
     }
 
   Alloc_internal(); // performance optimization 08/02/2007
-  pmp->pTPD = 2;  
+  pmp->pTPD = 2;
 }
 
     /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -330,7 +330,7 @@ void TMulti::EqstatExpand( const char *key )
     // Added experimentally 07.03.2008   by DK
     if( pmp->FIs )
     {
-      int k, jb, je=0; 
+      int k, jb, je=0;
       for( k=0; k<pmp->FIs; k++ )
       { // loop on solution phases
             jb = je;
@@ -341,7 +341,7 @@ void TMulti::EqstatExpand( const char *key )
                pmp->lnGmo[j] = pmp->lnGam[j];
                if( fabs( pmp->lnGam[j] ) <= 84. )
    //                pmp->Gamma[j] = exp( pmp->lnGam[j] );
-            	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );           
+            	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
                else pmp->Gamma[j] = 1.0;
            } // j
         }  // k
@@ -349,34 +349,34 @@ void TMulti::EqstatExpand( const char *key )
         {
              // not done if these models are already present in MULTI !
            pmp->PD = TProfil::pm->pa.p.PD;
-           SolModLoad();   // Call point to loading scripts for mixing models      
+           SolModLoad();   // Call point to loading scripts for mixing models
         }
     	pmp->pIPN = 1;
- 
-if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models are present  
+
+if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models are present
 {
 	for( k=0; k<pmp->FIs; k++ )
 	{ // loop on solution phases
 	   jb = je;
 	   je += pmp->L1[k];
-	   if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )	
-	   {  
+	   if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )
+	   {
 		  if( pmp->PHC[0] == PH_AQUEL && pmp->XF[k] > pmp->DSM
 		       && (pmp->XFA[0] > pmp->lowPosNum && pmp->XF[0] > pa->p.XwMin ))
-		       GouyChapman( jb, je, k );                 
-	   }                   
+		       GouyChapman( jb, je, k );
+	   }
 	}
 //   GammaCalc( LINK_UX_MODE);
-}    	
+}
 //   double FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
 //   pmp->FitVar[3] = 1.0;
        GammaCalc( LINK_TP_MODE);   // Computing DQF, FugPure and G wherever necessary
-                                   // Activity coeffs are restored from lnGmo 
+                                   // Activity coeffs are restored from lnGmo
 //   pmp->FitVar[3]=FitVar3;
     }
     else {  // no multi-component phases
         pmp->PD = 0;
-        pmp->pIPN = 1;	
+        pmp->pIPN = 1;
     }
     pmp->GX_ = pmp->FX * pmp->RT;
 
@@ -392,9 +392,9 @@ if(pmp->E && pmp->LO && pmp->Lads )  // Calling this only when sorption models a
         pmp->XFs[k] = pmp->XF[k];
         pmp->Falps[k] = pmp->Falp[k];
         memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
-    } 
-    
-    //calculate gas partial pressures  -- obsolete?, retained evtl. for old process scripts 
+    }
+
+    //calculate gas partial pressures  -- obsolete?, retained evtl. for old process scripts
     GasParcP();
 }
 
@@ -441,16 +441,16 @@ void TMulti::MultiCalcInit( const char *key )
 //    	pmp->FitVar[4] = pa->p.AG;
 //        pmp->IT = 0;     // needed here to clean LINK_TP_MODE
     }
-    
+
     // recalculating kinetic restrictions for DC amounts
      if( pmp->pULR && pmp->PLIM )
           Set_DC_limits(  DC_LIM_INIT );
-    
+
     // test multicomponent phases and load data for mixing models
     if( pmp->FIs )
     {
      	// Load activity coeffs for phases-solutions
-      int k, jb, je=0; 
+      int k, jb, je=0;
    	  for( k=0; k<pmp->FIs; k++ )
       { // loop on solution phases
          jb = je;
@@ -461,7 +461,7 @@ void TMulti::MultiCalcInit( const char *key )
             pmp->lnGmo[j] = pmp->lnGam[j];
             if( fabs( pmp->lnGam[j] ) <= 84. )
    //                pmp->Gamma[j] = exp( pmp->lnGam[j] );
-           	   pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );           
+           	   pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
             else pmp->Gamma[j] = 1.0;
           } // j
        }  // k
@@ -469,40 +469,40 @@ void TMulti::MultiCalcInit( const char *key )
        {
              // not done if these models are already present in MULTI !
            pmp->PD = TProfil::pm->pa.p.PD;
-           SolModLoad();   // Call point to loading scripts for mixing models      
+           SolModLoad();   // Call point to loading scripts for mixing models
        }
        pmp->pIPN = 1;
-        
+
     	// Calc Eh, pe, pH,and other stuff
 if( pmp->E && pmp->LO && pmp->pNP )
-{    
+{
 	ConCalc( pmp->X, pmp->XF, pmp->XFA);
 	IS_EtaCalc();
-    if( pmp->Lads )  // Calling this only when sorption models are present  
+    if( pmp->Lads )  // Calling this only when sorption models are present
     {
 	   for( k=0; k<pmp->FIs; k++ )
 	   { // loop on solution phases
 	      jb = je;
 	      je += pmp->L1[k];
-	      if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )	
-	      {  
+	      if( pmp->PHC[k] == PH_POLYEL || pmp->PHC[k] == PH_SORPTION )
+	      {
 		     if( pmp->PHC[0] == PH_AQUEL && pmp->XF[k] > pmp->DSM
 		       && (pmp->XFA[0] > pmp->lowPosNum && pmp->XF[0] > pa->p.XwMin ))
-		       GouyChapman( jb, je, k );  // getting PSIs - elecrtic potentials on surface planes               
-	      }                   
+		       GouyChapman( jb, je, k );  // getting PSIs - elecrtic potentials on surface planes
+	      }
 	   }
-    }   
-//  GammaCalc( LINK_UX_MODE );     
-}    	
+    }
+//  GammaCalc( LINK_UX_MODE );
+}
 //   double FitVar3 = pmp->FitVar[3];  // Reset the smoothing factor
 //   pmp->FitVar[3] = 1.0;
     GammaCalc( LINK_TP_MODE);   // Computing DQF, FugPure and G wherever necessary
-                                   // Activity coeffs are restored from lnGmo 
+                                   // Activity coeffs are restored from lnGmo
 //   pmp->FitVar[3]=FitVar3;
     }
     else {  // no multi-component phases
         pmp->PD = 0;
-        pmp->pIPN = 1;	
+        pmp->pIPN = 1;
     }
 
     // dynamic work arrays - loading initial data
@@ -512,7 +512,7 @@ if( pmp->E && pmp->LO && pmp->pNP )
         pmp->Falps[k] = pmp->Falp[k];
         memcpy( pmp->SFs[k], pmp->SF[k], MAXPHNAME+MAXSYMB );
     }
-} 
+}
 
 //--------------------- End of ms_muleq.cpp ---------------------------
 

@@ -1368,7 +1368,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
     if( phSolMod[k])
     	if(	phSolMod[k]->testSizes( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode ) )
     	{
-    		phSolMod[k]->UpdatePT(pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW);
+    		phSolMod[k]->UpdatePT(pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0]);
     		return; // using old allocation
     	}
 
@@ -1391,7 +1391,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_OTHER:  // Hard-coded solid solution models (selected by phase name)
             {
             	TModOther* aPT = new TModOther( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                        aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW);
+                        aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0]);
                 aPT->GetPhaseName( pmp->SF[k] );
             	aSM = (TSolMod*)aPT;
                 break;
@@ -1399,7 +1399,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_VANLAAR:  // Van Laar solid solution
         {
         	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW);
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0]);
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1408,7 +1408,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_REGULAR:  // Regular solid solution
         {
         	TRegular* aPT = new TRegular( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1416,7 +1416,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_GUGGENM:  // Redlich-Kister solid solution
         {
         	TRedlichKister* aPT = new TRedlichKister( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1424,7 +1424,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_NRTLLIQ:  // NRTL liquid solution
         {
         	TNRTL* aPT = new TNRTL( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1432,7 +1432,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_WILSLIQ:  // Wilson liquid solution
         {
         	TWilson* aPT = new TWilson( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW);
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0]);
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1440,7 +1440,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_AQPITZ:  // Pitzer aqueous electrolyte
         {
            	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
             aSM = (TSolMod*)aPT;
              break;
         }
@@ -1448,7 +1448,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_AQSIT:  // SIT aqueous electrolyte
         {
            	TSIT* aPT = new TSIT( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ,pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1456,7 +1456,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_AQEXUQ:  // EUNIQUAC aqueous electrolyte
         {
            	TEUNIQUAC* aPT = new TEUNIQUAC( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1465,7 +1465,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         {
         	TPRSVcalc* aPT = new TPRSVcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Pparc+jb,
-                    pmp->GEX+jb, pmp->Vol+jb, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    pmp->GEX+jb, pmp->Vol+jb, pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1475,7 +1475,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         	TCGFcalc* aPT = new TCGFcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,
                     pmp->Pparc+jb, pmp->FWGT+k, pmp->X+jb,
-                    pmp->GEX+jb, pmp->Vol+jb, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW);
+                    pmp->GEX+jb, pmp->Vol+jb, pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0]);
             aSM = (TSolMod*)aPT;
             break;
         }
@@ -1484,7 +1484,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         {
         	TSRKcalc* aPT = new TSRKcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Pparc+jb,
-                    pmp->GEX+jb, pmp->Vol+jb, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    pmp->GEX+jb, pmp->Vol+jb, pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
             aSM = (TSolMod*)aPT;
             break;
         }

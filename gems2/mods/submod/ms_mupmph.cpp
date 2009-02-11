@@ -112,10 +112,10 @@ void TMulti::MultiRemake( const char *key )
     pmp->next  = 0;
     pmp->IC =  syp->Mbel;
     pmp->FitVar[0] = pa->aqPar[0]; // setting T,P dependent b_gamma parameters
-    pmp->denW = tpp->RoW;
-    pmp->denWg = tpp->RoV;
-    pmp->epsW = tpp->EpsW;
-    pmp->epsWg = tpp->EpsV;
+    pmp->denW[0] = tpp->RoW;
+    pmp->denWg[0] = tpp->RoV;
+    pmp->epsW[0] = tpp->EpsW;
+    pmp->epsWg[0] = tpp->EpsV;
     pmp->GWAT = syp->Mwat * 55.50837344;   // constant corrected 06.03.2008
 
     pmp->RT = tpp->RT;  // R_CONSTANT * pmp->Tc
