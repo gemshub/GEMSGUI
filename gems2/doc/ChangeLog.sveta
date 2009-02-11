@@ -1,3 +1,24 @@
+
+10/02/2009
+Bugfix in math script interpreter 
+Added pow function for mathscript
+Added "Read IPM files structure" to Gems2 (as in gemipm2k)
+ (Fixed error in command "Read IPM files")
+
+09/02/2009
+Bugfix to infinite loop by calculation of lambda in LMD()
+
+07/02/2009
+Make file - ParamMulti.dat.txt - description of all parameters in Implementation 
+ of parts of the Interior Points Method (IPM)  
+
+04/02/2009
+Added new  check and support of system errors/warnings in Implementation 
+ of parts of the Interior Points Method (IPM) 
+Added new diagnostic information in IPM and objects "XU" and "uc" 
+Fixed  some errors in this case. 
+
+
 23/01/2009
 Fixes error in Simplex method with upper bounded variabels
 

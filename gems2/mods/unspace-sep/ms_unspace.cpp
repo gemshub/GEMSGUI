@@ -77,7 +77,7 @@ int TUnSpace::TaskSystemInit( const char *chbr_in1 )
   TNode::na->pCNode()->NodeStatusCH = NEED_GEM_AIA; // activating GEM IPM for automatic initial
                                     // approximation
 // re-calculating equilibrium by calling GEMIPM
-  TNode::na->GEM_run( false );
+  TNode::na->GEM_run( 1., false );
   // setup some internal data 
   pmu = TProfil::pm->pmp;
   

@@ -576,6 +576,7 @@ long int TMulti::EnterFeasibleDomain()
        }
       if( LM > 1.)
          LM = 1.;
+//      cout << "LM " << LM << endl;
 
       // calculation of new primal solution approximation
       // from step size LM and the descent vector MU
