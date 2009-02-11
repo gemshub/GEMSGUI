@@ -1355,15 +1355,12 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
     long int NComp, NPar, NPcoef, MaxOrd, NP_DC;
     double *aIPc, *aDCc, *aWx, *alnGam, *aphVOL, *aZ, *aM;
     long int *aIPx;
-//    double RhoW, EpsW;
 
     NComp = pmp->L1[k];          // Number of components in the phase
     NPar = pmp->LsMod[k*3];      // Number of interaction parameters
     NPcoef = pmp->LsMod[k*3+2];  // and number of coefs per parameter in PMc table
     MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
     NP_DC = pmp->LsMdc[k]; // Number of non-ideality coeffs per one DC in multicomponent phase
-//    RhoW = pmp->denW;		// added 04.06.2008 (TW)
-//    EpsW = pmp->epsW;
 
     if( phSolMod[k])
     	if(	phSolMod[k]->testSizes( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode ) )
@@ -1491,7 +1488,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
 
         default:
 //            aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-//                  aIPx, aIPc, aDCc,  aWx, alnGam,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+//                  aIPx, aIPc, aDCc,  aWx, alnGam,pmp->Tc, pmp->Pc, pmp->denW[0], pmp->epsW[0] );
         	break;
     }
 

@@ -112,8 +112,10 @@ void TMulti::set_def( long int /*q*/)
     pm.DSM = 0.;        // min value phase DS (IPM-2)
     pm.GWAT = 0.;       // used in ipm_gamma()
     pm.YMET = 0.;       // reserved
-    pm.denW[0] = pm.denWg[0] = 0.;  // Density of H2O(l) and steam for Tc = 0.;Pc
-    pm.epsW[0] = pm.epsWg[0] = 0.;  // Diel. constant of H2O(l) and steam for Tc = 0.;Pc
+    fillValue( pm.denW, 0., 5 );
+    fillValue( pm.denWg, 0., 5 );
+    fillValue( pm.epsW, 0., 5 );
+    fillValue( pm.epsWg, 0., 5 );
     pm.PCI = 0.;        // Current value of Dikin criterion of IPM convergence DK>=DX
     pm.DX = 0.;         // IPM convergence criterion threshold DX (1e-5)
     pm.lnP = 0.;        // log Ptotal
@@ -266,6 +268,14 @@ void TMulti::set_def( long int /*q*/)
 //    pm.sitE = 0;
 pm.IPx = 0;
 pm.ITF = pm.ITG = 0;
+pm.VPh = 0;
+pm.GPh = 0;
+pm.HPh = 0;
+pm.SPh = 0;
+pm.CPh = 0;
+pm.APh = 0;
+pm.UPh = 0;
+
 }
 
 //---------------------------------------------------------//
@@ -478,7 +488,6 @@ ff.writeArray((double*)pm.D, MST*MST);
       ff.writeArray(pm.Qp, pm.FIs*QPSIZE);
       ff.writeArray(pm.Qd, pm.FIs*QDSIZE);
    }
-
 //  Added 16.11.2004 by Sveta
 //   if( pm.sitNcat*pm.sitNcat )
 //     ff.writeArray( pm.sitE, pm.sitNcat*pm.sitNan );
@@ -1187,6 +1196,39 @@ else
   for( ii=0; ii<pm.N; ii++ )
   	  pm.Uc[ii] = 0.;
 
+  pm.Cp0   = new double[pm.L];
+  pm.H0    = new double[pm.L];
+  pm.U0    = new double[pm.L];
+  pm.S0    = new double[pm.L];
+  pm.A0    = new double[pm.L];
+  for( ii=0; ii<pm.L; ii++ )
+  {
+	  pm.Cp0[ii]   = 0.;
+	  pm.H0[ii]    = 0.;
+	  pm.U0[ii]    = 0.;
+	  pm.S0[ii]    = 0.;
+	  pm.A0[ii]    = 0.;
+	  
+  }
+  pm.VPh   = new double[pm.FIs][MIXPHPROPS];
+  pm.GPh   = new double[pm.FIs][MIXPHPROPS];
+  pm.HPh   = new double[pm.FIs][MIXPHPROPS];
+  pm.SPh   = new double[pm.FIs][MIXPHPROPS];
+  pm.CPh   = new double[pm.FIs][MIXPHPROPS];
+  pm.APh   = new double[pm.FIs][MIXPHPROPS];
+  pm.UPh   = new double[pm.FIs][MIXPHPROPS];
+  for( ii=0; ii<pm.FIs; ii++ )
+    for( jj=0; jj<MIXPHPROPS; jj++ )
+  {
+	  pm.VPh[ii][jj]  = 0.;
+	  pm.GPh[ii][jj]  = 0.;
+	  pm.HPh[ii][jj]  = 0.;
+	  pm.SPh[ii][jj]  = 0.;
+	  pm.CPh[ii][jj]  = 0.;
+	  pm.APh[ii][jj]  = 0.;
+	  pm.UPh[ii][jj]  = 0.;
+  }
+	  
  Alloc_TSolMod( pm.FIs );
 
 //  Added 16.11.2004 by Sveta
@@ -1355,7 +1397,21 @@ if( pm.D ) delete[] pm.D;
     if( pm.XU ) delete[] pm.XU;
     if( pm.Uc ) delete[] pm.Uc;
 
-//  Added 16.11.2004 by Sveta
+    if(pm.H0)  	delete[] pm.H0;
+    if(pm.A0)  	delete[] pm.A0;
+    if(pm.U0)  	delete[] pm.U0;
+    if(pm.S0)  	delete[] pm.S0;
+    if(pm.Cp0) 	delete[] pm.Cp0;
+
+    if(pm.VPh)  	delete[] pm.VPh;
+    if(pm.GPh)  	delete[] pm.GPh;
+    if(pm.HPh)  	delete[] pm.HPh;
+    if(pm.SPh)  	delete[] pm.SPh;
+    if(pm.CPh)  	delete[] pm.CPh;
+    if(pm.APh)  	delete[] pm.APh;
+    if(pm.UPh)  	delete[] pm.UPh;
+
+ //  Added 16.11.2004 by Sveta
 //    if( pm.sitE )     delete[] pm.sitE;
 //    if( pm.sitXcat )  delete[] pm.sitXcat;
 //    if( pm.sitXan )    delete[] pm.sitXan;
@@ -1560,6 +1616,25 @@ void TMulti::to_text_file( const char *path )
      prar.writeArray(  "Qd", pm.Qd,  pm.FIs*QDSIZE);
 
     }
+
+    if(pm.H0)
+    	prar.writeArray("H0",pm.H0, pm.L);
+    if(pm.A0)
+    	prar.writeArray("A0",pm.A0, pm.L);
+    if(pm.U0)
+    	prar.writeArray("U0",pm.U0, pm.L);
+    if(pm.S0)
+    	prar.writeArray("S0",pm.S0, pm.L);
+    if(pm.Cp0)
+    	prar.writeArray("Cp0",pm.Cp0, pm.L);
+
+    prar.writeArray(  "VPh", &pm.VPh[0][0], pm.FIs*MIXPHPROPS);
+    prar.writeArray(  "GPh", &pm.GPh[0][0], pm.FIs*MIXPHPROPS);
+    prar.writeArray(  "HPh", &pm.HPh[0][0], pm.FIs*MIXPHPROPS);
+    prar.writeArray(  "SPh", &pm.SPh[0][0], pm.FIs*MIXPHPROPS);
+    prar.writeArray(  "CPh", &pm.CPh[0][0], pm.FIs*MIXPHPROPS);
+    prar.writeArray(  "APh", &pm.APh[0][0], pm.FIs*MIXPHPROPS);
+    prar.writeArray(  "UPh", &pm.UPh[0][0], pm.FIs*MIXPHPROPS);
 
 //  Added 16.11.2004 by Sveta
 //   if( pm.sitNcat*pm.sitNcat )

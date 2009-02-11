@@ -295,23 +295,23 @@ void TMulti::CompG0Load()
  {
    if( xTP >= 0 )
    {
-      pmp->denW = dCH->roW[xTP];
-      pmp->epsW = dCH->epsW[xTP];
+      pmp->denW[0] = dCH->roW[xTP];
+      pmp->epsW[0] = dCH->epsW[xTP];
    }
    else
    {
-       pmp->denW = LagranInterp( dCH->Pval, dCH->TCval, dCH->roW,
+       pmp->denW[0] = LagranInterp( dCH->Pval, dCH->TCval, dCH->roW,
                           P, TC, dCH->nTp, dCH->nPp,1 );
         //       pmp->denWg = tpp->RoV;
-       pmp->epsW = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsW,
+       pmp->epsW[0] = LagranInterp( dCH->Pval, dCH->TCval, dCH->epsW,
                           P, TC, dCH->nTp, dCH->nPp,1 );
        //       pmp->epsWg = tpp->EpsV;
    }
  }
  else
  {
-   pmp->denW = 1.;
-   pmp->epsW = 78.;
+   pmp->denW[0] = 1.;
+   pmp->epsW[0] = 78.;
  }
 
  pmp->RT = R_CONSTANT * pmp->Tc;

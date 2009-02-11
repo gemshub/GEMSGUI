@@ -365,6 +365,21 @@ aObj[ o_w_xetad].SetDim(pm.FIs,pm.FIat);
 aObj[ o_wo_lnsat].SetPtr( pm.lnSAC );
 aObj[ o_wo_lnsat ].SetDim( pm.Lads, 4 );
 
+// 11/02/2009
+aObj[ o_wo_vph].SetPtr( pm.VPh );
+aObj[ o_wo_vph ].SetDim( pm.FIs, MIXPHPROPS );
+aObj[ o_wo_gph].SetPtr( pm.GPh );
+aObj[ o_wo_gph ].SetDim( pm.FIs, MIXPHPROPS );
+aObj[ o_wo_hph].SetPtr( pm.HPh );
+aObj[ o_wo_hph ].SetDim( pm.FIs, MIXPHPROPS );
+aObj[ o_wo_sph].SetPtr( pm.SPh );
+aObj[ o_wo_sph ].SetDim( pm.FIs, MIXPHPROPS );
+aObj[ o_wo_cph].SetPtr( pm.CPh );
+aObj[ o_wo_cph ].SetDim( pm.FIs, MIXPHPROPS );
+aObj[ o_wo_aph].SetPtr( pm.APh );
+aObj[ o_wo_aph ].SetDim( pm.FIs, MIXPHPROPS );
+aObj[ o_wo_uph].SetPtr( pm.UPh );
+aObj[ o_wo_uph ].SetDim( pm.FIs, MIXPHPROPS );
 /*
 //  Added 16.11.2004 by Sveta
     aObj[ o_wd_sitxcat ].SetPtr( pm.sitXcat );
@@ -510,6 +525,14 @@ void TMulti::dyn_set(int /*q*/)
     pm.SCM   = (char (*)[MST])aObj[ o_wi_scm ].GetPtr();
     pm.SATT  = (char *)aObj[ o_wi_satt ].GetPtr();
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].GetPtr();
+    // 11/02/2009
+    pm.VPh = (double (*)[MIXPHPROPS])aObj[ o_wo_vph].GetPtr();
+    pm.GPh = (double (*)[MIXPHPROPS])aObj[ o_wo_gph].GetPtr();
+    pm.HPh = (double (*)[MIXPHPROPS])aObj[ o_wo_hph].GetPtr();
+    pm.SPh = (double (*)[MIXPHPROPS])aObj[ o_wo_sph].GetPtr();
+    pm.CPh = (double (*)[MIXPHPROPS])aObj[ o_wo_cph].GetPtr();
+    pm.APh = (double (*)[MIXPHPROPS])aObj[ o_wo_aph].GetPtr();
+    pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].GetPtr();
 /*
 //  Added 16.11.2004 by Sveta
     pm.sitXcat = (long int *)aObj[ o_wd_sitxcat ].GetPtr();
@@ -652,6 +675,14 @@ void TMulti::dyn_kill(int /*q*/)
     pm.SCM   = (char (*)[MST])aObj[ o_wi_scm ].Free();
     pm.SATT  = (char *)aObj[ o_wi_satt ].Free();
     pm.DCCW  = (char *)aObj[ o_wi_dccw ].Free();
+    // 11/02/2009
+    pm.VPh = (double (*)[MIXPHPROPS])aObj[ o_wo_vph].Free();
+    pm.GPh = (double (*)[MIXPHPROPS])aObj[ o_wo_gph].Free();
+    pm.HPh = (double (*)[MIXPHPROPS])aObj[ o_wo_hph].Free();
+    pm.SPh = (double (*)[MIXPHPROPS])aObj[ o_wo_sph].Free();
+    pm.CPh = (double (*)[MIXPHPROPS])aObj[ o_wo_cph].Free();
+    pm.APh = (double (*)[MIXPHPROPS])aObj[ o_wo_aph].Free();
+    pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].Free();
     
     Free_TSolMod();
 /*
@@ -953,6 +984,34 @@ void TMulti::dyn_new(int /*q*/)
         pm.Qd    = (double *)aObj[ o_wi_qd ].Free();
     }
 
+// SD 11/02/2009
+    pm.Cp0   = (double *)aObj[ o_wio_cp0 ].Alloc( pm.L, 1, D_ );
+    if( syp->PHfst != S_OFF )
+    	pm.H0    = (double *)aObj[ o_wio_h0 ].Alloc( pm.L, 1, D_ );
+      else
+        pm.H0    = (double *)aObj[ o_wio_h0 ].Free();
+    if( syp->PUfst != S_OFF )
+    	pm.U0    = (double *)aObj[ o_wio_u0 ].Alloc( pm.L, 1, D_ );
+      else
+        pm.U0    = (double *)aObj[ o_wio_u0 ].Free();
+    if( syp->PSfst != S_OFF )
+    	   pm.S0    = (double *)aObj[ o_wio_s0 ].Alloc( pm.L, 1, D_ );
+      else
+    	pm.S0    = (double *)aObj[ o_wio_s0 ].Free();
+    if( syp->PSfst != S_OFF || syp->PHfst != S_OFF || syp->PUfst != S_OFF )
+    	pm.A0    = (double *)aObj[ o_wio_a0 ].Alloc( pm.L, 1, D_ );
+      else
+        pm.A0    = (double *)aObj[ o_wio_a0 ].Free();
+        
+    // 11/02/2009
+        pm.VPh = (double (*)[MIXPHPROPS])aObj[ o_wo_vph].Alloc(pm.FIs,MIXPHPROPS, D_);
+        pm.GPh = (double (*)[MIXPHPROPS])aObj[ o_wo_gph].Alloc(pm.FIs,MIXPHPROPS, D_);
+        pm.HPh = (double (*)[MIXPHPROPS])aObj[ o_wo_hph].Alloc(pm.FIs,MIXPHPROPS, D_);
+        pm.SPh = (double (*)[MIXPHPROPS])aObj[ o_wo_sph].Alloc(pm.FIs,MIXPHPROPS, D_);
+        pm.CPh = (double (*)[MIXPHPROPS])aObj[ o_wo_cph].Alloc(pm.FIs,MIXPHPROPS, D_);
+        pm.APh = (double (*)[MIXPHPROPS])aObj[ o_wo_aph].Alloc(pm.FIs,MIXPHPROPS, D_);
+        pm.UPh = (double (*)[MIXPHPROPS])aObj[ o_wo_uph].Alloc(pm.FIs,MIXPHPROPS, D_);
+           
     Alloc_TSolMod( pm.FIs );
 
     /* pm.R = (double *)aObj[ o_w_r].Alloc( pm.N, pm.N+1, D_ ); */
