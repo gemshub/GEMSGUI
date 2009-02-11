@@ -596,7 +596,8 @@ STEP_POINT("FIA Iteration");
     //  Prescribed mass balance precision cannot be reached
     //  Take a look at vector b or values of DHB and DS
 
-   if( IT1 == pa->p.DP )
+    long int ScaleEFD = 1;  // added 11.02.2009 (TW)
+   if( IT1 == ScaleEFD * pa->p.DP )
    {  // Experimental
        iRet = 2;
  	   setErrorMessage( 4, "E04IPM: EnterFeasibleDomain(): " ,
