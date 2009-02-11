@@ -44,11 +44,12 @@ struct BASE_PARAM
     PD,// Mode of DHH():0-invoke,1-at FIA only,2-last IPM it. 3-every IPM it.
     PRD,//Positive: mode GammaCalc(): 0-inactive, 1-FIA only, 2-SELEKT2 only 3-every IPM iteration
          // Negative: number of additional EFD-IPM improvement loops (-1 to -30 )
-    PSM,//  Mode of setting FIA Gamma in phases: 0-off; 1 - set activ.coeff. GAN
+    PSM,//  Level of diagnostic messages: 0- disabled (no ipmlog file); 1- normal; 2-incl. warnings
     DP, //  Max number of EnterFeasibleDomain() iterations { default 144 }
     DW, // IPM-2 precision mode: 0- disable >=1  - enable (number of loops, default 15)
     DT, // Exponent for restoring x_j from dual solution {-5 to +2, default 0}
-    PLLG, // IPM view debug time on Progress Dialog screen from (sec) or 0
+    PLLG, // Tolerance for checking change in dual solution in refinement loops
+          //      { 0 to 1000 mol/mol, default 0 or 32000 means no check }
     PE, // Include electroneutrality condition? { 0 1 }
     IIM // Maximum number of iterations in the main IPM algorithm { 500 }
     ;
@@ -228,7 +229,7 @@ public:
     SYSTEM *syp;
     MULTI *pmp;
 TMulti *pmulti;
-    
+
     SPP_SETTING pa;
 
     TProfil( int nrt );

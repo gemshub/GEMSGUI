@@ -183,12 +183,11 @@ TSysEq::RecBuild( const char *key, int mode  )
         ssp->DM[17] = 0;
     }
     TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
-    if( aPa->pa.p.PSM ) /* Phase splitting 13.04.96 */
-    {
-        ssp->switches[21] = S_REM;
-        ssp->switches[20] = S_REM;
-        ssp->switches[23] = S_REM;
-    }
+    // for phase separation (exsolution)
+    ssp->switches[21] = S_REM;
+    ssp->switches[20] = S_REM;
+    ssp->switches[23] = S_REM;
+
     //Eqstat
     setCalcFlag( false );
 

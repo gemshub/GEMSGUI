@@ -321,8 +321,6 @@ CH_FOUND:
         if( jj < mup->Ls && syp->PlnGf != S_OFF )
         {
             pmp->lnGmf[j] = syp->lnGmf[jj];
-//            if( !TProfil::pm->pa.p.PSM )  // Constant activity coefficients
-//                pmp->lnGmM[j] = syp->lnGmf[jj];    // Disabled by DK 19.02.2008
         }
         else pmp->lnGmf[j] = 0.0;
 

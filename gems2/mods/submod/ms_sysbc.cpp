@@ -248,12 +248,12 @@ void TSyst::make_syst_sizes()
 //            sy.Ls++;
             break;
         case DC_SOL_MINOR:
-            if( aPa->pa.p.PSM && aPa->pa.p.GAH > 0 )
+            if( aPa->pa.p.GAH > 0 )
                 sy.lnGmf[j] = log( aPa->pa.p.GAH );
 //            sy.Ls++;
             break;
         case DC_SOL_MAJOR:
-            if( aPa->pa.p.PSM && aPa->pa.p.GAR > 0 )
+            if( aPa->pa.p.GAR > 0 )
                 sy.lnGmf[j] = log( aPa->pa.p.GAR );
 //            sy.Ls++;
             break;
@@ -263,7 +263,7 @@ void TSyst::make_syst_sizes()
             break;
         case DC_PEL_CARRIER:
         case DC_SUR_CARRIER:
-            if( aPa->pa.p.PSM && aPa->pa.p.GAR > 0 ) // DAK testing
+            if( aPa->pa.p.GAR > 0 ) // DAK testing
                 sy.lnGmf[j] = log( aPa->pa.p.GAR );      // 27.10.99
 //            sy.Ls++;
             sy.Lsor++;
@@ -287,7 +287,7 @@ void TSyst::make_syst_sizes()
         case DC_SUR_IPAIR:
         case DC_IESC_A:
         case DC_IEWC_B:
-            if( aPa->pa.p.PSM && aPa->pa.p.GAH > 0 )   // DAK Testing 27.10.99
+            if( aPa->pa.p.GAH > 0 )   // DAK Testing 27.10.99
                 sy.lnGmf[j] = log( aPa->pa.p.GAH );     // Adsorption FIA
             sy.Lsor++;
 //            sy.Ls++;
@@ -413,7 +413,7 @@ void TSyst::make_syst()
     // due to specific surface area and energy
     if( sy.PYOF != S_OFF )
     {
-        double SSA = 0.0, STEN = 0.1;  // Fixed 22.01.2008 by DK 
+        double SSA = 0.0, STEN = 0.1;  // Fixed 22.01.2008 by DK
         for( k=0; k<mup->Fi; k++ )
         {
             if( sy.Pcl[k] == S_OFF )
