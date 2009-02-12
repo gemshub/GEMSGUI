@@ -47,9 +47,6 @@ void TMulti::MultiCalcMain( long int rLoop )
 {
     long int i, j, k, eRet, iB, status=0;
     SPP_SETTING *pa = &TProfil::pm->pa;
-#ifdef GEMITERTRACE
-fstream f_log("ipmlog.txt", ios::out|ios::app );
-#endif
 
     pmp->W1=0; pmp->K2=0;               // internal counters
     pmp->Ec = pmp->MK = pmp->PZ = 0;    // Return codes

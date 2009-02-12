@@ -105,9 +105,12 @@ long int TProfil::testMulti(  )
 {
   if( pmp->MK || pmp->PZ )	
   {
-   fstream f_log("ipmlog.txt", ios::out|ios::app );
-   f_log << "Warning " << pmp->stkey << " " <<
-   pmp->errorCode << ": " << pmp->errorBuf << endl;
+	if( pa.p.PSM == 2 )
+	{		   
+      fstream f_log("ipmlog.txt", ios::out|ios::app );
+      f_log << "Warning " << pmp->stkey << ": " <<  pmp->errorCode << ":" << endl;
+      f_log << pmp->errorBuf << endl;
+	}  
    return 1L;	  
   }
   return 0L	;  
