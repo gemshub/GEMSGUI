@@ -13,7 +13,7 @@
     PRD    Use only                 -1 - -50       // Negative: number of additional EFD-IPM improvement loops (-1 to -50 )
                                     3 			  // Positive: do not use improvement loops (usually set to 3)
     
-    PSM    AutoInitialApprox        1              //  Level of diagnostic messages: 0- disabled (no ipmlog file); 1- normal; 2-incl. warnings
+    PSM                              1              //  Level of diagnostic messages: 0- disabled (no ipmlog file); 1- normal; 2-incl. warnings
     
     DP     EnterFeasibleDomain      15 - 500       //  Max number of EnterFeasibleDomain() iterations { default 144 }
 							"E05IPM: EnterFeasibleDomain(): " "E04IPM: EnterFeasibleDomain(): " "E17IPM: EnterFeasibleDomain(): " 
