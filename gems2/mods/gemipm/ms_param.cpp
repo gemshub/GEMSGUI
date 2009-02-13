@@ -185,6 +185,7 @@ FINISHED:
          {
     	    pmp->pNP = 0; 
     	    pmp->MK = 0;
+//cout << pmp->stkey << " return simplex W1 " <<  pmp->W1 << " pmp->Ec " << pmp->errorBuf << endl;
     	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA 
          }    
     	else
