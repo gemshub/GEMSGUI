@@ -80,7 +80,7 @@ gems_scm.html</a> files.&nbsp;
 <p>The Simplex initial approximation is computed (if specified e.g. in
 the "Calculate" "Simplex" menu command of the Single Thermodynamic
 System dialog). There are two controls - <a href="#Pa_EPS_0"><tt>Pa_EPS[0]</tt></a>
-and <a href="#Pa_GAN_0"><tt><a href="#Pa_GAN_1">Pa_GAN[1]</a></tt></a>
+and <a href="#Pa_GAN_0"><tt></tt></a><tt><a href="#Pa_GAN_1">Pa_GAN[1]</a></tt>
 - that influence precision
 and result of the Simplex calculation, respectively. <br>
 </p>
@@ -345,7 +345,8 @@ valence) errors in the project thermodynamic database.&nbsp; </dd>
   <dd><br>
   </dd>
   <dt> <a name="Pa_DFY_0"></a><b><big><tt>Pa_DFY[0]</tt></big></b> -
-Insertion mole amount for water-solvent at Simplex()-&gt;EnterFeasibleDomain()
+Insertion mole amount for water-solvent at
+Simplex()-&gt;EnterFeasibleDomain()
 bridge { 1e-6 }</dt>
   <dd>&nbsp; &nbsp;&nbsp;</dd>
   <dd>This and following controls are used in a "fill-out" procedure
@@ -464,7 +465,8 @@ is achieved by calling such end members as "junior" 'J' and those that
 should not be suppressed&nbsp; as "major" 'M' in the Phase definition.
 These codes affect only automatic initial approximation obtained by
 Simplex() procedure, where the molar Gibbs energy values G0 of the
-"junior" components are automatically corrected by adding&nbsp; ln(PA_GAN[1])*RT&nbsp;
+"junior" components are automatically corrected by adding&nbsp;
+ln(PA_GAN[1])*RT&nbsp;
 and those of "major" components - by adding ln(PA_GAN[0])*RT. The
 corrections are removed after the Simplex() calculation is finished. In
 such initial approximation, a "junior" end member appears in mole
@@ -609,7 +611,8 @@ especially in presence of trace independent components in the system
 bulk composition. When the amount of j-th DC x[j] obtained from the
 current IPM iteration is less than the cutoff value DHBM*10^DT then <br>
   </dd>
-  <dd>it will be replaced with the respective XU[j] value, otherwise x[j]
+  <dd>it will be replaced with the respective XU[j] value, otherwise
+x[j]
 value is retained for the next refinement loop. <br>
   </dd>
   <dd><br>
@@ -668,8 +671,8 @@ W14IPM
 is raised. In "smart initial approximation" mode, this will cause the
 automatic attempt to calculate this
 equilibrium speciation from the automatic (simplex) mode. Otherwise,
-the warning&nbsp;
-      <a href="#W14IPM">W14IPM</a> will be be issued and the dual
+the warning&nbsp; <a href="#W14IPM">W14IPM</a> will be be issued and
+the dual
 solution vector u will be restored from its copy uc. &nbsp; &nbsp; <br>
     </dd>
   </dl>
@@ -837,8 +840,8 @@ multi-component highly non-ideal phases. <br>
   <dd> <br>
   </dd>
   <dt> <a name="Pa_IIM"></a><big><big><b><tt>Pa_IIM</tt><small><small>&nbsp;
-- </small></small></b></big></big>Maximum allowed number of
-iterations in the GEM IPM-2 solution run { 400 }</dt>
+- </small></small></b></big></big>Maximum allowed number of iterations
+in the GEM IPM-2 descent run { 400 }</dt>
   <dd>&nbsp;&nbsp;</dd>
   <dd>Contains maximum number of total IPM descent algorithm iterations
 (including IPM-2 loops). If this number is exceeded, the program
