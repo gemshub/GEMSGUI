@@ -732,7 +732,7 @@ FORCED_AIA:
     int NumIterIPM = pmp->ITG;
 
     if( pmp->MK || pmp->PZ ) // no good solution
-    	goto FINISHED;    
+    	goto FINISHED;
 
         //    else //Show results   //if( wn[W_EQCALC].status )
     // aMod[MD_EQCALC].ModUpdate("EQ_done  Equilibrium State: computed OK");
@@ -754,7 +754,7 @@ ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
           TotIT += pmp->IT - ITstart;
           TotW1 += pmp->W1+pmp->K2-1;
           if( pmp->MK || pmp->PZ ) // no good solution
-          	break;    
+          	break;
        } // end pp loop
 
        pmp->pNP = pNPo;
@@ -764,22 +764,22 @@ ITstart=10,            TotIT = pmp->IT;  // ITold = pmp->IT,
        NumIterFIA = pmp->ITF;
        NumIterIPM = pmp->ITG;
     }
-FINISHED:    
+FINISHED:
   	if( pmp->MK == 2 )
    	{	if( pmp->pNP )
              {
-        	    pmp->pNP = 0; 
+        	    pmp->pNP = 0;
         	    pmp->MK = 0;
-        	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA 
-             }    
+        	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA
+             }
         	else
-        		Error( pmp->errorCode ,pmp->errorBuf );	
+        		Error( pmp->errorCode ,pmp->errorBuf );
    	}
    if( pmp->MK || pmp->PZ ) // no good solution
    {
   	 testMulti( );
     //cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;
-   }	
+   }
     calcFinished = true;
     pmp->t_end = clock();
     pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
@@ -916,7 +916,7 @@ bool TProfil::GetFN( const char * prfName, bool show_dlg )
 void TProfil::SetFN()
 {
     bool allOpend = true;
-    
+
 	unsigned i, nx=0;
     short j, k=0;
     TCStringArray aFls;
@@ -941,7 +941,7 @@ void TProfil::SetFN()
             s = gstring( mup->FN[k++], 0, MAX_FILENAME_LEN);
             aFls.Add(s);
         }
-        
+
         if( !rt[aMod[i].rtNum()].SetNewOpenFileList( aFls ))
             allOpend = false;
     }
@@ -952,7 +952,7 @@ void TProfil::SetFN()
         StripLine(fstKeyFld);
 
     	GetFN( fstKeyFld.c_str(), false );
-    }	
+    }
 }
 
 //------------------ End of m_prfget.cpp --------------------------

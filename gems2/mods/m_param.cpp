@@ -191,7 +191,7 @@ void TProfil::InitSubModules()
         syst->ods_link();
         syp = syst->GetSY();
         aMod.Add( multi = new TMulti( MD_MULTI, syp, tpp, mup ) );
-pmulti = multi; 
+pmulti = multi;
         multi->ods_link();
         pmp = multi->GetPM();
         aMod.Add( new TEQCalc( MD_EQCALC ) );
@@ -388,7 +388,7 @@ void TProfil::CmReadMulti( const char* path )
     }
     // setup from dataBR to Multi
     na->unpackDataBr( true );
-   delete na; 
+   delete na;
 }
 
 
@@ -632,16 +632,16 @@ long int showMss = 1L;
 // test result GEM IPM calculation of equilibrium state in MULTI
 long int TProfil::testMulti()
 {
-  if( pmp->MK || pmp->PZ )	
+  if( pmp->MK || pmp->PZ )
   {
    if( pa.p.PSM == 2 )
-   {	   
+   {
      fstream f_log("ipmlog.txt", ios::out|ios::app );
      f_log << "Warning " << pmp->stkey << ": " <<  pmp->errorCode << ":" << endl;
      f_log << pmp->errorBuf << endl;
-   }  
+   }
    if( showMss )
-   {	   
+   {
 	   multi->addErrorMessage(" \nContinue?");
       switch( vfQuestion3(0, pmp->errorCode, pmp->errorBuf,
                            "&Yes", "&No", "&Yes to All" ))
@@ -654,16 +654,16 @@ long int TProfil::testMulti()
     	   Error(pmp->errorCode, pmp->errorBuf);
        }
    }
-  
-   return 1L;	  
+
+   return 1L;
   }
 
-  return 0L	;  
+  return 0L	;
 }
 
 // GEM IPM calculation of equilibrium state in MULTI
 // Modified on 10.09.2007 to return elapsed GEMIPM runtime in seconds
-// Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations 
+// Modified on 15.11.2007 to return more detailed info on FIA and IPM iterations
 // and precision refinement loops
 //
 double TProfil::calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long int& NumIterIPM )
@@ -680,32 +680,32 @@ double TProfil::calcMulti( long int& NumPrecLoops, long int& NumIterFIA, long in
 pmp->t_start = clock();     // Added 06.09.2007 by DK to check pure runtime
 pmp->t_end = pmp->t_start;
 pmp->t_elap_sec = 0.0;
-pmp->ITF = pmp->ITG = 0;    
+pmp->ITF = pmp->ITG = 0;
 
 FORCED_AIA:
    multi->MultiCalcInit( rt[RT_SYSEQ].UnpackKey() );
 	if( pmp->pNP )
-   { 
-	   if( pmp->ITaia <=30 )       // Foolproof     
+   {
+	   if( pmp->ITaia <=30 )       // Foolproof
 		  pmp->IT = 30;
-	   else 
-		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter  
-   }  
+	   else
+		  pmp->IT = pmp->ITaia;     // Setting number of iterations for the smoothing parameter
+   }
    if( multi->AutoInitialApprox( ) == false )
    {
 	   multi->MultiCalcIterations( -1 );
    }
 if( pmp->MK || pmp->PZ ) // no good solution
-   	goto FINISHED;    
-  
-NumPrecLoops = pmp->W1+pmp->K2-1; 
+   	goto FINISHED;
+
+NumPrecLoops = pmp->W1+pmp->K2-1;
 NumIterFIA = pmp->ITF;
 NumIterIPM = pmp->ITG;
 pmp->IT = pmp->ITG;   // This is to provide correct number of IPM iterations to upper levels
 
    if( pa.p.PRD < 0 && pa.p.PRD > -50 ) // max 50 loops
    {  // Test refinement loops for highly non-ideal systems Added here by KD on 15.11.2007
-      long int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,  
+      long int pp, pNPo = pmp->pNP,  TotW1 = pmp->W1+pmp->K2-1,
 ITstart = 10,        TotIT = pmp->IT;   // ITold = pmp->IT,
       pmp->pNP = 1;
       for( pp=0; pp < abs(pa.p.PRD); pp++ )
@@ -716,37 +716,37 @@ ITstart = 10,        TotIT = pmp->IT;   // ITold = pmp->IT,
             multi->MultiCalcIterations( pp );
          }
          TotIT += pmp->IT - ITstart;
-         TotW1 += pmp->W1+pmp->K2-1; 
+         TotW1 += pmp->W1+pmp->K2-1;
          if( pmp->MK || pmp->PZ ) // no good solution
              break;
        } // end pp loop
-      
+
       pmp->pNP = pNPo;
-      pmp->IT = TotIT; // ITold;         
-   
-      NumPrecLoops = TotW1; 
-      NumIterFIA = pmp->ITF;  
-      NumIterIPM = pmp->ITG;  
-   }       
-       
-FINISHED:    
+      pmp->IT = TotIT; // ITold;
+
+      NumPrecLoops = TotW1;
+      NumIterFIA = pmp->ITF;
+      NumIterIPM = pmp->ITG;
+   }
+
+FINISHED:
 
    	if( pmp->MK == 2 )
    	{	if( pmp->pNP )
             {
-       	    pmp->pNP = 0; 
+       	    pmp->pNP = 0;
        	    pmp->MK = 0;
-       	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA 
-            }    
+       	    goto FORCED_AIA;  // Trying again with AIA set after bad SIA
+            }
        	else
-       		Error( pmp->errorCode ,pmp->errorBuf );	
+       		Error( pmp->errorCode ,pmp->errorBuf );
    	}
 
    if( pmp->MK || pmp->PZ ) // no good solution
    {
     	 testMulti();
    //cout << "Iter"  << " MK " << pmp->MK << " PZ " << pmp->PZ << " " << pmp->errorCode << endl;
-   }	
+   }
 pmp->t_end = clock();
 pmp->t_elap_sec = double(pmp->t_end - pmp->t_start)/double(CLOCKS_PER_SEC);
   calcFinished = true;
@@ -844,8 +844,8 @@ void TProfil::LoadFromMtparm(double T, double P,double *G0,
 short TProfil::BAL_compare()
 {
     int i,j,k, jj, jb, je=0;
-    double Go, Gg, Ge, pGo; 
-    
+    double Go, Gg, Ge, pGo;
+
 // Test A - sizes and selectors
     if( pmp->N != syp->N || pmp->L != syp->L || pmp->Ls != syp->Ls
             || pmp->LO != syp->Lw || pmp->PG != syp->Lg
@@ -856,7 +856,7 @@ short TProfil::BAL_compare()
         return 0;
     else if( syp->DLLim == S_OFF && syp->DULim == S_OFF && pmp->PLIM == 1 )
         return 0;
-// test selectors 
+// test selectors
     for( i=0; i<pmp->N; i++ )
         if( syp->Icl[pmp->mui[i]] == S_OFF )
             return 0;
@@ -866,7 +866,7 @@ short TProfil::BAL_compare()
     for( k=0; k<pmp->FI; k++ )
         if( syp->Pcl[pmp->muk[k]] == S_OFF )
             return 0;
-// lists of components didn't change 
+// lists of components didn't change
 // test B - recipes and constraints
     for( i=0; i<pmp->N; i++ )
         if( fabs( syp->B[pmp->mui[i]] - pmp->B[i] ) >= pa.p.DB )
@@ -877,26 +877,26 @@ short TProfil::BAL_compare()
 	jb = je;
 	je += pmp->L1[k];
 	for( j=jb; j<je; j++ )
-    {    		
-       Gg = Ge = 0.0;    //   This part had to be changed after integrating Ge into pmp->G0 
+    {
+       Gg = Ge = 0.0;    //   This part had to be changed after integrating Ge into pmp->G0
        jj = pmp->muj[j]; //        DK    07.03.2008,  16.05.2008
        Go = tpp->G[jj]; //  G0(T,P) value taken from MTPARM
        if( syp->Guns )  // This is used mainly in UnSpace calculations
            Gg = syp->Guns[jj];    // User-set increment to G0 from project system
        if( syp->GEX && syp->PGEX != S_OFF )   // User-set increment to G0 from project system
-           Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK  
-       pGo = multi->Cj_init_calc( Go+Gg+Ge, j, k );       
+           Ge = syp->GEX[jj];     //now Ge is integrated into pmp->G0 (since 07.03.2008) DK
+       pGo = multi->Cj_init_calc( Go+Gg+Ge, j, k );
        if( fabs( pGo - pmp->G0[j] )* pmp->RT >= 0.001 )
        {
            pmp->pTPD = 1;   // Fixed here to invoke CompG0Load() DK 16.05.2008
-    	   break;   // GEX or Guns has changed for this DC in the system definition     
+    	   break;   // GEX or Guns has changed for this DC in the system definition
        }
  //      if( syp->PGEX != S_OFF )
  //           if( fabs( syp->GEX[pmp->muj[j]] - pmp->GEX[j]*pmp->RT ) >= 0.001 )
  //               break;
         if(( syp->DLLim != S_OFF ) && pmp->PLIM == 1 )
 //            if( fabs( (double)syp->DLL[jj] - pmp->DLL[j] ) >= 1e-19 )
-              if( syp->DLL[jj] != (float)pmp->DLL[j]  )   //SD 22/01/2009 
+              if( syp->DLL[jj] != (float)pmp->DLL[j]  )   //SD 22/01/2009
                 break;
         if(( syp->DULim != S_OFF ) && pmp->PLIM == 1 )
 //            if( fabs( (double)syp->DUL[jj] - pmp->DUL[j] ) >= 1e-19 )

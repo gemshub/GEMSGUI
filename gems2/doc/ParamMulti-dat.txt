@@ -38,14 +38,14 @@
     
 ------------------------------------------------------------------------------------------------------------------------    
     
-    DG     EnterFeasibleDomain()    1e-4 - 1e-7    // Threshold for minimum allowed descent step size Lambda { 1e-5 }
+    DG     EnterFeasibleDomain()    1e-4 - 1e-7    // Threshold for minimum allowed descent step size Lambda in EntryFeasibleDomain() { 1e-5 }
 							"E03IPM: EnterFeasibleDomain():" 
 
     
     DHB    pmp->DHBM = sfactor * pa->p.DHB         // Threshold for mass balance residuals at EFD() { 1e-8 }
              see below					"E02IPM: IPM-main(): " "W09IPM: IPM-main(): " "E10IPM: IPM-main(): " 
     
-    DS     pmp->DSM = pa->p.DS      1e-8 - 1e-12   // Cutoff number of moles of a phase present in primal solution { 1e-10 }
+    DS     pmp->DSM = pa->p.DS      1e-8 - 1e-12   // Cutoff minimum mole amount of stable Phase present in IPM primal solution approximation { 1e-10 }
 							"E13IPM: PrimalChemicalPotentials():" 
 
     
@@ -64,9 +64,9 @@
     DFYr   RaiseZeroedOffDCs                       // Insertion moles of major DC in non-ideal solution { 1e-6 }
     DFYh   RaiseZeroedOffDCs                       // Insertion moles of junior DC in non-ideal solution { 1e-6 }
     DFYc   RaiseZeroedOffDCs                       // N of moles for insertion of single-component phase { 1e-6 }
-    DFYs   RaiseZeroedOffDCs                       // Moles of DC to insert a single-component phase in Selekt2() { 1e-8 }
+    DFYs   RaiseZeroedOffDCs                       // Moles of DC to insert a single-component phase in Selekt2() { 1e-7 }
 
-    DB     AutoInitialApprox()      1e-8 to 1e-17  // Cutoff number of moles of IC in the system stoichiometry (1e-17)
+ *   DB     AutoInitialApprox()      1e-8 to 1e-17  // Cutoff number of moles of IC in the system stoichiometry (1e-17)
            ConCalc()
 
     AG     SetSmoothingFactor()     0.7 - 1.0      //Smoothing parameter for free energy increments on iterations {0.7}
@@ -76,7 +76,7 @@
 ??  GAN    TSyst::make_syst_sizes()                // Initial activity coefficient of minor DC in phase (FIA) { 1000 }
    
     GAS    MultiCalcMain()  
-           fabs(pmp->C[I])>  pmp->B[I] * pa->p.GAS // IPM-2 precision factor (DHB[i] / b[i]) { 1e-3 }
+           fabs(pmp->C[I])>  pmp->B[I] * pa->p.GAS // IPM-2 mass balance accuracy factor in EnterFeasibleDomain()  { 0.001 }
 
 
     
@@ -179,7 +179,7 @@ List of IPM error messages
 
 "E03IPM: EnterFeasibleDomain():" "Too small LM step size - cannot converge (check Pa_DG)."
 
-"E04IPM: EnterFeasibleDomain(): " "Maximum number of EFD loops exceeded! Too tight Pa_DHB tolerance for mass balance?"
+"E04IPM: EnterFeasibleDomain(): " "Maximum allowed number of EnterFeasibleDomain() iterations exceeded"
 
 "E05IPM: EnterFeasibleDomain(): " "Degeneration in R matrix (fault in the linearized system solver). Invalid initial approximation, cannot start IPM."
 
@@ -210,6 +210,8 @@ List of IPM error messages
 "E18IPM: IPM-main():", "Bad GammaCalc() status in SIA mode"
 
 "E19IPM: ConvertDCC()", "Invalid DC class code. Memory corruption?"
+
+"W20IPM: IPM-main()", "Too small input amount of independent component <IC1> {, <IC2>, ... }"
 
 
 General recommendation: most of IPM error messages have one of the following reasons:
