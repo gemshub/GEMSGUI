@@ -920,7 +920,6 @@ class TEUNIQUAC: public TSolMod
 		double **Psi;
 		double **dPsi;
 		double **d2Psi;
-		double **Xi;
 
 		// only needed for debugging output
 		double gammaDH[200];
