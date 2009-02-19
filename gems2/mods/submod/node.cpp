@@ -136,21 +136,21 @@ long int TNode::GEM_run( bool uPrimalSol )
 
     // test error result GEM IPM calculation of equilibrium state in MULTI
     long int erCode = TProfil::pm->testMulti();
-    
+
     if( erCode )
-    {	
+    {
         if( CNode->NodeStatusCH  == NEED_GEM_AIA )
           CNode->NodeStatusCH = BAD_GEM_AIA;
         else
           CNode->NodeStatusCH = BAD_GEM_SIA;
     }
     else
-    {	
+    {
       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
           CNode->NodeStatusCH = OK_GEM_AIA;
       else
          CNode->NodeStatusCH = OK_GEM_SIA;
-    }     
+    }
 
    }
    catch(TError& err)
@@ -172,7 +172,7 @@ long int TNode::GEM_run( bool uPrimalSol )
    catch(...)
    {
     fstream f_log("ipmlog.txt", ios::out|ios::app );
-    f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": " 
+    f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": "
    		<< "gems2: Unknown exception: GEM calculation aborted" << endl;
       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
         CNode->NodeStatusCH = ERR_GEM_AIA;
@@ -239,21 +239,21 @@ long int i;
 // *********************************************************
     // test error result GEM IPM calculation of equilibrium state in MULTI
     long int erCode = TProfil::pm->testMulti();
-    
+
     if( erCode )
-    {	
+    {
         if( CNode->NodeStatusCH  == NEED_GEM_AIA )
           CNode->NodeStatusCH = BAD_GEM_AIA;
         else
           CNode->NodeStatusCH = BAD_GEM_SIA;
     }
     else
-    {	
+    {
       if( CNode->NodeStatusCH  == NEED_GEM_AIA )
           CNode->NodeStatusCH = OK_GEM_AIA;
       else
          CNode->NodeStatusCH = OK_GEM_SIA;
-    }     
+    }
    }
    catch(TError& err)
     {
@@ -274,7 +274,7 @@ long int i;
     catch(...)
     {
      fstream f_log("ipmlog.txt", ios::out|ios::app );
-     f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": " 
+     f_log << "Node:" << CNode->NodeHandle << ":time:" << CNode->Tm << ":dt:" << CNode->dt<< ": "
     		<< "gems2: Unknown exception: GEM calculation aborted" << endl;
        if( CNode->NodeStatusCH  == NEED_GEM_AIA )
          CNode->NodeStatusCH = ERR_GEM_AIA;
@@ -916,6 +916,7 @@ void TNode::makeStartDataChBR(
     CSD->iGrd = 2;
   if ( pmm->Cp0 )
     CSD->iGrd = 3;
+CSD->iGrd = 0;   // Temporarily disabled by DK on 19.02.2009
 
 // These dimensionalities define sizes of dynamic data in DATABR structure!!!
 
@@ -1064,18 +1065,18 @@ void TNode::G0_V0_H0_Cp0_DD_arrays()
             else
               CSD->H0[ll] = 0.;
          }
-         if(  CSD->iGrd > 2 )
-         { if ( Cp0 )
-             CSD->Cp0[ll] = Cp0[pmm->muj[kk]];
-           else
-             CSD->Cp0[ll] = 0.;
-         }
          if(  CSD->iGrd > 1 )
          {
             if ( S0 )
                CSD->S0[ll] = S0[pmm->muj[kk]];
             else
              CSD->S0[ll] = 0.;
+         }
+         if(  CSD->iGrd > 2 )
+         { if ( Cp0 )
+             CSD->Cp0[ll] = Cp0[pmm->muj[kk]];
+           else
+             CSD->Cp0[ll] = 0.;
          }
      }
     }
@@ -1289,12 +1290,12 @@ void TNode::unpackDataBr( bool uPrimalSol )
  long int ii;
  //double Gamm;
 // numbers
-  
+
 #ifdef IPMGEMPLUGIN
  char buf[300];
  sprintf( buf, "Node:%ld:time:%lg:dt:%lg", CNode->NodeHandle, CNode->Tm, CNode->dt );
  strncpy( pmm->stkey, buf, EQ_RKLEN );
-#endif 
+#endif
 //  if( CNode->NodeStatusCH >= NEED_GEM_SIA )
 //   pmm->pNP = 1;
 //  else
@@ -1383,8 +1384,8 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
  char buf[300];
  sprintf( buf, "Node:%ld:time:%lg:dt:%lg", CNode->NodeHandle, CNode->Tm, CNode->dt );
  strncpy( pmm->stkey, buf, EQ_RKLEN );
-#endif 
- 
+#endif
+
  if( ScFact < 1e-6 )    // foolproof
 	 ScFact = 1e-6;
  if( ScFact > 1e6 )
@@ -1407,27 +1408,27 @@ void TNode::unpackDataBr( bool uPrimalSol, double ScFact )
     if( CNode->dll[ii] > 0. )
     	pmm->DLL[ CSD->xDC[ii] ] *= ScFact;
     pmm->DLL[ CSD->xDC[ii] ] = 0.;				  // Bugfix for lower metastability limit
-    
+
     if( pmm->DUL[ CSD->xDC[ii] ] < pmm->DLL[ CSD->xDC[ii] ] )
     {
        char buf[300];
-       sprintf(buf, "Upper kinetic restrictions smolest than lower for DC&RC %-6.6s",  
+       sprintf(buf, "Upper kinetic restrictions smolest than lower for DC&RC %-6.6s",
             		 pmm->SM[CSD->xDC[ii]] );
     	Error("unpackDataBr", buf );
-    }	
+    }
   }
   for( ii=0; ii<CSD->nICb; ii++ )
-  {	  
+  {
     pmm->B[ CSD->xIC[ii] ] = CNode->bIC[ii] * ScFact;
     if( ii < CSD->nICb-1 && pmm->B[ CSD->xIC[ii] ] < TProfil::pm->pa.p.DB )
     {
        char buf[300];
-       sprintf(buf, "Bulk mole amounts of IC  %-6.6s is %lg",  
+       sprintf(buf, "Bulk mole amounts of IC  %-6.6s is %lg",
             		 pmm->SB[CSD->xIC[ii]], pmm->B[ CSD->xIC[ii] ] );
     	Error("unpackDataBr", buf );
-    }	
-    
-  } 
+    }
+
+  }
   for( ii=0; ii<CSD->nPHb; ii++ )
   {
     if( CSD->nAalp >0 )
