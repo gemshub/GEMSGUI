@@ -88,8 +88,10 @@ extern TpworkList aW;
 
 
 struct WATERPARAM
-{ // WATER termodynamic properties - extracted from HGK subroutines (SUPCRT92)
-  // old dimensions [2] restored, added ideal gas water properties, 06.02.2008 (TW)
+{
+	// WATER termodynamic properties - extracted from HGK subroutines (SUPCRT92)
+	// old dimensions [2] restored, added ideal gas water properties, 06.02.2008 (TW)
+	// added partial derivatives of density and dielectrical constant, 21.02.2009 (TW)
     bool init;
     double Aw[2];        // Helmholtz energy
     double Gw[2];        // Gibbs energy
@@ -107,7 +109,7 @@ struct WATERPARAM
     double Surtenw[2];   // surface tension
     double Tdiffw[2];    // not clear (currently not used)
     double Prndtlw[2];   // Prandtl number (currently not used)
-    double Visckw[2];    // kinetic viscosity (currently not used) 
+    double Visckw[2];    // kinetic viscosity (currently not used)
     double Albew[2];     // alpha/beta ratio
     double ZBorn[2];     // Born function Z
     double YBorn[2];     // Born function Y
@@ -117,6 +119,16 @@ struct WATERPARAM
     double Gigw[2];      // ideal gas Gibbs energy
     double Sigw[2];      // ideal gas entropy
     double Cpigw[2];     // ideal gas isobaric heat capacity
+    double Rho[2];       // density
+    double dRdT[2];      // first T derivative of density
+    double d2RdT2[2];    // second T derivative of density
+    double dRdP[2];      // first P derivative of density
+    double d2RdP2[2];    // second P derivative of density
+    double Eps[2];       // dielectrical constant
+    double dEdT[2];      // first T derivative of dielectrical constant
+    double d2EdT2[2];    // second T derivative of dielectrical constant
+    double dEdP[2];      // first P derivative of dielectrical constant
+    double d2EdP2[2];    // second P derivative of dielectrical constant
     WATERPARAM()
     {
         init = false;
