@@ -455,10 +455,6 @@ class TMulti
     void IdealGas( long int jb, long int k, double *Zid );
     void IdealOneSite( long int jb, long int k, double *Zid );
     void IdealMultiSite( long int jb, long int k, double *Zid );
-    void IdealAqueous( long int jb, long int k, double *Zid );
-    void IdealSorption( long int jb, long int k, double *Zid );
-    void StandMoleFract();
-    void StandMolality();
 
 // ipm_main.cpp - numerical part of GEM IPM-2
     void MultiCalcMain( long int rLoop );
