@@ -26,28 +26,32 @@
 
 struct TPWORK
 {      // working t/d parametres
-    char DRkey[DC_RKLEN],    // DCOMP or REACDC rkey with source data
-    pSD,                // data origin { d n i f r }
-    pTM,   //Terminal state for  n i r : { + - * }
-    unE,                // Units of energy  { j c J C n N }
-    unV;                // Units of volume  { c C j L m }
-   double P,Pst,     //current pressure,bar (10^5 Pa), reference pressure
-    TC, TCst,      // TC - current temperature, TCr - reference temperature
-    T, Tst,        // T -  current temperature,Tr - reference temperature
-    dS, S, devS,   // dSr at TP, S0 for reacdef DC, devS - uncertainty
-    dG, G, devG,   // dGr at TP, gT0  partial molar(molal) Gibbs energy at TP
+    char DRkey[DC_RKLEN],	// DCOMP or REACDC rkey with source data
+    pSD,                	// data origin { d n i f r }
+    pTM,	//Terminal state for  n i r : { + - * }
+    unE,	// Units of energy  { j c J C n N }
+    unV;	// Units of volume  { c C j L m }
+   double P,Pst,	//current pressure,bar (10^5 Pa), reference pressure
+    TC, TCst,		// TC - current temperature, TCr - reference temperature
+    T, Tst,			// T -  current temperature,Tr - reference temperature
+    dS, S, devS,   	// dSr at TP, S0 for reacdef DC, devS - uncertainty
+    dG, G, devG,   	// dGr at TP, gT0  partial molar(molal) Gibbs energy at TP
     // uncertainty of gT0
-    K, lgK, dlgK,  //equilibrium constant for TP, logK of reac, uncertainty
-    dH, H, devH,   // dHr at TP, hT0  partial molal enthalpy, uncertainty
-    dCp, Cp,devCp, //dCpr at TP, Cp0  partial molar heat capacity,uncertainty
-    dV, V, devV,   // dVr at TP,Vm0  partial molar volume at TP,uncertainty
-    Alp, Bet,      // Compressibility (reserved), expandability (reserved)
-    Fug, dVg,      // molar fugacity at TP (reserved), dVm of gas (reserved)
-    RT,            // RT factor
-    wRo, wEps,     //Density of H2O fluid, Dielectric constant of H2O fluid
-wAlp, wdAlpdT, wBet, // Compressibility, its derivative, and expansibility of
-                   // H2O fluid (added for MRB model by DK on 03.08.2007)
-gfun,             // g function from HKF (added 07.06.05 by KD )
+    K, lgK, dlgK,  	//equilibrium constant for TP, logK of reac, uncertainty
+    dH, H, devH,   	// dHr at TP, hT0  partial molal enthalpy, uncertainty
+    dCp, Cp,devCp, 	//dCpr at TP, Cp0  partial molar heat capacity,uncertainty
+    dV, V, devV,   	// dVr at TP,Vm0  partial molar volume at TP,uncertainty
+    Alp, Bet,      	// Compressibility (reserved), expandability (reserved)
+    Fug, dVg,      	// molar fugacity at TP (reserved), dVm of gas (reserved)
+    RT,            	// RT factor
+    wRo, wEps,		// water density and dielectrical constant
+    wdRdT, wdEdT,		// first T derivative
+    wd2RdT2, wd2EdT2,	// second T derivative
+    wdRdP, wdEdP,		// first P derivative
+    wd2RdP2, wd2EdP2,	// second P derivative
+    wAlp, wBet, 	// water expansibility and compressibility
+    wdAlpdT,		// first T derivative of expansibility
+    gfun,             // g function from HKF (added 07.06.05 by KD )
     wtW[12];       //Work cells for RTparam script (increased to 12 for PRSV model, 31.05.2008 TW)
 // work objects copied from DComp structure (invisible in GUI)
     float *CPg,   // Input critical parameters (for FGL)

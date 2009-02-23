@@ -657,11 +657,13 @@ RESULT:
 void
 TDComp::DCthermo( int q, int p )
 {
-    int idx, CM,CE,CV;
+    int idx, CM, CE, CV;
+    double rho, eps, alp, dal, bet, xborn, yborn, zborn, qborn;
 
     aW.ods_link( p );
     if( dcp != dc+q )
         ods_link( q );
+
     aW.twp->Tst = aW.twp->TCst + C_to_K;
     aW.twp->RT = R_CONSTANT * aW.twp->T;
     aW.twp->Fug = aW.twp->P;
@@ -669,52 +671,74 @@ TDComp::DCthermo( int q, int p )
     CM = toupper( dcp->pct[0] );
     CE = toupper( dcp->pct[1] );
     CV = toupper( dcp->pct[2] );
+
     if( CM != CTPM_HKF && aW.twp->P < 1e-5 )
-         aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
+    	aW.twp->P = 1e-5;                   // lowest pressure set to 1 Pa
     if( CM == CTPM_HKF || CV == CPM_AKI /*&& aW.twp->P < 1.00001e-5 */ )  // fixed by KD 03.07.03, 05.12.06, 30.01.08
-    {// HKF calculations and/or or determination of P_sat if P=0
-        if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
-                ( fabs( aW.twp->P - aSta.Pres ) > 0.001 ))    // corrected by KD 25.11.05
-        { // re-calculation of properties of H2O using HGF/HGK
-            aSta.Temp = aW.twp->TC;
-            if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
-                aSta.Temp = 0.01;
-if( aW.twp->P < 6.1e-3 ) // 6.1e-3 is P_sat at triple point of H2O
-                         // At lower pressures HKF/HGK runs unstable or crashes
-     aSta.Pres = 0.0;  // 06.12.2006  DK
-else
-     aSta.Pres =  aW.twp->P;
-            TSupcrt supCrt;
-            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
-if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
-      aW.twp->P = aSta.Pres;
-            aW.twp->wRo  = aSta.Dens[aSpc.isat]; // density of water g/cm3
-            aW.twp->wEps = aWp.Dielw[aSpc.isat]; // dielectric constant of water
-//            aW.twp->wVis = aWp.Viscw[aSpc.isat]; // dynamic viscosity of water
-//   Added 03.08.2007 for MRB calculations (DK)
-            aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];
-            aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];
-            aW.twp->wBet  = aWp.Betaw[aSpc.isat];
+    { // HKF calculations and/or or determination of P_sat if P=0
+    	if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
+    			( fabs( aW.twp->P - aSta.Pres ) > 0.001 ))    // corrected by KD 25.11.05
+    	{ // re-calculation of properties of H2O using HGF/HGK
+    		aSta.Temp = aW.twp->TC;
+    		if( aSta.Temp < 0.01 && aSta.Temp >= 0.0 ) // Deg. C!
+    			aSta.Temp = 0.01;
+    		if( aW.twp->P < 6.1e-3 ) // 6.1e-3 is P_sat at triple point of H2O
+                // At lower pressures HKF/HGK runs unstable or crashes
+    			aSta.Pres = 0.0;  // 06.12.2006  DK
+    		else
+    			aSta.Pres =  aW.twp->P;
+
+    		TSupcrt supCrt;
+            supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres );
+            if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
+            	aW.twp->P = aSta.Pres;
+
+            // pull water properties from WATERPARAM
+            rho = aSta.Dens[aSpc.isat];
+            alp = aWp.Alphaw[aSpc.isat];
+            dal = aWp.dAldT[aSpc.isat];
+            bet = aWp.Betaw[aSpc.isat];
+            eps = aWp.Dielw[aSpc.isat];
+            xborn = aWp.XBorn[aSpc.isat];
+            yborn = aWp.YBorn[aSpc.isat];
+            zborn = aWp.ZBorn[aSpc.isat];
+            qborn = aWp.QBorn[aSpc.isat];
+
+            // recalculate and assign water properties
+            aW.twp->wRo  = aSta.Dens[aSpc.isat];  // density (g cm-3)
+            aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];  // expansibility
+            aW.twp->wEps = aWp.Dielw[aSpc.isat];  // dielectric constant
+            aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];  // T derivative
+            aW.twp->wBet  = aWp.Betaw[aSpc.isat];  // compressibility
+            // aW.twp->wVis = aWp.Viscw[aSpc.isat]; // dynamic viscosity
+            aW.twp->wdRdT = - alp * rho;
+            aW.twp->wd2RdT2 = rho * ( pow(alp,2.) - dal );
+            aW.twp->wdRdP = bet * rho;
+            aW.twp->wdEdT = yborn * pow(eps,2.);
+            aW.twp->wd2EdT2 = (xborn + 2.*eps*pow(yborn,2.)) * pow(eps,2.);
+            aW.twp->wdEdP = qborn * pow(eps,2.);
         }
+
         else
         { // calculated before
             aW.twp->P = aSta.Pres;
         }
     }
+
     switch( CM )
     {
     case CTPM_CPT:
-//        if( CE == CTM_CHP && CV == CPM_CHE )
-//        {  // Added for passing
-//        }
+    	// if( CE == CTM_CHP && CV == CPM_CHE )
+    	// {  // Added for passing
+    	// }
         calc_tpcv( q, p, CE, CV );
         if( CV == CPM_GAS && ( aW.twp->P > 10. && aW.twp->TC > 100. ) )
         {
-//            TFGLcalc aFGL;           Blocked 15.02.2007 by DK
+        	// TFGLcalc aFGL;           Blocked 15.02.2007 by DK
             aW.twp->CPg = dcp->CPg;
             aW.twp->mwt = dcp->mwt;
             aW.twp->PdcC = dcp->PdcC;
-//            aFGL.calc_FGL( );
+            // aFGL.calc_FGL( );
             aW.twp->CPg = NULL;
         }
 
@@ -750,13 +774,14 @@ if( aW.twp->P < 6.1e-3 )   // 06.12.2006  DK
         }
 
         else if( CV == CPM_AKI )
-        {  	// calculation of partial molal volumes for aqueous non-polar species
+        {
+        	// calculation of partial molal volumes for aqueous non-polar species
         	//  using EOS (Akinfiev,Diamond 2003) added by DK and TW 30.01.2008
         	calc_akinf( q, p );
         }
         break;
 
-    case CTPM_HKF:
+	case CTPM_HKF:
         {
             switch( CE )
             {

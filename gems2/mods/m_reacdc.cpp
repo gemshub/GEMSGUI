@@ -460,10 +460,10 @@ AGAIN_MOD:
         case CTM_IKZ:
             rcp->PreKP = S_ON;
             break; /* calc lgK(TP) */
-        case CTM_DKR:   // Franck-Marshall density model 
-        case CTM_MRB:   // Modified Ryzhenko-Bryzgalin model 
-            rcp->PreDS = S_ON;  
-             break; 
+        case CTM_DKR:   // Franck-Marshall density model
+        case CTM_MRB:   // Modified Ryzhenko-Bryzgalin model
+            rcp->PreDS = S_ON;
+             break;
         case CTM_PPE:
             rcp->PreKT = S_ON;
             break;
@@ -510,8 +510,8 @@ AGAIN_MOD:
             }
         }
      }
-    
-         
+
+
     // made vectors selections DCOMP and REACDC
     if( Nc1>0 || Nr1>0 )
     {
@@ -628,28 +628,29 @@ TReacDC::RecCalc( const char* key )
 
 // Calculation of thermodynamic properties of reaction and reaction-defined
 //    DC for T,P of interest
-//  Input data are loaded into tpwork structure, results extracted from 
+//  Input data are loaded into tpwork structure, results extracted from
 //    that structure. RCthermo() is recursive (up to 6 levels).
 //
 void
 TReacDC::RCthermo( int q, int p )
 {
-    int CM,CE,CV, j, isotop = 0;
+	int CM,CE,CV, j, isotop = 0;
+	double rho, eps, alp, dal, bet, xborn, yborn, zborn, qborn;
     time_t tim;
     vstr  /*buf[121],*/ dckey(DC_RKLEN + 10);
 
     aW.twp->Tst = aW.twp->TCst + C_to_K;
     aW.twp->RT = R_CONSTANT * aW.twp->T; /* !!!! */
-    /* aW.twp->ln10RT ??? */
-   // test method codes for thermodynamic calculations 
+	/* aW.twp->ln10RT ??? */
+	// test method codes for thermodynamic calculations
     CM = toupper( rc[q].pct[0] );
     CE = toupper( rc[q].pct[1] );
     CV = toupper( rc[q].pct[2] );
 
-// if( CE != CTM_MRB )  // Provisional for MRB model - DK on 06.08.07
+    // if( CE != CTM_MRB )  // Provisional for MRB model - DK on 06.08.07
     if( fabs( aW.twp->T - 298.15 ) < 0.01 && fabs(aW.twp->P-1.) < 0.01 )
-    {   // standard conditions (Tr,Pr) 
-        aW.twp->K = rcp->Ks[0];
+    {   // standard conditions (Tr,Pr)
+    	aW.twp->K = rcp->Ks[0];
         aW.twp->lgK = rcp->Ks[1];
         aW.twp->dG =  rcp->Gs[0];
         aW.twp->dS =  rcp->Ss[0];
@@ -678,27 +679,47 @@ TReacDC::RCthermo( int q, int p )
         if( fabs(aW.twp->TC - aSta.Temp) > 0.01 ||
                /* ( aW.twp->P > 1e-4 && */ fabs( aW.twp->P - aSta.Pres ) > 0.001 ) // )
         {  // calculate water properties from HGK EoS
-             aSta.Temp = aW.twp->TC;
-             aSta.Pres = aW.twp->P;
-             TSupcrt supCrt;
-             supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
-             aW.twp->P = aSta.Pres;
+			aSta.Temp = aW.twp->TC;
+			aSta.Pres = aW.twp->P;
+			TSupcrt supCrt;
+			supCrt.Supcrt_H2O( aSta.Temp, &aSta.Pres);
+			aW.twp->P = aSta.Pres;
         }
-        aW.twp->P = aSta.Pres;
-        aW.twp->wRo  = aSta.Dens[aSpc.isat];
-        aW.twp->wEps = aWp.Dielw[aSpc.isat];
-//            aW.twp->wVis = aWp.Viscw[aSpc.isat];
-//   Added 03.08.2007 for MRB calculations (DK)
-        aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];
-        aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];
-        aW.twp->wBet  = aWp.Betaw[aSpc.isat];
+
+        // pull water properties from WATERPARAM
+        rho = aSta.Dens[aSpc.isat];
+        alp = aWp.Alphaw[aSpc.isat];
+        dal = aWp.dAldT[aSpc.isat];
+        bet = aWp.Betaw[aSpc.isat];
+        eps = aWp.Dielw[aSpc.isat];
+        xborn = aWp.XBorn[aSpc.isat];
+        yborn = aWp.YBorn[aSpc.isat];
+        zborn = aWp.ZBorn[aSpc.isat];
+        qborn = aWp.QBorn[aSpc.isat];
+
+        // recalculate and assign water properties
+        aW.twp->P = aSta.Pres;  // pressure
+        aW.twp->wRo  = aSta.Dens[aSpc.isat];  // density (g cm-3)
+        aW.twp->wEps = aWp.Dielw[aSpc.isat];  // dielectric constant
+        aW.twp->wAlp  = aWp.Alphaw[aSpc.isat];  // expansibility
+        aW.twp->wdAlpdT = aWp.dAldT[aSpc.isat];  // T derivative
+        aW.twp->wBet  = aWp.Betaw[aSpc.isat];  // compressibility
+        // aW.twp->wVis = aWp.Viscw[aSpc.isat];  // dynamic viscosity
+        aW.twp->wdRdT = - alp * rho;
+        aW.twp->wd2RdT2 = rho * ( pow(alp,2.) - dal );
+        aW.twp->wdRdP = bet * rho;
+        aW.twp->wdEdT = yborn * pow(eps,2.);
+        aW.twp->wd2EdT2 = (xborn + 2.*eps*pow(yborn,2.)) * pow(eps,2.);
+        aW.twp->wdEdP = qborn * pow(eps,2.);
     }
+
     w_dyn_new();
+
     // test the component of reaction and calculate its t/d properties
     for( j=0; j<rc[q].nDC; j++ )
     {
         strncpy( dckey, rc[q].DCk[j], DC_RKLEN );  // Override off !!!
-// !!!!!!!! except "any"=* field in data base record 
+        // !!!!!!!! except "any"=* field in data base record
         aW.ods_link( p+1 );
         /* clear new TPwork structure */
         aW.set_zero( p+1 );
@@ -711,12 +732,16 @@ TReacDC::RCthermo( int q, int p )
         aW.twp->RT = aW.WW(p).RT;
         aW.twp->wRo = aW.WW(p).wRo;
         aW.twp->wEps = aW.WW(p).wEps;
-//        aW.twp->wVis = aW.WW(p).wVis;
-//   Added 06.08.2007 for MRB calculations (DK)
-       aW.twp->wAlp  = aW.WW(p).wAlp;
-       aW.twp->wdAlpdT = aW.WW(p).wdAlpdT;
-       aW.twp->wBet  = aW.WW(p).wBet;
-
+        aW.twp->wAlp  = aW.WW(p).wAlp;
+        aW.twp->wdAlpdT = aW.WW(p).wdAlpdT;
+        aW.twp->wBet  = aW.WW(p).wBet;
+        // aW.twp->wVis = aW.WW(p).wVis;
+        aW.twp->wdRdT = aW.WW(p).wdRdT;
+        aW.twp->wd2RdT2 = aW.WW(p).wd2RdT2;
+        aW.twp->wdRdP = aW.WW(p).wdRdP;
+        aW.twp->wdEdT = aW.WW(p).wdEdT;
+        aW.twp->wd2EdT2 = aW.WW(p).wd2EdT2;
+        aW.twp->wdEdP = aW.WW(p).wdEdP;
         aW.twp->unE = aW.WW(p).unE;  /* test units of measurement */
         aW.twp->unV = aW.WW(p).unV;
         memcpy( aW.twp->DRkey, dckey, DC_RKLEN );
@@ -731,7 +756,7 @@ TReacDC::RCthermo( int q, int p )
             aW.twp->Pst = rc[q+1].Pst;
             aW.twp->TCst = rc[q+1].TCst;
             aW.twp->T = aW.twp->TC + C_to_K;
-            // Recursive call of RCthermo()! 
+            // Recursive call of RCthermo()!
             RCthermo( q+1, p+1 );
             break;
         case SRC_FICT:   /* fictive component */
@@ -813,7 +838,7 @@ CALCULATE_DELTA_R:
             break;
             /*  case CTM_EK1:  dbc = calc_isocoul_r( q, p, CE, CV );
                                break;  */
-        case CTM_DKR: // Marshall-Franck density model 
+        case CTM_DKR: // Marshall-Franck density model
         	calc_r_FMD( q, p, CE, CV );
             break;
         case CTM_MRB: // Calling modified Ryzhenko-Bryzgalin model TW KD 08.2007
@@ -846,13 +871,14 @@ CALCULATE_DELTA_R:
     case CPM_VKE:
     case CPM_VBE:
     case CPM_NUL:   // Added by KD on 15.07.03
-//    case CPM_VBM:
-//    case CPM_CEH: // constant volume only in this version!
+    // case CPM_VBM:
+    // case CPM_CEH: // constant volume only in this version!
          if( (CE != CTM_MRB) && (CE != CTM_DKR) )  // if not Ryzhenko-Bryzgalin model (provisional)
-        calc_tpcv_r( q, p, CM, CV );
+        	 calc_tpcv_r( q, p, CM, CV );
     default:
         break;
     }
+
     /* Calc t/d properties of new component */
     if( !isotop )
     { /* this is a usual reaction  */
@@ -897,6 +923,8 @@ CALCULATE_DELTA_R:
     w_dyn_kill();
 
 }
+
+
 
 /* --------------------------------------------------------------- */
 /* PRONSPREP - Prediction of Partial Molal Properties and Equation of
@@ -1344,10 +1372,10 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
     if(LOGKR == 0.0 )
         LOGKR = 1e-9;
     ZZ = (int)fabs(ZC);
-    
+
 //    NC = 0;  // needs to pull atomic number of cation from IComp here
-    NC = (int)lAN[iC];      
-    
+    NC = (int)lAN[iC];
+
     // calculations for complex number 1
     switch ( ZZ )
     {
