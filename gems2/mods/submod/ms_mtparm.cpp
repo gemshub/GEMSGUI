@@ -486,17 +486,54 @@ if( P < 1e-5 )  // trial check  5.12.2006
        { /* load water properties from HGK/HKF*/
          float b_gamma;
          double gfun;
-         tp.RoW  = aSta.Dens[aSpc.isat]; /* Density of liquid water */
-         tp.EpsW = aWp.Dielw[aSpc.isat]; /* Dielectric constant of liquid water */
-         tp.VisW = aWp.Viscw[aSpc.isat]; /* Dynamic viscosity of liquid water */
-         tp.RoV  = aSta.Dens[!aSpc.isat]; /* Density of water vapor */
-         tp.EpsV = aWp.Dielw[!aSpc.isat]; /* Dielectric constant of water vapor */
-         tp.VisV = aWp.Viscw[!aSpc.isat]; /* Dynamic viscosity of liquid water */
+         double rhow, epsw, alpw, dalw, betw, xbornw, ybornw, zbornw, qbornw;
+         double rhov, epsv, alpv, dalv, betv, xbornv, ybornv, zbornv, qbornv;
+
+         // pull water parameters from WATERPARAM
+         rhow = aSta.Dens[aSpc.isat];  // water liquid
+         alpw = aWp.Alphaw[aSpc.isat];
+         dalw = aWp.dAldT[aSpc.isat];
+         betw = aWp.Betaw[aSpc.isat];
+         epsw = aWp.Dielw[aSpc.isat];
+         xbornw = aWp.XBorn[aSpc.isat];
+         ybornw = aWp.YBorn[aSpc.isat];
+         zbornw = aWp.ZBorn[aSpc.isat];
+         qbornw = aWp.QBorn[aSpc.isat];
+         rhov = aSta.Dens[!aSpc.isat];  // water vapor
+         alpv = aWp.Alphaw[!aSpc.isat];
+         dalv = aWp.dAldT[!aSpc.isat];
+         betv = aWp.Betaw[!aSpc.isat];
+         epsv = aWp.Dielw[!aSpc.isat];
+         xbornv = aWp.XBorn[!aSpc.isat];
+         ybornv = aWp.YBorn[!aSpc.isat];
+         zbornv = aWp.ZBorn[!aSpc.isat];
+         qbornv = aWp.QBorn[!aSpc.isat];
+
+         // recalculate and assign water properties
+         tp.RoW  = aSta.Dens[aSpc.isat];  // density (g cm-3)
+         tp.EpsW = aWp.Dielw[aSpc.isat];  // dielectric constant
+         tp.VisW = aWp.Viscw[aSpc.isat];  //dynamic viscosity
+         tp.dRdTW = - alpw * rhow;
+         tp.d2RdT2W = rhow * ( pow(alpw,2.) - dalw );
+         tp.dRdPW = betw * rhow;
+         tp.dEdTW = ybornw * pow(epsw,2.);
+         tp.d2EdT2W = (xbornw + 2.*epsw*pow(ybornw,2.)) * pow(epsw,2.);
+         tp.dEdPW = qbornw * pow(epsw,2.);
+         tp.RoV  = aSta.Dens[!aSpc.isat];  // density (g cm-3)
+         tp.EpsV = aWp.Dielw[!aSpc.isat];  // dielectric constant
+         tp.VisV = aWp.Viscw[!aSpc.isat];  //dynamic viscosity
+         tp.dRdTV = - alpv * rhov;
+         tp.d2RdT2V = rhov * ( pow(alpv,2.) - dalv );
+         tp.dRdPV = betv * rhov;
+         tp.dEdTV = ybornv * pow(epsv,2.);
+         tp.d2EdT2V = (xbornv + 2.*epsv*pow(ybornv,2.)) * pow(epsv,2.);
+         tp.dEdPV = qbornv * pow(epsv,2.);
+
          tp.PeosW = S_ON;
          tp.P_HKF = S_ON;
          if( tp.P < 1e-6 )     // added 25.11.05
              tp.P = aW.twp->P;
-       // Added 07.06.05 for b_gamma=f(T,P) calculations
+         // Added 07.06.05 for b_gamma=f(T,P) calculations
          gfun = aW.twp->gfun;
          b_gamma = aPa->pa.aqPar[0];
          switch( tp.Pbg )

@@ -3,7 +3,7 @@
 //
 // Declaration of TMTparm class, config and  load functions
 //
-// Rewritten from C to C++ by S.Dmytriyeva  
+// Rewritten from C to C++ by S.Dmytriyeva
 // Copyright (C) 1995-2001 S.Dmytriyeva, D.Kulik
 //
 // This file is part of a GEM-Selektor library for thermodynamic
@@ -66,16 +66,20 @@ typedef struct
     ;
     float  /* genP[8] */
     curT, curP, // current T & P
-    T,    // Temperature T, C
-    P,    // Pressure P, bar
-    RT,   // RT factor (R=8.3144 J/mole/K)
-    TK,   // T in Kelvins, added 27.11.00 by DAK
-    RoW,  // Density of H2O g/cm3 (liquid; vapour)
-    RoV,
-    EpsW, // Dielectric constant of H2O (liquid; vapour)
-    EpsV,
-    VisW, // Viscosity of H2O (dynamic), kg/m*sec (water; steam)
-    VisV;
+    T,    	// Temperature T, C
+    P,    	// Pressure P, bar
+    RT,   	// RT factor (R=8.3144 J/mole/K)
+    TK,   	// T in Kelvins, added 27.11.00 by DAK
+    RoW, RoV,  // Density of H2O g/cm3 (liquid; vapour)
+    EpsW, EpsV,  // Dielectric constant of H2O (liquid; vapour)
+    dRdTW, dRdTV,
+    d2RdT2W, d2RdT2V,
+    dRdPW, dRdPV,
+    dEdTW, dEdTV,
+    d2EdT2W, d2EdT2V,
+    dEdPW, dEdPV,
+    VisW, VisV; // Viscosity of H2O (dynamic), kg/m*sec (water; steam)
+
 
 // Arrays loaded from current data, not from DB !!!!
     double        /* size [0:L-1] */
