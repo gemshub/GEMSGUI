@@ -1281,16 +1281,6 @@ TSupcrt::load(int phase, WATERPARAM& wp)
         wp.Gigw[0]   = id.gi;
         wp.Sigw[0]   = id.si;
         wp.Cpigw[0]  = id.cpi;
-        wp.Rho[0]    = 0.0;
-        wp.dRdT[0]   = 0.0;
-        wp.d2RdT2[0] = 0.0;
-        wp.dRdP[0]   = 0.0;
-        wp.d2RdP2[0] = 0.0;
-        wp.Eps[0]    = 0.0;
-        wp.dEdT[0]   = 0.0;
-        wp.d2EdT2[0] = 0.0;
-        wp.dEdP[0]   = 0.0;
-        wp.d2EdP2[0] = 0.0;
     }
     else
     {   // liquid at Psat
@@ -1320,16 +1310,6 @@ TSupcrt::load(int phase, WATERPARAM& wp)
         wp.Gigw[1]   = id.gi;
         wp.Sigw[1]   = id.si;
         wp.Cpigw[1]  = id.cpi;
-        wp.Rho[0]    = 0.0;
-        wp.dRdT[0]   = 0.0;
-        wp.d2RdT2[0] = 0.0;
-        wp.dRdP[0]   = 0.0;
-        wp.d2RdP2[0] = 0.0;
-        wp.Eps[0]    = 0.0;
-        wp.dEdT[0]   = 0.0;
-        wp.d2EdT2[0] = 0.0;
-        wp.dEdP[0]   = 0.0;
-        wp.d2EdP2[0] = 0.0;
     }
 
 }
