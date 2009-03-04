@@ -1014,6 +1014,79 @@ class TEUNIQUAC: public TSolMod
 
 
 // -------------------------------------------------------------------------------------
+// Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Helgesons variant
+// References: Helgeson et al. (1981); Oelkers and Helgeson (1990); Pokrovskii and Helgeson (1995; 1997a; 1997b)
+
+class THelgesonDH: public TSolMod
+{
+	private:
+
+		// status flags copied from MULTI
+		double nPolicy;  // mode of calculating H2O and neutral species (old version)
+		double cutoffIS;  // IS cutoff value for calculating act. coefficients
+		int flagH2O;  // new flag for water
+		int flagNeut;  // new flag for neutral species
+		int flagElect;  // flag for selection of background electrolyte model
+
+		// data objects copied from MULTI
+		double *z;   // species charges
+		double *m;   // species molalities
+		double *RhoW;  // water density properties
+		double *EpsW;  // water dielectrical properties
+		double *a;  // individual ion size-parameters
+		double *b;  // individual extended-term parameters
+
+		// internal work objects
+		double *anot;  // ion-size parameters (TP corrected?)
+		double *bgam;  // extended-term parameters (TP corrected)
+		double *dbgdT;  // derivatives
+		double *d2bgdT2;
+		double *dbgdP;
+		double *LnG;  // activity coefficient
+		double *dLnGdT;  // derivatives
+		double *d2LnGdT2;
+		double *dLnGdP;
+
+		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
+		double B, dBdT, d2BdT2, dBdP;  // B term of DH equation (and derivatives)
+		double IS;  // ionic strength
+
+		// internal functions
+		void alloc_internal();
+		void free_internal();
+		long int IonicStrength();
+		long int BGammaTP();
+		long int Gfunction();
+
+	public:
+
+		// Constructor
+		THelgesonDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code,
+				long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
+				double T_k, double P_bar, double *dW, double *eW );
+
+		// Destructor
+		~THelgesonDH();
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam();
+
+		// calculates activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
+
+// -------------------------------------------------------------------------------------
 // Class for hardcoded models for solid solutions (c) TW January 2009
 // References:
 
