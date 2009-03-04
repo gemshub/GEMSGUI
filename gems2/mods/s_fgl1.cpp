@@ -1327,7 +1327,7 @@ long int TEUNIQUAC::PTparam()
 }
 
 
-// Calculates activity coefficients and excess functions
+// Calculates activity coefficients
 long int TEUNIQUAC::MixMod()
 {
 	int j, i, l, k, w;
@@ -1700,6 +1700,238 @@ void TEUNIQUAC::Euniquac_test_out( const char *path )
 
 
 
+//=============================================================================================
+// Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Helgesons variant
+// References: Helgeson et al. (1981); Oelkers and Helgeson (1990);
+// Pokrovskii and Helgeson (1995; 1997a; 1997b)
+//=============================================================================================
+
+
+// Generic constructor for the THelgesonDH class
+THelgesonDH::THelgesonDH( long int NSpecies, long int NParams,
+		long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code,
+		long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL,
+		double T_k, double P_bar, double *dW, double *eW,
+		double *arM, double *arZ, double AC, double BC ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
+        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
+        			 arlnGam, aphVOL, T_k, P_bar )
+{
+	alloc_internal();
+	m = arM;
+	z = arZ;
+	ac = AC;
+	bc = BC;
+	RhoW = dW;
+	EpsW = eW;
+}
+
+
+THelgesonDH::~THelgesonDH()
+{
+	free_internal();
+}
+
+
+void THelgesonDH::alloc_internal()
+{
+	LnG = new double [NComp];
+	dLnGdT = new double [NComp];
+	d2LnGdT2 = new double [NComp];
+	dLnGdP = new double [NComp];
+}
+
+
+void THelgesonDH::free_internal()
+{
+  	// cleaning memory
+	delete[]LnG;
+	delete[]dLnGdT;
+	delete[]d2LnGdT2;
+	delete[]dLnGdP;
+}
+
+
+long int THelgesonDH::SetFlags( long int elect, double cutoff, double np )
+{
+	// old nPolicy flag needs to be replaced
+	// might need to convert electrolyte model flag as well
+
+	flagElect = elect;
+	cutoffIS = cutoff;
+	nPolicy = np;
+
+	// converting old into new flags
+	if ( nPolicy < -1.000001 )
+	{
+		// neutral species 1.0, H2O solvent 1.0
+		flagNeut = 0;
+		flagH2O = 0;
+	}
+
+	else if ( nPolicy > -1.000001 && nPolicy < -0.000001 )
+	{
+		// neutral species 1.0, H2O solvent calc.
+		flagNeut = 0;
+		flagH2O = 1;
+	}
+
+	else if ( nPolicy > -0.000001 && nPolicy < 0.999999 )
+	{
+		// neutral species calc., H2O solvent calc.
+		flagNeut = 1;
+		flagH2O = 1;
+	}
+
+	else
+	{
+		// neutral species calc., H2O solvent 1.0
+		flagNeut = 1;
+		flagH2O = 0;
+	}
+
+	return 0;
+}
+
+
+// Calculates T,P corrected binary interaction parameters
+long int THelgesonDH::PTparam()
+{
+	double RHO, dRdT, d2RdT2, dRdP, EPS, dEdT, d2EdT2, dEdP;
+
+	// pull parameters
+	RHO = RhoW[0];
+	dRdT = RhoW[1];
+	d2RdT2 = RhoW[2];
+	dRdP = RhoW[3];
+	EPS = EpsW[0];
+	dEdT = EpsW[1];
+	d2EdT2 = EpsW[2];
+	dEdP = EpsW[3];
+
+	// calculate A and B terms of DH equation (add derivatives)
+	A = (1.82483e6) * sqrt(RHO) /	pow(Tk*EPS, 1.5);
+	B = 50.2916 * sqrt(RHO) / sqrt(Tk*EPS);
+
+	// b_gamma constant
+	if ( flagElect == 0)
+	{
+		// bla
+		bgam = bc;
+		dbgdT = 0.0;
+		d2bgdT2 = 0.0;
+		dbgdP = 0.0;
+		anot = ac;
+	}
+
+	// b_gamma TP-dependent
+	else
+	{
+		Gfunction();
+		BgammaTP( flagElect );
+	}
+
+	return 0;
+}
+
+
+// Calculates activity coefficients
+long int THelgesonDH::MixMod()
+{
+	// bla
+	return 0;
+}
+
+
+// calculates excess properties
+long int THelgesonDH::ExcessProp( double *Zex )
+{
+	// bla
+	return 0;
+}
+
+
+// calculates ideal mixing properties
+long int THelgesonDH::IdealProp( double *Zid )
+{
+	// bla
+	return 0;
+}
+
+
+// calculates g_function and derivatives
+long int THelgesonDH::Gfunction()
+{
+	// bla
+	return 0;
+}
+
+
+// calculates TP dependence of b_gamma
+long int THelgesonDH::BgammaTP( long int flagElect )
+{
+	// ni: stoichiometric number of moles of ions in one mole of electrolyte
+	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
+	// units are cal, kg, K, mol, bar
+	double ni, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, rc, ra;
+	double omgpt, nbg, gsf, eps;
+	double b_gamma;
+
+	// pull parameters
+	eps = EpsW[0];
+	gsf = Gf;
+
+	switch ( flagElect )
+	{
+		case 1:  // NaCl
+			ni = 2.; a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
+			a5 = -0.206; c1 = -1.50; c2 = 53300.; omg = 178650.;
+			bg = -174.623; bs = 2.164; rc = 0.97; ra = 1.81;
+			break;
+		case 2:  // KCl
+			ni = 2.; a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
+			a5 = -0.262; c1 = -2.53; c2 = 38628.4; omg = 164870.;
+			bg = -70.0; bs = 1.727; rc = 1.33; ra = 1.81;
+			break;
+		case 3:  // NaOH
+			ni = 2.; a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
+			a5 = -0.206; c1 = -1.50; c2 = 53300.; omg = 205520.;
+			bg = -267.4; bs = 1.836; rc = 0.97; ra = 1.40;
+			break;
+		case 4:  // KOH
+			ni = 2.; a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
+			a5 = -0.262; c1 = -2.53; c2 = 38628.4; omg = 191730.;
+			bg = -335.7; bs = 1.26; rc = 1.33; ra = 1.40;
+			break;
+		default:  // wrong mode
+			return -1;
+	}
+
+	// calculation part
+	omgpt = (1.66027e5)*(1./(0.94+rc+gsf)+1./(ra+gsf));
+	nbg = - ni*bg/2.+ni*bs*(Tk-298.15)/2.-c1*(Tk*log(Tk/298.15)-Tk+298.15)
+				+ a1*(Pbar-1.)+a2*log((2600.+Pbar)/(2600.+1.))
+				- c2*((1./(Tk-228.)-1./(298.15-228.))*(228.-Tk)/228.-Tk/(228.*228.)
+				* log((298.15*(Tk-228.))/(Tk*(298.15-228.))))
+				+ 1./(Tk-228.)*(a3*(Pbar-1.)+a4*log((2600.+Pbar)/(2600.+1.)))
+				+ a5*(omgpt*(1./eps-1.)-omg*(1./78.24513-1.)-5.80e-5*omg*(Tk-298.15));
+	b_gamma = nbg/(2.*log(10.)*1.98721*Tk);
+
+	// assignments
+	bgam = b_gamma;
+	anot = ac;
+
+	return 0;
+}
+
+
+
+
+
 //--------------------- End of s_fgl1.cpp ---------------------------
+
+
 
 

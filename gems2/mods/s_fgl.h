@@ -1024,39 +1024,38 @@ class THelgesonDH: public TSolMod
 		// status flags copied from MULTI
 		double nPolicy;  // mode of calculating H2O and neutral species (old version)
 		double cutoffIS;  // IS cutoff value for calculating act. coefficients
-		int flagH2O;  // new flag for water
-		int flagNeut;  // new flag for neutral species
-		int flagElect;  // flag for selection of background electrolyte model
+		long int flagH2O;  // new flag for water
+		long int flagNeut;  // new flag for neutral species
+		long int flagElect;  // flag for selection of background electrolyte model
 
 		// data objects copied from MULTI
 		double *z;   // species charges
 		double *m;   // species molalities
 		double *RhoW;  // water density properties
 		double *EpsW;  // water dielectrical properties
-		double *a;  // individual ion size-parameters
-		double *b;  // individual extended-term parameters
+		double *an;  // individual ion size-parameters
+		double *bg;  // individual extended-term parameters
+		double ac;  // common ion size parameters
+		double bc;  // common extended-term parameter
 
 		// internal work objects
-		double *anot;  // ion-size parameters (TP corrected?)
-		double *bgam;  // extended-term parameters (TP corrected)
-		double *dbgdT;  // derivatives
-		double *d2bgdT2;
-		double *dbgdP;
+		double anot;  // ion-size parameters (TP corrected?)
+		double bgam, dbgdT, d2bgdT2, dbgdP;  // extended-term parameter (TP corrected)
 		double *LnG;  // activity coefficient
 		double *dLnGdT;  // derivatives
 		double *d2LnGdT2;
 		double *dLnGdP;
-
+		double IS;  // ionic strength
 		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
 		double B, dBdT, d2BdT2, dBdP;  // B term of DH equation (and derivatives)
-		double IS;  // ionic strength
+		double Gf, dGfdT, d2GfdT2, dGfdP;  // g function (and derivatives)
 
 		// internal functions
 		void alloc_internal();
 		void free_internal();
 		long int IonicStrength();
-		long int BGammaTP();
 		long int Gfunction();
+		long int BgammaTP( long int flagElect );
 
 	public:
 
@@ -1064,11 +1063,15 @@ class THelgesonDH: public TSolMod
 		THelgesonDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
-				double *arWx, double *arlnGam, double *aphVOL, double *arM, double *arZ,
-				double T_k, double P_bar, double *dW, double *eW );
+				double *arWx, double *arlnGam, double *aphVOL,
+				double T_k, double P_bar, double *dW, double *eW,
+				double *arM, double *arZ, double AC, double BC );
 
 		// Destructor
 		~THelgesonDH();
+
+		// Set flags for calculation modes
+		long int SetFlags( long int elect, double cutoff, double np );
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
