@@ -1055,6 +1055,9 @@ class THelgesonDH: public TSolMod
 		void free_internal();
 		long int IonicStrength();
 		long int Gfunction();
+		long int GShok2( double T, double P, double D, double beta,
+				double alpha, double daldT, double *g, double *dgdP,
+				double *dgdT, double *d2gdT2 );
 		long int BgammaTP( long int flagElect );
 
 	public:

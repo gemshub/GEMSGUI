@@ -1861,14 +1861,6 @@ long int THelgesonDH::IdealProp( double *Zid )
 }
 
 
-// calculates g_function and derivatives
-long int THelgesonDH::Gfunction()
-{
-	// bla
-	return 0;
-}
-
-
 // calculates TP dependence of b_gamma
 long int THelgesonDH::BgammaTP( long int flagElect )
 {
@@ -1926,6 +1918,120 @@ long int THelgesonDH::BgammaTP( long int flagElect )
 	return 0;
 }
 
+
+// calculates g_function and derivatives
+long int THelgesonDH::Gfunction()
+{
+	double T, P, D, beta, alpha, daldT;
+	double *g, *dgdP, *dgdT, *d2gdT2;
+	double TMAX = 1000., PMAX = 5000., TOL = 1.0e-4;
+
+	// convert parameters
+	T = Tk - 273.15;
+	P = Pbar;
+	D = RhoW[0];
+	alpha = - RhoW[1]/RhoW[0];
+	daldT = pow(alpha, 2.) - RhoW[2]/RhoW[0];
+	beta = RhoW[3]/RhoW[0];
+
+	// initialize g and derivatives to zero
+	*g = 0.0;
+	*dgdP = 0.0;
+	*dgdT = 0.0;
+	*d2gdT2 = 0.0;
+
+	if ((T > TMAX+TOL) || (P > PMAX+TOL))
+		return -1;
+	else
+		GShok2( T, P, D, beta, alpha, daldT, g, dgdP, dgdT, d2gdT2 );
+
+	// assignments
+	Gf = *g;
+	dGfdT = *dgdT;
+	d2GfdT2 = *d2gdT2;
+	dGfdP = *dgdP;
+
+	return 0;
+}
+
+
+long int THelgesonDH::GShok2( double T, double P, double D, double beta,
+		double alpha, double daldT, double *g, double *dgdP, double *dgdT, double *d2gdT2 )
+{
+	double a, b, dgdD, /*dgdD2,*/ dadT, dadTT, dbdT, dbdTT, dDdT, dDdP,
+		dDdTT, Db, dDbdT, dDbdTT, ft, dftdT, dftdTT, fp, dfpdP,
+		f, dfdP, dfdT, d2fdT2, tempy;
+	double C[6]  = {-0.2037662e+01,  0.5747000e-02, -0.6557892e-05,
+			0.6107361e+01, -0.1074377e-01,  0.1268348e-04 };
+	double cC[3] = { 0.3666666e+02, -0.1504956e-09,  0.5017997e-13 };
+
+	if ( D >= 1.3 )
+		return -1;
+	// Sveta 19/02/2000 1-D < 0 pri D>1 => pow(-number, b) = -NaN0000 error
+	double pw = fabs(1.0e0 - D); // insert Sveta 19/02/2000
+
+	// calculation part
+	a  = C[0] + C[1] * T + C[2] * pow(T,2.);
+	b  = C[3] + C[4] * T + C[5] * pow(T,2.);
+		*g = a * pow( pw, b );
+
+	dgdD   = - a * b * pow(pw,(b - 1.0e0));
+	// dgdD2  =   a * b * (b - 1.0e0) * pow((1.0e0 - D),(b - 2.0e0));
+
+	dadT = C[1] + 2.0e0 * C[2] * T;
+	dadTT = 2.0e0 * C[2];
+	dbdT = C[4] + 2.0e0 * C[5] * T;
+	dbdTT = 2.0e0 * C[5];
+	dDdT = - D * alpha;
+	dDdP = D * beta;
+	dDdTT = - D * (daldT - pow(alpha,2.));
+
+	// Db = pow((1.0e0 - D),b);  Fixed by DAK 01.11.00
+	Db = pow( pw , b );
+	dDbdT = -b * pow(pw,(b - 1.0e0)) * dDdT +
+		log(pw) * Db  * dbdT;
+
+	dDbdTT = -(b * pow(pw,(b-1.0e0)) * dDdTT +
+			pow(pw,(b - 1.0e0)) * dDdT * dbdT + b * dDdT *
+			( -(b - 1.0e0) * pow(pw,(b - 2.0e0)) * dDdT +
+					log(pw) * pow(pw,(b - 1.0e0)) * dbdT)) +
+					log(pw) * pow(pw,b) * dbdTT -
+					pow(pw,b) * dbdT * dDdT / (1.0e0 - D) +
+					log(pw) * dbdT * dDbdT;
+
+	*dgdP = dgdD * dDdP;
+	*dgdT = a * dDbdT + Db * dadT;
+	*d2gdT2 = a * dDbdTT + 2.0e0 * dDbdT * dadT + Db * dadTT;
+
+	if((T < 155.0) || (P > 1000.0) || (T > 355.0))
+		return 0;
+
+	tempy = ((T - 155.0e0) / 300.0e0);
+	ft = pow(tempy,4.8) + cC[0] * pow(tempy,16.);
+
+	dftdT = 4.8e0 / 300.0e0 * pow(tempy,3.8) + 16.0e0 / 300.0e0 *
+		cC[0] * pow(tempy,15.);
+
+	dftdTT = 3.8e0 * 4.8e0 / (300.0e0 * 300.0e0) * pow(tempy,2.8) +
+		15.0e0 * 16.0e0 / (300.0e0*300.0e0) * cC[0] * pow(tempy,14.);
+
+	fp = cC[1] * pow((1000.0e0 - P),3.) + cC[2] * pow((1000.0e0 - P),4.);
+
+	dfpdP = -3.0e0 * cC[1] * pow((1000.0e0 - P),2.) -
+		4.0e0 * cC[2] * pow((1000.0e0 - P),3.);
+
+	f = ft * fp;
+	dfdP = ft * dfpdP;
+	dfdT = fp * dftdT;
+	d2fdT2 = fp * dftdTT;
+
+	*g -= f;
+	*dgdP -= dfdP;
+	*dgdT -= dfdT;
+	*d2gdT2 -= d2fdT2;
+
+	return 0;
+}
 
 
 
