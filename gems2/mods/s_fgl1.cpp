@@ -1330,7 +1330,7 @@ long int TEUNIQUAC::PTparam()
 // Calculates activity coefficients
 long int TEUNIQUAC::MixMod()
 {
-	int j, i, l, k, w;
+	long int j, i, l, k, w;
 	double Mw, Xw, IS, b, c;
 	double A, RR, QQ, K, L, M;
 	double gamDH, gamC, gamR, lnGam, Gam;
@@ -1453,7 +1453,7 @@ long int TEUNIQUAC::MixMod()
 long int TEUNIQUAC::ExcessProp( double *Zex )
 {
 	// add excess property calculations
-	int j, i, w;
+	long int j, i, w;
 	double Mw, Xw, IS, b, c;
 	double A, dAdT, dAdP, d2AdT2;
 	double phiti, phthi, RR, QQ, N, TPI, tpx, TPX, dtpx, DTPX, CON;
@@ -1831,6 +1831,7 @@ long int THelgesonDH::PTparam()
 	{
 		Gfunction();
 		BgammaTP( flagElect );
+		anot = ac;
 	}
 
 	return 0;
@@ -1840,7 +1841,90 @@ long int THelgesonDH::PTparam()
 // Calculates activity coefficients
 long int THelgesonDH::MixMod()
 {
-	// bla
+	long int j, w;
+	double a0, sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
+	double Lam, SigTerm, Phi, lnActWat, lg_to_ln;
+	lg_to_ln = 2.302585093;
+	a0 = anot;
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molaities (molT and molZ)
+	IonicStrength();
+	if ( IS < cutoffIS )
+		return 0;
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+
+	if( fabs(A) < 1e-9 )
+	{
+		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
+	}
+
+	if( fabs(B) < 1e-9 )
+	{
+		B = 50.2916 * sqrt( RhoW[0] ) / sqrt( Tk*EpsW[0] );
+	}
+
+	if ( fabs(A) < 1e-9 || fabs(B) < 1e-9 )
+		return -1;
+
+	// loop over all species
+	for( j=0; j<NComp; j++ )
+	{
+		lgGam = 0.0;
+		lnGam = 0.0;
+
+		// charged species
+		if ( z[j] )
+		{
+			lgGam = 0.0;
+			Z2 = z[j]*z[j];
+			lgGam = ( - A * sqI * Z2 ) / ( 1. + B * a0 * sqI ) + bgam * IS ;
+			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+		}
+
+		// neutral species except water solvent
+		if ( j != (NComp-1) )
+		{
+			lgGam = 0.0;
+			if ( flagNeut == 1 )
+				lgGam = bgam * IS;
+			else
+				lgGam = 0.0;
+			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+			continue;
+		}
+
+		// water solvent
+		else
+		{
+			lgGam = 0.0;
+			lnGam = 0.0;
+			if ( flagH2O == 1 )
+			{
+				// Phi corrected using eq. (190) from Helgeson et al. (1981)
+				Lam = 1. + a0*B*sqI;
+				SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(IS,(3./2.)))*(Lam-1./Lam-2*log(Lam));
+				// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+				Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+				lnActWat = -Phi*molT/Nw;
+				lnGam = lnActWat - lnwxWat;
+			}
+			else
+				lnGam = 0.0;
+			lnGamma[j] = lnGam;
+		}
+	}
+
 	return 0;
 }
 
@@ -1856,7 +1940,62 @@ long int THelgesonDH::ExcessProp( double *Zex )
 // calculates ideal mixing properties
 long int THelgesonDH::IdealProp( double *Zid )
 {
-	// bla
+	long int j;
+	double si;
+	si = 0.0;
+	for (j=0; j<NComp; j++)
+	{
+		si += x[j]*log(x[j]);
+	}
+	Hid = 0.0;
+	CPid = 0.0;
+	Vid = 0.0;
+	Sid = (-1.)*R_CONST*si;
+
+	// assignments (ideal mixing properties)
+	Gid = Hid - Sid*Tk;
+	Aid = Gid - Vid*Pbar;
+	Uid = Hid - Vid*Pbar;
+	Zid[0] = Gid;
+	Zid[1] = Hid;
+	Zid[2] = Sid;
+	Zid[3] = CPid;
+	Zid[4] = Vid;
+	Zid[5] = Aid;
+	Zid[6] = Uid;
+	return 0;
+}
+
+
+// calculates true ionic strength
+long int THelgesonDH::IonicStrength()
+{
+	long int j;
+	double is, mt, mz;
+	is = 0.0;
+	mt = 0.0;
+	mz = 0.0;
+
+	// calculate ionic strength
+	for (j=0; j<NComp; j++)
+	{
+		is += 0.5*m[j]*z[j]*z[j];
+	}
+
+	// calculate total molalities
+	// needs to be modified when nonaqueous solvents are present
+	for (j=0; j<(NComp-1); j++)
+	{
+		mt += m[j];
+		if ( z[j] )
+			mz += m[j];
+	}
+
+	// assignments
+	IS = is;
+	molT = mt;
+	molZ = mz;
+
 	return 0;
 }
 
@@ -1913,13 +2052,12 @@ long int THelgesonDH::BgammaTP( long int flagElect )
 
 	// assignments
 	bgam = b_gamma;
-	anot = ac;
 
 	return 0;
 }
 
 
-// calculates g_function and derivatives
+// wrapper for g-function
 long int THelgesonDH::Gfunction()
 {
 	double T, P, D, beta, alpha, daldT;
@@ -1955,6 +2093,7 @@ long int THelgesonDH::Gfunction()
 }
 
 
+// calculates g-function and derivatives
 long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 		double alpha, double daldT, double *g, double *dgdP, double *dgdT, double *d2gdT2 )
 {
@@ -1968,57 +2107,53 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 	if ( D >= 1.3 )
 		return -1;
 	// Sveta 19/02/2000 1-D < 0 pri D>1 => pow(-number, b) = -NaN0000 error
-	double pw = fabs(1.0e0 - D); // insert Sveta 19/02/2000
+	double pw = fabs(1.0 - D); // insert Sveta 19/02/2000
 
 	// calculation part
-	a  = C[0] + C[1] * T + C[2] * pow(T,2.);
-	b  = C[3] + C[4] * T + C[5] * pow(T,2.);
-		*g = a * pow( pw, b );
+	a = C[0] + C[1]*T + C[2]*pow(T,2.);
+	b = C[3] + C[4]*T + C[5]*pow(T,2.);
+	*g = a * pow(pw, b);
 
-	dgdD   = - a * b * pow(pw,(b - 1.0e0));
-	// dgdD2  =   a * b * (b - 1.0e0) * pow((1.0e0 - D),(b - 2.0e0));
+	dgdD = - a*b* pow(pw, (b - 1.0));
+	// dgdD2 = a * b * (b - 1.0) * pow((1.0 - D),(b - 2.0));
 
-	dadT = C[1] + 2.0e0 * C[2] * T;
-	dadTT = 2.0e0 * C[2];
-	dbdT = C[4] + 2.0e0 * C[5] * T;
-	dbdTT = 2.0e0 * C[5];
+	dadT = C[1] + 2.0*C[2]*T;
+	dadTT = 2.0*C[2];
+	dbdT = C[4] + 2.0*C[5]*T;
+	dbdTT = 2.0*C[5];
 	dDdT = - D * alpha;
 	dDdP = D * beta;
 	dDdTT = - D * (daldT - pow(alpha,2.));
 
-	// Db = pow((1.0e0 - D),b);  Fixed by DAK 01.11.00
-	Db = pow( pw , b );
-	dDbdT = -b * pow(pw,(b - 1.0e0)) * dDdT +
-		log(pw) * Db  * dbdT;
+	// Db = pow((1.0 - D), b);  Fixed by DAK 01.11.00
+	Db = pow(pw , b);
+	dDbdT = - b*pow(pw,(b - 1.0))*dDdT + log(pw)*Db*dbdT;
 
-	dDbdTT = -(b * pow(pw,(b-1.0e0)) * dDdTT +
-			pow(pw,(b - 1.0e0)) * dDdT * dbdT + b * dDdT *
-			( -(b - 1.0e0) * pow(pw,(b - 2.0e0)) * dDdT +
-					log(pw) * pow(pw,(b - 1.0e0)) * dbdT)) +
-					log(pw) * pow(pw,b) * dbdTT -
-					pow(pw,b) * dbdT * dDdT / (1.0e0 - D) +
-					log(pw) * dbdT * dDbdT;
+	dDbdTT = - (b*pow(pw,(b-1.0)) *dDdTT + pow(pw,(b - 1.0)) * dDdT * dbdT
+				+ b * dDdT * (-(b - 1.0) * pow(pw,(b - 2.0)) * dDdT
+				+ log(pw) * pow(pw,(b - 1.0)) * dbdT))
+				+ log(pw) * pow(pw,b) * dbdTT
+				- pow(pw,b) * dbdT * dDdT / (1.0 - D)
+				+ log(pw) * dbdT * dDbdT;
 
 	*dgdP = dgdD * dDdP;
 	*dgdT = a * dDbdT + Db * dadT;
-	*d2gdT2 = a * dDbdTT + 2.0e0 * dDbdT * dadT + Db * dadTT;
+	*d2gdT2 = a * dDbdTT + 2.0 * dDbdT * dadT + Db * dadTT;
 
 	if((T < 155.0) || (P > 1000.0) || (T > 355.0))
 		return 0;
 
-	tempy = ((T - 155.0e0) / 300.0e0);
+	tempy = ((T - 155.0) / 300.0);
 	ft = pow(tempy,4.8) + cC[0] * pow(tempy,16.);
 
-	dftdT = 4.8e0 / 300.0e0 * pow(tempy,3.8) + 16.0e0 / 300.0e0 *
-		cC[0] * pow(tempy,15.);
+	dftdT = 4.8 / 300.0 * pow(tempy, 3.8) + 16.0 / 300.0 * cC[0] * pow(tempy, 15.);
 
-	dftdTT = 3.8e0 * 4.8e0 / (300.0e0 * 300.0e0) * pow(tempy,2.8) +
-		15.0e0 * 16.0e0 / (300.0e0*300.0e0) * cC[0] * pow(tempy,14.);
+	dftdTT = 3.8 * 4.8 / (300.0 * 300.0) * pow(tempy, 2.8)
+		+ 15.0 * 16.0 / (300.0*300.0) * cC[0] * pow(tempy,14.);
 
-	fp = cC[1] * pow((1000.0e0 - P),3.) + cC[2] * pow((1000.0e0 - P),4.);
+	fp = cC[1] * pow((1000.0 - P),3.) + cC[2] * pow((1000.0 - P),4.);
 
-	dfpdP = -3.0e0 * cC[1] * pow((1000.0e0 - P),2.) -
-		4.0e0 * cC[2] * pow((1000.0e0 - P),3.);
+	dfpdP = -3.0 * cC[1] * pow((1000.0 - P),2.) - 4.0 * cC[2] * pow((1000.0 - P),3.);
 
 	f = ft * fp;
 	dfdP = ft * dfpdP;

@@ -1046,6 +1046,8 @@ class THelgesonDH: public TSolMod
 		double *d2LnGdT2;
 		double *dLnGdP;
 		double IS;  // ionic strength
+		double molT;  // total molality of aqueous species (except water solvent)
+		double molZ;  // total molality of charged species
 		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
 		double B, dBdT, d2BdT2, dBdP;  // B term of DH equation (and derivatives)
 		double Gf, dGfdT, d2GfdT2, dGfdP;  // g function (and derivatives)
@@ -1054,11 +1056,11 @@ class THelgesonDH: public TSolMod
 		void alloc_internal();
 		void free_internal();
 		long int IonicStrength();
+		long int BgammaTP( long int flagElect );
 		long int Gfunction();
 		long int GShok2( double T, double P, double D, double beta,
 				double alpha, double daldT, double *g, double *dgdP,
 				double *dgdT, double *d2gdT2 );
-		long int BgammaTP( long int flagElect );
 
 	public:
 
