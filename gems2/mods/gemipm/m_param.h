@@ -111,7 +111,7 @@ public:
     }
 
    void outMulti( GemDataStream& ff, gstring& path  );
-   void outMultiTxt( const char *path  );
+   void outMultiTxt( const char *path, bool append=false  );
    void readMulti( GemDataStream& ff );
    void readMulti( const char* path );
    double calcMulti( long int& PrecLoops_, long int& NumIterFIA_, long int& NumIterIPM_ );

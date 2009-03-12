@@ -23,6 +23,7 @@
 #include "m_gem2mt.h"
 #include "m_syseq.h"
 #include "service.h"
+#include "visor.h"
 
 
 // save old lists of keys to compare
@@ -429,6 +430,38 @@ int TProfil::indDC( int i )
         if( i == DCon[ii])
             return ii;
     return -1;
+}
+
+void TProfil::CalcAllSystems( )
+{
+    double ccTime = 0.;
+    vstr pkey(81);
+    gstring str_file;
+	TCStringArray aList;
+    TCIntArray anR;
+
+    rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
+                           K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
+    rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
+
+    gstring ProfName(pkey);
+    size_t pos = ProfName.find(':');
+    ProfName = ProfName.substr(0,pos);
+    str_file = ProfName + "_" + curDateSmol('_')+".Dump.out";
+
+    TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
+    aSE->ods_link(0);
+    for(uint i=0; i< aList.GetCount(); i++)
+    {
+       //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
+        pVisor->Message( 0, "Loading Modelling Project",
+           "Calculating and dumping all systems", i, aList.GetCount() );
+       loadSystat( aList[i].c_str() );
+        ccTime += CalcEqstat( false);
+        outMultiTxt( str_file.c_str(), true );    
+        // aSE->RecSave( aList[i].c_str(), true );
+    }
+
 }
 
 /*

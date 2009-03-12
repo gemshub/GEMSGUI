@@ -103,6 +103,18 @@ KeyProfile::getAqGasState()
 }
 
 bool
+KeyProfile::getMakeDump()
+{
+    if( newKey == true )
+        return false;    // new record => no dump
+
+    if( pMakeDump->isChecked() )
+        return true;  // out all system records
+    else return false; 
+
+}
+
+bool
 KeyProfile::getFilesState()
 {
 

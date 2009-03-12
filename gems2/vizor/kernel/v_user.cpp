@@ -198,7 +198,7 @@ gstring curDate()
     return tstr.p;
 }
 
-gstring curDateSmol()
+gstring curDateSmol(char ch )
 {
     struct tm *time_now;
     time_t secs_now;
@@ -209,8 +209,9 @@ gstring curDateSmol()
 
     vstr tstr(11);
 
-    strftime(tstr, 9,
-             "%d/%m/%y",
+    gstring frm = "%d" + gstring(1,ch)+ "%m" + gstring(1,ch) + "%y";
+    strftime(tstr, 9, frm.c_str(),
+             // "%d/%m/%y",
              time_now);
 
     return tstr.p;

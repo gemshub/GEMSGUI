@@ -196,6 +196,7 @@ protected:
         const char* key, bool changeAqGas, bool addFile );
     bool NewProfileMode( bool remakeRec, gstring& key_templ );
     bool NewProfileModeElements( bool remakeRec, gstring& key_templ );
+    void CalcAllSystems();
     void SaveOldList();
     void DeleteOldList();
     void TestChangeProfile();
@@ -278,7 +279,7 @@ double CalcEqstat( bool show_progress=true );
    void outMulti( GemDataStream& ff, gstring& path  );
    void outMulti( gstring& path, bool addMui  );
    void outMulti();
-   void outMultiTxt( const char *path  );
+   void outMultiTxt( const char *path, bool append=false  );
    void readMulti( GemDataStream& ff );
    void readMulti( const char* path );
    void CmReadMulti( const char* path );

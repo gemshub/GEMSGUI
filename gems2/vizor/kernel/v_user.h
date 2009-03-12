@@ -119,7 +119,7 @@ ChangeforTempl( gstring& data_str,  const gstring& from_templ1,
 gstring curDate();
 
 // Returns string representation of current date in dd/mm/yy format
-gstring curDateSmol();
+gstring curDateSmol(char ch = '/');
 
 // Returns string representation of current time in HH:MM  format
 gstring curTime();

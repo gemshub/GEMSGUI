@@ -228,9 +228,9 @@ void TProfil::outMulti( GemDataStream& ff, gstring& path  )
     multi->to_file( ff );
 }
 
-void TProfil::outMultiTxt( const char *path  )
+void TProfil::outMultiTxt( const char *path, bool append  )
 {
-    multi->to_text_file( path );
+    multi->to_text_file( path, append );
 }
 
 // Reading structure MULTI (GEM IPM work structure)

@@ -1423,7 +1423,7 @@ if( pm.D ) delete[] pm.D;
 
 #endif
 
-void TMulti::to_text_file( const char *path )
+void TMulti::to_text_file( const char *path, bool append )
 {
     //static values
    char PAalp;
@@ -1444,9 +1444,14 @@ void TMulti::to_text_file( const char *path )
    RoW = RoW_;
 #endif
 
-  fstream ff(path, ios::out );
+   ios::openmode mod = ios::out; 
+    if( append ) 
+     mod = ios::out|ios::app; 
+  fstream ff(path, mod );
   ErrorIf( !ff.good() , path, "Fileopen error");
 
+  if( append ) 
+   ff << "\nNext record" << endl;
   ff << pm.stkey << endl;
 
   TPrintArrays  prar(ff);

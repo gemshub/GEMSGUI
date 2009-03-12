@@ -42,10 +42,11 @@ TProfil::initCalcMode()
     // Get Project record key from old list
     bool changeAqGas = false,
          addfiles = false,
-         remakeRec = false;
+         remakeRec = false,
+         makeDump = false;
     gstring key_templ;
     gstring str = vfKeyProfile( window(), "Modelling projects",
-          nRT, changeAqGas, addfiles, remakeRec, key_templ );
+          nRT, changeAqGas, addfiles, remakeRec, makeDump, key_templ );
 
     if( str.empty() ) // cancel command
           return false;
@@ -79,22 +80,17 @@ TProfil::initCalcMode()
         syst->dyn_new();
         syst->setDefData();
 
-
-    // Get first  SYSEQ
+        if( str != ALLKEY && makeDump )
+        {	  
+        	CalcAllSystems();
+        } 
+// Get first  SYSEQ
         vstr pkey(81);
         rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                                K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
         rt[RT_SYSEQ].SetKey( pkey );
-/*        TCStringArray aList;
-        TCIntArray anR;
-        rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
 
-//  ms.Update("Loading start system definition", 90 );
-
-        if( aList.GetCount()>0 )
-            loadSystat( aList[0].c_str() );
-*/
-        // update windows informations
+   // update windows informations
    pVisor->CloseMessage();
    ModUpdate("Insertion of a Modelling Project record finished OK.");
         return true;
@@ -174,10 +170,13 @@ void TProfil::OpenProfileMode( const char* key,
       pVisor->Message( 0, "Loading Modelling Project",
        "Detecting changes in thermodynamic database", 40 );
 
-
    TestChangeProfile();  // test and insert changes to data base file
    DeleteOldList();
    rt[RT_PARAM].Rep( Rnum );
+//  if( true )
+//  {	  
+//	CalcAllSystems();
+//  } 
  }
  catch( TError& xcpt )
  {

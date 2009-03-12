@@ -334,9 +334,9 @@ void TProfil::outMulti( gstring& path, bool addMui  )
     multi->to_text_file_gemipm( path.c_str(), addMui );
 }
 
-void TProfil::outMultiTxt( const char *path  )
+void TProfil::outMultiTxt( const char *path, bool append  )
 {
-    multi->to_text_file( path );
+    multi->to_text_file( path, append );
 }
 
 void TProfil::outMulti( )
