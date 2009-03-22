@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>597</width>
-            <height>519</height>
+            <height>562</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -32,6 +32,109 @@
         <property name="spacing">
             <number>6</number>
         </property>
+        <widget class="QListBox" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>pList</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>pLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Please, select one modelling project </string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+            <property name="hAlign" stdset="0">
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="2" column="0">
+            <property name="name">
+                <cstring>pAqGas</cstring>
+            </property>
+            <property name="text">
+                <string>Re&amp;tain setup of aqueous (and gas) phases</string>
+            </property>
+            <property name="accel">
+                <string>Alt+T</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Uncheck to use different models of aqueous and/or gas phases</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="3" column="0">
+            <property name="name">
+                <cstring>pFiles</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="acceptDrops">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>Change &amp;file configuration of the selected project</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
+            <property name="checked">
+                <bool>false</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="4" column="0">
+            <property name="name">
+                <cstring>pTemplate</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="acceptDrops">
+                <bool>false</bool>
+            </property>
+            <property name="text">
+                <string>Create a new project &amp;using the selected one as template</string>
+            </property>
+            <property name="accel">
+                <string>Alt+U</string>
+            </property>
+            <property name="checked">
+                <bool>false</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="2" column="1">
+            <property name="name">
+                <cstring>CheckBox4</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Remake</string>
+            </property>
+            <property name="accel">
+                <string>Alt+R</string>
+            </property>
+        </widget>
         <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>Layout3</cstring>
@@ -190,131 +293,34 @@
                 </widget>
             </vbox>
         </widget>
-        <widget class="QListBox" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QButtonGroup" row="3" column="1" rowspan="2" colspan="1">
             <property name="name">
-                <cstring>pList</cstring>
+                <cstring>buttonGroup2</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
+            <property name="title">
+                <string>Re-run and save all SysEq</string>
             </property>
-            <property name="toolTip" stdset="0">
-                <string></string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>pLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Please, select one modelling project </string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
-            </property>
-            <property name="hAlign" stdset="0">
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="3" column="1">
-            <property name="name">
-                <cstring>pMakeDump</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="acceptDrops">
-                <bool>false</bool>
-            </property>
-            <property name="text">
-                <string>Calculating and dumping all systems</string>
-            </property>
-            <property name="accel">
-                <string></string>
-            </property>
-            <property name="checked">
-                <bool>false</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string></string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="4" column="1">
-            <property name="name">
-                <cstring>CheckBox4</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Remake</string>
-            </property>
-            <property name="accel">
-                <string>Alt+R</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="2" column="0">
-            <property name="name">
-                <cstring>pAqGas</cstring>
-            </property>
-            <property name="text">
-                <string>Re&amp;tain setup of aqueous (and gas) phases</string>
-            </property>
-            <property name="accel">
-                <string>Alt+T</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Uncheck to use different models of aqueous and/or gas phases</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="3" column="0">
-            <property name="name">
-                <cstring>pFiles</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="acceptDrops">
-                <bool>false</bool>
-            </property>
-            <property name="text">
-                <string>Change &amp;file configuration of the selected project</string>
-            </property>
-            <property name="accel">
-                <string>Alt+F</string>
-            </property>
-            <property name="checked">
-                <bool>false</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string></string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="4" column="0">
-            <property name="name">
-                <cstring>pTemplate</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="acceptDrops">
-                <bool>false</bool>
-            </property>
-            <property name="text">
-                <string>Create a new project &amp;using the selected one as template</string>
-            </property>
-            <property name="accel">
-                <string>Alt+U</string>
-            </property>
-            <property name="checked">
-                <bool>false</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string></string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>pRe_runIA</cstring>
+                    </property>
+                    <property name="text">
+                        <string>in auto IA mode</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>pRe_runSmart</cstring>
+                    </property>
+                    <property name="text">
+                        <string>in smart</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
     </grid>
 </widget>
@@ -355,10 +361,24 @@
         <receiver>KeyProfileData</receiver>
         <slot>accept()</slot>
     </connection>
+    <connection>
+        <sender>pRe_runIA</sender>
+        <signal>clicked()</signal>
+        <receiver>KeyProfileData</receiver>
+        <slot>CmRerunIA()</slot>
+    </connection>
+    <connection>
+        <sender>pRe_runSmart</sender>
+        <signal>clicked()</signal>
+        <receiver>KeyProfileData</receiver>
+        <slot>CmRerunSmart()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>CmNew()</slot>
     <slot>CmHelp()</slot>
+    <slot>CmRerunIA()</slot>
+    <slot>CmRerunSmart()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

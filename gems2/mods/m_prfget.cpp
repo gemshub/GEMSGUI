@@ -42,8 +42,8 @@ TProfil::initCalcMode()
     // Get Project record key from old list
     bool changeAqGas = false,
          addfiles = false,
-         remakeRec = false,
-         makeDump = false;
+         remakeRec = false;
+    int  makeDump = 0;
     gstring key_templ;
     gstring str = vfKeyProfile( window(), "Modelling projects",
           nRT, changeAqGas, addfiles, remakeRec, makeDump, key_templ );
@@ -82,7 +82,7 @@ TProfil::initCalcMode()
 
         if( str != ALLKEY && makeDump )
         {	  
-        	CalcAllSystems();
+        	CalcAllSystems( makeDump );
         } 
 // Get first  SYSEQ
         vstr pkey(81);
@@ -173,10 +173,7 @@ void TProfil::OpenProfileMode( const char* key,
    TestChangeProfile();  // test and insert changes to data base file
    DeleteOldList();
    rt[RT_PARAM].Rep( Rnum );
-//  if( true )
-//  {	  
-//	CalcAllSystems();
-//  } 
+
  }
  catch( TError& xcpt )
  {

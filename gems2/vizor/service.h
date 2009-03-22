@@ -124,7 +124,7 @@ vfKeyEdit(QWidget* par, const char* title, int iRt, const char* key=0);
 gstring
 vfKeyProfile(QWidget* par, const char* title, int iRt,
         bool& chAqGas, bool& addFiles,
-    bool& remake, bool& makeDump, gstring& key_templ  );
+    bool& remake, int& makeDump, gstring& key_templ  );
 
 gstring
 vfKeyTemplEdit(QWidget* par, const char* title, int iRt, const char* key=0,

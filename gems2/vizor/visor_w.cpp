@@ -1057,7 +1057,7 @@ vfKeyEdit(QWidget* par, const char* caption, int iRt, const char* key)
 gstring
 vfKeyProfile(QWidget* par, const char* caption, int iRt,
     bool& chAqGas, bool& addFiles,
-    bool& remake,  bool& makeDump, gstring& key_templ )
+    bool& remake,  int& makeDump, gstring& key_templ )
 {
 
     KeyProfile dbk(par, iRt, caption);

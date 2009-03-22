@@ -35,6 +35,8 @@ class KeyProfile : public KeyProfileData
 protected slots:
     void CmNew();
     void CmHelp();  // 05.01.01
+    void CmRerunIA();
+    void CmRerunSmart();
 
 public:
 
@@ -45,7 +47,7 @@ public:
     bool   getAqGasState();
     bool   getFilesState();
     bool   getRemakeState();
-    bool   getMakeDump();
+    int   getMakeDump();
     gstring getTemplateKey();
 
 };

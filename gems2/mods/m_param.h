@@ -196,7 +196,7 @@ protected:
         const char* key, bool changeAqGas, bool addFile );
     bool NewProfileMode( bool remakeRec, gstring& key_templ );
     bool NewProfileModeElements( bool remakeRec, gstring& key_templ );
-    void CalcAllSystems();
+    void CalcAllSystems(int makeDump);
     void SaveOldList();
     void DeleteOldList();
     void TestChangeProfile();

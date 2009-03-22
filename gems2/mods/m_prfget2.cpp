@@ -17,6 +17,12 @@
 // E-mail: gems2.support@psi.ch
 //-------------------------------------------------------------------
 //
+#ifdef __unix
+#include <unistd.h>
+#else
+#include <io.h>
+#endif
+
 #include "m_param.h"
 #include "m_unspace.h"
 #include "m_dualth.h"
@@ -432,7 +438,7 @@ int TProfil::indDC( int i )
     return -1;
 }
 
-void TProfil::CalcAllSystems( )
+void TProfil::CalcAllSystems( int makeDump )
 {
     double ccTime = 0.;
     vstr pkey(81);
@@ -444,11 +450,33 @@ void TProfil::CalcAllSystems( )
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
     rt[RT_SYSEQ].GetKeyList( pkey, aList, anR );
 
+    //get file name
     gstring ProfName(pkey);
     size_t pos = ProfName.find(':');
     ProfName = ProfName.substr(0,pos);
     str_file = ProfName + "_" + curDateSmol('_')+".Dump.out";
+    // open file to output
+AGAIN:
+    if( vfChooseFileSave(0/*window()*/, str_file,
+        "Please, enter dump file name", "*.out" ) == false )
+             return;
+     if( !access(str_file.c_str(), 0 ) ) //file exists
+      switch( vfQuestion3( 0/*window()*/, str_file.c_str(),
+      "This set of files exists!",
+           "&Overwrite", "&Rename", "&Cancel") )
+          {
+          case VF3_2:
+              goto AGAIN;
+          case VF3_1:
+              {
+        	  fstream ff(str_file.c_str(), ios::out );
+              }
+              break;
+          case VF3_3:
+              return;
+          }
 
+    pVisor->CloseMessage();
     TSysEq* aSE=(TSysEq *)(&aMod[RT_SYSEQ]);
     aSE->ods_link(0);
     for(uint i=0; i< aList.GetCount(); i++)
@@ -457,8 +485,19 @@ void TProfil::CalcAllSystems( )
         pVisor->Message( 0, "Loading Modelling Project",
            "Calculating and dumping all systems", i, aList.GetCount() );
        loadSystat( aList[i].c_str() );
-        ccTime += CalcEqstat( false);
-        outMultiTxt( str_file.c_str(), true );    
+ 	   if( makeDump == 2 ) //NEED_GEM_SIA
+ 		  pmp->pNP = 1;
+      else
+    	  pmp->pNP = 0; //  NEED_GEM_AIA;
+     
+ 	  try
+       {
+ 	   	showMss = 0L;
+ 	    ccTime += CalcEqstat( false);
+ 	    }
+ 	  catch( TError& xcpt )
+ 	    {}
+       outMultiTxt( str_file.c_str(), true );    
         // aSE->RecSave( aList[i].c_str(), true );
     }
 

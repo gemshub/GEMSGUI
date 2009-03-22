@@ -76,6 +76,18 @@ KeyProfile::getKey()
     return gstring();
 }
 
+void KeyProfile::CmRerunIA()
+{
+	   if( pRe_runIA->isChecked() )
+	         pRe_runSmart->setChecked(false);
+}
+
+void KeyProfile::CmRerunSmart()
+{
+	   if( pRe_runSmart->isChecked() )
+	         pRe_runIA->setChecked(false);
+}
+
 void
 KeyProfile::CmNew()
 {
@@ -102,16 +114,19 @@ KeyProfile::getAqGasState()
 
 }
 
-bool
+int
 KeyProfile::getMakeDump()
 {
     if( newKey == true )
-        return false;    // new record => no dump
+        return 0;    // new record => no dump
 
-    if( pMakeDump->isChecked() )
-        return true;  // out all system records
-    else return false; 
+    if( pRe_runIA->isChecked() )
+        return 1;  // Re-run and save all sysEq in auto IA mode
 
+    if( pRe_runSmart->isChecked() )
+        return 2;  // Re-run and save all sysEq in smart
+    
+    return 0; 
 }
 
 bool
