@@ -254,7 +254,7 @@
                 <cstring>ButtonGroup1</cstring>
             </property>
             <property name="title">
-                <string>New projects only:</string>
+                <string>New projects only</string>
             </property>
             <vbox>
                 <property name="name">
@@ -273,6 +273,9 @@
                     <property name="text">
                         <string>Make a new &amp;project by copying records from the default database </string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+P</string>
+                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -287,6 +290,9 @@
                     <property name="text">
                         <string>Make a new project by &amp;linking files from the default database</string>
                     </property>
+                    <property name="accel">
+                        <string>Alt+L</string>
+                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Switch on to select files from default database and link them to form a new project</string>
                     </property>
@@ -298,7 +304,7 @@
                 <cstring>buttonGroup2</cstring>
             </property>
             <property name="title">
-                <string>Re-run and save all SysEq</string>
+                <string>Re-calculate and save all equilibria (SysEq)</string>
             </property>
             <hbox>
                 <property name="name">
@@ -309,7 +315,7 @@
                         <cstring>pRe_runIA</cstring>
                     </property>
                     <property name="text">
-                        <string>in auto IA mode</string>
+                        <string>Use AIA mode (simplex)</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">
@@ -317,7 +323,7 @@
                         <cstring>pRe_runSmart</cstring>
                     </property>
                     <property name="text">
-                        <string>in smart</string>
+                        <string>Use SIA mode</string>
                     </property>
                 </widget>
             </hbox>

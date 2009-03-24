@@ -458,7 +458,7 @@ void TProfil::CalcAllSystems( int makeDump )
     // open file to output
 AGAIN:
     if( vfChooseFileSave(0/*window()*/, str_file,
-        "Please, enter dump file name", "*.out" ) == false )
+        "Please, enter output file name", "*.out" ) == false )
              return;
      if( !access(str_file.c_str(), 0 ) ) //file exists
       switch( vfQuestion3( 0/*window()*/, str_file.c_str(),
@@ -482,14 +482,14 @@ AGAIN:
     for(uint i=0; i< aList.GetCount(); i++)
     {
        //    int nRt = rt[RT_SYSEQ].Find( aList[i].c_str() );
-        pVisor->Message( 0, "Loading Modelling Project",
-           "Calculating and dumping all systems", i, aList.GetCount() );
+        pVisor->Message( 0, "Loading modelling project",
+           "Re-calculating and saving all equilibria", i, aList.GetCount() );
        loadSystat( aList[i].c_str() );
  	   if( makeDump == 2 ) //NEED_GEM_SIA
  		  pmp->pNP = 1;
       else
     	  pmp->pNP = 0; //  NEED_GEM_AIA;
-     
+
  	  try
        {
  	   	showMss = 0L;
@@ -497,7 +497,7 @@ AGAIN:
  	    }
  	  catch( TError& xcpt )
  	    {}
-       outMultiTxt( str_file.c_str(), true );    
+       outMultiTxt( str_file.c_str(), true );
         // aSE->RecSave( aList[i].c_str(), true );
     }
 
