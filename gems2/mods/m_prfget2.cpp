@@ -445,6 +445,7 @@ void TProfil::CalcAllSystems( int makeDump )
     gstring str_file;
 	TCStringArray aList;
     TCIntArray anR;
+    bool outFile = true;
 
     rt[RT_SYSEQ].MakeKey( RT_PARAM, pkey, RT_PARAM, 0,
                            K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_ANY, K_END);
@@ -472,8 +473,10 @@ AGAIN:
         	  fstream ff(str_file.c_str(), ios::out );
               }
               break;
-          case VF3_3:
-              return;
+          case VF3_3: // only calc and save to db
+        	  outFile = false;
+              break;
+        	  // return;
           }
 
     pVisor->CloseMessage();
@@ -497,8 +500,9 @@ AGAIN:
  	    }
  	  catch( TError& xcpt )
  	    {}
-       outMultiTxt( str_file.c_str(), true );
-        // aSE->RecSave( aList[i].c_str(), true );
+       if( outFile )
+ 	      outMultiTxt( str_file.c_str(), true );
+       aSE->RecSave( aList[i].c_str(), true );
     }
 
 }
