@@ -1427,8 +1427,9 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 		H1 = DELHR1 + HC + (1.0*HL);
 		break;
 	default:
-		Error( GetName(), "E16RErun: Estimation of standard state properties"
+		Error( GetName(), "E16RErun: Estimation of standard state properties "
 				"not possible for cations with charge larger than 4!");
+		break;
 	}
 
 
@@ -1479,16 +1480,17 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 		H2 = DELHR2 + HC + (2.0*HL) - Hw;
 		break;
 	default:
-		Error( GetName(), "E16RErun: Estimation of standard state properties"
+		Error( GetName(), "E16RErun: Estimation of standard state properties "
 				"not possible for cations with charge larger than 4!" );
+		break;
 	}
 
     // calculations for complex number 3
     switch ( ZZ )
     {
 	case 1:
-		Error( GetName(), "E16RErun: Estimation of standard state properties"
-				"not possible for complexes of monovalent cations with ligand numbers larger than 2!");
+		// Error( GetName(), "E16RErun: Estimation of standard state properties "
+		//		"not possible for complexes of monovalent cations with ligand numbers larger than 2!");
 		break;
 	case 2:
 		S3 = 1.52*SC + 15.5;
@@ -1525,8 +1527,9 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 		H3 = DELHR3 + HC + (3.0*HL) - Hw;
 		break;
 	default:
-		Error( GetName(), "E16RErun: Estimation of standard state properties"
+		Error( GetName(), "E16RErun: Estimation of standard state properties "
 				"not possible for cations with charge larger than 4!");
+		break;
 	}
 
 
@@ -1534,8 +1537,8 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
     switch ( ZZ )
     {
 	case 1:
-		Error( GetName(), "E16RErun: Estimation of standard state properties"
-				"not possible for complexes of monovalent cations with ligand numbers larger than 2!");
+		// Error( GetName(), "E16RErun: Estimation of standard state properties "
+		//		"not possible for complexes of monovalent cations with ligand numbers larger than 2!");
 		break;
 	case 2:
 		S4 = 1.62*SC + 11.0;
@@ -1572,8 +1575,9 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 		H4 = DELHR4 + HC + (4.0*HL) - (2.0*Hw);
 		break;
 	default:
-		Error( GetName(), "E16RErun: PRONSPREP-OH is not possible for cations"
+		Error( GetName(), "E16RErun: Pronsprep-OH is not possible for cations "
 				"with charge larger than 4!");
+		break;
 	}
 
 
