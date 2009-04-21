@@ -287,8 +287,70 @@ void TMulti::SetSmoothingFactor( )
 //    return TF;
 }
 
-static double ICold=0.;
+// New correction of smoothing factor for high non-ideality systems
+// re-written 18.04.2009 DK+TW
+void TMulti::SetSmoothingFactor( long int mode )
+{
+   double lg_al=1.0, ag, dg, dk, cd;
 
+   ag = TProfil::pm->pa.p.AG;    // Now the log10 distance from DK
+   dg = TProfil::pm->pa.p.DGC;   // Minimal value of smoothing parameter at DK or less
+   dk = log10( pmp->DX );        // log10 of IPM convergence threshold
+   cd = log10( pmp->PCI );       // log10 of current Dikin criterion
+
+   if( ag > 0 && dg && dg < 1.0 )
+   {
+     dg = log10( dg );
+	 // Calculation of log10 smoothing factor
+     if( cd > dk + ag )
+	    lg_al = 0.0;
+     else if( cd < dk )
+	    lg_al = dg;
+     else // Calculation of new smoothing equation
+	    lg_al = dg / ag * ( ( ag + 1. ) * ( dk - cd ) );
+   }
+   // Checking the mode where it is called
+   switch( mode )
+   {
+     case 0: // EnterFeasibleDomain() after simplex
+    	     break;
+     case 1: // EnterFeasibleDomain() in refinement (SIA mode)
+    	     break;
+     case 2: // Main IPM loops
+    	     break;
+     case 3: // Refinement IPM loops
+    	     break;
+     default: ;
+   }
+
+   pmp->FitVar[3] = exp( lg_al );
+}
+
+// Returns current value of smoothing factor for chemical potentials of highly non-ideal DCs
+// added 18.06.2008 DK
+double TMulti::SmoothingFactor( long int mode )
+{
+   // Checking the mode where it is called
+   switch( mode )
+   {
+     case 0: // EnterFeasibleDomain() after simplex
+    	     break;
+     case 1: // EnterFeasibleDomain() in refinement (SIA mode)
+			 break;
+	 case 2: // Main IPM loops
+	   	     break;
+	 case 3: // Refinement IPM loops
+	   	     break;
+	 default: ;
+   }
+
+	if( pmp->FitVar[3] > 0 )
+	   return pmp->FitVar[3];
+   else
+	   return pmp->FitVar[4];
+}
+
+static double ICold=0.;
 
 //--------------------------------------------------------------------------------
 // Main call point for calculation of DC activity coefficients (lnGam vector)
@@ -307,7 +369,7 @@ TMulti::GammaCalc( long int LinkMode  )
 {
     long int k, j, jb, je=0, jpb, jpe=0, jdb, jde=0, ipb, ipe=0;
     char *sMod;
-    long int statusGam=0, statusGC=0, statusSACT=0;
+    long int statusGam=0, statusGC=0, statusSACT=0, SmMode = 2;
     double LnGam, pmpXFk;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
@@ -429,8 +491,9 @@ TMulti::GammaCalc( long int LinkMode  )
         } // k
         break;
     case LINK_UX_MODE:
-        // Getting actual smoothing parameter
-    	SetSmoothingFactor();   // Changed 18.06.2008 by DK
+    	// Getting actual smoothing parameter
+//    	SetSmoothingFactor();   // Changed 18.06.2008 by DK
+    	SetSmoothingFactor( SmMode );
     	// calculating DC concentrations after this IPM iteration
         ConCalc( pmp->X, pmp->XF, pmp->XFA );
         // cleaning activity coefficients

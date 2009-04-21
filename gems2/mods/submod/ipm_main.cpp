@@ -451,12 +451,13 @@ to_text_file( "MultiDumpA.txt" );   // Debugging
         pmp->ITaia = 0;             // resetting the previous number of AIA iterations
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
 //      pmp->IC = 0.0;  For reproducibility of simplex FIA?
+pmp->PCI = 1.0;
         if( pmp->FIs )
             GammaCalc(LINK_FIA_MODE);
         if( pa->p.PC == 2 )
            XmaxSAT_IPM2_reset();  // Reset upper limits for surface species
         pmp->IT = 0; pmp->ITF += 1; // Assuming simplex() time equal to one iteration of EFD()
-        pmp->PCI = 0;
+//        pmp->PCI = 0.0;
 
      // Calling the simplex method here
         SimplexInitialApproximation( );
@@ -486,6 +487,18 @@ STEP_POINT( "End Simplex" );
         for( j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
+//
+if( pmp->PCI < 1e-7 || pmp->PCI > 1e-3 )
+{ //   For new smoothing function - need PCI value already here
+  pmp->NR=pmp->N;
+  if( pmp->LO )
+  {   if( pmp->YF[0] < pmp->DSM && pmp->YFA[0] < pmp->lowPosNum*100.)
+        pmp->NR= pmp->N-1;
+  }
+  pmp->PCI = calcDikin( pmp->NR, false );
+  pmp->PCI = sqrt( pmp->PCI );
+}
+//
         if( pmp->PD==3 /* && pmp->Lads==0 */ )    // added for stability at PIA 06.03.2008 DK
             GammaCalc( LINK_UX_MODE);
 
@@ -494,7 +507,7 @@ STEP_POINT( "End Simplex" );
            // Setting default trace amounts of DCs that were zeroed off
            RaiseZeroedOffDCs( 0, pmp->L, sfactor );
         }
-    }
+     }
 
 // STEPWISE (1) - stop point to see IA from old solution or raised simplex
 #ifndef IPMGEMPLUGIN

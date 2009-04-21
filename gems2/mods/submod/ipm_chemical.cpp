@@ -408,7 +408,7 @@ void TMulti::TotalPhases( double X[], double XF[], double XFA[] )
 //
 double TMulti::Ej_init_calc( double, long int j, long int k)
 {
-    long int ja=0, ist, isp, jc=-1;
+    long int ja=0, ist, isp, jc=-1, SmMode = 2;
     double F0=0.0, Fold, dF0, Mk=0.0, Ez, psiA, psiB, CD0, CDb, ObS;
     double FactSur, FactSurT;
     SPP_SETTING *pa = &TProfil::pm->pa;
@@ -566,7 +566,8 @@ double TMulti::Ej_init_calc( double, long int j, long int k)
         dF0 = F0 - Fold;
         if( pmp->X[j]>pmp->lowPosNum && fabs( dF0 ) >= 1e-5 ) // to be checked
 //           F0 = Fold + dF0 * pmp->FitVar[3];
-        	F0 = Fold + dF0 * SmoothingFactor();    // Changed 18.06.2008 DK
+//        	F0 = Fold + dF0 * SmoothingFactor();    // Changed 18.06.2008 DK
+    	  F0 = Fold + dF0 * SmoothingFactor( SmMode );
     }  // FitVar[3] = TinkleSuppressFactor(); see GammaCalc()
     return F0;
 }

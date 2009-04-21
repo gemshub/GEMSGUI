@@ -87,8 +87,8 @@ void TMulti::MultiRemake( const char *key )
     pmp->pH = pmp->Eh = pmp->pe = 0.0;
     pmp->GWAT = syp->Mwat;
     pmp->YMET = 0;
-    pmp->PCI = 0.0;
-
+//    pmp->PCI = 0.0;
+pmp->PCI = 1.0;
 // setting volume balance constraints, if necessary
     memcpy( pkey, pmp->stkey+48-MAXSYWHAT, MAXPTN );
     pkey[MAXPTN] = 0;

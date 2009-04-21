@@ -425,6 +425,8 @@ class TMulti
     void pm_GC_ods_link( long int k, long int jb, long int jpb, long int jdb, long int ipb );
     double SmoothingFactor( );
     void SetSmoothingFactor( );
+double SmoothingFactor( long int mode );  // new smoothing function
+void SetSmoothingFactor( long int mode ); // new smoothing function
 // Main call for calculation of activity coefficients on IPM iterations
     long int GammaCalc( long int LinkMode );
 // Built-in activity coefficient models
