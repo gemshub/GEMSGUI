@@ -290,16 +290,20 @@ void TMulti::SetSmoothingFactor( )
 // New correction of smoothing factor for highly non-ideal systems
 // re-written 18.04.2009 DK+TW
 // mode: 0 - taking single log(CD) value for calculation of smoothing factor SF;
-//       1, 2, ...  taking log(CD) average from moving window (5 consecutive values)
+//       1, 2, ...  taking log(CD) average from the moving window
+// (5 consecutive values)
+//
 void TMulti::SetSmoothingFactor( long int mode )
 {
-   double lg_al, ag, dg, dk, cd;
+   double lg_al, ag, dg, dk, cd, cut = -0.15, cd0, lg_al0;
    long int i;
 
    ag = TProfil::pm->pa.p.AG;    // Now the log10 distance from DK threshold
    dg = TProfil::pm->pa.p.DGC;   // Minimal value of smoothing parameter at DK or less
    dk = log10( pmp->DX );        // log10 of IPM convergence threshold
+								   // cut is the upper cutoff level for lg_al
 
+   // Checking the mode where it is called
    switch( mode )
    {
      case 0: // EnterFeasibleDomain() after simplex
@@ -316,21 +320,30 @@ void TMulti::SetSmoothingFactor( long int mode )
     	     break;
      default: ;
    }
-
+/*
    if( ag > 0. && dg < 1.0 )
    {
      dg = log10( dg );
 	 // Calculation of log10 smoothing factor
      if( cd > dk + ag )
-	    lg_al = 0.0;
+	    lg_al = cut;
      else if( cd < dk )
 	    lg_al = dg;
      else // Calculation of new smoothing equation
-	    lg_al = dg - dg / ag * ( cd - dk );
+	    lg_al = dg + ( cut - dg ) / ag * ( cd - dk );
    }
    else lg_al = 0.0;
-   // Checking the mode where it is called
-
+*/
+   cd0 = 0.; lg_al0 = 0.;
+   if( dg < 1.0 && cd < cd0  )
+   {
+	 dg = log10( dg );
+	 lg_al = lg_al0 - dg/dk * pow((cd0 - cd),(ag+1.));
+	 if( lg_al > lg_al0 )
+		lg_al = lg_al0;
+   }
+   else
+	   lg_al = 0.0;
    pmp->FitVar[3] = pow( 10., lg_al );
 }
 
