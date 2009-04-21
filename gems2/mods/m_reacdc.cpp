@@ -1428,7 +1428,7 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 		break;
 	default:
 		Error( GetName(), "E16RErun: Estimation of standard state properties "
-				"not possible for cations with charge larger than 4!");
+				"is not possible for cations with charge > 4!");
 		break;
 	}
 
@@ -1481,7 +1481,7 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 		break;
 	default:
 		Error( GetName(), "E16RErun: Estimation of standard state properties "
-				"not possible for cations with charge larger than 4!" );
+				"is not possible for cations with charge > 4!" );
 		break;
 	}
 
@@ -1489,8 +1489,9 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
     switch ( ZZ )
     {
 	case 1:
-		// Error( GetName(), "E16RErun: Estimation of standard state properties "
-		//		"not possible for complexes of monovalent cations with ligand numbers larger than 2!");
+		if( !(scL == 1 || scL == 2) )
+		   Error( GetName(), "E16RErun: Estimation of standard state properties "
+	   	   "is not possible for complexes of monovalent cations with ligand number > 2!");
 		break;
 	case 2:
 		S3 = 1.52*SC + 15.5;
@@ -1528,7 +1529,7 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 		break;
 	default:
 		Error( GetName(), "E16RErun: Estimation of standard state properties "
-				"not possible for cations with charge larger than 4!");
+				"is not possible for cations with charge > 4!");
 		break;
 	}
 
@@ -1537,8 +1538,9 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
     switch ( ZZ )
     {
 	case 1:
-		// Error( GetName(), "E16RErun: Estimation of standard state properties "
-		//		"not possible for complexes of monovalent cations with ligand numbers larger than 2!");
+		if( !(scL == 1 || scL == 2) )
+		   Error( GetName(), "E16RErun: Estimation of standard state properties "
+			"is not possible for complexes of monovalent cations with ligand number > 2!");
 		break;
 	case 2:
 		S4 = 1.62*SC + 11.0;
@@ -1576,7 +1578,7 @@ void TReacDC::PronsPrepOH( const char *key, int nIC, short *lAN )
 		break;
 	default:
 		Error( GetName(), "E16RErun: Pronsprep-OH is not possible for cations "
-				"with charge larger than 4!");
+				"with charge > 4!");
 		break;
 	}
 
