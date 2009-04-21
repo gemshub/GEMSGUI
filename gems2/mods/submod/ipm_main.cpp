@@ -447,7 +447,8 @@ to_text_file( "MultiDumpA.txt" );   // Debugging
 // Analyzing if the Simplex approximation is necessary
     if( !pmp->pNP  )
     {   // Preparing to call Simplex method
-        pmp->FitVar[4] = pa->p.AG;  //  initializing the smoothing parameter
+    	pmp->FitVar[4] = 1.0; // by default no smoothing
+//        pmp->FitVar[4] = pa->p.AG;  //  initializing the smoothing parameter
         pmp->ITaia = 0;             // resetting the previous number of AIA iterations
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
 //      pmp->IC = 0.0;  For reproducibility of simplex FIA?

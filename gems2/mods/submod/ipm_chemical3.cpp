@@ -317,8 +317,6 @@ void TMulti::SetSmoothingFactor( long int mode )
      default: ;
    }
 
-   cd = log10( pmp->PCI );       // log10 of current Dikin criterion
-
    if( ag > 0. && dg < 1.0 )
    {
      dg = log10( dg );
@@ -328,7 +326,7 @@ void TMulti::SetSmoothingFactor( long int mode )
      else if( cd < dk )
 	    lg_al = dg;
      else // Calculation of new smoothing equation
-	    lg_al = dg / ag * ( ( ag + 1. ) * ( dk - cd ) );
+	    lg_al = dg - dg / ag * ( cd - dk );
    }
    else lg_al = 0.0;
    // Checking the mode where it is called
