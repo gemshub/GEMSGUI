@@ -452,7 +452,9 @@ to_text_file( "MultiDumpA.txt" );   // Debugging
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
 //      pmp->IC = 0.0;  For reproducibility of simplex FIA?
 pmp->PCI = 1.0;
-        if( pmp->FIs )
+pmp->lgCDvalues[0] = pmp->lgCDvalues[1] = pmp->lgCDvalues[2] = pmp->lgCDvalues[3] =
+	 pmp->lgCDvalues[4] = log10( pmp->PCI );  // reset CD sampler array
+		if( pmp->FIs )
             GammaCalc(LINK_FIA_MODE);
         if( pa->p.PC == 2 )
            XmaxSAT_IPM2_reset();  // Reset upper limits for surface species
@@ -487,7 +489,7 @@ STEP_POINT( "End Simplex" );
         for( j=0; j< pmp->L; j++ )
             pmp->X[j] = pmp->Y[j];
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
-//
+/*
 if( pmp->PCI < 1e-7 || pmp->PCI > 1e-3 )
 { //   For new smoothing function - need PCI value already here
   pmp->NR=pmp->N;
@@ -498,7 +500,9 @@ if( pmp->PCI < 1e-7 || pmp->PCI > 1e-3 )
   pmp->PCI = calcDikin( pmp->NR, false );
   pmp->PCI = sqrt( pmp->PCI );
 }
-//
+*/
+pmp->lgCDvalues[0] = pmp->lgCDvalues[1] = pmp->lgCDvalues[2] = pmp->lgCDvalues[3] =
+   	 pmp->lgCDvalues[4] = log10( pmp->PCI );  // reset CD sampler array
         if( pmp->PD==3 /* && pmp->Lads==0 */ )    // added for stability at PIA 06.03.2008 DK
             GammaCalc( LINK_UX_MODE);
 
@@ -744,6 +748,10 @@ long int TMulti::InteriorPointsMethod( long int &status, long int rLoop )
 	   LM1=LMD( LM ); // Finding an optimal value of the descent step
        FX1=GX( LM1 ); // New G(X) value after the descent step
        pmp->PCI = sqrt(pmp->PCI); // Dikin criterion
+// temporary
+for(i=4; i>0; i-- )
+   pmp->lgCDvalues[i] = pmp->lgCDvalues[i-1];
+pmp->lgCDvalues[0] = log10( pmp->PCI );  // updating CD sampler array
 
        if( (IT1 > 3) && (FX1 - pmp->FX > 10)  &&
           ( IT1 > pa->p.IIM/2 || pmp->PD==3 ) )
@@ -794,7 +802,8 @@ STEP_POINT( "IPM Iteration" );
 //----------------------------------------------------------------------------
 CONVERGED:
  // cout << "LM " << LM << " LM1 "	 << LM1 << " PCI " << pmp->PCI << endl;
- // Final calculation of phase amounts and activity coefficients
+pmp->PCI = pmp->DX * 0.999999; // temporary
+// Final calculation of phase amounts and activity coefficients
   TotalPhases( pmp->X, pmp->XF, pmp->XFA );
 
   if(!pmp->PZ && pmp->W1)

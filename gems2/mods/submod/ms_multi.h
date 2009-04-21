@@ -309,11 +309,12 @@ double
   double *tpp_Vm;   // Partial molar(molal) volume Vm(TP) (always), J/bar
 #endif
 
-  // addition arrays for internal calculation in ipm_main
+  // additional arrays for internal calculation in ipm_main
   double *XU; //dual-thermo calculation of DC amount X(j) from A matrix and u vector [L]
   double *Uc; // Internal copy of IC chemical potentials u_i (mole/mole) - dual IPM solution [N]
   char errorCode[100]; //  code of error in IPM      (Ec number of error)
   char errorBuf[500]; // description of error in IPM
+  double lgCDvalues[5]; // Collection of lg Dikin crit. values for the new smoothing equation
 }
 MULTI;
 

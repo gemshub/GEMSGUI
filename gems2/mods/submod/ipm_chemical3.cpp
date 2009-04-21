@@ -287,18 +287,39 @@ void TMulti::SetSmoothingFactor( )
 //    return TF;
 }
 
-// New correction of smoothing factor for high non-ideality systems
+// New correction of smoothing factor for highly non-ideal systems
 // re-written 18.04.2009 DK+TW
+// mode: 0 - taking single log(CD) value for calculation of smoothing factor SF;
+//       1, 2, ...  taking log(CD) average from moving window (5 consecutive values)
 void TMulti::SetSmoothingFactor( long int mode )
 {
-   double lg_al=1.0, ag, dg, dk, cd;
+   double lg_al, ag, dg, dk, cd;
+   long int i;
 
-   ag = TProfil::pm->pa.p.AG;    // Now the log10 distance from DK
+   ag = TProfil::pm->pa.p.AG;    // Now the log10 distance from DK threshold
    dg = TProfil::pm->pa.p.DGC;   // Minimal value of smoothing parameter at DK or less
    dk = log10( pmp->DX );        // log10 of IPM convergence threshold
+
+   switch( mode )
+   {
+     case 0: // EnterFeasibleDomain() after simplex
+    	     cd = log10( pmp->PCI );
+    	     break;
+     case 1: // EnterFeasibleDomain() in refinement (SIA mode)
+     case 2: // Main IPM loops
+     case 3: // Refinement IPM loops
+    	     // Getting average (log geometric mean) from sampled CD values
+    	     cd = 0.0;
+    	     for(i=0; i<5; i++ )
+    	    	 cd += pmp->lgCDvalues[i];
+    	     cd /= 5.;
+    	     break;
+     default: ;
+   }
+
    cd = log10( pmp->PCI );       // log10 of current Dikin criterion
 
-   if( ag > 0 && dg && dg < 1.0 )
+   if( ag > 0. && dg < 1.0 )
    {
      dg = log10( dg );
 	 // Calculation of log10 smoothing factor
@@ -309,21 +330,10 @@ void TMulti::SetSmoothingFactor( long int mode )
      else // Calculation of new smoothing equation
 	    lg_al = dg / ag * ( ( ag + 1. ) * ( dk - cd ) );
    }
+   else lg_al = 0.0;
    // Checking the mode where it is called
-   switch( mode )
-   {
-     case 0: // EnterFeasibleDomain() after simplex
-    	     break;
-     case 1: // EnterFeasibleDomain() in refinement (SIA mode)
-    	     break;
-     case 2: // Main IPM loops
-    	     break;
-     case 3: // Refinement IPM loops
-    	     break;
-     default: ;
-   }
 
-   pmp->FitVar[3] = exp( lg_al );
+   pmp->FitVar[3] = pow( 10., lg_al );
 }
 
 // Returns current value of smoothing factor for chemical potentials of highly non-ideal DCs
