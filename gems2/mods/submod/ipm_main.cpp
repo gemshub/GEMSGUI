@@ -453,8 +453,8 @@ to_text_file( "MultiDumpA.txt" );   // Debugging
         TotalPhases( pmp->X, pmp->XF, pmp->XFA );
 //      pmp->IC = 0.0;  For reproducibility of simplex FIA?
 pmp->PCI = 1.0;
-pmp->lgCDvalues[0] = pmp->lgCDvalues[1] = pmp->lgCDvalues[2] = pmp->lgCDvalues[3] =
-	 pmp->lgCDvalues[4] = log10( pmp->PCI );  // reset CD sampler array
+pmp->logCDvalues[0] = pmp->logCDvalues[1] = pmp->logCDvalues[2] = pmp->logCDvalues[3] =
+	 pmp->logCDvalues[4] = log( pmp->PCI );  // reset CD sampler array
 		if( pmp->FIs )
             GammaCalc(LINK_FIA_MODE);
         if( pa->p.PC == 2 )
@@ -502,8 +502,8 @@ if( pmp->PCI < 1e-7 || pmp->PCI > 1e-3 )
   pmp->PCI = sqrt( pmp->PCI );
 }
 */
-pmp->lgCDvalues[0] = pmp->lgCDvalues[1] = pmp->lgCDvalues[2] = pmp->lgCDvalues[3] =
-   	 pmp->lgCDvalues[4] = log10( pmp->PCI );  // reset CD sampler array
+pmp->logCDvalues[0] = pmp->logCDvalues[1] = pmp->logCDvalues[2] = pmp->logCDvalues[3] =
+   	 pmp->logCDvalues[4] = log( pmp->PCI );  // reset CD sampler array
         if( pmp->PD==3 /* && pmp->Lads==0 */ )    // added for stability at PIA 06.03.2008 DK
             GammaCalc( LINK_UX_MODE);
 
@@ -751,8 +751,8 @@ long int TMulti::InteriorPointsMethod( long int &status, long int rLoop )
        pmp->PCI = sqrt(pmp->PCI); // Dikin criterion
 // temporary
 for(i=4; i>0; i-- )
-   pmp->lgCDvalues[i] = pmp->lgCDvalues[i-1];
-pmp->lgCDvalues[0] = log10( pmp->PCI );  // updating CD sampler array
+   pmp->logCDvalues[i] = pmp->logCDvalues[i-1];
+pmp->logCDvalues[0] = log( pmp->PCI );  // updating CD sampler array
 
        if( (IT1 > 3) && (FX1 - pmp->FX > 10)  &&
           ( IT1 > pa->p.IIM/2 || pmp->PD==3 ) )

@@ -295,7 +295,7 @@ void TMulti::SetSmoothingFactor( )
 //
 void TMulti::SetSmoothingFactor( long int mode )
 {
-   double lg_al, ag, dg, dk, cd, cut = -0.15, cd0, lg_al0;
+   double lg_al, al, ag, dg, dk, cd, cut = -0.15, cd0, lg_al0;
    long int i;
 
    ag = TProfil::pm->pa.p.AG;    // Now the log10 distance from DK threshold
@@ -307,7 +307,7 @@ void TMulti::SetSmoothingFactor( long int mode )
    switch( mode )
    {
      case 0: // EnterFeasibleDomain() after simplex
-    	     cd = log10( pmp->PCI );
+    	     cd = log( pmp->PCI );
     	     break;
      case 1: // EnterFeasibleDomain() in refinement (SIA mode)
      case 2: // Main IPM loops
@@ -315,12 +315,12 @@ void TMulti::SetSmoothingFactor( long int mode )
     	     // Getting average (log geometric mean) from sampled CD values
     	     cd = 0.0;
     	     for(i=0; i<5; i++ )
-    	    	 cd += pmp->lgCDvalues[i];
+    	    	 cd += pmp->logCDvalues[i];
     	     cd /= 5.;
     	     break;
      default: ;
    }
-/*
+/*  Lin-log function
    if( ag > 0. && dg < 1.0 )
    {
      dg = log10( dg );
@@ -333,7 +333,7 @@ void TMulti::SetSmoothingFactor( long int mode )
 	    lg_al = dg + ( cut - dg ) / ag * ( cd - dk );
    }
    else lg_al = 0.0;
-*/
+// Alternative function
    cd0 = 0.; lg_al0 = 0.;
    if( dg < 1.0 && cd < cd0  )
    {
@@ -344,7 +344,19 @@ void TMulti::SetSmoothingFactor( long int mode )
    }
    else
 	   lg_al = 0.0;
-   pmp->FitVar[3] = pow( 10., lg_al );
+*/
+   // Sigmoid smoothing function
+   if( ag > 0. && dg < 1.0 )
+   {
+      dk = log( pmp->DX );
+      al = dg + ( ag - dg ) / ( 1. + exp( ( dk - cd ) / dg ) );
+//      lg_al = log10( al );
+   }
+   else al = 1.;
+//	  lg_al = 0.0;
+
+   pmp->FitVar[3] = al;
+//	   pow( 10., lg_al );
 }
 
 // Returns current value of smoothing factor for chemical potentials of highly non-ideal DCs

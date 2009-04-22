@@ -314,7 +314,7 @@ double
   double *Uc; // Internal copy of IC chemical potentials u_i (mole/mole) - dual IPM solution [N]
   char errorCode[100]; //  code of error in IPM      (Ec number of error)
   char errorBuf[500]; // description of error in IPM
-  double lgCDvalues[5]; // Collection of lg Dikin crit. values for the new smoothing equation
+  double logCDvalues[5]; // Collection of lg Dikin crit. values for the new smoothing equation
 }
 MULTI;
 
