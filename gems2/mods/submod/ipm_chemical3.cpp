@@ -338,7 +338,7 @@ void TMulti::SetSmoothingFactor( long int mode )
    if( dg < 1.0 && cd < cd0  )
    {
 	 dg = log10( dg );
-	 lg_al = lg_al0 - dg/dk * pow((cd0 - cd),(ag+1.));
+	 lg_al = lg_al0 - dg/pow((cd0 - cd),(ag+1.));
 	 if( lg_al > lg_al0 )
 		lg_al = lg_al0;
    }
@@ -349,7 +349,10 @@ void TMulti::SetSmoothingFactor( long int mode )
    if( ag > 0. && dg < 1.0 )
    {
       dk = log( pmp->DX );
-      al = dg + ( ag - dg ) / ( 1. + exp( ( dk - cd ) / dg ) );
+      al = dg + ( ag - dg ) / ( 1. + exp( dk - cd ) / dg );
+      al += exp( log( 1. - ag ) + cd );
+      if( al > 1. )
+    	  al = 1.;
 //      lg_al = log10( al );
    }
    else al = 1.;
