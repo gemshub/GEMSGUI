@@ -245,20 +245,25 @@ double TMulti::SmoothingFactor( )
 }
 
 
-// Correction of smoothing factor for high non-ideality systems
-// re-written 18.06.2008 DK
-void TMulti::SetSmoothingFactor( )
+// New correction of smoothing factor for highly non-ideal systems
+// re-written 18.04.2009 DK+TW
+// mode: 0 - taking single log(CD) value for calculation of smoothing factor SF;
+//       1, 2, ...  taking log(CD) average from the moving window of length mode
+// (up to 5 consecutive values)
+//
+void TMulti::SetSmoothingFactor( long int mode )
 {
-    double TF, ag, dg, irf; // rg=0.0;
+    double TF=1., al, ag, dg, iim, irf; // rg=0.0;
     long int ir, Level, itqF, itq;
 
     ir = pmp->IT;
     irf = (double)ir;
     ag = TProfil::pm->pa.p.AG; // pmp->FitVar[4];
     dg = TProfil::pm->pa.p.DGC;
+    iim = (double)TProfil::pm->pa.p.IIM;
 
-    if( dg > -0.1 )       // Smoothing used in the IPM-2 algorithm
-    {
+    if( dg > -0.0001 && ag >= 0.0001 ) // Smoothing used in the IPM-2 algorithm
+    {								// with some improvements
         if(ag>1) ag=1;
         if(ag<0.1) ag=0.1;
         if(dg>0.15) dg=0.15;
@@ -267,123 +272,67 @@ void TMulti::SetSmoothingFactor( )
         if( dg <= 0.0 )
           TF = ag;
         else
-          TF = ag * ( 1 - pow(1-exp(-dg*irf),60.));
-//        Level =  (int)rg;
+          TF = ag * ( 1 - pow(1-exp(-dg*irf),6.));
+//           TF = ag * ( 1 - pow(1-exp(-dg*irf),60.));
+        if(TF < 1e-6 )
+          TF = 1e-6;
     }
-    else
-    {  // Obsolete smoothing for solid solutions: -1.0 < pa.p.DGC < 0
-        Level = (long int)pmp->FitVar[2];
-    	itq = ir/60;
-        dg = fabs( dg );
-        itqF = ir/(60/(itq+1))-itq;  // 0,1,2,4,5,6...
-        if( itqF < Level )
-            itqF = Level;
-        TF = ag * pow( dg, itqF );
-        Level = itqF;
-        pmp->FitVar[2] = (double)Level;
+    else if( dg <= -0.0001 && ag >= 0.0001 )
+    {
+       // New sigmoid smoothing function of 1/IT
+    	double logr, inv_r = 1., logr_m;
+    	if( pmp->IT )
+    	  inv_r = 1./(double)pmp->IT;
+        logr = log( inv_r );
+        logr_m = log( 1./iim );
+        al = dg + ( ag - dg ) / ( 1. + exp( logr_m - logr ) / dg );
+        al += exp( log( 1. - ag ) + logr );
+        if( al > 1. )
+      	    al = 1.;
+        TF = al;
+    // Obsolete smoothing for solid solutions: -1.0 < pa.p.DGC < 0
+    //   Level = (long int)pmp->FitVar[2];
+    //   itq = ir/60;
+    //   dg = fabs( dg );
+    //   itqF = ir/(60/(itq+1))-itq;  // 0,1,2,4,5,6...
+    //   if( itqF < Level )
+    //       itqF = Level;
+    //   TF = ag * pow( dg, itqF );
+    //   Level = itqF;
+    //   pmp->FitVar[2] = (double)Level;
     }
+    else if( dg <= -0.0001 && ag <= -0.0001 )
+    {
+    	double dk, cd;   long int i;
+    	dk = log( pmp->DX );
+    	// Checking the mode where it is called
+    	switch( mode )
+    	{
+    	  default:
+    	  case 0: // EnterFeasibleDomain() after simplex
+    	  	     cd = log( pmp->PCI );
+    	   	     break;
+    	  case 1:
+    	  case 2:
+    	  case 3:
+    	  case 4:
+    	  case 5: // Getting average (log geometric mean) from sampled CD values
+    	  	     cd = 0.0;
+    	   	     for(i=0; i < mode; i++ )
+    	   	    	 cd += pmp->logCDvalues[i];
+    	   	     cd /= 5.;
+    	   	     break;
+    	}
+        al = dg + ( ag - dg ) / ( 1. + exp( dk - cd ) / dg );
+        al += exp( log( 1. - ag ) + cd );
+        if( al > 1. )
+      	    al = 1.;
+        TF = al;
+    }
+
     pmp->FitVar[3] = TF;
 //    pmp->pRR1 = Level;
 //    return TF;
-}
-
-// New correction of smoothing factor for highly non-ideal systems
-// re-written 18.04.2009 DK+TW
-// mode: 0 - taking single log(CD) value for calculation of smoothing factor SF;
-//       1, 2, ...  taking log(CD) average from the moving window
-// (5 consecutive values)
-//
-void TMulti::SetSmoothingFactor( long int mode )
-{
-   double lg_al, al, ag, dg, dk, cd, cut = -0.15, cd0, lg_al0;
-   long int i;
-
-   ag = TProfil::pm->pa.p.AG;    // Now the log10 distance from DK threshold
-   dg = TProfil::pm->pa.p.DGC;   // Minimal value of smoothing parameter at DK or less
-   dk = log10( pmp->DX );        // log10 of IPM convergence threshold
-								   // cut is the upper cutoff level for lg_al
-
-   // Checking the mode where it is called
-   switch( mode )
-   {
-     case 0: // EnterFeasibleDomain() after simplex
-    	     cd = log( pmp->PCI );
-    	     break;
-     case 1: // EnterFeasibleDomain() in refinement (SIA mode)
-     case 2: // Main IPM loops
-     case 3: // Refinement IPM loops
-    	     // Getting average (log geometric mean) from sampled CD values
-    	     cd = 0.0;
-    	     for(i=0; i<5; i++ )
-    	    	 cd += pmp->logCDvalues[i];
-    	     cd /= 5.;
-    	     break;
-     default: ;
-   }
-/*  Lin-log function
-   if( ag > 0. && dg < 1.0 )
-   {
-     dg = log10( dg );
-	 // Calculation of log10 smoothing factor
-     if( cd > dk + ag )
-	    lg_al = cut;
-     else if( cd < dk )
-	    lg_al = dg;
-     else // Calculation of new smoothing equation
-	    lg_al = dg + ( cut - dg ) / ag * ( cd - dk );
-   }
-   else lg_al = 0.0;
-// Alternative function
-   cd0 = 0.; lg_al0 = 0.;
-   if( dg < 1.0 && cd < cd0  )
-   {
-	 dg = log10( dg );
-	 lg_al = lg_al0 - dg/pow((cd0 - cd),(ag+1.));
-	 if( lg_al > lg_al0 )
-		lg_al = lg_al0;
-   }
-   else
-	   lg_al = 0.0;
-*/
-   // Sigmoid smoothing function
-   if( ag > 0. && dg < 1.0 )
-   {
-      dk = log( pmp->DX );
-      al = dg + ( ag - dg ) / ( 1. + exp( dk - cd ) / dg );
-      al += exp( log( 1. - ag ) + cd );
-      if( al > 1. )
-    	  al = 1.;
-//      lg_al = log10( al );
-   }
-   else al = 1.;
-//	  lg_al = 0.0;
-
-   pmp->FitVar[3] = al;
-//	   pow( 10., lg_al );
-}
-
-// Returns current value of smoothing factor for chemical potentials of highly non-ideal DCs
-// added 18.06.2008 DK
-double TMulti::SmoothingFactor( long int mode )
-{
-   // Checking the mode where it is called
-   switch( mode )
-   {
-     case 0: // EnterFeasibleDomain() after simplex
-    	     break;
-     case 1: // EnterFeasibleDomain() in refinement (SIA mode)
-			 break;
-	 case 2: // Main IPM loops
-	   	     break;
-	 case 3: // Refinement IPM loops
-	   	     break;
-	 default: ;
-   }
-
-	if( pmp->FitVar[3] > 0 )
-	   return pmp->FitVar[3];
-   else
-	   return pmp->FitVar[4];
 }
 
 static double ICold=0.;
@@ -405,7 +354,7 @@ TMulti::GammaCalc( long int LinkMode  )
 {
     long int k, j, jb, je=0, jpb, jpe=0, jdb, jde=0, ipb, ipe=0;
     char *sMod;
-    long int statusGam=0, statusGC=0, statusSACT=0, SmMode = 2;
+    long int statusGam=0, statusGC=0, statusSACT=0, SmMode = 0;
     double LnGam, pmpXFk;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
