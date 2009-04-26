@@ -267,12 +267,12 @@ void TMulti::SetSmoothingFactor( long int mode )
         if(ag>1) ag=1;
         if(ag<0.1) ag=0.1;
         if(dg>0.15) dg=0.15;
-        if( irf > 1000. )
-        	irf = 1000;
+        // if( irf > 1000. )
+        //	irf = 1000;
         if( dg <= 0.0 )
           TF = ag;
         else
-          TF = ag * ( 1 - pow(1-exp(-dg*irf),6.));
+          TF = ag * ( 1 - pow(1-exp(-dg*irf),60.));
 //           TF = ag * ( 1 - pow(1-exp(-dg*irf),60.));
         if(TF < 1e-6 )
           TF = 1e-6;
