@@ -247,6 +247,9 @@ double TMulti::SmoothingFactor( )
 
 // New correction of smoothing factor for highly non-ideal systems
 // re-written 18.04.2009 DK+TW
+// Smoothing function choice: AG >= 0.0001 and DGC > -0.0001: old f(IT)
+//                            AG >= 0.0001 and DGC <= -0.0001: new f(1/IT)
+//                            AG <= -0.0001 and DGC <= -0.0001: new f(1/CD)
 // mode: 0 - taking single log(CD) value for calculation of smoothing factor SF;
 //       1, 2, ...  taking log(CD) average from the moving window of length mode
 // (up to 5 consecutive values)
@@ -273,7 +276,6 @@ void TMulti::SetSmoothingFactor( long int mode )
           TF = ag;
         else
           TF = ag * ( 1 - pow(1-exp(-dg*irf),60.));
-//           TF = ag * ( 1 - pow(1-exp(-dg*irf),60.));
         if(TF < 1e-6 )
           TF = 1e-6;
     }
@@ -281,6 +283,7 @@ void TMulti::SetSmoothingFactor( long int mode )
     {
        // New sigmoid smoothing function of 1/IT
     	double logr, inv_r = 1., logr_m;
+    	dg = fabs( dg );
     	if( pmp->IT )
     	  inv_r = 1./(double)pmp->IT;
         logr = log( inv_r );
@@ -304,6 +307,8 @@ void TMulti::SetSmoothingFactor( long int mode )
     else if( dg <= -0.0001 && ag <= -0.0001 )
     {
     	double dk, cd;   long int i;
+    	dg = fabs( dg );
+    	ag = fabs( ag );
     	dk = log( pmp->DX );
     	// Checking the mode where it is called
     	switch( mode )
