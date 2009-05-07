@@ -1796,7 +1796,7 @@ long int THelgesonDH::SetFlags( long int elect, double cutoff, double np )
 }
 
 
-// Calculates T,P corrected binary interaction parameters
+// Calculates T,P corrected parameters
 long int THelgesonDH::PTparam()
 {
 	double RHO, dRdT, d2RdT2, dRdP, EPS, dEdT, d2EdT2, dEdP;
@@ -2167,6 +2167,278 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 
 	return 0;
 }
+
+
+
+
+
+//=============================================================================================
+// Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Davies variant
+// References: Langmuir (1997)
+//=============================================================================================
+
+
+// Generic constructor for the TDaviesDH class
+TDaviesDH::TDaviesDH( long int NSpecies, long int NParams,
+		long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code,
+		long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL,
+		double T_k, double P_bar, double *dW, double *eW,
+		double *arM, double *arZ ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
+        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
+        			 arlnGam, aphVOL, T_k, P_bar )
+{
+	alloc_internal();
+	m = arM;
+	z = arZ;
+	RhoW = dW;
+	EpsW = eW;
+}
+
+
+TDaviesDH::~TDaviesDH()
+{
+	free_internal();
+}
+
+
+void TDaviesDH::alloc_internal()
+{
+	LnG = new double [NComp];
+	dLnGdT = new double [NComp];
+	d2LnGdT2 = new double [NComp];
+	dLnGdP = new double [NComp];
+}
+
+
+void TDaviesDH::free_internal()
+{
+  	// cleaning memory
+	delete[]LnG;
+	delete[]dLnGdT;
+	delete[]d2LnGdT2;
+	delete[]dLnGdP;
+}
+
+
+long int TDaviesDH::SetFlags( double cutoff, double np )
+{
+	// old nPolicy flag needs to be replaced
+	// might need to convert electrolyte model flag as well
+
+	cutoffIS = cutoff;
+	nPolicy = np;
+
+	// converting old into new flags
+	if ( nPolicy < -1.000001 )
+	{
+		// neutral species 1.0, H2O solvent 1.0
+		flagNeut = 0;
+		flagH2O = 0;
+	}
+
+	else if ( nPolicy > -1.000001 && nPolicy < -0.000001 )
+	{
+		// neutral species 1.0, H2O solvent calc.
+		flagNeut = 0;
+		flagH2O = 1;
+	}
+
+	else if ( nPolicy > -0.000001 && nPolicy < 0.999999 )
+	{
+		// neutral species calc., H2O solvent calc.
+		flagNeut = 1;
+		flagH2O = 1;
+	}
+
+	else
+	{
+		// neutral species calc., H2O solvent 1.0
+		flagNeut = 1;
+		flagH2O = 0;
+	}
+
+	return 0;
+}
+
+
+// Calculates T,P corrected parameters
+long int TDaviesDH::PTparam()
+{
+	double RHO, dRdT, d2RdT2, dRdP, EPS, dEdT, d2EdT2, dEdP;
+	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP;
+
+	// pull parameters
+	RHO = RhoW[0];
+	dRdT = RhoW[1];
+	d2RdT2 = RhoW[2];
+	dRdP = RhoW[3];
+	EPS = EpsW[0];
+	dEdT = EpsW[1];
+	d2EdT2 = EpsW[2];
+	dEdP = EpsW[3];
+
+	// calculate A term of DH equation (add derivatives)
+	U = (1.82483e6) * sqrt(RHO);
+	V = pow(Tk*EPS, 1.5);
+	dUdT = 0.;
+	dVdT = 0.;
+	d2UdT2 = 0.;
+	d2VdT2 = 0.;
+	dUdP = 0.;
+	dVdP = 0.;
+	A = (1.82483e6) * sqrt(RHO) / pow(Tk*EPS, 1.5);
+	dAdT = (dUdT*V-U*dVdT) / pow (V,2.);
+	d2AdT2 = (d2UdT2*V+dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
+				- (dUdT*dVdT+U*d2VdT2)*pow(V,2.)/pow(V,4.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.);
+	dAdP = (dUdP*V-U*dVdP) / pow (V,2.);
+
+	return 0;
+}
+
+
+// Calculates activity coefficients
+long int TDaviesDH::MixMod()
+{
+	// bla
+
+	long int j, w;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
+	double lg_to_ln;
+	lg_to_ln = 2.302585093;
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molaities (molT and molZ)
+	IonicStrength();
+	if ( IS < cutoffIS )
+		return 0;
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+
+	if( fabs(A) < 1e-9 )
+	{
+		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
+	}
+
+	if ( fabs(A) < 1e-9  )
+		return -1;
+
+	// loop over all species
+	for( j=0; j<NComp; j++ )
+	{
+		lgGam = 0.0;
+		lnGam = 0.0;
+
+		// charged species
+		if ( z[j] )
+		{
+			lgGam = 0.0;
+			Z2 = z[j]*z[j];
+			lgGam = ( -A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS );
+			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+		}
+
+		// neutral species except water solvent
+		if ( j != (NComp-1) )
+		{
+			lgGam = 0.0;
+			if ( flagNeut == 1 )
+				// depends on form of Davies equation, inconsistent with Gibbs-Duhem
+				lgGam = 0.0;
+			else
+				lgGam = 0.0;
+			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+			continue;
+		}
+
+		// water solvent
+		else
+		{
+			lgGam = 0.0;
+			lnGam = 0.0;
+			if ( flagH2O == 1 )
+			{
+				// add water activity coefficient equation here
+				lnGam = 0.0;
+			}
+			else
+				lnGam = 0.0;
+			lnGamma[j] = lnGam;
+		}
+	}
+
+	return 0;
+}
+
+
+// calculates excess properties
+long int TDaviesDH::ExcessProp( double *Zex )
+{
+	// bla
+
+	return 0;
+}
+
+
+// calculates ideal mixing properties
+long int TDaviesDH::IdealProp( double *Zid )
+{
+	long int j;
+	double si;
+	si = 0.0;
+	for (j=0; j<NComp; j++)
+	{
+		si += x[j]*log(x[j]);
+	}
+	Hid = 0.0;
+	CPid = 0.0;
+	Vid = 0.0;
+	Sid = (-1.)*R_CONST*si;
+
+	// assignments (ideal mixing properties)
+	Gid = Hid - Sid*Tk;
+	Aid = Gid - Vid*Pbar;
+	Uid = Hid - Vid*Pbar;
+	Zid[0] = Gid;
+	Zid[1] = Hid;
+	Zid[2] = Sid;
+	Zid[3] = CPid;
+	Zid[4] = Vid;
+	Zid[5] = Aid;
+	Zid[6] = Uid;
+	return 0;
+}
+
+
+// calculates true ionic strength
+long int TDaviesDH::IonicStrength()
+{
+	long int j;
+	double is;
+	is = 0.0;
+
+	// calculate ionic strength
+	for (j=0; j<NComp; j++)
+	{
+		is += 0.5*m[j]*z[j]*z[j];
+	}
+	IS = is;
+
+	return 0;
+}
+
+
 
 
 

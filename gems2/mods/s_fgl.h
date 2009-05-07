@@ -1095,6 +1095,72 @@ class THelgesonDH: public TSolMod
 
 
 // -------------------------------------------------------------------------------------
+// Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Davies variant
+// References: Langmuir (1997)
+class TDaviesDH: public TSolMod
+{
+	private:
+
+		// status flags copied from MULTI
+		double nPolicy;  // mode of calculating H2O and neutral species (old version)
+		double cutoffIS;  // IS cutoff value for calculating act. coefficients
+		long int flagH2O;  // new flag for water
+		long int flagNeut;  // new flag for neutral species
+
+		// data objects copied from MULTI
+		double *z;   // species charges
+		double *m;   // species molalities
+		double *RhoW;  // water density properties
+		double *EpsW;  // water dielectrical properties
+
+		// internal work objects
+		double *LnG;  // activity coefficient
+		double *dLnGdT;  // derivatives
+		double *d2LnGdT2;
+		double *dLnGdP;
+		double IS;  // ionic strength
+		double molT;  // total molality of aqueous species (except water solvent)
+		double molZ;  // total molality of charged species
+		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
+
+		// internal functions
+		void alloc_internal();
+		void free_internal();
+		long int IonicStrength();
+
+	public:
+
+		// Constructor
+		TDaviesDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code,
+				long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL,
+				double T_k, double P_bar, double *dW, double *eW,
+				double *arM, double *arZ );
+
+		// Destructor
+		~TDaviesDH();
+
+		// Set flags for calculation modes
+		long int SetFlags( double cutoff, double np );
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam();
+
+		// calculates activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
+
+// -------------------------------------------------------------------------------------
 // Class for hardcoded models for solid solutions (c) TW January 2009
 // References:
 
