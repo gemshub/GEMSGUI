@@ -1860,6 +1860,7 @@ long int THelgesonDH::MixMod()
 	lnwxWat = log(WxW);
 	sqI = sqrt(IS);
 
+	// not sure if still needed
 	if( fabs(A) < 1e-9 )
 	{
 		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
@@ -1888,36 +1889,40 @@ long int THelgesonDH::MixMod()
 			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 		}
 
-		// neutral species except water solvent
-		if ( j != (NComp-1) )
-		{
-			lgGam = 0.0;
-			if ( flagNeut == 1 )
-				lgGam = bgam * IS;
-			else
-				lgGam = 0.0;
-			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
-			continue;
-		}
-
-		// water solvent
+		// neutral species and water solvent
 		else
 		{
-			lgGam = 0.0;
-			lnGam = 0.0;
-			if ( flagH2O == 1 )
+			// neutral species
+			if ( j != (NComp-1) )
 			{
-				// Phi corrected using eq. (190) from Helgeson et al. (1981)
-				Lam = 1. + a0*B*sqI;
-				SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(IS,(3./2.)))*(Lam-1./Lam-2*log(Lam));
-				// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-				Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-				lnActWat = -Phi*molT/Nw;
-				lnGam = lnActWat - lnwxWat;
+				lgGam = 0.0;
+				if ( flagNeut == 1 )
+					lgGam = bgam * IS;
+				else
+					lgGam = 0.0;
+				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+				continue;
 			}
+
+			// water solvent
 			else
+			{
+				lgGam = 0.0;
 				lnGam = 0.0;
-			lnGamma[j] = lnGam;
+				if ( flagH2O == 1 )
+				{
+					// Phi corrected using eq. (190) from Helgeson et al. (1981)
+					Lam = 1. + a0*B*sqI;
+					SigTerm = 3./(pow(a0,3.)*pow(B,3.)*pow(IS,(3./2.)))*(Lam-1./Lam-2*log(Lam));
+					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+					Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+					lnActWat = -Phi*molT/Nw;
+					lnGam = lnActWat - lnwxWat;
+				}
+				else
+					lnGam = 0.0;
+				lnGamma[j] = lnGam;
+			}
 		}
 	}
 
@@ -2312,6 +2317,7 @@ long int TDaviesDH::MixMod()
 	lnwxWat = log(WxW);
 	sqI = sqrt(IS);
 
+	// not sure if still needed
 	if( fabs(A) < 1e-9 )
 	{
 		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
@@ -2335,32 +2341,36 @@ long int TDaviesDH::MixMod()
 			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 		}
 
-		// neutral species except water solvent
-		if ( j != (NComp-1) )
-		{
-			lgGam = 0.0;
-			if ( flagNeut == 1 )
-				// depends on form of Davies equation, inconsistent with Gibbs-Duhem
-				lgGam = 0.0;
-			else
-				lgGam = 0.0;
-			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
-			continue;
-		}
-
-		// water solvent
+		// neutral species and water solvent
 		else
 		{
-			lgGam = 0.0;
-			lnGam = 0.0;
-			if ( flagH2O == 1 )
+			// neutral species
+			if ( j != (NComp-1) )
 			{
-				// add water activity coefficient equation here
-				lnGam = 0.0;
+				lgGam = 0.0;
+				if ( flagNeut == 1 )
+					// depends on form of Davies equation, inconsistent with Gibbs-Duhem
+					lgGam = 0.0;
+				else
+					lgGam = 0.0;
+				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+				continue;
 			}
+
+			// water solvent
 			else
+			{
+				lgGam = 0.0;
 				lnGam = 0.0;
-			lnGamma[j] = lnGam;
+				if ( flagH2O == 1 )
+				{
+					// add water activity coefficient equation here
+					lnGam = 0.0;
+				}
+				else
+					lnGam = 0.0;
+				lnGamma[j] = lnGam;
+			}
 		}
 	}
 
@@ -2411,15 +2421,26 @@ long int TDaviesDH::IdealProp( double *Zid )
 long int TDaviesDH::IonicStrength()
 {
 	long int j;
-	double is;
+	double is, mt;
 	is = 0.0;
+	mt = 0.0;
 
 	// calculate ionic strength
 	for (j=0; j<NComp; j++)
 	{
 		is += 0.5*m[j]*z[j]*z[j];
 	}
+
+
+	// calculate total molalities
+	for (j=0; j<(NComp-1); j++)
+	{
+		mt += m[j];
+	}
+
+	// assignments
 	IS = is;
+	molT = mt;
 
 	return 0;
 }
@@ -2428,9 +2449,6 @@ long int TDaviesDH::IonicStrength()
 
 
 
-
 //--------------------- End of s_fgl1.cpp ---------------------------
-
-
 
 
