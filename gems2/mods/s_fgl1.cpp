@@ -1816,7 +1816,6 @@ long int THelgesonDH::PTparam()
 	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
 	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
 	dAdP = 1./2.*A*( bet - 3.*dedp);
-	// the formula in Helgeson an Kirkham (1974) contains a multiplier of e8
 	B = (50.2916)*sqrt(rho) / sqrt(Tk*eps);
 	dBdT = - 1./2.*B*( dedt +1./Tk + alp );
 	d2BdT2 = 1./B*pow(dBdT,2.) - 1./2.*B*( d2edt2 - 1./pow(Tk,2.) + dal );
