@@ -1799,21 +1799,28 @@ long int THelgesonDH::SetFlags( long int elect, double cutoff, double np )
 // Calculates T,P corrected parameters
 long int THelgesonDH::PTparam()
 {
-	double RHO, dRdT, d2RdT2, dRdP, EPS, dEdT, d2EdT2, dEdP;
+	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
-	// pull parameters
-	RHO = RhoW[0];
-	dRdT = RhoW[1];
-	d2RdT2 = RhoW[2];
-	dRdP = RhoW[3];
-	EPS = EpsW[0];
-	dEdT = EpsW[1];
-	d2EdT2 = EpsW[2];
-	dEdP = EpsW[3];
+	// pull and convert parameters
+	rho = RhoW[0];
+	alp = - 1./rho*RhoW[1];
+	dal = pow(alp,2.) - 1./rho*RhoW[2];
+	bet = 1./rho*RhoW[3];
+	eps = EpsW[0];
+	dedt = 1./eps*EpsW[1];
+	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	dedp = 1./eps*EpsW[3];
 
-	// calculate A and B terms of DH equation (add derivatives)
-	A = (1.82483e6) * sqrt(RHO) /	pow(Tk*EPS, 1.5);
-	B = 50.2916 * sqrt(RHO) / sqrt(Tk*EPS);
+	// calculate A and B terms of Debye-Huckel equation (and derivatives)
+	A = (1.82483e6)*sqrt(rho) / pow(Tk*eps,1.5);
+	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
+	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
+	dAdP = 1./2.*A*( bet - 3.*dedp);
+	// the formula in Helgeson an Kirkham (1974) contains a multiplier of e8
+	B = (50.2916)*sqrt(rho) / sqrt(Tk*eps);
+	dBdT = - 1./2.*B*( dedt +1./Tk + alp );
+	d2BdT2 = 1./B*pow(dBdT,2.) - 1./2.*B*( d2edt2 - 1./pow(Tk,2.) + dal );
+	dBdP = 1./2.*B*( bet - dedp );
 
 	// b_gamma constant
 	if ( flagElect == 0)
@@ -2267,33 +2274,23 @@ long int TDaviesDH::SetFlags( double cutoff, double np )
 // Calculates T,P corrected parameters
 long int TDaviesDH::PTparam()
 {
-	double RHO, dRdT, d2RdT2, dRdP, EPS, dEdT, d2EdT2, dEdP;
-	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP;
+	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
-	// pull parameters
-	RHO = RhoW[0];
-	dRdT = RhoW[1];
-	d2RdT2 = RhoW[2];
-	dRdP = RhoW[3];
-	EPS = EpsW[0];
-	dEdT = EpsW[1];
-	d2EdT2 = EpsW[2];
-	dEdP = EpsW[3];
+	// pull and convert parameters
+	rho = RhoW[0];
+	alp = - 1./rho*RhoW[1];
+	dal = pow(alp,2.) - 1./rho*RhoW[2];
+	bet = 1./rho*RhoW[3];
+	eps = EpsW[0];
+	dedt = 1./eps*EpsW[1];
+	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	dedp = 1./eps*EpsW[3];
 
-	// calculate A term of DH equation (add derivatives)
-	U = (1.82483e6) * sqrt(RHO);
-	V = pow(Tk*EPS, 1.5);
-	dUdT = 0.;
-	dVdT = 0.;
-	d2UdT2 = 0.;
-	d2VdT2 = 0.;
-	dUdP = 0.;
-	dVdP = 0.;
-	A = (1.82483e6) * sqrt(RHO) / pow(Tk*EPS, 1.5);
-	dAdT = (dUdT*V-U*dVdT) / pow (V,2.);
-	d2AdT2 = (d2UdT2*V+dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
-				- (dUdT*dVdT+U*d2VdT2)*pow(V,2.)/pow(V,4.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.);
-	dAdP = (dUdP*V-U*dVdP) / pow (V,2.);
+	// calculate A term of Debye-Huckel equation (and derivatives)
+	A = (1.82483e6)*sqrt(rho) / pow(Tk*eps,1.5);
+	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
+	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
+	dAdP = 1./2.*A*( bet - 3.*dedp);
 
 	return 0;
 }
