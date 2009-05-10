@@ -1334,17 +1334,17 @@ long int TEUNIQUAC::MixMod()
 	double Mw, Xw, IS, b, c;
 	double A, RR, QQ, K, L, M;
 	double gamDH, gamC, gamR, lnGam, Gam;
-	double RHO, EPS;
+	double rho, eps;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
 	// calculation of DH parameters
-	RHO = RhoW[0] * 1000.;  // density in kg m-3
-	EPS = EpsW[0];
+	rho = RhoW[0]*1000.;  // density in kg m-3
+	eps = EpsW[0];
 	b = 1.5;
-	c = 1.3287e+5;  // corrected
-	// A = c*sqrt(RHO)/pow((EPS*Tk),1.5);
+	c = (1.3287e+5);  // corrected
+	A = c*sqrt(rho)/pow((eps*Tk),1.5);
 
 	// approximation valid only for temperatures below 200 deg. C and Psat
 	A = 1.131 + (1.335e-3)*(Tk-273.15) + (1.164e-5)*pow( (Tk-273.15), 2.);
@@ -1459,44 +1459,34 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 	double phiti, phthi, RR, QQ, N, TPI, tpx, TPX, dtpx, DTPX, CON;
 	double gDH, gC, gR, hR, cpR, gCI, gRI, gCX, gRX;   // DH, C and R contributions to properties
 	double dg, d2g, dgRI, d2gRI, dgRX, d2gRX, dgDH, d2gDH, dgDHdP;
-	double RHO, dRdT, d2RdT2, dRdP, EPS, dEdT, d2EdT2, dEdP;
-	double X, Y, dXdT, dYdT, d2XdT2, d2YdT2, dXdP, dYdP;
+	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculation of DH parameters
-	RHO = RhoW[0] * 1000.;  // density in kg m-3
-	dRdT = RhoW[1];
-	d2RdT2 = RhoW[2];
-	dRdP = RhoW[3];
-	EPS = EpsW[0];
-	dEdT = EpsW[1];
-	d2EdT2 = EpsW[2];
-	dEdP = EpsW[3];
-
-	// DH term A and partial derivatives
+	// pull and convert parameters (check density units)
 	b = 1.5;
-	c = 1.3287e+5;  // corrected
-	X = pow(RHO,0.5);
-	Y = pow((EPS*Tk),1.5);
-	dXdT = 0.5*pow(RHO,(-0.5))*dRdT;
-	dYdT = 1.5*pow((EPS*Tk),0.5) * (dEdT*Tk + EPS);
-	d2XdT2 = 0.5*( -0.5*pow(RHO,(-1.5))*dRdT*dRdT + pow(RHO,(-0.5))*d2RdT2 );
-	d2YdT2 = 1.5*( 0.5*pow((EPS*Tk),(-0.5)) * (dEdT*Tk+EPS)*(dEdT*Tk+EPS)
-			+ pow((EPS*Tk),(0.5)) * (d2EdT2*Tk+dEdT+dEdT) );
-	dXdP = 0.5*pow(RHO,(-0.5))*dRdP;
-	dYdP = 1.5*pow((EPS*Tk),(0.5))*(dEdP*Tk);
-	A = c*sqrt(RHO)/pow((EPS*Tk),1.5);
-	dAdT = c * (dXdT*Y-X*dYdT) / pow (Y,2.);
-	d2AdT2 = c * ( (d2XdT2*Y+dXdT*dYdT)*pow(Y,2.)/pow(Y,4.) - (dXdT*Y)*(2.*Y*dYdT)/pow(Y,4.)
-				- (dXdT*dYdT+X*d2YdT2)*pow(Y,2.)/pow(Y,4.) + (X*dYdT)*(2.*Y*dYdT)/pow(Y,4.) );
-	dAdP = c * (dXdP*Y-X*dYdP) / pow (Y,2.);
+	c = (1.3287e+5);
+	rho = RhoW[0]*1000.;
+	alp = - 1./rho*RhoW[1]*1000.;
+	dal = pow(alp,2.) - 1./rho*RhoW[2];
+	bet = 1./rho*RhoW[3]*1000.;
+	eps = EpsW[0];
+	dedt = 1./eps*EpsW[1];
+	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	dedp = 1./eps*EpsW[3];
+
+	// calculate A term of Debye-Huckel equation (and derivatives)
+	A = c*sqrt(rho)/pow((eps*Tk),1.5);
+	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
+	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
+	dAdP = 1./2.*A*( bet - 3.*dedp);
 
 	// approximation valid only for temperatures below 200 deg. C and Psat
 	A = 1.131 + (1.335e-3)*(Tk-273.15) + (1.164e-5)*pow( (Tk-273.15), 2.);
 	dAdT = (1.335e-3) + 2.*(1.164e-5)*(Tk-273.15);
 	d2AdT2 = 2.*(1.164e-5);
+	dAdP = 0.;
 
 	// calculation of ionic strength
 	IS = 0.0;
