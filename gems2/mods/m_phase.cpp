@@ -581,7 +581,7 @@ AGAIN_SETUP:
                               php->ncpN = 1;
                           if( php->ncpN > (php->nDC*php->nDC/2) )
                               php->ncpN = (php->nDC*php->nDC/2);
-                          php->ncpM = 1;  // NPcoef
+                          php->ncpM = 2;  // NPcoef - changed from 1 to 2 on 13.05.09 (DK)
                           php->PphC = PH_AQUEL;
                           break;
           case SM_AQEXUQ: // built-in EUNIQUAC model for aqueous activity coeffs, changed 18.01.2009 (TW)

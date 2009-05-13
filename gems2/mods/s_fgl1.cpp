@@ -48,12 +48,12 @@ TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxO
   EpsW = eW;
 }
 
-
-// Calculates activity coefficients and excess functions
+// Calculates activity coefficients in SIT (NEA) model
+//
 long int TSIT::MixMod()
 {
-    long int j, icat, ian, /*ic, ia,*/  index1, index2, ip;
-    double T, A, B, sqI, bgi=0, Z2, lgGam, SumSIT;
+    long int j, /* icat, ian, ineut, ic, ia, */  index1, index2, ip;
+    double T, A, B, sqI, lgI, Z2, lgGam, SumSIT;
     double RHO, EPS;
 //    double nPolicy;
     RHO = RhoW[0];
@@ -66,6 +66,7 @@ long int TSIT::MixMod()
     	  lnGamma[j] = 0.;
 	  return 0;
     }
+    lgI = log10(I);
     T = Tk;
     A = 1.82483e6 * sqrt( RHO ) / pow( T*EPS, 1.5 );
     B = 50.2916 * sqrt( RHO ) / sqrt( T*EPS );
@@ -73,63 +74,103 @@ long int TSIT::MixMod()
     sqI = sqrt( I );
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
         "Error: A,B were not calculated - no values of RoW and EpsW !" );
-
-    // Calculation of EDH equation
-//  bgi = bg;
-    ian= -1;
-    icat = -1;
+//    ian= -1; icat = -1; ineut = -1;
+    // Calculation of SIT model
     for( j=0; j<NComp; j++ )
     {
-// Determining the index of cation or anion
-      if( aZ[j] < 0 )
-          ian = j; // ian++;
-      else if( aZ[j] > 0 )
-          icat = j; // icat++;
-//      else ;
       if( aZ[j] )
       {    // Charged species : calculation of the DH part
            Z2 = aZ[j]*aZ[j];
            lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
-
-// Calculation of SIT sum - new variant
-           SumSIT = 0.;
-           if( aZ[j] > 0 )  // cation
-           {
-              for( ip=0; ip<NPar; ip++ )
-              {
-                 index1 = aIPx[ip*MaxOrd];
-                 if( index1 != icat )
-                    continue;
-                 index2 = aIPx[ip*MaxOrd+1];
-                 SumSIT += aIPc[ip*NPcoef]   // epsilon
-                        * aM[index2];
-              }
-           }
-           else {   // anion
-              for( ip=0; ip<NPar; ip++ )
-              {
-                 index2 = aIPx[ip*MaxOrd+1];
-                 if( index2 != ian )
-                    continue;
-                 index1 = aIPx[ip*MaxOrd];  // index of cation
-                 SumSIT += aIPc[ip*NPcoef]  // epsilon
-                         * aM[index1];
-              }
-           }
-           lgGam += SumSIT;
       }
-      else { // Neutral species
-         if( j != NComp-1 /*pmp->DCC[j] != DC_AQ_SOLVENT*/ ) // common salting-out coefficient ??
-               lgGam = bgi * I;
-            else // water-solvent - a0 - osmotic coefficient
+      else {  // neutral species incl. water
+    	  Z2 = 0.;
+    	  lgGam =0.;
+      }
+//   Calculation of the SIT sum - new variant
+//   Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.09
+      SumSIT = 0.;
+      if( j != NComp-1 )   // not water
+      {
+  	     for( ip=0; ip<NPar; ip++ )
+         {
+            index1 = aIPx[ip*MaxOrd];  // The order of indexes for binary parameters plays no role
+            index2 = aIPx[ip*MaxOrd+1];
+            if( index1 == index2 )
+                continue;
+            if( index1 == j )
+            {
+                SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
+            }
+            else if( index2 == j )
+            {
+                SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
+            }
+         }
+      }
+      else { // H2O solvent: shall we calculate act. coeff. of water?
                lgGam = 0.;
       }
+      lgGam += SumSIT;
       lnGamma[j] = lgGam * 2.302585093/*lg_to_ln*/;
     } // j
 
     return 0;
 }
 
+ /*
+      if( j == icat )  // cation: always first index, second index can be anion or neutral
+      {
+         for( ip=0; ip<NPar; ip++ )
+         {
+            index1 = aIPx[ip*MaxOrd];
+            if( index1 != icat )
+                continue;
+            index2 = aIPx[ip*MaxOrd+1];  // index of anion or neutral
+            SumSIT += aIPc[ip*NPcoef]   // epsilon
+                    * aM[index2];
+         }
+      }
+      else if(aZ[j] < 0. )   // anion: always second index, first index can be cation or neutral
+      {
+         for( ip=0; ip<NPar; ip++ )
+         {
+             index2 = aIPx[ip*MaxOrd+1];
+             if( index2 != ian )
+                 continue;
+             index1 = aIPx[ip*MaxOrd];  // index of cation or neutral
+             SumSIT += aIPc[ip*NPcoef]  // epsilon
+                     * aM[index1];
+         }
+      }
+      else {  // neutral species: can be either first or second index
+        if( j != NComp-1 )
+        {
+    	  for( ip=0; ip<NPar; ip++ )
+          {
+              index1 = aIPx[ip*MaxOrd];
+              index2 = aIPx[ip*MaxOrd+1];
+              if( index1 != ineut && index1 != ineut )
+                  continue;
+              if( index1 == ineut )
+              {
+//               index2 = aIPx[ip*MaxOrd+1];  // index of anion or neutral
+                 SumSIT += aIPc[ip*NPcoef]  // epsilon
+                        * aM[index2];
+              }
+              if( index2 == ineut )
+              {
+//            	  index1 = aIPx[ip*MaxOrd];  // index of cation or neutral
+                  SumSIT += aIPc[ip*NPcoef]  // epsilon
+                         * aM[index1];
+              }
+          }
+        }
+        else { // H2O solvent: lg_gam = ?
+               lgGam = 0.; SumSIT = 0.,
+        }
+      }
+*/
 
 long int TSIT::ExcessProp( double *Zex )
 {
