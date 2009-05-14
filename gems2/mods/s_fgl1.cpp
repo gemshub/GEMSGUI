@@ -52,7 +52,7 @@ TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxO
 //
 long int TSIT::MixMod()
 {
-    long int j, /* icat, ian, ineut, ic, ia, */  index1, index2, ip;
+    long int j, index1, index2, ip;
     double T, A, B, sqI, lgI, Z2, lgGam, SumSIT;
     double RHO, EPS;
 //    double nPolicy;
@@ -74,7 +74,7 @@ long int TSIT::MixMod()
     sqI = sqrt( I );
     ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
         "Error: A,B were not calculated - no values of RoW and EpsW !" );
-//    ian= -1; icat = -1; ineut = -1;
+
     // Calculation of SIT model
     for( j=0; j<NComp; j++ )
     {
@@ -100,16 +100,16 @@ long int TSIT::MixMod()
                 continue;
             if( index1 == j )
             {
-                SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
+               SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
             }
             else if( index2 == j )
             {
-                SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
+               SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
             }
          }
       }
       else { // H2O solvent: shall we calculate act. coeff. of water?
-               lgGam = 0.;
+           lgGam = 0.;         // Decision: PHREEQC?   14.05.09 set to 0
       }
       lgGam += SumSIT;
       lnGamma[j] = lgGam * 2.302585093/*lg_to_ln*/;
@@ -117,60 +117,6 @@ long int TSIT::MixMod()
 
     return 0;
 }
-
- /*
-      if( j == icat )  // cation: always first index, second index can be anion or neutral
-      {
-         for( ip=0; ip<NPar; ip++ )
-         {
-            index1 = aIPx[ip*MaxOrd];
-            if( index1 != icat )
-                continue;
-            index2 = aIPx[ip*MaxOrd+1];  // index of anion or neutral
-            SumSIT += aIPc[ip*NPcoef]   // epsilon
-                    * aM[index2];
-         }
-      }
-      else if(aZ[j] < 0. )   // anion: always second index, first index can be cation or neutral
-      {
-         for( ip=0; ip<NPar; ip++ )
-         {
-             index2 = aIPx[ip*MaxOrd+1];
-             if( index2 != ian )
-                 continue;
-             index1 = aIPx[ip*MaxOrd];  // index of cation or neutral
-             SumSIT += aIPc[ip*NPcoef]  // epsilon
-                     * aM[index1];
-         }
-      }
-      else {  // neutral species: can be either first or second index
-        if( j != NComp-1 )
-        {
-    	  for( ip=0; ip<NPar; ip++ )
-          {
-              index1 = aIPx[ip*MaxOrd];
-              index2 = aIPx[ip*MaxOrd+1];
-              if( index1 != ineut && index1 != ineut )
-                  continue;
-              if( index1 == ineut )
-              {
-//               index2 = aIPx[ip*MaxOrd+1];  // index of anion or neutral
-                 SumSIT += aIPc[ip*NPcoef]  // epsilon
-                        * aM[index2];
-              }
-              if( index2 == ineut )
-              {
-//            	  index1 = aIPx[ip*MaxOrd];  // index of cation or neutral
-                  SumSIT += aIPc[ip*NPcoef]  // epsilon
-                         * aM[index1];
-              }
-          }
-        }
-        else { // H2O solvent: lg_gam = ?
-               lgGam = 0.; SumSIT = 0.,
-        }
-      }
-*/
 
 long int TSIT::ExcessProp( double *Zex )
 {
