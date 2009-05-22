@@ -645,7 +645,7 @@ void TRMults::LoadRmults( bool NewRec, bool changePhases )
     gstring FluKey;
     char amod = SM_AQDAV;    // Added KD 25.01.02
     char gmod = SM_IDEAL;    // Added KD 16.06.03
-    float aparam[4], gparam[4];
+    float aparam[8], gparam[4];
 
 TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     if( aPa->tpp->Pbg < '0' || aPa->tpp->Pbg > '4' )
@@ -656,7 +656,8 @@ TProfil *aPa=(TProfil *)(&aMod[RT_PARAM]);
     aparam[1] = aPa->pa.aqPar[1];
     aparam[2] = aPa->pa.aqPar[2];
     aparam[3] = aPa->pa.aqPar[3];
-    gparam[0] = aPa->pa.ResFloat;
+    aparam[4] = aPa->pa.aqPar[4];
+    gparam[0] = 0.; //  = aPa->pa.ResFloat;
     gparam[1]=gparam[2]=gparam[3]=0.0;
 
     if( NewRec == false )
@@ -717,7 +718,7 @@ NEW_PHASE_AGAIN:
 */
 // Calling the wizard to set generated aq and gas phases
        if( !vfAutoPhaseSet( window(), prfName.c_str(), AqKey, GasKey,
-              amod, gmod, aparam, gparam, resp ) )
+              amod, gmod, aparam, gparam /*, resp */ ) )
        {
           if( vfQuestion( window(), "Project: Attempt to cancel setup of phases",
             "Are you really sure?\n Repeat phase setup (Yes) or\nCancel creating the project (No)?" ))
@@ -725,8 +726,8 @@ NEW_PHASE_AGAIN:
           else
             Error( GetName(), "Project creation aborted by the user - bailing out..." );
        }
-
-       aPa->tpp->Pbg = resp+'0';
+// aparam[4] = resp;
+       aPa->tpp->Pbg = (int)aparam[4]+'0'; // resp+'0';  to check in TSolMod implementation
        if( amod == '-' )
        {
 //       TProfil::pm->useAqPhase = false;
@@ -739,6 +740,7 @@ NEW_PHASE_AGAIN:
             aPa->pa.aqPar[1] = aparam[1];
             aPa->pa.aqPar[2] = aparam[2];
             aPa->pa.aqPar[3] = aparam[3];
+            aPa->pa.aqPar[4] = aparam[4];
        }
        if( gmod == '-' )
        {
@@ -748,7 +750,7 @@ NEW_PHASE_AGAIN:
        }
        else {
            mu.PmvGas = gmod;
-           aPa->pa.ResFloat = gparam[0];
+//           aPa->pa.ResFloat = gparam[0];
        }
 
        if( mu.PmvAq == 'U' )

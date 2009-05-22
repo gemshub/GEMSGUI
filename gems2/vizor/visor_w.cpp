@@ -1008,7 +1008,7 @@ vfDualThSet(QWidget* par, const char * p_key,
 // call to AutoPhaseDialog  added 18.07.03
 bool
 vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key,
-         char& acode, char& gcode, float apar[4], float gpar[4], int& resp_T )
+         char& acode, char& gcode, float apar[8], float gpar[4]/*, int& resp_T */ )
 {
      AutoPhaseDialog apdlg( pr_key, acode, gcode, wpar );
 
@@ -1016,7 +1016,7 @@ vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key
 //              QWidget* parent = NULL);
 
      apdlg.set_apar( apar );
-     apdlg.set_resp( resp_T );
+//     apdlg.set_resp( resp_T );
      apdlg.set_gpar( gpar );
      apdlg.set_akey( a_key );
      apdlg.set_gkey( g_key );
@@ -1027,13 +1027,13 @@ vfAutoPhaseSet(QWidget* wpar, const char *pr_key, gstring& a_key, gstring& g_key
     acode = apdlg.get_acode();
     gcode = apdlg.get_gcode();
     apdlg.get_apar( apar );
-    resp_T = apdlg.get_resp();
+//    resp_T = apdlg.get_resp();
     apdlg.get_gpar( gpar );
     apdlg.get_akey( a_key );
     apdlg.get_gkey( g_key );
 
 if( acode == 'S' )
-	acode = 'U';     // Blocking unavailable automatic SIT mode 
+	acode = 'U';     // Blocking unavailable automatic SIT mode
     return true;
 }
 

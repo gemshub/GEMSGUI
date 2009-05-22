@@ -1069,14 +1069,14 @@ class THelgesonDH: public TSolMod
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar, double *dW, double *eW,
-				double *arM, double *arZ, double AC, double BC );
+				double *arM, double *arZ,
+				double T_k, double P_bar, double *dW, double *eW );
 
 		// Destructor
 		~THelgesonDH();
 
 		// Set flags for calculation modes
-		long int SetFlags( long int elect, double cutoff, double np );
+//		long int SetFlags( long int elect, double cutoff, double np );
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
@@ -1135,14 +1135,13 @@ class TDaviesDH: public TSolMod
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
-				double T_k, double P_bar, double *dW, double *eW,
-				double *arM, double *arZ );
-
+				double *arM, double *arZ,
+				double T_k, double P_bar, double *dW, double *eW );
 		// Destructor
 		~TDaviesDH();
 
 		// Set flags for calculation modes
-		long int SetFlags( double cutoff, double np );
+//		long int SetFlags( double cutoff, double np );
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();

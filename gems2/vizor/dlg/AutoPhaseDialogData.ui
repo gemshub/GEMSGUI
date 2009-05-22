@@ -195,6 +195,12 @@
                                         <property name="name">
                                             <cstring>apRkeyEdit</cstring>
                                         </property>
+                                        <property name="frameShape">
+                                            <enum>LineEditPanel</enum>
+                                        </property>
+                                        <property name="frameShadow">
+                                            <enum>Sunken</enum>
+                                        </property>
                                         <property name="toolTip" stdset="0">
                                             <string>This field shows a record key of the aqueous Phase to be automatically generated</string>
                                         </property>
@@ -276,7 +282,7 @@ the aqueous phase model</string>
                                     <number>0</number>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>This value of third EDH parameter will be used in H and 3 models and in 2 (aqueous species only)</string>
+                                    <string>Here, the b_gamma(Tr,Pr) value for a major electrolyte in DHH model can be selected</string>
                                 </property>
                             </widget>
                             <widget class="QLabel">
@@ -316,6 +322,9 @@ the aqueous phase model</string>
                                 <property name="name">
                                     <cstring>pBG_T</cstring>
                                 </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Here, the mode for b_gamma(T,P) for a major electrolyte in DHH model can be selected</string>
+                                </property>
                             </widget>
                             <widget class="QLabel">
                                 <property name="name">
@@ -353,7 +362,7 @@ the aqueous phase model</string>
                                     <bool>true</bool>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>This value in 1e-8 cm (to be used in the H model) can be changed here</string>
+                                    <string>This value in 1e-8 cm (to be used in the DHH model) can be selected or edited here</string>
                                 </property>
                             </widget>
                             <widget class="QLabel">
@@ -372,14 +381,14 @@ the aqueous phase model</string>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>Set as b_gamma*IS</string>
+                                        <string>Calculate as b_gamma*IS</string>
                                     </property>
                                 </item>
                                 <property name="name">
                                     <cstring>apEdit2</cstring>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>This value can be 0 (default) or -1 (set gamma=1 for all neutral species)</string>
+                                    <string>This sets internal activity coefficient for neutral aqueous species to 1.0 or calculated as IS*b_gamma(T,P)</string>
                                 </property>
                             </widget>
                             <widget class="QLabel">
@@ -398,14 +407,14 @@ the aqueous phase model</string>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>Calculate</string>
+                                        <string>Calculate internally</string>
                                     </property>
                                 </item>
                                 <property name="name">
                                     <cstring>apEdit3</cstring>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>This value can be 0 (default) or -1 (set gamma=1 for all neutral species)</string>
+                                    <string>This field selects whether the internal activity coefficient of H2O-solvent is set to 1.0 or calculated internally</string>
                                 </property>
                             </widget>
                         </vbox>

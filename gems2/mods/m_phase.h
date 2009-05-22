@@ -156,7 +156,7 @@ public:
             bool useLst = false, TCStringArray lst = 0 );
     // Added by KD on 31.07.03
     void AssemblePhase( const char* key, const char* part, float param[4],
-           int file, bool useLst = false, TCStringArray lst = 0 );
+           int file, bool useLst = false, TCStringArray lst = 0, int Npar = 4 );
 
     void CopyRecords( const char * prfName, TCStringArray& aPHnoused,
           TCStringArray& aPHtmp, elmWindowData el_data, phSetupData st_data);

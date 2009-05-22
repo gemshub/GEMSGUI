@@ -36,14 +36,14 @@ public:
          const char* pr_key, char acode, char gcode, QWidget* parent = NULL);
     virtual ~AutoPhaseDialog();
 
-    void set_apar( float apar[4] );
-    void set_resp( int );
+    void set_apar( float apar[8] );
+//    void set_resp( int );
     void set_gpar( float gpar[4] );
     void set_akey( gstring& a_key );
     void set_gkey( gstring& g_key );
 
-    void get_apar( float apar[4] );
-    int get_resp();
+    void get_apar( float apar[8] );
+//    int get_resp();
     void get_gpar( float gpar[4] );
     void get_akey( gstring& a_key );
     void get_gkey( gstring& g_key );
@@ -52,7 +52,7 @@ public:
     char get_gcode();
 
 private:
-   float a_param[4];
+   float a_param[8];  // Changed size from 4 to 8 on 22.05.2009 (DK,TW)
    float g_param[4];
    char aqu_code;
    char gas_code;

@@ -98,7 +98,7 @@ SPP_SETTING pa_ = {
     1., 25.,      /* Pr, Tr */
     /* MULTI */
     (float)1e-19, /* lowPosNum, */  (float)1e-16, /* logXw, */   (float)1e-9,  /* logYFk */
-    { (float)0.064, (float)3.72, 0., 0.5 }, 0.   // Reserv
+    { (float)0.064, (float)3.72, 0., 0., 0. },  // Defaults for aqueous auto-phase models
 }; /* SPP_SETTING */
 
 

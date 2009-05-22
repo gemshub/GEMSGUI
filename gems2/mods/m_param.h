@@ -132,9 +132,8 @@ struct SPP_SETTING
     lowPosNum, // MULTI Cutoff moles of DC (Ls set) { 1e-19 };
     logXw,     // log(1e-16)
     logYFk,    // log(1e-9)
-    aqPar[4],  // b_gamma, a0, NeutPolicy, I_max for auto aq phase model
-    ResFloat   // one parameter for auto gas/fluid phase
-    ;
+    aqPar[5];  // b_gamma, a0, NeutPolicy, GamH2O, b_gam_T_dep for auto aq phase model
+//    ResFloat;   // one parameter for auto gas/fluid phase
 
     void write(GemDataStream& oss);
     void read(GemDataStream& oss);

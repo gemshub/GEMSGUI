@@ -28,6 +28,8 @@ const char * dfAqKeyU =  "a   AQELSI  aq_gen          aq  EUNIQUAC        ";
 const char * dfGasKey =  "g   GASMXID gas_gen         gm  Ideal           ";
 const char * dfFluKey =  "f   FLUIDMX fluid_gen       gm  GC_EoS          ";
 
+// List of maximum values of ionic strength up to which the respective model is applicable
+// (not used in calculations, just to inform the user)
 const double dfImaxD = 0.5;
 const double dfImaxH = 1.5;
 const double dfImax3 = 1.0;
@@ -83,9 +85,9 @@ AutoPhaseDialog::AutoPhaseDialog (
 
 AutoPhaseDialog::~AutoPhaseDialog()
 {}
-
-int
-AutoPhaseDialog::get_resp()
+/*
+int    // merged into get_apar() and set_apar()
+AutoPhaseDialog::get_resp()   // T-calculation mode of b_g Helgeson parameter
 {
   return pBG_T->currentItem();
 }
@@ -95,18 +97,19 @@ AutoPhaseDialog::set_resp( int resp_t )
 {
   pBG_T->setCurrentItem( resp_t );
 }
-
+*/
 void
-AutoPhaseDialog::get_apar ( float par[4] )
+AutoPhaseDialog::get_apar ( float par[8] )
 {
     par[0] = QString( apEdit0->currentText() ).toDouble();
     par[1] = QString( apEdit1->currentText() ).toDouble();
-    par[2] = apEdit2->currentItem();
-    par[3] = apEdit3->currentItem();
+    par[2] = (float)apEdit2->currentItem();
+    par[3] = (float)apEdit3->currentItem();
+    par[4] = (float)pBG_T->currentItem();
 }
 
 void
-AutoPhaseDialog::set_apar ( float par[4] )
+AutoPhaseDialog::set_apar ( float par[8] )
 {
     QString str;
  //   double I_max;
@@ -137,6 +140,7 @@ AutoPhaseDialog::set_apar ( float par[4] )
 */
     apEdit3->setCurrentItem( (int)par[3] );
 //   apEdit3->setText( str.setNum( (double)par[3] ) );
+    pBG_T->setCurrentItem( (int)par[4] );
 }
 
 char

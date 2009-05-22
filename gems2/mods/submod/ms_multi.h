@@ -429,12 +429,13 @@ class TMulti
 // Main call for calculation of activity coefficients on IPM iterations
     long int GammaCalc( long int LinkMode );
 // Built-in activity coefficient models
-//  aqueous electrolyte
+/*  aqueous electrolyte
     void DebyeHueckel3Hel( long int jb, long int je, long int jpb, long int jdb, long int k );
     void DebyeHueckel3Karp( long int jb, long int je, long int jpb, long int jdb, long int k );
     void DebyeHueckel2Kjel( long int jb, long int je, long int jpb, long int jdb, long int k );
     void DebyeHueckel1LL( long int jb, long int je, long int k );
     void Davies03temp( long int jb, long int je, long int jpb, long int k );
+*/
 // fluid mixtures (old functions)
 //    void ChurakovFluid( long int jb, long int je, long int jpb, long int jdb, long int k );
     void CGofPureGases( long int jb, long int je, long int jpb, long int jdb, long int k, long int ipb );

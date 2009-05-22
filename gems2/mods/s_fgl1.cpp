@@ -1674,8 +1674,16 @@ void TEUNIQUAC::Euniquac_test_out( const char *path )
 }
 
 
-
-
+// Semantics of DH model parameters transmitted through 'aIPc' ('ph_cf')
+//   array (DK, TW on 22.05.2009)
+//   aIPc[0]:  b_gamma common at Tr, Pr (default 0.064 for NaCl)
+//   aIPc[1]:  common ion size (default 3.72 A)
+//   aIPc[2]:  flag for internal gamma calculation for neutral species: 0: set to 1;
+//                    1: use b_gamma(T,P)
+//   aIPc[3]:  flag for internal gamma calculation of H2O-solvent: 0: set to 1; 1 - built-in
+//   aIPc[4]:  flag for T-P dependence of b_gamma: 0: No (set constant to b_gamma(Tr,Pr);
+//                1: for NaCl; 2: for KCl; 3: NaOH; 4: KOH
+//  More can be defined in future (check also TSolMod)
 
 //=============================================================================================
 // Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Helgesons variant
@@ -1690,8 +1698,8 @@ THelgesonDH::THelgesonDH( long int NSpecies, long int NParams,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,
 		double *arWx, double *arlnGam, double *aphVOL,
-		double T_k, double P_bar, double *dW, double *eW,
-		double *arM, double *arZ, double AC, double BC ):
+		double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
@@ -1699,10 +1707,13 @@ THelgesonDH::THelgesonDH( long int NSpecies, long int NParams,
 	alloc_internal();
 	m = arM;
 	z = arZ;
-	ac = AC;
-	bc = BC;
 	RhoW = dW;
 	EpsW = eW;
+	ac = aIPc[1];
+	bc = aIPc[0];
+	flagNeut = aIPc[2];
+	flagH2O = aIPc[3];
+	flagElect = aIPc[4];
 }
 
 
@@ -1730,7 +1741,7 @@ void THelgesonDH::free_internal()
 	delete[]dLnGdP;
 }
 
-
+/*
 long int THelgesonDH::SetFlags( long int elect, double cutoff, double np )
 {
 	// old nPolicy flag needs to be replaced
@@ -1771,7 +1782,7 @@ long int THelgesonDH::SetFlags( long int elect, double cutoff, double np )
 
 	return 0;
 }
-
+*/
 
 // Calculates T,P corrected parameters
 long int THelgesonDH::PTparam()
@@ -1835,8 +1846,8 @@ long int THelgesonDH::MixMod()
 
 	// calculate ionic strength and total molaities (molT and molZ)
 	IonicStrength();
-	if ( IS < cutoffIS )
-		return 0;
+//	if ( IS < cutoffIS )
+//		return 0;
 
 	WxW = x[w];
 	Nw = 1000./18.01528;
@@ -2157,9 +2168,6 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 }
 
 
-
-
-
 //=============================================================================================
 // Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Davies variant
 // References: Langmuir (1997)
@@ -2172,8 +2180,8 @@ TDaviesDH::TDaviesDH( long int NSpecies, long int NParams,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,
 		double *arWx, double *arlnGam, double *aphVOL,
-		double T_k, double P_bar, double *dW, double *eW,
-		double *arM, double *arZ ):
+		double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
         	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
@@ -2183,6 +2191,11 @@ TDaviesDH::TDaviesDH( long int NSpecies, long int NParams,
 	z = arZ;
 	RhoW = dW;
 	EpsW = eW;
+//	ac = aIPc[1];
+//	bc = aIPc[0];
+	flagNeut = aIPc[2];
+	flagH2O = aIPc[3];
+//	flagElect = aIPc[4];
 }
 
 
@@ -2210,7 +2223,7 @@ void TDaviesDH::free_internal()
 	delete[]dLnGdP;
 }
 
-
+/*
 long int TDaviesDH::SetFlags( double cutoff, double np )
 {
 	// old nPolicy flag needs to be replaced
@@ -2250,7 +2263,7 @@ long int TDaviesDH::SetFlags( double cutoff, double np )
 
 	return 0;
 }
-
+*/
 
 // Calculates T,P corrected parameters
 long int TDaviesDH::PTparam()
