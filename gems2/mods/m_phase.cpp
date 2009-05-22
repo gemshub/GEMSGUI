@@ -1281,7 +1281,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 memcpy( php->sol_t, "3NNSNN", 6 );
                 memcpy( &php->PphC, "a++---", 6 );
                 php->ncpN = 2; php->ncpM = 4;
-                php->nscM = 1; php->npxM = 0;
+                php->nscM = 2; php->npxM = 0;
                 Name += "ion-association model, EDH(K) equation, Kielland ion sizes";
                 apar[1] = 0.0;
     sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size=specific; gam_neut= %s; gam_H2O= %s ",
@@ -1291,7 +1291,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 memcpy( php->sol_t, "2NNSNN", 6 );
                 memcpy( &php->PphC, "a++---", 6 );
                 php->ncpN = 2; php->ncpM = 4;
-                php->nscM = 1; php->npxM = 0;
+                php->nscM = 2; php->npxM = 0;
                 Name += "ion-association model, DH equation, Kielland ion sizes";
                 apar[1] = 0.0;
     sprintf( nbuf, ": b_gamma= %-5.3f; a_size=specific; gam_neut= %s; gam_H2O= %s ",
@@ -1300,7 +1300,7 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
        case '1': // DH limiting law (no a0 and bg required)
                 memcpy( php->sol_t, "1NNSNN", 6 );
                 memcpy( &php->PphC, "a-----", 6 );
-                php->ncpN = 0; php->ncpM = 0;
+                php->ncpN = 2; php->ncpM = 4;
                 php->nscM = 0; php->npxM = 0;
                 Name += "ion-association model, Debye-Hueckel limiting law";
                 apar[0] = apar[1] = apar[2] = 0.0;

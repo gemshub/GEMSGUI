@@ -342,6 +342,8 @@ void TMulti::SetSmoothingFactor( long int mode )
 
 static double ICold=0.;
 
+
+
 //--------------------------------------------------------------------------------
 // Main call point for calculation of DC activity coefficients (lnGam vector)
 // Controls various built-in models, as well as generic Phase script calculation
@@ -559,7 +561,7 @@ TMulti::GammaCalc( long int LinkMode  )
                    case SM_AQPITZ:
                    case SM_AQEXUQ:
                 	  SolModActCoeff( k, sMod[SPHAS_TYP] );
-                	           break;
+                	  break;
 /*                case SM_AQDH3:
                        DebyeHueckel3Karp( jb, je, jpb, jdb, k );
                           break;
@@ -1515,13 +1517,18 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         {
         	break;   //  TBD
         }
+
         case SM_AQDH2:   // Debye-Hueckel without extended term
         {
         	break;  // TBD
         }
+
         case SM_AQDH1:   // Debye-Hueckel limiting law
         {
-            break;  // TBD
+           	TLimitingLaw* aPT = new TLimitingLaw( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
+            aSM = (TSolMod*)aPT;
+        	break;
         }
 
         case SM_AQDHH:  // Helgeson's version of extended Debye-Hueckel equation

@@ -1022,8 +1022,6 @@ class THelgesonDH: public TSolMod
 	private:
 
 		// status flags copied from MULTI
-		double nPolicy;  // mode of calculating H2O and neutral species (old version)
-		double cutoffIS;  // IS cutoff value for calculating act. coefficients
 		long int flagH2O;  // new flag for water
 		long int flagNeut;  // new flag for neutral species
 		long int flagElect;  // flag for selection of background electrolyte model
@@ -1099,8 +1097,6 @@ class TDaviesDH: public TSolMod
 	private:
 
 		// status flags copied from MULTI
-		double nPolicy;  // mode of calculating H2O and neutral species (old version)
-		double cutoffIS;  // IS cutoff value for calculating act. coefficients
 		long int flagH2O;  // new flag for water
 		long int flagNeut;  // new flag for neutral species
 
@@ -1136,6 +1132,64 @@ class TDaviesDH: public TSolMod
 				double T_k, double P_bar, double *dW, double *eW );
 		// Destructor
 		~TDaviesDH();
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam();
+
+		// calculates activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
+
+// -------------------------------------------------------------------------------------
+// Debye-Hueckel (DH) limiting law for aqueous electrolyte solutions
+// References: Langmuir (1997)
+class TLimitingLaw: public TSolMod
+{
+	private:
+
+		// status flags copied from MULTI
+		long int flagH2O;  // new flag for water
+		long int flagNeut;  // new flag for neutral species
+
+		// data objects copied from MULTI
+		double *z;   // species charges
+		double *m;   // species molalities
+		double *RhoW;  // water density properties
+		double *EpsW;  // water dielectrical properties
+
+		// internal work objects
+		double *LnG;  // activity coefficient
+		double *dLnGdT;  // derivatives
+		double *d2LnGdT2;
+		double *dLnGdP;
+		double IS;  // ionic strength
+		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
+
+		// internal functions
+		void alloc_internal();
+		void free_internal();
+		long int IonicStrength();
+
+	public:
+
+		// Constructor
+		TLimitingLaw( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code,
+				long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL,
+				double *arM, double *arZ,
+				double T_k, double P_bar, double *dW, double *eW );
+		// Destructor
+		~TLimitingLaw();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
