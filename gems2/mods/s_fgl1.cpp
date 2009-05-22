@@ -1741,48 +1741,6 @@ void THelgesonDH::free_internal()
 	delete[]dLnGdP;
 }
 
-/*
-long int THelgesonDH::SetFlags( long int elect, double cutoff, double np )
-{
-	// old nPolicy flag needs to be replaced
-	// might need to convert electrolyte model flag as well
-
-	flagElect = elect;
-	cutoffIS = cutoff;
-	nPolicy = np;
-
-	// converting old into new flags
-	if ( nPolicy < -1.000001 )
-	{
-		// neutral species 1.0, H2O solvent 1.0
-		flagNeut = 0;
-		flagH2O = 0;
-	}
-
-	else if ( nPolicy > -1.000001 && nPolicy < -0.000001 )
-	{
-		// neutral species 1.0, H2O solvent calc.
-		flagNeut = 0;
-		flagH2O = 1;
-	}
-
-	else if ( nPolicy > -0.000001 && nPolicy < 0.999999 )
-	{
-		// neutral species calc., H2O solvent calc.
-		flagNeut = 1;
-		flagH2O = 1;
-	}
-
-	else
-	{
-		// neutral species calc., H2O solvent 1.0
-		flagNeut = 1;
-		flagH2O = 0;
-	}
-
-	return 0;
-}
-*/
 
 // Calculates T,P corrected parameters
 long int THelgesonDH::PTparam()
@@ -2060,7 +2018,7 @@ long int THelgesonDH::BgammaTP( long int flagElect )
 long int THelgesonDH::Gfunction()
 {
 	double T, P, D, beta, alpha, daldT;
-	double *g, *dgdP, *dgdT, *d2gdT2;
+	double g, dgdP, dgdT, d2gdT2;
 	double TMAX = 1000., PMAX = 5000., TOL = 1.0e-4;
 
 	// convert parameters
@@ -2072,10 +2030,10 @@ long int THelgesonDH::Gfunction()
 	beta = RhoW[3]/RhoW[0];
 
 	// initialize g and derivatives to zero
-	*g = 0.0;
-	*dgdP = 0.0;
-	*dgdT = 0.0;
-	*d2gdT2 = 0.0;
+	g = 0.0;
+	dgdP = 0.0;
+	dgdT = 0.0;
+	d2gdT2 = 0.0;
 
 	if ((T > TMAX+TOL) || (P > PMAX+TOL))
 		return -1;
@@ -2083,10 +2041,10 @@ long int THelgesonDH::Gfunction()
 		GShok2( T, P, D, beta, alpha, daldT, g, dgdP, dgdT, d2gdT2 );
 
 	// assignments
-	Gf = *g;
-	dGfdT = *dgdT;
-	d2GfdT2 = *d2gdT2;
-	dGfdP = *dgdP;
+	Gf = g;
+	dGfdT = dgdT;
+	d2GfdT2 = d2gdT2;
+	dGfdP = dgdP;
 
 	return 0;
 }
@@ -2094,7 +2052,7 @@ long int THelgesonDH::Gfunction()
 
 // calculates g-function and derivatives
 long int THelgesonDH::GShok2( double T, double P, double D, double beta,
-		double alpha, double daldT, double *g, double *dgdP, double *dgdT, double *d2gdT2 )
+		double alpha, double daldT, double &g, double &dgdP, double &dgdT, double &d2gdT2 )
 {
 	double a, b, dgdD, /*dgdD2,*/ dadT, dadTT, dbdT, dbdTT, dDdT, dDdP,
 		dDdTT, Db, dDbdT, dDbdTT, ft, dftdT, dftdTT, fp, dfpdP,
@@ -2111,7 +2069,7 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 	// calculation part
 	a = C[0] + C[1]*T + C[2]*pow(T,2.);
 	b = C[3] + C[4]*T + C[5]*pow(T,2.);
-	*g = a * pow(pw, b);
+	g = a * pow(pw, b);
 
 	dgdD = - a*b* pow(pw, (b - 1.0));
 	// dgdD2 = a * b * (b - 1.0) * pow((1.0 - D),(b - 2.0));
@@ -2135,9 +2093,9 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 				- pow(pw,b) * dbdT * dDdT / (1.0 - D)
 				+ log(pw) * dbdT * dDbdT;
 
-	*dgdP = dgdD * dDdP;
-	*dgdT = a * dDbdT + Db * dadT;
-	*d2gdT2 = a * dDbdTT + 2.0 * dDbdT * dadT + Db * dadTT;
+	dgdP = dgdD * dDdP;
+	dgdT = a * dDbdT + Db * dadT;
+	d2gdT2 = a * dDbdTT + 2.0 * dDbdT * dadT + Db * dadTT;
 
 	if((T < 155.0) || (P > 1000.0) || (T > 355.0))
 		return 0;
@@ -2159,13 +2117,16 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 	dfdT = fp * dftdT;
 	d2fdT2 = fp * dftdTT;
 
-	*g -= f;
-	*dgdP -= dfdP;
-	*dgdT -= dfdT;
-	*d2gdT2 -= d2fdT2;
+	g -= f;
+	dgdP -= dfdP;
+	dgdT -= dfdT;
+	d2gdT2 -= d2fdT2;
 
 	return 0;
 }
+
+
+
 
 
 //=============================================================================================
@@ -2223,47 +2184,6 @@ void TDaviesDH::free_internal()
 	delete[]dLnGdP;
 }
 
-/*
-long int TDaviesDH::SetFlags( double cutoff, double np )
-{
-	// old nPolicy flag needs to be replaced
-	// might need to convert electrolyte model flag as well
-
-	cutoffIS = cutoff;
-	nPolicy = np;
-
-	// converting old into new flags
-	if ( nPolicy < -1.000001 )
-	{
-		// neutral species 1.0, H2O solvent 1.0
-		flagNeut = 0;
-		flagH2O = 0;
-	}
-
-	else if ( nPolicy > -1.000001 && nPolicy < -0.000001 )
-	{
-		// neutral species 1.0, H2O solvent calc.
-		flagNeut = 0;
-		flagH2O = 1;
-	}
-
-	else if ( nPolicy > -0.000001 && nPolicy < 0.999999 )
-	{
-		// neutral species calc., H2O solvent calc.
-		flagNeut = 1;
-		flagH2O = 1;
-	}
-
-	else
-	{
-		// neutral species calc., H2O solvent 1.0
-		flagNeut = 1;
-		flagH2O = 0;
-	}
-
-	return 0;
-}
-*/
 
 // Calculates T,P corrected parameters
 long int TDaviesDH::PTparam()
@@ -2338,7 +2258,10 @@ long int TDaviesDH::MixMod()
 			lgGam = 0.0;
 			Z2 = z[j]*z[j];
 			lgGam = ( -A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS );
-			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+			if ( flagNeut == 1 )
+				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+			else
+				lnGamma[j] = lgGam * lg_to_ln;
 		}
 
 		// neutral species and water solvent
@@ -2349,11 +2272,9 @@ long int TDaviesDH::MixMod()
 			{
 				lgGam = 0.0;
 				if ( flagNeut == 1 )
-					// depends on form of Davies equation, inconsistent with Gibbs-Duhem
-					lgGam = 0.0;
+					lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 				else
-					lgGam = 0.0;
-				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+					lnGamma[j] = lgGam * lg_to_ln;
 				continue;
 			}
 

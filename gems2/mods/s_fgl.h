@@ -1059,8 +1059,8 @@ class THelgesonDH: public TSolMod
 		long int BgammaTP( long int flagElect );
 		long int Gfunction();
 		long int GShok2( double T, double P, double D, double beta,
-				double alpha, double daldT, double *g, double *dgdP,
-				double *dgdT, double *d2gdT2 );
+				double alpha, double daldT, double &g, double &dgdP,
+				double &dgdT, double &d2gdT2 );
 
 	public:
 
@@ -1074,9 +1074,6 @@ class THelgesonDH: public TSolMod
 
 		// Destructor
 		~THelgesonDH();
-
-		// Set flags for calculation modes
-//		long int SetFlags( long int elect, double cutoff, double np );
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
@@ -1139,9 +1136,6 @@ class TDaviesDH: public TSolMod
 				double T_k, double P_bar, double *dW, double *eW );
 		// Destructor
 		~TDaviesDH();
-
-		// Set flags for calculation modes
-//		long int SetFlags( double cutoff, double np );
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
