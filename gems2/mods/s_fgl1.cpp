@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: s_fgl1.cpp 1140 2008-12-08 19:07:05Z wagner $
 //
-// Copyright (C) 2008-2009  S.Dmitrieva, F.Hingerl, T.Wagner, D.Kulik
+// Copyright (C) 2008-2009  T.Wagner, S.Dmitrieva, F.Hingerl, D.Kulik
 //
 // Implementation of TSIT, TPitzer and TEUNIQUAC classes
 //
@@ -24,6 +24,8 @@
 using namespace std;
 #include "verror.h"
 #include "s_fgl.h"
+
+
 
 
 
@@ -1676,7 +1678,7 @@ void TEUNIQUAC::Euniquac_test_out( const char *path )
 
 
 //=============================================================================================
-// Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Helgesons variant
+// Extended Debye-Hueckel (EDH) model for aqueous solutions, Helgesons variant (c) TW May 2009
 // References: Helgeson et al. (1981); Oelkers and Helgeson (1990);
 // Pokrovskii and Helgeson (1995; 1997a; 1997b)
 //=============================================================================================
@@ -2118,7 +2120,7 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 
 
 //=============================================================================================
-// Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Davies variant
+// Extended Debye-Hueckel (EDH) model for aqueous solutions, Davies variant (c) TW May 2009
 // References: Langmuir (1997)
 //=============================================================================================
 
@@ -2354,13 +2356,13 @@ long int TDaviesDH::IonicStrength()
 
 
 //=============================================================================================
-// Debye-Hueckel (DH) limiting law for aqueous electrolyte solutions
+// Debye-Hueckel (DH) limiting law for aqueous solutions (c) TW May 2009
 // References: Langmuir (1997)
 //=============================================================================================
 
 
 // Generic constructor for the TDaviesDH class
-TLimitingLaw::TLimitingLaw( long int NSpecies, long int NParams,
+TLimitingLawDH::TLimitingLawDH( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,
@@ -2381,13 +2383,13 @@ TLimitingLaw::TLimitingLaw( long int NSpecies, long int NParams,
 }
 
 
-TLimitingLaw::~TLimitingLaw()
+TLimitingLawDH::~TLimitingLawDH()
 {
 	free_internal();
 }
 
 
-void TLimitingLaw::alloc_internal()
+void TLimitingLawDH::alloc_internal()
 {
 	LnG = new double [NComp];
 	dLnGdT = new double [NComp];
@@ -2396,7 +2398,7 @@ void TLimitingLaw::alloc_internal()
 }
 
 
-void TLimitingLaw::free_internal()
+void TLimitingLawDH::free_internal()
 {
   	// cleaning memory
 	delete[]LnG;
@@ -2407,7 +2409,7 @@ void TLimitingLaw::free_internal()
 
 
 // Calculates T,P corrected parameters
-long int TLimitingLaw::PTparam()
+long int TLimitingLawDH::PTparam()
 {
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
@@ -2432,7 +2434,7 @@ long int TLimitingLaw::PTparam()
 
 
 // Calculates activity coefficients
-long int TLimitingLaw::MixMod()
+long int TLimitingLawDH::MixMod()
 {
 	// bla
 	long int j, w;
@@ -2519,7 +2521,7 @@ long int TLimitingLaw::MixMod()
 
 
 // calculates excess properties
-long int TLimitingLaw::ExcessProp( double *Zex )
+long int TLimitingLawDH::ExcessProp( double *Zex )
 {
 	// bla
 
@@ -2528,7 +2530,7 @@ long int TLimitingLaw::ExcessProp( double *Zex )
 
 
 // calculates ideal mixing properties
-long int TLimitingLaw::IdealProp( double *Zid )
+long int TLimitingLawDH::IdealProp( double *Zid )
 {
 	long int j;
 	double si;
@@ -2558,7 +2560,7 @@ long int TLimitingLaw::IdealProp( double *Zid )
 
 
 // calculates true ionic strength
-long int TLimitingLaw::IonicStrength()
+long int TLimitingLawDH::IonicStrength()
 {
 	long int j;
 	double is;
@@ -2575,6 +2577,269 @@ long int TLimitingLaw::IonicStrength()
 
 	return 0;
 }
+
+
+
+
+
+//=============================================================================================
+// Two-term Debye-Hueckel (DH) model for aqueous solutions (c) TW May 2009
+// References: Helgeson et al. (1981)
+// uses individual ion-size parameters, optionally individual salting-out coefficients
+//=============================================================================================
+
+
+// Generic constructor for the THelgesonDH class
+TTwoTermDH::TTwoTermDH( long int NSpecies, long int NParams,
+		long int NPcoefs, long int MaxOrder,
+		long int NPperDC, char Mod_Code,
+		long int *arIPx, double *arIPc, double *arDCc,
+		double *arWx, double *arlnGam, double *aphVOL,
+		double *arM, double *arZ, double T_k, double P_bar,
+		double *dW, double *eW ):
+        	TSolMod( NSpecies, NParams, NPcoefs, MaxOrder, NPperDC, 0,
+        			 Mod_Code, arIPx, arIPc, arDCc, arWx,
+        			 arlnGam, aphVOL, T_k, P_bar )
+{
+	int j;
+
+	alloc_internal();
+	m = arM;
+	z = arZ;
+	RhoW = dW;
+	EpsW = eW;
+	ac = 3.72;   // common ion size parameter
+	bc = 0.064;   // common b_setch
+	flagNeut = aIPc[2];   // 0: unity, 1: calculated
+	flagH2O = aIPc[3];   // 0: unity, 1: calculated
+
+	// read and transfer individual an and bg
+	for (j=0; j<NComp; j++)
+	{
+		an[j] = aDCc[NP_DC*j];   // individual an
+		bg[j] = aDCc[NP_DC*j+1];   // individual bg
+	}
+
+}
+
+
+TTwoTermDH::~TTwoTermDH()
+{
+	free_internal();
+}
+
+
+void TTwoTermDH::alloc_internal()
+{
+	LnG = new double [NComp];
+	dLnGdT = new double [NComp];
+	d2LnGdT2 = new double [NComp];
+	dLnGdP = new double [NComp];
+	an = new double [NComp];
+	bg = new double [NComp];
+}
+
+
+void TTwoTermDH::free_internal()
+{
+  	// cleaning memory
+	delete[]LnG;
+	delete[]dLnGdT;
+	delete[]d2LnGdT2;
+	delete[]dLnGdP;
+	delete[]an;
+	delete[]bg;
+}
+
+
+// Calculates T,P corrected parameters
+long int TTwoTermDH::PTparam()
+{
+	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
+
+	// pull and convert parameters
+	rho = RhoW[0];
+	alp = - 1./rho*RhoW[1];
+	dal = pow(alp,2.) - 1./rho*RhoW[2];
+	bet = 1./rho*RhoW[3];
+	eps = EpsW[0];
+	dedt = 1./eps*EpsW[1];
+	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	dedp = 1./eps*EpsW[3];
+
+	// calculate A and B terms of Debye-Huckel equation (and derivatives)
+	A = (1.82483e6)*sqrt(rho) / pow(Tk*eps,1.5);
+	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
+	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
+	dAdP = 1./2.*A*( bet - 3.*dedp);
+	B = (50.2916)*sqrt(rho) / sqrt(Tk*eps);
+	dBdT = - 1./2.*B*( dedt +1./Tk + alp );
+	d2BdT2 = 1./B*pow(dBdT,2.) - 1./2.*B*( d2edt2 - 1./pow(Tk,2.) + dal );
+	dBdP = 1./2.*B*( bet - dedp );
+
+	return 0;
+}
+
+
+// Calculates activity coefficients
+long int TTwoTermDH::MixMod()
+{
+	long int j, w;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
+	double lg_to_ln;
+	lg_to_ln = 2.302585093;
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molaities (molT and molZ)
+	IonicStrength();
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+
+	// not sure if still needed
+	if( fabs(A) < 1e-9 )
+	{
+		A = 1.82483e6 * sqrt( RhoW[0] ) / pow( Tk*EpsW[0], 1.5 );
+	}
+
+	if( fabs(B) < 1e-9 )
+	{
+		B = 50.2916 * sqrt( RhoW[0] ) / sqrt( Tk*EpsW[0] );
+	}
+
+	if ( fabs(A) < 1e-9 || fabs(B) < 1e-9 )
+		return -1;
+
+	// loop over all species
+	for( j=0; j<NComp; j++ )
+	{
+		lgGam = 0.0;
+		lnGam = 0.0;
+
+		// charged species
+		if ( z[j] )
+		{
+			lgGam = 0.0;
+			Z2 = z[j]*z[j];
+			lgGam = ( - A * sqI * Z2 ) / ( 1. + B * an[j] * sqI ) ;
+			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+		}
+
+		// neutral species and water solvent
+		else
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				lgGam = 0.0;
+				if ( flagNeut == 1 )
+					lgGam = bg[j] * IS;
+				else
+					lgGam = 0.0;
+				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
+				continue;
+			}
+
+			// water solvent
+			else
+			{
+				lgGam = 0.0;
+				lnGam = 0.0;
+				if ( flagH2O == 1 )
+				{
+					// rational osmotic coefficient
+					lgGam = bg[j] * molT;
+					lnGam = lgGam * lg_to_ln;
+				}
+				else
+					lnGam = 0.0;
+				lnGamma[j] = lnGam;
+			}
+		}
+	}
+
+	return 0;
+}
+
+
+// calculates excess properties
+long int TTwoTermDH::ExcessProp( double *Zex )
+{
+	// bla
+	return 0;
+}
+
+
+// calculates ideal mixing properties
+long int TTwoTermDH::IdealProp( double *Zid )
+{
+	long int j;
+	double si;
+	si = 0.0;
+	for (j=0; j<NComp; j++)
+	{
+		si += x[j]*log(x[j]);
+	}
+	Hid = 0.0;
+	CPid = 0.0;
+	Vid = 0.0;
+	Sid = (-1.)*R_CONST*si;
+
+	// assignments (ideal mixing properties)
+	Gid = Hid - Sid*Tk;
+	Aid = Gid - Vid*Pbar;
+	Uid = Hid - Vid*Pbar;
+	Zid[0] = Gid;
+	Zid[1] = Hid;
+	Zid[2] = Sid;
+	Zid[3] = CPid;
+	Zid[4] = Vid;
+	Zid[5] = Aid;
+	Zid[6] = Uid;
+	return 0;
+}
+
+
+// calculates true ionic strength
+long int TTwoTermDH::IonicStrength()
+{
+	long int j;
+	double is, mt, mz;
+	is = 0.0;
+	mt = 0.0;
+	mz = 0.0;
+
+	// calculate ionic strength
+	for (j=0; j<NComp; j++)
+	{
+		is += 0.5*m[j]*z[j]*z[j];
+	}
+
+	// calculate total molalities
+	// needs to be modified when nonaqueous solvents are present
+	for (j=0; j<(NComp-1); j++)
+	{
+		mt += m[j];
+		if ( z[j] )
+			mz += m[j];
+	}
+
+	// assignments
+	IS = is;
+	molT = mt;
+	molZ = mz;
+
+	return 0;
+}
+
 
 
 

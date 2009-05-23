@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: ipm_chemical3.cpp 690 2006-03-29 07:10:23Z gems $
 //
-// Copyright (C) 1992-2007  D.Kulik, S.Dmitrieva, K.Chudnenko, I.Karpov
+// Copyright (C) 1992-2009  D.Kulik, S.Dmitrieva, K.Chudnenko, I.Karpov, T. Wagner
 //
 // Implementation of chemistry-specific functions (concentrations,
 // activity coefficients, adsorption models etc.)
@@ -811,6 +811,7 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
     return statusGam;
 }
 
+
 /*
 //--------------------------------------------------------------------------------
 // Aqueous electrolyte
@@ -920,8 +921,10 @@ if( Lgam < -0.7 )
     }
     return;
 }
+*/
 
 
+/*
 //--------------------------------------------------------------------------------
 // Aqueous electrolyte
 // Debye-Hueckel (DH) equation with Kielland-type ion-size parameters
@@ -1016,8 +1019,10 @@ TMulti::DebyeHueckel2Kjel( long int jb, long int je, long int jpb, long int jdb,
         pmp->lnGam[j] = lgGam * lg_to_ln;
     }
 }
+*/
 
 
+/*
 //--------------------------------------------------------------------------------
 // Aqueous electrolyte
 // Debye-Hueckel limiting law
@@ -1074,8 +1079,10 @@ TMulti::DebyeHueckel1LL( long int jb, long int je, long int k )
         pmp->lnGam[j] = lgGam * lg_to_ln;
     }
 }
+*/
 
 
+/*
 //--------------------------------------------------------------------------------
 // Aqueous electrolyte  (Karpov's variant)
 // Extended Debye-Hueckel (EDH) equation with common 3rd parameter (HKF81)
@@ -1177,8 +1184,10 @@ void TMulti::DebyeHueckel3Karp( long int jb, long int je, long int jpb, long int
         pmp->lnGam[j] = lgGam * lg_to_ln;
     }
 }
+*/
 
 
+/*
 //--------------------------------------------------------------------------------
 // Aqueous electrolyte
 // Davies equation with common 0.3 parameter and
@@ -1238,6 +1247,7 @@ void TMulti::Davies03temp( long int jb, long int je, long int jpb, long int k )
     }
 }
 */
+
 
 //--------------------------------------------------------------------------------
 // Binary Redlich-Kister model - parameters (dimensionless)
@@ -1441,13 +1451,14 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
     {
 
         case SM_OTHER:  // Hard-coded solid solution models (selected by phase name)
-            {
-            	TModOther* aPT = new TModOther( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                        aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
-                aPT->GetPhaseName( pmp->SF[k] );
-            	aSM = (TSolMod*)aPT;
-                break;
+        {
+            TModOther* aPT = new TModOther( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+            		aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+            aPT->GetPhaseName( pmp->SF[k] );
+            aSM = (TSolMod*)aPT;
+            break;
         }
+
         case SM_VANLAAR:  // Van Laar solid solution
         {
         	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
@@ -1513,25 +1524,28 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_AQDH3:  // Karpov's version of extended Debye-Hueckel equation
+        case SM_AQDH3:  // Karpov's version of extended Debye-Hueckel model
         {
         	break;   //  TBD
         }
 
-        case SM_AQDH2:   // Debye-Hueckel without extended term
+        case SM_AQDH2:   // Debye-Hueckel model without extended term
         {
-        	break;  // TBD
-        }
-
-        case SM_AQDH1:   // Debye-Hueckel limiting law
-        {
-           	TLimitingLaw* aPT = new TLimitingLaw( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+           	TTwoTermDH* aPT = new TTwoTermDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
             aSM = (TSolMod*)aPT;
         	break;
         }
 
-        case SM_AQDHH:  // Helgeson's version of extended Debye-Hueckel equation
+        case SM_AQDH1:   // Debye-Hueckel limiting law
+        {
+           	TLimitingLawDH* aPT = new TLimitingLawDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
+            aSM = (TSolMod*)aPT;
+        	break;
+        }
+
+        case SM_AQDHH:  // Helgeson's version of extended Debye-Hueckel model
         {
            	THelgesonDH* aPT = new THelgesonDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
@@ -1576,8 +1590,8 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         }
 
         default:
-//            aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-//                  aIPx, aIPc, aDCc,  aWx, alnGam,pmp->Tc, pmp->Pc );
+        	// aSM = new TSolMod( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+        	// aIPx, aIPc, aDCc,  aWx, alnGam,pmp->Tc, pmp->Pc );
         	break;
     }
 
@@ -1601,7 +1615,7 @@ TMulti::SolModParPT( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
-        case SM_AQDH3:
+        // case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
@@ -1637,7 +1651,7 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
-        case SM_AQDH3:
+        // case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
@@ -1684,7 +1698,7 @@ TMulti::SolModExcessProp( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
-        case SM_AQDH3:
+        // case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
@@ -1752,7 +1766,7 @@ TMulti::SolModIdealProp( long int jb, long int k, char ModCode )
 		case SM_PRFLUID:
 		case SM_SRFLUID:
 
-		case SM_AQDH3:
+		// case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:

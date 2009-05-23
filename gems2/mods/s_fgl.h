@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (C) 2003-2009  T.Wagner, S.Churakov, D.Kulik, S.Dmitrieva
+// Copyright (C) 2003-2009  T.Wagner, D.Kulik, S.Dmitrieva, S.Churakov
 //
 // Declaration of new versions of fluid, liquid, aquous
 // and solid-solution models
@@ -1152,7 +1152,7 @@ class TDaviesDH: public TSolMod
 // -------------------------------------------------------------------------------------
 // Debye-Hueckel (DH) limiting law for aqueous electrolyte solutions
 // References: Langmuir (1997)
-class TLimitingLaw: public TSolMod
+class TLimitingLawDH: public TSolMod
 {
 	private:
 
@@ -1182,14 +1182,82 @@ class TLimitingLaw: public TSolMod
 	public:
 
 		// Constructor
-		TLimitingLaw( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		TLimitingLawDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
 				double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 		// Destructor
-		~TLimitingLaw();
+		~TLimitingLawDH();
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam();
+
+		// calculates activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
+
+// -------------------------------------------------------------------------------------
+// Two-term Debye-Hueckel (DH) model for aqueous electrolyte solutions
+// References: Helgeson et al. (1981)
+// uses individual ion-size parameters, optionally individual salting-out coefficients
+
+class TTwoTermDH: public TSolMod
+{
+	private:
+
+		// status flags copied from MULTI
+		long int flagH2O;  // new flag for water
+		long int flagNeut;  // new flag for neutral species
+
+		// data objects copied from MULTI
+		double *z;   // species charges
+		double *m;   // species molalities
+		double *RhoW;  // water density properties
+		double *EpsW;  // water dielectrical properties
+		double *an;  // individual ion size-parameters
+		double *bg;  // individual extended-term parameters
+		double ac;  // common ion size parameters
+		double bc;  // common extended-term parameter
+
+		// internal work objects
+		double *LnG;  // activity coefficient
+		double *dLnGdT;  // derivatives
+		double *d2LnGdT2;
+		double *dLnGdP;
+		double IS;  // ionic strength
+		double molT;  // total molality of aqueous species (except water solvent)
+		double molZ;  // total molality of charged species
+		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
+		double B, dBdT, d2BdT2, dBdP;  // B term of DH equation (and derivatives)
+
+		// internal functions
+		void alloc_internal();
+		void free_internal();
+		long int IonicStrength();
+
+	public:
+
+		// Constructor
+		TTwoTermDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code,
+				long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL,
+				double *arM, double *arZ,
+				double T_k, double P_bar, double *dW, double *eW );
+
+		// Destructor
+		~TTwoTermDH();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
