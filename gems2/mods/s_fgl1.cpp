@@ -1462,7 +1462,7 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 	bet = 1./rho*RhoW[3]*1000.;
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A term of Debye-Huckel equation (and derivatives)
@@ -1746,7 +1746,7 @@ long int THelgesonDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A and B terms of Debye-Huckel equation (and derivatives)
@@ -2188,7 +2188,7 @@ long int TDaviesDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A term of Debye-Huckel equation (and derivatives)
@@ -2424,7 +2424,7 @@ long int TLimitingLawDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A term of Debye-Huckel equation (and derivatives)
@@ -2668,7 +2668,7 @@ long int TTwoTermDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A and B terms of Debye-Huckel equation (and derivatives)
@@ -2930,7 +2930,7 @@ long int TKarpovDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(dedt,2.) + 1./eps*EpsW[2];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A and B terms of Debye-Huckel equation (and derivatives)
