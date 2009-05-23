@@ -1526,7 +1526,10 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
 
         case SM_AQDH3:  // Karpov's version of extended Debye-Hueckel model
         {
-        	break;   //  TBD
+           	TKarpovDH* aPT = new TKarpovDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
+            aSM = (TSolMod*)aPT;
+        	break;
         }
 
         case SM_AQDH2:   // Debye-Hueckel model without extended term
@@ -1615,7 +1618,7 @@ TMulti::SolModParPT( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
-        // case SM_AQDH3:
+        case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
@@ -1651,7 +1654,7 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
-        // case SM_AQDH3:
+        case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
@@ -1698,7 +1701,7 @@ TMulti::SolModExcessProp( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
-        // case SM_AQDH3:
+        case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
@@ -1766,7 +1769,7 @@ TMulti::SolModIdealProp( long int jb, long int k, char ModCode )
 		case SM_PRFLUID:
 		case SM_SRFLUID:
 
-		// case SM_AQDH3:
+		case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:

@@ -1037,7 +1037,7 @@ class THelgesonDH: public TSolMod
 		double bc;  // common extended-term parameter
 
 		// internal work objects
-		double anot;  // ion-size parameters (TP corrected?)
+		double ao, daodT, d2aodT2, daodP;  // ion-size parameter (TP corrected)
 		double bgam, dbgdT, d2bgdT2, dbgdP;  // extended-term parameter (TP corrected)
 		double *LnG;  // activity coefficient
 		double *dLnGdT;  // derivatives
@@ -1258,6 +1258,83 @@ class TTwoTermDH: public TSolMod
 
 		// Destructor
 		~TTwoTermDH();
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam();
+
+		// calculates activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
+
+// -------------------------------------------------------------------------------------
+// Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Karpovs variant
+// References: Karpov et al. (1997); Helgeson et al. (1981); Oelkers and Helgeson (1990);
+// Pokrovskii and Helgeson (1995; 1997a; 1997b)
+
+class TKarpovDH: public TSolMod
+{
+	private:
+
+		// status flags copied from MULTI
+		long int flagH2O;  // new flag for water
+		long int flagNeut;  // new flag for neutral species
+		long int flagElect;  // flag for selection of background electrolyte model
+
+		// data objects copied from MULTI
+		double *z;   // species charges
+		double *m;   // species molalities
+		double *RhoW;  // water density properties
+		double *EpsW;  // water dielectrical properties
+		double *an;  // individual ion size-parameters
+		double *bg;  // individual extended-term parameters
+		double ac;  // common ion size parameters
+		double bc;  // common extended-term parameter
+
+		// internal work objects
+		double ao, daodT, d2aodT2, daodP;  // ion-size parameter (TP corrected)
+		double bgam, dbgdT, d2bgdT2, dbgdP;  // extended-term parameter (TP corrected)
+		double *LnG;  // activity coefficient
+		double *dLnGdT;  // derivatives
+		double *d2LnGdT2;
+		double *dLnGdP;
+		double IS;  // ionic strength
+		double molT;  // total molality of aqueous species (except water solvent)
+		double molZ;  // total molality of charged species
+		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
+		double B, dBdT, d2BdT2, dBdP;  // B term of DH equation (and derivatives)
+		double Gf, dGfdT, d2GfdT2, dGfdP;  // g function (and derivatives)
+
+		// internal functions
+		void alloc_internal();
+		void free_internal();
+		long int IonicStrength();
+		long int BgammaTP( long int flagElect );
+		long int Gfunction();
+		long int GShok2( double T, double P, double D, double beta,
+				double alpha, double daldT, double &g, double &dgdP,
+				double &dgdT, double &d2gdT2 );
+
+	public:
+
+		// Constructor
+		TKarpovDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code,
+				long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL,
+				double *arM, double *arZ,
+				double T_k, double P_bar, double *dW, double *eW );
+
+		// Destructor
+		~TKarpovDH();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
