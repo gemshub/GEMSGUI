@@ -1427,15 +1427,14 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
     MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
     NP_DC = pmp->LsMdc[k]; // Number of non-ideality coeffs per one DC in multicomponent phase
 
-#ifdef IPMGEMPLUGIN
+// #ifdef IPMGEMPLUGIN  This has no sense in GEMIPM2K!
     if( phSolMod[k])
     	if(	phSolMod[k]->testSizes( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode ) )
     	{
     		phSolMod[k]->UpdatePT( pmp->Tc, pmp->Pc );
     		return; // using old allocation
     	}
-#endif
-
+// #endif
     aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters for non-ideal solutions
                               // -> NPar x MaxOrd   added 07.12.2006   KD
     aIPc = pmp->PMc+jpb;   // Interaction parameter coefficients f(TP) -> NPar x NPcoef

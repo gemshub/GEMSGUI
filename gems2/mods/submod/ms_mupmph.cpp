@@ -24,6 +24,7 @@
 #include "m_param.h"
 #include "s_formula.h"
 #include "service.h"
+#include "s_fgl.h"
 
 // Aseembling base GEM-IPM structure to calculate equilibrium states
 //
@@ -492,7 +493,7 @@ void TMulti::multi_sys_ph()
         if( syp->Pcl[kk] == S_OFF )
             continue;
         k++; // FI++;  //PMM = 0.0;
-        pmp->L1[k] = syp->Ll[kk];
+      	pmp->L1[k] = syp->Ll[kk];
         jb = je;
         je += pmp->L1[k];
         pmp->muk[k] = kk;
@@ -508,6 +509,11 @@ void TMulti::multi_sys_ph()
         { // load phase record
             /* ????????????????????????????? */  if( pmp->pNP && pmp->pBAL )
                 goto PARLOAD;
+// Resetting vector of TSolMod pointers to avoid problems with activity coeffs
+//     in TSolMod calculations after switching phases on/off (DK 25.05.2009)
+  if(phSolMod[k])
+     delete phSolMod[k];
+  phSolMod[k] = NULL;
             aPH->TryRecInp( mup->SF[kk], crt, 0 );
             // read informations from phase-solution
             memcpy( pmp->sMod[k], aPH->php->sol_t, 6 );
