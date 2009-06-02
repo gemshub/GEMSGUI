@@ -1408,6 +1408,125 @@ class TModOther: public TSolMod
 
 
 
+// -------------------------------------------------------------------------------------
+// Ternary Margules (regular) model for solid solutions (c) TW June 2009
+// References: Anderson and Crerar (1993); Anderson (2006)
+
+class TTernaryMargules: public TSolMod
+{
+	private:
+
+		double WU12, WS12, WV12, WG12;
+		double WU13, WS13, WV13, WG13;
+		double WU23, WS23, WV23, WG23;
+		double WU123, WS123, WV123, WG123;
+
+	public:
+
+		// Constructor
+		TTernaryMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code,
+				long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL,
+				double T_k, double P_bar );
+
+		// Destructor
+		~TTernaryMargules();
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam( );
+
+		// calculates of activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
+
+// -------------------------------------------------------------------------------------
+// Binary Margules (subregular) model for solid solutions (c) TW June 2009
+// References: Anderson and Crerar (1993); Anderson (2006)
+
+class TBinaryMargules: public TSolMod
+{
+	private:
+
+		double WU12, WS12, WV12, WG12;
+		double WU21, WS21, WV21, WG21;
+
+	public:
+
+		// Constructor
+		TBinaryMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code,
+				long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL,
+				double T_k, double P_bar );
+
+		// Destructor
+		~TBinaryMargules();
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam( );
+
+		// calculates of activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
+
+// -------------------------------------------------------------------------------------
+// Binary Guggenheim (Redlich-Kister) model for solid solutions (c) TW June 2009
+// References: Anderson and Crerar (1993); Anderson (2006)
+// uses normalized (by RT) interaction parameters
+
+class TGuggenheim: public TSolMod
+{
+	private:
+
+		double a0, a1, a2;
+
+	public:
+
+		// Constructor
+		TGuggenheim( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+				long int NPperDC, char Mod_Code,
+				long int *arIPx, double *arIPc, double *arDCc,
+				double *arWx, double *arlnGam, double *aphVOL,
+				double T_k, double P_bar );
+
+		// Destructor
+		~TGuggenheim();
+
+		// calculates T,P corrected interaction parameters
+		long int PTparam( );
+
+		// calculates of activity coefficients
+		long int MixMod();
+
+		// calculates excess properties
+		long int ExcessProp( double *Zex );
+
+		// calculates ideal mixing properties
+		long int IdealProp( double *Zid );
+
+};
+
+
+
 #endif
 
 // _s_fgl_h

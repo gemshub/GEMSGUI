@@ -3,7 +3,9 @@
 //
 // Copyright (C) 2008-2009  T.Wagner, S.Dmitrieva, F.Hingerl, D.Kulik
 //
-// Implementation of TSIT, TPitzer and TEUNIQUAC classes
+// Implementation of subclasses of TSolMod for aqueous activity models
+// subclasses: TSIT, TPitzer, TEUNIQUAC, THelgesonDH, TDaviesDH,
+// 				TLimitingLawDH, TTwoTermDH, TKarpovDH
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry
