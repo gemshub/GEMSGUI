@@ -55,11 +55,10 @@ typedef struct
  short nDC,      // N of DC in phase definition >= 1
     Nsd,        //  N of references to Data Sources  <= 4
 // changed 07.12.2006 KD
-ncpN,    // Number of interaction parameters (rows in pnc and ipx tables) SIT - N cations
-ncpM,    // Number of coefficients per IP (cols in pnc table) for SIT - N anions
+ncpN,    // Number of interaction parameters (rows in pnc and ipx tables)
+ncpM,    // Number of coefficients per IP (cols in pnc table)
 npxM,    // Maximum order of interaction parameters (cols in ipx, to set up on remake)
 nscM,    // Number of parameters per solution phase species (cols in scoef table)
-// nipX replaces nscM  - changed 07.12.2006  by KD
     NsiT,     // N of surface site types (to set up on remake)
     NR1;      // Number of elements per species in MaSdj array (1: old 6: new)
 short *ipxt;  // Table of indexation for interaction parameters ncpN x npxM

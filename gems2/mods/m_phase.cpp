@@ -94,7 +94,10 @@ aObj[ o_phnsc].SetPtr( &ph[q].nscM );  // i 1  changed 07.12.2006 KD
 //    aObj[ o_phmasdj].SetDim( ph[q].nDC, 1 );
     aObj[ o_phmasdj].SetDim( ph[q].nDC, DFCN );
 aObj[ o_phpxres].SetPtr( ph[q].ipxt);  // changed 07.12.2006 KD
-    aObj[ o_phpxres].SetDim( ph[q].ncpN, ph[q].npxM );
+// if(ph[q].ipxt)
+  aObj[ o_phpxres].SetDim( ph[q].ncpN, ph[q].npxM );
+// else
+//  aObj[ o_phpxres].SetDim( 0, 0 );  // Bugfix 02.06.2009 DK
     aObj[ o_phsm].SetPtr(   ph[q].SM[0] );
     aObj[ o_phsm].SetDim( ph[q].nDC, 1 );
     aObj[ o_phdcc].SetPtr(  ph[q].DCC );
@@ -223,14 +226,15 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
         ph[q].scoef = (float *)aObj[ o_phscoef ].Free();
 
     if( ph[q].Ppnc == S_ON )
-    {
-      ph[q].pnc = (float *)aObj[ o_phpnc ].Alloc( ph[q].ncpN, ph[q].ncpM, F_ );
-      ph[q].ipxt = (short *)aObj[ o_phpxres ].Alloc( ph[q].ncpN, ph[q].npxM, I_);
-    }
+        ph[q].pnc = (float *)aObj[ o_phpnc ].Alloc( ph[q].ncpN, ph[q].ncpM, F_ );
     else
-    {    ph[q].pnc =   (float *)aObj[ o_phpnc ].Free();
-         ph[q].ipxt = (short *)aObj[ o_phpxres ].Free();
-    }
+        ph[q].pnc =   (float *)aObj[ o_phpnc ].Free();
+
+    if( ph[q].Ppnc == S_ON && ph[q].npxM > 0 )             // Bugfix 02.06.2009 DK
+        ph[q].ipxt = (short *)aObj[ o_phpxres ].Alloc( ph[q].ncpN, ph[q].npxM, I_);
+    if( ph[q].npxM <= 0 )
+    	ph[q].ipxt = (short *)aObj[ o_phpxres ].Free();
+//    	aObj[ o_phpxres].SetDim( 0, 0 );
 
     if( ph[q].PFsiT == S_ON || ph[q].PFsiT == S_REM )
     {
@@ -283,7 +287,7 @@ ph[q].scoef = (float *)aObj[ o_phscoef].Alloc( ph[q].nDC, ph[q].nscM, F_ );
             *ph[q].dEq = '`';
         }
 
-// Work objects for SIT aqueous model
+// Work objects for SIT, Pitzer, EUNIQUAC aqueous model
     if( ph[q].Ppnc == S_ON && ph[q].sol_t[SPHAS_TYP] == SM_AQSIT )
     {
          ph[q].lsCat = (char (*)[MAXDCNAME])aObj[ o_ph_w_lsc ].Alloc(
@@ -337,7 +341,7 @@ void TPhase::set_def( int q)
     ph[q].SATC =  0;
     ph[q].MaSdj = 0;
 //    ph[q].PXres = 0;  changed 07.12.2006  by KD
-ph[q].ipxt = 0;
+    ph[q].ipxt = 0;
     ph[q].pnc =   0;
     ph[q].scoef = 0;
     ph[q].SM =    0;
@@ -740,7 +744,7 @@ AGAINRC:
     /* insert coeff of model of solid and other data */
     if( php->nscM ) php->Psco = S_ON;
     else  php->Psco = S_OFF;
-// if( php->nscM ) php->Psco = S_ON;   07.12.2006  KD   Check later!
+// if( php->npxM ) php->Psco = S_ON;   07.12.2006  KD   Check later!
 //    else  php->Psco = S_OFF;
     if( php->ncpN * php->ncpM ) php->Ppnc = S_ON;
     else php->Ppnc = S_OFF;
