@@ -1412,7 +1412,7 @@ class TModOther: public TSolMod
 // Ternary Margules (regular) model for solid solutions (c) TW June 2009
 // References: Anderson and Crerar (1993); Anderson (2006)
 
-class TTernaryMargules: public TSolMod
+class TMargules: public TSolMod
 {
 	private:
 
@@ -1424,14 +1424,14 @@ class TTernaryMargules: public TSolMod
 	public:
 
 		// Constructor
-		TTernaryMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		TMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
 				double T_k, double P_bar );
 
 		// Destructor
-		~TTernaryMargules();
+		~TMargules();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam( );
@@ -1453,7 +1453,7 @@ class TTernaryMargules: public TSolMod
 // Binary Margules (subregular) model for solid solutions (c) TW June 2009
 // References: Anderson and Crerar (1993); Anderson (2006)
 
-class TBinaryMargules: public TSolMod
+class TSubregular: public TSolMod
 {
 	private:
 
@@ -1463,14 +1463,14 @@ class TBinaryMargules: public TSolMod
 	public:
 
 		// Constructor
-		TBinaryMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		TSubregular( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
 				double T_k, double P_bar );
 
 		// Destructor
-		~TBinaryMargules();
+		~TSubregular();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam( );

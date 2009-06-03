@@ -1297,7 +1297,7 @@ long int TWilson::IdealProp( double *Zid )
 
 
 // Generic constructor for the TRegular class
-TTernaryMargules::TTernaryMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+TMargules::TMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
@@ -1310,14 +1310,14 @@ TTernaryMargules::TTernaryMargules( long int NSpecies, long int NParams, long in
 }
 
 
-TTernaryMargules::~TTernaryMargules()
+TMargules::~TMargules()
 {
 	// empty destructor
 }
 
 
 // Calculates T,P corrected binary interaction parameters
-long int TTernaryMargules::PTparam()
+long int TMargules::PTparam()
 {
 	if ( NPcoef < 3 || NPar < 4 )
 	           return 1;
@@ -1347,7 +1347,7 @@ long int TTernaryMargules::PTparam()
 
 
 // Calculates activity coefficients
-long int TTernaryMargules::MixMod()
+long int TMargules::MixMod()
 {
 	double a12, a13, a23, a123, lnGam1, lnGam2, lnGam3, X1, X2, X3;
 
@@ -1381,7 +1381,7 @@ long int TTernaryMargules::MixMod()
 
 
 // calculates bulk phase excess properties
-long int TTernaryMargules::ExcessProp( double *Zex )
+long int TMargules::ExcessProp( double *Zex )
 {
 	double X1, X2, X3;
 
@@ -1412,7 +1412,7 @@ long int TTernaryMargules::ExcessProp( double *Zex )
 
 
 // calculates ideal mixing properties
-long int TTernaryMargules::IdealProp( double *Zid )
+long int TMargules::IdealProp( double *Zid )
 {
 	long int j;
 	double si;
@@ -1452,7 +1452,7 @@ long int TTernaryMargules::IdealProp( double *Zid )
 
 
 // Generic constructor for the TRegular class
-TBinaryMargules::TBinaryMargules( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+TSubregular::TSubregular( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, char Mod_Code,
         long int *arIPx, double *arIPc, double *arDCc,
         double *arWx, double *arlnGam, double *aphVOL,
@@ -1466,14 +1466,14 @@ TBinaryMargules::TBinaryMargules( long int NSpecies, long int NParams, long int 
 }
 
 
-TBinaryMargules::~TBinaryMargules()
+TSubregular::~TSubregular()
 {
 	// empty destructor
 }
 
 
 // Calculates T,P corrected binary interaction parameters
-long int TBinaryMargules::PTparam()
+long int TSubregular::PTparam()
 {
 	if ( NPcoef < 3 || NPar < 2 )
 	           return 1;
@@ -1495,7 +1495,7 @@ long int TBinaryMargules::PTparam()
 
 
 // Calculates activity coefficients
-long int TBinaryMargules::MixMod()
+long int TSubregular::MixMod()
 {
 	double a1, a2, lnGam1, lnGam2, X1, X2;
 
@@ -1521,7 +1521,7 @@ long int TBinaryMargules::MixMod()
 
 
 // calculates bulk phase excess properties
-long int TBinaryMargules::ExcessProp( double *Zex )
+long int TSubregular::ExcessProp( double *Zex )
 {
 	double X1, X2;
 
@@ -1551,7 +1551,7 @@ long int TBinaryMargules::ExcessProp( double *Zex )
 
 
 // calculates ideal mixing properties
-long int TBinaryMargules::IdealProp( double *Zid )
+long int TSubregular::IdealProp( double *Zid )
 {
 	long int j;
 	double si;

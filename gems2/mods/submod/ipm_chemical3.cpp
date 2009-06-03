@@ -365,7 +365,7 @@ TMulti::GammaCalc( long int LinkMode  )
     double LnGam, pmpXFk;
     SPP_SETTING *pa = &TProfil::pm->pa;
 
-//  high-precision IPM-2 debugging
+// high-precision IPM-2 debugging
 //   if( pmp->W1 > 1 )
 //     goto END_LOOP;
 
@@ -381,7 +381,7 @@ TMulti::GammaCalc( long int LinkMode  )
                 if( pmp->X[j] < pmp->lowPosNum )
                     pmp->X[j] = pa->p.DFYaq;
             ConCalc( pmp->X, pmp->XF, pmp->XFA );
-//          pmp->IC = max( pmp->MOL, pmp->IC );
+            // pmp->IC = max( pmp->MOL, pmp->IC );
             pmp->IC = 0.0;  // Important for the simplex FIA reproducibility
             if( pmp->E && pmp->FIat > 0 )
             {
@@ -456,7 +456,7 @@ TMulti::GammaCalc( long int LinkMode  )
             	    SolModCreate( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // new solution models (TW, DK 2007)
             	    SolModParPT( k, sMod[SPHAS_TYP] );
             	    break;
-/*               case PH_GASMIX:
+            /* case PH_GASMIX:
                case PH_PLASMA:
                case PH_FLUID:
                     if( sMod[SPHAS_TYP] == SM_CGFLUID )  // CG EoS fluid model
@@ -479,8 +479,8 @@ TMulti::GammaCalc( long int LinkMode  )
 						SolModParPT( k, sMod[SPHAS_TYP] );
 						break;
                     }
-                    break;
-*/
+                    break; */
+
 				default:
 					break;
             }
@@ -488,7 +488,7 @@ TMulti::GammaCalc( long int LinkMode  )
         break;
     case LINK_UX_MODE:
     	// Getting actual smoothing parameter
-//    	SetSmoothingFactor();   // Changed 18.06.2008 by DK
+    	// SetSmoothingFactor();   // Changed 18.06.2008 by DK
     	SetSmoothingFactor( SmMode );
     	// calculating DC concentrations after this IPM iteration
         ConCalc( pmp->X, pmp->XF, pmp->XFA );
@@ -562,7 +562,7 @@ TMulti::GammaCalc( long int LinkMode  )
                    case SM_AQEXUQ:
                 	  SolModActCoeff( k, sMod[SPHAS_TYP] );
                 	  break;
-/*                case SM_AQDH3:
+                /* case SM_AQDH3:
                        DebyeHueckel3Karp( jb, je, jpb, jdb, k );
                           break;
                   case SM_AQDH2:
@@ -578,16 +578,16 @@ TMulti::GammaCalc( long int LinkMode  )
                        Davies03temp( jb, je, jpb, k );
                           break;
                   case SM_AQSIT:  // SIT - under testing
-//                       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );  // To switch to TSolMod class
-//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-//                          break;
+                       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );  // To switch to TSolMod class
+                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                          break;
                   case SM_AQPITZ:
-//                	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-//                       break;
+                	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+						   break;
                   case SM_AQEXUQ:
                 	  SolModActCoeff( k, sMod[SPHAS_TYP] );
-                       break;
-*/
+                       break; */
+
                   default:
                           break;
                 }
@@ -621,26 +621,26 @@ TMulti::GammaCalc( long int LinkMode  )
                 switch( sMod[SPHAS_TYP] )
                 {
                   case SM_REDKIS:  // left for compatibility with old projects
-                       RedlichKister( jb, je, jpb, jdb, k );
-                          break;
+                	  // RedlichKister( jb, je, jpb, jdb, k );
+                	  // break;
                   case SM_MARGB:   // left for compatibility with old projects
-                       MargulesBinary( jb, je, jpb, jdb, k );
-                          break;
+                	  // MargulesBinary( jb, je, jpb, jdb, k );
+                	  // break;
                   case SM_MARGT:   // left for compatibility with old projects
-                       MargulesTernary( jb, je, jpb, jdb, k );
-                          break;
+                	  // MargulesTernary( jb, je, jpb, jdb, k );
+                	  // break;
                   case SM_GUGGENM: // Redlich-Kister model (multicomponent), 2007 (TW)
-//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-//                          break;
+                	  // SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                	  // break;
                   case SM_VANLAAR: // VanLaar model (multicomponent), 2007 (TW)
-//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-//                          break;
+                	  // SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                	  // break;
                   case SM_REGULAR: // Regular model (multicomponent), 2007 (TW)
-//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-//                          break;
+                	  // SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                	  // break;
                   case SM_NRTLLIQ: // NRTL model (multicomponent), 03.06.2007 (TW)
-//                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-//                          break;
+                	  // SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+                	  // break;
                   case SM_WILSLIQ: // Wilson model (multicomponent), 09.06.2007 (TW)
                        SolModActCoeff( k, sMod[SPHAS_TYP] );
                           break;
@@ -655,18 +655,18 @@ TMulti::GammaCalc( long int LinkMode  )
             if( pmp->PHC[0] == PH_AQUEL && pmpXFk > pmp->DSM
                 && (pmp->XFA[0] > pmp->lowPosNum && pmp->XF[0] > pa->p.XwMin ))
             {
-//              ConCalc( pmp->X, pmp->XF, pmp->XFA  );  Debugging
+            	// ConCalc( pmp->X, pmp->XF, pmp->XFA  );  Debugging
                     if( pmp->E )
                     {
-//                       IS_EtaCalc();
+                    	// IS_EtaCalc();
                        statusGC = GouyChapman( jb, je, k );
                     // PoissonBoltzmann( q, jb, je, k )
                     }
         // Calculating surface activity coefficient terms
                     statusSACT = SurfaceActivityCoeff(  jb, je, jpb, jdb, k );
             }
-//            if( sMod[SGM_MODE] == SM_IDEAL )
-//                goto END_LOOP;
+            // if( sMod[SGM_MODE] == SM_IDEAL )
+            // goto END_LOOP;
             break;
          default:
             goto END_LOOP;
@@ -771,7 +771,7 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
         	   LnGam = pmp->lnGmo[j];
                pmp->lnGam[j] = LnGam;
                if( /* fabs( LnGam ) > 1e-9 && */ fabs( LnGam ) < 84. )
-//                    pmp->Gamma[j] = exp( LnGam );
+            	   // pmp->Gamma[j] = exp( LnGam );
             	  pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
                else pmp->Gamma[j] = 1.0;
                pmp->F0[j] = Ej_init_calc( 0.0, j, k );
@@ -784,17 +784,17 @@ if( pmp->XF[k] < pmp->lowPosNum )   // workaround 10.03.2008 DK
 	      for( j=jb; j<je; j++ )
           {
           	lnGamG = PhaseSpecificGamma( j, jb, je, k, 1 );
-//            if( fabs( 1.0-pmp->Gamma[j] ) > 1e-9
-//           		&& pmp->Gamma[j] > 3.3e-37 && pmp->Gamma[j] < 3.03e+36 )   // > 1e-35 before 26.02.08
-//                pmp->lnGam[j] += log( pmp->Gamma[j] );
-//            if( fabs( lnGamG ) > 1e-9 )
-//            	pmp->lnGam[j] += lnGamG;
+          	// if( fabs( 1.0-pmp->Gamma[j] ) > 1e-9
+          	// && pmp->Gamma[j] > 3.3e-37 && pmp->Gamma[j] < 3.03e+36 )   // > 1e-35 before 26.02.08
+          	// pmp->lnGam[j] += log( pmp->Gamma[j] );
+          	// if( fabs( lnGamG ) > 1e-9 )
+          	// pmp->lnGam[j] += lnGamG;
             LnGam = pmp->lnGam[j];
             if( fabs( lnGamG ) > 1e-9 )
             	LnGam += lnGamG;
             pmp->lnGmo[j] = LnGam;
             if( /*fabs( LnGam ) > 1e-9 &&*/ fabs( LnGam ) < 84. )   // before 26.02.08: < 42.
-//                pmp->Gamma[j] = exp( LnGam );
+            	// pmp->Gamma[j] = exp( LnGam );
           	    pmp->Gamma[j] = PhaseSpecificGamma( j, jb, je, k, 0 );
             else pmp->Gamma[j] = 1.0;
             pmp->F0[j] = Ej_init_calc( 0.0, j, k );
@@ -1248,7 +1248,7 @@ void TMulti::Davies03temp( long int jb, long int je, long int jpb, long int k )
 }
 */
 
-
+/*
 //--------------------------------------------------------------------------------
 // Binary Redlich-Kister model - parameters (dimensionless)
 // Implemented by KD on 31 July 2003
@@ -1287,8 +1287,10 @@ void TMulti::RedlichKister( long int jb, long int, long int jpb, long int, long 
 	pmp->lnGam[jb] = lnGam1;
 	pmp->lnGam[jb+1] = lnGam2;
 }
+*/
 
 
+/*
 //--------------------------------------------------------------------------------
 // Binary Margules model
 // Implemented by KD on 31 July 2003
@@ -1339,8 +1341,10 @@ void TMulti::MargulesBinary( long int jb, long int, long int jpb, long int, long
 	pmp->FVOL[k] += vE*10.;  // make consistent with TSolMod
 
 }
+*/
 
 
+/*
 //--------------------------------------------------------------------------------
 // Ternary regular Margules model - parameters (in J/mol)
 // Implemented by KD on 31 July 2003
@@ -1408,6 +1412,7 @@ void TMulti::MargulesTernary( long int jb, long int, long int jpb, long int, lon
 	pmp->FVOL[k] += vE*10.;  // make consistent with TSolMod
 
 }
+*/
 
 
 //--------------------------------------------------------------------------------
@@ -1427,14 +1432,13 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
     MaxOrd =  pmp->LsMod[k*3+1];  // max. parameter order (cols in IPx)
     NP_DC = pmp->LsMdc[k]; // Number of non-ideality coeffs per one DC in multicomponent phase
 
-// #ifdef IPMGEMPLUGIN  This has no sense in GEMIPM2K!
     if( phSolMod[k])
     	if(	phSolMod[k]->testSizes( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode ) )
     	{
     		phSolMod[k]->UpdatePT( pmp->Tc, pmp->Pc );
     		return; // using old allocation
     	}
-// #endif
+
     aIPx = pmp->IPx+ipb;   // Pointer to list of indexes of non-zero interaction parameters for non-ideal solutions
                               // -> NPar x MaxOrd   added 07.12.2006   KD
     aIPc = pmp->PMc+jpb;   // Interaction parameter coefficients f(TP) -> NPar x NPcoef
@@ -1454,54 +1458,78 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         case SM_OTHER:  // Hard-coded solid solution models (selected by phase name)
         {
             TModOther* aPT = new TModOther( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-            		aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+            		aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
             aPT->GetPhaseName( pmp->SF[k] );
             aSM = (TSolMod*)aPT;
             break;
         }
 
-        case SM_VANLAAR:  // Van Laar solid solution
+        case SM_VANLAAR:  // Van Laar solid solution (multicomponent)
         {
         	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
             aSM = (TSolMod*)aPT;
             break;
         }
              // break;
 
-        case SM_REGULAR:  // Regular solid solution
+        case SM_REGULAR:  // Regular solid solution (multicomponent)
         {
         	TRegular* aPT = new TRegular( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
             aSM = (TSolMod*)aPT;
             break;
         }
 
-        case SM_GUGGENM:  // Redlich-Kister solid solution
+        case SM_GUGGENM:  // Redlich-Kister solid solution (multicomponent)
         {
         	TRedlichKister* aPT = new TRedlichKister( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
             aSM = (TSolMod*)aPT;
             break;
         }
 
-        case SM_NRTLLIQ:  // NRTL liquid solution
+        case SM_NRTLLIQ:  // NRTL liquid solution (multicomponent)
         {
         	TNRTL* aPT = new TNRTL( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
             aSM = (TSolMod*)aPT;
             break;
         }
 
-        case SM_WILSLIQ:  // Wilson liquid solution
+        case SM_WILSLIQ:  // Wilson liquid solution (multicomponent)
         {
         	TWilson* aPT = new TWilson( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,pmp->Tc, pmp->Pc );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
             aSM = (TSolMod*)aPT;
             break;
         }
 
-        case SM_AQPITZ:  // Pitzer aqueous electrolyte
+        case SM_MARGT:  // Margules ternary (regular) solid solution
+        {
+        	TMargules* aPT = new TMargules( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
+            aSM = (TSolMod*)aPT;
+            break;
+        }
+
+        case SM_MARGB:  // Margules binary (subregular) solid solution
+        {
+        	TSubregular* aPT = new TSubregular( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
+            aSM = (TSolMod*)aPT;
+            break;
+        }
+
+        case SM_REDKIS:  // Gugenheim binary (REdlich-Kister) solid solution
+        {
+        	TGuggenheim* aPT = new TGuggenheim( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
+            aSM = (TSolMod*)aPT;
+            break;
+        }
+
+        case SM_AQPITZ:  // Pitzer aqueous electrolyte (multicomponent)
         {
            	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
@@ -1509,15 +1537,15 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
              break;
         }
 
-        case SM_AQSIT:  // SIT aqueous electrolyte
+        case SM_AQSIT:  // SIT aqueous electrolyte (multicomponent)
         {
            	TSIT* aPT = new TSIT( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
-                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ,pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
             aSM = (TSolMod*)aPT;
             break;
         }
 
-        case SM_AQEXUQ:  // EUNIQUAC aqueous electrolyte
+        case SM_AQEXUQ:  // EUNIQUAC aqueous electrolyte (multicomponent)
         {
            	TEUNIQUAC* aPT = new TEUNIQUAC( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
@@ -1565,7 +1593,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         	break;
         }
 
-        case SM_PRFLUID:  // PRSV fluid mixture
+        case SM_PRFLUID:  // PRSV fluid mixture (multicomponent)
         {
         	TPRSVcalc* aPT = new TPRSVcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Pparc+jb,
@@ -1574,7 +1602,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_CGFLUID:  // CG fluid mixture
+        case SM_CGFLUID:  // CG fluid mixture (multicomponent)
         {
         	TCGFcalc* aPT = new TCGFcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL,
@@ -1584,7 +1612,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_SRFLUID:  // SRK fluid mixture
+        case SM_SRFLUID:  // SRK fluid mixture (multicomponent)
         {
         	TSRKcalc* aPT = new TSRKcalc( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Pparc+jb,
@@ -1619,6 +1647,10 @@ TMulti::SolModParPT( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
+        case SM_MARGT:
+        case SM_MARGB:
+        case SM_REDKIS:
+
         case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
@@ -1628,9 +1660,11 @@ TMulti::SolModParPT( long int k, char ModCode )
         case SM_AQPITZ:
         case SM_AQSIT:
         case SM_AQEXUQ:
+
         case SM_PRFLUID:
         case SM_CGFLUID:
         case SM_SRFLUID:
+
         {    ErrorIf( !phSolMod[k], "","Invalid index of phase");
               TSolMod* aSM = phSolMod[k];
               aSM->PTparam();
@@ -1655,6 +1689,10 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
+        case SM_MARGT:
+        case SM_MARGB:
+        case SM_REDKIS:
+
         case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
@@ -1664,9 +1702,11 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_AQPITZ:
         case SM_AQSIT:
         case SM_AQEXUQ:
+
         case SM_PRFLUID:
         case SM_CGFLUID:
         case SM_SRFLUID:
+
         {    ErrorIf( !phSolMod[k], "","Invalid index of phase");
              TSolMod* aSM = phSolMod[k];
              aSM->MixMod();
@@ -1702,6 +1742,10 @@ TMulti::SolModExcessProp( long int k, char ModCode )
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
+        case SM_MARGT:
+        case SM_MARGB:
+        case SM_REDKIS:
+
         case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
@@ -1711,9 +1755,11 @@ TMulti::SolModExcessProp( long int k, char ModCode )
         case SM_AQPITZ:
         case SM_AQSIT:
         case SM_AQEXUQ:
+
         case SM_PRFLUID:
         case SM_CGFLUID:
         case SM_SRFLUID:
+
         {    ErrorIf( !phSolMod[k], "","Invalid index of phase");
               TSolMod* aSM = phSolMod[k];
               aSM->ExcessProp( zex );
@@ -1765,10 +1811,10 @@ TMulti::SolModIdealProp( long int jb, long int k, char ModCode )
 		case SM_REGULAR:
 		case SM_NRTLLIQ:
 		case SM_WILSLIQ:
-		case SM_OTHER:
-		case SM_CGFLUID:
-		case SM_PRFLUID:
-		case SM_SRFLUID:
+
+        case SM_MARGT:
+        case SM_MARGB:
+        case SM_REDKIS:
 
 		case SM_AQDH3:
         case SM_AQDH2:
@@ -1776,18 +1822,20 @@ TMulti::SolModIdealProp( long int jb, long int k, char ModCode )
         case SM_AQDHH:
         case SM_AQDAV:
 
-		case SM_AQSIT:
-		case SM_AQEXUQ:
-		case SM_AQPITZ:
+        case SM_AQPITZ:
+        case SM_AQSIT:
+        case SM_AQEXUQ:
+
+        case SM_PRFLUID:
+        case SM_CGFLUID:
+        case SM_SRFLUID:
+
         {    ErrorIf( !phSolMod[k], "","Invalid index of phase");
              TSolMod* aSM = phSolMod[k];
              aSM->IdealProp( zid );
               break;
         }
 		case SM_IDEAL:
-		case SM_REDKIS:
-		case SM_MARGB:
-		case SM_MARGT:
 		case SM_USERDEF:
 		{
 			IdealOneSite( jb, k, zid );
