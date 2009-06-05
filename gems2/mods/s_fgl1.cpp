@@ -1780,12 +1780,10 @@ long int THelgesonDH::PTparam()
 		Gfunction();
 		BgammaTP();
 		IonsizeTP();
-
-		// temporary
-		ao = ac;
-		daodT = 0.0;
-		d2aodT2 = 0.0;
-		daodP = 0.0;
+		// ao = ac;
+		// daodT = 0.0;
+		// d2aodT2 = 0.0;
+		// daodP = 0.0;
 	}
 
 	return 0;
@@ -3013,6 +3011,7 @@ long int TKarpovDH::PTparam()
 	{
 		Gfunction();
 		BgammaTP();
+		// IonsizeTP();
 		ao = ac;
 		daodT = 0.0;
 		d2aodT2 = 0.0;
@@ -3281,7 +3280,6 @@ long int TKarpovDH::IonsizeTP()
 
 	for (j=0; j<NComp; j++)
 	{
-		// bla
 		an[j] = aref[j] + c*Gf;
 		dadT[j] = c*dGfdT;
 		d2adT2[j] = c*d2GfdT2;
