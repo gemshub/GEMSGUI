@@ -1054,7 +1054,8 @@ class THelgesonDH: public TSolMod
 		void alloc_internal();
 		void free_internal();
 		long int IonicStrength();
-		long int BgammaTP( long int flagElect );
+		long int BgammaTP();
+		long int IonsizeTP();
 		long int Gfunction();
 		long int GShok2( double T, double P, double D, double beta,
 				double alpha, double daldT, double &g, double &dgdP,
@@ -1294,7 +1295,11 @@ class TKarpovDH: public TSolMod
 		double *m;   // species molalities
 		double *RhoW;  // water density properties
 		double *EpsW;  // water dielectrical properties
-		double *an;  // individual ion size-parameters
+		double *aref;  // individual ion size-parameters at Tr,Pr
+		double *an;  // individual ion size-parameters at T,P
+		double *dadT;  // derivatives
+		double *d2adT2;
+		double *dadP;
 		double *bg;  // individual extended-term parameters
 		double ac;  // common ion size parameters
 		double bc;  // common extended-term parameter
@@ -1317,7 +1322,8 @@ class TKarpovDH: public TSolMod
 		void alloc_internal();
 		void free_internal();
 		long int IonicStrength();
-		long int BgammaTP( long int flagElect );
+		long int BgammaTP();
+		long int IonsizeTP();
 		long int Gfunction();
 		long int GShok2( double T, double P, double D, double beta,
 				double alpha, double daldT, double &g, double &dgdP,

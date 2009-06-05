@@ -1778,7 +1778,10 @@ long int THelgesonDH::PTparam()
 	else
 	{
 		Gfunction();
-		BgammaTP( flagElect );
+		BgammaTP();
+		IonsizeTP();
+
+		// temporary
 		ao = ac;
 		daodT = 0.0;
 		d2aodT2 = 0.0;
@@ -1953,8 +1956,8 @@ long int THelgesonDH::IonicStrength()
 }
 
 
-// calculates TP dependence of b_gamma
-long int THelgesonDH::BgammaTP( long int flagElect )
+// calculates TP dependence of b_gamma (and derivatives)
+long int THelgesonDH::BgammaTP()
 {
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
@@ -2005,6 +2008,44 @@ long int THelgesonDH::BgammaTP( long int flagElect )
 
 	// assignments
 	bgam = b_gamma;
+
+	return 0;
+}
+
+
+// calculates TP dependence of a_not (and derivatives)
+long int THelgesonDH::IonsizeTP()
+{
+	// bla
+	double nc, na, nk, zc, za, c;
+
+	switch ( flagElect )
+	{
+		case 1:  // NaCl
+			nc = 1.; na = 1.; nk = 2.;
+			zc = 1.; za = 1.;
+			break;
+		case 2:  // KCl
+			nc = 1.; na = 1.; nk = 2.;
+			zc = 1.; za = 1.;
+			break;
+		case 3:  // NaOH
+			nc = 1.; na = 1.; nk = 2.;
+			zc = 1.; za = 1.;
+			break;
+		case 4:  // KOH
+			nc = 1.; na = 1.; nk = 2.;
+			zc = 1.; za = 1.;
+			break;
+		default:  // wrong mode
+			return -1;
+	}
+
+	c = 2./nk * ( nc*zc + na*za );
+	ao = ac + c*Gf;
+	daodT = c*dGfdT;
+	d2aodT2 = c*d2GfdT2;
+	daodP = c*dGfdP;
 
 	return 0;
 }
@@ -2885,7 +2926,8 @@ TKarpovDH::TKarpovDH( long int NSpecies, long int NParams,
 	// read and transfer individual an and bg
 	for (j=0; j<NComp; j++)
 	{
-		an[j] = aDCc[NP_DC*j];   // individual an
+		aref[j] = aDCc[NP_DC*j]; // individual an
+		an[j] = aDCc[NP_DC*j];
 		bg[j] = aDCc[NP_DC*j+1];   // individual bg
 	}
 }
@@ -2903,7 +2945,11 @@ void TKarpovDH::alloc_internal()
 	dLnGdT = new double [NComp];
 	d2LnGdT2 = new double [NComp];
 	dLnGdP = new double [NComp];
+	aref = new double [NComp];
 	an = new double [NComp];
+	dadT = new double [NComp];
+	d2adT2 = new double [NComp];
+	dadP = new double [NComp];
 	bg = new double [NComp];
 }
 
@@ -2915,7 +2961,11 @@ void TKarpovDH::free_internal()
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
 	delete[]dLnGdP;
+	delete[]aref;
 	delete[]an;
+	delete[]dadT;
+	delete[]d2adT2;
+	delete[]dadP;
 	delete[]bg;
 }
 
@@ -2962,7 +3012,7 @@ long int TKarpovDH::PTparam()
 	else
 	{
 		Gfunction();
-		BgammaTP( flagElect );
+		BgammaTP();
 		ao = ac;
 		daodT = 0.0;
 		d2aodT2 = 0.0;
@@ -3143,7 +3193,7 @@ long int TKarpovDH::IonicStrength()
 
 
 // calculates TP dependence of b_gamma
-long int TKarpovDH::BgammaTP( long int flagElect )
+long int TKarpovDH::BgammaTP()
 {
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
@@ -3194,6 +3244,49 @@ long int TKarpovDH::BgammaTP( long int flagElect )
 
 	// assignments
 	bgam = b_gamma;
+
+	return 0;
+}
+
+
+// calculates TP dependence of a_not (and derivatives)
+long int TKarpovDH::IonsizeTP()
+{
+	long int j;
+	double nc, na, nk, zc, za, c;
+
+	switch ( flagElect )
+	{
+		case 1:  // NaCl
+			nc = 1.; na = 1.; nk = 2.;
+			zc = 1.; za = 1.;
+			break;
+		case 2:  // KCl
+			nc = 1.; na = 1.; nk = 2.;
+			zc = 1.; za = 1.;
+			break;
+		case 3:  // NaOH
+			nc = 1.; na = 1.; nk = 2.;
+			zc = 1.; za = 1.;
+			break;
+		case 4:  // KOH
+			nc = 1.; na = 1.; nk = 2.;
+			zc = 1.; za = 1.;
+			break;
+		default:  // wrong mode
+			return -1;
+	}
+
+	c = 2./nk * ( nc*zc + na*za );
+
+	for (j=0; j<NComp; j++)
+	{
+		// bla
+		an[j] = aref[j] + c*Gf;
+		dadT[j] = c*dGfdT;
+		d2adT2[j] = c*d2GfdT2;
+		dadP[j] = c*dGfdP;
+	}
 
 	return 0;
 }
