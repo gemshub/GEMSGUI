@@ -1960,14 +1960,15 @@ long int THelgesonDH::BgammaTP()
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
 	// units are cal, kg, K, mol, bar
-	double ni, nc, na, zc, za, rc, ra;
-	double a1, a2, a3, a4, a5, c1, c2, omg, bg, bs;
-	double rec, rea, eps, eta, X1, X2;
-	double omgpt, domdt, d2omdT2, domdP;
-	double nbg, b_gamma;
+	double ni, nc, na, zc, za, rc, ra, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, bh;
+	double rec, rea, omgpt, domdt, d2omdt2, domdp, nbg, nbv, nbj, nbh;
+	double eps, eta, xborn, yborn, qborn, X1, X2;
 
 	// set parameters
 	eps = EpsW[0];
+	yborn = 1./pow(EpsW[0],2.)*EpsW[1];
+	xborn = 1./pow(EpsW[0],2.) * ( EpsW[2] - 2./EpsW[0]*pow(EpsW[1],2.) );
+	qborn = 1./pow(EpsW[0],2.)*EpsW[3];
 	eta = (1.66027e5);
 
 	switch ( flagElect )
@@ -2000,7 +2001,8 @@ long int THelgesonDH::BgammaTP()
 			return -1;
 	}
 
-	// calculation part
+	// calculation part, extended 06.06.2009 (TW)
+	bh = bg + (298.15)*bs;
 	rec = rc + fabs(zc)*(0.94+Gf);
 	rea = ra + fabs(za)*Gf;
 	X1 = - eta*nc*( fabs(pow(zc,3.))/pow(rec,2.) - zc/pow((3.082+Gf),2.) )
@@ -2010,18 +2012,30 @@ long int THelgesonDH::BgammaTP()
 	omgpt = eta*( nc*pow(zc,2.)/rec + na*pow(za,2.)/rea );
 	// omgpt = (1.66027e5)*(1./(0.94+rc+Gf)+1./(ra+Gf));
 	domdt = X1*dGfdT;
-	d2omdT2 = X2*pow(dGfdT,2.) + X1*d2GfdT2;
-	domdP = X1*dGfdP;
-	nbg = - ni*bg/2.+ni*bs*(Tk-298.15)/2.-c1*(Tk*log(Tk/298.15)-Tk+298.15)
-				+ a1*(Pbar-1.)+a2*log((2600.+Pbar)/(2600.+1.))
+	d2omdt2 = X2*pow(dGfdT,2.) + X1*d2GfdT2;
+	domdp = X1*dGfdP;
+	nbg = - ni*bg/2. + ni*bs*(Tk-298.15)/2. - c1*(Tk*log(Tk/298.15)-Tk+298.15)
+				+ a1*(Pbar-1.) + a2*log((2600.+Pbar)/(2600.+1.))
 				- c2*((1./(Tk-228.)-1./(298.15-228.))*(228.-Tk)/228.-Tk/(228.*228.)
 				* log((298.15*(Tk-228.))/(Tk*(298.15-228.))))
-				+ 1./(Tk-228.)*(a3*(Pbar-1.)+a4*log((2600.+Pbar)/(2600.+1.)))
-				+ a5*(omgpt*(1./eps-1.)-omg*(1./78.24513-1.)-5.80e-5*omg*(Tk-298.15));
-	b_gamma = nbg/(2.*log(10.)*1.98721*Tk);
-
-	// assignments
-	bgam = b_gamma;
+				+ 1./(Tk-228.)*(a3*(Pbar-1.) + a4*log((2600.+Pbar)/(2600.+1.)))
+				+ a5*(omgpt*(1./eps-1.)-omg*(1./(78.24513795)-1.)+(-5.798650444e-5)*omg*(Tk-298.15));
+	nbh = - ni/2.*bh + c1*(Tk-298.15) - c2*(1./(Tk-228.)-1./(298.15-228.))
+				+ a1*(Pbar-1.) + a2*log((2600.+Pbar)/(2600.+1.))
+				+ ((2.*Tk-228.)/pow((Tk-228.),2.))*(a3*(Pbar-1.)+a4*log((2600.+Pbar)/(2600.+1.)))
+				+ a5*( omgpt*(1./eps-1.) + omgpt*Tk*yborn - Tk*(1./eps-1.)*domdt
+				- omg*(1./(78.24513795)-1.) - omg*(298.15)*(-5.798650444e-5) );
+	nbj = c1 + c2/pow((Tk-228.),2.)  - ( (2.*Tk)/pow((Tk-228.),3.) )
+				* ( a3*(Pbar-1.) + a4*log((2600.+Pbar)/(2600.+1.)) )
+				+ a5*( omgpt*Tk*xborn + 2.*Tk*yborn*domdt - Tk*(1./eps-1.)*d2omdt2 );
+	nbv = a1 + a2/(2600.+Pbar) + a3/(Tk-228.) + a4/((2600.+Pbar)*(Tk-228.))
+				+ a5*(-omgpt*qborn + (1./eps-1.)*domdp);
+	// b_gamma = nbg/(2.*log(10.)*1.98721*Tk);
+	// bgam = b_gamma;
+	bgam = nbg/(2.*log(10.)*(1.98721)*Tk)*2./ni;
+	dbgdT = - nbh/(2.*log(10.)*(1.98721)*pow(Tk,2.))*2./ni;
+	d2bgdT2 = - nbj/( 2.*log(10.)*(1.98721)*pow(Tk,2.))*2./ni - 2./Tk*dbgdT;
+	dbgdP = nbv/(2.*log(10.)*(1.98721)*Tk)*2./ni;
 
 	return 0;
 }
@@ -3207,39 +3221,46 @@ long int TKarpovDH::IonicStrength()
 }
 
 
-// calculates TP dependence of b_gamma
+// calculates TP dependence of b_gamma (and derivatives)
 long int TKarpovDH::BgammaTP()
 {
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
 	// units are cal, kg, K, mol, bar
-	double ni, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, rc, ra;
-	double omgpt, nbg, gsf, eps;
-	double b_gamma;
+	double ni, nc, na, zc, za, rc, ra, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, bh;
+	double rec, rea, omgpt, domdt, d2omdt2, domdp, nbg, nbv, nbj, nbh;
+	double eps, eta, xborn, yborn, qborn, X1, X2;
 
-	// pull parameters
+	// set parameters
 	eps = EpsW[0];
-	gsf = Gf;
+	yborn = 1./pow(EpsW[0],2.)*EpsW[1];
+	xborn = 1./pow(EpsW[0],2.) * ( EpsW[2] - 2./EpsW[0]*pow(EpsW[1],2.) );
+	qborn = 1./pow(EpsW[0],2.)*EpsW[3];
+	eta = (1.66027e5);
 
 	switch ( flagElect )
 	{
 		case 1:  // NaCl
-			ni = 2.; a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
 			a5 = -0.206; c1 = -1.50; c2 = 53300.; omg = 178650.;
 			bg = -174.623; bs = 2.164; rc = 0.97; ra = 1.81;
 			break;
 		case 2:  // KCl
-			ni = 2.; a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
 			a5 = -0.262; c1 = -2.53; c2 = 38628.4; omg = 164870.;
 			bg = -70.0; bs = 1.727; rc = 1.33; ra = 1.81;
 			break;
 		case 3:  // NaOH
-			ni = 2.; a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
 			a5 = -0.206; c1 = -1.50; c2 = 53300.; omg = 205520.;
 			bg = -267.4; bs = 1.836; rc = 0.97; ra = 1.40;
 			break;
 		case 4:  // KOH
-			ni = 2.; a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
 			a5 = -0.262; c1 = -2.53; c2 = 38628.4; omg = 191730.;
 			bg = -335.7; bs = 1.26; rc = 1.33; ra = 1.40;
 			break;
@@ -3247,18 +3268,41 @@ long int TKarpovDH::BgammaTP()
 			return -1;
 	}
 
-	// calculation part
-	omgpt = (1.66027e5)*(1./(0.94+rc+gsf)+1./(ra+gsf));
-	nbg = - ni*bg/2.+ni*bs*(Tk-298.15)/2.-c1*(Tk*log(Tk/298.15)-Tk+298.15)
-				+ a1*(Pbar-1.)+a2*log((2600.+Pbar)/(2600.+1.))
+	// calculation part, extended 06.06.2009 (TW)
+	bh = bg + (298.15)*bs;
+	rec = rc + fabs(zc)*(0.94+Gf);
+	rea = ra + fabs(za)*Gf;
+	X1 = - eta*nc*( fabs(pow(zc,3.))/pow(rec,2.) - zc/pow((3.082+Gf),2.) )
+			- eta*na*( fabs(pow(za,3.))/pow(rea,2.) - za/pow((3.082+Gf),2.) );
+	X2 = 2.*eta*nc*( fabs(pow(zc,4.))/pow(rec,3.) - zc/pow((3.082+Gf),3.) )
+			+ 2.*eta*nc * ( fabs(pow(zc,4.))/pow(rec,3.) - zc/pow((3.082+Gf),3.) );
+	omgpt = eta*( nc*pow(zc,2.)/rec + na*pow(za,2.)/rea );
+	// omgpt = (1.66027e5)*(1./(0.94+rc+Gf)+1./(ra+Gf));
+	domdt = X1*dGfdT;
+	d2omdt2 = X2*pow(dGfdT,2.) + X1*d2GfdT2;
+	domdp = X1*dGfdP;
+	nbg = - ni*bg/2. + ni*bs*(Tk-298.15)/2. - c1*(Tk*log(Tk/298.15)-Tk+298.15)
+				+ a1*(Pbar-1.) + a2*log((2600.+Pbar)/(2600.+1.))
 				- c2*((1./(Tk-228.)-1./(298.15-228.))*(228.-Tk)/228.-Tk/(228.*228.)
 				* log((298.15*(Tk-228.))/(Tk*(298.15-228.))))
-				+ 1./(Tk-228.)*(a3*(Pbar-1.)+a4*log((2600.+Pbar)/(2600.+1.)))
-				+ a5*(omgpt*(1./eps-1.)-omg*(1./78.24513-1.)-5.80e-5*omg*(Tk-298.15));
-	b_gamma = nbg/(2.*log(10.)*1.98721*Tk);
-
-	// assignments
-	bgam = b_gamma;
+				+ 1./(Tk-228.)*(a3*(Pbar-1.) + a4*log((2600.+Pbar)/(2600.+1.)))
+				+ a5*(omgpt*(1./eps-1.)-omg*(1./(78.24513795)-1.)+(-5.798650444e-5)*omg*(Tk-298.15));
+	nbh = - ni/2.*bh + c1*(Tk-298.15) - c2*(1./(Tk-228.)-1./(298.15-228.))
+				+ a1*(Pbar-1.) + a2*log((2600.+Pbar)/(2600.+1.))
+				+ ((2.*Tk-228.)/pow((Tk-228.),2.))*(a3*(Pbar-1.)+a4*log((2600.+Pbar)/(2600.+1.)))
+				+ a5*( omgpt*(1./eps-1.) + omgpt*Tk*yborn - Tk*(1./eps-1.)*domdt
+				- omg*(1./(78.24513795)-1.) - omg*(298.15)*(-5.798650444e-5) );
+	nbj = c1 + c2/pow((Tk-228.),2.)  - ( (2.*Tk)/pow((Tk-228.),3.) )
+				* ( a3*(Pbar-1.) + a4*log((2600.+Pbar)/(2600.+1.)) )
+				+ a5*( omgpt*Tk*xborn + 2.*Tk*yborn*domdt - Tk*(1./eps-1.)*d2omdt2 );
+	nbv = a1 + a2/(2600.+Pbar) + a3/(Tk-228.) + a4/((2600.+Pbar)*(Tk-228.))
+				+ a5*(-omgpt*qborn + (1./eps-1.)*domdp);
+	// b_gamma = nbg/(2.*log(10.)*1.98721*Tk);
+	// bgam = b_gamma;
+	bgam = nbg/(2.*log(10.)*(1.98721)*Tk)*2./ni;
+	dbgdT = - nbh/(2.*log(10.)*(1.98721)*pow(Tk,2.))*2./ni;
+	d2bgdT2 = - nbj/( 2.*log(10.)*(1.98721)*pow(Tk,2.))*2./ni - 2./Tk*dbgdT;
+	dbgdP = nbv/(2.*log(10.)*(1.98721)*Tk)*2./ni;
 
 	return 0;
 }
@@ -3268,32 +3312,31 @@ long int TKarpovDH::BgammaTP()
 long int TKarpovDH::IonsizeTP()
 {
 	long int j;
-	double nc, na, nk, zc, za, c;
+	double nc, na, ni, zc, za, c;
 
 	switch ( flagElect )
 	{
 		case 1:  // NaCl
-			nc = 1.; na = 1.; nk = 2.;
-			zc = 1.; za = 1.;
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
 			break;
 		case 2:  // KCl
-			nc = 1.; na = 1.; nk = 2.;
-			zc = 1.; za = 1.;
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
 			break;
 		case 3:  // NaOH
-			nc = 1.; na = 1.; nk = 2.;
-			zc = 1.; za = 1.;
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
 			break;
 		case 4:  // KOH
-			nc = 1.; na = 1.; nk = 2.;
-			zc = 1.; za = 1.;
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
 			break;
 		default:  // wrong mode
 			return -1;
 	}
 
-	c = 2./nk * ( nc*zc + na*za );
-
+	c = 2./ni * ( nc*fabs(zc) + na*fabs(za) );
 	for (j=0; j<NComp; j++)
 	{
 		an[j] = aref[j] + c*Gf;
