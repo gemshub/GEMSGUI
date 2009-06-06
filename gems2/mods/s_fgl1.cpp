@@ -1960,33 +1960,39 @@ long int THelgesonDH::BgammaTP()
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
 	// units are cal, kg, K, mol, bar
-	double ni, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, rc, ra;
-	double omgpt, nbg, gsf, eps;
-	double b_gamma;
+	double ni, nc, na, zc, za, rc, ra;
+	double a1, a2, a3, a4, a5, c1, c2, omg, bg, bs;
+	double rec, rea, eps, eta, X1, X2;
+	double omgpt, domdt, d2omdT2, domdP;
+	double nbg, b_gamma;
 
-	// pull parameters
+	// set parameters
 	eps = EpsW[0];
-	gsf = Gf;
+	eta = (1.66027e5);
 
 	switch ( flagElect )
 	{
 		case 1:  // NaCl
-			ni = 2.; a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
 			a5 = -0.206; c1 = -1.50; c2 = 53300.; omg = 178650.;
 			bg = -174.623; bs = 2.164; rc = 0.97; ra = 1.81;
 			break;
 		case 2:  // KCl
-			ni = 2.; a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
 			a5 = -0.262; c1 = -2.53; c2 = 38628.4; omg = 164870.;
 			bg = -70.0; bs = 1.727; rc = 1.33; ra = 1.81;
 			break;
 		case 3:  // NaOH
-			ni = 2.; a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.030056; a2 = -202.55; a3 = -2.9092; a4 = 20302;
 			a5 = -0.206; c1 = -1.50; c2 = 53300.; omg = 205520.;
 			bg = -267.4; bs = 1.836; rc = 0.97; ra = 1.40;
 			break;
 		case 4:  // KOH
-			ni = 2.; a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
+			ni = 2.; nc = 1.; na = 1.; zc = 1.; za = -1.;
+			a1 = 0.0172; a2 = -115.36; a3 = -1.1857; a4 = 13854.2;
 			a5 = -0.262; c1 = -2.53; c2 = 38628.4; omg = 191730.;
 			bg = -335.7; bs = 1.26; rc = 1.33; ra = 1.40;
 			break;
@@ -1995,7 +2001,17 @@ long int THelgesonDH::BgammaTP()
 	}
 
 	// calculation part
-	omgpt = (1.66027e5)*(1./(0.94+rc+gsf)+1./(ra+gsf));
+	rec = rc + fabs(zc)*(0.94+Gf);
+	rea = ra + fabs(za)*Gf;
+	X1 = - eta*nc*( fabs(pow(zc,3.))/pow(rec,2.) - zc/pow((3.082+Gf),2.) )
+			- eta*na*( fabs(pow(za,3.))/pow(rea,2.) - za/pow((3.082+Gf),2.) );
+	X2 = 2.*eta*nc*( fabs(pow(zc,4.))/pow(rec,3.) - zc/pow((3.082+Gf),3.) )
+			+ 2.*eta*nc * ( fabs(pow(zc,4.))/pow(rec,3.) - zc/pow((3.082+Gf),3.) );
+	omgpt = eta*( nc*pow(zc,2.)/rec + na*pow(za,2.)/rea );
+	// omgpt = (1.66027e5)*(1./(0.94+rc+Gf)+1./(ra+Gf));
+	domdt = X1*dGfdT;
+	d2omdT2 = X2*pow(dGfdT,2.) + X1*d2GfdT2;
+	domdP = X1*dGfdP;
 	nbg = - ni*bg/2.+ni*bs*(Tk-298.15)/2.-c1*(Tk*log(Tk/298.15)-Tk+298.15)
 				+ a1*(Pbar-1.)+a2*log((2600.+Pbar)/(2600.+1.))
 				- c2*((1./(Tk-228.)-1./(298.15-228.))*(228.-Tk)/228.-Tk/(228.*228.)
@@ -2015,31 +2031,31 @@ long int THelgesonDH::BgammaTP()
 long int THelgesonDH::IonsizeTP()
 {
 	// bla
-	double nc, na, nk, zc, za, c;
+	double nc, na, ni, zc, za, c;
 
 	switch ( flagElect )
 	{
 		case 1:  // NaCl
-			nc = 1.; na = 1.; nk = 2.;
-			zc = 1.; za = 1.;
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
 			break;
 		case 2:  // KCl
-			nc = 1.; na = 1.; nk = 2.;
-			zc = 1.; za = 1.;
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
 			break;
 		case 3:  // NaOH
-			nc = 1.; na = 1.; nk = 2.;
-			zc = 1.; za = 1.;
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
 			break;
 		case 4:  // KOH
-			nc = 1.; na = 1.; nk = 2.;
-			zc = 1.; za = 1.;
+			nc = 1.; na = 1.; ni = 2.;
+			zc = 1.; za = -1.;
 			break;
 		default:  // wrong mode
 			return -1;
 	}
 
-	c = 2./nk * ( nc*zc + na*za );
+	c = 2./ni * ( nc*fabs(zc) + na*fabs(za) );
 	ao = ac + c*Gf;
 	daodT = c*dGfdT;
 	d2aodT2 = c*d2GfdT2;
