@@ -33,7 +33,7 @@
 // Implementation of the TPRSVcalc class
 //=======================================================================================================
 
-// Constructor
+// Generic constructor
 TPRSVcalc::TPRSVcalc( long int NCmp, double Pp, double Tkp ):
 	TSolMod( NCmp, 0, 0, 0, 0, 4, 'P',
          0, 0, 0, 0, 0, 0, Tkp, Pp  )
@@ -762,7 +762,7 @@ long int TPRSVcalc::PRCalcFugPure( void )
 // Implementation of the TCGFcalc class
 //=======================================================================================================
 
-// Constructor
+// Generic constructor
 TCGFcalc::TCGFcalc( long int NCmp, double Pp, double Tkp ):
     TSolMod( NCmp, 0, 0, 0, 0, 0, 'F',
          0, 0, 0, 0, 0, 0, Tkp, Pp )
@@ -2340,6 +2340,8 @@ long int EOSPARAM::ParamMix( double *Xin )
     emix = emix/s3mix;
     return NComp;
   }
+
+
 
 
 

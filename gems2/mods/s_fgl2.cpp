@@ -54,30 +54,9 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
     lnGamma = arlnGam;
 
     // initialize phase properties
-    Gex = 0.0;
-    Hex = 0.0;
-    Sex = 0.0;
-    CPex = 0.0;
-    Vex = 0.0;
-    Aex = 0.0;
-    Uex = 0.0;
-
-    Gid = 0.0;
-    Hid = 0.0;
-    Sid = 0.0;
-    CPid = 0.0;
-    Vid = 0.0;
-    Aid = 0.0;
-    Uid = 0.0;
-
-    Gdq = 0.0;
-    Hdq = 0.0;
-    Sdq = 0.0;
-    CPdq = 0.0;
-    Vdq = 0.0;
-    Adq = 0.0;
-    Udq = 0.0;
-
+    Gex = 0.0; Hex = 0.0; Sex = 0.0; CPex = 0.0; Vex = 0.0; Aex = 0.0; Uex = 0.0;
+    Gid = 0.0; Hid = 0.0; Sid = 0.0; CPid = 0.0; Vid = 0.0; Aid = 0.0; Uid = 0.0;
+    Gdq = 0.0; Hdq = 0.0; Sdq = 0.0; CPdq = 0.0; Vdq = 0.0; Adq = 0.0; Udq = 0.0;
 }
 
 
@@ -114,6 +93,7 @@ void TSolMod::GetPhaseName( const char *PhName )
 	 strncpy( PhaseName, PhName, MAXPHASENAME );
 	 PhaseName[MAXPHASENAME] = 0;
 }
+
 
 
 
@@ -157,12 +137,12 @@ void TVanLaar::alloc_internal()
 
 void TVanLaar::free_internal()
 {
-	if(Wu)  delete[]Wu;
-	if(Ws)  delete[]Ws;
-	if(Wv)  delete[]Wv;
-	if(Wpt)  delete[]Wpt;
-	if(Phi)  delete[]Phi;
-	if(PsVol)  delete[]PsVol;
+	if(Wu) delete[]Wu;
+	if(Ws) delete[]Ws;
+	if(Wv) delete[]Wv;
+	if(Wpt) delete[]Wpt;
+	if(Phi) delete[]Phi;
+	if(PsVol) delete[]PsVol;
 }
 
 
@@ -374,10 +354,10 @@ void TRegular::alloc_internal()
 
 void TRegular::free_internal()
 {
-	if(Wu)  delete[]Wu;
-	if(Ws)  delete[]Ws;
-	if(Wv)  delete[]Wv;
-	if(Wpt)  delete[]Wpt;
+	if(Wu) delete[]Wu;
+	if(Ws) delete[]Ws;
+	if(Wv) delete[]Wv;
+	if(Wpt) delete[]Wpt;
 }
 
 
@@ -557,11 +537,11 @@ void TRedlichKister::alloc_internal()
 
 void TRedlichKister::free_internal()
 {
-	if(Lu)  delete[]Lu;
-	if(Ls)  delete[]Ls;
-	if(Lv)  delete[]Lv;
-	if(Lpt)  delete[]Lpt;
-	if(Lcp)  delete[]Lcp;
+	if(Lu) delete[]Lu;
+	if(Ls) delete[]Ls;
+	if(Lv) delete[]Lv;
+	if(Lpt) delete[]Lpt;
+	if(Lcp) delete[]Lcp;
 }
 
 

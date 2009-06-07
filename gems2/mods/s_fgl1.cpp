@@ -36,6 +36,7 @@ using namespace std;
 // References:
 //=============================================================================================
 
+
 // Generic constructor for the TSIT class
 TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
         long int NPperDC, char Mod_Code,
@@ -46,29 +47,30 @@ TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxO
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
 {
-  aZ = arZ;
-  aM =	arM;
-  RhoW = dW;
-  EpsW = eW;
+	aZ = arZ;
+	aM = arM;
+	RhoW = dW;
+	EpsW = eW;
 }
+
 
 // Calculates activity coefficients in SIT (NEA) model
 //
 long int TSIT::MixMod()
 {
-    long int j, index1, index2, ip;
+	long int j, index1, index2, ip;
     double T, A, B, sqI, lgI, Z2, lgGam, SumSIT;
     double RHO, EPS;
-//    double nPolicy;
+    // double nPolicy;
     RHO = RhoW[0];
     EPS = EpsW[0];
 
     I= IonicStr();
     if( I <  1e-6 /*TProfil::pm->pa.p.ICmin*/ )
     {
-      for( j=0; j<NComp; j++)
-    	  lnGamma[j] = 0.;
-	  return 0;
+    	for( j=0; j<NComp; j++)
+    		lnGamma[j] = 0.;
+    	return 0;
     }
     lgI = log10(I);
     T = Tk;
@@ -76,51 +78,56 @@ long int TSIT::MixMod()
     B = 50.2916 * sqrt( RHO ) / sqrt( T*EPS );
 
     sqI = sqrt( I );
-    ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
-        "Error: A,B were not calculated - no values of RoW and EpsW !" );
+	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
+    	"Error: A,B were not calculated - no values of RoW and EpsW !" );
 
-    // Calculation of SIT model
-    for( j=0; j<NComp; j++ )
+	// Calculation of SIT model
+	for( j=0; j<NComp; j++ )
     {
-      if( aZ[j] )
-      {    // Charged species : calculation of the DH part
-           Z2 = aZ[j]*aZ[j];
-           lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
-      }
-      else {  // neutral species incl. water
-    	  Z2 = 0.;
-    	  lgGam =0.;
-      }
-//   Calculation of the SIT sum - new variant
-//   Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.09
-      SumSIT = 0.;
-      if( j != NComp-1 )   // not water
-      {
-  	     for( ip=0; ip<NPar; ip++ )
-         {
-            index1 = aIPx[ip*MaxOrd];  // The order of indexes for binary parameters plays no role
-            index2 = aIPx[ip*MaxOrd+1];
-            if( index1 == index2 )
-                continue;
-            if( index1 == j )
-            {
-               SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
-            }
-            else if( index2 == j )
-            {
-               SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
-            }
-         }
-      }
-      else { // H2O solvent: shall we calculate act. coeff. of water?
-           lgGam = 0.;         // Decision: PHREEQC?   14.05.09 set to 0
-      }
-      lgGam += SumSIT;
-      lnGamma[j] = lgGam * 2.302585093/*lg_to_ln*/;
+		if( aZ[j] )  // Charged species : calculation of the DH part
+		{
+			Z2 = aZ[j]*aZ[j];
+			lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
+		}
+		else  // neutral species incl. water
+		{
+			Z2 = 0.;
+			lgGam =0.;
+		}
+
+		// Calculation of the SIT sum - new variant
+		// Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.09
+		SumSIT = 0.;
+		if( j != NComp-1 )   // not water
+		{
+			for( ip=0; ip<NPar; ip++ )
+			{
+				index1 = aIPx[ip*MaxOrd];  // The order of indexes for binary parameters plays no role
+				index2 = aIPx[ip*MaxOrd+1];
+				if( index1 == index2 )
+					continue;
+				if( index1 == j )
+				{
+					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
+				}
+				else if( index2 == j )
+				{
+					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
+				}
+			}
+		}
+
+		else  // H2O solvent: shall we calculate act. coeff. of water?
+		{
+			lgGam = 0.;         // Decision: PHREEQC?   14.05.09 set to 0
+		}
+		lgGam += SumSIT;
+		lnGamma[j] = lgGam * 2.302585093/*lg_to_ln*/;
     } // j
 
-    return 0;
+	return 0;
 }
+
 
 long int TSIT::ExcessProp( double *Zex )
 {
@@ -261,6 +268,7 @@ if( Nn > 0 )
     return 0;
 }
 
+
 // Moved macros here from s_fgl.h to restrict their visibility
 // in other files (DK)
 #define IPc( ii, jj )  ( aIPc[ (ii) * NPcoef + (jj) ])
@@ -285,6 +293,7 @@ if( Nn > 0 )
 #define Psi1( a,a1,c ) ( aPsi1[(( (a) * Na + (a1) ) * Nc + (c)) ])
 #define Zeta( n,c,a )  ( aZeta[(( (n) * Nc + (c)  ) * Na + (a)) ])
 //
+
 
 // Output of test results into text file (standalone variant only)
 void TPitzer::Pitzer_test_out( const char *path )
@@ -401,6 +410,7 @@ void TPitzer::alloc_internal()
 	}
 }
 
+
 void TPitzer::free_internal()
 {
 	// Input parameter arrays
@@ -514,7 +524,7 @@ void TPitzer::setValues()
 	         ia = getIa( IPx(ii,1) );
 	      ErrorIf( ia<0||ic<0, "", "Cation and anion index needed here"  );
 	      bet0( ic, ia ) = aIP[ii];
-//	      cout << "indexC = " << ic << "indexA = " << ia << " ind " << ((ic)*Na+(ia)) << endl;
+	      // cout << "indexC = " << ic << "indexA = " << ia << " ind " << ((ic)*Na+(ia)) << endl;
 	      break;
 	  case bet1_:
 		  ic = getIc( IPx(ii,0) );
@@ -526,7 +536,7 @@ void TPitzer::setValues()
 	         ia = getIa( IPx(ii,1) );
 	      ErrorIf( ia<0||ic<0, "", "Cation and anion index needed here"  );
 	      bet1( ic, ia ) = aIP[ii];
-//	      cout << "indexC = " << ic << "indexA = " << ia << " ind " << ((ic)*Na+(ia)) << endl;
+	      // cout << "indexC = " << ic << "indexA = " << ia << " ind " << ((ic)*Na+(ia)) << endl;
 	      break;
 	  case bet2_:
 		  ic = getIc( IPx(ii,0) );
@@ -538,7 +548,7 @@ void TPitzer::setValues()
 	         ia = getIa( IPx(ii,1) );
 	      ErrorIf( ia<0||ic<0, "", "Cation and anion indexes needed here"  );
 	      bet2( ic, ia ) = aIP[ii];
-//	      cout << "indexC = " << ic << "indexA = " << ia << " ind " << ((ic)*Na+(ia)) << endl;
+	      // cout << "indexC = " << ic << "indexA = " << ia << " ind " << ((ic)*Na+(ia)) << endl;
 	      break;
 	  case Cphi_:
 		  ic = getIc( IPx(ii,0) );
@@ -550,7 +560,7 @@ void TPitzer::setValues()
 	         ia = getIa( IPx(ii,1) );
 	      ErrorIf( ia<0||ic<0, "", "Cation and anion indexes needed here"  );
 	      Cphi( ic, ia ) = aIP[ii];
-//	      cout << "indexC = " << ic << "indexA = " << ia << " ind " << ((ic)*Na+(ia)) << endl;
+	      // cout << "indexC = " << ic << "indexA = " << ia << " ind " << ((ic)*Na+(ia)) << endl;
 	      break;
 	  case Lam_:
 		  in = getIn( IPx(ii,0) );
@@ -562,7 +572,7 @@ void TPitzer::setValues()
 	         ic = getIc( IPx(ii,1) );
 	      ErrorIf( in<0||ic<0, "", "Cation and neutral species indexes needed here"  );
 	      Lam( in, ic ) = aIP[ii];
-//	      cout << "indexN = " << in << "indexC = " << ic << " ind " << ((in)*Nc+(ic)) << endl;
+	      // cout << "indexN = " << in << "indexC = " << ic << " ind " << ((in)*Nc+(ic)) << endl;
 	      break;
 	  case Lam1_:
 		  in = getIn( IPx(ii,0) );
@@ -574,21 +584,21 @@ void TPitzer::setValues()
 	         ia = getIa( IPx(ii,1) );
 	      ErrorIf( in<0||ia<0, "", "Parameters must be anion and neutral species index"  );
 	      Lam1( in, ia ) = aIP[ii];
-//	      cout << "indexN = " << in << "indexA = " << ia << " ind " << ((in)*Na+(ia)) << endl;
+	      // cout << "indexN = " << in << "indexA = " << ia << " ind " << ((in)*Na+(ia)) << endl;
 	      break;
 	  case Theta_:
 	      ic = getIc( IPx(ii,0) );
           i = getIc( IPx(ii,1) );
 	      ErrorIf( i<0||ic<0, "", "Only indexes of cations needed here"  );
 	      Theta( ic, i ) = aIP[ii];
-//	      cout << "indexC = " << ic << "indexC = " << i << " ind " << ((ic)*Nc+(i)) << endl;
+	      // cout << "indexC = " << ic << "indexC = " << i << " ind " << ((ic)*Nc+(i)) << endl;
 	      break;
 	  case Theta1_:
 	      ia = getIa( IPx(ii,0) );
           i = getIa( IPx(ii,1) );
 	      ErrorIf( i<0||ia<0, "", "Only indexes of anions needed here"  );
 	      Theta1( ia, i ) = aIP[ii];
-//	      cout << "indexA = " << ia << "indexA = " << i << " ind " << ((ia)*Na+(i)) << endl;
+	      // cout << "indexA = " << ia << "indexA = " << i << " ind " << ((ia)*Na+(i)) << endl;
 	      break;
 	  case Psi_:
 		  ic = getIc( IPx(ii,0) );
@@ -609,7 +619,7 @@ void TPitzer::setValues()
 	      }
           ErrorIf( ic<0||ia<0||i<0, "", "Index of anion and 2 indexes of cations needed here"  );
 	      Psi( ic, i, ia ) = aIP[ii];
-//	      cout << "Psi = " << Psi( ic, i, ia ) << "index = " << (( (ic) * Nc + (i)  ) * Na + (ia)) << endl;
+	      // cout << "Psi = " << Psi( ic, i, ia ) << "index = " << (( (ic) * Nc + (i)  ) * Na + (ia)) << endl;
 	      break;
 	  case Psi1_:
 		  ia = getIa( IPx(ii,0) );
@@ -630,7 +640,7 @@ void TPitzer::setValues()
 	      }
           ErrorIf( ic<0||ia<0||i<0, "", "Indexes of 2 anions and one cation needed here"  );
 	      Psi1( ia, i, ic ) = aIP[ii];
-//	      cout << "Psi1 = " << Psi1( ia, i, ic ) << "index = " << (( (ia) * Na + (i) ) * Nc + (ic)) << endl;
+	      // cout << "Psi1 = " << Psi1( ia, i, ic ) << "index = " << (( (ia) * Na + (i) ) * Nc + (ic)) << endl;
 	      break;
 	  case Zeta_:
 		  in = getIn( IPx(ii,0) );
@@ -654,7 +664,7 @@ void TPitzer::setValues()
 	      ErrorIf( ic<0||ia<0||in<0, "",
 	    		  "Index of neutral species, index of cation and index of anion needed here"  );
 	      Zeta( in, ic, ia ) = aIP[ii];
-//	      cout << "Zeta = " << Zeta( in, ic, ia ) << "index = " << (( (in) * Nc + (ic)  ) * Na + (ia)) << endl;
+	      // cout << "Zeta = " << Zeta( in, ic, ia ) << "index = " << (( (in) * Nc + (ic)  ) * Na + (ia)) << endl;
 	      break;
 	}
   }
@@ -666,10 +676,10 @@ void TPitzer::setValues()
 void TPitzer::Ecalc( double z, double z1, double I, double Aphi,
 		double& Etheta, double& Ethetap)
 {
-  double xMN, xMM, xNN,  x;
-  double zet=0., dzdx=0.;
-  double bk[23], dk[23];
-  double JMN=0., JpMN=0., JMM=0., JpMM=0., JNN=0., JpNN=0.;
+	double xMN, xMM, xNN,  x;
+	double zet=0., dzdx=0.;
+	double bk[23], dk[23];
+	double JMN=0., JpMN=0., JMM=0., JpMM=0., JNN=0., JpNN=0.;
 
   // parameters for ak1 and ak2 values from Pitzer 1991 (p. 125, Table B1)
   static double ak1[21] = {  1.925154014814667, -0.060076477753119, -0.029779077456514,
@@ -679,7 +689,7 @@ void TPitzer::Ecalc( double z, double z1, double I, double Aphi,
                       -0.000000025267769,  0.000000013522610,  0.000000001229405,
                       -0.000000000821969, -0.000000000050847,  0.000000000046333,
                        0.000000000001943, -0.000000000002563, -0.000000000010991 };
-					   // Prescribed constants
+  // Prescribed constants
   static double ak2[23] = {  0.628023320520852,  0.462762985338493,  0.150044637187895,
                       -0.028796057604906, -0.036552745910311, -0.001668087945272,
                        0.006519840398744,  0.001130378079086, -0.000887171310131,
@@ -788,7 +798,7 @@ double TPitzer::A_Factor( double T )
     RHO = RhoW[0];
     EPS = EpsW[0];
 
-	//------------ Computing A- Factor
+	// Computing A- Factor
 	Aphi = (1./3.) * pow((2.*pi*N0*dens*1000.),0.5) * pow((el*el)/(eps*4.*pi*eps0*k*T),1.5);
 
 	return Aphi;
@@ -813,15 +823,14 @@ double TPitzer::IonicStr( double& I )
 }
 
 
-
 // Calculate osmotic coefficient, activity, and activity coefficient of water-solvent
 double TPitzer::lnGammaH2O( )
 {
     double Etheta=0., Ethetap=0.;
 	long int a, c, n, c1, a1;
-// Term OC1, Pitzer-Toughreact Report 2006, equation (A2)
+	// Term OC1, Pitzer-Toughreact Report 2006, equation (A2)
 	double OC1 = 2. * ( (-(Aphi*pow(I,1.5)) / (1.+1.2*Is) ));
-// Term OC2
+	// Term OC2
 	double OC2=0., alp=0., alp1=0., C=0., h1=0., h2=0., B3=0.;
 	for( c=0; c<Nc; c++)
 	  for( a=0; a<Na; a++)
@@ -833,7 +842,7 @@ double TPitzer::lnGammaH2O( )
 	     B3 = bet0(c,a)+ bet1(c,a)*exp(-h1)+(bet2(c,a)*exp(-h2)); //Pitzer-Toughreact Report 2006 equation (A9)
 	     OC2 +=(mc(c)*ma(a)*(B3+Zfac*(C/(2.*sqrt(fabs(zc(c)*za(a)))))));
 	  }
-// Term OC3
+	// Term OC3
 	double OC3=0., z, z1, Phiphi;
 	for( c=0; c<Nc; c++ )
 	  for( c1=c+1; c1<Nc; c1++ )
@@ -845,7 +854,7 @@ double TPitzer::lnGammaH2O( )
 	         Phiphi = Theta(c,c1) + Etheta + Ethetap * sqrt(I);	// Pitzer-Toughreact Report 2006, equation (A14)
 	         OC3 += (mc(c)*mc(c1)*(Phiphi + (ma(a)*Psi(c,c1,a))));
 	     }
-// Term OC4
+	// Term OC4
 	double OC4=0., Phiphi1;
 	for( a=0; a<Na; a++)
 	  for( a1=a+1; a1<Na; a1++)
@@ -856,7 +865,7 @@ double TPitzer::lnGammaH2O( )
 	       Phiphi1 = Theta1(a,a1) + Etheta + Ethetap * sqrt(I);	// Pitzer-Toughreact Report, 2006 equation (A14)
 	       OC4 += (ma(a)*ma(a1)*(Phiphi1+(mc(c)*Psi1(a,a1,c))));
 	    }
-// Term OC5
+	// Term OC5
 	double OC5, OC5a=0., OC5b=0.;
 	for(  n=0; n<Nn; n++)
 	  for( c=0; c<Nc; c++)
@@ -866,24 +875,24 @@ double TPitzer::lnGammaH2O( )
 	  for( a=0; a<Na; a++)
 	        OC5b +=(mn(n)*ma(a)*Lam1(n,a));
 	OC5=OC5a+OC5b;
-// Term OC6
+	// Term OC6
 	double OC6=0.;
 	for(  n=0; n<Nn; n++)
 	 for( c=0; c<Nc; c++)
 	   for( a=0; a<Na; a++)
 	        OC6 +=(mn(n)*mc(c)*ma(a)*Zeta(n,c,a));
-// Addition of all sums
+	// Addition of all sums
 	double OCges=OC1+OC2+OC3+OC4+OC5+OC6;
-// Summation of Molalities
+	// Summation of Molalities
 	double   OCmol= sum(aM, xcx, Nc)+ sum(aM, xax, Na)+ sum(aM, xnx, Nn);
-// Osmotic coefficient (OC)
+	// Osmotic coefficient (OC)
 	double OC = (1.+OCges) / OCmol;
-// Activity of Water, Pitzer-Toughreact Report 2006, equation (A1)
+	// Activity of Water, Pitzer-Toughreact Report 2006, equation (A1)
 	double Lna =(-18.1/1000.)*OC*OCmol;
 
 	double activityH2O = exp(Lna);
 
-//  lnGamma[Ns] = activityH2O/molefractionH2O;
+	// lnGamma[Ns] = activityH2O/molefractionH2O;
 	return Lna-log(x[Ns]);
 }
 
@@ -915,9 +924,9 @@ double TPitzer::F_Factor( double Aphi, double I, double Is )
 
   long int c, c1, a, a1;
   double z=0., z1=0., Etheta=0., Ethetap=0.;
-// Term F1
+  // Term F1
   double F1=-Aphi*( (Is/(1.+1.2*Is)) + 2.*log(1.+1.2*Is)/1.2);
-// Term F2
+  // Term F2
   double F2=0., Phip;
    for( c=0; c<Nc; c++ )
 	 for( c1=c+1; c1<Nc; c1++ )
@@ -1443,7 +1452,6 @@ long int TEUNIQUAC::MixMod()
 
 long int TEUNIQUAC::ExcessProp( double *Zex )
 {
-	// add excess property calculations
 	long int j, i, w;
 	double Mw, Xw, IS, b, c;
 	double A, dAdT, dAdP, d2AdT2;
@@ -1635,10 +1643,9 @@ long int TEUNIQUAC::IdealProp( double *Zid )
 // Output of test results into text file (standalone variant only)
 void TEUNIQUAC::Euniquac_test_out( const char *path )
 {
-
 	long int ii, c, a, n;
 
-//	const ios::open_mode OFSMODE = ios::out � ios::app;
+	// const ios::open_mode OFSMODE = ios::out � ios::app;
 	ofstream ff(path, ios::app );
 	ErrorIf( !ff.good() , path, "Fileopen error");
 
@@ -1658,13 +1665,6 @@ void TEUNIQUAC::Euniquac_test_out( const char *path )
 	for( ii=0; ii<NComp; ii++ )
 		ff << gammaR[ii] << "  ";
 
-/*	ff << endl << "abet0" << endl;
-	for( c=0; c<Nc; c++ )
-	{	for( a=0; a<Na; a++ )
-			ff << abet0[c*Na+a] << "  ";
-		ff << endl;
-	}
-*/
 	ff << endl << "ln activity coefficients of end members" << endl;
 	for( ii=0; ii<NComp; ii++ )
 		ff << lnGamma[ii] << "  ";
@@ -1728,7 +1728,6 @@ void THelgesonDH::alloc_internal()
 
 void THelgesonDH::free_internal()
 {
-  	// cleaning memory
 	delete[]LnG;
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
@@ -1886,7 +1885,8 @@ long int THelgesonDH::MixMod()
 // calculates excess properties
 long int THelgesonDH::ExcessProp( double *Zex )
 {
-	// bla
+	// add excess properties
+
 	return 0;
 }
 
@@ -2044,7 +2044,6 @@ long int THelgesonDH::BgammaTP()
 // calculates TP dependence of a_not (and derivatives)
 long int THelgesonDH::IonsizeTP()
 {
-	// bla
 	double nc, na, ni, zc, za, c;
 
 	switch ( flagElect )
@@ -2239,7 +2238,6 @@ void TDaviesDH::alloc_internal()
 
 void TDaviesDH::free_internal()
 {
-  	// cleaning memory
 	delete[]LnG;
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
@@ -2275,8 +2273,6 @@ long int TDaviesDH::PTparam()
 // Calculates activity coefficients
 long int TDaviesDH::MixMod()
 {
-	// bla
-
 	long int j, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
 	double lg_to_ln;
@@ -2362,7 +2358,7 @@ long int TDaviesDH::MixMod()
 // calculates excess properties
 long int TDaviesDH::ExcessProp( double *Zex )
 {
-	// bla
+	// add excess properties
 
 	return 0;
 }
@@ -2475,7 +2471,6 @@ void TLimitingLawDH::alloc_internal()
 
 void TLimitingLawDH::free_internal()
 {
-  	// cleaning memory
 	delete[]LnG;
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
@@ -2511,7 +2506,6 @@ long int TLimitingLawDH::PTparam()
 // Calculates activity coefficients
 long int TLimitingLawDH::MixMod()
 {
-	// bla
 	long int j, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
 	double lg_to_ln;
@@ -2598,7 +2592,7 @@ long int TLimitingLawDH::MixMod()
 // calculates excess properties
 long int TLimitingLawDH::ExcessProp( double *Zex )
 {
-	// bla
+	// add excess properties
 
 	return 0;
 }
@@ -2717,7 +2711,6 @@ void TTwoTermDH::alloc_internal()
 
 void TTwoTermDH::free_internal()
 {
-  	// cleaning memory
 	delete[]LnG;
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
@@ -2848,7 +2841,8 @@ long int TTwoTermDH::MixMod()
 // calculates excess properties
 long int TTwoTermDH::ExcessProp( double *Zex )
 {
-	// bla
+	// add excess properties
+
 	return 0;
 }
 
@@ -2984,7 +2978,6 @@ void TKarpovDH::alloc_internal()
 
 void TKarpovDH::free_internal()
 {
-  	// cleaning memory
 	delete[]LnG;
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
@@ -3148,7 +3141,8 @@ long int TKarpovDH::MixMod()
 // calculates excess properties
 long int TKarpovDH::ExcessProp( double *Zex )
 {
-	// bla
+	// add excess properties
+
 	return 0;
 }
 
