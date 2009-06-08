@@ -1372,7 +1372,7 @@ long int TEUNIQUAC::MixMod()
 		Theta[j] = x[j]*Q[j]/QQ;
 	}
 
-	// loop over all species
+	// loop over species
 	for (j=0; j<NComp; j++)
 	{
 		// species other than water solvent
@@ -1511,23 +1511,13 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 	}
 
 	// calculation of bulk phase excess properties
-	Gex = 0.0;
-	Hex = 0.0;
-	Sex = 0.0;
-	CPex = 0.0;
-	Vex = 0.0;
-	gC = 0.0;
-	gR = 0.0;
-	hR = 0.0;
-	cpR = 0.0;
+	Gex = 0.0; Hex = 0.0; Sex = 0.0; CPex = 0.0; Vex = 0.0;
+	gC = 0.0; gR = 0.0; hR = 0.0; cpR = 0.0;
 
 	// infinite dilution part
-	gCI = 0.;
-	gRI = 0.;
-	dgRI = 0.;
-	d2gRI = 0.;
+	gCI = 0.; gRI = 0.; dgRI = 0.; d2gRI = 0.;
 
-	for (j=0; j<NComp; j++)
+	for (j=0; j<NComp; j++) // loop over species
 	{
 		if (j ==w)
 		{
@@ -1550,12 +1540,9 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 	}
 
 	// combinatorial and residual part
-	gCX = 0.;
-	gRX = 0.;
-	dgRX = 0.;
-	d2gRX = 0.;
+	gCX = 0.; gRX = 0.; dgRX = 0.; d2gRX = 0.;
 
-	for (j=0; j<NComp; j++)
+	for (j=0; j<NComp; j++)  // loop over species
 	{
 		N = 0.0;
 		TPI = 0.0;
@@ -1826,7 +1813,7 @@ long int THelgesonDH::MixMod()
 	if ( fabs(A) < 1e-9 || fabs(B) < 1e-9 )
 		return -1;
 
-	// loop over all species
+	// loop over species
 	for( j=0; j<NComp; j++ )
 	{
 		lgGam = 0.0;
@@ -1876,7 +1863,7 @@ long int THelgesonDH::MixMod()
 				lnGamma[j] = lnGam;
 			}
 		}
-	}
+	}  // j
 
 	return 0;
 }
@@ -1885,7 +1872,100 @@ long int THelgesonDH::MixMod()
 // calculates excess properties
 long int THelgesonDH::ExcessProp( double *Zex )
 {
-	// add excess properties
+	// under construction
+	long int j, w;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, lnActWat, lg_to_ln;
+	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
+			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
+			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP;
+	lg_to_ln = 2.302585093;
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molalities (molT and molZ)
+	IonicStrength();
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+
+	// loop over species
+	for( j=0; j<NComp; j++ )
+	{
+		// charged species
+		if ( z[j] )
+		{
+			Z2 = z[j]*z[j];
+			U = - (Z2*A) * sqI;
+			V = 1. + (ao*B) * sqI;
+			dUdT = - (Z2*dAdT) * sqI;
+			dVdT = (daodT*B + ao*dBdT) * sqI;
+			d2UdT2 = - (Z2*d2AdT2) * sqI;
+			d2VdT2 = (d2aodT2*B + 2.*daodT*dBdT + ao*d2BdT2) * sqI;
+			dUdP = - (Z2*dAdP) * sqI;
+			dVdP = (daodP*B + ao*dBdP) * sqI;
+			LnG[j] = ( U/V + bgam*IS ) * lg_to_ln;
+			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) + dbgdT*IS ) * lg_to_ln;
+			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
+				- (dUdT*dVdT + U*d2VdT2)*pow(V,2.)/pow(V,4.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.)
+				+ d2bgdT2*IS ) * lg_to_ln;
+			dLnGdP[j] = ( (dUdP*V - U*dVdP)/pow(V,2.) + dbgdP*IS ) * lg_to_ln;
+		}
+
+		// neutral species and water solvent
+		else
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				if ( flagNeut == 1 )
+				{
+					LnG[j] = ( bgam*IS ) * lg_to_ln;
+					dLnGdT[j] = ( dbgdT*IS ) * lg_to_ln;
+					d2LnGdT2[j] = ( d2bgdT2*IS ) * lg_to_ln;
+					dLnGdP[j] = ( dbgdP*IS ) * lg_to_ln;
+				}
+
+				else
+				{
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+				continue;
+			}
+
+			// water solvent (under construction)
+			else
+			{
+				// add derivatives of osmotic coefficient
+				if ( flagH2O == 1 )
+				{
+					// Phi corrected using eq. (190) from Helgeson et al. (1981)
+					Lam = 1. + ao*B*sqI;
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.)))*(Lam-1./Lam-2*log(Lam));
+					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+					Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+					lnActWat = -Phi*molT/Nw;
+					LnG[j] = lnActWat - lnwxWat;
+				}
+				else
+				{
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+			}
+		}
+	} // j
 
 	return 0;
 }
@@ -2281,7 +2361,7 @@ long int TDaviesDH::MixMod()
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molaities (molT and molZ)
+	// calculate ionic strength and total molalities (molT and molZ)
 	IonicStrength();
 
 	WxW = x[w];
@@ -2302,7 +2382,7 @@ long int TDaviesDH::MixMod()
 	if ( fabs(A) < 1e-9  )
 		return -1;
 
-	// loop over all species
+	// loop over species
 	for( j=0; j<NComp; j++ )
 	{
 		lgGam = 0.0;
@@ -2349,7 +2429,7 @@ long int TDaviesDH::MixMod()
 				lnGamma[j] = lnGam;
 			}
 		}
-	}
+	} // j
 
 	return 0;
 }
@@ -2358,7 +2438,7 @@ long int TDaviesDH::MixMod()
 // calculates excess properties
 long int TDaviesDH::ExcessProp( double *Zex )
 {
-	// add excess properties
+	// to be implemented
 
 	return 0;
 }
@@ -2514,7 +2594,7 @@ long int TLimitingLawDH::MixMod()
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molaities (molT and molZ)
+	// calculate ionic strength and total molalities (molT and molZ)
 	IonicStrength();
 
 	WxW = x[w];
@@ -2535,7 +2615,7 @@ long int TLimitingLawDH::MixMod()
 	if ( fabs(A) < 1e-9  )
 		return -1;
 
-	// loop over all species
+	// loop over species
 	for( j=0; j<NComp; j++ )
 	{
 		lgGam = 0.0;
@@ -2583,7 +2663,7 @@ long int TLimitingLawDH::MixMod()
 				lnGamma[j] = lnGam;
 			}
 		}
-	}
+	} // j
 
 	return 0;
 }
@@ -2592,7 +2672,7 @@ long int TLimitingLawDH::MixMod()
 // calculates excess properties
 long int TLimitingLawDH::ExcessProp( double *Zex )
 {
-	// add excess properties
+	// to be implemented
 
 	return 0;
 }
@@ -2760,7 +2840,7 @@ long int TTwoTermDH::MixMod()
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molaities (molT and molZ)
+	// calculate ionic strength and total molalities (molT and molZ)
 	IonicStrength();
 
 	WxW = x[w];
@@ -2786,7 +2866,7 @@ long int TTwoTermDH::MixMod()
 	if ( fabs(A) < 1e-9 || fabs(B) < 1e-9 )
 		return -1;
 
-	// loop over all species
+	// loop over species
 	for( j=0; j<NComp; j++ )
 	{
 		lgGam = 0.0;
@@ -2832,7 +2912,7 @@ long int TTwoTermDH::MixMod()
 				lnGamma[j] = lnGam;
 			}
 		}
-	}
+	} // j
 
 	return 0;
 }
@@ -2841,7 +2921,7 @@ long int TTwoTermDH::MixMod()
 // calculates excess properties
 long int TTwoTermDH::ExcessProp( double *Zex )
 {
-	// add excess properties
+	// to be implemented
 
 	return 0;
 }
@@ -3056,7 +3136,7 @@ long int TKarpovDH::MixMod()
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molaities (molT and molZ)
+	// calculate ionic strength and total molalities (molT and molZ)
 	IonicStrength();
 
 	WxW = x[w];
@@ -3082,7 +3162,7 @@ long int TKarpovDH::MixMod()
 	if ( fabs(A) < 1e-9 || fabs(B) < 1e-9 )
 		return -1;
 
-	// loop over all species
+	// loop over species
 	for( j=0; j<NComp; j++ )
 	{
 		lgGam = 0.0;
@@ -3132,7 +3212,7 @@ long int TKarpovDH::MixMod()
 				lnGamma[j] = lnGam;
 			}
 		}
-	}
+	} // j
 
 	return 0;
 }
@@ -3141,7 +3221,7 @@ long int TKarpovDH::MixMod()
 // calculates excess properties
 long int TKarpovDH::ExcessProp( double *Zex )
 {
-	// add excess properties
+	// to be implemented
 
 	return 0;
 }

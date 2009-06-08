@@ -195,7 +195,7 @@ long int TVanLaar::MixMod()
 		Phi[j] = x[j]*PsVol[j]/sumPhi;
 
 	// calculate activity coefficients
-	for (j=0; j<NComp; j++)      // index end members with j
+	for (j=0; j<NComp; j++)
 	{
 		lnGamRT = 0.;
 		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
@@ -246,10 +246,7 @@ long int TVanLaar::ExcessProp( double *Zex )
 	    Phi[j] = x[j]*PsVol[j]/sumPhi;
 
 	// calculate bulk phase excess properties
-	g = 0.0;
-	s = 0.0;
-	v = 0.0;
-	u = 0.0;
+	g = 0.0; s = 0.0; v = 0.0; u = 0.0;
 
 	for (ip=0; ip<NPar; ip++)
 	{
@@ -391,7 +388,7 @@ long int TRegular::MixMod()
 		return 1;
 
 	// calculate activity coefficients
-	for (j=0; j<NComp; j++)      // index end members with j
+	for (j=0; j<NComp; j++)
 	{
 		lnGamRT = 0.;
 
@@ -428,10 +425,7 @@ long int TRegular::ExcessProp( double *Zex )
 		return 1;
 
 	// calculate bulk phase excess properties
-	g = 0.0;
-	s = 0.0;
-	v = 0.0;
-	u = 0.0;
+	g = 0.0; s = 0.0; v = 0.0; u = 0.0;
 
 	for (ip=0; ip<NPar; ip++)
 	{
@@ -596,8 +590,8 @@ long int TRedlichKister::MixMod()
 	if ( NPcoef < 16 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 		return 1;
 
-	// calculate activity coefficients
-	for (j=0; j<NComp; j++)      // index end members with j
+	// loop over species
+	for (j=0; j<NComp; j++)
 	{
 		lnGamRT = 0.;
 		for (ip=0; ip<NPar; ip++)  // inter.parameters indexed with ip
@@ -649,7 +643,8 @@ long int TRedlichKister::MixMod()
 
 		lnGam = lnGamRT/(R_CONST*Tk);
 		lnGamma[j] = lnGam;
-	}
+	} // j
+
    	return 0;
 }
 
@@ -666,11 +661,7 @@ long int TRedlichKister::ExcessProp( double *Zex )
 		return 1;
 
    	// calculate bulk phase excess properties
-   	g = 0.0;
-   	s = 0.0;
-   	cp = 0.0;
-   	v = 0.0;
-   	u = 0.0;
+   	g = 0.0; s = 0.0; cp = 0.0; v = 0.0; u = 0.0;
 
    	for (ip=0; ip<NPar; ip++)
    	{
@@ -922,7 +913,7 @@ long int TNRTL::MixMod()
 	if ( NPcoef < 6 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
 
-	// calculate activity coefficients
+	// loop over species
 	for (j=0; j<NComp; j++)
 	{
 		lnGam = 0.0;
@@ -960,14 +951,8 @@ long int TNRTL::ExcessProp( double *Zex )
 	        return 1;
 
 	// calculate bulk phase excess properties
-   	Gex = 0.0;
-   	Sex = 0.0;
-   	Hex = 0.0;
-   	CPex = 0.0;
-   	Vex = 0.0;
-   	g = 0.0;
-   	dg = 0.0;
-   	d2g = 0.0;
+   	Gex = 0.0; Sex = 0.0; Hex = 0.0; CPex = 0.0; Vex = 0.0;
+   	g = 0.0; dg = 0.0; d2g = 0.0;
 
    	for (j=0; j<NComp; j++)
    	{
@@ -1155,7 +1140,7 @@ long int TWilson::MixMod()
 	if ( NPcoef < 4 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
 
-	// calculate activity coefficients
+	// loop over species
 	for (j=0; j<NComp; j++)
 	{
 		lnGam = 0.0;
@@ -1190,15 +1175,10 @@ long int TWilson::ExcessProp( double *Zex )
 	        return 1;
 
 	// calculate bulk phase excess properties
-	Gex = 0.0;
-	Sex = 0.0;
-	Hex = 0.0;
-	CPex = 0.0;
-	Vex = 0.0;
-	g = 0.0;
-	dg = 0.0;
-	d2g = 0.0;
+	Gex = 0.0; Sex = 0.0; Hex = 0.0; CPex = 0.0; Vex = 0.0;
+	g = 0.0; dg = 0.0; d2g = 0.0;
 
+	// loop over species
 	for (j=0; j<NComp; j++)
 	{
 		U = 0.0;
@@ -1212,7 +1192,7 @@ long int TWilson::ExcessProp( double *Zex )
 		}
 		g -= x[j]*log(U);
 		dg -= x[j]*(1./U)*dU;
-		d2g -= x[j] * ( (-1./pow(U,2.))*dU*dU + (1./U)*d2U );  // fixed, 11.06.2008 (TW)
+		d2g -= x[j] * ( (-1./pow(U,2.))*dU*dU + (1./U)*d2U );  // corrected 11.06.2008 (TW)
 	}
 
 	// final calculations
