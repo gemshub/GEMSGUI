@@ -1781,8 +1781,8 @@ long int THelgesonDH::MixMod()
 {
 	long int j, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
-	double Lam, SigTerm, Phi, lnActWat, lg_to_ln;
-	lg_to_ln = 2.302585093;
+	double Lam, SigTerm, Phi, zc, za, psi, lnActWat, lg_to_ln;
+	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
@@ -1851,11 +1851,11 @@ long int THelgesonDH::MixMod()
 				if ( flagH2O == 1 )
 				{
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
-					Lam = 1. + ao*B*sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.)))*(Lam-1./Lam-2*log(Lam));
+					Lam = 1. + (ao*B) * sqI;
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					lnActWat = -Phi*molT/Nw;
+					Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
+					lnActWat = - Phi*molT/Nw;
 					lnGam = lnActWat - lnwxWat;
 				}
 				else
@@ -1874,11 +1874,12 @@ long int THelgesonDH::ExcessProp( double *Zex )
 {
 	// under construction
 	long int j, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, lnActWat, lg_to_ln;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, lnActWat, lg_to_ln, zc, za, psi;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
-			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP;
-	lg_to_ln = 2.302585093;
+			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
+			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP, dPhidT, d2PhidT2, dPhidP;
+	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
@@ -1903,13 +1904,13 @@ long int THelgesonDH::ExcessProp( double *Zex )
 		{
 			Z2 = z[j]*z[j];
 			U = - (Z2*A) * sqI;
-			V = 1. + (ao*B) * sqI;
 			dUdT = - (Z2*dAdT) * sqI;
-			dVdT = (daodT*B + ao*dBdT) * sqI;
 			d2UdT2 = - (Z2*d2AdT2) * sqI;
-			d2VdT2 = (d2aodT2*B + 2.*daodT*dBdT + ao*d2BdT2) * sqI;
 			dUdP = - (Z2*dAdP) * sqI;
-			dVdP = (daodP*B + ao*dBdP) * sqI;
+			V = 1. + (ao*B) * sqI;
+			dVdT = ( daodT*B + ao*dBdT ) * sqI;
+			d2VdT2 = ( d2aodT2*B + 2.*daodT*dBdT + ao*d2BdT2 ) * sqI;
+			dVdP = ( daodP*B + ao*dBdP ) * sqI;
 			LnG[j] = ( U/V + bgam*IS ) * lg_to_ln;
 			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) + dbgdT*IS ) * lg_to_ln;
 			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
@@ -1942,20 +1943,80 @@ long int THelgesonDH::ExcessProp( double *Zex )
 				continue;
 			}
 
-			// water solvent (under construction)
+			// water solvent
 			else
 			{
-				// add derivatives of osmotic coefficient
+				// activity coefficient of water calculated
 				if ( flagH2O == 1 )
 				{
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
-					Lam = 1. + ao*B*sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.)))*(Lam-1./Lam-2*log(Lam));
+					Lam = 1. + (ao*B) * sqI;
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					lnActWat = -Phi*molT/Nw;
+					Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
+					lnActWat = - Phi*molT/Nw;
 					LnG[j] = lnActWat - lnwxWat;
+
+					// derivatives of lambda and sigma terms
+					L = 1. + (ao*B) * sqI;
+					dLdT = ( daodT*B + ao*dBdT ) * sqI;
+					d2LdT2 = ( d2aodT2*B + 2.*daodT*dBdT + ao*d2BdT2 ) * sqI;
+					dLdP = ( daodP*B + ao*dBdP ) * sqI;
+					U1 = (zc*za) * (A*L);
+					dU1dT = (zc*za) * (dAdT*L + A*dLdT);
+					d2U1dT2 = (zc*za) * ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
+					dU1dP = (zc*za) * ( dAdP*L + A*dLdP );
+					V1 = pow(ao,3.)*pow(B,3.) * IS;
+					dV1dT = ( 3.*ao*daodT*pow(B,3.) +3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
+					d2V1dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)
+								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
+								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
+					dV1dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+					U2 = (zc*za) * A;
+					dU2dT = (zc*za) * dAdT;
+					d2U2dT2 = (zc*za) * d2AdT2;
+					dU2dP = (zc*za) * dAdP;
+					V2 = pow(ao,3.)*pow(B,3.)*L * IS;
+					dV2dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdT*L
+								+ pow(ao,3.)*pow(B,3.)*dLdT ) * IS;
+					d2V2dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.)*L + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)*L
+								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT*L + 6.*pow(ao,2.)*daodT*pow(B,3.)*dLdT
+								+ 6.*pow(ao,3.)*B*pow(dBdT,2.)*L + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2*L
+								+ 6.*pow(ao,3.)*pow(B,2.)*dBdT*dLdT + pow(ao,3.)*pow(B,3.)*d2LdT2 );
+					dV2dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdP
+								+ pow(ao,3.)*pow(B,3.)*dLdP ) * IS;
+					U3 = (2.*zc*za) * ( A*log(L) );
+					dU3dT = (2.*zc*za) * ( dAdT*log(L) + A*(1./L)*dLdT );
+					d2U3dT2 = (2.*zc*za) * ( d2AdT2*log(L) + 2.*dAdT*(1./L)*dLdT
+								- A*(1./pow(L,2.))*pow(dLdT,2.) + A*(1./L)*d2LdT2 );
+					dU3dP = (2.*zc*za) * ( dAdP*log(L) + A*(1./L)*dLdP );
+					V3 = pow(ao,3.)*pow(B,3.) * IS;
+					dV3dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
+					d2V3dT2 = ( 6.*ao*pow(ao,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)
+								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
+								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
+					dV3dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+					Z = U1/V1 - U2/V2 - U3/V3;
+					dZdT = (dU1dT*V1 - U1*dV1dT)/pow(V1,2.) - (dU2dT*V2 - U2*dV2dT)/pow(V2,2.)
+								- (dU3dT*V3 - U3*dV3dT)/pow(V3,2.);
+					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)*pow(V1,2.)/pow(V1,4.) - (dU1dT*V1)*(2.*V1*dV1dT)/pow(V1,4.)
+								- (dU1dT*dV1dT + U1*d2V1dT2)*pow(V1,2.)/pow(V1,4.) + (U1*dV1dT)*(2.*V1*dV1dT)/pow(V1,4.)
+								- (d2U2dT2*V2 + dU2dT*dV2dT)*pow(V2,2.)/pow(V2,4.) + (dU2dT*V2)*(2.*V2*dV2dT)/pow(V2,4.)
+								+ (dU2dT*dV2dT + U2*d2V2dT2)*pow(V2,2.)/pow(V2,4.) - (U2*dV2dT)*(2.*V2*dV2dT)/pow(V2,4.)
+								- (d2U3dT2*V3 + dU3dT*dV3dT)*pow(V3,2.)/pow(V3,4.) + (dU3dT*V3)*(2.*V3*dV3dT)/pow(V3,4.)
+								+ (dU3dT*dV3dT + U3*d2V3dT2)*pow(V3,2.)/pow(V3,4.) - (U3*dV3dT)*(2.*V3*dV3dT)/pow(V3,4.);
+					dZdP = (dU1dP*V1 - U1*dV1dP)/pow(V1,2.) - (dU2dP*V2 - U2*dV2dP)/pow(V2,2.)
+								- (dU3dP*V3 - U3*dV3dP)/pow(V3,2.);
+
+					// derivatives of osmotic and activity coefficient
+					dPhidT = - log(10.) * (molZ/molT) * ( dZdT - dbgdT*IS/2. );
+					d2PhidT2 = - log(10.) * (molZ/molT) * ( d2ZdT2 - d2bgdT2*IS/2. );
+					dPhidP = - log(10.) * (molZ/molT) * ( dZdP - dbgdP*IS/2. );
+					dLnGdT[j] = - (molT/Nw) * dPhidT;
+					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
+					dLnGdP[j] = - (molT/Nw) * dPhidP;
 				}
+
 				else
 				{
 					LnG[j] = 0.;
@@ -3130,8 +3191,8 @@ long int TKarpovDH::MixMod()
 {
 	long int j, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
-	double Lam, SigTerm, Phi, lnActWat, lg_to_ln;
-	lg_to_ln = 2.302585093;
+	double Lam, SigTerm, Phi, psi, zc, za, lnActWat, lg_to_ln;
+	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
@@ -3201,10 +3262,10 @@ long int TKarpovDH::MixMod()
 				{
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
 					Lam = 1. + ao*B*sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.)))*(Lam-1./Lam-2*log(Lam));
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					Phi = -log(10)*molZ/molT*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					lnActWat = -Phi*molT/Nw;
+					Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (psi*Lgam)/(0.0180153*2.*IS) - bgam*IS/2. );
+					lnActWat = - Phi*molT/Nw;
 					lnGam = lnActWat - lnwxWat;
 				}
 				else
