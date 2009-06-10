@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: ipm_chemical3.cpp 690 2006-03-29 07:10:23Z gems $
 //
-// Copyright (C) 1992-2009  D.Kulik, S.Dmitrieva, K.Chudnenko, I.Karpov, T. Wagner
+// Copyright (C) 1992-2009  D.Kulik, TS.Dmitrieva, K.Chudnenko
 //
 // Implementation of chemistry-specific functions (concentrations,
 // activity coefficients, adsorption models etc.)
@@ -565,32 +565,6 @@ TMulti::GammaCalc( long int LinkMode  )
                    case SM_AQEXUQ:
                 	  SolModActCoeff( k, sMod[SPHAS_TYP] );
                 	  break;
-                /* case SM_AQDH3:
-                       DebyeHueckel3Karp( jb, je, jpb, jdb, k );
-                          break;
-                  case SM_AQDH2:
-                       DebyeHueckel2Kjel( jb, je, jpb, jdb, k );
-                          break;
-                  case SM_AQDH1:
-                       DebyeHueckel1LL( jb, je, k );
-                          break;
-                  case SM_AQDHH:
-                       DebyeHueckel3Hel( jb, je, jpb, jdb, k );
-                          break;
-                  case SM_AQDAV:
-                       Davies03temp( jb, je, jpb, k );
-                          break;
-                  case SM_AQSIT:  // SIT - under testing
-                       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );  // To switch to TSolMod class
-                       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                          break;
-                  case SM_AQPITZ:
-                	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-						   break;
-                  case SM_AQEXUQ:
-                	  SolModActCoeff( k, sMod[SPHAS_TYP] );
-                       break; */
-
                   default:
                           break;
                 }
@@ -1460,10 +1434,35 @@ void TMulti::IdealMultiSite( long int jb, long int k, double *Zid )
 }
 
 
-
-
 // Old implemenation of aqueous and solid-solution models (without TSolMod)
 // only retained until new versions are fully tested
+// to line 568
+/* case SM_AQDH3:
+       DebyeHueckel3Karp( jb, je, jpb, jdb, k );
+          break;
+  case SM_AQDH2:
+       DebyeHueckel2Kjel( jb, je, jpb, jdb, k );
+          break;
+  case SM_AQDH1:
+       DebyeHueckel1LL( jb, je, k );
+          break;
+  case SM_AQDHH:
+       DebyeHueckel3Hel( jb, je, jpb, jdb, k );
+          break;
+  case SM_AQDAV:
+       Davies03temp( jb, je, jpb, k );
+          break;
+  case SM_AQSIT:  // SIT - under testing
+       SIT_aqac_PSI( jb, je, jpb, jdb, k, ipb );  // To switch to TSolMod class
+       SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+          break;
+  case SM_AQPITZ:
+	  SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
+		   break;
+  case SM_AQEXUQ:
+	  SolModActCoeff( k, sMod[SPHAS_TYP] );
+       break; */
+
 /*
 //--------------------------------------------------------------------------------
 // Aqueous electrolyte

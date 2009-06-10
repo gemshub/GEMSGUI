@@ -125,9 +125,9 @@ outField DataCH_dynamic_fields[25] =  {
    { "epsW",  1, 0 },
    { "V0",  1, 0 },
    { "G0",  1, 0 },
-   { "H0", 1, 0 },    // Depending on iGrd flag
-   { "S0",  1, 0 },   // Depending on iGrd flag
-   { "Cp0",  1, 0 },  // Depending on iGrd flag
+   { "H0", 0, 0 },    // Depending on iGrd flag
+   { "S0",  0, 0 },   // Depending on iGrd flag
+   { "Cp0",  0, 0 },  // Depending on iGrd flag
    { "DD",  0, 0 }    // Depending on iGrd flag
 };
 
@@ -731,6 +731,15 @@ void TNode::datach_from_text_file(fstream& ff)
   if( CSD->DD )
     for( ii=0; ii< CSD->nDCs*CSD->nPp*CSD->nTp; ii++ )
        CSD->DD[ii] = 0.;
+  if( CSD->Cp0 )
+    for( ii=0; ii< CSD->nDCs*CSD->nPp*CSD->nTp; ii++ )
+       CSD->Cp0[ii] = 0.;
+  if( CSD->H0 )
+    for( ii=0; ii< CSD->nDCs*CSD->nPp*CSD->nTp; ii++ )
+       CSD->H0[ii] = 0.;
+  if( CSD->S0 )
+    for( ii=0; ii< CSD->nDCs*CSD->nPp*CSD->nTp; ii++ )
+       CSD->S0[ii] = 0.;
   CSD->Ttol = 0.1;
   CSD->Ptol = 0.1;
   if( CSD->nIC == CSD->nICb )
@@ -792,11 +801,11 @@ void TNode::datach_from_text_file(fstream& ff)
     case 16: rddar.readArray( "Pval", CSD->Pval, CSD->nPp );
               break;
     case 17: if( !CSD->roW )
-                   Error( "Error", "Array roW must be provided in DCH file!");
+                   Error( "Error", "Array roW is not allocated in DCH!");
              rddar.readArray( "roW", CSD->roW, CSD->nPp*CSD->nTp );
               break;
     case 18: if( !CSD->epsW )
-                   Error( "Error", "Array epsW must be provided in DCH file!");
+                   Error( "Error", "Array epsW is not allocated in DCH!");
              rddar.readArray( "epsW", CSD->epsW,  CSD->nPp*CSD->nTp );
             break;
     case 19: rddar.readArray( "V0", CSD->V0,  CSD->nDC*CSD->nPp*CSD->nTp );
@@ -804,19 +813,19 @@ void TNode::datach_from_text_file(fstream& ff)
     case 20: rddar.readArray( "G0", CSD->G0, CSD->nDC*CSD->nPp*CSD->nTp );
               break;
     case 21: if( !CSD->H0 )
-                   Error( "Error", "Array HO must be provided in DCH file!");
+                   Error( "Error", "Array HO is not allocated in DCH!");
             rddar.readArray( "H0", CSD->H0,  CSD->nDC*CSD->nPp*CSD->nTp);
             break;
     case 22: if( !CSD->S0 )
-                   Error( "Error", "Array S0 must be provided in DCH file!");
+                   Error( "Error", "Array S0 is not allocated in DCH!");
             rddar.readArray( "S0", CSD->S0,CSD->nDC*CSD->nPp*CSD->nTp);
             break;
     case 23: if( !CSD->Cp0 )
-                   Error( "Error", "Array CpO must be provided in DCH file!");
+                   Error( "Error", "Array CpO is not allocated in DCH!");
             rddar.readArray( "Cp0", CSD->Cp0,CSD->nDC*CSD->nPp*CSD->nTp );
             break;
     case 24: if( !CSD->DD )
-                    Error( "Error", "Array DD must be provided in DCH file!");
+                    Error( "Error", "Array DD is not allocated in DCH!");
             rddar.readArray( "DD", CSD->DD, CSD->nDCs*CSD->nPp*CSD->nTp);
            break;
   }
@@ -1251,7 +1260,7 @@ DATABR * TNode::databr_free( DATABR *CNode_ )
     CNode_->xPA = 0;
   }
 
- delete[] CNode_;
+ delete CNode_;
  return NULL;
 }
 
