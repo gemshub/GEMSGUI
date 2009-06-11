@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id: ipm_chemical3.cpp 690 2006-03-29 07:10:23Z gems $
 //
-// Copyright (C) 1992-2009  D.Kulik, TS.Dmitrieva, K.Chudnenko
+// Copyright (C) 1992-2009  D.Kulik, T.Wagner, S.Dmitrieva, K.Chudnenko
 //
 // Implementation of chemistry-specific functions (concentrations,
 // activity coefficients, adsorption models etc.)
@@ -1015,26 +1015,31 @@ TMulti::SolModParPT( long int k, char ModCode )
     // Extended constructor to connect to params, coeffs, and mole fractions
     switch( ModCode )
     {
+		// solid and liquid solutions
         case SM_VANLAAR:
         case SM_REGULAR:
         case SM_GUGGENM:
         case SM_NRTLLIQ:
         case SM_WILSLIQ:
 
+        // old solid solutions
         case SM_MARGT:
         case SM_MARGB:
         case SM_REDKIS:
 
+        // aqueous DH models
         case SM_AQDH3:
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
         case SM_AQDAV:
 
+        // aqueous models
         case SM_AQPITZ:
         case SM_AQSIT:
         case SM_AQEXUQ:
 
+        // fluid (gas) models
         case SM_PRFLUID:
         case SM_CGFLUID:
         case SM_SRFLUID:
