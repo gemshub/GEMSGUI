@@ -1519,7 +1519,7 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 
 	for (j=0; j<NComp; j++) // loop over species
 	{
-		if (j ==w)
+		if (j == w)
 		{
 			gCI += 0.;
 			gRI += 0.;
@@ -1550,12 +1550,14 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 		TPX = 0.0;
 		dtpx = 0.0;
 		DTPX = 0.0;
+
 		for (i=0; i<NComp; i++)
 		{
 			N += Theta[i]*Psi[i][j];
 			tpx += Theta[i]*dPsi[i][j];
 			dtpx += Theta[i]*d2Psi[i][j];
 		}
+
 		TPI = 1./N;
 		TPX = tpx*TPI;
 		DTPX = - TPX*TPX + dtpx*TPI;
@@ -1962,16 +1964,19 @@ long int THelgesonDH::ExcessProp( double *Zex )
 					dLdT = ( daodT*B + ao*dBdT ) * sqI;
 					d2LdT2 = ( d2aodT2*B + 2.*daodT*dBdT + ao*d2BdT2 ) * sqI;
 					dLdP = ( daodP*B + ao*dBdP ) * sqI;
+
 					U1 = (zc*za) * (A*L);
 					dU1dT = (zc*za) * (dAdT*L + A*dLdT);
 					d2U1dT2 = (zc*za) * ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
 					dU1dP = (zc*za) * ( dAdP*L + A*dLdP );
 					V1 = pow(ao,3.)*pow(B,3.) * IS;
-					dV1dT = ( 3.*ao*daodT*pow(B,3.) +3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
+					dV1dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;  // corrected, 15.06.2009 (TW)
+
 					d2V1dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)
 								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
 								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
 					dV1dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+
 					U2 = (zc*za) * A;
 					dU2dT = (zc*za) * dAdT;
 					d2U2dT2 = (zc*za) * d2AdT2;
@@ -1983,8 +1988,9 @@ long int THelgesonDH::ExcessProp( double *Zex )
 								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT*L + 6.*pow(ao,2.)*daodT*pow(B,3.)*dLdT
 								+ 6.*pow(ao,3.)*B*pow(dBdT,2.)*L + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2*L
 								+ 6.*pow(ao,3.)*pow(B,2.)*dBdT*dLdT + pow(ao,3.)*pow(B,3.)*d2LdT2 ) * IS;
-					dV2dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdP
+					dV2dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdP*L  // corrected, 15.06.2009 (TW)
 								+ pow(ao,3.)*pow(B,3.)*dLdP ) * IS;
+
 					U3 = (2.*zc*za) * ( A*log(L) );
 					dU3dT = (2.*zc*za) * ( dAdT*log(L) + A*(1./L)*dLdT );
 					d2U3dT2 = (2.*zc*za) * ( d2AdT2*log(L) + 2.*dAdT*(1./L)*dLdT
@@ -1992,10 +1998,11 @@ long int THelgesonDH::ExcessProp( double *Zex )
 					dU3dP = (2.*zc*za) * ( dAdP*log(L) + A*(1./L)*dLdP );
 					V3 = pow(ao,3.)*pow(B,3.) * IS;
 					dV3dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
-					d2V3dT2 = ( 6.*ao*pow(ao,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)
+					d2V3dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)  // corrected, 15.06.2009 (TW)
 								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
 								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
 					dV3dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+
 					Z = U1/V1 - U2/V2 - U3/V3;
 					dZdT = (dU1dT*V1 - U1*dV1dT)/pow(V1,2.) - (dU2dT*V2 - U2*dV2dT)/pow(V2,2.)
 								- (dU3dT*V3 - U3*dV3dT)/pow(V3,2.);
