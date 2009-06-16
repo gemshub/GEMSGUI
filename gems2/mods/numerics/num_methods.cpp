@@ -110,7 +110,7 @@ double LagranInterp(float *y, float *x, float *d, float yoi,
   xx = new double[M];
   for(int ii=0; ii<M; ii++ )
     xx[ii] = (double)x[ii];
- 
+
   res = LagranInterp( yy, xx, dd, (double)yoi, (double)xoi, M, N, pp );
 
  delete[] dd;
@@ -130,13 +130,19 @@ double LagranInterp(float *y, float *x, double *d, float yoi,
   xx = new double[M];
   for(int ii=0; ii<M; ii++ )
       xx[ii] = (double)x[ii];
-   
+
   res = LagranInterp( yy, xx, d, (double)yoi, (double)xoi, M, N, pp );
 
  delete[] yy;
  delete[] xx;
  return res;
 }
+
+double Deriv1Quotient(double u, double v, double du, double dv)
+{
+
+}
+
 //-----------------------End of num_methods.cpp--------------------------
 
 

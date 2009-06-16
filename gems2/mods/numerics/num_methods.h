@@ -25,6 +25,9 @@ double LagranInterp(float *y, float *x, float *d, float yoi,
                     float xoi, int M, int N, int pp );
 double LagranInterp(double *y, double *x, double *d, double yoi,
                     double xoi, long int M, long int N, long int pp );
+
+double Deriv1Quotient(double u, double v, double du, double dv);
+
 #endif   // _num_methods_h_
 
 //-----------------------End of num_methods.h--------------------------

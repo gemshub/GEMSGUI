@@ -21,12 +21,9 @@
 //-------------------------------------------------------------------
 //
 
-
 #include <math.h>
 #include "m_param.h"
 #include "s_fgl.h"
-
-
 
 //--------------------------------------------------------------------------------
 // Calculation of surface charge densities on multi-surface sorption phase
