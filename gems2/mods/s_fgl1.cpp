@@ -1582,10 +1582,10 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 	CPex = ( 2.*Tk*dg + pow(Tk,2.)*d2g ) * R_CONST;
 	Sex = (Hex-Gex)/Tk;
 	Vex = dgDHdP;
-
-	// assigments (excess properties)
 	Aex = Gex - Vex*Pbar;
 	Uex = Hex - Vex*Pbar;
+
+	// assigments (excess properties)
 	Zex[0] = Gex;
 	Zex[1] = Hex;
 	Zex[2] = Sex;
@@ -1874,14 +1874,16 @@ long int THelgesonDH::MixMod()
 // calculates excess properties
 long int THelgesonDH::ExcessProp( double *Zex )
 {
-	// under construction
+	// under testing
 	long int j, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, lnActWat, lg_to_ln, zc, za, psi;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, lnActWat, lg_to_ln, zc, za,
+			psi, g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
 			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
 			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP, dPhidT, d2PhidT2, dPhidP;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
+	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
@@ -2033,7 +2035,32 @@ long int THelgesonDH::ExcessProp( double *Zex )
 				}
 			}
 		}
+
+		g += x[j]*LnG[j];
+		dgt += x[j]*dLnGdT[j];
+		d2gt += x[j]*d2LnGdT2[j];
+		dgp += x[j]*dLnGdP[j];
+
 	} // j
+
+	// increment thermodynamic properties
+	Gex = (R_CONST*Tk) * g;
+	Hex = - R_CONST*pow(Tk,2.) * dgt;
+	// Sex = - R_CONST * ( g + Tk*dgt );
+	Sex = (Hex-Gex)/Tk;
+	CPex = - R_CONST * ( 2.*Tk*dgt + pow(Tk,2.)*d2gt );
+	Vex = (R_CONST*Tk) * dgp;
+	Aex = Gex - Vex*Pbar;
+	Uex = Hex - Vex*Pbar;
+
+	// assigments (excess properties)
+	Zex[0] = Gex;
+	Zex[1] = Hex;
+	Zex[2] = Sex;
+	Zex[3] = CPex;
+	Zex[4] = Vex;
+	Zex[5] = Aex;
+	Zex[6] = Uex;
 
 	return 0;
 }
