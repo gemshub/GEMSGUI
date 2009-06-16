@@ -66,6 +66,7 @@ class TSolMod
         double Gex, Hex, Sex, CPex, Vex, Aex, Uex;   // molar excess properties
         double Gid, Hid, Sid, CPid, Vid, Aid, Uid;   // molar ideal mixing properties
         double Gdq, Hdq, Sdq, CPdq, Vdq, Adq, Udq;   // molar Darken quadratic terms
+        double Grs, Hrs, Srs, CPrs, Vrs, Ars, Urs;   // molar residual functions (fluids)
         double *lnGamma;   // Pointer to ln activity coefficients of end members
                            // (memory must be provided from the calling program)
 
@@ -255,7 +256,6 @@ class TCGFcalc: public TSolMod
 		double *FugCoefs;
 		double *EoSparam;
 		double *EoSparam1;
-		double *DepPh;     // bulk phase departure functions
 
 		void alloc_internal();
 		void free_internal();
@@ -392,7 +392,6 @@ class TPRSVcalc: public TSolMod
 		double (*Pureparm)[4];  // parameters a, b, da and d2a for cubic EoS
 		double (*Fugpure)[6];   // fugacity parameters of pure gas species
 		double (*Fugci)[4];     // fugacity parameters of species in the mixture
-		double *DepPh;  // bulk phase departure functions
 
 		double **KK;     // binary interaction parameter
 		double **dKK;    // derivative of interaction parameter
@@ -473,7 +472,6 @@ class TSRKcalc: public TSolMod
 		double (*Pureparm)[4];  // Parameters a, b, sqrAl, ac, dAldT for cubic EoS
 		double (*Fugpure)[6];   // Fugacity parameters of pure gas species
 		double (*Fugci)[4];     // Fugacity parameters of species in the mixture
-		double *DepPh;  // bulk phase departure functions
 
 		double **KK;    // binary interaction parameter
 		double **dKK;   // derivative of interaction parameter

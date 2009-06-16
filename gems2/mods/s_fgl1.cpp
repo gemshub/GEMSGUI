@@ -59,9 +59,8 @@ TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxO
 long int TSIT::MixMod()
 {
 	long int j, index1, index2, ip;
-    double T, A, B, sqI, lgI, Z2, lgGam, SumSIT;
-    double RHO, EPS;
-    // double nPolicy;
+    double T, A, B, sqI, lgI, Z2, lgGam, SumSIT, RHO, EPS;
+
     RHO = RhoW[0];
     EPS = EpsW[0];
 
@@ -133,9 +132,10 @@ long int TSIT::ExcessProp( double *Zex )
 {
 	// add excess property calculations
 
-	// assigments (excess properties)
 	Aex = Gex - Vex*Pbar;
 	Uex = Hex - Vex*Pbar;
+
+	// assigments (excess properties)
 	Zex[0] = Gex;
 	Zex[1] = Hex;
 	Zex[2] = Sex;
@@ -162,11 +162,11 @@ long int TSIT::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -240,13 +240,13 @@ long int TPitzer::Pitzer_calc_Gamma( )
 {
 	long int M, N, X;
 
-	//------------ Computing A- Factor
+	// Computing A- Factor
 	  Aphi = A_Factor( Tk );
-	//----------- Ionic Strength
+	// Ionic Strength
 	  Is = IonicStr( I );
-	//----------- ------- F-Factor_______ Pitzer-Toughreact Report 2006 equation (A6)
+	// F-Factor, Pitzer-Toughreact Report 2006 equation (A6)
 	  Ffac = F_Factor( Aphi, I, Is );
-	//----------- Z- Term________________ Pitzer-Toughreact Report 2006 equation (A8)
+	// Z- Term, Pitzer-Toughreact Report 2006 equation (A8)
 	  Zfac = Z_Term();
 
 	lnGamma[Ns] = lnGammaH2O();
@@ -371,7 +371,7 @@ void TPitzer::alloc_internal()
 	aTheta1 = new double[Na*Na];
     aPsi = new double[Nc*Nc*Na];
 	aPsi1 = new double[Na*Na*Nc];
-//	Cleaning allocated arrays
+
 	for( i=0; i < Nc*Na; i++ )
 	{
 	   abet0[i] = 0.0;
@@ -1128,9 +1128,10 @@ long int TPitzer::ExcessProp( double *Zex )
 {
 	// add excess property calculations
 
-	// assigments (excess properties)
 	Aex = Gex - Vex*Pbar;
 	Uex = Hex - Vex*Pbar;
+
+	// assigments (excess properties)
 	Zex[0] = Gex;
 	Zex[1] = Hex;
 	Zex[2] = Sex;
@@ -1157,11 +1158,11 @@ long int TPitzer::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -1234,7 +1235,6 @@ void TEUNIQUAC::alloc_internal()
 
 void TEUNIQUAC::free_internal()
 {
-  	// cleaning memory
 	for (long int j=0; j<NComp; j++)
 	{
 		delete[]U[j];
@@ -1261,8 +1261,7 @@ void TEUNIQUAC::free_internal()
 long int TEUNIQUAC::PTparam()
 {
 	long int j, i, ip, i1, i2;
-	double u0, u1, u, du, d2u;
-	double psi, dpsi, d2psi, v, dv;
+	double u0, u1, u, du, d2u, psi, dpsi, d2psi, v, dv;
 
     if ( NPcoef < 2 || NPar < 1 || NP_DC < 2 )
        return 1;
@@ -1331,10 +1330,7 @@ long int TEUNIQUAC::PTparam()
 long int TEUNIQUAC::MixMod()
 {
 	long int j, i, l, k, w;
-	double Mw, Xw, IS, b, c;
-	double A, RR, QQ, K, L, M;
-	double gamDH, gamC, gamR, lnGam, Gam;
-	double rho, eps;
+	double Mw, Xw, IS, b, c, A, RR, QQ, K, L, M, gamDH, gamC, gamR, lnGam, Gam, rho, eps;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
@@ -1453,11 +1449,10 @@ long int TEUNIQUAC::MixMod()
 long int TEUNIQUAC::ExcessProp( double *Zex )
 {
 	long int j, i, w;
-	double Mw, Xw, IS, b, c;
-	double A, dAdT, dAdP, d2AdT2;
-	double phiti, phthi, RR, QQ, N, TPI, tpx, TPX, dtpx, DTPX, CON;
-	double gDH, gC, gR, hR, cpR, gCI, gRI, gCX, gRX;   // DH, C and R contributions to properties
-	double dg, d2g, dgRI, d2gRI, dgRX, d2gRX, dgDH, d2gDH, dgDHdP;
+	double Mw, Xw, IS, b, c, A, dAdT, dAdP, d2AdT2, phiti, phthi, RR, QQ,
+			N, TPI, tpx, TPX, dtpx, DTPX, CON;
+	double gDH, gC, gR, hR, cpR, gCI, gRI, gCX, gRX, dg, d2g, dgRI, d2gRI,
+			dgRX, d2gRX, dgDH, d2gDH, dgDHdP;
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
 	// get index of water (assumes water is last species in phase)
@@ -1612,11 +1607,11 @@ long int TEUNIQUAC::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -1782,8 +1777,8 @@ long int THelgesonDH::PTparam()
 long int THelgesonDH::MixMod()
 {
 	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
-	double Lam, SigTerm, Phi, zc, za, psi, lnActWat, lg_to_ln;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm,
+			Phi, zc, za, psi, lnActWat, lg_to_ln;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -2080,11 +2075,11 @@ long int THelgesonDH::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -2135,8 +2130,8 @@ long int THelgesonDH::BgammaTP()
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
 	// units are cal, kg, K, mol, bar
-	double ni, nc, na, zc, za, rc, ra, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, bh;
-	double rec, rea, omgpt, domdt, d2omdt2, domdp, nbg, nbv, nbj, nbh;
+	double ni, nc, na, zc, za, rc, ra, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, bh, rec, rea,
+			omgpt, domdt, d2omdt2, domdp, nbg, nbv, nbj, nbh;
 	double eps, eta, xborn, yborn, qborn, X1, X2;
 
 	// set parameters
@@ -2256,8 +2251,7 @@ long int THelgesonDH::IonsizeTP()
 // wrapper for g-function
 long int THelgesonDH::Gfunction()
 {
-	double T, P, D, beta, alpha, daldT;
-	double g, dgdP, dgdT, d2gdT2;
+	double T, P, D, beta, alpha, daldT, g, dgdP, dgdT, d2gdT2;
 	double TMAX = 1000., PMAX = 5000., TOL = 1.0e-4;
 
 	// convert parameters
@@ -2294,8 +2288,8 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 		double alpha, double daldT, double &g, double &dgdP, double &dgdT, double &d2gdT2 )
 {
 	double a, b, dgdD, /*dgdD2,*/ dadT, dadTT, dbdT, dbdTT, dDdT, dDdP,
-		dDdTT, Db, dDbdT, dDbdTT, ft, dftdT, dftdTT, fp, dfpdP,
-		f, dfdP, dfdT, d2fdT2, tempy;
+			dDdTT, Db, dDbdT, dDbdTT, ft, dftdT, dftdTT, fp, dfpdP,
+			f, dfdP, dfdT, d2fdT2, tempy;
 	double C[6]  = {-0.2037662e+01,  0.5747000e-02, -0.6557892e-05,
 			0.6107361e+01, -0.1074377e-01,  0.1268348e-04 };
 	double cC[3] = { 0.3666666e+02, -0.1504956e-09,  0.5017997e-13 };
@@ -2449,8 +2443,7 @@ long int TDaviesDH::PTparam()
 long int TDaviesDH::MixMod()
 {
 	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
-	double lg_to_ln;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
 	lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -2553,11 +2546,11 @@ long int TDaviesDH::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -2682,8 +2675,7 @@ long int TLimitingLawDH::PTparam()
 long int TLimitingLawDH::MixMod()
 {
 	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
-	double lg_to_ln;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
 	lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -2787,11 +2779,11 @@ long int TLimitingLawDH::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -2928,8 +2920,7 @@ long int TTwoTermDH::PTparam()
 long int TTwoTermDH::MixMod()
 {
 	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
-	double lg_to_ln;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
 	lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -3036,11 +3027,11 @@ long int TTwoTermDH::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -3224,8 +3215,8 @@ long int TKarpovDH::PTparam()
 long int TKarpovDH::MixMod()
 {
 	long int j, w;
-	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW;
-	double Lam, SigTerm, Phi, psi, zc, za, lnActWat, lg_to_ln;
+	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm,
+			Phi, psi, zc, za, lnActWat, lg_to_ln;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
@@ -3336,11 +3327,11 @@ long int TKarpovDH::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -3396,8 +3387,8 @@ long int TKarpovDH::BgammaTP()
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
 	// units are cal, kg, K, mol, bar
-	double ni, nc, na, zc, za, rc, ra, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, bh;
-	double rec, rea, omgpt, domdt, d2omdt2, domdp, nbg, nbv, nbj, nbh;
+	double ni, nc, na, zc, za, rc, ra, a1, a2, a3, a4, a5, c1, c2, omg, bg, bs, bh, rec, rea,
+			omgpt, domdt, d2omdt2, domdp, nbg, nbv, nbj, nbh;
 	double eps, eta, xborn, yborn, qborn, X1, X2;
 
 	// set parameters
@@ -3521,8 +3512,7 @@ long int TKarpovDH::IonsizeTP()
 // wrapper for g-function
 long int TKarpovDH::Gfunction()
 {
-	double T, P, D, beta, alpha, daldT;
-	double g, dgdP, dgdT, d2gdT2;
+	double T, P, D, beta, alpha, daldT, g, dgdP, dgdT, d2gdT2;
 	double TMAX = 1000., PMAX = 5000., TOL = 1.0e-4;
 
 	// convert parameters

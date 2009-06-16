@@ -57,6 +57,7 @@ TSolMod::TSolMod( long int NSpecies, long int NParams, long int NPcoefs, long in
     Gex = 0.0; Hex = 0.0; Sex = 0.0; CPex = 0.0; Vex = 0.0; Aex = 0.0; Uex = 0.0;
     Gid = 0.0; Hid = 0.0; Sid = 0.0; CPid = 0.0; Vid = 0.0; Aid = 0.0; Uid = 0.0;
     Gdq = 0.0; Hdq = 0.0; Sdq = 0.0; CPdq = 0.0; Vdq = 0.0; Adq = 0.0; Udq = 0.0;
+    Grs = 0.0; Hrs = 0.0; Srs = 0.0; CPrs = 0.0; Vrs = 0.0; Ars = 0.0; Urs = 0.0;
 }
 
 
@@ -175,8 +176,7 @@ long int TVanLaar::PTparam()
 long int TVanLaar::MixMod()
 {
 	long int ip, j, i1, i2;
-	double dj, dk;
-	double sumPhi; // Sum of Phi terms
+	double dj, dk, sumPhi;
 
 	if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 		return 1;
@@ -224,9 +224,7 @@ long int TVanLaar::MixMod()
 // calculates bulk phase excess properties
 long int TVanLaar::ExcessProp( double *Zex )
 {
-	long int ip, j, i1, i2;
-	double sumPhi; // Sum of Phi terms
-	double g, v, s, u;
+	long int ip, j, i1, i2, sumPhi, g, v, s, u;
 
 	if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 		return 1;
@@ -264,10 +262,10 @@ long int TVanLaar::ExcessProp( double *Zex )
 	 Vex = v;
 	 Uex = u;
 	 Hex = Uex + Vex*Pbar;
-
-	 // assignments (excess properties)
 	 Aex = Gex - Vex*Pbar;
 	 Uex = Hex - Vex*Pbar;
+
+	 // assignments (excess properties)
 	 Zex[0] = Gex;
 	 Zex[1] = Hex;
 	 Zex[2] = Sex;
@@ -294,11 +292,11 @@ long int TVanLaar::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -443,10 +441,10 @@ long int TRegular::ExcessProp( double *Zex )
 	Vex = v;
 	Uex = u;
 	Hex = Uex + Vex*Pbar;
-
-	// assignments (excess properties)
 	Aex = Gex - Vex*Pbar;
 	Uex = Hex - Vex*Pbar;
+
+	// assignments (excess properties)
 	Zex[0] = Gex;
 	Zex[1] = Hex;
 	Zex[2] = Sex;
@@ -473,11 +471,11 @@ long int TRegular::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -583,8 +581,7 @@ long int TRedlichKister::PTparam()
 // Calculates activity coefficients
 long int TRedlichKister::MixMod()
 {
-	long int ip, j;
-	long int i1, i2, L, I, J;
+	long int ip, j, i1, i2, L, I, J;
 	double L0, L1, L2, L3;
 
 	if ( NPcoef < 16 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
@@ -652,10 +649,8 @@ long int TRedlichKister::MixMod()
 // calculates bulk phase excess properties
 long int TRedlichKister::ExcessProp( double *Zex )
 {
-	long int ip;
-	long int i1, i2;
-	double LU, LS, LCP, LV, LPT;
-	double g, v, s, cp, u;
+	long int ip, i1, i2;
+	double LU, LS, LCP, LV, LPT, g, v, s, cp, u;
 
 	if ( NPcoef < 16 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 		return 1;
@@ -703,10 +698,10 @@ long int TRedlichKister::ExcessProp( double *Zex )
 	Vex = v;
 	Uex = u;
 	Hex = Uex + Vex*Pbar;
-
-	// assignments (excess properties)
 	Aex = Gex - Vex*Pbar;
 	Uex = Hex - Vex*Pbar;
+
+	// assignments (excess properties)
 	Zex[0] = Gex;
 	Zex[1] = Hex;
 	Zex[2] = Sex;
@@ -734,11 +729,11 @@ long int TRedlichKister::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -838,8 +833,7 @@ void TNRTL::free_internal()
 long int TNRTL::PTparam()
 {
 	long int ip, i, j, i1, i2;
-	double A, B, C, D, E, F;
-	double tau, dtau, d2tau, alp, dalp, d2alp;
+	double A, B, C, D, E, F, tau, dtau, d2tau, alp, dalp, d2alp;
 
     if ( NPcoef < 6 || NPar < 1 )
        return 1;
@@ -907,8 +901,7 @@ long int TNRTL::PTparam()
 long int TNRTL::MixMod()
 {
 	long int  j, i, k;
-	double K, L, M, N, O;
-	double lnGam;
+	double K, L, M, N, O, lnGam;
 
 	if ( NPcoef < 6 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
@@ -944,8 +937,7 @@ long int TNRTL::MixMod()
 long int TNRTL::ExcessProp( double *Zex )
 {
 	long int  j, i;
-	double U, dU, V, dV, d2U, d2V;
-	double g, dg, d2g;
+	double U, dU, V, dV, d2U, d2V, g, dg, d2g;
 
 	if ( NPcoef < 6 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
@@ -983,10 +975,10 @@ long int TNRTL::ExcessProp( double *Zex )
 	Hex = -R_CONST*pow(Tk,2.)*dg;
 	Sex = (Hex-Gex)/Tk;
 	CPex = -R_CONST * ( 2.*Tk*dg + pow(Tk,2.)*d2g );
-
-	// assignments (excess properties)
 	Aex = Gex - Vex*Pbar;
 	Uex = Hex - Vex*Pbar;
+
+	// assignments (excess properties)
 	Zex[0] = Gex;
 	Zex[1] = Hex;
 	Zex[2] = Sex;
@@ -1013,11 +1005,11 @@ long int TNRTL::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -1093,8 +1085,7 @@ void TWilson::free_internal()
 long int TWilson::PTparam()
 {
 	long int ip, i, j, i1, i2;
-	double A, B, C, D;
-	double lam, dlam, d2lam;
+	double A, B, C, D, lam, dlam, d2lam;
 
     if ( NPcoef < 4 || NPar < 1 )
            return 1;
@@ -1134,8 +1125,7 @@ long int TWilson::PTparam()
 long int TWilson::MixMod()
 {
 	long int  j, i, k;
-	double K, L, M;
-	double lnGam;
+	double K, L, M, lnGam;
 
 	if ( NPcoef < 4 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
@@ -1168,8 +1158,7 @@ long int TWilson::MixMod()
 long int TWilson::ExcessProp( double *Zex )
 {
 	long int  j, i;
-	double U, dU, d2U;
-	double g, dg, d2g;
+	double U, dU, d2U, g, dg, d2g;
 
 	if ( NPcoef < 4 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 	        return 1;
@@ -1230,11 +1219,11 @@ long int TWilson::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -1385,11 +1374,11 @@ long int TMargules::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -1524,11 +1513,11 @@ long int TSubregular::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
@@ -1653,11 +1642,11 @@ long int TGuggenheim::IdealProp( double *Zid )
 	CPid = 0.0;
 	Vid = 0.0;
 	Sid = (-1.)*R_CONST*si;
-
-	// assignments (ideal mixing properties)
 	Gid = Hid - Sid*Tk;
 	Aid = Gid - Vid*Pbar;
 	Uid = Hid - Vid*Pbar;
+
+	// assignments (ideal mixing properties)
 	Zid[0] = Gid;
 	Zid[1] = Hid;
 	Zid[2] = Sid;
