@@ -2526,7 +2526,100 @@ long int TDaviesDH::MixMod()
 // calculates excess properties
 long int TDaviesDH::ExcessProp( double *Zex )
 {
-	// to be implemented
+	// under testing
+	long int j, w;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, lg_to_ln, g, dgt, d2gt, dgp;
+	lg_to_ln = 2.302585093;
+	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molalities (molT and molZ)
+	IonicStrength();
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+
+	// loop over species
+	for( j=0; j<NComp; j++ )
+	{
+		// charged species
+		if ( z[j] )
+		{
+			Z2 = z[j]*z[j];
+			LnG[j] = - ( A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS ) * lg_to_ln;
+			dLnGdT[j] = - ( dAdT * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS ) * lg_to_ln;
+			d2LnGdT2[j] = - ( d2AdT2 * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS ) * lg_to_ln;
+			dLnGdP[j] = - ( dAdP * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS ) * lg_to_ln;
+		}
+
+		// neutral species and water solvent
+		else
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				LnG[j] = 0.;
+				dLnGdT[j] = 0.;
+				d2LnGdT2[j] = 0.;
+				dLnGdP[j] = 0.;
+			}
+
+			// water solvent
+			else
+			{
+				if ( flagH2O == 1 )
+				{
+					// add water activity coefficient equations here
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+
+				else
+				{
+					// water activity coefficient unity
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+			}
+		}
+
+		g += x[j]*LnG[j];
+		dgt += x[j]*dLnGdT[j];
+		d2gt += x[j]*d2LnGdT2[j];
+		dgp += x[j]*dLnGdP[j];
+
+	} // j
+
+	// increment thermodynamic properties
+	Gex = (R_CONST*Tk) * g;
+	Hex = - R_CONST*pow(Tk,2.) * dgt;
+	// Sex = - R_CONST * ( g + Tk*dgt );
+	Sex = (Hex-Gex)/Tk;
+	CPex = - R_CONST * ( 2.*Tk*dgt + pow(Tk,2.)*d2gt );
+	Vex = (R_CONST*Tk) * dgp;
+	Aex = Gex - Vex*Pbar;
+	Uex = Hex - Vex*Pbar;
+
+	// assigments (excess properties)
+	Zex[0] = Gex;
+	Zex[1] = Hex;
+	Zex[2] = Sex;
+	Zex[3] = CPex;
+	Zex[4] = Vex;
+	Zex[5] = Aex;
+	Zex[6] = Uex;
 
 	return 0;
 }
@@ -2759,7 +2852,100 @@ long int TLimitingLawDH::MixMod()
 // calculates excess properties
 long int TLimitingLawDH::ExcessProp( double *Zex )
 {
-	// to be implemented
+	// under testing
+	long int j, w;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, lg_to_ln, g, dgt, d2gt, dgp;
+	lg_to_ln = 2.302585093;
+	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molalities (molT and molZ)
+	IonicStrength();
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+
+	// loop over species
+	for( j=0; j<NComp; j++ )
+	{
+		// charged species
+		if ( z[j] )
+		{
+			Z2 = z[j]*z[j];
+			LnG[j] = - ( A * Z2 * sqI ) * lg_to_ln;
+			dLnGdT[j] = - ( dAdT * Z2 * sqI ) * lg_to_ln;
+			d2LnGdT2[j] = - ( d2AdT2 * Z2 * sqI ) * lg_to_ln;
+			dLnGdP[j] = - ( dAdP * Z2 * sqI ) * lg_to_ln;
+		}
+
+		// neutral species and water solvent
+		else
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				LnG[j] = 0.;
+				dLnGdT[j] = 0.;
+				d2LnGdT2[j] = 0.;
+				dLnGdP[j] = 0.;
+			}
+
+			// water solvent
+			else
+			{
+				if ( flagH2O == 1 )
+				{
+					// add water activity coefficient equations here
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+
+				else
+				{
+					// water activity coefficient unity
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+			}
+		}
+
+		g += x[j]*LnG[j];
+		dgt += x[j]*dLnGdT[j];
+		d2gt += x[j]*d2LnGdT2[j];
+		dgp += x[j]*dLnGdP[j];
+
+	} // j
+
+	// increment thermodynamic properties
+	Gex = (R_CONST*Tk) * g;
+	Hex = - R_CONST*pow(Tk,2.) * dgt;
+	// Sex = - R_CONST * ( g + Tk*dgt );
+	Sex = (Hex-Gex)/Tk;
+	CPex = - R_CONST * ( 2.*Tk*dgt + pow(Tk,2.)*d2gt );
+	Vex = (R_CONST*Tk) * dgp;
+	Aex = Gex - Vex*Pbar;
+	Uex = Hex - Vex*Pbar;
+
+	// assigments (excess properties)
+	Zex[0] = Gex;
+	Zex[1] = Hex;
+	Zex[2] = Sex;
+	Zex[3] = CPex;
+	Zex[4] = Vex;
+	Zex[5] = Aex;
+	Zex[6] = Uex;
 
 	return 0;
 }
