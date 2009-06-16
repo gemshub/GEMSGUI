@@ -43,21 +43,19 @@ class TSolMod
         long int NPcoef;   	// Number of coeffs per parameter (columns in the aIPc table)
         long int MaxOrd;   	// max. parameter order (or number of columns in aIPx)
         long int NP_DC;    	// Number of coeffs per one DC in the phase (columns in aDCc)
-        long int NPTP_DC;    	// Number of properties per one DC at T,P of interest (columns in aDC)
+        long int NPTP_DC;   // Number of properties per one DC at T,P of interest (columns in aDC)
         long int *aIPx;  	// Pointer to list of indexes of non-zero interaction parameters
 
         double R_CONST; // R constant
-        // double RhoW;	// Density of liquid water, added 04.06.2008 (TW)
-        // double EpsW;	// Dielectric constant of liquid water
         double Tk;    	// Temperature, K
         double Pbar;  	// Pressure, bar
 
-        double *aIPc;  	// Table of interaction parameter coefficients
+        double *aIPc;  // Table of interaction parameter coefficients
         double *aIP;   // Vector of interaction parameters corrected to T,P of interest
-        double *aDCc;  	// End-member properties coefficients
-        double **aDC;  // Table of corrected end member properties at T,P of interest (
-        double *x;    	// Pointer to mole fractions of end members (provided)
-        double *phVOL;    // phase volumes, cm3/mol                   [0:FI-1]
+        double *aDCc;  // End-member properties coefficients
+        double **aDC;  // Table of corrected end member properties at T,P of interest
+        double *x;     // Pointer to mole fractions of end members (provided)
+        double *phVOL; // phase volumes, cm3/mol (now obsolete)
 
         // Results
         double Gam;   	// work cell for activity coefficient of end member
@@ -99,31 +97,11 @@ class TSolMod
 
 		virtual long int ExcessProp( double *Zex )
 		{
-			Aex = Gex - Vex*Pbar;
-			Uex = Hex - Vex*Pbar;
-			Zex[0] = Gex;
-			Zex[1] = Hex;
-			Zex[2] = Sex;
-			Zex[3] = CPex;
-			Zex[4] = Vex;
-			Zex[5] = Aex;
-			Zex[6] = Uex;
 			return 0;
 		};
 
 		virtual long int IdealProp( double *Zid )
 		{
-			Gid = Hid - Sid*Tk;
-			Aid = Gid - Vid*Pbar;
-			Uid = Hid - Vid*Pbar;
-			Zid[0] = Gid;
-			Zid[1] = Hid;
-			Zid[2] = Sid;
-			Zid[3] = CPid;
-			Zid[4] = Vid;
-			Zid[5] = Aid;
-			Zid[6] = Uid;
-
 			return 0;
 		};
 
@@ -758,19 +736,20 @@ class TWilson: public TSolMod
 class TSIT: public TSolMod
 {
 	private:
-		double *aZ;    // Vector of species charges (for aqueous models)
-		double *aM;    // Vector of species molality (for aqueous models)
+
+		// data objects copied from MULTI
+		double *aZ;    // vector of species charges (for aqueous models)
+		double *aM;    // vector of species molalities (for aqueous models)
 		double *RhoW;  // water density properties
 		double *EpsW;  // water dielectrical properties
-		double I;	// Ionic strength
 
-		inline double IonicStr()
-		{
-			double Is=0.;
-			for(long int ii=0; ii<NComp; ii++ )
-				Is += aZ[ii]*aZ[ii]*aM[ii];
-			return 0.5*Is;
-		}
+		// internal work objects
+		double I;	// ionic strength
+		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
+		double B, dBdT, d2BdT2, dBdP;  // A term of DH equation (and derivatives)
+
+		// internal functions
+		double IonicStr();
 
 	public:
 
@@ -794,7 +773,7 @@ class TSIT: public TSolMod
 		long int IdealProp( double *Zid );
 
 		// Calculation of internal tables (at each GEM iteration)
-		//long int PTparam()
+		long int PTparam();
 
 };
 

@@ -54,33 +54,60 @@ TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxO
 }
 
 
+long int TSIT::PTparam()
+{
+	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
+
+	// pull and convert parameters
+	rho = RhoW[0];
+	alp = - 1./rho*RhoW[1];
+	dal = pow(alp,2.) - 1./rho*RhoW[2];
+	bet = 1./rho*RhoW[3];
+	eps = EpsW[0];
+	dedt = 1./eps*EpsW[1];
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	dedp = 1./eps*EpsW[3];
+
+	// calculate A and term of Debye-Huckel equation (and derivatives)
+	A = (1.82483e6)*sqrt(rho) / pow(Tk*eps,1.5);
+	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
+	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
+	dAdP = 1./2.*A*( bet - 3.*dedp);
+
+	return 0;
+}
+
+
 // Calculates activity coefficients in SIT (NEA) model
-//
 long int TSIT::MixMod()
 {
 	long int j, index1, index2, ip;
-    double T, A, B, sqI, lgI, Z2, lgGam, SumSIT, RHO, EPS;
+    double T, sqI, lgI, Z2, lgGam, SumSIT, rho, eps, lg_to_ln;
+    lg_to_ln = 2.302585093;
 
-    RHO = RhoW[0];
-    EPS = EpsW[0];
+    rho = RhoW[0];
+    eps = EpsW[0];
 
-    I= IonicStr();
+    I = IonicStr();
+
     if( I <  1e-6 /*TProfil::pm->pa.p.ICmin*/ )
     {
     	for( j=0; j<NComp; j++)
     		lnGamma[j] = 0.;
     	return 0;
     }
+
     lgI = log10(I);
     T = Tk;
-    A = 1.82483e6 * sqrt( RHO ) / pow( T*EPS, 1.5 );
-    B = 50.2916 * sqrt( RHO ) / sqrt( T*EPS );
+
+    A = (1.82483e6) * sqrt( rho ) / pow( T*eps, 1.5 );
+    B = (50.2916) * sqrt( rho ) / sqrt( T*eps );
 
     sqI = sqrt( I );
 	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
     	"Error: A,B were not calculated - no values of RoW and EpsW !" );
 
-	// Calculation of SIT model
+	// loop over species
 	for( j=0; j<NComp; j++ )
     {
 		if( aZ[j] )  // Charged species : calculation of the DH part
@@ -88,27 +115,31 @@ long int TSIT::MixMod()
 			Z2 = aZ[j]*aZ[j];
 			lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
 		}
+
 		else  // neutral species incl. water
 		{
 			Z2 = 0.;
 			lgGam =0.;
 		}
 
-		// Calculation of the SIT sum - new variant
+		// Calculation of the SIT sum (new variant)
 		// Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.09
 		SumSIT = 0.;
 		if( j != NComp-1 )   // not water
 		{
 			for( ip=0; ip<NPar; ip++ )
 			{
-				index1 = aIPx[ip*MaxOrd];  // The order of indexes for binary parameters plays no role
+				index1 = aIPx[ip*MaxOrd];  // order of indexes for binary parameters plays no role
 				index2 = aIPx[ip*MaxOrd+1];
+
 				if( index1 == index2 )
 					continue;
+
 				if( index1 == j )
 				{
 					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
 				}
+
 				else if( index2 == j )
 				{
 					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
@@ -116,12 +147,14 @@ long int TSIT::MixMod()
 			}
 		}
 
-		else  // H2O solvent: shall we calculate act. coeff. of water?
+		else  // water solvent (currently set to unity)
 		{
-			lgGam = 0.;         // Decision: PHREEQC?   14.05.09 set to 0
+			lgGam = 0.;
 		}
+
 		lgGam += SumSIT;
-		lnGamma[j] = lgGam * 2.302585093/*lg_to_ln*/;
+		lnGamma[j] = lgGam * lg_to_ln;
+
     } // j
 
 	return 0;
@@ -176,6 +209,16 @@ long int TSIT::IdealProp( double *Zid )
 	Zid[6] = Uid;
 
 	return 0;
+}
+
+
+// calculates true ionic strength
+double TSIT::IonicStr()
+{
+	double Is=0.;
+	for( long int ii=0; ii<NComp; ii++ )
+		Is += aZ[ii]*aZ[ii]*aM[ii];
+	return 0.5*Is;
 }
 
 
