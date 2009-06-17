@@ -3,7 +3,8 @@
 //
 // Copyright (C) 2004-2009  T.Wagner, S.Churakov, D.Kulik
 //
-// Implementation of TPRSVcalc, TCGFcalc and TSRKcalc classes
+// Implementation of subclasses of TSolMod for fluid models
+// subclasses: TPRSVcalc, TCGFcalc and TSRKcalc classes
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry

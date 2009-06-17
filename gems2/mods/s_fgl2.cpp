@@ -1,7 +1,7 @@
 //-------------------------------------------------------------------
 // $Id$
 //
-// Copyright (c) 2007-2009  T.Wagner, D.Kulik, S.Dmitrieva
+// Copyright (C) 2007-2009  T.Wagner, D.Kulik, S.Dmitrieva
 //
 // Implementation of the TSolMod base class and subclasses
 // for activity models for condensed (solid and liquid) phases

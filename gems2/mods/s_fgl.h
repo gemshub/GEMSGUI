@@ -746,10 +746,15 @@ class TSIT: public TSolMod
 		// internal work objects
 		double I;	// ionic strength
 		double A, dAdT, d2AdT2, dAdP;  // A term of DH equation (and derivatives)
-		double B, dBdT, d2BdT2, dBdP;  // A term of DH equation (and derivatives)
+		double *LnG;  // activity coefficient
+		double *dLnGdT;  // derivatives
+		double *d2LnGdT2;
+		double *dLnGdP;
 
 		// internal functions
 		double IonicStr();
+		void alloc_internal();
+		void free_internal();
 
 	public:
 

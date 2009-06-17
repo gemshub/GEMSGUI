@@ -47,10 +47,29 @@ TSIT::TSIT( long int NSpecies, long int NParams, long int NPcoefs, long int MaxO
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
 {
+	alloc_internal();
 	aZ = arZ;
 	aM = arM;
 	RhoW = dW;
 	EpsW = eW;
+}
+
+
+void TSIT::alloc_internal()
+{
+	LnG = new double [NComp];
+	dLnGdT = new double [NComp];
+	d2LnGdT2 = new double [NComp];
+	dLnGdP = new double [NComp];
+}
+
+
+void TSIT::free_internal()
+{
+	delete[]LnG;
+	delete[]dLnGdT;
+	delete[]d2LnGdT2;
+	delete[]dLnGdP;
 }
 
 
@@ -65,10 +84,10 @@ long int TSIT::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
 	dedp = 1./eps*EpsW[3];
 
-	// calculate A and term of Debye-Huckel equation (and derivatives)
+	// calculate A term of Debye-Huckel equation (and derivatives)
 	A = (1.82483e6)*sqrt(rho) / pow(Tk*eps,1.5);
 	dAdT = - 3./2.*A*( dedt + 1./Tk + alp/3. );
 	d2AdT2 = 1./A*pow(dAdT,2.) - 3./2.*A*( d2edt2 - 1/pow(Tk,2.) + 1/3.*dal );
@@ -82,50 +101,38 @@ long int TSIT::PTparam()
 long int TSIT::MixMod()
 {
 	long int j, index1, index2, ip;
-    double T, sqI, lgI, Z2, lgGam, SumSIT, rho, eps, lg_to_ln;
+    double sqI, lgI, Z2, lgGam, SumSIT, rho, eps, lg_to_ln;
     lg_to_ln = 2.302585093;
 
     rho = RhoW[0];
     eps = EpsW[0];
 
-    I = IonicStr();
+    A = (1.82483e6) * sqrt( rho ) / pow( Tk*eps, 1.5 );
 
-    if( I <  1e-6 /*TProfil::pm->pa.p.ICmin*/ )
+ 	ErrorIf( fabs(A) < 1e-9, "SIT",
+ 			"Error: DH parameter A was not calculated - no values of RoW and EpsW !" );
+
+    I = IonicStr();
+    sqI = sqrt( I );
+    lgI = log10(I);
+
+    // check already performed in GammaCalc()
+    if( I < 1e-6 )
     {
     	for( j=0; j<NComp; j++)
     		lnGamma[j] = 0.;
     	return 0;
     }
 
-    lgI = log10(I);
-    T = Tk;
-
-    A = (1.82483e6) * sqrt( rho ) / pow( T*eps, 1.5 );
-    B = (50.2916) * sqrt( rho ) / sqrt( T*eps );
-
-    sqI = sqrt( I );
-	ErrorIf( fabs(A) < 1e-9 || fabs(B) < 1e-9, "SIT",
-    	"Error: A,B were not calculated - no values of RoW and EpsW !" );
-
 	// loop over species
 	for( j=0; j<NComp; j++ )
     {
-		if( aZ[j] )  // Charged species : calculation of the DH part
-		{
-			Z2 = aZ[j]*aZ[j];
-			lgGam = ( -A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // B * 4.562 = 1.5 at 25 C
-		}
-
-		else  // neutral species incl. water
-		{
-			Z2 = 0.;
-			lgGam =0.;
-		}
+		lgGam = 0.;
 
 		// Calculation of the SIT sum (new variant)
 		// Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.09
 		SumSIT = 0.;
-		if( j != NComp-1 )   // not water
+		if( j != NComp-1 )  // not for water solvent
 		{
 			for( ip=0; ip<NPar; ip++ )
 			{
@@ -147,14 +154,34 @@ long int TSIT::MixMod()
 			}
 		}
 
-		else  // water solvent (currently set to unity)
+		// Charged species
+		if( aZ[j] )
 		{
 			lgGam = 0.;
+			Z2 = aZ[j]*aZ[j];
+			lgGam = ( - A * sqI * Z2 ) / ( 1. + 1.5 * sqI );  // DH part for charged species
+			lgGam += SumSIT;
+			lnGamma[j] = lgGam * lg_to_ln;
 		}
 
-		lgGam += SumSIT;
-		lnGamma[j] = lgGam * lg_to_ln;
+		else // neutral species and water solvent
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				lgGam = 0.;
+				Z2 = 0.;
+				lgGam += SumSIT;
+				lnGamma[j] = lgGam * lg_to_ln;
+			}
 
+			// water solvent (osmotic coefficient not considered)
+			else
+			{
+				lgGam = 0.;
+				lnGamma[j] = lgGam * lg_to_ln;
+			}
+		}
     } // j
 
 	return 0;
@@ -163,8 +190,88 @@ long int TSIT::MixMod()
 
 long int TSIT::ExcessProp( double *Zex )
 {
-	// add excess property calculations
+	long int j, index1, index2, ip;
+    double sqI, lgI, Z2, lgGam, SumSIT, rho, eps, lg_to_ln, g, dgt, d2gt, dgp;
+    lg_to_ln = 2.302585093;
 
+    I = IonicStr();
+    sqI = sqrt( I );
+    lgI = log10(I);
+
+	// loop over species
+	for( j=0; j<NComp; j++ )
+    {
+		// Calculation of the SIT sum (new variant)
+		// Corrected to 2-coeff SIT parameter and extended to neutral species by DK on 13.05.09
+		SumSIT = 0.;
+		if( j != NComp-1 )  // not for water solvent
+		{
+			for( ip=0; ip<NPar; ip++ )
+			{
+				index1 = aIPx[ip*MaxOrd];  // order of indexes for binary parameters plays no role
+				index2 = aIPx[ip*MaxOrd+1];
+
+				if( index1 == index2 )
+					continue;
+
+				if( index1 == j )
+				{
+					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index2]; // epsilon
+				}
+
+				else if( index2 == j )
+				{
+					SumSIT += ( aIPc[ip*NPcoef] + aIPc[ip*NPcoef+1]*lgI ) * aM[index1]; // epsilon
+				}
+			}
+		}
+
+		// Charged species
+		if( aZ[j] )
+		{
+			Z2 = aZ[j]*aZ[j];
+			LnG[j] = - ( ( A * sqI * Z2 ) / ( 1. + 1.5 * sqI ) + SumSIT ) * lg_to_ln;
+			dLnGdT[j] = - ( ( dAdT * sqI * Z2 ) / ( 1. + 1.5 * sqI ) ) * lg_to_ln;
+			d2LnGdT2[j] = - ( ( d2AdT2 * sqI * Z2 ) / ( 1. + 1.5 * sqI ) ) * lg_to_ln;
+			dLnGdP[j] = - ( ( dAdP * sqI * Z2 ) / ( 1. + 1.5 * sqI ) ) * lg_to_ln;
+		}
+
+		// neutral species and water solvent
+		else
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				LnG[j] = ( SumSIT ) * lg_to_ln;
+				dLnGdT[j] = 0.;
+				d2LnGdT2[j] = 0.;
+				dLnGdP[j] = 0.;
+			}
+
+			// water solvent (osmotic coefficient not considered)
+			else
+			{
+				LnG[j] = 0.;
+				dLnGdT[j] = 0.;
+				d2LnGdT2[j] = 0.;
+				dLnGdP[j] = 0.;
+			}
+		}
+
+		g += x[j]*LnG[j];
+		dgt += x[j]*dLnGdT[j];
+		d2gt += x[j]*d2LnGdT2[j];
+		dgp += x[j]*dLnGdP[j];
+
+    } // j
+
+	// increment thermodynamic properties
+	Gex = (R_CONST*Tk) * g;
+	Hex = - R_CONST*pow(Tk,2.) * dgt;
+	// Sex = - R_CONST * ( g + Tk*dgt );
+	Sex = (Hex-Gex)/Tk;
+	CPex = - R_CONST * ( 2.*Tk*dgt + pow(Tk,2.)*d2gt );
+	Vex = (R_CONST*Tk) * dgp;
 	Aex = Gex - Vex*Pbar;
 	Uex = Hex - Vex*Pbar;
 
@@ -1510,7 +1617,7 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 	bet = 1./rho*RhoW[3]*1000.;
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A term of Debye-Huckel equation (and derivatives)
@@ -1774,7 +1881,7 @@ long int THelgesonDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A and B terms of Debye-Huckel equation (and derivatives)
@@ -2469,7 +2576,7 @@ long int TDaviesDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A term of Debye-Huckel equation (and derivatives)
@@ -2794,7 +2901,7 @@ long int TLimitingLawDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A term of Debye-Huckel equation (and derivatives)
@@ -3128,7 +3235,7 @@ long int TTwoTermDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A and B terms of Debye-Huckel equation (and derivatives)
@@ -3398,7 +3505,7 @@ long int TKarpovDH::PTparam()
 	bet = 1./rho*RhoW[3];
 	eps = EpsW[0];
 	dedt = 1./eps*EpsW[1];
-	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];  // corrected 23.05.2009 (TW)
+	d2edt2 = - 1./pow(eps,2.)*pow(EpsW[1],2.) + 1./eps*EpsW[2];
 	dedp = 1./eps*EpsW[3];
 
 	// calculate A and B terms of Debye-Huckel equation (and derivatives)
