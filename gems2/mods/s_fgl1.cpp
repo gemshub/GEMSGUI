@@ -191,8 +191,9 @@ long int TSIT::MixMod()
 long int TSIT::ExcessProp( double *Zex )
 {
 	long int j, index1, index2, ip;
-    double sqI, lgI, Z2, lgGam, SumSIT, rho, eps, lg_to_ln, g, dgt, d2gt, dgp;
+    double sqI, lgI, Z2, SumSIT, lg_to_ln, g, dgt, d2gt, dgp;
     lg_to_ln = 2.302585093;
+    g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
     I = IonicStr();
     sqI = sqrt( I );
