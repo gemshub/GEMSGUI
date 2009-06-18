@@ -3343,7 +3343,125 @@ long int TTwoTermDH::MixMod()
 // calculates excess properties
 long int TTwoTermDH::ExcessProp( double *Zex )
 {
-	// to be implemented
+	// under construction
+	long int j, w;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, lg_to_ln, g, dgt, d2gt, dgp,
+			U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP;
+	lg_to_ln = 2.302585093;
+	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
+
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molalities (molT and molZ)
+	IonicStrength();
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+
+	// loop over species
+	for( j=0; j<NComp; j++ )
+	{
+		// charged species
+		if ( z[j] )
+		{
+			Z2 = z[j]*z[j];
+			U = - (Z2*A) * sqI;
+			dUdT = - (Z2*dAdT) * sqI;
+			d2UdT2 = - (Z2*d2AdT2) * sqI;
+			dUdP = - (Z2*dAdP) * sqI;
+			V = 1. + (an[j]*B) * sqI;
+			dVdT = ( an[j]*dBdT ) * sqI;
+			d2VdT2 = ( an[j]*d2BdT2 ) * sqI;
+			dVdP = ( an[j]*dBdP ) * sqI;
+			LnG[j] = ( ( - A * sqI * Z2 ) / ( 1. + B * an[j] * sqI ) ) * lg_to_ln;
+			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) ) * lg_to_ln;
+			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
+				- (dUdT*dVdT + U*d2VdT2)*pow(V,2.)/pow(V,4.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.) ) * lg_to_ln;
+			dLnGdP[j] = ( (dUdP*V - U*dVdP)/pow(V,2.) ) * lg_to_ln;
+		}
+
+		// neutral species and water solvent
+		else
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				if ( flagNeut == 1 )
+				{
+					// rational Setchenow coefficient
+					LnG[j] = ( bg[j] * IS ) * lg_to_ln;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+
+				else
+				{
+					// activity coefficient unity
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+				continue;
+			}
+
+			// water solvent
+			else
+			{
+				if ( flagH2O == 1 )
+				{
+					// rational osmotic coefficient
+					LnG[j] = ( bg[j] * molT ) * lg_to_ln;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+
+				else
+				{
+					// water activity coefficient unity
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+			}
+		}
+
+		g += x[j]*LnG[j];
+		dgt += x[j]*dLnGdT[j];
+		d2gt += x[j]*d2LnGdT2[j];
+		dgp += x[j]*dLnGdP[j];
+
+	} // j
+
+	// increment thermodynamic properties
+	Gex = (R_CONST*Tk) * g;
+	Hex = - R_CONST*pow(Tk,2.) * dgt;
+	// Sex = - R_CONST * ( g + Tk*dgt );
+	Sex = (Hex-Gex)/Tk;
+	CPex = - R_CONST * ( 2.*Tk*dgt + pow(Tk,2.)*d2gt );
+	Vex = (R_CONST*Tk) * dgp;
+	Aex = Gex - Vex*Pbar;
+	Uex = Hex - Vex*Pbar;
+
+	// assigments (excess properties)
+	Zex[0] = Gex;
+	Zex[1] = Hex;
+	Zex[2] = Sex;
+	Zex[3] = CPex;
+	Zex[4] = Vex;
+	Zex[5] = Aex;
+	Zex[6] = Uex;
 
 	return 0;
 }
