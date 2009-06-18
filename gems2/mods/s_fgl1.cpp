@@ -3174,8 +3174,6 @@ TTwoTermDH::TTwoTermDH( long int NSpecies, long int NParams,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
 {
-	int j;
-
 	alloc_internal();
 	m = arM;
 	z = arZ;
@@ -3185,13 +3183,6 @@ TTwoTermDH::TTwoTermDH( long int NSpecies, long int NParams,
 	bc = 0.064;   // common b_setch
 	flagNeut = aIPc[2];   // 0: unity, 1: calculated
 	flagH2O = aIPc[3];   // 0: unity, 1: calculated
-
-	// read and transfer individual an and bg
-	for (j=0; j<NComp; j++)
-	{
-		an[j] = aDCc[NP_DC*j];   // individual an
-		bg[j] = aDCc[NP_DC*j+1];   // individual bg
-	}
 
 }
 
@@ -3227,7 +3218,15 @@ void TTwoTermDH::free_internal()
 // Calculates T,P corrected parameters
 long int TTwoTermDH::PTparam()
 {
+	long int j;
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
+
+	// read and copy individual an and bg
+	for (j=0; j<NComp; j++)
+	{
+		an[j] = aDCc[NP_DC*j];   // individual an
+		bg[j] = aDCc[NP_DC*j+1];   // individual bg
+	}
 
 	// pull and convert parameters
 	rho = RhoW[0];
@@ -3435,8 +3434,6 @@ TKarpovDH::TKarpovDH( long int NSpecies, long int NParams,
         			 Mod_Code, arIPx, arIPc, arDCc, arWx,
         			 arlnGam, aphVOL, T_k, P_bar )
 {
-	int j;
-
 	alloc_internal();
 	m = arM;
 	z = arZ;
@@ -3448,13 +3445,6 @@ TKarpovDH::TKarpovDH( long int NSpecies, long int NParams,
 	flagH2O = aIPc[3];   // 0: unity, 1: calculated
 	flagElect = aIPc[4];  // 0: constant, 1: NaCl, 2: KCl, 3: NaOH, 4: KOH
 
-	// read and transfer individual an and bg
-	for (j=0; j<NComp; j++)
-	{
-		aref[j] = aDCc[NP_DC*j]; // individual an
-		an[j] = aDCc[NP_DC*j];
-		bg[j] = aDCc[NP_DC*j+1];   // individual bg
-	}
 }
 
 
@@ -3497,7 +3487,19 @@ void TKarpovDH::free_internal()
 // Calculates T,P corrected parameters
 long int TKarpovDH::PTparam()
 {
+	long int j;
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
+
+	// read and copy individual an and bg
+	for (j=0; j<NComp; j++)
+	{
+		aref[j] = aDCc[NP_DC*j]; // individual an
+		an[j] = aDCc[NP_DC*j];
+		dadT[j] = 0.;
+		d2adT2[j] = 0.;
+		dadP[j] = 0.;
+		bg[j] = aDCc[NP_DC*j+1];  // individual bg (not used)
+	}
 
 	// pull and convert parameters
 	rho = RhoW[0];
@@ -3644,7 +3646,193 @@ long int TKarpovDH::MixMod()
 // calculates excess properties
 long int TKarpovDH::ExcessProp( double *Zex )
 {
-	// to be implemented
+	// under testing
+	long int j, w;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, lnActWat, lg_to_ln, zc, za,
+			psi, g, dgt, d2gt, dgp;
+	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
+			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
+			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
+			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP, dPhidT, d2PhidT2, dPhidP;
+	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
+	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
+
+	// get index of water (assumes water is last species in phase)
+	w = NComp - 1;
+
+	// calculate ionic strength and total molalities (molT and molZ)
+	IonicStrength();
+
+	WxW = x[w];
+	Nw = 1000./18.01528;
+	// Lgam = -log10(1.+0.0180153*molT);
+	Lgam = log10(WxW);  // Helgeson large gamma simplified
+	if( Lgam < -0.7 )
+		Lgam = -0.7;  // experimental truncation of Lgam to min ln(0.5)
+	lnwxWat = log(WxW);
+	sqI = sqrt(IS);
+
+	// loop over species
+	for( j=0; j<NComp; j++ )
+	{
+		// charged species
+		if ( z[j] )
+		{
+			Z2 = z[j]*z[j];
+			U = - (Z2*A) * sqI;
+			dUdT = - (Z2*dAdT) * sqI;
+			d2UdT2 = - (Z2*d2AdT2) * sqI;
+			dUdP = - (Z2*dAdP) * sqI;
+			V = 1. + (an[j]*B) * sqI;
+			dVdT = ( dadT[j]*B + an[j]*dBdT ) * sqI;
+			d2VdT2 = ( d2adT2[j]*B + 2.*dadT[j]*dBdT + an[j]*d2BdT2 ) * sqI;
+			dVdP = ( dadP[j]*B + an[j]*dBdP ) * sqI;
+			LnG[j] = ( U/V + bgam*IS ) * lg_to_ln;
+			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) + dbgdT*IS ) * lg_to_ln;
+			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
+				- (dUdT*dVdT + U*d2VdT2)*pow(V,2.)/pow(V,4.) + (U*dVdT)*(2.*V*dVdT)/pow(V,4.)
+				+ d2bgdT2*IS ) * lg_to_ln;
+			dLnGdP[j] = ( (dUdP*V - U*dVdP)/pow(V,2.) + dbgdP*IS ) * lg_to_ln;
+		}
+
+		// neutral species and water solvent
+		else
+		{
+			// neutral species
+			if ( j != (NComp-1) )
+			{
+				if ( flagNeut == 1 )
+				{
+					LnG[j] = ( bgam*IS ) * lg_to_ln;
+					dLnGdT[j] = ( dbgdT*IS ) * lg_to_ln;
+					d2LnGdT2[j] = ( d2bgdT2*IS ) * lg_to_ln;
+					dLnGdP[j] = ( dbgdP*IS ) * lg_to_ln;
+				}
+
+				else
+				{
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+				continue;
+			}
+
+			// water solvent
+			else
+			{
+				// activity coefficient of water calculated
+				if ( flagH2O == 1 )
+				{
+					// Phi corrected using eq. (190) from Helgeson et al. (1981)
+					Lam = 1. + (ao*B) * sqI;
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+					Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
+					lnActWat = - Phi*molT/Nw;
+					LnG[j] = lnActWat - lnwxWat;
+
+					// derivatives of lambda and sigma terms
+					L = 1. + (ao*B) * sqI;
+					dLdT = ( daodT*B + ao*dBdT ) * sqI;
+					d2LdT2 = ( d2aodT2*B + 2.*daodT*dBdT + ao*d2BdT2 ) * sqI;
+					dLdP = ( daodP*B + ao*dBdP ) * sqI;
+
+					U1 = (zc*za) * (A*L);
+					dU1dT = (zc*za) * (dAdT*L + A*dLdT);
+					d2U1dT2 = (zc*za) * ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
+					dU1dP = (zc*za) * ( dAdP*L + A*dLdP );
+					V1 = pow(ao,3.)*pow(B,3.) * IS;
+					dV1dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;  // corrected, 15.06.2009 (TW)
+
+					d2V1dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)
+								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
+								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
+					dV1dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+
+					U2 = (zc*za) * A;
+					dU2dT = (zc*za) * dAdT;
+					d2U2dT2 = (zc*za) * d2AdT2;
+					dU2dP = (zc*za) * dAdP;
+					V2 = pow(ao,3.)*pow(B,3.)*L * IS;
+					dV2dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdT*L
+								+ pow(ao,3.)*pow(B,3.)*dLdT ) * IS;
+					d2V2dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.)*L + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)*L
+								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT*L + 6.*pow(ao,2.)*daodT*pow(B,3.)*dLdT
+								+ 6.*pow(ao,3.)*B*pow(dBdT,2.)*L + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2*L
+								+ 6.*pow(ao,3.)*pow(B,2.)*dBdT*dLdT + pow(ao,3.)*pow(B,3.)*d2LdT2 ) * IS;
+					dV2dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdP*L  // corrected, 15.06.2009 (TW)
+								+ pow(ao,3.)*pow(B,3.)*dLdP ) * IS;
+
+					U3 = (2.*zc*za) * ( A*log(L) );
+					dU3dT = (2.*zc*za) * ( dAdT*log(L) + A*(1./L)*dLdT );
+					d2U3dT2 = (2.*zc*za) * ( d2AdT2*log(L) + 2.*dAdT*(1./L)*dLdT
+								- A*(1./pow(L,2.))*pow(dLdT,2.) + A*(1./L)*d2LdT2 );
+					dU3dP = (2.*zc*za) * ( dAdP*log(L) + A*(1./L)*dLdP );
+					V3 = pow(ao,3.)*pow(B,3.) * IS;
+					dV3dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
+					d2V3dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)  // corrected, 15.06.2009 (TW)
+								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
+								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
+					dV3dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+
+					Z = U1/V1 - U2/V2 - U3/V3;
+					dZdT = (dU1dT*V1 - U1*dV1dT)/pow(V1,2.) - (dU2dT*V2 - U2*dV2dT)/pow(V2,2.)
+								- (dU3dT*V3 - U3*dV3dT)/pow(V3,2.);
+					d2ZdT2 = (d2U1dT2*V1 + dU1dT*dV1dT)*pow(V1,2.)/pow(V1,4.) - (dU1dT*V1)*(2.*V1*dV1dT)/pow(V1,4.)
+								- (dU1dT*dV1dT + U1*d2V1dT2)*pow(V1,2.)/pow(V1,4.) + (U1*dV1dT)*(2.*V1*dV1dT)/pow(V1,4.)
+								- (d2U2dT2*V2 + dU2dT*dV2dT)*pow(V2,2.)/pow(V2,4.) + (dU2dT*V2)*(2.*V2*dV2dT)/pow(V2,4.)
+								+ (dU2dT*dV2dT + U2*d2V2dT2)*pow(V2,2.)/pow(V2,4.) - (U2*dV2dT)*(2.*V2*dV2dT)/pow(V2,4.)
+								- (d2U3dT2*V3 + dU3dT*dV3dT)*pow(V3,2.)/pow(V3,4.) + (dU3dT*V3)*(2.*V3*dV3dT)/pow(V3,4.)
+								+ (dU3dT*dV3dT + U3*d2V3dT2)*pow(V3,2.)/pow(V3,4.) - (U3*dV3dT)*(2.*V3*dV3dT)/pow(V3,4.);
+					dZdP = (dU1dP*V1 - U1*dV1dP)/pow(V1,2.) - (dU2dP*V2 - U2*dV2dP)/pow(V2,2.)
+								- (dU3dP*V3 - U3*dV3dP)/pow(V3,2.);
+
+					// derivatives of osmotic and activity coefficient
+					dPhidT = - log(10.) * (molZ/molT) * ( dZdT - dbgdT*IS/2. );
+					d2PhidT2 = - log(10.) * (molZ/molT) * ( d2ZdT2 - d2bgdT2*IS/2. );
+					dPhidP = - log(10.) * (molZ/molT) * ( dZdP - dbgdP*IS/2. );
+					dLnGdT[j] = - (molT/Nw) * dPhidT;
+					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
+					dLnGdP[j] = - (molT/Nw) * dPhidP;
+				}
+
+				else
+				{
+					LnG[j] = 0.;
+					dLnGdT[j] = 0.;
+					d2LnGdT2[j] = 0.;
+					dLnGdP[j] = 0.;
+				}
+			}
+		}
+
+		g += x[j]*LnG[j];
+		dgt += x[j]*dLnGdT[j];
+		d2gt += x[j]*d2LnGdT2[j];
+		dgp += x[j]*dLnGdP[j];
+
+	} // j
+
+	// increment thermodynamic properties
+	Gex = (R_CONST*Tk) * g;
+	Hex = - R_CONST*pow(Tk,2.) * dgt;
+	// Sex = - R_CONST * ( g + Tk*dgt );
+	Sex = (Hex-Gex)/Tk;
+	CPex = - R_CONST * ( 2.*Tk*dgt + pow(Tk,2.)*d2gt );
+	Vex = (R_CONST*Tk) * dgp;
+	Aex = Gex - Vex*Pbar;
+	Uex = Hex - Vex*Pbar;
+
+	// assigments (excess properties)
+	Zex[0] = Gex;
+	Zex[1] = Hex;
+	Zex[2] = Sex;
+	Zex[3] = CPex;
+	Zex[4] = Vex;
+	Zex[5] = Aex;
+	Zex[6] = Uex;
 
 	return 0;
 }
@@ -3684,11 +3872,9 @@ long int TKarpovDH::IdealProp( double *Zid )
 long int TKarpovDH::IonicStrength()
 {
 	long int j;
-	double is, mt, mz, as;
-	is = 0.0;
-	mt = 0.0;
-	mz = 0.0;
-	as = 0.0;
+	double is, mt, mz, as, dats, d2ats, daps;
+	is = 0.0; mt = 0.0; mz = 0.0;
+	as = 0.0; dats = 0.0; d2ats = 0.0; daps = 0.0;
 
 	// calculate ionic strength
 	for (j=0; j<NComp; j++)
@@ -3705,11 +3891,17 @@ long int TKarpovDH::IonicStrength()
 		{
 			mz += m[j];
 			as += m[j]*an[j];
+			dats += m[j]*dadT[j];
+			d2ats += m[j]*d2adT2[j];
+			daps += m[j]*dadP[j];
 		}
 	}
 
 	// conversions and assignments
 	ao = as/mz;
+	daodT = dats/mz;
+	d2aodT2 = d2ats/mz;
+	daodP = daps/mz;
 	IS = is;
 	molT = mt;
 	molZ = mz;
