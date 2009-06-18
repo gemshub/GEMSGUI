@@ -1277,17 +1277,13 @@ class TKarpovDH: public TSolMod
 		double *m;   // species molalities
 		double *RhoW;  // water density properties
 		double *EpsW;  // water dielectrical properties
-		double *aref;  // individual ion size-parameters at Tr,Pr
 		double *an;  // individual ion size-parameters at T,P
-		double *dadT;  // derivatives
-		double *d2adT2;
-		double *dadP;
 		double *bg;  // individual extended-term parameters
 		double ac;  // common ion size parameters
 		double bc;  // common extended-term parameter
 
 		// internal work objects
-		double ao, daodT, d2aodT2, daodP;  // ion-size parameter (TP corrected)
+		double ao;  // average ion-size parameter
 		double bgam, dbgdT, d2bgdT2, dbgdP;  // extended-term parameter (TP corrected)
 		double *LnG;  // activity coefficient
 		double *dLnGdT;  // derivatives

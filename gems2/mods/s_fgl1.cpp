@@ -3460,11 +3460,7 @@ void TKarpovDH::alloc_internal()
 	dLnGdT = new double [NComp];
 	d2LnGdT2 = new double [NComp];
 	dLnGdP = new double [NComp];
-	aref = new double [NComp];
 	an = new double [NComp];
-	dadT = new double [NComp];
-	d2adT2 = new double [NComp];
-	dadP = new double [NComp];
 	bg = new double [NComp];
 }
 
@@ -3475,11 +3471,7 @@ void TKarpovDH::free_internal()
 	delete[]dLnGdT;
 	delete[]d2LnGdT2;
 	delete[]dLnGdP;
-	delete[]aref;
 	delete[]an;
-	delete[]dadT;
-	delete[]d2adT2;
-	delete[]dadP;
 	delete[]bg;
 }
 
@@ -3493,11 +3485,7 @@ long int TKarpovDH::PTparam()
 	// read and copy individual an and bg
 	for (j=0; j<NComp; j++)
 	{
-		aref[j] = aDCc[NP_DC*j]; // individual an
 		an[j] = aDCc[NP_DC*j];
-		dadT[j] = 0.;
-		d2adT2[j] = 0.;
-		dadP[j] = 0.;
 		bg[j] = aDCc[NP_DC*j+1];  // individual bg (not used)
 	}
 
@@ -3528,10 +3516,7 @@ long int TKarpovDH::PTparam()
 		dbgdT = 0.0;
 		d2bgdT2 = 0.0;
 		dbgdP = 0.0;
-		ao = ac;
-		daodT = 0.0;
-		d2aodT2 = 0.0;
-		daodP = 0.0;
+		ao = ac;  // constant
 	}
 
 	// b_gamma TP-dependent
@@ -3539,11 +3524,7 @@ long int TKarpovDH::PTparam()
 	{
 		Gfunction();
 		BgammaTP();
-		// IonsizeTP();
-		ao = ac;
-		daodT = 0.0;
-		d2aodT2 = 0.0;
-		daodP = 0.0;
+		ao = ac;  // constant
 	}
 
 	return 0;
@@ -3684,9 +3665,9 @@ long int TKarpovDH::ExcessProp( double *Zex )
 			d2UdT2 = - (Z2*d2AdT2) * sqI;
 			dUdP = - (Z2*dAdP) * sqI;
 			V = 1. + (an[j]*B) * sqI;
-			dVdT = ( dadT[j]*B + an[j]*dBdT ) * sqI;
-			d2VdT2 = ( d2adT2[j]*B + 2.*dadT[j]*dBdT + an[j]*d2BdT2 ) * sqI;
-			dVdP = ( dadP[j]*B + an[j]*dBdP ) * sqI;
+			dVdT = ( an[j]*dBdT ) * sqI;
+			d2VdT2 = ( an[j]*d2BdT2 ) * sqI;
+			dVdP = ( an[j]*dBdP ) * sqI;
 			LnG[j] = ( U/V + bgam*IS ) * lg_to_ln;
 			dLnGdT[j] = ( (dUdT*V - U*dVdT)/pow(V,2.) + dbgdT*IS ) * lg_to_ln;
 			d2LnGdT2[j] = ( (d2UdT2*V + dUdT*dVdT)*pow(V,2.)/pow(V,4.) - (dUdT*V)*(2.*V*dVdT)/pow(V,4.)
@@ -3735,35 +3716,28 @@ long int TKarpovDH::ExcessProp( double *Zex )
 
 					// derivatives of lambda and sigma terms
 					L = 1. + (ao*B) * sqI;
-					dLdT = ( daodT*B + ao*dBdT ) * sqI;
-					d2LdT2 = ( d2aodT2*B + 2.*daodT*dBdT + ao*d2BdT2 ) * sqI;
-					dLdP = ( daodP*B + ao*dBdP ) * sqI;
+					dLdT = ( ao*dBdT ) * sqI;
+					d2LdT2 = ( ao*d2BdT2 ) * sqI;
+					dLdP = ( ao*dBdP ) * sqI;
 
 					U1 = (zc*za) * (A*L);
 					dU1dT = (zc*za) * (dAdT*L + A*dLdT);
 					d2U1dT2 = (zc*za) * ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
 					dU1dP = (zc*za) * ( dAdP*L + A*dLdP );
 					V1 = pow(ao,3.)*pow(B,3.) * IS;
-					dV1dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;  // corrected, 15.06.2009 (TW)
-
-					d2V1dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)
-								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
-								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
-					dV1dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+					dV1dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
+					d2V1dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.) + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
+					dV1dP = ( 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
 
 					U2 = (zc*za) * A;
 					dU2dT = (zc*za) * dAdT;
 					d2U2dT2 = (zc*za) * d2AdT2;
 					dU2dP = (zc*za) * dAdP;
 					V2 = pow(ao,3.)*pow(B,3.)*L * IS;
-					dV2dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdT*L
-								+ pow(ao,3.)*pow(B,3.)*dLdT ) * IS;
-					d2V2dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.)*L + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)*L
-								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT*L + 6.*pow(ao,2.)*daodT*pow(B,3.)*dLdT
-								+ 6.*pow(ao,3.)*B*pow(dBdT,2.)*L + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2*L
+					dV2dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT*L + pow(ao,3.)*pow(B,3.)*dLdT ) * IS;
+					d2V2dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.)*L + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2*L
 								+ 6.*pow(ao,3.)*pow(B,2.)*dBdT*dLdT + pow(ao,3.)*pow(B,3.)*d2LdT2 ) * IS;
-					dV2dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdP*L  // corrected, 15.06.2009 (TW)
-								+ pow(ao,3.)*pow(B,3.)*dLdP ) * IS;
+					dV2dP = ( 3.*pow(ao,3.)*pow(B,2.)*dBdP*L + pow(ao,3.)*pow(B,3.)*dLdP ) * IS;
 
 					U3 = (2.*zc*za) * ( A*log(L) );
 					dU3dT = (2.*zc*za) * ( dAdT*log(L) + A*(1./L)*dLdT );
@@ -3771,11 +3745,9 @@ long int TKarpovDH::ExcessProp( double *Zex )
 								- A*(1./pow(L,2.))*pow(dLdT,2.) + A*(1./L)*d2LdT2 );
 					dU3dP = (2.*zc*za) * ( dAdP*log(L) + A*(1./L)*dLdP );
 					V3 = pow(ao,3.)*pow(B,3.) * IS;
-					dV3dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
-					d2V3dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)  // corrected, 15.06.2009 (TW)
-								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
-								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
-					dV3dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
+					dV3dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
+					d2V3dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.) + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
+					dV3dP = ( 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
 
 					Z = U1/V1 - U2/V2 - U3/V3;
 					dZdT = (dU1dT*V1 - U1*dV1dT)/pow(V1,2.) - (dU2dT*V2 - U2*dV2dT)/pow(V2,2.)
@@ -3872,9 +3844,8 @@ long int TKarpovDH::IdealProp( double *Zid )
 long int TKarpovDH::IonicStrength()
 {
 	long int j;
-	double is, mt, mz, as, dats, d2ats, daps;
-	is = 0.0; mt = 0.0; mz = 0.0;
-	as = 0.0; dats = 0.0; d2ats = 0.0; daps = 0.0;
+	double is, mt, mz, as;
+	is = 0.0; mt = 0.0; mz = 0.0; as = 0.0;
 
 	// calculate ionic strength
 	for (j=0; j<NComp; j++)
@@ -3891,17 +3862,11 @@ long int TKarpovDH::IonicStrength()
 		{
 			mz += m[j];
 			as += m[j]*an[j];
-			dats += m[j]*dadT[j];
-			d2ats += m[j]*d2adT2[j];
-			daps += m[j]*dadP[j];
 		}
 	}
 
 	// conversions and assignments
 	ao = as/mz;
-	daodT = dats/mz;
-	d2aodT2 = d2ats/mz;
-	daodP = daps/mz;
 	IS = is;
 	molT = mt;
 	molZ = mz;
@@ -3992,47 +3957,6 @@ long int TKarpovDH::BgammaTP()
 	dbgdT = - nbh/(2.*log(10.)*(1.98721)*pow(Tk,2.))*2./ni;
 	d2bgdT2 = - nbj/( 2.*log(10.)*(1.98721)*pow(Tk,2.))*2./ni - 2./Tk*dbgdT;
 	dbgdP = nbv/(2.*log(10.)*(1.98721)*Tk)*2./ni;
-
-	return 0;
-}
-
-
-// calculates TP dependence of a_not (and derivatives)
-long int TKarpovDH::IonsizeTP()
-{
-	long int j;
-	double nc, na, ni, zc, za, c;
-
-	switch ( flagElect )
-	{
-		case 1:  // NaCl
-			nc = 1.; na = 1.; ni = 2.;
-			zc = 1.; za = -1.;
-			break;
-		case 2:  // KCl
-			nc = 1.; na = 1.; ni = 2.;
-			zc = 1.; za = -1.;
-			break;
-		case 3:  // NaOH
-			nc = 1.; na = 1.; ni = 2.;
-			zc = 1.; za = -1.;
-			break;
-		case 4:  // KOH
-			nc = 1.; na = 1.; ni = 2.;
-			zc = 1.; za = -1.;
-			break;
-		default:  // wrong mode
-			return -1;
-	}
-
-	c = 2./ni * ( nc*fabs(zc) + na*fabs(za) );
-	for (j=0; j<NComp; j++)
-	{
-		an[j] = aref[j] + c*Gf;
-		dadT[j] = c*dGfdT;
-		d2adT2[j] = c*d2GfdT2;
-		dadP[j] = c*dGfdP;
-	}
 
 	return 0;
 }
