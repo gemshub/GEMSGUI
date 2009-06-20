@@ -2096,7 +2096,7 @@ long int THelgesonDH::ExcessProp( double *Zex )
 			// water solvent
 			else
 			{
-				// activity coefficient of water calculated
+				// water activity coeff. calculated
 				if ( flagH2O == 1 )
 				{
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
@@ -2172,6 +2172,7 @@ long int THelgesonDH::ExcessProp( double *Zex )
 					dLnGdP[j] = - (molT/Nw) * dPhidP;
 				}
 
+				// water activity coeff. unity
 				else
 				{
 					LnG[j] = 0.;
@@ -2536,8 +2537,10 @@ TDaviesDH::TDaviesDH( long int NSpecies, long int NParams,
 	z = arZ;
 	RhoW = dW;
 	EpsW = eW;
-	flagNeut = aIPc[2];  // 0: no scale correction, 1: scale correction
+	flagNeut = 0;
+	flagMol = aIPc[2];  // 0: no scale correction, 1: scale correction
 	flagH2O = aIPc[3];  // 0: unity, 1: calculated
+
 }
 
 
@@ -2633,7 +2636,7 @@ long int TDaviesDH::MixMod()
 			lgGam = 0.0;
 			Z2 = z[j]*z[j];
 			lgGam = ( -A * Z2 ) * ( sqI/( 1. + sqI ) - 0.3 * IS );
-			if ( flagNeut == 1 )
+			if ( flagMol == 1 )
 				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 			else
 				lnGamma[j] = lgGam * lg_to_ln;
@@ -2646,7 +2649,7 @@ long int TDaviesDH::MixMod()
 			if ( j != (NComp-1) )
 			{
 				lgGam = 0.0;
-				if ( flagNeut == 1 )
+				if ( flagMol == 1 )
 					lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 				else
 					lnGamma[j] = lgGam * lg_to_ln;
@@ -2660,7 +2663,7 @@ long int TDaviesDH::MixMod()
 				lnGam = 0.0;
 				if ( flagH2O == 1 )
 				{
-					// add water activity coefficient equation here
+					// add water activity coefficient equation
 					lnGam = 0.0;
 				}
 				else
@@ -2728,7 +2731,7 @@ long int TDaviesDH::ExcessProp( double *Zex )
 			{
 				if ( flagH2O == 1 )
 				{
-					// add water activity coefficient equations here
+					// add water activity coefficient equation
 					LnG[j] = 0.;
 					dLnGdT[j] = 0.;
 					d2LnGdT2[j] = 0.;
@@ -2737,7 +2740,6 @@ long int TDaviesDH::ExcessProp( double *Zex )
 
 				else
 				{
-					// water activity coefficient unity
 					LnG[j] = 0.;
 					dLnGdT[j] = 0.;
 					d2LnGdT2[j] = 0.;
@@ -2861,7 +2863,7 @@ TLimitingLawDH::TLimitingLawDH( long int NSpecies, long int NParams,
 	z = arZ;
 	RhoW = dW;
 	EpsW = eW;
-	flagNeut = aIPc[2];  // 0: no scale correction, 1: scale correction
+	flagNeut = aIPc[2];  // 0: unity
 	flagH2O = aIPc[3];  // 0: unity, 1: calculated
 }
 
@@ -2958,11 +2960,7 @@ long int TLimitingLawDH::MixMod()
 			lgGam = 0.0;
 			Z2 = z[j]*z[j];
 			lgGam = ( -A * Z2 * sqI );
-
-			if ( flagNeut == 1 )
-				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
-			else
-				lnGamma[j] = lgGam * lg_to_ln;
+			lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 		}
 
 		// neutral species and water solvent
@@ -2972,10 +2970,7 @@ long int TLimitingLawDH::MixMod()
 			if ( j != (NComp-1) )
 			{
 				lgGam = 0.0;
-				if ( flagNeut == 1 )
-					lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
-				else
-					lnGamma[j] = lgGam * lg_to_ln;
+				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 				continue;
 			}
 
@@ -2986,7 +2981,7 @@ long int TLimitingLawDH::MixMod()
 				lnGam = 0.0;
 				if ( flagH2O == 1 )
 				{
-					// add water activity coefficient equation here
+					// add water activity coefficient equation
 					lnGam = 0.0;
 				}
 				else
@@ -3054,16 +3049,15 @@ long int TLimitingLawDH::ExcessProp( double *Zex )
 			{
 				if ( flagH2O == 1 )
 				{
-					// add water activity coefficient equations here
+					// add water activity coefficient equation
+					LnG[j] = 0.;
 					LnG[j] = 0.;
 					dLnGdT[j] = 0.;
-					d2LnGdT2[j] = 0.;
 					dLnGdP[j] = 0.;
 				}
 
 				else
 				{
-					// water activity coefficient unity
 					LnG[j] = 0.;
 					dLnGdT[j] = 0.;
 					d2LnGdT2[j] = 0.;
@@ -3181,8 +3175,8 @@ TTwoTermDH::TTwoTermDH( long int NSpecies, long int NParams,
 	EpsW = eW;
 	ac = 3.72;   // common ion size parameter
 	bc = 0.064;   // common b_setch
-	flagNeut = aIPc[2];   // 0: unity, 1: calculated
-	flagH2O = aIPc[3];   // 0: unity, 1: calculated
+	flagNeut = aIPc[2];   // 0: unity, 1: calculated from bg
+	flagH2O = aIPc[3];   // 0: unity, 1: calculated from bg
 
 }
 
@@ -3310,10 +3304,14 @@ long int TTwoTermDH::MixMod()
 			if ( j != (NComp-1) )
 			{
 				lgGam = 0.0;
+
+				// rational Setchenow coefficient
 				if ( flagNeut == 1 )
 					lgGam = bg[j] * IS;
+
 				else
 					lgGam = 0.0;
+
 				lnGamma[j] = (lgGam + Lgam) * lg_to_ln;
 				continue;
 			}
@@ -3323,14 +3321,17 @@ long int TTwoTermDH::MixMod()
 			{
 				lgGam = 0.0;
 				lnGam = 0.0;
+
+				// rational osmotic coefficient
 				if ( flagH2O == 1 )
 				{
-					// rational osmotic coefficient
 					lgGam = bg[j] * molT;
 					lnGam = lgGam * lg_to_ln;
 				}
+
 				else
 					lnGam = 0.0;
+
 				lnGamma[j] = lnGam;
 			}
 		}
@@ -3394,9 +3395,9 @@ long int TTwoTermDH::ExcessProp( double *Zex )
 			// neutral species
 			if ( j != (NComp-1) )
 			{
+				// rational Setchenow coefficient
 				if ( flagNeut == 1 )
 				{
-					// rational Setchenow coefficient
 					LnG[j] = ( bg[j] * IS ) * lg_to_ln;
 					dLnGdT[j] = 0.;
 					d2LnGdT2[j] = 0.;
@@ -3405,7 +3406,6 @@ long int TTwoTermDH::ExcessProp( double *Zex )
 
 				else
 				{
-					// activity coefficient unity
 					LnG[j] = 0.;
 					dLnGdT[j] = 0.;
 					d2LnGdT2[j] = 0.;
@@ -3417,9 +3417,10 @@ long int TTwoTermDH::ExcessProp( double *Zex )
 			// water solvent
 			else
 			{
+				// rational osmotic coefficient
 				if ( flagH2O == 1 )
 				{
-					// rational osmotic coefficient
+
 					LnG[j] = ( bg[j] * molT ) * lg_to_ln;
 					dLnGdT[j] = 0.;
 					d2LnGdT2[j] = 0.;
@@ -3428,7 +3429,6 @@ long int TTwoTermDH::ExcessProp( double *Zex )
 
 				else
 				{
-					// water activity coefficient unity
 					LnG[j] = 0.;
 					dLnGdT[j] = 0.;
 					d2LnGdT2[j] = 0.;
@@ -3821,7 +3821,7 @@ long int TKarpovDH::ExcessProp( double *Zex )
 			// water solvent
 			else
 			{
-				// activity coefficient of water calculated
+				// water activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
@@ -3888,6 +3888,7 @@ long int TKarpovDH::ExcessProp( double *Zex )
 					dLnGdP[j] = - (molT/Nw) * dPhidP;
 				}
 
+				// water activity coefficient unity
 				else
 				{
 					LnG[j] = 0.;

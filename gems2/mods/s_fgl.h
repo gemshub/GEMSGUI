@@ -1004,8 +1004,8 @@ class THelgesonDH: public TSolMod
 	private:
 
 		// status flags copied from MULTI
-		long int flagH2O;  // new flag for water
-		long int flagNeut;  // new flag for neutral species
+		long int flagH2O;  // flag for water
+		long int flagNeut;  // flag for neutral species
 		long int flagElect;  // flag for selection of background electrolyte model
 
 		// data objects copied from MULTI
@@ -1080,8 +1080,9 @@ class TDaviesDH: public TSolMod
 	private:
 
 		// status flags copied from MULTI
-		long int flagH2O;  // new flag for water
-		long int flagNeut;  // new flag for neutral species
+		long int flagH2O;  // flag for water
+		long int flagNeut;  // flag for neutral species
+		long int flagMol;  // flag for molality correction
 
 		// data objects copied from MULTI
 		double *z;   // species charges
@@ -1140,8 +1141,8 @@ class TLimitingLawDH: public TSolMod
 	private:
 
 		// status flags copied from MULTI
-		long int flagH2O;  // new flag for water
-		long int flagNeut;  // new flag for neutral species
+		long int flagH2O;  // flag for water
+		long int flagNeut;  // flag for neutral species
 
 		// data objects copied from MULTI
 		double *z;   // species charges
@@ -1200,8 +1201,8 @@ class TTwoTermDH: public TSolMod
 	private:
 
 		// status flags copied from MULTI
-		long int flagH2O;  // new flag for water
-		long int flagNeut;  // new flag for neutral species
+		long int flagH2O;  // flag for water
+		long int flagNeut;  // flag for neutral species
 
 		// data objects copied from MULTI
 		double *z;   // species charges
@@ -1268,8 +1269,8 @@ class TKarpovDH: public TSolMod
 	private:
 
 		// status flags copied from MULTI
-		long int flagH2O;  // new flag for water
-		long int flagNeut;  // new flag for neutral species
+		long int flagH2O;  // flag for water
+		long int flagNeut;  // flag for neutral species
 		long int flagElect;  // flag for selection of background electrolyte model
 
 		// data objects copied from MULTI
