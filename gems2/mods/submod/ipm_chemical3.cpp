@@ -1363,7 +1363,8 @@ void TMulti::IdealGas( long int jb, long int k, double *Zid )
 	s = 0.0;
 	for (j=0; j<Nc; j++)
 	{
-		s += X[j]*log(X[j]);
+		if ( X[j] > 1.0e-32 )
+			s += X[j]*log(X[j]);
 	}
 	sc = (-1.)*R*s;
 	sp = (-1.)*R*log(P);
@@ -1404,7 +1405,8 @@ void TMulti::IdealOneSite( long int jb, long int k, double *Zid )
 	s = 0.0;
 	for (j=0; j<Nc; j++)
 	{
-		s += X[j]*log(X[j]);
+		if ( X[j] > 1.0e-32 )
+			s += X[j]*log(X[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;

@@ -286,7 +286,8 @@ long int TVanLaar::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -465,7 +466,8 @@ long int TRegular::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -723,7 +725,8 @@ long int TRedlichKister::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -999,7 +1002,8 @@ long int TNRTL::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -1213,7 +1217,8 @@ long int TWilson::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -1368,7 +1373,8 @@ long int TMargules::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -1507,7 +1513,8 @@ long int TSubregular::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;

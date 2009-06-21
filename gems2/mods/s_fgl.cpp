@@ -243,7 +243,8 @@ long int TPRSVcalc::IdealProp( double *Zid )
 	s = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		s += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			s += x[j]*log(x[j]);
 	}
 	sc = (-1.)*R_CONST*s;
 	sp = (-1.)*R_CONST*log(Pbar);
@@ -1039,7 +1040,8 @@ long int TCGFcalc::IdealProp( double *Zid )
 	s = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		s += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			s += x[j]*log(x[j]);
 	}
 	sc = (-1.)*R_CONST*s;
 	sp = (-1.)*R_CONST*log(Pbar);
@@ -2526,7 +2528,8 @@ long int TSRKcalc::IdealProp( double *Zid )
 	s = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		s += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			s += x[j]*log(x[j]);
 	}
 	sc = (-1.)*R_CONST*s;
 	sp = (-1.)*R_CONST*log(Pbar);

@@ -30,7 +30,7 @@
 //=============================================================================================
 
 
-// Generic constructor for the TVanLaar class
+// Generic constructor for the TModOther class
 TModOther::TModOther( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,

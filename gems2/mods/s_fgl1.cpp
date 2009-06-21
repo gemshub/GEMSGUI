@@ -297,7 +297,8 @@ long int TSIT::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -1303,7 +1304,8 @@ long int TPitzer::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -1752,7 +1754,8 @@ long int TEUNIQUAC::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -2221,7 +2224,8 @@ long int THelgesonDH::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -2786,7 +2790,8 @@ long int TDaviesDH::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -2846,7 +2851,7 @@ long int TDaviesDH::IonicStrength()
 //=============================================================================================
 
 
-// Generic constructor for the TDaviesDH class
+// Generic constructor for the TDLimitingLawDH class
 TLimitingLawDH::TLimitingLawDH( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
@@ -3104,7 +3109,8 @@ long int TLimitingLawDH::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -3156,7 +3162,7 @@ long int TLimitingLawDH::IonicStrength()
 //=============================================================================================
 
 
-// Generic constructor for the THelgesonDH class
+// Generic constructor for the TTwoTermDH class
 TTwoTermDH::TTwoTermDH( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
@@ -3475,7 +3481,8 @@ long int TTwoTermDH::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
@@ -3540,7 +3547,7 @@ long int TTwoTermDH::IonicStrength()
 //=============================================================================================
 
 
-// Generic constructor for the THelgesonDH class
+// Generic constructor for the TKarpovDH class
 TKarpovDH::TKarpovDH( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
@@ -3937,7 +3944,8 @@ long int TKarpovDH::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;
