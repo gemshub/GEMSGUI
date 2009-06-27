@@ -1930,15 +1930,15 @@ long int THelgesonDH::PTparam()
 // Calculates activity coefficients
 long int THelgesonDH::MixMod()
 {
-	long int j, w;
+	long int j, k, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm,
-			Phi, zc, za, psi, lnActWat, lg_to_ln;
+			Phi, Phit, zc, za, psi, lnActWat, lg_to_ln;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molaities (molT and molZ)
+	// calculate ionic strength and total molaities
 	IonicStrength();
 
 	WxW = x[w];
@@ -2001,11 +2001,22 @@ long int THelgesonDH::MixMod()
 				lnGam = 0.0;
 				if ( flagH2O == 1 )
 				{
+					Phit = 0.0;
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
 					Lam = 1. + (ao*B) * sqI;
 					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
+					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
+
+					for (k=0; k<(NComp-1); k++)
+					{
+						if ( (z[k] == 0) && (flagNeut == 0) )
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
+						else
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
+					}
+
+					Phi = Phit/molT;
 					lnActWat = - Phi*molT/Nw;
 					lnGam = lnActWat - lnwxWat;
 				}
@@ -2023,21 +2034,21 @@ long int THelgesonDH::MixMod()
 // calculates excess properties
 long int THelgesonDH::ExcessProp( double *Zex )
 {
-	// under testing
-	long int j, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, lnActWat, lg_to_ln, zc, za,
-			psi, g, dgt, d2gt, dgp;
+	long int j, k, w;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, zc, za, psi,
+			g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
 			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
-			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP, dPhidT, d2PhidT2, dPhidP;
+			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -2102,13 +2113,7 @@ long int THelgesonDH::ExcessProp( double *Zex )
 				// water activity coeff. calculated
 				if ( flagH2O == 1 )
 				{
-					// Phi corrected using eq. (190) from Helgeson et al. (1981)
-					Lam = 1. + (ao*B) * sqI;
-					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
-					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
-					lnActWat = - Phi*molT/Nw;
-					LnG[j] = lnActWat - lnwxWat;
+					Phit = 0.; dPhitdT = 0.; d2PhitdT2 = 0.; dPhitdP = 0.;
 
 					// derivatives of lambda and sigma terms
 					L = 1. + (ao*B) * sqI;
@@ -2116,22 +2121,21 @@ long int THelgesonDH::ExcessProp( double *Zex )
 					d2LdT2 = ( d2aodT2*B + 2.*daodT*dBdT + ao*d2BdT2 ) * sqI;
 					dLdP = ( daodP*B + ao*dBdP ) * sqI;
 
-					U1 = (zc*za) * (A*L);
-					dU1dT = (zc*za) * (dAdT*L + A*dLdT);
-					d2U1dT2 = (zc*za) * ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
-					dU1dP = (zc*za) * ( dAdP*L + A*dLdP );
+					U1 = (A*L);
+					dU1dT = (dAdT*L + A*dLdT);
+					d2U1dT2 = ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
+					dU1dP = ( dAdP*L + A*dLdP );
 					V1 = pow(ao,3.)*pow(B,3.) * IS;
-					dV1dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;  // corrected, 15.06.2009 (TW)
-
+					dV1dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
 					d2V1dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)
 								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
 								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
 					dV1dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
 
-					U2 = (zc*za) * A;
-					dU2dT = (zc*za) * dAdT;
-					d2U2dT2 = (zc*za) * d2AdT2;
-					dU2dP = (zc*za) * dAdP;
+					U2 = A;
+					dU2dT = dAdT;
+					d2U2dT2 = d2AdT2;
+					dU2dP = dAdP;
 					V2 = pow(ao,3.)*pow(B,3.)*L * IS;
 					dV2dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdT*L
 								+ pow(ao,3.)*pow(B,3.)*dLdT ) * IS;
@@ -2139,17 +2143,17 @@ long int THelgesonDH::ExcessProp( double *Zex )
 								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT*L + 6.*pow(ao,2.)*daodT*pow(B,3.)*dLdT
 								+ 6.*pow(ao,3.)*B*pow(dBdT,2.)*L + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2*L
 								+ 6.*pow(ao,3.)*pow(B,2.)*dBdT*dLdT + pow(ao,3.)*pow(B,3.)*d2LdT2 ) * IS;
-					dV2dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdP*L  // corrected, 15.06.2009 (TW)
+					dV2dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.)*L + 3.*pow(ao,3.)*pow(B,2.)*dBdP*L
 								+ pow(ao,3.)*pow(B,3.)*dLdP ) * IS;
 
-					U3 = (2.*zc*za) * ( A*log(L) );
-					dU3dT = (2.*zc*za) * ( dAdT*log(L) + A*(1./L)*dLdT );
-					d2U3dT2 = (2.*zc*za) * ( d2AdT2*log(L) + 2.*dAdT*(1./L)*dLdT
+					U3 = 2.*( A*log(L) );
+					dU3dT = 2.*( dAdT*log(L) + A*(1./L)*dLdT );
+					d2U3dT2 = 2.*( d2AdT2*log(L) + 2.*dAdT*(1./L)*dLdT
 								- A*(1./pow(L,2.))*pow(dLdT,2.) + A*(1./L)*d2LdT2 );
-					dU3dP = (2.*zc*za) * ( dAdP*log(L) + A*(1./L)*dLdP );
+					dU3dP = 2.*( dAdP*log(L) + A*(1./L)*dLdP );
 					V3 = pow(ao,3.)*pow(B,3.) * IS;
 					dV3dT = ( 3.*pow(ao,2.)*daodT*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
-					d2V3dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)  // corrected, 15.06.2009 (TW)
+					d2V3dT2 = ( 6.*ao*pow(daodT,2.)*pow(B,3.) + 3.*pow(ao,2.)*d2aodT2*pow(B,3.)
 								+ 18.*pow(ao,2.)*daodT*pow(B,2.)*dBdT + 6.*pow(ao,3.)*B*pow(dBdT,2.)
 								+ 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
 					dV3dP = ( 3.*pow(ao,2.)*daodP*pow(B,3.) + 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
@@ -2166,13 +2170,43 @@ long int THelgesonDH::ExcessProp( double *Zex )
 					dZdP = (dU1dP*V1 - U1*dV1dP)/pow(V1,2.) - (dU2dP*V2 - U2*dV2dP)/pow(V2,2.)
 								- (dU3dP*V3 - U3*dV3dP)/pow(V3,2.);
 
-					// derivatives of osmotic and activity coefficient
-					dPhidT = - log(10.) * (molZ/molT) * ( dZdT - dbgdT*IS/2. );
-					d2PhidT2 = - log(10.) * (molZ/molT) * ( d2ZdT2 - d2bgdT2*IS/2. );
-					dPhidP = - log(10.) * (molZ/molT) * ( dZdP - dbgdP*IS/2. );
+					// increments to osmotic coefficient (and derivatives)
+					Lam = 1. + (ao*B) * sqI;
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
+
+					for (k=0; k<(NComp-1); k++)
+					{
+						if ( (z[k] == 0) && (flagNeut == 0) )
+						{
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
+							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT - 0. );
+							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 - 0. );
+							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP - 0. );
+						}
+
+						else
+						{
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
+							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT - dbgdT*IS/2. );
+							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 - d2bgdT2*IS/2. );
+							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP - dbgdP*IS/2. );
+						}
+					}
+
+					Phi = Phit/molT;
+					dPhidT = dPhitdT/molT;
+					d2PhidT2 = d2PhitdT2/molT;
+					dPhidP = dPhitdP/molT;
+
+					// activity coefficient (and derivatives)
+					lnActWat = - Phi*molT/Nw;
+					LnG[j] = lnActWat - lnwxWat;
 					dLnGdT[j] = - (molT/Nw) * dPhidT;
 					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
 					dLnGdP[j] = - (molT/Nw) * dPhidP;
+
 				}
 
 				// water activity coeff. unity
@@ -2607,7 +2641,7 @@ long int TDaviesDH::MixMod()
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -2693,7 +2727,7 @@ long int TDaviesDH::ExcessProp( double *Zex )
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -2932,7 +2966,7 @@ long int TLimitingLawDH::MixMod()
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -3012,7 +3046,7 @@ long int TLimitingLawDH::ExcessProp( double *Zex )
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -3262,7 +3296,7 @@ long int TTwoTermDH::MixMod()
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -3361,7 +3395,7 @@ long int TTwoTermDH::ExcessProp( double *Zex )
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -3659,15 +3693,15 @@ long int TKarpovDH::PTparam()
 // Calculates activity coefficients
 long int TKarpovDH::MixMod()
 {
-	long int j, w;
+	long int j, k, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm,
-			Phi, psi, zc, za, lnActWat, lg_to_ln;
+			Phi, Phit, psi, zc, za, lnActWat, lg_to_ln;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -3730,11 +3764,22 @@ long int TKarpovDH::MixMod()
 				lnGam = 0.0;
 				if ( flagH2O == 1 )
 				{
+					Phit = 0.0;
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
 					Lam = 1. + ao*B*sqI;
 					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
 					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
-					Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (psi*Lgam)/(0.0180153*2.*IS) - bgam*IS/2. );
+					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (psi*Lgam)/(0.0180153*2.*IS) - bgam*IS/2. );
+
+					for (k=0; k<(NComp-1); k++)
+					{
+						if ( (z[k] == 0) && (flagNeut == 0) )
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
+						else
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
+					}
+
+					Phi = Phit/molT;
 					lnActWat = - Phi*molT/Nw;
 					lnGam = lnActWat - lnwxWat;
 				}
@@ -3752,21 +3797,21 @@ long int TKarpovDH::MixMod()
 // calculates excess properties
 long int TKarpovDH::ExcessProp( double *Zex )
 {
-	// under testing
-	long int j, w;
-	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, lnActWat, lg_to_ln, zc, za,
-			psi, g, dgt, d2gt, dgp;
+	long int j, k, w;
+	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
+			Phit, dPhitdT, d2PhitdT2, dPhitdP, lnActWat, lg_to_ln, zc, za, psi,
+			g, dgt, d2gt, dgp;
 	double U, V, dUdT, dVdT, d2UdT2, d2VdT2, dUdP, dVdP, U1, U2, U3, V1, V2, V3,
 			dU1dT, dU2dT, dU3dT, dV1dT, dV2dT, dV3dT, d2U1dT2, d2U2dT2, d2U3dT2,
 			d2V1dT2, d2V2dT2, d2V3dT2, dU1dP, dU2dP, dU3dP, dV1dP, dV2dP, dV3dP,
-			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP, dPhidT, d2PhidT2, dPhidP;
+			L, dLdT, d2LdT2, dLdP, Z, dZdT, d2ZdT2, dZdP;
 	zc = 1.; za = 1.; psi = 1.; lg_to_ln = 2.302585093;
 	g = 0.; dgt = 0.; d2gt = 0.; dgp = 0.;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
 
-	// calculate ionic strength and total molalities (molT and molZ)
+	// calculate ionic strength and total molalities
 	IonicStrength();
 
 	WxW = x[w];
@@ -3831,6 +3876,8 @@ long int TKarpovDH::ExcessProp( double *Zex )
 				// water activity coefficient calculated
 				if ( flagH2O == 1 )
 				{
+					Phit = 0.; dPhitdT = 0.; d2PhitdT2 = 0.; dPhitdP = 0.;
+
 					// Phi corrected using eq. (190) from Helgeson et al. (1981)
 					Lam = 1. + (ao*B) * sqI;
 					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
@@ -3845,30 +3892,30 @@ long int TKarpovDH::ExcessProp( double *Zex )
 					d2LdT2 = ( ao*d2BdT2 ) * sqI;
 					dLdP = ( ao*dBdP ) * sqI;
 
-					U1 = (zc*za) * (A*L);
-					dU1dT = (zc*za) * (dAdT*L + A*dLdT);
-					d2U1dT2 = (zc*za) * ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
-					dU1dP = (zc*za) * ( dAdP*L + A*dLdP );
+					U1 = (A*L);
+					dU1dT = (dAdT*L + A*dLdT);
+					d2U1dT2 = ( d2AdT2*L + 2.*dAdT*dLdT + A*d2LdT2 );
+					dU1dP = ( dAdP*L + A*dLdP );
 					V1 = pow(ao,3.)*pow(B,3.) * IS;
 					dV1dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
 					d2V1dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.) + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
 					dV1dP = ( 3.*pow(ao,3.)*pow(B,2.)*dBdP ) * IS;
 
-					U2 = (zc*za) * A;
-					dU2dT = (zc*za) * dAdT;
-					d2U2dT2 = (zc*za) * d2AdT2;
-					dU2dP = (zc*za) * dAdP;
+					U2 = A;
+					dU2dT = dAdT;
+					d2U2dT2 = d2AdT2;
+					dU2dP = dAdP;
 					V2 = pow(ao,3.)*pow(B,3.)*L * IS;
 					dV2dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT*L + pow(ao,3.)*pow(B,3.)*dLdT ) * IS;
 					d2V2dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.)*L + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2*L
 								+ 6.*pow(ao,3.)*pow(B,2.)*dBdT*dLdT + pow(ao,3.)*pow(B,3.)*d2LdT2 ) * IS;
 					dV2dP = ( 3.*pow(ao,3.)*pow(B,2.)*dBdP*L + pow(ao,3.)*pow(B,3.)*dLdP ) * IS;
 
-					U3 = (2.*zc*za) * ( A*log(L) );
-					dU3dT = (2.*zc*za) * ( dAdT*log(L) + A*(1./L)*dLdT );
-					d2U3dT2 = (2.*zc*za) * ( d2AdT2*log(L) + 2.*dAdT*(1./L)*dLdT
+					U3 = 2.*( A*log(L) );
+					dU3dT = 2.*( dAdT*log(L) + A*(1./L)*dLdT );
+					d2U3dT2 = 2.*( d2AdT2*log(L) + 2.*dAdT*(1./L)*dLdT
 								- A*(1./pow(L,2.))*pow(dLdT,2.) + A*(1./L)*d2LdT2 );
-					dU3dP = (2.*zc*za) * ( dAdP*log(L) + A*(1./L)*dLdP );
+					dU3dP = 2.*( dAdP*log(L) + A*(1./L)*dLdP );
 					V3 = pow(ao,3.)*pow(B,3.) * IS;
 					dV3dT = ( 3.*pow(ao,3.)*pow(B,2.)*dBdT ) * IS;
 					d2V3dT2 = ( 6.*pow(ao,3.)*B*pow(dBdT,2.) + 3.*pow(ao,3.)*pow(B,2.)*d2BdT2 ) * IS;
@@ -3886,10 +3933,40 @@ long int TKarpovDH::ExcessProp( double *Zex )
 					dZdP = (dU1dP*V1 - U1*dV1dP)/pow(V1,2.) - (dU2dP*V2 - U2*dV2dP)/pow(V2,2.)
 								- (dU3dP*V3 - U3*dV3dP)/pow(V3,2.);
 
-					// derivatives of osmotic and activity coefficient
-					dPhidT = - log(10.) * (molZ/molT) * ( dZdT - dbgdT*IS/2. );
-					d2PhidT2 = - log(10.) * (molZ/molT) * ( d2ZdT2 - d2bgdT2*IS/2. );
-					dPhidP = - log(10.) * (molZ/molT) * ( dZdP - dbgdP*IS/2. );
+					// increments to osmotic coefficient (and derivatives)
+					Lam = 1. + (ao*B) * sqI;
+					SigTerm = 3./(pow(ao,3.)*pow(B,3.)*pow(IS,(3./2.))) * (Lam-1./Lam-2*log(Lam));
+					// Phi = -2.3025851*(A*sqI*SigTerm/3. + Lgam/(0.0180153*2.*IS) - bgam*IS/2.);
+					// Phi = - log(10.) * (molZ/molT) * ( (zc*za*A*sqI*SigTerm)/3. + (Lgam*psi)/(0.0180153*2.*IS) - bgam*IS/2. );
+
+					for (k=0; k<(NComp-1); k++)
+					{
+						if ( (z[k] == 0) && (flagNeut == 0) )
+						{
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - 0. );
+							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT - 0. );
+							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 - 0. );
+							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP - 0. );
+
+						}
+
+						else
+						{
+							Phit += - log(10.) * m[k] * ( (pow(z[k],2.)*A*sqI*SigTerm)/3. + Lgam/(0.0180153*molT) - bgam*IS/2. );
+							dPhitdT  += - log(10.) * m[k] * ( pow(z[k],2.)*dZdT - dbgdT*IS/2. );
+							d2PhitdT2 += - log(10.) * m[k] * ( pow(z[k],2.)*d2ZdT2 - d2bgdT2*IS/2. );
+							dPhitdP += - log(10.) * m[k] * ( pow(z[k],2.)*dZdP - dbgdP*IS/2. );
+						}
+					}
+
+					Phi = Phit/molT;
+					dPhidT = dPhitdT/molT;
+					d2PhidT2 = d2PhitdT2/molT;
+					dPhidP = dPhitdP/molT;
+
+					// activity coefficient (and derivatives)
+					lnActWat = - Phi*molT/Nw;
+					LnG[j] = lnActWat - lnwxWat;
 					dLnGdT[j] = - (molT/Nw) * dPhidT;
 					d2LnGdT2[j] = - (molT/Nw) * d2PhidT2;
 					dLnGdP[j] = - (molT/Nw) * dPhidP;
