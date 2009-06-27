@@ -999,7 +999,7 @@ class TEUNIQUAC: public TSolMod
 // Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Helgesons variant
 // References: Helgeson et al. (1981); Oelkers and Helgeson (1990); Pokrovskii and Helgeson (1995; 1997a; 1997b)
 
-class THelgesonDH: public TSolMod
+class THelgeson: public TSolMod
 {
 	private:
 
@@ -1046,7 +1046,7 @@ class THelgesonDH: public TSolMod
 	public:
 
 		// Constructor
-		THelgesonDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		THelgeson( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
@@ -1054,7 +1054,7 @@ class THelgesonDH: public TSolMod
 				double T_k, double P_bar, double *dW, double *eW );
 
 		// Destructor
-		~THelgesonDH();
+		~THelgeson();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
@@ -1075,7 +1075,7 @@ class THelgesonDH: public TSolMod
 // -------------------------------------------------------------------------------------
 // Extended Debye-Hueckel (EDH) model for aqueous electrolyte solutions, Davies variant
 // References: Langmuir (1997)
-class TDaviesDH: public TSolMod
+class TDavies: public TSolMod
 {
 	private:
 
@@ -1108,14 +1108,14 @@ class TDaviesDH: public TSolMod
 	public:
 
 		// Constructor
-		TDaviesDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		TDavies( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
 				double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 		// Destructor
-		~TDaviesDH();
+		~TDavies();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
@@ -1136,7 +1136,7 @@ class TDaviesDH: public TSolMod
 // -------------------------------------------------------------------------------------
 // Debye-Hueckel (DH) limiting law for aqueous electrolyte solutions
 // References: Langmuir (1997)
-class TLimitingLawDH: public TSolMod
+class TLimitingLaw: public TSolMod
 {
 	private:
 
@@ -1166,14 +1166,14 @@ class TLimitingLawDH: public TSolMod
 	public:
 
 		// Constructor
-		TLimitingLawDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		TLimitingLaw( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
 				double *arM, double *arZ,
 				double T_k, double P_bar, double *dW, double *eW );
 		// Destructor
-		~TLimitingLawDH();
+		~TLimitingLaw();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
@@ -1196,7 +1196,7 @@ class TLimitingLawDH: public TSolMod
 // References: Helgeson et al. (1981)
 // uses individual ion-size parameters, optionally individual salting-out coefficients
 
-class TTwoTermDH: public TSolMod
+class TDebyeHueckel: public TSolMod
 {
 	private:
 
@@ -1233,7 +1233,7 @@ class TTwoTermDH: public TSolMod
 	public:
 
 		// Constructor
-		TTwoTermDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		TDebyeHueckel( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
@@ -1241,7 +1241,7 @@ class TTwoTermDH: public TSolMod
 				double T_k, double P_bar, double *dW, double *eW );
 
 		// Destructor
-		~TTwoTermDH();
+		~TDebyeHueckel();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();
@@ -1264,7 +1264,7 @@ class TTwoTermDH: public TSolMod
 // References: Karpov et al. (1997); Helgeson et al. (1981); Oelkers and Helgeson (1990);
 // Pokrovskii and Helgeson (1995; 1997a; 1997b)
 
-class TKarpovDH: public TSolMod
+class TKarpov: public TSolMod
 {
 	private:
 
@@ -1311,7 +1311,7 @@ class TKarpovDH: public TSolMod
 	public:
 
 		// Constructor
-		TKarpovDH( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
+		TKarpov( long int NSpecies, long int NParams, long int NPcoefs, long int MaxOrder,
 				long int NPperDC, char Mod_Code,
 				long int *arIPx, double *arIPc, double *arDCc,
 				double *arWx, double *arlnGam, double *aphVOL,
@@ -1319,7 +1319,7 @@ class TKarpovDH: public TSolMod
 				double T_k, double P_bar, double *dW, double *eW );
 
 		// Destructor
-		~TKarpovDH();
+		~TKarpov();
 
 		// calculates T,P corrected interaction parameters
 		long int PTparam();

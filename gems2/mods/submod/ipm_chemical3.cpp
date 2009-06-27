@@ -926,7 +926,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
 
         case SM_AQDH3:  // Karpov's version of extended Debye-Hueckel model
         {
-           	TKarpovDH* aPT = new TKarpovDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+           	TKarpov* aPT = new TKarpov( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
             aSM = (TSolMod*)aPT;
         	break;
@@ -934,7 +934,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
 
         case SM_AQDH2:   // Debye-Hueckel model without extended term
         {
-           	TTwoTermDH* aPT = new TTwoTermDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+           	TDebyeHueckel* aPT = new TDebyeHueckel( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
             aSM = (TSolMod*)aPT;
         	break;
@@ -942,7 +942,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
 
         case SM_AQDH1:   // Debye-Hueckel limiting law
         {
-           	TLimitingLawDH* aPT = new TLimitingLawDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+           	TLimitingLaw* aPT = new TLimitingLaw( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
             aSM = (TSolMod*)aPT;
         	break;
@@ -950,7 +950,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
 
         case SM_AQDHH:  // Helgeson's version of extended Debye-Hueckel model
         {
-           	THelgesonDH* aPT = new THelgesonDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+           	THelgeson* aPT = new THelgeson( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
             aSM = (TSolMod*)aPT;
         	break;
@@ -958,7 +958,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
 
         case SM_AQDAV:   // Davies equation (in NEA TDB variant)
         {
-           	TDaviesDH* aPT = new TDaviesDH( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+           	TDavies* aPT = new TDavies( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
             aSM = (TSolMod*)aPT;
         	break;

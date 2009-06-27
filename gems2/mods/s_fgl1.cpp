@@ -1825,7 +1825,7 @@ void TEUNIQUAC::Euniquac_test_out( const char *path )
 
 
 // Generic constructor for the THelgesonDH class
-THelgesonDH::THelgesonDH( long int NSpecies, long int NParams,
+THelgeson::THelgeson( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,
@@ -1849,13 +1849,13 @@ THelgesonDH::THelgesonDH( long int NSpecies, long int NParams,
 }
 
 
-THelgesonDH::~THelgesonDH()
+THelgeson::~THelgeson()
 {
 	free_internal();
 }
 
 
-void THelgesonDH::alloc_internal()
+void THelgeson::alloc_internal()
 {
 	LnG = new double [NComp];
 	dLnGdT = new double [NComp];
@@ -1864,7 +1864,7 @@ void THelgesonDH::alloc_internal()
 }
 
 
-void THelgesonDH::free_internal()
+void THelgeson::free_internal()
 {
 	delete[]LnG;
 	delete[]dLnGdT;
@@ -1874,7 +1874,7 @@ void THelgesonDH::free_internal()
 
 
 // Calculates T,P corrected parameters
-long int THelgesonDH::PTparam()
+long int THelgeson::PTparam()
 {
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
@@ -1928,7 +1928,7 @@ long int THelgesonDH::PTparam()
 
 
 // Calculates activity coefficients
-long int THelgesonDH::MixMod()
+long int THelgeson::MixMod()
 {
 	long int j, k, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm,
@@ -2032,7 +2032,7 @@ long int THelgesonDH::MixMod()
 
 
 // calculates excess properties
-long int THelgesonDH::ExcessProp( double *Zex )
+long int THelgeson::ExcessProp( double *Zex )
 {
 	long int j, k, w;
 	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
@@ -2251,7 +2251,7 @@ long int THelgesonDH::ExcessProp( double *Zex )
 
 
 // calculates ideal mixing properties
-long int THelgesonDH::IdealProp( double *Zid )
+long int THelgeson::IdealProp( double *Zid )
 {
 	long int j;
 	double si;
@@ -2282,7 +2282,7 @@ long int THelgesonDH::IdealProp( double *Zid )
 
 
 // calculates true ionic strength
-long int THelgesonDH::IonicStrength()
+long int THelgeson::IonicStrength()
 {
 	long int j;
 	double is, mt, mz;
@@ -2315,7 +2315,7 @@ long int THelgesonDH::IonicStrength()
 
 
 // calculates TP dependence of b_gamma (and derivatives)
-long int THelgesonDH::BgammaTP()
+long int THelgeson::BgammaTP()
 {
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
@@ -2402,7 +2402,7 @@ long int THelgesonDH::BgammaTP()
 
 
 // calculates TP dependence of a_not (and derivatives)
-long int THelgesonDH::IonsizeTP()
+long int THelgeson::IonsizeTP()
 {
 	double nc, na, ni, zc, za, c;
 
@@ -2439,7 +2439,7 @@ long int THelgesonDH::IonsizeTP()
 
 
 // wrapper for g-function
-long int THelgesonDH::Gfunction()
+long int THelgeson::Gfunction()
 {
 	double T, P, D, beta, alpha, daldT, g, dgdP, dgdT, d2gdT2;
 	double TMAX = 1000., PMAX = 5000., TOL = 1.0e-4;
@@ -2474,7 +2474,7 @@ long int THelgesonDH::Gfunction()
 
 
 // calculates g-function and derivatives
-long int THelgesonDH::GShok2( double T, double P, double D, double beta,
+long int THelgeson::GShok2( double T, double P, double D, double beta,
 		double alpha, double daldT, double &g, double &dgdP, double &dgdT, double &d2gdT2 )
 {
 	double a, b, dgdD, /*dgdD2,*/ dadT, dadTT, dbdT, dbdTT, dDdT, dDdP,
@@ -2559,7 +2559,7 @@ long int THelgesonDH::GShok2( double T, double P, double D, double beta,
 
 
 // Generic constructor for the TDaviesDH class
-TDaviesDH::TDaviesDH( long int NSpecies, long int NParams,
+TDavies::TDavies( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,
@@ -2582,13 +2582,13 @@ TDaviesDH::TDaviesDH( long int NSpecies, long int NParams,
 }
 
 
-TDaviesDH::~TDaviesDH()
+TDavies::~TDavies()
 {
 	free_internal();
 }
 
 
-void TDaviesDH::alloc_internal()
+void TDavies::alloc_internal()
 {
 	LnG = new double [NComp];
 	dLnGdT = new double [NComp];
@@ -2597,7 +2597,7 @@ void TDaviesDH::alloc_internal()
 }
 
 
-void TDaviesDH::free_internal()
+void TDavies::free_internal()
 {
 	delete[]LnG;
 	delete[]dLnGdT;
@@ -2607,7 +2607,7 @@ void TDaviesDH::free_internal()
 
 
 // Calculates T,P corrected parameters
-long int TDaviesDH::PTparam()
+long int TDavies::PTparam()
 {
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
@@ -2632,7 +2632,7 @@ long int TDaviesDH::PTparam()
 
 
 // Calculates activity coefficients
-long int TDaviesDH::MixMod()
+long int TDavies::MixMod()
 {
 	long int j, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
@@ -2716,7 +2716,7 @@ long int TDaviesDH::MixMod()
 
 
 // calculates excess properties
-long int TDaviesDH::ExcessProp( double *Zex )
+long int TDavies::ExcessProp( double *Zex )
 {
 	// under testing
 	long int j, w;
@@ -2817,7 +2817,7 @@ long int TDaviesDH::ExcessProp( double *Zex )
 
 
 // calculates ideal mixing properties
-long int TDaviesDH::IdealProp( double *Zid )
+long int TDavies::IdealProp( double *Zid )
 {
 	long int j;
 	double si;
@@ -2848,7 +2848,7 @@ long int TDaviesDH::IdealProp( double *Zid )
 
 
 // calculates true ionic strength
-long int TDaviesDH::IonicStrength()
+long int TDavies::IonicStrength()
 {
 	long int j;
 	double is, mt;
@@ -2886,7 +2886,7 @@ long int TDaviesDH::IonicStrength()
 
 
 // Generic constructor for the TDLimitingLawDH class
-TLimitingLawDH::TLimitingLawDH( long int NSpecies, long int NParams,
+TLimitingLaw::TLimitingLaw( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,
@@ -2907,13 +2907,13 @@ TLimitingLawDH::TLimitingLawDH( long int NSpecies, long int NParams,
 }
 
 
-TLimitingLawDH::~TLimitingLawDH()
+TLimitingLaw::~TLimitingLaw()
 {
 	free_internal();
 }
 
 
-void TLimitingLawDH::alloc_internal()
+void TLimitingLaw::alloc_internal()
 {
 	LnG = new double [NComp];
 	dLnGdT = new double [NComp];
@@ -2922,7 +2922,7 @@ void TLimitingLawDH::alloc_internal()
 }
 
 
-void TLimitingLawDH::free_internal()
+void TLimitingLaw::free_internal()
 {
 	delete[]LnG;
 	delete[]dLnGdT;
@@ -2932,7 +2932,7 @@ void TLimitingLawDH::free_internal()
 
 
 // Calculates T,P corrected parameters
-long int TLimitingLawDH::PTparam()
+long int TLimitingLaw::PTparam()
 {
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
 
@@ -2957,7 +2957,7 @@ long int TLimitingLawDH::PTparam()
 
 
 // Calculates activity coefficients
-long int TLimitingLawDH::MixMod()
+long int TLimitingLaw::MixMod()
 {
 	long int j, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
@@ -3035,7 +3035,7 @@ long int TLimitingLawDH::MixMod()
 
 
 // calculates excess properties
-long int TLimitingLawDH::ExcessProp( double *Zex )
+long int TLimitingLaw::ExcessProp( double *Zex )
 {
 	// under testing
 	long int j, w;
@@ -3136,7 +3136,7 @@ long int TLimitingLawDH::ExcessProp( double *Zex )
 
 
 // calculates ideal mixing properties
-long int TLimitingLawDH::IdealProp( double *Zid )
+long int TLimitingLaw::IdealProp( double *Zid )
 {
 	long int j;
 	double si;
@@ -3167,7 +3167,7 @@ long int TLimitingLawDH::IdealProp( double *Zid )
 
 
 // calculates true ionic strength
-long int TLimitingLawDH::IonicStrength()
+long int TLimitingLaw::IonicStrength()
 {
 	long int j;
 	double is;
@@ -3197,7 +3197,7 @@ long int TLimitingLawDH::IonicStrength()
 
 
 // Generic constructor for the TTwoTermDH class
-TTwoTermDH::TTwoTermDH( long int NSpecies, long int NParams,
+TDebyeHueckel::TDebyeHueckel( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,
@@ -3221,13 +3221,13 @@ TTwoTermDH::TTwoTermDH( long int NSpecies, long int NParams,
 }
 
 
-TTwoTermDH::~TTwoTermDH()
+TDebyeHueckel::~TDebyeHueckel()
 {
 	free_internal();
 }
 
 
-void TTwoTermDH::alloc_internal()
+void TDebyeHueckel::alloc_internal()
 {
 	LnG = new double [NComp];
 	dLnGdT = new double [NComp];
@@ -3238,7 +3238,7 @@ void TTwoTermDH::alloc_internal()
 }
 
 
-void TTwoTermDH::free_internal()
+void TDebyeHueckel::free_internal()
 {
 	delete[]LnG;
 	delete[]dLnGdT;
@@ -3250,7 +3250,7 @@ void TTwoTermDH::free_internal()
 
 
 // Calculates T,P corrected parameters
-long int TTwoTermDH::PTparam()
+long int TDebyeHueckel::PTparam()
 {
 	long int j;
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
@@ -3287,7 +3287,7 @@ long int TTwoTermDH::PTparam()
 
 
 // Calculates activity coefficients
-long int TTwoTermDH::MixMod()
+long int TDebyeHueckel::MixMod()
 {
 	long int j, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, lg_to_ln;
@@ -3382,7 +3382,7 @@ long int TTwoTermDH::MixMod()
 
 
 // calculates excess properties
-long int TTwoTermDH::ExcessProp( double *Zex )
+long int TDebyeHueckel::ExcessProp( double *Zex )
 {
 	// under construction
 	long int j, w;
@@ -3508,7 +3508,7 @@ long int TTwoTermDH::ExcessProp( double *Zex )
 
 
 // calculates ideal mixing properties
-long int TTwoTermDH::IdealProp( double *Zid )
+long int TDebyeHueckel::IdealProp( double *Zid )
 {
 	long int j;
 	double si;
@@ -3539,7 +3539,7 @@ long int TTwoTermDH::IdealProp( double *Zid )
 
 
 // calculates true ionic strength
-long int TTwoTermDH::IonicStrength()
+long int TDebyeHueckel::IonicStrength()
 {
 	long int j;
 	double is, mt, mz;
@@ -3582,7 +3582,7 @@ long int TTwoTermDH::IonicStrength()
 
 
 // Generic constructor for the TKarpovDH class
-TKarpovDH::TKarpovDH( long int NSpecies, long int NParams,
+TKarpov::TKarpov( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
 		long int *arIPx, double *arIPc, double *arDCc,
@@ -3607,13 +3607,13 @@ TKarpovDH::TKarpovDH( long int NSpecies, long int NParams,
 }
 
 
-TKarpovDH::~TKarpovDH()
+TKarpov::~TKarpov()
 {
 	free_internal();
 }
 
 
-void TKarpovDH::alloc_internal()
+void TKarpov::alloc_internal()
 {
 	LnG = new double [NComp];
 	dLnGdT = new double [NComp];
@@ -3624,7 +3624,7 @@ void TKarpovDH::alloc_internal()
 }
 
 
-void TKarpovDH::free_internal()
+void TKarpov::free_internal()
 {
 	delete[]LnG;
 	delete[]dLnGdT;
@@ -3636,7 +3636,7 @@ void TKarpovDH::free_internal()
 
 
 // Calculates T,P corrected parameters
-long int TKarpovDH::PTparam()
+long int TKarpov::PTparam()
 {
 	long int j;
 	double alp, bet, dal, rho, eps, dedt, d2edt2, dedp;
@@ -3691,7 +3691,7 @@ long int TKarpovDH::PTparam()
 
 
 // Calculates activity coefficients
-long int TKarpovDH::MixMod()
+long int TKarpov::MixMod()
 {
 	long int j, k, w;
 	double sqI, Z2, lgGam, lnGam, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm,
@@ -3795,7 +3795,7 @@ long int TKarpovDH::MixMod()
 
 
 // calculates excess properties
-long int TKarpovDH::ExcessProp( double *Zex )
+long int TKarpov::ExcessProp( double *Zex )
 {
 	long int j, k, w;
 	double sqI, Z2, Nw, Lgam, lnwxWat, WxW, Lam, SigTerm, Phi, dPhidT, d2PhidT2, dPhidP,
@@ -4014,7 +4014,7 @@ long int TKarpovDH::ExcessProp( double *Zex )
 
 
 // calculates ideal mixing properties
-long int TKarpovDH::IdealProp( double *Zid )
+long int TKarpov::IdealProp( double *Zid )
 {
 	long int j;
 	double si;
@@ -4045,7 +4045,7 @@ long int TKarpovDH::IdealProp( double *Zid )
 
 
 // calculates true ionic strength
-long int TKarpovDH::IonicStrength()
+long int TKarpov::IonicStrength()
 {
 	long int j;
 	double is, mt, mz, as;
@@ -4080,7 +4080,7 @@ long int TKarpovDH::IonicStrength()
 
 
 // calculates TP dependence of b_gamma (and derivatives)
-long int TKarpovDH::BgammaTP()
+long int TKarpov::BgammaTP()
 {
 	// ni: stoichiometric number of moles of ions in one mole of electrolyte
 	// rc, ra: radius of cation and anion, respectively at 298 K/1 bar
@@ -4167,7 +4167,7 @@ long int TKarpovDH::BgammaTP()
 
 
 // wrapper for g-function
-long int TKarpovDH::Gfunction()
+long int TKarpov::Gfunction()
 {
 	double T, P, D, beta, alpha, daldT, g, dgdP, dgdT, d2gdT2;
 	double TMAX = 1000., PMAX = 5000., TOL = 1.0e-4;
@@ -4202,7 +4202,7 @@ long int TKarpovDH::Gfunction()
 
 
 // calculates g-function and derivatives
-long int TKarpovDH::GShok2( double T, double P, double D, double beta,
+long int TKarpov::GShok2( double T, double P, double D, double beta,
 		double alpha, double daldT, double &g, double &dgdP, double &dgdT, double &d2gdT2 )
 {
 	double a, b, dgdD, /*dgdD2,*/ dadT, dadTT, dbdT, dbdTT, dDdT, dDdP,
