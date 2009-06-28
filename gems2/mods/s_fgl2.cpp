@@ -224,7 +224,8 @@ long int TVanLaar::MixMod()
 // calculates bulk phase excess properties
 long int TVanLaar::ExcessProp( double *Zex )
 {
-	long int ip, j, i1, i2, sumPhi, g, v, s, u;
+	long int ip, j, i1, i2;
+	double sumPhi, g, v, s, u;
 
 	if ( NPcoef < 3 || NPar < 1 || NComp < 2 || MaxOrd < 2 || !x || !lnGamma )
 		return 1;
@@ -1417,7 +1418,6 @@ TSubregular::TSubregular( long int NSpecies, long int NParams, long int NPcoefs,
         			 arlnGam, aphVOL, T_k, P_bar )
 {
 	// empty constructor
-
 }
 
 
@@ -1557,7 +1557,6 @@ TGuggenheim::TGuggenheim( long int NSpecies, long int NParams, long int NPcoefs,
         			 arlnGam, aphVOL, T_k, P_bar )
 {
 	// empty constructor
-
 }
 
 
@@ -1643,7 +1642,8 @@ long int TGuggenheim::IdealProp( double *Zid )
 	si = 0.0;
 	for (j=0; j<NComp; j++)
 	{
-		si += x[j]*log(x[j]);
+		if ( x[j] > 1.0e-32 )
+			si += x[j]*log(x[j]);
 	}
 	Hid = 0.0;
 	CPid = 0.0;

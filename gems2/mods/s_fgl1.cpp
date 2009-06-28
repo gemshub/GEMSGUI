@@ -4,8 +4,8 @@
 // Copyright (C) 2008-2009  T.Wagner, S.Dmitrieva, F.Hingerl, D.Kulik
 //
 // Implementation of subclasses of TSolMod for aqueous activity models
-// subclasses: TSIT, TPitzer, TEUNIQUAC, THelgesonDH, TDaviesDH,
-// 				TLimitingLawDH, TTwoTermDH, TKarpovDH
+// subclasses: TSIT, TPitzer, TEUNIQUAC, THelgeson, TDavies,
+// 				TLimitingLaw, TDebyeHueckel, TKarpov
 //
 // This file is part of a GEM-Selektor (GEMS) v.2.x.x program
 // environment for thermodynamic modeling in geochemistry
@@ -1824,7 +1824,7 @@ void TEUNIQUAC::Euniquac_test_out( const char *path )
 //=============================================================================================
 
 
-// Generic constructor for the THelgesonDH class
+// Generic constructor for the THelgeson class
 THelgeson::THelgeson( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
@@ -2558,7 +2558,7 @@ long int THelgeson::GShok2( double T, double P, double D, double beta,
 //=============================================================================================
 
 
-// Generic constructor for the TDaviesDH class
+// Generic constructor for the TDavies class
 TDavies::TDavies( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
@@ -2885,7 +2885,7 @@ long int TDavies::IonicStrength()
 //=============================================================================================
 
 
-// Generic constructor for the TDLimitingLawDH class
+// Generic constructor for the TDLimitingLaw class
 TLimitingLaw::TLimitingLaw( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
@@ -3196,7 +3196,7 @@ long int TLimitingLaw::IonicStrength()
 //=============================================================================================
 
 
-// Generic constructor for the TTwoTermDH class
+// Generic constructor for the TDebyeHueckel class
 TDebyeHueckel::TDebyeHueckel( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
@@ -3581,7 +3581,7 @@ long int TDebyeHueckel::IonicStrength()
 //=============================================================================================
 
 
-// Generic constructor for the TKarpovDH class
+// Generic constructor for the TKarpov class
 TKarpov::TKarpov( long int NSpecies, long int NParams,
 		long int NPcoefs, long int MaxOrder,
 		long int NPperDC, char Mod_Code,
