@@ -925,8 +925,8 @@ class TEUNIQUAC: public TSolMod
 	private:
 
 		// data objects copied from MULTI
-		double *Z;   // species charges
-		double *M;   // species molalities
+		double *z;   // species charges
+		double *m;   // species molalities
 		double *RhoW;  // water density properties
 		double *EpsW;  // water dielectrical properties
 
@@ -952,6 +952,7 @@ class TEUNIQUAC: public TSolMod
 		// internal functions
 		void alloc_internal();
 		void free_internal();
+		long int IonicStrength();
 
 	public:
 

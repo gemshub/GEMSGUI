@@ -1342,8 +1342,8 @@ TEUNIQUAC::TEUNIQUAC( long int NSpecies, long int NParams, long int NPcoefs, lon
         			 arlnGam, aphVOL, T_k, P_bar )
 {
 	alloc_internal();
-	Z = arZ;
-	M = arM;
+	z = arZ;
+	m = arM;
 	RhoW = dW;
 	EpsW = eW;
 }
@@ -1505,19 +1505,14 @@ long int TEUNIQUAC::MixMod()
 {
 	long int j, i, l, k, w;
 	double Mw, Xw, b, RR, QQ, K, L, M, gamDH, gamC, gamR, lnGam, Gam;
-	b = 1.5;
+	b = 1.5; Mw = 0.01801528;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
+	Xw = x[w];
 
 	// calculation of ionic strength
-	IS = 0.0;
-	Mw = 0.018015;
-	Xw = x[w];
-	for (j=0; j<NComp; j++)
-	{
-		IS += 0.5*x[j]*pow(Z[j],2.)/(Xw*Mw);
-	}
+	IonicStrength();
 
 	// calculation of Phi and Theta terms
 	for (j=0; j<NComp; j++)
@@ -1553,7 +1548,7 @@ long int TEUNIQUAC::MixMod()
 				L += Theta[k]*Psi[j][k]/M;
 			}
 
-			gamDH = - pow(Z[j],2.)*A*sqrt(IS)/(1.+b*sqrt(IS));
+			gamDH = - pow(z[j],2.)*A*sqrt(IS)/(1.+b*sqrt(IS));
 			gamC = log(Phi[j]/x[j]) - Phi[j]/x[j] - log(R[j]/R[w]) + R[j]/R[w]
 					- 5.0*Q[j] * ( log(Phi[j]/Theta[j]) - Phi[j]/Theta[j]
 					- log(R[j]*Q[w]/(R[w]*Q[j])) + R[j]*Q[w]/(R[w]*Q[j]) );
@@ -1611,22 +1606,17 @@ long int TEUNIQUAC::ExcessProp( double *Zex )
 {
 	long int j, i, w;
 	double Mw, Xw, b, phiti, phthi, RR, QQ, N, TPI, tpx, TPX,
-			dtpx, DTPX, con;
+				dtpx, DTPX, con;
 	double gDH, gC, gR, hR, cpR, gCI, gRI, gCX, gRX, dg, d2g, dgRI, d2gRI,
-			dgRX, d2gRX, dgDH, d2gDH, dgDHdP;
-	b = 1.5;
+				dgRX, d2gRX, dgDH, d2gDH, dgDHdP;
+	b = 1.5; Mw = 0.01801528;
 
 	// get index of water (assumes water is last species in phase)
 	w = NComp - 1;
+	Xw = x[w];
 
 	// calculation of ionic strength
-	IS = 0.0;
-	Mw = 0.018015;
-	Xw = x[w];
-	for (j=0; j<NComp; j++)
-	{
-		IS += 0.5*x[j]*pow(Z[j],2.)/(Xw*Mw);
-	}
+	IonicStrength();
 
 	// calculation of Phi and Theta terms
 	for (j=0; j<NComp; j++)
@@ -1757,6 +1747,23 @@ long int TEUNIQUAC::IdealProp( double *Zid )
 	Zid[4] = Vid;
 	Zid[5] = Aid;
 	Zid[6] = Uid;
+
+	return 0;
+}
+
+
+// Calculate ionic strength
+long int TEUNIQUAC::IonicStrength()
+{
+	long int j;
+	double Mw, Xw;
+	IS = 0.0; Mw = 0.01801528;
+	Xw = x[NComp-1];
+
+	for (j=0; j<(NComp-1); j++)
+	{
+		IS += 0.5*x[j]*pow(z[j],2.)/(Xw*Mw);
+	}
 
 	return 0;
 }
