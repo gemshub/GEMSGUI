@@ -4,7 +4,7 @@
 // Implementation of TPhase class, config and calculation functions
 //
 // Rewritten from C to C++ by S.Dmytriyeva
-// Copyright (C) 1995,2008 S.Dmytriyeva, D.Kulik
+// Copyright (C) 1995-2009 S.Dmytriyeva, D.Kulik, T. Wagner
 //
 // This file is part of a GEM-Selektor library for thermodynamic
 // modelling by Gibbs energy minimization
@@ -549,7 +549,7 @@ AGAIN_SETUP:
                           php->nscM = 7;  // set to 7 to pull all parameters from CPg
                           php->npxM = 2;
                           break;
-          case SM_AQDAV:  // Aqueous Davies
+          case SM_AQDAV:  // aqueous Davies
                           // php->ncpN = php->ncpM = 0;
         	  			  php->ncpN = 2;
         	  			  php->ncpM = 4; // changed 10.07.2008 DK
@@ -557,31 +557,38 @@ AGAIN_SETUP:
         	  			  php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
-          case SM_AQDH1:  // Aqueous DH LL
+          case SM_AQDH1:  // aqueous DH limiting law
                           php->ncpN = 2;
                           php->ncpM = 4;
                           php->nscM = 0;
                           php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
-          case SM_AQDH2:  // DH Kielland, salt-out for neutral
+          case SM_AQDH2:  // aqueous DH, individual a0, individual bg
                           php->ncpN = 2;
                           php->ncpM = 4;
                           php->nscM = 2;
                           php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
-          case SM_AQDH3:  // EDH Kielland, salt-out for neutral
+          case SM_AQDH3:  // aqueous EDH Karpov, individual a0, common bg
                           php->ncpN = 2;
                           php->ncpM = 4;
                           php->nscM = 2;
                           php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
-          case SM_AQDHH:  // EDH Helgeson, common a0, salt-out for neutral
+          case SM_AQDHH:  // aqueous EDH Helgeson, common a0 and bg
                           php->ncpN = 2;
                           php->ncpM = 4;
                           php->nscM = 0;
+                          php->npxM = 0;
+                          php->PphC = PH_AQUEL;
+                          break;
+          case SM_AQDHS:  // aqueous EDH Shvarov, common a0 and bg
+                          php->ncpN = 2;
+                          php->ncpM = 4;
+                          php->nscM = 2;
                           php->npxM = 0;
                           php->PphC = PH_AQUEL;
                           break;
@@ -1276,10 +1283,10 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->ncpM = 4;
                 php->nscM = 0;
                 php->npxM = 0;
-                Name += "ion-association, Davies equation";
                 apar[0] = 0.0;
                 apar[1] = 0.0;
-                sprintf( nbuf, "Parameters: gam_neut= %s; gam_H2O= %s", neutbuf, H2Obuf );
+					Name += "ion-association model, Davies equation";
+					sprintf( nbuf, "Parameters: gam_neut= %s; gam_H2O= %s", neutbuf, H2Obuf );
                 break;
        case 'H': // EDH model with common bg and common a0 (Helgeson)
                 memcpy( php->sol_t, "HNNSNN", 6 );
@@ -1288,9 +1295,20 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->ncpM = 4;
                 php->nscM = 0;
                 php->npxM = 0;
-                Name += "ion-association, EDH(H) equation, common ion size";
-    sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size= %-5.3f; gam_neut= %s, gam_H2O= %s ",
-                 apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
+					Name += "ion-association model, EDH(H) equation, common ion size";
+					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size= %-5.3f; gam_neut= %s, gam_H2O= %s ",
+							apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
+                break;
+       case 'Y': // EDH model with common bg and common a0 (Shvarov)
+                memcpy( php->sol_t, "HNNSNN", 6 );
+                memcpy( &php->PphC, "a++---", 6 );
+                php->ncpN = 2;
+                php->ncpM = 4;
+                php->nscM = 0;
+                php->npxM = 0;
+					Name += "ion-association model, EDH(S) equation, common ion size";
+					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size= %-5.3f; gam_neut= %s, gam_H2O= %s ",
+							apar[0], tempdbuf, apar[1], neutbuf, H2Obuf );
                 break;
        case '3': // EDH model with individual (Kielland) a0 and common bg (Karpov)
                 memcpy( php->sol_t, "3NNSNN", 6 );
@@ -1299,10 +1317,10 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->ncpM = 4;
                 php->nscM = 2;
                 php->npxM = 0;
-                Name += "ion-association model, EDH(K) equation, Kielland ion sizes";
                 apar[1] = 0.0;
-    sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size=specific; gam_neut= %s; gam_H2O= %s ",
-                 apar[0], tempdbuf, neutbuf, H2Obuf );
+					Name += "ion-association model, EDH(K) equation, individual ion sizes";
+					sprintf( nbuf, ": b_gamma= %-5.3f, T_dep= %s; a_size=specific; gam_neut= %s; gam_H2O= %s ",
+							apar[0], tempdbuf, neutbuf, H2Obuf );
                 break;
        case '2': // DH model with individual (Kielland) a0 and optional bg for neutral species
                 memcpy( php->sol_t, "2NNSNN", 6 );
@@ -1311,11 +1329,11 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->ncpM = 4;
                 php->nscM = 2;
                 php->npxM = 0;
-                Name += "ion-association model, DH equation, Kielland ion sizes";
                 apar[0] = 0.0;
                 apar[1] = 0.0;
-    sprintf( nbuf, ": b_gamma= %-5.3f; a_size=specific; gam_neut= %s; gam_H2O= %s ",
-                 apar[0], neutbuf, H2Obuf );
+					Name += "ion-association model, DH equation, individual ion sizes";
+					sprintf( nbuf, ": b_gamma= %-5.3f; a_size=specific; gam_neut= %s; gam_H2O= %s ",
+							apar[0], neutbuf, H2Obuf );
                 break;
        case '1': // DH limiting law (no a0 and bg required)
                 memcpy( php->sol_t, "1NNSNN", 6 );
@@ -1324,11 +1342,11 @@ void TPhase::newAqGasPhase( const char * akey, const char *gkey, int file,
                 php->ncpM = 4;
                 php->nscM = 0;
                 php->npxM = 0;
-                Name += "ion-association model, Debye-Hueckel limiting law";
                 apar[0] = 0.0;
                 apar[1] = 0.0;
                 // apar[2] = 0.0;
-                sprintf( nbuf, "Parameters: gam_H2O= %s ", H2Obuf );
+					Name += "ion-association model, Debye-Hueckel limiting law";
+					sprintf( nbuf, "Parameters: gam_H2O= %s ", H2Obuf );
                 break;
        default: // Unrecognized code - error message ?
        case 'S': // SIT - under testing

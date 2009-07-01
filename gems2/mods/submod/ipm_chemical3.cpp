@@ -456,31 +456,6 @@ TMulti::GammaCalc( long int LinkMode  )
             	    SolModCreate( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] ); // new solution models (TW, DK 2007)
             	    SolModParPT( k, sMod[SPHAS_TYP] );
             	    break;
-            /* case PH_GASMIX:
-               case PH_PLASMA:
-               case PH_FLUID:
-                    if( sMod[SPHAS_TYP] == SM_CGFLUID )  // CG EoS fluid model
-                    {
-                    	// CGofPureGases( jb, je, jpb, jdb, k, ipb );  // CG pure gas
-                    	SolModCreate( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                    	SolModParPT( k, sMod[SPHAS_TYP] );
-                    	break;
-                    }
-                    if( sMod[SPHAS_TYP] == SM_PRFLUID )  // PRSV EoS fluid model
-                    {
-                    	// PRSVofPureGases( jb, je, jpb, jdb, k, ipb );  // PRSV pure gas
-                    	SolModCreate( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-						SolModParPT( k, sMod[SPHAS_TYP] );
-						break;
-                    }
-                    if( sMod[SPHAS_TYP] == SM_SRFLUID )  // SRK EoS fluid model
-                    {
-                    	SolModCreate( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-						SolModParPT( k, sMod[SPHAS_TYP] );
-						break;
-                    }
-                    break; */
-
 				default:
 					break;
             }
@@ -552,18 +527,19 @@ TMulti::GammaCalc( long int LinkMode  )
              {
                 switch( sMod[SPHAS_TYP] )
                 {
-                   case SM_AQDH3:
-                   case SM_AQDH2:
-                   case SM_AQDH1:
-                   case SM_AQDHH:
-                   case SM_AQDAV:
-                   case SM_AQSIT:
-                   case SM_AQPITZ:
-                   case SM_AQEXUQ:
-                	  SolModActCoeff( k, sMod[SPHAS_TYP] );
-                	  break;
-                  default:
-                          break;
+					case SM_AQDH3:
+					case SM_AQDH2:
+					case SM_AQDH1:
+					case SM_AQDHS:
+					case SM_AQDHH:
+					case SM_AQDAV:
+					case SM_AQSIT:
+					case SM_AQPITZ:
+					case SM_AQEXUQ:
+						SolModActCoeff( k, sMod[SPHAS_TYP] );
+						break;
+					default:
+						break;
                 }
                 ICold = pmp->IC;
              }
@@ -576,10 +552,8 @@ TMulti::GammaCalc( long int LinkMode  )
              {
                  if( sMod[SPHAS_TYP] == SM_CGFLUID )  // CG EoS fluid model
                      SolModActCoeff( k, sMod[SPHAS_TYP] );
-                   //  ChurakovFluid( jb, je, jpb, jdb, k );
                  if( sMod[SPHAS_TYP] == SM_PRFLUID )  // PRSV EoS fluid model
                      SolModActCoeff( k, sMod[SPHAS_TYP] );
-                    // PRSVFluid( jb, je, jpb, jdb, k, ipb );
                  if( sMod[SPHAS_TYP] == SM_SRFLUID )  // SRK EoS fluid model
                      SolModActCoeff( k, sMod[SPHAS_TYP] );
              }
@@ -594,28 +568,14 @@ TMulti::GammaCalc( long int LinkMode  )
              {
                 switch( sMod[SPHAS_TYP] )
                 {
-                  case SM_REDKIS:  // left for compatibility with old projects
-                	  // RedlichKister( jb, je, jpb, jdb, k );
-                	  // break;
-                  case SM_MARGB:   // left for compatibility with old projects
-                	  // MargulesBinary( jb, je, jpb, jdb, k );
-                	  // break;
-                  case SM_MARGT:   // left for compatibility with old projects
-                	  // MargulesTernary( jb, je, jpb, jdb, k );
-                	  // break;
-                  case SM_GUGGENM: // Redlich-Kister model (multicomponent), 2007 (TW)
-                	  // SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                	  // break;
-                  case SM_VANLAAR: // VanLaar model (multicomponent), 2007 (TW)
-                	  // SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                	  // break;
-                  case SM_REGULAR: // Regular model (multicomponent), 2007 (TW)
-                	  // SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                	  // break;
-                  case SM_NRTLLIQ: // NRTL model (multicomponent), 03.06.2007 (TW)
-                	  // SolModActCoeff( jb, je, jpb, jdb, k, ipb, sMod[SPHAS_TYP] );
-                	  // break;
-                  case SM_WILSLIQ: // Wilson model (multicomponent), 09.06.2007 (TW)
+					case SM_REDKIS:  // Redlich-Kister model (binary)
+					case SM_MARGB:   // Subregular Margules model (binary)
+					case SM_MARGT:   // Regular Margules model (ternary)
+					case SM_GUGGENM: // Redlich-Kister model (multicomponent), 2007 (TW)
+					case SM_VANLAAR: // VanLaar model (multicomponent), 2007 (TW)
+					case SM_REGULAR: // Regular model (multicomponent), 2007 (TW)
+					case SM_NRTLLIQ: // NRTL model (multicomponent), 03.06.2007 (TW)
+					case SM_WILSLIQ: // Wilson model (multicomponent), 09.06.2007 (TW)
                        SolModActCoeff( k, sMod[SPHAS_TYP] );
                           break;
                   default:
@@ -835,7 +795,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_VANLAAR:  // Van Laar solid solution (multicomponent)
+        case SM_VANLAAR:  // Van Laar solid solution model (multicomponent)
         {
         	TVanLaar* aPT = new TVanLaar( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
@@ -844,7 +804,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         }
              // break;
 
-        case SM_REGULAR:  // Regular solid solution (multicomponent)
+        case SM_REGULAR:  // Regular solid solution model (multicomponent)
         {
         	TRegular* aPT = new TRegular( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
@@ -852,7 +812,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_GUGGENM:  // Redlich-Kister solid solution (multicomponent)
+        case SM_GUGGENM:  // Redlich-Kister solid solution model (multicomponent)
         {
         	TRedlichKister* aPT = new TRedlichKister( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
@@ -860,7 +820,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_NRTLLIQ:  // NRTL liquid solution (multicomponent)
+        case SM_NRTLLIQ:  // NRTL liquid solution model (multicomponent)
         {
         	TNRTL* aPT = new TNRTL( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
@@ -868,7 +828,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_WILSLIQ:  // Wilson liquid solution (multicomponent)
+        case SM_WILSLIQ:  // Wilson liquid solution model (multicomponent)
         {
         	TWilson* aPT = new TWilson( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
@@ -876,7 +836,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_MARGT:  // Margules ternary (regular) solid solution
+        case SM_MARGT:  // Margules ternary (regular) solid solution model
         {
         	TMargules* aPT = new TMargules( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
@@ -884,7 +844,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_MARGB:  // Margules binary (subregular) solid solution
+        case SM_MARGB:  // Margules binary (subregular) solid solution model
         {
         	TSubregular* aPT = new TSubregular( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, pmp->Tc, pmp->Pc );
@@ -900,7 +860,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_AQPITZ:  // Pitzer aqueous electrolyte (multicomponent)
+        case SM_AQPITZ:  // Pitzer aqueous electrolyte model (multicomponent)
         {
            	TPitzer* aPT = new TPitzer( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
@@ -908,7 +868,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
              break;
         }
 
-        case SM_AQSIT:  // SIT aqueous electrolyte (multicomponent)
+        case SM_AQSIT:  // SIT aqueous electrolyte model (multicomponent)
         {
            	TSIT* aPT = new TSIT( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
@@ -916,7 +876,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_AQEXUQ:  // EUNIQUAC aqueous electrolyte (multicomponent)
+        case SM_AQEXUQ:  // EUNIQUAC aqueous electrolyte model (multicomponent)
         {
            	TEUNIQUAC* aPT = new TEUNIQUAC( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc, pmp->denW, pmp->epsW );
@@ -924,7 +884,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
             break;
         }
 
-        case SM_AQDH3:  // Karpov's version of extended Debye-Hueckel model
+        case SM_AQDH3:  // extended Debye-Hueckel aqueous electrolyte model (Karpov version)
         {
            	TKarpov* aPT = new TKarpov( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
@@ -932,7 +892,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         	break;
         }
 
-        case SM_AQDH2:   // Debye-Hueckel model without extended term
+        case SM_AQDH2:   // Debye-Hueckel aqueous electrolyte model
         {
            	TDebyeHueckel* aPT = new TDebyeHueckel( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
@@ -940,7 +900,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         	break;
         }
 
-        case SM_AQDH1:   // Debye-Hueckel limiting law
+        case SM_AQDH1:   // Debye-Hueckel limiting law aqueous electrolyte model
         {
            	TLimitingLaw* aPT = new TLimitingLaw( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
@@ -948,7 +908,15 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         	break;
         }
 
-        case SM_AQDHH:  // Helgeson's version of extended Debye-Hueckel model
+        case SM_AQDHS:  // extended Debye-Hueckel aqueous electrolyte model (Shvarov version)
+        {
+           	TShvarov* aPT = new TShvarov( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
+                    aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
+            aSM = (TSolMod*)aPT;
+        	break;
+        }
+
+        case SM_AQDHH:  // extended Debye-Hueckel aqueous electrolyte model (Helgeson version)
         {
            	THelgeson* aPT = new THelgeson( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
@@ -956,7 +924,7 @@ void TMulti::SolModCreate( long int jb, long int, long int jpb, long int jdb, lo
         	break;
         }
 
-        case SM_AQDAV:   // Davies equation (in NEA TDB variant)
+        case SM_AQDAV:  // Davies aqueous electrolyte model (in NEA TDB version)
         {
            	TDavies* aPT = new TDavies( NComp, NPar, NPcoef, MaxOrd, NP_DC, ModCode,
                     aIPx, aIPc, aDCc, aWx, alnGam, aphVOL, aM, aZ, pmp->Tc, pmp->Pc,  pmp->denW, pmp->epsW );
@@ -1029,6 +997,7 @@ TMulti::SolModParPT( long int k, char ModCode )
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
+        case SM_AQDHS:
         case SM_AQDAV:
 
         // aqueous models
@@ -1076,6 +1045,7 @@ TMulti::SolModActCoeff( long int k, char ModCode )
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
+        case SM_AQDHS:
         case SM_AQDAV:
 
         // aqueous models
@@ -1134,6 +1104,7 @@ TMulti::SolModExcessProp( long int k, char ModCode )
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
+        case SM_AQDHS:
         case SM_AQDAV:
 
         // aqueous models
@@ -1209,6 +1180,7 @@ TMulti::SolModIdealProp( long int jb, long int k, char ModCode )
         case SM_AQDH2:
         case SM_AQDH1:
         case SM_AQDHH:
+        case SM_AQDHS:
         case SM_AQDAV:
 
         // aqueous models

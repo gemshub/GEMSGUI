@@ -100,11 +100,6 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>O   Other non-ideal model (built-in, selected by phase name)</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
                             <string>F   Churakov-Gottschalk (CG) EoS fluid model (built-in)</string>
                         </property>
                     </item>
@@ -120,47 +115,57 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>D   Aqueous, Davies equation (built-in)</string>
+                            <string>D   Aqueous Davies equation (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>H  Aqueous Debye-Huckel extended, common a0 (built-in)</string>
+                            <string>H   Aqueous extended Debye-Hueckel model (Helgeson), common a0 (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>3   Aqueous Debye-Huckel, indiv. a0 (built-in)</string>
+                            <string>Y   Aqueous extended Debye-Hueckel model (Shvarov), common a0 (built-ib)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>2   Aqueous Debye-Huckel 2-term with Kielland a0 (built-in)</string>
+                            <string>3   Aqueous extended Debye-Hueckel model (Karpov), individual a0 (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>1   Aqueous Debye-Huckel limiting law (built-in)</string>
+                            <string>2   Aqueous Debye-Hueckel model (2-term,) individual a0 (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>S   Aqueous, SIT model (NEA TDB variant, built-in)</string>
+                            <string>1   Aqueous Debye-Hueckel limiting law model (built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Q   Aqueous, Extended UNIQAC model (built-in, reserved)</string>
+                            <string>S   Aqueous SIT model (NEA TDB variant, built-in)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Z   Aqueous, Pitzer model (built-in, reserved)</string>
+                            <string>Q   Aqueous extended UNIQAC model (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Z   Aqueous Pitzer model (built-in, reserved)</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
                             <string>A   Adsorption, SACT and EDL models (built-in)</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>O   Other non-ideal model (built-in, selected by phase name)</string>
                         </property>
                     </item>
                     <item>
